@@ -71,20 +71,6 @@ class SoSFUInt32 : public SoSField {
     SO_SFIELD_HEADER(SoSFUInt32, uint32_t, uint32_t);
 
   SoINTERNAL public:
-#ifndef IV_STRICT
-#if (_MIPS_SZLONG == 32)
-//
-//  If the system long has exactly 32 bits, support methods that have "long" 
-//  in the argument list.
-//
-    unsigned long  operator =(unsigned long newValue)		  // System long
-		{ setValue((uint32_t)newValue); return (newValue); }
-//
-//  Problems in SoFieldConverters.c++  (more than one instance matches ...)
-//    void  setValue(unsigned long newValue)			  // System long
-//		{ setValue((uint32_t)newValue); }
-#endif
-#endif
 
     static void		initClass();
 };

@@ -111,17 +111,6 @@ class SoFaceDetail : public SoDetail {
     // Return a pointer to the point details.
     SoPointDetail *		getPoints()		{ return &point[0]; }
 
-#ifndef IV_STRICT
-    void    setNumPoints(long num)				// System long
-		{ setNumPoints ((int32_t) num); }
-    void    setPoint(long index, const SoPointDetail *pd)	// System long
-		{ setPoint ((int32_t) index, pd); }
-    void    setFaceIndex(long i)				// System long
-		{ setFaceIndex ((int32_t) i); }
-    void    setPartIndex(long i)				// System long
-		{ setPartIndex ((int32_t) i); }
-#endif
-
   SoINTERNAL public:
     static void			initClass();
 

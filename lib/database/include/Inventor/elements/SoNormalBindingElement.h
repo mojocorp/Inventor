@@ -83,14 +83,7 @@ SoEXTENDER class SoNormalBindingElement : public SoInt32Element {
 	PER_VERTEX_INDEXED = 8	// One normal for each vertex, indexed
         
 // C-api: end
-#ifndef IV_STRICT
-        // Obsolete bindings:
-        ,                       // Comma to continue list
-// C-api: begin
-        DEFAULT = PER_VERTEX_INDEXED,
-        NONE = OVERALL
-// C-api: end
-#endif
+
 // C-api: begin
 
     };
@@ -101,11 +94,6 @@ SoEXTENDER class SoNormalBindingElement : public SoInt32Element {
     // Sets the current normal binding in the state
     static void		set(SoState *state, Binding binding)
 	{ SoInt32Element::set(classStackIndex, state, (int32_t)binding); }
-
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, Binding binding)
-        { set(state, binding); }
-#endif
 
     // Returns current normal binding from the state
     static Binding	get(SoState *state)

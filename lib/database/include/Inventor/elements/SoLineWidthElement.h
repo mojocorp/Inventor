@@ -78,11 +78,6 @@ SoEXTENDER class SoLineWidthElement : public SoFloatElement {
     static void		set(SoState *state, float width)
 	{ SoFloatElement::set(classStackIndex, state, width); }
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, float width)
-        { set(state, width); }
-#endif
-
     // Returns current line width from the state
     static float	get(SoState *state)
 	{ return SoFloatElement::get(classStackIndex, state); }

@@ -76,14 +76,6 @@ class SoState;
 //////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef IV_STRICT
-// Deprecated feature; specifying USE_REST_OF_VERTICES as the last
-// value in the numVertices field will use all the points in the
-// coordinate array.
-#define SO_LINE_SET_USE_REST_OF_VERTICES	(-1)
-#endif
-
-
 // C-api: prefix=SoLSet
 // C-api: public=startIndex, numVertices, vertexProperty
 class SoLineSet : public SoNonIndexedShape {

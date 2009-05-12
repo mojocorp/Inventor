@@ -71,24 +71,6 @@ class SoMFInt32 : public SoMField {
     SO_MFIELD_HEADER(SoMFInt32, int32_t, int32_t);
 
   SoINTERNAL public:
-#ifndef IV_STRICT
-#if (_MIPS_SZLONG == 32)
-//
-//  If the system long has exactly 32 bits, support methods that have "long" 
-//  in the argument list.
-//
-    int   find(long targetValue,SbBool addIfNotFound = FALSE)	  // System long
-		{ return find ((int32_t)targetValue, addIfNotFound);}
-    void  setValues(int start, int num, const long *newValues)    // System long
-	    	{ setValues(start, num, (const int32_t *)newValues);}
-    void  set1Value(int index, long newValue)			  // System long
-		{ set1Value(index, (int32_t)newValue); }
-    long  operator =(long newValue)				  // System long
-		{ setValue((int32_t)newValue); return (newValue); }
-    void  setValue(long newValue)				  // System long
-		{ setValue((int32_t)newValue); }
-#endif
-#endif
 
     static void		initClass();
 

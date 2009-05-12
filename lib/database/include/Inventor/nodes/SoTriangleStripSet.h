@@ -78,13 +78,6 @@
 class SoNormalGenerator;
 class SoCoordinateElement;
 
-#ifndef IV_STRICT
-// Deprecated feature; specifying USE_REST_OF_VERTICES as the last
-// value in the numVertices field will use all the points in the
-// coordinate array.
-#define SO_TRI_STRIP_SET_USE_REST_OF_VERTICES	(-1)
-#endif
-
 // C-api: prefix=SoTriStripSet
 // C-api: public=startIndex, numVertices, vertexProperty
 class SoTriangleStripSet : public SoNonIndexedShape {

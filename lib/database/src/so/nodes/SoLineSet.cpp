@@ -124,6 +124,11 @@ SoLineSet::PMLS SoLineSet::renderFunc[32] = {
 
 SO_NODE_SOURCE(SoLineSet);
 
+// Deprecated feature; specifying USE_REST_OF_VERTICES as the last
+// value in the numVertices field will use all the points in the
+// coordinate array.
+#define SO_LINE_SET_USE_REST_OF_VERTICES	(-1)
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -234,7 +239,7 @@ SoLineSet::generatePrimitives(SoAction *action)
 
 	// Figure out number of vertices in this line
 	vertsInLine = (int) numVertices[line];
-	if (vertsInLine == SO_LINE_SET_USE_REST_OF_VERTICES)
+        if (vertsInLine == SO_LINE_SET_USE_REST_OF_VERTICES)
 	    vertsInLine = (int) ce->getNum() - curVert;
 
 	for (vert = 0; vert < vertsInLine; vert++) {
@@ -486,7 +491,7 @@ SoLineSet::wouldGenerateNormals(SoState *state)
 	// Count up total number of vertices used. If the last entry in
 	// numVertices is SO_LINE_SET_USE_REST_OF_VERTICES, then we need
 	// to use all of the vertices.
-	if (numVertices[numLines - 1] == SO_LINE_SET_USE_REST_OF_VERTICES)
+        if (numVertices[numLines - 1] == SO_LINE_SET_USE_REST_OF_VERTICES)
 	    numVerts =
 		(int)(SoCoordinateElement::getInstance(state))->getNum();
 	else for (int i = 0; i < numLines; i++)
@@ -682,7 +687,7 @@ SoLineSet::GLRender(SoGLRenderAction *action)
 	// Restore USE_REST_OF_VERTICES (-1)
 	if (usingUSE_REST) {
 	    numVertices.set1Value(numPolylines-1, -1);
-	    numVertices.enableNotify(nvNotifyEnabled);
+            numVertices.enableNotify(nvNotifyEnabled);
 	}	    
 	
 	// Influence auto-caching algorithm:

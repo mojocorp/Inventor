@@ -84,11 +84,6 @@ SoEXTENDER class SoComplexityTypeElement : public SoInt32Element {
     // Sets the current complexity type in the state
     static void		set(SoState *state, Type type);
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, Type type)
-        { set(state, type); }
-#endif
-
     // Returns current complexity type from the state
     static Type		get(SoState *state)
 	{ return (Type)SoInt32Element::get(classStackIndex, state); }

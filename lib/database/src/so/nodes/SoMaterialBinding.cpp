@@ -84,13 +84,6 @@ SoMaterialBinding::SoMaterialBinding()
     SO_NODE_DEFINE_ENUM_VALUE(Binding, PER_VERTEX);
     SO_NODE_DEFINE_ENUM_VALUE(Binding, PER_VERTEX_INDEXED);
 
-    // And obsolete bindings:
-    if (firstInstance) {
-	fieldData->addEnumValue("Binding", "DEFAULT", 0);
-	fieldData->addEnumValue("Binding", "NONE", 1);
-    }
-
-
     // Set up info in enumerated type field
     SO_NODE_SET_SF_ENUM_TYPE(value, Binding);
 

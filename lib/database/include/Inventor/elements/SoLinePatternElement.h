@@ -78,11 +78,6 @@ SoEXTENDER class SoLinePatternElement : public SoInt32Element {
     static void		set(SoState *state, u_short pattern)
 	{ SoInt32Element::set(classStackIndex, state, (int32_t)pattern); }
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, u_short pattern)
-        { set(state, pattern); }
-#endif
-
     // Returns current line pattern from the state
     static u_short	get(SoState *state)
 	{ return (u_short)SoInt32Element::get(classStackIndex, state); }
