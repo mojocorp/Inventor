@@ -93,16 +93,6 @@ SoEXTENDER class SoInt32Element : public SoElement {
     // set.
     static void		set(int stackIndex, SoState *state, int32_t value);
 
-#ifndef IV_STRICT
-    static void         set(int stackIndex, 
-				SoState *state, SoNode *, int32_t value)
-        { set(stackIndex, state, value); }
-    static void         set(int stackIndex, 
-				SoState *state, SoNode *, 
-			  	long value)	// System long
-        { set(stackIndex, state, (int32_t) value); }
-#endif
-
     // Virtual set that subclasses can override to implement
     // side-effect behaviors.
     virtual void	setElt(int32_t value);

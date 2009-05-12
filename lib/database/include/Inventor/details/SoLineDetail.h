@@ -107,13 +107,6 @@ class SoLineDetail : public SoDetail {
     void			setLineIndex(int32_t i)	{ lineIndex = i; }
     void			setPartIndex(int32_t i)	{ partIndex = i; }
 
-#ifndef IV_STRICT
-    void    setLineIndex(long i)				// System long
-		{ setLineIndex ((int32_t) i); }
-    void    setPartIndex(long i)				// System long
-		{ setPartIndex ((int32_t) i); }
-#endif
-
   SoINTERNAL public:
     static void			initClass();
 

@@ -80,11 +80,6 @@ SoEXTENDER class SoSwitchElement : public SoInt32Element {
     static void		set(SoState *state, int32_t index)
 	{ SoInt32Element::set(classStackIndex, state, index); }
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, int32_t index)
-        { set(state, index); }
-#endif
-
     // Returns current switch index from the state
     static int32_t		get(SoState *state)
 	{ return SoInt32Element::get(classStackIndex, state); }

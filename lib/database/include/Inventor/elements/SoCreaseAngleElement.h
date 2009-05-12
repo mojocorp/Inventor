@@ -80,11 +80,6 @@ SoEXTENDER class SoCreaseAngleElement : public SoFloatElement {
     static void		set(SoState *state, float angle)
 	{ SoFloatElement::set(classStackIndex, state, angle); }
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, float angle)
-        { set(state, angle); }
-#endif
-
     // Returns current crease angle from the state
     static float	get(SoState *state)
 	{ return SoFloatElement::get(classStackIndex, state); }

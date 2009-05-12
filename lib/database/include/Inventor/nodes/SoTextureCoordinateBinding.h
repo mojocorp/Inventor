@@ -88,12 +88,6 @@ class SoTextureCoordinateBinding : public SoNode {
 	    SoTextureCoordinateBindingElement::PER_VERTEX_INDEXED,
 
 // C-api: end
-#ifndef IV_STRICT
-// C-api: begin
-	// Obsolete bindings:
-	DEFAULT		  = PER_VERTEX_INDEXED
-// C-api: end
-#endif
 // C-api: begin
     };
 

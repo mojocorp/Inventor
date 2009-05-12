@@ -96,11 +96,6 @@ SoEXTENDER class SoUnitsElement : public SoInt32Element {
     static void		set(SoState *state, Units units)
 	{ SoInt32Element::set(classStackIndex, state, (int32_t)units); }
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, Units units)
-        { set(state, units); }
-#endif
-
     // Returns current units from the state
     static Units	get(SoState *state)
 	{ return (Units)SoInt32Element::get(classStackIndex, state); }

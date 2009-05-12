@@ -78,11 +78,6 @@ SoEXTENDER class SoComplexityElement : public SoFloatElement {
     static void		set(SoState *state, float comp)
 	{ SoFloatElement::set(classStackIndex, state, comp); }
 
-#ifndef IV_STRICT
-    static void		set(SoState *state, SoNode *, float comp)
-	{ set(state, comp); }
-#endif
-
     // Returns current complexity from the state
     static float	get(SoState *state)
 	{ return SoFloatElement::get(classStackIndex, state); }

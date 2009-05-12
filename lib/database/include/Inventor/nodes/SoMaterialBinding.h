@@ -93,13 +93,7 @@ class SoMaterialBinding : public SoNode {
 	PER_VERTEX_INDEXED= SoMaterialBindingElement::PER_VERTEX_INDEXED,
 
 // C-api: end
-#ifndef IV_STRICT
-// C-api: begin
-	// Obsolete bindings:
-	DEFAULT		  = OVERALL,
-	NONE		  = OVERALL
-// C-api: end
-#endif
+
 // C-api: begin
     };
 

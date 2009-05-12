@@ -93,13 +93,6 @@ class SoNormalBinding : public SoNode {
 	PER_VERTEX_INDEXED= SoNormalBindingElement::PER_VERTEX_INDEXED,
 
 // C-api: end
-#ifndef IV_STRICT
-// C-api: begin
-	// Obsolete bindings:
-	DEFAULT		  = PER_VERTEX_INDEXED,
-	NONE		  = PER_VERTEX_INDEXED
-// C-api: end
-#endif
 // C-api: begin
     };
 

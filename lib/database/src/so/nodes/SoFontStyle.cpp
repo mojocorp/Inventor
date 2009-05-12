@@ -167,7 +167,7 @@ SoFontStyle::doAction(SoAction *action)
 	if (isOverride()) {
 	    SoOverrideElement::setFontSizeOverride(state, this, TRUE);
 	}
-	SoFontSizeElement::set(state, this, size.getValue());
+        SoFontSizeElement::set(state, size.getValue());
     }
 }
 

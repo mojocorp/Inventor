@@ -85,11 +85,6 @@ SoEXTENDER class SoTextureCoordinateBindingElement : public SoInt32Element {
     static void		set(SoState *state, Binding binding)
         { SoInt32Element::set(classStackIndex, state, (int32_t)binding); }
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, Binding binding)
-        { set(state, binding); }
-#endif
-
     // Returns current texture binding from the state
     static Binding	get(SoState *state)
 	{ return (Binding)SoInt32Element::get(classStackIndex, state); }

@@ -79,11 +79,6 @@ SoEXTENDER class SoFocalDistanceElement : public SoFloatElement {
     static void		set(SoState *state, float distance)
 	{ SoFloatElement::set(classStackIndex, state, distance); }
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, float distance)
-        { set(state, distance); }
-#endif
-
     // Returns current focal distance from the state
     static float	get(SoState *state)
 	{ return SoFloatElement::get(classStackIndex, state); }
