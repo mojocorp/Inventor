@@ -66,7 +66,6 @@
 #include <Inventor/elements/SoComplexityTypeElement.h>
 #include <Inventor/elements/SoGLTextureCoordinateElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
-#include <Inventor/elements/SoLightModelElement.h>
 #include <Inventor/elements/SoMaterialBindingElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/misc/SoState.h>
@@ -202,8 +201,8 @@ SoCube::GLRender(SoGLRenderAction *action)
     // outputting normals but no texture coordinates. This case is
     // handled separately since it occurs often and warrants its own
     // method.
-    SbBool sendNormals = (SoLightModelElement::get(action->getState()) !=
-                          SoLightModelElement::BASE_COLOR);
+    SbBool sendNormals = ((SoLazyElement::getLightModel(action->getState())) !=
+                          SoLazyElement::BASE_COLOR);
     if (! doTextures && sendNormals)
         GLRenderNvertTnone(action);
     else
