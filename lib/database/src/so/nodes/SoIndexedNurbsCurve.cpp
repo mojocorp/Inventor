@@ -65,7 +65,7 @@
 #include <Inventor/elements/SoCoordinateElement.h>
 #include <Inventor/elements/SoDrawStyleElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
-#include <Inventor/elements/SoLightModelElement.h>
+#include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/elements/SoProjectionMatrixElement.h>
 #include <Inventor/elements/SoViewingMatrixElement.h>
@@ -131,9 +131,9 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
     state->push();
 
     // Draw unlit:
-    if (SoLightModelElement::get(state) != SoLightModelElement::BASE_COLOR) {
-	SoLightModelElement::set(state,
-				 SoLightModelElement::BASE_COLOR);
+    if (SoLazyElement::getLightModel(state) != SoLazyElement::BASE_COLOR) {
+        SoLazyElement::setLightModel(state,
+                                 SoLazyElement::BASE_COLOR);
     }
     // Make sure textures are disabled, as texturing of NURBS curves
     // has not been implemented.
