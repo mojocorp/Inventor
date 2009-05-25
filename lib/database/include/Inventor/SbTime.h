@@ -66,9 +66,6 @@
 #include <Inventor/SbString.h>
 
 // C-api: end
-#ifdef _CRAY
-#define trunc(x) x
-#endif /* _CRAY */
 
 // C-api: begin
 
