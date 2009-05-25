@@ -54,12 +54,6 @@
 #include <Inventor/SbTime.h>
 #include <time.h>
 
-#ifdef _CRAY
-extern "C" {
-    int gettimeofday(struct timeval *tp,struct timezone *tzp);
-}
-#endif /* _CRAY */
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:

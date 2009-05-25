@@ -63,141 +63,6 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/SoOutput.h>
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Note: The following dgl code is for machine specific implemenations.
-//       The SGI implementation is defined in dgl.h and does not
-//       require any functions (macros only).
-//
-////////////////////// BEGIN CRAY-DEPENDENT CODE ////////////////////////
-//
-// Following are functions that are used to convert from the
-// host format to the network-neutral format, for CRAY machines:
-//
-//	DGL_HTON_SHORT(t,f)	host to network - short
-//	DGL_HTON_INT32(t,f)	host to network - int32_t
-//	DGL_HTON_FLOAT(PC,vc)	host to network - float
-//	DGL_HTON_DOUBLE(PC,vc)	host to network - double
-//
-
-#ifdef _CRAY
-
-void DGL_HTON_SHORT( char *t, short f )
-{
-    t[0] = f >> 8;
-    t[1] = f;
-}
-void DGL_HTON_INT32( char *t, int32_t f )
-{
-    t[0] = f >> 24;
-    t[1] = f >> 16;
-    t[2] = f >> 8;
-    t[3] = f;
-}
-
-//
-// BIG_IEEE: no conversion necessary (FLOAT)
-//
-// (Not portable. This routine works on Crays.)
-// IEEE single precision floating point for a Cray.
-//
-
-struct	ieee_single {
-    unsigned int	zero	: 32;	/* Upper 32 bits are junk */
-    unsigned int	sign	: 1;
-    unsigned int	exp	: 8;
-    unsigned int	mantissa: 23;	/* 24-bit mantissa with 1 hidden bit */
-};
-
-/* Cray floating point, partitioned for easy conversion to IEEE single */
-struct	cray_single {
-    unsigned int	sign	 : 1;
-    unsigned int	exp	 : 15;
-    unsigned int	mantissa : 24;
-    unsigned int	mantissa2: 24;
-};
-
-struct	cray_double {
-    unsigned int	sign	 : 1;
-    unsigned int	exp	 : 15;
-    unsigned int	mantissa : 48;
-};
-
-#define	CRAY_BIAS	040001
-
-/* Cray exponent limits for conversion to IEEE single */
-#define	MAX_CRAY_SNG	(0x100 + CRAY_BIAS - IEEE_SNG_BIAS)
-#define	MIN_CRAY_SNG	(0x00 + CRAY_BIAS - IEEE_SNG_BIAS)
-
-static struct ieee_single min_sng_ieee = { 0, 0, 0x00, 0 };
-static struct ieee_single max_sng_ieee = { 0, 0, 0xff, 0 };
-
-static struct cray_single max_sng_cray = { 0, 0x6000, 0, 0 } ;
-static struct cray_double max_dbl_cray = { 0, 0x6000, 0 } ;
-
-#define IEEE_SNG_BIAS   0x7f
-
-static void DGL_HTON_FLOAT( char *PC, struct cray_single vc ) {
-    struct ieee_single ais;
-    union {
-	struct ieee_single is;
-	unsigned iis;
-    } ieee;
-
-    if (vc.exp >= MAX_CRAY_SNG) ieee.is = max_sng_ieee;
-    else if ( vc.exp < MIN_CRAY_SNG ||
-	    ( vc.mantissa == 0 && vc.mantissa2 == 0  ) )
-    {
-	//  On the Cray, there is no hidden mantissa bit.
-	//  So, if the mantissa is zero, the number is zero.
-	ieee.is = min_sng_ieee ;
-    }
-    else {
-	ieee.is.exp = vc.exp - CRAY_BIAS + IEEE_SNG_BIAS;
-	ieee.is.mantissa = vc.mantissa;
-	/* Hidden bit removed by truncation */
-    }
-    ieee.is.sign = vc.sign;
-    DGL_HTON_INT32(PC,ieee.iis);
-}
-
-// IEEE double precision floating point for a Cray,
-// (the first word, anyway - second word is pure mantissa2).
-
-struct  ieee_double {
-    unsigned int    sign      : 1;
-    unsigned int    exp       : 11;
-    unsigned int    mantissa  : 52;
-};
-
-static struct ieee_double min_dbl_ieee = { 0, 0x000, 0 };
-static struct ieee_double max_dbl_ieee = { 0, 0x7ff, 0 };
-
-#define IEEE_DBL_BIAS   0x3ff
-
-static void DGL_HTON_DOUBLE( char *PC, struct cray_double vc ) {
-    union {
-	struct ieee_double is;
-	char iis[M_SIZEOF(double)];
-    } ieee;
-
-    if(vc.exp >= MAX_CRAY_SNG) ieee.is = max_dbl_ieee;
-    else if ( vc.exp < MIN_CRAY_SNG || vc.mantissa == 0 ) {
-	//  On the Cray, there is no hidden mantissa bit.
-	//  So, if the mantissa is zero, the number is zero.
-	ieee.is = min_dbl_ieee ;
-    }
-    else {
-	ieee.is.exp = vc.exp - CRAY_BIAS + IEEE_DBL_BIAS;
-	ieee.is.mantissa = vc.mantissa << 5;
-	/* Hidden bit removed by truncation */
-    }
-    ieee.is.sign = vc.sign;
-    memcpy(PC, ieee.iis, M_SIZEOF(double));
-}
-
-#endif // _CRAY
-//////////////////////// END CRAY-DEPENDENT CODE ////////////////////////
 
 static const char *defaultASCIIHeader =  "#Inventor V2.1 ascii";
 static const char *defaultBinaryHeader = "#Inventor V2.1 binary";
@@ -647,7 +512,7 @@ SoOutput::write(char c)
             tmpBuffer[1] = 0;
             tmpBuffer[2] = 0;
             tmpBuffer[3] = 0;
-            fwrite((void *)tmpBuffer, M_SIZEOF(char), 4, fp);
+            fwrite((void *)tmpBuffer, sizeof(char), 4, fp);
             fflush(fp);
         }
     }
@@ -795,17 +660,17 @@ SoOutput::write(const SbName &s)
     if (! wroteHeader)							      \
 	writeHeader();							      \
     if (isBinary()) {							      \
-	if (isToBuffer() && ! makeRoomInBuf(M_SIZEOF(dglType)))		      \
+        if (isToBuffer() && ! makeRoomInBuf(sizeof(dglType)))		      \
 	    return;							      \
         if (isToBuffer()) {                                                   \
             dglFunc(num, curBuf);	  				      \
-            curBuf += M_SIZEOF(dglType);                                      \
+            curBuf += sizeof(dglType);                                      \
         }                                                                     \
         else {                                                                \
-            if (!makeRoomInTmpBuf(M_SIZEOF(dglType)))			      \
+            if (!makeRoomInTmpBuf(sizeof(dglType)))			      \
                 return;							      \
             dglFunc(num, tmpBuffer);                                          \
-            fwrite((void *)tmpBuffer, M_SIZEOF(dglType), 1, fp);              \
+            fwrite((void *)tmpBuffer, sizeof(dglType), 1, fp);              \
             fflush(fp);                                                       \
         }                                                                     \
     }									      \
@@ -820,17 +685,17 @@ SoOutput::write(const SbName &s)
 #define WRITE_BIN_ARRAY(type, array, length, dglFunc)  			      \
     if (! wroteHeader)							      \
 	writeHeader();							      \
-    if (isToBuffer() && ! makeRoomInBuf(length*M_SIZEOF(type)))	              \
+    if (isToBuffer() && ! makeRoomInBuf(length*sizeof(type)))	              \
         return;							              \
     if (isToBuffer()) {                                                       \
         dglFunc(array, curBuf, length);                                       \
-        curBuf += length * M_SIZEOF(type);                                    \
+        curBuf += length * sizeof(type);                                    \
     }									      \
     else {                                                                    \
-        if (!makeRoomInTmpBuf(length*M_SIZEOF(type))) 			      \
+        if (!makeRoomInTmpBuf(length*sizeof(type))) 			      \
             return;							      \
         dglFunc(array, tmpBuffer, length);                                    \
-        fwrite((void *)tmpBuffer, M_SIZEOF(type), length, fp);                \
+        fwrite((void *)tmpBuffer, sizeof(type), length, fp);                \
         fflush(fp); 							      \
     }                                                                         \
 
@@ -973,14 +838,14 @@ SoOutput::writeBinaryArray(unsigned char *c, int length)
 {
     if (! wroteHeader)
 	writeHeader();
-    if (isToBuffer() && ! makeRoomInBuf(length*M_SIZEOF(unsigned char)))
+    if (isToBuffer() && ! makeRoomInBuf(length*sizeof(unsigned char)))
 	return;
     if (isToBuffer()) {
 	memcpy(curBuf, c, length);
-	curBuf += length * M_SIZEOF(unsigned char);
+        curBuf += length * sizeof(unsigned char);
     }
     else {
-	fwrite((void *)c, M_SIZEOF(unsigned char), length, fp);
+        fwrite((void *)c, sizeof(unsigned char), length, fp);
 	fflush(fp);
     }
 }
@@ -1047,7 +912,7 @@ SoOutput::convertShort(short s, char *to)
     int i;
 
     DGL_HTON_INT32( INT32(jjj), l );
-    for (i=0; i<M_SIZEOF(int32_t); i++)  to[i] = jjj[i];
+    for (i=0; i<sizeof(int32_t); i++)  to[i] = jjj[i];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1067,7 +932,7 @@ SoOutput::convertInt32(int32_t l, char *to)
 
     DGL_HTON_INT32( INT32(jjj), l );
 
-    for (i=0; i<M_SIZEOF(int32_t); i++)  to[i] = jjj[i];
+    for (i=0; i<sizeof(int32_t); i++)  to[i] = jjj[i];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1087,7 +952,7 @@ SoOutput::convertFloat(float f, char *to)
 
     DGL_HTON_FLOAT( FLOAT(jjj), f );
 
-    for (i=0; i<M_SIZEOF(float); i++)  to[i] = jjj[i];
+    for (i=0; i<sizeof(float); i++)  to[i] = jjj[i];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1124,16 +989,16 @@ SoOutput::convertShortArray( register short *from,
 
     while (len > 4) {		// unroll the loop a bit
 	DGL_HTON_SHORT( SHORT(b), from[0]);
-	DGL_HTON_SHORT( SHORT(b + M_SIZEOF(short)),   from[1]);
-	DGL_HTON_SHORT( SHORT(b + M_SIZEOF(short)*2), from[2]);
-	DGL_HTON_SHORT( SHORT(b + M_SIZEOF(short)*3), from[3]);
-	b += M_SIZEOF(short)*4;
+        DGL_HTON_SHORT( SHORT(b + sizeof(short)),   from[1]);
+        DGL_HTON_SHORT( SHORT(b + sizeof(short)*2), from[2]);
+        DGL_HTON_SHORT( SHORT(b + sizeof(short)*3), from[3]);
+        b += sizeof(short)*4;
 	from += 4;
 	len -= 4;
     }
     while (len-- > 0) {
 	DGL_HTON_SHORT( SHORT(b),*from);
-	b += M_SIZEOF(short);
+        b += sizeof(short);
 	from++;
     }
 }
@@ -1158,16 +1023,16 @@ SoOutput::convertInt32Array( int32_t *from,
 
     while (len > 4) {		// unroll the loop a bit
 	DGL_HTON_INT32( INT32(b), f[0]);
-	DGL_HTON_INT32( INT32(b + M_SIZEOF(int32_t)),   f[1]);
-	DGL_HTON_INT32( INT32(b + M_SIZEOF(int32_t)*2), f[2]);
-	DGL_HTON_INT32( INT32(b + M_SIZEOF(int32_t)*3), f[3]);
-	b += M_SIZEOF(int32_t)*4;
+        DGL_HTON_INT32( INT32(b + sizeof(int32_t)),   f[1]);
+        DGL_HTON_INT32( INT32(b + sizeof(int32_t)*2), f[2]);
+        DGL_HTON_INT32( INT32(b + sizeof(int32_t)*3), f[3]);
+        b += sizeof(int32_t)*4;
 	f += 4;
 	len -= 4;
     }
     while (len-- > 0) {
 	DGL_HTON_INT32( INT32(b),*f);
-	b += M_SIZEOF(int32_t);
+        b += sizeof(int32_t);
 	f++;
     }
 }
@@ -1192,16 +1057,16 @@ SoOutput::convertFloatArray( float *from,
 
     while (len > 4) {		// unroll the loop a bit
 	DGL_HTON_FLOAT( FLOAT(b), f[0]);
-	DGL_HTON_FLOAT( FLOAT(b + M_SIZEOF(float)),   f[1]);
-	DGL_HTON_FLOAT( FLOAT(b + M_SIZEOF(float)*2), f[2]);
-	DGL_HTON_FLOAT( FLOAT(b + M_SIZEOF(float)*3), f[3]);
-	b += M_SIZEOF(float)*4;
+        DGL_HTON_FLOAT( FLOAT(b + sizeof(float)),   f[1]);
+        DGL_HTON_FLOAT( FLOAT(b + sizeof(float)*2), f[2]);
+        DGL_HTON_FLOAT( FLOAT(b + sizeof(float)*3), f[3]);
+        b += sizeof(float)*4;
 	f += 4;
 	len -= 4;
     }
     while (len-- > 0) {
 	DGL_HTON_FLOAT( FLOAT(b),*f);
-	b += M_SIZEOF(float);
+        b += sizeof(float);
 	f++;
     }
 }
@@ -1225,16 +1090,16 @@ SoOutput::convertDoubleArray( register double *from,
 
     while (len > 4) {		// unroll the loop a bit
 	DGL_HTON_DOUBLE( DOUBLE(b), from[0]);
-	DGL_HTON_DOUBLE( DOUBLE(b + M_SIZEOF(double)),   from[1]);
-	DGL_HTON_DOUBLE( DOUBLE(b + M_SIZEOF(double)*2), from[2]);
-	DGL_HTON_DOUBLE( DOUBLE(b + M_SIZEOF(double)*3), from[3]);
-	b += M_SIZEOF(double)*4;
+        DGL_HTON_DOUBLE( DOUBLE(b + sizeof(double)),   from[1]);
+        DGL_HTON_DOUBLE( DOUBLE(b + sizeof(double)*2), from[2]);
+        DGL_HTON_DOUBLE( DOUBLE(b + sizeof(double)*3), from[3]);
+        b += sizeof(double)*4;
 	from += 4;
 	len -= 4;
     }
     while (len-- > 0) {
 	DGL_HTON_DOUBLE( DOUBLE(b),*from);
-	b += M_SIZEOF(double);
+        b += sizeof(double);
 	from++;
     }
 }

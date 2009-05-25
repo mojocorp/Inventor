@@ -72,145 +72,6 @@ SbStringList *SoInput::directories = NULL;
 #define COMMENT_CHAR '#'
 
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Note: The following dgl code is for machine specific implemenations.
-//       The SGI implementation is defined in dgl.h and does not
-//       require any functions (macros only).
-//
-////////////////////// BEGIN CRAY-DEPENDENT CODE ////////////////////////
-//
-// Following are functions that are used to convert from the
-// network format to the host format for CRAY machines:
-//
-//	dgl_ntoh_short(f)	network to host - short
-//	dgl_ntoh_int32(f)	network to host - int32_t
-//	dgl_ntoh_float(PC)	network to host - float
-//	dgl_ntoh_double(PC)	network to host - double
-//
-////////////////////////////////////////////////////////////////////////
-
-#ifdef _CRAY
-
-short dgl_ntoh_short( char *f )
-{
-    int val;
-    val = f[0] << 8 | f[1];
-    if (f[0] & 0x80) val |= ~0xffff;
-    return (val);
-}
-int32_t dgl_ntoh_int32( char *f )
-{
-    int32_t val;
-    val = f[0] << 24 | f[1] << 16 | f[2] << 8 | f[3];
-    if (f[0] & 0x80) val |= ~0xffffffff;
-    return (val);
-}
-
-//
-// BIG_IEEE: no conversion necessary (FLOAT)
-//
-// (Not portable.  This routine works on Crays.)
-// What IEEE single precision floating point looks like on a Cray
-
-struct	ieee_single {
-    unsigned int	zero	: 32;	// Upper 32 bits are junk
-    unsigned int	sign	: 1;
-    unsigned int	exp	: 8;
-    unsigned int	mantissa: 23;	// 24-bit mantissa with 1 hidden bit
-};
-
-// Cray floating point, partitioned for easy conversion to IEEE single
-struct	cray_single {
-    unsigned int	sign	 : 1;
-    unsigned int	exp	 : 15;
-    unsigned int	mantissa : 24;
-    unsigned int	mantissa2: 24;
-};
-
-struct	cray_double {
-    unsigned int	sign	 : 1;
-    unsigned int	exp	 : 15;
-    unsigned int	mantissa : 48;
-};
-
-#define	CRAY_BIAS	040001
-
-// Cray exponent limits for conversion to IEEE single
-#define	MAX_CRAY_SNG	(0x100 + CRAY_BIAS - IEEE_SNG_BIAS)
-#define	MIN_CRAY_SNG	(0x00 + CRAY_BIAS - IEEE_SNG_BIAS)
-
-static struct cray_single max_sng_cray = { 0, 0x6000, 0, 0 } ;
-static struct cray_double max_dbl_cray = { 0, 0x6000, 0 } ;
-
-#define IEEE_SNG_BIAS   0x7f
-
-float dgl_ntoh_float( char *PC ) { 		// CRAY-dependent
-    union {
-	struct ieee_single is;
-	int32_t l;
-    } c;
-    union {
-	struct cray_single vc;
-	float iis;
-    } ieee;
-
-    c.l = dgl_ntoh_int32(PC);
-
-    if(c.is.exp == 0) { ieee.iis = 0.0; }
-    else if ( c.is.exp == 0xff ) {
-	// If the IEEE float we are decoding indicates an IEEE overflow
-	// condition, we manufacture a Cray overflow condition.
-	ieee.vc = max_sng_cray ;
-    }
-    else {
-	ieee.vc.sign = c.is.sign;
-	ieee.vc.exp = c.is.exp - IEEE_SNG_BIAS + CRAY_BIAS;
-	ieee.vc.mantissa = c.is.mantissa | (1 << 23);
-	ieee.vc.mantissa2 = 0;
-    }
-    return (ieee.iis);
-}
-
-// What IEEE double precision floating point looks like on a Cray
-// (the first word, anyway.  Second word is pure mantissa2.)
-struct  ieee_double {
-    unsigned int    sign      : 1;
-    unsigned int    exp       : 11;
-    unsigned int    mantissa  : 52;
-};
-
-#define IEEE_DBL_BIAS   0x3ff
-
-float dgl_ntoh_double( char *PC ) { 	// CRAY-dependent
-    union {
-	struct ieee_double is;
-	char l[M_SIZEOF(double)];
-    } c;
-    union {
-	struct	cray_double vc;
-	float iis;
-    } cr;
-
-    memcpy(c.l, PC, M_SIZEOF(double));
-    if(c.is.exp == 0) { cr.iis = 0.0; }
-    else if ( c.is.exp == 0xff ) {
-	// If the IEEE float we are decoding indicates an IEEE overflow
-	// condition, we manufacture a Cray overflow condition.
-	cr.vc = max_dbl_cray ;
-    }
-    else {
-	cr.vc.sign = c.is.sign;
-	cr.vc.exp = c.is.exp - IEEE_DBL_BIAS + CRAY_BIAS;
-	cr.vc.mantissa = (c.is.mantissa >> 5) | (1 << 47);
-    }
-    return (cr.iis);
-}
-#endif // _CRAY
-//////////////////////// END CRAY-DEPENDENT CODE ////////////////////////
-
-
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -1250,7 +1111,7 @@ SoInput::read(SbName &n,		// Name to read into
     if (! skipWhiteSpace())                                                   \
         ok = FALSE;                                                           \
     else if (curFile->binary) {                                               \
-        int n = M_SIZEOF(dglType);                                            \
+        int n = sizeof(dglType);                                            \
         int pad = ((n+3) & ~0003) - n;                                        \
         dglType tnum;                                                         \
         if (fromBuffer()) {                                                   \
@@ -1259,7 +1120,7 @@ SoInput::read(SbName &n,		// Name to read into
             else {                                                            \
                 ok = TRUE;                                                    \
                 dglFunc(curFile->curBuf, (dglType *)&tnum);                   \
-                curFile->curBuf += M_SIZEOF(dglType) + pad;                   \
+                curFile->curBuf += sizeof(dglType) + pad;                   \
             }                                                                 \
         }                                                                     \
         else {                                                                \
@@ -1269,11 +1130,11 @@ SoInput::read(SbName &n,		// Name to read into
                 return TRUE;                                                  \
             }                                                                 \
             char padbuf[4];                                                   \
-            makeRoomInBuf(M_SIZEOF(dglType));                                 \
-            ok = fread(tmpBuffer, M_SIZEOF(dglType), 1, curFile->fp);         \
+            makeRoomInBuf(sizeof(dglType));                                 \
+            ok = fread(tmpBuffer, sizeof(dglType), 1, curFile->fp);         \
             dglFunc((char *)tmpBuffer, (dglType *)&tnum);                     \
             if (pad != 0)                                                     \
-                ok = fread((void *)padbuf, M_SIZEOF(char), pad, curFile->fp); \
+                ok = fread((void *)padbuf, sizeof(char), pad, curFile->fp); \
         }                                                                     \
         num = (type)tnum;                                                     \
     }                                                                         \
@@ -1294,12 +1155,12 @@ SoInput::read(SbName &n,		// Name to read into
 	    ok = FALSE;					                      \
 	else {								      \
 	    dglFunc(curFile->curBuf, (type *)array, length);	              \
-	    curFile->curBuf += length * M_SIZEOF(type);                       \
+            curFile->curBuf += length * sizeof(type);                       \
         }								      \
     }                                                                         \
     else { 								      \
-        makeRoomInBuf(length * M_SIZEOF(type));				      \
-        int i = fread(tmpBuffer, M_SIZEOF(type), length, curFile->fp);        \
+        makeRoomInBuf(length * sizeof(type));				      \
+        int i = fread(tmpBuffer, sizeof(type), length, curFile->fp);        \
         if (i != length)                                                      \
             return FALSE;                                                     \
         dglFunc((char *)tmpBuffer, (type *)array, length);		      \
@@ -1385,11 +1246,11 @@ SoInput::readBinaryArray(unsigned char *c, int length)
 	    ok = FALSE;
 	else {
 	    memcpy((unsigned char *)c, curFile->curBuf, length);
-	    curFile->curBuf += length * M_SIZEOF(unsigned char);
+            curFile->curBuf += length * sizeof(unsigned char);
 	}
     }
     else {
-	int i = fread(c, M_SIZEOF(unsigned char), length, curFile->fp);
+        int i = fread(c, sizeof(unsigned char), length, curFile->fp);
 	if (i != length)
 	    return FALSE;
     }
@@ -1525,17 +1386,17 @@ SoInput::convertShortArray( char *from,
     len >>= 1;			// convert bytes to short
     while (len > 4) {		// unroll the loop a bit
 	DGL_NTOH_SHORT( to[0], SHORT(b));
-	DGL_NTOH_SHORT( to[1], SHORT(b + M_SIZEOF(short)));
-	DGL_NTOH_SHORT( to[2], SHORT(b + M_SIZEOF(short)*2));
-	DGL_NTOH_SHORT( to[3], SHORT(b + M_SIZEOF(short)*3));
+        DGL_NTOH_SHORT( to[1], SHORT(b + sizeof(short)));
+        DGL_NTOH_SHORT( to[2], SHORT(b + sizeof(short)*2));
+        DGL_NTOH_SHORT( to[3], SHORT(b + sizeof(short)*3));
 	to += 4;
-	b  += M_SIZEOF(short)*4;
+        b  += sizeof(short)*4;
 	len -= 4;
     }
     while (len-- > 0) {
 	DGL_NTOH_SHORT( *to, SHORT(b));
 	to++;
-	b += M_SIZEOF(short);
+        b += sizeof(short);
     }
 }
 
@@ -1560,17 +1421,17 @@ SoInput::convertInt32Array( char *from,
 
     while (len > 4) {		// unroll the loop a bit
 	DGL_NTOH_INT32( t[0], INT32(b));
-	DGL_NTOH_INT32( t[1], INT32(b + M_SIZEOF(int32_t)));
-	DGL_NTOH_INT32( t[2], INT32(b + M_SIZEOF(int32_t)*2));
-	DGL_NTOH_INT32( t[3], INT32(b + M_SIZEOF(int32_t)*3));
+        DGL_NTOH_INT32( t[1], INT32(b + sizeof(int32_t)));
+        DGL_NTOH_INT32( t[2], INT32(b + sizeof(int32_t)*2));
+        DGL_NTOH_INT32( t[3], INT32(b + sizeof(int32_t)*3));
 	t += 4;
-	b += M_SIZEOF(int32_t)*4;
+        b += sizeof(int32_t)*4;
 	len -= 4;
     }
     while (len-- > 0) {
 	DGL_NTOH_INT32( *t, INT32(b));
 	t++;
-	b += M_SIZEOF(int32_t);
+        b += sizeof(int32_t);
     }
 }
 
@@ -1595,17 +1456,17 @@ SoInput::convertFloatArray( char  *from,
 
     while (len > 4) {		// unroll the loop a bit
 	DGL_NTOH_FLOAT( t[0], FLOAT(b));
-	DGL_NTOH_FLOAT( t[1], FLOAT(b + M_SIZEOF(float)));
-	DGL_NTOH_FLOAT( t[2], FLOAT(b + M_SIZEOF(float)*2));
-	DGL_NTOH_FLOAT( t[3], FLOAT(b + M_SIZEOF(float)*3));
+        DGL_NTOH_FLOAT( t[1], FLOAT(b + sizeof(float)));
+        DGL_NTOH_FLOAT( t[2], FLOAT(b + sizeof(float)*2));
+        DGL_NTOH_FLOAT( t[3], FLOAT(b + sizeof(float)*3));
 	t += 4;
-	b += M_SIZEOF(float)*4;
+        b += sizeof(float)*4;
 	len -= 4;
     }
     while (len-- > 0) {
 	DGL_NTOH_FLOAT( *t, FLOAT(b));
 	t++;
-	b += M_SIZEOF(float);
+        b += sizeof(float);
     }
 }
 
@@ -1630,17 +1491,17 @@ SoInput::convertDoubleArray( char *from,
     len >>= 3;			// convert bytes to doubles
     while (len > 4) {		// unroll the loop a bit
 	DGL_NTOH_DOUBLE( to[0], DOUBLE(b));
-	DGL_NTOH_DOUBLE( to[1], DOUBLE(b + M_SIZEOF(double)));
-	DGL_NTOH_DOUBLE( to[2], DOUBLE(b + M_SIZEOF(double)*2));
-	DGL_NTOH_DOUBLE( to[3], DOUBLE(b + M_SIZEOF(double)*3));
+        DGL_NTOH_DOUBLE( to[1], DOUBLE(b + sizeof(double)));
+        DGL_NTOH_DOUBLE( to[2], DOUBLE(b + sizeof(double)*2));
+        DGL_NTOH_DOUBLE( to[3], DOUBLE(b + sizeof(double)*3));
 	to += 4;
-	b  += M_SIZEOF(double)*4;
+        b  += sizeof(double)*4;
 	len -= 4;
     }
     while (len-- > 0) {
 	DGL_NTOH_DOUBLE( *to, DOUBLE(b));
 	to++;
-	b += M_SIZEOF(double);
+        b += sizeof(double);
     }
 }
 

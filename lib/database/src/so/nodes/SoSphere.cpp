@@ -69,10 +69,6 @@
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoSphere.h>
 
-#ifdef _CRAY
-#define atan2f	atan2
-#endif
-
 SO_NODE_SOURCE(SoSphere);
 
 // Computes S and T texture coordinates from point on surface
@@ -712,7 +708,3 @@ SoSphere::computeDepth(SoAction *action)
 }
 
 #undef COMPUTE_S_T
-
-#ifdef _CRAY
-#undef atan2f
-#endif
