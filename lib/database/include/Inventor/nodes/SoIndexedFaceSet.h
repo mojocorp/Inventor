@@ -81,7 +81,7 @@ class SoShapeStyleElement;
 
 // C-api: prefix=SoIndFSet
 // C-api: public=coordIndex, materialIndex, normalIndex, textureCoordIndex, vertexProperty
-class SoIndexedFaceSet : public SoIndexedShape {
+class INVENTOR_API SoIndexedFaceSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedFaceSet);
 

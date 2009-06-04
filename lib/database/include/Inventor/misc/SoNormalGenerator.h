@@ -97,7 +97,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoNormalGenerator {
+SoEXTENDER class INVENTOR_API SoNormalGenerator {
 
   public:
     // Constructors and destructor

@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSUShort
-class SoSFUShort : public SoSField {
+class INVENTOR_API SoSFUShort : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFUShort, unsigned short, unsigned short);

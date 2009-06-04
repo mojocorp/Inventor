@@ -77,7 +77,7 @@
 #  pragma set woff 1375
 #endif
 
-class SoMemoryError : public SoError {
+class INVENTOR_API SoMemoryError : public SoError {
 
   public:
     // Sets/returns handler callback for SoMemoryError class

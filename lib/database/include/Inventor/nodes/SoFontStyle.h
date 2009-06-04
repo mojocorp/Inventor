@@ -67,7 +67,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=family,style
-class SoFontStyle : public SoFont {
+class INVENTOR_API SoFontStyle : public SoFont {
 
     SO_NODE_HEADER(SoFontStyle);
 

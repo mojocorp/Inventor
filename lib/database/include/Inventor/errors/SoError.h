@@ -106,10 +106,10 @@ class SoNode;
 class SoPath;
 
 // Error handling callbacks are of this type:
-typedef void	SoErrorCB(const SoError *error, void *data);
+typedef void INVENTOR_API SoErrorCB(const SoError *error, void *data);
 
 // C-api: prefix=SoErr
-class SoError {
+class INVENTOR_API SoError {
 
   public:
     // Sets/returns handler callback for SoError class

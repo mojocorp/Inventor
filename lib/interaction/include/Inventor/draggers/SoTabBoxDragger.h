@@ -88,7 +88,7 @@ class SoFieldSensor;
 
 // C-api: prefix=SoTabBoxDrag
 // C-api: public=translation,scaleFactor
-class SoTabBoxDragger : public SoDragger
+class INVENTOR_API SoTabBoxDragger : public SoDragger
 {
     SO_KIT_HEADER(SoTabBoxDragger);
 

@@ -79,7 +79,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SbTime {
+class INVENTOR_API SbTime {
   public:
 
     // Default constructor
@@ -198,10 +198,10 @@ class SbTime {
     SbString			formatDate(const char *fmt = "%A, %D %r") const;
 
     // Addition
-    friend SbTime		operator +(const SbTime &t0, const SbTime &t1);
+    friend INVENTOR_API SbTime		operator +(const SbTime &t0, const SbTime &t1);
 
     // Subtraction
-    friend SbTime		operator -(const SbTime &t0, const SbTime &t1);
+    friend INVENTOR_API SbTime		operator -(const SbTime &t0, const SbTime &t1);
 
     // Destructive addition
     SbTime &			operator +=(const SbTime &tm)
@@ -218,10 +218,10 @@ class SbTime {
 	      : SbTime(- t.tv_sec - 1, 1000000 - t.tv_usec); }
 
     // multiplication by scalar
-    friend SbTime		operator *(const SbTime &tm, double s);
+    friend INVENTOR_API SbTime		operator *(const SbTime &tm, double s);
 // C-api: end
 
-    friend SbTime		operator *(double s, const SbTime &tm)
+    friend INVENTOR_API SbTime		operator *(double s, const SbTime &tm)
 	{ return tm * s; }
 
 // C-api: begin
@@ -230,7 +230,7 @@ class SbTime {
 	{ *this = *this * s; return *this; }
 
     // division by scalar
-    friend SbTime		operator /(const SbTime &tm, double s);
+    friend INVENTOR_API SbTime		operator /(const SbTime &tm, double s);
 
     // destructive division by scalar
     SbTime &			operator /=(double s)

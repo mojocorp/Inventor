@@ -75,7 +75,7 @@
 
 // C-api: abstract
 // C-api: prefix=SoDtl
-class SoDetail {
+class INVENTOR_API SoDetail {
   public:
     // Destructor
     // C-api: expose

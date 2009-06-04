@@ -97,7 +97,7 @@
 
 // C-api: prefix=SoSepKit
 // C-api: public=renderCaching,boundingBoxCaching,renderCulling,pickCulling
-class SoSeparatorKit : public SoBaseKit {
+class INVENTOR_API SoSeparatorKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoSeparatorKit);
 

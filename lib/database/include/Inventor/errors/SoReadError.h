@@ -78,7 +78,7 @@ class SoInput;
 #  pragma set woff 1375
 #endif
 
-class SoReadError : public SoError {
+class INVENTOR_API SoReadError : public SoError {
 
   public:
     // Sets/returns handler callback for SoReadError class

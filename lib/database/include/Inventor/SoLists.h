@@ -100,7 +100,7 @@ class SoPickedPoint;
 #  pragma set woff 1375
 #endif
 
-class SoBaseList : public SbPList {
+class INVENTOR_API SoBaseList : public SbPList {
   public:
     SoBaseList();
     // C-api: name=createSize
@@ -145,7 +145,7 @@ class SoBaseList : public SbPList {
     SbBool		addRefs;
 };
 
-class SoNodeList : public SoBaseList {
+class INVENTOR_API SoNodeList : public SoBaseList {
   public:
     SoNodeList()			: SoBaseList()	{}
     // C-api: name=createSize
@@ -165,7 +165,7 @@ class SoNodeList : public SoBaseList {
 	{ return ( (SoNode *) ( (*(const SoBaseList *) this) [i] ) ); }
 };
 
-class SoPathList : public SoBaseList {
+class INVENTOR_API SoPathList : public SoBaseList {
   public:
     SoPathList()			: SoBaseList()	{}
     // C-api: name=createSize
@@ -200,7 +200,7 @@ class SoPathList : public SoBaseList {
     static int		comparePaths(const void *p1Ptr, const void *p2Ptr);
 };
 
-class SoEngineList : public SoBaseList {
+class INVENTOR_API SoEngineList : public SoBaseList {
   public:
     SoEngineList()			: SoBaseList()	{}
     // C-api: name=createSize
@@ -220,7 +220,7 @@ class SoEngineList : public SoBaseList {
 	{ return ( (SoEngine *) ( (*(const SoBaseList *) this) [i] ) ); }
 };
 
-class SoTypeList : public SbPList {
+class INVENTOR_API SoTypeList : public SbPList {
   public:
     SoTypeList()			: SbPList()	{}
     // C-api: name=createSize
@@ -247,7 +247,7 @@ class SoTypeList : public SbPList {
 };
 
 // C-api: prefix=SoDtlList
-class SoDetailList : public SbPList {
+class INVENTOR_API SoDetailList : public SbPList {
   public:
     SoDetailList()			: SbPList()	{}
     // C-api: name=createSize
@@ -285,7 +285,7 @@ class SoDetailList : public SbPList {
 };
 
 // C-api: prefix=SoPickPtList
-class SoPickedPointList : public SbPList {
+class INVENTOR_API SoPickedPointList : public SbPList {
   public:
     SoPickedPointList()			: SbPList()	{}
     // C-api: name=createSize
@@ -315,7 +315,7 @@ class SoPickedPointList : public SbPList {
     void		set(int i, SoPickedPoint *pickedPoint);
 };
 
-class SoFieldList : public SbPList {
+class INVENTOR_API SoFieldList : public SbPList {
   public:
     SoFieldList()			: SbPList()	{}
     // C-api: name=createSize
@@ -347,7 +347,7 @@ class SoFieldList : public SbPList {
 	{ return (SoField *)SbPList::get(i); }
 };
 
-class SoEngineOutputList : public SbPList {
+class INVENTOR_API SoEngineOutputList : public SbPList {
   public:
     SoEngineOutputList()			: SbPList()	{}
     // C-api: name=createSize

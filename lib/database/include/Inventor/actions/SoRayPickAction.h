@@ -80,7 +80,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoRayAct
-class SoRayPickAction : public SoPickAction {
+class INVENTOR_API SoRayPickAction : public SoPickAction {
 
     SO_ACTION_HEADER(SoRayPickAction);
 

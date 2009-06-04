@@ -64,7 +64,7 @@
 class SoFieldContainer;
 
 // C-api: prefix=SoFieldSens
-class SoFieldSensor : public SoDataSensor {
+class INVENTOR_API SoFieldSensor : public SoDataSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data

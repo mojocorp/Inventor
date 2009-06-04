@@ -81,7 +81,7 @@ class SoState;
 
 // C-api: prefix=SoIndLSet
 // C-api: public=coordIndex, materialIndex, normalIndex, textureCoordIndex, vertexProperty
-class SoIndexedLineSet : public SoIndexedShape {
+class INVENTOR_API SoIndexedLineSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedLineSet);
 

@@ -64,7 +64,7 @@ class SoWWWAnchor;
 // and highlight (move over the anchor).
 // The URL for the anchor is passed, with additional information as described by the
 // map field tagged onto the URL.
-typedef void SoWWWAnchorCB(
+typedef void INVENTOR_API SoWWWAnchorCB(
     const SbString &url, void *userData, SoWWWAnchor *node);
 
 
@@ -75,7 +75,7 @@ typedef void SoWWWAnchorCB(
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=name,description,map
-class SoWWWAnchor : public SoLocateHighlight {
+class INVENTOR_API SoWWWAnchor : public SoLocateHighlight {
 
     SO_NODE_HEADER(SoWWWAnchor);
 

@@ -71,7 +71,7 @@
 
 #include <Inventor/SbBasic.h>
 
-class SoInteraction {
+class INVENTOR_API SoInteraction {
   public:
     static void		init();		// init all interaction classes
   private:

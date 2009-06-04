@@ -66,7 +66,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoTextureCoordinateBindingElement : public SoInt32Element {
+SoEXTENDER class INVENTOR_API SoTextureCoordinateBindingElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoTextureCoordinateBindingElement);
 

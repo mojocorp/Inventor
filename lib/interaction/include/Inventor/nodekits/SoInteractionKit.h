@@ -82,7 +82,7 @@ class SoPathList;
 
 // C-api: prefix=SoInteractKit
 // C-api: public=renderCaching, boundingBoxCaching, renderCulling, pickCulling
-class SoInteractionKit : public SoBaseKit {
+class INVENTOR_API SoInteractionKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoInteractionKit);
 

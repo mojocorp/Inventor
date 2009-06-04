@@ -75,7 +75,7 @@ class SoSearchAction;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoNkitPath
-class SoNodeKitPath : public SoPath {
+class INVENTOR_API SoNodeKitPath : public SoPath {
 
   public:
 

@@ -67,7 +67,7 @@ class SoChildList;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoGroup : public SoNode {
+class INVENTOR_API SoGroup : public SoNode {
 
     SO_NODE_HEADER(SoGroup);
 

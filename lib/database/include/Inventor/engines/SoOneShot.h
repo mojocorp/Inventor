@@ -67,7 +67,7 @@
 
 // C-api: public=duration,trigger,flags,disable,timeIn
 // C-api: public=timeOut,isActive,ramp
-class SoOneShot : public SoEngine {
+class INVENTOR_API SoOneShot : public SoEngine {
 
     SO_ENGINE_HEADER(SoOneShot);
 

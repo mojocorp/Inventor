@@ -82,7 +82,7 @@ class SoMField;
 
 // C-api: public=input,output
 // C-api: prefix=SoConcat
-class SoConcatenate : public SoEngine {
+class INVENTOR_API SoConcatenate : public SoEngine {
 
     SO_ENGINE_HEADER(SoConcatenate);
 

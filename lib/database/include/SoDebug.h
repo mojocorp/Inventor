@@ -60,6 +60,8 @@
 #ifndef _SO_DEBUG_
 #define _SO_DEBUG_
 
+#include <Inventor/SbBasic.h>
+
 class SoBase;
 class SoNode;
 class SoField;
@@ -76,7 +78,7 @@ class SoField;
 //   IV_DEBUG_CACHELIST : print out info on Separator render caches.
 //
 
-class SoDebug {
+class INVENTOR_API SoDebug {
   public:
     // Returns value of environment variable; faster than getenv()
     // because the environment variables are stored in a dictionary.

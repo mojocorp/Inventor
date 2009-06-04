@@ -82,7 +82,7 @@ typedef void SoDBHeaderCB(void *userData, SoInput *in);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoDB {
+class INVENTOR_API SoDB {
 
   public:
     // Initialization routine. Creates global database

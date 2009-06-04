@@ -81,7 +81,7 @@
 
 class SoAction;
 
-SoEXTENDER class SoChildList : public SoNodeList {
+SoEXTENDER class INVENTOR_API SoChildList : public SoNodeList {
 
   public:
     // Constructors and destructor.

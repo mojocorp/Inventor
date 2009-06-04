@@ -77,7 +77,7 @@
 #define SO_SWITCH_ALL		(-3)	/* Traverse all children	*/
 
 // C-api: public=whichChild
-class SoSwitch : public SoGroup {
+class INVENTOR_API SoSwitch : public SoGroup {
 
     SO_NODE_HEADER(SoSwitch);
 

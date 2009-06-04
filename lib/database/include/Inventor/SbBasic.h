@@ -133,4 +133,14 @@ typedef int	SbBool;
 
 #endif /* _DOUBLE_MATH_ONLY */
 
+#if defined(WIN32) || defined(WIN64)
+#  ifdef INVENTOR_EXPORTS
+#     define INVENTOR_API __declspec(dllexport)
+#  else
+#     define INVENTOR_API __declspec(dllimport)
+#  endif
+#else
+#   define INVENTOR_API
+#endif
+
 #endif /* _SB_BASIC_ */

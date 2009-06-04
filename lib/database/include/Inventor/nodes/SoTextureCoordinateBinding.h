@@ -77,7 +77,7 @@
 
 // C-api: prefix=SoTexCoordBind
 // C-api: public=value
-class SoTextureCoordinateBinding : public SoNode {
+class INVENTOR_API SoTextureCoordinateBinding : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinateBinding);
 

@@ -129,7 +129,7 @@ SoINTERNAL struct SoInputFile {
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoIn
-class SoInput {
+class INVENTOR_API SoInput {
  public:
 
     // Constructor (default SoInput reads from stdin)

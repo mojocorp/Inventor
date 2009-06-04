@@ -81,7 +81,7 @@ class SoField;
 class SoOutput;
 class SoInput;
 
-class SoEngine : public SoFieldContainer {
+class INVENTOR_API SoEngine : public SoFieldContainer {
 
   public:
 
@@ -197,7 +197,7 @@ friend class SoEngineOutput;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoEngineOutput {
+class INVENTOR_API SoEngineOutput {
 
   public:
     // type of field this output can connect to

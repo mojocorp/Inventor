@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSStr
-class SoSFString : public SoSField {
+class INVENTOR_API SoSFString : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFString, SbString, const SbString &);
 

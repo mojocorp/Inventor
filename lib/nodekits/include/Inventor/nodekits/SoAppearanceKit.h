@@ -87,7 +87,7 @@
 ////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoAppearKit
-class SoAppearanceKit : public SoBaseKit {
+class INVENTOR_API SoAppearanceKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoAppearanceKit);
 

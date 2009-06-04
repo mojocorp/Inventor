@@ -62,7 +62,7 @@
 
 // C-api: abstract
 // C-api: prefix=SbSphProj
-class SbSphereProjector : public SbProjector
+class INVENTOR_API SbSphereProjector : public SbProjector
 {
   public:
     // Apply the projector using the given point, returning the

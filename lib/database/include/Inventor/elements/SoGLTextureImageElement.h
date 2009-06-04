@@ -73,7 +73,7 @@ class SoGLDisplayList;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLTextureImageElement : public SoTextureImageElement {
+SoEXTENDER class INVENTOR_API SoGLTextureImageElement : public SoTextureImageElement {
 
     SO_ELEMENT_HEADER(SoGLTextureImageElement);
     

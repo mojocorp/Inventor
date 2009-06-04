@@ -93,7 +93,7 @@ class SoTextureCoordinateElement;
 
 // C-api: prefix=SoTxt3
 // C-api: public=string, spacing, parts, justification
-class SoText3 : public SoShape {
+class INVENTOR_API SoText3 : public SoShape {
 
     SO_NODE_HEADER(SoText3);
 

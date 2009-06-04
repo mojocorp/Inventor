@@ -85,7 +85,7 @@ class SoPath;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoBase {
+class INVENTOR_API SoBase {
   public:
 
     // Adds a reference to an instance

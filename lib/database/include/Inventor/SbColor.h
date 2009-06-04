@@ -79,7 +79,7 @@ class SbColor;
 
 // C-api: end
 
-class SbColor : public SbVec3f {
+class INVENTOR_API SbColor : public SbVec3f {
   public:
     // Default constructor
     SbColor();

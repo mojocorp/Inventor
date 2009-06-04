@@ -68,7 +68,7 @@ class SoNotList;
 
 // C-api: abstract
 // C-api: prefix=SoDataSens
-class SoDataSensor : public SoDelayQueueSensor {
+class INVENTOR_API SoDataSensor : public SoDelayQueueSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data

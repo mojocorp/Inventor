@@ -68,7 +68,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=string
-class SoInfo : public SoNode {
+class INVENTOR_API SoInfo : public SoNode {
 
     SO_NODE_HEADER(SoInfo);
 

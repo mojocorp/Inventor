@@ -61,7 +61,7 @@
 #include <Inventor/sensors/SoDataSensor.h>
 
 // C-api: prefix=SoNodeSens
-class SoNodeSensor : public SoDataSensor {
+class INVENTOR_API SoNodeSensor : public SoDataSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data

@@ -76,7 +76,7 @@ class _SoNurbsNurbsTessellator;
 
 // C-api: prefix=SoIndCurve
 // C-api: public=numControlPoints, coordIndex, knotVector
-class SoIndexedNurbsCurve : public SoShape {
+class INVENTOR_API SoIndexedNurbsCurve : public SoShape {
 
     SO_NODE_HEADER(SoIndexedNurbsCurve);
 

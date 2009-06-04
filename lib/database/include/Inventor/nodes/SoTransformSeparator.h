@@ -71,7 +71,7 @@
 
 // C-api: prefix=SoXfSep
 // C-api: public=whichChild
-class SoTransformSeparator : public SoGroup {
+class INVENTOR_API SoTransformSeparator : public SoGroup {
 
     SO_NODE_HEADER(SoTransformSeparator);
 

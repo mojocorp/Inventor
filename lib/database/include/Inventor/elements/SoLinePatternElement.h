@@ -66,7 +66,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoLinePatternElement : public SoInt32Element {
+SoEXTENDER class INVENTOR_API SoLinePatternElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoLinePatternElement);
 

@@ -70,7 +70,7 @@
 
 // C-api: prefix=SoLModel
 // C-api: public=model, nearColor, farColor
-class SoLightModel : public SoNode {
+class INVENTOR_API SoLightModel : public SoNode {
 
     SO_NODE_HEADER(SoLightModel);
 

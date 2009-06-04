@@ -72,7 +72,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SbStr
-class SbString {
+class INVENTOR_API SbString {
   public:
 
     // Default constructor
@@ -106,7 +106,7 @@ class SbString {
 
     // Returns length of string
     // C-api: name=getLen
-    int			getLength() const	{ return strlen(string); }
+    int			getLength() const	{ return static_cast<int>(strlen(string)); }
 
     // Sets string to be the empty string (""). If freeOld is TRUE
     // (default), any old storage is freed up
@@ -147,27 +147,27 @@ class SbString {
 
     // Equality operator for SbString/char* and SbString/SbString comparison
     // C-api: name=IsEqStr
-    friend int		operator ==(const SbString &str, const char *s);
+    friend INVENTOR_API int		operator ==(const SbString &str, const char *s);
 // C-api: end
 
-    friend int		operator ==(const char *s, const SbString &str)
+    friend INVENTOR_API int		operator ==(const char *s, const SbString &str)
 	{ return (str == s); }
 
 // C-api: begin
 
-    friend int		operator ==(const SbString &str1, const SbString &str2)
+    friend INVENTOR_API int		operator ==(const SbString &str1, const SbString &str2)
 	{ return (str1 == str2.string); }
 
     // Inequality operator for SbString/char* and SbString/SbString comparison
     // C-api: name=IsNEqStr
-    friend int		operator !=(const SbString &str, const char *s);
+    friend INVENTOR_API int		operator !=(const SbString &str, const char *s);
 // C-api: end
 
-    friend int		operator !=(const char *s, const SbString &str)
+    friend INVENTOR_API int		operator !=(const char *s, const SbString &str)
 	{ return (str != s); }
 
 // C-api: begin
-    friend int		operator !=(const SbString &str1,
+    friend INVENTOR_API int		operator !=(const SbString &str1,
 				    const SbString &str2)
 	{ return (str1 != str2.string); }
 
@@ -196,7 +196,7 @@ class SbString {
 
 // C-api: end
 
-SoINTERNAL class SbNameEntry {
+SoINTERNAL class INVENTOR_API SbNameEntry {
 
   public:
     // Returns TRUE if entry's string is empty ("")
@@ -225,7 +225,7 @@ SoINTERNAL class SbNameEntry {
     // Inserts string in table
     static const SbNameEntry *	insert(const char *s);
 
-friend class SbName;
+friend INVENTOR_API class SbName;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -242,7 +242,7 @@ friend class SbName;
 
 // C-api: begin
 
-class SbName {
+class INVENTOR_API SbName {
   public:
     // Default constructor
     SbName();
@@ -293,31 +293,31 @@ class SbName {
     // Equality operator for SbName/char* and SbName/SbName comparison
     // C-api: name=IsEqStr
     // C-api: keepSbName
-    friend int		operator ==(const SbName &n, const char *s)
+    friend INVENTOR_API int		operator ==(const SbName &n, const char *s)
 	{ return n.entry->isEqual(s); }
 
 // C-api: end
-    friend int		operator ==(const char *s, const SbName &n)
+    friend INVENTOR_API int		operator ==(const char *s, const SbName &n)
 	{ return n.entry->isEqual(s); }
 // C-api: begin
 
     // C-api: keepSbName
-    friend int 		operator ==(const SbName &n1, const SbName &n2)
+    friend INVENTOR_API int 		operator ==(const SbName &n1, const SbName &n2)
 	{ return n1.entry == n2.entry; }
 
     // Inequality operator for SbName/char* and SbName/SbName comparison
     // C-api: name=IsNEqStr
     // C-api: keepSbName
-    friend int		operator !=(const SbName &n, const char *s)
+    friend INVENTOR_API int		operator !=(const SbName &n, const char *s)
 	{ return ! n.entry->isEqual(s); }
 
 // C-api: end
-    friend int		operator !=(const char *s, const SbName &n)
+    friend INVENTOR_API int		operator !=(const char *s, const SbName &n)
 	{ return ! n.entry->isEqual(s); }
 // C-api: begin
 
     // C-api: keepSbName
-    friend int 		operator !=(const SbName &n1, const SbName &n2)
+    friend INVENTOR_API int 		operator !=(const SbName &n1, const SbName &n2)
 	{ return n1.entry != n2.entry; }
 
   private:

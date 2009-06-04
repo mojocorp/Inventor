@@ -65,7 +65,7 @@
 
 // C-api: public=vector,matrix,point,direction,normalDirection
 // C-api: prefix=SoXfV3f
-class SoTransformVec3f : public SoEngine {
+class INVENTOR_API SoTransformVec3f : public SoEngine {
 
     SO_ENGINE_HEADER(SoTransformVec3f);
     

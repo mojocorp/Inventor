@@ -75,10 +75,10 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // Callback functions registered with this node should be of this type.
-typedef void SoCallbackCB(void *userData, SoAction *action);
+typedef void INVENTOR_API SoCallbackCB(void *userData, SoAction *action);
 
 // C-api: prefix=SoCB
-class SoCallback : public SoNode {
+class INVENTOR_API SoCallback : public SoNode {
 
     SO_NODE_HEADER(SoCallback);
 

@@ -93,7 +93,7 @@ typedef void *SoOutputReallocCB(void *ptr, size_t newSize);
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoOut
-class SoOutput {
+class INVENTOR_API SoOutput {
  public:
 
     // Constructor (default SoOutput writes to stdout)

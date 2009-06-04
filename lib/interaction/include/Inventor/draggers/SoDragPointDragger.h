@@ -112,7 +112,7 @@ class SoFieldSensor;
 
 // C-api: prefix=SoDragPtDrag
 // C-api: public=translation
-class SoDragPointDragger : public SoDragger
+class INVENTOR_API SoDragPointDragger : public SoDragger
 {
     SO_KIT_HEADER(SoDragPointDragger);
 

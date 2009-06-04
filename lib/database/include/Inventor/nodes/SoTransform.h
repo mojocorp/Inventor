@@ -70,7 +70,7 @@
 
 // C-api: prefix=SoXf
 // C-api: public= translation, rotation, scaleFactor, scaleOrientation, center
-class SoTransform : public SoTransformation {
+class INVENTOR_API SoTransform : public SoTransformation {
 
     SO_NODE_HEADER(SoTransform);
 

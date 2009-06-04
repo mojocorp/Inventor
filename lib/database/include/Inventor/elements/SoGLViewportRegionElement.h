@@ -71,7 +71,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLViewportRegionElement : public SoViewportRegionElement {
+SoEXTENDER class INVENTOR_API SoGLViewportRegionElement : public SoViewportRegionElement {
 
     SO_ELEMENT_HEADER(SoGLViewportRegionElement);
 

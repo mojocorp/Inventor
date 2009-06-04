@@ -95,7 +95,7 @@ class SoField;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SoNotRec {
+SoINTERNAL class INVENTOR_API SoNotRec {
 
   public:
 

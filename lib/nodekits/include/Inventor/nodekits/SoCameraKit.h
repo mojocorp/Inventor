@@ -85,7 +85,7 @@
 ////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoCamKit
-class SoCameraKit : public SoBaseKit {
+class INVENTOR_API SoCameraKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoCameraKit);
 

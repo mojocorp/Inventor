@@ -75,7 +75,7 @@ struct SoTypeData;
 //
 // SoType has no virtual functions to keep it small...
 //
-class SoType {
+class INVENTOR_API SoType {
 #ifdef __DELTA
 #  pragma __nondynamic_class
 #endif

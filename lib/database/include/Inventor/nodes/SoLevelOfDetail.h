@@ -96,7 +96,7 @@
 
 // C-api: prefix=SoLvlOfDtl
 // C-api: public=screenArea
-class SoLevelOfDetail : public SoGroup {
+class INVENTOR_API SoLevelOfDetail : public SoGroup {
 
     SO_NODE_HEADER(SoLevelOfDetail);
 

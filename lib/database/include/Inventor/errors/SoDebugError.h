@@ -80,7 +80,7 @@
 #  pragma set woff 1375
 #endif
 
-class SoDebugError : public SoError {
+class INVENTOR_API SoDebugError : public SoError {
 
   public:
     enum Severity {

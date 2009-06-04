@@ -72,7 +72,7 @@ class SoGLRenderCache;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLLazyElement : public SoLazyElement {
+SoEXTENDER class INVENTOR_API SoGLLazyElement : public SoLazyElement {
 
     SO_ELEMENT_HEADER(SoGLLazyElement);
 

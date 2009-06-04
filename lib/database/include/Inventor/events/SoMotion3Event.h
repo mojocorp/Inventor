@@ -62,7 +62,7 @@
 
 
 // C-api: prefix=SoMotion3Ev
-class SoMotion3Event : public SoEvent {
+class INVENTOR_API SoMotion3Event : public SoEvent {
 
     SO_EVENT_HEADER();
     

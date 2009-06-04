@@ -74,9 +74,9 @@ class SoSelection;
 class SoPath;
 
 // callback function prototypes
-typedef void SoSelectionPathCB(void *userData, SoPath *path);
-typedef void SoSelectionClassCB(void *userData, SoSelection *sel);
-typedef SoPath * SoSelectionPickCB(void *userData, const SoPickedPoint *pick);
+typedef INVENTOR_API void SoSelectionPathCB(void *userData, SoPath *path);
+typedef INVENTOR_API void SoSelectionClassCB(void *userData, SoSelection *sel);
+typedef INVENTOR_API SoPath * SoSelectionPickCB(void *userData, const SoPickedPoint *pick);
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -88,7 +88,7 @@ typedef SoPath * SoSelectionPickCB(void *userData, const SoPickedPoint *pick);
 
 // C-api: public=policy
 // C-api: prefix=SoSel
-class SoSelection : public SoSeparator {
+class INVENTOR_API SoSelection : public SoSeparator {
 
     SO_NODE_HEADER(SoSelection);
 

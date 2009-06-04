@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoMName
-class SoMFName : public SoMField {
+class INVENTOR_API SoMFName : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFName, SbName, const SbName &);
 

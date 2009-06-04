@@ -62,7 +62,7 @@
 #include <Inventor/projectors/SbCylinderProjector.h>
 
 // C-api: prefix=SbCylSheetProj
-class SbCylinderSheetProjector : public SbCylinderProjector
+class INVENTOR_API SbCylinderSheetProjector : public SbCylinderProjector
 {
   public:
     // Default constructor.

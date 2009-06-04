@@ -67,7 +67,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoViewVolumeElement : public SoReplacedElement {
+SoEXTENDER class INVENTOR_API SoViewVolumeElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoViewVolumeElement);
 

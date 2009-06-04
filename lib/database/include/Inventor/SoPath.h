@@ -81,7 +81,7 @@ class SoPathList;
 class SoWriteAction;
 class SoTempPath;
 
-class SoPath : public SoBase {
+class INVENTOR_API SoPath : public SoBase {
 
   public:
 
@@ -168,7 +168,7 @@ class SoPath : public SoBase {
 			     int numNodes = 0) const;
 
     // Comparison operator: returns TRUE if all nodes in paths are identical
-    friend int		operator ==(const SoPath &p1, const SoPath &p2);
+    friend INVENTOR_API int		operator ==(const SoPath &p1, const SoPath &p2);
 
     // Returns type identifier for path instance
     virtual SoType	getTypeId() const;
@@ -255,7 +255,7 @@ friend class SoAction;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoFullPath : public SoPath {
+SoEXTENDER class INVENTOR_API SoFullPath : public SoPath {
 
   public:
     //
@@ -298,7 +298,7 @@ friend class SoTempPath;
 //////////////////////////////////////////////////////////////////////////////
 
 
-class SoLightPath  {
+class INVENTOR_API SoLightPath  {
 
   SoINTERNAL public:
 

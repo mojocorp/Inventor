@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSUInt32
-class SoSFUInt32 : public SoSField {
+class INVENTOR_API SoSFUInt32 : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFUInt32, uint32_t, uint32_t);

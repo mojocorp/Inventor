@@ -67,7 +67,7 @@
 
 // C-api: public=timeIn,speed,on,pause,reset
 // C-api: public=timeOut
-class SoElapsedTime : public SoEngine {
+class INVENTOR_API SoElapsedTime : public SoEngine {
 
     SO_ENGINE_HEADER(SoElapsedTime);
 

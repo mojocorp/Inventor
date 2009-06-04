@@ -65,7 +65,7 @@
 #include <Inventor/SbTime.h>
 
 // C-api: prefix=SoTimerQSens
-class SoTimerQueueSensor : public SoSensor {
+class INVENTOR_API SoTimerQueueSensor : public SoSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data

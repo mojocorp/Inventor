@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoTexFunc
-class SoTextureCoordinateFunction : public SoNode {
+class INVENTOR_API SoTextureCoordinateFunction : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinateFunction);
 

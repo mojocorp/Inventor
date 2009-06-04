@@ -77,7 +77,7 @@ class SoFieldData;
 class SoFieldList;
 
 // C-api: prefix=SoFieldCont
-class SoFieldContainer : public SoBase {
+class INVENTOR_API SoFieldContainer : public SoBase {
 
   public:
 

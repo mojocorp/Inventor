@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoMMx
-class SoMFMatrix : public SoMField {
+class INVENTOR_API SoMFMatrix : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFMatrix, SbMatrix, const SbMatrix &);

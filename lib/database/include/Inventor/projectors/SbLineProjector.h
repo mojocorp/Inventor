@@ -60,7 +60,7 @@
 #include <Inventor/projectors/SbProjector.h>
 
 // C-api: prefix=SbLineProj
-class SbLineProjector : public SbProjector
+class INVENTOR_API SbLineProjector : public SbProjector
 {
   public:
     // Constructor

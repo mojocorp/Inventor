@@ -71,7 +71,7 @@
 
 // C-api: prefix=SoCmplx
 // C-api: public= value, type, textureQuality
-class SoComplexity : public SoNode {
+class INVENTOR_API SoComplexity : public SoNode {
 
     SO_NODE_HEADER(SoComplexity);
 

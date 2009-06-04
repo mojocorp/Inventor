@@ -70,7 +70,7 @@
 
 // C-api: prefix=SoPtLt
 // C-api: public=on, intensity, color, location
-class SoPointLight : public SoLight {
+class INVENTOR_API SoPointLight : public SoLight {
 
     SO_NODE_HEADER(SoPointLight);
 

@@ -69,7 +69,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=rotation,rotation0,rotation1,speed,on
-class SoPendulum : public SoRotation {
+class INVENTOR_API SoPendulum : public SoRotation {
 
     SO_NODE_HEADER(SoPendulum);
 

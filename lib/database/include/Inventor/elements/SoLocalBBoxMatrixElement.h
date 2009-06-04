@@ -81,7 +81,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoLocalBBoxMatrixElement : public SoElement {
+SoEXTENDER class INVENTOR_API SoLocalBBoxMatrixElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoLocalBBoxMatrixElement);
 

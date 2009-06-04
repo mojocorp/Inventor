@@ -62,7 +62,7 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbLinear.h>
 
-class SbBox3f {
+class INVENTOR_API SbBox3f {
   public:
     // Default constructor - leaves box totally empty
     SbBox3f()						{ makeEmpty(); }
@@ -182,8 +182,8 @@ class SbBox3f {
     float	getVolume() const;
 
     // Equality comparisons
-    friend int          operator ==(const SbBox3f &b1, const SbBox3f &b2);
-    friend int          operator !=(const SbBox3f &b1, const SbBox3f &b2)
+    friend INVENTOR_API int          operator ==(const SbBox3f &b1, const SbBox3f &b2);
+    friend INVENTOR_API int          operator !=(const SbBox3f &b1, const SbBox3f &b2)
 	{ return !(b1 == b2); }
 
   private:
@@ -191,7 +191,7 @@ class SbBox3f {
     SbVec3f	min, max;
 };
 
-class SbXfBox3f : private SbBox3f {
+class INVENTOR_API SbXfBox3f : public SbBox3f {
   public:
     // Default constructor - leaves box totally empty
     SbXfBox3f();
@@ -298,8 +298,8 @@ class SbXfBox3f : private SbBox3f {
     SbBox3f		project() const;
 
     // Equality comparisons
-    friend int          operator ==(const SbXfBox3f &b1, const SbXfBox3f &b2);
-    friend int          operator !=(const SbXfBox3f &b1, const SbXfBox3f &b2)
+    friend INVENTOR_API int          operator ==(const SbXfBox3f &b1, const SbXfBox3f &b2);
+    friend INVENTOR_API int          operator !=(const SbXfBox3f &b1, const SbXfBox3f &b2)
 	{ return !(b1 == b2); }
 
   private:
@@ -312,7 +312,7 @@ class SbXfBox3f : private SbBox3f {
     SbMatrix		xformInv;
 };
 
-class SbBox2f {
+class INVENTOR_API SbBox2f {
   public:
     // Default constructor - leaves box totally empty
     SbBox2f()					{ makeEmpty(); };
@@ -399,8 +399,8 @@ class SbBox2f {
 	{ return (max[0] > min[0] && max[1] > min[1]); }
 
     // Equality comparisons
-    friend int          operator ==(const SbBox2f &b1, const SbBox2f &b2);
-    friend int          operator !=(const SbBox2f &b1, const SbBox2f &b2)
+    friend INVENTOR_API int          operator ==(const SbBox2f &b1, const SbBox2f &b2);
+    friend INVENTOR_API int          operator !=(const SbBox2f &b1, const SbBox2f &b2)
 	{ return !(b1 == b2); }
 
   private:
@@ -408,7 +408,7 @@ class SbBox2f {
     SbVec2f	min, max;
 };
 
-class SbBox2s {
+class INVENTOR_API SbBox2s {
   public:
     // Default constructor - leaves box totally empty
     SbBox2s()					{ makeEmpty(); };
@@ -477,8 +477,8 @@ class SbBox2s {
     void	makeEmpty();
 
     // Equality comparisons
-    friend int          operator ==(const SbBox2s &b1, const SbBox2s &b2);
-    friend int          operator !=(const SbBox2s &b1, const SbBox2s &b2)
+    friend INVENTOR_API int          operator ==(const SbBox2s &b1, const SbBox2s &b2);
+    friend INVENTOR_API int          operator !=(const SbBox2s &b1, const SbBox2s &b2)
 	{ return !(b1 == b2); }
 
   private:

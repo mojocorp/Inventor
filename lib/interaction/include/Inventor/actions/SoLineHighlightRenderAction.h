@@ -78,7 +78,7 @@ class SoTexture2;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoLineHLRenderAct
-class SoLineHighlightRenderAction : public SoGLRenderAction {
+class INVENTOR_API SoLineHighlightRenderAction : public SoGLRenderAction {
       SO_ACTION_HEADER(SoLineHighlightRenderAction);
  public:
     // Constructor which takes no parameters. This sets up a dummy

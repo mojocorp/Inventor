@@ -94,7 +94,7 @@
 // C-api: abstract
 // C-api: prefix=SoInterp
 // C-api: public=alpha,output
-class SoInterpolate : public SoEngine {
+class INVENTOR_API SoInterpolate : public SoEngine {
 
     SO_ENGINE_ABSTRACT_HEADER(SoInterpolate);
 
@@ -208,7 +208,7 @@ className::initClass()							\
 // C-api: prefix=SoInterpFloat
 // C-api: public=alpha,output
 // C-api: public=input0, input1
-class SoInterpolateFloat : public SoInterpolate {
+class INVENTOR_API SoInterpolateFloat : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateFloat);
     SoMFFloat		input0;
     SoMFFloat		input1;
@@ -217,7 +217,7 @@ class SoInterpolateFloat : public SoInterpolate {
 // C-api: prefix=SoInterpRot
 // C-api: public=alpha,output
 // C-api: public=input0, input1
-class SoInterpolateRotation : public SoInterpolate {
+class INVENTOR_API SoInterpolateRotation : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateRotation);
     SoMFRotation	input0;
     SoMFRotation	input1;
@@ -226,7 +226,7 @@ class SoInterpolateRotation : public SoInterpolate {
 // C-api: prefix=SoInterpV2f
 // C-api: public=alpha,output
 // C-api: public=input0, input1
-class SoInterpolateVec2f : public SoInterpolate {
+class INVENTOR_API SoInterpolateVec2f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec2f);
     SoMFVec2f		input0;
     SoMFVec2f		input1;
@@ -235,7 +235,7 @@ class SoInterpolateVec2f : public SoInterpolate {
 // C-api: prefix=SoInterpV3f
 // C-api: public=alpha,output
 // C-api: public=input0, input1
-class SoInterpolateVec3f : public SoInterpolate {
+class INVENTOR_API SoInterpolateVec3f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec3f);
     SoMFVec3f		input0;
     SoMFVec3f		input1;
@@ -244,7 +244,7 @@ class SoInterpolateVec3f : public SoInterpolate {
 // C-api: prefix=SoInterpV4f
 // C-api: public=alpha,output
 // C-api: public=input0, input1
-class SoInterpolateVec4f : public SoInterpolate {
+class INVENTOR_API SoInterpolateVec4f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec4f);
     SoMFVec4f		input0;
     SoMFVec4f		input1;

@@ -69,7 +69,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoTransformation : public SoNode {
+class INVENTOR_API SoTransformation : public SoNode {
 
     SO_NODE_HEADER(SoTransformation);
 

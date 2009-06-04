@@ -80,7 +80,7 @@
 
 // C-api: public=numElements1, numElements2, numElements3
 // C-api: public=separation1, separation2, separation3, origin
-class SoArray : public SoGroup {
+class INVENTOR_API SoArray : public SoGroup {
 
     SO_NODE_HEADER(SoArray);
 

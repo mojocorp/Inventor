@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoMV4f
-class SoMFVec4f : public SoMField {
+class INVENTOR_API SoMFVec4f : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFVec4f, SbVec4f, const SbVec4f &);
 

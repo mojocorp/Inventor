@@ -66,7 +66,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoUnitsElement : public SoInt32Element {
+SoEXTENDER class INVENTOR_API SoUnitsElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoUnitsElement);
 

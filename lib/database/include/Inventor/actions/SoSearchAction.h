@@ -73,7 +73,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSearchAct
-class SoSearchAction : public SoAction {
+class INVENTOR_API SoSearchAction : public SoAction {
 
     SO_ACTION_HEADER(SoSearchAction);
 

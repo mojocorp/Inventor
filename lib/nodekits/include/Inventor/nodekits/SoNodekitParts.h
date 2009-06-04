@@ -75,7 +75,7 @@ class SoSFNode;
 ////////////////////////////////////////////////////////////////////
 //    Class: SoNodekitParts
 ////////////////////////////////////////////////////////////////////
-SoEXTENDER class SoNodekitParts {
+SoEXTENDER class INVENTOR_API SoNodekitParts {
 
   SoEXTENDER public:
     // Instances of SoNodekitParts are created only by subclasses of SoBaseKit.

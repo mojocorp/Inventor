@@ -76,7 +76,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLLightIdElement : public SoInt32Element {
+SoEXTENDER class INVENTOR_API SoGLLightIdElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoGLLightIdElement);
 

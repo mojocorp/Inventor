@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSFloat
-class SoSFFloat : public SoSField {
+class INVENTOR_API SoSFFloat : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFFloat, float, float);

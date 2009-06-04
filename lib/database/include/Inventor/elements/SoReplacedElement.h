@@ -79,7 +79,7 @@
 
 #include <Inventor/elements/SoSubElement.h>
 
-SoEXTENDER class SoReplacedElement : public SoElement {
+SoEXTENDER class INVENTOR_API SoReplacedElement : public SoElement {
 
     SO_ELEMENT_ABSTRACT_HEADER(SoReplacedElement);
 

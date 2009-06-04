@@ -77,7 +77,7 @@
 
 
 // C-api: prefix=SoSpballEv
-class SoSpaceballButtonEvent : public SoButtonEvent {
+class INVENTOR_API SoSpaceballButtonEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
     

@@ -73,7 +73,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=path
-class SoPathSwitch : public SoGroup {
+class INVENTOR_API SoPathSwitch : public SoGroup {
 
     SO_NODE_HEADER(SoPathSwitch);
 

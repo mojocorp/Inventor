@@ -101,7 +101,7 @@ typedef void SoPointCB(void *userData, SoCallbackAction *action,
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoCBAct
-class SoCallbackAction : public SoAction {
+class INVENTOR_API SoCallbackAction : public SoAction {
 
     SO_ACTION_HEADER(SoCallbackAction);
 

@@ -123,7 +123,7 @@ class SoFieldSensor;
 
 // C-api: prefix=SoDirLtDrag
 // C-api: public=rotation,translation
-class SoDirectionalLightDragger : public SoDragger {
+class INVENTOR_API SoDirectionalLightDragger : public SoDragger {
 
     SO_KIT_HEADER(SoDirectionalLightDragger);
 

@@ -92,7 +92,7 @@ class SoFieldSensor;
 
 // C-api: prefix=SoRotCylDrag
 // C-api: public=rotation
-class SoRotateCylindricalDragger : public SoDragger
+class INVENTOR_API SoRotateCylindricalDragger : public SoDragger
 {
     SO_KIT_HEADER(SoRotateCylindricalDragger);
 

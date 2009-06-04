@@ -64,7 +64,7 @@
 #include <Inventor/SbLinear.h>
 
 // C-api: prefix=SbProj
-class SbProjector
+class INVENTOR_API SbProjector
 {
   public:
     // Apply the projector using the given point, returning the

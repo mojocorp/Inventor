@@ -68,7 +68,7 @@
 class SbDict;
 // C-api: abstract
 // C-api: prefix=SoUpgr
-class SoUpgrader : public SoGroup {
+class INVENTOR_API SoUpgrader : public SoGroup {
 
     SO_NODE_ABSTRACT_HEADER(SoUpgrader);
 

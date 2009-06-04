@@ -74,7 +74,7 @@
 
 // C-api: public=enable,trigger,input,output
 
-class SoGate : public SoEngine {
+class INVENTOR_API SoGate : public SoEngine {
 
     SO_ENGINE_HEADER(SoGate);
 

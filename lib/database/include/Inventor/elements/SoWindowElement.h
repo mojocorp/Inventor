@@ -71,7 +71,7 @@ class SoGLRenderAction;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoWindowElement : public SoElement {
+SoEXTENDER class INVENTOR_API SoWindowElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoWindowElement);
 

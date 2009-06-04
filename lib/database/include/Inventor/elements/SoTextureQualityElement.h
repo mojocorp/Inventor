@@ -67,7 +67,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoTextureQualityElement : public SoFloatElement {
+SoEXTENDER class INVENTOR_API SoTextureQualityElement : public SoFloatElement {
 
     SO_ELEMENT_HEADER(SoTextureQualityElement);
 
@@ -105,7 +105,7 @@ SoEXTENDER class SoTextureQualityElement : public SoFloatElement {
 //  
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoTextureOverrideElement : public SoElement {
+SoEXTENDER class INVENTOR_API SoTextureOverrideElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoTextureOverrideElement);
 

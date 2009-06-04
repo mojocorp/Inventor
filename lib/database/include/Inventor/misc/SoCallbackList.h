@@ -69,10 +69,10 @@
 
 // Callback functions that are registered with this class should
 // be cast to this type.
-typedef void SoCallbackListCB(void *userData, void *callbackData);
+typedef void INVENTOR_API SoCallbackListCB(void *userData, void *callbackData);
 
 // C-api: prefix=SoCBList
-class SoCallbackList {
+class INVENTOR_API SoCallbackList {
     
   public:
 

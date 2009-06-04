@@ -72,7 +72,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoBBoxModelMatrixElement : public SoModelMatrixElement {
+SoEXTENDER class INVENTOR_API SoBBoxModelMatrixElement : public SoModelMatrixElement {
 
     SO_ELEMENT_HEADER(SoBBoxModelMatrixElement);
 

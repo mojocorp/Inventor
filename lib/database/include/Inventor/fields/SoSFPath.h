@@ -69,7 +69,7 @@ class SoPath;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSPath
-class SoSFPath : public SoSField {
+class INVENTOR_API SoSFPath : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFPath, SoPath *, SoPath *);

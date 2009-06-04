@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSV3f
-class SoSFVec3f : public SoSField {
+class INVENTOR_API SoSFVec3f : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFVec3f, SbVec3f, const SbVec3f &);
 

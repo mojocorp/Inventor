@@ -73,7 +73,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoBBoxAct
-class SoGetBoundingBoxAction : public SoAction {
+class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
 
     SO_ACTION_HEADER(SoGetBoundingBoxAction);
 

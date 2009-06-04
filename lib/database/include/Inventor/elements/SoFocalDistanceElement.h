@@ -67,7 +67,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoFocalDistanceElement : public SoFloatElement {
+SoEXTENDER class INVENTOR_API SoFocalDistanceElement : public SoFloatElement {
 
     SO_ELEMENT_HEADER(SoFocalDistanceElement);
 

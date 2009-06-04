@@ -89,7 +89,7 @@
 //      "cameraList"    "lightList"   "childList"     
 //
 ////////////////////////////////////////////////////////////////////
-class SoSceneKit : public SoBaseKit {
+class INVENTOR_API SoSceneKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoSceneKit);
 

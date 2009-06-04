@@ -96,7 +96,7 @@ class SoGetBoundingBoxAction;
 
 // C-api: prefix=SoComputeBBox
 // C-api: public=node,path,min,max,boxCenter,objectCenter
-class SoComputeBoundingBox : public SoEngine {
+class INVENTOR_API SoComputeBoundingBox : public SoEngine {
 
     SO_ENGINE_HEADER(SoComputeBoundingBox);
 

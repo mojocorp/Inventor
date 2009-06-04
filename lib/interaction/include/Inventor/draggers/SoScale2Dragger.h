@@ -94,7 +94,7 @@ class SoFieldSensor;
 
 // C-api: prefix=SoScale2Drag
 // C-api: public=scaleFactor
-class SoScale2Dragger : public SoDragger
+class INVENTOR_API SoScale2Dragger : public SoDragger
 {
     SO_KIT_HEADER(SoScale2Dragger);
 

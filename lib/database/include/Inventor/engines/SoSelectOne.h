@@ -73,7 +73,7 @@
 // C-api: prefix=SoSelOne
 // C-api: public=index,input,output
 
-class SoSelectOne : public SoEngine {
+class INVENTOR_API SoSelectOne : public SoEngine {
 
     SO_ENGINE_HEADER(SoSelectOne);
 

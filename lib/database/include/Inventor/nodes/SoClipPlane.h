@@ -75,7 +75,7 @@
 
 // C-api: prefix=SoClipPln
 // C-api: public=plane,on
-class SoClipPlane : public SoNode {
+class INVENTOR_API SoClipPlane : public SoNode {
 
     SO_NODE_HEADER(SoClipPlane);
 

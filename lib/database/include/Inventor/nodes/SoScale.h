@@ -68,7 +68,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=scaleFactor
-class SoScale : public SoTransformation {
+class INVENTOR_API SoScale : public SoTransformation {
 
     SO_NODE_HEADER(SoScale);
 

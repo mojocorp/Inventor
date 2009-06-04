@@ -72,7 +72,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoWriteAct
-class SoWriteAction : public SoAction {
+class INVENTOR_API SoWriteAction : public SoAction {
 
     SO_ACTION_HEADER(SoWriteAction);
 

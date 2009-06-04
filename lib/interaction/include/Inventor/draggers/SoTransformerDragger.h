@@ -157,7 +157,7 @@ class SoFieldSensor;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoTransformerDragger : public SoDragger {
+class INVENTOR_API SoTransformerDragger : public SoDragger {
 
     SO_KIT_HEADER(SoTransformerDragger);
 

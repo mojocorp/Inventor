@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSImg
-class SoSFImage : public SoSField {
+class INVENTOR_API SoSFImage : public SoSField {
     // Uses only some of the standard field stuff (because there is no
     // SbImage type):
     SO_SFIELD_REQUIRED_HEADER(SoSFImage);

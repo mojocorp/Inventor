@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSCol
-class SoSFColor : public SoSField {
+class INVENTOR_API SoSFColor : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFColor, SbColor, const SbColor &);

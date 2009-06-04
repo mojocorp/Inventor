@@ -78,7 +78,7 @@ class SoBaseKit;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoNkDtl
-class SoNodeKitDetail : public SoDetail {
+class INVENTOR_API SoNodeKitDetail : public SoDetail {
     
     SO_DETAIL_HEADER(SoNodeKitDetail);
 

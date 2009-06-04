@@ -92,7 +92,7 @@ class SoFieldSensor;
 
 // C-api: prefix=SoTabPlnDrag
 // C-api: public=translation,scaleFactor
-class SoTabPlaneDragger : public SoDragger
+class INVENTOR_API SoTabPlaneDragger : public SoDragger
 {
     // Define typeId and name stuff
     SO_KIT_HEADER(SoTabPlaneDragger);

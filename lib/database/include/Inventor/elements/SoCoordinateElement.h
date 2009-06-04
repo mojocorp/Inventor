@@ -74,7 +74,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoCoordinateElement : public SoReplacedElement {
+SoEXTENDER class INVENTOR_API SoCoordinateElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoCoordinateElement);
 

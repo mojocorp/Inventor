@@ -89,7 +89,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoTextureCoordinateBundle : public SoBundle {
+SoEXTENDER class INVENTOR_API SoTextureCoordinateBundle : public SoBundle {
 
   public:
     // Constructor - takes the action the bundle is used for and a

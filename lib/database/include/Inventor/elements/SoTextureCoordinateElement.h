@@ -88,7 +88,7 @@ typedef const SbVec4f &
 				      const SbVec3f &normal);
 // C-api: begin
 
-SoEXTENDER class SoTextureCoordinateElement : public SoReplacedElement {
+SoEXTENDER class INVENTOR_API SoTextureCoordinateElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoTextureCoordinateElement);
 

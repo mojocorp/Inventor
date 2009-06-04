@@ -93,7 +93,7 @@ class SoGroup;
 ////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoKit
-class SoBaseKit : public SoNode {
+class INVENTOR_API SoBaseKit : public SoNode {
 
     // Instead of calling SO_KIT_HEADER(className) here,
     // which is the norm for all nodekits, explicitly write the contents

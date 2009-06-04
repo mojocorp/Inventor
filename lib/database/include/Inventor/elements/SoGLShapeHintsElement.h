@@ -68,7 +68,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLShapeHintsElement : public SoShapeHintsElement {
+SoEXTENDER class INVENTOR_API SoGLShapeHintsElement : public SoShapeHintsElement {
 
     SO_ELEMENT_HEADER(SoGLShapeHintsElement);
 
