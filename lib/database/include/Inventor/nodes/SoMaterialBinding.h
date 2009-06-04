@@ -71,7 +71,7 @@
 
 // C-api: prefix=SoMtlBind
 // C-api: public=value
-class SoMaterialBinding : public SoNode {
+class INVENTOR_API SoMaterialBinding : public SoNode {
 
     SO_NODE_HEADER(SoMaterialBinding);
 

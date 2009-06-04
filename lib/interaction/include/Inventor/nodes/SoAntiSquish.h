@@ -72,7 +72,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=sizing
-class SoAntiSquish : public SoTransformation {
+class INVENTOR_API SoAntiSquish : public SoTransformation {
 
     SO_NODE_HEADER(SoAntiSquish);
 

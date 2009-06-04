@@ -77,7 +77,7 @@ class SoState;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoPickPt
-class SoPickedPoint {
+class INVENTOR_API SoPickedPoint {
 
   public:
     // Copy constructor

@@ -80,7 +80,7 @@ class SoGLRenderAction;
 class SoState;
 class SoElement;
 
-SoEXTENDER class SoGLCacheList {
+SoEXTENDER class INVENTOR_API SoGLCacheList {
     
   public:
     // Constructor.  Takes the maximum number of caches to build.

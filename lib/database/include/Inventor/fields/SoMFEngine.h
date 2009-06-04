@@ -69,7 +69,7 @@ class SoEngine;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoMEngine
-class SoMFEngine : public SoMField {
+class INVENTOR_API SoMFEngine : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFEngine, SoEngine *, SoEngine *);

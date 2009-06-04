@@ -61,7 +61,7 @@
 
 
 // C-api: prefix=SoBtnEv
-class SoButtonEvent : public SoEvent {
+class INVENTOR_API SoButtonEvent : public SoEvent {
 
     SO_EVENT_HEADER();
     

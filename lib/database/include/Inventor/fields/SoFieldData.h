@@ -85,7 +85,7 @@ class SoOutput;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SoFieldData {
+SoINTERNAL class INVENTOR_API SoFieldData {
   public:
     // Constructor
     SoFieldData() {}

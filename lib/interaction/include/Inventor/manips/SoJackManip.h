@@ -59,7 +59,7 @@
 
 #include <Inventor/manips/SoTransformManip.h>
 
-class SoJackManip : public SoTransformManip
+class INVENTOR_API SoJackManip : public SoTransformManip
 {
     SO_NODE_HEADER(SoJackManip);
 

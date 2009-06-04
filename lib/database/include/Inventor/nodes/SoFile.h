@@ -87,7 +87,7 @@ class SoFieldSensor;
 class SoGroup;
 
 // C-api: public=name
-class SoFile : public SoNode {
+class INVENTOR_API SoFile : public SoNode {
 
     SO_NODE_HEADER(SoFile);
 

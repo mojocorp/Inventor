@@ -70,7 +70,7 @@
 // C-api: public= viewportMapping, position, orientation, aspectRatio
 // C-api: public= nearDistance, farDistance, focalDistance
 // C-api: public= height
-class SoOrthographicCamera : public SoCamera {
+class INVENTOR_API SoOrthographicCamera : public SoCamera {
 
     SO_NODE_HEADER(SoOrthographicCamera);
 

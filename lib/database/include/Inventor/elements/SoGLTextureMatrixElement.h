@@ -68,7 +68,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLTextureMatrixElement : public SoTextureMatrixElement {
+SoEXTENDER class INVENTOR_API SoGLTextureMatrixElement : public SoTextureMatrixElement {
 
     SO_ELEMENT_HEADER(SoGLTextureMatrixElement);
 

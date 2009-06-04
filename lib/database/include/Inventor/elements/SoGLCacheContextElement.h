@@ -107,7 +107,7 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLDisplayList {
+SoEXTENDER class INVENTOR_API SoGLDisplayList {
 
   public:
     //
@@ -171,7 +171,7 @@ friend class SoGLCacheContextElement;
 
 class SbIntList;
 
-SoEXTENDER class SoGLCacheContextElement : public SoElement {
+SoEXTENDER class INVENTOR_API SoGLCacheContextElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoGLCacheContextElement);
 

@@ -71,7 +71,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLProjectionMatrixElement :
+SoEXTENDER class INVENTOR_API SoGLProjectionMatrixElement :
 		public SoProjectionMatrixElement {
 
     SO_ELEMENT_HEADER(SoGLProjectionMatrixElement);

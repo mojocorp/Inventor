@@ -74,7 +74,7 @@
 
 // C-api: abstract
 // C-api: prefix=SoNonInd
-class SoNonIndexedShape : public SoVertexShape {
+class INVENTOR_API SoNonIndexedShape : public SoVertexShape {
 
     SO_NODE_ABSTRACT_HEADER(SoNonIndexedShape);
 

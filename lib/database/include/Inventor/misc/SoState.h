@@ -80,7 +80,7 @@
 class SoAction;
 class SoElement;
 
-SoEXTENDER class SoState {
+SoEXTENDER class INVENTOR_API SoState {
 
   public:
     // Constructor. Takes pointer to action instance this state is

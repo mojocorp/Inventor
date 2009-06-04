@@ -120,7 +120,7 @@ class SbBox3f;
 
 // C-api: end
 
-class SbVec3f {
+class INVENTOR_API SbVec3f {
   public:
     // Default constructor
     SbVec3f()						{ }
@@ -215,20 +215,20 @@ class SbVec3f {
     SbVec3f	operator -() const;
 
     // Component-wise binary scalar multiplication and division operators
-    friend SbVec3f	operator *(const SbVec3f &v, float d);
-    friend SbVec3f	operator *(float d, const SbVec3f &v)
+    friend INVENTOR_API SbVec3f	operator *(const SbVec3f &v, float d);
+    friend INVENTOR_API SbVec3f	operator *(float d, const SbVec3f &v)
 	{ return v * d; }
-    friend SbVec3f	operator /(const SbVec3f &v, float d)
-	{ return v * (1.0 / d); }
+    friend INVENTOR_API SbVec3f	operator /(const SbVec3f &v, float d)
+	{ return v * (1.0f / d); }
 
     // Component-wise binary vector addition and subtraction operators
-    friend SbVec3f	operator +(const SbVec3f &v1, const SbVec3f &v2);
+    friend INVENTOR_API SbVec3f	operator +(const SbVec3f &v1, const SbVec3f &v2);
 // C-api.h: #define SbV3fAdd(_dest, _src1, _src2)
 // C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
 // C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]),
 // C-api.h:      ((_dest).vec[2] = (_src1).vec[2] + (_src2).vec[2]))
 
-    friend SbVec3f	operator -(const SbVec3f &v1, const SbVec3f &v2);
+    friend INVENTOR_API SbVec3f	operator -(const SbVec3f &v1, const SbVec3f &v2);
 // C-api.h: #define SbV3fSub(_dest, _src1, _src2)
 // C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
 // C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]),
@@ -236,8 +236,8 @@ class SbVec3f {
 
 // C-api: begin
     // Equality comparison operator
-    friend int		operator ==(const SbVec3f &v1, const SbVec3f &v2);
-    friend int		operator !=(const SbVec3f &v1, const SbVec3f &v2)
+    friend INVENTOR_API int		operator ==(const SbVec3f &v1, const SbVec3f &v2);
+    friend INVENTOR_API int		operator !=(const SbVec3f &v1, const SbVec3f &v2)
 	{ return !(v1 == v2); }
 
     // Equality comparison within given tolerance - the square of the
@@ -268,7 +268,7 @@ class SbVec3f {
 
 // C-api: end
 
-class SbVec2f {
+class INVENTOR_API SbVec2f {
   public:
 
     // Default constructor
@@ -343,27 +343,27 @@ class SbVec2f {
     SbVec2f	operator -() const;
 
     // Component-wise binary scalar multiplication and division operators
-    friend SbVec2f	operator *(const SbVec2f &v, float d);
-    friend SbVec2f	operator *(float d, const SbVec2f &v)
+    friend INVENTOR_API SbVec2f	operator *(const SbVec2f &v, float d);
+    friend INVENTOR_API SbVec2f	operator *(float d, const SbVec2f &v)
 	{ return v * d; }
-    friend SbVec2f	operator /(const SbVec2f &v, float d)
-	{ return v * (1.0 / d); }
+    friend INVENTOR_API SbVec2f	operator /(const SbVec2f &v, float d)
+	{ return v * (1.0f / d); }
 
     // Component-wise binary vector addition and subtraction operators
-    friend SbVec2f	operator +(const SbVec2f &v1, const SbVec2f &v2);
+    friend INVENTOR_API SbVec2f	operator +(const SbVec2f &v1, const SbVec2f &v2);
 // C-api.h: #define SbV2fAdd(_dest, _src1, _src2)
 // C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
 // C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]))
 
-    friend SbVec2f	operator -(const SbVec2f &v1, const SbVec2f &v2);
+    friend INVENTOR_API SbVec2f	operator -(const SbVec2f &v1, const SbVec2f &v2);
 // C-api.h: #define SbV2fSub(_dest, _src1, _src2)
 // C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
 // C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]))
 
 // C-api: begin
     // Equality comparison operator
-    friend int		operator ==(const SbVec2f &v1, const SbVec2f &v2);
-    friend int		operator !=(const SbVec2f &v1, const SbVec2f &v2)
+    friend INVENTOR_API int		operator ==(const SbVec2f &v1, const SbVec2f &v2);
+    friend INVENTOR_API int		operator !=(const SbVec2f &v1, const SbVec2f &v2)
 	{ return !(v1 == v2); }
 
     // Equality comparison within given tolerance - the square of the
@@ -390,7 +390,7 @@ class SbVec2f {
 
 // C-api: end
 
-class SbVec2s {
+class INVENTOR_API SbVec2s {
   public:
 
     // Default constructor
@@ -456,31 +456,31 @@ class SbVec2s {
     SbVec2s	operator -() const;
 
     // Component-wise binary scalar multiplication and division operators
-    friend SbVec2s	operator *(const SbVec2s &v, int d);
-    friend SbVec2s	operator *(const SbVec2s &v, double d);
-    friend SbVec2s	operator *(int d, const SbVec2s &v)
+    friend INVENTOR_API SbVec2s	operator *(const SbVec2s &v, int d);
+    friend INVENTOR_API SbVec2s	operator *(const SbVec2s &v, double d);
+    friend INVENTOR_API SbVec2s	operator *(int d, const SbVec2s &v)
 	{ return v * d; }
-    friend SbVec2s	operator *(double d, const SbVec2s &v)
+    friend INVENTOR_API SbVec2s	operator *(double d, const SbVec2s &v)
 	{ return v * d; }
-    friend SbVec2s	operator /(const SbVec2s &v, int d);
-    friend SbVec2s	operator /(const SbVec2s &v, double d)
+    friend INVENTOR_API SbVec2s	operator /(const SbVec2s &v, int d);
+    friend INVENTOR_API SbVec2s	operator /(const SbVec2s &v, double d)
 	{ return v * (1.0 / d); }
 
     // Component-wise binary vector addition and subtraction operators
-    friend SbVec2s	operator +(const SbVec2s &v1, const SbVec2s &v2);
+    friend INVENTOR_API SbVec2s	operator +(const SbVec2s &v1, const SbVec2s &v2);
 // C-api.h: #define SbV2sAdd(_dest, _src1, _src2)
 // C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
 // C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]))
 
-    friend SbVec2s	operator -(const SbVec2s &v1, const SbVec2s &v2);
+    friend INVENTOR_API SbVec2s	operator -(const SbVec2s &v1, const SbVec2s &v2);
 // C-api.h: #define SbV2sSub(_dest, _src1, _src2)
 // C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
 // C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]))
 
 // C-api: begin
     // Equality comparison operator
-    friend int		operator ==(const SbVec2s &v1, const SbVec2s &v2);
-    friend int		operator !=(const SbVec2s &v1, const SbVec2s &v2)
+    friend INVENTOR_API int		operator ==(const SbVec2s &v1, const SbVec2s &v2);
+    friend INVENTOR_API int		operator !=(const SbVec2s &v1, const SbVec2s &v2)
 	{ return !(v1 == v2); }
 
   protected:
@@ -503,7 +503,7 @@ class SbVec2s {
 
 // C-api: end
 
-class SbVec4f {
+class INVENTOR_API SbVec4f {
   public:
 
     // Default constructor
@@ -590,21 +590,21 @@ class SbVec4f {
     SbVec4f	operator -() const;
 
     // Component-wise binary scalar multiplication and division operators
-    friend SbVec4f	operator *(const SbVec4f &v, float d);
-    friend SbVec4f	operator *(float d, const SbVec4f &v)
+    friend INVENTOR_API SbVec4f	operator *(const SbVec4f &v, float d);
+    friend INVENTOR_API SbVec4f	operator *(float d, const SbVec4f &v)
 	{ return v * d; }
-    friend SbVec4f	operator /(const SbVec4f &v, float d)
-	{ return v * (1.0 / d); }
+    friend INVENTOR_API SbVec4f	operator /(const SbVec4f &v, float d)
+	{ return v * (1.0f / d); }
 
     // Component-wise binary vector addition and subtraction operators
-    friend SbVec4f	operator +(const SbVec4f &v1, const SbVec4f &v2);
+    friend INVENTOR_API SbVec4f	operator +(const SbVec4f &v1, const SbVec4f &v2);
 // C-api.h: #define SbV4fAdd(_dest, _src1, _src2)
 // C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
 // C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]),
 // C-api.h:      ((_dest).vec[2] = (_src1).vec[2] + (_src2).vec[2]))
 // C-api.h:      ((_dest).vec[3] = (_src1).vec[3] + (_src2).vec[3]))
 
-    friend SbVec4f	operator -(const SbVec4f &v1, const SbVec4f &v2);
+    friend INVENTOR_API SbVec4f	operator -(const SbVec4f &v1, const SbVec4f &v2);
 // C-api.h: #define SbV4fSub(_dest, _src1, _src2)
 // C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
 // C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]),
@@ -613,8 +613,8 @@ class SbVec4f {
 
 // C-api: begin
     // Equality comparison operator
-    friend int		operator ==(const SbVec4f &v1, const SbVec4f &v2);
-    friend int		operator !=(const SbVec4f &v1, const SbVec4f &v2)
+    friend INVENTOR_API int		operator ==(const SbVec4f &v1, const SbVec4f &v2);
+    friend INVENTOR_API int		operator !=(const SbVec4f &v1, const SbVec4f &v2)
 	{ return !(v1 == v2); }
 
     // Equality comparison within given tolerance - the square of the
@@ -641,7 +641,7 @@ class SbVec4f {
 
 // C-api: end
 
-class SbRotation {
+class INVENTOR_API SbRotation {
   public:
 
     // Default constructor
@@ -733,8 +733,8 @@ class SbRotation {
 
 // C-api: begin
     // Equality comparison operator
-    friend int	operator ==(const SbRotation &q1, const SbRotation &q2);
-    friend int	operator !=(const SbRotation &q1, const SbRotation &q2)
+    friend INVENTOR_API int	operator ==(const SbRotation &q1, const SbRotation &q2);
+    friend INVENTOR_API int	operator !=(const SbRotation &q1, const SbRotation &q2)
 	{ return !(q1 == q2); }
 
     // Equality comparison within given tolerance - the square of the
@@ -742,7 +742,7 @@ class SbRotation {
     SbBool		equals(const SbRotation &r, float tolerance) const;
 
     // Multiplication of two rotations; results in product of rotations
-    friend SbRotation	operator *(const SbRotation &q1, const SbRotation &q2);
+    friend INVENTOR_API SbRotation	operator *(const SbRotation &q1, const SbRotation &q2);
 
     // Puts the given vector through this rotation
     // (Multiplies the given vector by the matrix of this rotation),.
@@ -787,7 +787,7 @@ class SbRotation {
 
 // C-api: end
 
-class SbMatrix {
+class INVENTOR_API SbMatrix {
   public:
 
     // Default constructor
@@ -979,11 +979,11 @@ class SbMatrix {
     SbMatrix &	operator *=(const SbMatrix &m)	{ return multRight(m); }
 
     // Binary multiplication of matrices
-    friend SbMatrix	operator *(const SbMatrix &m1, const SbMatrix &m2);
+    friend INVENTOR_API SbMatrix	operator *(const SbMatrix &m1, const SbMatrix &m2);
 
     // Equality comparison operator
-    friend int		operator ==(const SbMatrix &m1, const SbMatrix &m2);
-    friend int		operator !=(const SbMatrix &m1, const SbMatrix &m2)
+    friend INVENTOR_API int		operator ==(const SbMatrix &m1, const SbMatrix &m2);
+    friend INVENTOR_API int		operator !=(const SbMatrix &m1, const SbMatrix &m2)
 	{ return !(m1 == m2); }
 
     // Equality comparison within given tolerance, for each component
@@ -1010,7 +1010,7 @@ class SbMatrix {
 
 // C-api: prefix=SbViewVol
 
-class SbViewVolume {
+class INVENTOR_API SbViewVolume {
   public:
 
     // Default constructor
@@ -1108,7 +1108,7 @@ class SbViewVolume {
     // The parameters are the same as for the GL ortho() routine.
     void		ortho(float left,   float right,
 			      float bottom, float top,
-			      float near,   float far);
+			      float nearVal,   float farVal);
 
     // Sets up a perspective view volume with the given field of view
     // and aspect ratio. The parameters are the same as for the GL
@@ -1116,7 +1116,7 @@ class SbViewVolume {
     // specified in radians.
     // C-api: name=persp
     void		perspective(float fovy, float aspect,
-				    float near, float far);
+				    float nearVal, float farVal);
 
     // Rotate the camera view direction.  Note that this accomplishes
     // the reverse of doing a GL rotate() command after defining a
@@ -1141,7 +1141,7 @@ class SbViewVolume {
     // returned view volume will never be larger than the current volume,
     // however.  Near and far are given in terms of zVector(): this
     // means that near > far must hold.
-    SbViewVolume	zNarrow(float near, float far) const;
+    SbViewVolume	zNarrow(float nearVal, float farVal) const;
 
     // Scales width and height of view volume by given factor
     void		scale(float factor);
@@ -1229,7 +1229,7 @@ class SbViewVolume {
 
 // C-api: public=pos, dir
 
-class SbLine {
+class INVENTOR_API SbLine {
   public:
 // C-api: end
     SbLine()	{}
@@ -1304,7 +1304,7 @@ class SbLine {
 // C-api: prefix=SbPln
 // C-api: public=normalVec, distance
 
-class SbPlane {
+class INVENTOR_API SbPlane {
   public:
 // C-api: end
     SbPlane()	{}
@@ -1346,8 +1346,8 @@ class SbPlane {
 
 // C-api: begin
     // Equality/inequality comparison operators
-    friend int		operator ==(const SbPlane &p1, const SbPlane &p2);
-    friend int		operator !=(const SbPlane &p1, const SbPlane &p2)
+    friend INVENTOR_API int		operator ==(const SbPlane &p1, const SbPlane &p2);
+    friend INVENTOR_API int		operator !=(const SbPlane &p1, const SbPlane &p2)
 	{ return !(p1 == p2); }
 
   private:
@@ -1372,7 +1372,7 @@ class SbPlane {
 // C-api: prefix=SbCyl
 // C-api: public=axis, radius
 
-class SbCylinder {
+class INVENTOR_API SbCylinder {
   public:
 // C-api: end
     // Constructor
@@ -1419,7 +1419,7 @@ class SbCylinder {
 // C-api: prefix=SbSph
 // C-api: public=center, radius
 
-class SbSphere {
+class INVENTOR_API SbSphere {
   public:
 
 // C-api: end

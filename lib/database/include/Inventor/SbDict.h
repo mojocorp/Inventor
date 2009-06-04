@@ -98,7 +98,7 @@ friend class SbDict;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SbDict {
+SoEXTENDER class INVENTOR_API SbDict {
   public:
 
     // Constructor

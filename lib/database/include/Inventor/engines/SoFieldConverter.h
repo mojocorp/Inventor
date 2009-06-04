@@ -77,7 +77,7 @@
 
 // C-api: abstract
 
-SoEXTENDER class SoFieldConverter : public SoEngine {
+SoEXTENDER class INVENTOR_API SoFieldConverter : public SoEngine {
 
     SO_ENGINE_ABSTRACT_HEADER(SoFieldConverter);
 

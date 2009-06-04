@@ -99,7 +99,7 @@
 //
 ////////////////////////////////////////////////////////////
 // C-api: prefix=SoWrapKit
-class SoWrapperKit : public SoSeparatorKit {
+class INVENTOR_API SoWrapperKit : public SoSeparatorKit {
 
     SO_KIT_HEADER(SoWrapperKit);
 

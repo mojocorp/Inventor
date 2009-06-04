@@ -85,7 +85,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoMxAct
-class SoGetMatrixAction : public SoAction {
+class INVENTOR_API SoGetMatrixAction : public SoAction {
 
     SO_ACTION_HEADER(SoGetMatrixAction);
 

@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSTrigger
-class SoSFTrigger : public SoSField {
+class INVENTOR_API SoSFTrigger : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_REQUIRED_HEADER(SoSFTrigger);

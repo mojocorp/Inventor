@@ -65,7 +65,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSBool
-class SoSFBool : public SoSField {
+class INVENTOR_API SoSFBool : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFBool, SbBool, SbBool);

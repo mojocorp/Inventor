@@ -100,7 +100,7 @@ class SoFieldSensor;
 
 // C-api: prefix=SoXfBoxDrag
 // C-api: public=rotation,translation,scaleFactor
-class SoTransformBoxDragger : public SoDragger
+class INVENTOR_API SoTransformBoxDragger : public SoDragger
 {
     SO_KIT_HEADER(SoTransformBoxDragger);
 

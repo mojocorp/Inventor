@@ -100,7 +100,7 @@ typedef void SoSensorCB(void *data, SoSensor *sensor);
 //////////////////////////////////////////////////////////////////////////////
 // C-api: prefix=SoSens
 // C-api: abstract
-class SoSensor {
+class INVENTOR_API SoSensor {
 
   public:
 

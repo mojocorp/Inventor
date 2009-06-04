@@ -78,7 +78,7 @@ class SoBitmapFontCache;  // Internal class
 
 // C-api: prefix=SoTxt2
 // C-api: public=string, interval, justification
-class SoText2 : public SoShape {
+class INVENTOR_API SoText2 : public SoShape {
 
     SO_NODE_HEADER(SoText2);
 

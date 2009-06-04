@@ -106,7 +106,7 @@ class SoOutput;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoTranSender {
+class INVENTOR_API SoTranSender {
   public:
 
     // Constructor: takes pointer to SoOutput instance
@@ -155,7 +155,7 @@ friend class SoTranReceiver;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoTranReceiver {
+class INVENTOR_API SoTranReceiver {
 
   public:
 

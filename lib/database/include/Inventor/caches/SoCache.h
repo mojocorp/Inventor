@@ -81,7 +81,7 @@
 class SoElement;
 class SoState;
 
-SoEXTENDER class SoCache {
+SoEXTENDER class INVENTOR_API SoCache {
 
   public:
 

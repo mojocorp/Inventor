@@ -70,7 +70,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLNormalElement : public SoNormalElement {
+SoEXTENDER class INVENTOR_API SoGLNormalElement : public SoNormalElement {
 
     SO_ELEMENT_HEADER(SoGLNormalElement);
 

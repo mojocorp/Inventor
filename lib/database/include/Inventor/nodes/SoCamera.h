@@ -78,7 +78,7 @@ class SbViewportRegion;
 // C-api: prefix=SoCam
 // C-api: public= viewportMapping, position, orientation, aspectRatio
 // C-api: public= nearDistance, farDistance, focalDistance
-class SoCamera : public SoNode {
+class INVENTOR_API SoCamera : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoCamera);
 

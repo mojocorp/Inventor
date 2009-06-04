@@ -97,7 +97,7 @@
 // 
 // C-api: prefix=SoCmpsV2f
 // C-api: public=x,y,vector
-class SoComposeVec2f : public SoEngine {
+class INVENTOR_API SoComposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec2f);
     SoMFFloat		x;	// Input
     SoMFFloat		y;	// Input
@@ -105,7 +105,7 @@ class SoComposeVec2f : public SoEngine {
 };
 // C-api: prefix=SoCmpsV3f
 // C-api: public=x,y,z,vector
-class SoComposeVec3f : public SoEngine {
+class INVENTOR_API SoComposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec3f);
     SoMFFloat		x;	// Input
     SoMFFloat		y;	// Input
@@ -114,7 +114,7 @@ class SoComposeVec3f : public SoEngine {
 };
 // C-api: prefix=SoCmpsV4f
 // C-api: public=x,y,z,w,vector
-class SoComposeVec4f : public SoEngine {
+class INVENTOR_API SoComposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec4f);
     SoMFFloat		x;	// Input
     SoMFFloat		y;	// Input
@@ -129,7 +129,7 @@ class SoComposeVec4f : public SoEngine {
 // 
 // C-api: prefix=SoDecmpsV2f
 // C-api: public=vector,x,y
-class SoDecomposeVec2f : public SoEngine {
+class INVENTOR_API SoDecomposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec2f);
     SoMFVec2f		vector;	// Input
     SoEngineOutput	x;	// Output (SoMFFloat)
@@ -137,7 +137,7 @@ class SoDecomposeVec2f : public SoEngine {
 };
 // C-api: prefix=SoDecmpsV3f
 // C-api: public=vector,x,y,z
-class SoDecomposeVec3f : public SoEngine {
+class INVENTOR_API SoDecomposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec3f);
     SoMFVec3f		vector;	// Input
     SoEngineOutput	x;	// Output (SoMFFloat)
@@ -146,7 +146,7 @@ class SoDecomposeVec3f : public SoEngine {
 };
 // C-api: prefix=SoDecmpsV4f
 // C-api: public=vector,x,y,z,w
-class SoDecomposeVec4f : public SoEngine {
+class INVENTOR_API SoDecomposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec4f);
     SoMFVec4f		vector;	// Input
     SoEngineOutput	x;	// Output (SoMFFloat)
@@ -161,7 +161,7 @@ class SoDecomposeVec4f : public SoEngine {
 // 
 // C-api: prefix=SoCmpsRot
 // C-api: public=axis,angle,rotation
-class SoComposeRotation : public SoEngine {
+class INVENTOR_API SoComposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotation);
     SoMFVec3f		axis;		// Input
     SoMFFloat		angle;		// Input
@@ -169,7 +169,7 @@ class SoComposeRotation : public SoEngine {
 };
 // C-api: prefix=SoCmpsRotFromTo
 // C-api: public=from,to,rotation
-class SoComposeRotationFromTo : public SoEngine {
+class INVENTOR_API SoComposeRotationFromTo : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotationFromTo);
     SoMFVec3f		from;		// Input
     SoMFVec3f		to;		// Input
@@ -183,7 +183,7 @@ class SoComposeRotationFromTo : public SoEngine {
 // 
 // C-api: prefix=SoDecmpsRot
 // C-api: public=rotation,axis,angle
-class SoDecomposeRotation : public SoEngine {
+class INVENTOR_API SoDecomposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeRotation);
     SoMFRotation	rotation;	// Input
     SoEngineOutput	axis;		// Output (SoMFVec3f)
@@ -198,7 +198,7 @@ class SoDecomposeRotation : public SoEngine {
 // C-api: prefix=SoCmpsMx
 // C-api: public=translation,rotation,scaleFactor
 // C-api: public=scaleOrientation,center,matrix
-class SoComposeMatrix : public SoEngine {
+class INVENTOR_API SoComposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeMatrix);
     SoMFVec3f		translation;	// Input
     SoMFRotation	rotation;	// Input
@@ -220,7 +220,7 @@ class SoComposeMatrix : public SoEngine {
 // C-api: prefix=SoDecmpsMx
 // C-api: public=marix,center,translation,rotation,scaleFactor
 // C-api: public=scaleOrientation
-class SoDecomposeMatrix : public SoEngine {
+class INVENTOR_API SoDecomposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeMatrix);
     SoMFMatrix		matrix;		// Input
     SoMFVec3f		center;		// Input

@@ -65,7 +65,7 @@
 
 // C-api: abstract
 // C-api: prefix=SbCylProj
-class SbCylinderProjector : public SbProjector
+class INVENTOR_API SbCylinderProjector : public SbProjector
 {
   public:
     // Destructor

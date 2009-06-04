@@ -78,7 +78,7 @@
 
 // C-api: prefix=SoQMesh
 // C-api: public=startIndex, verticesPerColumn, verticesPerRow, vertexProperty
-class SoQuadMesh : public SoNonIndexedShape {
+class INVENTOR_API SoQuadMesh : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoQuadMesh);
 

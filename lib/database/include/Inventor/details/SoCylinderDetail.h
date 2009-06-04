@@ -68,7 +68,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoCylDtl
-class SoCylinderDetail : public SoDetail {
+class INVENTOR_API SoCylinderDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoCylinderDetail);
 

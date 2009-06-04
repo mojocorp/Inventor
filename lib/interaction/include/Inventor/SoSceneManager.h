@@ -82,7 +82,7 @@ typedef void SoSceneManagerRenderCB(void *userData, SoSceneManager *mgr);
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSceneMgr
-class SoSceneManager {
+class INVENTOR_API SoSceneManager {
   public:
     // Constructor. 
     SoSceneManager();

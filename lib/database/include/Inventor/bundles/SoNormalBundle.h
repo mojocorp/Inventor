@@ -75,7 +75,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoNormalBundle : public SoBundle {
+SoEXTENDER class INVENTOR_API SoNormalBundle : public SoBundle {
 
   public:
     // Constructor - takes the action the bundle is used for and a

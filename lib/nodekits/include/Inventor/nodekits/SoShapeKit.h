@@ -106,7 +106,7 @@
 //
 
 ////////////////////////////////////////////////////////////////////
-class SoShapeKit : public SoSeparatorKit {
+class INVENTOR_API SoShapeKit : public SoSeparatorKit {
 
     SO_KIT_HEADER(SoShapeKit);
 

@@ -69,7 +69,7 @@
 
 // C-api: prefix=SoXlate
 // C-api: public= translation
-class SoTranslation : public SoTransformation {
+class INVENTOR_API SoTranslation : public SoTransformation {
 
     SO_NODE_HEADER(SoTranslation);
 

@@ -94,7 +94,7 @@ extern "C" struct GLUtriangulatorObj;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: abstract
-class SoShape : public SoNode {
+class INVENTOR_API SoShape : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoShape);
 

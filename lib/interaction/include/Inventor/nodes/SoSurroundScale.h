@@ -108,7 +108,7 @@ class SoFullPath;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=numNodesUpToContainer,numNodesUpToReset
-class SoSurroundScale : public SoTransformation {
+class INVENTOR_API SoSurroundScale : public SoTransformation {
 
     SO_NODE_HEADER(SoSurroundScale);
 

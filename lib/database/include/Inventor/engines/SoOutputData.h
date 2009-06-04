@@ -85,7 +85,7 @@ class SoEngineOutput;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SoEngineOutputData {
+SoINTERNAL class INVENTOR_API SoEngineOutputData {
   public:
     // Default constructor
     SoEngineOutputData() { }

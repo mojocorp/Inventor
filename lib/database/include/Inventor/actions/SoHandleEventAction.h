@@ -72,7 +72,7 @@ class SoEvent;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoEvAct
-class SoHandleEventAction : public SoAction {
+class INVENTOR_API SoHandleEventAction : public SoAction {
 
     SO_ACTION_HEADER(SoHandleEventAction);
 

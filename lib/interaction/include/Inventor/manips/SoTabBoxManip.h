@@ -55,7 +55,7 @@
 
 #include <Inventor/manips/SoTransformManip.h>
 
-class SoTabBoxManip : public SoTransformManip
+class INVENTOR_API SoTabBoxManip : public SoTransformManip
 {
     SO_NODE_HEADER(SoTabBoxManip);
 

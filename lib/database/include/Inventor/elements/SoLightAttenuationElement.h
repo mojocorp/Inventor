@@ -71,7 +71,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoLightAttenuationElement : public SoReplacedElement {
+SoEXTENDER class INVENTOR_API SoLightAttenuationElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoLightAttenuationElement);
 

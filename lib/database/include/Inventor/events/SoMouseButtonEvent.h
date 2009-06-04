@@ -77,7 +77,7 @@
 
 
 // C-api: prefix=SoMouseEv
-class SoMouseButtonEvent : public SoButtonEvent {
+class INVENTOR_API SoMouseButtonEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
     

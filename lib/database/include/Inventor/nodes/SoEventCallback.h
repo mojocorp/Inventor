@@ -66,7 +66,7 @@ class SoEvent;
 class SoEventCallback;
 
 // callback function prototypes
-typedef void SoEventCallbackCB(void *userData, SoEventCallback *node);
+typedef void INVENTOR_API SoEventCallbackCB(void *userData, SoEventCallback *node);
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -75,7 +75,7 @@ typedef void SoEventCallbackCB(void *userData, SoEventCallback *node);
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoEvCB
-class SoEventCallback : public SoNode {
+class INVENTOR_API SoEventCallback : public SoNode {
 
     SO_NODE_HEADER(SoEventCallback);
 

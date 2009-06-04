@@ -74,7 +74,7 @@
 // C-api: prefix=SoSpotLt
 // C-api: public=on, intensity, color
 // C-api: public=location, direction, dropOffRate, cutOffAngle
-class SoSpotLight : public SoLight {
+class INVENTOR_API SoSpotLight : public SoLight {
 
     SO_NODE_HEADER(SoSpotLight);
 

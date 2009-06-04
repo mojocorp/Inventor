@@ -82,7 +82,7 @@ class SoDetail;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoPrimVtx
-class SoPrimitiveVertex {
+class INVENTOR_API SoPrimitiveVertex {
 
   public:
     // Constructors

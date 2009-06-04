@@ -62,7 +62,7 @@
 
 
 // C-api: prefix=SoLoc2Ev
-class SoLocation2Event : public SoEvent {
+class INVENTOR_API SoLocation2Event : public SoEvent {
 
     SO_EVENT_HEADER();
     

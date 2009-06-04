@@ -89,7 +89,7 @@
 #  pragma set woff 1375
 #endif
 
-SoINTERNAL class SoAuditorList : private SbPList {
+SoINTERNAL class INVENTOR_API SoAuditorList : private SbPList {
   public:
 
     // Constructor and destructor.

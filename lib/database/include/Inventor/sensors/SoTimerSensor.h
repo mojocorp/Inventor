@@ -70,7 +70,7 @@
 #include <Inventor/sensors/SoTimerQueueSensor.h>
 
 // C-api: prefix=SoTimerSens
-class SoTimerSensor : public SoTimerQueueSensor {
+class INVENTOR_API SoTimerSensor : public SoTimerQueueSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data

@@ -72,7 +72,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoDirLtManip
-class SoDirectionalLightManip : public SoDirectionalLight {
+class INVENTOR_API SoDirectionalLightManip : public SoDirectionalLight {
 
     SO_NODE_HEADER(SoDirectionalLightManip);
 

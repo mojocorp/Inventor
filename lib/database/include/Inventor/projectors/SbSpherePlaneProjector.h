@@ -65,7 +65,7 @@
 #include <Inventor/projectors/SbSphereSectionProjector.h>
 
 // C-api: prefix=SbSphPlnProj
-class SbSpherePlaneProjector : public SbSphereSectionProjector
+class INVENTOR_API SbSpherePlaneProjector : public SbSphereSectionProjector
 {
   public:
     // Default constructor.

@@ -72,7 +72,7 @@
 #include <Inventor/projectors/SbSphereProjector.h>
 
 // C-api: prefix=SbSphSheetProj
-class SbSphereSheetProjector : public SbSphereProjector
+class INVENTOR_API SbSphereSheetProjector : public SbSphereProjector
 {
   public:
     // Default constructor.

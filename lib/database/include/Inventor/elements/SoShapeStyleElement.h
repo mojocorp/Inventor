@@ -91,7 +91,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoShapeStyleElement : public SoElement {
+SoEXTENDER class INVENTOR_API SoShapeStyleElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoShapeStyleElement);
 

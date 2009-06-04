@@ -93,7 +93,7 @@
 // C-api: prefix=SoEnv
 // C-api: public= ambientIntensity, ambientColor, attenuation
 // C-api: public= fogType, fogColor, fogVisibility
-class SoEnvironment : public SoNode {
+class INVENTOR_API SoEnvironment : public SoNode {
 
     SO_NODE_HEADER(SoEnvironment);
 

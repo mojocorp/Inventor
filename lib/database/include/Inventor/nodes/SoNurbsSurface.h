@@ -82,7 +82,7 @@ class _SoNurbsNurbsTessellator;
 // C-api: public=numSControlPoints, numTControlPoints
 // C-api: public=uKnotVector, vKnotVector
 // C-api: public=sKnotVector, tKnotVector
-class SoNurbsSurface : public SoShape {
+class INVENTOR_API SoNurbsSurface : public SoShape {
 
     SO_NODE_HEADER(SoNurbsSurface);
 

@@ -73,7 +73,7 @@
 #include <Inventor/SbLinear.h>
 
 // C-api: prefix=SbVPReg
-class SbViewportRegion {
+class INVENTOR_API SbViewportRegion {
   public:
     // Default constructor. Sets window size to default 100x100
     SbViewportRegion();

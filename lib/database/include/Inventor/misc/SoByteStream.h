@@ -72,7 +72,7 @@ class SoPathList;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoByteStream {
+class INVENTOR_API SoByteStream {
   public:
     SoByteStream();
    ~SoByteStream();

@@ -74,7 +74,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoClipPlaneElement : public SoAccumulatedElement {
+SoEXTENDER class INVENTOR_API SoClipPlaneElement : public SoAccumulatedElement {
 
     SO_ELEMENT_HEADER(SoClipPlaneElement);
 

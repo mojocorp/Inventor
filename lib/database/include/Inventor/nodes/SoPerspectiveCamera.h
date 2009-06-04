@@ -71,7 +71,7 @@
 // C-api: public= viewportMapping, position, orientation, aspectRatio
 // C-api: public= nearDistance, farDistance, focalDistance
 // C-api: public= heightAngle
-class SoPerspectiveCamera : public SoCamera {
+class INVENTOR_API SoPerspectiveCamera : public SoCamera {
 
     SO_NODE_HEADER(SoPerspectiveCamera);
 

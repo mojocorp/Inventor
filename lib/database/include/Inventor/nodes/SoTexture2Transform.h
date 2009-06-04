@@ -70,7 +70,7 @@
 
 // C-api: prefix=SoTex2Xf
 // C-api: public= translation, rotation, scaleFactor, center
-class SoTexture2Transform : public SoNode {
+class INVENTOR_API SoTexture2Transform : public SoNode {
 
     SO_NODE_HEADER(SoTexture2Transform);
 

@@ -68,7 +68,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoTexEnv
-class SoTextureCoordinateEnvironment : public SoTextureCoordinateFunction {
+class INVENTOR_API SoTextureCoordinateEnvironment : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinateEnvironment);
 

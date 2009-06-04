@@ -108,7 +108,7 @@ class SoTimerSensor;
 
 // C-api: prefix=SoTballDrag
 // C-api: public=rotation,scaleFactor
-class SoTrackballDragger : public SoDragger {
+class INVENTOR_API SoTrackballDragger : public SoDragger {
 
     SO_KIT_HEADER(SoTrackballDragger);
 

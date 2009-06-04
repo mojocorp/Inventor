@@ -75,7 +75,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLDrawStyleElement : public SoDrawStyleElement {
+SoEXTENDER class INVENTOR_API SoGLDrawStyleElement : public SoDrawStyleElement {
 
     SO_ELEMENT_HEADER(SoGLDrawStyleElement);
 

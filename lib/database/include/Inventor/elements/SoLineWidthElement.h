@@ -66,7 +66,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoLineWidthElement : public SoFloatElement {
+SoEXTENDER class INVENTOR_API SoLineWidthElement : public SoFloatElement {
 
     SO_ELEMENT_HEADER(SoLineWidthElement);
 

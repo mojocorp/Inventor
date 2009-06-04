@@ -71,7 +71,7 @@ class SoProfile;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoProfileElement : public SoAccumulatedElement {
+SoEXTENDER class INVENTOR_API SoProfileElement : public SoAccumulatedElement {
 
     SO_ELEMENT_HEADER(SoProfileElement);
 

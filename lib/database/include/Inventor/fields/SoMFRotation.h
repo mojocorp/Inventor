@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoMRot
-class SoMFRotation : public SoMField {
+class INVENTOR_API SoMFRotation : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFRotation, SbRotation, const SbRotation &);
 

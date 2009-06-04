@@ -69,7 +69,7 @@ class SoNode;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoMNode
-class SoMFNode : public SoMField {
+class INVENTOR_API SoMFNode : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFNode, SoNode *, SoNode *);

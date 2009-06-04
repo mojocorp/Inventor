@@ -68,7 +68,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoSwitchElement : public SoInt32Element {
+SoEXTENDER class INVENTOR_API SoSwitchElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoSwitchElement);
 

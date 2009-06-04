@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoTballManip
-class SoTrackballManip : public SoTransformManip {
+class INVENTOR_API SoTrackballManip : public SoTransformManip {
 
     SO_NODE_HEADER(SoTrackballManip);
 

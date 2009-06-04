@@ -66,7 +66,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoPointSizeElement : public SoFloatElement {
+SoEXTENDER class INVENTOR_API SoPointSizeElement : public SoFloatElement {
 
     SO_ELEMENT_HEADER(SoPointSizeElement);
 

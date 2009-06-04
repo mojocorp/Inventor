@@ -69,7 +69,7 @@ class SoWriteAction;
 
 // This is the format for callbacks that will get URL data for us.
 // Once they get the data, they should call the setChildData() method.
-typedef void SoWWWInlineFetchURLCB(
+typedef void INVENTOR_API SoWWWInlineFetchURLCB(
     const SbString &url, void *userData, SoWWWInline *node);
 		
 
@@ -80,7 +80,7 @@ typedef void SoWWWInlineFetchURLCB(
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=name,bboxCenter,bboxSize
-class SoWWWInline : public SoNode {
+class INVENTOR_API SoWWWInline : public SoNode {
 
     SO_NODE_HEADER(SoWWWInline);
 

@@ -52,7 +52,7 @@
 #include <Inventor/sensors/SoFieldSensor.h>
 
 // C-api: prefix=SoSpotLtManip
-class SoSpotLightManip : public SoSpotLight
+class INVENTOR_API SoSpotLightManip : public SoSpotLight
 {
     SO_NODE_HEADER(SoSpotLightManip);
 

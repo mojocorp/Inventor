@@ -81,7 +81,7 @@ class SoCube;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoBoxHLRenderAct
-class SoBoxHighlightRenderAction : public SoGLRenderAction {
+class INVENTOR_API SoBoxHighlightRenderAction : public SoGLRenderAction {
       SO_ACTION_HEADER(SoBoxHighlightRenderAction);
  public:
     // Constructor which takes no parameters. This sets up a dummy

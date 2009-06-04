@@ -69,7 +69,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: public=translation,translation0,translation1,speed,on
-class SoShuttle : public SoTranslation {
+class INVENTOR_API SoShuttle : public SoTranslation {
 
     SO_NODE_HEADER(SoShuttle);
 

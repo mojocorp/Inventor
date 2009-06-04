@@ -75,7 +75,7 @@ typedef void	SoGLRenderPassCB(void *userData);
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoGLRenderAct
-class SoGLRenderAction : public SoAction {
+class INVENTOR_API SoGLRenderAction : public SoAction {
 
     SO_ACTION_HEADER(SoGLRenderAction);
 

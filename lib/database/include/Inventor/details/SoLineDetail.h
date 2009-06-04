@@ -69,7 +69,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoLineDtl
-class SoLineDetail : public SoDetail {
+class INVENTOR_API SoLineDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoLineDetail);
 

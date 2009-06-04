@@ -68,7 +68,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoNkit
-class SoNodeKit {
+class INVENTOR_API SoNodeKit {
   public:
     static void		init(); // init all nodeKit classes
   private:

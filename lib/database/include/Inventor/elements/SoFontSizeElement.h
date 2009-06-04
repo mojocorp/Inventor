@@ -67,7 +67,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoFontSizeElement : public SoFloatElement {
+SoEXTENDER class INVENTOR_API SoFontSizeElement : public SoFloatElement {
 
     SO_ELEMENT_HEADER(SoFontSizeElement);
 

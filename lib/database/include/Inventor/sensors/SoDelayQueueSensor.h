@@ -74,7 +74,7 @@
 #include <Inventor/sensors/SoSensor.h>
 
 // C-api: prefix=SoDelQSens
-class SoDelayQueueSensor : public SoSensor {
+class INVENTOR_API SoDelayQueueSensor : public SoSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data

@@ -86,7 +86,7 @@ class SbPList;
 class SoDragger;  // forward reference
 
 // The following typedef is used in defining the callback function lists.
-typedef void SoDraggerCB(void *userData, SoDragger *dragger );
+typedef void INVENTOR_API SoDraggerCB(void *userData, SoDragger *dragger );
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -99,7 +99,7 @@ typedef void SoDraggerCB(void *userData, SoDragger *dragger );
 
 // C-api: prefix=SoDrag
 // C-api: public=isActive
-class SoDragger : public SoInteractionKit {
+class INVENTOR_API SoDragger : public SoInteractionKit {
 
     SO_KIT_HEADER(SoDragger);
 

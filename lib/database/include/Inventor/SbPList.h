@@ -76,7 +76,7 @@
 #  pragma set woff 1375
 #endif
 
-class SbPList {
+class INVENTOR_API SbPList {
   public:
 
     // Constructor
@@ -175,7 +175,7 @@ class SbPList {
 
 // C-api: end
 
-SoINTERNAL class SbIntList : public SbPList {
+SoINTERNAL class INVENTOR_API SbIntList : public SbPList {
 
   public:
     // Constructors, similar to SbPList
@@ -184,15 +184,15 @@ SoINTERNAL class SbIntList : public SbPList {
     SbIntList(int initSize) : SbPList(initSize) {}
 
     void	append(int integer)
-	{ ((SbPList *) this)->append((void *) (unsigned long) integer); }
+	{ ((SbPList *) this)->append((void *) (size_t) integer); }
 
     // Returns index of given integer in list, or -1 if not found
     int		find(int integer)
-	{ return ((SbPList *) this)->find((void *) (unsigned long) integer); }
+	{ return ((SbPList *) this)->find((void *) (size_t) integer); }
 
     // Inserts given integer in list before integer with given index
     void	insert(int integer, int addBefore)
-	{ ((SbPList *) this)->insert((void *) (unsigned long) integer, addBefore); }
+	{ ((SbPList *) this)->insert((void *) (size_t) integer, addBefore); }
 
     int &	operator [](int i) const
 #if (_MIPS_SZPTR==64) && (_MIPS_SZINT==32)
@@ -216,7 +216,7 @@ SoINTERNAL class SbIntList : public SbPList {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SbVec3fList : public SbPList {
+SoINTERNAL class INVENTOR_API SbVec3fList : public SbPList {
 
   public:
      SbVec3fList() {}
@@ -245,7 +245,7 @@ SoINTERNAL class SbVec3fList : public SbPList {
 
 class SbString;
 
-SoEXTENDER class SbStringList : public SbPList {
+SoEXTENDER class INVENTOR_API SbStringList : public SbPList {
   public:
     void	append(SbString *string)
 	{ ((SbPList *) this)->append((void *) string); }

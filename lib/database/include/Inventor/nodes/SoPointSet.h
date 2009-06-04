@@ -75,7 +75,7 @@
 
 // C-api: prefix=SoPtSet
 // C-api: public=startIndex, numPoints, vertexProperty
-class SoPointSet : public SoNonIndexedShape {
+class INVENTOR_API SoPointSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoPointSet);
 

@@ -82,7 +82,7 @@ typedef void	(*SoActionMethod)(SoAction *, SoNode *);
 #  pragma set woff 1375
 #endif
 
-SoINTERNAL class SoActionMethodList : public SbPList {
+SoINTERNAL class INVENTOR_API SoActionMethodList : public SbPList {
 
   public:
     // Constructor.  Pass in list from parent action.
@@ -126,7 +126,7 @@ SoINTERNAL class SoActionMethodList : public SbPList {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SoEnabledElementsList {
+SoINTERNAL class INVENTOR_API SoEnabledElementsList {
 
   public:
     // Constructor
@@ -178,7 +178,7 @@ SoINTERNAL class SoEnabledElementsList {
 
 // C-api: abstract
 // C-api: prefix=SoAct
-class SoAction {
+class INVENTOR_API SoAction {
 
   public:
     // Destructor

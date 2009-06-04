@@ -92,7 +92,7 @@
 
 class SoTypeList;
 
-SoEXTENDER class SoElement {
+SoEXTENDER class INVENTOR_API SoElement {
 
   public:
     // Initializes element. Called for first element of its kind in

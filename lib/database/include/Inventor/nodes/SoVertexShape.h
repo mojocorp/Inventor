@@ -78,7 +78,7 @@ class SoState;
 
 // C-api: abstract
 // C-api: prefix=SoVtx
-class SoVertexShape : public SoShape {
+class INVENTOR_API SoVertexShape : public SoShape {
 
     SO_NODE_ABSTRACT_HEADER(SoVertexShape);
     

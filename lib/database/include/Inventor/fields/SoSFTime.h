@@ -66,7 +66,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSTime
-class SoSFTime : public SoSField {
+class INVENTOR_API SoSFTime : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFTime, SbTime, const SbTime &);
 

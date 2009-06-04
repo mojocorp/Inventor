@@ -70,7 +70,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoViewportRegionElement : public SoElement {
+SoEXTENDER class INVENTOR_API SoViewportRegionElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoViewportRegionElement);
 

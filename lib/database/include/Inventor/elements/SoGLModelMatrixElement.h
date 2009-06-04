@@ -77,7 +77,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLModelMatrixElement : public SoModelMatrixElement {
+SoEXTENDER class INVENTOR_API SoGLModelMatrixElement : public SoModelMatrixElement {
 
     SO_ELEMENT_HEADER(SoGLModelMatrixElement);
 

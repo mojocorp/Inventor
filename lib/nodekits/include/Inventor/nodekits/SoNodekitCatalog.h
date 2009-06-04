@@ -74,7 +74,7 @@
 //
 //
 ////////////////////////////////////////////////////////////////////
-SoINTERNAL class SoNodekitCatalogEntry {
+SoINTERNAL class INVENTOR_API SoNodekitCatalogEntry {
     private:
 	SbName     name;		// Reference name of this entry 
 	SoType     type;		// Type of node allowable for setting
@@ -152,7 +152,7 @@ SoINTERNAL class SoNodekitCatalogEntry {
 ////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoNkitCat
-class SoNodekitCatalog {
+class INVENTOR_API SoNodekitCatalog {
 
   public:
 

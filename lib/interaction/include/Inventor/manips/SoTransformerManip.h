@@ -65,7 +65,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SoTransformerManip : public SoTransformManip {
+class INVENTOR_API SoTransformerManip : public SoTransformManip {
 
     SO_NODE_HEADER(SoTransformerManip);
 

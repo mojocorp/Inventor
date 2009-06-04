@@ -74,7 +74,7 @@
 
 // C-api: prefix=SoCyl
 // C-api: public=parts, radius, height
-class SoCylinder : public SoShape {
+class INVENTOR_API SoCylinder : public SoShape {
 
     SO_NODE_HEADER(SoCylinder);
 

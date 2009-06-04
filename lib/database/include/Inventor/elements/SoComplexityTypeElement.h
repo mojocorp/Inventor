@@ -66,7 +66,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoComplexityTypeElement : public SoInt32Element {
+SoEXTENDER class INVENTOR_API SoComplexityTypeElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoComplexityTypeElement);
 

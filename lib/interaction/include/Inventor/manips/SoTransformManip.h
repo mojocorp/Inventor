@@ -63,7 +63,7 @@
 #include <Inventor/sensors/SoFieldSensor.h>
 
 // C-api: prefix=SoXfManip
-class SoTransformManip : public SoTransform
+class INVENTOR_API SoTransformManip : public SoTransform
 {
     SO_NODE_HEADER(SoTransformManip);
 

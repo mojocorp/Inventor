@@ -71,7 +71,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLLineWidthElement : public SoLineWidthElement {
+SoEXTENDER class INVENTOR_API SoGLLineWidthElement : public SoLineWidthElement {
 
     SO_ELEMENT_HEADER(SoGLLineWidthElement);
 

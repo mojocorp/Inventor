@@ -71,7 +71,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLLinePatternElement : public SoLinePatternElement {
+SoEXTENDER class INVENTOR_API SoGLLinePatternElement : public SoLinePatternElement {
 
     SO_ELEMENT_HEADER(SoGLLinePatternElement);
 

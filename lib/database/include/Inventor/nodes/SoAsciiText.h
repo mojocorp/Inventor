@@ -98,7 +98,7 @@ class SoPrimitiveVertex;
 class SoTextureCoordinateElement;
 
 // C-api: public=string,spacing,justification,width
-class SoAsciiText : public SoShape {
+class INVENTOR_API SoAsciiText : public SoShape {
 
     SO_NODE_HEADER(SoAsciiText);
 

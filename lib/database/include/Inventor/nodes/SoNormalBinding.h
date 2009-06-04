@@ -71,7 +71,7 @@
 
 // C-api: prefix=SoNormBind
 // C-api: public=value
-class SoNormalBinding : public SoNode {
+class INVENTOR_API SoNormalBinding : public SoNode {
 
     SO_NODE_HEADER(SoNormalBinding);
 

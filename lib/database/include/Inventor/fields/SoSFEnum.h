@@ -76,7 +76,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoSEnum
-class SoSFEnum : public SoSField {
+class INVENTOR_API SoSFEnum : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFEnum, int, int);
 

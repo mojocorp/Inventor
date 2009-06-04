@@ -70,7 +70,7 @@
 
 // C-api: prefix=SoRot
 // C-api: public=rotation
-class SoRotation : public SoTransformation {
+class INVENTOR_API SoRotation : public SoTransformation {
 
     SO_NODE_HEADER(SoRotation);
 

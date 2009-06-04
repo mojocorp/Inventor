@@ -75,7 +75,7 @@ class SoGLCacheList;
 
 // C-api: prefix=SoSep
 // C-api: public=renderCaching, boundingBoxCaching, renderCulling, pickCulling
-class SoSeparator : public SoGroup {
+class INVENTOR_API SoSeparator : public SoGroup {
 
     SO_NODE_HEADER(SoSeparator);
 

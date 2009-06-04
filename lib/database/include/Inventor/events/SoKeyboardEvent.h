@@ -76,7 +76,7 @@
 // C-api: interpret     (SoKeyEvIsKeyReleaseEv(EVENT,KEY))
 
 // C-api: prefix=SoKeyEv
-class SoKeyboardEvent : public SoButtonEvent {
+class INVENTOR_API SoKeyboardEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
     

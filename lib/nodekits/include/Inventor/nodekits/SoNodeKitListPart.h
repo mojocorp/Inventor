@@ -93,7 +93,7 @@ class SoCallbackAction;
 ////////////////////////////////////////////////////////////////////
 
 // C-api: prefix=SoNkitListPart
-class SoNodeKitListPart : public SoNode {
+class INVENTOR_API SoNodeKitListPart : public SoNode {
 
     SO_NODE_HEADER(SoNodeKitListPart);
 

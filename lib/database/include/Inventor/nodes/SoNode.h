@@ -86,7 +86,7 @@ class SoWriteAction;
 
 // C-api: abstract
 
-class SoNode : public SoFieldContainer {
+class INVENTOR_API SoNode : public SoFieldContainer {
 
   public:
 

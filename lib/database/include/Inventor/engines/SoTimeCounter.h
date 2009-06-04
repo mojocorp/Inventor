@@ -69,7 +69,7 @@
 
 // C-api: public=min,max,step,on,frequency,duty,timeIn,syncIn,reset
 // C-api: public=output,syncOut
-class SoTimeCounter : public SoEngine {
+class INVENTOR_API SoTimeCounter : public SoEngine {
 
     SO_ENGINE_HEADER(SoTimeCounter);
 

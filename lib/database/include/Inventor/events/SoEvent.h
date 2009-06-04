@@ -63,7 +63,7 @@
 #include <Inventor/SoType.h>
 
 // C-api: prefix=SoEv
-class SoEvent {
+class INVENTOR_API SoEvent {
   public:
   
     // Constructor and destructor

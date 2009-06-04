@@ -79,7 +79,7 @@ class SoOutput;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: abstract
-class SoField {
+class INVENTOR_API SoField {
   public:
     // Destructor
     // C-api: expose
@@ -361,7 +361,7 @@ friend class SoEngineOutput;
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: abstract
-class SoSField : public SoField {
+class INVENTOR_API SoSField : public SoField {
   public:
     // Destructor
     virtual ~SoSField();
@@ -397,7 +397,7 @@ class SoSField : public SoField {
 //////////////////////////////////////////////////////////////////////////////
 
 // C-api: abstract
-class SoMField : public SoField {
+class INVENTOR_API SoMField : public SoField {
 
   public:
     // Destructor

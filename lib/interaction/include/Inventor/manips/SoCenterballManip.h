@@ -56,7 +56,7 @@
 #include <Inventor/manips/SoTransformManip.h>
 
 // C-api: prefix=SoCballManip
-class SoCenterballManip : public SoTransformManip
+class INVENTOR_API SoCenterballManip : public SoTransformManip
 {
     SO_NODE_HEADER(SoCenterballManip);
 

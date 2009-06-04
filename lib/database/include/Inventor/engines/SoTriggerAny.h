@@ -64,7 +64,7 @@
 
 // C-api: public=input0,input1,input2,input3,input4,input5
 // C-api: public=input6,input7,input8,input9,output
-class SoTriggerAny : public SoEngine {
+class INVENTOR_API SoTriggerAny : public SoEngine {
 
     SO_ENGINE_HEADER(SoTriggerAny);
 

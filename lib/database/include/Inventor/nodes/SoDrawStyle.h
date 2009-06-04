@@ -76,7 +76,7 @@ class SoCallbackAction;
 
 // C-api: prefix=SoDStyle
 // C-api: public= style, pointSize, lineWidth, linePattern
-class SoDrawStyle : public SoNode {
+class INVENTOR_API SoDrawStyle : public SoNode {
 
     SO_NODE_HEADER(SoDrawStyle);
 

@@ -69,7 +69,7 @@
 
 // C-api: abstract
 // C-api: prefix=SoPickAct
-class SoPickAction : public SoAction {
+class INVENTOR_API SoPickAction : public SoAction {
 
     SO_ACTION_HEADER(SoPickAction);
 
