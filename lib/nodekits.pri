@@ -1,0 +1,114 @@
+DEPENDPATH += nodekits \
+              nodekits/src \
+              nodekits/include/Inventor \
+              nodekits/src/details \
+              nodekits/src/nodekits \
+              nodekits/src/upgraders \
+              nodekits/include/Inventor/details \
+              nodekits/include/Inventor/nodekits \
+              nodekits/include/Inventor/misc/upgraders
+
+# Input
+PUBLIC_HEADERS += nodekits/include/Inventor/SoNodeKitPath.h \
+           nodekits/include/Inventor/details/SoNodeKitDetail.h \
+           nodekits/include/Inventor/nodekits/SoAppearanceKit.h \
+           nodekits/include/Inventor/nodekits/SoBaseKit.h \
+           nodekits/include/Inventor/nodekits/SoCameraKit.h \
+           nodekits/include/Inventor/nodekits/SoLightKit.h \
+           nodekits/include/Inventor/nodekits/SoNodeKit.h \
+           nodekits/include/Inventor/nodekits/SoNodekitCatalog.h \
+           nodekits/include/Inventor/nodekits/SoNodeKitListPart.h \
+           nodekits/include/Inventor/nodekits/SoNodekitParts.h \
+           nodekits/include/Inventor/nodekits/SoSceneKit.h \
+           nodekits/include/Inventor/nodekits/SoSeparatorKit.h \
+           nodekits/include/Inventor/nodekits/SoShapeKit.h \
+           nodekits/include/Inventor/nodekits/SoSubKit.h \
+           nodekits/include/Inventor/nodekits/SoWrapperKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1AppearanceKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1BaseKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1CameraKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1ConeKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1CubeKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1CylinderKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1DirectionalLightKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1FaceSetKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1GroupKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1IndexedFaceSetKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1IndexedLineSetKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1IndexedNurbsCurveKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1IndexedNurbsSurfaceKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1IndexedTriangleMeshKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1LightKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1LineSetKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1NodeKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1NodekitCatalog.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1NodekitParts.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1NurbsCurveKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1NurbsSurfaceKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1OrthographicCameraKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1PerspectiveCameraKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1PointLightKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1PointSetKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1QuadMeshKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1SceneKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1ShapeKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1SphereKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1SpotLightKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1SubKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1Text2Kit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1Text3Kit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1TriangleStripSetKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1VertexShapeKit.h \
+           nodekits/include/Inventor/misc/upgraders/SoV1WrapperKit.h
+
+HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
+
+SOURCES += nodekits/src/SoNodeKitPath.cpp \
+           nodekits/src/details/SoNodeKitDetail.cpp \
+           nodekits/src/nodekits/SoAppearKit.cpp \
+           nodekits/src/nodekits/SoBaseKit.cpp \
+           nodekits/src/nodekits/SoCameraKit.cpp \
+           nodekits/src/nodekits/SoLightKit.cpp \
+           nodekits/src/nodekits/SoNkCatalog.cpp \
+           nodekits/src/nodekits/SoNkParts.cpp \
+           nodekits/src/nodekits/SoNodeKit.cpp \
+           nodekits/src/nodekits/SoNodeKitListPart.cpp \
+           nodekits/src/nodekits/SoSceneKit.cpp \
+           nodekits/src/nodekits/SoSeparatorKit.cpp \
+           nodekits/src/nodekits/SoShapeKit.cpp \
+           nodekits/src/nodekits/SoWrapperKit.cpp \
+           nodekits/src/upgraders/SoV1AppearKit.cpp \
+           nodekits/src/upgraders/SoV1BaseKit.cpp \
+           nodekits/src/upgraders/SoV1CameraKit.cpp \
+           nodekits/src/upgraders/SoV1ConeKit.cpp \
+           nodekits/src/upgraders/SoV1CubeKit.cpp \
+           nodekits/src/upgraders/SoV1CylinderKit.cpp \
+           nodekits/src/upgraders/SoV1DirLtKit.cpp \
+           nodekits/src/upgraders/SoV1FaceSetKit.cpp \
+           nodekits/src/upgraders/SoV1GroupKit.cpp \
+           nodekits/src/upgraders/SoV1IFaceSetKit.cpp \
+           nodekits/src/upgraders/SoV1ILineSetKit.cpp \
+           nodekits/src/upgraders/SoV1INrbCurvKit.cpp \
+           nodekits/src/upgraders/SoV1INrbSurfKit.cpp \
+           nodekits/src/upgraders/SoV1ITMshSetKit.cpp \
+           nodekits/src/upgraders/SoV1LightKit.cpp \
+           nodekits/src/upgraders/SoV1LineSetKit.cpp \
+           nodekits/src/upgraders/SoV1NkCatalog.cpp \
+           nodekits/src/upgraders/SoV1NkParts.cpp \
+           nodekits/src/upgraders/SoV1NodeKit.cpp \
+           nodekits/src/upgraders/SoV1NurbCurvKit.cpp \
+           nodekits/src/upgraders/SoV1NurbSurfKit.cpp \
+           nodekits/src/upgraders/SoV1OrthoCamKit.cpp \
+           nodekits/src/upgraders/SoV1PerspCamKit.cpp \
+           nodekits/src/upgraders/SoV1PointLtKit.cpp \
+           nodekits/src/upgraders/SoV1PointSetKit.cpp \
+           nodekits/src/upgraders/SoV1QuadMeshKit.cpp \
+           nodekits/src/upgraders/SoV1SceneKit.cpp \
+           nodekits/src/upgraders/SoV1ShapeKit.cpp \
+           nodekits/src/upgraders/SoV1SphereKit.cpp \
+           nodekits/src/upgraders/SoV1SpotLtKit.cpp \
+           nodekits/src/upgraders/SoV1Text2Kit.cpp \
+           nodekits/src/upgraders/SoV1Text3Kit.cpp \
+           nodekits/src/upgraders/SoV1TriStripKit.cpp \
+           nodekits/src/upgraders/SoV1VtxShapeKit.cpp \
+           nodekits/src/upgraders/SoV1WrapperKit.cpp
