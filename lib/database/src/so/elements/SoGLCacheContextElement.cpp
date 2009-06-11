@@ -64,7 +64,6 @@ SO_ELEMENT_SOURCE(SoGLCacheContextElement);
 
 SbPList		*SoGLCacheContextElement::waitingToBeFreed = NULL;
 SbPList		*SoGLCacheContextElement::extensionList = NULL;
-SbIntList	*SoGLCacheContextElement::mipmapSupportList = NULL;
 
 // Internal struct:
 struct extInfo {
@@ -264,45 +263,7 @@ SoGLCacheContextElement::areMipMapsFast(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int ctx = get(state);
-
-    // See if we already know:
-    for (int i = 0; i < mipmapSupportList->getLength(); i+=2) {
-	if ((*mipmapSupportList)[i] == ctx)
-	    return (*mipmapSupportList)[i+1];
-    }
-    // Don't know, figure it out:
-
-    SbBool result;
-    if (strncmp((const char *)glGetString(GL_VENDOR), "SGI", 3) == 0) {
-	
-	const char *renderer = (const char *)glGetString(GL_RENDERER);
-	// Indy and XL
-	if (strncmp(renderer, "NEWPORT", 7) == 0)
-	    result = FALSE;
-	// Personal Iris, XS, XZ, Extreme...
-	else if (strncmp(renderer, "GR", 2) == 0)
-	    result = FALSE;
-	else if (strncmp(renderer, "GU", 2) == 0)
-	    result = FALSE;
-	// VGX and VGXT
-	else if (strncmp(renderer, "VGX", 3) == 0)
-	    result = FALSE;
-	// Indigo Entry
-	else if (strncmp(renderer, "LIGHT", 5) == 0)
-	    result = FALSE;
-	// IndigoII Impact
-	else if (strncmp(renderer, "IMPACT", 6) == 0)
-	    result = TRUE;
-	else
-	    result = TRUE; // Re's are fast, assume all future SGI
-			   // machines will do fast texturing.
-    }
-    else result = FALSE;  // Assume non-SGI machines do texturing slowly
-
-    mipmapSupportList->append(ctx);
-    mipmapSupportList->append(result);
-    return result;
+    return TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -409,13 +370,8 @@ SoGLDisplayList::SoGLDisplayList(SoState *state, Type _type,
     // been created).
     context = SoGLCacheContextElement::get(state);
 
-#ifdef GL_EXT_texture_object
-    if (texture_object_extensionID == -1) {
-	texture_object_extensionID =
-	    SoGLCacheContextElement::getExtID("GL_EXT_texture_object");
-    }
-    int texObjSupported = SoGLCacheContextElement::extSupported(state,
-					texture_object_extensionID);
+#ifdef GL_VERSION_1_1
+    int texObjSupported = TRUE;
 
     if (never_use_texture_object == -1) {
 	if (getenv("IV_NO_TEXTURE_OBJECT"))
@@ -436,22 +392,11 @@ SoGLDisplayList::SoGLDisplayList(SoState *state, Type _type,
 	type = _type;
 
     if (type == TEXTURE_OBJECT) {
-#ifdef GL_EXT_texture_object
-#ifdef GL_VERSION_1_1
 	glGenTextures(1, &startIndex);
-#else
-	glGenTexturesEXT(1, &startIndex);
-#endif
 #ifdef DEBUG
 	if (num != 1)
 	    SoDebugError::post("SoGLDisplayList", "Sorry, can only "
 			       "construct 1 texture object at a time");
-#endif
-#else
-#ifdef DEBUG
-	SoDebugError::post("SoGLDisplayList", "Texture objects not "
-			   "supported, but type not reset!");
-#endif
 #endif
     } else {
 	startIndex = glGenLists(num);
@@ -505,13 +450,7 @@ SoGLDisplayList::open(SoState *, int index)
 ////////////////////////////////////////////////////////////////////////
 {
     if (type == TEXTURE_OBJECT) {
-#ifdef GL_EXT_texture_object
-#ifdef GL_VERSION_1_1
 	glBindTexture(GL_TEXTURE_2D, startIndex+index);
-#else
-	glBindTextureEXT(GL_TEXTURE_2D, startIndex+index);
-#endif
-#endif
     } else {
 	glNewList(startIndex+index, GL_COMPILE_AND_EXECUTE);
     }
@@ -547,13 +486,7 @@ SoGLDisplayList::call(SoState *state, int index)
 ////////////////////////////////////////////////////////////////////////
 {
     if (type == TEXTURE_OBJECT) {
-#ifdef GL_EXT_texture_object
-#ifdef GL_VERSION_1_1
 	glBindTexture(GL_TEXTURE_2D, startIndex+index);
-#else
-	glBindTextureEXT(GL_TEXTURE_2D, startIndex+index);
-#endif
-#endif
     } else {
 	glCallList(startIndex+index);
     }
@@ -591,13 +524,7 @@ SoGLDisplayList::~SoGLDisplayList()
 ////////////////////////////////////////////////////////////////////////
 {
     if (type == TEXTURE_OBJECT) {
-#ifdef GL_EXT_texture_object
-#ifdef GL_VERSION_1_1
 	glDeleteTextures(1, &startIndex);
-#else
-	glDeleteTexturesEXT(1, &startIndex);
-#endif
-#endif
     } else {
 	glDeleteLists(startIndex, num);
     }
