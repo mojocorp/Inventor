@@ -374,7 +374,6 @@ SoGLCacheContextElement::initClass()
     SO_ELEMENT_INIT_CLASS(SoGLCacheContextElement, SoElement);
     waitingToBeFreed = new SbPList;
     extensionList = new SbPList;
-    mipmapSupportList = new SbIntList;
 }
 
 ////////////////////////////////////////////////////////////////////////
