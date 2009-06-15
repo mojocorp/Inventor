@@ -85,39 +85,6 @@ _flGetFontInfoList(GLubyte *fontList /* "fn1,fn2,fn3, ..." */)
   return list;
 }
 
-void
-flAAColor(GLuint colorFull, GLuint colorHalf)
-{
-  FLcontext ctx = current_context;
-
-  if (! ctx)
-    return;
-
-  /* TODO - not used in Inventor */
-}
-
-void
-flAACpack(GLuint colorFull, GLuint colorHalf)
-{
-  FLcontext ctx = current_context;
-
-  if (! ctx)
-    return;
-
-  /* TODO - not used in Inventor */
-}
-
-void
-flCpack(GLuint color)
-{
-  FLcontext ctx = current_context;
-
-  if (! ctx)
-    return;
-
-  /* TODO - not used in Inventor */
-}
-
 FLcontext
 flCreateContext(const GLubyte *fontPath,
 		GLint	       fontNamePreference,
@@ -233,37 +200,6 @@ flDestroyFont(FLfontNumber fn)
 }
 
 void
-flDrawCharacters(GLubyte *str)
-{
-  TRACE(("flDrawCharacters\n"));
-  /* TODO - not used in Inventor */
-}
-
-void
-flDrawNCharacters(void *str, 
-		  GLint charCount,
-		  GLint bytesPerCharacter)
-{
-  TRACE(("flDrawNCharacters: count=%d, bytesPerChar=%d\n",
-	 charCount, bytesPerCharacter));
-  /* TODO - not used in Inventor */
-}
-
-void
-flEnumerateFonts(void (*callback)(GLubyte *))
-{
-  TRACE(("flEnumerateFonts\n"));
-  /* TODO - not used in Inventor */
-}
-
-void
-flEnumerateSizes(GLubyte *typeface, void (*callback)(GLfloat))
-{
-  TRACE(("flEnumerateSizes\n"));
-  /* TODO - not used in Inventor */
-}
-
-void
 flFreeBitmap(FLbitmap *bitmapPtr)
 {
   TRACE(("flFreeBitmap: bitmapPtr=%p, bitmapPtr->bitmap=%p\n",
@@ -338,21 +274,6 @@ flFreeOutline(FLoutline *outline)
   }
 }
 
-GLboolean
-flGetOutlineBBox(FLfontNumber fn, 
-		 GLuint	      c, 
-		 GLfloat *    llx,
-		 GLfloat *    lly,
-		 GLfloat *    urx,
-		 GLfloat *    ury)
-{
-  TRACE(("flGetOutlintBBox\n"));
-
-  /* TODO - not used in Inventor */
-
-  return FALSE;
-}
-
 FLbitmap *
 flGetBitmap(FLfontNumber fn, GLuint c)
 {
@@ -400,46 +321,6 @@ flGetOutline(FLfontNumber fn, GLuint c)
 }
 
 GLboolean
-flGetStringWidth(FLfontNumber fn,
-		 GLubyte *    str, 
-		 GLfloat *    dx,
-		 GLfloat *    dy)
-{
-  TRACE(("flGetStringWidth: fn=%d\n", fn));
-  /* TODO - not used in Inventor */
-  return FALSE;
-}
-
-GLboolean
-flGetStringWidthN(FLfontNumber fn,
-		  void *       str,
-		  GLint	       charCount,
-		  GLint	       bytesPerCharacter, 
-		  GLfloat *    dx,
-		  GLfloat *    dy)
-{
-  TRACE(("flGetStringWidthN\n"));
-  /* TODO - not used in Inventor */
-  return FALSE;
-}
-
-GLubyte **
-flListFonts(GLint maxNames, GLint *countReturn)
-{
-  TRACE(("flListFonts\n"));
-  /* TODO - not used in Inventor */
-  return NULL;
-}
-
-GLfloat *
-flListSizes(const GLubyte *typeface, GLint *countReturn)
-{
-  TRACE(("flListSizes\n"));
-  /* TODO - not used in Inventor */
-  return NULL;
-}
-
-GLboolean
 flMakeCurrentContext(FLcontext ctx)
 {
   TRACE(("flMakeCurrentContext: ctx=%p\n", ctx));
@@ -465,34 +346,12 @@ flMakeCurrentFont(FLfontNumber fn)
   return TRUE;
 }
 
-FLfontNumber
-flScaleRotateFont(const GLubyte *fontName,
-		  GLfloat	 fontScale,
-		  GLfloat	 angle)
-{
-  TRACE(("flScaleRotateFont: fontName=%s\n", fontName));
-  /* TODO - not used in Inventor */
-  return BAD_FONT_NUMBER;
-}
-
 void
 flSetHint(GLuint hint, GLfloat hintValue)
 {
   FLcontext ctx = current_context;
   if (hint > 0 && hint <= 8)
     ctx->hintValue[hint] = hintValue;
-}
-
-void
-flGetFontBBox(FLfontNumber fn,
-	      GLfloat *	   llx,
-	      GLfloat *    lly,
-	      GLfloat *	   urx,
-	      GLfloat *	   ury,
-	      GLint *	   isfixed)
-{
-  TRACE(("flGetFontBBox: fn=%d\n", fn));
-  /* TODO - not used in Inventor */
 }
 
 FLbitmap *
@@ -525,26 +384,3 @@ flUniGetOutline(GLubyte *fontList, /* "fn1,fn2,fn3, ..." */
   return outline;
 }
 
-GLboolean
-flUniGetOutlineBBox(GLubyte *fontList, /* "fn1,fn2,fn3, ..." */
-		    GLubyte *UCS2,
-		    GLfloat *llx, 
-		    GLfloat *lly,
-		    GLfloat *urx, 
-		    GLfloat *ury)
-{
-  TRACE(("flUniGetOutlineBBox\n"));
-  /* TODO - not used in Inventor */
-  return FALSE;
-}
-
-FLscalableBitmap *
-flUniGetScalableBitmap(GLubyte *fontList, /* "fn1,fn2,fn3, ..." */
-		       GLubyte *UCS2)
-{
-  FLscalableBitmap *sb = NULL;
-
-  TRACE(("flUniGetScalableBitmap\n"));
-  /* TODO - not used in Inventor */
-  return sb;
-}

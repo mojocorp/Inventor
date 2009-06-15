@@ -97,26 +97,21 @@ static FLfontImpl *fontImplTable[] = {
 
 
 #if defined(WIN32)
-static char *fontPath = NULL;
+static const char *PATH_SEPARATOR = ";";
+static const char *DEFAULT_FONTPATH = "c:\\Windows\\Fonts;c:\\Winnt\\Fonts";
+static const char *DEFAULT_FONT = "arial.ttf";
 #elif defined(__APPLE__)
-static char *fontPath = NULL;
+static const char *PATH_SEPARATOR = ":";
+static const char *DEFAULT_FONTPATH = "/System/Library/Fonts:/Library/Fonts";
+static const char *DEFAULT_FONT = "Arial.ttf";
 #else
-static char *fontPath = "/usr/share/data/fonts";
+static const char *PATH_SEPARATOR = ":";
+static const char *DEFAULT_FONTPATH = "/usr/share/data/fonts";
+static const char *DEFAULT_FONT = "Arial.ttf";
 #endif
 
 
 int fl_debug = FALSE;
-
-/*
- * Most Inventor font names don't exist in 
- * windows, so we'll default to a common
- * windows font.
- */
- 
-#ifdef WIN32
-static char fontDefault[_MAX_DIR];
-#endif
-
 
 /*
  * Initialize the given font implementation. Returns true if OK, false
@@ -127,28 +122,9 @@ _flInitialize(FLfontImpl *impl)
 {
   GLboolean ret;
   char *ev;
-#ifdef WIN32
-  static char dirBuffer[_MAX_DIR];
-  UINT dirBufferSize;
-  char fontDir[] = "\\fonts";  // winnt default font directory
-
-  dirBufferSize = GetWindowsDirectory(dirBuffer, sizeof(dirBuffer));
-  if ((dirBufferSize > 0) &&
-      (dirBufferSize + 2 + strlen(fontDir) <= sizeof(dirBuffer)))
-  {
-    strcat(dirBuffer,fontDir);
-    fontPath=dirBuffer;
-    *fontDefault = '\0';
-    strcat(fontDefault,fontPath);
-    strcat(fontDefault,"times.ttf");
-  }
-#endif
 
   ev = getenv("FL_DEBUG");
   fl_debug = (ev && *ev != '0');
-
-  ev = getenv("FL_FONT_PATH");
-  if (ev && *ev) fontPath = ev;
 
   if (impl->initialize)
     ret = impl->initialize();
@@ -177,25 +153,55 @@ _flSearchFont(const GLubyte *fontName)
 {
   char buffer[1024];
   char *path;
+  char *fontsearchpath;
+  char tmp[1024];
 
-  /* In future, the fontPath could have multiple dir as in "path1:path2:...",
-     the fontName may be lookup in a mapping table. For now, this suffice. */
-  sprintf(buffer, "%s/%s", fontPath, fontName);
-  if (access(buffer, R_OK) == 0) {
-    path = strdup(buffer);
-  }
-#ifdef WIN32
-  /*
-   * The font wasn't found, so we'll try the default
-   * windows font instead of giving up.
-   */
-  else if (access(fontDefault, R_OK) == 0) {
-    path = fontDefault;
-  }
-#endif
-  else
-    path = NULL;
+  fontsearchpath = getenv ("FL_FONT_PATH");
+  if (!fontsearchpath)
+      fontsearchpath = DEFAULT_FONTPATH;
 
+  strcpy(tmp, fontsearchpath);
+
+  path = strtok (tmp,PATH_SEPARATOR);
+  while (path != NULL) {
+    sprintf(buffer, "%s/%s.ttf", path, fontName);
+    if (access(buffer, R_OK) == 0) {
+      path = strdup(buffer);
+      break;
+    }
+
+    sprintf(buffer, "%s/%s.pfa", path, fontName);
+    if (access(buffer, R_OK) == 0) {
+      path = strdup(buffer);
+      break;
+    }
+
+    sprintf(buffer, "%s/%s.pfb", path, fontName);
+    if (access(buffer, R_OK) == 0) {
+      path = strdup(buffer);
+      break;
+    }
+
+    sprintf(buffer, "%s/%s.dfont", path, fontName);
+    if (access(buffer, R_OK) == 0) {
+      path = strdup(buffer);
+      break;
+    }
+    path = strtok (NULL, PATH_SEPARATOR);
+  }
+
+  if (path==NULL) {
+      strcpy(tmp, fontsearchpath);
+      path = strtok (tmp,PATH_SEPARATOR);
+      while (path != NULL) {
+        sprintf(buffer, "%s/%s", path, DEFAULT_FONT);
+        if (access(buffer, R_OK) == 0) {
+          path = strdup(buffer);
+          break;
+        }
+        path = strtok (NULL, PATH_SEPARATOR);
+      }
+  }
   TRACE(("_flSearchFont: path=[%s]\n", path));
 
   return path;

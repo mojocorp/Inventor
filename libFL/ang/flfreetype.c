@@ -694,7 +694,7 @@ typedef int  TScan, *PScan;
 
 /* States and directions of each line, arc, and face. */
 typedef enum TDirection {
-  Unknown,
+  UnknownDirection,
   Ascending,
   Descending,
   Flat
@@ -1671,7 +1671,7 @@ Move_To (FT_Vector *to, FT_Raster raster)
   ras.last.x = SCALED (to->x);
   ras.last.y = SCALED (to->y);
 
-  ras.state      = Unknown;
+  ras.state      = UnknownDirection;
   ras.first_face = NULL;
 
   top = ras.cursor;

@@ -211,21 +211,6 @@ typedef struct FLfontStruct {
 } FLfontStruct;
 
 
-/* functions provided (exported) by the OpenGL Font Library (FL) */
-extern void flAAColor(
-    GLuint                         /* colorFull */, 
-    GLuint                         /* colorHalf */
-);
-
-extern void flAACpack(
-    GLuint                         /* colorFull */, 
-    GLuint                         /* colorHalf */
-);
-
-extern void flCpack(
-    GLuint                         /* color */
-);
-
 extern FLcontext flCreateContext(
     const GLubyte *                /* fontPath */,
     GLint                          /* fontNamePreference */,
@@ -247,25 +232,6 @@ extern void flDestroyContext(
 
 extern void flDestroyFont(
     FLfontNumber                   /* fn */
-);
-
-extern void flDrawCharacters(
-    GLubyte *                      /* str */
-);
-
-extern void flDrawNCharacters(
-    void *                         /* str */, 
-    GLint                          /* charCount */,
-    GLint                          /* bytesPerCharacter */
-);
-
-extern void flEnumerateFonts(
-    void (*fn)(GLubyte *)          /* name of callback function */
-);
-
-extern void flEnumerateSizes(
-    GLubyte *                      /* typeface */,
-    void (*fn)(GLfloat)            /* name of callback function */
 );
 
 extern void flFreeBitmap(
@@ -290,15 +256,6 @@ extern void flFreeFontSizes(
 
 extern void flFreeOutline(
     FLoutline *                     /* outline */
-);
-
-extern GLboolean flGetOutlineBBox(
-    FLfontNumber                   /* fn */,
-    GLuint                         /* c */, 
-    GLfloat *                      /* llx */, 
-    GLfloat *                      /* lly */,
-    GLfloat *                      /* urx */, 
-    GLfloat *                      /* ury */
 );
 
 extern FLbitmap *flGetBitmap(
@@ -332,32 +289,6 @@ extern FLoutline *flGetOutline(
     GLuint                         /* c */
 );
 
-extern GLboolean  flGetStringWidth(
-    FLfontNumber                   /* fn */,
-    GLubyte *                      /* str */, 
-    GLfloat *                      /* dx  */, 
-    GLfloat *                      /* dy */
-);
-
-extern GLboolean flGetStringWidthN(
-    FLfontNumber                   /* fn */,
-    void *                         /* str */, 
-    GLint                          /* charCount */,
-    GLint                          /* bytesPerCharacter */, 
-    GLfloat *                      /* dx */, 
-    GLfloat *                      /* dy */
-);
-
-extern GLubyte **flListFonts(
-    GLint                          /* maxNames */, 
-    GLint *                        /* countReturn */
-);
-
-extern GLfloat *flListSizes(
-    const GLubyte *                /* typeface */, 
-    GLint *countReturn
-);
-
 extern GLboolean flMakeCurrentContext(
     FLcontext                      /* ctx */
 );
@@ -366,24 +297,9 @@ extern GLboolean flMakeCurrentFont(
     FLfontNumber                   /* fn */
 );
 
-extern FLfontNumber flScaleRotateFont(
-    const GLubyte *                /* fontName */,
-    GLfloat                        /* fontScale */, 
-    GLfloat                        /* angle */
-);
-
 extern void flSetHint(
     GLuint                         /* hint */, 
     GLfloat                        /* hintValue */
-);
-
-extern void flGetFontBBox(
-    FLfontNumber                   /* fn */,
-    GLfloat *                      /* llx */,
-    GLfloat *                      /* lly */,
-    GLfloat *                      /* urx */,
-    GLfloat *                      /* ury */,
-    GLint *                        /* isfixed */
 );
 
 extern FLbitmap *flUniGetBitmap(
@@ -392,20 +308,6 @@ extern FLbitmap *flUniGetBitmap(
 );
 
 extern FLoutline *flUniGetOutline(
-    GLubyte *                      /* fontList */, /* "fn1,fn2,fn3, ..." */
-    GLubyte *                      /* UCS2 */
-);
-
-extern GLboolean flUniGetOutlineBBox(
-    GLubyte *                      /* fontList */, /* "fn1,fn2,fn3, ..." */
-    GLubyte *                      /* UCS2 */,
-    GLfloat *                      /* llx */,
-    GLfloat *                      /* lly */,
-    GLfloat *                      /* urx */,
-    GLfloat *                      /* ury */
-);
-
-extern FLscalableBitmap *flUniGetScalableBitmap(
     GLubyte *                      /* fontList */, /* "fn1,fn2,fn3, ..." */
     GLubyte *                      /* UCS2 */
 );
