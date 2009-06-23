@@ -75,15 +75,15 @@ SoEXTENDER class INVENTOR_API SoLinePatternElement : public SoInt32Element {
     virtual void	init(SoState *state);
 
     // Sets the current line pattern in the state
-    static void		set(SoState *state, u_short pattern)
+    static void		set(SoState *state, uint16_t pattern)
 	{ SoInt32Element::set(classStackIndex, state, (int32_t)pattern); }
 
     // Returns current line pattern from the state
-    static u_short	get(SoState *state)
-	{ return (u_short)SoInt32Element::get(classStackIndex, state); }
+    static uint16_t	get(SoState *state)
+        { return (uint16_t)SoInt32Element::get(classStackIndex, state); }
 
     // Returns the default line pattern
-    static u_short	getDefault()			{ return 0xffff; }
+    static uint16_t	getDefault()			{ return 0xffff; }
 
     // Prints element (for debugging)
     virtual void	print(FILE *fp) const;

@@ -178,7 +178,7 @@ class INVENTOR_API SoCallbackAction : public SoAction {
     //////////////////////// DrawStyle:
 
     SoDrawStyle::Style		getDrawStyle() const;
-    u_short			getLinePattern() const;
+    uint16_t			getLinePattern() const;
     float			getLineWidth() const;
     float			getPointSize() const;
 
