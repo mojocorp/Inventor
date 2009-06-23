@@ -1937,7 +1937,7 @@ SoGLLazyElement::packColors(SoColorPacker *cPacker)
 // Holds defined 32x32 bit stipple patterns. Each is defined as 32
 // rows of 4 bytes (32 bits) each.
 ////////////////////////////////////////////////////////////////////////////////
-u_char	SoGLLazyElement::patterns[64+1][32 * 4];
+uint8_t	SoGLLazyElement::patterns[64+1][32 * 4];
 
 // Indicates whether patterns were created and stored yet
 SbBool	SoGLLazyElement::patternsCreated = FALSE;
@@ -2053,7 +2053,7 @@ SoGLLazyElement::createPatterns()
         {63, 31, 55, 23, 61, 29, 53, 21},
     };
 
-    u_char		pat[8];
+    uint8_t		pat[8];
     int			pattern, x, y;
 
     // For each pattern

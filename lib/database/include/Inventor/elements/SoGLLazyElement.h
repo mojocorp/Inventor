@@ -256,7 +256,7 @@ SoEXTENDER class INVENTOR_API SoGLLazyElement : public SoLazyElement {
     // Private storage associated with stipple patterns:
     // Holds defined 32x32 bit stipple patterns. Each is defined as 32
     // rows of 4 bytes (32 bits) each.
-    static u_char	patterns[64+1][32 * 4];
+    static uint8_t	patterns[64+1][32 * 4];
 
     // Indicates whether patterns were created and stored yet
     static SbBool	patternsCreated;

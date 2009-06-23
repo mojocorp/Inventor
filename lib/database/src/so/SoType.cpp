@@ -56,7 +56,6 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <dlfcn.h>
 #include <stdlib.h>
-#include <sys/types.h>
 #include <unistd.h>
 
 SoINTERNAL struct SoTypeData {

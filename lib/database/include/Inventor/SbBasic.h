@@ -66,7 +66,6 @@
 #define SO_VERSION_REVISION	1
 
 #include <inttypes.h>
-#include <sys/types.h>
 #include <stdio.h>
 
 #ifndef FALSE
