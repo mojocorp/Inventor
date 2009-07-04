@@ -55,6 +55,8 @@
 #include <Inventor/SbBox.h>
 #include <Inventor/misc/SoNormalGenerator.h>
 
+#include <string.h>
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:

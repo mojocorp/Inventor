@@ -54,6 +54,8 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/engines/SoTimeCounter.h>
 
+#include <stdlib.h>
+
 SO_ENGINE_SOURCE(SoTimeCounter);
 
 ////////////////////////////////////////////////////////////////////////

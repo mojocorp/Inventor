@@ -95,7 +95,16 @@ static FLfontImpl *fontImplTable[] = {
   NULL
 };
 
-static char *fontPath = IVPREFIX "/share/data/fonts";
+
+#if defined(WIN32)
+static char *fontPath = NULL;
+#elif defined(__APPLE__)
+static char *fontPath = NULL;
+#else
+static char *fontPath = "/usr/share/data/fonts";
+#endif
+
+
 int fl_debug = FALSE;
 
 /*

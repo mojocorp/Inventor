@@ -64,8 +64,9 @@
 #include <Inventor/SbColor.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SbLinear.h>
-#include <X11/Xlib.h>
-
+#ifdef SB_HAS_X11
+#   include <X11/Xlib.h>
+#endif
 class SoNode;
 class SoPath;
 class SoGLRenderAction;
@@ -165,14 +166,27 @@ class SoOffscreenRenderer {
     SbColor		backgroundColor;
     SoGLRenderAction	*userAction, *offAction;
     SbViewportRegion    renderedViewport;
-
+#ifdef SB_HAS_X11
     // These are used for rendering to the offscreen pixmap
     Display 		*display;
     XVisualInfo  	*visual;
     GLXContext 		context;
     GLXPixmap 		pixmap;
     Pixmap 		pmap;
+#else
+    typedef int Window;
+    typedef int Display;
+    typedef int XVisualInfo;
+    typedef int GLXContext;
+    typedef int GLXPixmap;
+    typedef int Pixmap;
 
+    Display 		*display;
+    XVisualInfo  	*visual;
+    GLXContext 		context;
+    GLXPixmap 		pixmap;
+    Pixmap 		pmap;
+#endif
     // Setup the offscreen pixmap
     SbBool		setupPixmap();
 

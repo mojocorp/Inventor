@@ -5,7 +5,11 @@
 #include <windows.h>
 #endif
 #ifndef __gl_h_
-#include <GL/gl.h>
+#ifdef __APPLE__
+#   include <OpenGL/gl.h>
+#else
+#   include <GL/gl.h>
+#endif /* __APPLE__ */
 #endif /* __gl_h_ */
 
 #ifdef __cplusplus
