@@ -85,7 +85,7 @@ SoEXTENDER class SoWindowElement : public SoElement {
 
     // Create and return a copy of this element
     virtual SoElement	*copyMatchInfo() const;
-
+#ifdef SB_HAS_X11
     // Sets the window, context and glRenderAction info
     static void		set(SoState *state, Window window, GLXContext context, 
 			    Display *display, SoGLRenderAction *glAction);
@@ -93,7 +93,15 @@ SoEXTENDER class SoWindowElement : public SoElement {
     // Returns the current window, context and glRenderAction
     static void	get(SoState *state, Window &window, GLXContext &context, 
 			    Display *&display, SoGLRenderAction *&glAction);
-    
+#else
+    // Sets the window, context and glRenderAction info
+    static void		set(SoState *state, void *window, void *context,
+                            void *display, SoGLRenderAction *glAction);
+
+    // Returns the current window, context and glRenderAction
+    static void	get(SoState *state, void *&window, void *&context,
+                            void *&display, SoGLRenderAction *&glAction);
+#endif
     virtual void    push(SoState *state);
     
   SoINTERNAL public:
@@ -101,9 +109,15 @@ SoEXTENDER class SoWindowElement : public SoElement {
     static void		initClass();
 
   protected:
+#ifdef SB_HAS_X11
     Window		window;
     GLXContext		context;
     Display		*display;
+#else
+    void * window;
+    void * context;
+    void * display;
+#endif
     SoGLRenderAction	*glRenderAction;
     
     virtual	~SoWindowElement();

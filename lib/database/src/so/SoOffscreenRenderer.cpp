@@ -94,12 +94,13 @@ extern void iclose(IMAGE *);
 #define IBUFSIZE(pixels)        ( (pixels+(pixels>>6))*sizeof(int32_t) )
 #define RLE_NOP         0x00
 
+#ifdef SB_HAS_X11
 // Offscreen renderings will always be rendered as RGB images
 // Currently the OpenGL does not support storing alpha channel information
 // in the offscreen pixmap.
 static int attributeList[] = { GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
                                GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
-
+#endif
 //
 // KLUDGE!!!!!
 // In order to keep caches from being blown away when the contexts
@@ -170,9 +171,11 @@ SoOffscreenRenderer::~SoOffscreenRenderer()
 
     // Delete the pixmap, window, and context, as it is no longer needed
     if (display != NULL) {
+#ifdef SB_HAS_X11
         glXDestroyGLXPixmap( display, pixmap );
         glXDestroyContext( display, context );
         XCloseDisplay( display );
+#endif
     }
 }
 
@@ -190,6 +193,7 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
 //
 ////////////////////////////////////////////////////////////////////////
 {
+#ifdef SB_HAS_X11
     Display *tmpDisplay;
     float   pix;
 
@@ -203,6 +207,9 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
     XCloseDisplay(tmpDisplay);
 
     return pix;
+#else
+    return 75.0f;
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -234,12 +241,12 @@ SoOffscreenRenderer::getMaximumResolution()
 #endif
         return SbVec2s(-1, -1);
     }
-
+#ifdef SB_HAS_X11
     glGetIntegerv(GL_MAX_VIEWPORT_DIMS, params);
     glXDestroyGLXPixmap( dpy, glxpmap );
     glXDestroyContext( dpy, cx );
     XCloseDisplay(dpy);
-
+#endif
     return (SbVec2s((short)params[0], (short)params[1]));
 }
 
@@ -731,6 +738,7 @@ SoOffscreenRenderer::initPixmap(
 //
 ////////////////////////////////////////////////////////////////////////
 {
+#ifdef SB_HAS_X11
     // If a display is already open, and is the same size, use it.
     // Otherwise, close it and open up a fresh one.
     if (dpy != NULL) {
@@ -810,6 +818,9 @@ SoOffscreenRenderer::initPixmap(
     glPixelStorei(GL_PACK_ALIGNMENT, 1);
 
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -867,6 +878,7 @@ SoOffscreenRenderer::setContext() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
+#ifdef SB_HAS_X11
     if (!glXMakeCurrent(display, pixmap, context)) {
         glXDestroyGLXPixmap( display, pixmap );
         glXDestroyContext( display, context );
@@ -875,6 +887,9 @@ SoOffscreenRenderer::setContext() const
     }
 
     return TRUE;
+#else
+    return FALSE;
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -64,7 +64,6 @@
 #include <Inventor/elements/SoLazyElement.h>
 #include <Inventor/elements/SoOverrideElement.h>
 #include <Inventor/elements/SoWindowElement.h>
-
 #include <Inventor/nodes/SoLocateHighlight.h>
 
 #ifdef DEBUG
@@ -394,7 +393,7 @@ SoLocateHighlight::redrawHighlighted(
     }
     
     SoState *state = action->getState();
-    
+#ifdef SB_HAS_X11
     Window window;
     GLXContext context;
     Display *display;
@@ -404,10 +403,14 @@ SoLocateHighlight::redrawHighlighted(
     // If we don't have a current window, then simply return...
     if (window == 0 || context == NULL || display == NULL || glAction == NULL)
 	return;
-    
+
     // set the current window
     glXMakeCurrent(display, window, context);
-    
+#else
+#warning "SoLocateHighlight not implemented"
+    SoGLRenderAction *glAction;
+    return;
+#endif
     // render into the front buffer (save the current buffering type)
     GLint whichBuffer;
     glGetIntegerv(GL_DRAW_BUFFER, &whichBuffer);

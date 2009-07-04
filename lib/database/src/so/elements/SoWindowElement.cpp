@@ -86,7 +86,7 @@ SoWindowElement::init(SoState *)
     display = NULL;
     glRenderAction = NULL;
 }
-
+#ifdef SB_HAS_X11
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -133,7 +133,54 @@ SoWindowElement::get(SoState *state, Window &w, GLXContext &ctx,
     d	= elt->display;
     glAc = elt->glRenderAction;
 }
+#else
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Sets the window attributes
+//
+// Use: public, static
 
+void
+SoWindowElement::set(SoState *state, void *w, void *ctx,
+    void *d, SoGLRenderAction *glAc)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SoWindowElement	*elt;
+
+    // Get an instance we can change (pushing if necessary)
+    elt = (SoWindowElement *) getElement(state, classStackIndex);
+
+    elt->window = w;
+    elt->context = ctx;
+    elt->display = d;
+    elt->glRenderAction = glAc;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Returns the window information from the state
+//
+// Use: public, static
+
+void
+SoWindowElement::get(SoState *state, void *&w, void *&ctx,
+    void *&d, SoGLRenderAction *&glAc)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    const SoWindowElement *elt;
+
+    elt = (const SoWindowElement *) getConstElement(state, classStackIndex);
+
+    w	= elt->window;
+    ctx = elt->context;
+    d	= elt->display;
+    glAc = elt->glRenderAction;
+}
+#endif
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:

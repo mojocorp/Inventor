@@ -141,7 +141,6 @@ SoElement::initElements()
     // Other derived classes 
     SoBBoxModelMatrixElement::initClass();
     SoLocalBBoxMatrixElement::initClass();
-    
     SoWindowElement::initClass();
 }
 ////////////////////////////////////////////////////////////////////////
@@ -1072,7 +1071,6 @@ SoViewportRegionElement::initClass()
 //    Initializes SoWindowElement class.
 //
 // Use: internal
-
 void
 SoWindowElement::initClass()
 {

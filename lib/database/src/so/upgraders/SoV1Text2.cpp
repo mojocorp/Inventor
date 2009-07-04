@@ -242,7 +242,7 @@ SoV1Text2::convertToUTF8(const SbString &strng)
 	"Non ascii text was changed to ascii");
 #endif /*DEBUG*/    
     char *asciiBuf = new char[strng.getLength()+1];
-    for (i= 0; i< strng.getLength(); i++){
+    for (int i= 0; i< strng.getLength(); i++){
 	if ( str[i] & 0x80 ) asciiBuf[i] = '_';
 	    else asciiBuf[i] =  str[i];
     }
