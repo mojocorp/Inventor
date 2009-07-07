@@ -57,7 +57,7 @@
 #define  _SO_WINDOW_ELEMENT
 
 #include <Inventor/elements/SoSubElement.h>
-#include <GL/glx.h>
+#include <Inventor/misc/SoGL.h>
 
 class SoGLRenderAction;
 

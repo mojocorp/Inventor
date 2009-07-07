@@ -72,7 +72,7 @@
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-#include <GL/gl.h>   // For GLenum declaration
+#include <Inventor/misc/SoGL.h>   // For GLenum declaration
 
 //  GLU Library version dependency.   Introduced with Iris 6.2.
 #ifndef gluTESSELATOR

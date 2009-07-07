@@ -65,9 +65,7 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoHandleEventAction.h>
 
-#include <GL/gl.h>
-#include <GL/glu.h>
-#include <GL/glx.h>
+#include <Inventor/misc/SoGL.h>
 
 #include <SoDebug.h>
 

@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoGLLightIdElement.h>
 
 SO_ELEMENT_SOURCE(SoGLLightIdElement);

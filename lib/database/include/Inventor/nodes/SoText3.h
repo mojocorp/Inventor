@@ -63,7 +63,7 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-#include <GL/gl.h>   // For GLenum declaration
+#include <Inventor/misc/SoGL.h>   // For GLenum declaration
 
 // C-api: end
 

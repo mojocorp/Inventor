@@ -34,7 +34,7 @@
  *
  */
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include "softcurvemaps.h"
 
 _SoNurbsColor4CurveMap::_SoNurbsColor4CurveMap() : _SoNurbsCurveMap( N_C4D, 0, 4 ) {}

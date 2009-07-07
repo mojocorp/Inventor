@@ -52,8 +52,7 @@
  */
 
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPickedPoint.h>

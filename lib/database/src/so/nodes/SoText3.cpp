@@ -53,8 +53,7 @@
  */
 //Internationalization changes (i18n) only work with Irix 6
 #ifdef IRIX_6
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/actions/SoCallbackAction.h>
@@ -2750,8 +2749,7 @@ void SoOutlineFontCache::freeOutline(unsigned long, void* value)
 #else /*IRIX_6*/
 //Following version is for Irix 5:
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/actions/SoCallbackAction.h>

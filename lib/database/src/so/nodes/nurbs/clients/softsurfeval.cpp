@@ -43,7 +43,7 @@
 #include "../SoAddPrefix.h"
 #include "myassert.h"
 #include <stdio.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include "mystdio.h"
 #include "mymath.h"
 #include "softsurfmap.h"

@@ -41,7 +41,7 @@
  */
 
 #include "../SoAddPrefix.h"
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include "myassert.h"
 #include "softcurveval.h"
 #include "softcurvmap.h"

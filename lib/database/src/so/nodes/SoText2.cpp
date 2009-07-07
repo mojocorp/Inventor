@@ -1386,7 +1386,7 @@ SoBitmapFontCache::freeBitmap(unsigned long, void* value)
 
 /////////////////////////////////////////////////////////////////////////
 #else /*IRIX_6*/
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/actions/SoCallbackAction.h>

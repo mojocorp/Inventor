@@ -257,6 +257,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/misc/SoCallbackList.h \
            database/include/Inventor/misc/SoChildList.h \
            database/include/Inventor/misc/SoCompactPathList.h \
+           database/include/Inventor/misc/SoGL.h \
            database/include/Inventor/misc/SoNormalGenerator.h \
            database/include/Inventor/misc/SoNotification.h \
            database/include/Inventor/misc/SoState.h \
