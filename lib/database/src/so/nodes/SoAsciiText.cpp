@@ -52,8 +52,7 @@
  _______________________________________________________________________
  */
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/actions/SoCallbackAction.h>

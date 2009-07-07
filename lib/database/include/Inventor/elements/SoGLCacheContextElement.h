@@ -56,7 +56,7 @@
 #ifndef  _SO_CACHE_CONTEXT_ELEMENT
 #define  _SO_CACHE_CONTEXT_ELEMENT
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoSubElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

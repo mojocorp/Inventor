@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <math.h>
 #include <stdlib.h>
 #include "SoAddPrefix.h"

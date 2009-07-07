@@ -39,7 +39,7 @@
 
 #include <inttypes.h>   /* defines long and brethren */
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include "softsurfmap.h"
 #include "gl4types.h"
 

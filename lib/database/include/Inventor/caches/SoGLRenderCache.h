@@ -59,7 +59,7 @@
 #ifndef  _SO_GL_RENDER_CACHE
 #define  _SO_GL_RENDER_CACHE
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/caches/SoCache.h>
 #include <Inventor/elements/SoGLLazyElement.h>
 

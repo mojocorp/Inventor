@@ -60,7 +60,7 @@
 #define  _SO_OFFSCREEN_RENDERER_
 
 #include <stdio.h>
-#include <GL/glx.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbColor.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SbLinear.h>

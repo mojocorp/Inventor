@@ -56,7 +56,7 @@
 #ifndef  _SO_NURBS_PRIM_RENDER_
 #define  _SO_NURBS_PRIM_RENDER_
 
-//#include <GL/gl.h>
+//#include <Inventor/misc/SoGL.h>
 #include <math.h>
 #include <stdlib.h>
 #include <Inventor/SbLinear.h>

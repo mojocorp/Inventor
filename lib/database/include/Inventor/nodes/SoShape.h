@@ -59,7 +59,7 @@
 #include <Inventor/SbLinear.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-#include <GL/glu.h>
+#include <Inventor/misc/SoGL.h>
 
 class SoCube;
 class SoDetail;
