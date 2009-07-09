@@ -47,7 +47,8 @@
 
 class Mapdesc;
 
-struct BezierArc : public PooledObj { /* a bezier arc */
+class BezierArc : public PooledObj { /* a bezier arc */
+public:
     REAL *		cpts;		/* control points of arc */
     int			order;		/* order of arc */
     int			stride;		/* REAL distance between points */

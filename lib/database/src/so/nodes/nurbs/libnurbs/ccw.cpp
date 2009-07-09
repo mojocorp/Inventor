@@ -508,6 +508,6 @@ int
 Subdivider::ccw( TrimVertex *a, TrimVertex *b, TrimVertex *c )
 {
     REAL d = det3( a, b, c );
-    if( abs(d) < 0.0001 ) return -1;
+    if( fabs(d) < 0.0001 ) return -1;
     return (d < 0.0) ? 0 : 1;
 }

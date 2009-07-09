@@ -44,6 +44,9 @@
 #define _lib_nurbs(name) _SoNurbs/**/name
 #endif
 
+#undef min
+#undef max
+
 #include "../_undefs.h"
 #include "../_defines.h"
 

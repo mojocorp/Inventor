@@ -67,7 +67,8 @@ struct Quiltspec { /* a specification for a dimension of a quilt */
 
 typedef Quiltspec *Quiltspec_ptr;
     
-struct Quilt : PooledObj { /* an array of bezier patches */
+class Quilt : public PooledObj { /* an array of bezier patches */
+public:
     			Quilt( Mapdesc * );
     Mapdesc *		mapdesc;	/* map descriptor */
     REAL *		cpts;		/* control points */

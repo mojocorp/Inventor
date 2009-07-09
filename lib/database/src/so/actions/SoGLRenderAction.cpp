@@ -496,7 +496,7 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
     }
 
     int		pass;
-    float	passFrac = 1.0 / (float) getNumPasses();
+    float	passFrac = 1.0f / (float) getNumPasses();
 
     for (pass = 0; pass < getNumPasses(); pass++) {
 
@@ -646,7 +646,7 @@ SoGLRenderAction::renderTransparentObjs()
 
 	// Render them in sorted order
 	for (numToDo = numObjs; numToDo > 0; --numToDo) {
-	    int		farthest;
+	    int		farthest = -1;
 	    float	zFar;
 
 	    // Use selection sort, since number of objects is usually small
@@ -706,7 +706,7 @@ SoGLRenderAction::checkAbort()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool doAbort;
+    SbBool doAbort = FALSE;
 
     switch ((*abortCB)(abortData)) {
 

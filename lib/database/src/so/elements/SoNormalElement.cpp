@@ -121,6 +121,18 @@ SoNormalElement::set(SoState *state, SoNode *node,
 //
 ////////////////////////////////////////////////////////////////////////
 
+const SbVec3f &
+SoNormalElement::get(int index) const
+{
+#ifdef DEBUG
+if (index < 0 || index >= numNormals)
+    SoDebugError::post("SoNormalElement::get",
+                       "Index (%d) is out of range 0 - %d",
+                       index, numNormals - 1);
+#endif /* DEBUG */
+    return normals[index];
+}
+
 #ifdef DEBUG
 void
 SoNormalElement::print(FILE *fp) const

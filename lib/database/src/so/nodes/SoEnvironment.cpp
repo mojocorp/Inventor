@@ -72,7 +72,7 @@ SoEnvironment::SoEnvironment()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_NODE_CONSTRUCTOR(SoEnvironment);
-    SO_NODE_ADD_FIELD(ambientIntensity,	(0.2));
+    SO_NODE_ADD_FIELD(ambientIntensity,	(0.2f));
     SO_NODE_ADD_FIELD(ambientColor,	(1.0, 1.0, 1.0));
     SO_NODE_ADD_FIELD(attenuation,	(0.0, 0.0, 1.0));
     SO_NODE_ADD_FIELD(fogType,		(NONE));
@@ -233,8 +233,8 @@ SoEnvironment::computeDensity(float visibility, SbBool squared)
     //
 
     if (squared)
-	return 2.0 / visibility;
+	return 2.0f / visibility;
 
     else
-	return 4.0 / visibility;
+	return 4.0f / visibility;
 }

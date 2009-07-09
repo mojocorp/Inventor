@@ -338,7 +338,7 @@ SoEngine::notify(SoNotList *list)
 
     needsEvaluation = TRUE;
 
-    SoNotRec *lastRec = list->getLastRec();
+    const SoNotRec *lastRec = list->getLastRec();
     SbBool notifiedFromContainer = 
 	(lastRec && lastRec->getType() == SoNotRec::CONTAINER);
 
@@ -728,7 +728,7 @@ SoEngineOutput::enable(SbBool flag)
 	    // that enable their outputs during inputChanged that we
 	    // prevent by not bothering to start notification if we're
 	    // already in the middle of notification:
-	    SoEngine *e = getContainer();
+	    const SoEngine *e = getContainer();
 	    if (e && e->isNotifying()) return;
 
 	    for (int j = 0; j < getNumConnections(); j++) {

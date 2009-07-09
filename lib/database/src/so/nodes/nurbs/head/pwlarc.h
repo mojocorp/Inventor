@@ -45,7 +45,7 @@
 #include "myassert.h"
 #include "nurbsconsts.h"
 
-class TrimVertex;
+struct TrimVertex;
 
 struct PwlArc : public PooledObj { /* a piecewise-linear arc */
     TrimVertex *	pts;		/* sample points */

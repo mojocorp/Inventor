@@ -95,16 +95,7 @@ SoEXTENDER class INVENTOR_API SoNormalElement : public SoReplacedElement {
     int32_t		getNum() const		{ return numNormals; }
 
     // Returns the indexed normal from an element
-    const SbVec3f &	get(int index) const
-    	{
-#ifdef DEBUG
-    if (index < 0 || index >= numNormals)
-	SoDebugError::post("SoNormalElement::get",
-			   "Index (%d) is out of range 0 - %d",
-			   index, numNormals - 1);
-#endif /* DEBUG */ 
-	    return normals[index];
-	}
+    const SbVec3f &	get(int index) const;
 
     // Prints element (for debugging)
     virtual void	print(FILE *fp) const;
