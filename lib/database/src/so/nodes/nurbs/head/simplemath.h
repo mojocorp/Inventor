@@ -40,6 +40,9 @@
 #include <Inventor/SbBasic.h>
 
 #include "../SoAddPrefix.h"
+
+#include <math.h>
+
 /*
  * simplemath.h - $Revision: 1.1 $
  */

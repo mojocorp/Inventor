@@ -49,7 +49,7 @@
 #include "pwlarc.h"
 #include "trimvertex.h"
 
-class Bin;
+struct Bin;
 class Arc;
 class BezierArc;	
 typedef Arc *Arc_ptr;
@@ -57,8 +57,8 @@ typedef Arc *Arc_ptr;
 enum arc_side { arc_none = 0, arc_right, arc_top, arc_left, arc_bottom };
 
 
-struct Arc : public PooledObj { /* an arc, in two list, the trim list and bin */
-
+class Arc : public PooledObj { /* an arc, in two list, the trim list and bin */
+public:
     static const int bezier_tag;
     static const int arc_tag;
     static const int tail_tag;

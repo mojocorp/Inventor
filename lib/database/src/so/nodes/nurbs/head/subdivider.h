@@ -57,7 +57,7 @@ class Backend;
 class Quilt;
 class Patchlist;
 class Curvelist;
-class JumpBuffer;
+struct JumpBuffer;
 
 class Subdivider {
 public:

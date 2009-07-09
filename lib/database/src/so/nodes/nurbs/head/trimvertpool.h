@@ -44,7 +44,7 @@
 
 #include "bufpool.h"
 
-class TrimVertex;
+struct TrimVertex;
 
 #define INIT_VERTLISTSIZE  200
 

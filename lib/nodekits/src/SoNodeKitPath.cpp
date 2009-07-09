@@ -136,7 +136,7 @@ SoNodeKitPath::getNode(int i) const
     if (fp->getLength() == 0 || i < 0 )
 	return NULL;
 
-    SoNode *answer;
+    SoNode *answer = NULL;
     int curKitCount = -1;
 
     for ( int j = 0; j < fp->getLength(); j++ ) {
@@ -174,7 +174,7 @@ SoNodeKitPath::getNodeFromTail(int i) const
 	// return last nodekit. Use 'this' not 'fp'
 	return getTail();
 
-    SoNode *answer;
+    SoNode *answer = NULL;
     int curKitCount = -1;
 
     for ( int j = fp->getLength() - 1; j >= 0; j-- ) {

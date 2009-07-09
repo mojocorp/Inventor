@@ -252,12 +252,12 @@ _SoNurbsPickV3CurveMap::intersectLine()
         // Compute interpolated texture coordinate 
         ratioFromV1 = ((point - CP[0]).length() /
                        (CP[1] - CP[0]).length());
-        texCoord[0] = (TP[0][0] * (1.0 - ratioFromV1) +
+        texCoord[0] = (TP[0][0] * (1.0f - ratioFromV1) +
                     TP[1][0] * ratioFromV1);
-        texCoord[1] = (TP[0][1] * (1.0 - ratioFromV1) +
+        texCoord[1] = (TP[0][1] * (1.0f - ratioFromV1) +
                     TP[1][1] * ratioFromV1);
-        texCoord[2] = 0.0;
-        texCoord[3] = 1.0;
+        texCoord[2] = 0.0f;
+        texCoord[3] = 1.0f;
         pp->setObjectTextureCoords(texCoord);
     }
 }

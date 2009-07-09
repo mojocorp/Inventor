@@ -46,8 +46,8 @@
 #include "trimregion.h"
 
 class Backend;
-class TrimVertex;
-class GridVertex;
+struct TrimVertex;
+struct GridVertex;
 class GridTrimVertex;
 
 class CoveAndTiler : virtual public TrimRegion {

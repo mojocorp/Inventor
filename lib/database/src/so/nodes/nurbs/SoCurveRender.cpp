@@ -99,8 +99,8 @@ _SoNurbsCurveRender::loadSamplingMatrix( SbMatrix &vmat )
     ::glGetIntegerv(GL_VIEWPORT, vpParams);
 
     /* rescale the mapping to correspond to pixels in x/y */
-    xsize = 0.5 * (float) (vpParams[2]);
-    ysize = 0.5 * (float) (vpParams[3]);
+    xsize = 0.5f * (float) (vpParams[2]);
+    ysize = 0.5f * (float) (vpParams[3]);
 
     smat[0][0] = vmat[0][0] * xsize;
     smat[1][0] = vmat[1][0] * xsize;

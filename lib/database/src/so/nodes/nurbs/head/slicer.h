@@ -48,7 +48,7 @@
 
 class Backend;
 class Arc;
-class TrimVertex;
+struct TrimVertex;
 
 class Slicer : public CoveAndTiler, public Mesher {
 public:

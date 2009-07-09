@@ -46,7 +46,7 @@
 #include "trimregion.h"
 
 class GridTrimVertex;
-class Gridline;
+struct Gridline;
 class Uarray;
 
 class Hull : virtual public TrimRegion {

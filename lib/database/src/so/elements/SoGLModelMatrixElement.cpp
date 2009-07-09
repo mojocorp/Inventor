@@ -243,7 +243,7 @@ SoGLModelMatrixElement::rotateEltBy(const SbRotation &rotation)
 
     rotation.getValue(axis, angle);
 
-    glRotatef(angle * (180.0 / M_PI), axis[0], axis[1], axis[2]);
+    glRotatef(angle * (180.0f / M_PI), axis[0], axis[1], axis[2]);
 }
 
 ////////////////////////////////////////////////////////////////////////

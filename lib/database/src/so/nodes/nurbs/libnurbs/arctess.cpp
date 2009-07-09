@@ -247,8 +247,8 @@ ArcTessellator::pwl( Arc *arc, REAL s1, REAL s2, REAL t1, REAL t2, REAL rate )
 
 /*    if(rate <= 0.06) rate = 0.06;*/
 
-    int snsteps = 1 + (int) (abs(s2 - s1) / rate );
-    int tnsteps = 1 + (int) (abs(t2 - t1) / rate );
+    int snsteps = 1 + (int) (fabs(s2 - s1) / rate );
+    int tnsteps = 1 + (int) (fabs(t2 - t1) / rate );
     int nsteps = max(1,max( snsteps, tnsteps ));
 
     REAL sstepsize = (s2 - s1) / (REAL) nsteps;

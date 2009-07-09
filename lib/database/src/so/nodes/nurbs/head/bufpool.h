@@ -54,7 +54,7 @@ class Buffer {
 	Buffer	*	next;		/* next buffer on free list	*/
 };
 
-class Pool {
+class INVENTOR_API Pool {
 public:
                        Pool( int, int, const char * );
 			~Pool( void );

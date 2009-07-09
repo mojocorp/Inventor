@@ -51,11 +51,11 @@ struct Property;
 struct O_surface;
 struct O_nurbssurface;
 struct O_trim;
-struct O_pwlcurve;
+class O_pwlcurve;
 struct O_nurbscurve;
 struct O_curve;
 class  Quilt;
-class TrimVertex;
+struct TrimVertex;
 
 
 struct O_curve : public PooledObj {

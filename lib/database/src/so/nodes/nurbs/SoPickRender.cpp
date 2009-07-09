@@ -130,8 +130,8 @@ _SoNurbsPickRender::loadSamplingMatrix( SbMatrix &vmat, const SbVec2s &vpSize )
     INREAL smat[4][4];
 
     /* rescale the mapping to correspond to pixels in x/y */
-    xsize = 0.5 * (float) (vpSize[0]);
-    ysize = 0.5 * (float) (vpSize[1]);
+    xsize = 0.5f * (float) (vpSize[0]);
+    ysize = 0.5f * (float) (vpSize[1]);
 
     smat[0][0] = vmat[0][0] * xsize;
     smat[1][0] = vmat[1][0] * xsize;
@@ -177,8 +177,8 @@ _SoNurbsPickRender::loadCullingMatrix( SbMatrix &vmat )
     shrinkMat.makeIdentity();
     shrinkMat[0][0] = xsize;
     shrinkMat[1][1] = ysize;
-    shrinkMat[3][0] = -(objPt[0]*2.0-1.0) * xsize;
-    shrinkMat[3][1] = -(objPt[1]*2.0-1.0) * ysize;
+    shrinkMat[3][0] = -(objPt[0]*2.0f-1.0f) * xsize;
+    shrinkMat[3][1] = -(objPt[1]*2.0f-1.0f) * ysize;
 
     vmat *= shrinkMat;
 

@@ -85,8 +85,8 @@ SO_NODE_SOURCE(SoCone);
 
 // Returns S or T texture coord for point on bottom of cone, given x
 // or z coord
-#define BOT_TEX_S(x)	((x) * .5 + .5)
-#define BOT_TEX_T(z)	((z) * .5 + .5)
+#define BOT_TEX_S(x)	((x) * .5f + .5f)
+#define BOT_TEX_T(z)	((z) * .5f + .5f)
 
 // Cone ring geometry (x,z coords of points around 1 cross-section ring)
 SbVec2f		*SoCone::coordsArray;		// Ring x,z coordinates
@@ -246,7 +246,7 @@ SoCone::rayPick(SoRayPickAction *action)
     // Compute a matrix that will transform a canonical cone (apex at
     // the origin, bottom radius 1) to this cone
     matrix.setTranslate(SbVec3f(0.0, halfHeight, 0.0));
-    matrix2.setScale(SbVec3f(radius, 2.0 * halfHeight, radius));
+    matrix2.setScale(SbVec3f(radius, 2.0f * halfHeight, radius));
     matrix.multLeft(matrix2);
 
     // Compute the object-space picking ray, using the matrix we
@@ -293,9 +293,9 @@ SoCone::rayPick(SoRayPickAction *action)
                 pp->setObjectNormal(normal);
 
                 texCoord.setValue(atan2f(enterPoint[0], enterPoint[2])
-                                  * (1.0 / (2.0 * M_PI)) + 0.5,
-                                  enterPoint[1] + 1.0,
-                                  0.0, 1.0);
+                                  * (1.0f / (2.0f * M_PI)) + 0.5f,
+                                  enterPoint[1] + 1.0f,
+                                  0.0f, 1.0f);
                 pp->setObjectTextureCoords(texCoord);
 
                 detail = new SoConeDetail();
@@ -332,8 +332,8 @@ SoCone::rayPick(SoRayPickAction *action)
 
                 texCoord.setValue(atan2f(exitPoint[0], exitPoint[2])
                                   * (1.0 / (2.0 * M_PI)) + 0.5,
-                                  exitPoint[1] + 1.0,
-                                  0.0, 1.0);
+                                  exitPoint[1] + 1.0f,
+                                  0.0f, 1.0f);
                 pp->setObjectTextureCoords(texCoord);
 
                 detail = new SoConeDetail();
@@ -368,9 +368,9 @@ SoCone::rayPick(SoRayPickAction *action)
 
                 pp->setObjectNormal(norm);
 
-                texCoord.setValue(0.5 + enterPoint[0] / 2.0,
-                                  0.5 + enterPoint[2] / 2.0,
-                                  0.0, 1.0);
+                texCoord.setValue(0.5f + enterPoint[0] / 2.0f,
+                                  0.5f + enterPoint[2] / 2.0f,
+                                  0.0f, 1.0f);
                 pp->setObjectTextureCoords(texCoord);
 
                 if (materialPerPart)
@@ -477,24 +477,24 @@ SoCone::generatePrimitives(SoAction *action)
     if (! genTexCoords)
         tce = SoTextureCoordinateElement::getInstance(action->getState());
     else {
-        tex[2] = 0.0;
-        tex[3] = 1.0;
+        tex[2] = 0.0f;
+        tex[3] = 1.0f;
     }
 
     getSize(radius, halfHeight);
 
-    dRadius = 1.0 / numSections;
+    dRadius = 1.0f / numSections;
 
     if (HAS_PART(curParts, SIDES)) {
 
         // Draw each section of sides as a triangle mesh, from top to bottom
-        yTop = 1.0;
-        dy   = -2.0 / numSections;
-        tTop = 1.0;
-        dt   = -1.0 / numSections;
-        ds   =  1.0 / numSides;
+        yTop = 1.0f;
+        dy   = -2.0f / numSections;
+        tTop = 1.0f;
+        dt   = -1.0f / numSections;
+        ds   =  1.0f / numSides;
 
-        innerRadius = 0.0;
+        innerRadius = 0.0f;
 
         for (section = 0; section < numSections; section++) {
 
@@ -990,15 +990,15 @@ SoCone::GLRenderNvertTnone(SoGLRenderAction *action)
     // Make sure first material is sent if necessary
     mb.sendFirst();
 
-    dRadius = 1.0 / numSections;
+    dRadius = 1.0f / numSections;
 
     if (HAS_PART(curParts, SIDES)) {
 
         // Draw each section of sides as a triangle mesh, from top to bottom
-        yTop = 1.0;
-        dy   = -2.0 / numSections;
+        yTop = 1.0f;
+        dy   = -2.0f / numSections;
 
-        innerRadius = 0.0;
+        innerRadius = 0.0f;
 
         for (section = 0; section < numSections; section++) {
 
@@ -1198,8 +1198,8 @@ SoCone::computeBase(SoAction *action, int &numSides, int &numSections,
     sideNormals = normalsArray;
 
     // Compute x and z coordinates around base
-    theta  = 0.0;
-    dTheta = 2.0 * M_PI / numSides;
+    theta  = 0.0f;
+    dTheta = 2.0f * M_PI / numSides;
 
     // Looking at the XY silhouette of the cone, (t1,t2) is the normal
     // in the XY plane.

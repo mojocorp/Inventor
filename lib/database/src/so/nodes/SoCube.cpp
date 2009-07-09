@@ -147,7 +147,7 @@ SoCube::SoCube()
         // average of the face normals of the two adjoining faces, so the
         // edge is fairly-well lit in any forward-facing orientation.
 
-        sq2 = sqrt(2.0) / 2.0;
+        sq2 = sqrt(2.0) / 2.0f;
 
         edgeNormals[ 0].setValue( 0.0, -sq2,  sq2);		// Bottom front
         edgeNormals[ 1].setValue( sq2,  0.0,  sq2);		// Right  front
@@ -382,7 +382,7 @@ SoCube::generatePrimitives(SoAction *action)
 
         // More than one polygon per face
         else {
-            float	di = 1.0 / numDivisions;
+            float	di = 1.0f / numDivisions;
             SbVec3f	topPoint,    botPoint,    nextBotPoint;
             SbVec3f	horizSpace, vertSpace;
             int		strip, rect;
@@ -535,7 +535,7 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
 
         // More than one polygon per face
         else {
-            float	di = 1.0 / numDivisions;
+            float	di = 1.0f / numDivisions;
             SbVec3f	topPoint,    botPoint,    nextBotPoint;
             SbVec3f	horizSpace, vertSpace;
             int		strip, rect;
@@ -647,7 +647,7 @@ SoCube::GLRenderNvertTnone(SoGLRenderAction *action)
 
         // More than one polygon per face
         else {
-            float	di = 1.0 / numDivisions;
+            float	di = 1.0f / numDivisions;
             SbVec3f	topPoint,    botPoint,    nextBotPoint;
             SbVec3f	horizSpace, vertSpace;
             int		strip, rect;
@@ -823,9 +823,9 @@ SoCube::getSize(float &hWidth, float &hHeight, float &hDepth) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    hWidth  = ( width.isIgnored() ? 1.0 :  width.getValue() / 2.0);
-    hHeight = (height.isIgnored() ? 1.0 : height.getValue() / 2.0);
-    hDepth  = ( depth.isIgnored() ? 1.0 :  depth.getValue() / 2.0);
+    hWidth  = ( width.isIgnored() ? 1.0f :  width.getValue() / 2.0f);
+    hHeight = (height.isIgnored() ? 1.0f : height.getValue() / 2.0f);
+    hDepth  = ( depth.isIgnored() ? 1.0f :  depth.getValue() / 2.0f);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -909,11 +909,11 @@ SoCube::rayPickBoundingBox(SoRayPickAction *action, const SbBox3f &bbox)
     // If any of the dimensions is 0, beef it up a little bit to avoid
     // scaling by 0
     if (size[0] == 0.0)
-        size[0] = 0.00001;
+        size[0] = 0.00001f;
     if (size[1] == 0.0)
-        size[1] = 0.00001;
+        size[1] = 0.00001f;
     if (size[2] == 0.0)
-        size[2] = 0.00001;
+        size[2] = 0.00001f;
 
     SoModelMatrixElement::translateBy(action->getState(), this,
                                       bbox.getCenter());
