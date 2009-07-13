@@ -133,8 +133,8 @@ do {									      \
 } while(0)
 
 #else
-#define SO__NODE_CHECK_INIT(className)	while(0)
-#define SO__NODE_CHECK_CONSTRUCT(where)	while(0)
+#define SO__NODE_CHECK_INIT(className) 	while(0){}
+#define SO__NODE_CHECK_CONSTRUCT(where)	while(0){}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

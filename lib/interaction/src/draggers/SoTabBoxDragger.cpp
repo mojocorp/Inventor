@@ -94,48 +94,48 @@ SoTabBoxDragger::SoTabBoxDragger()
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane1Sep, SoSeparator, FALSE,
 				topSeparator, geomSeparator,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane1Xf, SoTransform, TRUE,
-				tabPlane1Sep, ,FALSE);
+				tabPlane1Sep,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane1, SoTabPlaneDragger, TRUE,
-				tabPlane1Sep, ,TRUE);
+				tabPlane1Sep,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane2Sep, SoSeparator, FALSE,
 				topSeparator, geomSeparator,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane2Xf, SoTransform, TRUE,
-				tabPlane2Sep, ,FALSE);
+				tabPlane2Sep,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane2, SoTabPlaneDragger, TRUE,
-				tabPlane2Sep, ,TRUE);
+				tabPlane2Sep,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane3Sep, SoSeparator, FALSE,
 				topSeparator, geomSeparator,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane3Xf, SoTransform, TRUE,
-				tabPlane3Sep, ,FALSE);
+				tabPlane3Sep,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane3, SoTabPlaneDragger, TRUE,
-				tabPlane3Sep, ,TRUE);
+				tabPlane3Sep,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane4Sep, SoSeparator, FALSE,
 				topSeparator, geomSeparator,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane4Xf, SoTransform, TRUE,
-				tabPlane4Sep, ,FALSE);
+				tabPlane4Sep,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane4, SoTabPlaneDragger, TRUE,
-				tabPlane4Sep, ,TRUE);
+				tabPlane4Sep,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane5Sep, SoSeparator, FALSE,
 				topSeparator, geomSeparator,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane5Xf, SoTransform, TRUE,
-				tabPlane5Sep, ,FALSE);
+				tabPlane5Sep,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane5, SoTabPlaneDragger, TRUE,
-				tabPlane5Sep, ,TRUE);
+				tabPlane5Sep,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane6Sep, SoSeparator, FALSE,
 				topSeparator, geomSeparator,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane6Xf, SoTransform, TRUE,
-				tabPlane6Sep, ,FALSE);
+				tabPlane6Sep,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(tabPlane6, SoTabPlaneDragger, TRUE,
-				tabPlane6Sep, ,TRUE);
+				tabPlane6Sep,\x0,TRUE);
 
     // Geometry to draw a nice box instead of drawing the planes separately...
     SO_KIT_ADD_CATALOG_ENTRY(boxGeom, SoSeparator, TRUE,
-				geomSeparator, ,TRUE);
+				geomSeparator,\x0,TRUE);
 
     // Read the default geometry for this dragger
     if (SO_KIT_IS_FIRST_INSTANCE())

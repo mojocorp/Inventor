@@ -48,12 +48,11 @@
  * Pool - allocate a new pool of buffers
  *-----------------------------------------------------------------------------
  */
-Pool::Pool( int _buffersize, int initpoolsize, char *n )
+Pool::Pool( int _buffersize, int initpoolsize, const char * )
 {
     buffersize= (_buffersize < sizeof(Buffer)) ? sizeof(Buffer)	: _buffersize;
     initsize	= initpoolsize * buffersize;
     nextsize	= initsize;
-    name	= n;
     magic	= is_allocated;
     nextblock	= 0;
     curblock	= 0;

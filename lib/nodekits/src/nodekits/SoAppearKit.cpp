@@ -83,14 +83,14 @@ SoAppearanceKit::SoAppearanceKit()
     // Use combinations of ...ADD_CATALOG_ENTRY 
     // and ...ADD_CATALOG_LIST_ENTRY.  See SoSubKit.h for more info
     // on syntax of these macros.
-    SO_KIT_ADD_CATALOG_ENTRY(lightModel,  SoLightModel, TRUE, this, ,TRUE );
-    SO_KIT_ADD_CATALOG_ENTRY(environment, SoEnvironment,TRUE, this, ,TRUE );
-    SO_KIT_ADD_CATALOG_ENTRY(drawStyle,   SoDrawStyle,  TRUE, this, ,TRUE );
-    SO_KIT_ADD_CATALOG_ENTRY(material,    SoMaterial,   TRUE, this, ,TRUE );
-    SO_KIT_ADD_CATALOG_ENTRY(complexity,  SoComplexity, TRUE, this, ,TRUE );
-    SO_KIT_ADD_CATALOG_ENTRY(texture2,    SoTexture2,   TRUE, this, ,TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(lightModel,  SoLightModel, TRUE, this,\x0,TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(environment, SoEnvironment,TRUE, this,\x0,TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(drawStyle,   SoDrawStyle,  TRUE, this,\x0,TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(material,    SoMaterial,   TRUE, this,\x0,TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(complexity,  SoComplexity, TRUE, this,\x0,TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(texture2,    SoTexture2,   TRUE, this,\x0,TRUE );
 
-    SO_KIT_ADD_CATALOG_ENTRY(font,        SoFont,     TRUE, this, ,TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(font,        SoFont,     TRUE, this,\x0,TRUE );
 
     SO_KIT_INIT_INSTANCE();
 }

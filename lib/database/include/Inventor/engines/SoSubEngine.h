@@ -130,8 +130,8 @@
 	}								      \
     } while(0)
 #else
-#define SO__ENGINE_CHECK_INIT(className)	while(0)
-#define SO__ENGINE_CHECK_CONSTRUCT(where)	while(0)
+#define SO__ENGINE_CHECK_INIT(className)	while(0){}
+#define SO__ENGINE_CHECK_CONSTRUCT(where)	while(0){}
 #endif
 
 /////////////////////////////////////////////////////////////////////////////

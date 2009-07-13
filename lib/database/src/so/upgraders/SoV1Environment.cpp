@@ -69,15 +69,15 @@ SoV1Environment::SoV1Environment()
 {
     SO_NODE_CONSTRUCTOR(SoV1Environment);
 
-    SO_NODE_ADD_FIELD(ambientIntensity,	(0.2));
-    SO_NODE_ADD_FIELD(ambientColor,	(1.0, 1.0, 1.0));
-    SO_NODE_ADD_FIELD(attenuation,	(0.0, 0.0, 1.0));
+    SO_NODE_ADD_FIELD(ambientIntensity,	(0.2f));
+    SO_NODE_ADD_FIELD(ambientColor,	(1.0f, 1.0f, 1.0f));
+    SO_NODE_ADD_FIELD(attenuation,	(0.0f, 0.0f, 1.0f));
     SO_NODE_ADD_FIELD(fogType,		(NONE));
     SO_NODE_ADD_FIELD(fogComputed,	(PER_VERTEX));
-    SO_NODE_ADD_FIELD(fogColor,		(1.0, 1.0, 1.0));
-    SO_NODE_ADD_FIELD(fogDensity,	(0.0));
-    SO_NODE_ADD_FIELD(fogNearDistance,	(1.0));
-    SO_NODE_ADD_FIELD(fogFarDistance,	(10.0));
+    SO_NODE_ADD_FIELD(fogColor,		(1.0f, 1.0f, 1.0f));
+    SO_NODE_ADD_FIELD(fogDensity,	(0.0f));
+    SO_NODE_ADD_FIELD(fogNearDistance,	(1.0f));
+    SO_NODE_ADD_FIELD(fogFarDistance,	(10.0f));
 
     // Set up static info for enumerated type fields
     SO_NODE_DEFINE_ENUM_VALUE(Type, NONE);
@@ -148,9 +148,9 @@ SoV1Environment::createNewNode()
     // Convert density to visibility
     if (! fogDensity.isDefault()) {
 	if (result->fogType.getValue() == SoEnvironment::SMOKE)
-	    result->fogVisibility = 2.0 / fogDensity.getValue();
+	    result->fogVisibility = 2.0f / fogDensity.getValue();
 	else
-	    result->fogVisibility = 4.0 / fogDensity.getValue();
+	    result->fogVisibility = 4.0f / fogDensity.getValue();
 	
 	if (fogDensity.isIgnored())
 	    result->fogVisibility.setIgnored(TRUE);

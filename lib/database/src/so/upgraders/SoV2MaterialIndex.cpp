@@ -73,8 +73,8 @@ SoV2MaterialIndex::SoV2MaterialIndex()
     SO_NODE_ADD_FIELD(ambientIndex,	(1));
     SO_NODE_ADD_FIELD(diffuseIndex,	(2));
     SO_NODE_ADD_FIELD(specularIndex,	(3));
-    SO_NODE_ADD_FIELD(shininess,	(0.2));
-    SO_NODE_ADD_FIELD(transparency,	(0.0));
+    SO_NODE_ADD_FIELD(shininess,	(0.2f));
+    SO_NODE_ADD_FIELD(transparency,	(0.0f));
 }
 
 ////////////////////////////////////////////////////////////////////////

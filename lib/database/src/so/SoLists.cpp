@@ -98,7 +98,7 @@ SoBaseList::SoBaseList(int size) : SbPList(size)
 //
 // Use: public
 
-SoBaseList::SoBaseList(const SoBaseList &l)
+SoBaseList::SoBaseList(const SoBaseList &l) : SbPList()
 //
 ////////////////////////////////////////////////////////////////////////
 {

@@ -73,9 +73,9 @@ SbCylinderPlaneProjector::SbCylinderPlaneProjector(
 
 SbCylinderPlaneProjector::SbCylinderPlaneProjector(
     const SbCylinder &c,
-    float,
+    float edgeTol,
     SbBool orient)
-: SbCylinderSectionProjector(c, orient)
+: SbCylinderSectionProjector(c, edgeTol, orient)
 {
 }
 
@@ -124,7 +124,7 @@ SbCylinderPlaneProjector::project(const SbVec2f &point)
 	SoDebugError::post("SbCylinderPlaneProjector::project",
 			   "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
     
     SbVec3f cylIntersection, dontCare;
@@ -150,7 +150,7 @@ SbCylinderPlaneProjector::project(const SbVec2f &point)
 	    SoDebugError::post("SbCylinderPlaneProjector::project",
 			       "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
 
 	SbVec3f vecToPoint = projectIntersection - 

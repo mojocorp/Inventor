@@ -77,9 +77,9 @@ SbColor::setHSVValue(float hue, float sat, float val)
 	hue *= 6.0;
     i = (int)(floor(hue));
     f = hue-i;
-    p = val*(1.0-sat);
-    q = val*(1.0-(sat*f));
-    t = val*(1.0-(sat*(1.0-f)));
+    p = val*(1.0f-sat);
+    q = val*(1.0f-(sat*f));
+    t = val*(1.0f-(sat*(1.0f-f)));
     switch (i) {
 	case 0: vec[0] = val; vec[1] = t; vec[2] = p; break;
 	case 1: vec[0] = q; vec[1] = val; vec[2] = p; break;
@@ -123,15 +123,15 @@ SbColor::getHSVValue(float &hue, float &sat, float &val) const
 	if (vec[0]  ==  max) 
 	    h = (vec[1] - vec[2]) / (max-min);
 	else if (vec[1]  ==  max)
-	    h = 2.0 + (vec[2] - vec[0]) / (max-min);
+	    h = 2.0f + (vec[2] - vec[0]) / (max-min);
 	else
-	    h = 4.0 + (vec[0] - vec[1]) / (max-min);
-	if (h < 0.0)
-	    h += 6.0;
-	hue = h/6.0;
+	    h = 4.0f + (vec[0] - vec[1]) / (max-min);
+	if (h < 0.0f)
+	    h += 6.0f;
+	hue = h/6.0f;
     }
     else
-    	hue = 0.0;
+    	hue = 0.0f;
 }
 
 //
@@ -140,11 +140,11 @@ SbColor::getHSVValue(float &hue, float &sat, float &val) const
 SbColor &
 SbColor::setPackedValue(uint32_t orderedRGBA, float& transparency)
 {
-    float f = 1.0 / 255.0;
+    float f = 1.0f / 255.0f;
     vec[0] = ((orderedRGBA & 0xFF000000)>>24) * f;
     vec[1] = ((orderedRGBA & 0xFF0000) >> 16) * f;
     vec[2] = ((orderedRGBA & 0xFF00) >> 8) * f;
-    transparency = 1.0 - (orderedRGBA & 0xFF) * f;
+    transparency = 1.0f - (orderedRGBA & 0xFF) * f;
     
     return (*this);
 }

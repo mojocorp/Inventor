@@ -241,5 +241,6 @@ _SoNurbsGLRender::errorHandler( int msg )
     SoDebugError::post("_SoNurbsGLRender::errorHandler",
             "NURBS - %s", _SoNurbsNurbsTessellator::nurbserror[msg]);
 #endif
-#endif      
+#endif
+    SB_UNUSED(msg);
 }

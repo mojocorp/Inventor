@@ -155,9 +155,9 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
 //???
     float dropRate = dropOffRate.getValue();
     if (dropRate <= 0.0)
-        glLightf((GLenum) id, GL_SPOT_EXPONENT, .01);
+        glLightf((GLenum) id, GL_SPOT_EXPONENT, (GLfloat).01f);
     else 
-        glLightf((GLenum) id, GL_SPOT_EXPONENT,  dropRate * 128.0);
+        glLightf((GLenum) id, GL_SPOT_EXPONENT,  (GLfloat)dropRate * 128.0f);
     glLightf((GLenum) id, GL_SPOT_CUTOFF, cutOffAngle.getValue()*(180.0/M_PI));
 
     // Attenuation is accessed from the state

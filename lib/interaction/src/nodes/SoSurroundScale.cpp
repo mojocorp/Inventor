@@ -205,9 +205,9 @@ SoSurroundScale::updateMySurroundParams(SoAction *action,
 	else {
 	    float x, y, z;
 	    myBox.getSize(x,y,z);
-	    cachedScale.setValue(  .5*x, .5*y, .5*z );
+	    cachedScale.setValue(  .5f*x, .5f*y, .5f*z );
 
-	    float minLength = .01 * cachedScale.length();
+	    float minLength = .01f * cachedScale.length();
 	    // Macro defined just before beginning of this method.
 	    FUDGE(cachedScale[0],minLength);
 	    FUDGE(cachedScale[1],minLength);
@@ -215,7 +215,7 @@ SoSurroundScale::updateMySurroundParams(SoAction *action,
 
 	    // Find the inverse values
 	    for (int j = 0; j < 3; j++ )
-		cachedInvScale[j] = 1.0 / cachedScale[j];
+		cachedInvScale[j] = 1.0f / cachedScale[j];
 	}
 
     // Get the translation for this node to add to the ctm.

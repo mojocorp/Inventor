@@ -133,6 +133,9 @@ typedef int	SbBool;
 
 #endif /* _DOUBLE_MATH_ONLY */
 
+//Avoid "unused parameter" warnings
+#define SB_UNUSED(x) (void)x;
+
 #if defined(WIN32) || defined(WIN64)
 #  ifdef INVENTOR_EXPORTS
 #     define INVENTOR_API __declspec(dllexport)

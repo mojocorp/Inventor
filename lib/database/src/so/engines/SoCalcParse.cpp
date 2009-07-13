@@ -32,7 +32,7 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #define yyname SoCalcParsename
 #define yyrule SoCalcParserule
 #define YYPREFIX "SoCalcParse"
-#line 19 "lib\database\src\so\engines\SoCalcParse.y"
+#line 19 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/errors/SoDebugError.h>
 #include "SoCalcExpr.h"
@@ -126,7 +126,7 @@ static struct {
     const Func *func;
 } Funcs[NFUNCS];
 
-#line 118 "lib\database\src\so\engines\SoCalcParse.y"
+#line 118 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 typedef union
 {
     Expr	*expr;
@@ -417,7 +417,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 235 "lib\database\src\so\engines\SoCalcParse.y"
+#line 235 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 
 //
 // The static Funcs array contains instances of objects that have
@@ -470,7 +470,7 @@ initFuncs()
 static Const *
 isConst(const char *nm)
 {
-    for (int i=0; i<NCONSTANTS; i++)
+    for (size_t i=0; i<NCONSTANTS; i++)
 	if (strcmp(nm, Constants[i].name)==0)
 	    return new Const(Constants[i].val);
     return NULL;
@@ -490,7 +490,7 @@ isFunc(const char *nm)
 static Var *
 isInput(const char *nm)
 {
-    for (int i=0; i<NINPUTS; i++) if (strcmp(nm, Inputs[i].name)==0) 
+    for (size_t i=0; i<NINPUTS; i++) if (strcmp(nm, Inputs[i].name)==0)
 	return new Var(nm, Inputs[i].type);
     return NULL;
 }
@@ -498,7 +498,7 @@ isInput(const char *nm)
 static Var *
 isOutput(const char *nm)
 {
-    for (int i=0; i<NOUTPUTS; i++) if (strcmp(nm, Outputs[i].name)==0) 
+    for (size_t i=0; i<NOUTPUTS; i++) if (strcmp(nm, Outputs[i].name)==0)
 	return new Var(nm, Outputs[i].type);
     return NULL;
 }
@@ -506,7 +506,7 @@ isOutput(const char *nm)
 static Var *
 isVar(const char *nm)
 {
-    for (int i=0; i<NVARS; i++) if (strcmp(nm, Vars[i].name)==0) 
+    for (size_t i=0; i<NVARS; i++) if (strcmp(nm, Vars[i].name)==0)
 	return new Var(nm, Vars[i].type);
     return NULL;
 }
@@ -790,131 +790,131 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 135 "lib\database\src\so\engines\SoCalcParse.y"
+#line 135 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { EList->append(yyvsp[0].expr); }
 break;
 case 2:
-#line 136 "lib\database\src\so\engines\SoCalcParse.y"
+#line 136 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { EList->append(yyvsp[0].expr); }
 break;
 case 4:
-#line 142 "lib\database\src\so\engines\SoCalcParse.y"
+#line 142 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Assign(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 5:
-#line 144 "lib\database\src\so\engines\SoCalcParse.y"
+#line 144 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new AssignIndex(yyvsp[-5].expr, yyvsp[-3].expr, yyvsp[0].expr); }
 break;
 case 6:
-#line 146 "lib\database\src\so\engines\SoCalcParse.y"
+#line 146 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Assign(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 7:
-#line 148 "lib\database\src\so\engines\SoCalcParse.y"
+#line 148 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new AssignIndex(yyvsp[-5].expr, yyvsp[-3].expr, yyvsp[0].expr); }
 break;
 case 8:
-#line 152 "lib\database\src\so\engines\SoCalcParse.y"
+#line 152 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = yyvsp[0].expr; }
 break;
 case 9:
-#line 153 "lib\database\src\so\engines\SoCalcParse.y"
+#line 153 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = yyvsp[0].expr; }
 break;
 case 10:
-#line 154 "lib\database\src\so\engines\SoCalcParse.y"
+#line 154 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = yyvsp[0].expr; }
 break;
 case 11:
-#line 155 "lib\database\src\so\engines\SoCalcParse.y"
+#line 155 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = yyvsp[0].expr; }
 break;
 case 12:
-#line 156 "lib\database\src\so\engines\SoCalcParse.y"
+#line 156 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = yyvsp[-1].expr; }
 break;
 case 13:
-#line 160 "lib\database\src\so\engines\SoCalcParse.y"
+#line 160 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = yyvsp[0].expr; }
 break;
 case 14:
-#line 162 "lib\database\src\so\engines\SoCalcParse.y"
+#line 162 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Index(yyvsp[-3].expr, yyvsp[-1].expr); }
 break;
 case 15:
-#line 163 "lib\database\src\so\engines\SoCalcParse.y"
+#line 163 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { ((Func *)yyvsp[-3].expr)->setArgs(yyvsp[-1].list); yyval.expr = yyvsp[-3].expr; }
 break;
 case 16:
-#line 167 "lib\database\src\so\engines\SoCalcParse.y"
+#line 167 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { (yyval.list = new ExprList)->append(yyvsp[0].expr); }
 break;
 case 17:
-#line 168 "lib\database\src\so\engines\SoCalcParse.y"
+#line 168 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyvsp[-2].list->append(yyvsp[0].expr); yyval.list = yyvsp[-2].list; }
 break;
 case 19:
-#line 173 "lib\database\src\so\engines\SoCalcParse.y"
+#line 173 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Negate(yyvsp[0].expr); }
 break;
 case 20:
-#line 174 "lib\database\src\so\engines\SoCalcParse.y"
+#line 174 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Not(yyvsp[0].expr); }
 break;
 case 22:
-#line 180 "lib\database\src\so\engines\SoCalcParse.y"
+#line 180 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Mult(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 23:
-#line 182 "lib\database\src\so\engines\SoCalcParse.y"
+#line 182 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Divide(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 24:
-#line 184 "lib\database\src\so\engines\SoCalcParse.y"
+#line 184 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Mod(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 26:
-#line 190 "lib\database\src\so\engines\SoCalcParse.y"
+#line 190 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Plus(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 27:
-#line 192 "lib\database\src\so\engines\SoCalcParse.y"
+#line 192 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Minus(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 29:
-#line 198 "lib\database\src\so\engines\SoCalcParse.y"
+#line 198 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new LessThan(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 30:
-#line 200 "lib\database\src\so\engines\SoCalcParse.y"
+#line 200 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new GreaterThan(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 31:
-#line 202 "lib\database\src\so\engines\SoCalcParse.y"
+#line 202 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new LessEQ(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 32:
-#line 204 "lib\database\src\so\engines\SoCalcParse.y"
+#line 204 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new GreaterEQ(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 34:
-#line 210 "lib\database\src\so\engines\SoCalcParse.y"
+#line 210 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Equals(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 35:
-#line 212 "lib\database\src\so\engines\SoCalcParse.y"
+#line 212 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new NotEquals(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 37:
-#line 218 "lib\database\src\so\engines\SoCalcParse.y"
+#line 218 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new And(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 39:
-#line 224 "lib\database\src\so\engines\SoCalcParse.y"
+#line 224 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Or(yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 case 41:
-#line 231 "lib\database\src\so\engines\SoCalcParse.y"
+#line 231 "lib\\database\\src\\so\\engines\\SoCalcParse.y"
 { yyval.expr = new Ternary(yyvsp[-4].expr, yyvsp[-2].expr, yyvsp[0].expr); }
 break;
 #line 921 "y.tab.c"

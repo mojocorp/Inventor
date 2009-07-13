@@ -74,17 +74,6 @@
 
 #include <Inventor/misc/SoGL.h>   // For GLenum declaration
 
-//  GLU Library version dependency.   Introduced with Iris 6.2.
-#ifndef gluTESSELATOR
-#if defined(__glu_h__) && (GLU_VERSION_1_2)
-#define gluTESSELATOR  GLUtesselator
-#else
-#define gluTESSELATOR  GLUtriangulatorObj
-extern "C" struct GLUtriangulatorObj;
-#endif
-#endif
-
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoAsciiText
@@ -151,7 +140,7 @@ class INVENTOR_API SoAsciiText : public SoShape {
     
     // Render the fronts of the characters
     void renderFront(SoGLRenderAction *action, const SbString &string,
-		     float width, GLUtriangulatorObj *tobj);
+		     float width, GLUtesselator *tobj);
     
     // Creates a text detail when picking:
     SoDetail * createTriangleDetail(SoRayPickAction *,

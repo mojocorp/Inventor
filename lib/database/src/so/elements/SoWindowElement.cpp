@@ -198,6 +198,8 @@ SoWindowElement::push(SoState *state)
     if (state->getDepth() > 1)
 	SoDebugError::post("SoWindowElement::push",
 	    "must not set this element");
+#else
+    SB_UNUSED(state);
 #endif
 }
 

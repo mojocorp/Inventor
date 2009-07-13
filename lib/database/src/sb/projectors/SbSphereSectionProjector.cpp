@@ -142,7 +142,7 @@ SbSphereSectionProjector::project(const SbVec2f &point)
 	    SoDebugError::post("SbSphereSectionProjector::project",
 			       "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
     }
     else if (! tolPlane.intersect(workingLine, planeIntersection))
@@ -150,7 +150,7 @@ SbSphereSectionProjector::project(const SbVec2f &point)
 	SoDebugError::post("SbSphereSectionProjector::project",
 			   "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
 
     float dist = (planeIntersection - planePoint).length();
@@ -387,7 +387,7 @@ SbSphereSectionProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
 	    SoDebugError::post("SbSphereSectionProjector::getRotation",
 			       "Couldn't intersect plane line with sphere");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
 
 	if (tol1) {

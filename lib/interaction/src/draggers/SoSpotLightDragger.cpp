@@ -112,23 +112,23 @@ SoSpotLightDragger::SoSpotLightDragger()
     SO_KIT_ADD_CATALOG_ENTRY(translatorSep, SoSeparator, 
 				TRUE, topSeparator, geomSeparator,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translatorRotInv, SoRotation, 
-				TRUE, translatorSep, ,FALSE);
+				TRUE, translatorSep,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator, SoDragPointDragger, 
-				TRUE, translatorSep, ,TRUE);
+				TRUE, translatorSep,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator, SoRotateSphericalDragger, 
 				TRUE, topSeparator, geomSeparator,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(beamSep, SoSeparator, 
 				TRUE, topSeparator, geomSeparator,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(beamPlacement, SoTranslation, 
-				TRUE, beamSep, ,TRUE);
+				TRUE, beamSep,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(beamScale, SoScale, 
-				TRUE, beamSep, ,TRUE);
+				TRUE, beamSep,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(beamSwitch, SoSwitch, 
-				TRUE, beamSep, ,FALSE);
+				TRUE, beamSep,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(beam, SoSeparator, 
-				TRUE, beamSwitch, ,TRUE);
+				TRUE, beamSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(beamActive, SoSeparator, 
-				TRUE, beamSwitch, ,TRUE);
+				TRUE, beamSwitch,\x0,TRUE);
 
     // Read the default geometry for this dragger
     if (SO_KIT_IS_FIRST_INSTANCE())

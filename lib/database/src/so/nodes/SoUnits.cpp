@@ -63,20 +63,20 @@
 SO_NODE_SOURCE(SoUnits);
 
 const float SoUnits::factor[14] = {
-    1,
-    1e2,
-    1e3,
-    1e6,
-    1e6,
-    1e9,
-    1e10,
-    1e-3,
-    3.280840,
-    3.937008e01,
-    2.834646e03,
-    1.093613,
-    6.213712e-04,
-    5.399568e-04
+    1.0f,
+    1e2f,
+    1e3f,
+    1e6f,
+    1e6f,
+    1e9f,
+    1e10f,
+    1e-3f,
+    3.280840f,
+    3.937008e01f,
+    2.834646e03f,
+    1.093613f,
+    6.213712e-04f,
+    5.399568e-04f
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -219,7 +219,7 @@ SoUnits::getMatrix(SoGetMatrixAction *action)
 	float	ratio	  = oldFactor / newFactor;
 
 	SbVec3f		sc(ratio, ratio, ratio);
-	SbVec3f		si(1.0/ratio, 1.0/ratio, 1.0/ratio);
+	SbVec3f		si(1.0f/ratio, 1.0f/ratio, 1.0f/ratio);
 	SbMatrix	&ctm = action->getMatrix();
 	SbMatrix	&inv = action->getInverse();
 	SbMatrix	m;

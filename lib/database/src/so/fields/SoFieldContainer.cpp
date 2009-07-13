@@ -289,9 +289,8 @@ SoFieldContainer::get(SbString &fieldDataString, SoOutput *dictOut)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoFieldData	*fieldData = getFieldData();
-
 #ifdef DEBUG
+    const SoFieldData	*fieldData = getFieldData();
     if (fieldData == NULL) {
 	SoDebugError::post("SoFieldContainer::get",
 			   "Field data is NULL!");

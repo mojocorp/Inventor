@@ -69,12 +69,12 @@ SoV1Material::SoV1Material()
 {
     SO_NODE_CONSTRUCTOR(SoV1Material);
 
-    SO_NODE_ADD_FIELD(ambientColor,	(0.2, 0.2, 0.2));
-    SO_NODE_ADD_FIELD(diffuseColor,	(0.8, 0.8, 0.8));
-    SO_NODE_ADD_FIELD(specularColor,	(0.0, 0.0, 0.0));
-    SO_NODE_ADD_FIELD(emissiveColor,	(0.0, 0.0, 0.0));
-    SO_NODE_ADD_FIELD(shininess,	(0.0));
-    SO_NODE_ADD_FIELD(transparency,	(0.0));
+    SO_NODE_ADD_FIELD(ambientColor,	(0.2f, 0.2f, 0.2f));
+    SO_NODE_ADD_FIELD(diffuseColor,	(0.8f, 0.8f, 0.8f));
+    SO_NODE_ADD_FIELD(specularColor,	(0.0f, 0.0f, 0.0f));
+    SO_NODE_ADD_FIELD(emissiveColor,	(0.0f, 0.0f, 0.0f));
+    SO_NODE_ADD_FIELD(shininess,	(0.0f));
+    SO_NODE_ADD_FIELD(transparency,	(0.0f));
 }
 
 ////////////////////////////////////////////////////////////////////////

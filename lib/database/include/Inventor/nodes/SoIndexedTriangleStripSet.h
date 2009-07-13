@@ -76,10 +76,6 @@ class SoCoordinateElement;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// This coordinate index indicates that the current triangle ends and the
-// next triangle begins
-#define SO_END_STRIP_INDEX	(-1)
-
 class SoNormalBundle;
 class SoCoordinateElement;
 

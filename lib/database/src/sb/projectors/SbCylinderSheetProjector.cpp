@@ -132,7 +132,7 @@ SbCylinderSheetProjector::project(const SbVec2f &point)
 	    SoDebugError::post("SbCylinderSheetProjector::project",
 			       "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
     }
     else if (! tolPlane.intersect(workingLine, planeIntersection))
@@ -140,7 +140,7 @@ SbCylinderSheetProjector::project(const SbVec2f &point)
 	SoDebugError::post("SbCylinderSheetProjector::project",
 			   "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
 
     SbVec3f vecToPoint = planeIntersection -
@@ -165,7 +165,7 @@ SbCylinderSheetProjector::project(const SbVec2f &point)
 	// See the SphereSheetProjector for a description
 	// of this hyperbolic function.
 	
-	float f = cylinder.getRadius()*cylinder.getRadius()/2.0;
+	float f = cylinder.getRadius()*cylinder.getRadius()/2.0f;
 	float offsetDist = f / dist;
 	    
 	SbVec3f offset;
@@ -268,13 +268,13 @@ SbCylinderSheetProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
     float d = diff.length();
 	
     // prevent numerical instability problems
-    float sinHalfAngle = d / (2.0 * cylinder.getRadius());
+    float sinHalfAngle = d / (2.0f * cylinder.getRadius());
     if (sinHalfAngle < -1.0 )
         sinHalfAngle = -1.0;
     else if (sinHalfAngle > 1.0)
         sinHalfAngle = 1.0;
 
-    float angle = 2.0 * asin(sinHalfAngle);
+    float angle = 2.0f * asin(sinHalfAngle);
 
     // This cross product gets flaky when the
     // angle between v1 and v2 gets small -

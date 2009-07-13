@@ -173,8 +173,8 @@ SoSphere::rayPick(SoRayPickAction *action)
     computeObjectSpaceRay(action);
 
     // Create SbSphere with correct radius, centered at zero
-    float	rad = (radius.isIgnored() ? 1.0 : radius.getValue());
-    SbSphere	sph(SbVec3f(0., 0., 0.), rad);
+    float	rad = (radius.isIgnored() ? 1.0f : radius.getValue());
+    SbSphere	sph(SbVec3f(0.f, 0.f, 0.f), rad);
 
     // Intersect with pick ray. If found, set up picked point(s)
     if (sph.intersect(action->getLine(), enterPoint, exitPoint)) {
@@ -213,7 +213,7 @@ SoSphere::computeBBox(SoAction *, SbBox3f &box, SbVec3f &center)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	rad = (radius.isIgnored() ? 1.0 : radius.getValue());
+    float	rad = (radius.isIgnored() ? 1.0f : radius.getValue());
 
     box.setBounds(-rad, -rad, -rad, rad, rad, rad);
     center.setValue(0.0, 0.0, 0.0);
@@ -244,7 +244,7 @@ SoSphere::generatePrimitives(SoAction *action)
     // Compute depth based on complexity
     depth = computeDepth(action);
 
-    rad = (radius.isIgnored() ? 1.0 : radius.getValue());
+    rad = (radius.isIgnored() ? 1.0f : radius.getValue());
 
     // Determine whether we should generate our own texture coordinates
     switch (SoTextureCoordinateElement::getType(action->getState())) {
@@ -381,7 +381,7 @@ SoSphere::generatePrimitives(SoAction *action)
         shapeVertex(&pv);
 
         // Third cap vertex
-        vec.setValue(0.0, s_y, 0.0);
+        vec.setValue(0.0f, s_y, 0.0f);
 
         if (genTexCoords) {
             tex[0] = sAvg;

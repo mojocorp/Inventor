@@ -136,23 +136,23 @@ SbSphere::intersect(const SbLine &l, SbVec3f &intersection) const
 
     // setup B,C
     v = l.getPosition() - center;
-    B = 2.0 * (l.getDirection().dot(v));
+    B = 2.0f * (l.getDirection().dot(v));
     C = v.dot(v) - (radius * radius);
 
     // compute discriminant
     // if negative, there is no intersection
-    discr = B*B - 4.0*C;
-    if (discr < 0.0) {
+    discr = B*B - 4.0f*C;
+    if (discr < 0.0f) {
 	// line and sphere do not intersect
 	doesIntersect = FALSE;
     }
     else {
 	// compute t0: (-B - sqrt(B^2 - 4AC)) / 2A  (A = 1)
 	sqroot = sqrtf(discr);
-	t = (-B - sqroot) * 0.5;
+	t = (-B - sqroot) * 0.5f;
 	if (t < 0.0) {
 	    // no intersection, try t1: (-B + sqrt(B^2 - 4AC)) / 2A  (A = 1)
-	    t = (-B + sqroot) * 0.5;
+	    t = (-B + sqroot) * 0.5f;
 	}
 
 	if (t < 0.0) {
@@ -189,12 +189,12 @@ SbSphere::intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const
 
     // setup B,C
     v = l.getPosition() - center;
-    B = 2.0 * (l.getDirection().dot(v));
+    B = 2.0f * (l.getDirection().dot(v));
     C = v.dot(v) - (radius * radius);
 
     // compute discriminant
     // if negative, there is no intersection
-    discr = B*B - 4.0*C;
+    discr = B*B - 4.0f*C;
 
     if (discr < 0.0) {
 	// line and sphere do not intersect
@@ -203,10 +203,10 @@ SbSphere::intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const
     else {
 	sqroot = sqrtf(discr);
 	    
-	float t0 = (-B - sqroot) * 0.5;
+	float t0 = (-B - sqroot) * 0.5f;
 	enter = l.getPosition() + (l.getDirection() * t0);
 	
-	float t1 = (-B + sqroot) * 0.5;
+	float t1 = (-B + sqroot) * 0.5f;
 	exit = l.getPosition() + (l.getDirection() * t1);
     }
 

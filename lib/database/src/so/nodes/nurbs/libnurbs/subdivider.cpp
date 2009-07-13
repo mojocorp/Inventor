@@ -62,13 +62,13 @@
  */
 
 Subdivider::Subdivider( Renderhints& r, Backend& b ) 
-	: arcpool( sizeof( Arc), 1, "arcpool" ),
+        : slicer( b ),
+          arctessellator( trimvertexpool, pwlarcpool ),
+          arcpool( sizeof( Arc), 1, "arcpool" ),
  	  bezierarcpool( sizeof( BezierArc ), 1, "Bezarcpool" ),
-	  pwlarcpool( sizeof( PwlArc ), 1, "Pwlarcpool" ),
-	  renderhints( r ),
-	  arctessellator( trimvertexpool, pwlarcpool ), 
-	  backend( b ),
-	  slicer( b )
+          pwlarcpool( sizeof( PwlArc ), 1, "Pwlarcpool" ),
+          renderhints( r ),
+          backend( b )
 {
 }
 
@@ -617,7 +617,7 @@ Subdivider::freejarcs( Bin& bin )
     bin.adopt();	/* XXX - should not be necessary */
 
     Arc_ptr jarc;
-    while( jarc = bin.removearc() ) {
+    while( (jarc = bin.removearc()) ) {
 	if( jarc->pwlArc ) jarc->pwlArc->deleteMe( pwlarcpool ); jarc->pwlArc = 0;
 	if( jarc->bezierArc) jarc->bezierArc->deleteMe( bezierarcpool ); jarc->bezierArc = 0;
 	jarc->deleteMe( arcpool );

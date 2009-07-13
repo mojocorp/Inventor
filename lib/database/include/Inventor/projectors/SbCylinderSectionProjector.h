@@ -80,7 +80,7 @@ class INVENTOR_API SbCylinderSectionProjector : public SbCylinderProjector
     // Constructor taking the cylinder.
     // C-api: name=createCyl
     SbCylinderSectionProjector( const SbCylinder &cyl,
-				float edgeTol = .9,
+				float edgeTol = .9f,
 				SbBool orientToEye = TRUE);
 
     // Destructor

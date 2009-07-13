@@ -171,8 +171,8 @@ SbViewVolume::getMatrices(SbMatrix &affine, SbMatrix &proj) const
     float topPlusBottom = ulfEye[1] + llfEye[1];
 
     const float & farMinusNear = nearToFar;
-    float far = nearDist + nearToFar;
-    float farPlusNear = far + nearDist;
+    float far1 = nearDist + nearToFar;
+    float farPlusNear = far1 + nearDist;
 
     if (type == ORTHOGRAPHIC) {
 	proj[0][0] =   2.0 / rightMinusLeft;
@@ -194,7 +194,7 @@ SbViewVolume::getMatrices(SbMatrix &affine, SbMatrix &proj) const
 	proj[2][2] = - farPlusNear / farMinusNear;
 	proj[2][3] = - 1.0;
 
-	proj[3][2] = - 2.0 * nearDist * far / farMinusNear;
+	proj[3][2] = - 2.0 * nearDist * far1 / farMinusNear;
 	proj[3][3] = 0.0;
     }
 }
@@ -659,21 +659,21 @@ SbViewVolume::narrow(float left, float bottom, float right, float top) const
 void
 SbViewVolume::ortho(float left, float right,
 		    float bottom, float top,
-		    float near, float far)
+		    float nearVal, float farVal)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     type = ORTHOGRAPHIC;
     projPoint	= SbVec3f(0.0, 0.0, 0.0);
     projDir	= SbVec3f(0.0, 0.0, -1.0);
-    llfO	= SbVec3f(left,  bottom, -near);
-    lrfO	= SbVec3f(right, bottom, -near);
-    ulfO	= SbVec3f(left,  top,    -near);
+    llfO	= SbVec3f(left,  bottom, -nearVal);
+    lrfO	= SbVec3f(right, bottom, -nearVal);
+    ulfO	= SbVec3f(left,  top,    -nearVal);
     llf		= llfO + projPoint;  // For compatibility
     lrf		= lrfO + projPoint;
     ulf		= ulfO + projPoint;
-    nearDist	= near;
-    nearToFar	= far - near;
+    nearDist	= nearVal;
+    nearToFar	= farVal - nearVal;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -688,7 +688,7 @@ SbViewVolume::ortho(float left, float right,
 
 void
 SbViewVolume::perspective(float fovy, float aspect,
-			  float near, float far)
+			  float nearVal, float farVal)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -698,9 +698,9 @@ SbViewVolume::perspective(float fovy, float aspect,
 
     projPoint.setValue(0.0, 0.0, 0.0);
     projDir.setValue(0.0, 0.0, -1.0);
-    llfO[2] = lrfO[2] = ulfO[2] = - near;
+    llfO[2] = lrfO[2] = ulfO[2] = - nearVal;
 
-    ulfO[1] = near * tanfov;
+    ulfO[1] = nearVal * tanfov;
     llfO[1] = lrfO[1] = - ulfO[1];
     ulfO[0] = llfO[0] = aspect * llfO[1];
     lrfO[0] = - llfO[0];
@@ -709,8 +709,8 @@ SbViewVolume::perspective(float fovy, float aspect,
     lrf		= lrfO + projPoint;
     ulf		= ulfO + projPoint;
 
-    nearDist  = near;
-    nearToFar = far - near;
+    nearDist  = nearVal;
+    nearToFar = farVal - nearVal;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -801,7 +801,7 @@ SbViewVolume::zVector() const
 // Use: public
 
 SbViewVolume
-SbViewVolume::zNarrow(float near, float far) const
+SbViewVolume::zNarrow(float nearVal, float farVal) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -810,10 +810,10 @@ SbViewVolume::zNarrow(float near, float far) const
     SbVec3f		zVec = zVector();
 
     // make sure we aren't expanding the volume
-    if (near > 1.0)
-	near = 1.0;
-    if (far < 0.0)
-	far = 0.0;
+    if (nearVal > 1.0)
+	nearVal = 1.0;
+    if (farVal < 0.0)
+	farVal = 0.0;
 
     narrowed.type	= type;
     narrowed.projPoint	= projPoint;
@@ -821,14 +821,14 @@ SbViewVolume::zNarrow(float near, float far) const
 
     // the near-to-far distance can be calculated from the new near
     // and far values
-    narrowed.nearDist	= near;
-    narrowed.nearToFar	= (near - far) * nearToFar;
+    narrowed.nearDist	= nearVal;
+    narrowed.nearToFar	= (nearVal - farVal) * nearToFar;
 
     // the new near plane
     // find the old near plane
     plane = SbPlane(zVec, llfO);
     // offset it
-    plane.offset((near - 1.0) * nearToFar);
+    plane.offset((nearVal - 1.0) * nearToFar);
 
     // intersect various lines with the new near plane to find the new
     // info for the view volume

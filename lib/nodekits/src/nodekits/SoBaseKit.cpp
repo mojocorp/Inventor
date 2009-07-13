@@ -251,7 +251,7 @@ SoBaseKit::SoBaseKit()
 	catalogError();
 
     SO_KIT_ADD_CATALOG_LIST_ENTRY(callbackList, SoSeparator, TRUE,
-				       this, , SoCallback, TRUE );
+				       this,\x0, SoCallback, TRUE );
     SO_KIT_ADD_LIST_ITEM_TYPE(callbackList, SoEventCallback );
 
 
@@ -1617,6 +1617,9 @@ SoBaseKit::write( SoWriteAction *action )
 	if (fieldDataForWriting != NULL) {
 
 	    const SoNodekitCatalog *cat      = getNodekitCatalog();
+
+            SB_UNUSED(cat);
+
 	    SoSFNode               **pFields = nodekitPartsList->fieldList;
 	    int                    numParts  = nodekitPartsList->numEntries;
 

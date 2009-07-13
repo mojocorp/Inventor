@@ -85,13 +85,13 @@ SoSceneKit::SoSceneKit()
 
     // this is a switch node, so the user can pick which camera to look 
     // through.
-    SO_KIT_ADD_CATALOG_ENTRY(topSeparator, SoSeparator, TRUE, this, , FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(topSeparator, SoSeparator, TRUE, this,\x0, FALSE);
     SO_KIT_ADD_CATALOG_LIST_ENTRY(cameraList, SoSwitch, TRUE,
-					topSeparator, , SoCameraKit, TRUE );
+					topSeparator,\x0, SoCameraKit, TRUE );
     SO_KIT_ADD_CATALOG_LIST_ENTRY(lightList, SoGroup, TRUE,
-					topSeparator, , SoLightKit, TRUE );
+					topSeparator,\x0, SoLightKit, TRUE );
     SO_KIT_ADD_CATALOG_LIST_ENTRY(childList, SoGroup, TRUE,
-					topSeparator, , SoShapeKit, TRUE );
+					topSeparator,\x0, SoShapeKit, TRUE );
     SO_KIT_ADD_LIST_ITEM_TYPE(childList, SoSeparatorKit );
 
     SO_KIT_INIT_INSTANCE();

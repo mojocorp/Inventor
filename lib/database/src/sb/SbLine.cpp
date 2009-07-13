@@ -204,7 +204,7 @@ SbLine::intersect(const SbBox3f &box, SbVec3f &enter, SbVec3f &exit) const
     float    t = (box.getCenter() - pos).dot(dir);
     SbVec3f  diff(pos + t * dir - box.getCenter());
     float    dist2 = diff.dot(diff);
-    float    rad2 = (max - min).dot(max - min) * .25;
+    float    rad2 = (max - min).dot(max - min) * 0.25f;
 
     if (dist2 > rad2)
 	return FALSE;
@@ -291,7 +291,7 @@ SbLine::intersect(float angle, const SbBox3f &box) const
 	    double	thisFuzz = sqrt(diff.dot(diff)) * tanA;
 
 	    if (thisFuzz > fuzz)
-		fuzz = thisFuzz;
+		fuzz = float(thisFuzz);
 	}
     }
 
@@ -328,7 +328,7 @@ SbLine::intersect(
 
     t = diff.dot(getDirection());
     if(t > 0) {
-	d = sqrt(diff.dot(diff) - t*t);
+	d = float(sqrt(diff.dot(diff)) - t*t);
         if (pickAngle < 0.0)
   	    return (d < -pickAngle);
 	return ((d/t) < pickAngle);
@@ -489,7 +489,7 @@ SbLine::intersect(const SbVec3f &v0, const SbVec3f &v1, const SbVec3f &v2,
     //     coordinates and figure out if the front was hit.
     //
     if (isInter) {
-	barycentric.setValue(1.0 - (alpha + beta), alpha, beta);
+	barycentric.setValue(1.0f - (alpha + beta), alpha, beta);
 	front = (getDirection().dot(norm) < 0.0);
 	intersection = getPosition() + t * getDirection();
     }

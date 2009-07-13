@@ -97,158 +97,158 @@ SoHandleBoxDragger::SoHandleBoxDragger()
     // These parts will all go under the geomSeparator, for efficient 
     // rendering
     SO_KIT_ADD_CATALOG_ENTRY(drawStyle, SoDrawStyle, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
 
     SO_KIT_ADD_CATALOG_ENTRY(translator1Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator1, SoSeparator, TRUE,
-				translator1Switch, ,TRUE);
+				translator1Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator1Active, SoSeparator, TRUE,
-				translator1Switch, ,TRUE);
+				translator1Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator2Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator2, SoSeparator, TRUE,
-				translator2Switch, ,TRUE);
+				translator2Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator2Active, SoSeparator, TRUE,
-				translator2Switch, ,TRUE);
+				translator2Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator3Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator3, SoSeparator, TRUE,
-				translator3Switch, ,TRUE);
+				translator3Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator3Active, SoSeparator, TRUE,
-				translator3Switch, ,TRUE);
+				translator3Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator4Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator4, SoSeparator, TRUE,
-				translator4Switch, ,TRUE);
+				translator4Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator4Active, SoSeparator, TRUE,
-				translator4Switch, ,TRUE);
+				translator4Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator5Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator5, SoSeparator, TRUE,
-				translator5Switch, ,TRUE);
+				translator5Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator5Active, SoSeparator, TRUE,
-				translator5Switch, ,TRUE);
+				translator5Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator6Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator6, SoSeparator, TRUE,
-				translator6Switch, ,TRUE);
+				translator6Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator6Active, SoSeparator, TRUE,
-				translator6Switch, ,TRUE);
+				translator6Switch,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(extruder1Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder1, SoSeparator, TRUE,
-				extruder1Switch, ,TRUE);
+				extruder1Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder1Active, SoSeparator, TRUE,
-				extruder1Switch, ,TRUE);
+				extruder1Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder2Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder2, SoSeparator, TRUE,
-				extruder2Switch, ,TRUE);
+				extruder2Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder2Active, SoSeparator, TRUE,
-				extruder2Switch, ,TRUE);
+				extruder2Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder3Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder3, SoSeparator, TRUE,
-				extruder3Switch, ,TRUE);
+				extruder3Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder3Active, SoSeparator, TRUE,
-				extruder3Switch, ,TRUE);
+				extruder3Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder4Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder4, SoSeparator, TRUE,
-				extruder4Switch, ,TRUE);
+				extruder4Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder4Active, SoSeparator, TRUE,
-				extruder4Switch, ,TRUE);
+				extruder4Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder5Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder5, SoSeparator, TRUE,
-				extruder5Switch, ,TRUE);
+				extruder5Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder5Active, SoSeparator, TRUE,
-				extruder5Switch, ,TRUE);
+				extruder5Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder6Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder6, SoSeparator, TRUE,
-				extruder6Switch, ,TRUE);
+				extruder6Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder6Active, SoSeparator, TRUE,
-				extruder6Switch, ,TRUE);
+				extruder6Switch,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(uniform1Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform1, SoSeparator, TRUE,
-				uniform1Switch, ,TRUE);
+				uniform1Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform1Active, SoSeparator, TRUE,
-				uniform1Switch, ,TRUE);
+				uniform1Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform2Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform2, SoSeparator, TRUE,
-				uniform2Switch, ,TRUE);
+				uniform2Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform2Active, SoSeparator, TRUE,
-				uniform2Switch, ,TRUE);
+				uniform2Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform3Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform3, SoSeparator, TRUE,
-				uniform3Switch, ,TRUE);
+				uniform3Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform3Active, SoSeparator, TRUE,
-				uniform3Switch, ,TRUE);
+				uniform3Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform4Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform4, SoSeparator, TRUE,
-				uniform4Switch, ,TRUE);
+				uniform4Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform4Active, SoSeparator, TRUE,
-				uniform4Switch, ,TRUE);
+				uniform4Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform5Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform5, SoSeparator, TRUE,
-				uniform5Switch, ,TRUE);
+				uniform5Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform5Active, SoSeparator, TRUE,
-				uniform5Switch, ,TRUE);
+				uniform5Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform6Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform6, SoSeparator, TRUE,
-				uniform6Switch, ,TRUE);
+				uniform6Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform6Active, SoSeparator, TRUE,
-				uniform6Switch, ,TRUE);
+				uniform6Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform7Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform7, SoSeparator, TRUE,
-				uniform7Switch, ,TRUE);
+				uniform7Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform7Active, SoSeparator, TRUE,
-				uniform7Switch, ,TRUE);
+				uniform7Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform8Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform8, SoSeparator, TRUE,
-				uniform8Switch, ,TRUE);
+				uniform8Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform8Active, SoSeparator, TRUE,
-				uniform8Switch, ,TRUE);
+				uniform8Switch,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(arrowTranslation, SoTranslation, 
-				TRUE, geomSeparator, ,FALSE);
+				TRUE, geomSeparator,\x0,FALSE);
 
     SO_KIT_ADD_CATALOG_ENTRY(arrow1Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow1, SoSeparator, TRUE,
-				arrow1Switch, ,TRUE);
+				arrow1Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow2Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow2, SoSeparator, TRUE,
-				arrow2Switch, ,TRUE);
+				arrow2Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow3Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow3, SoSeparator, TRUE,
-				arrow3Switch, ,TRUE);
+				arrow3Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow4Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow4, SoSeparator, TRUE,
-				arrow4Switch, ,TRUE);
+				arrow4Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow5Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow5, SoSeparator, TRUE,
-				arrow5Switch, ,TRUE);
+				arrow5Switch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow6Switch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(arrow6, SoSeparator, TRUE,
-				arrow6Switch, ,TRUE);
+				arrow6Switch,\x0,TRUE);
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())
@@ -973,6 +973,7 @@ SoHandleBoxDragger::scaleDrag()
 		case BAK_Z_SCALE:
 		    scaleCenter.setValue(  startHitPt[0], startHitPt[1],  0);
 		    break;
+                default: break;
 	    }
 	}
 	else {  // With alt key down, edge being pulled should move and 
@@ -1026,6 +1027,7 @@ SoHandleBoxDragger::scaleDrag()
 		    // This mode always scales about origin.
 		    scaleCenter.setValue( 0, 0, 0);
 		    break;
+                default: break;
 	    }
 	}
 
@@ -1345,6 +1347,7 @@ SoHandleBoxDragger::setHighlights()
    	    enableNotify(TRUE);
 	    touch();
 	    return;
+        default: break;
     }
 
     // The other states require some things on, some things off.
@@ -1527,6 +1530,7 @@ SoHandleBoxDragger::setFeedbackArrows()
 		}
 		arrowTrans->translation.setValue(SbVec3f(0,0,-1));
 		break;
+            default: break;
 	}
     }
     else {
@@ -1561,6 +1565,7 @@ SoHandleBoxDragger::setFeedbackArrows()
 		setSwitchValue( arrow6Switch.getValue(), 0  );
 		arrowTrans->translation.setValue(SbVec3f(0,0,-1));
 		break;
+            default: break;
 	}
     }
 }

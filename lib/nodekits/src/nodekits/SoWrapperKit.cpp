@@ -79,9 +79,9 @@ SoWrapperKit::SoWrapperKit()
     // and ...ADD_CATALOG_LIST_ENTRY.  See SoSubKit.h for more info
     // on syntax of these macros.
     SO_KIT_ADD_CATALOG_ENTRY(localTransform, SoTransform, TRUE,
-				    topSeparator, , TRUE );
+				    topSeparator,\x0, TRUE );
     SO_KIT_ADD_CATALOG_ENTRY(contents, SoSeparator, TRUE,
-				    topSeparator, , TRUE );
+				    topSeparator,\x0, TRUE );
 
     SO_KIT_INIT_INSTANCE();
 }

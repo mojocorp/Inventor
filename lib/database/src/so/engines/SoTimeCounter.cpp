@@ -279,7 +279,7 @@ SoTimeCounter::inputChanged(SoField *whichInput)
         int i, val;
 	for (i=0, val=stp>0?mn:mx; i<nStages; i++, val+=stp) {
 	    stages[i].val = val;
-	    stages[i].duty = (i < nDuty) ? duty[i] : 1.0;
+	    stages[i].duty = (i < nDuty) ? duty[i] : 1.0f;
 	}
 
 	// normalize duties
