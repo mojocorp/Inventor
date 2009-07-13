@@ -269,7 +269,7 @@ class INVENTOR_API SbName {
 
     // Returns length of string
     // C-api: name=getLen
-    int			getLength() const   { return strlen(entry->string); }
+    size_t			getLength() const   { return strlen(entry->string); }
 
     // Returns TRUE if given character is a legal starting character
     // for an identifier

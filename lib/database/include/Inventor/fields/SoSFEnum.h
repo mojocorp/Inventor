@@ -124,7 +124,7 @@ class INVENTOR_API SoSFEnum : public SoSField {
 			       containerMacroName, typeName);		      \
     } while(0)
 #else
-#define SO__SF_ENUM_CHECK_DATA(vals, typeName, fieldName, containerMacroName)	while(0)
+#define SO__SF_ENUM_CHECK_DATA(vals, typeName, fieldName, containerMacroName)	while(0){}
 #endif
 	
 

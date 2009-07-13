@@ -86,9 +86,9 @@ SoInteractionKit::SoInteractionKit()
     isBuiltIn = TRUE;
 
     // Add a separator to the catalog.
-    SO_KIT_ADD_CATALOG_ENTRY(topSeparator, SoSeparator, TRUE, this, ,FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(topSeparator, SoSeparator, TRUE, this,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(geomSeparator,SoSeparator, 
-				TRUE, topSeparator, ,FALSE);
+				TRUE, topSeparator,\x0,FALSE);
 
     SO_KIT_ADD_FIELD(renderCaching,            (AUTO));
     SO_KIT_ADD_FIELD(boundingBoxCaching,       (AUTO));
@@ -337,8 +337,7 @@ SoInteractionKit::setAnyPartAsDefault(const SbName &partName,
 		// Cast to a full path:
 		    SoFullPath *fp = (SoFullPath *) testP;
 		// The part is the tail of the full path:
-		    SoNode *part = fp->getTail();
-		    SoNode *tester;
+                    SoNode *tester;
 		// Owner is first nodekit above the tail:
 		    for (int ind = 1; ind < fp->getLength(); ind ++ ) {
 			tester = fp->getNodeFromTail(ind);
@@ -854,8 +853,8 @@ SoInteractionKit::setAnySurrogatePath( const SbName &partName,
 	    // (as in "childList[0].appearance")
 	    // If so, get the string up to whichever came first.
 	    // This will be the 'intermediary' we look for.
-	    char *dotPtr   = strchr( partName.getString(), '.' );
-	    char *brackPtr = strchr( partName.getString(), '[' );
+	    const char *dotPtr   = strchr( partName.getString(), '.' );
+	    const char *brackPtr = strchr( partName.getString(), '[' );
 
 	    if ( dotPtr != NULL || brackPtr != NULL ) {
 		char *nameCopy = strdup( partName.getString() );

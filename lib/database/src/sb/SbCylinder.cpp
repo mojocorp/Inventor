@@ -149,7 +149,7 @@ SbCylinder::intersect(const SbLine &line, SbVec3f &enter, SbVec3f &exit) const
     mtxToYAxis.setRotate(rotToYAxis);
 
     // scale to unit space
-    float	scaleFactor = 1.0/radius;
+    float	scaleFactor = 1.0f/radius;
     SbMatrix	toUnitCylSpace;
     toUnitCylSpace.setScale(SbVec3f(scaleFactor, scaleFactor, scaleFactor));
     toUnitCylSpace.multLeft(mtxToYAxis);
@@ -209,28 +209,28 @@ SbCylinder::unitCylinderIntersect(const SbLine &l,
 
     A = dir[0] * dir[0] + dir[2] * dir[2];
 
-    B = 2.0 * (pos[0] * dir[0] + pos[2] * dir[2]);
+    B = 2.0f * (pos[0] * dir[0] + pos[2] * dir[2]);
 
     C = pos[0] * pos[0] + pos[2] * pos[2] - 1;
 
     // discriminant = B^2 - 4AC
-    discr = B*B - 4.0*A*C;
+    discr = B*B - 4.0f*A*C;
 
     // if discriminant is negative, no intersection
     if (discr < 0.0) {
 	doesIntersect = FALSE;
     }
     else {
-	sqroot = sqrtf(discr);
+	sqroot = float(sqrtf(discr));
 
 	// magic to stabilize the answer
 	if (B > 0.0) {
-	    t0 = -(2.0 * C) / (sqroot + B);
-	    t1 = -(sqroot + B) / (2.0 * A);
+	    t0 = -(2.0f * C) / (sqroot + B);
+	    t1 = -(sqroot + B) / (2.0f * A);
 	}
 	else {
-	    t0 = (2.0 * C) / (sqroot - B);
-	    t1 = (sqroot - B) / (2.0 * A);
+	    t0 = (2.0f * C) / (sqroot - B);
+	    t1 = (sqroot - B) / (2.0f * A);
 	}	    
 
 	enter = pos + (dir * t0);

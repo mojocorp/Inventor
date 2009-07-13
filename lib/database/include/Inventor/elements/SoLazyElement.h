@@ -194,19 +194,19 @@ SoEXTENDER class INVENTOR_API SoLazyElement : public SoElement {
 	 
     //Specify inventor defaults for colors, etc.
     static SbColor	getDefaultDiffuse()
-	    {return SbColor(0.8, 0.8, 0.8);}
+	    {return SbColor(0.8f, 0.8f, 0.8f);}
     static SbColor	getDefaultAmbient()
-	    {return SbColor(0.2, 0.2, 0.2);}    
+	    {return SbColor(0.2f, 0.2f, 0.2f);}    
     static SbColor	getDefaultSpecular()
-	    {return SbColor(0.0, 0.0, 0.0);}
+	    {return SbColor(0.0f, 0.0f, 0.0f);}
     static SbColor	getDefaultEmissive()
-	    {return SbColor(0.0, 0.0, 0.0);}
+	    {return SbColor(0.0f, 0.0f, 0.0f);}
     static float	getDefaultShininess()
-	    {return 0.2;}	         
+	    {return 0.2f;}	         
     static uint32_t	getDefaultPacked()
 	    {return (0xccccccff);}	    
     static float	getDefaultTransparency()
-	    {return 0.0;}	    
+	    {return 0.0f;}	    
     static int32_t	getDefaultLightModel()
 	    {return PHONG;}
     static int32_t	getDefaultColorIndex()

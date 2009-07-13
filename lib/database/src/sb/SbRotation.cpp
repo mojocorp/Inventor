@@ -97,8 +97,8 @@ SbRotation::getValue(SbVec3f &axis, float &radians) const
     q[2] = quat[2];
 
     if ((len = q.length()) > 0.00001) {
-	axis	= q * (1.0 / len);
-	radians	= 2.0 * acosf(quat[3]);
+	axis	= q * (1.0f / len);
+	radians	= 2.0f * acosf(quat[3]);
     }
 
     else {
@@ -119,29 +119,25 @@ SbRotation::getValue(SbMatrix &matrix) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMat m;
+    matrix[0][0] = 1.f - 2.0f * (quat[1] * quat[1] + quat[2] * quat[2]);
+    matrix[0][1] =       2.0f * (quat[0] * quat[1] + quat[2] * quat[3]);
+    matrix[0][2] =       2.0f * (quat[2] * quat[0] - quat[1] * quat[3]);
+    matrix[0][3] = 0.0f;
 
-    m[0][0] = 1 - 2.0 * (quat[1] * quat[1] + quat[2] * quat[2]);
-    m[0][1] =     2.0 * (quat[0] * quat[1] + quat[2] * quat[3]);
-    m[0][2] =     2.0 * (quat[2] * quat[0] - quat[1] * quat[3]);
-    m[0][3] = 0.0;
+    matrix[1][0] =       2.0f * (quat[0] * quat[1] - quat[2] * quat[3]);
+    matrix[1][1] = 1.f - 2.0f * (quat[2] * quat[2] + quat[0] * quat[0]);
+    matrix[1][2] =       2.0f * (quat[1] * quat[2] + quat[0] * quat[3]);
+    matrix[1][3] = 0.0;
 
-    m[1][0] =     2.0 * (quat[0] * quat[1] - quat[2] * quat[3]);
-    m[1][1] = 1 - 2.0 * (quat[2] * quat[2] + quat[0] * quat[0]);
-    m[1][2] =     2.0 * (quat[1] * quat[2] + quat[0] * quat[3]);
-    m[1][3] = 0.0;
+    matrix[2][0] =       2.0f * (quat[2] * quat[0] + quat[1] * quat[3]);
+    matrix[2][1] =       2.0f * (quat[1] * quat[2] - quat[0] * quat[3]);
+    matrix[2][2] = 1.f - 2.0f * (quat[1] * quat[1] + quat[0] * quat[0]);
+    matrix[2][3] = 0.0f;
 
-    m[2][0] =     2.0 * (quat[2] * quat[0] + quat[1] * quat[3]);
-    m[2][1] =     2.0 * (quat[1] * quat[2] - quat[0] * quat[3]);
-    m[2][2] = 1 - 2.0 * (quat[1] * quat[1] + quat[0] * quat[0]);
-    m[2][3] = 0.0;
-
-    m[3][0] = 0.0;
-    m[3][1] = 0.0;
-    m[3][2] = 0.0;
-    m[3][3] = 1.0;
-
-    matrix = m;
+    matrix[3][0] = 0.0;
+    matrix[3][1] = 0.0;
+    matrix[3][2] = 0.0;
+    matrix[3][3] = 1.0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -156,7 +152,7 @@ SbRotation::invert()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float invNorm = 1.0 / norm();
+    float invNorm = 1.0f / norm();
 
     quat[0] = -quat[0] * invNorm;
     quat[1] = -quat[1] * invNorm;
@@ -287,7 +283,7 @@ SbRotation::setValue(const SbMatrix &m)
     }
     if (m[0][0]+m[1][1]+m[2][2] > m[i][i]) {
 	// Compute w first:
-	quat[3] = sqrt(m[0][0]+m[1][1]+m[2][2]+m[3][3])/2.0;
+	quat[3] = sqrt(m[0][0]+m[1][1]+m[2][2]+m[3][3])/2.0f;
 
 	// And compute other values:
 	quat[0] = (m[1][2]-m[2][1])/(4*quat[3]);
@@ -299,7 +295,7 @@ SbRotation::setValue(const SbMatrix &m)
 	j = (i+1)%3; k = (i+2)%3;
     
 	// Compute first value:
-	quat[i] = sqrt(m[i][i]-m[j][j]-m[k][k]+m[3][3])/2.0;
+	quat[i] = sqrt(m[i][i]-m[j][j]-m[k][k]+m[3][3])/2.0f;
        
 	// And the others:
 	quat[j] = (m[i][j]+m[j][i])/(4*quat[i]);
@@ -348,13 +344,13 @@ SbRotation::setValue(const SbVec3f &axis, float radians)
     q = axis;
     q.normalize();
 
-    q *= sinf(radians / 2.0);
+    q *= sinf(radians / 2.0f);
 
     quat[0] = q[0];
     quat[1] = q[1];
     quat[2] = q[2];
 
-    quat[3] = cosf(radians / 2.0);
+    quat[3] = cosf(radians / 2.0f);
 
     return(*this);
 }
@@ -405,7 +401,7 @@ SbRotation::setValue(const SbVec3f &rotateFrom, const SbVec3f &rotateTo)
 
     // use half-angle formulae
     // sin^2 t = ( 1 - cos (2t) ) / 2
-    axis *= sqrt(0.5 * (1.0 - cost));
+    axis *= sqrt(0.5f * (1.0f - cost));
 
     // scale the axis by the sine of half the rotation angle to get
     // the normalized quaternion
@@ -415,7 +411,7 @@ SbRotation::setValue(const SbVec3f &rotateFrom, const SbVec3f &rotateTo)
 
     // cos^2 t = ( 1 + cos (2t) ) / 2
     // w part is cosine of half the rotation angle
-    quat[3] = sqrt(0.5 * (1.0 + cost));
+    quat[3] = sqrt(0.5f * (1.0f + cost));
 
     return (*this);
 }
@@ -644,7 +640,7 @@ SbRotation::normalize()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	dist = 1.0 / sqrt(norm());
+    float	dist = 1.0f / sqrt(norm());
 
     quat[0] *= dist;
     quat[1] *= dist;

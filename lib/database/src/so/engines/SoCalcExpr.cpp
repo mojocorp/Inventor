@@ -130,6 +130,8 @@ Expr::print(int level)
 #ifdef DEBUG
     printSpace(level);
     printf("Expr: type %s\n", type == FLOAT ? "FLOAT" : "VEC3F");
+#else
+    SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
@@ -146,6 +148,8 @@ Expr::printSpace(int level)
 	putchar(' ');
 	putchar(' ');
     }
+#else
+    SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
@@ -243,6 +247,8 @@ Const::print(int level)
 #ifdef DEBUG
     printSpace(level);
     printf("Const: val = %g\n", val);
+#else
+    SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
@@ -274,6 +280,8 @@ void Var::print(int level)
     else
 	printf("(%g %g %g)", (*pvec3f)[0], (*pvec3f)[1], (*pvec3f)[2]);
     printf("\n");
+#else
+    SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
@@ -311,6 +319,8 @@ Func::print(int level)
     printf("Func: name = %s, %d args:\n", name, args->getLength());
     for (int i = 0; i < args->getLength(); i++)
 	(*args)[i]->print(level + 1);
+#else
+    SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
@@ -503,6 +513,8 @@ void BinaryOp::print(int level)
     printf("BinaryOp: args:\n");
     a->print(level + 1);
     b->print(level + 1);
+#else
+    SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
@@ -565,6 +577,8 @@ void Not::print(int level)
     printSpace(level);
     printf("Not: arg:\n");
     e->print(level + 1);
+#else
+    SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
@@ -578,6 +592,8 @@ void Negate::print(int level)
     printSpace(level);
     printf("Negate: arg:\n");
     e->print(level + 1);
+#else
+    SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
@@ -606,6 +622,8 @@ void Ternary::print(int level)
     etest->print(level + 1);
     etrue->print(level + 1);
     efalse->print(level + 1);
+#else
+    SB_UNUSED(level);
 #endif /* DEBUG */
 }
 

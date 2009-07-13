@@ -184,59 +184,59 @@ SbTime::format(const char *fmt) const
 
 	      case 'D':
 		if (negative) *s++ = '-';
-		s += sprintf(s, "%ld", tday);
+                s += sprintf(s, "%d", tday);
 		break;
 
 	      case 'H':
 		if (negative) *s++ = '-';
-		s += sprintf(s, "%ld", thour);
+                s += sprintf(s, "%d", thour);
 		break;
 
 	      case 'M':
 		if (negative) *s++ = '-';
-		s += sprintf(s, "%ld", tmin);
+                s += sprintf(s, "%d", tmin);
 		break;
 
 	      case 'S':
 		if (negative) *s++ = '-';
-		s += sprintf(s, "%ld", tsec);
+                s += sprintf(s, "%d", tsec);
 		break;
 
 	      case 'I':
 		if (negative) *s++ = '-';
-		s += sprintf(s, "%ld", tmilli);
+                s += sprintf(s, "%d", tmilli);
 		break;
 
 	      case 'U':
 		if (negative) *s++ = '-';
-		s += sprintf(s, "%ld", tmicro);
+                s += sprintf(s, "%d", tmicro);
 		break;
 
 	      case 'h':
-		s += sprintf(s, "%.2ld", rhour);
+                s += sprintf(s, "%.2d", rhour);
 		break;
 
 	      case 'm':
-		s += sprintf(s, "%.2ld", rmin);
+                s += sprintf(s, "%.2d", rmin);
 		break;
 
 	      case 's':
-		s += sprintf(s, "%.2ld", rsec);
+                s += sprintf(s, "%.2d", rsec);
 		break;
 
 	      case 'i':
-		s += sprintf(s, "%.3ld", rmilli);
+                s += sprintf(s, "%.3d", rmilli);
 		break;
 
 	      case 'u':
-		s += sprintf(s, "%.6ld", rmicro);
+                s += sprintf(s, "%.6d", rmicro);
 		break;
 
 	      default:
 		*s++ = '%';	// echo any bad '%?'
 		*s++ = *fmt;	// specifier
 	    }
-	if (s-buf >= sizeof(buf)-7) // don't overshoot the buffer
+        if (s-buf >= (char)sizeof(buf)-7) // don't overshoot the buffer
 	    break;
     }
     *s = 0;

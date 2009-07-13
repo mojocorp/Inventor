@@ -123,6 +123,9 @@ SoJackDragger::SoJackDragger()
     SoDragger *rD = SO_GET_ANY_PART( this,"rotator", SoRotateSphericalDragger );
     SoDragger *tD = SO_GET_ANY_PART( this,"translator", SoDragPointDragger );
 
+    SB_UNUSED(sD);
+    SB_UNUSED(rD);
+    SB_UNUSED(tD);
     // Update the rotation and scale fields when the motionMatrix is set.
     addValueChangedCallback( &SoJackDragger::valueChangedCB );
 

@@ -166,8 +166,8 @@ SoLevelOfDetail::doAction(SoAction *action)
 	// For complexity less than or equal to the default (0.5), use
 	// a linear ramp so that complexity 0 always gives the last
 	// child (area = 0) and complexity 0.5 uses the area as is.
-	if (complexity <= 0.5)
-	    projectedArea *= 2.0 * complexity;
+	if (complexity <= 0.5f)
+	    projectedArea *= 2.0f * complexity;
 
 	// For complexity greater than the default, scale the area so
 	// that at complexity = 1, the first (most detailed) child is
@@ -175,7 +175,7 @@ SoLevelOfDetail::doAction(SoAction *action)
 	// it bigger, though
 	else if (projectedArea < screenArea[0] && projectedArea > 0.0) {
 	    float	ratio = screenArea[0] / projectedArea;
-	    projectedArea *= (2.0 * (ratio - 1.0) * complexity) - ratio + 2.0;
+	    projectedArea *= (2.0f * (ratio - 1.0f) * complexity) - ratio + 2.0f;
 	}
 
 	for (i = 0; i < numAreas; i++)

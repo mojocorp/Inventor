@@ -114,43 +114,43 @@ SoCenterballDragger::SoCenterballDragger()
     // This little grouping goes under the geomSeparator, since it's 
     // geometry only, not draggers.
     SO_KIT_ADD_CATALOG_ENTRY(XAxisSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(XAxis, SoSeparator, TRUE,
-				XAxisSwitch, ,TRUE);
+				XAxisSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(YAxisSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(YAxis, SoSeparator, TRUE,
-				YAxisSwitch, ,TRUE);
+				YAxisSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(ZAxisSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(ZAxis, SoSeparator, TRUE,
-				ZAxisSwitch, ,TRUE);
+				ZAxisSwitch,\x0,TRUE);
 
     // The rest of the stuff will go after the geomSeparator
     SO_KIT_ADD_CATALOG_ENTRY(rotator, SoRotateSphericalDragger, TRUE,
-				topSeparator, ,TRUE);
+				topSeparator,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(YRotator, SoRotateCylindricalDragger, TRUE,
-				topSeparator, ,TRUE);
+				topSeparator,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(ZCenterChanger, SoTranslate2Dragger, TRUE,
-				topSeparator, ,TRUE);
+				topSeparator,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(rotX90, SoRotation, TRUE,
-				topSeparator, ,FALSE);
+				topSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(ZRotator, SoRotateCylindricalDragger, TRUE,
-				topSeparator, ,TRUE);
+				topSeparator,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(YCenterChanger, SoTranslate2Dragger, TRUE,
-				topSeparator, ,TRUE);
+				topSeparator,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(rotY90, SoRotation, TRUE,
-				topSeparator, ,FALSE);
+				topSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(XCenterChanger, SoTranslate2Dragger, TRUE,
-				topSeparator, ,TRUE);
+				topSeparator,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(rot2X90, SoRotation, TRUE,
-				topSeparator, ,FALSE);
+				topSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(XRotator, SoRotateCylindricalDragger, TRUE,
-				topSeparator, ,TRUE);
+				topSeparator,\x0,TRUE);
 
 
     if ( SO_KIT_IS_FIRST_INSTANCE())
@@ -174,7 +174,7 @@ SoCenterballDragger::SoCenterballDragger()
 
 	// ROTATOR BALL
 	    SoDragger *ball = (SoDragger *)  getAnyPart("rotator", TRUE );
-
+            SB_UNUSED(ball);
 	// STRIPES
 	    SoDragger *stps[3];
 	    stps[0] = SO_GET_ANY_PART(this,"XRotator", SoDragger);

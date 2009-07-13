@@ -67,7 +67,7 @@ void
 Bin::remove_this_arc( Arc_ptr arc )
 {
     Arc_ptr *j;
-    for( j = &(head); (*j != 0) && (*j != arc); j = &((*j)->link) );
+    for( j = &(head); (*j != 0) && (*j != arc); j = &((*j)->link) ){}
 
     if( *j != 0 ) {
         if( *j == current )
@@ -101,7 +101,7 @@ Bin::adopt()
     markall();
 
     Arc_ptr orphan;
-    while( orphan = removearc() ) {
+    while( (orphan = removearc()) ) {
 	for( Arc_ptr parent = orphan->next; parent != orphan; parent = parent->next ) {
 	    if (! parent->ismarked() ) {
 		orphan->link = parent->link;
@@ -120,7 +120,7 @@ Bin::adopt()
  */
 
 void
-Bin::show( char *name )
+Bin::show( const char *name )
 {
 #ifndef NDEBUG
     dprintf( "%s\n", name );

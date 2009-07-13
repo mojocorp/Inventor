@@ -53,7 +53,7 @@ BasicCurveEvaluator::domain1f( REAL, REAL )
 }
 
 void 
-BasicCurveEvaluator::range1f( long type, REAL *, REAL * )
+BasicCurveEvaluator::range1f( long , REAL *, REAL * )
 {
 #ifndef NDEBUG
     dprintf( "range1f\n" );

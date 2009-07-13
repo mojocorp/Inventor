@@ -67,7 +67,6 @@ Curve::Curve( Quilt_ptr geo, REAL pta, REAL ptb, Curve *c )
     Quiltspec_ptr qs = geo->qspec;
     ps += qs->offset;
     ps += qs->index * qs->order * qs->stride;
-    REAL *pend = ps + qs->order * qs->stride;
 
     if( needsSampling )
 	mapdesc->xformSampling( ps, qs->order, qs->stride, spts, stride );

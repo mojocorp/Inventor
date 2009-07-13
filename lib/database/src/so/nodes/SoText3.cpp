@@ -173,7 +173,7 @@ class SoOutlineFontCache : public SoCache
     // given character.  This is used for both rendering and
     // generating primitives, with just different callback routines
     // registered.
-    void	generateFrontChar(const char* c, gluTESSELATOR *tobj);
+    void	generateFrontChar(const char* c, GLUtesselator *tobj);
     // Ditto, for sides of characters:
     void	generateSideChar(const char* c, SideCB callbackFunc);
 
@@ -184,7 +184,7 @@ class SoOutlineFontCache : public SoCache
     // Returns TRUE if this font cache has a display list for the
     // given UCS character.  It will try to build a display list, if it
     // can.
-    SbBool	hasFrontDisplayList(const char* c, gluTESSELATOR *tobj);
+    SbBool	hasFrontDisplayList(const char* c, GLUtesselator *tobj);
     SbBool	hasSideDisplayList(const char* c, SideCB callbackFunc);
 
     // Renders an entire line by using the GL callList() function.
@@ -192,7 +192,7 @@ class SoOutlineFontCache : public SoCache
     void	callSideLists(int line);
 
     // Renders a  UCS string in cases where display lists can't be buit.
-    void	renderFront(int line,   gluTESSELATOR *tobj);
+    void	renderFront(int line,   GLUtesselator *tobj);
     void	renderSide(int line,  SideCB callbackFunc);
 
     // Callback registered with GLU used to detect tesselation errors.
@@ -465,7 +465,7 @@ SoText3::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static gluTESSELATOR *tobj = NULL;
+    static GLUtesselator *tobj = NULL;
 
     // First see if the object is visible and should be rendered now
     if (! shouldGLRender(action))
@@ -1014,7 +1014,7 @@ SoText3::getCharacterOffset(int line, int whichChar)
 
 void
 SoText3::renderFront(SoGLRenderAction *, int line,
-		     gluTESSELATOR *tobj)
+		     GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1123,7 +1123,7 @@ SoText3::generateFront(int line)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static gluTESSELATOR *tobj = NULL;
+    static GLUtesselator *tobj = NULL;
 
     const char *chars = myFont->getUCSString(line);
 
@@ -1935,7 +1935,7 @@ SoOutlineFontCache::getCharOffset(const char* c)
 
 void
 SoOutlineFontCache::generateFrontChar(const char* c,
-				      gluTESSELATOR *tobj)
+				      GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -2080,7 +2080,7 @@ SoOutlineFontCache::setupToRenderSide(SoState *state, SbBool willTexture)
 
 SbBool
 SoOutlineFontCache::hasFrontDisplayList(const char* c,
-					gluTESSELATOR *tobj)
+					GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -2190,7 +2190,7 @@ SoOutlineFontCache::callSideLists(int line)
 
 void
 SoOutlineFontCache::renderFront(int line,
-				gluTESSELATOR *tobj)
+				GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -2866,7 +2866,7 @@ class SoOutlineFontCache : public SoCache
     // given character.  This is used for both rendering and
     // generating primitives, with just different callback routines
     // registered.
-    void	generateFrontChar(const char c, gluTESSELATOR *tobj);
+    void	generateFrontChar(const char c, GLUtesselator *tobj);
     // Ditto, for sides of characters:
     void	generateSideChar(const char c, SideCB callbackFunc);
 
@@ -2877,7 +2877,7 @@ class SoOutlineFontCache : public SoCache
     // Returns TRUE if this font cache has a display list for the
     // given character.  It will try to build a display list, if it
     // can.
-    SbBool	hasFrontDisplayList(const char c, gluTESSELATOR *tobj);
+    SbBool	hasFrontDisplayList(const char c, GLUtesselator *tobj);
     SbBool	hasSideDisplayList(const char c, SideCB callbackFunc);
 
     // Renders an entire string by using the GL callList() function.
@@ -2886,7 +2886,7 @@ class SoOutlineFontCache : public SoCache
 
     // Renders a string in cases where display lists can't be buit.
     void	renderFront(const SbString &string,
-			    gluTESSELATOR *tobj);
+                            GLUtesselator *tobj);
     void	renderSide(const SbString &string,
 			   SideCB callbackFunc);
 
@@ -3133,7 +3133,7 @@ SoText3::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static gluTESSELATOR *tobj = NULL;
+    static GLUtesselator *tobj = NULL;
 
     // First see if the object is visible and should be rendered now
     if (! shouldGLRender(action))
@@ -3677,7 +3677,7 @@ SoText3::getCharacterOffset(int line, int whichChar)
 
 void
 SoText3::renderFront(SoGLRenderAction *, int line,
-		     gluTESSELATOR *tobj)
+                     GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -3786,7 +3786,7 @@ SoText3::generateFront(int line)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static gluTESSELATOR *tobj = NULL;
+    static GLUtesselator *tobj = NULL;
 
     const char *chars = string[line].getString();
 
@@ -4259,7 +4259,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
     }
     flSetHint(FL_HINT_TOLERANCE, uems);
 
-    static GLfloat m[2][2] = { 1.0, 0.0, 0.0, 1.0 };
+    static GLfloat m[2][2] = { {1.0, 0.0}, {0.0, 1.0} };
 
     fontId = flCreateFont((const GLubyte *)font.getString(), m, 0, NULL);
 
@@ -4534,7 +4534,7 @@ SoOutlineFontCache::getCharOffset(const char c)
 
 void
 SoOutlineFontCache::generateFrontChar(const char c,
-				      gluTESSELATOR *tobj)
+                                      GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -4654,7 +4654,7 @@ SoOutlineFontCache::setupToRenderSide(SoState *state, SbBool willTexture)
 
 SbBool
 SoOutlineFontCache::hasFrontDisplayList(const char c,
-					gluTESSELATOR *tobj)
+                                        GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -4757,7 +4757,7 @@ SoOutlineFontCache::callSideLists(const SbString &string)
 
 void
 SoOutlineFontCache::renderFront(const SbString &string,
-				gluTESSELATOR *tobj)
+                                GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {

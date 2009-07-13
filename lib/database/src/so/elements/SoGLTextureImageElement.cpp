@@ -277,11 +277,11 @@ struct qualityFilterTable {
 // Defaults for RealityEngine (mip-mapped by default):
 //
 static qualityFilterTable mipmap_minQFTable[] = {
-    { 0.1, GL_NEAREST, FALSE},
-    { 0.5, GL_LINEAR, FALSE},
-    { 0.7, GL_NEAREST_MIPMAP_NEAREST, TRUE},
-    { 0.8, GL_NEAREST_MIPMAP_LINEAR, TRUE},
-    { 0.9, GL_LINEAR_MIPMAP_NEAREST, TRUE},
+    { 0.1f, GL_NEAREST, FALSE},
+    { 0.5f, GL_LINEAR, FALSE},
+    { 0.7f, GL_NEAREST_MIPMAP_NEAREST, TRUE},
+    { 0.8f, GL_NEAREST_MIPMAP_LINEAR, TRUE},
+    { 0.9f, GL_LINEAR_MIPMAP_NEAREST, TRUE},
     { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, TRUE},
 };
 
@@ -289,11 +289,11 @@ static qualityFilterTable mipmap_minQFTable[] = {
 // Defaults for non-RE machines (point-sampled by default):
 //
 static qualityFilterTable point_minQFTable[] = {
-    { 0.5, GL_NEAREST, FALSE},
-    { 0.6, GL_LINEAR, FALSE},
-    { 0.7, GL_NEAREST_MIPMAP_NEAREST, TRUE},
-    { 0.8, GL_NEAREST_MIPMAP_LINEAR, TRUE},
-    { 0.9, GL_LINEAR_MIPMAP_NEAREST, TRUE},
+    { 0.5f, GL_NEAREST, FALSE},
+    { 0.6f, GL_LINEAR, FALSE},
+    { 0.7f, GL_NEAREST_MIPMAP_NEAREST, TRUE},
+    { 0.8f, GL_NEAREST_MIPMAP_LINEAR, TRUE},
+    { 0.9f, GL_LINEAR_MIPMAP_NEAREST, TRUE},
     { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, TRUE},
 };
 

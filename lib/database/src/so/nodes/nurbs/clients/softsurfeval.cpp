@@ -279,7 +279,7 @@ _SoNurbsSurfaceEvaluator::typeToMap( long type )
  *-------------------------------------------------------------------------
  */
 void
-_SoNurbsSurfaceEvaluator::mapmesh2f( long style, long umin, long umax, long vmin, long vmax )
+_SoNurbsSurfaceEvaluator::mapmesh2f( long /*style*/, long umin, long umax, long vmin, long vmax )
 {
     makeMesh( umin, umax, vmin, vmax );
 }

@@ -126,7 +126,7 @@ class Expr {
 class ExprList : public SbPList {
   public:
     ExprList() {}
-    ExprList(const ExprList &l) { copy(l); }
+    ExprList(const ExprList &l) : SbPList() { copy(l); }
     ~ExprList() { truncate(0); }
 
     void truncate(int n);

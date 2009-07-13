@@ -59,7 +59,7 @@
  */
 
 ArcTessellator::ArcTessellator( TrimVertexPool& t, Pool& p ) 
-	: trimvertexpool(t), pwlarcpool(p)
+        : pwlarcpool(p), trimvertexpool(t)
 {
 }
 
@@ -278,7 +278,7 @@ ArcTessellator::pwl( Arc *arc, REAL s1, REAL s2, REAL t1, REAL t2, REAL rate )
  */
 
 void
-ArcTessellator::tessellateLinear( Arc *arc, REAL geo_stepsize, REAL arc_stepsize, int isrational )
+ArcTessellator::tessellateLinear( Arc *arc, REAL geo_stepsize, REAL /*arc_stepsize*/, int isrational )
 {
     assert( arc->pwlArc == NULL );
     REAL s1, s2, t1, t2;

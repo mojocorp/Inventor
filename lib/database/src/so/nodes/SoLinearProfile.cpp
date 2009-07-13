@@ -139,6 +139,8 @@ getIndex(int i, const SoMFInt32 &index, int numCoords)
 	SoDebugError::post("SoLinearProfile", "index[%d]=%d out of "
 			   "range (0,%d)", i, result, 0, numCoords);
     }
+#else
+    SB_UNUSED(numCoords);
 #endif
     return result;
 }

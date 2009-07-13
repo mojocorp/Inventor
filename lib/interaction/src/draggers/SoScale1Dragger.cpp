@@ -84,17 +84,17 @@ SoScale1Dragger::SoScale1Dragger()
     // Put this stuff under the geomSeparator so it will draw more
     // efficiently.
     SO_KIT_ADD_CATALOG_ENTRY(scalerSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scaler, SoSeparator, TRUE,
-				scalerSwitch, ,TRUE);
+				scalerSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(scalerActive, SoSeparator, TRUE,
-				scalerSwitch, ,TRUE);
+				scalerSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(feedbackSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(feedback, SoSeparator, TRUE,
-				feedbackSwitch, ,TRUE);
+				feedbackSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(feedbackActive, SoSeparator, TRUE,
-				feedbackSwitch, ,TRUE);
+				feedbackSwitch,\x0,TRUE);
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())

@@ -985,7 +985,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
     BLOCK4(1);
 
     // BLOCK 5, j = 1
-    dum = 1.0 / (matrix[1][1]);
+    dum = 1.0f / (matrix[1][1]);
     // for(i = j + 1; i < 4; i++)
 	matrix[2][1] *= dum;
 	matrix[3][1] *= dum;
@@ -1040,7 +1040,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
     BLOCK4(2);
 
     // BLOCK 5, j = 2
-    dum = 1.0 / (matrix[2][2]);
+    dum = 1.0f / (matrix[2][2]);
     // for(i = j + 1; i < 4; i++)
 	matrix[3][2] *= dum;
 

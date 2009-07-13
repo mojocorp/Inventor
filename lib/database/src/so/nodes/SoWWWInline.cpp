@@ -73,7 +73,7 @@ SoWWWInlineFetchURLCB *	SoWWWInline::fetchURLcb = NULL;
 void *			SoWWWInline::fetchURLdata = NULL;
 
 SoWWWInline::BboxVisibility     SoWWWInline::bboxVisibility = UNTIL_LOADED;
-SbColor                         SoWWWInline::bboxColor(0.8, 0.8, 0.8); 
+SbColor                         SoWWWInline::bboxColor(0.8f, 0.8f, 0.8f); 
 
 SO_NODE_SOURCE(SoWWWInline);
 

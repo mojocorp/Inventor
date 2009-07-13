@@ -122,7 +122,7 @@ SoShapeKit::SoShapeKit()
 				    topSeparator, childList, TRUE );
     SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY( textureCoordinateFunction, 
 		    SoTextureCoordinateFunction, SoTextureCoordinateDefault,
-		    TRUE, topSeparator, ,TRUE );
+		    TRUE, topSeparator,\x0,TRUE );
     SO_KIT_ADD_CATALOG_ENTRY(profileCoordinate2, SoProfileCoordinate2, TRUE,
 				    topSeparator, childList, TRUE );
     SO_KIT_ADD_CATALOG_ENTRY(profileCoordinate3, SoProfileCoordinate3, TRUE,
@@ -131,11 +131,11 @@ SoShapeKit::SoShapeKit()
 		    		    topSeparator, childList, SoProfile, TRUE );
 
     SO_KIT_ADD_CATALOG_ENTRY(localTransform, SoTransform, TRUE,
-				    topSeparator, , TRUE );
+				    topSeparator,\x0, TRUE );
     SO_KIT_ADD_CATALOG_ENTRY(shapeSeparator, SoSeparator, TRUE,
-				    topSeparator, , TRUE );
+				    topSeparator,\x0, TRUE );
     SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(shape, SoShape,
-			    SoCube, FALSE, shapeSeparator, , TRUE  );
+			    SoCube, FALSE, shapeSeparator,\x0, TRUE  );
 
     SO_KIT_INIT_INSTANCE();
 

@@ -174,6 +174,8 @@ SoElement::getIdFromStackIndex(int stackIndex)
 #ifdef DEBUG
     return (*stackToType)[stackIndex];
 #else
+    SB_UNUSED(stackIndex);
+
     return SoType::badType();
 #endif
 }
@@ -198,6 +200,8 @@ SoElement::createStackIndex(SoType id)
 #ifdef DEBUG
     // Store id in list so we can get it from stack index later
     stackToType->set(stackIndex, id);
+#else
+    SB_UNUSED(id);
 #endif
 
     return stackIndex;

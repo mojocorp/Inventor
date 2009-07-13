@@ -82,11 +82,11 @@ SoCameraKit::SoCameraKit()
     // and ...ADD_CATALOG_LIST_ENTRY.  See SoSubKit.h for more info
     // on syntax of these macros.
     SO_KIT_ADD_CATALOG_ENTRY(transformGroup, SoTransformSeparator, 
-				TRUE, this, , TRUE );
+				TRUE, this,\x0, TRUE );
     SO_KIT_ADD_CATALOG_ENTRY(transform, SoTransform, 
-				    TRUE, transformGroup, , TRUE  );
+				    TRUE, transformGroup,\x0, TRUE  );
     SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(camera, SoCamera, SoPerspectiveCamera,
-					 FALSE, transformGroup, , TRUE);
+					 FALSE, transformGroup,\x0, TRUE);
 
     SO_KIT_INIT_INSTANCE();
 }

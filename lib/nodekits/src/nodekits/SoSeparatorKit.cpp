@@ -85,25 +85,25 @@ SoSeparatorKit::SoSeparatorKit()
     // on syntax of these macros.
 
     SO_KIT_ADD_CATALOG_ENTRY(topSeparator, SoSeparator, TRUE,
-				    this, , FALSE );
+				    this,\x0, FALSE );
 
     SO_KIT_ADD_CATALOG_ENTRY(pickStyle, SoPickStyle, TRUE,
-				       topSeparator, , TRUE );
+				       topSeparator,\x0, TRUE );
 
     SO_KIT_ADD_CATALOG_ENTRY(appearance,     SoAppearanceKit, TRUE,
-				    topSeparator, , TRUE );
+				    topSeparator,\x0, TRUE );
 
     SO_KIT_ADD_CATALOG_ENTRY(units,      SoUnits, TRUE,
-				    topSeparator, , TRUE );
+				    topSeparator,\x0, TRUE );
 
     SO_KIT_ADD_CATALOG_ENTRY(transform,      SoTransform, TRUE,
-				    topSeparator, , TRUE );
+				    topSeparator,\x0, TRUE );
 
     SO_KIT_ADD_CATALOG_ENTRY(texture2Transform, SoTexture2Transform, TRUE,
-				    topSeparator, , TRUE );
+				    topSeparator,\x0, TRUE );
 
     SO_KIT_ADD_CATALOG_LIST_ENTRY(childList, SoSeparator, TRUE,
-				       topSeparator, , SoShapeKit, TRUE );
+				       topSeparator,\x0, SoShapeKit, TRUE );
     SO_KIT_ADD_LIST_ITEM_TYPE(childList, SoSeparatorKit );
 
     SO_KIT_ADD_FIELD(renderCaching,            (AUTO));

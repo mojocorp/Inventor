@@ -2018,7 +2018,7 @@ SoDragger::setDefaultOnNonWritingFields()
     // Since so many draggers have fields named 'rotation',
     // 'translation', 'scaleFactor', and 'center', we'll check for them
     // in the base class and set them to default if we can...
-#define TINY 0.00001
+#define TINY 0.00001f
     SoField *f;
     if ( (f = getField( "rotation" )) != NULL ) {
 	if ( !(f->isConnected() && f->isConnectionEnabled())
@@ -2028,17 +2028,17 @@ SoDragger::setDefaultOnNonWritingFields()
     }
     if ( (f = getField( "translation" )) != NULL ) {
 	if ( !(f->isConnected() && f->isConnectionEnabled())
-	     && (((SoSFVec3f *)f)->getValue()).equals(SbVec3f(0,0,0),TINY))
+	     && (((SoSFVec3f *)f)->getValue()).equals(SbVec3f(0.f,0.f,0.f),TINY))
 	f->setDefault(TRUE);
     }
     if ( (f = getField( "scaleFactor" )) != NULL ) {
 	if ( !(f->isConnected() && f->isConnectionEnabled())
-	     && (((SoSFVec3f *)f)->getValue()).equals(SbVec3f(1,1,1),TINY))
+	     && (((SoSFVec3f *)f)->getValue()).equals(SbVec3f(1.f,1.f,1.f),TINY))
 	f->setDefault(TRUE);
     }
     if ( (f = getField( "center" )) != NULL ) {
 	if ( !(f->isConnected() && f->isConnectionEnabled())
-	     && (((SoSFVec3f *)f)->getValue()).equals(SbVec3f(0,0,0),TINY))
+	     && (((SoSFVec3f *)f)->getValue()).equals(SbVec3f(0.f,0.f,0.f),TINY))
 	f->setDefault(TRUE);
     }
 #undef TINY

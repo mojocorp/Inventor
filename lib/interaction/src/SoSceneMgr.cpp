@@ -508,7 +508,7 @@ SoSceneManager::render(SbBool clearWindow, SbBool clearZbuffer)
 {
     // reinitialize if necessary
     if (graphicsInitNeeded) {
-	int numBits[1];
+	GLint numBits[1];
 	glGetIntegerv(GL_DEPTH_BITS, numBits);
 	needZbuffer = (numBits[0] != 0); // FALSE for overlay windows !
 	if (needZbuffer)

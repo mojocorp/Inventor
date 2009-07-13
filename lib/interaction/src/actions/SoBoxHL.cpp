@@ -222,9 +222,9 @@ SoBoxHighlightRenderAction::updateBbox(SoPath *p)
     const SbVec3f &max = ((SbBox3f &) box).getMax();
     if (min[0] != -max[0] || min[1] != -max[1] || min[2] != -max[2]) {
 	xlate->translation.setValue(
-	    (min[0] + max[0]) * .5, 
-	    (min[1] + max[1]) * .5, 
-	    (min[2] + max[2]) * .5);
+	    (min[0] + max[0]) * .5f, 
+	    (min[1] + max[1]) * .5f, 
+	    (min[2] + max[2]) * .5f);
 	xlate->translation.setIgnored(FALSE);
     }
     else {

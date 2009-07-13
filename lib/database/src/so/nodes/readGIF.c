@@ -102,12 +102,12 @@ unsigned char* readGIF(FILE *fd, int *w, int *h, XColor *colors, int *ncolors,
     unsigned char localColorMap[3][GIF_MAXCOLORMAPSIZE];
     int grayScale;
     int useGlobalColormap;
-    int bitPixel;
+    unsigned int bitPixel;
     int imageCount = 0;
     char version[4];
     int imageNumber = 1;
     unsigned char *image = NULL;
-    int i;
+    unsigned int i;
     static const int scale = 65536 / GIF_MAXCOLORMAPSIZE + 1;
 
     /*
@@ -385,12 +385,15 @@ static int doExtension(FILE *fd, int label)
 
 static unsigned char* readImage(FILE *fd, int len, int height, XColor *colors,
 			int cmapSize, unsigned char cmap[][GIF_MAXCOLORMAPSIZE],
-			int gray, int interlace, int ignore)
+                        int gray, int interlace, int ignore)
 {
     unsigned char *dp, c;
     int v;
     int xpos = 0, ypos = 0;
     unsigned char *image;
+
+    /* Avoid "unused parameter" warnings */
+    (void)gray;
 
     /*
      * Initialize the Compression routines

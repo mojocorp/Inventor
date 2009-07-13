@@ -136,7 +136,7 @@ SbCylinderSectionProjector::project(const SbVec2f &point)
 	    SoDebugError::post("SbCylinderSectionProjector::project",
 			       "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
     }
     else if (! tolPlane.intersect(workingLine, planeIntersection))
@@ -144,7 +144,7 @@ SbCylinderSectionProjector::project(const SbVec2f &point)
 	SoDebugError::post("SbCylinderSectionProjector::project",
 			   "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
 
     
@@ -225,7 +225,7 @@ SbCylinderSectionProjector::isWithinTolerance(const SbVec3f &point)
 	SoDebugError::post("SbCylinderSectionProjector::isWithinTolerance",
 			   "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */{};
 #endif
     
     SbVec3f vecToPoint = planeIntersection - 

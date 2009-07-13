@@ -65,20 +65,6 @@
 
 #include <Inventor/misc/SoGL.h>   // For GLenum declaration
 
-// C-api: end
-
-//  GLU Library version dependency.
-#ifndef gluTESSELATOR
-#define gluTESSELATOR  GLUtriangulatorObj
-#if defined(__glu_h__) && defined(GLU_VERSION_1_2)
-#define gluTESSELATOR  GLUtesselator
-#else
-extern "C" struct GLUtriangulatorObj;
-#endif
-#endif
-
-// C-api: begin
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoText3
@@ -168,7 +154,7 @@ class INVENTOR_API SoText3 : public SoShape {
 
     // Render the fronts of the characters
     void renderFront(SoGLRenderAction *action, int line,
-		     GLUtriangulatorObj *tobj);
+		     GLUtesselator *tobj);
     
     // Render the sides of the characters
     void renderSide(SoGLRenderAction *action, int line);

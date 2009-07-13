@@ -148,7 +148,7 @@ class INVENTOR_API SbViewportRegion {
     // Returns aspect ratio (width/height) of viewport
     // C-api: name=getVPAspect
     float		getViewportAspectRatio() const
-	{ return (vpSizePix[1] == 0 ? 1.0 :
+	{ return (vpSizePix[1] == 0 ? 1.0f :
 		  (float) vpSizePix[0] / (float) vpSizePix[1]); }
 
     // Scales viewport within window to be the given ratio of its
@@ -168,7 +168,7 @@ class INVENTOR_API SbViewportRegion {
     // Convenience function that returns number of pixels per printer's point
     // C-api: name=getPixPerPt
     float		getPixelsPerPoint() const
-	{ return pixelsPerInch / 72.0; }
+	{ return pixelsPerInch / 72.0f; }
 
     // Equality comparison operator
     friend int		operator ==(const SbViewportRegion &reg1,

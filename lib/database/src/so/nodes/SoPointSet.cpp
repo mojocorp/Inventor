@@ -174,11 +174,11 @@ SoPointSet::GLRender(SoGLRenderAction *action)
         // Get the complexity element and decide how points will be skipped
         // during rendering.
         float cmplxValue = SoComplexityElement::get(state);
-        float delta = 1.8 * (0.5 - ((cmplxValue < 0.5) ? cmplxValue : 0.5));
+        float delta = 1.8f * (0.5f - ((cmplxValue < 0.5f) ? cmplxValue : 0.5f));
 
 	glBegin(GL_POINTS);
 
-        float fraction = 0.0;
+        float fraction = 0.0f;
 	for (i = 0; i < numPts; i++, fraction += delta) {
 
             // Check to see if this point should be skipped due to complexity
@@ -282,10 +282,10 @@ SoPointSet::generatePrimitives(SoAction *action)
 	// during processing; note that we don't want to skip anything
 	// when picking.
         float cmplxValue = SoComplexityElement::get(action->getState());
-        float delta = 1.8 * (0.5 - ((cmplxValue < 0.5) ? cmplxValue : 0.5));
-        float fraction = 0.0;
+        float delta = 1.8f * (0.5f - ((cmplxValue < 0.5f) ? cmplxValue : 0.5f));
+        float fraction = 0.0f;
 	if (forPicking)
-	    delta = 0.0;
+	    delta = 0.0f;
 
 	for (i = 0; i < numPts; i++, fraction += delta) {
 

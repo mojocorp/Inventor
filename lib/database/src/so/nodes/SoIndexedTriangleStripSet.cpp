@@ -79,6 +79,10 @@
 
 SO_NODE_SOURCE(SoIndexedTriangleStripSet);
 
+// This coordinate index indicates that the current triangle ends and the
+// next triangle begins
+#define SO_END_STRIP_INDEX	-1
+
 // Constants for influencing auto-caching algorithm:
 const int AUTO_CACHE_ITSS_MIN_WITHOUT_VP = 20;
 
@@ -242,7 +246,7 @@ SoIndexedTriangleStripSet::generatePrimitives(SoAction *action)
         int vertsInStrip;
 	for (vertsInStrip = 0; vertsInStrip+curIndex <
 	     numIndices && coordIndex[vertsInStrip+curIndex] !=
-	     SO_END_STRIP_INDEX; vertsInStrip++);
+             SO_END_STRIP_INDEX; vertsInStrip++){};
 
         // Check to see whether to skip this strip due to 
 	//  too few polygons:

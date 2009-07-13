@@ -109,49 +109,49 @@ SoTrackballDragger::SoTrackballDragger()
     // Put this stuff under the geomSeparator so it will draw more
     // efficiently.
     SO_KIT_ADD_CATALOG_ENTRY(rotatorSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator, SoSeparator, TRUE,
-				rotatorSwitch, ,TRUE);
+				rotatorSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(rotatorActive, SoSeparator, TRUE,
-				rotatorSwitch, ,TRUE);
+				rotatorSwitch,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(XRotatorSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(XRotator, SoSeparator, TRUE,
-				XRotatorSwitch, ,TRUE);
+				XRotatorSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(XRotatorActive, SoSeparator, TRUE,
-				XRotatorSwitch, ,TRUE);
+				XRotatorSwitch,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(YRotatorSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(YRotator, SoSeparator, TRUE,
-				YRotatorSwitch, ,TRUE);
+				YRotatorSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(YRotatorActive, SoSeparator, TRUE,
-				YRotatorSwitch, ,TRUE);
+				YRotatorSwitch,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(ZRotatorSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(ZRotator, SoSeparator, TRUE,
-				ZRotatorSwitch, ,TRUE);
+				ZRotatorSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(ZRotatorActive, SoSeparator, TRUE,
-				ZRotatorSwitch, ,TRUE);
+				ZRotatorSwitch,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(userAxisRotation, SoRotation, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
 
     SO_KIT_ADD_CATALOG_ENTRY(userAxisSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(userAxis, SoSeparator, TRUE,
-				userAxisSwitch, ,TRUE);
+				userAxisSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(userAxisActive, SoSeparator, TRUE,
-				userAxisSwitch, ,TRUE);
+				userAxisSwitch,\x0,TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(userRotatorSwitch, SoSwitch, TRUE,
-				geomSeparator, ,FALSE);
+				geomSeparator,\x0,FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(userRotator, SoSeparator, TRUE,
-				userRotatorSwitch, ,TRUE);
+				userRotatorSwitch,\x0,TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(userRotatorActive, SoSeparator, TRUE,
-				userRotatorSwitch, ,TRUE);
+				userRotatorSwitch,\x0,TRUE);
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())
@@ -432,20 +432,20 @@ SoTrackballDragger::dragStart()
 	currentState = SCALE;
     else if (shftDown)
 	currentState = USER_AXIS_ADJUST;
-    else if (pickPath && pickPath->containsNode( XRotatorSwitch.getValue()  ) ||
-	      getSurrogatePartPickedName() == "XRotator" )
+    else if ((pickPath && pickPath->containsNode( XRotatorSwitch.getValue()  )) ||
+              getSurrogatePartPickedName() == "XRotator" )
 	currentState = X_ROTATE;
-    else if (pickPath && pickPath->containsNode( YRotatorSwitch.getValue()  ) ||
+    else if ((pickPath && pickPath->containsNode( YRotatorSwitch.getValue()  )) ||
 	      getSurrogatePartPickedName() == "YRotator" )
 	currentState = Y_ROTATE;
-    else if (pickPath && pickPath->containsNode( ZRotatorSwitch.getValue()  ) ||
+    else if ((pickPath && pickPath->containsNode( ZRotatorSwitch.getValue()  )) ||
 	      getSurrogatePartPickedName() == "ZRotator" )
 	currentState = Z_ROTATE;
-    else if (pickPath && pickPath->containsNode(userRotatorSwitch.getValue()) ||
+    else if ((pickPath && pickPath->containsNode(userRotatorSwitch.getValue())) ||
 	      getSurrogatePartPickedName() == "userRotator" )
 	currentState = USER_AXIS_ROTATE;
     else 
-	currentState = FREE_ROTATE;
+        currentState = FREE_ROTATE;
 
     // set the constrained axis, if appropriate
     switch( currentState ) {
@@ -461,6 +461,7 @@ SoTrackballDragger::dragStart()
 	case USER_AXIS_ROTATE:
 	    constrainedAxis = userAxisVec;
 	    break;
+        default: break;
     }
 
     // Working space is space after "antiSquish"

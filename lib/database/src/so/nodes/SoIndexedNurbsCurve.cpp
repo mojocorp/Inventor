@@ -148,6 +148,7 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
     const SoCoordinateElement   *ce =
             SoCoordinateElement::getInstance(state);
 
+    SB_UNUSED(ce);
 
     //
     // Create a NURBS library renderer, and use it by making regular

@@ -138,7 +138,6 @@ SoV2AsciiText::upgrade(SoInput *in, const SbName &refName, SoBase *&result)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool isBinary = in->isBinary();
     if (in->isBinary()){
 	SbString unknownString;
 	SbBool  readOK = in->read(unknownString);

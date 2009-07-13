@@ -127,12 +127,10 @@ Mapdesc::calcPartialVelocity (
     REAL *mp = &mag[0][0];
     const int istride = sizeof( tmp[0]) / sizeof( tmp[0][0][0] );
     const int jstride = sizeof( tmp[0][0]) / sizeof( tmp[0][0][0] );
-    const int kstride = sizeof( tmp[0][0][0]) / sizeof( tmp[0][0][0] );
     const int mistride = sizeof( mag[0]) / sizeof( mag[0][0] );
     const int mjstride = sizeof( mag[0][0]) / sizeof( mag[0][0] );
     const int idist = nrows * istride;
     const int jdist = ncols * jstride;
-    const int kdist = inhcoords * kstride;
     const int id = idist - spartial * istride;
     const int jd = jdist - tpartial * jstride;
 

@@ -128,9 +128,6 @@ SoCallback::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoType	actionType = action->getTypeId();
-    SoState *state = action->getState();
-
     if (this->callbackFunc != NULL)
 	(*this->callbackFunc)(this->callbackData, action);
 }
