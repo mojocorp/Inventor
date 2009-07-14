@@ -470,7 +470,11 @@ SbBool ReadGIFImage(const SoInput& in, int &w, int &h, int &nc,
     FILE *fp = in.getCurFile();
     fseek(fp, 0, SEEK_SET);
     
-    if (fp == NULL) return FALSE;
+    if (fp == NULL) 
+    {
+        free(colors);
+        return FALSE;
+    }
     
     unsigned char *array = readGIF(fp, 
 			    &w, &h, colors, &ncolors, &bgIndex, &errCode);

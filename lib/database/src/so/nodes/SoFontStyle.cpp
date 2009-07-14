@@ -62,7 +62,30 @@
 
 SO_NODE_SOURCE(SoFontStyle);
 
-char *SoFontStyle::fontList[][4] = 
+#if defined(WIN32)
+// Use font file names
+const char *SoFontStyle::fontList[][4] =
+                    {
+                        { "Times", "Timesbd", 
+                          "Timesi", "Timesbi" }, 
+                        { "Arial", "Arialbd", 
+                          "Ariali", "Arialbi" }, 
+                        { "Cour", "Courbd", 
+                          "Couri", "Courbi" }, 
+                    };
+#elif defined(__APPLE__)
+// Use font postscript names
+const char *SoFontStyle::fontList[][4] =
+                    {
+                        { "Times-Roman", "Times-Bold", 
+                          "Times-Italic", "Times-BoldItalic" }, 
+                        { "Helvetica", "Helvetica-Bold", 
+                          "Helvetica", "Helvetica-Bold" }, 
+                        { "Courier", "Courier-Bold", 
+                          "Courier", "Courier-Bold" }, 
+                    };
+#else
+const char *SoFontStyle::fontList[][4] =
 		    {
 			{ "Utopia-Regular", "Utopia-Bold", 
 			  "Utopia-Italic", "Utopia-BoldItalic" }, 
@@ -71,6 +94,7 @@ char *SoFontStyle::fontList[][4] =
 			{ "Courier", "Courier-Bold", 
 			  "Courier-Oblique", "Courier-BoldOblique" }, 
 		    };
+#endif
 
 ////////////////////////////////////////////////////////////////////////
 //

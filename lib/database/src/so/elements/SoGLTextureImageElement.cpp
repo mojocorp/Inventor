@@ -59,7 +59,11 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
 
-#include <stdlib.h>
+#ifdef WIN32
+#include <malloc.h>
+#else
+#include <alloca.h>
+#endif
 #include <float.h>
 
 // Formats for 1-4 component textures
@@ -69,23 +73,6 @@ static GLenum formats[] = {
     GL_RGB,
     GL_RGBA
 };
-
-// And preferred formats for internal storage, if GL_EXT_texture is
-// supported:
-#ifdef GL_EXT_texture
-static GLint internalFormatsLow[] = {
-    GL_LUMINANCE8_EXT,
-    GL_LUMINANCE8_ALPHA8_EXT,
-    GL_RGB4_EXT,
-    GL_RGBA4_EXT
-};
-static GLint internalFormatsHigh[] = {
-    GL_LUMINANCE,
-    GL_LUMINANCE_ALPHA,
-    GL_RGB,
-    GL_RGBA
-};
-#endif
 
 SO_ELEMENT_SOURCE(SoGLTextureImageElement);
 
@@ -378,21 +365,11 @@ SoGLTextureImageElement::sendTex(SoState *state)
     // Format in memory
     int format = formats[numComponents-1];
     
-    // Internal format is just numComponents unless GL_EXT_texture is
+    // Internal format is just numComponents unless OpenGL 1.1 is
     // supported:
     int internalFormat = numComponents;
-#ifdef GL_EXT_texture
-    static int textureExtInt = -1;  // for fast lookup of extension support
-    if (textureExtInt == -1) {
-	textureExtInt =
-	    SoGLCacheContextElement::getExtID("GL_EXT_texture");
-    }
-    if (SoGLCacheContextElement::extSupported(state, textureExtInt)) {
-	if (quality >= 0.8)
-	    internalFormat = internalFormatsHigh[numComponents-1];
-	else
-	    internalFormat = internalFormatsLow[numComponents-1];	
-    }
+#ifdef GL_VERSION_1_1
+    internalFormat = formats[numComponents-1];
 #endif
 
     SbBool buildList = !SoCacheElement::anyOpen(state);
@@ -404,13 +381,9 @@ SoGLTextureImageElement::sendTex(SoState *state)
 
     // If we aren't creating a texture object, then we need to 
     // unbind the current texture object so we don't overwrite it's state.
-#ifdef GL_EXT_texture_object
-    if (!buildList)
 #ifdef GL_VERSION_1_1
+    if (!buildList)
 	glBindTexture(GL_TEXTURE_2D, 0);
-#else
-	glBindTextureEXT(GL_TEXTURE_2D, 0);
-#endif
 #endif
 
     // These need to go inside the display list or texture object

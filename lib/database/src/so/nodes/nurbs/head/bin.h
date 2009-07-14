@@ -105,7 +105,7 @@ Bin::nextarc( void )
     Arc * jarc = current;
 
 #ifdef DEBUG
-    assert( jarc->check() );
+    assert( jarc && jarc->check() );
 #endif
 
     if( jarc ) current = jarc->link;
