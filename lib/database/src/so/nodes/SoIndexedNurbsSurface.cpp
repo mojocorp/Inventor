@@ -1193,7 +1193,7 @@ SoIndexedNurbsSurface::drawNURBS(
 
     render->endsurface();
 
-    delete coords;
+    delete [] coords;
 }
 
 ////////////////////////////////////////////////////////////////////////

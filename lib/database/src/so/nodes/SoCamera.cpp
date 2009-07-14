@@ -68,6 +68,7 @@
 #include <Inventor/elements/SoGLViewportRegionElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/elements/SoViewVolumeElement.h>
+#include <Inventor/elements/SoFocalDistanceElement.h>
 #include <Inventor/nodes/SoCamera.h>
 #include <stdlib.h>
 
@@ -723,6 +724,7 @@ SoCamera::setElements(SoAction *action, SbViewVolume &viewVol,
 
     SoViewVolumeElement::set(state, this, viewVol);
     SoViewingMatrixElement::set(state, this, viewMat);
+    SoFocalDistanceElement::set(state, focalDistance.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////

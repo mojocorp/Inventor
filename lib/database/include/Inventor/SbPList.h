@@ -195,17 +195,7 @@ SoINTERNAL class INVENTOR_API SbIntList : public SbPList {
 	{ ((SbPList *) this)->insert((void *) (size_t) integer, addBefore); }
 
     int &	operator [](int i) const
-#if (_MIPS_SZPTR==64) && (_MIPS_SZINT==32)
-	// An ugly cast that makes sure that when we cast from void* to
-	// int&, we get the rightmost four bytes, rather than the upper
-	// bytes.  
-	{ return ((int &)*(((char*)&((*(const SbPList *) this) [i]) ) + 4 ));}
-
-#elif 1 || ((_MIPS_SZPTR==32) && (_MIPS_SZINT==32))
-	{ return ( (int &) ( (*(const SbPList *) this) [i] ) ); }
-#else
-#	error "Error in SbPList:  Don't know how to cast void* to int!"
-#endif
+        { return ( reinterpret_cast<int &>( (*(const SbPList *) this) [i] ) ); }
 };
 
 //////////////////////////////////////////////////////////////////////////////

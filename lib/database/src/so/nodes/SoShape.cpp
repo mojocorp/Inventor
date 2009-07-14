@@ -166,6 +166,9 @@ SoShape::getBoundingBox(SoGetBoundingBoxAction *action)
 
     computeBBox(action, bbox, center);
 
+    if(bbox.isEmpty())
+        return;
+
     action->extendBy(bbox);
 
     // Make sure the center is first transformed by the current local

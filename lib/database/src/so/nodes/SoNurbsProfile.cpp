@@ -272,7 +272,7 @@ SoNurbsProfile::getVertices(SoState *state,
     memcpy((void *) vertices, (void *) verts,
 	  (int) nVertices * sizeof(SbVec2f));
 
-    delete points;
+    delete [] points;
     delete render;
 
     return;

@@ -243,7 +243,6 @@ SoUnknownNode::createFromIsA(SoMFString *isA)
 	    t.isDerivedFrom(SoNode::getClassTypeId())) {
 
 	    SoNode *alternateRep = (SoNode *)t.createInstance();
-	    alternateRep->ref();
 #ifdef DEBUG
 	    if (alternateRep == NULL) {
 		SoDebugError::post("SoUnknownNode::createFromIsA",
@@ -253,6 +252,8 @@ SoUnknownNode::createFromIsA(SoMFString *isA)
 		return;
 	    }
 #endif
+        alternateRep->ref();
+
 	    // Copy over all fields that are shared:
 	    int num = instanceFieldData->getNumFields();
 	    for (int j=0; j<num; j++) {
