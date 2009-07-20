@@ -81,8 +81,6 @@ class SoCoordinateElement;
 class SoNormalBundle;
 class SoState;
 
-// C-api: prefix=SoFSet
-// C-api: public=startIndex, numVertices, vertexProperty
 class INVENTOR_API SoFaceSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoFaceSet);

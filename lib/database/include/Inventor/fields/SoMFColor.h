@@ -66,7 +66,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMCol
 class INVENTOR_API SoMFColor : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFColor, SbColor, const SbColor &);
@@ -77,37 +76,25 @@ class INVENTOR_API SoMFColor : public SoMField {
     //
 
     // Set RGB/HSV values from array of arrays of 3 floats
-    // C-api: name=SetRGBs
     void		setValues(int start, int num, const float rgb[][3]);
-    // C-api: name=SetHSVs
     void		setHSVValues(int start, int num, const float hsv[][3]);
 
     // Set to one RGB color from SbVec3f, 3 floats, or array of 3 floats
-    // C-api: name=SetV3f
     void		setValue(const SbVec3f &vec);
-    // C-api: name=SetR_G_B
     void		setValue(float r, float g, float b);
-    // C-api: name=SetRGB
     void		setValue(const float rgb[3]);
 
     // Set to one HSV color from 3 floats or array of 3 floats
-    // C-api: name=SetH_S_V
     void		setHSVValue(float h, float s, float v);
-    // C-api: name=SetHSV
     void		setHSVValue(const float hsv[3]);
 
     // Set one of N RGB colors from SbVec3f, 3 floats, or array of 3 floats
-    // C-api: name=Set1V3f
     void		set1Value(int index, const SbVec3f &vec);
-    // C-api: name=Set1R_G_B
     void		set1Value(int index, float r, float g, float b);
-    // C-api: name=Set1RGB
     void		set1Value(int index, const float rgb[3]);
 
     // Set1 one of N HSV colors from 3 floats or array of 3 floats
-    // C-api: name=Set1H_S_V
     void		set1HSVValue(int index, float h, float s, float v);
-    // C-api: name=Set1HSV
     void		set1HSVValue(int index, const float hsv[3]);
 
   SoINTERNAL public:

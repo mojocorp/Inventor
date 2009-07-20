@@ -60,7 +60,6 @@
 #include <Inventor/events/SoButtonEvent.h>
 
 // some convenience macros for determining if an event matches
-// C-api: end
 
 #define SO_MOUSE_PRESS_EVENT(EVENT,BUTTON) \
     (SoMouseButtonEvent::isButtonPressEvent(EVENT,SoMouseButtonEvent::BUTTON))
@@ -68,15 +67,9 @@
 #define SO_MOUSE_RELEASE_EVENT(EVENT,BUTTON) \
     (SoMouseButtonEvent::isButtonReleaseEvent(EVENT,SoMouseButtonEvent::BUTTON))
 
-// C-api: begin
-
-// C-api: interpret #define SO_MOUSE_PRESS_EV(EVENT,BUTTON)
-// C-api: interpret     (SoMouseEvIsBtnPressEv(EVENT,BUTTON))
-// C-api: interpret #define SO_MOUSE_RELEASE_EV(EVENT,BUTTON)
-// C-api: interpret     (SoMouseEvIsBtnReleaseEv(EVENT,BUTTON))
 
 
-// C-api: prefix=SoMouseEv
+
 class INVENTOR_API SoMouseButtonEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
@@ -95,19 +88,15 @@ class INVENTOR_API SoMouseButtonEvent : public SoButtonEvent {
     
     // set/get which button generated the event, either SO_MOUSE_BUTTON1, 
     // SO_MOUSE_BUTTON2, or SO_MOUSE_BUTTON3
-    // C-api: name=setBtn
     void		setButton(SoMouseButtonEvent::Button b)  { button = b; }
-    // C-api: name=getBtn
     SoMouseButtonEvent::Button	getButton() const	    { return button; }
     
     // convenience routines to see if an SoEvent is a press or release
     // of the passed mouse button
-    // C-api: name=isBtnPressEv
     static SbBool	isButtonPressEvent(
 			    const SoEvent *e,
 			    SoMouseButtonEvent::Button whichButton);
 			    
-    // C-api: name=isBtnReleaseEv
     static SbBool	isButtonReleaseEvent(
 			    const SoEvent *e,
 			    SoMouseButtonEvent::Button whichButton);

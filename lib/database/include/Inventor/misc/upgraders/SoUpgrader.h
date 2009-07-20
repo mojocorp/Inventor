@@ -66,8 +66,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 class SbDict;
-// C-api: abstract
-// C-api: prefix=SoUpgr
 class INVENTOR_API SoUpgrader : public SoGroup {
 
     SO_NODE_ABSTRACT_HEADER(SoUpgrader);
@@ -75,13 +73,11 @@ class INVENTOR_API SoUpgrader : public SoGroup {
   public:
     // Find out if an upgrader exists for a specific class and a
     // specific version of the file format.
-    // C-api: name=getUpgr
     static SoUpgrader 	*getUpgrader(const SbName &className,
 				     float fileFormatVersion);
   protected:
     // Register a converter for a specific class and a specific file
     // format.
-    // C-api: name=regUpgr
     static void		registerUpgrader(const SoType &type,
 					 const SbName &className,
 					 float version);

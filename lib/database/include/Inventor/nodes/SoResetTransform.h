@@ -73,8 +73,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoResetXf
-// C-api: public=whatToReset
 class INVENTOR_API SoResetTransform : public SoTransformation {
 
     SO_NODE_HEADER(SoResetTransform);

@@ -76,7 +76,6 @@
 // Callback functions registered with this node should be of this type.
 typedef void INVENTOR_API SoCallbackCB(void *userData, SoAction *action);
 
-// C-api: prefix=SoCB
 class INVENTOR_API SoCallback : public SoNode {
 
     SO_NODE_HEADER(SoCallback);
@@ -86,7 +85,6 @@ class INVENTOR_API SoCallback : public SoNode {
     SoCallback();
 
     // Sets pointer to callback function and user data
-    // C-api: name=setCB
     void	setCallback(SoCallbackCB *func, void *userData = NULL)
 	{ callbackFunc = func; callbackData = userData; }
 

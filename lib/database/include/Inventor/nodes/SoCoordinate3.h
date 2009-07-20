@@ -67,8 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoCoord3
-// C-api: public= point
 class INVENTOR_API SoCoordinate3 : public SoNode {
 
     SO_NODE_HEADER(SoCoordinate3);

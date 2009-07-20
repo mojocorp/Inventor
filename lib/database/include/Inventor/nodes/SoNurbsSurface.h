@@ -77,11 +77,6 @@ class SoState;
 class SoPrimitiveVertex;
 class _SoNurbsNurbsTessellator;
 
-// C-api: prefix=SoNurbs
-// C-api: public=numUControlPoints, numVControlPoints
-// C-api: public=numSControlPoints, numTControlPoints
-// C-api: public=uKnotVector, vKnotVector
-// C-api: public=sKnotVector, tKnotVector
 class INVENTOR_API SoNurbsSurface : public SoShape {
 
     SO_NODE_HEADER(SoNurbsSurface);

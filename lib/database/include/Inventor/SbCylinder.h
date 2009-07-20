@@ -74,7 +74,6 @@
 
 class INVENTOR_API SbCylinder {
   public:
-// C-api: end
     // Constructor
     SbCylinder();
 
@@ -92,10 +91,8 @@ class INVENTOR_API SbCylinder {
     const SbLine & 	getAxis() const			{ return axis; }
     float		getRadius() const		{ return radius; }
 
-// C-api: begin
     // Intersect line and cylinder, returning TRUE if there is an intersection
     SbBool	intersect(const SbLine &l, SbVec3f &intersection) const;
-    // C-api: name=intersect2
     SbBool	intersect(const SbLine &l,
 			  SbVec3f &enter, SbVec3f &exit) const;
 

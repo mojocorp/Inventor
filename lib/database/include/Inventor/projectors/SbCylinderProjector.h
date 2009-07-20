@@ -64,8 +64,6 @@
 #include <Inventor/projectors/SbProjector.h>
 #include <Inventor/SbCylinder.h>
 
-// C-api: abstract
-// C-api: prefix=SbCylProj
 class INVENTOR_API SbCylinderProjector : public SbProjector
 {
   public:
@@ -75,27 +73,21 @@ class INVENTOR_API SbCylinderProjector : public SbProjector
     // Apply the projector using the given point, returning the
     // point in three dimensions that it projects to.
     // The point should be normalized from 0-1, with (0,0) at the lower-left.
-    // C-api: expose
     virtual SbVec3f	project(const SbVec2f &point) = 0;
 
     // Same as above, but also get a rotation from the last
     // projected point to this one.
-    // C-api: name=projectGetRot
     SbVec3f		projectAndGetRotation(const SbVec2f &point,
 					      SbRotation &rot);
 
     // Get a rotation given two points on this cylinder projector.
-    // C-api: expose
-    // C-api: name=getRot
     virtual SbRotation	getRotation(const SbVec3f &point1,
 				    const SbVec3f &point2) = 0;
 
     // Set/get the cylinder to use.
     // Default cylinder is centered about Y axis and has radius 1.0.
-    // C-api: name=setCyl
     void		setCylinder(const SbCylinder &cyl);
 
-    // C-api: name=getCyl
     const SbCylinder &	getCylinder() const		{ return cylinder; }
 
     // Set/get whether the projector should always be oriented towards the eye.

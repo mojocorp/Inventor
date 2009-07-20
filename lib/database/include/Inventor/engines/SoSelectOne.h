@@ -70,8 +70,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSelOne
-// C-api: public=index,input,output
 
 class INVENTOR_API SoSelectOne : public SoEngine {
 

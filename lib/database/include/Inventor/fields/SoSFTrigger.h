@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSTrigger
 class INVENTOR_API SoSFTrigger : public SoSField {
 
     // Use standard field stuff

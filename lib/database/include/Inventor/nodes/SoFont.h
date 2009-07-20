@@ -68,7 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=name,size
 class INVENTOR_API SoFont : public SoNode {
 
     SO_NODE_HEADER(SoFont);

@@ -69,9 +69,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoLt
-// C-api: public=on, intensity, color
 class INVENTOR_API SoLight : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoLight);

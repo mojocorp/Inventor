@@ -74,7 +74,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=parts, bottomRadius, height
 class INVENTOR_API SoCone : public SoShape {
 
     SO_NODE_HEADER(SoCone);
@@ -147,5 +146,4 @@ class INVENTOR_API SoCone : public SoShape {
 					      SbVec3f &exitPoint) const;
 };
 
-// C-api: begin
 #endif /* _SO_CONE_ */

@@ -75,10 +75,6 @@ class SbViewportRegion;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoCam
-// C-api: public= viewportMapping, position, orientation, aspectRatio
-// C-api: public= nearDistance, farDistance, focalDistance
 class INVENTOR_API SoCamera : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoCamera);
@@ -122,20 +118,16 @@ class INVENTOR_API SoCamera : public SoNode {
     // given target point while keeping the "up" direction of the
     // camera parallel to the positive y-axis. If this is not
     // possible, it uses the positive z-axis as "up".
-    // C-api: name=ptAt
     void		pointAt(const SbVec3f &targetPoint);
 
     // Scales the height of the camera. This is a virtual function.
     // Perspective cameras will scale their 'heightAngle' field here, and ortho
     // cameras will scale their 'height' field.
-    // C-api: expose
     virtual void	scaleHeight(float scaleFactor) = 0;
 
     // Fills in a view volume structure, based on the camera. If the
     // useAspectRatio field is not 0.0 (the default), the camera uses
     // that ratio instead of the one it has.
-    // C-api: expose
-    // C-api: name=getViewVol
     virtual SbViewVolume getViewVolume(float useAspectRatio = 0.0) const = 0;
 
     // Sets the camera up to view the scene under the given node or
@@ -146,14 +138,12 @@ class INVENTOR_API SoCamera : public SoNode {
     void		viewAll(SoNode *sceneRoot,
 				const SbViewportRegion &vpRegion,
 				float slack = 1.0);
-    // C-api: name=viewAllPath
     void		viewAll(SoPath *path,
 				const SbViewportRegion &vpRegion,
 				float slack = 1.0);
 
     // Returns the viewport region this camera would use to render
     // into a given viewport region, accounting for cropping
-    // C-api: name=getVpBounds
     SbViewportRegion	getViewportBounds(const SbViewportRegion &region) const;
 
   SoEXTENDER public:

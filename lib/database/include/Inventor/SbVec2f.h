@@ -86,44 +86,27 @@ class INVENTOR_API SbVec2f {
 
     // Returns dot (inner) product of vector and another vector
     float	dot(const SbVec2f &v) const;
-// C-api.h: #define SbV2fDot(_v0, _v1)
-// C-api.h:     ((_v0).vec[0] * (_v1).vec[0] + (_v0).vec[1] * (_v1).vec[1])
 
     // Returns pointer to array of 2 components
     const float	*getValue() const			{ return vec; }
-// C-api.h: #define SbV2fGetXY(_xy, _src)
-// C-api.h:     (((_xy)[0] = (_src).vec[0]), ((_xy)[1] = (_src).vec[1]))
 
     // Returns 2 individual components
     void	getValue(float &x, float &y) const;
-// C-api.h: #define SbV2fGetX_Y(_x, _y, _src)
-// C-api.h:     (((_x) = (_src).vec[0]), ((_y) = (_src).vec[1]))
 
     // Returns geometric length of vector
     float	length() const;
-// C-api.h: #define SbV2fLen(_v)
-// C-api.h:     (sqrtf(SbV2fDot((_v), (_v))))
 
     // Negates each component of vector in place
     void	negate();
-// C-api.h: #define SbV2fNegate(_v)
-// C-api.h: 	SbV2fMultBy(_v, -1.0)
 
-// C-api: begin
     // Changes vector to be unit length
-    // C-api: name=norm
     float	normalize();
-// C-api: end
 
     // Sets value of vector from array of 2 components
     SbVec2f &	setValue(const float v[2]);
-// C-api.h: #define SbV2fSetXY(_dest, _src)
-// C-api.h:     (((_dest).vec[0] = (_src)[0]), ((_dest).vec[1] = (_src)[1]))
 
     // Sets value of vector from 2 individual components
     SbVec2f &	setValue(float x, float y);
-// C-api.h: #define SbV2fSetX_Y(_dest, _x, _y)
-// C-api.h:     (((_dest).vec[0] = (_x)), ((_dest).vec[1] = (_y)))
 
     // Accesses indexed component of vector
     float &	  operator [](int i) 		{ return (vec[i]); }
@@ -131,8 +114,6 @@ class INVENTOR_API SbVec2f {
 
     // Component-wise scalar multiplication and division operators
     SbVec2f &	operator *=(float d);
-// C-api.h: #define SbV2fMultBy(_v, _s)
-// C-api.h:     (((_v).vec[0] *= (_s)), ((_v).vec[1] *= (_s)))
 
     SbVec2f &	operator /=(float d)
 	{ return *this *= (1.0f / d); }
@@ -153,16 +134,9 @@ class INVENTOR_API SbVec2f {
 
     // Component-wise binary vector addition and subtraction operators
     friend INVENTOR_API SbVec2f	operator +(const SbVec2f &v1, const SbVec2f &v2);
-// C-api.h: #define SbV2fAdd(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]))
 
     friend INVENTOR_API SbVec2f	operator -(const SbVec2f &v1, const SbVec2f &v2);
-// C-api.h: #define SbV2fSub(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]))
 
-// C-api: begin
     // Equality comparison operator
     friend INVENTOR_API int		operator ==(const SbVec2f &v1, const SbVec2f &v2);
     friend INVENTOR_API int		operator !=(const SbVec2f &v1, const SbVec2f &v2)

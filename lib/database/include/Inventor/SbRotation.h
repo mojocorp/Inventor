@@ -104,24 +104,15 @@ class INVENTOR_API SbRotation {
     // Returns pointer to array of 4 components defining quaternion
     const float	*	getValue() const
 	{ return (quat); }
-// C-api.h: #define SbRotGetQuat(_dest, _src)
-// C-api.h:     (((_dest)[0] = (_src).quat[0]), ((_dest)[1] = (_src).quat[1]),
-// C-api.h:      ((_dest)[2] = (_src).quat[2]), ((_dest)[3] = (_src).quat[3]))
 
     // Returns 4 individual components of rotation quaternion 
     void		getValue(float &q0, float &q1,
 				 float &q2, float &q3) const;
-// C-api.h: #define SbRotGetQ_U_A_T(_x, _y, _z, _w, _src)
-// C-api.h:     (((_x) = (_src).quat[0]), ((_y) = (_src).quat[1]),
-// C-api.h:      ((_z) = (_src).quat[2]), ((_w) = (_src).quat[3]))
 
-// C-api: begin
     // Returns corresponding 3D rotation axis vector and angle in radians
-    // C-api: name=getAxisAngle
     void		getValue(SbVec3f &axis, float &radians) const;
 
     // Returns corresponding 4x4 rotation matrix
-    // C-api: name=getMx
     void		getValue(SbMatrix &matrix) const;
 
     // Changes a rotation to be its inverse
@@ -130,41 +121,28 @@ class INVENTOR_API SbRotation {
     // Returns the inverse of a rotation
     SbRotation		inverse() const
 	{ SbRotation q = *this; return q.invert(); }
-// C-api: end
 
     // Sets value of rotation from array of 4 components of a quaternion
     SbRotation &	setValue(const float q[4]);
-// C-api.h: #define SbRotSetQuat(_dest, _src)
-// C-api.h:     (((_dest).quat[0] = (_src)[0]), ((_dest).quat[1] = (_src)[1]),
-// C-api.h:      ((_dest).quat[2] = (_src)[2]), ((_dest).quat[3] = (_src)[3]))
 
     // Sets value of rotation from 4 individual components of a quaternion 
     SbRotation &	setValue(float q0, float q1, float q2, float q3);
-// C-api.h: #define SbRotSetQ_U_A_T(_dest, _x, _y, _z, _w)
-// C-api.h:     (((_dest).quat[0] = (_x)), ((_dest).quat[1] = (_y)),
-// C-api.h:      ((_dest).quat[2] = (_z)), ((_dest).quat[3] = (_w)))
 
-// C-api: begin
     // Sets value of rotation from a rotation matrix
     // I don't know what will happen if you call this with something
     // that isn't a rotation.
-    // C-api: name=setMx
     SbRotation &	setValue(const SbMatrix &m);
 
     // Sets value of vector from 3D rotation axis vector and angle in radians
-    // C-api: name=setAxisAngle
     SbRotation &	setValue(const SbVec3f &axis, float radians);
 
     // Sets rotation to rotate one direction vector to another
-    // C-api: name=setFromTo
     SbRotation &	setValue(const SbVec3f &rotateFrom,
 				 const SbVec3f &rotateTo);
-// C-api: end
 
     // Multiplies by another rotation; results in product of rotations
     SbRotation &	 operator *=(const SbRotation &q);
 
-// C-api: begin
     // Equality comparison operator
     friend INVENTOR_API int	operator ==(const SbRotation &q1, const SbRotation &q2);
     friend INVENTOR_API int	operator !=(const SbRotation &q1, const SbRotation &q2)
@@ -191,7 +169,6 @@ class INVENTOR_API SbRotation {
 			      const SbRotation &rot1, float t);
 
     // Null rotation
-    // C-api: name=ident
     static SbRotation	identity()
 	{ return SbRotation(0.0, 0.0, 0.0, 1.0); }
 

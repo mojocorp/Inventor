@@ -77,8 +77,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 class SoVertexPropertyCache;
-// C-api: prefix=SoVertProp
-// C-api: public=vertex, texCoord, normal, normalBinding, orderedRGBA, materialBinding
 class INVENTOR_API SoVertexProperty : public SoNode {
 
     SO_NODE_HEADER(SoVertexProperty);

@@ -61,13 +61,11 @@
 #include <Inventor/SoPath.h>
 #include <Inventor/sensors/SoDataSensor.h>
 
-// C-api: prefix=SoPathSens
 class INVENTOR_API SoPathSensor : public SoDataSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data
     SoPathSensor();
-    // C-api: name=CreateCB
     SoPathSensor(SoSensorCB *func, void *data);
 
     // Destructor

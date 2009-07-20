@@ -81,8 +81,6 @@ class SoColorPacker;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoLocHigh
-// C-api: public=color, style
 class INVENTOR_API SoLocateHighlight : public SoSeparator {
 
     SO_NODE_HEADER(SoLocateHighlight);

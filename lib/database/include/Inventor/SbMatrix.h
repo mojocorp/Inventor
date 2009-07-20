@@ -97,48 +97,39 @@ class INVENTOR_API SbMatrix {
 
     public:
 
-// C-api: begin
     // Sets matrix to be identity
-    // C-api: name=makeIdent
     void	makeIdentity();
 
     // Returns an identity matrix 
-    // C-api: name=ident
     static SbMatrix	identity();
 
     // Sets matrix to rotate by given rotation
-    // C-api: name=setRot
     void	setRotate(const SbRotation &q);
 
     // Sets matrix to scale by given uniform factor
     void	setScale(float s);
 
     // Sets matrix to scale by given vector
-    // C-api: name=scaleVec
     void	setScale(const SbVec3f &s);
 
     // Sets matrix to translate by given vector
-    // C-api: name=setXlate
     void	setTranslate(const SbVec3f &t);
 
     // Composes the matrix based on a translation, rotation, scale,
     // orientation for scale, and center.  The "center" is the
     // center point for scaling and rotation.  The "scaleOrientation"
     // chooses the primary axes for the scale.
-    // C-api: name=setXform
     void	setTransform(
 			const SbVec3f &translation,
 			const SbRotation &rotation,
 			const SbVec3f &scaleFactor,
 			const SbRotation &scaleOrientation,
 			const SbVec3f &center);
-// C-api: end
     // Overloaded methods as a kludge because the compiler won't let
     // us have SbVec3f(0,0,0) as a default value:
     void	setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s);
     void	setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s, const SbRotation &so);
 
-// C-api: begin
     // Decomposes the matrix into a translation, rotation, scale,
     // and scale orientation.  Any projection information is discarded.
     // The decomposition depends upon choice of center point for
@@ -146,13 +137,11 @@ class INVENTOR_API SbMatrix {
     // Note that if the center is 0, decompose() is the same as
     // factor() where "t" is translation, "u" is rotation, "s" is scaleFactor,
     // and "r" is ScaleOrientattion.
-    // C-api: name=getXform
     void	getTransform(SbVec3f &translation,
 			  SbRotation &rotation,
 			  SbVec3f &scaleFactor,
 			  SbRotation &scaleOrientation,
 			  const SbVec3f &center) const;
-// C-api: end
     void	getTransform(SbVec3f &t, SbRotation &r,
                           SbVec3f &s, SbRotation &so) const;
 
@@ -163,10 +152,8 @@ class INVENTOR_API SbMatrix {
     void	getValue(SbMat &m) const;
     const SbMat &	getValue() const { return matrix; }
 
-// C-api: begin
     // Returns determinant of 3x3 submatrix composed of given row and
     // column indices (0-3 for each).
-    // C-api: name=det3Mx
     float	det3(int r1, int r2, int r3, int c1, int c2, int c3) const;
 
     // Returns determinant of upper-left 3x3 submatrix
@@ -188,12 +175,10 @@ class INVENTOR_API SbMatrix {
 
     // Perform in-place LU decomposition of matrix.  indx is index of rows
     // in matrix. d is the parity of row swaps.  Returns FALSE if singular
-    // C-api: name=LUDecomp
     SbBool	LUDecomposition(int index[4], float &d);
 
     // Perform back-substitution on LU-decomposed matrix. Index is
     // permutation of rows from original matrix
-    // C-api: name=LUBackSub
     void	LUBackSubstitution(int index[4], float b[4]) const;
 
     // Returns transpose of matrix
@@ -207,22 +192,18 @@ class INVENTOR_API SbMatrix {
     SbMatrix &	multLeft(const SbMatrix &m);	// this = m * this
 
     // Multiplies matrix by given column vector, giving vector result
-    // C-api: name=multMxVec
     void	multMatrixVec(const SbVec3f &src, SbVec3f &dst) const;
 
     // Multiplies given row vector by matrix, giving vector result
-    // C-api: name=multVecMx
     void	multVecMatrix(const SbVec3f &src, SbVec3f &dst) const;
 
     // Multiplies given row vector by matrix, giving vector result
     // src is assumed to be a direction vector, so translation part of
     // matrix is ignored.
-    // C-api: name=multDirMx
     void	multDirMatrix(const SbVec3f &src, SbVec3f &dst) const;
 
     // Multiplies the given line's origin by the matrix, and the
     // line's direction by the rotation portion of the matrix
-    // C-api: name=multLineMx
     void	multLineMatrix(const SbLine &src, SbLine &dst) const;
 
 
@@ -230,7 +211,6 @@ class INVENTOR_API SbMatrix {
 
     // Prints a formatted version of the matrix to the given file pointer
     void	print(FILE *fp) const;
-// C-api: end
 
 
     // Cast: returns pointer to storage of first element
@@ -246,9 +226,7 @@ class INVENTOR_API SbMatrix {
     // Sets value from 4x4 array of elements
     SbMatrix &	operator =(const SbMat &m);
 
-// C-api: begin
     SbMatrix &	operator =(const SbMatrix &m);
-// C-api: end
     // This silly little inline method is needed because some
     // compilers won't use the above method...
 #ifdef __sgi
@@ -258,7 +236,6 @@ class INVENTOR_API SbMatrix {
     // Sets value from a rotation
     SbMatrix &	operator =(const SbRotation &q)	{ setRotate(q); return *this; }
 
-// C-api: begin
     // Performs right multiplication with another matrix
     SbMatrix &	operator *=(const SbMatrix &m)	{ return multRight(m); }
 

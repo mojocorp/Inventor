@@ -104,9 +104,7 @@ class INVENTOR_API SoSceneKit : public SoBaseKit {
     SoSceneKit();
 
     // sets the switch node in 'cameraList' to be the number given
-    // C-api: name=getCamNum
     int  getCameraNumber();
-    // C-api: name=setCamNum
     void setCameraNumber(int camNum );
 
     // Overrides default method on SoNode

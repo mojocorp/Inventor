@@ -72,7 +72,6 @@ class SoInput;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoReadErr
 
 #if _COMPILER_VERSION>=710
 #  pragma set woff 1375
@@ -82,12 +81,9 @@ class INVENTOR_API SoReadError : public SoError {
 
   public:
     // Sets/returns handler callback for SoReadError class
-    // C-api: name=setHndlrCB
     static void		setHandlerCallback(SoErrorCB *cb, void *data)
 	{ handlerCB = cb; cbData = data; }
-    // C-api: name=getHndlrCB
     static SoErrorCB *	getHandlerCallback()	{ return handlerCB; }
-    // C-api: name=getHndlrData
     static void *	getHandlerData()	{ return cbData; }
 
     // Returns type identifier for SoReadError class

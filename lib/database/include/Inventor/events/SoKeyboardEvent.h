@@ -60,7 +60,6 @@
 #include <Inventor/events/SoButtonEvent.h>
 
 // some convenience macros for determining if an event matches
-// C-api: end
 
 #define SO_KEY_PRESS_EVENT(EVENT,KEY) \
     (SoKeyboardEvent::isKeyPressEvent(EVENT,SoKeyboardEvent::KEY))
@@ -68,14 +67,8 @@
 #define SO_KEY_RELEASE_EVENT(EVENT,KEY) \
     (SoKeyboardEvent::isKeyReleaseEvent(EVENT,SoKeyboardEvent::KEY))
 
-// C-api: begin
 
-// C-api: interpret #define SO_KEY_PRESS_EV(EVENT,KEY)
-// C-api: interpret     (SoKeyEvIsKeyPressEv(EVENT,KEY))
-// C-api: interpret #define SO_KEY_RELEASE_EV(EVENT,KEY)
-// C-api: interpret     (SoKeyEvIsKeyReleaseEv(EVENT,KEY))
 
-// C-api: prefix=SoKeyEv
 class INVENTOR_API SoKeyboardEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
@@ -244,12 +237,10 @@ class INVENTOR_API SoKeyboardEvent : public SoButtonEvent {
     
     // convenience routines to see if an SoEvent is a press or release
     // of the passed keyboard key
-    // C-api: name=isKeyPressEv
     static SbBool	isKeyPressEvent(
 			    const SoEvent *e,
 			    SoKeyboardEvent::Key whichKey);
 			    
-    // C-api: name=isKeyReleaseEv
     static SbBool	isKeyReleaseEvent(
 			    const SoEvent *e,
 			    SoKeyboardEvent::Key whichKey);

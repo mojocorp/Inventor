@@ -69,8 +69,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXfSep
-// C-api: public=whichChild
 class INVENTOR_API SoTransformSeparator : public SoGroup {
 
     SO_NODE_HEADER(SoTransformSeparator);
@@ -82,7 +80,6 @@ class INVENTOR_API SoTransformSeparator : public SoGroup {
     SoTransformSeparator();
 
     // Constructor that takes approximate number of children
-    // C-api: name=CreateN
     SoTransformSeparator(int nChildren);
 
   SoEXTENDER public:

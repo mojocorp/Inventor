@@ -92,7 +92,6 @@ class SoCallbackAction;
 //
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoNkitListPart
 class INVENTOR_API SoNodeKitListPart : public SoNode {
 
     SO_NODE_HEADER(SoNodeKitListPart);
@@ -137,11 +136,9 @@ class INVENTOR_API SoNodeKitListPart : public SoNode {
     int			findChild(SoNode *child) const;
     int			getNumChildren() const;
     void		removeChild(int index);
-    // C-api: name=removeChildNode
     void		removeChild(SoNode *child)
 		{ removeChild( findChild(child));	}
     void		replaceChild(int index, SoNode *newChild);
-    // C-api: name=replaceChildNode
     void		replaceChild( SoNode *oldChild, SoNode *newChild)
 		{ replaceChild(findChild(oldChild), newChild); }
 

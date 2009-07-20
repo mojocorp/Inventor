@@ -69,9 +69,6 @@ class SoColorPacker;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMtl
-// C-api: public=ambientColor, diffuseColor, specularColor, emissiveColor
-// C-api: public=shininess, transparency
 class INVENTOR_API SoMaterial : public SoNode {
 
     SO_NODE_HEADER(SoMaterial);

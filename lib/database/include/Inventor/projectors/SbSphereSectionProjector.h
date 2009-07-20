@@ -69,7 +69,6 @@
 #include <Inventor/projectors/SbSphereProjector.h>
 #include <Inventor/SbPlane.h>
 
-// C-api: prefix=SbSphSectProj
 class INVENTOR_API SbSphereSectionProjector : public SbSphereProjector
 {
   public:
@@ -83,7 +82,6 @@ class INVENTOR_API SbSphereSectionProjector : public SbSphereProjector
 			     SbBool orientToEye = TRUE);
 
     // Constructor taking the sphere.
-    // C-api: name=createSph 
     SbSphereSectionProjector(const SbSphere &sph,
 			     float edgeTol = .9, 
 			     SbBool orientToEye = TRUE);
@@ -108,10 +106,8 @@ class INVENTOR_API SbSphereSectionProjector : public SbSphereProjector
     // radius of the sphere. If this is 1.0, the projector is a
     // hemisphere. If this is .1, the projector is a slice of
     // the sphere with radius .1*radius.  Default is .9.
-    // C-api: name=setTol
     void		setTolerance(float edgeTol);
 
-    // C-api: name=getTol
     float		getTolerance() const		  { return tolerance; }
 
     // Set/get the radial rotation factor.
@@ -133,7 +129,6 @@ class INVENTOR_API SbSphereSectionProjector : public SbSphereProjector
 
     // Find whether this point on the sphere or tolerance
     // plane is within tolerance.
-    // C-api: name=isWithinTol
     SbBool		isWithinTolerance(const SbVec3f &point);
     
   protected:

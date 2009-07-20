@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTexDflt
 class INVENTOR_API SoTextureCoordinateDefault : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinateDefault);

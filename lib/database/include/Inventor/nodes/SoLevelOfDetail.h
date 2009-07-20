@@ -94,8 +94,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoLvlOfDtl
-// C-api: public=screenArea
 class INVENTOR_API SoLevelOfDetail : public SoGroup {
 
     SO_NODE_HEADER(SoLevelOfDetail);
@@ -108,7 +106,6 @@ class INVENTOR_API SoLevelOfDetail : public SoGroup {
     SoLevelOfDetail();
 
     // Constructor that takes approximate number of children
-    // C-api: name=CreateN
     SoLevelOfDetail(int nChildren);
 
   SoEXTENDER public:

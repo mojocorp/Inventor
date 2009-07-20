@@ -76,7 +76,6 @@
 #include <Inventor/fields/SoMFVec3f.h>
 #include <Inventor/fields/SoMFVec4f.h>
 
-// C-api: end
 // This internal macro defines the standard methods for the composition
 // engines.  These are just basic engine declarations, nothing fancy. 
 // The macro leaves the class header in "public:" state so it can be
@@ -89,22 +88,17 @@
 	  public:				\
 	    Name();				\
 	    static void initClass()				
-// C-api: begin
 
 ///////////////////////////////////////////////////////////
 // 
 //  Vector composition engines
 // 
-// C-api: prefix=SoCmpsV2f
-// C-api: public=x,y,vector
 class INVENTOR_API SoComposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec2f);
     SoMFFloat		x;	// Input
     SoMFFloat		y;	// Input
     SoEngineOutput	vector;	// Output (SoMFVec2f)
 };
-// C-api: prefix=SoCmpsV3f
-// C-api: public=x,y,z,vector
 class INVENTOR_API SoComposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec3f);
     SoMFFloat		x;	// Input
@@ -112,8 +106,6 @@ class INVENTOR_API SoComposeVec3f : public SoEngine {
     SoMFFloat		z;	// Input
     SoEngineOutput	vector;	// Output (SoMFVec3f)
 };
-// C-api: prefix=SoCmpsV4f
-// C-api: public=x,y,z,w,vector
 class INVENTOR_API SoComposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec4f);
     SoMFFloat		x;	// Input
@@ -127,16 +119,12 @@ class INVENTOR_API SoComposeVec4f : public SoEngine {
 // 
 //  Vector decomposition engines
 // 
-// C-api: prefix=SoDecmpsV2f
-// C-api: public=vector,x,y
 class INVENTOR_API SoDecomposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec2f);
     SoMFVec2f		vector;	// Input
     SoEngineOutput	x;	// Output (SoMFFloat)
     SoEngineOutput	y;	// Output (SoMFFloat)
 };
-// C-api: prefix=SoDecmpsV3f
-// C-api: public=vector,x,y,z
 class INVENTOR_API SoDecomposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec3f);
     SoMFVec3f		vector;	// Input
@@ -144,8 +132,6 @@ class INVENTOR_API SoDecomposeVec3f : public SoEngine {
     SoEngineOutput	y;	// Output (SoMFFloat)
     SoEngineOutput	z;	// Output (SoMFFloat)
 };
-// C-api: prefix=SoDecmpsV4f
-// C-api: public=vector,x,y,z,w
 class INVENTOR_API SoDecomposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec4f);
     SoMFVec4f		vector;	// Input
@@ -159,16 +145,12 @@ class INVENTOR_API SoDecomposeVec4f : public SoEngine {
 // 
 //  Rotation composition engines
 // 
-// C-api: prefix=SoCmpsRot
-// C-api: public=axis,angle,rotation
 class INVENTOR_API SoComposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotation);
     SoMFVec3f		axis;		// Input
     SoMFFloat		angle;		// Input
     SoEngineOutput	rotation;	// Output (SoMFRotation)
 };
-// C-api: prefix=SoCmpsRotFromTo
-// C-api: public=from,to,rotation
 class INVENTOR_API SoComposeRotationFromTo : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotationFromTo);
     SoMFVec3f		from;		// Input
@@ -181,8 +163,6 @@ class INVENTOR_API SoComposeRotationFromTo : public SoEngine {
 // 
 //  Rotation decomposition engine
 // 
-// C-api: prefix=SoDecmpsRot
-// C-api: public=rotation,axis,angle
 class INVENTOR_API SoDecomposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeRotation);
     SoMFRotation	rotation;	// Input
@@ -195,9 +175,6 @@ class INVENTOR_API SoDecomposeRotation : public SoEngine {
 // 
 //  Matrix composition engine
 // 
-// C-api: prefix=SoCmpsMx
-// C-api: public=translation,rotation,scaleFactor
-// C-api: public=scaleOrientation,center,matrix
 class INVENTOR_API SoComposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeMatrix);
     SoMFVec3f		translation;	// Input
@@ -217,9 +194,6 @@ class INVENTOR_API SoComposeMatrix : public SoEngine {
 //  center. So a "center" input is provided (with default 
 //  value 0,0,0) and there is no "center" output.
 // 
-// C-api: prefix=SoDecmpsMx
-// C-api: public=marix,center,translation,rotation,scaleFactor
-// C-api: public=scaleOrientation
 class INVENTOR_API SoDecomposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeMatrix);
     SoMFMatrix		matrix;		// Input

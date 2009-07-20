@@ -103,11 +103,8 @@ class SoPickedPoint;
 class INVENTOR_API SoBaseList : public SbPList {
   public:
     SoBaseList();
-    // C-api: name=createSize
     SoBaseList(int size);
-    // C-api: end
     SoBaseList(const SoBaseList &l);
-    // C-api: begin
     ~SoBaseList()			{ truncate(0); }
 
     // Add a pointer to the end of the list
@@ -124,10 +121,8 @@ class INVENTOR_API SoBaseList : public SbPList {
 
     // Copy a list, keeping all reference counts correct
     void		copy(const SoBaseList &l);
-    // C-api: end
     SoBaseList &	operator =(const SoBaseList &l)
 	{ copy(l) ; return *this; }
-    // C-api: begin
 
     // Access an element of a list
     SoBase *		operator [](int i) const
@@ -148,11 +143,8 @@ class INVENTOR_API SoBaseList : public SbPList {
 class INVENTOR_API SoNodeList : public SoBaseList {
   public:
     SoNodeList()			: SoBaseList()	{}
-    // C-api: name=createSize
     SoNodeList(int size)		: SoBaseList(size) {}
-    // C-api: end
     SoNodeList(const SoNodeList &l)	: SoBaseList(l) {}
-    // C-api: begin
     ~SoNodeList()			{ }
 
     void		append(SoNode * ptr)
@@ -168,11 +160,8 @@ class INVENTOR_API SoNodeList : public SoBaseList {
 class INVENTOR_API SoPathList : public SoBaseList {
   public:
     SoPathList()			: SoBaseList()	{}
-    // C-api: name=createSize
     SoPathList(int size)		: SoBaseList(size) {}
-    // C-api: end
     SoPathList(const SoPathList &l)	: SoBaseList(l) {}
-    // C-api: begin
     ~SoPathList()			{ }
 
     void		append(SoPath * ptr)
@@ -203,11 +192,8 @@ class INVENTOR_API SoPathList : public SoBaseList {
 class INVENTOR_API SoEngineList : public SoBaseList {
   public:
     SoEngineList()			: SoBaseList()	{}
-    // C-api: name=createSize
     SoEngineList(int size)		: SoBaseList(size) {}
-    // C-api: end
     SoEngineList(const SoEngineList &l)	: SoBaseList(l) {}
-    // C-api: begin
     ~SoEngineList()			{ }
 
     void		append(SoEngine * ptr)
@@ -223,11 +209,8 @@ class INVENTOR_API SoEngineList : public SoBaseList {
 class INVENTOR_API SoTypeList : public SbPList {
   public:
     SoTypeList()			: SbPList()	{}
-    // C-api: name=createSize
     SoTypeList(int size)		: SbPList(size)	{}
-    // C-api: end
     SoTypeList(const SoTypeList &l)	: SbPList(l)	{}
-    // C-api: begin
     ~SoTypeList()			{ truncate(0); }
 
     // Add a typeId to the end of the list
@@ -246,15 +229,11 @@ class INVENTOR_API SoTypeList : public SbPList {
     void		set(int i, SoType typeId);
 };
 
-// C-api: prefix=SoDtlList
 class INVENTOR_API SoDetailList : public SbPList {
   public:
     SoDetailList()			: SbPList()	{}
-    // C-api: name=createSize
     SoDetailList(int size)		: SbPList(size)	{}
-    // C-api: end
     SoDetailList(const SoDetailList &l);
-    // C-api: begin
     ~SoDetailList()			{ truncate(0); }
 
     // Add a detail to the end of the list
@@ -271,10 +250,8 @@ class INVENTOR_API SoDetailList : public SbPList {
 
     // Copy a list, making copies of all detail instances
     void		copy(const SoDetailList &l);
-    // C-api: end
     SoDetailList &	operator =(const SoDetailList &l)
 	{ copy(l) ; return *this; }
-    // C-api: begin
 
     // Access an element of a list
     SoDetail *		operator [](int i) const
@@ -284,15 +261,11 @@ class INVENTOR_API SoDetailList : public SbPList {
     void		set(int i, SoDetail *detail);
 };
 
-// C-api: prefix=SoPickPtList
 class INVENTOR_API SoPickedPointList : public SbPList {
   public:
     SoPickedPointList()			: SbPList()	{}
-    // C-api: name=createSize
     SoPickedPointList(int size)		: SbPList(size)	{}
-    // C-api: end
     SoPickedPointList(const SoPickedPointList &l);
-    // C-api: begin
     ~SoPickedPointList()				{ truncate(0); }
 
     // Add a pickedPoint to the end of the list
@@ -318,11 +291,8 @@ class INVENTOR_API SoPickedPointList : public SbPList {
 class INVENTOR_API SoFieldList : public SbPList {
   public:
     SoFieldList()			: SbPList()	{}
-    // C-api: name=createSize
     SoFieldList(int size)		: SbPList(size)	{}
-    // C-api: end
     SoFieldList(const SoFieldList &l)	: SbPList(l)	{}
-    // C-api: begin
     ~SoFieldList()			{ truncate(0); }
 
     // Add a Field to the end of the list
@@ -350,11 +320,8 @@ class INVENTOR_API SoFieldList : public SbPList {
 class INVENTOR_API SoEngineOutputList : public SbPList {
   public:
     SoEngineOutputList()			: SbPList()	{}
-    // C-api: name=createSize
     SoEngineOutputList(int size)		: SbPList(size)	{}
-    // C-api: end
     SoEngineOutputList(const SoEngineOutputList &l)	: SbPList(l)	{}
-    // C-api: begin
     ~SoEngineOutputList()			{ truncate(0); }
 
     // Add a EngineOutput to the end of the list

@@ -92,7 +92,6 @@ class SoGroup;
 //
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoKit
 class INVENTOR_API SoBaseKit : public SoNode {
 
     // Instead of calling SO_KIT_HEADER(className) here,
@@ -106,13 +105,10 @@ class INVENTOR_API SoBaseKit : public SoNode {
     static SoNodekitCatalog *nodekitCatalog; /* design of this class */
     static const SoNodekitCatalog **parentNodekitCatalogPtr; /* parent design */
   public:
-    // C-api: name=getClassNkitCat
     static const SoNodekitCatalog *getClassNodekitCatalog()
 	{ return nodekitCatalog; }
 
     /* Returns an SoNodekitCatalog for the node */
-    // C-api: expose
-    // C-api: name=getCat
     virtual const SoNodekitCatalog *getNodekitCatalog() const;
     // ...end of contents of SO_KIT_HEADER
 
@@ -144,7 +140,6 @@ class INVENTOR_API SoBaseKit : public SoNode {
     //
     // Prints an error if the environment variable IV_DEBUG_KIT_PARTS is set 
     // and 'partName' can't be found in catalog of this or any derived part.
-    // C-api: expose
     virtual SoNode *getPart( const SbName &partName, SbBool makeIfNeeded );
 
     // Given a node or a path to a node, sees if it's a part in the 
@@ -161,7 +156,6 @@ class INVENTOR_API SoBaseKit : public SoNode {
     //
     // Prints an error if the environment variable IV_DEBUG_KIT_PARTS is set 
     // and 'partName' can't be found in catalog of this or any derived part.
-    // C-api: expose
     virtual SoNodeKitPath *createPathToPart( const SbName &partName, 
 		    SbBool makeIfNeeded, const SoPath *pathToExtend = NULL );
 		   
@@ -181,7 +175,6 @@ class INVENTOR_API SoBaseKit : public SoNode {
     //
     // Prints an error if the environment variable IV_DEBUG_KIT_PARTS is set 
     // and 'partName' can't be found in catalog of this or any derived part.
-    // C-api: expose
     virtual SbBool setPart( const SbName &partName, SoNode *from );
 
     //
@@ -189,7 +182,6 @@ class INVENTOR_API SoBaseKit : public SoNode {
     //
     // set routine returns FALSE if it cannot find the parameter to set
     SbBool set(char *nameValuePairListString);
-    // C-api: name=set2
     SbBool set(char *partNameString, char *parameterString);
 
     // DO NODEKITS TRAVERSE THEIR CHILDREN DURING A SEARCH ACTION?
@@ -394,7 +386,6 @@ class INVENTOR_API SoBaseKit : public SoNode {
 //           gained from making them.  So, don't make them.
 
 
-// C-api: end
 #ifdef DEBUG
 #define SO_GET_PART( kitContainingPart, partName, partClassName )              \
         ((partClassName *) SoBaseKit::typeCheck( partName,                     \
@@ -428,6 +419,5 @@ class INVENTOR_API SoBaseKit : public SoNode {
         ((partClassName *) kitContainingPart->getAnyPart( partName, FALSE,   \
 							  FALSE, FALSE ))
 #endif
-// C-api: begin
 
 #endif  /* _SO_BASE_KIT_ */

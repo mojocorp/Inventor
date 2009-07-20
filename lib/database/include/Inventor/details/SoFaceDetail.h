@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoFaceDtl
 class INVENTOR_API SoFaceDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoFaceDetail);
@@ -78,19 +77,15 @@ class INVENTOR_API SoFaceDetail : public SoDetail {
     virtual ~SoFaceDetail();
 
     // Returns the number of points in the face
-    // C-api: name=getNumPts
     int32_t			getNumPoints() const	{ return numPoints; }
 
     // Returns the point detail for the indexed point of the face
-    // C-api: name=getPt
     const SoPointDetail *	getPoint(int i) const	{ return &point[i]; }
 
     // Returns the index of the face within a shape
-    // C-api: name=getFaceInd
     int32_t			getFaceIndex() const	{ return faceIndex; }
 
     // Returns the index of the part within a shape
-    // C-api: name=getPartInd
     int32_t			getPartIndex() const	{ return partIndex; }
 
     // Returns an instance that is a copy of this instance. The caller

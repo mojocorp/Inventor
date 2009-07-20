@@ -68,8 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXf
-// C-api: public= translation, rotation, scaleFactor, scaleOrientation, center
 class INVENTOR_API SoTransform : public SoTransformation {
 
     SO_NODE_HEADER(SoTransform);
@@ -90,19 +88,14 @@ class INVENTOR_API SoTransform : public SoTransformation {
     // fromPoint to toPoint. This always tries to keep the "up"
     // direction the positive y-axis, unless that is impossible.
     // All current info in the node is wiped out.
-    // C-api: begin
-    // C-api: name=ptAt
     void		pointAt(const SbVec3f &fromPoint,
 				const SbVec3f &toPoint);
 
     // returns composite matrices that take you from object space to each
     // of scale/rotation/translation spaces
-    // C-api: name=getScaleSpaceMx
     void		getScaleSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const;
-    // C-api: name=getRotSpaceMx
     void		getRotationSpaceMatrix(SbMatrix &mat,
                                                SbMatrix &inv) const;
-    // C-api: name=getXlateSpaceMx
     void		getTranslationSpaceMatrix(SbMatrix &mat,
                                                   SbMatrix &inv) const;
 
@@ -121,7 +114,6 @@ class INVENTOR_API SoTransform : public SoTransformation {
 
     // Sets the fields in the node to implement the transformation
     // represented by the given matrix
-    // C-api: name=setMx
     void		setMatrix(const SbMatrix &mat);
 
     // Changes the center of the transformation to the given point

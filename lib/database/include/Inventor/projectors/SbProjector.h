@@ -66,7 +66,6 @@
 #include <Inventor/SbViewVolume.h>
 #include <Inventor/SbMatrix.h>
 
-// C-api: prefix=SbProj
 class INVENTOR_API SbProjector
 {
   public:
@@ -74,27 +73,20 @@ class INVENTOR_API SbProjector
     // point in three dimensions that it projects to.
     // The point should be normalized from 0-1, with (0,0) at
     // the lower-left.
-    // C-api: expose
     virtual SbVec3f	    project(const SbVec2f &point) = 0;
 
     // Set/get the view volume to use for the projection.
     // This is typically gotten from SbCamera::getViewVolume.
-    // C-api: expose
-    // C-api: name=setViewVol
     virtual void	    setViewVolume(const SbViewVolume &vol);
 
-    // C-api: name=getViewVol
     const SbViewVolume &    getViewVolume() const	    { return viewVol; }
     
     // Set/get the transform space to work in. This matrix should transform
     // working space coords into world space.
     // The default matrix is identity, meaning that the default working
     // space is world space.
-    // C-api: expose
-    // C-api: name=setWorkSpace
     virtual void	    setWorkingSpace(const SbMatrix &space);
 
-    // C-api: name=getWorkSpace
     const SbMatrix &	    getWorkingSpace() const
 						{ return workingToWorld ; }
 

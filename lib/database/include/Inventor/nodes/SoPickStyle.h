@@ -75,7 +75,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public= style
 class INVENTOR_API SoPickStyle : public SoNode {
 
     SO_NODE_HEADER(SoPickStyle);

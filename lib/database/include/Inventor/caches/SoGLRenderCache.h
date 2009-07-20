@@ -54,7 +54,6 @@
  _______________________________________________________________________
  */
 
-// C-api: end
 
 #ifndef  _SO_GL_RENDER_CACHE
 #define  _SO_GL_RENDER_CACHE

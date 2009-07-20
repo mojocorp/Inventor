@@ -74,7 +74,6 @@ typedef void	SoGLRenderPassCB(void *userData);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoGLRenderAct
 class INVENTOR_API SoGLRenderAction : public SoAction {
 
     SO_ACTION_HEADER(SoGLRenderAction);
@@ -114,11 +113,9 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
     virtual ~SoGLRenderAction();
 
     // Sets current viewport region to use for rendering
-    // C-api: name=setVPReg
     void		setViewportRegion(const SbViewportRegion &newRegion);
 
     // Returns current viewport region
-    // C-api: name=getVPReg
     const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
 
     // Sets/returns current update area, which is the area of the
@@ -135,15 +132,12 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
     // Sets callback to call during rendering to test for abort
     // condition. The callback function should return one of the
     // AbortCode values.
-    // C-api: name=setAbortCB
     void		setAbortCallback(SoGLRenderAbortCB *func,
 					 void *userData)
 	{ abortCB = func; abortData = userData; }
 
     // Sets/returns transparency quality level to use when rendering
-    // C-api: name=setTranspType
     void		setTransparencyType(TransparencyType type);
-    // C-api: name=getTranspType
     TransparencyType	getTransparencyType() const	{ return transpType; }
 
     // Sets/returns smoothing (cheap anti-aliasing) flag
@@ -162,7 +156,6 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
     // Sets callback to invoke between passes when anti-aliasing.
     // Passing NULL (the default) will cause a color clear and a depth
     // buffer clear to be performed
-    // C-api: name=setPassCB
     void                setPassCallback(SoGLRenderPassCB *func, void *userData)
 	{ passCB = func; passData = userData; }
 

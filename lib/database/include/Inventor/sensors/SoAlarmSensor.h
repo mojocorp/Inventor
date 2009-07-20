@@ -61,13 +61,11 @@
 
 #include <Inventor/sensors/SoTimerQueueSensor.h>
 
-// C-api: prefix=SoAlarmSens
 class INVENTOR_API SoAlarmSensor : public SoTimerQueueSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data
     SoAlarmSensor();
-    // C-api: name=CreateCB
     SoAlarmSensor(SoSensorCB *func, void *data);
 
     // Destructor

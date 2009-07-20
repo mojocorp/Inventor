@@ -62,7 +62,6 @@
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 
-// C-api: prefix=SoXfManip
 class INVENTOR_API SoTransformManip : public SoTransform
 {
     SO_NODE_HEADER(SoTransformManip);
@@ -72,7 +71,6 @@ class INVENTOR_API SoTransformManip : public SoTransform
     // Constructor
     SoTransformManip();
 
-    // C-api: name=getDrag
     SoDragger *getDragger();
 
     SbBool replaceNode( SoPath *p );

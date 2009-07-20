@@ -73,8 +73,6 @@
 // the coordinates as points
 #define SO_POINT_SET_USE_REST_OF_POINTS	(-1)
 
-// C-api: prefix=SoPtSet
-// C-api: public=startIndex, numPoints, vertexProperty
 class INVENTOR_API SoPointSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoPointSet);

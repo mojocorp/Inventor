@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSV2f
 class INVENTOR_API SoSFVec2f : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFVec2f, SbVec2f, const SbVec2f &);
@@ -76,11 +75,9 @@ class INVENTOR_API SoSFVec2f : public SoSField {
     //
 
     // Set value from 2 floats
-    // C-api: name=SetX_Y
     void		setValue(float x, float y);
 
     // Set value from array of 2 floats
-    // C-api: name=SetXY
     void		setValue(const float xy[2]);
 
 

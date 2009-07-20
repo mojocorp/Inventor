@@ -66,7 +66,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMPath
 class INVENTOR_API SoMFPath : public SoMField {
 
     // Use standard field stuff

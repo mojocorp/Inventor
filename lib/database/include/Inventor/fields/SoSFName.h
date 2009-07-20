@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSName
 class INVENTOR_API SoSFName : public SoSField {
 
     // Use standard field stuff
@@ -77,7 +76,6 @@ class INVENTOR_API SoSFName : public SoSField {
     //
 
     // Set value from character string
-    // C-api: name=setStr
     void	setValue(const char *string);
 
   SoINTERNAL public:

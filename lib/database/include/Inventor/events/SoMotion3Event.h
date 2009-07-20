@@ -62,7 +62,6 @@
 #include <Inventor/events/SoSubEvent.h>
 
 
-// C-api: prefix=SoMotion3Ev
 class INVENTOR_API SoMotion3Event : public SoEvent {
 
     SO_EVENT_HEADER();
@@ -74,15 +73,11 @@ class INVENTOR_API SoMotion3Event : public SoEvent {
     virtual ~SoMotion3Event();
     
     // set/get the change in translation
-    // C-api: name=setXlate
     void		setTranslation(const SbVec3f &t)    { translation = t; }
-    // C-api: name=getXlate
     const SbVec3f &	getTranslation() const		    { return translation; }
     
     // set/get the change in rotation
-    // C-api: name=setRot
     void		setRotation(const SbRotation &r)    { rotation = r; }
-    // C-api: name=getRot
     const SbRotation &	getRotation() const		    { return rotation; }
     
     

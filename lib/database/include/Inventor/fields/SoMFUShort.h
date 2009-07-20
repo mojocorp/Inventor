@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMUShort
 class INVENTOR_API SoMFUShort : public SoMField {
 
     // Use standard field stuff

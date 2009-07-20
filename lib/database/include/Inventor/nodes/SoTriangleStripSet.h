@@ -78,8 +78,6 @@
 class SoNormalGenerator;
 class SoCoordinateElement;
 
-// C-api: prefix=SoTriStripSet
-// C-api: public=startIndex, numVertices, vertexProperty
 class INVENTOR_API SoTriangleStripSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoTriangleStripSet);

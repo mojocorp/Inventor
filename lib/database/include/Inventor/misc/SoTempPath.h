@@ -59,7 +59,6 @@
 
 #include <Inventor/SoPath.h>
 
-// C-api: end
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoTempPath
@@ -79,6 +78,5 @@ SoINTERNAL class SoTempPath : public SoFullPath {
     SoTempPath(int approxLength);
     virtual ~SoTempPath();
 };
-// C-api: begin
 
 #endif /* _SO_TEMP_PATH_ */

@@ -97,8 +97,6 @@ typedef void INVENTOR_API SoDraggerCB(void *userData, SoDragger *dragger );
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoDrag
-// C-api: public=isActive
 class INVENTOR_API SoDragger : public SoInteractionKit {
 
     SO_KIT_HEADER(SoDragger);
@@ -117,29 +115,21 @@ class INVENTOR_API SoDragger : public SoInteractionKit {
     // callbacks, so many callback functions may be registered, if desired.
 
     // Start callbacks are made after mouse button 1 goes down.
-    // C-api: name=addStartCB
     void    addStartCallback(SoDraggerCB *f, void *userData = NULL);
-    // C-api: name=removeStartCB
     void removeStartCallback(SoDraggerCB *f, void *userData = NULL);
 
     // Motion callbacks are called before each movement of the mouse
     // during dragging.
-    // C-api: name=addMotionCB
     void    addMotionCallback(SoDraggerCB *f, void *userData = NULL);
-    // C-api: name=removeMotionCB
     void removeMotionCallback(SoDraggerCB *f, void *userData = NULL);
 
     // Finish callbacks are made just after dragging ends.
-    // C-api: name=addFinishCB
     void    addFinishCallback(SoDraggerCB *f, void *userData = NULL);
-    // C-api: name=removeFinishCB
     void removeFinishCallback(SoDraggerCB *f, void *userData = NULL);
 
     // Value changed callbacks are made after the dragger edits
     // the motion matrix.
-    // C-api: name=addValueChangedCB
     void    addValueChangedCallback(SoDraggerCB *f, void *userData = NULL);
-    // C-api: name=removeValueChangedCB
     void removeValueChangedCallback(SoDraggerCB *f, void *userData = NULL);
 
     // Set/get number of pixels of movement required to

@@ -69,8 +69,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoNormBind
-// C-api: public=value
 class INVENTOR_API SoNormalBinding : public SoNode {
 
     SO_NODE_HEADER(SoNormalBinding);
@@ -92,8 +90,6 @@ class INVENTOR_API SoNormalBinding : public SoNode {
 	// One normal for each vertex, indexed
 	PER_VERTEX_INDEXED= SoNormalBindingElement::PER_VERTEX_INDEXED,
 
-// C-api: end
-// C-api: begin
     };
 
     // Fields

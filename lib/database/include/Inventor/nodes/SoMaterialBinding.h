@@ -69,8 +69,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMtlBind
-// C-api: public=value
 class INVENTOR_API SoMaterialBinding : public SoNode {
 
     SO_NODE_HEADER(SoMaterialBinding);
@@ -92,9 +90,7 @@ class INVENTOR_API SoMaterialBinding : public SoNode {
 	// One material for each vertex, indexed
 	PER_VERTEX_INDEXED= SoMaterialBindingElement::PER_VERTEX_INDEXED,
 
-// C-api: end
 
-// C-api: begin
     };
 
     // Fields

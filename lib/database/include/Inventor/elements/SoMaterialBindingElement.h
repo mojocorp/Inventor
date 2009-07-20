@@ -82,8 +82,6 @@ SoEXTENDER class INVENTOR_API SoMaterialBindingElement : public SoInt32Element {
 	PER_VERTEX = 7,		// One material for each vertex
 	PER_VERTEX_INDEXED = 8	// One material for each vertex, indexed
 
-// C-api: end
-// C-api: begin
 
     };
 

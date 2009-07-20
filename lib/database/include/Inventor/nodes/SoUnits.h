@@ -68,7 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=units
 class INVENTOR_API SoUnits : public SoTransformation {
 
     SO_NODE_HEADER(SoUnits);

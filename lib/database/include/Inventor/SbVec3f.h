@@ -93,57 +93,34 @@ class INVENTOR_API SbVec3f {
     // Constructor given 3 planes
     SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2);
 
-// C-api: begin
     // Returns right-handed cross product of vector and another vector
     SbVec3f	cross(const SbVec3f &v) const;
-// C-api: end
 
     // Returns dot (inner) product of vector and another vector
     float	dot(const SbVec3f &v) const;
-// C-api.h: #define SbV3fDot(_v0, _v1)
-// C-api.h:     ((_v0).vec[0] * (_v1).vec[0] + (_v0).vec[1] * (_v1).vec[1] +
-// C-api.h:      (_v0).vec[2] * (_v1).vec[2])
 
     // Returns pointer to array of 3 components
     const float	*getValue() const			{ return vec; }
-// C-api.h: #define SbV3fGetXYZ(_xyz, _src)
-// C-api.h:     (((_xyz)[0] = (_src).vec[0]), ((_xyz)[1] = (_src).vec[1]),
-// C-api.h:	 ((_xyz)[2] = (_src).vec[2]))
 
     // Returns 3 individual components
     void	getValue(float &x, float &y, float &z) const;
-// C-api.h: #define SbV3fGetX_Y_Z(_x, _y, _z, _src)
-// C-api.h:     (((_x) = (_src).vec[0]), ((_y) = (_src).vec[1]), ((_z) = (_src).vec[2]))
 
     // Returns geometric length of vector
     float	length() const;
-// C-api.h: #define SbV3fLen(_v)
-// C-api.h:     (sqrtf(SbV3fDot((_v), (_v))))
 
-// C-api: begin
     // Changes vector to be unit length
-    // C-api: name=norm
     float	normalize();
-// C-api: end
 
     // Negates each component of vector in place
     void	negate();
-// C-api.h: #define SbV3fNegate(_v)
-// C-api.h: 	SbV3fMultBy(_v, -1.0)
 
     // Sets value of vector from array of 3 components
     SbVec3f &	setValue(const float v[3])
 	 { vec[0] = v[0]; vec[1] = v[1]; vec[2] = v[2]; return *this; }
-// C-api.h: #define SbV3fSetXYZ(_dest, _src)
-// C-api.h:     (((_dest).vec[0] = (_src)[0]), ((_dest).vec[1] = (_src)[1]),
-// C-api.h:      ((_dest).vec[2] = (_src)[2]))
 
     // Sets value of vector from 3 individual components
     SbVec3f &	setValue(float x, float y, float z)
 	 { vec[0] = x; vec[1] = y; vec[2] = z; return *this; }
-// C-api.h: #define SbV3fSetX_Y_Z(_dest, _x, _y, _z)
-// C-api.h:     (((_dest).vec[0] = (_x)), ((_dest).vec[1] = (_y)),
-// C-api.h:      ((_dest).vec[2] = (_z)))
 
     // Sets value of vector to be convex combination of 3 other
     // vectors, using barycentic coordinates
@@ -156,8 +133,6 @@ class INVENTOR_API SbVec3f {
 
     // Component-wise scalar multiplication and division operators
     SbVec3f &	operator *=(float d);
-// C-api.h: #define SbV3fMultBy(_v, _s)
-// C-api.h:     (((_v).vec[0] *= (_s)), ((_v).vec[1] *= (_s)), ((_v).vec[2] *= (_s)))
 
     SbVec3f &	operator /=(float d)
 	{ return *this *= (1.0f / d); }
@@ -178,18 +153,9 @@ class INVENTOR_API SbVec3f {
 
     // Component-wise binary vector addition and subtraction operators
     friend INVENTOR_API SbVec3f	operator +(const SbVec3f &v1, const SbVec3f &v2);
-// C-api.h: #define SbV3fAdd(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]),
-// C-api.h:      ((_dest).vec[2] = (_src1).vec[2] + (_src2).vec[2]))
 
     friend INVENTOR_API SbVec3f	operator -(const SbVec3f &v1, const SbVec3f &v2);
-// C-api.h: #define SbV3fSub(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]),
-// C-api.h:      ((_dest).vec[2] = (_src1).vec[2] - (_src2).vec[2]))
 
-// C-api: begin
     // Equality comparison operator
     friend INVENTOR_API int		operator ==(const SbVec3f &v1, const SbVec3f &v2);
     friend INVENTOR_API int		operator !=(const SbVec3f &v1, const SbVec3f &v2)

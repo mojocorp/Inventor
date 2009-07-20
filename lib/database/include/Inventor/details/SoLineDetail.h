@@ -68,7 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoLineDtl
 class INVENTOR_API SoLineDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoLineDetail);
@@ -79,19 +78,15 @@ class INVENTOR_API SoLineDetail : public SoDetail {
     virtual ~SoLineDetail();
 
     // These return the point details for the two ends of the line segment
-    // C-api: name=getPt0
     const SoPointDetail *	getPoint0() const	{ return &point[0]; }
-    // C-api: name=getPt1
     const SoPointDetail *	getPoint1() const	{ return &point[1]; }
 
     // Returns the index of the line the segment is part of within a
     // shape (e.g., the third line within an SoLineSet)
-    // C-api: name=getLineInd
     int32_t			getLineIndex() const	{ return lineIndex; }
 
     // Returns the index of the part (usually part = segment) within a
     // shape (e.g., the fifth segment overall within an SoLineSet)
-    // C-api: name=getPartInd
     int32_t			getPartIndex() const	{ return partIndex; }
 
     // Returns an instance that is a copy of this instance. The caller

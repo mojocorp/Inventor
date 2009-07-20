@@ -65,9 +65,7 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 
-// C-api: end
 
-// C-api: begin
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -86,11 +84,9 @@ class INVENTOR_API SbTime {
     SbTime()					{}
 
     // Constructor taking a double (in seconds)
-    // C-api: name=CreateSec
     SbTime(double sec);
 
     // Constructor taking seconds + microseconds
-    // C-api: name=CreateSecUSec
     SbTime(time_t sec, long usec)		// System long from <sys/time.h>
 	{ t.tv_sec = sec; t.tv_usec = usec; }
 
@@ -114,14 +110,10 @@ class INVENTOR_API SbTime {
   public:
 
     // Constructor taking struct timeval
-    // C-api: name=CreateTimeval
     SbTime(const struct timeval *tv)
 	{ t.tv_sec = tv->tv_sec; t.tv_usec = tv->tv_usec; }
 
     // Destructors for C
-    // C-api.h: void	SbTimeDelete(SbTime *);
-    // C-api.c++: void	SbTimeDelete(SbTime *_this)
-    // C-api.c++: { delete _this; }
 
     // Get the current time (seconds since Jan 1, 1970)
     static SbTime		getTimeOfDay();
@@ -142,7 +134,6 @@ class INVENTOR_API SbTime {
 	{ return SbTime(INT32_MAX, 999999); }
 
     // Set time from a double (in seconds)
-    // C-api: name=setSec
     void		setValue(double sec)
 #ifdef __sgi
 	{ t.tv_sec = time_t(trunc(sec)); 
@@ -152,38 +143,31 @@ class INVENTOR_API SbTime {
 	  t.tv_usec = long((sec - t.tv_sec) * 1000000.0); }
 
     // Set time from seconds + microseconds
-    // C-api: name=setSecUSec
     void		setValue(time_t sec, long usec)  	// System long
 	{ t.tv_sec = sec; t.tv_usec = usec; }
 
     // Set time from a struct timeval
-    // C-api: name=setTimeval
     void		setValue(const struct timeval *tv)
 	{ t.tv_sec = tv->tv_sec; t.tv_usec = tv->tv_usec; }
 
     // Set time from milliseconds
-    // C-api: name=setMSec
     void		setMsecValue(unsigned long msec)  	// System long
 	{ t.tv_sec = time_t(msec/1000); 
 	  t.tv_usec = long(1000 * (msec % 1000)); }
 
     // Get time in seconds as a double
-    // C-api: name=getSec
     double		getValue() const
 	{ return (double) t.tv_sec + (double) t.tv_usec / 1000000.0; }
 
     // Get time in seconds & microseconds
-    // C-api: name=getSecUSec
     void		getValue(time_t &sec, long &usec) const  // System long
 	{ sec = t.tv_sec; usec = t.tv_usec; }
 
     // Get time in a struct timeval
-    // C-api: name=getTimeval
     void		getValue(struct timeval *tv) const
 	{ tv->tv_sec = t.tv_sec; tv->tv_usec = t.tv_usec; }
 
     // Get time in milliseconds (for Xt)
-    // C-api: name=getMSec
     unsigned long	getMsecValue() const			// System long
 	{ return t.tv_sec * 1000 + t.tv_usec / 1000; }
 
@@ -212,19 +196,16 @@ class INVENTOR_API SbTime {
 	{ return (*this = *this - tm); }
 
     // Unary negation
-    // C-api: name=negate
     SbTime			operator -() const
 	{ return (t.tv_usec == 0) ? SbTime(- t.tv_sec, 0)
 	      : SbTime(- t.tv_sec - 1, 1000000 - t.tv_usec); }
 
     // multiplication by scalar
     friend INVENTOR_API SbTime		operator *(const SbTime &tm, double s);
-// C-api: end
 
     friend INVENTOR_API SbTime		operator *(double s, const SbTime &tm)
 	{ return tm * s; }
 
-// C-api: begin
     // destructive multiplication by scalar
     SbTime &			operator *=(double s)
 	{ *this = *this * s; return *this; }
@@ -237,7 +218,6 @@ class INVENTOR_API SbTime {
 	{ return (*this = *this / s); }
 
     // division by another time
-    // C-api: name=DivByTime
     double			operator /(const SbTime &tm) const
 	{ return getValue() / tm.getValue(); }
 
@@ -263,7 +243,6 @@ class INVENTOR_API SbTime {
 };
 
 
-// C-api: end
 
 inline SbBool
 SbTime::operator <(const SbTime &tm) const
@@ -305,6 +284,5 @@ SbTime::operator >=(const SbTime &tm) const
 	return FALSE;
 }
 
-// C-api: begin
 
 #endif /* _SB_TIME_ */

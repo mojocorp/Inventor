@@ -87,54 +87,30 @@ class INVENTOR_API SbVec4f {
 
     // Returns dot (inner) product of vector and another vector
     float	dot(const SbVec4f &v) const;
-// C-api.h: #define SbV4fDot(_v0, _v1)
-// C-api.h:     ((_v0).vec[0] * (_v1).vec[0] + (_v0).vec[1] * (_v1).vec[1] +
-// C-api.h:      (_v0).vec[2] * (_v1).vec[2] + (_v0).vec[3] * (_v1).vec[3])
 
-// C-api: begin
     // Returns the real portion of the vector by dividing by the fourth value
     void	getReal(SbVec3f &v) const;
-// C-api: end
 
     // Returns pointer to array of 4 components
     const float	*getValue() const			{ return vec; }
-// C-api.h: #define SbV4fGetXYZW(_dest, _src)
-// C-api.h:     (((_dest)[0] = (_src).vec[0]), ((_dest)[1] = (_src).vec[1]),
-// C-api.h:      ((_dest)[2] = (_src).vec[2]), ((_dest)[3] = (_src).vec[3]))
 
     // Returns 4 individual components
     void	getValue(float &x, float &y, float &z, float &w) const;
-// C-api.h: #define SbV4fGetX_Y_Z_W(_x, _y, _z, _w, _src)
-// C-api.h:     (((_x) = (_src).vec[0]), ((_y) = (_src).vec[1]),
-// C-api.h:      ((_z) = (_src).vec[2]), ((_w) = (_src).vec[3]))
 
     // Returns geometric length of vector
     float	length() const;
-// C-api.h: #define SbV4fLen(_v)
-// C-api.h:     (sqrtf(SbV4fDot((_v), (_v))))
 
     // Negates each component of vector in place
     void	negate();
-// C-api.h: #define SbV4fNegate(_v)
-// C-api.h: 	SbV4fMultBy(_v, -1.0)
 
-// C-api: begin
     // Changes vector to be unit length
-    // C-api: name=norm
     float	normalize();
-// C-api: end
 
     // Sets value of vector from array of 4 components
     SbVec4f &	setValue(const float v[4]);
-// C-api.h: #define SbV4fSetXYZW(_dest, _src)
-// C-api.h:     (((_dest).vec[0] = (_src)[0]), ((_dest).vec[1] = (_src)[1]),
-// C-api.h:      ((_dest).vec[2] = (_src)[2]), ((_dest).vec[3] = (_src)[3]))
 
     // Sets value of vector from 4 individual components
     SbVec4f &	setValue(float x, float y, float z, float w);
-// C-api.h: #define SbV4fSetX_Y_Z_W(_dest, _x, _y, _z, _w)
-// C-api.h:     (((_dest).vec[0] = (_x)), ((_dest).vec[1] = (_y)),
-// C-api.h:      ((_dest).vec[2] = (_z)), ((_dest).vec[3] = (_w)))
 
     // Accesses indexed component of vector
     float &	  operator [](int i) 		{ return (vec[i]); }
@@ -142,9 +118,6 @@ class INVENTOR_API SbVec4f {
 
     // Component-wise scalar multiplication and division operators
     SbVec4f &	operator *=(float d);
-// C-api.h: #define SbV4fMultBy(_v, _s)
-// C-api.h:     (((_v).vec[0] *= (_s)), ((_v).vec[1] *= (_s)),
-// C-api.h:      ((_v).vec[2] *= (_s)), ((_v).vec[3] *= (_s)))
 
     SbVec4f &	operator /=(float d)
 	{ return *this *= (1.0f / d); }
@@ -165,20 +138,9 @@ class INVENTOR_API SbVec4f {
 
     // Component-wise binary vector addition and subtraction operators
     friend INVENTOR_API SbVec4f	operator +(const SbVec4f &v1, const SbVec4f &v2);
-// C-api.h: #define SbV4fAdd(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]),
-// C-api.h:      ((_dest).vec[2] = (_src1).vec[2] + (_src2).vec[2]))
-// C-api.h:      ((_dest).vec[3] = (_src1).vec[3] + (_src2).vec[3]))
 
     friend INVENTOR_API SbVec4f	operator -(const SbVec4f &v1, const SbVec4f &v2);
-// C-api.h: #define SbV4fSub(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]),
-// C-api.h:      ((_dest).vec[2] = (_src1).vec[2] - (_src2).vec[2]))
-// C-api.h:      ((_dest).vec[3] = (_src1).vec[3] - (_src2).vec[3]))
 
-// C-api: begin
     // Equality comparison operator
     friend INVENTOR_API int		operator ==(const SbVec4f &v1, const SbVec4f &v2);
     friend INVENTOR_API int		operator !=(const SbVec4f &v1, const SbVec4f &v2)

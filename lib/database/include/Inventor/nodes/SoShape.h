@@ -81,7 +81,6 @@ class SoState;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
 class INVENTOR_API SoShape : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoShape);
