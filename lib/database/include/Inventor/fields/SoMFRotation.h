@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMRot
 class INVENTOR_API SoMFRotation : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFRotation, SbRotation, const SbRotation &);
@@ -77,31 +76,24 @@ class INVENTOR_API SoMFRotation : public SoMField {
     //
 
     // Set values from array of arrays of 4 floats
-    // C-api: name=SetQuats
     void	setValues(int start, int num, const float q[][4]);
 
     // Set one value from 4 floats
-    // C-api: name=Set1Q_U_A_T
     void	set1Value(int index, float q0, float q1, float q2, float q3);
 
     // Set one value from 4 floats in array
-    // C-api: name=Set1Quat
     void	set1Value(int index, const float q[4]);
 
     // Set one value from axis and angle
-    // C-api: name=Set1AxisAngle
     void	set1Value(int index, const SbVec3f &axis, float angle);
 
     // Set to one value from 4 floats
-    // C-api: name=SetQ_U_A_T
     void	setValue(float q0, float q1, float q2, float q3);
 
     // Set to one value from 4 floats in array
-    // C-api: name=SetQuat
     void	setValue(const float q[4]);
 
     // Set to one value from axis and angle
-    // C-api: name=SetAxisAngle
     void	setValue(const SbVec3f &axis, float angle);
 
   SoINTERNAL public:

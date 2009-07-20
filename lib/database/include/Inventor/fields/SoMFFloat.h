@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMFloat
 class INVENTOR_API SoMFFloat : public SoMField {
 
     // Use standard field stuff

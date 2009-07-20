@@ -89,29 +89,24 @@ class INVENTOR_API SoPath : public SoBase {
     SoPath();
 
     // Constructor given approximate number of nodes in chain
-    // C-api: name=CreateLen
     SoPath(int approxLength);
 
     // Constructor given head node to insert in path
-    // C-api: name=CreateNode
     SoPath(SoNode *node);
 
     // Sets head node (first node in chain)
     void		setHead(SoNode *node);
 
     // Adds node to end of chain; node is nth child of current last node
-    // C-api: name=AppendInd
     void		append(int childIndex);
 
     // Adds node to end of chain; uses first occurrance of node as
     // child of current last node. If path is empty, this is
     // equivalent to setHead().
-    // C-api: name=AppendNode
     void		append(SoNode *childNode);
 
     // Adds all nodes in path to end of chain; head node of fromPath must
     // be the same as or a child of current last node
-    // C-api: name=AppendPath
     void		append(const SoPath *fromPath);
 
     // Allows path to be treated as a stack: push a node at the end of
@@ -132,16 +127,13 @@ class INVENTOR_API SoPath : public SoBase {
 	{ return (nodes[getLength() - 1 - i]); }
 
     // Returns index of ith node in chain
-    // C-api: name=getInd
     int			getIndex(int i) const	{ return (indices[i]); }
 
     // Returns index of ith node in chain
-    // C-api: name=getIndFromTail
     int			getIndexFromTail(int i) const
 	{ return (indices[getLength() - 1 - i]); }
 
     // Returns length of path chain (number of nodes)
-    // C-api: name=getLen
     int			getLength() const;
 
     // Removes all nodes from indexed node on
@@ -179,7 +171,6 @@ class INVENTOR_API SoPath : public SoBase {
     // A path can be given a name using setName() (which is a method on
     // SoBase).  These methods allow paths to be looked up by name.
     static SoPath *	getByName(const SbName &name);
-    // C-api: name=getByNameList
     static int		getByName(const SbName &name, SoPathList &list);
 
   SoINTERNAL public:

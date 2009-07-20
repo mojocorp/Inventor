@@ -98,43 +98,30 @@ typedef void SoSensorCB(void *data, SoSensor *sensor);
 //  triggering methods.
 //
 //////////////////////////////////////////////////////////////////////////////
-// C-api: prefix=SoSens
-// C-api: abstract
 class INVENTOR_API SoSensor {
 
   public:
 
     // Constructors. The second form takes callback function and data
-    // C-api: end
     SoSensor()				{ func = NULL; funcData = NULL; }
     SoSensor(SoSensorCB *f, void *d)	{ func = f;    funcData = d; }
-    // C-api: begin
 
     // Virtual destructor so that subclasses are deleted properly
-    // C-api: expose
     virtual ~SoSensor();
 
     // Sets/returns callback function and user data pointers.
-    // C-api: name=setFunc
     void		setFunction(SoSensorCB *f)	{ func = f;	}
     void		setData(void *d)		{ funcData = d;	}
-    // C-api: name=getFunc
     SoSensorCB *	getFunction() const		{ return func; }
     void *		getData() const			{ return funcData; }
 
     // Schedules the sensor for triggering at the appropriate time
-    // C-api: expose
-    // C-api: name=sched
     virtual void	schedule() = 0;
 
     // Unschedules sensor to keep it from being triggered
-    // C-api: expose
-    // C-api: name=unsched
     virtual void	unschedule() = 0;
 
     // Returns whether the sensor is scheduled
-    // C-api: expose
-    // C-api: name=isSched
     virtual SbBool	isScheduled() const = 0;
 
   SoINTERNAL public:

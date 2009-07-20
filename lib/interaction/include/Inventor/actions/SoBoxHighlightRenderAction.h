@@ -80,7 +80,6 @@ class SoCube;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoBoxHLRenderAct
 class INVENTOR_API SoBoxHighlightRenderAction : public SoGLRenderAction {
       SO_ACTION_HEADER(SoBoxHighlightRenderAction);
  public:
@@ -91,7 +90,6 @@ class INVENTOR_API SoBoxHighlightRenderAction : public SoGLRenderAction {
     SoBoxHighlightRenderAction();
     
     // Constructor which takes the normal SoGLRenderAction parameters.
-    // C-api: name=CreateVpRgn
     SoBoxHighlightRenderAction(const SbViewportRegion &viewportRegion);
 		  
     
@@ -116,13 +114,9 @@ class INVENTOR_API SoBoxHighlightRenderAction : public SoGLRenderAction {
     // Set the appearance of the highlight.
     // Application is responsible for redrawing the scene
     // after making changes here.
-    // C-api: name=setCol
     void	    setColor( const SbColor &c );
-    // C-api: name=getCol
     const SbColor & getColor();
-    // C-api: name=setLinePat
     void            setLinePattern( unsigned short pattern );
-    // C-api: name=getLinePat
     unsigned short  getLinePattern();
     void            setLineWidth( float width );
     float           getLineWidth();

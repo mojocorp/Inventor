@@ -86,8 +86,6 @@ typedef INVENTOR_API SoPath * SoSelectionPickCB(void *userData, const SoPickedPo
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=policy
-// C-api: prefix=SoSel
 class INVENTOR_API SoSelection : public SoSeparator {
 
     SO_NODE_HEADER(SoSelection);
@@ -95,7 +93,6 @@ class INVENTOR_API SoSelection : public SoSeparator {
   public:
     // Constructor. nChildren is the approximate number of children.
     SoSelection();
-    // C-api: name=CreateN
     SoSelection(int nChildren);
     
     //
@@ -131,21 +128,16 @@ class INVENTOR_API SoSelection : public SoSeparator {
     // 'this' must lie in the path, and when added to the list,
     // the path will be truncated such that 'this' is the head.
     // select() makes a copy of the passed path.
-    // C-api: name=sel
     void		select(const SoPath *path);    
     // This convenience version of select will search for the first instance
     // of the passed node under this selection node, and select that path.
-    // C-api: name=selNode
     void		select(SoNode *node);
 
     // deselect removes a path from the selection list by path or by index.
-    // C-api: name=desel
     void		deselect(const SoPath *path);
-    // C-api: name=deselByInd
     void		deselect(int which);
     // This convenience version of deselect will search for the first instance
     // of the passed node under this selection node, and deselect that path.
-    // C-api: name=deselNode
     void		deselect(SoNode *node);
 
     // toggles a path in the selection list - if the path is not there,
@@ -154,24 +146,19 @@ class INVENTOR_API SoSelection : public SoSeparator {
     // This convenience version of toggle will search for the first instance
     // of the passed node under this selection node, and toggle
     // the selection status on that path.
-    // C-api: name=toggleNode
     void		toggle(SoNode *node);
 
     // returns TRUE if the path is selected
-    // C-api: name=isSel
     SbBool  	    	isSelected(const SoPath *path) const;
     // This convenience version of deselect will search for the first instance
     // of the passed node under this selection node, and return whether
     // that path is selected.
-    // C-api: name=isSelNode
     SbBool		isSelected(SoNode *node) const;
     
     // deselect all the paths in the selection list (i.e. clear)
-    // C-api: name=deselAll
     void		deselectAll();
 
     // return the selection list, or one item in the list
-    // C-api: name=getNumSel
     int			getNumSelected() const	{ return selectionList.getLength(); }
     const SoPathList	*getList() const { return &selectionList; }
     SoPath		*getPath(int index) const;
@@ -191,33 +178,25 @@ class INVENTOR_API SoSelection : public SoSeparator {
     // These callbacks are invoked every time an object is selected, whether
     // it be from user interaction or from program call to select() or toggle().
     // This is invoked after the object has been added to the selection list.
-    // C-api: name=addSelCB
     void    addSelectionCallback(SoSelectionPathCB *f, void *userData = NULL);
-    // C-api: name=removeSelCB
     void    removeSelectionCallback(SoSelectionPathCB *f, void *userData = NULL);
     
     // These callbacks are invoked every time an object is deselected, whether
     // it be from user interaction or from program call to deselect() or toggle().
     // This is invoked after the object has been removed from the selection list.
-    // C-api: name=addDeselCB
     void    addDeselectionCallback(SoSelectionPathCB *f, void *userData = NULL);
-    // C-api: name=removeDeselCB
     void    removeDeselectionCallback(SoSelectionPathCB *f, void *userData = NULL);
 
     // Invoked when the user has initiated a change to the selection list
     // by picking objects. This will be followed by invocations of the select
     // and/or deselect callbacks, finally followed by the finish callback.
-    // C-api: name=addStartCB
     void    addStartCallback(SoSelectionClassCB *f, void *userData = NULL);
-    // C-api: name=removeStartCB
     void    removeStartCallback(SoSelectionClassCB *f, void *userData = NULL);
     
     // Invoked when the user has finished changing the selection list
     // by picking objects. This was preceeded by an invocation of the start
     // callback, and invocations of the select and/or deselect callbacks.
-    // C-api: name=addFinishCB
     void    addFinishCallback(SoSelectionClassCB *f, void *userData = NULL);
-    // C-api: name=removeFinishCB
     void    removeFinishCallback(SoSelectionClassCB *f, void *userData = NULL);
 
     // Invoked when a pick has occurred and the selection node is about
@@ -258,7 +237,6 @@ class INVENTOR_API SoSelection : public SoSeparator {
     // Selection will always ref the path returned by the callback, make a
     // copy of the path, then unref the path.
     //
-    // C-api: name=setPickFilterCB
     void    setPickFilterCallback(
 		SoSelectionPickCB *f,
 		void *userData = NULL, 

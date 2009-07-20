@@ -63,9 +63,6 @@
 #include <Inventor/fields/SoMFEnum.h>
 #include <Inventor/fields/SoMFBool.h>
 
-// C-api: prefix=SoBoolOper
-// C-api: public=a,b,operation
-// C-api: public=output,inverse
 class INVENTOR_API SoBoolOperation : public SoEngine {
 
     SO_ENGINE_HEADER(SoBoolOperation);

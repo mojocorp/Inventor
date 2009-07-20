@@ -91,9 +91,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoInterp
-// C-api: public=alpha,output
 class INVENTOR_API SoInterpolate : public SoEngine {
 
     SO_ENGINE_ABSTRACT_HEADER(SoInterpolate);
@@ -115,7 +112,6 @@ class INVENTOR_API SoInterpolate : public SoEngine {
     ~SoInterpolate();
 };
 
-// C-api: end
 /////////////////////////////////////////////////////////////////////////////
 //
 // These macros can be used to easily define interpolater engine
@@ -198,52 +194,36 @@ className::initClass()							\
 {									\
     SO__ENGINE_INIT_CLASS(className, classPrintName, SoInterpolate);	\
 }
-// C-api: begin
 /////////////////////////////////////////////////////////////////////////////
 //
 // Interpolaters for the builtin field types.
 //
 /////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoInterpFloat
-// C-api: public=alpha,output
-// C-api: public=input0, input1
 class INVENTOR_API SoInterpolateFloat : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateFloat);
     SoMFFloat		input0;
     SoMFFloat		input1;
 };
 
-// C-api: prefix=SoInterpRot
-// C-api: public=alpha,output
-// C-api: public=input0, input1
 class INVENTOR_API SoInterpolateRotation : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateRotation);
     SoMFRotation	input0;
     SoMFRotation	input1;
 };
 
-// C-api: prefix=SoInterpV2f
-// C-api: public=alpha,output
-// C-api: public=input0, input1
 class INVENTOR_API SoInterpolateVec2f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec2f);
     SoMFVec2f		input0;
     SoMFVec2f		input1;
 };
 
-// C-api: prefix=SoInterpV3f
-// C-api: public=alpha,output
-// C-api: public=input0, input1
 class INVENTOR_API SoInterpolateVec3f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec3f);
     SoMFVec3f		input0;
     SoMFVec3f		input1;
 };
 
-// C-api: prefix=SoInterpV4f
-// C-api: public=alpha,output
-// C-api: public=input0, input1
 class INVENTOR_API SoInterpolateVec4f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec4f);
     SoMFVec4f		input0;

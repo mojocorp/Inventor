@@ -73,11 +73,9 @@ class INVENTOR_API SoGroup : public SoNode {
 
   public:
     // Default constructor
-    // C-api: begin
     SoGroup();
 
     // Constructor that takes approximate number of children
-    // C-api: name=CreateN
     SoGroup(int nChildren);
 
     // Adds a child as last one in group
@@ -99,7 +97,6 @@ class INVENTOR_API SoGroup : public SoNode {
     void		removeChild(int index);
 
     // Removes first instance of given child from group
-    // C-api: name=RemoveChildNode
     void		removeChild(SoNode *child)
 	{ removeChild(findChild(child)); }
 
@@ -110,7 +107,6 @@ class INVENTOR_API SoGroup : public SoNode {
     void		replaceChild(int index, SoNode *newChild);
 
     // Replaces first instance of given child with new child
-    // C-api: name=ReplaceChildNode
     void		replaceChild(SoNode *oldChild, SoNode *newChild)
 	{ replaceChild(findChild(oldChild), newChild); }
 

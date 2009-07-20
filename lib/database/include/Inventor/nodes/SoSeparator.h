@@ -73,8 +73,6 @@ class SoGLCacheList;
 
 #include <Inventor/fields/SoSFBitMask.h>
 
-// C-api: prefix=SoSep
-// C-api: public=renderCaching, boundingBoxCaching, renderCulling, pickCulling
 class INVENTOR_API SoSeparator : public SoGroup {
 
     SO_NODE_HEADER(SoSeparator);
@@ -97,7 +95,6 @@ class INVENTOR_API SoSeparator : public SoGroup {
     SoSeparator();
 
     // Constructor that takes approximate number of children
-    // C-api: name=CreateN
     SoSeparator(int nChildren);
 
     // Overrides default method on SoNode

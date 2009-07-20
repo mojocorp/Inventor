@@ -84,7 +84,6 @@ class SbMatrix;
 
 class INVENTOR_API SbPlane {
   public:
-// C-api: end
     SbPlane()	{}
 
     // Construct a plane given 3 points.
@@ -100,7 +99,6 @@ class INVENTOR_API SbPlane {
     // Orientation is given by the normal vector n.
     SbPlane(const SbVec3f &n, const SbVec3f &p);
 
-// C-api: begin
     // Offset a plane by a given distance.
     void		offset(float d);
 
@@ -116,13 +114,11 @@ class INVENTOR_API SbPlane {
     // defined by the plane
     SbBool		isInHalfSpace(const SbVec3f &point) const;
 
-// C-api: end
 
     // Accessors
     const SbVec3f &	getNormal() const		{ return normalVec; }
     float		getDistanceFromOrigin() const	{ return distance; }
 
-// C-api: begin
     // Equality/inequality comparison operators
     friend INVENTOR_API int		operator ==(const SbPlane &p1, const SbPlane &p2);
     friend INVENTOR_API int		operator !=(const SbPlane &p1, const SbPlane &p2)

@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMV3f
 class INVENTOR_API SoMFVec3f : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFVec3f, SbVec3f, const SbVec3f &);
@@ -77,23 +76,18 @@ class INVENTOR_API SoMFVec3f : public SoMField {
     //
 
     // Set values from array of arrays of 3 floats
-    // C-api: name=SetXYZs
     void	setValues(int start, int num, const float xyz[][3]);
 
     // Set one value from 3 floats
-	// C-api: name=Set1X_Y_Z
     void	set1Value(int index, float x, float y, float z);
 
     // Set one value from 3 floats in array
-	// C-api: name=Set1XYZ
     void	set1Value(int index, const float xyz[3]);
 
     // Set to one value from 3 floats
-	// C-api: name=SetX_Y_Z
     void	setValue(float x, float y, float z);
 
     // Set to one value from 3 floats in array
-	// C-api: name=SetXYZ
     void	setValue(const float xyz[3]);
 
   SoINTERNAL public:

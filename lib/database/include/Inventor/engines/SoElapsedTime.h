@@ -65,8 +65,6 @@
 #include <Inventor/fields/SoSFTime.h>
 #include <Inventor/fields/SoSFTrigger.h>
 
-// C-api: public=timeIn,speed,on,pause,reset
-// C-api: public=timeOut
 class INVENTOR_API SoElapsedTime : public SoEngine {
 
     SO_ENGINE_HEADER(SoElapsedTime);

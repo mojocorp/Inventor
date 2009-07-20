@@ -65,7 +65,6 @@
 #include <Inventor/projectors/SbCylinderProjector.h>
 #include <Inventor/SbPlane.h>
 
-// C-api: prefix=SbCylSectProj
 class INVENTOR_API SbCylinderSectionProjector : public SbCylinderProjector
 {
   public:
@@ -79,7 +78,6 @@ class INVENTOR_API SbCylinderSectionProjector : public SbCylinderProjector
 			       SbBool orientToEye = TRUE);
 
     // Constructor taking the cylinder.
-    // C-api: name=createCyl
     SbCylinderSectionProjector( const SbCylinder &cyl,
 				float edgeTol = .9f,
 				SbBool orientToEye = TRUE);
@@ -104,15 +102,12 @@ class INVENTOR_API SbCylinderSectionProjector : public SbCylinderProjector
     // radius of the cylinder. If this is 1.0, the projector is a
     // hemisphere. If this is .1, the projector is a slice of
     // the cylinder with radius .1*radius.  Default is .9.
-    // C-api: name=setTol
     void		setTolerance(float edgeTol);
 
-    // C-api: name=getTol
     float		getTolerance() const		  { return tolerance; }
 
     // Find whether this point on the cylinder or tolerance
     // plane is within tolerance.
-    // C-api: name=isWithinTol
     SbBool		isWithinTolerance(const SbVec3f &point);
     
   protected:

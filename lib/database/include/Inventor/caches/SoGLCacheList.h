@@ -73,7 +73,6 @@
 
 #include <Inventor/SbBasic.h>
 
-// C-api: end
 
 struct SoGLCacheListEntry;
 class SoGLRenderAction;
@@ -151,6 +150,5 @@ SoEXTENDER class INVENTOR_API SoGLCacheList {
 
 };
 
-// C-api: begin
 
 #endif /* _SO_GL_CACHE_LIST */

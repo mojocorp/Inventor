@@ -70,8 +70,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMultCopy
-// C-api: public=matrix
 class INVENTOR_API SoMultipleCopy : public SoGroup {
 
     SO_NODE_HEADER(SoMultipleCopy);

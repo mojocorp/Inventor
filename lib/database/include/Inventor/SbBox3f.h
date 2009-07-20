@@ -47,22 +47,18 @@ class INVENTOR_API SbBox3f {
     SbBox3f()						{ makeEmpty(); }
 
     // Constructor given bounds 
-    // C-api: name=CreateBounds
     SbBox3f(float xmin, float ymin, float zmin,
 	    float xmax, float ymax, float zmax)
 	{ min.setValue(xmin, ymin, zmin); max.setValue(xmax, ymax, zmax); }
 
     // Constructor given minimum and maximum points 
-    // C-api: name=CreateMinMax
     SbBox3f(const SbVec3f &_min, const SbVec3f &_max)
 	{ min = _min; max = _max; }
 
     ~SbBox3f()						{ }
 
     // Returns the min and max points
-    // C-api: name=getMinConst
     const SbVec3f &	getMin() const { return min; }
-    // C-api: name=getMaxConst
     const SbVec3f &	getMax() const { return max; }
     SbVec3f &	        getMin()       { return min; }
     SbVec3f &	        getMax()       { return max; }
@@ -71,19 +67,15 @@ class INVENTOR_API SbBox3f {
     SbVec3f	getCenter() const;
 
     // Extends Box3f (if necessary) to contain given 3D point
-    // C-api: name=extendByPt
     void	extendBy(const SbVec3f &pt);
 
     // Extends Box3f (if necessary) to contain given Box3f
-    // C-api: name=extendByBox
     void	extendBy(const SbBox3f &bb);
 
     // Returns TRUE if intersection of given point and Box3f is not empty
-    // C-api: name=intersectPt
     SbBool	intersect(const SbVec3f &pt) const;
 
     // Returns TRUE if intersection of given Box3f and Box3f is not empty
-    // C-api: name=intersectBox
     SbBool	intersect(const SbBox3f &bb) const;
 
     // Returns TRUE if bounding box is completely outside the
@@ -104,7 +96,6 @@ class INVENTOR_API SbBox3f {
 			  float xmax, float ymax, float zmax)
 	{ min.setValue(xmin, ymin, zmin); max.setValue(xmax, ymax, zmax); }
 
-    // C-api: name=setBoundsMinMax
     void	setBounds(const SbVec3f &_min, const SbVec3f &_max)
 	{ min = _min; max = _max; }
 
@@ -112,13 +103,11 @@ class INVENTOR_API SbBox3f {
 			  float &xmax, float &ymax, float &zmax) const
 	{ min.getValue(xmin, ymin, zmin); max.getValue(xmax, ymax, zmax); }
 
-    // C-api: name=getBoundsMinMax
     void	getBounds(SbVec3f &_min, SbVec3f &_max) const
 	{ _min = min; _max = max; }
 
     // Returns the closest point on the box to the given point.
     // (Returns the point on the center of the Z face if passed the center.)
-    // C-api: name=getClosestPt
     SbVec3f	getClosestPoint(const SbVec3f &point);
     
     // Returns origin (minimum point) of box
@@ -144,7 +133,6 @@ class INVENTOR_API SbBox3f {
 
     // Checks if the box has volume; i.e., all three dimensions have
     // positive size
-    // C-api: name=hasVol
     SbBool	hasVolume() const
 	{ return (max[0] > min[0] && max[1] > min[1] && max[2] > min[2] ); }
 
@@ -153,11 +141,9 @@ class INVENTOR_API SbBox3f {
 			float &dMin, float &dMax) const;
 
     // Transforms Box3f by matrix, enlarging Box3f to contain result
-    // C-api: name=xf
     void	transform(const SbMatrix &m);
 
     // Gives the volume of the box (0 for an empty box)
-    // C-api: name=getVol
     float	getVolume() const;
 
     // Equality comparisons

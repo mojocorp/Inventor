@@ -79,34 +79,26 @@ class SoLightPath;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoAct
 class INVENTOR_API SoAction {
 
 public:
     // Destructor
-    // C-api: expose
     virtual ~SoAction();
 
     // Returns type identifier for SoAction class
-    // C-api: expose
     static SoType	getClassTypeId()
     { return classTypeId; }
 
     // Returns type identifier for action
-    // C-api: expose
     virtual SoType	getTypeId() const = 0;
 
     // Returns TRUE if action is of given type or is derived from it
     SbBool		isOfType(SoType type) const;
 
     // Applies action to the graph rooted by a node
-    // C-api: expose
     virtual void	apply(SoNode *node);
 
     // Applies action to the graph defined by a path
-    // C-api: expose
-    // C-api: name=ApplyPath
     virtual void	apply(SoPath *path);
 
     // Applies action to the graphs defined by a path list. The
@@ -118,13 +110,10 @@ public:
     //	  4 - No two paths are the same
     // These rules will be obeyed by path lists returned by searches
     // for non-group nodes.
-    // C-api: expose
-    // C-api: name=ApplyPathList
     virtual void	apply(const SoPathList &pathList,
 			      SbBool obeysRules = FALSE);
 
     // Invalidate the state, forcing it to be recreated at the next apply
-    // C-api: expose
     virtual void	invalidateState();
     
     SoEXTENDER public:

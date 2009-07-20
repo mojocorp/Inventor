@@ -47,21 +47,17 @@ class INVENTOR_API SbXfBox3f : public SbBox3f {
     SbXfBox3f();
 
     // Constructor given minimum and maximum points 
-    // C-api: name=CreateMinMax
     SbXfBox3f(const SbVec3f &_min, const SbVec3f &_max);
 
     // Constructor given Box3f
-    // C-api: name=CreateBox3f
     SbXfBox3f(const SbBox3f &box);
 
     ~SbXfBox3f()						{ }
 
     // Set the transformation on the box
-    // C-api: name=setXf
     void		setTransform(const SbMatrix &m);
 
     // Get the transformation on the box, and its inverse.
-    // C-api: name=getXf
     const SbMatrix &	getTransform() const	    { return xform; }
     const SbMatrix &	getInverse() const	    { return xformInv; }
     
@@ -69,24 +65,19 @@ class INVENTOR_API SbXfBox3f : public SbBox3f {
     SbVec3f		getCenter() const;
 
     // Extends XfBox3f (if necessary) to contain given 3D point
-    // C-api: name=extendByPt
     void		extendBy(const SbVec3f &pt);
 
     // Extends XfBox3f (if necessary) to contain given Box3f
-    // C-api: name=extendByBox
     void		extendBy(const SbBox3f &bb)
 	{ extendBy(SbXfBox3f(bb)); }
 
     // Extends XfBox3f (if necessary) to contain given XfBox3f
-    // C-api: name=extendByXfBox
     void		extendBy(const SbXfBox3f &bb);
 
     // Returns TRUE if intersection of given point and Box3f is not empty
-    // C-api: name=intersectPt
     SbBool		intersect(const SbVec3f &pt) const;
 
     // Returns TRUE if intersection of given XfBox3f and Box3f is not empty
-    // C-api: name=intersectBox
     SbBool		intersect(const SbBox3f &bb) const
 	{ return project().intersect(bb); }
 
@@ -95,7 +86,6 @@ class INVENTOR_API SbXfBox3f : public SbBox3f {
 			  float xmax, float ymax, float zmax)
 	{ SbBox3f::setBounds(xmin, ymin, zmin, xmax, ymax, zmax); }
 
-    // C-api: name=setBoundsMinMax
     void	setBounds(const SbVec3f &_min, const SbVec3f &_max)
 	{ SbBox3f::setBounds(_min, _max); }
 
@@ -103,7 +93,6 @@ class INVENTOR_API SbXfBox3f : public SbBox3f {
 			  float &xmax, float &ymax, float &zmax) const
 	{ SbBox3f::getBounds(xmin, ymin, zmin, xmax, ymax, zmax); }
 
-    // C-api: name=getBoundsMinMax
     void	getBounds(SbVec3f &_min, SbVec3f &_max) const
 	{ SbBox3f::getBounds(_min, _max); }
 
@@ -118,7 +107,6 @@ class INVENTOR_API SbXfBox3f : public SbBox3f {
 	{ SbBox3f::getSize(sizeX, sizeY, sizeZ); }
 
     // Gives the volume of the box (0 for an empty box)
-    // C-api: name=getVol
     float	getVolume() const;
 
     // Sets Box3f to contain nothing
@@ -132,7 +120,6 @@ class INVENTOR_API SbXfBox3f : public SbBox3f {
 
     // Checks if the box has volume; i.e., all three dimensions have
     // positive size
-    // C-api: name=hasVol
     SbBool		hasVolume() const { return SbBox3f::hasVolume(); }
 
     // Finds the extent of a box along a particular direction
@@ -141,7 +128,6 @@ class INVENTOR_API SbXfBox3f : public SbBox3f {
 	{ project().getSpan(direction, dMin, dMax); }
 
     // Transforms Box3f by matrix
-    // C-api: name=xf
     void		transform(const SbMatrix &m);
 
     // Projects an SbXfBox3f to an SbBox3f

@@ -70,7 +70,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
 
 class SoFieldData;
 class SoEngineList;
@@ -86,26 +85,21 @@ class INVENTOR_API SoEngine : public SoFieldContainer {
   public:
 
     // Returns type identifier for SoEngine class
-    // C-api: expose
     static SoType	getClassTypeId() { return classTypeId; }
 
     // Returns a list of outputs in this engine.  This is virtual
     // so private outputs can be hidden.  Use getOutputName() to get the
     // names of the fields, and use getConnectionType() to figure out
     // their types.  Returns the number of outputs added to the list.
-    // C-api: expose
-    // C-api: name=getOuts
     virtual int		getOutputs(SoEngineOutputList &list) const;
 
     // Returns a pointer to the engine output with the given name.
     // If no such output exists, NULL is returned.
-    // C-api: name=getOut
     SoEngineOutput *	getOutput(const SbName &outputName) const;
 
     // Returns (in outputName) the name of the output pointed to.
     // Returns FALSE if the output is not contained within the
     // engine instance.
-    // C-api: name=getOutName
     SbBool		getOutputName(const SoEngineOutput *output,
 				     SbName &outputName) const;
 
@@ -118,7 +112,6 @@ class INVENTOR_API SoEngine : public SoFieldContainer {
     // method on SoBase).  These methods allow enginess to be looked
     // up by name.
     static SoEngine *	getByName(const SbName &name);
-    // C-api: name=getByNameList
     static int		getByName(const SbName &name, SoEngineList &list);
 
   protected:
@@ -201,12 +194,10 @@ class INVENTOR_API SoEngineOutput {
 
   public:
     // type of field this output can connect to
-    // C-api: name=getConnType
     SoType		getConnectionType() const;
 
     // Returns the number of fields this output is writing to, and
     // adds pointers to those fields to the given list:
-    // C-api: name=getForwardConn
     int			getForwardConnections(SoFieldList &list) const;
 
     // Enables or disables all connections from this output. If the

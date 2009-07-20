@@ -63,8 +63,6 @@
 #include <Inventor/fields/SoMFMatrix.h>
 #include <Inventor/fields/SoMFVec3f.h>
 
-// C-api: public=vector,matrix,point,direction,normalDirection
-// C-api: prefix=SoXfV3f
 class INVENTOR_API SoTransformVec3f : public SoEngine {
 
     SO_ENGINE_HEADER(SoTransformVec3f);

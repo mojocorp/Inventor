@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSMx
 class INVENTOR_API SoSFMatrix : public SoSField {
 
     // Use standard field stuff
@@ -73,7 +72,6 @@ class INVENTOR_API SoSFMatrix : public SoSField {
 
   public:
     // Set one value from 16 floats
-    // C-api: name=SetMx
     void		setValue(float a11, float a12, float a13, float a14,
 				 float a21, float a22, float a23, float a24,
 				 float a31, float a32, float a33, float a34,

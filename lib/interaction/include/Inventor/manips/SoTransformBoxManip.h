@@ -55,7 +55,6 @@
 
 #include <Inventor/manips/SoTransformManip.h>
 
-// C-api: prefix=SoXfBoxManip
 class INVENTOR_API SoTransformBoxManip : public SoTransformManip
 {
     SO_NODE_HEADER(SoTransformBoxManip);

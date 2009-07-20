@@ -60,7 +60,6 @@
 #include <Inventor/events/SoButtonEvent.h>
 
 // some convenience macros for determining if an event matches
-// C-api: end
 #define SO_SPACEBALL_PRESS_EVENT(EVENT,BUTTON) \
     (SoSpaceballButtonEvent::isButtonPressEvent(EVENT, \
 			SoSpaceballButtonEvent::BUTTON))
@@ -69,14 +68,8 @@
     (SoSpaceballButtonEvent::isButtonReleaseEvent(EVENT, \
 			SoSpaceballButtonEvent::BUTTON))
 
-// C-api: begin
-// C-api: interpret #define SO_SPBALL_PRESS_EV(EVENT,BUTTON)
-// C-api: interpret     (SoSpballEvIsBtnPressEv(EVENT,BUTTON))
-// C-api: interpret #define SO_SPBALL_RELEASE_EV(EVENT,BUTTON)
-// C-api: interpret     (SoSpballEvIsBtnReleaseEv(EVENT,BUTTON))
 
 
-// C-api: prefix=SoSpballEv
 class INVENTOR_API SoSpaceballButtonEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
@@ -100,21 +93,17 @@ class INVENTOR_API SoSpaceballButtonEvent : public SoButtonEvent {
     virtual ~SoSpaceballButtonEvent();
     
     // which button generated the event, e.g. SoSpaceballButtonEvent::BUTTON1
-    // C-api: name=setBtn
     void		setButton(SoSpaceballButtonEvent::Button b)
 	{ button = b; }
-    // C-api: name=getBtn
     SoSpaceballButtonEvent::Button	getButton() const
 	{ return button; }
     
     // convenience routines to see if an SoEvent is a press or release
     // of the passed spaceball button
-    // C-api: name=isBtnPressEv
     static SbBool	isButtonPressEvent(
 			    const SoEvent *e,
 			    SoSpaceballButtonEvent::Button whichButton);
 			    
-    // C-api: name=isBtnReleaseEv
     static SbBool	isButtonReleaseEvent(
 			    const SoEvent *e,
 			    SoSpaceballButtonEvent::Button whichButton);

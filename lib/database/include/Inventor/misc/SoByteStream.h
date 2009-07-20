@@ -82,13 +82,10 @@ class INVENTOR_API SoByteStream {
     // (TRUE) or ascii (FALSE) format. The converted data can be accessed
     // through getData() and getNumBytes().
     
-    // C-api: name=convertNode
     void	        convert(SoNode *node, SbBool binaryFormat = TRUE);
     
-    // C-api: name=convertPath
     void	        convert(SoPath *path, SbBool binaryFormat = TRUE);
     
-    // C-api: name=convertPathList
     void	        convert(SoPathList *pathList, SbBool binaryFormat = TRUE);
 
     // Access the byte stream data
@@ -99,10 +96,8 @@ class INVENTOR_API SoByteStream {
     // This static routine performs an SoDB::read on the data,
     // and returns a path list of the paths read in.
     
-    // C-api: name=unconvertStream
     static SoPathList *	unconvert(SoByteStream *byteStream);
     
-    // C-api: name=unconvertData
     static SoPathList *	unconvert(void *data, uint32_t numBytes);
   
   SoEXTENDER public:

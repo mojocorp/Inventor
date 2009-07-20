@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSCol
 class INVENTOR_API SoSFColor : public SoSField {
 
     // Use standard field stuff
@@ -78,21 +77,16 @@ class INVENTOR_API SoSFColor : public SoSField {
     //
 
     // Set RGB color from SbVec3f
-    // C-api: name=SetV3f
     void		setValue(const SbVec3f &vec);
 
     // Set RGB/HSV value from 3 floats
-    // C-api: name=SetR_G_B
     void		setValue(float r, float g, float b);
 
-    // C-api: name=SetH_S_V
     void		setHSVValue(float h, float s, float v);
 
     // Set RGB/HSV value from array of 3 floats
-    // C-api: name=SetRGB
     void		setValue(const float rgb[3]);
 
-    // C-api: name=SetHSV
     void		setHSVValue(const float hsv[3]);
 
   SoINTERNAL public:

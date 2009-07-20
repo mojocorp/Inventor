@@ -62,7 +62,6 @@
 #include <Inventor/projectors/SbCylinderProjector.h>
 #include <Inventor/SbPlane.h>
 
-// C-api: prefix=SbCylSheetProj
 class INVENTOR_API SbCylinderSheetProjector : public SbCylinderProjector
 {
   public:
@@ -74,7 +73,6 @@ class INVENTOR_API SbCylinderSheetProjector : public SbCylinderProjector
     SbCylinderSheetProjector(SbBool orientToEye = TRUE);
 
     // Constructor taking the cylinder.
-    // C-api: name=createCyl
     SbCylinderSheetProjector(const  SbCylinder &cyl,
 			     SbBool orientToEye = TRUE);
 

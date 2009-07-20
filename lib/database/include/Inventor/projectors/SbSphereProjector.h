@@ -61,8 +61,6 @@
 #include <Inventor/projectors/SbProjector.h>
 #include <Inventor/SbSphere.h>
 
-// C-api: abstract
-// C-api: prefix=SbSphProj
 class INVENTOR_API SbSphereProjector : public SbProjector
 {
   public:
@@ -73,21 +71,16 @@ class INVENTOR_API SbSphereProjector : public SbProjector
 
     // Same as above, but also get a rotation from the last
     // projected point to this one.
-    // C-api: name=projectGetRot
     SbVec3f		projectAndGetRotation(const SbVec2f &point,
 					      SbRotation &rot);
 
     // Get a rotation given two points on this sphere projector.
-    // C-api: expose
-    // C-api: name=getRot
     virtual SbRotation	getRotation(const SbVec3f &point1,
 				    const SbVec3f &point2) = 0;
 
     // Set/get the sphere to use.
-    // C-api: name=setSph
     void		setSphere(const SbSphere &sph);
 
-    // C-api: name=getSph
     const SbSphere &	getSphere() const		  { return sphere; }
 
     // Set/get whether the projector should always be oriented towards the eye.

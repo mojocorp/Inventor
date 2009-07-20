@@ -73,13 +73,11 @@
 
 #include <Inventor/sensors/SoSensor.h>
 
-// C-api: prefix=SoDelQSens
 class INVENTOR_API SoDelayQueueSensor : public SoSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data
     SoDelayQueueSensor();
-    // C-api: name=createCB
     SoDelayQueueSensor(SoSensorCB *func, void *data);
 
     // Destructor
@@ -88,9 +86,7 @@ class INVENTOR_API SoDelayQueueSensor : public SoSensor {
     // Sets/returns the priority for the sensor. If the priority is
     // changed to 0 (immediate) and it is already scheduled, the
     // sensor is unscheduled and triggered.
-    // C-api: name=setPri
     void		setPriority(uint32_t pri);
-    // C-api: name=getPri
     uint32_t		getPriority() const		{ return priority; }
 
     // Returns default sensor priority

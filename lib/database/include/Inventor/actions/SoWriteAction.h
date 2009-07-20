@@ -71,7 +71,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoWriteAct
 class INVENTOR_API SoWriteAction : public SoAction {
 
     SO_ACTION_HEADER(SoWriteAction);
@@ -81,14 +80,12 @@ class INVENTOR_API SoWriteAction : public SoAction {
     SoWriteAction();
 
     // Constructor that takes SoOutput to write to
-    // C-api: name=CreateOut
     SoWriteAction(SoOutput *out);
 
     // Destructor
     virtual ~SoWriteAction();
 
     // Returns SoOutput
-    // C-api: name=getOut
     SoOutput *		getOutput() const		{ return output; }
 
   SoINTERNAL public:

@@ -70,14 +70,8 @@
 
 class SbColor;
 
-// C-api: derived: SbColor is derived from SbVec3f
-// C-api: prefix=SbCol
 
-// C-api.h: struct SbColor {
-// C-api.h: 	float rgb[3];
-// C-api.h: };
 
-// C-api: end
 
 class INVENTOR_API SbColor : public SbVec3f {
   public:
@@ -93,27 +87,22 @@ class INVENTOR_API SbColor : public SbVec3f {
     // Constructor given 3 individual components
     SbColor(float r, float g, float b)			{ setValue(r, g, b); }
 
-// C-api: begin
     //
     // HSV routines. Those are 3 floats containing the Hue, Saturation and
     // Value (same as brightness) of the color.
     //
 
     // Sets value of color vector from 3 hsv components
-    // C-api: name=setH_S_V
     SbColor &	setHSVValue(float h, float s, float v);
 
     // Sets value of color vector from array of 3 hsv components
-    // C-api: name=setHSV
     SbColor &	setHSVValue(const float hsv[3])
 			{ return setHSVValue(hsv[0], hsv[1], hsv[2]); }
 
     // Returns 3 individual hsv components
-    // C-api: name=getH_S_V
     void	getHSVValue(float &h, float &s, float &v) const;
 
     // Returns an array of 3 hsv components
-    // C-api: name=getHSV
     void	getHSVValue(float hsv[3]) const
  			{ getHSVValue(hsv[0], hsv[1], hsv[2]); }
     
@@ -129,49 +118,23 @@ class INVENTOR_API SbColor : public SbVec3f {
     
     // Sets value from ordered RGBA packed color. Alpha value is used for
     // transparency.
-    // C-api: name=setPacked
     SbColor &	setPackedValue(uint32_t orderedRGBA, float& transparency);
 
     // Returns ordered RGBA packed color. Alpha is 1 - transparency, scaled
     // between 0 and 255 = 0xFF.
-    // C-api: name=getPacked
     uint32_t   getPackedValue(float transparency = 0.0) const;
 
 // NOTE: These Macros are stolen from SbVec3f because the C-api
 // generator does NOT generate macros for macros defined by a parent
 // class. Thus they must be done `by hand'.  Yes, this does suck.
 
-// C-api.h: #define SbColGetRGB(_dest, _src)
-// C-api.h:     (((_dest)[0] = (_src).rgb[0]), ((_dest)[1] = (_src).rgb[1]),
-// C-api.h:      ((_dest)[2] = (_src).rgb[2]))
 
-// C-api.h: #define SbColGetR_G_B(_r, _g, _b, _src)
-// C-api.h:     (((_r) = (_src).rgb[0]), ((_g) = (_src).rgb[1]),
-// C-api.h:	 ((_b) = (_src).rgb[2]))
 
-// C-api.h: #define SbColSetRGB(_dest, _src)
-// C-api.h:     (((_dest).rgb[0] = (_src)[0]), ((_dest).rgb[1] = (_src)[1]),
-// C-api.h:      ((_dest).rgb[2] = (_src)[2]))
 
-// C-api.h: #define SbColSetR_G_B(_dest, _r, _g, _b)
-// C-api.h:     (((_dest).rgb[0] = (_r)), ((_dest).rgb[1] = (_g)),
-// C-api.h:      ((_dest).rgb[2] = (_b)))
 
-// C-api.h: #define SbColMult(_v, _s)
-// C-api.h:     (((_v).rgb[0] *= (_s)), ((_v).rgb[1] *= (_s)), ((_v).rgb[2] *= (_s)))
 
-// C-api.h: #define SbColDiv(_v, _s)
-// C-api.h:     (((_v).rgb[0] /= (_s)), ((_v).rgb[1] /= (_s)), ((_v).rgb[2] /= (_s)))
 
-// C-api.h: #define SbColAdd(_dest, _src1, _src2)
-// C-api.h:     (((_dest).rgb[0] = (_src1).rgb[0] + (_src2).rgb[0]),
-// C-api.h:      ((_dest).rgb[1] = (_src1).rgb[1] + (_src2).rgb[1]),
-// C-api.h:      ((_dest).rgb[2] = (_src1).rgb[2] + (_src2).rgb[2]))
 
-// C-api.h: #define SbColSub(_dest, _src1, _src2)
-// C-api.h:     (((_dest).rgb[0] = (_src1).rgb[0] - (_src2).rgb[0]),
-// C-api.h:      ((_dest).rgb[1] = (_src1).rgb[1] - (_src2).rgb[1]),
-// C-api.h:      ((_dest).rgb[2] = (_src1).rgb[2] - (_src2).rgb[2]))
 
 };
 

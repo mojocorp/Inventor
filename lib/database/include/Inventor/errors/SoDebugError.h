@@ -74,7 +74,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoDbgErr
 
 #if _COMPILER_VERSION>=710
 #  pragma set woff 1375
@@ -90,12 +89,9 @@ class INVENTOR_API SoDebugError : public SoError {
     };
 
     // Sets/returns handler callback for SoDebugError class
-    // C-api: name=setHndlrCB
     static void		setHandlerCallback(SoErrorCB *cb, void *data)
 	{ handlerCB = cb; cbData = data; }
-    // C-api: name=getHndlrCB
     static SoErrorCB *	getHandlerCallback()	{ return handlerCB; }
-    // C-api: name=getHndlrData
     static void *	getHandlerData()	{ return cbData; }
 
     // Returns type identifier for SoDebugError class

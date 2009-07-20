@@ -117,8 +117,6 @@
 class SoFieldSensor;
 class SbPlaneProjector;
 
-// C-api: prefix=SoSpotLtDrag
-// C-api: public=rotation,translation,angle
 class INVENTOR_API SoSpotLightDragger : public SoDragger
 {
     SO_KIT_HEADER(SoSpotLightDragger);

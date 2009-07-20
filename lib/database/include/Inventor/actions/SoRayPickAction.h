@@ -83,7 +83,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoRayAct
 class INVENTOR_API SoRayPickAction : public SoPickAction {
 
     SO_ACTION_HEADER(SoRayPickAction);
@@ -105,12 +104,10 @@ class INVENTOR_API SoRayPickAction : public SoPickAction {
     // Sets the viewport-space point through which the ray passes.
     // Viewport coordinates range from (0,0) at the lower left to
     // (width-1,height-1) at the upper right
-    // C-api: name=setPt
     void		setPoint(const SbVec2s &viewportPoint);
 
     // Sets the viewport point in normalized coordinates, which range
     // from (0,0) at the lower left to (1,1) at the upper right
-    // C-api: name=setNormPt
     void		setNormalizedPoint(const SbVec2f &normPoint);
 
     // Set the radius (in pixels) around the point. This is used when
@@ -141,11 +138,9 @@ class INVENTOR_API SoRayPickAction : public SoPickAction {
     //
 
     // Accesses list of picked points
-    // C-api: name=getPickPtList
     const SoPickedPointList &getPickedPointList() const  { return ptList; }
 
     // Returns the indexed picked point from the list
-    // C-api: name=getPickPt
     SoPickedPoint *	getPickedPoint(int index = 0) const;
 
   SoEXTENDER public:

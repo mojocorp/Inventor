@@ -78,7 +78,6 @@ class SoState;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoPickPt
 class INVENTOR_API SoPickedPoint {
 
   public:
@@ -94,18 +93,14 @@ class INVENTOR_API SoPickedPoint {
 
     // These return the intersection point and surface normal in world
     // space, and the texture coordinates in image space:
-    // C-api: name=getPt
     const SbVec3f &	getPoint() const	 { return worldPoint; }
-    // C-api: name=getNorm
     const SbVec3f &	getNormal() const	 { return worldNormal; }
-    // C-api: name=getTexCoords
     const SbVec4f &	getTextureCoords() const { return imageTexCoords; }
 
     // Returns the index into the current set of materials of the
     // material active at the intersection point. Note that if the
     // materials are interpolated between vertices, the index will
     // correspond to the material at one of the vertices.
-    // C-api: name=getMtlInd
     int			getMaterialIndex() const { return materialIndex; }
 
     // Returns the path to the object that was intersected
@@ -114,7 +109,6 @@ class INVENTOR_API SoPickedPoint {
     // Returns whether the intersection is actually on the geometry of
     // the character that was hit, as opposed to being on the bounding
     // box. The pick style affects this decision.
-    // C-api: name=isOnGeom
     SbBool		isOnGeometry() const	 { return onGeometry; }
 
     //////////////////////
@@ -125,32 +119,24 @@ class INVENTOR_API SoPickedPoint {
     //
 
     // Returns the detail that corresponds to the given node in the path
-    // C-api: name=getDtl
     const SoDetail *	getDetail(const SoNode *node = NULL) const;
 
     // These return the transformation matrices between world space
     // and the object space corresponding to the given node in the path
-    // C-api: name=getObjToWorld
     SbMatrix		getObjectToWorld(const SoNode *node = NULL) const;
-    // C-api: name=getWorldToObj
     SbMatrix		getWorldToObject(const SoNode *node = NULL) const;
 
     // These return the texture transformation matrices between image
     // space and the object space corresponding to the given node in
     // the path
-    // C-api: name=getObjToImage
     SbMatrix		getObjectToImage(const SoNode *node = NULL) const;
-    // C-api: name=getImageToObj
     SbMatrix		getImageToObject(const SoNode *node = NULL) const;
 
     // These return the intersection point, surface normal, and
     // texture coordinates in the object space corresponding to the
     // given node in the path
-    // C-api: name=getObjPt
     SbVec3f		getObjectPoint(const SoNode *node = NULL) const;
-    // C-api: name=getObjNorm
     SbVec3f		getObjectNormal(const SoNode *node = NULL) const;
-    // C-api: name=getObjTexCoords
     SbVec4f		getObjectTextureCoords(const SoNode *node=NULL) const;
 
     //

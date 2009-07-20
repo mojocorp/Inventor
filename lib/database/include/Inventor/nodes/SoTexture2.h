@@ -76,8 +76,6 @@ class SoGLDisplayList;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTex2
-// C-api: public=filename, image, wrapS, wrapT, model, blendColor
 class INVENTOR_API SoTexture2 : public SoNode {
 
     SO_NODE_HEADER(SoTexture2);

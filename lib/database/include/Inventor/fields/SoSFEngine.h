@@ -68,7 +68,6 @@ class SoEngine;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSEngine
 class INVENTOR_API SoSFEngine : public SoSField {
 
     // Use standard field stuff

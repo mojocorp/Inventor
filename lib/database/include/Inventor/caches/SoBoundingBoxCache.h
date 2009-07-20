@@ -54,7 +54,6 @@
  _______________________________________________________________________
  */
 
-// C-api: end
 
 #ifndef  _SO_BOUNDING_BOX_CACHE
 #define  _SO_BOUNDING_BOX_CACHE

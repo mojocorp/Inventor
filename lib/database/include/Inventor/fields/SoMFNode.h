@@ -68,7 +68,6 @@ class SoNode;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMNode
 class INVENTOR_API SoMFNode : public SoMField {
 
     // Use standard field stuff

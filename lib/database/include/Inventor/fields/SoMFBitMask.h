@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMBitMask
 class INVENTOR_API SoMFBitMask : public SoMFEnum {
     // Use standard field stuff for derived class;
     // the rest is inherited from SoMFEnum

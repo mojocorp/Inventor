@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=label
 class INVENTOR_API SoLabel : public SoNode {
 
     SO_NODE_HEADER(SoLabel);

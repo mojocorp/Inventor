@@ -67,10 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoPerspCam
-// C-api: public= viewportMapping, position, orientation, aspectRatio
-// C-api: public= nearDistance, farDistance, focalDistance
-// C-api: public= heightAngle
 class INVENTOR_API SoPerspectiveCamera : public SoCamera {
 
     SO_NODE_HEADER(SoPerspectiveCamera);
@@ -84,7 +80,6 @@ class INVENTOR_API SoPerspectiveCamera : public SoCamera {
     SoPerspectiveCamera();
 
     // Scales the height of the camera, in this case, the 'heightAngle' field.
-    // C-api: begin
     virtual void	scaleHeight( float scaleFactor );
 
     // Fills in a view volume structure, based on the camera. If the

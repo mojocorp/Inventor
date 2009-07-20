@@ -77,7 +77,6 @@ class SoTexture2;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoLineHLRenderAct
 class INVENTOR_API SoLineHighlightRenderAction : public SoGLRenderAction {
       SO_ACTION_HEADER(SoLineHighlightRenderAction);
  public:
@@ -88,7 +87,6 @@ class INVENTOR_API SoLineHighlightRenderAction : public SoGLRenderAction {
     SoLineHighlightRenderAction();
     
     // Constructor which takes the normal SoGLRenderAction parameters.
-    // C-api: name=CreateVpRgn
     SoLineHighlightRenderAction(const SbViewportRegion &viewportRegion);
 		   
     
@@ -112,13 +110,9 @@ class INVENTOR_API SoLineHighlightRenderAction : public SoGLRenderAction {
     // Set the appearance of the highlight.
     // Application is responsible for redrawing the scene
     // after making changes here.
-    // C-api: name=setCol
     void	    setColor( const SbColor &c );
-    // C-api: name=getCol
     const SbColor & getColor();
-    // C-api: name=setLinePat
     void            setLinePattern( unsigned short pattern );
-    // C-api: name=getLinePat
     unsigned short  getLinePattern();
     void            setLineWidth( float width );
     float           getLineWidth();

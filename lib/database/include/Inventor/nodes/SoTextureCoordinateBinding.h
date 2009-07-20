@@ -75,8 +75,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTexCoordBind
-// C-api: public=value
 class INVENTOR_API SoTextureCoordinateBinding : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinateBinding);
@@ -87,8 +85,6 @@ class INVENTOR_API SoTextureCoordinateBinding : public SoNode {
 	PER_VERTEX_INDEXED =
 	    SoTextureCoordinateBindingElement::PER_VERTEX_INDEXED,
 
-// C-api: end
-// C-api: begin
     };
 
     // Fields

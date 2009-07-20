@@ -72,7 +72,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSearchAct
 class INVENTOR_API SoSearchAction : public SoAction {
 
     SO_ACTION_HEADER(SoSearchAction);
@@ -128,9 +127,7 @@ class INVENTOR_API SoSearchAction : public SoAction {
 
     // Returns/sets whether searching uses normal traversal (switches, etc.)
     // or whether it traverses every single node. Default is FALSE;
-    // C-api: name=isSearchAll
     SbBool		isSearchingAll() const	{ return searchingAll; }
-    // C-api: name=setSearchAll
     void		setSearchingAll(SbBool flag) { searchingAll = flag; }
 
     // Returns resulting path (if interest is not ALL)

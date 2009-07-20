@@ -151,7 +151,6 @@ SoINTERNAL class INVENTOR_API SoNodekitCatalogEntry {
 //    Class: SoNodekitCatalog
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoNkitCat
 class INVENTOR_API SoNodekitCatalog {
 
   public:
@@ -164,50 +163,31 @@ class INVENTOR_API SoNodekitCatalog {
 
     // inquiry routines, to find out about entries in the catalog,
     // Questions may be asked based on name or partNumber.
-    // C-api: name=getPartNum
 	  int        getPartNumber(      const SbName &theName ) const;
     const SbName     &getName(		       int    thePartNumber ) const;
 	  SoType     getType(		       int    thePartNumber ) const;
-    // C-api: name=getTypeByName
 	  SoType     getType(		 const SbName &theName ) const;
-    // C-api: name=getDfltType
 	  SoType     getDefaultType(	       int    thePartNumber ) const;
-    // C-api: name=getDfltTypeByName
 	  SoType     getDefaultType(	 const SbName &theName ) const;
 	  SbBool     isNullByDefault(	       int    thePartNumber ) const;
-    // C-api: name=isNullByDefaultByName
 	  SbBool     isNullByDefault(		 const SbName &theName ) const;
 	  SbBool     isLeaf(		       int    thePartNumber ) const;
-    // C-api: name=isLeafByName
 	  SbBool     isLeaf(		 const SbName &theName ) const;
-    // C-api: name=getParName
     const SbName     &getParentName(	       int    thePartNumber ) const;
-    // C-api: name=getParNameByName
     const SbName     &getParentName(	 const SbName &theName ) const;
-    // C-api: name=getParPartNum
 	  int        getParentPartNumber(      int    thePartNumber ) const;
-    // C-api: name=getParPartNumByName
 	  int        getParentPartNumber(const SbName &theName ) const;
-    // C-api: name=getRtSibName
     const SbName     &getRightSiblingName(      int    thePartNumber ) const;
-    // C-api: name=getRtSibNameByName
     const SbName     &getRightSiblingName(const SbName &theName ) const;
-    // C-api: name=getRtSibPartNum
 	  int        getRightSiblingPartNumber(      int thePartNumber ) const;
-    // C-api: name=getRtSibPartNumByName
 	  int        getRightSiblingPartNumber(const SbName &theName ) const;
 	  SbBool     isList(		       int    thePartNumber ) const;
-    // C-api: name=isListByName
 	  SbBool     isList(		 const SbName &theName ) const;
-    // C-api: name=getLstCntnrType
 	  SoType     getListContainerType(       int    thePartNumber ) const;
-    // C-api: name=getLstCntnrTypeByName
 	  SoType     getListContainerType( const SbName &theName ) const;
     const SoTypeList    &getListItemTypes(       int    thePartNumber ) const;
-    // C-api: name=getListItemTypesByName
     const SoTypeList    &getListItemTypes( const SbName &theName ) const;
 	  SbBool     isPublic(		       int    thePartNumber ) const;
-    // C-api: name=isPubByName
 	  SbBool     isPublic(		 const SbName &theName ) const;
 
   SoEXTENDER public:
@@ -237,7 +217,6 @@ class INVENTOR_API SoNodekitCatalog {
 
     // For adding to the set of node types allowed beneath a list...
     void addListItemType(int thePartNumber, SoType typeToAdd);
-    // C-api: name=addListItemTypeByName
     void addListItemType(const SbName &theName,   SoType typeToAdd);
 
     // For changing the type and defaultType of an entry.

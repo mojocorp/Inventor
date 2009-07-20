@@ -90,8 +90,6 @@ class SbDict;
 class SbCylinderProjector;
 class SoFieldSensor;
 
-// C-api: prefix=SoRotCylDrag
-// C-api: public=rotation
 class INVENTOR_API SoRotateCylindricalDragger : public SoDragger
 {
     SO_KIT_HEADER(SoRotateCylindricalDragger);
@@ -116,9 +114,7 @@ class INVENTOR_API SoRotateCylindricalDragger : public SoDragger
     // is deleted.
     // Note that the axis and radius of the cylinder used by the
     // projector are determined by the dragger during dragStart.
-    // C-api: name=setProj
     void			setProjector(SbCylinderProjector *p);
-    // C-api: name=getProj
     const SbCylinderProjector *	getProjector() const	{ return cylinderProj;}
 
   SoINTERNAL public:

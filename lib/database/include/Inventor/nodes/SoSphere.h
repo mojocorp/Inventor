@@ -68,8 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSph
-// C-api: public=radius
 class INVENTOR_API SoSphere : public SoShape {
 
     SO_NODE_HEADER(SoSphere);

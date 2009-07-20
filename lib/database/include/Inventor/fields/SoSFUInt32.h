@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSUInt32
 class INVENTOR_API SoSFUInt32 : public SoSField {
 
     // Use standard field stuff

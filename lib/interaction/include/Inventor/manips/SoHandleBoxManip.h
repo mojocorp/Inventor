@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoHBoxManip
 class INVENTOR_API SoHandleBoxManip : public SoTransformManip {
 
     SO_NODE_HEADER(SoHandleBoxManip);

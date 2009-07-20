@@ -70,7 +70,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=width, height, depth
 class INVENTOR_API SoCube : public SoShape {
 
     SO_NODE_HEADER(SoCube);

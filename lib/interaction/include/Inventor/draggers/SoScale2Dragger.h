@@ -92,8 +92,6 @@ class SbDict;
 class SbPlaneProjector;
 class SoFieldSensor;
 
-// C-api: prefix=SoScale2Drag
-// C-api: public=scaleFactor
 class INVENTOR_API SoScale2Dragger : public SoDragger
 {
     SO_KIT_HEADER(SoScale2Dragger);

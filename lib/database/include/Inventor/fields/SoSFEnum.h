@@ -75,14 +75,12 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSEnum
 class INVENTOR_API SoSFEnum : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFEnum, int, int);
 
   public:
     // Set value from SbName or character string. Convenience functions.
-    // C-api: name=setStr
     void		setValue(const SbName &name);
 
   SoEXTENDER public:
@@ -106,7 +104,6 @@ class INVENTOR_API SoSFEnum : public SoSField {
     virtual SbBool	findEnumName(int val, const SbName *&name) const;
 };
 
-// C-api: end
 
 ////////////////////////////////////////////
 //
@@ -163,6 +160,5 @@ class INVENTOR_API SoSFEnum : public SoSField {
 //
 /////////////////////////////////////////////////////////////////////////////
 
-// C-api: begin
 
 #endif /* _SO_SF_ENUM_ */

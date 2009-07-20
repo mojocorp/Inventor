@@ -71,7 +71,6 @@
 // be cast to this type.
 typedef void INVENTOR_API SoCallbackListCB(void *userData, void *callbackData);
 
-// C-api: prefix=SoCBList
 class INVENTOR_API SoCallbackList {
     
   public:
@@ -85,17 +84,12 @@ class INVENTOR_API SoCallbackList {
     // parameter, and callback specific data as the second parameter.
     // e.g. (*f)(userData, callbackData);
 
-    // C-api: name=addCB
     void    addCallback(SoCallbackListCB *f, void *userData = NULL);
-    // C-api: name=removeCB
     void    removeCallback(SoCallbackListCB *f, void *userData = NULL);
     
-    // C-api: name=clearCB
     void    clearCallbacks()			    { list.truncate(0); }
-    // C-api: name=getNumCB
     int	    getNumCallbacks() const		    { return list.getLength(); }
 
-    // C-api: name=invokeCB
     void    invokeCallbacks(void *callbackData);
 
   private:

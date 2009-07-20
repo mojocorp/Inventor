@@ -62,7 +62,6 @@
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFTrigger.h>
 
-// C-api: public=on,off,toggle,isOn,isOff
 class INVENTOR_API SoOnOff : public SoEngine {
 
     SO_ENGINE_HEADER(SoOnOff);

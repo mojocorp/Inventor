@@ -59,13 +59,11 @@
 
 #include <Inventor/sensors/SoDelayQueueSensor.h>
 
-// C-api: prefix=SoOneShotSens
 class INVENTOR_API SoOneShotSensor : public SoDelayQueueSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data
     SoOneShotSensor();
-    // C-api: name=CreateCB
     SoOneShotSensor(SoSensorCB *func, void *data);
 
     // Destructor

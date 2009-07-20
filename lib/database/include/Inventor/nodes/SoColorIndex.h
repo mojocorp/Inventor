@@ -70,8 +70,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoColInd
-// C-api: public= index
 class INVENTOR_API SoColorIndex : public SoNode {
 
     SO_NODE_HEADER(SoColorIndex);

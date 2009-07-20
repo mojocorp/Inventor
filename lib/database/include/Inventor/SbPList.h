@@ -83,14 +83,11 @@ class INVENTOR_API SbPList {
     SbPList();
 
     // Constructor allocates enough room for the given number of pointers
-    // C-api: name=createN
     SbPList(int initSize);
 
     // Constructor for copying
-// C-api: end
     SbPList(const SbPList &pl);
 
-// C-api: begin
     // Destructor
     ~SbPList();
 
@@ -109,7 +106,6 @@ class INVENTOR_API SbPList {
     void	remove(int which);
 
     // Returns number of pointers in list
-    // C-api: name=getLen
     int		getLength() const		{ return (int) nPtrs;	}
 
     // Removes all pointers after one with given index, inclusive
@@ -119,11 +115,9 @@ class INVENTOR_API SbPList {
 
     // Copy a PList
     void	copy(const SbPList &pl);
-// C-api: end
 
     SbPList &	operator =(const SbPList &pl)	{ copy(pl); return *this; }
 
-// C-api: begin
     // Returns pointer with given index
     void *&	operator [](int i) const
     	{ if (i >= nPtrs) grow(i); return ptrs[i]; }
@@ -173,14 +167,12 @@ class INVENTOR_API SbPList {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: end
 
 SoINTERNAL class INVENTOR_API SbIntList : public SbPList {
 
   public:
     // Constructors, similar to SbPList
     SbIntList()					{}
-    // C-api: name=createN
     SbIntList(int initSize) : SbPList(initSize) {}
 
     void	append(int integer)
@@ -250,7 +242,6 @@ SoEXTENDER class INVENTOR_API SbStringList : public SbPList {
 	{ return ( (SbString *&) ( (*(const SbPList *) this) [i] ) ); }
 };
 
-// C-api: begin
 
 #if _COMPILER_VERSION>=710
 #  pragma reset woff 1375

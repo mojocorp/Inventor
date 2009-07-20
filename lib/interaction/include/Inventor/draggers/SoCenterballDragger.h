@@ -120,8 +120,6 @@ class SoGetMatrixAction;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoCballDrag
-// C-api: public=rotation,center
 class INVENTOR_API SoCenterballDragger : public SoDragger {
 
     SO_KIT_HEADER(SoCenterballDragger);

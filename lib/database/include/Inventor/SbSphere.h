@@ -76,7 +76,6 @@ class SbBox3f;
 class INVENTOR_API SbSphere {
   public:
 
-// C-api: end
     // Boring default constructor
     SbSphere()	{}
 
@@ -94,13 +93,11 @@ class INVENTOR_API SbSphere {
     const SbVec3f & 	getCenter() const		{ return center; }
     float		getRadius() const		{ return radius; }
 
-// C-api: begin
     // Return a sphere containing a given box
     void	circumscribe(const SbBox3f &box);
 
     // Intersect line and sphere, returning TRUE if there is an intersection
     SbBool	intersect(const SbLine &l, SbVec3f &intersection) const;
-    // C-api: name=intersect2
     SbBool	intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
 
   private:

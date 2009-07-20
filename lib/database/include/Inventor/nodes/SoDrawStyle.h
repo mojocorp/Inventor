@@ -74,8 +74,6 @@
 class SoGLRenderAction;
 class SoCallbackAction;
 
-// C-api: prefix=SoDStyle
-// C-api: public= style, pointSize, lineWidth, linePattern
 class INVENTOR_API SoDrawStyle : public SoNode {
 
     SO_NODE_HEADER(SoDrawStyle);

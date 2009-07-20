@@ -117,8 +117,6 @@ class SoFieldSensor;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoHBoxDrag
-// C-api: public=translation,scaleFactor
 class INVENTOR_API SoHandleBoxDragger : public SoDragger {
 
     SO_KIT_HEADER(SoHandleBoxDragger);

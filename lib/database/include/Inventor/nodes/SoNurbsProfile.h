@@ -66,8 +66,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoNProf
-// C-api: public=index, linkage, knotVector
 class INVENTOR_API SoNurbsProfile : public SoProfile{
 
     SO_NODE_HEADER(SoNurbsProfile);

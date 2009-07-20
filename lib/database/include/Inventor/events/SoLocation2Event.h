@@ -60,7 +60,6 @@
 #include <Inventor/events/SoSubEvent.h>
 
 
-// C-api: prefix=SoLoc2Ev
 class INVENTOR_API SoLocation2Event : public SoEvent {
 
     SO_EVENT_HEADER();

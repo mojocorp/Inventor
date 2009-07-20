@@ -53,7 +53,6 @@
  _______________________________________________________________________
  */
 
-// C-api: end
 
 #ifndef  _SO_COMPACT_PATH_LIST_
 #define  _SO_COMPACT_PATH_LIST_

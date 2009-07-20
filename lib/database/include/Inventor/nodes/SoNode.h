@@ -84,7 +84,6 @@ class SoWriteAction;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
 
 class INVENTOR_API SoNode : public SoFieldContainer {
 
@@ -97,7 +96,6 @@ class INVENTOR_API SoNode : public SoFieldContainer {
     SbBool		isOverride() const		{ return override; }
 
     // Returns type identifier for SoNode class
-    // C-api: expose
     static SoType	getClassTypeId()	{ return classTypeId; }
 
     // Creates and returns an exact copy of the node. If the node is a
@@ -115,7 +113,6 @@ class INVENTOR_API SoNode : public SoFieldContainer {
     // A node's name can be set using setName() (which is a method on
     // SoBase).  These methods allow nodes to be looked up by name.
     static SoNode *	getByName(const SbName &name);
-    // C-api: name=getByNameList
     static int		getByName(const SbName &name, SoNodeList &list);
 
   SoEXTENDER public:

@@ -64,8 +64,6 @@
 #include <Inventor/fields/SoSFBool.h>
 #include <Inventor/fields/SoSFTrigger.h>
 
-// C-api: public=min,max,step,trigger,reset
-// C-api: public=output,syncOut
 class INVENTOR_API SoCounter : public SoEngine {
 
     SO_ENGINE_HEADER(SoCounter);

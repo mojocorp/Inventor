@@ -81,7 +81,6 @@ typedef void SoSceneManagerRenderCB(void *userData, SoSceneManager *mgr);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSceneMgr
 class INVENTOR_API SoSceneManager {
   public:
     // Constructor. 
@@ -93,12 +92,8 @@ class INVENTOR_API SoSceneManager {
     // reinitialize is called to initialize graphics, i.e. for a new window.
     // NOTE: a window MUST be set before calling render() and processEvent().
     // The window size must also be set (call setWindowSize()).
-    // C-api: expose
     virtual void	render(SbBool clearWindow = TRUE, SbBool clearZbuffer = TRUE);
-    // C-api: expose
-    // C-api: name=processEv
     virtual SbBool	processEvent(const SoEvent *event);
-    // C-api: name=reinit
     void		reinitialize();
     
     // Schedule a redraw for some time in the near future.
@@ -109,18 +104,12 @@ class INVENTOR_API SoSceneManager {
     //
     // Set/get the scene graph to render.
     //
-    // C-api: expose
-    // C-api: name=setScene
     virtual void	setSceneGraph(SoNode *newScene);
-    // C-api: expose
-    // C-api: name=getScene
     virtual SoNode *	getSceneGraph() const;
     
     // Set/get the size of the window in which scene mgr should render.
     // This size must be set before render() and processEvent() are called.
-    // C-api: name=setWinSize
     void		setWindowSize(const SbVec2s &newSize);
-    // C-api: name=getWinSize
     const SbVec2s &	getWindowSize() const;
     
     // Set/get the size and origin of the viewport within the window.
@@ -133,27 +122,21 @@ class INVENTOR_API SoSceneManager {
     
     // Sets/gets current viewport region to use for rendering.
     // This can be used instead of setting the size and origin separately.
-    // C-api: name=setVPReg
     void	setViewportRegion(const SbViewportRegion &newRegion);
-    // C-api: name=getVPReg
     const SbViewportRegion &getViewportRegion() const;
 
     //
     // Sets/gets the window background color when in RGB mode.
     // (default to black (0,0,0));
     //
-    // C-api: name=setBkgCol
     void		setBackgroundColor(const SbColor &c);
-    // C-api: name=getBkgCol
     const SbColor &	getBackgroundColor() const  { return bkgColor; }
     
     //
     // Sets/gets the window background color when in color index mode.
     // (default to black (index 0)).
     //
-    // C-api: name=setBkgInd
     void		setBackgroundIndex(int index);
-    // C-api: name=getBkgInd
     int			getBackgroundIndex() const  { return bkgIndex; }
     
     //
@@ -164,9 +147,7 @@ class INVENTOR_API SoSceneManager {
     SbBool		isRGBMode() const	    { return rgbMode; }
     
     // The scene manager will only employ sensors while it is active.
-    // C-api: expose
     virtual void	activate();
-    // C-api: expose
     virtual void	deactivate();
 
     // Render callback - the scene manager employs a sensor to redraw
@@ -174,7 +155,6 @@ class INVENTOR_API SoSceneManager {
     // to happen. The callback should set up its graphics window, then
     // call the scene manager render() method. If the callback is set to NULL
     // (the default), auto-redraw is turned off.
-    // C-api: name=setRenderCB
     void		setRenderCallback(
 			    SoSceneManagerRenderCB *f,
 			    void *userData = NULL);
@@ -189,9 +169,7 @@ class INVENTOR_API SoSceneManager {
     
     // Enable/Disable the realTime global field update which normally
     // happen right after a redraw.
-    // C-api: name=enableRTUpdate
     static void		enableRealTimeUpdate(SbBool flag);
-    // C-api: name=isRTUpdate
     static SbBool	isRealTimeUpdateEnabled()	{ return updateRealTime; }
     
     //

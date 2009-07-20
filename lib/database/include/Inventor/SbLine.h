@@ -75,7 +75,6 @@
 
 class INVENTOR_API SbLine {
   public:
-// C-api: end
     SbLine()	{}
 
     // Construct a line from two points lying on the line.  If you
@@ -87,25 +86,20 @@ class INVENTOR_API SbLine {
     // Set that value!
     void		setValue(const SbVec3f &p0, const SbVec3f &p1);
 
-// C-api: begin
     // Find closest points between the two lines. Return FALSE if they are 
     // parallel, otherwise return TRUE.
-    // C-api: name=getClosestPts
     SbBool		getClosestPoints(const SbLine  &line2,
 					 SbVec3f &ptOnThis,
 					 SbVec3f &ptOnLine2 ) const;
 
     // Returns the closest point on the line to the given point.
-    // C-api: name=getClosestPt
     SbVec3f		getClosestPoint(const SbVec3f &point) const;
 
-// C-api: end
 
     // Accessors
     const SbVec3f &	getPosition() const	{ return pos; }
     const SbVec3f &	getDirection() const	{ return dir; }
 
-// C-api: begin
 
   SoINTERNAL public:
     // Intersect the line with a box, point, line, and triangle.

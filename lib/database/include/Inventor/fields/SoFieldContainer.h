@@ -76,7 +76,6 @@ class SbDict;
 class SoFieldData;
 class SoFieldList;
 
-// C-api: prefix=SoFieldCont
 class INVENTOR_API SoFieldContainer : public SoBase {
 
   public:
@@ -85,24 +84,20 @@ class INVENTOR_API SoFieldContainer : public SoBase {
     static SoType	getClassTypeId()	{ return classTypeId; }
 
     // Sets all fields to default values
-    // C-api: name=setToDflts
     void		setToDefaults();
 
     // Returns TRUE if all fields have their default values (even if
     // the isDefault() flags are not all set)
-    // C-api: name=hasDfltVals
     SbBool		hasDefaultValues() const;
 
     // Returns TRUE if the field values match those of the passed
     // instance, which is assumed to be of the same type as this
-    // C-api: name=fieldsAreEq
     SbBool		fieldsAreEqual(const SoFieldContainer *fc) const;
 
     // Copies field values from the passed instance, which is assumed
     // to be of the same type as this. If the copyConnections flag is
     // TRUE (it is FALSE by default), any connections to (but not
     // from) fields of the instance are copied, as well.
-    // C-api: name=copyFieldVals
     void		copyFieldValues(const SoFieldContainer *fc,
 					SbBool copyConnections = FALSE);
 
@@ -122,12 +117,10 @@ class INVENTOR_API SoFieldContainer : public SoBase {
     // names of the fields, and use SoField::getType() to figure out
     // their types.  The number of fields added to the list is
     // returned. 
-    // C-api: expose
     virtual int		getFields(SoFieldList &list) const;
 
     // Returns a pointer to the field with the given name. If no such
     // field exists, NULL is returned.
-    // C-api: expose
     virtual SoField *	getField(const SbName &fieldName) const;
 
     // Returns (in fieldName) the name of the field pointed to.

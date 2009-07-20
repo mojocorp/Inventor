@@ -45,12 +45,10 @@ class INVENTOR_API SbBox2s {
     SbBox2s()					{ makeEmpty(); };
 
     // Constructor given bounds 
-    // C-api: name=CreateBounds
     SbBox2s(short xmin, short ymin, short xmax, short ymax)
 	{ min.setValue(xmin, ymin); max.setValue(xmax, ymax); }
 
     // Constructor given minimum and maximum points 
-    // C-api: name=CreateMinMax
     SbBox2s(const SbVec2s &_min, const SbVec2s &_max)
 	{ min = _min; max = _max; }
 
@@ -61,26 +59,21 @@ class INVENTOR_API SbBox2s {
     const SbVec2s &	getMax() const			{ return max; }
 
     // Extends Box2s (if necessary) to contain given 2D point
-    // C-api: name=extendByPt
     void	extendBy(const SbVec2s &pt);
 
     // Extends Box2s (if necessary) to contain given Box2s
-    // C-api: name=extendByBox
     void	extendBy(const SbBox2s &r);
 
     // Returns TRUE if intersection of given point and Box2s is not empty
-    // C-api: name=intersectPt
     SbBool	intersect(const SbVec2s &pt) const;
 
     // Returns TRUE if intersection of given Box2s and Box2s is not empty
-    // C-api: name=intersectBox
     SbBool	intersect(const SbBox2s &bb) const;
 
     // Common get and set functions
     void	setBounds(short xmin, short ymin, short xmax, short ymax)
 	{ min.setValue(xmin, ymin); max.setValue(xmax, ymax); }
 
-    // C-api: name=setBoundsMinMax
     void	setBounds(const SbVec2s &_min, const SbVec2s &_max)
 	{ min = _min; max = _max; }
 
@@ -88,7 +81,6 @@ class INVENTOR_API SbBox2s {
 			  short &xmax, short &ymax) const
 	{ min.getValue(xmin, ymin); max.getValue(xmax, ymax); }
 
-    // C-api: name=getBoundsMinMax
     void	getBounds(SbVec2s &_min, SbVec2s &_max) const
 	{ _min = min; _max = max; }
 

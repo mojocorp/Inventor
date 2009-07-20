@@ -86,7 +86,6 @@
 //                                           
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoLtKit
 class INVENTOR_API SoLightKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoLightKit);

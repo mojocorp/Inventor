@@ -73,81 +73,65 @@
 #include <Inventor/SbVec2s.h>
 #include <Inventor/SbVec2f.h>
 
-// C-api: prefix=SbVPReg
 class INVENTOR_API SbViewportRegion {
   public:
     // Default constructor. Sets window size to default 100x100
     SbViewportRegion();
 
     // Constructor that takes window size as width and height in pixels
-    // C-api: name=CreateWH
     SbViewportRegion(short width, short height);
 
     // Constructor that takes window size as width and height in
     // pixels as SbVec2s
-    // C-api: name=CreateVec
     SbViewportRegion(SbVec2s winSize);
 
     // Constructor that takes an SbViewportRegion to copy from
-    // C-api: name=CreateReg
     SbViewportRegion(const SbViewportRegion &vpReg);
 
     // Changes window size to given width and height in pixels
-    // C-api: name=SetWin
     void		setWindowSize(short width, short height)
 	{ setWindowSize(SbVec2s(width, height)); }
 
     // Changes window size to given width and height in pixels, given
     // as SbVec2s
-    // C-api: name=SetWinVec
     void		setWindowSize(SbVec2s winSize);
 
     // Sets viewport to given region, specified as normalized window
     // coordinates: (0,0) is the lower-left corner, (1,1) is the upper-right.
-    // C-api: name=SetVP
     void		setViewport(float left, float bottom,
 				    float width, float height)
 	{ setViewport(SbVec2f(left, bottom), SbVec2f(width, height)); }
 
     // Sets viewport to region with given origin (lower-left corner)
     // and size, given as normalized coordinate vectors.
-    // C-api: name=SetVPVec
     void		setViewport(SbVec2f origin, SbVec2f size);
 
     // Sets viewport to given region, specified as pixel coordinates
     // in window: (0,0) is the lower-left corner
-    // C-api: name=SetVPPix
     void		setViewportPixels(short left, short bottom,
 					  short width, short height)
 	{ setViewportPixels(SbVec2s(left, bottom), SbVec2s(width, height)); }
 
     // Sets viewport to region with given origin (lower-left corner)
     // and size, given as pixel coordinates.
-    // C-api: name=SetVPPixVec
     void		setViewportPixels(SbVec2s origin, SbVec2s size);
 
     // Returns window size in pixels
-    // C-api: name=getWinSize
     const SbVec2s &	getWindowSize() const		{ return windowSize; }
 
     // Returns viewport origin in normalized coordinates
-    // C-api: name=getVPOrigin
     const SbVec2f &	getViewportOrigin() const	{ return vpOrigin; }
 
     // Returns viewport origin in pixels
-    // C-api: name=getVPOriginPix
     const SbVec2s &	getViewportOriginPixels() const	{ return vpOriginPix; }
 
     // Returns viewport size in normalized coordinates
-    // C-api: name=getVPSize
     const SbVec2f &	getViewportSize() const		{ return vpSize; }
 
     // Returns viewport size in pixels
-    // C-api: name=getVPSizePix
     const SbVec2s &	getViewportSizePixels() const	{ return vpSizePix;}
 
     // Returns aspect ratio (width/height) of viewport
-    // C-api: name=getVPAspect
     float		getViewportAspectRatio() const
 	{ return (vpSizePix[1] == 0 ? 1.0f :
 		  (float) vpSizePix[0] / (float) vpSizePix[1]); }
@@ -161,13 +145,10 @@ class INVENTOR_API SbViewportRegion {
     // Sets/returns the pixel-per-inch ratio for the display device
     // the viewport is part of. The default value is 72 (1 pixel per
     // printer's point).
-    // C-api: name=setPixPerInch
     void		setPixelsPerInch(float ppi)   { pixelsPerInch = ppi;  }
-    // C-api: name=getPixPerInch
     float		getPixelsPerInch() const      { return pixelsPerInch; }
 
     // Convenience function that returns number of pixels per printer's point
-    // C-api: name=getPixPerPt
     float		getPixelsPerPoint() const
 	{ return pixelsPerInch / 72.0f; }
 

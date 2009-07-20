@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTxtDtl
 class INVENTOR_API SoTextDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoTextDetail);
@@ -79,13 +78,11 @@ class INVENTOR_API SoTextDetail : public SoDetail {
 
     // Returns the index of the string within a multiple-value string
     // fields of a text node
-    // C-api: name=getStrInd
     int32_t		getStringIndex() const		{ return stringIndex; }
 
     // Returns the index of the character within the string. For
     // example, if the character of detail was the "u" within
     // "Splurmph", the character index would be 3. 
-    // C-api: name=getCharInd
     int32_t		getCharacterIndex() const	{ return charIndex; }
 
     // For Text3, this returns which part was picked:

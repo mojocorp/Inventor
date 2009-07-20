@@ -78,7 +78,6 @@
 
 #include <Inventor/events/SoEvent.h>
 
-// C-api: end
 
 //  *** note: many of the macros use the "do { ... } while(0)"
 //  ***       hack to define multiline blocks as a single statement
@@ -159,7 +158,6 @@
 
 
 
-// C-api: begin
 
 #endif /* _SO_SUB_EVENT_ */
 

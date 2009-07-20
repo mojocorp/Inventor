@@ -91,26 +91,21 @@ class INVENTOR_API SbViewVolume {
     // first is a viewing matrix, which is guaranteed to be an affine
     // transformation.  The second is suitable for use as a projection
     // matrix in GL.
-    // C-api: name=getMxs
     void		getMatrices(SbMatrix &affine, SbMatrix &proj) const;
 
     // Like the method above, but returns the affine and projection parts
     // together in one matrix (i.e. affine.multRight( proj ) ).
-    // C-api: name=getMx
     SbMatrix		getMatrix() const;
 
     // Returns a matrix that transforms the view volume into camera
     // space: it translates the view volume so the view point is at
     // the origin, and rotates it so the view direction is along the
     // negative z axis.
-    // C-api: name=getBoxMx
     SbMatrix		getCameraSpaceMatrix() const;
 
     // Maps a 2d point (in 0 <= x,y <= 1) to a 3d line.
-    // C-api: name=projPtToLine
     void		projectPointToLine(const SbVec2f &pt,
 					SbLine &line) const;
-    // C-api: name=projPtToLinePts				
     void		projectPointToLine(const SbVec2f &pt,
 				       SbVec3f &line0, SbVec3f &line1) const;
 
@@ -119,24 +114,20 @@ class INVENTOR_API SbViewVolume {
     // The z-screen coordinate represents the homogonized z coordinate
     // which goes (non-linearly) from 0 at the near clipping plane to
     // 1 at the far clipping plane.
-    // C-api: name=projToScreen
     void		projectToScreen(const SbVec3f &src,
 					SbVec3f &dst) const;
 
     // Returns a plane parallel to the near (or far) plane of the view
     // volume at a given distance from the projection point (eye)
-    // C-api: name=getPln
     SbPlane		getPlane(float distFromEye) const;
 
     // Returns the point along the line of sight at the given distance
     // from the projection point (eye)
-    // C-api: name=getSightPt
     SbVec3f		getSightPoint(float distFromEye) const;
 
     // Returns the projection of a given point in normalized screen
     // coords (see projectToScreen()) onto the plane parallel to the
     // near plane that is at distFromEye units from the eye
-    // C-api: name=getPlnPt
     SbVec3f		getPlanePoint(float distFromEye,
 				      const SbVec2f &normPoint) const;
 
@@ -145,7 +136,6 @@ class INVENTOR_API SbViewVolume {
     // the view and it's positive y-axis is up. If rightAngleOnly is
     // TRUE, it will come as close as it can to this goal by using
     // only 90 degree rotations.
-    // C-api: name=getAlignRot
     SbRotation		getAlignRotation(SbBool rightAngleOnly = FALSE) const;
 
     // Returns a scale factor that would scale a unit sphere centered
@@ -157,21 +147,18 @@ class INVENTOR_API SbViewVolume {
     // Projects the given 3D bounding box onto the near plane and
     // returns the size (in normalized screen coords) of the
     // rectangular region that encloses it
-    // C-api: name=projBox
     SbVec2f		projectBox(const SbBox3f &box) const;
 
     // Given a view volume, this narrows the view to the given sub-rectangle
     // of the near plane. The coordinates of the rectangle are between
     // 0 and 1, where (0,0) is the lower-left corner of the near plane
     // and (1,1) is the upper-right corner.
-    // C-api: name=narrow2d
     SbViewVolume	narrow(float left,  float bottom,
 			       float right, float top) const;
 
     // Narrow a view volume by the given box.  The box must lie inside
     // the unit cube, and the view will be shrunk according to the
     // size of the box.
-    // C-api: name=narrow3d
     SbViewVolume	narrow(const SbBox3f &box) const;
 
     // Sets up an orthographic view volume with the given sides.
@@ -184,26 +171,22 @@ class INVENTOR_API SbViewVolume {
     // and aspect ratio. The parameters are the same as for the GL
     // perspective() routine, except that the field of view angle is
     // specified in radians.
-    // C-api: name=persp
     void		perspective(float fovy, float aspect,
 				    float nearVal, float farVal);
 
     // Rotate the camera view direction.  Note that this accomplishes
     // the reverse of doing a GL rotate() command after defining a
     // camera, which rotates the scene viewed by the camera.
-    // C-api: name=rotCam
     void		rotateCamera(const SbRotation &q);
 
     // Translate the camera viewpoint.  Note that this accomplishes
     // the reverse of doing a GL translate() command after defining a
     // camera, which translates the scene viewed by the camera.
-    // C-api: name=xlateCam
     void		translateCamera(const SbVec3f &v);
 
     // Returns the positive z axis in eye space.  In this coordinate
     // system, the z value of the near plane should be GREATER than the
     // z value of the far plane.
-    // C-api: name=zVec
     SbVec3f		zVector() const;
 
     // Returns a narrowed view volume which contains as tightly as
@@ -228,13 +211,10 @@ class INVENTOR_API SbViewVolume {
 	PERSPECTIVE 
     };
 
-    // C-api: name=getProjType
     ProjectionType	getProjectionType() const  { return type; }
 
-    // C-api: name=getProjPt
     const SbVec3f &	getProjectionPoint() const { return projPoint; }
 
-    // C-api: name=getProjDir
     const SbVec3f &	getProjectionDirection() const   { return projDir; }
 
     // Returns distance from projection point to near plane

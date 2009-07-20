@@ -98,7 +98,6 @@
 #include <Inventor/fields/SoFieldData.h>
 #include <Inventor/nodes/SoNode.h>
 
-// C-api: end
 
 //  *** note: many of the macros use the "do { ... } while(0)"
 //  ***       hack to define multiline blocks as a single statement
@@ -384,7 +383,6 @@ do {									      \
 				enumValue);				      \
     } while (0)
 
-// C-api: begin
 
 #endif /* _SO_SUB_NODE_ */
 

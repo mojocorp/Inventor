@@ -60,7 +60,6 @@
 #include <Inventor/events/SoSubEvent.h>
 
 
-// C-api: prefix=SoBtnEv
 class INVENTOR_API SoButtonEvent : public SoEvent {
 
     SO_EVENT_HEADER();

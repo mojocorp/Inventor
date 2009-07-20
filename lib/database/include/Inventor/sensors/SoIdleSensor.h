@@ -61,13 +61,11 @@
 
 #include <Inventor/sensors/SoDelayQueueSensor.h>
 
-// C-api: prefix=SoIdleSens
 class INVENTOR_API SoIdleSensor : public SoDelayQueueSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data
     SoIdleSensor();
-    // C-api: name=CreateCB
     SoIdleSensor(SoSensorCB *func, void *data);
 
     // Destructor

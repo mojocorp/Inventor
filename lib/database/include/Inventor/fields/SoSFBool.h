@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSBool
 class INVENTOR_API SoSFBool : public SoSField {
 
     // Use standard field stuff

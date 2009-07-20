@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoCubeDtl
 class INVENTOR_API SoCubeDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoCubeDetail);

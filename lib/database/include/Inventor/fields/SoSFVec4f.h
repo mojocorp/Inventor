@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSV4f
 class INVENTOR_API SoSFVec4f : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFVec4f, SbVec4f, const SbVec4f &);
@@ -76,11 +75,9 @@ class INVENTOR_API SoSFVec4f : public SoSField {
     //
 
     // Set value from 4 floats
-    // C-api: name=SetX_Y_Z_W
     void	setValue(float x, float y, float z, float w);
 
     // Set value from array of 4 floats
-    // C-api: name=SetXYZW
     void	setValue(const float xyzw[4]);
 
   SoINTERNAL public:

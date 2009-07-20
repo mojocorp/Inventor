@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMStr
 class INVENTOR_API SoMFString : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFString, SbString, const SbString &);
@@ -75,11 +74,9 @@ class INVENTOR_API SoMFString : public SoMField {
     //
 
     // Set values from array of character strings
-    // C-api: name=SetStrs
     void	setValues(int start, int num, const char *strings[]);
 
     // Set one value from character string
-    // C-api: name=SetStr
     void	setValue(const char *string);
 
     // Convenience function to delete text from consecutive strings.

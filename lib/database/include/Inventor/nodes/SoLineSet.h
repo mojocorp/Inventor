@@ -76,8 +76,6 @@ class SoState;
 //////////////////////////////////////////////////////////////////////////////
 
 
-// C-api: prefix=SoLSet
-// C-api: public=startIndex, numVertices, vertexProperty
 class INVENTOR_API SoLineSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoLineSet);

@@ -72,7 +72,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=path
 class INVENTOR_API SoPathSwitch : public SoGroup {
 
     SO_NODE_HEADER(SoPathSwitch);
@@ -85,7 +84,6 @@ class INVENTOR_API SoPathSwitch : public SoGroup {
     SoPathSwitch();
 
     // Constructor that takes approximate number of children
-    // C-api: name=CreateN
     SoPathSwitch(int nChildren);
 
   SoEXTENDER public:

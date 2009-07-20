@@ -69,8 +69,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTexPln
-// C-api: public=directionS, directionT
 class INVENTOR_API SoTextureCoordinatePlane : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinatePlane);

@@ -72,7 +72,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoBBoxAct
 class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
 
     SO_ACTION_HEADER(SoGetBoundingBoxAction);
@@ -88,19 +87,15 @@ class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
     virtual ~SoGetBoundingBoxAction();
 
     // Sets current viewport region to use for action
-    // C-api: name=setVPReg
     void		setViewportRegion(const SbViewportRegion &newRegion);
 
     // Returns current viewport region
-    // C-api: name=getVPReg
     const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
 
     // Returns computed bounding box
-    // C-api: name=getBBox
     SbBox3f		getBoundingBox() const	{ return box.project(); }
 
     // Returns bounding box before transform
-    // C-api: name=getXfBBox
     SbXfBox3f &		getXfBoundingBox()	{ return box; }
 
     // Returns computed center point
@@ -111,11 +106,9 @@ class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
     // defined to have the viewpoint at the origin, with the direction
     // of view along the negative z axis. This space can be used to
     // determine distances of objects from the camera.
-    // C-api: name=setInCamSpace
     void		setInCameraSpace(SbBool flag)	{ cameraSpace = flag; }
 
     // Returns camera space flag
-    // C-api: name=isInCamSpace
     SbBool		isInCameraSpace() const		{ return cameraSpace; }
 
     // set a path to do a resetTransform/resetBoundingBox on. The default

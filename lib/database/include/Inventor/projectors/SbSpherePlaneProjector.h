@@ -64,7 +64,6 @@
 
 #include <Inventor/projectors/SbSphereSectionProjector.h>
 
-// C-api: prefix=SbSphPlnProj
 class INVENTOR_API SbSpherePlaneProjector : public SbSphereSectionProjector
 {
   public:
@@ -77,7 +76,6 @@ class INVENTOR_API SbSpherePlaneProjector : public SbSphereSectionProjector
     SbSpherePlaneProjector(float edgeTol = 0.9, SbBool orientToEye = TRUE);
 
     // Constructor taking the sphere.
-    // C-api: name=createSph
     SbSpherePlaneProjector( const  SbSphere &sph,
 			    float  edgeTol = 0.9,
 			    SbBool orientToEye = TRUE);

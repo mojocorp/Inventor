@@ -79,8 +79,6 @@ class SoCoordinateElement;
 class SoNormalBundle;
 class SoCoordinateElement;
 
-// C-api: prefix=SoIndTriStripSet
-// C-api: public=coordIndex, materialIndex, normalIndex, textureCoordIndex, vertexProperty
 class INVENTOR_API SoIndexedTriangleStripSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedTriangleStripSet);

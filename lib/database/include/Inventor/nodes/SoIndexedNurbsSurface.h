@@ -76,11 +76,6 @@ class SoProfileBundle;
 class SoShapeBundle;
 class _SoNurbsNurbsTessellator;
 
-// C-api: prefix=SoIndNurbs
-// C-api: public=numUControlPoints, numVControlPoints, coordIndex
-// C-api: public=uKnotVector, vKnotVector,
-// C-api: public=numSControlPoints, numTControlPoints, textureCoordIndex
-// C-api: public=sKnotVector, tKnotVector
 class INVENTOR_API SoIndexedNurbsSurface : public SoShape {
 
     SO_NODE_HEADER(SoIndexedNurbsSurface);

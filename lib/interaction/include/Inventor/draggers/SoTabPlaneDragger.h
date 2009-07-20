@@ -90,8 +90,6 @@ class SoGLRenderAction;
 class SoRayPickAction;
 class SoFieldSensor;
 
-// C-api: prefix=SoTabPlnDrag
-// C-api: public=translation,scaleFactor
 class INVENTOR_API SoTabPlaneDragger : public SoDragger
 {
     // Define typeId and name stuff
