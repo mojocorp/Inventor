@@ -56,7 +56,7 @@
 #ifndef  _SB_COLOR_H_
 #define  _SB_COLOR_H_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec3f.h>
 
 
 //////////////////////////////////////////////////////////////////////////////

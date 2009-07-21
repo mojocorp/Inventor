@@ -58,6 +58,7 @@
 #include <Inventor/actions/SoPickAction.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/nodes/SoRotationXYZ.h>
+#include <Inventor/SbRotation.h>
 
 SO_NODE_SOURCE(SoRotationXYZ);
 

@@ -63,7 +63,7 @@
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/SbColor.h>
 #include <Inventor/SbViewportRegion.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec2s.h>
 #ifdef SB_HAS_X11
 #   include <X11/Xlib.h>
 #endif

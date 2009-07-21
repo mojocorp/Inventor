@@ -56,7 +56,6 @@
 #ifndef  _SO_CALLBACK_
 #define  _SO_CALLBACK_
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/nodes/SoSubNode.h>
 
 //////////////////////////////////////////////////////////////////////////////

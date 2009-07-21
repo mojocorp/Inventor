@@ -56,7 +56,7 @@
 #ifndef  _SO_VIEWING_MATRIX_ELEMENT
 #define  _SO_VIEWING_MATRIX_ELEMENT
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/elements/SoReplacedElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

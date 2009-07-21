@@ -56,7 +56,7 @@
 #ifndef  _SO_TEXT_3_
 #define  _SO_TEXT_3_
 
-#include <Inventor/SbBox.h>
+#include <Inventor/SbBox2f.h>
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/fields/SoSFBitMask.h>

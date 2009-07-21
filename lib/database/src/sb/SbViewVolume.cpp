@@ -51,8 +51,13 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
-#include <Inventor/SbBox.h>
+#include <Inventor/SbViewVolume.h>
+#include <Inventor/SbBox2f.h>
+#include <Inventor/SbRotation.h>
+#include <Inventor/SbLine.h>
+#include <Inventor/SbPlane.h>
+#include <Inventor/SbMatrix.h>
+#include <Inventor/SbVec2f.h>
 #include <math.h> // for M_PI_2
 
 ////////////////////////////////////////////
@@ -175,9 +180,9 @@ SbViewVolume::getMatrices(SbMatrix &affine, SbMatrix &proj) const
     float farPlusNear = far1 + nearDist;
 
     if (type == ORTHOGRAPHIC) {
-	proj[0][0] =   2.0 / rightMinusLeft;
-	proj[1][1] =   2.0 / topMinusBottom;
-	proj[2][2] =  -2.0 / farMinusNear;
+	proj[0][0] =   2.0f / rightMinusLeft;
+	proj[1][1] =   2.0f / topMinusBottom;
+	proj[2][2] =  -2.0f / farMinusNear;
 
 	proj[3][0] = - rightPlusLeft / rightMinusLeft;
 	proj[3][1] = - topPlusBottom / topMinusBottom;
@@ -185,17 +190,17 @@ SbViewVolume::getMatrices(SbMatrix &affine, SbMatrix &proj) const
     }
     else {			// type == PERSPECTIVE
 
-	proj[0][0] = 2.0 * nearDist / rightMinusLeft;
+	proj[0][0] = 2.0f * nearDist / rightMinusLeft;
 
-	proj[1][1] = 2.0 * nearDist / topMinusBottom;
+	proj[1][1] = 2.0f * nearDist / topMinusBottom;
 
 	proj[2][0] = rightPlusLeft / rightMinusLeft;
 	proj[2][1] = topPlusBottom / topMinusBottom;
 	proj[2][2] = - farPlusNear / farMinusNear;
-	proj[2][3] = - 1.0;
+	proj[2][3] = - 1.0f;
 
-	proj[3][2] = - 2.0 * nearDist * far1 / farMinusNear;
-	proj[3][3] = 0.0;
+	proj[3][2] = - 2.0f * nearDist * far1 / farMinusNear;
+	proj[3][3] = 0.0f;
     }
 }
 
@@ -239,8 +244,8 @@ SbViewVolume::projectPointToLine(const SbVec2f &pt,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float ptx = 2.0 * pt[0] - 1.0;
-    float pty = 2.0 * pt[1] - 1.0;
+    float ptx = 2.0f * pt[0] - 1.0f;
+    float pty = 2.0f * pt[1] - 1.0f;
     SbMatrix mat = getMatrix().inverse();
     float x, y, z, w;
 
@@ -254,10 +259,10 @@ SbViewVolume::projectPointToLine(const SbVec2f &pt,
     line0[2] = z/w;
 
     /* ptz = +1 */
-    x += 2.0 * mat[2][0];
-    y += 2.0 * mat[2][1];
-    z += 2.0 * mat[2][2];
-    w += 2.0 * mat[2][3];
+    x += 2.0f * mat[2][0];
+    y += 2.0f * mat[2][1];
+    z += 2.0f * mat[2][2];
+    w += 2.0f * mat[2][3];
     line1[0] = x/w;
     line1[1] = y/w;
     line1[2] = z/w;
@@ -298,9 +303,9 @@ SbViewVolume::projectToScreen(const SbVec3f &src, SbVec3f &dst) const
 
     // dst will now range from -1 to +1 in x, y, and z. Normalize this
     // to range from 0 to 1.
-    dst[0] = (1.0 + dst[0]) / 2.0;
-    dst[1] = (1.0 + dst[1]) / 2.0;
-    dst[2] = (1.0 + dst[2]) / 2.0;
+    dst[0] = (1.0f + dst[0]) / 2.0f;
+    dst[1] = (1.0f + dst[1]) / 2.0f;
+    dst[2] = (1.0f + dst[2]) / 2.0f;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -405,7 +410,7 @@ SbViewVolume::getAlignRotation(SbBool rightAngleOnly) const
 	// degree rot about z, not y, which screws things up.
 	float thetaCos = newRight.dot(right);
 	if (thetaCos < -0.99999) {
-	    result *= SbRotation( SbVec3f(0,1,0), 3.14159 );
+	    result *= SbRotation( SbVec3f(0.f,1.f,0.f), 3.14159f );
 	}
 	else {
 	    result *= SbRotation(newRight, right);
@@ -428,7 +433,7 @@ SbViewVolume::getAlignRotation(SbBool rightAngleOnly) const
 	// Find which of the 4 rotations that are multiples of 90
 	// degrees about the y-axis brings X closest to right
 
-	max = -237.4;
+	max = -237.4f;
 
 	for (i = 0; i < 4; i++) {
 
@@ -692,7 +697,7 @@ SbViewVolume::perspective(float fovy, float aspect,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float tanfov = tan(fovy / 2.0);
+    float tanfov = tan(fovy / 2.0f);
 
     type = PERSPECTIVE;
 
@@ -828,7 +833,7 @@ SbViewVolume::zNarrow(float nearVal, float farVal) const
     // find the old near plane
     plane = SbPlane(zVec, llfO);
     // offset it
-    plane.offset((nearVal - 1.0) * nearToFar);
+    plane.offset((nearVal - 1.0f) * nearToFar);
 
     // intersect various lines with the new near plane to find the new
     // info for the view volume
@@ -867,7 +872,7 @@ SbViewVolume::scale(float factor)
     if (factor < 0) factor = -factor;
 
     // Compute amount to move corners
-    float	diff = (1.0 - factor) / 2.0;
+    float	diff = (1.0f - factor) / 2.0f;
 
     // Find vectors from lower left corner to lower right corner and
     // to upper left corner and scale them
@@ -905,7 +910,7 @@ SbViewVolume::scaleWidth(float ratio)
     SbVec3f	widthVec = lrfO - llfO;
 
     // Compute amount to move corners left or right and scale vector
-    widthVec *= (1.0 - ratio) / 2.0;
+    widthVec *= (1.0f - ratio) / 2.0f;
 
     // Move all corners in correct direction
     llfO += widthVec;
@@ -938,7 +943,7 @@ SbViewVolume::scaleHeight(float ratio)
     SbVec3f	heightVec = ulfO - llfO;
 
     // Compute amount to move corners up or down and scale vector
-    heightVec *= (1.0 - ratio) / 2.0;
+    heightVec *= (1.0f - ratio) / 2.0f;
 
     // Move all corners in correct direction
     llfO += heightVec;

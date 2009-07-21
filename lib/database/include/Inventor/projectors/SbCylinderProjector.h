@@ -62,6 +62,7 @@
 #define _SB_CYLINDER_PROJECTOR_
 
 #include <Inventor/projectors/SbProjector.h>
+#include <Inventor/SbCylinder.h>
 
 // C-api: abstract
 // C-api: prefix=SbCylProj

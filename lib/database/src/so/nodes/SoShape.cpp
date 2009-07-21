@@ -53,7 +53,6 @@
 
 
 #include <Inventor/misc/SoGL.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/SoPrimitiveVertex.h>
@@ -80,6 +79,7 @@
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoCube.h>
 #include <Inventor/nodes/SoShape.h>
+#include <Inventor/SbBox2f.h>
 
 SO_NODE_ABSTRACT_SOURCE(SoShape);
 

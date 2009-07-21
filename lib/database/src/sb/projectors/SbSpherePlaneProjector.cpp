@@ -53,6 +53,8 @@
 
 #include <Inventor/projectors/SbSpherePlaneProjector.h>
 #include <Inventor/errors/SoDebugError.h>
+#include <Inventor/SbLine.h>
+#include <Inventor/SbRotation.h>
 #include <stdio.h>
 
 ////////////////////////////////////////////////////////////////////////

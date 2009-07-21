@@ -56,13 +56,14 @@
 #ifndef  _SO_CAMERA_
 #define  _SO_CAMERA_
 
-#include <Inventor/SbBox.h>
+#include <Inventor/SbBox3f.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/fields/SoSFEnum.h>
+#include <Inventor/SbViewVolume.h>
 
 class SbViewportRegion;
 

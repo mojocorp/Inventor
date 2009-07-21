@@ -57,6 +57,10 @@
 #define  _SO_RAY_PICK_ACTION_
 
 #include <Inventor/SoLists.h>
+#include <Inventor/SbBox3f.h>
+#include <Inventor/SbMatrix.h>
+#include <Inventor/SbViewVolume.h>
+#include <Inventor/SbLine.h>
 #include <Inventor/actions/SoPickAction.h>
 
 //////////////////////////////////////////////////////////////////////////////

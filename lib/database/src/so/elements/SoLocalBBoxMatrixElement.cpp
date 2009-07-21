@@ -53,6 +53,7 @@
 
 #include <Inventor/elements/SoLocalBBoxMatrixElement.h>
 #include <Inventor/errors/SoDebugError.h>
+#include <Inventor/SbRotation.h>
 
 SO_ELEMENT_SOURCE(SoLocalBBoxMatrixElement);
 

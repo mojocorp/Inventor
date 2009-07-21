@@ -52,10 +52,11 @@
  */
 
 
-#include <Inventor/SbBox.h>
+#include <Inventor/SbBox3f.h>
 #include <Inventor/misc/SoNormalGenerator.h>
 
 #include <string.h>
+#include <math.h>
 
 ////////////////////////////////////////////////////////////////////////
 //

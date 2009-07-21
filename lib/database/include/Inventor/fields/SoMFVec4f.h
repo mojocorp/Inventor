@@ -57,7 +57,7 @@
 #define  _SO_MF_VEC4F_
 
 #include <Inventor/fields/SoSubField.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec4f.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

@@ -53,7 +53,9 @@
 
 #include <Inventor/projectors/SbPlaneProjector.h>
 #include <Inventor/errors/SoDebugError.h>
+#include <Inventor/SbLine.h>
 #include <stdio.h>
+#include <math.h>
 
 ////////////////////////////////////////////////////////////////////////
 //

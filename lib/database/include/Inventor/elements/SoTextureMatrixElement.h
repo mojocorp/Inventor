@@ -56,7 +56,7 @@
 #ifndef  _SO_TEXTURE_MATRIX_ELEMENT
 #define  _SO_TEXTURE_MATRIX_ELEMENT
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/elements/SoAccumulatedElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

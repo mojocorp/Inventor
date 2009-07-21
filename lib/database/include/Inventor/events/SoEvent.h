@@ -58,7 +58,8 @@
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbViewportRegion.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec2s.h>
+#include <Inventor/SbVec2f.h>
 #include <Inventor/SbTime.h>
 #include <Inventor/SoType.h>
 

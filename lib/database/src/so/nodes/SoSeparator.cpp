@@ -51,7 +51,8 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbBox.h>
+#include <Inventor/SbBox3f.h>
+#include <Inventor/SbXfBox3f.h>
 #include <Inventor/actions/SoAction.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>

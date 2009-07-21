@@ -53,7 +53,8 @@
  */
 
 #include <Inventor/misc/SoGL.h>
-#include <Inventor/SbBox.h>
+#include <Inventor/SbBox2f.h>
+#include <Inventor/SbBox3f.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>

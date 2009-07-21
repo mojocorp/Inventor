@@ -56,7 +56,6 @@
 #ifndef _SO_TEXT_DETAIL_
 #define _SO_TEXT_DETAIL_
 
-#include <Inventor/SbBox.h>
 #include <Inventor/details/SoSubDetail.h>
 #include <Inventor/nodes/SoText3.h>
 

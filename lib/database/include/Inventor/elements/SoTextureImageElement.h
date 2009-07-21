@@ -57,6 +57,7 @@
 #define  _SO_TEXTURE_IMAGE_ELEMENT
 
 #include <Inventor/SbColor.h>
+#include <Inventor/SbVec2s.h>
 #include <Inventor/elements/SoReplacedElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

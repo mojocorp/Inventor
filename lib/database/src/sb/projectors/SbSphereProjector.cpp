@@ -52,6 +52,7 @@
  */
 
 #include <Inventor/projectors/SbSphereProjector.h>
+#include <Inventor/SbRotation.h>
 #include <stdio.h>
 
 ////////////////////////////////////////////////////////////////////////

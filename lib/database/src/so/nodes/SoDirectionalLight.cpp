@@ -55,6 +55,8 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoGLLightIdElement.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
+#include <Inventor/SbVec3f.h>
+#include <Inventor/SbVec4f.h>
 
 SO_NODE_SOURCE(SoDirectionalLight);
 

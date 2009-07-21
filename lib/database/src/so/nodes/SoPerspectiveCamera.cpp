@@ -52,6 +52,9 @@
  */
 
 #include <Inventor/nodes/SoPerspectiveCamera.h>
+#include <Inventor/SbSphere.h>
+#include <Inventor/SbMatrix.h>
+#include <Inventor/SbRotation.h>
 #include <math.h>
 
 #define MINIMUM_NEAR_PLANE 0.01	    /* minimum near clipping distance */

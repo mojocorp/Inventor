@@ -58,6 +58,8 @@
 
 #include <Inventor/fields/SoSubField.h>
 
+#include <Inventor/SbPlane.h>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  SoMFPlane subclass of SoMField.

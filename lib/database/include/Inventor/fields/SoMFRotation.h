@@ -57,7 +57,7 @@
 #define  _SO_MF_ROTATION_
 
 #include <Inventor/fields/SoSubField.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbRotation.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

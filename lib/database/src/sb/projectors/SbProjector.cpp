@@ -52,6 +52,7 @@
  */
 
 #include <Inventor/projectors/SbProjector.h>
+#include <Inventor/SbLine.h>
 #include <stdio.h>
 
 ////////////////////////////////////////////////////////////////////////

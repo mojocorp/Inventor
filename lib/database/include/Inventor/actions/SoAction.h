@@ -59,6 +59,8 @@
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/misc/SoTempPath.h>
 #include <Inventor/SoPath.h>
+#include <Inventor/actions/SoActionMethodList.h>
+#include <Inventor/actions/SoEnabledElementsList.h>
 
 // This is the type of a method function pointer in the table
 class SoAction;
@@ -66,105 +68,6 @@ class SoCompactPathList;
 class SoNode;
 class SoState;
 class SoLightPath;
-
-typedef void	(*SoActionMethod)(SoAction *, SoNode *);
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoActionMethodList
-//
-//  Internal class.  A list of routines to call, one for each node type.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-#if _COMPILER_VERSION>=710
-#  pragma set woff 1375
-#endif
-
-SoINTERNAL class INVENTOR_API SoActionMethodList : public SbPList {
-
-  public:
-    // Constructor.  Pass in list from parent action.
-    SoActionMethodList(SoActionMethodList *parentList);
-
-    // Operator used to get and set methods.  The list will grow
-    // dynamically as we access items off the end of the list, and
-    // entries will be initialized to NULL.
-    SoActionMethod &	operator [](int i) const
-	{ return ((SoActionMethod &)((*(const SbPList *)this)[i])); }
-
-    // Add a method to the appropriate place in the list.
-    void		addMethod(SoType nodeType, SoActionMethod method);
-    
-    // This MUST be called before using the list.  It fills in NULL
-    // entries with their parents' method.
-    void		setUp();
-
-  private:
-    SoActionMethod	parentMethod(SoType);	// Method from parent node
-    SoActionMethodList	*parent;
-    int			numValidTypes;   // Stores the number of types at most
-                                         // recent setup
-
-    // Dummy action used internally
-    static void		dummyAction(SoAction *, SoNode *);
-
-};
-
-#if _COMPILER_VERSION>=710
-#  pragma reset woff 1375
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoEnabledElementsList
-//
-//  Internal class.  A list of elements enabled for a given action
-//  class. Lists of elements can be merged, allowing an action class
-//  to inherit enabled elements from its parent class.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-SoINTERNAL class INVENTOR_API SoEnabledElementsList {
-
-  public:
-    // Constructor
-    SoEnabledElementsList(SoEnabledElementsList *parentList);
-
-    // Returns list of elements.  This automatically merges the
-    // elements with elements enabled in the parentList.
-    const SoTypeList &	getElements() const;
-
-    // Adds an element to the list if it's not already in it
-    void		enable(SoType elementType, int stackIndex);
-
-    // Enables all elements from the given list that are not already
-    // enabled in this one
-    void		merge(const SoEnabledElementsList &list);
-
-    // Returns the current setting of the global counter used to
-    // determine when lists are out of date.
-    static int		getCounter()		{ return counter; }
-
-  private:
-    // This maintains a global counter used to determine when lists
-    // are out of date. It is incremented whenever a new element is
-    // added to a list.
-    static int		counter;
-
-    // And a per-instance counter so we don't merge enabled elements
-    // with the parent list unnecessarily.
-    int			setUpCounter;
-
-    // This list holds type id's of enabled elements, indexed by the
-    // stack index of the elements.
-    SoTypeList		elements;
-
-    // Pointer to parent's list of enabled elements (NULL for
-    // SoAction).
-    SoEnabledElementsList	*parent;
-};
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -180,7 +83,7 @@ SoINTERNAL class INVENTOR_API SoEnabledElementsList {
 // C-api: prefix=SoAct
 class INVENTOR_API SoAction {
 
-  public:
+public:
     // Destructor
     // C-api: expose
     virtual ~SoAction();
@@ -188,7 +91,7 @@ class INVENTOR_API SoAction {
     // Returns type identifier for SoAction class
     // C-api: expose
     static SoType	getClassTypeId()
-			    { return classTypeId; }
+    { return classTypeId; }
 
     // Returns type identifier for action
     // C-api: expose
@@ -224,10 +127,10 @@ class INVENTOR_API SoAction {
     // C-api: expose
     virtual void	invalidateState();
     
-  SoEXTENDER public:
+    SoEXTENDER public:
 
-    // Null action method that can be stored in lookup table when desired
-    static void		nullAction(SoAction *, SoNode *);
+        // Null action method that can be stored in lookup table when desired
+        static void		nullAction(SoAction *, SoNode *);
 
     // This enum is used to determine what the action is being applied to
     enum AppliedCode {
@@ -258,11 +161,11 @@ class INVENTOR_API SoAction {
     // determine the current path list, the original path list, and
     // whether the current list is the last one from the original
     const SoPathList *	getPathListAppliedTo() const
-	{ return appliedTo.pathList; }
+    { return appliedTo.pathList; }
     const SoPathList *	getOriginalPathListAppliedTo() const
-	{ return appliedTo.origPathList; }
+    { return appliedTo.origPathList; }
     SbBool		isLastPathListAppliedTo() const
-	{ return appliedTo.isLastPathList; }
+    { return appliedTo.isLastPathList; }
 
     // Returns path code based on where current node (the node at the
     // end of the current path) lies with respect to the path(s) the
@@ -271,17 +174,17 @@ class INVENTOR_API SoAction {
     // children that continue the paths and numIndices is set to the
     // number of such children.
     PathCode	getPathCode(int &numIndices, const int *&indices)
-	{   if (appliedTo.curPathCode == IN_PATH) {
-    	        usePathCode(numIndices, indices);
-	    }
-    	    return appliedTo.curPathCode;
-	}
+    {   if (appliedTo.curPathCode == IN_PATH) {
+            usePathCode(numIndices, indices);
+        }
+        return appliedTo.curPathCode;
+    }
 
 
     // Does traversal of a graph rooted by a node
     void		traverse(SoNode *node)
-	{ (*traversalMethods)[
-	    SoNode::getActionMethodIndex(node->getTypeId())](this, node); }
+    { (*traversalMethods)[
+                SoNode::getActionMethodIndex(node->getTypeId())](this, node); }
 
     // Returns TRUE if the traversal has reached a termination condition
     SbBool		hasTerminated() const	{ return terminated; }
@@ -294,8 +197,8 @@ class INVENTOR_API SoAction {
     // Get the state from the action
     SoState *		getState() const	{ return state; }
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL public:
+        static void		initClass();
 
     // Initialize ALL Inventor action classes
     static void		initClasses();
@@ -321,13 +224,13 @@ class INVENTOR_API SoAction {
     // Optimized versions of push/pop when we know path codes won't
     // change:
     void		pushCurPath()
-    			{ curPath.append(-1); }
+    { curPath.append(-1); }
     void		popPushCurPath(int childIndex)
-			{ curPath.setTail(childIndex);}
+    { curPath.setTail(childIndex);}
     void		popCurPath()
-			{ curPath.pop(); }
+    { curPath.pop(); }
 
-  protected:
+protected:
     // Constructor
     SoAction();
 
@@ -353,8 +256,8 @@ class INVENTOR_API SoAction {
     // the list.
     virtual SbBool	shouldCompactPathLists() const;
 
-  SoINTERNAL protected:    
-    SoState		*state;		// Traversal state
+    SoINTERNAL protected:
+        SoState		*state;		// Traversal state
 
     // The list of what to do when.  Subclasses set this pointer to
     // their per-class instance in their constructors.
@@ -366,7 +269,7 @@ class INVENTOR_API SoAction {
     // ... and the methods
     static SoActionMethodList *methods;
 
-  private:
+private:
     static SoType	classTypeId;		// Type identifier
 
     // This structure holds the necessary information about what the
@@ -394,7 +297,7 @@ class INVENTOR_API SoAction {
     // This holds the current path (nodes and childindices) whenever        
     // action->getCurPath is called:
     SoTempPath	*	tempPath;
- 
+
 
     // Holds enabled-elements counter when state is created; used to
     // determine whether list of enabled elements is up to date.
@@ -422,7 +325,7 @@ class INVENTOR_API SoAction {
 			      const SoPathList &origPathList,
 			      SbBool isLastPathList);
 
-friend class SoDB;
+    friend class SoDB;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -434,8 +337,8 @@ friend class SoDB;
 //
 
 #define SO_ENABLE(actionClass, elementClass)				\
-	actionClass::enableElement(elementClass::getClassTypeId(),	\
-				   elementClass::getClassStackIndex())
+    actionClass::enableElement(elementClass::getClassTypeId(),	\
+    elementClass::getClassStackIndex())
 
 //
 //////////////////////////////////////////////////////////////////////////////

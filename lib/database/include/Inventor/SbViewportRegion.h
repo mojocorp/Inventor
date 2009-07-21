@@ -70,7 +70,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec2s.h>
+#include <Inventor/SbVec2f.h>
 
 // C-api: prefix=SbVPReg
 class INVENTOR_API SbViewportRegion {

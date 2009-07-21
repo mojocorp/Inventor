@@ -70,6 +70,7 @@
 #define _SB_SPHERE_SHEET_PROJECTOR_
 
 #include <Inventor/projectors/SbSphereProjector.h>
+#include <Inventor/SbPlane.h>
 
 // C-api: prefix=SbSphSheetProj
 class INVENTOR_API SbSphereSheetProjector : public SbSphereProjector

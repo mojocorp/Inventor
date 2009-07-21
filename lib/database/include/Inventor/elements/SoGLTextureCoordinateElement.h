@@ -60,7 +60,6 @@
 #ifndef  _SO_GL_TEXTURE_COORDINATE_ELEMENT
 #define  _SO_GL_TEXTURE_COORDINATE_ELEMENT
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/elements/SoTextureCoordinateElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

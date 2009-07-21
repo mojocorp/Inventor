@@ -56,6 +56,7 @@
 #include <Inventor/elements/SoGLLightIdElement.h>
 #include <Inventor/elements/SoLightAttenuationElement.h>
 #include <Inventor/nodes/SoPointLight.h>
+#include <Inventor/SbVec4f.h>
 
 SO_NODE_SOURCE(SoPointLight);
 

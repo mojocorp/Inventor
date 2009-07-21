@@ -59,6 +59,7 @@
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/elements/SoViewVolumeElement.h>
 #include <Inventor/errors/SoDebugError.h>
+#include <Inventor/SbRotation.h>
 
 SO_ACTION_SOURCE(SoRayPickAction);
 

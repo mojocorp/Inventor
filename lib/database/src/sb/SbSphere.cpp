@@ -51,8 +51,11 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
-#include <Inventor/SbBox.h>
+#include <Inventor/SbSphere.h>
+#include <Inventor/SbBox3f.h>
+#include <Inventor/SbLine.h>
+
+#include <math.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

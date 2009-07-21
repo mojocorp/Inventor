@@ -52,7 +52,7 @@
  */
 
 #include <Inventor/misc/SoGL.h>
-#include <Inventor/SbBox.h>
+#include <Inventor/SbBox3f.h>
 #include <Inventor/misc/SoState.h>
 #include <Inventor/bundles/SoTextureCoordinateBundle.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
