@@ -56,7 +56,7 @@
 #ifndef  _SO_PICK_RAY_ELEMENT
 #define  _SO_PICK_RAY_ELEMENT
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbViewVolume.h>
 #include <Inventor/elements/SoSubElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

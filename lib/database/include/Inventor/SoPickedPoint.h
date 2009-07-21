@@ -56,7 +56,9 @@
 #ifndef _SO_PICKED_POINT_
 #define _SO_PICKED_POINT_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec3f.h>
+#include <Inventor/SbVec4f.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SoLists.h>
 

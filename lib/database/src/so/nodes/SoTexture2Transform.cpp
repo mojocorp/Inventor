@@ -59,6 +59,7 @@
 #include <Inventor/elements/SoOverrideElement.h>
 #include <Inventor/elements/SoTextureMatrixElement.h>
 #include <Inventor/nodes/SoTexture2Transform.h>
+#include <Inventor/SbRotation.h>
 
 SO_NODE_SOURCE(SoTexture2Transform);
 

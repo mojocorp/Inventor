@@ -59,6 +59,7 @@
 #define _SB_SPHERE_PROJECTOR_
 
 #include <Inventor/projectors/SbProjector.h>
+#include <Inventor/SbSphere.h>
 
 // C-api: abstract
 // C-api: prefix=SbSphProj

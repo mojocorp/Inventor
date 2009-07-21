@@ -53,8 +53,11 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbRotation.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/errors/SoDebugError.h>
+
+#include <math.h>
 
 // amount squared to figure if two floats are equal
 #define DELTA 1e-6

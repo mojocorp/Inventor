@@ -56,7 +56,7 @@
 #ifndef  _SO_GET_BOUNDING_BOX_ACTION_
 #define  _SO_GET_BOUNDING_BOX_ACTION_
 
-#include <Inventor/SbBox.h>
+#include <Inventor/SbXfBox3f.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/actions/SoSubAction.h>
 

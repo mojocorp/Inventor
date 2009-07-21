@@ -58,7 +58,6 @@
 #define  _SO_PROFILE_ELEMENT
 
 #include <Inventor/SoLists.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/elements/SoAccumulatedElement.h>
 
 class SoProfile;

@@ -51,9 +51,12 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbBox.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbBox3f.h>
+#include <Inventor/SbLine.h>
+#include <Inventor/SbPlane.h>
+#include <Inventor/SbVec2f.h>
 
+#include <math.h>
 //////////////////////////////////////////////////////////////////////////////
 //
 // Line class

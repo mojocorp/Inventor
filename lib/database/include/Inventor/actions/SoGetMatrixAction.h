@@ -56,7 +56,7 @@
 #ifndef  _SO_GET_MATRIX_ACTION_
 #define  _SO_GET_MATRIX_ACTION_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/SbViewportRegion.h>
 

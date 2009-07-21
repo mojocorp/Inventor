@@ -59,7 +59,6 @@
 #ifndef  _SO_NORMAL_CACHE
 #define  _SO_NORMAL_CACHE
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/caches/SoCache.h>
 
 ////////////////////////////////////////////////////////////////////////
@@ -69,6 +68,7 @@
 //  A normal cache stores a list of normals.
 //
 ////////////////////////////////////////////////////////////////////////
+class SbVec3f;
 
 SoEXTENDER class INVENTOR_API SoNormalCache : public SoCache {
 

@@ -56,7 +56,6 @@
 #ifndef  _SO_CALLBACK_ACTION_
 #define  _SO_CALLBACK_ACTION_
 
-#include <Inventor/SbBox.h>
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/nodes/SoComplexity.h>
 #include <Inventor/nodes/SoDrawStyle.h>
@@ -68,6 +67,10 @@
 #include <Inventor/nodes/SoTexture2.h>
 #include <Inventor/nodes/SoTextureCoordinateBinding.h>
 #include <Inventor/nodes/SoUnits.h>
+#include <Inventor/SbVec2f.h>
+#include <Inventor/SbVec4f.h>
+#include <Inventor/SbMatrix.h>
+#include <Inventor/SbViewVolume.h>
 
 class SoPrimitiveVertex;
 class SoShape;

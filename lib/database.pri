@@ -50,9 +50,24 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/Sb.h \
            database/include/Inventor/SbBasic.h \
            database/include/Inventor/SbBox.h \
+           database/include/Inventor/SbBox3f.h \
+           database/include/Inventor/SbXfBox3f.h \
+           database/include/Inventor/SbBox2f.h \
+           database/include/Inventor/SbBox2s.h \
            database/include/Inventor/SbColor.h \
            database/include/Inventor/SbDict.h \
            database/include/Inventor/SbLinear.h \
+           database/include/Inventor/SbVec2f.h \
+           database/include/Inventor/SbVec2s.h \
+           database/include/Inventor/SbVec3f.h \
+           database/include/Inventor/SbVec4f.h \
+           database/include/Inventor/SbMatrix.h \
+           database/include/Inventor/SbRotation.h \
+           database/include/Inventor/SbLine.h \
+           database/include/Inventor/SbPlane.h \
+           database/include/Inventor/SbSphere.h \
+           database/include/Inventor/SbCylinder.h \
+           database/include/Inventor/SbViewVolume.h \
            database/include/Inventor/SbPList.h \
            database/include/Inventor/SbString.h \
            database/include/Inventor/SbTime.h \
@@ -68,6 +83,8 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/SoPrimitiveVertex.h \
            database/include/Inventor/SoType.h \
            database/include/Inventor/actions/SoAction.h \
+           database/include/Inventor/actions/SoActionMethodList.h \
+           database/include/Inventor/actions/SoEnabledElementsList.h \
            database/include/Inventor/actions/SoActions.h \
            database/include/Inventor/actions/SoCallbackAction.h \
            database/include/Inventor/actions/SoGetBoundingBoxAction.h \
@@ -505,7 +522,10 @@ PRIVATE_HEADERS += database/src/so/engines/SoCalcExpr.h \
 
 HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
 
-SOURCES += database/src/sb/SbBox.cpp \
+SOURCES += database/src/sb/SbBox3f.cpp \
+           database/src/sb/SbXfBox3f.cpp \
+           database/src/sb/SbBox2f.cpp \
+           database/src/sb/SbBox2s.cpp \
            database/src/sb/SbColor.cpp \
            database/src/sb/SbCylinder.cpp \
            database/src/sb/SbDict.cpp \
@@ -518,8 +538,11 @@ SOURCES += database/src/sb/SbBox.cpp \
            database/src/sb/SbSphere.cpp \
            database/src/sb/SbString.cpp \
            database/src/sb/SbTime.cpp \
-           database/src/sb/SbVec.cpp \
-           database/src/sb/SbView.cpp \
+           database/src/sb/SbVec2f.cpp \
+           database/src/sb/SbVec2s.cpp \
+           database/src/sb/SbVec3f.cpp \
+           database/src/sb/SbVec4f.cpp \
+           database/src/sb/SbViewVolume.cpp \
            database/src/sb/SbViewportRegion.cpp \
            database/src/so/linux.cpp \
            database/src/so/SoAuditorList.cpp \
@@ -555,6 +578,8 @@ SOURCES += database/src/sb/SbBox.cpp \
            database/src/sb/projectors/SbSphereSectionProjector.cpp \
            database/src/sb/projectors/SbSphereSheetProjector.cpp \
            database/src/so/actions/SoAction.cpp \
+           database/src/so/actions/SoActionMethodList.cpp \
+           database/src/so/actions/SoEnabledElementsList.cpp \
            database/src/so/actions/SoActionInit.cpp \
            database/src/so/actions/SoCallbackAction.cpp \
            database/src/so/actions/SoGetBoundingBoxAction.cpp \

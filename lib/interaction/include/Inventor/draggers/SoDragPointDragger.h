@@ -93,7 +93,7 @@
 #define  _SO_DRAGPOINT_DRAGGER_
 
 #include <Inventor/SbLinear.h>
-#include <Inventor/SbBox.h>
+#include <Inventor/SbBox3f.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/sensors/SoSensor.h>

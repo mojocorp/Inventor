@@ -52,7 +52,6 @@
  */
 
 
-#include <Inventor/SbBox.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoNodeKitPath.h>
 #include <Inventor/SoPath.h>

@@ -51,7 +51,11 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbCylinder.h>
+#include <Inventor/SbRotation.h>
+#include <Inventor/SbMatrix.h>
+
+#include <math.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

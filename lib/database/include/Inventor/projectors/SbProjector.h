@@ -61,7 +61,10 @@
 #ifndef _SB_PROJECTOR_
 #define _SB_PROJECTOR_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec2f.h>
+#include <Inventor/SbVec3f.h>
+#include <Inventor/SbViewVolume.h>
+#include <Inventor/SbMatrix.h>
 
 // C-api: prefix=SbProj
 class INVENTOR_API SbProjector

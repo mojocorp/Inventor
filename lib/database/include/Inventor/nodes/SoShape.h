@@ -56,7 +56,9 @@
 #ifndef  _SO_SHAPE_
 #define  _SO_SHAPE_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec2s.h>
+#include <Inventor/SbVec3f.h>
+#include <Inventor/SbBox3f.h>
 #include <Inventor/nodes/SoSubNode.h>
 
 #include <Inventor/misc/SoGL.h>

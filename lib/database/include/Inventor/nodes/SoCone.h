@@ -56,7 +56,9 @@
 #ifndef  _SO_CONE_
 #define  _SO_CONE_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec2f.h>
+#include <Inventor/SbVec3f.h>
+#include <Inventor/SbLine.h>
 #include <Inventor/fields/SoSFBitMask.h>
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>

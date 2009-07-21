@@ -60,6 +60,7 @@
 #define _SB_CYLINDER_SHEET_PROJECTOR_
 
 #include <Inventor/projectors/SbCylinderProjector.h>
+#include <Inventor/SbPlane.h>
 
 // C-api: prefix=SbCylSheetProj
 class INVENTOR_API SbCylinderSheetProjector : public SbCylinderProjector

@@ -64,9 +64,9 @@
 #ifndef  _SO_DRAGGER_
 #define  _SO_DRAGGER_
 
-#include <Inventor/SbBox.h>
 #include <Inventor/SbViewportRegion.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec3f.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/nodekits/SoInteractionKit.h>
 #include <Inventor/misc/SoCallbackList.h>
 #include <Inventor/fields/SoSFBool.h>

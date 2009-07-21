@@ -51,7 +51,9 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbPlane.h>
+#include <Inventor/SbLine.h>
+#include <Inventor/SbMatrix.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

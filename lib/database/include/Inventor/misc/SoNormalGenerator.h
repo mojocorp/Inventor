@@ -58,7 +58,7 @@
 #ifndef  _SO_NORMAL_GENERATOR_
 #define  _SO_NORMAL_GENERATOR_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec3f.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

@@ -57,7 +57,8 @@
 #define  _SO_MOTION3_EVENT_
 
 #include <Inventor/SbBasic.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec3f.h>
+#include <Inventor/SbRotation.h>
 #include <Inventor/events/SoSubEvent.h>
 
 

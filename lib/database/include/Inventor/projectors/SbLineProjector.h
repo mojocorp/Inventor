@@ -58,6 +58,7 @@
 #define _SB_LINE_PROJECTOR_
 
 #include <Inventor/projectors/SbProjector.h>
+#include <Inventor/SbLine.h>
 
 // C-api: prefix=SbLineProj
 class INVENTOR_API SbLineProjector : public SbProjector

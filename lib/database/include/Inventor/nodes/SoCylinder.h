@@ -56,7 +56,7 @@
 #ifndef  _SO_CYLINDER_
 #define  _SO_CYLINDER_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec2f.h>
 #include <Inventor/fields/SoSFBitMask.h>
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>

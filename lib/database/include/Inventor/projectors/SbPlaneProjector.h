@@ -59,6 +59,7 @@
 #define _SB_PLANE_PROJECTOR_
 
 #include <Inventor/projectors/SbProjector.h>
+#include <Inventor/SbPlane.h>
 
 // C-api: prefix=SbPlnProj
 class INVENTOR_API SbPlaneProjector : public SbProjector

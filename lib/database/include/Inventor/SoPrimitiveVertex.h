@@ -56,7 +56,8 @@
 #ifndef _SO_PRIMITIVE_VERTEX_
 #define _SO_PRIMITIVE_VERTEX_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec3f.h>
+#include <Inventor/SbVec4f.h>
 
 class SoDetail;
 

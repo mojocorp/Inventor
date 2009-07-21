@@ -59,7 +59,7 @@
 #ifndef  _SO_BOUNDING_BOX_CACHE
 #define  _SO_BOUNDING_BOX_CACHE
 
-#include <Inventor/SbBox.h>
+#include <Inventor/SbXfBox3f.h>
 #include <Inventor/caches/SoCache.h>
 
 ////////////////////////////////////////////////////////////////////////

@@ -54,7 +54,12 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbMatrix.h>
+#include <Inventor/SbRotation.h>
+#include <Inventor/SbVec3f.h>
+#include <Inventor/SbLine.h>
+
+#include <math.h>
 
 // amount squared to figure if two floats are equal
 // (used for operator == right now)
@@ -1232,6 +1237,18 @@ SbMatrix::setTransform(const SbVec3f &translation,
 #undef ROTATE
 }
 
+void
+SbMatrix::setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s)
+{
+    setTransform(t, r, s, SbRotation(0,0,0,1), SbVec3f(0,0,0));
+}
+
+void
+SbMatrix::setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s, const SbRotation &so)
+{
+    setTransform(t, r, s, so, SbVec3f(0,0,0));
+}
+
 //
 // Decomposes a rotation into translation etc, based on scale
 //
@@ -1265,7 +1282,12 @@ SbMatrix::getTransform(SbVec3f &translation,
     rotation = rot;
 }
 
-
+void
+SbMatrix::getTransform(SbVec3f &t, SbRotation &r,
+                      SbVec3f &s, SbRotation &so) const
+{
+    getTransform(t, r, s, so, SbVec3f(0,0,0));
+}
 
 ////////////////////////////////////////////
 //

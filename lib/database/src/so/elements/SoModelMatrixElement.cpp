@@ -52,6 +52,7 @@
  */
 
 #include <Inventor/elements/SoModelMatrixElement.h>
+#include <Inventor/SbRotation.h>
 
 #ifdef DEBUG
 #include <SoDebug.h>
