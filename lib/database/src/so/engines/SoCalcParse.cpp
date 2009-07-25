@@ -37,10 +37,12 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #include <Inventor/errors/SoDebugError.h>
 #include "SoCalcExpr.h"
 #include <stdio.h>
-#ifdef WIN32
+#ifdef SB_OS_WIN
 #include <float.h>
+#define _USE_MATH_DEFINES
+#include <math.h>
 #define drand48() (((double)rand())/double(RAND_MAX))
-#elif defined(__APPLE__)
+#elif defined(SB_OS_MACX)
 #include <float.h>
 #include <limits.h>
 #else
@@ -48,7 +50,7 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #endif
 #include <math.h>
 #include <ctype.h>
-#ifndef WIN32
+#ifndef SB_OS_WIN
 #include <strings.h>
 #endif
 #include <stdlib.h>
@@ -64,8 +66,8 @@ static const struct {
     const char *name;
     float	val;
 } Constants[] = {
-    { "MAXFLOAT",	MAXFLOAT },
-#if defined(__APPLE__) || defined(WIN32)
+    { "MAXFLOAT",	FLT_MAX },
+#if defined(SB_OS_MACX) || defined(SB_OS_WIN)
     { "MINFLOAT",	FLT_MIN },
 #else
     { "MINFLOAT",	MINFLOAT },

@@ -59,13 +59,14 @@
 //
 // These symbols can be used to determine what version of Inventor
 // your application is compiling against.  These symbols were first
-// added with Inventor 2.1 (SO_VERSION==2, SO_VERSION_REVISION==1);
+// added with Inventor 2.1 (SO_VERSION==0x020100);
 // they were undefined in previous revisions of Inventor.
 //
-#define SO_VERSION 		2
-#define SO_VERSION_REVISION	1
+#define SO_VERSION_STR		"2.1.0"
+#define SO_VERSION 		0x020100
 
-#include <inttypes.h>
+#include <machine.h>
+#include <Inventor/SbStdint.h>
 #include <stdio.h>
 
 #ifndef FALSE
@@ -129,14 +130,19 @@ typedef int	SbBool;
 //Avoid "unused parameter" warnings
 #define SB_UNUSED(x) (void)x;
 
-#if defined(WIN32) || defined(WIN64)
+#ifdef SB_OS_WIN
+#  define NOMINMAX
+#  define _USE_MATH_DEFINES
+#  include <windows.h>
+#  define GLCALLBACK __stdcall
 #  ifdef INVENTOR_EXPORTS
 #     define INVENTOR_API __declspec(dllexport)
 #  else
 #     define INVENTOR_API __declspec(dllimport)
 #  endif
 #else
-#   define INVENTOR_API
+#  define GLCALLBACK
+#  define INVENTOR_API
 #endif
 
 #endif /* _SB_BASIC_ */

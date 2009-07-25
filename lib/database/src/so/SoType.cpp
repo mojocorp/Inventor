@@ -54,9 +54,12 @@
 #include <Inventor/SoType.h>
 #include <Inventor/SoLists.h>
 #include <Inventor/errors/SoDebugError.h>
-#include <dlfcn.h>
+#ifndef SB_OS_WIN
+#   include <dlfcn.h>
+#   include <unistd.h>
+#endif
 #include <stdlib.h>
-#include <unistd.h>
+
 
 SoINTERNAL struct SoTypeData {
     SoType		type;
@@ -202,7 +205,11 @@ SoType::fromName(SbName name)
 	// XXX Alex -- add additional layer of abstraction on top
  	// of this to make porting to other platforms easier.
 	//
-#define sgidlopen_version(a,b,c,d) dlopen((a),(b))
+#ifdef SB_OS_WIN
+#   define sgidlopen_version(a,b,c,d) LoadLibraryA(a)
+#else
+#   define sgidlopen_version(a,b,c,d) dlopen((a),(b))
+#endif
 
     const char *nameChars = name.getString();
     SbString nameString(nameChars);  // For easier manipulation...
@@ -226,12 +233,14 @@ SoType::fromName(SbName name)
 	// Current directory (if not root)
 	// /usr/local/lib/InventorDSO (if not root)  (or 32, 64)
 	// /usr/lib/InventorDSO (always)  (or 32, 64)
-
+#ifdef SB_OS_WIN
+    HINSTANCE dsoHandle = NULL;
+#else
 	SbBool isRoot = ((geteuid()!=getuid()) || (getegid()!=getgid())
 			 || (getuid() == 0));
 
 	void *dsoHandle = NULL;
-       
+#endif
 	// Temporary storage
 	char DSOFile[101], dummyFunc[101];
 #ifdef DEBUG
@@ -244,15 +253,20 @@ SoType::fromName(SbName name)
 	// string is longer than the initClass__... string.
 #endif
 
-	sprintf(DSOFile, "%s.so", nameChars);
-	dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
+#ifdef SB_OS_WIN
+    sprintf(DSOFile, "%s.dll", nameChars);
+#else
+    sprintf(DSOFile, "%s.so", nameChars);
+#endif	
+    dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
 
-	if (dsoHandle == NULL && !isRoot) {
-	    sprintf(DSOFile, "./%s.so", nameChars);
-	    dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
-	}	    
-	if (dsoHandle == NULL && !isRoot) {
-	    sprintf(DSOFile, "/usr/local/%s/InventorDSO/%s.so", 
+#ifndef SB_OS_WIN
+  if (dsoHandle == NULL && !isRoot) {
+      sprintf(DSOFile, "./%s.so", nameChars);
+      dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
+  }     
+  if (dsoHandle == NULL && !isRoot) {
+      sprintf(DSOFile, "/usr/local/%s/InventorDSO/%s.so", 
                                  libDir, nameChars);
 	    dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
 	}	    
@@ -260,9 +274,14 @@ SoType::fromName(SbName name)
 	    sprintf(DSOFile,"/usr/%s/InventorDSO/%s.so", libDir, nameChars);
 	    dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
 	}	    
+#endif
 
 	if (dsoHandle  == NULL)
 	    return SoType::badType();
+
+#ifdef SB_OS_WIN
+  sprintf(dummyFunc, "?initClass@%s@@SAXXZ", nameChars);
+#else
 
 #if ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1))
 #define DUMMY_FUNC "_ZN%d%s9initClassEv"
@@ -273,9 +292,15 @@ SoType::fromName(SbName name)
 	sprintf(dummyFunc, DUMMY_FUNC, name.getLength(),
 		nameChars, abiName);
 
-	void (*dsoFunc)();
-	dsoFunc = (void (*)())dlsym(dsoHandle, dummyFunc);
-	if (dsoFunc == NULL) {
+#endif  // SB_OS_WIN
+
+  void (*dsoFunc)();
+#ifdef SB_OS_WIN
+  dsoFunc = (void (*)())GetProcAddress(dsoHandle, dummyFunc);
+#else
+  dsoFunc = (void (*)())dlsym(dsoHandle, dummyFunc);
+#endif // SB_OS_WIN
+  if (dsoFunc == NULL) {
 #ifdef DEBUG
 	    SoDebugError::post("SoType::fromName",
 	       "Could not find %s::initClass in %s.",

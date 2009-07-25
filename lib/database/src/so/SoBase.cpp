@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-#include <dlfcn.h>
 #include <ctype.h>
 
 #include <Inventor/SoDB.h>

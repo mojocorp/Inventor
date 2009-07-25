@@ -407,7 +407,11 @@ SoLocateHighlight::redrawHighlighted(
     // set the current window
     glXMakeCurrent(display, window, context);
 #else
-#warning "SoLocateHighlight not implemented"
+#ifdef SB_OS_WIN
+    #pragma message ("SoLocateHighlight not implemented")
+#else
+    #warning "SoLocateHighlight not implemented"
+#endif
     SoGLRenderAction *glAction;
     return;
 #endif

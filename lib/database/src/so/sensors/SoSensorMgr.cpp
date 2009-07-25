@@ -54,9 +54,6 @@
 #include <Inventor/sensors/SoSensorManager.h>
 #include <Inventor/sensors/SoSensors.h>
 #include <Inventor/errors/SoDebugError.h>
-#ifdef __APPLE__
-#include <unistd.h>
-#endif // __APPLE__
 
 #ifdef DEBUG
 #include <SoDebug.h>

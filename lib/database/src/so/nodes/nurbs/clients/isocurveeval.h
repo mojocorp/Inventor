@@ -43,7 +43,7 @@
 #ifndef SO_NURBS_ISOCURVEEVAL
 #define SO_NURBS_ISOCURVEEVAL
 
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 
 #include "types.h"
 

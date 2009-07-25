@@ -43,7 +43,7 @@
 #ifndef SO_NURBS_SOFTCURVEVAL
 #define SO_NURBS_SOFTCURVEVAL
 
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 
 #include "mystdio.h"
 #include "isocurveeval.h"

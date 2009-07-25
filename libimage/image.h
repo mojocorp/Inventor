@@ -142,11 +142,13 @@ IMAGE *iopen();
 IMAGE *icreate();
 unsigned short *ibufalloc();
 
+#if !defined(_WIN32) && !defined(_WIN64)
 #define _IOEOF          0020    /* EOF reached on read */
 #define _IOERR          0040    /* I/O error from system */
 #define _IOREAD         0001    /* currently reading */
 #define _IOWRT          0002    /* currently writing */
 #define _IORW           0200    /* opened for reading and writing */
+#endif
 
 #define IMAGEDEF		/* for backwards compatibility */
 #ifdef __cplusplus

@@ -56,6 +56,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/SbBox2s.h \
            database/include/Inventor/SbColor.h \
            database/include/Inventor/SbDict.h \
+           database/include/Inventor/SbStdint.h \
            database/include/Inventor/SbLinear.h \
            database/include/Inventor/SbVec2f.h \
            database/include/Inventor/SbVec2s.h \
@@ -544,7 +545,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/sb/SbVec4f.cpp \
            database/src/sb/SbViewVolume.cpp \
            database/src/sb/SbViewportRegion.cpp \
-           database/src/so/linux.cpp \
+           database/src/so/machine.cpp \
            database/src/so/SoAuditorList.cpp \
            database/src/so/SoBase.cpp \
            database/src/so/SoByteStream.cpp \

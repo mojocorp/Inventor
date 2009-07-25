@@ -73,7 +73,9 @@
 //  debugging.
 //
 //////////////////////////////////////////////////////////////////////////////
-
+#ifdef ERROR
+#   undef ERROR
+#endif
 
 class INVENTOR_API SoDebugError : public SoError {
 

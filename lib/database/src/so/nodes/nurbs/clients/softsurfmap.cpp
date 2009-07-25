@@ -41,7 +41,7 @@
  */
 
 #include <stdio.h>
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 #include "myassert.h"
 #include "mystdio.h"
 #include "mymath.h"

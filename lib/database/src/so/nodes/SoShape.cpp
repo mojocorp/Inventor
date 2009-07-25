@@ -81,6 +81,8 @@
 #include <Inventor/nodes/SoShape.h>
 #include <Inventor/SbBox2f.h>
 
+#include <limits.h>
+
 SO_NODE_ABSTRACT_SOURCE(SoShape);
 
 // This is used as a surrogate object when rendering or picking a
@@ -880,13 +882,13 @@ SoShape::endShape()
 	if (tobj == NULL) {
 	    tobj = gluNewTess();
 	    gluTessCallback(tobj, (GLenum)GLU_BEGIN,
-			    (void (*)())SoShape::beginCB);
+			    (void (GLCALLBACK*)())SoShape::beginCB);
 	    gluTessCallback(tobj, (GLenum)GLU_END, 
-			    (void (*)())SoShape::endCB);
+			    (void (GLCALLBACK*)())SoShape::endCB);
 	    gluTessCallback(tobj, (GLenum)GLU_VERTEX, 
-			    (void (*)())SoShape::vtxCB);
+			    (void (GLCALLBACK*)())SoShape::vtxCB);
 	    gluTessCallback(tobj, (GLenum)GLU_ERROR,
-			    (void (*)())SoShape::errorCB);
+			    (void (GLCALLBACK*)())SoShape::errorCB);
 	}
 #ifdef GLU_VERSION_1_2
 	gluTessBeginPolygon(tobj, NULL);

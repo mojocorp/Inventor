@@ -20,7 +20,10 @@
 #include <Inventor/errors/SoDebugError.h>
 #include "SoCalcExpr.h"
 #include <stdio.h>
-#ifdef __APPLE__
+#ifdef _WINDOWS
+#include <float.h>
+#define drand48() (((double)rand())/double(RAND_MAX))
+#elif defined(__APPLE__)
 #include <float.h>
 #include <limits.h>
 #else
@@ -28,7 +31,9 @@
 #endif
 #include <math.h>
 #include <ctype.h>
+#ifndef _WINDOWS
 #include <strings.h>
+#endif
 #include <stdlib.h>
 
 void yyerror(const char *);
@@ -43,7 +48,7 @@ static const struct {
     float	val;
 } Constants[] = {
     { "MAXFLOAT",	MAXFLOAT },
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(_WINDOWS)
     { "MINFLOAT",	FLT_MIN },
 #else
     { "MINFLOAT",	MINFLOAT },
@@ -118,7 +123,7 @@ static struct {
 
 %type <expr> asgn primary_expression postfix_expression
 %type <expr> unary_expression
-%type <expr> multiplicative_expression additive_expression
+%type <expr> multiplicative_expression
 %type <expr> additive_expression relational_expression
 %type <expr> equality_expression logical_AND_expression
 %type <expr> logical_OR_expression conditional_expression

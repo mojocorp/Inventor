@@ -60,6 +60,8 @@
 #include <Inventor/sensors/SoFieldSensor.h>
 #include <Inventor/sensors/SoOneShotSensor.h>
 
+#include <math.h>
+
 SO_NODE_SOURCE(SoRotor);
 
 ////////////////////////////////////////////////////////////////////////

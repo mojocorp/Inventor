@@ -136,7 +136,7 @@ class INVENTOR_API SoVertexProperty : public SoNode {
 
 #include <Inventor/elements/SoShapeStyleElement.h>
 
-typedef void SoVPCacheFunc(const char *const);
+typedef INVENTOR_API void GLCALLBACK SoVPCacheFunc(const char *const);
 
 SoEXTENDER class INVENTOR_API SoVertexPropertyCache {
   public:

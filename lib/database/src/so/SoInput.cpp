@@ -71,6 +71,11 @@ SbStringList *SoInput::directories = NULL;
 
 #define COMMENT_CHAR '#'
 
+#ifdef SB_OS_WIN
+#	define ENV_SEPARATOR ":"
+#else
+#	define ENV_SEPARATOR ": \t"
+#endif
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -251,12 +256,12 @@ SoInput::addEnvDirectoriesFirst(const char *envVarName)
 	int	i = 0;
 
 	// Parse colon- or space-separated directories from string
-	dir = strtok(d, ": \t");
+	dir = strtok(d, ENV_SEPARATOR);
 
 	while (dir != NULL) {
 	    // Make sure directories are added in the same order
-	    directories->insert(new SbString(dir), i++);
-	    dir = strtok(NULL, ": \t");
+        directories->insert(new SbString(dir), i++);
+        dir = strtok(NULL, ENV_SEPARATOR);
 	}
 
 	free(d);
@@ -284,11 +289,11 @@ SoInput::addEnvDirectoriesLast(const char *envVarName)
 	char *dir;
 
 	// Parse colon- or space-separated directories from string
-	dir = strtok(d, ": \t");
+	dir = strtok(d, ENV_SEPARATOR);
 
 	while (dir != NULL) {
 	    addDirectoryLast(dir);
-	    dir = strtok(NULL, ": \t");
+	    dir = strtok(NULL, ENV_SEPARATOR);
 	}
 
 	free(d);
@@ -1618,9 +1623,13 @@ SoInput::findFile(const char *fileName, SbString &fullName) const
     int		i;
 
     // If filename is absolute
+#ifdef SB_OS_WIN
+	if (isalpha(fileName[0]) && fileName[1] == ':') {
+#else
     if (fileName[0] == '/') {
+#endif
 	fullName = fileName;
-	fp = fopen(fileName, "r");
+	fp = fopen(fileName, "rb");
     }
 
     // For relative file names, try each of the directories in the search path
@@ -1632,7 +1641,7 @@ SoInput::findFile(const char *fileName, SbString &fullName) const
 	    fullName += "/";
 	    fullName += fileName;
 
-	    fp = fopen(fullName.getString(), "r");
+	    fp = fopen(fullName.getString(), "rb");
 
 	    if (fp != NULL)
 		break;

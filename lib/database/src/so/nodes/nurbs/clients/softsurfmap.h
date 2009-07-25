@@ -43,7 +43,7 @@
 #ifndef SO_NURBS_SOFTSURFMAP
 #define SO_NURBS_SOFTSURFMAP
 
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 
 #include "mystdio.h"
 #include "mymath.h"

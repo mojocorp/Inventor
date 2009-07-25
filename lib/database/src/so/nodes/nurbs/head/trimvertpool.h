@@ -48,7 +48,7 @@ class TrimVertex;
 
 #define INIT_VERTLISTSIZE  200
 
-class TrimVertexPool {
+class INVENTOR_API TrimVertexPool {
 public:
     			TrimVertexPool( void );
     			~TrimVertexPool( void );

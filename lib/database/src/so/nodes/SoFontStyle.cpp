@@ -62,7 +62,7 @@
 
 SO_NODE_SOURCE(SoFontStyle);
 
-#if defined(WIN32)
+#if defined(SB_OS_WIN)
 // Use font file names
 const char *SoFontStyle::fontList[][4] =
                     {
@@ -73,7 +73,7 @@ const char *SoFontStyle::fontList[][4] =
                         { "Cour", "Courbd", 
                           "Couri", "Courbi" }, 
                     };
-#elif defined(__APPLE__)
+#elif defined(SB_OS_MACX)
 // Use font postscript names
 const char *SoFontStyle::fontList[][4] =
                     {

@@ -72,6 +72,10 @@
 #include <Inventor/nodes/SoCamera.h>
 #include <stdlib.h>
 
+#ifdef SB_OS_WIN
+#   define drand48() (((double)rand())/double(RAND_MAX))
+#endif
+
 SO_NODE_ABSTRACT_SOURCE(SoCamera);
 
 ////////////////////////////////////////////////////////////////////////

@@ -465,11 +465,11 @@ SoText3::GLRender(SoGLRenderAction *action)
 
     if (tobj == NULL) {
 	tobj = gluNewTess();
-	gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (*)())glBegin);
-	gluTessCallback(tobj, (GLenum)GLU_END, (void (*)())glEnd);
-	gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (*)())glVertex2fv);
+	gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (GLCALLBACK*)())glBegin);
+	gluTessCallback(tobj, (GLenum)GLU_END, (void (GLCALLBACK*)())glEnd);
+	gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (GLCALLBACK*)())glVertex2fv);
 	gluTessCallback(tobj, (GLenum)GLU_ERROR,
-			(void (*)())SoOutlineFontCache::errorCB);
+			(void (GLCALLBACK*)())SoOutlineFontCache::errorCB);
     }
 
     // See if texturing is enabled
@@ -1096,11 +1096,11 @@ SoText3::generateFront(int line)
 
     if (tobj == NULL) {
 	tobj = gluNewTess();
-	gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (*)())SoText3::beginCB);
-	gluTessCallback(tobj, (GLenum)GLU_END, (void (*)())SoText3::endCB);
-	gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (*)())SoText3::vtxCB);
+	gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (GLCALLBACK*)())SoText3::beginCB);
+	gluTessCallback(tobj, (GLenum)GLU_END, (void (GLCALLBACK*)())SoText3::endCB);
+	gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (GLCALLBACK*)())SoText3::vtxCB);
 	gluTessCallback(tobj, (GLenum)GLU_ERROR,
-			(void (*)())SoOutlineFontCache::errorCB);
+			(void (GLCALLBACK*)())SoOutlineFontCache::errorCB);
     }
 
     genWhichVertex = 0;
