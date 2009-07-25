@@ -1,7 +1,9 @@
 #ifndef _SO_GL_
 #define _SO_GL_
 
-#ifdef __APPLE__
+#include <Inventor/SbBasic.h>
+
+#ifdef SB_OS_MACX
 #   include <OpenGL/gl.h>
 #   include <OpenGL/glu.h>
 #else

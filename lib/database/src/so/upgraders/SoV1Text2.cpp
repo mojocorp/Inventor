@@ -57,7 +57,6 @@
 #include <iconv.h>
 #include <errno.h>
 
-
 SO_NODE_SOURCE(SoV1Text2);
 
 
@@ -179,7 +178,11 @@ SoV1Text2::convertToUTF8(const SbString &strng)
     size_t inbytes = strng.getLength();
     size_t outbytes = 2*inbytes;
     char* output = (char*)UCSBuf;    
+#ifdef SB_OS_WIN
+    if ((iconv(codeConvert1, const_cast<const char**>(&input), &inbytes, &output, &outbytes) != 0)){
+#else
     if ((iconv(codeConvert1, &input, &inbytes, &output, &outbytes) != 0)){
+#endif
 #ifdef DEBUG
 	SoDebugError::post("SoV1Text2::convertToUTF8", 
 	    "Error converting text to UCS-2");
@@ -189,7 +192,11 @@ SoV1Text2::convertToUTF8(const SbString &strng)
     outbytes = 2*strng.getLength()+1;
     inbytes = 2*strng.getLength();
     output = (char*)UTFBuf;    
+#ifdef SB_OS_WIN
+    if ((iconv(codeConvert2, const_cast<const char**>(&input), &inbytes, &output, &outbytes) != 0)){
+#else
     if ((iconv(codeConvert2, &input, &inbytes, &output, &outbytes) != 0)){
+#endif
 #ifdef DEBUG
 	switch(errno){
 	    case EILSEQ:  printf("EILSEQ\n");

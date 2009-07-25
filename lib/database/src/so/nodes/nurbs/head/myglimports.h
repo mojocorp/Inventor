@@ -41,7 +41,7 @@
 #ifndef SO_MYGLIMPORTS_H
 #define SO_MYGLIMPORTS_H
 
-#include <inttypes.h>   /* defines int32_t and brethren */
+#include <Inventor/SbStdint.h>   /* defines int32_t and brethren */
 #include "../SoAddPrefix.h"
 
 #ifdef GLBUILD

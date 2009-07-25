@@ -56,8 +56,6 @@
 ////////////////////////////////////////////////////////////////////////
 
 
-#include <stdio.h>
-#include <math.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPath.h>
@@ -79,6 +77,8 @@
 
 #include "geom/SoSpotLightDraggerGeom.h"
 
+#include <stdio.h>
+#include <math.h>
 
 SO_KIT_SOURCE(SoSpotLightDragger);
 

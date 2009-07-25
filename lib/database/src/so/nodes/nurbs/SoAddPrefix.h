@@ -37,7 +37,8 @@
 #ifndef so__scope_h
 #define so__scope_h
 
-#if defined(__STDC__) || defined(__ANSI_CPP__)
+#include <Inventor/SbBasic.h>
+#if defined(__STDC__) || defined(__ANSI_CPP__) || defined(_MSC_VER)
 #define _lib_nurbs(name) _SoNurbs##name
 #else
 #define _lib_nurbs(name) _SoNurbs/**/name

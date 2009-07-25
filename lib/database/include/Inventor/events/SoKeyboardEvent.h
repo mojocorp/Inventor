@@ -59,6 +59,8 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoButtonEvent.h>
 
+#undef DELETE
+
 // some convenience macros for determining if an event matches
 
 #define SO_KEY_PRESS_EVENT(EVENT,KEY) \

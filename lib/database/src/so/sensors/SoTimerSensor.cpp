@@ -51,6 +51,8 @@
  _______________________________________________________________________
  */
 
+#include <math.h>
+
 #include <Inventor/SoDB.h>
 #include <Inventor/sensors/SoTimerSensor.h>
 

@@ -67,12 +67,34 @@
  _______________________________________________________________________
  */
 
+#if defined(__APPLE__) && (defined(__GNUC__) || defined(__xlC__) || defined(__xlc__))
+#  define SB_OS_MACX
+#elif defined(__CYGWIN__)
+#  define SB_OS_CYGWIN
+#elif defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
+#  define SB_OS_WIN32
+#  define SB_OS_WIN64
+#  define SB_OS_WIN
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#  define SB_OS_WIN32
+#  define SB_OS_WIN
+#elif defined(__sun) || defined(sun)
+#  define SB_OS_SOLARIS
+#elif defined(__linux__) || defined(__linux)
+#  define SB_OS_LINUX
+#elif defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
+#  define SB_OS_BSD
+#elif defined(__sgi)
+#  define SB_OS_IRIX
+#else
+#  error "Inventor has not been ported to this OS"
+#endif
 
 /*
  * SGI machine dependent setup
  */
 
-#if sgi
+#ifdef SB_OS_IRIX
 
 #define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
 #define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
@@ -83,85 +105,93 @@
 				make m68020 behave like everyone */
 #endif /* m68000 */
 
-#endif /* sgi */
+#endif /* SB_OS_IRIX */
 
 
 /*
- * SUN/BSD machine dependent setup
+ * SUN Solaris machine dependent setup
  */
 
-#if sun
+#ifdef SB_OS_SOLARIS
 
-#define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
-#define signed			/* SUN default is signed chars		*/
-#define h_errno errno		/* BSD has these merged???		*/
-typedef unsigned long ulong;	/* System long missing from types.h	*/
+#include <sys/byteorder.h>
 
-#endif /* sun */
+#if _BYTE_ORDER == _BIG_ENDIAN
+#   define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
+#   define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
+#elif _BYTE_ORDER == _LITTLE_ENDIAN
+#   define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
+#   define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
+#endif
+
+#endif /* SB_OS_SOLARIS */
 
 
 /*
- * VAX VMS/BSD machine dependent setup
+ * Windows machine dependent setup
  */
 
-#if vax
+#ifdef SB_OS_WIN
 
-#define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
-#define signed			/* VAX default is signed chars		*/
-#if vms				/* VMS only statements			*/
-#define	HZ	100		/* missing from param.h			*/
-#define dn_perror dgl_perror	/* use normal error handler		*/
-#define fork vfork		/* just for now - doesn't really work	*/
-#else				/* VAX/BSD only statements		*/
-#define HZ 60			/* missing from param.h			*/
-typedef unsigned long ulong;	/* System long missing from types.h	*/
-extern int errno;		/* missing from errno.h			*/
-#endif /* vms */
+#define MACHINE_WORD_FORMAT     DGL_LITTLE_ENDIAN
+#define MACHINE_FLOAT_FORMAT    DGL_NON_IEEE
 
-#endif /* vax */
-
+#endif /* SB_OS_WIN */
 
 /*
  * Linux i386/ia64 machine dependent setup
  */
 
-#if __i386__ || __ia64__ || __x86_64__
+#ifdef SB_OS_LINUX
 
-#define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
+#include <endian.h>
 
-#endif /* __i386__ || __ia64__ || __x86_64__ */
+#if __BYTE_ORDER == __BIG_ENDIAN
+#   define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
+#   define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
+#elif __BYTE_ORDER == __LITTLE_ENDIAN
+#   define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
+#   define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
+#endif
 
+#endif
+
+/*
+ * BSD machine dependent setup
+ */
+
+#ifdef SB_OS_BSD
+
+#include <sys/endian.h>
+
+#if _BYTE_ORDER == _BIG_ENDIAN
+#   define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
+#   define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
+#elif _BYTE_ORDER == _LITTLE_ENDIAN
+#   define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
+#   define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
+#endif
+
+#endif
 
 /*
  * Apple Darwin (Mac OS X) machine dependent setup
  */
 
-#ifdef __APPLE__
+#ifdef SB_OS_MACX
 
 #ifdef __LITTLE_ENDIAN__
-#   define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
-#   define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
-#else /* __LITTLE_ENDIAN */
-#   define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
-#   define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
-#endif /* __LITTLE_ENDIAN */
+#   define MACHINE_WORD_FORMAT  DGL_LITTLE_ENDIAN
+#   define MACHINE_FLOAT_FORMAT DGL_NON_IEEE
+#else
+#   define MACHINE_WORD_FORMAT  DGL_BIG_ENDIAN
+#   define MACHINE_FLOAT_FORMAT DGL_BIG_IEEE
+#endif
 
-#endif /* __APPLE__ */
+#endif
 
-
-/*
- * IBM RS/6000 series machine dependent setup
- */
-
-#ifdef _IBMR2
-
-#define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
-#undef DOUBLE	/* bogusly defined in <gai/g3dm2types.h> */
-
+#if !defined(MACHINE_WORD_FORMAT) || !defined(MACHINE_FLOAT_FORMAT)
+#  error "Inventor needs to be set up for your CPU type."
 #endif
 
 /*
@@ -242,12 +272,10 @@ extern int errno;		/* missing from errno.h			*/
  */
 
 #if MACHINE_FLOAT_FORMAT == DGL_NON_IEEE
-#if __i386__ || __ia64__ || __x86_64__
 void mem_hton_float(float *t, float *f);
 void mem_ntoh_float(float *t, float *f);
 void mem_hton_double(double *t, double *f);
 void mem_ntoh_double(double *t, double *f);
-#endif /* __i386__ || __ia64__  || __x86_64__*/
 #define DGL_HTON_FLOAT(t,f) mem_hton_float(&t,&f)
 #define DGL_NTOH_FLOAT(t,f) mem_ntoh_float(&t,&f)
 #define DGL_HTON_DOUBLE(t,f) mem_hton_double(&t,&f)

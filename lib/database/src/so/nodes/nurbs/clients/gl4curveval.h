@@ -43,7 +43,7 @@
 #ifndef SO_NURBS_GL4CURVEVAL
 #define SO_NURBS_GL4CURVEVAL
 
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 
 #include "basiccrveval.h"
 

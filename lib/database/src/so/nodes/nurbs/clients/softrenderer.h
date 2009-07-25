@@ -41,7 +41,7 @@
 #ifndef SO_NURBS_SOFTRENDERER
 #define SO_NURBS_SOFTRENDERER
 
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 
 #include "mymath.h"
 #include "mystdlib.h"

@@ -34,7 +34,7 @@
  *
  */
 
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 #include "gl4types.h"
 #include "typestringtable.h"
 

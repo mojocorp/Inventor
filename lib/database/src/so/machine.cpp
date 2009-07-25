@@ -34,6 +34,8 @@
  *
  */
 
+#include <machine.h>
+
 inline static void
 mem_cvt_float(float *t, float *f)
 {

@@ -59,7 +59,7 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
 
-#ifdef WIN32
+#ifdef SB_OS_WIN
 #include <malloc.h>
 #else
 #include <alloca.h>

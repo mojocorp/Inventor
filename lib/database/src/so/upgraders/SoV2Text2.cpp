@@ -189,7 +189,11 @@ SoV2Text2::convertToUTF8(const SbString &inString,
     size_t inbytes = inString.getLength();
     size_t outbytes = 2*inbytes;
     char* output = (char*)UCSBuf;    
+#ifdef SB_OS_WIN
+    if ((iconv(codeConvert1, const_cast<const char**>(&input), &inbytes, &output, &outbytes) == (size_t)-1)){
+#else
     if ((iconv(codeConvert1, &input, &inbytes, &output, &outbytes) != 0)){
+#endif
 #ifdef DEBUG
 	SoDebugError::post("SoV2Text2::convertToUTF8", 
 	    "Error converting text to UCS-2");
@@ -199,7 +203,11 @@ SoV2Text2::convertToUTF8(const SbString &inString,
     outbytes = 2*inString.getLength()+1;
     inbytes = 2*inString.getLength();
     output = (char*)UTFBuf;    
+#ifdef SB_OS_WIN
+    if ((iconv(codeConvert2, const_cast<const char**>(&input), &inbytes, &output, &outbytes) == (size_t)-1)){
+#else
     if ((iconv(codeConvert2, &input, &inbytes, &output, &outbytes) != 0)){
+#endif
 #ifdef DEBUG
 	switch(errno){
 	    case EILSEQ:  printf("EILSEQ\n");

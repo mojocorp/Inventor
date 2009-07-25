@@ -43,7 +43,7 @@
 #ifndef SO_NURBS_GL4SURFEVAL
 #define SO_NURBS_GL4SURFEVAL
 
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 
 #include "basicsurfeval.h"
 

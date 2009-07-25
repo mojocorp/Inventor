@@ -37,7 +37,7 @@
 #ifndef SO_NURBS_SOFTSURFACEMAPS
 #define SO_NURBS_SOFTSURFACEMAPS
 
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 
 #include <Inventor/misc/SoGL.h>
 #include "softsurfmap.h"

@@ -37,13 +37,14 @@
 #ifndef __glusimplemath_h_
 #define __glusimplemath_h_
 
+#include <Inventor/SbBasic.h>
+
 #include "../SoAddPrefix.h"
 /*
  * simplemath.h - $Revision: 1.1 $
  */
 
 /* simple inline routines */
-
 inline int 
 max( int x, int y ) { return ( x < y ) ? y : x; }
 
@@ -53,7 +54,9 @@ min( REAL x, REAL y ) { return ( x > y ) ? y : x; }
 inline int 
 absi( int x ) { return ( x < 0 ) ? -x : x; }
 
+#ifndef SB_OS_WIN
 inline REAL 
 abs( REAL x ) { return ( x < 0.0 ) ? -x : x; }
+#endif
 
 #endif /* __glusimplemath_h_ */

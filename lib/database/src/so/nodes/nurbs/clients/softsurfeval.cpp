@@ -50,7 +50,10 @@
 #include "softsurfeval.h"
 #include "nurbsconsts.h"
 
+#ifndef _WINDOWS
 inline REAL abs( REAL x ) { return (x < 0.0) ? -x : x; }
+#endif
+
 inline int equal( REAL x, REAL y ) { return (abs(x-y) < 1.0E-6) ? 1 : 0; }
 
 _SoNurbsSurfaceEvaluator::~_SoNurbsSurfaceEvaluator() 

@@ -396,6 +396,9 @@ extern "C" {
 #include <setjmp.h>
 
 #include "readGIF.h"
+#ifdef SB_OS_WIN
+#  define XMD_H
+#endif
 #include <jpeglib.h>
 
 typedef struct {

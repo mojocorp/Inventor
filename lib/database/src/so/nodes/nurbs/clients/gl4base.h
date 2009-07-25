@@ -41,7 +41,7 @@
 #ifndef SO_NURBS_GL4_BASE
 #define SO_NURBS_GL4_BASE
 
-#include <inttypes.h>   /* defines long and brethren */
+#include <Inventor/SbStdint.h>   /* defines long and brethren */
 
 #include "math.h"
 #include "stdlib.h"

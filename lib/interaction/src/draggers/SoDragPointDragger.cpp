@@ -54,6 +54,7 @@
 
 #include <stdio.h>
 #include <limits.h>
+#include <math.h>
 
 #include <Inventor/SoDB.h>
 #include <Inventor/errors/SoDebugError.h>

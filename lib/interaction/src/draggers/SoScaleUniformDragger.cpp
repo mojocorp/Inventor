@@ -53,6 +53,7 @@
 
 
 #include <stdio.h>
+#include <math.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
