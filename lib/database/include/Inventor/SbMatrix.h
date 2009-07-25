@@ -227,11 +227,6 @@ class INVENTOR_API SbMatrix {
     SbMatrix &	operator =(const SbMat &m);
 
     SbMatrix &	operator =(const SbMatrix &m);
-    // This silly little inline method is needed because some
-    // compilers won't use the above method...
-#ifdef __sgi
-    SbMatrix &  operator =(      SbMat &m) { return *this = (const SbMat &)m; }
-#endif // __sgi
 
     // Sets value from a rotation
     SbMatrix &	operator =(const SbRotation &q)	{ setRotate(q); return *this; }

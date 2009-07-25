@@ -67,10 +67,6 @@
 
 #include <inttypes.h>
 #include <sys/types.h>
-#ifdef __sgi
-#include <libc.h>
-#include <sgidefs.h>
-#endif /* __sgi */
 #include <stdio.h>
 
 #ifndef FALSE
