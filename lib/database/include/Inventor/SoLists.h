@@ -96,10 +96,6 @@ class SoPickedPoint;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#if _COMPILER_VERSION>=710
-#  pragma set woff 1375
-#endif
-
 class INVENTOR_API SoBaseList : public SbPList {
   public:
     SoBaseList();
@@ -342,9 +338,5 @@ class INVENTOR_API SoEngineOutputList : public SbPList {
 };
 
 //////////////////////////////////////////////////////////////////////////////
-
-#if _COMPILER_VERSION>=710
-#  pragma reset woff 1375
-#endif
 
 #endif /* _SO_LISTS_ */

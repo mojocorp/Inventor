@@ -85,10 +85,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#if _COMPILER_VERSION>=710
-#  pragma set woff 1375
-#endif
-
 SoINTERNAL class INVENTOR_API SoAuditorList : private SbPList {
   public:
 
@@ -124,9 +120,5 @@ SoINTERNAL class INVENTOR_API SoAuditorList : private SbPList {
     // Propagates notification to indexed auditor
     void		notify1(SoNotList *list, int index);
 };
-
-#if _COMPILER_VERSION>=710
-#  pragma reset woff 1375
-#endif
 
 #endif /* _SO_AUDITOR_LIST_ */

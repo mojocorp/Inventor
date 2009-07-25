@@ -78,9 +78,7 @@
 #include <Inventor/draggers/SoTransformerDragger.h>
 #include "geom/SoTransformerDraggerGeom.h"
 
-#ifndef __sgi
 #define _ABS(x) ((x) < 0 ? -(x) : (x))
-#endif // !__sgi
 
 int    SoTransformerDragger::colinearThreshold = 4;
 
