@@ -54,7 +54,7 @@
  _______________________________________________________________________
  */
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -120,6 +120,20 @@ SoQuadMesh::~SoQuadMesh()
 {
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoQuadMesh class.
+//
+// Use: internal
+
+void
+SoQuadMesh::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoQuadMesh, "QuadMesh", SoNonIndexedShape);
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -746,6 +760,278 @@ SoQuadMesh::notify(SoNotList *list)
 }
 
 
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Generates triangles representing a quad mesh.
+//
+// Use: protected
+
+void
+SoQuadMesh::generatePrimitives(SoAction *action)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // When generating primitives for picking, there is no need to
+    // create details now, since they will be created in
+    // createTriangleDetail() when an intersection is found (but we
+    // need to use the face detail to figure out the rest of it).
+    // Otherwise, we create a face detail containing the 3 points of
+    // the generated triangle, using the stuff in SoShape.
+    // We also delay computing default texture coordinates.
+    SbBool forPicking = action->isOfType(SoRayPickAction::getClassTypeId());
+
+    //put the vertexProperty into the state:
+    SoState *state = action->getState();
+    state->push();
+    SoVertexProperty* vp = (SoVertexProperty*)vertexProperty.getValue();
+    if(vp){
+	vp->doAction(action);
+    }
+
+
+    SoPrimitiveVertex		pv;
+    SoFaceDetail		fd;
+    SoPointDetail		pd;
+    const SoCoordinateElement	*ce;
+    int				topVert, botVert, curVert;
+    int				quadIndex, matlIndex, normIndex, tcIndex;
+    int				row, col, numRows, numCols;
+    Binding			materialBinding, normalBinding;
+    SoNormalBundle		nb(action, FALSE);
+    SoTextureCoordinateBundle	tcb(action, FALSE, ! forPicking);
+
+    ce = SoCoordinateElement::getInstance(action->getState());
+
+    materialBinding = getMaterialBinding(action);
+    normalBinding   = getNormalBinding(action);
+
+    // Get number of rows and columns (of quads, not vertices)
+    numRows = (int) verticesPerColumn.getValue() - 1;
+    numCols = (int) verticesPerRow.getValue()    - 1;
+
+    topVert = (int) startIndex.getValue();
+    botVert = topVert + numCols + 1;
+
+    if (forPicking) {
+	pv.setTextureCoords(SbVec4f(0.0, 0.0, 0.0, 0.0));
+	pv.setDetail(&fd);
+    }
+    else
+	pv.setDetail(&pd);
+
+    // Generate default normals, if necessary:
+    if (SoNormalElement::getInstance(state)->getNum() == 0) {
+	figureNormals(action->getState(), &nb);
+	normalBinding = PER_VERTEX;
+    }
+
+    for (row = 0; row < numRows; row++) {
+
+	fd.setPartIndex(row);
+
+	// If either material or normal binding is per quad, we have
+	// to generate each quad separately, to get the materials and
+	// normals in the details to be correct
+	if (materialBinding == PER_QUAD || normalBinding == PER_QUAD) {
+
+	    for (col = -1; col < numCols; col++) {
+		if (col >= 0) {
+		    // Generate a triangle strip from the 4 vertices of the
+		    // independent quad, in this order:
+		    //		topVert-1, botVert-1, botVert, topVert
+
+		    quadIndex = row * numCols + col;
+
+		    fd.setFaceIndex(quadIndex);
+
+		    beginShape(action, TRIANGLE_STRIP,
+			       forPicking ? NULL : &fd);
+
+		    curVert = topVert - 1;
+		    matlIndex = getBindIndex(materialBinding, row, quadIndex, curVert);
+		    normIndex = getBindIndex(normalBinding,   row, quadIndex, curVert);
+		    tcIndex   = tcb.isFunction() ? 0 : curVert;
+
+		    pv.setPoint(ce->get3(curVert));
+		    pv.setNormal(nb.get(normIndex));
+		    pv.setMaterialIndex(matlIndex);
+
+		    if (! tcb.isFunction())
+			pv.setTextureCoords(tcb.get(tcIndex));
+
+		    if (! forPicking) {
+			if (tcb.isFunction())
+			    pv.setTextureCoords(tcb.get(pv.getPoint(),
+							pv.getNormal()));
+			pd.setCoordinateIndex(curVert);
+			pd.setMaterialIndex(matlIndex);
+			pd.setNormalIndex(normIndex);
+			pd.setTextureCoordIndex(tcIndex);
+		    }
+
+		    shapeVertex(&pv);
+
+		    curVert = botVert - 1;
+		    matlIndex = getBindIndex(materialBinding, row, quadIndex, curVert);
+		    normIndex = getBindIndex(normalBinding,   row, quadIndex, curVert);
+		    tcIndex   = tcb.isFunction() ? 0 : curVert;
+
+		    pv.setPoint(ce->get3(curVert));
+		    pv.setNormal(nb.get(normIndex));
+		    pv.setMaterialIndex(matlIndex);
+
+		    if (! tcb.isFunction())
+			pv.setTextureCoords(tcb.get(tcIndex));
+
+		    if (! forPicking) {
+			if (tcb.isFunction())
+			    pv.setTextureCoords(tcb.get(pv.getPoint(),
+							pv.getNormal()));
+			pd.setCoordinateIndex(curVert);
+			pd.setMaterialIndex(matlIndex);
+			pd.setNormalIndex(normIndex);
+			pd.setTextureCoordIndex(tcIndex);
+		    }
+
+		    shapeVertex(&pv);
+
+		    curVert = topVert;
+		    matlIndex = getBindIndex(materialBinding, row, quadIndex, curVert);
+		    normIndex = getBindIndex(normalBinding,   row, quadIndex, curVert);
+		    tcIndex   = tcb.isFunction() ? 0 : curVert;
+
+		    pv.setPoint(ce->get3(curVert));
+		    pv.setNormal(nb.get(normIndex));
+		    pv.setMaterialIndex(matlIndex);
+
+		    if (! tcb.isFunction())
+			pv.setTextureCoords(tcb.get(tcIndex));
+
+		    if (! forPicking) {
+			if (tcb.isFunction())
+			    pv.setTextureCoords(tcb.get(pv.getPoint(),
+							pv.getNormal()));
+			pd.setCoordinateIndex(curVert);
+			pd.setMaterialIndex(matlIndex);
+			pd.setNormalIndex(normIndex);
+			pd.setTextureCoordIndex(tcIndex);
+		    }
+
+		    shapeVertex(&pv);
+
+		    curVert = botVert;
+		    matlIndex = getBindIndex(materialBinding, row, quadIndex, curVert);
+		    normIndex = getBindIndex(normalBinding,   row, quadIndex, curVert);
+		    tcIndex   = tcb.isFunction() ? 0 : curVert;
+
+		    pv.setPoint(ce->get3(curVert));
+		    pv.setNormal(nb.get(normIndex));
+		    pv.setMaterialIndex(matlIndex);
+
+		    if (! tcb.isFunction())
+			pv.setTextureCoords(tcb.get(tcIndex));
+
+		    if (! forPicking) {
+			if (tcb.isFunction())
+			    pv.setTextureCoords(tcb.get(pv.getPoint(),
+							pv.getNormal()));
+			pd.setCoordinateIndex(curVert);
+			pd.setMaterialIndex(matlIndex);
+			pd.setNormalIndex(normIndex);
+			pd.setTextureCoordIndex(tcIndex);
+		    }
+
+		    shapeVertex(&pv);
+
+		    endShape();
+		}
+
+		topVert++;
+		botVert++;
+	    }
+	}
+
+	// We can generate triangle strips, which is a little easier
+	else {
+	    beginShape(action, TRIANGLE_STRIP, forPicking ? NULL : &fd);
+
+	    for (col = -1; col < numCols; col++) {
+
+		quadIndex = row * numCols + col;
+
+		fd.setFaceIndex(quadIndex);
+
+		// Generate two vertices for each column:
+		//	topVert, then botVert
+
+		curVert = topVert;
+		matlIndex = getBindIndex(materialBinding, row, quadIndex, curVert);
+		normIndex = getBindIndex(normalBinding,   row, quadIndex, curVert);
+		tcIndex   = tcb.isFunction() ? 0 : curVert;
+
+		pv.setPoint(ce->get3(curVert));
+		pv.setNormal(nb.get(normIndex));
+		pv.setMaterialIndex(matlIndex);
+
+		if (! tcb.isFunction())
+		    pv.setTextureCoords(tcb.get(tcIndex));
+
+		if (! forPicking) {
+		    if (tcb.isFunction())
+			pv.setTextureCoords(tcb.get(pv.getPoint(),
+						    pv.getNormal()));
+		    pd.setCoordinateIndex(curVert);
+		    pd.setMaterialIndex(matlIndex);
+		    pd.setNormalIndex(normIndex);
+		    pd.setTextureCoordIndex(tcIndex);
+		}
+
+		shapeVertex(&pv);
+
+		curVert = botVert;
+		matlIndex = getBindIndex(materialBinding, row, quadIndex, curVert);
+		normIndex = getBindIndex(normalBinding,   row, quadIndex, curVert);
+		tcIndex   = tcb.isFunction() ? 0 : curVert;
+
+		pv.setPoint(ce->get3(curVert));
+		pv.setNormal(nb.get(normIndex));
+		pv.setMaterialIndex(matlIndex);
+
+		if (! tcb.isFunction())
+		    pv.setTextureCoords(tcb.get(tcIndex));
+
+		if (! forPicking) {
+		    if (tcb.isFunction())
+			pv.setTextureCoords(tcb.get(pv.getPoint(),
+						    pv.getNormal()));
+		    pd.setCoordinateIndex(curVert);
+		    pd.setMaterialIndex(matlIndex);
+		    pd.setNormalIndex(normIndex);
+		    pd.setTextureCoordIndex(tcIndex);
+		}
+
+		shapeVertex(&pv);
+
+		topVert++;
+		botVert++;
+	    }
+
+	    endShape();
+	}
+    }
+
+    state->pop();
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Following preprocessor-generated routines handle all combinations of
+// Normal binding (per vertex, per face, per part, overall/none)
+// Color Binding (per vertex, per face, per part, overall)
+// Textures (on or off)
+//////////////////////////////////////////////////////////////////////////
 
 // 32 different rendering loops; the 5 bits used to determine the
 // rendering case are:
