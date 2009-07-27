@@ -852,7 +852,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/nodes/SoProfile.cpp \
            database/src/so/nodes/SoProfileCoordinate2.cpp \
            database/src/so/nodes/SoProfileCoordinate3.cpp \
-           database/src/so/nodes/SoQuadSet.cpp \
+           database/src/so/nodes/SoQuadMesh.cpp \
            database/src/so/nodes/SoResetTransform.cpp \
            database/src/so/nodes/SoRotation.cpp \
            database/src/so/nodes/SoRotationXYZ.cpp \
