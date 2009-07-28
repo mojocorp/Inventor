@@ -157,6 +157,21 @@ SoIndexedTriangleStripSet::~SoIndexedTriangleStripSet()
     if (numVertices) delete[] numVertices;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoIndexedTriangleStripSet class.
+//
+// Use: internal
+
+void
+SoIndexedTriangleStripSet::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoIndexedTriangleStripSet,
+			"IndexedTriangleStripSet", SoIndexedShape);
+}
 
 ////////////////////////////////////////////////////////////////////////
 //

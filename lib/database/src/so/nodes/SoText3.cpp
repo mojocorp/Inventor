@@ -349,6 +349,23 @@ SoText3::~SoText3()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoText3 class.
+//
+// Use: internal
+
+void
+SoText3::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoText3, "Text3", SoShape);
+
+    // Font name and size elements are enabled by the SoFont node
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Figure out the bounds of a character.
 //
 // Use: extender

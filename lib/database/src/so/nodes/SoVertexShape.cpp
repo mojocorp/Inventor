@@ -97,6 +97,21 @@ SoVertexShape::~SoVertexShape()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoVertexShape class.
+//
+// Use: internal
+
+void
+SoVertexShape::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_ABSTRACT_CLASS(SoVertexShape, "VertexShape", SoShape);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Subclasses may define this method to generate normals to use
 //    when the normal binding is DEFAULT and there aren't enough
 //    normals in the state. This should use the given SoNormalBundle

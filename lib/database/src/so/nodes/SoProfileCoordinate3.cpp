@@ -91,6 +91,21 @@ SoProfileCoordinate3::~SoProfileCoordinate3()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoProfileCoordinate3 class.
+//
+// Use: internal
+
+void
+SoProfileCoordinate3::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoProfileCoordinate3, "ProfileCoordinate3", SoNode);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Handles actions (just changes the state)
 //
 // Use: extender

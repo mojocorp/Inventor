@@ -87,6 +87,21 @@ SoLinearProfile::~SoLinearProfile()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoLinearProfile class.
+//
+// Use: internal
+
+void
+SoLinearProfile::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoLinearProfile, "LinearProfile", SoProfile);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Static helper routine that figures out how many points will
 //    really be used, taking into account USE_REST_OF_VERTICES
 //

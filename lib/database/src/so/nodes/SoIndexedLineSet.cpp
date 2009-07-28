@@ -155,6 +155,21 @@ SoIndexedLineSet::~SoIndexedLineSet()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoIndexedLineSet class.
+//
+// Use: internal
+
+void
+SoIndexedLineSet::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoIndexedLineSet, "IndexedLineSet", SoIndexedShape);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Generates line segments representing a line set.
 //
 // Use: protected

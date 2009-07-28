@@ -129,6 +129,27 @@ SoUnits::~SoUnits()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoUnits class.
+//
+// Use: internal
+
+void
+SoUnits::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoUnits, "Units", SoTransformation);
+
+    SO_ENABLE(SoCallbackAction,		SoUnitsElement);
+    SO_ENABLE(SoGLRenderAction,		SoUnitsElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoUnitsElement);
+    SO_ENABLE(SoGetMatrixAction,	SoUnitsElement);
+    SO_ENABLE(SoPickAction,		SoUnitsElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets the units element and scales by the quotient of this unit
 //    and the previous unit
 //

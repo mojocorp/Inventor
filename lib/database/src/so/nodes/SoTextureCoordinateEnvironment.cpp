@@ -95,6 +95,24 @@ SoTextureCoordinateEnvironment::~SoTextureCoordinateEnvironment()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTextureCoordinateEnvironment class.
+//
+// Use: internal
+
+void
+SoTextureCoordinateEnvironment::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTextureCoordinateEnvironment,
+		  "TextureCoordinateEnvironment", SoTextureCoordinateFunction);
+
+    // Elements are enabled by SoTextureCoordinate nodes.
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Calculates texture coordinate
 //
 // Use: public

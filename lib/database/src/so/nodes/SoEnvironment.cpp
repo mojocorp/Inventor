@@ -107,6 +107,25 @@ SoEnvironment::~SoEnvironment()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoEnvironment class.
+//
+// Use: internal
+
+void
+SoEnvironment::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoEnvironment, "Environment", SoNode);
+
+    // Enable elements for appropriate actions:
+
+    SO_ENABLE(SoCallbackAction, SoLightAttenuationElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets up environment parameters during rendering.
 //
 // Use: extender

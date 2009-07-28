@@ -90,6 +90,21 @@ SoOrthographicCamera::~SoOrthographicCamera()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoOrthographicCamera class.
+//
+// Use: internal
+
+void
+SoOrthographicCamera::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoOrthographicCamera, "OrthographicCamera", SoCamera);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Scales the height of the camera, in this case the 'height' field
 //
 // Use: public

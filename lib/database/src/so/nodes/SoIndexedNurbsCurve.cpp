@@ -114,6 +114,21 @@ SoIndexedNurbsCurve::~SoIndexedNurbsCurve()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoIndexedNurbsCurve class.
+//
+// Use: internal
+
+void
+SoIndexedNurbsCurve::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoIndexedNurbsCurve, "IndexedNurbsCurve", SoShape);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Performs GL rendering of the NURBS surface.
 //
 // Use: private
