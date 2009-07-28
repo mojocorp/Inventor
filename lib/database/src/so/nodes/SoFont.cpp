@@ -95,6 +95,31 @@ SoFont::~SoFont()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoFont class.
+//
+// Use: internal
+
+void
+SoFont::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoFont, "Font", SoNode);
+
+    // Enable elements for appropriate actions:
+    SO_ENABLE(SoGLRenderAction,		SoFontNameElement);
+    SO_ENABLE(SoGLRenderAction,		SoFontSizeElement);
+    SO_ENABLE(SoPickAction,		SoFontNameElement);
+    SO_ENABLE(SoPickAction,		SoFontSizeElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoFontNameElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoFontSizeElement);
+    SO_ENABLE(SoCallbackAction,		SoFontNameElement);
+    SO_ENABLE(SoCallbackAction,		SoFontSizeElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Handles actions
 //
 // Use: extender

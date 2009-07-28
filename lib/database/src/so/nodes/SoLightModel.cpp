@@ -54,7 +54,7 @@
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoOverrideElement.h>
-#include <Inventor/elements/SoLazyElement.h>
+#include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/nodes/SoLightModel.h>
 
 SO_NODE_SOURCE(SoLightModel);
@@ -95,6 +95,26 @@ SoLightModel::~SoLightModel()
 //
 ////////////////////////////////////////////////////////////////////////
 {
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoLightModel class.
+//
+// Use: internal
+
+void
+SoLightModel::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoLightModel, "LightModel", SoNode);
+
+    SO_ENABLE(SoGLRenderAction, SoShapeStyleElement);
+    SO_ENABLE(SoCallbackAction, SoShapeStyleElement);
+    SO_ENABLE(SoGLRenderAction, SoGLLazyElement);
+    SO_ENABLE(SoCallbackAction, SoLazyElement);
 }
 
 ////////////////////////////////////////////////////////////////////////

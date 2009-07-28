@@ -92,6 +92,21 @@ SoDirectionalLight::~SoDirectionalLight()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoDirectionalLight class.
+//
+// Use: internal
+
+void
+SoDirectionalLight::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoDirectionalLight, "DirectionalLight", SoLight);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Creates a light source during rendering.
 //
 // Use: extender

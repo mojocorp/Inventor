@@ -129,6 +129,27 @@ SoTransform::~SoTransform()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTransform class.
+//
+// Use: internal
+
+void
+SoTransform::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTransform, "Transform", SoTransformation);
+
+    SO_ENABLE(SoCallbackAction,		SoModelMatrixElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoBBoxModelMatrixElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoLocalBBoxMatrixElement);
+    SO_ENABLE(SoPickAction,		SoModelMatrixElement);
+    SO_ENABLE(SoGLRenderAction,		SoGLModelMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets the transform to translate the origin to the fromPoint and
 //    rotate the negative z-axis (0,0,-1) to lie on the vector from
 //    fromPoint to toPoint. This always tries to keep the "up"

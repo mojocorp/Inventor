@@ -83,3 +83,19 @@ SoTextureCoordinateFunction::~SoTextureCoordinateFunction()
 ////////////////////////////////////////////////////////////////////////
 {
 }
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoTextureCoordinateFunction class.
+//
+// Use: internal
+
+void
+SoTextureCoordinateFunction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTextureCoordinateFunction,
+		      "TextureCoordinateFunction", SoNode);
+}

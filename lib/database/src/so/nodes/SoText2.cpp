@@ -213,6 +213,23 @@ SoText2::~SoText2()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoText2 class.
+//
+// Use: internal
+
+void
+SoText2::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoText2, "Text2", SoShape);
+
+    // Font size/name are enabled by SoFont node
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Static helper routine; given a vector in object space, a
 //    transformation matrix to screen (normalized-device coordinate)
 //    space, and a viewportRegion, returns the 2D pixel coordinates of

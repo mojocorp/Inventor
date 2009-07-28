@@ -98,6 +98,25 @@ SoTexture2Transform::~SoTexture2Transform()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTexture2Transform class.
+//
+// Use: internal
+
+void
+SoTexture2Transform::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTexture2Transform, "Texture2Transform", SoNode);
+
+    SO_ENABLE(SoCallbackAction,		SoTextureMatrixElement);
+    SO_ENABLE(SoPickAction,		SoTextureMatrixElement);
+    SO_ENABLE(SoGLRenderAction,		SoGLTextureMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Does all the work for most actions
 //
 // Use: extender

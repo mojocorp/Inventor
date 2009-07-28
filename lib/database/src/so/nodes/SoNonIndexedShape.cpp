@@ -89,6 +89,22 @@ SoNonIndexedShape::~SoNonIndexedShape()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoNonIndexedShape class.
+//
+// Use: internal
+
+void
+SoNonIndexedShape::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_ABSTRACT_CLASS(SoNonIndexedShape, "NonIndexedShape",
+				 SoVertexShape);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    This is a convenience method to simplify the job of computing
 //    bounding boxes for subclasses; it can be called from a
 //    subclass's computeBBox() method. It sets the given bounding box

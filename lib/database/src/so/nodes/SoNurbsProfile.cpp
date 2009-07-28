@@ -96,6 +96,21 @@ SoNurbsProfile::~SoNurbsProfile()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoNurbsProfile class.
+//
+// Use: internal
+
+void
+SoNurbsProfile::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoNurbsProfile, "NurbsProfile", SoProfile);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns the list of control points and the knot vector. Space
 //    will be allocated to store this data.  The calling routine is
 //    responsible for freeing this space.

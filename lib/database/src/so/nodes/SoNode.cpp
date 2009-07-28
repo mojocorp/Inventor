@@ -104,6 +104,43 @@ SoNode::~SoNode()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the base SoNode class.
+//
+// Use: internal
+
+void
+SoNode::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    nextActionMethodIndex = 0;
+    // Allocate a new node type id
+    // No real parent id
+    classTypeId = SoType::createType(SoFieldContainer::getClassTypeId(),
+				     "Node",
+				     NULL,	// Cannot create, abstract
+				     nextActionMethodIndex++);
+				     
+    // Start nodeIds at 10--that way values of 0 through 9 can be used
+    // for special meanings to attach to nonexistent nodes, 
+    // like "default" or "invalid"
+    nextUniqueId = 10;
+
+    // Add action methods
+    SoCallbackAction::addMethod(classTypeId,		callbackS);
+    SoGLRenderAction::addMethod(classTypeId,		GLRenderS);
+    SoGetBoundingBoxAction::addMethod(classTypeId,	getBoundingBoxS);
+    SoGetMatrixAction::addMethod(classTypeId,		getMatrixS);
+    SoHandleEventAction::addMethod(classTypeId,		handleEventS);
+    SoPickAction::addMethod(classTypeId,		pickS);
+    SoRayPickAction::addMethod(classTypeId,		rayPickS);
+    SoSearchAction::addMethod(classTypeId,		searchS);
+    SoWriteAction::addMethod(classTypeId,		writeS);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Turns override flag on or off. Causes notification.
 //
 // Use: public

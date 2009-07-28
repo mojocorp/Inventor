@@ -111,6 +111,21 @@ SoTransformSeparator::~SoTransformSeparator()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTransformSeparator class.
+//
+// Use: internal
+
+void
+SoTransformSeparator::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTransformSeparator, "TransformSeparator", SoGroup);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Typical action traversal. Assumes the model matrix element is
 //    enabled.
 //

@@ -54,10 +54,11 @@
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoDrawStyleElement.h>
-#include <Inventor/elements/SoLinePatternElement.h>
-#include <Inventor/elements/SoLineWidthElement.h>
-#include <Inventor/elements/SoPointSizeElement.h>
+#include <Inventor/elements/SoGLLinePatternElement.h>
+#include <Inventor/elements/SoGLLineWidthElement.h>
+#include <Inventor/elements/SoGLPointSizeElement.h>
 #include <Inventor/elements/SoOverrideElement.h>
+#include <Inventor/elements/SoGLDrawStyleElement.h>
 #include <Inventor/nodes/SoDrawStyle.h>
 
 SO_NODE_SOURCE(SoDrawStyle);
@@ -103,6 +104,35 @@ SoDrawStyle::~SoDrawStyle()
 //
 ////////////////////////////////////////////////////////////////////////
 {
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoDrawStyle class.
+//
+// Use: internal
+
+void
+SoDrawStyle::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoDrawStyle, "DrawStyle", SoNode);
+
+    // Enable elements for appropriate actions:
+
+    SO_ENABLE(SoCallbackAction, SoDrawStyleElement);
+    SO_ENABLE(SoCallbackAction, SoLinePatternElement);
+    SO_ENABLE(SoCallbackAction, SoLineWidthElement);
+    SO_ENABLE(SoCallbackAction, SoPointSizeElement);
+    SO_ENABLE(SoCallbackAction, SoShapeStyleElement);
+
+    SO_ENABLE(SoGLRenderAction, SoGLDrawStyleElement);
+    SO_ENABLE(SoGLRenderAction, SoGLLinePatternElement);
+    SO_ENABLE(SoGLRenderAction, SoGLLineWidthElement);
+    SO_ENABLE(SoGLRenderAction, SoGLPointSizeElement);
+    SO_ENABLE(SoGLRenderAction, SoShapeStyleElement);
 }
 
 ////////////////////////////////////////////////////////////////////////

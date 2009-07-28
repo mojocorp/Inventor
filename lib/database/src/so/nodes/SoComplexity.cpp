@@ -107,6 +107,37 @@ SoComplexity::~SoComplexity()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoComplexity class.
+//
+// Use: internal
+
+void
+SoComplexity::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoComplexity, "Complexity", SoNode);
+
+    // Enable elements for appropriate actions:
+    SO_ENABLE(SoCallbackAction, SoComplexityTypeElement);
+    SO_ENABLE(SoCallbackAction, SoShapeStyleElement);
+    SO_ENABLE(SoCallbackAction, SoComplexityElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoComplexityTypeElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoShapeStyleElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoComplexityElement);
+    SO_ENABLE(SoGLRenderAction, SoComplexityTypeElement);
+    SO_ENABLE(SoGLRenderAction, SoShapeStyleElement);
+    SO_ENABLE(SoGLRenderAction, SoComplexityElement);
+    SO_ENABLE(SoGLRenderAction, SoTextureQualityElement);
+    SO_ENABLE(SoGLRenderAction, SoTextureOverrideElement);
+    SO_ENABLE(SoPickAction,     SoComplexityTypeElement);
+    SO_ENABLE(SoPickAction,     SoShapeStyleElement);
+    SO_ENABLE(SoPickAction,     SoComplexityElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Handles any action.
 //
 // Use: extender

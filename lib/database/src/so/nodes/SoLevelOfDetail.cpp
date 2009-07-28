@@ -115,6 +115,21 @@ SoLevelOfDetail::~SoLevelOfDetail()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoLevelOfDetail class.
+//
+// Use: internal
+
+void
+SoLevelOfDetail::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoLevelOfDetail, "LevelOfDetail", SoGroup);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Implements typical traversal, determining child to traverse
 //    based on screen area.
 //

@@ -91,6 +91,24 @@ SoTextureCoordinateDefault::~SoTextureCoordinateDefault()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTextureCoordinateDefault class.
+//
+// Use: internal
+
+void
+SoTextureCoordinateDefault::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTextureCoordinateDefault,
+		      "TextureCoordinateDefault", SoTextureCoordinateFunction);
+
+    // Elements are enabled by SoTextureCoordinate nodes.
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Does GL render action.
 //
 // Use: protected

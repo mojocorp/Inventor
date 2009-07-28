@@ -120,6 +120,21 @@ SoIndexedFaceSet::~SoIndexedFaceSet()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoIndexedFaceSet class.
+//
+// Use: internal
+
+void
+SoIndexedFaceSet::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoIndexedFaceSet, "IndexedFaceSet", SoIndexedShape);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Performs GL rendering of a indexedFaceSet.
 //
 // Use: protected

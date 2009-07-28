@@ -99,6 +99,25 @@ SoPickStyle::~SoPickStyle()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoPickStyle class.
+//
+// Use: internal
+
+void
+SoPickStyle::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoPickStyle, "PickStyle", SoNode);
+
+    // Enable elements for picking actions:
+    SO_ENABLE(SoCallbackAction, SoPickStyleElement);
+    SO_ENABLE(SoPickAction,	SoPickStyleElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Handles most actions.
 //
 // Use: extender

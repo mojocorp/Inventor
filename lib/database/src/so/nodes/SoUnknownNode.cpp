@@ -153,6 +153,21 @@ SoUnknownNode::~SoUnknownNode()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoUnknownNode class.
+//
+// Use: internal
+
+void
+SoUnknownNode::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoUnknownNode, "UnknownNode", SoNode);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Reads field type data, fields, and children into instance of
 //    SoUnknownNode. Returns FALSE on error.
 //

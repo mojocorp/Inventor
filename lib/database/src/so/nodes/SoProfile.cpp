@@ -100,6 +100,30 @@ SoProfile::~SoProfile()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoProfile class.
+//
+// Use: internal
+
+void
+SoProfile::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_ABSTRACT_CLASS(SoProfile, "Profile", SoNode);
+
+    SO_ENABLE(SoCallbackAction,		SoProfileElement);
+    SO_ENABLE(SoCallbackAction,		SoProfileCoordinateElement);
+    SO_ENABLE(SoGLRenderAction,		SoProfileElement);
+    SO_ENABLE(SoGLRenderAction,		SoProfileCoordinateElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoProfileElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoProfileCoordinateElement);
+    SO_ENABLE(SoPickAction,		SoProfileElement);
+    SO_ENABLE(SoPickAction,		SoProfileCoordinateElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Implements all actions.
 //
 // Use: extender

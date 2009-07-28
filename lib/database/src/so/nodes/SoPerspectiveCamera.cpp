@@ -94,6 +94,21 @@ SoPerspectiveCamera::~SoPerspectiveCamera()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoPerspectiveCamera class.
+//
+// Use: internal
+
+void
+SoPerspectiveCamera::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoPerspectiveCamera, "PerspectiveCamera", SoCamera);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Scales the height of the camera, in this case the 'heightAngle' field
 //
 // Use: public

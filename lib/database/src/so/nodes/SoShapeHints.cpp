@@ -121,6 +121,30 @@ SoShapeHints::~SoShapeHints()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoShapeHints class.
+//
+// Use: internal
+
+void
+SoShapeHints::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoShapeHints, "ShapeHints", SoNode);
+
+    SO_ENABLE(SoGLRenderAction, SoGLShapeHintsElement);
+    SO_ENABLE(SoGLRenderAction, SoCreaseAngleElement);
+    SO_ENABLE(SoCallbackAction, SoShapeHintsElement);
+    SO_ENABLE(SoCallbackAction, SoCreaseAngleElement);
+    SO_ENABLE(SoPickAction, SoShapeHintsElement);
+    SO_ENABLE(SoPickAction, SoCreaseAngleElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoShapeHintsElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoCreaseAngleElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Updates state for actions
 //
 // Use: extender

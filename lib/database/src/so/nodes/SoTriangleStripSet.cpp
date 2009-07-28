@@ -126,6 +126,24 @@ SoTriangleStripSet::~SoTriangleStripSet()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTriangleStripSet class.
+//
+// Use: internal
+
+void
+SoTriangleStripSet::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTriangleStripSet, "TriangleStripSet",
+			SoNonIndexedShape);
+
+    SO_ENABLE(SoGLRenderAction,		SoShapeStyleElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Implements GL rendering.
 //
 // Use: extender

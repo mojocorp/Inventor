@@ -110,6 +110,22 @@ SoIndexedShape::~SoIndexedShape()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoIndexedShape class.
+//
+// Use: internal
+
+void
+SoIndexedShape::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_ABSTRACT_CLASS(SoIndexedShape, "IndexedShape",
+				 SoVertexShape);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Keep things up to date when my fields change
 //
 // Use: protected
