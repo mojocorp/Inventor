@@ -23,7 +23,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "readGIF.h"
+#include "image-gif.h"
 
 #define DoRed                  (1<<0)
 #define DoGreen                (1<<1)

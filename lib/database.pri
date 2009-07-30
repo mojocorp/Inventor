@@ -429,7 +429,6 @@ PRIVATE_HEADERS += database/src/so/engines/SoCalcExpr.h \
            database/src/so/engines/SoEngineUtil.h \
            database/src/so/engines/SoFieldConverters.h \
            database/src/so/fields/SoGlobalField.h \
-           database/src/so/nodes/readGIF.h \
            database/src/so/upgraders/SoUpgraders.h \
            database/src/so/upgraders/SoV1DrawStyle.h \
            database/src/so/upgraders/SoV1Environment.h \
@@ -791,7 +790,6 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/fields/SoSFVec2f.cpp \
            database/src/so/fields/SoSFVec3f.cpp \
            database/src/so/fields/SoSFVec4f.cpp \
-           database/src/so/nodes/readGIF.c \
            database/src/so/nodes/SoAnnotation.cpp \
            database/src/so/nodes/SoArray.cpp \
            database/src/so/nodes/SoAsciiText.cpp \

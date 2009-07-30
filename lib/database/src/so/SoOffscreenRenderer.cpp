@@ -59,40 +59,7 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoNode.h>
 
-// gross stuff to read images, grabbed from image.h and the image
-// library.  Had to grab it since the real .h file is not c++ compatible.
-extern "C" {
-
-typedef struct {
-    unsigned short      imagic;         /* stuff saved on disk . . */
-    unsigned short      type;
-    unsigned short      dim;
-    unsigned short      xsize;
-    unsigned short      ysize;
-    unsigned short      zsize;
-    uint32_t       min;
-    uint32_t       max;
-    uint32_t       wastebytes;
-    char                name[80];
-    uint32_t       colormap;
-} IMAGE;
-extern IMAGE *fiopen(int, const char *, int = 0, int = 0,
-                     int = 0, int = 0, int = 0);
-extern void putrow(IMAGE *, short *, unsigned int, unsigned int);
-extern void iclose(IMAGE *);
-};  /* end of extern "C" */
-
-#define TYPEMASK        0xff00
-#define BPPMASK         0x00ff
-#define ITYPE_VERBATIM  0x0000
-#define ITYPE_RLE       0x0100
-#define ISRLE(type)             (((type) & 0xff00) == ITYPE_RLE)
-#define ISVERBATIM(type)        (((type) & 0xff00) == ITYPE_VERBATIM)
-#define BPP(type)               ((type) & BPPMASK)
-#define RLE(bpp)                (ITYPE_RLE | (bpp))
-#define VERBATIM(bpp)           (ITYPE_VERBATIM | (bpp))
-#define IBUFSIZE(pixels)        ( (pixels+(pixels>>6))*sizeof(int32_t) )
-#define RLE_NOP         0x00
+#include <image-sgi.h>
 
 #ifdef SB_HAS_X11
 // Offscreen renderings will always be rendered as RGB images
@@ -481,10 +448,9 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
     // Get the correct viewport size.
     const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
 
-    int ifile = fileno(fp);
-    IMAGE *image;
+    sgi_t *image;
 
-    if ((image = fiopen( ifile, "w", RLE(1), dimensions,
+    if ((image = sgiOpenFile( fp, SGI_WRITE, SGI_COMP_RLE, dimensions,
             (unsigned int)vpSize[0], (unsigned int)vpSize[1],
             components )) == NULL)
     {
@@ -500,7 +466,7 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
     getFormat(format);
 
     // For each row in the pixel buffer, write the row into the image file
-    short *rowBuf = new short[vpSize[0]];
+    unsigned short *rowBuf = new unsigned short[vpSize[0]];
     unsigned char *pBuf = new unsigned char[vpSize[0]*components*2];
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -518,16 +484,16 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
 
         // Convert each color component
         for (int comp=0; comp<components; comp++) {
-            short *trow = rowBuf;
+            unsigned short *trow = rowBuf;
 
             // Convert a row
             tbuf = pBuf + comp;
             for (int j=0; j<vpSize[0]; j++, tbuf += components)
                 *trow++ = (short)*tbuf;
-            putrow( image, rowBuf, row, comp );
+            sgiPutRow( image, rowBuf, row, comp );
         }
     }
-    iclose( image );
+    sgiClose( image );
     delete [] pBuf;
     delete [] rowBuf;
     return TRUE;
