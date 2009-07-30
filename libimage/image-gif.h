@@ -47,10 +47,10 @@
 
 
 /* Public functions */
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 typedef struct
 {
     unsigned long pixel;
@@ -61,9 +61,8 @@ typedef struct
 
 extern unsigned char* readGIF(FILE *fd, int *w, int *h, GIF_Color *colors,
 				int *ncolors, int *bgIndex, int *errCode);
+
 #ifdef __cplusplus
 }
 #endif
-
-
 #endif  /* _READGIF_H_INCLUDED */
