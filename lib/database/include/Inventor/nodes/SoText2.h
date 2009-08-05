@@ -118,7 +118,7 @@ class INVENTOR_API SoText2 : public SoShape {
 
     // Internal class that allows Text2 nodes to share font
     // information, GL display lists, etc.
-    SoBitmapFontCache	*myFont;
+    SoBitmapFontCache	*fontCache;
 };
 
 #endif /* _SO_TEXT_2_ */

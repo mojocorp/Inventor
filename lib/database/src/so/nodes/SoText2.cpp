@@ -53,118 +53,25 @@
 
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/SbBox3f.h>
+#include <Inventor/SbMatrix.h>
+#include <Inventor/SbViewportRegion.h>
 #include <Inventor/SoPickedPoint.h>
-#include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoRayPickAction.h>
 #include <Inventor/bundles/SoMaterialBundle.h>
-#include <Inventor/caches/SoCache.h>
 #include <Inventor/details/SoTextDetail.h>
-#include <Inventor/elements/SoCacheElement.h>
-#include <Inventor/elements/SoFontNameElement.h>
+#include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/elements/SoFontSizeElement.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
-#include <Inventor/elements/SoLightModelElement.h>
-#include <Inventor/elements/SoMaterialBindingElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/elements/SoProjectionMatrixElement.h>
 #include <Inventor/elements/SoViewingMatrixElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/errors/SoDebugError.h>
-#include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoText2.h>
+#include <Inventor/caches/SoBitmapFontCache.h>
 
-#include <flclient.h>
-#include <math.h>
-
-// An internal class that makes life easier:
-
-// This very specialized cache class is used to cache bitmaps and GL
-// display lists containing bitmaps.  It is strange because it doesn't
-// use the normal list of elements used to determine validity, etc,
-// and knows exactly which elements it depends on.
-
-class SoBitmapFontCache : public SoCache
-{
-  public:
-    // Return a font (either a new one or an old one) that is valid
-    // for the given state.
-    static SoBitmapFontCache *	getFont(SoState *state, SbBool forRender);
-
-    // Checks to see if this font is valid
-    SbBool		isValid(SoState *state) const;
-
-    // Use this when rendering to decide if this cache is valid (it
-    // checks the GL cache context in addition to other elements)
-    SbBool		isRenderValid(SoState *state) const;
-    
-    // Set up for GL rendering:
-    void	setupToRender(SoState *state);
-
-    // Returns the amount the current raster position will be advanced
-    // after drawing the given character.
-    SbVec3f		getCharOffset(char c);
-
-    // Get the pixel-space bounding box of a given character.
-    void		getCharBbox(char c, SbBox3f &box);
-
-    // Gets the width (in pixels) of the given string
-    float		getWidth(const SbString &str);
-
-    // Gets the height of the font, in pixels
-    float		getHeight();
-
-    // Draws the given string
-    void		drawString(const SbString &string);
-
-    // Draws the given character (using GL)
-    void		drawCharacter(char c);
-
-  protected:
-    // Free up display lists before being deleted
-    virtual void	destroy(SoState *state);
-
-  private:
-    // Constructor.
-    SoBitmapFontCache(SoState *state);
-
-    // Destructor
-    virtual ~SoBitmapFontCache();
-
-    // Returns TRUE if this font cache has a display list for the
-    // given character.  It will try to build a display list, if it
-    // can.
-    SbBool	hasDisplayList(const char c);
-
-    // Renders an entire string by using the GL callList() function.
-    void	callLists(const SbString &string);
-
-    const FLbitmap *getBitmap(unsigned char c);
-
-    // Static list of all fonts.  OPTIMIZATION:  If there turn out to
-    // be applications that use lots of fonts, we could change this
-    // list into a dictionary keyed off the font name.
-    static SbPList	*fonts;
-
-    int		numChars;  // Number of characters in this font
-
-    SoGLDisplayList *list;
-    SbBool	*listFlags;// Flag for each character-- have we built
-			   // GL display list yet?
-    FLbitmap	**bitmaps; // Cached bitmaps for each character.  NULL
-			   // if bitmap hasn't been fetched yet.
-    
-    // This flag will be true if there is another cache open (if
-    // building GL display lists for render caching, that means we
-    // can't also build display lists).
-    SbBool	otherOpen;
-
-    // And some font library stuff:
-    static FLcontext	flContext;
-    FLfontNumber	fontId;
-};
-    
 SO_NODE_SOURCE(SoText2);
 
 ////////////////////////////////////////////////////////////////////////
@@ -193,7 +100,7 @@ SoText2::SoText2()
     SO_NODE_SET_SF_ENUM_TYPE(justification, Justification);
 
     isBuiltIn = TRUE;
-    myFont = NULL;
+    fontCache = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -207,7 +114,7 @@ SoText2::~SoText2()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (myFont != NULL) myFont->unref();
+    if (fontCache != NULL) fontCache->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -307,27 +214,27 @@ SoText2::GLRender(SoGLRenderAction *action)
     state->push();
 
     // Get a font cache we can pull stuff out of
-    if (myFont != NULL) {
-	if (!myFont->isRenderValid(state)) {
-	    myFont->unref(state);
-	    myFont = NULL;
+    if (fontCache != NULL) {
+        if (!fontCache->isRenderValid(state)) {
+            fontCache->unref(state);
+            fontCache = NULL;
 	}
     }
-    if (myFont == NULL) {
-	myFont = SoBitmapFontCache::getFont(state, TRUE);
-	if (myFont == NULL) {
+    if (fontCache == NULL) {
+        fontCache = SoBitmapFontCache::getFont(state, TRUE);
+        if (fontCache == NULL) {
 	    state->pop();
 	    return;
 	}
     }
 
     // Turn off lighting
-    SoLightModelElement::set(state,
-			     SoLightModelElement::BASE_COLOR);
+    SoGLLazyElement::setLightModel(state,
+                             SoGLLazyElement::BASE_COLOR);
     // Turn off texturing
     SoGLTextureEnabledElement::set(state, FALSE);
     
-    myFont->setupToRender(state);
+    fontCache->setupToRender(state);
 
     // Send first color
     SoMaterialBundle mb(action);
@@ -338,7 +245,7 @@ SoText2::GLRender(SoGLRenderAction *action)
     // avoiding getting the projection/view/model matrices:
     if (string.getNum() == 1 && justification.getValue() == LEFT) {
 	glRasterPos3f(0,0,0);
-	myFont->drawString(string[0]);
+        fontCache->drawString(string[0]);
     }
     // General case:
     else {
@@ -373,7 +280,7 @@ SoText2::GLRender(SoGLRenderAction *action)
 					       vpr);
 	    glRasterPos3fv(&lineOrigin[0]);
 	    
-	    myFont->drawString(str);
+            fontCache->drawString(str);
 	}
 	// Don't auto-cache above, since dependent on camera:
 	SoGLCacheContextElement::shouldAutoCache(state,
@@ -403,15 +310,15 @@ SoText2::rayPick(SoRayPickAction *action)
     state->push();
 
     // Get a font cache we can pull stuff out of
-    if (myFont != NULL) {
-	if (!myFont->isValid(state)) {
-	    myFont->unref();
-	    myFont = NULL;
+    if (fontCache != NULL) {
+        if (!fontCache->isValid(state)) {
+            fontCache->unref();
+            fontCache = NULL;
 	}
     }
-    if (myFont == NULL) {
-	myFont = SoBitmapFontCache::getFont(state, FALSE);
-	if (myFont == NULL) {
+    if (fontCache == NULL) {
+        fontCache = SoBitmapFontCache::getFont(state, FALSE);
+        if (fontCache == NULL) {
 	    state->pop();
 	    return;
 	}
@@ -454,7 +361,7 @@ SoText2::rayPick(SoRayPickAction *action)
 	SbVec3f p0, p1, p2, p3;
 	int chr;
 	for (chr = 0; chr < str.getLength(); chr++) {
-	    myFont->getCharBbox(chars[chr], charBbox);
+            fontCache->getCharBbox(chars[chr], charBbox);
 
 	    if (!charBbox.isEmpty()) {
 
@@ -467,7 +374,7 @@ SoText2::rayPick(SoRayPickAction *action)
 		lineBbox.extendBy(charMax);
 
 		// Advance to next character...
-		charPosition += myFont->getCharOffset(chars[chr]);
+                charPosition += fontCache->getCharOffset(chars[chr]);
 	    }
 	}
 	// And transform line's box into object space:
@@ -507,7 +414,7 @@ SoText2::rayPick(SoRayPickAction *action)
 		charPosition = getPixelStringOffset(line) +
 		    screenOrigin;
 		for (chr = 0; chr < str.getLength(); chr++) {
-		    charPosition += myFont->getCharOffset(chars[chr]);
+                    charPosition += fontCache->getCharOffset(chars[chr]);
 		    // Assuming left-to-right drawing of characters:
 		    if (charPosition[0] >= screenPoint[0]) break;
 		}
@@ -559,15 +466,15 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
     state->push();
 
     // Get a font cache we can pull stuff out of
-    if (myFont != NULL) {
-	if (!myFont->isValid(state)) {
-	    myFont->unref();
-	    myFont = NULL;
+    if (fontCache != NULL) {
+        if (!fontCache->isValid(state)) {
+            fontCache->unref();
+            fontCache = NULL;
 	}
     }
-    if (myFont == NULL) {
-	myFont = SoBitmapFontCache::getFont(state, FALSE);
-	if (myFont == NULL) {
+    if (fontCache == NULL) {
+        fontCache = SoBitmapFontCache::getFont(state, FALSE);
+        if (fontCache == NULL) {
 	    state->pop();
 	    return;
 	}
@@ -605,7 +512,7 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 	const char *chars = str.getString();
 
 	for (int chr = 0; chr < str.getLength(); chr++) {
-	    myFont->getCharBbox(chars[chr], charBbox);
+            fontCache->getCharBbox(chars[chr], charBbox);
 	    if (!charBbox.isEmpty()) {
 		SbVec3f min = charBbox.getMin() + charPosition;
 		SbVec3f max = charBbox.getMax() + charPosition;
@@ -614,7 +521,7 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 	    }
 
 	    // And advance...
-	    charPosition += myFont->getCharOffset(chars[chr]);
+            charPosition += fontCache->getCharOffset(chars[chr]);
 	}
     }
     // Ok, screenBbox now contains the pixel-space extent of the
@@ -667,493 +574,14 @@ SoText2::getPixelStringOffset(int line)
     SbVec3f result(0,0,0);
     
     if (justification.getValue() == RIGHT) {
-	float width = myFont->getWidth(string[line]);
+        float width = fontCache->getWidth(string[line]);
 	result[0] = -width;
     }
     if (justification.getValue() == CENTER) {
-	float width = myFont->getWidth(string[line]);
+        float width = fontCache->getWidth(string[line]);
 	result[0] = -width/2.0;
     }
-    result[1] = -line*myFont->getHeight()*spacing.getValue()*2;
+    result[1] = -line*fontCache->getHeight()*spacing.getValue()*2;
 
     return result;
-}
-
-// Static variables for SoBitmapFontCache
-SbPList *SoBitmapFontCache::fonts = NULL;
-FLcontext SoBitmapFontCache::flContext;
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Get a font cache suitable for using with the given state.
-//
-// Use: static, internal, public
-
-SoBitmapFontCache *
-SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    if (fonts == NULL) {
-	// One-time font library initialization
-	fonts = new SbPList;
-	flContext = flCreateContext(NULL, FL_FONTNAME, NULL,
-				  1.0, 1.0);
-	if (flContext == NULL) {
-#ifdef DEBUG
-	    SoDebugError::post("SoText2::getFont",
-			       "flCreateContext returned NULL");
-#endif
-	    return NULL;
-	}
-	if (flGetCurrentContext() != flContext)
-	    flMakeCurrentContext(flContext);
-	flSetHint(FL_HINT_MINOUTLINESIZE, 24.0);
-    }
-    else if (flContext == NULL) return NULL;
-    else {
-	if (flGetCurrentContext() != flContext)
-	    flMakeCurrentContext(flContext);
-    }
-    
-    SoBitmapFontCache *result = NULL;
-    for (int i = 0; i < fonts->getLength() && result == NULL; i++) {
-	SoBitmapFontCache *fc = (SoBitmapFontCache *)(*fonts)[i];
-	if (!fc->fontNumList) continue;
-	if (forRender ? fc->isRenderValid(state) : fc->isValid(state)) {
-	    result = fc;
-	    result->ref();
-	    if (flGetCurrentFont() != result->fontId) {
-		flMakeCurrentFont(result->fontId);
-	    }
-	}	    
-    }
-    if (result == NULL) {
-	result = new SoBitmapFontCache(state);
-
-	// If error:
-	if (result->fontId == 0) {
-	    delete result;
-	    return NULL;
-	}
-    }    
-    return result;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sees if this font is valid.  If it is valid, it also makes it
-//    current.
-//
-// Use: public
-
-SbBool
-SoBitmapFontCache::isValid(SoState *state) const
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SbBool result = SoCache::isValid(state);
-    
-    if (result) {
-	if (flGetCurrentContext() != flContext) {
-	    flMakeCurrentContext(flContext);
-	    flMakeCurrentFont(fontId);
-	}
-	else if (flGetCurrentFont() != fontId)
-	    flMakeCurrentFont(fontId);
-    }
-    return result;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Construct a bitmap font cache, given the state and a dummy
-//    (empty) list of overridden elements (needed only to pass to the
-//    SoCache constructor).
-//
-// Use: internal, private
-
-SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    ref();
-
-    list = NULL;
-
-    // Grab all the stuff we'll need to determine our validity from
-    // the state.
-    SbName fontName = SoFontNameElement::get(state);
-    addElement(state->getConstElement(
-	SoFontNameElement::getClassStackIndex()));
-    if (fontName == SoFontNameElement::getDefault()) {
-	fontName = SbName("Utopia-Regular");
-    }
-    const SbViewportRegion &vpr = SoViewportRegionElement::get(state);
-    addElement(state->getConstElement(
-	SoViewportRegionElement::getClassStackIndex()));
-    float fontSize = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
-    addElement(state->getConstElement(
-	SoFontSizeElement::getClassStackIndex()));
-
-    // Initialize everything
-    GLfloat m[2][2];
-    m[0][0] = m[1][1] = fontSize;
-    m[0][1] = m[1][0] = 0.0;
-    fontId = flCreateFont((const GLubyte *)fontName.getString(), m, 0, NULL);
-
-    if (fontId == 0) {
-	// Try Utopia-Regular, unless we just did!
-	if (fontName != SbName("Utopia-Regular")) {
-#ifdef DEBUG
-	    SoDebugError::post("SoText2::getFont",
-		      "Couldn't find font %s, replacing with Utopia-Regular",
-		       fontName.getString());
-#endif
-	    fontId = flCreateFont((const GLubyte *)"Utopia-Regular",
-				  m, 0, NULL);
-	}
-	if (fontId == 0) {
-#ifdef DEBUG
-	    SoDebugError::post("SoText3::getFont",
-			       "Couldn't find font Utopia-Regular!");
-#endif
-	    numChars = 0;
-	}
-    }	
-    flMakeCurrentFont(fontId);
-    
-    numChars = 256;  // ??? JUST DO ASCII FOR NOW!
-    listFlags = new SbBool[numChars];
-    bitmaps = new FLbitmap*[numChars];
-    for (int i = 0; i < numChars; i++) {
-	listFlags[i] = FALSE;
-	bitmaps[i] = NULL;
-    }
-
-    fonts->append(this);
-}
-    
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Destructor.  Clean up-- GL stuff, font library stuff, and
-//    internally generated stuff.
-//
-// Use: internal, private
-
-SoBitmapFontCache::~SoBitmapFontCache()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    if (fontId) {
-	if (flGetCurrentContext() != flContext) {
-	    flMakeCurrentContext(flContext);
-	    flMakeCurrentFont(fontId);
-	}
-	else if (flGetCurrentFont() != fontId)
-	    flMakeCurrentFont(fontId);
-
-	int i;
-	for (i = 0; i < numChars; i++) {
-	    if (bitmaps[i] != NULL) flFreeBitmap(bitmaps[i]);
-	}
-
-	// Only destroy the font library font if no other font caches
-	// are using the same font identifier:
-	SbBool otherUsing = FALSE;
-	for (i = 0; i < fonts->getLength(); i++) {
-	    SoBitmapFontCache *t = (SoBitmapFontCache *)(*fonts)[i];
-	    if (t != this && t->fontId == fontId) otherUsing = TRUE;
-	}
-	if (!otherUsing) {
-	    flDestroyFont(fontId);
-	}
-    
-	delete [] listFlags;
-	delete [] bitmaps;
-
-	fonts->remove(fonts->find(this));
-    }
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Destroy this cache.  Called by unref(); frees up OpenGL display
-//    lists.
-//
-// Use: protected, virtual
-
-void
-SoBitmapFontCache::destroy(SoState *)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // Pass in NULL to unref because this cache may be destroyed
-    // from an action _other_ than GLRender:
-    if (list) {
-	list->unref(NULL);
-	list = NULL;
-    }
-    SoCache::destroy(NULL);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns TRUE if this cache is valid
-//
-// Use: internal, public
-
-SbBool
-SoBitmapFontCache::isRenderValid(SoState *state) const
-//
-////////////////////////////////////////////////////////////////////////
-{
-    if (!list) return isValid(state);
-    else
-	return (list->getContext() == SoGLCacheContextElement::get(state)
-		 && isValid(state));
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sets up for GL rendering.
-//
-// Use: internal
-
-void
-SoBitmapFontCache::setupToRender(SoState *state)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    otherOpen = SoCacheElement::anyOpen(state);
-
-    if (!otherOpen && !list) {
-	list = new SoGLDisplayList(state,
-				   SoGLDisplayList::DISPLAY_LIST,
-				   numChars);
-	list->ref();
-    }
-    if (list) {
-	// Set correct list base
-	glListBase(list->getFirstIndex());
-	list->addDependency(state);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns TRUE if a display lists exists for given character.
-//    Tries to build a display list, if it can.
-//
-// Use: internal
-
-SbBool
-SoBitmapFontCache::hasDisplayList(const char c)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // If we have one, return TRUE
-    if (listFlags[c] == TRUE) return TRUE;
-    
-    // If we don't and we can't build one, return FALSE.
-    if (otherOpen) return FALSE;
-    
-    // Build one:
-    glNewList(list->getFirstIndex()+c, GL_COMPILE);
-    drawCharacter(c);
-    glEndList();
-    listFlags[c] = TRUE;
-
-    return TRUE;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Assuming that there are display lists built for all the
-//    characters in given string, render them using the GL's CallLists
-//    routine.
-//
-// Use: internal
-
-void
-SoBitmapFontCache::callLists(const SbString &string)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const char *str = string.getString();
-
-    glCallLists(string.getLength(), GL_UNSIGNED_BYTE, str);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns the pixel-space bounding box of given character.
-//
-// Use: internal, public
-
-void
-SoBitmapFontCache::getCharBbox(char c, SbBox3f &box)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    box.makeEmpty();
-
-    const FLbitmap *bmap = getBitmap(c);
-    if (bmap == NULL) return;
-    
-    box.extendBy(SbVec3f(-bmap->xorig, -bmap->yorig, 0));
-    box.extendBy(SbVec3f(bmap->width - bmap->xorig,
-			 bmap->height - bmap->yorig, 0));
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns the amount the current raster position will be advanced
-//    after drawing the given character.
-//
-// Use: internal, public
-
-SbVec3f
-SoBitmapFontCache::getCharOffset(char c)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const FLbitmap *bmap = getBitmap(c);
-    if (bmap != NULL)
-	return SbVec3f(bmap->xmove, bmap->ymove, 0);
-    else return SbVec3f(0,0,0);
-}
-    
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns the width of given string.
-//
-// Use: internal, public
-
-float
-SoBitmapFontCache::getWidth(const SbString &str)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    float result = 0.0;
-
-    const char *chars = str.getString();
-    for (int i = 0; i < str.getLength(); i++) {
-	const FLbitmap *bmap = getBitmap(chars[i]);
-	if (bmap != NULL)
-	    result += bmap->xmove;
-    }
-    return result;
-}
-    
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns the height of given string.
-//
-// Use: internal, public
-
-float
-SoBitmapFontCache::getHeight()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const FLbitmap *bmap = getBitmap('M');
-    if (bmap != NULL)
-	return bmap->height - bmap->yorig;
-    else return 0;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Draws a bitmap
-//
-// Use: internal public
-
-void
-SoBitmapFontCache::drawCharacter(char c)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const FLbitmap *bmap = getBitmap(c);
-    
-    if (bmap != NULL)
-	glBitmap(bmap->width, bmap->height, bmap->xorig, bmap->yorig,
-	     bmap->xmove, bmap->ymove, bmap->bitmap);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Draws a whole string.  Tries to build display lists, if it can.
-//
-// Use: internal public
-
-void
-SoBitmapFontCache::drawString(const SbString &string)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SbBool useCallLists = TRUE;
-
-    const char *chars = string.getString();
-
-    // If there aren't any other caches open, build display lists for
-    // the characters we can:
-    for (int i = 0; i < string.getLength(); i++) {
-	// See if the font cache already has (or can build) a display
-	// list for this character:
-	if (!hasDisplayList(chars[i])) {
-	    useCallLists = FALSE;
-	    break;
-	}
-    }
-	
-    // if we have display lists for all of the characters, use
-    // glCallLists:
-    if (useCallLists) {
-	callLists(string);
-    } else {
-	// if we don't, draw the string character-by-character, using the
-	// display lists we do have:
-	for (int i = 0; i < string.getLength(); i++) {
-	    if (!hasDisplayList(chars[i])) {
-		drawCharacter(chars[i]);
-	    }
-	    else glCallList(list->getFirstIndex()+chars[i]);
-	}
-    }
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns a bitmap.
-//
-// Use: private
-
-const FLbitmap *
-SoBitmapFontCache::getBitmap(unsigned char c)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    if (!fontNumList) return NULL;
-
-    if (bitmaps[c] == NULL) {
-	bitmaps[c] = flGetBitmap(fontId, c);
-    }
-    return bitmaps[c];
 }
