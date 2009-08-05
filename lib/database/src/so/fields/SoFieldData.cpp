@@ -878,7 +878,7 @@ SoFieldData::copy(const SoFieldData *from)
 	struct SoFieldEntry *fromField =
 	    (struct SoFieldEntry *) from->fields[i];
 
-	fields.append((void *) new struct SoFieldEntry(*fromField));
+	fields.append(new struct SoFieldEntry(*fromField));
     }
 
     // Copy enum entries
@@ -886,7 +886,7 @@ SoFieldData::copy(const SoFieldData *from)
 
 	struct SoEnumEntry *fromEnum = (struct SoEnumEntry *) from->enums[i];
 
-	enums.append((void *) new struct SoEnumEntry(*fromEnum));
+	enums.append(new struct SoEnumEntry(*fromEnum));
     }
 }
 

@@ -220,14 +220,14 @@ do {									      \
 // SO_NODE_ABSTRACT_HEADER.
 //
 
-#define SO__NODE_METHODS(className)					      \
-									      \
-    SO__NODE_ABSTRACT_METHODS(className)				      \
-									      \
-    void *								      \
-    className::createInstance()						      \
-    {									      \
-	return (void *)(new className);					      \
+#define SO__NODE_METHODS(className)           \
+                                              \
+    SO__NODE_ABSTRACT_METHODS(className)      \
+                                              \
+    void *                                    \
+    className::createInstance()               \
+    {                                         \
+        return new className;                 \
     }
 
 

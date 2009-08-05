@@ -192,7 +192,7 @@ className::getTypeId() const						      \
 void *									      \
 className::createInstance()						      \
 {									      \
-    return (void *)(new className);					      \
+    return new className;					      \
 }
 
 #define	SO__FIELD_EQ_SAME_SOURCE(className)				      \

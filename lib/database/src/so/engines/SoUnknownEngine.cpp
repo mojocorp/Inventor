@@ -80,7 +80,7 @@ SoUnknownEngine::getOutputData() const
 void *
 SoUnknownEngine::createInstance()
 {
-    return (void *)(new SoUnknownEngine);
+    return new SoUnknownEngine;
 }
 
 ////////////////////////////////////////////////////////////////////////

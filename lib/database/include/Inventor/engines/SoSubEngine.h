@@ -219,7 +219,7 @@
     void *								      \
     className::createInstance()						      \
     {									      \
-	return (void *)(new className);					      \
+	return new className;					      \
     }
 
 /////////////////////////////////////////////////////////////////////////////
