@@ -79,7 +79,7 @@ class INVENTOR_API SbColor : public SbVec3f {
     SbColor();
 
     // Constructor given an SbVec3f
-    SbColor(const SbVec3f vec3f) { setValue(vec3f.getValue()); }
+    SbColor(const SbVec3f & vec3f) { setValue(vec3f.getValue()); }
 
     // Constructor given an array of 3 components
     SbColor(const float rgb[3])				{ setValue(rgb); }

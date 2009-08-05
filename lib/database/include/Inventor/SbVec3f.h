@@ -163,7 +163,7 @@ class INVENTOR_API SbVec3f {
 
     // Equality comparison within given tolerance - the square of the
     // length of the maximum distance between the two vectors
-    SbBool		equals(const SbVec3f v, float tolerance) const;
+    SbBool		equals(const SbVec3f & v, float tolerance) const;
 
     // Returns principal axis that is closest (based on maximum dot
     // product) to this vector

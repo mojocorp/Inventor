@@ -457,7 +457,7 @@ SoPickedPoint::getMatrix(const SoNode *node) const
 // Use: private, static
 
 SbVec4f
-SoPickedPoint::multVecMatrix4(const SbMatrix &m, const SbVec4f v)
+SoPickedPoint::multVecMatrix4(const SbMatrix &m, const SbVec4f & v)
 //
 ////////////////////////////////////////////////////////////////////////
 {
