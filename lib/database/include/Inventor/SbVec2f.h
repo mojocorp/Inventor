@@ -144,7 +144,7 @@ class INVENTOR_API SbVec2f {
 
     // Equality comparison within given tolerance - the square of the
     // length of the maximum distance between the two vectors
-    SbBool		equals(const SbVec2f v, float tolerance) const;
+    SbBool		equals(const SbVec2f & v, float tolerance) const;
 
   protected:
     float	vec[2];		// Storage for vector components

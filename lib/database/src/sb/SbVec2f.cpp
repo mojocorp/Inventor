@@ -241,7 +241,7 @@
  //
 
  SbBool
- SbVec2f::equals(const SbVec2f v, float tolerance) const
+ SbVec2f::equals(const SbVec2f & v, float tolerance) const
  {
      SbVec2f	diff = *this - v;
 
