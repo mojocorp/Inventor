@@ -83,7 +83,7 @@ SoUnknownNode::createInstance()
 		       "Unknown nodes should be created only by "
 		       "SoBase::read methods when reading");
 #endif
-    return (void *)(new SoUnknownNode());
+    return new SoUnknownNode();
 }
 
 

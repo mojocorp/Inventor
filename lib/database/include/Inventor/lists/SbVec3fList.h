@@ -79,11 +79,11 @@ SoINTERNAL class INVENTOR_API SbVec3fList : public SbPList {
     ~SbVec3fList();
 
     void	append(SbVec3f *vec)
-        { ((SbPList *) this)->append((void *) new SbVec3f(vec->getValue())); }
+        { ((SbPList *) this)->append(new SbVec3f(vec->getValue())); }
 
     // Inserts given integer in list before integer with given index
     void	insert(SbVec3f *vec, int addBefore)
-        { ((SbPList *) this)->insert((void *) new SbVec3f(vec->getValue()),
+        { ((SbPList *) this)->insert(new SbVec3f(vec->getValue()),
                 addBefore); }
 
     SbVec3f *   operator [](int i) const
