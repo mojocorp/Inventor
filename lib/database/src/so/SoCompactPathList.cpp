@@ -52,7 +52,7 @@
  */
 
 #include <Inventor/misc/SoCompactPathList.h>
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/errors/SoDebugError.h>
 
 ////////////////////////////////////////////////////////////////////////

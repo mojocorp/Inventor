@@ -67,7 +67,7 @@
 #include <Inventor/details/SoNodeKitDetail.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/errors/SoReadError.h>
-#include <Inventor/misc/SoAuditorList.h>
+#include <Inventor/lists/SoAuditorList.h>
 #include <Inventor/nodekits/SoBaseKit.h>
 #include <Inventor/nodekits/SoNodeKitListPart.h>
 #include <Inventor/nodes/SoCallback.h>

@@ -60,6 +60,7 @@
 #include <Inventor/misc/SoBase.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/SoLists.h>
+#include <Inventor/lists/SbIntList.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -232,118 +233,5 @@ friend class SoFullPath;
 friend class SoTempPath;
 friend class SoAction;
 };
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoFullPath
-//
-//  This SoEXTENDER class allows expert users to examine "hidden"
-//  children in paths. SoPath allows access from the head node down to
-//  the first node with hidden children, but no further. Casting an
-//  SoPath to an SoFullPath (which is always guaranteed to be safe)
-//  allows you to get at hidden children. SoFullPath overrides some of
-//  the methods defined on paths to make this possible.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-SoEXTENDER class INVENTOR_API SoFullPath : public SoPath {
-
-  public:
-    //
-    // Override methods that normally stop at last public child:
-    //
-
-    void		pop()		{ truncate(getFullLength() - 1); }
-
-    SoNode *		getTail() const
-	{ return (nodes[getFullLength() - 1]); }
-
-    SoNode *		getNodeFromTail(int i) const
-	{ return (nodes[getFullLength() - 1 - i]); }
-
-    int			getIndexFromTail(int i) const
-	{ return (indices[getFullLength() - 1 - i]); }
-
-    int			getLength() const	{ return getFullLength(); }
-
-  private:
-    SoFullPath(int approxLength) : SoPath(approxLength)	{}
-    virtual ~SoFullPath();
-
-friend class SoTempPath;
-};
-
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoINTERNAL Class: SoLightPath
-//
-//  A SoLightPath is a light-weight version of an SoTempPath, intended to
-//  be used just to keep track of the current path during traversal.
-//  Eventually it is intended to replace SoTempPath (when appropriate 
-//  modifications are made to SoDraggers).
-//  Unlike SoPath, it keeps only a chain of childIndices and a headnode.
-//  The methods implemented are only those needed for traversal.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-class INVENTOR_API SoLightPath  {
-
-  SoINTERNAL public:
-
-    // Constructor given approximate number of nodes in chain
-    SoLightPath(int approxLength);
- 
-
-    // Sets head node (first node in chain)
-    // Resulting path has only one node.
-    void		setHead(SoNode *node);
-
-    // Adds node specified by childindex to end of chain. 
-    void		append(int childIndex) 
-	{ indices.append(childIndex);}
-
-
-    // Allows path to be treated as a stack: push a node at the end of
-    // the chain and pop the last node off
-    void		push(int childIndex)	{ append(childIndex); }
-    void		push()			{ append(-1);}
-    void		pop()		{ truncate(getFullLength() - 1); }
-    void		setTail(int childIndex) 
-	   	{ indices.set(getFullLength()-1,(void *)(unsigned long)childIndex);}
-    SoNode *		getTail()
-		{ return getNode(getFullLength()-1);}
-
-    // Returns the first node in a path chain.
-    SoNode *		getHead() const	{ return headNode; }
-
-    // Returns pointer to ith node in chain
-    SoNode *		getNode(int i) const;	
-
-    // Returns full length of path chain (number of nodes)
-    // note that public/private distinction is ignored.
-    int			getFullLength() const {return indices.getLength();}
-
-    // Removes all nodes from indexed node on
-    void		truncate(int start) { indices.truncate(start);}
-
-    
-    // fills in nodes for a TempPath that is represented by this 
-    // SoLightPath.  Called by SoAction::getCurPath(); 
-    void 		makeTempPath(SoTempPath *) const;
-
-  private:
-
-    ~SoLightPath();
-    SoNode *		headNode;	// Pointer to headnode
-    SbIntList		indices;	// Child indices
-
-
-  friend class SoAction;
-};
-
-
 
 #endif /* _SO_PATH_ */

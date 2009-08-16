@@ -60,7 +60,7 @@
 #define  _SO_BASE_
 
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/misc/SoAuditorList.h>
+#include <Inventor/lists/SoAuditorList.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 

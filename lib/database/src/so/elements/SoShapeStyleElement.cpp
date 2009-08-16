@@ -55,7 +55,7 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoDrawStyleElement.h>
 #include <Inventor/elements/SoComplexityTypeElement.h>
-#include <Inventor/nodes/SoVertexProperty.h>
+#include <Inventor/caches/SoVertexPropertyCache.h>
 #include <Inventor/nodes/SoLightModel.h>
 
 const int INVISIBLE_BIT = 0x1;

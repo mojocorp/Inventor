@@ -79,7 +79,7 @@
 
 #include <Inventor/misc/SoState.h>
 #include <Inventor/misc/SoTempPath.h>
-#include <Inventor/misc/SoAuditorList.h>
+#include <Inventor/lists/SoAuditorList.h>
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/elements/SoViewVolumeElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>

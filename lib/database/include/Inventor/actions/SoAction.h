@@ -58,7 +58,7 @@
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/misc/SoTempPath.h>
-#include <Inventor/SoPath.h>
+#include <Inventor/SoLightPath.h>
 #include <Inventor/actions/SoActionMethodList.h>
 #include <Inventor/actions/SoEnabledElementsList.h>
 
@@ -67,7 +67,7 @@ class SoAction;
 class SoCompactPathList;
 class SoNode;
 class SoState;
-class SoLightPath;
+class SoPath;
 
 //////////////////////////////////////////////////////////////////////////////
 //

@@ -52,6 +52,7 @@
  */
 
 #include <Inventor/fields/SoMFRotation.h>
+#include <Inventor/SbVec3f.h>
 #include <stdlib.h>
 
 //////////////////////////////////////////////////////////////////////////////

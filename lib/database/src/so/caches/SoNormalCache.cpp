@@ -53,6 +53,8 @@
 
 #include <Inventor/caches/SoNormalCache.h>
 
+#include <Inventor/SbVec3f.h>
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:

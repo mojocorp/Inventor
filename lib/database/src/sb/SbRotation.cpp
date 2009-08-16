@@ -55,6 +55,7 @@
 
 #include <Inventor/SbRotation.h>
 #include <Inventor/SbMatrix.h>
+#include <Inventor/SbVec3f.h>
 #include <Inventor/errors/SoDebugError.h>
 
 #include <math.h>

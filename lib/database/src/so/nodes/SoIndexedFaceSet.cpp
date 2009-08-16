@@ -74,6 +74,7 @@
 #include <Inventor/nodes/SoIndexedFaceSet.h>
 #include <Inventor/nodes/SoMaterialBinding.h>
 #include <Inventor/nodes/SoNormalBinding.h>
+#include <Inventor/nodes/SoVertexProperty.h>
 
 SO_NODE_SOURCE(SoIndexedFaceSet);
 
