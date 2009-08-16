@@ -75,6 +75,7 @@
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoIndexedLineSet.h>
+#include <Inventor/nodes/SoVertexProperty.h>
 
 SO_NODE_SOURCE(SoIndexedLineSet);
 

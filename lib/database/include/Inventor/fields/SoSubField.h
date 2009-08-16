@@ -127,6 +127,8 @@
 #define  _SO_SUB_FIELD_
 
 #include <Inventor/fields/SoField.h>
+#include <Inventor/fields/SoSField.h>
+#include <Inventor/fields/SoMField.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoOutput.h>
 

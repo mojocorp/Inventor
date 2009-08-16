@@ -57,7 +57,7 @@
 #define  _SO_VERTEX_SHAPE_
 
 #include <Inventor/nodes/SoShape.h>
-#include <Inventor/nodes/SoVertexProperty.h>
+#include <Inventor/caches/SoVertexPropertyCache.h>
 #include <Inventor/fields/SoSFNode.h>
 
 //////////////////////////////////////////////////////////////////////////////

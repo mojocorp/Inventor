@@ -56,6 +56,7 @@
 #include <Inventor/elements/SoTextureCoordinateBindingElement.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoIndexedShape.h>
+#include <Inventor/nodes/SoVertexProperty.h>
 
 SO_NODE_ABSTRACT_SOURCE(SoIndexedShape);
 

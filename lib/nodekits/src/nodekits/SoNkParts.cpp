@@ -59,7 +59,7 @@
 #include <Inventor/nodekits/SoNodekitParts.h>
 #include <Inventor/nodekits/SoNodeKitListPart.h>
 #include <Inventor/nodekits/SoBaseKit.h>
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/fields/SoSFNode.h>
 #include <Inventor/nodes/SoGroup.h>
 

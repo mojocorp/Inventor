@@ -58,7 +58,7 @@
 #ifndef  _SO_PATH_SENSOR_
 #define  _SO_PATH_SENSOR_
 
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/sensors/SoDataSensor.h>
 
 class INVENTOR_API SoPathSensor : public SoDataSensor {

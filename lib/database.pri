@@ -58,6 +58,8 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/SbDict.h \
            database/include/Inventor/SbStdint.h \
            database/include/Inventor/SbLinear.h \
+           database/include/Inventor/SbName.h \
+           database/include/Inventor/SbNameEntry.h \
            database/include/Inventor/SbVec2f.h \
            database/include/Inventor/SbVec2s.h \
            database/include/Inventor/SbVec3f.h \
@@ -80,6 +82,8 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/SoOffscreenRenderer.h \
            database/include/Inventor/SoOutput.h \
            database/include/Inventor/SoPath.h \
+           database/include/Inventor/SoFullPath.h \
+           database/include/Inventor/SoLightPath.h \
            database/include/Inventor/SoPickedPoint.h \
            database/include/Inventor/SoPrimitiveVertex.h \
            database/include/Inventor/SoType.h \
@@ -106,6 +110,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/caches/SoGLCacheList.h \
            database/include/Inventor/caches/SoGLRenderCache.h \
            database/include/Inventor/caches/SoNormalCache.h \
+           database/include/Inventor/caches/SoVertexPropertyCache.h \
            database/include/Inventor/details/SoConeDetail.h \
            database/include/Inventor/details/SoCubeDetail.h \
            database/include/Inventor/details/SoCylinderDetail.h \
@@ -220,6 +225,8 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/events/SoSpaceballButtonEvent.h \
            database/include/Inventor/events/SoSubEvent.h \
            database/include/Inventor/fields/SoField.h \
+           database/include/Inventor/fields/SoSField.h \
+           database/include/Inventor/fields/SoMField.h \
            database/include/Inventor/fields/SoFieldContainer.h \
            database/include/Inventor/fields/SoFieldData.h \
            database/include/Inventor/fields/SoFields.h \
@@ -268,6 +275,19 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/fields/SoSFVec3f.h \
            database/include/Inventor/fields/SoSFVec4f.h \
            database/include/Inventor/fields/SoSubField.h \
+           database/include/Inventor/lists/SbIntList.h \
+           database/include/Inventor/lists/SbVec3fList.h \
+           database/include/Inventor/lists/SbStringList.h \
+           database/include/Inventor/lists/SoBaseList.h \
+           database/include/Inventor/lists/SoNodeList.h \
+           database/include/Inventor/lists/SoPathList.h \
+           database/include/Inventor/lists/SoEngineList.h \
+           database/include/Inventor/lists/SoTypeList.h \
+           database/include/Inventor/lists/SoDetailList.h \
+           database/include/Inventor/lists/SoPickedPointList.h \
+           database/include/Inventor/lists/SoFieldList.h \
+           database/include/Inventor/lists/SoEngineOutputList.h \
+           database/include/Inventor/lists/SoAuditorList.h \
            database/include/Inventor/misc/SoAuditorList.h \
            database/include/Inventor/misc/SoBase.h \
            database/include/Inventor/misc/SoBasic.h \
@@ -533,8 +553,8 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/sb/SbLine.cpp \
            database/src/sb/SbMatrix.cpp \
            database/src/sb/SbName.cpp \
+           database/src/sb/SbNameEntry.cpp \
            database/src/sb/SbPlane.cpp \
-           database/src/sb/SbPList.cpp \
            database/src/sb/SbRotation.cpp \
            database/src/sb/SbSphere.cpp \
            database/src/sb/SbString.cpp \
@@ -545,8 +565,15 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/sb/SbVec4f.cpp \
            database/src/sb/SbViewVolume.cpp \
            database/src/sb/SbViewportRegion.cpp \
+           database/src/sb/lists/SbPList.cpp \
+           database/src/sb/lists/SbVec3fList.cpp \
            database/src/so/machine.cpp \
-           database/src/so/SoAuditorList.cpp \
+           database/src/so/lists/SoAuditorList.cpp \
+           database/src/so/lists/SoBaseList.cpp \
+           database/src/so/lists/SoDetailList.cpp \
+           database/src/so/lists/SoPathList.cpp \
+           database/src/so/lists/SoPickedPointList.cpp \
+           database/src/so/lists/SoTypeList.cpp \
            database/src/so/SoBase.cpp \
            database/src/so/SoByteStream.cpp \
            database/src/so/SoCBList.cpp \
@@ -555,12 +582,13 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/SoDB.cpp \
            database/src/so/SoDebug.cpp \
            database/src/so/SoInput.cpp \
-           database/src/so/SoLists.cpp \
            database/src/so/SoNormalGenerator.cpp \
            database/src/so/SoNotification.cpp \
            database/src/so/SoOffscreenRenderer.cpp \
            database/src/so/SoOutput.cpp \
            database/src/so/SoPath.cpp \
+           database/src/so/SoFullPath.cpp \
+           database/src/so/SoLightPath.cpp \
            database/src/so/SoPickedPoint.cpp \
            database/src/so/SoPrimitiveVertex.cpp \
            database/src/so/SoState.cpp \
@@ -599,6 +627,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/caches/SoGLCacheList.cpp \
            database/src/so/caches/SoGLRenderCache.cpp \
            database/src/so/caches/SoNormalCache.cpp \
+           database/src/so/caches/SoVertexPropertyCache.cpp \
            database/src/so/details/SoConeDetail.cpp \
            database/src/so/details/SoCubeDetail.cpp \
            database/src/so/details/SoCylinderDetail.cpp \
@@ -712,6 +741,8 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/events/SoMouseButtonEvent.cpp \
            database/src/so/events/SoSpaceballButtonEvent.cpp \
            database/src/so/fields/SoField.cpp \
+           database/src/so/fields/SoSField.cpp \
+           database/src/so/fields/SoMField.cpp \
            database/src/so/fields/SoFieldContainer.cpp \
            database/src/so/fields/SoFieldData.cpp \
            database/src/so/fields/SoFieldInit.cpp \

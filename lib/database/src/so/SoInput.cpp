@@ -59,6 +59,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <Inventor/misc/SoBase.h>
+#include <Inventor/lists/SbStringList.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoOutput.h>

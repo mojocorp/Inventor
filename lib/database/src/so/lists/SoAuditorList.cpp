@@ -52,7 +52,7 @@
  */
 
 #include <Inventor/errors/SoDebugError.h>
-#include <Inventor/misc/SoAuditorList.h>
+#include <Inventor/lists/SoAuditorList.h>
 #include <Inventor/misc/SoBase.h>
 #include <Inventor/fields/SoField.h>
 #include <Inventor/sensors/SoDataSensor.h>

@@ -53,6 +53,7 @@
 
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/SbRotation.h>
+#include <Inventor/SbVec3f.h>
 #include <Inventor/elements/SoGLTextureMatrixElement.h>
 
 #include <math.h>

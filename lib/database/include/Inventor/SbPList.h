@@ -61,7 +61,6 @@
 #define _SB_PLIST_
 
 #include <Inventor/SbBasic.h>
-#include <Inventor/SbVec3f.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -152,90 +151,6 @@ class INVENTOR_API SbPList {
     // expand is the lowest level routine.  It just reallocates the
     // array and copies over the old values.
     void	expand(int size);
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbIntList
-//
-//  List of generic (void *) pointers. SbIntList allows random access,
-//  insertion, and removal.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-SoINTERNAL class INVENTOR_API SbIntList : public SbPList {
-
-  public:
-    // Constructors, similar to SbPList
-    SbIntList()					{}
-    SbIntList(int initSize) : SbPList(initSize) {}
-
-    void	append(int integer)
-	{ ((SbPList *) this)->append((void *) (size_t) integer); }
-
-    // Returns index of given integer in list, or -1 if not found
-    int		find(int integer)
-	{ return ((SbPList *) this)->find((void *) (size_t) integer); }
-
-    // Inserts given integer in list before integer with given index
-    void	insert(int integer, int addBefore)
-	{ ((SbPList *) this)->insert((void *) (size_t) integer, addBefore); }
-
-    int &	operator [](int i) const
-        { return ( reinterpret_cast<int &>( (*(const SbPList *) this) [i] ) ); }
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbVec3fList
-//
-//  List of vectors. Probably mostly used for vertices of polygons
-//
-//////////////////////////////////////////////////////////////////////////////
-
-SoINTERNAL class INVENTOR_API SbVec3fList : public SbPList {
-
-  public:
-     SbVec3fList() {}
-    ~SbVec3fList();
-
-    void	append(SbVec3f *vec)
-	{ ((SbPList *) this)->append((void *) new SbVec3f(vec->getValue())); }
-
-    // Inserts given integer in list before integer with given index
-    void	insert(SbVec3f *vec, int addBefore)
-	{ ((SbPList *) this)->insert((void *) new SbVec3f(vec->getValue()),
-		addBefore); }
-
-    SbVec3f *   operator [](int i) const
-	{ return ( (SbVec3f *) ( (*(const SbPList *) this) [i] ) ); }
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbStringList
-//
-//  A list of strings.  This list is used to list classes associated with 
-//  a specific error.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-class SbString;
-
-SoEXTENDER class INVENTOR_API SbStringList : public SbPList {
-  public:
-    void	append(SbString *string)
-	{ ((SbPList *) this)->append((void *) string); }
-
-    int 	 find(SbString *string)
-	{ return ((SbPList *) this)->find((void *) string); }
-
-    void	insert(SbString *string, int addBefore)
-	{ ((SbPList *) this)->insert((void *) string, addBefore); }
-
-    SbString *&	operator [](int i) const
-	{ return ( (SbString *&) ( (*(const SbPList *) this) [i] ) ); }
 };
 
 #endif /* _SB_PLIST_ */

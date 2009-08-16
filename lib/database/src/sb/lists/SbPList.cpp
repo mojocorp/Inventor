@@ -263,11 +263,4 @@ SbPList::compare(const SbPList &pl) const
     return TRUE;
 }
 
-SbVec3fList::~SbVec3fList()
-{
-    int		i;
-
-    for(i = 0; i < getLength(); i++)
-	delete (*this)[i];
-}
 
