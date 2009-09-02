@@ -737,7 +737,7 @@ SoFieldContainer::copyDone()
 // Use: private, static
 
 void
-SoFieldContainer::unrefCopy(unsigned long, void *instPtr)
+SoFieldContainer::unrefCopy(uintptr_t, void *instPtr)
 //
 ////////////////////////////////////////////////////////////////////////
 {

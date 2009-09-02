@@ -60,33 +60,46 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoTransformation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoRotationXYZ
-//
-//  Node that rotates by an arbitrary angle around the x, y, or z axis.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node representing a 3D rotation about the x-, y-, or z-axis.
+/// \ingroup Nodes
+/// This node defines a 3D rotation about one of the three principal axes.
+/// The rotation is accumulated into the current transformation, which is
+/// applied to subsequent shapes.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction</b>
+/// Accumulates rotation transformation into the current transformation.
+/// <b>SoGetMatrixAction</b>
+/// Returns the matrix corresponding to the rotation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoRotationXYZ {
+///    axis	X
+///    angle	0
+/// }
+/// \endcode
+/// \sa SoRotation, SoTransform
 class INVENTOR_API SoRotationXYZ : public SoTransformation {
 
     SO_NODE_HEADER(SoRotationXYZ);
 
   public:
-    enum Axis {				// Rotation axis
-	X,					// x-axis
-	Y,					// y-axis
-	Z					// z-axis
+    /// Rotation axis
+    enum Axis {
+        X,  ///< x-axis
+        Y,  ///< y-axis
+        Z   ///< z-axis
     };
 
     // Fields
-    SoSFEnum		axis;		// Rotation axis (x, y, or z)
-    SoSFFloat		angle;		// Rotation angle (in radians)
+    SoSFEnum		axis;   ///< Rotation axis (x, y, or z)
+    SoSFFloat		angle;  ///< Rotation angle (in radians), using the right-hand rule.
 
-    // Constructor
+    /// Creates a rotation node with default settings.
     SoRotationXYZ();
 
-    // Returns SbRotation equivalent to rotation
+    /// Returns an <tt>SbRotation</tt> equivalent to the specified rotation.
     SbRotation		getRotation() const;
 
   SoEXTENDER public:

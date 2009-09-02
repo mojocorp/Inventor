@@ -59,39 +59,59 @@
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoGroup.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoSwitch
-//
-//  Switch group node: traverses only the child indicated by integer
-//  "whichChild" field. If this field is SO_SWITCH_NONE, no children
-//  are traversed, while SO_SWITCH_INHERIT means inherit the index
-//  from the current switch state, doing a modulo operation to make
-//  sure the child index is within the correct bounds of the switch
-//  node.
-//
-//////////////////////////////////////////////////////////////////////////////
+#define SO_SWITCH_NONE		(-1)	///< Don't traverse any children
+#define SO_SWITCH_INHERIT	(-2)	///< Inherit value from state
+#define SO_SWITCH_ALL		(-3)	///< Traverse all children
 
-#define SO_SWITCH_NONE		(-1)	/* Don't traverse any children	*/
-#define SO_SWITCH_INHERIT	(-2)	/* Inherit value from state	*/
-#define SO_SWITCH_ALL		(-3)	/* Traverse all children	*/
-
+/// Group node that traverse one chosen child.
+/// \ingroup Nodes
+/// This group node usually traverses only one or none of its children.
+/// It implements an operation similar to the <b>switch</b> statement in C.
+/// One can use this node to switch on and off the effects of some
+/// properties or to switch between different properties.
+///
+/// The #whichChild field specifies the index of the child to traverse,
+/// where the first child has index 0.
+///
+/// A value of <b>SO_SWITCH_NONE</b> (-1, the default) means do not traverse
+/// any children. A value of <b>SO_SWITCH_INHERIT</b> (-2) allows the index
+/// to be inherited from a previously-encountered <tt>SoSwitch</tt> node or
+/// from certain other nodes (such as <tt>SoArray</tt> or <tt>SoMultipleCopy</tt>)
+/// that set the switch value. A value of <b>SO_SWITCH_ALL</b> (-3) traverses
+/// all children, making the switch behave exactly like a regular
+/// <tt>SoGroup</tt>.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoGetMatrixAction, SoHandleEventAction, SoRayPickAction</b>
+/// Traverses the chosen child or children.
+/// <b>SoSearchAction</b>
+/// If the action's Searching-All flag is set, always traverses all
+/// children.  Otherwise, traverses just the chosen child or children.
+///
+/// \par File format/defaults:
+/// \code
+/// SoSwitch {
+///    whichChild	-1
+/// }
+/// \endcode
+/// \sa SoArray, SoLevelOfDetail, SoMultipleCopy, SoPathSwitch
 class INVENTOR_API SoSwitch : public SoGroup {
 
     SO_NODE_HEADER(SoSwitch);
 
   public:
     // Fields
-    SoSFInt32		whichChild;	// Child to traverse
+    SoSFInt32		whichChild;	///< Index of the child to traverse, or one of SO_SWITCH_NONE, SO_SWITCH_INHERIT, or SO_SWITCH_ALL.
 
-    // Default constructor
+    /// Creates a switch node with default settings.
     SoSwitch();
 
-    // Constructor that takes approximate number of children
+    /// Constructor that takes approximate number of children.
     SoSwitch(int nChildren);
 
-    // Overrides method in SoNode to return FALSE if there is no
-    // selected child or the selected child does not affect the state.
+    /// Overrides method in SoNode to return FALSE if there is no
+    /// selected child or the selected child does not affect the state.
     virtual SbBool	affectsState() const;
 
   SoEXTENDER public:

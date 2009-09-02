@@ -58,31 +58,38 @@
 
 #include <Inventor/details/SoSubDetail.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCubeDetail
-//
-//  Detail about an SoCube node. It contains the part index (face) of
-//  the cube.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Stores detail information about the SoCube node.
+/// \ingroup Details
+/// This class contains detail information about a point on a cube.
+/// It contains the part of the cube that was hit.
+///
+///
+/// Part values are as follows:
+/// - 0	Front
+/// - 1	Back
+/// - 2	Left
+/// - 3	Right
+/// - 4	Top
+/// - 5	Bottom
+/// \sa SoCube, SoDetail, SoPickedPoint, SoPrimitiveVertex
 class INVENTOR_API SoCubeDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoCubeDetail);
 
   public:
-    // Constructor and destructor
+    /// Constructor and destructor
     SoCubeDetail();
+
+    /// Destructor
     virtual ~SoCubeDetail();
 
-    // Returns the part of detail for this shape. This is the index of
-    // the face of the cube, as follows: 0=front, 1=back, 2=left,
-    // 3=right, 4=top, 5=bottom.
+    /// Returns the part of detail for this shape. This is the index of
+    /// the face of the cube, as follows: 0=front, 1=back, 2=left,
+    /// 3=right, 4=top, 5=bottom.
     int			getPart() const			{ return part; }
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SoDetail *	copy() const;
 
   SoEXTENDER public:

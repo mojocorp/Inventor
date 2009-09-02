@@ -147,24 +147,51 @@ SoINTERNAL class INVENTOR_API SoNodekitCatalogEntry {
 	void printCheck() const; // prints the contents of this entry
 };
 
-////////////////////////////////////////////////////////////////////
-//    Class: SoNodekitCatalog
-////////////////////////////////////////////////////////////////////
-
+/// Nodekit catalog class.
+/// \ingroup Nodekits
+/// This class describes the parts and structure of a nodekit.  Each class of
+/// nodekit has one <tt>SoNodekitCatalog</tt> (a static variable for the class).
+/// Internally, the catalog contains one entry for each "part" in the
+/// nodekit's structure. Users can query the catalog for information about
+/// each entry in the catalog. This information can be obtained either by
+/// part name (an <tt>SbName</tt> unique for the part within the catalog) or by part
+/// number (an index into an array of parts).
+///
+///
+/// Note that, although the catalog for a nodekit class may contain many
+/// entries, each instance of that class is not initially created with all of
+/// these parts intact. Rather, each instance of the class has its own
+/// parts list which keeps track of which parts the user has created. The
+/// nodekit uses the catalog as a guide in creating new nodes as its
+/// descendants; the standard #addChild(), #removeChild() and other
+/// <tt>SoGroup</tt>  methods are protected, so that users must create descendants
+/// indirectly by asking the nodekit to get and/or set the different "parts"
+/// in the catalog.
+///
+///
+/// The first entry in any <tt>SoNodekitCatalog</tt> corresponds to the nodekit
+/// itself. Its \a partName is "this" and its \a partNumber is 0. All other
+/// parts in the catalog are described relative to "this."
+/// \sa SoAppearanceKit,SoBaseKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,SoNodeKitListPart,SoNodeKitPath,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit
 class INVENTOR_API SoNodekitCatalog {
 
   public:
 
-    // initializes static variables. 
+    /// initializes static variables.
     static void initClass();
 
-    // How many entries in this catalog?
+    /// Returns number of entries in the catalog.
     int        getNumEntries() const { return numEntries; };
 
-    // inquiry routines, to find out about entries in the catalog,
-    // Questions may be asked based on name or partNumber.
-	  int        getPartNumber(      const SbName &theName ) const;
+    /// Given the name of a part, returns its part number in the catalog.
+    int        getPartNumber(      const SbName &theName ) const;
+
+    /// Given the part number of a part, returns its name in the catalog.
     const SbName     &getName(		       int    thePartNumber ) const;
+
+    /// \name A full set of methods for finding out all parameters in the catalog, given
+    /// either the part name or the part number.
+    /// @{
 	  SoType     getType(		       int    thePartNumber ) const;
 	  SoType     getType(		 const SbName &theName ) const;
 	  SoType     getDefaultType(	       int    thePartNumber ) const;
@@ -189,7 +216,7 @@ class INVENTOR_API SoNodekitCatalog {
     const SoTypeList    &getListItemTypes( const SbName &theName ) const;
 	  SbBool     isPublic(		       int    thePartNumber ) const;
 	  SbBool     isPublic(		 const SbName &theName ) const;
-
+    /// @}
   SoEXTENDER public:
     // Catalogs are only constructed, destructed, cloned or added to  
     // by subclasses of SoBaseKit.

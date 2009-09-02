@@ -58,12 +58,19 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFUInt32 subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of uint32_tegers.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of uint32_t
+/// (32-bit) integers.
+///
+/// <tt>SoMFUInt32s</tt> are written to file as one or more uint32_t
+/// integers, in decimal, hexadecimal or octal format.
+///
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ 17, 0xFFFFE0, 0755 ]
 class INVENTOR_API SoMFUInt32 : public SoMField {
 
     // Use standard field stuff

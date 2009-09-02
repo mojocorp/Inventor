@@ -62,6 +62,27 @@
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFTrigger.h>
 
+/// Provides fan-in for triggers.
+/// \ingroup Engines
+/// This engine takes up to 10 input triggers, and produces one trigger
+/// output.  The output is triggered whenever one of the inputs is touched.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTriggerAny {
+///    input0
+///    input1
+///    input2
+///    input3
+///    input4
+///    input5
+///    input6
+///    input7
+///    input8
+///    input9
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoSFTrigger
 class INVENTOR_API SoTriggerAny : public SoEngine {
 
     SO_ENGINE_HEADER(SoTriggerAny);

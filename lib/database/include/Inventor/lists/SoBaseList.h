@@ -65,54 +65,59 @@
 
 #include <Inventor/SbPList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Subclasses of the SbPList class which hold lists of pointers of a
-// specific type.
-//
-// Each contains:
-//	A default constructor
-//	A constructor taking an initial number of items in the list
-//	An "append" function that adds a pointer to the end of the list
-//	The index ([]) operator that returns the nth pointer in the list
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoBase;
 
+/// Maintains a list of pointers to instances of the \c SoBase classes.
+/// \ingroup General
+/// This subclass of <tt>SbPList</tt> holds lists of pointers to
+/// instances of classes derived from <tt>SoBase</tt> (an abstract class). A
+/// flag indicates whether adding an instance pointer to the list should
+/// add a reference to the instance. If this flag is TRUE, then adding and
+/// removing pointers from the list updates reference counts in the
+/// corresponding instances.
+/// \sa SoBase, SoNodeList, SoPathList
 class INVENTOR_API SoBaseList : public SbPList {
   public:
+    /// Constructor.
     SoBaseList();
+
+    /// Constructor that pre-allocates storage for \a size pointers.
     SoBaseList(int size);
+
+    /// Constructor that copies the contents of another list.
     SoBaseList(const SoBaseList &l);
+
+    /// Destructor.
     ~SoBaseList()			{ truncate(0); }
 
-    // Add a pointer to the end of the list
+    /// Adds a pointer to the end of the list.
     void		append(SoBase * ptr);
 
-    // Insert given pointer in list before pointer with given index
+    /// Inserts given pointer in list before pointer with given index.
     void		insert(SoBase *ptr, int addBefore);
 
-    // Remove pointer with given index
+    /// Removes pointer with given index.
     void		remove(int which);
 
-    // Remove all pointers after one with given index, inclusive
+    /// Removes all pointers after one with given index, inclusive.
     void		truncate(int start);
 
-    // Copy a list, keeping all reference counts correct
+    /// Copies a list, keeping all reference counts correct.
     void		copy(const SoBaseList &l);
+
+    /// Copies a list, keeping all reference counts correct.
     SoBaseList &	operator =(const SoBaseList &l)
         { copy(l) ; return *this; }
 
-    // Access an element of a list
+    /// Accesses an element of a list.
     SoBase *		operator [](int i) const
         { return ( (SoBase *) ( (*(const SbPList *) this) [i] ) ); }
 
-    // Set an element of a list
+    /// Sets an element of a list.
     void		set(int i, SoBase *ptr);
 
-    // Tells list whether to call ref() and unref() for bases in the
-    // list when adding/removing them. The default value is TRUE.
+    /// Indicates whether to call #ref() and #unref() for bases in the
+    /// list when adding/removing them. The default value is TRUE.
     void		addReferences(SbBool flag)	{ addRefs = flag; }
 
   private:

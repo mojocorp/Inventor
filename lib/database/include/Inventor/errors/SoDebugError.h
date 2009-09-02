@@ -61,65 +61,63 @@
 
 #include <Inventor/errors/SoError.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoDebugError
-//
-//  This class is used for all errors reported from the debugging
-//  version of the Inventor library. These errors are typically
-//  programmer errors, such as passing a NULL pointer or an
-//  out-of-range index. The post() method takes the name of the
-//  Inventor method that detected the error, to aid the programmer in
-//  debugging.
-//
-//////////////////////////////////////////////////////////////////////////////
 #ifdef ERROR
 #   undef ERROR
 #endif
 
+/// Debug error handling.
+/// \ingroup Errors
+/// <tt>SoDebugError</tt> is used for all errors reported from the debugging
+/// version of the Inventor library. These errors are typically
+/// programmer errors, such as passing a NULL pointer or an
+/// out-of-range index.
+/// The #post() method takes the name of the
+/// Inventor method that detected the error, to aid the programmer in
+/// debugging.
+/// \sa SoMemoryError, SoReadError
 class INVENTOR_API SoDebugError : public SoError {
 
   public:
     enum Severity {
-	ERROR,		// Error
-	WARNING,	// Just a warning
-	INFO		// No error, just information
+        ERROR,      ///< Error
+        WARNING,    ///< Just a warning
+        INFO        ///< No error, just information
     };
 
-    // Sets/returns handler callback for SoDebugError class
+    /// Sets handler callback for SoDebugError class
     static void		setHandlerCallback(SoErrorCB *cb, void *data)
 	{ handlerCB = cb; cbData = data; }
     static SoErrorCB *	getHandlerCallback()	{ return handlerCB; }
     static void *	getHandlerData()	{ return cbData; }
 
-    // Returns type identifier for SoDebugError class
+    /// Returns type identifier for SoDebugError class
     static SoType	getClassTypeId()	{ return classTypeId; }
 
-    // Returns type identifier for error instance
+    /// Returns type identifier for error instance
     virtual SoType	getTypeId() const;
 
-    // Returns severity of error (for use by handlers)
+    /// Returns severity of error (for use by handlers)
     SoDebugError::Severity getSeverity() const	{ return severity; }
 
   SoEXTENDER public:
-    // Posts an error
+    /// Posts an error
     static void		post(const char *methodName,
 			     const char *formatString ...);
 
-    // Posts a warning
+    /// Posts a warning
     static void		postWarning(const char *methodName,
 				    const char *formatString ...);
 
-    // Posts an informational (non-error) message
+    /// Posts an informational (non-error) message
     static void		postInfo(const char *methodName,
 				 const char *formatString ...);
 
   SoINTERNAL public:
-    // Initializes SoDebugError class
+    /// Initializes SoDebugError class
     static void		initClass();
 
   protected:
-    // Returns handler callback (and data) to use for a given instance
+    /// Returns handler callback (and data) to use for a given instance
     virtual SoErrorCB *	getHandler(void *&data) const;
 
     virtual ~SoDebugError() {}

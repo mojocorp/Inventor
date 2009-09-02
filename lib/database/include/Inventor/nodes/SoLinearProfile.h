@@ -72,6 +72,34 @@
 // only one value in the index field).
 #define SO_LINEAR_PROFILE_USE_REST_OF_VERTICES	(-1)
 
+/// Piecewise-linear profile curve.
+/// \ingroup Nodes
+/// This node specifies a piecewise-linear curve that is used as a profile
+/// for either a trimming patch of a Nurbs surface or for the bevel of
+/// <tt>SoText3</tt>.  The #index field indexes into the current profile
+/// coordinates (specified in an <tt>SoProfileCoordinate2</tt> or
+/// <tt>SoProfileCoordinate3</tt> node).
+/// If the last value of the #index field is
+/// <b>SO_LINEAR_PROFILE_USE_REST_OF_VERTICES</b> (-1), all remaining
+/// coordinates in the current coordinates will be used, starting with
+/// the coordinate after the previous index (all coordinates will be used
+/// if <b>SO_LINEAR_PROFILE_USE_REST_OF_VERTICES</b> is the only value in the
+/// #index field).  For example, if #index contains the values
+/// <b>[2,0,-1]</b> and there are 4 profile coordinates (0-3), it is as if
+/// the #index field contains <b>[2,0,1,2,3]</b>.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoRayPickAction, SoCallbackAction</b>
+/// Adds a profile to the current state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoLinearProfile {
+///    index	0
+///    linkage	START_FIRST
+/// }
+/// \endcode
+/// \sa SoNurbsProfile, SoProfileCoordinate2, SoProfileCoordinate3
 class SoLinearProfile : public SoProfile{
 
     SO_NODE_HEADER(SoLinearProfile);
@@ -79,7 +107,7 @@ class SoLinearProfile : public SoProfile{
   public:
     // Inherits all fields from parent class
 
-    // Constructor
+    /// Creates a linear profile node with default settings.
     SoLinearProfile();
 
   SoEXTENDER public:

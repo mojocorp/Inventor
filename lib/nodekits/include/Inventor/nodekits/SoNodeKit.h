@@ -58,18 +58,20 @@
 
 #include <Inventor/SbBasic.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNodeKit
-//
-//  Class with one static function to initialize all nodeKit node classes,
-//  and their catalogs.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Initializes nodekit classes.
+/// \ingroup Nodekits
+/// This class is used to initialize all nodekit classes.
+/// \sa SoAppearanceKit,SoBaseKit,SoCameraKit,SoInteraction,SoLightKit,SoNodeKitDetail,SoNodeKitListPart,
+/// \sa SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit,SoXt
 class INVENTOR_API SoNodeKit {
   public:
-    static void		init(); // init all nodeKit classes
+    /// Initialize all nodekit classes by registering
+    /// them with the database.  This function needs to be called before \e any
+    /// other nodekit class may be constructed or accessed. Note that
+    /// this is called automatically by
+    /// SoInteraction::init() and SoXt::init(), so if you have made either of
+    /// these calls, there is no need to call SoNodeKit::init() directly.
+    static void		init();
   private:
     static SbBool	initialized;	// has nodekit been initialized
 };

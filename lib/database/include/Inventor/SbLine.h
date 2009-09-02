@@ -65,39 +65,41 @@
 #include <Inventor/SbVec3f.h>
 #include <Inventor/SbBox3f.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbLine
-//
-//  Represents a directed line in 3D space.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Directed line in 3D.
+/// \ingroup Basics
+/// Represents a directed line in 3D. This is a basic Inventor datatype that is
+/// used for representing a 3D line. It is used as input and output by a variety of
+/// Inventor classes.
+/// \sa SbVec3f, SbPlane
 class INVENTOR_API SbLine {
   public:
     SbLine()	{}
 
-    // Construct a line from two points lying on the line.  If you
-    // want to construct a line from a position and a direction, use
-    // SbLine(p, p + d).
-    // Line is directed from p0 to p1.
+    /// Construct a line from two points lying on the line.  If you
+    /// want to construct a line from a position and a direction, use
+    /// SbLine(p, p + d).
+    /// Line is directed from p0 to p1.
     SbLine(const SbVec3f &p0, const SbVec3f &p1);
 
-    // Set that value!
+    /// Sets line to pass through points \a p0 and \a p1.
     void		setValue(const SbVec3f &p0, const SbVec3f &p1);
 
-    // Find closest points between the two lines. Return FALSE if they are 
-    // parallel, otherwise return TRUE.
+    /// Finds the two closest points between this line and \a line2,
+    /// and loads them into \a ptOnThis and \a ptOnLine2.
+    /// Returns FALSE. if the lines are parallel (results undefined), and returns
+    /// TRUE. otherwise.
     SbBool		getClosestPoints(const SbLine  &line2,
 					 SbVec3f &ptOnThis,
 					 SbVec3f &ptOnLine2 ) const;
 
-    // Returns the closest point on the line to the given point.
+    /// Returns the closest point on the line to the given point.
     SbVec3f		getClosestPoint(const SbVec3f &point) const;
 
 
-    // Accessors
+    /// Returns position of line origin point.
     const SbVec3f &	getPosition() const	{ return pos; }
+    
+    /// Returns direction vector of line.
     const SbVec3f &	getDirection() const	{ return dir; }
 
 

@@ -1,0 +1,1082 @@
+Introduction
+
+   1.  Introduction
+
+
+       The Open	Inventor 2.1.7 Developer's Kit contains	the bug
+       fixes and multiple versions of the libraries associated with
+       the Open	Inventor 2.1.2 and 2.1.3 Developer's Kit.
+
+       Each of the multiple library versions in	the Open Inventor
+       2.1.2 Developer's Kit corresponds to one	of the different
+       ABI options available with the IRIX 6.5 compilers.  The
+       library versions	are:
+
+	  32   the default, provides compatibility with	5.3,
+	 n32   provides	an enhanced performance	32-bit mode,
+	  64   produced	with the same compiler as n32 but
+	       generates 64-bit	code.
+
+       Chapter 3 of these notes	provides additional details on the
+       library versions.
+
+  1.1  A Brief History of Inventor
+
+
+       The first Inventor product release, IRIS	Inventor 1.0, used
+       the IRIS	Graphics Library (GL) for rendering. The second
+       major release, Open Inventor 2.0, uses Open GL, has been
+       licensed	to third parties for porting to	other platforms,
+       and thus	has been renamed "Open Inventor".  Open	Inventor
+       2.0 added significant new features, performance
+       improvements, and required source code changes to 1.0
+       programs.
+
+       Open Inventor 2.1 provided significant performance
+       improvements over previous releases.  However, Inventor 2.1
+       is not binary compatible	with previous releases,	and
+       programs	will have to be	recompiled.  Some programs may have
+       to be re-coded to take full advantage of	the performance
+       improvements.  Programs that extend the toolkit,	as
+       described in The	Inventor Toolmaker, are	more likely to need
+       re-coding because parts of the extender API have	changed.
+
+       Open Inventor 2.1.7 contains additional bug fixes over
+       previous	releases of Inventor 2.1. Additionally,	this
+       release is available for	IRIX 6.5 and higher.
+
+  1.2  Inventor on the World Wide Web
+
+
+       See the Open Inventor WWW page for information, tips, and
+       assorted	interesting stuff:
+
+	       http://www.sgi.com/Technology/Inventor
+
+  1.3  What is Inventor?
+
+
+       Open Inventor is	an object-oriented 3D toolkit that offers a
+       comprehensive solution to traditional 3D	programming
+       problems.  First, it presents a new programming model based
+       on a 3D scene database.	This includes a	rich set of objects
+       such as cubes, polygons,	materials, cameras, lights,
+       trackballs, engines, 3D viewers,	and editors that speed up
+       programming time	and extend 3D programming capabilities.
+       Second, it provides an innovative event model that paves	the
+       way for 3D interaction. In addition, Open Inventor allows
+       you to focus on the application solution	rather than
+       graphics	hardware implementation. If the	specific object	or
+       operation needed	for a program does not exist, Open
+       Inventor's object-oriented architecture makes custom
+       additions possible.
+
+       Open Inventor matches a programmer's mental model of the
+       task. It	is not a 3D graphics toolkit for drawing pictures.
+       Rather, it is a 3D object toolkit for representing a user's
+       3D physical models and operating	on them. Rendering is just
+       one of the many operations that can be applied to a 3D scene
+       or data set.
+
+       This new	model for 3D object programming	makes the
+       programming paradigm simpler and	more intuitive.	It also
+       makes possible spunky 3D	interactivity and flexible program
+       development. For	example, Open Inventor's 3D picking returns
+       useful information such as the point of intersection, normal
+       at the point of intersection, the nearest vertex, and more.
+       Furthermore, Inventor does not do picking by redrawing the
+       scene, as many graphics libraries do. Instead, it does
+       picking in software with	immense	improvements in
+       performance, functionality, and precision.  Inventor's event
+       model for 3D objects is designed	to help	add interactivity
+       to programs. Simply put,	any 3D object in a scene can now
+       listen and respond to user input	events such as Mouse Down
+       or Key Pressed. This mechanism works exactly like any 2D
+       window system or	toolkit	that distributes user events to
+       windows or widgets. In the case of Open Inventor, the idea
+       extends to 3D objects. You can now write	interactive 3D
+       objects that listen and react to	user events.
+
+       The scene database also makes a 3D file format possible.
+       Objects and scenes that are saved to a file retain their
+       full 3D physical	character and can be read back into another
+       program.
+
+       Inventor	includes C++ and C language support, a complete	set
+       of C++ and C on-line man	(reference) pages, all of the
+       example code from the Programming Guides, source	code for
+
+       several sample programs,	and a few directories of sample	3D
+       data and	program	binaries. Note that all	three books are
+       available as hardcopy books and as on-line SGI InSight
+       books.
+
+       The Inventor technical documentation consists of	three
+       books:
+
+	 The Inventor Mentor (ISBN 0-201-62495-8)
+	 The Inventor Toolmaker	(ISBN 0-201-62493-1)
+	 Inventor Reference Manual (ISBN 0-201-62491-5)
+
+       These books are published by Addison-Wesley and available in
+       technical bookstores as well as through SGI.
+
+       This document contains the following chapters:
+
+	 1.  Introduction
+
+	 2.  Installation Information
+
+	 3.  New Features
+
+	 4.  Known Problems and	Workarounds
+
+  1.4  Release Identification Information
+
+
+       Following is the	release	identification information for Open
+       Inventor:
+
+       Software	Option Product	      Open Inventor
+				      Development Kit
+
+       Version			      2.1.7
+       System Software Requirements   IRIX 6.5
+
+  1.5  Online Release Notes
+
+
+       After you install the online documentation for a	product
+       (the relnotes subsystem), you can view the release notes	on
+       your screen.
+
+       If you have a graphics system, you may be able to select
+       ``Release Notes'' from the Help submenu of the Desktop. This
+       displays	the grelnotes(1) graphical browser for the online
+       release notes.
+
+       Refer to	the grelnotes(1) man page for information on
+       options to this command.
+
+       If you do not have a graphics system, you can use the
+       relnotes	command.  Refer	to the relnotes(1) man page for
+       accessing the online release notes.
+
+  1.6  Product Support
+
+
+       Silicon Graphics, Inc., provides	a comprehensive	product
+       support maintenance program for its products.
+
+       If you are in North America and would like support for your
+       Silicon Graphics-supported products, contact the	Technical
+       Assistance Center at
+       1-800-800-4SGI.
+
+       If you are outside North	America, contact the Silicon
+       Graphics	subsidiary or authorized distributor in	your
+       country.
+
+
+
+
+Installation Information
+
+   2.  Installation Information
+
+
+       This chapter lists information supplemental to the IRIS
+       Software	Installation Guide.  The information listed here is
+       product-specific; use it	with the Installation Guide to
+       install Open Inventor.
+
+  2.1  Open Inventor Subsystems
+
+
+       Open Inventor 2.1.7 includes these subsystems:
+
+       inventor_dev.books.Mentor	Programmers Insight on-line book
+       inventor_dev.books.Toolmaker	Advanced users Insight on-line book
+       inventor_dev.books.PortAndPerf	Inventor 2.1 Insight on-line book
+					with porting and performance tips.
+       inventor_dev.man.pages		Complete set of	C++ man	pages
+       inventor_dev.man.relnotes	These release notes
+       inventor_dev.man.pages_c		Complete set of	C man pages
+       inventor_dev.src.sample		Sample Inventor	source code
+       inventor_dev.sw.base		Open Inventor header files
+       inventor_dev.sw.lib		o32 Open Inventor development libs
+       inventor_dev.sw.c		Open Inventor C	library
+       inventor_dev.sw.debug		Open Inventor debug libs
+       inventor_dev.sw64.lib		Open Inventor development 64 libs
+       inventor_dev.sw64.debug		Debug version of Inventor 64 libs
+
+  2.2  Open Inventor Disk Space Requirements
+
+
+       This section lists the subsystems (and their sizes) of the
+       Open Inventor Development option.
+
+       If you are installing this option for the first time, the
+       subsystems marked default are the ones that are installed if
+       you use the go menu item.  To install a different set of
+       subsystems, use the interface provided with Software Manager
+       or use the install, remove, keep, and step commands in inst
+       to customize the	list of	subsystems to be installed, then
+       select the go menu item.
+
+       Note:  The listed subsystem sizes are approximate. Refer	to
+	      the IRIS Software	Installation Guide for information
+	      on finding exact sizes.
+
+       Subsystem Name			     Subsystem Size
+					     (Kbyte blocks)
+
+       inventor_dev.books.Mentor		  6680
+
+       inventor_dev.books.Toolmaker		  1830
+       inventor_dev.books.PortAndPerf		  1010
+       inventor_dev.man.pages (default)		  3110
+       inventor_dev.man.pages_c			  3930
+       inventor_dev.man.relnotes (default)	    30
+       inventor_dev.src.sample			  5060
+       inventor_dev.sw.base (default)		  2260
+       inventor_dev.sw.lib (default)		 12040
+       inventor_dev.sw.c			  3250
+       inventor_dev.sw.debug			 10350
+       inventor_dev.sw64.lib			 12040
+       inventor_dev.sw64.debug			 12860
+
+  2.3  Installation Method
+
+
+       All of the subsystems for Open Inventor can be installed
+       using inst or Software Manager.	You do not need	to use the
+       miniroot. Refer to the IRIS Software Installation Guide for
+       complete	installation instructions.
+
+  2.4  Prerequisites
+
+
+       This section details the	software dependencies needed for
+       Open Inventor.
+
+       IRIS Development	Option (IDO)
+
+	 To compile and	link with the Inventor libraries, you must
+	 have the IRIS Development Option. This	option includes	the
+	 C Compiler, Open Graphics Library Development system, and
+	 the X Window System and Motif Development systems.
+	 Without IDO, you cannot compile or link Inventor programs.
+
+       Required	Subsystems
+
+	 Inventor requires that	the following IDO subsystems be
+	 installed:
+
+	 compiler_eoe.hdr.lib
+	 c_dev.sw.c
+	 dev.hdr.lib
+	 dev.sw.lib
+	 gl_dev.sw.gldev
+	 inventor_eoe.sw.inventor
+
+	 It is HIGHLY recommended that you install the appropriate
+	 debug versions	of the Inventor	libraries found	in
+	 inventor_dev.sw.debug (or sw64).  These libraries include
+
+	 run-time error	checking to help you verify your
+	 application.  Refer to	section	2.8.
+
+       Recommended Subsystems
+
+	 The following IDO subsystems are recommended for typical
+	 Inventor use:
+
+	 c_dev.sw.util
+	 dev.sw.*
+
+       Using Inventor with Motif
+
+	 If you	are developing in the Motif environment, you must
+	 install the following IDO subsystems as well as the
+	 required subsystems (listed above):
+
+	 motif_dev.sw.dev
+
+       Using C++
+
+	 If you	plan to	develop	using C++, you must install the	C++
+	 development option.
+
+	 c++_dev.hdr.*
+	 c++_dev.sw.*
+
+  2.5  Configuration Files
+
+
+       The X resource file for Inventor	Xt Components is
+       /usr/lib/X11/app-defaults/Inventor. It contains the X
+       resource	default	settings for components. See the individual
+       Xt component man	pages for details on the resources used.
+
+  2.6  Old Inventor Releases and Binary Compatibility
+
+
+       Open Inventor 2.1.7 is binary compatible	with previous
+       releases	of 2.1.x.  However, Open Inventor 2.1.x	is not
+       binary compatible with previous releases	of Inventor.  If
+       you last	installed Open Inventor	2.0/2.0.1 you must
+       recompile your programs if you want to use the new 2.1.7
+       library.	 Your programs may also	require	some code
+       modifications; see the The Open Inventor	2.1 Porting and
+       Performance Tips.
+
+       DSO (dynamic shared objects) versioning is used to install
+       multiple	versions of the	Inventor Execution Only	Environment
+       onto the	same system.  /usr/lib/libInventor.so is linked	to
+       the MOST	RECENT DSO.  Older versions of DSOs will be called
+       libInventor.so.x. This renaming occurs when an updated
+       Inventor	is installed.  For example, when developers install
+       Inventor	2.1.x (including the compatibility subsystem), a
+       new libInventor.so will be installed, plus libInventor.so.2
+       for 2.0/2.0.1 programs.	Programs will automatically find
+       the `right' DSO and use it to run (assuming that	it was
+       installed).  Release 2.1.x uses DSO version 3
+       (libInventor.so is linked to libInventor.so.3, and
+       libInventorXt.so	is linked to libInventorXt.so.3).  Here's a
+       list of the existing supported Inventor releases:
+
+       Release	   IRIX	     Need run-time	Notes
+
+       1.1.2	   5.1.1     libInventor.so.1	Onyx, Challenge, and
+						Indy (identical	to
+						1.0.1)
+
+       2.0/2.0.1   5.2/5.3   libInventor.so.2	First release of
+						Open Inventor.
+						Both 2.0 and 2.0.1
+						are libInventor.so.2.
+
+       2.1	   5.3	     libInventor.so.3	Initial	release	of
+						Inventor 2.1.
+						Inventor 2.0/2.0.1
+						programs must be
+						recompiled to run
+						under Inventor 2.1.
+
+       2.1.1	   5.3	     libInventor.so.3	Same software as 2.1,
+						but some installation
+						problems have been
+						fixed.
+
+       2.1.2	   6.2	     libInventor.so.3	Release	for IRIX 6.2.
+						Contains multiple
+						versions of the
+						libraries.
+
+       2.1.3	   6.3	     libInventor.so.3	Removed	name space
+						conflicts with other
+						IRIX libraries.
+
+       2.1.4	   6.5	     libInventor.so.3	Bug fixes for
+						Inventor 2.1.3
+						(primarily for 64-bit
+						support).
+
+       2.1.5	   6.5	     libInventor.so.3	Bug fixes for
+						previous releases of
+						Inventor 2.1 as	well
+						as making the release
+						available across all
+						IRIX 6.2 and higher
+						releases.
+
+       2.1.6	   6.5	     libInventor.so.3	Bug fixes for
+						previous releases of
+						Inventor 2.1 and
+						better 64-bit
+						support.
+
+       2.1.7	   6.5	     libInventor.so.3	Bug fixes for
+						previous releases of
+						Inventor 2.1.
+
+       Here's a	basic rule of thumb:
+
+	    If you are running Inventor	programs linked	with `older' versions
+	    of Inventor	than what is currently installed on your system, then
+	    you	(and your users) need to install the appropriate inventor_eoe
+	    compatibility sub-systems.	Inventor 2.0/2.0.1 are the exception;
+	    they are binary compatible.
+
+  2.7  Transitioning from Open Inventor 2.0 to Open Inventor
+	    2.1
+
+
+       REALLY IMPORTANT: When installing Inventor 2.1.x, previous
+       Inventor	versions will AUTOMATICALLY be removed.
+       Compatibility subsystems	are provided with the Inventor
+       2.1.x Execution Only Environment, so programs that were
+       developed using Inventor	2.0 and	Inventor 1.1 will continue
+       to run.	However, if you	would like to continue to compile
+       and link	programs using the 2.0 Developement Environment,
+       you probably want to re-install 2.0 after installing 2.1.x.
+
+       To re-install 2.0, you will need	to use the 2.0 CD to
+       install 2.0 into	a different location (so as not	to ruin
+       2.1).  Please note that you will	have to	change the
+
+       Makefiles of programs that will compile and link	with 2.0
+       (-I and -L need to point	to your	safe locations of Inventor
+       2.0).  To install Inventor 2.0 under a different	root
+       directory than /:
+
+	   [Select a directory to install Inventor 2.0,	e.g. /inv_2.0 :]
+	   setenv IVD /inv_2.0
+
+	   inst	-r $IVD
+
+	   [Override the prerequisite rules :]
+	   Inst>  set rulesoverride true
+
+	   [Choose the Inventor	subsystems for installation, for example :]
+	   Inst> keep *
+	   Inst> i inventor_dev.sw.base
+	   Inst> i inventor_eoe.sw.inventor
+	   Inst> go
+
+       To compile Inventor 2.0 programs, you will need to give the
+       compiler	the -I$IVD/usr/include flag, and will need to give
+       the linker the -L$IVD/usr/lib flag to pick up the correct
+       headers and libraries.  If you use SGI "commondefs"-style
+       Makefiles, you can do this on the command using the LC++OPTS
+       (LCOPTS for the C compiler) and LLDOPTS variables:
+
+	   make	LC++OPTS=-I$IVD/usr/include LLDOPTS=-L$IVD/usr/lib
+
+       For example:
+
+	   cd $IVD/usr/share/src/Inventor/demos/revo
+	   make	LC++OPTS=-I$IVD/usr/include LLDOPTS=-L$IVD/usr/lib
+	   ./revo		      #	Running	with Inventor 2.0
+
+       If you install the 2.0 compatibility library
+       (inventor_eoe.sw.2_0), your 2.0 program will pick up the
+       correct Inventor	library	at run time.
+
+       If you prefer to	install	2.1 in a secondary directory, and
+       keep 2.0	as your	main development environment, you can do
+       so.  However, you will have to set your LD_LIBRARY_PATH to
+       include the directory containing	the 2.1	Inventor libraries
+       whenever	you run	a 2.1 application.
+
+       Please note that	each library version (32, n32, 64) has its
+       own version of the LD_LIBRARY_PATH environment variable,
+       i.e., LD_LIBRARY_PATH, LD_LIBRARYN32_PATH, and
+       LD_LIBRARY64_PATH.  See the man page for	rld for	further
+       information.  For simplicity, we	refer to the
+       LD_LIBRARY_PATH variable	in this	document when any of the
+
+       three variables may be appropriate.
+
+  2.8  REALLY IMPORTANT: The Inventor Debug Library
+
+
+       IMPORTANT: Each of the multiple versions	of the Inventor
+       Debug Library contains a	variety	of run-time error checking
+       that detects programmer error. It is highly recommended that
+       the appropriate version of this library be used for all
+       developmental work.  Install the	inventor_dev.sw.debug (or
+       sw64, as	appropriate) subsystem to use this feature.  To	RUN
+       your programs with the debug library, simply:
+
+	       setenv LD_LIBRARY_PATH /usr/lib/InventorDebug
+       or
+	       setenv LD_LIBRARYN32_PATH /usr/lib32/InventorDebug
+       or
+	       setenv LD_LIBRARY64_PATH	/usr/lib64/InventorDebug
+
+       as appropriate before running your program.  To turn off
+       debugging, simply unsetenv before running.
+
+       IMPORTANT: Remember that	you do not have	to re-link your
+       programs	to run with debugging tests.  This feature will
+       SAVE you	LARGE amounts of TIME!
+
+  2.9  SGI-Only Open Inventor Features
+
+
+       IMPORTANT: Since	Open Inventor has been licensed	to run on
+       other platforms The Inventor Mentor does	not contain any
+       SGI-only	feature	descriptions. The following information	is
+       specific	to the SGI implementation.
+
+       SoTexture2 and Image files (.rgb)
+
+	 The node SoTexture2 has a field `filename' which specifies
+	 an image file to be used as a texture map.  The
+	 specification does not	define what type of image files	are
+	 supported.  On	SGIs, only .rgb	(SGI image files) are
+	 supported.
+
+       SoFont, SoText2,	and SoText3
+
+	 The node SoFont has a field `name' which specifies a font
+	 to be used by the SoText2 and SoText3 nodes during
+	 rendering.  The specification does not	define what type of
+	 font names are	supported.  On SGIs, only Postscript Type 1
+	 fonts are supported.  Of course the font must be installed
+
+	 on the	machine	that it	will be	used on.
+
+	 SGI installs rasterized fonts (SoText2) into
+	 /usr/lib/X11/fonts/*.	SGI installs Type 1 fonts (SoText3)
+	 into /usr/lib/DPS/outline/base.  See the IRIX System
+	 Programming Guide for details on installing fonts.
+
+       Dragger Resource	Files
+
+	 The Inventor files containing the default resources for
+	 dragger parts are located in
+	 /usr/share/data/draggerDefaults.  See The Inventor Mentor
+	 or the	man pages for details on how to	use these to change
+	 the default look of a dragger.
+
+  2.10  Using DSOs	with User-Created Nodes	and Engines (for
+	     SGI systems only)
+
+
+       The following is	a brief	description of what is required	for
+       successful loading of user derived Inventor nodes and
+       engines.	 First,	read the The Inventor Toolmaker	for a
+       detailed	description on how to create new Inventor classes.
+       Note that if you	DO NOT intend to share this new	node or
+       engine class with any other program you probably	do not need
+       to use the DSO mechanism.  Instead, you can simply link your
+       new class directly into your application, and ignore the
+       rest of this section.
+
+       The following discussion	will show how to compile, link,	and
+       share a node or engine that you've written using	the DSO
+       mechanism.
+
+       How to Create a DSO for a New Node or Engine
+
+	 Note first that your DSO type (32, n32, 64) must match	the
+	 Open Inventor DSO type.  More precisely, mixing DSOs of
+	 different versions (i.e., and two of 32, n32, 64) will	not
+	 work. Details on the library versions are contained in
+	 Chapter 3.
+
+	 New nodes and engines can be compiled into a shared object
+	 (DSO) for dynamic loading at run time.	This can be
+	 accomplished by the following commands	(where NewNode is a
+	 class derived from NewNodeBase	which is derived from
+	 Inventor's SoShape class, and where NewNode uses a new
+	 engine	class called NewEngine):
+
+	 % CC -shared -set_version sgi3.0 -o NewNode.so	\
+		 NewNode.c++ NewNodeBase.c++ NewEngine.c++
+
+	 Note that the command includes	the C++	file for the new
+	 class plus all	classes	upon which the new class depends
+	 (i.e. is derived from or uses). In this simple	example,
+	 the user has written three new	classes: NewNode,
+	 NewNodeBase, and NewEngine. The class NewNode is derived
+	 from NewNodeBase. NewNodeBase is derived from an official
+	 Inventor class, and NewEngine is a new	engine that NewNode
+	 creates during	construction.  The -set_version	option
+	 versions the DSO to match the 2.1 version of the Inventor
+	 library (libInventor.so.3).  See the man page for ld for
+	 more details on DSO versioning.
+
+	 IMPORTANT: The	name of	your DSO MUST match the	name of
+	 your new class. The DSO for your new node, NewNode, must
+	 be called NewNode.so.	This is	due to the fact	that during
+	 file reading, when your new node is encountered, the only
+	 available key word Inventor can use to	find the DSO is	the
+	 name of the node in the file.
+
+       Make Sure to Initialize Everything You Need
+
+	 Note that the NewNode initClass method	needs to verify
+	 that NewNodeBase and NewEngine	are initialized:
+
+	     void NewNode::initClass()
+	     {
+		 // Make sure type of base class is initialized:
+		 if ( NewNodeBase::getClassTypeId() == SoType::badType() )
+		     NewNodeBase::initClass();
+
+		 // Make sure type of engine is	initialized,
+		 // is okay, since Foo creates one in constructor
+		 if ( NewEngine::getClassTypeId() == SoType::badType() )
+		     NewEngine::initClass();
+
+		 SO_NODE_INIT_CLASS( NewNode, NewNodeBase, "NewNode");
+		 ...
+	     }
+
+       Where to	Install	the DSO
+
+	 The safest place to install your new DSO (e.g.	NewNode.so)
+	 is /usr/local/lib/InventorDSO (or lib32 or lib64). In
+	 Inventor 2.1, the Inventor file reader	will AUTOMATICALLY
+	 look in this directory	(and others) without the user
+	 setting the LD_LIBRARY_PATH variable.
+
+	 If you	want to	put your DSO in	a non-standard location,
+	 then the environment variable LD_LIBRARY_PATH must be
+	 appended or set to include your directory.  For example,
+	 for the 32 libraries in the csh environment:
+
+	 % setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/myDir
+	 % setenv LD_LIBRARY_PATH /myDir       # if LD_LIBRARY_PATH not	set
+
+	 where myDir is	the directory path to where NewNode.so is
+	 located.
+
+       Creating	a Hierarchy of New Classes
+
+	 If a hierarchy	of new nodes (or engines) is created, you
+	 may want to create a DSO for the parent base classes, and
+	 an individual DSO for each leaf user class.
+
+	 Remember to have the subclasses ensure	that the parent
+	 classes are initialized before	the subclasses.	Initialize
+	 the parent class nodes	(or engines) inside the	init class
+	 methods of the	subclasses.  For example, the new class
+	 Animal	is derived from	Inventor's SoNode base class.  It
+	 is a base class that will be used to derive some other
+	 real, user classes from. Let's	say that we derive Tiger
+	 and Falcon subclasses from Animal.  Here's what the
+	 initialization	code would look	like:
+
+	 class Animal :	public SoNode {
+	     SO_NODE_HEADER( Animal );
+	 }
+
+	 class Tiger : public Animal {
+	     SO_NODE_HEADER( Tiger );
+	 }
+
+	 class Falcon :	public Animal {
+	     SO_NODE_HEADER( Falcon );
+	 }
+
+	 void Animal::initClass()
+	 {
+	     # No need to initClass SoNode!
+
+	     SO_NODE_INIT_CLASS( Animal, SoNode, "Animal" );
+	 }
+
+	 void Tiger::initClass()
+	 {
+	     if	( Animal::getClassTypeId() == SoType::badType()	)
+		 Animal::initClass();	// Init	the parent class
+	     SO_NODE_INIT_CLASS( Tiger,	Animal,	"Tiger"	):
+	 }
+
+	 void Falcon::initClass()
+	 {
+	     if	( Animal::getClassTypeId() == SoType::badType()	)
+		 Animal::initClass();	// Init	the parent class
+	     SO_NODE_INIT_CLASS( Falcon, Animal, "Falcon" ):
+	 }
+
+	 Compile and link as follows:
+
+	 # This	ensures	that the animal	code is	not repeated in	each class!
+	 % CC -shared -set_version sgi3.0 -o Animal.so Animal.c++
+	 % CC -shared -set_version sgi3.0 -o Tiger.so Tiger.c++	Animal.so
+	 % CC -shared -set_version sgi3.0 -o Falcon.so Falcon.c++ Animal.so
+
+	 If your new node also references any other library
+	 software, such	as the audio or	video libraries, those
+	 libraries must	also be	linked into the	DSO.
+
+       How Inventor Finds the DSO
+
+	 At run	time, Inventor will need to find your DSO so it	can
+	 be loaded.  Inventor will automatically look for a DSO
+	 with the same name as the new node in a set of	standard
+	 directories in	order.	These directories are the current
+	 directory, followed by	/usr/local/lib/InventorDSO, then
+	 /usr/lib/InventorDSO.	/usr/local/lib/InventorDSO is where
+	 you should put	DSO libraries that you use a lot.
+	 /usr/lib/InventorDSO is where new DSO libraries developed
+	 by Inventor go.  You can use the LD_LIBRARY_PATH variable
+	 to allow your DSO to reside in	any non-standard directory.
+	 The operating system will follow the LD_LIBRARY_PATH
+	 first,	looking	in the directories you have specified.	If
+	 the DSO has not been found yet, Inventor will then look
+	 for the DSO in	its set	of standard directories.
+
+	 You can set the LD_LIBRARY_PATH using either of the
+	 following csh commands:
+
+	 % setenv LD_LIBRARY_PATH /myDir, or
+	 % setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/myDir
+
+	 where myDir is	the directory path to where your new nodes
+	 are located.
+
+	 If a DSO cannot be found for a	new node you have written,
+	 Inventor will still read in the data for the node, and	it
+	 will be correctly written back	out.  But the node itself
+	 will not be available to the program for modification,	and
+	 cannot	be rendered or picked.	If you want at least
+	 something to be rendered on the screen, you must specify
+	 an alternate representation for the node.
+
+       Working Around Problem with Loading DSOs	for Subclasses
+
+	 CAUTION: While	new nodes will be located correctly using
+	 Inventor's DSO	searching capability, further subclasses of
+	 the new nodes will not	be loaded.  This is due	to a
+	 problem with building and locating DSO	libraries in
+	 general.  The problem can be illustrated using	the Animal
+	 and Tiger nodes.  Suppose the Animal and Tiger	DSO
+	 libraries have	been compiled and placed in
+	 /usr/local/lib/InventorDSO.  If a Tiger node is
+	 encountered in	a file,	Inventor will find Tiger.so in
+	 /usr/local/lib/InventorDSO. But when the operating system
+	 tries to load Tiger.so, it will notice	that there is a
+	 reference to Animal.so, which it must also load.  Since
+	 the operating system does not know to look in
+	 /usr/local/lib/InventorDSO, the load will fail.
+
+	 There are a few alternatives which might suit your needs.
+	 They each have	their advantages and disadvantages.  First,
+	 if you	are sure that Animal.so	will always reside in
+	 /usr/local/lib/InventorDSO, you can place Animal.so in
+	 that directory	before linking Tiger.so, then linking
+	 Tiger.so as follows:
+
+	 CC -shared -set_version sgi3.0	-o Tiger.so \
+		 Tiger.c++ /usr/local/lib/InventorDSO/Animal.so
+
+	 In this case, the operating system will always	open
+	 /usr/local/lib/InventorDSO/Animal.so.
+
+	 Or, you can link the code for Animal.so directly into
+	 Tiger.so by linking Animal.o or Animal.c++ instead of
+	 Animal.so into	Tiger.so:
+
+	 CC -shared -set_version sgi3.0	-o Tiger.so Tiger.c++ Animal.o,	or
+	 CC -shared -set_version sgi3.0	-o Tiger.so Tiger.c++ Animal.c++
+
+	 Or, you can create one	DSO library which will contain both
+
+	 nodes.	 Then link Animal.so and Tiger.so back to this one
+	 library.  Put the library and both links in
+	 /usr/local/lib/InventorDSO:
+
+	 CC -shared -set_version sgi3.0	-o BothNodes.so	Tiger.c++ Animal.c++
+	 ln -s BothNodes.so Animal.so
+	 ln -s BothNodes.so Tiger.so
+
+	 Or, you can forgo the use of Inventor's searching
+	 capabilities, and use the LD_LIBRARY_PATH exclusively to
+	 find your DSOs.  This just means that all of your DSOs
+	 should	reside in the directories specified by
+	 LD_LIBRARY_PATH.
+
+	 Keep in mind that you do not have to create DSO libraries
+	 for new nodes if you do not intend to use them	in any
+	 programs other	than ones you have written.  In	your
+	 programs, you simply need to call the initClass() method
+	 once for your new node	classes, and link in their compiled
+	 code.
+
+
+
+
+New Features
+
+   3.  New Features
+
+
+       This chapter enumerates the major new features added to Open
+       Inventor	2.1.7 since Open Inventor 2.1.1.  If you last
+       installed Open Inventor 2.0 or 2.0.1, see also the Open
+       Inventor	2.1 Porting and	Performance Tips.
+
+  3.1  Multiple versions of the Open Inventor libraries
+
+
+	 The Open Inventor libraries are available in multiple
+	 versions:  32,	n32, and 64.  More detailed information	on
+	 32, n32, and 64 bit modes can be found	in the compiler_dev
+	 release notes.
+
+	 All versions are native (have been compiled with the tools
+	 supplied with IRIX 6.5).  The 32 version provides support
+	 for Open Inventor based applications and demos.  This
+	 version also provides upward compatibility for	Open
+	 Inventor 2.1 applications created on IRIX 5.3.	 The 32
+	 version libraries reside in /usr/lib and have been
+	 compiled to use the mips-2 instruction	set.
+
+	 The n32 version is a high-performance 32-bit version
+	 created with the new suite of compilers.  A first step	in
+	 porting applications to 64-bit	mode can be made by
+	 compiling with	the -n32 option.  The n32 Open Inventor
+	 libraries are provided	to support these porting efforts as
+	 well as providing the enhanced	32-bit performance
+	 available within IRIX 6.5.  These libraries reside in
+	 /usr/lib32 and	have been compiled to use the mips-3
+	 instruction set.
+
+	 The 64-bit version is fully 64-bit compatible.	 This means
+	 that variables	of type	long and addresses are represented
+	 using 64 bits.	 The n32 and 64	versions also make better
+	 use of	registers and take further advantage of	available
+	 floating point	capabilities.  The 64-bit libraries reside
+	 in /usr/lib64 and have	been compiled to use the mips-3
+	 instruction set.  The 64-bit version of Open Inventor does
+	 not include support for double	precision floating point
+	 values.
+
+	 Creating executables is slightly different with the new
+	 compilers.  The linker	now requires you to have a
+	 -llibrary option for every library that you make use of
+	 your source or	any archives.  That is,	the DSO	library
+	 list is processed only	for DSO	related	symbols.  As an
+	 example, with o32 you could make calls	to symbols in
+	 libInventor.so.3 and to symbols in libInventorXt.so.3 but
+	 only have -llibInventorXt on your link	line (because
+
+	 libInventor.so.3 is in	libInventorXt.so.3's liblist).	The
+	 order in which	libraries are specified	also becomes
+	 important as the linker makes a single	pass through the
+	 list (in the order specified on the command line) to
+	 resolve references.
+
+	 Important: there is a new option to ld	that provides the
+	 old linking functionality.  This option is
+	 -full_transitive_link and if specified	in the link command
+	 will instruct the compiler to make all	the symbols in the
+	 hierarchy of DSOs available to	your program.  See the man
+	 ld man	page for details.
+
+	 Additionally, if you use the /usr/lib/make/commondefs file
+	 in your application Makefiles,	then you can get the
+	 default n32 (or 64) compilation flags by specifying
+	 OBJECT_STYLE=N32 (or OBJECT_STYLE=64) in your Makefile
+	 previous to the inclusion of the commondefs file.  The
+	 appropriate compilation flags will be added to	both
+	 compilation and linking lines.	 That is, the changes
+	 required to change the	Makefile in say,
+	 /usr/share/src/Inventor/demos/drop to build an	n32 version
+	 are
+
+	 1. Add	the "OBJECT_STYLE=N32" line before the
+	 "include /usr/include/make/commondefs"	line, and
+
+	 2. change the line "LLDLIBS = -lGL -lXm -lm -lInventorXt"
+	 to "LLDLIBS = -lInventorXt -lInventor -lGL -lXm -lXt -
+	 lX11 -lm"
+
+	 Open Inventor 2.1.7 provides N32 and 64-bit versions of
+	 the InventorXt	library	that are compatible with Motif 2.1.
+	 These libraries are installed as
+	 /usr/lib32/libInventorXt.so.4 and
+	 /usr/lib64/libInventorXt.so.4,	respectively (debug
+	 versions are installed	in the InventorDebug subdirectory).
+	 The Motif 1.2 compatible versions of the library remains
+	 unchanged in libInventorXt.so.3.
+
+  3.2  International text in the scene graph
+
+
+	 This release of Open Inventor has support for two-
+	 dimensional and three-dimensional international text in
+	 Inventor scenes.  This	capability results from	two changes
+	 in Inventor:
+
+	   1.  The SoMFField "string" in SoText2 and SoText3 nodes
+	       is now regarded as a UTF-8 character string.  Ascii
+	       is a subset of UTF-8, so	existing ascii strings in
+	       SoText2 and SoText3 nodes will continue to display
+	       correctly.  In addition,	UTF-8 can be used to encode
+	       various characters of international text, permitting
+	       any such	text to	appear in SoText2 or SoText3 nodes.
+
+	   2.  The name	field in SoFont	nodes formerly could only
+	       contain one font	name.  Now it contains a
+	       semicolon-separated list	of font	names.	By using
+	       multiple	fonts in the same SoFont node, multiple
+	       international characters	sets can be used in the
+	       same SoText2 or SoText3 node.  When a character in
+	       an SoText2 or SoText3 string is translated, the list
+	       of fonts	in the state is	used to	determine how to
+	       render the character.  The character will be
+	       rendered	according to the first font (in	the list of
+	       font names in the state)	that contains the specified
+	       character.
+
+	 In some cases Inventor	2.0 files have used the	string
+	 field of SoText2 and SoText3 nodes to contain nonascii
+	 characters, for example to represent nonascii characters
+	 in Latin text such as accented	letters.  Such character
+	 strings will be automatically converted to their UTF-8
+	 equivalents when read by Inventor 2.1 applications.  Note
+	 however that Inventor 2.0 applications	that utilize
+	 nonascii text will need to be modified	to correctly handle
+	 UTF-8 text.
+
+       International text in viewer menus
+
+	 Release 2.1.4 enables international text in Inventor
+	 viewers. This is valid	for ivview, SceneViewer, textomatic
+	 including some	Inventor components.  The internationalized
+	 components are	Examiner Viewer, Fly Viewer, Plane Viewer,
+	 Walk Viewer, Directional Light	Editor,	Material Editor,
+	 Transform Editor, and Printing	Panel.
+
+
+
+
+Known Problems and Workarounds
+
+   4.  Known Problems and Workarounds
+
+
+       This chapter contains a list of the known problems in this
+       2.1.7 release of	Open Inventor.	If a workaround	exists it
+       is described along with the problem.
+
+       Problem with re-installing inventor_eoe
+
+	 The inventor_eoe.sw.inventor subsystem	contains a stripped
+	 version of the	libInventor.so.3 library, while	the
+	 inventor_dev.sw.base subsystem	contains the full library
+	 required for Inventor development.  If	you re-install
+	 inventor_eoe.sw.inventor after	installing inventor_dev, a
+	 stripped version of the library will be installed; you
+	 must re-install inventor_dev.sw.base in order to link your
+	 Inventor programs.
+
+	 The stripped libraries	are provided to	produce	a small
+	 footprint on machines not supporting Open Inventor
+	 development.  A side effect of	having the stripped library
+	 is that linking to Inventor will not work and the compiler
+	 produces an error message about the inappropriate value of
+	 the "magic number" in the library file.
+
+       The Inventor Mentor and The Inventor Toolmaker
+
+	 The on-line books, The	Inventor Mentor	and The	Inventor
+	 Toolmaker, are	included in this release, but they have	not
+	 been updated to reflect new and changed features.  See	the
+	 new Open Inventor 2.1 Porting and Performance Tips and	the
+	 man pages for more current information.
+
+       ivnorm
+
+	 The ivnorm sample utility program does	not work for
+	 objects that contain a	vertexProperty field.
+
+       SoLOD and SoLevelOfDetail
+
+	 Sometimes an attribute	in one child of	an SoLOD or
+	 SoLevelOfDetail node, can "leak" into another child of	the
+	 same node.  To	prevent	this, make sure	that all children
+	 of these nodes	are isolated using SoSeparator.	 For
+	 example,
+
+	     # This is good
+	     LOD {
+		 Separator {
+
+		     BaseColor { rgb 1 0 0 }
+		     Cube {}
+		 }
+		 Separator {
+		     Cone {}
+		 }
+	     }
+
+	     # This can	be bad
+	     LOD {
+		 Group {
+		     BaseColor { rgb 1 0 0 }
+		     Cube {}
+		 }
+		 Group {
+		     Cone {}
+		 }
+	     }
+
+       SceneViewer
+
+	 The SceneViewer Material Editor will have no effect on
+	 objects where the material is specified using the
+	 vertexProperty	field.
+
+       Texture Mapping in Multiple Windows
+
+	 Due to	an OpenGL bug, applications that use multiple
+	 windows, or switch viewers within a window, may draw
+	 texture mapped	objects	incorrectly.  The textures may
+	 appear	in only	one of the windows; the	other windows will
+	 display the objects without the textures.  You	will see
+	 this behavior on systems that support the OpenGL extension
+	 for texture objects, such as systems with Reality Engine
+	 or Impact graphics.  To work around this problem you can
+	 set the environment variable IV_NO_TEXTURE_OBJECT to 1,
+	 and rerun your	application.  This will	cause the textures
+	 to be drawn correctly,	but you	may see	a drop in rendering
+	 performance.
+
+       Setting Color and Transparency using SoLazyElement (Extender
+	 API)
+
+	 If diffuse color or transparency is set in the	state using
+	 either	SoLazyElement::setPacked(),
+	 SoLazyElement::setDiffuse(), or
+	 SoLazyElement::setTransparency(), the color or
+	 transparency that is sent to OpenGL may not change as
+
+	 expected, when	the array containing the color or
+	 transparency is changed.  This	can happen, for	instance,
+	 if you	have diffuse colors in an SbColor array	which is
+	 not in	a field, and you attempt to change the color by
+	 assigning new values to the array of colors.
+
+	 To make the diffuse color or transparency change
+	 correctly, you	should do one of the following:
+
+	 (1) Store the diffuse color or	transparency in	an SoField,
+	 and use setValue() on that field to change the	color or
+	 transparency, or
+
+	 (2) Issue SoNode::touch(), on the node	that is	setting	the
+	 color or transparency,	whenever the color or transparency
+	 changes.
+
+       Highlighting may	change lighting
+
+	 Highlighting in scenes	containing multiple objects may
+	 change	the scene lighting.  This happens in all versions
+	 of the	library.  Often	deselecting everything and
+	 manipulating the scene	restores the proper lighting.
+
+       Developing with n32 Open	Inventor
+
+	 The n32 loader/linker will produce many warnings about
+	 symbols in /usr/lib32/libInventorXt.so	being preempted.
+	 These warnings	may be ignored.	 You may also turn this
+	 warning off by	passing	the -woff 85 argument to ld (if
+	 using ld via the CC command, then use the option -Wl,"-
+	 woff 85", including the quotes).
+
+       Example 15.3.AttachManip	and n32	Open Inventor
+
+	 Example 15.3.AttachManip does not work	properly when
+	 compiled with the -n32	option.	 The lamp will disappear if
+	 you try to move it and	then the cube can not be picked.
+	 As a workaround, use the 32 version (it works fine).
+

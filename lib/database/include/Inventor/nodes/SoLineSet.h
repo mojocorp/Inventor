@@ -61,30 +61,74 @@
 
 class SoState;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoLineSet
-//
-//  Set of (poly)lines. Each line consists of 2 or more vertices,
-//  taken in order from the current coordinates, which are joined to
-//  form segments. The startIndex field gives the starting coordinate
-//  index for the first line. If materials or normals are bound to
-//  vertices, they will begin at that index, as well; otherwise, they
-//  will start at index 0.  The number of vertices in each polyline is
-//  determined by successive entries in the numVertices field.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
+/// Polyline shape node.
+/// \ingroup Nodes
+/// This node represents a 3D shape formed by constructing polylines from
+/// vertices located at the coordinates specified in the
+/// #vertexProperty field (from <tt>SoVertexShape</tt>),
+/// or the current inherited coordinates.
+/// For optimal performance, the #vertexProperty field is recommended.
+///
+/// <tt>SoLineSet</tt> uses the
+/// coordinates in order, starting with the first one.
+/// Each line has a number of vertices specified by
+/// a value in the #numVertices field. For example, an <tt>SoLineSet</tt>
+/// with a #numVertices of [3,4,2] would use
+/// coordinates 1, 2, and 3 for the first line, coordinates 4, 5, 6, and 7
+/// for the second line, and coordinates 8 and 9 for the third.
+///
+/// The number of values in the #numVertices field indicates the
+/// number of polylines in the set.
+///
+/// The coordinates of the line set are transformed by the current
+/// cumulative transformation. The lines are drawn with the current light
+/// model and drawing style (drawing style <b>FILLED</b> is treated as
+/// <b>LINES</b>).
+///
+/// Treatment of the current material and normal binding is as follows:
+/// The <b>PER_PART</b> binding specifies a material or normal for each
+/// segment of the line. The <b>PER_FACE</b> binding specifies a material or
+/// normal for each polyline. The <b>_INDEXED</b> bindings are equivalent to
+/// their non-indexed counterparts. The default material binding is
+/// <b>OVERALL</b>. The default normal binding is
+/// <b>PER_VERTEX</b>.
+///
+/// The current complexity value has no effect on the rendering of line
+/// sets.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws lines based on the current coordinates, normals, materials,
+/// drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Picks lines based on the current coordinates and transformation.
+/// Details about the intersection are returned in an <tt>SoLineDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses all vertices of the line set
+/// with the current transformation applied to them.  Sets the center to
+/// the average of the coordinates of all vertices.
+/// <b>SoCallbackAction</b>
+/// If any line segment callbacks are registered with the action, they will
+/// be invoked for each successive segment in the line set.
+///
+/// \par File format/defaults:
+/// \code
+/// SoLineSet {
+///    vertexProperty	NULL
+///    startIndex	0
+///    numVertices	-1
+/// }
+/// \endcode
+/// \sa SoCoordinate3,SoDrawStyle,SoIndexedLineSet,SoLineDetail,SoVertexProperty
 class INVENTOR_API SoLineSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoLineSet);
 
   public:
     // Fields
-    SoMFInt32		numVertices;	// Number of vertices per line
+    SoMFInt32		numVertices;	///< Number of vertices per polyline.
 
-    // Constructor
+    /// Creates a line set node with default settings.
     SoLineSet();
 
   SoEXTENDER public:

@@ -73,54 +73,57 @@ SoEXTENDER class INVENTOR_API SoShapeHintsElement : public SoElement {
     SO_ELEMENT_HEADER(SoShapeHintsElement);
 
   public:
-    enum VertexOrdering {	// Hints about ordering of face vertices:
-	UNKNOWN_ORDERING,	//	No ordering info is known
-	CLOCKWISE,		//	Vertices are ordered CW around faces
-	COUNTERCLOCKWISE,	//	Vertices are ordered CCW around faces
-	ORDERING_AS_IS		//	Indicates to set() to leave as is
+    /// Hints about ordering of face vertices:
+    enum VertexOrdering {
+        UNKNOWN_ORDERING,	///<	No ordering info is known
+        CLOCKWISE,		///<	Vertices are ordered CW around faces
+        COUNTERCLOCKWISE,	///<	Vertices are ordered CCW around faces
+        ORDERING_AS_IS		///<	Indicates to set() to leave as is
     };
 
-    enum ShapeType {		// Hints about entire shape:
-	UNKNOWN_SHAPE_TYPE,	//	Nothing is known about shape
-	SOLID,			//	Shape is known to be solid
-	SHAPE_TYPE_AS_IS	//	Indicates to set() to leave as is
+    /// Hints about entire shape:
+    enum ShapeType {
+        UNKNOWN_SHAPE_TYPE,	///<	Nothing is known about shape
+        SOLID,			///<	Shape is known to be solid
+        SHAPE_TYPE_AS_IS         ///<	Indicates to set() to leave as is
     };
 
-    enum FaceType {		// Hints about faces of shape:
-	UNKNOWN_FACE_TYPE,	//	Nothing is known about faces
-	CONVEX,			//	Faces are all convex
-	FACE_TYPE_AS_IS		//	Indicates to set() to leave as is
+    /// Hints about faces of shape:
+    enum FaceType {
+        UNKNOWN_FACE_TYPE,	///<	Nothing is known about faces
+        CONVEX,			///<	Faces are all convex
+        FACE_TYPE_AS_IS		///<	Indicates to set() to leave as is
     };
 
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the current shape hints in the state.  Calls virtual
-    // method that subclasses can override.
+    /// Sets the current shape hints in the state.  Calls virtual
+    /// method that subclasses can override.
     static void		set(SoState *state, VertexOrdering vertexOrdering,
 			    ShapeType shapeType, FaceType faceType);
 
-    // Returns current shape hints from the state
+    /// Returns current shape hints from the state
     static void		get(SoState *state,
 			    VertexOrdering &vertexOrdering,
 			    ShapeType &shapeType, FaceType &faceType);
 
-    // Returns each default hint
+    /// Returns each default hint
     static VertexOrdering getDefaultVertexOrdering() {return UNKNOWN_ORDERING;}
     static ShapeType	  getDefaultShapeType()  { return UNKNOWN_SHAPE_TYPE; }
     static FaceType	  getDefaultFaceType()   { return CONVEX; }
 
-    // Push copies the values from the previous element, so set
-    // doesn't have to set them if they are set AS_IS.
+    /// Push copies the values from the previous element, so set
+    /// doesn't have to set them if they are set AS_IS.
     virtual void	push(SoState *state);
 
-    // Returns TRUE if the hints match in both elements
+    /// Returns TRUE if the hints match in both elements
     virtual SbBool	matches(const SoElement *elt) const;
 
-    // Create and return a copy of this element
+    /// Create and return a copy of this element
     virtual SoElement	*copyMatchInfo() const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

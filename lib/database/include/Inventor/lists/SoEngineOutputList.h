@@ -65,41 +65,41 @@
 
 #include <Inventor/SbPList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Subclasses of the SbPList class which hold lists of pointers of a
-// specific type.
-//
-// Each contains:
-//	A default constructor
-//	A constructor taking an initial number of items in the list
-//	An "append" function that adds a pointer to the end of the list
-//	The index ([]) operator that returns the nth pointer in the list
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoEngineOutput;
 
+/// Maintains a list of pointers to engine outputs.
+/// \ingroup Engines
+/// This subclass of <tt>SbPlist</tt> holds lists of pointers to
+/// <tt>SoEngineOutput</tt>s.  It updates reference counts to engine outputs in the list
+/// whenever adding or removing pointers.
+/// \sa SoEngineOutput
 class INVENTOR_API SoEngineOutputList : public SbPList {
   public:
+    /// Constructor.
     SoEngineOutputList()			: SbPList()	{}
+
+    /// Constructor that pre-allocates storage for \a size pointers.
     SoEngineOutputList(int size)		: SbPList(size)	{}
+
+    /// Constructor that copies the contents of another list.
     SoEngineOutputList(const SoEngineOutputList &l)	: SbPList(l)	{}
+
+    /// Destructor.
     ~SoEngineOutputList()			{ truncate(0); }
 
-    // Add a EngineOutput to the end of the list
+    /// Adds an engine output to the end of the list.
     void		append(SoEngineOutput *engineOutput)
         { SbPList::append((void *) engineOutput); }
 
-    // Insert given engineOutput in list before engineOutput with given index
+    /// Inserts the given engine output in the list before the element of the given index.
     void		insert(SoEngineOutput *engineOutput, int addBefore)
         { SbPList::insert((void *) engineOutput, addBefore); }
 
-    // Access an element of a list
+    /// Accesses an element of a list.
     SoEngineOutput *		operator [](int i) const
         { return ( (SoEngineOutput *) ( (* (const SbPList *) this) [i] ) ); }
 
-    // Set an element of a list
+    /// Sets an element of a list.
     void		set(int i, SoEngineOutput *engineOutput)
         { (* (const SbPList *) this) [i] = (void *) engineOutput; }
 };

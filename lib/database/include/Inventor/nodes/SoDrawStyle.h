@@ -74,25 +74,46 @@
 class SoGLRenderAction;
 class SoCallbackAction;
 
+/// Node that defines the style to use when rendering.
+/// \ingroup Nodes
+/// This node defines the current drawing style for all subsequent shape
+/// nodes in a scene graph. <tt>SoDrawStyle</tt> specifies how primitives
+/// should be rendered. The drawing style has no effect on picking or
+/// callback primitive generation.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction</b>
+/// Sets the current drawing style.
+///
+/// \par File format/defaults:
+/// \code
+/// SoDrawStyle {
+///    style        FILLED
+///    pointSize    0
+///    lineWidth    0
+///    linePattern  0xffff
+/// }
+/// \endcode
+/// \sa SoLightModel, SoPickStyle, SoShapeHints
 class INVENTOR_API SoDrawStyle : public SoNode {
 
     SO_NODE_HEADER(SoDrawStyle);
 
   public:
     enum Style {
-	FILLED	  = SoDrawStyleElement::FILLED,		// Filled regions
-	LINES	  = SoDrawStyleElement::LINES,		// Outlined regions
-	POINTS	  = SoDrawStyleElement::POINTS,		// Points
-	INVISIBLE = SoDrawStyleElement::INVISIBLE	// Nothing!
+        FILLED	  = SoDrawStyleElement::FILLED,		///< Filled regions
+        LINES	  = SoDrawStyleElement::LINES,		///< Outlined regions
+        POINTS	  = SoDrawStyleElement::POINTS,		///< Points
+        INVISIBLE = SoDrawStyleElement::INVISIBLE	///< Nothing!
     };
 
     // Fields
-    SoSFEnum		style;		// Drawing style
-    SoSFFloat		pointSize;	// Radius of points (for POINTS style)
-    SoSFFloat		lineWidth;	// Width of lines (for LINES style)
-    SoSFUShort		linePattern;	// Line pattern (for LINES style)
+    SoSFEnum		style;		///< Drawing style
+    SoSFFloat		pointSize;	///< Radius of points (for POINTS style)
+    SoSFFloat		lineWidth;	///< Width of lines (for LINES style)
+    SoSFUShort		linePattern;	///< Line pattern (for LINES style)
 
-    // Constructor
+    /// Constructor
     SoDrawStyle();
 
   SoEXTENDER public:

@@ -101,15 +101,150 @@
 
 class SoFieldSensor;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoDragPointDragger
-//
-//  DragPoint dragger - allows user to move a single coordinate in
-//  three dimensions.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Object you can translate in 3D by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoDragPointDragger</tt>
+/// is a compound dragger that translates
+/// in all three dimensions when dragged with the mouse.
+///
+///
+/// It is made up of six smaller draggers, which it displays two at a time.
+/// Each pair has one <em>plane</em> dragger and one <em>line</em> dragger. The line dragger
+/// is oriented perpendicular to the plane, so
+/// together the <em>plane/line pair</em> lets you move through all of 3-space.
+///
+///
+/// DragPoint has a total of three such pairs, oriented along the x, y, and z
+/// axes of its local space.  You can cycle through the three pairs by hitting
+/// the <b><Control></b> key with the cursor over the dragger. (You need not press the
+/// mouse button.)
+///
+///
+/// The line draggers are <tt>SoTranslate1Draggers</tt> and
+/// the plane draggers are <tt>SoTranslate2Draggers</tt>. So you can use the
+/// <b><Shift></b> key to constrain the motion of a plane dragger along one of the
+/// two axes within the plane, as described in the <tt>SoTranslate2Draggers</tt> man
+/// page.
+///
+///
+/// DragPoint adds extra feedback parts to provide a more intuitive idea of
+/// where you are placed in three-space. There are three <em>feedback planes</em>
+/// and three <em>feedback axes</em>; each corresponds to one of the plane or
+/// line draggers, but spans a much greater distance.  When you drag along a
+/// line, that line's larger feedback axis is displayed, and remains
+/// anchored in space while the dragger slides along it.  This helps
+/// establish the motion of the dragger relative to the rest of the scene.
+/// Similarly, when you drag within a plane, the larger (but transparent)
+/// feedback plane establishes a ground plane for you to move upon. The
+/// location of the dragger within the plane is pinpointed by two
+/// intersecting axes that always cross below the cursor and extend to the
+/// edges of the plane.  When you move dragPoint to the edge of the feedback
+/// plane (or line), the feedback will jump to a new location in that
+/// direction, so that the dragger never leaves the feedback behind.
+///
+///
+/// The primary directions of motion are given by the local space of the dragger.
+/// Transforms earlier in the scene will affect the dragger, its children,
+/// and the orientation of its directions of motion.
+///
+///
+/// This node has a #translation field
+/// which always reflects its position in local space.
+/// Setting the field moves the dragger to that point.
+/// You can also connect fields of other nodes or engines from
+/// this one to make them follow the dragger's motion.
+///
+///
+/// Although the child draggers each have their own resources defining
+/// default part geometries, the dragPoint dragger overrides these
+/// with a new set of resources.  It also defines resources for the feedback
+/// parts that it adds.  These are detailed in the Dragger Resources
+/// section of the online reference page for this class.
+/// You can change the parts in any instance of this dragger using
+/// #setPart().
+///
+///
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/dragPointDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that directory.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoDragPointDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "noRotSep"
+/// -->         "xTranslatorSwitch"
+/// -->            "xTranslator"
+/// -->         "xyTranslatorSwitch"
+/// -->            "xyTranslator"
+/// -->      "rotXSep"
+/// -->         "rotX"
+/// -->         "xzTranslatorSwitch"
+/// -->            "xzTranslator"
+/// -->      "rotYSep"
+/// -->         "rotY"
+/// -->         "zTranslatorSwitch"
+/// -->            "zTranslator"
+/// -->         "yzTranslatorSwitch"
+/// -->            "yzTranslator"
+/// -->      "rotZSep"
+/// -->         "rotZ"
+/// -->         "yTranslatorSwitch"
+/// -->            "yTranslator"
+/// -->      "xFeedbackSwitch"
+/// -->         "xFeedbackSep"
+/// -->            "xFeedbackTranslation"
+/// -->            "xFeedback"
+/// -->      "yFeedbackSwitch"
+/// -->         "yFeedbackSep"
+/// -->            "yFeedbackTranslation"
+/// -->            "yFeedback"
+/// -->      "zFeedbackSwitch"
+/// -->         "zFeedbackSep"
+/// -->            "zFeedbackTranslation"
+/// -->            "zFeedback"
+/// -->      "planeFeedbackSep"
+/// -->         "planeFeedbackTranslation"
+/// -->         "planeFeedbackSwitch"
+/// -->            "yzFeedback"
+/// -->            "xzFeedback"
+/// -->            "xyFeedback"
+///          "geomSeparator"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoDragPointDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     translation         0 0 0
+///     callbackList        NULL
+///     xTranslator         Translate1Dragger {}
+///     xyTranslator        Translate2Dragger {}
+///     xzTranslator        Translate2Dragger {}
+///     zTranslator         Translate1Dragger {}
+///     yzTranslator        Translate2Dragger {}
+///     yTranslator         Translate1Dragger {}
+///     xFeedback           <dragPointXFeedback resource>
+///     yFeedback           <dragPointYFeedback resource>
+///     zFeedback           <dragPointZFeedback resource>
+///     yzFeedback          <dragPointYZFeedback resource>
+///     xzFeedback          <dragPointXZFeedback resource>
+///     xyFeedback          <dragPointXYFeedback resource>
+/// }
+/// \endcode
+/// \sa SoInteractionKit,SoDragger,SoCenterballDragger,SoDragPointDragger,SoHandleBoxDragger,
+/// \sa SoJackDragger,SoPointLightDragger,SoRotateCylindricalDragger,SoRotateDiscDragger,
+/// \sa SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,
+/// \sa SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,
+/// \sa SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class INVENTOR_API SoDragPointDragger : public SoDragger
 {
     SO_KIT_HEADER(SoDragPointDragger);
@@ -160,22 +295,24 @@ class INVENTOR_API SoDragPointDragger : public SoDragger
     SO_KIT_CATALOG_ENTRY_HEADER(xyFeedback);
 
   public:
-    // Constructor
+    /// Constructor.
     SoDragPointDragger();
 
-    SoSFVec3f translation;
+    SoSFVec3f translation; ///< Position of the dragger.
 
   public:
-    // Set/get the limit at which the feedback axes will jump to a new 
-    // position. For example, if set to .1 (the default), the
-    // feedback axes will jump when the location gets within
-    // 10% of the end of the axis.
+    /// Set and get the point at which the feedback axes will jump to a new
+    /// position. For example, if set to .1 (the default), the
+    /// feedback axes will jump when the dragger gets within
+    /// 10% of the end of the axis.
     void    setJumpLimit(float limit)	{ jumpLimit = limit; }
     float   getJumpLimit() const	{ return jumpLimit; }
 
-    // Sets switches to show one line dragger and one plane dragger.
-    // It cycles through 3 different configurations:
-    // xline/yzPlane, yline/xzplane, zline/xyplane
+    /// The dragPoint dragger contains three pairs of draggers, each containing
+    /// a plane dragger and a line dragger (see the Description above).
+    /// The dragger starts with the (y-line/xz-plane) pair displayed.
+    /// Calling this method will cycle next through the (z-line/xy-plane), then
+    /// the (x-line/yz-plane).
     void showNextDraggerSet();
 
   SoINTERNAL public:

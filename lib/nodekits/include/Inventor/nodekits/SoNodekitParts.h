@@ -80,10 +80,10 @@ SoEXTENDER class INVENTOR_API SoNodekitParts {
   SoEXTENDER public:
     // Instances of SoNodekitParts are created only by subclasses of SoBaseKit.
 
-    // Constructor -- requires a catalog to build
+    /// Constructor -- requires a catalog to build
     SoNodekitParts( SoBaseKit *rootOfKit );
 
-    // Destructor
+    /// Destructor
     ~SoNodekitParts();
 
     friend class SoBaseKit;

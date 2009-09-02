@@ -60,12 +60,21 @@
 #include <Inventor/SbColor.h>
 #include <Inventor/fields/SoMFVec3f.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFColor subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of RGB colors stored as three floats.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of RGB colors, stored
+/// as instances of <tt>SbColor</tt>.  Values may be set in either RGB (red,
+/// green, blue) or HSV (hue, saturation, value) color spaces.
+///
+/// <tt>SoMFColors</tt> are written to file as one or more RGB triples of
+/// floating point numbers in standard scientific notation.  When more
+/// than one value is present, all of the values are enclosed in square
+/// brackets and separated by commas.  For example:
+///
+/// [ 1.0 0.0 0.0, 0 1 0, 0 0 1 ]
+///
+/// represents the three colors red, green, and blue.
+/// \sa SbColor
 class INVENTOR_API SoMFColor : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFColor, SbColor, const SbColor &);
@@ -75,25 +84,30 @@ class INVENTOR_API SoMFColor : public SoMField {
     // Additional convenience functions
     //
 
-    // Set RGB/HSV values from array of arrays of 3 floats
+    /// Sets \a num values starting at index \a start to the RGB (or HSV) values
+    /// specified by the given array of floats.  Each float should be in the
+    /// range 0.0 to 1.0, and there must be 3* \a num floats in the array.
     void		setValues(int start, int num, const float rgb[][3]);
     void		setHSVValues(int start, int num, const float hsv[][3]);
 
-    // Set to one RGB color from SbVec3f, 3 floats, or array of 3 floats
+    /// Sets the field to contain one and only one value, the given color
+    /// (expressed as either RGB or HSV floating point values in the range 0.0
+    /// to 1.0), and deletes the second and subsequent values.
     void		setValue(const SbVec3f &vec);
     void		setValue(float r, float g, float b);
     void		setValue(const float rgb[3]);
 
-    // Set to one HSV color from 3 floats or array of 3 floats
+    /// Set to one HSV color from 3 floats or array of 3 floats
     void		setHSVValue(float h, float s, float v);
     void		setHSVValue(const float hsv[3]);
 
-    // Set one of N RGB colors from SbVec3f, 3 floats, or array of 3 floats
+    /// Sets one value in the array to the given color.  The array will be
+    /// expanded and filled with zeroes as necessary.
     void		set1Value(int index, const SbVec3f &vec);
     void		set1Value(int index, float r, float g, float b);
     void		set1Value(int index, const float rgb[3]);
 
-    // Set1 one of N HSV colors from 3 floats or array of 3 floats
+    /// Set1 one of N HSV colors from 3 floats or array of 3 floats
     void		set1HSVValue(int index, float h, float s, float v);
     void		set1HSVValue(int index, const float hsv[3]);
 

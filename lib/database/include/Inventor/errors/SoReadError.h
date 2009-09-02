@@ -63,29 +63,27 @@
 
 class SoInput;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoReadError
-//
-//  This class is used for all errors reported while reading Inventor
-//  data files.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
+/// Read error handling.
+/// \ingroup Errors
+/// <tt>SoReadError</tt>  is used for errors reported
+/// while reading Inventor data files.
+/// \sa SoDebugError,SoMemoryError
 class INVENTOR_API SoReadError : public SoError {
 
   public:
-    // Sets/returns handler callback for SoReadError class
-    static void		setHandlerCallback(SoErrorCB *cb, void *data)
-	{ handlerCB = cb; cbData = data; }
+    /// Sets handler callback for SoReadError class
+    static void		setHandlerCallback(SoErrorCB *cb, void *data)	{ handlerCB = cb; cbData = data; }
+
+    /// Returns handler callback for SoReadError class
     static SoErrorCB *	getHandlerCallback()	{ return handlerCB; }
+
+    /// Returns handler callback data for SoReadError class
     static void *	getHandlerData()	{ return cbData; }
 
-    // Returns type identifier for SoReadError class
+    /// Returns type identifier for SoReadError class
     static SoType	getClassTypeId()	{ return classTypeId; }
 
-    // Returns type identifier for error instance
+    /// Returns type identifier for error instance
     virtual SoType	getTypeId() const;
 
   SoEXTENDER public:

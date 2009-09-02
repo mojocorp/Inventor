@@ -74,8 +74,10 @@
 
 SoINTERNAL class SoTempPath : public SoFullPath {
   public:
-    // Constructor given approximate number of nodes in chain
+    /// Constructor given approximate number of nodes in chain
     SoTempPath(int approxLength);
+
+    /// Destructor
     virtual ~SoTempPath();
 };
 

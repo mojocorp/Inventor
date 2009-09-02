@@ -59,22 +59,36 @@
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/nodes/SoProfile.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNurbsProfile
-//
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// NURBS profile curve.
+/// \ingroup Nodes
+/// This node specifies a NURBS curve that is used as a profile. The curve
+/// is defined in the same way as a standard <tt>SoNurbsCurve</tt>, except that
+/// the control points are constructed from the current set of profile
+/// coordinates, using the #index field.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoRayPickAction</b>
+/// Adds a profile to the current traversal state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoNurbsProfile {
+///    index        0
+///    linkage      START_FIRST
+///    knotVector   0
+/// }
+/// \endcode
+/// \sa SoLinearProfile, SoNurbsCurve, SoProfileCoordinate2, SoProfileCoordinate3
 class INVENTOR_API SoNurbsProfile : public SoProfile{
 
     SO_NODE_HEADER(SoNurbsProfile);
 
   public:
-    // Fields (in addition to those inherited from parent class)
+    /// The knot vector for the NURBS curve. It must be a list of
+    /// non-decreasing floating point values.
     SoMFFloat		knotVector;
 
-    // Constructor
+    /// Creates a NURBS profile curve node with default settings.
     SoNurbsProfile();
 
   SoEXTENDER public:

@@ -63,6 +63,30 @@
 #include <Inventor/fields/SoMFMatrix.h>
 #include <Inventor/fields/SoMFVec3f.h>
 
+/// Transforms a 3D vector by a 4x4 matrix.
+/// \ingroup Engines
+/// This engine takes as input a three dimensional floating-point vector and
+/// a transformation matrix.  The vector is assumed to be a row vector.
+///
+///
+/// The engine multiplies the vector by the matrix and returns the result
+/// in the output #point.
+/// The output #direction contains the result when the matrix multiplication
+/// assumes the vector is a direction, and therefore ignores the translation
+/// part of the matrix.
+/// The output #normalDirection contains the normalized #direction
+///
+/// \par File format/defaults:
+/// \code
+/// SoTransformVec3f {
+///    vector   0 0 0
+///    matrix   1 0 0 0
+///             0 1 0 0
+///             0 0 1 0
+///             0 0 0 1
+/// }
+/// \endcode
+/// \sa SoEngineOutput
 class INVENTOR_API SoTransformVec3f : public SoEngine {
 
     SO_ENGINE_HEADER(SoTransformVec3f);
@@ -74,11 +98,11 @@ class INVENTOR_API SoTransformVec3f : public SoEngine {
     SoMFMatrix	matrix;
     
     // Outputs
-    SoEngineOutput point;	    // (SoMFVec3f) vector-matrix multiply
-    SoEngineOutput direction;	    // (SoMFVec3f) direction-matrix multiply
-    SoEngineOutput normalDirection; // (SoMFVec3f) direction, normalized
+    SoEngineOutput point;	    ///< (SoMFVec3f) vector-matrix multiply
+    SoEngineOutput direction;	    ///< (SoMFVec3f) direction-matrix multiply
+    SoEngineOutput normalDirection; ///< (SoMFVec3f) direction, normalized
     
-    // Constructor
+    /// Constructor
     SoTransformVec3f();
     
   SoINTERNAL public:

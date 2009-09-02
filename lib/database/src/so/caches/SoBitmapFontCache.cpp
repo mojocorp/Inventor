@@ -372,8 +372,14 @@ SoBitmapFontCache::callLists(const SbString &string)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const char *str = string.getString();
+    for (int i=0; i<string.getLength(); i++)
+    {
+        if (!listFlags[string.getString()[i]])
+            printf("no display list for %c\n", string.getString()[i]);
 
+    }
+    const char *str = string.getString();
+    printf("call list: %s\n", str);
     glCallLists(string.getLength(), GL_UNSIGNED_BYTE, str);
 }
 
@@ -473,9 +479,11 @@ SoBitmapFontCache::drawCharacter(char c)
 {
     const FLbitmap *bmap = getBitmap(c);
 
-    if (bmap != NULL)
+    if (bmap != NULL) {
         glBitmap(bmap->width, bmap->height, bmap->xorig, bmap->yorig,
              bmap->xmove, bmap->ymove, bmap->bitmap);
+        printf("draw char %c - w: %d h: %d ox: %f oy: %f xmove %f ymove %f\n", c, bmap->width, bmap->height, bmap->xorig, bmap->yorig, bmap->xmove, bmap->ymove);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////

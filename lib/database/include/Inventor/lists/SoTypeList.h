@@ -66,39 +66,37 @@
 #include <Inventor/SbPList.h>
 #include <Inventor/SoType.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Subclasses of the SbPList class which hold lists of pointers of a
-// specific type.
-//
-// Each contains:
-//	A default constructor
-//	A constructor taking an initial number of items in the list
-//	An "append" function that adds a pointer to the end of the list
-//	The index ([]) operator that returns the nth pointer in the list
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Maintains a list of \c SoTypes
+/// \ingroup General
+/// This subclass of <tt>SbPList</tt> holds lists of <tt>SoType</tt> type identifiers.
+/// \sa SoType
 class INVENTOR_API SoTypeList : public SbPList {
   public:
+    /// Constructor.
     SoTypeList()			: SbPList()	{}
+
+    /// Constructor that pre-allocates storage for \a size types.
     SoTypeList(int size)		: SbPList(size)	{}
+
+    /// Constructor that copies the contents of another list.
     SoTypeList(const SoTypeList &l)	: SbPList(l)	{}
+
+    /// Destructor.
     ~SoTypeList()			{ truncate(0); }
 
-    // Add a typeId to the end of the list
+    /// Add a typeId to the end of the list
     void		append(SoType typeId);
 
-    // Returns index of given typeId in list, or -1 if not found
+    /// Returns index of given typeId in list, or -1 if not found
     int			find(SoType typeId) const;
 
-    // Insert given typeId in list before typeId with given index
+    /// Insert given typeId in list before typeId with given index
     void		insert(SoType typeId, int addBefore);
 
-    // Access an element of a list
+    /// Access an element of a list
     SoType		operator [](int i) const;
 
-    // Set an element of a list
+    /// Set an element of a list
     void		set(int i, SoType typeId);
 };
 

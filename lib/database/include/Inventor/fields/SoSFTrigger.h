@@ -58,12 +58,22 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFTrigger subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field used to trigger engines or connection networks.
+/// \ingroup Fields
+/// This class can be used to start or to synchronize a network of field
+/// connections.  It is the "null" field \(em a field with no values.  It
+/// is typically used as the "start button" for engines that change over
+/// time.
+///
+/// Triggers can be connected from any other type of field, and will notify
+/// any engines or nodes they are part of (or any other triggers they are
+/// connected to) whenever the value of the field is set (even if it is set
+/// to its current value) or the field is #touch()'ed.
+///
+/// Since they have no value, <tt>SoSFTriggers</tt> are not written to file.  A
+/// node or engine containing an <tt>SoSFTrigger</tt> field will write only the
+/// field's name.
+/// \sa SoSFBool, SoMFBool
 class INVENTOR_API SoSFTrigger : public SoSField {
 
     // Use standard field stuff
@@ -71,18 +81,21 @@ class INVENTOR_API SoSFTrigger : public SoSField {
     SO_SFIELD_CONSTRUCTOR_HEADER(SoSFTrigger);
 
   public:
-    // equivalent to SoField::touch().  Kept for consistency
+    /// Starts the notification process; this is equivalent to calling SoField::touch().
     void                setValue()		{ touch(); }
 
-    // getValue is a no-op:
+    /// getValue is a no-op:
     void                getValue() const	{ }
 
-    // Start notification.
+    /// Start notification.
     virtual void	touch();
 
-    // Equality/inequality tests. Since there are no values, trigger
-    // fields are all the same
+    /// Equality tests. Since there are no values, trigger
+    /// fields are all the same
     int			operator ==(const SoSFTrigger &t) const;
+
+    /// Inequality tests. Since there are no values, trigger
+    /// fields are all the same
     int			operator !=(const SoSFTrigger &t) const;
 
   SoINTERNAL public:

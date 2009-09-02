@@ -59,26 +59,38 @@
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoColorIndex
-//
-//  Surface color node, specified as an index into the current color
-//  table. This is used only for BASE_COLOR lighting in color index
-//  mode. Since color indices make sense only in the context of GL
-//  rendering, this node implements only the GLRender() action method.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Surface color index node.
+/// \ingroup Nodes
+/// This node specifies the color to use for subsequent shapes as an index
+/// into the current color table. This is used only for <b>BASE_COLOR</b>
+/// lighting (see <tt>SoLightModel</tt>) in color index mode. Color index mode
+/// may be enabled by the window in which rendering occurs.
+///
+///
+/// Since color indices make sense only in the context of OpenGL rendering,
+/// this node implements only a method for the <tt>SoGLRenderAction</tt>.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Sets the color index for subsequent shapes rendered with
+/// <b>BASE_COLOR</b> lighting.
+///
+/// \par File format/defaults:
+/// \code
+/// SoColorIndex {
+///    index	1
+/// }
+/// \endcode
+/// \sa SoBaseColor, SoLightModel
 class INVENTOR_API SoColorIndex : public SoNode {
 
     SO_NODE_HEADER(SoColorIndex);
 
   public:
     // Fields
-    SoMFInt32		index;		// Color index
+    SoMFInt32		index;		///< Color index
 
-    // Constructor
+    /// Constructor
     SoColorIndex();
 
   SoEXTENDER public:

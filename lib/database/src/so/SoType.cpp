@@ -217,11 +217,11 @@ SoType::fromName(SbName name)
     // Look for an existing type; if the type begins with "So", then
     // look at a type matching the stuff after the "So", also.  If not
     // found, we'll try the DSO thing:
-    SbBool notFound = !nameDict->find((unsigned long) nameChars, b);
+    SbBool notFound = !nameDict->find((uintptr_t) nameChars, b);
     if (notFound && (name.getLength() > 2)  &&
 	(nameString.getSubString(0,1) == "So")) {
 
-	notFound = !nameDict->find((unsigned long)SbName(nameChars+2).getString(),
+        notFound = !nameDict->find((uintptr_t)SbName(nameChars+2).getString(),
 				  b);
     }
     if (notFound) {
@@ -371,7 +371,7 @@ SoType::createType(SoType parent, SbName name,
     td->name		= name;
     td->createMethod	= createMethod;
 
-    nameDict->enter((unsigned long) name.getString(), (void *)(unsigned long)t.storage.index);
+    nameDict->enter((uintptr_t) name.getString(), (void *)(uintptr_t)t.storage.index);
 
     return t;
 }

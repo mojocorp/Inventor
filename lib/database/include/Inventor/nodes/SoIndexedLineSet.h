@@ -79,6 +79,62 @@ class SoState;
 // next line begins
 #define SO_END_LINE_INDEX	(-1)
 
+/// Indexed polyline shape node.
+/// \ingroup Nodes
+/// This node represents a 3D shape formed by constructing polylines from
+/// vertices located at the coordinates specified in the #vertexProperty
+/// field (from <tt>SoVertexShape</tt>), or the current inherited coordinates.
+/// For optimal performance, the #vertexProperty field is recommended.
+///
+/// <tt>SoIndexedLineSet</tt>
+/// uses the indices in the #coordIndex field (from <tt>SoIndexedShape</tt>)
+/// to specify the polylines. An index of <b>SO_END_LINE_INDEX</b> (-1)
+/// indicates that the current polyline has ended and the next one begins.
+///
+/// The coordinates of the line set are transformed by the current
+/// cumulative transformation. The lines are drawn with the current light
+/// model and drawing style (drawing style <b>FILLED</b> is treated as
+/// <b>LINES</b>).
+///
+/// Treatment of the current material and normal binding is as follows:
+/// The <b>PER_PART</b> binding specifies a material or normal for each
+/// segment of the line. The <b>PER_FACE</b> binding specifies a material or
+/// normal for each polyline.  <b>PER_VERTEX</b> specifies a material or
+/// normal for each vertex.  The corresponding <b>_INDEXED</b> bindings are
+/// the same, but use the #materialIndex or #normalIndex indices
+/// (see <tt>SoIndexedShape</tt>). The default material binding is
+/// <b>OVERALL</b>. The default normal binding is
+/// <b>PER_VERTEX_INDEXED</b>
+///
+/// The current complexity value has no effect on the rendering of indexed
+/// line sets.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws lines based on the current coordinates, normals, materials,
+/// drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Picks lines based on the current coordinates and transformation.
+/// Details about the intersection are returned in an <tt>SoLineDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses all vertices of the line set
+/// with the current transformation applied to them.  Sets the center to
+/// the average of the coordinates of all vertices.
+/// <b>SoCallbackAction</b>
+/// If any line segment callbacks are registered with the action, they will
+/// be invoked for each successive segment in the line set.
+///
+/// \par File format/defaults:
+/// \code
+/// SoIndexedLineSet {
+///    vertexProperty	NULL
+///    coordIndex	0
+///    materialIndex	-1
+///    normalIndex	-1
+///    textureCoordIndex	-1
+/// }
+/// \endcode
+/// \sa SoCoordinate3,SoDrawStyle,SoLineDetail,SoLineSet,SoVertexProperty
 class INVENTOR_API SoIndexedLineSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedLineSet);
@@ -86,7 +142,7 @@ class INVENTOR_API SoIndexedLineSet : public SoIndexedShape {
   public:
     // Inherits all fields
 
-    // Constructor
+    /// Creates an indexed line set node with default settings.
     SoIndexedLineSet();
 
   SoEXTENDER public:

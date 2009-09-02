@@ -60,14 +60,15 @@ class SoPath;
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFPath subclass of SoSField. The field value is a pointer to an
-//  SoPath. The field automatically maintains a reference to the path
-//  it points to and propagates notification from the path.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a pointer to an SoPath.
+/// \ingroup Fields
+/// This field maintains a pointer to an <tt>SoPath</tt> instance,
+/// correctly maintaining its reference count.
+///
+/// <tt>SoSFPaths</tt> are written to file as the path they point to.  See the
+/// <tt>SoPath</tt> manual page for a description of the file format for a
+/// path.
+/// \sa SoField, SoSField, SoMFPath, SoPath
 class INVENTOR_API SoSFPath : public SoSField {
 
     // Use standard field stuff

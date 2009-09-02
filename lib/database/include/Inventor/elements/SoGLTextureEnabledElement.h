@@ -87,27 +87,27 @@ SoEXTENDER class INVENTOR_API SoGLTextureEnabledElement :
     SO_ELEMENT_HEADER(SoGLTextureEnabledElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Used by GLTextureImageElement, set to TRUE when a non-null
-    // image is set, set to FALSE when there is no texture image (the
-    // default).
+    /// Used by GLTextureImageElement, set to TRUE when a non-null
+    /// image is set, set to FALSE when there is no texture image (the
+    /// default).
     static void		set(SoState *state, SbBool value);
 
-    // Used by shapes to figure out if they need to send texture
-    // coordinates:
+    /// Used by shapes to figure out if they need to send texture
+    /// coordinates:
     static SbBool	get(SoState *state)
 	{ return (SbBool)SoInt32Element::get(classStackIndex, state); }
 
-    // By default there is not texture
+    /// By default there is not texture
     static SbBool	getDefault()	{ return FALSE; }
 
-    // Override push() so we can remember previous elements value and
-    // avoid making GL calls if this element has the same value.
+    /// Override push() so we can remember previous elements value and
+    /// avoid making GL calls if this element has the same value.
     virtual void	push(SoState *state);
 
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void	pop(SoState *state, const SoElement *prevTopElement);
 
   SoINTERNAL public:

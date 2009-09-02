@@ -72,18 +72,18 @@ SoEXTENDER class INVENTOR_API SoFocalDistanceElement : public SoFloatElement {
     SO_ELEMENT_HEADER(SoFocalDistanceElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the current focal distance in the state
+    /// Sets the current focal distance in the state
     static void		set(SoState *state, float distance)
 	{ SoFloatElement::set(classStackIndex, state, distance); }
 
-    // Returns current focal distance from the state
+    /// Returns current focal distance from the state
     static float	get(SoState *state)
 	{ return SoFloatElement::get(classStackIndex, state); }
 
-    // Returns the default focal distance
+    /// Returns the default focal distance
     static float	getDefault()			{ return 5.0; }
 
   SoINTERNAL public:

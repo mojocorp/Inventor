@@ -73,10 +73,10 @@ SoEXTENDER class INVENTOR_API SoTextureImageElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoTextureImageElement);
 
   public:
-    // Initializes element.
+    /// Initializes element.
     virtual void	init(SoState *state);
 
-    // sets the current image, wrap, and model:
+    /// sets the current image, wrap, and model:
     static void		set(SoState *state, SoNode *node,
 			    const SbVec2s &size, int numComponents,
 			    const unsigned char *bytes,
@@ -88,13 +88,13 @@ SoEXTENDER class INVENTOR_API SoTextureImageElement : public SoReplacedElement {
 				    int &wrapT, int &model, 
 				    SbColor &blendColor);
 
-    // Returns TRUE if the texture contains transparency info
+    /// Returns TRUE if the texture contains transparency info
     static SbBool	containsTransparency(SoState *state);
 
-    // Returns the default texture image
+    /// Returns the default texture image
     static const unsigned char *getDefault(SbVec2s &s, int &nc);
 
-    // Print info about image for debugging
+    /// Print info about image for debugging
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

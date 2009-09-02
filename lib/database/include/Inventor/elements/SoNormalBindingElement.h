@@ -71,36 +71,33 @@ SoEXTENDER class INVENTOR_API SoNormalBindingElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoNormalBindingElement);
 
   public:
-    // The (seemingly random) choice of values is for compatibility
-    // with Inventor 2.0 binary format files:
+    /// The (seemingly random) choice of values is for compatibility
+    /// with Inventor 2.0 binary format files:
     enum Binding {
-	OVERALL = 2,		// Whole object has same normal
-	PER_PART = 3,		// One normal for each part of object
-	PER_PART_INDEXED = 4,	// One normal for each part, indexed
-	PER_FACE = 5,		// One normal for each face of object
-	PER_FACE_INDEXED = 6,	// One normal for each face, indexed
-	PER_VERTEX = 7,		// One normal for each vertex
-	PER_VERTEX_INDEXED = 8	// One normal for each vertex, indexed
-        
-
-
+        OVERALL = 2,		///< Whole object has same normal
+        PER_PART = 3,		///< One normal for each part of object
+        PER_PART_INDEXED = 4,	///< One normal for each part, indexed
+        PER_FACE = 5,		///< One normal for each face of object
+        PER_FACE_INDEXED = 6,	///< One normal for each face, indexed
+        PER_VERTEX = 7,		///< One normal for each vertex
+        PER_VERTEX_INDEXED = 8	///< One normal for each vertex, indexed
     };
 
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the current normal binding in the state
+    /// Sets the current normal binding in the state
     static void		set(SoState *state, Binding binding)
 	{ SoInt32Element::set(classStackIndex, state, (int32_t)binding); }
 
-    // Returns current normal binding from the state
+    /// Returns current normal binding from the state
     static Binding	get(SoState *state)
 	{ return (Binding)SoInt32Element::get(classStackIndex, state); }
 
-    // Returns the default normal binding
+    /// Returns the default normal binding
     static Binding	getDefault()		{ return PER_VERTEX_INDEXED; }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

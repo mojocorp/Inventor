@@ -58,12 +58,14 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFInt32 subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a int32_t integer.
+/// \ingroup Fields
+/// A field containing a single long (32-bit) integer.
+///
+/// <tt>SoSFInt32s</tt> are written to file as an integer in decimal,
+/// hexadecimal (beginning with '0x') or octal (beginning with '0')
+/// format.
+/// \sa SoField, SoSField, SoMFInt32, SoSFUInt32
 class INVENTOR_API SoSFInt32 : public SoSField {
 
     // Use standard field stuff

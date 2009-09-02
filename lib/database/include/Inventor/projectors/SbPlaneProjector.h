@@ -61,64 +61,77 @@
 #include <Inventor/projectors/SbProjector.h>
 #include <Inventor/SbPlane.h>
 
+/// Plane projector.
+/// \ingroup Projectors
+/// <tt>SbPlaneProjector</tt>
+/// projects the mouse onto a plane.
+/// This is typically used to write
+/// interactive 3D manipulators and viewers.
+/// \sa SbCylinderProjector,SbCylinderPlaneProjector,SbCylinderSectionProjector,
+/// \sa SbCylinderSheetProjector,SbLineProjector, SbSpherePlaneProjector,SbSphereProjector, SbSphereSectionProjector, SbSphereSheetProjector
 class INVENTOR_API SbPlaneProjector : public SbProjector
 {
   public:
   
-    // Constructor
-    // The default plane passes through the origin and is
-    // oriented toward the Z axis.
+    /// Constructor
+    /// The default plane passes through the origin and is
+    /// oriented toward the Z axis.
     SbPlaneProjector(SbBool orient = FALSE);
     
-    // Constructor that takes a plane.
+    /// Constructor that takes a plane. If orient to eye is TRUE,
+    /// the plane will be reoriented to the eye.
     SbPlaneProjector(const SbPlane &plane,
 		     SbBool orient = FALSE);
 
-    // Destructor
+    /// Destructor
     ~SbPlaneProjector(){};
     
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SbProjector *    copy() const;
 
-    // Apply the projector using the given point, returning the
-    // point in three dimensions that it projects to.
-    // The point should be normalized from 0-1, with (0,0) at
-    // the lower-left.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// The point should be normalized from 0-1, with (0,0) at
+    /// the lower-left.
     virtual SbVec3f	project(const SbVec2f &point);
 
-    // Set/get the plane to use.
+    /// Set the plane to use.
     void		setPlane(const SbPlane &plane);
 
+    /// Get the plane to use.
     const SbPlane &	getPlane() const		  { return plane; }
 
-    // Set/get whether the projector should be oriented towards
-    // the eye.
-    // If orient is set to TRUE, the given plane's direction
-    // is ignored, and the plane will be oriented to the eye. 
-    // It will pass through the same point from the origin defined
-    // by the original dir * dist;
-    // Set to FALSE if the plane's direction should remain in working space.
+    /// Set whether the projector should be oriented towards
+    /// the eye.
+    /// If orient is set to TRUE, the given plane's direction
+    /// is ignored, and the plane will be oriented to the eye.
+    /// It will pass through the same point from the origin defined
+    /// by the original dir * dist;
+    /// Set to FALSE if the plane's direction should remain in working space.
     void		setOrientToEye(SbBool orientToEye);
+
+    /// Get whether the projector should be oriented towards
+    /// the eye.
     SbBool		isOrientToEye()	const		{ return orientToEye; }
 
-    // Get a vector on this plane given two normalized mouse points.
+    /// Get a vector on this plane given two normalized mouse points.
     virtual SbVec3f	getVector(const SbVec2f &mousePosition1,
 				  const SbVec2f &mousePosition2);
 					    
-    // Get a vector given the current mouse point.
-    // Uses the last point on this projector from the previous
-    // call to getVector or setStartPostion. Do not use this
-    // if the working space transform is changing since
-    // the new point will be in a different space than
-    // the old one.
+    /// Get a vector given the current mouse point.
+    /// Uses the last point on this projector from the previous
+    /// call to getVector or setStartPostion. Do not use this
+    /// if the working space transform is changing since
+    /// the new point will be in a different space than
+    /// the old one.
     virtual SbVec3f	getVector(const SbVec2f &mousePosition);
 					    
-    // Set the initialial from a mouse position.
+    /// Set the initialial from a mouse position.
     void		setStartPosition(const SbVec2f &mousePosition)
 					{ lastPoint = project(mousePosition); }
 
-    // Set the initialial position from a point on the projector.
+    /// Set the initialial position from a point on the projector.
     void		setStartPosition(const SbVec3f &point)
 					    { lastPoint = point; }
   protected:

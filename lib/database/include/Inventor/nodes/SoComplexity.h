@@ -61,14 +61,53 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoComplexity
-//
-//  Shape complexity node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Shape complexity node.
+/// \ingroup Nodes
+/// This node sets the current shape complexity value. This is a heuristic
+/// value which provides a hint at what geometric complexity to render
+/// shape nodes.  Values range from 0 to 1, where 0 means minimum
+/// complexity and 1 means maximum complexity. Each shape node interprets
+/// complexity in its own way.
+///
+///
+/// Shape complexity always affects rendering and primitive generation for
+/// the <tt>SoCallbackAction</tt>. For some shapes, it also affects picking.
+///
+///
+/// There are three ways to interpret shape complexity, depending on the
+/// #type field. <b>BOUNDING_BOX</b> complexity ignores the #value
+/// field and renders all shapes as bounding boxes, using the current
+/// material, drawing style, etc. The other two types use the #value
+/// field to determine the tessellation of shapes into polygons.
+/// <b>OBJECT_SPACE</b> complexity uses #value directly to determine the
+/// tessellation.  <b>SCREEN_SPACE</b> complexity depends on #value and the
+/// projected size of the shape on the screen; a #value of 0 produces
+/// the minimum tessellation for a shape, and a #value of 1 produces a
+/// tessellation that is fine enough that each edge of a polygon is about 1
+/// or two pixels in length. Since the projected size depends on the
+/// camera position, objects may be tessellated differently every frame if
+/// the camera is moving; note that this may have adverse effects on
+/// render caching in <tt>SoSeparator</tt> nodes.
+///
+///
+/// The <tt>SoComplexity</tt> node also sets a hint for the quality of textures
+/// applied to shapes, based on the value of the #textureQuality field.
+/// The texture quality will take effect at the next Texture2 node;
+/// Texture2 nodes previously traversed will not be affected.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction</b>
+/// Sets the current complexity in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoComplexity {
+///    type             OBJECT_SPACE
+///    value            0.5
+///    textureQuality   0.5
+/// }
+/// \endcode
+/// \sa SoShape, SoShapeHints, SoTexture2
 class INVENTOR_API SoComplexity : public SoNode {
 
     SO_NODE_HEADER(SoComplexity);
@@ -81,11 +120,11 @@ class INVENTOR_API SoComplexity : public SoNode {
     };
 
     // Fields
-    SoSFEnum		type;		// How complexity is expressed
-    SoSFFloat		value;		// Complexity value
-    SoSFFloat		textureQuality; // Fast versus nice textures
+    SoSFEnum		type;		 ///< How complexity is expressed
+    SoSFFloat		value;		 ///< Complexity value
+    SoSFFloat		textureQuality; ///< Fast versus nice textures
 
-    // Constructor
+    /// Constructor
     SoComplexity();
 
   SoEXTENDER public:

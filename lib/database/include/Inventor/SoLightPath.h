@@ -76,21 +76,21 @@ class INVENTOR_API SoLightPath  {
 
   SoINTERNAL public:
 
-    // Constructor given approximate number of nodes in chain
+    /// Constructor given approximate number of nodes in chain
     SoLightPath(int approxLength);
 
 
-    // Sets head node (first node in chain)
-    // Resulting path has only one node.
+    /// Sets head node (first node in chain)
+    /// Resulting path has only one node.
     void		setHead(SoNode *node);
 
-    // Adds node specified by childindex to end of chain.
+    /// Adds node specified by childindex to end of chain.
     void		append(int childIndex)
         { indices.append(childIndex);}
 
 
-    // Allows path to be treated as a stack: push a node at the end of
-    // the chain and pop the last node off
+    /// Allows path to be treated as a stack: push a node at the end of
+    /// the chain and pop the last node off
     void		push(int childIndex)	{ append(childIndex); }
     void		push()			{ append(-1);}
     void		pop()		{ truncate(getFullLength() - 1); }
@@ -99,22 +99,22 @@ class INVENTOR_API SoLightPath  {
     SoNode *		getTail()
                 { return getNode(getFullLength()-1);}
 
-    // Returns the first node in a path chain.
+    /// Returns the first node in a path chain.
     SoNode *		getHead() const	{ return headNode; }
 
-    // Returns pointer to ith node in chain
+    /// Returns pointer to ith node in chain
     SoNode *		getNode(int i) const;
 
-    // Returns full length of path chain (number of nodes)
-    // note that public/private distinction is ignored.
+    /// Returns full length of path chain (number of nodes)
+    /// note that public/private distinction is ignored.
     int			getFullLength() const {return indices.getLength();}
 
-    // Removes all nodes from indexed node on
+    /// Removes all nodes from indexed node on
     void		truncate(int start) { indices.truncate(start);}
 
 
-    // fills in nodes for a TempPath that is represented by this
-    // SoLightPath.  Called by SoAction::getCurPath();
+    /// fills in nodes for a TempPath that is represented by this
+    /// SoLightPath.  Called by SoAction::getCurPath();
     void 		makeTempPath(SoTempPath *) const;
 
   private:

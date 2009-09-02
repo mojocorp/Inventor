@@ -61,23 +61,40 @@
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFFloat.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoLight
-//
-//  Abstract base light source node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for all light source nodes.
+/// \ingroup Nodes
+/// <tt>SoLight</tt> is the abstract base class for all light nodes. A light
+/// node defines an illumination source that may affect subsequent shapes
+/// in the scene graph, depending on the current lighting style.
+/// Light sources are affected by the current transformation. A light node
+/// under a separator does not affect any objects outside that separator.
+///
+/// You can also use a node kit to create a light; see the reference page for
+/// <tt>SoLightKit</tt>.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Activates this light (if so specified) during traversal. All shape
+/// nodes that come after this light in the scene graph are illuminated by
+/// this light.
+/// \par File format/defaults:
+/// This is an abstract class. See the reference page of a derived class for the format and default values.
+/// \sa SoDirectionalLight, SoEnvironment,SoLightKit, SoLightModel, SoMaterial, SoPointLight,SoSpotLight
 class INVENTOR_API SoLight : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoLight);
 
   public:
-    // Fields common to all subclasses:
-    SoSFBool		on;		// Whether light is on
-    SoSFFloat		intensity;	// Source intensity (0 to 1)
-    SoSFColor		color;		// RGB source color
+    /// Determines whether the source is active or inactive. When inactive, the
+    /// source does not illuminate at all.
+    SoSFBool		on;
+
+    /// Illumination intensity of light source. Valid values range from 0.0
+    /// (no illumination) to 1.0 (maximum illumination).
+    SoSFFloat		intensity;
+
+    /// Light source illumination color.
+    SoSFColor		color;
 
   SoINTERNAL public:
     static void		initClass();

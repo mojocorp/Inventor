@@ -77,14 +77,16 @@ SoEXTENDER class INVENTOR_API SoGLLazyElement : public SoLazyElement {
     SO_ELEMENT_HEADER(SoGLLazyElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Override push() and pop() methods to maintain GL state
+    /// Override push() method to maintain GL state
     virtual void	push(SoState *state);
+
+    /// Override pop() method to maintain GL state
     virtual void	pop(SoState *state, const SoElement *prevTopElement);
 
-    //Static sends, always send top-of-stack.  Intended for extender use.  
+    /// Static sends, always send top-of-stack.  Intended for extender use.
     static void		sendAllMaterial(SoState *state)
 	{SoGLLazyElement *le = getInstance(state);
 	if ((le->invalidBits)||(state->isCacheOpen()))  
@@ -100,21 +102,21 @@ SoEXTENDER class INVENTOR_API SoGLLazyElement : public SoLazyElement {
 	if ((DIFFUSE_ONLY_MASK & le->invalidBits)||(state->isCacheOpen()))  
 	    le->reallySend(state, DIFFUSE_ONLY_MASK);}
 	    
-    // Send diffuse color and transparency, by index
-    // Included for compatibility with SoMaterialBundle
-    // To be used by a shape to send additional colors after first send()
-    // Should NEVER be the first send of a shape! 
+    /// Send diffuse color and transparency, by index
+    /// Included for compatibility with SoMaterialBundle
+    /// To be used by a shape to send additional colors after first send()
+    /// Should NEVER be the first send of a shape!
     void sendDiffuseByIndex(int index) const; 
     
-    // Destroy knowledge of GL state
+    /// Destroy knowledge of GL state
     void reset(SoState* state,  uint32_t bitmask) const;
     
     static SbBool	isColorIndex(SoState *state)
     	{return(getInstance(state)->colorIndex);}
 	
-    // Return the top (current) instance of the element in the state
-    // Note it does NOT cause cache dependency!
-    // It also casts away the const.   
+    /// Return the top (current) instance of the element in the state
+    /// Note it does NOT cause cache dependency!
+    /// It also casts away the const.
     static  SoGLLazyElement * getInstance(const SoState *state)
 	{return (SoGLLazyElement *) 
 	(state->getConstElement(classStackIndex));}

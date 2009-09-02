@@ -506,7 +506,7 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
     for (int line = 0; line < string.getNum(); line++) {
 	// Starting position of string, based on justification:
 	SbVec3f charPosition = getPixelStringOffset(line) +
-	    screenOrigin;
+            screenOrigin;
 
 	const SbString &str = string[line];
 	const char *chars = str.getString();

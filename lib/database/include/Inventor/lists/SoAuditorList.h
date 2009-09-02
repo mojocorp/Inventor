@@ -88,32 +88,34 @@
 SoINTERNAL class INVENTOR_API SoAuditorList : private SbPList {
   public:
 
-    // Constructor and destructor.
+    /// Constructor and destructor.
     SoAuditorList();
+
+    /// Destructor
     ~SoAuditorList();
 
-    // Adds an auditor of the given type to the list
+    /// Adds an auditor of the given type to the list
     void		append(void *auditor, SoNotRec::Type type);
 
-    // Sets auditor and type for given index
+    /// Sets auditor and type for given index
     void		set(int index, void *auditor, SoNotRec::Type type);
 
-    // Finds an auditor in the list, returning the index or -1 if not found
+    /// Finds an auditor in the list, returning the index or -1 if not found
     int			find(void *auditor, SoNotRec::Type type) const;
 
-    // Returns object or type for given index
+    /// Returns object or type for given index
     void *		getObject(int index) const;
     SoNotRec::Type	getType(int index) const;
 
-    // Removes an auditor from the list
+    /// Removes an auditor from the list
     void		remove(int index);
     void		remove(void *auditor, SoNotRec::Type type)
         { remove(find(auditor, type)); }
 
-    // Returns number of auditors in list
+    /// Returns number of auditors in list
     int			getLength() const;
 
-    // Propagates notification to all auditors in list
+    /// Propagates notification to all auditors in list
     void		notify(SoNotList *list);
 
   private:

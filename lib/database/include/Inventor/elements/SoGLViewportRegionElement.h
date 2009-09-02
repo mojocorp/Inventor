@@ -76,11 +76,13 @@ SoEXTENDER class INVENTOR_API SoGLViewportRegionElement : public SoViewportRegio
     SO_ELEMENT_HEADER(SoGLViewportRegionElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Override push() and pop() methods to keep GL up to date
+    /// Override push() method to keep GL up to date
     virtual void	push(SoState *state);
+
+    /// Override pop() method to keep GL up to date
     virtual void	pop(SoState *state, const SoElement *prevTopElement);
 
   SoINTERNAL public:

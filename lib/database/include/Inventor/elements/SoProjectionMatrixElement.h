@@ -75,17 +75,17 @@ SoEXTENDER class INVENTOR_API SoProjectionMatrixElement : public SoReplacedEleme
     SO_ELEMENT_HEADER(SoProjectionMatrixElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the projection matrix to the given matrix
+    /// Sets the projection matrix to the given matrix
     static void		set(SoState *state, SoNode *node,
 			    const SbMatrix &matrix);
 
-    // Returns current matrix from the state
+    /// Returns current matrix from the state
     static const SbMatrix &	get(SoState *state);
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

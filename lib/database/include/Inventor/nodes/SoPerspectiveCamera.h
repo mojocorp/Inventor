@@ -59,32 +59,53 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoCamera.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPerspectiveCamera
-//
-//  perspectiveCamera node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Perspective camera node.
+/// \ingroup Nodes
+/// A perspective camera defines a perspective projection from a
+/// viewpoint. The viewing volume for a perspective camera is a truncated
+/// right pyramid.
+///
+/// By default, the camera is located at (0,0,1) and looks along the
+/// negative z-axis; the #position and #orientation fields can be
+/// used to change these values. The #heightAngle field defines the
+/// total vertical angle of the viewing volume; this and the
+/// <tt>aspectRatio</tt> field determine the horizontal angle.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoHandleEventAction, SoRayPickAction</b>
+/// Sets the viewport and camera information in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoPerspectiveCamera {
+///    viewportMapping  ADJUST_CAMERA
+///    position         0 0 1
+///    orientation      0 0 1  0
+///    aspectRatio      1
+///    nearDistance     1
+///    farDistance      10
+///    focalDistance    5
+///    heightAngle      0.785398
+/// }
+/// \endcode
+/// \sa SbViewVolume, SoOrthographicCamera
 class INVENTOR_API SoPerspectiveCamera : public SoCamera {
 
     SO_NODE_HEADER(SoPerspectiveCamera);
 
   public:
     // Fields (some are inherited from SoCamera)
-    SoSFFloat		heightAngle;	// Angle (in radians) of field
-					// of view, in height direction
+    SoSFFloat		heightAngle;	///< Vertical angle of the viewing volume.
 
-    // Constructor
+    /// Creates a perspective camera node with default settings.
     SoPerspectiveCamera();
 
-    // Scales the height of the camera, in this case, the 'heightAngle' field.
+    /// Scales the height of the camera, in this case, the 'heightAngle' field.
     virtual void	scaleHeight( float scaleFactor );
 
-    // Fills in a view volume structure, based on the camera. If the
-    // useAspectRatio field is not 0.0 (the default), the camera uses
-    // that ratio instead of the one it has.
+    /// Fills in a view volume structure, based on the camera. If the
+    /// useAspectRatio field is not 0.0 (the default), the camera uses
+    /// that ratio instead of the one it has.
     virtual SbViewVolume getViewVolume(float useAspectRatio = 0.0) const;
 
   SoINTERNAL public:

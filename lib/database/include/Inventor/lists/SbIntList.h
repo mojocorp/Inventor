@@ -76,18 +76,18 @@
 SoINTERNAL class INVENTOR_API SbIntList : public SbPList {
 
   public:
-    // Constructors, similar to SbPList
+    /// Constructors, similar to SbPList
     SbIntList()					{}
     SbIntList(int initSize) : SbPList(initSize) {}
 
     void	append(int integer)
         { ((SbPList *) this)->append((void *) (size_t) integer); }
 
-    // Returns index of given integer in list, or -1 if not found
+    /// Returns index of given integer in list, or -1 if not found
     int		find(int integer)
         { return ((SbPList *) this)->find((void *) (size_t) integer); }
 
-    // Inserts given integer in list before integer with given index
+    /// Inserts given integer in list before integer with given index
     void	insert(int integer, int addBefore)
         { ((SbPList *) this)->insert((void *) (size_t) integer, addBefore); }
 

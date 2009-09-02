@@ -62,115 +62,143 @@
 #include <Inventor/SoLists.h>
 #include <Inventor/lists/SbIntList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPath
-//
-//  A SoPath represents a scene graph or subgraph. It contains
-//  pointers to a chain of nodes, each of which is a child of the
-//  previous. The child index of each node is also stored, to
-//  disambiguate cases where a node appears more than once as a child
-//  of the same group.
-//
-//  The graph defined by the path consists of all of the nodes in the
-//  path, all nodes below the last node in the chain, and any other
-//  nodes that have an effect on these nodes.
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoPathList;
 class SoWriteAction;
 class SoTempPath;
 
+/// Path that points to a list of hierarchical nodes.
+/// \ingroup General
+/// A path represents a scene graph or subgraph.  It contains a list of
+/// pointers to nodes forming a chain from some root to some descendent.
+/// Each node in the chain is a child of the previous node. Paths are used
+/// to refer to some object in a scene graph precisely and unambiguously,
+/// even if there are many instances of the object. Therefore, paths are
+/// returned by both the <tt>SoRayPickAction</tt> and <tt>SoSearchAction</tt>.
+///
+///
+/// When an action is applied to a path, only the nodes in the subgraph
+/// defined by the path are traversed. These include: the nodes in the
+/// path chain, all nodes (if any) below the last node in the path, and
+/// all nodes whose effects are inherited by any of these nodes.
+///
+///
+/// <tt>SoPath</tt> attempts to maintain consistency of paths even when the
+/// structure of the scene graph changes. For example, removing a child
+/// from its parent when both are in a path chain cuts the path chain at
+/// that point, leaving the top part intact. Removing the node to the left
+/// of a node in a path adjusts the index for that node. Replacing a child
+/// of a node when both the parent and the child are in the chain replaces
+/// the child in the chain with the new child, truncating the path below
+/// the new child.
+///
+///
+/// Note that only public children of nodes are accessible from an
+/// <tt>SoPath</tt>. Nodes like node kits that limit access to their children
+/// may provide other ways to get more information, such as by using the
+/// <tt>SoNodeKitPath</tt> class.
+/// \sa SoNode, SoRayPickAction, SoSearchAction, SoNodeKitPath
 class INVENTOR_API SoPath : public SoBase {
 
   public:
 
-    // Default constructor
+    /// Constructs an empty path.
     SoPath();
 
-    // Constructor given approximate number of nodes in chain
+    /// Constructs a path with a hint to length (number of nodes in chain).
     SoPath(int approxLength);
 
-    // Constructor given head node to insert in path
+    /// Constructs a path and sets the head node to the given node.
     SoPath(SoNode *node);
 
-    // Sets head node (first node in chain)
+    /// Sets head node (first node in chain). The head node must be set before the
+    /// #append() or #push() methods may be called.
     void		setHead(SoNode *node);
 
-    // Adds node to end of chain; node is nth child of current last node
+    /// Adds node to end of chain; the node is the \a childIndex 'th child of
+    /// the current tail node.
     void		append(int childIndex);
 
-    // Adds node to end of chain; uses first occurrance of node as
-    // child of current last node. If path is empty, this is
-    // equivalent to setHead().
+    /// Adds node to end of chain; uses the first occurrence of \a childNode
+    /// as child of current tail node. If the path is empty, this is
+    /// equivalent to #setHead(childNode) .
     void		append(SoNode *childNode);
 
-    // Adds all nodes in path to end of chain; head node of fromPath must
-    // be the same as or a child of current last node
+    /// Adds all nodes in \a fromPath 's chain to end of chain; the head node
+    /// of \a fromPath must be the same as or a child of the current tail node.
     void		append(const SoPath *fromPath);
 
-    // Allows path to be treated as a stack: push a node at the end of
-    // the chain and pop the last node off
+    /// These allow a path to be treated as a stack; they push a node at the
+    /// end of the chain and pop the last node off.
     void		push(int childIndex) { append(childIndex); }
     void		pop()		     { truncate(getFullLength() - 1); }
 
-    // Returns the first/last node in a path chain.
+    /// These return the first nodes in a path chain.
     SoNode *		getHead() const	{ return nodes[0]; }
+
+    /// These return the last nodes in a path chain.
     SoNode *		getTail() const	{ return (nodes[getLength() - 1]); }
 
-    // Returns pointer to ith node in chain
+    /// Return a pointer to the \a i 'th node (within its parent) in the chain.
+    /// Calling getNode(0) is equivalent to calling #getHead().
     SoNode *		getNode(int i) const	{ return (nodes[i]); }
 
-    // Returns pointer to ith node from the tail in chain
-    // i.e. index 0 == tail, index 1 == 1 before tail, 2 == 2 before tail
+    /// Return a pointer to the \a i 'th node (within its parent) in the chain, counting backward from
+    /// the tail node. Passing 0 for \a i returns the tail node.
     SoNode *		getNodeFromTail(int i) const
 	{ return (nodes[getLength() - 1 - i]); }
 
-    // Returns index of ith node in chain
+    /// Return the index of the \a i 'th node (within its parent) in the chain.
     int			getIndex(int i) const	{ return (indices[i]); }
 
-    // Returns index of ith node in chain
+    /// Return the index of the \a i 'th node (within its parent) in the chain, counting backward from
+    /// the tail node. Passing 0 for \a i returns the tail node index.
     int			getIndexFromTail(int i) const
 	{ return (indices[getLength() - 1 - i]); }
 
-    // Returns length of path chain (number of nodes)
+    /// Returns length of path chain (number of nodes).
     int			getLength() const;
 
-    // Removes all nodes from indexed node on
+    /// Truncates the path chain, removing all nodes from index \a start on.
+    /// Calling #truncate(0) empties the path entirely.
     void		truncate(int start);
 
-    // Returns TRUE if the passed node is in the path chain
+    /// Returns TRUE if the node is found anywhere in the path chain.
     SbBool		containsNode(const SoNode *node) const;
     
-    // Returns TRUE if the nodes in the chain in the passed path are
-    // contained (in consecutive order) in this path chain
+    /// Returns TRUE if the nodes in the chain in the passed path are
+    /// contained (in consecutive order) in this path chain.
     SbBool		containsPath(const SoPath *path) const;
     
-    // If the paths have different head nodes, this returns -1.
-    // Otherwise, it returns the index into the chain of the last node
-    // (starting at the head) that is the same for both paths.
+    /// If the two paths have different head nodes, this returns -1.
+    /// Otherwise, it returns the path chain index of the last node (starting
+    /// at the head) that is the same for both paths.
     int			findFork(const SoPath *path) const;
 
-    // Creates and returns a new path that is a copy of some or all of
-    // this path. Copying starts at the given index (default is 0,
-    // which is the head node). numNodes = 0 (the default) means copy
-    // all nodes from the starting index to the end. Returns NULL on
-    // error.
+    /// Creates and returns a new path that is a copy of some or all of this
+    /// path. Copying starts at the given index (default is 0, which is the
+    /// head node). A \a numNodes of 0 (the default) means copy all nodes
+    /// from the starting index to the end. Returns NULL on error.
     SoPath *		copy(int startFromNodeIndex = 0,
 			     int numNodes = 0) const;
 
-    // Comparison operator: returns TRUE if all nodes in paths are identical
+    /// Returns TRUE if all node pointers in the two path chains are identical.
     friend INVENTOR_API int		operator ==(const SoPath &p1, const SoPath &p2);
 
-    // Returns type identifier for path instance
+    /// Returns type identifier for path instance
     virtual SoType	getTypeId() const;
 
-    // Returns type identifier for SoPath class
+    /// Returns type identifier for SoPath class
     static SoType	getClassTypeId()	{ return classTypeId; }
 
-    // A path can be given a name using setName() (which is a method on
-    // SoBase).  These methods allow paths to be looked up by name.
+    /// These methods lookup and return paths with a given name.  Paths are
+    /// named by calling their #setName() method
+    /// (defined by the \c SoBase class). The first form returns the last
+    /// path that was given that name, either by #setName()
+    /// or by reading in a named path from a file. If there is no path with
+    /// the given name, NULL will be returned.  The second form appends all
+    /// paths with the given name to the given path list and returns the
+    /// number of paths that were added. If there are no paths with the given
+    /// name, zero will be returned and nothing will be added to the list.
     static SoPath *	getByName(const SbName &name);
     static int		getByName(const SbName &name, SoPathList &list);
 

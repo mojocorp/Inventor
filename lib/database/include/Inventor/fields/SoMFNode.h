@@ -60,14 +60,17 @@ class SoNode;
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFNode subclass of SoMField. Each field value is a pointer to an
-//  SoNode. The field automatically maintains references to the nodes
-//  it points to and propagates notification from the nodes.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of pointers to nodes.
+/// \ingroup Fields
+/// This field maintains a set of pointers to <tt>SoNode</tt> instances,
+/// correctly maintaining their reference counts.
+///
+/// <tt>SoMFNodes</tt> are written to file as one or more nodes.
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ Cube { }, Sphere { radius 2.0 }, USE myTranslation ]
 class INVENTOR_API SoMFNode : public SoMField {
 
     // Use standard field stuff

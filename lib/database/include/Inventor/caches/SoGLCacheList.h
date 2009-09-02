@@ -82,31 +82,31 @@ class SoElement;
 SoEXTENDER class INVENTOR_API SoGLCacheList {
     
   public:
-    // Constructor.  Takes the maximum number of caches to build.
+    /// Constructor.  Takes the maximum number of caches to build.
     SoGLCacheList(int numCaches = 2);
 
-    // Destructor.
+    /// Destructor.
     ~SoGLCacheList();
     
-    // Given an SoGLRenderAction, try to use one of the caches we've
-    // built.  If none of the caches can be used, this returns FALSE.
-    // If this returns TRUE, then a cache has been called and all the
-    // GL commands in it have already been done.
+    /// Given an SoGLRenderAction, try to use one of the caches we've
+    /// built.  If none of the caches can be used, this returns FALSE.
+    /// If this returns TRUE, then a cache has been called and all the
+    /// GL commands in it have already been done.
     SbBool call(SoGLRenderAction *);
     
-    // Open a new cache, maybe.  If the autoCache flag is TRUE, a
-    // heuristic will be used to figure out whether or not caching
-    // should be done (based on when caches were built, when they were
-    // used, etc).  If the flag is FALSE, always try to open a cache
-    // (and possibly delete an old cache).
+    /// Open a new cache, maybe.  If the autoCache flag is TRUE, a
+    /// heuristic will be used to figure out whether or not caching
+    /// should be done (based on when caches were built, when they were
+    /// used, etc).  If the flag is FALSE, always try to open a cache
+    /// (and possibly delete an old cache).
     void open(SoGLRenderAction *, SbBool autoCache = TRUE);
 
-    // Close an open cache, if any.  If open() didn't open a cache,
-    // this routine does nothing.
+    /// Close an open cache, if any.  If open() didn't open a cache,
+    /// this routine does nothing.
     void close(SoGLRenderAction *);
     
-    // Mark all caches as invalid.  This should be called when a node
-    // is notified of changes in its children or fields.
+    /// Mark all caches as invalid.  This should be called when a node
+    /// is notified of changes in its children or fields.
     void invalidateAll();
     
   private:

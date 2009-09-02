@@ -60,70 +60,99 @@
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/actions/SoSubAction.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoGetBoundingBoxAction
-//
-//  For computing a bounding box enclosing objects defined by a scene
-//  graph. The box is a rectangular prism whose sides are aligned with
-//  the coordinate axes, and is represented as an SbBox3f. It also
-//  computes the center point, which is defined differently for
-//  different objects.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Computes bounding box of a scene.
+/// \ingroup Actions
+/// This class is used to compute a 3D bounding box enclosing objects
+/// defined by a scene graph. The box is a rectangular prism. The action
+/// also computes the center point, which is defined differently for
+/// different objects.  (For example, the center of an <tt>SoFaceSet</tt> is
+/// the average of its vertices' coordinates.) For a group, the center
+/// point is defined as the average of the centers of all shapes in it.
+///
+///
+/// Each bounding box is calculated as a <tt>SbXfBox3f</tt>, where the
+/// transformation matrix is defined so that the bounding box can be
+/// stored in the object space of the <tt>SoShape</tt>. When two bounding boxes
+/// are combined by a group node, the combination is performed so as to
+/// produce the smaller untransformed box.  The result of the calculation
+/// by the action can be returned as an <tt>SbXfBox3f</tt> or as a
+/// world-space-aligned <tt>SbBox3f</tt>.
+///
+///
+/// To calculate the bounding box of a subgraph bounded by two paths,
+/// specify the left edge of the subgraph with #setResetPath(), and
+/// apply the action to the path that defines the right edge of the
+/// subgraph. The accumulated bounding box and transformation will be
+/// reset when the tail of the reset path is traversed.
+///
+///
+/// If the subgraph being traversed does not contain any shapes, the returned
+/// bounding box will be empty (that is, #box.isEmpty() will return TRUE).
+/// \sa SbBox3f, SbXfBox3f, SoGetMatrixAction
 class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
 
     SO_ACTION_HEADER(SoGetBoundingBoxAction);
 
   public:
-    // Constructor takes viewport region to use for picking. Even
-    // though the bounding box computation may not involve a window
-    // per se, some nodes need this information to determine their
-    // size and placement.
+    /// Constructor takes viewport region to use for picking. Even
+    /// though the bounding box computation may not involve a window
+    /// per se, some nodes need this information to determine their
+    /// size and placement.
     SoGetBoundingBoxAction(const SbViewportRegion &viewportRegion);
 
-    // Destructor
+    /// Destructor
     virtual ~SoGetBoundingBoxAction();
 
-    // Sets current viewport region to use for action
+    /// Sets current viewport region to use for action
     void		setViewportRegion(const SbViewportRegion &newRegion);
 
-    // Returns current viewport region
+    /// Returns current viewport region
     const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
 
-    // Returns computed bounding box
+    /// Returns computed bounding box in world space.
     SbBox3f		getBoundingBox() const	{ return box.project(); }
 
-    // Returns bounding box before transform
+    /// Returns computed bounding box before transformation into world space.
     SbXfBox3f &		getXfBoundingBox()	{ return box; }
 
-    // Returns computed center point
+    /// Returns computed center point in world space.
     const SbVec3f &	getCenter() const;
 
-    // Set to TRUE if you want the returned bounding box to be in the
-    // space of whatever camera is in the graph. Camera space is
-    // defined to have the viewpoint at the origin, with the direction
-    // of view along the negative z axis. This space can be used to
-    // determine distances of objects from the camera.
+    /// Set to TRUE if you want the returned bounding box to be in the
+    /// space of whatever camera is in the graph. Camera space is
+    /// defined to have the viewpoint at the origin, with the direction
+    /// of view along the negative z axis. This space can be used to
+    /// determine distances of objects from the camera.
     void		setInCameraSpace(SbBool flag)	{ cameraSpace = flag; }
 
-    // Returns camera space flag
+    /// Returns camera space flag
     SbBool		isInCameraSpace() const		{ return cameraSpace; }
 
-    // set a path to do a resetTransform/resetBoundingBox on. The default
-    // is to do the reset right before the given path.
-    enum ResetType {    // Which things get reset:
-	TRANSFORM      = 0x01,	    // Transformation
-	BBOX           = 0x02,	    // Bounding Box
-	ALL            = 0x03       // Both Transform and Bounding Box
+    /// Which things get reset
+    enum ResetType {
+        TRANSFORM      = 0x01,      ///< Transformation
+        BBOX           = 0x02,      ///< Bounding Box
+        ALL            = 0x03       ///< Both Transform and Bounding Box
     };
+
+    /// If a non-NULL path is specified, the action will reset the computed
+    /// bounding box to be empty and/or the current transformation to
+    /// identity. The \a resetBefore flag indicates whether to perform the
+    /// reset before or after the tail node of the path is traversed.
     void		setResetPath(const SoPath *path,
 				     SbBool resetBefore = TRUE,
 				     ResetType what = ALL);
+
+    /// Returns the current reset path, or NULL.
     const SoPath *	getResetPath() const	{ return resetPath; }
+
+    /// Returns TRUE if the current reset path is not NULL.
     SbBool		isResetPath() const	{ return( resetPath != NULL); }
+
+    /// Returns TRUE if the \a resetBefore flag was specified for the reset path.
     SbBool		isResetBefore() const	{ return resetBefore; }
+
+    /// Returns what flags were specified to be reset for the reset path.
     SoGetBoundingBoxAction::ResetType getWhatReset() const { return resetWhat;}
 
   SoEXTENDER public:

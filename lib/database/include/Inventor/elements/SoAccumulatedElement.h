@@ -90,10 +90,10 @@ SoEXTENDER class INVENTOR_API SoAccumulatedElement : public SoElement {
     SO_ELEMENT_ABSTRACT_HEADER(SoAccumulatedElement);
 
   public:
-    // Returns TRUE if the element matches another element, based on node-id's
+    /// Returns TRUE if the element matches another element, based on node-id's
     virtual SbBool	matches(const SoElement *elt) const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

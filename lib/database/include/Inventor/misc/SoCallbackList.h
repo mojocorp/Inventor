@@ -61,35 +61,42 @@
 
 #include <Inventor/SbPList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCallbackList
-//
-//////////////////////////////////////////////////////////////////////////////
-
-// Callback functions that are registered with this class should
-// be cast to this type.
+/// Callback functions that are registered with this class should
+/// be cast to this type.
 typedef void INVENTOR_API SoCallbackListCB(void *userData, void *callbackData);
 
+/// Manages a list of callback functions and associated data.
+/// \ingroup General
+/// This class manages a list of callback functions and user data.  The
+/// user can add a callback function to the list, along with user data.
+/// When the callback is invoked, it is passed this user data, along with
+/// callback data specified by the invoking routine.  The type of this
+/// callback data is determined by the invoking routine.
 class INVENTOR_API SoCallbackList {
     
   public:
 
+    /// Default constructor
     SoCallbackList();
+
+    /// Destructor
     ~SoCallbackList();
     
-    //
-    // Managing callback functions
-    // At callback time, f will be called with userData as the first
-    // parameter, and callback specific data as the second parameter.
-    // e.g. (*f)(userData, callbackData);
-
+    /// \name Adds a function to or removes a function from the list of callback
+    /// @{
     void    addCallback(SoCallbackListCB *f, void *userData = NULL);
     void    removeCallback(SoCallbackListCB *f, void *userData = NULL);
-    
+    /// @}
+
+    /// Clears all callback functions from the list.
     void    clearCallbacks()			    { list.truncate(0); }
+
+    /// Returns the number of callback functions in the list.
     int	    getNumCallbacks() const		    { return list.getLength(); }
 
+    /// Invokes each callback function in the list, passing each function the
+    /// user data supplied when they were registered here, and
+    /// \a callbackData, the callback-specific data supplied by the caller.
     void    invokeCallbacks(void *callbackData);
 
   private:

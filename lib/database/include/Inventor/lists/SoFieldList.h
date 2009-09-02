@@ -80,26 +80,38 @@
 
 class SoField;
 
+/// Maintains a list of pointers to fields.
+/// \ingroup Fields
+/// This subclass of <tt>SbPList</tt> holds lists of pointers to
+/// instances of classes derived from <tt>SoField</tt>.
+/// \sa SoField
 class INVENTOR_API SoFieldList : public SbPList {
   public:
+    /// Constructor.
     SoFieldList()			: SbPList()	{}
+
+    /// Constructor that pre-allocates storage for \a size pointers.
     SoFieldList(int size)		: SbPList(size)	{}
+
+    /// Constructor that copies the contents of another list.
     SoFieldList(const SoFieldList &l)	: SbPList(l)	{}
+
+    /// Destructor.
     ~SoFieldList()			{ truncate(0); }
 
-    // Add a Field to the end of the list
+    /// Add a Field to the end of the list
     void		append(SoField *field)
         { SbPList::append((void *) field); }
 
-    // Insert given field in list before field with given index
+    /// Insert given field in list before field with given index
     void		insert(SoField *field, int addBefore)
         { SbPList::insert((void *) field, addBefore); }
 
-    // Access an element of a list
+    /// Access an element of a list
     SoField *		operator [](int i) const
         { return ( (SoField *) ( (* (const SbPList *) this) [i] ) ); }
 
-    // Set an element of a list
+    /// Set an element of a list
     void		set(int i, SoField *Field)
         { (* (const SbPList *) this) [i] = (void *) Field; }
 

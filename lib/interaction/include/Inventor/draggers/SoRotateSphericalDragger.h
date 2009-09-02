@@ -91,6 +91,76 @@ class SbDict;
 class SbSphereProjector;
 class SoFieldSensor;
 
+/// Object you can rotate about a spherical surface by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoRotateSphericalDragger</tt>
+/// is a simple dragger that rotates freely in all directions.
+/// The feel of the rotation is as if you were rolling a ball.
+/// The center of rotation is the origin of the local space,
+/// determined by the dragger's location in the scene graph.
+/// Transformation nodes placed before it will
+/// affect both the dragger and the direction of motion.
+///
+///
+/// This node has a #rotation field which always reflects its orientation
+/// in local space.  If you set the field, the dragger will rotate
+/// accordingly.  You can also connect fields of other nodes or engines from
+/// this one to make them follow the dragger's orientation.
+///
+///
+/// This dragger contains four parts, <em>rotator</em>, <em>rotatorActive</em>,
+/// <em>feedback</em>, and <em>feedbackActive</em>.
+///
+///
+/// Each of these is set by default from a resource described in the Dragger
+/// Resources section of the online reference page for this class.  You can
+/// change the parts in any instance of this dragger using
+/// #setPart().
+///
+///
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/rotateSphericalDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that directory.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoRotateSphericalDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+///          "geomSeparator"
+/// -->         "rotatorSwitch"
+/// -->            "rotator"
+/// -->            "rotatorActive"
+/// -->         "feedbackSwitch"
+/// -->            "feedback"
+/// -->            "feedbackActive"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoRotateSphericalDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     rotation            0 0 1  0
+///     callbackList        NULL
+///     rotator             <rotateSphericalRotator resource>
+///     rotatorActive       <rotateSphericalRotatorActive resource>
+///     feedback            <rotateSphericalFeedback resource>
+///     feedbackActive      <rotateSphericalFeedbackActive resource>
+/// }
+/// \endcode
+/// \sa SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoScale1Dragger,SoScale2Dragger,
+/// \sa SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,
+/// \sa SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,
+/// \sa SoTranslate1Dragger,SoTranslate2Dragger
 class INVENTOR_API SoRotateSphericalDragger : public SoDragger
 {
     SO_KIT_HEADER(SoRotateSphericalDragger);
@@ -103,18 +173,22 @@ class INVENTOR_API SoRotateSphericalDragger : public SoDragger
     SO_KIT_CATALOG_ENTRY_HEADER(feedbackActive);
 
   public:
-    // Constructors
+    /// Constructor.
     SoRotateSphericalDragger();
 
-    SoSFRotation rotation;
+    SoSFRotation rotation; ///< Orientation of the dragger.
 
-    // Set/get a different sphere projector. The default uses an
-    // SbSpherePlaneProjector. 
-    // Pasing in NULL will cause the default type of projector to be used.
-    // The projector will be deleted by this dragger when this dragger
-    // is deleted.
-    // Note that the center and radius of the sphere used by the
-    // projector are determined by the dragger during dragStart.
+    /// Set and get a different sphere projector.
+    /// See the <tt>SbSphereProjector</tt> man pages to find out how
+    /// each kind affects the feel of your dragger's motion.
+    /// The default uses an <tt>SbSpherePlaneProjector</tt>.
+    ///
+    /// Passing in NULL will cause the default type of projector to be used.
+    /// Any projector you pass in will be deleted by this dragger when
+    /// this dragger is deleted.
+    /// Note that the center and radius of the sphere are determined by the
+    /// dragger, based on the origin of the local space and the distance between
+    /// the initial mouse click and that origin.
     void			setProjector(SbSphereProjector *p);
     const SbSphereProjector *	getProjector() const	 { return sphereProj; }
 

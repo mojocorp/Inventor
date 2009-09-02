@@ -58,22 +58,19 @@
 #ifndef  _SO_INTERACTION_
 #define  _SO_INTERACTION_
 
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoInteraction
-//
-//  Class with one static function to initialize all interaction node classes.
-//  SoInteraction::init MUST be called in order for interaction classes to
-//  function. SoInteraction::init() calls SoDB::init().
-//
-//////////////////////////////////////////////////////////////////////////////
-
 #include <Inventor/SbBasic.h>
 
+/// Initializes Inventor interaction classes.
+/// \ingroup Interaction
+/// <tt>SoInteraction</tt> consists of one static function which
+/// initializes all Inventor interaction classes, as well as nodekits and
+/// the database.
+/// Note that #SoInteraction::init() is already called by #SoXt::init()
+/// \sa SoDB, SoNodeKit, SoXt
 class INVENTOR_API SoInteraction {
   public:
-    static void		init();		// init all interaction classes
+    /// init all interaction classes
+    static void		init();		
   private:
     static SbBool	initialized;	// has interaction been initialized
 };

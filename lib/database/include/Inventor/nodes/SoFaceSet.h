@@ -81,15 +81,80 @@ class SoCoordinateElement;
 class SoNormalBundle;
 class SoState;
 
+/// Polygonal face shape node.
+/// \ingroup Nodes
+/// This node represents a 3D shape formed by constructing faces
+/// (polygons) from vertices located at the coordinates
+/// specified in the #vertexProperty field (from <tt>SoVertexShape</tt>),
+/// or the current inherited state.
+/// For optimal performance, the #vertexProperty field is recommended.
+///
+/// <tt>SoFaceSet</tt> uses the coordinates in order, starting with the
+/// first one.
+/// Each face has a number of
+/// vertices specified by a value in the #numVertices field. For
+/// example, an <tt>SoFaceSet</tt>  with
+/// #numVertices of [3,4,4] would use coordinates 1, 2, and 3 for the
+/// first face, coordinates 4, 5, 6, and 7 for the second face, and
+/// coordinates 8, 9, 10, and 11 for the third.
+/// For improved performance, arrange all the faces with only 3
+/// vertices at beginning of the list, then all faces with 4 vertices,
+/// and finally all other faces.
+///
+/// The number of values in the #numVertices field indicates the
+/// number of faces in the set.
+///
+/// The coordinates of the face set are transformed by the current
+/// cumulative transformation. The faces are drawn with the current light
+/// model and drawing style.
+///
+/// Treatment of the current material and normal binding is as follows:
+/// The <b>PER_PART</b> and <b>PER_FACE</b> bindings specify a material or
+/// normal for each face. The <b>_INDEXED</b> bindings are equivalent to
+/// their non-indexed counterparts. The default material binding is
+/// <b>OVERALL</b>. The default normal binding is
+/// <b>PER_VERTEX</b>.
+///
+/// If any normals (or materials) are specified, Inventor assumes
+/// you provide the correct number of them, as indicated by the binding.
+/// You will see unexpected results
+/// if you specify fewer normals (or materials) than the shape requires.
+/// If no normals are specified, they will be generated automatically.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws faces based on the current coordinates, normals, materials,
+/// drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Picks faces based on the current coordinates and transformation.
+/// Details about the intersection are returned in an <tt>SoFaceDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses all vertices of the face set
+/// with the current transformation applied to them.  Sets the center to
+/// the average of the coordinates of all vertices.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will
+/// be invoked for each successive triangle generated from each face in
+/// the set.
+///
+/// \par File format/defaults:
+/// \code
+/// SoFaceSet {
+///    vertexProperty	NULL
+///    startIndex	0
+///    numVertices	-1
+/// }
+/// \endcode
+/// \sa SoCoordinate3,SoDrawStyle,SoIndexedFaceSet,SoFaceDetail,SoVertexProperty
 class INVENTOR_API SoFaceSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoFaceSet);
 
   public:
     // Fields - some inherited from SoNonIndexedShape
-    SoMFInt32		numVertices;	// Number of vertices per face
+    SoMFInt32		numVertices;	///< Number of vertices per face
 
-    // Constructor
+    /// Constructor
     SoFaceSet();
 
   SoEXTENDER public:

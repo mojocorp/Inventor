@@ -71,8 +71,8 @@ class INVENTOR_API SoUpgrader : public SoGroup {
     SO_NODE_ABSTRACT_HEADER(SoUpgrader);
 
   public:
-    // Find out if an upgrader exists for a specific class and a
-    // specific version of the file format.
+    /// Find out if an upgrader exists for a specific class and a
+    /// specific version of the file format.
     static SoUpgrader 	*getUpgrader(const SbName &className,
 				     float fileFormatVersion);
   protected:

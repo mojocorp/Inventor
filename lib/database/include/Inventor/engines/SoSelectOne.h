@@ -62,34 +62,52 @@
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/fields/SoSFName.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoSelectOne
-//
-//  Class that select a single value from a multiple-valued field.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
+/// Selects one value from a multiple-value field.
+/// \ingroup Engines
+/// This engine selects a single value from a multiple-value field,
+/// based on the input field #index.
+/// The type of the input field can be any subclass of <tt>SoMField</tt>,
+/// and the type of the output is the corresponding subclass of
+/// <tt>SoSField</tt>. For example, if the input type is <tt>SoMFVec3f</tt>, the
+/// output type will be <tt>SoSFVec3f</tt>.
+/// The type is specified when an instance of the class is created.
+/// For example, <tt>SoSelectOne(SoMFFloat::getClassTypeId())</tt>
+/// creates an engine that selects one floating-point value.
+///
+///
+/// Note that unlike most other engine fields, the #input field and
+/// #output are pointers.
+/// Note also that by default #input does not contain any values,
+/// and no value is output from the engine.
+///
+/// \par File format/defaults:
+/// \code
+/// SoSelectOne {
+///    type	<inputType>
+///    input	[]
+///    index	0
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoConcatenate, SoGate
 class INVENTOR_API SoSelectOne : public SoEngine {
 
     SO_ENGINE_HEADER(SoSelectOne);
 
   public:
-    // Constructor takes a subclass of SoMField.
+    /// Constructor takes a subclass of SoMField.
     SoSelectOne(SoType mfInputType);
 
-    // Index is used to choose which value of the input is written to
-    // output.  Default is -1, meaning don't write anything.
+    /// Index is used to choose which value of the input is written to
+    /// output.  Default is -1, meaning don't write anything.
     SoSFInt32		index;
 
-    // Note that unlike most engines the input field is a pointer.
-    // The default value for this field is no values.
+    /// Note that unlike most engines the input field is a pointer.
+    /// The default value for this field is no values.
     SoMField		*input;
 
-    // Note that unlike most engines the output is a pointer.  The
-    // type of the output is the single-value field corresponding to
-    // whatever type the input is.
+    /// Note that unlike most engines the output is a pointer.  The
+    /// type of the output is the single-value field corresponding to
+    /// whatever type the input is.
     SoEngineOutput	*output;
 
   SoINTERNAL public:

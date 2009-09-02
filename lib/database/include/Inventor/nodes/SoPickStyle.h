@@ -61,35 +61,42 @@
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPickStyle
-//
-//  Pick style node. Allows picking in subgraphs to be defined in one
-//  of the following ways:
-//
-//	SHAPE (default): points on the surfaces of shapes may be picked
-//	BOUNDING_BOX:	 points on the surfaces of bounding boxes of
-//			 shapes may be picked
-//	UNPICKABLE:	 objects in the subgraph are transparent to picks
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Picking style node.
+/// \ingroup Nodes
+/// This node determines how subsequent geometry nodes in the scene graph
+/// are to be picked, as indicated by the #style field.
+///
+/// Note that this is the only way to change the pick behavior of shapes;
+/// drawing style, complexity, and other rendering-related properties have
+/// no effect on picking.
+///
+/// \par Action behavior:
+/// <b>SoRayPickAction, SoCallbackAction</b>
+/// Sets the current pick style in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoPickStyle {
+///    style	SHAPE
+/// }
+/// \endcode
+/// \sa SoComplexity, SoDrawStyle, SoRayPickAction
 class INVENTOR_API SoPickStyle : public SoNode {
 
     SO_NODE_HEADER(SoPickStyle);
 
   public:
-    enum Style {			// Picking style:
-	SHAPE		= SoPickStyleElement::SHAPE,
-	BOUNDING_BOX	= SoPickStyleElement::BOUNDING_BOX,
-	UNPICKABLE	= SoPickStyleElement::UNPICKABLE
+    /// Picking style:
+    enum Style {
+        SHAPE		= SoPickStyleElement::SHAPE,        ///< Points on the surfaces of shapes may be picked"
+        BOUNDING_BOX	= SoPickStyleElement::BOUNDING_BOX, ///< Points on the surfaces of 3D bounding boxes of shapes may be picked
+        UNPICKABLE	= SoPickStyleElement::UNPICKABLE    ///< Subsequent objects are transparent to picks
     };
 
     // Fields
-    SoSFEnum		style;		// Picking style
+    SoSFEnum		style;  ///< Picking style.
 
-    // Constructor
+    /// Creates a pick style node with default settings.
     SoPickStyle();
 
   SoEXTENDER public:

@@ -65,34 +65,37 @@
 
 #include <Inventor/SbPList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Subclasses of the SbPList class which hold lists of pointers of a
-// specific type.
-//
-// Each contains:
-//	A default constructor
-//	A constructor taking an initial number of items in the list
-//	An "append" function that adds a pointer to the end of the list
-//	The index ([]) operator that returns the nth pointer in the list
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoNode;
 
+/// Maintains a list of pointers to nodes.
+/// \ingroup General
+/// This subclass of <tt>SoBaseList</tt> holds lists of pointers to
+/// <tt>SoNode</tt>s.  It updates reference counts to nodes in the list
+/// whenever adding or removing pointers.
+/// \sa SoNode
 class INVENTOR_API SoNodeList : public SoBaseList {
   public:
+    /// Constructor.
     SoNodeList()			: SoBaseList()	{}
+
+    /// Constructor that pre-allocates storage for \a size pointers.
     SoNodeList(int size)		: SoBaseList(size) {}
+
+    /// Constructor that copies the contents of another list.
     SoNodeList(const SoNodeList &l)	: SoBaseList(l) {}
+
+    /// Destructor.
     ~SoNodeList()			{ }
 
+    /// Adds a pointer to the end of the list.
     void		append(SoNode * ptr)
         { ((SoBaseList *) this)->append((SoBase *) ptr); }
 
+    /// Copies a list, keeping all reference counts correct.
     SoNodeList &	operator =(const SoNodeList &l)
         { SoBaseList::copy(l) ; return *this; }
 
+    /// Accesses an element of a list.
     SoNode *		operator [](int i) const
         { return ( (SoNode *) ( (*(const SoBaseList *) this) [i] ) ); }
 };

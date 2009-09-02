@@ -62,30 +62,65 @@
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoShape.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNurbsCurve
-//
-//  NURBS curve. The curve consists of a knot vector and order for
-//  the U parametric directions.  The control points for the curve
-//  are obtained from the current coordinates.
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoState;
 class SoPrimitiveVertex;
 class _SoNurbsNurbsTessellator;
 
+/// NURBS curve shape node.
+/// \ingroup Nodes
+/// This class represents a NURBS curve, based on the knot vector and the
+/// control points that you specify. The #knotVector field specifies a
+/// floating-point array of values; the values are the coordinates of the
+/// knot points in the curve, and you must enter them in non-decreasing
+/// order. The curve will use the first #numControlPoints values in the
+/// current coordinates as control points.
+///
+/// If you specify <em>n</em> knots, you can specify up to <em>n-8</em> control
+/// points. The number of knots minus the number of control points is
+/// known as the order of the curve. A NURBS curve can have an order of up
+/// to 8.
+///
+/// The control points of the curve are transformed by the current
+/// transformation matrix. The curve is drawn with the current lighting
+/// model and drawing style (drawing style <b>FILLED</b> is treated as
+/// <b>LINES</b>). The coordinates, normals, and texture coordinates of a
+/// NURBS curve are generated, so you cannot bind explicit normals or
+/// texture coordinates to a NURBS curve.
+///
+/// The approximation of the curve by line segments is affected by the
+/// current complexity value.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws the curve based on the current coordinates, material, and so on.
+/// <b>SoRayPickAction</b>
+/// Picks the curve based on the current coordinates and transformation.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses all control points of the
+/// curve with the current transformation applied to them. Sets the center
+/// to the average of the control points.
+/// <b>SoCallbackAction</b>
+/// If any line segment callbacks are registered with the action, they
+/// will be invoked for each successive segment approximating the curve.
+///
+/// \par File format/defaults:
+/// \code
+/// SoNurbsCurve {
+///    numControlPoints	0
+///    knotVector	0
+/// }
+/// \endcode
+/// \sa SoIndexedNurbsCurve, SoNurbsSurface
 class INVENTOR_API SoNurbsCurve : public SoShape {
 
     SO_NODE_HEADER(SoNurbsCurve);
 
   public:
     // Fields
-    SoSFInt32		numControlPoints; // Number of control points
-    SoMFFloat		knotVector;       // The knot vector
+    SoSFInt32		numControlPoints; ///< Number of control points.
+    SoMFFloat		knotVector;       ///< The knot vector.
 
-    // Constructor
+    /// Creates a NURBS curve node with default settings.
     SoNurbsCurve();
 
   SoEXTENDER public:

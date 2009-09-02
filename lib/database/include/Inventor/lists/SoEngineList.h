@@ -65,34 +65,37 @@
 
 #include <Inventor/SbPList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Subclasses of the SbPList class which hold lists of pointers of a
-// specific type.
-//
-// Each contains:
-//	A default constructor
-//	A constructor taking an initial number of items in the list
-//	An "append" function that adds a pointer to the end of the list
-//	The index ([]) operator that returns the nth pointer in the list
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoEngine;
 
+/// Maintains a list of pointers to engines.
+/// \ingroup Engines
+/// This subclass of <tt>SoBaseList</tt> holds lists of pointers to
+/// <tt>SoEngine</tt>s.  It updates reference counts to engines in the list
+/// whenever adding or removing pointers.
+/// \sa SoEngine
 class INVENTOR_API SoEngineList : public SoBaseList {
   public:
+    /// Constructor.
     SoEngineList()			: SoBaseList()	{}
+
+    /// Constructor that pre-allocates storage for \a size pointers.
     SoEngineList(int size)		: SoBaseList(size) {}
+
+    /// Constructor that copies the contents of another list.
     SoEngineList(const SoEngineList &l)	: SoBaseList(l) {}
+
+    /// Destructor.
     ~SoEngineList()			{ }
 
+    /// Adds an engine to the end of the list.
     void		append(SoEngine * ptr)
         { ((SoBaseList *) this)->append((SoBase *) ptr); }
 
+    /// Copies a list, keeping all reference counts correct.
     SoEngineList &	operator =(const SoEngineList &l)
         { SoBaseList::copy(l) ; return *this; }
 
+    /// Accesses an element of a list.
     SoEngine *		operator [](int i) const
         { return ( (SoEngine *) ( (*(const SoBaseList *) this) [i] ) ); }
 };

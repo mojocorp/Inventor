@@ -79,25 +79,25 @@ SoEXTENDER class INVENTOR_API SoNormalElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoNormalElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the current normals
+    /// Sets the current normals
     static void		set(SoState *state, SoNode *node,
 			    int32_t numNormals, const SbVec3f *normals);
 
-    // Returns the top (current) instance of the element in the state
+    /// Returns the top (current) instance of the element in the state
     static const SoNormalElement * getInstance(SoState *state)
     	{return (const SoNormalElement *) 
 	    getConstElement(state, classStackIndex);}
 
-    // Returns the number of normal vectors in an instance
+    /// Returns the number of normal vectors in an instance
     int32_t		getNum() const		{ return numNormals; }
 
-    // Returns the indexed normal from an element
+    /// Returns the indexed normal from an element
     const SbVec3f &	get(int index) const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

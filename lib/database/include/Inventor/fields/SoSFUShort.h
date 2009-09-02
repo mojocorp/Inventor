@@ -58,12 +58,13 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFUShort subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing an unsigned short integer.
+/// \ingroup Fields
+/// A single-value field containing a short (16-bit) integer.
+///
+/// <tt>SoSFUShorts</tt> are written to file in decimal, hexadecimal (beginning
+/// with '0x') or octal (beginning with '0') values.
+/// \sa SoField, SoSField, SoMFUShort
 class INVENTOR_API SoSFUShort : public SoSField {
 
     // Use standard field stuff

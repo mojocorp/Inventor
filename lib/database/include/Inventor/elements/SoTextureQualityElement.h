@@ -72,18 +72,18 @@ SoEXTENDER class INVENTOR_API SoTextureQualityElement : public SoFloatElement {
     SO_ELEMENT_HEADER(SoTextureQualityElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the current TextureQuality in the state
+    /// Sets the current TextureQuality in the state
     static void		set(SoState *state, float qual)
 	{ SoFloatElement::set(classStackIndex, state, qual); }
 
-    // Returns current TextureQuality from the state
+    /// Returns current TextureQuality from the state
     static float	get(SoState *state)
 	{ return SoFloatElement::get(classStackIndex, state); }
 
-    // Returns the default TextureQuality
+    /// Returns the default TextureQuality
     static float	getDefault()			{ return 0.5; }
 
   SoINTERNAL public:

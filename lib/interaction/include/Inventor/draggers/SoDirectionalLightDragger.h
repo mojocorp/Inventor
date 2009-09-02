@@ -113,14 +113,103 @@
 
 class SoFieldSensor;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoDirectionalLightDragger
-//
-//  This changes the direction of directional lights.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Directional icon you rotate and translate by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoDirectionalLightDragger</tt>
+/// is a composite dragger.  It looks like a sun with a large arrow coming
+/// out of it.
+/// The arrow can be rotated about the sun by dragging with the mouse; its
+/// orientation is given by the #rotation field.
+/// You can also drag the sun (and the arrow with it) through 3-space. The
+/// location is stored in the #translation field.
+///
+///
+/// The dragger uses an <tt>SoRotateSphericalDragger</tt> for changing the
+/// rotation. Instead of using the default spherical geometry, this dragger
+/// uses an arrow shape.
+///
+///
+/// The sun is an <tt>SoDragPointDragger</tt>. Dragging it edits the #translation
+/// field; conversely, if you change the #translation field the sun
+/// will move to that new location, bringing the arrow with it.  The sun
+/// looks and behaves just like
+/// the sun in an <tt>SoPointLightDragger</tt>,
+/// as does the #material part. See the <tt>SoPointLightDragger</tt> man page
+/// for details.
+///
+///
+/// <em>Remember:</em> This is <em>not</em> a light source! It just looks like one.
+/// If you want to move a light with this dragger, you can either:
+///
+///
+/// [a] Use an <tt>SoDirectionalLightManip</tt>, which is subclassed from <tt>SoLight</tt>.
+/// It creates an <tt>SoDirectionalLightDragger</tt>
+/// and uses it as the interface to change the #direction of its
+/// light source (see the <tt>SoDirectionalLightManip</tt> man page).
+/// The manipulator also edits the #material part of this dragger to match the
+/// color of light the manipulator is producing.
+/// However, the directional light manipulator will ignore the #translation
+/// field, because a directional light has no location or translation field.
+/// So in this case the translation dragger merely allows you to
+/// move the physical arrow to wherever you'd like it to be.
+///
+///
+/// [b] Put an <tt>SoTransform</tt> under an <tt>SoTransformSeparator</tt>.
+/// Add the <tt>SoDirectionalLight</tt> as the next child. Use
+/// a field-to-field connection between the #rotation fields of this
+/// dragger and the transform node to synchronize the light with this dragger.
+///
+///
+/// [c] Use engines to connect the #rotation field of this dragger to the
+/// #direction field of an <tt>SoDirectionalLight</tt>.  Use the #rotation as
+/// input to an <tt>SoComposeMatrix</tt> engine. Then, use an
+/// <tt>SoTransformVec3f</tt> engine to apply that matrix to (0,0,-1), the default
+/// light direction.
+///
+///
+/// You can change the parts in any instance of this dragger using
+/// #setPart().
+/// The default part geometries are defined as resources for this
+/// <tt>SoDirectionalLightDragger</tt> class.  They are detailed in the
+/// Dragger Resources section of the online reference page for this class.
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/directionalLightDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that directory.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoDirectionalLightDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "material"
+/// -->      "translatorSep"
+/// -->         "translatorRotInv"
+/// -->         "translator"
+/// -->      "rotator"
+///          "geomSeparator"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoDirectionalLightDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     translation         0 0 0
+///     rotation            0 0 1  0
+///     callbackList        NULL
+///     material            <directionalLightOverallMaterial resource>
+///     translatorRotInv    NULL
+///     translator          DragPointDragger {}
+///     rotator             RotateSphericalDragger {}
+/// }
+/// \endcode
+/// \sa SoInteractionKit,SoDragger,SoCenterballDragger,SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class INVENTOR_API SoDirectionalLightDragger : public SoDragger {
 
     SO_KIT_HEADER(SoDirectionalLightDragger);
@@ -140,10 +229,11 @@ class INVENTOR_API SoDirectionalLightDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(rotator);
 
   public:
+    /// Constructor.
     SoDirectionalLightDragger();
 
-    SoSFRotation rotation;
-    SoSFVec3f    translation;
+    SoSFRotation rotation;      ///< Orientation of the rotating part (an arrow by default).
+    SoSFVec3f    translation;   ///< Position of the origin of the directional light dragger.
 
   SoINTERNAL public:
     static void		initClass();	// initialize the class

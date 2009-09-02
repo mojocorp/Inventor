@@ -71,26 +71,24 @@ class SoNode;
 class SoPath;
 class SoGLRenderAction;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoOffscreenRenderer
-//
-//  This file contains the definition of the SoOffscreenRenderer class.
-//  This class is used for rendering a scene graph to an offscreen memory
-//  buffer which can be used for printing or generating textures.
-//
-//  The implementation of this class uses the X Pixmap for rendering.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Renders to an off-screen buffer for printing or generating textures.
+/// \ingroup General
+/// This class is used to render into an off-screen buffer to create a
+/// printable image or to generate a texture image. It uses X Pixmaps for
+/// rendering. Methods are provided to write the buffer to a file, either
+/// as an RGB image or an encapsulated PostScript description.
 class SoOffscreenRenderer {
  public:
 
-    // Constructor
+    /// Constructor. An internal instance of an SoGLRenderAction will be maintained with a
+    /// viewport region set to the on passed in by the constructor.
     SoOffscreenRenderer( const SbViewportRegion &viewportRegion );
+
+    /// Constructor. If a render action is passed to the contructor,
+    /// that action will be used in all subsequent offscreen renderings.
     SoOffscreenRenderer( SoGLRenderAction *ra );
 
-    // Destructor
+    /// Destructor
     ~SoOffscreenRenderer();
 
     enum Components {
@@ -100,47 +98,68 @@ class SoOffscreenRenderer {
         RGB_TRANSPARENCY = 4
     };
 
+    /// Returns the number of pixels per inch (in the horizontal direction) of
+    /// the current X device screen.
     static float	getScreenPixelsPerInch();
 
-    // Set/get the components to be rendered
+    /// Sets the components to be rendered.
     void		setComponents( Components components )
 				{comps = components;}
+
+    /// Returns the components to be rendered.
     Components		getComponents() const
 				{return comps;}
 
-    // Set/get the viewport region
+    /// Sets the viewport region used for rendering.  This will NOT
+    /// be applied to the viewport region of any render action passed in.
     void		setViewportRegion( const SbViewportRegion &region );
+
+    /// Returns the viewport region used for rendering.  This will NOT
+    /// be applied to the viewport region of any render action passed in.
     const SbViewportRegion  &getViewportRegion() const;
 
-    // Get the maximum supported resolution of the viewport.
+    /// Get the maximum supported resolution of the viewport.
     static SbVec2s	getMaximumResolution();
 
-    // Set/get the background color
+    /// Sets the background color for rendering.
     void		setBackgroundColor( const SbColor &c )
 				{backgroundColor = c;}
+
+    /// Returns the background color for rendering.
     const SbColor & getBackgroundColor() const
 				{return backgroundColor;}
 
-    // Set and get the render action to use
+    /// Set the render action to use for rendering.  This will return
+    /// any render action passed in by the caller.
     void                      setGLRenderAction(SoGLRenderAction *ra);
+
+    /// Get the render action to use for rendering.  This will return
+    /// any render action passed in by the caller.
     SoGLRenderAction *        getGLRenderAction() const;
 
-    // Render the given scene into a buffer
+    /// Renders the given scene, specified as a node or a path, into an off-screen buffer.
     SbBool		render( SoNode *scene );
+
+    /// Renders the given scene, specified as a node or a path, into an off-screen buffer.
     SbBool		render( SoPath *scene );
 
-    // Return the buffer containing the rendering
+    /// Returns the buffer containing the rendered image.  The buffer is an
+    /// array of unsigned characters.  Each pixel is stored sequentially by
+    /// scanline, starting with the lower left corner.  The data stored for
+    /// each pixel is determined by the Components set before rendering.
+    /// Pixels are stored in RGBA order and are packed without any padding
+    /// between pixels or scanlines.  The buffer is allocated by the offscreen
+    /// renderer class and the space is deleted when the instance is destructed.
     unsigned char *     getBuffer() const;
 
-    // Write the buffer as a .rgb file into the given FILE
+    /// Writes the buffer as a .rgb file to the given file pointer.
     SbBool		writeToRGB( FILE *fp ) const;
 
-    // Write the buffer into encapsulated PostScript.  If a print size is
-    // not given, adjust the size of the print so it is WYSIWYG with respect
-    // to the viewport region on the current device.
+    /// Writes the buffer as encapsulated PostScript. If a print size is not
+    /// given, the size of the image in the buffer is adjusted so it is the
+    /// same as the apparent size of the viewport region on the current device.
     SbBool		writeToPostScript( FILE *fp ) const;
-    SbBool		writeToPostScript( FILE *fp,
-                                const SbVec2f &printSize ) const;
+    SbBool		writeToPostScript( FILE *fp, const SbVec2f &printSize ) const;
 
   private:
     unsigned char *	pixelBuffer;

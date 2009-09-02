@@ -59,12 +59,13 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec2f.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFVec2f subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a two-dimensional vector.
+/// \ingroup Fields
+/// Field containing a two-dimensional vector.
+///
+/// <tt>SoSFVec2fs</tt> are written to file as a pair of floating
+/// point values separated by whitespace.
+/// \sa SoField, SoSField, SoMFVec2f
 class INVENTOR_API SoSFVec2f : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFVec2f, SbVec2f, const SbVec2f &);
@@ -74,10 +75,10 @@ class INVENTOR_API SoSFVec2f : public SoSField {
     // Some additional convenience functions:
     //
 
-    // Set value from 2 floats
+    /// Set value from 2 floats
     void		setValue(float x, float y);
 
-    // Set value from array of 2 floats
+    /// Set value from array of 2 floats
     void		setValue(const float xy[2]);
 
 

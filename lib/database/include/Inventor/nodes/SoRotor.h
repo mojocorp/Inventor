@@ -60,24 +60,52 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/fields/SoSFBool.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoRotor
-//
-//  SoRotation node that spins the rotation angle, keeping the axis constant
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Animated rotation node.
+/// \ingroup Nodes
+/// The <tt>SoRotor</tt> class is derived from <tt>SoRotation</tt>, so it applies a
+/// rotation to the current transformation.  Using engines connected to
+/// the <b>realTime</b> global field, the rotation value is animated over
+/// time, achieving a spinning effect. The period of the rotation can be
+/// adjusted by changing the #speed field.
+///
+/// The current rotation at any time is available in the #rotation
+/// field, inherited from <tt>SoRotation</tt>. This field can also be set to
+/// specify the axis of rotation. Note that unless a non-zero rotation is
+/// specified for the rotation, the node will not know which axis to use.
+/// For example, to set a rotor to spin about the y-axis, use the
+/// following:
+/// \code
+/// rotor->rotation.setValue(axis, 0.1);
+/// \endcode
+/// where \a axis is a vector containing (0,1,0). Any non-zero angle can
+/// be used in this code.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction</b>
+/// Concatenates current rotation value with the current
+/// transformation matrix.
+/// <b>SoGetMatrixAction</b>
+/// Returns transformation matrix specified by the rotation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoRotor {
+///    rotation	0 0 1  0
+///    speed	1
+///    on	TRUE
+/// }
+/// \endcode
+/// \sa SoPendulum, SoShuttle
 class INVENTOR_API SoRotor : public SoRotation {
 
     SO_NODE_HEADER(SoRotor);
 
   public:
     // Fields
-    SoSFFloat	speed;	// revolutions per second
-    SoSFBool	on;	// FALSE to stop rotation
+    SoSFFloat	speed;	///< Defines the speed of the rotor, in revolutions per second.
+    SoSFBool	on;	///< Allows applications to enable or disable the motion easily.
 
-    // Constructor
+    /// Creates a rotor node with default settings.
     SoRotor();
 
   SoINTERNAL public:

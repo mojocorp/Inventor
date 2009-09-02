@@ -92,60 +92,90 @@ typedef void *SoOutputReallocCB(void *ptr, size_t newSize);
 //
 //////////////////////////////////////////////////////////////////////////////
 
+/// Used to write Inventor data files.
+/// \ingroup General
+/// This class is used for writing Inventor data files.  It supports both
+/// ASCII (default) and binary formats and provides some convenience
+/// functions for handling files.  It can also write to a buffer in memory
+/// as well as to a file pointer.
+/// A user-defined header can be specified for the output file.
+///
+/// An instance of <tt>SoOutput</tt> is
+/// contained in an <tt>SoWriteAction</tt>; this is typically the only instance
+/// needed.
+/// \sa SoInput, SoWriteAction, SoTranSender
 class INVENTOR_API SoOutput {
  public:
 
-    // Constructor (default SoOutput writes to stdout)
+    /// Constructor (default SoOutput writes to stdout)
     SoOutput();
 
-    // Destructor closes file if SoOutput opened it.
+    /// The destructor closes any files opened by the \c SoOutput.
     ~SoOutput();
 
-    // Sets file pointer to write to
+    /// Sets file pointer to write to.
     void		setFilePointer(FILE *newFP);
 
-    // Returns file pointer writing to, or NULL if writing to buffer
+    /// Returns the file pointer in use, or NULL if using a buffer.
     FILE *		getFilePointer() const;
 
-    // Opens named file, sets file pointer to result. Returns FALSE on error
+    /// Opens named file, sets file pointer to result. This returns FALSE on error.
     SbBool		openFile(const char *fileName);
 
-    // Closes file if opened with openFile. (Does nothing if not.)
+    /// Closes current file if opened with #openFile. (Does nothing if not.)
     void		closeFile();
 
-    // Sets up buffer to write to, initial size, reallocation function,
-    // and offset in buffer at which to begin writing.
+    /// Sets up memory buffer to write to, initial size, reallocation function
+    /// (which is called if there is not enough room in the buffer), and
+    /// offset in the buffer at which to begin writing.  If the reallocation
+    /// function returns NULL, writing will be disabled.
     void		setBuffer(void *bufPointer, size_t initSize,
 				  SoOutputReallocCB *reallocFunc, 
 				  int32_t offset = 0);
 
-    // Returns pointer to buffer and the total bytes written in the buffer
-    // from the start of the buffer (not from offset!)
-    // Returns FALSE if not writing into buffer.
+    /// Returns pointer to buffer and the total bytes written in the buffer
+    /// from the start of the buffer (not from offset!)
+    /// Returns FALSE if not writing into buffer.
     SbBool		getBuffer(void *&bufPointer, size_t &nBytes) const;
 
-    // The actual number of bytes allocated to the buffer may be larger
-    // than the number of bytes written. This returns that actual number.
+    /// The actual number of bytes allocated to the buffer may be larger
+    /// than the number of bytes written. This returns that actual number.
     size_t		getBufferSize() const { return bufSize; }
     
-    // Resets buffer for output again; output starts over at beginning
+    /// Resets buffer for output again. Output starts over at beginning of buffer.
     void		resetBuffer();
 
-    // Indicates whether output should be ASCII (default) or binary
+    /// Sets whether output should be ASCII (default) or binary.
     void		setBinary(SbBool flag);
 
-    // Returns current state of binary flag
+    /// Returns current state of binary flag.
     SbBool		isBinary() const		{ return binary; }
 
-    // Specify the header used when writing the file
+    /// Sets the header for output files.
+    /// This is useful, for example, if you have a file format that is
+    /// a superset of the Inventor file format and you want Inventor
+    /// to read the files.  It is highly recommend that in your new
+    /// header you simply append to the header of the Inventor
+    /// file format you are extending.
+    /// For example, if a new file format is based on the Inventor 2.1
+    /// file format, register a header similar to:
+    /// <b>"#Inventor V2.1 ascii MY FILE FORMAT EXTENSION"</b>
+    /// Then all Inventor 2.1 applications (and later) can read the file.
     void		setHeaderString(const SbString &str);
-    // Specify to use the default header (ascii or binary)
+
+    /// Resets the header for output files to be the default header.
     void		resetHeaderString();
     
+    /// Returns the string representing the default ASCII header.
     static SbString	getDefaultASCIIHeader();
+
+    /// Returns the string representing the default binary header.
     static SbString	getDefaultBinaryHeader();
 
-    // Sets the precision for outputing real numbers
+    /// Sets the precision for writing floating point numbers, i.e.
+    /// the number of significant digits. Floating point numbers
+    /// are written using %.xg format, where 'x' is the value of
+    /// the precision argument.
     void		setFloatPrecision(int precision);
 							
   SoEXTENDER public:
@@ -176,12 +206,6 @@ class INVENTOR_API SoOutput {
     void		write(unsigned int   i);
     void		write(short	     s);
     void		write(unsigned short s);
-    // was ... C-api: name=writeInt32
-    //     but typedef makes this redundant
-    //void		write(int32_t	     l);
-    // was ... C-api: name=writeUInt32
-    //     but typedef makes this redundant
-    //void		write(uint32_t	     l);
     void		write(float	     f);
     void		write(double	     d);
     void                writeBinaryArray(unsigned char *c, int length);

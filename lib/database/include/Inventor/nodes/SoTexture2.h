@@ -68,39 +68,107 @@ class SoSensor;
 class SoFieldSensor;
 class SoGLDisplayList;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTexture
-//
-//  Texture node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Texture mapping node.
+/// \ingroup Nodes
+/// This property node defines a texture map and parameters for that map. This
+/// map is used to apply texture to subsequent shapes as they are rendered.
+///
+/// The texture can be read from the file specified by the #filename
+/// field. Once the texture has been read, the #image field contains
+/// the texture data. However, this field is marked so the image is not
+/// written out when the texture node is written to a file.  To turn off
+/// texturing, set the #filename field to an empty string ("").
+///
+/// Textures can also be specified in memory by setting the #image
+/// field to contain the texture data. Doing so resets the #filename to
+/// the empty string.
+///
+/// If the texture image's width or height is not a power of 2, or the
+/// image's width or height is greater than the maximum supported by
+/// OpenGL, then the image will be automatically scaled up or down to the
+/// next power of 2 or the maximum texture size.  For maximum speed,
+/// point-sampling is used to do the scale; if you want more accurate
+/// resampling, pre-filter images to a power of 2 smaller than the maximum
+/// texture size (use the OpenGL glGetIntegerv(GL_MAX_TEXTURE_SIZE...)
+/// call to determine maximum texture for a specific OpenGL
+/// implementation).
+///
+/// The quality of the texturing is affected by the <b>textureQuality</b>
+/// field of the <tt>SoComplexity</tt> node.  The #textureQuality field
+/// affects what kind of filtering is done to the texture when it must be
+/// minified or magnified.  The mapping of a particular texture quality
+/// value to a particular OpenGL filtering technique is implementation
+/// dependent, and varies based on the texturing performance.
+/// If mipmap filtering is required, mipmaps are automatically created
+/// using the simple box filter.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction</b>
+/// Sets current texture in state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTexture2 {
+///    filename     ""
+///    image        0 0 0
+///    wrapS        REPEAT
+///    wrapT        REPEAT
+///    model        MODULATE
+///    blendColor   0 0 0
+/// }
+/// \endcode
+/// \sa SoComplexity,SoMaterial,SoTexture2Transform,SoTextureCoordinate2,SoTextureCoordinateBinding,SoTextureCoordinateFunction
 class INVENTOR_API SoTexture2 : public SoNode {
 
     SO_NODE_HEADER(SoTexture2);
 
   public:
-    enum Model {			// Texture model
-	MODULATE		= GL_MODULATE,
-	DECAL			= GL_DECAL,
-	BLEND			= GL_BLEND
+    /// Texture model
+    enum Model {
+        MODULATE    = GL_MODULATE,  ///< The texture color is multiplied by the surface color
+        DECAL       = GL_DECAL,     ///< The texture color replaces the surface color
+        BLEND       = GL_BLEND      ///< Blends between the surface color and a specified blend color
     };
 
-    enum Wrap {				// Texture wrap type
-	REPEAT			= GL_REPEAT,
-	CLAMP			= GL_CLAMP
+    /// Texture wrap type
+    enum Wrap {
+        REPEAT      = GL_REPEAT,    ///< Repeats texture outside 0-1 texture coordinate range
+        CLAMP       = GL_CLAMP      ///< Clamps texture coordinates to lie within 0-1 range
     };
 
     // Fields.
-    SoSFString		filename;	// file to read texture from
-    SoSFImage		image;		// The texture
+    /// Names file from which to read texture image. Currently only SGI .rgb
+    /// files are supported. If the filename is not an absolute path name, the
+    /// list of directories maintained by <tt>SoInput</tt> is searched. If the
+    /// texture is not found in any of those directories, then the file is
+    /// searched for relative to the directory from which the <tt>SoTexture2</tt>
+    /// node was read. For example, if an <tt>SoTexture2</tt> node with a filename
+    /// of <b>"../tofu.rgb"</b> is read from <b>/usr/people/bob/models/food.iv</b>,
+    /// then <b>/usr/people/bob/tofu.rgb</b> will be read (assuming <b>tofu.rgb</b>
+    /// isn't found in the directories maintained by <tt>SoInput</tt>).
+    SoSFString		filename;
+
+    /// Contains an in-memory representation of the texture map. It is either
+    /// the contents of the file read from #filename, an image read
+    /// directly from an Inventor file, or an image set programmatically using
+    /// the methods provided by <tt>SoSFImage</tt>.
+    SoSFImage		image;
+
+    /// Indicates what to do when texture coordinates in the S (horizontal)
+    /// direction lie outside the range 0-1.
     SoSFEnum		wrapS;
+
+    /// Indicates what to do when texture coordinates in the T (vertical)
+    /// direction lie outside the range 0-1.
     SoSFEnum		wrapT;
+
+    /// Specifies how to map texture onto surface.
     SoSFEnum		model;
+
+    /// Color used for <b>BLEND</b> model.
     SoSFColor		blendColor;
 
-    // Constructor
+    /// Creates a texture node with default settings.
     SoTexture2();
     
   SoEXTENDER public:

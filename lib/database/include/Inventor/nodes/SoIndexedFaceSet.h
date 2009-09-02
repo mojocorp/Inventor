@@ -79,6 +79,71 @@ class SoNormalBundle;
 class SoCoordinateElement;
 class SoShapeStyleElement;
 
+/// Indexed polygonal face shape node.
+/// \ingroup Nodes
+/// This node represents a 3D shape formed by constructing faces
+/// (polygons) from vertices located at the coordinates
+/// specified in the #vertexProperty field (from <tt>SoVertexShape</tt>),
+/// or the current inherited state.
+/// For optimal performance, the #vertexProperty field is recommended.
+///
+/// <tt>SoIndexedFaceSet</tt> uses the indices in the #coordIndex field
+/// (from <tt>SoIndexedShape</tt>) to specify the polygonal faces. An index of
+/// <b>SO_END_FACE_INDEX</b> (-1) indicates that the current face has ended
+/// and the next one begins.
+/// For improved performance, arrange all the faces with only 3
+/// vertices at beginning of the list, then all faces with 4 vertices,
+/// and finally all other faces.
+///
+/// The vertices of the faces are transformed by the current
+/// transformation matrix. The faces are drawn with the current light
+/// model and drawing style.
+///
+/// Treatment of the current material and normal binding is as follows:
+/// The <b>PER_PART</b> and <b>PER_FACE</b> bindings specify a material or
+/// normal for each face. <b>PER_VERTEX</b> specifies a material or normal
+/// for each vertex.  The corresponding <b>_INDEXED</b> bindings are the
+/// same, but use the #materialIndex or #normalIndex indices (see
+/// <tt>SoIndexedShape</tt>). The default material binding is
+/// <b>OVERALL</b>. The default normal binding is
+/// <b>PER_VERTEX_INDEXED</b>.
+///
+/// If any normals (or materials) are specified, Inventor assumes
+/// you provide the correct number of them, as indicated by the binding.
+/// You will see unexpected results
+/// if you specify fewer normals (or materials) than the shape requires.
+/// If no normals are specified, they will be generated automatically.
+///
+/// Textures are applied
+/// as described for the <tt>SoIndexedShape</tt> class.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws faces based on the current coordinates, normals, materials,
+/// drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Picks faces based on the current coordinates and transformation.
+/// Details about the intersection are returned in an <tt>SoFaceDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses all vertices of the face set
+/// with the current transformation applied to them.  Sets the center to
+/// the average of the coordinates of all vertices.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will
+/// be invoked for each successive triangle generated from each face in
+/// the set.
+///
+/// \par File format/defaults:
+/// \code
+/// SoIndexedFaceSet {
+///    vertexProperty	NULL
+///    coordIndex	0
+///    materialIndex	-1
+///    normalIndex	-1
+///    textureCoordIndex	-1
+/// }
+/// \endcode
+/// \sa SoCoordinate3,SoDrawStyle,SoFaceDetail,SoFaceSet,SoVertexProperty
 class INVENTOR_API SoIndexedFaceSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedFaceSet);
@@ -86,7 +151,7 @@ class INVENTOR_API SoIndexedFaceSet : public SoIndexedShape {
   public:
     // Inherits fields
 
-    // Constructor
+    /// Creates an indexed face set node with default settings.
     SoIndexedFaceSet();
 
   SoEXTENDER public:

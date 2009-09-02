@@ -65,50 +65,51 @@
 
 #include <Inventor/SbPList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Subclasses of the SbPList class which hold lists of pointers of a
-// specific type.
-//
-// Each contains:
-//	A default constructor
-//	A constructor taking an initial number of items in the list
-//	An "append" function that adds a pointer to the end of the list
-//	The index ([]) operator that returns the nth pointer in the list
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoDetail;
 
+/// Maintains a list of instances of details.
+/// \ingroup Details
+/// This subclass of <tt>SbPList</tt> holds lists of instances of
+/// classes derived from <tt>SoDetail</tt>.
+/// \sa SoDetail
 class INVENTOR_API SoDetailList : public SbPList {
   public:
+    /// Constructor
     SoDetailList()			: SbPList()	{}
+
+    /// Constructor that pre-allocates storage for \a size pointers.
     SoDetailList(int size)		: SbPList(size)	{}
+
+    /// Constructor that copies the contents of another list.
     SoDetailList(const SoDetailList &l);
+
+    /// Destructor
     ~SoDetailList()			{ truncate(0); }
 
-    // Add a detail to the end of the list
+    /// Add a detail to the end of the list
     void		append(SoDetail *detail)
         { SbPList::append((void *) detail); }
 
-    // Insert given detail in list before detail with given index
+    /// Insert given detail in list before detail with given index
     void		insert(SoDetail *detail, int addBefore)
         { SbPList::insert((void *) detail, addBefore); }
 
-    // Remove all pointers after one with given index, inclusive,
-    // deleting instances
+    /// Remove all pointers after one with given index, inclusive,
+    /// deleting instances
     void		truncate(int start);
 
-    // Copy a list, making copies of all detail instances
+    /// Copy a list, making copies of all detail instances
     void		copy(const SoDetailList &l);
+
+    /// Copies a list, making a copy of each detail instance in the list.
     SoDetailList &	operator =(const SoDetailList &l)
         { copy(l) ; return *this; }
 
-    // Access an element of a list
+    /// Access an element of a list
     SoDetail *		operator [](int i) const
         { return ( (SoDetail *) ( (* (const SbPList *) this) [i] ) ); }
 
-    // Set an element of a list, deleting old entry
+    /// Set an element of a list, deleting old entry
     void		set(int i, SoDetail *detail);
 };
 

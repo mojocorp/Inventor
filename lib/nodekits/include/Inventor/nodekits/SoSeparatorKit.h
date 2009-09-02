@@ -63,38 +63,74 @@
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 
-////////////////////////////////////////////////////////////////////
-//    Class: SoSeparatorKit
-//
-// NOTE TO DEVELOPERS:
-//     For info about the structure of SoSeparatorKit:
-//     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
-//     [2] type:    ivNodeKitStructure SoSeparatorKit.
-//     [3] The program prints a diagram of the scene graph and a table with 
-//         information about each part.
-//
-//    New nodes in this subclass are:
-//         callbackList, topSeparator, pickStyle, appearance,                 
-//          transform, texture2Transform, 
-//          childList
-//
-//      A parent node that manages a collection of child nodes 
-//      into a unit with the following structure:
-//
-//                            this
-//            ------------------|
-//            |          "topSeparator"
-//         "callbackList"       |
-//      ---------------------------------------------------------------
-//      |       |       |           |     |                           |
-//  "pickStyle" |    "units" "transform"  |                           |
-//     "appearance"  "texture2Transform"                              |
-//                                                                    |
-//                                                                    | 
-//                                                              "childList"
-//
-////////////////////////////////////////////////////////////////////
-
+/// Separator nodekit class.
+/// \ingroup Nodekits
+/// A nodekit that is used for creating nodekit hierarchies.
+/// <tt>SoSeparatorKit</tt> contains a <em>transform</em> part, a <em>childList</em> part,
+/// and a few others in its catalog.
+/// The <em>transform</em> part (an <tt>SoTransform</tt> node) affects all of the
+/// children in the <b>childList</b>. Each of these children must be an
+/// <tt>SoSeparatorKit</tt> or from a class that is derived from <tt>SoSeparatorKit</tt>
+/// (e.g., <tt>SoShapeKit</tt> and <tt>SoWrapperKit</tt>).
+/// Since all members of the <em>childList</em> are in turn <tt>SoSeparatorKit</tt>s,
+/// and each contains a <em>transform</em>, these nested lists allow you to create
+/// a hierarchy of motion, in which each <em>transform</em> affects an entire subgraph
+/// of nodekits.
+///
+///
+/// The other parts added to the catalog for the <tt>SoSeparatorKit</tt> are
+/// <em>pickStyle</em>, <em>appearance</em>, <em>units</em> and <em>texture2Transform</em>.
+/// Furthermore,
+/// since <tt>SoSeparator</tt> is derived from <tt>SoBaseKit</tt>, it inherits
+/// the <em>callbackList</em> part. This is a list of <tt>SoCallback</tt> and/or
+/// <tt>SoEventCallback</tt> nodes which enable the <tt>SoSeparatorKit</tt> to perform
+/// special callbacks whenever an action is applied to it.
+///
+///
+/// By creating the <em>pickStyle</em> part, a user can alter the pick style
+/// for the entire nodekit hierarchy. The <em>appearance</em> part is an
+/// <tt>SoAppearanceKit</tt> nodekit. Note that all parts contained in the
+/// <tt>SoAppearanceKit</tt> catalog can be accessed
+/// as if they were part of the <tt>SoSeparatorKit</tt>. For example:
+/// \code
+/// myMtl = mySepKit->getPart("material",TRUE)
+/// \endcode
+/// and
+/// \code
+/// mySepKit->setPart("material",myMtl)
+/// \endcode
+/// See <tt>SoBaseKit</tt> for further explanation.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoSeparatorKit
+/// -->"this"
+///       "callbackList"
+/// -->   "topSeparator"
+/// -->      "pickStyle"
+/// -->      "appearance"
+/// -->      "units"
+/// -->      "transform"
+/// -->      "texture2Transform"
+/// -->      "childList"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoSeparatorKit {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     callbackList        NULL
+///     pickStyle           NULL
+///     appearance          NULL
+///     units               NULL
+///     transform           NULL
+///     texture2Transform   NULL
+///     childList           NULL
+/// }
+/// \endcode
+/// \sa SoAppearanceKit,SoBaseKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoShapeKit,SoWrapperKit
 class INVENTOR_API SoSeparatorKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoSeparatorKit);
@@ -110,22 +146,22 @@ class INVENTOR_API SoSeparatorKit : public SoBaseKit {
 
   public:
 
-    enum CacheEnabled {         // Possible values for caching
-	OFF,                    // Never build or use a cache
-	ON,                     // Always try to build a cache
-	AUTO                    // Decide based on some heuristic
+    enum CacheEnabled {         ///< Possible values for caching
+        OFF,                    ///< Never build or use a cache
+        ON,                     ///< Always try to build a cache
+        AUTO                    ///< Decide based on some heuristic
     };
 
     // Fields
-    SoSFEnum renderCaching;     // OFF/ON/AUTO (see above)
-    SoSFEnum boundingBoxCaching;// OFF/ON/AUTO (see above)
-    SoSFEnum renderCulling;     // OFF/ON/AUTO (see above)
-    SoSFEnum pickCulling;       // OFF/ON/AUTO (see above)
+    SoSFEnum renderCaching;     ///< OFF/ON/AUTO (see above)
+    SoSFEnum boundingBoxCaching;///< OFF/ON/AUTO (see above)
+    SoSFEnum renderCulling;     ///< OFF/ON/AUTO (see above)
+    SoSFEnum pickCulling;       ///< OFF/ON/AUTO (see above)
 
-    // constructor
+    /// Default constructor
     SoSeparatorKit();
 
-    // Overrides default method on SoNode
+    /// Overrides default method on SoNode
     virtual SbBool affectsState() const;
 
   SoINTERNAL public:

@@ -58,12 +58,35 @@
 
 #include <Inventor/fields/SoSFEnum.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFBitMask subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Single-value field containing a set of bit flags.
+/// \ingroup Fields
+/// A single-value field that contains a mask of bit flags,
+/// stored as an integer. Nodes that use this field class define mnemonic
+/// names for the bit flags. These names should be used when setting or testing
+/// the values of the field, even though the values are treated as
+/// integers in the methods.
+///
+///
+/// The bit-wise "&" and "|" operators should be used when testing and
+/// setting flags in a mask.  For example, to turn on the sides of a 3D
+/// text node and turn off the back you would write:
+/// \code
+/// text3->parts = text3->parts.getValue() | SoText3::SIDES;
+/// text3->parts = text3->parts.getValue() & ~SoText3::BACK;
+/// \endcode
+/// <tt>SoSFBitMasks</tt> are written to file as one or more mnemonic enumerated type
+/// names, in this format:
+///
+/// ( flag1 | flag2 | ... )
+///
+/// If only one flag is used in a mask, the parentheses are optional.
+/// These names differ among uses of this field in various node or engine
+/// classes.  See their man pages for the names.
+///
+///
+/// The field values may also be represented as integers, but this is not
+/// guaranteed to be portable.
+/// \sa SoField, SoSField, SoMFBitMask
 class INVENTOR_API SoSFBitMask : public SoSFEnum {
 
     // Use standard field stuff for derived class;

@@ -58,25 +58,33 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFName subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of names.
+/// \ingroup Fields
+/// A multiple-valued field containing any number of names.  Names are
+/// short series of characters generally used for labels or names, and are
+/// stored in a special table designed to allow fast lookup and
+/// comparison.  For most purposes, an <tt>SoMFString</tt> field is probably
+/// more appropriate.
+///
+/// <tt>SoMFNames</tt> are written to file as one or more strings of
+/// characters.  Names must begin with an underscore or alphabetic
+/// character, and must consist entirely of underscores, alphabetic
+/// characters, or numbers.
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ Fred, Wilma, _Part_01, translationField ]
 class INVENTOR_API SoMFName : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFName, SbName, const SbName &);
 
   public:
-    //
-    // Some additional convenience functions:
-    //
-
-    // Set values from array of character strings
+    /// Sets \a num values beginning at index \a start to the names contained in the
+    /// given set of character strings.
     void	setValues(int start, int num, const char *strings[]);
 
-    // Set one value from character string
+    /// Sets this field to contain one and only one value, given by \a string.
     void	setValue(const char *string);
 
   SoINTERNAL public:

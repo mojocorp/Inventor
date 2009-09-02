@@ -59,12 +59,13 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec3f.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFVec3f subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a three-dimensional vector.
+/// \ingroup Fields
+/// Field containing a three-dimensional vector.
+///
+/// <tt>SoSFVec3fs</tt> are written to file as three floating
+/// point values separated by whitespace.
+/// \sa SoField, SoSField, SoMFVec3f
 class INVENTOR_API SoSFVec3f : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFVec3f, SbVec3f, const SbVec3f &);
@@ -74,10 +75,10 @@ class INVENTOR_API SoSFVec3f : public SoSField {
     // Some additional convenience functions:
     //
 
-    // Set value from 3 floats
+    /// Set value from 3 floats
     void	setValue(float x, float y, float z);
 
-    // Set value from array of 3 floats
+    /// Set value from array of 3 floats
     void	setValue(const float xyz[3]);
 
 

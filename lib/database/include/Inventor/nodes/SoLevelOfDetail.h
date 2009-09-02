@@ -59,53 +59,63 @@
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/nodes/SoGroup.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoLevelOfDetail
-//
-//  Level-of-detail group node. The children of this node typically
-//  represent the same object or objects at varying levels of detail,
-//  from highest detail to lowest. The size of the objects when
-//  projected into the viewport is used to determine which version to
-//  use (i.e., which child to traverse).
-//
-//  The size is computed as the area of the screen rectangle enclosing
-//  the projection of the 3D bounding box that encloses all of the
-//  children. When rendering, this size is compared to the values in
-//  the screenArea field. If the size is greater than the first value,
-//  child 0 is traversed. If it is smaller than the first, but greater
-//  than the second, child 1 is traversed, and so on. If there are
-//  fewer children than are required by this rule, the last child is
-//  traversed. The screenArea field contains just 0 by default, so the
-//  first child is always traversed.
-//
-//  The size calculation takes the current complexity into account. If
-//  the complexity is 0 or is of type BOUNDING_BOX, the last child is
-//  always traversed. If the complexity is less than .5, the computed
-//  size is scaled down appropriately to use (possibly) a less
-//  detailed representation. If the complexity is greater than .5, the
-//  size is scaled up. At complexity 1, the first child is always used.
-//
-//  Picking and the callback action use the same traversal rules as
-//  rendering. Bounding boxes are computed to enclose all children (as
-//  is needed to compute the projected size). All other actions are
-//  implemented as for SoGroup, except that SoLevelOfDetail
-//  saves/restores state (like a separator) when applying any action.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Level-of-detail switching group node.
+/// \ingroup Nodes
+/// The children of this
+/// node typically represent the same object or objects at varying levels
+/// of detail, from highest detail to lowest. The size of the objects when
+/// projected into the viewport is used to determine which version to use
+/// (i.e., which child to traverse).
+///
+/// The size is computed as the area of the screen rectangle enclosing the
+/// projection of the 3D bounding box that encloses all of the children.
+/// When rendering, this size is compared to the values in the
+/// #screenArea field. If the size is greater than the first value,
+/// child 0 is traversed. If it is smaller than the first, but greater
+/// than the second, child 1 is traversed, and so on. If there are fewer
+/// children than are required by this rule, the last child is traversed.
+/// The #screenArea field contains just 0 by default, so the first
+/// child is always traversed.
+///
+/// The size calculation takes the current complexity into account. If the
+/// complexity is 0 or is of type <b>BOUNDING_BOX</b>, the last child is
+/// always traversed. If the complexity is less than .5, the computed size
+/// is scaled down appropriately to use (possibly) a less detailed
+/// representation. If the complexity is greater than .5, the size is
+/// scaled up. At complexity 1, the first child is always used.
+///
+/// Note that the <tt>SoLOD</tt> node is similar to <tt>SoLevelOfDetail</tt>, except
+/// the switching between levels in the <tt>SoLOD</tt> node is based on
+/// distance from the camera, which is faster than using screen area.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoRayPickAction, SoCallbackAction</b>
+/// Only the child with the appropriate level of detail is traversed.
+/// <b>SoGetBoundingBoxAction</b>
+/// The box that encloses all children is computed. (This is the box that is
+/// needed to compute the projected size.)
+/// <b>others</b>
+/// All implemented as for <tt>SoGroup</tt>.
+///
+/// \par File format/defaults:
+/// \code
+/// SoLevelOfDetail {
+///    screenArea	0
+/// }
+/// \endcode
+/// \sa SoLOD, SoComplexity, SoSwitch, SoGroup
 class INVENTOR_API SoLevelOfDetail : public SoGroup {
 
     SO_NODE_HEADER(SoLevelOfDetail);
 
   public:
     // Fields
-    SoMFFloat		screenArea;	// Areas to use for comparison
+    SoMFFloat		screenArea;	///< Areas to use for comparison.
 
-    // Default constructor
+    /// Creates a level-of-detail node with default settings.
     SoLevelOfDetail();
 
-    // Constructor that takes approximate number of children
+    /// Constructor that takes approximate number of children
     SoLevelOfDetail(int nChildren);
 
   SoEXTENDER public:

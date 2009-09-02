@@ -72,10 +72,10 @@
 SoINTERNAL class INVENTOR_API SbNameEntry {
 
   public:
-    // Returns TRUE if entry's string is empty ("")
+    /// Returns TRUE if entry's string is empty ("")
     SbBool		isEmpty() const   { return (string[0] == '\0'); }
 
-    // Returns TRUE if entry's string is same as passed string
+    /// Returns TRUE if entry's string is same as passed string
     SbBool		isEqual(const char *s) const;
 
   private:

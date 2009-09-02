@@ -84,7 +84,7 @@ class SoAction;
 SoEXTENDER class INVENTOR_API SoChildList : public SoNodeList {
 
   public:
-    // Constructors and destructor.
+    /// Constructors and destructor.
     SoChildList(SoNode *parentNode);
     SoChildList(SoNode *parentNode, int size);
     SoChildList(SoNode *parentNode, const SoChildList &l);
@@ -99,17 +99,17 @@ SoEXTENDER class INVENTOR_API SoChildList : public SoNodeList {
     void		copy(const SoChildList &l);
     void		set(int i, SoNode *child);
 
-    // Traverses all children to apply action. Stops if action's
-    // termination condition is reached
+    /// Traverses all children to apply action. Stops if action's
+    /// termination condition is reached
     void		traverse(SoAction *action)
 	{ traverse(action, 0, getLength() - 1); }
 
-    // Traverses just one child
+    /// Traverses just one child
     void		traverse(SoAction *action, int childIndex)
 	{ traverse(action, childIndex, childIndex); }
 
-    // Traverses all children between two indices, inclusive. Stops if
-    // action's termination condition is reached.
+    /// Traverses all children between two indices, inclusive. Stops if
+    /// action's termination condition is reached.
     void		traverse(SoAction *action,
 				 int firstChild, int lastChild);
 

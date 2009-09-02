@@ -71,18 +71,18 @@ SoEXTENDER class INVENTOR_API SoPointSizeElement : public SoFloatElement {
     SO_ELEMENT_HEADER(SoPointSizeElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the current point size in the state
+    /// Sets the current point size in the state
     static void		set(SoState *state, float size)
 	{ SoFloatElement::set(classStackIndex, state, size); }
 
-    // Returns current point size from the state
+    /// Returns current point size from the state
     static float	get(SoState *state)
 	{ return SoFloatElement::get(classStackIndex, state); }
 
-    // Returns the default point size
+    /// Returns the default point size
     static float	getDefault()			{ return 0; }
 
   SoINTERNAL public:

@@ -110,42 +110,39 @@
 SoEXTENDER class INVENTOR_API SoGLDisplayList {
 
   public:
-    //
-    // Constructor.  Takes state, type, and number of lists to
-    // allocate.  Calls either glGenLists() or glGenTexturesEXT() to
-    // create empty objects/display lists.  If texture objects are not
-    // supported, the type will revert to DISPLAY_LIST.
-    //
+
     enum Type {
 	DISPLAY_LIST,
 	TEXTURE_OBJECT
 	};
+
+    /// Constructor.  Takes state, type, and number of lists to
+    /// allocate.  Calls either glGenLists() or glGenTexturesEXT() to
+    /// create empty objects/display lists.  If texture objects are not
+    /// supported, the type will revert to DISPLAY_LIST.
     SoGLDisplayList(SoState *state, Type type, int numToAllocate=1);
 
-    //
-    // Because display lists may contain textures objects or other
-    // display lists, they must be reference counted.
-    // You can pass a NULL state to unref(); deletion of the display
-    // list or texture object will then be delayed until a render
-    // action is applied in the correct context.
+    /// Because display lists may contain textures objects or other
+    /// display lists, they must be reference counted.
+    /// You can pass a NULL state to unref(); deletion of the display
+    /// list or texture object will then be delayed until a render
+    /// action is applied in the correct context.
     void ref();
     void unref(SoState *state = NULL);
 
-    //
-    // Open/close a display list.  Display lists are done in
-    // COMPILE_AND_EXECUTE mode, so you don't need to call() the
-    // display list after close().
-    // Opening a texture object binds it; closing it does nothing.
+    /// Open/close a display list.  Display lists are done in
+    /// COMPILE_AND_EXECUTE mode, so you don't need to call() the
+    /// display list after close().
+    /// Opening a texture object binds it; closing it does nothing.
     void open(SoState *state, int index = 0);
     void close(SoState *state);
 
-    //
-    // Call a display list, or bind a texture object.  This
-    // automatically sets up a dependency if there is another display
-    // list open in the state.
-    // You can also use the get() methods below and make the OpenGL
-    // calls yourself, in which case you should call the
-    // addDependency() method to do the correct reference counting...
+    /// Call a display list, or bind a texture object.  This
+    /// automatically sets up a dependency if there is another display
+    /// list open in the state.
+    /// You can also use the get() methods below and make the OpenGL
+    /// calls yourself, in which case you should call the
+    /// addDependency() method to do the correct reference counting...
     void call(SoState *state, int index = 0);
     void addDependency(SoState *state);
 

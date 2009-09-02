@@ -72,17 +72,17 @@ SoEXTENDER class INVENTOR_API SoViewVolumeElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoViewVolumeElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the view volume in the state
+    /// Sets the view volume in the state
     static void		set(SoState *state, SoNode *node,
 			    const SbViewVolume &viewVolume);
 
-    // Returns the current view volume from the state
+    /// Returns the current view volume from the state
     static const SbViewVolume &	get(SoState *state);
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

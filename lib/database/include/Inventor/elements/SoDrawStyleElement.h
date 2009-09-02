@@ -71,28 +71,28 @@ SoEXTENDER class INVENTOR_API SoDrawStyleElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoDrawStyleElement);
 
   public:
-    // These are the available draw styles:
+    /// These are the available draw styles:
     enum Style {
-	FILLED,			// Filled regions
-	LINES,			// Outlined regions
-	POINTS,			// Points
-	INVISIBLE		// Nothing!
+        FILLED,			///< Filled regions
+        LINES,			///< Outlined regions
+        POINTS,			///< Points
+        INVISIBLE		///< Nothing!
     };
 
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the current draw style in the state
+    /// Sets the current draw style in the state
     static void		set(SoState *state, Style style);
 
-    // Returns current draw style from the state
+    /// Returns current draw style from the state
     static Style	get(SoState *state)
 	{ return (Style)SoInt32Element::get(classStackIndex, state); }
 
-    // Returns the default draw style
+    /// Returns the default draw style
     static Style	getDefault()		{ return FILLED; }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

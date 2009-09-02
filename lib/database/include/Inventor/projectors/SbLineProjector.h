@@ -60,47 +60,55 @@
 #include <Inventor/projectors/SbProjector.h>
 #include <Inventor/SbLine.h>
 
+/// Line projector.
+/// \ingroup Projectors
+/// <tt>SbLineProjector</tt>
+/// projects a 2D point, typically the location of the cursor, onto a 3D line.
+/// \sa SbCylinderProjector,SbCylinderPlaneProjector,SbCylinderSectionProjector,
+/// \sa SbCylinderSheetProjector,SbPlaneProjector,SbSpherePlaneProjector,SbSphereProjector, SbSphereSectionProjector, SbSphereSheetProjector
 class INVENTOR_API SbLineProjector : public SbProjector
 {
   public:
-    // Constructor
-    // The default line passes through the origin and is
-    // oriented toward the Y axis.
+    /// Constructor
+    /// The default line passes through the origin and is
+    /// oriented toward the Y axis.
     SbLineProjector();
 
-    // Destructor
+    /// Destructor
     ~SbLineProjector(){};
     
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SbProjector *    copy() const;
 
-    // Apply the projector using the given point, returning the
-    // point in three dimensions that it projects to.
-    // The point should be normalized from 0-1, with (0,0) at the lower-left.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// The point should be normalized from 0-1, with (0,0) at the lower-left.
     virtual SbVec3f	project(const SbVec2f &point);
 
-    // Set/get the line to use.
+    /// Set the line on which to project 2D points.
     void		setLine(const SbLine &line);
+
+    /// Get the line on which to project 2D points.
     const SbLine &	getLine() const		  { return line; }
 
-    // Get a vector on this line given two normalized mouse points.
+    /// Get a vector on this line given two normalized mouse points.
     virtual SbVec3f	getVector(const SbVec2f &mousePosition1,
 				  const SbVec2f &mousePosition2);
 					    
-    // Get a vector given the current mouse point.
-    // Uses the last point on this projector from the previous
-    // call to getVector or setStartPostion. Do not use this
-    // if the working space transform is changing since
-    // the new point will be in a different space than
-    // the old one.
+    /// Get a vector given the current mouse point.
+    /// Uses the last point on this projector from the previous
+    /// call to getVector or setStartPostion. Do not use this
+    /// if the working space transform is changing since
+    /// the new point will be in a different space than
+    /// the old one.
     virtual SbVec3f	getVector(const SbVec2f &mousePosition);
 					    
-    // Set the initialial from a mouse position.
+    /// Set the initialial from a mouse position.
     void		setStartPosition(const SbVec2f &mousePosition)
 				{ lastPoint = project(mousePosition); }
 
-    // Set the initialial position from a point on the projector.
+    /// Set the initialial position from a point on the projector.
     void		setStartPosition(const SbVec3f &point)
 						{ lastPoint = point; }
   protected:

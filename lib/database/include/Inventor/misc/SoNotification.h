@@ -99,34 +99,34 @@ SoINTERNAL class INVENTOR_API SoNotRec {
 
   public:
 
-    // Notification types (what receives notification). Note that
-    // these are also used for maintaining lists of auditors in
-    // SoBase instances. Each auditor uses one of these types to
-    // indicate how it is auditing the instance. This is then
-    // propagated to the auditors in the notification records.
+    /// Notification types (what receives notification). Note that
+    /// these are also used for maintaining lists of auditors in
+    /// SoBase instances. Each auditor uses one of these types to
+    /// indicate how it is auditing the instance. This is then
+    /// propagated to the auditors in the notification records.
     enum Type {
-	CONTAINER,		// Field notifying container
-	PARENT,			// Child node notifying parent
-	SENSOR,			// Some base notifying sensor
-	FIELD,			// Field notifying connected field
-	ENGINE			// Engine notifying connected field
+        CONTAINER,		///< Field notifying container
+        PARENT,			///< Child node notifying parent
+        SENSOR,			///< Some base notifying sensor
+        FIELD,			///< Field notifying connected field
+        ENGINE			///< Engine notifying connected field
     };
 
-    // Constructor - passed the base pointer
+    /// Constructor - passed the base pointer
     SoNotRec(SoBase *b)			{ base = b; }
 
-    // Sets notification type
+    /// Sets notification type
     void		setType(SoNotRec::Type t)	{ type = t;	}
 
-    // Returns base pointer, type, or previous record in list
+    /// Returns base pointer, type, or previous record in list
     SoBase *		getBase() const			{ return base;  }
     SoNotRec::Type	getType() const			{ return type;  }
     const SoNotRec *	getPrevious() const		{ return previous; }
 
-    // Sets previous record pointer
+    /// Sets previous record pointer
     void		setPrevious(SoNotRec *prev)	{ previous = prev; }
 
-    // Prints a notification record for debugging
+    /// Prints a notification record for debugging
     void		print(FILE *fp) const;
 
   private:
