@@ -58,42 +58,84 @@
 
 #include <Inventor/fields/SoField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoMField
-//
-//  Field that can have multiple values.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Base class for all multiple-valued fields.
+/// \ingroup Fields
+/// Each class derived from <tt>SoMField</tt> begins with an <tt>SoMF</tt> prefix
+/// and contains a dynamic array of values of a particular type.  Each has a
+/// #setValues() method
+/// that is passed a pointer to a const array of values of the correct
+/// type; these values are copied into the array in the field, making
+/// extra room in the array if necessary. The start and num parameters to
+/// this method indicate the starting array index to copy into and the
+/// number of values to copy.
+///
+/// The #getValues() method
+/// for a multiple-value field returns a const pointer to the array of
+/// values in the field. (Because this pointer is const, it cannot be used
+/// to change values in this array.)
+///
+/// In addition, the indexing operator "[]" is overloaded to return the
+/// \a i'th value in the array; because it returns a const reference, it can
+/// be used only to get values, not to set them.
+///
+/// Methods are provided for getting the number of values in the field,
+/// inserting space for new values in the middle, and deleting values.
+///
+/// There are other methods that allow you to set only one value of
+/// several in the field and to set the field to contain one and only one
+/// value.
+///
+/// Two other methods can be used to make several changes to a
+/// multiple-value field without the overhead of copying values into and
+/// out of the fields. The #startEditing() method
+/// returns a non-const pointer to the array of values in the field; this
+/// pointer can then be used to change (but not add or remove) any values
+/// in the array. The #finishEditing() method
+/// indicates that the editing is done and notifies any sensors or engines
+/// that may be connected to the field.
+///
+/// <tt>SoMFields</tt> are written to file as a series of values separated by
+/// commas, all enclosed in square brackets.  If the field has no values
+/// (#getNum() returns zero), then only the square brackets ("[]") are
+/// written.  The last value may optionally be followed by a comma.  Each
+/// field subtype defines how the values are written; for example, a field
+/// whose values are integers might be written as:
+/// [ 1, 2, 3, 4 ]
+///    or:
+/// [ 1, 2, 3, 4, ]
+/// \sa SoNode, SoEngine
 class INVENTOR_API SoMField : public SoField {
 
   public:
-    // Destructor
+    /// Destructor
     virtual ~SoMField();
 
-    // Returns number of values
+    /// Returns the number of values currently in the field.
     int			getNum() const { evaluate(); return num; }
 
-    // Adjust the number of values to be num, adding or deleting
-    // values at the end as needed.  If adding, the initial values
-    // in the new space are undefined.
+    /// Forces this field to have exactly num values, inserting or deleting
+    /// values as necessary.
     void		setNum(int num);
 
-    // Delete num values, starting at start. A num of -1 (the default)
-    // means delete all values after start, inclusive
+    /// Deletes \a num values beginning at index \a start (index \a start through
+    /// \a start + \a num -1 will be deleted, and any leftover values will be moved
+    /// down to fill in the gap created).  A \a num of -1 means delete all values
+    /// from \a start to the last value in the field; #getNum() will return
+    /// \a start as the number of values in the field after this operation
+    /// (#deleteValues(0, -1) empties the field).
     virtual void	deleteValues(int start, int num = -1);
 
-    // Insert space for num values starting at start.  The initial
-    // values in the new space are undefined.
+    /// Inserts space for \a num values at index \a start.  Index \a start through
+    /// \a start + \a num -1 will be moved up to make room.  For example, to make room
+    /// for 7 new values at the beginning of the field call #insertSpace(0, 10).
     virtual void	insertSpace(int start, int num);
 
-    // These are equivalent to the SoField::set() and SoField::get()
-    // methods, but operate on only the value given by the index.
+    /// These are equivalent to the SoField::set() and SoField::get()
+    /// methods, but operate on only the value given by the index.
     SbBool		set1(int index, const char *valueString);
     void		get1(int index, SbString &valueString);
 
-    // Returns type identifier for SoMField class
+    /// Return the type identifier for this field class.
     static SoType	getClassTypeId()	{ return classTypeId; }
 
   SoINTERNAL public:

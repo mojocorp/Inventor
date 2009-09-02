@@ -60,25 +60,42 @@
 #include <Inventor/nodes/SoVertexShape.h>
 #include <Inventor/nodes/SoVertexProperty.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNonIndexedShape
-//
-//  Abstract nonindexed shape node class. All nodes derived from this
-//  (such as SoFaceSet and SoTriangleStripSet) are shapes constructed
-//  from vertices defined by consecutive entries in the current
-//  coordinates. The startIndex field gives the index into the current
-//  coordinates at which the shape begins.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for all non-indexed vertex-based shapes.
+/// \ingroup Nodes
+/// This node is the abstract base class for all vertex-based shapes that
+/// are not constructed from indices, such as <tt>SoFaceSet</tt>,
+/// <tt>SoLineSet</tt>, and <tt>SoQuadMesh</tt>.
+///
+/// All subclasses of <tt>SoNonIndexedShape</tt> construct objects by using the
+/// coordinates specified in the #vertexProperty field (from
+/// <tt>SoVertexShape</tt>), or the current inherited coordinates.
+///
+/// The #startIndex
+/// field defined by this class is now obsolete, and is provided
+/// here only for compatibility with old files and programs.
+///
+/// The subclass decides what to do with this
+/// and any subsequent coordinates. The shape is drawn with the current
+/// lighting model and drawing style and is transformed by the current
+/// transformation matrix.
+///
+/// Material, normal, and texture coordinate bindings for shapes derived
+/// from this class ignore any index specifications. That is, a binding
+/// value of <b>PER_FACE_INDEXED</b> is treated the same way as <b>PER_FACE</b>,
+/// and so on.
+///
+/// If there aren't sufficient values in the current coordinates,
+/// material, or texture coordinates, errors will occur.
+/// \par File format/defaults:
+/// This is an abstract class. See the reference page of a derived class for the format and default values.
+/// \sa SoFaceSet,SoIndexedShape,SoLineSet,SoPointSet,SoQuadMesh,SoTriangleStripSet,SoVertexProperty
 class INVENTOR_API SoNonIndexedShape : public SoVertexShape {
 
     SO_NODE_ABSTRACT_HEADER(SoNonIndexedShape);
 
   public:
-    // Fields inherited by all subclasses:
-    SoSFInt32		startIndex;	// Index of 1st coordinate of shape
+    /// Obsolete field, provided only for compatibility reasons. Index of first coordinate of shape.
+    SoSFInt32		startIndex;
 
   SoINTERNAL public:
     static void		initClass();

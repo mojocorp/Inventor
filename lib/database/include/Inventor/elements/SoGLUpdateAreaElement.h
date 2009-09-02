@@ -82,32 +82,36 @@ SoEXTENDER class INVENTOR_API SoGLUpdateAreaElement : public SoElement {
     SO_ELEMENT_HEADER(SoGLUpdateAreaElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the current update area in the state. May have GL side effects.
+    /// Sets the current update area in the state. May have GL side effects.
     static void		set(SoState *state,
 			    const SbVec2f &origin, const SbVec2f &size);
 
-    // Returns current update area from the state. Returns TRUE if the
-    // update area is the default, namely, the entire viewport.
+    /// Returns current update area from the state. Returns TRUE if the
+    /// update area is the default, namely, the entire viewport.
     static SbBool	get(SoState *state, SbVec2f &origin, SbVec2f &size);
 
-    // Returns the default update area origin and size
+    /// Returns the default update area origin
     static SbVec2f	getDefaultOrigin()	{ return SbVec2f(0.0, 0.0); }
+
+    /// Returns the default update area size
     static SbVec2f	getDefaultSize()	{ return SbVec2f(1.0, 1.0); }
 
-    // Override push() and pop() methods to keep GL up to date
+    /// Override push() methods to keep GL up to date
     virtual void	push(SoState *state);
+
+    /// Override pop() methods to keep GL up to date
     virtual void	pop(SoState *state, const SoElement *prevTopElement);
 
-    // Returns TRUE if the update areas match in both elements
+    /// Returns TRUE if the update areas match in both elements
     virtual SbBool	matches(const SoElement *elt) const;
 
-    // Create and return a copy of this element
+    /// Create and return a copy of this element
     virtual SoElement	*copyMatchInfo() const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

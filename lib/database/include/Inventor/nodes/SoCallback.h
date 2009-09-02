@@ -73,18 +73,58 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// Callback functions registered with this node should be of this type.
+/// Callback functions registered with this node should be of this type.
 typedef void INVENTOR_API SoCallbackCB(void *userData, SoAction *action);
 
+/// Provides custom behavior during actions.
+/// \ingroup Nodes
+/// This node provides a general mechanism for inserting callback functions
+/// into a scene graph. The callback function registered with the node is
+/// called each time the node is traversed while performing any scene graph
+/// action. The callback function is passed a pointer to the action being
+/// performed and a user data pointer registered with the callback function.
+/// You can use this node to make nonstandard OpenGL calls while rendering. If
+/// you do, be careful not to interfere with Inventor's use of OpenGL.
+///
+///
+/// If you use a callback node for GL rendering, you should be careful
+/// to follow render caching rules. If your callback node can make
+/// different rendering calls each time it is traversed, it cannot be
+/// cached. In such a case, the node should invalidate any open caches,
+/// as in the following example:
+///
+/// \code
+/// void
+/// myCallbackFunc(void *d, SoAction *action) {
+///     if (action->isOfType(SoGLRenderAction::getClassTypeId())) {
+///         // Make my custom GL calls
+///         ((MyClass *) d)->myRender();
+///
+///         // Invalidate the state so that a cache is not made
+///         SoCacheElement::invalidate(action->getState());
+///     }
+/// }
+/// \endcode
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoBoundingBoxAction, SoPickAction</b>
+/// Calls the specified callback function for all actions.
+///
+/// \par File format/defaults:
+/// \code
+/// SoCallback {
+/// }
+/// \endcode
+/// \sa SoAction, SoCallbackAction, SoEventCallback
 class INVENTOR_API SoCallback : public SoNode {
 
     SO_NODE_HEADER(SoCallback);
 
   public:
-    // Constructor
+    /// Constructor
     SoCallback();
 
-    // Sets pointer to callback function and user data
+    /// Sets pointer to callback function and user data
     void	setCallback(SoCallbackCB *func, void *userData = NULL)
 	{ callbackFunc = func; callbackData = userData; }
 

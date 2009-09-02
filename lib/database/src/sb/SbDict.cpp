@@ -97,7 +97,7 @@ SbDict::~SbDict()
 //
 
 void
-SbDict::addEntryToPLists(unsigned long key, void *value, void *data)
+SbDict::addEntryToPLists(uintptr_t key, void *value, void *data)
 {
     SbDictListThing	*lists = (SbDictListThing *) data;
 
@@ -111,7 +111,7 @@ SbDict::addEntryToPLists(unsigned long key, void *value, void *data)
 //
 
 void
-SbDict::applyToAll(void (*rtn)(unsigned long key, void *value) )
+SbDict::applyToAll(void (*rtn)(uintptr_t key, void *value) )
 {
     int		i;
     SbDictEntry	*entry;
@@ -130,7 +130,7 @@ SbDict::applyToAll(void (*rtn)(unsigned long key, void *value) )
 //
 
 void
-SbDict::applyToAll(void (*rtn)(unsigned long key, void *value, void *data),
+SbDict::applyToAll(void (*rtn)(uintptr_t key, void *value, void *data),
 		   void *data )
 {
     int		i;
@@ -171,7 +171,7 @@ SbDict::clear()
 //
 
 SbBool
-SbDict::enter(unsigned long key, void *value)
+SbDict::enter(uintptr_t key, void *value)
 {
     SbDictEntry		*&entry = findEntry(key);
 
@@ -192,7 +192,7 @@ SbDict::enter(unsigned long key, void *value)
 //
 
 SbBool
-SbDict::find(unsigned long key, void *&value) const
+SbDict::find(uintptr_t key, void *&value) const
 {
     SbDictEntry		*&entry = findEntry(key);
 
@@ -211,7 +211,7 @@ SbDict::find(unsigned long key, void *&value) const
 //
 
 SbDictEntry *&
-SbDict::findEntry(unsigned long key) const
+SbDict::findEntry(uintptr_t key) const
 {
     SbDictEntry		**entry;
 
@@ -249,7 +249,7 @@ SbDict::makePList(SbPList &keys, SbPList &values)
 //
 
 SbBool
-SbDict::remove(unsigned long key)
+SbDict::remove(uintptr_t key)
 {
     SbDictEntry		*&entry = findEntry(key);
     SbDictEntry		*tmp;

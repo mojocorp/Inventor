@@ -62,34 +62,58 @@
 #include <Inventor/projectors/SbCylinderProjector.h>
 #include <Inventor/SbPlane.h>
 
+/// Cylinder-sheet projector.
+/// \ingroup Projectors
+/// <tt>SbCylinderSheetProjector</tt>
+/// projects a window space point (usually based on the mouse location)
+/// onto the surface of a cylinder with a hyperbolic sheet draped over it.
+/// This allows smooth transitions onto and off of the cylinder.
+/// Two projected points can produce a rotation
+/// along the cylinder's axis.
+/// When the mouse position projects on to the sheet, the
+/// rotations will be as if the sheet is being dragged,
+/// causing the cylinder to roll beneath it.
+///
+/// Incremental changes (delta rotation) can be computed during
+/// interactive sessions. Cylinder projectors are typically used to write
+/// interactive 3D manipulators and viewers.
+/// \sa SbCylinderSectionProjector,SbCylinderPlaneProjector,SbLineProjector,
+/// \sa SbPlaneProjector, SbSpherePlaneProjector,SbSphereProjector, SbSphereSectionProjector, SbSphereSheetProjector
 class INVENTOR_API SbCylinderSheetProjector : public SbCylinderProjector
 {
   public:
-    // Default constructor.
-    // The default view volume is undefined.
-    // The default working space is identity (world space).
-    // The default cylinder is centered about the Y axis and has radius 1.0.
-    // The default eye orientation is TRUE.
+    /// Default constructor.
+    /// The default view volume is undefined.
+    /// The default working space is identity (world space).
+    /// The default cylinder is centered about the Y axis and has radius 1.0.
+    /// The default eye orientation is TRUE.
     SbCylinderSheetProjector(SbBool orientToEye = TRUE);
 
-    // Constructor taking the cylinder.
+    /// Constructor taking the cylinder.
+    /// The \a orientToEye
+    /// parameter determines whether the sheet is perpendicular to the
+    /// eye, or perpendicular to the cylinder's Z axis.  Setting that parameter to TRUE
+    /// (the default) specifies that the plane be perpendicular to the
+    /// eye, which is most often the desired behavior.
+    ///
+    ///The default view volume is undefined, and the working space is identity.
     SbCylinderSheetProjector(const  SbCylinder &cyl,
 			     SbBool orientToEye = TRUE);
 
-    // Destructor
+    /// Destructor
     ~SbCylinderSheetProjector() {}
     
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SbProjector *    copy() const;
 
-    // Apply the projector using the given point, returning the
-    // point in three dimensions that it projects to.
-    // The point should be normalized from 0-1, with (0,0) at
-    // the lower-left.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// The point should be normalized from 0-1, with (0,0) at
+    /// the lower-left.
     virtual SbVec3f	project(const SbVec2f &point);
 
-    // Computes a rotation based on two points on this projector.
+    /// Computes a rotation based on two points on this projector.
     virtual SbRotation	getRotation(const SbVec3f &point1,
 				    const SbVec3f &point2);
 

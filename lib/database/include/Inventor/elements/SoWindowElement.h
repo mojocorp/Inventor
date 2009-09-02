@@ -76,29 +76,29 @@ SoEXTENDER class INVENTOR_API SoWindowElement : public SoElement {
     SO_ELEMENT_HEADER(SoWindowElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Always returns TRUE, since this element should never be a
-    // criterion for cache invalidation.
+    /// Always returns TRUE, since this element should never be a
+    /// criterion for cache invalidation.
     virtual SbBool	matches(const SoElement *elt) const;
 
-    // Create and return a copy of this element
+    /// Create and return a copy of this element
     virtual SoElement	*copyMatchInfo() const;
 #ifdef SB_HAS_X11
-    // Sets the window, context and glRenderAction info
+    /// Sets the window, context and glRenderAction info
     static void		set(SoState *state, Window window, GLXContext context, 
 			    Display *display, SoGLRenderAction *glAction);
 
-    // Returns the current window, context and glRenderAction
+    /// Returns the current window, context and glRenderAction
     static void	get(SoState *state, Window &window, GLXContext &context, 
 			    Display *&display, SoGLRenderAction *&glAction);
 #else
-    // Sets the window, context and glRenderAction info
+    /// Sets the window, context and glRenderAction info
     static void		set(SoState *state, void *window, void *context,
                             void *display, SoGLRenderAction *glAction);
 
-    // Returns the current window, context and glRenderAction
+    /// Returns the current window, context and glRenderAction
     static void	get(SoState *state, void *&window, void *&context,
                             void *&display, SoGLRenderAction *&glAction);
 #endif

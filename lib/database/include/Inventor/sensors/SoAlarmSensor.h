@@ -61,29 +61,46 @@
 
 #include <Inventor/sensors/SoTimerQueueSensor.h>
 
+/// Triggers a callback once sometime in the future.
+/// \ingroup Sensors
+/// This type of sensor can be used to schedule a one-time callback for
+/// some time in the future.  The sensor is not guaranteed to be called at
+/// exactly that time, but will be called sometime after the specified
+/// time.
+/// \sa SoOneShotSensor, SoTimerSensor, SoTimerQueueSensor, SbTime
 class INVENTOR_API SoAlarmSensor : public SoTimerQueueSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoAlarmSensor();
+
+    /// Constructor that takes the callback function and data to be called when the sensor is triggered.
     SoAlarmSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destroys the sensor, freeing up any memory associated with it after
+    /// unscheduling it.
     virtual ~SoAlarmSensor();
 
-    // Set the time to trigger the sensor. The first method specifies
-    // an absolute time, the second a time relative to the current time.
+    /// Sets the sensor to go off at the specified time.  You \e must also
+    /// call schedule() for the sensor to be
+    /// triggered.  If the sensor is already scheduled, it must be unscheduled
+    /// and then rescheduled for the change in the trigger time to take effect.
     void		setTime(const SbTime &absTime);
+
+    /// Sets the sensor to go off the given amount of time from now. You
+    /// \e must also call schedule() for the
+    /// sensor to be triggered.  If the sensor is already scheduled, it must be unscheduled
+    /// and then rescheduled for the change in the trigger time to take effect.
     void		setTimeFromNow(const SbTime &relTime);
 
-    // Returns the time the sensor is scheduled to be triggered. This
-    // differs from getTriggerTime() in that this method returns the
-    // time the sensor was set to be scheduled, even if it has not yet
-    // been scheduled.
+    /// Returns the time the sensor is scheduled to be triggered. This
+    /// differs from getTriggerTime() in that this method returns the
+    /// time the sensor was set to be scheduled, even if it has not yet
+    /// been scheduled.
     const SbTime &	getTime() const			{ return time; }
 
-    // Overrides the regular schedule() method because we have to set
-    // up the trigger time first.
+    /// Overrides the regular schedule() method because we have to set
+    /// up the trigger time first.
     virtual void	schedule();
 
   private:

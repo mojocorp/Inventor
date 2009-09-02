@@ -61,30 +61,27 @@
 
 #include <Inventor/errors/SoError.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoMemoryError
-//
-//  This class is used for errors reported due to lack of memory. The
-//  post() method takes a string describing the item that was to be
-//  allocated, such as "cylinder vertex array".
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
+/// Memory error handling.
+/// \ingroup Errors
+/// <tt>SoMemoryError</tt>  is used for errors reported
+/// due to lack of memory.
+/// \sa SoDebugError,SoReadError
 class INVENTOR_API SoMemoryError : public SoError {
 
   public:
-    // Sets/returns handler callback for SoMemoryError class
-    static void		setHandlerCallback(SoErrorCB *cb, void *data)
-	{ handlerCB = cb; cbData = data; }
+    /// Sets handler callback for SoMemoryError class
+    static void		setHandlerCallback(SoErrorCB *cb, void *data) { handlerCB = cb; cbData = data; }
+
+    /// Returns handler callback for SoMemoryError class
     static SoErrorCB *	getHandlerCallback()	{ return handlerCB; }
+
+    /// Returns handler data for SoMemoryError class
     static void *	getHandlerData()	{ return cbData; }
 
-    // Returns type identifier for SoMemoryError class
+    /// Returns type identifier for SoMemoryError class
     static SoType	getClassTypeId()	{ return classTypeId; }
 
-    // Returns type identifier for error instance
+    /// Returns type identifier for error instance
     virtual SoType	getTypeId() const;
 
   SoEXTENDER public:

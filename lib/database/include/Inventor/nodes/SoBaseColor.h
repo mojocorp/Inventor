@@ -59,24 +59,34 @@
 #include <Inventor/fields/SoMFColor.h>
 #include <Inventor/nodes/SoSubNode.h>
 class SoColorPacker;
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoBaseColor
-//
-//  Surface base color (of the material) node. This affects the
-//  diffuse color of the current material.
-//
-//////////////////////////////////////////////////////////////////////////////
 
+/// Node that defines an object's base color.
+/// \ingroup Nodes
+/// This node defines the base color (or colors) of subsequent shape nodes
+/// in the scene graph. <tt>SoBaseColor</tt> sets only the diffuse color(s) of
+/// the current material and has no effect on the material's other
+/// attributes.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction</b>
+/// Sets the current base color in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoBaseColor {
+///    rgb	0.8 0.8 0.8
+/// }
+/// \endcode
+/// \sa SoMaterial, SoPackedColor
 class INVENTOR_API SoBaseColor : public SoNode {
 
     SO_NODE_HEADER(SoBaseColor);
 
   public:
     // Fields
-    SoMFColor		rgb;		// RGB color
+    SoMFColor		rgb;		///< RGB color
 
-    // Constructor
+    /// Constructor
     SoBaseColor();
 
   SoEXTENDER public:

@@ -64,17 +64,108 @@
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/nodes/SoMaterialBinding.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoVertexProperty
-//
-//  SoNode class that manages arrays of data for GLVertex Array Extension.
-//  Data arrays include: vertices, normals, colors, texture coordinates.
-//  Also has NormalBinding and MaterialBinding fields
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoVertexPropertyCache;
+
+
+/// Vertex property node.
+/// \ingroup Nodes
+/// This property node may be used to efficiently specify coordinates, normals,
+/// texture coordinates, colors, transparency values, material
+/// binding and normal binding for vertex-based shapes, i.e., shapes of
+/// class <tt>SoVertexShape</tt>.  An <tt>SoVertexProperty</tt> node can be used
+/// as a child of a group node in a scene graph, in which case the
+/// properties it specifies are inherited by subsequent shape nodes in the
+/// graph.  It can also be directly referenced as the <tt>VertexProperty</tt>
+/// <tt>SoSFField</tt> of a vertex-based shape, bypassing scene graph inheritance.
+///
+/// When directly referenced by a #VertexProperty <tt>SoSFField</tt> of a vertex-based
+/// shape, the <tt>SoVertexProperty</tt> node is the most efficient way of
+/// specifying vertex-based shapes.  Use of the directly referenced
+/// <tt>SoVertexProperty</tt> node results in significantly faster scene
+/// rendering than scene graph inheritance of vertex properties, provided all
+/// required vertex properties are specified in the <tt>SoVertexProperty</tt>
+/// node.
+///
+/// Because the class <tt>SoVertexProperty</tt> is derived from <tt>SoNode</tt>, a
+/// vertex property node can be inserted as a child node in a scene graph.
+/// When inserted as a node in a scene graph, the <tt>SoVertexProperty</tt> node is
+/// traversed as any other property node and the properties it specifies are
+/// inherited by subsequent shape nodes in the scene graph.  It specifies
+/// the current material and normal bindings, and can be used to specify
+/// the current 3D
+/// coordinates, the current normals, the current texture
+/// coordinates, the current diffuse colors, and the current transparencies.
+///
+/// All multiple-valued fields in the <tt>SoVertexProperty</tt> node are optional.
+/// If a field is not present (i.e. if it has 0 values), then shapes that require
+/// the missing information are required to obtain it from the current traversal
+/// state.   However, users are
+/// cautioned that, for optimal performance, the vertex property node should
+/// be referenced as the #VertexProperty field of an <tt>SoVertexShape</tt>,
+/// and should specify in its fields all values required to render that shape.
+///
+/// The various fields in a vertex property node can be used in place of
+/// corresponding fields in other property nodes, as follows:  The #vertex field
+/// contains 3D coordinates, as in the #point field of an
+/// <tt>SoCoordinate3</tt> node. The #normal field contains normal vectors, as in the
+/// #vector field of the #SoNormal node. The #orderedRGBA field contains
+/// packed colors in the hexadecimal format <tt>0xrrggbbaa</tt>, where
+/// - <tt>rr</tt> is the red value (between 00 and 0xFF hex)
+/// - <tt>gg</tt> is the green value (between 00 and 0xFF hex)
+/// - <tt>bb</tt> is the blue value (between 00 and 0xFF hex)
+/// - <tt>aa</tt> is the alpha value (between 00 = transparent and 0xFF = opaque).
+///
+/// The packed colors are equivalent to an <tt>SoPackedColor</tt> node, and
+/// provide values for both diffuse color and transparency.
+/// The #texCoord field replaces
+/// the #point field of the <tt>SoTextureCoordinate2</tt> node.
+///
+/// If the transparency type is <tt>SoGLRenderAction::SCREEN_DOOR</tt>, only the
+/// first transparency value will be used.  With other transparency types,
+/// multiple transparencies will be used.
+///
+/// The #materialBinding field replaces the #value field of the
+/// <tt>SoMaterialBinding</tt> node.  The #materialBinding field in a directly
+/// referenced <tt>SoVertexProperty</tt> node has no effect unless there is a nonempty
+/// #orderedRGBA field, in which case the material binding specifies the
+/// assignment of diffuse colors and alpha values to the shape.
+/// The #materialBinding field can take as value any of the material
+/// bindings supported by Inventor.
+///
+/// The #normalBinding field replaces the #value field of the
+/// <tt>SoNormalBinding</tt> node.   The #normalBinding field of
+/// a directly referenced <tt>SoVertexProperty</tt> node has no effect
+/// unless there is a nonempty
+/// #normal field, in which case the normal binding specifies the assignment
+/// of normal vectors to the shape.  The value of the #normalBinding
+/// field can be any of the normal bindings supported by Inventor.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoPickAction</b>
+/// When traversed in a scene graph, sets coordinates, normals, texture coordinates,
+/// diffuse colors, transparency, normal binding and material binding in current
+/// traversal state.  If not traversed, has no effect on current traversal state
+/// associated with action.  The normalBinding field has no effect if there
+/// are no normals.  The materialBinding has no effect if there are no
+/// packed colors.
+/// <b>SoGetBoundingBoxAction</b>
+/// When traversed in a scene graph, sets coordinates in current traversal
+/// state.  If not traversed, has no effect on current traversal state
+/// associated with action.
+///
+/// \par File format/defaults:
+/// \code
+/// SoVertexProperty {
+///    vertex      	[  ]
+///    normal      	[  ]
+///    texCoord  	[  ]
+///    orderedRGBA	[  ]
+///    materialBinding	OVERALL
+///    normalBinding	PER_VERTEX_INDEXED
+/// }
+/// \endcode
+/// \sa SoIndexedTriangleStripSet, SoIndexedFaceSet, SoIndexedLineSet, SoTriangleStripSet,
+/// \sa SoLineSet, SoFaceSet, SoPointSet, SoQuadMesh, SoVertexShape, SoIndexedShape, SoNonindexedShape
 class INVENTOR_API SoVertexProperty : public SoNode {
 
     SO_NODE_HEADER(SoVertexProperty);
@@ -82,28 +173,26 @@ class INVENTOR_API SoVertexProperty : public SoNode {
   public:
 
     // Fields:
-    SoMFVec3f		vertex;		// Coordinate point(s)
-    SoMFVec2f    	texCoord;	// Texture coordinate(s)
+    SoMFVec3f		vertex;		///< Coordinate point(s)
+    SoMFVec2f    	texCoord;	///< Texture coordinate(s)
 
-    SoMFVec3f		normal;		// Normal vector(s)
-    SoSFEnum		normalBinding;  // Ignored unless normal field
-					// set
+    SoMFVec3f		normal;		///< Normal vector(s)
+    SoSFEnum		normalBinding;  ///< Ignored unless normal field set
 
-    SoMFUInt32		orderedRGBA;	// Diffuse+transparency
-    SoSFEnum		materialBinding;// Ignored unless orderedRGBA
-					// field set
+    SoMFUInt32		orderedRGBA;	///< Packed color(s), including transparencies.
+    SoSFEnum		materialBinding;///< Ignored unless orderedRGBA field set
 
     enum Binding {
-	OVERALL =		SoMaterialBindingElement::OVERALL,
-	PER_PART =		SoMaterialBindingElement::PER_PART,
-	PER_PART_INDEXED =	SoMaterialBindingElement::PER_PART_INDEXED,
-	PER_FACE =		SoMaterialBindingElement::PER_FACE,
-	PER_FACE_INDEXED =	SoMaterialBindingElement::PER_FACE_INDEXED,
-	PER_VERTEX =		SoMaterialBindingElement::PER_VERTEX,
-	PER_VERTEX_INDEXED =	SoMaterialBindingElement::PER_VERTEX_INDEXED
+        OVERALL =            SoMaterialBindingElement::OVERALL,             ///< Whole object has same material/normal
+        PER_PART =           SoMaterialBindingElement::PER_PART,            ///< One material/normal for each part of object
+        PER_PART_INDEXED =   SoMaterialBindingElement::PER_PART_INDEXED,    ///< One material/normal for each part, indexed
+        PER_FACE =           SoMaterialBindingElement::PER_FACE,            ///< One material/normal for each face of object
+        PER_FACE_INDEXED =   SoMaterialBindingElement::PER_FACE_INDEXED,    ///< One material/normal for each face, indexed
+        PER_VERTEX =         SoMaterialBindingElement::PER_VERTEX,          ///< One material/normal for each vertex of object
+        PER_VERTEX_INDEXED = SoMaterialBindingElement::PER_VERTEX_INDEXED   ///< One material/normal for each vertex, indexed
     };
 
-    // Constructor
+    /// Creates an SoVertexProperty node with default settings.
     SoVertexProperty();
 
   SoEXTENDER public:

@@ -61,26 +61,61 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCube
-//
-//  Simple cube. Default size is -1 to +1 in all 3 dimensions, but the
-//  width, height, and depth fields can be used to change these.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Cube shape node.
+/// \ingroup Nodes
+/// This node represents a cuboid aligned with the coordinate axes. By
+/// default, the cube is centered at (0,0,0) and measures 2 units in each
+/// dimension, from -1 to +1. The cube is transformed by the current
+/// cumulative transformation and is drawn with the current lighting
+/// model, drawing style, material, and geometric complexity.
+///
+///
+/// If the current material binding is <b>PER_PART</b>, <b>PER_PART_INDEXED</b>,
+/// <b>PER_FACE</b>, or <b>PER_FACE_INDEXED</b>, materials will be bound to the
+/// faces of the cube in this order: front, back, left, right, top, and
+/// bottom.
+///
+///
+/// Textures are applied individually to each face of the cube; the entire
+/// texture goes on each face. On the front, back, right, and left sides
+/// of the cube, the texture is applied right side up. On the top, the
+/// texture appears right side up when the top of the cube is tilted
+/// toward the camera. On the bottom, the texture appears right side up
+/// when the top of the cube is tilted away from the camera.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws cube based on the current coordinates, materials,
+/// drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Intersects the ray with the cube. The face of the cube that was picked
+/// is available from the <tt>SoCubeDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses the cube.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will
+/// be invoked for each successive triangle that approximates the cube.
+///
+/// \par File format/defaults:
+/// \code
+/// SoCube {
+///    width	2
+///    height	2
+///    depth	2
+/// }
+/// \endcode
+/// \sa SoCone,SoCubeDetail,SoCylinder,SoSphere
 class INVENTOR_API SoCube : public SoShape {
 
     SO_NODE_HEADER(SoCube);
 
   public:
     // Fields
-    SoSFFloat		width;		// Size in x dimension
-    SoSFFloat		height;		// Size in y dimension
-    SoSFFloat		depth;		// Size in z dimension
+    SoSFFloat		width;		///< Size in x dimension
+    SoSFFloat		height;		///< Size in y dimension
+    SoSFFloat		depth;		///< Size in z dimension
 
-    // Constructor
+    /// Constructor
     SoCube();
 
   SoEXTENDER public:

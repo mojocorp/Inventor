@@ -69,41 +69,56 @@
 			SoSpaceballButtonEvent::BUTTON))
 
 
-
+/// Spaceball button press and release events.
+/// \ingroup Events
+/// <tt>SoSpaceballButtonEvent</tt> represents spaceball button press and release events
+/// in the Inventor event model.
+/// \sa SoEvent, SoButtonEvent, SoKeyboardEvent, SoLocation2Event, SoMotion3Event,SoMouseButtonEvent,
+/// \sa SoHandleEventAction, SoEventCallback, SoSelection, SoInteraction,SoXtDevice
 class INVENTOR_API SoSpaceballButtonEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
     
   public:
     enum Button {
-	ANY = 0, 
-	BUTTON1 = 1, 
-	BUTTON2 = 2, 
-	BUTTON3 = 3, 
-	BUTTON4 = 4, 
-	BUTTON5 = 5, 
-	BUTTON6 = 6, 
-	BUTTON7 = 7, 
-	BUTTON8 = 8, 
-	PICK = 9
+        ANY = 0,        ///< Any spaceball button
+        BUTTON1 = 1,    ///< Spaceball button 1
+        BUTTON2 = 2,    ///< Spaceball button 2
+        BUTTON3 = 3,    ///< Spaceball button 3
+        BUTTON4 = 4,    ///< Spaceball button 4
+        BUTTON5 = 5,    ///< Spaceball button 5
+        BUTTON6 = 6,    ///< Spaceball button 6
+        BUTTON7 = 7,    ///< Spaceball button 7
+        BUTTON8 = 8,    ///< Spaceball button 8
+        PICK = 9        ///< Spaceball pick button
     };
     
-    // constructor
+    /// Default constructor
     SoSpaceballButtonEvent();
+
+    /// Destructor
     virtual ~SoSpaceballButtonEvent();
     
-    // which button generated the event, e.g. SoSpaceballButtonEvent::BUTTON1
+    /// Set which spaceball button generated the event., e.g. SoSpaceballButtonEvent::BUTTON1
     void		setButton(SoSpaceballButtonEvent::Button b)
 	{ button = b; }
+
+    /// Get which spaceball button generated the event., e.g. SoSpaceballButtonEvent::BUTTON1
     SoSpaceballButtonEvent::Button	getButton() const
 	{ return button; }
     
-    // convenience routines to see if an SoEvent is a press or release
-    // of the passed spaceball button
+    /// Returns whether the passed event is a spaceball button press event
+    /// of the passed button. When \e SoSpaceballButtonEvent::ANY is passed,
+    /// this returns TRUE if the event represents a button press
+    /// or release of any spaceball button.
     static SbBool	isButtonPressEvent(
 			    const SoEvent *e,
 			    SoSpaceballButtonEvent::Button whichButton);
-			    
+
+    /// Returns whether the passed event is a spaceball button release event
+    /// of the passed button. When \e SoSpaceballButtonEvent::ANY is passed,
+    /// this returns TRUE if the event represents a button press
+    /// or release of any spaceball button.
     static SbBool	isButtonReleaseEvent(
 			    const SoEvent *e,
 			    SoSpaceballButtonEvent::Button whichButton);

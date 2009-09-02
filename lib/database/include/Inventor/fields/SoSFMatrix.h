@@ -59,19 +59,26 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbMatrix.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFMatrix subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a 4x4 matrix.
+/// \ingroup Fields
+/// A field containing a transformation matrix (an <tt>SbMatrix</tt>).
+///
+/// <tt>SoSFMatrices</tt> are written to file as 16 floating point
+/// numbers separated by whitespace.  For example, an identity matrix is
+/// written as:
+///
+/// 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1
+///
+/// \sa SoField, SoSField, SoMFMatrix, SbMatrix
 class INVENTOR_API SoSFMatrix : public SoSField {
 
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFMatrix, SbMatrix, const SbMatrix &);
 
   public:
-    // Set one value from 16 floats
+    /// Sets this field to contain the matrix given by the 16 values.  For a
+    /// translation matrix, the x, y and z translations should be in the a41,
+    /// a42, and a43 arguments.
     void		setValue(float a11, float a12, float a13, float a14,
 				 float a21, float a22, float a23, float a24,
 				 float a31, float a32, float a33, float a34,

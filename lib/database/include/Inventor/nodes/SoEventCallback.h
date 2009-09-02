@@ -65,40 +65,67 @@
 class SoEvent;
 class SoEventCallback;
 
-// callback function prototypes
+/// callback function prototypes
 typedef void INVENTOR_API SoEventCallbackCB(void *userData, SoEventCallback *node);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoEventCallback
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node which invokes callbacks for events.
+/// \ingroup Interaction
+/// <tt>SoEventCallback</tt> will invoke application supplied
+/// callback functions during <tt>SoHandleEventAction</tt> traversal.
+/// Methods allow the application to specify which Inventor events should
+/// trigger callbacks, and which path must be picked, if any, for the callback
+/// invocation to occur. The application callback is able to get information about
+/// the event and the pick detail, and may grab events, release events, and set
+/// whether the event was handled.
+///
+/// If you register more than one callback
+/// function in an <tt>SoEventCallback</tt> node, all the callback functions
+/// will be invoked when an event occurs, even if one of the callbacks handles
+/// the event. However, if the event is handled by any of the callback functions,
+/// no other node in the scene graph will see the event.
+///
+/// \par File format/defaults:
+/// \code
+/// SoEventCallback {
+/// }
+/// \endcode
+/// \sa SoInteraction, SoSelection, SoHandleEventAction, SoDragger
 class INVENTOR_API SoEventCallback : public SoNode {
 
     SO_NODE_HEADER(SoEventCallback);
 
   public:
-    // Constructor
+    /// Constructor creates an event callback node with no event interest
+    /// and a NULL path.
     SoEventCallback();
     
-    // Set the path to monitor - the callbacks are only invoked
-    // if this path is picked. If path is NULL, then the callbacks
-    // are invoked automatically on every event of the type specified
-    // in setEventInterest, without a pick occurring.
-    // This makes its own copy of path.
+    /// Set the path to monitor - the callbacks are only invoked
+    /// if this path is picked. If path is NULL, then the callbacks
+    /// are invoked automatically on every event of the type specified
+    /// in setEventInterest, without a pick occurring.
+    /// This makes its own copy of path.
     void		setPath(SoPath *path);
+
+    /// Get the path which must be picked in order for the callbacks
+    /// to be invoked.
     const SoPath *	getPath()		{ return pathOfInterest; }
 
-    // Specify callback functions to be invoked. When invoked, the
-    // callback will be passed userData, and a pointer to this. To
-    // specify interest in all event types, pass
-    // SoEvent::getClassTypeId() as the eventType. Else, pass the type
-    // of event you are interested in (e.g.
-    // SoLocation2Event::getClassTypeId() for mouse motion)
+    /// Specifies the callback functions to be invoked for different event types.
+    /// When invoked, the callback function will be passed the \a userData,
+    /// along with a pointer to this \c SoEventCallback node.
+    /// For example, passing
+    /// SoMouseButtonEvent::getClassTypeId()
+    /// SoMouseEvGetClassTypeId()
+    /// means callbacks will be invoked only when a mouse button is pressed
+    /// or released.
+    /// Passing SoEvent::getClassTypeId()
+    /// for the \a eventType will cause the callback to be invoked for every event
+    /// which passes through this event callback node.
     void		addEventCallback(SoType eventType,
 					 SoEventCallbackCB *f,
 					 void *userData = NULL);
+
+    /// Remove the specified event callback.
     void		removeEventCallback(SoType eventType,
 					    SoEventCallbackCB *f,
 					    void *userData = NULL);
@@ -109,38 +136,46 @@ class INVENTOR_API SoEventCallback : public SoNode {
     // return NULL when called from anywhere but a callback function.
     //
     
-    // Returns the SoHandleEventAction being applied
+    /// Returns the \c SoHandleEventAction currently traversing this node,
+    /// or NULL if traversal is not taking place. This should be called
+    /// only from callback functions.
     SoHandleEventAction *	getAction() const { return eventAction; }
 
-    // Returns the event being handled by the action
+    /// Returns the event currently being handled,
+    /// or NULL if traversal is not taking place. This should be called
+    /// only from callback functions.
     const SoEvent *		getEvent() const
 	{ return (eventAction != NULL ? eventAction->getEvent() : NULL); }
 
-    // Returns pick information from the action
+    /// Returns pick information during \c SoHandleEventAction traversal,
+    /// or NULL if traversal is not taking place. This should be called
+    /// only from callback functions.
     const SoPickedPoint *	getPickedPoint() const
 	{ return (eventAction != NULL ? eventAction->getPickedPoint() : NULL);}
     
-    //
-    //////////////////////
-
-    // Tells the node the event was handled. The callback function is
-    // responsible for setting whether the event was handled or not.
-    // If there is more than one callback function, all of them will be
-    // invoked, regardless of whether one has handled the event or not.
+    /// Tells the node the event was handled. The callback function is
+    /// responsible for setting whether the event was handled or not.
+    /// If there is more than one callback function registered
+    /// with an \c SoEventCallback node, all of them will be
+    /// invoked, regardless of whether one has handled
+    /// the event or not.
+    /// This should be called only from callback functions.
     void		setHandled()
 	{ if (eventAction != NULL) eventAction->setHandled(); }
 
-    // Returns whether the event was handled
+    /// Returns whether the event has been handled.
+    /// This should be called only from callback functions.
     SbBool		isHandled() const
 	{ return (eventAction != NULL) ? eventAction->isHandled() : FALSE; }
     
-    // Tells the event callback node to grab events or release the
-    // grab. While grabbing, the node will consume all events;
-    // however, the callback functions are still only invoked for
-    // events of interest.
+    /// Tells the event callback node to grab events.
+    /// While grabbing, the node will consume all events;
+    /// however, the callback functions are still only invoked for
+    /// events of interest.
     void		grabEvents()
 	{ if (eventAction != NULL) eventAction->setGrabber(this); }
 
+    /// Tells the event callback node to release the grab.
     void		releaseEvents()
 	{ if (eventAction != NULL) eventAction->releaseGrabber(); }
 

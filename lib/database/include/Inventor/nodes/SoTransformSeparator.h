@@ -58,17 +58,29 @@
 
 #include <Inventor/nodes/SoGroup.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTransformSeparator
-//
-//  TransformSeparator group node: isolates any transformations under
-//  the node from the rest of the graph. In effect, this node acts as
-//  a separator for just modeling transformations; it saves the model
-//  matrix before traversing children and restores it afterwards.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Group node that saves and restores transformation state.
+/// \ingroup Nodes
+/// This group node is similar to the <tt>SoSeparator</tt> node in that it
+/// saves state before traversing its children and restores it afterwards.
+/// However, it saves only the current transformation; all other state is
+/// left as is. This node can be useful for positioning a camera, since
+/// the transformations to the camera will not affect the rest of the
+/// scene, even through the camera will view the scene. Similarly, this
+/// node can be used to isolate transformations to light sources or other
+/// objects.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoGetMatrixAction, SoRayPickAction</b>
+/// Saves the current transformation state, traverses all children, and
+/// restores the previous transformation state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTransformSeparator {
+/// }
+/// \endcode
+/// \sa SoResetTransform, SoTransformation
 class INVENTOR_API SoTransformSeparator : public SoGroup {
 
     SO_NODE_HEADER(SoTransformSeparator);
@@ -76,10 +88,10 @@ class INVENTOR_API SoTransformSeparator : public SoGroup {
   public:
     // No fields
 
-    // Default constructor
+    /// Creates a transform separator node with default settings.
     SoTransformSeparator();
 
-    // Constructor that takes approximate number of children
+    /// Constructor that takes approximate number of children.
     SoTransformSeparator(int nChildren);
 
   SoEXTENDER public:

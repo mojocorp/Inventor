@@ -58,12 +58,12 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFFloat subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a floating-point value.
+/// \ingroup Fields
+/// A field that contains one single-precision floating point number.
+///
+/// <tt>SoSFFloats</tt> are written to file in standard scientific notation.
+/// \sa SoField, SoSField, SoMFFloat
 class INVENTOR_API SoSFFloat : public SoSField {
 
     // Use standard field stuff

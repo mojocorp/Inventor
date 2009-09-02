@@ -90,6 +90,112 @@ class SoGLRenderAction;
 class SoRayPickAction;
 class SoFieldSensor;
 
+/// Object you can translate or scale within a plane by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoTabPlaneDragger</tt> is a dragger which allows the user
+/// to interactively translate and scale in a plane.  It looks like
+/// a square white outline with smaller green squares (or <em>tabs</em>) set
+/// in the corners and along the center of each edge. Dragging a #corner tab
+/// scales the dragger in 2D by scaling about the opposite corner.
+/// Dragging an #edge tab performs 1D scaling about the opposite edge.
+/// The rest of the dragger is invisible but pickable; selecting it
+/// initiates translation within the plane.
+///
+///
+/// The dragger tries to keep the small tabs a constant size in screen space.
+/// Every time a drag begins or ends, the size is recalculated based on the
+/// viewing and modeling matrix.
+///
+///
+/// When dragging the translator part,
+/// press the <b><Shift></b> key and you can constrain motion to either the
+/// local #x axis or the #y axis.  The direction is determined by your initial
+/// mouse gesture after pressing the key.  Releasing the key removes the constraint.
+///
+///
+/// When the translator part drags, the dragger updates its #translation
+/// field.  The various scaling parts cause changes to both the
+/// #scaleFactor and #translation field, since scaling about a point other
+/// than the center adds translation to the center of the dragger.
+/// If you set the field, the dragger will move accordingly.
+/// You can also connect fields of other nodes or engines from
+/// this one
+/// to make them follow the dragger's motion.
+///
+///
+///   You can  not change the shape used to draw
+/// the tabs.  This part is kept privately and may not be changed; the
+/// coordinates for the tabs are edited during
+/// #adjustScaleTabSize().
+///
+///
+/// The <tt>SoTabPlaneDragger</tt> class does contain three other parts you can
+/// change:  <em>tabPlaneTranslator</em>, <em>tabPlaneScaleTabMaterial</em> and
+/// <em>tabPlaneScaleTabHints</em>.
+///
+///
+/// Each of these is set by default from
+/// a resource described in the Dragger Resources section of the online
+/// reference page for this class.  You
+/// can change the parts in any instance of this dragger using
+/// #setPart().
+///
+///
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// <tt>/usr/share/data/draggerDefaults/tabPlaneDragger.iv</tt>
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that directory.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoTabPlaneDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+///          "geomSeparator"
+/// -->         "planeSwitch"
+/// -->            "translator"
+/// -->            "scaleTabs"
+/// -->               "scaleTabMaterial"
+/// -->               "scaleTabHints"
+/// -->               "scaleTabMaterialBinding"
+/// -->               "scaleTabNormalBinding"
+/// -->               "scaleTabNormal"
+/// -->               "edgeScaleCoords"
+/// -->               "edgeScaleTab0"
+/// -->               "edgeScaleTab1"
+/// -->               "edgeScaleTab2"
+/// -->               "edgeScaleTab3"
+/// -->               "cornerScaleCoords"
+/// -->               "cornerScaleTab0"
+/// -->               "cornerScaleTab1"
+/// -->               "cornerScaleTab2"
+/// -->               "cornerScaleTab3"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoTabPlaneDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     translation         0 0 0
+///     scaleFactor         1 1 1
+///     callbackList        NULL
+///     translator          <tabPlaneTranslator resource>
+///     scaleTabMaterial    <tabPlaneScaleTabMaterial resource>
+///     scaleTabHints       <tabPlaneScaleTabHints resource>
+/// }
+/// \endcode
+/// \sa SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,
+/// \sa SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,
+/// \sa SoSpotLightDragger,SoTabBoxDragger,SoTrackballDragger,SoTransformBoxDragger,
+/// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class INVENTOR_API SoTabPlaneDragger : public SoDragger
 {
     // Define typeId and name stuff
@@ -115,15 +221,17 @@ class INVENTOR_API SoTabPlaneDragger : public SoDragger
     SO_KIT_CATALOG_ENTRY_HEADER(cornerScaleTab3);
 
   public:
-    // Constructor
+    /// Constructor.
     SoTabPlaneDragger();
 
-    SoSFVec3f    translation;
-    SoSFVec3f    scaleFactor;
+    SoSFVec3f    translation; ///< Position of the dragger.
+    SoSFVec3f    scaleFactor; ///< Scale factor affecting the dragger.
 
-    // Cause the scale tabs size to be re-adjusted. Happens automatically
-    // upon dragger finish. You may want to do it upon viewer finish as 
-    // well.
+    /// Cause the scale tab sizes to be re-adjusted
+    /// so that they remain a near constant screen space size.
+    /// This happens automatically upon dragger finish.
+    /// Call this to adjust the scale tab sizes at other times, for instance
+    /// after the camera has changed in a viewer finish callback.
     void    adjustScaleTabSize();
 
   SoINTERNAL public:

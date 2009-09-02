@@ -59,16 +59,16 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTransformation
-//
-//  Abstract base class for all nodes that affect the current
-//  transformation. This class exists only to support type-id requests
-//  for all types of transformation nodes.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for all geometric transformation nodes.
+/// \ingroup Nodes
+/// This is the abstract base class for all nodes that perform geometric
+/// transformations. It exists only to make it easy for applications to
+/// test whether a particular node is a transformation node (that is, is
+/// derived from this class).
+/// \par File format/defaults:
+/// This is an abstract class. See the reference page of a derived class for the format and default values.
+/// \sa SoAntiSquish,SoMatrixTransform,SoResetTransform,SoRotation,SoRotationXYZ,SoScale,SoSurroundScale,
+/// \sa SoTransform,SoTransformManip,SoTransformSeparator,SoTranslationSoUnits
 class INVENTOR_API SoTransformation : public SoNode {
 
     SO_NODE_HEADER(SoTransformation);

@@ -90,6 +90,75 @@ class SbDict;
 class SbCylinderProjector;
 class SoFieldSensor;
 
+/// Object you rotate along a cylindrical surface by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoRotateCylindricalDragger</tt>
+/// is a simple dragger that rotates about the y axis of its local space.
+/// The feel of the rotation is as if you were spinning a cylinder about
+/// its axis of rotation.  The local space is determined by its location in the
+/// scene graph.  Transformation nodes placed before it will affect both the
+/// dragger and the direction of motion.
+///
+///
+/// This node has a #rotation field which always reflects its orientation
+/// in local space.  If you set the field, the dragger will rotate
+/// accordingly.  You can also connect fields of other nodes or engines from
+/// this one to make them follow the dragger's orientation.
+///
+///
+/// This dragger contains four parts, <em>rotator</em>, <em>rotatorActive</em>,
+/// <em>feedback</em>, and <em>feedbackActive</em>.
+///
+///
+/// Each of these is set by default from a resource described in the Dragger
+/// Resources section of the online reference page for this class.  You can
+/// change the parts in any instance of this dragger using
+/// #setPart().
+///
+///
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// <tt>/usr/share/data/draggerDefaults/rotateCylindricalDragger.iv</tt>
+/// into your own directory, editing the file, and then setting the
+/// environment variable <b>SO_DRAGGER_DIR</b> to be a path to that directory.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoRotateCylindricalDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+///          "geomSeparator"
+/// -->         "rotatorSwitch"
+/// -->            "rotator"
+/// -->            "rotatorActive"
+/// -->         "feedbackSwitch"
+/// -->            "feedback"
+/// -->            "feedbackActive"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoRotateCylindricalDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     rotation            0 0 1  0
+///     callbackList        NULL
+///     rotator             <rotateCylindricalRotator resource>
+///     rotatorActive       <rotateCylindricalRotatorActive resource>
+///     feedback            <rotateCylindricalFeedback resource>
+///     feedbackActive      <rotateCylindricalFeedbackActive resource>
+/// }
+/// \endcode
+/// \sa SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,
+/// \sa SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,
+/// \sa SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,
+/// \sa SoTranslate1Dragger,SoTranslate2Dragger
 class INVENTOR_API SoRotateCylindricalDragger : public SoDragger
 {
     SO_KIT_HEADER(SoRotateCylindricalDragger);
@@ -102,18 +171,21 @@ class INVENTOR_API SoRotateCylindricalDragger : public SoDragger
     SO_KIT_CATALOG_ENTRY_HEADER(feedbackActive);
 
   public:
-    // Constructors
+    /// Constructor.
     SoRotateCylindricalDragger();
     
-    SoSFRotation rotation;
+    SoSFRotation rotation; ///< Orientation of the dragger.
 
-    // Set/get a different cylinder projector. The default uses an
-    // SbCylinderPlaneProjector. 
-    // Passing in NULL will cause the default type of projector to be used.
-    // The projector will be deleted by this dragger when this dragger
-    // is deleted.
-    // Note that the axis and radius of the cylinder used by the
-    // projector are determined by the dragger during dragStart.
+    /// Set and get a different cylinder projector. See the <tt>SbCylinderProjector</tt>
+    /// man pages to find out how each kind affects the feel of your dragger's motion.
+    /// The default uses an <tt>SbCylinderPlaneProjector</tt>.
+    ///
+    /// Passing in NULL will cause this default type of projector to be used.
+    /// Any projector you pass in will be deleted by this dragger when
+    /// this dragger is deleted.
+    /// Note that the axis and radius of the cylinder are determined by the
+    /// dragger, based on the <b>y-axis</b> in local space and how far the initial mouse
+    /// click occured from the center of rotation.
     void			setProjector(SbCylinderProjector *p);
     const SbCylinderProjector *	getProjector() const	{ return cylinderProj;}
 

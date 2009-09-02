@@ -59,12 +59,21 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbRotation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFRotation subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of SbRotations.
+/// \ingroup Fields
+/// multiple-value field that contains any number of SbRotations.
+///
+/// <tt>SoMFRotations</tt> are written to file as one or more sets of four
+/// floating point values.  Each set of 4 values is an axis of rotation
+/// followed by the amount of right-handed rotation about that axis, in
+/// radians.
+///
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ 1 0 0 0, -.707 -.707 0 1.57 ]
+/// \sa SbRotation
 class INVENTOR_API SoMFRotation : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFRotation, SbRotation, const SbRotation &);
@@ -75,25 +84,25 @@ class INVENTOR_API SoMFRotation : public SoMField {
     // Some additional convenience functions:
     //
 
-    // Set values from array of arrays of 4 floats
+    /// Set values from array of arrays of 4 floats
     void	setValues(int start, int num, const float q[][4]);
 
-    // Set one value from 4 floats
+    /// Sets the \a index 'th value to the given quaternion.
     void	set1Value(int index, float q0, float q1, float q2, float q3);
 
-    // Set one value from 4 floats in array
+    /// Sets the \a index 'th value to the given quaternion.
     void	set1Value(int index, const float q[4]);
 
-    // Set one value from axis and angle
+    /// Sets the \a index 'th value to the given axis/angle.
     void	set1Value(int index, const SbVec3f &axis, float angle);
 
-    // Set to one value from 4 floats
+    /// Makes this field have exactly one value, given by the quaternion.
     void	setValue(float q0, float q1, float q2, float q3);
 
-    // Set to one value from 4 floats in array
+    /// Makes this field have exactly one value, given by the quaternion.
     void	setValue(const float q[4]);
 
-    // Set to one value from axis and angle
+    /// Makes this field have exactly one value, given by \a axis and \a angle.
     void	setValue(const SbVec3f &axis, float angle);
 
   SoINTERNAL public:

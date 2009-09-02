@@ -762,7 +762,7 @@ SoTranReceiver::addEntry(SoNode *node, SbName &name)
 // Use: private
 
 void
-SoTranReceiver::deleteDictEntry(unsigned long, void *value)
+SoTranReceiver::deleteDictEntry(uintptr_t, void *value)
 //
 ////////////////////////////////////////////////////////////////////////
 {

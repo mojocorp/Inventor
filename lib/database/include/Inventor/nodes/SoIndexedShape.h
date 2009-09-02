@@ -59,38 +59,90 @@
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/nodes/SoVertexShape.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoIndexedShape
-//
-//  Abstract indexed shape node class. All nodes derived from this
-//  (such as SoIndexedFaceSet and SoIndexedLineSet) are shapes
-//  that are constructed from vertices defined by indexing into the
-//  current coordinates. The coordinate indices are stored in the
-//  coordIndex field, which is used by all subclasses.
-//
-//  One rule is used: all coordinate indices less than 0 may be used
-//  for special purposes, such as to denote the end of a face or
-//  polyline. This means that all indices < 0 can be ignored safely
-//  when looking at vertices.
-//
-//  Depending on the current material, normal, and texture coordinate
-//  binding values, materials, normals, and texture coordinates may be
-//  accessed in order or may be indexed using the materialIndex,
-//  normalIndex, and textureCoordIndex fields.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for all indexed vertex-based shapes.
+/// \ingroup Nodes
+/// This node is the abstract base class for all vertex-based shapes that
+/// are constructed from indices, including <tt>SoIndexedFaceSet</tt>,
+/// <tt>SoIndexedTriangleStripSet</tt>, and <tt>SoIndexedLineSet</tt>.
+/// <tt>SoIndexedShape</tt> defines fields that are used in all of its
+/// subclasses.
+///
+/// All subclasses of <tt>SoNonIndexedShape</tt> construct objects by using the
+/// coordinates specified by the #vertexProperty field
+/// (from <tt>SoVertexShape</tt>), or the current inherited coordinates.
+/// The #coordIndex
+/// field defined by this class contains the indices into the current
+/// coordinates of the vertices of the shape. These indices are also used
+/// for materials, normals, or texture coordinates when the appropriate
+/// binding is <b>PER_VERTEX_INDEXED</b>.
+///
+/// Material and normal bindings are interpreted as follows for each subclass:
+/// \code
+/// <b>OVERALL</b>		One material for the entire shape.
+/// <b>PER_PART</b>		Specific to the subclass.
+/// <b>PER_PART_INDEXED</b>	Same as <b>PER_PART</b>, using indices from the #materialIndex or #normalIndex field.
+/// <b>PER_FACE</b>		Specific to the subclass.
+/// <b>PER_FACE_INDEXED</b>	Same as <b>PER_FACE</b>, using indices from the #materialIndex or #normalIndex field.
+/// <b>PER_VERTEX</b>		One material per vertex.
+/// <b>PER_VERTEX_INDEXED</b>	One material per vertex, using indices from the #materialIndex or #normalIndex field.
+/// \endcode
+///
+/// When any <b>_INDEXED</b> binding is used for materials or normals, the
+/// #materialIndex or #normalIndex field is used to determine the
+/// indices for the materials or normals. If this field contains a single
+/// value of -1 (the default), the coordinate indices from the
+/// #coordIndex field are used as well for materials or normals. When
+/// the binding is <b>PER_VERTEX_INDEXED</b>, indices in these fields that
+/// correspond to negative indices in #coordIndex are skipped; for
+/// other index bindings all the values in the fields are used, in order.
+///
+/// Explicit texture coordinates (as defined by <tt>SoTextureCoordinate2</tt>)
+/// may be bound to vertices of an indexed
+/// shape consecutively (if the texture coordinate binding is
+/// <b>PER_VERTEX</b>) or by using the indices in the #textureCoordIndex
+/// field (if the binding is <b>PER_VERTEX_INDEXED</b>). As with all
+/// vertex-based shapes, if there is a current texture but no texture
+/// coordinates are specified, a default texture coordinate mapping is
+/// calculated using the bounding box of the shape.
+///
+/// Be sure that the indices contained in the #coordIndex,
+/// #materialIndex, #normalIndex, and #textureCoordIndex fields
+/// are valid with respect to the current state, or errors will occur.
+/// \par File format/defaults:
+/// This is an abstract class. See the reference page of a derived class for the format and default values.
+/// \sa SoIndexedFaceSet,SoIndexedLineSet,SoIndexedTriangleStripSet,SoMaterialBinding,SoNonIndexedShape,
+/// \sa SoNormalBinding,SoShapeHints,SoTextureCoordinateBinding
 class INVENTOR_API SoIndexedShape : public SoVertexShape {
 
     SO_NODE_ABSTRACT_HEADER(SoIndexedShape);
 
   public:
-    // Fields inherited by all subclasses:
-    SoMFInt32		coordIndex;		// Coordinate indices
-    SoMFInt32		materialIndex;		// Material indices
-    SoMFInt32		normalIndex;		// Surface normal indices
-    SoMFInt32		textureCoordIndex;	// Texture Coordinate indices
+    /// The indices of the coordinates that the shape uses as its vertices.
+    /// The coordinates connect to form faces, lines, or other shapes. Each
+    /// subclass defines special negative indices to use to indicate
+    /// separation between faces, lines, and so on.
+    SoMFInt32		coordIndex;
+
+    /// The indices of the materials that
+    /// are used for the shape. This field is used only when the
+    /// appropriate binding is one of the <b>_INDEXED</b> bindings. By default,
+    /// the values of this field indicate that the coordinate indices should
+    /// be used for materials.
+    SoMFInt32		materialIndex;
+
+    /// The indices of the normals that
+    /// are used for the shape. This field is used only when the
+    /// appropriate binding is one of the <b>_INDEXED</b> bindings. By default,
+    /// the values of this field indicate that the coordinate indices should
+    /// be used normals.
+    SoMFInt32		normalIndex;
+
+    /// The indices of the texture coordinates that
+    /// are used for the shape. This field is used only when the
+    /// appropriate binding is one of the <b>_INDEXED</b> bindings. By default,
+    /// the values of this field indicate that the coordinate indices should
+    /// be used for coordinates as well.
+    SoMFInt32		textureCoordIndex;
 
   SoINTERNAL public:
     static void		initClass();

@@ -56,12 +56,11 @@
 #ifndef  _SB_BASIC_
 #define  _SB_BASIC_
 
-//
-// These symbols can be used to determine what version of Inventor
-// your application is compiling against.  These symbols were first
-// added with Inventor 2.1 (SO_VERSION==0x020100);
-// they were undefined in previous revisions of Inventor.
-//
+
+/// These symbols can be used to determine what version of Inventor
+/// your application is compiling against.  These symbols were first
+/// added with Inventor 2.1 (SO_VERSION==0x020100);
+/// they were undefined in previous revisions of Inventor.
 #define SO_VERSION_STR		"2.1.0"
 #define SO_VERSION 		0x020100
 
@@ -69,12 +68,23 @@
 #include <Inventor/SbStdint.h>
 #include <stdio.h>
 
+/// A Boolean type.
+/// \ingroup Basics
+/// This typedef is used to represent the Boolean
+/// values TRUE and FALSE.
+/// <tt>SbBool</tt> is not a class and does not have any methods
+/// or variables.
+typedef int	SbBool;
+
+/// Indicates to the compiler that the parameter with the specified name is not used in the body of a function.
+/// This can be used to suppress compiler warnings while allowing functions to be defined with meaningful parameter names in their signatures.
+#define SB_UNUSED(x) (void)x;
+
+/// @cond INTERNAL
 #ifndef FALSE
 #   define FALSE	0
 #   define TRUE		1
 #endif
-
-typedef int	SbBool;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -102,9 +112,9 @@ typedef int	SbBool;
 //	"private:" members are private, dammit.
 //
 /////////////////////////////////////////////////////////////////////////////
-
 #define SoEXTENDER
 #define SoINTERNAL
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -112,7 +122,6 @@ typedef int	SbBool;
 // machines that don't support them.
 //
 /////////////////////////////////////////////////////////////////////////////
-
 #ifdef _DOUBLE_MATH_ONLY
 
 #define acosf acos
@@ -127,8 +136,6 @@ typedef int	SbBool;
 
 #endif /* _DOUBLE_MATH_ONLY */
 
-//Avoid "unused parameter" warnings
-#define SB_UNUSED(x) (void)x;
 
 #ifdef SB_OS_WIN
 #  define NOMINMAX
@@ -144,5 +151,6 @@ typedef int	SbBool;
 #  define GLCALLBACK
 #  define INVENTOR_API
 #endif
+/// @endcond
 
 #endif /* _SB_BASIC_ */

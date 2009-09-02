@@ -75,35 +75,68 @@ class SoFullPath;
 class SoColorPacker;
 
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoLocateHighlight
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Special separator that performs locate highlighting.
+/// \ingroup Nodes
+/// This is a subclass of <tt>SoSeparator</tt> that redraws itself in a different color
+/// when the cursor is over the contents of the separator.
+///
+/// The redraw happens for that separator only and not the entire window (redraw along
+/// the handle event pick path) and in the front buffer, to efficiently
+/// track the mouse motion. The highlighted redraw overrides the emissive and/or diffuse
+/// color of the subgraph based on the field values in this node.
+///
+/// NOTE: when using <b>SoLightModel::BASE_COLOR</b> (to turn lighting off) only the diffuse color
+/// will be used to render objects, so <b>EMISSIVE_DIFFUSE</b> must be used for
+/// this node to have any effect.
+///
+/// \par Action behavior:
+/// <b>SoHandleEventAction</b>
+/// Checks to see if the cursor moves onto or off of the contents of the separator,
+/// and redraws appropriately (if #mode is <b>AUTO</b>), otherwise traverses
+/// as a normal separator.
+/// <b>SoGLRenderAction</b>
+/// Redraws either highlighted (if cursor is over the contents of the separator
+/// when #mode == <b>AUTO</b> or always if #mode == <b>ON</b>), otherwise traverses
+/// as a normal separator.
+///
+/// \par File format/defaults:
+/// \code
+/// SoLocateHighlight {
+///    renderCaching        AUTO
+///    boundingBoxCaching   AUTO
+///    renderCulling        AUTO
+///    pickCulling          AUTO
+///    mode                 AUTO
+///    style                EMISSIVE
+///    color                0.3 0.3 0.3
+/// }
+/// \endcode
+/// \sa SoSeparator, SoSelection, SoMaterial
 class INVENTOR_API SoLocateHighlight : public SoSeparator {
 
     SO_NODE_HEADER(SoLocateHighlight);
 
   public:
 
-    enum Styles {	    // Possible values for draw style
-	EMISSIVE,	    // changes emissive color only (default)
-	EMISSIVE_DIFFUSE    // changes emissive and diffuse colors
+    /// Possible values for draw style
+    enum Styles {
+        EMISSIVE,	    ///< changes emissive color only (default)
+        EMISSIVE_DIFFUSE    ///< changes emissive and diffuse colors
     };
 
-    enum Modes {	    // Possible values for the mode
-	AUTO, 		    // highlight when mouse is over (default)
-	ON,		    // always highlight
-	OFF		    // never highlight
+    /// Possible values for the mode
+    enum Modes {
+        AUTO, 		    ///< highlight when mouse is over (default)
+        ON,		    ///< always highlight
+        OFF		    ///< never highlight
     };
 
     // Fields
-    SoSFColor	color;	// highlighting color - default [.3, .3, .3]
-    SoSFEnum	style;	// EMISSIVE/EMISSIVE_DIFFUSE
-    SoSFEnum	mode;	// ON/OFF/AUTO
+    SoSFColor	color;	///< highlighting color - default [.3, .3, .3]
+    SoSFEnum	style;	///< highlighting draw style - default EMISSIVE
+    SoSFEnum	mode;	///< Whether to highlight or not - default AUTO
 
-    // Constructor
+    /// Creates a LocateHighlight node with default settings.
     SoLocateHighlight();
 
   SoEXTENDER public:

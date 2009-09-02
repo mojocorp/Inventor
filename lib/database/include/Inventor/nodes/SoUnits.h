@@ -59,15 +59,32 @@
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoTransformation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoUnits
-//
-//  Node that sets the current length unit, effectively scaling
-//  objects to the correct relative sizes.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that scales to convert units of length.
+/// \ingroup Nodes
+/// This node defines a uniform 3D scale about the origin relative to the
+/// previously defined units. The default units for all data are meters.
+/// Adding a units node with the value <b>INCHES</b> will have the same
+/// effect as adding an <tt>SoScale</tt> node with the #scaleFactor of
+/// (.0254, .0254, .0254). Any subsequent <tt>SoUnits</tt> node will take the
+/// previous units into account. When building a composite object out of
+/// a bunch of pieces, it would be a good practice to add an <tt>SoUnits</tt>
+/// node at the beginning of each of the pieces, under an <tt>SoSeparator</tt>
+/// node, to make sure all the pieces fit together with the same scale.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction</b>
+/// Accumulates the scale that is the ratio of the size from the previous
+/// unit to the current unit into the current transformation.
+/// <b>SoGetMatrixAction</b>
+/// Returns the matrix corresponding to the units scaling.
+///
+/// \par File format/defaults:
+/// \code
+/// SoUnits {
+///    units	METERS
+/// }
+/// \endcode
+/// \sa SoScale, SoTransform
 class INVENTOR_API SoUnits : public SoTransformation {
 
     SO_NODE_HEADER(SoUnits);
@@ -91,9 +108,9 @@ class INVENTOR_API SoUnits : public SoTransformation {
     };
 
     // Fields
-    SoSFEnum		units;		// Current unit
+    SoSFEnum		units;		///< Defines the current unit.
 
-    // Constructor
+    /// Creates a unit conversion node with default settings.
     SoUnits();
 
   SoEXTENDER public:

@@ -59,26 +59,47 @@
 #include <Inventor/fields/SoMFUInt32.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPackedColor
-//
-//  Surface base color (of material) node. This affects the diffuse
-//  color and transparency of the current material. Colors are packed
-//  into uint32_ts as 0xrrggbbaa. The alpha value is used for
-//  transparency.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that defines base colors using packed representation.
+/// \ingroup Nodes
+/// <tt>SoPackedColor</tt> is similar to <tt>SoBaseColor</tt> in that it sets the
+/// diffuse color component of the current material. However, it also
+/// changes the transparency component. The color and transparency
+/// information is packed into unsigned 32-bit integers: <b>0xrrggbbaa</b>,
+/// where <b>aa</b> represents the alpha (<b>0x00</b> = fully transparent,
+/// <b>0xff</b> = opaque), and <b>rr</b>, <b>gg</b>, and <b>bb</b> represent the
+/// red, blue, and green components of the color, respectively.
+/// Note that the order (r,g,b,a) of these components is reversed from
+/// the ordering in releases of Inventor prior to 2.1.
+///
+/// If the
+/// transparency type is <tt>SoGLRenderAction::SCREEN_DOOR</tt>, only the
+/// first transparency value will be used.  With other transparency types,
+/// multiple transparencies will be used.
+///
+/// <tt>SoPackedColor</tt> uses less memory than <tt>SoBaseColor</tt> or
+/// <tt>SoMaterial</tt>  to store multiple color and transparency values. It
+/// can be used in cases where space is critical.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction</b>
+/// Sets the current base (diffuse) color(s) in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoPackedColor {
+///    orderedRGBA	0xccccccff
+/// }
+/// \endcode
+/// \sa SoBaseColor, SoMaterial
 class INVENTOR_API SoPackedColor : public SoNode {
 
     SO_NODE_HEADER(SoPackedColor);
 
   public:
     // Fields
-    SoMFUInt32		orderedRGBA;	// RGBA packed, in correct order   
+    SoMFUInt32		orderedRGBA;	///< Defines the packed colors.
 
-    // Constructor
+    /// Creates a packed color node with default settings.
     SoPackedColor();
 
   SoEXTENDER public:

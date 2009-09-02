@@ -62,43 +62,62 @@
 
 class SoSensor;
 class SoFieldSensor;
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoFile
-//
-//  This node represents a subgraph that was read from a
-//  named input file. When a file node is written out, just the field
-//  containing the name of the file is written. (No children are
-//  written out.) When one is encountered during reading, reading
-//  continues from the named file, and all children found in the file
-//  are added as hidden children of this node.
-//
-//  Whenever the name of the input file changes
-//  (name.setValue("foo.iv")), the old children are removed and the
-//  contents of the new file is read in.  The file node remembers
-//  what directory the last file was read from, and will read the new
-//  file from the same directory after checking the standard list of
-//  directories (see the static methods on SoInput), assuming the
-//  field isn't set to an absolute path name.
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoGroup;
 
+/// Node that reads children from a named file.
+/// \ingroup Nodes
+/// This node represents a subgraph that was read from a named input file.
+/// When an <tt>SoFile</tt> node is written out, just the field containing the
+/// name of the file is written; no children are written out. When an
+/// <tt>SoFile</tt> is encountered during reading, reading continues from the
+/// named file, and all nodes read from the file are added as hidden
+/// children of the file node.
+///
+/// Whenever the #name field changes, any existing children are removed
+/// and the contents of the new file is read in. The file node remembers
+/// what directory the last file was read from and will read the new file
+/// from the same directory after checking the standard list of
+/// directories (see <tt>SoInput</tt>), assuming the field isn't set to an
+/// absolute path name.
+///
+/// The children of an <tt>SoFile</tt> node are hidden; there is no way of
+/// accessing or editing them. If you wish to edit the contents of an
+/// <tt>SoFile</tt> node, you can modify the contents of the named file and
+/// then "touch" the #name field (see <tt>SoField</tt>). Alternatively,
+/// you can use the #copyChildren() method
+/// to get a editable copy of the file node's children. Note that this
+/// does not affect the original file on disk, however.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction,
+/// SoHandleEventAction</b>
+/// Traverses its children just as <tt>SoGroup</tt> does.
+/// <b>SoRayPickAction</b>
+/// Traverses its hidden children, but, if intersections are found,
+/// generates paths that end at the <tt>SoFile</tt> node.
+/// <b>SoWriteAction</b>
+/// Writes just the #name field and no children.
+///
+/// \par File format/defaults:
+/// \code
+/// SoFile {
+///    name	"<Undefined file>"
+/// }
+/// \endcode
+/// \sa SoInput, SoPath
 class INVENTOR_API SoFile : public SoNode {
 
     SO_NODE_HEADER(SoFile);
 
   public:
     // Fields
-    SoSFString		name;		// File name
+    SoSFString		name;		///< File name
 
-    // Constructor
+    /// Constructor
     SoFile();
 
-    // Method that returns a copy of the File node's children added to
-    // a group.
+    /// Method that returns a copy of the File node's children added to
+    /// a group.
     SoGroup 		*copyChildren() const;
 
   SoEXTENDER public:

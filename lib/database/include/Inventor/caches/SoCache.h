@@ -85,34 +85,34 @@ SoEXTENDER class INVENTOR_API SoCache {
 
   public:
 
-    // Constructor. Takes the state in effect when the cache is used;
-    // it is assumed that the state is pushed before the cache is
-    // created. 
+    /// Constructor. Takes the state in effect when the cache is used;
+    /// it is assumed that the state is pushed before the cache is
+    /// created.
     SoCache(SoState *state);
 
-    // Reference/unreference
+    /// Reference/unreference
     void		ref();
     void		unref(SoState *state = NULL);
 
-    // Adds an element to elements-used list if not already there
+    /// Adds an element to elements-used list if not already there
     void		addElement(const SoElement *elt);
 
-    // Adds a dependency of this instance on another cache instance.
-    // The default method takes care of adding dependencies from the
-    // child cache.
+    /// Adds a dependency of this instance on another cache instance.
+    /// The default method takes care of adding dependencies from the
+    /// child cache.
     virtual void	addCacheDependency(const SoState *state,
 					   SoCache *cache);
 
-    // Returns TRUE if cache is valid with respect to the given state
+    /// Returns TRUE if cache is valid with respect to the given state
     virtual SbBool	isValid(const SoState *state) const;
 
-    // Assuming isValid() returns FALSE, this will return the first
-    // element that is invalid (auto-caching uses this in its
-    // heuristic).  Returns NULL if the cache is not invalid because
-    // of an element or if the cache is valid.
+    /// Assuming isValid() returns FALSE, this will return the first
+    /// element that is invalid (auto-caching uses this in its
+    /// heuristic).  Returns NULL if the cache is not invalid because
+    /// of an element or if the cache is valid.
     const SoElement *	getInvalidElement(const SoState *state) const;
 
-    // Make this cache invalid
+    /// Make this cache invalid
     void		invalidate();
 
   protected:

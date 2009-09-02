@@ -66,32 +66,48 @@
 #include <Inventor/SbViewVolume.h>
 #include <Inventor/SbMatrix.h>
 
+/// Base class for representing projectors.
+/// \ingroup Projectors
+/// <tt>SbProjector</tt> is the base class for all projector classes.
+/// Projector classes
+/// are used to convert from window space (usually based on the mouse location)
+/// into a 3D point. This is done by projecting the window coordinate as a
+/// 3D vector onto a geometric function in 3-space, and computing the
+/// intersection point. Most projectors actually compute incremental
+/// changes and produce incremental rotations and translation as needed.
+/// Projectors are used to write 3D interactive manipulators and viewers.
+/// \sa SbCylinderProjector, SbCylinderPlaneProjector,SbCylinderSectionProjector, SbCylinderSheetProjector,
+/// \sa SbLineProjector, SbPlaneProjector, SbSpherePlaneProjector,SbSphereProjector, SbSphereSectionProjector, SbSphereSheetProjector
 class INVENTOR_API SbProjector
 {
   public:
-    // Apply the projector using the given point, returning the
-    // point in three dimensions that it projects to.
-    // The point should be normalized from 0-1, with (0,0) at
-    // the lower-left.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// The point should be normalized (lie in the range [0.0,1.0]), with (0,0) at
+    /// the lower-left.
     virtual SbVec3f	    project(const SbVec2f &point) = 0;
 
-    // Set/get the view volume to use for the projection.
-    // This is typically gotten from SbCamera::getViewVolume.
+    /// Set the view volume to use for the projection.
+    /// This is typically gotten from SbCamera::getViewVolume.
     virtual void	    setViewVolume(const SbViewVolume &vol);
 
+    /// Get the view volume to use for the projection.
     const SbViewVolume &    getViewVolume() const	    { return viewVol; }
     
-    // Set/get the transform space to work in. This matrix should transform
-    // working space coords into world space.
-    // The default matrix is identity, meaning that the default working
-    // space is world space.
+    /// Set the transform space to work in. This matrix should transform
+    /// working space coords into world space.
+    /// The default matrix is identity, meaning that the default working
+    /// space is world space.
     virtual void	    setWorkingSpace(const SbMatrix &space);
 
-    const SbMatrix &	    getWorkingSpace() const
-						{ return workingToWorld ; }
+    /// Get the transform space to work in. This matrix should transform
+    /// working space coords into world space.
+    /// The default matrix is identity, meaning that the default working
+    /// space is world space.
+    const SbMatrix &	    getWorkingSpace() const { return workingToWorld ; }
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SbProjector *    copy() const = 0;
 
   protected:

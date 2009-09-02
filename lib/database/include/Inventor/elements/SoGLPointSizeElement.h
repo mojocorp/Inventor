@@ -76,15 +76,15 @@ SoEXTENDER class INVENTOR_API SoGLPointSizeElement : public SoPointSizeElement {
     SO_ELEMENT_HEADER(SoGLPointSizeElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Override push() method to copy state pointer and value of
-    // previous element, to avoid sending GL commands if the elements
-    // are the same.
+    /// Override push() method to copy state pointer and value of
+    /// previous element, to avoid sending GL commands if the elements
+    /// are the same.
     virtual void	push(SoState *state);
 
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void	pop(SoState *state, const SoElement *prevTopElement);
 
   SoINTERNAL public:

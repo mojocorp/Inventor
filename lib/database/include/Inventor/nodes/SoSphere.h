@@ -59,24 +59,49 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoSphere
-//
-//  Simple sphere. By default a sphere has radius 1 and is centered
-//  around the origin.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Sphere shape node.
+/// \ingroup Nodes
+/// This node represents a sphere. By default, the sphere is centered at
+/// the origin and has a radius of 1. The sphere is transformed by the
+/// current cumulative transformation and is drawn with the current
+/// lighting model, drawing style, material, and geometric complexity.
+///
+/// A sphere does not have faces or parts. Therefore, the sphere ignores
+/// material and normal bindings, using the first material for the entire
+/// sphere and using its own normals. When a texture is applied to a
+/// sphere, the texture covers the entire surface, wrapping
+/// counterclockwise from the back of the sphere. The texture has a seam
+/// at the back on the yz-plane.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws sphere based on the current coordinates, materials,
+/// drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Intersects the ray with the sphere. No details are created for
+/// intersections.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses the sphere.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will
+/// be invoked for each successive triangle that approximates the sphere.
+///
+/// \par File format/defaults:
+/// \code
+/// SoSphere {
+///    radius	1
+/// }
+/// \endcode
+/// \sa SoCone, SoCube, SoCylinder
 class INVENTOR_API SoSphere : public SoShape {
 
     SO_NODE_HEADER(SoSphere);
 
   public:
     // Fields
-    SoSFFloat		radius;		// Radius of sphere
+    SoSFFloat		radius;		///< Radius of sphere. This must be greater than 0.
 
-    // Constructor
+    /// Creates a sphere node with default settings.
     SoSphere();
 
   SoEXTENDER public:

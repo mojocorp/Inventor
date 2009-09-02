@@ -72,23 +72,23 @@ SoEXTENDER class INVENTOR_API SoFontNameElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoFontNameElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // set the current font name
+    /// set the current font name
     static void		set(SoState *state, SoNode *node,
 			    const SbName &fontName);
 
-    // return the current font name from the state
+    /// return the current font name from the state
     static const SbName	&get(SoState *state);
 
-    // Returns the default font name
+    /// Returns the default font name
     static SbName	getDefault()	{ return SbName("defaultFont"); }
 
-    // Returns TRUE if the font name matches given element
+    /// Returns TRUE if the font name matches given element
     virtual SbBool	matches(const SoElement *elt) const;
 
-    // Create and return a copy of this element
+    /// Create and return a copy of this element
     virtual SoElement	*copyMatchInfo() const;
 
     virtual void	print(FILE *fp) const;

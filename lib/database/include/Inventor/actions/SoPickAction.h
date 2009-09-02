@@ -59,25 +59,22 @@
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/actions/SoSubAction.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPickAction
-//
-//  Base class for picking actions.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for picking objects in a scene.
+/// \ingroup Actions
+/// This is an abstract base class for all picking actions. Currently,
+/// the only supported subclass is the <tt>SoRayPickAction</tt>.
+/// \sa SoRayPickAction
 class INVENTOR_API SoPickAction : public SoAction {
 
     SO_ACTION_HEADER(SoPickAction);
 
   public:
-    // Sets current viewport region to use for picking. Even though
-    // picking may not involve a window per se, some nodes need this
-    // information to determine their size and placement.
+    /// Sets current viewport region to use for action. Even though
+    /// the picking operation may not involve a window per se, some nodes need
+    /// this information to determine their size and placement.
     void		setViewportRegion(const SbViewportRegion &newRegion);
 
-    // Returns current viewport region
+    /// Returns current viewport region
     const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
 
   SoEXTENDER public:

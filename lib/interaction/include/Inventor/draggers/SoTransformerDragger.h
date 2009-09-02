@@ -149,14 +149,345 @@ class SbSphereSectionProjector;
 class SbCylinderPlaneProjector;
 class SoFieldSensor;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTransformerDragger
-//
-//  SoTransformerDragger - allows user to transform objects.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Box-like object you scale, rotate, and translate by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoTransformerDragger</tt>
+/// is a dragger shaped like a box. It has small cubes at the corners and small
+/// balls sticking out of the middle of each face.
+/// Click and drag any face of the box for 2D translation in the plane of that face.
+/// Drag any corner-cube to scale the box uniformly.
+/// Pick any of the mid-face balls to rotate the whole dragger about
+/// its center.
+///
+///
+/// The <tt>SoTransformerDragger</tt> uses locate highlighting, so you can tell which part
+/// you are about to select before pressing the mouse button. By default, the
+/// locate highlight color is gold.
+///
+///
+/// Click-drag any <em>face</em> to translate the dragger within the plane of that
+/// face.  The face you selected will highlight in yellow. While you drag,
+/// yellow <em>feedback arrows</em> display the
+/// two directions of motion.  Press the <b><Shift></b> key and the arrows turn
+/// orange; you may now pick between these two directions to
+/// <em>constrain</em> the motion. The direction you move the cursor in will determine
+/// which direction is chosen.
+/// Press the <b><Control></b> key and the dragger will translate
+/// <em>perpendicular</em> to that plane.  The #translation field is modified
+/// as the face is dragged.
+///
+///
+/// Click a <em>corner</em> to scale the dragger.  The corner you selected will
+/// turn yellow and radial lines will indicate that you may move toward and away
+/// from the center of the box.  Drag radially and you will perform uniform scale.
+/// Press the <b><Control></b> key to scale about the opposite corner instead of the center
+/// of the box.
+///
+///
+/// To stretch the dragger non-uniformly, press <b><Shift></b> when you drag the
+/// corner cube.  Now you will see three orange arrows indicating that your
+/// gesture will determine which direction to choose.  Move the cursor and
+/// the selected arrow will turn yellow while the others disappear. Now the
+/// dragger will stretch only in the direction you selected.
+/// Pressing <b><Control></b> at the same time as <b><Shift></b> allows you to stretch the
+/// dragger while keeping the opposite side pinned in place.
+/// When you drag a corner, this modifies the #scaleFactor
+/// and possibly the #translation  field of the dragger.
+///
+///
+/// Click one of the <em>spherical knobs</em> to rotate the
+/// dragger.  When you first click, you'll see two orange lines and two purple
+/// circles.  The purple circles indicate the two ways you can rotate. The
+/// orange lines are, once again, the two choices for your mouse gesture.
+/// Each line begins you moving around one of the two circles.
+/// Once you move the cursor far enough, the selected line turns yellow and you
+/// begin rotating the dragger about the selected circle.  The other circle
+/// and line will disappear.
+///
+///
+/// To perform unconstrained ("free") rotation, just press <b><Shift></b> while you
+/// drag the spherical knob.  There will be no choices; instead all three
+/// purple circles will be displayed, forming a ball that you can roll around.
+/// Regardless of how you rotate, dragging the spherical knobs will modify the
+/// #rotatation field of the dragger. Depending on how it is centered and
+/// what transforms precede it in the scene graph, rotation is likely to affect
+/// the #translation and #scaleFactor fields as well.
+///
+///
+/// Pressing the <b><Control></b> key will change the center of rotation in both the
+/// constrained and unconstrained (<b><Shift></b>) case.    By default, rotation
+/// occurs about the center of the bounding box.  With <b><Control></b> depressed,
+/// rotation occurs about the middle of the opposite side of the bounding
+/// box.  The purple feedback will change to illustrate this; the feedback circles
+/// increase in size and purple crosshairs sprout at the new rotational center.
+///
+///
+/// Ordinarily, the knobs of the dragger are unsquished upon readin from file and
+/// when the mouse button is released at the end of a drag. If you want this to
+/// happen more often, then you should call the method #unsquishKnobs.
+///
+///
+/// As with all draggers, if you change the fields the dragger will
+/// move to match the new settings.
+///
+///
+/// \a Remember: This is <em>not</em> an <tt>SoTransform!</tt>.
+/// If you want to move other objects with this dragger, you can either:
+///
+///
+/// [a] Use an <tt>SoTransformerManip</tt>, which is subclassed from <tt>SoTransform</tt>.
+/// It creates one of
+/// these draggers and uses it as the interface to change its fields.
+/// (see the <tt>SoTransformerManip</tt> man page).
+///
+///
+/// [b] Use field-to-field connections to connect the fields of this dragger to
+/// those of any <tt>SoTransformation</tt> node.
+///
+///
+/// You can change the parts in any instance of this dragger using
+/// #setPart().
+/// The default part geometries are defined as resources for this
+/// <tt>SoTransformerDragger</tt> class.  They are detailed in the
+/// Dragger Resources section of the online reference page for this class.
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/transformerDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that directory.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoTransformerDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "surroundScale"
+/// -->      "overallStyle"
+///          "geomSeparator"
+/// -->         "axisFeedbackSep"
+/// -->            "axisFeedbackLocation"
+/// -->            "xAxisFeedbackSwitch"
+/// -->               "xAxisFeedbackActive"
+/// -->               "xAxisFeedbackSelect"
+/// -->               "xCrosshairFeedback"
+/// -->            "yAxisFeedbackSwitch"
+/// -->               "yAxisFeedbackActive"
+/// -->               "yAxisFeedbackSelect"
+/// -->               "yCrosshairFeedback"
+/// -->            "zAxisFeedbackSwitch"
+/// -->               "zAxisFeedbackActive"
+/// -->               "zAxisFeedbackSelect"
+/// -->               "zCrosshairFeedback"
+/// -->         "translateBoxFeedbackSep"
+/// -->            "translateBoxFeedbackSwitch"
+/// -->               "translateBoxFeedbackRotation"
+/// -->               "translateBoxFeedback"
+/// -->         "scaleBoxFeedbackSwitch"
+/// -->            "scaleBoxFeedback"
+/// -->         "posXWallFeedbackSwitch"
+/// -->            "posXWallFeedback"
+/// -->            "posXRoundWallFeedback"
+/// -->         "posYWallFeedbackSwitch"
+/// -->            "posYWallFeedback"
+/// -->            "posYRoundWallFeedback"
+/// -->         "posZWallFeedbackSwitch"
+/// -->            "posZWallFeedback"
+/// -->            "posZRoundWallFeedback"
+/// -->         "negXWallFeedbackSwitch"
+/// -->            "negXWallFeedback"
+/// -->            "negXRoundWallFeedback"
+/// -->         "negYWallFeedbackSwitch"
+/// -->            "negYWallFeedback"
+/// -->            "negYRoundWallFeedback"
+/// -->         "negZWallFeedbackSwitch"
+/// -->            "negZWallFeedback"
+/// -->            "negZRoundWallFeedback"
+/// -->         "radialFeedbackSwitch"
+/// -->            "radialFeedback"
+/// -->      "translatorSep"
+/// -->         "translator1Switch"
+/// -->            "translator1LocateGroup"
+/// -->               "translator1"
+/// -->            "translator1Active"
+/// -->         "translator2Switch"
+/// -->            "translator2LocateGroup"
+/// -->               "translator2"
+/// -->            "translator2Active"
+/// -->         "translator3Switch"
+/// -->            "translator3LocateGroup"
+/// -->               "translator3"
+/// -->            "translator3Active"
+/// -->         "translator4Switch"
+/// -->            "translator4LocateGroup"
+/// -->               "translator4"
+/// -->            "translator4Active"
+/// -->         "translator5Switch"
+/// -->            "translator5LocateGroup"
+/// -->               "translator5"
+/// -->            "translator5Active"
+/// -->         "translator6Switch"
+/// -->            "translator6LocateGroup"
+/// -->               "translator6"
+/// -->            "translator6Active"
+/// -->      "rotatorSep"
+/// -->         "rotator1Switch"
+/// -->            "rotator1LocateGroup"
+/// -->               "rotator1"
+/// -->            "rotator1Active"
+/// -->         "rotator2Switch"
+/// -->            "rotator2LocateGroup"
+/// -->               "rotator2"
+/// -->            "rotator2Active"
+/// -->         "rotator3Switch"
+/// -->            "rotator3LocateGroup"
+/// -->               "rotator3"
+/// -->            "rotator3Active"
+/// -->         "rotator4Switch"
+/// -->            "rotator4LocateGroup"
+/// -->               "rotator4"
+/// -->            "rotator4Active"
+/// -->         "rotator5Switch"
+/// -->            "rotator5LocateGroup"
+/// -->               "rotator5"
+/// -->            "rotator5Active"
+/// -->         "rotator6Switch"
+/// -->            "rotator6LocateGroup"
+/// -->               "rotator6"
+/// -->            "rotator6Active"
+/// -->      "scaleSep"
+/// -->         "scale1Switch"
+/// -->            "scale1LocateGroup"
+/// -->               "scale1"
+/// -->            "scale1Active"
+/// -->         "scale2Switch"
+/// -->            "scale2LocateGroup"
+/// -->               "scale2"
+/// -->            "scale2Active"
+/// -->         "scale3Switch"
+/// -->            "scale3LocateGroup"
+/// -->               "scale3"
+/// -->            "scale3Active"
+/// -->         "scale4Switch"
+/// -->            "scale4LocateGroup"
+/// -->               "scale4"
+/// -->            "scale4Active"
+/// -->         "scale5Switch"
+/// -->            "scale5LocateGroup"
+/// -->               "scale5"
+/// -->            "scale5Active"
+/// -->         "scale6Switch"
+/// -->            "scale6LocateGroup"
+/// -->               "scale6"
+/// -->            "scale6Active"
+/// -->         "scale7Switch"
+/// -->            "scale7LocateGroup"
+/// -->               "scale7"
+/// -->            "scale7Active"
+/// -->         "scale8Switch"
+/// -->            "scale8LocateGroup"
+/// -->               "scale8"
+/// -->            "scale8Active"
+/// -->      "circleFeedbackSep"
+/// -->         "circleFeedbackTransformSwitch"
+/// -->            "circleFeedbackAntiSquish"
+/// -->            "circleFeedbackTransform"
+/// -->         "xCircleFeedbackSwitch"
+/// -->            "xCircleFeedback"
+/// -->         "yCircleFeedbackSwitch"
+/// -->            "yCircleFeedback"
+/// -->         "zCircleFeedbackSwitch"
+/// -->            "zCircleFeedback"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoTransformerDragger {
+///     renderCaching           AUTO
+///     boundingBoxCaching      AUTO
+///     renderCulling           AUTO
+///     pickCulling             AUTO
+///     isActive                FALSE
+///     translation             0 0 0
+///     scaleFactor             1 1 1
+///     rotation                0 0 1  0
+///     minDiscRotDot           0.025
+///     callbackList            NULL
+///     surroundScale           NULL
+///     translator1             <transformerTranslator1 resource>
+///     translator1Active       <transformerTranslator1Active resource>
+///     translator2             <transformerTranslator2 resource>
+///     translator2Active       <transformerTranslator2Active resource>
+///     translator3             <transformerTranslator3 resource>
+///     translator3Active       <transformerTranslator3Active resource>
+///     translator4             <transformerTranslator4 resource>
+///     translator4Active       <transformerTranslator4Active resource>
+///     translator5             <transformerTranslator5 resource>
+///     translator5Active       <transformerTranslator5Active resource>
+///     translator6             <transformerTranslator6 resource>
+///     translator6Active       <transformerTranslator6Active resource>
+///     rotator1                <transformerRotator1 resource>
+///     rotator1Active          <transformerRotator1Active resource>
+///     rotator2                <transformerRotator2 resource>
+///     rotator2Active          <transformerRotator2Active resource>
+///     rotator3                <transformerRotator3 resource>
+///     rotator3Active          <transformerRotator3Active resource>
+///     rotator4                <transformerRotator4 resource>
+///     rotator4Active          <transformerRotator4Active resource>
+///     rotator5                <transformerRotator5 resource>
+///     rotator5Active          <transformerRotator5Active resource>
+///     rotator6                <transformerRotator6 resource>
+///     rotator6Active          <transformerRotator6Active resource>
+///     scale1                  <transformerScale1 resource>
+///     scale1Active            <transformerScale1Active resource>
+///     scale2                  <transformerScale2 resource>
+///     scale2Active            <transformerScale2Active resource>
+///     scale3                  <transformerScale3 resource>
+///     scale3Active            <transformerScale3Active resource>
+///     scale4                  <transformerScale4 resource>
+///     scale4Active            <transformerScale4Active resource>
+///     scale5                  <transformerScale5 resource>
+///     scale5Active            <transformerScale5Active resource>
+///     scale6                  <transformerScale6 resource>
+///     scale6Active            <transformerScale6Active resource>
+///     scale7                  <transformerScale7 resource>
+///     scale7Active            <transformerScale7Active resource>
+///     scale8                  <transformerScale8 resource>
+///     scale8Active            <transformerScale8Active resource>
+///     xAxisFeedbackActive     <transformerXAxisFeedbackActive resource>
+///     xAxisFeedbackSelect     <transformerXAxisFeedbackSelect resource>
+///     xCrosshairFeedback      <transformerXCrosshairFeedback resource>
+///     yAxisFeedbackActive     <transformerYAxisFeedbackActive resource>
+///     yAxisFeedbackSelect     <transformerYAxisFeedbackSelect resource>
+///     yCrosshairFeedback      <transformerYCrosshairFeedback resource>
+///     zAxisFeedbackActive     <transformerZAxisFeedbackActive resource>
+///     zAxisFeedbackSelect     <transformerZAxisFeedbackSelect resource>
+///     zCrosshairFeedback      <transformerZCrosshairFeedback resource>
+///     translateBoxFeedback    <transformerTranslateBoxFeedback resource>
+///     scaleBoxFeedback        <transformerScaleBoxFeedback resource>
+///     posXWallFeedback        <transformerPosXWallFeedback resource>
+///     posXRoundWallFeedback   <transformerPosXRoundWallFeedback resource>
+///     posYWallFeedback        <transformerPosYWallFeedback resource>
+///     posYRoundWallFeedback   <transformerPosYRoundWallFeedback resource>
+///     posZWallFeedback        <transformerPosZWallFeedback resource>
+///     posZRoundWallFeedback   <transformerPosZRoundWallFeedback resource>
+///     negXWallFeedback        <transformerNegXWallFeedback resource>
+///     negXRoundWallFeedback   <transformerNegXRoundWallFeedback resource>
+///     negYWallFeedback        <transformerNegYWallFeedback resource>
+///     negYRoundWallFeedback   <transformerNegYRoundWallFeedback resource>
+///     negZWallFeedback        <transformerNegZWallFeedback resource>
+///     negZRoundWallFeedback   <transformerNegZRoundWallFeedback resource>
+///     radialFeedback          <transformerRadialFeedback resource>
+///     xCircleFeedback         <transformerXCircleFeedback resource>
+///     yCircleFeedback         <transformerYCircleFeedback resource>
+///     zCircleFeedback         <transformerZCircleFeedback resource>
+/// }
+/// \endcode
+/// \sa SoDragger,SoInteractionKit,SoLocateHighlight,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,
+/// \sa SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,
+/// \sa SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class INVENTOR_API SoTransformerDragger : public SoDragger {
 
     SO_KIT_HEADER(SoTransformerDragger);
@@ -311,25 +642,35 @@ class INVENTOR_API SoTransformerDragger : public SoDragger {
 
 
   public:
-    // Constructor
+    /// Constructor.
     SoTransformerDragger();
 
-    SoSFRotation    rotation;
-    SoSFVec3f       translation;
-    SoSFVec3f       scaleFactor;
-    SoSFFloat       minDiscRotDot; // 0-1, specifies minimum dot product 
-				   // between eyeDir and rotPlane normal before
-				   // switching to cylinder rotation model
-				   // (default = 0.025)
+    SoSFRotation    rotation;       ///< Orientation of the dragger.
+    SoSFVec3f       translation;    ///< Position of the dragger.
+    SoSFVec3f       scaleFactor;    ///< Scale of the dragger.
+    /// Specifies the minimum dot product between eyeDir and rotPlane normal
+    /// before switching from record-player-type rotation to rolling-pin-type
+    /// rotation.  This transition is made so that rotations don't get screwy
+    /// when the circle is edge-on.
+    /// Lies in range [0-1]. Best to leave this alone.
+    SoSFFloat       minDiscRotDot;
 
-    // Tells the dragger to unsquish its rotation and scale knobs during 
-    // the next traversal.
+    /// Tells the dragger to unsquish its rotation and scale knobs during the next
+    /// traversal.
+    /// Ordinarily, the knobs are only unsquished upon readin from file and when
+    /// the mouse button is released at the end of a drag. If you want this to
+    /// happen more often, then you should call this method.
     void unsquishKnobs();
 
-    // Controls whether or not locate highlighting is used.
+    /// Controls whether or not locate highlighting is used.
+    /// Default is TRUE.
     SbBool isLocateHighlighting() { return locateHighlightOn; }
     void setLocateHighlighting( SbBool onOff );
 
+    /// When picking a direction for constraining based on gesture, this
+    /// paramater determines how many pixels must separate two axes before they
+    /// are regarded as distinct.  If they are deemed "the same" then the shorter
+    /// of the two will be discarded.
     static void setColinearThreshold(int newVal) { colinearThreshold = newVal; }
     static int getColinearThreshold() { return colinearThreshold; }
 

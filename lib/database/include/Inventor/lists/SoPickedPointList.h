@@ -65,45 +65,45 @@
 
 #include <Inventor/SbPList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Subclasses of the SbPList class which hold lists of pointers of a
-// specific type.
-//
-// Each contains:
-//	A default constructor
-//	A constructor taking an initial number of items in the list
-//	An "append" function that adds a pointer to the end of the list
-//	The index ([]) operator that returns the nth pointer in the list
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoPickedPoint;
 
+/// Maintains a list of pointers to \c SoPickedPoint instances.
+/// \ingroup General
+/// This subclass of <tt>SbPList</tt> holds lists of pointers to
+/// instances of classes derived from <tt>SoPickedPoint</tt>. It is used primarily
+/// to return information from picking with the <tt>SoRayPickAction</tt> class.
+/// \sa SoPickedPoint, SoRayPickAction
 class INVENTOR_API SoPickedPointList : public SbPList {
   public:
+    /// Constructor.
     SoPickedPointList()			: SbPList()	{}
+
+    /// Constructor that pre-allocates storage for \a size pointers.
     SoPickedPointList(int size)		: SbPList(size)	{}
+
+    /// Constructor that copies the contents of another list.
     SoPickedPointList(const SoPickedPointList &l);
+
+    /// Destructor
     ~SoPickedPointList()				{ truncate(0); }
 
-    // Add a pickedPoint to the end of the list
+    /// Add a pickedPoint to the end of the list
     void		append(SoPickedPoint *pickedPoint)
         { SbPList::append((void *) pickedPoint); }
 
-    // Insert given pickedPoint in list before pickedPoint with given index
+    /// Insert given pickedPoint in list before pickedPoint with given index
     void		insert(SoPickedPoint *pickedPoint, int addBefore)
         { SbPList::insert((void *) pickedPoint, addBefore); }
 
-    // Remove all pointers after one with given index, inclusive,
-    // deleting instances
+    /// Removes all pointers after one with given index, inclusive, deleting all
+    /// instances removed from the list.
     void		truncate(int start);
 
-    // Access an element of a list
+    /// Access an element of a list
     SoPickedPoint *	operator [](int i) const
         { return ( (SoPickedPoint *) ( (* (const SbPList *) this) [i] ) ); }
 
-    // Set an element of a list, deleting old entry
+    /// Set an element of a list, deleting old entry
     void		set(int i, SoPickedPoint *pickedPoint);
 };
 

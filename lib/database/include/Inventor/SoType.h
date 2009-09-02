@@ -72,53 +72,71 @@
 class SoTypeList;
 struct SoTypeData;
 
-//
-// SoType has no virtual functions to keep it small...
-//
+/// Stores runtime type information.
+/// \ingroup General
+/// The <tt>SoType</tt> class keeps track of runtime type information in
+/// Inventor. Each type is associated with a given name, so lookup is
+/// possible in either direction.
+///
+///
+/// Many Inventor classes request a unique <tt>SoType</tt> when they
+/// are initialized.  This type can then be used to find out the actual
+/// class of an instance when only its base class is known, or to obtain
+/// an instance of a particular class given its type or name.
+///
+///
+/// Note that the names associated with types of Inventor classes do not
+/// contain the "So" prefix.
+/// \sa SoAction, SoBase, SoDetail, SoError, SoEvent, SoField
 class INVENTOR_API SoType {
-#ifdef __DELTA
-#  pragma __nondynamic_class
-#endif
   public:
-    // Get a type from a name
+    /// Returns the type associated with the given name.
     static SoType	fromName(SbName name);
 
-    // Get name
+    /// Returns the name associated with a type.
     SbName		getName() const;
 
-    // Get parent
+    /// Returns the type of the parent class.
     SoType		getParent() const;
 
-    // returns the "bad type" - used for type errors
+    /// Returns an always-illegal type. Useful for returning errors.
     static SoType	badType();
 
-    // returns TRUE if the type is bad
+    /// Returns TRUE if the type is a bad type.
     SbBool		isBad() const
 	{ return (storage.index == 0); }
 
-    // returns TRUE if this type is derived from the argument type
+    /// Returns TRUE if the type is derived from type \a t.
     SbBool		isDerivedFrom(SoType t) const;
 
-    // Add all types derived from the given type to the given type
-    // list.  Returns the number of types added.
+    /// Adds all types derived from the given type to the given type list.
+    /// Returns the number of types added.
     static int		getAllDerivedFrom(SoType type,
 					  SoTypeList &list);
 
-    // returns TRUE if this type knows how to create an instance
+    /// returns TRUE if this type knows how to create an instance
     SbBool		canCreateInstance() const;
 
-    // Get an instance of the given type, or NULL if such an instance
-    // is unavailable.
+    /// Creates and returns a pointer to an instance of the type. Returns NULL
+    /// if an instance could not be created for some reason. The pointer is
+    /// returned as a generic pointer, but can be cast to the appropriate
+    /// type. For example:
+    /// \code
+    /// SoCube *c = (SoCube *) SoCube::getClassTypeId().createInstance();
+    /// \endcode
+    /// is a convoluted way of creating a new instance of an \c SoCube.
     void * 		createInstance() const;
 
-    // test equality / inequality
+    /// Returns TRUE if this type is the same as the given type.
     int			operator ==(const SoType & t) const
 	{ return (storage.index == t.storage.index);}
+
+    /// Returns TRUE if this type is not the same as the given type.
     int			operator !=(const SoType & t) const
 	{ return (storage.index != t.storage.index);}
 
-    // Less-than operator that can be used to sort types. Pretty
-    // useless otherwise.
+    /// Less-than comparison operator that can be used to sort types. This is
+    /// pretty useless otherwise.
     int			operator <(const SoType & t) const
 	{ return (storage.index < t.storage.index); }
 

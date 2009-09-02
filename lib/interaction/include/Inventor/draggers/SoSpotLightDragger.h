@@ -117,6 +117,136 @@
 class SoFieldSensor;
 class SbPlaneProjector;
 
+/// Spotlight shaped dragger that allows you to change position, direction, and width of the beam.
+/// \ingroup Draggers
+/// <tt>SoSpotLightDragger</tt>
+/// is a composite dragger. It is shaped like a beam of light emanating from a
+/// sun-like ball. An arrow runs along the axis of the
+/// beam and extends past the end of the beam.
+///
+///
+/// When you click and drag the beam, it opens and closes with
+/// an umbrella-like motion. The angle
+/// between the center and edge of the beam is stored in
+/// the #angle field of this dragger; setting the #angle field causes the
+/// beam to widen or narrow in response.  The spotlight dragger does not
+/// use a standard dragger class to execute this motion.  More details are
+/// given later in this section.
+///
+///
+/// Dragging the arrow rotates it arount the sun, and the beam moves with it.
+/// The arrow is an <tt>SoRotateSphericalDragger</tt> that controls the #rotation
+/// field. See the reference page for <tt>SoDirectionalLightDragger</tt>, which
+/// works the same way, for details.
+///
+///
+/// The sun-shape can be dragged to translate all three pieces together
+/// through 3-space. Its movement controls the #translation field and
+/// works exactly as described in the reference pages for
+/// <tt>SoDirectionalLightDragger</tt>  and <tt>SoPointLightDragger</tt> (which goes
+/// into more detail).
+///
+///
+/// <em>Remember:</em> This is <em>not</em> a light source! It just looks like one.
+/// If you want to move a light with this dragger, you can do the following:
+///
+///
+/// [a] Use an <tt>SoSpotLightManip</tt>, which is subclassed from <tt>SoLight</tt>.
+/// It creates an <tt>SoSpotLightDragger</tt>
+/// and uses it as the interface to change the #location, #direction,
+/// and #cutOffAngle of its  light source
+/// (see the <tt>SoSpotLightManip</tt> man page).
+/// The manip also edits the #material part of this dragger to match the
+/// color of light the manip is producing.
+///
+///
+/// [b] Connect the #angle field of this dragger to the #cutOffAngle
+/// field of an <tt>SoSpotLight</tt> with a field-to-field connection.
+///
+///
+/// See the <tt>SoPointLightDragger</tt> and <tt>SoDirectionalLightDragger</tt>
+/// man pages for other ways to control light parameters with the
+/// #rotation and #translation fields.
+///
+///
+/// This class  creates its own projector and
+/// handles mouse events to do it's own dragging of the beam angle.
+/// When the mouse picks a point on the beam, that point is dragged in a
+/// circle just like in an <tt>SoRotateDiscDragger</tt>, but the
+/// plane of the disc is re-defined every time a drag is initiated.
+/// Imagine placing the metal tip of a compass at the apex of the cone and the
+/// pencil tip at the picked point.
+/// If you swing an arc through the central axis of the cone,
+/// you will be drawing the arc
+/// used to drag the beam open and closed.
+///
+///
+/// The beam is opened and closed not by rotating, but by scaling.
+/// The dragger scales the beam-cone so that the height and
+/// radius change to move the picked point along the circle.  Then the
+/// #angle field is calculated from the height and radius.
+///
+///
+/// You can change the geometry of parts in any instance of this dragger using
+/// #setPart().
+/// The default part geometries are defined as resources for this
+/// <tt>SoSpotLightDragger</tt> class.  They are detailed below in the
+/// <b>DRAGGER RESOURCE</b> section.
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/spotLightDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that directory.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoSpotLightDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "material"
+/// -->      "translatorSep"
+/// -->         "translatorRotInv"
+/// -->         "translator"
+/// -->      "rotator"
+/// -->      "beamSep"
+/// -->         "beamPlacement"
+/// -->         "beamScale"
+/// -->         "beamSwitch"
+/// -->            "beam"
+/// -->            "beamActive"
+///          "geomSeparator"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoSpotLightDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     rotation            0 0 1  0
+///     translation         0 0 0
+///     angle               1
+///     callbackList        NULL
+///     material            <spotLightOverallMaterial resource>
+///     translator          DragPointDragger {}
+///     rotator             RotateSphericalDragger {}
+///     beamPlacement       <spotLightBeamPlacement resource>
+///     beamScale           Scale {
+///                             scaleFactor 0.841471 0.841471 0.540302
+///                         }
+///     beam                <spotLightBeam resource>
+///     beamActive          <spotLightBeamActive resource>
+/// }
+/// \endcode
+/// \sa SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,
+/// \sa SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,
+/// \sa SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,
+/// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class INVENTOR_API SoSpotLightDragger : public SoDragger
 {
     SO_KIT_HEADER(SoSpotLightDragger);
@@ -145,12 +275,12 @@ class INVENTOR_API SoSpotLightDragger : public SoDragger
     SO_KIT_CATALOG_ENTRY_HEADER(beamActive);
 
   public:
-    // Constructors
+    /// Constructor.
     SoSpotLightDragger();
 
-    SoSFRotation rotation;
-    SoSFVec3f    translation;
-    SoSFFloat    angle;
+    SoSFRotation rotation;      ///< Orientation of the rotating part (an arrow by default).
+    SoSFVec3f    translation;   ///< Position of the dragger.
+    SoSFFloat    angle;         ///< Angle between center and edge of beam.
 
   SoINTERNAL public:
     static void initClass(); // Initialize the class. 

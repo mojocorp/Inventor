@@ -288,7 +288,7 @@ SbString::operator +=(const SbString &str)
 // Equality operator for SbString/char* and SbString/SbString comparison
 //
 
-int
+bool
 operator ==(const SbString &str, const char *s)
 {
     if (s == NULL)
@@ -301,7 +301,7 @@ operator ==(const SbString &str, const char *s)
 // Inequality operator for SbString/char* and SbString/SbString comparison
 //
 
-int
+bool
 operator !=(const SbString &str, const char *s)
 {
     if (s == NULL)

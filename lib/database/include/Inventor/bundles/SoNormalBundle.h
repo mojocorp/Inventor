@@ -78,20 +78,20 @@
 SoEXTENDER class INVENTOR_API SoNormalBundle : public SoBundle {
 
   public:
-    // Constructor - takes the action the bundle is used for and a
-    // flag to indicate whether the bundle is being used for
-    // rendering. If this is TRUE, the bundle can be used to send
-    // normals to GL. 
+    /// Constructor - takes the action the bundle is used for and a
+    /// flag to indicate whether the bundle is being used for
+    /// rendering. If this is TRUE, the bundle can be used to send
+    /// normals to GL.
     SoNormalBundle(SoAction *action, SbBool forRendering);
 
-    // Destructor
+    /// Destructor
     ~SoNormalBundle();
 
-    // Returns TRUE if normals need to be generated.
+    /// Returns TRUE if normals need to be generated.
     SbBool		shouldGenerate(int numNeeded);
 
-    // Initializes generation in the case where shouldGenerate() is
-    // not called. (shouldGenerate() does this automatically).
+    /// Initializes generation in the case where shouldGenerate() is
+    /// not called. (shouldGenerate() does this automatically).
     void		initGenerator(int initialNum = 100);
 
     //////////////////////
@@ -101,8 +101,8 @@ SoEXTENDER class INVENTOR_API SoNormalBundle : public SoBundle {
     // are front-ends to methods on the SoNormalGenerator class:
     //
 
-    // Send a polygon's worth of vertices. Begin a polygon, send as
-    // many vertices as you want, and then end the polygon.
+    /// Send a polygon's worth of vertices. Begin a polygon, send as
+    /// many vertices as you want, and then end the polygon.
     void		beginPolygon()
 	{ generator->beginPolygon(); }
     void		polygonVertex(const SbVec3f &point)
@@ -110,50 +110,50 @@ SoEXTENDER class INVENTOR_API SoNormalBundle : public SoBundle {
     void		endPolygon()
 	{ generator->endPolygon(); }
 
-    // Send a triangle
+    /// Send a triangle
     void		triangle(const SbVec3f &p1,
 				 const SbVec3f &p2,
 				 const SbVec3f &p3)
 	{ generator->triangle(p1, p2, p3); }
 
-    // Calculates the normals once all vertices have been sent. The
-    // normals are stored by the bundle so the caller does not have to
-    // deal with them directly.  The startIndex argument specifies the
-    // index at which the generated normals will begin-- it can be
-    // used by shapes that allow the coordinates and normals to be
-    // offset (non-indexed shapes).  If addToState is TRUE, the
-    // state will be pushed, the normals will be added to the
-    // state; otherwise, you can just use
-    // getGeneratedNormals/getNumGeneratedNormals to get the generated
-    // normals.
-    //
-    // The normal bundle DOES NOT FREE the generated normals!  It is
-    // expected that normals will be added to a normal cache, and the
-    // normal cache will free the normals.
-    //
+    /// Calculates the normals once all vertices have been sent. The
+    /// normals are stored by the bundle so the caller does not have to
+    /// deal with them directly.  The startIndex argument specifies the
+    /// index at which the generated normals will begin-- it can be
+    /// used by shapes that allow the coordinates and normals to be
+    /// offset (non-indexed shapes).  If addToState is TRUE, the
+    /// state will be pushed, the normals will be added to the
+    /// state; otherwise, you can just use
+    /// getGeneratedNormals/getNumGeneratedNormals to get the generated
+    /// normals.
+    ///
+    /// The normal bundle DOES NOT FREE the generated normals!  It is
+    /// expected that normals will be added to a normal cache, and the
+    /// normal cache will free the normals.
+    ///
     void		generate(int startIndex = 0,
 				 SbBool addToState=TRUE);
 
-    // Returns the generated normals.
+    /// Returns the generated normals.
     const SbVec3f *	getGeneratedNormals() const
 	{ return generator->getNormals(); }
     int			getNumGeneratedNormals() const
 	{ return generator->getNumNormals(); }
 
 
-    // This allows shapes that generate their own normals (for
-    // efficiency) to store the resulting normals in the state. The
-    // bundle takes care of pushing/popping the state.
-    // Note:  This method only adds the normals to the state, it does
-    // NOT store a pointer to them (so you cannot call the
-    // getGenerated() routines)
+    /// This allows shapes that generate their own normals (for
+    /// efficiency) to store the resulting normals in the state. The
+    /// bundle takes care of pushing/popping the state.
+    /// Note:  This method only adds the normals to the state, it does
+    /// NOT store a pointer to them (so you cannot call the
+    /// getGenerated() routines)
     void		set(int32_t numNormals, const SbVec3f *normals);
 
-    // Returns indexed normal. This can be used for primitive
-    // generation or during rendering
+    /// Returns indexed normal. This can be used for primitive
+    /// generation or during rendering
     const SbVec3f &	get(int index) const	{ return normElt->get(index); }
 
-    // Sends indexed normal to the GL, for use only during GL rendering
+    /// Sends indexed normal to the GL, for use only during GL rendering
     void		send(int index) const	{ GLNormElt->send(index); }
 
   SoINTERNAL public:

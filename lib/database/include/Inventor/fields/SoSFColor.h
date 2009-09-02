@@ -59,12 +59,16 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbColor.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFColor subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing an RGB color.
+/// \ingroup Fields
+/// A single-value field containing an <tt>SbColor</tt>.
+/// Values may be set in either RGB (red,
+/// green, blue) or HSV (hue, saturation, value) color spaces.
+///
+/// <tt>SoSFColors</tt> are written to file as an RGB triple of
+/// floating point numbers in standard scientific notation, in the range
+/// 0.0 to 1.0.
+/// \sa SoField, SoSField, SoMFColor, SbColor
 class INVENTOR_API SoSFColor : public SoSField {
 
     // Use standard field stuff
@@ -76,17 +80,19 @@ class INVENTOR_API SoSFColor : public SoSField {
     // Some additional convenience functions
     //
 
-    // Set RGB color from SbVec3f
+    /// Set RGB color from SbVec3f
     void		setValue(const SbVec3f &vec);
 
-    // Set RGB/HSV value from 3 floats
+    /// Set RGB value from 3 floats
     void		setValue(float r, float g, float b);
 
+    /// Set HSV value from 3 floats
     void		setHSVValue(float h, float s, float v);
 
-    // Set RGB/HSV value from array of 3 floats
+    /// Set RGB value from array of 3 floats
     void		setValue(const float rgb[3]);
 
+    /// Set HSV value from array of 3 floats
     void		setHSVValue(const float hsv[3]);
 
   SoINTERNAL public:

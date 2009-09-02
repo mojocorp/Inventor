@@ -59,12 +59,22 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec3f.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFVec3f subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of three-dimensional vectors.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of three-dimensional
+/// vectors.
+///
+///
+/// <tt>SoMFVec3fs</tt> are written to file as one or more triples of floating
+/// point values separated by whitespace.
+///
+///
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ 0 0 0, 1.2 3.4 5.6, 98.6 -4e1 212 ]
+///
 class INVENTOR_API SoMFVec3f : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFVec3f, SbVec3f, const SbVec3f &);
@@ -75,19 +85,22 @@ class INVENTOR_API SoMFVec3f : public SoMField {
     // Some additional convenience functions:
     //
 
-    // Set values from array of arrays of 3 floats
+    /// Sets \a num values starting at index \a start to the given floating point
+    /// values.  There must be \a num *3 values in the passed array.
     void	setValues(int start, int num, const float xyz[][3]);
 
-    // Set one value from 3 floats
+    /// Set the \a index 'th value to the given floating point values.
     void	set1Value(int index, float x, float y, float z);
 
-    // Set one value from 3 floats in array
+    /// Set the \a index 'th value to the given floating point values.
     void	set1Value(int index, const float xyz[3]);
 
-    // Set to one value from 3 floats
+    /// Sets the field to contain the given value and only the given value (if
+    /// the array had multiple values before, they are deleted).
     void	setValue(float x, float y, float z);
 
-    // Set to one value from 3 floats in array
+    /// Sets the field to contain the given value and only the given value (if
+    /// the array had multiple values before, they are deleted).
     void	setValue(const float xyz[3]);
 
   SoINTERNAL public:

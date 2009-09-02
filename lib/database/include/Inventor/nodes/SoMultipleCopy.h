@@ -59,29 +59,49 @@
 #include <Inventor/fields/SoMFMatrix.h>
 #include <Inventor/nodes/SoGroup.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoMultipleCopy
-//
-//  MultipleCopy group node: children are traversed for each matrix in
-//  the multiple-value "matrix" field, after transforming the current
-//  model matrix by that matrix. State is saved before traversing all
-//  children each time and restored afterwards.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Group node that traverses multiple times, applying matrices.
+/// \ingroup Nodes
+/// This group node traverses its children, in order, several times,
+/// applying a different matrix each time. The matrices are stored in the
+/// multiple-value #matrix field. Each matrix is concatenated to the
+/// current transformation matrix, and all of the children are traversed.
+/// This allows the user to put multiple copies of the same data in
+/// different locations easily and efficiently.
+///
+/// Traversing the \a Nth child sets the current switch value to \a N, for use
+/// with inherited switch values (see <tt>SoSwitch</tt>).
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction</b>
+/// Traverses all children for each matrix, saving and restoring state
+/// before and after each traversal.
+/// <b>SoSearchAction</b>
+/// Traverses all children once, setting the inherited switch value to
+/// <b>SO_SWITCH_ALL</b> first.
+///
+/// \par File format/defaults:
+/// \code
+/// SoMultipleCopy {
+///    matrix   1 0 0 0
+///             0 1 0 0
+///             0 0 1 0
+///             0 0 0 1
+/// }
+/// \endcode
+/// \sa SoArray, SoSwitch
 class INVENTOR_API SoMultipleCopy : public SoGroup {
 
     SO_NODE_HEADER(SoMultipleCopy);
 
   public:
     // Fields
-    SoMFMatrix		matrix;	// Set of matrices to apply to children
+    SoMFMatrix		matrix;	///< Set of matrices to apply to children.
 
+    /// Creates a multiple copy node with default settings.
     SoMultipleCopy();
 
-    // Overrides default method on SoNode to return FALSE since these
-    // nodes are effectively separators
+    /// Overrides default method on SoNode to return FALSE since these
+    /// nodes are effectively separators
     virtual SbBool	affectsState() const;
 
   SoEXTENDER public:

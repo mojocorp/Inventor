@@ -77,13 +77,13 @@
 
 SoINTERNAL class SbDictEntry {
   private:
-    unsigned long		key;
+    uintptr_t		key;
     void *		value;
 
     SbDictEntry *	next;
 
     // Constructor
-    SbDictEntry(unsigned long k, void *v)	{ key = k; value = v; };
+    SbDictEntry(uintptr_t k, void *v)	{ key = k; value = v; };
 
 friend class SbDict;
 };
@@ -100,46 +100,46 @@ friend class SbDict;
 SoEXTENDER class INVENTOR_API SbDict {
   public:
 
-    // Constructor
+    /// Constructor
     SbDict( int entries = 251 );
 
-    // Destructor
+    /// Destructor
     ~SbDict();
 
-    // Calls given routine (passing value) for each entry in dictionary.
-    //  The order of entries is not guaranteed to mean anything.
-    void	applyToAll(void (*rtn)(unsigned long key, void *value) );
+    /// Calls given routine (passing value) for each entry in dictionary.
+    ///  The order of entries is not guaranteed to mean anything.
+    void	applyToAll(void (*rtn)(uintptr_t key, void *value) );
 
-    // Calls given routine (passing value,data) for each entry in dictionary.
-    //  The order of entries is not guaranteed to mean anything.
-    void	applyToAll(void (*rtn)(unsigned long key, void *value, void *data), 
+    /// Calls given routine (passing value,data) for each entry in dictionary.
+    ///  The order of entries is not guaranteed to mean anything.
+    void	applyToAll(void (*rtn)(uintptr_t key, void *value, void *data),
 			   void *data );
 
-    // Removes all entries from dictionary.
+    /// Removes all entries from dictionary.
     void	clear();
 
-    // Enters a key,value pair into the dictionary. Overwrites entry and
-    //  returns FALSE if key already exists.
-    SbBool	enter(unsigned long key, void *value);
+    /// Enters a key,value pair into the dictionary. Overwrites entry and
+    ///  returns FALSE if key already exists.
+    SbBool	enter(uintptr_t key, void *value);
 
-    // Finds entry with given key, setting value to point to value.
-    //  Returns FALSE if no such entry.
-    SbBool	find(unsigned long key, void *&value) const;
+    /// Finds entry with given key, setting value to point to value.
+    ///  Returns FALSE if no such entry.
+    SbBool	find(uintptr_t key, void *&value) const;
 
-    // Makes two SbPLists, one for keys and the other for values.
-    //  The order of entries is not guaranteed to mean anything.
+    /// Makes two SbPLists, one for keys and the other for values.
+    ///  The order of entries is not guaranteed to mean anything.
     void	makePList(SbPList &keys, SbPList &values);
 
-    // Removes the entry with the given key. Returns FALSE if no such entry.
-    SbBool	remove(unsigned long key);
+    /// Removes the entry with the given key. Returns FALSE if no such entry.
+    SbBool	remove(uintptr_t key);
 
   private:
     // Entries are stored as an external hash table of SbDictEntry instances.
     int			tableSize;			// Entries in table
     SbDictEntry *	*buckets;			// Hash table
 
-    SbDictEntry *&	findEntry(unsigned long key) const;
-    static void		addEntryToPLists(unsigned long key, void *value, void *data);
+    SbDictEntry *&	findEntry(uintptr_t key) const;
+    static void		addEntryToPLists(uintptr_t key, void *value, void *data);
 };
 
 #endif /* _SB_DICT_ */

@@ -60,64 +60,85 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoTransformation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTransform
-//
-//  Geometric transformation node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// General 3D geometric transformation node.
+/// \ingroup Nodes
+/// This node defines a geometric 3D transformation consisting of (in
+/// order) a (possibly) non-uniform scale about an arbitrary point, a
+/// rotation about an arbitrary point and axis, and a translation. (While
+/// the transformations can be thought of as being applied in that order,
+/// matrices are actually premultiplied in the opposite order. Therefore,
+/// the operations are listed in the reverse order throughout this reference
+/// page.)
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction</b>
+/// Accumulates transformation into the current transformation.
+/// <b>SoGetMatrixAction</b>
+/// Returns the matrix corresponding to the total transformation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTransform {
+///    translation          0 0 0
+///    rotation             0 0 1  0
+///    scaleFactor          1 1 1
+///    scaleOrientation     0 0 1  0
+///    center               0 0 0
+/// }
+/// \endcode
+/// \sa SoMatrixTransform,SoResetTransform,SoRotation,SoRotationXYZ,SoScale,SoTransformManip,SoTransformSeparator,SoTranslation
 class INVENTOR_API SoTransform : public SoTransformation {
 
     SO_NODE_HEADER(SoTransform);
 
   public:
     // Fields
-    SoSFVec3f		translation;	 // Translation vector
-    SoSFRotation	rotation;	 // Rotation
-    SoSFVec3f		scaleFactor;	 // Scale factors
-    SoSFRotation	scaleOrientation;// Defines rotational space for scale
-    SoSFVec3f		center;	         // Center point for scale and rotate
+    SoSFVec3f       translation;        ///< Translation vector.
+    SoSFRotation    rotation;           ///< Rotation specification.
+    SoSFVec3f       scaleFactor;        ///< Scale factors.
+    SoSFRotation    scaleOrientation;   ///< Rotational orientation for scale.
+    SoSFVec3f       center;             ///< Origin for scale and rotation.
 
-    // Constructor
+    /// Creates a transformation node with default settings.
     SoTransform();
 
-    // Sets the transform to translate the origin to the fromPoint and
-    // rotate the negative z-axis (0,0,-1) to lie on the vector from
-    // fromPoint to toPoint. This always tries to keep the "up"
-    // direction the positive y-axis, unless that is impossible.
-    // All current info in the node is wiped out.
+    /// Sets the transform to translate the origin to the \a fromPoint and
+    /// rotate the negative z-axis (0,0,-1) to lie on the vector from
+    /// \a fromPoint to \a toPoint. This always tries to keep the "up"
+    /// direction the positive y-axis, unless that is impossible.
+    /// All current info in the node is wiped out.
     void		pointAt(const SbVec3f &fromPoint,
 				const SbVec3f &toPoint);
 
-    // returns composite matrices that take you from object space to each
-    // of scale/rotation/translation spaces
+    /// These return composite matrices that transform from object space to each
+    /// of the spaces after the scale, rotation, or translation.
     void		getScaleSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const;
     void		getRotationSpaceMatrix(SbMatrix &mat,
                                                SbMatrix &inv) const;
     void		getTranslationSpaceMatrix(SbMatrix &mat,
                                                   SbMatrix &inv) const;
 
-    // Convenience functions that combine the effects of a matrix
-    // transformation into the transformation stored in this node. The
-    // first method premultiplies the transformation and the second
-    // postmultiplies it.
+    /// These are convenience functions that combine the effects of a matrix
+    /// transformation into the current transformation stored in this node.
+    /// The first method premultiplies the transformation and the second
+    /// postmultiplies it.
     void		multLeft(const SbMatrix &mat);
     void		multRight(const SbMatrix &mat);
 
-    // These are the same as multLeft() and multRight(), except that
-    // the transformation to multiply into this node comes from
-    // another transformation node.
+    /// These are convenience functions that combine the effects of another
+    /// transformation node into the current transformation stored in this
+    /// node. The first method premultiplies the transformation and the
+    /// second postmultiplies it.
     void		combineLeft(SoTransformation *nodeOnLeft);
     void		combineRight(SoTransformation *nodeOnRight);
 
-    // Sets the fields in the node to implement the transformation
-    // represented by the given matrix
+    /// Sets the fields in the node to implement the transformation
+    /// represented by the given matrix. Note that invalid matrices (such as
+    /// singular ones) have undefined results.
     void		setMatrix(const SbMatrix &mat);
 
-    // Changes the center of the transformation to the given point
-    // without affecting the overall effect of the transformation
+    /// Changes the center of the transformation to the given point without
+    /// affecting the overall effect of the transformation.
     void		recenter(const SbVec3f &newCenter);
 
   SoEXTENDER public:

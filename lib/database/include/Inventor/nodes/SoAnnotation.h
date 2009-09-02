@@ -58,34 +58,54 @@
 
 #include <Inventor/nodes/SoSeparator.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoAnnotation
-//
-//  Annotation group node: delays rendering its children until all
-//  other nodes have been traversed, turning off depth buffer
-//  comparisons first. The result is that the shapes under the
-//  annotation node are rendered on top of the rest of the scene.
-//
-//  Note that if more than one annotation node is present in a graph,
-//  the order in which they are traversed determines the stacking
-//  order - later nodes are rendered on top of earlier ones. Also note
-//  that since depth buffer comparisons are disabled, complex 3D
-//  objects may not be rendered correctly when used under annotation
-//  nodes.
-//
-//  All non-rendering actions are inherited as is from SoSeparator.
-//
-//////////////////////////////////////////////////////////////////////////////
+/// Annotation group node.
+/// \ingroup Nodes
+/// This group node delays rendering its children until all other nodes
+/// have been traversed, turning off depth buffer comparisons first. The
+/// result is that the shapes under the annotation node are rendered on
+/// top of the rest of the scene. This node is derived from
+/// <tt>SoSeparator</tt>, so it saves and restores traversal state for all
+/// actions.
+///
+/// Note that if more than one annotation node is present in a graph, the
+/// order in which they are traversed determines the stacking order \(em
+/// later nodes are rendered on top of earlier ones. Also note that since
+/// depth buffer comparisons are disabled, complex 3D objects may not be
+/// rendered correctly when used under annotation nodes.
+///
+/// Also note that the annotation node does nothing special when picking
+/// along a ray. That is, it does not modify the sorting order of
+/// intersected objects based on which ones are under annotation nodes. If
+/// your application uses annotation nodes and you want to ensure that
+/// objects under them are picked "in front of" other objects, you can
+/// tell the pick action that you want to pick all objects along the ray
+/// and then scan through the paths in the resulting picked point
+/// instances to see if any of them passes through an annotation
+/// node. Your program can then decide what to do in such a case.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Delays rendering its children until all other nodes have been
+/// traversed, turning off depth buffer comparisons first.
+/// <b>SoCallbackAction, SoGetBoundingBoxAction, SoGetMatrixAction, SoRayPickAction, SoSearchAction</b>
+/// Same as <tt>SoSeparator</tt>
+///
+/// \par File format/defaults:
+/// \code
+/// SoAnnotation {
+///    renderCaching        AUTO
+///    boundingBoxCaching   AUTO
+///    renderCulling        AUTO
+///    pickCulling          AUTO
+/// }
+/// \endcode
 class INVENTOR_API SoAnnotation : public SoSeparator {
 
     SO_NODE_HEADER(SoAnnotation);
 
   public:
 
-    // No fields
-
-    // Constructor
+    /// Creates an annotation node with default settings.
     SoAnnotation();
 
   SoEXTENDER public:

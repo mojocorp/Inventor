@@ -73,20 +73,20 @@ class INVENTOR_API SoV1CustomNode : public SoUpgrader {
 
   public:
     // Fields
-    SoMFName		className;	// Names in custom subclass hierarchy
-    SoMFString		fields;		// Field data strings, 1 per subclass
-    SoMFString		customData;	// Custom data strings, 1 per subclass
+    SoMFName		className;	///< Names in custom subclass hierarchy
+    SoMFString		fields;		///< Field data strings, 1 per subclass
+    SoMFString		customData;	///< Custom data strings, 1 per subclass
 
-    // Default constructor
+    /// Default constructor
     SoV1CustomNode();
 
-    // There are 9 steps to reading in and upgrading a custom node;
-    // happily, subclasses only have to worry about three virtual
-    // methods:
-    //   createNewNode()       -- MUST be implemented
-    //   interpretCustomData() -- optional
-    //   setUpNewNode()        -- also optional
-    // See comments below for more info...
+    /// There are 9 steps to reading in and upgrading a custom node;
+    /// happily, subclasses only have to worry about three virtual
+    /// methods:
+    ///   createNewNode()       -- MUST be implemented
+    ///   interpretCustomData() -- optional
+    ///   setUpNewNode()        -- also optional
+    /// See comments below for more info...
     virtual SbBool	upgrade(SoInput *in, const SbName &refName,
 				SoBase *&result);
 

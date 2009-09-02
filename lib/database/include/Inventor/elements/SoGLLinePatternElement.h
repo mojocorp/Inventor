@@ -76,14 +76,14 @@ SoEXTENDER class INVENTOR_API SoGLLinePatternElement : public SoLinePatternEleme
     SO_ELEMENT_HEADER(SoGLLinePatternElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Override push() so we can remember what line pattern the
-    // previous element set, and not send it again if it is the same.
+    /// Override push() so we can remember what line pattern the
+    /// previous element set, and not send it again if it is the same.
     virtual void	push(SoState *state);
 
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void	pop(SoState *state, const SoElement *prevTopElement);
 
   SoINTERNAL public:

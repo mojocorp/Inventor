@@ -86,44 +86,44 @@ SoEXTENDER class INVENTOR_API SoLocalBBoxMatrixElement : public SoElement {
     SO_ELEMENT_HEADER(SoLocalBBoxMatrixElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Overrides push() method to copy values from next instance in the stack
+    /// Overrides push() method to copy values from next instance in the stack
     virtual void	push(SoState *state);
 
-    // Sets the local matrix to the identity matrix
+    /// Sets the local matrix to the identity matrix
     static void		makeIdentity(SoState *state);
 
-    // Sets the local matrix to the given matrix
+    /// Sets the local matrix to the given matrix
     static void		set(SoState *state, const SbMatrix &matrix);
 
-    // Multiplies the given matrix into the local matrix
+    /// Multiplies the given matrix into the local matrix
     static void		mult(SoState *state, const SbMatrix &matrix);
 
-    // Each of these multiplies a matrix that performs the specified
-    // transformation into the local matrix
+    /// Each of these multiplies a matrix that performs the specified
+    /// transformation into the local matrix
     static void		translateBy(SoState *state,const SbVec3f &translation);
     static void		rotateBy(SoState *state, const SbRotation &rotation);
     static void		scaleBy(SoState *state, const SbVec3f &scaleFactor);
 
-    // These methods are used by the TransformSeparator node.
+    /// These methods are used by the TransformSeparator node.
     static SbMatrix	pushMatrix(SoState *state);
     static void		popMatrix(SoState *state, const SbMatrix &m);
 
-    // Resets all current instances in the state to identity
+    /// Resets all current instances in the state to identity
     static void		resetAll(SoState *state);
 
-    // Returns current matrix from the state
+    /// Returns current matrix from the state
     static const SbMatrix &	get(SoState *state);
 
-    // Prints error message and returns FALSE (see class header comment)
+    /// Prints error message and returns FALSE (see class header comment)
     virtual SbBool	matches(const SoElement *elt) const;
 
-    // Create and return a copy of this element
+    /// Create and return a copy of this element
     virtual SoElement	*copyMatchInfo() const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

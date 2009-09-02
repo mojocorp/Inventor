@@ -58,55 +58,91 @@
 
 #include <Inventor/nodes/SoGroup.h>
 #include <Inventor/fields/SoSFEnum.h>
+#include <Inventor/fields/SoSFBitMask.h>
 
 class SoBoundingBoxCache;
 class SoGLCacheList;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoSeparator
-//
-//  Separator group node: state is saved before traversing children
-//  and restored afterwards.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-#include <Inventor/fields/SoSFBitMask.h>
-
+/// Group node that saves and restores traversal state.
+/// \ingroup Nodes
+/// This group node performs a push (save) of the traversal state before
+/// traversing its children and a pop (restore) after traversing them.
+/// This isolates the separator's children from the rest of the scene
+/// graph. A separator can include lights, cameras, coordinates, normals,
+/// bindings, and all other properties. Separators are relatively
+/// inexpensive, so they can be used freely within scenes.
+///
+/// The <tt>SoSeparator</tt> node provides caching of state during rendering
+/// and bounding box computation. This feature can be enabled by setting
+/// the #renderCaching and #boundingBoxCaching fields. By default,
+/// these are set to <b>AUTO</b>, which means that Inventor decides whether
+/// to build a cache based on internal heuristics.
+///
+/// Separators can also perform culling during rendering and picking.
+/// Culling skips over traversal of the separator's children if they are
+/// not going to be rendered or picked, based on the comparison of the
+/// separator's bounding box with the current view volume. Culling is
+/// controlled by the #renderCulling and #pickCulling fields.  These
+/// are also set to <b>AUTO</b> by default; however, render culling can be
+/// expensive (and can interfere with render caching), so the <b>AUTO</b>
+/// heuristics leave it disabled unless specified otherwise.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoGetMatrixAction, SoHandleEventAction, SoRayPickAction, SoSearchAction</b>
+/// Saves the current traversal state, traverses all children, and
+/// restores the previous traversal state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoSeparator {
+///    renderCaching        AUTO
+///    boundingBoxCaching   AUTO
+///    renderCulling        AUTO
+///    pickCulling          AUTO
+/// }
+/// \endcode
+/// \sa SoSelection, SoTransformSeparator
 class INVENTOR_API SoSeparator : public SoGroup {
 
     SO_NODE_HEADER(SoSeparator);
 
   public:
 
-    enum CacheEnabled {		// Possible values for caching
-	OFF,			// Never build or use a cache
-	ON,			// Always try to build a cache
-	AUTO			// Decide based on some heuristic
+    /// Possible values for caching
+    enum CacheEnabled {
+        OFF,			///< Never build or use a cache
+        ON,			///< Always try to build a cache
+        AUTO			///< Decide whether to cache based on some heuristic
     };
 
     // Fields
-    SoSFEnum renderCaching;	// OFF/ON/AUTO
-    SoSFEnum boundingBoxCaching;// OFF/ON/AUTO
-    SoSFEnum renderCulling;	// OFF/ON/AUTO
-    SoSFEnum pickCulling;	// OFF/ON/AUTO
+    SoSFEnum renderCaching;         ///< Whether to cache during rendering traversal.
+    SoSFEnum boundingBoxCaching;    ///< Whether to cache during bounding box traversal.
+    SoSFEnum renderCulling;         ///< Whether to cull during rendering traversal.
+    SoSFEnum pickCulling;           ///< Whether to cull during picking traversal.
 
-    // Constructor
+    /// Creates a separator node with default settings.
     SoSeparator();
 
-    // Constructor that takes approximate number of children
+    /// Constructor that takes approximate number of children.
     SoSeparator(int nChildren);
 
-    // Overrides default method on SoNode
+    /// Overrides default method on SoNode
     virtual SbBool	affectsState() const;
 
-    // Set/get the number of render caches each separator will have
-    // (2, by default).  The more render caches each separator is
-    // allowed to have, the more memory used.  setNumRenderCaches only
-    // affects separators that are created after it is called, not
-    // separators that were created before.  Setting zero render
-    // caches globally turns off render caching.
+    /// By default, each separator node maintains 2 render caches. (This is to
+    /// allow two different representations, such as filled and wire-frame, to
+    /// both be cached.) The #setNumRenderCaches() method sets the number of
+    /// render caches each separator will have. Each render
+    /// cache uses memory, so increasing this number may increase the memory
+    /// requirements of the application. This method affects only separators
+    /// that are created after it is called, not separators that were created
+    /// before. Setting the number of caches to 0 turns off render caching
+    /// globally from then on.
     static void		setNumRenderCaches(int howMany);
+
+    /// Returns the current number of render caches.
     static int		getNumRenderCaches();
 
   SoEXTENDER public:

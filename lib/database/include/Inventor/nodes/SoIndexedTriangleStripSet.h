@@ -59,32 +59,77 @@
 #include <Inventor/nodes/SoIndexedShape.h>
 #include <Inventor/fields/SoSFNode.h>
 #include <Inventor/nodes/SoVertexProperty.h>
+
 class SoCoordinateElement;
-
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoIndexedTriangleStripSet
-//
-//  Indexed set of triangles strips.  Strips are separated by the
-//  special index SO_END_STRIP_INDEX (-1).  The N indices in the strip
-//  define N-2 triangles, which are formed by indexing into the
-//  current coordinates. Depending on the current material and normal
-//  binding values, the materials and normals for the triangles or
-//  vertices may be accessed in order or indexed. If they are indexed,
-//  the materialIndex and normalIndex fields are used.
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoNormalBundle;
 class SoCoordinateElement;
 
+/// Indexed triangle strip set shape node.
+/// \ingroup Nodes
+/// This shape node constructs triangle strips out of vertices located at
+/// the coordinates specified in the #vertexProperty field
+/// (from <tt>SoVertexShape</tt>), or the
+/// current inherited coordinates.
+/// For optimal performance, the #vertexProperty field is recommended.
+///
+/// <tt>SoIndexedTriangleStripSet</tt> uses the
+/// indices in the #coordIndex field (from <tt>SoIndexedShape</tt>) to
+/// specify the vertices of the triangle strips. An index of
+/// <b>SO_END_STRIP_INDEX</b> (-1) indicates that the current strip has ended
+/// and the next one begins.
+///
+/// The vertices of the faces are transformed by the current
+/// transformation matrix. The faces are drawn with the current light
+/// model and drawing style.
+///
+/// Treatment of the current material and normal binding is as follows:
+/// <b>PER_PART</b> specifies a material or normal per strip.  <b>PER_FACE</b>
+/// binding specifies a material or normal for each triangle.
+/// <b>PER_VERTEX</b> specifies a material or normal for each vertex.  The
+/// corresponding <b>_INDEXED</b> bindings are the same, but use the
+/// #materialIndex or #normalIndex indices (see <tt>SoIndexedShape</tt>).
+/// The default material binding is <b>OVERALL</b>. The
+/// default normal binding is <b>PER_VERTEX_INDEXED</b>
+///
+/// If any normals (or materials) are specified, Inventor assumes
+/// you provide the correct number of them, as indicated by the binding.
+/// You will see unexpected results
+/// if you specify fewer normals (or materials) than the shape requires.
+/// If no normals are specified, they will be generated automatically.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws a strip set based on the current coordinates, normals,
+/// materials, drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Picks on the strip set based on the current coordinates and
+/// transformation.  Details about the intersection are returned in an
+/// <tt>SoFaceDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses all vertices of the strip set
+/// with the current transformation applied to them. Sets the center to
+/// the average of the coordinates of all vertices.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will be
+/// invoked for each successive triangle forming the strips of the set.
+///
+/// \par File format/defaults:
+/// \code
+/// SoIndexedTriangleStripSet {
+///    vertexProperty	NULL
+///    coordIndex	0
+///    materialIndex	-1
+///    normalIndex	-1
+///    textureCoordIndex	-1
+/// }
+/// \endcode
+/// \sa SoCoordinate3,SoDrawStyle,SoFaceDetail,SoIndexedFaceSet,SoTriangleStripSet,SoVertexProperty
 class INVENTOR_API SoIndexedTriangleStripSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedTriangleStripSet);
 
   public:
-    // Constructor
+    /// Creates an indexed triangle strip set node with default settings.
     SoIndexedTriangleStripSet();
 
   SoEXTENDER public:

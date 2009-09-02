@@ -86,6 +86,108 @@
 
 class SoFieldSensor;
 
+/// Cubic object you can translate and scale by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoTabBoxDragger</tt>
+/// is a composite dragger shaped like a box.
+/// Inside it are six <tt>SoTabPlaneDraggers</tt> which the dragger positions
+/// and orients to form a cube.
+/// The operations available in an <tt>SoTabPlaneDragger</tt> (translation,
+/// 1D scaling and 2D scaling) are available on each face of the cube.
+/// Since they each move in their local space, the dragger may be easily
+/// translated or scaled in any direction.
+///
+///
+/// As a composite dragger, this class makes sure that when
+/// one plane is dragged, the entire box moves together.
+///
+///
+/// As each sub-dragger is moved, the <tt>SoTabBoxDragger</tt> updates
+/// its #scaleFactor and #translation fields.
+/// As with all draggers, if you change a field the dragger will
+/// move to match the new settings.
+///
+///
+/// <em>Remember:</em> This is <em>not</em> an <tt>SoTransform!</tt>.
+/// If you want to move other objects with this dragger, you can either:
+///
+///
+/// [a] Use an <tt>SoTabBoxManip</tt>, which is subclassed from <tt>SoTransform</tt>.
+/// It creates one of
+/// these draggers and uses it as the interface to change its fields.
+/// (see the <tt>SoTabBoxManip</tt> man page).
+///
+///
+/// [b] Use field-to-field connections to connect the fields of this dragger to
+/// those of any <tt>SoTransformation</tt> node.
+///
+///
+/// You can change the parts in any instance of this dragger using
+/// #setPart().  The default part geometries
+/// are defined as resources for this <tt>SoTabBoxDragger</tt> class.  They are
+/// detailed below in the Dragger Resources section of the online reference
+/// page for this class.  You can make your program use different default
+/// resources for the parts by copying the file
+/// #/usr/share/data/draggerDefaults/tabBoxDragger.iv  into your own
+/// directory, editing the file, and then setting the environment variable
+/// <b>SO_DRAGGER_DIR</b> to be a path to that directory.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoTabBoxDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "surroundScale"
+/// -->      "tabPlane1Sep"
+/// -->         "tabPlane1Xf"
+/// -->         "tabPlane1"
+/// -->      "tabPlane2Sep"
+/// -->         "tabPlane2Xf"
+/// -->         "tabPlane2"
+/// -->      "tabPlane3Sep"
+/// -->         "tabPlane3Xf"
+/// -->         "tabPlane3"
+/// -->      "tabPlane4Sep"
+/// -->         "tabPlane4Xf"
+/// -->         "tabPlane4"
+/// -->      "tabPlane5Sep"
+/// -->         "tabPlane5Xf"
+/// -->         "tabPlane5"
+/// -->      "tabPlane6Sep"
+/// -->         "tabPlane6Xf"
+/// -->         "tabPlane6"
+///          "geomSeparator"
+/// -->         "boxGeom"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoTabBoxDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     translation         0 0 0
+///     scaleFactor         1 1 1
+///     callbackList        NULL
+///     surroundScale       NULL
+///     tabPlane1           TabPlaneDragger {}
+///     tabPlane2           TabPlaneDragger {}
+///     tabPlane3           TabPlaneDragger {}
+///     tabPlane4           TabPlaneDragger {}
+///     tabPlane5           TabPlaneDragger {}
+///     tabPlane6           TabPlaneDragger {}
+///     boxGeom             <tabBoxBoxGeom resource>
+/// }
+/// \endcode
+/// \sa SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,
+/// \sa SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,
+/// \sa SoSpotLightDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,
+/// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class INVENTOR_API SoTabBoxDragger : public SoDragger
 {
     SO_KIT_HEADER(SoTabBoxDragger);
@@ -115,15 +217,17 @@ class INVENTOR_API SoTabBoxDragger : public SoDragger
     SO_KIT_CATALOG_ENTRY_HEADER(boxGeom);
 
   public:
-    // Constructors
+    /// Constructor.
     SoTabBoxDragger();
 
-    SoSFVec3f    translation;
-    SoSFVec3f    scaleFactor;
+    SoSFVec3f    translation; ///< Position of the dragger.
+    SoSFVec3f    scaleFactor; ///< Scale of the dragger.
 
-    // Cause the scale tabs size to be re-adjusted on all 6 tabPlanes. Happens 
-    // automatically upon dragger finish. You may want to do this during a 
-    // finishCallback for your viewer as well.
+    /// Cause the scale tab sizes to be re-adjusted on all 6 <tt>SoTabPlaneDragger</tt>s
+    /// so that they remain a near constant screen space size.
+    /// This happens automatically upon dragger finish.
+    /// Call this to adjust the scale tab sizes at other times, for instance
+    /// after the camera has changed in a viewer finish callback.
     void    adjustScaleTabSize();
 
   SoINTERNAL public:

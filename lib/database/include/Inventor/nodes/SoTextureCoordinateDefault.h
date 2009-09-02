@@ -61,12 +61,24 @@
 
 #include <Inventor/nodes/SoTextureCoordinateFunction.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTextureCoordinateDefault
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that removes texture coordinates from state.
+/// \ingroup Nodes
+/// This node changes the current traversal state to indicate that there
+/// are no currently defined texture coordinates or texture coordinate
+/// function. This forces subsequent shapes to use their own default
+/// texture coordinates. The net result is that this node turns off any
+/// previous texture coordinate specification.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoRayPickAction</b>
+/// Removes any texture coordinates or function.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTextureCoordinateDefault {
+/// }
+/// \endcode
+/// \sa SoTexture2,SoTexture2Transform,SoTextureCoordinateEnvironment,SoTextureCoordinatePlane
 class INVENTOR_API SoTextureCoordinateDefault : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinateDefault);
@@ -74,7 +86,7 @@ class INVENTOR_API SoTextureCoordinateDefault : public SoTextureCoordinateFuncti
   public:
     // No fields.
 
-    // Constructor
+    /// Creates a node with default settings.
     SoTextureCoordinateDefault();
 
   SoEXTENDER public:

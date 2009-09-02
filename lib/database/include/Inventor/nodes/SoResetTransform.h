@@ -59,34 +59,52 @@
 #include <Inventor/fields/SoSFBitMask.h>
 #include <Inventor/nodes/SoTransformation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoResetTransform
-//
-//  This node resets the current transformation to be identity. It can
-//  be used to achieve the effect of an absolute transformation, such
-//  as translating to a specific point. It also allows the bounding
-//  box computed by an SoGetBoundingBoxAction to be reset to empty
-//  during traversal.
-//
-//  This node is dangerous and should be used with caution.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that resets the current transformation to identity.
+/// \ingroup Nodes
+/// This node resets the current transformation to identity. It can be
+/// used to apply an absolute world space transformation afterwards, such
+/// as translating to a specific point from within a hierarchy.
+///
+/// An <tt>SoResetTransform</tt> node should probably be used under an
+/// <tt>SoSeparator</tt> or <tt>SoTransformSeparator</tt> so it won't change
+/// transformations for the rest of the scene graph.
+///
+/// An <tt>SoResetTransform</tt> node can also be used to reset the current
+/// bounding box to empty during traversal of an
+/// <tt>SoGetBoundingBoxAction</tt>, if the #whatToReset field has the
+/// #BBOX bit set.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoRayPickAction</b>
+/// If specified, resets current transformation matrix to identity.
+/// <b>SoGetBoundingBoxAction</b>
+/// If specified, resets current transformation matrix to identity and
+/// current computed bounding box to be empty.
+/// <b>SoGetMatrixAction</b>
+/// Returns identity matrix.
+///
+/// \par File format/defaults:
+/// \code
+/// SoResetTransform {
+///    whatToReset	TRANSFORM
+/// }
+/// \endcode
+/// \sa SoTransform
 class INVENTOR_API SoResetTransform : public SoTransformation {
 
     SO_NODE_HEADER(SoResetTransform);
 
   public:
-    enum ResetType {			// Which things get reset:
-	TRANSFORM	= 0x01,			// Transformation
-	BBOX		= 0x02			// Bounding box
+    /// Which things get reset:
+    enum ResetType {
+        TRANSFORM	= 0x01, ///< Reset the current transformation to identity
+        BBOX		= 0x02  ///< Reset the bounding box to empty
     };
 
     // Fields
-    SoSFBitMask		whatToReset;	// Which things get reset
+    SoSFBitMask		whatToReset;	///< Specifies which items to reset when the node is traversed.
 
-    // Constructor
+    /// Creates a reset transformation node with default settings.
     SoResetTransform();
 
   SoEXTENDER public:

@@ -76,26 +76,26 @@ SoEXTENDER class INVENTOR_API SoLightAttenuationElement : public SoReplacedEleme
     SO_ELEMENT_HEADER(SoLightAttenuationElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void	init(SoState *state);
 
-    // Sets the current light attenuation(s)
+    /// Sets the current light attenuation(s)
     static void		set(SoState *state, SoNode *node,
 			    const SbVec3f &attenuation);
 
-    // Returns the current light attenuation from the state
+    /// Returns the current light attenuation from the state
     static const SbVec3f & get(SoState *state);
 
-    // Returns the default light attenuation
+    /// Returns the default light attenuation
     static SbVec3f	getDefault()		{ return SbVec3f(0., 0., 1.); }
 
-    // Create and return a copy of this element
+    /// Create and return a copy of this element
     virtual SoElement	*copyMatchInfo() const;
 
-    // Returns TRUE if the attenuations match in both elements
+    /// Returns TRUE if the attenuations match in both elements
     virtual SbBool	matches(const SoElement *elt) const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

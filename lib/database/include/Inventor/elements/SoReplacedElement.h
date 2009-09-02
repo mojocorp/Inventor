@@ -84,13 +84,13 @@ SoEXTENDER class INVENTOR_API SoReplacedElement : public SoElement {
     SO_ELEMENT_ABSTRACT_HEADER(SoReplacedElement);
 
   public:
-    // Initializes node id in element
+    /// Initializes node id in element
     virtual void	init(SoState *state);
 
-    // Returns TRUE if the element matches another element, based on node-id
+    /// Returns TRUE if the element matches another element, based on node-id
     virtual SbBool	matches(const SoElement *elt) const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
   SoINTERNAL public:

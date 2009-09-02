@@ -77,41 +77,41 @@ class SoGLLazyElement;
 SoEXTENDER class INVENTOR_API SoMaterialBundle : public SoBundle {
 
   public:
-    // Constructor - takes the action the bundle is used for
+    /// Constructor - takes the action the bundle is used for
     SoMaterialBundle(SoAction *action);
 
-    // Destructor
+    /// Destructor
     ~SoMaterialBundle();
 
-    // This can be called by shapes to prepare for sending multiple
-    // materials later on. It is not required, since all of the send
-    // methods call it if necessary. However, it allows the bundle to
-    // set up some optimizations that are not possible to do later on.
-    // This should never be called between calls to glBegin() and
-    // glEnd().
+    /// This can be called by shapes to prepare for sending multiple
+    /// materials later on. It is not required, since all of the send
+    /// methods call it if necessary. However, it allows the bundle to
+    /// set up some optimizations that are not possible to do later on.
+    /// This should never be called between calls to glBegin() and
+    /// glEnd().
     void		setUpMultiple()	   
 	    { accessElements(FALSE, FALSE);
 	      sendMultiple = TRUE; }
 
-    // Makes sure the first defined material in the state is sent to
-    // GL. This should never be called between calls to glBegin() and
-    // glEnd().
+    /// Makes sure the first defined material in the state is sent to
+    /// GL. This should never be called between calls to glBegin() and
+    /// glEnd().
     void		sendFirst()		{ send(0, FALSE); }
 
-    // Sends indexed material to the GL if it's not already there.
-    // The second paramater should be TRUE if this send is between a
-    // glBegin() and glEnd() call, in which case the stipple pattern
-    // commands for screen-door transparency won't be sent.
+    /// Sends indexed material to the GL if it's not already there.
+    /// The second paramater should be TRUE if this send is between a
+    /// glBegin() and glEnd() call, in which case the stipple pattern
+    /// commands for screen-door transparency won't be sent.
     void		send(int index, SbBool isBetweenBeginEnd)
 	{  reallySend(index, isBetweenBeginEnd, FALSE);  }
 	    
-    // Sends indexed material to the GL even if it's already there.
-    // This method can be used by SoMaterial and related nodes to send
-    // the base material to the GL to avoid cache dependencies on materials.
+    /// Sends indexed material to the GL even if it's already there.
+    /// This method can be used by SoMaterial and related nodes to send
+    /// the base material to the GL to avoid cache dependencies on materials.
     void		forceSend(int index)
 	{ reallySend(index, FALSE, TRUE); }
 
-    // Returns TRUE if only base color part of material is used
+    /// Returns TRUE if only base color part of material is used
     SbBool		isColorOnly() const	{ return colorOnly; }
 
   private:

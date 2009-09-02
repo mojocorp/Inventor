@@ -65,43 +65,109 @@
 
 #include <Inventor/misc/SoGL.h>   // For GLenum declaration
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoText3
-//
-//  Specify 3D text.
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoOutlineFontCache;
 class SoPrimitiveVertex;
 class SoTextureCoordinateElement;
 
+/// 3D text shape node.
+/// \ingroup Nodes
+/// This node defines one or more strings of 3D text. In contrast with
+/// <tt>SoText2</tt>, 3D text can be rotated, scaled, lighted, and textured,
+/// just like all other 3D shapes. Each character in a 3D text string is
+/// created by extruding an outlined version of the character (in the
+/// current typeface) along the current profile, as defined by nodes
+/// derived from <tt>SoProfile</tt>. The default text profile, if none is
+/// specified, is a straight line segment one unit long.
+///
+/// The text origin is at (0,0,0) after applying the current
+/// transformation. The scale of the text is affected by the #size
+/// field of the current <tt>SoFont</tt> as well as the current transformation.
+///
+/// <tt>SoText3</tt> uses the current set of materials when rendering. If the
+/// material binding is <b>OVERALL</b>, then the whole text is drawn with the
+/// first material. If it is <b>PER_PART</b> or <b>PER_PART_INDEXED</b>, the
+/// front part of the text is drawn with the first material, the sides
+/// with the second, and the back with the third.
+///
+/// Textures are applied to 3D text as follows.  On the front and back
+/// faces of the text, the texture origin is at the base point of the
+/// first string; the base point is at the lower left for justification
+/// <b>LEFT</b>, at the lower right for <b>RIGHT</b>, and at the lower center
+/// for <b>CENTER</b>. The texture is scaled equally in both S and T
+/// dimensions, with the font height representing 1 unit. S increases to
+/// the right on the front faces and to the left on the back faces. On the
+/// sides, the texture is scaled the same as on the front and back. S is
+/// equal to 0 at the rear edge of the side faces. The T origin can occur
+/// anywhere along each character, depending on how that character's
+/// outline is defined.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws text based on the current font, profiles, transformation,
+/// drawing style, material, texture, complexity, and so on.
+/// <b>SoRayPickAction</b>
+/// Performs a pick on the text. The string index and character position
+/// are available from the <tt>SoTextDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses the text.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will be
+/// invoked for each successive triangle used to approximate the text
+/// geometry.
+///
+/// \par File format/defaults:
+/// \code
+/// SoText3 {
+///    string           ""
+///    spacing          1
+///    justification    LEFT
+///    parts            FRONT
+/// }
+/// \endcode
+/// \sa SoFont,SoProfile,SoText2,SoTextDetail
 class INVENTOR_API SoText3 : public SoShape {
 
     SO_NODE_HEADER(SoText3);
 
   public:
-    enum Justification {		// Justification types
-	LEFT	= 0x01,
-	RIGHT	= 0x02,
-	CENTER	= 0x03
+    /// Justification types
+    enum Justification {
+        LEFT	= 0x01, ///< Left edges of all strings are aligned
+        RIGHT	= 0x02, ///< Right edges of all strings are aligned
+        CENTER	= 0x03  ///< Centers of all strings are aligned
     };
 
-    enum Part {			// Justification types
-	FRONT	= 0x01,
-	SIDES	= 0x02,
-	BACK  	= 0x04,
-	ALL     = 0x07
+    /// Justification types
+    enum Part {
+        FRONT	= 0x01, ///< Front faces of characters
+        SIDES	= 0x02, ///< Extruded sides of characters
+        BACK  	= 0x04, ///< Back faces of characters
+        ALL     = 0x07  ///< All parts
     };
 
     // Fields
-    SoMFString		string;		// the strings to display
-    SoSFFloat		spacing;	// interval between strings
-    SoSFBitMask		parts;		// Visible parts of text
+    /// The text string(s) to display. Each string will appear on its own line.
+    SoMFString		string;
+
+    /// Defines the distance (in the negative y direction) between the base
+    /// points of successive strings, measured with respect to the current
+    /// font height. A value of 1 indicates single spacing, a value of 2
+    /// indicates double spacing, and so on.
+    SoSFFloat		spacing;
+
+    /// Which parts of text are visible. Note that, for speed, the default for
+    /// this field is <b>FRONT</b> only.
+    SoSFBitMask		parts;
+
+    /// Indicates placement and alignment of strings. With <b>LEFT</b>
+    /// justification, the left edge of the first line is at the (transformed)
+    /// origin, and all left edges are aligned. <b>RIGHT</b> justification is
+    /// similar.  <b>CENTER</b> justification places the center of the first
+    /// string at the (transformed) origin, with the centers of all remaining
+    /// strings aligned under it.
     SoSFEnum		justification;
 
-    // Constructor
+    /// Creates a 3D text node with default settings.
     SoText3();
 
   SoEXTENDER public:

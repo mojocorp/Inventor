@@ -59,12 +59,20 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbTime.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFTime subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of SbTime values.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of SbTime values.
+///
+/// <tt>SoMFTimes</tt> are written to file as one or more double-precision
+/// floating point values representing the length of time in seconds.
+/// Absolute times are measured relative to 00:00:00 GMT, January 1, 1970.
+///
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ 1.0, 1345600.1200055, 99.8 ]
+/// \sa SbTime
 class INVENTOR_API SoMFTime : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFTime, SbTime, const SbTime &);

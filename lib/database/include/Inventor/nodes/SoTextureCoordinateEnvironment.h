@@ -61,12 +61,25 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/fields/SoSFRotation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTextureCoordinateEnvironment
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that specifies texture coordinates by projection from a environment.
+/// \ingroup Nodes
+/// This node creates texture coordinates by projecting points on an
+/// object's surface to the interior of a surrounding sphere, along the
+/// reflection across the surface normal of the vector from the camera
+/// point to the surface. If the current texture image represents a
+/// spherical reflection map of the current surrounding environment,
+/// subsequent shapes will appear to reflect that environment.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoRayPickAction</b>
+/// Sets the current texture function in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTextureCoordinateEnvironment {
+/// }
+/// \endcode
+/// \sa SoTexture2,SoTexture2Transform,SoTextureCoordinateDefault,SoTextureCoordinatePlane
 class INVENTOR_API SoTextureCoordinateEnvironment : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinateEnvironment);
@@ -74,7 +87,7 @@ class INVENTOR_API SoTextureCoordinateEnvironment : public SoTextureCoordinateFu
   public:
     // No fields
 
-    // Constructor
+    /// Creates a texture function node with default settings.
     SoTextureCoordinateEnvironment();
 
   SoEXTENDER public:

@@ -67,14 +67,14 @@ class SoUnknownEngine : public SoEngine {
     
   public:
 
-    // Constructor
+    /// Constructor
     SoUnknownEngine();
     
   protected:
-    // Returns file format name
+    /// Returns file format name
     virtual const char *getFileFormatName() const;
 
-    // Copies the contents of the given engine into this instance
+    /// Copies the contents of the given engine into this instance
     virtual void	copyContents(const SoFieldContainer *fromFC,
 				     SbBool copyConnections);
 

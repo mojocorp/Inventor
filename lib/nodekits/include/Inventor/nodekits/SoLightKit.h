@@ -86,6 +86,59 @@
 //                                           
 ////////////////////////////////////////////////////////////////////
 
+/// Light nodekit class.
+/// \ingroup Nodekits
+/// This nodekit class is used to create light nodes that have
+/// a local transformation and a geometry icon to represent the light source.
+/// <tt>SoLightKit</tt> adds three public parts to the basic nodekit:
+/// <em>transform</em>, <em>light</em>, and <em>icon</em>.
+///
+///
+/// <tt>SoLightKit</tt> creates an <tt>SoDirectionalLight</tt> as the <em>light</em> part
+/// by default - all other parts are <b>NULL</b> at creation.
+///
+///
+/// You can move the light relative to the rest of the scene by creating
+/// and editing the <em>transform</em> part.
+///
+///
+/// You can add a geometrical representation for the light by
+/// setting the <em>icon</em> part to be any scene graph you like.
+///
+///
+/// <tt>SoLightKit</tt> also adds two private parts. An <tt>SoTransformSeparator</tt>
+/// contains the effect of <em>transform</em> to move only the <em>light</em> and <em>icon</em>,
+/// while allowing the <em>light</em> to illuminate the rest of the scene.
+/// The second private part is an <tt>SoSeparator</tt>, which keeps property nodes
+/// within the <em>icon</em> geometry from affecting the rest of the scene.
+/// It also serves to cache the <em>icon</em> even when the <em>light</em>
+/// or <em>transform</em> is changing.
+///
+///
+/// <tt>SoLightKit</tt> is derived from <tt>SoBaseKit</tt> and thus also includes a
+/// <em>callbackList</em> part for adding callback nodes.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoLightKit
+/// -->"this"
+///       "callbackList"
+/// -->   "transformGroup"
+/// -->      "transform"
+/// -->      "light"
+/// -->      "iconSeparator"
+/// -->         "icon"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoLightKit {
+///     callbackList    NULL
+///     transform       NULL
+///     light           DirectionalLight {}
+///     icon            NULL
+/// }
+/// \endcode
+/// \sa SoAppearanceKit,SoBaseKit,SoCameraKit,SoNodeKit,SoNodeKitDetail,SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit
 class INVENTOR_API SoLightKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoLightKit);
@@ -98,7 +151,7 @@ class INVENTOR_API SoLightKit : public SoBaseKit {
     SO_KIT_CATALOG_ENTRY_HEADER(icon);
 
   public:
-    // constructor
+    /// Default constructor
     SoLightKit();
 
   SoINTERNAL public:

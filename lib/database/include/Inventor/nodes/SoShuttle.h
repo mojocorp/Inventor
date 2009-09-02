@@ -60,26 +60,48 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/fields/SoSFBool.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoShuttle
-//
-//  SoTranslation node oscillates between two translations
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Animated oscillating translation node.
+/// \ingroup Nodes
+/// The <tt>SoShuttle</tt> class is derived from <tt>SoTranslation</tt>, so it
+/// applies a translation to the current transformation.  Using engines
+/// connected to the #realTime global field, the translation value is
+/// animated over time between two fixed translations, achieving a
+/// shuttling effect. The period of the motion can be adjusted by changing
+/// the #speed field. The current translation at any time is available
+/// in the #translation field, inherited from <tt>SoTranslation</tt>
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction</b>
+/// Concatenates interpolated translation value with the current
+/// transformation matrix.
+/// <b>SoGetMatrixAction</b>
+/// Returns transformation matrix specified by the interpolated translation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoShuttle {
+///    translation      0 0 0
+///    translation0     0 0 0
+///    translation1     0 0 0
+///    speed            1
+///    on               TRUE
+/// }
+/// \endcode
+/// \sa SoPendulum, SoRotor
 class INVENTOR_API SoShuttle : public SoTranslation {
 
     SO_NODE_HEADER(SoShuttle);
 
   public:
     // Fields
+    /// These define the two fixed translations that are interpolated to
+    /// create the shuttling motion.
     SoSFVec3f		translation0;
     SoSFVec3f		translation1;
-    SoSFFloat		speed;	// cycles per second
-    SoSFBool		on;	// FALSE to stop shuttle
+    SoSFFloat		speed;	///< Defines the speed of the shuttle, in cycles per second.
+    SoSFBool		on;	///< Allows applications to enable or disable the motion easily.
 
-    // Constructor
+    /// Creates a shuttle node with default settings.
     SoShuttle();
 
   SoINTERNAL public:

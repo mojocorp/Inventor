@@ -81,47 +81,52 @@ class SoField;
 class SoMField;
 class SoSensor;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// This typedef defines the calling sequence for all callbacks from sensors
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// This typedef defines the calling sequence for all callbacks from sensors
 typedef void SoSensorCB(void *data, SoSensor *sensor);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoSensor
-//
-//  Abstract base class for all sensors. Defines basic callback
-//  definition (explicit or in constructor) and scheduling and
-//  triggering methods.
-//
-//////////////////////////////////////////////////////////////////////////////
+/// Abstract base class for Inventor sensors.
+/// \ingroup Sensors
+/// Sensors detect changes either to time or to Inventor objects in a
+/// scene graph, and call a user-defined callback function.  Sensors are
+/// <em>scheduled</em> when the thing they are attached to changes, and sometime
+/// after they are scheduled they are <em>triggered</em>, calling the user's
+/// callback function.
+/// \sa SoAlarmSensor, SoDataSensor, SoFieldSensor, SoIdleSensor,SoNodeSensor, SoPathSensor, SoSensorManager
 class INVENTOR_API SoSensor {
 
   public:
 
-    // Constructors. The second form takes callback function and data
+    /// Constructor.
     SoSensor()				{ func = NULL; funcData = NULL; }
+
+    /// Constructor that takes callback function and data
     SoSensor(SoSensorCB *f, void *d)	{ func = f;    funcData = d; }
 
-    // Virtual destructor so that subclasses are deleted properly
+    /// Virtual destructor so that subclasses are deleted properly
     virtual ~SoSensor();
 
-    // Sets/returns callback function and user data pointers.
+    /// Sets the callback function that is called when the sensor is
+    /// triggered.  The function must take two arguments \(em user-supplied
+    /// callback data (of type void *) and a pointer to the sensor that is
+    /// triggering the function (of type SoSensor *).
     void		setFunction(SoSensorCB *f)	{ func = f;	}
+
+    /// Sets the callback data passed to the callback function.
     void		setData(void *d)		{ funcData = d;	}
+
+    /// Returns the callback function that will be called when the sensor is triggered.
     SoSensorCB *	getFunction() const		{ return func; }
+
+    /// Returns the user-supplied pointer that will be passed to the callback function.
     void *		getData() const			{ return funcData; }
 
-    // Schedules the sensor for triggering at the appropriate time
+    /// Schedules the sensor for triggering at the appropriate time
     virtual void	schedule() = 0;
 
-    // Unschedules sensor to keep it from being triggered
+    /// Unschedules sensor to keep it from being triggered
     virtual void	unschedule() = 0;
 
-    // Returns whether the sensor is scheduled
+    /// Returns whether the sensor is scheduled
     virtual SbBool	isScheduled() const = 0;
 
   SoINTERNAL public:

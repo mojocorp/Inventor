@@ -63,87 +63,95 @@
 
 #include <Inventor/SbBasic.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbVec2f
-//
-//  2D vector used to represet points or directions. Each component of
-//  the vector is a float.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// 2D vector class.
+/// \ingroup Basics
+/// 2D vector class used to store 2D vectors and points. This class is used
+/// throughout Inventor for arguments and return values.
+/// \sa SbVec3f, SbVec4f, SbVec2s, SbRotation
 class INVENTOR_API SbVec2f {
   public:
 
-    // Default constructor
+    /// Default constructor
     SbVec2f()						{ }
 
-    // Constructor given an array of 2 components
+    /// Constructor given an array of 2 components
     SbVec2f(const float v[2])				{ setValue(v); }
 
-    // Constructor given 2 individual components
+    /// Constructor given 2 individual components
     SbVec2f(float x, float y)				{ setValue(x, y); }
 
-    // Returns dot (inner) product of vector and another vector
+    /// Returns dot (inner) product of vector and another vector
     float	dot(const SbVec2f &v) const;
 
-    // Returns pointer to array of 2 components
+    /// Returns pointer to array of 2 components
     const float	*getValue() const			{ return vec; }
 
-    // Returns 2 individual components
+    /// Returns 2 individual components
     void	getValue(float &x, float &y) const;
 
-    // Returns geometric length of vector
+    /// Returns geometric length of vector
     float	length() const;
 
-    // Negates each component of vector in place
+    /// Negates each component of vector in place
     void	negate();
 
-    // Changes vector to be unit length
+    /// Changes vector to be unit length, returning the length before normalization.
     float	normalize();
 
-    // Sets value of vector from array of 2 components
+    /// Sets value of vector from array of 2 components
     SbVec2f &	setValue(const float v[2]);
 
-    // Sets value of vector from 2 individual components
+    /// Sets value of vector from 2 individual components
     SbVec2f &	setValue(float x, float y);
 
-    // Accesses indexed component of vector
+    /// Accesses indexed component of vector
     float &	  operator [](int i) 		{ return (vec[i]); }
+
+    /// Accesses indexed component of vector
     const float & operator [](int i) const 	{ return (vec[i]); }
 
-    // Component-wise scalar multiplication and division operators
+    /// Component-wise scalar multiplication operator
     SbVec2f &	operator *=(float d);
 
+    /// Component-wise scalar division operator
     SbVec2f &	operator /=(float d)
 	{ return *this *= (1.0f / d); }
 
-    // Component-wise vector addition and subtraction operators
+    /// Component-wise vector addition operator
     SbVec2f &	operator +=(const SbVec2f &u);
+
+    /// Component-wise vector subtraction operator
     SbVec2f &	operator -=(const SbVec2f &u);
 
-    // Nondestructive unary negation - returns a new vector
+    /// Nondestructive unary negation - returns a new vector
     SbVec2f	operator -() const;
 
-    // Component-wise binary scalar multiplication and division operators
+    /// Component-wise binary scalar multiplication operator
     friend INVENTOR_API SbVec2f	operator *(const SbVec2f &v, float d);
+
+    /// Component-wise binary scalar multiplication operator
     friend INVENTOR_API SbVec2f	operator *(float d, const SbVec2f &v)
 	{ return v * d; }
+
+    /// Component-wise binary scalar division operator
     friend INVENTOR_API SbVec2f	operator /(const SbVec2f &v, float d)
 	{ return v * (1.0f / d); }
 
-    // Component-wise binary vector addition and subtraction operators
+    /// Component-wise binary vector addition operator
     friend INVENTOR_API SbVec2f	operator +(const SbVec2f &v1, const SbVec2f &v2);
 
+    /// Component-wise binary vector subtraction operator
     friend INVENTOR_API SbVec2f	operator -(const SbVec2f &v1, const SbVec2f &v2);
 
-    // Equality comparison operator
+    /// Equality comparison operator
     friend INVENTOR_API int		operator ==(const SbVec2f &v1, const SbVec2f &v2);
+
+    /// Inequality comparison operator
     friend INVENTOR_API int		operator !=(const SbVec2f &v1, const SbVec2f &v2)
 	{ return !(v1 == v2); }
 
-    // Equality comparison within given tolerance - the square of the
-    // length of the maximum distance between the two vectors
+    /// Equality comparison within given tolerance - the square of the
+    /// length of the maximum distance between the two vectors
     SbBool		equals(const SbVec2f & v, float tolerance) const;
 
   protected:

@@ -65,46 +65,49 @@
 
 #include <Inventor/lists/SoBaseList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Subclasses of the SbPList class which hold lists of pointers of a
-// specific type.
-//
-// Each contains:
-//	A default constructor
-//	A constructor taking an initial number of items in the list
-//	An "append" function that adds a pointer to the end of the list
-//	The index ([]) operator that returns the nth pointer in the list
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoPath;
 
+/// Maintains a list of pointers to paths.
+/// \ingroup General
+/// This subclass of <tt>SoBaseList</tt> holds lists of pointers to
+/// <tt>SoPath</tt>s.  It updates reference counts to paths in the list
+/// whenever adding or removing pointers.
+/// \sa SoPath
 class INVENTOR_API SoPathList : public SoBaseList {
   public:
+    /// Constructor.
     SoPathList()			: SoBaseList()	{}
+
+    /// Constructor that pre-allocates storage for \a size pointers.
     SoPathList(int size)		: SoBaseList(size) {}
+
+    /// Constructor that copies the contents of another list.
     SoPathList(const SoPathList &l)	: SoBaseList(l) {}
+
+    /// Destructor.
     ~SoPathList()			{ }
 
+    /// Adds a path to the end of the list.
     void		append(SoPath * ptr)
         { ((SoBaseList *) this)->append((SoBase *) ptr); }
 
+    /// Copies a list, keeping all reference counts correct.
     SoPathList &	operator =(const SoPathList &l)
         { SoBaseList::copy(l) ; return *this; }
 
+    /// Accesses an element of a list.
     SoPath *		operator [](int i) const
         { return ( (SoPath *) ( (*(const SoBaseList *) this) [i] ) ); }
 
-    // Returns index of matching path in list, or -1 if not found
+    /// Returns the index of the matching path in the list, or -1 if not found.
     int			findPath(const SoPath &path);
 
-    // Sorts list in place based on (1) increasing address of head
-    // node, then (2) increasing indices of children
+    /// Sorts list in place based on (1) increasing address of head node, then
+    /// (2) increasing indices of children.
     void		sort();
 
-    // Given a sorted list, removes any path that (1) is a duplicate,
-    // or (2) goes through a node that is the tail of another path
+    /// Given a sorted list, removes any path that (1) is a duplicate, or (2)
+    /// goes through a node that is the tail of another path.
     void		uniquify();
 
   private:

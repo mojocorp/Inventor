@@ -86,6 +86,51 @@
 //
 ////////////////////////////////////////////////////////////////////
 
+/// Appearance nodekit class.
+/// \ingroup Nodekits
+/// The <tt>SoAppearanceKit</tt> is used to create a group of property nodes
+/// that will be used to affect subsequent <em>shape</em> nodes or nodekits in the
+/// scene graph.
+///
+///
+/// This nodekit defines seven new parts: <em>lightModel</em>, <em>environment</em>,
+/// <em>drawStyle</em>, <em>material</em>, <em>complexity</em>, <em>texture2</em>, and <em>font</em>.
+/// Note that
+/// it does not include <em>binding</em> nodes such as <tt>SoMaterialBinding</tt>.
+///
+///
+/// <tt>SoAppearanceKit</tt> is derived from <tt>SoBaseKit</tt> and thus also includes a
+/// <em>callbackList</em> part for adding callback nodes.
+/// \par Notes:
+/// Note that <tt>SoSeparatorKit</tt> includes an <tt>SoAppearanceKit</tt> as a part.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoAppearanceKit
+/// -->"this"
+///       "callbackList"
+/// -->   "lightModel"
+/// -->   "environment"
+/// -->   "drawStyle"
+/// -->   "material"
+/// -->   "complexity"
+/// -->   "texture2"
+/// -->   "font"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoAppearanceKit {
+///     callbackList    NULL
+///     lightModel      NULL
+///     environment     NULL
+///     drawStyle       NULL
+///     material        NULL
+///     complexity      NULL
+///     texture2        NULL
+///     font            NULL
+/// }
+/// \endcode
+/// \sa SoBaseKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit
 class INVENTOR_API SoAppearanceKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoAppearanceKit);
@@ -100,7 +145,7 @@ class INVENTOR_API SoAppearanceKit : public SoBaseKit {
     SO_KIT_CATALOG_ENTRY_HEADER(font);
 
   public:
-    // constructor
+    /// constructor
     SoAppearanceKit();
 
   SoINTERNAL public:

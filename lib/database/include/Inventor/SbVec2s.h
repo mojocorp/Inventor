@@ -63,84 +63,98 @@
 
 #include <Inventor/SbBasic.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbVec2s
-//
-//  2D vector used to represet points or directions. Each component of
-//  the vector is a (short) integer.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// 2D vector class.
+/// \ingroup Basics
+/// 2D vector class used to store 2D integer vectors and points. This class is used
+/// throughout Inventor for arguments and return values.
+/// \sa SbVec3f, SbVec4f, SbVec2f
 class INVENTOR_API SbVec2s {
   public:
 
-    // Default constructor
+    /// Default constructor
     SbVec2s()						{ }
 
-    // Constructor given an array of 2 components
+    /// Constructor given an array of 2 components
     SbVec2s(const short v[2])				{ setValue(v); }
 
-    // Constructor given 2 individual components
+    /// Constructor given 2 individual components
     SbVec2s(short x, short y)				{ setValue(x, y); }
 
-    // Returns dot (inner) product of vector and another vector
+    /// Returns dot (inner) product of vector and another vector
     int32_t	dot(const SbVec2s &v) const;
 
-    // Returns pointer to array of 2 components
+    /// Returns pointer to array of 2 components
     const short	*getValue() const			{ return vec; }
 
-    // Returns 2 individual components
+    /// Returns 2 individual components
     void	getValue(short &x, short &y) const;
 
-    // Negates each component of vector in place
+    /// Negates each component of vector in place
     void	negate();
 
-    // Sets value of vector from array of 2 components
+    /// Sets value of vector from array of 2 components
     SbVec2s &	setValue(const short v[2]);
 
-    // Sets value of vector from 2 individual components
+    /// Sets value of vector from 2 individual components
     SbVec2s &	setValue(short x, short y);
 
-    // Accesses indexed component of vector
+    /// Accesses indexed component of vector
     short &	  operator [](int i) 		{ return (vec[i]); }
+
+    /// Accesses indexed component of vector
     const short & operator [](int i) const 	{ return (vec[i]); }
 
-    // Component-wise scalar multiplication and division operators
+    /// Component-wise scalar multiplication operator
     SbVec2s &	operator *=(int d);
+
+    /// Component-wise scalar multiplication operator
     SbVec2s &	operator *=(double d);
 
+    /// Component-wise scalar division operator
     SbVec2s &	operator /=(int d);
+
+    /// Component-wise scalar division operator
     SbVec2s &	operator /=(double d)
 	{ return *this *= (1.0 / d); }
 
-    // Component-wise vector addition and subtraction operators
+    /// Component-wise vector addition operator
     SbVec2s &	operator +=(const SbVec2s &u);
+
+    /// Component-wise vector subtraction operator
     SbVec2s &	operator -=(const SbVec2s &u);
 
-    // Nondestructive unary negation - returns a new vector
+    /// Nondestructive unary negation - returns a new vector
     SbVec2s	operator -() const;
 
-    // Component-wise binary scalar multiplication and division operators
+    /// Component-wise binary scalar multiplication operator
     friend INVENTOR_API SbVec2s	operator *(const SbVec2s &v, int d);
-    friend INVENTOR_API SbVec2s	operator *(const SbVec2s &v, double d);
-    friend INVENTOR_API SbVec2s	operator *(int d, const SbVec2s &v)
-	{ return v * d; }
-    friend INVENTOR_API SbVec2s	operator *(double d, const SbVec2s &v)
-	{ return v * d; }
-    friend INVENTOR_API SbVec2s	operator /(const SbVec2s &v, int d);
-    friend INVENTOR_API SbVec2s	operator /(const SbVec2s &v, double d)
-	{ return v * (1.0 / d); }
 
-    // Component-wise binary vector addition and subtraction operators
+    /// Component-wise binary scalar multiplication operator
+    friend INVENTOR_API SbVec2s	operator *(const SbVec2s &v, double d);
+
+    /// Component-wise binary scalar multiplication operator
+    friend INVENTOR_API SbVec2s	operator *(int d, const SbVec2s &v) { return v * d; }
+
+    /// Component-wise binary scalar multiplication operator
+    friend INVENTOR_API SbVec2s	operator *(double d, const SbVec2s &v) { return v * d; }
+
+    /// Component-wise binary scalar division operator
+    friend INVENTOR_API SbVec2s	operator /(const SbVec2s &v, int d);
+
+    /// Component-wise binary scalar division operator
+    friend INVENTOR_API SbVec2s	operator /(const SbVec2s &v, double d) { return v * (1.0 / d); }
+
+    /// Component-wise binary vector addition operator
     friend INVENTOR_API SbVec2s	operator +(const SbVec2s &v1, const SbVec2s &v2);
 
+    /// Component-wise binary vector subtraction operator
     friend INVENTOR_API SbVec2s	operator -(const SbVec2s &v1, const SbVec2s &v2);
 
-    // Equality comparison operator
+    /// Equality comparison operator
     friend INVENTOR_API int		operator ==(const SbVec2s &v1, const SbVec2s &v2);
-    friend INVENTOR_API int		operator !=(const SbVec2s &v1, const SbVec2s &v2)
-	{ return !(v1 == v2); }
+    
+    /// Inequality comparison operator
+    friend INVENTOR_API int		operator !=(const SbVec2s &v1, const SbVec2s &v2) { return !(v1 == v2); }
 
   protected:
     short	vec[2];		// Storage for vector components

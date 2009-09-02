@@ -67,14 +67,26 @@
 
 class SbViewportRegion;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCamera
-//
-//  Abstract base class Camera node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for camera nodes.
+/// \ingroup Nodes
+/// This is the abstract base class for all camera nodes. It defines the
+/// common methods and fields that all cameras have. Cameras are used to
+/// view a scene. When a camera is encountered during rendering, it sets
+/// the projection and viewing matrices and viewport appropriately; it
+/// does not draw geometry. Cameras should be placed before any shape
+/// nodes or light nodes in a scene graph; otherwise, those shapes or
+/// lights cannot be rendered properly. Cameras are affected by the
+/// current transformation, so you can position a camera by placing a
+/// transformation node before it in the scene graph . The default
+/// position and orientation of a camera is at (0,0,1) looking along the
+/// negative z-axis.
+///
+///
+/// You can also use a node kit to create a camera; see the reference page for
+/// <tt>SoCameraKit</tt>.
+/// \par File format/defaults:
+/// This is an abstract class. See the reference page of a derived class for the format and default values.
+/// \sa SoOrthographicCamera, SoPerspectiveCamera, SoCameraKit
 class INVENTOR_API SoCamera : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoCamera);
@@ -85,13 +97,12 @@ class INVENTOR_API SoCamera : public SoNode {
 	
 				       // The first 3 adjust the viewport
 				       // to fit the camera.
-        CROP_VIEWPORT_FILL_FRAME = 0,  // Draw filled frame around vp.
-        CROP_VIEWPORT_LINE_FRAME = 1,  // Draw frame in lines.
-        CROP_VIEWPORT_NO_FRAME   = 2,  // Draw no frame.
+        CROP_VIEWPORT_FILL_FRAME = 0,  ///< Draw filled frame around vp.
+        CROP_VIEWPORT_LINE_FRAME = 1,  ///< Draw frame in lines.
+        CROP_VIEWPORT_NO_FRAME   = 2,  ///< Draw no frame.
 
-	ADJUST_CAMERA            = 3,  // Adjust camera to fit viewport.
-	LEAVE_ALONE              = 4   // Do nothing. Camera image may
-				       // become stretched out of proportion
+        ADJUST_CAMERA            = 3,  ///< Adjust camera to fit viewport.
+        LEAVE_ALONE              = 4   ///< Do nothing. Camera image may become stretched out of proportion
     };
 
     // NOTE: These fields are here so that all camera subclasses do
@@ -100,41 +111,35 @@ class INVENTOR_API SoCamera : public SoNode {
     // things work properly.
 
     // Fields
-    SoSFEnum		viewportMapping;// Treatment when aspectRatio not
-					// same as viewport's aspectRatio
-    SoSFVec3f		position;	// Location of viewpoint
-    SoSFRotation	orientation;	// Orientation (rotation with
-					// respect to (0,0,-1) vector)
-    SoSFFloat		aspectRatio;	// Ratio of width to height of
-					// view plane
-    SoSFFloat		nearDistance;	// Distance from viewpoint to
-					// view plane
-    SoSFFloat		farDistance;	// Distance from viewpoint to
-					// far clipping plane
-    SoSFFloat	    	focalDistance;	// Distance from viewpoint to
-					// point of focus.
+    SoSFEnum		viewportMapping;///< Treatment when aspectRatio not same as viewport's aspectRatio
+    SoSFVec3f		position;	///< Location of viewpoint
+    SoSFRotation	orientation;	///< Orientation (rotation with respect to (0,0,-1) vector)
+    SoSFFloat		aspectRatio;	///< Ratio of width to height of view plane
+    SoSFFloat		nearDistance;	///< Distance from viewpoint to view plane
+    SoSFFloat		farDistance;	///< Distance from viewpoint to far clipping plane
+    SoSFFloat	    	focalDistance;	///< Distance from viewpoint to point of focus.
 
-    // Sets the orientation of the camera so that it points toward the
-    // given target point while keeping the "up" direction of the
-    // camera parallel to the positive y-axis. If this is not
-    // possible, it uses the positive z-axis as "up".
+    /// Sets the orientation of the camera so that it points toward the
+    /// given target point while keeping the "up" direction of the
+    /// camera parallel to the positive y-axis. If this is not
+    /// possible, it uses the positive z-axis as "up".
     void		pointAt(const SbVec3f &targetPoint);
 
-    // Scales the height of the camera. This is a virtual function.
-    // Perspective cameras will scale their 'heightAngle' field here, and ortho
-    // cameras will scale their 'height' field.
+    /// Scales the height of the camera. This is a virtual function.
+    /// Perspective cameras will scale their 'heightAngle' field here, and ortho
+    /// cameras will scale their 'height' field.
     virtual void	scaleHeight(float scaleFactor) = 0;
 
-    // Fills in a view volume structure, based on the camera. If the
-    // useAspectRatio field is not 0.0 (the default), the camera uses
-    // that ratio instead of the one it has.
+    /// Fills in a view volume structure, based on the camera. If the
+    /// useAspectRatio field is not 0.0 (the default), the camera uses
+    /// that ratio instead of the one it has.
     virtual SbViewVolume getViewVolume(float useAspectRatio = 0.0) const = 0;
 
-    // Sets the camera up to view the scene under the given node or
-    // defined by the given path. The near and far clipping planes
-    // will be positioned 'slack' bounding sphere radii away from the
-    // bounding box's center. A value of 1.0 will make the clipping
-    // planes the tightest around the bounding sphere.
+    /// Sets the camera up to view the scene under the given node or
+    /// defined by the given path. The near and far clipping planes
+    /// will be positioned 'slack' bounding sphere radii away from the
+    /// bounding box's center. A value of 1.0 will make the clipping
+    /// planes the tightest around the bounding sphere.
     void		viewAll(SoNode *sceneRoot,
 				const SbViewportRegion &vpRegion,
 				float slack = 1.0);
@@ -142,8 +147,8 @@ class INVENTOR_API SoCamera : public SoNode {
 				const SbViewportRegion &vpRegion,
 				float slack = 1.0);
 
-    // Returns the viewport region this camera would use to render
-    // into a given viewport region, accounting for cropping
+    /// Returns the viewport region this camera would use to render
+    /// into a given viewport region, accounting for cropping
     SbViewportRegion	getViewportBounds(const SbViewportRegion &region) const;
 
   SoEXTENDER public:

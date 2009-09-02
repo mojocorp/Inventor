@@ -59,12 +59,18 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbRotation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFRotation subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a rotation.
+/// \ingroup Fields
+/// A field containing a single <tt>SbRotation</tt> (an arbitrary rotation).
+///
+/// <tt>SoSFRotations</tt> are written to file as four floating point values
+/// separated by whitespace.  The 4 values represent an axis of rotation
+/// followed by the amount of right-handed rotation about that axis, in
+/// radians.  For example, a 180 degree rotation about the Y axis is:
+///
+/// 0 1 0  3.14159265
+///
+/// \sa SbRotation, SoField, SoSField, SoMFRotation
 class INVENTOR_API SoSFRotation : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFRotation, SbRotation, const SbRotation &);
@@ -74,17 +80,17 @@ class INVENTOR_API SoSFRotation : public SoSField {
     // Some additional convenience functions:
     //
 
-    // Return value as axis and angle
+    /// Gets the value of the field as an axis/angle.
     void	getValue(SbVec3f &axis, float &angle) const
 	{ evaluate(); value.getValue(axis, angle); }
 
-    // Set value from 4 floats defining rotation quaternion
+    /// Set value from 4 floats defining rotation quaternion
     void	setValue(float q0, float q1, float q2, float q3);
     
-    // Set value from array of 4 floats defining rotation quaternion
+    /// Set value from array of 4 floats defining rotation quaternion
     void	setValue(const float q[4]);
 
-    // Set value from axis and angle in radians
+    /// Set the field to the rotation given by axis/angle.
     void	setValue(const SbVec3f &axis, float angle);
 
   SoINTERNAL public:

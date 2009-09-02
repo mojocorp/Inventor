@@ -72,33 +72,57 @@
 #include <Inventor/projectors/SbSphereProjector.h>
 #include <Inventor/SbPlane.h>
 
+/// Sphere-sheet projector.
+/// \ingroup Projectors
+/// <tt>SbSphereSheetProjector</tt>
+/// projects a window space point (usually based on the mouse location)
+/// onto the surface of a sphere with a hyperbolic sheet draped over it.
+/// This allows smooth transitions onto and off of the sphere.
+/// Two projected points can produce a rotation
+/// about the sphere's center.
+/// When the mouse position projects on to the sheet, the
+/// rotations will be as if the sheet is being dragged,
+/// causing the sphere to roll beneath it.
+///
+/// Incremental changes (delta rotation) can be computed during
+/// interactive sessions. Sphere projectors are typically used to write
+/// interactive 3D manipulators and viewers.
+/// \sa SbCylinderProjector,SbCylinderPlaneProjector,SbCylinderSectionProjector,
+/// \sa SbCylinderSheetProjector,SbLineProjector,SbPlaneProjector,SbSpherePlaneProjector
 class INVENTOR_API SbSphereSheetProjector : public SbSphereProjector
 {
   public:
-    // Default constructor.
-    // The default view volume is undefined.
-    // The default working space is identity (world space).
-    // The default sphere to use has a radius of 1.0 and is centered at (0,0,0).
-    // The default eye orientation is TRUE.
+    /// Default constructor.
+    /// The default view volume is undefined.
+    /// The default working space is identity (world space).
+    /// The default sphere to use has a radius of 1.0 and is centered at (0,0,0).
+    /// The default eye orientation is TRUE.
     SbSphereSheetProjector(SbBool orientToEye = TRUE);
 
-    // Constructor taking the sphere.
+    /// Constructor taking the sphere.
+    /// The \a orientToEye
+    /// parameter determines whether the sheet is perpendicular to the
+    /// eye, or perpendicular to the sphere's Z axis.  Setting that parameter to TRUE
+    /// (the default) specifies that the sheet be perpendicular to the
+    /// eye, which is most often the desired behavior.
+    ///
+    /// The default view volume is undefined, and the working space is identity.
     SbSphereSheetProjector(const SbSphere &sph,
 			   SbBool orientToEye = TRUE);
 
-    // Destructor
+    /// Destructor
     ~SbSphereSheetProjector() {}
     
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SbProjector *    copy() const;
 
-    // Apply the projector using the given point, returning the
-    // point in three dimensions that it projects to.
-    // The point should be normalized from 0-1, with (0,0) at the lower-left.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// The point should be normalized from 0-1, with (0,0) at the lower-left.
     virtual SbVec3f	project(const SbVec2f &point);
 
-    // Computes a rotation based on two points on this projector.
+    /// Computes a rotation based on two points on this projector.
     virtual SbRotation	getRotation(const SbVec3f &point1,
 				    const SbVec3f &point2);
 

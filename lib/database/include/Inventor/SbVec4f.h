@@ -63,91 +63,96 @@
 
 #include <Inventor/SbBasic.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbVec4f
-//
-//  4D vector used to represet rational points or directions. Each component of
-//  the vector is a float.
-//
-//////////////////////////////////////////////////////////////////////////////
 class SbVec3f;
 
+/// 4D vector class.
+/// \ingroup Basics
+/// 4D vector class used to store homogeneous coordinates. This class is used
+/// in Inventor for arguments and return values.
+/// \sa SbVec2f, SbVec3f, SbVec2s, SbRotation
 class INVENTOR_API SbVec4f {
   public:
 
-    // Default constructor
+    /// Default constructor
     SbVec4f()						{ }
 
-    // Constructor given an array of 4 components
+    /// Constructor given an array of 4 components
     SbVec4f(const float v[4])				{ setValue(v); }
 
-    // Constructor given 4 individual components
+    /// Constructor given 4 individual components
     SbVec4f(float x, float y, float z, float w)	      { setValue(x, y, z, w); }
 
-    // Returns dot (inner) product of vector and another vector
+    /// Returns dot (inner) product of vector and another vector
     float	dot(const SbVec4f &v) const;
 
-    // Returns the real portion of the vector by dividing by the fourth value
+    /// Returns the real portion of the vector by dividing by the fourth value
     void	getReal(SbVec3f &v) const;
 
-    // Returns pointer to array of 4 components
+    /// Returns pointer to array of 4 components
     const float	*getValue() const			{ return vec; }
 
-    // Returns 4 individual components
+    /// Returns 4 individual components
     void	getValue(float &x, float &y, float &z, float &w) const;
 
-    // Returns geometric length of vector
+    /// Returns geometric length of vector
     float	length() const;
 
-    // Negates each component of vector in place
+    /// Negates each component of vector in place
     void	negate();
 
-    // Changes vector to be unit length
+    /// Changes vector to be unit length, returning the length before normalization.
     float	normalize();
 
-    // Sets value of vector from array of 4 components
+    /// Sets value of vector from array of 4 components
     SbVec4f &	setValue(const float v[4]);
 
-    // Sets value of vector from 4 individual components
+    /// Sets value of vector from 4 individual components
     SbVec4f &	setValue(float x, float y, float z, float w);
 
-    // Accesses indexed component of vector
+    /// Accesses indexed component of vector
     float &	  operator [](int i) 		{ return (vec[i]); }
+
+    /// Accesses indexed component of vector
     const float & operator [](int i) const	{ return (vec[i]); }
 
-    // Component-wise scalar multiplication and division operators
+    /// Component-wise scalar multiplication operator
     SbVec4f &	operator *=(float d);
 
-    SbVec4f &	operator /=(float d)
-	{ return *this *= (1.0f / d); }
+    /// Component-wise scalar division operator
+    SbVec4f &	operator /=(float d) { return *this *= (1.0f / d); }
 
-    // Component-wise vector addition and subtraction operators
+    /// Component-wise vector addition operator
     SbVec4f &	operator +=(const SbVec4f &u);
+
+    /// Component-wise vector subtraction operator
     SbVec4f &	operator -=(const SbVec4f &u);
 
-    // Nondestructive unary negation - returns a new vector
+    /// Nondestructive unary negation - returns a new vector
     SbVec4f	operator -() const;
 
-    // Component-wise binary scalar multiplication and division operators
+    /// Component-wise binary scalar multiplication operator
     friend INVENTOR_API SbVec4f	operator *(const SbVec4f &v, float d);
-    friend INVENTOR_API SbVec4f	operator *(float d, const SbVec4f &v)
-	{ return v * d; }
-    friend INVENTOR_API SbVec4f	operator /(const SbVec4f &v, float d)
-	{ return v * (1.0f / d); }
 
-    // Component-wise binary vector addition and subtraction operators
+    /// Component-wise binary scalar multiplication operator
+    friend INVENTOR_API SbVec4f	operator *(float d, const SbVec4f &v) { return v * d; }
+
+    /// Component-wise binary scalar division operator
+    friend INVENTOR_API SbVec4f	operator /(const SbVec4f &v, float d) { return v * (1.0f / d); }
+
+    /// Component-wise binary vector addition operator
     friend INVENTOR_API SbVec4f	operator +(const SbVec4f &v1, const SbVec4f &v2);
 
+    /// Component-wise binary vector subtraction operator
     friend INVENTOR_API SbVec4f	operator -(const SbVec4f &v1, const SbVec4f &v2);
 
-    // Equality comparison operator
+    /// Equality comparison operator
     friend INVENTOR_API int		operator ==(const SbVec4f &v1, const SbVec4f &v2);
-    friend INVENTOR_API int		operator !=(const SbVec4f &v1, const SbVec4f &v2)
-	{ return !(v1 == v2); }
 
-    // Equality comparison within given tolerance - the square of the
-    // length of the maximum distance between the two vectors
+    /// Inequality comparison operator
+    friend INVENTOR_API int		operator !=(const SbVec4f &v1, const SbVec4f &v2) { return !(v1 == v2); }
+
+    /// Equality comparison within given tolerance - the square of the
+    /// length of the maximum distance between the two vectors
     SbBool		equals(const SbVec4f & v, float tolerance) const;
 
   protected:

@@ -62,43 +62,62 @@
 #include <Inventor/fields/SoSFBool.h>
 #include <Inventor/fields/SoSFEnum.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoAntiSquish
-//
-//  undoes any uneven scales in the current transformation matrix.
-//  during traversal
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Transformation node that undoes non-uniform 3D scales.
+/// \ingroup Nodes
+/// This node removes nonuniform 3D scaling from the current transformation matrix
+/// when traversed by an action.   It is used by draggers such as the
+/// <tt>SoTrackballDragger</tt> that need to stay uniformly scaled no matter where
+/// they are located in the scene graph.
+///
+///
+/// The magnitude of the new scale is determined
+/// by the current transformation matrix and the \a sizing field.
+/// This node does not change the translation or rotation in the matrix.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction,SoCallbackAction,SoGetBoundingBoxAction, SoGetMatrixAction, SoRayPickAction</b>
+/// Appends the current transformation with a new matrix to create an unsquished
+/// result.
+///
+/// \par File format/defaults:
+/// \code
+/// SoAntiSquish {
+///    sizing           AVERAGE_DIMENSION
+///    recalcAlways     TRUE
+/// }
+/// \endcode
+/// \sa SoCenterballDragger, SoJackDragger, SoTrackballDragger, SoTransformerDragger,SoTransformation, SoTransformBoxDragger
 class INVENTOR_API SoAntiSquish : public SoTransformation {
 
     SO_NODE_HEADER(SoAntiSquish);
 
   public:
 
-    // Constructor
+    /// Creates an anti-squish node with default settings.
     SoAntiSquish();
 
     enum Sizing {
-	X,
-	Y,
-	Z,
-	AVERAGE_DIMENSION,
-	BIGGEST_DIMENSION,
-	SMALLEST_DIMENSION,
-	LONGEST_DIAGONAL
+        X,                  ///< fits the other two axes to match the X axis, whose size is unchanged
+        Y,                  ///< fits the other two axes to match the Y axis, whose size is unchanged
+        Z,                  ///< fits the other two axes to match the Z axis, whose size is unchanged
+        AVERAGE_DIMENSION,  ///< uses average of 3 scales in the matrix
+        BIGGEST_DIMENSION,  ///< uses biggest of 3 scales in the matrix
+        SMALLEST_DIMENSION, ///< uses smallest of 3 scales in the matrix
+        LONGEST_DIAGONAL    ///< accounts for shearing; transforms a cube by the matrix and then uses length of longest diagonal
     };
 
-    // Fields
-        SoSFEnum		sizing;
-	// If TRUE, recalculates every time the ctm changes.
-	// If FALSE, recalculates only after the recalc() method is called.
-	// Default is TRUE
-        SoSFBool		recalcAlways;
+    /// Determines which of the algorithms enumerated by the type \c Sizing
+    /// will be used to select the new scale when the x,y, and z scales are
+    /// not equal.
+    SoSFEnum		sizing;
 
-    // If recalcAlways field is FALSE, call this method to force a new matrix
-    // to be calculated.
+    /// If recalcAlways is <b>TRUE</b>, this node calculates its unsquishing matrix every
+    /// time it is traversed.  If <b>FALSE</b>, then this only occurs during the first
+    /// traversal folllowing a call to recalc().
+    SoSFBool		recalcAlways;
+
+    /// Sets a flag so that the next time the node is traversed, it will recalculate
+    /// its unsquishing matrix.
     void recalc();
 
   SoEXTENDER public:

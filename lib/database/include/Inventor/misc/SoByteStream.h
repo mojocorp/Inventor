@@ -62,42 +62,41 @@ class SoNode;
 class SoPath;
 class SoPathList;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoByteStream
-//
-//  This class creates a byte stream representation of a scene graph,
-//  using the SoWriteAction to write to an in memory buffer. Byte streams
-//  are commonly used to transfer data, for instance during copy and paste.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Converts scene graph objects to character byte streams.
+/// \ingroup General
+/// This class creates a byte stream representation of a scene graph,
+/// using an <tt>SoWriteAction</tt> to write path lists to an in-memory
+/// buffer.  Byte streams are commonly used to transfer data in copy and
+/// paste operations.  (The <tt>SoXtClipboard</tt> class passes
+/// <tt>SoByteStream</tt> data during copy and paste.)
+/// \sa SoXtClipboard
 class INVENTOR_API SoByteStream {
   public:
+    /// Constructor.
     SoByteStream();
+
+    /// Destructor.
    ~SoByteStream();
 
-    // Convert the passed node, path, or path list into a byte stream.
-    // Caller may specify whether the byte stream is written in binary
-    // (TRUE) or ascii (FALSE) format. The converted data can be accessed
-    // through getData() and getNumBytes().
-    
+    /// \name These convert the passed scene graph object(s) into a byte stream.
+    /// The caller may specify whether the byte stream is written in binary
+    /// (TRUE) or ASCII (FALSE) format, and can pass the object(s) by node,
+    /// path, or pathList.
+    /// @{
     void	        convert(SoNode *node, SbBool binaryFormat = TRUE);
-    
     void	        convert(SoPath *path, SbBool binaryFormat = TRUE);
-    
     void	        convert(SoPathList *pathList, SbBool binaryFormat = TRUE);
+    /// @}
 
-    // Access the byte stream data
+    /// These return the data and number of bytes from the last #convert()
+    /// operation.  This byte stream format is well suited to data transfers,
+    /// like copy and paste.
     void *    	    	getData()   	{ return data; }
     uint32_t   		getNumBytes()	{ return numBytes; }
     
-    // Unconvert a byte stream back to a path list.
-    // This static routine performs an SoDB::read on the data,
-    // and returns a path list of the paths read in.
-    
+    /// These take byte stream data and unconvert it back to scene graph objects.
+    /// The objects are returned in a path list.
     static SoPathList *	unconvert(SoByteStream *byteStream);
-    
     static SoPathList *	unconvert(void *data, uint32_t numBytes);
   
   SoEXTENDER public:

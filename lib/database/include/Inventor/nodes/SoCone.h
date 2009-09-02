@@ -63,42 +63,82 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCone
-//
-//  Simple cone, aligned with y-axis. Default has apex point at y = 1,
-//  bottom radius 1, and height 2, so that the size is -1 to +1 in all
-//  3 dimensions. There are two parts to the cone: the sides and the
-//  bottom face (in that order).
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Cone shape node.
+/// \ingroup Nodes
+/// This node represents a simple cone whose central axis is aligned with
+/// the y-axis. By default, the cone is centered at (0,0,0) and has a size
+/// of -1 to +1 in all three directions. The cone has a radius of 1 at the
+/// bottom and a height of 2, with its apex at 1. The cone has two parts:
+/// the sides and the bottom.
+///
+///
+/// The cone is transformed by the current cumulative transformation and
+/// is drawn with the current lighting model, drawing style, material, and
+/// geometric complexity.
+///
+///
+/// If the current material binding is <b>PER_PART</b> or
+/// <b>PER_PART_INDEXED</b>, the first current material is used for the sides
+/// of the cone, and the second is used for the bottom. Otherwise, the
+/// first material is used for the entire cone.
+///
+///
+/// When a texture is applied to a cone, it is applied differently to the
+/// sides and bottom. On the sides, the texture wraps counterclockwise
+/// (from above) starting at the back of the cone. The texture has a
+/// vertical seam at the back, intersecting the yz-plane. For the bottom,
+/// a circle is cut out of the texture square and applied to the cone's
+/// base circle. The texture appears right side up when the top of the
+/// cone is tilted away from the camera.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws cone based on the current coordinates, materials,
+/// drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Intersects the ray with the cone. The part of the cone that was picked
+/// is available from the <tt>SoConeDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses the cone.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will
+/// be invoked for each successive triangle that approximates the cone.
+///
+/// \par File format/defaults:
+/// \code
+/// SoCone {
+///    parts        ALL
+///    bottomRadius 1
+///    height       2
+/// }
+/// \endcode
+/// \sa SoConeDetail,SoCube,SoCylinder,SoSphere
 class INVENTOR_API SoCone : public SoShape {
 
     SO_NODE_HEADER(SoCone);
 
   public:
 
-    enum Part {			// Cone parts:
-	SIDES	= 0x01,			// The conical part
-	BOTTOM	= 0x02,			// The bottom circular face
-	ALL	= 0x03		 	// All parts
+    /// Cone parts:
+    enum Part {
+        SIDES	= 0x01,			///< The conical part
+        BOTTOM	= 0x02,			///< The bottom circular face
+        ALL	= 0x03		 	///< All parts
     };
 
     // Fields
-    SoSFBitMask		parts;		// Visible parts of cone
-    SoSFFloat		bottomRadius;	// Radius of bottom circular face
-    SoSFFloat		height;		// Size in y dimension
+    SoSFBitMask		parts;		///< Visible parts of cone
+    SoSFFloat		bottomRadius;	///< Radius of bottom circular face
+    SoSFFloat		height;		///< Size in y dimension
 
-    // Constructor
+    /// Constructor
     SoCone();
 
-    // Turns on/off a part of the cone. (Convenience functions)
+    /// Turns on/off a part of the cone. (Convenience functions)
     void		addPart(SoCone::Part part);
     void		removePart(SoCone::Part part);
 
-    // Returns whether a given part is on or off. (Convenience function)
+    /// Returns whether a given part is on or off. (Convenience function)
     SbBool		hasPart(SoCone::Part part) const;
 
   SoEXTENDER public:

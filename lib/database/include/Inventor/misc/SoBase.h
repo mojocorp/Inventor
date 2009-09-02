@@ -71,51 +71,74 @@ class SoNotList;
 class SoOutput;
 class SoPath;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoBase
-//
-//  Base class for most important SO classes. All subclasses of this
-//  class may be read and written, in the form:
-//	NameOfClass {
-//	    <stuff inside>
-//	}
-//  where NameOfClass is the thing returned by getFileName(). For example,
-//  the "FileName" of the SoPath class is "Path".
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Base class for all nodes, paths, and engines.
+/// \ingroup General
+/// Abstract base class for Inventor node, path, and engine classes. This
+/// class handles reference counting, notification, and naming.
+/// \sa SoFieldContainer, SoNode, SoPath, SoEngine, SoDB
 class INVENTOR_API SoBase {
   public:
 
-    // Adds a reference to an instance
-    // This generates a C++ warning.
+    /// Adds a reference to an instance. Instances should be
+    /// referenced when they will be used outside of the routine in which they
+    /// were initialized. (A typical example of this is maintaining a pointer
+    /// to the root of a graph.) Whenever the reference count for an instance
+    /// is decremented to 0, the instance is automatically destroyed by the
+    /// database (unless #unrefNoDelete() is used to unref it).  The
+    /// reference count of a node is automatically incremented when the node
+    /// is added as a child of another node or when a path points to the node.
+    /// Likewise, the reference count is automatically decremented when the
+    /// node is removed as a child or when a path that points to the node is
+    /// changed or destroyed.
+    /// \sa unref() unrefNoDelete()
     void			ref() const;
 
-    // Removes a reference to an instance, deleting it if count is now 0
+    /// Removes a reference to an instance, deleting it if count is now 0
     void			unref() const;
 
-    // Removes a reference to an instance, NOT deleting it if count is now 0
+    /// Removes a reference to an instance, NOT deleting it if count is now 0
+    /// Should be called when it is desired to decrement
+    /// the reference count, but not delete the instance if this brings the
+    /// reference count to zero. This is most useful in returning an object to
+    /// a zero-reference-count state, like it was when it was created by
+    /// #new method.
     void			unrefNoDelete() const;
 
-    // Marks an instance as modified, simulating a change to it. This
-    // will notify all auditors of the instance.
+    /// Marks an instance as modified, simulating a change to it. This will
+    /// notify auditors (parent nodes, connected engines, and so on) of a
+    /// change to this object and cause attached sensors to be triggered.
     void			touch()		{ startNotify(); }
 
-    // Returns type identifier for SoBase class
+    /// Returns type identifier for this class.
     static SoType		getClassTypeId() { return classTypeId; }
 
-    // Returns type identifier for base
+    /// Returns the type identifier for a specific instance.
     virtual SoType		getTypeId() const = 0;
 
-    // Returns TRUE if base is of given type or is derived from it
+    /// Returns TRUE if this object is of the type specified in \a type or is
+    /// derived from that type.  Otherwise, it returns FALSE. For example,
+    /// \code
+    /// nodePtr->isOfType(SoGroup::getClassTypeId())
+    /// \endcode
+    /// returns TRUE if \a nodePtr is an instance of \c SoGroup or one of
+    /// its subclasses.
     SbBool			isOfType(SoType type) const;
 
-    // Routines for naming objects:
-    // getName() returns SbName("") if the object has no name.
+    /// Returns the name of an instance. If the instance has not been named,
+    /// an empty \c SbName is returned. Objects that are named can be looked
+    /// up using the getByName() methods of \c SoNode, \c SoEngine, or \c SoPath.
     virtual SbName		getName() const;
 
-    // setName(SbName("")) to un-name an object
+    /// Sets the name of an instance. Object names are preserved when objects
+    /// are written to or read from files.  Object names must not begin with a
+    /// digit, and must not contain
+    /// spaces or control characters, single or double quote characters,
+    /// backslashes, curly braces or the plus character.
+    /// The #isBaseNameChar() and #isBaseNameStartChar() methods
+    /// of \c SbName can be used to validate names input by users.
+    /// This method will replace any bad charaters in the name with
+    /// underscore characters, and will print out an error message if the
+    /// application is using the Inventor debugging library.
     virtual void		setName(const SbName &name);
 
   protected:

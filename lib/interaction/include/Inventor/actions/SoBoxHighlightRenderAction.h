@@ -73,52 +73,87 @@ class SoTranslation;
 class SoMatrixTransform;
 class SoCube;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Box highlight - a subclass of SoGLRenderAction which renders the
-// scene graph, then renders wireframe boxes surrounding each selected object.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// A selection highlight style.
+/// \ingroup Interaction
+/// <tt>SoBoxHighlightRenderAction</tt> is a render action which
+/// renders the specified scene graph, then renders wireframe boxes surrounding
+/// each selected object.
+/// Selected objects are specified by the first <tt>SoSelection</tt>
+/// node in the scene to which this action is applied.
+/// If an <tt>SoGetBoundingBoxAction</tt> applied to a selected object
+/// produces an empty bounding box, no highlight is rendered
+/// for that object.
+/// A highlight render action can be passed to
+/// the #setGLRenderAction() method of <tt>SoXtRenderArea</tt>
+/// to have an effect on scene graphs.
+/// \sa SoLineHighlightRenderAction, SoGLRenderAction, SoSelection, SoXtRenderArea, SoDrawStyle, SoInteraction
 class INVENTOR_API SoBoxHighlightRenderAction : public SoGLRenderAction {
       SO_ACTION_HEADER(SoBoxHighlightRenderAction);
  public:
-    // Constructor which takes no parameters. This sets up a dummy
-    // viewport region. If passed to a render area, the render area
-    // will correctly set the region. Otherwise, setViewportRegion()
-    // should be called before applying this action.
+    /// Constructor which takes no parameters. This sets up a dummy
+    /// viewport region. If passed to a render area, the render area
+    /// will correctly set the region. Otherwise, setViewportRegion()
+    /// should be called before applying this action.
     SoBoxHighlightRenderAction();
     
-    // Constructor which takes the normal SoGLRenderAction parameters.
+    /// Constructor which takes the normal SoGLRenderAction parameters.
     SoBoxHighlightRenderAction(const SbViewportRegion &viewportRegion);
 		  
-    
+    /// Destructor
     virtual ~SoBoxHighlightRenderAction();
     
-    // Applies action to the graph rooted by a node. 
-    // This renders the scene, then renders highlights for selected objects.
+    /// This renders the passed scene graph, and also renders wireframe
+    /// boxes around selected objects as specified by the first
+    /// \c SoSelection node found in the scene graph.
     virtual void    apply(SoNode *node);
 
-    // Applies action to the graph defined by a path or path list.
-    // These simply invoke the parent class apply() methods.
-    // These do NOT highlight the path, whether selected or not.
+    /// Applies action to the graph defined by a path.
+    /// These simply invoke the parent class apply() methods.
+    /// These do NOT highlight the path, whether selected or not.
     virtual void    apply(SoPath *path);
-    virtual void    apply(const SoPathList &pathList,
-			      SbBool obeysRules = FALSE);
+
+    /// Applies action to the graph defined by a path list.
+    /// These simply invoke the parent class apply() methods.
+    /// These do NOT highlight the path, whether selected or not.
+    virtual void    apply(const SoPathList &pathList, SbBool obeysRules = FALSE);
     
-    // Simple switch to turn highlighting on (TRUE) or off (FALSE)
-    // App is responsible for redrawing after this state changes.
+    /// This provides a convenient mechansim for turning highlights off
+    /// or on. When FALSE is passed, subsequent calls to
+    /// \a apply() - \a SoBoxHLRenderActApply()
+    /// render the scene graph without rendering highlights.
+    /// The application is responsible for forcing a redraw of the
+    /// scene after changing this state. The default visibility is on.
     void	    setVisible(SbBool b) { hlVisible = b; }
+
+    /// Returns whether highlights will be rendered or not.
     SbBool	    isVisible() const { return hlVisible; }
 
-    // Set the appearance of the highlight.
-    // Application is responsible for redrawing the scene
-    // after making changes here.
+    /// Set the color of the highlight.
+    /// Application is responsible for forcing a redraw of the
+    /// scene to see the effects of this change.
     void	    setColor( const SbColor &c );
+
+    /// Get the color of the highlight. Default is red \c (1,0,0).
     const SbColor & getColor();
+
+    /// Set line pattern of the highlight.
+    /// The pattern of bits in the passed variable specifies the pattern of the line.
+    /// See \c SoDrawStyle for a description. 
+    /// Application is responsible for forcing a redraw of the
+    /// scene to see the effects of this change.
     void            setLinePattern( unsigned short pattern );
+
+    /// Get the line pattern of the highlight. Default is solid, \e 0xffff.
+    /// The pattern of bits in the passed variable specifies the pattern of the line.
+    /// See \c SoDrawStyle for a description. 
     unsigned short  getLinePattern();
+    
+    /// Set line width of the highlight.
+    /// Application is responsible for forcing a redraw of the
+    /// scene to see the effects of this change.
     void            setLineWidth( float width );
+    
+    /// Get the line width of the highlight. Default is \e 3.
     float           getLineWidth();
    
  SoINTERNAL public: 

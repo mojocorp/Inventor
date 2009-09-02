@@ -64,37 +64,67 @@
 
 #include <Inventor/projectors/SbCylinderSectionProjector.h>
 
+/// Cylinder-plane projector.
+/// \ingroup Projectors
+/// <tt>SbCylinderPlaneProjector</tt>
+/// projects a window space point (usually based on the mouse location)
+/// onto a surface defined by a cylinder and plane cutting through the cylinder.
+/// Two projected points can produce a rotation
+/// along the cylinder's axis.
+/// When the mouse position projects onto the plane, the
+/// rotations will be as if the plane is being dragged,
+/// causing the cylinder to roll beneath it.
+///
+///
+/// Incremental changes (delta rotation) can be computed during
+/// interactive sessions. Cylinder projectors are typically used to write
+/// interactive 3D manipulators and viewers.
+/// \sa SbCylinderSheetProjector,SbLineProjector, SbPlaneProjector, SbSpherePlaneProjector,SbSphereProjector, SbSphereSectionProjector, SbSphereSheetProjector
 class INVENTOR_API SbCylinderPlaneProjector : public SbCylinderSectionProjector
 {
   public:
   
-    // Default constructor.
-    // The default view volume is undefined.
-    // The default working space is identity (world space).
-    // The default cylinder is centered about the Y axis and has radius 1.0.
-    // The default edge tolerance is .9.
-    // The default eye orientation is TRUE.
+    /// Default constructor.
+    /// The default view volume is undefined.
+    /// The default working space is identity (world space).
+    /// The default cylinder is centered about the Y axis and has radius 1.0.
+    /// The default edge tolerance is .9.
+    /// The default eye orientation is TRUE.
     SbCylinderPlaneProjector(float edgeTol = .9, SbBool orientToEye = TRUE);
 
-    // Constructor taking the cylinder.
+    /// Constructor taking the cylinder.
+    /// The position of the plane is specified as a fraction of the cylinder radius
+    /// with the parameter \a edgeTol.
+    /// A tolerance value of 1.0 positions the plane
+    /// down the center of the cylinder. A tolerance value of 0.5 defines
+    /// the longitudinal plane halfway between the center and the outside
+    /// edge of the cylinder.  The default value is .9, so that almost
+    /// half the cylinder is in front of the plane.
+    /// The \a orientToEye
+    /// parameter determines whether the plane is perpendicular to the
+    /// eye, or perpendicular to the cylinder's Z axis.  Setting that parameter to TRUE
+    /// (the default) specifies that the plane be perpendicular to the
+    /// eye, which is most often the desired behavior.
+    ///
+    /// The default view volume is undefined, and the working space is identity.
     SbCylinderPlaneProjector( const SbCylinder &cyl,
 			      float edgeTol = .9,
 			      SbBool orientToEye = TRUE);
 
-    // Destructor
+    /// Destructor
     ~SbCylinderPlaneProjector() {}
     
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SbProjector *    copy() const;
 
-    // Apply the projector using the given point, returning the
-    // point in three dimensions that it projects to.
-    // The point should be normalized from 0-1, with (0,0) at
-    // the lower-left.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// The point should be normalized from 0-1, with (0,0) at
+    /// the lower-left.
     virtual SbVec3f	project(const SbVec2f &point);
 
-    // Computes a rotation based on two points on this projector.
+    /// Computes a rotation based on two points on this projector.
     virtual SbRotation	getRotation(const SbVec3f &point1,
 				    const SbVec3f &point2);
 

@@ -59,23 +59,35 @@
 #include <Inventor/fields/SoMFVec3f.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCoordinate3
-//
-//  3-vector coordinate point node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Coordinate point node.
+/// \ingroup Nodes
+/// This node defines a set of 3D coordinates to be used by subsequent
+/// vertex-based shape nodes (those derived from <tt>SoVertexShape</tt>) or
+/// shape nodes that use them as control points (such as NURBS curves and
+/// surfaces). This node does not produce a visible result during
+/// rendering; it simply replaces the current coordinates in the rendering
+/// state for subsequent nodes to use.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction</b>
+/// Sets coordinates in current traversal state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoCoordinate3 {
+///    point	0 0 0
+/// }
+/// \endcode
+/// \sa SoCoordinate4,SoVertexShape
 class INVENTOR_API SoCoordinate3 : public SoNode {
 
     SO_NODE_HEADER(SoCoordinate3);
 
   public:
     // Fields
-    SoMFVec3f		point;		// Coordinate point(s)
+    SoMFVec3f		point;		///< Coordinate point(s)
 
-    // Constructor
+    /// Constructor
     SoCoordinate3();
 
   SoEXTENDER public:

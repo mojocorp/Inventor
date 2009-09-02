@@ -62,95 +62,94 @@
 
 #include <string.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbString
-//
-//  "Smart" character strings, which allow things like concatenation
-//  with the "+=" operator and automatic storage management.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-class INVENTOR_API SbString {
+/// Class for smart character strings.
+/// \ingroup Basics
+/// Strings which have many convenience methods to make
+/// string manipulation easier.
+/// \sa SbName
+class INVENTOR_API SbString
+{
   public:
 
-    // Default constructor
+    /// Default constructor
     SbString()				{ string = staticStorage; 
 					  string[0] = '\0'; }
 
-    // Constructor that initializes to given character string
+    /// Constructor that initializes to given character string
     SbString(const char *str)		{ string = staticStorage;
 					  *this = str; }
 
-    // Constructor that initializes to given character string
+    /// Constructors take a character string, the subset of a character string from start to end (inclusive)
     SbString(const char *str, int start, int end);
 
-    // Constructor that initializes to given SbString
-    SbString(const SbString &str)	{ string = staticStorage;
-					  *this = str.string; }
+    /// Constructor that initializes to given SbString
+    SbString(const SbString &str)	{ string = staticStorage; *this = str.string; }
 
-    // Constructor that initializes to string formed from given integer.
-    // For example, SbString(1234) gives the string "1234".
+    /// Constructor that initializes to string formed from given integer.
+    /// For example, SbString(1234) gives the string "1234".
     SbString(int digitString);
 
-    // Destructor
+    /// Destructor
     ~SbString();
 
-    // Returns a reasonable hash key for string
+    /// Returns a reasonable hash key for string
     uint32_t		hash()		{ return SbString::hash(string); }
 
-    // Returns length of string
-    int			getLength() const	{ return static_cast<int>(strlen(string)); }
+    /// Returns length of string
+    size_t			getLength() const	{ return strlen(string); }
 
-    // Sets string to be the empty string (""). If freeOld is TRUE
-    // (default), any old storage is freed up
+    /// Sets string to be the empty string (""). If freeOld is TRUE
+    /// (default), any old storage is freed up
     void		makeEmpty(SbBool freeOld = TRUE);
 
-    // Returns pointer to the character string
+    /// Returns pointer to the character string
     const char *	getString() const	{ return string; }
 
-    // Returns new string representing sub-string from startChar to
-    // endChar, inclusive. If endChar is -1 (the default), the
-    // sub-string from startChar until the end is returned.
+    /// Returns new string representing sub-string from startChar to
+    /// endChar, inclusive. If endChar is -1 (the default), the
+    /// sub-string from startChar until the end is returned.
     SbString		getSubString(int startChar, int endChar = -1) const;
 
-    // Deletes the characters from startChar to endChar, inclusive,
-    // from the string. If endChar is -1 (the default), all characters
-    // from startChar until the end are deleted.
+    /// Deletes the characters from startChar to endChar, inclusive,
+    /// from the string. If endChar is -1 (the default), all characters
+    /// from startChar until the end are deleted.
     void		deleteSubString(int startChar, int endChar = -1);
 
-    // Assignment operator for character string, SbString
+    /// Assigns str to this string and returns a reference to this string.
     SbString &		operator =(const char *str);
-    SbString &		operator =(const SbString &str)
-	{ return (*this = str.string); }
 
-    // Concatenation operator "+=" for string, SbString
+    /// Assigns str to this string and returns a reference to this string.
+    SbString &		operator =(const SbString &str) { return (*this = str.string); }
+
+    /// Appends the string str onto the end of this string and returns a reference to this string.
     SbString &		operator +=(const char *str);
 
+    /// Appends the string str onto the end of this string and returns a reference to this string.
     SbString &		operator +=(const SbString &str);
 
-    // Unary "not" operator; returns TRUE if string is empty ("")
+    /// Unary "not" operator; returns TRUE if string is empty ("")
     int			operator !() const { return (string[0] == '\0'); }
 
-    // Equality operator for SbString/char* and SbString/SbString comparison
-    friend INVENTOR_API int		operator ==(const SbString &str, const char *s);
+    /// Returns true if str1 is equal to str2; otherwise returns false.
+    friend INVENTOR_API bool		operator ==(const SbString &str1, const char *str2);
 
-    friend INVENTOR_API int		operator ==(const char *s, const SbString &str)
-	{ return (str == s); }
+    /// Returns true if str1 is equal to str2; otherwise returns false.
+    friend INVENTOR_API bool		operator ==(const char *str1, const SbString &str2) { return (str2 == str1); }
 
+    /// Returns true if str1 is equal to str2; otherwise returns false.
+    friend INVENTOR_API bool		operator ==(const SbString &str1, const SbString &str2) { return (str1 == str2.string); }
 
-    friend INVENTOR_API int		operator ==(const SbString &str1, const SbString &str2)
-	{ return (str1 == str2.string); }
+    /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
+    friend INVENTOR_API bool		operator !=(const SbString &str1, const char *str2);
 
-    // Inequality operator for SbString/char* and SbString/SbString comparison
-    friend INVENTOR_API int		operator !=(const SbString &str, const char *s);
+    /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
+    friend INVENTOR_API bool		operator !=(const char *str1, const SbString &str2) { return (str2 != str1); }
 
-    friend INVENTOR_API int		operator !=(const char *s, const SbString &str)
-	{ return (str != s); }
+    /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
+    friend INVENTOR_API bool		operator !=(const SbString &str1, const SbString &str2) { return (str1 != str2.string); }
 
-    friend INVENTOR_API int		operator !=(const SbString &str1,
-				    const SbString &str2)
-	{ return (str1 != str2.string); }
+    /// Returns a string which is the result of concatenating s1 and s2.
+    friend INVENTOR_API const SbString	operator +( const SbString & s1, const SbString & s2 ) { SbString t(s1); t += s2; return t; }
 
   SoINTERNAL public:
 

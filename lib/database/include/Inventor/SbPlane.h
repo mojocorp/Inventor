@@ -63,64 +63,57 @@
 
 #include <Inventor/SbVec3f.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbPlane
-//
-//  Represents an oriented plane in 3D space. The plane is defined by
-//  a plane normal and a distance from the origin along that normal.
-//  SbPlanes may be used to represent either planes or half-spaces. In
-//  the latter case (as for the isInHalfSpace() method), the
-//  half-space is defined to be all points on the plane or on the side
-//  of the plane in the direction of the plane normal.
-//
-//  The 4 coefficients of the plane equation of an SbPlane can be
-//  obtained easily as the 3 coordinates of the plane normal and the
-//  distance, in that order.
-//
-//////////////////////////////////////////////////////////////////////////////
 class SbLine;
 class SbMatrix;
 
+/// Oriented plane in 3D.
+/// \ingroup Basics
+/// Represents an oriented plane in 3D. This is a lightweight
+/// class/datatype that is used for arguments to some Inventor objects.
+/// \sa SbVec3f, SbLine
 class INVENTOR_API SbPlane {
   public:
     SbPlane()	{}
 
-    // Construct a plane given 3 points.
-    // Orientation is computed by taking (p1 - p0) x (p2 - p0) and
-    // pointing the normal in that direction.
+    /// Construct a plane given 3 points.
+    /// Orientation is computed by taking (p1 - p0) x (p2 - p0) and
+    /// pointing the normal in that direction.
     SbPlane(const SbVec3f &p0, const SbVec3f &p1, const SbVec3f &p2);
 
-    // Construct a plane given normal and distance from origin along normal.
-    // Orientation is given by the normal vector n.
+    /// Construct a plane given normal and distance from origin along normal.
+    /// Orientation is given by the normal vector n.
     SbPlane(const SbVec3f &n, float d);
 
-    // Construct a plane given normal and a point to pass through
-    // Orientation is given by the normal vector n.
+    /// Construct a plane given normal and a point to pass through
+    /// Orientation is given by the normal vector n.
     SbPlane(const SbVec3f &n, const SbVec3f &p);
 
-    // Offset a plane by a given distance.
+    /// Offset a plane by a given distance.
     void		offset(float d);
 
-    // Intersect line and plane, returning TRUE if there is an intersection
-    // FALSE if line is parallel to plane
+    /// Intersect line and plane, returning TRUE if there is an intersection
+    /// FALSE if line is parallel to plane
     SbBool		intersect(const SbLine &l,
 				  SbVec3f &intersection) const;
 
-    // Transforms the plane by the given matrix
+    /// Transforms the plane by the given matrix
     void		transform(const SbMatrix &matrix);
 
-    // Returns TRUE if the given point is within the half-space
-    // defined by the plane
+    /// Returns TRUE if the given point is within the half-space
+    /// defined by the plane
     SbBool		isInHalfSpace(const SbVec3f &point) const;
 
 
-    // Accessors
+    /// Returns normal vector to plane.
     const SbVec3f &	getNormal() const		{ return normalVec; }
+
+    /// Returns distance from origin to plane.
     float		getDistanceFromOrigin() const	{ return distance; }
 
-    // Equality/inequality comparison operators
+    /// Equality comparison operators
     friend INVENTOR_API int		operator ==(const SbPlane &p1, const SbPlane &p2);
+
+    /// Inequality comparison operators
     friend INVENTOR_API int		operator !=(const SbPlane &p1, const SbPlane &p2)
 	{ return !(p1 == p2); }
 

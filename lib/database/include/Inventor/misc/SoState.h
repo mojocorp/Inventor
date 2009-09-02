@@ -83,36 +83,36 @@ class SoElement;
 SoEXTENDER class INVENTOR_API SoState {
 
   public:
-    // Constructor. Takes pointer to action instance this state is
-    // part of and a list of type-ids of elements that are enabled.
+    /// Constructor. Takes pointer to action instance this state is
+    /// part of and a list of type-ids of elements that are enabled.
     SoState(SoAction *action, const SoTypeList &enabledElements);
 
     // Destructor
     ~SoState();
 
-    // Returns the action instance the state is part of
+    /// Returns the action instance the state is part of
     SoAction *		getAction() const	{ return action; }
 
-    // Returns a writable instance of the element on the top of the
-    // stack with the given index.
+    /// Returns a writable instance of the element on the top of the
+    /// stack with the given index.
     SoElement *		getElement(int stackIndex);
 
-    // Returns the top (read-only) instance of the given element stack
+    /// Returns the top (read-only) instance of the given element stack
     const SoElement *	getConstElement(int stackIndex) const
 	{ return stack[stackIndex]; }
 
-    // Pushes (saves) the current state until a pop() restores it. The
-    // push is done lazily: this just increments the depth in the
-    // state. When an element is accessed with getElement() and its
-    // depth is less than the current depth, it is then pushed
-    // individually.
+    /// Pushes (saves) the current state until a pop() restores it. The
+    /// push is done lazily: this just increments the depth in the
+    /// state. When an element is accessed with getElement() and its
+    /// depth is less than the current depth, it is then pushed
+    /// individually.
     void		push() 
 			{ depth++; }
 
-    // Pops the state, restoring the state to just before the last push().
+    /// Pops the state, restoring the state to just before the last push().
     void		pop();
 
-    // Prints state to file (for debugging)
+    /// Prints state to file (for debugging)
     void		print(FILE *fp);
 
   SoINTERNAL public:

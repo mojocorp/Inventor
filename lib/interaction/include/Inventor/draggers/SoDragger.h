@@ -85,18 +85,160 @@ class SbPList;
 
 class SoDragger;  // forward reference
 
-// The following typedef is used in defining the callback function lists.
+/// The following typedef is used in defining the callback function lists.
 typedef void INVENTOR_API SoDraggerCB(void *userData, SoDragger *dragger );
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoDragger
-//
-//  Base class for draggers which are operated by a start (mouse down)
-//  followed by dragging, followed by end (mouse up).
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Base class for nodekits that move in response to click-drag-release mouse events.
+/// \ingroup Draggers
+/// <tt>SoDragger</tt>
+/// is the base class for all nodekits you move by using the mouse to
+/// click-drag-and-release. More specifically,
+/// they are operated by a start (mouse button 1 pressed over dragger to pick it),
+/// followed by dragging (mouse motion events are interpreted by the dragger
+/// and result in some form of motion and/or change to a field),
+/// followed by finish (mouse up).
+///
+///
+/// Each dragger has a different paradigm for interpreting mouse motion and
+/// changing its fields as a result.
+/// Draggers map 2D mouse motion into motion of a point on 3D lines, planes,
+/// spheres or cylinders.  (See the <tt>SbProjector</tt> reference pages.)
+/// Then they react to this motion of a point through 3-space by scaling,
+/// translating, or rotating.
+/// For example, <tt>SoTranslate2Dragger</tt> maps mouse motion onto a
+/// 3D plane, then translates to follow the cursor as it moves within that plane.
+///
+///
+/// Every dragger has <em>fields</em> that describe its current state.
+/// Scaling draggers have a #scaleFactor field,  rotational draggers have
+/// a #rotation field, etc.
+/// All draggers have the #isActive field, defined in this class.
+/// It is TRUE while the dragger is being dragged, FALSE otherwise.
+///
+///
+/// Draggers that have only one part to pick and one motion field are called
+/// <em>simple draggers</em>. Examples are the <tt>SoRotateDiscDragger</tt>,
+/// <tt>SoScale1Dragger</tt>, and <tt>SoTranslate2Dragger</tt>.
+///
+///
+/// Draggers that create assemblies out of other draggers and then orchestrate
+/// the motion of the whole assembly are call <em>composite draggers</em>.
+/// <tt>SoTransformBoxDragger</tt> is a composite dragger made entirely of simple
+/// draggers.  <tt>SoDirectionalLightDragger</tt> contains both a simple dragger
+/// (<tt>SoRotateSphericalDragger</tt>) and a composite dragger (<tt>SoDragPointDragger</tt>)
+/// When using a composite dragger, the fields of the composite dragger
+/// are the ones you should work with. Draggers
+/// lower down in the assemblage usually have zeroed out values.
+/// For example, when you drag the face
+/// of a transformBox, an <tt>SoTranslate2Dragger</tt>, the transformBox "steals"
+/// the translation from the child dragger and transfers it up to the top of the
+/// composite dragger, where it effects all pieces of the assemblage.
+///
+///
+/// Draggers always keep their fields up to date, including while they are
+/// being dragged. So you can use field-to-field connections and engines to
+/// connect dragger values to other parts of your scene graph.
+/// Hence draggers can be easily utilized as input devices for
+/// mouse-driven 3D interface elements.
+/// You can also register value-changed callbacks, which are called whenever any
+/// of the fields is changed.
+///
+///
+/// Also, if you set the field of a dragger through some method other than dragging,
+/// (by calling #setValue(), for example),
+/// the dragger's internal <tt>SoFieldSensor</tt> will sense this and the dragger
+/// will move to satisfy that new value.
+///
+///
+/// This makes it easy to constrain draggers to keep their fields within certain
+/// limits: if the limit is exceeded, just set it back to the exceeded maximum or
+/// minimum.  You can do this even as the dragger is in use, by constraining the
+/// field value within a value-changed callback that you add with
+/// #addValueChangedCallback().  In this
+/// case, be sure to temporarily disable the other value-changed callbacks using
+/// #enableValueChangedCallbacks().
+/// Doing this will prevent infinite-looping; changing the value followed
+/// by calling the callbacks which change the value ad infinitum.
+///
+///
+/// When you drag a dragger, the dragger only moves itself.
+/// Draggers do not change the state or affect objects that follow in the scene
+/// graph.
+/// For example a dragger does not ever behave like an <tt>SoTransform</tt> and
+/// change the current transformation matrix.
+/// Draggers are not transforms, even if they have field names like
+/// translation, rotation, scaleFactor.  Many draggers, such
+/// as <tt>SoTrackballDragger</tt>, have a corresponding  <tt>SoTransformManip</tt>, in
+/// this case <tt>SoTrackballManip</tt>.  The manipulator is a subclass of <tt>SoTransform</tt>,
+/// and affects other objects in the scene; it uses a trackball <em>dragger</em> to
+/// provide its user interface.
+/// In this way, draggers are employed extensively by manipulators.
+/// Callback functions on the dragger allow its employer to be
+/// notified of start, motion, finish, and value changes.
+/// In all cases, the callback function is passed a pointer to the
+/// dragger which initiated the callback.
+/// (See the various man pages for more details on specific draggers and
+/// manipulators).
+///
+///
+/// All draggers are nodekits.
+/// However, draggers do not list their parts in the Parts section of the
+/// reference page. Instead, there is a section called Dragger Resources,
+/// more suited to describe the parts made available to the programmer.
+/// Because of space limitations, the Dragger Resources section only
+/// appears in the online versions of the reference pages.
+/// Each dragger has some parts you can pick on, and other parts that replace
+/// them when they are <em>active</em> or moving.  These active parts are often
+/// just the same geometry in another color.
+/// Draggers also have pieces for displaying feedback.
+/// Each of these pieces has a default scene graph, as well as a special
+/// function within the dragger.  Each part also has a <b>resource name</b>.
+/// All this information is contained in the <b>DRAGGER RESOURCES</b> section.
+///
+///
+/// Since draggers are nodekits, you can set the parts in any instance of a dragger using
+/// #setPart().
+///
+///
+/// But draggers also give each part a <em>resource name</em>.
+/// When a dragger builds a part, it looks in the global dictionary for the
+/// node with that #resourceName. By putting a new entry in the dictionary,
+/// you can override that default.
+/// The default part geometries are defined as resources for each class,
+/// and each class has a file you can change to alter the defaults.
+/// The files are listed in each dragger's man page.
+/// You can make your program use different default resources for the parts
+/// by copying the listed file from the directory
+/// #/usr/share/data/draggerDefaults
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that directory.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+/// -->      "motionMatrix"
+///          "geomSeparator"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     callbackList        NULL
+/// }
+/// \endcode
+/// \sa SoInteractionKit,SoCenterballDragger,SoDirectionalLightDragger,SoDragPointDragger,
+/// \sa SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,SoRotateCylindricalDragger,
+/// \sa SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,
+/// \sa SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,
+/// \sa SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,
+/// \sa SoTranslate1Dragger,SoTranslate2Dragger
 class INVENTOR_API SoDragger : public SoInteractionKit {
 
     SO_KIT_HEADER(SoDragger);
@@ -107,51 +249,55 @@ class INVENTOR_API SoDragger : public SoInteractionKit {
 
     // This field is a boolean that is TRUE when the mouse is down and
     // we are dragging, FALSE otherwise.
-    SoSFBool  isActive;
+    SoSFBool  isActive; ///< TRUE when mouse is down and dragging, else FALSE.
 
     // Dragger Callbacks
     // In all cases, the callback data will be a pointer to the dragger 
     // that caused the callback. Each type of callback maintains a list of 
     // callbacks, so many callback functions may be registered, if desired.
 
-    // Start callbacks are made after mouse button 1 goes down.
+    /// Start callbacks are made after the mouse button 1 goes down and the
+    /// dragger determines that it has been picked.  If it is going to begin dragging,
+    /// it grabs events and invokes the startCallbacks.
     void    addStartCallback(SoDraggerCB *f, void *userData = NULL);
     void removeStartCallback(SoDraggerCB *f, void *userData = NULL);
 
-    // Motion callbacks are called before each movement of the mouse
-    // during dragging.
+    /// Motion callbacks are called after each movement of the mouse
+    /// during dragging.
     void    addMotionCallback(SoDraggerCB *f, void *userData = NULL);
     void removeMotionCallback(SoDraggerCB *f, void *userData = NULL);
 
-    // Finish callbacks are made just after dragging ends.
+    /// Finish callbacks are made after dragging ends and the dragger has
+    /// stopped grabbing events.
     void    addFinishCallback(SoDraggerCB *f, void *userData = NULL);
     void removeFinishCallback(SoDraggerCB *f, void *userData = NULL);
 
-    // Value changed callbacks are made after the dragger edits
-    // the motion matrix.
+    /// Value-changed callbacks are made after a dragger changes any of its fields.
+    /// This does not include changes to the <b>isActive</b> field.
+    /// See also #enableValueChangedCallbacks().
     void    addValueChangedCallback(SoDraggerCB *f, void *userData = NULL);
     void removeValueChangedCallback(SoDraggerCB *f, void *userData = NULL);
 
-    // Set/get number of pixels of movement required to
-    // initiate a constraint gesture. Default is 8.
+    /// Set and get the number of pixels of movement required to
+    /// initiate a constraint gesture. Default is 8.
     void    setMinGesture(int pixels)	    { minGesture = pixels; }
     int	    getMinGesture() const	    { return minGesture; }
 
-    // The smallest scale that any dragger will write. If the user attempts
-    // to go below this amount, the dragger will set it to this minimum.
-    // Default is .001
+    /// The smallest scale that any dragger will write. If the user attempts
+    /// to go below this amount, the dragger will set it to this minimum.
+    /// Default is .001
     static void  setMinScale( float newMinScale ) { minScale = newMinScale; }
     static float getMinScale() { return minScale; }
 
-    // You can temporarily disable a dragger's valueChangedCallbacks.
-    // The method returns a value that tells you if callbacks were already 
-    // enabled.  Use this method if you write a valueChanged callback of your
-    // own and you change one of the dragger's fields within the callback.
-    // (For example, when writing a callback to constrain your dragger).
-    // Disable first, then change the field, then restore the state you began
-    // with.
-    // All this prevents you from entering an infinite loop of changing values,
-    // calling callbacks which change values, etc.
+    /// You can temporarily disable a dragger's valueChangedCallbacks.
+    /// The method returns a value that tells you if callbacks were already
+    /// enabled.  Use this method if you write a valueChanged callback of your
+    /// own and you change one of the dragger's fields within the callback.
+    /// (For example, when writing a callback to constrain your dragger).
+    /// Disable first, then change the field, then re-enable the callbacks (if they
+    /// were enabled to start with).
+    /// All this prevents you from entering an infinite loop of changing values,
+    /// calling callbacks which change values, etc.
     SbBool enableValueChangedCallbacks( SbBool newVal );
 
   SoEXTENDER public:

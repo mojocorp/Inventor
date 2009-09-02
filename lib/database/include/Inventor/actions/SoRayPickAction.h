@@ -63,84 +63,85 @@
 #include <Inventor/SbLine.h>
 #include <Inventor/actions/SoPickAction.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoRayPickAction
-//
-//  Picking action that intersects a ray with objects in the scene
-//  graph. The ray can be specified by calling setPoint() with a point
-//  in a viewport in a rendering window or by calling setRay() with a
-//  world-space ray. In the setPoint() case, a valid camera must be
-//  encountered in the graph to set up the mapping to world space.
-//
-//  The "pickAll" flag indicates whether all intersections along the
-//  ray should be returned (sorted by distance from the starting point
-//  of the ray), or just the closest one. In either case, the
-//  intersections are returned as an SoPickedPointList. Each
-//  intersection can be examined by accessing the appropriate
-//  SoPickedPoint in the list. The SoPickedPoint class provides
-//  methods to get the intersection point, normal, and other info.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Intersects objects with a ray cast into scene.
+/// \ingroup Actions
+/// This class performs picking by casting a ray into a scene and
+/// performing intersection tests with each object. The ray is extended to
+/// be a cone or cylinder, depending on the camera type, for intersection
+/// with points and lines. Each intersection is returned as an
+/// <tt>SoPickedPoint</tt> instance.
+///
+///
+/// The picking ray can be specified as either a ray from the camera
+/// location through a particular viewport pixel, or as a world-space ray.
+/// In the former case, a valid camera must be encountered during
+/// traversal of the graph to determine the location of the ray in world
+/// space.
+///
+///
+/// Callers can cause the action to compute all intersections along the
+/// ray (sorted closest to farthest) by setting the #pickAll flag to
+/// TRUE. By default, the action computes only the closest intersection.
+/// In either case, the
+/// intersections are returned in an <tt>SoPickedPointList</tt>. Each
+/// intersection can be examined by accessing the appropriate
+/// <tt>SoPickedPoint</tt> in the list. The <tt>SoPickedPoint</tt> class provides
+/// methods to get the intersection point, normal, and other info.
+/// \sa SoPickedPoint, SoPickedPointList
 class INVENTOR_API SoRayPickAction : public SoPickAction {
 
     SO_ACTION_HEADER(SoRayPickAction);
 
   public:
-    // Constructor takes viewport region to use for picking. Even
-    // though picking may not involve a window per se, some nodes need
-    // this information to determine their size and placement.
+    /// Constructor takes viewport region to use for picking. Even
+    /// though picking may not involve a window per se, some nodes need
+    /// this information to determine their size and placement.
     SoRayPickAction(const SbViewportRegion &viewportRegion);
 
-    // Destructor
+    /// Destructor
     virtual ~SoRayPickAction();
 
-    //////////////////////////////////////////////////////////////////
-    //
-    //  Setting up the action before it is applied:
-    //
-
-    // Sets the viewport-space point through which the ray passes.
-    // Viewport coordinates range from (0,0) at the lower left to
-    // (width-1,height-1) at the upper right
+    /// Sets the viewport-space point through which the ray passes.
+    /// Viewport coordinates range from (0,0) at the lower left to
+    /// (width-1,height-1) at the upper right
     void		setPoint(const SbVec2s &viewportPoint);
 
-    // Sets the viewport point in normalized coordinates, which range
-    // from (0,0) at the lower left to (1,1) at the upper right
+    /// Sets the viewport point in normalized coordinates, which range
+    /// from (0,0) at the lower left to (1,1) at the upper right
     void		setNormalizedPoint(const SbVec2f &normPoint);
 
-    // Set the radius (in pixels) around the point. This is used when
-    // testing the ray against lines and points.
+    /// Set the radius (in pixels) around the point. This is used when testing
+    /// the ray against lines and points. By default, the radius is 5 pixels.
+    /// For perspective cameras, the ray is extended to be a cone when testing
+    /// against lines and points. For orthographic cameras, the ray is
+    /// extended to be a cylinder. The radius has no effect for shapes of
+    /// other types.
     void		setRadius(float radiusInPixels);
 
-    // Set a world-space ray along which to pick, instead of using a
-    // viewport point and radius. The ray is defined as a starting
-    // point, direction vector, and parametric distances between
-    // which intersections along the ray must occur. The direction
-    // vector will be normalized automatically. The distances are
-    // measured as if the direction vector is unit length; e.g., if
-    // "nearDistance" is 1.0, the intersection must occur past
-    // (start+direction) along the ray. These distances can be used to
-    // achieve near and far plane clipping. A negative distance (such
-    // as the default values) means disable clipping to that plane.
+    /// Sets a world-space ray along which to pick. The ray is defined as a
+    /// world space starting point and direction vector. The direction vector
+    /// will be normalized automatically. The last two arguments are the
+    /// parametric distances between which intersections along the ray must
+    /// occur. The distances are measured as if the direction vector is unit
+    /// length; e.g., if \a nearDistance is 2.0, the intersection must occur
+    /// past (\a start + 2*(length of the direction vector)) units along the
+    /// ray. These distances can be used to achieve near and far plane clipping.
+    /// A negative distance (such as the default values) means disable clipping
+    /// to that plane.
     void		setRay(const SbVec3f &start, const SbVec3f &direction,
 			       float nearDistance = -1.0,
 			       float farDistance = -1.0);
 
-    // Set/return whether we are picking all objects, or just the closest one
+    /// Sets whether the action will return all objects intersected or just the closest one.
     void		setPickAll(SbBool flag)		{ pickAll = flag; }
+
+    /// Returns whether the action will return all objects intersected or just the closest one.
     SbBool		isPickAll() const		{ return pickAll;     }
 
-    //////////////////////////////////////////////////////////////////
-    //
-    //  Examining results after the action is applied:
-    //
-
-    // Accesses list of picked points
+    /// Returns list of picked points.
     const SoPickedPointList &getPickedPointList() const  { return ptList; }
 
-    // Returns the indexed picked point from the list
+    /// Returns the indexed picked point from the list
     SoPickedPoint *	getPickedPoint(int index = 0) const;
 
   SoEXTENDER public:

@@ -63,13 +63,6 @@
 
 #include <Inventor/SbBasic.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbMatrix
-//
-//  4x4 matrix of floating-point elements.
-//
-//////////////////////////////////////////////////////////////////////////////
 class SbLine;
 class SbRotation;
 class SbVec3f;
@@ -77,172 +70,183 @@ class SbVec4f;
 
 typedef float SbMat[4][4];
 
+/// 4x4 matrix class.
+/// \ingroup Basics
+/// 4x4 matrix class/datatype used by many Inventor node and action classes.
+/// The matrices are stored in row-major order.
+/// \sa SbVec3f, SbRotation
 class INVENTOR_API SbMatrix {
   public:
 
-    // Default constructor
+    /// Default constructor
     SbMatrix()						{ }
 
-    // Constructor given all 16 elements in row-major order
+    /// Constructor given all 16 elements in row-major order
     SbMatrix(float a11, float a12, float a13, float a14,
 	     float a21, float a22, float a23, float a24, 
 	     float a31, float a32, float a33, float a34, 
 	     float a41, float a42, float a43, float a44);
 
-    // Constructor from a 4x4 array of elements
+    /// Constructor from a 4x4 array of elements
     SbMatrix(const SbMat &m);
 
-    // Sets value from 4x4 array of elements
+    /// Sets value from 4x4 array of elements
     void	setValue(const SbMat &m);
 
-    public:
-
-    // Sets matrix to be identity
+    /// Sets matrix to be identity
     void	makeIdentity();
 
-    // Returns an identity matrix 
+    /// Returns an identity matrix
     static SbMatrix	identity();
 
-    // Sets matrix to rotate by given rotation
+    /// Sets matrix to rotate by given rotation
     void	setRotate(const SbRotation &q);
 
-    // Sets matrix to scale by given uniform factor
+    /// Sets matrix to scale by given uniform factor
     void	setScale(float s);
 
-    // Sets matrix to scale by given vector
+    /// Sets matrix to scale by given vector
     void	setScale(const SbVec3f &s);
 
-    // Sets matrix to translate by given vector
+    /// Sets matrix to translate by given vector
     void	setTranslate(const SbVec3f &t);
 
-    // Composes the matrix based on a translation, rotation, scale,
-    // orientation for scale, and center.  The "center" is the
-    // center point for scaling and rotation.  The "scaleOrientation"
-    // chooses the primary axes for the scale.
+    /// Composes the matrix based on a translation, rotation, scale,
+    /// orientation for scale, and center.  The "center" is the
+    /// center point for scaling and rotation.  The "scaleOrientation"
+    /// chooses the primary axes for the scale.
     void	setTransform(
 			const SbVec3f &translation,
 			const SbRotation &rotation,
 			const SbVec3f &scaleFactor,
 			const SbRotation &scaleOrientation,
 			const SbVec3f &center);
-    // Overloaded methods as a kludge because the compiler won't let
-    // us have SbVec3f(0,0,0) as a default value:
+    /// Overloaded methods as a kludge because the compiler won't let
+    /// us have SbVec3f(0,0,0) as a default value:
     void	setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s);
     void	setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s, const SbRotation &so);
 
-    // Decomposes the matrix into a translation, rotation, scale,
-    // and scale orientation.  Any projection information is discarded.
-    // The decomposition depends upon choice of center point for
-    // rotation and scaling, which is optional as the last parameter.
-    // Note that if the center is 0, decompose() is the same as
-    // factor() where "t" is translation, "u" is rotation, "s" is scaleFactor,
-    // and "r" is ScaleOrientattion.
+    /// Decomposes the matrix into a translation, rotation, scale,
+    /// and scale orientation.  Any projection information is discarded.
+    /// The decomposition depends upon choice of center point for
+    /// rotation and scaling, which is optional as the last parameter.
+    /// Note that if the center is 0, decompose() is the same as
+    /// factor() where "t" is translation, "u" is rotation, "s" is scaleFactor,
+    /// and "r" is ScaleOrientattion.
     void	getTransform(SbVec3f &translation,
 			  SbRotation &rotation,
 			  SbVec3f &scaleFactor,
 			  SbRotation &scaleOrientation,
 			  const SbVec3f &center) const;
-    void	getTransform(SbVec3f &t, SbRotation &r,
-                          SbVec3f &s, SbRotation &so) const;
+
+    /// Return translation, rotation, scale, and scale orientation
+    /// components of the matrix.
+    void	getTransform(SbVec3f &t, SbRotation &r, SbVec3f &s, SbRotation &so) const;
 
 
     // The following methods return matrix values and other info:
 
-    // Returns 4x4 array of elements
+    /// Returns 4x4 array of elements
     void	getValue(SbMat &m) const;
+    
+    /// Returns 4x4 array of elements
     const SbMat &	getValue() const { return matrix; }
 
-    // Returns determinant of 3x3 submatrix composed of given row and
-    // column indices (0-3 for each).
+    /// Returns determinant of 3x3 submatrix composed of given row and
+    /// column indices (0-3 for each).
     float	det3(int r1, int r2, int r3, int c1, int c2, int c3) const;
 
-    // Returns determinant of upper-left 3x3 submatrix
+    /// Returns determinant of upper-left 3x3 submatrix
     float	det3() const { return det3(0, 1, 2, 0, 1, 2); }
 
-    // Returns determinant of entire matrix
+    /// Returns determinant of entire matrix
     float	det4() const;
 
-    // Factors a matrix m into 5 pieces: m = r s r^ u t, where r^
-    // means transpose of r, and r and u are rotations, s is a scale,
-    // and t is a translation. Any projection information is returned
-    // in proj.
-    SbBool	factor(SbMatrix &r, SbVec3f &s, SbMatrix &u,
-		       SbVec3f &t, SbMatrix &proj) const;
+    /// Factors a matrix m into 5 pieces: m = r s r^ u t, where r^
+    /// means transpose of r, and r and u are rotations, s is a scale,
+    /// and t is a translation. Any projection information is returned
+    /// in proj.
+    SbBool	factor(SbMatrix &r, SbVec3f &s, SbMatrix &u, SbVec3f &t, SbMatrix &proj) const;
 
-    // Returns inverse of matrix. Results are undefined for
-    // singular matrices.  Uses LU decompostion
+    /// Returns inverse of matrix. Results are undefined for
+    /// singular matrices.  Uses LU decompostion
     SbMatrix	inverse() const;
 
-    // Perform in-place LU decomposition of matrix.  indx is index of rows
-    // in matrix. d is the parity of row swaps.  Returns FALSE if singular
+    /// Perform in-place LU decomposition of matrix.  indx is index of rows
+    /// in matrix. d is the parity of row swaps.  Returns FALSE if singular
     SbBool	LUDecomposition(int index[4], float &d);
 
-    // Perform back-substitution on LU-decomposed matrix. Index is
-    // permutation of rows from original matrix
+    /// Perform back-substitution on LU-decomposed matrix. Index is
+    /// permutation of rows from original matrix
     void	LUBackSubstitution(int index[4], float b[4]) const;
 
-    // Returns transpose of matrix
+    /// Returns transpose of matrix
     SbMatrix	transpose() const;
 
 
     // The following methods provide Mx/mx and mx/vec arithmetic:
 
-    // Multiplies matrix by given matrix on right or left
+    /// Multiplies matrix by given matrix on right or left
     SbMatrix &	multRight(const SbMatrix &m);	// this = this * m
     SbMatrix &	multLeft(const SbMatrix &m);	// this = m * this
 
-    // Multiplies matrix by given column vector, giving vector result
+    /// Multiplies matrix by given column vector, giving vector result
     void	multMatrixVec(const SbVec3f &src, SbVec3f &dst) const;
 
-    // Multiplies given row vector by matrix, giving vector result
+    /// Multiplies given row vector by matrix, giving vector result
     void	multVecMatrix(const SbVec3f &src, SbVec3f &dst) const;
 
-    // Multiplies given row vector by matrix, giving vector result
-    // src is assumed to be a direction vector, so translation part of
-    // matrix is ignored.
+    /// Multiplies given row vector by matrix, giving vector result
+    /// src is assumed to be a direction vector, so translation part of
+    /// matrix is ignored.
     void	multDirMatrix(const SbVec3f &src, SbVec3f &dst) const;
 
-    // Multiplies the given line's origin by the matrix, and the
-    // line's direction by the rotation portion of the matrix
+    /// Multiplies the given line's origin by the matrix, and the
+    /// line's direction by the rotation portion of the matrix
     void	multLineMatrix(const SbLine &src, SbLine &dst) const;
 
 
     // The following methods are miscellaneous Mx functions:
 
-    // Prints a formatted version of the matrix to the given file pointer
+    /// Prints a formatted version of the matrix to the given file pointer
     void	print(FILE *fp) const;
 
 
-    // Cast: returns pointer to storage of first element
+    /// Cast: returns pointer to storage of first element
     operator float *() 		{ return &matrix[0][0]; }
 
-    // Cast: returns reference to 4x4 array
+    /// Cast: returns reference to 4x4 array
     operator SbMat &() 		{ return matrix; }
 
-    // Make it look like a usual matrix (so you can do m[3][2])
+    /// Make it look like a usual matrix (so you can do m[3][2])
     float *	  operator [](int i) 	    { return &matrix[i][0]; }
+
+    /// Make it look like a usual matrix (so you can do m[3][2])
     const float * operator [](int i) const  { return &matrix[i][0]; }
 
-    // Sets value from 4x4 array of elements
+    /// Sets value from 4x4 array of elements
     SbMatrix &	operator =(const SbMat &m);
 
+    /// Set the matrix from another \a SbMatrix
     SbMatrix &	operator =(const SbMatrix &m);
 
-    // Sets value from a rotation
+    /// Sets value from a rotation
     SbMatrix &	operator =(const SbRotation &q)	{ setRotate(q); return *this; }
 
-    // Performs right multiplication with another matrix
+    /// Performs right multiplication with another matrix
     SbMatrix &	operator *=(const SbMatrix &m)	{ return multRight(m); }
 
-    // Binary multiplication of matrices
+    /// Binary multiplication of matrices
     friend INVENTOR_API SbMatrix	operator *(const SbMatrix &m1, const SbMatrix &m2);
 
-    // Equality comparison operator
+    /// Equality comparison operator
     friend INVENTOR_API int		operator ==(const SbMatrix &m1, const SbMatrix &m2);
+
+    /// Inequality comparison operator
     friend INVENTOR_API int		operator !=(const SbMatrix &m1, const SbMatrix &m2)
 	{ return !(m1 == m2); }
 
-    // Equality comparison within given tolerance, for each component
+    /// Equality comparison within given tolerance, for each component
     SbBool		equals(const SbMatrix &m, float tolerance) const;
 
   private:

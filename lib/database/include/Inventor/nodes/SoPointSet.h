@@ -59,29 +59,65 @@
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoNonIndexedShape.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPointSet
-//
-//  Set of points, using the current coordinates. The startIndex field
-//  gives the starting coordinate index for the first point. The number of
-//  points to draw is determined by the numPoints field.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-// This value, when used in the numPoints field, means use the rest of
-// the coordinates as points
+/// This value, when used in the numPoints field, means use the rest of
+/// the coordinates as points
 #define SO_POINT_SET_USE_REST_OF_POINTS	(-1)
 
+/// Point set shape node.
+/// \ingroup Nodes
+/// This node represents a set of points located at the
+/// coordinates specified by the #vertexProperty field (from <tt>SoVertexShape</tt>)
+/// or the current inherited coordinates. For optimal performance,
+/// the #vertexProperty field is recommended.
+///
+/// <tt>SoPointSet</tt> uses the coordinates in order,
+/// starting with the first one. The
+/// number of points in the set is specified by the #numPoints field.
+///
+/// The coordinates of the point set are transformed by the current
+/// cumulative transformation. The points are drawn with the current light
+/// model and drawing style (drawing styles <b>FILLED</b> and <b>LINES</b> are
+/// treated as <b>POINTS</b>).
+///
+/// Treatment of the current material and normal binding is as follows:
+/// <b>PER_PART</b>, <b>PER_FACE</b>, and <b>PER_VERTEX</b> bindings bind one
+/// material or normal to each point. The default material binding is
+///  <b>OVERALL</b>. The default normal binding is
+/// <b>PER_VERTEX</b>.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws points based on the current coordinates, normals, materials,
+/// drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Picks points based on the current coordinates and transformation.
+/// Details about the intersection are returned in an <tt>SoPointDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses all points in the set with the
+/// current transformation applied to them.  Sets the center to the
+/// average of the coordinates of all points.
+/// <b>SoCallbackAction</b>
+/// If any point callbacks are registered with the action, they will be
+/// invoked for each point in the set.
+///
+/// \par File format/defaults:
+/// \code
+/// SoPointSet {
+///    vertexProperty   NULL
+///    startIndex       0
+///    numPoints        -1
+/// }
+/// \endcode
+/// \sa SoCoordinate3,SoDrawStyle,SoPointDetail,SoVertexProperty
 class INVENTOR_API SoPointSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoPointSet);
 
   public:
     // Fields
-    SoSFInt32		numPoints;	// Number of points to draw
+    SoSFInt32		numPoints;	///< Number of points.
 
-    // Constructor
+    /// Creates a point set node with default settings.
     SoPointSet();
 
   SoEXTENDER public:

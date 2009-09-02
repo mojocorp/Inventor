@@ -58,39 +58,43 @@
 
 #include <Inventor/details/SoPointDetail.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoLineDetail
-//
-//  Detail information about vertex-based shapes made of line
-//  segments. It adds indices of various items that vary among lines,
-//  segments, and vertices.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Stores detail information about vertex-based shapes made of line segments.
+/// \ingroup Details
+/// This class contains detail information about a point on a line segment
+/// in a vertex-based shape made of line segments. The information
+/// includes the points at the ends of the segment, and the index of the
+/// segment within the shape.
+/// \sa SoDetail, SoPickedPoint, SoPrimitiveVertex, SoVertexShape
 class INVENTOR_API SoLineDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoLineDetail);
 
   public:
-    // Constructor and destructor.
+    /// Constructor and destructor.
     SoLineDetail();
+
+    /// Destructor
     virtual ~SoLineDetail();
 
-    // These return the point details for the two ends of the line segment
+    /// These return information about the first of two points forming the end vertices of
+    /// the line segment, represented as an \a SoPointDetail.
     const SoPointDetail *	getPoint0() const	{ return &point[0]; }
+    
+    /// These return information about the second of two points forming the end vertices of
+    /// the line segment, represented as an \a SoPointDetail.
     const SoPointDetail *	getPoint1() const	{ return &point[1]; }
 
-    // Returns the index of the line the segment is part of within a
-    // shape (e.g., the third line within an SoLineSet)
+    /// Returns the index of the line the segment is part of within a
+    /// shape (e.g., the third line within an SoLineSet)
     int32_t			getLineIndex() const	{ return lineIndex; }
 
-    // Returns the index of the part (usually part = segment) within a
-    // shape (e.g., the fifth segment overall within an SoLineSet)
+    /// Returns the index of the part containing the line segment within the
+    /// shape. Usually, the part index is the same as the line segment index,
+    /// such as the fifth segment overall within an \a SoLineSet.
     int32_t			getPartIndex() const	{ return partIndex; }
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SoDetail *		copy() const;
 
   SoEXTENDER public:

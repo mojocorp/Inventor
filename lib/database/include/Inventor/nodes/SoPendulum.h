@@ -60,26 +60,46 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/fields/SoSFBool.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPendulum
-//
-//  SoRotation node oscillates between two rotations
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Animated oscillating rotation node.
+/// \ingroup Nodes
+/// The <tt>SoPendulum</tt> class is derived from <tt>SoRotation</tt>, so it applies
+/// a rotation to the current transformation.  Using engines connected to
+/// the <b>realTime</b> global field, the rotation value is animated over
+/// time between two fixed rotations, achieving the effect of a swinging
+/// pendulum. The period of the swing can be adjusted by changing the
+/// #speed field. The current rotation at any time is available in
+/// the #rotation field, inherited from <tt>SoRotation</tt>
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction, SoRayPickAction</b>
+/// Concatenates interpolated rotation value with the current
+/// transformation matrix.
+/// <b>SoGetMatrixAction</b>
+/// Returns transformation matrix specified by the interpolated rotation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoPendulum {
+///    rotation     0 0 1  0
+///    rotation0    0 0 1  0
+///    rotation1    0 0 1  0
+///    speed        1
+///    on           TRUE
+/// }
+/// \endcode
+/// \sa SoRotor, SoShuttle
 class INVENTOR_API SoPendulum : public SoRotation {
 
     SO_NODE_HEADER(SoPendulum);
 
   public:
     // Fields
-    SoSFRotation	rotation0;
-    SoSFRotation	rotation1;
-    SoSFFloat		speed;	// cycles per second
-    SoSFBool		on;	// FALSE to stop rotation
+    SoSFRotation	rotation0;  ///< These define the two fixed rotations that are interpolated to create the pendular motion.
+    SoSFRotation	rotation1;  ///< These define the two fixed rotations that are interpolated to create the pendular motion.
+    SoSFFloat	speed;      ///< Defines the speed of the pendulum, in cycles per second.
+    SoSFBool	on;         ///< Allows applications to enable or disable the motion easily.
 
-    // Constructor
+    /// Creates a pendulum node with default settings.
     SoPendulum();
 
   SoINTERNAL public:

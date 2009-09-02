@@ -72,15 +72,19 @@ class SbVec3f;
 SoEXTENDER class INVENTOR_API SoNormalCache : public SoCache {
 
   public:
-    // Constructor and destructor
+    /// Constructor and destructor
     SoNormalCache(SoState *state);
+
+    /// Destructor
     ~SoNormalCache();
 
-    // Stores a list of normals in the cache
+    /// Stores a list of normals in the cache
     void		set(int numNormals, const SbVec3f *normals);
 
-    // Returns the number of normals and list of normals
+    /// Returns the number of normals
     int			getNum() const		{ return numNormals; }
+
+    /// Returns the number list of normals
     const SbVec3f *	getNormals() const	{ return normals;    }
 
   private:

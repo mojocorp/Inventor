@@ -81,14 +81,14 @@ SoEXTENDER class INVENTOR_API SoFieldConverter : public SoEngine {
     SO_ENGINE_ABSTRACT_HEADER(SoFieldConverter);
 
   public:
-    // These must be defined in each subclass. They return the input
-    // and output connections of the given types.
+    /// These must be defined in each subclass. They return the input
+    /// and output connections of the given types.
     virtual SoField *		getInput(SoType type)  = 0;
     virtual SoEngineOutput *	getOutput(SoType type) = 0;
 
-    // Returns the input that is connected.  By default, this searches
-    // through the field data for the field that is connected;
-    // you can redefine to make more efficient.
+    /// Returns the input that is connected.  By default, this searches
+    /// through the field data for the field that is connected;
+    /// you can redefine to make more efficient.
     virtual SoField *		getConnectedInput();
 
   SoINTERNAL public:

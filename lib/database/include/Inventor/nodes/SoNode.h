@@ -76,42 +76,52 @@ class SoRayPickAction;
 class SoSearchAction;
 class SoWriteAction;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNode
-//
-//  Base SoNode class (abstract).
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
+/// Abstract base class for all database nodes.
+/// \ingroup Nodes
+/// This is the abstract base class from which all scene graph node
+/// classes are derived.
+///
+/// \par Action behavior:
+/// <b>SoSearchAction</b>
+/// If the node pointer, type, or name matches the search criteria,
+/// returns a path to the node.
+/// <b>SoWriteAction</b>
+/// Writes the contents of the node to the current <tt>SoOutput</tt>.
+/// \par File format/defaults:
+/// This is an abstract class. See the reference page of a derived class for the format and default values.
+/// \sa SoPath, SoAction, SoNodeKit
 class INVENTOR_API SoNode : public SoFieldContainer {
 
   public:
 
-    // Turns override flag on or off
+    /// Turns override flag on or off.
     void		setOverride(SbBool state);
 
-    // Returns the state of the override flag
+    /// Returns the state of the override flag.
     SbBool		isOverride() const		{ return override; }
 
-    // Returns type identifier for SoNode class
+    /// Returns type identifier for the <tt>SoNode</tt> class.
     static SoType	getClassTypeId()	{ return classTypeId; }
 
-    // Creates and returns an exact copy of the node. If the node is a
-    // group, it copies the children as well. If the copyConnections
-    // flag is TRUE (it is FALSE by default), any connections to (but
-    // not from) fields of the node are copied, as well.
+    /// Creates and returns an exact copy of the node. If the node is a group,
+    /// it copies the children as well. If \a copyConnections is
+    /// TRUE (it is FALSE by default), any connections to (but not from)
+    /// fields of the node are copied, as well. Note that multiple references to
+    /// a node under the node to be copied will result in multiple references to
+    /// the copy of that node.
     SoNode *		copy(SbBool copyConnections = FALSE) const;
 
-    // Returns TRUE if a node has an affect on the state during
-    // traversal. The default method returns TRUE. Node classes (such
-    // as SoSeparator) that isolate their effects from the rest of the
-    // graph override this method to return FALSE.
+    /// Returns TRUE if a node has an effect on the state during traversal.
+    /// The default method returns TRUE. Node classes (such as
+    /// <tt>SoSeparator</tt>)  that isolate their effects from the rest of the
+    /// graph override this method to return FALSE.
     virtual SbBool	affectsState() const;
 
-    // A node's name can be set using setName() (which is a method on
-    // SoBase).  These methods allow nodes to be looked up by name.
+    /// A node's name can be set using SoBase::setName().
+    /// These methods allow nodes to be looked up by name. The first one
+    /// returns the last node given the specified name. The second one returns
+    /// the number of nodes with the given name, and adds to \a list pointers
+    /// to those nodes.
     static SoNode *	getByName(const SbName &name);
     static int		getByName(const SbName &name, SoNodeList &list);
 

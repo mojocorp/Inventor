@@ -58,47 +58,64 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoGroup.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoLOD
-//
-//  Level-of-detail group node. The children of this node typically
-//  represent the same object or objects at varying levels of detail,
-//  from highest detail to lowest.  The world-space distance of the
-//  eye from the transformed center of the LOD is computed, and one
-//  child is drawn, based on the values in the ranges field.
-//
-//  More precisely, if the distance from the eyepoint to the
-//  transformed center is D and the ranges array contains LAST_RANGE+1
-//  values (numbered 0...LAST_RANGE), then:
-//
-//  D < ranges[0]  : Child 0 is drawn
-//  ranges[i-1] < D < ranges[i] : Child i is drawn
-//  D > ranges[LAST_RANGE] : Child LAST_RANGE+1 is drawn
-//
-//  So, you should specify N ranges and N+1 children.  If you specify
-//  too few children, the last child will be used for the extra
-//  ranges.  If you specify too few ranges, the extra children will
-//  never be used.
-//
-//  Add an SoInfo node as a child if you want a level of detail
-//  that doesn't draw anything.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Distance-based level-of-detail  switching group node.
+/// \ingroup Nodes
+/// This group node is used to allow applications to switch between
+/// various representations of objects automatically. The children of this
+/// node typically represent the same object or objects at varying levels
+/// of detail, from highest detail to lowest.
+/// The distance from the world-space
+/// eye point to the transformed center of the LOD is computed, and one
+/// child is drawn, based on the values in the ranges field.
+///
+/// More precisely, if the distance from the world-space eyepoint to the
+/// transformed center is D and the ranges array contains LAST_RANGE+1
+/// values (numbered 0...LAST_RANGE), then:
+///
+/// \code
+///     if D < ranges[0]                    : Child 0 is drawn
+///     else if ranges[i-1] < D < ranges[i] : Child i is drawn
+///     else if D > ranges[LAST_RANGE]      : Child LAST_RANGE+1 is drawn
+/// \endcode
+///
+/// Thus, N ranges and N+1 children should be specified.  If you specify
+/// too few children, the last child will be used for the extra
+/// ranges.  If you specify too few ranges, the extra children will
+/// never be used.
+///
+/// It is often useful to define the lowest detail child to be an SoInfo
+/// node.  This causes the object to completely disappear if it is far enough
+/// away from the eyepoint.  Defining the highest detail child to be an
+/// SoInfo node can also be useful if you want the object to disappear if
+/// it gets too close to the eyepoint.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoRayPickAction, SoCallbackAction</b>
+/// Only the child with the appropriate level of detail is traversed.
+/// <b>others</b>
+/// All implemented as for <tt>SoGroup</tt>.
+///
+/// \par File format/defaults:
+/// \code
+/// SoLOD {
+///    center	0 0 0
+///    range	[  ]
+/// }
+/// \endcode
+/// \sa SoSwitch, SoGroup
 class INVENTOR_API SoLOD : public SoGroup {
 
     SO_NODE_HEADER(SoLOD);
 
   public:
     // Fields
-    SoMFFloat		range;	// World-space distances
-    SoSFVec3f		center; // Center for computation
+    SoMFFloat		range;	///< World-space distances to use as switching criteria.
+    SoSFVec3f		center; ///< Object-space center of the model.
 
-    // Default constructor
+    /// Creates a distance-based level-of-detail node with default settings.
     SoLOD();
 
-    // Constructor that takes approximate number of children
+    /// Constructor that takes approximate number of children
     SoLOD(int nChildren);
 
   SoEXTENDER public:
