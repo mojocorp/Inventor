@@ -98,6 +98,9 @@ class INVENTOR_API SbString
     /// Returns length of string
     size_t			getLength() const	{ return strlen(string); }
 
+    /// Returns true if the string has no characters; otherwise returns false.
+    bool isEmpty() const { return (string[0] == '\0'); }
+
     /// Sets string to be the empty string (""). If freeOld is TRUE
     /// (default), any old storage is freed up
     void		makeEmpty(SbBool freeOld = TRUE);
@@ -128,7 +131,7 @@ class INVENTOR_API SbString
     SbString &		operator +=(const SbString &str);
 
     /// Unary "not" operator; returns TRUE if string is empty ("")
-    int			operator !() const { return (string[0] == '\0'); }
+    int			operator !() const { return isEmpty(); }
 
     /// Returns true if str1 is equal to str2; otherwise returns false.
     friend INVENTOR_API bool		operator ==(const SbString &str1, const char *str2);
