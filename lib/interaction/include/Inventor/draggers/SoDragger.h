@@ -65,6 +65,7 @@
 #define  _SO_DRAGGER_
 
 #include <Inventor/SbViewportRegion.h>
+#include <Inventor/SbViewVolume.h>
 #include <Inventor/SbVec3f.h>
 #include <Inventor/SbMatrix.h>
 #include <Inventor/nodekits/SoInteractionKit.h>
