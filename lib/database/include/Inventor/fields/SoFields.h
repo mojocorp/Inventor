@@ -63,6 +63,7 @@
 
 #include <Inventor/fields/SoSFBitMask.h>
 #include <Inventor/fields/SoSFBool.h>
+#include <Inventor/fields/SoSFBox3f.h>
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFEngine.h>
 #include <Inventor/fields/SoSFEnum.h>
