@@ -70,6 +70,7 @@ SoField::initClasses()
     SoMField::initClass();
 
     SoSFBool::initClass();
+    SoSFBox3f::initClass();
     SoSFColor::initClass();
     SoSFEngine::initClass();
     SoSFEnum::initClass();
@@ -482,6 +483,21 @@ SoSFBool::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO__FIELD_INIT_CLASS(SoSFBool, "SFBool", SoSField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoSFBox3f class.
+//
+// Use: internal
+
+void
+SoSFBox3f::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoSFBox3f, "SFBox3f", SoSField);
 }
 
 ////////////////////////////////////////////////////////////////////////

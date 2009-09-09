@@ -253,6 +253,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/fields/SoMFVec4f.h \
            database/include/Inventor/fields/SoSFBitMask.h \
            database/include/Inventor/fields/SoSFBool.h \
+           database/include/Inventor/fields/SoSFBox3f.h \
            database/include/Inventor/fields/SoSFColor.h \
            database/include/Inventor/fields/SoSFEngine.h \
            database/include/Inventor/fields/SoSFEnum.h \
@@ -771,6 +772,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/fields/SoMFVec4f.cpp \
            database/src/so/fields/SoSFBitMask.cpp \
            database/src/so/fields/SoSFBool.cpp \
+           database/src/so/fields/SoSFBox3f.cpp \
            database/src/so/fields/SoSFColor.cpp \
            database/src/so/fields/SoSFEngine.cpp \
            database/src/so/fields/SoSFEnum.cpp \
