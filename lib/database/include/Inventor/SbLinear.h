@@ -50,6 +50,7 @@
  |
  |   Classes:
  |	SbVec3f
+ |	SbVec3d
  |	SbVec2f
  |	SbVec2s
  |	SbVec4f
@@ -74,6 +75,7 @@
 #include <Inventor/SbVec2f.h>
 #include <Inventor/SbVec2s.h>
 #include <Inventor/SbVec3f.h>
+#include <Inventor/SbVec3d.h>
 #include <Inventor/SbVec4f.h>
 #include <Inventor/SbMatrix.h>
 #include <Inventor/SbRotation.h>
