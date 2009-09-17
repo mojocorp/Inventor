@@ -149,6 +149,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoGLModelMatrixElement.h \
            database/include/Inventor/elements/SoGLNormalElement.h \
            database/include/Inventor/elements/SoGLPointSizeElement.h \
+           database/include/Inventor/elements/SoGLPolygonOffsetElement.h \
            database/include/Inventor/elements/SoGLProjectionMatrixElement.h \
            database/include/Inventor/elements/SoGLRenderPassElement.h \
            database/include/Inventor/elements/SoGLShapeHintsElement.h \
@@ -173,6 +174,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoPickRayElement.h \
            database/include/Inventor/elements/SoPickStyleElement.h \
            database/include/Inventor/elements/SoPointSizeElement.h \
+           database/include/Inventor/elements/SoPolygonOffsetElement.h \
            database/include/Inventor/elements/SoProfileCoordinateElement.h \
            database/include/Inventor/elements/SoProfileElement.h \
            database/include/Inventor/elements/SoProjectionMatrixElement.h \
@@ -363,6 +365,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/nodes/SoPickStyle.h \
            database/include/Inventor/nodes/SoPointLight.h \
            database/include/Inventor/nodes/SoPointSet.h \
+           database/include/Inventor/nodes/SoPolygonOffset.h \
            database/include/Inventor/nodes/SoProfile.h \
            database/include/Inventor/nodes/SoProfileCoordinate2.h \
            database/include/Inventor/nodes/SoProfileCoordinate3.h \
@@ -669,6 +672,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/elements/SoGLModelMatrixElement.cpp \
            database/src/so/elements/SoGLNormalElement.cpp \
            database/src/so/elements/SoGLPointSizeElement.cpp \
+           database/src/so/elements/SoGLPolygonOffsetElement.cpp \
            database/src/so/elements/SoGLProjectionMatrixElement.cpp \
            database/src/so/elements/SoGLRenderPassElement.cpp \
            database/src/so/elements/SoGLShapeHintsElement.cpp \
@@ -693,6 +697,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/elements/SoPickRayElement.cpp \
            database/src/so/elements/SoPickStyleElement.cpp \
            database/src/so/elements/SoPointSizeElement.cpp \
+           database/src/so/elements/SoPolygonOffsetElement.cpp \
            database/src/so/elements/SoProfileCoordinateElement.cpp \
            database/src/so/elements/SoProfileElement.cpp \
            database/src/so/elements/SoProjectionMatrixElement.cpp \
@@ -857,6 +862,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/nodes/SoPickStyle.cpp \
            database/src/so/nodes/SoPointLight.cpp \
            database/src/so/nodes/SoPointSet.cpp \
+           database/src/so/nodes/SoPolygonOffset.cpp \
            database/src/so/nodes/SoProfile.cpp \
            database/src/so/nodes/SoProfileCoordinate2.cpp \
            database/src/so/nodes/SoProfileCoordinate3.cpp \

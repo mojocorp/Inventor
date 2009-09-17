@@ -101,7 +101,7 @@ SoEXTENDER class INVENTOR_API SoOverrideElement : public SoElement {
 	COMPLEXITY	= 0x4,
 	COMPLEXITY_TYPE	= 0x8,
 	CREASE_ANGLE	= 0x10,
-	DIFFUSE_COLOR	= 0x20,
+        DIFFUSE_COLOR	= 0x20,
 	DRAW_STYLE	= 0x40,
 	EMISSIVE_COLOR	= 0x80,
 	FONT_NAME	= 0x100,
@@ -115,6 +115,7 @@ SoEXTENDER class INVENTOR_API SoOverrideElement : public SoElement {
 	SHAPE_HINTS	= 0x10000,
 	SHININESS	= 0x20000,
 	SPECULAR_COLOR	= 0x40000,
+        POLYGON_OFFSET  = 0x80000,
 // TRANSPARENCY is same as diffuse color:  overriding one will override both.
 	TRANSPARENCY	= 0x20
     };
@@ -134,85 +135,89 @@ SoEXTENDER class INVENTOR_API SoOverrideElement : public SoElement {
     // "get" methods for each element which can be overridden.
     //
 
-    /// Returns TRUE iff SoAmbientColorElement is overridden.
+    /// Returns TRUE if SoAmbientColorElement is overridden.
     static SbBool	getAmbientColorOverride(SoState *state)
 	{ SO_GET_OVERRIDE(AMBIENT_COLOR); }
 
-    /// Returns TRUE iff SoColorIndexElement is overridden.
+    /// Returns TRUE if SoColorIndexElement is overridden.
     static SbBool	getColorIndexOverride(SoState *state)
 	{ SO_GET_OVERRIDE(COLOR_INDEX); }
 
-    /// Returns TRUE iff SoComplexityElement is overridden.
+    /// Returns TRUE if SoComplexityElement is overridden.
     static SbBool	getComplexityOverride(SoState *state)
 	{ SO_GET_OVERRIDE(COMPLEXITY); }
 
-    /// Returns TRUE iff SoComplexityTypeElement is overridden.
+    /// Returns TRUE if SoComplexityTypeElement is overridden.
     static SbBool	getComplexityTypeOverride(SoState *state)
 	{ SO_GET_OVERRIDE(COMPLEXITY_TYPE); }
 
-    /// Returns TRUE iff SoCreaseAngleElement is overridden.
+    /// Returns TRUE if SoCreaseAngleElement is overridden.
     static SbBool	getCreaseAngleOverride(SoState *state)
 	{ SO_GET_OVERRIDE(CREASE_ANGLE); }
 
-    /// Returns TRUE iff SoDiffuseColorElement is overridden.
+    /// Returns TRUE if SoDiffuseColorElement is overridden.
     static SbBool	getDiffuseColorOverride(SoState *state)
-	{ SO_GET_OVERRIDE(DIFFUSE_COLOR); }
+        { SO_GET_OVERRIDE(DIFFUSE_COLOR); }
 
-    /// Returns TRUE iff SoDrawStyleElement is overridden.
+    /// Returns TRUE if SoDrawStyleElement is overridden.
     static SbBool	getDrawStyleOverride(SoState *state)
 	{ SO_GET_OVERRIDE(DRAW_STYLE); }
 
-    /// Returns TRUE iff SoEmissiveColorElement is overridden.
+    /// Returns TRUE if SoEmissiveColorElement is overridden.
     static SbBool	getEmissiveColorOverride(SoState *state)
 	{ SO_GET_OVERRIDE(EMISSIVE_COLOR); }
 
-    /// Returns TRUE iff SoFontNameElement is overridden.
+    /// Returns TRUE if SoFontNameElement is overridden.
     static SbBool	getFontNameOverride(SoState *state)
 	{ SO_GET_OVERRIDE(FONT_NAME); }
 
-    /// Returns TRUE iff SoFontSizeElement is overridden.
+    /// Returns TRUE if SoFontSizeElement is overridden.
     static SbBool	getFontSizeOverride(SoState *state)
 	{ SO_GET_OVERRIDE(FONT_SIZE); }
 
-    /// Returns TRUE iff SoLightModelElement is overridden.
+    /// Returns TRUE if SoLightModelElement is overridden.
     static SbBool	getLightModelOverride(SoState *state)
 	{ SO_GET_OVERRIDE(LIGHT_MODEL); }
 
-    /// Returns TRUE iff SoLinePatternElement is overridden.
+    /// Returns TRUE if SoLinePatternElement is overridden.
     static SbBool	getLinePatternOverride(SoState *state)
 	{ SO_GET_OVERRIDE(LINE_PATTERN); }
 
-    /// Returns TRUE iff SoLineWidthElement is overridden.
+    /// Returns TRUE if SoLineWidthElement is overridden.
     static SbBool	getLineWidthOverride(SoState *state)
 	{ SO_GET_OVERRIDE(LINE_WIDTH); }
 	
-    /// Returns TRUE iff SoMaterialBindingElement is overridden.
+    /// Returns TRUE if SoMaterialBindingElement is overridden.
     static SbBool	getMaterialBindingOverride(SoState *state)
 	{ SO_GET_OVERRIDE(MATERIAL_BINDING); }
 
-    /// Returns TRUE iff SoPointSizeElement is overridden.
+    /// Returns TRUE if SoPointSizeElement is overridden.
     static SbBool	getPointSizeOverride(SoState *state)
 	{ SO_GET_OVERRIDE(POINT_SIZE); }
 
-    /// Returns TRUE iff SoPickStyleElement is overridden.
+    /// Returns TRUE if SoPickStyleElement is overridden.
     static SbBool	getPickStyleOverride(SoState *state)
 	{ SO_GET_OVERRIDE(PICK_STYLE); }
 
-    /// Returns TRUE iff SoShapeHintsElement is overridden.
+    /// Returns TRUE if SoShapeHintsElement is overridden.
     static SbBool	getShapeHintsOverride(SoState *state)
 	{ SO_GET_OVERRIDE(SHAPE_HINTS); }
 
-    /// Returns TRUE iff SoShininessElement is overridden.
+    /// Returns TRUE if SoShininessElement is overridden.
     static SbBool	getShininessOverride(SoState *state)
 	{ SO_GET_OVERRIDE(SHININESS); }
 
-    /// Returns TRUE iff SoSpecularColorElement is overridden.
+    /// Returns TRUE if SoSpecularColorElement is overridden.
     static SbBool	getSpecularColorOverride(SoState *state)
 	{ SO_GET_OVERRIDE(SPECULAR_COLOR); }
 
-    /// Returns TRUE iff SoTransparencyElement is overridden.
+    /// Returns TRUE if SoTransparencyElement is overridden.
     static SbBool	getTransparencyOverride(SoState *state)
 	{ SO_GET_OVERRIDE(TRANSPARENCY); }
+
+    /// Returns TRUE if SoPolygonOffsetElement is overridden.
+    static SbBool	getPolygonOffsetOverride(SoState *state)
+        { SO_GET_OVERRIDE(POLYGON_OFFSET); }
 
     //
     // "set" methods for each element which can be overridden.
@@ -311,6 +316,11 @@ SoEXTENDER class INVENTOR_API SoOverrideElement : public SoElement {
 						 SbBool override)
 	{ SO_SET_OVERRIDE(SPECULAR_COLOR); }
     
+    /// set override flag for SoPolygonOffsetElement.
+    static void		setPolygonOffsetOverride(SoState *state, SoNode *,
+                                                 SbBool override)
+        { SO_SET_OVERRIDE(POLYGON_OFFSET); }
+
     /// set override flag for SoTransparencyElement.
     static void		setTransparencyOverride(SoState *state, SoNode *,
 						 SbBool override);
