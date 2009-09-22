@@ -78,6 +78,14 @@ SbLine::setValue(const SbVec3f &p0, const SbVec3f &p1)
     dir.normalize();
 }
 
+void
+SbLine::setPosDir(const SbVec3f &position, const SbVec3f &direction)
+{
+    pos = position;
+    dir = direction;
+    dir.normalize();
+}
+
 // find points on this line and on line2 that are closest to each other.
 // If the lines intersect, then ptOnThis and ptOnLine2 will be equal.
 // If the lines are parallel, then FALSE is returned, and the contents of
