@@ -84,6 +84,10 @@ class INVENTOR_API SbLine {
     /// Sets line to pass through points \a p0 and \a p1.
     void		setValue(const SbVec3f &p0, const SbVec3f &p1);
 
+    /// Sets line using a \a position and a \a direction vector.
+    /// The direction vector will be normalized automatically.
+    void               setPosDir(const SbVec3f &position, const SbVec3f &direction);
+
     /// Finds the two closest points between this line and \a line2,
     /// and loads them into \a ptOnThis and \a ptOnLine2.
     /// Returns FALSE. if the lines are parallel (results undefined), and returns
