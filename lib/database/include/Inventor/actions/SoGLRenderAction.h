@@ -59,6 +59,7 @@
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
+#include <Inventor/elements/SoTransparencyTypeElement.h>
 
 class	SbBox3f;
 class	SoGetBoundingBoxAction;
@@ -81,13 +82,13 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
 
     /// Various levels of transparency rendering quality
     enum TransparencyType {
-        SCREEN_DOOR,		///< Use stipple patterns for screen-door transparency
-        ADD,			///< Use additive alpha blending
-        DELAYED_ADD,		///< Uses additive blending, rendering all transparent objects after opaque ones
-        SORTED_OBJECT_ADD,	///< Same as DELAYED_ADD, but sorts transparent objects by distances of bounding boxes from camera
-        BLEND,			///< Uses multiplicative alpha blending
-        DELAYED_BLEND,		///< Uses multiplicative alpha blending, rendering all transparent objects after opaque ones
-        SORTED_OBJECT_BLEND	///< Same as DELAYED_BLEND, but sorts transparent objects by distances of bounding boxes from camera
+        SCREEN_DOOR         = SoTransparencyTypeElement::SCREEN_DOOR,	   ///< Use stipple patterns for screen-door transparency
+        ADD                 = SoTransparencyTypeElement::ADD,                ///< Use additive alpha blending
+        DELAYED_ADD         = SoTransparencyTypeElement::DELAYED_ADD,        ///< Uses additive blending, rendering all transparent objects after opaque ones
+        SORTED_OBJECT_ADD   = SoTransparencyTypeElement::SORTED_OBJECT_ADD,  ///< Same as DELAYED_ADD, but sorts transparent objects by distances of bounding boxes from camera
+        BLEND               = SoTransparencyTypeElement::BLEND,              ///< Uses multiplicative alpha blending
+        DELAYED_BLEND       = SoTransparencyTypeElement::DELAYED_BLEND,      ///< Uses multiplicative alpha blending, rendering all transparent objects after opaque ones
+        SORTED_OBJECT_BLEND = SoTransparencyTypeElement::SORTED_OBJECT_BLEND ///< Same as DELAYED_BLEND, but sorts transparent objects by distances of bounding boxes from camera
     };
 
     /// Possible return codes from a render abort callback

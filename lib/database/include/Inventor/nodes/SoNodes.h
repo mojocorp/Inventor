@@ -148,6 +148,7 @@
 #include <Inventor/nodes/SoTransformSeparator.h>
 #include <Inventor/nodes/SoTransformation.h>
 #include <Inventor/nodes/SoTranslation.h>
+#include <Inventor/nodes/SoTransparencyType.h>
 #include <Inventor/nodes/SoTriangleStripSet.h>
 #include <Inventor/nodes/SoUnits.h>
 #include <Inventor/nodes/SoVertexShape.h>
