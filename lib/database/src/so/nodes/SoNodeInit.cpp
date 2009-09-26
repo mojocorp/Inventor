@@ -155,6 +155,7 @@ SoNode::initClasses()
     SoTransform::initClass();
     SoTransformSeparator::initClass();
     SoTranslation::initClass();
+    SoTransparencyType::initClass();
     SoTriangleStripSet::initClass();
     SoUnits::initClass();
     SoUnknownNode::initClass();

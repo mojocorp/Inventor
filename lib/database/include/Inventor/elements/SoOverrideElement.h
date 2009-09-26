@@ -113,9 +113,10 @@ SoEXTENDER class INVENTOR_API SoOverrideElement : public SoElement {
 	POINT_SIZE	= 0x4000,
 	PICK_STYLE	= 0x8000,
 	SHAPE_HINTS	= 0x10000,
-	SHININESS	= 0x20000,
-	SPECULAR_COLOR	= 0x40000,
+        SHININESS	= 0x20000,
+        SPECULAR_COLOR	= 0x40000,
         POLYGON_OFFSET  = 0x80000,
+        TRANSPARENCY_TYPE = 0x800000,
 // TRANSPARENCY is same as diffuse color:  overriding one will override both.
 	TRANSPARENCY	= 0x20
     };
@@ -214,6 +215,10 @@ SoEXTENDER class INVENTOR_API SoOverrideElement : public SoElement {
     /// Returns TRUE if SoTransparencyElement is overridden.
     static SbBool	getTransparencyOverride(SoState *state)
 	{ SO_GET_OVERRIDE(TRANSPARENCY); }
+
+    /// Returns TRUE if SoTransparencyTypeElement is overridden.
+    static SbBool getTransparencyTypeOverride(SoState *state)
+        { SO_GET_OVERRIDE(TRANSPARENCY_TYPE); }
 
     /// Returns TRUE if SoPolygonOffsetElement is overridden.
     static SbBool	getPolygonOffsetOverride(SoState *state)
@@ -325,6 +330,9 @@ SoEXTENDER class INVENTOR_API SoOverrideElement : public SoElement {
     static void		setTransparencyOverride(SoState *state, SoNode *,
 						 SbBool override);
 	
+    /// set override flag for SoTransparencyTypeElement.
+    static void setTransparencyTypeOverride(SoState *state, SoNode *, SbBool override)
+        { SO_SET_OVERRIDE(TRANSPARENCY_TYPE); }
 
     /// Prints element (for debugging)
     virtual void	print(FILE *fp) const;

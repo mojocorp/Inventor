@@ -137,6 +137,7 @@ SoGLRenderAction::initClass()
     SO_ENABLE(SoGLRenderAction, SoGLRenderPassElement);
     SO_ENABLE(SoGLRenderAction, SoViewportRegionElement);
     SO_ENABLE(SoGLRenderAction, SoWindowElement);
+    SO_ENABLE(SoGLRenderAction, SoTransparencyTypeElement);
 }
 
 ////////////////////////////////////////////////////////////////////////

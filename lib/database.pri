@@ -190,6 +190,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoTextureImageElement.h \
            database/include/Inventor/elements/SoTextureMatrixElement.h \
            database/include/Inventor/elements/SoTextureQualityElement.h \
+           database/include/Inventor/elements/SoTransparencyTypeElement.h \
            database/include/Inventor/elements/SoUnitsElement.h \
            database/include/Inventor/elements/SoViewingMatrixElement.h \
            database/include/Inventor/elements/SoViewportRegionElement.h \
@@ -398,6 +399,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/nodes/SoTransformation.h \
            database/include/Inventor/nodes/SoTransformSeparator.h \
            database/include/Inventor/nodes/SoTranslation.h \
+           database/include/Inventor/nodes/SoTransparencyType.h \
            database/include/Inventor/nodes/SoTriangleStripSet.h \
            database/include/Inventor/nodes/SoUnits.h \
            database/include/Inventor/nodes/SoVertexProperty.h \
@@ -712,6 +714,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/elements/SoTextureImageElement.cpp \
            database/src/so/elements/SoTextureMatrixElement.cpp \
            database/src/so/elements/SoTextureQualityElement.cpp \
+           database/src/so/elements/SoTransparencyTypeElement.cpp \
            database/src/so/elements/SoUnitsElement.cpp \
            database/src/so/elements/SoViewingMatrixElement.cpp \
            database/src/so/elements/SoViewportRegionElement.cpp \
@@ -895,6 +898,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/nodes/SoTransformation.cpp \
            database/src/so/nodes/SoTransformSeparator.cpp \
            database/src/so/nodes/SoTranslation.cpp \
+           database/src/so/nodes/SoTransparencyType.cpp \
            database/src/so/nodes/SoTriangleStripSet.cpp \
            database/src/so/nodes/SoUnits.cpp \
            database/src/so/nodes/SoUnknownNode.cpp \

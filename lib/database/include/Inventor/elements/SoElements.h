@@ -120,6 +120,7 @@
 #include <Inventor/elements/SoTextureImageElement.h>
 #include <Inventor/elements/SoTextureMatrixElement.h>
 #include <Inventor/elements/SoTextureQualityElement.h>
+#include <Inventor/elements/SoTransparencyTypeElement.h>
 #include <Inventor/elements/SoUnitsElement.h>
 #include <Inventor/elements/SoViewVolumeElement.h>
 #include <Inventor/elements/SoViewingMatrixElement.h>

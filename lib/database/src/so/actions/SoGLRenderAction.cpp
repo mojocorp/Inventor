@@ -63,6 +63,7 @@
 #include <Inventor/elements/SoTextureImageElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
+#include <Inventor/elements/SoTransparencyTypeElement.h>
 
 SO_ACTION_SOURCE(SoGLRenderAction);
 
@@ -87,7 +88,7 @@ SoGLRenderAction::SoGLRenderAction(const SbViewportRegion &viewportRegion)
  
     abortCB		= NULL;
 
-    transpType  	= SCREEN_DOOR;
+    transpType          	= (TransparencyType)SoTransparencyTypeElement::getDefault();
     doSmooth		= FALSE;
     numPasses		= 1;
     passUpdate		= FALSE;
@@ -484,10 +485,7 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
     SoGLCacheContextElement::set(state, (int) cacheContext, delayObjs,
 				 remoteRendering);
     
-    // Set the transparency bit in the ShapeStyle element
-    // and the lazy element.
-    SoShapeStyleElement::setTransparencyType(state,transpType);
-    SoLazyElement::setTransparencyType(state, transpType);
+    SoTransparencyTypeElement::set(state, (SoTransparencyTypeElement::TransparencyType)transpType);
     
     // Simple case of one pass
     if (getNumPasses() == 1) {
