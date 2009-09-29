@@ -106,6 +106,7 @@
 #include <Inventor/fields/SoMFUShort.h>
 #include <Inventor/fields/SoMFVec2f.h>
 #include <Inventor/fields/SoMFVec3f.h>
+#include <Inventor/fields/SoMFVec3i32.h>
 #include <Inventor/fields/SoMFVec4f.h>
 
 #endif /* _SO_FIELDS_ */
