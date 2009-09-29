@@ -114,6 +114,7 @@ SoField::initClasses()
     SoMFUShort::initClass();
     SoMFVec2f::initClass();
     SoMFVec3f::initClass();
+    SoMFVec3i32::initClass();
     SoMFVec4f::initClass();
 }
 
@@ -438,6 +439,21 @@ SoMFVec3f::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO__FIELD_INIT_CLASS(SoMFVec3f, "MFVec3f", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoMFVec3i32 class.
+//
+// Use: internal
+
+void
+SoMFVec3i32::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFVec3i32, "MFVec3i32", SoMField);
 }
 
 ////////////////////////////////////////////////////////////////////////
