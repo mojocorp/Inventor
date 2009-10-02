@@ -174,6 +174,23 @@ SoDirectionalLightDragger::~SoDirectionalLightDragger()
 	delete rotFieldSensor;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//  Initializes the type ID for this dragger node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public, internal
+//
+void
+SoDirectionalLightDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoDirectionalLightDragger, "DirectionalLightDragger",
+		       SoDragger);
+}
+
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.

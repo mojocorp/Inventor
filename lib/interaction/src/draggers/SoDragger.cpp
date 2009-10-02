@@ -199,6 +199,21 @@ SoDragger::~SoDragger()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initialize the dragger
+//
+// Use: public, internal
+//
+void
+SoDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoDragger, "Dragger", SoInteractionKit);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    This attempts to handle the passed event. It will call methods on
 // the SoHandleEventAction if it wants to grab and if it handles the event.
 //

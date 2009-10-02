@@ -215,6 +215,22 @@ SoTabBoxDragger::~SoTabBoxDragger()
 	delete scaleFieldSensor; 
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//  Initializes the type ID for this dragger node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoTabBoxDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoTabBoxDragger, "TabBoxDragger", SoDragger);
+}
+
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.

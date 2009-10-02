@@ -166,6 +166,21 @@ SoTranslate2Dragger::~SoTranslate2Dragger()
 	delete fieldSensor;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initialize the dragger
+//
+// Use: public, internal
+//
+void
+SoTranslate2Dragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoTranslate2Dragger, "Translate2Dragger", SoDragger);
+}
+
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.

@@ -156,6 +156,22 @@ SoRotateCylindricalDragger::~SoRotateCylindricalDragger()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initialize the dragger
+//
+// Use: public, internal
+//
+void
+SoRotateCylindricalDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoRotateCylindricalDragger, "RotateCylindricalDragger",
+		       SoDragger);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Redefines this to also copy the projector.
 //
 // Use: protected, virtual

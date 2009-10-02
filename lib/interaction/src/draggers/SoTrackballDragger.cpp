@@ -265,6 +265,21 @@ SoTrackballDragger::~SoTrackballDragger()
 	delete scaleFieldSensor;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    initialize the class
+//
+// Use: public, internal
+
+void
+SoTrackballDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoTrackballDragger, "TrackballDragger", SoDragger);
+}
+
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.

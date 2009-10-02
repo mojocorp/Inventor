@@ -239,6 +239,21 @@ SoCenterballDragger::~SoCenterballDragger()
 	delete centerFieldSensor;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    initialize the class
+//
+// Use: public, internal
+
+void
+SoCenterballDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoCenterballDragger, "CenterballDragger", SoDragger);
+}
+
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.

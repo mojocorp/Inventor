@@ -150,6 +150,21 @@ SoRotateDiscDragger::~SoRotateDiscDragger()
         delete fieldSensor;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initialize the dragger
+//
+// Use: public, internal
+//
+void
+SoRotateDiscDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoRotateDiscDragger, "RotateDiscDragger", SoDragger);
+}
+
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.
