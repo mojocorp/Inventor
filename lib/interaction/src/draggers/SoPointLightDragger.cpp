@@ -132,6 +132,21 @@ SoPointLightDragger::~SoPointLightDragger()
         delete fieldSensor;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initialize the dragger
+//
+// Use: public, internal
+//
+void
+SoPointLightDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoPointLightDragger, "PointLightDragger", SoDragger);
+}
+
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.

@@ -214,6 +214,26 @@ SoSpotLightDragger::~SoSpotLightDragger()
 	delete angleFieldSensor; 
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//  Initializes the type ID for this dragger node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoSpotLightDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(
+		       SoSpotLightDragger,	// class
+		       "SpotLightDragger",	// name to be written to files
+		       SoDragger		// parent class
+    );
+}
+
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.

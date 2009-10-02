@@ -380,6 +380,22 @@ SoHandleBoxDragger::~SoHandleBoxDragger()
 	delete scaleFieldSensor; 
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initialize the dragger
+//
+// Use: public, internal
+//
+
+void
+SoHandleBoxDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoHandleBoxDragger, "HandleBoxDragger", SoDragger);
+}
+
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.

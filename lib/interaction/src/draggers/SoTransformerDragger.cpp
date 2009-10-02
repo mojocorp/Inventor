@@ -177,6 +177,22 @@ SoTransformerDragger::SoTransformerDragger()
     locateHighlightOn = TRUE;
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//  Initializes the type ID for this dragger node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoTransformerDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoTransformerDragger, "TransformerDragger", SoDragger);
+}
+
 void
 SoTransformerDragger::makeCatalog()
 {
