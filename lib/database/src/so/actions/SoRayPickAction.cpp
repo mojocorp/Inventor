@@ -109,6 +109,23 @@ SoRayPickAction::~SoRayPickAction()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoRayPickAction class.
+//
+// Use: internal
+
+void
+SoRayPickAction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_ACTION_INIT_CLASS(SoRayPickAction, SoPickAction);
+
+    SO_ENABLE(SoRayPickAction, SoPickRayElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets the viewport-space point through which the ray passes.
 //
 // Use: public

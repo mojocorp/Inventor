@@ -87,6 +87,23 @@ SoGetMatrixAction::~SoGetMatrixAction()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoGetMatrixAction class.
+//
+// Use: internal
+
+void
+SoGetMatrixAction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_ACTION_INIT_CLASS(SoGetMatrixAction, SoAction);
+
+    SO_ENABLE(SoGetMatrixAction, SoViewportRegionElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets the viewport region.  This should be called when the window
 //    changes size.
 //

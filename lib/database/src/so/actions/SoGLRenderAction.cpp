@@ -64,6 +64,8 @@
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
 #include <Inventor/elements/SoTransparencyTypeElement.h>
+#include <Inventor/elements/SoGLLazyElement.h>
+#include <Inventor/elements/SoWindowElement.h>
 
 SO_ACTION_SOURCE(SoGLRenderAction);
 
@@ -127,6 +129,27 @@ SoGLRenderAction::~SoGLRenderAction()
 
     if (bboxes != NULL)
 	delete [] bboxes;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoGLRenderAction class.
+//
+// Use: internal
+
+void
+SoGLRenderAction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_ACTION_INIT_CLASS(SoGLRenderAction, SoAction);
+
+    SO_ENABLE(SoGLRenderAction, SoGLLazyElement);
+    SO_ENABLE(SoGLRenderAction, SoGLRenderPassElement);
+    SO_ENABLE(SoGLRenderAction, SoViewportRegionElement);
+    SO_ENABLE(SoGLRenderAction, SoWindowElement);
+    SO_ENABLE(SoGLRenderAction, SoTransparencyTypeElement);
 }
 
 ////////////////////////////////////////////////////////////////////////

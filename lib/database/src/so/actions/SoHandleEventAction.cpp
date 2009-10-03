@@ -53,6 +53,7 @@
 
 #include <Inventor/actions/SoHandleEventAction.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
+#include <Inventor/elements/SoWindowElement.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/events/SoEvent.h>
 
@@ -102,6 +103,24 @@ SoHandleEventAction::~SoHandleEventAction()
 	pickRoot->unref();
 
     delete pickAct;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoHandleEventAction class.
+//
+// Use: internal
+
+void
+SoHandleEventAction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_ACTION_INIT_CLASS(SoHandleEventAction, SoAction);
+
+    SO_ENABLE(SoHandleEventAction, SoViewportRegionElement);
+    SO_ENABLE(SoHandleEventAction, SoWindowElement);
 }
 
 ////////////////////////////////////////////////////////////////////////

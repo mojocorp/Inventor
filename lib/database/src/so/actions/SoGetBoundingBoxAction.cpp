@@ -105,6 +105,23 @@ SoGetBoundingBoxAction::~SoGetBoundingBoxAction()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoGetBoundingBoxAction class.
+//
+// Use: internal
+
+void
+SoGetBoundingBoxAction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_ACTION_INIT_CLASS(SoGetBoundingBoxAction, SoAction);
+
+    SO_ENABLE(SoGetBoundingBoxAction, SoViewportRegionElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets the current viewport region.
 //
 // Use: public
