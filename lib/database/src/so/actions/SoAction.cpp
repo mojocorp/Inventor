@@ -55,6 +55,7 @@
 
 #include <Inventor/SoDB.h>
 #include <Inventor/elements/SoElement.h>
+#include <Inventor/elements/SoOverrideElement.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoCompactPathList.h>
 #include <Inventor/misc/SoBasic.h>
@@ -130,6 +131,30 @@ SoAction::~SoAction()
 	delete state;
     if (tempPath != NULL)
 	tempPath->unref();	
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoAction class.
+//
+// Use: internal
+
+void
+SoAction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    enabledElements = new SoEnabledElementsList(NULL);
+    methods = new SoActionMethodList(NULL);
+
+    // Allocate a new action type id. There's no real parent id, so we
+    // can't use the regular macro.
+    classTypeId = SoType::createType(SoType::badType(), "SoAction", NULL);
+
+    // Enable override element for all actions.
+    enabledElements->enable(SoOverrideElement::getClassTypeId(),
+			    SoOverrideElement::getClassStackIndex());
 }
 
 ////////////////////////////////////////////////////////////////////////
