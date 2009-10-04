@@ -86,6 +86,22 @@ SoCylinderDetail::~SoCylinderDetail()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes class.
+//
+// Use: internal
+//
+
+void
+SoCylinderDetail::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_DETAIL_INIT_CLASS(SoCylinderDetail, SoDetail);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns an instance that is a copy of this instance. The caller
 //    is responsible for deleting the copy when done.
 //
