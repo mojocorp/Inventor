@@ -99,6 +99,21 @@ SoElapsedTime::~SoElapsedTime()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoElapsedTime class.
+//
+// Use: internal
+
+void
+SoElapsedTime::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_CLASS(SoElapsedTime, "ElapsedTime", SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Writes instance to SoOutput. Takes care of not writing out
 //    connection to realTime that is created in constructor.
 //

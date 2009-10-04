@@ -150,6 +150,25 @@ SoConvToTrigger::~SoConvToTrigger()
     }
 }
 
+void
+SoConvToTrigger::initClass()
+{
+    SO__ENGINE_INIT_CLASS(SoConvToTrigger,"SoConvToTrigger",SoFieldConverter);
+    classTypeId.makeInternal();
+    SoType trigType = SoSFTrigger::getClassTypeId();
+    SoType conv = SoConvToTrigger::getClassTypeId();
+
+    // Any field type can be connected to a trigger, so just register
+    // the converter on all field classes
+    SoTypeList	fieldTypes;
+    int		numFieldTypes;
+    numFieldTypes = SoType::getAllDerivedFrom(SoField::getClassTypeId(),
+					      fieldTypes);
+    for (int i = 0; i < numFieldTypes; i++)
+	if (fieldTypes[i] != trigType)
+	    SoDB::addConverter(fieldTypes[i], trigType, conv);
+}
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -317,6 +336,152 @@ SoBuiltinFieldConverter::~SoBuiltinFieldConverter()
 	delete input;
 	delete output;
     }
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the built-in field converter class.
+//
+// Use: internal
+
+void
+SoBuiltinFieldConverter::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_CLASS(SoBuiltinFieldConverter, 
+            "BuiltinFieldConverter", SoFieldConverter);
+    classTypeId.makeInternal();
+
+// Macro for registering the single/multi to multi/single field
+// conversions:
+#define REG1(type) \
+    SoDB::addConverter(SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
+		       SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
+		       SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
+		       getClassTypeId())
+    
+// Cases for all the field types:
+    REG1(BitMask);
+    REG1(Bool);
+    REG1(Color);
+    REG1(Enum);
+    REG1(Float);
+    REG1(Int32);
+    REG1(Matrix);
+    REG1(Name);
+    REG1(Node);
+    REG1(Path);
+    REG1(Plane);
+    REG1(Rotation);
+    REG1(Short);
+    REG1(String);
+    REG1(Time);
+    REG1(UInt32);
+    REG1(UShort);
+    REG1(Vec2f);
+    REG1(Vec3f);
+    REG1(Vec4f);
+#undef REG1
+
+// Macro for registering all of the to/from single/multi-valued
+// string conversions (eight for each type):
+#define REGSTRING(type) \
+    SoDB::addConverter(SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
+		       SoSFString::getClassTypeId(),			    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
+		       SoSFString::getClassTypeId(),			    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
+		       SoMFString::getClassTypeId(),			    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
+		       SoMFString::getClassTypeId(),			    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SoSFString::getClassTypeId(),			    \
+		       SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SoSFString::getClassTypeId(),			    \
+		       SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SoMFString::getClassTypeId(),			    \
+		       SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SoMFString::getClassTypeId(),			    \
+		       SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
+		       getClassTypeId())
+
+// All types except string:
+    REGSTRING(BitMask);
+    REGSTRING(Bool);
+    REGSTRING(Color);
+    REGSTRING(Enum);
+    REGSTRING(Float);
+    REGSTRING(Int32);
+    REGSTRING(Matrix);
+    REGSTRING(Name);
+    REGSTRING(Node);
+    REGSTRING(Path);
+    REGSTRING(Plane);
+    REGSTRING(Rotation);
+    REGSTRING(Short);
+    REGSTRING(Time);
+    REGSTRING(UInt32);
+    REGSTRING(UShort);
+    REGSTRING(Vec2f);
+    REGSTRING(Vec3f);
+    REGSTRING(Vec4f);
+#undef REGSTRING
+
+// Macro for other conversions (float to int32_t, etc):
+
+#define REGHALF(type1,type2) \
+    SoDB::addConverter(SO__CONCAT(SoSF,type1)::getClassTypeId(),	    \
+		       SO__CONCAT(SoSF,type2)::getClassTypeId(),	    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SO__CONCAT(SoMF,type1)::getClassTypeId(),	    \
+		       SO__CONCAT(SoSF,type2)::getClassTypeId(),	    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SO__CONCAT(SoSF,type1)::getClassTypeId(),	    \
+		       SO__CONCAT(SoMF,type2)::getClassTypeId(),	    \
+		       getClassTypeId());				    \
+    SoDB::addConverter(SO__CONCAT(SoMF,type1)::getClassTypeId(),	    \
+		       SO__CONCAT(SoMF,type2)::getClassTypeId(),	    \
+		       getClassTypeId())
+
+#define REGCONV(type1,type2)						    \
+	REGHALF(type1,type2);						    \
+	REGHALF(type2,type1)
+
+    REGCONV(Bool,Float);
+    REGCONV(Bool,Int32);
+    REGCONV(Bool,Short);
+    REGCONV(Bool,UInt32);
+    REGCONV(Bool,UShort);
+
+    REGCONV(Color, Vec3f);
+
+    REGCONV(Float,Int32);
+    REGCONV(Float,Short);
+    REGCONV(Float,UInt32);
+    REGCONV(Float,UShort);
+
+    REGCONV(Int32,Short);
+    REGCONV(Int32,UInt32);
+    REGCONV(Int32,UShort);
+
+    REGCONV(Short,UInt32);
+    REGCONV(Short,UShort);
+
+    REGCONV(UInt32,UShort);
+
+    REGCONV(Float, Time);
+
+    REGCONV(Matrix, Rotation);
 }
 
 ////////////////////////////////////////////////////////////////////////

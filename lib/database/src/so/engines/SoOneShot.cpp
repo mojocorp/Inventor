@@ -114,6 +114,21 @@ SoOneShot::~SoOneShot()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoOneShot class.
+//
+// Use: internal
+
+void
+SoOneShot::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_CLASS(SoOneShot, "OneShot", SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Writes instance to SoOutput. Takes care of not writing out
 //    connection to realTime that is created in constructor.
 //

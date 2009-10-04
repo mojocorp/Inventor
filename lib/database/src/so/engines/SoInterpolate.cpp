@@ -97,6 +97,52 @@ SoInterpolate::~SoInterpolate()
 {
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+//
+// Description:
+//    This initializes the SoInterpolate class.
+//
+// Use: internal
+
+void
+SoInterpolate::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_ABSTRACT_CLASS(SoInterpolate, "Interpolate",
+				       SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+//
+// Description:
+//    This initializes the builtin SoInterpolate classes.
+//
+// Use: internal
+
+void
+SoInterpolate::initClasses()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // ... first the base class
+    SoInterpolate::initClass();
+    // ... then the derived classes
+    SoInterpolateFloat::initClass();
+    SoInterpolateRotation::initClass();
+    SoInterpolateVec2f::initClass();
+    SoInterpolateVec3f::initClass();
+    SoInterpolateVec4f::initClass();
+}
+
+SO_INTERPOLATE_INITCLASS(SoInterpolateFloat, "InterpolateFloat");
+SO_INTERPOLATE_INITCLASS(SoInterpolateRotation, "InterpolateRotation");
+SO_INTERPOLATE_INITCLASS(SoInterpolateVec2f, "InterpolateVec2f");
+SO_INTERPOLATE_INITCLASS(SoInterpolateVec3f, "InterpolateVec3f");
+SO_INTERPOLATE_INITCLASS(SoInterpolateVec4f, "InterpolateVec4f"); 
+
 /*
 ** Source for the builtin field type interpolaters
 */

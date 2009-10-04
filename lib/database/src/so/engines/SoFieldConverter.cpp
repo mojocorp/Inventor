@@ -89,6 +89,22 @@ SoFieldConverter::~SoFieldConverter()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoFieldConverter class.
+//
+// Use: internal
+
+void
+SoFieldConverter::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_ABSTRACT_CLASS(SoFieldConverter, "FieldConverter",
+				       SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Searches through the field data to find a field that has a
 //    connection.
 //

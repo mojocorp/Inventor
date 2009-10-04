@@ -154,6 +154,22 @@ SoConcatenate::~SoConcatenate()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoConcatenate class.
+//
+// Use: internal
+
+void
+SoConcatenate::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_CLASS(SoConcatenate, "Concatenate",
+				       SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Creates input and output fields and input/output data
 //
 // Use: private

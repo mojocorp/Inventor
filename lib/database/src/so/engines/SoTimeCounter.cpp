@@ -110,6 +110,21 @@ SoTimeCounter::~SoTimeCounter()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTimeCounter class.
+//
+// Use: internal
+
+void
+SoTimeCounter::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_CLASS(SoTimeCounter, "TimeCounter", SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Writes instance to SoOutput. Takes care of not writing out
 //    connection to realTime that is created in constructor.
 //

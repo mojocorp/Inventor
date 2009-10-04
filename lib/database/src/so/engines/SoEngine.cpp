@@ -128,6 +128,25 @@ SoEngine::~SoEngine()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the base SoEngine class.  Called by
+//    SoDB::init().
+//
+// Use: internal
+
+void
+SoEngine::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new engine type id
+    // No real parent id
+    classTypeId = SoType::createType(SoFieldContainer::getClassTypeId(),
+	SbName("Engine"), 0, 0);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns a list of outputs in this engine.
 //
 // Use: public

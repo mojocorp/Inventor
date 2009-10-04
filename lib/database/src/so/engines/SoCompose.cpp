@@ -430,3 +430,25 @@ SoDecomposeMatrix::evaluate()
 	SO_ENGINE_OUTPUT(scaleOrientation, SoMFRotation, set1Value(i, scaleO));
     }
 }
+
+//////////////////
+//
+// Utility macro defines basic source for composition/decomposition
+// engines
+//
+#define SO_COMPOSE__INIT(Name,String)			\
+    void Name::initClass() {				\
+	SO__ENGINE_INIT_CLASS(Name,String,SoEngine);	\
+    }
+SO_COMPOSE__INIT(SoComposeVec2f,"ComposeVec2f");
+SO_COMPOSE__INIT(SoComposeVec3f,"ComposeVec3f");
+SO_COMPOSE__INIT(SoComposeVec4f,"ComposeVec4f");
+SO_COMPOSE__INIT(SoDecomposeVec2f,"DecomposeVec2f");
+SO_COMPOSE__INIT(SoDecomposeVec3f,"DecomposeVec3f");
+SO_COMPOSE__INIT(SoDecomposeVec4f,"DecomposeVec4f");
+SO_COMPOSE__INIT(SoComposeRotation,"ComposeRotation");
+SO_COMPOSE__INIT(SoComposeRotationFromTo,"ComposeRotationFromTo");
+SO_COMPOSE__INIT(SoDecomposeRotation,"DecomposeRotation");
+SO_COMPOSE__INIT(SoComposeMatrix,"ComposeMatrix");
+SO_COMPOSE__INIT(SoDecomposeMatrix,"DecomposeMatrix");
+#undef SO_COMPOSE__INIT
