@@ -87,6 +87,24 @@ SoDetail::~SoDetail()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes class.
+//
+// Use: internal
+//
+
+void
+SoDetail::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new type id
+    // No real parent id, so pass 'badType' as the parent type
+    classTypeId = SoType::createType(SoType::badType(), "SoDetail", NULL);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns TRUE if detail is an instance of a detail of the given type
 //    or an instance of a subclass of it.
 //
