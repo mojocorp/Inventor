@@ -104,6 +104,21 @@ SoCounter::~SoCounter()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoCounter class.
+//
+// Use: internal
+
+void
+SoCounter::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_CLASS(SoCounter, "Counter", SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Detects when the inputs changed.  Notifications are only propogated
 // when the output is going to change; periodic clock-ticks are suppressed
 // while waiting for the next stage

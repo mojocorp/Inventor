@@ -110,6 +110,22 @@ SoComputeBoundingBox::~SoComputeBoundingBox()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoComputeBoundingBox class.
+//
+// Use: internal
+
+void
+SoComputeBoundingBox::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_CLASS(SoComputeBoundingBox,
+			  "ComputeBoundingBox", SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets viewport region to use for bounding box computation.
 //
 // Use: public
