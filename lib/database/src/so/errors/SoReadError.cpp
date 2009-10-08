@@ -63,6 +63,26 @@ void		*SoReadError::cbData;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoReadError class.
+//
+// Use: internal
+
+void
+SoReadError::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Initialize type id
+    classTypeId = SoType::createType(SoError::getClassTypeId(), "ReadError");
+
+    // Set handler to default handler
+    handlerCB = defaultHandlerCB;
+    cbData    = NULL;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns type id of instance.
 //
 // Use: public
