@@ -78,6 +78,22 @@ SoMouseButtonEvent::~SoMouseButtonEvent()
 
 ////////////////////////////////////////////////////////////////////////
 //
+// Class initialization
+//
+// SoINTERNAL public
+//
+void
+SoMouseButtonEvent::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new event type id
+    classTypeId = SoType::createType(
+	SoButtonEvent::getClassTypeId(), "MouseButtonEvent");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
 // Convenience routine - this returns TRUE if the event is a mouse button
 // press event matching the passed button.
 //

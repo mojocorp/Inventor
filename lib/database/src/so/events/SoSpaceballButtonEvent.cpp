@@ -78,6 +78,22 @@ SoSpaceballButtonEvent::~SoSpaceballButtonEvent()
 
 ////////////////////////////////////////////////////////////////////////
 //
+// Class initialization
+//
+// SoINTERNAL public
+//
+void
+SoSpaceballButtonEvent::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new event type id
+    classTypeId = SoType::createType(
+	SoButtonEvent::getClassTypeId(), "SpaceballButtonEvent");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
 // Convenience routine - this returns TRUE if the event is a spaceball button
 // press event matching the passed button.
 //
