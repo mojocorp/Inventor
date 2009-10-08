@@ -82,6 +82,22 @@ SoEvent::~SoEvent()
 
 ////////////////////////////////////////////////////////////////////////
 //
+// Class initialization
+//
+// SoINTERNAL public
+//
+void
+SoEvent::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new node type id
+    // No real parent id, so pass 'badType' as the parent type
+    classTypeId = SoType::createType(SoType::badType(), "Event");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
 // returns TRUE if event is of given type of is derived from it
 //
 // public

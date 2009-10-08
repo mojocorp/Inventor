@@ -78,6 +78,22 @@ SoKeyboardEvent::~SoKeyboardEvent()
 
 ////////////////////////////////////////////////////////////////////////
 //
+// Class initialization
+//
+// SoINTERNAL public
+//
+void
+SoKeyboardEvent::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new event type id
+    classTypeId = SoType::createType(
+	SoButtonEvent::getClassTypeId(), "KeyboardEvent");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
 // Convenience routine - this returns TRUE if the event is a key press
 // event matching the passed key.
 //

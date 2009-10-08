@@ -74,3 +74,17 @@ SoLocation2Event::~SoLocation2Event()
 {
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Class initialization
+//
+// SoINTERNAL public
+//
+void
+SoLocation2Event::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new event type id
+    classTypeId = SoType::createType(SoEvent::getClassTypeId(), "Location2Event");
+}

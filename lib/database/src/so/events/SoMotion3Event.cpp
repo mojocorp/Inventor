@@ -77,3 +77,18 @@ SoMotion3Event::~SoMotion3Event()
 {
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Class initialization
+//
+// SoINTERNAL public
+//
+void
+SoMotion3Event::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new event type id
+    classTypeId = SoType::createType(
+	SoEvent::getClassTypeId(), "Motion3Event");
+}
