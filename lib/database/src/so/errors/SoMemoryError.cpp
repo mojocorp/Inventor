@@ -61,6 +61,26 @@ void		*SoMemoryError::cbData;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoMemoryError class.
+//
+// Use: internal
+
+void
+SoMemoryError::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Initialize type id
+    classTypeId = SoType::createType(SoError::getClassTypeId(), "MemoryError");
+
+    // Set handler to default handler
+    handlerCB = defaultHandlerCB;
+    cbData    = NULL;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns type id of instance.
 //
 // Use: public
