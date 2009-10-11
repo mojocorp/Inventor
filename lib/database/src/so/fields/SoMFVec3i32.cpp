@@ -13,6 +13,21 @@ SO_MFIELD_SOURCE_MALLOC(SoMFVec3i32, SbVec3i32, const SbVec3i32 &);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoMFVec3i32 class.
+//
+// Use: internal
+
+void
+SoMFVec3i32::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFVec3i32, "MFVec3i32", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets values from array of arrays of 3 int32_ts. This can be useful
 //    in some applications that have vectors stored in this manner and
 //    want to keep them that way for efficiency.

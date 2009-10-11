@@ -10,6 +10,21 @@
 // Use standard definitions of all basic methods
 SO_SFIELD_SOURCE(SoSFBox3f, SbBox3f, const SbBox3f &);
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoSFBox3f class.
+//
+// Use: internal
+
+void
+SoSFBox3f::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoSFBox3f, "SFBox3f", SoSField);
+}
+
 void
 SoSFBox3f::setValue(float xmin, float ymin, float zmin,
                     float xmax, float ymax, float zmax)

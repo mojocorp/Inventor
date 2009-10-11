@@ -65,6 +65,24 @@ SO_SFIELD_SOURCE(SoSFUInt32, uint32_t, uint32_t);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoSFUInt32 class.
+//    Enables the synonym SFULong.
+//       Note: last one registered is used in output.
+//
+// Use: internal
+
+void
+SoSFUInt32::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoSFUInt32, "SFULong", SoSField);
+    SO__FIELD_INIT_CLASS(SoSFUInt32, "SFUInt32", SoSField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Reads value from file. Returns FALSE on error.
 //
 // Use: private

@@ -66,6 +66,21 @@ SO_SFIELD_SOURCE(SoSFRotation, SbRotation, const SbRotation &);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoSFRotation class.
+//
+// Use: internal
+
+void
+SoSFRotation::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoSFRotation, "SFRotation", SoSField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets value from 4 separate floats describing a quaternion.
 //    (Convenience function)
 //

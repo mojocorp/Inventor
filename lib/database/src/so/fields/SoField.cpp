@@ -240,6 +240,23 @@ SoField::~SoField()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoField class.
+//
+// Use: internal
+
+void
+SoField::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new field type id. There's no real parent id, so we
+    // can't use the regular macro.
+    classTypeId = SoType::createType(SoType::badType(), "Field");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns TRUE if field is an instance of a field of the given type
 //    or an instance of a subclass of it.
 //

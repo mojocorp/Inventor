@@ -67,6 +67,21 @@ SO_MFIELD_SOURCE_MALLOC(SoMFRotation, SbRotation, const SbRotation &);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoMFRotation class.
+//
+// Use: internal
+
+void
+SoMFRotation::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFRotation, "MFRotation", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets values from array of arrays of 4 floats. This can be useful
 //    in some applications that have quaternions stored in this manner and
 //    want to keep them that way for efficiency.

@@ -77,6 +77,21 @@ SoSFBitMask::~SoSFBitMask()
     }
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoSFBitMask class.
+//
+// Use: internal
+
+void
+SoSFBitMask::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoSFBitMask, "SFBitMask", SoSFEnum);
+}
+
 // Special characters when reading or writing value in ASCII
 #define OPEN_PAREN	'('
 #define CLOSE_PAREN	')'
