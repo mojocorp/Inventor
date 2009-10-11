@@ -71,6 +71,19 @@ SoGLRenderPassElement::~SoGLRenderPassElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLRenderPassElement class.
+//
+// Use: internal
+
+void
+SoGLRenderPassElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLRenderPassElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

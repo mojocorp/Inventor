@@ -73,6 +73,19 @@ SoGLCoordinateElement::~SoGLCoordinateElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLCoordinateElement class.
+//
+// Use: internal
+
+void
+SoGLCoordinateElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLCoordinateElement, SoCoordinateElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sends coordinate with the given index to GL.
 //
 // Use: public

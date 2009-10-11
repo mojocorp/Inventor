@@ -74,6 +74,19 @@ SoProfileCoordinateElement::~SoProfileCoordinateElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoProfileCoordinateElement class.
+//
+// Use: internal
+
+void
+SoProfileCoordinateElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoProfileCoordinateElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

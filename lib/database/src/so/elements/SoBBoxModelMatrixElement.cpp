@@ -77,6 +77,19 @@ SoBBoxModelMatrixElement::~SoBBoxModelMatrixElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoBBoxModelMatrixElement class.
+//
+// Use: internal
+
+void
+SoBBoxModelMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoBBoxModelMatrixElement, SoModelMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

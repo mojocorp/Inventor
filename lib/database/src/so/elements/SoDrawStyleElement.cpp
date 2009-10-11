@@ -72,6 +72,19 @@ SoDrawStyleElement::~SoDrawStyleElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoDrawStyleElement class.
+//
+// Use: internal
+
+void
+SoDrawStyleElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoDrawStyleElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

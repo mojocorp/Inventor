@@ -74,6 +74,19 @@ SoGLLinePatternElement::~SoGLLinePatternElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLLinePatternElement class.
+//
+// Use: internal
+
+void
+SoGLLinePatternElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLLinePatternElement, SoLinePatternElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

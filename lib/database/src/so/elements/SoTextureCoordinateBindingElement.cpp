@@ -71,6 +71,19 @@ SoTextureCoordinateBindingElement::~SoTextureCoordinateBindingElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoTextureCoordinateBindingElement class.
+//
+// Use: internal
+
+void
+SoTextureCoordinateBindingElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoTextureCoordinateBindingElement,SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes texture coordinate binding element.
 //
 // Use: extender public

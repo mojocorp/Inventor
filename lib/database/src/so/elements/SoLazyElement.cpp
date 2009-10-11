@@ -83,6 +83,19 @@ SoLazyElement::~SoLazyElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoLazyElement class.
+//
+// Use: internal
+
+void
+SoLazyElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoLazyElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

@@ -71,6 +71,19 @@ SoLightAttenuationElement::~SoLightAttenuationElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoLightAttenuationElement class.
+//
+// Use: internal
+
+void
+SoLightAttenuationElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoLightAttenuationElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

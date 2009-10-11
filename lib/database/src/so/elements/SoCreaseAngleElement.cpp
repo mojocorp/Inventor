@@ -71,6 +71,19 @@ SoCreaseAngleElement::~SoCreaseAngleElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoCreaseAngleElement class.
+//
+// Use: internal
+
+void
+SoCreaseAngleElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoCreaseAngleElement, SoFloatElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

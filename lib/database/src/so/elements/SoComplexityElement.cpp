@@ -71,6 +71,19 @@ SoComplexityElement::~SoComplexityElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoComplexityElement class.
+//
+// Use: internal
+
+void
+SoComplexityElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoComplexityElement, SoFloatElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

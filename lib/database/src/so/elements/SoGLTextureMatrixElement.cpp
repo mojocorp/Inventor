@@ -76,6 +76,19 @@ SoGLTextureMatrixElement::~SoGLTextureMatrixElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLTextureMatrixElement class.
+//
+// Use: internal
+
+void
+SoGLTextureMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLTextureMatrixElement, SoTextureMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Pops element, causing side effects in GL.
 //
 // Use: public

@@ -71,6 +71,19 @@ SoFocalDistanceElement::~SoFocalDistanceElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoFocalDistanceElement class.
+//
+// Use: internal
+
+void
+SoFocalDistanceElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoFocalDistanceElement, SoFloatElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

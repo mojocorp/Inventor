@@ -72,6 +72,19 @@ SoViewVolumeElement::~SoViewVolumeElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoViewVolumeElement class.
+//
+// Use: internal
+
+void
+SoViewVolumeElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoViewVolumeElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

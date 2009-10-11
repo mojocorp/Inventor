@@ -71,6 +71,19 @@ SoMaterialBindingElement::~SoMaterialBindingElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoMaterialBindingElement class.
+//
+// Use: internal
+
+void
+SoMaterialBindingElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoMaterialBindingElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

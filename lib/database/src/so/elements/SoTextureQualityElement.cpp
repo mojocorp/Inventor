@@ -71,6 +71,19 @@ SoTextureQualityElement::~SoTextureQualityElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoTextureQualityElement class.
+//
+// Use: internal
+
+void
+SoTextureQualityElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoTextureQualityElement, SoFloatElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public
@@ -84,6 +97,19 @@ SoTextureQualityElement::init(SoState *)
 }
 
 SO_ELEMENT_SOURCE(SoTextureOverrideElement);
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes SoTextureQualityElement class.
+//
+// Use: internal
+
+void
+SoTextureOverrideElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoTextureOverrideElement, SoElement);
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
