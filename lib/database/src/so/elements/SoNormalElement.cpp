@@ -72,6 +72,19 @@ SoNormalElement::~SoNormalElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoNormalElement class.
+//
+// Use: internal
+
+void
+SoNormalElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoNormalElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

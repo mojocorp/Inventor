@@ -87,6 +87,21 @@ SoGLCacheContextElement::~SoGLCacheContextElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLCacheContextElement class.
+//
+// Use: internal
+
+void
+SoGLCacheContextElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLCacheContextElement, SoElement);
+    waitingToBeFreed = new SbPList;
+    extensionList = new SbPList;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

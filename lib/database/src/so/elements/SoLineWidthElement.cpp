@@ -71,6 +71,19 @@ SoLineWidthElement::~SoLineWidthElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoLineWidthElement class.
+//
+// Use: internal
+
+void
+SoLineWidthElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoLineWidthElement, SoFloatElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

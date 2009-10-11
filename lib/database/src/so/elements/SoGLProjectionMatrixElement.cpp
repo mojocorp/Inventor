@@ -72,6 +72,20 @@ SoGLProjectionMatrixElement::~SoGLProjectionMatrixElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLProjectionMatrixElement class.
+//
+// Use: internal
+
+void
+SoGLProjectionMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLProjectionMatrixElement,
+			  SoProjectionMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Pops element, causing side effects in GL.
 //
 // Use: public

@@ -71,6 +71,19 @@ SoFontNameElement::~SoFontNameElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoFontNameElement class.
+//
+// Use: internal
+
+void
+SoFontNameElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoFontNameElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

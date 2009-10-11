@@ -72,6 +72,19 @@ SoComplexityTypeElement::~SoComplexityTypeElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoComplexityTypeElement class.
+//
+// Use: internal
+
+void
+SoComplexityTypeElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoComplexityTypeElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

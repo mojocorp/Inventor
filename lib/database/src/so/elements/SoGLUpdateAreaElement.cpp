@@ -73,6 +73,19 @@ SoGLUpdateAreaElement::~SoGLUpdateAreaElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLUpdateAreaElement class.
+//
+// Use: internal
+
+void
+SoGLUpdateAreaElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLUpdateAreaElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

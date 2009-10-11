@@ -71,6 +71,19 @@ SoPickStyleElement::~SoPickStyleElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoPickStyleElement class.
+//
+// Use: internal
+
+void
+SoPickStyleElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoPickStyleElement, SoInt32Element);
+
+}
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

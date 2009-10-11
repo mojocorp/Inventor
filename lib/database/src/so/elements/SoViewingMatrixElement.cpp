@@ -71,6 +71,19 @@ SoViewingMatrixElement::~SoViewingMatrixElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoViewingMatrixElement class.
+//
+// Use: internal
+
+void
+SoViewingMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoViewingMatrixElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

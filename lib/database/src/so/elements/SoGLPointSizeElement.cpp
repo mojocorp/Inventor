@@ -75,6 +75,19 @@ SoGLPointSizeElement::~SoGLPointSizeElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLPointSizeElement class.
+//
+// Use: internal
+
+void
+SoGLPointSizeElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLPointSizeElement, SoPointSizeElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

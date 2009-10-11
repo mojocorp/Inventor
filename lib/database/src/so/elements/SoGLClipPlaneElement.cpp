@@ -76,6 +76,19 @@ SoGLClipPlaneElement::~SoGLClipPlaneElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLClipPlaneElement class.
+//
+// Use: internal
+
+void
+SoGLClipPlaneElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLClipPlaneElement, SoClipPlaneElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Pops element, causing side effects in GL.
 //
 // Use: public

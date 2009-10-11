@@ -71,6 +71,19 @@ SoLinePatternElement::~SoLinePatternElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoLinePatternElement class.
+//
+// Use: internal
+
+void
+SoLinePatternElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoLinePatternElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

@@ -71,6 +71,19 @@ SoFontSizeElement::~SoFontSizeElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoFontSizeElement class.
+//
+// Use: internal
+
+void
+SoFontSizeElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoFontSizeElement, SoFloatElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

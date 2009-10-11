@@ -92,6 +92,19 @@ SoGLTextureImageElement::~SoGLTextureImageElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLTextureImageElement class.
+//
+// Use: internal
+
+void
+SoGLTextureImageElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLTextureImageElement, SoTextureImageElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

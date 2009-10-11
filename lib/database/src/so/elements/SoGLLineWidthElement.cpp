@@ -75,6 +75,19 @@ SoGLLineWidthElement::~SoGLLineWidthElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLLineWidthElement class.
+//
+// Use: internal
+
+void
+SoGLLineWidthElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLLineWidthElement, SoLineWidthElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

@@ -72,6 +72,19 @@ SoPickRayElement::~SoPickRayElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoPickRayElement class.
+//
+// Use: internal
+
+void
+SoPickRayElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoPickRayElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

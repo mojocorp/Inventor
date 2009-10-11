@@ -71,6 +71,19 @@ SoSwitchElement::~SoSwitchElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoSwitchElement class.
+//
+// Use: internal
+
+void
+SoSwitchElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoSwitchElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

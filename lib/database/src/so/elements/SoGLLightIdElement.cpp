@@ -75,6 +75,19 @@ SoGLLightIdElement::~SoGLLightIdElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLLightIdElement class.
+//
+// Use: internal
+
+void
+SoGLLightIdElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLLightIdElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

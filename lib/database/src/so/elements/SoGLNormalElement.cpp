@@ -73,6 +73,19 @@ SoGLNormalElement::~SoGLNormalElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLNormalElement class.
+//
+// Use: internal
+
+void
+SoGLNormalElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLNormalElement, SoNormalElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

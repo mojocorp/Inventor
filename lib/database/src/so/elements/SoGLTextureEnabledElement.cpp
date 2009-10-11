@@ -75,6 +75,19 @@ SoGLTextureEnabledElement::~SoGLTextureEnabledElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLTextureEnabledElement class.
+//
+// Use: internal
+
+void
+SoGLTextureEnabledElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLTextureEnabledElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

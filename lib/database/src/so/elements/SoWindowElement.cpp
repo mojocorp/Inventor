@@ -72,6 +72,18 @@ SoWindowElement::~SoWindowElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoWindowElement class.
+//
+// Use: internal
+void
+SoWindowElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoWindowElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public

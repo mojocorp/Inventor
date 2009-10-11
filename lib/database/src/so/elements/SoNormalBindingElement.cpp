@@ -71,6 +71,19 @@ SoNormalBindingElement::~SoNormalBindingElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoNormalBindingElement class.
+//
+// Use: internal
+
+void
+SoNormalBindingElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoNormalBindingElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

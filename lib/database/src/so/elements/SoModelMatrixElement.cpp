@@ -78,6 +78,19 @@ SoModelMatrixElement::~SoModelMatrixElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoModelMatrixElement class.
+//
+// Use: internal
+
+void
+SoModelMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoModelMatrixElement, SoAccumulatedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element
 //
 // Use: public

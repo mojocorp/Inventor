@@ -74,6 +74,20 @@ SoGLTextureCoordinateElement::~SoGLTextureCoordinateElement()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLTextureCoordinateElement class.
+//
+// Use: internal
+
+void
+SoGLTextureCoordinateElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLTextureCoordinateElement,
+			  SoTextureCoordinateElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.
 //
 // Use: public
