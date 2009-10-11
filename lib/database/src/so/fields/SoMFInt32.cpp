@@ -66,6 +66,24 @@ SO_MFIELD_SOURCE_MALLOC(SoMFInt32, int32_t, int32_t);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoMFInt32 class.
+//    Enables the synonym MFLong.
+//       Note: last one registered is used in output.
+//
+// Use: internal
+
+void
+SoMFInt32::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFInt32, "MFLong", SoMField);
+    SO__FIELD_INIT_CLASS(SoMFInt32, "MFInt32", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Reads one (indexed) value from file. Returns FALSE on error.
 //
 // Use: private

@@ -66,6 +66,21 @@ SO_MFIELD_SOURCE(SoMFString, SbString, const SbString &);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoMFString class.
+//
+// Use: internal
+
+void
+SoMFString::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFString, "MFString", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets values from array of character strings. (Convenience function)
 //
 // Use: public

@@ -66,6 +66,21 @@ SO_MFIELD_SOURCE_MALLOC(SoMFUShort, unsigned short, unsigned short);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoMFUShort class.
+//
+// Use: internal
+
+void
+SoMFUShort::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFUShort, "MFUShort", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Reads one (indexed) value from file. Returns FALSE on error.
 //
 // Use: private

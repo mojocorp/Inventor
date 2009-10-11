@@ -65,6 +65,21 @@ SO_SFIELD_SOURCE(SoSFMatrix, SbMatrix, const SbMatrix &);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoSFMatrix class.
+//
+// Use: internal
+
+void
+SoSFMatrix::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoSFMatrix, "SFMatrix", SoSField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets one matrix value from 16 separate floats. (Convenience function)
 //
 // Use: public
