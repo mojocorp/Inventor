@@ -1,4 +1,6 @@
 #include <Inventor/elements/SoTransparencyTypeElement.h>
+#include <Inventor/elements/SoShapeStyleElement.h>
+#include <Inventor/elements/SoTransparencyTypeElement.h>
 
 SO_ELEMENT_SOURCE(SoTransparencyTypeElement);
 
@@ -42,6 +44,22 @@ SoTransparencyTypeElement::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_ELEMENT_INIT_CLASS(SoTransparencyTypeElement, SoInt32Element);
+}
+
+///////////////////////////////////////////////////////////////////////
+//
+// Description
+// set the current transparency in the state
+//
+void
+SoTransparencyTypeElement::set(SoState *state, TransparencyType type)
+{
+    SoInt32Element::set(classStackIndex, state, (int32_t)type);
+
+    // Set the transparency bit in the ShapeStyle element
+    // and the lazy element.
+    SoShapeStyleElement::setTransparencyType(state,type);
+    SoLazyElement::setTransparencyType(state, type);
 }
 
 ////////////////////////////////////////////////////////////////////////

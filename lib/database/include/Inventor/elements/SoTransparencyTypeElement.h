@@ -32,8 +32,7 @@ SoEXTENDER class INVENTOR_API SoTransparencyTypeElement : public SoInt32Element 
     virtual void	init(SoState *state);
 
     /// Sets the current transparency type in the state
-    static void		set(SoState *state, TransparencyType type)
-    { SoInt32Element::set(classStackIndex, state, (int32_t)type); }
+    static void		set(SoState *state, TransparencyType type);
 
     /// Returns current transparency type from the state
     static TransparencyType	get(SoState *state)
