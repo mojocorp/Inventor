@@ -181,6 +181,11 @@ class INVENTOR_API SoFieldContainer : public SoBase {
     /// the trouble of manually controlling notification.
     SbBool		isNotifyEnabled() const	   { return notifyEnabled; }
 
+    /// Compatibility method.
+    void                 setUserData (void *userdata);
+
+    /// Compatibility method.
+    void *               getUserData () const;
   SoINTERNAL public:
     // Setup type information
     static void		initClass();
@@ -286,6 +291,9 @@ class INVENTOR_API SoFieldContainer : public SoBase {
     // This is used to reallocate the string buffer used by
     // SoFieldContainer::get()
     static void *	reallocFieldBuf(void *ptr, size_t newSize);
+
+    // Compatibility
+    void* userData;
 };
 
 #endif  /* _SO_FIELD_CONTAINER_ */
