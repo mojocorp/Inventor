@@ -112,6 +112,7 @@ SoFieldContainer::SoFieldContainer()
 ////////////////////////////////////////////////////////////////////////
 {
     notifyEnabled = TRUE;
+    userData = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -236,6 +237,8 @@ SoFieldContainer::copyFieldValues(const SoFieldContainer *fc,
     const SoFieldData *fieldData = getFieldData();
     if (fieldData != NULL)
 	fieldData->overlay(this, fc, copyConnections);
+
+    userData = fc->userData;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -792,4 +795,16 @@ SoFieldContainer::copyThroughConnection() const
 ////////////////////////////////////////////////////////////////////////
 {
     return (SoFieldContainer *) this;
+}
+
+void
+SoFieldContainer::setUserData (void *data)
+{
+    userData = data;
+}
+
+void *
+SoFieldContainer::getUserData () const
+{
+    return userData;
 }
