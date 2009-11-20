@@ -395,6 +395,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/nodes/SoTextureCoordinateDefault.h \
            database/include/Inventor/nodes/SoTextureCoordinateEnvironment.h \
            database/include/Inventor/nodes/SoTextureCoordinateFunction.h \
+           database/include/Inventor/nodes/SoTextureCoordinateObject.h \
            database/include/Inventor/nodes/SoTextureCoordinatePlane.h \
            database/include/Inventor/nodes/SoTransform.h \
            database/include/Inventor/nodes/SoTransformation.h \
@@ -895,6 +896,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/nodes/SoTextureCoordinateDefault.cpp \
            database/src/so/nodes/SoTextureCoordinateEnvironment.cpp \
            database/src/so/nodes/SoTextureCoordinateFunction.cpp \
+           database/src/so/nodes/SoTextureCoordinateObject.cpp \
            database/src/so/nodes/SoTextureCoordinatePlane.cpp \
            database/src/so/nodes/SoTransform.cpp \
            database/src/so/nodes/SoTransformation.cpp \
