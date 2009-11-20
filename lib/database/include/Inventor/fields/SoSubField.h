@@ -821,5 +821,30 @@ className::allocValues(int newNum)					      \
 	SO_MFIELD_REQUIRED_SOURCE(className);				      \
 	SO_MFIELD_DERIVED_CONSTRUCTOR_SOURCE(className)
 
+////////////////////////////////////////////////////////////////////////////
+//
+//
+//
+////////////////////////////////////////////////////////////////////////////
+#define SO_MFIELD_SETVALUESPOINTER_HEADER(valueType)                        \
+   void setValuesPointer(const int num, const valueType * userdata);        \
+   void setValuesPointer(const int num, valueType * userdata)
+
+#define SO_MFIELD_SETVALUESPOINTER_SOURCE(className, valueType, userType)   \
+    void                                                                    \
+    className::setValuesPointer(const int numarg, userType * userdata)      \
+    {                                                                       \
+        this->makeRoom(0);                                                  \
+        if (numarg > 0 && userdata) {                                       \
+            this->values = reinterpret_cast<valueType*>(userdata);          \
+            this->num = this->maxNum = numarg;                              \
+            this->valueChanged();                                           \
+        }                                                                   \
+    }                                                                       \
+    void                                                                    \
+    className::setValuesPointer(const int numarg, const userType * userdata) \
+    {                                                                       \
+        this->setValuesPointer(numarg, const_cast<userType*>(userdata));    \
+    }
 
 #endif /* _SO_SUB_FIELD_ */

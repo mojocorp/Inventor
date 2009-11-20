@@ -78,7 +78,8 @@
 class INVENTOR_API SoMFColor : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFColor, SbColor, const SbColor &);
-
+    SO_MFIELD_SETVALUESPOINTER_HEADER(float);
+    SO_MFIELD_SETVALUESPOINTER_HEADER(SbColor);
   public:
     //
     // Additional convenience functions

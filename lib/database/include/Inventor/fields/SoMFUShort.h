@@ -74,6 +74,7 @@ class INVENTOR_API SoMFUShort : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFUShort, unsigned short, unsigned short);
+    SO_MFIELD_SETVALUESPOINTER_HEADER(unsigned short);
 
   SoINTERNAL public:
     static void		initClass();
