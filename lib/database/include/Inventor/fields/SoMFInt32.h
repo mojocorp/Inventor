@@ -73,6 +73,7 @@ class INVENTOR_API SoMFInt32 : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFInt32, int32_t, int32_t);
+    SO_MFIELD_SETVALUESPOINTER_HEADER(int32_t);
 
   SoINTERNAL public:
 

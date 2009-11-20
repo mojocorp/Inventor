@@ -62,6 +62,8 @@
 
 // Use standard definitions of all basic methods
 SO_MFIELD_SOURCE_MALLOC(SoMFVec4f, SbVec4f, const SbVec4f &);
+SO_MFIELD_SETVALUESPOINTER_SOURCE(SoMFVec4f, SbVec4f, SbVec4f);
+SO_MFIELD_SETVALUESPOINTER_SOURCE(SoMFVec4f, SbVec4f, float);
 
 ////////////////////////////////////////////////////////////////////////
 //

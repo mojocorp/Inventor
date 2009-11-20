@@ -78,6 +78,8 @@
 class INVENTOR_API SoMFVec3f : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFVec3f, SbVec3f, const SbVec3f &);
+    SO_MFIELD_SETVALUESPOINTER_HEADER(SbVec3f);
+    SO_MFIELD_SETVALUESPOINTER_HEADER(float);
 
   public:
 

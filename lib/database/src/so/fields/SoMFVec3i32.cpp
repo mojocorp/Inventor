@@ -9,6 +9,8 @@
 
 // Use standard definitions of all basic methods
 SO_MFIELD_SOURCE_MALLOC(SoMFVec3i32, SbVec3i32, const SbVec3i32 &);
+SO_MFIELD_SETVALUESPOINTER_SOURCE(SoMFVec3i32, SbVec3i32, SbVec3i32);
+SO_MFIELD_SETVALUESPOINTER_SOURCE(SoMFVec3i32, SbVec3i32, int32_t);
 
 ////////////////////////////////////////////////////////////////////////
 //

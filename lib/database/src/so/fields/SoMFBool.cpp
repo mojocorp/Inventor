@@ -63,6 +63,7 @@
 
 // Use standard definitions of all basic methods
 SO_MFIELD_SOURCE_MALLOC(SoMFBool, SbBool, SbBool);
+SO_MFIELD_SETVALUESPOINTER_SOURCE(SoMFBool, SbBool, SbBool);
 
 ////////////////////////////////////////////////////////////////////////
 //
