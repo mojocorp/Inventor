@@ -21,6 +21,8 @@
 class INVENTOR_API SoMFVec3i32 : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFVec3i32, SbVec3i32, const SbVec3i32 &);
+    SO_MFIELD_SETVALUESPOINTER_HEADER(SbVec3i32);
+    SO_MFIELD_SETVALUESPOINTER_HEADER(int32_t);
 
   public:
 

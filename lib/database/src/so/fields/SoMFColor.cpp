@@ -62,6 +62,8 @@
 
 // Use standard definitions of all basic methods
 SO_MFIELD_SOURCE_MALLOC(SoMFColor, SbColor, const SbColor &);
+SO_MFIELD_SETVALUESPOINTER_SOURCE(SoMFColor, SbColor, float);
+SO_MFIELD_SETVALUESPOINTER_SOURCE(SoMFColor, SbColor, SbColor);
 
 ////////////////////////////////////////////////////////////////////////
 //

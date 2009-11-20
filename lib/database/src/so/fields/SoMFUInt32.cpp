@@ -62,6 +62,7 @@
 
 // Use standard definitions of all basic methods
 SO_MFIELD_SOURCE_MALLOC(SoMFUInt32, uint32_t, uint32_t);
+SO_MFIELD_SETVALUESPOINTER_SOURCE(SoMFUInt32, uint32_t, uint32_t);
 
 ////////////////////////////////////////////////////////////////////////
 //

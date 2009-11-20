@@ -74,6 +74,7 @@
 class INVENTOR_API SoMFBool : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFBool, SbBool, SbBool);
+    SO_MFIELD_SETVALUESPOINTER_HEADER(SbBool);
 
   SoINTERNAL public:
     static void		initClass();
