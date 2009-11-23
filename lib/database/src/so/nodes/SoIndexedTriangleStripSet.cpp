@@ -79,10 +79,6 @@
 
 SO_NODE_SOURCE(SoIndexedTriangleStripSet);
 
-// This coordinate index indicates that the current triangle ends and the
-// next triangle begins
-#define SO_END_STRIP_INDEX	-1
-
 // Constants for influencing auto-caching algorithm:
 const int AUTO_CACHE_ITSS_MIN_WITHOUT_VP = 20;
 
