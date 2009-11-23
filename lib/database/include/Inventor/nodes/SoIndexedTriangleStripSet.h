@@ -60,6 +60,10 @@
 #include <Inventor/fields/SoSFNode.h>
 #include <Inventor/nodes/SoVertexProperty.h>
 
+// This coordinate index indicates that the current triangle ends and the
+// next triangle begins
+#define SO_END_STRIP_INDEX	-1
+
 class SoCoordinateElement;
 class SoNormalBundle;
 class SoCoordinateElement;
