@@ -72,9 +72,14 @@ class INVENTOR_API SbVec3i32 {
     /// Component-wise scalar multiplication operator
     SbVec3i32 &	operator *=(int32_t d);
 
+    /// Component-wise scalar multiplication operator
+    SbVec3i32 &	operator *=(double d);
+
     /// Component-wise scalar division operator
-    SbVec3i32 &	operator /=(int32_t d)
-        { return *this *= (1.0 / d); }
+    SbVec3i32 &	operator /=(int32_t d) { return *this *= (1.0 / d); }
+
+    /// Component-wise scalar division operator
+    SbVec3i32 &	operator /=(double d) { return *this *= (1.0 / d); }
 
     /// Component-wise vector addition operator
     SbVec3i32 &	operator +=(SbVec3i32 v);
