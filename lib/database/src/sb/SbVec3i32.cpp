@@ -106,6 +106,20 @@
  }
 
  //
+ // Component-wise scalar multiplication operator
+ //
+
+ SbVec3i32 &
+ SbVec3i32::operator *=(double d)
+ {
+     vec[0] *= d;
+     vec[1] *= d;
+     vec[2] *= d;
+
+     return *this;
+ }
+
+ //
  // Component-wise vector addition operator
  //
 
