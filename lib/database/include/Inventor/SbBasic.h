@@ -138,7 +138,11 @@ typedef int	SbBool;
 
 
 #ifdef SB_OS_WIN
-#  define NOMINMAX
+
+#  ifndef NOMINMAX
+#    define NOMINMAX
+#  endif
+
 #  define _USE_MATH_DEFINES
 #  include <windows.h>
 #  define GLCALLBACK __stdcall
