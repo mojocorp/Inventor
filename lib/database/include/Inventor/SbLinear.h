@@ -56,6 +56,7 @@
  |	SbVec2s
  |	SbVec2i32
  |	SbVec4f
+ |	SbVec4i32
  |	SbRotation
  |	SbMatrix
  |	SbViewVolume
@@ -81,6 +82,7 @@
 #include <Inventor/SbVec3f.h>
 #include <Inventor/SbVec3d.h>
 #include <Inventor/SbVec4f.h>
+#include <Inventor/SbVec4i32.h>
 #include <Inventor/SbMatrix.h>
 #include <Inventor/SbRotation.h>
 
