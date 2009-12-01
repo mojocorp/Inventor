@@ -790,11 +790,11 @@ className::allocValues(int newNum)					      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_SOURCE(className, valueType, valueRef)		      \
-	SO_MFIELD_REQUIRED_SOURCE(className)				      \
-        SO_MFIELD_CONSTRUCTOR_SOURCE(className)                             \
-	SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)		      \
-	SO_MFIELD_ALLOC_SOURCE(className, valueType)
+#define SO_MFIELD_SOURCE(className, valueType, valueRef)                   \
+    SO_MFIELD_REQUIRED_SOURCE(className)                                   \
+    SO_MFIELD_CONSTRUCTOR_SOURCE(className)                                \
+    SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)                 \
+    SO_MFIELD_ALLOC_SOURCE(className, valueType)
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -803,11 +803,11 @@ className::allocValues(int newNum)					      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_SOURCE_MALLOC(className, valueType, valueRef)             \
-	SO_MFIELD_REQUIRED_SOURCE(className)				      \
-        SO_MFIELD_CONSTRUCTOR_SOURCE(className)                             \
-	SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)		      \
-	SO_MFIELD_MALLOC_SOURCE(className, valueType)
+#define SO_MFIELD_SOURCE_MALLOC(className, valueType, valueRef)            \
+    SO_MFIELD_REQUIRED_SOURCE(className)                                   \
+    SO_MFIELD_CONSTRUCTOR_SOURCE(className)                                \
+    SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)                 \
+    SO_MFIELD_MALLOC_SOURCE(className, valueType)
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -817,34 +817,35 @@ className::allocValues(int newNum)					      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_DERIVED_SOURCE(className, valueType, valueRef)	      \
-	SO_MFIELD_REQUIRED_SOURCE(className);				      \
-	SO_MFIELD_DERIVED_CONSTRUCTOR_SOURCE(className)
+#define SO_MFIELD_DERIVED_SOURCE(className, valueType, valueRef)           \
+    SO_MFIELD_REQUIRED_SOURCE(className);                                  \
+    SO_MFIELD_DERIVED_CONSTRUCTOR_SOURCE(className)
 
 ////////////////////////////////////////////////////////////////////////////
 //
 //
 //
 ////////////////////////////////////////////////////////////////////////////
-#define SO_MFIELD_SETVALUESPOINTER_HEADER(valueType)                        \
-   void setValuesPointer(const int num, const valueType * userdata);        \
-   void setValuesPointer(const int num, valueType * userdata)
+#define SO_MFIELD_SETVALUESPOINTER_HEADER(valueType)                       \
+    public:                                                                \
+    void setValuesPointer(const int num, const valueType * userdata);      \
+    void setValuesPointer(const int num, valueType * userdata)
 
-#define SO_MFIELD_SETVALUESPOINTER_SOURCE(className, valueType, userType)   \
-    void                                                                    \
-    className::setValuesPointer(const int numarg, userType * userdata)      \
-    {                                                                       \
-        this->makeRoom(0);                                                  \
-        if (numarg > 0 && userdata) {                                       \
-            this->values = reinterpret_cast<valueType*>(userdata);          \
-            this->num = this->maxNum = numarg;                              \
-            this->valueChanged();                                           \
-        }                                                                   \
-    }                                                                       \
-    void                                                                    \
+#define SO_MFIELD_SETVALUESPOINTER_SOURCE(className, valueType, userType)  \
+    void                                                                   \
+    className::setValuesPointer(const int numarg, userType * userdata)     \
+    {                                                                      \
+        this->makeRoom(0);                                                 \
+        if (numarg > 0 && userdata) {                                      \
+            this->values = reinterpret_cast<valueType*>(userdata);         \
+            this->num = this->maxNum = numarg;                             \
+            this->valueChanged();                                          \
+        }                                                                  \
+    }                                                                      \
+    void                                                                   \
     className::setValuesPointer(const int numarg, const userType * userdata) \
-    {                                                                       \
-        this->setValuesPointer(numarg, const_cast<userType*>(userdata));    \
+    {                                                                      \
+        this->setValuesPointer(numarg, const_cast<userType*>(userdata));   \
     }
 
 #endif /* _SO_SUB_FIELD_ */
