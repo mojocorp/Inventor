@@ -64,6 +64,7 @@
 #include <Inventor/SbVec4f.h>
 
 class SbMatrix;
+class SbMatrixd;
 class SbVec3f;
 
 /// Class for representing a rotation.
@@ -113,6 +114,9 @@ class INVENTOR_API SbRotation {
     /// Returns corresponding 4x4 rotation matrix
     void		getValue(SbMatrix &matrix) const;
 
+    /// Returns corresponding 4x4 rotation matrix
+    void		getValue(SbMatrixd &matrix) const;
+
     /// Changes a rotation to be its inverse
     SbRotation &	invert();
 
@@ -130,6 +134,9 @@ class INVENTOR_API SbRotation {
     /// I don't know what will happen if you call this with something
     /// that isn't a rotation.
     SbRotation &	setValue(const SbMatrix &m);
+
+    /// Sets value of rotation from a rotation matrix
+    SbRotation &	setValue(const SbMatrixd &m);
 
     /// Sets value of vector from 3D rotation axis vector and angle in radians
     SbRotation &	setValue(const SbVec3f &axis, float radians);

@@ -84,6 +84,7 @@
 #include <Inventor/SbVec4f.h>
 #include <Inventor/SbVec4i32.h>
 #include <Inventor/SbMatrix.h>
+#include <Inventor/SbMatrixd.h>
 #include <Inventor/SbRotation.h>
 
 #include <Inventor/SbLine.h>
