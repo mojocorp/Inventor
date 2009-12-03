@@ -65,8 +65,7 @@
 
 class SbLine;
 class SbRotation;
-class SbVec3f;
-class SbVec4f;
+class SbVec3d;
 
 typedef double SbMatd[4][4];
 
@@ -74,7 +73,7 @@ typedef double SbMatd[4][4];
 /// \ingroup Basics
 /// 4x4 matrix class/datatype used by many Inventor node and action classes.
 /// The matrices are stored in row-major order.
-/// \sa SbVec3f, SbRotation
+/// \sa SbVec3d, SbRotation
 class INVENTOR_API SbMatrixd {
   public:
 
@@ -108,25 +107,25 @@ class INVENTOR_API SbMatrixd {
     void	setScale(double s);
 
     /// Sets matrix to scale by given vector
-    void	setScale(const SbVec3f &s);
+    void	setScale(const SbVec3d &s);
 
     /// Sets matrix to translate by given vector
-    void	setTranslate(const SbVec3f &t);
+    void	setTranslate(const SbVec3d &t);
 
     /// Composes the matrix based on a translation, rotation, scale,
     /// orientation for scale, and center.  The "center" is the
     /// center point for scaling and rotation.  The "scaleOrientation"
     /// chooses the primary axes for the scale.
     void	setTransform(
-			const SbVec3f &translation,
+			const SbVec3d &translation,
 			const SbRotation &rotation,
-			const SbVec3f &scaleFactor,
+			const SbVec3d &scaleFactor,
 			const SbRotation &scaleOrientation,
-			const SbVec3f &center);
+			const SbVec3d &center);
     /// Overloaded methods as a kludge because the compiler won't let
-    /// us have SbVec3f(0,0,0) as a default value:
-    void	setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s);
-    void	setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s, const SbRotation &so);
+    /// us have SbVec3d(0,0,0) as a default value:
+    void	setTransform(const SbVec3d &t, const SbRotation &r, const SbVec3d &s);
+    void	setTransform(const SbVec3d &t, const SbRotation &r, const SbVec3d &s, const SbRotation &so);
 
     /// Decomposes the matrix into a translation, rotation, scale,
     /// and scale orientation.  Any projection information is discarded.
@@ -135,15 +134,15 @@ class INVENTOR_API SbMatrixd {
     /// Note that if the center is 0, decompose() is the same as
     /// factor() where "t" is translation, "u" is rotation, "s" is scaleFactor,
     /// and "r" is ScaleOrientattion.
-    void	getTransform(SbVec3f &translation,
+    void	getTransform(SbVec3d &translation,
 			  SbRotation &rotation,
-			  SbVec3f &scaleFactor,
+			  SbVec3d &scaleFactor,
 			  SbRotation &scaleOrientation,
-			  const SbVec3f &center) const;
+			  const SbVec3d &center) const;
 
     /// Return translation, rotation, scale, and scale orientation
     /// components of the matrix.
-    void	getTransform(SbVec3f &t, SbRotation &r, SbVec3f &s, SbRotation &so) const;
+    void	getTransform(SbVec3d &t, SbRotation &r, SbVec3d &s, SbRotation &so) const;
 
 
     // The following methods return matrix values and other info:
@@ -168,7 +167,7 @@ class INVENTOR_API SbMatrixd {
     /// means transpose of r, and r and u are rotations, s is a scale,
     /// and t is a translation. Any projection information is returned
     /// in proj.
-    SbBool	factor(SbMatrixd &r, SbVec3f &s, SbMatrixd &u, SbVec3f &t, SbMatrixd &proj) const;
+    SbBool	factor(SbMatrixd &r, SbVec3d &s, SbMatrixd &u, SbVec3d &t, SbMatrixd &proj) const;
 
     /// Returns inverse of matrix. Results are undefined for
     /// singular matrices.  Uses LU decompostion
@@ -193,15 +192,15 @@ class INVENTOR_API SbMatrixd {
     SbMatrixd &	multLeft(const SbMatrixd &m);	// this = m * this
 
     /// Multiplies matrix by given column vector, giving vector result
-    void	multMatrixVec(const SbVec3f &src, SbVec3f &dst) const;
+    void	multMatrixVec(const SbVec3d &src, SbVec3d &dst) const;
 
     /// Multiplies given row vector by matrix, giving vector result
-    void	multVecMatrix(const SbVec3f &src, SbVec3f &dst) const;
+    void	multVecMatrix(const SbVec3d &src, SbVec3d &dst) const;
 
     /// Multiplies given row vector by matrix, giving vector result
     /// src is assumed to be a direction vector, so translation part of
     /// matrix is ignored.
-    void	multDirMatrix(const SbVec3f &src, SbVec3f &dst) const;
+    void	multDirMatrix(const SbVec3d &src, SbVec3d &dst) const;
 
     /// Multiplies the given line's origin by the matrix, and the
     /// line's direction by the rotation portion of the matrix
@@ -255,7 +254,7 @@ class INVENTOR_API SbMatrixd {
     SbMatd	matrix;		// Storage for 4x4 matrix
 
     // Diagonalizes 3x3 matrix
-    void	jacobi3(double evalues[3], SbVec3f evectors[3], int &rots) const;
+    void	jacobi3(double evalues[3], SbVec3d evectors[3], int &rots) const;
 
     SbBool affine_inverse(const SbMatrixd &in, SbMatrixd &out) const;
 };
