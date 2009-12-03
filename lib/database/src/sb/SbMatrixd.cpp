@@ -56,7 +56,7 @@
 
 #include <Inventor/SbMatrixd.h>
 #include <Inventor/SbRotation.h>
-#include <Inventor/SbVec3f.h>
+#include <Inventor/SbVec3d.h>
 #include <Inventor/SbLine.h>
 
 #include <math.h>
@@ -279,7 +279,7 @@ SbMatrixd::setScale(double s)
 //
 
 void
-SbMatrixd::setScale(const SbVec3f &s)
+SbMatrixd::setScale(const SbVec3d &s)
 {
     matrix[0][0] = s[0];
     matrix[0][1] = 0.0;
@@ -304,7 +304,7 @@ SbMatrixd::setScale(const SbVec3f &s)
 //
 
 void
-SbMatrixd::setTranslate(const SbVec3f &t)
+SbMatrixd::setTranslate(const SbVec3d &t)
 {
     matrix[0][0] = 1.0;
     matrix[0][1] = 0.0;
@@ -422,7 +422,7 @@ SbMatrixd::det4() const
  */
 	       
 SbBool
-SbMatrixd::factor(SbMatrixd &r, SbVec3f &s, SbMatrixd &u, SbVec3f &t,
+SbMatrixd::factor(SbMatrixd &r, SbVec3d &s, SbMatrixd &u, SbVec3d &t,
 		 SbMatrixd &proj) const
 {
     double	det;		/* Determinant of matrix A	*/
@@ -432,7 +432,7 @@ SbMatrixd::factor(SbMatrixd &r, SbVec3f &s, SbMatrixd &u, SbVec3f &t,
     int		junk;
     SbMatrixd	a, b, si;
     double	evalues[3];
-    SbVec3f	evectors[3];
+    SbVec3d	evectors[3];
     
     a = *this;
     proj.makeIdentity();
@@ -485,7 +485,7 @@ SbMatrixd::factor(SbMatrixd &r, SbVec3f &s, SbMatrixd &u, SbVec3f &t,
 #define SB_JACOBI_RANK	3
 void
 SbMatrixd::jacobi3(double evalues[SB_JACOBI_RANK],
-		  SbVec3f evectors[SB_JACOBI_RANK], int &rots) const
+		  SbVec3d evectors[SB_JACOBI_RANK], int &rots) const
 {
     double	sm;		// smallest entry
     double	theta;		// angle for Jacobi rotation
@@ -1216,11 +1216,11 @@ SbMatrixd::transpose() const
 //
 
 void
-SbMatrixd::setTransform(const SbVec3f &translation,
+SbMatrixd::setTransform(const SbVec3d &translation,
 		 const SbRotation &rotation,
-		 const SbVec3f &scaleFactor,
+		 const SbVec3d &scaleFactor,
 		 const SbRotation &scaleOrientation,
-		 const SbVec3f &center)
+		 const SbVec3d &center)
 {
 #define TRANSLATE(vec)		m.setTranslate(vec), multLeft(m)
 #define ROTATE(rot)		rot.getValue(m), multLeft(m)
@@ -1228,16 +1228,16 @@ SbMatrixd::setTransform(const SbVec3f &translation,
 
     makeIdentity();
     
-    if (translation != SbVec3f(0,0,0))
+    if (translation != SbVec3d(0,0,0))
 	TRANSLATE(translation);
 
-    if (center != SbVec3f(0,0,0))
+    if (center != SbVec3d(0,0,0))
 	TRANSLATE(center);
 
     if (rotation != SbRotation(0,0,0,1))
 	ROTATE(rotation);
 
-    if (scaleFactor != SbVec3f(1,1,1)) {
+    if (scaleFactor != SbVec3d(1,1,1)) {
 	SbRotation so = scaleOrientation;
 	if (so != SbRotation(0,0,0,1))
 	    ROTATE(so);
@@ -1251,7 +1251,7 @@ SbMatrixd::setTransform(const SbVec3f &translation,
 	}
     }
 
-    if (center != SbVec3f(0,0,0))
+    if (center != SbVec3d(0,0,0))
 	TRANSLATE(-center);
 
 #undef TRANSLATE
@@ -1259,15 +1259,15 @@ SbMatrixd::setTransform(const SbVec3f &translation,
 }
 
 void
-SbMatrixd::setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s)
+SbMatrixd::setTransform(const SbVec3d &t, const SbRotation &r, const SbVec3d &s)
 {
-    setTransform(t, r, s, SbRotation(0,0,0,1), SbVec3f(0,0,0));
+    setTransform(t, r, s, SbRotation(0,0,0,1), SbVec3d(0,0,0));
 }
 
 void
-SbMatrixd::setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s, const SbRotation &so)
+SbMatrixd::setTransform(const SbVec3d &t, const SbRotation &r, const SbVec3d &s, const SbRotation &so)
 {
-    setTransform(t, r, s, so, SbVec3f(0,0,0));
+    setTransform(t, r, s, so, SbVec3d(0,0,0));
 }
 
 //
@@ -1275,14 +1275,14 @@ SbMatrixd::setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s,
 //
 
 void
-SbMatrixd::getTransform(SbVec3f &translation,
+SbMatrixd::getTransform(SbVec3d &translation,
 		    SbRotation &rotation,
-		    SbVec3f &scaleFactor,
+		    SbVec3d &scaleFactor,
 		    SbRotation &scaleOrientation,
-		    const SbVec3f &center) const
+		    const SbVec3d &center) const
 {
     SbMatrixd so, rot, proj;
-    if (center != SbVec3f(0,0,0)) {
+    if (center != SbVec3d(0,0,0)) {
 	// to get fields for a non-0 center, we
 	// need to decompose a new matrix "m" such
 	// that [-center][m][center] = [this]
@@ -1304,10 +1304,10 @@ SbMatrixd::getTransform(SbVec3f &translation,
 }
 
 void
-SbMatrixd::getTransform(SbVec3f &t, SbRotation &r,
-                      SbVec3f &s, SbRotation &so) const
+SbMatrixd::getTransform(SbVec3d &t, SbRotation &r,
+                      SbVec3d &s, SbRotation &so) const
 {
-    getTransform(t, r, s, so, SbVec3f(0,0,0));
+    getTransform(t, r, s, so, SbVec3d(0,0,0));
 }
 
 ////////////////////////////////////////////
@@ -1406,7 +1406,7 @@ SbMatrixd::multLeft(const SbMatrixd &m)
 //
 
 void
-SbMatrixd::multMatrixVec(const SbVec3f &src, SbVec3f &dst) const
+SbMatrixd::multMatrixVec(const SbVec3d &src, SbVec3d &dst) const
 {
     double	x,y,z,w;
     
@@ -1427,7 +1427,7 @@ SbMatrixd::multMatrixVec(const SbVec3f &src, SbVec3f &dst) const
 //
 
 void
-SbMatrixd::multVecMatrix(const SbVec3f &src, SbVec3f &dst) const
+SbMatrixd::multVecMatrix(const SbVec3d &src, SbVec3d &dst) const
 {
     double	x,y,z,w;
     
@@ -1450,7 +1450,7 @@ SbMatrixd::multVecMatrix(const SbVec3f &src, SbVec3f &dst) const
 //
 
 void
-SbMatrixd::multDirMatrix(const SbVec3f &src, SbVec3f &dst) const
+SbMatrixd::multDirMatrix(const SbVec3d &src, SbVec3d &dst) const
 {
     double	x,y,z;
     
@@ -1471,10 +1471,10 @@ SbMatrixd::multDirMatrix(const SbVec3f &src, SbVec3f &dst) const
 void
 SbMatrixd::multLineMatrix(const SbLine &src, SbLine &dst) const
 {
-	SbVec3f pos, dir;
-	multVecMatrix(src.getPosition(), pos);
-	multDirMatrix(src.getDirection(), dir);
-	dst.setValue(pos, pos+dir);
+	SbVec3d pos, dir;
+	multVecMatrix(SbVec3d(src.getPosition()), pos);
+	multDirMatrix(SbVec3d(src.getDirection()), dir);
+	dst.setValue(SbVec3f(pos), SbVec3f(pos+dir));
 }
 
 

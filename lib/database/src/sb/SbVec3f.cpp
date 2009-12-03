@@ -55,6 +55,7 @@
  */
  
 #include <Inventor/SbVec3f.h>
+#include <Inventor/SbVec3d.h>
 #include <Inventor/SbPlane.h>
 
 #include <math.h>
@@ -223,6 +224,14 @@
      return (*this);
  }
 
+SbVec3f & 
+SbVec3f::setValue(const SbVec3d & v)
+{
+  vec[0] = (float)v[0];
+  vec[1] = (float)v[1];
+  vec[2] = (float)v[2];
+  return *this;
+}
 
  //
  // Component-wise scalar multiplication operator

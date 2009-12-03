@@ -33,6 +33,9 @@ class INVENTOR_API SbVec3d {
     /// Constructor given 3 planes
     SbVec3d(SbPlane &p0, SbPlane &p1, SbPlane &p2);
 
+    /// Constructs an SbVec3d instance from an SbVec3f instance.
+    explicit SbVec3d(const SbVec3f & v) { setValue(v); }
+
     /// Returns right-handed cross product of vector and another vector
     SbVec3d	cross(const SbVec3d &v) const;
 

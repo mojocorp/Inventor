@@ -71,6 +71,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 class SbPlane;
+class SbVec3d;
 
 /// 3D vector class.
 /// \ingroup Basics
@@ -92,6 +93,9 @@ class INVENTOR_API SbVec3f {
 
     /// Constructor given 3 planes
     SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2);
+
+    /// Constructs an SbVec3f instance from an SbVec3d instance.
+    explicit SbVec3f(const SbVec3d & v) { setValue(v); }
 
     /// Returns right-handed cross product of vector and another vector
     SbVec3f	cross(const SbVec3f &v) const;
@@ -125,6 +129,9 @@ class INVENTOR_API SbVec3f {
     /// Sets value of vector to be convex combination of 3 other
     /// vectors, using barycentic coordinates
     SbVec3f &	setValue(const SbVec3f &barycentic, const SbVec3f &v0, const SbVec3f &v1, const SbVec3f &v2);
+
+    /// Sets this vector to the double precision vector v, converting the vector to a single precision vector.
+    SbVec3f & setValue(const SbVec3d & v);
 
     /// Accesses indexed component of vector
     float &	  operator [](int i) 		{ return (vec[i]); }
