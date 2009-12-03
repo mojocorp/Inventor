@@ -67,6 +67,7 @@ class SbLine;
 class SbRotation;
 class SbVec3f;
 class SbVec4f;
+class SbMatrixd;
 
 typedef float SbMat[4][4];
 
@@ -92,6 +93,8 @@ class INVENTOR_API SbMatrix {
 
     /// Sets value from 4x4 array of elements
     void	setValue(const SbMat &m);
+
+    void 	setValue (const SbMatrixd &m);
 
     /// Sets matrix to be identity
     void	makeIdentity();
