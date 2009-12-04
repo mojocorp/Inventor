@@ -693,7 +693,7 @@ SbViewVolume::ortho(float left, float right,
 
 void
 SbViewVolume::perspective(float fovy, float aspect,
-			  float nearVal, float farVal)
+                          float nearVal, float farVal)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -718,6 +718,22 @@ SbViewVolume::perspective(float fovy, float aspect,
     nearToFar = farVal - nearVal;
 }
 
+void 
+SbViewVolume::frustum(float left, float right,
+                      float bottom, float top,
+                      float nearval, float farval)
+{
+    type = PERSPECTIVE;
+
+    projPoint.setValue(0.0f, 0.0f, 0.0f);
+    projDir.setValue(0.0f, 0.0f, -1.0f);
+    nearDist = nearval;
+    nearToFar = farval - nearval;
+
+    llf.setValue(left, bottom, -nearval);
+    lrf.setValue(right, bottom, -nearval);
+    ulf.setValue(left, top, -nearval);
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
