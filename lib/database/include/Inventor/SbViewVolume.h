@@ -171,6 +171,10 @@ class INVENTOR_API SbViewVolume {
     void		perspective(float fovy, float aspect,
 				    float nearVal, float farVal);
 
+    /// Set up the frustum for perspective projection.
+    /// It has the same arguments and functionality as the corresponding OpenGL glFrustum() function.
+    void frustum (float left, float right, float bottom, float top, float nearval, float farval);
+
     /// Rotate the camera view direction.  Note that this accomplishes
     /// the reverse of doing a GL rotate() command after defining a
     /// camera, which rotates the scene viewed by the camera.
