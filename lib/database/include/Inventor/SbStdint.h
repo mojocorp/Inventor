@@ -4,6 +4,8 @@
 #include <machine.h>
 
 #ifdef SB_OS_WIN
+    // Support for standard integer types.  This is only a small part of what
+    // stdint.h provides on Unix platforms.
     typedef signed __int8     int8_t;
     typedef signed __int16    int16_t;
     typedef signed __int32    int32_t;
