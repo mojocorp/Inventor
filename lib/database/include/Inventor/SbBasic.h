@@ -144,15 +144,26 @@ typedef int	SbBool;
 #  endif
 
 #  define _USE_MATH_DEFINES
-#  include <windows.h>
-#  define GLCALLBACK __stdcall
+
+#ifndef WINGDIAPI
+#    define WINGDIAPI __declspec(dllimport)
+#endif
+
+#ifndef APIENTRY
+#    define APIENTRY __stdcall
+#endif
+
+#ifndef CALLBACK
+#   define CALLBACK    __stdcall
+#endif
+
 #  ifdef INVENTOR_EXPORTS
 #     define INVENTOR_API __declspec(dllexport)
 #  else
 #     define INVENTOR_API __declspec(dllimport)
 #  endif
 #else
-#  define GLCALLBACK
+#  define CALLBACK
 #  define INVENTOR_API
 #endif
 /// @endcond

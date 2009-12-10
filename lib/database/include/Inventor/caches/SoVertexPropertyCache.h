@@ -76,7 +76,7 @@
 
 class SoVertexProperty;
 
-typedef INVENTOR_API void GLCALLBACK SoVPCacheFunc(const char *const);
+typedef INVENTOR_API void CALLBACK SoVPCacheFunc(const char *const);
 
 SoEXTENDER class INVENTOR_API SoVertexPropertyCache {
   public:

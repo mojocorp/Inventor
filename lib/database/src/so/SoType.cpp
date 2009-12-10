@@ -54,7 +54,9 @@
 #include <Inventor/SoType.h>
 #include <Inventor/SoLists.h>
 #include <Inventor/errors/SoDebugError.h>
-#ifndef SB_OS_WIN
+#ifdef SB_OS_WIN
+#   include <windows.h>
+#else
 #   include <dlfcn.h>
 #   include <unistd.h>
 #endif
