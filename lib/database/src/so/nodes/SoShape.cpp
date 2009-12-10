@@ -897,13 +897,13 @@ SoShape::endShape()
 	if (tobj == NULL) {
 	    tobj = gluNewTess();
 	    gluTessCallback(tobj, (GLenum)GLU_BEGIN,
-			    (void (GLCALLBACK*)())SoShape::beginCB);
+			    (void (CALLBACK*)())SoShape::beginCB);
 	    gluTessCallback(tobj, (GLenum)GLU_END, 
-			    (void (GLCALLBACK*)())SoShape::endCB);
+			    (void (CALLBACK*)())SoShape::endCB);
 	    gluTessCallback(tobj, (GLenum)GLU_VERTEX, 
-			    (void (GLCALLBACK*)())SoShape::vtxCB);
+			    (void (CALLBACK*)())SoShape::vtxCB);
 	    gluTessCallback(tobj, (GLenum)GLU_ERROR,
-			    (void (GLCALLBACK*)())SoShape::errorCB);
+			    (void (CALLBACK*)())SoShape::errorCB);
 	}
 #ifdef GLU_VERSION_1_2
 	gluTessBeginPolygon(tobj, NULL);
