@@ -263,17 +263,6 @@ class INVENTOR_API SoDB {
     /// Returns the current delay queue timeout value.
     static const SbTime &getDelaySensorTimeout();
 
-    /// In order to keep timer and idle sensors running as expected, it is
-    /// necessary that an Inventor application not block waiting for input. If
-    /// the Inventor application uses the Xt utility library, this can be
-    /// handled automatically.  However, if the application is using its own
-    /// event loop, this function is provided as a wrapper around
-    /// \x select(2) that will handle Inventor tasks if necessary instead of
-    /// blocking.
-    static int		doSelect(int nfds, fd_set *readfds, fd_set *writefds,
-				 fd_set *exceptfds,
-				 struct timeval *userTimeOut);
-
   SoEXTENDER public:
     // Registers a field conversion engine that can be used to
     // convert from one type of field to another. The type id's of the

@@ -120,11 +120,6 @@ SoINTERNAL class INVENTOR_API SoSensorManager {
     // in tm.
     SbBool		isTimerSensorPending(SbTime &tm);
 
-    // Just like UNIX select() call, but checks sensor queues while
-    // waiting for events.
-    int			doSelect(int nfds, fd_set *readfds, fd_set *writefds,
-				 fd_set *exceptfds,
-				 struct timeval *userTimeOut);
   private:
     SoSensor		*delayQueue;	// Head of delay sensor queue
     SoSensor		*timerQueue;	// Head of timer sensor queue
