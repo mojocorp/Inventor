@@ -648,31 +648,6 @@ SoDB::readAll(SoInput *in)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Just like UNIX select() call, but does our tasks while waiting.
-//    Can be used in applications with their own event loops.
-//
-// Use: public, static
-
-int
-SoDB::doSelect(int nfds, fd_set *readfds, fd_set *writefds,
-	       fd_set *exceptfds, struct timeval *userTimeOut)
-//
-////////////////////////////////////////////////////////////////////////
-{
-#ifdef DEBUG
-    if (globalDB == NULL) {
-	SoDebugError::post("SoDB::doSelect", "SoDB::init() was never called");
-	return 0;
-    }
-#endif /* DEBUG */
-
-    return globalDB->sensorManager.doSelect(nfds, readfds, writefds,
-					    exceptfds, userTimeOut);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Registers a field conversion engine that can be used to
 //    convert from one type of field to another. The type id's of the
 //    two fields are passed in, as is the type id of the field
