@@ -46,55 +46,55 @@
 #include "arcsorter.h"
 #include "subdivider.h"
 
-ArcSorter::ArcSorter(Subdivider &s) : Sorter( sizeof( Arc ** ) ), subdivider(s)
+_SoNurbsArcSorter::_SoNurbsArcSorter(Subdivider &s) : Sorter( sizeof( _SoNurbsArc ** ) ), subdivider(s)
 {
 }
 
 int
-ArcSorter::qscmp( char *, char * )
+_SoNurbsArcSorter::qscmp( char *, char * )
 {
-    dprintf( "ArcSorter::qscmp: pure virtual called\n" );
+    dprintf( "_SoNurbsArcSorter::qscmp: pure virtual called\n" );
     return 0;
 }
 
 void
-ArcSorter::qsort( Arc **a, int n )
+_SoNurbsArcSorter::qsort( _SoNurbsArc **a, int n )
 {
     Sorter::qsort( (void *) a, n );
 }
 
 void		
-ArcSorter::qsexc( char *i, char *j )// i<-j, j<-i 
+_SoNurbsArcSorter::qsexc( char *i, char *j )// i<-j, j<-i 
 {
-    Arc **jarc1 = (Arc **) i;
-    Arc **jarc2 = (Arc **) j;
-    Arc *tmp = *jarc1;
+    _SoNurbsArc **jarc1 = (_SoNurbsArc **) i;
+    _SoNurbsArc **jarc2 = (_SoNurbsArc **) j;
+    _SoNurbsArc *tmp = *jarc1;
     *jarc1 = *jarc2;
     *jarc2 = tmp;
 }	
 
 void		
-ArcSorter::qstexc( char *i, char *j, char *k )// i<-k, k<-j, j<-i
+_SoNurbsArcSorter::qstexc( char *i, char *j, char *k )// i<-k, k<-j, j<-i
 {
-    Arc **jarc1 = (Arc **) i;
-    Arc **jarc2 = (Arc **) j;
-    Arc **jarc3 = (Arc **) k;
-    Arc *tmp = *jarc1;
+    _SoNurbsArc **jarc1 = (_SoNurbsArc **) i;
+    _SoNurbsArc **jarc2 = (_SoNurbsArc **) j;
+    _SoNurbsArc **jarc3 = (_SoNurbsArc **) k;
+    _SoNurbsArc *tmp = *jarc1;
     *jarc1 = *jarc3;
     *jarc3 = *jarc2;
     *jarc2 = tmp;
 }
   
 
-ArcSdirSorter::ArcSdirSorter( Subdivider &s ) : ArcSorter(s)
+_SoNurbsArcSdirSorter::_SoNurbsArcSdirSorter( Subdivider &s ) : _SoNurbsArcSorter(s)
 {
 }
 
 int
-ArcSdirSorter::qscmp( char *i, char *j )
+_SoNurbsArcSdirSorter::qscmp( char *i, char *j )
 {
-    Arc *jarc1 = *(Arc **) i;
-    Arc *jarc2 = *(Arc **) j;
+    _SoNurbsArc *jarc1 = *(_SoNurbsArc **) i;
+    _SoNurbsArc *jarc2 = *(_SoNurbsArc **) j;
 
     int v1 = (jarc1->getitail() ? 0 : (jarc1->pwlArc->npts - 1));
     int	v2 = (jarc2->getitail() ? 0 : (jarc2->pwlArc->npts - 1));
@@ -123,12 +123,12 @@ ArcSdirSorter::qscmp( char *i, char *j )
     }    
 }
 
-ArcTdirSorter::ArcTdirSorter( Subdivider &s ) : ArcSorter(s)
+_SoNurbsArcTdirSorter::_SoNurbsArcTdirSorter( Subdivider &s ) : _SoNurbsArcSorter(s)
 {
 }
 
 /*----------------------------------------------------------------------------
- * ArcTdirSorter::qscmp - 
+ * _SoNurbsArcTdirSorter::qscmp - 
   *		   compare two axis monotone arcs that are incident 
  *		   to the line T == compare_value. Determine which of the
  *		   two intersects that line with a LESSER S value.  If
@@ -136,10 +136,10 @@ ArcTdirSorter::ArcTdirSorter( Subdivider &s ) : ArcSorter(s)
  *----------------------------------------------------------------------------
  */
 int
-ArcTdirSorter::qscmp( char *i, char *j )
+_SoNurbsArcTdirSorter::qscmp( char *i, char *j )
 {
-    Arc *jarc1 = *(Arc **) i;
-    Arc *jarc2 = *(Arc **) j;
+    _SoNurbsArc *jarc1 = *(_SoNurbsArc **) i;
+    _SoNurbsArc *jarc2 = *(_SoNurbsArc **) j;
 
     int v1 = (jarc1->getitail() ? 0 : (jarc1->pwlArc->npts - 1));
     int	v2 = (jarc2->getitail() ? 0 : (jarc2->pwlArc->npts - 1));

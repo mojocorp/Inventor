@@ -46,12 +46,12 @@
 #include "defines.h"
 #include "bufpool.h"
 
-class Backend;
+class _SoNurbsBackend;
 class Mapdesc;
 
 class Maplist {
 public:
-			Maplist( Backend & );
+			Maplist( _SoNurbsBackend & );
     void 		define( long, int, int );
     inline void 	undefine( long );
     inline int		isMap( long );
@@ -64,7 +64,7 @@ private:
     Pool		mapdescPool;
     Mapdesc *		maps;
     Mapdesc **		lastmap;
-    Backend &		backend;
+    _SoNurbsBackend &		backend;
 
     void 		add( long, int, int );
     void 		remove( Mapdesc * );

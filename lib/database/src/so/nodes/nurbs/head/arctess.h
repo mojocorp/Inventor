@@ -51,18 +51,18 @@ class BezierArc;
 class Pool;
 class TrimVertexPool;
 
-class ArcTessellator {
+class _SoNurbsArcTessellator {
 public:
-			ArcTessellator( TrimVertexPool&, Pool& );
-			~ArcTessellator( void );
-    void		bezier( Arc *, REAL, REAL, REAL, REAL );
-    void		pwl( Arc *, REAL, REAL, REAL, REAL, REAL );
-    void		pwl_left( Arc *, REAL, REAL, REAL, REAL );
-    void		pwl_right( Arc *, REAL, REAL, REAL, REAL );
-    void		pwl_top( Arc *, REAL, REAL, REAL, REAL );
-    void		pwl_bottom( Arc *, REAL, REAL, REAL, REAL );
-    void		tessellateLinear( Arc *, REAL, REAL, int );
-    void		tessellateNonlinear( Arc *, REAL, REAL, int );
+			_SoNurbsArcTessellator( TrimVertexPool&, Pool& );
+			~_SoNurbsArcTessellator( void );
+    void		bezier( _SoNurbsArc *, REAL, REAL, REAL, REAL );
+    void		pwl( _SoNurbsArc *, REAL, REAL, REAL, REAL, REAL );
+    void		pwl_left( _SoNurbsArc *, REAL, REAL, REAL, REAL );
+    void		pwl_right( _SoNurbsArc *, REAL, REAL, REAL, REAL );
+    void		pwl_top( _SoNurbsArc *, REAL, REAL, REAL, REAL );
+    void		pwl_bottom( _SoNurbsArc *, REAL, REAL, REAL, REAL );
+    void		tessellateLinear( _SoNurbsArc *, REAL, REAL, int );
+    void		tessellateNonlinear( _SoNurbsArc *, REAL, REAL, int );
 
 private:
     static const REAL 	gl_Bernstein[][MAXORDER][MAXORDER];

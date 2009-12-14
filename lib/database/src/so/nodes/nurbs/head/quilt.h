@@ -46,7 +46,7 @@
 #include "bufpool.h"
 #include "types.h"
 
-class Backend;
+class _SoNurbsBackend;
 class Mapdesc;
 class Flist;
 class Knotvector;
@@ -81,8 +81,8 @@ public:
     void		toBezier( Knotvector &, Knotvector &, INREAL *, long  );
     void		select( REAL *, REAL * );
     int			getDimension( void ) { return eqspec - qspec; }
-    void 		download( Backend & );
-    void		downloadAll( REAL *, REAL *, Backend & );
+    void 		download( _SoNurbsBackend & );
+    void		downloadAll( REAL *, REAL *, _SoNurbsBackend & );
     int 		isCulled( void );
     void		getRange( REAL *, REAL *, Flist&, Flist & );
     void		getRange( REAL *, REAL *, int, Flist & );

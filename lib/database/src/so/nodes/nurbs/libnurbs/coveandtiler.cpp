@@ -51,7 +51,7 @@
 
 const int CoveAndTiler::MAXSTRIPSIZE = 1000;
 
-CoveAndTiler::CoveAndTiler( Backend& b )
+CoveAndTiler::CoveAndTiler( _SoNurbsBackend& b )
             : backend( b )
 { }
 

@@ -122,7 +122,7 @@ Quilt::select( REAL *pta, REAL *ptb )
 }
 
 void 
-Quilt::download( Backend &backend )
+Quilt::download( _SoNurbsBackend &backend )
 {
     if( getDimension() == 2 ) {
 	REAL *ps  = cpts; 
@@ -157,7 +157,7 @@ Quilt::download( Backend &backend )
  */
 
 void
-Quilt::downloadAll( REAL *pta, REAL *ptb, Backend &backend )
+Quilt::downloadAll( REAL *pta, REAL *ptb, _SoNurbsBackend &backend )
 {
     for( Quilt *m = this; m; m=m->next ) {
 	m->select( pta, ptb );

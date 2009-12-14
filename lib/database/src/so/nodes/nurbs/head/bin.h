@@ -49,17 +49,17 @@
 
 struct Bin { /* a linked list of jordan arcs */
 private:
-    Arc *		head;		/* first arc on list */
-    Arc *		current;	/* current arc on list */
+    _SoNurbsArc *		head;		/* first arc on list */
+    _SoNurbsArc *		current;	/* current arc on list */
 public:
     			Bin();
 			~Bin();
-    inline Arc *	firstarc( void );
-    inline Arc *	nextarc( void );
-    inline Arc *	removearc( void );
+    inline _SoNurbsArc *	firstarc( void );
+    inline _SoNurbsArc *	nextarc( void );
+    inline _SoNurbsArc *	removearc( void );
     inline int		isnonempty( void ) { return (head ? 1 : 0); }
-    inline void		addarc( Arc * );
-    void 		remove_this_arc( Arc * );
+    inline void		addarc( _SoNurbsArc * );
+    void 		remove_this_arc( _SoNurbsArc * );
     int			numarcs( void );
     void 		adopt( void );
     void		markall( void );
@@ -73,7 +73,7 @@ public:
  */
 
 inline void
-Bin::addarc( Arc *jarc )
+Bin::addarc( _SoNurbsArc *jarc )
 {
    jarc->link = head;
    head = jarc;
@@ -84,10 +84,10 @@ Bin::addarc( Arc *jarc )
  *----------------------------------------------------------------------------
  */
 
-inline Arc *
+inline _SoNurbsArc *
 Bin::removearc( void )
 {
-    Arc * jarc = head;
+    _SoNurbsArc * jarc = head;
 
     if( jarc ) head = jarc->link;
     return jarc;
@@ -99,10 +99,10 @@ Bin::removearc( void )
  *----------------------------------------------------------------------------
  */
 
-inline Arc *
+inline _SoNurbsArc *
 Bin::nextarc( void )
 {
-    Arc * jarc = current;
+    _SoNurbsArc * jarc = current;
 
 #ifdef DEBUG
     assert( jarc && jarc->check() );
@@ -117,7 +117,7 @@ Bin::nextarc( void )
  *----------------------------------------------------------------------------
  */
 
-inline Arc *
+inline _SoNurbsArc *
 Bin::firstarc( void )
 {
     current = head;

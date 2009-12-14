@@ -50,12 +50,12 @@
 class BasicCurveEvaluator;
 class BasicSurfaceEvaluator;
 
-class Backend {
+class _SoNurbsBackend {
 private:
     BasicCurveEvaluator&	curveEvaluator;
     BasicSurfaceEvaluator&	surfaceEvaluator;
 public:
-  			Backend( BasicCurveEvaluator &c, BasicSurfaceEvaluator& e )
+  			_SoNurbsBackend( BasicCurveEvaluator &c, BasicSurfaceEvaluator& e )
 			: curveEvaluator(c), surfaceEvaluator(e) {}
 
     /* surface backend routines */

@@ -50,7 +50,7 @@
 #include "trimvertex.h"
 #include "varray.h"
 
-Slicer::Slicer( Backend &b ) 
+Slicer::Slicer( _SoNurbsBackend &b ) 
 	: CoveAndTiler( b ), Mesher( b ), backend( b )
 {
 }

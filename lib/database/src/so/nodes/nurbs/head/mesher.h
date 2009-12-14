@@ -45,21 +45,21 @@
 #include "hull.h"
 
 class TrimRegion;
-class Backend;
+class _SoNurbsBackend;
 class Pool;
 class GridTrimVertex;
 
 
 class Mesher : virtual public TrimRegion, public Hull {
 public:
-     			Mesher( Backend & );
+     			Mesher( _SoNurbsBackend & );
 			~Mesher( void );
     void		init( unsigned int );
     void		mesh( void );
 
 private:
     static const float	ZERO;
-    Backend&		backend;
+    _SoNurbsBackend&		backend;
 
     Pool		p;
     unsigned int	stacksize;

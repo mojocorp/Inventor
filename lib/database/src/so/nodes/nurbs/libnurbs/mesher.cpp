@@ -54,7 +54,7 @@
 
 const float Mesher::ZERO = 0.0;
 
-Mesher::Mesher( Backend& b ) 
+Mesher::Mesher( _SoNurbsBackend& b ) 
 	: backend( b ), 
 	p( sizeof( GridTrimVertex ), 100, "GridTrimVertexPool" )
 {
