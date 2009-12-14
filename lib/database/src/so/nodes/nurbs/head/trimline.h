@@ -42,8 +42,8 @@
  * trimline.h - $Revision: 1.1 $
  */
 
-class Arc;
-class Backend;
+class _SoNurbsArc;
+class _SoNurbsBackend;
 
 #include "trimvertex.h"
 #include "jarcloc.h"
@@ -70,13 +70,13 @@ public:
 			Trimline();
 			~Trimline();
     void		init( TrimVertex * );
-    void		init( long, Arc *, long );
+    void		init( long, _SoNurbsArc *, long );
     void		getNextPt( void );
     void		getPrevPt( void );
-    void		getNextPts( REAL, Backend & );
-    void		getPrevPts( REAL, Backend & );
-    void		getNextPts( Arc * );
-    void		getPrevPts( Arc * );
+    void		getNextPts( REAL, _SoNurbsBackend & );
+    void		getPrevPts( REAL, _SoNurbsBackend & );
+    void		getNextPts( _SoNurbsArc * );
+    void		getPrevPts( _SoNurbsArc * );
     inline TrimVertex *	next( void );
     inline TrimVertex *	prev( void ); 
     inline TrimVertex *	first( void );

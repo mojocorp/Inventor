@@ -180,7 +180,7 @@ Subdivider::arc_split( Arc_ptr jarc, int param, REAL value, int dir )
     switch( pwlarc_intersect( jarc->pwlArc, param, value, dir, loc ) ) {
 
     case INTERSECT_VERTEX: {
-	    jarc1 = new(arcpool) Arc( jarc, new( pwlarcpool) PwlArc( maxvertex-loc[1], &v[loc[1]] ) );
+	    jarc1 = new(arcpool) _SoNurbsArc( jarc, new( pwlarcpool) PwlArc( maxvertex-loc[1], &v[loc[1]] ) );
 	    jarc->pwlArc->npts = loc[1] + 1;
 	    jarc1->next = jarc->next;
 	    jarc1->next->prev = jarc1;
@@ -211,7 +211,7 @@ Subdivider::arc_split( Arc_ptr jarc, int param, REAL value, int dir )
 		backend.triangle( &newjunk[2], &newjunk[1], &newjunk[0] );
 
 	    if (maxvertex == 2) {
-		jarc1 = new(arcpool) Arc( jarc, new(pwlarcpool) PwlArc( 2, newjunk+1 ) );
+		jarc1 = new(arcpool) _SoNurbsArc( jarc, new(pwlarcpool) PwlArc( 2, newjunk+1 ) );
 		jarc->pwlArc->npts = 2;
 		jarc->pwlArc->pts = newjunk;
 		jarc1->next = jarc->next;
@@ -221,8 +221,8 @@ Subdivider::arc_split( Arc_ptr jarc, int param, REAL value, int dir )
 		assert(jarc->check());
 		return 2;
 	    } else if (maxvertex - j == 2) {
-		jarc1 = new(arcpool) Arc( jarc, new(pwlarcpool) PwlArc( 2, newjunk ) );
-		jarc2 = new(arcpool) Arc( jarc, new(pwlarcpool) PwlArc( 2, newjunk+1 ) );
+		jarc1 = new(arcpool) _SoNurbsArc( jarc, new(pwlarcpool) PwlArc( 2, newjunk ) );
+		jarc2 = new(arcpool) _SoNurbsArc( jarc, new(pwlarcpool) PwlArc( 2, newjunk+1 ) );
 		jarc->pwlArc->npts = maxvertex-1;
 		jarc2->next = jarc->next;
 		jarc2->next->prev = jarc2;
@@ -233,8 +233,8 @@ Subdivider::arc_split( Arc_ptr jarc, int param, REAL value, int dir )
 		assert(jarc->check());
 		return 31;
 	    } else if (i == 1) {
-		jarc1 = new(arcpool) Arc( jarc, new(pwlarcpool) PwlArc( 2, newjunk+1 ) );
-		jarc2 = new(arcpool) Arc( jarc, 
+		jarc1 = new(arcpool) _SoNurbsArc( jarc, new(pwlarcpool) PwlArc( 2, newjunk+1 ) );
+		jarc2 = new(arcpool) _SoNurbsArc( jarc, 
 			new(pwlarcpool) PwlArc( maxvertex-1, &jarc->pwlArc->pts[1] ) );
 		jarc->pwlArc->npts = 2;
 		jarc->pwlArc->pts = newjunk;
@@ -247,9 +247,9 @@ Subdivider::arc_split( Arc_ptr jarc, int param, REAL value, int dir )
 		assert(jarc->check());
 		return 32;
 	    } else {
-		jarc1 = new(arcpool) Arc( jarc, new(pwlarcpool) PwlArc( 2, newjunk ) );
-		jarc2 = new(arcpool) Arc( jarc, new(pwlarcpool) PwlArc( 2, newjunk+1 ) );
-		jarc3 = new(arcpool) Arc( jarc, new(pwlarcpool) PwlArc( maxvertex-i, v+i ) );
+		jarc1 = new(arcpool) _SoNurbsArc( jarc, new(pwlarcpool) PwlArc( 2, newjunk ) );
+		jarc2 = new(arcpool) _SoNurbsArc( jarc, new(pwlarcpool) PwlArc( 2, newjunk+1 ) );
+		jarc3 = new(arcpool) _SoNurbsArc( jarc, new(pwlarcpool) PwlArc( maxvertex-i, v+i ) );
 		jarc->pwlArc->npts = j + 1;
 		jarc3->next = jarc->next;
 		jarc3->next->prev = jarc3;

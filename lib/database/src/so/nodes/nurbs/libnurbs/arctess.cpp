@@ -54,21 +54,21 @@
 #define steps_function(large, small, rate) (max(1, 1+ (int) ((large-small)/rate)));
 
 /*-----------------------------------------------------------------------------
- * ArcTessellator - construct an ArcTessellator
+ * _SoNurbsArcTessellator - construct an _SoNurbsArcTessellator
  *-----------------------------------------------------------------------------
  */
 
-ArcTessellator::ArcTessellator( TrimVertexPool& t, Pool& p ) 
+_SoNurbsArcTessellator::_SoNurbsArcTessellator( TrimVertexPool& t, Pool& p ) 
         : pwlarcpool(p), trimvertexpool(t)
 {
 }
 
 /*-----------------------------------------------------------------------------
- * ~ArcTessellator - destroy an ArcTessellator
+ * ~_SoNurbsArcTessellator - destroy an _SoNurbsArcTessellator
  *-----------------------------------------------------------------------------
  */
 
-ArcTessellator::~ArcTessellator( void )
+_SoNurbsArcTessellator::~_SoNurbsArcTessellator( void )
 {
 }
 
@@ -78,7 +78,7 @@ ArcTessellator::~ArcTessellator( void )
  */
 
 void
-ArcTessellator::bezier( Arc *arc, REAL s1, REAL s2, REAL t1, REAL t2 )
+_SoNurbsArcTessellator::bezier( _SoNurbsArc *arc, REAL s1, REAL s2, REAL t1, REAL t2 )
 {
     assert( arc != 0 );
     assert( ! arc->isTessellated() );
@@ -124,7 +124,7 @@ ArcTessellator::bezier( Arc *arc, REAL s1, REAL s2, REAL t1, REAL t2 )
  */
 
 void
-ArcTessellator::pwl_left( Arc *arc, REAL s, REAL t1, REAL t2, REAL rate )
+_SoNurbsArcTessellator::pwl_left( _SoNurbsArc *arc, REAL s, REAL t1, REAL t2, REAL rate )
 {
     assert( t2 < t1 );
 
@@ -154,7 +154,7 @@ ArcTessellator::pwl_left( Arc *arc, REAL s, REAL t1, REAL t2, REAL rate )
  */
 
 void
-ArcTessellator::pwl_right( Arc *arc, REAL s, REAL t1, REAL t2, REAL rate )
+_SoNurbsArcTessellator::pwl_right( _SoNurbsArc *arc, REAL s, REAL t1, REAL t2, REAL rate )
 {
     assert( t1 < t2 );
 
@@ -184,7 +184,7 @@ ArcTessellator::pwl_right( Arc *arc, REAL s, REAL t1, REAL t2, REAL rate )
  */
 
 void
-ArcTessellator::pwl_top( Arc *arc, REAL t, REAL s1, REAL s2, REAL rate )
+_SoNurbsArcTessellator::pwl_top( _SoNurbsArc *arc, REAL t, REAL s1, REAL s2, REAL rate )
 {
     assert( s2 < s1 );
 
@@ -213,7 +213,7 @@ ArcTessellator::pwl_top( Arc *arc, REAL t, REAL s1, REAL s2, REAL rate )
  */
 
 void
-ArcTessellator::pwl_bottom( Arc *arc, REAL t, REAL s1, REAL s2, REAL rate )
+_SoNurbsArcTessellator::pwl_bottom( _SoNurbsArc *arc, REAL t, REAL s1, REAL s2, REAL rate )
 {
     assert( s1 < s2 );
 
@@ -242,7 +242,7 @@ ArcTessellator::pwl_bottom( Arc *arc, REAL t, REAL s1, REAL s2, REAL rate )
  */
 
 void
-ArcTessellator::pwl( Arc *arc, REAL s1, REAL s2, REAL t1, REAL t2, REAL rate )
+_SoNurbsArcTessellator::pwl( _SoNurbsArc *arc, REAL s1, REAL s2, REAL t1, REAL t2, REAL rate )
 {
 
 /*    if(rate <= 0.06) rate = 0.06;*/
@@ -278,7 +278,7 @@ ArcTessellator::pwl( Arc *arc, REAL s1, REAL s2, REAL t1, REAL t2, REAL rate )
  */
 
 void
-ArcTessellator::tessellateLinear( Arc *arc, REAL geo_stepsize, REAL /*arc_stepsize*/, int isrational )
+_SoNurbsArcTessellator::tessellateLinear( _SoNurbsArc *arc, REAL geo_stepsize, REAL /*arc_stepsize*/, int isrational )
 {
     assert( arc->pwlArc == NULL );
     REAL s1, s2, t1, t2;
@@ -323,7 +323,7 @@ ArcTessellator::tessellateLinear( Arc *arc, REAL geo_stepsize, REAL /*arc_stepsi
  */
 
 void
-ArcTessellator::tessellateNonlinear( Arc *arc, REAL geo_stepsize, REAL arc_stepsize, int isrational )
+_SoNurbsArcTessellator::tessellateNonlinear( _SoNurbsArc *arc, REAL geo_stepsize, REAL arc_stepsize, int isrational )
 {
     assert( arc->pwlArc == NULL );
 
@@ -499,7 +499,7 @@ ArcTessellator::tessellateNonlinear( Arc *arc, REAL geo_stepsize, REAL arc_steps
 */
 }
 
-const REAL ArcTessellator::gl_Bernstein[][MAXORDER][MAXORDER] = {
+const REAL _SoNurbsArcTessellator::gl_Bernstein[][MAXORDER][MAXORDER] = {
  {
   {1, 0, 0, 0, 0, 0, 0, 0 },
   {0, 0, 0, 0, 0, 0, 0, 0 },
@@ -587,7 +587,7 @@ const REAL ArcTessellator::gl_Bernstein[][MAXORDER][MAXORDER] = {
  *-----------------------------------------------------------------------------
  */
 void
-ArcTessellator::trim_power_coeffs( BezierArc *bez_arc, REAL *p, int coord )
+_SoNurbsArcTessellator::trim_power_coeffs( BezierArc *bez_arc, REAL *p, int coord )
 {
     register int stride = bez_arc->stride;
     register int order = bez_arc->order;

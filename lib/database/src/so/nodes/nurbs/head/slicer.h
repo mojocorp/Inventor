@@ -46,20 +46,20 @@
 #include "mesher.h"
 #include "coveandtiler.h"
 
-class Backend;
-class Arc;
+class _SoNurbsBackend;
+class _SoNurbsArc;
 struct TrimVertex;
 
 class Slicer : public CoveAndTiler, public Mesher {
 public:
-    			Slicer( Backend & );
+    			Slicer( _SoNurbsBackend & );
 			~Slicer( void );
-    void		slice( Arc * );
-    void		outline( Arc * );
+    void		slice( _SoNurbsArc * );
+    void		outline( _SoNurbsArc * );
     void		setstriptessellation( REAL, REAL );
     void		setisolines( int );
 private:
-    Backend&		backend;
+    _SoNurbsBackend&		backend;
     REAL		oneOverDu;
     REAL		du, dv;
     int			isolines;

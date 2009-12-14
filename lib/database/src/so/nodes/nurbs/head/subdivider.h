@@ -50,10 +50,10 @@
 #include "trimvertex.h"
 #include "trimvertpool.h"
 
-class Arc;
+class _SoNurbsArc;
 class Pool;
 class Renderhints;
-class Backend;
+class _SoNurbsBackend;
 class Quilt;
 class Patchlist;
 class Curvelist;
@@ -61,7 +61,7 @@ struct JumpBuffer;
 
 class Subdivider {
 public:
-			Subdivider( Renderhints&, Backend& );
+			Subdivider( Renderhints&, _SoNurbsBackend& );
 			~Subdivider( void );
     void		clear( void );
 
@@ -79,10 +79,10 @@ public:
     void		drawCurves( void );
     void		drawSurfaces( long );
 
-    int			ccwTurn_sl( Arc *, Arc * );
-    int			ccwTurn_sr( Arc *, Arc * );
-    int			ccwTurn_tl( Arc *, Arc * );
-    int			ccwTurn_tr( Arc *, Arc * );
+    int			ccwTurn_sl( _SoNurbsArc *, _SoNurbsArc * );
+    int			ccwTurn_sr( _SoNurbsArc *, _SoNurbsArc * );
+    int			ccwTurn_tl( _SoNurbsArc *, _SoNurbsArc * );
+    int			ccwTurn_tr( _SoNurbsArc *, _SoNurbsArc * );
 
     void		setJumpbuffer( JumpBuffer * );
 
@@ -97,14 +97,14 @@ private:
     void		classify_tailonright_t( Bin &, Bin &, Bin &, REAL );
 
     enum dir 		{ down, same, up, none };
-    void		tessellate( Arc *, REAL );
-    void		monotonize( Arc *, Bin & );
-    int			isMonotone( Arc * );
+    void		tessellate( _SoNurbsArc *, REAL );
+    void		monotonize( _SoNurbsArc *, Bin & );
+    int			isMonotone( _SoNurbsArc * );
     int			decompose( Bin &, REAL );
 
 
     Slicer		slicer;
-    ArcTessellator	arctessellator;
+    _SoNurbsArcTessellator	arctessellator;
     Pool		arcpool;
     Pool		bezierarcpool;
     Pool		pwlarcpool;
@@ -112,10 +112,10 @@ private:
 
     JumpBuffer*		jumpbuffer;
     Renderhints&	renderhints;
-    Backend&		backend;
+    _SoNurbsBackend&		backend;
 
     Bin			initialbin;
-    Arc *		pjarc;
+    _SoNurbsArc *		pjarc;
     int 		s_index;
     int			t_index;
     Quilt *		qlist;
@@ -161,13 +161,13 @@ private:
     inline int		bbox( TrimVertex *, TrimVertex *, TrimVertex *, int );
     static int		bbox( REAL, REAL, REAL, REAL, REAL, REAL );
     static int		ccw( TrimVertex *, TrimVertex *, TrimVertex * );
-    void		join_s( Bin &, Bin &, Arc *, Arc * );
-    void		join_t( Bin &, Bin &, Arc *, Arc * );
-    int			arc_split( Arc *, int, REAL, int );
-    void		check_s( Arc *, Arc * );
-    void		check_t( Arc *, Arc * );
-    inline void		link( Arc *, Arc *, Arc *, Arc * );
-    inline void		simple_link( Arc *, Arc * );
+    void		join_s( Bin &, Bin &, _SoNurbsArc *, _SoNurbsArc * );
+    void		join_t( Bin &, Bin &, _SoNurbsArc *, _SoNurbsArc * );
+    int			arc_split( _SoNurbsArc *, int, REAL, int );
+    void		check_s( _SoNurbsArc *, _SoNurbsArc * );
+    void		check_t( _SoNurbsArc *, _SoNurbsArc * );
+    inline void		link( _SoNurbsArc *, _SoNurbsArc *, _SoNurbsArc *, _SoNurbsArc * );
+    inline void		simple_link( _SoNurbsArc *, _SoNurbsArc * );
 };
 
 inline void

@@ -44,7 +44,7 @@
 
 #include "types.h"
 
-class Arc;
+class _SoNurbsArc;
 
 class Uarray {
 private:
@@ -53,7 +53,7 @@ private:
 public:
 			Uarray();
 			~Uarray();
-    long		init( REAL, Arc *, Arc * );
+    long		init( REAL, _SoNurbsArc *, _SoNurbsArc * );
     REAL *		uarray;
 };
 

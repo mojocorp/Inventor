@@ -103,7 +103,7 @@ public:
 protected:
     Renderhints		renderhints;
     Maplist		maplist;
-    Backend		backend;
+    _SoNurbsBackend		backend;
 
 private:
 

@@ -50,14 +50,14 @@
 #include "trimvertex.h"
 
 struct Bin;
-class Arc;
+class _SoNurbsArc;
 class BezierArc;	
-typedef Arc *Arc_ptr;
+typedef _SoNurbsArc *Arc_ptr;
 
 enum arc_side { arc_none = 0, arc_right, arc_top, arc_left, arc_bottom };
 
 
-class Arc : public PooledObj { /* an arc, in two list, the trim list and bin */
+class _SoNurbsArc : public PooledObj { /* an arc, in two list, the trim list and bin */
 public:
     static const int bezier_tag;
     static const int arc_tag;
@@ -71,8 +71,8 @@ public:
     long		type;		/* curve type */
     long		nuid;
 
-    inline		Arc( Arc *, PwlArc * );
-    inline		Arc( arc_side, long );
+    inline		_SoNurbsArc( _SoNurbsArc *, PwlArc * );
+    inline		_SoNurbsArc( arc_side, long );
 
     Arc_ptr		append( Arc_ptr );
     int			check( void );
@@ -112,7 +112,7 @@ public:
  */
 
 inline
-Arc::Arc( Arc *j, PwlArc *p )
+_SoNurbsArc::_SoNurbsArc( _SoNurbsArc *j, PwlArc *p )
 {
     bezierArc = NULL;
     pwlArc = p;
@@ -127,7 +127,7 @@ Arc::Arc( Arc *j, PwlArc *p )
  */
 
 inline
-Arc::Arc( arc_side side, long _nuid )
+_SoNurbsArc::_SoNurbsArc( arc_side side, long _nuid )
 {
     bezierArc = NULL;
     pwlArc = NULL;

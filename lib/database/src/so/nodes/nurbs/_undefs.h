@@ -34,12 +34,9 @@
  *
  */
 
-#undef Arc
-#undef ArcSdirSorter
-#undef ArcSorter
-#undef ArcTdirSorter
-#undef ArcTessellator
-#undef Backend
+#undef _SoNurbsArcTdirSorter
+#undef _SoNurbsArcTessellator
+#undef _SoNurbsBackend
 #undef BasicCurveEvaluator
 #undef BasicSurfaceEvaluator
 #undef BezierArc

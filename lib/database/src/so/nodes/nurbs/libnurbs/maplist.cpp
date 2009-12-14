@@ -48,7 +48,7 @@
 #include "mapdesc.h"
 #include "backend.h"
  
-Maplist::Maplist( Backend& b )
+Maplist::Maplist( _SoNurbsBackend& b )
     : mapdescPool( sizeof( Mapdesc ), 10, "mapdesc pool" ),
       backend( b )
 {
