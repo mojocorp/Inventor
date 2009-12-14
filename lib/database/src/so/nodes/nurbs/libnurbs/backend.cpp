@@ -55,7 +55,7 @@
  *-------------------------------------------------------------------------
  */
 void
-Backend::bgnsurf( int wiretris, int wirequads, long nuid )
+_SoNurbsBackend::bgnsurf( int wiretris, int wirequads, long nuid )
 {
 #ifndef NOWIREFRAME
     wireframetris = wiretris;
@@ -65,13 +65,13 @@ Backend::bgnsurf( int wiretris, int wirequads, long nuid )
 }
 
 void
-Backend::patch( REAL ulo, REAL uhi, REAL vlo, REAL vhi )
+_SoNurbsBackend::patch( REAL ulo, REAL uhi, REAL vlo, REAL vhi )
 {
     surfaceEvaluator.domain2f( ulo, uhi, vlo, vhi );
 }
 
 void
-Backend::surfbbox( long type, REAL *from, REAL *to )
+_SoNurbsBackend::surfbbox( long type, REAL *from, REAL *to )
 {
     surfaceEvaluator.range2f( type, from, to );
 }
@@ -81,7 +81,7 @@ Backend::surfbbox( long type, REAL *from, REAL *to )
  *-------------------------------------------------------------------------
  */
 void 
-Backend::surfpts(
+_SoNurbsBackend::surfpts(
     long type, 		/* geometry, color, texture, normal	*/
     REAL *pts, 		/* control points			*/
     long ustride,	/* distance to next point in u direction */
@@ -102,7 +102,7 @@ Backend::surfpts(
  *-------------------------------------------------------------------------
  */
 void
-Backend::surfgrid( REAL u0, REAL u1, long nu, REAL v0, REAL v1, long nv )
+_SoNurbsBackend::surfgrid( REAL u0, REAL u1, long nu, REAL v0, REAL v1, long nv )
 {
     surfaceEvaluator.mapgrid2f( nu, u0, u1, nv, v0, v1 );
 }
@@ -112,7 +112,7 @@ Backend::surfgrid( REAL u0, REAL u1, long nu, REAL v0, REAL v1, long nv )
  *-------------------------------------------------------------------------
  */
 void
-Backend::surfmesh( long u, long v, long n, long m )
+_SoNurbsBackend::surfmesh( long u, long v, long n, long m )
 {
 #ifndef NOWIREFRAME
     if( wireframequads ) {
@@ -152,7 +152,7 @@ Backend::surfmesh( long u, long v, long n, long m )
  *-------------------------------------------------------------------------
  */
 void
-Backend::endsurf( void )
+_SoNurbsBackend::endsurf( void )
 {
     surfaceEvaluator.endmap2f();
 }
@@ -163,7 +163,7 @@ Backend::endsurf( void )
  *-------------------------------------------------------------------------
  */
 void
-Backend::bgntmesh( const char * )
+_SoNurbsBackend::bgntmesh( const char * )
 {
 #ifndef NOWIREFRAME
 
@@ -185,7 +185,7 @@ Backend::bgntmesh( const char * )
 }
 
 void
-Backend::tmeshvert( GridTrimVertex *v )
+_SoNurbsBackend::tmeshvert( GridTrimVertex *v )
 {
     if( v->isGridVert() ) {
 	tmeshvert( v->g );
@@ -199,7 +199,7 @@ Backend::tmeshvert( GridTrimVertex *v )
  *-------------------------------------------------------------------------
  */
 void
-Backend::tmeshvert( TrimVertex *t )
+_SoNurbsBackend::tmeshvert( TrimVertex *t )
 {
     const long nuid = t->nuid;
     const REAL u = t->param[0];
@@ -239,7 +239,7 @@ Backend::tmeshvert( TrimVertex *t )
  *-------------------------------------------------------------------------
  */
 void
-Backend::tmeshvert( GridVertex *g )
+_SoNurbsBackend::tmeshvert( GridVertex *g )
 {
     const long u = g->gparam[0];
     const long v = g->gparam[1];
@@ -277,7 +277,7 @@ Backend::tmeshvert( GridVertex *g )
  *-------------------------------------------------------------------------
  */
 void
-Backend::swaptmesh( void )
+_SoNurbsBackend::swaptmesh( void )
 {
 #ifndef NOWIREFRAME
     if( wireframetris ) {
@@ -295,7 +295,7 @@ Backend::swaptmesh( void )
  *-------------------------------------------------------------------------
  */
 void
-Backend::endtmesh( void )
+_SoNurbsBackend::endtmesh( void )
 {
 #ifndef NOWIREFRAME
     if( ! wireframetris )
@@ -312,7 +312,7 @@ Backend::endtmesh( void )
  *-------------------------------------------------------------------------
  */
 void
-Backend::bgnoutline( void )
+_SoNurbsBackend::bgnoutline( void )
 {
     surfaceEvaluator.bgnline();
 }
@@ -322,7 +322,7 @@ Backend::bgnoutline( void )
  *-------------------------------------------------------------------------
  */
 void
-Backend::linevert( TrimVertex *t )
+_SoNurbsBackend::linevert( TrimVertex *t )
 {
     surfaceEvaluator.evalcoord2f( t->nuid, t->param[0], t->param[1] );
 }
@@ -332,7 +332,7 @@ Backend::linevert( TrimVertex *t )
  *-------------------------------------------------------------------------
  */
 void
-Backend::linevert( GridVertex *g )
+_SoNurbsBackend::linevert( GridVertex *g )
 {
     surfaceEvaluator.evalpoint2i( g->gparam[0], g->gparam[1] );
 }
@@ -342,7 +342,7 @@ Backend::linevert( GridVertex *g )
  *-------------------------------------------------------------------------
  */
 void
-Backend::endoutline( void )
+_SoNurbsBackend::endoutline( void )
 {
     surfaceEvaluator.endline();
 }
@@ -352,7 +352,7 @@ Backend::endoutline( void )
  *-------------------------------------------------------------------------
  */
 void
-Backend::triangle( TrimVertex *a, TrimVertex *b, TrimVertex *c )
+_SoNurbsBackend::triangle( TrimVertex *a, TrimVertex *b, TrimVertex *c )
 {
     bgntmesh( "spittriangle" );
     tmeshvert( a );
@@ -362,19 +362,19 @@ Backend::triangle( TrimVertex *a, TrimVertex *b, TrimVertex *c )
 }
 
 void 
-Backend::bgncurv( void )
+_SoNurbsBackend::bgncurv( void )
 {
     curveEvaluator.bgnmap1f( 0 );
 }
 
 void
-Backend::segment( REAL ulo, REAL uhi )
+_SoNurbsBackend::segment( REAL ulo, REAL uhi )
 {
     curveEvaluator.domain1f( ulo, uhi );
 } 
 
 void 
-Backend::curvpts( 
+_SoNurbsBackend::curvpts( 
     long type,		 	/* geometry, color, texture, normal */
     REAL *pts, 			/* control points */
     long stride, 		/* distance to next point */
@@ -388,37 +388,37 @@ Backend::curvpts(
 }
 
 void 
-Backend::curvgrid( REAL u0, REAL u1, long nu )
+_SoNurbsBackend::curvgrid( REAL u0, REAL u1, long nu )
 {
     curveEvaluator.mapgrid1f( nu, u0, u1 );
 }
 
 void 
-Backend::curvmesh( long from, long n )
+_SoNurbsBackend::curvmesh( long from, long n )
 {
     curveEvaluator.mapmesh1f( N_MESHFILL, from, from+n );
 }
 
 void 
-Backend::curvpt(REAL u)
+_SoNurbsBackend::curvpt(REAL u)
 {
     curveEvaluator.evalcoord1f( 0, u );
 }
 
 void 
-Backend::bgnline( void )		
+_SoNurbsBackend::bgnline( void )		
 {
     curveEvaluator.bgnline();
 }
 
 void 
-Backend::endline( void )
+_SoNurbsBackend::endline( void )
 {
     curveEvaluator.endline();
 }
 
 void 
-Backend::endcurv( void )
+_SoNurbsBackend::endcurv( void )
 {
     curveEvaluator.endmap1f();
 }

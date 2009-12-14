@@ -46,13 +46,13 @@
 #include "sorter.h"
 #include "arcsorter.h"
 
-class Arc;
+class _SoNurbsArc;
 class Subdivider;
 
-class ArcSorter : private Sorter {
+class _SoNurbsArcSorter : private Sorter {
 public:
-			ArcSorter(Subdivider &);
-    void		qsort( Arc **a, int n );
+			_SoNurbsArcSorter(Subdivider &);
+    void		qsort( _SoNurbsArc **a, int n );
 protected:
     virtual int		qscmp( char *, char * );
     Subdivider&		subdivider;
@@ -62,17 +62,17 @@ private:
 };
 
 
-class ArcSdirSorter : public ArcSorter {
+class _SoNurbsArcSdirSorter : public _SoNurbsArcSorter {
 public:
-			ArcSdirSorter( Subdivider & );
+			_SoNurbsArcSdirSorter( Subdivider & );
 private:
     int			qscmp( char *, char * );
 };
 
 
-class ArcTdirSorter : public ArcSorter {
+class _SoNurbsArcTdirSorter : public _SoNurbsArcSorter {
 public:
-			ArcTdirSorter( Subdivider & );
+			_SoNurbsArcTdirSorter( Subdivider & );
 private:
     int			qscmp( char *, char * );
 };

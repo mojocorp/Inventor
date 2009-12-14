@@ -52,9 +52,9 @@
 /* local preprocessor definitions */
 #define	ZERO		0.000001
 
-const int 	Arc::bezier_tag = (1<<13);
-const int 	Arc::arc_tag = (1<<3);
-const int 	Arc::tail_tag = (1<<6);
+const int 	_SoNurbsArc::bezier_tag = (1<<13);
+const int 	_SoNurbsArc::arc_tag = (1<<3);
+const int 	_SoNurbsArc::tail_tag = (1<<6);
 
 /*--------------------------------------------------------------------------
  * makeSide - attach a pwl arc to an arc and mark it as a border arc
@@ -62,7 +62,7 @@ const int 	Arc::tail_tag = (1<<6);
  */
 
 void
-Arc::makeSide( PwlArc *pwl, arc_side side )
+_SoNurbsArc::makeSide( PwlArc *pwl, arc_side side )
 {
     assert( pwl );
     assert( pwlArc == 0 );
@@ -80,7 +80,7 @@ Arc::makeSide( PwlArc *pwl, arc_side side )
  */
 
 int
-Arc::numpts( void )
+_SoNurbsArc::numpts( void )
 {
     Arc_ptr jarc = this;
     int npts = 0;
@@ -97,7 +97,7 @@ Arc::numpts( void )
  */
 
 void
-Arc::markverts( void )
+_SoNurbsArc::markverts( void )
 {
     Arc_ptr jarc = this;
 	
@@ -115,7 +115,7 @@ Arc::markverts( void )
  */
 
 void
-Arc::getextrema( Arc_ptr extrema[4] )
+_SoNurbsArc::getextrema( Arc_ptr extrema[4] )
 {
     REAL leftpt, botpt, rightpt, toppt;
 
@@ -155,7 +155,7 @@ Arc::getextrema( Arc_ptr extrema[4] )
  */
 
 void
-Arc::show()
+_SoNurbsArc::show()
 {
 /*#ifndef NDEBUG*/
      printf( "\tPWLARC NP: %d FL: 1\n", pwlArc->npts );
@@ -172,7 +172,7 @@ Arc::show()
  */
 
 void
-Arc::print( void )
+_SoNurbsArc::print( void )
 {
     Arc_ptr jarc = this;
 
@@ -201,7 +201,7 @@ Arc::print( void )
  */
 
 int
-Arc::isDisconnected( void )
+_SoNurbsArc::isDisconnected( void )
 {
     if( pwlArc == 0 ) return 0;
     if( prev->pwlArc == 0 ) return 0;
@@ -244,7 +244,7 @@ neq_vert( REAL	*v1, REAL *v2 )
  */
 
 int
-Arc::check( void )
+_SoNurbsArc::check( void )
 {
     if( this == 0 ) return 1;
     Arc_ptr jarc = this;
@@ -342,7 +342,7 @@ inline long tooclose( REAL x, REAL y )
  */
 
 Arc_ptr
-Arc::append( Arc_ptr jarc )
+_SoNurbsArc::append( Arc_ptr jarc )
 {
     if( jarc != 0 ) {
 	next = jarc->next;

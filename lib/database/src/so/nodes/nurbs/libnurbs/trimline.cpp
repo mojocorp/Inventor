@@ -114,7 +114,7 @@ Trimline::getPrevPt()
  *----------------------------------------------------------------------
  */
 void
-Trimline::getNextPts( REAL vval, Backend& backend )
+Trimline::getNextPts( REAL vval, _SoNurbsBackend& backend )
 {
     reset(); swap(); append( tinterp );
     assert( tinterp->param[1] >= vval );
@@ -136,7 +136,7 @@ Trimline::getNextPts( REAL vval, Backend& backend )
 }
 
 void 
-Trimline::getPrevPts( REAL vval, Backend& backend )
+Trimline::getPrevPts( REAL vval, _SoNurbsBackend& backend )
 {
     reset(); swap(); append( tinterp );
     assert( tinterp->param[1] >= vval );

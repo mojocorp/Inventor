@@ -50,13 +50,13 @@
 
 typedef REAL Maxmatrix[MAXCOORDS][MAXCOORDS];
 
-class Backend;
+class _SoNurbsBackend;
 
 class Mapdesc : public PooledObj {
     friend class Maplist;
 			
 public:
-    			Mapdesc( long, int, int, Backend & );
+    			Mapdesc( long, int, int, _SoNurbsBackend & );
     int			isProperty( long );
     REAL		getProperty( long );
     void		setProperty( long, REAL );
@@ -130,7 +130,7 @@ private:
     REAL 		culling_method;		/* check for culling */
     REAL		bbox_subdividing;
     Mapdesc *		next;
-    Backend &		backend;
+    _SoNurbsBackend &		backend;
 
     void		bbox( REAL [2][MAXCOORDS], REAL *, int, int, int, int );
     REAL		maxDifference( int, REAL *, int );

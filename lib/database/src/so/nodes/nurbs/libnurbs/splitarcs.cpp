@@ -85,7 +85,7 @@ Subdivider::split( Bin& bin, Bin& left, Bin& right, int param, REAL value )
 	*last = jarc;
 
     if( param == 0 ) { /* sort into increasing t order */
-	ArcSdirSorter sorter(*this);
+	_SoNurbsArcSdirSorter sorter(*this);
 	sorter.qsort( list, count );
 	
         //::qsort ((void *)list, count, sizeof(Arc_ptr), (cmpfunc)compare_s);
@@ -101,7 +101,7 @@ Subdivider::split( Bin& bin, Bin& left, Bin& right, int param, REAL value )
 		right.addarc( *lptr  );
 	}
     } else { /* sort into decreasing s order */
-	ArcTdirSorter sorter(*this);
+	_SoNurbsArcTdirSorter sorter(*this);
 	sorter.qsort( list, count );
         //::qsort ((void *)list, count, sizeof(Arc_ptr), (cmpfunc)compare_t);
         Arc_ptr *lptr;
@@ -200,8 +200,8 @@ Subdivider::join_s( Bin& left, Bin& right, Arc_ptr jarc1, Arc_ptr jarc2 )
     if( t1 == t2 ) {
 	simple_link( jarc1, jarc2 );
     } else {
-	Arc_ptr newright = new(arcpool) Arc( arc_right, 0 ); 
-	Arc_ptr newleft = new(arcpool) Arc( arc_left, 0 );
+	Arc_ptr newright = new(arcpool) _SoNurbsArc( arc_right, 0 ); 
+	Arc_ptr newleft = new(arcpool) _SoNurbsArc( arc_left, 0 );
 	assert( t1 < t2 );
 	if( isBezierArcType() ) {
 	    arctessellator.bezier( newright, s, s, t1, t2 );
@@ -274,8 +274,8 @@ Subdivider::join_t( Bin& bottom, Bin& top, Arc_ptr jarc1, Arc_ptr jarc2 )
     if( s1 == s2 ) {
 	simple_link( jarc1, jarc2 );
     } else {
-	Arc_ptr newtop = new(arcpool) Arc( arc_top, 0 );
-	Arc_ptr newbot = new(arcpool) Arc( arc_bottom, 0 );
+	Arc_ptr newtop = new(arcpool) _SoNurbsArc( arc_top, 0 );
+	Arc_ptr newbot = new(arcpool) _SoNurbsArc( arc_bottom, 0 );
 	assert( s1 > s2 );
 	if( isBezierArcType() ) {
 	    arctessellator.bezier( newtop, s1, s2, t, t );

@@ -178,7 +178,7 @@ Subdivider::monotonize( Arc_ptr jarc, Bin& bin )
 	    if( ! degenerate ) {
 	        /* make last segment into separate pwl curve */
 	        jarc->pwlArc->npts = vert - firstvert + 1;
-	        jarc = (new(arcpool) Arc( side, uid ))->append( jarc );
+	        jarc = (new(arcpool) _SoNurbsArc( side, uid ))->append( jarc );
 	        jarc->pwlArc = new(pwlarcpool) PwlArc();
 		bin.addarc( jarc );
 	    }

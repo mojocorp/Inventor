@@ -73,7 +73,7 @@ TrimRegion::getPts( Arc_ptr extrema )
 }
 
 void
-TrimRegion::getPts( Backend &backend )
+TrimRegion::getPts( _SoNurbsBackend &backend )
 {
     left.getNextPts( bot.vval, backend );
     right.getPrevPts( bot.vval, backend );

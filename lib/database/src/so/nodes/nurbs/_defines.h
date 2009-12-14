@@ -34,12 +34,6 @@
  *
  */
 
-#define Arc _lib_nurbs(Arc)
-#define ArcSdirSorter _lib_nurbs(ArcSdirSorter)
-#define ArcSorter _lib_nurbs(ArcSorter)
-#define ArcTdirSorter _lib_nurbs(ArcTdirSorter)
-#define ArcTessellator _lib_nurbs(ArcTessellator)
-#define Backend _lib_nurbs(Backend)
 #define BasicCurveEvaluator _lib_nurbs(BasicCurveEvaluator)
 #define BasicSurfaceEvaluator _lib_nurbs(BasicSurfaceEvaluator)
 #define BezierArc _lib_nurbs(BezierArc)

@@ -61,10 +61,10 @@
  *---------------------------------------------------------------------------
  */
 
-Subdivider::Subdivider( Renderhints& r, Backend& b ) 
+Subdivider::Subdivider( Renderhints& r, _SoNurbsBackend& b ) 
         : slicer( b ),
           arctessellator( trimvertexpool, pwlarcpool ),
-          arcpool( sizeof( Arc), 1, "arcpool" ),
+          arcpool( sizeof( _SoNurbsArc), 1, "arcpool" ),
  	  bezierarcpool( sizeof( BezierArc ), 1, "Bezarcpool" ),
           pwlarcpool( sizeof( PwlArc ), 1, "Pwlarcpool" ),
           renderhints( r ),
@@ -109,7 +109,7 @@ void
 Subdivider::addArc( REAL *cpts, Quilt *quilt, long _nuid )
 {
     BezierArc *bezierArc = new(bezierarcpool) BezierArc;
-    Arc *jarc  		= new(arcpool) Arc( arc_none, _nuid );
+    _SoNurbsArc *jarc  		= new(arcpool) _SoNurbsArc( arc_none, _nuid );
     jarc->pwlArc	= 0;
     jarc->bezierArc	= bezierArc;
     bezierArc->order	= quilt->qspec->order;
@@ -128,7 +128,7 @@ Subdivider::addArc( REAL *cpts, Quilt *quilt, long _nuid )
 void
 Subdivider::addArc( int npts, TrimVertex *pts, long _nuid ) 
 {
-    Arc *jarc 		= new(arcpool) Arc( arc_none, _nuid );
+    _SoNurbsArc *jarc 		= new(arcpool) _SoNurbsArc( arc_none, _nuid );
     jarc->pwlArc	= new(pwlarcpool) PwlArc( npts, pts );        
     initialbin.addarc( jarc  );
     pjarc		= jarc->append( pjarc );
@@ -532,22 +532,22 @@ Subdivider::makeBorderTrim( const REAL *from, const REAL *to )
 
     pjarc = 0;
 
-    Arc_ptr jarc = new(arcpool) Arc( arc_bottom, 0 );
+    Arc_ptr jarc = new(arcpool) _SoNurbsArc( arc_bottom, 0 );
     arctessellator.bezier( jarc, smin, smax, tmin, tmin );
     initialbin.addarc( jarc  );
     pjarc = jarc->append( pjarc );
 
-    jarc = new(arcpool) Arc( arc_right, 0 );
+    jarc = new(arcpool) _SoNurbsArc( arc_right, 0 );
     arctessellator.bezier( jarc, smax, smax, tmin, tmax );
     initialbin.addarc( jarc  );
     pjarc = jarc->append( pjarc );
 
-    jarc = new(arcpool) Arc( arc_top, 0 );
+    jarc = new(arcpool) _SoNurbsArc( arc_top, 0 );
     arctessellator.bezier( jarc, smax, smin, tmax, tmax );
     initialbin.addarc( jarc  );
     pjarc = jarc->append( pjarc );
 
-    jarc = new(arcpool) Arc( arc_left, 0 );
+    jarc = new(arcpool) _SoNurbsArc( arc_left, 0 );
     arctessellator.bezier( jarc, smin, smin, tmax, tmin );
     initialbin.addarc( jarc  );
     jarc->append( pjarc );

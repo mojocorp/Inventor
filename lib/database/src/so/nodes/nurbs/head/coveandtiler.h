@@ -45,18 +45,18 @@
 
 #include "trimregion.h"
 
-class Backend;
+class _SoNurbsBackend;
 struct TrimVertex;
 struct GridVertex;
 class GridTrimVertex;
 
 class CoveAndTiler : virtual public TrimRegion {
 public:
-    			CoveAndTiler( Backend& );
+    			CoveAndTiler( _SoNurbsBackend& );
     			~CoveAndTiler( void );
     void 		coveAndTile( void );
 private:
-    Backend&		backend;
+    _SoNurbsBackend&		backend;
     static const int 	MAXSTRIPSIZE;
     void		tile( long, long, long );
     void		coveLowerLeft( void );

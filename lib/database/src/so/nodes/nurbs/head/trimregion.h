@@ -46,8 +46,8 @@
 #include "gridline.h"
 #include "uarray.h"
 
-class Arc;
-class Backend;
+class _SoNurbsArc;
+class _SoNurbsBackend;
 
 class TrimRegion {
 public:
@@ -61,9 +61,9 @@ public:
     void		init( REAL );
     void		advance( REAL, REAL, REAL );
     void		setDu( REAL );
-    void		init( long, Arc * );
-    void		getPts( Arc * );
-    void		getPts( Backend & );
+    void		init( long, _SoNurbsArc * );
+    void		getPts( _SoNurbsArc * );
+    void		getPts( _SoNurbsBackend & );
     void		getGridExtent( TrimVertex *, TrimVertex * );
     void		getGridExtent( void );
     int			canTile( void );

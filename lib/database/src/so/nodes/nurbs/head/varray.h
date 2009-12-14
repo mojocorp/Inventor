@@ -44,13 +44,13 @@
 
 #include "types.h"
 
-class Arc;
+class _SoNurbsArc;
 
 class Varray {
 public:
 			Varray();
 			~Varray();
-    long		init( REAL, Arc *, Arc * );
+    long		init( REAL, _SoNurbsArc *, _SoNurbsArc * );
     REAL *		varray;
     REAL		vval[1000];
     long		voffset[1000];
@@ -58,7 +58,7 @@ public:
 
 private:
     long		size;
-    inline void		update( Arc *, long[2], REAL );
+    inline void		update( _SoNurbsArc *, long[2], REAL );
     void		grow( long );
     inline void		append( REAL );
 };

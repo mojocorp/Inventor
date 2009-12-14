@@ -46,7 +46,7 @@
 
 class Jarcloc {
 private:
-    Arc * 		arc;
+    _SoNurbsArc * 		arc;
     TrimVertex		*p;
     TrimVertex		*plast;
 public:

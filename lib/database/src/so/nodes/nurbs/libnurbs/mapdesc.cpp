@@ -48,7 +48,7 @@
 #include "nurbsconsts.h"
 #include "mapdesc.h"
 
-Mapdesc::Mapdesc( long _type, int _israt, int _ncoords, Backend& b ) 
+Mapdesc::Mapdesc( long _type, int _israt, int _ncoords, _SoNurbsBackend& b ) 
     : backend( b )
 {
     type 		= _type;
