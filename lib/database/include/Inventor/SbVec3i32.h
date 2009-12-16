@@ -97,7 +97,7 @@ class INVENTOR_API SbVec3i32 {
     friend INVENTOR_API SbVec3i32	operator *(int32_t d, const SbVec3i32 &v) { return v * d; }
 
     /// Component-wise binary scalar division operator
-    friend INVENTOR_API SbVec3i32	operator /(const SbVec3i32 &v, int32_t d) { return v * (1.0f / d); }
+    friend INVENTOR_API SbVec3i32	operator /(const SbVec3i32 &v, int32_t d) { SbVec3i32 val(v); val /= d; return val; }
 
     /// Component-wise binary vector addition operator
     friend INVENTOR_API SbVec3i32	operator +(const SbVec3i32 &v1, const SbVec3i32 &v2);

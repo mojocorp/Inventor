@@ -112,8 +112,14 @@ class INVENTOR_API SbVec4i32 {
     /// Component-wise scalar multiplication operator
     SbVec4i32 &	operator *=(int32_t d);
 
+    /// Component-wise scalar multiplication operator
+    SbVec4i32 &	operator *=(double d);
+
     /// Component-wise scalar division operator
-    SbVec4i32 &	operator /=(int32_t d) { return *this *= (1.0f / d); }
+    SbVec4i32 &	operator /=(int32_t d) { vec[0] /= d; vec[1] /= d; vec[2] /= d; vec[3] /= d; return *this; }
+
+    /// Component-wise scalar division operator
+    SbVec4i32 &	operator /=(double d) { return *this *= (1.0f / d); }
 
     /// Component-wise vector addition operator
     SbVec4i32 &	operator +=(const SbVec4i32 &u);
@@ -131,7 +137,10 @@ class INVENTOR_API SbVec4i32 {
     friend INVENTOR_API SbVec4i32	operator *(int32_t d, const SbVec4i32 &v) { return v * d; }
 
     /// Component-wise binary scalar division operator
-    friend INVENTOR_API SbVec4i32	operator /(const SbVec4i32 &v, int32_t d) { return v * (1.0f / d); }
+    friend INVENTOR_API SbVec4i32	operator /(const SbVec4i32 &v, int32_t d) { SbVec4i32 val(v); val /= d; return val; }
+
+    /// Component-wise binary scalar division operator
+    friend INVENTOR_API SbVec4i32	operator /(const SbVec4i32 &v, double d) { SbVec4i32 val(v); val /= d; return val; }
 
     /// Component-wise binary vector addition operator
     friend INVENTOR_API SbVec4i32	operator +(const SbVec4i32 &v1, const SbVec4i32 &v2);
