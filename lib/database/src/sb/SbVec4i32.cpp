@@ -155,17 +155,27 @@
  // Component-wise scalar multiplication operator
  //
 
- SbVec4i32 &
- SbVec4i32::operator *=(int32_t d)
- {
-     vec[0] *= d;
-     vec[1] *= d;
-     vec[2] *= d;
-     vec[3] *= d;
+SbVec4i32 &
+SbVec4i32::operator *=(int32_t d)
+{
+    vec[0] *= d;
+    vec[1] *= d;
+    vec[2] *= d;
+    vec[3] *= d;
 
-     return *this;
- }
+    return *this;
+}
 
+SbVec4i32 &
+SbVec4i32::operator *=(double d)
+{
+    vec[0] *= d;
+    vec[1] *= d;
+    vec[2] *= d;
+    vec[3] *= d;
+
+    return *this;
+}
  //
  // Component-wise vector addition operator
  //
