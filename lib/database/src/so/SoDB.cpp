@@ -324,7 +324,7 @@ SoDB::registerHeader(const SbString &header, SbBool isBinary, float ivVersion,
 	return (FALSE);
 	
     // The string must not contain any newline characters.
-    for (int i = 1; i < header.getLength(); i++)
+    for (size_t i = 1; i < header.getLength(); i++)
 	if (string[i] == '\n')
 	    return (FALSE);
 	 

@@ -521,7 +521,7 @@ SoText3::GLRender(SoGLRenderAction *action)
 	    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 	    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 	    GLfloat params[4];
-	    params[0] = -1.0/myFont->getHeight();
+	    params[0] = -1.0f/myFont->getHeight();
 	    params[1] = params[2] = params[3] = 0.0;
 	    glTexGenfv(GL_S, GL_OBJECT_PLANE, params);
 	    params[1] = -params[0];
@@ -568,7 +568,7 @@ SoText3::GLRender(SoGLRenderAction *action)
 	    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 	    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 	    GLfloat params[4];
-	    params[0] = 1.0/myFont->getHeight();
+	    params[0] = 1.0f/myFont->getHeight();
 	    params[1] = params[2] = params[3] = 0.0;
 	    glTexGenfv(GL_S, GL_OBJECT_PLANE, params);
 	    params[1] = params[0];

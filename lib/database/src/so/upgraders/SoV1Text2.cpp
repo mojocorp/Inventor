@@ -144,11 +144,11 @@ SoV1Text2::convertToUTF8(const SbString &strng)
 {
     const char* str = strng.getString();
     SbBool ascii = TRUE;
-    for (int i= 0; i< strng.getLength(); i++){
-	if ( str[i]& 0x80) {
-	    ascii = FALSE;
-	    break;
-	}
+    for (size_t i= 0; i< strng.getLength(); i++){
+        if ( str[i]& 0x80) {
+            ascii = FALSE;
+            break;
+        }
     }
     if (ascii) return &strng;
     

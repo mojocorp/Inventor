@@ -106,10 +106,10 @@ SoTransformerDragger::SoTransformerDragger()
     if (SO_KIT_IS_FIRST_INSTANCE())
 	readDefaultParts("transformerDragger.iv", geomBuffer, sizeof(geomBuffer));
 
-    SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
-    SO_KIT_ADD_FIELD(scaleFactor, (1.0, 1.0, 1.0));
-    SO_KIT_ADD_FIELD(rotation,    (0.0, 0.0, 0.0, 1.0));
-    SO_KIT_ADD_FIELD(minDiscRotDot, (0.025));
+    SO_KIT_ADD_FIELD(translation, (0.0f, 0.0f, 0.0f));
+    SO_KIT_ADD_FIELD(scaleFactor, (1.0f, 1.0f, 1.0f));
+    SO_KIT_ADD_FIELD(rotation,    (0.0f, 0.0f, 0.0f, 1.0f));
+    SO_KIT_ADD_FIELD(minDiscRotDot, (0.025f));
 
     SO_KIT_INIT_INSTANCE();
 

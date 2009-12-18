@@ -268,7 +268,7 @@ SoScale1Dragger::drag()
     // [3] Change in scale is the ratio of newDist to oldDist
 #define TINY 0.0001
     float delta = ( fabs(oldDist) < TINY || fabs(newDist) < TINY) 
-		    ? 1.0 : newDist / oldDist;
+		    ? 1.0f : newDist / oldDist;
 #undef TINY
 
     // Constrain the scaling to be greater than getMinScale().

@@ -89,7 +89,7 @@
 // The smallest scale that any dragger will write. If the user attempts
 // to go below this amount, the dragger will set it to this minimum.
 // Default is .001
-float SoDragger::minScale = .001;
+float SoDragger::minScale = .001f;
 
 SO_KIT_SOURCE(SoDragger);
 

@@ -42,12 +42,6 @@ class INVENTOR_API SbVec3i32 {
     /// Returns 3 individual components
     void	getValue(int32_t &x, int32_t &y, int32_t &z) const;
 
-    /// Returns geometric length of vector
-    int32_t	length() const;
-
-    /// Changes vector to be unit length, returning the length before normalization.
-    int32_t	normalize();
-
     /// Negates each component of vector in place
     void	negate();
 
@@ -114,10 +108,6 @@ class INVENTOR_API SbVec3i32 {
     /// Equality comparison within given tolerance - the square of the
     /// length of the maximum distance between the two vectors
     SbBool		equals(const SbVec3i32 & v, int32_t tolerance) const;
-
-    /// Returns principal axis that is closest (based on maximum dot
-    /// product) to this vector
-    SbVec3i32		getClosestAxis() const;
 
   protected:
     int32_t	vec[3];		// Storage for vector components

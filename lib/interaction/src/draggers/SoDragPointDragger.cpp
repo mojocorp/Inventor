@@ -205,9 +205,9 @@ SoDragPointDragger::SoDragPointDragger()
     SoRotation *myRotX = new SoRotation;
     SoRotation *myRotY = new SoRotation;
     SoRotation *myRotZ = new SoRotation;
-    myRotX->rotation = SbRotation( SbVec3f(1,0,0), 1.57079 );
-    myRotY->rotation = SbRotation( SbVec3f(0,1,0), 1.57079 );
-    myRotZ->rotation = SbRotation( SbVec3f(0,0,1), 1.57079 );
+    myRotX->rotation = SbRotation( SbVec3f(1,0,0), 1.57079f );
+    myRotY->rotation = SbRotation( SbVec3f(0,1,0), 1.57079f );
+    myRotZ->rotation = SbRotation( SbVec3f(0,0,1), 1.57079f );
     setAnyPartAsDefault("rotX", myRotX );
     setAnyPartAsDefault("rotY", myRotY );
     setAnyPartAsDefault("rotZ", myRotZ );
@@ -282,7 +282,7 @@ SoDragPointDragger::SoDragPointDragger()
 
     // The jump axes will jump when the edit point gets within
     // 10% of their ends
-    jumpLimit = .1;
+    jumpLimit = .1f;
 
     // makes the offsetWorkLimit box
     limitBox.makeEmpty();
@@ -882,7 +882,7 @@ SoDragPointDragger::checkBoxLimits()
     for (int i = 0; i < 3; i++) {
 
 	float length = boxSize[i];
-	float halfLength = length * 0.5;
+	float halfLength = length * 0.5f;
 
 	// Check the location of startLocalHitPt against boundaries of the limit
 	// box (keeping in mind the jump limit as a % of the total length).

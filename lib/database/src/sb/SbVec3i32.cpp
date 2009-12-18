@@ -44,16 +44,6 @@
  }
 
  //
- // Returns geometric length of vector
- //
-
- int32_t
- SbVec3i32::length() const
- {
-     return sqrtf(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
- }
-
- //
  // Negates each component of vector in place
  //
 
@@ -63,23 +53,6 @@
      vec[0] = -vec[0];
      vec[1] = -vec[1];
      vec[2] = -vec[2];
- }
-
- //
- // Changes vector to be unit length
- //
-
- int32_t
- SbVec3i32::normalize()
- {
-     int32_t len = length();
-
-     if (len != 0.0f)
- 	(*this) *= (1.0f / len);
-
-     else setValue(0.0f, 0.0f, 0.0f);
-
-     return len;
  }
 
  SbVec3i32 &
@@ -112,9 +85,9 @@
  SbVec3i32 &
  SbVec3i32::operator *=(double d)
  {
-     vec[0] *= d;
-     vec[1] *= d;
-     vec[2] *= d;
+     vec[0] = (int32_t)(vec[0] * d);
+     vec[1] = (int32_t)(vec[1] * d);
+     vec[2] = (int32_t)(vec[2] * d);
 
      return *this;
  }
@@ -215,46 +188,4 @@
      SbVec3i32	diff = *this - v;
 
      return diff.dot(diff) <= tolerance;
- }
-
- //
- // Returns principal axis that is closest (based on maximum dot
- // product) to this vector.
- //
-
- SbVec3i32
- SbVec3i32::getClosestAxis() const
- {
-     SbVec3i32	axis(0.0f, 0.0f, 0.0f), bestAxis;
-     int32_t	d, max = -21.234f;
-
- #define TEST_AXIS()							      \
-     if ((d = dot(axis)) > max) {					      \
- 	max = d;							      \
- 	bestAxis = axis;						      \
-     }
-
-     axis[0] = 1.0;	// +x axis
-     TEST_AXIS();
-
-     axis[0] = -1.0;	// -x axis
-     TEST_AXIS();
-     axis[0] = 0.0;
-
-     axis[1] = 1.0;	// +y axis
-     TEST_AXIS();
-
-     axis[1] = -1.0;	// -y axis
-     TEST_AXIS();
-     axis[1] = 0.0;
-
-     axis[2] = 1.0;	// +z axis
-     TEST_AXIS();
-
-     axis[2] = -1.0;	// -z axis
-     TEST_AXIS();
-
- #undef TEST_AXIS
-
-     return bestAxis;
  }

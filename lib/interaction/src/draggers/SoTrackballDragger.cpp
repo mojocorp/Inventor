@@ -212,8 +212,8 @@ SoTrackballDragger::SoTrackballDragger()
     animationEnabled = TRUE;
     wasSpinningAtDragStart = FALSE;
 
-    sphereProj = new SbSphereSectionProjector( 0.85 );
-    stripeProj = new SbCylinderPlaneProjector( 0.85 );
+    sphereProj = new SbSphereSectionProjector( 0.85f );
+    stripeProj = new SbCylinderPlaneProjector( 0.85f );
 
     // add the callbacks to perform the dragging
     addStartCallback(  &SoTrackballDragger::startCB );
@@ -725,7 +725,7 @@ SoTrackballDragger::scaleDrag()
     // [3] Change in scale is ratio of newRad to oldRad
 #define TINY .0001
     float delta = (fabs(oldRad) < TINY || fabs(newRad) < TINY)
-		    ? 1.0 : newRad / oldRad;
+		    ? 1.0f : newRad / oldRad;
 #undef TINY
 
     // constrain the scaling to be greater than getMinScale()
@@ -774,9 +774,9 @@ SoTrackballDragger::userStripeDrag()
     // get the newHitPt
     // temporarily make the tolerance = 1.0, since we want all possible sphere
     // intersections. This makes for a nicer interface of axis picking
-    ((SbSphereSectionProjector *)sphereProj)->setTolerance( 1.0 );
+    ((SbSphereSectionProjector *)sphereProj)->setTolerance( 1.0f );
     newHitPt = sphereProj->project(getNormalizedLocaterPosition());
-    ((SbSphereSectionProjector *)sphereProj)->setTolerance( 0.85 );
+    ((SbSphereSectionProjector *)sphereProj)->setTolerance( 0.85f );
 
     // find the new axis
     userAxisVec = newHitPt;

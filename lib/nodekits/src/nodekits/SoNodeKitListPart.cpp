@@ -775,7 +775,7 @@ SoNodeKitListPart::getBoundingBox( SoGetBoundingBoxAction *action )
     }
     // Now, set the center to be the average:
     if (numCenters != 0)
-	action->setCenter(totalCenter / numCenters, FALSE);
+	action->setCenter(totalCenter / (float)numCenters, FALSE);
 
 }
 

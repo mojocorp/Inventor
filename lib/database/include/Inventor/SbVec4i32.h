@@ -88,14 +88,8 @@ class INVENTOR_API SbVec4i32 {
     /// Returns 4 individual components
     void	getValue(int32_t &x, int32_t &y, int32_t &z, int32_t &w) const;
 
-    /// Returns geometric length of vector
-    int32_t	length() const;
-
     /// Negates each component of vector in place
     void	negate();
-
-    /// Changes vector to be unit length, returning the length before normalization.
-    int32_t	normalize();
 
     /// Sets value of vector from array of 4 components
     SbVec4i32 &	setValue(const int32_t v[4]);

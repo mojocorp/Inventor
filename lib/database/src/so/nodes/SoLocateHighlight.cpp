@@ -110,7 +110,7 @@ SoLocateHighlight::SoLocateHighlight()
 
     SO_NODE_ADD_FIELD(mode, (AUTO));
     SO_NODE_ADD_FIELD(style, (EMISSIVE));
-    SO_NODE_ADD_FIELD(color, (.3,.3,.3));
+    SO_NODE_ADD_FIELD(color, (.3f,.3f,.3f));
     
     // Set up static info for enum fields
     SO_NODE_DEFINE_ENUM_VALUE(Styles,	EMISSIVE);

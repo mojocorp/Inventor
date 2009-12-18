@@ -206,7 +206,7 @@ SoLOD::getBoundingBox(SoGetBoundingBoxAction *action)
 	// Now, set the center to be the average. Don't re-transform the
 	// average, which should already be transformed.
 	if (numCenters != 0)
-	    action->setCenter(totalCenter / numCenters, FALSE);
+	    action->setCenter(totalCenter / (float)numCenters, FALSE);
     }
     
     // if IN_PATH, traverse the (first) child in path to accumulate state:    	   
