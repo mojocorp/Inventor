@@ -372,7 +372,7 @@ SoBitmapFontCache::callLists(const SbString &string)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i=0; i<string.getLength(); i++)
+    for (size_t i=0; i<string.getLength(); i++)
     {
         if (!listFlags[string.getString()[i]])
             printf("no display list for %c\n", string.getString()[i]);
@@ -439,7 +439,7 @@ SoBitmapFontCache::getWidth(const SbString &str)
     float result = 0.0;
 
     const char *chars = str.getString();
-    for (int i = 0; i < str.getLength(); i++) {
+    for (size_t i = 0; i < str.getLength(); i++) {
         const FLbitmap *bmap = getBitmap(chars[i]);
         if (bmap != NULL)
             result += bmap->xmove;
@@ -504,7 +504,7 @@ SoBitmapFontCache::drawString(const SbString &string)
 
     // If there aren't any other caches open, build display lists for
     // the characters we can:
-    for (int i = 0; i < string.getLength(); i++) {
+    for (size_t i = 0; i < string.getLength(); i++) {
         // See if the font cache already has (or can build) a display
         // list for this character:
         if (!hasDisplayList(chars[i])) {
@@ -520,7 +520,7 @@ SoBitmapFontCache::drawString(const SbString &string)
     } else {
         // if we don't, draw the string character-by-character, using the
         // display lists we do have:
-        for (int i = 0; i < string.getLength(); i++) {
+        for (size_t i = 0; i < string.getLength(); i++) {
             if (!hasDisplayList(chars[i])) {
                 drawCharacter(chars[i]);
             }

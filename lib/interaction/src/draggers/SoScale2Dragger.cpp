@@ -272,9 +272,9 @@ SoScale2Dragger::drag()
     // [3] Change in scale is the ratio of new to old
 #define TINY 0.0001
     float xAxisDelta = (fabs(newXAxisDist) < TINY || fabs(oldXAxisDist) < TINY) 
-		       ? 1.0 : newXAxisDist / oldXAxisDist;
+		       ? 1.0f : newXAxisDist / oldXAxisDist;
     float yAxisDelta = (fabs(newYAxisDist) < TINY || fabs(oldYAxisDist) < TINY) 
-		       ? 1.0 : newYAxisDist / oldYAxisDist;
+		       ? 1.0f : newYAxisDist / oldYAxisDist;
 #undef TINY
 
     // Constrain the scaling to be greater than getMinScale().

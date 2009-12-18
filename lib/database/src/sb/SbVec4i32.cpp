@@ -81,17 +81,6 @@
 
 
  //
- // Returns geometric length of vector
- //
-
- int32_t
- SbVec4i32::length() const
- {
-     return sqrtf(vec[0] * vec[0] + vec[1] * vec[1]
- 		 + vec[2] * vec[2] + vec[3] * vec[3]);
- }
-
- //
  // Negates each component of vector in place
  //
 
@@ -102,23 +91,6 @@
      vec[1] = -vec[1];
      vec[2] = -vec[2];
      vec[3] = -vec[3];
- }
-
- //
- // Changes vector to be unit length
- //
-
- int32_t
- SbVec4i32::normalize()
- {
-     int32_t len = length();
-
-     if (len != 0.0f)
- 	(*this) *= (1.0f / len);
-
-     else setValue(0.0f, 0.0f, 0.0f, 0.0f);
-
-     return len;
  }
 
  //
@@ -169,10 +141,10 @@ SbVec4i32::operator *=(int32_t d)
 SbVec4i32 &
 SbVec4i32::operator *=(double d)
 {
-    vec[0] *= d;
-    vec[1] *= d;
-    vec[2] *= d;
-    vec[3] *= d;
+    vec[0] = (int32_t)(vec[0] * d);
+    vec[1] = (int32_t)(vec[1] * d);
+    vec[2] = (int32_t)(vec[2] * d);
+    vec[3] = (int32_t)(vec[3] * d);
 
     return *this;
 }

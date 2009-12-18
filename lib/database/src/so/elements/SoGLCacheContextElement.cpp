@@ -274,7 +274,7 @@ SoGLCacheContextElement::extSupported(SoState *state, int ext)
 //    mip-mapped textures quickly.
 //
 SbBool
-SoGLCacheContextElement::areMipMapsFast(SoState *state)
+SoGLCacheContextElement::areMipMapsFast(SoState * /*state*/)
 //
 ////////////////////////////////////////////////////////////////////////
 {

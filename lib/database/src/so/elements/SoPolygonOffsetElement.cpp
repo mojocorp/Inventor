@@ -13,7 +13,7 @@ SoPolygonOffsetElement::initClass()
 }
 
 void
-SoPolygonOffsetElement::init(SoState * state)
+SoPolygonOffsetElement::init(SoState * /*state*/)
 {
    SoPolygonOffsetElement::getDefault(offsetfactor, offsetunits, style, active);
 }
