@@ -306,11 +306,11 @@ SoNormalGenerator::generate(float creaseAngle)
     tolerance = (hashScale[0] + hashScale[1] + hashScale[2]) / 10000;
     SbVec3f toleranceVec(tolerance, tolerance, tolerance);
     if (hashScale[0] != 0.0)
-	hashScale[0] = .333 * numPoints / hashScale[0];
+	hashScale[0] = .333f * numPoints / hashScale[0];
     if (hashScale[1] != 0.0)
-	hashScale[1] = .333 * numPoints / hashScale[1];
+	hashScale[1] = .333f * numPoints / hashScale[1];
     if (hashScale[2] != 0.0)
-	hashScale[2] = .333 * numPoints / hashScale[2];
+	hashScale[2] = .333f * numPoints / hashScale[2];
 
     // Compute the base for the hash function, which is just the
     // minimum point of the bounding box:
@@ -381,7 +381,7 @@ SoNormalGenerator::generate(float creaseAngle)
 	// (mostly) the same as the zero vector.
 	// We use a fixed tolerance for normals (suggested by Tim Wiegand)
 	// since normals are unit length
-	SbBool isDegenerate = equal(zeroVec, sum, 1.e-4);
+	SbBool isDegenerate = equal(zeroVec, sum, 1.e-4f);
 
 	// Smooth normals if face normals are within crease angle
 	for (j = indirect[i]; j != i; j = indirect[j]) {

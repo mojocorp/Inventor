@@ -320,8 +320,7 @@ SoBase::setName(const SbName &newName)
     // Check for beginning-with-a-number:
     if (!SbName::isBaseNameStartChar(str[0])) isBad = TRUE;
 
-    int i;
-    for (i = 1; i < newName.getLength() && !isBad; i++) {
+    for (size_t i = 1; i < newName.getLength() && !isBad; i++) {
 	isBad = !SbName::isBaseNameChar(str[i]);
     }
 
@@ -336,7 +335,7 @@ SoBase::setName(const SbName &newName)
 	if (!SbName::isBaseNameStartChar(str[0])) {
 	    goodString += "_";
 	}
-	for (i = 0; i < newName.getLength(); i++) {
+	for (size_t i = 0; i < newName.getLength(); i++) {
 	    // Ugly little hack so we can use SbString's += operator,
 	    // which doesn't do char's (only char *'s):
 	    char temp[2];
@@ -1040,7 +1039,7 @@ SoBase::readReference(SoInput *in, SoBase *&base)
 	// characters:
 	if ( !in->isBinary()) {
 	    const char *chars = refName.getString();
-	    for (int i = 0; i < refName.getLength(); i++) {
+	    for (size_t i = 0; i < refName.getLength(); i++) {
 		if (chars[i] == '.') {
 		    in->putBack(chars+i);
 		    refName = SbString(chars, 0, i-1);

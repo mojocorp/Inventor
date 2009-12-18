@@ -147,7 +147,7 @@ SoV2Text2::convertToUTF8(const SbString &inString,
 {
     const char* str = inString.getString();
     SbBool ascii = TRUE;
-    for (int i= 0; i< inString.getLength(); i++){
+    for (size_t i= 0; i< inString.getLength(); i++){
 	if ( str[i]& 0x80) {
 	    ascii = FALSE;
 	    break;

@@ -139,8 +139,8 @@ SoOrthographicCamera::getViewVolume( float useAspectRatio) const
     float	camAspect = (useAspectRatio != 0.0 ? useAspectRatio :
 			     aspectRatio.getValue());
 
-    float xRadius = 0.5 * height.getValue() * camAspect;
-    float yRadius = 0.5 * height.getValue();
+    float xRadius = 0.5f * height.getValue() * camAspect;
+    float yRadius = 0.5f * height.getValue();
 
     // Set up the orthographic camera.
     view.ortho(- xRadius, xRadius, - yRadius, yRadius, 

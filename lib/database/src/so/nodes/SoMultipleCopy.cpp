@@ -203,7 +203,7 @@ SoMultipleCopy::doAction(SoAction *action)
     }
 
     if (gettingBBox && numCenters > 0)
-	((SoGetBoundingBoxAction *) action)->setCenter(totalCenter/numCenters,
+	((SoGetBoundingBoxAction *) action)->setCenter(totalCenter/(float)numCenters,
 						       FALSE);
 }
 

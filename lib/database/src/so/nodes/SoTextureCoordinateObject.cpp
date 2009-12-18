@@ -126,12 +126,7 @@ SoTextureCoordinateObject::valueCallback(void *instance,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureCoordinateObject *tc =
-        (SoTextureCoordinateObject *)instance;
-
-    static SbVec4f result(0.0f, 0.0f, 0.0f, 0.0f);
-
-    return result;
+    return SbVec4f(0.0f, 0.0f, 0.0f, 0.0f);
 }
 
 ////////////////////////////////////////////////////////////////////////
