@@ -673,16 +673,16 @@ SoText3::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
     // Front and back are straightforward:
     if (prts & FRONT) {
-	SbVec3f min(boxMin[0], boxMin[1], firstZ);
-	SbVec3f max(boxMax[0], boxMax[1], firstZ);
-	box.extendBy(min);
-	box.extendBy(max);
+	SbVec3f vmin(boxMin[0], boxMin[1], firstZ);
+	SbVec3f vmax(boxMax[0], boxMax[1], firstZ);
+	box.extendBy(vmin);
+	box.extendBy(vmax);
     }
     if (prts & BACK) {
-	SbVec3f min(boxMin[0], boxMin[1], lastZ);
-	SbVec3f max(boxMax[0], boxMax[1], lastZ);
-	box.extendBy(min);
-	box.extendBy(max);
+	SbVec3f vmin(boxMin[0], boxMin[1], lastZ);
+	SbVec3f vmax(boxMax[0], boxMax[1], lastZ);
+	box.extendBy(vmin);
+	box.extendBy(vmax);
     }
     //
     // Sides are trickier.  We figure out the maximum offset

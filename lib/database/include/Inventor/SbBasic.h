@@ -145,14 +145,6 @@ typedef int	SbBool;
 
 #  define _USE_MATH_DEFINES
 
-#ifndef WINGDIAPI
-#    define WINGDIAPI __declspec(dllimport)
-#endif
-
-#ifndef APIENTRY
-#    define APIENTRY __stdcall
-#endif
-
 #ifndef CALLBACK
 #   define CALLBACK    __stdcall
 #endif
