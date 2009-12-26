@@ -60,6 +60,7 @@
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/nodes/SoTransformation.h>
 #include <Inventor/fields/SoSFInt32.h>
+#include <Inventor/SbMatrix.h>
 
 class SoFullPath;
 
