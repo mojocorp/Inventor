@@ -61,6 +61,7 @@
 #include <Inventor/nodes/SoTransformation.h>
 #include <Inventor/fields/SoSFBool.h>
 #include <Inventor/fields/SoSFEnum.h>
+#include <Inventor/SbMatrix.h>
 
 /// Transformation node that undoes non-uniform 3D scales.
 /// \ingroup Nodes
