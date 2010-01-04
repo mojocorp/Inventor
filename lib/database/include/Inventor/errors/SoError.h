@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,12 +45,12 @@
  |   $Revision: 1.2 $
  |
  |   Description:
- |	This file defines the base SoError class.
+ | This file defines the base SoError class.
  |
  |   Classes:
- |	SoError
+ | SoError
  |
- |   Author(s)		: Paul S. Strauss
+ |   Author(s)  : Paul S. Strauss
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -62,7 +62,7 @@
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
-class SoError;		// Forward reference
+class SoError;  // Forward reference
 
 class SoBase;
 class SoEngine;
@@ -103,77 +103,90 @@ typedef void INVENTOR_API SoErrorCB(const SoError *error, void *data);
 /// \sa SoDebugError,SoMemoryError,SoReadError
 class INVENTOR_API SoError {
 
-  public:
+public:
     /// Sets handler callback for SoError class
-    static void		setHandlerCallback(SoErrorCB *cb, void *data) 	{ handlerCB = cb; cbData = data; }
+    static void setHandlerCallback(SoErrorCB *cb, void *data)  {
+        handlerCB = cb;
+        cbData = data;
+    }
 
     /// Returns handler callback for SoError class
-    static SoErrorCB *	getHandlerCallback()	{ return handlerCB; }
+    static SoErrorCB * getHandlerCallback() {
+        return handlerCB;
+    }
 
     /// Returns handler data for SoError class
-    static void *	getHandlerData()	{ return cbData; }
+    static void * getHandlerData() {
+        return cbData;
+    }
 
     /// Returns debug string containing full error info from instance
-    const SbString &	getDebugString() const { return debugString; }
+    const SbString & getDebugString() const {
+        return debugString;
+    }
 
     /// Returns type identifier for SoError class
-    static SoType	getClassTypeId()	{ return classTypeId; }
+    static SoType getClassTypeId() {
+        return classTypeId;
+    }
 
     /// Returns type identifier for error instance
-    virtual SoType	getTypeId() const;
+    virtual SoType getTypeId() const;
 
     /// Returns TRUE if instance is of given type or is derived from it
-    SbBool		isOfType(SoType type) const;
+    SbBool isOfType(SoType type) const;
 
-  SoEXTENDER public:
+SoEXTENDER public:
     /// Posts an error. The debugString will be created from the given
     /// arguments, which are in printf() format
-    static void		post(const char *formatString ...);
+    static void post(const char *formatString ...);
 
     // These are convenience functions that return a printable string
     // representing the given object. For example, a node is
     // represented by name (if it has one) and by address; the
     // returned string will be something like:
     //    node named "squid" at address 0x1004dcba
-    static SbString	getString(const SoNode *node);
-    static SbString	getString(const SoPath *path);
-    static SbString	getString(const SoEngine *engine);
+    static SbString getString(const SoNode *node);
+    static SbString getString(const SoPath *path);
+    static SbString getString(const SoEngine *engine);
 
-  SoINTERNAL public:
+SoINTERNAL public:
     // Initializes SoError class
-    static void		initClass();
+    static void initClass();
 
     // Initialize ALL Inventor error classes
-    static void		initClasses();
+    static void initClasses();
 
-  protected:
+protected:
     // The default error handler callback - it just prints to stderr
-    static void		defaultHandlerCB(const SoError *error, void *data);
+    static void defaultHandlerCB(const SoError *error, void *data);
 
     // Returns handler callback (and data) to use for a given instance
-    virtual SoErrorCB *	getHandler(void *&data) const;
+    virtual SoErrorCB * getHandler(void *&data) const;
 
     // Sets/appends to the debug string
-    void		setDebugString(const char *string)
-	{ debugString = string; }
-    void		appendToDebugString(const char *string)
-	{ debugString += string; }
+    void setDebugString(const char *string) {
+        debugString = string;
+    }
+    void appendToDebugString(const char *string) {
+        debugString += string;
+    }
 
     // Calls appropriate handler for an error instance. Application
     // writers can set breakpoints at this when debugging.
-    void		handleError();
+    void handleError();
 
     virtual ~SoError() {}
 
-  private:
-    static SoType	classTypeId;	// Type id of SoError class
-    static SoErrorCB	*handlerCB;	// Handler callback for SoError class
-    static void		*cbData;	// User data for callback
-    static SbBool	wasInitted;	// TRUE if error class initialized
-    SbString		debugString;	// Detailed error message string
+private:
+    static SoType classTypeId; // Type id of SoError class
+    static SoErrorCB *handlerCB; // Handler callback for SoError class
+    static void  *cbData; // User data for callback
+    static SbBool wasInitted; // TRUE if error class initialized
+    SbString  debugString; // Detailed error message string
 
     // The getString() methods use this one
-    static SbString	getBaseString(const SoBase *base, const char *what);
+    static SbString getBaseString(const SoBase *base, const char *what);
 };
 
 #endif /* _SO_ERROR */

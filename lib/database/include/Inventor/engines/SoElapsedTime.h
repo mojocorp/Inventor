@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,12 +45,12 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file contains the implementation of the ElapsedTime engine
+ | This file contains the implementation of the ElapsedTime engine
  |
  |   Classes:
- |	SoElapsedTime
+ | SoElapsedTime
  |
- |   Author(s)		: Gavin Bell
+ |   Author(s)  : Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -89,10 +89,10 @@
 /// \par File format/defaults:
 /// \code
 /// SoElapsedTime {
-///    timeIn	<current time>
-///    speed	1
-///    on	TRUE
-///    pause	FALSE
+///    timeIn <current time>
+///    speed 1
+///    on TRUE
+///    pause FALSE
 ///    reset
 /// }
 /// \endcode
@@ -101,66 +101,66 @@ class INVENTOR_API SoElapsedTime : public SoEngine {
 
     SO_ENGINE_HEADER(SoElapsedTime);
 
-  public:
+public:
     // Inputs
-    SoSFTime		timeIn;         ///< Running (clock) time
-    SoSFFloat		speed;          ///< Scale factor for time.
-    SoSFBool		on;             ///< TRUE to start running, FALSE to stop.
-    SoSFBool		pause;          ///< TRUE to freeze, FALSE to continue running.
-    SoSFTrigger		reset;          ///< Reset the base time.
+    SoSFTime  timeIn;         ///< Running (clock) time
+    SoSFFloat  speed;          ///< Scale factor for time.
+    SoSFBool  on;             ///< TRUE to start running, FALSE to stop.
+    SoSFBool  pause;          ///< TRUE to freeze, FALSE to continue running.
+    SoSFTrigger  reset;          ///< Reset the base time.
 
     // Output:
 
     /// Time elapsed, modified by the speed factor.
-    SoEngineOutput	timeOut;
+    SoEngineOutput timeOut;
 
     /// Constructor
     SoElapsedTime();
 
-  SoINTERNAL public:
+SoINTERNAL public:
 
     static void initClass();
 
-  protected:
+protected:
 
     // Detects when the running time input changed
-    virtual void	inputChanged(SoField *whichInput);
+    virtual void inputChanged(SoField *whichInput);
 
     // Writes instance to SoOutput. Takes care of not writing out
     // connection to realTime that is created in constructor.
-    virtual void	writeInstance(SoOutput *out);
+    virtual void writeInstance(SoOutput *out);
 
     // Reads stuff into instance.  Works around a problem with old
     // files that contain explicit references to the default
     // connection to realTime.
-    virtual SbBool	readInstance(SoInput *in, unsigned short flags);
+    virtual SbBool readInstance(SoInput *in, unsigned short flags);
 
-  private:
+private:
     enum Todo {
-	CHECK_ON	= (1<<0),
-	CHECK_PAUSE	= (1<<1),
-	RESET		= (1<<2)
+        CHECK_ON = (1<<0),
+        CHECK_PAUSE = (1<<1),
+        RESET  = (1<<2)
     };
     enum State {
-	STOPPED,	// Clock is not running
-	RUNNING,	// Clock is running
-	PAUSED		// Clock is running, but output is frozen
+        STOPPED, // Clock is not running
+        RUNNING, // Clock is running
+        PAUSED  // Clock is running, but output is frozen
     };
 
-    enum State		state;
-    unsigned int	todo;
-    SbTime		prevTimeOfDay;	 // Time of day when last
-					 // evaluate was called.
-    SbTime		prevTimeOut;	 // Last 'clock' time that 
-					 // was output.
-    float		prevClockTime;   // 'Clock' time when last 
-					 // evaluate was called.
+    enum State  state;
+    unsigned int todo;
+    SbTime  prevTimeOfDay;  // Time of day when last
+    // evaluate was called.
+    SbTime  prevTimeOut;  // Last 'clock' time that
+    // was output.
+    float  prevClockTime;   // 'Clock' time when last
+    // evaluate was called.
 
     // Destructor
     ~SoElapsedTime();
 
     // Evaluation method
-    virtual void	evaluate();
+    virtual void evaluate();
 };
 
 #endif  /* _SO_ELAPSED_TIME_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,12 +45,12 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	Definition of SoBase, the base class for several other Inventor
- |	classes. This class handles reference counting and
- |	notification and is the main entry point for reading and
- |	writing derived classes.
+ | Definition of SoBase, the base class for several other Inventor
+ | classes. This class handles reference counting and
+ | notification and is the main entry point for reading and
+ | writing derived classes.
  |
- |   Author(s)		: Paul S. Strauss, Nick Thompson, Gavin Bell
+ |   Author(s)  : Paul S. Strauss, Nick Thompson, Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -77,7 +77,7 @@ class SoPath;
 /// class handles reference counting, notification, and naming.
 /// \sa SoFieldContainer, SoNode, SoPath, SoEngine, SoDB
 class INVENTOR_API SoBase {
-  public:
+public:
 
     /// Adds a reference to an instance. Instances should be
     /// referenced when they will be used outside of the routine in which they
@@ -91,10 +91,10 @@ class INVENTOR_API SoBase {
     /// node is removed as a child or when a path that points to the node is
     /// changed or destroyed.
     /// \sa unref() unrefNoDelete()
-    void			ref() const;
+    void ref() const;
 
     /// Removes a reference to an instance, deleting it if count is now 0
-    void			unref() const;
+    void unref() const;
 
     /// Removes a reference to an instance, NOT deleting it if count is now 0
     /// Should be called when it is desired to decrement
@@ -102,18 +102,22 @@ class INVENTOR_API SoBase {
     /// reference count to zero. This is most useful in returning an object to
     /// a zero-reference-count state, like it was when it was created by
     /// #new method.
-    void			unrefNoDelete() const;
+    void unrefNoDelete() const;
 
     /// Marks an instance as modified, simulating a change to it. This will
     /// notify auditors (parent nodes, connected engines, and so on) of a
     /// change to this object and cause attached sensors to be triggered.
-    void			touch()		{ startNotify(); }
+    void touch()  {
+        startNotify();
+    }
 
     /// Returns type identifier for this class.
-    static SoType		getClassTypeId() { return classTypeId; }
+    static SoType getClassTypeId() {
+        return classTypeId;
+    }
 
     /// Returns the type identifier for a specific instance.
-    virtual SoType		getTypeId() const = 0;
+    virtual SoType getTypeId() const = 0;
 
     /// Returns TRUE if this object is of the type specified in \a type or is
     /// derived from that type.  Otherwise, it returns FALSE. For example,
@@ -122,12 +126,12 @@ class INVENTOR_API SoBase {
     /// \endcode
     /// returns TRUE if \a nodePtr is an instance of \c SoGroup or one of
     /// its subclasses.
-    SbBool			isOfType(SoType type) const;
+    SbBool isOfType(SoType type) const;
 
     /// Returns the name of an instance. If the instance has not been named,
     /// an empty \c SbName is returned. Objects that are named can be looked
     /// up using the getByName() methods of \c SoNode, \c SoEngine, or \c SoPath.
-    virtual SbName		getName() const;
+    virtual SbName getName() const;
 
     /// Sets the name of an instance. Object names are preserved when objects
     /// are written to or read from files.  Object names must not begin with a
@@ -139,9 +143,9 @@ class INVENTOR_API SoBase {
     /// This method will replace any bad charaters in the name with
     /// underscore characters, and will print out an error message if the
     /// application is using the Inventor debugging library.
-    virtual void		setName(const SbName &name);
+    virtual void setName(const SbName &name);
 
-  protected:
+protected:
     // Constructor is protected - this is an abstract class
     SoBase();
 
@@ -150,15 +154,17 @@ class INVENTOR_API SoBase {
 
     // Actually deletes an instance. Allows subclasses to do other
     // stuff before the deletion if necessary.
-    virtual void		destroy();
+    virtual void destroy();
 
     // Returns current write counter
-    static uint32_t	getCurrentWriteCounter()
-	{ return currentWriteCounter; }
+    static uint32_t getCurrentWriteCounter() {
+        return currentWriteCounter;
+    }
 
     // Returns TRUE if the instance has multiple write references
-    SbBool			hasMultipleWriteRefs() const
-	{ return writeStuff.multWriteRef; }
+    SbBool hasMultipleWriteRefs() const {
+        return writeStuff.multWriteRef;
+    }
 
     // Writes a header (name, open brace) or footer (close brace) to
     // file defined by SoOutput. writeHeader returns TRUE if no
@@ -166,9 +172,9 @@ class INVENTOR_API SoBase {
     // isEngine/isGroup are exactly what they sound like, and must be
     // passed in so that unknown nodes/engines can be correctly
     // created when reading the binary file format.
-    SbBool	writeHeader(SoOutput *out,
-			    SbBool isGroup, SbBool isEngine) const;
-    void	writeFooter(SoOutput *out) const;
+    SbBool writeHeader(SoOutput *out,
+                       SbBool isGroup, SbBool isEngine) const;
+    void writeFooter(SoOutput *out) const;
 
     // Unknown nodes and engines write a different name for themselves
     // than their typeId; this virtual method lets them do that (by
@@ -187,95 +193,103 @@ class INVENTOR_API SoBase {
     // If reading binary file format, the flags specify whether the
     // object was written as an engine or a group; unknown nodes and
     // groups need this information to read themselves in properly.
-    virtual SbBool	readInstance(SoInput *in, unsigned short flags) = 0;
+    virtual SbBool readInstance(SoInput *in, unsigned short flags) = 0;
 
-  SoINTERNAL public:
+SoINTERNAL public:
 
     // Setup type information
-    static void		initClass();
+    static void initClass();
 
     // Increments the current write counter at the start of a write operation
-    static void		incrementCurrentWriteCounter()
-	{ currentWriteCounter++; }
+    static void incrementCurrentWriteCounter() {
+        currentWriteCounter++;
+    }
 
     // Decrements the current write counter after a write operation,
     // in some rare cases
-    static void		decrementCurrentWriteCounter()
-	{ currentWriteCounter--; }
+    static void decrementCurrentWriteCounter() {
+        currentWriteCounter--;
+    }
 
     // Initiates notification from an instance. The default method
     // does nothing, because some classes (path, sensor) never
     // initiate notification. This is used by touch().
-    virtual void	startNotify();
+    virtual void startNotify();
 
     // Propagates modification notification through an instance. The
     // default method here does not create and add a new record. It
     // merely propagates the current record list to all auditors. This
     // method may be used by subclasses to do the propagation after
     // modifying the list appropriately.
-    virtual void	notify(SoNotList *list);
+    virtual void notify(SoNotList *list);
 
     // Adds/removes an auditor to/from list
-    void		addAuditor(void *auditor, SoNotRec::Type type);
-    void		removeAuditor(void *auditor, SoNotRec::Type type);
+    void addAuditor(void *auditor, SoNotRec::Type type);
+    void removeAuditor(void *auditor, SoNotRec::Type type);
 
     // Returns auditor list-- used by SoField and SoEngineOutput to
     // trace forward connections
-    const SoAuditorList &getAuditors() { return auditors; }
+    const SoAuditorList &getAuditors() {
+        return auditors;
+    }
 
     // Turns on/off reference count tracing (for debugging)
-    static SbBool	traceRefs;
+    static SbBool traceRefs;
 
     // Internal methods used to maintain the global name dictionary
-    static void		addName(SoBase *, const char *);
-    static void		removeName(SoBase *, const char *);
+    static void addName(SoBase *, const char *);
+    static void removeName(SoBase *, const char *);
 
     // Helper routines used to get stuff out of nameDict
-    static SoBase	*getNamedBase(const SbName &, SoType);
-    static int		getNamedBases(const SbName &, SoBaseList &,
-				      SoType);
+    static SoBase *getNamedBase(const SbName &, SoType);
+    static int getNamedBases(const SbName &, SoBaseList &,
+                             SoType);
 
     // Returns current reference count
-    int			getRefCount() const	{ return refCount; }
+    int getRefCount() const {
+        return refCount;
+    }
 
     // Reads one instance of some subclass of SoBase. Returns pointer
     // to read-in instance in base, or NULL on EOF. Returns FALSE on
     // error. The last parameter is a subclass type to match. If
     // the returned base is not of this type, it is an error. A type
     // of SoBase::getClassTypeId() will match any base.
-    static SbBool	read(SoInput *in, SoBase *&base,
-			     SoType expectedType);
+    static SbBool read(SoInput *in, SoBase *&base,
+                       SoType expectedType);
 
     // Adds a reference to the instance when writing. isFromField
     // indicates whether the reference is from a field-to-field
     // connection.
-    virtual void	addWriteReference(SoOutput *out,
-					  SbBool isFromField = FALSE);
+    virtual void addWriteReference(SoOutput *out,
+                                   SbBool isFromField = FALSE);
 
     // Returns TRUE if the instance should be written, based on the
     // write-reference info already accumulated
-    SbBool		shouldWrite();
+    SbBool shouldWrite();
 
     // This defaults to "+" and is used when naming nodes that are DEF's and USE'd.
     // The ivdowngrade converter needs to set it to other than "+" since that was
     // an illegal character for Inventor V1.0 names.
-    static void		setInstancePrefix(const SbString &c) { instancePrefix = c; }
-  
-  private:
+    static void setInstancePrefix(const SbString &c) {
+        instancePrefix = c;
+    }
 
-    static SoType	classTypeId;
-    
-    static SbString	instancePrefix;
+private:
+
+    static SoType classTypeId;
+
+    static SbString instancePrefix;
 
     // This is incremented once per write operation. It is used to
     // determine which instances to write.
     static uint32_t currentWriteCounter;
 
     // Reference count
-    int			refCount;
+    int   refCount;
 
     // List of auditors: objects to pass notification to
-    SoAuditorList	auditors;    
+    SoAuditorList auditors;
 
     // These are all packed into one word to save space
     struct {
@@ -298,29 +312,29 @@ class INVENTOR_API SoBase {
     } writeStuff;
 
     // These are used internally by writeHeader()
-    void		writeDef(SoOutput *, int) const;
-    void		writeRef(SoOutput *, int) const;
-    void		writeAnnotation(SoOutput *) const;
+    void writeDef(SoOutput *, int) const;
+    void writeRef(SoOutput *, int) const;
+    void writeAnnotation(SoOutput *) const;
 
     // These are all used internally by read()
-    static SbBool	readReference(SoInput *in, SoBase *&base);
-    static SbBool	readBase(SoInput *in, SbName &className,
-				 SoBase *&base);
-    static SbBool	readBaseInstance(SoInput *in, const SbName &className,
-					 const SbName &refName, SoBase *&base);
-    static SoBase	*createInstance(SoInput *in, SbName className,
-					unsigned short ioFlags);
-    static void		flushInput(SoInput *in);
+    static SbBool readReference(SoInput *in, SoBase *&base);
+    static SbBool readBase(SoInput *in, SbName &className,
+                           SoBase *&base);
+    static SbBool readBaseInstance(SoInput *in, const SbName &className,
+                                   const SbName &refName, SoBase *&base);
+    static SoBase *createInstance(SoInput *in, SbName className,
+                                  unsigned short ioFlags);
+    static void flushInput(SoInput *in);
 
     // This dictionary stores SbPLists keyed by name (the SbPLists
     // contain SoBases-- a BaseList isn't used because we don't want
     // the items on the list to be reference counted, otherwise they
     // will never get deleted).
-    static SbDict	*nameObjDict;
+    static SbDict *nameObjDict;
 
     // And this dictionary maps the other way, from an SoBase * to a
     // name.
-    static SbDict	*objNameDict;
+    static SbDict *objNameDict;
 };
 
 #endif /* _SO_BASE_ */

@@ -70,7 +70,7 @@
 /// the window and (1,1) is the upper-right corner.
 /// \sa SbVec2f, SbVec2s
 class INVENTOR_API SbViewportRegion {
-  public:
+public:
     /// Default constructor. Sets window size to default 100x100
     SbViewportRegion();
 
@@ -79,101 +79,120 @@ class INVENTOR_API SbViewportRegion {
 
     /// Constructor that takes window size as width and height in
     /// pixels as SbVec2s
-    SbViewportRegion(SbVec2s winSize);
+    SbViewportRegion(const SbVec2s & winSize);
 
     /// Constructor that takes an SbViewportRegion to copy from
     SbViewportRegion(const SbViewportRegion &vpReg);
 
     /// Changes window size to given width and height in pixels
-    void		setWindowSize(short width, short height)
-	{ setWindowSize(SbVec2s(width, height)); }
+    void setWindowSize(short width, short height) {
+        setWindowSize(SbVec2s(width, height));
+    }
 
     /// Changes window size to given width and height in pixels, given
     /// as SbVec2s
-    void		setWindowSize(SbVec2s winSize);
+    void setWindowSize(SbVec2s winSize);
 
     /// Sets viewport to given region, specified as normalized window
     /// coordinates: (0,0) is the lower-left corner, (1,1) is the upper-right.
-    void		setViewport(float left, float bottom,
-				    float width, float height)
-	{ setViewport(SbVec2f(left, bottom), SbVec2f(width, height)); }
+    void setViewport(float left, float bottom,
+                     float width, float height) {
+        setViewport(SbVec2f(left, bottom), SbVec2f(width, height));
+    }
 
     /// Sets viewport to region with given origin (lower-left corner)
     /// and size, given as normalized coordinate vectors.
-    void		setViewport(SbVec2f origin, SbVec2f size);
+    void setViewport(SbVec2f origin, SbVec2f size);
 
     /// Sets viewport to given region, specified as pixel coordinates
     /// in window: (0,0) is the lower-left corner
-    void		setViewportPixels(short left, short bottom,
-					  short width, short height)
-	{ setViewportPixels(SbVec2s(left, bottom), SbVec2s(width, height)); }
+    void setViewportPixels(short left, short bottom,
+                           short width, short height) {
+        setViewportPixels(SbVec2s(left, bottom), SbVec2s(width, height));
+    }
 
     /// Sets viewport to region with given origin (lower-left corner)
     /// and size, given as pixel coordinates.
-    void		setViewportPixels(SbVec2s origin, SbVec2s size);
+    void setViewportPixels(SbVec2s origin, SbVec2s size);
 
     /// Returns window size in pixels
-    const SbVec2s &	getWindowSize() const		{ return windowSize; }
+    const SbVec2s & getWindowSize() const {
+        return windowSize;
+    }
 
     /// Returns viewport origin in normalized coordinates
-    const SbVec2f &	getViewportOrigin() const	{ return vpOrigin; }
+    const SbVec2f & getViewportOrigin() const {
+        return vpOrigin;
+    }
 
     /// Returns viewport origin in pixels
-    const SbVec2s &	getViewportOriginPixels() const	{ return vpOriginPix; }
+    const SbVec2s & getViewportOriginPixels() const {
+        return vpOriginPix;
+    }
 
     /// Returns viewport size in normalized coordinates
-    const SbVec2f &	getViewportSize() const		{ return vpSize; }
+    const SbVec2f & getViewportSize() const  {
+        return vpSize;
+    }
 
     /// Returns viewport size in pixels
-    const SbVec2s &	getViewportSizePixels() const	{ return vpSizePix;}
+    const SbVec2s & getViewportSizePixels() const {
+        return vpSizePix;
+    }
 
     /// Returns aspect ratio (width/height) of viewport
-    float		getViewportAspectRatio() const
-	{ return (vpSizePix[1] == 0 ? 1.0f :
-		  (float) vpSizePix[0] / (float) vpSizePix[1]); }
+    float getViewportAspectRatio() const {
+        return (vpSizePix[1] == 0 ? 1.0f :
+                (float) vpSizePix[0] / (float) vpSizePix[1]);
+    }
 
     /// Scales viewport within window to be the given ratio of its
     /// current width, leaving the resulting viewport
     /// centered about the same point as the current one.
-    void		scaleWidth(float ratio);
+    void scaleWidth(float ratio);
 
     /// Scales viewport within window to be the given ratio of its
     /// current height, leaving the resulting viewport
     /// centered about the same point as the current one.
-    void		scaleHeight(float ratio);
+    void scaleHeight(float ratio);
 
     /// Sets the pixel-per-inch ratio for the display device
     /// the viewport is part of. The default value is 72 (1 pixel per
     /// printer's point).
-    void		setPixelsPerInch(float ppi)   { pixelsPerInch = ppi;  }
+    void setPixelsPerInch(float ppi)   {
+        pixelsPerInch = ppi;
+    }
 
     /// Returns the pixel-per-inch ratio for the display device
     /// the viewport is part of. The default value is 72 (1 pixel per
     /// printer's point).
-    float		getPixelsPerInch() const      { return pixelsPerInch; }
+    float getPixelsPerInch() const      {
+        return pixelsPerInch;
+    }
 
     /// Convenience function that returns number of pixels per printer's point
-    float		getPixelsPerPoint() const
-	{ return pixelsPerInch / 72.0f; }
+    float getPixelsPerPoint() const {
+        return pixelsPerInch / 72.0f;
+    }
 
     /// Equality comparison operator
-    friend int		operator ==(const SbViewportRegion &reg1,
-				    const SbViewportRegion &reg2);
+    friend int  operator ==(const SbViewportRegion &reg1,
+                            const SbViewportRegion &reg2);
 
-  private:
-    SbVec2s		windowSize;	// Window size in pixels
-    SbVec2f		vpOrigin;	// Viewport origin, normalized
-    SbVec2s		vpOriginPix;	// Viewport origin in pixels
-    SbVec2f		vpSize;		// Viewport size, normalized
-    SbVec2s		vpSizePix;	// Viewport size in pixels
-    SbBool		vpSet;		// TRUE if viewport was set explicitly
-    float		pixelsPerInch;	// Number of pixels per inch
+private:
+    SbVec2s  windowSize; // Window size in pixels
+    SbVec2f  vpOrigin; // Viewport origin, normalized
+    SbVec2s  vpOriginPix; // Viewport origin in pixels
+    SbVec2f  vpSize;  // Viewport size, normalized
+    SbVec2s  vpSizePix; // Viewport size in pixels
+    SbBool  vpSet;  // TRUE if viewport was set explicitly
+    float  pixelsPerInch; // Number of pixels per inch
 
     // Sets viewport to be full window
-    void		setFullViewport();
+    void  setFullViewport();
 
     // Adjusts viewport pixel size based on new window size or new viewport
-    void		adjustViewport();
+    void  adjustViewport();
 };
 
 #endif /* _SB_VIEWPORT_REGION_ */

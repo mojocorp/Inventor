@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,10 +45,10 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file contains the definition of the extender SoChildList
- |	class.
- |	  
- |   Author(s)		: Paul S. Strauss
+ | This file contains the definition of the extender SoChildList
+ | class.
+ |
+ |   Author(s)  : Paul S. Strauss
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -83,7 +83,7 @@ class SoAction;
 
 SoEXTENDER class INVENTOR_API SoChildList : public SoNodeList {
 
-  public:
+public:
     /// Constructors and destructor.
     SoChildList(SoNode *parentNode);
     SoChildList(SoNode *parentNode, int size);
@@ -92,39 +92,43 @@ SoEXTENDER class INVENTOR_API SoChildList : public SoNodeList {
 
     // All of these override the standard SoBaseList methods so they
     // can maintain auditors correctly.
-    void		append(SoNode * child);
-    void		insert(SoNode *child, int addBefore);
-    void		remove(int which);
-    void		truncate(int start);
-    void		copy(const SoChildList &l);
-    void		set(int i, SoNode *child);
+    void append(SoNode * child);
+    void insert(SoNode *child, int addBefore);
+    void remove(int which);
+    void truncate(int start);
+    void copy(const SoChildList &l);
+    void set(int i, SoNode *child);
 
     /// Traverses all children to apply action. Stops if action's
     /// termination condition is reached
-    void		traverse(SoAction *action)
-	{ traverse(action, 0, getLength() - 1); }
+    void traverse(SoAction *action) {
+        traverse(action, 0, getLength() - 1);
+    }
 
     /// Traverses just one child
-    void		traverse(SoAction *action, int childIndex)
-	{ traverse(action, childIndex, childIndex); }
+    void traverse(SoAction *action, int childIndex) {
+        traverse(action, childIndex, childIndex);
+    }
 
     /// Traverses all children between two indices, inclusive. Stops if
     /// action's termination condition is reached.
-    void		traverse(SoAction *action,
-				 int firstChild, int lastChild);
+    void traverse(SoAction *action, int firstChild, int lastChild);
 
-  SoINTERNAL public:
+SoINTERNAL public:
     // SoPath calls these to be notified of changes in scene graph
     // topology:
-    void addPathAuditor(SoPath *p) { auditors.append(p); }
-    void removePathAuditor(SoPath *p) 
-		{ auditors.remove(auditors.find(p)); }
+    void addPathAuditor(SoPath *p) {
+        auditors.append(p);
+    }
+    void removePathAuditor(SoPath *p) {
+        auditors.remove(auditors.find(p));
+    }
 
-  private:
-    SoNode		*parent;
+private:
+    SoNode  *parent;
     // This is a PList and not a PathList because PathList ref()s the
     // paths it contains, and that screws up Path reference counting.
-    SbPList		auditors;
+    SbPList  auditors;
 };
 
 #endif /* _SO_CHILD_LIST_ */

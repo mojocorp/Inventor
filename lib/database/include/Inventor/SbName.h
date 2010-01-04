@@ -76,73 +76,91 @@
 /// node names.
 /// \sa SbString
 class INVENTOR_API SbName {
-  public:
+public:
     /// Default constructor
     SbName();
 
     /// Constructor that initializes to given character string
-    SbName(const char *s)		{ entry = SbNameEntry::insert(s); }
+    SbName(const char *s) {
+        entry = SbNameEntry::insert(s);
+    }
 
     /// Constructor that initializes to given SbString
-    SbName(const SbString &s)	{ entry = SbNameEntry::insert(s.getString()); }
+    SbName(const SbString &s) {
+        entry = SbNameEntry::insert(s.getString());
+    }
 
 
     /// Constructor that initializes to another SbName
-    SbName(const SbName &n)			{ entry = n.entry; }
+    SbName(const SbName &n) {
+        entry = n.entry;
+    }
 
-    ~SbName()					{}
+    ~SbName() {}
 
     /// Returns pointer to the character string
-    const char		*getString() const	{ return entry->string; }
+    const char  *getString() const {
+        return entry->string;
+    }
 
     /// Returns length of string
-    size_t		getLength() const   { return strlen(entry->string); }
+    size_t getLength() const {
+        return strlen(entry->string);
+    }
 
     /// Returns TRUE if given character is a legal starting character
     /// for an identifier
-    static SbBool 	isIdentStartChar(char c);
+    static SbBool isIdentStartChar(char c);
 
     /// Returns TRUE if given character is a legal nonstarting
     /// character for an identifier
-    static SbBool	isIdentChar(char c);
+    static SbBool isIdentChar(char c);
 
     /// Returns TRUE if given character is a legal starting character
     /// for an SoBase's name
-    static SbBool 	isBaseNameStartChar(char c);
+    static SbBool isBaseNameStartChar(char c);
 
     /// Returns TRUE if given character is a legal nonstarting
     /// character for an SoBase's name
-    static SbBool	isBaseNameChar(char c);
+    static SbBool isBaseNameChar(char c);
 
     /// Unary "not" operator; returns TRUE if string is empty ("")
-    int			operator !() const   { return entry->isEmpty(); }
+    int operator !() const   {
+        return entry->isEmpty();
+    }
 
     /// Equality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int		operator ==(const SbName &n, const char *s)
-        { return n.entry->isEqual(s); }
+    friend INVENTOR_API int operator ==(const SbName &n, const char *s) {
+        return n.entry->isEqual(s);
+    }
 
     /// Equality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int		operator ==(const char *s, const SbName &n)
-        { return n.entry->isEqual(s); }
+    friend INVENTOR_API int operator ==(const char *s, const SbName &n) {
+        return n.entry->isEqual(s);
+    }
 
     /// Equality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int 		operator ==(const SbName &n1, const SbName &n2)
-        { return n1.entry == n2.entry; }
+    friend INVENTOR_API int operator ==(const SbName &n1, const SbName &n2) {
+        return n1.entry == n2.entry;
+    }
 
     /// Inequality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int		operator !=(const SbName &n, const char *s)
-        { return ! n.entry->isEqual(s); }
+    friend INVENTOR_API int operator !=(const SbName &n, const char *s) {
+        return ! n.entry->isEqual(s);
+    }
 
     /// Inequality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int		operator !=(const char *s, const SbName &n)
-        { return ! n.entry->isEqual(s); }
+    friend INVENTOR_API int operator !=(const char *s, const SbName &n) {
+        return ! n.entry->isEqual(s);
+    }
 
     /// Inequality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int 		operator !=(const SbName &n1, const SbName &n2)
-        { return n1.entry != n2.entry; }
+    friend INVENTOR_API int operator !=(const SbName &n1, const SbName &n2) {
+        return n1.entry != n2.entry;
+    }
 
-  private:
-    const SbNameEntry	*entry;		// Name string storage
+private:
+    const SbNameEntry *entry;  // Name string storage
 };
 
 #endif /* _SB_NAME_ */

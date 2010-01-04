@@ -33,10 +33,10 @@
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
- 
- #ifndef _SB_XFBOX3F_
- #define _SB_XFBOX3F_
- 
+
+#ifndef _SB_XFBOX3F_
+#define _SB_XFBOX3F_
+
 #include <Inventor/SbVec3f.h>
 #include <Inventor/SbBox3f.h>
 #include <Inventor/SbMatrix.h>
@@ -51,7 +51,7 @@
 /// box can be expanded to an axis-aligned box if necessary.
 /// \sa SbBox3f, SbBox2f, SbBox2s, SbVec3f, SbVec2f, SbVec2s,     SbMatrix, SoGetBoundingBoxAction
 class INVENTOR_API SbXfBox3f : public SbBox3f {
-  public:
+public:
     /// Default constructor - leaves box totally empty
     SbXfBox3f();
 
@@ -62,19 +62,23 @@ class INVENTOR_API SbXfBox3f : public SbBox3f {
     SbXfBox3f(const SbBox3f &box);
 
     /// Destructor
-    ~SbXfBox3f()						{ }
+    ~SbXfBox3f() { }
 
     /// Set the transformation on the box
-    void		setTransform(const SbMatrix &m);
+    void setTransform(const SbMatrix &m);
 
     /// Get the transformation on the box.
-    const SbMatrix &	getTransform() const	    { return xform; }
+    const SbMatrix & getTransform() const {
+        return xform;
+    }
 
     /// Get the inverse transformation on the box.
-    const SbMatrix &	getInverse() const	    { return xformInv; }
-    
+    const SbMatrix & getInverse() const {
+        return xformInv;
+    }
+
     /// Returns the center of the box
-    SbVec3f		getCenter() const;
+    SbVec3f getCenter() const;
 
     /// Extends XfBox3f (if necessary) to contain given 3D point.
     /// If the box has had a non-identity transformation applied using the
@@ -85,95 +89,115 @@ class INVENTOR_API SbXfBox3f : public SbBox3f {
     /// SbMatrix trans; trans.setTranslate(SbVec3f(1,1,1));
     /// bbox.setTransform(trans);
     /// bbox.extendBy(SbVec3f(0,0,0));
-    /// 
+    ///
     /// will result in a bounding box extending from (-1,-1,-1) to
     /// (0,0,0) in bbox'es local (untransformed) space.
-    void		extendBy(const SbVec3f &pt);
+    void extendBy(const SbVec3f &pt);
 
     /// Extends XfBox3f (if necessary) to contain given Box3f.
     /// If the box has had a non-identity transformation applied using the
     /// setTransform() method, the given \c SbBox3f is assumed to be in the
     /// transformed space.
-    void		extendBy(const SbBox3f &bb)
-	{ extendBy(SbXfBox3f(bb)); }
+    void extendBy(const SbBox3f &bb) {
+        extendBy(SbXfBox3f(bb));
+    }
 
     /// Extends XfBox3f (if necessary) to contain given XfBox3f
-    void		extendBy(const SbXfBox3f &bb);
+    void extendBy(const SbXfBox3f &bb);
 
     /// Returns TRUE if intersection of given point and Box3f is not empty
-    SbBool		intersect(const SbVec3f &pt) const;
+    SbBool intersect(const SbVec3f &pt) const;
 
     /// Returns TRUE if intersection of given XfBox3f and Box3f is not empty
-    SbBool		intersect(const SbBox3f &bb) const
-	{ return project().intersect(bb); }
+    SbBool intersect(const SbBox3f &bb) const {
+        return project().intersect(bb);
+    }
 
     /// Set the bounds of the box.
-    void	setBounds(float xmin, float ymin, float zmin,
-			  float xmax, float ymax, float zmax)
-	{ SbBox3f::setBounds(xmin, ymin, zmin, xmax, ymax, zmax); }
+    void setBounds(float xmin, float ymin, float zmin,
+                   float xmax, float ymax, float zmax) {
+        SbBox3f::setBounds(xmin, ymin, zmin, xmax, ymax, zmax);
+    }
 
     /// Set the bounds of the box.
-    void	setBounds(const SbVec3f &_min, const SbVec3f &_max)
-	{ SbBox3f::setBounds(_min, _max); }
+    void setBounds(const SbVec3f &_min, const SbVec3f &_max) {
+        SbBox3f::setBounds(_min, _max);
+    }
 
     /// Get the bounds of the box.
-    void	getBounds(float &xmin, float &ymin, float &zmin,
-			  float &xmax, float &ymax, float &zmax) const
-	{ SbBox3f::getBounds(xmin, ymin, zmin, xmax, ymax, zmax); }
+    void getBounds(float &xmin, float &ymin, float &zmin,
+                   float &xmax, float &ymax, float &zmax) const {
+        SbBox3f::getBounds(xmin, ymin, zmin, xmax, ymax, zmax);
+    }
 
     /// Get the bounds of the box.
-    void	getBounds(SbVec3f &_min, SbVec3f &_max) const
-	{ SbBox3f::getBounds(_min, _max); }
+    void getBounds(SbVec3f &_min, SbVec3f &_max) const {
+        SbBox3f::getBounds(_min, _max);
+    }
 
     /// Returns origin (minimum point) of box
-    void	getOrigin(float &originX,
-			  float &originY,
-			  float &originZ)
-	{ SbBox3f::getOrigin(originX, originY, originZ); }
+    void getOrigin(float &originX,
+                   float &originY,
+                   float &originZ) {
+        SbBox3f::getOrigin(originX, originY, originZ);
+    }
 
     /// Returns size of box
-    void	getSize(float &sizeX, float &sizeY, float &sizeZ)
-	{ SbBox3f::getSize(sizeX, sizeY, sizeZ); }
+    void getSize(float &sizeX, float &sizeY, float &sizeZ) {
+        SbBox3f::getSize(sizeX, sizeY, sizeZ);
+    }
 
     /// Gives the volume of the box (0 for an empty box)
-    float	getVolume() const;
+    float getVolume() const;
 
     /// Sets Box3f to contain nothing
-    void		makeEmpty()		{ SbBox3f::makeEmpty(); }
+    void makeEmpty()  {
+        SbBox3f::makeEmpty();
+    }
 
     /// Checks if the box is empty (degenerate)
     /// note that this relies on boxes being completely degenerate if
     /// they are degenerate at all.  All member functions preserve this
     /// invariant.
-    SbBool		isEmpty() const	{ return SbBox3f::isEmpty(); }
+    SbBool isEmpty() const {
+        return SbBox3f::isEmpty();
+    }
 
     /// Checks if the box has volume; i.e., all three dimensions have
     /// positive size
-    SbBool		hasVolume() const { return SbBox3f::hasVolume(); }
+    SbBool hasVolume() const {
+        return SbBox3f::hasVolume();
+    }
 
     /// Finds the extent of a box along a particular direction
-    void		getSpan(const SbVec3f &direction,
-				float &dMin, float &dMax) const
-	{ project().getSpan(direction, dMin, dMax); }
+    void getSpan(const SbVec3f &direction,
+                 float &dMin, float &dMax) const {
+        project().getSpan(direction, dMin, dMax);
+    }
 
     /// Transforms Box3f by matrix
-    void		transform(const SbMatrix &m);
+    void transform(const SbMatrix &m);
 
     /// Projects an SbXfBox3f to an SbBox3f
-    SbBox3f		project() const;
+    SbBox3f project() const;
 
     /// Equality comparisons
-    friend INVENTOR_API int          operator ==(const SbXfBox3f &b1, const SbXfBox3f &b2);
-    friend INVENTOR_API int          operator !=(const SbXfBox3f &b1, const SbXfBox3f &b2)
-	{ return !(b1 == b2); }
+    friend INVENTOR_API int operator ==(const SbXfBox3f &b1, const SbXfBox3f &b2);
+    friend INVENTOR_API int operator !=(const SbXfBox3f &b1, const SbXfBox3f &b2) {
+        return !(b1 == b2);
+    }
 
-  private:
+private:
     // These are incorrect for SbXfBox3f, so we hide them
-    const SbVec3f &	getMin() const			{ return SbBox3f::getMin(); }
-    const SbVec3f &	getMax() const			{ return SbBox3f::getMax(); }
+    const SbVec3f & getMin() const   {
+        return SbBox3f::getMin();
+    }
+    const SbVec3f & getMax() const   {
+        return SbBox3f::getMax();
+    }
 
     // The box is transformed by this xform
-    SbMatrix		xform;
-    SbMatrix		xformInv;
+    SbMatrix  xform;
+    SbMatrix  xformInv;
 };
 #endif /* _SB_XFBOX3F_ */

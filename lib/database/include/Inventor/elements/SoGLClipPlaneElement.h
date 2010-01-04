@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,9 +45,9 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoGLClipPlaneElement class.
+ | This file defines the SoGLClipPlaneElement class.
  |
- |   Author(s)		: Paul S. Strauss
+ |   Author(s)  : Paul S. Strauss
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -75,30 +75,30 @@ SoEXTENDER class INVENTOR_API SoGLClipPlaneElement : public SoClipPlaneElement {
 
     SO_ELEMENT_HEADER(SoGLClipPlaneElement);
 
-  public:
+public:
     /// Override pop() method so side effects can occur in GL
-    virtual void	pop(SoState *state, const SoElement *prevTopElement);
+    virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     /// Returns the maximum number of concurrent clipping planes
     /// supported by GL implementation
-    static int		getMaxGLPlanes();
+    static int getMaxGLPlanes();
 
-  SoINTERNAL public:
+SoINTERNAL public:
     // Initializes the SoGLClipPlaneElement class
-    static void		initClass();
+    static void initClass();
 
-  protected:
+protected:
     // Adds the clipping plane to an instance. Has GL side effects.
-    virtual void	addToElt(const SbPlane &plane,
-				 const SbMatrix &modelMatrix);
+    virtual void addToElt(const SbPlane &plane,
+                          const SbMatrix &modelMatrix);
 
     virtual ~SoGLClipPlaneElement();
 
-  private:
-    static int		maxGLPlanes;	// Holds max number of GL clip planes
+private:
+    static int maxGLPlanes; // Holds max number of GL clip planes
 
     // Sends clipping plane in element to GL
-    void		send();
+    void send();
 };
 
 #endif /* _SO_GL_CLIP_PLANE_ELEMENT */

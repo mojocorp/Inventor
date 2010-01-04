@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,12 +45,12 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file contains the declaration of the TransformVec3f engine
+ | This file contains the declaration of the TransformVec3f engine
  |
  |   Classes:
- |	SoTransformVec3f
+ | SoTransformVec3f
  |
- |   Author(s)		: Ronen Barzel
+ |   Author(s)  : Ronen Barzel
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -90,26 +90,26 @@
 class INVENTOR_API SoTransformVec3f : public SoEngine {
 
     SO_ENGINE_HEADER(SoTransformVec3f);
-    
-  public:
+
+public:
 
     // Inputs
-    SoMFVec3f	vector;
-    SoMFMatrix	matrix;
-    
+    SoMFVec3f vector;
+    SoMFMatrix matrix;
+
     // Outputs
-    SoEngineOutput point;	    ///< (SoMFVec3f) vector-matrix multiply
-    SoEngineOutput direction;	    ///< (SoMFVec3f) direction-matrix multiply
+    SoEngineOutput point;     ///< (SoMFVec3f) vector-matrix multiply
+    SoEngineOutput direction;     ///< (SoMFVec3f) direction-matrix multiply
     SoEngineOutput normalDirection; ///< (SoMFVec3f) direction, normalized
-    
+
     /// Constructor
     SoTransformVec3f();
-    
-  SoINTERNAL public:
+
+SoINTERNAL public:
 
     static void initClass();
 
-  private:
+private:
 
     // Destructor
     ~SoTransformVec3f();

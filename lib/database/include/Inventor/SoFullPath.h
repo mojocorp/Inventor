@@ -73,26 +73,33 @@
 
 SoEXTENDER class INVENTOR_API SoFullPath : public SoPath {
 
-  public:
+public:
     //
     // Override methods that normally stop at last public child:
     //
 
-    void		pop()		{ truncate(getFullLength() - 1); }
+    void pop() {
+        truncate(getFullLength() - 1);
+    }
 
-    SoNode *		getTail() const
-        { return (nodes[getFullLength() - 1]); }
+    SoNode * getTail() const {
+        return (nodes[getFullLength() - 1]);
+    }
 
-    SoNode *		getNodeFromTail(int i) const
-        { return (nodes[getFullLength() - 1 - i]); }
+    SoNode * getNodeFromTail(int i) const {
+        return (nodes[getFullLength() - 1 - i]);
+    }
 
-    int			getIndexFromTail(int i) const
-        { return (indices[getFullLength() - 1 - i]); }
+    int getIndexFromTail(int i) const {
+        return (indices[getFullLength() - 1 - i]);
+    }
 
-    int			getLength() const	{ return getFullLength(); }
+    int getLength() const {
+        return getFullLength();
+    }
 
-  private:
-    SoFullPath(int approxLength) : SoPath(approxLength)	{}
+private:
+    SoFullPath(int approxLength) : SoPath(approxLength) {}
     virtual ~SoFullPath();
 
     friend class SoTempPath;

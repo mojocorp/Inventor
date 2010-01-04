@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,9 +45,9 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	Defines the SoGLRenderAction class
+ | Defines the SoGLRenderAction class
  |
- |   Author(s)		: Paul S. Strauss
+ |   Author(s)  : Paul S. Strauss
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -61,11 +61,11 @@
 #include <Inventor/elements/SoShapeStyleElement.h>
 #include <Inventor/elements/SoTransparencyTypeElement.h>
 
-class	SbBox3f;
-class	SoGetBoundingBoxAction;
+class SbBox3f;
+class SoGetBoundingBoxAction;
 
 /// Callback functions used between rendering passes should be of this type.
-typedef void	SoGLRenderPassCB(void *userData);
+typedef void SoGLRenderPassCB(void *userData);
 
 /// Renders a scene graph using OpenGL.
 /// \ingroup Actions
@@ -78,11 +78,11 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
 
     SO_ACTION_HEADER(SoGLRenderAction);
 
-  public:
+public:
 
     /// Various levels of transparency rendering quality
     enum TransparencyType {
-        SCREEN_DOOR         = SoTransparencyTypeElement::SCREEN_DOOR,	   ///< Use stipple patterns for screen-door transparency
+        SCREEN_DOOR         = SoTransparencyTypeElement::SCREEN_DOOR,    ///< Use stipple patterns for screen-door transparency
         ADD                 = SoTransparencyTypeElement::ADD,                ///< Use additive alpha blending
         DELAYED_ADD         = SoTransparencyTypeElement::DELAYED_ADD,        ///< Uses additive blending, rendering all transparent objects after opaque ones
         SORTED_OBJECT_ADD   = SoTransparencyTypeElement::SORTED_OBJECT_ADD,  ///< Same as DELAYED_ADD, but sorts transparent objects by distances of bounding boxes from camera
@@ -93,10 +93,10 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
 
     /// Possible return codes from a render abort callback
     enum AbortCode {
-        CONTINUE,		///< Continue traversal as usual
-        ABORT,			///< Stop traversing the rest of the graph
-        PRUNE,			///< Do not traverse this node or its children, but continue
-        DELAY			///< Delay rendering of this node until the second pass
+        CONTINUE,  ///< Continue traversal as usual
+        ABORT,   ///< Stop traversing the rest of the graph
+        PRUNE,   ///< Do not traverse this node or its children, but continue
+        DELAY   ///< Delay rendering of this node until the second pass
     };
 
     /// Callback functions for render abort should be of this type.
@@ -107,16 +107,18 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
     /// Constructor. The  parameter defines the viewport region
     /// into which rendering will take place.
     SoGLRenderAction(const SbViewportRegion &viewportRegion);
-		
+
 
     /// Destructor
     virtual ~SoGLRenderAction();
 
     /// Sets current viewport region to use for rendering
-    void		setViewportRegion(const SbViewportRegion &newRegion);
+    void setViewportRegion(const SbViewportRegion &newRegion);
 
     /// Returns current viewport region
-    const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
+    const SbViewportRegion &getViewportRegion() const {
+        return vpRegion;
+    }
 
     /// Sets/returns current update area, which is the area of the
     /// viewport region that will actually be rendered into. This can
@@ -125,8 +127,8 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
     /// coordinates, where (0,0) is the lower left corner of the
     /// viewport and (1,1) is the upper right corner. The area is given
     /// as an origin and a size.
-    void		setUpdateArea(const SbVec2f &origin, const SbVec2f &size);
-    void		getUpdateArea(SbVec2f &origin, SbVec2f &size) const;
+    void setUpdateArea(const SbVec2f &origin, const SbVec2f &size);
+    void getUpdateArea(SbVec2f &origin, SbVec2f &size) const;
 
     /// Sets callback to call during rendering to test for an abort condition.
     /// It will be called for each node that is traversed.
@@ -135,25 +137,32 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
     /// codes to indicate whether traversal should continue. Use of the various
     /// codes in a callback can allow applications to modify Inventor's default
     /// order of rendering objects in a scene graph.
-    void		setAbortCallback(SoGLRenderAbortCB *func, void *userData) { abortCB = func; abortData = userData; }
+    void setAbortCallback(SoGLRenderAbortCB *func, void *userData) {
+        abortCB = func;
+        abortData = userData;
+    }
 
     /// Sets transparency quality level to use when rendering. The
     /// default is SCREEN_DOOR. (Note that SCREEN_DOOR transparency does not work
     /// in the case where transparency values are specified for each vertex
     /// of a shape. If this is the case, use one of the other transparency types.)
-    void		setTransparencyType(TransparencyType type);
+    void setTransparencyType(TransparencyType type);
 
     /// Returns transparency quality level to use when rendering. The
     /// default is SCREEN_DOOR.
-    TransparencyType	getTransparencyType() const	{ return transpType; }
+    TransparencyType getTransparencyType() const {
+        return transpType;
+    }
 
     /// Sets smoothing flag. When on, smoothing uses OpenGL's line-
     /// and point-smoothing features to provide cheap antialiasing of lines
     /// and points. The default is FALSE.
-    void		setSmoothing(SbBool smooth);
+    void setSmoothing(SbBool smooth);
 
     /// Returns smoothing flag.
-    SbBool		isSmoothing() const		{ return doSmooth; }
+    SbBool isSmoothing() const {
+        return doSmooth;
+    }
 
     /// Sets number of rendering passes for multipass rendering.
     /// Specifying more than one pass will result in antialiasing of the
@@ -161,35 +170,46 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
     /// typically move their viewpoints a little bit for each pass to achieve
     /// the antialiasing.)  Each additional pass provides better
     /// antialiasing, but requires more rendering time The default is 1 pass.
-    void		setNumPasses(int num)		{ numPasses = num;  }
+    void setNumPasses(int num) {
+        numPasses = num;
+    }
 
     /// Returns number of rendering passes for multipass rendering.
-    int			getNumPasses() const		{ return numPasses; }
+    int getNumPasses() const {
+        return numPasses;
+    }
 
     /// Sets a flag indicating whether intermediate results are
     /// displayed after each antialiasing pass for progressive improvement
     /// (default is FALSE).
-    void		setPassUpdate(SbBool flag)	{ passUpdate = flag; }
+    void setPassUpdate(SbBool flag) {
+        passUpdate = flag;
+    }
 
     /// Returns a flag indicating whether intermediate results are
     /// displayed after each antialiasing pass for progressive improvement
     /// (default is FALSE).
-    SbBool		isPassUpdate() const		{ return passUpdate; }
+    SbBool isPassUpdate() const {
+        return passUpdate;
+    }
 
     /// Sets a callback function to invoke between passes when antialiasing.
     /// Passing NULL (which is the default state) will cause a clear of the color
     /// and depth buffers to be performed.
-    void                setPassCallback(SoGLRenderPassCB *func, void *userData) { passCB = func; passData = userData; }
+    void setPassCallback(SoGLRenderPassCB *func, void *userData) {
+        passCB = func;
+        passData = userData;
+    }
 
     /// Sets the OpenGL cache context. A cache context is just an
     /// integer identifying when OpenGL display lists (which are used for
     /// render caching) can be shared between render actions; for example, see
     /// the documentation on GLX contexts for information on when OpenGL
     /// display lists can be shared between GLX windows.
-    void		setCacheContext(uint32_t context);
+    void setCacheContext(uint32_t context);
 
     /// Returns the OpenGL cache context.
-    uint32_t		getCacheContext() const;
+    uint32_t getCacheContext() const;
 
     /// Sets whether or not "remote" rendering is happening.
     /// Inventor's auto-render-caching algorithm will choose to cache
@@ -197,21 +217,24 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
     /// performance will be better with display lists stored on the
     /// remote machine).  By default, it is assumed rendering is NOT
     /// remote.
-    void		setRenderingIsRemote(SbBool flag);
+    void setRenderingIsRemote(SbBool flag);
 
     /// Gets whether or not "remote" rendering is happening.
-    SbBool		getRenderingIsRemote() const;
+    SbBool getRenderingIsRemote() const;
 
     /// Invalidate the state, forcing it to be recreated at the next apply
-    virtual void	invalidateState();
-    
-  SoEXTENDER public:
+    virtual void invalidateState();
+
+SoEXTENDER public:
     // Returns current rendering pass number
-    int			getCurPass() const		{ return curPass; }
+    int getCurPass() const {
+        return curPass;
+    }
 
     // Returns TRUE if render action should abort - checks user callback
-    SbBool		abortNow()
-	{ return (hasTerminated() || (abortCB != NULL && checkAbort())); }
+    SbBool abortNow() {
+        return (hasTerminated() || (abortCB != NULL && checkAbort()));
+    }
 
     // Returns TRUE if render action handles processing of a
     // transparent object (if it is to be sorted and rendered later).
@@ -220,97 +243,104 @@ class INVENTOR_API SoGLRenderAction : public SoAction {
     // The optional argument isTransparent ensures that the object being
     // rendered will be taken as transparent, regardless of transparency
     // in the state.  If it is false, the state is checked for transparency.
-    SbBool		handleTransparency(SbBool isTransparent = FALSE);
+    SbBool handleTransparency(SbBool isTransparent = FALSE);
 
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
     // Returns TRUE if rendering is being delayed because of
     // transparency sorting or delaying
-    SbBool		isDelaying() const  { return sortObjs || delayObjs; }
+    SbBool isDelaying() const  {
+        return sortObjs || delayObjs;
+    }
 
     // Adds to the list of paths to render after all other stuff
     // (including delayed/sorted transparent objects) have been
     // rendered. (Used for annotation nodes.)
-    void		addDelayedPath(SoPath *path);
+    void addDelayedPath(SoPath *path);
 
     // Returns TRUE if currently rendering delayed paths
-    SbBool		isRenderingDelayedPaths() const
-	{ return renderingDelPaths; }
+    SbBool isRenderingDelayedPaths() const {
+        return renderingDelPaths;
+    }
 
-    int			getCullTestResults() { return cullBits; }
-    void		setCullTestResults(int b) { cullBits = b; }
+    int getCullTestResults() {
+        return cullBits;
+    }
+    void setCullTestResults(int b) {
+        cullBits = b;
+    }
 
-  protected:
+protected:
     // Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
-  private:
-    SbViewportRegion	vpRegion;	// Current viewport region
-    SbVec2f		updateOrigin;	// Origin of update area
-    SbVec2f		updateSize;	// Size of update area
- 
+private:
+    SbViewportRegion vpRegion; // Current viewport region
+    SbVec2f  updateOrigin; // Origin of update area
+    SbVec2f  updateSize; // Size of update area
 
-    // Variables for render abort: 
-    SoGLRenderAbortCB	*abortCB;	// Callback to test abort
-    void		*abortData;	// User data for abort callback
+
+    // Variables for render abort:
+    SoGLRenderAbortCB *abortCB; // Callback to test abort
+    void  *abortData; // User data for abort callback
 
     // Variables for transparency, smoothing, and multi-pass rendering:
-    TransparencyType	transpType;	// Transparency quality type
-    SbBool		doSmooth;	// Doing smoothing ?
-    int			numPasses;	// Number of rendering passes
-    int			curPass;	// Current pass
-    SbBool		passUpdate;	// Whether to update after each pass
-    SoGLRenderPassCB	*passCB;	// Callback between passes
-    void		*passData;	// User data for pass callback
+    TransparencyType transpType; // Transparency quality type
+    SbBool  doSmooth; // Doing smoothing ?
+    int   numPasses; // Number of rendering passes
+    int   curPass; // Current pass
+    SbBool  passUpdate; // Whether to update after each pass
+    SoGLRenderPassCB *passCB; // Callback between passes
+    void  *passData; // User data for pass callback
 
     // For SORTED_OBJECT_ADD or SORTED_OBJECT_BLEND transparency:
-    SbBool		renderingTranspObjs; // TRUE when rendering transp objs
-    SbBool		delayObjs;	// TRUE if transp objects are to be
-					// delayed until after opaque ones
-    SbBool		sortObjs;	// TRUE if objects are to be sorted
-    SoPathList		transpPaths;	// Paths to transparent objects
-    SoGetBoundingBoxAction *ba;		// For computing bounding boxes
-    SbBox3f		*bboxes;	// Bounding boxes of objects
-    int			numBBoxes;	// Number of bboxes allocated
+    SbBool  renderingTranspObjs; // TRUE when rendering transp objs
+    SbBool  delayObjs; // TRUE if transp objects are to be
+    // delayed until after opaque ones
+    SbBool  sortObjs; // TRUE if objects are to be sorted
+    SoPathList  transpPaths; // Paths to transparent objects
+    SoGetBoundingBoxAction *ba;  // For computing bounding boxes
+    SbBox3f  *bboxes; // Bounding boxes of objects
+    int   numBBoxes; // Number of bboxes allocated
 
-    uint32_t		cacheContext;   // GL cache context
-    SbBool		remoteRendering;// Remote rendering?
+    uint32_t  cacheContext;   // GL cache context
+    SbBool  remoteRendering;// Remote rendering?
 
     // Stuff needed to implement rendering of delayed paths
-    SoPathList		delayedPaths;	// List of paths to render
-    SbBool		renderingDelPaths; // TRUE when rendering them
+    SoPathList  delayedPaths; // List of paths to render
+    SbBool  renderingDelPaths; // TRUE when rendering them
 
     // These flags determine which things have to be sent to GL when
     // the action is applied. They indicate what's changed since the
     // last time the action was applied.
     enum flags {
-	TRANSPARENCY_TYPE	= 0x01,
-	SMOOTHING		= 0x02,
-	ALL			= 0x03	// Initial value
+        TRANSPARENCY_TYPE = 0x01,
+        SMOOTHING  = 0x02,
+        ALL   = 0x03 // Initial value
     };
-    uint32_t		whatChanged;
+    uint32_t  whatChanged;
 
     // Renders all passes starting at a node
-    void		renderAllPasses(SoNode *node);
+    void renderAllPasses(SoNode *node);
 
     // Renders one pass starting at a node
-    void		renderPass(SoNode *node, int pass);
+    void renderPass(SoNode *node, int pass);
 
     // Renders objects that have been marked as transparent in same or
     // sorted order
-    void		renderTransparentObjs();
+    void renderTransparentObjs();
 
     // Enables or disables GL blending
-    void		enableBlending(SbBool enable);
+    void enableBlending(SbBool enable);
 
     // Returns TRUE if render action should abort based on callback
-    SbBool		checkAbort();
+    SbBool checkAbort();
 
     // Keep track of which planes we need to view-volume cull test
     // against:
-    int			cullBits;
+    int   cullBits;
 };
 
 #endif /* _SO_GL_RENDER_ACTION_ */

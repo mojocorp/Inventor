@@ -85,20 +85,21 @@ public:
     virtual ~SoAction();
 
     /// Returns type identifier for SoAction class
-    static SoType	getClassTypeId()
-    { return classTypeId; }
+    static SoType getClassTypeId() {
+        return classTypeId;
+    }
 
     /// Returns type identifier for action
-    virtual SoType	getTypeId() const = 0;
+    virtual SoType getTypeId() const = 0;
 
     /// Returns TRUE if action is of given type or is derived from it
-    SbBool		isOfType(SoType type) const;
+    SbBool isOfType(SoType type) const;
 
     /// Applies action to the graph rooted by a node
-    virtual void	apply(SoNode *node);
+    virtual void apply(SoNode *node);
 
     /// Applies action to the graph defined by a path
-    virtual void	apply(SoPath *path);
+    virtual void apply(SoPath *path);
 
     /// Initiates an action on the graph defined either by a node, path, or
     /// list of paths. TRUE can be passed for the \a obeysRules flag if the
@@ -112,53 +113,62 @@ public:
     ///
     /// These rules will be obeyed by path lists returned by picking and by
     /// searches for non-group nodes.
-    virtual void	apply(const SoPathList &pathList,
-			      SbBool obeysRules = FALSE);
+    virtual void apply(const SoPathList &pathList,
+                       SbBool obeysRules = FALSE);
 
     /// Invalidates the current traversal state in the action, forcing it to
     /// be recreated when the action is next applied. This is typically
     /// unnecessary in most applications.
-    virtual void	invalidateState();
-    
-    SoEXTENDER public:
+    virtual void invalidateState();
 
-        // Null action method that can be stored in lookup table when desired
-        static void		nullAction(SoAction *, SoNode *);
+SoEXTENDER public:
+
+    // Null action method that can be stored in lookup table when desired
+    static void nullAction(SoAction *, SoNode *);
 
     // This enum is used to determine what the action is being applied to
     enum AppliedCode {
-	NODE,			// Applied to graph rooted by a node
-	PATH,			// Applied to graph defined by a path
-	PATH_LIST		// Applied to graphs defined by list of paths
+        NODE,   // Applied to graph rooted by a node
+        PATH,   // Applied to graph defined by a path
+        PATH_LIST  // Applied to graphs defined by list of paths
     };
 
     // This enum may be used during traversal of nodes to indicate
     // where the node is with respect to the path being traversed
     enum PathCode {
-	NO_PATH,		// Not traversing a path
-	IN_PATH,		// In middle of path chain (not tail node)
-	BELOW_PATH,		// Tail node of path or below tail node
-	OFF_PATH		// None of the above (Probably to the left)
+        NO_PATH,  // Not traversing a path
+        IN_PATH,  // In middle of path chain (not tail node)
+        BELOW_PATH,  // Tail node of path or below tail node
+        OFF_PATH  // None of the above (Probably to the left)
     };
 
     // Returns code indicating what action is being applied to
-    AppliedCode		getWhatAppliedTo() const   { return appliedTo.code; }
+    AppliedCode getWhatAppliedTo() const   {
+        return appliedTo.code;
+    }
 
     // These returns a pointer to the node, path, or path list the
     // action is being applied to. Each returns NULL if the action is
     // not being applied to the appropriate class.
-    SoNode *		getNodeAppliedTo() const  { return appliedTo.node; }
-    SoPath *		getPathAppliedTo() const  { return appliedTo.path; }
+    SoNode * getNodeAppliedTo() const  {
+        return appliedTo.node;
+    }
+    SoPath * getPathAppliedTo() const  {
+        return appliedTo.path;
+    }
     // A single path list may be split into several, one for each
     // different head node. These methods allow subclasses to
     // determine the current path list, the original path list, and
     // whether the current list is the last one from the original
-    const SoPathList *	getPathListAppliedTo() const
-    { return appliedTo.pathList; }
-    const SoPathList *	getOriginalPathListAppliedTo() const
-    { return appliedTo.origPathList; }
-    SbBool		isLastPathListAppliedTo() const
-    { return appliedTo.isLastPathList; }
+    const SoPathList * getPathListAppliedTo() const {
+        return appliedTo.pathList;
+    }
+    const SoPathList * getOriginalPathListAppliedTo() const {
+        return appliedTo.origPathList;
+    }
+    SbBool isLastPathListAppliedTo() const {
+        return appliedTo.isLastPathList;
+    }
 
     // Returns path code based on where current node (the node at the
     // end of the current path) lies with respect to the path(s) the
@@ -166,8 +176,8 @@ public:
     // set to point to an array of indices corresponding to the
     // children that continue the paths and numIndices is set to the
     // number of such children.
-    PathCode	getPathCode(int &numIndices, const int *&indices)
-    {   if (appliedTo.curPathCode == IN_PATH) {
+    PathCode getPathCode(int &numIndices, const int *&indices) {
+        if (appliedTo.curPathCode == IN_PATH) {
             usePathCode(numIndices, indices);
         }
         return appliedTo.curPathCode;
@@ -175,26 +185,31 @@ public:
 
 
     // Does traversal of a graph rooted by a node
-    void		traverse(SoNode *node)
-    { (*traversalMethods)[
-                SoNode::getActionMethodIndex(node->getTypeId())](this, node); }
+    void traverse(SoNode *node) {
+        (*traversalMethods)[
+            SoNode::getActionMethodIndex(node->getTypeId())](this, node);
+    }
 
     // Returns TRUE if the traversal has reached a termination condition
-    SbBool		hasTerminated() const	{ return terminated; }
+    SbBool hasTerminated() const {
+        return terminated;
+    }
 
     // Returns a pointer to the path accumulated during traversal,
     // i.e., the chain of nodes from the root of the traversed graph
     // to the current node being traversed.
-    const SoPath *	getCurPath();
+    const SoPath * getCurPath();
 
     // Get the state from the action
-    SoState *		getState() const	{ return state; }
+    SoState * getState() const {
+        return state;
+    }
 
-    SoINTERNAL public:
-        static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
     // Initialize ALL Inventor action classes
-    static void		initClasses();
+    static void initClasses();
 
     // These methods maintain the current path accumulated so far
     // during traversal. The action needs to know whether this path is
@@ -203,25 +218,30 @@ public:
     // path, call getOnPath() to determine the current setting. The
     // value of this flag should be passed in to popCurPath() so the
     // onPath variable can be restored.
-    PathCode		getCurPathCode() const { return appliedTo.curPathCode;}
-    void		pushCurPath(int childIndex);
-    void		popCurPath(PathCode prevPathCode);
+    PathCode getCurPathCode() const {
+        return appliedTo.curPathCode;
+    }
+    void pushCurPath(int childIndex);
+    void popCurPath(PathCode prevPathCode);
     // This is virtual, so that SoCallbackAction can use current node.
-    virtual SoNode *	getCurPathTail();			
+    virtual SoNode * getCurPathTail();
 
     // called by inline getPathCode:
-    void		usePathCode(int &numIndices, const int *&indices);
+    void usePathCode(int &numIndices, const int *&indices);
 
 
 
     // Optimized versions of push/pop when we know path codes won't
     // change:
-    void		pushCurPath()
-    { curPath.append(-1); }
-    void		popPushCurPath(int childIndex)
-    { curPath.setTail(childIndex);}
-    void		popCurPath()
-    { curPath.pop(); }
+    void pushCurPath() {
+        curPath.append(-1);
+    }
+    void popPushCurPath(int childIndex) {
+        curPath.setTail(childIndex);
+    }
+    void popCurPath() {
+        curPath.pop();
+    }
 
 protected:
     // Constructor
@@ -233,11 +253,13 @@ protected:
     // Begins traversal of an action at the given node. The default
     // method just calls traverse(node). This is virtual to allow
     // subclasses to do extra work before or after traversing the node.
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
     // Allows subclass instance to indicate that traversal has reached
     // a termination condition
-    void		setTerminated(SbBool flag)	{ terminated = flag; }
+    void setTerminated(SbBool flag) {
+        terminated = flag;
+    }
 
     // This method is used when applying an action to an SoPathList.
     // It returns TRUE if the action should create a compact version
@@ -247,14 +269,14 @@ protected:
     // example, the SoWriteAction applies itself to each path
     // separately, so it doesn't need the extra overhead of compacting
     // the list.
-    virtual SbBool	shouldCompactPathLists() const;
+    virtual SbBool shouldCompactPathLists() const;
 
-    SoINTERNAL protected:
-        SoState		*state;		// Traversal state
+SoINTERNAL protected:
+    SoState  *state;  // Traversal state
 
     // The list of what to do when.  Subclasses set this pointer to
     // their per-class instance in their constructors.
-    SoActionMethodList	*traversalMethods;
+    SoActionMethodList *traversalMethods;
 
     // Holds list of enabled elements for the SoAction class
     static SoEnabledElementsList *enabledElements;
@@ -263,60 +285,60 @@ protected:
     static SoActionMethodList *methods;
 
 private:
-    static SoType	classTypeId;		// Type identifier
+    static SoType classTypeId;  // Type identifier
 
     // This structure holds the necessary information about what the
     // action is being applied to. It allows this information to be
     // saved and restored when necessary.
     struct AppliedTo {
-	AppliedCode		code;
-	SoNode			*node;		// If code is NODE
-	SoPath			*path;		// If code is PATH
-	const SoPathList	*pathList;	// If code is PATH_LIST
-	const SoPathList	*origPathList;
-	SoCompactPathList	*compactPathList;
-	int			isLastPathList;
-	PathCode		curPathCode;
-    }			appliedTo;
+        AppliedCode  code;
+        SoNode   *node;  // If code is NODE
+        SoPath   *path;  // If code is PATH
+        const SoPathList *pathList; // If code is PATH_LIST
+        const SoPathList *origPathList;
+        SoCompactPathList *compactPathList;
+        int   isLastPathList;
+        PathCode  curPathCode;
+    }   appliedTo;
 
     // This is set to TRUE while the action is being applied, so we
     // can tell if the action is being applied recursively.
-    SbBool		isBeingApplied;
+    SbBool isBeingApplied;
 
     // This is the current path through the graph the action is being
     // applied to
-    SoLightPath		curPath;
+    SoLightPath curPath;
 
-    // This holds the current path (nodes and childindices) whenever        
+    // This holds the current path (nodes and childindices) whenever
     // action->getCurPath is called:
-    SoTempPath	*	tempPath;
+    SoTempPath * tempPath;
 
 
     // Holds enabled-elements counter when state is created; used to
     // determine whether list of enabled elements is up to date.
-    int			enabledElementsCounter;
+    int   enabledElementsCounter;
 
     // This is TRUE if the action has reached a termination condition
-    SbBool		terminated;
+    SbBool  terminated;
 
     // Stores next index in path being applied to so a pointer to it
     // can be returned
-    int			index;
+    int   index;
 
     // Creates state, based on list of elements passed in
-    void		setUpState();
+    void setUpState();
 
     // Cleans up after an action is done
-    void		cleanUp();
+    void cleanUp();
 
     // Splits a sorted path list based on head nodes, then applies to each
-    void		splitPathList(const SoPathList &sortedList,
-				      const SoPathList &origPathList);
+    void splitPathList(const SoPathList &sortedList,
+                       const SoPathList &origPathList);
 
     // Applies action to sorted path list
-    void		apply(const SoPathList &sortedList,
-			      const SoPathList &origPathList,
-			      SbBool isLastPathList);
+    void apply(const SoPathList &sortedList,
+               const SoPathList &origPathList,
+               SbBool isLastPathList);
 
     friend class SoDB;
 };
@@ -326,11 +348,11 @@ private:
 //  Classes can use this macro to enable a specific element class
 //  within a specific action class. E.g.:
 //
-//	SO_ENABLE(SoGetBoundingBoxAction, SoModelMatrixElement);
+// SO_ENABLE(SoGetBoundingBoxAction, SoModelMatrixElement);
 //
 
-#define SO_ENABLE(actionClass, elementClass)				\
-    actionClass::enableElement(elementClass::getClassTypeId(),	\
+#define SO_ENABLE(actionClass, elementClass)    \
+    actionClass::enableElement(elementClass::getClassTypeId(), \
     elementClass::getClassStackIndex())
 
 //
