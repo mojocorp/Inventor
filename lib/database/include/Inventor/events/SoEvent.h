@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Classes:
- |	SoEvent
+ | SoEvent
  |
  |   Author(s): David Mott, Gavin Bell
  |
@@ -76,42 +76,52 @@
 /// \sa SoMouseButtonEvent, SoSpaceballButtonEvent,SoHandleEventAction,
 /// \sa SoEventCallback, SoSelection, SoInteraction,SoXtDevice, SoXtRenderArea
 class INVENTOR_API SoEvent {
-  public:
-  
+public:
+
     /// Constructor and destructor
     SoEvent();
 
     /// Destructor
     virtual ~SoEvent();
-    
+
     /// Return the type id for this event instance.
-    virtual SoType	getTypeId() const;
-    
+    virtual SoType getTypeId() const;
+
     /// Return the type id for the \c SoEvent class.
-    static SoType	getClassTypeId() { return classTypeId; }
-    
+    static SoType getClassTypeId() {
+        return classTypeId;
+    }
+
     /// returns TRUE if event is of given type or is derived from it
-    SbBool		isOfType(SoType type) const;
-    
+    SbBool isOfType(SoType type) const;
+
     /// Set the time at which the event occurred.
-    void		setTime(SbTime t)		{ timestamp = t; }
+    void setTime(SbTime t) {
+        timestamp = t;
+    }
 
     /// Get the time at which the event occurred.
-    SbTime		getTime() const			{ return timestamp; }
-    
+    SbTime getTime() const {
+        return timestamp;
+    }
+
     /// Set the window pixel location of the cursor when the event occurred.
     /// The position is relative to the lower left corner of the window
     /// in which the event occurred.
-    void		setPosition(const SbVec2s &p)	{ position = p; }
+    void setPosition(const SbVec2s &p) {
+        position = p;
+    }
 
     /// Get the window pixel location of the cursor when the event occurred.
     /// The position is relative to the lower left corner of the window
     /// in which the event occurred.
-    const SbVec2s &	getPosition() const		{ return position; }
+    const SbVec2s & getPosition() const {
+        return position;
+    }
 
     /// Get the viewport pixel location of the cursor when the event occurred,
     /// relative to the specified viewport region.
-    const SbVec2s &	getPosition(const SbViewportRegion &vpRgn) const;
+    const SbVec2s & getPosition(const SbViewportRegion &vpRgn) const;
 
     /// Get the normalized location of the cursor when the event occurred,
     /// relative to the specified viewport region. The returned value will
@@ -119,42 +129,54 @@ class INVENTOR_API SoEvent {
     const SbVec2f & getNormalizedPosition(const SbViewportRegion &vpRgn) const;
 
     /// Set whether the modifier key was down when the event occurred.
-    void		setShiftDown(SbBool isDown)	{ shiftDown = isDown; }
+    void setShiftDown(SbBool isDown) {
+        shiftDown = isDown;
+    }
 
     /// Set whether the modifier key was down when the event occurred.
-    void		setCtrlDown(SbBool isDown)	{ ctrlDown = isDown; }
+    void setCtrlDown(SbBool isDown) {
+        ctrlDown = isDown;
+    }
 
     /// Set whether the modifier key was down when the event occurred.
-    void		setAltDown(SbBool isDown)	{ altDown = isDown; }
-    
-    /// Get whether the modifier key was down when the event occurred.
-    SbBool		wasShiftDown() const		{ return shiftDown; }
+    void setAltDown(SbBool isDown) {
+        altDown = isDown;
+    }
 
     /// Get whether the modifier key was down when the event occurred.
-    SbBool		wasCtrlDown() const		{ return ctrlDown; }
+    SbBool wasShiftDown() const {
+        return shiftDown;
+    }
 
     /// Get whether the modifier key was down when the event occurred.
-    SbBool		wasAltDown() const		{ return altDown; }
-    
-  SoINTERNAL public:
+    SbBool wasCtrlDown() const {
+        return ctrlDown;
+    }
+
+    /// Get whether the modifier key was down when the event occurred.
+    SbBool wasAltDown() const {
+        return altDown;
+    }
+
+SoINTERNAL public:
     // Initializes base event class
-    static void		initClass();
+    static void initClass();
 
     // Initialize ALL Inventor event classes
-    static void		initClasses();
-    
-  private:
+    static void initClasses();
+
+private:
     // all of these are set according to when the event occurred
-    SbTime		timestamp;  // time the event occurred
-    SbBool		shiftDown;  // TRUE if shift key was down 
-    SbBool		ctrlDown;   // TRUE if ctrl key was down 
-    SbBool		altDown;    // TRUE if alt key was down 
+    SbTime  timestamp;  // time the event occurred
+    SbBool  shiftDown;  // TRUE if shift key was down
+    SbBool  ctrlDown;   // TRUE if ctrl key was down
+    SbBool  altDown;    // TRUE if alt key was down
 
-    SbVec2s		position;   // locator position when event occurred
-    SbVec2s		viewportPos;	// position relative to viewport
-    SbVec2f		normalizedPos;	// normalized position
+    SbVec2s  position;   // locator position when event occurred
+    SbVec2s  viewportPos; // position relative to viewport
+    SbVec2f  normalizedPos; // normalized position
 
-    static SoType	classTypeId; // base typeId for all events
+    static SoType classTypeId; // base typeId for all events
 };
 
 

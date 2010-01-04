@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,9 +45,9 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoTextDetail class.
+ | This file defines the SoTextDetail class.
  |
- |   Author(s)		: Thaddeus Beier, Dave Immel, Howard Look
+ |   Author(s)  : Thaddeus Beier, Dave Immel, Howard Look
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -69,7 +69,7 @@ class INVENTOR_API SoTextDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoTextDetail);
 
-  public:
+public:
     /// Constructor
     SoTextDetail();
 
@@ -78,34 +78,46 @@ class INVENTOR_API SoTextDetail : public SoDetail {
 
     /// Returns the index of the string within a multiple-value string
     /// fields of a text node
-    int32_t		getStringIndex() const		{ return stringIndex; }
+    int32_t getStringIndex() const {
+        return stringIndex;
+    }
 
     /// Returns the index of the character within the string. For
     /// example, if the character of detail was the "u" within
     /// "Splurmph", the character index would be 3.
-    int32_t		getCharacterIndex() const	{ return charIndex; }
+    int32_t getCharacterIndex() const {
+        return charIndex;
+    }
 
     /// For \c SoText3, this returns which part was picked or generated.
-    SoText3::Part	getPart() const		{ return part; }
+    SoText3::Part getPart() const {
+        return part;
+    }
 
     /// Returns an instance that is a copy of this instance. The caller
     /// is responsible for deleting the copy when done.
-    virtual SoDetail *	copy() const;
+    virtual SoDetail * copy() const;
 
-  SoEXTENDER public:
+SoEXTENDER public:
     // For Text3, this sets which part is picked:
-    void		setPart(SoText3::Part p)	{ part = p; }
+    void setPart(SoText3::Part p) {
+        part = p;
+    }
 
     // These set the string and character indices:
-    void		setStringIndex(int32_t i)		{ stringIndex = i; }
-    void		setCharacterIndex(int32_t i)	{ charIndex = i; }
+    void setStringIndex(int32_t i) {
+        stringIndex = i;
+    }
+    void setCharacterIndex(int32_t i) {
+        charIndex = i;
+    }
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
-  private:
-    int32_t		stringIndex, charIndex;
-    SoText3::Part	part;
+private:
+    int32_t  stringIndex, charIndex;
+    SoText3::Part part;
 };
 
 #endif /* _SO_TEXT_DETAIL_ */

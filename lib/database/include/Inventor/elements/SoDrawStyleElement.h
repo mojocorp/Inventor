@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,9 +45,9 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoDrawStyleElement class.
+ | This file defines the SoDrawStyleElement class.
  |
- |   Author(s)		: Paul S. Strauss
+ |   Author(s)  : Paul S. Strauss
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -70,36 +70,39 @@ SoEXTENDER class INVENTOR_API SoDrawStyleElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoDrawStyleElement);
 
-  public:
+public:
     /// These are the available draw styles:
     enum Style {
-        FILLED,			///< Filled regions
-        LINES,			///< Outlined regions
-        POINTS,			///< Points
-        INVISIBLE		///< Nothing!
+        FILLED,   ///< Filled regions
+        LINES,   ///< Outlined regions
+        POINTS,   ///< Points
+        INVISIBLE  ///< Nothing!
     };
 
     /// Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     /// Sets the current draw style in the state
-    static void		set(SoState *state, Style style);
+    static void set(SoState *state, Style style);
 
     /// Returns current draw style from the state
-    static Style	get(SoState *state)
-	{ return (Style)SoInt32Element::get(classStackIndex, state); }
+    static Style get(SoState *state) {
+        return (Style)SoInt32Element::get(classStackIndex, state);
+    }
 
     /// Returns the default draw style
-    static Style	getDefault()		{ return FILLED; }
+    static Style getDefault()  {
+        return FILLED;
+    }
 
     /// Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+SoINTERNAL public:
     // Initializes the SoDrawStyleElement class
-    static void		initClass();
+    static void initClass();
 
-  protected:
+protected:
     virtual ~SoDrawStyleElement();
 };
 

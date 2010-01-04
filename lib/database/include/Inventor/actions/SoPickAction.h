@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,9 +45,9 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	Defines the abstract SoPickAction class
+ | Defines the abstract SoPickAction class
  |
- |   Author(s)		: Paul S. Strauss, Nick Thompson
+ |   Author(s)  : Paul S. Strauss, Nick Thompson
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -68,16 +68,18 @@ class INVENTOR_API SoPickAction : public SoAction {
 
     SO_ACTION_HEADER(SoPickAction);
 
-  public:
+public:
     /// Sets current viewport region to use for action. Even though
     /// the picking operation may not involve a window per se, some nodes need
     /// this information to determine their size and placement.
-    void		setViewportRegion(const SbViewportRegion &newRegion);
+    void setViewportRegion(const SbViewportRegion &newRegion);
 
     /// Returns current viewport region
-    const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
+    const SbViewportRegion &getViewportRegion() const {
+        return vpRegion;
+    }
 
-  SoEXTENDER public:
+SoEXTENDER public:
     // Setting this flag to FALSE disables any pick culling that might
     // take place (as in SoSeparators). This can be used for nodes
     // (such as SoArray and SoMultipleCopy) that traverse their
@@ -85,14 +87,18 @@ class INVENTOR_API SoPickAction : public SoAction {
     // avoiding computing bounding boxes each time. (This problem is
     // very severe when each bounding box traversal also traverses the
     // children N times.) The default setting is TRUE.
-    void		enableCulling(SbBool flag)	{ culling = flag; }
-    SbBool		isCullingEnabled() const	{ return culling; }
+    void enableCulling(SbBool flag) {
+        culling = flag;
+    }
+    SbBool isCullingEnabled() const {
+        return culling;
+    }
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void  initClass();
 
-  protected:
-    SbViewportRegion	vpRegion;	// Current viewport region
+protected:
+    SbViewportRegion vpRegion; // Current viewport region
 
     // Constructor takes viewport region. See comments for the
     // setViewportRegion() method.
@@ -102,10 +108,10 @@ class INVENTOR_API SoPickAction : public SoAction {
     virtual ~SoPickAction();
 
     // Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
-  private:
-    SbBool		culling;	// Pick culling enabled?
+private:
+    SbBool  culling; // Pick culling enabled?
 };
 
 #endif /* _SO_PICK_ACTION_ */

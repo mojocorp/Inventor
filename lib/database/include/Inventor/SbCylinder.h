@@ -70,7 +70,7 @@
 /// the Inventor toolkit for arguments or return values.
 /// \sa SbVec3f, SbLine, SbPlane, SbSphere, SoCylinder
 class INVENTOR_API SbCylinder {
-  public:
+public:
     /// Constructor
     SbCylinder();
 
@@ -78,32 +78,35 @@ class INVENTOR_API SbCylinder {
     SbCylinder(const SbLine &a, float r);
 
     /// Change the axis and radius
-    void 	setValue(const SbLine &a, float r);
+    void  setValue(const SbLine &a, float r);
 
     /// Set just the axis
-    void	setAxis(const SbLine &a);
+    void setAxis(const SbLine &a);
 
     /// Set just the radius
-    void	setRadius(float r);
+    void setRadius(float r);
 
     /// Return the axis
-    const SbLine & 	getAxis() const			{ return axis; }
+    const SbLine &  getAxis() const {
+        return axis;
+    }
 
     /// Return the radius
-    float		getRadius() const		{ return radius; }
+    float  getRadius() const {
+        return radius;
+    }
 
     /// Intersect line and cylinder, returning TRUE if there is an intersection
-    SbBool	intersect(const SbLine &l, SbVec3f &intersection) const;
+    SbBool intersect(const SbLine &l, SbVec3f &intersection) const;
 
     /// Intersect line and cylinder, returning TRUE if there is an intersection
-    SbBool	intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
+    SbBool intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
 
-  private:
-    SbLine	axis;
-    float	radius;
+private:
+    SbLine axis;
+    float radius;
 
-    static SbBool	unitCylinderIntersect(const SbLine &l,
-					      SbVec3f &in, SbVec3f &out);
+    static SbBool unitCylinderIntersect(const SbLine &l, SbVec3f &in, SbVec3f &out);
 };
 
 #endif /* _SB_CYLINDER_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,9 +45,9 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoGLCacheContextElement class.
+ | This file defines the SoGLCacheContextElement class.
  |
- |   Author(s)		: Gavin Bell
+ |   Author(s)  : Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -109,12 +109,12 @@
 
 SoEXTENDER class INVENTOR_API SoGLDisplayList {
 
-  public:
+public:
 
     enum Type {
-	DISPLAY_LIST,
-	TEXTURE_OBJECT
-	};
+        DISPLAY_LIST,
+        TEXTURE_OBJECT
+    };
 
     /// Constructor.  Takes state, type, and number of lists to
     /// allocate.  Calls either glGenLists() or glGenTexturesEXT() to
@@ -149,21 +149,29 @@ SoEXTENDER class INVENTOR_API SoGLDisplayList {
     //
     // Get methods
     //
-    Type getType() { return type; }
-    int getNumAllocated() { return num; }
-    GLuint getFirstIndex() { return startIndex; }
-    int getContext() { return context; }
+    Type getType() {
+        return type;
+    }
+    int getNumAllocated() {
+        return num;
+    }
+    GLuint getFirstIndex() {
+        return startIndex;
+    }
+    int getContext() {
+        return context;
+    }
 
-  private:
+private:
     ~SoGLDisplayList();
 
     Type type;
     GLuint startIndex;
     int num;
     int refCount;
-    int	context;
+    int context;
     static int texture_object_extensionID;
-friend class SoGLCacheContextElement;
+    friend class SoGLCacheContextElement;
 };
 
 class SbIntList;
@@ -172,9 +180,9 @@ SoEXTENDER class INVENTOR_API SoGLCacheContextElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoGLCacheContextElement);
 
-  public:
+public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the current context.  This is done by the renderAction;
     // theoretically, a node that redirected the GL rendering context
@@ -187,25 +195,25 @@ SoEXTENDER class INVENTOR_API SoGLCacheContextElement : public SoElement {
     // rendering is being done; the SoSeparator auto-caching algorithm
     // uses this information to help decide whether or not to build
     // caches.
-    static void		set(SoState *state, int context,
-			    SbBool is2PassTransparency,
-			    SbBool isRemoteRendering);
+    static void set(SoState *state, int context,
+                    SbBool is2PassTransparency,
+                    SbBool isRemoteRendering);
 
     // Gets the current context
-    static int		get(SoState *state);
+    static int get(SoState *state);
 
     // Methods to quickly figure out if an OpenGL extension is
     // available at run-time.
 
     // This is the slow routine-- convert from a string to an integer.
     // The integer should be saved to do quick lookups:
-    static int		getExtID(const char *str);
+    static int getExtID(const char *str);
 
     // This routine is pretty quick:
-    static SbBool	extSupported(SoState *state, int ext);
+    static SbBool extSupported(SoState *state, int ext);
 
     // TRUE if mip-mapped textures are known to be fast:
-    static SbBool	areMipMapsFast(SoState *state);
+    static SbBool areMipMapsFast(SoState *state);
 
     // Methods used to improve auto-caching algorithm:
 
@@ -216,68 +224,65 @@ SoEXTENDER class INVENTOR_API SoGLCacheContextElement : public SoElement {
     // default.  Separators will auto cache if DO_AUTO_CACHE is TRUE
     // and DONT_AUTO_CACHE is FALSE, otherwise they won't auto-cache.
     enum {
-	DO_AUTO_CACHE = 1,   // Hack warning: I rely on TRUE==DO_AUTO_CACHE
-	DONT_AUTO_CACHE = 2
+        DO_AUTO_CACHE = 1,   // Hack warning: I rely on TRUE==DO_AUTO_CACHE
+        DONT_AUTO_CACHE = 2
     };
 
     // Called by nodes to say that they should/shouldn't be
     // auto-cached (pass TRUE if should, FALSE if shouldn't, don't
     // call this method at all if the node doesn't care):
-    static void		shouldAutoCache(SoState *state, int bits)
-    {
-	SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
-	    state->getElementNoPush(classStackIndex);
-	elt->autoCacheBits |= bits;
+    static void shouldAutoCache(SoState *state, int bits) {
+        SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
+                                       state->getElementNoPush(classStackIndex);
+        elt->autoCacheBits |= bits;
     }
 
     // Used by Separators to set/reset the auto-caching bits:
-    static void		setAutoCacheBits(SoState *state, int bits)
-	{ ((SoGLCacheContextElement *)state->getElementNoPush(
-	    classStackIndex))->autoCacheBits = bits;
-        }
+    static void setAutoCacheBits(SoState *state, int bits) {
+        ((SoGLCacheContextElement *)state->getElementNoPush(
+             classStackIndex))->autoCacheBits = bits;
+    }
 
-    static int		resetAutoCacheBits(SoState *state)
-	{
-	    SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
-		state->getElementNoPush(classStackIndex);
-	    int result = elt->autoCacheBits;
-	    // Hack warning: I rely on TRUE==DO_AUTO_CACHE
-	    elt->autoCacheBits = elt->isRemoteRendering;
-	    
-	    return result;
-	}
+    static int resetAutoCacheBits(SoState *state) {
+        SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
+                                       state->getElementNoPush(classStackIndex);
+        int result = elt->autoCacheBits;
+        // Hack warning: I rely on TRUE==DO_AUTO_CACHE
+        elt->autoCacheBits = elt->isRemoteRendering;
 
-    static SbBool	getIsRemoteRendering(SoState *state)
-	{
-	    const SoGLCacheContextElement *elt =
-		(const SoGLCacheContextElement *)
-		    state->getConstElement(classStackIndex);
-	    return elt->isRemoteRendering;
-	}
+        return result;
+    }
+
+    static SbBool getIsRemoteRendering(SoState *state) {
+        const SoGLCacheContextElement *elt =
+            (const SoGLCacheContextElement *)
+            state->getConstElement(classStackIndex);
+        return elt->isRemoteRendering;
+    }
 
     // Standard element stuff:
 
     // Returns TRUE if the widths match in both elements
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
     // Create and return a copy of this element
-    virtual SoElement	*copyMatchInfo() const;
+    virtual SoElement *copyMatchInfo() const;
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
-  protected:
-    int			context;
-    SbBool		is2PassTransp;
-    SbBool		isRemoteRendering;
-    int			autoCacheBits;
+protected:
+    int   context;
+    SbBool  is2PassTransp;
+    SbBool  isRemoteRendering;
+    int   autoCacheBits;
 
     virtual ~SoGLCacheContextElement();
 
-  private:
+private:
     // Frees up the given display lists right away, if possible.  If
     // not possible (because the state passed in is NULL or has a
     // different cache context than the display lists' state), this
@@ -286,13 +291,12 @@ SoEXTENDER class INVENTOR_API SoGLCacheContextElement : public SoElement {
     // This method is necessary because nodes with caches can be
     // deleted at any time, but we can't necessarily send GL commands
     // to free up a display list at any time.
-    static void		freeList(SoState *state,
-				 SoGLDisplayList *list);
+    static void freeList(SoState *state, SoGLDisplayList *list);
 
-    static SbPList *	waitingToBeFreed;	// Allocated in ::init
-    static SbPList *	extensionList;		// Allocated in ::init
+    static SbPList * waitingToBeFreed; // Allocated in ::init
+    static SbPList * extensionList;  // Allocated in ::init
 
-friend class SoGLDisplayList;
+    friend class SoGLDisplayList;
 };
 
 #endif /* _SO_CACHE_CONTEXT_ELEMENT */

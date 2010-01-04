@@ -47,85 +47,109 @@
 /// geometry operations.
 /// \sa SbBox3f, SbXfBox3f, SbBox2f, SbVec3f, SbVec2f, SbVec2s, SbMatrix
 class INVENTOR_API SbBox2s {
-  public:
+public:
     /// Default constructor - leaves box totally empty
-    SbBox2s()					{ makeEmpty(); };
+    SbBox2s() {
+        makeEmpty();
+    };
 
     /// Constructor given bounds.
     /// \a xmin, \a ymin, \a xmax, and \a ymax are the bounds of the box.
-    SbBox2s(short xmin, short ymin, short xmax, short ymax)
-	{ min.setValue(xmin, ymin); max.setValue(xmax, ymax); }
+    SbBox2s(short xmin, short ymin, short xmax, short ymax) {
+        min.setValue(xmin, ymin);
+        max.setValue(xmax, ymax);
+    }
 
     /// Constructor given minimum and maximum points.
     /// \a min and \a max are the corners of the diagonal that define the box.
-    SbBox2s(const SbVec2s &_min, const SbVec2s &_max)
-	{ min = _min; max = _max; }
+    SbBox2s(const SbVec2s &_min, const SbVec2s &_max) {
+        min = _min;
+        max = _max;
+    }
 
     /// Destructor
-    ~SbBox2s()						{ }
+    ~SbBox2s() { }
 
     /// Returns the minimum point of the box.  The minimum point is
     /// the corner of the box with the lowest X, Y, and Z values.
-    const SbVec2s &	getMin() const			{ return min; }
+    const SbVec2s & getMin() const {
+        return min;
+    }
 
     /// Returns the maximum point of the box.  The maximum
     /// point is the corner of the box with the highest X, Y, and Z values.
-    const SbVec2s &	getMax() const			{ return max; }
+    const SbVec2s & getMax() const {
+        return max;
+    }
 
     /// Extends Box2s (if necessary) to contain given 2D point
-    void	extendBy(const SbVec2s &pt);
+    void extendBy(const SbVec2s &pt);
 
     /// Extends Box2s (if necessary) to contain given Box2s
-    void	extendBy(const SbBox2s &r);
+    void extendBy(const SbBox2s &r);
 
     /// Returns TRUE if intersection of given point and Box2s is not empty
-    SbBool	intersect(const SbVec2s &pt) const;
+    SbBool intersect(const SbVec2s &pt) const;
 
     /// Returns TRUE if intersection of given Box2s and Box2s is not empty
-    SbBool	intersect(const SbBox2s &bb) const;
+    SbBool intersect(const SbBox2s &bb) const;
 
     /// Sets the corners of the box.
-    void	setBounds(short xmin, short ymin, short xmax, short ymax)
-	{ min.setValue(xmin, ymin); max.setValue(xmax, ymax); }
+    void setBounds(short xmin, short ymin, short xmax, short ymax) {
+        min.setValue(xmin, ymin);
+        max.setValue(xmax, ymax);
+    }
 
     /// Sets the corners of the box.
-    void	setBounds(const SbVec2s &_min, const SbVec2s &_max)
-	{ min = _min; max = _max; }
+    void setBounds(const SbVec2s &_min, const SbVec2s &_max) {
+        min = _min;
+        max = _max;
+    }
 
     /// Gets the corners of the box.
-    void	getBounds(short &xmin, short &ymin,
-			  short &xmax, short &ymax) const
-	{ min.getValue(xmin, ymin); max.getValue(xmax, ymax); }
+    void getBounds(short &xmin, short &ymin,
+                   short &xmax, short &ymax) const {
+        min.getValue(xmin, ymin);
+        max.getValue(xmax, ymax);
+    }
 
     /// Gets the corners of the box.
-    void	getBounds(SbVec2s &_min, SbVec2s &_max) const
-	{ _min = min; _max = max; }
+    void getBounds(SbVec2s &_min, SbVec2s &_max) const {
+        _min = min;
+        _max = max;
+    }
 
     /// Returns origin (minimum point) of box
-    void	getOrigin(short &originX, short &originY) const
-	{ originX = min[0]; originY = min[1]; }
+    void getOrigin(short &originX, short &originY) const {
+        originX = min[0];
+        originY = min[1];
+    }
 
     /// Returns size of box
-    void	getSize(short &sizeX, short &sizeY) const
-	{ sizeX = max[0] - min[0]; sizeY = max[1] - min[1]; }
+    void getSize(short &sizeX, short &sizeY) const {
+        sizeX = max[0] - min[0];
+        sizeY = max[1] - min[1];
+    }
 
     /// Returns aspect ratio (ratio of width to height) of box
-    float	getAspectRatio() const
-	{ return float(max[0] - min[0]) / float(max[1] - min[1]); }
+    float getAspectRatio() const {
+        return float(max[0] - min[0]) / float(max[1] - min[1]);
+    }
 
     /// Sets box to contain nothing
-    void	makeEmpty();
+    void makeEmpty();
 
     /// Equality comparison
     friend INVENTOR_API int          operator ==(const SbBox2s &b1, const SbBox2s &b2);
 
     /// Inequality comparison
-    friend INVENTOR_API int          operator !=(const SbBox2s &b1, const SbBox2s &b2)
-	{ return !(b1 == b2); }
+    friend INVENTOR_API int          operator !=(const SbBox2s &b1, const SbBox2s &b2) {
+        return !(b1 == b2);
+    }
 
-  private:
+private:
     // Minimum and maximum points
-    SbVec2s	min, max;
+    SbVec2s min, max;
 };
 
 #endif /* _SB_BOX2S_ */

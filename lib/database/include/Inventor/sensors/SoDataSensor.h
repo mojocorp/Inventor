@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,12 +45,12 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	Abstract base class for sensors that attach to some part of a
- |	scene graph and detect changes to it. A data sensor is scheduled
- |	when a change is made to the thing to which it is attached. This
- |	change is detected via the notification mechanism.
+ | Abstract base class for sensors that attach to some part of a
+ | scene graph and detect changes to it. A data sensor is scheduled
+ | when a change is made to the thing to which it is attached. This
+ | change is detected via the notification mechanism.
  |
- |   Author(s)		: Nick Thompson, Gavin Bell, Paul Strauss
+ |   Author(s)  : Nick Thompson, Gavin Bell, Paul Strauss
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -84,7 +84,7 @@ class SoNotList;
 /// \sa SoNodeSensor, SoPathSensor, SoFieldSensor, SoDelayQueueSensor
 class INVENTOR_API SoDataSensor : public SoDelayQueueSensor {
 
-  public:
+public:
     /// Constructor.
     SoDataSensor();
 
@@ -95,7 +95,10 @@ class INVENTOR_API SoDataSensor : public SoDelayQueueSensor {
     virtual ~SoDataSensor();
 
     /// Sets a callback that will be called when the object the sensor is sensing is deleted.
-    void		setDeleteCallback(SoSensorCB *func, void *data = NULL) { deleteFunc = func; deleteData = data; }
+    void setDeleteCallback(SoSensorCB *func, void *data = NULL) {
+        deleteFunc = func;
+        deleteData = data;
+    }
 
     /// If this is a priority 0 data sensor,
     /// returns the node/field that was modified that caused this sensor to
@@ -106,19 +109,19 @@ class INVENTOR_API SoDataSensor : public SoDelayQueueSensor {
     /// graph may cause multiple nodes or fields to be modified (because of
     /// field-to-field connections), the node or field returned may not be the
     /// only one that changed.
-    SoNode *		getTriggerNode() const;
+    SoNode * getTriggerNode() const;
 
     /// Like getTriggerNode(), but returns the field that started
     /// notification (NULL if the sensor isn't priority 0 or if
     /// notification didn't start at a field).
-    SoField *		getTriggerField() const;
-    
+    SoField * getTriggerField() const;
+
     /// Returns the path from the node to which this sensor is attached
     /// down to the child node that changed.  setTriggerPathFlag(TRUE)
     /// must be called before the sensor is scheduled, or this will
     /// return NULL.  It will also return NULL if the sensor is not
     /// immediate or if the notification doesn't go through a node
-    SoPath *		getTriggerPath() const;
+    SoPath * getTriggerPath() const;
 
     /// If this is a priority 0 data sensor,
     /// returns a path to the node that caused this sensor to trigger.
@@ -127,13 +130,17 @@ class INVENTOR_API SoDataSensor : public SoDelayQueueSensor {
     /// sensor is scheduled.  If it is not called, or if the sensor wasn't
     /// triggered because a node changed, this returns NULL.  NULL is also
     /// returned if this is not a priority 0 sensor.
-    void		setTriggerPathFlag(SbBool flag) { doTrigPath = flag; }
-    SbBool		getTriggerPathFlag() const	{ return doTrigPath; }
+    void setTriggerPathFlag(SbBool flag) {
+        doTrigPath = flag;
+    }
+    SbBool getTriggerPathFlag() const {
+        return doTrigPath;
+    }
 
     /// Override unschedule() to reset trigNode and trigPath.
     virtual void unschedule();
 
-  SoINTERNAL public:
+SoINTERNAL public:
     // Override trigger to reset trigNode and trigPath, if
     // necessary.
     virtual void trigger();
@@ -142,24 +149,24 @@ class INVENTOR_API SoDataSensor : public SoDelayQueueSensor {
     // default, this schedules the sensor to be triggered and saves
     // some information from the notification list for use by the
     // callback function.  Called by SoBase.
-    virtual void	notify(SoNotList *list);
+    virtual void notify(SoNotList *list);
 
     // This is called when the base (path, field, node, whatever) is
     // deleted. All subclasses must implement this to do the right
     // thing.
-    virtual void	dyingReference() = 0;
+    virtual void dyingReference() = 0;
 
-  protected:
+protected:
     // Invokes the delete callback
-    void		invokeDeleteCallback();
+    void invokeDeleteCallback();
 
-  private:
-    SoSensorCB		*deleteFunc;    // CB and data for when attached SoBase
-    void		*deleteData;	//     is about to be deleted
-    SoNode		*trigNode;	// Node that triggered sensor
-    SoField		*trigField;	// Field that triggered sensor
-    SoPath		*trigPath;	// Path to trigNode
-    SbBool		doTrigPath;	// Whether to compute trigger path
+private:
+    SoSensorCB  *deleteFunc;    // CB and data for when attached SoBase
+    void  *deleteData; //     is about to be deleted
+    SoNode  *trigNode; // Node that triggered sensor
+    SoField  *trigField; // Field that triggered sensor
+    SoPath  *trigPath; // Path to trigNode
+    SbBool  doTrigPath; // Whether to compute trigger path
 };
 
 #endif  /* _SO_DATA_SENSOR_ */

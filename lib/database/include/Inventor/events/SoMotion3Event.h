@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Classes:
- |	SoMotion3Event - 3d change in value (relative, not absolute)
+ | SoMotion3Event - 3d change in value (relative, not absolute)
  |
  |   Author(s): David Mott
  |
@@ -70,34 +70,42 @@
 class INVENTOR_API SoMotion3Event : public SoEvent {
 
     SO_EVENT_HEADER();
-    
-  public:
-  
+
+public:
+
     /// constructor
     SoMotion3Event();
 
     /// Destructor
     virtual ~SoMotion3Event();
-    
+
     /// Set the relative change in translation since the last translation event.
-    void		setTranslation(const SbVec3f &t)    { translation = t; }
+    void setTranslation(const SbVec3f &t) {
+        translation = t;
+    }
 
     /// Get the relative change in translation since the last translation event.
-    const SbVec3f &	getTranslation() const		    { return translation; }
-    
+    const SbVec3f & getTranslation() const {
+        return translation;
+    }
+
     /// Set the relative change in rotation since the last rotation event.
-    void		setRotation(const SbRotation &r)    { rotation = r; }
+    void  setRotation(const SbRotation &r) {
+        rotation = r;
+    }
 
     /// Get the relative change in rotation since the last rotation event.
-    const SbRotation &	getRotation() const		    { return rotation; }
-    
-    
-  SoINTERNAL public:
-    static void	    initClass();
-    
-  private:
-    SbVec3f	    translation;    // translation value
-    SbRotation	    rotation;	    // rotation value
+    const SbRotation & getRotation() const {
+        return rotation;
+    }
+
+
+SoINTERNAL public:
+    static void initClass();
+
+private:
+    SbVec3f     translation;    // translation value
+    SbRotation     rotation;     // rotation value
 };
 
 

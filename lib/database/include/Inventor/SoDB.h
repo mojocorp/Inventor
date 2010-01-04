@@ -102,12 +102,12 @@ typedef void SoDBHeaderCB(void *userData, SoInput *in);
 /// \sa SoBase, SoNode, SoEngine, SoField, SoInput, SoFile, SoPath, SoOneShotSensor, SoDataSensor, SoXt
 class INVENTOR_API SoDB {
 
-  public:
+public:
     /// Initialization routine. Creates global database
-    static void		init();
+    static void  init();
 
     /// Returns a character string identifying the version of the Inventor library in use.
-    static const char	*getVersion();
+    static const char *getVersion();
 
     /// Reads a graph from the file specified by the given \c SoInput,
     /// returning a pointer to the resulting root node in \a rootNode, or a
@@ -122,13 +122,13 @@ class INVENTOR_API SoDB {
     /// This means that nested files named in \c SoFile nodes may be found
     /// relative to that directory.  The directory is removed from the search
     /// path when reading is complete.
-    static SbBool	read(SoInput *in, SoNode *&rootNode);
+    static SbBool read(SoInput *in, SoNode *&rootNode);
 
     /// Reads a path from the file specified by the given SoInput,
     /// returning a pointer to the resulting path in path. Returns
     /// FALSE on error.
     /// \sa read(SoInput *in, SoNode *&rootNode)
-    static SbBool	read(SoInput *in, SoPath *&path);
+    static SbBool read(SoInput *in, SoPath *&path);
 
     /// Reads all graphs and paths from the file specified by the given \c SoInput.  If
     /// there is only one graph in the file and its root is an
@@ -137,7 +137,7 @@ class INVENTOR_API SoDB {
     /// graphs read as children of it, and returns a pointer to it. This
     /// returns NULL on error. This processes directory paths in the same way
     /// as the other reading routines.
-    static SoSeparator	*readAll(SoInput *in);
+    static SoSeparator *readAll(SoInput *in);
 
     /// Registers the given string as a valid header for input files.
     /// The string must be 80 characters or less, and start with the
@@ -154,12 +154,12 @@ class INVENTOR_API SoDB {
     /// The method returns TRUE if the header is successfully registered.
     /// Note, nothing prevents you from registering the
     /// same string multiple times.
-    static SbBool	registerHeader(const SbString &headerString,
-					SbBool isBinary, 
-					float ivVersion, 
-					SoDBHeaderCB *preCB,
-					SoDBHeaderCB *postCB,
-					void *userData = NULL);
+    static SbBool registerHeader(const SbString &headerString,
+                                 SbBool isBinary,
+                                 float ivVersion,
+                                 SoDBHeaderCB *preCB,
+                                 SoDBHeaderCB *postCB,
+                                 void *userData = NULL);
 
     /// Passes back the data registered with the given header string,
     /// including the flag specifying whether the string is for a binary
@@ -172,26 +172,26 @@ class INVENTOR_API SoDB {
     /// the given string.
     /// The method returns TRUE if a matching registered header, or
     /// subheader, was found.
-    static SbBool	getHeaderData(const SbString &string,
-					SbBool &isBinary,  
-					float &ivVersion,
-					SoDBHeaderCB *&preCB, 
-					SoDBHeaderCB *&postCB, 
-					void *&userData, 
-                                        SbBool substringOK = FALSE);
+    static SbBool getHeaderData(const SbString &string,
+                                SbBool &isBinary,
+                                float &ivVersion,
+                                SoDBHeaderCB *&preCB,
+                                SoDBHeaderCB *&postCB,
+                                void *&userData,
+                                SbBool substringOK = FALSE);
 
     /// Returns the number of valid headers, including standard Inventor
     /// headers, and user-registered headers.
-    static int		getNumHeaders();
+    static int getNumHeaders();
 
     /// Returns the i'th header.
-    static SbString	getHeaderString(int i);
-    
+    static SbString getHeaderString(int i);
+
     /// This returns TRUE if the given character string is one of the valid
     /// Inventor file headers, (e.g. "#Inventor V2.0 binary"), or if
     /// the string has been registered as a valid header through the
     /// \c registerHeader method.
-    static SbBool	isValidHeader(const char *testString);
+    static SbBool isValidHeader(const char *testString);
 
     /// The database maintains a namespace for global fields, making sure that
     /// there is at most one instance of a global field with any given name in
@@ -209,21 +209,21 @@ class INVENTOR_API SoDB {
     ///     (SoSFInt32 *) SoDB::createGlobalField("Frame",
     ///                                          SoSFInt32::getClassTypeId());
     /// \endcode
-    static SoField *	createGlobalField(const SbName &name,
-					  SoType type);
-    
+    static SoField * createGlobalField(const SbName &name,
+                                       SoType type);
+
     /// Returns the global field with the given name, or NULL if there is
     /// none. The type of the field may be checked using the
     /// SoField::isOfType(), SoField::getClassTypeId(),
     /// and SoField::getTypeId() methods.
-    static SoField *	getGlobalField(const SbName &name);
+    static SoField * getGlobalField(const SbName &name);
 
     /// Renames the global field named \a oldName.  Renaming a global field to
     /// an empty name ("") deletes it.  If there is already a global field
     /// with the new name, that field will be deleted (the
     /// #getGlobalField method can be used to guard against this).
-    static void		renameGlobalField(const SbName &oldName,
-					  const SbName &newName);
+    static void  renameGlobalField(const SbName &oldName,
+                                   const SbName &newName);
 
     /// The database automatically creates one global field when SoDB::init()
     /// is called.  The \v realTime global field, which is of type
@@ -246,7 +246,7 @@ class INVENTOR_API SoDB {
     /// SoDB::setRealTimeInterval method ensures that engines that do not
     /// continuously animate (such as SoTimeCounter) will eventually be
     /// scheduled.
-    static void		setRealTimeInterval(const SbTime &deltaT);
+    static void setRealTimeInterval(const SbTime &deltaT);
 
     /// Returns how often the database is updating \v realTime.
     static const SbTime &getRealTimeInterval();
@@ -258,30 +258,32 @@ class INVENTOR_API SoDB {
     /// process), these sensors may not be triggered. Setting this timeout
     /// value ensures that if the specified length of time elapses without any
     /// idle time, the delay queue sensors will be processed anyway.
-    static void		setDelaySensorTimeout(const SbTime &t);
+    static void setDelaySensorTimeout(const SbTime &t);
 
     /// Returns the current delay queue timeout value.
     static const SbTime &getDelaySensorTimeout();
 
-  SoEXTENDER public:
+SoEXTENDER public:
     // Registers a field conversion engine that can be used to
     // convert from one type of field to another. The type id's of the
     // two fields are passed in, as is the type id of the field
     // converter engine (derived from SoFieldConverter).
-    static void		addConverter(SoType fromField, SoType toField,
-				     SoType converterEngine);
+    static void addConverter(SoType fromField, SoType toField,
+                             SoType converterEngine);
 
     // Returns the field conversion engine registered for the two
     // given field types. If no such engine exists,
     // SoType::badType() is returned.
-    static SoType	getConverter(SoType fromField, SoType toField);
+    static SoType getConverter(SoType fromField, SoType toField);
 
-  SoINTERNAL public:
+SoINTERNAL public:
     // Accesses sensor manager
-    static SoSensorManager *	getSensorManager();
+    static SoSensorManager * getSensorManager();
 
     // Returns TRUE if database is initialized (for error checking)
-    static SbBool	isInitialized()	{ return (globalDB != NULL); }
+    static SbBool isInitialized() {
+        return (globalDB != NULL);
+    }
 
     // This is called when some instance begins or ends a notification
     // process. It increments or decrements a counter of notifications
@@ -289,49 +291,55 @@ class INVENTOR_API SoDB {
     // (immediate) delay queue sensors are triggered. By doing this,
     // all notification has a chance to finish before any evaluation
     // (due to data sensors, primarily) takes place.
-    static void		startNotify()		{ notifyCount++; }
-    static SbBool	isNotifying()		{ return (notifyCount > 0); }
-    static void		endNotify()
-	{ if (--notifyCount == 0)
-	      globalDB->sensorManager.processImmediateQueue(); }
+    static void startNotify()  {
+        notifyCount++;
+    }
+    static SbBool isNotifying()  {
+        return (notifyCount > 0);
+    }
+    static void  endNotify() {
+        if (--notifyCount == 0)
+            globalDB->sensorManager.processImmediateQueue();
+    }
 
     // Enables/disables realTime sensor processing
-    static void		enableRealTimeSensor(SbBool enable);
+    static void enableRealTimeSensor(SbBool enable);
 
     // Reads a base of any type, returning a pointer to it. Returns
     // FALSE on error.
-    static SbBool	read(SoInput *in, SoBase *&base);
-    
-  private:
-    static const char	*versionString;	// Returned by getVersion()
-    static SoDB		*globalDB;	// Pointer to the global database
-    SoSensorManager	sensorManager;	// Its global sensor manager 	
+    static SbBool read(SoInput *in, SoBase *&base);
 
-    static int		notifyCount;	// How many current notifications
+private:
+    static const char *versionString; // Returned by getVersion()
+    static SoDB  *globalDB; // Pointer to the global database
+    SoSensorManager sensorManager; // Its global sensor manager
 
-    static SoTimerSensor *realTimeSensor;// touches realTime global field 
-    static void		realTimeSensorCallback();
-    static SoSFRealTime	*realTime;
-    
+    static int  notifyCount; // How many current notifications
+
+    static SoTimerSensor *realTimeSensor;// touches realTime global field
+    static void  realTimeSensorCallback();
+    static SoSFRealTime *realTime;
+
     // List of valid header strings, and their corresponding callbacks
-    static SbPList	*headerList;
+    static SbPList *headerList;
 
     // This dictionary stores field conversion engine types. The key
     // is created by mangling the types of the two fields to convert
     // from. The dictionary maps the key to the type of the conversion
     // engine.
-    static SbDict	*conversionDict;
+    static SbDict *conversionDict;
 
     // Returns a conversionDict key from the two given field type id's.
-    static uint32_t 	getConversionKey(SoType fromField, SoType toField)
-	{ return (fromField.getKey() << 16) | toField.getKey(); }
+    static uint32_t getConversionKey(SoType fromField, SoType toField) {
+        return (fromField.getKey() << 16) | toField.getKey();
+    }
 
-    static void		iv2_1PreCallback(void *userData, SoInput *in);
-    static void		iv2_0PreCallback(void *userData, SoInput *in);
-    static void		iv1_0PreCallback(void *userData, SoInput *in);
-    static void		iv2_0PostCallback(void *userData, SoInput *in);
-    static void		iv1_0PostCallback(void *userData, SoInput *in);
-    
+    static void  iv2_1PreCallback(void *userData, SoInput *in);
+    static void  iv2_0PreCallback(void *userData, SoInput *in);
+    static void  iv1_0PreCallback(void *userData, SoInput *in);
+    static void  iv2_0PostCallback(void *userData, SoInput *in);
+    static void  iv1_0PostCallback(void *userData, SoInput *in);
+
 };
 
 #endif /* _SO_DB_ */

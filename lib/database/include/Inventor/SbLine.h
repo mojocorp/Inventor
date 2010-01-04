@@ -72,8 +72,8 @@
 /// Inventor classes.
 /// \sa SbVec3f, SbPlane
 class INVENTOR_API SbLine {
-  public:
-    SbLine()	{}
+public:
+    SbLine() {}
 
     /// Construct a line from two points lying on the line.  If you
     /// want to construct a line from a position and a direction, use
@@ -82,50 +82,53 @@ class INVENTOR_API SbLine {
     SbLine(const SbVec3f &p0, const SbVec3f &p1);
 
     /// Sets line to pass through points \a p0 and \a p1.
-    void		setValue(const SbVec3f &p0, const SbVec3f &p1);
+    void setValue(const SbVec3f &p0, const SbVec3f &p1);
 
     /// Sets line using a \a position and a \a direction vector.
     /// The direction vector will be normalized automatically.
-    void               setPosDir(const SbVec3f &position, const SbVec3f &direction);
+    void setPosDir(const SbVec3f &position, const SbVec3f &direction);
 
     /// Finds the two closest points between this line and \a line2,
     /// and loads them into \a ptOnThis and \a ptOnLine2.
     /// Returns FALSE. if the lines are parallel (results undefined), and returns
     /// TRUE. otherwise.
-    SbBool		getClosestPoints(const SbLine  &line2,
-					 SbVec3f &ptOnThis,
-					 SbVec3f &ptOnLine2 ) const;
+    SbBool getClosestPoints(const SbLine  &line2,
+                            SbVec3f &ptOnThis,
+                            SbVec3f &ptOnLine2 ) const;
 
     /// Returns the closest point on the line to the given point.
-    SbVec3f		getClosestPoint(const SbVec3f &point) const;
+    SbVec3f getClosestPoint(const SbVec3f &point) const;
 
 
     /// Returns position of line origin point.
-    const SbVec3f &	getPosition() const	{ return pos; }
-    
+    const SbVec3f & getPosition() const {
+        return pos;
+    }
+
     /// Returns direction vector of line.
-    const SbVec3f &	getDirection() const	{ return dir; }
+    const SbVec3f & getDirection() const {
+        return dir;
+    }
 
 
-  SoINTERNAL public:
+SoINTERNAL public:
     // Intersect the line with a box, point, line, and triangle.
-    SbBool              intersect( const SbBox3f &box,
-                                   SbVec3f &enter, SbVec3f &exit ) const;
+    SbBool              intersect( const SbBox3f &box, SbVec3f &enter, SbVec3f &exit ) const;
     SbBool              intersect( float angle, const SbBox3f &box ) const;
     SbBool              intersect( float angle, const SbVec3f &point ) const;
     SbBool              intersect( float angle, const SbVec3f &v0,
                                    const SbVec3f &v1, SbVec3f &pt ) const;
     SbBool              intersect( const SbVec3f &v0,
-				  const SbVec3f &v1,
-				  const SbVec3f &v2,
-				  SbVec3f &pt, SbVec3f &barycentric,
-				  SbBool &front ) const;
+                                   const SbVec3f &v1,
+                                   const SbVec3f &v2,
+                                   SbVec3f &pt, SbVec3f &barycentric,
+                                   SbBool &front ) const;
 
-  private:
+private:
     // Parametric description:
     //  l(t) = pos + t * dir
-    SbVec3f	pos;
-    SbVec3f	dir;
+    SbVec3f pos;
+    SbVec3f dir;
 };
 
 #endif /* _SB_LINE_ */

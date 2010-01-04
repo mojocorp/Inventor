@@ -89,33 +89,34 @@ struct SoTypeData;
 /// contain the "So" prefix.
 /// \sa SoAction, SoBase, SoDetail, SoError, SoEvent, SoField
 class INVENTOR_API SoType {
-  public:
+public:
     /// Returns the type associated with the given name.
-    static SoType	fromName(SbName name);
+    static SoType fromName(SbName name);
 
     /// Returns the name associated with a type.
-    SbName		getName() const;
+    SbName getName() const;
 
     /// Returns the type of the parent class.
-    SoType		getParent() const;
+    SoType getParent() const;
 
     /// Returns an always-illegal type. Useful for returning errors.
-    static SoType	badType();
+    static SoType badType();
 
     /// Returns TRUE if the type is a bad type.
-    SbBool		isBad() const
-	{ return (storage.index == 0); }
+    SbBool isBad() const {
+        return (storage.index == 0);
+    }
 
     /// Returns TRUE if the type is derived from type \a t.
-    SbBool		isDerivedFrom(SoType t) const;
+    SbBool isDerivedFrom(SoType t) const;
 
     /// Adds all types derived from the given type to the given type list.
     /// Returns the number of types added.
-    static int		getAllDerivedFrom(SoType type,
-					  SoTypeList &list);
+    static int getAllDerivedFrom(SoType type,
+                                 SoTypeList &list);
 
     /// returns TRUE if this type knows how to create an instance
-    SbBool		canCreateInstance() const;
+    SbBool canCreateInstance() const;
 
     /// Creates and returns a pointer to an instance of the type. Returns NULL
     /// if an instance could not be created for some reason. The pointer is
@@ -125,73 +126,85 @@ class INVENTOR_API SoType {
     /// SoCube *c = (SoCube *) SoCube::getClassTypeId().createInstance();
     /// \endcode
     /// is a convoluted way of creating a new instance of an \c SoCube.
-    void * 		createInstance() const;
+    void * createInstance() const;
 
     /// Returns TRUE if this type is the same as the given type.
-    int			operator ==(const SoType & t) const
-	{ return (storage.index == t.storage.index);}
+    int operator ==(const SoType & t) const {
+        return (storage.index == t.storage.index);
+    }
 
     /// Returns TRUE if this type is not the same as the given type.
-    int			operator !=(const SoType & t) const
-	{ return (storage.index != t.storage.index);}
+    int operator !=(const SoType & t) const {
+        return (storage.index != t.storage.index);
+    }
 
     /// Less-than comparison operator that can be used to sort types. This is
     /// pretty useless otherwise.
-    int			operator <(const SoType & t) const
-	{ return (storage.index < t.storage.index); }
+    int operator <(const SoType & t) const {
+        return (storage.index < t.storage.index);
+    }
 
-  SoEXTENDER public:
+SoEXTENDER public:
 
     // Create a new type
-    static SoType	createType(SoType parent, SbName name,
-				   void * (*createMethod)() = NULL,
-				   short data = 0);
+    static SoType createType(SoType parent, SbName name,
+                             void * (*createMethod)() = NULL,
+                             short data = 0);
 
     // Make an new type act like an existing type.  The new type MUST
     // be a C++ subclass of the original (e.g. MyCubeClass must be
     // derived from SoCube), but there is no way for us to check that.
     // This can be used to get the database to create a different
     // subclass whenever it reads in a SoNode class from a file.
-    static SoType	overrideType(SoType existingType,
-				     void * (*createMethod)() = NULL);
+    static SoType overrideType(SoType existingType,
+                               void * (*createMethod)() = NULL);
 
-  SoINTERNAL public:
+SoINTERNAL public:
     // Initialize the type system
-    static void		init();
+    static void init();
 
     // Get data
-    short		getData() const		{ return storage.data; }
+    short getData() const  {
+        return storage.data;
+    }
 
     // Returns the type key as a short
-    short		getKey() const		{ return storage.index; }
+    short getKey() const  {
+        return storage.index;
+    }
 
     // Mark this type as internal; if internal, getAllDerivedFrom and
     // fromName will not return the type.
-    void		makeInternal();
+    void makeInternal();
 
     // Get the number of types currently registed in the types dictionary.
     // This is used by SoAction when setting up the action method list.
-    static int		getNumTypes()		{ return nextIndex; }
+    static int getNumTypes()  {
+        return nextIndex;
+    }
 
-  private:
+private:
     // SoTypes are passed around on the stack a lot, and are cast to
     // void *'s; they MUST fit into a single word.
     struct {
-	unsigned int	data : 16;
-	unsigned int	index : 15;  // Assumes we have fewer than
-				     // 32,768 types
-	unsigned int	isPublic :1; // 0 if is an internal class
+unsigned int data :
+        16;
+unsigned int index :
+        15;  // Assumes we have fewer than
+        // 32,768 types
+unsigned int isPublic :
+        1; // 0 if is an internal class
     } storage;
 
     // name->sotype dictionary
-    static SbDict	*nameDict;
+    static SbDict *nameDict;
 
     // array of SoTypeData
-    static int		nextIndex;
-    static int		arraySize;
-    static SoTypeData	*typeData;
+    static int  nextIndex;
+    static int  arraySize;
+    static SoTypeData *typeData;
 
-    static void		expandTypeData();
+    static void  expandTypeData();
 };
 
 #endif /* _SO_TYPE_ */

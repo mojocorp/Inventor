@@ -93,7 +93,7 @@ class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
 
     SO_ACTION_HEADER(SoGetBoundingBoxAction);
 
-  public:
+public:
     /// Constructor takes viewport region to use for picking. Even
     /// though the bounding box computation may not involve a window
     /// per se, some nodes need this information to determine their
@@ -104,29 +104,39 @@ class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
     virtual ~SoGetBoundingBoxAction();
 
     /// Sets current viewport region to use for action
-    void		setViewportRegion(const SbViewportRegion &newRegion);
+    void setViewportRegion(const SbViewportRegion &newRegion);
 
     /// Returns current viewport region
-    const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
+    const SbViewportRegion &getViewportRegion() const {
+        return vpRegion;
+    }
 
     /// Returns computed bounding box in world space.
-    SbBox3f		getBoundingBox() const	{ return box.project(); }
+    SbBox3f getBoundingBox() const {
+        return box.project();
+    }
 
     /// Returns computed bounding box before transformation into world space.
-    SbXfBox3f &		getXfBoundingBox()	{ return box; }
+    SbXfBox3f & getXfBoundingBox() {
+        return box;
+    }
 
     /// Returns computed center point in world space.
-    const SbVec3f &	getCenter() const;
+    const SbVec3f & getCenter() const;
 
     /// Set to TRUE if you want the returned bounding box to be in the
     /// space of whatever camera is in the graph. Camera space is
     /// defined to have the viewpoint at the origin, with the direction
     /// of view along the negative z axis. This space can be used to
     /// determine distances of objects from the camera.
-    void		setInCameraSpace(SbBool flag)	{ cameraSpace = flag; }
+    void setInCameraSpace(SbBool flag) {
+        cameraSpace = flag;
+    }
 
     /// Returns camera space flag
-    SbBool		isInCameraSpace() const		{ return cameraSpace; }
+    SbBool isInCameraSpace() const  {
+        return cameraSpace;
+    }
 
     /// Which things get reset
     enum ResetType {
@@ -139,35 +149,43 @@ class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
     /// bounding box to be empty and/or the current transformation to
     /// identity. The \a resetBefore flag indicates whether to perform the
     /// reset before or after the tail node of the path is traversed.
-    void		setResetPath(const SoPath *path,
-				     SbBool resetBefore = TRUE,
-				     ResetType what = ALL);
+    void setResetPath(const SoPath *path,
+                      SbBool resetBefore = TRUE,
+                      ResetType what = ALL);
 
     /// Returns the current reset path, or NULL.
-    const SoPath *	getResetPath() const	{ return resetPath; }
+    const SoPath * getResetPath() const {
+        return resetPath;
+    }
 
     /// Returns TRUE if the current reset path is not NULL.
-    SbBool		isResetPath() const	{ return( resetPath != NULL); }
+    SbBool isResetPath() const {
+        return( resetPath != NULL);
+    }
 
     /// Returns TRUE if the \a resetBefore flag was specified for the reset path.
-    SbBool		isResetBefore() const	{ return resetBefore; }
+    SbBool isResetBefore() const {
+        return resetBefore;
+    }
 
     /// Returns what flags were specified to be reset for the reset path.
-    SoGetBoundingBoxAction::ResetType getWhatReset() const { return resetWhat;}
+    SoGetBoundingBoxAction::ResetType getWhatReset() const {
+        return resetWhat;
+    }
 
-  SoEXTENDER public:
+SoEXTENDER public:
 
     // Call these methods at beginning and end (respectively) of
     // the getBoundingBox action for each node. (SoNode calls these in
     // its static method for this action.)
-    void		checkResetBefore();
-    void		checkResetAfter();
+    void checkResetBefore();
+    void checkResetAfter();
 
     // Extends the current bounding box by the given bounding box,
     // after transforming it by the current value of the
     // SoLocalBBoxMatrixElement
-    void		extendBy(const SbBox3f &box);
-    void		extendBy(const SbXfBox3f &box);
+    void extendBy(const SbBox3f &box);
+    void extendBy(const SbXfBox3f &box);
 
     // Sets the center of the bounding box to the given point, which,
     // if transformCenter is TRUE, is first transformed by the current
@@ -179,31 +197,31 @@ class INVENTOR_API SoGetBoundingBoxAction : public SoAction {
     // responsible for averaging the centers if more than one shape
     // sets the center; when setting the center to the average of
     // transformed centers, pass FALSE for transformCenter.
-    void		setCenter(const SbVec3f &center,
-				  SbBool transformCenter);
-    SbBool		isCenterSet() const;
-    void		resetCenter();
+    void setCenter(const SbVec3f &center,
+                   SbBool transformCenter);
+    SbBool isCenterSet() const;
+    void resetCenter();
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
-  protected:
+protected:
     // Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
-  private:
-    SbXfBox3f		box;		// Bounding box
-    SbVec3f		center;		// Center point
-    SbBool		cameraSpace;	// Bounding box in camera space?
-    const SoPath	*resetPath;	// path to reset transform
-    SbBool		resetBefore;	// reset before or after?
-    ResetType 	  	resetWhat;      // which things get reset?
-    SbViewportRegion	vpRegion;	// Current viewport region
-    SbBool		centerSet;	// setCenter() called?
+private:
+    SbXfBox3f  box;  // Bounding box
+    SbVec3f  center;  // Center point
+    SbBool  cameraSpace; // Bounding box in camera space?
+    const SoPath *resetPath; // path to reset transform
+    SbBool  resetBefore; // reset before or after?
+    ResetType     resetWhat;      // which things get reset?
+    SbViewportRegion vpRegion; // Current viewport region
+    SbBool  centerSet; // setCenter() called?
 
     // check to see if the reset parameters are met, if so, do the
     // reset transform and reset bbox
-    void		checkReset(SbBool resetBefore);
+    void checkReset(SbBool resetBefore);
 };
 
 #endif /* _SO_GET_BOUNDING_BOX_ACTION_ */

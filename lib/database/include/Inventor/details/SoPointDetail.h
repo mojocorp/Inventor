@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,9 +45,9 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoPointDetail class.
+ | This file defines the SoPointDetail class.
  |
- |   Author(s)		: Thaddeus Beier, Dave Immel, Howard Look
+ |   Author(s)  : Thaddeus Beier, Dave Immel, Howard Look
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -70,7 +70,7 @@ class INVENTOR_API SoPointDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoPointDetail);
 
-  public:
+public:
     /// Constructor
     SoPointDetail();
 
@@ -78,39 +78,55 @@ class INVENTOR_API SoPointDetail : public SoDetail {
     virtual ~SoPointDetail();
 
     /// Returns the index of the point in the relevant coordinate node
-    int32_t	getCoordinateIndex() const	{ return coordIndex; }
+    int32_t getCoordinateIndex() const {
+        return coordIndex;
+    }
 
     /// Returns the index of the material for the point within the relevant
     /// material node.
-    int32_t	getMaterialIndex() const	{ return materialIndex; }
+    int32_t getMaterialIndex() const {
+        return materialIndex;
+    }
 
     /// Returns the index of the surface normal at the point within the
     /// relevant normal node. Note that if normals have been generated for a
     /// shape, the index may not be into an existing normal node.
-    int32_t	getNormalIndex() const		{ return normalIndex; }
+    int32_t getNormalIndex() const  {
+        return normalIndex;
+    }
 
     /// Returns the index of the texture coordinates for the point within the
     /// relevant normal node. Note that if texture coordinates have been
     /// generated for a shape, the index may not be into an existing texture
     /// coordinate node.
-    int32_t	getTextureCoordIndex() const	{ return texCoordIndex; }
+    int32_t getTextureCoordIndex() const {
+        return texCoordIndex;
+    }
 
     /// Returns an instance that is a copy of this instance. The caller
     /// is responsible for deleting the copy when done.
-    virtual SoDetail *	copy() const;
+    virtual SoDetail * copy() const;
 
-  SoEXTENDER public:
+SoEXTENDER public:
     // Each of these sets one of the indices in the detail
-    void	setCoordinateIndex(int32_t i)	{ coordIndex	= i; }
-    void	setMaterialIndex(int32_t i)	{ materialIndex	= i; }
-    void	setNormalIndex(int32_t i)		{ normalIndex	= i; }
-    void	setTextureCoordIndex(int32_t i)	{ texCoordIndex	= i; }
+    void setCoordinateIndex(int32_t i) {
+        coordIndex = i;
+    }
+    void setMaterialIndex(int32_t i) {
+        materialIndex = i;
+    }
+    void setNormalIndex(int32_t i)  {
+        normalIndex = i;
+    }
+    void setTextureCoordIndex(int32_t i) {
+        texCoordIndex = i;
+    }
 
-  SoINTERNAL public:
-    static void	initClass();
+SoINTERNAL public:
+    static void initClass();
 
-  private:
-    int32_t	coordIndex, materialIndex, normalIndex, texCoordIndex;
+private:
+    int32_t coordIndex, materialIndex, normalIndex, texCoordIndex;
 };
 
 #endif /* _SO_POINT_DETAIL_ */

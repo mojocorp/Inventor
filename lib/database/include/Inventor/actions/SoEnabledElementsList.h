@@ -71,42 +71,44 @@
 
 SoINTERNAL class INVENTOR_API SoEnabledElementsList {
 
-  public:
+public:
     /// Constructor
     SoEnabledElementsList(SoEnabledElementsList *parentList);
 
     /// Returns list of elements.  This automatically merges the
     /// elements with elements enabled in the parentList.
-    const SoTypeList &	getElements() const;
+    const SoTypeList & getElements() const;
 
     /// Adds an element to the list if it's not already in it
-    void		enable(SoType elementType, int stackIndex);
+    void enable(SoType elementType, int stackIndex);
 
     /// Enables all elements from the given list that are not already
     /// enabled in this one
-    void		merge(const SoEnabledElementsList &list);
+    void merge(const SoEnabledElementsList &list);
 
     /// Returns the current setting of the global counter used to
     /// determine when lists are out of date.
-    static int		getCounter()		{ return counter; }
+    static int getCounter()  {
+        return counter;
+    }
 
-  private:
+private:
     // This maintains a global counter used to determine when lists
     // are out of date. It is incremented whenever a new element is
     // added to a list.
-    static int		counter;
+    static int  counter;
 
     // And a per-instance counter so we don't merge enabled elements
     // with the parent list unnecessarily.
-    int			setUpCounter;
+    int   setUpCounter;
 
     // This list holds type id's of enabled elements, indexed by the
     // stack index of the elements.
-    SoTypeList		elements;
+    SoTypeList  elements;
 
     // Pointer to parent's list of enabled elements (NULL for
     // SoAction).
-    SoEnabledElementsList	*parent;
+    SoEnabledElementsList *parent;
 };
 
 #endif /* _SO_ENABLEDELEMENTSLIST_ */

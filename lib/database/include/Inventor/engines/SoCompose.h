@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,21 +45,21 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file contains the implementation of the
+ | This file contains the implementation of the
  |      various composition and decomposition engines
  |
  |   Classes:
- |       SoComposeVec2f 
- |       SoComposeVec3f 
- |       SoComposeVec4f 
- |       SoComposeRotation 
+ |       SoComposeVec2f
+ |       SoComposeVec3f
+ |       SoComposeVec4f
+ |       SoComposeRotation
  |       SoComposeRotationFromTo
- |       SoDecomposeVec2f 
- |       SoDecomposeVec3f 
- |       SoDecomposeVec4f 
- |       SoDecomposeRotation 
+ |       SoDecomposeVec2f
+ |       SoDecomposeVec3f
+ |       SoDecomposeVec4f
+ |       SoDecomposeRotation
  |
- |   Author(s)		: Ronen Barzel
+ |   Author(s)  : Ronen Barzel
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -77,17 +77,17 @@
 #include <Inventor/fields/SoMFVec4f.h>
 
 // This internal macro defines the standard methods for the composition
-// engines.  These are just basic engine declarations, nothing fancy. 
+// engines.  These are just basic engine declarations, nothing fancy.
 // The macro leaves the class header in "public:" state so it can be
 // followed immediately with the composition input and output declarations.
-#define SO_COMPOSE__HEADER(Name)		\
-	    SO_ENGINE_HEADER(Name);		\
-	  private:				\
-	    ~Name();				\
-	    virtual void evaluate();		\
-	  public:				\
-	    Name();				\
-	    static void initClass()				
+#define SO_COMPOSE__HEADER(Name)  \
+     SO_ENGINE_HEADER(Name);  \
+   private:    \
+     ~Name();    \
+     virtual void evaluate();  \
+   public:    \
+     Name();    \
+     static void initClass()
 
 /// Composes 2D vectors from floating-point values.
 /// \ingroup Engines
@@ -110,9 +110,9 @@
 /// \sa SoDecomposeVec2f, SoEngineOutput
 class INVENTOR_API SoComposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec2f);
-    SoMFFloat		x;	///< Input
-    SoMFFloat		y;	///< Input
-    SoEngineOutput	vector;	///< Output (SoMFVec2f)
+    SoMFFloat      x; ///< Input
+    SoMFFloat      y; ///< Input
+    SoEngineOutput vector; ///< Output (SoMFVec2f)
 };
 
 
@@ -137,10 +137,10 @@ class INVENTOR_API SoComposeVec2f : public SoEngine {
 /// \sa SoDecomposeVec2f, SoEngineOutput
 class INVENTOR_API SoComposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec3f);
-    SoMFFloat		x;	///< Input
-    SoMFFloat		y;	///< Input
-    SoMFFloat		z;	///< Input
-    SoEngineOutput	vector;	///< Output (SoMFVec3f)
+    SoMFFloat      x; ///< Input
+    SoMFFloat      y; ///< Input
+    SoMFFloat      z; ///< Input
+    SoEngineOutput vector; ///< Output (SoMFVec3f)
 };
 
 /// Composes 4D vectors from floating-point values.
@@ -166,11 +166,11 @@ class INVENTOR_API SoComposeVec3f : public SoEngine {
 /// \sa SoDecomposeVec4f, SoEngineOutput
 class INVENTOR_API SoComposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec4f);
-    SoMFFloat		x;	///< Input
-    SoMFFloat		y;	///< Input
-    SoMFFloat		z;	///< Input
-    SoMFFloat		w;	///< Input
-    SoEngineOutput	vector;	///< Output (SoMFVec4f)
+    SoMFFloat      x; ///< Input
+    SoMFFloat      y; ///< Input
+    SoMFFloat      z; ///< Input
+    SoMFFloat      w; ///< Input
+    SoEngineOutput vector; ///< Output (SoMFVec4f)
 };
 
 /// Decomposes 2D vectors into floating-point values.
@@ -185,15 +185,15 @@ class INVENTOR_API SoComposeVec4f : public SoEngine {
 /// \par File format/defaults:
 /// \code
 /// SoDecomposeVec2f {
-///    vector	0 0
+///    vector 0 0
 /// }
 /// \endcode
 /// \sa SoComposeVec2f, SoEngineOutput
 class INVENTOR_API SoDecomposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec2f);
-    SoMFVec2f		vector;	// Input
-    SoEngineOutput	x;	// Output (SoMFFloat)
-    SoEngineOutput	y;	// Output (SoMFFloat)
+    SoMFVec2f      vector; // Input
+    SoEngineOutput x; // Output (SoMFFloat)
+    SoEngineOutput y; // Output (SoMFFloat)
 };
 
 /// Decomposes 3D vectors into floating-point values.
@@ -208,16 +208,16 @@ class INVENTOR_API SoDecomposeVec2f : public SoEngine {
 /// \par File format/defaults:
 /// \code
 /// SoDecomposeVec3f {
-///    vector	0 0 0
+///    vector 0 0 0
 /// }
 /// \endcode
 /// \sa SoComposeVec3f, SoEngineOutput
 class INVENTOR_API SoDecomposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec3f);
-    SoMFVec3f		vector;	// Input
-    SoEngineOutput	x;	// Output (SoMFFloat)
-    SoEngineOutput	y;	// Output (SoMFFloat)
-    SoEngineOutput	z;	// Output (SoMFFloat)
+    SoMFVec3f      vector; // Input
+    SoEngineOutput x; // Output (SoMFFloat)
+    SoEngineOutput y; // Output (SoMFFloat)
+    SoEngineOutput z; // Output (SoMFFloat)
 };
 
 /// Decomposes 4D vectors into floating-point values.
@@ -232,17 +232,17 @@ class INVENTOR_API SoDecomposeVec3f : public SoEngine {
 /// \par File format/defaults:
 /// \code
 /// SoDecomposeVec4f {
-///    vector	0 0 0 0
+///    vector 0 0 0 0
 /// }
 /// \endcode
 /// \sa SoComposeVec4f, SoEngineOutput
 class INVENTOR_API SoDecomposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec4f);
-    SoMFVec4f		vector;	// Input
-    SoEngineOutput	x;	// Output (SoMFFloat)
-    SoEngineOutput	y;	// Output (SoMFFloat)
-    SoEngineOutput	z;	// Output (SoMFFloat)
-    SoEngineOutput	w;	// Output (SoMFFloat)
+    SoMFVec4f      vector; // Input
+    SoEngineOutput x; // Output (SoMFFloat)
+    SoEngineOutput y; // Output (SoMFFloat)
+    SoEngineOutput z; // Output (SoMFFloat)
+    SoEngineOutput w; // Output (SoMFFloat)
 };
 
 /// Composes a rotation from axis and angle values.
@@ -267,9 +267,9 @@ class INVENTOR_API SoDecomposeVec4f : public SoEngine {
 /// \sa SoComposeRotationFromTo, SoDecomposeRotation, SoEngineOutput
 class INVENTOR_API SoComposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotation);
-    SoMFVec3f		axis;		// Input
-    SoMFFloat		angle;		// Input
-    SoEngineOutput	rotation;	// Output (SoMFRotation)
+    SoMFVec3f      axis;  // Input
+    SoMFFloat      angle;  // Input
+    SoEngineOutput rotation; // Output (SoMFRotation)
 };
 
 /// Composes a rotation that rotates from one vector into another.
@@ -295,9 +295,9 @@ class INVENTOR_API SoComposeRotation : public SoEngine {
 /// \sa SoComposeRotation, SoDecomposeRotationFromTo, SoEngineOutput
 class INVENTOR_API SoComposeRotationFromTo : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotationFromTo);
-    SoMFVec3f		from;		// Input
-    SoMFVec3f		to;		// Input
-    SoEngineOutput	rotation;	// Output (SoMFRotation)
+    SoMFVec3f      from;  // Input
+    SoMFVec3f      to;  // Input
+    SoEngineOutput rotation; // Output (SoMFRotation)
 };
 
 
@@ -313,15 +313,15 @@ class INVENTOR_API SoComposeRotationFromTo : public SoEngine {
 /// \par File format/defaults:
 /// \code
 /// SoDecomposeRotation {
-///    rotation	0 0 1  0
+///    rotation 0 0 1  0
 /// }
 /// \endcode
 /// \sa SoDecomposeRotationFromTo, SoComposeRotation, SoEngineOutput
 class INVENTOR_API SoDecomposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeRotation);
-    SoMFRotation	rotation;	// Input
-    SoEngineOutput	axis;		// Output (SoMFVec3f)
-    SoEngineOutput	angle;		// Output (SoMFFloat)
+    SoMFRotation   rotation; // Input
+    SoEngineOutput axis;  // Output (SoMFVec3f)
+    SoEngineOutput angle;  // Output (SoMFFloat)
 };
 
 
@@ -352,12 +352,12 @@ class INVENTOR_API SoDecomposeRotation : public SoEngine {
 /// \sa SoDecomposeMatrix, SoEngineOutput
 class INVENTOR_API SoComposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeMatrix);
-    SoMFVec3f		translation;	// Input
-    SoMFRotation	rotation;	// Input
-    SoMFVec3f		scaleFactor;	// Input
-    SoMFRotation	scaleOrientation;//Input
-    SoMFVec3f		center;		// Input
-    SoEngineOutput	matrix;		// Output (SoMFMatrix)
+    SoMFVec3f      translation; // Input
+    SoMFRotation   rotation; // Input
+    SoMFVec3f      scaleFactor; // Input
+    SoMFRotation   scaleOrientation;//Input
+    SoMFVec3f      center;  // Input
+    SoEngineOutput matrix;  // Output (SoMFMatrix)
 };
 
 
@@ -386,12 +386,12 @@ class INVENTOR_API SoComposeMatrix : public SoEngine {
 /// \sa SoComposeMatrix, SoEngineOutput
 class INVENTOR_API SoDecomposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeMatrix);
-    SoMFMatrix		matrix;		// Input
-    SoMFVec3f		center;		// Input
-    SoEngineOutput	translation;	// Output (SoMFVec3f)
-    SoEngineOutput	rotation;	// Output (SoMFRotation)
-    SoEngineOutput	scaleFactor;	// Output (SoMFVec3f)
-    SoEngineOutput	scaleOrientation;//Output (SoMFRotation)
+    SoMFMatrix     matrix;  // Input
+    SoMFVec3f      center;  // Input
+    SoEngineOutput translation; // Output (SoMFVec3f)
+    SoEngineOutput rotation; // Output (SoMFRotation)
+    SoEngineOutput scaleFactor; // Output (SoMFVec3f)
+    SoEngineOutput scaleOrientation;//Output (SoMFRotation)
 };
 
 #endif  /* _SO_COMPOSE_ */

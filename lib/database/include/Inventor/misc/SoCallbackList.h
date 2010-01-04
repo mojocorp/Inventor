@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,12 +45,12 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	Callback list - a list of callback functions and associated data,
+ | Callback list - a list of callback functions and associated data,
  |   with member functions to add, remove, and invoke callbacks.
- |	
- |   Classes:	SoCallbackList
  |
- |   Author(s):	David Mott
+ |   Classes: SoCallbackList
+ |
+ |   Author(s): David Mott
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -73,36 +73,40 @@ typedef void INVENTOR_API SoCallbackListCB(void *userData, void *callbackData);
 /// callback data specified by the invoking routine.  The type of this
 /// callback data is determined by the invoking routine.
 class INVENTOR_API SoCallbackList {
-    
-  public:
+
+public:
 
     /// Default constructor
     SoCallbackList();
 
     /// Destructor
     ~SoCallbackList();
-    
+
     /// \name Adds a function to or removes a function from the list of callback
     /// @{
-    void    addCallback(SoCallbackListCB *f, void *userData = NULL);
-    void    removeCallback(SoCallbackListCB *f, void *userData = NULL);
+    void addCallback(SoCallbackListCB *f, void *userData = NULL);
+    void removeCallback(SoCallbackListCB *f, void *userData = NULL);
     /// @}
 
     /// Clears all callback functions from the list.
-    void    clearCallbacks()			    { list.truncate(0); }
+    void clearCallbacks() {
+        list.truncate(0);
+    }
 
     /// Returns the number of callback functions in the list.
-    int	    getNumCallbacks() const		    { return list.getLength(); }
+    int getNumCallbacks() const {
+        return list.getLength();
+    }
 
     /// Invokes each callback function in the list, passing each function the
     /// user data supplied when they were registered here, and
     /// \a callbackData, the callback-specific data supplied by the caller.
-    void    invokeCallbacks(void *callbackData);
+    void invokeCallbacks(void *callbackData);
 
-  private:
-  
+private:
+
     // callbackList holds a list of functions and user data
-    SbPList 	list;
+    SbPList  list;
 };
 
 #endif  /* _SO_CALLBACK_LIST_ */
