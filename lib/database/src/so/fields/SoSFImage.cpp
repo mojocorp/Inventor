@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -43,9 +43,9 @@
  |   $Revision: 1.1 $
  |
  |   Classes:
- |	SoSFImage
+ | SoSFImage
  |
- |   Author(s)		: Gavin Bell
+ |   Author(s)  : Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -121,20 +121,19 @@ SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b)
 ////////////////////////////////////////////////////////////////////////
 {
     if (bytes != NULL) {
-	delete[] bytes;
-	bytes = NULL;
+        delete[] bytes;
+        bytes = NULL;
     }
 
     size = s;
     numComponents = nc;
-    
+
     int numBytes = size[0]*size[1]*numComponents;
 
     if (numBytes != 0) {
-	bytes = new unsigned char[numBytes];
-	memcpy(bytes, b, numBytes);
-    }
-    else
+        bytes = new unsigned char[numBytes];
+        memcpy(bytes, b, numBytes);
+    } else
         bytes = NULL;
 
     valueChanged();
@@ -156,7 +155,7 @@ SoSFImage::getValue(SbVec2s &s, int &nc) const
 
     s = size;
     nc = numComponents;
-    
+
     return bytes;
 }
 
@@ -194,10 +193,10 @@ SoSFImage::operator ==(const SoSFImage &f) const
 {
     // Check easy stuff first
     if (size != f.size || numComponents != f.numComponents)
-	return FALSE;
+        return FALSE;
 
     if (memcmp(bytes, f.bytes, size[0] * size[1] * numComponents) != 0)
-	return FALSE;
+        return FALSE;
 
     return TRUE;
 }
@@ -247,45 +246,44 @@ SoSFImage::readValue(SoInput *in)
 ////////////////////////////////////////////////////////////////////////
 {
     if (!in->read(size[0])  ||
-	!in->read(size[1]) ||
-	!in->read(numComponents))
-	return FALSE;
-    
+            !in->read(size[1]) ||
+            !in->read(numComponents))
+        return FALSE;
+
     if (bytes != NULL) delete[] bytes;
     bytes = new unsigned char[size[0]*size[1]*numComponents];
 
     int byte = 0;
     if (in->isBinary()) {
-	// Inventor version 2.1 and later binary file
-	if (in->getIVVersion() > 2.0) {
-	    int numBytes = size[0]*size[1]*numComponents;
-	    if (! in->readBinaryArray(bytes, numBytes))
-		return FALSE;
-	}
+        // Inventor version 2.1 and later binary file
+        if (in->getIVVersion() > 2.0) {
+            int numBytes = size[0]*size[1]*numComponents;
+            if (! in->readBinaryArray(bytes, numBytes))
+                return FALSE;
+        }
 
-	// Pre version 2.1 Inventor binary files
-	else {
-	    for (int i = 0; i < size[0]*size[1]; i++) {
-		uint32_t l;
+        // Pre version 2.1 Inventor binary files
+        else {
+            for (int i = 0; i < size[0]*size[1]; i++) {
+                uint32_t l;
 
-		if (!in->read(l)) return FALSE;
-		for (int j = 0; j < numComponents; j++) {
-		    bytes[byte++] = (unsigned char)(
-			(l >> (8*(numComponents-j-1))) & 0xFF);
-		}
-	    }
-	}
-    }
-    else {
-	for (int i = 0; i < size[0]*size[1]; i++) {
-	    uint32_t l;
-    
-	    if (!in->readHex(l)) return FALSE;
-	    for (int j = 0; j < numComponents; j++) {
-		bytes[byte++] = (unsigned char)(
-		    (l >> (8*(numComponents-j-1))) & 0xFF);
-	    }
-	}
+                if (!in->read(l)) return FALSE;
+                for (int j = 0; j < numComponents; j++) {
+                    bytes[byte++] = (unsigned char)(
+                                        (l >> (8*(numComponents-j-1))) & 0xFF);
+                }
+            }
+        }
+    } else {
+        for (int i = 0; i < size[0]*size[1]; i++) {
+            uint32_t l;
+
+            if (!in->readHex(l)) return FALSE;
+            for (int j = 0; j < numComponents; j++) {
+                bytes[byte++] = (unsigned char)(
+                                    (l >> (8*(numComponents-j-1))) & 0xFF);
+            }
+        }
     }
 
     return TRUE;
@@ -306,28 +304,27 @@ SoSFImage::writeValue(SoOutput *out) const
     out->write(size[0]);
 
     if (! out->isBinary())
-	out->write(' ');
+        out->write(' ');
 
     out->write(size[1]);
 
     if (! out->isBinary())
-	out->write(' ');
+        out->write(' ');
 
     out->write(numComponents);
 
     if (out->isBinary()) {
-	int numBytes = size[0] * size[1] * numComponents;
-	out->writeBinaryArray(bytes, numBytes);
-    }
-    else {
-	int byte = 0;
-	for (int i = 0; i < size[0]*size[1]; i++) {
-	    uint32_t l = 0;
-	    for (int j = 0; j < numComponents; j++) {
-		l = (l<<8) | bytes[byte++];
-	    }
-	    out->write(' ');
-	    out->write(l);
-	}
+        int numBytes = size[0] * size[1] * numComponents;
+        out->writeBinaryArray(bytes, numBytes);
+    } else {
+        int byte = 0;
+        for (int i = 0; i < size[0]*size[1]; i++) {
+            uint32_t l = 0;
+            for (int j = 0; j < numComponents; j++) {
+                l = (l<<8) | bytes[byte++];
+            }
+            out->write(' ');
+            out->write(l);
+        }
     }
 }
