@@ -73,43 +73,47 @@ class SbBox3f;
 /// <tt>SoSphere</tt> for a database sphere (used for rendering, picking, etc.).
 /// \sa SbVec3f, SbLine, SoSphere
 class INVENTOR_API SbSphere {
-  public:
+public:
 
     /// Default constructor
-    SbSphere()	{}
+    SbSphere() {}
 
     /// Construct a sphere given center and radius
     SbSphere(const SbVec3f &c, float r);
 
     /// Change the center and radius
-    void 	setValue(const SbVec3f &c, float r);
+    void  setValue(const SbVec3f &c, float r);
 
     /// Set just the center
-    void	setCenter(const SbVec3f &c);
+    void setCenter(const SbVec3f &c);
 
     /// Set just the radius
-    void	setRadius(float r);
+    void setRadius(float r);
 
     /// Return the center
-    const SbVec3f & 	getCenter() const		{ return center; }
+    const SbVec3f & getCenter() const  {
+        return center;
+    }
 
     /// Return the radius
-    float		getRadius() const		{ return radius; }
+    float getRadius() const  {
+        return radius;
+    }
 
     /// Return a sphere containing a given box
-    void	circumscribe(const SbBox3f &box);
+    void circumscribe(const SbBox3f &box);
 
     /// Intersect line and sphere, returning TRUE if there is an intersection
     /// The line is treated as a ray.
-    SbBool	intersect(const SbLine &l, SbVec3f &intersection) const;
+    SbBool intersect(const SbLine &l, SbVec3f &intersection) const;
 
     /// Intersect line and sphere, returning TRUE if there is an intersection
     /// The line is treated as a ray.
-    SbBool	intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
+    SbBool intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
 
-  private:
-    SbVec3f	center;
-    float	radius;
+private:
+    SbVec3f center;
+    float radius;
 };
 
 #endif /* _SB_SPHERE_ */

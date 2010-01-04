@@ -71,31 +71,36 @@
 
 SoINTERNAL class INVENTOR_API SbNameEntry {
 
-  public:
+public:
     /// Returns TRUE if entry's string is empty ("")
-    SbBool		isEmpty() const   { return (string[0] == '\0'); }
+    SbBool isEmpty() const {
+        return (string[0] == '\0');
+    }
 
     /// Returns TRUE if entry's string is same as passed string
-    SbBool		isEqual(const char *s) const;
+    SbBool isEqual(const char *s) const;
 
-  private:
-    static int		nameTableSize;	// Number of buckets in name table
-    static SbNameEntry	**nameTable;	// Array of name entries
-    static struct SbNameChunk *chunk;	// Chunk of memory for string storage
+private:
+    static int  nameTableSize; // Number of buckets in name table
+    static SbNameEntry **nameTable; // Array of name entries
+    static struct SbNameChunk *chunk; // Chunk of memory for string storage
 
-    const char		*string;	// String for this entry
-    uint32_t		hashValue;	// Its hash value
-    SbNameEntry		*next;		// Pointer to next entry
+    const char  *string; // String for this entry
+    uint32_t  hashValue; // Its hash value
+    SbNameEntry  *next;  // Pointer to next entry
 
     // Initializes SbNameEntry class - done only once
-    static void		initClass();
+    static void initClass();
 
     // Constructor
-    SbNameEntry(const char *s, uint32_t h, SbNameEntry *n)
-    { string = s; hashValue = h; next = n; }
+    SbNameEntry(const char *s, uint32_t h, SbNameEntry *n) {
+        string = s;
+        hashValue = h;
+        next = n;
+    }
 
     // Inserts string in table
-    static const SbNameEntry *	insert(const char *s);
+    static const SbNameEntry * insert(const char *s);
 
     friend INVENTOR_API class SbName;
 };

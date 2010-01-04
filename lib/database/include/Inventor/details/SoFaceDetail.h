@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,9 +45,9 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoFaceDetail class.
+ | This file defines the SoFaceDetail class.
  |
- |   Author(s)		: Thaddeus Beier, Dave Immel, Howard Look
+ |   Author(s)  : Thaddeus Beier, Dave Immel, Howard Look
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -76,7 +76,7 @@ class INVENTOR_API SoFaceDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoFaceDetail);
 
-  public:
+public:
     /// Constructor and destructor.
     SoFaceDetail();
 
@@ -84,43 +84,57 @@ class INVENTOR_API SoFaceDetail : public SoDetail {
     virtual ~SoFaceDetail();
 
     /// Returns the number of points in the face
-    int32_t			getNumPoints() const	{ return numPoints; }
+    int32_t getNumPoints() const {
+        return numPoints;
+    }
 
     /// Returns information about the point forming the \a i'th vertex of the
     /// face, represented as an \a SoPointDetail.
-    const SoPointDetail *	getPoint(int i) const	{ return &point[i]; }
+    const SoPointDetail * getPoint(int i) const {
+        return &point[i];
+    }
 
     /// Returns the index of the face within a shape
-    int32_t			getFaceIndex() const	{ return faceIndex; }
+    int32_t getFaceIndex() const {
+        return faceIndex;
+    }
 
     /// Returns the index of the part within a shape
-    int32_t			getPartIndex() const	{ return partIndex; }
+    int32_t getPartIndex() const {
+        return partIndex;
+    }
 
     /// Returns an instance that is a copy of this instance. The caller
     /// is responsible for deleting the copy when done.
-    virtual SoDetail *		copy() const;
+    virtual SoDetail * copy() const;
 
-  SoEXTENDER public:
+SoEXTENDER public:
     // Sets the number of points in the face and allocates room for the points
-    void			setNumPoints(int32_t num);
+    void setNumPoints(int32_t num);
 
     // Copies a point detail from the given detail
-    void			setPoint(int32_t index, const SoPointDetail *pd);
+    void setPoint(int32_t index, const SoPointDetail *pd);
 
     // Sets the face index and part index
-    void			setFaceIndex(int32_t i)	{ faceIndex = i; }
-    void			setPartIndex(int32_t i)	{ partIndex = i; }
+    void setFaceIndex(int32_t i) {
+        faceIndex = i;
+    }
+    void setPartIndex(int32_t i) {
+        partIndex = i;
+    }
 
     // Return a pointer to the point details.
-    SoPointDetail *		getPoints()		{ return &point[0]; }
+    SoPointDetail * getPoints() {
+        return &point[0];
+    }
 
-  SoINTERNAL public:
-    static void			initClass();
+SoINTERNAL public:
+    static void initClass();
 
-  private:
-    SoPointDetail		*point;
-    int32_t			numPoints;
-    int32_t			faceIndex, partIndex;
+private:
+    SoPointDetail  *point;
+    int32_t   numPoints;
+    int32_t   faceIndex, partIndex;
 };
 
 #endif /* _SO_FACE_DETAIL_ */

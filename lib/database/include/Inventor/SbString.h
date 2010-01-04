@@ -67,23 +67,29 @@
 /// Strings which have many convenience methods to make
 /// string manipulation easier.
 /// \sa SbName
-class INVENTOR_API SbString
-{
-  public:
+class INVENTOR_API SbString {
+public:
 
     /// Default constructor
-    SbString()				{ string = staticStorage; 
-					  string[0] = '\0'; }
+    SbString() {
+        string = staticStorage;
+        string[0] = '\0';
+    }
 
     /// Constructor that initializes to given character string
-    SbString(const char *str)		{ string = staticStorage;
-					  *this = str; }
+    SbString(const char *str) {
+        string = staticStorage;
+        *this = str;
+    }
 
     /// Constructors take a character string, the subset of a character string from start to end (inclusive)
     SbString(const char *str, int start, int end);
 
     /// Constructor that initializes to given SbString
-    SbString(const SbString &str)	{ string = staticStorage; *this = str.string; }
+    SbString(const SbString &str) {
+        string = staticStorage;
+        *this = str.string;
+    }
 
     /// Constructor that initializes to string formed from given integer.
     /// For example, SbString(1234) gives the string "1234".
@@ -93,80 +99,104 @@ class INVENTOR_API SbString
     ~SbString();
 
     /// Returns a reasonable hash key for string
-    uint32_t		hash()		{ return SbString::hash(string); }
+    uint32_t hash() {
+        return SbString::hash(string);
+    }
 
     /// Returns length of string
-    size_t			getLength() const	{ return strlen(string); }
+    size_t getLength() const {
+        return strlen(string);
+    }
 
     /// Returns true if the string has no characters; otherwise returns false.
-    bool isEmpty() const { return (string[0] == '\0'); }
+    bool isEmpty() const {
+        return (string[0] == '\0');
+    }
 
     /// Sets string to be the empty string (""). If freeOld is TRUE
     /// (default), any old storage is freed up
-    void		makeEmpty(SbBool freeOld = TRUE);
+    void makeEmpty(SbBool freeOld = TRUE);
 
     /// Returns pointer to the character string
-    const char *	getString() const	{ return string; }
+    const char * getString() const {
+        return string;
+    }
 
     /// Returns new string representing sub-string from startChar to
     /// endChar, inclusive. If endChar is -1 (the default), the
     /// sub-string from startChar until the end is returned.
-    SbString		getSubString(int startChar, int endChar = -1) const;
+    SbString getSubString(int startChar, int endChar = -1) const;
 
     /// Deletes the characters from startChar to endChar, inclusive,
     /// from the string. If endChar is -1 (the default), all characters
     /// from startChar until the end are deleted.
-    void		deleteSubString(int startChar, int endChar = -1);
+    void deleteSubString(int startChar, int endChar = -1);
 
     /// Assigns str to this string and returns a reference to this string.
-    SbString &		operator =(const char *str);
+    SbString & operator =(const char *str);
 
     /// Assigns str to this string and returns a reference to this string.
-    SbString &		operator =(const SbString &str) { return (*this = str.string); }
+    SbString & operator =(const SbString &str) {
+        return (*this = str.string);
+    }
 
     /// Appends the string str onto the end of this string and returns a reference to this string.
-    SbString &		operator +=(const char *str);
+    SbString & operator +=(const char *str);
 
     /// Appends the string str onto the end of this string and returns a reference to this string.
-    SbString &		operator +=(const SbString &str);
+    SbString & operator +=(const SbString &str);
 
     /// Unary "not" operator; returns TRUE if string is empty ("")
-    int			operator !() const { return isEmpty(); }
+    int operator !() const {
+        return isEmpty();
+    }
 
     /// Returns true if str1 is equal to str2; otherwise returns false.
-    friend INVENTOR_API bool		operator ==(const SbString &str1, const char *str2);
+    friend INVENTOR_API bool  operator ==(const SbString &str1, const char *str2);
 
     /// Returns true if str1 is equal to str2; otherwise returns false.
-    friend INVENTOR_API bool		operator ==(const char *str1, const SbString &str2) { return (str2 == str1); }
+    friend INVENTOR_API bool  operator ==(const char *str1, const SbString &str2) {
+        return (str2 == str1);
+    }
 
     /// Returns true if str1 is equal to str2; otherwise returns false.
-    friend INVENTOR_API bool		operator ==(const SbString &str1, const SbString &str2) { return (str1 == str2.string); }
+    friend INVENTOR_API bool  operator ==(const SbString &str1, const SbString &str2) {
+        return (str1 == str2.string);
+    }
 
     /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
-    friend INVENTOR_API bool		operator !=(const SbString &str1, const char *str2);
+    friend INVENTOR_API bool  operator !=(const SbString &str1, const char *str2);
 
     /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
-    friend INVENTOR_API bool		operator !=(const char *str1, const SbString &str2) { return (str2 != str1); }
+    friend INVENTOR_API bool  operator !=(const char *str1, const SbString &str2) {
+        return (str2 != str1);
+    }
 
     /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
-    friend INVENTOR_API bool		operator !=(const SbString &str1, const SbString &str2) { return (str1 != str2.string); }
+    friend INVENTOR_API bool  operator !=(const SbString &str1, const SbString &str2) {
+        return (str1 != str2.string);
+    }
 
     /// Returns a string which is the result of concatenating s1 and s2.
-    friend INVENTOR_API const SbString	operator +( const SbString & s1, const SbString & s2 ) { SbString t(s1); t += s2; return t; }
+    friend INVENTOR_API const SbString operator +( const SbString & s1, const SbString & s2 ) {
+        SbString t(s1);
+        t += s2;
+        return t;
+    }
 
-  SoINTERNAL public:
+SoINTERNAL public:
 
-    static uint32_t	hash(const char *s);    // Hash function
+    static uint32_t hash(const char *s);    // Hash function
 
-  private:
-    char		*string;		// String pointer
-    int			storageSize;
+private:
+    char  *string;  // String pointer
+    int   storageSize;
 
     // This is used if the string fits in a reasonably small space
-#define SB_STRING_STATIC_STORAGE_SIZE		32
-    char		staticStorage[SB_STRING_STATIC_STORAGE_SIZE];
+#define SB_STRING_STATIC_STORAGE_SIZE  32
+    char  staticStorage[SB_STRING_STATIC_STORAGE_SIZE];
 
-    void		expand(int bySize);	// Makes more room
+    void  expand(int bySize); // Makes more room
 };
 
 #endif /* _SB_STRING_ */

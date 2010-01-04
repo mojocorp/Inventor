@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,9 +45,9 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	Defines the SoWriteAction class
+ | Defines the SoWriteAction class
  |
- |   Author(s)		: Paul S. Strauss
+ |   Author(s)  : Paul S. Strauss
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -71,7 +71,7 @@ class INVENTOR_API SoWriteAction : public SoAction {
 
     SO_ACTION_HEADER(SoWriteAction);
 
-  public:
+public:
     /// Constructor (default action writes to stdout)
     SoWriteAction();
 
@@ -82,34 +82,36 @@ class INVENTOR_API SoWriteAction : public SoAction {
     virtual ~SoWriteAction();
 
     /// Returns pointer to \c SoOutput instance in action.
-    SoOutput *		getOutput() const		{ return output; }
+    SoOutput * getOutput() const {
+        return output;
+    }
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
     // Continues write action on a graph or path
-    void		continueToApply(SoNode *node);
-    void		continueToApply(SoPath *path);
+    void continueToApply(SoNode *node);
+    void continueToApply(SoPath *path);
 
-  protected:
+protected:
     // Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
     // Override method to return FALSE, since this action applies
     // itself to each path separately, so it doesn't need the extra
     // overhead of compacting the list.
-    virtual SbBool	shouldCompactPathLists() const;
+    virtual SbBool shouldCompactPathLists() const;
 
-  private:
-    SoOutput		*output;	// Output info
-    SbBool		createdOutput;	// TRUE if output created by action
-    SbBool		continuing;	// TRUE only if continueToApply()
-					// was used to apply action
-    SbBool		doOneStage;	// TRUE if only supposed to do 1 stage
-    SbPList		savedLists;	// Path lists saved for later apply
+private:
+    SoOutput  *output; // Output info
+    SbBool  createdOutput; // TRUE if output created by action
+    SbBool  continuing; // TRUE only if continueToApply()
+    // was used to apply action
+    SbBool  doOneStage; // TRUE if only supposed to do 1 stage
+    SbPList  savedLists; // Path lists saved for later apply
 
     // Performs traversal on a path list, which is a little tricker
-    void		traversePathList(SoNode *node);
+    void traversePathList(SoNode *node);
 };
 
 #endif /* _SO_WRITE_ACTION_ */

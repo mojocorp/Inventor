@@ -65,18 +65,24 @@
 /// convert back and forth between RGB and HSV.
 /// \sa SbVec3f
 class INVENTOR_API SbColor : public SbVec3f {
-  public:
+public:
     /// Default constructor
     SbColor();
 
     /// Constructor given an SbVec3f
-    SbColor(const SbVec3f & vec3f) { setValue(vec3f.getValue()); }
+    SbColor(const SbVec3f & vec3f) {
+        setValue(vec3f.getValue());
+    }
 
     /// Constructor given an array of 3 components
-    SbColor(const float rgb[3])				{ setValue(rgb); }
+    SbColor(const float rgb[3]) {
+        setValue(rgb);
+    }
 
     /// Constructor given 3 individual components
-    SbColor(float r, float g, float b)			{ setValue(r, g, b); }
+    SbColor(float r, float g, float b) {
+        setValue(r, g, b);
+    }
 
     //
     // HSV routines. Those are 3 floats containing the Hue, Saturation and
@@ -84,37 +90,39 @@ class INVENTOR_API SbColor : public SbVec3f {
     //
 
     /// Sets value of color vector from 3 hsv components
-    SbColor &	setHSVValue(float h, float s, float v);
+    SbColor & setHSVValue(float h, float s, float v);
 
     /// Sets value of color vector from array of 3 hsv components
-    SbColor &	setHSVValue(const float hsv[3])
-			{ return setHSVValue(hsv[0], hsv[1], hsv[2]); }
+    SbColor & setHSVValue(const float hsv[3]) {
+        return setHSVValue(hsv[0], hsv[1], hsv[2]);
+    }
 
     /// Returns 3 individual hsv components
-    void	getHSVValue(float &h, float &s, float &v) const;
+    void getHSVValue(float &h, float &s, float &v) const;
 
     /// Returns an array of 3 hsv components
-    void	getHSVValue(float hsv[3]) const
- 			{ getHSVValue(hsv[0], hsv[1], hsv[2]); }
-    
+    void getHSVValue(float hsv[3]) const {
+        getHSVValue(hsv[0], hsv[1], hsv[2]);
+    }
+
     /// Sets value of color vector from an RGBA packed color value.
     /// The packed color format expressed in hexadecimal is 0xrrggbbaa, where
     ///     rr is the red value
-	///     gg is the green value
-	///     bb is the blue value
-	///     aa is the alpha value
+    ///     gg is the green value
+    ///     bb is the blue value
+    ///     aa is the alpha value
     ///
     /// RGBA component values range from 0 to 0xFF (255).
     /// The returned transparency value is a
-    /// floating point value between 0.0 (opaque) 
+    /// floating point value between 0.0 (opaque)
     /// and 1.0 (completely transparent).
     /// It is derived from the alpha component of the RGBA color.
-    SbColor &	setPackedValue(uint32_t orderedRGBA, float& transparency);
+    SbColor & setPackedValue(uint32_t orderedRGBA, float& transparency);
 
     /// Returns an RGBA packed color value, derived from the color
-    /// vector and the passed transparency value. 
-    /// The alpha component is set to (1.0 - transparency) * 255, 
-    /// resulting in a hex value between 0 and 0xFF.  
+    /// vector and the passed transparency value.
+    /// The alpha component is set to (1.0 - transparency) * 255,
+    /// resulting in a hex value between 0 and 0xFF.
     /// If transparency not specified, alpha is set to 0xFF (opaque).
     uint32_t   getPackedValue(float transparency = 0.0) const;
 };

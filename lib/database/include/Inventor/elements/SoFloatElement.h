@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,14 +45,14 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the abstract SoEXTENDER SoFloatElement class.
+ | This file defines the abstract SoEXTENDER SoFloatElement class.
  |      This is a base class used to make the library smaller by
  |      sharing code.
  |
  |   Classes:
- |	SoFloatElement
+ | SoFloatElement
  |
- |   Author(s)		: Gavin Bell
+ |   Author(s)  : Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -77,38 +77,39 @@ SoEXTENDER class INVENTOR_API SoFloatElement : public SoElement {
 
     SO_ELEMENT_ABSTRACT_HEADER(SoFloatElement);
 
-  public:
+public:
     /// Comparison based on value of floats
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
     /// Copy method, takes care copying the data.
-    virtual SoElement 	*copyMatchInfo() const;
-    
+    virtual SoElement *copyMatchInfo() const;
+
     /// Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+SoINTERNAL public:
     // Initializes the SoFloatElement class
-    static void		initClass();
+    static void initClass();
 
-  protected:
+protected:
     // Set value.  Derived classes have static inline methods
     // that pass in the stack index and cast their type into a float.
     // This just gets an appropriate instance and calls the virtual
     // set.
-    static void		set(int stackIndex, SoState *state, float value);
+    static void set(int stackIndex, SoState *state, float value);
 
     // Virtual set that subclasses can override to implement
     // side-effect behaviors.
-    virtual void	setElt(float value);
+    virtual void setElt(float value);
 
     // Get value.  Derived classes have static inline methods to pass
     // in the stackIndex and cast the returned value to the right type.
 
-    static float	get(int stackIndex, SoState *state)
-        {return ((const SoFloatElement *)
-	    getConstElement(state, stackIndex))->data;}
-    
+    static float get(int stackIndex, SoState *state) {
+        return ((const SoFloatElement *)
+                getConstElement(state, stackIndex))->data;
+    }
+
     // Storage for data.
     float data;
 

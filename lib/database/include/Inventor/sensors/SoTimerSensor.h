@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,20 +45,20 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	Timer sensors trigger repeatedly at regular
- |	intervals, starting at a given base time. By default, the base
- |	time is the current time (at the time the sensor is scheduled or
- |	rescheduled) and the interval is 1/30 of a second; both of these
- |	values may be changed.  If more than one interval passes while
- |	sensors are being triggered, then the extra intervals will be lost
- |	(timers always reschedule themselves to occur in the future).
- |	If more than one timer has expired (and therefore more than one
- |	needs to be rescheduled), all of them are first triggered, and are
- |	then rescheduled relative to the current time.  The reschedule()
- |	method is called by the sensor manager to accomplish this (see the
- |	comments there about saturating the timer queue).
+ | Timer sensors trigger repeatedly at regular
+ | intervals, starting at a given base time. By default, the base
+ | time is the current time (at the time the sensor is scheduled or
+ | rescheduled) and the interval is 1/30 of a second; both of these
+ | values may be changed.  If more than one interval passes while
+ | sensors are being triggered, then the extra intervals will be lost
+ | (timers always reschedule themselves to occur in the future).
+ | If more than one timer has expired (and therefore more than one
+ | needs to be rescheduled), all of them are first triggered, and are
+ | then rescheduled relative to the current time.  The reschedule()
+ | method is called by the sensor manager to accomplish this (see the
+ | comments there about saturating the timer queue).
  |
- |   Author(s)		: Nick Thompson, Paul Strauss, Gavin Bell
+ |   Author(s)  : Nick Thompson, Paul Strauss, Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -91,7 +91,7 @@
 /// \sa SoOneShotSensor, SoAlarmSensor, SoTimerQueueSensor, SbTime
 class INVENTOR_API SoTimerSensor : public SoTimerQueueSensor {
 
-  public:
+public:
     /// Constructor.
     SoTimerSensor();
 
@@ -106,42 +106,50 @@ class INVENTOR_API SoTimerSensor : public SoTimerQueueSensor {
     /// Sets the base time. The base time
     /// is undefined unless it has been specified by the user or the
     /// sensor is currently scheduled.
-    void		setBaseTime(const SbTime &base)  { baseTime = base;
-						           baseTimeSet = TRUE;}
+    void setBaseTime(const SbTime &base) {
+        baseTime = base;
+        baseTimeSet = TRUE;
+    }
     /// Sets the interval length.
-    void		setInterval(const SbTime &intvl) { interval = intvl; }
+    void setInterval(const SbTime &intvl) {
+        interval = intvl;
+    }
 
     /// Returns the base time. The default base time is the time when the sensor is scheduled or rescheduled.
-    const SbTime &	getBaseTime() const		 { return baseTime;  }
+    const SbTime & getBaseTime() const {
+        return baseTime;
+    }
 
     /// Return the interval. The default interval is 1/30th of a second.
-    const SbTime &	getInterval() const		 { return interval;  }
+    const SbTime & getInterval() const {
+        return interval;
+    }
 
     /// Overrides the regular schedule() method because we have to set
     /// up the trigger time first.
-    virtual void	schedule();
+    virtual void schedule();
 
     /// Overrides the regular unschedule() because the timer could be
     /// in either the timer queue or the waiting-to-be-rescheduled
     /// queue, depending on the state of the 'triggering' flag.
-    virtual void	unschedule();
+    virtual void unschedule();
 
-  SoINTERNAL public:
+SoINTERNAL public:
 
     // Reschedule this timer relative to the given time
-    void		reschedule(const SbTime &);
+    void reschedule(const SbTime &);
 
-  private:
-    SbTime		baseTime;	// Base time for scheduling triggering
-    SbTime		interval;	// Interval between triggering
-    SbBool		baseTimeSet;	// Whether base time was set by user
+private:
+    SbTime  baseTime; // Base time for scheduling triggering
+    SbTime  interval; // Interval between triggering
+    SbBool  baseTimeSet; // Whether base time was set by user
 
-    SbBool		triggering;	// True if in trigger() code
+    SbBool  triggering; // True if in trigger() code
 
     // Triggers the sensor, calling its callback function. This
     // overrides the method in SoSensor because it has to reschedule
     // itself for the next interval after triggering.
-    virtual void	trigger();
+    virtual void trigger();
 };
 
 #endif  /* _SO_TIMER_SENSOR_ */

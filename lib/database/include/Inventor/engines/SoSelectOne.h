@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,11 +45,11 @@
  |   $Revision: 1.2 $
  |
  |   Description:
- |	This file defines the SoSelectOne class, used to select one
+ | This file defines the SoSelectOne class, used to select one
  |      value out of an SoMF field and write it into the corresponding
  |      SoSF field.
  |
- |   Author(s)		: Gavin Bell
+ |   Author(s)  : Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -83,9 +83,9 @@
 /// \par File format/defaults:
 /// \code
 /// SoSelectOne {
-///    type	<inputType>
-///    input	[]
-///    index	0
+///    type <inputType>
+///    input []
+///    index 0
 /// }
 /// \endcode
 /// \sa SoEngineOutput, SoConcatenate, SoGate
@@ -93,39 +93,39 @@ class INVENTOR_API SoSelectOne : public SoEngine {
 
     SO_ENGINE_HEADER(SoSelectOne);
 
-  public:
+public:
     /// Constructor takes a subclass of SoMField.
     SoSelectOne(SoType mfInputType);
 
     /// Index is used to choose which value of the input is written to
     /// output.  Default is -1, meaning don't write anything.
-    SoSFInt32		index;
+    SoSFInt32  index;
 
     /// Note that unlike most engines the input field is a pointer.
     /// The default value for this field is no values.
-    SoMField		*input;
+    SoMField  *input;
 
     /// Note that unlike most engines the output is a pointer.  The
     /// type of the output is the single-value field corresponding to
     /// whatever type the input is.
-    SoEngineOutput	*output;
+    SoEngineOutput *output;
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
-    virtual SoFieldContainer *	copyThroughConnection() const;
-  
-  private:
+    virtual SoFieldContainer * copyThroughConnection() const;
+
+private:
     SoSelectOne();
     ~SoSelectOne();
 
     // SelectOne engines must write out their input type before writing
     // their fields, so these are overridden:
-    virtual SbBool	readInstance(SoInput *in, unsigned short flags);
-    virtual void	writeInstance(SoOutput *out);
+    virtual SbBool readInstance(SoInput *in, unsigned short flags);
+    virtual void writeInstance(SoOutput *out);
 
-    void		setup(SoType);
-    virtual void	evaluate();
+    void setup(SoType);
+    virtual void evaluate();
 
     int conversionCase;
 

@@ -77,7 +77,7 @@ class SoDetail;
 /// probably make copies of them.
 class INVENTOR_API SoPrimitiveVertex {
 
-  public:
+public:
     /// Constructor.
     SoPrimitiveVertex();
 
@@ -89,49 +89,69 @@ class INVENTOR_API SoPrimitiveVertex {
     ~SoPrimitiveVertex();
 
     /// Returns the surface point in object space.
-    const SbVec3f &	getPoint() const		{ return point; }
+    const SbVec3f & getPoint() const {
+        return point;
+    }
 
     /// Returns the surface normal in object space.
-    const SbVec3f &	getNormal() const		{ return normal; }
+    const SbVec3f & getNormal() const {
+        return normal;
+    }
 
     /// Returns the surface texture coordinates in object space.
-    const SbVec4f &	getTextureCoords() const	{ return texCoords; }
+    const SbVec4f & getTextureCoords() const {
+        return texCoords;
+    }
 
     /// Returns the index into the current set of materials of the
     /// material active at the vertex
-    int			getMaterialIndex() const    { return materialIndex; }
+    int getMaterialIndex() const {
+        return materialIndex;
+    }
 
     /// Returns the detail giving more information about the vertex. Note that
     /// this pointer may be NULL if there is no more info.
-    const SoDetail *	getDetail() const		{ return detail; }
+    const SoDetail * getDetail() const {
+        return detail;
+    }
 
     /// Copy assignment operator. Note that just the pointer to the
     /// detail is copied, and not the detail itself.
-    SoPrimitiveVertex &	operator =(const SoPrimitiveVertex &pv);
+    SoPrimitiveVertex & operator =(const SoPrimitiveVertex &pv);
 
-  SoEXTENDER public:
+SoEXTENDER public:
 
     // These methods are typically called by shape classes during
     // primtiive generation
 
     // These set the object space point, normal, and texture coordinates:
-    void		setPoint(const SbVec3f &pt)	  { point     = pt; }
-    void		setNormal(const SbVec3f &norm)	  { normal    = norm; }
-    void		setTextureCoords(const SbVec4f &t){ texCoords = t; }
+    void setPoint(const SbVec3f &pt) {
+        point     = pt;
+    }
+    void setNormal(const SbVec3f &norm) {
+        normal    = norm;
+    }
+    void setTextureCoords(const SbVec4f &t) {
+        texCoords = t;
+    }
 
     // Sets the material index. The index is set to 0 during construction.
-    void		setMaterialIndex(int index)  { materialIndex = index; }
+    void setMaterialIndex(int index) {
+        materialIndex = index;
+    }
 
     // Sets the detail corresponding to the vertex. The pointer may be
     // NULL, although it is set to NULL during construction.
-    void		setDetail(SoDetail *d)		  { detail = d; }
+    void setDetail(SoDetail *d) {
+        detail = d;
+    }
 
-  private:
-    SbVec3f		point;		// Object-space point
-    SbVec3f		normal;		// Object-space normal
-    SbVec4f		texCoords;	// Object-space texture coordinates
-    int			materialIndex;	// Material index
-    SoDetail		*detail;	// Extra detail info
+private:
+    SbVec3f  point;  // Object-space point
+    SbVec3f  normal;  // Object-space normal
+    SbVec4f  texCoords; // Object-space texture coordinates
+    int   materialIndex; // Material index
+    SoDetail  *detail; // Extra detail info
 };
 
 #endif /* _SO_PRIMITIVE_VERTEX_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoGLCacheList class, which can be used
+ | This file defines the SoGLCacheList class, which can be used
  |      is used by nodes like Separator to maintain a list of render
  |      caches that might be used.  It also implements an auto caching
  |      scheme that tries to be smart about only building caches when
@@ -61,7 +61,7 @@
  |     In a node's notify method:
  |         cacheList->invalidateAll();
  |
- |   Author(s)		: Gavin Bell
+ |   Author(s)  : Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -80,20 +80,20 @@ class SoState;
 class SoElement;
 
 SoEXTENDER class INVENTOR_API SoGLCacheList {
-    
-  public:
+
+public:
     /// Constructor.  Takes the maximum number of caches to build.
     SoGLCacheList(int numCaches = 2);
 
     /// Destructor.
     ~SoGLCacheList();
-    
+
     /// Given an SoGLRenderAction, try to use one of the caches we've
     /// built.  If none of the caches can be used, this returns FALSE.
     /// If this returns TRUE, then a cache has been called and all the
     /// GL commands in it have already been done.
     SbBool call(SoGLRenderAction *);
-    
+
     /// Open a new cache, maybe.  If the autoCache flag is TRUE, a
     /// heuristic will be used to figure out whether or not caching
     /// should be done (based on when caches were built, when they were
@@ -104,12 +104,12 @@ SoEXTENDER class INVENTOR_API SoGLCacheList {
     /// Close an open cache, if any.  If open() didn't open a cache,
     /// this routine does nothing.
     void close(SoGLRenderAction *);
-    
+
     /// Mark all caches as invalid.  This should be called when a node
     /// is notified of changes in its children or fields.
     void invalidateAll();
-    
-  private:
+
+private:
     SoGLCacheListEntry *getLRU();
     void setMRU(SoGLCacheListEntry *e);
     void setLRU(SoGLCacheListEntry *e);
@@ -121,32 +121,32 @@ SoEXTENDER class INVENTOR_API SoGLCacheList {
     SoGLCacheListEntry *MRU;
     int maxCaches, numCaches;
     SoGLCacheListEntry *openCache;
-    int threshold;	// Number of frames to wait before trying to
-			// build a cache.  This is increased when caches
-			// are found to be invalid, and decreased when a
-			// cache is successfully used.
-    int mightBeUsed;	// When we can't use a cache, this counts the
-			// number of times open() is called and we
-			// think we might have been able to use a cache, if
-    			// there was one built.  The bigger this gets,
-			// the more likely we are to use a cache.
+    int threshold; // Number of frames to wait before trying to
+    // build a cache.  This is increased when caches
+    // are found to be invalid, and decreased when a
+    // cache is successfully used.
+    int mightBeUsed; // When we can't use a cache, this counts the
+    // number of times open() is called and we
+    // think we might have been able to use a cache, if
+    // there was one built.  The bigger this gets,
+    // the more likely we are to use a cache.
     SoElement *invalidElement;
-			// This is the element that caused the most
-			// recently used cache to be considered
-			// invalid.  If it doesn't change, a cache
-			// will be built (if it does continue to
-			// change, we'll avoid building a cache).
-    SbBool saveInvalid;	// Used to remember whether or not a node
-			// called SoCacheElement::invalidate() between
-			// open() and close().  This scheme assumes
-			// that nodes won't apply() another action
-			// that uses the CacheElement during
-			// rendering (that would screw up caching
-			// anyway, so that is a good assumption).
-    int saveACacheBits;	// At cache->open() time we get these from the
-			// SoGLCacheContextElement, clear them before
-			// traversing children, and reset them at
-			// cache->close() time.
+    // This is the element that caused the most
+    // recently used cache to be considered
+    // invalid.  If it doesn't change, a cache
+    // will be built (if it does continue to
+    // change, we'll avoid building a cache).
+    SbBool saveInvalid; // Used to remember whether or not a node
+    // called SoCacheElement::invalidate() between
+    // open() and close().  This scheme assumes
+    // that nodes won't apply() another action
+    // that uses the CacheElement during
+    // rendering (that would screw up caching
+    // anyway, so that is a good assumption).
+    int saveACacheBits; // At cache->open() time we get these from the
+    // SoGLCacheContextElement, clear them before
+    // traversing children, and reset them at
+    // cache->close() time.
 
 };
 

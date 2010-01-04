@@ -103,7 +103,7 @@ SbViewportRegion::SbViewportRegion(short width, short height)
 //
 // Use: public
 
-SbViewportRegion::SbViewportRegion(SbVec2s winSize)
+SbViewportRegion::SbViewportRegion(const SbVec2s & winSize)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -114,7 +114,7 @@ SbViewportRegion::SbViewportRegion(SbVec2s winSize)
 
     vpSet = FALSE;
 
-    pixelsPerInch = 72.0;
+    pixelsPerInch = 72.0f;
 }
 
 ////////////////////////////////////////////////////////////////////////

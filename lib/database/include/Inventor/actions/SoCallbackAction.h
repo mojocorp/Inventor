@@ -81,17 +81,17 @@ class SoShape;
 //
 
 typedef void SoTriangleCB(void *userData,
-			  SoCallbackAction *action,
-			  const SoPrimitiveVertex *v1,
-			  const SoPrimitiveVertex *v2,
-			  const SoPrimitiveVertex *v3);
+                          SoCallbackAction *action,
+                          const SoPrimitiveVertex *v1,
+                          const SoPrimitiveVertex *v2,
+                          const SoPrimitiveVertex *v3);
 
 typedef void SoLineSegmentCB(void *userData, SoCallbackAction *action,
-			     const SoPrimitiveVertex *v1,
-			     const SoPrimitiveVertex *v2);
+                             const SoPrimitiveVertex *v1,
+                             const SoPrimitiveVertex *v2);
 
 typedef void SoPointCB(void *userData, SoCallbackAction *action,
-		       const SoPrimitiveVertex *v);
+                       const SoPrimitiveVertex *v);
 
 /// Performs a generic traversal of the scene graph.
 /// \ingroup Actions
@@ -120,13 +120,13 @@ class INVENTOR_API SoCallbackAction : public SoAction {
 
     SO_ACTION_HEADER(SoCallbackAction);
 
-  public:
+public:
 
     /// Possible responses from a pre or post callback
     enum Response {
-	CONTINUE,		///< Continue as usual
-	ABORT,			///< Stop traversing the rest of the graph
-	PRUNE			///< Do not traverse children of this node
+        CONTINUE,  ///< Continue as usual
+        ABORT,   ///< Stop traversing the rest of the graph
+        PRUNE   ///< Do not traverse children of this node
     };
 
     /// The SoCallbackActionCB typedef is defined within the class, since
@@ -134,10 +134,10 @@ class INVENTOR_API SoCallbackAction : public SoAction {
     /// The first argument is the data pointer that the user supplied
     /// when the callback was registered. The second argument is the
     /// action, from which the state can be extracted. The third
-    /// argument is the node that the callback is called from.  
+    /// argument is the node that the callback is called from.
     typedef Response SoCallbackActionCB(void *userData,
-					SoCallbackAction *action,
-					const SoNode *node);
+                                        SoCallbackAction *action,
+                                        const SoNode *node);
 
     /// Constructor.
     SoCallbackAction();
@@ -173,172 +173,175 @@ class INVENTOR_API SoCallbackAction : public SoAction {
     /// \name Complexity:
     /// Returns complexity information from the state.
     /// @{
-    float			getComplexity() const;
-    SoComplexity::Type		getComplexityType() const;
+    float getComplexity() const;
+    SoComplexity::Type getComplexityType() const;
     /// @}
 
     /// \name Coordinates:
     /// Returns the current coordinates from the state.
     /// @{
-    int32_t			getNumCoordinates() const;
-    const SbVec3f &		getCoordinate3(int index) const;
-    const SbVec4f &		getCoordinate4(int index) const;
+    int32_t getNumCoordinates() const;
+    const SbVec3f & getCoordinate3(int index) const;
+    const SbVec4f & getCoordinate4(int index) const;
     /// @}
 
     /// \name DrawStyle:
     /// Returns the current drawing style information from the state.
     /// @{
-    SoDrawStyle::Style		getDrawStyle() const;
-    uint16_t			getLinePattern() const;
-    float			getLineWidth() const;
-    float			getPointSize() const;
+    SoDrawStyle::Style  getDrawStyle() const;
+    uint16_t getLinePattern() const;
+    float getLineWidth() const;
+    float getPointSize() const;
     /// @}
 
     /// \name Font:
     /// Returns the current font information from the state.
     /// @{
-    const SbName &		getFontName() const;
-    float			getFontSize() const;
+    const SbName & getFontName() const;
+    float getFontSize() const;
     /// @}
 
     /// \name Lighting:
     /// Returns the current lighting model information from the state.
     /// @{
-    SoLightModel::Model		getLightModel() const;
-    const SbVec3f &		getLightAttenuation() const;
+    SoLightModel::Model getLightModel() const;
+    const SbVec3f & getLightAttenuation() const;
     /// @}
 
     /// \name Material:
     /// Returns the current material information from the state.
     /// @{
-    void			getMaterial(SbColor &ambient,
-					    SbColor &diffuse,
-					    SbColor &specular,
-					    SbColor &emission,
-					    float   &shininess,
-					    float   &transparency,
-                                            int     mtlIndex = 0) const; ///< Providing a \a mtlIndex will return the material defined for that index.
-    SoMaterialBinding::Binding	getMaterialBinding() const;
+    void getMaterial(SbColor &ambient,
+                     SbColor &diffuse,
+                     SbColor &specular,
+                     SbColor &emission,
+                     float   &shininess,
+                     float   &transparency,
+                     int     mtlIndex = 0) const; ///< Providing a \a mtlIndex will return the material defined for that index.
+    SoMaterialBinding::Binding getMaterialBinding() const;
     /// @}
 
     /// \name Normals:
     /// Returns the current normal information from the state.
     /// @{
-    int32_t			getNumNormals() const;
-    const SbVec3f &		getNormal(int index) const;
-    SoNormalBinding::Binding	getNormalBinding() const;
+    int32_t getNumNormals() const;
+    const SbVec3f & getNormal(int index) const;
+    SoNormalBinding::Binding getNormalBinding() const;
     /// @}
 
     /// \name Profiles:
     /// Returns the current profiles and their coordinates from the state.
     /// @{
-    int32_t			getNumProfileCoordinates() const;
-    const SbVec2f &		getProfileCoordinate2(int index) const;
-    const SbVec3f &		getProfileCoordinate3(int index) const;
-    const SoNodeList &		getProfile() const;
+    int32_t getNumProfileCoordinates() const;
+    const SbVec2f & getProfileCoordinate2(int index) const;
+    const SbVec3f & getProfileCoordinate3(int index) const;
+    const SoNodeList & getProfile() const;
     /// @}
 
     /// \name Shape Hints:
     /// Returns the current shape hints from the state.
     /// @{
-    SoShapeHints::VertexOrdering	getVertexOrdering() const;
-    SoShapeHints::ShapeType		getShapeType() const;
-    SoShapeHints::FaceType		getFaceType() const;
-    float				getCreaseAngle() const;
+    SoShapeHints::VertexOrdering getVertexOrdering() const;
+    SoShapeHints::ShapeType getShapeType() const;
+    SoShapeHints::FaceType getFaceType() const;
+    float getCreaseAngle() const;
     /// @}
 
     /// \name Textures:
     /// Returns texture information from the state.
     /// @{
-    int32_t				getNumTextureCoordinates() const; ///< Returns 0 if texture coordinates are generated by a function
-    const SbVec2f &			getTextureCoordinate2(int index) const;
-    const SbVec4f &			getTextureCoordinate4(int index) const;
-    SoTextureCoordinateBinding::Binding	getTextureCoordinateBinding() const;
-    const SbColor &			getTextureBlendColor() const;
-    const unsigned char *		getTextureImage(SbVec2s &size,	int &numComps) const; ///< Returns NULL if no texture is enabled
+    int32_t getNumTextureCoordinates() const; ///< Returns 0 if texture coordinates are generated by a function
+    const SbVec2f & getTextureCoordinate2(int index) const;
+    const SbVec4f & getTextureCoordinate4(int index) const;
+    SoTextureCoordinateBinding::Binding getTextureCoordinateBinding() const;
+    const SbColor & getTextureBlendColor() const;
+    const unsigned char * getTextureImage(SbVec2s &size, int &numComps) const; ///< Returns NULL if no texture is enabled
 
     /// Returns the current texture mapping information from the state.
-    const SbMatrix &			getTextureMatrix() const;
-    SoTexture2::Model	getTextureModel() const;
-    SoTexture2::Wrap			getTextureWrapS() const;
-    SoTexture2::Wrap			getTextureWrapT() const;
+    const SbMatrix & getTextureMatrix() const;
+    SoTexture2::Model getTextureModel() const;
+    SoTexture2::Wrap getTextureWrapS() const;
+    SoTexture2::Wrap getTextureWrapT() const;
     /// @}
 
     /// \name Transformations:
     /// Returns the current modeling transformation and the current units from the state.
     /// @{
-    const SbMatrix &		getModelMatrix() const;
-    SoUnits::Units		getUnits() const;
+    const SbMatrix & getModelMatrix() const;
+    SoUnits::Units getUnits() const;
     /// @}
 
     /// \name Viewing:
     /// Returns the current camera and viewing information from the state.
     /// @{
-    float			getFocalDistance() const;
-    const SbMatrix &		getProjectionMatrix() const;
-    const SbMatrix &		getViewingMatrix() const;
-    const SbViewVolume &	getViewVolume() const;
+    float getFocalDistance() const;
+    const SbMatrix & getProjectionMatrix() const;
+    const SbMatrix & getViewingMatrix() const;
+    const SbViewVolume & getViewVolume() const;
     /// @}
 
     /// \name Miscellaneous:
     /// @{
-    SoPickStyle::Style		getPickStyle() const; ///< Returns the current picking style.
-    int32_t			getSwitch() const;  ///< Returns the current switch value.
+    SoPickStyle::Style getPickStyle() const; ///< Returns the current picking style.
+    int32_t getSwitch() const;  ///< Returns the current switch value.
     /// @}
 
-  SoEXTENDER public:
+SoEXTENDER public:
     /// Returns the current response
-    Response		getCurrentResponse() const { return response; }
+    Response getCurrentResponse() const {
+        return response;
+    }
 
     /// Call the pre-callbacks and post-callbacks
-    void		invokePreCallbacks(const SoNode *node);
-    void		invokePostCallbacks(const SoNode *node);
+    void invokePreCallbacks(const SoNode *node);
+    void invokePostCallbacks(const SoNode *node);
 
     /// Call the primitive callbacks
-    void	invokeTriangleCallbacks(const SoShape *shape,
-					const SoPrimitiveVertex *v1,
-					const SoPrimitiveVertex *v2,
-					const SoPrimitiveVertex *v3);
-    void	invokeLineSegmentCallbacks(const SoShape *shape,
-					   const SoPrimitiveVertex *v1,
-					   const SoPrimitiveVertex *v2);
-    void	invokePointCallbacks(const SoShape *shape,
-				     const SoPrimitiveVertex *v);
+    void invokeTriangleCallbacks(const SoShape *shape,
+                                 const SoPrimitiveVertex *v1,
+                                 const SoPrimitiveVertex *v2,
+                                 const SoPrimitiveVertex *v3);
+    void invokeLineSegmentCallbacks(const SoShape *shape,
+                                    const SoPrimitiveVertex *v1,
+                                    const SoPrimitiveVertex *v2);
+    void invokePointCallbacks(const SoShape *shape,
+                              const SoPrimitiveVertex *v);
 
     /// Should primitives be generated for this shape?
-    SbBool	shouldGeneratePrimitives(const SoShape *shape) const;    
- 
-  SoINTERNAL public:
-    static void		initClass();
-    
+    SbBool shouldGeneratePrimitives(const SoShape *shape) const;
+
+SoINTERNAL public:
+    static void initClass();
+
     /// Returns the node that caused the callback:
-    virtual SoNode *	getCurPathTail();
-    
+    virtual SoNode * getCurPathTail();
+
     /// Set the current node during traversal:
-    void		setCurrentNode(SoNode *node)
-	{ currentNode = node;} 
+    void setCurrentNode(SoNode *node) {
+        currentNode = node;
+    }
 
-  protected:
+protected:
     /// Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
-  private:
+private:
     // Callback lists
-    SbPList		preCallbackList;
-    SbPList		postCallbackList;
+    SbPList  preCallbackList;
+    SbPList  postCallbackList;
 
-    SbPList		preTailCallbackList;
-    SbPList		postTailCallbackList;
+    SbPList  preTailCallbackList;
+    SbPList  postTailCallbackList;
 
-    SbPList		triangleCallbackList;
-    SbPList		lineSegmentCallbackList;
-    SbPList		pointCallbackList;
+    SbPList  triangleCallbackList;
+    SbPList  lineSegmentCallbackList;
+    SbPList  pointCallbackList;
 
     // Response from last callback
-    Response		response;
-    
+    Response  response;
+
     // Node where the callback occurs:
-    SoNode *		currentNode;
+    SoNode *  currentNode;
 };
 
 #endif /* _SO_CALLBACK_ACTION_ */

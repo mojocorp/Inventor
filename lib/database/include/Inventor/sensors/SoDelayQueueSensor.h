@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,17 +45,17 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	Abstract base class for all sensors that are added to the delay
- |	queue, which means that they will be executed at some time in the
- |	future (when there is idle time, or when a user-defined timeout
- |	occurs-- see SoDB::setDelaySensorTimeout()).
+ | Abstract base class for all sensors that are added to the delay
+ | queue, which means that they will be executed at some time in the
+ | future (when there is idle time, or when a user-defined timeout
+ | occurs-- see SoDB::setDelaySensorTimeout()).
  |
- |	Sensors in the delay queue are sorted by priorities. A priority of
- |	0 indicates that the sensor is immediate and should be triggered
- |	immediately when it is scheduled. Sensors with other priorities
- |	are sorted by increasing priority.
+ | Sensors in the delay queue are sorted by priorities. A priority of
+ | 0 indicates that the sensor is immediate and should be triggered
+ | immediately when it is scheduled. Sensors with other priorities
+ | are sorted by increasing priority.
  |
- |   Author(s)		: Nick Thompson, Paul Strauss, Gavin Bell
+ |   Author(s)  : Nick Thompson, Paul Strauss, Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
@@ -101,7 +101,7 @@
 /// \sa SoTimerQueueSensor, SoDataSensor, SoFieldSensor, SoIdleSensor,SoOneShotSensor, SoNodeSensor, SoPathSensor, SoSensorManager
 class INVENTOR_API SoDelayQueueSensor : public SoSensor {
 
-  public:
+public:
     /// Constructor.
     SoDelayQueueSensor();
 
@@ -114,13 +114,17 @@ class INVENTOR_API SoDelayQueueSensor : public SoSensor {
     /// Sets the priority of the sensor.  Priorities can be changed at
     /// any time; if the priority is changed to zero and it is already
     /// scheduled, the sensor is immediately triggered and removed from the queue.
-    void		setPriority(uint32_t pri);
+    void setPriority(uint32_t pri);
 
     /// Gets the priority of the sensor.
-    uint32_t		getPriority() const		{ return priority; }
+    uint32_t getPriority() const  {
+        return priority;
+    }
 
     /// Returns the default delay queue sensor priority, which is 100.
-    static uint32_t getDefaultPriority()		{ return 100; }
+    static uint32_t getDefaultPriority()  {
+        return 100;
+    }
 
     /// If this sensor's priority is non-zero, adds this sensor to the list of
     /// delay queue sensors ready to be triggered.
@@ -133,43 +137,47 @@ class INVENTOR_API SoDelayQueueSensor : public SoSensor {
     /// they reschedule themselves), timers and events will still be
     /// processed.  This should not be done with a priority zero sensor
     /// because an infinite loop will result.
-    virtual void	schedule();
+    virtual void schedule();
 
     /// If this sensor is scheduled, removes it from the delay queue so that
     /// it will not be triggered.
-    virtual void	unschedule();
+    virtual void unschedule();
 
     /// Returns TRUE if this sensor has been scheduled and is waiting in the
     /// delay queue to be triggered.  Sensors are removed from the queue
     /// before their callback function is triggered.
-    virtual SbBool	isScheduled() const;
+    virtual SbBool isScheduled() const;
 
     /// This method is overriden by IdleSensors to tell sensor manager
     /// that they should only be processed when there really is idle
     /// time (and not when the delay queue timeout expires).
-    virtual SbBool	isIdleOnly() const;
-  SoINTERNAL public:
+    virtual SbBool isIdleOnly() const;
+SoINTERNAL public:
     // Set/inquire counter when sensor was last triggered. This allows
     // the sensor manager to avoid triggering a sensor more than once
     // during the same call to processDelayQueue().
-    void		setCounter(uint32_t c)		{ counter = c;  }
-    uint32_t		getCounter() const		{ return counter; }
+    void setCounter(uint32_t c)  {
+        counter = c;
+    }
+    uint32_t getCounter() const  {
+        return counter;
+    }
 
-  protected:
+protected:
     // Triggers the sensor, calling its callback function. This
     // overrides the method in SoSensor because it has to reset the
     // schedule flag before triggering.
-    virtual void	trigger();
+    virtual void trigger();
 
-    SbBool		scheduled;	// Whether sensor is scheduled
+    SbBool  scheduled; // Whether sensor is scheduled
 
-  private:
-    uint32_t		priority;	// Sensor priority
-    uint32_t		counter;	// Used by sensor manager
+private:
+    uint32_t  priority; // Sensor priority
+    uint32_t  counter; // Used by sensor manager
 
     // Returns TRUE if this sensor should precede sensor s in the delay
     // queue: it must have a lower priority number than s.
-    virtual SbBool	isBefore(const SoSensor *s) const;
+    virtual SbBool isBefore(const SoSensor *s) const;
 };
 
 #endif  /* _SO_DELAY_QUEUE_SENSOR_ */
