@@ -109,6 +109,13 @@ class INVENTOR_API SoSFImage : public SoSField {
     SO_SFIELD_CONSTRUCTOR_HEADER(SoSFImage);
 
 public:
+    enum CopyPolicy {
+        COPY,
+        NO_COPY,
+        NO_COPY_AND_DELETE,
+        NO_COPY_AND_FREE
+    };
+
     /// Returns the pixels in the image as an array of unsigned chars.  The
     /// \a size and \a nc arguments are filled in with the dimensions of the
     /// image and the number of components in the image; the number of bytes
@@ -120,7 +127,7 @@ public:
     /// \a size[0]* \a size[1]* \a nc bytes from the given array will be copied into
     /// internal storage maintained by the <tt>SoSFImage</tt> field.
     void setValue(const SbVec2s &size, int nc,
-                  const unsigned char *bytes);
+                  const unsigned char *bytes, CopyPolicy copypolicy = COPY);
 
     /// Equality operator
     int operator ==(const SoSFImage &f) const;
@@ -144,6 +151,9 @@ private:
     SbVec2s  size;  // Width and height of image
     int   numComponents; // Number of components per pixel
     unsigned char * bytes;  // Array of pixels
+    CopyPolicy copyPolicy;
+
+    void freeImage();
 
     // Reading and writing
     virtual SbBool readValue(SoInput *in);
