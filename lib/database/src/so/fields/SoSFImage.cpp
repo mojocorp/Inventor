@@ -53,6 +53,8 @@
 
 #include <Inventor/fields/SoSFImage.h>
 
+#include <stdlib.h>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // SoSFImage class
@@ -77,6 +79,7 @@ SoSFImage::SoSFImage()
     size[0] = size[1] = 0;
     numComponents = 0;
     bytes = NULL;
+    copyPolicy = COPY;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -90,7 +93,7 @@ SoSFImage::~SoSFImage()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (bytes != NULL) delete[] bytes;
+    freeImage();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -116,25 +119,32 @@ SoSFImage::initClass()
 // Use: public
 
 void
-SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b)
+SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b, CopyPolicy copypolicy)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (bytes != NULL) {
-        delete[] bytes;
-        bytes = NULL;
-    }
+    freeImage();
 
     size = s;
     numComponents = nc;
+    copyPolicy = copypolicy;
 
     int numBytes = size[0]*size[1]*numComponents;
 
     if (numBytes != 0) {
-        bytes = new unsigned char[numBytes];
-        memcpy(bytes, b, numBytes);
-    } else
-        bytes = NULL;
+        switch(copypolicy) {
+            case COPY:
+                bytes = new unsigned char[numBytes];
+                memcpy(bytes, b, numBytes);
+                break;
+            case NO_COPY:
+            case NO_COPY_AND_DELETE:
+            case NO_COPY_AND_FREE:
+                bytes = (unsigned char*)b;
+                break;
+            default: break;
+        }
+    }
 
     valueChanged();
 }
@@ -236,6 +246,31 @@ SoSFImage::finishEditing()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    
+//
+// Use: private
+void
+SoSFImage::freeImage()
+{
+    switch(copyPolicy) {
+        case COPY: 
+        case NO_COPY_AND_DELETE:
+            delete[] bytes; 
+        break;
+        case NO_COPY:
+            // Nothing to do.
+        break;
+        case NO_COPY_AND_FREE:
+            free(bytes);
+        break;
+        default: break;
+    }
+    bytes = NULL;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Reads value from file. Returns FALSE on error.
 //
 // Use: private
@@ -250,8 +285,10 @@ SoSFImage::readValue(SoInput *in)
             !in->read(numComponents))
         return FALSE;
 
-    if (bytes != NULL) delete[] bytes;
+    freeImage();
+
     bytes = new unsigned char[size[0]*size[1]*numComponents];
+    copyPolicy = COPY;
 
     int byte = 0;
     if (in->isBinary()) {
