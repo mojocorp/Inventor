@@ -81,7 +81,7 @@ PRIVATE_HEADERS += interaction/src/draggers/geom/SoCenterballDraggerGeom.h \
 HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
 
 SOURCES += interaction/src/SoInteraction.cpp \
-           interaction/src/SoSceneMgr.cpp \
+           interaction/src/SoSceneManager.cpp \
            interaction/src/SoSelection.cpp \
            interaction/src/actions/SoBoxHL.cpp \
            interaction/src/actions/SoLineHL.cpp \
