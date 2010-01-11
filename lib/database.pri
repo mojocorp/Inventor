@@ -929,7 +929,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/sensors/SoOneShotSensor.cpp \
            database/src/so/sensors/SoPathSensor.cpp \
            database/src/so/sensors/SoSensor.cpp \
-           database/src/so/sensors/SoSensorMgr.cpp \
+           database/src/so/sensors/SoSensorManager.cpp \
            database/src/so/sensors/SoTimerQueueSensor.cpp \
            database/src/so/sensors/SoTimerSensor.cpp \
            database/src/so/upgraders/SoUpgrader.cpp \
