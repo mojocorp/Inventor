@@ -19,6 +19,7 @@ DEPENDPATH += database \
               database/include/Inventor/nodes \
               database/include/Inventor/projectors \
               database/include/Inventor/sensors \
+              database/include/Inventor/threads \
               database/src/sb/projectors \
               database/src/so/actions \
               database/src/so/bundles \
@@ -432,6 +433,8 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/sensors/SoSensors.h \
            database/include/Inventor/sensors/SoTimerQueueSensor.h \
            database/include/Inventor/sensors/SoTimerSensor.h \
+           database/include/Inventor/threads/SbThreadAutoLock.h \
+           database/include/Inventor/threads/SbThreadMutex.h \
            database/include/Inventor/misc/upgraders/SoUpgrader.h \
            database/include/Inventor/misc/upgraders/SoV1CustomNode.h
 
@@ -619,6 +622,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/sb/projectors/SbSphereProjector.cpp \
            database/src/sb/projectors/SbSphereSectionProjector.cpp \
            database/src/sb/projectors/SbSphereSheetProjector.cpp \
+           database/src/sb/threads/SbThreadMutex.cpp \
            database/src/so/actions/SoAction.cpp \
            database/src/so/actions/SoActionMethodList.cpp \
            database/src/so/actions/SoEnabledElementsList.cpp \
