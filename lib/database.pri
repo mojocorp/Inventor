@@ -143,6 +143,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoFontNameElement.h \
            database/include/Inventor/elements/SoFontSizeElement.h \
            database/include/Inventor/elements/SoGLCacheContextElement.h \
+           database/include/Inventor/elements/SoGLDisplayList.h \
            database/include/Inventor/elements/SoGLClipPlaneElement.h \
            database/include/Inventor/elements/SoGLCoordinateElement.h \
            database/include/Inventor/elements/SoGLDrawStyleElement.h \
@@ -677,6 +678,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/elements/SoFontNameElement.cpp \
            database/src/so/elements/SoFontSizeElement.cpp \
            database/src/so/elements/SoGLCacheContextElement.cpp \
+           database/src/so/elements/SoGLDisplayList.cpp \
            database/src/so/elements/SoGLClipPlaneElement.cpp \
            database/src/so/elements/SoGLCoordinateElement.cpp \
            database/src/so/elements/SoGLDrawStyleElement.cpp \
