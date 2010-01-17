@@ -96,85 +96,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////
-//
-//  Class SoGLDisplayList:
-//
-//  A helper class used to store OpenGL display-list-like objects.
-//  Currently, it can store either texture objects (which must be
-//  treated like display lists; texture objects bound inside a display
-//  list must be reference counted, etc) and display lists.
-//
-////////////////////////////////////////////////////////////////////////
-
-SoEXTENDER class INVENTOR_API SoGLDisplayList {
-
-public:
-
-    enum Type {
-        DISPLAY_LIST,
-        TEXTURE_OBJECT
-    };
-
-    /// Constructor.  Takes state, type, and number of lists to
-    /// allocate.  Calls either glGenLists() or glGenTexturesEXT() to
-    /// create empty objects/display lists.  If texture objects are not
-    /// supported, the type will revert to DISPLAY_LIST.
-    SoGLDisplayList(SoState *state, Type type, int numToAllocate=1);
-
-    /// Because display lists may contain textures objects or other
-    /// display lists, they must be reference counted.
-    /// You can pass a NULL state to unref(); deletion of the display
-    /// list or texture object will then be delayed until a render
-    /// action is applied in the correct context.
-    void ref();
-    void unref(SoState *state = NULL);
-
-    /// Open/close a display list.  Display lists are done in
-    /// COMPILE_AND_EXECUTE mode, so you don't need to call() the
-    /// display list after close().
-    /// Opening a texture object binds it; closing it does nothing.
-    void open(SoState *state, int index = 0);
-    void close(SoState *state);
-
-    /// Call a display list, or bind a texture object.  This
-    /// automatically sets up a dependency if there is another display
-    /// list open in the state.
-    /// You can also use the get() methods below and make the OpenGL
-    /// calls yourself, in which case you should call the
-    /// addDependency() method to do the correct reference counting...
-    void call(SoState *state, int index = 0);
-    void addDependency(SoState *state);
-
-    //
-    // Get methods
-    //
-    Type getType() {
-        return type;
-    }
-    int getNumAllocated() {
-        return num;
-    }
-    GLuint getFirstIndex() {
-        return startIndex;
-    }
-    int getContext() {
-        return context;
-    }
-
-private:
-    ~SoGLDisplayList();
-
-    Type type;
-    GLuint startIndex;
-    int num;
-    int refCount;
-    int context;
-    static int texture_object_extensionID;
-    friend class SoGLCacheContextElement;
-};
-
 class SbIntList;
+class SoGLDisplayList;
 
 SoEXTENDER class INVENTOR_API SoGLCacheContextElement : public SoElement {
 
@@ -232,20 +155,17 @@ public:
     // auto-cached (pass TRUE if should, FALSE if shouldn't, don't
     // call this method at all if the node doesn't care):
     static void shouldAutoCache(SoState *state, int bits) {
-        SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
-                                       state->getElementNoPush(classStackIndex);
+        SoGLCacheContextElement *elt = (SoGLCacheContextElement *)state->getElementNoPush(classStackIndex);
         elt->autoCacheBits |= bits;
     }
 
     // Used by Separators to set/reset the auto-caching bits:
     static void setAutoCacheBits(SoState *state, int bits) {
-        ((SoGLCacheContextElement *)state->getElementNoPush(
-             classStackIndex))->autoCacheBits = bits;
+        ((SoGLCacheContextElement *)state->getElementNoPush(classStackIndex))->autoCacheBits = bits;
     }
 
     static int resetAutoCacheBits(SoState *state) {
-        SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
-                                       state->getElementNoPush(classStackIndex);
+        SoGLCacheContextElement *elt = (SoGLCacheContextElement *)state->getElementNoPush(classStackIndex);
         int result = elt->autoCacheBits;
         // Hack warning: I rely on TRUE==DO_AUTO_CACHE
         elt->autoCacheBits = elt->isRemoteRendering;
@@ -254,9 +174,7 @@ public:
     }
 
     static SbBool getIsRemoteRendering(SoState *state) {
-        const SoGLCacheContextElement *elt =
-            (const SoGLCacheContextElement *)
-            state->getConstElement(classStackIndex);
+        const SoGLCacheContextElement *elt = (const SoGLCacheContextElement *)state->getConstElement(classStackIndex);
         return elt->isRemoteRendering;
     }
 
