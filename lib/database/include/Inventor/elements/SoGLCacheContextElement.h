@@ -189,6 +189,9 @@ public:
     // Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
+    // Returns an unique cache context id.
+    static uint32_t getUniqueCacheContext();
+
 SoINTERNAL public:
     static void initClass();
 

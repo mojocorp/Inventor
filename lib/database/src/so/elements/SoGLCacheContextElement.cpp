@@ -347,4 +347,10 @@ SoGLCacheContextElement::print(FILE *) const
 }
 #endif /* DEBUG */
 
-
+uint32_t 
+SoGLCacheContextElement::getUniqueCacheContext()
+{
+    static uint32_t s_contextIncrement = 1000;
+    
+    return ++s_contextIncrement;
+}
