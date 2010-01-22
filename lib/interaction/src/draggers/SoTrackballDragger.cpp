@@ -930,13 +930,13 @@ SoTrackballDragger::spinAnimate()
 				"Zero or negative Dt %f", deltaTime.getValue());
 #endif
 
-	angleVelocity /= deltaTime.getValue();
+	angleVelocity /= (float)deltaTime.getValue();
 	
 	computeAverage = FALSE;
     }
     
     // calculate the change in rotation
-    angle = angleVelocity * sec;
+    angle = (float)(angleVelocity * sec);
     
     // append the incremental rotation after the current rotation
     SbRotation rotIncrement(averageAxis, angle);

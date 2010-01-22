@@ -305,6 +305,6 @@ SoOneShot::evaluate()
 #endif
     SO_ENGINE_OUTPUT(timeOut, SoSFTime, setValue(timeVal));
     SO_ENGINE_OUTPUT(isActive, SoSFBool, setValue(activeVal));
-    SO_ENGINE_OUTPUT(ramp, SoSFFloat, setValue(rampVal));
+    SO_ENGINE_OUTPUT(ramp, SoSFFloat, setValue((float)rampVal));
     outputPending = FALSE;
 }

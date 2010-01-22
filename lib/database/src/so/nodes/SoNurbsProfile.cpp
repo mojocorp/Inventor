@@ -213,9 +213,9 @@ SoNurbsProfile::getVertices(SoState *state,
     else if (complexity < 0.55)
 	steps = 5;
     else
-	steps = (int) (powf(complexity, 3.32) * 28) + 2;
+	steps = (int) (powf(complexity, 3.32f) * 28) + 2;
 
-    pixTolerance = 104.0 * complexity * complexity - 252.0 * complexity + 150;
+    pixTolerance = 104.0f * complexity * complexity - 252.0f * complexity + 150;
 
     if (SoComplexityTypeElement::get(state) ==
 	SoComplexityTypeElement::OBJECT_SPACE) {

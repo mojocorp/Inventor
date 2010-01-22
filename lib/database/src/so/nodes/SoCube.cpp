@@ -147,7 +147,7 @@ SoCube::SoCube()
         // average of the face normals of the two adjoining faces, so the
         // edge is fairly-well lit in any forward-facing orientation.
 
-        sq2 = sqrt(2.0) / 2.0f;
+        sq2 = (float)(sqrt(2.0) / 2.0);
 
         edgeNormals[ 0].setValue( 0.0, -sq2,  sq2);		// Bottom front
         edgeNormals[ 1].setValue( sq2,  0.0,  sq2);		// Right  front

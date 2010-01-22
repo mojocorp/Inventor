@@ -155,7 +155,7 @@ SbSphereSheetProjector::project(const SbVec2f &point)
     // distance on the plane from the center
     // to the projection of the point where 
     // the sphere meets the hyperbolic sheet
-    float sphereSheetDist = sphere.getRadius() * M_SQRT1_2;
+    float sphereSheetDist = sphere.getRadius() * (float)M_SQRT1_2;
 
     if (dist < sphereSheetDist) {
 	// project onto sphere

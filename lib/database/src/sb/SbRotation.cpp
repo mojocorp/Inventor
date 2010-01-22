@@ -386,25 +386,25 @@ SbRotation::setValue(const SbMatrixd &m)
     }
     if (m[0][0]+m[1][1]+m[2][2] > m[i][i]) {
 	// Compute w first:
-	quat[3] = sqrt(m[0][0]+m[1][1]+m[2][2]+m[3][3])/2.0f;
+	quat[3] = (float)(sqrt(m[0][0]+m[1][1]+m[2][2]+m[3][3])/2.0);
 
 	// And compute other values:
-	quat[0] = (m[1][2]-m[2][1])/(4*quat[3]);
-	quat[1] = (m[2][0]-m[0][2])/(4*quat[3]);
-	quat[2] = (m[0][1]-m[1][0])/(4*quat[3]);
+	quat[0] = (float)(m[1][2]-m[2][1])/(4*quat[3]);
+	quat[1] = (float)(m[2][0]-m[0][2])/(4*quat[3]);
+	quat[2] = (float)(m[0][1]-m[1][0])/(4*quat[3]);
     }
     else {
 	// Compute x, y, or z first:
 	j = (i+1)%3; k = (i+2)%3;
     
 	// Compute first value:
-	quat[i] = sqrt(m[i][i]-m[j][j]-m[k][k]+m[3][3])/2.0f;
+	quat[i] = (float)(sqrt(m[i][i]-m[j][j]-m[k][k]+m[3][3])/2.0);
        
 	// And the others:
-	quat[j] = (m[i][j]+m[j][i])/(4*quat[i]);
-	quat[k] = (m[i][k]+m[k][i])/(4*quat[i]);
+	quat[j] = (float)(m[i][j]+m[j][i])/(4*quat[i]);
+	quat[k] = (float)(m[i][k]+m[k][i])/(4*quat[i]);
 
-	quat[3] = (m[j][k]-m[k][j])/(4*quat[i]);
+	quat[3] = (float)(m[j][k]-m[k][j])/(4*quat[i]);
     }
 
 #ifdef DEBUG
@@ -707,7 +707,7 @@ SbRotation::slerp(const SbRotation &rot0, const SbRotation &rot1, float t)
 
         // build the new quarternion
         for (i = 0; i <4; i++)
-                rot.quat[i] = scalerot0 * rot0.quat[i] + scalerot1 * rot1q[i];
+                rot.quat[i] = (float)(scalerot0 * rot0.quat[i] + scalerot1 * rot1q[i]);
 
         return rot;
 }

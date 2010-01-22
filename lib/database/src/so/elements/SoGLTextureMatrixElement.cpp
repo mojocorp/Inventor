@@ -178,7 +178,7 @@ SoGLTextureMatrixElement::rotateEltBy(const SbRotation &rotation)
     rotation.getValue(axis, angle);
 
     glMatrixMode(GL_TEXTURE);
-    glRotatef(angle * (180.0f / M_PI), axis[0], axis[1], axis[2]);
+    glRotatef((GLfloat)(angle * (180.0 / M_PI)), axis[0], axis[1], axis[2]);
     glMatrixMode(GL_MODELVIEW);
 
     SoTextureMatrixElement::rotateEltBy(rotation);

@@ -136,7 +136,7 @@ SoTransformerDragger::SoTransformerDragger()
 
     planeProj = new SbPlaneProjector;
     lineProj = new SbLineProjector;
-    sphereProj = new SbSphereSectionProjector( 0.85 );
+    sphereProj = new SbSphereSectionProjector( 0.85f );
     cylProj = new SbCylinderPlaneProjector();
 
     currentState = INACTIVE;
@@ -2528,7 +2528,7 @@ SoTransformerDragger::setFeedbackForRotate()
 		    break;
                 default: break;
 	    }
-	    myXf->scaleFactor.setValue(1.8,1.8,1.8);
+	    myXf->scaleFactor.setValue(1.8f,1.8f,1.8f);
 	}
 	else {
 	    myXf->translation.setValue(0,0,0);
@@ -3178,7 +3178,7 @@ SoTransformerDragger::isColinear(SbVec2f a1[2], SbVec2f a2[2], int pixels)
 	dx = a1[0][0] - a1[1][0];
 	dy = a1[0][1] - a1[1][1];
 	if (dx == 0.0)
-	    dx = 0.0001;
+	    dx = 0.0001f;
 	slope = dy/dx;  
 
     float yIntercept,A,B,C,dist1,dist2;

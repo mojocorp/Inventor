@@ -77,7 +77,7 @@ SoSpotLight::SoSpotLight()
     SO_NODE_ADD_FIELD(location,	   (0.0, 0.0, 1.0));
     SO_NODE_ADD_FIELD(direction,   (0.0, 0.0, -1.0));
     SO_NODE_ADD_FIELD(dropOffRate, (0.0));
-    SO_NODE_ADD_FIELD(cutOffAngle, (M_PI / 4.0));
+    SO_NODE_ADD_FIELD(cutOffAngle, ((float)M_PI / 4.0));
     isBuiltIn = TRUE;
 }
 
@@ -175,7 +175,7 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
         glLightf((GLenum) id, GL_SPOT_EXPONENT, (GLfloat).01f);
     else 
         glLightf((GLenum) id, GL_SPOT_EXPONENT,  (GLfloat)dropRate * 128.0f);
-    glLightf((GLenum) id, GL_SPOT_CUTOFF, cutOffAngle.getValue()*(180.0/M_PI));
+    glLightf((GLenum) id, GL_SPOT_CUTOFF, (GLfloat)(cutOffAngle.getValue()*(180.0/M_PI)));
 
     // Attenuation is accessed from the state
     const SbVec3f &atten = SoLightAttenuationElement::get(action->getState());

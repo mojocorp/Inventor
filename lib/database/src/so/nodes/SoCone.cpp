@@ -307,8 +307,7 @@ SoCone::rayPick(SoRayPickAction *action)
                 normal.normalize();
                 pp->setObjectNormal(normal);
 
-                texCoord.setValue(atan2f(enterPoint[0], enterPoint[2])
-                                  * (1.0f / (2.0f * M_PI)) + 0.5f,
+                texCoord.setValue((float)(atan2f(enterPoint[0], enterPoint[2]) * (1.0 / (2.0 * M_PI)) + 0.5),
                                   enterPoint[1] + 1.0f,
                                   0.0f, 1.0f);
                 pp->setObjectTextureCoords(texCoord);
@@ -345,8 +344,7 @@ SoCone::rayPick(SoRayPickAction *action)
                 normal.normalize();
                 pp->setObjectNormal(normal);
 
-                texCoord.setValue(atan2f(exitPoint[0], exitPoint[2])
-                                  * (1.0 / (2.0 * M_PI)) + 0.5,
+                texCoord.setValue((float)(atan2f(exitPoint[0], exitPoint[2]) * (1.0 / (2.0 * M_PI)) + 0.5),
                                   exitPoint[1] + 1.0f,
                                   0.0f, 1.0f);
                 pp->setObjectTextureCoords(texCoord);
@@ -800,18 +798,18 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action,
     // Make sure first material is sent if necessary
     mb.sendFirst();
 
-    dRadius = 1.0 / numSections;
+    dRadius = 1.0f / numSections;
 
     if (HAS_PART(curParts, SIDES)) {
 
         // Draw each section of sides as a triangle mesh, from top to bottom
-        yTop = 1.0;
-        dy   = -2.0 / numSections;
-        tTop = 1.0;
-        dt   = -1.0 / numSections;
-        ds   =  1.0 / numSides;
+        yTop = 1.0f;
+        dy   = -2.0f / numSections;
+        tTop = 1.0f;
+        dt   = -1.0f / numSections;
+        ds   =  1.0f / numSides;
 
-        innerRadius = 0.0;
+        innerRadius = 0.0f;
 
         for (section = 0; section < numSections; section++) {
 
@@ -819,7 +817,7 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action,
             yBot = yTop + dy;
 
             tBot = tTop + dt;
-            s    = 0.0;
+            s    = 0.0f;
 
             glBegin(GL_TRIANGLE_STRIP);
 
@@ -1214,7 +1212,7 @@ SoCone::computeBase(SoAction *action, int &numSides, int &numSections,
 
     // Compute x and z coordinates around base
     theta  = 0.0f;
-    dTheta = 2.0f * M_PI / numSides;
+    dTheta = (float)(2.0 * M_PI / numSides);
 
     // Looking at the XY silhouette of the cone, (t1,t2) is the normal
     // in the XY plane.
@@ -1245,8 +1243,8 @@ SoCone::getSize(float &botRad, float &hHeight) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    botRad  = (bottomRadius.isIgnored() ? 1.0 : bottomRadius.getValue());
-    hHeight = (      height.isIgnored() ? 1.0 :       height.getValue() / 2.0);
+    botRad  = (bottomRadius.isIgnored() ? 1.0f : bottomRadius.getValue());
+    hHeight = (      height.isIgnored() ? 1.0f :       height.getValue() / 2.0f);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1278,12 +1276,12 @@ SoCone::intersectInfiniteCone(const SbLine &ray,
     // the cone gives us a quadratic, whose a, b, and c coefficients
     // are as follows
     a =  dir[0] * dir[0] - dir[1] * dir[1] + dir[2] * dir[2];
-    b = (pos[0] * dir[0] - pos[1] * dir[1] + pos[2] * dir[2]) * 2.0;
+    b = (pos[0] * dir[0] - pos[1] * dir[1] + pos[2] * dir[2]) * 2.0f;
     c =  pos[0] * pos[0] - pos[1] * pos[1] + pos[2] * pos[2];
 
     // If the discriminant of the quadratic is negative, there's no
     // intersection
-    discriminant = b * b - 4.0 * a * c;
+    discriminant = b * b - 4.0f * a * c;
     if (discriminant < 0.0)
         return FALSE;
 
@@ -1291,12 +1289,12 @@ SoCone::intersectInfiniteCone(const SbLine &ray,
 
     // Some Magic to stabilize the answer
     if (b > 0.0) {
-        t0 = -(2.0 * c) / (sqroot + b);
-        t1 = -(sqroot + b) / (2.0 * a);
+        t0 = -(2.0f * c) / (sqroot + b);
+        t1 = -(sqroot + b) / (2.0f * a);
     }
     else {
-        t0 = (2.0 * c) / (sqroot - b);
-        t1 = (sqroot - b) / (2.0 * a);
+        t0 = (2.0f * c) / (sqroot - b);
+        t1 = (sqroot - b) / (2.0f * a);
     }
 
     enterPoint = pos + t0 * dir;
