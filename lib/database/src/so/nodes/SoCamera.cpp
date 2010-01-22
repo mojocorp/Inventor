@@ -599,7 +599,7 @@ SoCamera::getJitterSample(int numPasses, int curPass, SbVec2f &samplePoint)
 
 		// Set 2 coords of sample to random number between -1 and +1.
 		for (int i = 0; i < 2 * numExtraNeeded; i++)
-		    extraSamples[i] = 2.0f * drand48() - 1.0f;
+		    extraSamples[i] = (float)(2.0 * drand48() - 1.0);
 	    }
 	}
 

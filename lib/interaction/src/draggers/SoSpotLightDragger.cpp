@@ -379,7 +379,7 @@ SoSpotLightDragger::setBeamScaleFromAngle( float beamAngle )
 	myNewAngle =  TWO_AND_A_HALF_DEGREES;
 #undef TWO_AND_A_HALF_DEGREES
     if ( beamAngle > (M_PI / 2.0f) )
-	myNewAngle = (M_PI / 2.0f);
+	myNewAngle = (float)(M_PI / 2.0);
 
     float myCos = cosf(myNewAngle);
     float mySin = sinf(myNewAngle);
@@ -525,10 +525,10 @@ SoSpotLightDragger::drag()
 		if ( fabs(curAngle - 0.0) < fabs((M_PI/2.0) - curAngle) )
 		    theta = 0.0;
 		else 
-		    theta = M_PI / 2.0f;
+		    theta = (float)(M_PI / 2.0);
 	    }
 	    else if ( isPosZ ) {
-		theta = M_PI / 2.0f;
+		theta = (float)(M_PI / 2.0);
 	    }
 	    else if ( isNewOppositeStart ) {
 		theta = 0.0f;
@@ -543,7 +543,7 @@ SoSpotLightDragger::drag()
 
 		// clamp theta to lie between 0 and PI/2
 		theta = (theta < 0.0)          ? 0.0f          : theta;
-		theta = (theta > (M_PI / 2.0)) ? (M_PI / 2.0) : theta;
+		theta = (theta > (M_PI / 2.0)) ? (float)(M_PI / 2.0) : theta;
 	    }
 
     // Now we've got a new angle.  Set the beamScale appropriately,

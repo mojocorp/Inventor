@@ -120,7 +120,7 @@ class SoUnknownNode : public SoGroup {
     SoFieldData		*instanceFieldData;
 
     // Real class name
-    const char *className;
+    SbName className;
 
     // List of hidden children.
     SoChildList		hiddenChildren;

@@ -158,8 +158,8 @@ fromObjectSpace(const SbVec3f &vector, const SbMatrix &matrix,
     // And do the viewport transformation:
     SbVec2s vpSize = vpr.getViewportSizePixels();
     SbVec3f result;
-    result[0] = (ndc[0]+1.0)*vpSize[0]/2.0;
-    result[1] = (ndc[1]+1.0)*vpSize[1]/2.0;
+    result[0] = (ndc[0]+1.0f)*vpSize[0]/2.0f;
+    result[1] = (ndc[1]+1.0f)*vpSize[1]/2.0f;
     // Leave the z coordinate alone
     result[2] = ndc[2];
 
@@ -185,8 +185,8 @@ toObjectSpace(const SbVec3f &pixel, const SbMatrix &matrix,
     // Viewport transformation, to normalized device coordinates:
     SbVec2s vpSize = vpr.getViewportSizePixels();
     SbVec3f ndc;
-    ndc[0] = pixel[0]*2.0/vpSize[0] - 1.0;
-    ndc[1] = pixel[1]*2.0/vpSize[1] - 1.0;
+    ndc[0] = pixel[0]*2.0f/vpSize[0] - 1.0f;
+    ndc[1] = pixel[1]*2.0f/vpSize[1] - 1.0f;
     ndc[2] = pixel[2];
 
     SbVec3f result;
@@ -359,8 +359,8 @@ SoText2::rayPick(SoRayPickAction *action)
 	const char *chars = str.getString();
 
 	SbVec3f p0, p1, p2, p3;
-	int chr;
-	for (chr = 0; chr < str.getLength(); chr++) {
+	size_t chr;
+	for (size_t chr = 0; chr < str.getLength(); chr++) {
             fontCache->getCharBbox(chars[chr], charBbox);
 
 	    if (!charBbox.isEmpty()) {
@@ -511,7 +511,7 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 	const SbString &str = string[line];
 	const char *chars = str.getString();
 
-	for (int chr = 0; chr < str.getLength(); chr++) {
+	for (size_t chr = 0; chr < str.getLength(); chr++) {
             fontCache->getCharBbox(chars[chr], charBbox);
 	    if (!charBbox.isEmpty()) {
 		SbVec3f min = charBbox.getMin() + charPosition;
@@ -579,7 +579,7 @@ SoText2::getPixelStringOffset(int line)
     }
     if (justification.getValue() == CENTER) {
         float width = fontCache->getWidth(string[line]);
-	result[0] = -width/2.0;
+	result[0] = -width/2.0f;
     }
     result[1] = -line*fontCache->getHeight()*spacing.getValue()*2;
 

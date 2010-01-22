@@ -286,8 +286,7 @@ SoCylinder::rayPick(SoRayPickAction *action)
                 normal.normalize();
                 pp->setObjectNormal(normal);
 
-                texCoord.setValue(atan2f(enterPoint[0], enterPoint[2])
-                                  * (1.0f / (2.0f * M_PI)) + 0.5f,
+                texCoord.setValue((float)(atan2f(enterPoint[0], enterPoint[2]) * (1.0 / (2.0 * M_PI)) + 0.5),
                                   (enterPoint[1] + halfHeight) /
                                   (2.0f * halfHeight),
                                   0.0f, 1.0f);
@@ -308,8 +307,7 @@ SoCylinder::rayPick(SoRayPickAction *action)
                 normal.setValue(exitPoint[0], 0.0, exitPoint[2]);
                 normal.normalize();
                 pp->setObjectNormal(normal);
-                texCoord.setValue(atan2f(exitPoint[0], exitPoint[2])
-                                  * (1.0f / (2.0f * M_PI)) + 0.5f,
+                texCoord.setValue((float)(atan2f(exitPoint[0], exitPoint[2]) * (1.0 / (2.0 * M_PI)) + 0.5),
                                   (exitPoint[1] + halfHeight) /
                                   (2.0f * halfHeight),
                                   0.0f, 1.0f);
@@ -1499,7 +1497,7 @@ SoCylinder::computeRing(SoAction *action, int &numSides, int &numSections,
 
     // Compute x and z coordinates around ring
     theta  = 0.0f;
-    dTheta = 2.0f * M_PI / numSides;
+    dTheta = (float)(2.0 * M_PI / numSides);
     for (side = 0; side < numSides; side++) {
         ringCoords[side].setValue(sin(theta), -cos(theta));
         theta += dTheta;

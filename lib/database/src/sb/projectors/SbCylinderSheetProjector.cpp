@@ -152,7 +152,7 @@ SbCylinderSheetProjector::project(const SbVec2f &point)
     // Distance on the plane from the axis to the 
     // to the projection of the point where 
     // the cylinder meets the hyperbolic sheet
-    float cylSheetDist = cylinder.getRadius() * M_SQRT1_2;
+    float cylSheetDist = cylinder.getRadius() * (float)M_SQRT1_2;
 
     if (dist < cylSheetDist) {
 #ifdef DEBUG

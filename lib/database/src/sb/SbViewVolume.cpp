@@ -438,7 +438,7 @@ SbViewVolume::getAlignRotation(SbBool rightAngleOnly) const
 	for (i = 0; i < 4; i++) {
 
 	    // Rotate by -90, 0, 90, 180 degrees
-	    rot1.setValue(yAxis, (i-1) * M_PI_2);
+	    rot1.setValue(yAxis, (i-1) * (float)M_PI_2);
 
 	    rot2 = rot1 * rotToUp;
 	    rotMat.setRotate(rot2);

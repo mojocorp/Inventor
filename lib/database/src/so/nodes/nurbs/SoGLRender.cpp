@@ -156,8 +156,8 @@ _SoNurbsGLRender::loadSamplingMatrix( SbMatrix &vmat, const SbVec2s &vpSize )
 ////////////////////////////////////////////////////////////////////////
 {
     /* rescale the mapping to correspond to pixels in x/y */
-    REAL xsize = 0.5 * (REAL) (vpSize[0]); 
-    REAL ysize = 0.5 * (REAL) (vpSize[1]); 
+    REAL xsize = 0.5f * (REAL) (vpSize[0]); 
+    REAL ysize = 0.5f * (REAL) (vpSize[1]); 
 
     INREAL smat[4][4];
     smat[0][0] = vmat[0][0] * xsize;

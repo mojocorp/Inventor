@@ -933,20 +933,20 @@ SoBuiltinFieldConverter::doConversion(SoField *outField)
 
       CASE(SFTime, SFFloat):
 	((SoSFFloat *)outField)->setValue(
-	    ((SoSFTime *)input)->getValue().getValue());
+	    (float)((SoSFTime *)input)->getValue().getValue());
 	break;
       CASE(SFTime, MFFloat):
 	((SoMFFloat *)outField)->setValue(
-	    ((SoSFTime *)input)->getValue().getValue());
+	    (float)((SoSFTime *)input)->getValue().getValue());
 	break;
       CASE(MFTime, SFFloat):
 	((SoSFFloat *)outField)->setValue(
-	    (*(SoMFTime *)input)[0].getValue());
+	    (float)(*(SoMFTime *)input)[0].getValue());
 	break;
       CASE(MFTime, MFFloat):
 	for (i = 0; i < ((SoMFTime *)input)->getNum(); i++) {
 	    ((SoMFFloat *)outField)->set1Value(i,
-		(*(SoMFTime *)input)[i].getValue());
+		(float)(*(SoMFTime *)input)[i].getValue());
 	}
 	break;
 	    

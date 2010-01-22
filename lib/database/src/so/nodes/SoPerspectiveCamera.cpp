@@ -57,7 +57,7 @@
 #include <Inventor/SbRotation.h>
 #include <math.h>
 
-#define MINIMUM_NEAR_PLANE 0.01	    /* minimum near clipping distance */
+#define MINIMUM_NEAR_PLANE 0.01f	    /* minimum near clipping distance */
 				    /* (from center) */
 
 SO_NODE_SOURCE(SoPerspectiveCamera);
@@ -74,7 +74,7 @@ SoPerspectiveCamera::SoPerspectiveCamera()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_NODE_CONSTRUCTOR(SoPerspectiveCamera);
-    SO_NODE_ADD_FIELD(heightAngle,    (M_PI_4));	// 45 degrees
+    SO_NODE_ADD_FIELD(heightAngle,    ((float)M_PI_4));	// 45 degrees
     isBuiltIn = TRUE;
 }
 
@@ -189,7 +189,7 @@ SoPerspectiveCamera::viewBoundingBox(const SbBox3f &box,
     //	    h = height (radius of sphere)
     //	    d = distance to eye
     //	    tan(alpha) gives us h/d
-    float hOverD = tan(heightAngle.getValue()  / 2.0);
+    float hOverD = tan(heightAngle.getValue()  / 2.0f);
     if (aspect < 1.0)
 	hOverD *= aspect;
 

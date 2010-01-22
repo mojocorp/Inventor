@@ -182,9 +182,9 @@ SoNurbsSurface::GLRender(SoGLRenderAction *action)
     else if (val < 0.25) steps = 3;
     else if (val < 0.40) steps = 4;
     else if (val < 0.55) steps = 5;
-    else                 steps = (int)(powf(val, 3.32)*28) + 2;
+    else                 steps = (int)(powf(val, 3.32f)*28) + 2;
 
-    float pixTolerance = 104.0*val*val - 252.0*val + 150;
+    float pixTolerance = 104.0f*val*val - 252.0f*val + 150;
 
     //
     // If the surface is being cached, or if the tessellation is in object
@@ -690,14 +690,14 @@ SoNurbsSurface::generatePrimitives(SoAction *action)
     if (val < 0.0) val = 0.0;
     if (val > 1.0) val = 1.0;
 
-    float pixTolerance = 104.0*val*val - 252.0*val + 150;
+    float pixTolerance = 104.0f*val*val - 252.0f*val + 150;
     int   steps;
 
     if      (val < 0.10) steps = 2;
     else if (val < 0.25) steps = 3;
     else if (val < 0.40) steps = 4;
     else if (val < 0.55) steps = 5;
-    else                 steps = (int)(powf(val, 3.32)*28) + 2;
+    else                 steps = (int)(powf(val, 3.32f)*28) + 2;
 
     if (SoComplexityTypeElement::get(action->getState()) ==
         SoComplexityTypeElement::OBJECT_SPACE)

@@ -300,7 +300,7 @@ SoTimeCounter::inputChanged(SoField *whichInput)
 	// normalize duties
 	double total;
 	for (total=0, i=0; i<nStages; i++) total += stages[i].duty;
-	for (i=0; i<nStages; i++) stages[i].duty /= total;
+	for (i=0; i<nStages; i++) stages[i].duty /= (float)total;
 
 	// set offsets
 	stages[0].offset = 0.0;
