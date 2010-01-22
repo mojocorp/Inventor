@@ -119,7 +119,7 @@ SoUnknownNode::setClassName( const char *name )
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    className = strdup(name);
+    className = name;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -146,8 +146,6 @@ SoUnknownNode::~SoUnknownNode()
         delete fieldList[i];
 
     delete instanceFieldData;
-
-    if (className) free((void *)className);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -417,7 +415,7 @@ SoUnknownNode::copyContents(const SoFieldContainer *fromFC,
 {
     // Make sure the copy has the correct class name
     const SoUnknownNode *fromUnk = (const SoUnknownNode *) fromFC;
-    setClassName(fromUnk->className);
+    setClassName(fromUnk->className.getString());
 
     // For each field in the original node, create a new field and add
     // it to the new node
@@ -490,6 +488,6 @@ SoUnknownNode::getFileFormatName() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return className;
+    return className.getString();
 }
 

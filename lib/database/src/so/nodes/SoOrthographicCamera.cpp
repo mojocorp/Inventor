@@ -197,7 +197,7 @@ SoOrthographicCamera::viewBoundingBox(const SbBox3f &box,
     // window.  We don't need any slack, because the bounding sphere
     // is already bigger than the bounding box.
     if (aspect < 1.0)
-	height = 2.0 * bSphere.getRadius() / aspect;
+	height = 2.0f * bSphere.getRadius() / aspect;
     else
-	height = 2.0 * bSphere.getRadius();
+	height = 2.0f * bSphere.getRadius();
 }

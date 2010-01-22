@@ -120,7 +120,7 @@ SoTextureCoordinateObject::initClass()
 // Use: public
 
 const SbVec4f &
-SoTextureCoordinateObject::valueCallback(void *instance,
+SoTextureCoordinateObject::valueCallback(void * /* instance */,
     const SbVec3f & /* position - not used */,
     const SbVec3f & /* normal - not used */)
 //

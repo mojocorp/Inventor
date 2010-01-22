@@ -1180,7 +1180,7 @@ SoShape::rayPickLineSegment(SoRayPickAction *action,
 	pp->setObjectNormal(norm);
 
 	// Compute texture coordinates the same way
-	texCoord = (v1->getTextureCoords() * (1.0 - ratioFromV1) +
+	texCoord = (v1->getTextureCoords() * (1.0f - ratioFromV1) +
 		    v2->getTextureCoords() * ratioFromV1);
 	pp->setObjectTextureCoords(texCoord);
 
