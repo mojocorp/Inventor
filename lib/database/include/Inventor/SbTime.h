@@ -65,9 +65,6 @@
 #ifdef SB_OS_WIN
 #   include <winsock.h>
 #   include <sys/timeb.h>
-#   ifdef max
-#       undef max
-#   endif
 #else
 #   include <sys/time.h>
 #endif
@@ -125,7 +122,7 @@ public:
     }
 
     /// Get a time far, far into the future
-    static SbTime max();
+    static SbTime maxTime();
 
     /// Set time from a double (in seconds)
     void setValue(double sec);
