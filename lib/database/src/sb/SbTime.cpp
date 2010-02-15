@@ -153,7 +153,7 @@ SbTime::setToTimeOfDay()
 //
 // Description:
 // Get a time far, far into the future
-SbTime SbTime::max()
+SbTime SbTime::maxTime()
 { 
     return SbTime(INT32_MAX, 999999); 
 }
