@@ -54,7 +54,7 @@
 #include <Inventor/SbTime.h>
 #include <time.h>
 #include <math.h>
-#include <limits.h>
+#include <limits>
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -66,12 +66,7 @@ SbTime::SbTime(double sec)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (sec >= 0) {
-	t.tv_sec = int(sec);
-	t.tv_usec = (time_t) (0.5 + (sec - t.tv_sec) * 1000000.0);
-    }
-    else
-	*this = -SbTime(-sec);
+    setValue(sec);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -82,8 +77,7 @@ SbTime::SbTime(double sec)
 
 SbTime::SbTime(time_t sec, long usec)
 { 
-    t.tv_sec = sec;
-    t.tv_usec = usec; 
+    setValue(sec, usec);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -93,8 +87,7 @@ SbTime::SbTime(time_t sec, long usec)
 //
 SbTime::SbTime(const struct timeval *tv)
 { 
-    t.tv_sec = tv->tv_sec;
-    t.tv_usec = tv->tv_usec;
+    setValue(tv);
 }
 ////////////////////////////////////////////////////////////////////////
 //
@@ -134,20 +127,8 @@ SbTime::setToTimeOfDay()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-#ifdef SB_OS_WIN
-    struct _timeb timeBuffer;
-    _ftime(&timeBuffer);
-    t.tv_sec = timeBuffer.time;
-    t.tv_usec = timeBuffer.millitm * 1000.0;
-#else
-    if (-1 == gettimeofday(&t, NULL))
-    perror("gettimeofday");
-#endif
+    *this = SbTime::getTimeOfDay();
 }
-
-#ifndef INT32_MAX
-#define INT32_MAX INT_MAX
-#endif // !INT32_MAX
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -155,7 +136,7 @@ SbTime::setToTimeOfDay()
 // Get a time far, far into the future
 SbTime SbTime::maxTime()
 { 
-    return SbTime(INT32_MAX, 999999); 
+    return SbTime(std::numeric_limits<time_t>::max(), 999999); 
 }
 
 // Set time from a double (in seconds)
