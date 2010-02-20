@@ -62,12 +62,7 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 
-#ifdef SB_OS_WIN
-#   include <winsock.h>
-#   include <sys/timeb.h>
-#else
-#   include <sys/time.h>
-#endif
+#include <time.h>
 
 /// Class for representation of a time.
 /// \ingroup Basics
@@ -241,7 +236,8 @@ public:
     SbBool operator >=(const SbTime &tm) const;
 
 private:
-    struct timeval  t;
+    long tv_sec;
+    long tv_usec;
 };
 
 #endif /* _SB_TIME_ */
