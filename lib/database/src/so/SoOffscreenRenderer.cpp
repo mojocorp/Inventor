@@ -436,13 +436,14 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
 {
 #if defined(SB_OS_WIN)
 
-    HDC devctx = CreateCompatibleDC(NULL);
-    if (devctx == NULL)
+    HDC hdc = GetDC(NULL);
+    if (hdc == NULL)
         return 75.0;
 
     // Get the dimensions of the screen
-    float pix = (float)GetDeviceCaps(devctx, LOGPIXELSX);
-    DeleteDC(devctx);
+    float pix =  (float)GetDeviceCaps(hdc, LOGPIXELSX);
+
+    ReleaseDC(NULL,hdc);
 
     return pix;
 
@@ -450,8 +451,9 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
     
     CGDirectDisplayID display = CGMainDisplayID();
     CGSize size = CGDisplayScreenSize(display);
-    return CGDisplayPixelsWide(display) * 25.4 / (float)CGDisplayScreenSize(display).width;
 
+    // Get the dimensions of the screen (25.4mm = 1 inch)
+    return CGDisplayPixelsWide(display) * 25.4f / (float)CGDisplayScreenSize(display).width;
 #elif defined(SB_OS_LINUX)
     
     // Create an X Display
@@ -460,8 +462,8 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
     if (tmpDisplay == NULL)
         return 75.0;
 
-    // Get the dimensions of the screen
-    float pix = DisplayWidth(tmpDisplay, 0) * 25.4 / (float)DisplayWidthMM(tmpDisplay, 0);
+    // Get the dimensions of the screen (25.4mm = 1 inch)
+    float pix = DisplayWidth(tmpDisplay, 0) * 25.4f / (float)DisplayWidthMM(tmpDisplay, 0);
     
     XCloseDisplay(tmpDisplay);
 
