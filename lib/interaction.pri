@@ -109,16 +109,16 @@ SOURCES += interaction/src/SoInteraction.cpp \
            interaction/src/draggers/SoTranslate1Dragger.cpp \
            interaction/src/draggers/SoTranslate2Dragger.cpp \
            interaction/src/manips/SoCenterballManip.cpp \
-           interaction/src/manips/SoDirLtManip.cpp \
-           interaction/src/manips/SoHbox.cpp \
+           interaction/src/manips/SoDirectionalLightManip.cpp \
+           interaction/src/manips/SoHandleBoxManip.cpp \
            interaction/src/manips/SoJackManip.cpp \
-           interaction/src/manips/SoPtLtManip.cpp \
-           interaction/src/manips/SoSpotLtManip.cpp \
+           interaction/src/manips/SoPointLightManip.cpp \
+           interaction/src/manips/SoSpotLightManip.cpp \
            interaction/src/manips/SoTabBoxManip.cpp \
-           interaction/src/manips/SoTball.cpp \
+           interaction/src/manips/SoTrackballManip.cpp \
            interaction/src/manips/SoTransformerManip.cpp \
            interaction/src/manips/SoTransformManip.cpp \
-           interaction/src/manips/SoXformBox.cpp \
+           interaction/src/manips/SoTransformBoxManip.cpp \
            interaction/src/nodekits/SoInteractionKit.cpp \
            interaction/src/nodes/SoAntiSquish.cpp \
            interaction/src/nodes/SoSurroundScale.cpp
