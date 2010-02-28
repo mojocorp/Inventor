@@ -3,4 +3,4 @@ CONFIG   += ordered
 
 SUBDIRS = freetype libjpeg
 
-win32: SUBDIRS += win-iconv pthreads-w32
+win32: SUBDIRS += pthreads-w32
