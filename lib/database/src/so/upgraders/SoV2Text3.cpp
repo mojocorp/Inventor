@@ -131,10 +131,7 @@ SoV2Text3::createNewNode()
 
     // if european characters present they are converted to UTF-8
     for (int i = 0; i < string.getNum(); i++) {
-	SbString str("");
-	if (SoV2Text2::convertToUTF8(string[i], str)) {
-	    result->string.set1Value(i, str);	
-	}
+        result->string.set1Value(i, string[i]);
     }
 
     result->spacing.setValue(spacing.getValue());

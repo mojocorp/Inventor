@@ -11,8 +11,6 @@ linux-g++ {
 
 win32 {
     DEFINES += INVENTOR_EXPORTS WIN32_LEAN_AND_MEAN _CRT_SECURE_NO_WARNINGS
-    INCLUDEPATH += ../3rdparty/win-iconv
-    LIBS += -lWs2_32
 }
 
 x11 {
