@@ -393,27 +393,33 @@ SoLocateHighlight::redrawHighlighted(
     }
     
     SoState *state = action->getState();
-#ifdef SB_HAS_X11
-    Window window;
-    GLXContext context;
-    Display *display;
+
+// TODO: Remove all this code and replace by a FBO.
+    WEWindow window;
+    WEContext context;
+    WEDisplay display;
     SoGLRenderAction *glAction;
     SoWindowElement::get(state, window, context, display, glAction);
-    
+
+#if defined(SB_OS_LINUX)
     // If we don't have a current window, then simply return...
     if (window == 0 || context == NULL || display == NULL || glAction == NULL)
 	return;
 
     // set the current window
-    glXMakeCurrent(display, window, context);
+    if (glXGetCurrentContext() != context)
+        glXMakeCurrent(display, window, context);
+#elif defined(SB_OS_WIN)
+    if (wglGetCurrentContext() != context) {
+        HDC hdc = GetDC(window);
+        wglMakeCurrent(hdc, context);
+        ReleaseDC(window, hdc);
+    }
+#elif defined(SB_OS_MACX)
+    if (CGLGetCurrentContext() != context)
+        CGLSetCurrentContext(context);
 #else
-#ifdef SB_OS_WIN
-    #pragma message ("SoLocateHighlight not implemented")
-#else
-    #warning "SoLocateHighlight not implemented"
-#endif
-    SoGLRenderAction *glAction;
-    return;
+#  error "SoLocateHighlight has not been ported to this OS"
 #endif
     // render into the front buffer (save the current buffering type)
     GLint whichBuffer;
