@@ -410,12 +410,18 @@ SoLocateHighlight::redrawHighlighted(
     if (glXGetCurrentContext() != context)
         glXMakeCurrent(display, window, context);
 #elif defined(SB_OS_WIN)
+    // If we don't have a current window, then simply return...
+    if (window == 0 || context == NULL || glAction == NULL)
+        return;
     if (wglGetCurrentContext() != context) {
         HDC hdc = GetDC(window);
         wglMakeCurrent(hdc, context);
         ReleaseDC(window, hdc);
     }
 #elif defined(SB_OS_MACX)
+    // If we don't have a current window, then simply return...
+    if (window == 0 || context == NULL || glAction == NULL)
+        return;
     if (CGLGetCurrentContext() != context)
         CGLSetCurrentContext(context);
 #else
