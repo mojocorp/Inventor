@@ -14,7 +14,7 @@ win32 {
     
     INCLUDEPATH += ../3rdparty/pthreads-w32
     DEFINES += PTW32_STATIC_LIB
-    LIBS += -lpthreads-w32
+    LIBS += -lpthreads-w32 -lWSock32
 }
 
 x11 {
