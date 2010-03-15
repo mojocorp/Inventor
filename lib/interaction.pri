@@ -83,8 +83,8 @@ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
 SOURCES += interaction/src/SoInteraction.cpp \
            interaction/src/SoSceneManager.cpp \
            interaction/src/SoSelection.cpp \
-           interaction/src/actions/SoBoxHL.cpp \
-           interaction/src/actions/SoLineHL.cpp \
+           interaction/src/actions/SoBoxHighlightRenderAction.cpp \
+           interaction/src/actions/SoLineHighlightRenderAction.cpp \
            interaction/src/draggers/SoCenterballDragger.cpp \
            interaction/src/draggers/SoDirectionalLightDragger.cpp \
            interaction/src/draggers/SoDragger.cpp \
