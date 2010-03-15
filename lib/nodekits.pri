@@ -65,12 +65,12 @@ HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
 
 SOURCES += nodekits/src/SoNodeKitPath.cpp \
            nodekits/src/details/SoNodeKitDetail.cpp \
-           nodekits/src/nodekits/SoAppearKit.cpp \
+           nodekits/src/nodekits/SoAppearanceKit.cpp \
            nodekits/src/nodekits/SoBaseKit.cpp \
            nodekits/src/nodekits/SoCameraKit.cpp \
            nodekits/src/nodekits/SoLightKit.cpp \
-           nodekits/src/nodekits/SoNkCatalog.cpp \
-           nodekits/src/nodekits/SoNkParts.cpp \
+           nodekits/src/nodekits/SoNodekitCatalog.cpp \
+           nodekits/src/nodekits/SoNodekitParts.cpp \
            nodekits/src/nodekits/SoNodeKit.cpp \
            nodekits/src/nodekits/SoNodeKitListPart.cpp \
            nodekits/src/nodekits/SoSceneKit.cpp \
