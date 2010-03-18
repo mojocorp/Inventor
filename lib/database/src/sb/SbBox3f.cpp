@@ -53,6 +53,7 @@
  
 #include <Inventor/SbBox3f.h>
 #include <Inventor/SbMatrix.h>
+#include <Inventor/errors/SoDebugError.h>
 
 #include <math.h>
 #include <limits.h>
