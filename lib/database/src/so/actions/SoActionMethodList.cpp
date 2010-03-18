@@ -55,6 +55,8 @@
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/actions/SoAction.h>
 
+#include <Inventor/errors/SoDebugError.h>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoActionMethodList (internal)

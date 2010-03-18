@@ -53,6 +53,8 @@
 
 #include <Inventor/actions/SoEnabledElementsList.h>
 
+#include <Inventor/errors/SoDebugError.h>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoEnabledElementsList (internal)

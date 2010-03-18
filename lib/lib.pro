@@ -5,6 +5,8 @@ DESTDIR  = ../build
 CONFIG += opengl
 CONFIG -= qt flat
 
+debug: DEFINES += DEBUG
+
 linux-g++ {
     CONFIG += x11
 }
