@@ -59,6 +59,8 @@
 #include <Inventor/nodes/SoSwitch.h>
 #include <Inventor/errors/SoDebugError.h>
 
+#include <stdlib.h>
+
 // Static variables for the nodekit catalog class...
 
 const SbName  *SoV1NodekitCatalog::emptyName = NULL;

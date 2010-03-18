@@ -60,6 +60,8 @@
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoSwitch.h>
 
+#include <stdlib.h>
+
 // Static variables for the nodekit catalog class...
 
 const SbName  *SoNodekitCatalog::emptyName = NULL;
