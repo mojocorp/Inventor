@@ -58,6 +58,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/SbBox2s.h \
            database/include/Inventor/SbColor.h \
            database/include/Inventor/SbDict.h \
+           database/include/Inventor/SbFile.h \
            database/include/Inventor/SbStdint.h \
            database/include/Inventor/SbLinear.h \
            database/include/Inventor/SbName.h \
@@ -569,6 +570,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/sb/SbColor.cpp \
            database/src/sb/SbCylinder.cpp \
            database/src/sb/SbDict.cpp \
+           database/src/sb/SbFile.cpp \
            database/src/sb/SbLine.cpp \
            database/src/sb/SbMatrix.cpp \
            database/src/sb/SbMatrixd.cpp \
