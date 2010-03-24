@@ -64,9 +64,7 @@
 #include <Inventor/SbColor.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SbVec2s.h>
-#ifdef SB_HAS_X11
-#   include <X11/Xlib.h>
-#endif
+
 class SoNode;
 class SoPath;
 class SoGLRenderAction;
@@ -77,7 +75,7 @@ class SoGLRenderAction;
 /// printable image or to generate a texture image. It uses X Pixmaps for
 /// rendering. Methods are provided to write the buffer to a file, either
 /// as an RGB image or an encapsulated PostScript description.
-class SoOffscreenRenderer {
+class INVENTOR_API SoOffscreenRenderer {
 public:
 
     /// Constructor. An internal instance of an SoGLRenderAction will be maintained with a
@@ -166,48 +164,26 @@ public:
     SbBool writeToPostScript( FILE *fp, const SbVec2f &printSize ) const;
 
 private:
-    unsigned char * pixelBuffer;
+    unsigned char *     pixelBuffer;
     Components          comps;
-    SbColor  backgroundColor;
+    SbColor             backgroundColor;
+    SbVec2s             vpSize;
     SoGLRenderAction *userAction, *offAction;
     SbViewportRegion    renderedViewport;
-#ifdef SB_HAS_X11
-    // These are used for rendering to the offscreen pixmap
-    Display   *display;
-    XVisualInfo   *visual;
-    GLXContext   context;
-    GLXPixmap   pixmap;
-    Pixmap   pmap;
-#else
-    typedef int Window;
-    typedef int Display;
-    typedef int XVisualInfo;
-    typedef int GLXContext;
-    typedef int GLXPixmap;
-    typedef int Pixmap;
+    GLuint              framebuffer;
+    GLuint              renderbuffer;
+    GLuint              depthbuffer;
 
-    Display   *display;
-    XVisualInfo   *visual;
-    GLXContext   context;
-    GLXPixmap   pixmap;
-    Pixmap   pmap;
-#endif
-    // Setup the offscreen pixmap
-    SbBool  setupPixmap();
+    class SoOffscreenRendererInternal* internal;
 
-    // Initialize an offscreen pixmap
-    static SbBool  initPixmap( Display * &dpy, XVisualInfo * &vi,
-                               GLXContext &cx, const SbVec2s &sz,
-                               GLXPixmap &glxPmap, Pixmap &xpmap );
+    // Setup the framebuffer
+    bool resize(const SbVec2s & size);
 
     // Read pixels back from the Pixmap
     void readPixels();
 
-    // Set the graphics context
-    SbBool setContext() const;
-
     // Return the format used in the rendering
-    void getFormat( GLenum &format ) const;
+    GLenum getFormat() const;
 
     static void putHex( FILE *fp, char val, int &hexPos );
 };

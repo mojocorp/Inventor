@@ -40,7 +40,8 @@ DEPENDPATH += database \
               database/src/so/nodes/nurbs/libnurbs
 
 INCLUDEPATH += ../libFL/src \
-               database/src/so/nodes/nurbs/head/
+               database/src/so/nodes/nurbs/head \
+               database/include/Inventor/misc
 
 
 
@@ -597,6 +598,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/lists/SoPathList.cpp \
            database/src/so/lists/SoPickedPointList.cpp \
            database/src/so/lists/SoTypeList.cpp \
+           database/src/so/misc/glew.c \
            database/src/so/SoBase.cpp \
            database/src/so/SoByteStream.cpp \
            database/src/so/SoCBList.cpp \
