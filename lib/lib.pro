@@ -24,6 +24,10 @@ x11 {
     DEFINES += SB_HAS_X11
 }
 
+macx {
+    LIBS += -framework ApplicationServices
+}
+
 DEPENDPATH += ../3rdparty/freetype \
               ../3rdparty/libjpeg \
               ../libFL \
@@ -35,6 +39,8 @@ INCLUDEPATH+= database/include \
               interaction/include \
               nodekits/include
 
+DEFINES += GLEW_STATIC GLEW_MX
+              
 include(database.pri)
 include(interaction.pri)
 include(nodekits.pri)
