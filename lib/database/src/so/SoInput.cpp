@@ -58,6 +58,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <locale.h>
 #include <Inventor/misc/SoBase.h>
 #include <Inventor/lists/SbStringList.h>
 #include <Inventor/SoDB.h>
@@ -95,6 +96,8 @@ SoInputFile::SoInputFile()
     fp = NULL;
     buffer = NULL;
     curBuf = NULL;
+    bufSize = 0;
+    lineNum = 0;
     openedHere = FALSE;
     binary = FALSE;
     readHeader = FALSE;
@@ -105,7 +108,6 @@ SoInputFile::SoInputFile()
     headerString.makeEmpty();
     postReadCB = NULL;
     CBData = NULL;
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -147,6 +149,8 @@ SoInput::init()
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    setlocale( LC_NUMERIC, "C" );
+
     directories = new SbStringList;
 
     // Default directory search path is current directory
