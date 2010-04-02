@@ -1,6 +1,4 @@
-DEPENDPATH += interaction \
-              interaction/include \
-              interaction/include/Inventor \
+DEPENDPATH += interaction/include/Inventor \
               interaction/src/actions \
               interaction/src/draggers \
               interaction/src/manips \
@@ -56,27 +54,7 @@ PUBLIC_HEADERS += interaction/include/Inventor/SoInteraction.h \
            interaction/include/Inventor/nodes/SoSelection.h \
            interaction/include/Inventor/nodes/SoSurroundScale.h
 
-PRIVATE_HEADERS += interaction/src/draggers/geom/SoCenterballDraggerGeom.h \
-           interaction/src/draggers/geom/SoDirectionalLightDraggerGeom.h \
-           interaction/src/draggers/geom/SoDragPointDraggerGeom.h \
-           interaction/src/draggers/geom/SoHandleBoxDraggerGeom.h \
-           interaction/src/draggers/geom/SoJackDraggerGeom.h \
-           interaction/src/draggers/geom/SoPointLightDraggerGeom.h \
-           interaction/src/draggers/geom/SoRotateCylindricalDraggerGeom.h \
-           interaction/src/draggers/geom/SoRotateDiscDraggerGeom.h \
-           interaction/src/draggers/geom/SoRotateSphericalDraggerGeom.h \
-           interaction/src/draggers/geom/SoScale1DraggerGeom.h \
-           interaction/src/draggers/geom/SoScale2DraggerGeom.h \
-           interaction/src/draggers/geom/SoScale2UniformDraggerGeom.h \
-           interaction/src/draggers/geom/SoScaleUniformDraggerGeom.h \
-           interaction/src/draggers/geom/SoSpotLightDraggerGeom.h \
-           interaction/src/draggers/geom/SoTabBoxDraggerGeom.h \
-           interaction/src/draggers/geom/SoTabPlaneDraggerGeom.h \
-           interaction/src/draggers/geom/SoTrackballDraggerGeom.h \
-           interaction/src/draggers/geom/SoTransformBoxDraggerGeom.h \
-           interaction/src/draggers/geom/SoTransformerDraggerGeom.h \
-           interaction/src/draggers/geom/SoTranslate1DraggerGeom.h \
-           interaction/src/draggers/geom/SoTranslate2DraggerGeom.h
+PRIVATE_HEADERS +=
 
 HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
 
