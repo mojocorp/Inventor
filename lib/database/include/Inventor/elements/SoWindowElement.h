@@ -70,6 +70,24 @@ class SoGLRenderAction;
 //  cursor is not over an OpenGL window.
 //
 //////////////////////////////////////////////////////////////////////////////
+#if defined(SB_OS_WIN)
+#include <windows.h>
+typedef HWND WEWindow;
+typedef HGLRC WEContext;
+typedef void* WEDisplay;
+#elif defined(SB_OS_MACX)
+#include <OpenGL/OpenGL.h>
+typedef long WEWindow;
+typedef CGLContextObj WEContext;
+typedef void* WEDisplay;
+#elif defined(SB_OS_LINUX)
+#include <X11/Xlib.h>
+typedef Window WEWindow;
+typedef GLXContext WEContext;
+typedef Display* WEDisplay;
+#else
+#   error "SoOffscreenRenderer has not been ported to this OS"
+#endif
 
 SoEXTENDER class INVENTOR_API SoWindowElement : public SoElement {
 
@@ -85,23 +103,15 @@ SoEXTENDER class INVENTOR_API SoWindowElement : public SoElement {
 
     /// Create and return a copy of this element
     virtual SoElement	*copyMatchInfo() const;
-#ifdef SB_HAS_X11
+
     /// Sets the window, context and glRenderAction info
-    static void		set(SoState *state, Window window, GLXContext context, 
-			    Display *display, SoGLRenderAction *glAction);
+    static void		set(SoState *state, WEWindow window, WEContext context, 
+			    WEDisplay display, SoGLRenderAction *glAction);
 
     /// Returns the current window, context and glRenderAction
-    static void	get(SoState *state, Window &window, GLXContext &context, 
-			    Display *&display, SoGLRenderAction *&glAction);
-#else
-    /// Sets the window, context and glRenderAction info
-    static void		set(SoState *state, void *window, void *context,
-                            void *display, SoGLRenderAction *glAction);
+    static void	get(SoState *state, WEWindow &window, WEContext &context, 
+			    WEDisplay &display, SoGLRenderAction *&glAction);
 
-    /// Returns the current window, context and glRenderAction
-    static void	get(SoState *state, void *&window, void *&context,
-                            void *&display, SoGLRenderAction *&glAction);
-#endif
     virtual void    push(SoState *state);
     
   SoINTERNAL public:
@@ -109,15 +119,10 @@ SoEXTENDER class INVENTOR_API SoWindowElement : public SoElement {
     static void		initClass();
 
   protected:
-#ifdef SB_HAS_X11
-    Window		window;
-    GLXContext		context;
-    Display		*display;
-#else
-    void * window;
-    void * context;
-    void * display;
-#endif
+    WEWindow window;
+    WEContext context;
+    WEDisplay display;
+
     SoGLRenderAction	*glRenderAction;
     
     virtual	~SoWindowElement();
