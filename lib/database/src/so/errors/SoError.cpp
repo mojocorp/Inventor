@@ -58,6 +58,8 @@
 #include <Inventor/errors/SoError.h>
 #include <Inventor/nodes/SoNode.h>
 
+#include <iostream>
+
 // Static variables declared in SoError.h:
 SoType		 SoError::classTypeId;
 SoErrorCB	*SoError::handlerCB;
@@ -205,7 +207,7 @@ SoError::defaultHandlerCB(const SoError *error, void *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fprintf(stderr, "%s\n", error->getDebugString().getString());
+    std::cerr << error->getDebugString().getString() << std::endl;
 }
 
 ////////////////////////////////////////////////////////////////////////

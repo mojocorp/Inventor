@@ -479,10 +479,10 @@ SoInteractionKit::readFromFile(const char *fileName)
     SoGroup *answer = NULL;
 
 #ifdef DRAGGER_DIR_TEST
-    fprintf(stderr, "STARTING DIRECTORY LIST\n");
+    std::cerr << "STARTING DIRECTORY LIST" << std::endl;
     const SbStringList &startList = SoInput::getDirectories();
     for (int sli = 0; sli < startList.getLength(); sli++ ) {
-	fprintf(stderr,"  %s\n", startList[sli]->getString() );
+        std::cerr << "  " << startList[sli]->getString() << std::endl;
     }
 #endif
 
@@ -520,10 +520,10 @@ SoInteractionKit::readFromFile(const char *fileName)
 	savedDirStrings.truncate(0);
 
 #ifdef DRAGGER_DIR_TEST
-    fprintf(stderr, "ENDING DIRECTORY LIST\n");
+    std::cerr << "ENDING DIRECTORY LIST" << std::endl;
     const SbStringList &endList = SoInput::getDirectories();
     for (int eli = 0; eli < endList.getLength(); eli++ ) {
-	fprintf(stderr,"  %s\n", endList[eli]->getString() );
+        std::cerr << "  " << endList[eli]->getString() << std::endl;
     }
 #endif
 

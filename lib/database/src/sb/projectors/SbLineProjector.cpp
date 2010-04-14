@@ -53,7 +53,8 @@
 
 #include <Inventor/projectors/SbLineProjector.h>
 #include <Inventor/errors/SoDebugError.h>
-#include <stdio.h>
+
+#include <iostream>
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -213,8 +214,8 @@ SbLineProjector::project(const SbVec2f &point)
 	    SbLine vanishWorldLine;
 	    viewVol.projectPointToLine( nrmScnVanish2, vanishWorldLine );
 	    SbVec3f test = vanishWorldLine.getDirection();
-	    fprintf(stderr,"wldDir = %f %f %f\n",wldDir[0],wldDir[1],wldDir[2]);
-	    fprintf(stderr,"checkDir = %f %f %f\n", test[0], test[1],test[2]);
+            std::cerr << "wldDir = " << wldDir[0] << " " << wldDir[1] << " "<< wldDir[2] << std::endl;
+            std::cerr << "checkDir = " << test[0] << " " << test[1] << " " << test[2] << std::endl;
 #endif
 
 	// The points vpPt1 and vpPt2 define the line in viewPlane space.

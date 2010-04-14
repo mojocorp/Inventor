@@ -77,8 +77,7 @@
 
 #include <SoDebug.h>
 
-#include <stdlib.h>
-#include <ctype.h>
+#include <iostream>
 
 // Defines for printing out file data for nodekits
 #define SO_BASEKIT_FILEDATA_HEADER "partName\/childNum pairs [ "
@@ -1664,8 +1663,8 @@ SoBaseKit::write( SoWriteAction *action )
 	    // This is ONLY for debugging purposes, to check for consistency
 	    // of childList and part fields.
 
-	    fprintf(stderr,"NODEKIT DEBUG: Writing Children of this NodeKit\n");
-	    fprintf(stderr,"    to file. Do not try to read in the result\n");
+            std::cerr << "NODEKIT DEBUG: Writing Children of this NodeKit" << std::endl;
+            std::cerr <<  "    to file. Do not try to read in the result" << std::endl;
 
 	    // In the writing stage, we can't use standard traversal,
 	    // because if we are writing out one path of a path list, we
