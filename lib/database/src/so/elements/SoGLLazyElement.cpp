@@ -66,6 +66,8 @@
 #include <SoDebug.h>
 #include <machine.h>
 
+#include <iostream>
+
 SO_ELEMENT_SOURCE(SoGLLazyElement);
 
 ////////////////////////////////////////////////////////////////////////
@@ -870,10 +872,9 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
     if(ivState.transpType != stateLazyElt->ivState.transpType){
 #ifdef DEBUG
 	if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-	    fprintf(stderr, "CACHE DEBUG: cache not valid\n ");       
-	    fprintf(stderr, "transparency type match failed,\n");
-	    fprintf(stderr, "prev,  current %d %d\n", 
-	    ivState.transpType, stateLazyElt->ivState.transpType);
+            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+            std::cerr << "transparency type match failed," << std::endl;
+            std::cerr << "prev,  current " << ivState.transpType << " " << stateLazyElt->ivState.transpType << std::endl;
 	}
 #endif /*DEBUG*/       
 	return FALSE;
@@ -892,11 +893,9 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 		    if (ivState.lightModel != stateLazyElt->ivState.lightModel){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n ");       
-			    fprintf(stderr, "lightModel match failed,\n");
-			    fprintf(stderr, "prev,  current %d %d\n", 
-				ivState.lightModel, 
-				stateLazyElt->ivState.lightModel);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "lightModel match failed," << std::endl;
+                            std::cerr << "prev,  current " << ivState.lightModel << " " << stateLazyElt->ivState.lightModel << std::endl;
 			}
 #endif /*DEBUG*/	   
 			return FALSE;
@@ -908,11 +907,9 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			stateLazyElt->ivState.colorMaterial){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n ");       
-			    fprintf(stderr, "colorMaterial match failed,\n");
-			    fprintf(stderr, "prev,  current %d %d\n", 
-				ivState.colorMaterial, 
-				stateLazyElt->ivState.colorMaterial);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "colorMaterial match failed," << std::endl;
+                            std::cerr << "prev,  current " << ivState.colorMaterial << " " << stateLazyElt->ivState.colorMaterial << std::endl;
 			}
 #endif /*DEBUG*/	   
 			return FALSE;
@@ -926,12 +923,12 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			stateLazyElt->ivState.transpNodeId){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			    fprintf(stderr, "diffuse&trans match failed,\n");
-			    fprintf(stderr, "prev,  current %d %d, %d %d\n", 
-				ivState.diffuseNodeId, ivState.transpNodeId,  
-				stateLazyElt->ivState.diffuseNodeId, 
-				stateLazyElt->ivState.transpNodeId);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "diffuse&trans match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << ivState.diffuseNodeId << " " << ivState.transpNodeId << ", "
+                                      << stateLazyElt->ivState.diffuseNodeId << " "
+                                      << stateLazyElt->ivState.transpNodeId << std::endl;
 			}
 #endif /*DEBUG*/	   		    
 			return (FALSE);
@@ -943,11 +940,10 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			    stateLazyElt->ivState.ambientColor[j]){
 #ifdef DEBUG
 			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			       fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			       fprintf(stderr, "ambient %d match failed,\n", j);
-			       fprintf(stderr, "prev,  current %f %f\n", 
-				   ivState.ambientColor[j], 
-				   stateLazyElt->ivState.ambientColor[j]);
+                               std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                               std::cerr << "ambient " << j << " match failed," << std::endl;
+                               std::cerr << "prev,  current " << ivState.ambientColor[j] << " "
+                                                              << stateLazyElt->ivState.ambientColor[j] << std::endl;
 			    }
 #endif /*DEBUG*/				 
 			    return(FALSE);
@@ -961,11 +957,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			    stateLazyElt->ivState.emissiveColor[j]){
 #ifdef DEBUG
 			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			       fprintf(stderr, "CACHE DEBUG: cache not valid\n");      
-			       fprintf(stderr, "emissive %d match failed,\n", j);
-			       fprintf(stderr, "prev,  current %f %f\n", 
-				    ivState.emissiveColor[j], 
-				    stateLazyElt->ivState.emissiveColor[j]);
+                               std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                               std::cerr << "emissive " << j << " match failed," << std::endl;
+                               std::cerr << "prev,  current "
+                                         << ivState.emissiveColor[j] << " "
+                                         << stateLazyElt->ivState.emissiveColor[j] << std::endl;
 			    }
 #endif /*DEBUG*/			 
 		    	    return(FALSE);
@@ -979,11 +975,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			    stateLazyElt->ivState.specularColor[j]){
 #ifdef DEBUG
 			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			       fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			       fprintf(stderr, "specular %d match failed,\n", j);
-			       fprintf(stderr, "prev,  current %f %f\n", 
-				    ivState.specularColor[j], 
-				    stateLazyElt->ivState.specularColor[j]);
+                                std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                                std::cerr << "specular " << j << " match failed," << std::endl;
+                                std::cerr << "prev,  current "
+                                          << ivState.specularColor[j] << " "
+                                          << stateLazyElt->ivState.specularColor[j] << std::endl;
 			    }
 #endif /*DEBUG*/				 
 		             return(FALSE);
@@ -996,11 +992,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			>  SO_LAZY_SHINY_THRESHOLD){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			    fprintf(stderr, "shininess match failed,\n");
-			    fprintf(stderr, "prev,  current %f %f\n", 
-				ivState.shininess, 
-				stateLazyElt->ivState.shininess);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "shininess match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << ivState.shininess << " "
+                                      << stateLazyElt->ivState.shininess << std::endl;
 			}
 #endif /*DEBUG*/	   			  
 		        return (FALSE);
@@ -1011,11 +1007,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 		    if (ivState.blending != stateLazyElt->ivState.blending){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			    fprintf(stderr, "blend match failed,\n");
-			    fprintf(stderr, "prev,  current %d %d\n", 
-				ivState.blending, 
-				stateLazyElt->ivState.blending);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "blend match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << ivState.blending << " "
+                                      << stateLazyElt->ivState.blending << std::endl;
 			}
 #endif /*DEBUG*/		    
 			return FALSE;
@@ -1028,11 +1024,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			    stateLazyElt->ivState.stippleNum){			
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			    fprintf(stderr, "IVstipple match failed,\n");
-			    fprintf(stderr, "prev,  current %d %d\n", 
-				ivState.stippleNum, 
-				stateLazyElt->ivState.stippleNum);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "IVstipple match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << ivState.stippleNum << " "
+                                      << stateLazyElt->ivState.stippleNum << std::endl;
 			}
 #endif /*DEBUG*/			
 			return FALSE;
@@ -1062,11 +1058,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			stateLazyElt->glState.GLLightModel){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n ");       
-			    fprintf(stderr, "GLLightModel match failed,\n");
-			    fprintf(stderr, "prev,  current %d %d\n", 
-				glState.GLLightModel, 
-				stateLazyElt->glState.GLLightModel);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "GLLightModel match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << glState.GLLightModel << " "
+                                      << stateLazyElt->glState.GLLightModel << std::endl;
 			}
 #endif /*DEBUG*/		    
 			return FALSE;
@@ -1078,11 +1074,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			stateLazyElt->glState.GLColorMaterial){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			    fprintf(stderr, "GLColorMaterial match failed,\n");
-			    fprintf(stderr, "prev,  current %d %d\n", 
-				glState.GLColorMaterial, 
-				stateLazyElt->glState.GLColorMaterial);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "GLColorMaterial match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << glState.GLColorMaterial << " "
+                                      << stateLazyElt->glState.GLColorMaterial << std::endl;
 			}
 #endif /*DEBUG*/		    
 			return FALSE;
@@ -1096,14 +1092,13 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			stateLazyElt->glState.GLTranspNodeId){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			    fprintf(stderr, "GLDiffuse&Transp match failed,\n");
-			    fprintf(stderr, "prev,  current %d %d,  %d %d\n", 
-				glState.GLDiffuseNodeId,
-				glState.GLTranspNodeId,  
-				stateLazyElt->glState.GLDiffuseNodeId, 
-				stateLazyElt->glState.GLTranspNodeId);
-			}
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "GLDiffuse&Transp match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << glState.GLDiffuseNodeId << " "
+                                      << glState.GLTranspNodeId << ", "
+                                      << stateLazyElt->glState.GLDiffuseNodeId << " "
+                                      << stateLazyElt->glState.GLTranspNodeId << std::endl;			}
 #endif /*DEBUG*/		    
 			return (FALSE);
 		    }
@@ -1115,11 +1110,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			    stateLazyElt->glState.GLAmbient[j]) {
 #ifdef DEBUG
 			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			       fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			       fprintf(stderr, "GLambient %d match failed,\n",j);
-			       fprintf(stderr, "prev,  current %f %f\n", 
-				    glState.GLAmbient[j], 
-				    stateLazyElt->glState.GLAmbient[j]);
+                               std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                               std::cerr << "GLambient " << j << " match failed," << std::endl;
+                               std::cerr << "prev,  current "
+                                         << glState.GLAmbient[j] << " "
+                                         << stateLazyElt->glState.GLAmbient[j] << std::endl;
 			    }
 #endif /*DEBUG*/			
 			    return(FALSE);
@@ -1133,11 +1128,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			    stateLazyElt->glState.GLEmissive[j]){ 
 #ifdef DEBUG
 			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			      fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			      fprintf(stderr, "GLemissive %d match failed,\n", j);
-			      fprintf(stderr, "prev,  current %f %f\n", 
-				    glState.GLEmissive[j], 
-				    stateLazyElt->glState.GLEmissive[j]);
+                              std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                              std::cerr << "GLemissive " << j << " match failed," << std::endl;
+                              std::cerr << "prev,  current "
+                                        << glState.GLEmissive[j] << " "
+                                        << stateLazyElt->glState.GLEmissive[j] << std::endl;
 			    }
 #endif /*DEBUG*/			
 		    	    return(FALSE);
@@ -1151,11 +1146,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			    stateLazyElt->glState.GLSpecular[j]){
 #ifdef DEBUG
 			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			       fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			       fprintf(stderr, "GLspecular %d match failed,\n", j);
-			       fprintf(stderr, "prev,  current %f %f\n", 
-				    glState.GLSpecular[j], 
-				    stateLazyElt->glState.GLSpecular[j]);
+                               std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                               std::cerr << "GLspecular " << j << " match failed," << std::endl;
+                               std::cerr << "prev,  current "
+                                         << glState.GLSpecular[j] << " "
+                                         << stateLazyElt->glState.GLSpecular[j] << std::endl;
 			    }
 #endif /*DEBUG*/			 
 		             return(FALSE);
@@ -1169,11 +1164,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			    SO_LAZY_SHINY_THRESHOLD){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			    fprintf(stderr, "GLshininess match failed,\n");
-			    fprintf(stderr, "prev,  current %f %f\n", 
-				glState.GLShininess, 
-				stateLazyElt->glState.GLShininess);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "GLshininess match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << glState.GLShininess << " "
+                                      << stateLazyElt->glState.GLShininess << std::endl;
 			}
 #endif /*DEBUG*/			     
 		        return (FALSE);
@@ -1185,11 +1180,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			stateLazyElt->glState.GLblending){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			    fprintf(stderr, "GLblending match failed,\n");
-			    fprintf(stderr, "prev,  current %d %d\n", 
-				glState.GLblending, 
-				stateLazyElt->glState.GLblending);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "GLblending match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << glState.GLblending << " "
+                                      << stateLazyElt->glState.GLblending << std::endl;
 			}
 #endif /*DEBUG*/		    
 			return FALSE;
@@ -1202,11 +1197,11 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 			    stateLazyElt->glState.GLStippleNum){			       		       
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-			    fprintf(stderr, "CACHE DEBUG: cache not valid\n");       
-			    fprintf(stderr, "GLstipple match failed,\n");
-			    fprintf(stderr, "prev, current  %d %d\n", 
-				glState.GLStippleNum, 
-				stateLazyElt->glState.GLStippleNum);
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "GLstipple match failed," << std::endl;
+                            std::cerr << "prev, current  "
+                                      << glState.GLStippleNum << " "
+                                      << stateLazyElt->glState.GLStippleNum << std::endl;
 			}
 #endif /*DEBUG*/	
 			return FALSE;			
