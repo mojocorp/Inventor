@@ -52,7 +52,6 @@
  */
 
 
-#include <stdio.h>
 #include <SoDebug.h>
 
 #include <Inventor/errors/SoDebugError.h>
@@ -67,6 +66,8 @@
 #include <Inventor/nodes/SoGroup.h>
 #include <Inventor/nodes/SoSurroundScale.h>
 #include <Inventor/manips/SoTransformManip.h>
+
+#include <iostream>
 
 SO_NODE_SOURCE(SoTransformManip);
 
@@ -489,23 +490,23 @@ SoTransformManip::transferFieldValues( const SoTransform *from,
     if (m) {
 	// call the callback, then reattach the field sensors.
 	if (SoDebug::GetEnv("IV_DEBUG_TRANSFORM_MANIP_FIELDS")) {
-	    fprintf(stderr,"before:\n");
+            std::cerr << "before:" << std::endl;
 	    SbVec3f t = m->translation.getValue();
 	    SbVec3f s = m->scaleFactor.getValue();
 	    SbVec3f c = m->center.getValue();
-	    fprintf(stderr,"translation = %f %f %f\n", t[0], t[1], t[2]);
-	    fprintf(stderr,"scale = %f %f %f\n", s[0], s[1], s[2]);
-	    fprintf(stderr,"center = %f %f %f\n", c[0], c[1], c[2]);
+            std::cerr << "translation = " << t[0] << " " << t[1] << " " << t[2] << std::endl;
+            std::cerr << "scale = " << s[0] << " " << s[1] << " " << s[2] << std::endl;
+            std::cerr << "center = " << c[0] << " " << c[1] << " " << c[2] << std::endl;
 	}
 	SoTransformManip::fieldSensorCB( m, NULL );
 	if (SoDebug::GetEnv("IV_DEBUG_TRANSFORM_MANIP_FIELDS")) {
-	    fprintf(stderr,"after:\n");
+            std::cerr << "after:" << std::endl;
 	    SbVec3f t = m->translation.getValue();
 	    SbVec3f s = m->scaleFactor.getValue();
 	    SbVec3f c = m->center.getValue();
-	    fprintf(stderr,"translation = %f %f %f\n", t[0], t[1], t[2]);
-	    fprintf(stderr,"scale = %f %f %f\n", s[0], s[1], s[2]);
-	    fprintf(stderr,"center = %f %f %f\n", c[0], c[1], c[2]);
+            std::cerr << "translation = " << t[0] << " " << t[1] << " " << t[2] << std::endl;
+            std::cerr << "scale = " << s[0] << " " << s[1] << " " << s[2] << std::endl;
+            std::cerr << "center = " << c[0] << " " << c[1] << " " << c[2] << std::endl;
 	}
 	m->rotateFieldSensor->attach( &m->rotation);
 	m->translFieldSensor->attach( &m->translation);

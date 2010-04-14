@@ -56,7 +56,7 @@
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/fields/SoField.h>
-#include <stdio.h>
+#include <iostream>
 #include <stdlib.h>
 #include <stdarg.h>
 
@@ -274,7 +274,7 @@ SoDebug::printName(SoBase *base)
     const char *name = base->getName().getString();
 
     if (name)
-	puts(name);
+        std::cout << name << std::endl;
     else
-	puts(" not named ");
+        std::cout << " not named " << std::endl;
 }
