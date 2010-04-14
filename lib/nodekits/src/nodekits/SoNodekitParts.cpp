@@ -65,7 +65,7 @@
 
 #include <SoDebug.h>
 
-#include <stdlib.h>
+#include <iostream>
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -699,15 +699,13 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
 	    if (newNode == NULL ) {
 #ifdef DEBUG
 		if (SoDebug::GetEnv("IV_DEBUG_KIT_PARTS")) {
-		    fprintf(stderr,"\n");
-		    fprintf(stderr,"NODE KIT PARTS DEBUG:\n");
-		    fprintf(stderr,"    The part %s does not exist\n",
-					nameOfPart.getString());
-		    fprintf(stderr,"    and could not be created.The list %s\n",
-					    listNameCopy );
-		    fprintf(stderr,"    only specifies abstract types\n");
-		    fprintf(stderr,"    Returning NULL\n");
-		    fprintf(stderr,"\n");
+                    std::cerr << std::endl;
+                    std::cerr << "NODE KIT PARTS DEBUG:" << std::endl;
+                    std::cerr << "    The part " << nameOfPart.getString() << " does not exist" << std::endl;
+                    std::cerr << "    and could not be created.The list " << listNameCopy << std::endl;
+                    std::cerr << "    only specifies abstract types" << std::endl;
+                    std::cerr << "    Returning NULL" << std::endl;
+                    std::cerr << std::endl;
 		}
 #endif
 	    }
@@ -721,15 +719,13 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
 	    if ( makeIfNeeded ) {
 #ifdef DEBUG
 		if (SoDebug::GetEnv("IV_DEBUG_KIT_PARTS")) {
-		    fprintf(stderr,"\n");
-		    fprintf(stderr,"NODE KIT PARTS DEBUG:\n");
-		    fprintf(stderr,"    Could not return the part\n");
-		    fprintf(stderr,"    %s. The list %s only has\n", 
-					nameOfPart.getString(), listNameCopy );
-		    fprintf(stderr,"    %d entries. You want entry number %d\n",
-					listGroup->getNumChildren(),arrayIndex);
-		    fprintf(stderr,"    Returning NULL\n");
-		    fprintf(stderr,"\n");
+                    std::cerr << std::endl;
+                    std::cerr << "NODE KIT PARTS DEBUG:" << std::endl;
+                    std::cerr << "    Could not return the part" << std::endl;
+                    std::cerr << "    " << nameOfPart.getString() << ". The list " << listNameCopy << " only has" << std::endl;
+                    std::cerr << "    " << listGroup->getNumChildren() << " entries. You want entry number " << arrayIndex << std::endl;
+                    std::cerr << "    Returning NULL" << std::endl;
+                    std::cerr << std::endl;
 		}
 #endif
 	    }
@@ -823,13 +819,12 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
     // OF THE SUB CATALOGS.
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_KIT_PARTS")) {
-	fprintf(stderr,"\n");
-	fprintf(stderr,"NODE KIT PARTS DEBUG: The catalog for this class\n");
-	fprintf(stderr,"    of nodekit does not have a part named %s, \n",
-			    nameOfPart.getString() );
-	fprintf(stderr,"    nor do the catalogs for any of nested nodekits\n");
-	fprintf(stderr,"    Returning NULL\n");
-	fprintf(stderr,"\n");
+        std::cerr << std::endl;
+        std::cerr << "NODE KIT PARTS DEBUG: The catalog for this class" << std::endl;
+        std::cerr << "    of nodekit does not have a part named " << nameOfPart.getString() << "," << std::endl;
+        std::cerr << "    nor do the catalogs for any of nested nodekits" << std::endl;
+        std::cerr << "    Returning NULL" << std::endl;
+        std::cerr << std::endl;
     }
 #endif
     return NULL;
@@ -924,15 +919,13 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 	    if (newNode == NULL ) {
 #ifdef DEBUG
 		if (SoDebug::GetEnv("IV_DEBUG_KIT_PARTS")) {
-		    fprintf(stderr,"\n");
-		    fprintf(stderr,"NODE KIT PARTS DEBUG:\n");
-		    fprintf(stderr,"    The part %s does not exist\n",
-					nameOfPart.getString());
-		    fprintf(stderr,"    and could not be created.The list %s\n",
-					    listNameCopy );
-		    fprintf(stderr,"    only specifies abstract types\n");
-		    fprintf(stderr,"    Returning NULL\n");
-		    fprintf(stderr,"\n");
+                    std::cerr << std::endl;
+                    std::cerr << "NODE KIT PARTS DEBUG:" << std::endl;
+                    std::cerr << "    The part " << nameOfPart.getString() << " does not exist" << std::endl;
+                    std::cerr << "    and could not be created.The list " << listNameCopy << std::endl;
+                    std::cerr << "    only specifies abstract types" << std::endl;
+                    std::cerr << "    Returning NULL" << std::endl;
+                    std::cerr << std::endl;
 		}
 #endif
 	        answerPath->unref();
@@ -947,16 +940,14 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 	if ( listGroup->getNumChildren() <= arrayIndex ) {
 	    if ( makeIfNeeded ) {
 #ifdef DEBUG
-	    if (SoDebug::GetEnv("IV_DEBUG_KIT_PARTS")) {
-	    fprintf(stderr,"\n");
-	    fprintf(stderr,"NODE KIT PARTS DEBUG: Could not return the part\n");
-	    fprintf(stderr,"    %s. The list %s only has\n", 
-				nameOfPart.getString(), listNameCopy );
-	    fprintf(stderr,"    %d entries, but you want entry number %d\n",
-				listGroup->getNumChildren(), arrayIndex);
-	    fprintf(stderr,"    Returning NULL\n");
-	    fprintf(stderr,"\n");
-	    }
+                if (SoDebug::GetEnv("IV_DEBUG_KIT_PARTS")) {
+                    std::cerr << std::endl;
+                    std::cerr << "NODE KIT PARTS DEBUG: Could not return the part" << std::endl;
+                    std::cerr << "    " << nameOfPart.getString() << ". The list " << listNameCopy << " only has" << std::endl;
+                    std::cerr << "    " << listGroup->getNumChildren() << " entries, but you want entry number " << arrayIndex << std::endl;
+                    std::cerr << "    Returning NULL" << std::endl;
+                    std::cerr << std::endl;
+                }
 #endif
 	    }
 	    answerPath->unref();
@@ -1076,13 +1067,12 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
     // OF THE SUB CATALOGS.
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_KIT_PARTS")) {
-	fprintf(stderr,"\n");
-	fprintf(stderr,"NODE KIT PARTS DEBUG: The catalog for this class\n");
-	fprintf(stderr,"    of nodekit does not have a part named %s, \n",
-			    nameOfPart.getString() );
-	fprintf(stderr,"    nor do the catalogs for any of nested nodekits\n");
-	fprintf(stderr,"    Returning NULL\n");
-	fprintf(stderr,"\n");
+        std::cerr << std::endl;
+        std::cerr << "NODE KIT PARTS DEBUG: The catalog for this class" << std::endl;
+        std::cerr << "    of nodekit does not have a part named " << nameOfPart.getString() << "," << std::endl;
+        std::cerr << "    nor do the catalogs for any of nested nodekits" << std::endl;
+        std::cerr << "    Returning NULL" << std::endl;
+        std::cerr << std::endl;
     }
 #endif
     return NULL;
@@ -1171,18 +1161,14 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 		    listGroup->replaceChild(arrayIndex, newPartNode );
 #ifdef DEBUG
 		else if (SoDebug::GetEnv("IV_DEBUG_KIT_PARTS")) {
-		    fprintf(stderr,"\n");
-		    fprintf(stderr,"NODE KIT PARTS DEBUG:\n");
-		    fprintf(stderr,"    The part %s could not be installed\n",
-					nameOfPart.getString());
-		    fprintf(stderr,"    because the index %d is greater \n",
-					arrayIndex);
-		    fprintf(stderr,"    than %d, the number of entries in \n",
-					listGroup->getNumChildren());
-		    fprintf(stderr,"    the list %s\n",
-					    listNameCopy );
-		    fprintf(stderr,"    Returning NULL\n");
-		    fprintf(stderr,"\n");
+                    std::cerr << std::endl;
+                    std::cerr << "NODE KIT PARTS DEBUG:" << std::endl;
+                    std::cerr << "    The part " << nameOfPart.getString() << " could not be installed" << std::endl;
+                    std::cerr << "    because the index " << arrayIndex << " is greater" << std::endl;
+                    std::cerr << "    than " << listGroup->getNumChildren() << ", the number of entries in" << std::endl;
+                    std::cerr << "    the list " << listNameCopy << std::endl;
+                    std::cerr << "    Returning NULL" << std::endl;
+                    std::cerr << std::endl;
 		}
 #endif
 	        free(listNameCopy);
@@ -1280,13 +1266,12 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
     // OF THE SUB CATALOGS.
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_KIT_PARTS")) {
-	fprintf(stderr,"\n");
-	fprintf(stderr,"NODE KIT PARTS DEBUG: The catalog for this class\n");
-	fprintf(stderr,"    of nodekit does not have a part named %s, \n",
-			    nameOfPart.getString() );
-	fprintf(stderr,"    nor do the catalogs for any of nested nodekits\n");
-	fprintf(stderr,"    Returning NULL\n");
-	fprintf(stderr,"\n");
+        std::cerr << std::endl;
+        std::cerr << "NODE KIT PARTS DEBUG: The catalog for this class" << std::endl;
+        std::cerr << "    of nodekit does not have a part named " << nameOfPart.getString() << "," << std::endl;
+        std::cerr << "    nor do the catalogs for any of nested nodekits" << std::endl;
+        std::cerr << "    Returning NULL" << std::endl;
+        std::cerr << std::endl;
     }
 #endif
     return FALSE;

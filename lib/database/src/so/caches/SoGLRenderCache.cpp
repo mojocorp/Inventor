@@ -59,6 +59,7 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <SoDebug.h>
 
+#include <iostream>
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -127,11 +128,9 @@ SoGLRenderCache::isValid(const SoState *state) const
 	    lazyMatches(checkGLFlag,checkIVFlag,eltInState)){
 #ifdef DEBUG
 	if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-	    fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid ",
-		    this);
-	    fprintf(stderr, "Because a lazy element match failed,\n");
-	    fprintf(stderr, "GL and IV flags were %d %d\n", checkGLFlag, 
-		    checkIVFlag);	
+            std::cerr <<  "CACHE DEBUG: cache(0x" << std::hex << this << ") not valid " << std::endl;
+            std::cerr <<  "Because a lazy element match failed," << std::endl;
+            std::cerr <<  "GL and IV flags were " << checkGLFlag << " " << checkIVFlag << std::endl;
 	}
 #endif /*DEBUG*/	   
 	return(FALSE);

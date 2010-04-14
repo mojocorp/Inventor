@@ -59,6 +59,8 @@
 
 #include <SoDebug.h>
 
+#include <iostream>
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -237,13 +239,12 @@ SoCache::isValid(const SoState *state) const
     if (invalidated) {
 #ifdef DEBUG
 	if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-	    fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid ",
-		    this);
-	    fprintf(stderr, "because SoCache::invalidate was called, ");
-	    fprintf(stderr, "probably because a field or node\n");
-	    fprintf(stderr, "underneath a node with a cache changed ");
-	    fprintf(stderr, "or because a node with a cache contained\n");
-	    fprintf(stderr, "an uncacheable node.\n");
+            std::cerr << "CACHE DEBUG: cache(0x" << std::hex << this << ") not valid ";
+            std::cerr << "because SoCache::invalidate was called, ";
+            std::cerr << "probably because a field or node" << std::endl;
+            std::cerr << "underneath a node with a cache changed ";
+            std::cerr << "or because a node with a cache contained" << std::endl;
+            std::cerr << "an uncacheable node." << std::endl;
 	}	    
 #endif
 	return FALSE;
@@ -263,13 +264,11 @@ SoCache::isValid(const SoState *state) const
 
 #ifdef DEBUG
 	    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-		fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid",
-			this);
-		fprintf(stderr, " because element %s does not match:\n",
-			eltInState->getTypeId().getName().getString());
-		fprintf(stderr, "------\nElement in state:\n");
+                std::cerr << "CACHE DEBUG: cache(0x" << std::hex << this << ") not valid";
+                std::cerr << " because element " << eltInState->getTypeId().getName().getString() << "does not match:" << std::endl;
+                std::cerr << "------\nElement in state:" << std::endl;
 		eltInState->print(stderr);
-		fprintf(stderr, "------\nElement in cache:\n");
+                std::cerr << "------\nElement in cache:" << std::endl;
 		eltInCache->print(stderr);
 	    }
 #endif
