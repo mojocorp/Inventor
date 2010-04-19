@@ -156,28 +156,39 @@ SoAntiSquish::getUnsquishingMatrix( SbMatrix squishedMatrix,
     // We want to append our squishedMatrix with a new matrix:
     // desiredM = [NEWSCALE][R][T]
     // where NEWSCALE is a uniform scale based on [S] and the sizing field
-    float scl;
+    float scl = 1.0f;
 
-    Sizing whichSizing = (Sizing ) sizing.getValue();
-    if ( whichSizing == X )
-	scl = scaleV[0];
-    else if ( whichSizing == Y )
+    switch(sizing.getValue()) {
+
+    case X:
+        scl = scaleV[0];
+        break;
+
+    case Y:
 	scl = scaleV[1];
-    else if ( whichSizing == Z )
+        break;
+
+    case Z:
 	scl = scaleV[2];
-    else if ( whichSizing == AVERAGE_DIMENSION )
+        break;
+
+    case AVERAGE_DIMENSION:
 	scl = (scaleV[0] + scaleV[1] + scaleV[2]) / 3.0f ;
-    else if ( whichSizing == BIGGEST_DIMENSION ) {
+        break;
+
+    case BIGGEST_DIMENSION:
 	scl =   (scaleV[0] >= scaleV[1] && scaleV[0] >= scaleV[2] ) ? scaleV[0]
-	      : (scaleV[1] >= scaleV[2] )                           ? scaleV[1] 
-	      :  scaleV[2];
-    }
-    else if ( whichSizing == SMALLEST_DIMENSION ) {
+                                                                    : (scaleV[1] >= scaleV[2] ) ? scaleV[1]
+                                                                                                : scaleV[2];
+        break;
+
+    case SMALLEST_DIMENSION:
 	scl =   (scaleV[0] <= scaleV[1] && scaleV[0] <= scaleV[2] ) ? scaleV[0]
-	      : (scaleV[1] <= scaleV[2] )                           ? scaleV[1] 
-	      :  scaleV[2];
-    }
-    else if ( whichSizing == LONGEST_DIAGONAL ) {
+                                                                    : (scaleV[1] <= scaleV[2] ) ? scaleV[1]
+                                                                                                : scaleV[2];
+        break;
+
+    case LONGEST_DIAGONAL: {
 	// Determine the aggregate scaleOrientation-scale matrix
 	SbMatrix aggregate;
 	aggregate.setScale(scaleV);
@@ -200,9 +211,17 @@ SoAntiSquish::getUnsquishingMatrix( SbMatrix squishedMatrix,
 	    if ( ls[i] > scl )
 		scl = ls[i];
     }
+    break;
 
-    float invScl;
-    invScl = 1.0f / scl;
+    default:
+#ifdef DEBUG
+        SoDebugError::post("SoAntiSquish::getUnsquishingMatrix",
+                           "unknown sizing!");
+#endif
+        break;
+    }
+
+    float invScl = 1.0f / scl;
 
     SbVec3f newScale( scl, scl, scl), newScaleInv( invScl, invScl, invScl );
 
