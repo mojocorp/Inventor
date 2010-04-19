@@ -2757,11 +2757,17 @@ SoInput::makeRoomInBuf(size_t nBytes)
 	while (nBytes >= tmpBufSize)
 	    tmpBufSize *= 2;
 
-	tmpBuffer = realloc(tmpBuffer, tmpBufSize);
+        void* ptr = realloc(tmpBuffer, tmpBufSize);
 
 	// Test for bad reallocation
-	if (tmpBuffer == NULL)
-	    return FALSE;
+        if (ptr == NULL) {
+            free (tmpBuffer);
+            tmpBuffer = NULL;
+            tmpBufSize = 0;
+
+            return FALSE;
+        }
+        tmpBuffer = ptr;
     }
 
     return TRUE;

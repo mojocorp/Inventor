@@ -1615,6 +1615,7 @@ SoNodekitParts::createPathDownTo( const SbName &nameOfPart, SoNode *theNode )
 		SoDebugError::post("NodekitParts::createPathDownTo",
 		"Parent part not derived from a group");
 #endif
+                delete [ /*numEntries*/ ] backwardsKidIndexArray;
 		return NULL;
 	    }
 	    backwardsKidIndexArray[ count ] = parentNode->findChild( childNode);
