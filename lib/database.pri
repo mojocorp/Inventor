@@ -40,9 +40,9 @@ DEPENDPATH += database \
               database/src/so/nodes/nurbs/libnurbs
 
 INCLUDEPATH += ../libFL/src \
+               database/src/so/engines \
                database/src/so/nodes/nurbs/head \
                database/include/Inventor/misc
-
 
 
 PUBLIC_HEADERS += database/include/machine.h \
@@ -563,6 +563,8 @@ PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
 
 HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
 
+YACCSOURCES += database/src/so/engines/SoCalcParse.y
+
 SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/sb/SbXfBox3f.cpp \
            database/src/sb/SbBox2f.cpp \
@@ -739,7 +741,6 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/elements/SoWindowElement.cpp \
            database/src/so/engines/SoBoolOperation.cpp \
            database/src/so/engines/SoCalcExpr.cpp \
-           database/src/so/engines/SoCalcParse.cpp \
            database/src/so/engines/SoCalculator.cpp \
            database/src/so/engines/SoCompose.cpp \
            database/src/so/engines/SoComputeBoundingBox.cpp \

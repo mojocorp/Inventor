@@ -20,20 +20,14 @@
 #include <Inventor/errors/SoDebugError.h>
 #include "SoCalcExpr.h"
 #include <stdio.h>
-#ifdef _WINDOWS
-#include <float.h>
-#define drand48() (((double)rand())/double(RAND_MAX))
-#elif defined(__APPLE__)
-#include <float.h>
-#include <limits.h>
-#else
-#include <values.h>
+
+#ifdef SB_OS_WIN
+#   define drand48() (((double)rand())/double(RAND_MAX))
 #endif
+
+#include <float.h>
 #include <math.h>
 #include <ctype.h>
-#ifndef _WINDOWS
-#include <strings.h>
-#endif
 #include <stdlib.h>
 
 void yyerror(const char *);
@@ -47,12 +41,8 @@ static const struct {
     const char *name;
     float	val;
 } Constants[] = {
-    { "MAXFLOAT",	MAXFLOAT },
-#if defined(__APPLE__) || defined(_WINDOWS)
+    { "MAXFLOAT",	FLT_MAX },
     { "MINFLOAT",	FLT_MIN },
-#else
-    { "MINFLOAT",	MINFLOAT },
-#endif
     { "M_E",		M_E },
     { "M_LOG2E",	M_LOG2E },
     { "M_LOG10E",	M_LOG10E },
@@ -284,7 +274,7 @@ initFuncs()
 static Const *
 isConst(const char *nm)
 {
-    for (int i=0; i<NCONSTANTS; i++)
+    for (size_t i=0; i<NCONSTANTS; i++)
 	if (strcmp(nm, Constants[i].name)==0)
 	    return new Const(Constants[i].val);
     return NULL;
@@ -304,7 +294,7 @@ isFunc(const char *nm)
 static Var *
 isInput(const char *nm)
 {
-    for (int i=0; i<NINPUTS; i++) if (strcmp(nm, Inputs[i].name)==0) 
+    for (size_t i=0; i<NINPUTS; i++) if (strcmp(nm, Inputs[i].name)==0)
 	return new Var(nm, Inputs[i].type);
     return NULL;
 }
@@ -312,7 +302,7 @@ isInput(const char *nm)
 static Var *
 isOutput(const char *nm)
 {
-    for (int i=0; i<NOUTPUTS; i++) if (strcmp(nm, Outputs[i].name)==0) 
+    for (size_t i=0; i<NOUTPUTS; i++) if (strcmp(nm, Outputs[i].name)==0)
 	return new Var(nm, Outputs[i].type);
     return NULL;
 }
@@ -320,7 +310,7 @@ isOutput(const char *nm)
 static Var *
 isVar(const char *nm)
 {
-    for (int i=0; i<NVARS; i++) if (strcmp(nm, Vars[i].name)==0) 
+    for (size_t i=0; i<NVARS; i++) if (strcmp(nm, Vars[i].name)==0)
 	return new Var(nm, Vars[i].type);
     return NULL;
 }
@@ -386,19 +376,19 @@ int yylex()
 	}
 	*cp = 0;
 
-	if (yylval.expr = isConst(buf))
+        if ( (yylval.expr = isConst(buf)) )
 	    return CONST;
 
-	if (yylval.expr = isFunc(buf))
+        if ( (yylval.expr = isFunc(buf)) )
 	    return FUNC;
 
-	if (yylval.expr = isInput(buf))
+        if ( (yylval.expr = isInput(buf)) )
 	    return INPUT;
 
-	if (yylval.expr = isOutput(buf))
+        if ( (yylval.expr = isOutput(buf)) )
 	    return OUTPUT;
 
-	if (yylval.expr = isVar(buf))
+        if ( (yylval.expr = isVar(buf)) )
 	    return VAR;
 
     }
