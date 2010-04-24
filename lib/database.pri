@@ -1,6 +1,8 @@
 # for nurbs...
 DEFINES += LIBRARYBUILD
 
+win32: QMAKE_YACC = bison -y
+
 DEPENDPATH += database \
               database/include \
               database/include/Inventor \
