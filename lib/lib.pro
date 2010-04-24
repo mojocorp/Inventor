@@ -44,4 +44,4 @@ include(database.pri)
 include(interaction.pri)
 include(nodekits.pri)
 
-LIBS += -L$$OUT_PWD/../build -lFLWrapper -limage -ljpeg -lfreetype -liconv
+LIBS += -L$$OUT_PWD/../build -lFLWrapper -limage -ljpeg -lfreetype 
