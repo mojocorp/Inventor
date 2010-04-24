@@ -61,7 +61,7 @@
 
 #include <Inventor/engines/SoSubEngine.h>
 
-class SoUnknownEngine : public SoEngine {
+class INVENTOR_API SoUnknownEngine : public SoEngine {
 
     SO_ENGINE_HEADER(SoUnknownEngine);
     
