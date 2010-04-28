@@ -31,32 +31,32 @@
 #include <stdlib.h>
 
 void yyerror(const char *);
-extern "C" int	yylex();
+extern "C" int yylex();
 int yyparse();
 
 static const char *In;
-static ExprList	*EList;
+static ExprList   *EList;
 
 static const struct {
     const char *name;
     float	val;
 } Constants[] = {
-    { "MAXFLOAT",	FLT_MAX },
-    { "MINFLOAT",	FLT_MIN },
-    { "M_E",		M_E },
-    { "M_LOG2E",	M_LOG2E },
-    { "M_LOG10E",	M_LOG10E },
-    { "M_LN2",		M_LN2 },
-    { "M_LN10",		M_LN10 },
-    { "M_PI",		M_PI },
-    { "M_SQRT2",	M_SQRT2 },
-    { "M_SQRT1_2",	M_SQRT1_2 },
+    { "MAXFLOAT",   FLT_MAX },
+    { "MINFLOAT",   FLT_MIN },
+    { "M_E",        M_E },
+    { "M_LOG2E",    M_LOG2E },
+    { "M_LOG10E",   M_LOG10E },
+    { "M_LN2",      M_LN2 },
+    { "M_LN10",     M_LN10 },
+    { "M_PI",       M_PI },
+    { "M_SQRT2",    M_SQRT2 },
+    { "M_SQRT1_2",  M_SQRT1_2 },
 };
 #define NCONSTANTS (sizeof(Constants)/sizeof(Constants[0]))
 
 static const struct {
     const char *name;
-    Expr::Type	type;
+    Expr::Type  type;
 } Inputs[] = {
     { "a", Expr::FLOAT}, { "b", Expr::FLOAT},
     { "c", Expr::FLOAT}, { "d", Expr::FLOAT},
@@ -107,8 +107,8 @@ static struct {
 
 %union
 {
-    Expr	*expr;
-    ExprList	*list;
+    Expr    *expr;
+    ExprList    *list;
 }
 
 %type <expr> asgn primary_expression postfix_expression
@@ -122,103 +122,103 @@ static struct {
 %%
 
 asgnlist:
-	asgn { EList->append($1); }
-	| asgnlist  ';' asgn { EList->append($3); }
-	| asgnlist  ';'
-	;
+    asgn { EList->append($1); }
+    | asgnlist  ';' asgn { EList->append($3); }
+    | asgnlist  ';'
+    ;
 
 asgn:
-	OUTPUT '=' conditional_expression
-				{ $$ = new Assign($1, $3); }
-	| OUTPUT '[' conditional_expression ']' '=' conditional_expression
-				{ $$ = new AssignIndex($1, $3, $6); }
-	| VAR	'=' conditional_expression
-				{ $$ = new Assign($1, $3); }
-	| VAR '[' conditional_expression ']' '=' conditional_expression
-				{ $$ = new AssignIndex($1, $3, $6); }
-	;
+    OUTPUT '=' conditional_expression
+                { $$ = new Assign($1, $3); }
+    | OUTPUT '[' conditional_expression ']' '=' conditional_expression
+                { $$ = new AssignIndex($1, $3, $6); }
+    | VAR    '=' conditional_expression
+                { $$ = new Assign($1, $3); }
+    | VAR '[' conditional_expression ']' '=' conditional_expression
+                { $$ = new AssignIndex($1, $3, $6); }
+    ;
 
 primary_expression:
-	CONST	 			{ $$ = $1; }
-	| INPUT				{ $$ = $1; }
-	| OUTPUT			{ $$ = $1; }
-	| VAR				{ $$ = $1; }
-        | '(' conditional_expression ')'	{ $$ = $2; }
+    CONST                 { $$ = $1; }
+    | INPUT                { $$ = $1; }
+    | OUTPUT            { $$ = $1; }
+    | VAR                { $$ = $1; }
+        | '(' conditional_expression ')'    { $$ = $2; }
         ;
 
 postfix_expression:
-        primary_expression	{ $$ = $1; }
+        primary_expression    { $$ = $1; }
         | postfix_expression '[' conditional_expression ']'
-			 	{ $$ = new Index($1, $3); }
-	| FUNC '(' args ')'	{ ((Func *)$1)->setArgs($3); $$ = $1; }
+                 { $$ = new Index($1, $3); }
+    | FUNC '(' args ')'    { ((Func *)$1)->setArgs($3); $$ = $1; }
         ;
 
-args	:
-	conditional_expression		{ ($$ = new ExprList)->append($1); }
-	| args ',' conditional_expression { $1->append($3); $$ = $1; }
-	;
+args    :
+    conditional_expression        { ($$ = new ExprList)->append($1); }
+    | args ',' conditional_expression { $1->append($3); $$ = $1; }
+    ;
 
 unary_expression:
         postfix_expression
-        | '-' unary_expression	{ $$ = new Negate($2); }
-        | '!' unary_expression	{ $$ = new Not($2); }
+        | '-' unary_expression    { $$ = new Negate($2); }
+        | '!' unary_expression    { $$ = new Not($2); }
         ;
 
 multiplicative_expression:
         unary_expression
         | multiplicative_expression '*' unary_expression
-			{ $$ = new Mult($1, $3); }
+            { $$ = new Mult($1, $3); }
         | multiplicative_expression '/' unary_expression
-			{ $$ = new Divide($1, $3); }
+            { $$ = new Divide($1, $3); }
         | multiplicative_expression '%' unary_expression
-			{ $$ = new Mod($1, $3); }
+            { $$ = new Mod($1, $3); }
         ;
 
 additive_expression:
         multiplicative_expression
         | additive_expression '+' multiplicative_expression
-			{ $$ = new Plus($1, $3); }
+            { $$ = new Plus($1, $3); }
         | additive_expression '-' multiplicative_expression
-			{ $$ = new Minus($1, $3); }
+            { $$ = new Minus($1, $3); }
         ;
 
 relational_expression:
         additive_expression
         | relational_expression '<' additive_expression
-			{ $$ = new LessThan($1, $3); }
+            { $$ = new LessThan($1, $3); }
         | relational_expression '>' additive_expression
-			{ $$ = new GreaterThan($1, $3); }
+            { $$ = new GreaterThan($1, $3); }
         | relational_expression LEQ additive_expression
-			{ $$ = new LessEQ($1, $3); }
+            { $$ = new LessEQ($1, $3); }
         | relational_expression GEQ additive_expression
-			{ $$ = new GreaterEQ($1, $3); }
+            { $$ = new GreaterEQ($1, $3); }
         ;
 
 equality_expression:
         relational_expression
         | equality_expression EQEQ relational_expression
-			{ $$ = new Equals($1, $3); }
+            { $$ = new Equals($1, $3); }
         | equality_expression NEQ relational_expression
-			{ $$ = new NotEquals($1, $3); }
+            { $$ = new NotEquals($1, $3); }
         ;
 
 logical_AND_expression:
         equality_expression
         | logical_AND_expression ANDAND equality_expression
-			{ $$ = new And($1, $3); }
+            { $$ = new And($1, $3); }
         ;
 
 logical_OR_expression:
         logical_AND_expression
         | logical_OR_expression OROR logical_AND_expression
-			{ $$ = new Or($1, $3); }
+            { $$ = new Or($1, $3); }
         ;
 
 conditional_expression:
         logical_OR_expression
         | logical_OR_expression '?' conditional_expression ':'
                 conditional_expression
-			{ $$ = new Ternary($1, $3, $5); }
+            { $$ = new Ternary($1, $3, $5); }
         ;
 
 %%
@@ -232,10 +232,10 @@ conditional_expression:
 static void
 initFuncs()
 {
-    int	i = 0;
+    int    i = 0;
 
-#define MAKEFUNC(CLASS, NAME)						      \
-	Funcs[i++].func = new CLASS(SO__QUOTE(NAME),NAME)
+#define MAKEFUNC(CLASS, NAME)                              \
+    Funcs[i++].func = new CLASS(SO__QUOTE(NAME),NAME)
 
     MAKEFUNC(Func_d, acos);
     MAKEFUNC(Func_d, asin);
@@ -266,8 +266,8 @@ initFuncs()
 #ifdef DEBUG
     // Sanity check
     if (i != NFUNCS)
-	SoDebugError::post("SoCalcParse initFuncs (internal)",
-			   "Wrong number of functions declared");
+    SoDebugError::post("SoCalcParse initFuncs (internal)",
+                       "Wrong number of functions declared");
 #endif /* DEBUG */
 }
 
@@ -275,8 +275,8 @@ static Const *
 isConst(const char *nm)
 {
     for (size_t i=0; i<NCONSTANTS; i++)
-	if (strcmp(nm, Constants[i].name)==0)
-	    return new Const(Constants[i].val);
+        if (strcmp(nm, Constants[i].name)==0)
+            return new Const(Constants[i].val);
     return NULL;
 }
 
@@ -284,9 +284,9 @@ static Func *
 isFunc(const char *nm)
 {
     for (int i=0; i<NFUNCS; i++) {
-	const Func *f = Funcs[i].func;
-	if (strcmp(nm, f->name)==0)
-	    return f->dup();
+        const Func *f = Funcs[i].func;
+        if (strcmp(nm, f->name)==0)
+            return f->dup();
     }
     return NULL;
 }
@@ -295,7 +295,7 @@ static Var *
 isInput(const char *nm)
 {
     for (size_t i=0; i<NINPUTS; i++) if (strcmp(nm, Inputs[i].name)==0)
-	return new Var(nm, Inputs[i].type);
+        return new Var(nm, Inputs[i].type);
     return NULL;
 }
 
@@ -303,7 +303,7 @@ static Var *
 isOutput(const char *nm)
 {
     for (size_t i=0; i<NOUTPUTS; i++) if (strcmp(nm, Outputs[i].name)==0)
-	return new Var(nm, Outputs[i].type);
+        return new Var(nm, Outputs[i].type);
     return NULL;
 }
 
@@ -311,7 +311,7 @@ static Var *
 isVar(const char *nm)
 {
     for (size_t i=0; i<NVARS; i++) if (strcmp(nm, Vars[i].name)==0)
-	return new Var(nm, Vars[i].type);
+        return new Var(nm, Vars[i].type);
     return NULL;
 }
 
@@ -322,78 +322,78 @@ int yylex()
 
     // skip over blanks
     while (isspace(*In))
-	In++;
+    In++;
 
     if (!In[0])
-	return EOF;
+    return EOF;
 
     if (isdigit(In[0]) || In[0] == '.') {
 
-	// skip past a valid floating-point number
-	// (don't need to compute the number, will
-	// use atof() to do that).
-	SbBool dot = FALSE;
-	SbBool exp = FALSE;
-	for (;;) {
-	    c = *In++;
-	    if (cp - buf < BSZ)
-		*cp++ = c;
-	    *cp = c;
-	    if (isdigit(c))
-		continue;
-	    if (c== '.') {
-		if (dot || exp)
-		    return LEXERR;
-		dot = TRUE;
-		continue;
-	    }
-	    if (c == 'e' || c == 'E') {
-		if (exp)
-		    return LEXERR;
-		exp = TRUE;
-		continue;
-	    }
-	    // Check for negative exponent
-	    if (c == '-' && exp && (In[-2] == 'e' || In[-2] == 'E')) {
-		continue;
-	    }
-	    break;	// end of number
-	}
-	if (In[-1] == 'e')
-	    return LEXERR;
+        // skip past a valid floating-point number
+        // (don't need to compute the number, will
+        // use atof() to do that).
+        SbBool dot = FALSE;
+        SbBool exp = FALSE;
+        for (;;) {
+            c = *In++;
+            if (cp - buf < BSZ)
+                *cp++ = c;
+            *cp = c;
+            if (isdigit(c))
+                continue;
+            if (c== '.') {
+                if (dot || exp)
+                    return LEXERR;
+                dot = TRUE;
+                continue;
+            }
+            if (c == 'e' || c == 'E') {
+                if (exp)
+                    return LEXERR;
+                exp = TRUE;
+                continue;
+            }
+            // Check for negative exponent
+            if (c == '-' && exp && (In[-2] == 'e' || In[-2] == 'E')) {
+                continue;
+            }
+            break;    // end of number
+        }
+        if (In[-1] == 'e')
+            return LEXERR;
 
-	*cp = 0;
-	In--;	// push back last character "read"
+        *cp = 0;
+        In--;    // push back last character "read"
 
-	yylval.expr = new Const(atof(buf));
-	return CONST;
+        yylval.expr = new Const(atof(buf));
+        return CONST;
     }
 
     if (isalpha(In[0])) {
-	while (isalnum(In[0]) || In[0] == '_') {
-	    if (cp - buf < BSZ)
-		*cp++ = *In++;
-	}
-	*cp = 0;
+        while (isalnum(In[0]) || In[0] == '_') {
+            if (cp - buf < BSZ)
+                *cp++ = *In++;
+        }
+        *cp = 0;
 
         if ( (yylval.expr = isConst(buf)) )
-	    return CONST;
+            return CONST;
 
         if ( (yylval.expr = isFunc(buf)) )
-	    return FUNC;
+            return FUNC;
 
         if ( (yylval.expr = isInput(buf)) )
-	    return INPUT;
+            return INPUT;
 
         if ( (yylval.expr = isOutput(buf)) )
-	    return OUTPUT;
+            return OUTPUT;
 
         if ( (yylval.expr = isVar(buf)) )
-	    return VAR;
+            return VAR;
 
     }
 
-#define EQ2(x,y)	(x[0]==y[0] && x[1]==y[1])
+#define EQ2(x,y)    (x[0]==y[0] && x[1]==y[1])
     if (EQ2(In, "==")) { In += 2; return EQEQ; }
     if (EQ2(In, "!=")) { In += 2; return NEQ; }
     if (EQ2(In, ">=")) { In += 2; return GEQ; }
@@ -416,8 +416,8 @@ SoCalcParse(ExprList *elist, const char *buf)
     static SbBool initted = FALSE;
 
     if (! initted) {
-	initFuncs();
-	initted = TRUE;
+        initFuncs();
+        initted = TRUE;
     }
 
     In = buf;
@@ -438,16 +438,16 @@ main()
     EList = new ExprList;
 
     while (gets(buf)) {
-	In = buf;
-	EList->truncate(0);
-	if (yyparse())
-	    printf("Parse error.\n");
-	else {
-	    EList->eval();
-	    for (int i=0; i<EList->length(); i++) {
-		(*EList)[i]->pr();
-	    }
-	}
+    In = buf;
+    EList->truncate(0);
+    if (yyparse())
+        printf("Parse error.\n");
+    else {
+        EList->eval();
+        for (int i=0; i<EList->length(); i++) {
+            (*EList)[i]->pr();
+        }
+    }
     }
 }
 
