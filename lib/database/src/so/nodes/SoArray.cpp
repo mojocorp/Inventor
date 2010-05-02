@@ -199,9 +199,9 @@ SoArray::doAction(SoAction *action)
     translateArray = (! origin.isIgnored() && origin.getValue() != FIRST);
 
     if (translateArray) {
-	SbVec3f vecToCenter = -(separation1.getValue() * (n1 - 1) +
-				separation2.getValue() * (n2 - 1) +
-				separation3.getValue() * (n3 - 1));
+	SbVec3f vecToCenter = -(separation1.getValue() * float(n1 - 1) +
+				separation2.getValue() * float(n2 - 1) +
+				separation3.getValue() * float(n3 - 1));
 
 	if (origin.getValue() == CENTER)
 	    vecToCenter *= 0.5;
@@ -264,7 +264,7 @@ SoArray::doAction(SoAction *action)
 	action->getState()->pop();
 
     if (gettingBBox && numCenters > 0)
-	((SoGetBoundingBoxAction *) action)->setCenter(totalCenter/numCenters,
+	((SoGetBoundingBoxAction *) action)->setCenter(totalCenter/float(numCenters),
 						       FALSE);
 }
 
@@ -432,9 +432,9 @@ SoArray::getMatrix(SoGetMatrixAction *action)
 	    int	n2 = numElements2.getValue();
 	    int	n3 = numElements3.getValue();
 
-	    SbVec3f vecToCenter = -(separation1.getValue() * (n1 - 1) +
-				    separation2.getValue() * (n2 - 1) +
-				    separation3.getValue() * (n3 - 1));
+	    SbVec3f vecToCenter = -(separation1.getValue() * float(n1 - 1) +
+				    separation2.getValue() * float(n2 - 1) +
+				    separation3.getValue() * float(n3 - 1));
 
 	    if (origin.getValue() == CENTER)
 		vecToCenter *= 0.5;
