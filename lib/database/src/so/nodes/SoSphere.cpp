@@ -397,7 +397,7 @@ SoSphere::generatePrimitives(SoAction *action)
         shapeVertex(&pv);
 
         // Third cap vertex
-        vec.setValue(0.0f, s_y, 0.0f);
+        vec.setValue(0.0f, float(s_y), 0.0f);
 
         if (genTexCoords) {
             tex[0] = sAvg;
@@ -547,7 +547,7 @@ SoSphere::GLRenderGeneric(SoGLRenderAction *action,
         glVertex3fv((vec*rad).getValue());
 
         // Third cap vertex
-        vec.setValue(0.0, s_y, 0.0);
+        vec.setValue(0.0, float(s_y), 0.0);
 
         if (doTextures) {
             s = sAvg;
@@ -661,7 +661,7 @@ SoSphere::GLRenderNvertTnone(SoGLRenderAction *action)
         glVertex3fv((vec*rad).getValue());
 
         // Third cap vertex
-        vec.setValue(0.0, s_y, 0.0);
+        vec.setValue(0.0, float(s_y), 0.0);
 
         glNormal3fv(vec.getValue());
         glVertex3fv((vec*rad).getValue());

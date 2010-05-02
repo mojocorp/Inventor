@@ -173,7 +173,7 @@ SoLevelOfDetail::doAction(SoAction *action)
 
 	// Compute the screen size of the bbox and its area
 	SoShape::getScreenSize(state, bboxAction->getBoundingBox(), rectSize);
-	projectedArea = rectSize[0] * rectSize[1];
+	projectedArea = float(rectSize[0] * rectSize[1]);
 
 	// Adjust the area based on the complexity
 	complexity = SoComplexityElement::get(state);
