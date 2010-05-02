@@ -534,7 +534,7 @@ SoSceneManager::render(SbBool clearWindow, SbBool clearZbuffer)
     if (clearWindow) {
 	if (rgbMode)
 	     glClearColor(bkgColor[0], bkgColor[1], bkgColor[2], 0);
-	else glClearIndex(bkgIndex);
+	else glClearIndex(GLfloat(bkgIndex));
 	
 	// clear the color+zbuffer at the same time if we can
 	if (needZbuffer && clearZbuffer)
@@ -708,7 +708,7 @@ SoSceneManager::antialiasingCallback( void *r )
     
     if (mgr->rgbMode)
 	 glClearColor(mgr->bkgColor[0], mgr->bkgColor[1], mgr->bkgColor[2], 0);
-    else glClearIndex( mgr->bkgIndex );
+    else glClearIndex( GLfloat(mgr->bkgIndex) );
     
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }

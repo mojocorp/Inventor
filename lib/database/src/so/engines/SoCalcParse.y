@@ -39,7 +39,7 @@ static ExprList   *EList;
 
 static const struct {
     const char *name;
-    float	val;
+    double      val;
 } Constants[] = {
     { "MAXFLOAT",   FLT_MAX },
     { "MINFLOAT",   FLT_MIN },
@@ -90,7 +90,7 @@ static SbVec3f cross(const SbVec3f &a, const SbVec3f &b) { return a.cross(b); }
 static double dot(const SbVec3f &a, const SbVec3f &b) { return a.dot(b); }
 static double length(const SbVec3f &a) { return a.length(); }
 static SbVec3f normalize(const SbVec3f &v) { SbVec3f t=v; t.normalize(); return t; }
-static SbVec3f vec3f(double a, double b, double c) { return SbVec3f(a,b,c); }
+static SbVec3f vec3f(double a, double b, double c) { return SbVec3f(float(a),float(b),float(c)); }
 
 // Keep this up to date with the info in initFuncs()
 #define NFUNCS 25
@@ -276,7 +276,7 @@ isConst(const char *nm)
 {
     for (size_t i=0; i<NCONSTANTS; i++)
         if (strcmp(nm, Constants[i].name)==0)
-            return new Const(Constants[i].val);
+            return new Const(float(Constants[i].val));
     return NULL;
 }
 
@@ -325,7 +325,7 @@ int yylex()
     In++;
 
     if (!In[0])
-    return EOF;
+        return EOF;
 
     if (isdigit(In[0]) || In[0] == '.') {
 
@@ -365,7 +365,7 @@ int yylex()
         *cp = 0;
         In--;    // push back last character "read"
 
-        yylval.expr = new Const(atof(buf));
+        yylval.expr = new Const((float)atof(buf));
         return CONST;
     }
 
