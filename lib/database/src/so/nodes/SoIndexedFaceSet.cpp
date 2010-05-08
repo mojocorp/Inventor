@@ -80,11 +80,11 @@ SO_NODE_SOURCE(SoIndexedFaceSet);
 
 // Constants for influencing auto-caching algorithm:
 
-const int AUTO_CACHE_IFS_MIN_WITHOUT_VP = 20;
+const int AUTO_CACHE_IFS_MIN_WITHOUT_VP = 100000;
 
 // And the number above which we'll say caches definitely SHOULDN'T be
 // built (because they'll use too much memory):
-const int AUTO_CACHE_IFS_MAX = 1000;
+const int AUTO_CACHE_IFS_MAX = 10000000;
 
 ////////////////////////////////////////////////////////////////////////
 //
