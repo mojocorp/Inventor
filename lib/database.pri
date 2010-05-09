@@ -453,6 +453,8 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/misc/upgraders/SoV1CustomNode.h
 
 PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
+           database/include/Inventor/caches/SoOutlineFontCache.h \
+           database/include/Inventor/caches/SoFontOutline.h \
            database/src/so/engines/SoCalcExpr.h \
            database/src/so/engines/SoEngineUtil.h \
            database/src/so/engines/SoFieldConverters.h \
@@ -661,6 +663,8 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/bundles/SoNormalBundle.cpp \
            database/src/so/bundles/SoTextureCoordinateBundle.cpp \
            database/src/so/caches/SoBitmapFontCache.cpp \
+           database/src/so/caches/SoOutlineFontCache.cpp \
+           database/src/so/caches/SoFontOutline.cpp \
            database/src/so/caches/SoBoundingBoxCache.cpp \
            database/src/so/caches/SoCache.cpp \
            database/src/so/caches/SoGLCacheList.cpp \
