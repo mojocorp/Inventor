@@ -82,7 +82,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class MyOutlineFontCache;
+class SoOutlineFontCache;
 class SoPrimitiveVertex;
 class SoTextureCoordinateElement;
 
@@ -208,7 +208,7 @@ class INVENTOR_API SoAsciiText : public SoShape {
     // MyOutlineFontCache is an internal, opaque class used to
     // maintain gl display lists and other information for each
     // character in a font.
-    MyOutlineFontCache *myFont;
+    SoOutlineFontCache *myFont;
 
     // All this stuff is used while generating primitives:
     static SoAsciiText *currentGeneratingNode;
