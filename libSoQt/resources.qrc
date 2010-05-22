@@ -1,0 +1,34 @@
+<RCC>
+    <qresource prefix="/">
+		<file>resources/gotoHome.png</file>
+		<file>resources/help.png</file>
+		<file>resources/ortho.png</file>
+		<file>resources/persp.png</file>
+		<file>resources/pickMode.png</file>
+		<file>resources/seek.png</file>
+		<file>resources/setHome.png</file>
+		<file>resources/so_qt_curved_hand_bits.png</file>
+		<file>resources/so_qt_curved_hand_mask.png</file>
+		<file>resources/so_qt_flat_hand_bits.png</file>
+		<file>resources/so_qt_flat_hand_mask.png</file>
+		<file>resources/so_qt_normal_vec_bits.png</file>
+		<file>resources/so_qt_normal_vec_mask.png</file>
+		<file>resources/so_qt_pan_bits.png</file>
+		<file>resources/so_qt_pan_mask.png</file>
+		<file>resources/so_qt_pointing_hand_bits.png</file>
+		<file>resources/so_qt_pointing_hand_mask.png</file>
+		<file>resources/so_qt_roll_bits.png</file>
+		<file>resources/so_qt_roll_mask.png</file>
+		<file>resources/so_qt_target_bits.png</file>
+		<file>resources/so_qt_target_mask.png</file>
+		<file>resources/so_qt_tilt_bits.png</file>
+		<file>resources/so_qt_tilt_mask.png</file>
+		<file>resources/so_qt_walk_bits.png</file>
+		<file>resources/so_qt_walk_mask.png</file>
+		<file>resources/viewAll.png</file>
+		<file>resources/viewMode.png</file>
+		<file>resources/x.png</file>
+		<file>resources/y.png</file>
+		<file>resources/z.png</file>
+    </qresource>
+</RCC>
