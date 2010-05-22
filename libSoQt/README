@@ -1,0 +1,7 @@
+This directory contains the Inventor Qt Component and Utility Library tree.
+This is a separate library that contains window system dependent
+source code for Nokia Qt.
+
+Makefile - Makes entire library
+include	 - Contains include files for Qt Comp/Util lib
+src	 - Contains src files for Qt Comp/Util lib
