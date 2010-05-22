@@ -1,0 +1,177 @@
+/*
+ *
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License as published by the Free Software Foundation; either
+ *  version 2.1 of the License, or (at your option) any later version.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  Further, this software is distributed without any warranty that it is
+ *  free of the rightful claim of any third person regarding infringement
+ *  or the like.  Any license provided herein, whether implied or
+ *  otherwise, applies only to this software file.  Patent licenses, if
+ *  any, provided herein do not apply to combinations of this program with
+ *  other software, or any other product whatsoever.
+ * 
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
+ *  Mountain View, CA  94043, or:
+ * 
+ *  http://www.sgi.com 
+ * 
+ *  For further information regarding this notice, see: 
+ * 
+ *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
+ *
+ */
+
+/*
+ * Copyright (C) 1990-93   Silicon Graphics, Inc.
+ *
+ _______________________________________________________________________
+ ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
+ |
+ |   $Revision: 1.1 $
+ |
+ |   Classes	: SoQtFlyViewer
+ |
+ |   Author(s)	: Alain Dumesny
+ |
+ ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
+ _______________________________________________________________________
+ */
+
+/*
+ * Ported to Qt by Morgan Leborgne, 2010
+ */
+
+#ifndef  _SO_QT_FLY_VIEWER_
+#define  _SO_QT_FLY_VIEWER_
+
+#include <Inventor/Qt/viewers/SoQtConstrainedViewer.h>
+#include <Inventor/SbLinear.h>
+#include <Inventor/SbTime.h>
+
+class	SoFieldSensor;
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Class: SoQtFlyViewer
+//
+//
+//	Keys used by this viewer:
+//	-------------------------
+//
+//  Left Mouse: Click to increase speed.
+//  
+//  <s> + Left Mouse: Alternative to the Seek button. Press (but do not
+//	hold down) the <s> key, then click on a target object.
+//  
+//  <u> + Left Mouse: Press (but do not hold down) the <u> key, then
+//	click on a target object to set the "up" direction to the surface normal.
+//	By default +y is the "up" direction.
+//  
+//  Middle Mouse: Click to decrease speed.
+//  
+//  Left and Middle Mouse: Click boths simultaneously to stop.
+//  
+//  Ctrl: Hold the key down to temporary stop and rotate the viewpoint.
+//  
+//  Right Mouse: Open the popup menu.
+//  
+//////////////////////////////////////////////////////////////////////////////
+
+
+class SoQtFlyViewer : public SoQtConstrainedViewer {
+    Q_OBJECT
+ public:
+    
+    SoQtFlyViewer(
+	QWidget *parent = NULL,
+	const char *name = NULL, 
+	SbBool buildInsideParent = TRUE, 
+	SoQtFullViewer::BuildFlag flag = BUILD_ALL,
+	SoQtViewer::Type type = BROWSER);
+
+    ~SoQtFlyViewer();
+
+    //
+    // redefine these to add fly viewer functionality
+    //
+    virtual void    setViewing(SbBool onOrOff);
+    virtual void    resetToHomePosition();
+    virtual void    setCamera(SoCamera *cam);
+    virtual void    setCursorEnabled(SbBool onOrOff);
+    
+    // This is redefined to prevent the camera type from being changed 
+    virtual void    setCameraType(SoType type);
+    
+ protected:
+  
+    // This constructor takes a boolean whether to build the widget now.
+    // Subclasses can pass FALSE, then call SoQtFlyViewer::buildWidget()
+    // when they are ready for it to be built.
+    SoEXTENDER
+    SoQtFlyViewer(
+	QWidget *parent,
+	const char *name, 
+	SbBool buildInsideParent, 
+	SoQtFullViewer::BuildFlag flag, 
+	SoQtViewer::Type type, 
+	SbBool buildNow);
+    // redefine those routines to do viewer specific stuff
+    virtual void    processEvent(QEvent *anyevent);
+    virtual void	setSeekMode(SbBool onOrOff);
+    virtual void	actualRedraw();
+    virtual void    	rightWheelMotion(float);
+    
+    // add viewer preference stuff
+    virtual void createPrefSheet(QTabWidget* parent);
+    
+    // Define this to bring the viewer help card
+    virtual void	openViewerHelpCard();
+    
+ private:
+    // viewer state variables
+    int		    mode;
+    SbBool	    createdCursors;
+    QCursor         viewerCursor, seekCursor, upCursor;
+    SbVec2s	    locator; // mouse position
+    SbVec2s	    startPos; // mouse starting position
+    SbRotation	    camStartOrientation;
+    
+    // variables used for doing moving animation
+    SoFieldSensor   *animationSensor;
+    SbTime	    prevAnimTime;
+    float	    speed, maxSpeed, maxStraightSpeed;
+    float	    speedLimit, speedLimitFactor;
+    
+    // preference sheet stuff
+    QWidget*        createFlyPrefSheetGuts();
+protected slots:
+    void incPrefSheetButton();
+    void decPrefSheetButton();
+private:
+    
+    void	    defineCursors();
+    void	    drawViewerFeedback();
+    void	    switchMode(int newMode);
+    void	    changeMaxStraightSpeed(SbBool increase);
+    void	    calculateMaxSpeed();
+    static void	    animationSensorCB(void *, SoSensor *);
+    void	    doCameraAnimation();
+
+    // this is called by both constructors
+    void constructorCommon(SbBool buildNow);
+};
+
+#endif  /* _SO_QT_FLY_VIEWER_ */
