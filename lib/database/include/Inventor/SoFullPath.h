@@ -54,7 +54,7 @@
  */
 
 #ifndef  _SO_FULL_PATH_
-#define  _SO_FULLPATH_
+#define  _SO_FULL_PATH_
 
 #include <Inventor/SoPath.h>
 
