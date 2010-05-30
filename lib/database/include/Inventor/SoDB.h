@@ -263,6 +263,9 @@ public:
     /// Returns the current delay queue timeout value.
     static const SbTime &getDelaySensorTimeout();
 
+    /// Multi threading support is not implemented.
+    static SbBool isMultiThread() { return FALSE; }
+
 SoEXTENDER public:
     // Registers a field conversion engine that can be used to
     // convert from one type of field to another. The type id's of the
