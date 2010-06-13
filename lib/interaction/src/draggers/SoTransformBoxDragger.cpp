@@ -167,7 +167,7 @@ SoTransformBoxDragger::SoTransformBoxDragger()
 
     // Read the default geometry for this dragger
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts( "transformBoxDragger.iv", geomBuffer, sizeof(geomBuffer) );
+        readDefaultParts( "transformBoxDragger.iv", (char*)geomBuffer, sizeof(geomBuffer) );
 
     SO_KIT_ADD_FIELD(rotation, (0.0, 0.0, 0.0, 1.0));
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));

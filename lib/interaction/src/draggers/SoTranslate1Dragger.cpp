@@ -98,7 +98,7 @@ SoTranslate1Dragger::SoTranslate1Dragger()
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts("translate1Dragger.iv", geomBuffer, sizeof(geomBuffer) );
+        readDefaultParts("translate1Dragger.iv", (char*)geomBuffer, sizeof(geomBuffer) );
 
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
 

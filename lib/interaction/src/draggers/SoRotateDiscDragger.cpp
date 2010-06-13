@@ -99,7 +99,7 @@ SoRotateDiscDragger::SoRotateDiscDragger()
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts("rotateDiscDragger.iv", geomBuffer, sizeof(geomBuffer) );
+        readDefaultParts("rotateDiscDragger.iv", (char*)geomBuffer, sizeof(geomBuffer) );
 
     SO_KIT_ADD_FIELD(rotation, (0.0, 0.0, 0.0, 1.0));
 

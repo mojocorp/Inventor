@@ -213,7 +213,7 @@ class INVENTOR_API SoScale2Dragger : public SoDragger
     virtual ~SoScale2Dragger();
 
   private:
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 #endif  /* _SO_SCALE_2_DRAGGER_ */

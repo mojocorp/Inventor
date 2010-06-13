@@ -261,7 +261,7 @@ class INVENTOR_API SoJackDragger : public SoDragger
     virtual ~SoJackDragger();
 
   private:
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 #endif  /* _SO_JACK_DRAGGER_ */

@@ -343,7 +343,7 @@ class INVENTOR_API SoTrackballDragger : public SoDragger {
     SbBool	        userStripeDrag();
     
     // character strings from which the shared geometry is read
-    static const char geomBuffer[];		
+    static const unsigned char geomBuffer[];
 
     // variables used for doing spinning animation
     SbBool animationEnabled;
