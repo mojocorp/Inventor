@@ -58,6 +58,7 @@
 #include <Inventor/SbMatrixd.h>
 #include <Inventor/SbRotation.h>
 #include <Inventor/SbVec3f.h>
+#include <Inventor/SbVec3d.h>
 #include <Inventor/SbLine.h>
 
 #include <math.h>
@@ -1444,6 +1445,22 @@ SbMatrix::multVecMatrix(const SbVec3f &src, SbVec3f &dst) const
     dst.setValue(x/w, y/w, z/w);
 }
 
+void
+SbMatrix::multVecMatrix(const SbVec3d &src, SbVec3d &dst) const
+{
+    float	x,y,z,w;
+
+    x = src[0]*matrix[0][0] + src[1]*matrix[1][0] +
+        src[2]*matrix[2][0] + matrix[3][0];
+    y = src[0]*matrix[0][1] + src[1]*matrix[1][1] +
+        src[2]*matrix[2][1] + matrix[3][1];
+    z = src[0]*matrix[0][2] + src[1]*matrix[1][2] +
+        src[2]*matrix[2][2] + matrix[3][2];
+    w = src[0]*matrix[0][3] + src[1]*matrix[1][3] +
+        src[2]*matrix[2][3] + matrix[3][3];
+
+    dst.setValue(x/w, y/w, z/w);
+}
 //
 // Multiplies given row vector by matrix, giving vector result
 // src is assumed to be a direction vector, so translation part of

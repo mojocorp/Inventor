@@ -66,6 +66,7 @@
 class SbLine;
 class SbRotation;
 class SbVec3f;
+class SbVec3d;
 class SbVec4f;
 class SbMatrixd;
 
@@ -202,6 +203,7 @@ public:
 
     /// Multiplies given row vector by matrix, giving vector result
     void multVecMatrix(const SbVec3f &src, SbVec3f &dst) const;
+    void multVecMatrix(const SbVec3d &src, SbVec3d &dst) const;
 
     /// Multiplies given row vector by matrix, giving vector result
     /// src is assumed to be a direction vector, so translation part of
