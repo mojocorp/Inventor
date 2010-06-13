@@ -104,7 +104,7 @@ SoTransformerDragger::SoTransformerDragger()
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts("transformerDragger.iv", geomBuffer, sizeof(geomBuffer));
+        readDefaultParts("transformerDragger.iv", (char*)geomBuffer, sizeof(geomBuffer));
 
     SO_KIT_ADD_FIELD(translation, (0.0f, 0.0f, 0.0f));
     SO_KIT_ADD_FIELD(scaleFactor, (1.0f, 1.0f, 1.0f));

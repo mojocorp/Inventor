@@ -132,7 +132,7 @@ SoSpotLightDragger::SoSpotLightDragger()
 
     // Read the default geometry for this dragger
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts( "spotLightDragger.iv", geomBuffer, sizeof(geomBuffer) );
+        readDefaultParts( "spotLightDragger.iv", (char*)geomBuffer, sizeof(geomBuffer) );
     SO_KIT_ADD_FIELD(rotation, (0.0, 0.0, 0.0, 1.0));
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
     SO_KIT_ADD_FIELD(angle, (1.0));
