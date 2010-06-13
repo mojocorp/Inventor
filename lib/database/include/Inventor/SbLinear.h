@@ -82,10 +82,12 @@
 #include <Inventor/SbVec3f.h>
 #include <Inventor/SbVec3d.h>
 #include <Inventor/SbVec4f.h>
+#include <Inventor/SbVec4d.h>
 #include <Inventor/SbVec4i32.h>
 #include <Inventor/SbMatrix.h>
 #include <Inventor/SbMatrixd.h>
 #include <Inventor/SbRotation.h>
+#include <Inventor/SbRotationd.h>
 
 #include <Inventor/SbLine.h>
 #include <Inventor/SbPlane.h>
