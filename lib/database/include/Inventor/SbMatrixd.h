@@ -64,7 +64,7 @@
 #include <Inventor/SbMatrix.h>
 
 class SbLine;
-class SbRotation;
+class SbRotationd;
 class SbVec3d;
 
 typedef double SbMatd[4][4];
@@ -73,7 +73,7 @@ typedef double SbMatd[4][4];
 /// \ingroup Basics
 /// 4x4 matrix class/datatype used by many Inventor node and action classes.
 /// The matrices are stored in row-major order.
-/// \sa SbVec3d, SbRotation
+/// \sa SbVec3d, SbRotationd
 class INVENTOR_API SbMatrixd {
 public:
 
@@ -101,7 +101,7 @@ public:
     static SbMatrixd identity();
 
     /// Sets matrix to rotate by given rotation
-    void setRotate(const SbRotation &q);
+    void setRotate(const SbRotationd &q);
 
     /// Sets matrix to scale by given uniform factor
     void setScale(double s);
@@ -118,14 +118,14 @@ public:
     /// chooses the primary axes for the scale.
     void setTransform(
         const SbVec3d &translation,
-        const SbRotation &rotation,
+        const SbRotationd &rotation,
         const SbVec3d &scaleFactor,
-        const SbRotation &scaleOrientation,
+        const SbRotationd &scaleOrientation,
         const SbVec3d &center);
     /// Overloaded methods as a kludge because the compiler won't let
     /// us have SbVec3d(0,0,0) as a default value:
-    void setTransform(const SbVec3d &t, const SbRotation &r, const SbVec3d &s);
-    void setTransform(const SbVec3d &t, const SbRotation &r, const SbVec3d &s, const SbRotation &so);
+    void setTransform(const SbVec3d &t, const SbRotationd &r, const SbVec3d &s);
+    void setTransform(const SbVec3d &t, const SbRotationd &r, const SbVec3d &s, const SbRotationd &so);
 
     /// Decomposes the matrix into a translation, rotation, scale,
     /// and scale orientation.  Any projection information is discarded.
@@ -135,14 +135,14 @@ public:
     /// factor() where "t" is translation, "u" is rotation, "s" is scaleFactor,
     /// and "r" is ScaleOrientattion.
     void getTransform(SbVec3d &translation,
-                      SbRotation &rotation,
+                      SbRotationd &rotation,
                       SbVec3d &scaleFactor,
-                      SbRotation &scaleOrientation,
+                      SbRotationd &scaleOrientation,
                       const SbVec3d &center) const;
 
     /// Return translation, rotation, scale, and scale orientation
     /// components of the matrix.
-    void getTransform(SbVec3d &t, SbRotation &r, SbVec3d &s, SbRotation &so) const;
+    void getTransform(SbVec3d &t, SbRotationd &r, SbVec3d &s, SbRotationd &so) const;
 
 
     // The following methods return matrix values and other info:
@@ -244,7 +244,7 @@ public:
     SbMatrixd & operator =(const SbMatrixd &m);
 
     /// Sets value from a rotation
-    SbMatrixd & operator =(const SbRotation &q) {
+    SbMatrixd & operator =(const SbRotationd &q) {
         setRotate(q);
         return *this;
     }

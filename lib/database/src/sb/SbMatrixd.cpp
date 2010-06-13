@@ -55,7 +55,7 @@
  */
 
 #include <Inventor/SbMatrixd.h>
-#include <Inventor/SbRotation.h>
+#include <Inventor/SbRotationd.h>
 #include <Inventor/SbVec3d.h>
 #include <Inventor/SbLine.h>
 
@@ -244,7 +244,7 @@ SbMatrixd::makeIdentity()
 //
 
 void
-SbMatrixd::setRotate(const SbRotation &rotation)
+SbMatrixd::setRotate(const SbRotationd &rotation)
 {
     rotation.getValue(*this);
 }
@@ -1217,9 +1217,9 @@ SbMatrixd::transpose() const
 
 void
 SbMatrixd::setTransform(const SbVec3d &translation,
-		 const SbRotation &rotation,
+                 const SbRotationd &rotation,
 		 const SbVec3d &scaleFactor,
-		 const SbRotation &scaleOrientation,
+                 const SbRotationd &scaleOrientation,
 		 const SbVec3d &center)
 {
 #define TRANSLATE(vec)		m.setTranslate(vec), multLeft(m)
@@ -1234,18 +1234,18 @@ SbMatrixd::setTransform(const SbVec3d &translation,
     if (center != SbVec3d(0,0,0))
 	TRANSLATE(center);
 
-    if (rotation != SbRotation(0,0,0,1))
+    if (rotation != SbRotationd(0,0,0,1))
 	ROTATE(rotation);
 
     if (scaleFactor != SbVec3d(1,1,1)) {
-	SbRotation so = scaleOrientation;
-	if (so != SbRotation(0,0,0,1))
+        SbRotationd so = scaleOrientation;
+        if (so != SbRotationd(0,0,0,1))
 	    ROTATE(so);
 	
 	m.setScale(scaleFactor);
 	multLeft(m);
 
-	if (so != SbRotation(0,0,0,1)) {
+        if (so != SbRotationd(0,0,0,1)) {
 	    so.invert();
 	    ROTATE(so);
 	}
@@ -1259,13 +1259,13 @@ SbMatrixd::setTransform(const SbVec3d &translation,
 }
 
 void
-SbMatrixd::setTransform(const SbVec3d &t, const SbRotation &r, const SbVec3d &s)
+SbMatrixd::setTransform(const SbVec3d &t, const SbRotationd &r, const SbVec3d &s)
 {
-    setTransform(t, r, s, SbRotation(0,0,0,1), SbVec3d(0,0,0));
+    setTransform(t, r, s, SbRotationd(0,0,0,1), SbVec3d(0,0,0));
 }
 
 void
-SbMatrixd::setTransform(const SbVec3d &t, const SbRotation &r, const SbVec3d &s, const SbRotation &so)
+SbMatrixd::setTransform(const SbVec3d &t, const SbRotationd &r, const SbVec3d &s, const SbRotationd &so)
 {
     setTransform(t, r, s, so, SbVec3d(0,0,0));
 }
@@ -1276,9 +1276,9 @@ SbMatrixd::setTransform(const SbVec3d &t, const SbRotation &r, const SbVec3d &s,
 
 void
 SbMatrixd::getTransform(SbVec3d &translation,
-		    SbRotation &rotation,
+                    SbRotationd &rotation,
 		    SbVec3d &scaleFactor,
-		    SbRotation &scaleOrientation,
+                    SbRotationd &scaleOrientation,
 		    const SbVec3d &center) const
 {
     SbMatrixd so, rot, proj;
@@ -1304,8 +1304,8 @@ SbMatrixd::getTransform(SbVec3d &translation,
 }
 
 void
-SbMatrixd::getTransform(SbVec3d &t, SbRotation &r,
-                      SbVec3d &s, SbRotation &so) const
+SbMatrixd::getTransform(SbVec3d &t, SbRotationd &r,
+                      SbVec3d &s, SbRotationd &so) const
 {
     getTransform(t, r, s, so, SbVec3d(0,0,0));
 }
