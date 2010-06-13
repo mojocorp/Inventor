@@ -100,7 +100,7 @@ SoScale2Dragger::SoScale2Dragger()
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts("scale2Dragger.iv", geomBuffer, sizeof(geomBuffer) );
+        readDefaultParts("scale2Dragger.iv", (char*)geomBuffer, sizeof(geomBuffer) );
 
     SO_KIT_ADD_FIELD(scaleFactor, (1.0, 1.0, 1.0));
 

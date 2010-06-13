@@ -143,7 +143,7 @@ SoTabPlaneDragger::SoTabPlaneDragger()
 				 scaleTabs,\x0, FALSE );
 
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts("tabPlaneDragger.iv", geomBuffer, sizeof(geomBuffer));
+        readDefaultParts("tabPlaneDragger.iv", (char*)geomBuffer, sizeof(geomBuffer));
 
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
     SO_KIT_ADD_FIELD(scaleFactor, (1.0, 1.0, 1.0));

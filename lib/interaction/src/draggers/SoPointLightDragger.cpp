@@ -90,7 +90,7 @@ SoPointLightDragger::SoPointLightDragger()
     // Read the default geometry 
     if (SO_KIT_IS_FIRST_INSTANCE())
 	readDefaultParts( "pointLightDragger.iv",
-			   geomBuffer, sizeof(geomBuffer) );
+                           (char*)geomBuffer, sizeof(geomBuffer) );
 
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
 

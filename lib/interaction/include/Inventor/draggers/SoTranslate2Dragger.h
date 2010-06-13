@@ -246,7 +246,7 @@ class INVENTOR_API SoTranslate2Dragger : public SoDragger
     int     translateDir;   // Used for 1-D translation,
     SbBool  shftDown;  // used to keep track of shift modifier key
 
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 #endif  /* _SO_TRANSLATE_2_DRAGGER_ */

@@ -294,7 +294,7 @@ class INVENTOR_API SoTransformBoxDragger : public SoDragger
     virtual ~SoTransformBoxDragger();
 
   private:
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 #endif  /* _SO_TRANSFORM_BOX_DRAGGER_ */

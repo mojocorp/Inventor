@@ -139,7 +139,7 @@ SoTabBoxDragger::SoTabBoxDragger()
 
     // Read the default geometry for this dragger
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts( "tabBoxDragger.iv", geomBuffer, sizeof(geomBuffer) );
+        readDefaultParts( "tabBoxDragger.iv", (char*)geomBuffer, sizeof(geomBuffer) );
 
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
     SO_KIT_ADD_FIELD(scaleFactor, (1.0, 1.0, 1.0));

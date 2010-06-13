@@ -253,7 +253,7 @@ SoHandleBoxDragger::SoHandleBoxDragger()
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts("handleBoxDragger.iv", geomBuffer, sizeof(geomBuffer));
+        readDefaultParts("handleBoxDragger.iv", (char*)geomBuffer, sizeof(geomBuffer));
 
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
     SO_KIT_ADD_FIELD(scaleFactor, (1.0, 1.0, 1.0));
