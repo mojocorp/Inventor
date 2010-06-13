@@ -185,7 +185,7 @@ SoDragPointDragger::SoDragPointDragger()
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts("dragPointDragger.iv",geomBuffer,sizeof(geomBuffer) );
+        readDefaultParts("dragPointDragger.iv",(char*)geomBuffer,sizeof(geomBuffer) );
 
     // The field that reflects where the dragger has been translated to
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
