@@ -71,4 +71,7 @@
 #include <Inventor/events/SoLocation2Event.h>
 #include <Inventor/events/SoMotion3Event.h>
 
+#include <Inventor/events/SoControllerButtonEvent.h>
+#include <Inventor/events/SoTrackerEvent.h>
+
 #endif /* _SO_EVENTS_ */

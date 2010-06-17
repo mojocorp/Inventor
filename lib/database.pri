@@ -240,6 +240,9 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/events/SoMouseButtonEvent.h \
            database/include/Inventor/events/SoSpaceballButtonEvent.h \
            database/include/Inventor/events/SoSubEvent.h \
+           database/include/Inventor/events/SbTrackerInfo.h \
+           database/include/Inventor/events/SoControllerButtonEvent.h \
+           database/include/Inventor/events/SoTrackerEvent.h \
            database/include/Inventor/fields/SoField.h \
            database/include/Inventor/fields/SoSField.h \
            database/include/Inventor/fields/SoMField.h \
@@ -780,6 +783,9 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/events/SoMotion3Event.cpp \
            database/src/so/events/SoMouseButtonEvent.cpp \
            database/src/so/events/SoSpaceballButtonEvent.cpp \
+           database/src/so/events/SoControllerButtonEvent.cpp \
+           database/src/so/events/SbTrackerInfo.cpp \
+           database/src/so/events/SoTrackerEvent.cpp \
            database/src/so/fields/SoField.cpp \
            database/src/so/fields/SoSField.cpp \
            database/src/so/fields/SoMField.cpp \

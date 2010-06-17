@@ -75,4 +75,7 @@ SoEvent::initClasses()
 
     SoLocation2Event::initClass();
     SoMotion3Event::initClass();
+
+    SoControllerButtonEvent::initClass();
+    SoTrackerEvent::initClass();
 }
