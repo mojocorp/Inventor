@@ -136,6 +136,12 @@ class INVENTOR_API SoIndexedTriangleStripSet : public SoIndexedShape {
     /// Creates an indexed triangle strip set node with default settings.
     SoIndexedTriangleStripSet();
 
+    /// Returns the number of strips.
+    int getNumStrips();
+
+    /// Returns the total number of triangles.
+    int getNumTriangles();
+
   SoEXTENDER public:
     // Implements actions
     virtual void	GLRender(SoGLRenderAction *action);
