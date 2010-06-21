@@ -50,7 +50,7 @@
 #include "softsurfeval.h"
 #include "nurbsconsts.h"
 
-#ifndef _WINDOWS
+#ifndef SB_OS_WIN
 inline REAL abs( REAL x ) { return (x < 0.0) ? -x : x; }
 #endif
 
