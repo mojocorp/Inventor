@@ -658,12 +658,12 @@ SoBaseKit::setAnyPart( const SbName &partName, SoNode *from, SbBool anyPart )
 // Use: public
 
 SbBool
-SoBaseKit::set(char *nameValuePairListString) 
+SoBaseKit::set(const SbString & nameValuePairListString)
 		            // the string to use in setting the values
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char *string = strdup( nameValuePairListString );
+    char *string = strdup( nameValuePairListString.getString() );
     char *stringP = string;
     char *c;
     SbBool	success = TRUE;
