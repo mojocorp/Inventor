@@ -473,7 +473,7 @@ class INVENTOR_API SoBaseKit : public SoNode {
     ///             transform { translation 4 3 .6 \}");
     /// mySepKit->set("childList[0].material { ambientColor .5 .5 .5 \}");
     /// \endcode
-    SbBool set(char *nameValuePairListString);
+    SbBool set(const SbString & nameValuePairListString);
     SbBool set(char *partNameString, char *parameterString);
 
     /// Sets and queries if nodekit children are searched during \c SoSearchAction
