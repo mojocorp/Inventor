@@ -140,6 +140,8 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoComplexityTypeElement.h \
            database/include/Inventor/elements/SoCoordinateElement.h \
            database/include/Inventor/elements/SoCreaseAngleElement.h \
+           database/include/Inventor/elements/SoDepthBufferElement.h \
+           database/include/Inventor/elements/SoGLDepthBufferElement.h \
            database/include/Inventor/elements/SoDrawStyleElement.h \
            database/include/Inventor/elements/SoElement.h \
            database/include/Inventor/elements/SoElements.h \
@@ -337,6 +339,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/nodes/SoCoordinate4.h \
            database/include/Inventor/nodes/SoCube.h \
            database/include/Inventor/nodes/SoCylinder.h \
+           database/include/Inventor/nodes/SoDepthBuffer.h \
            database/include/Inventor/nodes/SoDirectionalLight.h \
            database/include/Inventor/nodes/SoDrawStyle.h \
            database/include/Inventor/nodes/SoEnvironment.h \
@@ -681,6 +684,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/elements/SoComplexityTypeElement.cpp \
            database/src/so/elements/SoCoordinateElement.cpp \
            database/src/so/elements/SoCreaseAngleElement.cpp \
+           database/src/so/elements/SoDepthBufferElement.cpp \
            database/src/so/elements/SoDrawStyleElement.cpp \
            database/src/so/elements/SoElement.cpp \
            database/src/so/elements/SoElementInit.cpp \
@@ -689,6 +693,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/elements/SoFontNameElement.cpp \
            database/src/so/elements/SoFontSizeElement.cpp \
            database/src/so/elements/SoGLCacheContextElement.cpp \
+           database/src/so/elements/SoGLDepthBufferElement.cpp \
            database/src/so/elements/SoGLDisplayList.cpp \
            database/src/so/elements/SoGLClipPlaneElement.cpp \
            database/src/so/elements/SoGLCoordinateElement.cpp \
@@ -851,6 +856,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/nodes/SoCoordinate4.cpp \
            database/src/so/nodes/SoCube.cpp \
            database/src/so/nodes/SoCylinder.cpp \
+           database/src/so/nodes/SoDepthBuffer.cpp \
            database/src/so/nodes/SoDirectionalLight.cpp \
            database/src/so/nodes/SoDrawStyle.cpp \
            database/src/so/nodes/SoEnvironment.cpp \
