@@ -94,6 +94,7 @@ SoNode::initClasses()
     SoCoordinate4::initClass();
     SoCube::initClass();
     SoCylinder::initClass();
+    SoDepthBuffer::initClass();
     SoDirectionalLight::initClass();
     SoDrawStyle::initClass();
     SoEnvironment::initClass();
@@ -131,6 +132,7 @@ SoNode::initClasses()
     SoPickStyle::initClass();
     SoPointLight::initClass();
     SoPointSet::initClass();
+    SoPolygonOffset::initClass();
     SoProfileCoordinate2::initClass();
     SoProfileCoordinate3::initClass();
     SoQuadMesh::initClass();

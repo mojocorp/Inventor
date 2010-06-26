@@ -114,6 +114,7 @@ SoElement::initElements()
     SoViewVolumeElement::initClass();
     SoViewingMatrixElement::initClass();
     SoViewportRegionElement::initClass();
+    SoDepthBufferElement::initClass();
 
     // GL specific elements must be initialized after their more
     // generic counterparts
@@ -140,6 +141,7 @@ SoElement::initElements()
     SoGLUpdateAreaElement::initClass();
     SoGLViewingMatrixElement::initClass();
     SoGLViewportRegionElement::initClass();
+    SoGLDepthBufferElement::initClass();
 
     // Other derived classes 
     SoBBoxModelMatrixElement::initClass();

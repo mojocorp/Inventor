@@ -76,6 +76,7 @@
 #include <Inventor/nodes/SoCoordinate4.h>
 #include <Inventor/nodes/SoCube.h>
 #include <Inventor/nodes/SoCylinder.h>
+#include <Inventor/nodes/SoDepthBuffer.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoDrawStyle.h>
 #include <Inventor/nodes/SoEnvironment.h>
@@ -118,6 +119,7 @@
 #include <Inventor/nodes/SoPickStyle.h>
 #include <Inventor/nodes/SoPointLight.h>
 #include <Inventor/nodes/SoPointSet.h>
+#include <Inventor/nodes/SoPolygonOffset.h>
 #include <Inventor/nodes/SoProfile.h>
 #include <Inventor/nodes/SoProfileCoordinate2.h>
 #include <Inventor/nodes/SoProfileCoordinate3.h>
