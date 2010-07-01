@@ -145,13 +145,8 @@ SoXtResource::SoXtResource(Widget widget)
     classList = new XrmQuark[listSize];
     for (q = 0, s = len - 1;
     	 s >= 0; q++, s--) {
-#if (_MIPS_SZPTR == 64 || __ia64)
-	 nameList[q]  = (XrmQuark) ((long) nameplist[s]);
-	 classList[q] = (XrmQuark) ((long) classplist[s]);
-#else
-	 nameList[q]  = (XrmQuark) nameplist[s];
-	 classList[q] = (XrmQuark) classplist[s];
-#endif
+         nameList[q]  = (XrmQuark) ((intptr_t) nameplist[s]);
+         classList[q] = (XrmQuark) ((intptr_t) classplist[s]);
     }
 
     // make the last entry the NULL sentinel
