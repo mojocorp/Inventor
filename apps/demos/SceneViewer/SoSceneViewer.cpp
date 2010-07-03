@@ -131,7 +131,7 @@
 #include "SoSceneViewer.h"
 #include "SoSceneMenu.h"
 #include "SvManipList.h"
-#include "../../samples/widgets/MyColorEditor.h"
+#include <_SoXtColorEditor.h>
 #include "../../samples/widgets/MyFileRead.h"
 #include "../../samples/widgets/MyDropSite.h"
 #include "../../samples/common/InventorLogo.h"
@@ -189,7 +189,7 @@ class SvLightData {
     SoTranslation   *translationInverse;
     SoType	    type;
     char	    *name;
-    MyColorEditor *colorEditor;
+    _SoXtColorEditor *colorEditor;
     SbBool     	    isManip();
     SbBool     	    shouldBeManip; // Used to remember what it was when
 				   // they all get turned off for writing,
@@ -1157,7 +1157,7 @@ SoSceneViewer::createColorEditor()
 ////////////////////////////////////////////////////////////////////////
 {
     if (colorEditor == NULL) {
-	colorEditor = new MyColorEditor;
+        colorEditor = new _SoXtColorEditor;
 	colorEditor->setWYSIWYG(TRUE);
 	colorEditor->setTitle("Diffuse Color");
     }
@@ -1742,7 +1742,7 @@ SoSceneViewer::editAmbientColor()
 ////////////////////////////////////////////////////////////////////////
 { 
     if ( ambientColorEditor == NULL ) {
-    	ambientColorEditor = new MyColorEditor;
+        ambientColorEditor = new _SoXtColorEditor;
 	ambientColorEditor->setTitle( "Ambient Lighting" );
 	ambientColorEditor->addColorChangedCallback(
 	    SoSceneViewer::ambientColorCallback, this );
@@ -1792,7 +1792,7 @@ SoSceneViewer::editBackgroundColor()
 ////////////////////////////////////////////////////////////////////////
 { 
     if ( backgroundColorEditor == NULL ) {
-    	backgroundColorEditor = new MyColorEditor;
+        backgroundColorEditor = new _SoXtColorEditor;
 	backgroundColorEditor->setTitle( "Background Color" );
 	backgroundColorEditor->addColorChangedCallback(
 	    SoSceneViewer::backgroundColorCallback, this );
@@ -3519,7 +3519,7 @@ SoSceneViewer::editLightColorCB(Widget, SvLightData *data, void *)
 {
     // create the color editor with the right title
     if (data->colorEditor == NULL) {
-	data->colorEditor = new MyColorEditor;
+        data->colorEditor = new _SoXtColorEditor;
 	char str[50];
 	strcpy(str, data->name);
 	strcat(str, " Light Color");
@@ -4737,7 +4737,7 @@ SoSceneViewer::showAboutDialog()
     if (access(IVPREFIX "/demos/Inventor/SceneViewer.about", R_OK) != 0)
     {
 	system("xmessage 'Sorry, could not find "
-	       IVPREFIX "/demos/Inventor/SceneViewer.about' > /dev/null");
+               IVPREFIX "/demos/Inventor/SceneViewer.about' > /dev/null");
 	return;
     }
 
