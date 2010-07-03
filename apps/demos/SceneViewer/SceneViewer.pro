@@ -3,9 +3,22 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
+TARGET = SceneViewerXt
+CONFIG  -= app_bundle
+QT += opengl
+DESTDIR    = ../../../build
+DEFINES += "IVPREFIX="
 DEPENDPATH += .
-INCLUDEPATH += .
+INCLUDEPATH += . \
+               ../../../lib/database/include/ \
+               ../../../lib/interaction/include/ \
+               ../../../lib/nodekits/include/ \
+               ../../../libSoXt/include
+
+LIBS += -L../../../build -lInventor -lSoxt
+LIBS += -L/usr/X11/lib -lx11 -lxt -lGL
+LIBS += -L/usr/OpenMotif/lib -lXm
+INCLUDEPATH += /usr/X11/include/ /usr/OpenMotif/include/
 
 # Input
 HEADERS += SoSceneMenu.h \
