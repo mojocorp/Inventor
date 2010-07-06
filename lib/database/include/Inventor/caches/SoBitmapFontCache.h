@@ -56,12 +56,16 @@
 #ifndef  _SO_BITMAP_FONT_CACHE_
 #define  _SO_BITMAP_FONT_CACHE_
 
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/caches/SoCache.h>
 #include <Inventor/SbBox3f.h>
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/SbStdint.h>
 
-#include <flclient.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+#include <vector>
 
 // An internal class that makes life easier:
 
@@ -76,9 +80,6 @@ public:
     // Return a font (either a new one or an old one) that is valid
     // for the given state.
     static SoBitmapFontCache * getFont(SoState *state, SbBool forRender);
-
-    // Checks to see if this font is valid
-    SbBool isValid(SoState *state) const;
 
     // Use this when rendering to decide if this cache is valid (it
     // checks the GL cache context in addition to other elements)
@@ -103,19 +104,30 @@ public:
     // Draws the given string
     void drawString(const SbString &string);
 
-    // Draws the given character (using GL)
-    void drawCharacter(char c);
 
 protected:
     // Free up display lists before being deleted
     virtual void destroy(SoState *state);
 
 private:
+    typedef struct FLbitmap {
+        GLsizei width;
+        GLsizei height;
+        GLfloat xorig;
+        GLfloat yorig;
+        GLfloat xmove;
+        GLfloat ymove;
+        GLubyte *bitmap;
+    } FLbitmap;
+
     // Constructor.
     SoBitmapFontCache(SoState *state);
 
     // Destructor
     virtual ~SoBitmapFontCache();
+
+    // Draws the given character (using GL)
+    void drawCharacter(char c);
 
     // Returns TRUE if this font cache has a display list for the
     // given character.  It will try to build a display list, if it
@@ -135,9 +147,9 @@ private:
     int  numChars;  // Number of characters in this font
 
     SoGLDisplayList *list;
-    SbBool *listFlags;// Flag for each character-- have we built
+    std::vector<SbBool> listFlags;// Flag for each character-- have we built
     // GL display list yet?
-    FLbitmap **bitmaps; // Cached bitmaps for each character.  NULL
+    std::vector<FLbitmap*> bitmaps; // Cached bitmaps for each character.  NULL
     // if bitmap hasn't been fetched yet.
 
     // This flag will be true if there is another cache open (if
@@ -146,7 +158,7 @@ private:
     SbBool otherOpen;
 
     // And some font library stuff:
-    static FLcontext flContext;
-    FLfontNumber fontId;
+    static FT_Library library;
+    FT_Face fontId;
 };
 #endif /* _SO_BITMAP_FONT_CACHE_ */
