@@ -97,6 +97,29 @@ public:
 
     void setValue (const SbMatrixd &m);
 
+    void    setValue(const float *pMat)
+    {
+        matrix[0][0] = *pMat++ ;
+        matrix[0][1] = *pMat++ ;
+        matrix[0][2] = *pMat++ ;
+        matrix[0][3] = *pMat++ ;
+
+        matrix[1][0] = *pMat++ ;
+        matrix[1][1] = *pMat++ ;
+        matrix[1][2] = *pMat++ ;
+        matrix[1][3] = *pMat++ ;
+
+        matrix[2][0] = *pMat++ ;
+        matrix[2][1] = *pMat++ ;
+        matrix[2][2] = *pMat++ ;
+        matrix[2][3] = *pMat++ ;
+
+        matrix[3][0] = *pMat++ ;
+        matrix[3][1] = *pMat++ ;
+        matrix[3][2] = *pMat++ ;
+        matrix[3][3] = *pMat++ ;
+    }
+
     /// Sets matrix to be identity
     void makeIdentity();
 

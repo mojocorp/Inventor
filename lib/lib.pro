@@ -38,7 +38,7 @@ INCLUDEPATH+= database/include \
               interaction/include \
               nodekits/include
 
-DEFINES += GLEW_STATIC GLEW_MX
+DEFINES += GLEW_MX GLEW_BUILD
               
 include(database.pri)
 include(interaction.pri)

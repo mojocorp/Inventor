@@ -143,7 +143,7 @@ SoTabBoxDragger::SoTabBoxDragger()
 
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
     SO_KIT_ADD_FIELD(scaleFactor, (1.0, 1.0, 1.0));
-
+    SO_KIT_ADD_FIELD(resizeHandles, (TRUE));
     SO_KIT_INIT_INSTANCE();
 
     // Create the simple draggers that comprise this dragger.

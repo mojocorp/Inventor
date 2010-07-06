@@ -82,13 +82,19 @@ public:
 
     /// Various levels of transparency rendering quality
     enum TransparencyType {
-        SCREEN_DOOR         = SoTransparencyTypeElement::SCREEN_DOOR,    ///< Use stipple patterns for screen-door transparency
-        ADD                 = SoTransparencyTypeElement::ADD,                ///< Use additive alpha blending
-        DELAYED_ADD         = SoTransparencyTypeElement::DELAYED_ADD,        ///< Uses additive blending, rendering all transparent objects after opaque ones
-        SORTED_OBJECT_ADD   = SoTransparencyTypeElement::SORTED_OBJECT_ADD,  ///< Same as DELAYED_ADD, but sorts transparent objects by distances of bounding boxes from camera
-        BLEND               = SoTransparencyTypeElement::BLEND,              ///< Uses multiplicative alpha blending
-        DELAYED_BLEND       = SoTransparencyTypeElement::DELAYED_BLEND,      ///< Uses multiplicative alpha blending, rendering all transparent objects after opaque ones
-        SORTED_OBJECT_BLEND = SoTransparencyTypeElement::SORTED_OBJECT_BLEND ///< Same as DELAYED_BLEND, but sorts transparent objects by distances of bounding boxes from camera
+        SCREEN_DOOR                     = SoTransparencyTypeElement::SCREEN_DOOR,                    ///< Use stipple patterns for screen-door transparency
+        ADD                             = SoTransparencyTypeElement::ADD,                            ///< Use additive alpha blending
+        DELAYED_ADD                     = SoTransparencyTypeElement::DELAYED_ADD,                    ///< Uses additive blending, rendering all transparent objects after opaque ones
+        BLEND                           = SoTransparencyTypeElement::BLEND,                          ///< Uses multiplicative alpha blending
+        DELAYED_BLEND                   = SoTransparencyTypeElement::DELAYED_BLEND,                  ///< Uses multiplicative alpha blending, rendering all transparent objects after opaque ones
+        SORTED_OBJECT_ADD               = SoTransparencyTypeElement::SORTED_OBJECT_ADD,              ///< Same as DELAYED_ADD, but sorts transparent objects by distances of bounding boxes from camera
+        SORTED_OBJECT_BLEND             = SoTransparencyTypeElement::SORTED_OBJECT_BLEND,            ///< Same as DELAYED_BLEND, but sorts transparent objects by distances of bounding boxes from camera
+        SORTED_LAYERS_BLEND             = SoTransparencyTypeElement::SORTED_LAYERS_BLEND,            ///TODO
+        DELAYED_SORTED_LAYERS_BLEND     = SoTransparencyTypeElement::DELAYED_SORTED_LAYERS_BLEND,    ///TODO
+        SORTED_TRIANGLES_ADD            = SoTransparencyTypeElement::SORTED_TRIANGLES_ADD,           ///TODO
+        SORTED_TRIANGLES_BLEND          = SoTransparencyTypeElement::SORTED_TRIANGLES_BLEND,         ///TODO
+        SORTED_OBJECT_TRIANGLES_ADD     = SoTransparencyTypeElement::SORTED_OBJECT_TRIANGLES_ADD,    ///TODO
+        SORTED_OBJECT_TRIANGLES_BLEND   = SoTransparencyTypeElement::SORTED_OBJECT_TRIANGLES_BLEND   ///TODO
     };
 
     /// Possible return codes from a render abort callback

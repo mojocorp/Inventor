@@ -90,7 +90,7 @@ SoGLRenderAction::SoGLRenderAction(const SbViewportRegion &viewportRegion)
  
     abortCB		= NULL;
 
-    transpType          	= (TransparencyType)SoTransparencyTypeElement::getDefault();
+    transpType          = (TransparencyType)SoTransparencyTypeElement::getDefault();
     doSmooth		= FALSE;
     numPasses		= 1;
     passUpdate		= FALSE;
@@ -475,21 +475,34 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
 	  case ADD:
 	  case DELAYED_ADD:
 	  case SORTED_OBJECT_ADD:
+          case SORTED_TRIANGLES_ADD:
+          case SORTED_OBJECT_TRIANGLES_ADD:
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	    break;
 
 	  case BLEND:
 	  case DELAYED_BLEND:
 	  case SORTED_OBJECT_BLEND:
+          case SORTED_TRIANGLES_BLEND:
+          case SORTED_LAYERS_BLEND:
+          case DELAYED_SORTED_LAYERS_BLEND:
+          case SORTED_OBJECT_TRIANGLES_BLEND:
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	    break;
 	}
 
 	sortObjs = (transpType == SORTED_OBJECT_ADD ||
-		    transpType == SORTED_OBJECT_BLEND);
+                    transpType == SORTED_OBJECT_BLEND ||
+                    transpType == SORTED_TRIANGLES_ADD ||
+                    transpType == SORTED_OBJECT_TRIANGLES_ADD ||
+                    transpType == SORTED_TRIANGLES_BLEND ||
+                    transpType == SORTED_LAYERS_BLEND ||
+                    transpType == DELAYED_SORTED_LAYERS_BLEND ||
+                    transpType == SORTED_OBJECT_TRIANGLES_BLEND);
+
 	delayObjs = (sortObjs ||
 		     transpType == DELAYED_ADD ||
-		     transpType == DELAYED_BLEND);
+                     transpType == DELAYED_BLEND);
 
 	if (doSmooth) {
 	    glEnable(GL_POINT_SMOOTH);

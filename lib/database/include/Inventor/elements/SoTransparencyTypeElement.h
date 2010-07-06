@@ -19,13 +19,19 @@ SoEXTENDER class INVENTOR_API SoTransparencyTypeElement : public SoInt32Element 
   public:
     /// Various levels of transparency rendering quality
     enum TransparencyType {
-        SCREEN_DOOR,		///< Use stipple patterns for screen-door transparency
-        ADD,			///< Use additive alpha blending
-        DELAYED_ADD,		///< Uses additive blending, rendering all transparent objects after opaque ones
-        SORTED_OBJECT_ADD,	///< Same as DELAYED_ADD, but sorts transparent objects by distances of bounding boxes from camera
-        BLEND,			///< Uses multiplicative alpha blending
-        DELAYED_BLEND,		///< Uses multiplicative alpha blending, rendering all transparent objects after opaque ones
-        SORTED_OBJECT_BLEND	///< Same as DELAYED_BLEND, but sorts transparent objects by distances of bounding boxes from camera
+        SCREEN_DOOR,                    ///< Use stipple patterns for screen-door transparency
+        ADD,                            ///< Use additive alpha blending
+        DELAYED_ADD,                    ///< Uses additive blending, rendering all transparent objects after opaque ones
+        BLEND,                          ///< Uses multiplicative alpha blending
+        DELAYED_BLEND,                  ///< Uses multiplicative alpha blending, rendering all transparent objects after opaque ones
+        SORTED_OBJECT_ADD,              ///< Same as DELAYED_ADD, but sorts transparent objects by distances of bounding boxes from camera
+        SORTED_OBJECT_BLEND,            ///< Same as DELAYED_BLEND, but sorts transparent objects by distances of bounding boxes from camera
+        SORTED_LAYERS_BLEND,            ///TODO
+        DELAYED_SORTED_LAYERS_BLEND,    ///TODO
+        SORTED_TRIANGLES_ADD,           ///TODO
+        SORTED_TRIANGLES_BLEND,         ///TODO
+        SORTED_OBJECT_TRIANGLES_ADD,    ///TODO
+        SORTED_OBJECT_TRIANGLES_BLEND   ///TODO
     };
 
     /// Initializes element

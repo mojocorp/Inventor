@@ -212,6 +212,7 @@ public:
         SCROLL_LOCK = 0xff14,
         ESCAPE = 0xff1b,
         DELETE = 0xffff,
+        KEY_DELETE = DELETE,
         PRINT = 0xff61,
         INSERT = 0xff63,
         NUM_LOCK = 0xff7f,

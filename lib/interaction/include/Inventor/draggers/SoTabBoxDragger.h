@@ -222,6 +222,7 @@ class INVENTOR_API SoTabBoxDragger : public SoDragger
 
     SoSFVec3f    translation; ///< Position of the dragger.
     SoSFVec3f    scaleFactor; ///< Scale of the dragger.
+    SoSFBool     resizeHandles; ///< TGS oiv compat
 
     /// Cause the scale tab sizes to be re-adjusted on all 6 <tt>SoTabPlaneDragger</tt>s
     /// so that they remain a near constant screen space size.

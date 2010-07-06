@@ -151,6 +151,36 @@ class INVENTOR_API SoCamera : public SoNode {
     /// into a given viewport region, accounting for cropping
     SbViewportRegion	getViewportBounds(const SbViewportRegion &region) const;
 
+    enum StereoMode {
+        MONOSCOPIC, ///< No stereo
+        LEFT_VIEW,  ///< Left view
+        RIGHT_VIEW  ///< Right view
+    };
+ 
+    /// Sets the stereo mode.
+    void setStereoMode(StereoMode mode)
+            { stereoMode = mode; }
+
+    /// Returns the stereo mode.
+    StereoMode getStereoMode() const
+            { return stereoMode; }
+
+    /// Sets the stereo adjustment. This is the distance between the left and right "eye" when doing stereo rendering.
+    void  setStereoAdjustment(float adjustment)
+            { stereoAdjustment = adjustment; }
+ 
+    /// Returns the stereo adjustment.
+    float getStereoAdjustment() const
+            { return stereoAdjustment; }
+ 
+    /// Sets the stereo balance adjustment.
+    void  setBalanceAdjustment(float adjustment, SbBool nearFrac = false)
+            { balanceAdjustment = adjustment; }
+
+    /// Returns the stereo balance adjustment.
+    float getBalanceAdjustment() const
+            { return balanceAdjustment; }
+
   SoEXTENDER public:
     virtual void	doAction(SoAction *action);
     virtual void	callback(SoCallbackAction *action);
@@ -202,6 +232,10 @@ class INVENTOR_API SoCamera : public SoNode {
     // Returns a 2D sample point within a pixel
     static void		getJitterSample(int numPasses, int curPass,
 					SbVec2f &samplePoint);
+
+    StereoMode stereoMode;
+    float stereoAdjustment;
+    float balanceAdjustment;
 };
 
 //////////////////////////////////////////////////////////////////////////////

@@ -322,6 +322,9 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/misc/SoState.h \
            database/include/Inventor/misc/SoTempPath.h \
            database/include/Inventor/misc/SoTranscribe.h \
+           database/include/Inventor/misc/GL/glew.h \		   
+           database/include/Inventor/misc/GL/wglew.h \
+           database/include/Inventor/misc/GL/glxew.h \
            database/include/Inventor/nodes/SoAnnotation.h \
            database/include/Inventor/nodes/SoArray.h \
            database/include/Inventor/nodes/SoAsciiText.h \
@@ -613,7 +616,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/lists/SoPathList.cpp \
            database/src/so/lists/SoPickedPointList.cpp \
            database/src/so/lists/SoTypeList.cpp \
-           database/src/so/misc/glew.c \
+           database/src/so/misc/glew.cpp \
            database/src/so/SoBase.cpp \
            database/src/so/SoByteStream.cpp \
            database/src/so/SoCBList.cpp \

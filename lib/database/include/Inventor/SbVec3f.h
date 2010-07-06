@@ -97,6 +97,14 @@ public:
         vec[2] = z;
     }
 
+    template<typename T>
+    explicit SbVec3f(const T& v)
+    {
+        vec[0] = float(v[0]);
+        vec[1] = float(v[1]);
+        vec[2] = float(v[2]);
+    }
+
     /// Constructor given 3 planes
     SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2);
 

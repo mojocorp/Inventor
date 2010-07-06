@@ -110,6 +110,10 @@ SoCamera::SoCamera()
     SO_NODE_SET_SF_ENUM_TYPE(viewportMapping, ViewportMapping);
 
     isBuiltIn = TRUE;
+
+    stereoMode = MONOSCOPIC;
+    stereoAdjustment = 1.0f;
+    balanceAdjustment = 1.0f;
 }
 
 ////////////////////////////////////////////////////////////////////////
