@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <Inventor/nodes/SoFont.h>
 #include <Inventor/caches/SoBitmapFontCache.h>
 
 #include <Inventor/elements/SoFontNameElement.h>
@@ -62,12 +63,14 @@
 
 #include <Inventor/errors/SoDebugError.h>
 
+#include "utopia-regular.cpp"
+
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////    SoBitmapFontCache  //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // Static variables for SoBitmapFontCache
 SbPList *SoBitmapFontCache::fonts = NULL;
-FLcontext SoBitmapFontCache::flContext;
+FT_Library SoBitmapFontCache::library;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -84,35 +87,22 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
     if (fonts == NULL) {
         // One-time font library initialization
         fonts = new SbPList;
-        flContext = flCreateContext(NULL, FL_FONTNAME, NULL,
-                                  1.0, 1.0);
-        if (flContext == NULL) {
+
+        if (FT_Init_FreeType( &library )) {
 #ifdef DEBUG
-            SoDebugError::post("SoText2::getFont",
-                               "flCreateContext returned NULL");
+            SoDebugError::post("SoBitmapFontCache::getFont",
+                               "FT_Init_FreeType failed");
 #endif
             return NULL;
         }
-        if (flGetCurrentContext() != flContext)
-            flMakeCurrentContext(flContext);
-        flSetHint(FL_HINT_MINOUTLINESIZE, 24.0);
-    }
-    else if (flContext == NULL) return NULL;
-    else {
-        if (flGetCurrentContext() != flContext)
-            flMakeCurrentContext(flContext);
     }
 
     SoBitmapFontCache *result = NULL;
     for (int i = 0; i < fonts->getLength() && result == NULL; i++) {
         SoBitmapFontCache *fc = (SoBitmapFontCache *)(*fonts)[i];
-        //ML if (!fc->fontNumList) continue;
         if (forRender ? fc->isRenderValid(state) : fc->isValid(state)) {
             result = fc;
             result->ref();
-            if (flGetCurrentFont() != result->fontId) {
-                flMakeCurrentFont(result->fontId);
-            }
         }
     }
     if (result == NULL) {
@@ -123,32 +113,6 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
             delete result;
             return NULL;
         }
-    }
-    return result;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sees if this font is valid.  If it is valid, it also makes it
-//    current.
-//
-// Use: public
-
-SbBool
-SoBitmapFontCache::isValid(SoState *state) const
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SbBool result = SoCache::isValid(state);
-
-    if (result) {
-        if (flGetCurrentContext() != flContext) {
-            flMakeCurrentContext(flContext);
-            flMakeCurrentFont(fontId);
-        }
-        else if (flGetCurrentFont() != fontId)
-            flMakeCurrentFont(fontId);
     }
     return result;
 }
@@ -172,49 +136,47 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
 
     // Grab all the stuff we'll need to determine our validity from
     // the state.
-    SbName fontName = SoFontNameElement::get(state);
-    addElement(state->getConstElement(
-        SoFontNameElement::getClassStackIndex()));
-    if (fontName == SoFontNameElement::getDefault()) {
-        fontName = SbName("Utopia-Regular");
-    }
     const SbViewportRegion &vpr = SoViewportRegionElement::get(state);
-    addElement(state->getConstElement(
-        SoViewportRegionElement::getClassStackIndex()));
+    addElement(state->getConstElement(SoViewportRegionElement::getClassStackIndex()));
+
     float fontSize = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
-    addElement(state->getConstElement(
-        SoFontSizeElement::getClassStackIndex()));
+    addElement(state->getConstElement(SoFontSizeElement::getClassStackIndex()));
 
-    // Initialize everything
-    GLfloat m[2][2];
-    m[0][0] = m[1][1] = fontSize;
-    m[0][1] = m[1][0] = 0.0;
-    fontId = flCreateFont((const GLubyte *)fontName.getString(), m, 0, NULL);
+    const SbName & fontName = SoFontNameElement::get(state);
 
-    if (fontId == 0) {
-        // Try Utopia-Regular, unless we just did!
-        if (fontName != SbName("Utopia-Regular")) {
+    addElement(state->getConstElement(SoFontNameElement::getClassStackIndex()));
+    if (fontName == SoFontNameElement::getDefault()) {
+        if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &fontId)) {
 #ifdef DEBUG
-            SoDebugError::post("SoText2::getFont",
-                      "Couldn't find font %s, replacing with Utopia-Regular",
-                       fontName.getString());
-#endif
-            fontId = flCreateFont((const GLubyte *)"Utopia-Regular",
-                                  m, 0, NULL);
-        }
-        if (fontId == 0) {
-#ifdef DEBUG
-            SoDebugError::post("SoText3::getFont",
-                               "Couldn't find font Utopia-Regular!");
+            SoDebugError::post("SoBitmapFontCache::getFont",
+                               "Couldn't load font Utopia-Regular!");
 #endif
             numChars = 0;
         }
+    } else {
+
+        // Initialize everything
+        SbString fullFontName = SoFontNameElement::getFontPath() + fontName.getString();
+        if (FT_New_Face( library, fullFontName.getString(), 0, &fontId )) {
+#ifdef DEBUG
+            SoDebugError::post("SoBitmapFontCache::getFont",
+                               "Couldn't find font %s, replacing with Utopia-Regular", fontName.getString());
+#endif
+            if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &fontId)) {
+#ifdef DEBUG
+                SoDebugError::post("SoBitmapFontCache::getFont",
+                                   "Couldn't load font Utopia-Regular!");
+#endif
+                numChars = 0;
+            }
+        }
     }
-    flMakeCurrentFont(fontId);
+
+    FT_Set_Char_Size( fontId, fontSize * 64, fontSize * 64, 96, 96);
 
     numChars = 256;  // ??? JUST DO ASCII FOR NOW!
-    listFlags = new SbBool[numChars];
-    bitmaps = new FLbitmap*[numChars];
+    listFlags.resize(numChars);
+    bitmaps.resize(numChars);
     for (int i = 0; i < numChars; i++) {
         listFlags[i] = FALSE;
         bitmaps[i] = NULL;
@@ -236,31 +198,27 @@ SoBitmapFontCache::~SoBitmapFontCache()
 ////////////////////////////////////////////////////////////////////////
 {
     if (fontId) {
-        if (flGetCurrentContext() != flContext) {
-            flMakeCurrentContext(flContext);
-            flMakeCurrentFont(fontId);
+        for (int i = 0; i < numChars; i++) {
+            if (bitmaps[i] != NULL) {
+                delete [] bitmaps[i]->bitmap;
+                delete bitmaps[i];
+                bitmaps[i] = NULL;
+            }
         }
-        else if (flGetCurrentFont() != fontId)
-            flMakeCurrentFont(fontId);
-
-        int i;
-        for (i = 0; i < numChars; i++) {
-            if (bitmaps[i] != NULL) flFreeBitmap(bitmaps[i]);
-        }
-
         // Only destroy the font library font if no other font caches
         // are using the same font identifier:
         SbBool otherUsing = FALSE;
-        for (i = 0; i < fonts->getLength(); i++) {
+        for (int i = 0; i < fonts->getLength(); i++) {
             SoBitmapFontCache *t = (SoBitmapFontCache *)(*fonts)[i];
             if (t != this && t->fontId == fontId) otherUsing = TRUE;
         }
         if (!otherUsing) {
-            flDestroyFont(fontId);
+            FT_Done_Face(fontId);
+            fontId = NULL;
         }
 
-        delete [] listFlags;
-        delete [] bitmaps;
+        listFlags.clear();
+        bitmaps.clear();
 
         fonts->remove(fonts->find(this));
     }
@@ -285,6 +243,7 @@ SoBitmapFontCache::destroy(SoState *)
         list->unref(NULL);
         list = NULL;
     }
+
     SoCache::destroy(NULL);
 }
 
@@ -318,6 +277,7 @@ SoBitmapFontCache::setupToRender(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+
     otherOpen = SoCacheElement::anyOpen(state);
 
     if (!otherOpen && !list) {
@@ -347,10 +307,12 @@ SoBitmapFontCache::hasDisplayList(const char c)
 ////////////////////////////////////////////////////////////////////////
 {
     // If we have one, return TRUE
-    if (listFlags[c] == TRUE) return TRUE;
+    if (listFlags[c] == TRUE)
+        return TRUE;
 
     // If we don't and we can't build one, return FALSE.
-    if (otherOpen) return FALSE;
+    if (otherOpen)
+        return FALSE;
 
     // Build one:
     glNewList(list->getFirstIndex()+c, GL_COMPILE);
@@ -382,7 +344,6 @@ SoBitmapFontCache::callLists(const SbString &string)
 
     }
     const char *str = string.getString();
-    printf("call list: %s\n", str);
     glCallLists(string.getLength(), GL_UNSIGNED_BYTE, str);
 }
 
@@ -401,7 +362,8 @@ SoBitmapFontCache::getCharBbox(char c, SbBox3f &box)
     box.makeEmpty();
 
     const FLbitmap *bmap = getBitmap(c);
-    if (bmap == NULL) return;
+    if (bmap == NULL)
+        return;
 
     box.extendBy(SbVec3f(-bmap->xorig, -bmap->yorig, 0));
     box.extendBy(SbVec3f(bmap->width - bmap->xorig,
@@ -424,7 +386,8 @@ SoBitmapFontCache::getCharOffset(char c)
     const FLbitmap *bmap = getBitmap(c);
     if (bmap != NULL)
         return SbVec3f(bmap->xmove, bmap->ymove, 0);
-    else return SbVec3f(0,0,0);
+    else
+        return SbVec3f(0,0,0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -483,9 +446,14 @@ SoBitmapFontCache::drawCharacter(char c)
     const FLbitmap *bmap = getBitmap(c);
 
     if (bmap != NULL) {
-        glBitmap(bmap->width, bmap->height, bmap->xorig, bmap->yorig,
-             bmap->xmove, bmap->ymove, bmap->bitmap);
-        printf("draw char %c - w: %d h: %d ox: %f oy: %f xmove %f ymove %f\n", c, bmap->width, bmap->height, bmap->xorig, bmap->yorig, bmap->xmove, bmap->ymove);
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+
+        glBitmap(0, 0, 0,0,bmap->xorig, bmap->yorig, NULL);
+
+        glDrawPixels(bmap->width, bmap->height, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, bmap->bitmap);
+
+        glBitmap(0, 0, 0.0f, 0.0f, bmap->xmove-bmap->xorig, bmap->ymove-bmap->yorig, NULL);
     }
 }
 
@@ -516,6 +484,20 @@ SoBitmapFontCache::drawString(const SbString &string)
         }
     }
 
+    //
+    // Set up OpenGL state for rendering text, and push
+    // attributes so that we can restore when done.
+    //
+    glPushAttrib( GL_ENABLE_BIT | GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
+    glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
+
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.3f);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_TEXTURE_2D);
+
     // if we have display lists for all of the characters, use
     // glCallLists:
     if (useCallLists) {
@@ -530,6 +512,12 @@ SoBitmapFontCache::drawString(const SbString &string)
             else glCallList(list->getFirstIndex()+chars[i]);
         }
     }
+
+    //
+    // Restore OpenGL state.
+    //
+    glPopClientAttrib();
+    glPopAttrib();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -538,16 +526,51 @@ SoBitmapFontCache::drawString(const SbString &string)
 //    Returns a bitmap.
 //
 // Use: private
-
-const FLbitmap *
+const SoBitmapFontCache::FLbitmap *
 SoBitmapFontCache::getBitmap(unsigned char c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-//ML    if (!fontNumList) return NULL;
+    if (bitmaps[c])
+        return bitmaps[c];
 
-    if (bitmaps[c] == NULL) {
-        bitmaps[c] = flGetBitmap(fontId, c);
+    bitmaps[c] = new FLbitmap;
+    bitmaps[c]->bitmap = NULL;
+
+    if(FT_Load_Char(fontId, c, FT_LOAD_RENDER)) {
+#ifdef DEBUG
+        SoDebugError::post("SoBitmapFontCache::getBitmap",
+                           "FT_Load_Char failed");
+#endif
     }
+
+    FT_GlyphSlot glyph = fontId->glyph;
+    FT_Bitmap bitmap = glyph->bitmap;
+
+    bitmaps[c]->width = bitmap.width;
+    bitmaps[c]->height = bitmap.rows;
+
+    bitmaps[c]->xorig = glyph->bitmap_left;
+    bitmaps[c]->yorig = glyph->bitmap_top - glyph->bitmap.rows;
+    bitmaps[c]->xmove = glyph->advance.x / 64.0f;
+    bitmaps[c]->ymove = glyph->advance.y / 64.0f;
+
+    //Allocate memory for the texture data.
+    bitmaps[c]->bitmap = new GLubyte[ 2 * bitmaps[c]->width * bitmaps[c]->height];
+
+    unsigned char* dest = bitmaps[c]->bitmap + (( bitmaps[c]->height - 1) * bitmaps[c]->width * 2);
+    unsigned char* src = bitmap.buffer;
+    size_t destStep = bitmaps[c]->width * 2 * 2;
+
+    for( unsigned int y = 0; y < bitmaps[c]->height; ++y)
+    {
+        for( unsigned int x = 0; x < bitmaps[c]->width; ++x)
+        {
+            *dest++ = 255;//*src;
+            *dest++ = *src++;
+        }
+        dest -= destStep;
+    }
+
     return bitmaps[c];
 }

@@ -28,7 +28,8 @@ DEPENDPATH += ../3rdparty/freetype \
               ../libFL \
               ../libimage
 
-INCLUDEPATH += ../libimage
+INCLUDEPATH += ../libimage \
+               ../3rdparty/freetype/include
 
 INCLUDEPATH+= database/include \
               interaction/include \

@@ -144,6 +144,26 @@ SoFontNameElement::get(SoState *state)
 //    Compares names
 //
 // Use: public
+SbString
+SoFontNameElement::getFontPath()
+//
+////////////////////////////////////////////////////////////////////////
+{
+#if defined(SB_OS_WIN)
+    return "c:\\Windows\\Fonts\\";
+#elif defined(SB_OS_MACX)
+    return "/Library/Fonts/";
+#else
+    return "/usr/share/data/fonts/";
+#endif
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Compares names
+//
+// Use: public
 
 SbBool
 SoFontNameElement::matches(const SoElement *elt) const
