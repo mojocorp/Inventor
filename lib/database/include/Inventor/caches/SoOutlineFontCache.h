@@ -62,7 +62,8 @@
 #include <Inventor/SbBox2f.h>
 #include <Inventor/caches/SoCache.h>
 
-#include <flclient.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 class SoFontOutline;
 class SoGLDisplayList;
@@ -212,10 +213,10 @@ class SoOutlineFontCache : public SoCache
     static SbBool tesselationError;
 
     // Font library identifier for this font
-    FLfontNumber	fontId;
+    FT_Face	fontId;
 
     // Font library context for all outline fonts
-    static FLcontext	context;
+    static FT_Library	context;
 
     // Global list of available fonts; a 'font' in this case is a
     // unique set of font name, font size, complexity value/type, and
