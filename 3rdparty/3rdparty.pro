@@ -1,4 +1,6 @@
 TEMPLATE  = subdirs
 CONFIG   += ordered
 
-SUBDIRS = freetype libjpeg 
+SUBDIRS =  libjpeg
+
+win32: SUBDIRS += freetype
