@@ -1,6 +1,6 @@
 TEMPLATE  = subdirs
 CONFIG   += ordered
 
-SUBDIRS = freetype libjpeg
+SUBDIRS =  libjpeg
 
-win32: SUBDIRS += pthreads-w32
+win32: SUBDIRS += pthreads-w32 freetype
