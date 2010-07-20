@@ -13,7 +13,8 @@ win32 {
 INCLUDEPATH += include
 INCLUDEPATH += ../lib/database/include \
                ../lib/interaction/include \
-               ../lib/nodekits/include
+               ../lib/nodekits/include \
+               ../lib/compat/include
 
 HEADERS += include/Inventor/Qt/SoQt.h \
            include/Inventor/Qt/SoQtIcons.h \

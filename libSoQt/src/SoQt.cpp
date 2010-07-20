@@ -65,6 +65,8 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInteraction.h>
 #include <Inventor/nodekits/SoNodeKit.h>
+#include <Inventor/SoCompat.h>
+
 #include <Inventor/sensors/SoSensorManager.h>
 #include <Inventor/Qt/SoQt.h>
 
@@ -114,6 +116,7 @@ SoQt::init (const char* /*appName*/, const char* /*className*/)
     SoDB::init();
     SoNodeKit::init();
     SoInteraction::init();
+    SoCompat::init();
 
     // bind Inventor with Qt
     eventHandler = new SoQtEventHandler();

@@ -36,12 +36,14 @@ INCLUDEPATH += ../libimage \
 
 INCLUDEPATH+= database/include \
               interaction/include \
-              nodekits/include
+              nodekits/include \
+              compat/include
 
 DEFINES += GLEW_MX GLEW_BUILD
               
 include(database.pri)
 include(interaction.pri)
 include(nodekits.pri)
+include(compat.pri)
 
 LIBS += -L$$OUT_PWD/../build -limage -ljpeg -lfreetype
