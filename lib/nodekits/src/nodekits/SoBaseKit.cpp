@@ -78,6 +78,7 @@
 #include <SoDebug.h>
 
 #include <iostream>
+#include <stdlib.h>
 
 // Defines for printing out file data for nodekits
 #define SO_BASEKIT_FILEDATA_HEADER "partName\/childNum pairs [ "
@@ -703,7 +704,7 @@ SoBaseKit::set(const SbString & nameValuePairListString)
 #ifdef DEBUG
 	    SoDebugError::post("SoBaseKit::set",
 		"Found char '%c' in string \"%s\", expected '{'",
-		*string, nameValuePairListString);
+		*string, nameValuePairListString.getString());
 #endif
 	    success = FALSE;
 	    break;

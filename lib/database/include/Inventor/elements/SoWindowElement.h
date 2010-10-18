@@ -82,6 +82,7 @@ typedef CGLContextObj WEContext;
 typedef void* WEDisplay;
 #elif defined(SB_OS_LINUX)
 #include <X11/Xlib.h>
+#include <GL/glx.h>
 typedef Window WEWindow;
 typedef GLXContext WEContext;
 typedef Display* WEDisplay;
