@@ -77,6 +77,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#if defined(__linux__)
+#include <QX11Info>
+#endif
 
 static const char *thisClassName = "SoQtRenderArea";
 
