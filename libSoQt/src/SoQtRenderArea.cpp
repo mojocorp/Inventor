@@ -98,7 +98,7 @@ SoQtRenderArea::SoQtRenderArea (
 	    parent,
 	    name, 
 	    buildInsideParent, 
-	    SO_GLX_RGB | SO_GLX_DOUBLE | SO_GLX_ZBUFFER | SO_GLX_OVERLAY, 
+            SO_GLX_RGB | SO_GLX_DOUBLE | SO_GLX_ZBUFFER | SO_GLX_OVERLAY | SO_GLX_STENCIL,
 	    FALSE) // tell GLWidget not to build just yet 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -122,7 +122,7 @@ SoQtRenderArea::SoQtRenderArea(
 	    parent,
 	    name, 
 	    buildInsideParent, 
-	    SO_GLX_RGB | SO_GLX_DOUBLE | SO_GLX_ZBUFFER | SO_GLX_OVERLAY, 
+            SO_GLX_RGB | SO_GLX_DOUBLE | SO_GLX_ZBUFFER | SO_GLX_OVERLAY | SO_GLX_STENCIL,
 	    FALSE) // tell GLWidget not to build just yet 
 //
 ////////////////////////////////////////////////////////////////////////
