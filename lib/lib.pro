@@ -18,7 +18,8 @@ win32 {
     DEFINES += INVENTOR_EXPORTS WIN32_LEAN_AND_MEAN _CRT_SECURE_NO_WARNINGS
     
     INCLUDEPATH += ../3rdparty/pthreads-w32 \
-                   ../3rdparty/freetype/include
+                   ../3rdparty/freetype/include \
+                   ../3rdparty/libjpeg
     DEFINES += PTW32_STATIC_LIB
     LIBS += -lpthreads-w32 -lWSock32
 }
@@ -32,8 +33,7 @@ macx {
     INCLUDEPATH += /usr/X11/include/ /usr/X11/include/freetype2
 }
 
-DEPENDPATH += ../3rdparty/libjpeg \
-              ../libimage
+DEPENDPATH += ../libimage
 
 INCLUDEPATH += ../libimage
 
