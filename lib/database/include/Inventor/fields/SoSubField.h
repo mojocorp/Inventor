@@ -607,6 +607,7 @@ className::operator =(const className &f)                                       
                                                                                     \
 className::className()                                                              \
 {                                                                                   \
+    hasUserData = false;                                                            \
     values = NULL;                                                                  \
 }                                                                                   \
                                                                                     \
@@ -746,9 +747,12 @@ className::allocValues(int newNum)                                              
         }                                                                           \
         else                                                                        \
             values = NULL;                                                          \
-        delete [] oldValues;                                                        \
+                                                                                    \
+        if (!hasUserData)                                                           \
+            delete [] oldValues;                                                    \
     }                                                                               \
                                                                                     \
+    hasUserData = false;                                                            \
     num = maxNum = newNum;                                                          \
 }
 
@@ -771,14 +775,17 @@ className::allocValues(int newNum)                                              
             values = (valueType *) malloc(sizeof(valueType) * newNum);              \
     }                                                                               \
     else {                                                                          \
-        if (newNum > 0)                                                             \
+        if (newNum > 0) {                                                           \
             values = (valueType *) realloc(values, sizeof(valueType)*newNum);       \
+        }                                                                           \
         else {                                                                      \
-            free((char *) values);                                                  \
+            if (!hasUserData)                                                       \
+                free((char *) values);                                              \
             values = NULL;                                                          \
         }                                                                           \
     }                                                                               \
                                                                                     \
+    hasUserData = false;                                                            \
     num = maxNum = newNum;                                                          \
 }
 
@@ -835,8 +842,10 @@ className::allocValues(int newNum)                                              
     void                                                                   \
     className::setValuesPointer(const int _num, userType * userdata)       \
     {                                                                      \
-        makeRoom(0);                                                       \
+        if (!hasUserData)                                                  \
+            makeRoom(0);                                                   \
         if (_num > 0 && userdata) {                                        \
+            hasUserData = true;                                            \
             values = reinterpret_cast<valueType*>(userdata);               \
             num = maxNum = _num;                                           \
             valueChanged();                                                \

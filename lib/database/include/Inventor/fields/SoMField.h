@@ -144,8 +144,10 @@ class INVENTOR_API SoMField : public SoField {
     static void *	createInstance();
 
   protected:
-    int			num;		// Number of values
-    int			maxNum;		// Number of values allocated
+    int                 num;            // Number of values
+    int                 maxNum;         // Number of values allocated
+    bool                hasUserData;    // Indicator if data has been set via a pointer and memory isn't managed by SoMField
+
 
     // Constructor
     SoMField();
