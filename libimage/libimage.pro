@@ -6,11 +6,13 @@ TEMPLATE = lib
 TARGET   = image
 DESTDIR  = ../build
 
-DEPENDPATH += . \
-              ../3rdparty/libjpeg \
+DEPENDPATH += .
+INCLUDEPATH += .
 
-INCLUDEPATH += . \
-               ../3rdparty/libjpeg
+win32 {
+DEPENDPATH += ../3rdparty/libjpeg
+INCLUDEPATH += ../3rdparty/libjpeg
+}
 
 CONFIG -= qt flat
 CONFIG += staticlib
