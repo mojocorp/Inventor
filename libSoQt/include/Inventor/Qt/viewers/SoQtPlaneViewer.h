@@ -92,93 +92,106 @@ class QPushButton;
 //////////////////////////////////////////////////////////////////////////////
 
 class SoQtPlaneViewer : public SoQtFullViewer {
- public:
+    Q_OBJECT
+public:
     SoQtPlaneViewer(
-	QWidget *parent = NULL,
-	const char *name = NULL, 
-	SbBool buildInsideParent = TRUE, 
-	SoQtFullViewer::BuildFlag flag = BUILD_ALL, 
-	SoQtViewer::Type type = BROWSER);
+            QWidget *parent = NULL,
+            const char *name = NULL,
+            SbBool buildInsideParent = TRUE,
+            SoQtFullViewer::BuildFlag flag = BUILD_ALL,
+            SoQtViewer::Type type = BROWSER);
     
     ~SoQtPlaneViewer();
     
     //
     // redefine these to add Plane viewer functionality
     //
-    virtual void	setViewing(SbBool onOrOff);
-    virtual void	setCamera(SoCamera *cam);
-    virtual void	setCursorEnabled(SbBool onOrOff);
+    virtual void        setViewing(SbBool onOrOff);
+    virtual void        setCamera(SoCamera *cam);
+    virtual void        setCursorEnabled(SbBool onOrOff);
     
- protected:
-  
+protected:
+
     // This constructor takes a boolean whether to build the widget now.
     // Subclasses can pass FALSE, then call SoQtPlaneViewer::buildWidget()
     // when they are ready for it to be built.
     SoEXTENDER
     SoQtPlaneViewer(
-	QWidget *parent,
-	const char *name, 
-	SbBool buildInsideParent, 
-	SoQtFullViewer::BuildFlag flag, 
-	SoQtViewer::Type type, 
-	SbBool buildNow);
+            QWidget *parent,
+            const char *name,
+            SbBool buildInsideParent,
+            SoQtFullViewer::BuildFlag flag,
+            SoQtViewer::Type type,
+            SbBool buildNow);
 
-    QWidget*		buildWidget(QWidget* parent);
+    QWidget*            buildWidget(QWidget* parent);
         
+    // redefine these
+    virtual const char *    getDefaultWidgetName() const;
+    virtual const char *    getDefaultTitle() const;
+    virtual const char *    getDefaultIconTitle() const;
+    
     // redefine those routines to do viewer specific stuff
-    virtual void	processEvent(QEvent *anyevent);
-    virtual void	setSeekMode(SbBool onOrOff);
-    virtual void	actualRedraw();
+    virtual void        processEvent(QEvent *anyevent);
+    virtual void        setSeekMode(SbBool onOrOff);
+    virtual void        actualRedraw();
     
     // Define those thumb wheels to translate in the viewer plane
-    virtual void    	bottomWheelMotion(float newVal);
-    virtual void    	leftWheelMotion(float newVal);
-    virtual void    	rightWheelMotion(float newVal);
+    virtual void        bottomWheelMotion(float newVal);
+    virtual void        leftWheelMotion(float newVal);
+    virtual void        rightWheelMotion(float newVal);
     
     // add viewer preference stuff
-    virtual void	createPrefSheet();
+    virtual void        createPrefSheet();
     
     // add some viewer buttons
-    virtual void	createViewerButtons(QToolBar* parent);
+    virtual void        createViewerButtons(QToolBar* parent);
     
     // Define this to bring the viewer help card
-    virtual void	openViewerHelpCard();
+    virtual void        openViewerHelpCard();
     
     // Redefine this to keep the same camera rotation when seeking
-    virtual void	computeSeekFinalOrientation();
+    virtual void        computeSeekFinalOrientation();
 
- private:
+private:
     // viewer state variables
-    int		    mode;
-    SbBool	    createdCursors;
-    QCursor	    transCursor, dollyCursor, seekCursor;
-    SbVec2s	    locator; // mouse position
+    int             mode;
+    SbBool          createdCursors;
+    QCursor         transCursor, dollyCursor, seekCursor;
+    SbVec2s         locator; // mouse position
     
     // camera translation vars
-    SbVec3f	    locator3D;
-    SbPlane	    focalplane;
-    float	    transXspeed, transYspeed;
+    SbVec3f         locator3D;
+    SbPlane         focalplane;
+    float           transXspeed, transYspeed;
     
     // push button vars and callbacks
-    QPushButton    *buttonList[10];
-    static void	    pushButtonCB(QWidget*, int id, void *);
-    
-    void	    updateViewerMode(unsigned int state);
-    void	    switchMode(int newMode);
-    void	    updateCursor();
-    void	    defineCursors();
-    void	    rollCamera(const SbVec2s &newLocator);
-    void	    translateCamera(const SbVec2f &newLocator);
-    void	    dollyCamera(const SbVec2s &newLocator);
-    void	    setPlane(const SbVec3f &newNormal, const SbVec3f &newRight);
+    QAction        *xAction;
+    QAction        *yAction;
+    QAction        *zAction;
+    QAction        *cameraAction;
+
+    void            updateViewerMode(int modifiers, int buttons);
+    void            switchMode(int newMode);
+    void            updateCursor();
+    void            defineCursors();
+    void            rollCamera(const SbVec2s &newLocator);
+    void            translateCamera(const SbVec2f &newLocator);
+    void            dollyCamera(const SbVec2s &newLocator);
+    void            setPlane(const SbVec3f &newNormal, const SbVec3f &newRight);
     
     // redefine these to also call computeTranslateValues()
     virtual void    bottomWheelStart();
     virtual void    leftWheelStart();
-    void	    computeTranslateValues();
+    void            computeTranslateValues();
     
     // this is called by both constructors
-    void constructorCommon(SbBool buildNow);
+    void            constructorCommon(SbBool buildNow);
+private slots:
+    void            xButtonClicked();
+    void            yButtonClicked();
+    void            zButtonClicked();
+    void            camButtonClicked();
 };
 
 #endif  /* _SO_QT_PLANE_VIEWER_ */

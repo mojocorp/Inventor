@@ -54,7 +54,12 @@
  * Ported to Qt by Morgan Leborgne, 2010
  */
 
+#include <QApplication>
 #include <QPushButton>
+#include <QAction>
+#include <QToolBar>
+#include <QKeyEvent>
+#include <QMouseEvent>
 
 #include <math.h>
 
@@ -82,27 +87,17 @@ enum ViewerModes {
     SEEK_MODE
 };
 
-// list of custom push buttons
-enum {
-    X_PUSH = 0, 
-    Y_PUSH,
-    Z_PUSH,
-    CAM_PUSH,
-    PUSH_NUM
-};
-
-
 // Resources for labels.
 typedef struct {
-	char *planeViewer;
-	char *transX;
-	char *transY;
-	char *planeViewerPreferenceSheet;
-	char *dolly;
-	char *zoom;
+    const char *planeViewer;
+    const char *transX;
+    const char *transY;
+    const char *planeViewerPreferenceSheet;
+    const char *dolly;
+    const char *zoom;
 } RES_LABELS;
 static RES_LABELS rl;
-static char *defaultLabel[]={ 
+static const char *defaultLabel[]={
 	"Plane Viewer",  
 	"transX", 
 	"transY",
@@ -180,10 +175,6 @@ SoQtPlaneViewer::constructorCommon(SbBool buildNow)
     //ML transCursor = dollyCursor = seekCursor = 0;
     setSize( SbVec2s(520, 470) );  // default size
     setClassName("SoQtPlaneViewer");
-    
-    // Initialize buttonList.
-    for (int i=0; i<PUSH_NUM; i++)
-	buttonList[i] = NULL;
 
     // Build the widget tree, and let SoQtComponent know about our base widget.
     if (buildNow) {
@@ -203,8 +194,7 @@ SoQtPlaneViewer::~SoQtPlaneViewer()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i=0; i<PUSH_NUM; i++)
-	delete buttonList[i];
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -253,23 +243,24 @@ SoQtPlaneViewer::createViewerButtons(QToolBar* parent)
 {
     // get the default buttons
     SoQtFullViewer::createViewerButtons(parent);
-#if 0
-    // allocate the custom buttons
-    for (int i=0; i<PUSH_NUM; i++) {
-        buttonList[i] = new QPushButton(parent);
-	XtAddCallback(w, XmNactivateCallback,
-	    (XtCallbackProc) SoQtPlaneViewer::pushButtonCB, (XtPointer) (unsigned long) i);
-	
-	// add this button to the list...
-	viewerButtonWidgets->append(w);
-    }
-    
-    // set the button images
-    buttonList[X_PUSH]->setIcon(so_xt_X_bits, so_xt_icon_width, so_xt_icon_height);
-    buttonList[Y_PUSH]->setIcon(so_xt_Y_bits, so_xt_icon_width, so_xt_icon_height);
-    buttonList[Z_PUSH]->setIcon(so_xt_Z_bits, so_xt_icon_width, so_xt_icon_height);
-    buttonList[CAM_PUSH]->setIcon(so_xt_persp_bits, so_xt_icon_width, so_xt_icon_height);
-#endif
+
+    xAction = new QAction(SoQtIcon::getIcon(SoQtIcon::X), tr("X"), this);
+    connect (xAction, SIGNAL (triggered(bool)), SLOT (xButtonClicked()));
+
+    yAction = new QAction(SoQtIcon::getIcon(SoQtIcon::Y), tr("Y"), this);
+    connect (yAction, SIGNAL (triggered(bool)), SLOT (yButtonClicked()));
+
+    zAction = new QAction(SoQtIcon::getIcon(SoQtIcon::Z), tr("Z"), this);
+    connect (zAction, SIGNAL (triggered(bool)), SLOT (zButtonClicked()));
+
+    cameraAction = new QAction(SoQtIcon::getIcon(SoQtIcon::PERSP), tr("Perspective"), this);
+    cameraAction->setCheckable(true);
+    connect (cameraAction, SIGNAL (triggered(bool)), SLOT (camButtonClicked()));
+
+    parent->addAction (xAction);
+    parent->addAction (yAction);
+    parent->addAction (zAction);
+    parent->addAction (cameraAction);
 }
 
 
@@ -328,25 +319,21 @@ SoQtPlaneViewer::setCamera(SoCamera *newCamera)
 {
     if (camera == newCamera)
 	return;
- #if 0
+
     // set the right thumbwheel label and toggle button image based on 
     // the camera type
     if (newCamera != NULL && (camera == NULL || 
 	newCamera->getTypeId() != camera->getTypeId())) {
 	if (newCamera->isOfType(SoOrthographicCamera::getClassTypeId())) {
-	    if (buttonList[CAM_PUSH])
-		buttonList[CAM_PUSH]->setIcon(so_xt_ortho_bits, 
-		    so_xt_icon_width, so_xt_icon_height);
+            cameraAction->setIcon (SoQtIcon::getIcon (SoQtIcon::ORTHO));
 	    setRightWheelString( rl.zoom );
 	}
 	else {
-	    if (buttonList[CAM_PUSH])
-		buttonList[CAM_PUSH]->setIcon(so_xt_persp_bits, 
-		    so_xt_icon_width, so_xt_icon_height);
+            cameraAction->setIcon (SoQtIcon::getIcon (SoQtIcon::PERSP));
 	    setRightWheelString( rl.dolly );
 	}
     }
- #endif
+
     // call parent class
     SoQtFullViewer::setCamera(newCamera);
 }
@@ -367,66 +354,65 @@ SoQtPlaneViewer::processEvent(QEvent *qe)
     
     if (!createdCursors)
 	updateCursor();
-#if 0
-    XButtonEvent    *be;
-    XMotionEvent    *me;
-    XKeyEvent	    *ke;
-    XCrossingEvent  *ce;
-    KeySym	    keysym;
+
+    QMouseEvent    *be;
+    QMouseEvent    *me;
+    QKeyEvent	    *ke;
     
+    Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
+    Qt::MouseButtons buttons = QApplication::mouseButtons();
+
     SbVec2s raSize = getGlxSize();
     
-    switch(xe->type) {
-    case ButtonPress:
-    case ButtonRelease:
-	be = (XButtonEvent *)xe;
-	if (be->button != Button1 && be->button != Button2)
+    switch(qe->type()) {
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonRelease:
+        be = (QMouseEvent *)qe;
+        if (be->button() != Qt::LeftButton && be->button() != Qt::MidButton)
 	    break;
 	
-	locator[0] = be->x;
-	locator[1] = raSize[1] - be->y;
+        locator[0] = be->x();
+        locator[1] = raSize[1] - be->y();
 	if (mode == SEEK_MODE) {
-	    if (xe->type == ButtonPress)
+            if (qe->type() == QEvent::MouseButtonPress)
 		seekToPoint(locator);
 	}
 	else {
-	    if (xe->type == ButtonPress)
+            if (qe->type() == QEvent::MouseButtonPress)
 		interactiveCountInc();
 	    else // ButtonRelease
 		interactiveCountDec();
-	    updateViewerMode(be->state);
+            updateViewerMode(be->modifiers(), be->buttons());
 	}
 	break;
 	
-    case KeyPress:
-    case KeyRelease:
-	ke = (XKeyEvent *)xe;
-	keysym = XLookupKeysym(ke, 0);
+    case QEvent::KeyPress:
+    case QEvent::KeyRelease:
+        ke = (QKeyEvent *)qe;
 	
-	locator[0] = ke->x;
-	locator[1] = raSize[1] - ke->y;
-	if (keysym == XK_Control_L || keysym == XK_Control_R)
-	    updateViewerMode(ke->state);
+        locator[0] = QCursor::pos().x();
+        locator[1] = raSize[1] - QCursor::pos().y();
+        if (ke->modifiers() & Qt::ControlModifier)
+            updateViewerMode(ke->modifiers(), buttons);
 	break;
 	
-    case MotionNotify:
-	me = (XMotionEvent *)xe;
+    case QEvent::MouseMove:
+        me = (QMouseEvent *)qe;
 	switch (mode) {
 	    case DOLLY_MODE_ACTIVE:
-		dollyCamera( SbVec2s(me->x, raSize[1] - me->y) );
+                dollyCamera( SbVec2s(me->x(), raSize[1] - me->y()) );
 		break;
 	    case PAN_MODE_ACTIVE:
-		translateCamera(SbVec2f(me->x/float(raSize[0]), (raSize[1] - me->y)/float(raSize[1])));
+                translateCamera(SbVec2f(me->x()/float(raSize[0]), (raSize[1] - me->y())/float(raSize[1])));
 		break;
 	    case ROLL_MODE_ACTIVE:
-		rollCamera( SbVec2s(me->x, raSize[1] - me->y) );
+                rollCamera( SbVec2s(me->x(), raSize[1] - me->y()) );
 		break;
 	}
 	break;
 	
-    case LeaveNotify:
-    case EnterNotify:
-	ce = (XCrossingEvent *)xe;
+    case QEvent::Leave:
+    case QEvent::Enter:
 	//
 	// because the application might use Ctrl-key for motif menu
 	// accelerators we might not receive a key-up event, so make sure
@@ -434,17 +420,17 @@ SoQtPlaneViewer::processEvent(QEvent *qe)
 	// if Ctrl-key is not down (nothing to do) or if a mouse button 
 	// is down (we will get another leaveNotify).
 	//
-	if (! (ce->state & ControlMask))
+        if (! (modifiers & Qt::ControlModifier))
 	    break;
-	if (ce->state & Button1Mask || ce->state & Button2Mask)
+        if (buttons & Qt::LeftButton || buttons & Qt::MidButton)
 	    break;
-	if (xe->type == LeaveNotify)
+        if (qe->type() == QEvent::Leave)
 	    switchMode(VIEW_MODE);
 	else
-	    updateViewerMode(ce->state);
+            updateViewerMode(modifiers, buttons);
 	break;
+    default: break;
     }
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -454,11 +440,10 @@ SoQtPlaneViewer::processEvent(QEvent *qe)
 //
 // Use: private
 void
-SoQtPlaneViewer::updateViewerMode(unsigned int state)
+SoQtPlaneViewer::updateViewerMode(int modifiers, int buttons)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-#if 0
     // ??? WARNING - this routine ONLY works because of 
     // ??? SoQtViewer::updateEventState() which is called for us
     // ??? by SoQtViewer::processCommonEvents(). 
@@ -466,21 +451,21 @@ SoQtPlaneViewer::updateViewerMode(unsigned int state)
     // ??? until after the event is received. WEIRD)
     
     // LEFT+MIDDLE down
-    if (state & Button1Mask && state & Button2Mask) {
+    if (buttons & Qt::LeftButton && buttons & Qt::MidButton) {
 	switchMode(DOLLY_MODE_ACTIVE);
     }
     
     // LEFT down
-    else if (state & Button1Mask) {
-	if (state & ControlMask)
+    else if (buttons & Qt::LeftButton) {
+        if (modifiers & Qt::ControlModifier)
 	    switchMode(PAN_MODE_ACTIVE);
 	else
 	    switchMode(DOLLY_MODE_ACTIVE);
     }
     
     // MIDDLE DOWN
-    else if (state & Button2Mask) {
-	if (state & ControlMask)
+    else if (buttons & Qt::MidButton) {
+        if (modifiers & Qt::ControlModifier)
 	    switchMode(ROLL_MODE_ACTIVE);
 	else
 	    switchMode(PAN_MODE_ACTIVE);
@@ -488,12 +473,11 @@ SoQtPlaneViewer::updateViewerMode(unsigned int state)
     
     // no buttons down...
     else {
-	if (state & ControlMask)
+        if (modifiers & Qt::ControlModifier)
 	    switchMode(PAN_MODE);
 	else
 	    switchMode(VIEW_MODE);
     }
-#endif
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -507,8 +491,6 @@ SoQtPlaneViewer::switchMode(int newMode)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    QWidget* raWidget = getRenderAreaWidget();
-    
     // assing new mode
     SbBool redrawNeeded = FALSE;
     int prevMode = mode;
@@ -524,26 +506,10 @@ SoQtPlaneViewer::switchMode(int newMode)
     // switch to new viewer mode
     switch (newMode) {
 	case PICK_MODE:
-#if 0
-	    if (raWidget && XtWindow(raWidget)) {
-		// ???? is if are going into PICK mode and some of our
-		// mouse buttons are still down, make sure to decrement
-		// interactive count correctly (correct draw style). One
-		// for the LEFT and one for MIDDLE mouse.
-		Window root_return, child_return;
-		int root_x_return, root_y_return;
-		int win_x_return, win_y_return;
-		unsigned int mask_return;
-		XQueryPointer(XtDisplay(raWidget), XtWindow(raWidget), 
-		    &root_return, &child_return,
-		    &root_x_return, &root_y_return, &win_x_return, 
-		    &win_y_return, &mask_return);
-		if (mask_return & Button1Mask && prevMode != SEEK_MODE)
-		    interactiveCountDec();
-		if (mask_return & Button2Mask && prevMode != SEEK_MODE)
-		    interactiveCountDec();
-	    }
-#endif
+            if (QApplication::mouseButtons() & Qt::LeftButton && prevMode != SEEK_MODE)
+                interactiveCountDec();
+            if (QApplication::mouseButtons() & Qt::MidButton && prevMode != SEEK_MODE)
+                interactiveCountDec();
 	    break;
 	    
 	case PAN_MODE_ACTIVE:
@@ -1028,6 +994,19 @@ SoQtPlaneViewer::computeTranslateValues()
 //
 // redefine those generic virtual functions
 //
+const char *
+SoQtPlaneViewer::getDefaultWidgetName() const
+{ return "SoXtPlaneViewer"; }
+
+const char *
+SoQtPlaneViewer::getDefaultTitle() const
+{ return rl.planeViewer; }
+
+const char *
+SoQtPlaneViewer::getDefaultIconTitle() const
+{ return rl.planeViewer; }
+
+
 void
 SoQtPlaneViewer::bottomWheelStart()
 {
@@ -1054,17 +1033,25 @@ SoQtPlaneViewer::leftWheelStart()
 // viewer push button callbacks
 //
 void
-SoQtPlaneViewer::pushButtonCB(QWidget* w, int id, void *)
+SoQtPlaneViewer::xButtonClicked()
 {
-#if 0
-    SoQtPlaneViewer *v;
-    XtVaGetValues(w, XmNuserData, &v, NULL);
-    
-    switch (id) {
-	case X_PUSH:	v->setPlane( SbVec3f(1, 0, 0), SbVec3f(0, 0, -1) ); break;
-	case Y_PUSH:	v->setPlane( SbVec3f(0, 1, 0), SbVec3f(1, 0, 0) ); break;
-	case Z_PUSH:	v->setPlane( SbVec3f(0, 0, 1), SbVec3f(1, 0, 0) ); break;
-	case CAM_PUSH:	v->toggleCameraType(); break;
-    }
-#endif
+    setPlane( SbVec3f(1, 0, 0), SbVec3f(0, 0, -1) );
+}
+
+void
+SoQtPlaneViewer::yButtonClicked()
+{
+    setPlane( SbVec3f(0, 1, 0), SbVec3f(1, 0, 0) );
+}
+
+void
+SoQtPlaneViewer::zButtonClicked()
+{
+    setPlane( SbVec3f(0, 0, 1), SbVec3f(1, 0, 0) );
+}
+
+void
+SoQtPlaneViewer::camButtonClicked()
+{
+    toggleCameraType();
 }
