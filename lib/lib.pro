@@ -30,6 +30,8 @@ x11 {
 
 macx {
     LIBS += -framework ApplicationServices
+
+    LIBS += -L/usr/X11/lib/
     INCLUDEPATH += /usr/X11/include/ /usr/X11/include/freetype2
 }
 
