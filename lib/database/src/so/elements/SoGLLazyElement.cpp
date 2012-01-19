@@ -669,7 +669,7 @@ SoGLLazyElement::setMaterialElt(SoNode* node, uint32_t mask,
 void
 SoGLLazyElement::sendVPPacked(SoState* state, const unsigned char* pcolor)
 {
-    unsigned char _pcolor[4];
+    unsigned char _pcolor[4] = {0,0,0,0};
     DGL_HTON_INT32(*((int32_t*)_pcolor), *((int32_t*)pcolor));
   
     if (glState.GLColorMaterial || 

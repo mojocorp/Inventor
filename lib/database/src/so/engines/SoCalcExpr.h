@@ -86,7 +86,6 @@ class Expr {
     };
     Type	type;
 
-    Expr() {}
     Expr(Type t) : type(t) {}
     virtual ~Expr();
 
@@ -436,7 +435,7 @@ class Or : public BinaryOp
 class Not : public Expr
 {
   public:
-    Not(Expr *exp) : e(exp) { type=FLOAT;}
+    Not(Expr *exp) : Expr(FLOAT), e(exp) {}
     ~Not();
     virtual float getFloat();
     virtual void print(int level);
@@ -447,7 +446,7 @@ class Not : public Expr
 class Negate : public Expr
 {
   public:
-    Negate(Expr *exp) : e(exp) { type=e->type; }
+    Negate(Expr *exp) : Expr(exp->type), e(exp) { }
     ~Negate();
     virtual float getFloat();
     virtual SbVec3f getVec3f();
