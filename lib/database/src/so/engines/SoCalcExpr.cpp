@@ -308,7 +308,7 @@ SbVec3f Var::setVec3f(const SbVec3f &v)
 //
 // Functions
 //
-Func::Func(const char *nm, Type type) : Expr(type), name(nm) {}
+Func::Func(const char *nm, Type type) : Expr(type), name(nm), args(NULL) {}
 Func::~Func() { delete args; }
 
 void
@@ -453,7 +453,7 @@ void Funcv_ddd::setArgs(ExprList *a)
 // Operations
 //
 BinaryOp::~BinaryOp() { delete a; delete b; }
-BinaryOp::BinaryOp(Expr *ea, Expr *eb, int TypeBits) : a(ea), b(eb)
+BinaryOp::BinaryOp(Expr *ea, Expr *eb, int TypeBits) : Expr(ea->type), a(ea), b(eb)
 {
     SbBool OK = FALSE;
 
@@ -599,7 +599,7 @@ void Negate::print(int level)
 
 Ternary::~Ternary() { delete etest; delete etrue; delete efalse; }
 Ternary::Ternary(Expr *a, Expr *b, Expr *c)
-    : etest(a), etrue(b), efalse(c)
+    : Expr(Expr::FLOAT), etest(a), etrue(b), efalse(c)
 {
     if (etest->type != FLOAT)
 	err("Ternary:: conditional expression in ?: operator must be scalar");
