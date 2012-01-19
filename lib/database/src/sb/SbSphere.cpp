@@ -131,28 +131,26 @@ SbSphere::intersect(const SbLine &l, SbVec3f &intersection) const
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    float   B,C;	// At^2 + Bt + C = 0, but A is 1 since we normalize Rd
-    float   discr;	// discriminant (B^2 - 4AC)
-    SbVec3f v;
-    float   t,sqroot;
     SbBool  doesIntersect = TRUE;
 
     // setup B,C
-    v = l.getPosition() - center;
-    B = 2.0f * (l.getDirection().dot(v));
-    C = v.dot(v) - (radius * radius);
+    SbVec3f v = l.getPosition() - center;
+    
+    // At^2 + Bt + C = 0, but A is 1 since we normalize Rd
+    float B = 2.0f * (l.getDirection().dot(v));
+    float C = v.dot(v) - (radius * radius);
 
-    // compute discriminant
+    // compute discriminant (B^2 - 4AC)
     // if negative, there is no intersection
-    discr = B*B - 4.0f*C;
+    float discr = B*B - 4.0f*C;
     if (discr < 0.0f) {
 	// line and sphere do not intersect
 	doesIntersect = FALSE;
     }
     else {
 	// compute t0: (-B - sqrt(B^2 - 4AC)) / 2A  (A = 1)
-	sqroot = sqrtf(discr);
-	t = (-B - sqroot) * 0.5f;
+	float sqroot = sqrtf(discr);
+	float t = (-B - sqroot) * 0.5f;
 	if (t < 0.0) {
 	    // no intersection, try t1: (-B + sqrt(B^2 - 4AC)) / 2A  (A = 1)
 	    t = (-B + sqroot) * 0.5f;
@@ -184,27 +182,24 @@ SbSphere::intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    float   B,C;	// At^2 + Bt + C = 0, but A is 1 since we normalize Rd
-    float   discr;	// discriminant (B^2 - 4AC)
-    SbVec3f v;
-    float   sqroot;
     SbBool  doesIntersect = TRUE;
 
     // setup B,C
-    v = l.getPosition() - center;
-    B = 2.0f * (l.getDirection().dot(v));
-    C = v.dot(v) - (radius * radius);
+    SbVec3f v = l.getPosition() - center;
+    // At^2 + Bt + C = 0, but A is 1 since we normalize Rd
+    float B = 2.0f * (l.getDirection().dot(v));
+    float C = v.dot(v) - (radius * radius);
 
-    // compute discriminant
+    // compute discriminant (B^2 - 4AC)
     // if negative, there is no intersection
-    discr = B*B - 4.0f*C;
+    float discr = B*B - 4.0f*C;
 
     if (discr < 0.0) {
 	// line and sphere do not intersect
 	doesIntersect = FALSE;
     }
     else {
-	sqroot = sqrtf(discr);
+	float sqroot = sqrtf(discr);
 	    
 	float t0 = (-B - sqroot) * 0.5f;
 	enter = l.getPosition() + (l.getDirection() * t0);

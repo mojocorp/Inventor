@@ -207,25 +207,25 @@ SbCylinder::unitCylinderIntersect(const SbLine &l,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float		A, B, C, discr, sqroot, t0, t1;
+    float		t0, t1;
     const SbVec3f	&pos = l.getPosition(), &dir = l.getDirection();
     SbBool		doesIntersect = TRUE;
 
-    A = dir[0] * dir[0] + dir[2] * dir[2];
+    float A = dir[0] * dir[0] + dir[2] * dir[2];
 
-    B = 2.0f * (pos[0] * dir[0] + pos[2] * dir[2]);
+    float B = 2.0f * (pos[0] * dir[0] + pos[2] * dir[2]);
 
-    C = pos[0] * pos[0] + pos[2] * pos[2] - 1;
+    float C = pos[0] * pos[0] + pos[2] * pos[2] - 1;
 
     // discriminant = B^2 - 4AC
-    discr = B*B - 4.0f*A*C;
+    float discr = B*B - 4.0f*A*C;
 
     // if discriminant is negative, no intersection
     if (discr < 0.0) {
 	doesIntersect = FALSE;
     }
     else {
-	sqroot = float(sqrtf(discr));
+	float sqroot = float(sqrtf(discr));
 
 	// magic to stabilize the answer
 	if (B > 0.0) {
