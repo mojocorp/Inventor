@@ -282,7 +282,6 @@ SbLine::intersect(float angle, const SbBox3f &box) const
 
     const SbVec3f	&max = box.getMax(), &min = box.getMin();
     float		fuzz = 0.0;
-    int			i;
 
     if (angle < 0.0)
 	fuzz = - angle;
@@ -293,7 +292,7 @@ SbLine::intersect(float angle, const SbBox3f &box) const
 	// be the minimum we can use.  Expand the box by that amount and
 	// do an intersection.
 	double tanA = tan(angle);
-	for(i = 0; i < 8; i++) {
+	for(int i = 0; i < 8; i++) {
 	    SbVec3f point(i & 01 ? min[0] : max[0],
 			  i & 02 ? min[1] : max[1],
 			  i & 04 ? min[2] : max[2]);
@@ -332,17 +331,15 @@ SbLine::intersect(
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	t, d;
-
     // how far is point from line origin??
     SbVec3f	diff(point - getPosition());
 
-    t = diff.dot(getDirection());
+    float t = diff.dot(getDirection());
     if(t > 0) {
-	d = float(sqrt(diff.dot(diff)) - t*t);
+        float d = float(sqrt(diff.dot(diff)) - t*t);
         if (pickAngle < 0.0)
-  	    return (d < -pickAngle);
-	return ((d/t) < pickAngle);
+            return (d < -pickAngle);
+        return ((d/t) < pickAngle);
     }
     return FALSE;
 }
@@ -368,7 +365,6 @@ SbLine::intersect(
 {
     SbVec3f	ptOnLine;
     SbLine	inputLine(v0, v1);
-    float	distance;
     SbBool      validIntersection = FALSE;
 
     if(getClosestPoints(inputLine, ptOnLine, intersection)) {
@@ -378,7 +374,7 @@ SbLine::intersect(
         else if((intersection - v1).dot(v0 - v1) < 0)
             intersection = v1;
 
-	distance = (ptOnLine - intersection).length();
+	float distance = (ptOnLine - intersection).length();
         if (pickAngle < 0.0)
             return (distance < -pickAngle);
 	validIntersection = ((distance / (ptOnLine - getPosition()).length())

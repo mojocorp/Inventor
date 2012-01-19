@@ -3174,26 +3174,24 @@ SoTransformerDragger::isColinear(SbVec2f a1[2], SbVec2f a2[2], int pixels)
 ////////////////////////////////////////////////////////////////////////
 {
     // Find slope of line along a1
-	float dx,dy,slope;
-	dx = a1[0][0] - a1[1][0];
-	dy = a1[0][1] - a1[1][1];
+	float dx = a1[0][0] - a1[1][0];
+	float dy = a1[0][1] - a1[1][1];
 	if (dx == 0.0)
 	    dx = 0.0001f;
-	slope = dy/dx;  
+	float slope = dy/dx;  
 
-    float yIntercept,A,B,C,dist1,dist2;
-    yIntercept = a1[0][1] - slope*a1[0][0]; // y intercept
+    float yIntercept = a1[0][1] - slope*a1[0][0]; // y intercept
 
-    A = -slope;
-    B = 1.0;
-    C = -yIntercept;
+    float A = -slope;
+    float B = 1.0f;
+    float C = -yIntercept;
 
-    dist1 = _ABS((A*a2[0][0] + B*a2[0][1] + C)/sqrtf(A*A + B*B));
+    float dist1 = _ABS((A*a2[0][0] + B*a2[0][1] + C)/sqrtf(A*A + B*B));
 
     if (dist1 > (float)pixels)
 	return FALSE;
     else {
-        dist2 = 
+        float dist2 = 
 	    _ABS((A*a2[1][0] + B*a2[1][1] + C)/sqrtf(A*A + B*B));
 
         if (dist2 > (float)pixels)

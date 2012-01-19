@@ -219,7 +219,6 @@ void
 SbPList::expand(int size)
 {
     void	**newPtrs;
-    int	i;
 
     if (ptrsSize == 0)
 	ptrsSize = DEFAULT_INITIAL_SIZE;
@@ -241,7 +240,7 @@ SbPList::expand(int size)
     newPtrs = new (void *[ptrsSize]);
 
     if (ptrs != NULL) {
-	for (i = 0; i < nPtrs; i++)
+	for (int i = 0; i < nPtrs; i++)
 	    newPtrs[i] = ptrs[i];
 	delete [] ptrs;
     }
