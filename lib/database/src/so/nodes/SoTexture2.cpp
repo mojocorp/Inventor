@@ -129,8 +129,8 @@ SoTexture2::~SoTexture2()
 ////////////////////////////////////////////////////////////////////////
 {
     if (renderList) {
-	renderList->unref();
-	renderList = NULL;
+        renderList->unref();
+        renderList = NULL;
     }
     delete imageSensor;
     delete filenameSensor;
@@ -177,17 +177,17 @@ SoTexture2::readInstance(SoInput *in, unsigned short flags)
     SbBool readOK = SoNode::readInstance(in, flags);
 
     if (readOK && !filename.isDefault()) {
-	// See the comment in SoFile::readInstance for why we do this
-	// and don't just let the FieldSensor take care of reading in
-	// the image.
-	setReadStatus(readOK);
-	(*(filenameSensor->getFunction()))(filenameSensor->getData(), NULL);
+        // See the comment in SoFile::readInstance for why we do this
+        // and don't just let the FieldSensor take care of reading in
+        // the image.
+        setReadStatus(readOK);
+        (*(filenameSensor->getFunction()))(filenameSensor->getData(), NULL);
 
-	// Don't set readOK, because not being able to read the image
-	// isn't a fatal error.  But do issue a read error:
-	if (getReadStatus() == FALSE)
-	    SoReadError::post(in, "Could not read texture file %s",
-			      filename.getValue().getString());
+        // Don't set readOK, because not being able to read the image
+        // isn't a fatal error.  But do issue a read error:
+        if (getReadStatus() == FALSE)
+            SoReadError::post(in, "Could not read texture file %s",
+                              filename.getValue().getString());
     }
 
     // Reattach sensor
@@ -219,8 +219,8 @@ SoTexture2::imageChangedCB(void *data, SoSensor *)
     tex->filenameSensor->attach(&tex->filename);
 
     if (tex->renderList) {
-	tex->renderList->unref();
-	tex->renderList = NULL;
+        tex->renderList->unref();
+        tex->renderList = NULL;
     }
 }
 
@@ -240,8 +240,8 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
     SoTexture2 *tex = (SoTexture2 *)data;
 
     if (tex->filename.isIgnored()) {
-	tex->setReadStatus(FALSE);
-	return;
+        tex->setReadStatus(FALSE);
+        return;
     }
 
     // Read in image file right away...
@@ -249,9 +249,9 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
     unsigned char *bytes;
     SbBool result = readImage(tex->filename.getValue(), nx, ny, nc, bytes);
     if (!result) {
-	// Read error is taken care of by readImage() call
-	nx = ny = nc = 0;
-	bytes = NULL;
+        // Read error is taken care of by readImage() call
+        nx = ny = nc = 0;
+        bytes = NULL;
     }
     // Detach the image sensor temporarily...
     tex->imageSensor->detach();
@@ -265,8 +265,8 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
     if (bytes != NULL) delete [] bytes;
 
     if (tex->renderList) {
-	tex->renderList->unref();
-	tex->renderList = NULL;
+        tex->renderList->unref();
+        tex->renderList = NULL;
     }
     tex->imageSensor->attach(&tex->image);
 
@@ -287,11 +287,11 @@ SoTexture2::doAction(SoAction *action)
 {
     SoState *	state = action->getState();
 
-    if (image.isIgnored() ||
-	SoTextureOverrideElement::getImageOverride(state))
-	return; // Texture being overriden or this node ignored
+    if (image.isIgnored() || SoTextureOverrideElement::getImageOverride(state))
+        return; // Texture being overriden or this node ignored
+
     if (isOverride()) {
-	SoTextureOverrideElement::setImageOverride(state, TRUE);
+        SoTextureOverrideElement::setImageOverride(state, TRUE);
     }
 
     SbVec2s size;
@@ -299,8 +299,8 @@ SoTexture2::doAction(SoAction *action)
     const unsigned char *bytes = image.getValue(size, nc);
 
     SoTextureImageElement::set(state, this, size, nc, bytes,
-			       wrapS.getValue(), wrapT.getValue(),
-			       model.getValue(), blendColor.getValue());
+                               wrapS.getValue(), wrapT.getValue(),
+                               model.getValue(), blendColor.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -332,11 +332,11 @@ SoTexture2::GLRender(SoGLRenderAction *action)
 {
     SoState *	state = action->getState();
 
-    if (image.isIgnored() ||
-	SoTextureOverrideElement::getImageOverride(state))
-	return; // Texture being overriden or this node ignored
+    if (image.isIgnored() || SoTextureOverrideElement::getImageOverride(state))
+        return; // Texture being overriden or this node ignored
+
     if (isOverride()) {
-	SoTextureOverrideElement::setImageOverride(state, TRUE);
+        SoTextureOverrideElement::setImageOverride(state, TRUE);
     }
 
     SbVec2s size;
@@ -346,68 +346,68 @@ SoTexture2::GLRender(SoGLRenderAction *action)
 
     float texQuality = SoTextureQualityElement::get(state);
     if (texQuality == 0 || numBytes == 0 || image.isIgnored()) {
-	SoGLTextureEnabledElement::set(state, FALSE);
-	return;
+        SoGLTextureEnabledElement::set(state, FALSE);
+        return;
     }
     else {
-	SoGLTextureEnabledElement::set(state, TRUE);
-    }	
+        SoGLTextureEnabledElement::set(state, TRUE);
+    }
 
     // Check for special cases of 1/2 component texture and model
     // DECAL or 3/4 component texture and model BLEND; print out
     // errors in these cases:
-	
+
     int m = model.getValue();
     if (nc < 3 && m == DECAL) {
 #ifdef DEBUG
-	SoDebugError::post("SoTexture2::GLRender",
-			   "Texture model is DECAL, but texture image"
-			   " has only %d components (must be 3 or 4).  "
-			   "Use imgcopy to convert the image.", nc);
+        SoDebugError::post("SoTexture2::GLRender",
+                           "Texture model is DECAL, but texture image"
+                           " has only %d components (must be 3 or 4).  "
+                           "Use imgcopy to convert the image.", nc);
 #endif	    
-	SoGLTextureEnabledElement::set(state, FALSE);
+        SoGLTextureEnabledElement::set(state, FALSE);
     }
     else if (nc > 2 && m == BLEND) {
 #ifdef DEBUG
-	SoDebugError::post("SoTexture2::GLRender",
-			   "Texture model is BLEND, but texture image"
-			   " has %d components (must be 1 or 2).  "
-			   "Use imgcopy to convert the image.", nc);
+        SoDebugError::post("SoTexture2::GLRender",
+                           "Texture model is BLEND, but texture image"
+                           " has %d components (must be 1 or 2).  "
+                           "Use imgcopy to convert the image.", nc);
 #endif	    
-	SoGLTextureEnabledElement::set(state, FALSE);
+        SoGLTextureEnabledElement::set(state, FALSE);
     } else {
-	// This is kind of weird-- the element builds and uses the
-	// display list (which is why we pass it in and assign
-	// it) because it sends the GL calls, and needs to know
-	// the list if the state is popped.  But this node must
-	// manage storage and deletion of the display list, since
-	// the list must go away if the node is deleted or the
-	// image is changed.
+        // This is kind of weird-- the element builds and uses the
+        // display list (which is why we pass it in and assign
+        // it) because it sends the GL calls, and needs to know
+        // the list if the state is popped.  But this node must
+        // manage storage and deletion of the display list, since
+        // the list must go away if the node is deleted or the
+        // image is changed.
 
-	// See if renderList is valid (in the right context, with
-	// the right texture quality):
-	int context = SoGLCacheContextElement::get(state);
-	if (renderList && renderList->getContext() == context &&
-	    texQuality == renderListQuality) {
-	    SoGLTextureImageElement::set(
-		state, this, size, nc, bytes, texQuality,
-		wrapS.getValue(), wrapT.getValue(),
-		m, blendColor.getValue(), renderList);
-	}  // Not valid, try to build
-	else {
-	    // Free up old list, if necessary:
-	    if (renderList) {
-		renderList->unref(state);
-		renderList = NULL;
-	    }
-	    renderList = SoGLTextureImageElement::set(
-		state, this, size, nc, bytes, texQuality,
-		wrapS.getValue(), wrapT.getValue(),
-		m, blendColor.getValue(), NULL);
-	    if (renderList)
-		renderList->ref();
-	    renderListQuality = texQuality;
-	}
+        // See if renderList is valid (in the right context, with
+        // the right texture quality):
+        int context = SoGLCacheContextElement::get(state);
+        if (renderList && renderList->getContext() == context &&
+                texQuality == renderListQuality) {
+            SoGLTextureImageElement::set(
+                        state, this, size, nc, bytes, texQuality,
+                        wrapS.getValue(), wrapT.getValue(),
+                        m, blendColor.getValue(), renderList);
+        }  // Not valid, try to build
+        else {
+            // Free up old list, if necessary:
+            if (renderList) {
+                renderList->unref(state);
+                renderList = NULL;
+            }
+            renderList = SoGLTextureImageElement::set(
+                        state, this, size, nc, bytes, texQuality,
+                        wrapS.getValue(), wrapT.getValue(),
+                        m, blendColor.getValue(), NULL);
+            if (renderList)
+                renderList->ref();
+            renderListQuality = texQuality;
+        }
     }
 }
 
@@ -422,7 +422,7 @@ SoTexture2::GLRender(SoGLRenderAction *action)
 
 SbBool
 SoTexture2::readImage(const SbString& fname, int &w, int &h, int &nc, 
-		      unsigned char *&bytes)
+                      unsigned char *&bytes)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -431,7 +431,7 @@ SoTexture2::readImage(const SbString& fname, int &w, int &h, int &nc,
     
     // Empty file means an empty image...
     if (fname.getString()[0] == '\0')
-	return TRUE;
+        return TRUE;
 
     SoInput in;
     if (!in.openFile(fname.getString(), TRUE)) {
@@ -444,8 +444,8 @@ SoTexture2::readImage(const SbString& fname, int &w, int &h, int &nc,
 
 #ifdef DEBUG
     SoDebugError::postInfo("SoTexture2::readImage",
-			   "Reading texture image %s",
-			   fname.getString());
+                           "Reading texture image %s",
+                           fname.getString());
 #endif
     return ReadImage(filename.getString(), w, h, nc, bytes);
 }
