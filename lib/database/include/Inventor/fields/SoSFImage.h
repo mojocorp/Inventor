@@ -104,10 +104,8 @@
 /// left pixel white, and the top right pixel yellow.
 /// \sa SoField, SoSField
 class INVENTOR_API SoSFImage : public SoSField {
-    // Uses only some of the standard field stuff (because there is no
-    // SbImage type):
-    SO_SFIELD_REQUIRED_HEADER(SoSFImage);
-    SO_SFIELD_CONSTRUCTOR_HEADER(SoSFImage);
+    // Use standard field stuff
+    SO_SFIELD_HEADER(SoSFImage, SbImage, const SbImage &);
 
 public:
     enum CopyPolicy {
@@ -121,42 +119,24 @@ public:
     /// \a size and \a nc arguments are filled in with the dimensions of the
     /// image and the number of components in the image; the number of bytes
     /// in the array returned will be \a size[0]* \a size[1]* \a nc.
-    const unsigned char * getValue(SbVec2s &size, int &nc) const;
-    const SbImage & getValue() const;
+    SB_DECL_DEPRECATED const unsigned char * getValue(SbVec2s &size, int &nc) const;
 
     /// Sets the value of this field to be an image of the given size, with
     /// the given number of components, and with the given pixel values.
     /// \a size[0]* \a size[1]* \a nc bytes from the given array will be copied into
     /// internal storage maintained by the <tt>SoSFImage</tt> field.
-    void setValue(const SbVec2s &size, int nc,
-                  const unsigned char *bytes, CopyPolicy copypolicy = COPY);
-
-    void setValue(const SbImage &img);
-
-    /// Equality operator
-    int operator ==(const SoSFImage &f) const;
-
-    /// Inequality operator
-    int operator !=(const SoSFImage &f) const {
-        return ! ((*this) == f);
-    }
+    SB_DECL_DEPRECATED void setValue(const SbVec2s &size, int nc,
+                                     const unsigned char *bytes, CopyPolicy copypolicy = COPY);
 
     /// These methods can be used to efficiently edit the values in an image
     /// field.  #startEditing() returns the size of the image in the \a size
     /// and \a nc  arguments; writing past the end of the array returned is a
     /// good way to cause hard-to-find core dumps.
-    unsigned char * startEditing(SbVec2s &size, int &nc);
-    void finishEditing();
+    SB_DECL_DEPRECATED unsigned char * startEditing(SbVec2s &size, int &nc);
+    SB_DECL_DEPRECATED void finishEditing();
 
 SoINTERNAL public:
     static void initClass();
-
-private:
-    SbImage image;
-
-    // Reading and writing
-    virtual SbBool readValue(SoInput *in);
-    virtual void writeValue(SoOutput *out) const;
 };
 
 #endif /* _SO_SF_IMAGE_ */
