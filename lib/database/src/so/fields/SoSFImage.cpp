@@ -61,37 +61,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// Use most of the standard stuff:
-SO__FIELD_ID_SOURCE(SoSFImage);
-SO__FIELD_EQ_SAME_SOURCE(SoSFImage);
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Constructor
-//
-// Use: public
-
-SoSFImage::SoSFImage()
-//
-////////////////////////////////////////////////////////////////////////
-{
-
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Destructor.
-//
-// Use: public
-
-SoSFImage::~SoSFImage()
-//
-////////////////////////////////////////////////////////////////////////
-{
-
-}
+// Use standard definitions of all basic methods
+SO_SFIELD_SOURCE(SoSFImage, SbImage, const SbImage &);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -120,26 +91,7 @@ SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b, CopyPolicy
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    image.setValue(s, nc, b);
-
-    valueChanged();
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sets value, given image dimensions and bytes...
-//
-// Use: public
-
-void
-SoSFImage::setValue(const SbImage &img)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    image = img;
-
-    valueChanged();
+    setValue(SbImage(s, nc, b));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -154,61 +106,10 @@ SoSFImage::getValue(SbVec2s &s, int &nc) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    evaluate();
+    s = value.getSize();
+    nc = value.getNumComponents();
 
-    s = image.getSize();
-    nc = image.getNumComponents();
-
-    return image.getConstBytes();
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Gets value, which is the image's dimensions and bytes.
-//
-// Use: public
-
-const SbImage &
-SoSFImage::getValue() const
-//
-////////////////////////////////////////////////////////////////////////
-{
-    evaluate();
-
-    return image;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Copy image from another field.
-//
-// Use: public
-
-const SoSFImage &
-SoSFImage::operator =(const SoSFImage &f)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    setValue(f.getValue());
-
-    return *this;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns TRUE if field has same value as given field.
-//
-// Use: public
-
-int
-SoSFImage::operator ==(const SoSFImage &f) const
-//
-////////////////////////////////////////////////////////////////////////
-{
-    return image == f.image;
+    return value.getConstBytes();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -223,9 +124,9 @@ SoSFImage::startEditing(SbVec2s &s, int &nc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    s = image.getSize();
-    nc = image.getNumComponents();
-    return image.getBytes();
+    s = value.getSize();
+    nc = value.getNumComponents();
+    return value.getBytes();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -262,7 +163,7 @@ SoSFImage::readValue(SoInput *in)
         !in->read(numComponents))
         return FALSE;
 
-    image = SbImage(size, numComponents);
+    SbImage image = SbImage(size, numComponents);
     unsigned char *bytes = image.getBytes();
 
     int byte = 0;
@@ -298,6 +199,8 @@ SoSFImage::readValue(SoInput *in)
         }
     }
 
+    setValue(image);
+
     return TRUE;
 }
 
@@ -313,9 +216,9 @@ SoSFImage::writeValue(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbVec2s & size = image.getSize();
-    int numComponents = image.getNumComponents();
-    const unsigned char * bytes = image.getConstBytes();
+    const SbVec2s & size = value.getSize();
+    int numComponents = value.getNumComponents();
+    const unsigned char * bytes = value.getConstBytes();
 
     out->write(size[0]);
 
