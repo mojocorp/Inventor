@@ -39,7 +39,6 @@
  * 	Derrick Burns - 1992
  */
 
-#include "glimports.h"
 #include "mystdio.h"
 #include "myassert.h"
 #include "mymath.h"

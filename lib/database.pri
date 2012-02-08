@@ -531,7 +531,6 @@ PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
            database/src/so/nodes/nurbs/head/displaymode.h \
            database/src/so/nodes/nurbs/head/flist.h \
            database/src/so/nodes/nurbs/head/flistsorter.h \
-           database/src/so/nodes/nurbs/head/glimports.h \
            database/src/so/nodes/nurbs/head/gridline.h \
            database/src/so/nodes/nurbs/head/gridtrimvertex.h \
            database/src/so/nodes/nurbs/head/gridvertex.h \
@@ -544,7 +543,6 @@ PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
            database/src/so/nodes/nurbs/head/maplist.h \
            database/src/so/nodes/nurbs/head/mesher.h \
            database/src/so/nodes/nurbs/head/myassert.h \
-           database/src/so/nodes/nurbs/head/myglimports.h \
            database/src/so/nodes/nurbs/head/mymath.h \
            database/src/so/nodes/nurbs/head/mysetjmp.h \
            database/src/so/nodes/nurbs/head/mystdio.h \

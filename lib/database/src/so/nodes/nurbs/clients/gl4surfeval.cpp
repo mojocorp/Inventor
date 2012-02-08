@@ -40,7 +40,6 @@
  * $Revision: 1.1 $
  */
 
-#include "myglimports.h"
 #include "myassert.h"
 #include "mystdio.h"
 #include "mymath.h"

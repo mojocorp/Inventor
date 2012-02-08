@@ -40,7 +40,6 @@
  */
 
 
-#include "glimports.h"
 #include "mystdio.h"
 #include "myassert.h"
 #include "arc.h"

@@ -39,7 +39,6 @@
  * 	Derrick Burns - 1991
  */
 
-#include "glimports.h"
 #include "nurbsconsts.h"
 #include "reader.h"
 #include "trimvertex.h"

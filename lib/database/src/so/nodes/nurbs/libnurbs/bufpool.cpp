@@ -39,7 +39,6 @@
  * 	Derrick Burns - 1991
  */
 
-#include "glimports.h"
 #include "myassert.h"
 #include "bufpool.h"
 

@@ -43,7 +43,6 @@
 	- interprets display mode (wireframe,shaded,...)
 */
 
-#include "glimports.h"
 #include "mystdio.h"
 #include "backend.h"
 #include "basiccrveval.h"
