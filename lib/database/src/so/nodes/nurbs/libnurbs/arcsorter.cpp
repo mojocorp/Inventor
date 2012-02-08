@@ -41,7 +41,6 @@
  * 	Derrick Burns - 1991
  */
 
-#include "glimports.h"
 #include "arc.h"
 #include "arcsorter.h"
 #include "subdivider.h"

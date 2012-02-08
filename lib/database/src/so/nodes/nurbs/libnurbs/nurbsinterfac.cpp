@@ -39,7 +39,6 @@
  * 	Derrick Burns - 1991
  */
 
-#include "glimports.h"
 #include "mystdio.h"
 #include "nurbsconsts.h"
 #include "nurbstess.h"
