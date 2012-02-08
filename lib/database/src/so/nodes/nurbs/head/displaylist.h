@@ -44,7 +44,6 @@
  * 	Derrick Burns - 1991
  */
 
-#include "glimports.h"
 #include "mysetjmp.h"
 #include "mystdio.h"
 #include "bufpool.h"
