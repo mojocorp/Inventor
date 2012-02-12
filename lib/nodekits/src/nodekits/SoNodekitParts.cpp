@@ -644,7 +644,7 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
     existedBefore = FALSE;
 
     // IS THERE A BRACKET, WHICH SIGNIFIES INDEXING INTO A LIST?
-    if ( strrchr( nameOfPart.getString(), '[') != NULL ) {
+    if ( nameOfPart.rfind('[') != -1 ) {
 
 	char *listNameCopy = strdup( nameOfPart.getString());
 	int  arrayIndex;
@@ -852,7 +852,7 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
     SoFullPath *answerPath = NULL;
 
     // IS THERE A BRACKET, WHICH SIGNIFIES INDEXING INTO A LIST?
-    if ( strrchr( nameOfPart.getString(), '[') != NULL ) {
+    if ( nameOfPart.rfind('[') != -1 ) {
 
 	char *listNameCopy = strdup( nameOfPart.getString());
 	int  arrayIndex;
@@ -1095,7 +1095,7 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 ////////////////////////////////////////////////////////////////////////
 {
     // IS THERE A BRACKET, WHICH SIGNIFIES INDEXING INTO A LIST?
-    if ( strrchr( nameOfPart.getString(), '[') != NULL ) {
+    if ( nameOfPart.rfind('[') != -1 ) {
 	char *listNameCopy = strdup( nameOfPart.getString());
 	int  arrayIndex;
 
@@ -1316,7 +1316,7 @@ SoNodekitParts::getAnyPart( const SbName &nameOfPart, SbBool makeIfNeeded,
     SoNode *firstNode = NULL, *secondNode = NULL;
 
     // JUST A SINGLE NAME...
-    if ( strrchr( nameOfPart.getString(), '.' ) == NULL )
+    if ( nameOfPart.rfind('.') == -1 )
 	return getSingleNamePart( nameOfPart, makeIfNeeded, leafCheck, 
 				  publicCheck, existedBefore );
 
@@ -1412,7 +1412,7 @@ SoNodekitParts::createPathToAnyPart( const SbName &nameOfPart,
     SoFullPath *firstPath = NULL, *secondPath = NULL, *answer = NULL;
 
     // JUST A SINGLE NAME...
-    if ( strrchr( nameOfPart.getString(), '.' ) == NULL )
+    if ( nameOfPart.rfind('.') == -1 )
 	return getSingleNamePathToPart( nameOfPart, makeIfNeeded, 
 				    leafCheck, publicCheck, existedBefore );
 
@@ -1506,7 +1506,7 @@ SoNodekitParts::setAnyPart( const SbName &nameOfPart, SoNode *newPartNode,
     SbBool answer;
 
     // JUST A SINGLE NAME...
-    if ( strrchr( nameOfPart.getString(), '.' ) == NULL )
+    if ( nameOfPart.rfind('.') == -1 )
 	return setSingleNamePart( nameOfPart, newPartNode, anyPart );
 
     // OTHERWISE, A COMPOUND NAME of the form:  part1.part2.part3 etc.
