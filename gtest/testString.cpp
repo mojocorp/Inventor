@@ -37,6 +37,24 @@ TEST(SbString, Length) {
     EXPECT_EQ(qstring.length(), sbstring.getLength());
 }
 
+TEST(SbString, Find) {
+    SbString str ("There are two needles in this haystack with needles.");
+    SbString str2 ("needle");
+
+    EXPECT_EQ(str.find(str2), 14);
+    EXPECT_EQ(str.find("needles",15), 44);
+    EXPECT_EQ(str.find("There", 14), -1);
+}
+
+TEST(SbString, Rfind) {
+    SbString str ("There are two needles in this haystack with needles.");
+    SbString str2 ("needle");
+
+    EXPECT_EQ(str.rfind(str2), 44);
+    EXPECT_EQ(str.rfind("needles",43), 14);
+    EXPECT_EQ(str.rfind("haystack", 14), -1);
+}
+
 TEST(SbString, Unicode) {
 
     QString German = QString::fromUtf8("Ä ä Ü ü ß");
