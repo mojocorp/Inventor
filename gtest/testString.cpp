@@ -4,7 +4,7 @@
 
 #include <QString>
 
-TEST(Empty, SbString) {
+TEST(SbString, Empty) {
 
     SbString sbstring;
 
@@ -19,7 +19,7 @@ TEST(Empty, SbString) {
     EXPECT_TRUE(sbstring.isEmpty());
 }
 
-TEST(Length, SbString) {
+TEST(SbString, Length) {
 
     QString qstring;
     SbString sbstring;
@@ -37,7 +37,7 @@ TEST(Length, SbString) {
     EXPECT_EQ(qstring.length(), sbstring.getLength());
 }
 
-TEST(Unicode, SbString) {
+TEST(SbString, Unicode) {
 
     QString German = QString::fromUtf8("Ä ä Ü ü ß");
     QString Russian = QString::fromUtf8("Я Б Г Д Ж Й");

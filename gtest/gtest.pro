@@ -15,6 +15,8 @@ HEADERS += include/gtest/gtest.h
 SOURCES += src/gtest-all.cc
 
 SOURCES += main.cpp \
-           creation_unittest.cpp \
-           string_unittest.cpp
+           testVec2f.cpp \
+           testBox3f.cpp \
+           testCreation.cpp \
+           testString.cpp
 
