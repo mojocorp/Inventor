@@ -54,6 +54,8 @@
 #include <Inventor/SbString.h>
 #include <Inventor/errors/SoDebugError.h>
 
+#include <string>
+
 //
 // Constructor that initializes to a substring.
 //
@@ -155,6 +157,24 @@ SbString::makeEmpty(SbBool freeOld)
 	string = staticStorage;
     }
     string[0] = '\0';
+}
+
+int
+SbString::find(const SbString & str, int pos) const
+{
+    size_t index = std::string(string).find(str.getString(), pos);
+
+    return (index!=std::string::npos) ? index : -1;
+}
+
+int
+SbString::rfind(const SbString & str, int pos) const
+{
+    pos = (pos==-1) ? std::string::npos : pos;
+
+    size_t index = std::string(string).rfind(str.getString(), pos);
+
+    return (index!=std::string::npos) ? index : -1;
 }
 
 //
