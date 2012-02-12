@@ -4,8 +4,6 @@ DEFINES += LIBRARYBUILD
 DEPENDPATH += database \
               database/include \
               database/include/Inventor \
-              database/src/sb \
-              database/src/so \
               database/include/Inventor/actions \
               database/include/Inventor/bundles \
               database/include/Inventor/caches \
@@ -20,7 +18,10 @@ DEPENDPATH += database \
               database/include/Inventor/projectors \
               database/include/Inventor/sensors \
               database/include/Inventor/threads \
+              database/include/Inventor/misc/upgraders \
+              database/src/sb \
               database/src/sb/projectors \
+              database/src/so \
               database/src/so/actions \
               database/src/so/bundles \
               database/src/so/caches \
@@ -33,7 +34,6 @@ DEPENDPATH += database \
               database/src/so/nodes \
               database/src/so/sensors \
               database/src/so/upgraders \
-              database/include/Inventor/misc/upgraders \
               database/src/so/nodes/nurbs \
               database/src/so/nodes/nurbs/clients \
               database/src/so/nodes/nurbs/head \

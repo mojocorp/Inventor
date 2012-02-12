@@ -44,8 +44,8 @@ INCLUDEPATH+= database/include \
               interaction/include \
               nodekits/include
               
-include(database.pri)
-include(interaction.pri)
-include(nodekits.pri)
+include(database/database.pri)
+include(interaction/interaction.pri)
+include(nodekits/nodekits.pri)
 
 LIBS += -L$$OUT_PWD/../build -limage -ljpeg -lfreetype
