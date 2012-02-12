@@ -421,7 +421,7 @@ SoV1NodekitParts::getAnyPart( const SbName &nameOfPart, SbBool makeIfNeeded,
 ////////////////////////////////////////////////////////////////////////
 {
     // ONLY ALLOW SINGLE NAME PARTS...
-    if ( strrchr( nameOfPart.getString(), '.' ) != NULL ) {
+    if ( nameOfPart.rfind('.') != -1 ) {
 #ifdef DEBUG
 	SoDebugError::post("SoV1NodekitParts::getAnyPart", 
 			   "part name %s is not a single-word part",
@@ -432,7 +432,7 @@ SoV1NodekitParts::getAnyPart( const SbName &nameOfPart, SbBool makeIfNeeded,
 
     // DON'T ALLOW BRACKETS, WHICH SIGNIFY INDEXING INTO A LIST
     // IN THE NEW NODEKITS.
-    if ( strrchr( nameOfPart.getString(), '[') != NULL ) {
+    if ( nameOfPart.rfind('[') != -1 ) {
 #ifdef DEBUG
 	SoDebugError::post("SoV1NodekitParts::getAnyPart", 
 			   "part name %s contains an index, which is illegal",
@@ -519,7 +519,7 @@ SoV1NodekitParts::setAnyPart( const SbName &nameOfPart, SoNode *newPartNode,
 ////////////////////////////////////////////////////////////////////////
 {
     // JUST SINGLE NAME PARTS...
-    if ( strrchr( nameOfPart.getString(), '.' ) != NULL ) {
+    if ( nameOfPart.rfind('.') != -1 ) {
 #ifdef DEBUG
 	SoDebugError::post("SoV1NodekitParts::setAnyPart", 
 			   "part name %s is not a single-word part",
@@ -530,7 +530,7 @@ SoV1NodekitParts::setAnyPart( const SbName &nameOfPart, SoNode *newPartNode,
 
     // DON'T ALLOW BRACKETS, WHICH SIGNIFY INDEXING INTO A LIST
     // IN THE NEW NODEKITS?
-    if ( strrchr( nameOfPart.getString(), '[') != NULL ) {
+    if ( nameOfPart.rfind('[') != -1 ) {
 #ifdef DEBUG
 	SoDebugError::post("SoV1NodekitParts::setAnyPart", 
 			   "part name %s contains an index, which is illegal",

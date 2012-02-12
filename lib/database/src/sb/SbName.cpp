@@ -81,6 +81,42 @@ SbName::SbName()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Return the position of the first occurrence in the string of the
+//    searched content, -1 if not found.
+//
+// Use: public
+
+int
+SbName::find(const char c) const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    int index = strchr(entry->string, c)-entry->string;
+
+    return (index>0) ? index : -1;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Return the position of the last occurrence in the string of the
+//    searched content, -1 if not found.
+//
+// Use: public
+
+int
+SbName::rfind(char c) const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    int index = strrchr(entry->string, c)-entry->string;
+
+    return (index>0) ? index : -1;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns TRUE if given character is legal starting character for
 //    an identifier.
 //
