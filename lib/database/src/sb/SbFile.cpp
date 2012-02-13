@@ -1,5 +1,7 @@
 #include <Inventor/SbFile.h>
 
+#include <algorithm>
+
 #if defined(SB_OS_WIN)
 #   include <io.h>
 #   include <sys/types.h>
@@ -115,3 +117,32 @@ SbFile::exists( const SbString & fileName )
     return (SB_ACCESS(fileName.getString(),SB_F_OK)==0) ? true : false;
 }
 
+SbString
+SbFile::baseName() const
+{
+    return SbFile::baseName(mFileName);
+}
+
+SbString
+SbFile::extension() const
+{
+    return SbFile::extension(mFileName);
+}
+
+SbString
+SbFile::baseName(const SbString & string)
+{
+    int index = std::max( string.rfind("/"), string.rfind("\\"));
+
+    return string.getSubString(index+1);
+}
+
+SbString
+SbFile::extension(const SbString & string)
+{
+    int firstDot = string.find(".");
+    if (firstDot == -1)
+        return "";
+
+    return string.getSubString(firstDot + 1);
+}
