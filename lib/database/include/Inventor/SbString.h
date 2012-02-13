@@ -142,6 +142,12 @@ public:
     /// from startChar until the end are deleted.
     void deleteSubString(int startChar, int endChar = -1);
 
+    /// Returns a lowercase copy of the string.
+    SbString toLower() const;
+
+    /// Returns an uppercase copy of the string.
+    SbString toUpper() const;
+
     /// Assigns str to this string and returns a reference to this string.
     SbString & operator =(const char *str);
 
@@ -206,7 +212,7 @@ private:
 #define SB_STRING_STATIC_STORAGE_SIZE  32
     char  staticStorage[SB_STRING_STATIC_STORAGE_SIZE];
 
-    void  expand(int bySize); // Makes more room
+    void  expand(size_t bySize); // Makes more room
 };
 
 #endif /* _SB_STRING_ */

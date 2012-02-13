@@ -55,6 +55,8 @@
 #include <Inventor/errors/SoDebugError.h>
 
 #include <string>
+#include <cctype> //tolower toupper
+#include <algorithm>
 
 //
 // Constructor that initializes to a substring.
@@ -104,9 +106,9 @@ SbString::~SbString()
 //
 
 void
-SbString::expand(int bySize)
+SbString::expand(size_t bySize)
 {
-    int newSize = strlen(string) + bySize + 1;
+    size_t newSize = strlen(string) + bySize + 1;
 
     if (newSize >= SB_STRING_STATIC_STORAGE_SIZE &&
 	(string == staticStorage || newSize > storageSize)) {
@@ -164,17 +166,17 @@ SbString::find(const SbString & str, int pos) const
 {
     size_t index = std::string(string).find(str.getString(), pos);
 
-    return (index!=std::string::npos) ? index : -1;
+    return (index!=std::string::npos) ? (int)index : -1;
 }
 
 int
 SbString::rfind(const SbString & str, int pos) const
 {
-    pos = (pos==-1) ? std::string::npos : pos;
+    pos = (pos==-1) ? (int)std::string::npos : pos;
 
     size_t index = std::string(string).rfind(str.getString(), pos);
 
-    return (index!=std::string::npos) ? index : -1;
+    return (index!=std::string::npos) ? (int)index : -1;
 }
 
 //
@@ -186,7 +188,7 @@ SbString::rfind(const SbString & str, int pos) const
 SbString
 SbString::getSubString(int startChar, int endChar) const
 {
-    int		len = getLength();
+    size_t		len = getLength();
 
     // Get substring that starts at specified character
     SbString	tmp = &string[startChar];
@@ -207,7 +209,7 @@ SbString::getSubString(int startChar, int endChar) const
 void
 SbString::deleteSubString(int startChar, int endChar)
 {
-    int		len = getLength();
+    size_t		len = getLength();
 
     // Modify string in place
     if (endChar < 0 || endChar >= len - 1)
@@ -234,6 +236,24 @@ SbString::deleteSubString(int startChar, int endChar)
     *this = tmp;
 }
 
+SbString
+SbString::toLower() const
+{
+    std::string str(string);
+    std::transform(str.begin(), str.end(), str.begin(), tolower);
+
+    return str.c_str();
+}
+
+SbString
+SbString::toUpper() const
+{
+    std::string str(string);
+    std::transform(str.begin(), str.end(), str.begin(), toupper);
+
+    return str.c_str();
+}
+
 //
 // Assignment operator for character string
 //
@@ -241,7 +261,7 @@ SbString::deleteSubString(int startChar, int endChar)
 SbString &
 SbString::operator =(const char *str)
 {
-    int size = (str == NULL ? 0 : strlen(str)) + 1;
+    size_t size = (str == NULL ? 0 : strlen(str)) + 1;
 
     // If the string we are assigning to this is a pointer into the
     // string already in this, we have to make sure we don't step on
