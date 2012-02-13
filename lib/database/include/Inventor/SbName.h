@@ -105,7 +105,7 @@ public:
 
     /// Returns length of string
     size_t getLength() const {
-        return strlen(entry->string);
+        return entry->length;
     }
 
     /// Return the position of the first occurrence in the char of the searched content, -1 if not found.
