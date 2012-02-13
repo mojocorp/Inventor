@@ -60,6 +60,8 @@
 
 #include <Inventor/SbBasic.h>
 
+#include <string.h>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SbNameEntry (internal to SB)
@@ -86,6 +88,7 @@ private:
     static struct SbNameChunk *chunk; // Chunk of memory for string storage
 
     const char  *string; // String for this entry
+    size_t       length;
     uint32_t  hashValue; // Its hash value
     SbNameEntry  *next;  // Pointer to next entry
 
@@ -93,8 +96,9 @@ private:
     static void initClass();
 
     // Constructor
-    SbNameEntry(const char *s, uint32_t h, SbNameEntry *n) {
+    SbNameEntry(const char *s, size_t l, uint32_t h, SbNameEntry *n) {
         string = s;
+        length = l;
         hashValue = h;
         next = n;
     }
