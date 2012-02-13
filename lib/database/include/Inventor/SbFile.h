@@ -42,8 +42,20 @@ public:
     /// Writes up to count items.
     size_t write(const char * data, size_t count);
 
+    /// Returns the base name of the file without the path.
+    SbString baseName() const;
+
+    /// Returns the complete extension of the file.
+    SbString extension() const;
+
     /// Returns true if the file specified by fileName exists; otherwise returns false.
     static bool exists( const SbString & fileName );
+
+    /// Static version of baseName().
+    static SbString baseName(const SbString & filename);
+
+    /// Static version of extension().
+    static SbString extension(const SbString & filename);
 private:
     // Disables the use of copy constructors and assignment operators
     SbFile(const SbFile &);
