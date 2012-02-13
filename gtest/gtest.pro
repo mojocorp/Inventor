@@ -18,5 +18,6 @@ SOURCES += main.cpp \
            testVec2f.cpp \
            testBox3f.cpp \
            testCreation.cpp \
-           testString.cpp
+           testString.cpp \
+           testFile.cpp
 
