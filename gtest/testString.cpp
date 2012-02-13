@@ -55,6 +55,20 @@ TEST(SbString, Rfind) {
     EXPECT_EQ(str.rfind("haystack", 14), -1);
 }
 
+TEST(SbString, toLower) {
+    SbString str1 ("there are two needles in this haystack with needles.");
+    SbString str2 ("THERE ARE TWO NEEDLES IN THIS HAYSTACK WITH NEEDLES.");
+
+    EXPECT_TRUE(str1==str2.toLower());
+}
+
+TEST(SbString, toUpper) {
+    SbString str1 ("there are two needles in this haystack with needles.");
+    SbString str2 ("THERE ARE TWO NEEDLES IN THIS HAYSTACK WITH NEEDLES.");
+
+    EXPECT_TRUE(str1.toUpper()==str2);
+}
+
 TEST(SbString, Unicode) {
 
     QString German = QString::fromUtf8("Ä ä Ü ü ß");
@@ -62,5 +76,5 @@ TEST(SbString, Unicode) {
     QString Polish = QString::fromUtf8("Ł Ą Ż Ę Ć Ń Ś Ź");
     QString Japanese = QString::fromUtf8("ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃ");
 
-    printf("utf8: %s\n", Japanese.toUtf8().constData());
+    //printf("utf8: %s\n", Japanese.toUtf8().constData());
 }
