@@ -179,7 +179,7 @@ SbNameEntry::insert(const char *s)
             chunk->bytesLeft -= len;
         }
 
-        entry = new SbNameEntry(s, h, head);
+        entry = new SbNameEntry(s, len-1, h, head);
         nameTable[i] = entry;
     }
 
