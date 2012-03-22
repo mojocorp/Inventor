@@ -60,12 +60,8 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
 
-#ifdef SB_OS_WIN
-#include <malloc.h>
-#else
-#include <alloca.h>
-#endif
 #include <float.h>
+#include <vector>
 
 // Formats for 1-4 component textures
 static GLenum formats[] = {
@@ -406,23 +402,22 @@ SoGLTextureImageElement::sendTex(SoState *state)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
     
-    GLubyte *level0 = NULL;
+    std::vector<GLubyte> level0;
     if (newSize != size) {
-	level0 = (GLubyte *)
-	    alloca(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
+        level0.resize(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
 
 	// Use gluScaleImage (which does linear interpolation or box
 	// filtering) if using a linear interpolation magnification
 	// filter:
 	gluScaleImage(
 	    (GLenum)format, size[0], size[1], GL_UNSIGNED_BYTE, bytes,
-	    newSize[0], newSize[1], GL_UNSIGNED_BYTE, level0);
+                    newSize[0], newSize[1], GL_UNSIGNED_BYTE, &level0[0]);
     }
     
     // Send level-0 mipmap:
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, newSize[0], newSize[1],
 		 0, (GLenum)format, GL_UNSIGNED_BYTE,
-		 level0 == NULL ? bytes : level0);
+                 level0.empty() ? bytes : &level0[0]);
     
     // If necessary, send other mipmaps:
     if (needMipMaps) {
@@ -431,13 +426,12 @@ SoGLTextureImageElement::sendTex(SoState *state)
 	// (and the level0 array is used if possible).
 	
 	const GLubyte *prevLevel = NULL;
-	if (level0 == NULL) {
-	    level0 = (GLubyte *)
-		alloca(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
+        if (level0.empty()) {
+            level0.resize(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
 	    prevLevel = bytes;
 	}
 	else {
-	    prevLevel = level0;
+            prevLevel = &level0[0];
 	}
     
 	int level = 0;
@@ -485,8 +479,8 @@ SoGLTextureImageElement::sendTex(SoState *state)
 	    // Send level-N mipmap:
 	    glTexImage2D(GL_TEXTURE_2D, level, internalFormat,
 			 curSize[0], curSize[1],
-			 0, (GLenum)format, GL_UNSIGNED_BYTE, level0);
-	    prevLevel = level0;
+                         0, (GLenum)format, GL_UNSIGNED_BYTE, &level0[0]);
+            prevLevel = &level0[0];
 	}
     }
 
