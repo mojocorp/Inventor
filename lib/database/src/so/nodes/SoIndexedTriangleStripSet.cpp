@@ -1996,15 +1996,14 @@ SoIndexedTriangleStripSet::FmVn(SoGLRenderAction *) {
     const int32_t *const normalIndx = getNormalIndices();
     const int32_t *const colorIndx = getColorIndices();
 
-    unsigned int f;
     unsigned int v = 0;
     int clrCtr = 0;
     glBegin(GL_TRIANGLES);
     for (int strip = 0; strip < ns; strip++) {
-        const int nf = (*numverts)-2;
+        const unsigned int nf = (*numverts)-2;
 
         v += 2;
-        for (f = 0; f < nf; f++) {
+        for (unsigned int f = 0; f < nf; f++) {
             // Per-face:
             (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
 
@@ -2054,15 +2053,14 @@ SoIndexedTriangleStripSet::FmVnT(SoGLRenderAction *) {
     const int32_t *const colorIndx = getColorIndices();
     const int32_t *const tCoordIndx = getTexCoordIndices();
 
-    unsigned int f;
     unsigned int v = 0;
     int clrCtr =0;
     glBegin(GL_TRIANGLES);
     for (int strip = 0; strip < ns; strip++) {
-        const int nf = (*numverts)-2;
+        const unsigned int nf = (*numverts)-2;
 
         v += 2;
-        for (f = 0; f < nf; f++) {
+        for (unsigned int f = 0; f < nf; f++) {
             // Per-face:
             (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
 
@@ -2292,15 +2290,14 @@ SoIndexedTriangleStripSet::VmFn(SoGLRenderAction *) {
     const int32_t *const normalIndx = getNormalIndices();
     const int32_t *const colorIndx = getColorIndices();
 
-    unsigned int f;
     unsigned int v = 0;
     int nrmCtr=0;
     glBegin(GL_TRIANGLES);
     for (int strip = 0; strip < ns; strip++) {
-        const int nf = (*numverts)-2;
+        const unsigned int nf = (*numverts)-2;
 
         v += 2;
-        for (f = 0; f < nf; f++) {
+        for (unsigned int f = 0; f < nf; f++) {
             // Per-face:
             (*normalFunc)(normalPtr+normalIndx[nrmCtr++]*normalStride);
 
@@ -2349,15 +2346,14 @@ SoIndexedTriangleStripSet::VmFnT(SoGLRenderAction *) {
     const int32_t *const colorIndx = getColorIndices();
     const int32_t *const tCoordIndx = getTexCoordIndices();
 
-    unsigned int f;
     unsigned int v = 0;
     int nrmCtr = 0;
     glBegin(GL_TRIANGLES);
     for (int strip = 0; strip < ns; strip++) {
-        const int nf = (*numverts)-2;
+        const unsigned int nf = (*numverts)-2;
 
         v += 2;
-        for (f = 0; f < nf; f++) {
+        for (unsigned int f = 0; f < nf; f++) {
             // Per-face:
 
             (*normalFunc)(normalPtr+normalIndx[nrmCtr++]*normalStride);

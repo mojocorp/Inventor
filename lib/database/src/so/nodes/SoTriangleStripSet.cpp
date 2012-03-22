@@ -1819,14 +1819,13 @@ SoTriangleStripSet::FmVn(SoGLRenderAction *) {
     const int numStrips = numVertices.getNum();
     const int32_t *numVerts = numVertices.getValues(0);
 
-    unsigned int f;
     unsigned int v = 0;
     glBegin(GL_TRIANGLES);
     for (int strip = 0; strip < numStrips; strip++) {
-        const int nf = (*numVerts)-2;
+        const unsigned int nf = (*numVerts)-2;
 
         v += 2;
-        for (f = 0; f < nf; f++) {
+        for (unsigned int f = 0; f < nf; f++) {
             // Per-face:
             (*colorFunc)(colorPtr); colorPtr += colorStride;
 
@@ -1870,14 +1869,13 @@ SoTriangleStripSet::FmVnT(SoGLRenderAction *) {
     const int numStrips = numVertices.getNum();
     const int32_t *numVerts = numVertices.getValues(0);
 
-    unsigned int f;
     unsigned int v = 0;
     glBegin(GL_TRIANGLES);
     for (int strip = 0; strip < numStrips; strip++) {
-        const int nf = (*numVerts)-2;
+        const unsigned int nf = (*numVerts)-2;
 
         v += 2;
-        for (f = 0; f < nf; f++) {
+        for (unsigned int f = 0; f < nf; f++) {
             // Per-face:
             (*colorFunc)(colorPtr); colorPtr += colorStride;
 
@@ -2096,14 +2094,13 @@ SoTriangleStripSet::VmFn(SoGLRenderAction *) {
     const int numStrips = numVertices.getNum();
     const int32_t *numVerts = numVertices.getValues(0);
 
-    unsigned int f;
     unsigned int v = 0;
     glBegin(GL_TRIANGLES);
     for (int strip = 0; strip < numStrips; strip++) {
-        const int nf = (*numVerts)-2;
+        const unsigned int nf = (*numVerts)-2;
 
         v += 2;
-        for (f = 0; f < nf; f++) {
+        for (unsigned int f = 0; f < nf; f++) {
             // Per-face:
             (*normalFunc)(normalPtr); normalPtr += normalStride;
 
@@ -2146,14 +2143,13 @@ SoTriangleStripSet::VmFnT(SoGLRenderAction *) {
     const int numStrips = numVertices.getNum();
     const int32_t *numVerts = numVertices.getValues(0);
 
-    unsigned int f;
     unsigned int v = 0;
     glBegin(GL_TRIANGLES);
     for (int strip = 0; strip < numStrips; strip++) {
-        const int nf = (*numVerts)-2;
+        const unsigned int nf = (*numVerts)-2;
 
         v += 2;
-        for (f = 0; f < nf; f++) {
+        for (unsigned int f = 0; f < nf; f++) {
             // Per-face:
             (*normalFunc)(normalPtr); normalPtr += normalStride;
 
