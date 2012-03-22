@@ -306,7 +306,7 @@ SoCompactPathList::compactPaths(int curSlot, int depth,
 ////////////////////////////////////////////////////////////////////////
 {
     int		nextSlot;
-    int		curIndex, prevIndex, nextIndex;
+    int		curIndex, prevIndex, nextIndex=0;
     int		firstPathWithChild, numPathsWithChild, curPath, lastPath;
     int		numChildren, curChild;
 
