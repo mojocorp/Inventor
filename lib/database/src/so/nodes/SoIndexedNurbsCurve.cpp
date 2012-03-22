@@ -190,10 +190,10 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
                 N_FIXEDRATE );
         GLRender->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
                 N_FIXEDRATE );
-        GLRender->setnurbsproperty( N_V3D,  N_S_STEPS, steps);
-        GLRender->setnurbsproperty( N_V3D,  N_T_STEPS, steps);
-        GLRender->setnurbsproperty( N_V3DR, N_S_STEPS, steps);
-        GLRender->setnurbsproperty( N_V3DR, N_T_STEPS, steps);
+        GLRender->setnurbsproperty( N_V3D,  N_S_STEPS, (float)steps);
+        GLRender->setnurbsproperty( N_V3D,  N_T_STEPS, (float)steps);
+        GLRender->setnurbsproperty( N_V3DR, N_S_STEPS, (float)steps);
+        GLRender->setnurbsproperty( N_V3DR, N_T_STEPS, (float)steps);
     }
     else
     {
@@ -346,10 +346,10 @@ SoIndexedNurbsCurve::generatePrimitives(SoAction *action)
                 N_FIXEDRATE );
         primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
                 N_FIXEDRATE );
-        primRender.setnurbsproperty( N_V3D,  N_S_STEPS, steps);
-        primRender.setnurbsproperty( N_V3D,  N_T_STEPS, steps);
-        primRender.setnurbsproperty( N_V3DR, N_S_STEPS, steps);
-        primRender.setnurbsproperty( N_V3DR, N_T_STEPS, steps);
+        primRender.setnurbsproperty( N_V3D,  N_S_STEPS, (float)steps);
+        primRender.setnurbsproperty( N_V3D,  N_T_STEPS, (float)steps);
+        primRender.setnurbsproperty( N_V3DR, N_S_STEPS, (float)steps);
+        primRender.setnurbsproperty( N_V3DR, N_T_STEPS, (float)steps);
     }
     else
     {
