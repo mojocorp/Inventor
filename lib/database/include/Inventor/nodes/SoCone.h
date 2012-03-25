@@ -178,7 +178,6 @@ class INVENTOR_API SoCone : public SoShape {
     // These render the cone
     void		GLRenderGeneric(SoGLRenderAction *action,
 					SbBool sendNormals, SbBool doTextures);
-    void		GLRenderNvertTnone(SoGLRenderAction *action);
 
     // Computes intersection of ray with infinite canonical cone
     SbBool		intersectInfiniteCone(const SbLine &ray,

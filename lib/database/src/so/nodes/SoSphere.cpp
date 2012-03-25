@@ -154,15 +154,8 @@ SoSphere::GLRender(SoGLRenderAction *action)
     SbBool doTextures = SoGLTextureEnabledElement::get(action->getState());
 
     // Render the sphere. The GLRenderGeneric() method handles any
-    // case. The GLRenderNvertTnone() handles the case where we are
-    // outputting normals but no texture coordinates. This case is
-    // handled separately since it occurs often and warrants its own
-    // method.
-
-    if (! doTextures && ! mb.isColorOnly())
-	GLRenderNvertTnone(action);
-    else
-	GLRenderGeneric(action, ! mb.isColorOnly(), doTextures);
+    // case.
+    GLRenderGeneric(action, ! mb.isColorOnly(), doTextures);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -556,114 +549,6 @@ SoSphere::GLRenderGeneric(SoGLRenderAction *action,
         }
         if (sendNormals)
             glNormal3fv(vec.getValue());
-        glVertex3fv((vec*rad).getValue());
-
-        glEnd();
-    }
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Renders sphere with normals and without texture coordinates.
-//
-// Use: private
-
-void
-SoSphere::GLRenderNvertTnone(SoGLRenderAction *action)
-//
-////////////////////////////////////////////////////////////////////////
-{  
-    float rad = (radius.isIgnored() ? 1.0f : radius.getValue());
-
-    int		i, j, k, s_x, s_y, s_z, order, octant;
-    float	botWidth, topWidth, yTop, yBot, tmp;
-    SbVec3f	vec;
-    int		depth;
-
-    // Compute depth based on complexity
-    depth = computeDepth(action);
-
-
-    for (octant = 0; octant < 8; octant++) {
-        s_x = -(((octant & 01) << 1) - 1);
-        s_y = -( (octant & 02)       - 1);
-        s_z = -(((octant & 04) >> 1) - 1);
-        order = s_x * s_y * s_z;
-
-        for (i = 0; i < depth - 1; i++) {
-            yBot = (float) i      / depth;
-            yTop = (float)(i + 1) / depth;
-
-            botWidth = 1.0f - yBot;
-            topWidth = 1.0f - yTop;
-
-            glBegin(GL_TRIANGLE_STRIP);
-
-            for (j = 0; j < depth - i; j++) {
-
-                // First vertex
-                k = order > 0 ? depth - i - j : j;
-                tmp = (botWidth * k) / (depth - i);
-                vec.setValue(s_x * tmp, s_y * yBot, s_z * (botWidth - tmp));
-                vec.normalize();
-
-                glNormal3fv(vec.getValue());
-                glVertex3fv((vec*rad).getValue());
-
-                // Second vertex
-                k = order > 0 ? (depth - i - 1) - j : j;
-                tmp = (topWidth * k) / (depth - i - 1);
-                vec.setValue(s_x * tmp, s_y * yTop, s_z * (topWidth - tmp));
-                vec.normalize();
-
-                glNormal3fv(vec.getValue());
-                glVertex3fv((vec*rad).getValue());
-            }
-
-            // Last vertex
-            k = order > 0 ? depth - i - j : j;
-            tmp = (botWidth * k) / (depth - i);
-            vec.setValue(s_x * tmp, s_y * yBot, s_z * (botWidth - tmp));
-            vec.normalize();
-
-            glNormal3fv(vec.getValue());
-            glVertex3fv((vec*rad).getValue());
-
-            glEnd();
-        }
-
-        // Handle the top/bottom polygons specially, to avoid divide by zero
-        glBegin(GL_TRIANGLE_STRIP);
-
-        yBot = (float) i / depth;
-        yTop = 1.0;
-        botWidth = 1 - yBot;
-
-        // First cap vertex
-        if (order > 0)
-            vec.setValue(0.0, s_y * yBot, s_z * botWidth);
-        else
-            vec.setValue(s_x * botWidth, s_y * yBot, 0.0);
-        vec.normalize();
-
-        glNormal3fv(vec.getValue());
-        glVertex3fv((vec*rad).getValue());
-
-        // Second cap vertex
-        if (order > 0)
-            vec.setValue(s_x * botWidth, s_y * yBot, 0.0);
-        else
-            vec.setValue(0.0, s_y * yBot, s_z * botWidth);
-        vec.normalize();
-
-        glNormal3fv(vec.getValue());
-        glVertex3fv((vec*rad).getValue());
-
-        // Third cap vertex
-        vec.setValue(0.0, float(s_y), 0.0);
-
-        glNormal3fv(vec.getValue());
         glVertex3fv((vec*rad).getValue());
 
         glEnd();
