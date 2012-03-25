@@ -423,36 +423,34 @@ SoSphere::GLRenderGeneric(SoGLRenderAction *action,
 {
     float rad = (radius.isIgnored() ? 1.0f : radius.getValue());
 
-    int		i, j, k, s_x, s_y, s_z, order, octant;
-    float	botWidth, topWidth, yTop, yBot, tmp;
     SbVec3f	vec;
-    int		depth;
     float	s, t, sAvg;
 
     // Compute depth based on complexity
-    depth = computeDepth(action);
+    int depth = computeDepth(action);
 
-
-    for (octant = 0; octant < 8; octant++) {
-        s_x = -(((octant & 01) << 1) - 1);
-        s_y = -( (octant & 02)       - 1);
-        s_z = -(((octant & 04) >> 1) - 1);
-        order = s_x * s_y * s_z;
+    for (int octant = 0; octant < 8; octant++) {
+        int s_x = -(((octant & 01) << 1) - 1);
+        int s_y = -( (octant & 02)       - 1);
+        int s_z = -(((octant & 04) >> 1) - 1);
+        int order = s_x * s_y * s_z;
+        int i;
 
         for (i = 0; i < depth - 1; i++) {
-            yBot = (float) i      / depth;
-            yTop = (float)(i + 1) / depth;
+            float yBot = (float) i      / depth;
+            float yTop = (float)(i + 1) / depth;
 
-            botWidth = 1.0f - yBot;
-            topWidth = 1.0f - yTop;
+            float botWidth = 1.0f - yBot;
+            float topWidth = 1.0f - yTop;
 
             glBegin(GL_TRIANGLE_STRIP);
 
+            int j;
             for (j = 0; j < depth - i; j++) {
 
                 // First vertex
-                k = order > 0 ? depth - i - j : j;
-                tmp = (botWidth * k) / (depth - i);
+                int k = order > 0 ? depth - i - j : j;
+                float tmp = (botWidth * k) / (depth - i);
                 vec.setValue(s_x * tmp, s_y * yBot, s_z * (botWidth - tmp));
                 vec.normalize();
 
@@ -481,8 +479,8 @@ SoSphere::GLRenderGeneric(SoGLRenderAction *action,
             }
 
             // Last vertex
-            k = order > 0 ? depth - i - j : j;
-            tmp = (botWidth * k) / (depth - i);
+            int k = order > 0 ? depth - i - j : j;
+            float tmp = (botWidth * k) / (depth - i);
             vec.setValue(s_x * tmp, s_y * yBot, s_z * (botWidth - tmp));
             vec.normalize();
 
@@ -501,9 +499,9 @@ SoSphere::GLRenderGeneric(SoGLRenderAction *action,
         // Handle the top/bottom polygons specially, to avoid divide by zero
         glBegin(GL_TRIANGLE_STRIP);
 
-        yBot = (float) i / depth;
-        yTop = 1.0;
-        botWidth = 1 - yBot;
+        float yBot = (float) i / depth;
+        float yTop = 1.0;
+        float botWidth = 1 - yBot;
 
         // First cap vertex
         if (order > 0)
