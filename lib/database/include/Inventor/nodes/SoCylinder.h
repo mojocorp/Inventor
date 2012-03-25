@@ -175,7 +175,6 @@ class INVENTOR_API SoCylinder : public SoShape {
     // These render the cylinder
     void		GLRenderGeneric(SoGLRenderAction *action,
 					SbBool sendNormals, SbBool doTextures);
-    void		GLRenderNvertTnone(SoGLRenderAction *action);
 };
 
 #endif /* _SO_CYLINDER_ */

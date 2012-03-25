@@ -170,7 +170,6 @@ class INVENTOR_API SoCube : public SoShape {
     // These render the cube
     void		GLRenderGeneric(SoGLRenderAction *action,
 					SbBool sendNormals, SbBool doTextures);
-    void		GLRenderNvertTnone(SoGLRenderAction *action);
 
     // Renders or picks cube representing given bounding box. These
     // are used by SoShape to implement BOUNDING_BOX complexity.
