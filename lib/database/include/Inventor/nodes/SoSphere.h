@@ -125,7 +125,6 @@ class INVENTOR_API SoSphere : public SoShape {
     // These render the sphere
     void		GLRenderGeneric(SoGLRenderAction *action,
 					SbBool sendNormals, SbBool doTextures);
-    void		GLRenderNvertTnone(SoGLRenderAction *action);
 
     // Computes tesselation depth based on current complexity
     int			computeDepth(SoAction *action);
