@@ -510,16 +510,11 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
     SbVec3f scale, tmp;
     getSize(scale[0], scale[1], scale[2]);
 
-    SbBool		materialPerFace;
-    int			numDivisions, face, vert;
-    float		s;
-    SbVec3f		pt, norm;
-    SoMaterialBundle	mb(action);
-
-    materialPerFace = isMaterialPerFace(action);
-    numDivisions    = computeNumDivisions(action);
+    SbBool materialPerFace = isMaterialPerFace(action);
+    int numDivisions    = computeNumDivisions(action);
 
     // Make sure first material is sent if necessary
+    SoMaterialBundle	mb(action);
     if (materialPerFace)
         mb.setUpMultiple();
     mb.sendFirst();
@@ -527,7 +522,7 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
     if (numDivisions == 1)
         glBegin(GL_QUADS);
 
-    for (face = 0; face < 6; face++) {
+    for (int face = 0; face < 6; face++) {
 
         if (materialPerFace && face > 0)
             mb.send(face, numDivisions == 1);
@@ -536,7 +531,7 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
 
         // Simple case of one polygon per face
         if (numDivisions == 1) {
-            for (vert = 0; vert < 4; vert++) {
+            for (int vert = 0; vert < 4; vert++) {
                 if (doTextures)
                     glTexCoord2fv(texCoords[vert].getValue());
                 glVertex3fv(SCALE(*verts[face][vert]).getValue());
@@ -546,18 +541,16 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
         // More than one polygon per face
         else {
             float	di = 1.0f / numDivisions;
-            SbVec3f	topPoint,    botPoint,    nextBotPoint;
-            SbVec3f	horizSpace, vertSpace;
-            int		strip, rect;
+            SbVec3f	topPoint,    nextBotPoint;
 
-            botPoint = *verts[face][0];
+            SbVec3f botPoint = *verts[face][0];
 
             // Compute spacing between adjacent points in both directions
-            horizSpace = di * (*verts[face][1] - botPoint);
-            vertSpace  = di * (*verts[face][3] - botPoint);
+            SbVec3f horizSpace = di * (*verts[face][1] - botPoint);
+            SbVec3f vertSpace  = di * (*verts[face][3] - botPoint);
 
             // For each horizontal strip
-            for (strip = 0; strip < numDivisions; strip++) {
+            for (int strip = 0; strip < numDivisions; strip++) {
 
                 // Compute current top point. Save it to use as bottom
                 // of next strip
@@ -566,7 +559,7 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
                 glBegin(GL_TRIANGLE_STRIP);
 
                 // Send points at left end of strip
-                s = 0.0;
+                float s = 0.0;
                 if (doTextures) {
                     glTexCoord2f(s, (strip + 1) * di);
                     glVertex3fv(SCALE(topPoint).getValue());
@@ -579,7 +572,7 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
                 }
 
                 // For each rectangular piece of strip
-                for (rect = 0; rect < numDivisions; rect++) {
+                for (int rect = 0; rect < numDivisions; rect++) {
 
                     // Go to next rect
                     topPoint += horizSpace;

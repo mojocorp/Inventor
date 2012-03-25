@@ -768,51 +768,49 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action,
     getSize(scale[0], scale[1]);
     scale[2] = scale[0];
 
-    SbBool		materialPerPart;
-    int			curParts, numSides, numSections, side, section;
-    float		yTop, yBot, dy;
-    float		s, ds, tTop, tBot, dt;
-    float		outerRadius, innerRadius, dRadius;
-    SbVec2f		*baseCoords;
-    SbVec3f		*sideNormals, pt, norm;
-    SoMaterialBundle	mb(action);
+    int         side;
+    SbVec3f		pt;
 
     SoMaterialBindingElement::Binding mbe =
         SoMaterialBindingElement::get(action->getState());
-    materialPerPart =
+    SbBool materialPerPart =
         (mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
          mbe == SoMaterialBindingElement::PER_PART);
 
-    curParts = (parts.isIgnored() ? ALL : parts.getValue());
+    int curParts = (parts.isIgnored() ? ALL : parts.getValue());
 
     // Compute number of sides and sections to use to represent
     // cone, then compute ring of x,z coordinates around cone
     // and store in baseCoords.
+    int			numSides, numSections;
+    SbVec2f		*baseCoords;
+    SbVec3f		*sideNormals;
     computeBase(action, numSides, numSections, baseCoords, sideNormals);
 
     // Make sure first material is sent if necessary
+    SoMaterialBundle	mb(action);
     mb.sendFirst();
 
-    dRadius = 1.0f / numSections;
+    float dRadius = 1.0f / numSections;
 
     if (HAS_PART(curParts, SIDES)) {
 
         // Draw each section of sides as a triangle mesh, from top to bottom
-        yTop = 1.0f;
-        dy   = -2.0f / numSections;
-        tTop = 1.0f;
-        dt   = -1.0f / numSections;
-        ds   =  1.0f / numSides;
+        float yTop = 1.0f;
+        float dy   = -2.0f / numSections;
+        float tTop = 1.0f;
+        float dt   = -1.0f / numSections;
+        float ds   =  1.0f / numSides;
 
-        innerRadius = 0.0f;
+        float innerRadius = 0.0f;
 
-        for (section = 0; section < numSections; section++) {
+        for (int section = 0; section < numSections; section++) {
 
-            outerRadius = innerRadius + dRadius;
-            yBot = yTop + dy;
+            float outerRadius = innerRadius + dRadius;
+            float yBot = yTop + dy;
 
-            tBot = tTop + dt;
-            s    = 0.0f;
+            float tBot = tTop + dt;
+            float s    = 0.0f;
 
             glBegin(GL_TRIANGLE_STRIP);
 
@@ -872,7 +870,7 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action,
     // rings is the same as the number of sections of the sides of the
     // cone.
     if (HAS_PART(curParts, BOTTOM)) {
-        norm.setValue(0.0, -1.0, 0.0);
+        SbVec3f norm(0.0, -1.0, 0.0);
         pt[1] = -1.0;
 
         if (materialPerPart)
@@ -881,10 +879,10 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action,
             glNormal3fv(norm.getValue());
 
         // Start at the outside and work in
-        outerRadius = 1.0;
-        for (section = numSections - 1; section >= 0; --section) {
+        float outerRadius = 1.0;
+        for (int section = numSections - 1; section >= 0; --section) {
 
-            innerRadius = outerRadius - dRadius;
+            float innerRadius = outerRadius - dRadius;
 
             // Innermost ring is drawn as a triangle fan. This not
             // only gets better shading (because the center vertex is
