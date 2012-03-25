@@ -519,27 +519,32 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
         mb.setUpMultiple();
     mb.sendFirst();
 
-    if (numDivisions == 1)
+    // Simple case of one polygon per face
+    if (numDivisions == 1) {
         glBegin(GL_QUADS);
+        for (int face = 0; face < 6; face++) {
 
-    for (int face = 0; face < 6; face++) {
+            if (materialPerFace && face > 0)
+                mb.send(face, TRUE);
+            if (sendNormals)
+                glNormal3fv(normals[face].getValue());
 
-        if (materialPerFace && face > 0)
-            mb.send(face, numDivisions == 1);
-        if (sendNormals)
-            glNormal3fv(normals[face].getValue());
-
-        // Simple case of one polygon per face
-        if (numDivisions == 1) {
             for (int vert = 0; vert < 4; vert++) {
                 if (doTextures)
                     glTexCoord2fv(texCoords[vert].getValue());
                 glVertex3fv(SCALE(*verts[face][vert]).getValue());
             }
         }
+        glEnd();
+    }
+    // More than one polygon per face
+    else {
+        for (int face = 0; face < 6; face++) {
+            if (materialPerFace && face > 0)
+                mb.send(face, FALSE);
+            if (sendNormals)
+                glNormal3fv(normals[face].getValue());
 
-        // More than one polygon per face
-        else {
             float	di = 1.0f / numDivisions;
             SbVec3f	topPoint,    nextBotPoint;
 
@@ -599,9 +604,6 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
             }
         }
     }
-
-    if (numDivisions == 1)
-        glEnd();
 }
 
 ////////////////////////////////////////////////////////////////////////
