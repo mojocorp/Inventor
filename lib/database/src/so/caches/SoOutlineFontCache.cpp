@@ -21,11 +21,12 @@
 #include <Inventor/nodes/SoFont.h>
 
 #include <cmath>
+#include <algorithm>
 
 #include "utopia-regular.cpp"
 
 SbBool SoOutlineFontCache::tesselationError = FALSE;
-SbPList *SoOutlineFontCache::fonts = NULL;
+std::vector<SoOutlineFontCache*> SoOutlineFontCache::fonts;
 FT_Library SoOutlineFontCache::context = NULL;
 
 ////////////////////////////////////////////////////////////////////////
@@ -42,10 +43,8 @@ SoOutlineFontCache::getFont(SoState *state, SbBool forRender)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (fonts == NULL) {
+    if (context == NULL) {
         // One-time font library initialization
-        fonts = new SbPList;
-
         if (FT_Init_FreeType( &context )) {
 #ifdef DEBUG
             SoDebugError::post("SoOutlineFontCache::getFont",
@@ -57,8 +56,8 @@ SoOutlineFontCache::getFont(SoState *state, SbBool forRender)
     else if (context == NULL) return NULL;
 
     SoOutlineFontCache *result = NULL;
-    for (int i = 0; i < fonts->getLength() && result == NULL; i++) {
-        SoOutlineFontCache *c = (SoOutlineFontCache *) (*fonts)[i];
+    for (int i = 0; i < fonts.size() && result == NULL; i++) {
+        SoOutlineFontCache *c = fonts[i];
         if (forRender ? c->isRenderValid(state) : c->isValid(state)) {
             result = c; // Loop will terminate...
             result->ref(); // Increment ref count
@@ -176,8 +175,8 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
             const float ZERO = 250;
             const float HALF = 20;
             const float ONE = 1;
-            if (complexity > 0.5) uems = (2.0-complexity*2.0)*(HALF-ONE)+ONE;
-            else uems = (1.0-complexity*2.0)*(ZERO-HALF)+HALF;
+            if (complexity > 0.5f) uems = (2.0f-complexity*2.0f)*(HALF-ONE)+ONE;
+            else uems = (1.0f-complexity*2.0f)*(ZERO-HALF)+HALF;
         }
         break;
 
@@ -189,7 +188,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
             SoShape::getScreenSize(state, SbBox3f(-p, p), rectSize);
             float maxSize =
                 (rectSize[0] > rectSize[1] ? rectSize[0] : rectSize[1]);
-            uems = 250.0 / (1.0 + 0.25 * maxSize * complexity *
+            uems = 250.0f / (1.0f + 0.25f * maxSize * complexity *
                             complexity);
 
             // We have to manually add the dependency on the
@@ -232,15 +231,14 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
 
     FT_Set_Char_Size( fontId, fontSize * 64, 0, 72, 72);
 
-    numChars = 256;  // ??? NEED TO REALLY KNOW HOW MANY CHARACTERS IN
+    int numChars = 256;  // ??? NEED TO REALLY KNOW HOW MANY CHARACTERS IN
                      // FONT!
     sidesHaveTexCoords = FALSE;
 
     frontFlags = new SbBool[numChars];
     sideFlags = new SbBool[numChars];
-    outlines = new SoFontOutline*[numChars];
-    int i;
-    for (i = 0; i < numChars; i++) {
+    outlines.resize(numChars);
+    for (int i = 0; i < numChars; i++) {
         frontFlags[i] = sideFlags[i] = FALSE;
         outlines[i] = NULL;
     }
@@ -278,7 +276,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
                            cosCreaseAngle, FALSE);
         // Need to flip all the normals because of the way the profiles
         // are defined:
-        for (i = 0; i < nSegments*2; i++) {
+        for (int i = 0; i < nSegments*2; i++) {
             profileNorms[i] *= -1.0;
         }
 
@@ -288,7 +286,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
                                profileVerts, FALSE);
         // And reverse them, so 0 is at the back of the profile:
         float max = sTexCoords[nProfileVerts-1];
-        for (i = 0; i < nProfileVerts; i++) {
+        for (int i = 0; i < nProfileVerts; i++) {
             sTexCoords[i] = max - sTexCoords[i];
         }
     } else {
@@ -296,7 +294,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
         sTexCoords = NULL;
     }
 
-    fonts->append(this);
+    fonts.push_back(this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -316,11 +314,10 @@ SoOutlineFontCache::~SoOutlineFontCache()
         delete[] sideFlags;
 
         // Free up cached outlines
-        int i;
-        for (i = 0; i < numChars; i++) {
-            if (outlines[i]) delete outlines[i];
+        for (int i = 0; i < outlines.size(); i++) {
+            delete outlines[i];
         }
-        delete[] outlines;
+        outlines.clear();
 
         if (hasProfile()) {
             delete[] profileVerts;
@@ -331,14 +328,14 @@ SoOutlineFontCache::~SoOutlineFontCache()
         // Only destroy the font library font if no other font caches
         // are using the same font identifier:
         SbBool otherUsing = FALSE;
-        for (i = 0; i < fonts->getLength(); i++) {
-            SoOutlineFontCache *t = (SoOutlineFontCache *)(*fonts)[i];
+        for (int i = 0; i < fonts.size(); i++) {
+            SoOutlineFontCache *t = fonts[i];
             if (t != this && t->fontId == fontId) otherUsing = TRUE;
         }
         if (!otherUsing) {
             FT_Done_Face(fontId);
         }
-        fonts->remove(fonts->find(this));
+        fonts.erase(std::find(fonts.begin(), fonts.end(), this));
     }
 }
 
@@ -366,16 +363,11 @@ SoOutlineFontCache::destroy(SoState *)
         sideList = NULL;
     }
 
+    SoCache::destroy(NULL);
+
     FT_Done_FreeType(context);
 
     context = NULL;
-
-    SoCache::destroy(NULL);
-
-    if (fonts) {
-        delete fonts;
-        fonts = NULL;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -556,7 +548,7 @@ SoOutlineFontCache::setupToRenderFront(SoState *state)
     if (!otherOpen && !frontList) {
         frontList = new SoGLDisplayList(state,
                                         SoGLDisplayList::DISPLAY_LIST,
-                                        numChars);
+                                        outlines.size());
         frontList->ref();
     }
     if (frontList) {
@@ -582,7 +574,7 @@ SoOutlineFontCache::setupToRenderSide(SoState *state, SbBool willTexture)
     if (!otherOpen && !sideList) {
         sideList = new SoGLDisplayList(state,
                                         SoGLDisplayList::DISPLAY_LIST,
-                                        numChars);
+                                        outlines.size());
         sideList->ref();
         sidesHaveTexCoords = willTexture;
     }

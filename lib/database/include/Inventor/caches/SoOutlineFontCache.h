@@ -62,6 +62,8 @@
 #include <Inventor/SbBox2f.h>
 #include <Inventor/caches/SoCache.h>
 
+#include <vector>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -174,10 +176,6 @@ class SoOutlineFontCache : public SoCache
     // Texture coordinates in side display lists
     int		sidesHaveTexCoords;
 
-    // Number of characters in this font. Until we internationalize,
-    // this will be 128 or less.
-    int		numChars;
-
     // Display lists for fronts, sides:
     SoGLDisplayList *frontList;
     SoGLDisplayList *sideList;
@@ -204,7 +202,7 @@ class SoOutlineFontCache : public SoCache
 
     // List of outlines; these are also cached and created when
     // needed.
-    SoFontOutline	**outlines;
+    std::vector<SoFontOutline*> outlines;
 
     // Font size
     float	fontSize;
@@ -223,7 +221,7 @@ class SoOutlineFontCache : public SoCache
     // set of profiles-- if any of these changes, the set of polygons
     // representing the font will change, and a different font will be
     // used.
-    static SbPList	*fonts;
+    static std::vector<SoOutlineFontCache*>	fonts;
 };
 
 #endif /* _SO_OUTLINE_FONT_CACHE_ */
