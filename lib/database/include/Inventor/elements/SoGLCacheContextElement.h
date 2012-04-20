@@ -146,7 +146,7 @@ public:
     // remote rendering is being done.  DONT_AUTO_CACHE is FALSE by
     // default.  Separators will auto cache if DO_AUTO_CACHE is TRUE
     // and DONT_AUTO_CACHE is FALSE, otherwise they won't auto-cache.
-    enum {
+    enum AutoCache {
         DO_AUTO_CACHE = 1,   // Hack warning: I rely on TRUE==DO_AUTO_CACHE
         DONT_AUTO_CACHE = 2
     };
@@ -154,9 +154,9 @@ public:
     // Called by nodes to say that they should/shouldn't be
     // auto-cached (pass TRUE if should, FALSE if shouldn't, don't
     // call this method at all if the node doesn't care):
-    static void shouldAutoCache(SoState *state, int bits) {
+    static void shouldAutoCache(SoState *state, AutoCache bits) {
         SoGLCacheContextElement *elt = (SoGLCacheContextElement *)state->getElementNoPush(classStackIndex);
-        elt->autoCacheBits |= bits;
+        elt->autoCacheBits |= (int)bits;
     }
 
     // Used by Separators to set/reset the auto-caching bits:
