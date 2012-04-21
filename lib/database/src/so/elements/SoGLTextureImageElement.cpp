@@ -335,21 +335,22 @@ SoGLTextureImageElement::sendTex(SoState *state)
 	return;
     }
 
-    // Scale the image to closest power of 2 smaller than maximum
-    // texture size:
-    GLint maxsize = 0;
-    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxsize);
-    SbVec2s newSize;
-    int i;
-    // Use nearest power of 2 for big textures, use next higher
-    // power of 2 for small textures:
-    for (i = 0; i < 2; i++) {
-	if (size[i] > 8) {
-	    newSize[i] = size[i] > maxsize ?
-		maxsize : 1 << nearestPowerOf2(size[i]);
-	} else {
-	    newSize[i] = 1 << nextPowerOf2(size[i]);
-	}
+    SbVec2s newSize = size;
+    if ( !SoGLCacheContextElement::extSupported(state, "GL_ARB_texture_non_power_of_two") ) {
+        // Scale the image to closest power of 2 smaller than maximum
+        // texture size:
+        GLint maxsize = 0;
+        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxsize);
+        // Use nearest power of 2 for big textures, use next higher
+        // power of 2 for small textures:
+        for (int i = 0; i < 2; i++) {
+            if (size[i] > 8) {
+                newSize[i] = size[i] > maxsize ?
+                            maxsize : 1 << nearestPowerOf2(size[i]);
+            } else {
+                newSize[i] = 1 << nextPowerOf2(size[i]);
+            }
+        }
     }
 
     int minFilter, magFilter;
@@ -362,6 +363,7 @@ SoGLTextureImageElement::sendTex(SoState *state)
     } else {
 	tbl = point_minQFTable;
     }
+    int i;
     for (i = 0; quality > tbl[i].quality; i++) /* Do nothing */;
     minFilter = tbl[i].filter;
     needMipMaps = tbl[i].needMipMaps;
