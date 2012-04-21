@@ -156,8 +156,7 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
     } else {
 
         // Initialize everything
-        SbString fullFontName = SoFontNameElement::getFontPath() + fontName.getString();
-        if (FT_New_Face( library, fullFontName.getString(), 0, &fontId )) {
+        if (FT_New_Face( library, SoFontNameElement::getFontFileName(fontName.getString()).c_str(), 0, &fontId )) {
 #ifdef DEBUG
             SoDebugError::post("SoBitmapFontCache::getFont",
                                "Couldn't find font %s, replacing with Utopia-Regular", fontName.getString());

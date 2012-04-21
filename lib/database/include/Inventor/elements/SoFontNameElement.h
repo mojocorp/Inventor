@@ -59,6 +59,9 @@
 #include <Inventor/SbString.h>
 #include <Inventor/elements/SoReplacedElement.h>
 
+#include <string>
+#include <map>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoFontNameElement
@@ -87,8 +90,11 @@ public:
         return SbName("defaultFont");
     }
 
-    /// Returns the default font path
-    static SbString getFontPath();
+    /// Returns the full font path
+    static std::string getFontFileName(const std::string & fontName);
+
+    /// Register a font with corresponding path.
+    static void addFontFileName(const std::string & fontName, const std::string & fontPath);
 
     /// Returns TRUE if the font name matches given element
     virtual SbBool matches(const SoElement *elt) const;
@@ -104,6 +110,10 @@ SoINTERNAL public:
 
 protected:
     SbName    fontName;
+
+    static std::map<std::string, std::string> s_font_map;
+
+    static void initFontMap();
 
     virtual ~SoFontNameElement();
 };

@@ -52,6 +52,9 @@
  */
 
 #include <Inventor/elements/SoFontNameElement.h>
+#include <Inventor/errors/SoDebugError.h>
+
+std::map<std::string, std::string> SoFontNameElement::s_font_map;
 
 SO_ELEMENT_SOURCE(SoFontNameElement);
 
@@ -141,21 +144,42 @@ SoFontNameElement::get(SoState *state)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Compares names
+//    Returns the font path
 //
 // Use: public
-SbString
-SoFontNameElement::getFontPath()
+std::string
+SoFontNameElement::getFontFileName(const std::string & fontName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-#if defined(SB_OS_WIN)
-    return "c:\\Windows\\Fonts\\";
-#elif defined(SB_OS_MACX)
-    return "/Library/Fonts/";
-#else
-    return "/usr/share/data/fonts/";
+    initFontMap();
+
+    if (!s_font_map[fontName].empty()) {
+        return s_font_map[fontName].c_str();
+    }
+
+#ifdef DEBUG
+    SoDebugError::post("SoFontNameElement::getFontFileName",
+                       "Couldn't find font %s, replacing with %s", fontName.c_str(), SoFontNameElement::getDefault().getString());
 #endif
+
+    return SoFontNameElement::getDefault().getString();
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Register a font
+//
+// Use: public
+void
+SoFontNameElement::addFontFileName(const std::string & fontName, const std::string & fontPath)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    initFontMap();
+
+    s_font_map[fontName] = fontPath;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -218,3 +242,79 @@ SoFontNameElement::print(FILE *) const
 {
 }
 #endif /* DEBUG */
+
+void
+SoFontNameElement::initFontMap()
+{
+    static bool initialized = false;
+    if (!initialized) {
+        // In PDF, the following 14 fonts are defined:
+        // Courier (Regular, Oblique, Bold, Bold Oblique)
+        // Helvetica (Regular, Oblique, Bold, Bold Oblique)
+        // Symbol
+        // Times (Roman, Italic, Bold, Bold Oblique)
+        // ITC Zapf Dingbats
+
+#if defined(SB_OS_WIN)
+            s_font_map["Courier"] = "c:\\Windows\\Fonts\\cour.ttf";
+            s_font_map["Courier-Regular"] = "c:\\Windows\\Fonts\\cour.ttf";
+            s_font_map["Courier-Bold"] = "c:\\Windows\\Fonts\\courbd.ttf";
+            s_font_map["Courier-Oblique"] = "c:\\Windows\\Fonts\\couri.ttf";
+            s_font_map["Courier-Bold Oblique"] = "c:\\Windows\\Fonts\\courbi.ttf";
+
+            s_font_map["Helvetica"] = "c:\\Windows\\Fonts\\arial.ttf";
+            s_font_map["Helvetica-Regular"] = "c:\\Windows\\Fonts\\arial.ttf";
+            s_font_map["Helvetica-Bold"] = "c:\\Windows\\Fonts\\arialbd.ttf";
+            s_font_map["Helvetica-Oblique"] = "c:\\Windows\\Fonts\\ariali.ttf";
+            s_font_map["Helvetica-Bold Oblique"] = "c:\\Windows\\Fonts\\arialbi.ttf";
+
+            s_font_map["Symbol"] = "c:\\Windows\\Fonts\\symbol.ttf";
+
+            s_font_map["Times-Roman"] = "c:\\Windows\\Fonts\\times.ttf";
+            s_font_map["Times-Bold"] = "c:\\Windows\\Fonts\\timesbd.ttf";
+            s_font_map["Times-Oblique"] = "c:\\Windows\\Fonts\\timesi.ttf";
+            s_font_map["Times-Bold Oblique"] = "c:\\Windows\\Fonts\\timesbi.ttf";
+
+#elif defined(SB_OS_MACX)
+            s_font_map["Courier"] = "/Library/Fonts/Courier New.ttf";
+            s_font_map["Courier-Regular"] = "/Library/Fonts/Courier New.ttf";
+            s_font_map["Courier-Oblique"] = "/Library/Fonts/Courier New Italic.ttf";
+            s_font_map["Courier-Bold"] = "/Library/Fonts/Courier New Bold.ttf";
+            s_font_map["Courier-Bold Oblique"] = "/Library/Fonts/Courier New Bold Italic.ttf";
+
+            s_font_map["Helvetica"] = "/Library/Fonts/Arial.ttf";
+            s_font_map["Helvetica-Regular"] = "/Library/Fonts/Arial.ttf";
+            s_font_map["Helvetica-Oblique"] = "/Library/Fonts/Arial Italic.ttf";
+            s_font_map["Helvetica-Bold"] = "/Library/Fonts/Arial Bold.ttf";
+            s_font_map["Helvetica-Bold Oblique"] = "/Library/Fonts/Arial Bold Italic.ttf";
+
+            s_font_map["Symbol"] = "/System/Library/Fonts/Symbol.ttf";
+
+            s_font_map["Times-Roman"] = "/Library/Fonts/Times New Roman.ttf";
+            s_font_map["Times-Oblique"] = "/Library/Fonts/Times New Roman Italic.ttf";
+            s_font_map["Times-Bold"] = "/Library/Fonts/Times New Roman Bold.ttf";
+            s_font_map["Times-Bold Oblique"] = "/Library/Fonts/Times New Roman Bold Italic.ttf";
+
+#else
+            s_font_map["Courier"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
+            s_font_map["Courier-Regular"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
+            s_font_map["Courier-Oblique"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
+            s_font_map["Courier-Bold"] = "/usr/share/fonts/X11/Type1/c0583bt_.pfb";
+            s_font_map["Courier-Bold Oblique"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
+
+            s_font_map["Helvetica"] = "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf";
+            s_font_map["Helvetica-Regular"] = "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf";
+            s_font_map["Helvetica-Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Arial_Italic.ttf";
+            s_font_map["Helvetica-Bold"] = "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold.ttf";
+            s_font_map["Helvetica-Bold Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold_Italic.ttf";
+
+            s_font_map["Symbol"] = "/usr/share/fonts/truetype/?ttf-symbol-replacement/?symbol-replacement.ttf/?symbol.ttf";
+
+            s_font_map["Times-Roman"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf";
+            s_font_map["Times-Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Italic.ttf";
+            s_font_map["Times-Bold"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold.ttf";
+            s_font_map["Times-Bold Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold_Italic.ttf";
+#endif
+            initialized = true;
+    }
+}
