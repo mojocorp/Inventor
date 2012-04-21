@@ -1,13 +1,14 @@
 TEMPLATE = lib
 TARGET = glew
 DESTDIR  = ../../build
-CONFIG += opengl
+CONFIG += opengl static
 CONFIG -= qt
 
 DEPENDPATH += . src include/GL
 INCLUDEPATH += . include
 
-DEFINES += GLEW_BUILD GLEW_MX
+DEFINES += GLEW_MX GLEW_STATIC
+#DEFINES += GLEW_BUILD
 
 # Input
 HEADERS += include/GL/glew.h \
