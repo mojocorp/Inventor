@@ -245,8 +245,12 @@ SbVec4i32::operator *=(double d)
  SbBool
  SbVec4i32::equals(const SbVec4i32 & v, int32_t tolerance) const
  {
-     SbVec4i32	diff = *this - v;
+     for (int i=0; i<4; i++) {
+         int32_t diff = vec[i] - v.vec[i];
+         if ((diff < 0.0 ? -diff : diff) > tolerance)
+            return FALSE;
+     }
 
-     return diff.dot(diff) <= tolerance;
+     return TRUE;
  }
  

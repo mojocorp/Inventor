@@ -340,9 +340,13 @@ SbVec3f::setValue(const SbVec3d & v)
  SbBool
  SbVec3f::equals(const SbVec3f & v, float tolerance) const
  {
-     SbVec3f	diff = *this - v;
+     for (int i=0; i<3; i++) {
+         float diff = vec[i] - v.vec[i];
+         if ((diff < 0.0 ? -diff : diff) > tolerance)
+            return FALSE;
+     }
 
-     return diff.dot(diff) <= tolerance;
+     return TRUE;
  }
 
  //

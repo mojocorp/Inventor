@@ -280,8 +280,12 @@
  SbBool
  SbVec4f::equals(const SbVec4f & v, float tolerance) const
  {
-     SbVec4f	diff = *this - v;
+     for (int i=0; i<4; i++) {
+         float diff = vec[i] - v.vec[i];
+         if ((diff < 0.0 ? -diff : diff) > tolerance)
+            return FALSE;
+     }
 
-     return diff.dot(diff) <= tolerance;
+     return TRUE;
  }
  
