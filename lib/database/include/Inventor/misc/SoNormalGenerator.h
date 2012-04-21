@@ -163,9 +163,6 @@ private:
 
     // Index into points array where current polygon started
     int32_t  beginPolygonIndex;
-
-    // Returns TRUE if the two points are the same within given tolerance
-    static SbBool equal(const SbVec3f &a, const SbVec3f &b, float tol);
 };
 
 #endif /* _SO_NORMAL_GENERATOR_ */
