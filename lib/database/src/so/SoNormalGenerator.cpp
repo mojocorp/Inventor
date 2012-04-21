@@ -351,7 +351,7 @@ SoNormalGenerator::generate(float creaseAngle)
 
 	for (hv = lowHashValue; hv <= highHashValue; hv++) {
 	    for (j = hashTable[hv]; found == FALSE && j >= 0; j = hashNext[j]){
-		if (i != j && equal(points[j], points[i], tolerance)) {
+        if (i != j && points[j].equals(points[i], tolerance)) {
 		    // Splice into the circularly linked list
 		    indirect[i] = indirect[j];
 		    indirect[j] = i;
@@ -381,7 +381,7 @@ SoNormalGenerator::generate(float creaseAngle)
 	// (mostly) the same as the zero vector.
 	// We use a fixed tolerance for normals (suggested by Tim Wiegand)
 	// since normals are unit length
-	SbBool isDegenerate = equal(zeroVec, sum, 1.e-4f);
+    SbBool isDegenerate = zeroVec.equals(sum, 1.e-4f);
 
 	// Smooth normals if face normals are within crease angle
 	for (j = indirect[i]; j != i; j = indirect[j]) {
@@ -449,34 +449,4 @@ SoNormalGenerator::setNormal(int32_t index, const SbVec3f &newNormal)
 
     // Store new normal
     vertNormals[index] = newNormal;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns TRUE if the two points are the same within given
-//    tolerance.
-//
-// Use: public
-
-SbBool
-SoNormalGenerator::equal(const SbVec3f &a, const SbVec3f &b, float tolerance)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    float	diff;
-
-    diff = a[0] - b[0];
-    if ((diff < 0.0 ? -diff : diff) > tolerance)
-	return FALSE;
-
-    diff = a[1] - b[1];
-    if ((diff < 0.0 ? -diff : diff) > tolerance)
-	return FALSE;
-
-    diff = a[2] - b[2];
-    if ((diff < 0.0 ? -diff : diff) > tolerance)
-	return FALSE;
-
-    return TRUE;
 }
