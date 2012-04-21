@@ -5,7 +5,7 @@ DESTDIR  = ../build
 CONFIG += opengl
 CONFIG -= qt flat
 
-DEFINES += GLEW_MX
+DEFINES += GLEW_MX GLEW_STATIC
 
 debug: DEFINES += DEBUG
 
@@ -36,7 +36,6 @@ macx {
 }
 
 DEPENDPATH += ../libimage
-DEPENDPATH += ../3rdparty/glew-1.7.0
 
 INCLUDEPATH += ../libimage
 INCLUDEPATH += ../3rdparty/glew-1.7.0/include

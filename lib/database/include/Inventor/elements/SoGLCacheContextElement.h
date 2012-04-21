@@ -127,13 +127,7 @@ public:
 
     // Methods to quickly figure out if an OpenGL extension is
     // available at run-time.
-
-    // This is the slow routine-- convert from a string to an integer.
-    // The integer should be saved to do quick lookups:
-    static int getExtID(const char *str);
-
-    // This routine is pretty quick:
-    static SbBool extSupported(SoState *state, int ext);
+    static SbBool extSupported(SoState *state, const char *str);
 
     // TRUE if mip-mapped textures are known to be fast:
     static SbBool areMipMapsFast(SoState *state);
@@ -215,7 +209,6 @@ private:
     static void freeList(SoState *state, SoGLDisplayList *list);
 
     static SbPList * waitingToBeFreed; // Allocated in ::init
-    static SbPList * extensionList;  // Allocated in ::init
 
     friend class SoGLDisplayList;
 };

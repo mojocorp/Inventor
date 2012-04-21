@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <GL/glew.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoGLDisplayList.h>
 #include <Inventor/errors/SoDebugError.h>
@@ -58,16 +59,11 @@
 #include <Inventor/SbString.h>
 #include <Inventor/lists/SbIntList.h>
 
+#include <map>
+
 SO_ELEMENT_SOURCE(SoGLCacheContextElement);
 
 SbPList		*SoGLCacheContextElement::waitingToBeFreed = NULL;
-SbPList		*SoGLCacheContextElement::extensionList = NULL;
-
-// Internal struct:
-struct extInfo {
-    SbString string;
-    SbIntList support;
-};
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -94,7 +90,6 @@ SoGLCacheContextElement::initClass()
 {
     SO_ELEMENT_INIT_CLASS(SoGLCacheContextElement, SoElement);
     waitingToBeFreed = new SbPList;
-    extensionList = new SbPList;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -147,11 +142,11 @@ SoGLCacheContextElement::set(SoState *state, int ctx,
     // Look through the list of display lists waiting to be freed, and
     // free any that match the context:
     for (int i = waitingToBeFreed->getLength()-1; i >= 0; i--) {
-	SoGLDisplayList *dl = (SoGLDisplayList *)(*waitingToBeFreed)[i];
-	if (dl->getContext() == ctx) {
-	    waitingToBeFreed->remove(i);
-	    delete dl;
-	}
+        SoGLDisplayList *dl = (SoGLDisplayList *)(*waitingToBeFreed)[i];
+        if (dl->getContext() == ctx) {
+            waitingToBeFreed->remove(i);
+            delete dl;
+        }
     }
 }
 
@@ -206,63 +201,41 @@ SoGLCacheContextElement::freeList(SoState *state,
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Converts an extension string to a unique integer to be used for
-//    faster lookup (to avoid string comparisons)
-//
-// Use: public
-
-int
-SoGLCacheContextElement::getExtID(const char *str)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    for (int i = 0; i < extensionList->getLength(); i++) {
-	extInfo *e = (extInfo *)(*extensionList)[i];
-	if (e->string == str) return i;
-    }
-    extInfo *e = new extInfo;
-    e->string = str;
-    extensionList->append(e);
-    return extensionList->getLength()-1;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Given a unique extension ID, return TRUE if that extension is
+//    Given an extension string, return TRUE if that extension is
 //    supported in this rendering context.
 //
 SbBool
-SoGLCacheContextElement::extSupported(SoState *state, int ext)
+SoGLCacheContextElement::extSupported(SoState *state, const char *str)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    SoGLCacheContextElement *elt = (SoGLCacheContextElement *)state->getElementNoPush(classStackIndex);
 #ifdef DEBUG
-    if (ext >= extensionList->getLength()) {
+    if (elt == NULL) {
 	SoDebugError::post("SoGLCacheContextElement::extSupported",
-			   "Bad extension ID passed; "
-			   "you MUST use SoGLCacheContextElement::getExtID");
+               "No GL cache context found; "
+               "This method require a valid OpenGL context");
     }
 #endif
-    extInfo *e = (extInfo *)(*extensionList)[ext];
-    int ctx = get(state);
 
-    // The support list is a list of context,flag pairs (flag is TRUE
-    // if the render context supports the extension).  This linear
-    // search assumes that there will be a small number of render
-    // contexts.
-    for (int i = 0; i < e->support.getLength(); i+=2) {
-	if (e->support[i] == ctx) return e->support[i+1];
+    static std::map<int, GLEWContext> s_glewctx;
+
+#ifdef GLEW_MX
+#  define glewGetContext() (&s_glewctx[elt->context])
+#endif
+
+    if (s_glewctx.find(elt->context) == s_glewctx.end()) {
+        GLenum err = glewInit();
+        if (GLEW_OK != err)
+        {
+            /* Problem: glewInit failed, something is seriously wrong. */
+#ifndef DEBUG
+            SoDebugError::post("SoGLCacheContextElement:", "Error: %s", glewGetErrorString(err));
+#endif
+        }
     }
-    // Ask GL if supported:
-    SbBool supported = 
-	strstr((const char *)glGetString(GL_EXTENSIONS),
-	       e->string.getString()) 
-	    != NULL;
-    e->support.append(ctx);
-    e->support.append(supported);
 
-    return supported;
+    return glewIsSupported(str);
 }
 
 ////////////////////////////////////////////////////////////////////////
