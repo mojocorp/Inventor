@@ -1,4 +1,6 @@
 TEMPLATE  = subdirs
 CONFIG   += ordered
 
-win32: SUBDIRS += freetype libjpeg glew-1.7.0
+SUBDIRS += glew-1.7.0
+
+win32: SUBDIRS += freetype libjpeg
