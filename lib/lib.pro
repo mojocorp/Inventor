@@ -5,7 +5,7 @@ DESTDIR  = ../build
 CONFIG += opengl
 CONFIG -= qt flat
 
-DEFINES += GLEW_BUILD GLEW_MX
+DEFINES += GLEW_MX
 
 debug: DEFINES += DEBUG
 
@@ -33,9 +33,10 @@ macx {
 }
 
 DEPENDPATH += ../libimage
+DEPENDPATH += ../3rdparty/glew-1.7.0
 
 INCLUDEPATH += ../libimage
-
+INCLUDEPATH += ../3rdparty/glew-1.7.0/include
 
 INCLUDEPATH+= database/include \
               interaction/include \
@@ -45,4 +46,4 @@ include(database/database.pri)
 include(interaction/interaction.pri)
 include(nodekits/nodekits.pri)
 
-LIBS += -L$$OUT_PWD/../build -limage -ljpeg -lfreetype
+LIBS += -L$$OUT_PWD/../build -limage -ljpeg -lfreetype -lglew
