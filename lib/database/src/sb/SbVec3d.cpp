@@ -275,9 +275,13 @@
  SbBool
  SbVec3d::equals(const SbVec3d & v, double tolerance) const
  {
-     SbVec3d	diff = *this - v;
+     for (int i=0; i<3; i++) {
+         double diff = vec[i] - v.vec[i];
+         if ((diff < 0.0 ? -diff : diff) > tolerance)
+            return FALSE;
+     }
 
-     return diff.dot(diff) <= tolerance;
+     return TRUE;
  }
 
  //

@@ -185,7 +185,11 @@
  SbBool
  SbVec3i32::equals(const SbVec3i32 & v, int32_t tolerance) const
  {
-     SbVec3i32	diff = *this - v;
+     for (int i=0; i<3; i++) {
+         int32_t diff = vec[i] - v.vec[i];
+         if ((diff < 0.0 ? -diff : diff) > tolerance)
+            return FALSE;
+     }
 
-     return diff.dot(diff) <= tolerance;
+     return TRUE;
  }
