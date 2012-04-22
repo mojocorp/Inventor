@@ -219,7 +219,7 @@ SoEXTENDER public:
     void write(unsigned short s);
     void write(float      f);
     void write(double      d);
-    void writeBinaryArray(unsigned char *c, int length);
+    void writeBinaryArray(const unsigned char *c, int length);
     void writeBinaryArray(int32_t *l, int length);
     void writeBinaryArray(float *f, int length);
     void writeBinaryArray(double *d, int length);

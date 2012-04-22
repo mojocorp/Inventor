@@ -832,7 +832,7 @@ SoOutput::write(double d)
 // Use: public
 
 void
-SoOutput::writeBinaryArray(unsigned char *c, int length)
+SoOutput::writeBinaryArray(const unsigned char *c, int length)
 //
 ////////////////////////////////////////////////////////////////////////
 {
