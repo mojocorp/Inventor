@@ -76,10 +76,7 @@ SoSFImage::SoSFImage()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    size[0] = size[1] = 0;
-    numComponents = 0;
-    bytes = NULL;
-    copyPolicy = COPY;
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -93,7 +90,7 @@ SoSFImage::~SoSFImage()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    freeImage();
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -123,28 +120,24 @@ SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b, CopyPolicy
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    freeImage();
+    image.setValue(s, nc, b);
 
-    size = s;
-    numComponents = nc;
-    copyPolicy = copypolicy;
+    valueChanged();
+}
 
-    int numBytes = size[0]*size[1]*numComponents;
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Sets value, given image dimensions and bytes...
+//
+// Use: public
 
-    if (numBytes != 0) {
-        switch(copypolicy) {
-            case COPY:
-                bytes = new unsigned char[numBytes];
-                memcpy(bytes, b, numBytes);
-                break;
-            case NO_COPY:
-            case NO_COPY_AND_DELETE:
-            case NO_COPY_AND_FREE:
-                bytes = (unsigned char*)b;
-                break;
-            default: break;
-        }
-    }
+void
+SoSFImage::setValue(const SbImage &img)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    image = img;
 
     valueChanged();
 }
@@ -163,10 +156,27 @@ SoSFImage::getValue(SbVec2s &s, int &nc) const
 {
     evaluate();
 
-    s = size;
-    nc = numComponents;
+    s = image.getSize();
+    nc = image.getNumComponents();
 
-    return bytes;
+    return image.getConstBytes();
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Gets value, which is the image's dimensions and bytes.
+//
+// Use: public
+
+const SbImage &
+SoSFImage::getValue() const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    evaluate();
+
+    return image;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -181,10 +191,7 @@ SoSFImage::operator =(const SoSFImage &f)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec2s s;
-    int nc;
-    const unsigned char *b = f.getValue(s, nc);
-    setValue(s, nc, b);
+    setValue(f.getValue());
 
     return *this;
 }
@@ -201,14 +208,7 @@ SoSFImage::operator ==(const SoSFImage &f) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // Check easy stuff first
-    if (size != f.size || numComponents != f.numComponents)
-        return FALSE;
-
-    if (memcmp(bytes, f.bytes, size[0] * size[1] * numComponents) != 0)
-        return FALSE;
-
-    return TRUE;
+    return image == f.image;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -223,9 +223,9 @@ SoSFImage::startEditing(SbVec2s &s, int &nc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    s = size;
-    nc = numComponents;
-    return bytes;
+    s = image.getSize();
+    nc = image.getNumComponents();
+    return image.getBytes();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -246,31 +246,6 @@ SoSFImage::finishEditing()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    
-//
-// Use: private
-void
-SoSFImage::freeImage()
-{
-    switch(copyPolicy) {
-        case COPY: 
-        case NO_COPY_AND_DELETE:
-            delete[] bytes; 
-        break;
-        case NO_COPY:
-            // Nothing to do.
-        break;
-        case NO_COPY_AND_FREE:
-            free(bytes);
-        break;
-        default: break;
-    }
-    bytes = NULL;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Reads value from file. Returns FALSE on error.
 //
 // Use: private
@@ -280,15 +255,15 @@ SoSFImage::readValue(SoInput *in)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    SbVec2s size;
+    int numComponents;
     if (!in->read(size[0])  ||
-            !in->read(size[1]) ||
-            !in->read(numComponents))
+        !in->read(size[1]) ||
+        !in->read(numComponents))
         return FALSE;
 
-    freeImage();
-
-    bytes = new unsigned char[size[0]*size[1]*numComponents];
-    copyPolicy = COPY;
+    image = SbImage(size, numComponents);
+    unsigned char *bytes = image.getBytes();
 
     int byte = 0;
     if (in->isBinary()) {
@@ -338,6 +313,10 @@ SoSFImage::writeValue(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    const SbVec2s & size = image.getSize();
+    int numComponents = image.getNumComponents();
+    const unsigned char * bytes = image.getConstBytes();
+
     out->write(size[0]);
 
     if (! out->isBinary())

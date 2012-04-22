@@ -502,28 +502,21 @@ SoCallbackAction::getTextureCoordinateBinding() const
 const SbColor &
 SoCallbackAction::getTextureBlendColor() const
 {
-    SbVec2s size;
-    int numComponents, wrapS, wrapT, model;
+    int wrapS, wrapT, model;
     static SbColor blendColor;
-    const unsigned char *bytes;
-    bytes = SoTextureImageElement::get(
-	state, size, numComponents, wrapS, wrapT, model,
+    const SbImage & image = SoTextureImageElement::get(
+    state, wrapS, wrapT, model,
 	blendColor);
 
     return blendColor;
 }
 
-const unsigned char *
-SoCallbackAction::getTextureImage(SbVec2s &size, int &numComponents) const
+SbImage
+SoCallbackAction::getTextureImage() const
 {
     int wrapS, wrapT, model;
-    static SbColor blendColor;
-    const unsigned char *bytes;
-    bytes = SoTextureImageElement::get(
-	state, size, numComponents, wrapS, wrapT, model,
-	blendColor);
-
-    return bytes;
+    SbColor blendColor;
+    return SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
 }
 
 const SbMatrix &
@@ -535,12 +528,10 @@ SoCallbackAction::getTextureMatrix() const
 SoTexture2::Model
 SoCallbackAction::getTextureModel() const
 {
-    SbVec2s size;
-    int numComponents, wrapS, wrapT, model;
-    static SbColor blendColor;
-    const unsigned char *bytes;
-    bytes = SoTextureImageElement::get(
-	state, size, numComponents, wrapS, wrapT, model,
+    int wrapS, wrapT, model;
+    SbColor blendColor;
+    const SbImage & image  = SoTextureImageElement::get(
+    state, wrapS, wrapT, model,
 	blendColor);
     return (SoTexture2::Model)model;
 }
@@ -548,12 +539,10 @@ SoCallbackAction::getTextureModel() const
 SoTexture2::Wrap
 SoCallbackAction::getTextureWrapS() const
 {
-    SbVec2s size;
-    int numComponents, wrapS, wrapT, model;
-    static SbColor blendColor;
-    const unsigned char *bytes;
-    bytes = SoTextureImageElement::get(
-	state, size, numComponents, wrapS, wrapT, model,
+    int wrapS, wrapT, model;
+    SbColor blendColor;
+    const SbImage & image = SoTextureImageElement::get(
+    state, wrapS, wrapT, model,
 	blendColor);
     return (SoTexture2::Wrap)wrapS;
 }
@@ -561,12 +550,10 @@ SoCallbackAction::getTextureWrapS() const
 SoTexture2::Wrap
 SoCallbackAction::getTextureWrapT() const
 {
-    SbVec2s size;
-    int numComponents, wrapS, wrapT, model;
-    static SbColor blendColor;
-    const unsigned char *bytes;
-    bytes = SoTextureImageElement::get(
-	state, size, numComponents, wrapS, wrapT, model,
+    int wrapS, wrapT, model;
+    SbColor blendColor;
+    const SbImage & image = SoTextureImageElement::get(
+    state, wrapS, wrapT, model,
 	blendColor);
     return (SoTexture2::Wrap)wrapT;
 }
