@@ -129,9 +129,6 @@ public:
     // available at run-time.
     static SbBool extSupported(SoState *state, const char *str);
 
-    // TRUE if mip-mapped textures are known to be fast:
-    static SbBool areMipMapsFast(SoState *state);
-
     // Methods used to improve auto-caching algorithm:
 
     // Two bits are stored.  Nodes that should be cached will set the

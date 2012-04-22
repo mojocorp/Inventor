@@ -241,20 +241,6 @@ SoGLCacheContextElement::extSupported(SoState *state, const char *str)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Returns TRUE if the current rendering context does 
-//    mip-mapped textures quickly.
-//
-SbBool
-SoGLCacheContextElement::areMipMapsFast(SoState * /*state*/)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    return TRUE;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Overrides this method to compare contexts.
 //
 // Use: public
