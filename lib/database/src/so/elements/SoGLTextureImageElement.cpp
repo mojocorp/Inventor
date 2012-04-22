@@ -129,8 +129,8 @@ SoGLTextureImageElement::pop(SoState *state, const SoElement *)
 {
     // Empty texture, don't need to do anything-- the
     // GLTextureEnabledElement will turn off texturing.
-    if (size[0] == 0 || size[1] == 0 || numComponents == 0) {
-	return;
+    if (image.isNull()) {
+        return;
     }
     // Since popping this element has GL side effects, make sure any
     // open caches capture it
@@ -149,16 +149,16 @@ SoGLTextureImageElement::pop(SoState *state, const SoElement *)
 // Use: protected, virtual
 
 void
-SoGLTextureImageElement::setElt(const SbVec2s &, int, const
-				unsigned char *, int, int, int,
-				const SbColor &)
+SoGLTextureImageElement::setElt(const SbImage &,
+                int, int, int,
+                const SbColor &)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     SoDebugError::post("SoGLTextureImageElement::setElt",
-	       "Nodes must call SoGLTextureImageElement::set"
-	       " for GLRender, not SoTextureImageElement::set");
+           "Nodes must call SoGLTextureImageElement::set"
+           " for GLRender, not SoTextureImageElement::set");
 #endif
 }
 
@@ -175,11 +175,10 @@ SoGLTextureImageElement::setElt(const SbVec2s &, int, const
 
 SoGLDisplayList *
 SoGLTextureImageElement::set(SoState *state, SoNode *node,
-			     const SbVec2s &_size, int _numComponents,
-			     const unsigned char *_bytes,
-			     float _quality, int _wrapS, int _wrapT,
-			     int _model, const SbColor &_blendColor,
-			     SoGLDisplayList *_list)
+                 const SbImage &img,
+                 float _quality, int _wrapS, int _wrapT,
+                 int _model, const SbColor &_blendColor,
+                 SoGLDisplayList *_list)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -189,15 +188,15 @@ SoGLTextureImageElement::set(SoState *state, SoNode *node,
     elt = (SoGLTextureImageElement *) getElement(state, classStackIndex, node);
 
     if (elt != NULL) {
-	elt->SoTextureImageElement::setElt(_size, _numComponents,
-					   _bytes, _wrapS, _wrapT,
-					   _model, _blendColor);
+        elt->SoTextureImageElement::setElt(img,
+                                           _wrapS, _wrapT,
+                                           _model, _blendColor);
 
-	elt->list = _list;
-	elt->quality = _quality;
-	elt->sendTexEnv(state);
-	elt->sendTex(state);
-	return elt->list;
+        elt->list = _list;
+        elt->quality = _quality;
+        elt->sendTexEnv(state);
+        elt->sendTex(state);
+        return elt->list;
     }
     return NULL;
 }
@@ -335,6 +334,9 @@ SoGLTextureImageElement::sendTex(SoState *state)
 	return;
     }
 
+    SbVec2s size = image.getSize();
+    int numComponents = image.getNumComponents();
+
     SbVec2s newSize = size;
     if ( !SoGLCacheContextElement::extSupported(state, "GL_ARB_texture_non_power_of_two") ) {
         // Scale the image to closest power of 2 smaller than maximum
@@ -412,14 +414,14 @@ SoGLTextureImageElement::sendTex(SoState *state)
 	// filtering) if using a linear interpolation magnification
 	// filter:
 	gluScaleImage(
-	    (GLenum)format, size[0], size[1], GL_UNSIGNED_BYTE, bytes,
+        (GLenum)format, size[0], size[1], GL_UNSIGNED_BYTE, image.getConstBytes(),
                     newSize[0], newSize[1], GL_UNSIGNED_BYTE, &level0[0]);
     }
     
     // Send level-0 mipmap:
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, newSize[0], newSize[1],
 		 0, (GLenum)format, GL_UNSIGNED_BYTE,
-                 level0.empty() ? bytes : &level0[0]);
+                 level0.empty() ? image.getConstBytes() : &level0[0]);
     
     // If necessary, send other mipmaps:
     if (needMipMaps) {
@@ -428,12 +430,12 @@ SoGLTextureImageElement::sendTex(SoState *state)
 	// (and the level0 array is used if possible).
 	
 	const GLubyte *prevLevel = NULL;
-        if (level0.empty()) {
-            level0.resize(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
-	    prevLevel = bytes;
+    if (level0.empty()) {
+        level0.resize(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
+        prevLevel = image.getConstBytes();
 	}
 	else {
-            prevLevel = &level0[0];
+        prevLevel = &level0[0];
 	}
     
 	int level = 0;

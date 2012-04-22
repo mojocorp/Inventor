@@ -58,6 +58,7 @@
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec2s.h>
+#include <Inventor/SbImage.h>
 
 /// Field containing a 2D image.
 /// \ingroup Fields
@@ -121,6 +122,7 @@ public:
     /// image and the number of components in the image; the number of bytes
     /// in the array returned will be \a size[0]* \a size[1]* \a nc.
     const unsigned char * getValue(SbVec2s &size, int &nc) const;
+    const SbImage & getValue() const;
 
     /// Sets the value of this field to be an image of the given size, with
     /// the given number of components, and with the given pixel values.
@@ -128,6 +130,8 @@ public:
     /// internal storage maintained by the <tt>SoSFImage</tt> field.
     void setValue(const SbVec2s &size, int nc,
                   const unsigned char *bytes, CopyPolicy copypolicy = COPY);
+
+    void setValue(const SbImage &img);
 
     /// Equality operator
     int operator ==(const SoSFImage &f) const;
@@ -148,12 +152,7 @@ SoINTERNAL public:
     static void initClass();
 
 private:
-    SbVec2s  size;  // Width and height of image
-    int   numComponents; // Number of components per pixel
-    unsigned char * bytes;  // Array of pixels
-    CopyPolicy copyPolicy;
-
-    void freeImage();
+    SbImage image;
 
     // Reading and writing
     virtual SbBool readValue(SoInput *in);
