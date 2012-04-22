@@ -71,6 +71,7 @@
 #include <Inventor/SbVec4f.h>
 #include <Inventor/SbMatrix.h>
 #include <Inventor/SbViewVolume.h>
+#include <Inventor/SbImage.h>
 
 class SoPrimitiveVertex;
 class SoShape;
@@ -255,7 +256,7 @@ public:
     const SbVec4f & getTextureCoordinate4(int index) const;
     SoTextureCoordinateBinding::Binding getTextureCoordinateBinding() const;
     const SbColor & getTextureBlendColor() const;
-    const unsigned char * getTextureImage(SbVec2s &size, int &numComps) const; ///< Returns NULL if no texture is enabled
+    SbImage getTextureImage() const; ///< Returns NULL image if no texture is enabled
 
     /// Returns the current texture mapping information from the state.
     const SbMatrix & getTextureMatrix() const;

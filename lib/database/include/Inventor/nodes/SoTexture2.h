@@ -179,10 +179,6 @@ class INVENTOR_API SoTexture2 : public SoNode {
   SoINTERNAL public:
     static void		initClass();
 
-    // Read libimage-format file
-    static SbBool   readImage(const SbString& fname, int &w, int &h, int &nc,
-				unsigned char *&bytes);
-
   protected:
     // Reads stuff into instance. Returns FALSE on error.
     virtual SbBool	readInstance(SoInput *in, unsigned short flags);

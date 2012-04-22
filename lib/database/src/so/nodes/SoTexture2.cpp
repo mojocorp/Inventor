@@ -62,6 +62,7 @@
 #include <Inventor/errors/SoReadError.h>
 #include <Inventor/nodes/SoTexture2.h>
 #include <Inventor/sensors/SoFieldSensor.h>
+#include <Inventor/SbImage.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -245,24 +246,22 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
     }
 
     // Read in image file right away...
-    int nx, ny, nc;
-    unsigned char *bytes;
-    SbBool result = readImage(tex->filename.getValue(), nx, ny, nc, bytes);
-    if (!result) {
-        // Read error is taken care of by readImage() call
-        nx = ny = nc = 0;
-        bytes = NULL;
-    }
+    SbImage img(tex->filename.getValue());
+
+#ifdef DEBUG
+    SoDebugError::postInfo("SoTexture2::filenameChangedCB",
+               "Reading texture image %s",
+               tex->filename.getValue().getString());
+#endif
+
     // Detach the image sensor temporarily...
     tex->imageSensor->detach();
 
     // Set the image to the right value:
-    tex->image.setValue(SbVec2s(nx, ny), nc, bytes);
+    tex->image.setValue(img);
 
     // And set its default bit so it isn't written out
     tex->image.setDefault(TRUE);
-
-    if (bytes != NULL) delete [] bytes;
 
     if (tex->renderList) {
         tex->renderList->unref();
@@ -270,7 +269,7 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
     }
     tex->imageSensor->attach(&tex->image);
 
-    tex->setReadStatus(result);
+    tex->setReadStatus(!img.isNull());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -294,11 +293,7 @@ SoTexture2::doAction(SoAction *action)
         SoTextureOverrideElement::setImageOverride(state, TRUE);
     }
 
-    SbVec2s size;
-    int nc;
-    const unsigned char *bytes = image.getValue(size, nc);
-
-    SoTextureImageElement::set(state, this, size, nc, bytes,
+    SoTextureImageElement::set(state, this, image.getValue(),
                                wrapS.getValue(), wrapT.getValue(),
                                model.getValue(), blendColor.getValue());
 }
@@ -390,7 +385,7 @@ SoTexture2::GLRender(SoGLRenderAction *action)
         if (renderList && renderList->getContext() == context &&
                 texQuality == renderListQuality) {
             SoGLTextureImageElement::set(
-                        state, this, size, nc, bytes, texQuality,
+                        state, this, image.getValue(), texQuality,
                         wrapS.getValue(), wrapT.getValue(),
                         m, blendColor.getValue(), renderList);
         }  // Not valid, try to build
@@ -401,7 +396,7 @@ SoTexture2::GLRender(SoGLRenderAction *action)
                 renderList = NULL;
             }
             renderList = SoGLTextureImageElement::set(
-                        state, this, size, nc, bytes, texQuality,
+                        state, this, image.getValue(), texQuality,
                         wrapS.getValue(), wrapT.getValue(),
                         m, blendColor.getValue(), NULL);
             if (renderList)
@@ -409,43 +404,4 @@ SoTexture2::GLRender(SoGLRenderAction *action)
             renderListQuality = texQuality;
         }
     }
-}
-
-#include <image.h>
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    read passed image file
-//
-// Use: static, protected
-
-SbBool
-SoTexture2::readImage(const SbString& fname, int &w, int &h, int &nc, 
-                      unsigned char *&bytes)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    w = h = nc = 0;
-    bytes = NULL;
-    
-    // Empty file means an empty image...
-    if (fname.getString()[0] == '\0')
-        return TRUE;
-
-    SoInput in;
-    if (!in.openFile(fname.getString(), TRUE)) {
-        return FALSE;
-    }
-
-    SbString filename = in.getCurFileName();
-
-    in.closeFile();
-
-#ifdef DEBUG
-    SoDebugError::postInfo("SoTexture2::readImage",
-                           "Reading texture image %s",
-                           fname.getString());
-#endif
-    return ReadImage(filename.getString(), w, h, nc, bytes);
 }

@@ -94,8 +94,6 @@ SoTextureImageElement::init(SoState *state)
 ////////////////////////////////////////////////////////////////////////
 {
     SoReplacedElement::init(state);
-
-    bytes = getDefault(size, numComponents);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -107,10 +105,9 @@ SoTextureImageElement::init(SoState *state)
 
 void
 SoTextureImageElement::set(SoState *state, SoNode *node,
-			   const SbVec2s &size, int nc,
-			   const unsigned char *b,
-			   int wrapS, int wrapT, int model,
-			   const SbColor &blendColor)
+               const SbImage &img,
+               int wrapS, int wrapT, int model,
+               const SbColor &blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -119,10 +116,9 @@ SoTextureImageElement::set(SoState *state, SoNode *node,
     // Get an instance we can change (pushing if necessary)
     elt = (SoTextureImageElement *) getElement(state, classStackIndex, node);
 
-    elt->setElt(size, nc, b, wrapS, wrapT, model, blendColor);
+    elt->setElt(img, wrapS, wrapT, model, blendColor);
 }
 
-	
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -132,17 +128,13 @@ SoTextureImageElement::set(SoState *state, SoNode *node,
 // Use: protected, virtual
 
 void
-SoTextureImageElement::setElt(const SbVec2s &_size, 
-			      int _numComponents,
-			      const unsigned char *_bytes,
-			      int _wrapS, int _wrapT, int _model,
-			      const SbColor &_blendColor)
+SoTextureImageElement::setElt(const SbImage &_image,
+                  int _wrapS, int _wrapT, int _model,
+                  const SbColor &_blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    size = _size;
-    numComponents = _numComponents;
-    bytes = _bytes;
+    image = _image;
     wrapS = _wrapS;
     wrapT = _wrapT;
     model = _model;
@@ -156,9 +148,9 @@ SoTextureImageElement::setElt(const SbVec2s &_size,
 //
 // Use: public, static
 
-const unsigned char *
-SoTextureImageElement::get(SoState *state, SbVec2s &_size, 
-			   int &_numComponents, int &_wrapS, int &_wrapT,
+const SbImage &
+SoTextureImageElement::get(SoState *state,
+               int &_wrapS, int &_wrapT,
 			   int &_model, SbColor &_blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -168,14 +160,12 @@ SoTextureImageElement::get(SoState *state, SbVec2s &_size,
     elt = (const SoTextureImageElement *)
 	getConstElement(state, classStackIndex);
 
-    _size = elt->size;
-    _numComponents = elt->numComponents;
     _wrapS = elt->wrapS;
     _wrapT = elt->wrapT;
     _model = elt->model;
     _blendColor = elt->blendColor;
 
-    return elt->bytes;
+    return elt->image;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -195,7 +185,7 @@ SoTextureImageElement::containsTransparency(SoState *state)
     elt = (const SoTextureImageElement *)
 	getConstElement(state, classStackIndex);
 
-    return (elt->numComponents == 2 || elt->numComponents == 4);
+    return elt->image.hasAlphaChannel();
 }
 
 ////////////////////////////////////////////////////////////////////////

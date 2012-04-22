@@ -58,6 +58,7 @@
 
 #include <Inventor/SbColor.h>
 #include <Inventor/SbVec2s.h>
+#include <Inventor/SbImage.h>
 #include <Inventor/elements/SoReplacedElement.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -78,14 +79,12 @@ SoEXTENDER class INVENTOR_API SoTextureImageElement : public SoReplacedElement {
 
     /// sets the current image, wrap, and model:
     static void		set(SoState *state, SoNode *node,
-			    const SbVec2s &size, int numComponents,
-			    const unsigned char *bytes,
-			    int wrapS, int wrapT, int model,
-			    const SbColor &blendColor);
+                const SbImage &img,
+                int wrapS, int wrapT, int model,
+                const SbColor &blendColor);
 
-    static const unsigned char *get(SoState *state, SbVec2s &size,
-				    int &numComponents, int &wrapS,
-				    int &wrapT, int &model, 
+    static const SbImage & get(SoState *state,
+                    int &wrapS, int &wrapT, int &model,
 				    SbColor &blendColor);
 
     /// Returns TRUE if the texture contains transparency info
@@ -102,14 +101,11 @@ SoEXTENDER class INVENTOR_API SoTextureImageElement : public SoReplacedElement {
     static void		initClass();
 
   protected:
-    virtual void	setElt(const SbVec2s &s, int nc,
-			       const unsigned char *bytes,
-			       int wrapS, int wrapT, int model,
-			       const SbColor &blendColor);
+    virtual void setElt(const SbImage &img,
+                   int wrapS, int wrapT, int model,
+                   const SbColor &blendColor);
 
-    SbVec2s	size;
-    int		numComponents;
-    const unsigned char *bytes;
+    SbImage image;
     int		wrapS, wrapT, model;
     SbColor	blendColor;
 
