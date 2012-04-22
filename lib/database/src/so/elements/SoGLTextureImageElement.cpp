@@ -281,18 +281,6 @@ static qualityFilterTable mipmap_minQFTable[] = {
     { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, TRUE},
 };
 
-//
-// Defaults for non-RE machines (point-sampled by default):
-//
-static qualityFilterTable point_minQFTable[] = {
-    { 0.5f, GL_NEAREST, FALSE},
-    { 0.6f, GL_LINEAR, FALSE},
-    { 0.7f, GL_NEAREST_MIPMAP_NEAREST, TRUE},
-    { 0.8f, GL_NEAREST_MIPMAP_LINEAR, TRUE},
-    { 0.9f, GL_LINEAR_MIPMAP_NEAREST, TRUE},
-    { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, TRUE},
-};
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -355,24 +343,13 @@ SoGLTextureImageElement::sendTex(SoState *state)
         }
     }
 
-    int minFilter, magFilter;
     SbBool needMipMaps = FALSE;
-    SbBool mipmapsAreFast =
-	SoGLCacheContextElement::areMipMapsFast(state);
-    qualityFilterTable *tbl;
-    if (mipmapsAreFast) {
-	tbl = mipmap_minQFTable;
-    } else {
-	tbl = point_minQFTable;
-    }
+    qualityFilterTable *tbl = mipmap_minQFTable;
     int i;
     for (i = 0; quality > tbl[i].quality; i++) /* Do nothing */;
-    minFilter = tbl[i].filter;
+    int minFilter = tbl[i].filter;
     needMipMaps = tbl[i].needMipMaps;
-    if (mipmapsAreFast)
-	magFilter = (quality < 0.5 ? GL_NEAREST : GL_LINEAR);
-    else
-	magFilter = (quality < 0.75 ? GL_NEAREST : GL_LINEAR);
+    int magFilter = (quality < 0.5 ? GL_NEAREST : GL_LINEAR);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Not default
     
