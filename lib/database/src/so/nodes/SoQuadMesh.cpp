@@ -756,7 +756,7 @@ SoQuadMesh::notify(SoNotList *list)
 	vpCache.invalidate();
     }
 
-    SoShape::notify(list);
+    SoNonIndexedShape::notify(list);
 }
 
 
