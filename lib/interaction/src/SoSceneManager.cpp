@@ -106,7 +106,7 @@ SoSceneManager::SoSceneManager()
     sceneSensor->setData((void *) this);
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	SoDebug::NamePtr("sceneChangeSensor", sceneSensor);
+        SoDebug::NamePtr("sceneChangeSensor", sceneSensor);
     }
 #endif
 
@@ -117,14 +117,14 @@ SoSceneManager::SoSceneManager()
     
     // setup the sensor to touch real time after a redraw
     if (! realTimeSensor) {
-	realTime = (SoSFTime *) SoDB::getGlobalField("realTime");
-	realTimeSensor = new SoOneShotSensor;
-	realTimeSensor->setFunction((SoSensorCB *)
-				 &SoSceneManager::realTimeSensorCB);
+        realTime = (SoSFTime *) SoDB::getGlobalField("realTime");
+        realTimeSensor = new SoOneShotSensor;
+        realTimeSensor->setFunction((SoSensorCB *)
+                                    &SoSceneManager::realTimeSensorCB);
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	    SoDebug::NamePtr("realTimeSensor", realTimeSensor);
-	}
+        if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
+            SoDebug::NamePtr("realTimeSensor", realTimeSensor);
+        }
 #endif
     }
 }
@@ -139,10 +139,10 @@ SoSceneManager::~SoSceneManager()
 {
     // delete actions
     if (raCreatedHere)
-	delete renderAction;
-	
+        delete renderAction;
+
     if (heaCreatedHere)
-	delete handleEventAction;
+        delete handleEventAction;
     
     // detach the scene
     setSceneGraph(NULL);
@@ -162,21 +162,21 @@ SoSceneManager::setGLRenderAction(SoGLRenderAction *ra)
 { 
 #ifdef DEBUG
     if (ra == NULL)
-	SoDebugError::post("SoSceneManager::setGLRenderAction",
-			"a NULL render action was passed. This is bad!");
+        SoDebugError::post("SoSceneManager::setGLRenderAction",
+                           "a NULL render action was passed. This is bad!");
 #endif
 
     // Make sure the viewport region is set
     // (be paranoid and check for NULL)
     if (renderAction != NULL) {
-	SbViewportRegion rgn(renderAction->getViewportRegion());
-	ra->setViewportRegion(rgn);
+        SbViewportRegion rgn(renderAction->getViewportRegion());
+        ra->setViewportRegion(rgn);
     }
     
     // Get rid of the old render action if it was created here.
     if (raCreatedHere) {
-	delete renderAction;
-	raCreatedHere = FALSE;
+        delete renderAction;
+        raCreatedHere = FALSE;
     }
     
     // Set to the new render action.
@@ -197,14 +197,14 @@ SoSceneManager::setHandleEventAction(SoHandleEventAction *hea)
 {
     // Make sure the viewport region is set
     if ((handleEventAction != NULL) && (hea != NULL)) {
-	SbViewportRegion rgn(handleEventAction->getViewportRegion());
-	hea->setViewportRegion(rgn);
+        SbViewportRegion rgn(handleEventAction->getViewportRegion());
+        hea->setViewportRegion(rgn);
     }
     
     // Get rid of the old render action if it was created here.
     if (heaCreatedHere) {
-	delete handleEventAction;
-	heaCreatedHere = FALSE;
+        delete handleEventAction;
+        heaCreatedHere = FALSE;
     }
     
     // Set to the new render action.
@@ -228,17 +228,17 @@ SoSceneManager::setSceneGraph(SoNode *newScene)
     
     // ref the new scene
     if (newScene != NULL)
-	newScene->ref();
+        newScene->ref();
 
     // check if there already is a scene graph
     if (scene != NULL)
-	scene->unref();
+        scene->unref();
 
     // now set the new scene graph
     scene = newScene;
     
     if (currentlyActive)
-	activate();
+        activate();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -253,7 +253,7 @@ SoSceneManager::getSceneGraph() const
 //
 ////////////////////////////////////////////////////////////////////////
 { return scene; }
-	    
+
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -267,14 +267,14 @@ SoSceneManager::processEvent(const SoEvent *event)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ((scene != NULL) && (handleEventAction != NULL)) {    
-	handleEventAction->setEvent(event);
-	handleEventAction->apply(scene);
-	
-	return handleEventAction->isHandled();
+    if ((scene != NULL) && (handleEventAction != NULL)) {
+        handleEventAction->setEvent(event);
+        handleEventAction->apply(scene);
+
+        return handleEventAction->isHandled();
     }
     else
-	return FALSE;
+        return FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -311,10 +311,10 @@ SoSceneManager::setWindowSize(const SbVec2s &newSize)
     rgn.setWindowSize(newSize);
     
     if (renderAction != NULL)
-	renderAction->setViewportRegion(rgn);
-	
+        renderAction->setViewportRegion(rgn);
+
     if (handleEventAction != NULL)
-	handleEventAction->setViewportRegion(rgn);
+        handleEventAction->setViewportRegion(rgn);
     
     // make sure to call glViewport() with the new size
     needToSendVP = TRUE;
@@ -348,12 +348,12 @@ SoSceneManager::setSize(const SbVec2s &newSize)
     SbViewportRegion rgn(renderAction->getViewportRegion());
     const SbVec2s &origin = rgn.getViewportOriginPixels();
     rgn.setViewportPixels(origin, newSize);
-           
+
     if (renderAction != NULL)
-	renderAction->setViewportRegion(rgn);
+        renderAction->setViewportRegion(rgn);
     
     if (handleEventAction != NULL)
-	handleEventAction->setViewportRegion(rgn);
+        handleEventAction->setViewportRegion(rgn);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -370,12 +370,12 @@ SoSceneManager::setOrigin(const SbVec2s &newOrigin)
     SbViewportRegion rgn(renderAction->getViewportRegion());
     const SbVec2s &size = rgn.getViewportSizePixels();
     rgn.setViewportPixels(newOrigin, size);
-           
+
     if (renderAction != NULL)
-	renderAction->setViewportRegion(rgn);
+        renderAction->setViewportRegion(rgn);
     
     if (handleEventAction != NULL)
-	handleEventAction->setViewportRegion(rgn);
+        handleEventAction->setViewportRegion(rgn);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -418,10 +418,10 @@ SoSceneManager::setViewportRegion(const SbViewportRegion &rgn)
 ////////////////////////////////////////////////////////////////////////
 {
     if (renderAction != NULL)
-	renderAction->setViewportRegion(rgn);
+        renderAction->setViewportRegion(rgn);
     
     if (handleEventAction != NULL)
-	handleEventAction->setViewportRegion(rgn);
+        handleEventAction->setViewportRegion(rgn);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -452,7 +452,7 @@ SoSceneManager::setRGBMode(SbBool onOrOff)
     rgbMode = onOrOff;
 
     // the render action determines color map/rgb at initialization
-//???pauli    renderAction->reinitialize();
+    //???pauli    renderAction->reinitialize();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -473,9 +473,9 @@ SoSceneManager::setAntialiasing(SbBool smoothing, int numPasses)
     // Set render action callback for multiple pass rendering.  This
     // makes sure to clear background to correct color between frames.
     if ( numPasses > 1 )
-	renderAction->setPassCallback(antialiasingCallback, this);
+        renderAction->setPassCallback(antialiasingCallback, this);
     else
-	renderAction->setPassCallback(NULL, NULL);
+        renderAction->setPassCallback(NULL, NULL);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -508,12 +508,12 @@ SoSceneManager::render(SbBool clearWindow, SbBool clearZbuffer)
 {
     // reinitialize if necessary
     if (graphicsInitNeeded) {
-	GLint numBits[1];
-	glGetIntegerv(GL_DEPTH_BITS, numBits);
-	needZbuffer = (numBits[0] != 0); // FALSE for overlay windows !
-	if (needZbuffer)
-	    glDepthFunc(GL_LEQUAL); // needed for hidden line rendering
-	graphicsInitNeeded = FALSE;
+        GLint numBits[1];
+        glGetIntegerv(GL_DEPTH_BITS, numBits);
+        needZbuffer = (numBits[0] != 0); // FALSE for overlay windows !
+        if (needZbuffer)
+            glDepthFunc(GL_LEQUAL); // needed for hidden line rendering
+        graphicsInitNeeded = FALSE;
     }
     
     //
@@ -521,34 +521,34 @@ SoSceneManager::render(SbBool clearWindow, SbBool clearZbuffer)
     // we can do a color clear.
     //
     if (needToSendVP) {
-	const SbViewportRegion &theRegion = renderAction->getViewportRegion();
-	SbVec2s size   = theRegion.getViewportSizePixels();
-	SbVec2s origin = theRegion.getViewportOriginPixels();
-	glViewport(origin[0], origin[1], size[0], size[1]);
-	needToSendVP = FALSE;
+        const SbViewportRegion &theRegion = renderAction->getViewportRegion();
+        SbVec2s size   = theRegion.getViewportSizePixels();
+        SbVec2s origin = theRegion.getViewportOriginPixels();
+        glViewport(origin[0], origin[1], size[0], size[1]);
+        needToSendVP = FALSE;
     }
     
     //
     // clear to the background color and clear the zbuffer
     //
     if (clearWindow) {
-	if (rgbMode)
-	     glClearColor(bkgColor[0], bkgColor[1], bkgColor[2], 0);
-	else glClearIndex(GLfloat(bkgIndex));
-	
-	// clear the color+zbuffer at the same time if we can
-	if (needZbuffer && clearZbuffer)
-	    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	else
-	    glClear(GL_COLOR_BUFFER_BIT);
+        if (rgbMode)
+            glClearColor(bkgColor[0], bkgColor[1], bkgColor[2], 0);
+        else glClearIndex(GLfloat(bkgIndex));
+
+        // clear the color+zbuffer at the same time if we can
+        if (needZbuffer && clearZbuffer)
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        else
+            glClear(GL_COLOR_BUFFER_BIT);
     }
     // check to see if only the zbuffer is needed...
     else if (needZbuffer && clearZbuffer)
-	glClear(GL_DEPTH_BUFFER_BIT);
+        glClear(GL_DEPTH_BUFFER_BIT);
     
     // render the scene graph!
     if (scene != NULL)
-    	renderAction->apply(scene);
+        renderAction->apply(scene);
     
     // sensor doesn't need to fire again if it's still scheduled
     sceneSensor->unschedule();
@@ -557,10 +557,10 @@ SoSceneManager::render(SbBool clearWindow, SbBool clearZbuffer)
     // as soon as we can now that we have rendered the scene. This will
     // enable us to render things that are animating with a consistent
     // time across mutiple renderAreas, while providing the maximum
-    // optainable frame rate (much better than a hard coded 30 or 60 
+    // optainable frame rate (much better than a hard coded 30 or 60
     // times/sec timer sensor).
     if (updateRealTime)
-	realTimeSensor->schedule();
+        realTimeSensor->schedule();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -591,14 +591,14 @@ SoSceneManager::enableRealTimeUpdate(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (updateRealTime == flag)
-	return;
+        return;
     
     updateRealTime = flag;
     
     if (updateRealTime)
-	realTimeSensor->schedule();
+        realTimeSensor->schedule();
     else
-	realTimeSensor->unschedule();
+        realTimeSensor->unschedule();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -614,11 +614,11 @@ SoSceneManager::activate()
     // only if the user has specified a redraw callback (i.e.
     // auto-redraw is enabled)
     if (renderCB != NULL) {
-	if (scene != NULL && sceneSensor->getAttachedNode() == NULL) {
-	    sceneSensor->setFunction((SoSensorCB *)
-			 &SoSceneManager::sceneSensorCallback);
-	    sceneSensor->attach(scene);
-	}
+        if (scene != NULL && sceneSensor->getAttachedNode() == NULL) {
+            sceneSensor->setFunction((SoSensorCB *)
+                                     &SoSceneManager::sceneSensorCallback);
+            sceneSensor->attach(scene);
+        }
     }
     active = TRUE;
 }
@@ -641,8 +641,8 @@ SoSceneManager::deactivate()
 //
 void
 SoSceneManager::setRenderCallback(
-    SoSceneManagerRenderCB *f,
-    void *userData)
+        SoSceneManagerRenderCB *f,
+        void *userData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -650,19 +650,19 @@ SoSceneManager::setRenderCallback(
     renderCBData = userData;
     
     if (f != NULL) {
-	// if we are active, attach the scene sensor
-	if (active) {
-	    if (scene != NULL && sceneSensor->getAttachedNode() == NULL) {
-		sceneSensor->setFunction((SoSensorCB *)
-			     &SoSceneManager::sceneSensorCallback);
-		sceneSensor->attach(scene);
-	    }
-	}
+        // if we are active, attach the scene sensor
+        if (active) {
+            if (scene != NULL && sceneSensor->getAttachedNode() == NULL) {
+                sceneSensor->setFunction((SoSensorCB *)
+                                         &SoSceneManager::sceneSensorCallback);
+                sceneSensor->attach(scene);
+            }
+        }
     }
     else {
-	// detach the scene sensor (whether active or not)
-	sceneSensor->detach();
-	sceneSensor->setFunction(NULL);
+        // detach the scene sensor (whether active or not)
+        sceneSensor->detach();
+        sceneSensor->setFunction(NULL);
     }
 }
 
@@ -707,7 +707,7 @@ SoSceneManager::antialiasingCallback( void *r )
     SoSceneManager *mgr = (SoSceneManager *) r;
     
     if (mgr->rgbMode)
-	 glClearColor(mgr->bkgColor[0], mgr->bkgColor[1], mgr->bkgColor[2], 0);
+        glClearColor(mgr->bkgColor[0], mgr->bkgColor[1], mgr->bkgColor[2], 0);
     else glClearIndex( GLfloat(mgr->bkgIndex) );
     
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
@@ -718,19 +718,19 @@ SoSceneManager::sceneSensorCallback(SoSceneManager *mgr, SoSensor *)
 {
 #ifdef DEBUG
     if (mgr->renderCB == NULL) {
-	SoDebugError::post("SoSceneManager::sceneSensorCallback",
-	"Callback was fired,  but auto-redraw is turned off.");
-	return;
+        SoDebugError::post("SoSceneManager::sceneSensorCallback",
+                           "Callback was fired,  but auto-redraw is turned off.");
+        return;
     }
     if (! mgr->isActive()) {
-	SoDebugError::post("SoSceneManager::sceneSensorCallback",
-	"Callback was fired,  but scene manager not active.");
-	return;
+        SoDebugError::post("SoSceneManager::sceneSensorCallback",
+                           "Callback was fired,  but scene manager not active.");
+        return;
     }
 #endif
 
     // redraw that scene graph!
-    mgr->redraw(); 
+    mgr->redraw();
 }
 
 //
@@ -743,7 +743,7 @@ void
 SoSceneManager::redraw()
 {
     if (renderCB != NULL)
-	(*renderCB)(renderCBData, this);
+        (*renderCB)(renderCBData, this);
 }
 
 void
@@ -761,7 +761,7 @@ SoSceneManager::setBackgroundColor(const SbColor &c)
 {
     bkgColor = c;
     if (isRGBMode())
-	scheduleRedraw();
+        scheduleRedraw();
 }
 
 void
@@ -769,5 +769,5 @@ SoSceneManager::setBackgroundIndex(int index)
 {
     bkgIndex = index;
     if (! isRGBMode())
-	scheduleRedraw();
+        scheduleRedraw();
 }
