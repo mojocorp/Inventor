@@ -1,6 +1,9 @@
 TEMPLATE = lib
 TARGET = glew
+VERSION = 1.7.0
+
 DESTDIR  = ../../build
+
 CONFIG += opengl static
 CONFIG -= qt
 
