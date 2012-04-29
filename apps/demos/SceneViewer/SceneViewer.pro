@@ -15,9 +15,8 @@ INCLUDEPATH += . \
                ../../../lib/nodekits/include/ \
                ../../../libSoXt/include
 
-LIBS += -L../../../build -lInventor -lSoxt
-LIBS += -L/usr/X11/lib -lx11 -lxt -lGL
-LIBS += -L/usr/OpenMotif/lib -lXm
+LIBS += -L../../../build -lInventor -lSoXt
+LIBS += -L/usr/X11R6/lib -lXm -lXt -lX11 -lXi
 INCLUDEPATH += /usr/X11/include/ /usr/OpenMotif/include/
 
 # Input

@@ -12,3 +12,6 @@ linux-g++ {
 }
 
 SUBDIRS += 3rdparty libimage lib gtest libSoQt SceneViewer
+
+x11: SUBDIRS += libSoXt
+
