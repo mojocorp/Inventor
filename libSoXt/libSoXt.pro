@@ -13,8 +13,9 @@ INCLUDEPATH += ../lib/database/include \
                ../lib/compat/include
 
 LIBS += -L../build -lInventor
-LIBS += -L/usr/X11/lib -lx11 -lxt -lGL -lXi
-LIBS += -L/usr/OpenMotif/lib -lXm
+# At link time, use the library order  -lXm -lXt -lX11. (http://www.rahul.net/kenton/faqs/Motif-FAQ.html#302)
+LIBS += -L/usr/X11R6/lib -lXm -lXt -lX11 -lXi
+
 INCLUDEPATH += /usr/X11/include/ /usr/OpenMotif/include/
 
 DEPENDPATH += . \
