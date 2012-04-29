@@ -7,14 +7,10 @@ DESTDIR  = ../build
 LIBS += -L../build -lInventor
 linux-g++: LIBS += -lGLU
 
-INCLUDEPATH += . include
+INCLUDEPATH += . ../3rdparty/gtest-1.6.0/include
 INCLUDEPATH += ../libInventor/database/include \
                ../libInventor/interaction/include \
                ../libInventor/nodekits/include
-
-# Google Test Framework
-HEADERS += include/gtest/gtest.h
-SOURCES += src/gtest-all.cc
 
 SOURCES += main.cpp \
            testVec2f.cpp \
@@ -23,3 +19,4 @@ SOURCES += main.cpp \
            testString.cpp \
            testFile.cpp
 
+LIBS += -L../build -lgtest
