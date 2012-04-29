@@ -4,7 +4,7 @@
 #include <Inventor/SoInteraction.h>
 #include <Inventor/nodekits/SoNodeKit.h>
 
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 int main(int argc, char **argv)
 {
