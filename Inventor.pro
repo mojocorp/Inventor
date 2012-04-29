@@ -11,7 +11,7 @@ linux-g++ {
     CONFIG += x11
 }
 
-SUBDIRS += 3rdparty libimage lib gtest libSoQt SceneViewer
+SUBDIRS += 3rdparty libimage libInventor gtest libSoQt SceneViewer
 
 x11: SUBDIRS += libSoXt
 

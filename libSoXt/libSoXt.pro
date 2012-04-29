@@ -7,10 +7,9 @@ DESTDIR    = ../build
 DEFINES += "IVPREFIX="
 DEFINES += SB_HAS_X11
 
-INCLUDEPATH += ../lib/database/include \
-               ../lib/interaction/include \
-               ../lib/nodekits/include \
-               ../lib/compat/include
+INCLUDEPATH += ../libInventor/database/include \
+               ../libInventor/interaction/include \
+               ../libInventor/nodekits/include
 
 LIBS += -L../build -lInventor
 # At link time, use the library order  -lXm -lXt -lX11. (http://www.rahul.net/kenton/faqs/Motif-FAQ.html#302)
