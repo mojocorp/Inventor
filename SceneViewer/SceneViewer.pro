@@ -14,11 +14,12 @@ mac {
 }
 
 INCLUDEPATH += ../libSoQt/include
-INCLUDEPATH += ../lib/database/include \
-               ../lib/interaction/include \
-               ../lib/nodekits/include
+INCLUDEPATH += ../libInventor/database/include \
+               ../libInventor/interaction/include \
+               ../libInventor/nodekits/include
 
 LIBS += -L../build -lInventor -lSoQt
+linux-g++: LIBS += -lGLU
 
 HEADERS += MainWindow.h \
            QRecentFilesMenu.h

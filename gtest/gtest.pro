@@ -1,14 +1,16 @@
 TEMPLATE = app
 TARGET   = gtest
+CONFIG  += opengl
 CONFIG  -= app_bundle
 DESTDIR  = ../build
 
 LIBS += -L../build -lInventor
+linux-g++: LIBS += -lGLU
 
 INCLUDEPATH += . include
-INCLUDEPATH += ../lib/database/include \
-               ../lib/interaction/include \
-               ../lib/nodekits/include
+INCLUDEPATH += ../libInventor/database/include \
+               ../libInventor/interaction/include \
+               ../libInventor/nodekits/include
 
 # Google Test Framework
 HEADERS += include/gtest/gtest.h
