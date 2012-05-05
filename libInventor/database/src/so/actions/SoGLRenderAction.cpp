@@ -111,6 +111,10 @@ SoGLRenderAction::SoGLRenderAction(const SbViewportRegion &viewportRegion)
     // These three bits keep track of which view-volume planes we need
     // to test against; by default, all bits are 1.
     cullBits		= 7;
+
+    stereoMode      = MONOSCOPIC;
+    stereoOffset    = SoStereoElement::getDefaultOffset();
+    stereoBalance   = SoStereoElement::getDefaultBalace();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -150,6 +154,7 @@ SoGLRenderAction::initClass()
     SO_ENABLE(SoGLRenderAction, SoViewportRegionElement);
     SO_ENABLE(SoGLRenderAction, SoWindowElement);
     SO_ENABLE(SoGLRenderAction, SoTransparencyTypeElement);
+    SO_ENABLE(SoGLRenderAction, SoStereoElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -297,6 +302,51 @@ SoGLRenderAction::invalidateState()
 
     // Also invalidate what we think we know...
     whatChanged = ALL;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+//
+//
+//
+// Use: public, virtual
+
+void
+SoGLRenderAction::setStereoMode(StereoMode mode)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    stereoMode = mode;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+//
+//
+//
+// Use: public, virtual
+
+void
+SoGLRenderAction::setStereoOffset(float offset)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    stereoOffset = offset;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+//
+//
+//
+// Use: public, virtual
+
+void
+SoGLRenderAction::setStereoBalance(float balance)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    stereoBalance = balance;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -505,11 +555,12 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
     }
 
     // Set the GL cache context:
-    SoGLCacheContextElement::set(state, (int) cacheContext, delayObjs,
-				 remoteRendering);
+    SoGLCacheContextElement::set(state, (int) cacheContext, delayObjs, remoteRendering);
     
     SoTransparencyTypeElement::set(state, (SoTransparencyTypeElement::TransparencyType)transpType);
     
+    SoStereoElement::set(state, (SoStereoElement::StereoMode)stereoMode, stereoOffset, stereoBalance);
+
     // Simple case of one pass
     if (getNumPasses() == 1) {
 	renderPass(node, 0);
