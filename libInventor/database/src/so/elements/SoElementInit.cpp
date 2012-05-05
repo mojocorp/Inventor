@@ -115,6 +115,7 @@ SoElement::initElements()
     SoViewingMatrixElement::initClass();
     SoViewportRegionElement::initClass();
     SoDepthBufferElement::initClass();
+    SoStereoElement::initClass();
 
     // GL specific elements must be initialized after their more
     // generic counterparts
