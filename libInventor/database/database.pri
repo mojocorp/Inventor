@@ -195,6 +195,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoShapeStyleElement.h \
            database/include/Inventor/elements/SoSpecularColorElement.h \
            database/include/Inventor/elements/SoSubElement.h \
+           database/include/Inventor/elements/SoStereoElement.h \
            database/include/Inventor/elements/SoSwitchElement.h \
            database/include/Inventor/elements/SoTextureCoordinateBindingElement.h \
            database/include/Inventor/elements/SoTextureCoordinateElement.h \
@@ -742,6 +743,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/elements/SoReplacedElement.cpp \
            database/src/so/elements/SoShapeHintsElement.cpp \
            database/src/so/elements/SoShapeStyleElement.cpp \
+           database/src/so/elements/SoStereoElement.cpp \
            database/src/so/elements/SoSwitchElement.cpp \
            database/src/so/elements/SoTextureCoordinateBindingElement.cpp \
            database/src/so/elements/SoTextureCoordinateElement.cpp \
