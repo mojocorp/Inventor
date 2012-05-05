@@ -730,9 +730,13 @@ SbViewVolume::frustum(float left, float right,
     nearDist = nearval;
     nearToFar = farval - nearval;
 
-    llf.setValue(left, bottom, -nearval);
-    lrf.setValue(right, bottom, -nearval);
-    ulf.setValue(left, top, -nearval);
+    llfO.setValue(left, bottom, -nearval);
+    lrfO.setValue(right, bottom, -nearval);
+    ulfO.setValue(left, top, -nearval);
+
+    llf		= llfO + projPoint; // For compatibility
+    lrf		= lrfO + projPoint;
+    ulf		= ulfO + projPoint;
 }
 ////////////////////////////////////////////////////////////////////////
 //
