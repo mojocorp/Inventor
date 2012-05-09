@@ -452,8 +452,6 @@ SbMatrix::factor(SbMatrix &r, SbVec3f &s, SbMatrix &u, SbVec3f &t,
     /* (3) Compute det A. If negative, set sign = -1, else sign = 1 */
     det = a.det3();
     det_sign = (det < 0.0 ? -1.0 : 1.0);
-    if (det_sign * det < 1e-12)
-	return(FALSE);		// singular
     
     /* (4) B = A * A^  (here A^ means A transpose) */
     b = a * a.transpose();
@@ -477,6 +475,9 @@ SbMatrix::factor(SbMatrix &r, SbVec3f &s, SbMatrix &u, SbVec3f &t,
     /* (5) Compute U = R^ S! R A. */
     u = r * si * r.transpose() * a;
     
+    if (det_sign * det < 1e-12)
+        return(FALSE);		// singular
+
     return(TRUE);
 }
 
