@@ -202,10 +202,17 @@ class INVENTOR_API SoVertexProperty : public SoNode {
     virtual void	callback(SoCallbackAction *action);
     virtual void	pick(SoPickAction *action);
 
+    bool            isTransparent() const {return transparent;}
+
   SoINTERNAL public:
     static void		initClass();
 
   protected:
+    // check for transparency when field changes.
+    virtual void	notify(SoNotList *list);
+    // store whether transparent or not
+    bool transparent;
+
     virtual ~SoVertexProperty();
     
 };
