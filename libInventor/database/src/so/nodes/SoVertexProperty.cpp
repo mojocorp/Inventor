@@ -117,6 +117,7 @@ SoVertexProperty::SoVertexProperty()
     SO_NODE_SET_SF_ENUM_TYPE(materialBinding, Binding);
     SO_NODE_SET_SF_ENUM_TYPE(normalBinding, Binding);
 
+    transparent = false;
     isBuiltIn = TRUE;
 }
 ////////////////////////////////////////////////////////////////////////
@@ -285,6 +286,32 @@ SoVertexProperty::pick(SoPickAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     SoVertexProperty::doAction(action);
+}
+
+///////////////////////////////////////////////////////////////////////////
+//
+// Description:
+// When notified of change in orderedRGBA field, reevaluate transparent flag
+//
+// use: SoExtender public
+//
+void
+SoVertexProperty::notify(SoNotList *list)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    if ((list->getLastRec()->getType() == SoNotRec::CONTAINER) &&
+            (list->getLastField() == &orderedRGBA) ) {
+        transparent = false;
+        for(int i = 0; i < orderedRGBA.getNum(); i++){
+            if((orderedRGBA[i] & 0xff) != 0xff){
+                transparent = true;
+                break;
+            }
+        }
+    }
+
+    SoNode::notify(list);
 }
 
 
