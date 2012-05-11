@@ -76,7 +76,8 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#include <Inventor/SoLists.h>
+#include <Inventor/SbBasic.h>
+#include <list>
 
 class SoElement;
 class SoState;
@@ -126,7 +127,7 @@ protected:
     virtual ~SoCache();
 
 private:
-    SbPList  elementsUsed;  // Elements used in cache
+    std::list<SoElement*>  elementsUsed;  // Elements used in cache
     unsigned char *elementsUsedFlags; // Which elements on list
 
     int   refCount;  // Reference count
