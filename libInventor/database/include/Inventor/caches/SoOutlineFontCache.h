@@ -60,6 +60,7 @@
 #include <Inventor/SbVec2f.h>
 #include <Inventor/SbVec3f.h>
 #include <Inventor/SbBox2f.h>
+#include <Inventor/SbString.h>
 #include <Inventor/caches/SoCache.h>
 
 #include <vector>
