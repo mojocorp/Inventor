@@ -44,8 +44,6 @@ public:
     static DepthWriteFunction   getDefaultFunction() { return LESS; }
     static SbVec2f              getDefaultRange() { return SbVec2f(0.0f, 1.0f); }
 
-    virtual void	push(SoState *state);
-
 SoINTERNAL public:
       // Initializes the SoDepthBufferElement class
       static void		initClass();

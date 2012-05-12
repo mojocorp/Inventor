@@ -50,6 +50,28 @@ SoGLDepthBufferElement::init(SoState *_state)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Pushes the element, copying values from previous element in
+//    state:
+//
+// Use: public, virtual
+
+void
+SoGLDepthBufferElement::push(SoState *)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    const SoGLDepthBufferElement	*prevElt =
+        (const SoGLDepthBufferElement *)getNextInStack();
+
+    test        = prevElt->test;
+    write       = prevElt->write;
+    function    = prevElt->function;
+    range       = prevElt->range;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Pops element, causing side effects in GL.
 //
 // Use: public
