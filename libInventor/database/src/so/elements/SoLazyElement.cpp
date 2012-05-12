@@ -55,7 +55,6 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/elements/SoSubElement.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
-#include <Inventor/nodes/SoPackedColor.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/fields/SoMFColor.h>
@@ -437,13 +436,13 @@ SoLazyElement::setTransparencyType(SoState *state, int32_t type)
 ///////////////////////////////////////////////////////////////////////  
 void	
 SoLazyElement::setPacked(SoState *state, SoNode *node,
-	    int32_t numColors, const uint32_t *colors)
+        int32_t numColors, const uint32_t *colors, bool hasTransparency)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (curElt->ivState.diffuseNodeId != (node->getNodeId()) ||	    
 	    (!(curElt->ivState.packed)) || 
 	    (curElt->ivState.packedColors != colors)){
-	getWInstance(state)->setPackedElt( node, numColors, colors);
+    getWInstance(state)->setPackedElt( node, numColors, colors, hasTransparency);
     } 
     else if (state->isCacheOpen()) 
         curElt->registerRedundantSet(state, DIFFUSE_MASK|TRANSPARENCY_MASK);
@@ -718,20 +717,19 @@ SoLazyElement::setTranspTypeElt(  int32_t type)
 
 void
 SoLazyElement::setPackedElt( SoNode *node,  int32_t numColors,  
-	const uint32_t* colors)
+    const uint32_t* colors, bool hasTransparency)
 {  
     ivState.diffuseNodeId   = node->getNodeId();
     ivState.numDiffuseColors = numColors;
-    ivState.numTransparencies = numColors;
+    ivState.numTransparencies = hasTransparency ? numColors : 0;
+
     ivState.stippleNum = 0;	
-    if ((ivState.transpType == SoGLRenderAction::SCREEN_DOOR) &&
-	    ((colors[0]&0xff) != 0xff)){ 	
-	ivState.stippleNum = (int)(getNumPatterns()*
-		(1.-(colors[0] & 0xff)*(1./255.)));	    
+    if ((ivState.transpType == SoGLRenderAction::SCREEN_DOOR) && ((colors[0]&0xff) != 0xff)){
+        ivState.stippleNum = (int)(getNumPatterns()*(1.-(colors[0] & 0xff)*(1./255.)));
     }   
     ivState.packedColors = colors;
     ivState.packed = TRUE;
-    ivState.packedTransparent = ((SoPackedColor*)node)->isTransparent();
+    ivState.packedTransparent = hasTransparency;
 }
 ////////////////////////////////////////////////////////////////////////
 //
