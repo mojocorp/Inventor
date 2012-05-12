@@ -11,6 +11,8 @@ public:
     /// Initializes element
     virtual void	init(SoState *state);
 
+    virtual void	push(SoState *state);
+
     /// Override pop() method so side effects can occur in GL
     virtual void	pop(SoState *state, const SoElement *prevTopElement);
 
