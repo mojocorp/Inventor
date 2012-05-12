@@ -73,28 +73,6 @@ SoDepthBufferElement::set(SoState * state, SbBool test, SbBool write,
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Pushes the element, copying values from previous element in
-//    state:
-//
-// Use: public, virtual
-
-void
-SoDepthBufferElement::push(SoState *)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const SoDepthBufferElement	*prevElt =
-        (const SoDepthBufferElement *)getNextInStack();
-
-    test        = prevElt->test;
-    write       = prevElt->write;
-    function    = prevElt->function;
-    range       = prevElt->range;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Virtual set method; the GL version of this element overrides
 //    this to send stuff to GL, too...
 //
