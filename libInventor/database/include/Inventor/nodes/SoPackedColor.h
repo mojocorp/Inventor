@@ -106,7 +106,7 @@ class INVENTOR_API SoPackedColor : public SoNode {
     virtual void	doAction(SoAction *action);
     virtual void	GLRender(SoGLRenderAction *action);
     virtual void	callback(SoCallbackAction *action);
-    SbBool		isTransparent()
+    SbBool		isTransparent() const
 	{return transparent;}
 
   SoINTERNAL public:
