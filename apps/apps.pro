@@ -4,5 +4,6 @@
 TEMPLATE  = subdirs
 CONFIG   += ordered
 
-SUBDIRS = converters examples samples demos nodes tools
+#SUBDIRS = converters examples samples demos nodes tools
+SUBDIRS = demos
 
