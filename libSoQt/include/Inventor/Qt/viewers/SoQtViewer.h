@@ -408,6 +408,7 @@ protected:
     SbVec3f	    seekPoint, seekNormal;
     SbRotation	    oldCamOrientation, newCamOrientation;
     SbVec3f	    oldCamPosition, newCamPosition;
+    float       oldFocalDisance, newFocalDistance;
     
     // Externally set the viewer into/out off seek mode (default OFF). Actual
     // seeking will not happen until the viewer decides to (ex: mouse click).
