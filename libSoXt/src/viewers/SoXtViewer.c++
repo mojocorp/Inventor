@@ -1754,41 +1754,40 @@ SoXtViewer::interpolateSeekAnimation(float t)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     //
     // check if camera new and old position/orientation have already
     // been computed.
     //
     if (computeSeekVariables) {
-	SbMatrix mx;
-	SbVec3f viewVector;
-	
-	// save camera starting point
-	oldCamPosition = camera->position.getValue();
-	oldCamOrientation = camera->orientation.getValue();
-	
-	// compute the distance the camera will be from the seek point
-	// and update the camera focalDistance.
-	float dist;
-	if ( seekDistAsPercentage ) {
-	    SbVec3f seekVec(seekPoint - camera->position.getValue());
-	    dist = seekVec.length() * (seekDistance / 100.0);
-	}
-	else
-	    dist = seekDistance;
-	camera->focalDistance = dist;
-	
-	// let subclasses have a chance to redefine what the
-	// camera final orientation should be.
-	computeSeekFinalOrientation();
-	
-	// find the camera final position based on orientation and distance
-	mx = newCamOrientation;
-	viewVector.setValue(-mx[2][0], -mx[2][1], -mx[2][2]);
-	newCamPosition = seekPoint - dist * viewVector;
-	
-	computeSeekVariables = FALSE;
+        SbMatrix mx;
+        SbVec3f viewVector;
+
+        // save camera starting point
+        oldCamPosition = camera->position.getValue();
+        oldCamOrientation = camera->orientation.getValue();
+        oldFocalDisance = camera->focalDistance.getValue();
+
+        // compute the distance the camera will be from the seek point
+        // and update the camera focalDistance.
+        if ( seekDistAsPercentage ) {
+            SbVec3f seekVec(seekPoint - camera->position.getValue());
+            newFocalDistance = seekVec.length() * (seekDistance / 100.0);
+        }
+        else
+            newFocalDistance = seekDistance;
+
+        // let subclasses have a chance to redefine what the
+        // camera final orientation should be.
+        computeSeekFinalOrientation();
+
+        // find the camera final position based on orientation and distance
+        mx = newCamOrientation;
+        viewVector.setValue(-mx[2][0], -mx[2][1], -mx[2][2]);
+        newCamPosition = seekPoint - newFocalDistance * viewVector;
+
+        computeSeekVariables = FALSE;
     }
     
     
