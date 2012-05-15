@@ -2,7 +2,7 @@ TEMPLATE = app
 TARGET   = SceneViewer
 CONFIG  -= app_bundle
 QT  += opengl
-DESTDIR = ../build
+DESTDIR = ../../../build
 
 win32 {
     RC_FILE = info.rc
@@ -13,12 +13,12 @@ mac {
     QMAKE_INFO_PLIST=info.plist
 }
 
-INCLUDEPATH += ../libSoQt/include
-INCLUDEPATH += ../libInventor/database/include \
-               ../libInventor/interaction/include \
-               ../libInventor/nodekits/include
+INCLUDEPATH += ../../../libSoQt/include
+INCLUDEPATH += ../../../libInventor/database/include \
+               ../../../libInventor/interaction/include \
+               ../../../libInventor/nodekits/include
 
-LIBS += -L../build -lInventor -lSoQt
+LIBS += -L../../../build -lInventor -lSoQt
 linux-g++: LIBS += -lGLU
 
 HEADERS += MainWindow.h \
