@@ -6,6 +6,8 @@ DESTDIR  = ../../build
 
 INCLUDEPATH += . include
 
+DEFINES += GTEST_CREATE_SHARED_LIBRARY
+
 # Input
 HEADERS += include/gtest/gtest-death-test.h \
            include/gtest/gtest-message.h \

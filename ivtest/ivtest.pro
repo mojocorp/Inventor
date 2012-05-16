@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET   = gtest
+TARGET   = ivtest
 CONFIG  += opengl
 CONFIG  -= app_bundle
 DESTDIR  = ../build
