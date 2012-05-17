@@ -261,7 +261,7 @@ SbString::toUpper() const
 SbString &
 SbString::operator =(const char *str)
 {
-    size_t size = (str == NULL ? 0 : strlen(str)) + 1;
+    size_t size = (str == NULL) ? 0 : strlen(str) + 1;
 
     // If the string we are assigning to this is a pointer into the
     // string already in this, we have to make sure we don't step on
@@ -294,7 +294,7 @@ SbString::operator =(const char *str)
     }
 
     // Copy away!
-    strcpy(string, str);
+    strncpy(string, str, size);
     storageSize = size;
     return *this;
 }

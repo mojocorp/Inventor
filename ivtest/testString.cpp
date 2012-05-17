@@ -69,6 +69,15 @@ TEST(SbString, toUpper) {
     EXPECT_TRUE(str1.toUpper()==str2);
 }
 
+TEST(SbString, Operators) {
+
+    SbString sbstring;
+
+    sbstring = NULL;
+
+    EXPECT_TRUE(sbstring.isEmpty());
+}
+
 TEST(SbString, Unicode) {
 
     QString German = QString::fromUtf8("Ä ä Ü ü ß");
