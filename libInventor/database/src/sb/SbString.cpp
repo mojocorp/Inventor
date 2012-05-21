@@ -236,24 +236,6 @@ SbString::deleteSubString(int startChar, int endChar)
     *this = tmp;
 }
 
-SbString
-SbString::toLower() const
-{
-    std::string str(string);
-    std::transform(str.begin(), str.end(), str.begin(), tolower);
-
-    return str.c_str();
-}
-
-SbString
-SbString::toUpper() const
-{
-    std::string str(string);
-    std::transform(str.begin(), str.end(), str.begin(), toupper);
-
-    return str.c_str();
-}
-
 //
 // Assignment operator for character string
 //

@@ -55,20 +55,6 @@ TEST(SbString, Rfind) {
     EXPECT_EQ(str.rfind("haystack", 14), -1);
 }
 
-TEST(SbString, toLower) {
-    SbString str1 ("there are two needles in this haystack with needles.");
-    SbString str2 ("THERE ARE TWO NEEDLES IN THIS HAYSTACK WITH NEEDLES.");
-
-    EXPECT_TRUE(str1==str2.toLower());
-}
-
-TEST(SbString, toUpper) {
-    SbString str1 ("there are two needles in this haystack with needles.");
-    SbString str2 ("THERE ARE TWO NEEDLES IN THIS HAYSTACK WITH NEEDLES.");
-
-    EXPECT_TRUE(str1.toUpper()==str2);
-}
-
 TEST(SbString, Operators) {
 
     SbString sbstring;
