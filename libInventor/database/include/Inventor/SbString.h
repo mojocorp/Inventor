@@ -142,12 +142,6 @@ public:
     /// from startChar until the end are deleted.
     void deleteSubString(int startChar, int endChar = -1);
 
-    /// Returns a lowercase copy of the string.
-    SbString toLower() const;
-
-    /// Returns an uppercase copy of the string.
-    SbString toUpper() const;
-
     /// Assigns str to this string and returns a reference to this string.
     SbString & operator =(const char *str);
 
