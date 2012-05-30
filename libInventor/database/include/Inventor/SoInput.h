@@ -128,8 +128,8 @@ public:
     /// Adds a directory to list of directories to search to find named
     /// files to open. Directories searched in order. By default, the list
     /// contains just the current directory.
-    static void addDirectoryFirst(const char *dirName);
-    static void addDirectoryLast(const char *dirName);
+    static void addDirectoryFirst(const SbString & dirName);
+    static void addDirectoryLast(const SbString & dirName);
 
     /// The \c SoInput class maintains a global list of directories that is
     /// searched to find files when opening them. Directories are searched in
