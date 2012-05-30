@@ -216,7 +216,7 @@ SoInput::~SoInput()
 // Use: public, static
 
 void
-SoInput::addDirectoryFirst(const char *dirName)
+SoInput::addDirectoryFirst(const SbString & dirName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -232,7 +232,7 @@ SoInput::addDirectoryFirst(const char *dirName)
 // Use: public, static
 
 void
-SoInput::addDirectoryLast(const char *dirName)
+SoInput::addDirectoryLast(const SbString & dirName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -253,23 +253,18 @@ SoInput::addEnvDirectoriesFirst(const char *envVarName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char *dirs = getenv(envVarName);
+    SbString dirs = getenv(envVarName);
 
-    if (dirs != NULL) {
-	char	*d = strdup(dirs);
-	char	*dir;
-	int	i = 0;
-
-	// Parse colon- or space-separated directories from string
-	dir = strtok(d, ENV_SEPARATOR);
-
-	while (dir != NULL) {
-	    // Make sure directories are added in the same order
-        directories->insert(new SbString(dir), i++);
-        dir = strtok(NULL, ENV_SEPARATOR);
-	}
-
-	free(d);
+    if (!dirs.isEmpty()) {
+        int start = 0, end = 0, i = 0;
+        // Parse colon- or space-separated directories from string
+        while ((end = dirs.find(ENV_SEPARATOR, start)) != -1) {
+            if(end > 0) {
+                // Make sure directories are added in the same order
+                directories->insert(new SbString(dirs.getSubString(start, end-1)), i++);
+            }
+            start = end + 1;
+        }
     }
 }
 
@@ -287,21 +282,17 @@ SoInput::addEnvDirectoriesLast(const char *envVarName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char *dirs = getenv(envVarName);
+    SbString dirs = getenv(envVarName);
 
-    if (dirs != NULL) {
-	char *d = strdup(dirs);
-	char *dir;
-
-	// Parse colon- or space-separated directories from string
-	dir = strtok(d, ENV_SEPARATOR);
-
-	while (dir != NULL) {
-	    addDirectoryLast(dir);
-	    dir = strtok(NULL, ENV_SEPARATOR);
-	}
-
-	free(d);
+    if (!dirs.isEmpty()) {
+        int start = 0, end = 0;
+        // Parse colon- or space-separated directories from string
+        while ((end = dirs.find(ENV_SEPARATOR, start)) != -1) {
+            if(end > 0) {
+                addDirectoryLast(dirs.getSubString(start, end-1));
+            }
+            start = end + 1;
+        }
     }
 }
 
