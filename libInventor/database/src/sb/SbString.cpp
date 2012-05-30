@@ -212,7 +212,7 @@ SbString::deleteSubString(int startChar, int endChar)
     size_t		len = getLength();
 
     // Modify string in place
-    if (endChar < 0 || endChar >= len - 1)
+    if (endChar < 0 || endChar >= (int)len - 1)
         string[startChar] = '\0';
     else {
 
@@ -224,9 +224,9 @@ SbString::deleteSubString(int startChar, int endChar)
         }
 #endif
 
-        int	i, numToMove = len - endChar - 1;
+        int	numToMove = len - endChar - 1;
 
-        for (i = 0; i < numToMove; i++)
+        for (int i = 0; i < numToMove; i++)
             string[startChar + i] = string[endChar + i + 1];
         string[startChar + numToMove] = '\0';
     }

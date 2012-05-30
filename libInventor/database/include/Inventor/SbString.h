@@ -200,7 +200,7 @@ SoINTERNAL public:
 
 private:
     char  *string;  // String pointer
-    int   storageSize;
+    size_t   storageSize;
 
     // This is used if the string fits in a reasonably small space
 #define SB_STRING_STATIC_STORAGE_SIZE  32
