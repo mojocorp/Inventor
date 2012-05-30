@@ -7,20 +7,10 @@
 #   include <sys/types.h>
 #   define SB_FTELL ::_ftelli64
 #   define SB_FSEEK  ::_fseeki64
-#   define SB_STAT   _stati64
-#   define SB_ACCESS ::_access
-#   define SB_F_OK 00
-#   define SB_R_OK 04
-#   define SB_W_OK 02
 #else
 #   include <unistd.h>
 #   define SB_FTELL ftello
 #   define SB_FSEEK  fseeko
-#   define SB_STAT   stat
-#   define SB_ACCESS access
-#   define SB_F_OK F_OK
-#   define SB_R_OK R_OK
-#   define SB_W_OK W_OK
 #endif
 
 #include <sys/stat.h>
@@ -42,9 +32,11 @@ SbFile::open( const SbString & mode )
 {
     if (isOpen())
         return false;
-
+#ifdef SB_OS_WIN
+    mFilePointer = _wfopen(mFileName.toStdWString().data(), mode.toStdWString().data());
+#else
     mFilePointer = fopen(mFileName.getString(), mode.getString());
-
+#endif
     return isOpen();
 }
 
@@ -88,13 +80,15 @@ SbFile::size() const
 {
 #if defined(SB_OS_WIN)
     struct _stati64 st;
-#else
-    struct stat st;
-#endif
-
-    if (SB_STAT(mFileName.getString (), &st) == 0) {
+    if (_wstati64(mFileName.toStdWString().data(), &st) == 0) {
         return st.st_size;
     }
+#else
+    struct stat st;
+    if (stat(mFileName.getString (), &st) == 0) {
+        return st.st_size;
+    }
+#endif
 
     return -1;
 }
@@ -114,7 +108,11 @@ SbFile::write(const char * data, size_t count)
 bool
 SbFile::exists( const SbString & fileName )
 {
-    return (SB_ACCESS(fileName.getString(),SB_F_OK)==0) ? true : false;
+#ifdef SB_OS_WIN
+    return (::_waccess(fileName.toStdWString().data(),00)==0) ? true : false;
+#else
+    return (access(fileName.getString(),F_OK)==0) ? true : false;
+#endif
 }
 
 SbString
