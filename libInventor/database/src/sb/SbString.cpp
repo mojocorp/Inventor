@@ -58,6 +58,38 @@
 #include <cctype> //tolower toupper
 #include <algorithm>
 
+#ifdef SB_OS_WIN
+#   include<windows.h>
+#endif
+
+// "Counting characters in UTF-8 strings is fast" by Kragen Sitaker
+size_t strlen_utf8(const char *s) {
+    size_t i = 0, j = 0;
+    while (s[i]) {
+        if ((s[i] & 0xc0) != 0x80) j++;
+        i++;
+    }
+    return j;
+}
+
+//
+// Constructor that initializes to a substring.
+//
+
+SbString::SbString() {
+    string = staticStorage;
+    string[0] = '\0';
+}
+
+//
+// Constructor that initializes to a substring.
+//
+
+SbString::SbString(const char *str) {
+    string = staticStorage;
+    *this = fromLatin1(str);
+}
+
 //
 // Constructor that initializes to a substring.
 //
@@ -77,17 +109,27 @@ SbString::SbString(const char *str, int start, int end)
 }
 
 //
+// Constructor that initializes to a substring.
+//
+
+SbString::SbString(const SbString &str) {
+    string = staticStorage;
+    *this = str;
+}
+
+//
 // Constructor that initializes to string formed from given integer.
 // For example, SbString(1234) gives the string "1234".
 //
 
 SbString::SbString(int digitString)
 {
-    char	buf[32];
-
     string = staticStorage;
-    sprintf(buf, "%d", digitString);
-    *this = buf;
+#ifdef SB_OS_WIN
+    _snprintf(string,SB_STRING_STATIC_STORAGE_SIZE,"%d",digitString);
+#else
+    snprintf(string,SB_STRING_STATIC_STORAGE_SIZE,"%d",digitString);
+#endif
 }
 
 //
@@ -145,6 +187,12 @@ SbString::hash(const char *s)
     return( total );
 }
 
+size_t
+SbString::getLength() const
+{
+    return strlen_utf8(string);
+}
+
 //
 // Sets string to be the empty string (""). If freeOld is TRUE
 // (default), any old storage is freed up.
@@ -161,6 +209,23 @@ SbString::makeEmpty(SbBool freeOld)
     string[0] = '\0';
 }
 
+std::wstring
+SbString::toStdWString () const
+{
+    std::wstring wstr;
+#ifdef SB_OS_WIN
+    int wlen = MultiByteToWideChar(CP_UTF8, 0, string, -1, NULL, 0);
+    wstr.resize(wlen-1);
+    MultiByteToWideChar(CP_UTF8, 0, string, -1, (LPWSTR)wstr.data(), wlen);
+#else
+    setlocale(LC_CTYPE, "en_US.UTF-8");
+    size_t wlen = mbstowcs(NULL, string, 0);
+    wstr.resize(wlen);
+    mbstowcs((wchar_t*)wstr.data(), string, wlen+1);
+#endif
+    return wstr;
+}
+
 int
 SbString::find(const SbString & str, int pos) const
 {
@@ -174,7 +239,7 @@ SbString::rfind(const SbString & str, int pos) const
 {
     pos = (pos==-1) ? (int)std::string::npos : pos;
 
-    size_t index = std::string(string).rfind(str.getString(), pos);
+    size_t index = std::string(string).rfind(str.string, pos);
 
     return (index!=std::string::npos) ? (int)index : -1;
 }
@@ -188,13 +253,13 @@ SbString::rfind(const SbString & str, int pos) const
 SbString
 SbString::getSubString(int startChar, int endChar) const
 {
-    size_t		len = getLength();
+    size_t		len = strlen(string);
 
     // Get substring that starts at specified character
-    SbString	tmp = &string[startChar];
+    SbString	tmp = SbString::fromUtf8(&string[startChar]);
 
     // Delete characters from end if necessary
-    if (endChar >= 0 && endChar < len - 1)
+    if (endChar >= 0 && endChar < (int)len - 1)
         tmp.deleteSubString(endChar - startChar + 1);
 
     return tmp;
@@ -209,7 +274,7 @@ SbString::getSubString(int startChar, int endChar) const
 void
 SbString::deleteSubString(int startChar, int endChar)
 {
-    size_t		len = getLength();
+    size_t len = strlen(string);
 
     // Modify string in place
     if (endChar < 0 || endChar >= (int)len - 1)
@@ -232,24 +297,23 @@ SbString::deleteSubString(int startChar, int endChar)
     }
 
     // Use temporary string to allow us to free up old storage if necessary
-    SbString	tmp = string;
+    SbString	tmp = SbString::fromUtf8(string);
     *this = tmp;
 }
 
 //
 // Assignment operator for character string
 //
-
 SbString &
-SbString::operator =(const char *str)
+SbString::operator =(const SbString &str)
 {
-    size_t size = (str == NULL) ? 0 : strlen(str) + 1;
+    size_t size = (str.string == NULL) ? 0 : strlen(str.string) + 1;
 
     // If the string we are assigning to this is a pointer into the
     // string already in this, we have to make sure we don't step on
     // the old string.
-    if (str >= string &&
-            str < string + (string != staticStorage ? storageSize :
+    if (str.string >= string &&
+            str.string < string + (string != staticStorage ? storageSize :
                             SB_STRING_STATIC_STORAGE_SIZE)) {
 
         SbString tmp = str;
@@ -276,22 +340,8 @@ SbString::operator =(const char *str)
     }
 
     // Copy away!
-    strncpy(string, str, size);
+    strncpy(string, str.string, size);
     storageSize = size;
-    return *this;
-}
-
-//
-// Concatenation operator "+=" for string
-//
-
-SbString &
-SbString::operator +=(const char *str)
-{
-    if (str != NULL) {
-        expand(strlen(str));
-        strcat(string, str);
-    }
     return *this;
 }
 
@@ -302,7 +352,8 @@ SbString::operator +=(const char *str)
 SbString &
 SbString::operator +=(const SbString &str)
 {
-    (*this) += str.getString();
+    expand(strlen(str.string));
+    strcat(string, str.string);
     return *this;
 }
 
@@ -311,23 +362,74 @@ SbString::operator +=(const SbString &str)
 //
 
 bool
-operator ==(const SbString &str, const char *s)
+operator ==(const SbString &str1, const SbString &str2)
 {
-    if (s == NULL)
-        return ((str.getLength() == 0) ? 1 : 0);
+    if (str2.string == NULL)
+        return ((str1.getLength() == 0) ? 1 : 0);
 
-    return (str.string[0] == s[0] && ! strcmp(str.string, s));
+    return (str1.string[0] == str2.string[0] && ! strcmp(str1.string, str2.string));
 }
 
 //
-// Inequality operator for SbString/char* and SbString/SbString comparison
+// Creates a string from ISO-8859-1.
 //
-
-bool
-operator !=(const SbString &str, const char *s)
+SbString
+SbString::fromLatin1(const char *latin1, int size)
 {
-    if (s == NULL)
-        return ((str.getLength() != 0) ? 1 : 0);
+    SbString str;
 
-    return (str.string[0] != s[0] || strcmp(str.string, s));
+    if (latin1) {
+        size_t len = (size > 0) ? size : strlen(latin1);
+        str.expand(2*len);
+
+        for (size_t i=0; i<len;) {
+            unsigned char c = latin1[i];
+            if (c < 0x80) {
+                str.string[i++] = c;
+            } else {
+                str.string[i++] = 0xC0 | (c >> 6);
+                str.string[i++] = 0x80 | (c & 0x3F);
+            }
+            str.string[i] = '\0';
+        }
+    }
+    return str;
+}
+
+//
+// Creates a string from UTF-8.
+//
+SbString
+SbString::fromUtf8(const char *utf8, int size)
+{
+    SbString str;
+    if (utf8) {
+        size_t len = (size > 0) ? size : strlen(utf8);
+        str.expand(len);
+        strncat(str.string, utf8, len);
+    }
+    return str;
+}
+
+//
+// Creates a string from UTF-16 (wide character).
+//
+SbString
+SbString::fromWideChar(const wchar_t *wcs, int size)
+{
+    SbString str;
+
+#ifdef SB_OS_WIN
+    size_t len = WideCharToMultiByte( CP_UTF8, 0, wcs, -1, NULL, 0,  NULL, NULL);
+    str.expand(len-1);
+
+    WideCharToMultiByte(CP_UTF8, 0, wcs, -1, str.string, len, NULL, NULL);
+#else
+    setlocale(LC_CTYPE, "en_US.UTF-8");
+    size_t len = wcstombs(NULL, wcs, 0);
+    str.expand(len);
+    wcstombs(str.string, wcs, len+1);
+#endif
+
+    return str;
 }

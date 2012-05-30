@@ -60,7 +60,7 @@
 
 #include <Inventor/SbBasic.h>
 
-#include <string.h>
+#include <string>
 
 /// Class for smart character strings.
 /// \ingroup Basics
@@ -71,25 +71,18 @@ class INVENTOR_API SbString {
 public:
 
     /// Default constructor
-    SbString() {
-        string = staticStorage;
-        string[0] = '\0';
-    }
+    SbString() ;
 
-    /// Constructor that initializes to given character string
-    SbString(const char *str) {
-        string = staticStorage;
-        *this = str;
-    }
+    /// Constructor that initializes to given character string.
+    /// The given const char pointer is converted to Unicode using the fromLatin1() function.
+    SbString(const char *str);
 
     /// Constructors take a character string, the subset of a character string from start to end (inclusive)
+    /// The given const char pointer is converted to Unicode using the fromLatin1() function.
     SbString(const char *str, int start, int end);
 
     /// Constructor that initializes to given SbString
-    SbString(const SbString &str) {
-        string = staticStorage;
-        *this = str.string;
-    }
+    SbString(const SbString &str);
 
     /// Constructor that initializes to string formed from given integer.
     /// For example, SbString(1234) gives the string "1234".
@@ -103,10 +96,8 @@ public:
         return SbString::hash(string);
     }
 
-    /// Returns length of string
-    size_t getLength() const {
-        return strlen(string);
-    }
+    /// Returns the number of characters in this string.
+    size_t getLength() const;
 
     /// Returns true if the string has no characters; otherwise returns false.
     bool isEmpty() const {
@@ -117,10 +108,13 @@ public:
     /// (default), any old storage is freed up
     void makeEmpty(SbBool freeOld = TRUE);
 
-    /// Returns pointer to the character string
+    /// Returns pointer to the UTF-8 character string
     const char * getString() const {
         return string;
     }
+
+    /// Returns an std::wstring encoded in utf16.
+    std::wstring toStdWString () const;
 
     /// Searches the string for the content specified in str, and returns the position of the first occurrence in the string.
     /// When pos is specified the search only includes characters on or after position pos, ignoring any possible occurrences in previous locations.
@@ -143,15 +137,17 @@ public:
     void deleteSubString(int startChar, int endChar = -1);
 
     /// Assigns str to this string and returns a reference to this string.
-    SbString & operator =(const char *str);
-
-    /// Assigns str to this string and returns a reference to this string.
-    SbString & operator =(const SbString &str) {
-        return (*this = str.string);
+    SbString & operator =(const char *str) {
+        return *this = SbString(str);
     }
 
+    /// Assigns str to this string and returns a reference to this string.
+    SbString & operator =(const SbString &str);
+
     /// Appends the string str onto the end of this string and returns a reference to this string.
-    SbString & operator +=(const char *str);
+    SbString & operator +=(const char *str) {
+        return *this += SbString(str);
+    }
 
     /// Appends the string str onto the end of this string and returns a reference to this string.
     SbString & operator +=(const SbString &str);
@@ -162,29 +158,31 @@ public:
     }
 
     /// Returns true if str1 is equal to str2; otherwise returns false.
-    friend INVENTOR_API bool  operator ==(const SbString &str1, const char *str2);
+    friend INVENTOR_API bool  operator ==(const SbString &str1, const char *str2) {
+        return (str1 == SbString(str2));
+    }
 
     /// Returns true if str1 is equal to str2; otherwise returns false.
     friend INVENTOR_API bool  operator ==(const char *str1, const SbString &str2) {
-        return (str2 == str1);
+        return (SbString(str1) == str2);
     }
 
     /// Returns true if str1 is equal to str2; otherwise returns false.
-    friend INVENTOR_API bool  operator ==(const SbString &str1, const SbString &str2) {
-        return (str1 == str2.string);
+    friend INVENTOR_API bool  operator ==(const SbString &str1, const SbString &str2);
+
+    /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
+    friend INVENTOR_API bool  operator !=(const SbString &str1, const char *str2) {
+        return (str1 != SbString(str2));
     }
 
     /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
-    friend INVENTOR_API bool  operator !=(const SbString &str1, const char *str2);
-
-    /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
     friend INVENTOR_API bool  operator !=(const char *str1, const SbString &str2) {
-        return (str2 != str1);
+        return (SbString(str1) != str2);
     }
 
     /// Returns true if this string str1 is not equal to string str2; otherwise returns false.
     friend INVENTOR_API bool  operator !=(const SbString &str1, const SbString &str2) {
-        return (str1 != str2.string);
+        return !(str1 == str2);
     }
 
     /// Returns a string which is the result of concatenating s1 and s2.
@@ -193,6 +191,15 @@ public:
         t += s2;
         return t;
     }
+
+    /// Creates a string from ISO-8859-1.
+    static SbString fromLatin1(const char *latin, int size = -1);
+
+    /// Creates a string from UTF-8.
+    static SbString fromUtf8(const char *utf8, int size = -1);
+
+    /// Creates a string from UTF-16 (wide character).
+    static SbString fromWideChar(const wchar_t *wcs, int size = -1);
 
 SoINTERNAL public:
 
