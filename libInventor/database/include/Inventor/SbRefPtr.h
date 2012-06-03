@@ -67,7 +67,7 @@ public:
 
     void unref() {
         if (--refcount<=0) {
-            delete this;
+            destroy();
         }
     }
 
@@ -86,6 +86,10 @@ public:
     }
 protected:
     virtual ~SbRefCounted() { }
+
+    virtual void destroy() {
+        delete this;
+    }
 
     SbRefCounted() : refcount(0) { }
     SbRefCounted(const SbRefCounted &) : refcount(0) { }
