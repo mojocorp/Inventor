@@ -147,7 +147,7 @@ SoText2::initClass()
 
 static SbVec3f
 fromObjectSpace(const SbVec3f &vector, const SbMatrix &matrix,
-		const SbViewportRegion &vpr)
+                const SbViewportRegion &vpr)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -178,7 +178,7 @@ fromObjectSpace(const SbVec3f &vector, const SbMatrix &matrix,
 
 static SbVec3f
 toObjectSpace(const SbVec3f &pixel, const SbMatrix &matrix,
-	      const SbViewportRegion &vpr)
+              const SbViewportRegion &vpr)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -218,19 +218,18 @@ SoText2::GLRender(SoGLRenderAction *action)
         if (!fontCache->isRenderValid(state)) {
             fontCache->unref(state);
             fontCache = NULL;
-	}
+        }
     }
     if (fontCache == NULL) {
         fontCache = SoBitmapFontCache::getFont(state, TRUE);
         if (fontCache == NULL) {
-	    state->pop();
-	    return;
-	}
+            state->pop();
+            return;
+        }
     }
 
     // Turn off lighting
-    SoGLLazyElement::setLightModel(state,
-                             SoGLLazyElement::BASE_COLOR);
+    SoGLLazyElement::setLightModel(state, SoGLLazyElement::BASE_COLOR);
     // Turn off texturing
     SoGLTextureEnabledElement::set(state, FALSE);
     
@@ -244,47 +243,41 @@ SoText2::GLRender(SoGLRenderAction *action)
     // starts at (0,0,0) in object space, so we can help caching by
     // avoiding getting the projection/view/model matrices:
     if (string.getNum() == 1 && justification.getValue() == LEFT) {
-	glRasterPos3f(0,0,0);
+        glRasterPos3f(0,0,0);
         fontCache->drawString(string[0]);
     }
     // General case:
     else {
-	SbMatrix objToScreen;
-	objToScreen = SoProjectionMatrixElement::get(state);
-	objToScreen =
-	    objToScreen.multLeft(SoViewingMatrixElement::get(state));
-	objToScreen =
-	    objToScreen.multLeft(SoModelMatrixElement::get(state));
+        SbMatrix objToScreen;
+        objToScreen = SoProjectionMatrixElement::get(state);
+        objToScreen = objToScreen.multLeft(SoViewingMatrixElement::get(state));
+        objToScreen = objToScreen.multLeft(SoModelMatrixElement::get(state));
 
-	SbMatrix screenToObj = objToScreen.inverse();
-	
-	SbViewportRegion vpr = SoViewportRegionElement::get(state);
+        SbMatrix screenToObj = objToScreen.inverse();
 
-	// The origin of the text on the screen is the object-space point
-	// 0,0,0:
-	SbVec3f screenOrigin =
-	    fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
-    
-	for (int line = 0; line < string.getNum(); line++) {
-	    // Starting position of string, based on justification:
-	    SbVec3f charPosition = getPixelStringOffset(line) +
-		screenOrigin;
+        SbViewportRegion vpr = SoViewportRegionElement::get(state);
 
-	    const SbString &str = string[line];
+        // The origin of the text on the screen is the object-space point
+        // 0,0,0:
+        SbVec3f screenOrigin = fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
 
-	    // Transform the screen-space starting position into object
-	    // space, and feed that back to the glRasterPos command (which
-	    // will turn around and transform it back into screen-space,
-	    // but oh well).
-	    SbVec3f lineOrigin = toObjectSpace(charPosition, screenToObj,
-					       vpr);
-	    glRasterPos3fv(&lineOrigin[0]);
-	    
+        for (int line = 0; line < string.getNum(); line++) {
+            // Starting position of string, based on justification:
+            SbVec3f charPosition = getPixelStringOffset(line) + screenOrigin;
+
+            const SbString &str = string[line];
+
+            // Transform the screen-space starting position into object
+            // space, and feed that back to the glRasterPos command (which
+            // will turn around and transform it back into screen-space,
+            // but oh well).
+            SbVec3f lineOrigin = toObjectSpace(charPosition, screenToObj, vpr);
+            glRasterPos3fv(&lineOrigin[0]);
+
             fontCache->drawString(str);
-	}
-	// Don't auto-cache above, since dependent on camera:
-	SoGLCacheContextElement::shouldAutoCache(state,
-		SoGLCacheContextElement::DONT_AUTO_CACHE);
+        }
+        // Don't auto-cache above, since dependent on camera:
+        SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
     }
     state->pop();
 }
@@ -303,7 +296,7 @@ SoText2::rayPick(SoRayPickAction *action)
 {
     // First see if the object is pickable
     if (! shouldRayPick(action))
-	return;
+        return;
 
     SoState *state = action->getState();
 
@@ -314,14 +307,14 @@ SoText2::rayPick(SoRayPickAction *action)
         if (!fontCache->isValid(state)) {
             fontCache->unref();
             fontCache = NULL;
-	}
+        }
     }
     if (fontCache == NULL) {
         fontCache = SoBitmapFontCache::getFont(state, FALSE);
         if (fontCache == NULL) {
-	    state->pop();
-	    return;
-	}
+            state->pop();
+            return;
+        }
     }
 
     // Tell the action about our current object space
@@ -329,107 +322,101 @@ SoText2::rayPick(SoRayPickAction *action)
 
     SbMatrix objToScreen;
     objToScreen = SoProjectionMatrixElement::get(state);
-    objToScreen =
-	objToScreen.multLeft(SoViewingMatrixElement::get(state));
-    objToScreen =
-	objToScreen.multLeft(SoModelMatrixElement::get(state));
+    objToScreen = objToScreen.multLeft(SoViewingMatrixElement::get(state));
+    objToScreen = objToScreen.multLeft(SoModelMatrixElement::get(state));
 
     SbMatrix screenToObj = objToScreen.inverse();
 
     SbViewportRegion vpr = SoViewportRegionElement::get(state);
     // font size in pixels
-    float fontSize   = SoFontSizeElement::get(state) *
-	vpr.getPixelsPerPoint();
+    float fontSize   = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
 
     // The origin of the text on the screen is the object-space point
     // 0,0,0:
-    SbVec3f screenOrigin =
-	fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
+    SbVec3f screenOrigin = fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
 
     for (int line = 0; line < string.getNum(); line++) {
 
-	// Intersect against each line of text's bounding box:
-	SbBox3f lineBbox, charBbox;
+        // Intersect against each line of text's bounding box:
+        SbBox3f lineBbox, charBbox;
 
-	// Starting position of string, based on justification:
-	SbVec3f charPosition = getPixelStringOffset(line) +
-	    screenOrigin;
+        // Starting position of string, based on justification:
+        SbVec3f charPosition = getPixelStringOffset(line) + screenOrigin;
 
-	const SbString &str = string[line];
-	const char *chars = str.getString();
+        const SbString &str = string[line];
+        const char *chars = str.getString();
 
-	SbVec3f p0, p1, p2, p3;
-	size_t chr;
-	for (size_t chr = 0; chr < str.getLength(); chr++) {
+        SbVec3f p0, p1, p2, p3;
+        size_t chr;
+        for (size_t chr = 0; chr < str.getLength(); chr++) {
             fontCache->getCharBbox(chars[chr], charBbox);
 
-	    if (!charBbox.isEmpty()) {
+            if (!charBbox.isEmpty()) {
 
-		SbVec3f charMin = charBbox.getMin() + charPosition;
-		SbVec3f charMax = charBbox.getMax() + charPosition;
+                SbVec3f charMin = charBbox.getMin() + charPosition;
+                SbVec3f charMax = charBbox.getMax() + charPosition;
 
-		// Extend the line's bounding box by this character's
-		// bounding box (both boxes are in screen-space):
-		lineBbox.extendBy(charMin);
-		lineBbox.extendBy(charMax);
+                // Extend the line's bounding box by this character's
+                // bounding box (both boxes are in screen-space):
+                lineBbox.extendBy(charMin);
+                lineBbox.extendBy(charMax);
 
-		// Advance to next character...
+                // Advance to next character...
                 charPosition += fontCache->getCharOffset(chars[chr]);
-	    }
-	}
-	// And transform line's box into object space:
-	SbVec3f min = lineBbox.getMin();
-	SbVec3f max = lineBbox.getMax();
+            }
+        }
+        // And transform line's box into object space:
+        SbVec3f min = lineBbox.getMin();
+        SbVec3f max = lineBbox.getMax();
 
-	SbVec3f t;
-	t.setValue(min[0], min[1], screenOrigin[2]);
-	p0 = toObjectSpace(t, screenToObj, vpr);
-	t.setValue(max[0], min[1], screenOrigin[2]);
-	p1 = toObjectSpace(t, screenToObj, vpr);
-	t.setValue(min[0], max[1], screenOrigin[2]);
-	p2 = toObjectSpace(t, screenToObj, vpr);
-	t.setValue(max[0], max[1], screenOrigin[2]);
-	p3 = toObjectSpace(t, screenToObj, vpr);
+        SbVec3f t;
+        t.setValue(min[0], min[1], screenOrigin[2]);
+        p0 = toObjectSpace(t, screenToObj, vpr);
+        t.setValue(max[0], min[1], screenOrigin[2]);
+        p1 = toObjectSpace(t, screenToObj, vpr);
+        t.setValue(min[0], max[1], screenOrigin[2]);
+        p2 = toObjectSpace(t, screenToObj, vpr);
+        t.setValue(max[0], max[1], screenOrigin[2]);
+        p3 = toObjectSpace(t, screenToObj, vpr);
 
-	// intersect the two triangles:
-	SbVec3f point;
-	// Info we get back from the pick that we don't need:
-	SbVec3f junk1; SbBool junk2;
-	if (action->intersect(p0, p1, p2, point, junk1, junk2) ||
-	    action->intersect(p2, p1, p3, point, junk1, junk2)) {
+        // intersect the two triangles:
+        SbVec3f point;
+        // Info we get back from the pick that we don't need:
+        SbVec3f junk1; SbBool junk2;
+        if (action->intersect(p0, p1, p2, point, junk1, junk2) ||
+                action->intersect(p2, p1, p3, point, junk1, junk2)) {
 
-	    SoPickedPoint *pp = action->addIntersection(point);
-	    if (pp) {
-		SoTextDetail *detail = new SoTextDetail();
-		detail->setStringIndex(line);
+            SoPickedPoint *pp = action->addIntersection(point);
+            if (pp) {
+                SoTextDetail *detail = new SoTextDetail();
+                detail->setStringIndex(line);
 
-		// Figure out which character was hit:
-		// Transform picked point into screen space:
-		SbVec3f screenPoint =
-		    fromObjectSpace(pp->getObjectPoint(), objToScreen,
-				    vpr);
-		// Figure out which character that corresponds to, by
-		// adding on the x-offset of each character until we
-		// go past the picked point:
-		charPosition = getPixelStringOffset(line) +
-		    screenOrigin;
-		for (chr = 0; chr < str.getLength(); chr++) {
+                // Figure out which character was hit:
+                // Transform picked point into screen space:
+                SbVec3f screenPoint =
+                        fromObjectSpace(pp->getObjectPoint(), objToScreen,
+                                        vpr);
+                // Figure out which character that corresponds to, by
+                // adding on the x-offset of each character until we
+                // go past the picked point:
+                charPosition = getPixelStringOffset(line) + screenOrigin;
+                for (chr = 0; chr < str.getLength(); chr++) {
                     charPosition += fontCache->getCharOffset(chars[chr]);
-		    // Assuming left-to-right drawing of characters:
-		    if (charPosition[0] >= screenPoint[0]) break;
-		}
-		    
-		detail->setCharacterIndex(chr);
+                    // Assuming left-to-right drawing of characters:
+                    if (charPosition[0] >= screenPoint[0]) break;
+                }
 
-		pp->setDetail(detail, this);
-		pp->setMaterialIndex(0);
+                detail->setCharacterIndex(chr);
 
-		// We'll define normal to be object-space 0,0,1:
-		pp->setObjectNormal(SbVec3f(0,0,1));
-		// And texture coordinates to be zero:
-		pp->setObjectTextureCoords(SbVec4f(0,0,0,0));
-	    }
-	}
+                pp->setDetail(detail, this);
+                pp->setMaterialIndex(0);
+
+                // We'll define normal to be object-space 0,0,1:
+                pp->setObjectNormal(SbVec3f(0,0,1));
+                // And texture coordinates to be zero:
+                pp->setObjectTextureCoords(SbVec4f(0,0,0,0));
+            }
+        }
     }
     state->pop();
 }
@@ -470,89 +457,84 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
         if (!fontCache->isValid(state)) {
             fontCache->unref();
             fontCache = NULL;
-	}
+        }
     }
     if (fontCache == NULL) {
         fontCache = SoBitmapFontCache::getFont(state, FALSE);
         if (fontCache == NULL) {
-	    state->pop();
-	    return;
-	}
+            state->pop();
+            return;
+        }
     }
 
     SbMatrix objToScreen;
     objToScreen = SoProjectionMatrixElement::get(state);
-    objToScreen =
-	objToScreen.multLeft(SoViewingMatrixElement::get(state));
-    objToScreen =
-	objToScreen.multLeft(SoModelMatrixElement::get(state));
+    objToScreen = objToScreen.multLeft(SoViewingMatrixElement::get(state));
+    objToScreen = objToScreen.multLeft(SoModelMatrixElement::get(state));
 
     SbMatrix screenToObj = objToScreen.inverse();
 
     SbViewportRegion vpr = SoViewportRegionElement::get(state);
 
     // font size in pixels
-    float fontSize   = SoFontSizeElement::get(state) *
-	vpr.getPixelsPerPoint();
+    float fontSize   = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
 
     // The origin of the text on the screen is the object-space point
     // 0,0,0:
-    SbVec3f screenOrigin =
-	fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
+    SbVec3f screenOrigin = fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
 
     // Figure out the screen-space bounding box of the characters:
     SbBox3f screenBbox, charBbox;
 
     for (int line = 0; line < string.getNum(); line++) {
-	// Starting position of string, based on justification:
-	SbVec3f charPosition = getPixelStringOffset(line) +
-            screenOrigin;
+        // Starting position of string, based on justification:
+        SbVec3f charPosition = getPixelStringOffset(line) + screenOrigin;
 
-	const SbString &str = string[line];
-	const char *chars = str.getString();
+        const SbString &str = string[line];
+        const char *chars = str.getString();
 
-	for (size_t chr = 0; chr < str.getLength(); chr++) {
+        for (size_t chr = 0; chr < str.getLength(); chr++) {
             fontCache->getCharBbox(chars[chr], charBbox);
-	    if (!charBbox.isEmpty()) {
-		SbVec3f min = charBbox.getMin() + charPosition;
-		SbVec3f max = charBbox.getMax() + charPosition;
-		screenBbox.extendBy(min);
-		screenBbox.extendBy(max);
-	    }
+            if (!charBbox.isEmpty()) {
+                SbVec3f min = charBbox.getMin() + charPosition;
+                SbVec3f max = charBbox.getMax() + charPosition;
+                screenBbox.extendBy(min);
+                screenBbox.extendBy(max);
+            }
 
-	    // And advance...
+            // And advance...
             charPosition += fontCache->getCharOffset(chars[chr]);
-	}
+        }
     }
     // Ok, screenBbox now contains the pixel-space extent of the
     // characters.  We'll transform the bounds of that box back into
     // object space and extend the object-space bounding box:
     
     if (!screenBbox.isEmpty()) {
-	// Do each of the 4 corners of the screen-space box:
-	const SbVec3f &min = screenBbox.getMin();
-	const SbVec3f &max = screenBbox.getMax();
-	SbVec3f objectPoint, temp;
+        // Do each of the 4 corners of the screen-space box:
+        const SbVec3f &min = screenBbox.getMin();
+        const SbVec3f &max = screenBbox.getMax();
+        SbVec3f objectPoint, temp;
 
-	temp.setValue(min[0], min[1], screenOrigin[2]);
-	objectPoint = toObjectSpace(temp, screenToObj, vpr);
-	box.extendBy(objectPoint);
+        temp.setValue(min[0], min[1], screenOrigin[2]);
+        objectPoint = toObjectSpace(temp, screenToObj, vpr);
+        box.extendBy(objectPoint);
 
-	temp.setValue(max[0], max[1], screenOrigin[2]);
-	objectPoint = toObjectSpace(temp, screenToObj, vpr);
-	box.extendBy(objectPoint);
+        temp.setValue(max[0], max[1], screenOrigin[2]);
+        objectPoint = toObjectSpace(temp, screenToObj, vpr);
+        box.extendBy(objectPoint);
 
-	temp.setValue(min[0], max[1], screenOrigin[2]);
-	objectPoint = toObjectSpace(temp, screenToObj, vpr);
-	box.extendBy(objectPoint);
+        temp.setValue(min[0], max[1], screenOrigin[2]);
+        objectPoint = toObjectSpace(temp, screenToObj, vpr);
+        box.extendBy(objectPoint);
 
-	temp.setValue(max[0], min[1], screenOrigin[2]);
-	objectPoint = toObjectSpace(temp, screenToObj, vpr);
-	box.extendBy(objectPoint);
+        temp.setValue(max[0], min[1], screenOrigin[2]);
+        objectPoint = toObjectSpace(temp, screenToObj, vpr);
+        box.extendBy(objectPoint);
 
-	// Set the center to be the origin, which is the natural "center"
-	// of the text, regardless of justification
-	center.setValue(0.0, 0.0, 0.0);
+        // Set the center to be the origin, which is the natural "center"
+        // of the text, regardless of justification
+        center.setValue(0.0, 0.0, 0.0);
     }
 
     state->pop();
@@ -575,11 +557,11 @@ SoText2::getPixelStringOffset(int line)
     
     if (justification.getValue() == RIGHT) {
         float width = fontCache->getWidth(string[line]);
-	result[0] = -width;
+        result[0] = -width;
     }
     if (justification.getValue() == CENTER) {
         float width = fontCache->getWidth(string[line]);
-	result[0] = -width/2.0f;
+        result[0] = -width/2.0f;
     }
     result[1] = -line*fontCache->getHeight()*spacing.getValue()*2;
 
