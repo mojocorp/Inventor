@@ -135,6 +135,11 @@ public:
         return entry->isEmpty();
     }
 
+    /// Less than operator (using alphabetical order).
+    bool operator<(const SbName &other) const {
+        return entry < other.entry;
+    }
+
     /// Equality operator for SbName/char* and SbName/SbName comparison
     friend INVENTOR_API int operator ==(const SbName &n, const char *s) {
         return n.entry->isEqual(s);

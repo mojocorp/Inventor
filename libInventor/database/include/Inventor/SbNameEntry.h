@@ -82,6 +82,8 @@ public:
     /// Returns TRUE if entry's string is same as passed string
     SbBool isEqual(const char *s) const;
 
+    /// Less than operator (using alphabetical order).
+    bool operator<(const SbNameEntry &other) const;
 private:
     static int  nameTableSize; // Number of buckets in name table
     static SbNameEntry **nameTable; // Array of name entries
