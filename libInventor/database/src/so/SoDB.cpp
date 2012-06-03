@@ -217,6 +217,9 @@ SoDB::init()
 	SoDB::registerHeader(SoOutput::getDefaultBinaryHeader(), 
 				TRUE, 2.1f,
 				NULL, NULL, NULL);
+    SoDB::registerHeader("#Inventor V2.1 utf8",
+                FALSE, 2.1f,
+                NULL, NULL, NULL);
 	SoDB::registerHeader("#Inventor V2.0 ascii",  
 				FALSE, 2.0f,
 				NULL, NULL, NULL);

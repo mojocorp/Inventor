@@ -886,7 +886,7 @@ SoInput::read(SbString &s)
             memcpy(buf, curFile->curBuf, n);
             buf[n] = '\0';
             curFile->curBuf += (n+3) & ~0003;
-            s = buf;
+            s = SbString::fromUtf8(buf);
             if (n > 1023)
                 delete [] buf;
             return TRUE;
@@ -999,7 +999,7 @@ SoInput::read(SbString &s)
             *buf = '\0';
 
             // Tack the buffer onto the string
-            s += bufStore;
+            s += SbString::fromUtf8(bufStore);
 
         } while (bytesLeft == 0);
     }
