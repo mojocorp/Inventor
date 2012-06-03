@@ -93,6 +93,11 @@ SbNameEntry::isEqual(const char *s) const
     return (string[0] == s[0] && ! strcmp(string, s));
 }
 
+bool
+SbNameEntry::operator<(const SbNameEntry &other) const
+{
+    return strcmp(string,other.string)<0;
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
