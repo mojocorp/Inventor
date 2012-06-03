@@ -174,7 +174,7 @@ SoInput::SoInput(SoInput *dictIn)
 
     // Make it read from stdin and use the passed dictionary
     initFile(stdin, "<stdin>", NULL, FALSE,
-	     (dictIn == NULL ? NULL : dictIn->curFile->refDict));
+             (dictIn == NULL ? NULL : dictIn->curFile->refDict));
 
     backBufIndex = -1;	// No buffer
 
@@ -197,7 +197,7 @@ SoInput::~SoInput()
 
     // closeFile() leaves the topmost file on the stack, so delete it
     if (curFile->refDict != NULL && ! curFile->borrowedDict)
-	delete curFile->refDict;
+        delete curFile->refDict;
     delete curFile;
 
     if (tmpBuffer != NULL) {
@@ -313,13 +313,13 @@ SoInput::removeDirectory(const char *dirName)
 
     for (i = 0; i < directories->getLength(); i++) {
 
-	dir = (*directories)[i];
+        dir = (*directories)[i];
 
-	if (*dir == dirName) {
-	    directories->remove(i);
-	    delete dir;
-	    break;
-	}
+        if (*dir == dirName) {
+            directories->remove(i);
+            delete dir;
+            break;
+        }
     }
 }
 
@@ -338,7 +338,7 @@ SoInput::clearDirectories()
     int	i;
 
     for (i = 0; i < directories->getLength(); i++)
-	delete (*directories)[i];
+        delete (*directories)[i];
 
     directories->truncate(0);
 }
@@ -373,9 +373,9 @@ SoInput::setFilePointer(FILE *newFP)		// New file pointer
 {
 #ifdef DEBUG
     if (newFP == NULL)
-	SoDebugError::postWarning("SoInput::setFilePointer",
-				  "Setting file pointer to NULL - "
-				  "may cause problems");
+        SoDebugError::postWarning("SoInput::setFilePointer",
+                                  "Setting file pointer to NULL - "
+                                  "may cause problems");
 #endif /* DEBUG */
 
     // Close open files, if any
@@ -410,14 +410,14 @@ SoInput::openFile(const char *fileName, SbBool okIfNotFound)
     SbString	fullName;
 
     if (fileName != NULL && fileName[0] != '\0') {
-	newFP = findFile(fileName, fullName);
+        newFP = findFile(fileName, fullName);
     }
 
     if (newFP == NULL) {
-	if (! okIfNotFound)
-	    SoReadError::post(this,
-			      "Can't open file \"%s\" for reading", fileName);
-	return FALSE;
+        if (! okIfNotFound)
+            SoReadError::post(this,
+                              "Can't open file \"%s\" for reading", fileName);
+        return FALSE;
     }
 
     // Close open files, if any
@@ -453,9 +453,9 @@ SoInput::pushFile(const char *fileName)	// Name of file
     FILE *newFP = findFile(fileName, fullName);
 
     if (newFP == NULL) {
-	SoDebugError::post("SoInput::pushFile",
-			   "Can't open file \"%s\" for reading", fileName);
-	return FALSE;
+        SoDebugError::post("SoInput::pushFile",
+                           "Can't open file \"%s\" for reading", fileName);
+        return FALSE;
     }
 
     // Allocate a new file structure and push onto stack
@@ -494,21 +494,21 @@ SoInput::closeFile()
 
     // Close all files opened here
     for (i = 0; i < files.getLength(); i++) {
-	f = (struct SoInputFile *) files[i];
+        f = (struct SoInputFile *) files[i];
 
-	if (f->openedHere)
-	    fclose(f->fp);
+        if (f->openedHere)
+            fclose(f->fp);
 
-	// Free up storage used for all but topmost file
-	if (i > 0) {
-	    delete f->refDict;
-	    delete f;
-	}
+        // Free up storage used for all but topmost file
+        if (i > 0) {
+            delete f->refDict;
+            delete f;
+        }
     }
 
     // Remove all but the first file from the stack
     if (files.getLength() > 1)
-	files.truncate(1);
+        files.truncate(1);
 
     // Reset to read from stdin again
     initFile(stdin, "<stdin>", NULL, FALSE);
@@ -530,7 +530,7 @@ SoInput::isValidFile()
 {
     // Make sure the header was read
     if (! curFile->readHeader)
-	(void) checkHeader();
+        (void) checkHeader();
 
     return curFile->headerOk;
 }
@@ -591,9 +591,9 @@ SoInput::setBuffer(void *bufPointer, size_t bufSize)
 
     // Start with a fresh dictionary
     if (curFile->refDict != NULL && ! curFile->borrowedDict)
-	curFile->refDict->clear();
+        curFile->refDict->clear();
     else
-	curFile->refDict = new SbDict;
+        curFile->refDict = new SbDict;
 
     // Assume file is ASCII until header is checked
     curFile->binary	= FALSE;
@@ -624,7 +624,7 @@ SoInput::getNumBytesRead() const
 ////////////////////////////////////////////////////////////////////////
 {
     if (! fromBuffer())
-	return 0;
+        return 0;
 
     return curFile->curBuf - (char *) curFile->buffer;
 }
@@ -644,7 +644,7 @@ SoInput::isBinary()
 {
     // Check header if not already done
     if (! curFile->readHeader)
-	(void) checkHeader();
+        (void) checkHeader();
 
     return curFile->binary;
 }
@@ -663,7 +663,7 @@ SoInput::getHeader()
 {
     // Check header if not already done
     if (! curFile->readHeader)
-	(void) checkHeader();
+        (void) checkHeader();
 
     return curFile->headerString;
 }
@@ -684,31 +684,31 @@ SoInput::get(char &c)
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
-	c = backBuf.getString()[backBufIndex++];
+        c = backBuf.getString()[backBufIndex++];
 
-	if (c != '\0')
-	    return TRUE;
+        if (c != '\0')
+            return TRUE;
 
-	// Back buffer ran out of characters
-	backBuf.makeEmpty();
-	backBufIndex = -1;
+        // Back buffer ran out of characters
+        backBuf.makeEmpty();
+        backBufIndex = -1;
     }
 
     if (! curFile->readHeader && ! checkHeader())
-	return FALSE;
+        return FALSE;
 
     if (eof()) {
-	c = (char)EOF;
-	ret = FALSE;
+        c = (char)EOF;
+        ret = FALSE;
     }
 
     else if (curFile->binary) {
         if (fromBuffer()) {
-	    c = *curFile->curBuf++;
+            c = *curFile->curBuf++;
             curFile->curBuf++;
             curFile->curBuf++;
             curFile->curBuf++;
-	    ret = TRUE;
+            ret = TRUE;
         }
         else {
             char pad[3];
@@ -720,25 +720,25 @@ SoInput::get(char &c)
 
     else {
 
-	if (! fromBuffer()) {
+        if (! fromBuffer()) {
 
-	    int i = getc(curFile->fp);
+            int i = getc(curFile->fp);
 
-	    if (i == EOF) {
-		c = (char)EOF;	// Set c to EOF so putpack(c) will fail 
-		ret = FALSE;
-	    }
+            if (i == EOF) {
+                c = (char)EOF;	// Set c to EOF so putpack(c) will fail
+                ret = FALSE;
+            }
 
-	    else {
-		c = (char) i;
-		ret = TRUE;
-	    }
-	}
+            else {
+                c = (char) i;
+                ret = TRUE;
+            }
+        }
 
-	else {
-	    c = *curFile->curBuf++;
-	    ret = TRUE;
-	}
+        else {
+            c = *curFile->curBuf++;
+            ret = TRUE;
+        }
     }
 
     return ret;
@@ -760,23 +760,23 @@ SoInput::getASCIIBuffer(char &c)
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
-	c = backBuf.getString()[backBufIndex++];
+        c = backBuf.getString()[backBufIndex++];
 
-	if (c != '\0')
-	    return TRUE;
+        if (c != '\0')
+            return TRUE;
 
-	// Back buffer ran out of characters
-	backBuf.makeEmpty();
-	backBufIndex = -1;
+        // Back buffer ran out of characters
+        backBuf.makeEmpty();
+        backBufIndex = -1;
     }
 
     if (freeBytesInBuf() == 0) {
-	c = (char)EOF;
-	ret = FALSE;
+        c = (char)EOF;
+        ret = FALSE;
     }
     else {
-	c = *curFile->curBuf++;
-	ret = TRUE;
+        c = *curFile->curBuf++;
+        ret = TRUE;
     }
 
     return ret;
@@ -799,14 +799,14 @@ SoInput::getASCIIFile(char &c)
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
-	c = backBuf.getString()[backBufIndex++];
+        c = backBuf.getString()[backBufIndex++];
 
-	if (c != '\0')
-	    return TRUE;
+        if (c != '\0')
+            return TRUE;
 
-	// Back buffer ran out of characters
-	backBuf.makeEmpty();
-	backBufIndex = -1;
+        // Back buffer ran out of characters
+        backBuf.makeEmpty();
+        backBufIndex = -1;
     }
 
     i = getc(curFile->fp);
@@ -849,16 +849,16 @@ SoInput::read(SbString &s)
 ////////////////////////////////////////////////////////////////////////
 {
     if (! skipWhiteSpace())
-	return FALSE;
+        return FALSE;
 
     if (curFile->binary) {
-	// If there is a string in the putback buffer, use it.
-	if (backBufIndex >= 0) {
-	    s = backBuf;
-	    backBuf.makeEmpty();
-	    backBufIndex = -1;
-	    return TRUE;
-	}
+        // If there is a string in the putback buffer, use it.
+        if (backBufIndex >= 0) {
+            s = backBuf;
+            backBuf.makeEmpty();
+            backBufIndex = -1;
+            return TRUE;
+        }
 
         //
         // Reading from the binary format consists of reading a word
@@ -867,8 +867,8 @@ SoInput::read(SbString &s)
         // character at the end of the string.
         //
         if (fromBuffer()) {
-	    if (eof())
-		return FALSE;
+            if (eof())
+                return FALSE;
 
             int n = * (int *) curFile->curBuf;
             DGL_NTOH_INT32(n, n);
@@ -877,18 +877,18 @@ SoInput::read(SbString &s)
             if (n < 0)
                 return FALSE;
 
-	    char buffer[1024], *buf;
-	    if (n > 1023)
-		buf = new char [n + 1];
-	    else
-		buf = buffer;
+            char buffer[1024], *buf;
+            if (n > 1023)
+                buf = new char [n + 1];
+            else
+                buf = buffer;
             curFile->curBuf += 4;
-	    memcpy(buf, curFile->curBuf, n);
+            memcpy(buf, curFile->curBuf, n);
             buf[n] = '\0';
             curFile->curBuf += (n+3) & ~0003;
             s = buf;
-	    if (n > 1023)
-		delete [] buf;
+            if (n > 1023)
+                delete [] buf;
             return TRUE;
         }
         else {
@@ -896,7 +896,7 @@ SoInput::read(SbString &s)
             // The case in SoFile nodes which don't know how many children
             // they have.  Reading keeps happening until eof is hit.
 
-	    int n;
+            int n;
             if (fread((void *) &n, sizeof(int), 1, curFile->fp) == 1) {
                 DGL_NTOH_INT32(n, n);
 
@@ -909,28 +909,28 @@ SoInput::read(SbString &s)
                     return FALSE;
                 }
 
-		char buffer[1024], *buf;
-		if (n > 1023)
-		    buf = new char [n + 1];
-		else
-		    buf = buffer;
-		SbBool ok =
-		    (fread((void *) buf, sizeof(char), n, curFile->fp) == n);
-		if (ok) {
-		    int pad = ((n+3) & ~003) - n;
-		    char padbuf[4];
-		    ok = (fread((void *) padbuf, sizeof(char), pad,
-				curFile->fp) == pad);
+                char buffer[1024], *buf;
+                if (n > 1023)
+                    buf = new char [n + 1];
+                else
+                    buf = buffer;
+                SbBool ok =
+                        (fread((void *) buf, sizeof(char), n, curFile->fp) == n);
+                if (ok) {
+                    int pad = ((n+3) & ~003) - n;
+                    char padbuf[4];
+                    ok = (fread((void *) padbuf, sizeof(char), pad,
+                                curFile->fp) == pad);
 
-		    if (ok) {
-			buf[n] = '\0';
-			s = buf;
-		    }
-		}
-		if (n > 1023)
-		    delete [] buf;
+                    if (ok) {
+                        buf[n] = '\0';
+                        s = buf;
+                    }
+                }
+                if (n > 1023)
+                    delete [] buf;
 
-		if (! ok)
+                if (! ok)
                     return FALSE;
             }
             else
@@ -941,67 +941,67 @@ SoInput::read(SbString &s)
     }
 
     else {
-	SbBool      quoted;
-	char        c;
-	char        bufStore[256];
-	char        *buf;
-	int         bytesLeft;
+        SbBool      quoted;
+        char        c;
+        char        bufStore[256];
+        char        *buf;
+        int         bytesLeft;
 
-	s.makeEmpty();
+        s.makeEmpty();
 
-	// Read first character - if none, EOF
-	if (! get(c))
-	    return FALSE;
+        // Read first character - if none, EOF
+        if (! get(c))
+            return FALSE;
 
-	// If quoted string
-	quoted = (c == '\"');
-	if (! quoted)
-	    putBack(c);
+        // If quoted string
+        quoted = (c == '\"');
+        if (! quoted)
+            putBack(c);
 
-	do {
-	    buf       = bufStore;
-	    bytesLeft = sizeof(bufStore) - 1;
+        do {
+            buf       = bufStore;
+            bytesLeft = sizeof(bufStore) - 1;
 
-	    // Read a bufferfull
-	    while (bytesLeft > 0) {
+            // Read a bufferfull
+            while (bytesLeft > 0) {
 
-		// Terminate on EOF
-		if (! get(*buf))
-		    break;
+                // Terminate on EOF
+                if (! get(*buf))
+                    break;
 
-		if (quoted) {
-		    // Terminate on close quote
-		    if (*buf == '\"')
-			break;
+                if (quoted) {
+                    // Terminate on close quote
+                    if (*buf == '\"')
+                        break;
 
-		    // Check for escaped double quote
-		    if (*buf == '\\') {
-			if ((get(c)) && c == '\"')
-			    *buf = '\"';
-			else
-			    putBack(c);
-		    }
+                    // Check for escaped double quote
+                    if (*buf == '\\') {
+                        if ((get(c)) && c == '\"')
+                            *buf = '\"';
+                        else
+                            putBack(c);
+                    }
 
-		    if (*buf == '\n')
-			curFile->lineNum++;
-		}
+                    if (*buf == '\n')
+                        curFile->lineNum++;
+                }
 
-		// If unquoted string, terminate at whitespace
-		else if (isspace(*buf)) {
-		    // Put back the whitespace
-		    putBack(*buf);
-		    break;
-		}
+                // If unquoted string, terminate at whitespace
+                else if (isspace(*buf)) {
+                    // Put back the whitespace
+                    putBack(*buf);
+                    break;
+                }
 
-		buf++;
-		bytesLeft--;
-	    }
-	    *buf = '\0';
+                buf++;
+                bytesLeft--;
+            }
+            *buf = '\0';
 
-	    // Tack the buffer onto the string
-	    s += bufStore;
+            // Tack the buffer onto the string
+            s += bufStore;
 
-	} while (bytesLeft == 0);
+        } while (bytesLeft == 0);
     }
 
     return TRUE;
@@ -1023,73 +1023,73 @@ SoInput::read(SbString &s)
 
 SbBool
 SoInput::read(SbName &n,		// Name to read into
-	      SbBool validIdent)	// TRUE => name must be
-					// identifier (default is FALSE)
+              SbBool validIdent)	// TRUE => name must be
+// identifier (default is FALSE)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool	gotChar;
 
     if (! skipWhiteSpace())
-	return FALSE;
+        return FALSE;
 
     // If binary input or not an identifer, read as just a regular string
     if (curFile->binary || ! validIdent) {
-	SbString	s;
+        SbString	s;
 
-	if (! read(s)) {
+        if (! read(s)) {
 
-	    // We may have just discovered EOF when trying to read the
-	    // string. If so, and there's another file open on the
-	    // stack, call this method again to try reading from the
-	    // next file.
+            // We may have just discovered EOF when trying to read the
+            // string. If so, and there's another file open on the
+            // stack, call this method again to try reading from the
+            // next file.
 
-	    if (curFile->binary && eof() && files.getLength() > 1)
-		return read(n, validIdent);
+            if (curFile->binary && eof() && files.getLength() > 1)
+                return read(n, validIdent);
 
-	    return FALSE;
-	}
+            return FALSE;
+        }
 
-	n = s;
+        n = s;
     }
 
     else {
-	// Read identifier, watching for validity
-	char	buf[256];
-	char	*b = buf;
-	char	c;
+        // Read identifier, watching for validity
+        char	buf[256];
+        char	*b = buf;
+        char	c;
 
-	if (fromBuffer()) {
-	    if ((gotChar = getASCIIBuffer(c)) && SbName::isIdentStartChar(c)) {
-		*b++ = c;
-    
-		while ((gotChar= getASCIIBuffer(c)) && SbName::isIdentChar(c)) {
-		    // If the identifier is too long, it will be silently
-		    // truncated.
-		    if (b - buf < 255)
-			*b++ = c;
-		}
-	    }
-	}
-	else {
-	    if ((gotChar = getASCIIFile(c)) && SbName::isIdentStartChar(c)) {
-		*b++ = c;
-    
-		while ((gotChar = getASCIIFile(c)) && SbName::isIdentChar(c)) {
-		    // If the identifier is too long, it will be silently
-		    // truncated.
-		    if (b - buf < 255)
-			*b++ = c;
-		}
-	    }
-	}
-	*b = '\0';
+        if (fromBuffer()) {
+            if ((gotChar = getASCIIBuffer(c)) && SbName::isIdentStartChar(c)) {
+                *b++ = c;
 
-	// Put the terminating character (if any) back in the stream.
-	if (gotChar)
-	    putBack(c);
+                while ((gotChar= getASCIIBuffer(c)) && SbName::isIdentChar(c)) {
+                    // If the identifier is too long, it will be silently
+                    // truncated.
+                    if (b - buf < 255)
+                        *b++ = c;
+                }
+            }
+        }
+        else {
+            if ((gotChar = getASCIIFile(c)) && SbName::isIdentStartChar(c)) {
+                *b++ = c;
 
-	n = buf;
+                while ((gotChar = getASCIIFile(c)) && SbName::isIdentChar(c)) {
+                    // If the identifier is too long, it will be silently
+                    // truncated.
+                    if (b - buf < 255)
+                        *b++ = c;
+                }
+            }
+        }
+        *b = '\0';
+
+        // Put the terminating character (if any) back in the stream.
+        if (gotChar)
+            putBack(c);
+
+        n = buf;
     }
 
     return TRUE;
@@ -1110,72 +1110,72 @@ SoInput::read(SbName &n,		// Name to read into
 #define READ_NUM(reader, readType, num, dglFunc, type, dglType)               \
     SbBool ok;                                                                \
     if (! skipWhiteSpace())                                                   \
-        ok = FALSE;                                                           \
+    ok = FALSE;                                                           \
     else if (curFile->binary) {                                               \
-        int n = sizeof(dglType);                                            \
-        int pad = ((n+3) & ~0003) - n;                                        \
-        dglType tnum;                                                         \
-        if (fromBuffer()) {                                                   \
-            if (eof())                                                        \
-                ok = FALSE;                                                   \
-            else {                                                            \
-                ok = TRUE;                                                    \
-                dglFunc(curFile->curBuf, (dglType *)&tnum);                   \
-                curFile->curBuf += sizeof(dglType) + pad;                   \
-            }                                                                 \
-        }                                                                     \
-        else {                                                                \
-            if (backupBufUsed == TRUE) {                                      \
-                num = (type)(*(type *)backupBuf);                             \
-                backupBufUsed = FALSE;                                        \
-                return TRUE;                                                  \
-            }                                                                 \
-            char padbuf[4];                                                   \
-            makeRoomInBuf(sizeof(dglType));                                 \
-            ok = fread(tmpBuffer, sizeof(dglType), 1, curFile->fp);         \
-            dglFunc((char *)tmpBuffer, (dglType *)&tnum);                     \
-            if (pad != 0)                                                     \
-                ok = fread((void *)padbuf, sizeof(char), pad, curFile->fp); \
-        }                                                                     \
-        num = (type)tnum;                                                     \
+    int n = sizeof(dglType);                                            \
+    int pad = ((n+3) & ~0003) - n;                                        \
+    dglType tnum;                                                         \
+    if (fromBuffer()) {                                                   \
+    if (eof())                                                        \
+    ok = FALSE;                                                   \
+    else {                                                            \
+    ok = TRUE;                                                    \
+    dglFunc(curFile->curBuf, (dglType *)&tnum);                   \
+    curFile->curBuf += sizeof(dglType) + pad;                   \
+    }                                                                 \
+    }                                                                     \
+    else {                                                                \
+    if (backupBufUsed == TRUE) {                                      \
+    num = (type)(*(type *)backupBuf);                             \
+    backupBufUsed = FALSE;                                        \
+    return TRUE;                                                  \
+    }                                                                 \
+    char padbuf[4];                                                   \
+    makeRoomInBuf(sizeof(dglType));                                 \
+    ok = fread(tmpBuffer, sizeof(dglType), 1, curFile->fp);         \
+    dglFunc((char *)tmpBuffer, (dglType *)&tnum);                     \
+    if (pad != 0)                                                     \
+    ok = fread((void *)padbuf, sizeof(char), pad, curFile->fp); \
+    }                                                                     \
+    num = (type)tnum;                                                     \
     }                                                                         \
     else {                                                                    \
-        readType _tmp;                                                        \
-        ok = reader(_tmp);                                                    \
-        if (ok)                                                               \
-            num = (type) _tmp;                                                \
+    readType _tmp;                                                        \
+    ok = reader(_tmp);                                                    \
+    if (ok)                                                               \
+    num = (type) _tmp;                                                \
     }                                                                         \
     return ok
 
 #define READ_BIN_ARRAY(array, length, dglFunc, type)   			      \
     SbBool ok = TRUE;							      \
     if (! skipWhiteSpace())						      \
-	ok = FALSE;							      \
+    ok = FALSE;							      \
     else if (fromBuffer()) {                                                  \
-	if (eof())						              \
-	    ok = FALSE;					                      \
-	else {								      \
-	    dglFunc(curFile->curBuf, (type *)array, length);	              \
-            curFile->curBuf += length * sizeof(type);                       \
-        }								      \
+    if (eof())						              \
+    ok = FALSE;					                      \
+    else {								      \
+    dglFunc(curFile->curBuf, (type *)array, length);	              \
+    curFile->curBuf += length * sizeof(type);                       \
+    }								      \
     }                                                                         \
     else { 								      \
-        makeRoomInBuf(length * sizeof(type));				      \
-        int i = fread(tmpBuffer, sizeof(type), length, curFile->fp);        \
-        if (i != length)                                                      \
-            return FALSE;                                                     \
-        dglFunc((char *)tmpBuffer, (type *)array, length);		      \
+    makeRoomInBuf(length * sizeof(type));				      \
+    int i = fread(tmpBuffer, sizeof(type), length, curFile->fp);        \
+    if (i != length)                                                      \
+    return FALSE;                                                     \
+    dglFunc((char *)tmpBuffer, (type *)array, length);		      \
     } 									      \
     return ok
 
 #define READ_INTEGER(num, dglFunc, type, dglType)			      \
-	READ_NUM(readInteger, int32_t, num, dglFunc, type, dglType)
+    READ_NUM(readInteger, int32_t, num, dglFunc, type, dglType)
 
 #define READ_UNSIGNED_INTEGER(num, dFunc, type, dType)			      \
-	READ_NUM(readUnsignedInteger, uint32_t, num, dFunc, type, dType)
+    READ_NUM(readUnsignedInteger, uint32_t, num, dFunc, type, dType)
 
 #define READ_REAL(num, dglFunc, type, dglType)				      \
-	READ_NUM(readReal, double, num, dglFunc, type, dglType)
+    READ_NUM(readReal, double, num, dglFunc, type, dglType)
 
 SbBool
 SoInput::read(int &i)
@@ -1241,19 +1241,19 @@ SoInput::readBinaryArray(unsigned char *c, int length)
 {
     SbBool ok = TRUE;
     if (! skipWhiteSpace())
-	ok = FALSE;
+        ok = FALSE;
     else if (fromBuffer()) {
-	if (eof())
-	    ok = FALSE;
-	else {
-	    memcpy((unsigned char *)c, curFile->curBuf, length);
+        if (eof())
+            ok = FALSE;
+        else {
+            memcpy((unsigned char *)c, curFile->curBuf, length);
             curFile->curBuf += length * sizeof(unsigned char);
-	}
+        }
     }
     else {
         int i = fread(c, sizeof(unsigned char), length, curFile->fp);
-	if (i != length)
-	    return FALSE;
+        if (i != length)
+            return FALSE;
     }
     return ok;
 }
@@ -1386,17 +1386,17 @@ SoInput::convertShortArray( char *from,
 
     len >>= 1;			// convert bytes to short
     while (len > 4) {		// unroll the loop a bit
-	DGL_NTOH_SHORT( to[0], SHORT(b));
+        DGL_NTOH_SHORT( to[0], SHORT(b));
         DGL_NTOH_SHORT( to[1], SHORT(b + sizeof(short)));
         DGL_NTOH_SHORT( to[2], SHORT(b + sizeof(short)*2));
         DGL_NTOH_SHORT( to[3], SHORT(b + sizeof(short)*3));
-	to += 4;
+        to += 4;
         b  += sizeof(short)*4;
-	len -= 4;
+        len -= 4;
     }
     while (len-- > 0) {
-	DGL_NTOH_SHORT( *to, SHORT(b));
-	to++;
+        DGL_NTOH_SHORT( *to, SHORT(b));
+        to++;
         b += sizeof(short);
     }
 }
@@ -1412,8 +1412,8 @@ SoInput::convertShortArray( char *from,
 
 void
 SoInput::convertInt32Array( char *from,
-                           register int32_t *to,
-                           register int len)
+                            register int32_t *to,
+                            register int len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1421,17 +1421,17 @@ SoInput::convertInt32Array( char *from,
     register char  *b = from;
 
     while (len > 4) {		// unroll the loop a bit
-	DGL_NTOH_INT32( t[0], INT32(b));
+        DGL_NTOH_INT32( t[0], INT32(b));
         DGL_NTOH_INT32( t[1], INT32(b + sizeof(int32_t)));
         DGL_NTOH_INT32( t[2], INT32(b + sizeof(int32_t)*2));
         DGL_NTOH_INT32( t[3], INT32(b + sizeof(int32_t)*3));
-	t += 4;
+        t += 4;
         b += sizeof(int32_t)*4;
-	len -= 4;
+        len -= 4;
     }
     while (len-- > 0) {
-	DGL_NTOH_INT32( *t, INT32(b));
-	t++;
+        DGL_NTOH_INT32( *t, INT32(b));
+        t++;
         b += sizeof(int32_t);
     }
 }
@@ -1456,17 +1456,17 @@ SoInput::convertFloatArray( char  *from,
     register char  *b = from;
 
     while (len > 4) {		// unroll the loop a bit
-	DGL_NTOH_FLOAT( t[0], FLOAT(b));
+        DGL_NTOH_FLOAT( t[0], FLOAT(b));
         DGL_NTOH_FLOAT( t[1], FLOAT(b + sizeof(float)));
         DGL_NTOH_FLOAT( t[2], FLOAT(b + sizeof(float)*2));
         DGL_NTOH_FLOAT( t[3], FLOAT(b + sizeof(float)*3));
-	t += 4;
+        t += 4;
         b += sizeof(float)*4;
-	len -= 4;
+        len -= 4;
     }
     while (len-- > 0) {
-	DGL_NTOH_FLOAT( *t, FLOAT(b));
-	t++;
+        DGL_NTOH_FLOAT( *t, FLOAT(b));
+        t++;
         b += sizeof(float);
     }
 }
@@ -1491,17 +1491,17 @@ SoInput::convertDoubleArray( char *from,
 
     len >>= 3;			// convert bytes to doubles
     while (len > 4) {		// unroll the loop a bit
-	DGL_NTOH_DOUBLE( to[0], DOUBLE(b));
+        DGL_NTOH_DOUBLE( to[0], DOUBLE(b));
         DGL_NTOH_DOUBLE( to[1], DOUBLE(b + sizeof(double)));
         DGL_NTOH_DOUBLE( to[2], DOUBLE(b + sizeof(double)*2));
         DGL_NTOH_DOUBLE( to[3], DOUBLE(b + sizeof(double)*3));
-	to += 4;
+        to += 4;
         b  += sizeof(double)*4;
-	len -= 4;
+        len -= 4;
     }
     while (len-- > 0) {
-	DGL_NTOH_DOUBLE( *to, DOUBLE(b));
-	to++;
+        DGL_NTOH_DOUBLE( *to, DOUBLE(b));
+        to++;
         b += sizeof(double);
     }
 }
@@ -1520,9 +1520,9 @@ SoInput::eof() const
 ////////////////////////////////////////////////////////////////////////
 {
     if (! fromBuffer())
-	return feof(curFile->fp);
+        return feof(curFile->fp);
     else
-	return (freeBytesInBuf() == 0);
+        return (freeBytesInBuf() == 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1546,14 +1546,14 @@ SoInput::getLocationString(SbString &string) const
 
     f = (const struct SoInputFile *) files[i];
     sprintf(buf, "\tOccurred at line %3d in %s",
-	    f->lineNum, f->fullName.getString());
+            f->lineNum, f->fullName.getString());
     string = buf;
 
     for (--i ; i >= 0; --i) {
-	f = (const struct SoInputFile *) files[i];
-	sprintf(buf, "\n\tIncluded at line %3d in %s",
-		f->lineNum, f->fullName.getString());
-	string += buf;
+        f = (const struct SoInputFile *) files[i];
+        sprintf(buf, "\n\tIncluded at line %3d in %s",
+                f->lineNum, f->fullName.getString());
+        string += buf;
     }
 }
 
@@ -1571,16 +1571,16 @@ SoInput::putBack(char c)
 {
     // Never put an EOF back in the stream
     if (c == (char) EOF)
-	return;
+        return;
 
     if (backBufIndex >= 0)
-	--backBufIndex;
+        --backBufIndex;
     else if (! fromBuffer())
-	ungetc(c, curFile->fp);
+        ungetc(c, curFile->fp);
     else if (isBinary())
-	;				// Can't do anything???
+        ;				// Can't do anything???
     else
-	curFile->curBuf--;
+        curFile->curBuf--;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1620,29 +1620,29 @@ SoInput::findFile(const char *fileName, SbString &fullName) const
 
     // If filename is absolute
 #ifdef SB_OS_WIN
-	if (isalpha(fileName[0]) && fileName[1] == ':') {
+    if (isalpha(fileName[0]) && fileName[1] == ':') {
 #else
     if (fileName[0] == '/') {
 #endif
-	fullName = fileName;
-	fp = fopen(fileName, "rb");
+        fullName = fileName;
+        fp = fopen(fileName, "rb");
     }
 
     // For relative file names, try each of the directories in the search path
     else {
-	fp = NULL;
+        fp = NULL;
 
-	for (i = 0; i < directories->getLength(); i++) {
-	    fullName = * (*directories)[i];
-	    fullName += "/";
-	    fullName += fileName;
+        for (i = 0; i < directories->getLength(); i++) {
+            fullName = * (*directories)[i];
+            fullName += "/";
+            fullName += fileName;
 
-	    fp = fopen(fullName.getString(), "rb");
+            fp = fopen(fullName.getString(), "rb");
 
-	    if (fp != NULL)
-		break;
-	}
-    }	
+            if (fp != NULL)
+                break;
+        }
+    }
 
     return fp;
 }
@@ -1656,37 +1656,37 @@ SoInput::findFile(const char *fileName, SbString &fullName) const
 
 void
 SoInput::initFile(FILE *newFP,		// New file pointer
-		  const char *fileName,	// Name of new file to read
-		  SbString *fullName,	// Full name of new file
-		  SbBool openedHere,	// TRUE if SoInput opened file
-		  SbDict *refDict)	// Dictionary of base references
-					// (default is NULL: create new dict)
+                  const char *fileName,	// Name of new file to read
+                  SbString *fullName,	// Full name of new file
+                  SbBool openedHere,	// TRUE if SoInput opened file
+                  SbDict *refDict)	// Dictionary of base references
+// (default is NULL: create new dict)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     curFile->name	= fileName;
     if (fullName == NULL)
-	curFile->fullName = fileName;
+        curFile->fullName = fileName;
     else
-	curFile->fullName = *fullName;
+        curFile->fullName = *fullName;
     curFile->fp		= newFP;
     curFile->buffer	= NULL;
     curFile->lineNum	= 1;
     curFile->openedHere	= openedHere;
 
     if (refDict == NULL) {
-	// Start with a fresh dictionary
-	if (curFile->refDict != NULL && ! curFile->borrowedDict)
-	    curFile->refDict->clear();
-	else
-	    curFile->refDict = new SbDict;
-	curFile->borrowedDict = FALSE;
+        // Start with a fresh dictionary
+        if (curFile->refDict != NULL && ! curFile->borrowedDict)
+            curFile->refDict->clear();
+        else
+            curFile->refDict = new SbDict;
+        curFile->borrowedDict = FALSE;
     }
     else {
-	if (curFile->refDict != NULL && ! curFile->borrowedDict)
-	    delete curFile->refDict;
-	curFile->refDict = refDict;
-	curFile->borrowedDict = TRUE;
+        if (curFile->refDict != NULL && ! curFile->borrowedDict)
+            delete curFile->refDict;
+        curFile->refDict = refDict;
+        curFile->borrowedDict = TRUE;
     }
 
     // Assume file is ASCII until header is checked
@@ -1728,63 +1728,63 @@ SoInput::checkHeader()
     // header, assume it is ASCII.
 
     if (get(c)) {
-    	if (c == COMMENT_CHAR) {
-	    char	buf[256];
-	    int		i = 0;
+        if (c == COMMENT_CHAR) {
+            char	buf[256];
+            int		i = 0;
 
-	    // Read comment into buffer
-	    buf[i++] = c;
-	    while (get(c) && c != '\n')
-		buf[i++] = c;
-	    buf[i] = '\0';
-	    if (c == '\n')
-		curFile->lineNum++;
+            // Read comment into buffer
+            buf[i++] = c;
+            while (get(c) && c != '\n')
+                buf[i++] = c;
+            buf[i] = '\0';
+            if (c == '\n')
+                curFile->lineNum++;
 
-	    // Read the file if the header is a registered header, or
-	    // if the file header is a superset of a registered header.
-	    
-	    if (SoDB::getHeaderData(buf, isBinary, versionNum,
-					preCB, postCB, userData, TRUE)) {
-	
-		if (isBinary) {
-		    curFile->binary = TRUE;
-		    if (tmpBuffer == NULL) {
-			tmpBuffer = malloc(64);
-			tmpBufSize = 64;
-			curTmpBuf = (char *)tmpBuffer;
-		    }
-		} else {		    
-		    curFile->binary = FALSE;		    
-		}
+            // Read the file if the header is a registered header, or
+            // if the file header is a superset of a registered header.
 
-		// Set the Inventor file version associated with the header
-		setIVVersion(versionNum);
+            if (SoDB::getHeaderData(buf, isBinary, versionNum,
+                                    preCB, postCB, userData, TRUE)) {
 
-		// Invoke the pre-callback associated with the header
-		if (preCB)
-		    (*preCB)(userData, this);
-		
-		// Store a pointer to the post-callback for later use
-		curFile->postReadCB = postCB;
-		curFile->CBData = userData;
-		    
-		curFile->headerOk = TRUE;
-		curFile->headerString = buf;
-		return TRUE;
-	    }
-	}
+                if (isBinary) {
+                    curFile->binary = TRUE;
+                    if (tmpBuffer == NULL) {
+                        tmpBuffer = malloc(64);
+                        tmpBufSize = 64;
+                        curTmpBuf = (char *)tmpBuffer;
+                    }
+                } else {
+                    curFile->binary = FALSE;
+                }
 
-	// Put non-comment char back in case we are reading from a buffer.
-	else
-	    putBack(c);
+                // Set the Inventor file version associated with the header
+                setIVVersion(versionNum);
+
+                // Invoke the pre-callback associated with the header
+                if (preCB)
+                    (*preCB)(userData, this);
+
+                // Store a pointer to the post-callback for later use
+                curFile->postReadCB = postCB;
+                curFile->CBData = userData;
+
+                curFile->headerOk = TRUE;
+                curFile->headerString = buf;
+                return TRUE;
+            }
+        }
+
+        // Put non-comment char back in case we are reading from a buffer.
+        else
+            putBack(c);
     }
 
     // If it gets here, no valid header was found. If we are reading
     // from a buffer, we can just assume we are reading ASCII, in the
     // latest format:
-    if (fromBuffer()) { 
-	curFile->binary = FALSE;
-	return TRUE;
+    if (fromBuffer()) {
+        curFile->binary = FALSE;
+        return TRUE;
     }
 
     // If we are reading from a file, it MUST have a header
@@ -1814,73 +1814,73 @@ SoInput::skipWhiteSpace()
     // of the read methods call this first, it's a convenient place to
     // do it.
     if (! curFile->readHeader && ! checkHeader())
-	return FALSE;
+        return FALSE;
 
     // Don't skip space in binary input. In ASCII, keep going while
     // space and comments appear
     if (! curFile->binary) {
-	if (fromBuffer()) {
-	    while (TRUE) {
-    
-		// Skip over space characters
-		while ((gotChar = getASCIIBuffer(c)) && isspace(c))
-		    if (c == '\n')
-			curFile->lineNum++;
-    
-		if (! gotChar)
-		    break;
-    
-		// If next character is comment character, flush til end of line
-		if (c == COMMENT_CHAR) {
-		    while (getASCIIBuffer(c) && c != '\n')
-			;
-    
-		    if (eof())
-			SoReadError::post(this,
-					  "EOF reached before end of comment");
-		    else
-			curFile->lineNum++;
-		}
-		else {
-		    putBack(c);
-		    break;		// EXIT: hit a non-comment, non-space
-		}
-	    }
-	}
-	else {
-	    while (TRUE) {
-    
-		// Skip over space characters
-		while ((gotChar = getASCIIFile(c)) && isspace(c))
-		    if (c == '\n')
-			curFile->lineNum++;
-    
-		if (! gotChar)
-		    break;
-    
-		// If next character is comment character, flush til end of line
-		if (c == COMMENT_CHAR) {
-		    while (getASCIIFile(c) && c != '\n')
-			;
-    
-		    if (eof())
-			SoReadError::post(this,
-					  "EOF reached before end of comment");
-		    else
-			curFile->lineNum++;
-		}
-		else {
-		    putBack(c);
-		    break;		// EXIT: hit a non-comment, non-space
-		}
-	    }
-	}
+        if (fromBuffer()) {
+            while (TRUE) {
+
+                // Skip over space characters
+                while ((gotChar = getASCIIBuffer(c)) && isspace(c))
+                    if (c == '\n')
+                        curFile->lineNum++;
+
+                if (! gotChar)
+                    break;
+
+                // If next character is comment character, flush til end of line
+                if (c == COMMENT_CHAR) {
+                    while (getASCIIBuffer(c) && c != '\n')
+                        ;
+
+                    if (eof())
+                        SoReadError::post(this,
+                                          "EOF reached before end of comment");
+                    else
+                        curFile->lineNum++;
+                }
+                else {
+                    putBack(c);
+                    break;		// EXIT: hit a non-comment, non-space
+                }
+            }
+        }
+        else {
+            while (TRUE) {
+
+                // Skip over space characters
+                while ((gotChar = getASCIIFile(c)) && isspace(c))
+                    if (c == '\n')
+                        curFile->lineNum++;
+
+                if (! gotChar)
+                    break;
+
+                // If next character is comment character, flush til end of line
+                if (c == COMMENT_CHAR) {
+                    while (getASCIIFile(c) && c != '\n')
+                        ;
+
+                    if (eof())
+                        SoReadError::post(this,
+                                          "EOF reached before end of comment");
+                    else
+                        curFile->lineNum++;
+                }
+                else {
+                    putBack(c);
+                    break;		// EXIT: hit a non-comment, non-space
+                }
+            }
+        }
     }
 
     // If EOF, pop to previous file and skip space again
     while (eof() && popFile())
-	if (! skipWhiteSpace())
-	    return FALSE;
+        if (! skipWhiteSpace())
+            return FALSE;
 
     return TRUE;
 }
@@ -1902,20 +1902,20 @@ SoInput::popFile()
     // Call the post callback associated with this file type (as determined
     // by the file header)
     if (curFile->postReadCB)
-	(*curFile->postReadCB)(curFile->CBData, this);
-	
+        (*curFile->postReadCB)(curFile->CBData, this);
+
     int depth = files.getLength();
 
     // Nothing to pop if we're already in last file on stack
     if (depth == 1)
-	return FALSE;
+        return FALSE;
 
     // Remove one file
     files.truncate(depth - 1);
 
     // Free up structure for current file and set to new one
     if (curFile->openedHere)
-	fclose(curFile->fp);
+        fclose(curFile->fp);
 
     delete curFile->refDict;
     delete curFile;
@@ -1942,98 +1942,98 @@ SoInput::readHex(uint32_t &l)
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
-	ret = FALSE;
-	if (backBufIndex >= 3) {
-	    strcpy(str, backBuf.getString());
-	    ret = TRUE;
-	}
+        ret = FALSE;
+        if (backBufIndex >= 3) {
+            strcpy(str, backBuf.getString());
+            ret = TRUE;
+        }
 
-	// Clear the back buffer.
-	backBuf.makeEmpty();
-	backBufIndex = -1;
+        // Clear the back buffer.
+        backBuf.makeEmpty();
+        backBufIndex = -1;
     }
 
     // Read from a memory buffer
     else if (fromBuffer()) {
-	skipWhiteSpace();
-	s = curFile->curBuf;
-	ret = TRUE;
+        skipWhiteSpace();
+        s = curFile->curBuf;
+        ret = TRUE;
     }
 
     // Read from a file
     else {
-	skipWhiteSpace();
-	while ((i = getc(curFile->fp)) != EOF) {
-	    *s = (char) i;
-	    if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
-		putBack(*s);
-		*s = '\0';
-		break;
-	    }
-	    s++;
-	}
+        skipWhiteSpace();
+        while ((i = getc(curFile->fp)) != EOF) {
+            *s = (char) i;
+            if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
+                putBack(*s);
+                *s = '\0';
+                break;
+            }
+            s++;
+        }
 
-	ret = (s - str <= 0) ? FALSE : TRUE;
-	s = str;
+        ret = (s - str <= 0) ? FALSE : TRUE;
+        s = str;
     }
 
     // Convert the hex string we just got into an uint32_teger
     if (ret) {
-	int	i;
-	int	minSize = 3;	// Must be at least this many bytes in str
-	char	*save = s;
+        int	i;
+        int	minSize = 3;	// Must be at least this many bytes in str
+        char	*save = s;
 
-	if (*s++ == '0') {
-	    if (*s == '\0' || *s == ',' || *s == ']' || *s == '}' ||
-		isspace(*s))
-	    {
-		l = 0;
-		curFile->curBuf++;
-	    }
-	    else if (*s == 'x' || *s == 'X') {
-		s++;
-		l = 0;
-		while (*s != '\0' && *s != ',' && *s != ']' && *s != '}' &&
-			! isspace(*s))
-		{
-		    i = (int)*s;
-		    if (i >= '0' && i <= '9') {
-			i -= '0';
-			l = (l<<4) + i;
-		    }
-		    else if (i >= 'A' && i <= 'F') {
-			i -= ('A' - 10);
-			l = (l<<4) + i;
-		    }
-		    else if (i >= 'a' && i <= 'f') {
-			i -= ('a' - 10);
-			l = (l<<4) + i;
-		    }
-		    s++;
-		}
-    
-		if (fromBuffer()) {
-		    // Make sure we have at least 1 actual digit
-		    if (s - curFile->curBuf < minSize) {
-			if (fromBuffer())
-			    curFile->curBuf = save;
-			else
-			    putBack(save);
-			ret = FALSE;
-		    }
-		    else
-			curFile->curBuf = s;
-		}
-		else if (s - str < minSize) {
-		    if (fromBuffer())
-			curFile->curBuf = save;
-		    else
-			putBack(save);
-		    ret = FALSE;
-		}
-		  
-	    }
-	}
+        if (*s++ == '0') {
+            if (*s == '\0' || *s == ',' || *s == ']' || *s == '}' ||
+                    isspace(*s))
+            {
+                l = 0;
+                curFile->curBuf++;
+            }
+            else if (*s == 'x' || *s == 'X') {
+                s++;
+                l = 0;
+                while (*s != '\0' && *s != ',' && *s != ']' && *s != '}' &&
+                       ! isspace(*s))
+                {
+                    i = (int)*s;
+                    if (i >= '0' && i <= '9') {
+                        i -= '0';
+                        l = (l<<4) + i;
+                    }
+                    else if (i >= 'A' && i <= 'F') {
+                        i -= ('A' - 10);
+                        l = (l<<4) + i;
+                    }
+                    else if (i >= 'a' && i <= 'f') {
+                        i -= ('a' - 10);
+                        l = (l<<4) + i;
+                    }
+                    s++;
+                }
+
+                if (fromBuffer()) {
+                    // Make sure we have at least 1 actual digit
+                    if (s - curFile->curBuf < minSize) {
+                        if (fromBuffer())
+                            curFile->curBuf = save;
+                        else
+                            putBack(save);
+                        ret = FALSE;
+                    }
+                    else
+                        curFile->curBuf = s;
+                }
+                else if (s - str < minSize) {
+                    if (fromBuffer())
+                        curFile->curBuf = save;
+                    else
+                        putBack(save);
+                    ret = FALSE;
+                }
+
+            }
+        }
     }
 
     return ret;
@@ -2060,135 +2060,135 @@ SoInput::readInteger(int32_t &l)
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
-	strcpy(str, backBuf.getString());
+        strcpy(str, backBuf.getString());
 
-	// Clear the back buffer.
-	backBuf.makeEmpty();
-	backBufIndex = -1;
+        // Clear the back buffer.
+        backBuf.makeEmpty();
+        backBufIndex = -1;
 
-	s = str;
-	ret = TRUE;
+        s = str;
+        ret = TRUE;
     }
 
     // Read from a memory buffer
     else if (fromBuffer()) {
-	s = curFile->curBuf;
-	ret = TRUE;
+        s = curFile->curBuf;
+        ret = TRUE;
     }
 
     // Read from a file
     else {
-	int i;
+        int i;
 
-	while ((i = getc(curFile->fp)) != EOF) {
-	    *s = (char) i;
-	    if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
-		putBack(*s);
-		*s = '\0';
-		break;
-	    }
-	    s++;
-	}
+        while ((i = getc(curFile->fp)) != EOF) {
+            *s = (char) i;
+            if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
+                putBack(*s);
+                *s = '\0';
+                break;
+            }
+            s++;
+        }
 
-	ret = (s - str <= 0) ? FALSE : TRUE;
-	s = str;
+        ret = (s - str <= 0) ? FALSE : TRUE;
+        s = str;
     }
     
     // Convert the string we just got into a int32_t integer
     if (ret) {
-	char	*ptr;
-	char	*save = s;
+        char	*ptr;
+        char	*save = s;
 
-	if (*s == '0') {
-	    s++;
+        if (*s == '0') {
+            s++;
 
-	    // The string just contains a single zero
-	    if (*s == '\0' || *s == ',' || *s == ']' || *s == '}' ||
-		isspace(*s))
-	    {
-		l = 0;
-		ret = TRUE;
-	    }
+            // The string just contains a single zero
+            if (*s == '\0' || *s == ',' || *s == ']' || *s == '}' ||
+                    isspace(*s))
+            {
+                l = 0;
+                ret = TRUE;
+            }
 
-	    // A hexadecimal format number
-	    else if (*s == 'x' || *s == 'X') {
-		s++;
-		l = 0;
-		ptr = s;
-		while (*s != '\0') {
-		    i = (int)*s;
-		    if (i >= '0' && i <= '9') {
-			i -= '0';
-			l = (l<<4) + i;
-		    }
-		    else if (i >= 'A' && i <= 'F') {
-			i -= ('A' - 10);
-			l = (l<<4) + i;
-		    }
-		    else if (i >= 'a' && i <= 'f') {
-			i -= ('a' - 10);
-			l = (l<<4) + i;
-		    }
-		    else {	// unrecognized character; stop processing
-			break;
-		    }
-		    s++;
-		}
-		if (s == ptr) {
-		    if (fromBuffer())
-			s = curFile->curBuf = save;
-		    else
-			putBack(save);
-		    ret = FALSE;
-		}
-	    }
+            // A hexadecimal format number
+            else if (*s == 'x' || *s == 'X') {
+                s++;
+                l = 0;
+                ptr = s;
+                while (*s != '\0') {
+                    i = (int)*s;
+                    if (i >= '0' && i <= '9') {
+                        i -= '0';
+                        l = (l<<4) + i;
+                    }
+                    else if (i >= 'A' && i <= 'F') {
+                        i -= ('A' - 10);
+                        l = (l<<4) + i;
+                    }
+                    else if (i >= 'a' && i <= 'f') {
+                        i -= ('a' - 10);
+                        l = (l<<4) + i;
+                    }
+                    else {	// unrecognized character; stop processing
+                        break;
+                    }
+                    s++;
+                }
+                if (s == ptr) {
+                    if (fromBuffer())
+                        s = curFile->curBuf = save;
+                    else
+                        putBack(save);
+                    ret = FALSE;
+                }
+            }
 
-	    // An octal format number
-	    else {
-		l = 0;
-		ptr = s;
-		while ((int)*s >= '0' && (int)*s <= '7') {
-		    i = (int)*s - '0';
-		    l = (l<<3) + i;
-		    s++;
-		}
-		if (s == ptr) {
-		    if (fromBuffer())
-			s = curFile->curBuf = save;
-		    else
-			putBack(save);
-		    ret = FALSE;
-		}
-	    }
-	}
+            // An octal format number
+            else {
+                l = 0;
+                ptr = s;
+                while ((int)*s >= '0' && (int)*s <= '7') {
+                    i = (int)*s - '0';
+                    l = (l<<3) + i;
+                    s++;
+                }
+                if (s == ptr) {
+                    if (fromBuffer())
+                        s = curFile->curBuf = save;
+                    else
+                        putBack(save);
+                    ret = FALSE;
+                }
+            }
+        }
 
-	// A decimal format number
-	else {
-	    int sign = 1;
+        // A decimal format number
+        else {
+            int sign = 1;
 
-	    l = 0;
-	    if (*s == '-' || *s == '+') {
-		s++;
-		sign = -1;
-	    }
-	    ptr = s;
-	    while ((int)*s >= '0' && (int)*s <= '9') {
-		i = (int)*s - '0';
-		l = l*10 + i;
-		s++;
-	    }
-	    l *= sign;
-	    if (s == ptr) {
-		if (fromBuffer())
-		    s = curFile->curBuf = save;
-		else
-		    putBack(save);
-		ret = FALSE;
-	    }
-	}
+            l = 0;
+            if (*s == '-' || *s == '+') {
+                s++;
+                sign = -1;
+            }
+            ptr = s;
+            while ((int)*s >= '0' && (int)*s <= '9') {
+                i = (int)*s - '0';
+                l = l*10 + i;
+                s++;
+            }
+            l *= sign;
+            if (s == ptr) {
+                if (fromBuffer())
+                    s = curFile->curBuf = save;
+                else
+                    putBack(save);
+                ret = FALSE;
+            }
+        }
 
-	if (fromBuffer())
-	    curFile->curBuf = s;
+        if (fromBuffer())
+            curFile->curBuf = s;
     }
 
     return ret;
@@ -2215,128 +2215,128 @@ SoInput::readUnsignedInteger(uint32_t &l)
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
-	strcpy(str, backBuf.getString());
+        strcpy(str, backBuf.getString());
 
-	// Clear the back buffer.
-	backBuf.makeEmpty();
-	backBufIndex = -1;
+        // Clear the back buffer.
+        backBuf.makeEmpty();
+        backBufIndex = -1;
 
-	s = str;
-	ret = TRUE;
+        s = str;
+        ret = TRUE;
     }
 
     // Read from a memory buffer
     else if (fromBuffer()) {
-	s = curFile->curBuf;
-	ret = TRUE;
+        s = curFile->curBuf;
+        ret = TRUE;
     }
 
     // Read from a file
     else {
-	int i;
+        int i;
 
-	while ((i = getc(curFile->fp)) != EOF) {
-	    *s = (char) i;
-	    if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
-		putBack(*s);
-		*s = '\0';
-		break;
-	    }
-	    s++;
-	}
+        while ((i = getc(curFile->fp)) != EOF) {
+            *s = (char) i;
+            if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
+                putBack(*s);
+                *s = '\0';
+                break;
+            }
+            s++;
+        }
 
-	ret = (s - str <= 0) ? FALSE : TRUE;
-	s = str;
+        ret = (s - str <= 0) ? FALSE : TRUE;
+        s = str;
     }
 
     // Convert the string we just got into an uint32_teger
     if (ret) {
-	char	*ptr;
-	char	*save = s;
+        char	*ptr;
+        char	*save = s;
 
-	if (*s == '0') {
-	    s++;
+        if (*s == '0') {
+            s++;
 
-	    // The string just contains a single zero
-	    if (*s == '\0' || *s == ',' || *s == ']' || *s == '}' ||
-		isspace(*s))
-	    {
-		l = 0;
-		ret = TRUE;
-	    }
+            // The string just contains a single zero
+            if (*s == '\0' || *s == ',' || *s == ']' || *s == '}' ||
+                    isspace(*s))
+            {
+                l = 0;
+                ret = TRUE;
+            }
 
-	    // A hexadecimal format number
-	    else if (*s == 'x' || *s == 'X') {
-		s++;
-		l = 0;
-		ptr = s;
-		while (*s != '\0') {
-		    i = (int)*s;
-		    if (i >= '0' && i <= '9') {
-			i -= '0';
-			l = (l<<4) + i;
-		    }
-		    else if (i >= 'A' && i <= 'F') {
-			i -= ('A' - 10);
-			l = (l<<4) + i;
-		    }
-		    else if (i >= 'a' && i <= 'f') {
-			i -= ('a' - 10);
-			l = (l<<4) + i;
-		    }
-		    else {	// unrecognized character; stop processing
-			break;
-		    }
-		    s++;
-		}
-		if (s == ptr) {
-		    if (fromBuffer())
-			s = curFile->curBuf = save;
-		    else
-			putBack(save);
-		    ret = FALSE;
-		}
-	    }
+            // A hexadecimal format number
+            else if (*s == 'x' || *s == 'X') {
+                s++;
+                l = 0;
+                ptr = s;
+                while (*s != '\0') {
+                    i = (int)*s;
+                    if (i >= '0' && i <= '9') {
+                        i -= '0';
+                        l = (l<<4) + i;
+                    }
+                    else if (i >= 'A' && i <= 'F') {
+                        i -= ('A' - 10);
+                        l = (l<<4) + i;
+                    }
+                    else if (i >= 'a' && i <= 'f') {
+                        i -= ('a' - 10);
+                        l = (l<<4) + i;
+                    }
+                    else {	// unrecognized character; stop processing
+                        break;
+                    }
+                    s++;
+                }
+                if (s == ptr) {
+                    if (fromBuffer())
+                        s = curFile->curBuf = save;
+                    else
+                        putBack(save);
+                    ret = FALSE;
+                }
+            }
 
-	    // An octal format number
-	    else {
-		l = 0;
-		ptr = s;
-		while ((int)*s >= '0' && (int)*s <= '7') {
-	            i = (int)*s - '0';
-	            l = (l<<3) + i;
-	            s++;
-		}
-		if (s == ptr) {
-		    if (fromBuffer())
-			s = curFile->curBuf = save;
-		    else
-			putBack(save);
-		    ret = FALSE;
-		}
-	    }
-	}
+            // An octal format number
+            else {
+                l = 0;
+                ptr = s;
+                while ((int)*s >= '0' && (int)*s <= '7') {
+                    i = (int)*s - '0';
+                    l = (l<<3) + i;
+                    s++;
+                }
+                if (s == ptr) {
+                    if (fromBuffer())
+                        s = curFile->curBuf = save;
+                    else
+                        putBack(save);
+                    ret = FALSE;
+                }
+            }
+        }
 
-	// A decimal format number
-	else {
-	    l = 0;
-	    ptr = s;
-	    while ((int)*s >= '0' && (int)*s <= '9') {
-		i = (int)*s - '0';
-		l = l*10 + i;
-		s++;
-	    }
-	    if (s == ptr) {
-		if (fromBuffer())
-		    s = curFile->curBuf = save;
-		else
-		    putBack(save);
-		ret = FALSE;
-	    }
-	}
+        // A decimal format number
+        else {
+            l = 0;
+            ptr = s;
+            while ((int)*s >= '0' && (int)*s <= '9') {
+                i = (int)*s - '0';
+                l = l*10 + i;
+                s++;
+            }
+            if (s == ptr) {
+                if (fromBuffer())
+                    s = curFile->curBuf = save;
+                else
+                    putBack(save);
+                ret = FALSE;
+            }
+        }
 
-	if (fromBuffer())
-	    curFile->curBuf = s;
+        if (fromBuffer())
+            curFile->curBuf = s;
     }
 
     return ret;
@@ -2361,23 +2361,23 @@ SoInput::readUnsignedIntegerString(char *str)
     // If the integer begins with '0', it may be in octal or hex
     if (readChar(s, '0')) {
 
-	// Check for '0x', signifying hex
-	if (readChar(s + 1, 'x')) {
-	    s += 2 + readHexDigits(s + 2);
-	    minSize = 3;
-	}
+        // Check for '0x', signifying hex
+        if (readChar(s + 1, 'x')) {
+            s += 2 + readHexDigits(s + 2);
+            minSize = 3;
+        }
 
-	// Read digits after zero. There don't have to be any, though
-	else
-	    s += 1 + readDigits(s + 1);
+        // Read digits after zero. There don't have to be any, though
+        else
+            s += 1 + readDigits(s + 1);
     }
 
     else
-	s += readDigits(s);
+        s += readDigits(s);
 
     // Make sure we have at least 1 actual digit
     if (s - str < minSize)
-	return FALSE;
+        return FALSE;
 
     // End string with null byte
     *s = '\0';
@@ -2406,98 +2406,98 @@ SoInput::readReal(double &d)
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
-	n = sscanf(backBuf.getString(), "%lf", &d);
+        n = sscanf(backBuf.getString(), "%lf", &d);
 
-	// Clear the back buffer.
-	backBuf.makeEmpty();
-	backBufIndex = -1;
+        // Clear the back buffer.
+        backBuf.makeEmpty();
+        backBufIndex = -1;
 
-	ret = (n == 0 || n == EOF) ? FALSE : TRUE;
+        ret = (n == 0 || n == EOF) ? FALSE : TRUE;
     }
 
     else if (fromBuffer()) {
-	SbBool	gotNum = FALSE;
-    
-	////////////////////////////////////////////
-	//
-	// Leading sign
-    
-	n = readChar(s, '-');
-	if (n == 0)
-	    n = readChar(s, '+');
-	s += n;
-    
-	////////////////////////////////////////////
-	//
-	// Integer before decimal point
-    
-	if ((n = readDigits(s)) > 0) {
-	    gotNum = TRUE;
-	    s += n;
-	}
-    
-	////////////////////////////////////////////
-	//
-	// Decimal point
-    
-	if (readChar(s, '.') > 0) {
-	    s++;
-    
-	    ////////////////////////////////////////////
-	    //
-	    // Integer after decimal point (no sign)
-    
-	    if ((n = readDigits(s)) > 0) {
-		gotNum = TRUE;
-		s += n;
-	    }
-	}
-    
-	// If no number before or after decimal point, there's a problem
-	if (! gotNum)
-	    return FALSE;
-    
-	////////////////////////////////////////////
-	//
-	// 'e' or 'E' for exponent
-    
-	n = readChar(s, 'e');
-	if (n == 0)
-	    n = readChar(s, 'E');
-    
-	if (n > 0) {
-	    s += n;
-    
-	    ////////////////////////////////////////////
-	    //
-	    // Sign for exponent
-    
-	    n = readChar(s, '-');
-	    if (n == 0)
-		n = readChar(s, '+');
-	    s += n;
-    
-	    ////////////////////////////////////////////
-	    //
-	    // Exponent integer
-    
-	    if ((n = readDigits(s)) > 0)
-		s += n;
-    
-	    else
-		return FALSE;	// Invalid exponent
-	}
+        SbBool	gotNum = FALSE;
 
-	// Terminator
-	*s = '\0';
+        ////////////////////////////////////////////
+        //
+        // Leading sign
 
-	d = atof(str);
+        n = readChar(s, '-');
+        if (n == 0)
+            n = readChar(s, '+');
+        s += n;
 
-	ret = TRUE;
+        ////////////////////////////////////////////
+        //
+        // Integer before decimal point
+
+        if ((n = readDigits(s)) > 0) {
+            gotNum = TRUE;
+            s += n;
+        }
+
+        ////////////////////////////////////////////
+        //
+        // Decimal point
+
+        if (readChar(s, '.') > 0) {
+            s++;
+
+            ////////////////////////////////////////////
+            //
+            // Integer after decimal point (no sign)
+
+            if ((n = readDigits(s)) > 0) {
+                gotNum = TRUE;
+                s += n;
+            }
+        }
+
+        // If no number before or after decimal point, there's a problem
+        if (! gotNum)
+            return FALSE;
+
+        ////////////////////////////////////////////
+        //
+        // 'e' or 'E' for exponent
+
+        n = readChar(s, 'e');
+        if (n == 0)
+            n = readChar(s, 'E');
+
+        if (n > 0) {
+            s += n;
+
+            ////////////////////////////////////////////
+            //
+            // Sign for exponent
+
+            n = readChar(s, '-');
+            if (n == 0)
+                n = readChar(s, '+');
+            s += n;
+
+            ////////////////////////////////////////////
+            //
+            // Exponent integer
+
+            if ((n = readDigits(s)) > 0)
+                s += n;
+
+            else
+                return FALSE;	// Invalid exponent
+        }
+
+        // Terminator
+        *s = '\0';
+
+        d = atof(str);
+
+        ret = TRUE;
     }
     else {
-	n = fscanf(curFile->fp, "%lf", &d);
-	ret =  (n == 0 || n == EOF) ? FALSE : TRUE;
+        n = fscanf(curFile->fp, "%lf", &d);
+        ret =  (n == 0 || n == EOF) ? FALSE : TRUE;
     }
 
     return ret;
@@ -2519,28 +2519,28 @@ SoInput::readDigits(char *string)
     char c, *s = string;
 
     if (fromBuffer()) {
-	while (getASCIIBuffer(c)) {
+        while (getASCIIBuffer(c)) {
 
-	    if (isdigit(c))
-		*s++ = c;
+            if (isdigit(c))
+                *s++ = c;
 
-	    else {
-		putBack(c);
-		break;
-	    }
-	}
+            else {
+                putBack(c);
+                break;
+            }
+        }
     }
     else {
-	while (getASCIIFile(c)) {
+        while (getASCIIFile(c)) {
 
-	    if (isdigit(c))
-		*s++ = c;
+            if (isdigit(c))
+                *s++ = c;
 
-	    else {
-		putBack(c);
-		break;
-	    }
-	}
+            else {
+                putBack(c);
+                break;
+            }
+        }
     }
 
     return s - string;
@@ -2562,28 +2562,28 @@ SoInput::readHexDigits(char *string)
     char c, *s = string;
 
     if (fromBuffer()) {
-	while (getASCIIBuffer(c)) {
+        while (getASCIIBuffer(c)) {
 
-	    if (isxdigit(c))
-		*s++ = c;
+            if (isxdigit(c))
+                *s++ = c;
 
-	    else {
-		putBack(c);
-		break;
-	    }
-	}
+            else {
+                putBack(c);
+                break;
+            }
+        }
     }
     else {
-	while (getASCIIFile(c)) {
+        while (getASCIIFile(c)) {
 
-	    if (isxdigit(c))
-		*s++ = c;
+            if (isxdigit(c))
+                *s++ = c;
 
-	    else {
-		putBack(c);
-		break;
-	    }
-	}
+            else {
+                putBack(c);
+                break;
+            }
+        }
     }
 
     return s - string;
@@ -2605,32 +2605,32 @@ SoInput::readChar(char *string, char charToRead)
     int		ret;
 
     if (fromBuffer()) {
-	if (! getASCIIBuffer(c))
-	    ret = 0;
+        if (! getASCIIBuffer(c))
+            ret = 0;
 
-	else if (c == charToRead) {
-	    *string = c;
-	    ret = 1;
-	}
+        else if (c == charToRead) {
+            *string = c;
+            ret = 1;
+        }
 
-	else {
-	    putBack(c);
-	    ret = 0;
-	}
+        else {
+            putBack(c);
+            ret = 0;
+        }
     }
     else {
-	if (! getASCIIFile(c))
-	    ret = 0;
+        if (! getASCIIFile(c))
+            ret = 0;
 
-	else if (c == charToRead) {
-	    *string = c;
-	    ret = 1;
-	}
+        else if (c == charToRead) {
+            *string = c;
+            ret = 1;
+        }
 
-	else {
-	    putBack(c);
-	    ret = 0;
-	}
+        else {
+            putBack(c);
+            ret = 0;
+        }
     }
 
     return ret;
@@ -2652,7 +2652,7 @@ SoInput::readChar(char *string, char charToRead)
 
 void
 SoInput::addReference(const SbName &name,	// Reference name
-		      SoBase *base, SbBool addToGlobalDict)
+                      SoBase *base, SbBool addToGlobalDict)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -2667,24 +2667,24 @@ SoInput::addReference(const SbName &name,	// Reference name
     // If we're reading a 1.0 file and the name is an '_' followed by
     // all digits, don't name the node.
     if (n[0] == '_' &&  curFile->ivVersion == 1.0f) {
-	int i;
-	for (i = 1; i < length; i++) {
-	    if (!isdigit(n[i])) break;
-	}
-	if (i == length) return;
+        int i;
+        for (i = 1; i < length; i++) {
+            if (!isdigit(n[i])) break;
+        }
+        if (i == length) return;
     }
 
     if (addToGlobalDict) {
-	// Look for the first '+':
+        // Look for the first '+':
         const char *firstPlus = strchr(n, '+');
 
-	if (firstPlus == NULL) {
-	    base->setName(name);
-	}
-	else if (firstPlus != n) {
-	    SbName instanceName(SbString(n, 0, firstPlus-n-1));
-	    base->setName(instanceName);
-	}
+        if (firstPlus == NULL) {
+            base->setName(name);
+        }
+        else if (firstPlus != n) {
+            SbName instanceName(SbString(n, 0, firstPlus-n-1));
+            base->setName(instanceName);
+        }
     }
 }
 
@@ -2720,7 +2720,7 @@ SoInput::findReference(const SbName &name) const // Reference name
 
     // Generates a CC warning. Ho hum.
     if (curFile->refDict->find((unsigned long) name.getString(), base))
-	return (SoBase *) base;
+        return (SoBase *) base;
 
     return NULL;
 }
@@ -2744,13 +2744,13 @@ SoInput::makeRoomInBuf(size_t nBytes)
 
     // If buffer not big enough, realloc a bigger one
     if (nBytes >= tmpBufSize) {
-	// While not enough room, double size of buffer
-	while (nBytes >= tmpBufSize)
-	    tmpBufSize *= 2;
+        // While not enough room, double size of buffer
+        while (nBytes >= tmpBufSize)
+            tmpBufSize *= 2;
 
         void* ptr = realloc(tmpBuffer, tmpBufSize);
 
-	// Test for bad reallocation
+        // Test for bad reallocation
         if (ptr == NULL) {
             free (tmpBuffer);
             tmpBuffer = NULL;
