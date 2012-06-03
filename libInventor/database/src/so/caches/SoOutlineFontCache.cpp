@@ -215,7 +215,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
     //TODO flSetHint(FL_HINT_TOLERANCE, uems);
 
     // If error creating font:
-    if (FT_New_Face( context, SoFontNameElement::getFontFileName(font.getString()).c_str(), 0, &fontId )) {
+    if (FT_New_Face( context, SoFontNameElement::getFontFileName(font).getString(), 0, &fontId )) {
 #ifdef DEBUG
             SoDebugError::post("SoText3::getFont",
                       "Couldn't find font %s, replacing with Utopia-Regular",

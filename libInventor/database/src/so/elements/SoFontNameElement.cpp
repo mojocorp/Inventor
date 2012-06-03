@@ -54,7 +54,7 @@
 #include <Inventor/elements/SoFontNameElement.h>
 #include <Inventor/errors/SoDebugError.h>
 
-std::map<std::string, std::string> SoFontNameElement::s_font_map;
+std::map<SbName, SbString> SoFontNameElement::s_font_map;
 
 SO_ELEMENT_SOURCE(SoFontNameElement);
 
@@ -147,20 +147,20 @@ SoFontNameElement::get(SoState *state)
 //    Returns the font path
 //
 // Use: public
-std::string
-SoFontNameElement::getFontFileName(const std::string & fontName)
+SbString
+SoFontNameElement::getFontFileName(const SbName & fontName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     initFontMap();
 
-    if (!s_font_map[fontName].empty()) {
-        return s_font_map[fontName].c_str();
+    if (s_font_map[fontName].getLength()) {
+        return s_font_map[fontName];
     }
 
 #ifdef DEBUG
     SoDebugError::post("SoFontNameElement::getFontFileName",
-                       "Couldn't find font %s, replacing with %s", fontName.c_str(), SoFontNameElement::getDefault().getString());
+                       "Couldn't find font %s, replacing with %s", fontName.getString(), SoFontNameElement::getDefault().getString());
 #endif
 
     return SoFontNameElement::getDefault().getString();
@@ -173,7 +173,7 @@ SoFontNameElement::getFontFileName(const std::string & fontName)
 //
 // Use: public
 void
-SoFontNameElement::addFontFileName(const std::string & fontName, const std::string & fontPath)
+SoFontNameElement::addFontFileName(const SbName & fontName, const SbString & fontPath)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -294,6 +294,8 @@ SoFontNameElement::initFontMap()
             s_font_map["Times-Oblique"] = "/Library/Fonts/Times New Roman Italic.ttf";
             s_font_map["Times-Bold"] = "/Library/Fonts/Times New Roman Bold.ttf";
             s_font_map["Times-Bold Oblique"] = "/Library/Fonts/Times New Roman Bold Italic.ttf";
+
+            s_font_map["Arial Unicode"] = "/Library/Fonts/Arial Unicode.ttf";
 
 #else
             s_font_map["Courier"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
