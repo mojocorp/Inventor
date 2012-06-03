@@ -133,7 +133,6 @@ private:
     int num;
     int refCount;
     int context;
-    static int texture_object_extensionID;
     friend class SoGLCacheContextElement;
 };
 
