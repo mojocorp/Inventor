@@ -9,7 +9,7 @@ DESTDIR  = ../build
 DEPENDPATH += .
 INCLUDEPATH += .
 
-win32 {
+win32|mac {
 DEPENDPATH += ../3rdparty/libjpeg
 INCLUDEPATH += ../3rdparty/libjpeg
 }
