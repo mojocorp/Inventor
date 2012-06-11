@@ -138,7 +138,7 @@ SbFile::baseName(const SbString & string)
 SbString
 SbFile::extension(const SbString & string)
 {
-    int firstDot = string.find(".");
+    int firstDot = string.find(".", baseName(string).getLength());
     if (firstDot == -1)
         return "";
 
