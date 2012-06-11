@@ -20,7 +20,7 @@ TEST(SbFile, BaseName) {
 
 TEST(SbFile, Extension) {
 
-    SbString filename("/tmp/archive.tar.gz");
+    SbString filename("/tmp/../archive.tar.gz");
 
     EXPECT_TRUE(SbFile::extension(filename) == "tar.gz");
 
