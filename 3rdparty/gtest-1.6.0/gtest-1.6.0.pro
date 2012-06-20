@@ -1,6 +1,5 @@
 TEMPLATE = lib
 TARGET = gtest
-VERSION = 1.6.0
 
 DESTDIR  = ../../build
 
