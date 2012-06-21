@@ -45,4 +45,4 @@ include(database/database.pri)
 include(interaction/interaction.pri)
 include(nodekits/nodekits.pri)
 
-LIBS += -L$$OUT_PWD/../build -limage -ljpeg -lfreetype -lglew
+LIBS += -L$$OUT_PWD/../build -limage -ljpeg -lfreetype -lGLEW
