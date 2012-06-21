@@ -87,9 +87,6 @@ public:
     /// Constructor
     SoGLRenderCache(SoState *state);
 
-    /// Destructor
-    ~SoGLRenderCache();
-
     /// Maintain list of cache dependencies.  If one cache calls
     /// another inside of it, we have to make sure that the inner cache
     /// isn't deleted before the outer one.
@@ -127,6 +124,9 @@ protected:
     virtual void destroy(SoState *state);
 
 private:
+    /// Destructor
+    ~SoGLRenderCache();
+
     SoGLDisplayList *list;  // Display list structure
     SbBool  listOpen; // Whether display list is open
     SbPList  nestedCaches; // List of nested caches
