@@ -75,9 +75,6 @@ public:
     /// Constructor and destructor
     SoNormalCache(SoState *state);
 
-    /// Destructor
-    ~SoNormalCache();
-
     /// Stores a list of normals in the cache
     void set(int numNormals, const SbVec3f *normals);
 
@@ -92,6 +89,9 @@ public:
     }
 
 private:
+    /// Destructor
+    ~SoNormalCache();
+
     int   numNormals;  // Number of normals
     const SbVec3f *normals;  // Array of normals
 };
