@@ -114,8 +114,8 @@ class SOQT_EXPORT SoQtViewer : public SoQtRenderArea {
     // remove it when another scene is supplied to the viewer.
     //
     enum Type {
-	BROWSER, // default viewer type
-	EDITOR
+        BROWSER, // default viewer type
+        EDITOR
     };
     
     //
@@ -125,31 +125,39 @@ class SOQT_EXPORT SoQtViewer : public SoQtRenderArea {
     // description of those draw styles.
     //
     enum DrawStyle {
-	VIEW_AS_IS,		// unchanged
-	VIEW_HIDDEN_LINE,	// render only the front most lines
-	VIEW_NO_TEXTURE,	// render withought textures
-	VIEW_LOW_COMPLEXITY,	// render low complexity and no texture
-	VIEW_LINE,		// wireframe draw style
-	VIEW_POINT,		// point draw style
-	VIEW_BBOX,		// bounding box draw style
-	VIEW_LOW_RES_LINE,	// low complexity wireframe + no depth clearing
-	VIEW_LOW_RES_POINT,	// low complexity point + no depth clearing
-	VIEW_SAME_AS_STILL	// forces the INTERACTIVE draw style to match STILL
+        VIEW_AS_IS,		// unchanged
+        VIEW_HIDDEN_LINE,	// render only the front most lines
+        VIEW_NO_TEXTURE,	// render withought textures
+        VIEW_LOW_COMPLEXITY,	// render low complexity and no texture
+        VIEW_LINE,		// wireframe draw style
+        VIEW_POINT,		// point draw style
+        VIEW_BBOX,		// bounding box draw style
+        VIEW_LOW_RES_LINE,	// low complexity wireframe + no depth clearing
+        VIEW_LOW_RES_POINT,	// low complexity point + no depth clearing
+        VIEW_SAME_AS_STILL	// forces the INTERACTIVE draw style to match STILL
     };
     enum DrawType {
-	STILL,			// default to VIEW_NO_TEXTURE (or VIEW_AS_IS)
-	INTERACTIVE		// default to VIEW_SAME_AS_STILL
+        STILL,			// default to VIEW_NO_TEXTURE (or VIEW_AS_IS)
+        INTERACTIVE		// default to VIEW_SAME_AS_STILL
     };
     
     //
     // list of different buffering types
     //
     enum BufferType {
-	BUFFER_SINGLE,
-	BUFFER_DOUBLE, 
-	BUFFER_INTERACTIVE	// changes to double only when interactive
+        BUFFER_SINGLE,
+        BUFFER_DOUBLE,
+        BUFFER_INTERACTIVE	// changes to double only when interactive
     };
     
+    enum StereoType{
+        MONOSCOPIC = 0,
+        QUADBUFFER,
+        ANAGLYPH_RED_CYAN,
+        ANAGLYPH_BLUE_YELLOW,
+        ANAGLYPH_GREEN_MAGENTA
+    };
+
     //
     // Sets/gets the scene graph to render. Whenever a new scene is supplied
     // the first camera encountered will be by default used as the edited
@@ -273,10 +281,14 @@ public slots:
     // The user can also specify what the offset between the two views 
     // should be.
     //
-    virtual void    setStereoViewing(SbBool onOrOff);
-    virtual SbBool  isStereoViewing();
-    void	    setStereoOffset(float dist)	{ stereoOffset = dist; }
-    float	    getStereoOffset()	{ return stereoOffset; }
+    virtual SbBool  isStereoViewing() const;
+    virtual void setStereoType(StereoType type);
+    StereoType getStereoType() const;
+
+    void    setStereoOffset(float dist)	{ stereoOffset = dist; }
+    float   getStereoOffset() const { return stereoOffset; }
+    void    setStereoBalance(float dist)	{ stereoBalance = dist; }
+    float   getStereoBalance() const { return stereoBalance; }
     
     //
     // Seek methods
@@ -470,8 +482,10 @@ protected:
     SoType		cameraType;
     BufferType		bufferType;
     SbBool  	    	interactiveFlag; // TRUE while doing interactive work
+    StereoType  stereoType;
     float		stereoOffset;
-    
+    float       stereoBalance;
+
     // draw style vars
     DrawStyle		stillDrawStyle, interactiveDrawStyle;
     SbBool		checkForDrawStyle;

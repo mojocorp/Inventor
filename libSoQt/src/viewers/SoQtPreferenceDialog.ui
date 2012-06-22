@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Preferences</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>4</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="seekTab">
       <attribute name="title">
@@ -305,39 +305,132 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <widget class="QCheckBox" name="stereoViewingToggle">
-         <property name="text">
-          <string>Stereo viewing</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
          <item>
-          <widget class="QLabel" name="label_10">
+          <widget class="QCheckBox" name="stereoViewingToggle">
            <property name="text">
-            <string>Camera rotation:</string>
+            <string>Stereo viewing</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="stereoDistSlider">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QDoubleSpinBox" name="stereoDistInput">
-           <property name="minimum">
-            <double>-100.000000000000000</double>
-           </property>
-           <property name="maximum">
-            <double>100.000000000000000</double>
-           </property>
+          <widget class="QComboBox" name="stereoTypeComboBox">
+           <item>
+            <property name="text">
+             <string>Quadbuffer</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Anaglyph (red/cyan)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Anaglyph (blue/yellow)</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Anaglyph (green/magenta)</string>
+            </property>
+           </item>
           </widget>
          </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="stereoAdjustmentsGroupBox">
+         <property name="title">
+          <string>Stereo Adjustments</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Parallax balance:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>Eye separation:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QDoubleSpinBox" name="eyeSeparationInput">
+            <property name="minimum">
+             <double>-10.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>10.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QSlider" name="parallaxBalanceSlider">
+            <property name="minimum">
+             <number>0</number>
+            </property>
+            <property name="maximum">
+             <number>100</number>
+            </property>
+            <property name="value">
+             <number>100</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QDoubleSpinBox" name="parallaxBalanceInput">
+            <property name="minimum">
+             <double>0.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>1.000000000000000</double>
+            </property>
+            <property name="singleStep">
+             <double>0.100000000000000</double>
+            </property>
+            <property name="value">
+             <double>1.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSlider" name="eyeSeparationSlider">
+            <property name="minimum">
+             <number>-1000</number>
+            </property>
+            <property name="maximum">
+             <number>1000</number>
+            </property>
+            <property name="value">
+             <number>1</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+         <zorder>eyeSeparationInput</zorder>
+         <zorder>label_10</zorder>
+         <zorder>eyeSeparationSlider</zorder>
+         <zorder>label_12</zorder>
+         <zorder>parallaxBalanceInput</zorder>
+         <zorder>parallaxBalanceSlider</zorder>
+        </widget>
        </item>
        <item>
         <spacer name="verticalSpacer_2">
