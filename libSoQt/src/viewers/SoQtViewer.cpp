@@ -93,6 +93,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QApplication>
+#include <QMessageBox>
 
 // keep a pointer to global time, since we are going to access it a lot.
 SoSFTime *SoQtViewer::viewerRealTime = NULL;
@@ -133,7 +134,9 @@ SoQtViewer::SoQtViewer(
     finishCBList = new SoCallbackList;
     interactiveCount = 0;
     bufferType = isDoubleBuffer() ? BUFFER_DOUBLE : BUFFER_SINGLE;
-    stereoOffset = 3.0;
+    stereoType = MONOSCOPIC;
+    stereoOffset = 1.0;
+    stereoBalance = 0.5;
     sceneSize = 0.0;	// not computed yet.
     viewerSpeed = 1.0;  // default. SoQtFullViewer add UI to increase/decrease
 
@@ -577,37 +580,73 @@ SoQtViewer::setAutoClipTolerance ( float tolerance )
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//	sets stereo mode
+//	gets stereo mode
 //
 // Use: virtual public
-void
-SoQtViewer::setStereoViewing(SbBool flag)
+SbBool
+SoQtViewer::isStereoViewing() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (flag == isStereoViewing())
-	return;
-    
-    // First, check to see if the OpenGL stereo visual can be created
-    setStereoBuffer(flag);
-    
+    // done in SoQtGLWidget
+    return stereoType != MONOSCOPIC;
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//	gets stereo mode
+//
 //
 // Use: virtual public
-SbBool
-SoQtViewer::isStereoViewing()
+void
+SoQtViewer::setStereoType(StereoType type)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // done in SoQtGLWidget
-    return isStereoBuffer();
+    if (stereoType == type)
+        return;
+
+    switch(type)
+    {
+    case MONOSCOPIC:
+        setStereoBuffer(false);
+        break;
+    case QUADBUFFER:
+    {
+        // First, check to see if the OpenGL stereo visual can be created
+        setStereoBuffer(true);
+
+        if (!isStereoBuffer()) {
+            QMessageBox::critical (baseWidget(), tr("Stereo Error"), tr("Quadbuffer Stereo Viewing can't be set on this machine."));
+            return;
+        }
+        break;
+    }
+    case ANAGLYPH_RED_CYAN:
+    case ANAGLYPH_BLUE_YELLOW:
+    case ANAGLYPH_GREEN_MAGENTA:
+        setStereoBuffer(false);
+        break;
+    }
+
+    stereoType = type;
+
+    scheduleRedraw();
 }
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//	gets stereo type
+//
+// Use: virtual public
+SoQtViewer::StereoType
+SoQtViewer::getStereoType() const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return stereoType;
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -964,17 +1003,17 @@ SoQtViewer::actualRedraw()
 ////////////////////////////////////////////////////////////////////////
 {
     if (isAutoClipping() && ! isStereoViewing())
-	adjustCameraClippingPlanes();
+        adjustCameraClippingPlanes();
     
     // update the headlight if necessary
     if (headlightFlag && camera)
-	headlightRot->rotation.setValue(camera->orientation.getValue());
+        headlightRot->rotation.setValue(camera->orientation.getValue());
     
     // make sure that we have a valid sceneSize value - but don't compute
     // a new sceneSize value for every redraw since the walking speed should
     // really be constant.
     if (sceneSize == 0.0)
-	recomputeSceneSize();
+        recomputeSceneSize();
     
     //
     // Check to see if we are in stereo mode, if so draw the scene
@@ -983,91 +1022,72 @@ SoQtViewer::actualRedraw()
     //
     
     if ( isStereoViewing() && camera != NULL) {
-	
-	// Check the camera type, since stereo is different:
-	//
-	// Ortho camera: setereo is accomplished by simply rorating
-	// the camera (around the point of interest) by 6 degree. 
-	//
-	// Perspective camera: we translate the camera and rotate
-	// them to look at the same point of interest (idealy we also would
-	// make sure the plane of convergence is exactly the same for
-	// both perspective views, unfortunatly we cannot do this with
-	// the current symetric view volumes).
-	//
-	
-	// save the camera original values to restore the camera after
-	// both views are rendered. This means we will use this in between
-	// left and right view for things like picking.
-	SbVec3f	    camOrigPos = camera->position.getValue();
-	SbRotation  camOrigRot = camera->orientation.getValue();
-	
-	// get the camera focal point
-	SbMatrix mx;
-	mx = camOrigRot;
-	SbVec3f forward( -mx[2][0], -mx[2][1], -mx[2][2]);
-	float radius = camera->focalDistance.getValue();
-	SbVec3f center = camOrigPos + radius * forward;
-	
 
-	
-	//
-	// change the camera for the LEFT eye view, and render
-	//
+        getGLRenderAction()->setStereoOffset(stereoOffset);
+        getGLRenderAction()->setStereoBalance(stereoBalance);
 
-	    glDrawBuffer( (isDoubleBuffer() && !drawToFrontBuffer) ? 
-						    GL_BACK_LEFT : GL_FRONT_LEFT);
-	// rotate the camera by - stereoOffset/2 degrees
-	camera->orientation = 
-	    SbRotation(SbVec3f(0, 1, 0), - stereoOffset * M_PI / 360.0) * camOrigRot;
-	
-	// reposition camera to look at pt of interest
-	mx = camera->orientation.getValue();
-	forward.setValue( -mx[2][0], -mx[2][1], -mx[2][2]);
-	camera->position = center - radius * forward;
-	
-	if (isAutoClipping())
-	    adjustCameraClippingPlanes();
-	doRendering();
-	
-	//
-	// change the camera for the RIGHT eye view, and render
-	//
+        getGLRenderAction()->setStereoMode(SoGLRenderAction::LEFT_VIEW);
+        switch (stereoType) {
+        case QUADBUFFER:
+            glDrawBuffer( isDoubleBuffer() ? GL_BACK_LEFT : GL_FRONT_LEFT);
+            break;
+        case ANAGLYPH_RED_CYAN:
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glColorMask(GL_TRUE, GL_FALSE, GL_FALSE, GL_TRUE);
+            break;
+        case ANAGLYPH_BLUE_YELLOW:
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glColorMask(GL_FALSE, GL_FALSE, GL_TRUE, GL_TRUE);
+            break;
+        case ANAGLYPH_GREEN_MAGENTA:
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+            glColorMask(GL_FALSE, GL_TRUE, GL_FALSE, GL_TRUE);
+            break;
+        default:
+            break;
+        }
 
-	    glDrawBuffer( (isDoubleBuffer() && !drawToFrontBuffer) ? 
-						    GL_BACK_RIGHT : GL_FRONT_RIGHT);
-	// rotate the camera by + stereoOffset/2 degrees
-	camera->orientation = 
-	    SbRotation(SbVec3f(0, 1, 0), stereoOffset * M_PI / 360.0) * camOrigRot;
-	
-	// reposition camera to look at pt of interest
-	mx = camera->orientation.getValue();
-	forward.setValue( -mx[2][0], -mx[2][1], -mx[2][2]);
-	camera->position = center - radius * forward;
-	
-	if (isAutoClipping())
-	    adjustCameraClippingPlanes();
-	doRendering();
-	
-	
-	//
-	// reset the camera original values now that we are done rendering
-	// the stereo views (leave aspect ratio to do correct picking).
-	camera->enableNotify(FALSE); // don't cause a redraw
-	camera->position = camOrigPos;
-	camera->orientation = camOrigRot;
-	camera->enableNotify(TRUE);
-	
 
-	    // restore to draw to both buffer (viewer feedback)
-	    glDrawBuffer( (isDoubleBuffer() && !drawToFrontBuffer) ? 
-						    GL_BACK : GL_FRONT);
+        if (isAutoClipping())
+            adjustCameraClippingPlanes();
+        doRendering();
+
+        getGLRenderAction()->setStereoMode(SoGLRenderAction::RIGHT_VIEW);
+        switch (stereoType) {
+        case QUADBUFFER:
+            glDrawBuffer( isDoubleBuffer() ? GL_BACK_RIGHT : GL_FRONT_RIGHT);
+            break;
+        case ANAGLYPH_RED_CYAN:
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glColorMask(GL_FALSE, GL_TRUE, GL_TRUE, GL_TRUE);
+            break;
+        case ANAGLYPH_BLUE_YELLOW:
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glColorMask(GL_TRUE, GL_TRUE, GL_FALSE, GL_TRUE);
+            break;
+        case ANAGLYPH_GREEN_MAGENTA:
+            glClear(GL_DEPTH_BUFFER_BIT);
+            glColorMask(GL_TRUE, GL_FALSE, GL_TRUE, GL_TRUE);
+            break;
+        default:
+            break;
+        }
+
+        if (isAutoClipping())
+            adjustCameraClippingPlanes();
+        doRendering();
     }
     //
     // else not stereo viewing, so do the regular rendering....
     //
-    else
-	doRendering();
+    else {
+        getGLRenderAction()->setStereoMode(SoGLRenderAction::MONOSCOPIC);
+
+        glDrawBuffer( (isDoubleBuffer() && !drawToFrontBuffer) ? GL_BACK : GL_FRONT);
+        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+
+        doRendering();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////

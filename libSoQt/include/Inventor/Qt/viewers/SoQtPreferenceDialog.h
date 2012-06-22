@@ -34,7 +34,6 @@ public slots:
     void setClipFarValue(double value);
 
     void setStereoViewing(bool state);
-    void setStereoDistance (double value);
 
     void setAnimationEnabled(bool state);
     void setFeedbackVisibility(bool state);
@@ -51,7 +50,12 @@ protected slots:
     void zoomMinFieldChanged(double value);
     void zoomMaxFieldChanged (double value);
 
-    void stereoSliderChanged(int value);
+    void stereoTypeChanged(int index);
+    void eyeSeparationSliderChanged(int value);
+    void parallaxBalanceSliderChanged(int value);
+    void eyeSeparationInputChanged(double value);
+    void parallaxBalanceInputChanged(double value);
+
 private:
     Ui::SoQtPreferenceDialog *ui;
 
