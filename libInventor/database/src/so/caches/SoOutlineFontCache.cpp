@@ -1,9 +1,9 @@
 #include <Inventor/caches/SoOutlineFontCache.h>
 #include <Inventor/caches/SoFontOutline.h>
+#include <Inventor/caches/SoGLDisplayList.h>
 #include <Inventor/SbVec2s.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
-#include <Inventor/elements/SoGLDisplayList.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoFontNameElement.h>
 #include <Inventor/elements/SoFontSizeElement.h>

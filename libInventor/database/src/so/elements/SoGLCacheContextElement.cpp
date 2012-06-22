@@ -53,7 +53,7 @@
 
 #include <GL/glew.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
-#include <Inventor/elements/SoGLDisplayList.h>
+#include <Inventor/caches/SoGLDisplayList.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
 #include <Inventor/SbString.h>
