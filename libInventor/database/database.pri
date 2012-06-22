@@ -118,6 +118,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/caches/SoBoundingBoxCache.h \
            database/include/Inventor/caches/SoCache.h \
            database/include/Inventor/caches/SoGLCacheList.h \
+           database/include/Inventor/caches/SoGLDisplayList.h \
            database/include/Inventor/caches/SoGLRenderCache.h \
            database/include/Inventor/caches/SoNormalCache.h \
            database/include/Inventor/caches/SoVertexPropertyCache.h \
@@ -149,7 +150,6 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoFontNameElement.h \
            database/include/Inventor/elements/SoFontSizeElement.h \
            database/include/Inventor/elements/SoGLCacheContextElement.h \
-           database/include/Inventor/elements/SoGLDisplayList.h \
            database/include/Inventor/elements/SoGLClipPlaneElement.h \
            database/include/Inventor/elements/SoGLCoordinateElement.h \
            database/include/Inventor/elements/SoGLDrawStyleElement.h \
@@ -666,6 +666,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/caches/SoBoundingBoxCache.cpp \
            database/src/so/caches/SoCache.cpp \
            database/src/so/caches/SoGLCacheList.cpp \
+           database/src/so/caches/SoGLDisplayList.cpp \
            database/src/so/caches/SoGLRenderCache.cpp \
            database/src/so/caches/SoNormalCache.cpp \
            database/src/so/caches/SoVertexPropertyCache.cpp \
@@ -696,7 +697,6 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/elements/SoFontSizeElement.cpp \
            database/src/so/elements/SoGLCacheContextElement.cpp \
            database/src/so/elements/SoGLDepthBufferElement.cpp \
-           database/src/so/elements/SoGLDisplayList.cpp \
            database/src/so/elements/SoGLClipPlaneElement.cpp \
            database/src/so/elements/SoGLCoordinateElement.cpp \
            database/src/so/elements/SoGLDrawStyleElement.cpp \
