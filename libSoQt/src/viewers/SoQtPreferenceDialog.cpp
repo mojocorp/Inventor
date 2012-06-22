@@ -14,6 +14,7 @@ SoQtPreferenceDialog::SoQtPreferenceDialog(SoQtFullViewer *_viewer, QWidget *par
     viewer(_viewer)
 {
     ui->setupUi(this);
+    ui->tabWidget->setCurrentIndex(0);
 
     // Seek prefs
     ui->seekTimeInput->setValue(viewer->getSeekTime());
@@ -65,17 +66,29 @@ SoQtPreferenceDialog::SoQtPreferenceDialog(SoQtFullViewer *_viewer, QWidget *par
     setAutoClipping(viewer->isAutoClipping());
 
     // Stereo prefs
-    ui->stereoViewingToggle->setCheckState (viewer->isStereoViewing() ? Qt::Checked : Qt::Unchecked);
-    ui->stereoDistInput->setValue (viewer->getStereoOffset());
+    connect(ui->stereoViewingToggle, SIGNAL(toggled(bool)), SLOT(setStereoViewing(bool)));
+
+    ui->stereoViewingToggle->setChecked(viewer->isStereoViewing());
+    ui->stereoAdjustmentsGroupBox->setEnabled(ui->stereoViewingToggle->isChecked());
+    ui->stereoTypeComboBox->setCurrentIndex(viewer->isStereoViewing() ? (int)viewer->getStereoType() - 1 : 0);
+
+    connect(ui->stereoTypeComboBox, SIGNAL(activated(int)), SLOT(stereoTypeChanged(int)));
+    connect(ui->eyeSeparationSlider,   SIGNAL(valueChanged(int)), SLOT(eyeSeparationSliderChanged(int)));
+    connect(ui->parallaxBalanceSlider, SIGNAL(valueChanged(int)), SLOT(parallaxBalanceSliderChanged(int)));
+    connect(ui->eyeSeparationInput,   SIGNAL(valueChanged(double)), SLOT(eyeSeparationInputChanged(double)));
+    connect(ui->parallaxBalanceInput, SIGNAL(valueChanged(double)), SLOT(parallaxBalanceInputChanged(double)));
+
+    ui->eyeSeparationInput->setValue (viewer->getStereoOffset());
+    ui->parallaxBalanceInput->setValue(viewer->getStereoBalance());
 
     // Exam prefs
     SoQtExaminerViewer *ew = dynamic_cast<SoQtExaminerViewer*>(viewer);
     if (ew) {
-        ui->enableSpinToggle->setCheckState (ew->isAnimationEnabled() ? Qt::Checked : Qt::Unchecked);
+        ui->enableSpinToggle->setChecked (ew->isAnimationEnabled());
         connect(ui->enableSpinToggle, SIGNAL(clicked(bool)), SLOT(setAnimationEnabled(bool)));
 
-        ui->showRotPointToggle->setEnabled (viewer->camera != NULL);
-        ui->showRotPointToggle->setCheckState (ew->isFeedbackVisible() ? Qt::Checked : Qt::Unchecked);
+        ui->showRotPointToggle->setEnabled(viewer->camera != NULL);
+        ui->showRotPointToggle->setChecked(ew->isFeedbackVisible());
         connect(ui->showRotPointToggle, SIGNAL(clicked(bool)), SLOT(setFeedbackVisibility(bool)));
 
         ui->feedbackInput->setEnabled (viewer->camera != NULL);
@@ -209,7 +222,7 @@ SoQtPreferenceDialog::zoomMaxFieldChanged (double value)
 void
 SoQtPreferenceDialog::setAutoClipping(bool state)
 {
-    ui->autoClippingToggle->setCheckState (state ? Qt::Checked : Qt::Unchecked);
+    ui->autoClippingToggle->setChecked(state);
     ui->clipNearInput->setEnabled(!state);
     ui->clipFarInput->setEnabled(!state);
 
@@ -247,40 +260,66 @@ SoQtPreferenceDialog::setClipFarValue (double value)
 void
 SoQtPreferenceDialog::setStereoViewing(bool state)
 {
-    // checks to make sure stereo viewing can be set, else
-    // grey the UI and bring and error message.
-    if (state != viewer->isStereoViewing()) {
-        viewer->setStereoViewing (state);
+    if (state) {
+        viewer->setStereoType((SoQtViewer::StereoType)(ui->stereoTypeComboBox->currentIndex() + 1));
+    } else {
+        viewer->setStereoType(SoQtViewer::MONOSCOPIC);
     }
-    if (state && !viewer->isStereoViewing()) {
-        // we couldn't activate stereo viewing:
-        ui->stereoViewingToggle->setCheckState (Qt::Unchecked);
-        ui->stereoViewingToggle->setEnabled (false);
-        QMessageBox::critical (this, tr("Stereo Error"),
-                               tr("Stereo Viewing can't be set on this machine."));
-        return;
-    }
-
-    // show/hide the eye spacing thumbwheel
-    //TODO ui->stereoDistWidgets->setEnabled (isStereoViewing());
+    ui->stereoViewingToggle->setChecked(viewer->isStereoViewing());
+    ui->stereoAdjustmentsGroupBox->setEnabled(viewer->isStereoViewing());
 }
 
 void
-SoQtPreferenceDialog::setStereoDistance (double value)
+SoQtPreferenceDialog::stereoTypeChanged(int index)
 {
-    // get text value from the label and update camera
+    if (!ui->stereoViewingToggle->isChecked())
+        return;
+
+    switch(index)
+    {
+    case 0: viewer->setStereoType(SoQtViewer::QUADBUFFER); break;
+    case 1: viewer->setStereoType(SoQtViewer::ANAGLYPH_RED_CYAN); break;
+    case 2: viewer->setStereoType(SoQtViewer::ANAGLYPH_BLUE_YELLOW); break;
+    case 3: viewer->setStereoType(SoQtViewer::ANAGLYPH_GREEN_MAGENTA); break;
+    default: break;
+    }
+    ui->stereoTypeComboBox->setCurrentIndex(viewer->isStereoViewing() ? (int)viewer->getStereoType() - 1 : 0);
+    ui->stereoViewingToggle->setChecked(viewer->isStereoViewing());
+    ui->stereoAdjustmentsGroupBox->setEnabled(viewer->isStereoViewing());
+}
+
+void
+SoQtPreferenceDialog::eyeSeparationSliderChanged(int value)
+{
+    ui->eyeSeparationInput->setValue(value / 100.0);
+}
+
+void
+SoQtPreferenceDialog::parallaxBalanceSliderChanged(int value)
+{
+    ui->parallaxBalanceInput->setValue(value / 100.0);
+}
+
+void
+SoQtPreferenceDialog::eyeSeparationInputChanged(double value)
+{
     viewer->setStereoOffset(value);
     viewer->scheduleRedraw();
 
-    ui->stereoDistInput->setValue (value);
+    ui->eyeSeparationSlider->blockSignals(true);
+    ui->eyeSeparationSlider->setValue (value * 100);
+    ui->eyeSeparationSlider->blockSignals(false);
 }
 
 void
-SoQtPreferenceDialog::stereoSliderChanged (int value)
+SoQtPreferenceDialog::parallaxBalanceInputChanged(double value)
 {
-    // shorter/grow the stereo camera offset
-    //TODO setStereoDistance (getStereoOffset() * pow (80.0, value - stereoWheelVal) / 360.0);
-    //TODO stereoWheelVal = value;
+    viewer->setStereoBalance(value);
+    viewer->scheduleRedraw();
+
+    ui->parallaxBalanceSlider->blockSignals(true);
+    ui->parallaxBalanceSlider->setValue(value * 100);
+    ui->parallaxBalanceSlider->blockSignals(false);
 }
 
 void
@@ -290,7 +329,7 @@ SoQtPreferenceDialog::setAnimationEnabled(bool state)
     if (ew) {
         ew->setAnimationEnabled(state);
 
-        ui->enableSpinToggle->setCheckState (state ? Qt::Checked : Qt::Unchecked);
+        ui->enableSpinToggle->setChecked(state);
     }
 }
 
@@ -301,7 +340,7 @@ SoQtPreferenceDialog::setFeedbackVisibility(bool state)
     if (ew) {
         ew->setFeedbackVisibility(state);
 
-        ui->showRotPointToggle->setCheckState (state ? Qt::Checked : Qt::Unchecked);
+        ui->showRotPointToggle->setChecked(state);
         ui->feedbackInput->setEnabled(state);
     }
 }
