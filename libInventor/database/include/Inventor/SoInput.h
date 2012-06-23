@@ -63,6 +63,7 @@
 #include <Inventor/SbDict.h>
 #include <Inventor/SbPList.h>
 #include <Inventor/SbString.h>
+#include <Inventor/SbFile.h>
 #include <Inventor/SoDB.h>
 
 class SoNode;
@@ -86,12 +87,11 @@ class SbStringList;
 SoINTERNAL struct SoInputFile {
     SbString  name;  // Name of file
     SbString  fullName; // Name of file with full path
-    FILE  *fp;  // File pointer
+    SbFile fp;  // File pointer
     void  *buffer; // Buffer to read from (or NULL)
     char  *curBuf; // Current location in buffer
     size_t  bufSize; // Buffer size
     int   lineNum; // Number of line currently reading
-    SbBool  openedHere; // TRUE if opened by SoInput
     SbBool  binary;  // TRUE if file has binary data
     SbBool  readHeader; // TRUE if header was checked for A/B
     SbBool  headerOk; // TRUE if header was read ok
@@ -142,7 +142,7 @@ public:
     static void addEnvDirectoriesLast(const char *envVarName);
 
     /// Removes named directory from the list.
-    static void removeDirectory(const char *dirName);
+    static void removeDirectory(const SbString & dirName);
 
     /// Clears the list of directories (including the current directory).
     static void clearDirectories();
@@ -157,12 +157,12 @@ public:
     /// input files if necessary. This returns FALSE on error; if
     /// \a okIfNotFound is FALSE (the default), this prints an error message
     /// if the file could not be found.
-    SbBool openFile(const char *fileName,
+    SbBool openFile(const SbString & fileName,
                     SbBool okIfNotFound = FALSE);
 
     /// Opens named file, pushing the resulting file pointer onto the stack.
     /// Returns FALSE on error.
-    SbBool pushFile(const char *fileName);
+    SbBool pushFile(const SbString & fileName);
 
     /// Closes all files on stack opened with #openFile() or #pushFile()
     void closeFile();
@@ -175,8 +175,8 @@ public:
     /// Returns a pointer to the current file, or NULL if reading from a buffer.
     FILE * getCurFile() const;
 
-    /// Returns full name (including directory path) of current file, or NULL if reading from a buffer.
-    const char * getCurFileName() const;
+    /// Returns full name (including directory path) of current file, or empty string if reading from a buffer.
+    const SbString & getCurFileName() const;
 
     /// Sets an in-memory buffer to read from, along with its size.
     void setBuffer(void *bufPointer, size_t bufSize);
@@ -284,13 +284,13 @@ private:
         curFile->ivVersion = version;
     }
 
-    // Looks for named file and opens it. Returns NULL if not found.
-    FILE *  findFile(const char *fileName,
+    // Looks for named file. Returns false if not found.
+    bool findFile(const SbString & fileName,
                      SbString &fullName) const;
 
     // Initializes reading from file
-    void  initFile(FILE *newFP, const char *fileName,
-                   SbString *fullName, SbBool openedHere,
+    bool  initFile(const SbString & fileName,
+                   SbString *fullName,
                    SbDict *refDict = NULL);
 
     // Checks current file for ASCII/binary header comment. Returns
