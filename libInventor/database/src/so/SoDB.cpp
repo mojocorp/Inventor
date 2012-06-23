@@ -54,6 +54,7 @@
 #include <stdlib.h>
 #include <Inventor/SbDict.h>
 #include <Inventor/SbString.h>
+#include <Inventor/SbFile.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoOutput.h>
@@ -756,9 +757,8 @@ SoDB::read(SoInput *in, SoBase *&base)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool	ret;
-    const char	*dataFileName;
-    char	*searchPath = NULL;
+    SbBool      ret;
+    SbString    searchPath;
 
 #ifdef DEBUG
     if (globalDB == NULL) {
@@ -770,19 +770,12 @@ SoDB::read(SoInput *in, SoBase *&base)
     // Before reading, see if the SoInput is reading from a named
     // file. If so, make sure the directory search path in the SoInput
     // is set up to read from the same directory the file is in.
-    dataFileName = in->getCurFileName();
+    SbString dataFileName = in->getCurFileName();
 
-    if (dataFileName != NULL) {
-	const char *slashPtr;
-
-	// Set up the directory search stack if necessary. Look for
-	// the last '/' in the path. If there is none, there's no
-	// path. Otherwise, remove the slash and everything after it.
-	if ((slashPtr = strrchr(dataFileName, '/')) != NULL) {
-	    searchPath = strdup(dataFileName);
-	    searchPath[slashPtr - dataFileName] = '\0';
-	    SoInput::addDirectoryFirst(searchPath);
-	}
+    if (!dataFileName.isEmpty()) {
+        searchPath = SbFile::dirName(dataFileName);
+        if (!searchPath.isEmpty())
+            SoInput::addDirectoryFirst(searchPath);
     }
 
     ret = SoBase::read(in, base, SoBase::getClassTypeId());
@@ -798,9 +791,8 @@ SoDB::read(SoInput *in, SoBase *&base)
     }
 
     // Clean up directory list if necessary
-    if (searchPath != NULL) {
+    if (!searchPath.isEmpty()) {
 	SoInput::removeDirectory(searchPath);
-	free(searchPath);
     }
 
     return ret;
