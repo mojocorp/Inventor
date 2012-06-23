@@ -63,6 +63,7 @@
 #include <Inventor/SbDict.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SbName.h>
+#include <Inventor/SbFile.h>
 
 class SoBase;
 
@@ -121,7 +122,7 @@ public:
     FILE * getFilePointer() const;
 
     /// Opens named file, sets file pointer to result. This returns FALSE on error.
-    SbBool openFile(const char *fileName);
+    SbBool openFile(const SbString & fileName);
 
     /// Closes current file if opened with #openFile. (Does nothing if not.)
     void closeFile();
@@ -257,7 +258,7 @@ SoINTERNAL public:
     }
 
 private:
-    FILE  *fp;  // File writing to
+    SbFile  fp;  // File writing to
     SbBool  toBuffer; // TRUE if writing to buffer
     char                *tmpBuffer;     // For binary write to file
     void  *buffer; // Buffer writing to
@@ -265,7 +266,6 @@ private:
     size_t  bufSize; // Maximum buffer size
     size_t  tmpBufSize; // Maximum temporary buffer size
     SoOutputReallocCB *reallocFunc; // Reallocation function for buffer
-    SbBool  openedHere; // TRUE if SoOutput opened file
     SbBool  binary;  // TRUE if writing binary data
     SbBool  compact; // TRUE if writing in compact form
     SbBool  wroteHeader; // TRUE if header was written
