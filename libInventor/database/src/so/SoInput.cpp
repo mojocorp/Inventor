@@ -93,12 +93,10 @@ SoInputFile::SoInputFile()
     // Initialize variables:
     name.makeEmpty();
     fullName.makeEmpty();
-    fp = NULL;
     buffer = NULL;
     curBuf = NULL;
     bufSize = 0;
     lineNum = 0;
-    openedHere = FALSE;
     binary = FALSE;
     readHeader = FALSE;
     headerOk = FALSE;
@@ -123,10 +121,12 @@ SoInput::SoInput()
 {
     // Create new file and push on stack
     curFile = new struct SoInputFile;
+    curFile->fp.setFilePointer(stdin);
+
     files.append((void *) curFile);
 
     // Make it read from stdin
-    initFile(stdin, "<stdin>", NULL, FALSE);
+    initFile("<stdin>", NULL);
 
     backBufIndex = -1;	// No buffer
 
@@ -170,10 +170,12 @@ SoInput::SoInput(SoInput *dictIn)
 {
     // Create new file and push on stack
     curFile = new struct SoInputFile;
+    curFile->fp.setFilePointer(stdin);
+
     files.append((void *) curFile);
 
     // Make it read from stdin and use the passed dictionary
-    initFile(stdin, "<stdin>", NULL, FALSE,
+    initFile("<stdin>", NULL,
              (dictIn == NULL ? NULL : dictIn->curFile->refDict));
 
     backBufIndex = -1;	// No buffer
@@ -304,16 +306,12 @@ SoInput::addEnvDirectoriesLast(const char *envVarName)
 // Use: public, static
 
 void
-SoInput::removeDirectory(const char *dirName)
+SoInput::removeDirectory(const SbString & dirName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-    SbString	*dir;
-
-    for (i = 0; i < directories->getLength(); i++) {
-
-        dir = (*directories)[i];
+    for (int i = 0; i < directories->getLength(); i++) {
+        SbString *dir = (*directories)[i];
 
         if (*dir == dirName) {
             directories->remove(i);
@@ -335,9 +333,7 @@ SoInput::clearDirectories()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
-
-    for (i = 0; i < directories->getLength(); i++)
+    for (int i = 0; i < directories->getLength(); i++)
         delete (*directories)[i];
 
     directories->truncate(0);
@@ -382,7 +378,8 @@ SoInput::setFilePointer(FILE *newFP)		// New file pointer
     closeFile();
 
     // Initialize reading from file
-    initFile(newFP, "<user-defined file pointer>", NULL, FALSE);
+    curFile->fp.setFilePointer(newFP);
+    initFile("<user-defined file pointer>", NULL);
 
     if (tmpBuffer == NULL) {
         tmpBuffer = malloc(64);
@@ -402,29 +399,30 @@ SoInput::setFilePointer(FILE *newFP)		// New file pointer
 // Use: public
 
 SbBool
-SoInput::openFile(const char *fileName, SbBool okIfNotFound)
+SoInput::openFile(const SbString & fileName, SbBool okIfNotFound)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FILE *newFP = NULL;
     SbString	fullName;
 
-    if (fileName != NULL && fileName[0] != '\0') {
-        newFP = findFile(fileName, fullName);
-    }
+    if (findFile(fileName, fullName)) {
+        SbFile newFP;
+        newFP.open(fullName, "rb");
 
-    if (newFP == NULL) {
-        if (! okIfNotFound)
-            SoReadError::post(this,
-                              "Can't open file \"%s\" for reading", fileName);
-        return FALSE;
+        if (!newFP.isOpen()) {
+            if (! okIfNotFound)
+                SoReadError::post(this,
+                                  "Can't open file \"%s\" for reading", fileName.getString());
+            return FALSE;
+        }
     }
 
     // Close open files, if any
     closeFile();
 
     // Initialize reading from file
-    initFile(newFP, fileName, &fullName, TRUE);
+    curFile->fp.open(fullName, "rb");
+    initFile(fileName, &fullName);
 
     if (tmpBuffer == NULL) {
         tmpBuffer = malloc(64);
@@ -444,26 +442,31 @@ SoInput::openFile(const char *fileName, SbBool okIfNotFound)
 // Use: public
 
 SbBool
-SoInput::pushFile(const char *fileName)	// Name of file
+SoInput::pushFile(const SbString & fileName)	// Name of file
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbString	fullName;
 
-    FILE *newFP = findFile(fileName, fullName);
+    if (findFile(fileName, fullName)) {
+        SbFile newFP;
+        newFP.open(fullName, "rb");
 
-    if (newFP == NULL) {
-        SoDebugError::post("SoInput::pushFile",
-                           "Can't open file \"%s\" for reading", fileName);
-        return FALSE;
+        if (!newFP.isOpen()) {
+            SoDebugError::post("SoInput::pushFile",
+                               "Can't open file \"%s\" for reading", fileName.getString());
+            return FALSE;
+        }
     }
 
     // Allocate a new file structure and push onto stack
     curFile = new struct SoInputFile;
+    curFile->fp.open(fullName, "rb");
+
     files.append(curFile);
 
     // Initialize reading from file
-    initFile(newFP, fileName, &fullName, TRUE);
+    initFile(fileName, &fullName);
 
     if (tmpBuffer == NULL) {
         tmpBuffer = malloc(64);
@@ -489,15 +492,11 @@ SoInput::closeFile()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			i;
-    struct SoInputFile	*f;
-
     // Close all files opened here
-    for (i = 0; i < files.getLength(); i++) {
-        f = (struct SoInputFile *) files[i];
+    for (int i = 0; i < files.getLength(); i++) {
+        struct SoInputFile *f = (struct SoInputFile *) files[i];
 
-        if (f->openedHere)
-            fclose(f->fp);
+        f->fp.close();
 
         // Free up storage used for all but topmost file
         if (i > 0) {
@@ -511,7 +510,8 @@ SoInput::closeFile()
         files.truncate(1);
 
     // Reset to read from stdin again
-    initFile(stdin, "<stdin>", NULL, FALSE);
+    curFile->fp.setFilePointer(stdin);
+    initFile("<stdin>", NULL);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -547,22 +547,22 @@ SoInput::getCurFile() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return fromBuffer() ? NULL : curFile->fp;
+    return fromBuffer() ? NULL : curFile->fp.getFilePointer();
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Returns full name of current file, or NULL if reading from buffer.
+//    Returns full name of current file, or empty string if reading from buffer.
 //
 // Use: public
 
-const char *
+const SbString &
 SoInput::getCurFileName() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return fromBuffer() ? NULL : curFile->fullName.getString();
+    return curFile->fullName;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -582,12 +582,10 @@ SoInput::setBuffer(void *bufPointer, size_t bufSize)
 
     // Initialize reading from buffer
     curFile->name	= "<user-defined buffer in memory>";
-    curFile->fp		= NULL;
     curFile->buffer	= bufPointer;
     curFile->curBuf	= (char *) bufPointer;
     curFile->bufSize	= bufSize;
     curFile->lineNum	= 1;
-    curFile->openedHere	= FALSE;
 
     // Start with a fresh dictionary
     if (curFile->refDict != NULL && ! curFile->borrowedDict)
@@ -712,8 +710,8 @@ SoInput::get(char &c)
         }
         else {
             char pad[3];
-            int i = fread((void *)&c, sizeof(char), 1, curFile->fp);
-            (void)fread((void *)pad, sizeof(char), 3, curFile->fp);
+            size_t i = curFile->fp.read(&c, sizeof(char), 1);
+            curFile->fp.read(pad, sizeof(char), 3);
             ret = (i == 1) ? TRUE : FALSE;
         }
     }
@@ -722,7 +720,7 @@ SoInput::get(char &c)
 
         if (! fromBuffer()) {
 
-            int i = getc(curFile->fp);
+            int i = getc(curFile->fp.getFilePointer());
 
             if (i == EOF) {
                 c = (char)EOF;	// Set c to EOF so putpack(c) will fail
@@ -809,7 +807,7 @@ SoInput::getASCIIFile(char &c)
         backBufIndex = -1;
     }
 
-    i = getc(curFile->fp);
+    i = getc(curFile->fp.getFilePointer());
     c = (char)i;
 
     ret =  (i == EOF) ? FALSE : TRUE;
@@ -897,7 +895,7 @@ SoInput::read(SbString &s)
             // they have.  Reading keeps happening until eof is hit.
 
             int n;
-            if (fread((void *) &n, sizeof(int), 1, curFile->fp) == 1) {
+            if (curFile->fp.read(&n, sizeof(int), 1) == 1) {
                 DGL_NTOH_INT32(n, n);
 
                 if (n < 0) {
@@ -915,12 +913,11 @@ SoInput::read(SbString &s)
                 else
                     buf = buffer;
                 SbBool ok =
-                        (fread((void *) buf, sizeof(char), n, curFile->fp) == n);
+                    (curFile->fp.read(buf, sizeof(char), n) == n);
                 if (ok) {
-                    int pad = ((n+3) & ~003) - n;
+                    size_t pad = ((n+3) & ~003) - n;
                     char padbuf[4];
-                    ok = (fread((void *) padbuf, sizeof(char), pad,
-                                curFile->fp) == pad);
+                    ok = (curFile->fp.read(padbuf, sizeof(char), pad) == pad);
 
                     if (ok) {
                         buf[n] = '\0';
@@ -1132,10 +1129,10 @@ SoInput::read(SbName &n,		// Name to read into
     }                                                                 \
     char padbuf[4];                                                   \
     makeRoomInBuf(sizeof(dglType));                                 \
-    ok = fread(tmpBuffer, sizeof(dglType), 1, curFile->fp);         \
+    ok = curFile->fp.read((char *)tmpBuffer, sizeof(dglType), 1);         \
     dglFunc((char *)tmpBuffer, (dglType *)&tnum);                     \
     if (pad != 0)                                                     \
-    ok = fread((void *)padbuf, sizeof(char), pad, curFile->fp); \
+    ok = curFile->fp.read(padbuf, sizeof(char), pad); \
     }                                                                     \
     num = (type)tnum;                                                     \
     }                                                                         \
@@ -1161,7 +1158,7 @@ SoInput::read(SbName &n,		// Name to read into
     }                                                                         \
     else { 								      \
     makeRoomInBuf(length * sizeof(type));				      \
-    int i = fread(tmpBuffer, sizeof(type), length, curFile->fp);        \
+    size_t i = curFile->fp.read(tmpBuffer, sizeof(type), length);        \
     if (i != length)                                                      \
     return FALSE;                                                     \
     dglFunc((char *)tmpBuffer, (type *)array, length);		      \
@@ -1251,7 +1248,7 @@ SoInput::readBinaryArray(unsigned char *c, int length)
         }
     }
     else {
-        int i = fread(c, sizeof(unsigned char), length, curFile->fp);
+        size_t i = curFile->fp.read(c, sizeof(unsigned char), length);
         if (i != length)
             return FALSE;
     }
@@ -1520,7 +1517,7 @@ SoInput::eof() const
 ////////////////////////////////////////////////////////////////////////
 {
     if (! fromBuffer())
-        return feof(curFile->fp);
+        return curFile->fp.eof();
     else
         return (freeBytesInBuf() == 0);
 }
@@ -1576,7 +1573,7 @@ SoInput::putBack(char c)
     if (backBufIndex >= 0)
         --backBufIndex;
     else if (! fromBuffer())
-        ungetc(c, curFile->fp);
+        ungetc(c, curFile->fp.getFilePointer());
     else if (isBinary())
         ;				// Can't do anything???
     else
@@ -1610,41 +1607,26 @@ SoInput::putBack(const char *string)
 //
 // Use: public
 
-FILE *
-SoInput::findFile(const char *fileName, SbString &fullName) const
+bool
+SoInput::findFile(const SbString & fileName, SbString &fullName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FILE	*fp;
-    int		i;
-
-    // If filename is absolute
-#ifdef SB_OS_WIN
-    if (isalpha(fileName[0]) && fileName[1] == ':') {
-#else
-    if (fileName[0] == '/') {
-#endif
+    if (SbFile::exists(fileName)) {
         fullName = fileName;
-        fp = fopen(fileName, "rb");
-    }
-
-    // For relative file names, try each of the directories in the search path
-    else {
-        fp = NULL;
-
-        for (i = 0; i < directories->getLength(); i++) {
+        return true;
+    } else {
+        for (int i = 0; i < directories->getLength(); i++) {
             fullName = * (*directories)[i];
             fullName += "/";
             fullName += fileName;
 
-            fp = fopen(fullName.getString(), "rb");
-
-            if (fp != NULL)
-                break;
+            if (SbFile::exists(fullName)) {
+                return true;
+            }
         }
     }
-
-    return fp;
+    return false;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1654,13 +1636,11 @@ SoInput::findFile(const char *fileName, SbString &fullName) const
 //
 // Use: private
 
-void
-SoInput::initFile(FILE *newFP,		// New file pointer
-                  const char *fileName,	// Name of new file to read
+bool
+SoInput::initFile(const SbString & fileName,	// Name of new file to read
                   SbString *fullName,	// Full name of new file
-                  SbBool openedHere,	// TRUE if SoInput opened file
                   SbDict *refDict)	// Dictionary of base references
-// (default is NULL: create new dict)
+                                    // (default is NULL: create new dict)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1669,10 +1649,9 @@ SoInput::initFile(FILE *newFP,		// New file pointer
         curFile->fullName = fileName;
     else
         curFile->fullName = *fullName;
-    curFile->fp		= newFP;
+
     curFile->buffer	= NULL;
     curFile->lineNum	= 1;
-    curFile->openedHere	= openedHere;
 
     if (refDict == NULL) {
         // Start with a fresh dictionary
@@ -1693,6 +1672,8 @@ SoInput::initFile(FILE *newFP,		// New file pointer
     curFile->binary	= FALSE;
     curFile->readHeader	= FALSE;
     curFile->headerOk	= TRUE;
+
+    return true;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1914,8 +1895,7 @@ SoInput::popFile()
     files.truncate(depth - 1);
 
     // Free up structure for current file and set to new one
-    if (curFile->openedHere)
-        fclose(curFile->fp);
+    curFile->fp.close();
 
     delete curFile->refDict;
     delete curFile;
@@ -1963,7 +1943,7 @@ SoInput::readHex(uint32_t &l)
     // Read from a file
     else {
         skipWhiteSpace();
-        while ((i = getc(curFile->fp)) != EOF) {
+        while ((i = getc(curFile->fp.getFilePointer())) != EOF) {
             *s = (char) i;
             if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
                 putBack(*s);
@@ -2080,7 +2060,7 @@ SoInput::readInteger(int32_t &l)
     else {
         int i;
 
-        while ((i = getc(curFile->fp)) != EOF) {
+        while ((i = getc(curFile->fp.getFilePointer())) != EOF) {
             *s = (char) i;
             if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
                 putBack(*s);
@@ -2235,7 +2215,7 @@ SoInput::readUnsignedInteger(uint32_t &l)
     else {
         int i;
 
-        while ((i = getc(curFile->fp)) != EOF) {
+        while ((i = getc(curFile->fp.getFilePointer())) != EOF) {
             *s = (char) i;
             if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
                 putBack(*s);
@@ -2496,7 +2476,7 @@ SoInput::readReal(double &d)
         ret = TRUE;
     }
     else {
-        n = fscanf(curFile->fp, "%lf", &d);
+        n = fscanf(curFile->fp.getFilePointer(), "%lf", &d);
         ret =  (n == 0 || n == EOF) ? FALSE : TRUE;
     }
 
