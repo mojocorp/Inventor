@@ -140,7 +140,7 @@ void MainWindow::writeSettings()
 void MainWindow::loadFile(const QString &fileName)
 {
     SoInput in;
-    if (!in.openFile(qPrintable(fileName))) {
+    if (!in.openFile(SbString::fromUtf8(fileName.toUtf8().data()))) {
         QMessageBox::warning(this, tr("Application"),
                              tr("Cannot read file %1.")
                              .arg(fileName));
@@ -176,7 +176,7 @@ bool MainWindow::saveFile(const QString &fileName)
     }
 
     SoOutput out;
-    if (!out.openFile(qPrintable(fileName))) {
+    if (!out.openFile(SbString::fromUtf8(fileName.toUtf8().data()))) {
         QMessageBox::warning(this, tr("Application"),
                              tr("Cannot write file %1.")
                              .arg(fileName));
