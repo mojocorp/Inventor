@@ -31,7 +31,7 @@ private:
     void createStatusBar();
     void readSettings();
     void writeSettings();
-    bool saveFile(const QString &fileName);
+    bool saveFile(const QString &fileName, bool binary);
     void setCurrentFile(const QString &fileName);
 
     SoQtExaminerViewer *viewer;
