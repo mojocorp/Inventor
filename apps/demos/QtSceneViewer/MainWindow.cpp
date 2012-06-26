@@ -45,11 +45,18 @@ void MainWindow::open()
 
 bool MainWindow::saveAs()
 {
-    QString fileName = QFileDialog::getSaveFileName(this);
-    if (fileName.isEmpty())
-        return false;
+    QFileDialog dialog(this, tr("Save File"));
+    dialog.setAcceptMode(QFileDialog::AcceptSave);
+    dialog.setFileMode(QFileDialog::AnyFile);
+    dialog.setNameFilter(tr("Inventor Ascii (*.iv);;Inventor Binary (*.iv)"));
 
-    return saveFile(fileName);
+    if (dialog.exec()) {
+         QString fileName = dialog.selectedFiles().first();
+         bool binary = (dialog.selectedNameFilter() == tr("Inventor Binary (*.iv)"));
+
+         return saveFile(fileName, binary);
+    }
+    return false;
 }
 
 void MainWindow::about()
@@ -164,18 +171,10 @@ void MainWindow::loadFile(const QString &fileName)
     recentFilesMenu->addRecentFile(fileName);
 }
 
-bool MainWindow::saveFile(const QString &fileName)
+bool MainWindow::saveFile(const QString &fileName, bool binary)
 {
-    QFile file(fileName);
-    if (!file.open(QFile::WriteOnly | QFile::Text)) {
-        QMessageBox::warning(this, tr("Application"),
-                             tr("Cannot write file %1:\n%2.")
-                             .arg(fileName)
-                             .arg(file.errorString()));
-        return false;
-    }
-
     SoOutput out;
+    out.setBinary(binary);
     if (!out.openFile(SbString::fromUtf8(fileName.toUtf8().data()))) {
         QMessageBox::warning(this, tr("Application"),
                              tr("Cannot write file %1.")
@@ -189,6 +188,9 @@ bool MainWindow::saveFile(const QString &fileName)
 
     setCurrentFile(fileName);
     statusBar()->showMessage(tr("File saved"), 2000);
+
+    recentFilesMenu->addRecentFile(fileName);
+
     return true;
 }
 
