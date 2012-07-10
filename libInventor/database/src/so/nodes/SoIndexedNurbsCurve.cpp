@@ -140,7 +140,7 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
 {
     // First see if the object is visible and should be rendered now
     if (! shouldGLRender(action))
-	return;
+        return;
 
     SoState *state = action->getState();
     state->push();
@@ -148,13 +148,13 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
     // Draw unlit:
     if (SoLazyElement::getLightModel(state) != SoLazyElement::BASE_COLOR) {
         SoLazyElement::setLightModel(state,
-                                 SoLazyElement::BASE_COLOR);
+                                     SoLazyElement::BASE_COLOR);
     }
     // Make sure textures are disabled, as texturing of NURBS curves
     // has not been implemented.
     if (SoGLTextureEnabledElement::get(state)) {
-	SoGLTextureEnabledElement::set(state, FALSE);
-    }        
+        SoGLTextureEnabledElement::set(state, FALSE);
+    }
 
     // Make sure the first current material is sent to GL
     SoMaterialBundle	mb(action);
@@ -176,7 +176,7 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
     if (val > 1.0) val = 1.0;
 
     if (SoComplexityTypeElement::get(state) ==
-         SoComplexityTypeElement::OBJECT_SPACE)
+            SoComplexityTypeElement::OBJECT_SPACE)
     {
         //
         // Set the nurbs properties to render the curve with uniform
@@ -187,9 +187,9 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
         else            steps = (int)(380.0*val) - 180;
 
         GLRender->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                    N_FIXEDRATE );
         GLRender->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                    N_FIXEDRATE );
         GLRender->setnurbsproperty( N_V3D,  N_S_STEPS, (float)steps);
         GLRender->setnurbsproperty( N_V3D,  N_T_STEPS, (float)steps);
         GLRender->setnurbsproperty( N_V3DR, N_S_STEPS, (float)steps);
@@ -214,9 +214,9 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
         else                 pixTolerance = .125;
 
         GLRender->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                    N_PARAMETRICDISTANCE );
         GLRender->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                    N_PARAMETRICDISTANCE );
         GLRender->setnurbsproperty( N_V3D,  N_PIXEL_TOLERANCE, pixTolerance );
         GLRender->setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE, pixTolerance );
 
@@ -258,7 +258,7 @@ SoIndexedNurbsCurve::rayPick(SoRayPickAction *action)
 {
     // First see if the object is pickable
     if (! shouldRayPick(action))
-	return;
+        return;
 
     action->setObjectSpace();
 
@@ -332,7 +332,7 @@ SoIndexedNurbsCurve::generatePrimitives(SoAction *action)
     float val = SoComplexityElement::get(action->getState());
 
     if (SoComplexityTypeElement::get(action->getState()) ==
-         SoComplexityTypeElement::OBJECT_SPACE)
+            SoComplexityTypeElement::OBJECT_SPACE)
     {
         //
         // Set the nurbs properties to render the curve with uniform
@@ -343,9 +343,9 @@ SoIndexedNurbsCurve::generatePrimitives(SoAction *action)
         else            steps = (int)(380.0*val) - 180;
 
         primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                     N_FIXEDRATE );
         primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                     N_FIXEDRATE );
         primRender.setnurbsproperty( N_V3D,  N_S_STEPS, (float)steps);
         primRender.setnurbsproperty( N_V3D,  N_T_STEPS, (float)steps);
         primRender.setnurbsproperty( N_V3DR, N_S_STEPS, (float)steps);
@@ -370,9 +370,9 @@ SoIndexedNurbsCurve::generatePrimitives(SoAction *action)
         else                 pixTolerance = .125;
 
         primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                     N_PARAMETRICDISTANCE );
         primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                     N_PARAMETRICDISTANCE );
         primRender.setnurbsproperty( N_V3D,  N_PIXEL_TOLERANCE, pixTolerance );
         primRender.setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE, pixTolerance );
 
@@ -407,9 +407,9 @@ SoIndexedNurbsCurve::generatePrimitives(SoAction *action)
 
 void
 SoIndexedNurbsCurve::primCB(
-    SoAction *act,
-    SoPrimitiveVertex *vertices,
-    void *userData)
+        SoAction *act,
+        SoPrimitiveVertex *vertices,
+        void *userData)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -427,8 +427,8 @@ SoIndexedNurbsCurve::primCB(
 
 void
 SoIndexedNurbsCurve::sendPrimitive(
-    SoAction *act,
-    SoPrimitiveVertex *vertices )
+        SoAction *act,
+        SoPrimitiveVertex *vertices )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -465,7 +465,7 @@ SoIndexedNurbsCurve::getBoundingBox(SoGetBoundingBoxAction *action)
 
 void
 SoIndexedNurbsCurve::computeBBox(SoAction *action,
-				 SbBox3f &box, SbVec3f &center)
+                                 SbBox3f &box, SbVec3f &center)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -520,8 +520,8 @@ SoIndexedNurbsCurve::computeBBox(SoAction *action,
 
 void
 SoIndexedNurbsCurve::drawNURBS(
-    _SoNurbsNurbsTessellator *render,
-    SoState *state )
+        _SoNurbsNurbsTessellator *render,
+        SoState *state )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -580,10 +580,10 @@ SoIndexedNurbsCurve::drawNURBS(
     //
     render->bgncurve(0);
     render->nurbscurve (knotVector.getNum(),
-        (INREAL *) knotVector.getValues(0),
-        offset, (INREAL *)coords,
-        knotVector.getNum() - numControlPoints.getValue(),
-        type);
+                        (INREAL *) knotVector.getValues(0),
+                        offset, (INREAL *)coords,
+                        knotVector.getNum() - numControlPoints.getValue(),
+                        type);
 
     render->endcurve();
     delete[] coords;
@@ -600,8 +600,8 @@ SoIndexedNurbsCurve::drawNURBS(
 
 void
 SoIndexedNurbsCurve::calcTotalMatrix(
-    SoState *state,
-    SbMatrix &totalMat )
+        SoState *state,
+        SbMatrix &totalMat )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -628,9 +628,9 @@ SoIndexedNurbsCurve::calcTotalMatrix(
 
 void
 SoIndexedNurbsCurve::multMatrix4d (
-   SbMatrix &n,
-   SbMatrix left,
-   SbMatrix right )
+        SbMatrix &n,
+        SbMatrix left,
+        SbMatrix right )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -640,12 +640,12 @@ SoIndexedNurbsCurve::multMatrix4d (
     for (i=0; i<4; i++)
     {
         n[i][0] = left[i][0]*right[0][0] + left[i][1]*right[1][0] +
-                  left[i][2]*right[2][0] + left[i][3]*right[3][0];
+                left[i][2]*right[2][0] + left[i][3]*right[3][0];
         n[i][1] = left[i][0]*right[0][1] + left[i][1]*right[1][1] +
-                  left[i][2]*right[2][1] + left[i][3]*right[3][1];
+                left[i][2]*right[2][1] + left[i][3]*right[3][1];
         n[i][2] = left[i][0]*right[0][2] + left[i][1]*right[1][2] +
-                  left[i][2]*right[2][2] + left[i][3]*right[3][2];
+                left[i][2]*right[2][2] + left[i][3]*right[3][2];
         n[i][3] = left[i][0]*right[0][3] + left[i][1]*right[1][3] +
-                  left[i][2]*right[2][3] + left[i][3]*right[3][3];
+                left[i][2]*right[2][3] + left[i][3]*right[3][3];
     }
 }
