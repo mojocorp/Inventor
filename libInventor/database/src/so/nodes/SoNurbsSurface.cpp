@@ -783,25 +783,7 @@ SoNurbsSurface::primCB(
 ////////////////////////////////////////////////////////////////////////
 {
     SoNurbsSurface *surf = (SoNurbsSurface *)userData;
-    surf->sendPrimitive(act, vertices);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sends primitives to the generate primitive callbacks.
-//
-// Use: internal, public
-
-void
-SoNurbsSurface::sendPrimitive(
-        SoAction *act,
-        SoPrimitiveVertex *vertices )
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    invokeTriangleCallbacks(act, &vertices[0], &vertices[1], &vertices[2]);
+    surf->invokeTriangleCallbacks(act, &vertices[0], &vertices[1], &vertices[2]);
 }
 
 ////////////////////////////////////////////////////////////////////////
