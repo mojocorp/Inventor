@@ -150,7 +150,7 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
 {
     // First see if the object is visible and should be rendered now
     if (! shouldGLRender(action))
-	return;
+        return;
 
 
     const SoCoordinateElement   *ce =
@@ -173,7 +173,7 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
     numCoordIndices = ce->getNum();
     if (numCoordIndices == 0)
         return;
-        
+
     // Make sure the first current material is sent to GL
     SoMaterialBundle	mb(action);
     mb.sendFirst();
@@ -204,7 +204,7 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
     // texture surface.
     //
     if (SoComplexityTypeElement::get(action->getState()) ==
-        SoComplexityTypeElement::OBJECT_SPACE)
+            SoComplexityTypeElement::OBJECT_SPACE)
     {
         _SoNurbsGLRender *GLRender = new _SoNurbsGLRender();
 
@@ -213,11 +213,11 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
         // tessellation to be 'steps' across the S and T parameters
         //
         GLRender->setnurbsproperty( N_T2D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                    N_FIXEDRATE );
         GLRender->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                    N_FIXEDRATE );
         GLRender->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                    N_FIXEDRATE );
         GLRender->setnurbsproperty( N_T2D,  N_S_STEPS, steps);
         GLRender->setnurbsproperty( N_T2D,  N_T_STEPS, steps);
         GLRender->setnurbsproperty( N_V3D,  N_S_STEPS, steps);
@@ -239,7 +239,7 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
     // for every frame.
     //
     if (SoDrawStyleElement::get(action->getState()) ==
-        SoDrawStyleElement::POINTS) {
+            SoDrawStyleElement::POINTS) {
         //
         // Render the control points of the surface.  The OpenGL NURBS
         // software does not support rendering nurbs surfaces as points.
@@ -275,13 +275,13 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
     GLUnurbsObj *nurbsObj = gluNewNurbsRenderer();
 
     switch (SoDrawStyleElement::get(action->getState())) {
-        case SoDrawStyleElement::FILLED:
-            gluNurbsProperty (nurbsObj, (GLenum)GLU_DISPLAY_MODE, GLU_FILL);
-            break;
-        case SoDrawStyleElement::LINES:
-            gluNurbsProperty (nurbsObj, (GLenum)GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
-            break;
-        default: break;
+    case SoDrawStyleElement::FILLED:
+        gluNurbsProperty (nurbsObj, (GLenum)GLU_DISPLAY_MODE, GLU_FILL);
+        break;
+    case SoDrawStyleElement::LINES:
+        gluNurbsProperty (nurbsObj, (GLenum)GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
+        break;
+    default: break;
     }
     gluNurbsProperty (nurbsObj, (GLenum)GLU_SAMPLING_TOLERANCE, (GLfloat)pixTolerance);
 
@@ -344,151 +344,151 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
 
     if(doTextures) {
 
-	switch (SoTextureCoordinateElement::getType(action->getState())) {
+        switch (SoTextureCoordinateElement::getType(action->getState())) {
 
-          // software texture functions
-	  case SoTextureCoordinateElement::FUNCTION:
-          {
-	    // generate S and T coords from U and V coords
-	    SbVec3f	coord;
-	    SbVec2f	stCoord;
-	    int		offset;
+        // software texture functions
+        case SoTextureCoordinateElement::FUNCTION:
+        {
+            // generate S and T coords from U and V coords
+            SbVec3f	coord;
+            SbVec2f	stCoord;
+            int		offset;
             SoTextureCoordinateBundle tb(action, TRUE);
 
-	    nsCoords = numUControlPoints.getValue();
-	    ntCoords = numVControlPoints.getValue();
+            nsCoords = numUControlPoints.getValue();
+            ntCoords = numVControlPoints.getValue();
 
-	    sKnots = duKnots;
-	    tKnots = dvKnots;
-	    nsKnots = uKnotVector.getNum();
-	    ntKnots = vKnotVector.getNum();
+            sKnots = duKnots;
+            tKnots = dvKnots;
+            nsKnots = uKnotVector.getNum();
+            ntKnots = vKnotVector.getNum();
 
-	    nDstCoords = nsCoords * ntCoords;
-	    dstCoords = (GLfloat *)new GLfloat[nDstCoords * 2];
+            nDstCoords = nsCoords * ntCoords;
+            dstCoords = (GLfloat *)new GLfloat[nDstCoords * 2];
 
-	    for(int v = 0; v < ntCoords; v++) {
-		for(int u = 0; u < nsCoords; u++) {
-		    if (ce->is3D()) {
-			offset = 3 * (v * (int)nsCoords + u);
-			coord[0] = dCoords[offset + 0];
-			coord[1] = dCoords[offset + 1];
-			coord[2] = dCoords[offset + 2];
-		    }
-		    else {
-			offset = 4 * (v * (int)nsCoords + u);
-			coord[0] = dCoords[offset + 0] / dCoords[offset + 3];
-			coord[1] = dCoords[offset + 1] / dCoords[offset + 3];
-			coord[2] = dCoords[offset + 2] / dCoords[offset + 3];
-		    }
+            for(int v = 0; v < ntCoords; v++) {
+                for(int u = 0; u < nsCoords; u++) {
+                    if (ce->is3D()) {
+                        offset = 3 * (v * (int)nsCoords + u);
+                        coord[0] = dCoords[offset + 0];
+                        coord[1] = dCoords[offset + 1];
+                        coord[2] = dCoords[offset + 2];
+                    }
+                    else {
+                        offset = 4 * (v * (int)nsCoords + u);
+                        coord[0] = dCoords[offset + 0] / dCoords[offset + 3];
+                        coord[1] = dCoords[offset + 1] / dCoords[offset + 3];
+                        coord[2] = dCoords[offset + 2] / dCoords[offset + 3];
+                    }
                     const SbVec4f &tc = tb.get(coord, SbVec3f(0.0, 1.0, 0.0));
-		    dstCoords[(v * (int)nsCoords  + u) * 2 + 0] = tc[0];
-		    dstCoords[(v * (int)nsCoords  + u) * 2 + 1] = tc[1];
-		}
-	    }
+                    dstCoords[(v * (int)nsCoords  + u) * 2 + 0] = tc[0];
+                    dstCoords[(v * (int)nsCoords  + u) * 2 + 1] = tc[1];
+                }
+            }
             break;
-  	  }
+        }
 
-	case SoTextureCoordinateElement::EXPLICIT:
-	  // get texture coordinates from texture node
-	  // get knot vectors from this node
-	  const SoTextureCoordinateElement *te = 
-	      SoTextureCoordinateElement::getInstance(action->getState());
-	  int32_t		nstCoords = te->getNum();
+        case SoTextureCoordinateElement::EXPLICIT:
+            // get texture coordinates from texture node
+            // get knot vectors from this node
+            const SoTextureCoordinateElement *te =
+                    SoTextureCoordinateElement::getInstance(action->getState());
+            int32_t		nstCoords = te->getNum();
 
-	  if (nstCoords < 1) {
-	      // Default texture coordinates are computed by defining
-	      // a bezier surface that is defined in the same valid
-	      // parameter space as the geometric surface.  The valid
-	      // parameter space is defined based on the order and knot
-	      // vector.  The coordinates go from 0 to one and the knot
-	      // vectors span the valid range of the geometric surface.
-	      // The knot vectors default to 0 and 1 in the event of bogus
-	      // input data.
-	      int uOrder, vOrder;
-	      GLfloat sKnotVal1, sKnotVal2, tKnotVal1, tKnotVal2;
+            if (nstCoords < 1) {
+                // Default texture coordinates are computed by defining
+                // a bezier surface that is defined in the same valid
+                // parameter space as the geometric surface.  The valid
+                // parameter space is defined based on the order and knot
+                // vector.  The coordinates go from 0 to one and the knot
+                // vectors span the valid range of the geometric surface.
+                // The knot vectors default to 0 and 1 in the event of bogus
+                // input data.
+                int uOrder, vOrder;
+                GLfloat sKnotVal1, sKnotVal2, tKnotVal1, tKnotVal2;
 
-	      uOrder = uKnotVector.getNum() - numUControlPoints.getValue();
-	      vOrder = vKnotVector.getNum() - numVControlPoints.getValue();
-	      if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
-		  sKnotVal1 = duKnots[uOrder-1];
-	      else
-		  sKnotVal1 = 0;
-	      if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
-		  sKnotVal2 = duKnots[uKnotVector.getNum()-uOrder];
-	      else
-		  sKnotVal2 = 1;
-	      if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
-		  tKnotVal1 = dvKnots[vOrder-1];
-	      else
-		  tKnotVal1 = 0;
-	      if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
-		  tKnotVal2 = dvKnots[vKnotVector.getNum()-vOrder];
-	      else
-		  tKnotVal2 = 1;
+                uOrder = uKnotVector.getNum() - numUControlPoints.getValue();
+                vOrder = vKnotVector.getNum() - numVControlPoints.getValue();
+                if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
+                    sKnotVal1 = duKnots[uOrder-1];
+                else
+                    sKnotVal1 = 0;
+                if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
+                    sKnotVal2 = duKnots[uKnotVector.getNum()-uOrder];
+                else
+                    sKnotVal2 = 1;
+                if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
+                    tKnotVal1 = dvKnots[vOrder-1];
+                else
+                    tKnotVal1 = 0;
+                if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
+                    tKnotVal2 = dvKnots[vKnotVector.getNum()-vOrder];
+                else
+                    tKnotVal2 = 1;
 
-	      // do a linear 2x2 array
-	      nsKnots = 4;
-	      ntKnots = 4;
+                // do a linear 2x2 array
+                nsKnots = 4;
+                ntKnots = 4;
 
-	      sKnots = (GLfloat *)new GLfloat[4];
-	      tKnots = (GLfloat *)new GLfloat[4];
+                sKnots = (GLfloat *)new GLfloat[4];
+                tKnots = (GLfloat *)new GLfloat[4];
 
-	      sKnots[0] = sKnots[1] = sKnotVal1;
-	      tKnots[0] = tKnots[1] = tKnotVal1;
-	      sKnots[2] = sKnots[3] = sKnotVal2;
-	      tKnots[2] = tKnots[3] = tKnotVal2;
-	      
-	      // allocate a 2 x 2 array of GLfloat[2]'s
-	      nsCoords = 2;
-	      ntCoords = 2;
-	      nDstCoords = nsCoords * ntCoords * 2;
-	      dstCoords = (GLfloat *)new GLfloat[nDstCoords];
-	      for(i = 0; i < 2; i++) {
-		  for(j = 0; j < 2; j++) {
-		      dstCoords[(i * 2 + j) * 2 + 0] = j;
-		      dstCoords[(i * 2 + j) * 2 + 1] = i;
-		  }
-	      }
-	  } else {
-	      // use coord indices if textureCoordIndices undefined
-	      if(textureCoordIndex.getNum() == 1 && texCoordIndices[0] < 0)
-		  texCoordIndices = coordIndices;
+                sKnots[0] = sKnots[1] = sKnotVal1;
+                tKnots[0] = tKnots[1] = tKnotVal1;
+                sKnots[2] = sKnots[3] = sKnotVal2;
+                tKnots[2] = tKnots[3] = tKnotVal2;
 
-	      nsKnots = sKnotVector.getNum();
-	      fKnots = (float *)sKnotVector.getValues(0);
-	      sKnots = (GLfloat *)new GLfloat[nsKnots];
-	      for (i=0; i < nsKnots; i++)
-		  sKnots[i] = (GLfloat)fKnots[i];
-	      
-	      ntKnots = tKnotVector.getNum();
-	      fKnots = (float *)tKnotVector.getValues(0);
-	      tKnots = (GLfloat *)new GLfloat[ntKnots];
-	      for (i=0; i < ntKnots; i++)
-		  tKnots[i] = (GLfloat)fKnots[i];
+                // allocate a 2 x 2 array of GLfloat[2]'s
+                nsCoords = 2;
+                ntCoords = 2;
+                nDstCoords = nsCoords * ntCoords * 2;
+                dstCoords = (GLfloat *)new GLfloat[nDstCoords];
+                for(i = 0; i < 2; i++) {
+                    for(j = 0; j < 2; j++) {
+                        dstCoords[(i * 2 + j) * 2 + 0] = j;
+                        dstCoords[(i * 2 + j) * 2 + 1] = i;
+                    }
+                }
+            } else {
+                // use coord indices if textureCoordIndices undefined
+                if(textureCoordIndex.getNum() == 1 && texCoordIndices[0] < 0)
+                    texCoordIndices = coordIndices;
 
-	      nsCoords = numSControlPoints.getValue();
-	      ntCoords = numTControlPoints.getValue();
-	      
-	      nDstCoords = 2 * nstCoords;
-	      dstCoords = (GLfloat *)new GLfloat[nDstCoords];
+                nsKnots = sKnotVector.getNum();
+                fKnots = (float *)sKnotVector.getValues(0);
+                sKnots = (GLfloat *)new GLfloat[nsKnots];
+                for (i=0; i < nsKnots; i++)
+                    sKnots[i] = (GLfloat)fKnots[i];
 
-	      if (SoTextureCoordinateBindingElement::get(action->getState()) ==
-		  SoTextureCoordinateBindingElement::PER_VERTEX)
-		  for(i = 0; i < nstCoords; i++) {
-		      const SbVec2f &tc = te->get2((int)i);
-		      dstCoords[i * 2    ] = (GLfloat)tc[0];
-		      dstCoords[i * 2 + 1] = (GLfloat)tc[1];
-		  }
-	      else for(i = 0; i < nstCoords; i++) {
-		  const SbVec2f &tc = te->get2((int)texCoordIndices[i]);
-		  dstCoords[i * 2    ] = (GLfloat)tc[0];
-		  dstCoords[i * 2 + 1] = (GLfloat)tc[1];
-	      }
-  	  }
-	  break;
-      }
-	sOffset = 2;
-	tOffset = sOffset * nsCoords;
+                ntKnots = tKnotVector.getNum();
+                fKnots = (float *)tKnotVector.getValues(0);
+                tKnots = (GLfloat *)new GLfloat[ntKnots];
+                for (i=0; i < ntKnots; i++)
+                    tKnots[i] = (GLfloat)fKnots[i];
+
+                nsCoords = numSControlPoints.getValue();
+                ntCoords = numTControlPoints.getValue();
+
+                nDstCoords = 2 * nstCoords;
+                dstCoords = (GLfloat *)new GLfloat[nDstCoords];
+
+                if (SoTextureCoordinateBindingElement::get(action->getState()) ==
+                        SoTextureCoordinateBindingElement::PER_VERTEX)
+                    for(i = 0; i < nstCoords; i++) {
+                        const SbVec2f &tc = te->get2((int)i);
+                        dstCoords[i * 2    ] = (GLfloat)tc[0];
+                        dstCoords[i * 2 + 1] = (GLfloat)tc[1];
+                    }
+                else for(i = 0; i < nstCoords; i++) {
+                    const SbVec2f &tc = te->get2((int)texCoordIndices[i]);
+                    dstCoords[i * 2    ] = (GLfloat)tc[0];
+                    dstCoords[i * 2 + 1] = (GLfloat)tc[1];
+                }
+            }
+            break;
+        }
+        sOffset = 2;
+        tOffset = sOffset * nsCoords;
     }
 
     //
@@ -503,32 +503,32 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
 
     // Draw the texture surface
     if(doTextures) {
-	// send down nurbs surface, then free memory
-	gluNurbsSurface(nurbsObj, (GLint)nsKnots, sKnots,
-                     (GLint)ntKnots, tKnots,
-		     (GLint)sOffset, (GLint)tOffset, dstCoords,
-		     (GLint)(nsKnots - nsCoords),
-                     (GLint)(ntKnots - ntCoords),
-                     GL_MAP2_TEXTURE_COORD_2);
+        // send down nurbs surface, then free memory
+        gluNurbsSurface(nurbsObj, (GLint)nsKnots, sKnots,
+                        (GLint)ntKnots, tKnots,
+                        (GLint)sOffset, (GLint)tOffset, dstCoords,
+                        (GLint)(nsKnots - nsCoords),
+                        (GLint)(ntKnots - ntCoords),
+                        GL_MAP2_TEXTURE_COORD_2);
 
-	// delete knots if not sharing them with the surface description
-	// (in the case of software texture coordinates only)
-	if(sKnots != duKnots) {
-	    delete [] sKnots;
-	    delete [] tKnots;
-	}
-	delete [] dstCoords;
+        // delete knots if not sharing them with the surface description
+        // (in the case of software texture coordinates only)
+        if(sKnots != duKnots) {
+            delete [] sKnots;
+            delete [] tKnots;
+        }
+        delete [] dstCoords;
     }
 
     // Draw the geometric surface
     gluNurbsSurface (nurbsObj, (GLint)(uKnotVector.getNum()), duKnots,
-                  (GLint)(vKnotVector.getNum()), dvKnots,
-                  (GLint)uOffset, (GLint)vOffset, dCoords,
-                  (GLint)(uKnotVector.getNum() -
-                      numUControlPoints.getValue()),
-                  (GLint)(vKnotVector.getNum() -
-                      numVControlPoints.getValue()),
-                  type);
+                     (GLint)(vKnotVector.getNum()), dvKnots,
+                     (GLint)uOffset, (GLint)vOffset, dCoords,
+                     (GLint)(uKnotVector.getNum() -
+                             numUControlPoints.getValue()),
+                     (GLint)(vKnotVector.getNum() -
+                             numVControlPoints.getValue()),
+                     type);
 
     //
     // Get all of the trim curves and use them to trim the surface.
@@ -554,7 +554,7 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
 
         // Get the trim curve.
         profile = (SoProfile *)trimNodes[(int) i];
-    	profile->getTrimCurve (action->getState(), numTrimCoords,
+        profile->getTrimCurve (action->getState(), numTrimCoords,
                                trimCoords, floatsPerVec,
                                numKnots, trimKnots);
 
@@ -564,10 +564,10 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
 
         // Check the linkage.
         if ((profile->linkage.getValue() == SoProfileElement::START_FIRST) ||
-            (profile->linkage.getValue() == SoProfileElement::START_NEW))
+                (profile->linkage.getValue() == SoProfileElement::START_NEW))
         {
             if (haveTrim)
-               gluEndTrim(nurbsObj);
+                gluEndTrim(nurbsObj);
             gluBeginTrim(nurbsObj);
             haveTrim = TRUE;
         }
@@ -589,7 +589,7 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
         {
             // Send down a Piecewise Linear Trim Curve
             gluPwlCurve (nurbsObj, (GLint)numTrimCoords, dTrimCoords,
-                    (GLint)offset, type);
+                         (GLint)offset, type);
         }
         else
         {
@@ -602,8 +602,8 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
                 *dtmp++ = (GLfloat)(*ftmp++);
 
             gluNurbsCurve (nurbsObj, (GLint)numKnots, dTrimKnots,
-                    (GLint)offset, dTrimCoords,
-                    (GLint)(numKnots - numTrimCoords), type);
+                           (GLint)offset, dTrimCoords,
+                           (GLint)(numKnots - numTrimCoords), type);
             delete[] dTrimKnots;
             delete[] trimKnots;
         }
@@ -636,7 +636,7 @@ SoIndexedNurbsSurface::rayPick(SoRayPickAction *action)
 {
     // First see if the object is pickable
     if (! shouldRayPick(action))
-	return;
+        return;
 
     // Tell the action about our current object space
     action->setObjectSpace();
@@ -679,7 +679,7 @@ SoIndexedNurbsSurface::rayPick(SoRayPickAction *action)
     // Determine whether a texture coordinate surface must be generated
     SbBool generateTexCoords = TRUE;
     if (SoTextureCoordinateElement::getType(action->getState()) ==
-        SoTextureCoordinateElement::FUNCTION)
+            SoTextureCoordinateElement::FUNCTION)
         generateTexCoords = FALSE;
 
     //
@@ -722,18 +722,18 @@ SoIndexedNurbsSurface::generatePrimitives(SoAction *action)
 
 
     if (SoComplexityTypeElement::get(action->getState()) ==
-        SoComplexityTypeElement::OBJECT_SPACE)
+            SoComplexityTypeElement::OBJECT_SPACE)
     {
         //
         // Set the sampling to be constant across the surface with the
         // tessellation to be 'steps' across the S and T parameters
         //
         primRender.setnurbsproperty( N_T2D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                     N_FIXEDRATE );
         primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                     N_FIXEDRATE );
         primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                     N_FIXEDRATE );
         primRender.setnurbsproperty( N_T2D,  N_S_STEPS, steps);
         primRender.setnurbsproperty( N_T2D,  N_T_STEPS, steps);
         primRender.setnurbsproperty( N_V3D,  N_S_STEPS, steps);
@@ -748,17 +748,17 @@ SoIndexedNurbsSurface::generatePrimitives(SoAction *action)
         // pixel tolerance.
         //
         primRender.setnurbsproperty( N_T2D,  N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                     N_PARAMETRICDISTANCE );
         primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                     N_PARAMETRICDISTANCE );
         primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                     N_PARAMETRICDISTANCE );
         primRender.setnurbsproperty( N_T2D, N_PIXEL_TOLERANCE,
-                pixTolerance );
+                                     pixTolerance );
         primRender.setnurbsproperty( N_V3D, N_PIXEL_TOLERANCE,
-                pixTolerance );
+                                     pixTolerance );
         primRender.setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE,
-                pixTolerance );
+                                     pixTolerance );
     }
 
     //
@@ -777,7 +777,7 @@ SoIndexedNurbsSurface::generatePrimitives(SoAction *action)
     // Determine whether a texture coordinate surface must be generated
     SbBool         generateTexCoords = TRUE;
     if (SoTextureCoordinateElement::getType(action->getState()) ==
-        SoTextureCoordinateElement::FUNCTION)
+            SoTextureCoordinateElement::FUNCTION)
         generateTexCoords = FALSE;
 
     //
@@ -797,9 +797,9 @@ SoIndexedNurbsSurface::generatePrimitives(SoAction *action)
 
 void
 SoIndexedNurbsSurface::primCB(
-    SoAction *act,
-    SoPrimitiveVertex *vertices,
-    void *userData)
+        SoAction *act,
+        SoPrimitiveVertex *vertices,
+        void *userData)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -817,8 +817,8 @@ SoIndexedNurbsSurface::primCB(
 
 void
 SoIndexedNurbsSurface::sendPrimitive(
-    SoAction *act,
-    SoPrimitiveVertex *vertices )
+        SoAction *act,
+        SoPrimitiveVertex *vertices )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -835,7 +835,7 @@ SoIndexedNurbsSurface::sendPrimitive(
 
 void
 SoIndexedNurbsSurface::computeBBox(SoAction *action,
-				   SbBox3f &box, SbVec3f &center)
+                                   SbBox3f &box, SbVec3f &center)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -891,9 +891,9 @@ SoIndexedNurbsSurface::computeBBox(SoAction *action,
 
 void
 SoIndexedNurbsSurface::drawNURBS(
-    _SoNurbsNurbsTessellator *render,
-    SoState *state,
-    SbBool doTextures )
+        _SoNurbsNurbsTessellator *render,
+        SoState *state,
+        SbBool doTextures )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -926,7 +926,7 @@ SoIndexedNurbsSurface::drawNURBS(
         coords = new float[3*numCoordIndices];
         float *tmpCoord = coords;
         for (i=0; i<numCoordIndices; i++) {
-        
+
             const SbVec3f &c3 = ce->get3((int)coordIndices[i]);
             *tmpCoord++ = c3[0];
             *tmpCoord++ = c3[1];
@@ -940,7 +940,7 @@ SoIndexedNurbsSurface::drawNURBS(
         coords = new float[4*numCoordIndices];
         float *tmpCoord = coords;
         for (i=0; i<numCoordIndices; i++) {
-        
+
             const SbVec4f &c4 = ce->get4((int)coordIndices[i]);
             *tmpCoord++ = c4[0];
             *tmpCoord++ = c4[1];
@@ -962,149 +962,149 @@ SoIndexedNurbsSurface::drawNURBS(
     // at each vertex.
     if(doTextures) {
 
-	switch (SoTextureCoordinateElement::getType(state)) {
+        switch (SoTextureCoordinateElement::getType(state)) {
 
-          // software texture functions
-	  case SoTextureCoordinateElement::FUNCTION:
-          {
-	    // generate S and T coords from U and V coords
-	    SbVec3f	coord;
-	    SbVec2f	stCoord;
-	    int		offset;
+        // software texture functions
+        case SoTextureCoordinateElement::FUNCTION:
+        {
+            // generate S and T coords from U and V coords
+            SbVec3f	coord;
+            SbVec2f	stCoord;
+            int		offset;
 
-	    nsCoords = numUControlPoints.getValue();
-	    ntCoords = numVControlPoints.getValue();
+            nsCoords = numUControlPoints.getValue();
+            ntCoords = numVControlPoints.getValue();
 
-	    sKnots = (float *) uKnotVector.getValues(0);
-	    tKnots = (float *) vKnotVector.getValues(0);
-	    nsKnots = uKnotVector.getNum();
-	    ntKnots = vKnotVector.getNum();
+            sKnots = (float *) uKnotVector.getValues(0);
+            tKnots = (float *) vKnotVector.getValues(0);
+            nsKnots = uKnotVector.getNum();
+            ntKnots = vKnotVector.getNum();
 
-	    nstCoords = nsCoords * ntCoords;
-	    stCoords = (float *)new float[nstCoords * 2];
-	    newSTCoords = TRUE;
-
-	    for(int v = 0; v < ntCoords; v++) {
-		for(int u = 0; u < nsCoords; u++) {
-		    if (ce->is3D()) {
-			offset = 3 * (v * (int)nsCoords + u);
-			coord[0] = coords[offset + 0];
-			coord[1] = coords[offset + 1];
-			coord[2] = coords[offset + 2];
-		    }
-		    else {
-			offset = 4 * (v * (int)nsCoords + u);
-			coord[0] = coords[offset + 0] / coords[offset + 3];
-			coord[1] = coords[offset + 1] / coords[offset + 3];
-			coord[2] = coords[offset + 2] / coords[offset + 3];
-		    }
-                    const SbVec4f &tc = te->get(coord, SbVec3f(0.0, 1.0, 0.0));
-		    stCoords[(v * (int)nsCoords  + u) * 2 + 0] = tc[0];
-		    stCoords[(v * (int)nsCoords  + u) * 2 + 1] = tc[1];
-		}
-	    }
-	  }
-	  break;
-
-  	  // texture coordinates defined from texture coordinate node
-	case SoTextureCoordinateElement::EXPLICIT:
-	  nstCoords = te->getNum();
-	  if (nstCoords < 1) {
-            // Default texture coordinates are computed by defining
-            // a bezier surface that is defined in the same valid
-            // parameter space as the geometric surface.  The valid
-            // parameter space is defined based on the order and knot
-            // vector.  The coordinates go from 0 to one and the knot
-            // vectors span the valid range of the geometric surface.
-            // The knot vectors default to 0 and 1 in the event of bogus
-            // input data.
-            int uOrder, vOrder;
-            float sKnotVal1, sKnotVal2, tKnotVal1, tKnotVal2;
-
-            uOrder = uKnotVector.getNum() - numUControlPoints.getValue();
-            vOrder = vKnotVector.getNum() - numVControlPoints.getValue();
-            if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
-                sKnotVal1 = uKnotVector[uOrder-1];
-            else
-                sKnotVal1 = 0;
-            if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
-                sKnotVal2 = uKnotVector[uKnotVector.getNum()-uOrder];
-            else
-                sKnotVal2 = 1;
-            if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
-                tKnotVal1 = vKnotVector[vOrder-1];
-            else
-                tKnotVal1 = 0;
-            if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
-                tKnotVal2 = vKnotVector[vKnotVector.getNum()-vOrder];
-            else
-                tKnotVal2 = 1;
-
-	    // do a linear 2x2 array
-	    nsKnots = 4;
-	    ntKnots = 4;
-
-	    sKnots = (float *)new float[4];
-	    tKnots = (float *)new float[4];
-	    newKnots = TRUE;
-		
-	    sKnots[0] = sKnots[1] = sKnotVal1;
-	    tKnots[0] = tKnots[1] = tKnotVal1;
-	    sKnots[2] = sKnots[3] = sKnotVal2;
-	    tKnots[2] = tKnots[3] = tKnotVal2;
-
-	    // allocate a 2 x 2 array of float[2]'s
-	    nsCoords = 2;
-	    ntCoords = 2;
-	    nstCoords = nsCoords * ntCoords * 2;
-	    stCoords = (float *)new float[nstCoords];
-	    newSTCoords = TRUE;
-	    for(i = 0; i < 2; i++) {
-		for(j = 0; j < 2; j++) {
-		    stCoords[(i * 2 + j) * 2 + 0] = j;
-		    stCoords[(i * 2 + j) * 2 + 1] = i;
-		}
-	    }
-	  } else {
-	    const int32_t *	texCoordIndices;
-
-	    nstCoords *= 2;
-
-	    if(textureCoordIndex.getNum() == 1)
-		texCoordIndices = coordIndices;
-	    else
-    		texCoordIndices = textureCoordIndex.getValues(0);
-
-	    // use coord indices if textureCoordIndices undefined
-
-	    nsKnots = sKnotVector.getNum();
-	    ntKnots = tKnotVector.getNum();
-	    sKnots = (float *)sKnotVector.getValues(0);
-	    tKnots = (float *)tKnotVector.getValues(0);
-
-	    nsCoords = numSControlPoints.getValue();
-	    ntCoords = numTControlPoints.getValue();
-
-            stCoords = new float[nstCoords];
+            nstCoords = nsCoords * ntCoords;
+            stCoords = (float *)new float[nstCoords * 2];
             newSTCoords = TRUE;
-	    if (SoTextureCoordinateBindingElement::get(state) ==
-                SoTextureCoordinateBindingElement::PER_VERTEX) {
-		for(i = 0; i < nstCoords / 2; i++)  {
-                    const SbVec2f &tc = te->get2((int)i);
-		    stCoords[i*2 + 0] = tc[0];
-		    stCoords[i*2 + 1] = tc[1];
-		}
+
+            for(int v = 0; v < ntCoords; v++) {
+                for(int u = 0; u < nsCoords; u++) {
+                    if (ce->is3D()) {
+                        offset = 3 * (v * (int)nsCoords + u);
+                        coord[0] = coords[offset + 0];
+                        coord[1] = coords[offset + 1];
+                        coord[2] = coords[offset + 2];
+                    }
+                    else {
+                        offset = 4 * (v * (int)nsCoords + u);
+                        coord[0] = coords[offset + 0] / coords[offset + 3];
+                        coord[1] = coords[offset + 1] / coords[offset + 3];
+                        coord[2] = coords[offset + 2] / coords[offset + 3];
+                    }
+                    const SbVec4f &tc = te->get(coord, SbVec3f(0.0, 1.0, 0.0));
+                    stCoords[(v * (int)nsCoords  + u) * 2 + 0] = tc[0];
+                    stCoords[(v * (int)nsCoords  + u) * 2 + 1] = tc[1];
+                }
             }
-	    else {
-		for(i = 0; i < nstCoords / 2; i++)  {
-                    const SbVec2f &tc = te->get2((int)texCoordIndices[i]);
-		    stCoords[i*2 + 0] = tc[0];
-		    stCoords[i*2 + 1] = tc[1];
-		}
-	    }
-	  }
-	  break;
-      }
+        }
+            break;
+
+            // texture coordinates defined from texture coordinate node
+        case SoTextureCoordinateElement::EXPLICIT:
+            nstCoords = te->getNum();
+            if (nstCoords < 1) {
+                // Default texture coordinates are computed by defining
+                // a bezier surface that is defined in the same valid
+                // parameter space as the geometric surface.  The valid
+                // parameter space is defined based on the order and knot
+                // vector.  The coordinates go from 0 to one and the knot
+                // vectors span the valid range of the geometric surface.
+                // The knot vectors default to 0 and 1 in the event of bogus
+                // input data.
+                int uOrder, vOrder;
+                float sKnotVal1, sKnotVal2, tKnotVal1, tKnotVal2;
+
+                uOrder = uKnotVector.getNum() - numUControlPoints.getValue();
+                vOrder = vKnotVector.getNum() - numVControlPoints.getValue();
+                if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
+                    sKnotVal1 = uKnotVector[uOrder-1];
+                else
+                    sKnotVal1 = 0;
+                if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
+                    sKnotVal2 = uKnotVector[uKnotVector.getNum()-uOrder];
+                else
+                    sKnotVal2 = 1;
+                if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
+                    tKnotVal1 = vKnotVector[vOrder-1];
+                else
+                    tKnotVal1 = 0;
+                if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
+                    tKnotVal2 = vKnotVector[vKnotVector.getNum()-vOrder];
+                else
+                    tKnotVal2 = 1;
+
+                // do a linear 2x2 array
+                nsKnots = 4;
+                ntKnots = 4;
+
+                sKnots = (float *)new float[4];
+                tKnots = (float *)new float[4];
+                newKnots = TRUE;
+
+                sKnots[0] = sKnots[1] = sKnotVal1;
+                tKnots[0] = tKnots[1] = tKnotVal1;
+                sKnots[2] = sKnots[3] = sKnotVal2;
+                tKnots[2] = tKnots[3] = tKnotVal2;
+
+                // allocate a 2 x 2 array of float[2]'s
+                nsCoords = 2;
+                ntCoords = 2;
+                nstCoords = nsCoords * ntCoords * 2;
+                stCoords = (float *)new float[nstCoords];
+                newSTCoords = TRUE;
+                for(i = 0; i < 2; i++) {
+                    for(j = 0; j < 2; j++) {
+                        stCoords[(i * 2 + j) * 2 + 0] = j;
+                        stCoords[(i * 2 + j) * 2 + 1] = i;
+                    }
+                }
+            } else {
+                const int32_t *	texCoordIndices;
+
+                nstCoords *= 2;
+
+                if(textureCoordIndex.getNum() == 1)
+                    texCoordIndices = coordIndices;
+                else
+                    texCoordIndices = textureCoordIndex.getValues(0);
+
+                // use coord indices if textureCoordIndices undefined
+
+                nsKnots = sKnotVector.getNum();
+                ntKnots = tKnotVector.getNum();
+                sKnots = (float *)sKnotVector.getValues(0);
+                tKnots = (float *)tKnotVector.getValues(0);
+
+                nsCoords = numSControlPoints.getValue();
+                ntCoords = numTControlPoints.getValue();
+
+                stCoords = new float[nstCoords];
+                newSTCoords = TRUE;
+                if (SoTextureCoordinateBindingElement::get(state) ==
+                        SoTextureCoordinateBindingElement::PER_VERTEX) {
+                    for(i = 0; i < nstCoords / 2; i++)  {
+                        const SbVec2f &tc = te->get2((int)i);
+                        stCoords[i*2 + 0] = tc[0];
+                        stCoords[i*2 + 1] = tc[1];
+                    }
+                }
+                else {
+                    for(i = 0; i < nstCoords / 2; i++)  {
+                        const SbVec2f &tc = te->get2((int)texCoordIndices[i]);
+                        stCoords[i*2 + 0] = tc[0];
+                        stCoords[i*2 + 1] = tc[1];
+                    }
+                }
+            }
+            break;
+        }
     }
 
     //
@@ -1119,9 +1119,9 @@ SoIndexedNurbsSurface::drawNURBS(
         // send down nurbs surface, then free memory
         render->nurbssurface(nsKnots, (INREAL *)sKnots, ntKnots,
                              (INREAL *)tKnots,
-                     	     2 * sizeof(float), 2 * sizeof(float) * nsCoords,
-			     (INREAL *)stCoords, nsKnots - nsCoords,
-			     ntKnots - ntCoords, N_T2D);
+                             2 * sizeof(float), 2 * sizeof(float) * nsCoords,
+                             (INREAL *)stCoords, nsKnots - nsCoords,
+                             ntKnots - ntCoords, N_T2D);
 
         // delete knots if not sharing them with the surface description
         // (in the case of software texture coordinates only)
@@ -1129,18 +1129,18 @@ SoIndexedNurbsSurface::drawNURBS(
             delete [] sKnots;
             delete [] tKnots;
         }
-	if(newSTCoords)
-	    delete [] stCoords;
+        if(newSTCoords)
+            delete [] stCoords;
     }
     
     render->nurbssurface (uKnotVector.getNum(),
-                    (INREAL *) uKnotVector.getValues(0),
-                    vKnotVector.getNum(),
-                    (INREAL *) vKnotVector.getValues(0),
-                    uOffset, vOffset, (INREAL *)coords,
-                    uKnotVector.getNum() - numUControlPoints.getValue(),
-                    vKnotVector.getNum() - numVControlPoints.getValue(),
-                    type);
+                          (INREAL *) uKnotVector.getValues(0),
+                          vKnotVector.getNum(),
+                          (INREAL *) vKnotVector.getValues(0),
+                          uOffset, vOffset, (INREAL *)coords,
+                          uKnotVector.getNum() - numUControlPoints.getValue(),
+                          vKnotVector.getNum() - numVControlPoints.getValue(),
+                          type);
 
     //
     // Get all of the trim curves and use them to trim the surface.
@@ -1159,10 +1159,10 @@ SoIndexedNurbsSurface::drawNURBS(
     // new trim curve.  Then, send the trim to the NURBS library.
     //
     for (i=0; i<numTrims; i++) {
-    
+
         // Get the trim curve.
         profile = (SoProfile *)trimNodes[i];
-    	profile->getTrimCurve (state, numTrimCoords,
+        profile->getTrimCurve (state, numTrimCoords,
                                trimCoords, floatsPerVec,
                                numKnots, trimKnots);
 
@@ -1172,11 +1172,11 @@ SoIndexedNurbsSurface::drawNURBS(
 
         // Check the linkage.
         if ((profile->linkage.getValue() == SoProfileElement::START_FIRST) ||
-            (profile->linkage.getValue() == SoProfileElement::START_NEW)) {
-        
+                (profile->linkage.getValue() == SoProfileElement::START_NEW)) {
+
             // Begin a new trim curve.
             if (haveTrim)
-               render->endtrim();
+                render->endtrim();
             render->bgntrim();
             haveTrim = TRUE;
         }
@@ -1198,7 +1198,7 @@ SoIndexedNurbsSurface::drawNURBS(
             render->nurbscurve (numKnots, (INREAL *)trimKnots, offset,
                                 (INREAL *)trimCoords,
                                 numKnots - numTrimCoords, type);
-        }  
+        }
         delete[] trimCoords;
         if (numKnots != 0)
             delete[] trimKnots;
@@ -1222,8 +1222,8 @@ SoIndexedNurbsSurface::drawNURBS(
 
 void
 SoIndexedNurbsSurface::calcTotalMatrix(
-    SoState *state,
-    SbMatrix &totalMat )
+        SoState *state,
+        SbMatrix &totalMat )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -1250,9 +1250,9 @@ SoIndexedNurbsSurface::calcTotalMatrix(
 
 void
 SoIndexedNurbsSurface::multMatrix4d (
-   SbMatrix &n,
-   SbMatrix left,
-   SbMatrix right )
+        SbMatrix &n,
+        SbMatrix left,
+        SbMatrix right )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -1262,12 +1262,12 @@ SoIndexedNurbsSurface::multMatrix4d (
     for (i=0; i<4; i++)
     {
         n[i][0] = left[i][0]*right[0][0] + left[i][1]*right[1][0] +
-                  left[i][2]*right[2][0] + left[i][3]*right[3][0];
+                left[i][2]*right[2][0] + left[i][3]*right[3][0];
         n[i][1] = left[i][0]*right[0][1] + left[i][1]*right[1][1] +
-                  left[i][2]*right[2][1] + left[i][3]*right[3][1];
+                left[i][2]*right[2][1] + left[i][3]*right[3][1];
         n[i][2] = left[i][0]*right[0][2] + left[i][1]*right[1][2] +
-                  left[i][2]*right[2][2] + left[i][3]*right[3][2];
+                left[i][2]*right[2][2] + left[i][3]*right[3][2];
         n[i][3] = left[i][0]*right[0][3] + left[i][1]*right[1][3] +
-                  left[i][2]*right[2][3] + left[i][3]*right[3][3];
+                left[i][2]*right[2][3] + left[i][3]*right[3][3];
     }
 }
