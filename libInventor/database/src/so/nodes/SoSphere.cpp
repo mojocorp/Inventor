@@ -500,7 +500,6 @@ SoSphere::GLRenderGeneric(SoGLRenderAction *action,
         glBegin(GL_TRIANGLE_STRIP);
 
         float yBot = (float) i / depth;
-        float yTop = 1.0;
         float botWidth = 1 - yBot;
 
         // First cap vertex

@@ -87,7 +87,7 @@ SoSFImage::initClass()
 // Use: public
 
 void
-SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b, CopyPolicy copypolicy)
+SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b, CopyPolicy)
 //
 ////////////////////////////////////////////////////////////////////////
 {

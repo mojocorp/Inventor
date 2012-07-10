@@ -71,9 +71,9 @@
 //////////////////////////////////////////////////////////////////////////////
 
 struct SoOutputEntry {
-    SbName		name;		// Name of output
-    int32_t		offset;		// Offset of output within object
-    SoType type;			// Type of output
+    SbName      name;   // Name of output
+    ptrdiff_t   offset; // Offset of output within object
+    SoType      type;   // Type of output
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -187,7 +187,7 @@ SoEngineOutputData::getIndex(const SoEngine *func,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int offset = (const char *) output - (const char *) func;
+    ptrdiff_t offset = (const char *) output - (const char *) func;
 
     // Loop through the list looking for the correct offset:
     // (we'll assume this won't be very slow, since the list will

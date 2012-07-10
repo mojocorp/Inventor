@@ -157,6 +157,8 @@ typedef int	SbBool;
 #   define CALLBACK    __stdcall
 #endif
 
+#  pragma warning(disable: 4251) /* class 'A' needs to have dll interface for to be used by clients of class 'B'. */
+
 #  ifdef INVENTOR_EXPORTS
 #     define INVENTOR_API __declspec(dllexport)
 #  else
