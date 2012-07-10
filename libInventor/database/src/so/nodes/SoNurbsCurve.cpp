@@ -138,29 +138,25 @@ SoNurbsCurve::GLRender(SoGLRenderAction *action)
 {
     // First see if the object is visible and should be rendered now
     if (! shouldGLRender(action))
-	return;
+        return;
 
     SoState *state = action->getState();
     state->push();
 
     // Draw unlit:
     if (SoLazyElement::getLightModel(state) != SoLazyElement::BASE_COLOR) {
-        SoLazyElement::setLightModel(state,
-                                 SoLazyElement::BASE_COLOR);
+        SoLazyElement::setLightModel(state, SoLazyElement::BASE_COLOR);
     }
     // Make sure textures are disabled, as texturing of NURBS curves
     // has not been implemented.
     if (SoGLTextureEnabledElement::get(state)) {
-	SoGLTextureEnabledElement::set(state, FALSE);
-    }        
+        SoGLTextureEnabledElement::set(state, FALSE);
+    }
 
     // Make sure the first current material is sent to GL
-    SoMaterialBundle	mb(action);
+    SoMaterialBundle mb(action);
     mb.sendFirst();
 
-    const SoCoordinateElement   *ce =
-            SoCoordinateElement::getInstance(state);
-    SB_UNUSED(ce);
     //
     // Create a NURBS library renderer, and use it by making regular
     // GL calls to it.
@@ -171,8 +167,7 @@ SoNurbsCurve::GLRender(SoGLRenderAction *action)
     if (val < 0.0) val = 0.0;
     if (val > 1.0) val = 1.0;
 
-    if (SoComplexityTypeElement::get(state) ==
-         SoComplexityTypeElement::OBJECT_SPACE)
+    if (SoComplexityTypeElement::get(state) == SoComplexityTypeElement::OBJECT_SPACE)
     {
         //
         // Set the nurbs properties to render the curve with uniform
@@ -183,9 +178,9 @@ SoNurbsCurve::GLRender(SoGLRenderAction *action)
         else            steps = (int)(380.0*val) - 180;
 
         render->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                  N_FIXEDRATE );
         render->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                  N_FIXEDRATE );
         render->setnurbsproperty( N_V3D,  N_S_STEPS, steps);
         render->setnurbsproperty( N_V3D,  N_T_STEPS, steps);
         render->setnurbsproperty( N_V3DR, N_S_STEPS, steps);
@@ -210,9 +205,9 @@ SoNurbsCurve::GLRender(SoGLRenderAction *action)
         else                 pixTolerance = .125;
 
         render->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                  N_PARAMETRICDISTANCE );
         render->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                  N_PARAMETRICDISTANCE );
         render->setnurbsproperty( N_V3D,  N_PIXEL_TOLERANCE, pixTolerance );
         render->setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE, pixTolerance );
 
@@ -222,8 +217,7 @@ SoNurbsCurve::GLRender(SoGLRenderAction *action)
         // Pass the resulting matrix to the NURBS library for use in
         // determining sampling and culling of the curve.
         //
-        const SbViewportRegion & vpRegion =
-                SoViewportRegionElement::get(state);
+        const SbViewportRegion & vpRegion = SoViewportRegionElement::get(state);
         const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
         SbMatrix totalMat;
         calcTotalMatrix (state, totalMat);
@@ -255,7 +249,7 @@ SoNurbsCurve::rayPick(SoRayPickAction *action)
 {
     // First see if the object is pickable
     if (! shouldRayPick(action))
-	return;
+        return;
 
     action->setObjectSpace();
 
@@ -295,8 +289,7 @@ SoNurbsCurve::rayPick(SoRayPickAction *action)
     // Pass the resulting matrix to the NURBS library for use in determining
     // sampling and culling of the curve.
     //
-    const SbViewportRegion & vpRegion =
-            SoViewportRegionElement::get(action->getState());
+    const SbViewportRegion & vpRegion = SoViewportRegionElement::get(action->getState());
     const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
     SbMatrix totalMat;
     calcTotalMatrix(action->getState(), totalMat);
@@ -330,8 +323,7 @@ SoNurbsCurve::generatePrimitives(SoAction *action)
     //
     float val = SoComplexityElement::get(action->getState());
 
-    if (SoComplexityTypeElement::get(action->getState()) ==
-         SoComplexityTypeElement::OBJECT_SPACE)
+    if (SoComplexityTypeElement::get(action->getState()) == SoComplexityTypeElement::OBJECT_SPACE)
     {
         //
         // Set the nurbs properties to render the curve with uniform
@@ -342,9 +334,9 @@ SoNurbsCurve::generatePrimitives(SoAction *action)
         else            steps = (int)(380.0*val) - 180;
 
         primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                     N_FIXEDRATE );
         primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
+                                     N_FIXEDRATE );
         primRender.setnurbsproperty( N_V3D,  N_S_STEPS, steps);
         primRender.setnurbsproperty( N_V3D,  N_T_STEPS, steps);
         primRender.setnurbsproperty( N_V3DR, N_S_STEPS, steps);
@@ -369,9 +361,9 @@ SoNurbsCurve::generatePrimitives(SoAction *action)
         else                 pixTolerance = .125;
 
         primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                     N_PARAMETRICDISTANCE );
         primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
+                                     N_PARAMETRICDISTANCE );
         primRender.setnurbsproperty( N_V3D,  N_PIXEL_TOLERANCE, pixTolerance );
         primRender.setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE, pixTolerance );
 
@@ -381,8 +373,7 @@ SoNurbsCurve::generatePrimitives(SoAction *action)
         // Pass the resulting matrix to the NURBS library for use in
         // determining sampling and culling of the surface.
         //
-        const SbViewportRegion & vpRegion =
-                SoViewportRegionElement::get(action->getState());
+        const SbViewportRegion & vpRegion = SoViewportRegionElement::get(action->getState());
         const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
         SbMatrix totalMat;
         calcTotalMatrix (action->getState(), totalMat);
@@ -406,9 +397,9 @@ SoNurbsCurve::generatePrimitives(SoAction *action)
 
 void
 SoNurbsCurve::primCB(
-    SoAction *act,
-    SoPrimitiveVertex *vertices,
-    void *userData)
+        SoAction *act,
+        SoPrimitiveVertex *vertices,
+        void *userData)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -426,8 +417,8 @@ SoNurbsCurve::primCB(
 
 void
 SoNurbsCurve::sendPrimitive(
-    SoAction *act,
-    SoPrimitiveVertex *vertices )
+        SoAction *act,
+        SoPrimitiveVertex *vertices )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -469,8 +460,7 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 {
     int32_t			nCoords;
     int				curCoord, j;
-    const SoCoordinateElement   *ce =
-            SoCoordinateElement::getInstance(action->getState());
+    const SoCoordinateElement   *ce = SoCoordinateElement::getInstance(action->getState());
 
     //
     // Loop through coordinates, keeping max bounding box and sum of coords
@@ -491,7 +481,7 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
             // Wrap around if necessary
             //
             if (curCoord >= nCoords)
-	        curCoord = 0;
+                curCoord = 0;
             const SbVec3f &coord = ce->get3(curCoord);
             box.extendBy(coord);
             center += coord;
@@ -499,14 +489,14 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
         }
     }
     else {
-        SbVec3f	        tmpCoord;
+        SbVec3f tmpCoord;
 
         for (j = 0; j < numControlPoints.getValue(); j++) {
             //
             // Wrap around if necessary
             //
             if (curCoord >= nCoords)
-	        curCoord = 0;
+                curCoord = 0;
             const SbVec4f &coord = ce->get4(curCoord);
             coord.getReal(tmpCoord);
             box.extendBy(tmpCoord);
@@ -528,16 +518,15 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
 void
 SoNurbsCurve::drawNURBS(
-    _SoNurbsNurbsTessellator *render,
-    SoState *state ) 
+        _SoNurbsNurbsTessellator *render,
+        SoState *state )
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoCoordinateElement   *ce =
-            SoCoordinateElement::getInstance(state);
-    int32_t                        type, nCoords, offset;
-    float                       *coords;
+    const SoCoordinateElement *ce = SoCoordinateElement::getInstance(state);
+    int32_t                    type, nCoords, offset;
+    float                     *coords;
 
     nCoords = ce->getNum();
 
@@ -581,10 +570,10 @@ SoNurbsCurve::drawNURBS(
 
     render->bgncurve(0);
     render->nurbscurve (knotVector.getNum(),
-        (INREAL *) knotVector.getValues(0),
-        offset, (INREAL *)coords,
-        knotVector.getNum() - numControlPoints.getValue(),
-        type);
+                        (INREAL *) knotVector.getValues(0),
+                        offset, (INREAL *)coords,
+                        knotVector.getNum() - numControlPoints.getValue(),
+                        type);
 
     render->endcurve();
     delete[] coords;
@@ -602,8 +591,8 @@ SoNurbsCurve::drawNURBS(
 
 void
 SoNurbsCurve::calcTotalMatrix(
-    SoState  *state,
-    SbMatrix &totalMat )
+        SoState  *state,
+        SbMatrix &totalMat )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -630,16 +619,14 @@ SoNurbsCurve::calcTotalMatrix(
 
 void
 SoNurbsCurve::multMatrix4d (
-   SbMatrix &n,
-   SbMatrix left,
-   SbMatrix right )
+        SbMatrix &n,
+        SbMatrix left,
+        SbMatrix right )
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
-
-    for (i=0; i<4; i++)
+    for (int i=0; i<4; i++)
     {
         n[i][0] = left[i][0]*right[0][0] + left[i][1]*right[1][0] +
                   left[i][2]*right[2][0] + left[i][3]*right[3][0];

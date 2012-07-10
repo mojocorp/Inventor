@@ -124,48 +124,48 @@ class INVENTOR_API SoIndexedNurbsCurve : public SoShape {
 
     SO_NODE_HEADER(SoIndexedNurbsCurve);
 
-  public:
+public:
 
     // Fields
-    SoSFInt32		numControlPoints;   ///< Number of control points for the curve.
-    SoMFInt32		coordIndex;         ///< Coordinate indices for the control points.
-    SoMFFloat		knotVector;         ///< The knot vector for the curve. Values must be in non-decreasing order.
+    SoSFInt32       numControlPoints;   ///< Number of control points for the curve.
+    SoMFInt32       coordIndex;         ///< Coordinate indices for the control points.
+    SoMFFloat       knotVector;         ///< The knot vector for the curve. Values must be in non-decreasing order.
 
     /// Creates an indexed NURBS curve node with default settings.
     SoIndexedNurbsCurve();
 
-  SoEXTENDER public:
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
+SoEXTENDER public:
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void rayPick(SoRayPickAction *action);
 
     // Redefine this to tell open caches that they contain lines
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
-    void                sendPrimitive(SoAction *, SoPrimitiveVertex *);
+    void sendPrimitive(SoAction *, SoPrimitiveVertex *);
 
-  protected:
+protected:
     // Generates triangles representing curve
-    virtual void	generatePrimitives(SoAction *action);
+    virtual void generatePrimitives(SoAction *action);
 
     // Computes bounding box of curve
-    virtual void	computeBBox(SoAction *action, SbBox3f &box,
-				    SbVec3f &center);
+    virtual void computeBBox(SoAction *action, SbBox3f &box,
+                             SbVec3f &center);
 
     ~SoIndexedNurbsCurve();
 
-  private:
-    void                drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state);
+private:
+    void drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state);
 
-    void                calcTotalMatrix( SoState *state, SbMatrix &totalMat );
+    void calcTotalMatrix( SoState *state, SbMatrix &totalMat );
 
-    void                multMatrix4d ( SbMatrix &n, SbMatrix left,
-                              SbMatrix right );
+    void multMatrix4d ( SbMatrix &n, SbMatrix left,
+                        SbMatrix right );
 
     // This callback gets details from the NURBS library
-    static void         primCB(SoAction *, SoPrimitiveVertex *, void *);
+    static void primCB(SoAction *, SoPrimitiveVertex *, void *);
 };
 
 #endif /* _SO_INDEXED_NURBS_CURVE_ */

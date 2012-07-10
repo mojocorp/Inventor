@@ -131,51 +131,51 @@ class INVENTOR_API SoNurbsSurface : public SoShape {
 
     SO_NODE_HEADER(SoNurbsSurface);
 
-  public:
+public:
     // Fields
-    SoSFInt32		numUControlPoints; ///< Number of control points in the U direction.
-    SoSFInt32		numVControlPoints; ///< Number of control points in the V direction.
-    SoSFInt32		numSControlPoints; ///< Number of control points in the S direction.
-    SoSFInt32		numTControlPoints; ///< Number of control points in the T direction.
-    SoMFFloat		uKnotVector;       ///< The knot vectors in the U direction.
-    SoMFFloat		vKnotVector;       ///< The knot vectors in the V direction.
-    SoMFFloat		sKnotVector;       ///< The knot vectors in the S direction.
-    SoMFFloat		tKnotVector;       ///< The knot vectors in the T direction.
+    SoSFInt32       numUControlPoints; ///< Number of control points in the U direction.
+    SoSFInt32       numVControlPoints; ///< Number of control points in the V direction.
+    SoSFInt32       numSControlPoints; ///< Number of control points in the S direction.
+    SoSFInt32       numTControlPoints; ///< Number of control points in the T direction.
+    SoMFFloat       uKnotVector;       ///< The knot vectors in the U direction.
+    SoMFFloat       vKnotVector;       ///< The knot vectors in the V direction.
+    SoMFFloat       sKnotVector;       ///< The knot vectors in the S direction.
+    SoMFFloat       tKnotVector;       ///< The knot vectors in the T direction.
 
     /// Creates a NURBS surface node with default settings.
     SoNurbsSurface();
 
-  SoEXTENDER public:
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
+SoEXTENDER public:
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void rayPick(SoRayPickAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
-    void                sendPrimitive(SoAction *, SoPrimitiveVertex *);
+    void sendPrimitive(SoAction *, SoPrimitiveVertex *);
 
-  protected:
+protected:
     // Generates triangles representing a surface
-    virtual void	generatePrimitives(SoAction *action);
+    virtual void generatePrimitives(SoAction *action);
 
     // Computes bounding box of surface
-    virtual void	computeBBox(SoAction *action, SbBox3f &box,
-				    SbVec3f &center);
+    virtual void computeBBox(SoAction *action, SbBox3f &box,
+                             SbVec3f &center);
 
     ~SoNurbsSurface();
 
-  private:
+private:
     // Renders the surface
-    void                drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state,
-				  SbBool doTextures);
+    void drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state,
+                   SbBool doTextures);
 
     // Matrix operations for level of detail and culling
-    void                calcTotalMatrix( SoState *state, SbMatrix &totalMat );
-    void                multMatrix4d( SbMatrix &n, SbMatrix left, 
-				      SbMatrix right );
+    void calcTotalMatrix( SoState *state, SbMatrix &totalMat );
+    void multMatrix4d( SbMatrix &n, SbMatrix left,
+                       SbMatrix right );
 
     // This callback gets details from the NURBS library
-    static void         primCB(SoAction *, SoPrimitiveVertex *, void *);
+    static void primCB(SoAction *, SoPrimitiveVertex *, void *);
 };
 
 #endif /* _SO_NURBS_SURFACE_ */
