@@ -123,7 +123,7 @@ SoPackedColor::doAction(SoAction *action)
 	    SoOverrideElement::setDiffuseColorOverride(state, this, TRUE);
 	}
 	SoLazyElement::setPacked(state, this,
-            orderedRGBA.getNum(), orderedRGBA.getValues(0), isTransparent());
+        orderedRGBA.getNum(), orderedRGBA.getValues(0), isTransparent() ? true : false);
     }
 }
 

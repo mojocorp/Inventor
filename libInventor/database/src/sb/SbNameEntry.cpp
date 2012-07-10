@@ -156,7 +156,7 @@ SbNameEntry::insert(const char *s)
     // If not there, create one
     if (entry == NULL) {
 
-        int len = strlen(s) + 1;
+        size_t len = strlen(s) + 1;
 
         // If there's no way to fit this string in a chunk
         if (len >= CHUNK_SIZE)

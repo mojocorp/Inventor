@@ -80,7 +80,7 @@ SbPList	*SoFieldContainer::copyDictList = NULL;
 // field string
 // We rely on the compiler to initialize them to zero for us...
 char	*SoFieldContainer::fieldBuf;
-int	 SoFieldContainer::fieldBufSize;
+size_t	 SoFieldContainer::fieldBufSize;
 
 SoType	SoFieldContainer::classTypeId;
 

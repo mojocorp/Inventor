@@ -115,7 +115,7 @@ public:
 
 SoType	SoField::classTypeId;		// Type identifier
 char	*SoField::fieldBuf;		// Used by SoField::get()
-int	SoField::fieldBufSize;		// Used by SoField::get()
+size_t	SoField::fieldBufSize;		// Used by SoField::get()
 
 ////////////////////////////////////////////////////////////////////////
 //
