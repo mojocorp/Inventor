@@ -418,25 +418,7 @@ SoIndexedNurbsCurve::primCB(
 ////////////////////////////////////////////////////////////////////////
 {
     SoIndexedNurbsCurve *curve = (SoIndexedNurbsCurve *)userData;
-    curve->sendPrimitive(act, vertices);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sends primitives to the generate primitive callbacks.
-//
-// Use: internal, public
-
-void
-SoIndexedNurbsCurve::sendPrimitive(
-        SoAction *act,
-        SoPrimitiveVertex *vertices )
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    invokeLineSegmentCallbacks(act, &vertices[0], &vertices[1]);
+    curve->invokeLineSegmentCallbacks(act, &vertices[0], &vertices[1]);
 }
 
 ////////////////////////////////////////////////////////////////////////

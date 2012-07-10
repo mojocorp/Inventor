@@ -164,8 +164,6 @@ SoEXTENDER public:
 SoINTERNAL public:
     static void initClass();
 
-    void sendPrimitive(SoAction *, SoPrimitiveVertex *);
-
 protected:
     // Generates triangles representing surface
     virtual void generatePrimitives(SoAction *action);
