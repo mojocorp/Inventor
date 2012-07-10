@@ -504,9 +504,7 @@ SoCallbackAction::getTextureBlendColor() const
 {
     int wrapS, wrapT, model;
     static SbColor blendColor;
-    const SbImage & image = SoTextureImageElement::get(
-    state, wrapS, wrapT, model,
-	blendColor);
+    SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
 
     return blendColor;
 }
@@ -530,9 +528,7 @@ SoCallbackAction::getTextureModel() const
 {
     int wrapS, wrapT, model;
     SbColor blendColor;
-    const SbImage & image  = SoTextureImageElement::get(
-    state, wrapS, wrapT, model,
-	blendColor);
+    SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
     return (SoTexture2::Model)model;
 }
 
@@ -541,9 +537,7 @@ SoCallbackAction::getTextureWrapS() const
 {
     int wrapS, wrapT, model;
     SbColor blendColor;
-    const SbImage & image = SoTextureImageElement::get(
-    state, wrapS, wrapT, model,
-	blendColor);
+    SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
     return (SoTexture2::Wrap)wrapS;
 }
 
@@ -552,9 +546,7 @@ SoCallbackAction::getTextureWrapT() const
 {
     int wrapS, wrapT, model;
     SbColor blendColor;
-    const SbImage & image = SoTextureImageElement::get(
-    state, wrapS, wrapT, model,
-	blendColor);
+    SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
     return (SoTexture2::Wrap)wrapT;
 }
 

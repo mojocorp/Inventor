@@ -94,7 +94,7 @@ public:
     void * getData() {
         return data;
     }
-    uint32_t getNumBytes() {
+    size_t getNumBytes() {
         return numBytes;
     }
 
@@ -114,7 +114,7 @@ SoEXTENDER public:
 
 private:
     void  *data;
-    uint32_t  numBytes;
+    size_t  numBytes;
     SbBool  isRaw;
 };
 
