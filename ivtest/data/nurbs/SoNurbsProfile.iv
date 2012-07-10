@@ -1,0 +1,67 @@
+#Inventor V2.1 ascii
+
+Separator {
+    Complexity {
+        value 0.7
+    }
+
+    Coordinate3 {
+     point [
+       -4.5 -2.0  8.0,
+       -2.0  1.0  8.0,
+        2.0 -3.0  6.0,
+        5.0 -1.0  8.0,
+       -3.0  3.0  4.0,
+        0.0 -1.0  4.0,
+        1.0 -1.0  4.0,
+        3.0  2.0  4.0,
+       -5.0 -2.0 -2.0,
+       -2.0 -4.0 -2.0,
+        2.0 -1.0 -2.0,
+        5.0  0.0 -2.0,
+       -4.5  2.0 -6.0,
+       -2.0 -4.0 -5.0,
+        2.0  3.0 -5.0,
+        4.5 -2.0 -6.0
+      ]
+  }
+
+  ProfileCoordinate2 {
+    point [
+        0.0 0.0,
+        1.0 0.0,
+        1.0 1.0,
+        0.0 1.0,
+        0.2 0.2,
+        0.2 0.7,
+        0.9 0.7,
+        0.9 0.2,
+        0.7 0.0,
+        0.4 0.8
+    ]
+  }
+  
+  NurbsProfile {
+    index      [ 0, 1, 2, 3, 0 ]
+    knotVector [ 0, 0, 1, 2, 3, 4, 4 ]
+  }
+  
+  NurbsProfile {
+    index      [ 4, 5, 6, 7 ]
+    knotVector [ 0, 0, 1, 2, 3, 3 ]
+    linkage START_NEW
+  }
+  
+  NurbsProfile {
+    index      [ 7, 8, 9, 4 ]
+    knotVector [ 0, 0, 0, 0, 1, 1, 1, 1 ]
+    linkage ADD_TO_CURRENT
+  }
+  
+  NurbsSurface {
+     numUControlPoints 4
+     numVControlPoints 4
+     uKnotVector [ 0, 0, 0, 0, 1, 1, 1, 1 ]
+     vKnotVector [ 0, 0, 0, 0, 1, 1, 1, 1 ]
+  }
+}
