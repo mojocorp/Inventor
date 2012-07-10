@@ -17,6 +17,7 @@ SOURCES += main.cpp \
            testBox3f.cpp \
            testCreation.cpp \
            testString.cpp \
+           testEndian.cpp \
            testFile.cpp
 
 LIBS += -L../build -lgtest

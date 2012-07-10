@@ -608,7 +608,6 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/sb/SbViewportRegion.cpp \
            database/src/sb/lists/SbPList.cpp \
            database/src/sb/lists/SbVec3fList.cpp \
-           database/src/so/machine.cpp \
            database/src/so/lists/SoAuditorList.cpp \
            database/src/so/lists/SoBaseList.cpp \
            database/src/so/lists/SoDetailList.cpp \
