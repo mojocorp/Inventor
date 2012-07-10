@@ -169,11 +169,6 @@ private:
     void drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state,
                    SbBool doTextures);
 
-    // Matrix operations for level of detail and culling
-    void calcTotalMatrix( SoState *state, SbMatrix &totalMat );
-    void multMatrix4d( SbMatrix &n, SbMatrix left,
-                       SbMatrix right );
-
     // This callback gets details from the NURBS library
     static void primCB(SoAction *, SoPrimitiveVertex *, void *);
 };

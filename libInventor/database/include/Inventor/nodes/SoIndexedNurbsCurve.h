@@ -159,11 +159,6 @@ protected:
 private:
     void drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state);
 
-    void calcTotalMatrix( SoState *state, SbMatrix &totalMat );
-
-    void multMatrix4d ( SbMatrix &n, SbMatrix left,
-                        SbMatrix right );
-
     // This callback gets details from the NURBS library
     static void primCB(SoAction *, SoPrimitiveVertex *, void *);
 };

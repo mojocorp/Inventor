@@ -672,8 +672,9 @@ SoIndexedNurbsSurface::rayPick(SoRayPickAction *action)
     const SbViewportRegion & vpRegion =
             SoViewportRegionElement::get(action->getState());
     const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
-    SbMatrix totalMat;
-    calcTotalMatrix(action->getState(), totalMat);
+    SbMatrix totalMat = (SoModelMatrixElement::get(action->getState())   *
+                         SoViewingMatrixElement::get(action->getState()) *
+                         SoProjectionMatrixElement::get(action->getState()));
     pickRender.loadMatrices(totalMat, vpSize);
 
     // Determine whether a texture coordinate surface must be generated
@@ -770,8 +771,9 @@ SoIndexedNurbsSurface::generatePrimitives(SoAction *action)
     const SbViewportRegion & vpRegion =
             SoViewportRegionElement::get(action->getState());
     const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
-    SbMatrix totalMat;
-    calcTotalMatrix (action->getState(), totalMat);
+    SbMatrix totalMat = (SoModelMatrixElement::get(action->getState())   *
+                         SoViewingMatrixElement::get(action->getState()) *
+                         SoProjectionMatrixElement::get(action->getState()));
     primRender.loadMatrices (totalMat, vpSize);
 
     // Determine whether a texture coordinate surface must be generated
@@ -1209,65 +1211,4 @@ SoIndexedNurbsSurface::drawNURBS(
     render->endsurface();
 
     delete [] coords;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Calculate the total transformation matrix by contatenating the
-//    modeling matrix, the camera's viewing matrix, and the projection
-//    matrix all together.
-//
-// Use: protected
-
-void
-SoIndexedNurbsSurface::calcTotalMatrix(
-        SoState *state,
-        SbMatrix &totalMat )
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SbMatrix mMat, pMat, vMat;
-    SbMatrix viewMat;
-
-    mMat = SoModelMatrixElement::get (state);
-    pMat = SoProjectionMatrixElement::get (state);
-    vMat = SoViewingMatrixElement::get (state);
-    multMatrix4d (viewMat, mMat, vMat);
-    multMatrix4d (totalMat, viewMat, pMat);
-}
-
-
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Multiply two matrices together.
-//    new = [left][right]
-//
-// Use: protected
-
-void
-SoIndexedNurbsSurface::multMatrix4d (
-        SbMatrix &n,
-        SbMatrix left,
-        SbMatrix right )
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    int i;
-
-    for (i=0; i<4; i++)
-    {
-        n[i][0] = left[i][0]*right[0][0] + left[i][1]*right[1][0] +
-                left[i][2]*right[2][0] + left[i][3]*right[3][0];
-        n[i][1] = left[i][0]*right[0][1] + left[i][1]*right[1][1] +
-                left[i][2]*right[2][1] + left[i][3]*right[3][1];
-        n[i][2] = left[i][0]*right[0][2] + left[i][1]*right[1][2] +
-                left[i][2]*right[2][2] + left[i][3]*right[3][2];
-        n[i][3] = left[i][0]*right[0][3] + left[i][1]*right[1][3] +
-                left[i][2]*right[2][3] + left[i][3]*right[3][3];
-    }
 }
