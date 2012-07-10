@@ -159,8 +159,8 @@ class INVENTOR_API SoMField : public SoField {
     static SoType	classTypeId;
 
     // These are used by SoMField::get1() to hold the returned field string
-    static char		*fieldBuf;
-    static int		fieldBufSize;
+    static char    *fieldBuf;
+    static size_t   fieldBufSize;
 
     // Allocates room for num values. Copies old values (if any) into
     // new area. Deletes old area, if any.

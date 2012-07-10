@@ -434,7 +434,7 @@ class INVENTOR_API SoField {
 
     // These are used by SoField::get() to hold the returned field string
     static char		*fieldBuf;
-    static int		fieldBufSize;
+    static size_t	fieldBufSize;
 
     // The "flags" field contains several bit flags:
     struct {

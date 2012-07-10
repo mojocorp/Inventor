@@ -318,7 +318,7 @@ SoDB::registerHeader(const SbString &header, SbBool isBinary, float ivVersion,
 {
     // Header string cannot be greater than 80 characters in length,
     // and must have at least one character beyond the initial comment char.
-    int headerLength = header.getLength();
+    size_t headerLength = header.getLength();
     if (headerLength > 80 || headerLength < 2)
 	return (FALSE);
 	
@@ -436,14 +436,14 @@ SoDB::getHeaderData(const SbString &header,
 	    
 		// See how much padding there is in the registered header string
 		const char *registeredStr = data->headerString.getString();
-		int lastNonPadChar = registeredString.getLength() - 1;
+		size_t lastNonPadChar = registeredString.getLength() - 1;
 		while (registeredStr[lastNonPadChar] == ' ' && lastNonPadChar > 0) 
 		    lastNonPadChar--;
 		
 		// Is the registered header (minus the padding) a substring 
 		// of the the given header string?
-		if (registeredString.getSubString(0, lastNonPadChar) == 
-			paddedHeader.getSubString(0, lastNonPadChar)) {
+		if (registeredString.getSubString(0, (int)lastNonPadChar) == 
+			paddedHeader.getSubString(0, (int)lastNonPadChar)) {
 		    whichHeader = i;			
 		}
 	    }	    

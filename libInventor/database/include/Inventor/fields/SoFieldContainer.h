@@ -286,7 +286,7 @@ class INVENTOR_API SoFieldContainer : public SoBase {
     // These are used by SoFieldContainer::get() to hold
     // the returned field string
     static char		*fieldBuf;
-    static int		fieldBufSize;
+    static size_t	fieldBufSize;
 
     // This is used to reallocate the string buffer used by
     // SoFieldContainer::get()
