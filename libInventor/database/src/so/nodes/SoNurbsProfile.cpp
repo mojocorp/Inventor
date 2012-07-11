@@ -58,8 +58,7 @@
 #include <Inventor/elements/SoProjectionMatrixElement.h>
 #include <Inventor/elements/SoViewingMatrixElement.h>
 #include <Inventor/nodes/SoNurbsProfile.h>
-#include "nurbs/SoAddPrefix.h"
-#include "nurbs/SoCurveMaps.h"
+#include "nurbs/clients/gl4types.h"
 #include "nurbs/SoCurveRender.h"
 
 SO_NODE_SOURCE(SoNurbsProfile);
@@ -119,46 +118,44 @@ SoNurbsProfile::initClass()
 
 void
 SoNurbsProfile::getTrimCurve(SoState *state, int32_t &numPoints, float *&points,
-			     int &floatsPerVec,
-			     int32_t &numKnots, float *&knots)
+                             int &floatsPerVec,
+                             int32_t &numKnots, float *&knots)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoProfileCoordinateElement	*pce;
-    int					i;
     const float				*tknots;
 
-    pce = SoProfileCoordinateElement::getInstance(state);
+    const SoProfileCoordinateElement *pce = SoProfileCoordinateElement::getInstance(state);
 
     numPoints = index.getNum();
 
     if (pce->is2D()) {
-	floatsPerVec = 2;
-	points = new float[numPoints * 2];
+        floatsPerVec = 2;
+        points = new float[numPoints * 2];
 
-	for (i = 0; i < numPoints; i++) {
-	    const SbVec2f &t = pce->get2((int) index[i]);
-	    points[i*2]   = t[0];
-	    points[i*2+1] = t[1];
-	}
+        for (int i = 0; i < numPoints; i++) {
+            const SbVec2f &t = pce->get2((int) index[i]);
+            points[i*2]   = t[0];
+            points[i*2+1] = t[1];
+        }
     }
     else {
-	floatsPerVec = 3;
-	points = new float[numPoints * 3];
+        floatsPerVec = 3;
+        points = new float[numPoints * 3];
 
-	for (i = 0; i < numPoints; i++) {
-	    const SbVec3f &t = pce->get3((int) index[i]);
-	    points[i*3]   = t[0];
-	    points[i*3+1] = t[1];
-	    points[i*3+2] = t[2];
-	}
+        for (int i = 0; i < numPoints; i++) {
+            const SbVec3f &t = pce->get3((int) index[i]);
+            points[i*3]   = t[0];
+            points[i*3+1] = t[1];
+            points[i*3+2] = t[2];
+        }
     }
 
     numKnots = (int32_t) (knotVector.getNum());
     knots    = new float[numKnots];
     tknots   = knotVector.getValues(0);
     memcpy((void *) knots, (const void *) tknots,
-	  (int) numKnots * sizeof(float));
+           (int) numKnots * sizeof(float));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -172,123 +169,118 @@ SoNurbsProfile::getTrimCurve(SoState *state, int32_t &numPoints, float *&points,
 
 void
 SoNurbsProfile::getVertices(SoState *state,
-			    int32_t &nVertices, SbVec2f *&vertices)
+                            int32_t &nVertices, SbVec2f *&vertices)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    _SoNurbsCurveRender			*render = new _SoNurbsCurveRender;
-    float				complexity, pixTolerance;
-    int					steps, i;
-    const SoProfileCoordinateElement	*pce;
+    int					steps;
     SbVec2f				*verts;
     float				*points;
-    int32_t				numPoints;
     int32_t				type, offset;
 
-    pce = SoProfileCoordinateElement::getInstance(state);
+    const SoProfileCoordinateElement *pce = SoProfileCoordinateElement::getInstance(state);
 
-    numPoints = index.getNum();
+    int32_t numPoints = index.getNum();
 
     // Check for no points
     if (numPoints == 0) {
         nVertices = 0;
         vertices = NULL;
-        delete render;
         return;
     }
 
-    complexity = SoComplexityElement::get(state);
+    _SoNurbsCurveRender render;
+
+    float complexity = SoComplexityElement::get(state);
 
     if (complexity < 0.0)
-	complexity = 0.0;
+        complexity = 0.0;
     if (complexity > 1.0)
-	complexity = 1.0;
+        complexity = 1.0;
 
     if (complexity < 0.10)
-	steps = 2;
+        steps = 2;
     else if (complexity < 0.25)
-	steps = 3;
+        steps = 3;
     else if (complexity < 0.40)
-	steps = 4;
+        steps = 4;
     else if (complexity < 0.55)
-	steps = 5;
+        steps = 5;
     else
-	steps = (int) (powf(complexity, 3.32f) * 28) + 2;
+        steps = (int) (powf(complexity, 3.32f) * 28) + 2;
 
-    pixTolerance = 104.0f * complexity * complexity - 252.0f * complexity + 150;
+    float pixTolerance = 104.0f * complexity * complexity - 252.0f * complexity + 150;
 
-    if (SoComplexityTypeElement::get(state) ==
-	SoComplexityTypeElement::OBJECT_SPACE) {
-        render->setnurbsproperty(N_V3D,  N_SAMPLINGMETHOD, N_FIXEDRATE);
-        render->setnurbsproperty(N_V3DR, N_SAMPLINGMETHOD, N_FIXEDRATE);
-        render->setnurbsproperty(N_V3D,  N_S_STEPS, steps);
-        render->setnurbsproperty(N_V3D,  N_T_STEPS, steps);
-        render->setnurbsproperty(N_V3DR, N_S_STEPS, steps);
-        render->setnurbsproperty(N_V3DR, N_T_STEPS, steps);
+    if (SoComplexityTypeElement::get(state) == SoComplexityTypeElement::OBJECT_SPACE) {
+        render.setnurbsproperty(N_V3D,  N_SAMPLINGMETHOD, N_FIXEDRATE);
+        render.setnurbsproperty(N_V3DR, N_SAMPLINGMETHOD, N_FIXEDRATE);
+        render.setnurbsproperty(N_V3D,  N_S_STEPS, steps);
+        render.setnurbsproperty(N_V3D,  N_T_STEPS, steps);
+        render.setnurbsproperty(N_V3DR, N_S_STEPS, steps);
+        render.setnurbsproperty(N_V3DR, N_T_STEPS, steps);
     }
     else {
-        render->setnurbsproperty(N_V3D,  N_SAMPLINGMETHOD, N_NOSAMPLING);
-        render->setnurbsproperty(N_V3DR, N_SAMPLINGMETHOD, N_NOSAMPLING);
-        render->setnurbsproperty(N_PIXEL_TOLERANCE, pixTolerance);
+        render.setnurbsproperty(N_V3D,  N_SAMPLINGMETHOD, N_NOSAMPLING);
+        render.setnurbsproperty(N_V3DR, N_SAMPLINGMETHOD, N_NOSAMPLING);
+        render.setnurbsproperty(N_PIXEL_TOLERANCE, pixTolerance);
 
         //
         // Calculate the total transformation matrix and pass it to the renderer
         //
         SbMatrix mat = (SoModelMatrixElement::get(state)   *
-    		        SoViewingMatrixElement::get(state) *
-		        SoProjectionMatrixElement::get(state));
-        render->loadMatrices(mat);
+                        SoViewingMatrixElement::get(state) *
+                        SoProjectionMatrixElement::get(state));
+        render.loadMatrices(mat);
     }
 
     //
     // Draw the NURBS curve
     //
     if (pce->is2D()) {
-	points = new float[numPoints * 3];
+        points = new float[numPoints * 3];
 
-	for (i = 0; i < numPoints; i++) {
-	    const SbVec2f &t = pce->get2((int)(index[i]));
-	    points[i*3]   = t[0];
-	    points[i*3+1] = t[1];
-	    points[i*3+2] = 0.0;
-	}
+        for (int i = 0; i < numPoints; i++) {
+            const SbVec2f &t = pce->get2((int)(index[i]));
+            points[i*3]   = t[0];
+            points[i*3+1] = t[1];
+            points[i*3+2] = 0.0;
+        }
 
         offset = 3 * sizeof(float);
         type = N_V3D;
     }
     else {
-	points = new float[numPoints * 4];
+        points = new float[numPoints * 4];
 
-	for (i = 0; i < numPoints; i++) {
-	    const SbVec3f &t = pce->get3((int)(index[i]));
-	    points[i*4]   = t[0];
-	    points[i*4+1] = t[1];
-	    points[i*4+2] = t[2];
-	    points[i*4+3] = 0.0;
-	}
+        for (int i = 0; i < numPoints; i++) {
+            const SbVec3f &t = pce->get3((int)(index[i]));
+            points[i*4]   = t[0];
+            points[i*4+1] = t[1];
+            points[i*4+2] = t[2];
+            points[i*4+3] = 0.0;
+        }
 
         offset = 4 * sizeof(float);
         type = N_V3DR;
     }
 
-    render->bgncurve(0);
-    render->nurbscurve(knotVector.getNum(),
-		       (INREAL *) knotVector.getValues(0),
-		       offset, (INREAL *) points,
-		       knotVector.getNum() - numPoints, type);
-    render->endcurve();
+    render.bgncurve(0);
+    render.nurbscurve(knotVector.getNum(),
+                       (INREAL *) knotVector.getValues(0),
+                       offset, (INREAL *) points,
+                       knotVector.getNum() - numPoints, type);
+    render.endcurve();
 
     //
     // The render now contains the list of vertices.  Return them to
     // the caller.
     //
-    render->getVertices(nVertices, verts);
+    render.getVertices(nVertices, verts);
     vertices = new SbVec2f[nVertices];
     memcpy((void *) vertices, (void *) verts,
-	  (int) nVertices * sizeof(SbVec2f));
+           (int) nVertices * sizeof(SbVec2f));
 
     delete [] points;
-    delete render;
 
     return;
 }
