@@ -161,73 +161,10 @@ SoNurbsCurve::GLRender(SoGLRenderAction *action)
     // Create a NURBS library renderer, and use it by making regular
     // GL calls to it.
     //
-    _SoNurbsGLRender *render = new _SoNurbsGLRender;
-
-    float val = SoComplexityElement::get(state);
-    if (val < 0.0) val = 0.0;
-    if (val > 1.0) val = 1.0;
-
-    if (SoComplexityTypeElement::get(state) == SoComplexityTypeElement::OBJECT_SPACE)
-    {
-        //
-        // Set the nurbs properties to render the curve with uniform
-        // tessellation over the whole curve.
-        //
-        int   steps;
-        if (val < 0.5)  steps = (int)(18.0 *val) + 1;
-        else            steps = (int)(380.0*val) - 180;
-
-        render->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                                  N_FIXEDRATE );
-        render->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                                  N_FIXEDRATE );
-        render->setnurbsproperty( N_V3D,  N_S_STEPS, steps);
-        render->setnurbsproperty( N_V3D,  N_T_STEPS, steps);
-        render->setnurbsproperty( N_V3DR, N_S_STEPS, steps);
-        render->setnurbsproperty( N_V3DR, N_T_STEPS, steps);
-    }
-    else
-    {
-        //
-        // Set the nurbs properties to render the curve with a view
-        // dependent tessellation using the given pixel tolerance.
-        //
-        float pixTolerance;
-
-        if      (val < 0.10) pixTolerance = 10;
-        else if (val < 0.20) pixTolerance = 8;
-        else if (val < 0.30) pixTolerance = 6;
-        else if (val < 0.40) pixTolerance = 4;
-        else if (val < 0.50) pixTolerance = 2;
-        else if (val < 0.70) pixTolerance = 1;
-        else if (val < 0.80) pixTolerance = .5;
-        else if (val < 0.90) pixTolerance = .25;
-        else                 pixTolerance = .125;
-
-        render->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                                  N_PARAMETRICDISTANCE );
-        render->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                                  N_PARAMETRICDISTANCE );
-        render->setnurbsproperty( N_V3D,  N_PIXEL_TOLERANCE, pixTolerance );
-        render->setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE, pixTolerance );
-
-        //
-        // Calculate the total viewing matrix by concatenating the modeling
-        // matrix, the camera's viewing matrix, and the projection matrix.
-        // Pass the resulting matrix to the NURBS library for use in
-        // determining sampling and culling of the curve.
-        //
-        const SbViewportRegion & vpRegion = SoViewportRegionElement::get(state);
-        const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
-        SbMatrix totalMat = (SoModelMatrixElement::get(state)   *
-                             SoViewingMatrixElement::get(state) *
-                             SoProjectionMatrixElement::get(state));
-        render->loadMatrices (totalMat, vpSize);
-    }
+    _SoNurbsGLRender render;
 
     // Draw the curve
-    drawNURBS (render, state);
-    delete render;
+    drawNURBS (&render, state, SoComplexityTypeElement::get(state));
 
     // Restore state
     state->pop();
@@ -259,49 +196,12 @@ SoNurbsCurve::rayPick(SoRayPickAction *action)
     // software NURBS library.
     //
     _SoNurbsPickRender render(action);
-    float pixTolerance;
-    float val = SoComplexityElement::get(action->getState());
-    if      (val < 0.10) pixTolerance = 10;
-    else if (val < 0.20) pixTolerance = 8;
-    else if (val < 0.30) pixTolerance = 6;
-    else if (val < 0.40) pixTolerance = 4;
-    else if (val < 0.50) pixTolerance = 2;
-    else if (val < 0.70) pixTolerance = 1;
-    else if (val < 0.80) pixTolerance = .5;
-    else if (val < 0.90) pixTolerance = .25;
-    else                 pixTolerance = .125;
-
-    //
-    // Set NURBS properties telling the NURBS library to pick filled
-    // triangles, use screen space tessellation with the pixel tolerance
-    // set to pixTolerance, and notify the library that the sampling
-    // and culling matrices will be passed in.
-    //
-    render.setnurbsproperty (N_V3D,  N_PIXEL_TOLERANCE, pixTolerance);
-    render.setnurbsproperty (N_V3DR, N_PIXEL_TOLERANCE, pixTolerance);
-    render.setnurbsproperty (N_V3D,N_SAMPLINGMETHOD, N_PARAMETRICDISTANCE);
-    render.setnurbsproperty (N_V3DR,N_SAMPLINGMETHOD,N_PARAMETRICDISTANCE);
-    render.setnurbsproperty (N_V3D,  N_CULLING, N_CULLINGON);
-    render.setnurbsproperty (N_V3DR, N_CULLING, N_CULLINGON);
-
-    //
-    // Calculate the total viewing matrix by concatenating the modeling
-    // matrix, the camera's viewing matrix, and the projection matrix.
-    // Pass the resulting matrix to the NURBS library for use in determining
-    // sampling and culling of the curve.
-    //
-    const SbViewportRegion & vpRegion = SoViewportRegionElement::get(action->getState());
-    const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
-    SbMatrix totalMat = (SoModelMatrixElement::get(action->getState())   *
-                         SoViewingMatrixElement::get(action->getState()) *
-                         SoProjectionMatrixElement::get(action->getState()));
-    render.loadMatrices(totalMat, vpSize);
 
     //
     // Draw the NURBS curve.  The SoPickRender class will receive primitive
     // drawn by the NURBS library and test them for intersection.
     //
-    drawNURBS(&render, action->getState());
+    drawNURBS(&render, action->getState(), SoComplexityTypeElement::SCREEN_SPACE);
 }
 
 
@@ -320,74 +220,10 @@ SoNurbsCurve::generatePrimitives(SoAction *action)
     _SoNurbsPrimRender   primRender(action, primCB, (void *)this);
 
     //
-    // Find the number of steps required for tessellation and the pixel
-    // tolerance used for tessellation.
-    //
-    float val = SoComplexityElement::get(action->getState());
-
-    if (SoComplexityTypeElement::get(action->getState()) == SoComplexityTypeElement::OBJECT_SPACE)
-    {
-        //
-        // Set the nurbs properties to render the curve with uniform
-        // tessellation over the whole curve.
-        //
-        int   steps;
-        if (val < 0.5)  steps = (int)(18.0 *val) + 1;
-        else            steps = (int)(380.0*val) - 180;
-
-        primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                                     N_FIXEDRATE );
-        primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                                     N_FIXEDRATE );
-        primRender.setnurbsproperty( N_V3D,  N_S_STEPS, steps);
-        primRender.setnurbsproperty( N_V3D,  N_T_STEPS, steps);
-        primRender.setnurbsproperty( N_V3DR, N_S_STEPS, steps);
-        primRender.setnurbsproperty( N_V3DR, N_T_STEPS, steps);
-    }
-    else
-    {
-        //
-        // Set the nurbs properties to render the curve with a view
-        // dependent tessellation using the given pixel tolerance.
-        //
-        float pixTolerance;
-
-        if      (val < 0.10) pixTolerance = 10;
-        else if (val < 0.20) pixTolerance = 8;
-        else if (val < 0.30) pixTolerance = 6;
-        else if (val < 0.40) pixTolerance = 4;
-        else if (val < 0.50) pixTolerance = 2;
-        else if (val < 0.70) pixTolerance = 1;
-        else if (val < 0.80) pixTolerance = .5;
-        else if (val < 0.90) pixTolerance = .25;
-        else                 pixTolerance = .125;
-
-        primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                                     N_PARAMETRICDISTANCE );
-        primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                                     N_PARAMETRICDISTANCE );
-        primRender.setnurbsproperty( N_V3D,  N_PIXEL_TOLERANCE, pixTolerance );
-        primRender.setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE, pixTolerance );
-
-        //
-        // Calculate the total viewing matrix by concatenating the modeling
-        // matrix, the camera's viewing matrix, and the projection matrix.
-        // Pass the resulting matrix to the NURBS library for use in
-        // determining sampling and culling of the surface.
-        //
-        const SbViewportRegion & vpRegion = SoViewportRegionElement::get(action->getState());
-        const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
-        SbMatrix totalMat = (SoModelMatrixElement::get(action->getState())   *
-                             SoViewingMatrixElement::get(action->getState()) *
-                             SoProjectionMatrixElement::get(action->getState()));
-        primRender.loadMatrices (totalMat, vpSize);
-    }
-
-    //
     // Draw the NURBS surface.  The SoPrimRender class will receive primitive
     // drawn by the NURBS library, triangulate them, and send them to the
     // callback.
-    drawNURBS(&primRender, action->getState());
+    drawNURBS(&primRender, action->getState(), SoComplexityTypeElement::get(action->getState()));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -493,7 +329,6 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
     center /= (float) (numControlPoints.getValue());
 }
 
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -503,17 +338,80 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
 void
 SoNurbsCurve::drawNURBS(
-        _SoNurbsNurbsTessellator *render,
-        SoState *state )
+        _SoNurbsTessellator *render,
+        SoState *state,
+        SoComplexityTypeElement::Type ctype)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    float val = SoComplexityElement::get(state);
+    if (val < 0.0) val = 0.0;
+    if (val > 1.0) val = 1.0;
+
+    if (ctype == SoComplexityTypeElement::OBJECT_SPACE)
+    {
+        //
+        // Set the nurbs properties to render the curve with uniform
+        // tessellation over the whole curve.
+        //
+        int   steps;
+        if (val < 0.5)  steps = (int)(18.0 *val) + 1;
+        else            steps = (int)(380.0*val) - 180;
+
+        render->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
+                                  N_FIXEDRATE );
+        render->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
+                                  N_FIXEDRATE );
+        render->setnurbsproperty( N_V3D,  N_S_STEPS, steps);
+        render->setnurbsproperty( N_V3D,  N_T_STEPS, steps);
+        render->setnurbsproperty( N_V3DR, N_S_STEPS, steps);
+        render->setnurbsproperty( N_V3DR, N_T_STEPS, steps);
+    }
+    else
+    {
+        //
+        // Set the nurbs properties to render the curve with a view
+        // dependent tessellation using the given pixel tolerance.
+        //
+        float pixTolerance;
+
+        if      (val < 0.10) pixTolerance = 10;
+        else if (val < 0.20) pixTolerance = 8;
+        else if (val < 0.30) pixTolerance = 6;
+        else if (val < 0.40) pixTolerance = 4;
+        else if (val < 0.50) pixTolerance = 2;
+        else if (val < 0.70) pixTolerance = 1;
+        else if (val < 0.80) pixTolerance = .5;
+        else if (val < 0.90) pixTolerance = .25;
+        else                 pixTolerance = .125;
+
+        render->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
+                                  N_PARAMETRICDISTANCE );
+        render->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
+                                  N_PARAMETRICDISTANCE );
+        render->setnurbsproperty( N_V3D,  N_PIXEL_TOLERANCE, pixTolerance );
+        render->setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE, pixTolerance );
+
+        //
+        // Calculate the total viewing matrix by concatenating the modeling
+        // matrix, the camera's viewing matrix, and the projection matrix.
+        // Pass the resulting matrix to the NURBS library for use in
+        // determining sampling and culling of the surface.
+        //
+        const SbViewportRegion & vpRegion = SoViewportRegionElement::get(state);
+        const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
+        SbMatrix totalMat = (SoModelMatrixElement::get(state)   *
+                             SoViewingMatrixElement::get(state) *
+                             SoProjectionMatrixElement::get(state));
+        render->loadMatrices (totalMat, vpSize);
+    }
+
     const SoCoordinateElement *ce = SoCoordinateElement::getInstance(state);
-    int32_t                    type, nCoords, offset;
+    int32_t                    type, offset;
     float                     *coords;
 
-    nCoords = ce->getNum();
+    int32_t nCoords = ce->getNum();
 
     // Check for a degenerate curve
     if ((nCoords == 0) || (numControlPoints.getValue() == 0))

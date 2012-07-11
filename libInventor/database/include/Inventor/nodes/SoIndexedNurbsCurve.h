@@ -62,10 +62,11 @@
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/nodes/SoShape.h>
+#include <Inventor/elements/SoComplexityTypeElement.h>
 
 class SoState;
 class SoPrimitiveVertex;
-class _SoNurbsNurbsTessellator;
+class _SoNurbsTessellator;
 
 /// Indexed NURBS curve shape node.
 /// \ingroup Nodes
@@ -155,7 +156,7 @@ protected:
     ~SoIndexedNurbsCurve();
 
 private:
-    void drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state);
+    void drawNURBS(_SoNurbsTessellator *render, SoState *state, SoComplexityTypeElement::Type ctype);
 
     // This callback gets details from the NURBS library
     static void primCB(SoAction *, SoPrimitiveVertex *, void *);
