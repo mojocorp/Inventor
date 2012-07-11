@@ -83,30 +83,30 @@ class INVENTOR_API SoNurbsProfile : public SoProfile{
 
     SO_NODE_HEADER(SoNurbsProfile);
 
-  public:
+public:
     /// The knot vector for the NURBS curve. It must be a list of
     /// non-decreasing floating point values.
-    SoMFFloat		knotVector;
+    SoMFFloat       knotVector;
 
     /// Creates a NURBS profile curve node with default settings.
     SoNurbsProfile();
 
-  SoEXTENDER public:
+SoEXTENDER public:
     // Returns a profile as a trim curve. floatsPerVec will be either
     // 2 or 3 depending on whether the curve is non-rational or
     // rational.
-    virtual void	getTrimCurve(SoState *state, int32_t &numPoints,
-				     float *&points, int &floatsPerVec,
-				     int32_t &numKnots, float *&knotVector);
+    virtual void getTrimCurve(SoState *state, int32_t &numPoints,
+                              float *&points, int &floatsPerVec,
+                              int32_t &numKnots, float *&knotVector);
 
     // Returns vertices approximating the profile
-    virtual void	getVertices(SoState *state, int32_t &nVertices,
-				    SbVec2f *&vertices);
+    virtual void getVertices(SoState *state, int32_t &nVertices,
+                             SbVec2f *&vertices);
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
-  protected:
+protected:
     virtual ~SoNurbsProfile();
 };
 
