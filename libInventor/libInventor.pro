@@ -2,12 +2,16 @@ TEMPLATE = lib
 TARGET   = Inventor
 DESTDIR  = ../build
 
-CONFIG += opengl
+# don't use system glu on windows since it's old 1.2 version
+!win32: CONFIG += opengl
+
 CONFIG -= qt flat
 
 DEFINES += GLEW_MX GLEW_STATIC
 
-debug: DEFINES += DEBUG
+CONFIG(debug, debug|release) {
+    DEFINES += DEBUG
+}
 
 linux-g++ {
     CONFIG += x11
@@ -19,9 +23,15 @@ win32 {
     
     INCLUDEPATH += ../3rdparty/pthreads-w32 \
                    ../3rdparty/freetype/include \
-                   ../3rdparty/libjpeg
+                   ../3rdparty/libjpeg \
+                   ../3rdparty/glu-1.3.0/include
+
     DEFINES += PTW32_STATIC_LIB
     LIBS += -lpthreads-w32 -lWSock32
+
+    # required libs for OpenGL
+    LIBS += -lopengl32 -lUser32 -lGdi32
+    LIBS += -L$$OUT_PWD/../build -lglu
 }
 
 x11 {
