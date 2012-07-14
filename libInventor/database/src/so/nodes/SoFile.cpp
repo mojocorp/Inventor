@@ -134,7 +134,7 @@ SoFile::copyChildren() const
     holder->ref();
 
     for (int i = 0; i < children.getLength(); i++)
-	holder->addChild(children[i]);
+        holder->addChild(children[i]);
 
     SoGroup *result = (SoGroup *) holder->copy(TRUE);
 
@@ -166,19 +166,19 @@ SoFile::copyContents(const SoFieldContainer *fromFC, SbBool copyConnections)
     SoChildList *fromChildren = fromGroup->getChildren();
     for (int i = 0; i < fromChildren->getLength(); i++) {
 
-	// If this node is being copied, it must be "inside" (see
-	// SoNode::copy() for details.) Therefore, all of its children
-	// must be inside, as well.
-	SoNode *fromKid = (*fromChildren)[i];
-	SoNode *kidCopy = (SoNode *) findCopy(fromKid, copyConnections);
+        // If this node is being copied, it must be "inside" (see
+        // SoNode::copy() for details.) Therefore, all of its children
+        // must be inside, as well.
+        SoNode *fromKid = (*fromChildren)[i];
+        SoNode *kidCopy = (SoNode *) findCopy(fromKid, copyConnections);
 
 #ifdef DEBUG
-	if (kidCopy == NULL)
-	    SoDebugError::post("(internal) SoFile::copyContents",
-			       "Child %d has not been copied yet", i);
+        if (kidCopy == NULL)
+            SoDebugError::post("(internal) SoFile::copyContents",
+                               "Child %d has not been copied yet", i);
 #endif /* DEBUG */
 
-	children.append(kidCopy);
+        children.append(kidCopy);
     }
     
     // Reattach sensor
@@ -203,30 +203,30 @@ SoFile::readInstance(SoInput *in, unsigned short flags)
 
     // Read field info as usual.
     if (! SoNode::readInstance(in, flags))
-	readOK = FALSE;
+        readOK = FALSE;
 
     // If file name is default, there's a problem, since the default
     // file name is not a valid one
     else if (name.isDefault()) {
-	SoReadError::post(in, "\"name\" field of SoFile node was never set");
-	readOK = FALSE;
+        SoReadError::post(in, "\"name\" field of SoFile node was never set");
+        readOK = FALSE;
     }
     else {
-	// Call nameChangedCB to read in children.  There is a really
-	// cool bug that occurs if we let the sensor do this for us.
-	// The sensor is called right after notification, in
-	// processImmediateQueue.  It would then call nameChanged,
-	// which calls SoDB::read, which sets up the directory search
-	// path.  If there is another File node in that directory
-	// search path, its name field will be set, but, since we are
-	// already in the middle of a processImmediateQueue, its field
-	// sensor isn't called right away.  The SoDB::read returns,
-	// removing the directory it added to the search path,
-	// nameChanged returns, and THEN the field sensor for the
-	// inner File node goes off.  But, by then it is too late--
-	// the directory search path no longer contains the directory
-	// of the containing File node.
-	nameChangedCB(this, NULL);
+        // Call nameChangedCB to read in children.  There is a really
+        // cool bug that occurs if we let the sensor do this for us.
+        // The sensor is called right after notification, in
+        // processImmediateQueue.  It would then call nameChanged,
+        // which calls SoDB::read, which sets up the directory search
+        // path.  If there is another File node in that directory
+        // search path, its name field will be set, but, since we are
+        // already in the middle of a processImmediateQueue, its field
+        // sensor isn't called right away.  The SoDB::read returns,
+        // removing the directory it added to the search path,
+        // nameChanged returns, and THEN the field sensor for the
+        // inner File node goes off.  But, by then it is too late--
+        // the directory search path no longer contains the directory
+        // of the containing File node.
+        nameChangedCB(this, NULL);
     }
 
     // Reattach sensor
@@ -257,27 +257,27 @@ SoFile::nameChangedCB(void *data, SoSensor *)
     // Open file
     f->readOK = TRUE;
     if (! in.openFile(filename, TRUE)) {
-	f->readOK = FALSE;
-	SoReadError::post(&in, "Can't open included file \"%s\" in File node",
-			  filename);
+        f->readOK = FALSE;
+        SoReadError::post(&in, "Can't open included file \"%s\" in File node",
+                          filename);
     }
 
     if (f->readOK) {
-	SoNode	*node;
+        SoNode	*node;
 
-	// Read children from opened file.
+        // Read children from opened file.
 
-	while (TRUE) {
-	    if (SoDB::read(&in, node)) {
-		if (node != NULL)
-		    f->children.append(node);
-		else
-		    break;
-	    }
-	    else
-		f->readOK = FALSE;
-	}
-	in.closeFile();
+        while (TRUE) {
+            if (SoDB::read(&in, node)) {
+                if (node != NULL)
+                    f->children.append(node);
+                else
+                    break;
+            }
+            else
+                f->readOK = FALSE;
+        }
+        in.closeFile();
     }
     // Note: if there is an error reading one of the children, the
     // other children will still be added properly...
@@ -314,10 +314,10 @@ SoFile::doAction(SoAction *action)
     const int	*indices;
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH)
-	children.traverse(action, 0, indices[numIndices - 1]);
+        children.traverse(action, 0, indices[numIndices - 1]);
 
     else
-	children.traverse(action);
+        children.traverse(action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -370,21 +370,21 @@ SoFile::getBoundingBox(SoGetBoundingBoxAction *action)
     int		lastChild;
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH)
-	lastChild = indices[numIndices - 1];
+        lastChild = indices[numIndices - 1];
     else
-	lastChild = children.getLength() - 1;
+        lastChild = children.getLength() - 1;
 
     for (int i = 0; i <= lastChild; i++) {
-	children.traverse(action, i, i);
-	if (action->isCenterSet()) {
-	    totalCenter += action->getCenter();
-	    numCenters++;
-	    action->resetCenter();
-	}
+        children.traverse(action, i, i);
+        if (action->isCenterSet()) {
+            totalCenter += action->getCenter();
+            numCenters++;
+            action->resetCenter();
+        }
     }
     // Now, set the center to be the average:
     if (numCenters != 0)
-	action->setCenter(totalCenter / (float)numCenters, FALSE);
+        action->setCenter(totalCenter / (float)numCenters, FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -439,18 +439,18 @@ SoFile::getMatrix(SoGetMatrixAction *action)
 
     switch (action->getPathCode(numIndices, indices)) {
 
-      case SoAction::NO_PATH:
-	break;
+    case SoAction::NO_PATH:
+        break;
 
-      case SoAction::IN_PATH:
-	children.traverse(action, 0, indices[numIndices - 1]);
-	break;
+    case SoAction::IN_PATH:
+        children.traverse(action, 0, indices[numIndices - 1]);
+        break;
 
-      case SoAction::BELOW_PATH:
-	break;
+    case SoAction::BELOW_PATH:
+        break;
 
-      case SoAction::OFF_PATH:
-	children.traverse(action);
-	break;
+    case SoAction::OFF_PATH:
+        children.traverse(action);
+        break;
     }
 }
