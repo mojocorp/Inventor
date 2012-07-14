@@ -252,14 +252,14 @@ SoFile::nameChangedCB(void *data, SoSensor *)
     f->children.truncate(0);
 
     SoInput in;
-    const char *filename = f->name.getValue().getString();
+    const SbString &filename = f->name.getValue();
     
     // Open file
     f->readOK = TRUE;
     if (! in.openFile(filename, TRUE)) {
         f->readOK = FALSE;
         SoReadError::post(&in, "Can't open included file \"%s\" in File node",
-                          filename);
+                          filename.getString());
     }
 
     if (f->readOK) {
