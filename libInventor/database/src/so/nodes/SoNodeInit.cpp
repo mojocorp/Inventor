@@ -105,6 +105,7 @@ SoNode::initClasses()
     SoFontStyle::initClass();
     SoIndexedFaceSet::initClass();
     SoIndexedLineSet::initClass();
+    SoIndexedPointSet::initClass();
     SoIndexedNurbsCurve::initClass();
     SoIndexedNurbsSurface::initClass();
     SoIndexedTriangleStripSet::initClass();
