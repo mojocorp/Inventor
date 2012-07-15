@@ -354,6 +354,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/nodes/SoIndexedLineSet.h \
            database/include/Inventor/nodes/SoIndexedNurbsCurve.h \
            database/include/Inventor/nodes/SoIndexedNurbsSurface.h \
+           database/include/Inventor/nodes/SoIndexedPointSet.h \
            database/include/Inventor/nodes/SoIndexedShape.h \
            database/include/Inventor/nodes/SoIndexedTriangleStripSet.h \
            database/include/Inventor/nodes/SoInfo.h \
@@ -876,6 +877,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/nodes/SoIndexedLineSet.cpp \
            database/src/so/nodes/SoIndexedNurbsCurve.cpp \
            database/src/so/nodes/SoIndexedNurbsSurface.cpp \
+           database/src/so/nodes/SoIndexedPointSet.cpp \
            database/src/so/nodes/SoIndexedShape.cpp \
            database/src/so/nodes/SoIndexedTriangleStripSet.cpp \
            database/src/so/nodes/SoInfo.cpp \

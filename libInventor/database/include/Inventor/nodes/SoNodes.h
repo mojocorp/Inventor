@@ -88,6 +88,7 @@
 #include <Inventor/nodes/SoGroup.h>
 #include <Inventor/nodes/SoIndexedFaceSet.h>
 #include <Inventor/nodes/SoIndexedLineSet.h>
+#include <Inventor/nodes/SoIndexedPointSet.h>
 #include <Inventor/nodes/SoIndexedNurbsCurve.h>
 #include <Inventor/nodes/SoIndexedNurbsSurface.h>
 #include <Inventor/nodes/SoIndexedTriangleStripSet.h>
