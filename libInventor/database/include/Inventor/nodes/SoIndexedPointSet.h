@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoPointSet node class.
+ |	This file defines the SoIndexedPointSet node class.
  |
  |   Author(s)		: Paul S. Strauss
  |
@@ -53,26 +53,21 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_POINT_SET_
-#define  _SO_POINT_SET_
+#ifndef  _SO_INDEXED_POINT_SET_
+#define  _SO_INDEXED_POINT_SET_
 
 #include <Inventor/fields/SoSFInt32.h>
-#include <Inventor/nodes/SoNonIndexedShape.h>
+#include <Inventor/nodes/SoIndexedShape.h>
 
-/// This value, when used in the numPoints field, means use the rest of
-/// the coordinates as points
-#define SO_POINT_SET_USE_REST_OF_POINTS	(-1)
-
-/// Point set shape node.
+/// Indexed point set shape node.
 /// \ingroup Nodes
 /// This node represents a set of points located at the
 /// coordinates specified by the #vertexProperty field (from <tt>SoVertexShape</tt>)
 /// or the current inherited coordinates. For optimal performance,
 /// the #vertexProperty field is recommended.
 ///
-/// <tt>SoPointSet</tt> uses the coordinates in order,
-/// starting with the first one. The
-/// number of points in the set is specified by the #numPoints field.
+/// <tt>SoPointSet</tt> uses the indices in the #coordIndex field (from <tt>SoIndexedShape</tt>)
+/// to specify the points.
 ///
 /// The coordinates of the point set are transformed by the current
 /// cumulative transformation. The points are drawn with the current light
@@ -102,23 +97,22 @@
 ///
 /// \par File format/defaults:
 /// \code
-/// SoPointSet {
-///    vertexProperty   NULL
-///    startIndex       0
-///    numPoints        -1
-/// }
+/// SoIndexedPointSet {
+///    vertexProperty      NULL
+///    coordIndex          0
+///    materialIndex      -1
+///    normalIndex        -1
+///    textureCoordIndex  -1
+///  }
 /// \endcode
-/// \sa SoIndexPointSet,SoCoordinate3,SoDrawStyle,SoPointDetail,SoVertexProperty
-class INVENTOR_API SoPointSet : public SoNonIndexedShape {
+/// \sa SoPointSet,SoCoordinate3,SoDrawStyle,SoPointDetail,SoVertexProperty
+class INVENTOR_API SoIndexedPointSet : public SoIndexedShape {
 
-    SO_NODE_HEADER(SoPointSet);
+    SO_NODE_HEADER(SoIndexedPointSet);
 
   public:
-    // Fields
-    SoSFInt32		numPoints;	///< Number of points.
-
     /// Creates a point set node with default settings.
-    SoPointSet();
+    SoIndexedPointSet();
 
   SoEXTENDER public:
     // Implements actions
@@ -134,17 +128,13 @@ class INVENTOR_API SoPointSet : public SoNonIndexedShape {
     // Generates points representing point set
     virtual void	generatePrimitives(SoAction *action);
 
-    // Computes bounding box of point set
-    virtual void	computeBBox(SoAction *action, SbBox3f &box,
-				    SbVec3f &center);
-
     // Overrides standard method to create an SoPointDetail instance
     virtual SoDetail *	createPointDetail(SoRayPickAction *action,
 					  const SoPrimitiveVertex *v,
 					  SoPickedPoint *pp);
 
   protected:
-    virtual ~SoPointSet();
+    virtual ~SoIndexedPointSet();
 
   private:
     // Returns TRUE if materials/normals are bound to individual points
@@ -152,4 +142,4 @@ class INVENTOR_API SoPointSet : public SoNonIndexedShape {
     SbBool		areNormalsPerPoint(SoAction *action) const;
 };
 
-#endif /* _SO_POINT_SET_ */
+#endif /* _SO_INDEXED_POINT_SET_ */
