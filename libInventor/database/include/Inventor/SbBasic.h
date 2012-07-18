@@ -74,7 +74,7 @@
 /// values TRUE and FALSE.
 /// <tt>SbBool</tt> is not a class and does not have any methods
 /// or variables.
-typedef int	SbBool;
+typedef int  SbBool;
 
 /// Indicates to the compiler that the parameter with the specified name is not used in the body of a function.
 /// This can be used to suppress compiler warnings while allowing functions to be defined with meaningful parameter names in their signatures.
@@ -90,8 +90,8 @@ typedef int	SbBool;
 
 /// @cond INTERNAL
 #ifndef FALSE
-#   define FALSE	0
-#   define TRUE		1
+#   define FALSE    0
+#   define TRUE     1
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -101,48 +101,27 @@ typedef int	SbBool;
 //
 // Types of classes are:
 //
-//	"class" means a public class intended for use by all users.
-//	"SoEXTENDER class" indicates a class that is used only by
-//		people extending the set of Inventor classes.
-//	"SoINTERNAL class" means that the class is used only by
-//		Inventor developers at Silicon Graphics.
+//  "class" means a public class intended for use by all users.
+//  "SoEXTENDER class" indicates a class that is used only by
+//    people extending the set of Inventor classes.
+//  "SoINTERNAL class" means that the class is used only by
+//    Inventor developers at Silicon Graphics.
 //
 // Types of member variables and methods are:
 //
-//	"public:" members are used by everybody.
-//	"SoEXTENDER public:" members are used when extending Inventor.
-//	"SoINTERNAL public:" members are for SGI Inventor developers only.
+//  "public:" members are used by everybody.
+//  "SoEXTENDER public:" members are used when extending Inventor.
+//  "SoINTERNAL public:" members are for SGI Inventor developers only.
 //
-//	"protected:" members are for people extending Inventor
-//		classes. (The "SoEXTENDER" is implied.)
-//	"SoINTERNAL protected:" members are for SGI use only.
+//  "protected:" members are for people extending Inventor
+//    classes. (The "SoEXTENDER" is implied.)
+//  "SoINTERNAL protected:" members are for SGI use only.
 //
-//	"private:" members are private, dammit.
+//  "private:" members are private, dammit.
 //
 /////////////////////////////////////////////////////////////////////////////
 #define SoEXTENDER
 #define SoINTERNAL
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Map the single-precision math functions to the regular ones on
-// machines that don't support them.
-//
-/////////////////////////////////////////////////////////////////////////////
-#ifdef _DOUBLE_MATH_ONLY
-
-#define acosf acos
-#define asinf asin
-#define atanf atan
-#define atan2f atan2
-#define cosf cos
-#define sinf sin
-#define tanf tan
-#define powf pow
-#define sqrtf sqrt
-
-#endif /* _DOUBLE_MATH_ONLY */
 
 
 #ifdef SB_OS_WIN
