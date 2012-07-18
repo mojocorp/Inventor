@@ -1,0 +1,35 @@
+#include "database/include/Inventor/SoVersion.h"
+
+1 VERSIONINFO
+FILEVERSION     SO_VERSION_MAJOR,SO_VERSION_MINOR,SO_VERSION_PATCH,0
+PRODUCTVERSION  SO_VERSION_MAJOR,SO_VERSION_MINOR,SO_VERSION_PATCH,0
+FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904E4"
+        BEGIN
+            VALUE "CompanyName",        "Silicon Graphics, Inc"
+            VALUE "FileDescription",    "Open Inventor Library"
+            VALUE "FileVersion",        SO_VERSION_STR
+            VALUE "InternalName",       "Open Inventor"
+            VALUE "LegalCopyright",     "Copyright © 2000 Silicon Graphics"
+            VALUE "LegalTrademarks1",   "All rights reserved"
+            VALUE "OriginalFilename",   "Inventor.dll"
+            VALUE "ProductName",        "Open Inventor"
+            VALUE "ProductVersion",     SO_VERSION_STR
+        END
+    END
+	BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

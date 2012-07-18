@@ -56,14 +56,6 @@
 #ifndef  _SB_BASIC_
 #define  _SB_BASIC_
 
-
-/// These symbols can be used to determine what version of Inventor
-/// your application is compiling against.  These symbols were first
-/// added with Inventor 2.1 (SO_VERSION==0x020100);
-/// they were undefined in previous revisions of Inventor.
-#define SO_VERSION_STR		"2.1.0"
-#define SO_VERSION 		0x020100
-
 #include <machine.h>
 #include <Inventor/SbStdint.h>
 #include <stdio.h>
