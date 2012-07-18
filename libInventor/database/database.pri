@@ -98,6 +98,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/SoPickedPoint.h \
            database/include/Inventor/SoPrimitiveVertex.h \
            database/include/Inventor/SoType.h \
+           database/include/Inventor/SoVersion.h \
            database/include/Inventor/actions/SoAction.h \
            database/include/Inventor/actions/SoActionMethodList.h \
            database/include/Inventor/actions/SoEnabledElementsList.h \

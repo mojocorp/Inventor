@@ -15,6 +15,8 @@ linux-g++ {
 }
 
 win32 {
+    RC_FILE = version.rc
+
     DEFINES += INVENTOR_EXPORTS WIN32_LEAN_AND_MEAN _CRT_SECURE_NO_WARNINGS
     
     INCLUDEPATH += ../3rdparty/pthreads-w32 \
