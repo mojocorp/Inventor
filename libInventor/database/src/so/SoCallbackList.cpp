@@ -55,8 +55,8 @@
 #include <Inventor/errors/SoDebugError.h>
 
 typedef struct {
-    SoCallbackListCB	*func;
-    void		*userData;
+    SoCallbackListCB    *func;
+    void                *userData;
 } SoCallbackStruct;
 
 //////////////////////////////////////////////////////////////////////////////
@@ -116,16 +116,15 @@ SoCallbackList::removeCallback(SoCallbackListCB *f, void *userData)
 //////////////////////////////////////////////////////////////////////////////
 {
     int len = list.getLength();
-    SoCallbackStruct *cb;
     int found = 0;
     
     for (int i = 0; (i < len) && (! found); i++) {
-	cb = (SoCallbackStruct *) list[i];
-	if ((cb->func == f) && (cb->userData == userData)) {
-	    list.remove(i);
-	    delete cb;
-	    found = 1;
-	}
+        SoCallbackStruct *cb = (SoCallbackStruct *) list[i];
+        if ((cb->func == f) && (cb->userData == userData)) {
+            list.remove(i);
+            delete cb;
+            found = 1;
+        }
     }
     
 #ifdef DEBUG
@@ -150,7 +149,7 @@ SoCallbackList::invokeCallbacks(void *callbackData)
     SoCallbackStruct *cb;
     
     for (int i = 0; i < len; i++) {
-	cb = (SoCallbackStruct *) list[i];
-	(*cb->func) (cb->userData, callbackData);
+        cb = (SoCallbackStruct *) list[i];
+        (*cb->func) (cb->userData, callbackData);
     }
 }   

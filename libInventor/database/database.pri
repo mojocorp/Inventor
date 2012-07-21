@@ -618,7 +618,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/lists/SoTypeList.cpp \
            database/src/so/SoBase.cpp \
            database/src/so/SoByteStream.cpp \
-           database/src/so/SoCBList.cpp \
+           database/src/so/SoCallbackList.cpp \
            database/src/so/SoChildList.cpp \
            database/src/so/SoCompactPathList.cpp \
            database/src/so/SoDB.cpp \
