@@ -1,0 +1,7 @@
+TEMPLATE = app
+TARGET = 
+DEPENDPATH += .
+INCLUDEPATH += .
+
+# Input
+SOURCES += 03.2.Robot.cpp

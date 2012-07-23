@@ -42,8 +42,8 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
