@@ -62,11 +62,10 @@
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/nodes/SoShape.h>
-#include <Inventor/elements/SoComplexityTypeElement.h>
 
 class SoState;
 class SoPrimitiveVertex;
-class _SoNurbsTessellator;
+class GLUnurbs;
 
 /// Indexed NURBS curve shape node.
 /// \ingroup Nodes
@@ -137,7 +136,6 @@ public:
 
 SoEXTENDER public:
     virtual void GLRender(SoGLRenderAction *action);
-    virtual void rayPick(SoRayPickAction *action);
 
     // Redefine this to tell open caches that they contain lines
     virtual void getBoundingBox(SoGetBoundingBoxAction *action);
@@ -156,10 +154,10 @@ protected:
     ~SoIndexedNurbsCurve();
 
 private:
-    void drawNURBS(_SoNurbsTessellator *render, SoState *state, SoComplexityTypeElement::Type ctype);
+    void drawNURBS(GLUnurbs *render, SoAction *action);
 
     // This callback gets details from the NURBS library
-    static void primCB(SoAction *, SoPrimitiveVertex *, void *);
+    static void vertexCallback(float *vertex, void * userData);
 };
 
 #endif /* _SO_INDEXED_NURBS_CURVE_ */
