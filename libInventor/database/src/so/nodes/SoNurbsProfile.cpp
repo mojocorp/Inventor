@@ -51,15 +51,18 @@
  _______________________________________________________________________
  */
 
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoComplexityElement.h>
 #include <Inventor/elements/SoComplexityTypeElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/elements/SoProfileCoordinateElement.h>
 #include <Inventor/elements/SoProjectionMatrixElement.h>
 #include <Inventor/elements/SoViewingMatrixElement.h>
+#include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/nodes/SoNurbsProfile.h>
-#include "nurbs/clients/gl4types.h"
-#include "nurbs/SoCurveRender.h"
+
+#include <math.h>
+#include <vector>
 
 SO_NODE_SOURCE(SoNurbsProfile);
 
@@ -158,6 +161,10 @@ SoNurbsProfile::getTrimCurve(SoState *state, int32_t &numPoints, float *&points,
            (int) numKnots * sizeof(float));
 }
 
+class glu_cb_data{
+public:
+    std::vector<SbVec3f> vertices;
+};
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -173,10 +180,7 @@ SoNurbsProfile::getVertices(SoState *state,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int					steps;
-    SbVec2f				*verts;
     float				*points;
-    int32_t				type, offset;
 
     const SoProfileCoordinateElement *pce = SoProfileCoordinateElement::getInstance(state);
 
@@ -189,7 +193,12 @@ SoNurbsProfile::getVertices(SoState *state,
         return;
     }
 
-    _SoNurbsCurveRender render;
+    glu_cb_data data;
+
+    GLUnurbs *theNurb = gluNewNurbsRenderer();
+    gluNurbsProperty(theNurb, GLU_NURBS_MODE, GLU_NURBS_TESSELLATOR);
+    gluNurbsCallbackData(theNurb, &data);
+    gluNurbsCallback(theNurb, GLU_NURBS_VERTEX_DATA,    (void (CALLBACK*)())SoNurbsProfile::vertexCallback);
 
     float complexity = SoComplexityElement::get(state);
 
@@ -198,39 +207,47 @@ SoNurbsProfile::getVertices(SoState *state,
     if (complexity > 1.0)
         complexity = 1.0;
 
-    if (complexity < 0.10)
-        steps = 2;
-    else if (complexity < 0.25)
-        steps = 3;
-    else if (complexity < 0.40)
-        steps = 4;
-    else if (complexity < 0.55)
-        steps = 5;
-    else
-        steps = (int) (powf(complexity, 3.32f) * 28) + 2;
-
-    float pixTolerance = 104.0f * complexity * complexity - 252.0f * complexity + 150;
-
     if (SoComplexityTypeElement::get(state) == SoComplexityTypeElement::OBJECT_SPACE) {
-        render.setnurbsproperty(N_V3D,  N_SAMPLINGMETHOD, N_FIXEDRATE);
-        render.setnurbsproperty(N_V3DR, N_SAMPLINGMETHOD, N_FIXEDRATE);
-        render.setnurbsproperty(N_V3D,  N_S_STEPS, steps);
-        render.setnurbsproperty(N_V3D,  N_T_STEPS, steps);
-        render.setnurbsproperty(N_V3DR, N_S_STEPS, steps);
-        render.setnurbsproperty(N_V3DR, N_T_STEPS, steps);
+        int steps;
+        if (complexity < 0.10)
+            steps = 2;
+        else if (complexity < 0.25)
+            steps = 3;
+        else if (complexity < 0.40)
+            steps = 4;
+        else if (complexity < 0.55)
+            steps = 5;
+        else
+            steps = (int) (powf(complexity, 3.32f) * 28) + 2;
+
+        gluNurbsProperty(theNurb, GLU_SAMPLING_METHOD, GLU_DOMAIN_DISTANCE);
+        gluNurbsProperty(theNurb, GLU_U_STEP, steps);
+        gluNurbsProperty(theNurb, GLU_V_STEP, steps);
     }
     else {
-        render.setnurbsproperty(N_V3D,  N_SAMPLINGMETHOD, N_NOSAMPLING);
-        render.setnurbsproperty(N_V3DR, N_SAMPLINGMETHOD, N_NOSAMPLING);
-        render.setnurbsproperty(N_PIXEL_TOLERANCE, pixTolerance);
+        float pixTolerance = 104.0f * complexity * complexity - 252.0f * complexity + 150;
 
-        //
-        // Calculate the total transformation matrix and pass it to the renderer
-        //
-        SbMatrix mat = (SoModelMatrixElement::get(state)   *
-                        SoViewingMatrixElement::get(state) *
-                        SoProjectionMatrixElement::get(state));
-        render.loadMatrices(mat);
+        gluNurbsProperty(theNurb, GLU_SAMPLING_METHOD, GLU_OBJECT_PATH_LENGTH);
+        gluNurbsProperty(theNurb, GLU_SAMPLING_TOLERANCE, pixTolerance);
+
+        SbMatrix matModelView = SoModelMatrixElement::get(state) * SoViewingMatrixElement::get(state);
+        const SbMatrix & matProjection = SoProjectionMatrixElement::get(state);
+
+        const SbViewportRegion & vpRegion = SoViewportRegionElement::get(state);
+        const SbVec2s & vpOrig = vpRegion.getViewportOriginPixels();
+        const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
+
+        GLint viewport[4];
+        viewport[0] = vpOrig[0];
+        viewport[1] = vpOrig[1];
+        viewport[2] = vpSize[0];
+        viewport[3] = vpSize[1];
+
+        gluNurbsProperty(theNurb, GLU_AUTO_LOAD_MATRIX, GL_FALSE);
+        gluLoadSamplingMatrices(theNurb,
+                                (float*)matModelView.getValue(),
+                                (float*)matProjection.getValue(),
+                                viewport);
     }
 
     //
@@ -245,9 +262,6 @@ SoNurbsProfile::getVertices(SoState *state,
             points[i*3+1] = t[1];
             points[i*3+2] = 0.0;
         }
-
-        offset = 3 * sizeof(float);
-        type = N_V3D;
     }
     else {
         points = new float[numPoints * 4];
@@ -259,28 +273,42 @@ SoNurbsProfile::getVertices(SoState *state,
             points[i*4+2] = t[2];
             points[i*4+3] = 0.0;
         }
-
-        offset = 4 * sizeof(float);
-        type = N_V3DR;
     }
 
-    render.bgncurve(0);
-    render.nurbscurve(knotVector.getNum(),
-                       (INREAL *) knotVector.getValues(0),
-                       offset, (INREAL *) points,
-                       knotVector.getNum() - numPoints, type);
-    render.endcurve();
+    gluBeginCurve(theNurb);
+    gluNurbsCurve(theNurb,
+            knotVector.getNum(), (float*)knotVector.getValues(0),
+            pce->is2D() ? 3 : 4, points, knotVector.getNum() - numPoints,
+            pce->is2D() ? GL_MAP1_VERTEX_3 : GL_MAP1_VERTEX_4);
+    gluEndCurve(theNurb);
+
+    gluDeleteNurbsRenderer( theNurb );
 
     //
     // The render now contains the list of vertices.  Return them to
     // the caller.
     //
-    render.getVertices(nVertices, verts);
+    nVertices = data.vertices.size();
     vertices = new SbVec2f[nVertices];
-    memcpy((void *) vertices, (void *) verts,
+    memcpy((void *) vertices, (void *) &data.vertices[0],
            (int) nVertices * sizeof(SbVec2f));
 
     delete [] points;
 
     return;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Gets details back from the NURBS library and sends them to the
+//    generate primitive callbacks.
+//
+// Use: private, static
+void
+SoNurbsProfile::vertexCallback(float *vertex, void * userData)
+{
+    glu_cb_data *data = (glu_cb_data*)userData;
+
+    data->vertices.push_back(SbVec3f(vertex[0], vertex[1], vertex[2]));
 }
