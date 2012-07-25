@@ -64,7 +64,7 @@
 
 class SoState;
 class SoPrimitiveVertex;
-class _SoNurbsNurbsTessellator;
+class GLUnurbs;
 
 /// NURBS surface shape node.
 /// \ingroup Nodes
@@ -147,7 +147,6 @@ public:
 
 SoEXTENDER public:
     virtual void GLRender(SoGLRenderAction *action);
-    virtual void rayPick(SoRayPickAction *action);
 
 SoINTERNAL public:
     static void initClass();
@@ -164,11 +163,10 @@ protected:
 
 private:
     // Renders the surface
-    void drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state,
-                   SbBool doTextures);
+    void drawNURBS(GLUnurbs *render, SoAction *action);
 
     // This callback gets details from the NURBS library
-    static void primCB(SoAction *, SoPrimitiveVertex *, void *);
+    static void vertexCallback(float *vertex, void * userData);
 };
 
 #endif /* _SO_NURBS_SURFACE_ */
