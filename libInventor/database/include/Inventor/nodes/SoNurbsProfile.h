@@ -108,6 +108,9 @@ SoINTERNAL public:
 
 protected:
     virtual ~SoNurbsProfile();
+
+    // Static callbacks invoked by the glu tesselation code:
+    static void vertexCallback(float *vertex, void * userData);
 };
 
 #endif /* _SO_NURBS_PROFILE_ */
