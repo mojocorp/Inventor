@@ -1,6 +1,3 @@
-# for nurbs...
-DEFINES += LIBRARYBUILD
-
 DEPENDPATH += database \
               database/include \
               database/include/Inventor \
@@ -33,14 +30,9 @@ DEPENDPATH += database \
               database/src/so/fields \
               database/src/so/nodes \
               database/src/so/sensors \
-              database/src/so/upgraders \
-              database/src/so/nodes/nurbs \
-              database/src/so/nodes/nurbs/clients \
-              database/src/so/nodes/nurbs/head \
-              database/src/so/nodes/nurbs/libnurbs
+              database/src/so/upgraders
 
 INCLUDEPATH += database/src/so/engines \
-               database/src/so/nodes/nurbs/head \
                database/include/Inventor/misc
 
 
@@ -491,87 +483,7 @@ PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
            database/src/so/upgraders/SoV2Text3.h \
            database/src/so/upgraders/SoV2VertexProperty.h \
            database/src/so/upgraders/SoV2WWWAnchor.h \
-           database/src/so/upgraders/SoV2WWWInline.h \
-           database/src/so/nodes/nurbs/_defines.h \
-           database/src/so/nodes/nurbs/_undefs.h \
-           database/src/so/nodes/nurbs/SoAddPrefix.h \
-           database/src/so/nodes/nurbs/SoCurveMaps.h \
-           database/src/so/nodes/nurbs/SoCurveRender.h \
-           database/src/so/nodes/nurbs/SoCurveRenderEval.h \
-           database/src/so/nodes/nurbs/SoGLRender.h \
-           database/src/so/nodes/nurbs/SoPickEvals.h \
-           database/src/so/nodes/nurbs/SoPickMaps.h \
-           database/src/so/nodes/nurbs/SoPickRender.h \
-           database/src/so/nodes/nurbs/SoPrimEvals.h \
-           database/src/so/nodes/nurbs/SoPrimMaps.h \
-           database/src/so/nodes/nurbs/SoPrimRender.h \
-           database/src/so/nodes/nurbs/clients/gl4base.h \
-           database/src/so/nodes/nurbs/clients/gl4curveval.h \
-           database/src/so/nodes/nurbs/clients/gl4surfeval.h \
-           database/src/so/nodes/nurbs/clients/gl4types.h \
-           database/src/so/nodes/nurbs/clients/isocurveeval.h \
-           database/src/so/nodes/nurbs/clients/softcurvemaps.h \
-           database/src/so/nodes/nurbs/clients/softcurveval.h \
-           database/src/so/nodes/nurbs/clients/softcurvmap.h \
-           database/src/so/nodes/nurbs/clients/softrenderer.h \
-           database/src/so/nodes/nurbs/clients/softsurfacemaps.h \
-           database/src/so/nodes/nurbs/clients/softsurfeval.h \
-           database/src/so/nodes/nurbs/clients/softsurfmap.h \
-           database/src/so/nodes/nurbs/clients/typestringtable.h \
-           database/src/so/nodes/nurbs/head/arc.h \
-           database/src/so/nodes/nurbs/head/arcsorter.h \
-           database/src/so/nodes/nurbs/head/arctess.h \
-           database/src/so/nodes/nurbs/head/backend.h \
-           database/src/so/nodes/nurbs/head/basiccrveval.h \
-           database/src/so/nodes/nurbs/head/basicsurfeval.h \
-           database/src/so/nodes/nurbs/head/bezierarc.h \
-           database/src/so/nodes/nurbs/head/bin.h \
-           database/src/so/nodes/nurbs/head/bufpool.h \
-           database/src/so/nodes/nurbs/head/cachingeval.h \
-           database/src/so/nodes/nurbs/head/coveandtiler.h \
-           database/src/so/nodes/nurbs/head/curve.h \
-           database/src/so/nodes/nurbs/head/curvelist.h \
-           database/src/so/nodes/nurbs/head/defines.h \
-           database/src/so/nodes/nurbs/head/displaylist.h \
-           database/src/so/nodes/nurbs/head/displaymode.h \
-           database/src/so/nodes/nurbs/head/flist.h \
-           database/src/so/nodes/nurbs/head/flistsorter.h \
-           database/src/so/nodes/nurbs/head/gridline.h \
-           database/src/so/nodes/nurbs/head/gridtrimvertex.h \
-           database/src/so/nodes/nurbs/head/gridvertex.h \
-           database/src/so/nodes/nurbs/head/hull.h \
-           database/src/so/nodes/nurbs/head/jarcloc.h \
-           database/src/so/nodes/nurbs/head/jumpbuffer.h \
-           database/src/so/nodes/nurbs/head/knot.h \
-           database/src/so/nodes/nurbs/head/knotvector.h \
-           database/src/so/nodes/nurbs/head/mapdesc.h \
-           database/src/so/nodes/nurbs/head/maplist.h \
-           database/src/so/nodes/nurbs/head/mesher.h \
-           database/src/so/nodes/nurbs/head/myassert.h \
-           database/src/so/nodes/nurbs/head/mymath.h \
-           database/src/so/nodes/nurbs/head/mysetjmp.h \
-           database/src/so/nodes/nurbs/head/mystdio.h \
-           database/src/so/nodes/nurbs/head/mystdlib.h \
-           database/src/so/nodes/nurbs/head/mystring.h \
-           database/src/so/nodes/nurbs/head/nurbsconsts.h \
-           database/src/so/nodes/nurbs/head/nurbstess.h \
-           database/src/so/nodes/nurbs/head/patch.h \
-           database/src/so/nodes/nurbs/head/patchlist.h \
-           database/src/so/nodes/nurbs/head/pwlarc.h \
-           database/src/so/nodes/nurbs/head/quilt.h \
-           database/src/so/nodes/nurbs/head/reader.h \
-           database/src/so/nodes/nurbs/head/renderhints.h \
-           database/src/so/nodes/nurbs/head/simplemath.h \
-           database/src/so/nodes/nurbs/head/slicer.h \
-           database/src/so/nodes/nurbs/head/sorter.h \
-           database/src/so/nodes/nurbs/head/subdivider.h \
-           database/src/so/nodes/nurbs/head/trimline.h \
-           database/src/so/nodes/nurbs/head/trimregion.h \
-           database/src/so/nodes/nurbs/head/trimvertex.h \
-           database/src/so/nodes/nurbs/head/trimvertpool.h \
-           database/src/so/nodes/nurbs/head/types.h \
-           database/src/so/nodes/nurbs/head/uarray.h \
-           database/src/so/nodes/nurbs/head/varray.h
+           database/src/so/upgraders/SoV2WWWInline.h
 
 HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
 
@@ -991,16 +903,4 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/upgraders/SoV2Text3.cpp \
            database/src/so/upgraders/SoV2VertexProperty.cpp \
            database/src/so/upgraders/SoV2WWWAnchor.cpp \
-           database/src/so/upgraders/SoV2WWWInline.cpp \
-           database/src/so/nodes/nurbs/SoCurveMaps.cpp \
-           database/src/so/nodes/nurbs/SoCurveRender.cpp \
-           database/src/so/nodes/nurbs/SoCurveRndEvl.cpp \
-           database/src/so/nodes/nurbs/SoGLRender.cpp \
-           database/src/so/nodes/nurbs/SoPickEvals.cpp \
-           database/src/so/nodes/nurbs/SoPickMaps.cpp \
-           database/src/so/nodes/nurbs/SoPickRender.cpp \
-           database/src/so/nodes/nurbs/SoPrimEvals.cpp \
-           database/src/so/nodes/nurbs/SoPrimMaps.cpp \
-           database/src/so/nodes/nurbs/SoPrimRender.cpp \
-           database/src/so/nodes/nurbs/clients/nurbsClient.cpp \
-           database/src/so/nodes/nurbs/libnurbs/libNurbs.cpp
+           database/src/so/upgraders/SoV2WWWInline.cpp
