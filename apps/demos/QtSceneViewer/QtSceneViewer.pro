@@ -1,5 +1,5 @@
 TEMPLATE = app
-TARGET   = SceneViewer
+TARGET   = QtSceneViewer
 CONFIG  -= app_bundle
 QT  += opengl
 DESTDIR = ../../../build
