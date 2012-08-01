@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET   = ivtest
-CONFIG  += opengl
+CONFIG  += opengl console
 CONFIG  -= app_bundle
 DESTDIR  = ../build
 
