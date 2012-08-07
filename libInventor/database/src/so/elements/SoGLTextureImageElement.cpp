@@ -267,19 +267,19 @@ nearestPowerOf2(GLuint value)
 struct qualityFilterTable {
     float quality;
     GLint filter;
-    SbBool needMipMaps;
+    bool needMipMaps;
 };
 
 //
 // Defaults for RealityEngine (mip-mapped by default):
 //
 static qualityFilterTable mipmap_minQFTable[] = {
-    { 0.1f, GL_NEAREST, FALSE},
-    { 0.5f, GL_LINEAR, FALSE},
-    { 0.7f, GL_NEAREST_MIPMAP_NEAREST, TRUE},
-    { 0.8f, GL_NEAREST_MIPMAP_LINEAR, TRUE},
-    { 0.9f, GL_LINEAR_MIPMAP_NEAREST, TRUE},
-    { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, TRUE},
+    { 0.1f, GL_NEAREST, false},
+    { 0.5f, GL_LINEAR, false},
+    { 0.7f, GL_NEAREST_MIPMAP_NEAREST, true},
+    { 0.8f, GL_NEAREST_MIPMAP_LINEAR, true},
+    { 0.9f, GL_LINEAR_MIPMAP_NEAREST, true},
+    { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, true},
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -322,7 +322,7 @@ SoGLTextureImageElement::sendTex(SoState *state)
         return;
     }
 
-    SbVec2s size = image.getSize();
+    const SbVec2s & size = image.getSize();
     int numComponents = image.getNumComponents();
 
     SbVec2s newSize = size;
@@ -342,39 +342,29 @@ SoGLTextureImageElement::sendTex(SoState *state)
         }
     }
 
-    SbBool needMipMaps = FALSE;
-    qualityFilterTable *tbl = mipmap_minQFTable;
     int i;
-    for (i = 0; quality > tbl[i].quality; i++) /* Do nothing */;
-    int minFilter = tbl[i].filter;
-    needMipMaps = tbl[i].needMipMaps;
+    for (i = 0; quality > mipmap_minQFTable[i].quality; i++) /* Do nothing */;
+    int minFilter = mipmap_minQFTable[i].filter;
     int magFilter = (quality < 0.5 ? GL_NEAREST : GL_LINEAR);
+    bool needMipMaps = mipmap_minQFTable[i].needMipMaps;
+
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Not default
     
     // Format in memory
-    int format = formats[numComponents-1];
-    
-    // Internal format is just numComponents unless OpenGL 1.1 is
-    // supported:
-    int internalFormat = numComponents;
-#ifdef GL_VERSION_1_1
-    internalFormat = formats[numComponents-1];
-#endif
+    int format         = formats[numComponents-1];
+    int internalFormat = formats[numComponents-1];
 
     SbBool buildList = !SoCacheElement::anyOpen(state);
     if (buildList) {
-        list = new SoGLDisplayList(state,
-                                   SoGLDisplayList::TEXTURE_OBJECT);
+        list = new SoGLDisplayList(state, SoGLDisplayList::TEXTURE_OBJECT);
         list->open(state);
     }
 
     // If we aren't creating a texture object, then we need to
     // unbind the current texture object so we don't overwrite it's state.
-#ifdef GL_VERSION_1_1
     if (!buildList)
         glBindTexture(GL_TEXTURE_2D, 0);
-#endif
 
     // These need to go inside the display list or texture object
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
