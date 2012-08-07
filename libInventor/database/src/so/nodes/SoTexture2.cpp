@@ -83,7 +83,7 @@ SoTexture2::SoTexture2()
     SO_NODE_CONSTRUCTOR(SoTexture2);
 
     SO_NODE_ADD_FIELD(filename, (""));
-    SO_NODE_ADD_FIELD(image, (SbVec2s(0, 0), 0, 0));
+    SO_NODE_ADD_FIELD(image, (SbImage()));
     SO_NODE_ADD_FIELD(wrapS, (REPEAT));
     SO_NODE_ADD_FIELD(wrapT, (REPEAT));
     SO_NODE_ADD_FIELD(model, (MODULATE));
@@ -212,7 +212,8 @@ SoTexture2::imageChangedCB(void *data, SoSensor *)
 {
     SoTexture2 *tex = (SoTexture2 *)data;
 
-    if (tex->image.isIgnored()) return;
+    if (tex->image.isIgnored())
+        return;
 
     tex->filenameSensor->detach();
     tex->filename.setValue("");
@@ -334,13 +335,8 @@ SoTexture2::GLRender(SoGLRenderAction *action)
         SoTextureOverrideElement::setImageOverride(state, TRUE);
     }
 
-    SbVec2s size;
-    int nc;
-    const unsigned char *bytes = image.getValue(size, nc);
-    int numBytes = size[0]*size[1]*nc;
-
     float texQuality = SoTextureQualityElement::get(state);
-    if (texQuality == 0 || numBytes == 0 || image.isIgnored()) {
+    if (texQuality == 0 || image.getValue().isNull() || image.isIgnored()) {
         SoGLTextureEnabledElement::set(state, FALSE);
         return;
     }
@@ -352,6 +348,7 @@ SoTexture2::GLRender(SoGLRenderAction *action)
     // DECAL or 3/4 component texture and model BLEND; print out
     // errors in these cases:
 
+    int nc = image.getValue().getNumComponents();
     int m = model.getValue();
     if (nc < 3 && m == DECAL) {
 #ifdef DEBUG
