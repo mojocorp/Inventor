@@ -29,6 +29,7 @@ SOURCES += main.cpp \
            testVec2f.cpp \
            testBox3f.cpp \
            testCreation.cpp \
+           testName.cpp \
            testString.cpp \
            testEndian.cpp \
            testFile.cpp

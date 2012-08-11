@@ -91,9 +91,10 @@ SbName::find(const char c) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int index = strchr(entry->string, c)-entry->string;
-
-    return (index>0) ? index : -1;
+    const char * pos = strchr(entry->string, c);
+    if (pos==NULL)
+        return -1;
+    return (int)(pos - entry->string);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -109,9 +110,10 @@ SbName::rfind(char c) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int index = strrchr(entry->string, c)-entry->string;
-
-    return (index>0) ? index : -1;
+    const char * pos = strrchr(entry->string, c);
+    if (pos==NULL)
+        return -1;
+    return (int)(pos - entry->string);
 }
 
 ////////////////////////////////////////////////////////////////////////
