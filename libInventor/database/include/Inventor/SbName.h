@@ -137,7 +137,7 @@ public:
 
     /// Less than operator (using alphabetical order).
     bool operator<(const SbName &other) const {
-        return entry < other.entry;
+        return *entry < *other.entry;
     }
 
     /// Equality operator for SbName/char* and SbName/SbName comparison
