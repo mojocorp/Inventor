@@ -27,8 +27,11 @@ SOURCES += main.cpp \
            utils.cpp \
            testUtils.cpp \
            testVec2f.cpp \
+           testVec3f.cpp \
+           testColor.cpp \
            testBox3f.cpp \
            testCreation.cpp \
+           testMatrix.cpp \
            testName.cpp \
            testString.cpp \
            testEndian.cpp \

@@ -1,7 +1,6 @@
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <Inventor/SbVec2f.h>
-#include <Inventor/SbVec3f.h>
 
 TEST(SbVec2f, Constructors) {
 
