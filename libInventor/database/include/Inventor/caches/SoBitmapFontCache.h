@@ -56,7 +56,6 @@
 #ifndef  _SO_BITMAP_FONT_CACHE_
 #define  _SO_BITMAP_FONT_CACHE_
 
-#include <Inventor/misc/SoGL.h>
 #include <Inventor/caches/SoCache.h>
 #include <Inventor/SbBox3f.h>
 #include <Inventor/fields/SoMFString.h>
@@ -111,14 +110,14 @@ protected:
 
 private:
     typedef struct FLbitmap {
-        GLsizei width;
-        GLsizei height;
-        GLfloat xorig;
-        GLfloat yorig;
-        GLfloat xmove;
-        GLfloat ymove;
-        GLubyte *bitmap;
-    } FLbitmap;
+         int width;
+         int height;
+         float xorig;
+         float yorig;
+         float xmove;
+         float ymove;
+         unsigned char *bitmap;
+     } FLbitmap;
 
     // Constructor.
     SoBitmapFontCache(SoState *state);
@@ -127,12 +126,12 @@ private:
     virtual ~SoBitmapFontCache();
 
     // Draws the given character (using GL)
-    void drawCharacter(char c);
+    void drawCharacter(unsigned char c);
 
     // Returns TRUE if this font cache has a display list for the
     // given character.  It will try to build a display list, if it
     // can.
-    SbBool hasDisplayList(const char c);
+    SbBool hasDisplayList(unsigned char c);
 
     // Renders an entire string by using the GL callList() function.
     void callLists(const SbString &string);
