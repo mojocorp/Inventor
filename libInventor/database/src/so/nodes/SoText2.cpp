@@ -239,6 +239,14 @@ SoText2::GLRender(SoGLRenderAction *action)
     SoMaterialBundle mb(action);
     mb.sendFirst();
     
+    const SbColor &	color = SoGLLazyElement::getDiffuse(state, 0);
+
+    glPushAttrib(GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
+
+    glPixelTransferf(GL_RED_SCALE,   color[0]);
+    glPixelTransferf(GL_GREEN_SCALE, color[1]);
+    glPixelTransferf(GL_BLUE_SCALE,  color[2]);
+
     // Special-case left-justified, single-line text, which we know
     // starts at (0,0,0) in object space, so we can help caching by
     // avoiding getting the projection/view/model matrices:
@@ -279,6 +287,7 @@ SoText2::GLRender(SoGLRenderAction *action)
         // Don't auto-cache above, since dependent on camera:
         SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
     }
+    glPopAttrib();
     state->pop();
 }
 
