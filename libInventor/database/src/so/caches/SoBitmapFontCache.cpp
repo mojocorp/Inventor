@@ -145,11 +145,11 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
     const SbName & fontName = SoFontNameElement::get(state);
 
     addElement(state->getConstElement(SoFontNameElement::getClassStackIndex()));
-    if (fontName == SoFontNameElement::getDefault()) {
+    if (fontName == SoFontNameElement::getDefault() || fontName == "Utopia-Regular") {
         if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &fontId)) {
 #ifdef DEBUG
             SoDebugError::post("SoBitmapFontCache::getFont",
-                               "Couldn't load font Utopia-Regular!");
+                               "Couldn't load embeded font Utopia-Regular!");
 #endif
             numChars = 0;
         }
@@ -171,7 +171,7 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
         }
     }
 
-    FT_Set_Char_Size( fontId, fontSize * 64, fontSize * 64, 96, 96);
+    FT_Set_Pixel_Sizes(fontId, 0, fontSize);
 
     numChars = 256;  // ??? JUST DO ASCII FOR NOW!
     listFlags.resize(numChars);
@@ -301,7 +301,7 @@ SoBitmapFontCache::setupToRender(SoState *state)
 // Use: internal
 
 SbBool
-SoBitmapFontCache::hasDisplayList(const char c)
+SoBitmapFontCache::hasDisplayList(unsigned char c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -436,26 +436,27 @@ SoBitmapFontCache::getHeight()
 //    Draws a bitmap
 //
 // Use: internal public
+//#define RGBA
+//#define LUMI
+#define LUMIA
 
 void
-SoBitmapFontCache::drawCharacter(char c)
+SoBitmapFontCache::drawCharacter(unsigned char c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const FLbitmap *bmap = getBitmap(c);
 
     if (bmap != NULL) {
-        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
-
-        glBitmap(0, 0, 0,0,bmap->xorig, bmap->yorig, NULL);
-
-        glDrawPixels(bmap->width, bmap->height, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, bmap->bitmap);
-
+        glBitmap(0, 0, 0, 0,bmap->xorig, bmap->yorig, NULL);
+        if (bmap->bitmap) {
+            glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+            glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+            glDrawPixels(bmap->width, bmap->height, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, bmap->bitmap);
+        }
         glBitmap(0, 0, 0.0f, 0.0f, bmap->xmove-bmap->xorig, bmap->ymove-bmap->yorig, NULL);
     }
 }
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -470,7 +471,7 @@ SoBitmapFontCache::drawString(const SbString &string)
 {
     SbBool useCallLists = TRUE;
 
-    const char *chars = string.getString();
+    const unsigned char *chars = (unsigned char*)string.getString();
 
     // If there aren't any other caches open, build display lists for
     // the characters we can:
@@ -487,6 +488,7 @@ SoBitmapFontCache::drawString(const SbString &string)
     // Set up OpenGL state for rendering text, and push
     // attributes so that we can restore when done.
     //
+    glDrawBuffer(GL_BACK);
     glPushAttrib( GL_ENABLE_BIT | GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
 
@@ -554,22 +556,21 @@ SoBitmapFontCache::getBitmap(unsigned char c)
     bitmaps[c]->xmove = glyph->advance.x / 64.0f;
     bitmaps[c]->ymove = glyph->advance.y / 64.0f;
 
-    //Allocate memory for the texture data.
-    bitmaps[c]->bitmap = new GLubyte[ 2 * bitmaps[c]->width * bitmaps[c]->height];
+    if (bitmap.width && bitmap.rows) {
+        //Allocate memory for the texture data.
+        bitmaps[c]->bitmap = new unsigned char[2 * bitmaps[c]->width * bitmaps[c]->height];
 
-    unsigned char* dest = bitmaps[c]->bitmap + (( bitmaps[c]->height - 1) * bitmaps[c]->width * 2);
-    unsigned char* src = bitmap.buffer;
-    size_t destStep = bitmaps[c]->width * 2 * 2;
+        unsigned char* src = fontId->glyph->bitmap.buffer;
+        unsigned char* dest = bitmaps[c]->bitmap;
 
-    for( unsigned int y = 0; y < bitmaps[c]->height; ++y)
-    {
-        for( unsigned int x = 0; x < bitmaps[c]->width; ++x)
+        for(int y=0; y<bitmaps[c]->height; y++)
         {
-            *dest++ = 255;//*src;
-            *dest++ = *src++;
+            for(int x = 0; x < bitmaps[c]->width; x++)
+            {
+                dest[2*(x+y*bitmap.width)+0] = 255;
+                dest[2*(x+y*bitmap.width)+1] = src[x+(bitmap.rows - 1 - y)*bitmap.width];
+            }
         }
-        dest -= destStep;
     }
-
     return bitmaps[c];
 }
