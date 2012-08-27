@@ -32,6 +32,7 @@ SOURCES += main.cpp \
            testName.cpp \
            testString.cpp \
            testEndian.cpp \
-           testFile.cpp
+           testFile.cpp \
+           testOffscreen.cpp
 
 LIBS += -L../build -lgtest
