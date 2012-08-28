@@ -905,12 +905,8 @@ SoShape::endShape()
 	    gluTessCallback(tobj, (GLenum)GLU_ERROR,
 			    (void (CALLBACK*)())SoShape::errorCB);
 	}
-#ifdef GLU_VERSION_1_2
 	gluTessBeginPolygon(tobj, NULL);
 	gluTessBeginContour(tobj);
-#else
-	gluBeginPolygon(tobj);
-#endif
 
 	for (i = 0; i < polyVertNum; i++) {
 	    const SbVec3f &t = polyVerts[i].getPoint();
@@ -919,12 +915,8 @@ SoShape::endShape()
 	    dv[0] = t[0]; dv[1] = t[1]; dv[2] = t[2];
 	    gluTessVertex(tobj, dv, (void *)&polyVerts[i]);
 	}
-#ifdef GLU_VERSION_1_2
 	gluTessEndContour(tobj);
 	gluTessEndPolygon(tobj);
-#else
-	gluEndPolygon(tobj);
-#endif
 
 	polyVertNum = 0;
 	break;
