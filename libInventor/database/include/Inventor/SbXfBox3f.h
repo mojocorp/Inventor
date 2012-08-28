@@ -147,6 +147,11 @@ public:
         SbBox3f::getSize(sizeX, sizeY, sizeZ);
     }
 
+    /// Returns size of box
+    SbVec3f getSize() const {
+        return SbBox3f::getSize();
+    }
+
     /// Gives the volume of the box (0 for an empty box)
     float getVolume() const;
 

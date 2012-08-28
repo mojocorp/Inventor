@@ -127,8 +127,13 @@ public:
 
     /// Returns size of box
     void getSize(short &sizeX, short &sizeY) const {
-        sizeX = max[0] - min[0];
-        sizeY = max[1] - min[1];
+        sizeX = (max[0] < min[0]) ? 0 : max[0] - min[0];
+        sizeY = (max[1] < min[1]) ? 0 : max[1] - min[1];
+    }
+
+    /// Returns size of box
+    SbVec2s getSize() const {
+        return isEmpty() ? SbVec2s(0, 0) : max - min;
     }
 
     /// Returns aspect ratio (ratio of width to height) of box
@@ -138,6 +143,19 @@ public:
 
     /// Sets box to contain nothing
     void makeEmpty();
+
+    /// Checks if the box is empty (degenerate)
+    /// note that this relies on boxes being completely degenerate if
+    /// they are degenerate at all.  All member functions preserve this
+    /// invariant.
+    SbBool isEmpty() const {
+        return max[0] < min[0];
+    }
+
+    /// Checks if the box has area; i.e., both dimensions have positive size
+    SbBool hasArea() const {
+        return (max[0] > min[0] && max[1] > min[1]);
+    }
 
     /// Equality comparison
     friend INVENTOR_API int          operator ==(const SbBox2s &b1, const SbBox2s &b2);
