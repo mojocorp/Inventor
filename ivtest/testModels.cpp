@@ -116,7 +116,28 @@ const char *models[] = {
     "ivtest/data/nurbs/SoNurbsCurve.iv",
     "ivtest/data/nurbs/SoNurbsProfile.iv",
     "ivtest/data/nurbs/SoNurbsSurface.iv",
-    "ivtest/data/shapes/creaseAngle.iv"
+    "ivtest/data/shapes/creaseAngle.iv",
+    "ivtest/data/draggers/CenterballDragger.iv",
+    "ivtest/data/draggers/DirectionalLightDragger.iv",
+    "ivtest/data/draggers/DragPointDragger.iv",
+    "ivtest/data/draggers/HandleBoxDragger.iv",
+    "ivtest/data/draggers/JackDragger.iv",
+    "ivtest/data/draggers/PointLightDragger.iv",
+    "ivtest/data/draggers/RotateCylindricalDragger.iv",
+    "ivtest/data/draggers/RotateDiscDragger.iv",
+    "ivtest/data/draggers/RotateSphericalDragger.iv",
+    "ivtest/data/draggers/Scale1Dragger.iv",
+    "ivtest/data/draggers/Scale2Dragger.iv",
+    "ivtest/data/draggers/Scale2UniformDragger.iv",
+    "ivtest/data/draggers/ScaleUniformDragger.iv",
+    "ivtest/data/draggers/SpotLightDragger.iv",
+    "ivtest/data/draggers/TabBoxDragger.iv",
+    "ivtest/data/draggers/TabPlaneDragger.iv",
+    "ivtest/data/draggers/TrackballDragger.iv",
+    "ivtest/data/draggers/TransformBoxDragger.iv",
+    "ivtest/data/draggers/TransformerDragger.iv",
+    "ivtest/data/draggers/Translate1Dragger.iv",
+    "ivtest/data/draggers/Translate2Dragger.iv"
 };
 
 QImage snapFile(const QFileInfo & src, const QFileInfo & dst);
