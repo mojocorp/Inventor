@@ -1,9 +1,9 @@
 #include <Inventor/caches/SoOutlineFontCache.h>
 #include <Inventor/caches/SoFontOutline.h>
+#include <Inventor/caches/SoGLDisplayList.h>
 #include <Inventor/SbVec2s.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
-#include <Inventor/elements/SoGLDisplayList.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoFontNameElement.h>
 #include <Inventor/elements/SoFontSizeElement.h>
@@ -18,12 +18,16 @@
 #include <Inventor/elements/SoViewingMatrixElement.h>
 #include <Inventor/nodes/SoShape.h>
 #include <Inventor/nodes/SoProfile.h>
+#include <Inventor/nodes/SoFont.h>
 
 #include <cmath>
+#include <algorithm>
+
+#include "utopia-regular.cpp"
 
 SbBool SoOutlineFontCache::tesselationError = FALSE;
-SbPList *SoOutlineFontCache::fonts = NULL;
-FLcontext SoOutlineFontCache::context = NULL;
+std::vector<SoOutlineFontCache*> SoOutlineFontCache::fonts;
+FT_Library SoOutlineFontCache::library = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -39,36 +43,23 @@ SoOutlineFontCache::getFont(SoState *state, SbBool forRender)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (fonts == NULL) {
+    if (library == NULL) {
         // One-time font library initialization
-        fonts = new SbPList;
-        context = flCreateContext(NULL, FL_FONTNAME, NULL,
-                                  1.0, 1.0);
-        if (context == NULL) {
+        if (FT_Init_FreeType( &library )) {
 #ifdef DEBUG
-            SoDebugError::post("SoText3::getFont",
-                               "flCreateContext returned NULL");
+            SoDebugError::post("SoOutlineFontCache::getFont",
+                               "FT_Init_FreeType failed");
 #endif
             return NULL;
         }
-        flMakeCurrentContext(context);
-        flSetHint(FL_HINT_FONTTYPE, FL_FONTTYPE_OUTLINE);
-    }
-    else if (context == NULL) return NULL;
-    else {
-        if (flGetCurrentContext() != context)
-            flMakeCurrentContext(context);
     }
 
     SoOutlineFontCache *result = NULL;
-    for (int i = 0; i < fonts->getLength() && result == NULL; i++) {
-        SoOutlineFontCache *c = (SoOutlineFontCache *) (*fonts)[i];
+    for (size_t i = 0; i < fonts.size() && result == NULL; i++) {
+        SoOutlineFontCache *c = fonts[i];
         if (forRender ? c->isRenderValid(state) : c->isValid(state)) {
             result = c; // Loop will terminate...
             result->ref(); // Increment ref count
-            if (flGetCurrentFont() != result->fontId) {
-                flMakeCurrentFont(result->fontId);
-            }
         }
     }
     // If none match:
@@ -76,7 +67,7 @@ SoOutlineFontCache::getFont(SoState *state, SbBool forRender)
         result = new SoOutlineFontCache(state);
 
         // If error:
-        if (result->fontId == 0) {
+        if (result->face == 0) {
             delete result;
             return NULL;
         }
@@ -97,17 +88,7 @@ SoOutlineFontCache::isValid(SoState *state) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool result = SoCache::isValid(state);
-
-    if (result) {
-        if (flGetCurrentContext() != context) {
-            flMakeCurrentContext(context);
-            flMakeCurrentFont(fontId);
-        }
-        else if (flGetCurrentFont() != fontId)
-            flMakeCurrentFont(fontId);
-    }
-    return result;
+    return SoCache::isValid(state);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -159,123 +140,58 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
     ref();
 
     frontList = sideList = NULL;
+    face = NULL;
 
     // Add element dependencies explicitly here; making 'this' the
     // CacheElement doesn't work if we are being constructed in an
     // action that doesn't have caches.
-    SbName font = SoFontNameElement::get(state);
-    addElement(state->getConstElement(
-        SoFontNameElement::getClassStackIndex()));
-    if (font == SoFontNameElement::getDefault()) {
-        font = SbName("Utopia-Regular");
-    }
+    const SbName & fontName = SoFontNameElement::get(state);
+    addElement(state->getConstElement(SoFontNameElement::getClassStackIndex()));
 
     float uems;
 
     // Remember size
     fontSize = SoFontSizeElement::get(state);
-    addElement(state->getConstElement(
-        SoFontSizeElement::getClassStackIndex()));
+    addElement(state->getConstElement(SoFontSizeElement::getClassStackIndex()));
 
-    // Figure out complexity...
-    float complexity = SoComplexityElement::get(state);
-    addElement(state->getConstElement(
-        SoComplexityElement::getClassStackIndex()));
-    addElement(state->getConstElement(
-        SoComplexityTypeElement::getClassStackIndex()));
-
-    switch (SoComplexityTypeElement::get(state)) {
-      case SoComplexityTypeElement::OBJECT_SPACE:
-        {
-            // Two ramps-- complexity of zero  == 250/1000 of an em
-            //             complexity of .5    == 20/1000 of an em
-            //             complexity of 1     == 1/1000 of an em
-            const float ZERO = 250;
-            const float HALF = 20;
-            const float ONE = 1;
-            if (complexity > 0.5) uems = (2.0-complexity*2.0)*(HALF-ONE)+ONE;
-            else uems = (1.0-complexity*2.0)*(ZERO-HALF)+HALF;
+    if (fontName == SoFontNameElement::getDefault() || fontName == "Utopia-Regular") {
+        if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
+#ifdef DEBUG
+            SoDebugError::post("SoBitmapFontCache::getFont",
+                               "Couldn't load embeded font Utopia-Regular!");
+#endif
         }
-        break;
-
-      case SoComplexityTypeElement::SCREEN_SPACE:
-        {
-            SbVec3f p(fontSize, fontSize, fontSize);
-            SbVec2s rectSize;
-
-            SoShape::getScreenSize(state, SbBox3f(-p, p), rectSize);
-            float maxSize =
-                (rectSize[0] > rectSize[1] ? rectSize[0] : rectSize[1]);
-            uems = 250.0 / (1.0 + 0.25 * maxSize * complexity *
-                            complexity);
-
-            // We have to manually add the dependency on the
-            // projection, view and model matrix elements (these are
-            // gotten in the SoShape::getScreenSize routine), and the
-            // ViewportRegionElement:
-            addElement(state->getConstElement(
-                SoProjectionMatrixElement::getClassStackIndex()));
-            addElement(state->getConstElement(
-                SoViewingMatrixElement::getClassStackIndex()));
-            addElement(state->getConstElement(
-                SoModelMatrixElement::getClassStackIndex()));
-            addElement(state->getConstElement(
-                SoViewportRegionElement::getClassStackIndex()));
-        }
-        break;
-
-      case SoComplexityTypeElement::BOUNDING_BOX:
-        {
-            uems = 20;
-        }
-        break;
-    }
-    flSetHint(FL_HINT_TOLERANCE, uems);
-
-    static GLfloat m[2][2] = { {1.0, 0.0}, {0.0, 1.0} };
-
-    fontId = flCreateFont((const GLubyte *)font.getString(), m, 0, NULL);
-
-    // If error creating font:
-    if (fontId == 0) {
-        // Try Utopia-Regular, unless we just did!
-        if (font != SbName("Utopia-Regular")) {
+    } else {
+        if (FT_New_Face( library, SoFontNameElement::getFontFileName(fontName).getString(), 0, &face )) {
 #ifdef DEBUG
             SoDebugError::post("SoText3::getFont",
-                      "Couldn't find font %s, replacing with Utopia-Regular",
-                       font.getString());
+                               "Couldn't find font %s, replacing with Utopia-Regular",
+                               fontName.getString());
 #endif
-            fontId = flCreateFont((GLubyte *)"Utopia-Regular", m, 0, NULL);
-        }
-        if (fontId == 0) {
+            if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
 #ifdef DEBUG
-            SoDebugError::post("SoText3::getFont",
-                               "Couldn't find font Utopia-Regular!");
+                SoDebugError::post("SoText3::getFont",
+                                   "Couldn't find font Utopia-Regular!");
 #endif
+            }
         }
     }
 
-    flMakeCurrentFont(fontId);
-
-    numChars = 256;  // ??? NEED TO REALLY KNOW HOW MANY CHARACTERS IN
-                     // FONT!
+    int numChars = 256;  // ??? NEED TO REALLY KNOW HOW MANY CHARACTERS IN FONT!
     sidesHaveTexCoords = FALSE;
 
     frontFlags = new SbBool[numChars];
     sideFlags = new SbBool[numChars];
-    outlines = new SoFontOutline*[numChars];
-    int i;
-    for (i = 0; i < numChars; i++) {
+    outlines.resize(numChars);
+    for (int i = 0; i < numChars; i++) {
         frontFlags[i] = sideFlags[i] = FALSE;
         outlines[i] = NULL;
     }
 
     // Get profile info:
     const SoNodeList &profiles = SoProfileElement::get(state);
-    addElement(state->getConstElement(
-        SoProfileElement::getClassStackIndex()));
-    addElement(state->getConstElement(
-        SoProfileCoordinateElement::getClassStackIndex()));
+    addElement(state->getConstElement(SoProfileElement::getClassStackIndex()));
+    addElement(state->getConstElement(SoProfileCoordinateElement::getClassStackIndex()));
     nProfileVerts = 0;
     if (profiles.getLength() > 0) {
         SoProfile *profileNode = (SoProfile *)profiles[0];
@@ -289,8 +205,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
 
     if (nProfileVerts > 1) {
         cosCreaseAngle = cos(SoCreaseAngleElement::get(state));
-        addElement(state->getConstElement(
-            SoCreaseAngleElement::getClassStackIndex()));
+        addElement(state->getConstElement(SoCreaseAngleElement::getClassStackIndex()));
         int nSegments = (int) nProfileVerts - 1;
 
         // Figure out normals for profiles; there are twice as many
@@ -303,7 +218,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
                            cosCreaseAngle, FALSE);
         // Need to flip all the normals because of the way the profiles
         // are defined:
-        for (i = 0; i < nSegments*2; i++) {
+        for (int i = 0; i < nSegments*2; i++) {
             profileNorms[i] *= -1.0;
         }
 
@@ -313,7 +228,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
                                profileVerts, FALSE);
         // And reverse them, so 0 is at the back of the profile:
         float max = sTexCoords[nProfileVerts-1];
-        for (i = 0; i < nProfileVerts; i++) {
+        for (int i = 0; i < nProfileVerts; i++) {
             sTexCoords[i] = max - sTexCoords[i];
         }
     } else {
@@ -321,7 +236,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
         sTexCoords = NULL;
     }
 
-    fonts->append(this);
+    fonts.push_back(this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -335,24 +250,16 @@ SoOutlineFontCache::~SoOutlineFontCache()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (fontId) {
-
-        if (flGetCurrentContext() != context) {
-            flMakeCurrentContext(context);
-            flMakeCurrentFont(fontId);
-        }
-        else if (flGetCurrentFont() != fontId)
-            flMakeCurrentFont(fontId);
+    if (face) {
 
         delete[] frontFlags;
         delete[] sideFlags;
 
         // Free up cached outlines
-        int i;
-        for (i = 0; i < numChars; i++) {
-            if (outlines[i]) delete outlines[i];
+        for (size_t i = 0; i < outlines.size(); i++) {
+            delete outlines[i];
         }
-        delete[] outlines;
+        outlines.clear();
 
         if (hasProfile()) {
             delete[] profileVerts;
@@ -363,14 +270,15 @@ SoOutlineFontCache::~SoOutlineFontCache()
         // Only destroy the font library font if no other font caches
         // are using the same font identifier:
         SbBool otherUsing = FALSE;
-        for (i = 0; i < fonts->getLength(); i++) {
-            SoOutlineFontCache *t = (SoOutlineFontCache *)(*fonts)[i];
-            if (t != this && t->fontId == fontId) otherUsing = TRUE;
+        for (size_t i = 0; i < fonts.size(); i++) {
+            SoOutlineFontCache *t = fonts[i];
+            if (t != this && t->face == face) otherUsing = TRUE;
         }
         if (!otherUsing) {
-            flDestroyFont(fontId);
+            FT_Done_Face(face);
+            face = NULL;
         }
-        fonts->remove(fonts->find(this));
+        fonts.erase(std::find(fonts.begin(), fonts.end(), this));
     }
 }
 
@@ -397,7 +305,17 @@ SoOutlineFontCache::destroy(SoState *)
         sideList->unref(NULL);
         sideList = NULL;
     }
+
     SoCache::destroy(NULL);
+
+    for (size_t i=0; i<fonts.size(); i++) {
+        fonts[i]->unref();
+    }
+    fonts.clear();
+
+    FT_Done_FreeType(library);
+
+    library = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -415,7 +333,7 @@ SoOutlineFontCache::getWidth(const SbString &string)
     float total = 0.0;
     const char *chars = string.getString();
 
-    for (int i = 0; i < string.getLength(); i++) {
+    for (size_t i = 0; i < string.getLength(); i++) {
         SoFontOutline *outline = getOutline(chars[i]);
         total += outline->getCharAdvance()[0];
     }
@@ -437,15 +355,11 @@ SoOutlineFontCache::getCharBBox(const char c, SbBox2f &result)
 {
     result.makeEmpty();
 
-    if (!fontId) return;
+    if (!face) return;
 
     SoFontOutline *outline = getOutline(c);
 
-    for (int i = 0; i < outline->getNumOutlines(); i++) {
-        for (int j = 0; j < outline->getNumVerts(i); j++) {
-            result.extendBy(outline->getVertex(i,j));
-        }
-    }
+    result = outline->getBoundingBox();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -462,17 +376,11 @@ SoOutlineFontCache::getOutline(const char c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!fontId) {
+    if (!face) {
         return SoFontOutline::getNullOutline();
     }
     if (outlines[c] == NULL) {
-        FLoutline *flo = flGetOutline(fontId, c);
-        if (flo == NULL) {
-            outlines[c] = SoFontOutline::getNullOutline();
-        } else {
-            outlines[c] = new SoFontOutline(flo, fontSize);
-            flFreeOutline(flo);
-        }
+        outlines[c] = new SoFontOutline(c, face, fontSize);
     }
     return outlines[c];
 }
@@ -491,7 +399,7 @@ SoOutlineFontCache::getCharOffset(const char c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!fontId) return SbVec2f(0,0);
+    if (!face) return SbVec2f(0,0);
 
     return getOutline(c)->getCharAdvance();
 }
@@ -511,24 +419,25 @@ SoOutlineFontCache::generateFrontChar(const char c,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!fontId) return;
+    if (!face) return;
 
     GLdouble v[3];
 
     tesselationError = FALSE;
-    gluBeginPolygon(tobj);
+    gluTessBeginPolygon( tobj, NULL );
+    gluTessBeginContour( tobj );
 
     // Get outline for character
     SoFontOutline *outline = getOutline(c);
-    int i;
-    for (i = 0; i < outline->getNumOutlines(); i++) {
+    for (size_t i = 0; i < outline->getNumOutlines(); i++) {
 
         // It would be nice if the font manager told us the type of
         // each outline...
-        gluNextContour(tobj, (GLenum)GLU_UNKNOWN);
+        gluTessEndContour( tobj );
+        gluTessBeginContour( tobj );
 
-        for (int j = 0; j < outline->getNumVerts(i); j++) {
-            SbVec2f &t = outline->getVertex(i,j);
+        for (size_t j = 0; j < outline->getNumVerts(i); j++) {
+            const SbVec2f &t = outline->getVertex(i,j);
             v[0] = t[0];
             v[1] = t[1];
             v[2] = 0.0;
@@ -536,10 +445,11 @@ SoOutlineFontCache::generateFrontChar(const char c,
             // Note: The third argument MUST NOT BE a local variable,
             // since glu just stores the pointer and only calls us
             // back at the gluEndPolygon call.
-            gluTessVertex(tobj, v, &t);
+            gluTessVertex(tobj, v, (GLvoid*)&t);
         }
     }
-    gluEndPolygon(tobj);
+    gluTessEndContour( tobj );
+    gluTessEndPolygon( tobj );
 
     // If there was an error tesselating the character, just generate
     // a bounding box for the character:
@@ -552,14 +462,16 @@ SoOutlineFontCache::generateFrontChar(const char c,
             boxVerts[1].setValue(boxVerts[2][0], boxVerts[0][1]);
             boxVerts[3].setValue(boxVerts[0][0], boxVerts[2][1]);
 
-            gluBeginPolygon(tobj);
-            for (i = 0; i < 4; i++) {
+            gluTessBeginPolygon( tobj, NULL );
+            gluTessBeginContour( tobj );
+            for (int i = 0; i < 4; i++) {
                 v[0] = boxVerts[i][0];
                 v[1] = boxVerts[i][1];
                 v[2] = 0.0;
                 gluTessVertex(tobj, v, &boxVerts[i]);
             }
-            gluEndPolygon(tobj);
+            gluTessEndContour( tobj );
+            gluTessEndPolygon( tobj );
         }
     }
 }
@@ -580,7 +492,7 @@ SoOutlineFontCache::setupToRenderFront(SoState *state)
     if (!otherOpen && !frontList) {
         frontList = new SoGLDisplayList(state,
                                         SoGLDisplayList::DISPLAY_LIST,
-                                        numChars);
+                                        outlines.size());
         frontList->ref();
     }
     if (frontList) {
@@ -606,7 +518,7 @@ SoOutlineFontCache::setupToRenderSide(SoState *state, SbBool willTexture)
     if (!otherOpen && !sideList) {
         sideList = new SoGLDisplayList(state,
                                         SoGLDisplayList::DISPLAY_LIST,
-                                        numChars);
+                                        outlines.size());
         sideList->ref();
         sidesHaveTexCoords = willTexture;
     }
@@ -640,7 +552,7 @@ SoOutlineFontCache::hasFrontDisplayList(const char c,
     // Build one:
     glNewList(frontList->getFirstIndex()+c, GL_COMPILE);
     generateFrontChar(c, tobj);
-    SbVec2f t = getOutline(c)->getCharAdvance();
+    const SbVec2f & t = getOutline(c)->getCharAdvance();
     glTranslatef(t[0], t[1], 0.0);
     glEndList();
     frontFlags[c] = TRUE;
@@ -674,7 +586,7 @@ SoOutlineFontCache::hasSideDisplayList(const char c,
     generateSideChar(c, callbackFunc);
     glEnd();
 
-    SbVec2f t = getOutline(c)->getCharAdvance();
+    const SbVec2f & t = getOutline(c)->getCharAdvance();
     glTranslatef(t[0], t[1], 0.0);
     glEndList();
     sideFlags[c] = TRUE;
@@ -736,13 +648,13 @@ SoOutlineFontCache::renderFront(const SbString &string,
 {
     const char *str = string.getString();
 
-    for (int i = 0; i < string.getLength(); i++) {
+    for (size_t i = 0; i < string.getLength(); i++) {
         if (frontFlags[str[i]]) {
             glCallList(frontList->getFirstIndex()+str[i]);
         }
         else {
             generateFrontChar(str[i], tobj);
-            SbVec2f t = getOutline(str[i])->getCharAdvance();
+            const SbVec2f & t = getOutline(str[i])->getCharAdvance();
             glTranslatef(t[0], t[1], 0.0);
         }
     }
@@ -764,7 +676,7 @@ SoOutlineFontCache::renderSide(const SbString &string,
 {
     const char *str = string.getString();
 
-    for (int i = 0; i < string.getLength(); i++) {
+    for (size_t i = 0; i < string.getLength(); i++) {
         if (sideFlags[str[i]]) {
             glCallList(sideList->getFirstIndex()+str[i]);
         }
@@ -773,7 +685,7 @@ SoOutlineFontCache::renderSide(const SbString &string,
             generateSideChar(str[i], callbackFunc);
             glEnd();
 
-            SbVec2f t = getOutline(str[i])->getCharAdvance();
+            const SbVec2f & t = getOutline(str[i])->getCharAdvance();
             glTranslatef(t[0], t[1], 0.0);
         }
     }
@@ -837,15 +749,14 @@ SoOutlineFontCache::generateSideChar(const char c, SideCB callbackFunc)
     // Get the outline of the character:
     SoFontOutline *outline = getOutline(c);
 
-    for (int i = 0; i < outline->getNumOutlines(); i++) {
+    for (size_t i = 0; i < outline->getNumOutlines(); i++) {
         // For each outline:
 
         int nOutline = outline->getNumVerts(i);
 
         SbVec2f *oVerts = new SbVec2f[nOutline];
         // Copy in verts so figureSegmentNorms can handle them..
-        int j;
-        for (j = 0; j < nOutline; j++) {
+        for (int j = 0; j < nOutline; j++) {
             oVerts[j] = outline->getVertex(i, j);
         }
 
@@ -882,12 +793,11 @@ SoOutlineFontCache::generateSideChar(const char c, SideCB callbackFunc)
         SbVec3f *s1 = bevel1;
         SbVec3f *s2 = bevel2;
 
-        for (j = 0; j < nOutline; j++) {
+        for (int j = 0; j < nOutline; j++) {
             // New normals are calculated for both ends of this
             // segment, since the normals may or may not be shared
             // with the previous segment.
-            fillBevelN(bevelN1, (int)(nProfileVerts-1)*2, profileNorms,
-                       oNorms[j*2]);
+            fillBevelN(bevelN1, (int)(nProfileVerts-1)*2, profileNorms, oNorms[j*2]);
 
             int j2 = (j+1)%nOutline;
             // fill out second bevel:
@@ -934,15 +844,11 @@ SoOutlineFontCache::figureSegmentNorms(SbVec2f *norms, int nPoints,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int nSegments;
-
-    if (isClosed) nSegments = nPoints;
-    else nSegments = nPoints-1;
+    int nSegments = isClosed ? nPoints : nPoints-1;
 
     // First, we'll just make all the normals perpendicular to their
     // segments:
-    int i;
-    for (i = 0; i < nSegments; i++) {
+    for (int i = 0; i < nSegments; i++) {
         SbVec2f n;
         // This is 2D perpendicular, assuming profile is increasing in
         // X (which becomes 'decreasing in Z' when we actually use
@@ -950,16 +856,17 @@ SoOutlineFontCache::figureSegmentNorms(SbVec2f *norms, int nPoints,
         // character will be inside-out, with the front face drawn
         // behind the back face, etc).
         SbVec2f v = points[(i+1)%nPoints] - points[i];
-        n[0] = v[1];
+        n[0] =  v[1];
         n[1] = -v[0];
         n.normalize();
 
-        norms[i*2] = n;
+        norms[i*2+0] = n;
         norms[i*2+1] = n;
     }
+
     // Now, figure out if the angle between any two segments is small
     // enough to average two of their normals.
-    for (i = 0; i < (isClosed ? nSegments : nSegments-1); i++) {
+    for (int i = 0; i < (isClosed ? nSegments : nSegments-1); i++) {
         SbVec2f seg1 = points[(i+1)%nPoints] - points[i];
         seg1.normalize();
         SbVec2f seg2 = points[(i+2)%nPoints] - points[(i+1)%nPoints];
@@ -995,10 +902,8 @@ SoOutlineFontCache::figureSegmentTexCoords(float *texCoords, int nPoints,
 {
     float total = 0.0;
 
-    int i;
-
     if (isClosed) {
-        for (i = nPoints; i >= 0; i--) {
+        for (int i = nPoints; i >= 0; i--) {
             texCoords[i] = total / getHeight();
             if (i > 0) {
                 total += (points[i%nPoints] - points[i-1]).length();
