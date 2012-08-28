@@ -616,9 +616,7 @@ SbViewVolume::projectBox(const SbBox3f &box) const
 	fBox.extendBy(SbVec2f(screenPoint[i][0], screenPoint[i][1]));
 
     // Return size of box
-    SbVec2f	size;
-    fBox.getSize(size[0], size[1]);
-    return size;
+    return fBox.getSize();
 }
 
 ////////////////////////////////////////////////////////////////////////

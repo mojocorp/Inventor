@@ -164,9 +164,14 @@ public:
 
     /// Returns size of box
     void getSize(float &sizeX, float &sizeY, float &sizeZ) const {
-        sizeX = max[0] - min[0];
-        sizeY = max[1] - min[1];
-        sizeZ = max[2] - min[2];
+        sizeX = (max[0] < min[0]) ? 0.0f : max[0] - min[0];
+        sizeY = (max[1] < min[1]) ? 0.0f : max[1] - min[1];
+        sizeZ = (max[2] < min[2]) ? 0.0f : max[2] - min[2];
+    }
+
+    /// Returns size of box
+    SbVec3f getSize() const {
+        return isEmpty() ? SbVec3f(0.0f, 0.0f, 0.0f) : max - min;
     }
 
     /// Sets Box3f to contain nothing
