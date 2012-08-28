@@ -135,8 +135,13 @@ public:
 
     /// Returns size of box
     void getSize(float &sizeX, float &sizeY) const {
-        sizeX = max[0] - min[0];
-        sizeY = max[1] - min[1];
+        sizeX = (max[0] < min[0]) ? 0.0f : max[0] - min[0];
+        sizeY = (max[1] < min[1]) ? 0.0f : max[1] - min[1];
+    }
+
+    /// Returns size of box
+    SbVec2f getSize() const {
+        return isEmpty() ? SbVec2f(0.0f, 0.0f) : max - min;
     }
 
     /// Returns aspect ratio (ratio of width to height) of box

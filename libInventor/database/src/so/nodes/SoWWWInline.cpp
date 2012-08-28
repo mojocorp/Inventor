@@ -216,8 +216,7 @@ SoWWWInline::setChildData(SoNode *URLdata)
 	    bba.apply(URLdata);
 	    SbBox3f inlineBbox = bba.getBoundingBox();
 	    
-	    SbVec3f bbsize;
-	    inlineBbox.getSize(bbsize[0], bbsize[1], bbsize[2]);
+        SbVec3f bbsize = inlineBbox.getSize();
 	    SbVec3f bbcenter = inlineBbox.getCenter();
 	    addBoundingBoxChild(bbcenter, bbsize);
 	} else {

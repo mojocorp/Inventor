@@ -416,11 +416,10 @@ SbVec3f
  	// Find the vector from center to the point, then scale
  	// to a unit box.
  	SbVec3f vec = point - getCenter();
- 	float sizeX, sizeY, sizeZ;
- 	getSize(sizeX, sizeY, sizeZ);
- 	float halfX = sizeX/2.0f;
- 	float halfY = sizeY/2.0f;
- 	float halfZ = sizeZ/2.0f;
+    SbVec3f size = getSize();
+    float halfX = size[0]/2.0f;
+    float halfY = size[1]/2.0f;
+    float halfZ = size[2]/2.0f;
  	if (halfX > 0.0)
  	    vec[0] /= halfX;
  	if (halfY > 0.0)

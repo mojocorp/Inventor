@@ -199,16 +199,15 @@ SoBoxHighlightRenderAction::updateBbox(SoPath *p)
     
     // Scale the cube to the correct size
     if (box.isEmpty()) {
-	cube->width  = 0;
-	cube->height = 0;
-	cube->depth  = 0;
+        cube->width  = 0;
+        cube->height = 0;
+        cube->depth  = 0;
     }
     else {
-	float x, y, z;
-	box.getSize(x, y, z);
-	cube->width  = x;
-	cube->height = y;
-	cube->depth  = z;
+        SbVec3f size = box.getSize();
+        cube->width  = size[0];
+        cube->height = size[1];
+        cube->depth  = size[2];
     }
     
     // Setup the matrix transform

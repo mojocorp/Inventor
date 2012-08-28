@@ -302,7 +302,7 @@ SoNormalGenerator::generate(float creaseAngle)
     // for this to be slow: all the points would have to be on the
     // exact wrong diagonal plane through the bounding box for them to
     // hash to the same value.]
-    box.getSize(hashScale[0], hashScale[1], hashScale[2]);
+    hashScale = box.getSize();
     tolerance = (hashScale[0] + hashScale[1] + hashScale[2]) / 10000;
     SbVec3f toleranceVec(tolerance, tolerance, tolerance);
     if (hashScale[0] != 0.0)

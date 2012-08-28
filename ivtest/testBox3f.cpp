@@ -1,4 +1,4 @@
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
 #include <Inventor/SbBox3f.h>
 
@@ -63,5 +63,5 @@ TEST(SbBox3f, Size) {
     SbVec3f pmax(3, 4, 5);
     SbBox3f b(pmin, pmax);
 
-
+    EXPECT_TRUE(b.getSize() == SbVec3f(3, 3, 3));
 }

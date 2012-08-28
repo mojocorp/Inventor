@@ -325,8 +325,7 @@ SoShape::getScreenSize(SoState *state, const SbBox3f &boundingBox,
 				   (screenPoint[i][1] * winSize[1])));
 
     // Get the size of the resulting box
-    SbVec2f boxSize;
-    screenBox.getSize(boxSize[0], boxSize[1]);
+    SbVec2f boxSize = screenBox.getSize();
 
     // Screen space size is actually half of this size. Test for
     // overflow and use the maximum size if necessary.

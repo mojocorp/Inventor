@@ -203,9 +203,7 @@ SoSurroundScale::updateMySurroundParams(SoAction *action,
 	    return;
 	}
 	else {
-	    float x, y, z;
-	    myBox.getSize(x,y,z);
-	    cachedScale.setValue(  .5f*x, .5f*y, .5f*z );
+        cachedScale = .5f*myBox.getSize();
 
 	    float minLength = .01f * cachedScale.length();
 	    // Macro defined just before beginning of this method.
