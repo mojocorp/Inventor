@@ -40,8 +40,7 @@ DEPENDPATH += database \
               database/src/so/nodes/nurbs/head \
               database/src/so/nodes/nurbs/libnurbs
 
-INCLUDEPATH += ../libFL/src \
-               database/src/so/engines \
+INCLUDEPATH += database/src/so/engines \
                database/src/so/nodes/nurbs/head \
                database/include/Inventor/misc
 
