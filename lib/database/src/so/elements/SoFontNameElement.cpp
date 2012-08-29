@@ -138,25 +138,6 @@ SoFontNameElement::get(SoState *state)
     return elt->fontName;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Compares names
-//
-// Use: public
-SbString
-SoFontNameElement::getFontPath()
-//
-////////////////////////////////////////////////////////////////////////
-{
-#if defined(SB_OS_WIN)
-    return "c:\\Windows\\Fonts\\";
-#elif defined(SB_OS_MACX)
-    return "/Library/Fonts/";
-#else
-    return "/usr/share/data/fonts/";
-#endif
-}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -218,3 +199,4 @@ SoFontNameElement::print(FILE *) const
 {
 }
 #endif /* DEBUG */
+

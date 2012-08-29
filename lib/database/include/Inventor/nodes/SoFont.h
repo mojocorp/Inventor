@@ -60,6 +60,8 @@
 #include <Inventor/fields/SoSFName.h>
 #include <Inventor/nodes/SoSubNode.h>
 
+#include <map>
+
 /// Node that defines font type and size for text.
 /// \ingroup Nodes
 /// This node defines the current font type and point size for all
@@ -99,6 +101,12 @@ class INVENTOR_API SoFont : public SoNode {
     /// Creates a font node with default settings.
     SoFont();
 
+    /// Returns the full font path
+    static SbString getFontFileName(const SbName & fontName);
+
+    /// Register a font with corresponding path.
+    static void addFontFileName(const SbName & fontName, const SbString & fontPath);
+
   SoEXTENDER public:
     virtual void	doAction(SoAction *action);
     virtual void	GLRender(SoGLRenderAction *action);
@@ -111,6 +119,10 @@ class INVENTOR_API SoFont : public SoNode {
 
   protected:
     virtual ~SoFont();
+
+    static std::map<SbName, SbString> s_font_map;
+
+    static void initFontMap();
 };
 
 #endif /* _SO_FONT_ */

@@ -87,9 +87,6 @@ public:
         return SbName("defaultFont");
     }
 
-    /// Returns the default font path
-    static SbString getFontPath();
-
     /// Returns TRUE if the font name matches given element
     virtual SbBool matches(const SoElement *elt) const;
 

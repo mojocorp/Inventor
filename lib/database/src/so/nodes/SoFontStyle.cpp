@@ -62,39 +62,13 @@
 
 SO_NODE_SOURCE(SoFontStyle);
 
-#if defined(SB_OS_WIN)
-// Use font file names
-const char *SoFontStyle::fontList[][4] =
-                    {
-                        { "Times", "Timesbd", 
-                          "Timesi", "Timesbi" }, 
-                        { "Arial", "Arialbd", 
-                          "Ariali", "Arialbi" }, 
-                        { "Cour", "Courbd", 
-                          "Couri", "Courbi" }, 
-                    };
-#elif defined(SB_OS_MACX)
 // Use font postscript names
 const char *SoFontStyle::fontList[][4] =
-                    {
-                        { "Times-Roman", "Times-Bold", 
-                          "Times-Italic", "Times-BoldItalic" }, 
-                        { "Helvetica", "Helvetica-Bold", 
-                          "Helvetica", "Helvetica-Bold" }, 
-                        { "Courier", "Courier-Bold", 
-                          "Courier", "Courier-Bold" }, 
-                    };
-#else
-const char *SoFontStyle::fontList[][4] =
-		    {
-			{ "Utopia-Regular", "Utopia-Bold", 
-			  "Utopia-Italic", "Utopia-BoldItalic" }, 
-			{ "Helvetica", "Helvetica-Bold", 
-			  "Helvetica-Oblique", "Helvetica-BoldOblique" }, 
-			{ "Courier", "Courier-Bold", 
-			  "Courier-Oblique", "Courier-BoldOblique" }, 
-		    };
-#endif
+{
+    { "Times-Roman", "Times-Bold", "Times-Oblique", "Times-Bold Oblique" }, 
+    { "Helvetica", "Helvetica-Bold", "Helvetica-Oblique", "Helvetica-Bold Oblique" }, 
+    { "Courier", "Courier-Bold", "Courier-Oblique", "Courier-Bold Oblique" }, 
+};
 
 ////////////////////////////////////////////////////////////////////////
 //
