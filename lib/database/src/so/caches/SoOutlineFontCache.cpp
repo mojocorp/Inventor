@@ -162,7 +162,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
 #endif
         }
     } else {
-        if (FT_New_Face( library, SoFontNameElement::getFontFileName(fontName).getString(), 0, &face )) {
+        if (FT_New_Face( library, SoFont::getFontFileName(fontName).getString(), 0, &face )) {
 #ifdef DEBUG
             SoDebugError::post("SoText3::getFont",
                                "Couldn't find font %s, replacing with Utopia-Regular",
