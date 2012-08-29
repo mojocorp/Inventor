@@ -162,17 +162,23 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
 #endif
         }
     } else {
-        if (FT_New_Face( library, SoFont::getFontFileName(fontName).getString(), 0, &face )) {
-#ifdef DEBUG
-            SoDebugError::post("SoText3::getFont",
-                               "Couldn't find font %s, replacing with Utopia-Regular",
-                               fontName.getString());
-#endif
-            if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
+        SbFile file;
+        if (file.open(SoFont::getFontFileName(fontName), "rb")) {
+            buffer.resize(SbFile::size(SoFont::getFontFileName(fontName)));
+            file.read(&buffer[0], 1, buffer.size());
+
+            if (FT_New_Memory_Face(library, &buffer[0], (FT_Long)buffer.size(), 0, &face)) {
 #ifdef DEBUG
                 SoDebugError::post("SoText3::getFont",
-                                   "Couldn't find font Utopia-Regular!");
+                                   "Couldn't find font %s, replacing with Utopia-Regular",
+                                   fontName.getString());
 #endif
+                if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
+#ifdef DEBUG
+                    SoDebugError::post("SoText3::getFont",
+                                       "Couldn't find font Utopia-Regular!");
+#endif
+                }
             }
         }
     }
