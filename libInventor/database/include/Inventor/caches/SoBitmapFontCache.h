@@ -158,6 +158,8 @@ private:
 
     // And some font library stuff:
     static FT_Library library;
-    FT_Face fontId;
+    FT_Face face;
+
+    std::vector<unsigned char> buffer;
 };
 #endif /* _SO_BITMAP_FONT_CACHE_ */

@@ -109,7 +109,7 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
         result = new SoBitmapFontCache(state);
 
         // If error:
-        if (result->fontId == 0) {
+        if (result->face == 0) {
             delete result;
             return NULL;
         }
@@ -146,7 +146,7 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
 
     addElement(state->getConstElement(SoFontNameElement::getClassStackIndex()));
     if (fontName == SoFontNameElement::getDefault() || fontName == "Utopia-Regular") {
-        if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &fontId)) {
+        if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
 #ifdef DEBUG
             SoDebugError::post("SoBitmapFontCache::getFont",
                                "Couldn't load embeded font Utopia-Regular!");
@@ -154,24 +154,27 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
             numChars = 0;
         }
     } else {
+        SbFile file;
+        if (file.open(SoFont::getFontFileName(fontName), "rb")) {
+            buffer.resize(SbFile::size(SoFont::getFontFileName(fontName)));
+            file.read(&buffer[0], 1, buffer.size());
 
-        // Initialize everything
-        if (FT_New_Face( library, SoFont::getFontFileName(fontName.getString()).getString(), 0, &fontId )) {
-#ifdef DEBUG
-            SoDebugError::post("SoBitmapFontCache::getFont",
-                               "Couldn't find font %s, replacing with Utopia-Regular", fontName.getString());
-#endif
-            if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &fontId)) {
+            if (FT_New_Memory_Face(library, &buffer[0], (FT_Long)buffer.size(), 0, &face)) {
 #ifdef DEBUG
                 SoDebugError::post("SoBitmapFontCache::getFont",
-                                   "Couldn't load font Utopia-Regular!");
+                                   "Couldn't find font %s, replacing with Utopia-Regular", fontName.getString());
 #endif
-                numChars = 0;
+                if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
+#ifdef DEBUG
+                    SoDebugError::post("SoText2::getFont",
+                                       "Couldn't find font Utopia-Regular!");
+#endif
+                }
             }
         }
     }
 
-    FT_Set_Pixel_Sizes(fontId, 0, fontSize);
+    FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
 
     numChars = 256;  // ??? JUST DO ASCII FOR NOW!
     listFlags.resize(numChars);
@@ -196,7 +199,7 @@ SoBitmapFontCache::~SoBitmapFontCache()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (fontId) {
+    if (face) {
         for (int i = 0; i < numChars; i++) {
             if (bitmaps[i] != NULL) {
                 delete [] bitmaps[i]->bitmap;
@@ -209,11 +212,11 @@ SoBitmapFontCache::~SoBitmapFontCache()
         SbBool otherUsing = FALSE;
         for (int i = 0; i < fonts->getLength(); i++) {
             SoBitmapFontCache *t = (SoBitmapFontCache *)(*fonts)[i];
-            if (t != this && t->fontId == fontId) otherUsing = TRUE;
+            if (t != this && t->face == face) otherUsing = TRUE;
         }
         if (!otherUsing) {
-            FT_Done_Face(fontId);
-            fontId = NULL;
+            FT_Done_Face(face);
+            face = NULL;
         }
 
         listFlags.clear();
@@ -538,14 +541,14 @@ SoBitmapFontCache::getBitmap(unsigned char c)
     bitmaps[c] = new FLbitmap;
     bitmaps[c]->bitmap = NULL;
 
-    if(FT_Load_Char(fontId, c, FT_LOAD_RENDER)) {
+    if(FT_Load_Char(face, c, FT_LOAD_RENDER)) {
 #ifdef DEBUG
         SoDebugError::post("SoBitmapFontCache::getBitmap",
                            "FT_Load_Char failed");
 #endif
     }
 
-    FT_GlyphSlot glyph = fontId->glyph;
+    FT_GlyphSlot glyph = face->glyph;
     FT_Bitmap bitmap = glyph->bitmap;
 
     bitmaps[c]->width = bitmap.width;
@@ -560,7 +563,7 @@ SoBitmapFontCache::getBitmap(unsigned char c)
         //Allocate memory for the texture data.
         bitmaps[c]->bitmap = new unsigned char[2 * bitmaps[c]->width * bitmaps[c]->height];
 
-        unsigned char* src = fontId->glyph->bitmap.buffer;
+        unsigned char* src = face->glyph->bitmap.buffer;
         unsigned char* dest = bitmaps[c]->bitmap;
 
         for(int y=0; y<bitmaps[c]->height; y++)

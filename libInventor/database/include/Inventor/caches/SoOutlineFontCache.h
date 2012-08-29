@@ -223,6 +223,8 @@ class SoOutlineFontCache : public SoCache
     // representing the font will change, and a different font will be
     // used.
     static std::vector<SoOutlineFontCache*>	fonts;
+
+    std::vector<unsigned char> buffer;
 };
 
 #endif /* _SO_OUTLINE_FONT_CACHE_ */
