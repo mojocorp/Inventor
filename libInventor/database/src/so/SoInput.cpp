@@ -1101,72 +1101,73 @@ SoInput::read(SbName &n,		// Name to read into
 
 #define READ_NUM(reader, readType, num, dglFunc, type, dglType)               \
     SbBool ok;                                                                \
+    if (! skipWhiteSpace()) {                                                 \
+        ok = FALSE;                                                           \
+    } else if (curFile->binary) {                                             \
+        int n = sizeof(dglType);                                              \
+        int pad = ((n+3) & ~0003) - n;                                        \
+        dglType tnum;                                                         \
+        if (fromBuffer()) {                                                   \
+            if (eof()) {                                                      \
+                ok = FALSE;                                                   \
+            } else {                                                          \
+                ok = TRUE;                                                    \
+                dglFunc(curFile->curBuf, (dglType *)&tnum);                   \
+                curFile->curBuf += sizeof(dglType) + pad;                     \
+            }                                                                 \
+        } else {                                                              \
+            if (backupBufUsed == TRUE) {                                      \
+                num = (type)(*(type *)backupBuf);                             \
+                backupBufUsed = FALSE;                                        \
+                return TRUE;                                                  \
+            }                                                                 \
+            char padbuf[4];                                                   \
+            makeRoomInBuf(sizeof(dglType));                                   \
+            ok = curFile->fp.read((char *)tmpBuffer, sizeof(dglType), 1);     \
+            dglFunc((char *)tmpBuffer, (dglType *)&tnum);                     \
+            if (pad != 0) {                                                   \
+                ok = curFile->fp.read(padbuf, sizeof(char), pad);             \
+            }                                                                 \
+        }                                                                     \
+        num = (type)tnum;                                                     \
+    } else {                                                                  \
+        readType _tmp;                                                        \
+        ok = reader(_tmp);                                                    \
+        if (ok) {                                                             \
+            num = (type) _tmp;                                                \
+        }                                                                     \
+    }                                                                         \
+    return ok
+
+#define READ_BIN_ARRAY(array, length, dglFunc, type)                          \
+    SbBool ok = TRUE;                                                         \
     if (! skipWhiteSpace())                                                   \
-    ok = FALSE;                                                           \
-    else if (curFile->binary) {                                               \
-    int n = sizeof(dglType);                                            \
-    int pad = ((n+3) & ~0003) - n;                                        \
-    dglType tnum;                                                         \
-    if (fromBuffer()) {                                                   \
-    if (eof())                                                        \
-    ok = FALSE;                                                   \
-    else {                                                            \
-    ok = TRUE;                                                    \
-    dglFunc(curFile->curBuf, (dglType *)&tnum);                   \
-    curFile->curBuf += sizeof(dglType) + pad;                   \
-    }                                                                 \
-    }                                                                     \
-    else {                                                                \
-    if (backupBufUsed == TRUE) {                                      \
-    num = (type)(*(type *)backupBuf);                             \
-    backupBufUsed = FALSE;                                        \
-    return TRUE;                                                  \
-    }                                                                 \
-    char padbuf[4];                                                   \
-    makeRoomInBuf(sizeof(dglType));                                 \
-    ok = curFile->fp.read((char *)tmpBuffer, sizeof(dglType), 1);         \
-    dglFunc((char *)tmpBuffer, (dglType *)&tnum);                     \
-    if (pad != 0)                                                     \
-    ok = curFile->fp.read(padbuf, sizeof(char), pad); \
-    }                                                                     \
-    num = (type)tnum;                                                     \
+        ok = FALSE;                                                           \
+    else if (fromBuffer()) {                                                  \
+        if (eof()) {                                                          \
+            ok = FALSE;                                                       \
+        } else {                                                              \
+            dglFunc(curFile->curBuf, (type *)array, length);	              \
+            curFile->curBuf += length * sizeof(type);                         \
+        }                                                                     \
     }                                                                         \
     else {                                                                    \
-    readType _tmp;                                                        \
-    ok = reader(_tmp);                                                    \
-    if (ok)                                                               \
-    num = (type) _tmp;                                                \
+        makeRoomInBuf(length * sizeof(type));                                 \
+        size_t i = curFile->fp.read(tmpBuffer, sizeof(type), length);         \
+        if (i != length) {                                                    \
+            return FALSE;                                                     \
+        }                                                                     \
+        dglFunc((char *)tmpBuffer, (type *)array, length);                    \
     }                                                                         \
     return ok
 
-#define READ_BIN_ARRAY(array, length, dglFunc, type)   			      \
-    SbBool ok = TRUE;							      \
-    if (! skipWhiteSpace())						      \
-    ok = FALSE;							      \
-    else if (fromBuffer()) {                                                  \
-    if (eof())						              \
-    ok = FALSE;					                      \
-    else {								      \
-    dglFunc(curFile->curBuf, (type *)array, length);	              \
-    curFile->curBuf += length * sizeof(type);                       \
-    }								      \
-    }                                                                         \
-    else { 								      \
-    makeRoomInBuf(length * sizeof(type));				      \
-    size_t i = curFile->fp.read(tmpBuffer, sizeof(type), length);        \
-    if (i != length)                                                      \
-    return FALSE;                                                     \
-    dglFunc((char *)tmpBuffer, (type *)array, length);		      \
-    } 									      \
-    return ok
-
-#define READ_INTEGER(num, dglFunc, type, dglType)			      \
+#define READ_INTEGER(num, dglFunc, type, dglType)                             \
     READ_NUM(readInteger, int32_t, num, dglFunc, type, dglType)
 
-#define READ_UNSIGNED_INTEGER(num, dFunc, type, dType)			      \
+#define READ_UNSIGNED_INTEGER(num, dFunc, type, dType)                        \
     READ_NUM(readUnsignedInteger, uint32_t, num, dFunc, type, dType)
 
-#define READ_REAL(num, dglFunc, type, dglType)				      \
+#define READ_REAL(num, dglFunc, type, dglType)                                \
     READ_NUM(readReal, double, num, dglFunc, type, dglType)
 
 SbBool
