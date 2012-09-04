@@ -30,6 +30,7 @@ SOURCES += main.cpp \
            testVec3f.cpp \
            testColor.cpp \
            testBox3f.cpp \
+           testIO.cpp \
            testCreation.cpp \
            testMatrix.cpp \
            testName.cpp \
