@@ -65,6 +65,7 @@
 
 
 static const char *defaultASCIIHeader =  "#Inventor V2.1 ascii";
+static const char *defaultUTF8Header =   "#Inventor V2.1 utf8";
 static const char *defaultBinaryHeader = "#Inventor V2.1 binary";
 
 ////////////////////////////////////////////////////////////////////////
@@ -82,7 +83,6 @@ SoOutput::SoOutput()
     buffer	= NULL;
     toBuffer	= FALSE;
     anyRef	= FALSE;
-    binary	= FALSE;
     compact	= FALSE;
     wroteHeader	= FALSE;
     tmpBuffer   = NULL;
@@ -92,6 +92,7 @@ SoOutput::SoOutput()
     annotation	= 0;
     headerString = SbString("");
     fmtString	= SbString("%g");
+    format = ASCII;
 
     reset();
 }
@@ -111,7 +112,6 @@ SoOutput::SoOutput(SoOutput *dictOut)
     buffer	= NULL;
     toBuffer	= FALSE;
     anyRef	= FALSE;
-    binary	= FALSE;
     compact	= FALSE;
     wroteHeader	= FALSE;
     tmpBuffer   = NULL;
@@ -127,6 +127,7 @@ SoOutput::SoOutput(SoOutput *dictOut)
         borrowedDict = TRUE;
         refDict	= dictOut->refDict;
     }
+    format = ASCII;
 
     reset();
 }
@@ -341,7 +342,22 @@ SoOutput::setBinary(SbBool flag)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    binary = flag;
+    setFormat(flag ? BINARY : ASCII);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Indicates whether output should be ASCII (default) or UTF8.
+//
+// Use: public
+
+void
+SoOutput::setFormat(Format fmt)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    format = fmt;
 
     // If writing to file, initialize the temporary output for buffering
     // data before writing.
@@ -350,7 +366,6 @@ SoOutput::setBinary(SbBool flag)
         tmpBuffer = (char *)malloc(64);
         tmpBufSize = 64;
     }
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -421,6 +436,34 @@ SoOutput::resetHeaderString()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Return the current header string
+//
+// Use: public
+
+SbString
+SoOutput::getHeaderString() const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    if (headerString != "")
+        return headerString;
+
+    switch(format) {
+    case BINARY:
+        return defaultBinaryHeader;
+    case ASCII:
+        return defaultASCIIHeader;
+    case UTF8:
+        return defaultUTF8Header;
+    default:
+        break;
+    }
+    return defaultASCIIHeader;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Return the default ASCII header string (ie the latest version
 //    of the standard Inventor ascii header)
 //
@@ -432,6 +475,22 @@ SoOutput::getDefaultASCIIHeader()
 ////////////////////////////////////////////////////////////////////////
 {
     return (SbString(defaultASCIIHeader));
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Return the default UTF8 header string (ie the latest version
+//    of the standard Inventor utf8 header)
+//
+// Use: public, static
+
+SbString
+SoOutput::getDefaultUTF8Header()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return (SbString(defaultUTF8Header));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1138,25 +1197,16 @@ SoOutput::writeHeader()
         return;
 
     if (isBinary()) {
-        binary = FALSE;
-        if (headerString == "") {
-            SbString defaultHeader = SoOutput::padHeader(defaultBinaryHeader);
-            write(defaultHeader.getString());
-        } else {
-            // Make sure the string is padded for correct alignment, in case
-            // it's used in a binary file
-            SbString paddedString = SoOutput::padHeader(headerString);
-            write(paddedString.getString());
-        }
-        write('\n');
-        binary = TRUE;
-    }
+        // Make sure the string is padded for correct alignment, in case
+        // it's used in a binary file
+        SbString paddedString = SoOutput::padHeader(getHeaderString());
 
-    else {
-        if (headerString == "")
-            write(defaultASCIIHeader);
-        else
-            write(headerString.getString());
+        format = ASCII;
+        write(paddedString.getString());
+        write('\n');
+        format = BINARY;
+    } else {
+        write(getHeaderString().getString());
         write('\n');
         write('\n');
     }
