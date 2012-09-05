@@ -96,8 +96,8 @@ typedef void *SoOutputReallocCB(void *ptr, size_t newSize);
 
 /// Used to write Inventor data files.
 /// \ingroup General
-/// This class is used for writing Inventor data files.  It supports both
-/// ASCII (default) and binary formats and provides some convenience
+/// This class is used for writing Inventor data files.  It supports ASCII (default),
+/// UTF-8 and binary formats and provides some convenience
 /// functions for handling files.  It can also write to a buffer in memory
 /// as well as to a file pointer.
 /// A user-defined header can be specified for the output file.
@@ -108,6 +108,12 @@ typedef void *SoOutputReallocCB(void *ptr, size_t newSize);
 /// \sa SoInput, SoWriteAction, SoTranSender
 class INVENTOR_API SoOutput {
 public:
+    /// Enum that determines formats for writing
+    enum Format {
+        ASCII,
+        UTF8,
+        BINARY
+    };
 
     /// Constructor (default SoOutput writes to stdout)
     SoOutput();
@@ -150,11 +156,21 @@ public:
     void resetBuffer();
 
     /// Sets whether output should be ASCII (default) or binary.
-    void setBinary(SbBool flag);
+    /// \sa setFormat
+    SB_DECL_DEPRECATED void setBinary(SbBool flag);
 
     /// Returns current state of binary flag.
     SbBool isBinary() const  {
-        return binary;
+        return (format == BINARY) ? TRUE : FALSE;
+    }
+
+    /// Sets the output format.
+    /// This must be called before writing any data (default ASCII).
+    void setFormat(Format fmt);
+
+    /// Returns the current format.
+    Format getFormat() const {
+        return format;
     }
 
     /// Sets the header for output files.
@@ -172,8 +188,14 @@ public:
     /// Resets the header for output files to be the default header.
     void resetHeaderString();
 
+    /// Returns the string representing the current header.
+    SbString getHeaderString() const;
+
     /// Returns the string representing the default ASCII header.
     static SbString getDefaultASCIIHeader();
+
+    /// Returns the string representing the default UTF-8 header.
+    static SbString getDefaultUTF8Header();
 
     /// Returns the string representing the default binary header.
     static SbString getDefaultBinaryHeader();
@@ -266,7 +288,6 @@ private:
     size_t    bufSize; // Maximum buffer size
     size_t    tmpBufSize; // Maximum temporary buffer size
     SoOutputReallocCB *reallocFunc; // Reallocation function for buffer
-    SbBool    binary;  // TRUE if writing binary data
     SbBool    compact; // TRUE if writing in compact form
     SbBool    wroteHeader; // TRUE if header was written
     int       indentLevel; // Current indentation level
@@ -278,6 +299,7 @@ private:
     Stage     curStage; // Stage of operation
     SbString  headerString; // The header
     SbString  fmtString; // Output format
+    Format    format; // Output format
 
     // Writes correct file header string to current file/buffer
     void writeHeader();

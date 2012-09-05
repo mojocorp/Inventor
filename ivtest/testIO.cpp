@@ -3,6 +3,7 @@
 #include <gtest/gtest.h>
 
 #include <Inventor/nodes/SoSeparator.h>
+#include <Inventor/nodes/SoText2.h>
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/SbRefPtr.h>
@@ -22,6 +23,7 @@ protected:
         QString tmp = QDir::tempPath();
         asciiModel = tmp + "/ascii.iv";
         binaryModel = tmp + "/binary.iv";
+        utf8Model = tmp + "/utf8.iv";
 
         SoInput in;
         in.setBuffer((void*)scenegraph, strlen(scenegraph));
@@ -37,11 +39,12 @@ protected:
     SbRefPtr<SoSeparator> graph;
     QString asciiModel;
     QString binaryModel;
+    QString utf8Model;
 };
 
 TEST_F(testIO, ascii) {
     SoOutput out;
-    out.setBinary(FALSE);
+    out.setFormat(SoOutput::ASCII);
     ASSERT_TRUE(out.openFile(qPrintable(asciiModel)));
 
     SoWriteAction wa(&out);
@@ -68,7 +71,7 @@ TEST_F(testIO, ascii) {
 
 TEST_F(testIO, binary) {
     SoOutput out;
-    out.setBinary(TRUE);
+    out.setFormat(SoOutput::BINARY);
     ASSERT_TRUE(out.openFile(qPrintable(binaryModel)));
 
     SoWriteAction wa(&out);
@@ -91,4 +94,110 @@ TEST_F(testIO, binary) {
     SoPathList & pl = sa.getPaths();
 
     EXPECT_EQ(2, pl.getLength());
+}
+
+TEST_F(testIO, utf8_text) {
+    {
+    SoSearchAction sa;
+    sa.setType(SoText2::getClassTypeId());
+    sa.setInterest(SoSearchAction::FIRST);
+    sa.apply(graph.data());
+    EXPECT_TRUE(sa.getPath()->getTail());
+
+    SoText2 *text = dynamic_cast<SoText2*>(sa.getPath()->getTail());
+    ASSERT_TRUE(text);
+    text->string = SbString::fromUtf8("Kl\303\274ft skr\303\244ms inf\303\266r p\303\245 f\303\251d\303\251ral \303\251lectoral gro\303\237e");
+    }
+
+    SoOutput out;
+    out.setFormat(SoOutput::UTF8);
+    ASSERT_TRUE(out.openFile(qPrintable(utf8Model)));
+
+    SoWriteAction wa(&out);
+    wa.apply(graph.data());
+
+    out.closeFile();
+
+    SoInput in;
+    ASSERT_TRUE(in.openFile(qPrintable(utf8Model)));
+    EXPECT_FALSE(in.isBinary());
+
+    SbRefPtr<SoSeparator> root = SoDB::readAll(&in);
+    ASSERT_TRUE(root);
+
+    {
+    SoSearchAction sa;
+    sa.setType(SoNode::getClassTypeId());
+    sa.setInterest(SoSearchAction::ALL);
+    sa.setSearchingAll(TRUE);
+    sa.apply(root.data());
+    SoPathList & pl = sa.getPaths();
+
+    EXPECT_EQ(2, pl.getLength());
+    }
+
+    {
+    SoSearchAction sa;
+    sa.setType(SoText2::getClassTypeId());
+    sa.setInterest(SoSearchAction::FIRST);
+    sa.apply(graph.data());
+    EXPECT_TRUE(sa.getPath()->getTail());
+
+    SoText2 *text = dynamic_cast<SoText2*>(sa.getPath()->getTail());
+    ASSERT_TRUE(text);
+    EXPECT_TRUE(text->string[0] == SbString::fromUtf8("Kl\303\274ft skr\303\244ms inf\303\266r p\303\245 f\303\251d\303\251ral \303\251lectoral gro\303\237e"));
+    }
+}
+
+TEST_F(testIO, utf8_binary) {
+    {
+    SoSearchAction sa;
+    sa.setType(SoText2::getClassTypeId());
+    sa.setInterest(SoSearchAction::FIRST);
+    sa.apply(graph.data());
+    EXPECT_TRUE(sa.getPath()->getTail());
+
+    SoText2 *text = dynamic_cast<SoText2*>(sa.getPath()->getTail());
+    ASSERT_TRUE(text);
+    text->string = SbString::fromUtf8("Kl\303\274ft skr\303\244ms inf\303\266r p\303\245 f\303\251d\303\251ral \303\251lectoral gro\303\237e");
+    }
+
+    SoOutput out;
+    out.setFormat(SoOutput::BINARY);
+    ASSERT_TRUE(out.openFile(qPrintable(utf8Model)));
+
+    SoWriteAction wa(&out);
+    wa.apply(graph.data());
+
+    out.closeFile();
+
+    SoInput in;
+    ASSERT_TRUE(in.openFile(qPrintable(utf8Model)));
+    EXPECT_TRUE(in.isBinary());
+
+    SbRefPtr<SoSeparator> root = SoDB::readAll(&in);
+    ASSERT_TRUE(root);
+
+    {
+    SoSearchAction sa;
+    sa.setType(SoNode::getClassTypeId());
+    sa.setInterest(SoSearchAction::ALL);
+    sa.setSearchingAll(TRUE);
+    sa.apply(root.data());
+    SoPathList & pl = sa.getPaths();
+
+    EXPECT_EQ(2, pl.getLength());
+    }
+
+    {
+    SoSearchAction sa;
+    sa.setType(SoText2::getClassTypeId());
+    sa.setInterest(SoSearchAction::FIRST);
+    sa.apply(graph.data());
+    EXPECT_TRUE(sa.getPath()->getTail());
+
+    SoText2 *text = dynamic_cast<SoText2*>(sa.getPath()->getTail());
+    ASSERT_TRUE(text);
+    EXPECT_TRUE(text->string[0] == SbString::fromUtf8("Kl\303\274ft skr\303\244ms inf\303\266r p\303\245 f\303\251d\303\251ral \303\251lectoral gro\303\237e"));
+    }
 }
