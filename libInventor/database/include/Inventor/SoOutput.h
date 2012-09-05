@@ -258,24 +258,24 @@ SoINTERNAL public:
     }
 
 private:
-    SbFile  fp;  // File writing to
-    SbBool  toBuffer; // TRUE if writing to buffer
-    char                *tmpBuffer;     // For binary write to file
-    void  *buffer; // Buffer writing to
-    char  *curBuf; // Current pointer in buffer
-    size_t  bufSize; // Maximum buffer size
-    size_t  tmpBufSize; // Maximum temporary buffer size
+    SbFile    fp;  // File writing to
+    SbBool    toBuffer; // TRUE if writing to buffer
+    char     *tmpBuffer;     // For binary write to file
+    void     *buffer; // Buffer writing to
+    char     *curBuf; // Current pointer in buffer
+    size_t    bufSize; // Maximum buffer size
+    size_t    tmpBufSize; // Maximum temporary buffer size
     SoOutputReallocCB *reallocFunc; // Reallocation function for buffer
-    SbBool  binary;  // TRUE if writing binary data
-    SbBool  compact; // TRUE if writing in compact form
-    SbBool  wroteHeader; // TRUE if header was written
-    int   indentLevel; // Current indentation level
-    SbDict  *refDict; // SoBase pointer -> reference ID
-    SbBool  borrowedDict; // TRUE if dict from another SoOutput
-    int   refIdCount; // Counter for generating ref IDs
-    SbBool  anyRef;  // TRUE if any reference in dictionary
+    SbBool    binary;  // TRUE if writing binary data
+    SbBool    compact; // TRUE if writing in compact form
+    SbBool    wroteHeader; // TRUE if header was written
+    int       indentLevel; // Current indentation level
+    SbDict   *refDict; // SoBase pointer -> reference ID
+    SbBool    borrowedDict; // TRUE if dict from another SoOutput
+    int       refIdCount; // Counter for generating ref IDs
+    SbBool    anyRef;  // TRUE if any reference in dictionary
     uint32_t  annotation; // annotation bit mask
-    Stage  curStage; // Stage of operation
+    Stage     curStage; // Stage of operation
     SbString  headerString; // The header
     SbString  fmtString; // Output format
 
