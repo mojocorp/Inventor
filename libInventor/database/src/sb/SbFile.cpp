@@ -107,6 +107,23 @@ SbFile::eof() const
     return feof(mFilePointer) != 0 ? true : false;
 }
 
+bool
+SbFile::getChar(char * c)
+{
+    int i = getc(mFilePointer);
+
+    if (c)
+        *c = (char)i;
+
+    return (i != EOF);
+}
+
+void
+SbFile::ungetChar(char c)
+{
+    ungetc(c, mFilePointer);
+}
+
 size_t 
 SbFile::read(void * data, size_t size, size_t count)
 {

@@ -714,18 +714,7 @@ SoInput::get(char &c)
     else {
 
         if (! fromBuffer()) {
-
-            int i = getc(curFile->fp.getFilePointer());
-
-            if (i == EOF) {
-                c = (char)EOF;	// Set c to EOF so putpack(c) will fail
-                ret = FALSE;
-            }
-
-            else {
-                c = (char) i;
-                ret = TRUE;
-            }
+            ret = curFile->fp.getChar(&c) ? TRUE : FALSE;
         }
 
         else {
@@ -787,9 +776,6 @@ SoInput::getASCIIFile(char &c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-    SbBool	ret;
-
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
         c = backBuf.getString()[backBufIndex++];
@@ -802,12 +788,7 @@ SoInput::getASCIIFile(char &c)
         backBufIndex = -1;
     }
 
-    i = getc(curFile->fp.getFilePointer());
-    c = (char)i;
-
-    ret =  (i == EOF) ? FALSE : TRUE;
-
-    return ret;
+    return curFile->fp.getChar(&c) ? TRUE : FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1569,7 +1550,7 @@ SoInput::putBack(char c)
     if (backBufIndex >= 0)
         --backBufIndex;
     else if (! fromBuffer())
-        ungetc(c, curFile->fp.getFilePointer());
+        curFile->fp.ungetChar(c);
     else if (isBinary())
         ;				// Can't do anything???
     else
@@ -1939,8 +1920,7 @@ SoInput::readHex(uint32_t &l)
     // Read from a file
     else {
         skipWhiteSpace();
-        while ((i = getc(curFile->fp.getFilePointer())) != EOF) {
-            *s = (char) i;
+        while (curFile->fp.getChar(s)) {
             if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
                 putBack(*s);
                 *s = '\0';
@@ -2054,10 +2034,7 @@ SoInput::readInteger(int32_t &l)
 
     // Read from a file
     else {
-        int i;
-
-        while ((i = getc(curFile->fp.getFilePointer())) != EOF) {
-            *s = (char) i;
+        while (curFile->fp.getChar(s)) {
             if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
                 putBack(*s);
                 *s = '\0';
@@ -2209,10 +2186,7 @@ SoInput::readUnsignedInteger(uint32_t &l)
 
     // Read from a file
     else {
-        int i;
-
-        while ((i = getc(curFile->fp.getFilePointer())) != EOF) {
-            *s = (char) i;
+        while (curFile->fp.getChar(s)) {
             if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
                 putBack(*s);
                 *s = '\0';
@@ -2389,9 +2363,7 @@ SoInput::readReal(double &d)
         backBufIndex = -1;
 
         ret = (n == 0 || n == EOF) ? FALSE : TRUE;
-    }
-
-    else if (fromBuffer()) {
+    } else {
         SbBool	gotNum = FALSE;
 
         ////////////////////////////////////////////
@@ -2470,10 +2442,6 @@ SoInput::readReal(double &d)
         d = atof(str);
 
         ret = TRUE;
-    }
-    else {
-        n = fscanf(curFile->fp.getFilePointer(), "%lf", &d);
-        ret =  (n == 0 || n == EOF) ? FALSE : TRUE;
     }
 
     return ret;
