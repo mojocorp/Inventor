@@ -42,6 +42,12 @@ public:
     /// Returns true if the end of the file has been reached; otherwise returns false.
     bool eof() const;
 
+    /// Reads a single character from the stream and stores it in c.
+    bool getChar(char * c);
+
+    /// Stores the character c back into the stream.
+    void ungetChar(char c);
+
     /// Returns the number of full items actually read, which may be less than count if an error occurs or if the end of the file is encountered before reaching count.
     size_t read(void * data, size_t size, size_t count);
 
