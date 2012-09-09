@@ -217,7 +217,7 @@ SoLocateHighlight::GLRenderInPath(SoGLRenderAction *action)
 // Use: private
 
 SbBool
-SoLocateHighlight::preRender(SoGLRenderAction *action, GLint &oldDepthFunc)
+SoLocateHighlight::preRender(SoGLRenderAction *action, int &oldDepthFunc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
