@@ -38,6 +38,7 @@
 #define _SB_BOX3F_
 
 #include <Inventor/SbVec3f.h>
+#include <Inventor/SbPlane.h>
 
 class SbMatrix;
 
@@ -109,6 +110,9 @@ public:
 
     /// Returns TRUE if intersection of given Box3f and Box3f is not empty
     SbBool intersect(const SbBox3f &bb) const;
+
+    /// Returns true if intersection of given Plane and Box3f is not empty
+    bool intersect(const SbPlane & plane) const;
 
     /// Returns TRUE if bounding box is completely outside the
     /// view-volume defined by the model+view+projection matrix given.
