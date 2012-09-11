@@ -312,6 +312,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/misc/SoChildList.h \
            database/include/Inventor/misc/SoCompactPathList.h \
            database/include/Inventor/misc/SoGL.h \
+           database/include/Inventor/misc/SoGLContext.h \
            database/include/Inventor/misc/SoNormalGenerator.h \
            database/include/Inventor/misc/SoNotification.h \
            database/include/Inventor/misc/SoState.h \
@@ -760,6 +761,7 @@ SOURCES += database/src/sb/SbBox3f.cpp \
            database/src/so/fields/SoSFVec2f.cpp \
            database/src/so/fields/SoSFVec3f.cpp \
            database/src/so/fields/SoSFVec4f.cpp \
+           database/src/so/misc/SoGLContext.cpp \
            database/src/so/nodes/SoAnnotation.cpp \
            database/src/so/nodes/SoArray.cpp \
            database/src/so/nodes/SoAsciiText.cpp \

@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/nodes/SoFont.h>
 #include <Inventor/caches/SoBitmapFontCache.h>
 #include <Inventor/caches/SoGLDisplayList.h>
