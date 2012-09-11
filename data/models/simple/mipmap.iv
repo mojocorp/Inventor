@@ -1,0 +1,76 @@
+#Inventor V2.1 ascii
+
+Separator {
+    PerspectiveCamera {
+	position	0 -5.65877 1.5127
+	orientation	1 0 0  1.34741
+	nearDistance	4.87324
+	farDistance	8.78752
+	focalDistance	6.82843
+	heightAngle	0.785398
+    }
+    Group {
+	Rotation {
+	    rotation	1 0 0  1.34741
+	}
+	DirectionalLight {
+	    direction	0.2 -0.2 -0.979796
+	}
+	ResetTransform {
+	}
+    }
+    PointLight {
+	on	TRUE
+	intensity	1
+	color	1 1 1
+	location	0 0 1
+    }
+    Separator {
+	Complexity {
+	    textureQuality	1
+	}
+	Texture2 {
+	    filename	"../../textures/checker.jpg"
+	}
+	Translation {
+	    translation	-1 0 0
+	}
+	DEF plane+0 FaceSet {
+	    vertexProperty		    VertexProperty {
+		vertex	[ -1 1 0,
+				  -1 -1 0,
+				  1 -1 0,
+				  1 1 0,
+				  -1 3 0,
+				  -1 1 0,
+				  1 1 0,
+				  1 3 0 ]
+		normal	[  ]
+		texCoord	[ 0 0,
+				  0 10,
+				  10 10,
+				  10 0,
+				  0 0,
+				  0 10,
+				  10 10,
+				  10 0 ]
+		orderedRGBA	[  ]
+		normalBinding	PER_PART
+	    }
+
+	    numVertices	[ 4, 4 ]
+	}
+    }
+    Separator {
+	Complexity {
+	    textureQuality	0.5
+	}
+	Texture2 {
+	    filename	"../../textures/checker.jpg"
+	}
+	Translation {
+	    translation	1 0 0
+	}
+	USE plane+0
+    }
+}

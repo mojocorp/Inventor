@@ -318,20 +318,15 @@ SoGLTextureImageElement::sendTex(SoState *state)
     int numComponents = image.getNumComponents();
 
     SbVec2s newSize = size;
-    if ( !SoGLCacheContextElement::extSupported(state, "GL_ARB_texture_non_power_of_two") ) {
+    if ( !GLEW_ARB_texture_non_power_of_two ) {
         // Scale the image to closest power of 2 smaller than maximum
         // texture size:
         GLint maxsize = 0;
         glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxsize);
-        // Use nearest power of 2 for big textures, use next higher
-        // power of 2 for small textures:
-        for (int i = 0; i < 2; i++) {
-            if (size[i] > 8) {
-                newSize[i] = size[i] > maxsize ? maxsize : 1 << nearestPowerOf2(size[i]);
-            } else {
-                newSize[i] = 1 << nextPowerOf2(size[i]);
-            }
-        }
+
+        // Use nearest power of 2:
+        newSize[0] = size[0] > maxsize ? maxsize : 1 << nearestPowerOf2(size[0]);
+        newSize[1] = size[1] > maxsize ? maxsize : 1 << nearestPowerOf2(size[1]);
     }
 
     int i;
@@ -376,74 +371,18 @@ SoGLTextureImageElement::sendTex(SoState *state)
                     newSize[0], newSize[1], GL_UNSIGNED_BYTE, &level0[0]);
     }
     
+    if(needMipMaps && GLEW_VERSION_1_4 && !GLEW_VERSION_3_0) {
+        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    }
+
     // Send level-0 mipmap:
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, newSize[0], newSize[1],
                  0, (GLenum)format, GL_UNSIGNED_BYTE,
                  level0.empty() ? image.getConstBytes() : &level0[0]);
     
     // If necessary, send other mipmaps:
-    if (needMipMaps) {
-        // Again, the goal is to minimize space allocated and data
-        // movement.  The same array is re-used for all mipmap levels
-        // (and the level0 array is used if possible).
-
-        const GLubyte *prevLevel = NULL;
-        if (level0.empty()) {
-            level0.resize(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
-            prevLevel = image.getConstBytes();
-        }
-        else {
-            prevLevel = &level0[0];
-        }
-
-        int level = 0;
-        SbVec2s curSize = newSize;
-        while (curSize[0] > 1 || curSize[1] > 1) {
-            ++level;
-            SbVec2s prevSize = curSize;
-
-            // When we're box-filtering, we average the 4 pixels
-            // [(curSize),(curSize+deltas)].  If mipmaps have already
-            // bottomed out for a dimension, the delta will be 0,
-            // otherwise the delta will be 1.
-            SbVec2s deltas;
-            if (curSize[0] > 1) {
-                curSize[0] = curSize[0] >> 1;
-                deltas[0] = 1;
-            } else {
-                deltas[0] = 0;
-            }
-            if (curSize[1] > 1) {
-                curSize[1] = curSize[1] >> 1;
-                deltas[1] = 1;
-            } else {
-                deltas[1] = 0;
-            }
-
-            int byte = 0;
-            for (int h = 0; h < prevSize[1]; h += (deltas[1]+1)) {
-                for (int w = 0; w < prevSize[0]; w += (deltas[0]+1)) {
-                    for (int b = 0; b < numComponents; b++) {
-
-                        // Helper macro for indexing:
-#define I(w,h,b) (b + (w + (h)*prevSize[0])*numComponents)
-
-                        level0[byte] =
-                                (prevLevel[I(w,h,b)] +
-                                 prevLevel[I(w,h+deltas[1],b)] +
-                                 prevLevel[I(w+deltas[0],h,b)] +
-                                 prevLevel[I(w+deltas[0],h+deltas[1],b)]) / 4;
-#undef I
-                        byte++;
-                    }
-                }
-            }
-            // Send level-N mipmap:
-            glTexImage2D(GL_TEXTURE_2D, level, internalFormat,
-                         curSize[0], curSize[1],
-                         0, (GLenum)format, GL_UNSIGNED_BYTE, &level0[0]);
-            prevLevel = &level0[0];
-        }
+    if (needMipMaps && GLEW_VERSION_3_0) {
+        glGenerateMipmap(GL_TEXTURE_2D);
     }
 
     if (buildList) {
