@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <GL/glew.h>
+#include <Inventor/misc/SoGL.h>
 
 #include <stdio.h>
 #include <assert.h>
@@ -302,10 +302,6 @@ private:
 //    Constructor.
 //
 // Use: public
-#ifdef GLEW_MX
-GLEWContext _glewctx;
-#  define glewGetContext() (&_glewctx)
-#endif
 
 SoOffscreenRenderer::SoOffscreenRenderer( const SbViewportRegion &viewportRegion )
     : pixelBuffer(NULL),
@@ -313,6 +309,7 @@ SoOffscreenRenderer::SoOffscreenRenderer( const SbViewportRegion &viewportRegion
       backgroundColor(SbColor(0.0, 0.0, 0.0)),
       userAction(NULL),
       offAction(new SoGLRenderAction(viewportRegion)),
+      cacheContext(SoGLCacheContextElement::getUniqueCacheContext()),
       framebuffer(0),
       renderbuffer(0),
       depthbuffer(0),
@@ -322,15 +319,7 @@ SoOffscreenRenderer::SoOffscreenRenderer( const SbViewportRegion &viewportRegion
 {
     internal->makeContextCurrent();
 
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        /* Problem: glewInit failed, something is seriously wrong. */
-#ifndef DEBUG
-        SoDebugError::post("SoOffscreenRenderer:",
-            "Error: %s", glewGetErrorString(err));
-#endif
-    }  
+    SoGLContext::setCurrentContext(cacheContext);
 
     // Generate the framebuffer object
     glGenFramebuffersEXT(1, &framebuffer);
@@ -353,6 +342,7 @@ SoOffscreenRenderer::SoOffscreenRenderer( SoGLRenderAction *act )
       backgroundColor(SbColor(0.0, 0.0, 0.0)),
       userAction(act),
       offAction(new SoGLRenderAction(act->getViewportRegion())),
+      cacheContext(SoGLCacheContextElement::getUniqueCacheContext()),
       framebuffer(0),
       renderbuffer(0),
       depthbuffer(0),
@@ -360,17 +350,9 @@ SoOffscreenRenderer::SoOffscreenRenderer( SoGLRenderAction *act )
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    GLenum err = glewInit();
-    if (GLEW_OK != err)
-    {
-        /* Problem: glewInit failed, something is seriously wrong. */
-#ifndef DEBUG
-        SoDebugError::post("SoOffscreenRenderer:",
-            "Error: %s", glewGetErrorString(err));
-#endif
-    }
-
     internal->makeContextCurrent();
+
+    SoGLContext::setCurrentContext(cacheContext);
 
     // Generate the framebuffer object
     glGenFramebuffersEXT(1, &framebuffer);
@@ -477,7 +459,8 @@ SoOffscreenRenderer::getMaximumResolution()
 
     GLint params[2];
     glGetIntegerv(GL_MAX_VIEWPORT_DIMS, params);
-    return (SbVec2s((short)params[0], (short)params[1]));
+
+    return SbVec2s((short)params[0], (short)params[1]);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -488,8 +471,7 @@ SoOffscreenRenderer::getMaximumResolution()
 // Use: public
 
 void
-SoOffscreenRenderer::setViewportRegion(
-    const SbViewportRegion &viewportRegion )
+SoOffscreenRenderer::setViewportRegion( const SbViewportRegion &viewportRegion )
 
 
 //
@@ -523,9 +505,7 @@ SoOffscreenRenderer::getViewportRegion() const
 // Use: public
 
 void
-SoOffscreenRenderer::setGLRenderAction(
-    SoGLRenderAction *act )
-
+SoOffscreenRenderer::setGLRenderAction( SoGLRenderAction *act )
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -577,7 +557,7 @@ SoOffscreenRenderer::render(SoNode *scene)
     // Set the GL cache context for the action to a unique number,
     // so that it doesn't try to use display lists from other contexts.
     uint32_t oldContext = act->getCacheContext();
-    act->setCacheContext(SoGLCacheContextElement::getUniqueCacheContext());
+    act->setCacheContext(cacheContext);
     act->apply(scene);
     act->setCacheContext(oldContext);
 
@@ -650,7 +630,6 @@ SoOffscreenRenderer::getBuffer() const
 
 SbBool
 SoOffscreenRenderer::writeToRGB( FILE *fp ) const
-
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -729,7 +708,6 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
 SbBool
 SoOffscreenRenderer::writeToPostScript( FILE *fp ) const
 
-
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -755,7 +733,6 @@ SbBool
 SoOffscreenRenderer::writeToPostScript(
         FILE *fp,
         const SbVec2f &printSize ) const
-
 
 //
 ////////////////////////////////////////////////////////////////////////
