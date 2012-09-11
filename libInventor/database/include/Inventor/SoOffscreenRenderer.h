@@ -169,6 +169,7 @@ private:
     SbColor             backgroundColor;
     SbVec2s             vpSize;
     SoGLRenderAction *userAction, *offAction;
+    uint32_t            cacheContext;
     SbViewportRegion    renderedViewport;
     GLuint              framebuffer;
     GLuint              renderbuffer;
