@@ -503,6 +503,8 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    SoGLContext::setCurrentContext(cacheContext);
+
     // If anything has changed since the last time this action was
     // applied, make sure it is set up correctly in GL.
     if (whatChanged != 0) {

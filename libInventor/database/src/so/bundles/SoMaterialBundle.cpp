@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/misc/SoGL.h>
 #include <Inventor/bundles/SoMaterialBundle.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoGLLazyElement.h>

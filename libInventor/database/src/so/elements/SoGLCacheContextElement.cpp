@@ -51,15 +51,10 @@
  _______________________________________________________________________
  */
 
-#include <GL/glew.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/caches/SoGLDisplayList.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
-#include <Inventor/SbString.h>
-#include <Inventor/lists/SbIntList.h>
-
-#include <map>
 
 SO_ELEMENT_SOURCE(SoGLCacheContextElement);
 
@@ -191,46 +186,6 @@ SoGLCacheContextElement::freeList(SoState *state,
     } else {
         waitingToBeFreed->append(dl);
     }
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Given an extension string, return TRUE if that extension is
-//    supported in this rendering context.
-//
-SbBool
-SoGLCacheContextElement::extSupported(SoState *state, const char *str)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SoGLCacheContextElement *elt = (SoGLCacheContextElement *)state->getElementNoPush(classStackIndex);
-#ifdef DEBUG
-    if (elt == NULL) {
-	SoDebugError::post("SoGLCacheContextElement::extSupported",
-               "No GL cache context found; "
-               "This method require a valid OpenGL context");
-    }
-#endif
-
-    static std::map<int, GLEWContext> s_glewctx;
-
-#ifdef GLEW_MX
-#  define glewGetContext() (&s_glewctx[elt->context])
-#endif
-
-    if (s_glewctx.find(elt->context) == s_glewctx.end()) {
-        GLenum err = glewInit();
-        if (GLEW_OK != err)
-        {
-            /* Problem: glewInit failed, something is seriously wrong. */
-#ifndef DEBUG
-            SoDebugError::post("SoGLCacheContextElement:", "Error: %s", glewGetErrorString(err));
-#endif
-        }
-    }
-
-    return glewIsSupported(str);
 }
 
 ////////////////////////////////////////////////////////////////////////

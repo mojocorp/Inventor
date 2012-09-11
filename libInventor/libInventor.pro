@@ -7,8 +7,6 @@ DESTDIR  = ../build
 
 CONFIG -= qt flat
 
-DEFINES += GLEW_MX GLEW_STATIC
-
 CONFIG(debug, debug|release) {
     DEFINES += DEBUG
 }
@@ -49,7 +47,6 @@ macx {
 DEPENDPATH += ../libimage
 
 INCLUDEPATH += ../libimage
-INCLUDEPATH += ../3rdparty/glew-1.7.0/include
 
 INCLUDEPATH+= database/include \
               interaction/include \
@@ -59,4 +56,4 @@ include(database/database.pri)
 include(interaction/interaction.pri)
 include(nodekits/nodekits.pri)
 
-LIBS += -L$$OUT_PWD/../build -limage -ljpeg -lfreetype -lGLEW
+LIBS += -L$$OUT_PWD/../build -limage -ljpeg -lfreetype
