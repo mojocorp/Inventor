@@ -56,7 +56,6 @@
 #ifndef  _SO_CACHE_CONTEXT_ELEMENT
 #define  _SO_CACHE_CONTEXT_ELEMENT
 
-#include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoSubElement.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -72,27 +71,6 @@
 //  This element should be set before traversal starts, and must not
 //  be changed during traversal (you'll get a debug error if a node
 //  tries to set the cache context during traversal).
-//
-//  This method also has API for quickly finding out whether or not
-//  OpenGL extensions are supported.  Code that uses extension "foo"
-//  should look something like:
-//  #ifdef GL_EXT_foo
-//      static int fooExtInt = -1;
-//      if (fooExtInt == -1)
-//          fooExtInt = SoGLCacheContextElement::getExtID("GL_EXT_foo");
-//      if (SoGLCacheContextElement::extSupported(state, fooExtInt)) {
-//          glFoo(... make extension foo calls...);
-//      } else {
-//  #endif
-//          Extension not supported, make regular GL calls
-//  #ifdef GL_EXT_foo
-//      }
-//  #endif
-//
-//  Arranging the code that way ensures that it both compiles on
-//  systems that don't support the extension AND will run on any
-//  OpenGL-capable machine, even if the application displays on
-//  multiple displays (only some of which may support the extension).
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -124,10 +102,6 @@ public:
 
     // Gets the current context
     static int get(SoState *state);
-
-    // Methods to quickly figure out if an OpenGL extension is
-    // available at run-time.
-    static SbBool extSupported(SoState *state, const char *str);
 
     // Methods used to improve auto-caching algorithm:
 
