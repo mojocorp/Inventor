@@ -63,6 +63,7 @@
 
 #include <math.h>
 
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbPList.h>
 #include <Inventor/nodes/SoOrthographicCamera.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
@@ -71,7 +72,6 @@
 #include <Inventor/Qt/SoQtIcons.h>
 
 //#include "SoQtBitmapButton.h"
-#include <Inventor/misc/SoGL.h>
 
 /*
  *  Defines
