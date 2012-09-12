@@ -58,6 +58,7 @@
 #include <math.h>
 #include <string.h>
 
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/SbPList.h>

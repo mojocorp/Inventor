@@ -56,6 +56,7 @@
 
 #include <math.h>
 
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/sensors/SoFieldSensor.h>
@@ -67,8 +68,6 @@
 #include <Inventor/actions/SoRayPickAction.h>
 #include <Inventor/Qt/SoQtCursors.h>
 #include <Inventor/Qt/viewers/SoQtWalkViewer.h>
-
-#include <Inventor/misc/SoGL.h>
 
 #include <QBoxLayout>
 #include <QLabel>
