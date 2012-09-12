@@ -378,7 +378,7 @@ SoTexture2::GLRender(SoGLRenderAction *action)
 
         // See if renderList is valid (in the right context, with
         // the right texture quality):
-        int context = SoGLCacheContextElement::get(state);
+        unsigned int context = SoGLCacheContextElement::get(state);
         if (renderList && renderList->getContext() == context &&
                 texQuality == renderListQuality) {
             SoGLTextureImageElement::set(

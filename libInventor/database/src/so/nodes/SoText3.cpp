@@ -173,7 +173,7 @@ SoText3::getCharacterBounds(SoState *state, int stringIndex, int charIndex)
                            "stringIndex (%d) out of range (max %d)",
                            stringIndex, string.getNum());
     }
-    if (charIndex >= string[stringIndex].getLength()) {
+    if (charIndex >= (int)string[stringIndex].getLength()) {
         SoDebugError::post("SoText3::getCharacterBounds",
                            "charIndex (%d) out of range (max %d)",
                            charIndex,

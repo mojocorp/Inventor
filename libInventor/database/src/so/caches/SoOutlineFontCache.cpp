@@ -148,8 +148,6 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
     const SbName & fontName = SoFontNameElement::get(state);
     addElement(state->getConstElement(SoFontNameElement::getClassStackIndex()));
 
-    float uems;
-
     // Remember size
     fontSize = SoFontSizeElement::get(state);
     addElement(state->getConstElement(SoFontSizeElement::getClassStackIndex()));

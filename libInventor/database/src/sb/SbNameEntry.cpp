@@ -79,7 +79,7 @@
 struct SbNameChunk {
     char		mem[CHUNK_SIZE];	// Chunk o'memory
     char		*curByte;		// Current byte of chunk
-    int			bytesLeft;		// Bytes left in chunk
+    size_t		bytesLeft;		// Bytes left in chunk
     struct SbNameChunk	*next;			// Pointer to next chunk
 };
 

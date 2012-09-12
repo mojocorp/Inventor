@@ -117,27 +117,25 @@ SoGLCacheContextElement::init(SoState *)
 // Use: public, static
 
 void
-SoGLCacheContextElement::set(SoState *state, int ctx,
-			     SbBool is2PassTransparency,
-			     SbBool remoteRender)
+SoGLCacheContextElement::set(SoState *state, unsigned int ctx,
+                             SbBool is2PassTransparency,
+                             SbBool remoteRender)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     if (state->getDepth() != 1) {
-	SoDebugError::post("SoGLCacheContextElement::set",
-			   "must not be set during traversal");
+        SoDebugError::post("SoGLCacheContextElement::set",
+                           "must not be set during traversal");
     }
 #endif
 
-    SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
-	state->getElementNoPush(classStackIndex);
+    SoGLCacheContextElement *elt = (SoGLCacheContextElement *)state->getElementNoPush(classStackIndex);
 
     elt->context = ctx;
     elt->is2PassTransp = is2PassTransparency;
     elt->isRemoteRendering = remoteRender;
-    if (remoteRender) elt->autoCacheBits = DO_AUTO_CACHE;
-    else elt->autoCacheBits = 0;
+    elt->autoCacheBits = remoteRender ? DO_AUTO_CACHE : 0;
 
     // Look through the list of display lists waiting to be freed, and
     // free any that match the context:
@@ -158,15 +156,12 @@ SoGLCacheContextElement::set(SoState *state, int ctx,
 //
 // Use: public, static
 
-int
+unsigned int
 SoGLCacheContextElement::get(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLCacheContextElement	*elt;
-
-    elt = (const SoGLCacheContextElement *)
-	getConstElement(state, classStackIndex);
+    const SoGLCacheContextElement *elt = (const SoGLCacheContextElement *)getConstElement(state, classStackIndex);
 
     return elt->context;
 }
@@ -187,14 +182,14 @@ SoGLCacheContextElement::get(SoState *state)
 
 void
 SoGLCacheContextElement::freeList(SoState *state,
-				  SoGLDisplayList *dl)
+                                  SoGLDisplayList *dl)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (state != NULL  &&  get(state) == dl->getContext()) {
-	delete dl;
+        delete dl;
     } else {
-	waitingToBeFreed->append(dl);
+        waitingToBeFreed->append(dl);
     }
 }
 
@@ -251,12 +246,10 @@ SoGLCacheContextElement::matches(const SoElement *elt) const
 ////////////////////////////////////////////////////////////////////////
 {
     
-    const SoGLCacheContextElement *cacheElt;
-
-    cacheElt = (const SoGLCacheContextElement *) elt;
+    const SoGLCacheContextElement *cacheElt = (const SoGLCacheContextElement *) elt;
 
     return (context       == cacheElt->context &&
-	    is2PassTransp == cacheElt->is2PassTransp);
+            is2PassTransp == cacheElt->is2PassTransp);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -273,7 +266,7 @@ SoGLCacheContextElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoGLCacheContextElement *result =
-	(SoGLCacheContextElement *)getTypeId().createInstance();
+            (SoGLCacheContextElement *)getTypeId().createInstance();
 
     result->context = context;
     result->is2PassTransp = is2PassTransp;
@@ -297,7 +290,7 @@ SoGLCacheContextElement::print(FILE *fp) const
     SoElement::print(fp);
 
     fprintf(fp, "\tCache context = %uL, is2PassTransp = %s\n",
-	    context, is2PassTransp ? "TRUE" : "FALSE");
+            context, is2PassTransp ? "TRUE" : "FALSE");
 }
 #else  /* DEBUG */
 void
@@ -306,10 +299,10 @@ SoGLCacheContextElement::print(FILE *) const
 }
 #endif /* DEBUG */
 
-uint32_t 
+unsigned int
 SoGLCacheContextElement::getUniqueCacheContext()
 {
-    static uint32_t s_contextIncrement = 1000;
+    static unsigned int s_contextIncrement = 1000;
     
     return ++s_contextIncrement;
 }

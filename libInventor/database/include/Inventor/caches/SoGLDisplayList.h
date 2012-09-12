@@ -121,7 +121,7 @@ public:
     GLuint getFirstIndex() {
         return startIndex;
     }
-    int getContext() {
+    unsigned int getContext() {
         return context;
     }
 
@@ -132,7 +132,7 @@ private:
     GLuint startIndex;
     int num;
     int refCount;
-    int context;
+    unsigned int context;
     friend class SoGLCacheContextElement;
 };
 

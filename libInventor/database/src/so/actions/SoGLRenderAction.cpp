@@ -555,7 +555,7 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
     }
 
     // Set the GL cache context:
-    SoGLCacheContextElement::set(state, (int) cacheContext, delayObjs, remoteRendering);
+    SoGLCacheContextElement::set(state, cacheContext, delayObjs, remoteRendering);
     
     SoTransparencyTypeElement::set(state, (SoTransparencyTypeElement::TransparencyType)transpType);
     

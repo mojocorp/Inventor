@@ -118,12 +118,12 @@ public:
     // rendering is being done; the SoSeparator auto-caching algorithm
     // uses this information to help decide whether or not to build
     // caches.
-    static void set(SoState *state, int context,
+    static void set(SoState *state, unsigned int context,
                     SbBool is2PassTransparency,
                     SbBool isRemoteRendering);
 
     // Gets the current context
-    static int get(SoState *state);
+    static unsigned int get(SoState *state);
 
     // Methods to quickly figure out if an OpenGL extension is
     // available at run-time.
@@ -181,16 +181,16 @@ public:
     virtual void print(FILE *fp) const;
 
     // Returns an unique cache context id.
-    static uint32_t getUniqueCacheContext();
+    static unsigned int getUniqueCacheContext();
 
 SoINTERNAL public:
     static void initClass();
 
 protected:
-    int   context;
-    SbBool  is2PassTransp;
-    SbBool  isRemoteRendering;
-    int   autoCacheBits;
+    unsigned int context;
+    SbBool   is2PassTransp;
+    SbBool   isRemoteRendering;
+    int      autoCacheBits;
 
     virtual ~SoGLCacheContextElement();
 

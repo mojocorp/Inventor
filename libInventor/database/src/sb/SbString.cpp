@@ -420,13 +420,13 @@ SbString::fromWideChar(const wchar_t *wcs, int size)
     SbString str;
 
 #ifdef SB_OS_WIN
-    size_t len = WideCharToMultiByte( CP_UTF8, 0, wcs, -1, NULL, 0,  NULL, NULL);
-    str.expand(len-1);
+    size_t len = (size == -1) ? WideCharToMultiByte( CP_UTF8, 0, wcs, -1, NULL, 0,  NULL, NULL)-1 : size;
+    str.expand(len);
 
     WideCharToMultiByte(CP_UTF8, 0, wcs, -1, str.string, len, NULL, NULL);
 #else
     setlocale(LC_CTYPE, "en_US.UTF-8");
-    size_t len = wcstombs(NULL, wcs, 0);
+    size_t len = (size == -1) ? wcstombs(NULL, wcs, 0) : size;
     str.expand(len);
     wcstombs(str.string, wcs, len+1);
 #endif

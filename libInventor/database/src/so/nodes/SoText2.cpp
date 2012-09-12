@@ -337,8 +337,6 @@ SoText2::rayPick(SoRayPickAction *action)
     SbMatrix screenToObj = objToScreen.inverse();
 
     SbViewportRegion vpr = SoViewportRegionElement::get(state);
-    // font size in pixels
-    float fontSize   = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
 
     // The origin of the text on the screen is the object-space point
     // 0,0,0:
@@ -484,9 +482,6 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
     SbMatrix screenToObj = objToScreen.inverse();
 
     SbViewportRegion vpr = SoViewportRegionElement::get(state);
-
-    // font size in pixels
-    float fontSize   = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
 
     // The origin of the text on the screen is the object-space point
     // 0,0,0:
