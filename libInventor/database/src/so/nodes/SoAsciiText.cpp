@@ -173,23 +173,23 @@ SoAsciiText::GLRender(SoGLRenderAction *action)
 
     // First see if the object is visible and should be rendered now
     if (! shouldGLRender(action))
-	return;
+        return;
 
     SoState *state = action->getState();
 
     if (!setupFontCache(state, TRUE))
-	return;
+        return;
 
     SoMaterialBindingElement::Binding mbe =
-	SoMaterialBindingElement::get(state);
+            SoMaterialBindingElement::get(state);
     SbBool materialPerPart =
-	(mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
-	 mbe == SoMaterialBindingElement::PER_PART);
+            (mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
+             mbe == SoMaterialBindingElement::PER_PART);
 
     SoMaterialBundle	mb(action);
     if (!materialPerPart) {
-	// Make sure the fist current material is sent to GL
-	mb.sendFirst();
+        // Make sure the fist current material is sent to GL
+        mb.sendFirst();
     }
 
     if (tobj == NULL) {
@@ -197,7 +197,7 @@ SoAsciiText::GLRender(SoGLRenderAction *action)
         gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (CALLBACK*)())glBegin);
         gluTessCallback(tobj, (GLenum)GLU_END, (void (CALLBACK*)())glEnd);
         gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (CALLBACK*)())glVertex2fv);
-	gluTessCallback(tobj, (GLenum)GLU_ERROR,
+        gluTessCallback(tobj, (GLenum)GLU_ERROR,
                         (void (CALLBACK*)())SoOutlineFontCache::errorCB);
     }
 
@@ -207,37 +207,37 @@ SoAsciiText::GLRender(SoGLRenderAction *action)
     if (materialPerPart) mb.sendFirst();
 
     glNormal3f(0, 0, 1);
-	
+
     myFont->setupToRenderFront(state);
 
     if (genTexCoord) {
-	glPushAttrib(GL_TEXTURE_BIT);
-	glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
-	GLfloat params[4];
-	params[0] = 1.0f/myFont->getHeight();
-	params[1] = params[2] = params[3] = 0.0f;
-	glTexGenfv(GL_S, GL_OBJECT_PLANE, params);
-	params[1] = params[0];
-	params[0] = 0.0f;
-	glTexGenfv(GL_T, GL_OBJECT_PLANE, params);
-	
-	glEnable(GL_TEXTURE_GEN_S);
-	glEnable(GL_TEXTURE_GEN_T);
+        glPushAttrib(GL_TEXTURE_BIT);
+        glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+        glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
+        GLfloat params[4];
+        params[0] = 1.0f/myFont->getHeight();
+        params[1] = params[2] = params[3] = 0.0f;
+        glTexGenfv(GL_S, GL_OBJECT_PLANE, params);
+        params[1] = params[0];
+        params[0] = 0.0f;
+        glTexGenfv(GL_T, GL_OBJECT_PLANE, params);
+
+        glEnable(GL_TEXTURE_GEN_S);
+        glEnable(GL_TEXTURE_GEN_T);
     }
     
     for (int line = 0; line < string.getNum(); line++) {
-	glPushMatrix();
-	float w = (line < width.getNum()) ? width[line] : 0;
-	SbVec2f p = getStringOffset(line, w);
-	if (p[0] != 0.0 || p[1] != 0.0)
-	    glTranslatef(p[0], p[1], 0.0);
-	renderFront(action, string[line], w, tobj);
-	glPopMatrix();
+        glPushMatrix();
+        float w = (line < width.getNum()) ? width[line] : 0;
+        SbVec2f p = getStringOffset(line, w);
+        if (p[0] != 0.0 || p[1] != 0.0)
+            glTranslatef(p[0], p[1], 0.0);
+        renderFront(action, string[line], w, tobj);
+        glPopMatrix();
     }
     
     if (genTexCoord) {
-	glPopAttrib();
+        glPopAttrib();
     }
 }
 
@@ -255,7 +255,7 @@ SoAsciiText::rayPick(SoRayPickAction *action)
 {
     // First see if the object is pickable
     if (! shouldRayPick(action))
-	return;
+        return;
 
     //
     // NOTE: This could be made more efficient by testing the ray
@@ -293,7 +293,7 @@ SoAsciiText::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
     SoState *state = action->getState();
 
     if (!setupFontCache(state))
-	return;
+        return;
 
     // Get the bounding box of all the characters:
     SbBox2f outlineBox;
@@ -304,7 +304,7 @@ SoAsciiText::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
     
     const SbVec2f &boxMin = outlineBox.getMin();
     const SbVec2f &boxMax = outlineBox.getMax();
-		     
+
     SbVec3f min(boxMin[0], boxMin[1], 0);
     SbVec3f max(boxMax[0], boxMax[1], 0);
     box.extendBy(min);
@@ -326,19 +326,19 @@ SoAsciiText::generatePrimitives(SoAction *action)
     SoState *state = action->getState();
 
     if (!setupFontCache(state))
-	return;
+        return;
 
     currentGeneratingNode = this;
 
     // Set up default texture coordinate mapping, if necessary:
     SoTextureCoordinateElement::CoordType tcType =
-	SoTextureCoordinateElement::getType(state);
+            SoTextureCoordinateElement::getType(state);
     if (tcType == SoTextureCoordinateElement::EXPLICIT) {
-	genTexCoord = TRUE;
-	tce = NULL;
+        genTexCoord = TRUE;
+        tce = NULL;
     } else {
-	genTexCoord = FALSE;
-	tce = SoTextureCoordinateElement::getInstance(state);
+        genTexCoord = FALSE;
+        tce = SoTextureCoordinateElement::getInstance(state);
     }
 
     // Set up 3 vertices we can use
@@ -356,20 +356,20 @@ SoAsciiText::generatePrimitives(SoAction *action)
     genBack = FALSE;
 
     SoMaterialBindingElement::Binding mbe =
-	SoMaterialBindingElement::get(state);
+            SoMaterialBindingElement::get(state);
     SbBool materialPerPart =
-	(mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
-	 mbe == SoMaterialBindingElement::PER_PART);
+            (mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
+             mbe == SoMaterialBindingElement::PER_PART);
     if (!materialPerPart) {
-	v1.setMaterialIndex(0);
-	v2.setMaterialIndex(0);
-	v3.setMaterialIndex(0);
+        v1.setMaterialIndex(0);
+        v2.setMaterialIndex(0);
+        v3.setMaterialIndex(0);
     }
 
     if (materialPerPart) {
-	v1.setMaterialIndex(0);
-	v2.setMaterialIndex(0);
-	v3.setMaterialIndex(0);
+        v1.setMaterialIndex(0);
+        v2.setMaterialIndex(0);
+        v3.setMaterialIndex(0);
     }
 
     v1.setNormal(SbVec3f(0, 0, 1));
@@ -377,12 +377,12 @@ SoAsciiText::generatePrimitives(SoAction *action)
     v3.setNormal(SbVec3f(0, 0, 1));
     
     for (int line = 0; line < string.getNum(); line++) {
-	detail.setStringIndex(line);
+        detail.setStringIndex(line);
 
-	float w = (line < width.getNum()) ? width[line] : 0;
-	SbVec2f p = getStringOffset(line, w);
-	genTranslate.setValue(p[0], p[1], 0);
-	generateFront(string[line], w);
+        float w = (line < width.getNum()) ? width[line] : 0;
+        SbVec2f p = getStringOffset(line, w);
+        genTranslate.setValue(p[0], p[1], 0);
+        generateFront(string[line], w);
     }
 }
 
@@ -407,16 +407,16 @@ SoAsciiText::setupFontCache(SoState *state, SbBool forRender)
     state->push();
 
     if (myFont != NULL) {
-	SbBool isValid;
-	if (forRender)
-	    isValid = myFont->isRenderValid(state);
-	else
-	    isValid = myFont->isValid(state);
+        SbBool isValid;
+        if (forRender)
+            isValid = myFont->isRenderValid(state);
+        else
+            isValid = myFont->isValid(state);
 
-	if (!isValid) {
-	    myFont->unref(state);
-	    myFont = NULL;
-	}
+        if (!isValid) {
+            myFont->unref(state);
+            myFont = NULL;
+        }
     }
     if (myFont == NULL) {
         myFont = SoOutlineFontCache::getFont(state, forRender);
@@ -446,33 +446,33 @@ SoAsciiText::getFrontBBox(SbBox2f &result)
 
     int line, character;
     for (line = 0; line < string.getNum(); line++) {
-	// Starting position of string, based on justification:
-	float w = (line < width.getNum()) ? width[line] : 0;
-	SbVec2f charPosition = getStringOffset(line, w);
-	SbVec2f curCharPos = charPosition;
+        // Starting position of string, based on justification:
+        float w = (line < width.getNum()) ? width[line] : 0;
+        SbVec2f charPosition = getStringOffset(line, w);
+        SbVec2f curCharPos = charPosition;
 
-	const SbString &str = string[line];
-	const char *chars = str.getString();
-	
-	for (character = 0; character < str.getLength(); character++) {
-	    myFont->getCharBBox(chars[character], charBBox);
-	    if (!charBBox.isEmpty()) {
-		SbVec2f min = charBBox.getMin() + curCharPos;
-		SbVec2f max = charBBox.getMax() + curCharPos;
-		result.extendBy(min);
-		result.extendBy(max);
-	    }
+        const SbString &str = string[line];
+        const char *chars = str.getString();
 
-	    // And advance...
-	    curCharPos += myFont->getCharOffset(chars[character]);
-	}
-	if (w > 0) { 
-	    // force the bbox width
-	    SbVec2f min = result.getMin();
-	    SbVec2f max = result.getMax();
-	    result.setBounds(charPosition[0], min[1], 
-			     charPosition[0] + w, max[1]);
-	}
+        for (character = 0; character < str.getLength(); character++) {
+            myFont->getCharBBox(chars[character], charBBox);
+            if (!charBBox.isEmpty()) {
+                SbVec2f min = charBBox.getMin() + curCharPos;
+                SbVec2f max = charBBox.getMax() + curCharPos;
+                result.extendBy(min);
+                result.extendBy(max);
+            }
+
+            // And advance...
+            curCharPos += myFont->getCharOffset(chars[character]);
+        }
+        if (w > 0) {
+            // force the bbox width
+            SbVec2f min = result.getMin();
+            SbVec2f max = result.getMax();
+            result.setBounds(charPosition[0], min[1],
+                             charPosition[0] + w, max[1]);
+        }
     }
 }
 
@@ -494,14 +494,14 @@ SoAsciiText::getStringOffset(int line, float width)
     SbVec2f result(0,0);
     
     if (justification.getValue() == RIGHT) {
-	if (width <= 0)
-	    width = myFont->getWidth(string[line]);
-	result[0] = -width;
+        if (width <= 0)
+            width = myFont->getWidth(string[line]);
+        result[0] = -width;
     }
     if (justification.getValue() == CENTER) {
-	if (width <= 0)
-	    width = myFont->getWidth(string[line]);
-	result[0] = -width/2.0f;
+        if (width <= 0)
+            width = myFont->getWidth(string[line]);
+        result[0] = -width/2.0f;
     }
     result[1] = -line*myFont->getHeight()*spacing.getValue();
 
@@ -519,7 +519,7 @@ SoAsciiText::getStringOffset(int line, float width)
 
 void
 SoAsciiText::renderFront(SoGLRenderAction *, const SbString &string,
-		     float width, GLUtesselator *tobj)
+                         float width, GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -528,20 +528,20 @@ SoAsciiText::renderFront(SoGLRenderAction *, const SbString &string,
     // if we have a fixed width, use it.
     float off = 0;
     if (width > 0) {
-	float naturalWidth = myFont->getWidth(string);
-	off = (width - naturalWidth) / (string.getLength() - 1);
+        float naturalWidth = myFont->getWidth(string);
+        off = (width - naturalWidth) / (string.getLength() - 1);
     }
     
     // First, try to figure out if we can use glCallLists:
     SbBool useCallLists = TRUE;
 
     for (int i = 0; i < string.getLength(); i++) {
-	// See if the font cache already has (or can build) a display
-	// list for this character:
-	if (!myFont->hasFrontDisplayList(chars[i], tobj)) {
-	    useCallLists = FALSE;
-	    break;
-	}
+        // See if the font cache already has (or can build) a display
+        // list for this character:
+        if (!myFont->hasFrontDisplayList(chars[i], tobj)) {
+            useCallLists = FALSE;
+            break;
+        }
     }
     
     // if we have display lists for all of the characters, use
@@ -565,10 +565,10 @@ SoAsciiText::renderFront(SoGLRenderAction *, const SbString &string,
 
 SoDetail *
 SoAsciiText::createTriangleDetail(SoRayPickAction *,
-			      const SoPrimitiveVertex *v1,
-			      const SoPrimitiveVertex *,
-			      const SoPrimitiveVertex *,
-			      SoPickedPoint *)
+                                  const SoPrimitiveVertex *v1,
+                                  const SoPrimitiveVertex *,
+                                  const SoPrimitiveVertex *,
+                                  SoPickedPoint *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -606,7 +606,7 @@ SoAsciiText::generateFront(const SbString &string, float width)
         gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (CALLBACK*)())SoAsciiText::beginCB);
         gluTessCallback(tobj, (GLenum)GLU_END, (void (CALLBACK*)())SoAsciiText::endCB);
         gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (CALLBACK*)())SoAsciiText::vtxCB);
-	gluTessCallback(tobj, (GLenum)GLU_ERROR,
+        gluTessCallback(tobj, (GLenum)GLU_ERROR,
                         (void (CALLBACK*)())SoOutlineFontCache::errorCB);
     }
 
@@ -617,18 +617,18 @@ SoAsciiText::generateFront(const SbString &string, float width)
     // if we have a fixed width, use it.
     float off = 0;
     if (width > 0) {
-	float naturalWidth = myFont->getWidth(string);
-	off = (width - naturalWidth) / (string.getLength() - 1);
+        float naturalWidth = myFont->getWidth(string);
+        off = (width - naturalWidth) / (string.getLength() - 1);
     }
     
     for (int i = 0; i < string.getLength(); i++) {
-	d->setCharacterIndex(i);
+        d->setCharacterIndex(i);
 
-	myFont->generateFrontChar(chars[i], tobj);
+        myFont->generateFrontChar(chars[i], tobj);
 
-	SbVec2f p = myFont->getCharOffset(chars[i]);
-	genTranslate[0] += p[0] + off;
-	genTranslate[1] += p[1];
+        SbVec2f p = myFont->getCharOffset(chars[i]);
+        genTranslate[0] += p[0] + off;
+        genTranslate[1] += p[1];
     }
 }
 
@@ -693,62 +693,62 @@ SoAsciiText::vtxCB(void *v)
     
     // And texture coordinates:
     if (genTexCoord) {
-	float textHeight = t3->myFont->getHeight();
-	texCoord.setValue(vertex[0]/textHeight, vertex[1]/textHeight,
-			  0.0, 1.0);
-	// S coordinates go other way on back...
-	if (genBack) texCoord[0] = -texCoord[0];
+        float textHeight = t3->myFont->getHeight();
+        texCoord.setValue(vertex[0]/textHeight, vertex[1]/textHeight,
+                          0.0, 1.0);
+        // S coordinates go other way on back...
+        if (genBack) texCoord[0] = -texCoord[0];
     } else {
-	texCoord = tce->get(vertex, genPrimVerts[0]->getNormal());
+        texCoord = tce->get(vertex, genPrimVerts[0]->getNormal());
     }
     genPrimVerts[genWhichVertex]->setTextureCoords(texCoord);
-	
+
     genWhichVertex = (genWhichVertex+1)%3;
 
     // If we just filled in the third vertex, we can spit out a
     // triangle:
     if (genWhichVertex == 0) {
-	// If we are doing the BACK part, reverse the triangle:
-	if (genBack) {
-	    t3->invokeTriangleCallbacks(genAction,
-					genPrimVerts[2],
-					genPrimVerts[1],
-					genPrimVerts[0]);
-	} else {
-	    t3->invokeTriangleCallbacks(genAction,
-					genPrimVerts[0],
-					genPrimVerts[1],
-					genPrimVerts[2]);
-	}
-	// Now, need to set-up for the next vertex.
-	// Three cases to deal with-- independent triangles, triangle
-	// strips, and triangle fans.
-	switch (genPrimType) {
-	  case GL_TRIANGLES:
-	    // Don't need to do anything-- every three vertices
-	    // defines a triangle.
-	    break;
+        // If we are doing the BACK part, reverse the triangle:
+        if (genBack) {
+            t3->invokeTriangleCallbacks(genAction,
+                                        genPrimVerts[2],
+                                        genPrimVerts[1],
+                                        genPrimVerts[0]);
+        } else {
+            t3->invokeTriangleCallbacks(genAction,
+                                        genPrimVerts[0],
+                                        genPrimVerts[1],
+                                        genPrimVerts[2]);
+        }
+        // Now, need to set-up for the next vertex.
+        // Three cases to deal with-- independent triangles, triangle
+        // strips, and triangle fans.
+        switch (genPrimType) {
+        case GL_TRIANGLES:
+            // Don't need to do anything-- every three vertices
+            // defines a triangle.
+            break;
 
-// Useful macro:
+            // Useful macro:
 #define SWAP(a, b) { SoPrimitiveVertex *t = a; a = b; b = t; }
 
-	  case GL_TRIANGLE_FAN:
-	    // For triangle fans, vertex zero stays the same, but
-	    // vertex 2 becomes vertex 1, and the next vertex to come
-	    // in will replace vertex 2 (the old vertex 1).
-	    SWAP(genPrimVerts[1], genPrimVerts[2]);
-	    genWhichVertex = 2;
-	    break;
+        case GL_TRIANGLE_FAN:
+            // For triangle fans, vertex zero stays the same, but
+            // vertex 2 becomes vertex 1, and the next vertex to come
+            // in will replace vertex 2 (the old vertex 1).
+            SWAP(genPrimVerts[1], genPrimVerts[2]);
+            genWhichVertex = 2;
+            break;
 
-	  case GL_TRIANGLE_STRIP:
-	    // For triangle strips, vertex 1 becomes vertex 0, vertex
-	    // 2 becomes vertex 1, and the new triangle will replace
-	    // vertex 2 (the old vertex 0).
-	    SWAP(genPrimVerts[1], genPrimVerts[0]);
-	    SWAP(genPrimVerts[2], genPrimVerts[1]);
-	    genWhichVertex = 2;
-	    break;
+        case GL_TRIANGLE_STRIP:
+            // For triangle strips, vertex 1 becomes vertex 0, vertex
+            // 2 becomes vertex 1, and the new triangle will replace
+            // vertex 2 (the old vertex 0).
+            SWAP(genPrimVerts[1], genPrimVerts[0]);
+            SWAP(genPrimVerts[2], genPrimVerts[1]);
+            genWhichVertex = 2;
+            break;
 #undef SWAP
-	}
+        }
     }
 }
