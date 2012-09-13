@@ -444,8 +444,7 @@ SoAsciiText::getFrontBBox(SbBox2f &result)
 {
     SbBox2f charBBox;
 
-    int line, character;
-    for (line = 0; line < string.getNum(); line++) {
+    for (int line = 0; line < string.getNum(); line++) {
         // Starting position of string, based on justification:
         float w = (line < width.getNum()) ? width[line] : 0;
         SbVec2f charPosition = getStringOffset(line, w);
@@ -454,7 +453,7 @@ SoAsciiText::getFrontBBox(SbBox2f &result)
         const SbString &str = string[line];
         const char *chars = str.getString();
 
-        for (character = 0; character < str.getLength(); character++) {
+        for (size_t character = 0; character < str.getLength(); character++) {
             myFont->getCharBBox(chars[character], charBBox);
             if (!charBBox.isEmpty()) {
                 SbVec2f min = charBBox.getMin() + curCharPos;
@@ -535,7 +534,7 @@ SoAsciiText::renderFront(SoGLRenderAction *, const SbString &string,
     // First, try to figure out if we can use glCallLists:
     SbBool useCallLists = TRUE;
 
-    for (int i = 0; i < string.getLength(); i++) {
+    for (size_t i = 0; i < string.getLength(); i++) {
         // See if the font cache already has (or can build) a display
         // list for this character:
         if (!myFont->hasFrontDisplayList(chars[i], tobj)) {
@@ -621,7 +620,7 @@ SoAsciiText::generateFront(const SbString &string, float width)
         off = (width - naturalWidth) / (string.getLength() - 1);
     }
     
-    for (int i = 0; i < string.getLength(); i++) {
+    for (size_t i = 0; i < string.getLength(); i++) {
         d->setCharacterIndex(i);
 
         myFont->generateFrontChar(chars[i], tobj);
