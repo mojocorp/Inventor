@@ -110,7 +110,8 @@ class INVENTOR_API SoAnnotation : public SoSeparator {
 
   SoEXTENDER public:
     // Implement actions
-    virtual void	GLRender(SoGLRenderAction *action);
+    virtual void	GLRenderBelowPath(SoGLRenderAction *action);
+    virtual void	GLRenderInPath(SoGLRenderAction *action);
 
   SoINTERNAL public:
     static void		initClass();
