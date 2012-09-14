@@ -1,0 +1,469 @@
+#Inventor V2.1 ascii
+
+Separator {
+    Group {
+	Rotation {
+	    rotation	0.55655 -0.654198 -0.51213  1.10227
+	}
+	DirectionalLight {
+	    direction	0.2 -0.2 -0.979796
+	}
+	ResetTransform {
+	}
+    }
+    DEF Light01 SpotLight {
+	on	TRUE
+	intensity	1
+	color	0.705882 0.705882 0.705882
+	location	-99 141 319
+	direction	0.441801 -0.338554 -0.830778
+	dropOffRate	0
+	cutOffAngle	1.13446
+    }
+    Material {
+	ambientColor	[ 0.2 0.2 0.2,
+			  0.015686 0.015686 0.015686 ]
+	diffuseColor	[ 0.8 0.8 0.8,
+			  0.015686 0.015686 0.015686 ]
+	specularColor	[ 0 0 0,
+			  1 1 1 ]
+	shininess	[ 0.2, 0.53 ]
+	transparency	[ 0, 0 ]
+    }
+    DEF cube26 Separator {
+	Material {
+	    ambientColor	0.515686 0 0
+	    diffuseColor	0.015686 0 0
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    145 95 -95 1
+	}
+	DEF cubeinstance+0 Cube {
+	    width	50
+	    height	50
+	    depth	50
+	}
+    }
+    DEF cube25 Separator {
+	Material {
+	    ambientColor	0.015686 0 0.015686
+	    diffuseColor	0.015686 0 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    85 95 -95 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube24 Separator {
+	Material {
+	    ambientColor	0 0.015686 0.015686
+	    diffuseColor	0 0.015686 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    25 95 -95 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube23 Separator {
+	Material {
+	    ambientColor	0.015686 0.015686 0
+	    diffuseColor	0.015686 0.015686 0
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    145 95 -35 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube22 Separator {
+	Material {
+	    ambientColor	0.015686 0.015686 0.015686
+	    diffuseColor	0.015686 0.015686 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    85 95 -35 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube21 Separator {
+	Material {
+	    ambientColor	0 0.015686 0
+	    diffuseColor	0 0.015686 0
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    25 95 -35 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube20 Separator {
+	Material {
+	    ambientColor	0.015686 0 0.5
+	    diffuseColor	0.015686 0.6 0.86
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    145 95 25 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube19 Separator {
+	Material {
+	    ambientColor	0 0 0.015686
+	    diffuseColor	0 0 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    85 95 25 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube18 Separator {
+	Material {
+	    ambientColor	0.015686 0.015686 0.015686
+	    diffuseColor	0.015686 0.015686 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    25 95 25 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube17 Separator {
+	Material {
+	    ambientColor	0.15 0.0686 0.05686
+	    diffuseColor	0.15 0.0686 0.05686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    145 35 -95 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube16 Separator {
+	Material {
+	    ambientColor	0.06 0.06 0.015686
+	    diffuseColor	0.06 0.06 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    85 35 -95 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube15 Separator {
+	Material {
+	    ambientColor	0.015686 0.01686 0.086
+	    diffuseColor	0.086 0.01686 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    25 35 -95 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube14 Separator {
+	Material {
+	    ambientColor	0.015686 0.06 0.015686
+	    diffuseColor	0.015686 0.06 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    145 35 -35 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube13 Separator {
+	Material {
+	    ambientColor	0.015686 0.5 0.015686
+	    diffuseColor	0.015686 0.5 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    85 35 -35 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube12 Separator {
+	Material {
+	    ambientColor	0.5 0.015686 0.015686
+	    diffuseColor	0.5 0.015686 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    25 35 -35 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube11 Separator {
+	Material {
+	    ambientColor	0.015686 0.015686 0.5
+	    diffuseColor	0.015686 0.015686 0.5
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    145 35 25 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube10 Separator {
+	Material {
+	    ambientColor	0.8 0.015686 0.015686
+	    diffuseColor	0.8 0.015686 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    85 35 25 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube1 Separator {
+	Material {
+	    ambientColor	0.015686 0.8 0.015686
+	    diffuseColor	0.015686 0.8 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    25 -25 25 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube09 Separator {
+	Material {
+	    ambientColor	0.015686 0.015686 0.8
+	    diffuseColor	0.015686 0.015686 0.815686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    25 35 25 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube08 Separator {
+	Material {
+	    ambientColor	0.8 0.015686 0.015686
+	    diffuseColor	0.015686 0.015686 0.8
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    145 -25 -95 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube07 Separator {
+	Material {
+	    ambientColor	0.3 0.015686 0.015686
+	    diffuseColor	0.015686 0.3 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    85 -25 -95 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube06 Separator {
+	Material {
+	    ambientColor	0.015686 0.015686 0.3
+	    diffuseColor	0.5 0.015686 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    25 -25 -95 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube05 Separator {
+	Material {
+	    ambientColor	0.5 0.015686 0.015686
+	    diffuseColor	0.015686 0.3 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    145 -25 -35 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube04 Separator {
+	Material {
+	    ambientColor	0.015686 0.05 0.015686
+	    diffuseColor	0.3 0.015686 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    85 -25 -35 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube03 Separator {
+	Material {
+	    ambientColor	0.3 0.015686 0.3
+	    diffuseColor	0.015686 0.5 0.015686
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    25 -25 -35 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube02 Separator {
+	Material {
+	    ambientColor	0.3 0.3 0.3
+	    diffuseColor	0.8 0.86 0.8
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    145 -25 25 1
+	}
+	USE cubeinstance+0
+    }
+    DEF cube01 Separator {
+	Material {
+	    ambientColor	0.015686 0.9 0.015686
+	    diffuseColor	0.019 0.015686 0.9
+	    specularColor	1 1 1
+	    shininess	0.53
+	    transparency	0
+	}
+	MatrixTransform {
+	    matrix	1 0 0 0
+		    0 1 -0 0
+		    0 0 1 0
+		    85 -25 25 1
+	}
+	USE cubeinstance+0
+    }
+}
