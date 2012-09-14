@@ -1,61 +1,68 @@
-#ifndef _SO_GL_POLYGON_OFFSET_ELEMENT_
-#define _SO_GL_POLYGON_OFFSET_ELEMENT_
+#ifndef _SO_GL_POLYGON_OFFSET_ELEMENT
+#define _SO_GL_POLYGON_OFFSET_ELEMENT
 
 #include <Inventor/elements/SoPolygonOffsetElement.h>
 
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Class: SoGLPolygonOffsetElement
+//
+//  Element that stores the current polygon offset in GL. Overrides the
+//  virtual methods on SoPolygonOffsetElement to send the polygon offset
+//  to GL when necessary.
+//
+//  Note that this class relies on SoPolygonOffsetElement to store the
+//  values in the instance.
+//
+//////////////////////////////////////////////////////////////////////////////
+
 SoEXTENDER class INVENTOR_API SoGLPolygonOffsetElement : public SoPolygonOffsetElement
 {
-   SO_ELEMENT_HEADER(SoGLPolygonOffsetElement);
+    SO_ELEMENT_HEADER(SoGLPolygonOffsetElement);
 
-   public:
+public:
 
-      // Initializes element
-      virtual void	init(SoState *state);
+    /// Initializes element
+    virtual void init(SoState *state);
 
-      // Override push() method to copy state pointer and value of
-      // previous element, to avoid sending GL commands if the elements
-      // are the same.
-      virtual void	push(SoState *state);
+    /// Override push() so we can remember what values the
+    /// previous element set, and not send it again if it is the same.
+    virtual void push(SoState *state);
 
-      // Override pop() method so side effects can occur in GL
-      virtual void	pop(SoState *state, const SoElement *childElt);
-      
-      friend int operator ==(const SoGLPolygonOffsetElement &e1, const SoGLPolygonOffsetElement &e2);
-      friend int operator !=(const SoGLPolygonOffsetElement &e1, const SoGLPolygonOffsetElement &e2) {
-         return !(e1 == e2);
-      }
+    /// Override pop() method so side effects can occur in GL
+    virtual void pop(SoState *state, const SoElement *childElt);
 
-   protected:
+SoINTERNAL public:
 
-      virtual void	setElt(float factor, float units, Style styles, SbBool on);
+    // Initializes the SoGLPolygonOffsetElement class.
+    static void initClass();
 
-      // Destructor.
-      virtual		~SoGLPolygonOffsetElement();
+protected:
 
-   SoINTERNAL public:
+    // Sets the polygon offset in an instance. Has GL side effects.
+    virtual void setElt(float factor, float units, Style styles, SbBool active);
 
-      // Initializes the SoGLPolygonOffsetElement class.
-      static void       initClass();
+    // Destructor.
+    virtual ~SoGLPolygonOffsetElement();
 
-   private:
+private:
 
-      // This variable is TRUE if the value in this element was copied
-      // from our parent.  If set is called with the same value, no GL
-      // commands have to be done-- it is as if this element doesn't
-      // exist, and the parent's value is used.  Of course, a cache
-      // dependency will have to be added in this case (if the parent
-      // changes, the cache is not valid).  Set sets this flag to false.
-      SbBool   copiedFromParent;
-      
-      Style    currentstyles;
-      float    currentoffsetfactor;
-      float    currentoffsetunits;
+    // We save the state to figure out if the lastPattern variable was
+    // copied from a parent element; if it was, then caches will have
+    // to depend on that element because if it changes we have to have
+    // a chance to change our decision about what GL calls to make.
+    // If this is NULL, then there are no cache dependencies.
+    SoState * copiedFromParent;
 
-      // We need to store the state.
-      SoState *state;
+    enum masks{
+        VALUE_MASK	= (1<<0),
+        STYLE_MASK	= (1<<1)
+    };
 
-      // Sends changes in element to GL
-      void		send();
+    uint32_t whatChanged;
+
+    // Sends polygon offset in element to GL
+    void send();
 };
 
-#endif  // _SO_GL_POLYGON_OFFSET_ELEMENT_
+#endif  /* _SO_GL_POLYGON_OFFSET_ELEMENT */

@@ -1,0 +1,25 @@
+#Inventor V2.1 ascii
+
+Separator {
+    Transform {
+        rotation 1 1 0 1.5
+    }
+    Separator {
+        BaseColor {
+            rgb 0.0 0.0 1.0
+        }
+        PolygonOffset {
+        }
+        Cube {
+        }
+    }
+    DrawStyle {
+        style LINES
+    }
+    BaseColor {
+        rgb 1.0 0.0 0.0
+    }
+    Cube {
+    
+    }
+}
