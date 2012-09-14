@@ -1,6 +1,8 @@
 #ifndef _SB_IMAGE_
 #define _SB_IMAGE_
 
+#include <Inventor/misc/SoGL.h>
+
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SbVec2s.h>
@@ -8,9 +10,18 @@
 
 class INVENTOR_API SbImage {
 public:
+    enum Format
+    {
+        Format_Invalid,
+        Format_Luminance       = GL_LUMINANCE,
+        Format_Luminance_Alpha = GL_LUMINANCE_ALPHA,
+        Format_RGB24           = GL_RGB,
+        Format_RGBA32          = GL_RGBA
+    };
+
     SbImage();
-    SbImage(const SbVec2s &size, int numComponents);
-    SbImage(const SbVec2s &size, int numComponents, const unsigned char *bytes);
+    SbImage(const SbVec2s &size, Format fmt);
+    SbImage(const SbVec2s &size, Format fmt, const unsigned char *bytes);
     SbImage(const SbString & filename);
 
     /// Destructor.
@@ -18,6 +29,9 @@ public:
 
     /// Returns the size of the image.
     const SbVec2s & getSize() const;
+
+    /// Return the internal format.
+    Format getFormat() const;
 
     /// Returns the number of components.
     int getNumComponents() const;
@@ -35,7 +49,7 @@ public:
     bool load(const SbString & filename);
 
     void setValue(const SbVec2s & size,
-                  int numComponents,
+                  Format fmt,
                   const unsigned char *bytes);
 
     /// Assigns a shallow copy of the given image to this image and returns a reference to this image.
@@ -59,12 +73,13 @@ private:
     public:
         SbImageRef();
         SbImageRef(const SbImageRef * other);
-        SbImageRef(const SbVec2s & size, int numComponents, const unsigned char * bytes = NULL);
+        SbImageRef(const SbVec2s & size, Format format, const unsigned char * bytes = NULL);
 
         void setValue(const SbVec2s & size,
-                         int  numComponents,
-                         const unsigned char * bytes);
+                      Format format,
+                      const unsigned char * bytes);
         bool isNull() const;
+        int getNumComponents() const;
         bool hasAlphaChannel() const;
         bool read(const SbString & filename);
 
@@ -72,9 +87,10 @@ private:
         void dispose();
 
         SbVec2s  size;          // Width and height of image
-        int   numComponents;    // Number of components per pixel
+        Format format;          // Image format
         unsigned char * bytes;  // Array of pixels
     private:
+
         ~SbImageRef();
     };
 
