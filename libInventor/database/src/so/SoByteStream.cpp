@@ -201,7 +201,7 @@ SoByteStream::unconvert(SoByteStream *bs)
 //  Use: static, public
 //
 SoPathList *
-SoByteStream::unconvert(void *data, uint32_t numBytes)
+SoByteStream::unconvert(void *data, size_t numBytes)
 //
 //////////////////////////////////////////////////////////////////////////////
 {

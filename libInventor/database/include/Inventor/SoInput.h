@@ -342,13 +342,13 @@ private:
     void                convertFloat(char *from, float *f);
     void                convertDouble(char *from, double *d);
     void                convertShortArray( char *from, register short *to,
-                                           register int len);
+                                           register size_t len);
     void                convertInt32Array( char *from, register int32_t *to,
-                                           register int len);
+                                           register size_t len);
     void                convertFloatArray( char *from, register float *to,
-                                           register int len);
+                                           register size_t len);
     void                convertDoubleArray( char *from, register double *to,
-                                            register int len);
+                                            register size_t len);
     friend class SoBase;
     friend class SoDB;
 };

@@ -79,7 +79,7 @@ public:
 
     /// Constructors take a character string, the subset of a character string from start to end (inclusive)
     /// The given const char pointer is converted to Unicode using the fromLatin1() function.
-    SbString(const char *str, int start, int end);
+    SbString(const char *str, size_t start, size_t end);
 
     /// Constructor that initializes to given SbString
     SbString(const SbString &str);

@@ -221,8 +221,8 @@ SoNurbsProfile::getVertices(SoState *state,
             steps = (int) (powf(complexity, 3.32f) * 28) + 2;
 
         gluNurbsProperty(theNurb, GLU_SAMPLING_METHOD, GLU_DOMAIN_DISTANCE);
-        gluNurbsProperty(theNurb, GLU_U_STEP, steps);
-        gluNurbsProperty(theNurb, GLU_V_STEP, steps);
+        gluNurbsProperty(theNurb, GLU_U_STEP, (GLfloat)steps);
+        gluNurbsProperty(theNurb, GLU_V_STEP, (GLfloat)steps);
     }
     else {
         float pixTolerance = 104.0f * complexity * complexity - 252.0f * complexity + 150;

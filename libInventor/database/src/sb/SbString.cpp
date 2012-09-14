@@ -94,9 +94,9 @@ SbString::SbString(const char *str) {
 // Constructor that initializes to a substring.
 //
 
-SbString::SbString(const char *str, int start, int end)
+SbString::SbString(const char *str, size_t start, size_t end)
 {
-    int size = end - start + 1;
+    size_t size = end - start + 1;
 
     if (size < SB_STRING_STATIC_STORAGE_SIZE)
         string = staticStorage;
@@ -214,9 +214,9 @@ SbString::toStdWString () const
 {
     std::wstring wstr;
 #ifdef SB_OS_WIN
-    int wlen = MultiByteToWideChar(CP_UTF8, 0, string, -1, NULL, 0);
-    wstr.resize(wlen-1);
-    MultiByteToWideChar(CP_UTF8, 0, string, -1, (LPWSTR)wstr.data(), wlen);
+    int wlen = MultiByteToWideChar(CP_UTF8, 0, string, -1, NULL, 0) - 1;
+    wstr.resize(wlen);
+    MultiByteToWideChar(CP_UTF8, 0, string, -1, (LPWSTR)wstr.data(), (int)wstr.length());
 #else
     setlocale(LC_CTYPE, "en_US.UTF-8");
     size_t wlen = mbstowcs(NULL, string, 0);
@@ -289,7 +289,7 @@ SbString::deleteSubString(int startChar, int endChar)
         }
 #endif
 
-        int	numToMove = len - endChar - 1;
+        size_t	numToMove = len - endChar - 1;
 
         for (int i = 0; i < numToMove; i++)
             string[startChar + i] = string[endChar + i + 1];
@@ -420,10 +420,10 @@ SbString::fromWideChar(const wchar_t *wcs, int size)
     SbString str;
 
 #ifdef SB_OS_WIN
-    size_t len = (size == -1) ? WideCharToMultiByte( CP_UTF8, 0, wcs, -1, NULL, 0,  NULL, NULL)-1 : size;
+    size_t len = (size == -1) ? WideCharToMultiByte( CP_UTF8, 0, wcs, -1, NULL, 0,  NULL, NULL) - 1 : size;
     str.expand(len);
 
-    WideCharToMultiByte(CP_UTF8, 0, wcs, -1, str.string, len, NULL, NULL);
+    WideCharToMultiByte(CP_UTF8, 0, wcs, -1, str.string, (int)len+1, NULL, NULL);
 #else
     setlocale(LC_CTYPE, "en_US.UTF-8");
     size_t len = (size == -1) ? wcstombs(NULL, wcs, 0) : size;
