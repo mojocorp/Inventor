@@ -62,6 +62,8 @@
 #include <Inventor/elements/SoTransparencyTypeElement.h>
 #include <Inventor/elements/SoStereoElement.h>
 
+#include <vector>
+
 class SbBox3f;
 class SoGetBoundingBoxAction;
 
@@ -319,8 +321,7 @@ private:
     SbBool  sortObjs; // TRUE if objects are to be sorted
     SoPathList  transpPaths; // Paths to transparent objects
     SoGetBoundingBoxAction *ba;  // For computing bounding boxes
-    SbBox3f  *bboxes; // Bounding boxes of objects
-    int   numBBoxes; // Number of bboxes allocated
+    std::vector<float> bboxes; // Bounding boxes zmax of objects
 
     int     cacheContext;   // GL cache context
     SbBool  remoteRendering;// Remote rendering?
