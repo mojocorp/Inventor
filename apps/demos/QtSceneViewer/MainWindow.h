@@ -23,6 +23,8 @@ private slots:
     bool saveAs();
     void about();
     void loadFile(const QString &fileName);
+    void transpMenuTriggered(QAction*);
+    void updateTranspActions();
 
 private:
     void createActions();
@@ -39,11 +41,23 @@ private:
 
     QMenu *fileMenu;
     QRecentFilesMenu *recentFilesMenu;
+    QMenu *viewMenu;
+    QMenu *transpMenu;
     QMenu *helpMenu;
     QToolBar *fileToolBar;
+
     QAction *openAct;
     QAction *saveAsAct;
     QAction *exitAct;
+
+    QAction *screenDoorAct;
+    QAction *addAct;
+    QAction *delayedAddAct;
+    QAction *sortedObjectAddAct;
+    QAction *blendAct;
+    QAction *delayedBlendAct;
+    QAction *sortedObjectBlendAct;
+
     QAction *aboutAct;
     QAction *aboutQtAct;
 };
