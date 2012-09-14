@@ -84,6 +84,27 @@ void MainWindow::createActions()
     exitAct->setStatusTip(tr("Exit the application"));
     connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
+    screenDoorAct = new QAction(tr("Screen Door"), this);
+    screenDoorAct->setCheckable(true);
+
+    addAct = new QAction(tr("Add"), this);
+    addAct->setCheckable(true);
+
+    delayedAddAct = new QAction(tr("Delayed Add"), this);
+    delayedAddAct->setCheckable(true);
+
+    sortedObjectAddAct = new QAction(tr("Sorted Object Add"), this);
+    sortedObjectAddAct->setCheckable(true);
+
+    blendAct = new QAction(tr("Blend"), this);
+    blendAct->setCheckable(true);
+
+    delayedBlendAct = new QAction(tr("Delayed Blend"), this);
+    delayedBlendAct->setCheckable(true);
+
+    sortedObjectBlendAct = new QAction(tr("Sorted Object Blend"), this);
+    sortedObjectBlendAct->setCheckable(true);
+
     aboutAct = new QAction(tr("&About"), this);
     aboutAct->setStatusTip(tr("Show the application's About box"));
     connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
@@ -100,6 +121,20 @@ void MainWindow::createMenus()
     fileMenu->addAction(saveAsAct);
     fileMenu->addSeparator();
     fileMenu->addAction(exitAct);
+
+    viewMenu = menuBar()->addMenu(tr("&View"));
+
+    transpMenu = viewMenu->addMenu(tr("&Transparency"));
+    transpMenu->addAction(screenDoorAct);
+    transpMenu->addAction(addAct);
+    transpMenu->addAction(delayedAddAct);
+    transpMenu->addAction(sortedObjectAddAct);
+    transpMenu->addAction(blendAct);
+    transpMenu->addAction(delayedBlendAct);
+    transpMenu->addAction(sortedObjectBlendAct);
+
+    connect(transpMenu, SIGNAL(triggered(QAction*)), SLOT(transpMenuTriggered(QAction*)));
+    connect(transpMenu, SIGNAL(aboutToShow()), SLOT(updateTranspActions()));
 
     menuBar()->addSeparator();
 
@@ -202,7 +237,35 @@ void MainWindow::setCurrentFile(const QString &fileName)
 
     QString shownName = curFile;
     if (curFile.isEmpty())
-        shownName = "untitled.txt";
+        shownName = "untitled";
     setWindowFilePath(shownName);
 }
 
+void MainWindow::transpMenuTriggered(QAction* action)
+{
+    if (action == screenDoorAct)
+        viewer->setTransparencyType(SoGLRenderAction::SCREEN_DOOR);
+    else if (action == addAct)
+        viewer->setTransparencyType(SoGLRenderAction::ADD);
+    else if (action == delayedAddAct)
+        viewer->setTransparencyType(SoGLRenderAction::DELAYED_ADD);
+    else if (action == sortedObjectAddAct)
+        viewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_ADD);
+    else if (action == blendAct)
+        viewer->setTransparencyType(SoGLRenderAction::BLEND);
+    else if (action == delayedBlendAct)
+        viewer->setTransparencyType(SoGLRenderAction::DELAYED_BLEND);
+    else if (action == sortedObjectBlendAct)
+        viewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
+}
+
+void MainWindow::updateTranspActions()
+{
+    screenDoorAct->setChecked(viewer->getTransparencyType() == SoGLRenderAction::SCREEN_DOOR);
+    addAct->setChecked(viewer->getTransparencyType() == SoGLRenderAction::ADD);
+    delayedAddAct->setChecked(viewer->getTransparencyType() == SoGLRenderAction::DELAYED_ADD);
+    sortedObjectAddAct->setChecked(viewer->getTransparencyType() == SoGLRenderAction::SORTED_OBJECT_ADD);
+    blendAct->setChecked(viewer->getTransparencyType() == SoGLRenderAction::BLEND);
+    delayedBlendAct->setChecked(viewer->getTransparencyType() == SoGLRenderAction::DELAYED_BLEND);
+    sortedObjectBlendAct->setChecked(viewer->getTransparencyType() == SoGLRenderAction::SORTED_OBJECT_BLEND);
+}
