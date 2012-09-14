@@ -52,6 +52,7 @@
  */
 
 #include <Inventor/fields/SoSFImage.h>
+#include <Inventor/errors/SoDebugError.h>
 
 #include <stdlib.h>
 
@@ -91,7 +92,23 @@ SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b, CopyPolicy
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    setValue(SbImage(s, nc, b));
+    SbImage::Format fmt = SbImage::Format_Invalid;
+
+    switch(nc) {
+    case 1: fmt = SbImage::Format_Luminance; break;
+    case 2: fmt = SbImage::Format_Luminance_Alpha; break;
+    case 3: fmt = SbImage::Format_RGB24; break;
+    case 4: fmt = SbImage::Format_RGBA32; break;
+    default:
+#ifdef DEBUG
+    SoDebugError::postInfo("SoSFImage::setValue",
+               "Unsupported number of components %d, should be 1,2,3 or 4",
+               nc);
+#endif
+        break;
+    }
+
+    setValue(SbImage(s, fmt, b));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -163,7 +180,23 @@ SoSFImage::readValue(SoInput *in)
         !in->read(numComponents))
         return FALSE;
 
-    SbImage image = SbImage(size, numComponents);
+    SbImage::Format fmt = SbImage::Format_Invalid;
+
+    switch(numComponents) {
+    case 1: fmt = SbImage::Format_Luminance; break;
+    case 2: fmt = SbImage::Format_Luminance_Alpha; break;
+    case 3: fmt = SbImage::Format_RGB24; break;
+    case 4: fmt = SbImage::Format_RGBA32; break;
+    default:
+#ifdef DEBUG
+    SoDebugError::postInfo("SoSFImage::readValue",
+               "Unsupported number of components %d, should be 1,2,3 or 4",
+               numComponents);
+#endif
+    break;
+    }
+
+    SbImage image = SbImage(size, fmt);
     unsigned char *bytes = image.getBytes();
 
     int byte = 0;
