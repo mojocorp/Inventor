@@ -100,7 +100,6 @@ SoGLRenderAction::SoGLRenderAction(const SbViewportRegion &viewportRegion)
     delayObjs		= FALSE;
     sortObjs		= FALSE;
     ba              = NULL;
-    bboxes          = NULL;
     cacheContext	= 0;
     remoteRendering	= FALSE;
 
@@ -130,9 +129,6 @@ SoGLRenderAction::~SoGLRenderAction()
 {
     if (ba != NULL)
         delete ba;
-
-    if (bboxes != NULL)
-        delete [] bboxes;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -682,13 +678,13 @@ SoGLRenderAction::renderTransparentObjs()
     glDepthMask(FALSE);
 
     // If not sorting, just render them in order
-    if (! sortObjs)
+    if (! sortObjs) {
         // Render paths to transparent objects. We know these paths
         // obey the rules for compact path lists, so let the action know.
         apply(transpPaths, TRUE);
 
     // Otherwise, compute bounding boxes, render objs back to front
-    else {
+    } else {
         if (ba == NULL) {
             ba = new SoGetBoundingBoxAction(vpRegion);
 
@@ -699,19 +695,11 @@ SoGLRenderAction::renderTransparentObjs()
         }
 
         // Make sure there is room for the bounding boxes
-        if (bboxes == NULL) {
-            bboxes = new SbBox3f[numObjs];
-            numBBoxes = numObjs;
-        }
-        else if (numBBoxes < numObjs) {
-            delete [] bboxes;
-            bboxes = new SbBox3f[numObjs];
-            numBBoxes = numObjs;
-        }
+        bboxes.resize(numObjs);
 
         for (int i = 0; i < numObjs; i++) {
             ba->apply(transpPaths[i]);
-            bboxes[i] = ba->getBoundingBox();
+            bboxes[i] = ba->getBoundingBox().getMax()[2];
         }
 
         // Render them in sorted order
@@ -723,8 +711,8 @@ SoGLRenderAction::renderTransparentObjs()
             // Look for bbox with smallest zmax (farthest from camera!)
             float zFar = FLT_MAX;
             for (int i = 0; i < numObjs; i++) {
-                if (bboxes[i].getMax()[2] < zFar) {
-                    zFar = bboxes[i].getMax()[2];
+                if (bboxes[i] < zFar) {
+                    zFar = bboxes[i];
                     farthest = i;
                 }
             }
@@ -733,7 +721,7 @@ SoGLRenderAction::renderTransparentObjs()
             apply(transpPaths[farthest]);
 
             // Mark it as being far
-            bboxes[farthest].getMax()[2] = FLT_MAX;
+            bboxes[farthest] = FLT_MAX;
         }
     }
 
