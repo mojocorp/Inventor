@@ -54,6 +54,7 @@
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoCacheElement.h>
+#include <Inventor/elements/SoGLDepthBufferElement.h>
 #include <Inventor/nodes/SoAnnotation.h>
 
 SO_NODE_SOURCE(SoAnnotation);
@@ -100,6 +101,9 @@ SoAnnotation::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO__NODE_INIT_CLASS(SoAnnotation, "Annotation", SoSeparator);
+
+    // Enable elements used:
+    SO_ENABLE(SoGLRenderAction, SoGLDepthBufferElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -117,15 +121,14 @@ SoAnnotation::GLRenderBelowPath(SoGLRenderAction *action)
     // If the action is currently rendering the delayed paths, turn
     // off depth buffer comparisons and render like a separator
     if (action->isRenderingDelayedPaths()) {
-        SbBool zbuffEnabled = glIsEnabled(GL_DEPTH_TEST);
-        if (zbuffEnabled)
-            glDisable(GL_DEPTH_TEST);
+        SoState *state = action->getState();
+        state->push();
+        SoGLDepthBufferElement::set(state, FALSE, TRUE, SoDepthBufferElement::LESS);
 
         SoSeparator::GLRenderBelowPath(action);
 
         // turn the depth comparisons if it was originally turned on
-        if (zbuffEnabled)
-            glEnable(GL_DEPTH_TEST);
+        state->pop();
     }
 
     // Otherwise, tell the render action that we want to render this
@@ -153,15 +156,14 @@ SoAnnotation::GLRenderInPath(SoGLRenderAction *action)
     // If the action is currently rendering the delayed paths, turn
     // off depth buffer comparisons and render like a separator
     if (action->isRenderingDelayedPaths()) {
-        SbBool zbuffEnabled = glIsEnabled(GL_DEPTH_TEST);
-        if (zbuffEnabled)
-            glDisable(GL_DEPTH_TEST);
+        SoState *state = action->getState();
+        state->push();
+        SoGLDepthBufferElement::set(state, FALSE, TRUE, SoDepthBufferElement::LESS);
 
         SoSeparator::GLRenderInPath(action);
 
         // turn the depth comparisons if it was originally turned on
-        if (zbuffEnabled)
-            glEnable(GL_DEPTH_TEST);
+        state->pop();
     }
 
     // Otherwise, tell the render action that we want to render this
