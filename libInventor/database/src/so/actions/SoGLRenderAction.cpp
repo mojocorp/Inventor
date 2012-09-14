@@ -78,7 +78,7 @@ SO_ACTION_SOURCE(SoGLRenderAction);
 // Use: public
 
 SoGLRenderAction::SoGLRenderAction(const SbViewportRegion &viewportRegion)
-				
+
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -87,24 +87,24 @@ SoGLRenderAction::SoGLRenderAction(const SbViewportRegion &viewportRegion)
     vpRegion		= viewportRegion;
     updateOrigin.setValue(0.0, 0.0);
     updateSize.setValue(1.0, 1.0);
- 
-    abortCB		= NULL;
 
-    transpType          	= (TransparencyType)SoTransparencyTypeElement::getDefault();
+    abortCB         = NULL;
+
+    transpType      = (TransparencyType)SoTransparencyTypeElement::getDefault();
     doSmooth		= FALSE;
     numPasses		= 1;
     passUpdate		= FALSE;
-    passCB		= NULL;
+    passCB          = NULL;
 
     renderingTranspObjs	= FALSE;
     delayObjs		= FALSE;
     sortObjs		= FALSE;
-    ba			= NULL;
-    bboxes		= NULL;
+    ba              = NULL;
+    bboxes          = NULL;
     cacheContext	= 0;
     remoteRendering	= FALSE;
 
-    renderingDelPaths	= FALSE;
+    renderingDelPaths = FALSE;
 
     whatChanged		= ALL;
 
@@ -129,10 +129,10 @@ SoGLRenderAction::~SoGLRenderAction()
 ////////////////////////////////////////////////////////////////////////
 {
     if (ba != NULL)
-	delete ba;
+        delete ba;
 
     if (bboxes != NULL)
-	delete [] bboxes;
+        delete [] bboxes;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -215,8 +215,8 @@ SoGLRenderAction::setTransparencyType(TransparencyType type)
 ////////////////////////////////////////////////////////////////////////
 {
     if (transpType != type) {
-	transpType = type;
-	whatChanged |= TRANSPARENCY_TYPE;
+        transpType = type;
+        whatChanged |= TRANSPARENCY_TYPE;
     }
 }
 
@@ -235,8 +235,8 @@ SoGLRenderAction::setCacheContext(uint32_t context)
     // If the cache context changes, we've changed OpenGL contexts,
     // and we should also invalidate the state:
     if (cacheContext != context) {
-	invalidateState();
-	cacheContext = context;
+        invalidateState();
+        cacheContext = context;
     }
 }
 
@@ -363,8 +363,8 @@ SoGLRenderAction::setSmoothing(SbBool smooth)
 ////////////////////////////////////////////////////////////////////////
 {
     if (doSmooth != smooth) {
-	doSmooth = smooth;
-	whatChanged |= SMOOTHING;
+        doSmooth = smooth;
+        whatChanged |= SMOOTHING;
     }
 }
 
@@ -389,7 +389,7 @@ SoGLRenderAction::handleTransparency(SbBool isTransparent)
 
     // Nothing special to do for screen-door blending
     if (transpType == SCREEN_DOOR)
-	return FALSE;
+        return FALSE;
 
     // Determine if the object is likely to be transparent. This is
     // true if: there are several transparency values in the state or
@@ -397,55 +397,54 @@ SoGLRenderAction::handleTransparency(SbBool isTransparent)
     // transparency; or the diffuse colors are specified as packed
     // values (which contain alpha).
     if (isTransparent ||
-	(SoLazyElement::getInstance(getState())->isTransparent()) ||
-	(SoTextureImageElement::containsTransparency(getState()))) {
+            (SoLazyElement::getInstance(getState())->isTransparent()) ||
+            (SoTextureImageElement::containsTransparency(getState()))) {
 
-	// If transparency is delayed, add a path to this object to
-	// the list of transparent objects, and tell the shape not to
-	// render
-	if (delayObjs) {
-	    const SoPath	*curPath = getCurPath();
+        // If transparency is delayed, add a path to this object to
+        // the list of transparent objects, and tell the shape not to
+        // render
+        if (delayObjs) {
+            const SoPath	*curPath = getCurPath();
 
-	    // For some group nodes (such as Array and MultipleCopy),
-	    // the children are traversed more than once. In this
-	    // case, don't add the path if it is the same as any of
-	    // the previous ones.
-	    SbBool	isCopy = FALSE;
-	    int		i;
+            // For some group nodes (such as Array and MultipleCopy),
+            // the children are traversed more than once. In this
+            // case, don't add the path if it is the same as any of
+            // the previous ones.
+            SbBool	isCopy = FALSE;
 
-	    for (i = 0; i < transpPaths.getLength(); i++) {
-		if (*curPath == *transpPaths[i]) {
-		    isCopy = TRUE;
-		    break;
-		}
-	    }
+            for (int i = 0; i < transpPaths.getLength(); i++) {
+                if (*curPath == *transpPaths[i]) {
+                    isCopy = TRUE;
+                    break;
+                }
+            }
 
-	    // Add path if not already there
-	    if (! isCopy)
-		transpPaths.append(curPath->copy());	// Also refs the path
+            // Add path if not already there
+            if (! isCopy)
+                transpPaths.append(curPath->copy());	// Also refs the path
 
-	    // We also need to make sure that any open caches are
-	    // invalidated; if they aren't, they will skip this
-	    // object and (since the cache replaces traversal),
-	    // this object will not be rendered delayed at all.
+            // We also need to make sure that any open caches are
+            // invalidated; if they aren't, they will skip this
+            // object and (since the cache replaces traversal),
+            // this object will not be rendered delayed at all.
 
-	    if (getState()->isCacheOpen())
-		SoCacheElement::invalidate(getState());
+            if (getState()->isCacheOpen())
+                SoCacheElement::invalidate(getState());
 
-	    ret = TRUE;
-	}	
+            ret = TRUE;
+        }
 
-	// If transparency is not delayed, enable blending
-	else {
-	    enableBlending(TRUE);
-	    ret = FALSE;
-	}
+        // If transparency is not delayed, enable blending
+        else {
+            enableBlending(TRUE);
+            ret = FALSE;
+        }
     }
 
     // Disable blending, otherwise
     else {
-	enableBlending(FALSE);
-	ret = FALSE;
+        enableBlending(FALSE);
+        ret = FALSE;
     }
 
     return ret;
@@ -488,10 +487,10 @@ SoGLRenderAction::beginTraversal(SoNode *node)
     // these cases apart by examining the flags.
 
     if (renderingTranspObjs || renderingDelPaths)
-	traverse(node);
+        traverse(node);
 
     else
-	renderAllPasses(node);
+        renderAllPasses(node);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -510,48 +509,48 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
     // applied, make sure it is set up correctly in GL.
     if (whatChanged != 0) {
 
-	switch (transpType) {
-	  case SCREEN_DOOR:
-	    if (doSmooth) {
-		// Blending has to be enabled for line smoothing to
-		// work properly
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		enableBlending(TRUE);
-	    }
-	    else
-		enableBlending(FALSE);
-	    break;
+        switch (transpType) {
+        case SCREEN_DOOR:
+            if (doSmooth) {
+                // Blending has to be enabled for line smoothing to
+                // work properly
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                enableBlending(TRUE);
+            }
+            else
+                enableBlending(FALSE);
+            break;
 
-	  case ADD:
-	  case DELAYED_ADD:
-	  case SORTED_OBJECT_ADD:
-	    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	    break;
+        case ADD:
+        case DELAYED_ADD:
+        case SORTED_OBJECT_ADD:
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+            break;
 
-	  case BLEND:
-	  case DELAYED_BLEND:
-	  case SORTED_OBJECT_BLEND:
-	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	    break;
-	}
+        case BLEND:
+        case DELAYED_BLEND:
+        case SORTED_OBJECT_BLEND:
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            break;
+        }
 
-	sortObjs = (transpType == SORTED_OBJECT_ADD ||
-		    transpType == SORTED_OBJECT_BLEND);
-	delayObjs = (sortObjs ||
-		     transpType == DELAYED_ADD ||
-		     transpType == DELAYED_BLEND);
+        sortObjs = (transpType == SORTED_OBJECT_ADD ||
+                    transpType == SORTED_OBJECT_BLEND);
+        delayObjs = (sortObjs ||
+                     transpType == DELAYED_ADD ||
+                     transpType == DELAYED_BLEND);
 
-	if (doSmooth) {
-	    glEnable(GL_POINT_SMOOTH);
-	    glEnable(GL_LINE_SMOOTH);
-	}
-	else {
-	    glDisable(GL_POINT_SMOOTH);
-	    glDisable(GL_LINE_SMOOTH);
-	}
+        if (doSmooth) {
+            glEnable(GL_POINT_SMOOTH);
+            glEnable(GL_LINE_SMOOTH);
+        }
+        else {
+            glDisable(GL_POINT_SMOOTH);
+            glDisable(GL_LINE_SMOOTH);
+        }
 
-	// Reset flags to indicate that everything is up to date
-	whatChanged = 0;
+        // Reset flags to indicate that everything is up to date
+        whatChanged = 0;
     }
 
     // Set the GL cache context:
@@ -563,39 +562,38 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
 
     // Simple case of one pass
     if (getNumPasses() == 1) {
-	renderPass(node, 0);
-	return;
+        renderPass(node, 0);
+        return;
     }
 
-    int		pass;
-    float	passFrac = 1.0f / (float) getNumPasses();
+    float passFrac = 1.0f / (float) getNumPasses();
 
-    for (pass = 0; pass < getNumPasses(); pass++) {
+    for (int pass = 0; pass < getNumPasses(); pass++) {
 
-	// Stuff to do between passes:
-	if (pass > 0) {
-	    // Update the buffer after each pass if requested
-	    if (passUpdate)
-		glAccum(GL_RETURN, (float) getNumPasses() / (float) pass);
+        // Stuff to do between passes:
+        if (pass > 0) {
+            // Update the buffer after each pass if requested
+            if (passUpdate)
+                glAccum(GL_RETURN, (float) getNumPasses() / (float) pass);
 
-	    // If user-defined callback exists, call it. Otherwise,
-	    // clear to current clear color and depth buffer clear value
-	    if (passCB != NULL)
-		(*passCB)(passData);
-	    else
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	}
+            // If user-defined callback exists, call it. Otherwise,
+            // clear to current clear color and depth buffer clear value
+            if (passCB != NULL)
+                (*passCB)(passData);
+            else
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        }
 
-	renderPass(node, pass);
+        renderPass(node, pass);
 
-	// Stop if rendering was aborted
-	if (hasTerminated())
-	    return;
+        // Stop if rendering was aborted
+        if (hasTerminated())
+            return;
 
-	if (pass > 0)
-	    glAccum(GL_ACCUM, passFrac);
-	else
-	    glAccum(GL_LOAD,  passFrac);
+        if (pass > 0)
+            glAccum(GL_ACCUM, passFrac);
+        else
+            glAccum(GL_LOAD,  passFrac);
     }
 
     glAccum(GL_RETURN, 1.0);
@@ -617,7 +615,7 @@ SoGLRenderAction::renderPass(SoNode *node, int pass)
     curPass = pass;
     SoGLRenderPassElement::set(getState(), pass);
 
-    // Set the viewport region 
+    // Set the viewport region
     SoViewportRegionElement::set(getState(), vpRegion);
     SoGLUpdateAreaElement::set(getState(), updateOrigin, updateSize);
 
@@ -628,29 +626,29 @@ SoGLRenderAction::renderPass(SoNode *node, int pass)
     // objects were added
     if (delayObjs && transpPaths.getLength() > 0 && ! hasTerminated()) {
 
-	// Make sure blending is enabled if necessary
-	if (transpType != SCREEN_DOOR)
-	    enableBlending(TRUE);
+        // Make sure blending is enabled if necessary
+        if (transpType != SCREEN_DOOR)
+            enableBlending(TRUE);
 
-	renderTransparentObjs();
+        renderTransparentObjs();
 
-	// Disable blending for next pass
-	if (transpType != SCREEN_DOOR)
-	    enableBlending(FALSE);
+        // Disable blending for next pass
+        if (transpType != SCREEN_DOOR)
+            enableBlending(FALSE);
     }
 
     // Delayed paths
     if (delayedPaths.getLength() > 0 && ! hasTerminated()) {
-	renderingDelPaths = TRUE;
+        renderingDelPaths = TRUE;
 
-	// Render paths to delayed objects. We know these paths obey
-	// the rules for compact path lists, so let the action know
-	apply(delayedPaths, TRUE);
+        // Render paths to delayed objects. We know these paths obey
+        // the rules for compact path lists, so let the action know
+        apply(delayedPaths, TRUE);
 
-	// Clear out the list
-	delayedPaths.truncate(0);
+        // Clear out the list
+        delayedPaths.truncate(0);
 
-	renderingDelPaths = FALSE;
+        renderingDelPaths = FALSE;
     }
 }
 
@@ -669,7 +667,7 @@ SoGLRenderAction::renderTransparentObjs()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i, numObjs = transpPaths.getLength(), numToDo;
+    int	numObjs = transpPaths.getLength();
 
     // Indicate that we are doing transparent objects so we know not
     // to render all passes
@@ -685,59 +683,58 @@ SoGLRenderAction::renderTransparentObjs()
 
     // If not sorting, just render them in order
     if (! sortObjs)
-	// Render paths to transparent objects. We know these paths
-	// obey the rules for compact path lists, so let the action know.
-	apply(transpPaths, TRUE);
+        // Render paths to transparent objects. We know these paths
+        // obey the rules for compact path lists, so let the action know.
+        apply(transpPaths, TRUE);
 
     // Otherwise, compute bounding boxes, render objs back to front
     else {
-	if (ba == NULL) {
-	    ba = new SoGetBoundingBoxAction(vpRegion);
+        if (ba == NULL) {
+            ba = new SoGetBoundingBoxAction(vpRegion);
 
-	    // Make sure bounding boxes are in camera space. This
-	    // means the z coordinates of the bounding boxes indicate
-	    // distance from the camera.
-	    ba->setInCameraSpace(TRUE);
-	}
+            // Make sure bounding boxes are in camera space. This
+            // means the z coordinates of the bounding boxes indicate
+            // distance from the camera.
+            ba->setInCameraSpace(TRUE);
+        }
 
-	// Make sure there is room for the bounding boxes
-	if (bboxes == NULL) {
-	    bboxes = new SbBox3f[numObjs];
-	    numBBoxes = numObjs;
-	}
-	else if (numBBoxes < numObjs) {
-	    delete [] bboxes;
-	    bboxes = new SbBox3f[numObjs];
-	    numBBoxes = numObjs;
-	}
+        // Make sure there is room for the bounding boxes
+        if (bboxes == NULL) {
+            bboxes = new SbBox3f[numObjs];
+            numBBoxes = numObjs;
+        }
+        else if (numBBoxes < numObjs) {
+            delete [] bboxes;
+            bboxes = new SbBox3f[numObjs];
+            numBBoxes = numObjs;
+        }
 
-	for (i = 0; i < numObjs; i++) {
-	    ba->apply(transpPaths[i]);
-	    bboxes[i] = ba->getBoundingBox();
-	}
+        for (int i = 0; i < numObjs; i++) {
+            ba->apply(transpPaths[i]);
+            bboxes[i] = ba->getBoundingBox();
+        }
 
-	// Render them in sorted order
-	for (numToDo = numObjs; numToDo > 0; --numToDo) {
-	    int		farthest = -1;
-	    float	zFar;
+        // Render them in sorted order
+        for (int numToDo = numObjs; numToDo > 0; --numToDo) {
+            int		farthest = -1;
 
-	    // Use selection sort, since number of objects is usually small
+            // Use selection sort, since number of objects is usually small
 
-	    // Look for bbox with smallest zmax (farthest from camera!)
-	    zFar = FLT_MAX;
-	    for (i = 0; i < numObjs; i++) {
-		if (bboxes[i].getMax()[2] < zFar) {
-		    zFar = bboxes[i].getMax()[2];
-		    farthest = i;
-		}
-	    }
+            // Look for bbox with smallest zmax (farthest from camera!)
+            float zFar = FLT_MAX;
+            for (int i = 0; i < numObjs; i++) {
+                if (bboxes[i].getMax()[2] < zFar) {
+                    zFar = bboxes[i].getMax()[2];
+                    farthest = i;
+                }
+            }
 
-	    // Render farthest one
-	    apply(transpPaths[farthest]);
+            // Render farthest one
+            apply(transpPaths[farthest]);
 
-	    // Mark it as being far
-	    bboxes[farthest].getMax()[2] = FLT_MAX;
-	}
+            // Mark it as being far
+            bboxes[farthest].getMax()[2] = FLT_MAX;
+        }
     }
 
     // Restore zwritemask to what we assume it was before...
@@ -782,27 +779,27 @@ SoGLRenderAction::checkAbort()
 
     switch ((*abortCB)(abortData)) {
 
-      case CONTINUE:
-	doAbort = FALSE;
-	break;
+    case CONTINUE:
+        doAbort = FALSE;
+        break;
 
-      case ABORT:
-	// Mark the action has having terminated
-	setTerminated(TRUE);
-	doAbort = TRUE;
-	break;
+    case ABORT:
+        // Mark the action has having terminated
+        setTerminated(TRUE);
+        doAbort = TRUE;
+        break;
 
-      case PRUNE:
-	// Don't mark anything, but return TRUE. This will tell the
-	// node not to render itself.
-	doAbort = TRUE;
-	break;
+    case PRUNE:
+        // Don't mark anything, but return TRUE. This will tell the
+        // node not to render itself.
+        doAbort = TRUE;
+        break;
 
-      case DELAY:
-	// Add the current path to the list of delayed paths
-	delayedPaths.append(getCurPath()->copy());	// Also refs the path
-	doAbort = TRUE;
-	break;
+    case DELAY:
+        // Add the current path to the list of delayed paths
+        delayedPaths.append(getCurPath()->copy());	// Also refs the path
+        doAbort = TRUE;
+        break;
     }
 
     return doAbort;
