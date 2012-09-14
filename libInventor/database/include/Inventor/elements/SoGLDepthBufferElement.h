@@ -25,6 +25,15 @@ protected:
 
     virtual ~SoGLDepthBufferElement();
 private:
+    enum masks{
+        TEST_MASK  = (1<<0),
+        WRITE_MASK = (1<<1),
+        FUNCT_MASK = (1<<2),
+        RANGE_MASK = (1<<3)
+    };
+
+    uint32_t whatChanged;
+
     void		send();
 };
 
