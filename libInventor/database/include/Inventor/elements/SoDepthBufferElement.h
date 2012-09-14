@@ -33,7 +33,7 @@ public:
     virtual void print(FILE *fp) const;
 
     static void set(SoState * state, SbBool test, SbBool write,
-                    DepthWriteFunction function, const SbVec2f & range);
+                    DepthWriteFunction function, const SbVec2f & range = getDefaultRange());
 
     static void get(SoState * state, SbBool & test_out, SbBool & write_out,
                     DepthWriteFunction & function_out, SbVec2f & range_out);

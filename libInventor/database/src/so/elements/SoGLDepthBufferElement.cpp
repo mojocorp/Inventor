@@ -45,6 +45,7 @@ SoGLDepthBufferElement::init(SoState *_state)
 {
     // Initialize base class stuff
     SoDepthBufferElement::init(_state);
+    whatChanged = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -90,14 +91,15 @@ SoGLDepthBufferElement::pop(SoState *state, const SoElement *childElt)
     capture(state);
 
     // If the previous element didn't have the same value...
-    const SoGLDepthBufferElement *child =
-            (const SoGLDepthBufferElement *) childElt;
+    const SoGLDepthBufferElement *child = (const SoGLDepthBufferElement *) childElt;
 
-    // Restore previous point size
-    if ((test != child->test) ||
-        (write != child->write) ||
-        (function != child->function) ||
-        (range != child->range)) {
+    // Restore previous values
+    if (test != child->test)   whatChanged |= TEST_MASK;
+    if (write != child->write) whatChanged |= WRITE_MASK;
+    if (function != child->function) whatChanged |= FUNCT_MASK;
+    if (range != child->range) whatChanged |= RANGE_MASK;
+
+    if (whatChanged) {
         send();
     }
 }
@@ -114,12 +116,15 @@ SoGLDepthBufferElement::setElt(SbBool _test, SbBool _write, DepthWriteFunction _
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoDepthBufferElement::setElt(test, write, function, range);
+    whatChanged = 0;
 
-    if ((test != _test) ||
-        (write != _write) ||
-        (function != _function) ||
-        (range != _range)) {
+    if (test != _test)   whatChanged |= TEST_MASK;
+    if (write != _write) whatChanged |= WRITE_MASK;
+    if (function != _function) whatChanged |= FUNCT_MASK;
+    if (range != _range) whatChanged |= RANGE_MASK;
+
+    if (whatChanged) {
+        SoDepthBufferElement::setElt(_test, _write, _function, _range);
 
         send();
     }
@@ -137,30 +142,34 @@ SoGLDepthBufferElement::send()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (test) {
-        glEnable(GL_DEPTH_TEST);
-    } else {
-        glDisable(GL_DEPTH_TEST);
+    if (whatChanged & TEST_MASK) {
+        if (test) {
+            glEnable(GL_DEPTH_TEST);
+        } else {
+            glDisable(GL_DEPTH_TEST);
+        }
     }
 
-    if (write) {
-        glDepthMask(GL_TRUE);
-    } else {
-        glDepthMask(GL_FALSE);
+    if (whatChanged & WRITE_MASK) {
+        glDepthMask(write ? GL_TRUE : GL_FALSE);
     }
 
-    switch (function) {
-    case NEVER:     glDepthFunc(GL_NEVER);     break;
-    case ALWAYS:    glDepthFunc(GL_ALWAYS);    break;
-    case LESS:      glDepthFunc(GL_LESS);      break;
-    case LEQUAL:    glDepthFunc(GL_LEQUAL);    break;
-    case EQUAL:     glDepthFunc(GL_EQUAL);     break;
-    case GEQUAL:    glDepthFunc(GL_GEQUAL);    break;
-    case GREATER:   glDepthFunc(GL_GREATER);   break;
-    case NOTEQUAL:  glDepthFunc(GL_NOTEQUAL);  break;
-    default:	// Just to shut CC up
-        break;
+    if (whatChanged & FUNCT_MASK) {
+        switch (function) {
+        case NEVER:     glDepthFunc(GL_NEVER);     break;
+        case ALWAYS:    glDepthFunc(GL_ALWAYS);    break;
+        case LESS:      glDepthFunc(GL_LESS);      break;
+        case LEQUAL:    glDepthFunc(GL_LEQUAL);    break;
+        case EQUAL:     glDepthFunc(GL_EQUAL);     break;
+        case GEQUAL:    glDepthFunc(GL_GEQUAL);    break;
+        case GREATER:   glDepthFunc(GL_GREATER);   break;
+        case NOTEQUAL:  glDepthFunc(GL_NOTEQUAL);  break;
+        default:	// Just to shut CC up
+            break;
+        }
     }
 
-    glDepthRange(range[0], range[1]);
+    if (whatChanged & RANGE_MASK) {
+        glDepthRange(range[0], range[1]);
+    }
 }
