@@ -525,11 +525,11 @@ SoIndexedNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action)
                 nsCoords = 2;
                 ntCoords = 2;
                 int32_t nDstCoords = nsCoords * ntCoords * 2;
-                dstCoords = (GLfloat *)new GLfloat[nDstCoords];
+                dstCoords = new GLfloat[nDstCoords];
                 for(int i = 0; i < 2; i++) {
                     for(int j = 0; j < 2; j++) {
-                        dstCoords[(i * 2 + j) * 2 + 0] = j;
-                        dstCoords[(i * 2 + j) * 2 + 1] = i;
+                        dstCoords[(i * 2 + j) * 2 + 0] = (GLfloat)j;
+                        dstCoords[(i * 2 + j) * 2 + 1] = (GLfloat)i;
                     }
                 }
             } else {

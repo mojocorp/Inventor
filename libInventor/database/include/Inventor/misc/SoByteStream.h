@@ -101,7 +101,7 @@ public:
     /// These take byte stream data and unconvert it back to scene graph objects.
     /// The objects are returned in a path list.
     static SoPathList * unconvert(SoByteStream *byteStream);
-    static SoPathList * unconvert(void *data, uint32_t numBytes);
+    static SoPathList * unconvert(void *data, size_t numBytes);
 
 SoEXTENDER public:
     // This allows apps to store raw data here without converting

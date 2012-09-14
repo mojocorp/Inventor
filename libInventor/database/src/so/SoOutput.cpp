@@ -586,7 +586,7 @@ SoOutput::write(const char *s)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int n = strlen(s);
+    size_t n = strlen(s);
     int nsize = (n + 3) & ~0003;
 
     if (! wroteHeader)
