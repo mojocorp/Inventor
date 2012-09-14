@@ -117,23 +117,23 @@ SoAnnotation::GLRender(SoGLRenderAction *action)
     // If the action is currently rendering the delayed paths, turn
     // off depth buffer comparisons and render like a separator
     if (action->isRenderingDelayedPaths()) {
-	SbBool zbuffEnabled = glIsEnabled(GL_DEPTH_TEST);
-	if (zbuffEnabled)
-	    glDisable(GL_DEPTH_TEST);
-	
-	SoSeparator::GLRender(action);
-	
-	// turn the depth comparisons if it was originally turned on
-	if (zbuffEnabled)
-	    glEnable(GL_DEPTH_TEST); 
+        SbBool zbuffEnabled = glIsEnabled(GL_DEPTH_TEST);
+        if (zbuffEnabled)
+            glDisable(GL_DEPTH_TEST);
+
+        SoSeparator::GLRender(action);
+
+        // turn the depth comparisons if it was originally turned on
+        if (zbuffEnabled)
+            glEnable(GL_DEPTH_TEST);
     }
 
     // Otherwise, tell the render action that we want to render this
     // node last
     else {
-	// Since we need to get a chance to add the path to the
-	// action, make sure we're not in any caches
-	SoCacheElement::invalidate(action->getState());
-	action->addDelayedPath(action->getCurPath()->copy());
+        // Since we need to get a chance to add the path to the
+        // action, make sure we're not in any caches
+        SoCacheElement::invalidate(action->getState());
+        action->addDelayedPath(action->getCurPath()->copy());
     }
 }
