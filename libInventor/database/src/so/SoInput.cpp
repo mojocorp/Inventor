@@ -1104,10 +1104,10 @@ SoInput::read(SbName &n,		// Name to read into
             }                                                                 \
             char padbuf[4];                                                   \
             makeRoomInBuf(sizeof(dglType));                                   \
-            ok = curFile->fp.read((char *)tmpBuffer, sizeof(dglType), 1);     \
+            ok = curFile->fp.read((char *)tmpBuffer, sizeof(dglType), 1) != 0;\
             dglFunc((char *)tmpBuffer, (dglType *)&tnum);                     \
             if (pad != 0) {                                                   \
-                ok = curFile->fp.read(padbuf, sizeof(char), pad);             \
+                ok = curFile->fp.read(padbuf, sizeof(char), pad) != 0;        \
             }                                                                 \
         }                                                                     \
         num = (type)tnum;                                                     \
@@ -1352,7 +1352,7 @@ SoInput::convertDouble(char *from, double *d)
 void
 SoInput::convertShortArray( char *from,
                             register short *to,
-                            register int len)
+                            register size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1387,7 +1387,7 @@ SoInput::convertShortArray( char *from,
 void
 SoInput::convertInt32Array( char *from,
                             register int32_t *to,
-                            register int len)
+                            register size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1422,7 +1422,7 @@ SoInput::convertInt32Array( char *from,
 void
 SoInput::convertFloatArray( char  *from,
                             float *to,
-                            register int len)
+                            register size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1457,7 +1457,7 @@ SoInput::convertFloatArray( char  *from,
 void
 SoInput::convertDoubleArray( char *from,
                              register double *to,
-                             register int len)
+                             register size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -2486,7 +2486,7 @@ SoInput::readDigits(char *string)
         }
     }
 
-    return s - string;
+    return (int)(s - string);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -2529,7 +2529,7 @@ SoInput::readHexDigits(char *string)
         }
     }
 
-    return s - string;
+    return (int)(s - string);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -2602,7 +2602,7 @@ SoInput::addReference(const SbName &name,	// Reference name
     // Enter in dictionary : generates a CC warning...
     curFile->refDict->enter((unsigned long) name.getString(), (void *) base);
 
-    int length = name.getLength();
+    size_t length = name.getLength();
     if (length == 0) return;
 
     const char *n = name.getString();

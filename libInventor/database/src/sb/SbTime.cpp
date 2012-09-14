@@ -113,8 +113,8 @@ SbTime::getTimeOfDay()
 #ifdef SB_OS_WIN
     struct _timeb timeBuffer;
     _ftime(&timeBuffer);
-    tm.tv_sec = timeBuffer.time;
-    tm.tv_usec = timeBuffer.millitm * 1000.0;
+    tm.tv_sec = (long)timeBuffer.time;
+    tm.tv_usec = (long)(timeBuffer.millitm * 1000.0);
 #else
     struct timeval t;
     if (-1 == gettimeofday(&t, NULL))
@@ -162,8 +162,8 @@ SbTime::setValue(double sec)
 void
 SbTime::setValue(time_t sec, long usec)  	// System long
 { 
-    tv_sec = sec; 
-    tv_usec = usec; 
+    tv_sec = (long)sec;
+    tv_usec = usec;
 }
 
 // Set time from a struct timeval

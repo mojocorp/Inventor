@@ -736,7 +736,7 @@ SoText3::getStringOffset(int line)
     }
     if (justification.getValue() == CENTER) {
         float width = myFont->getWidth(string[line]);
-        result[0] = -width/2.0;
+        result[0] = -width/2.0f;
     }
     result[1] = -line*myFont->getHeight()*spacing.getValue();
 

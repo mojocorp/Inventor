@@ -201,9 +201,8 @@ SoType::fromName(SbName name)
 #ifdef DEBUG
     const char *longestName = "/usr/lib/InventorDSO/.so";
 #endif // DEBUG
-	const char *libDir = "lib";
-	const char *abiName = "";
-	//
+
+    //
 	// XXX Alex -- add additional layer of abstraction on top
  	// of this to make porting to other platforms easier.
 	//
@@ -263,6 +262,7 @@ SoType::fromName(SbName name)
     dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
 
 #ifndef SB_OS_WIN
+  const char *libDir = "lib";
   if (dsoHandle == NULL && !isRoot) {
       sprintf(DSOFile, "./%s.so", nameChars);
       dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
@@ -291,6 +291,7 @@ SoType::fromName(SbName name)
 #define DUMMY_FUNC "initClass__%d%s%s"
 #endif
 
+    const char *abiName = "";
     sprintf(dummyFunc, DUMMY_FUNC, (int)name.getLength(), nameChars, abiName);
 
 #endif  // SB_OS_WIN

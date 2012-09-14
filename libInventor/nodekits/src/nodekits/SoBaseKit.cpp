@@ -684,7 +684,7 @@ SoBaseKit::set(const SbString & nameValuePairListString)
 	if(!*c) 		// no more data, return
 	    break;
 
-	int length = c - string + 1;
+    size_t length = c - string + 1;
 	char *desiredNodeName = new char [length];
 	strncpy(desiredNodeName, string, c - string);
 	desiredNodeName[c - string] = 0;
@@ -1469,7 +1469,7 @@ SoBaseKit::getBoundingBox( SoGetBoundingBoxAction *action )
     }
     // Now, set the center to be the average:
     if (numCenters != 0)
-	action->setCenter(totalCenter / numCenters, FALSE);
+        action->setCenter(totalCenter / (float)numCenters, FALSE);
 }
 
 void 

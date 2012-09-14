@@ -346,7 +346,7 @@ SoBitmapFontCache::callLists(const SbString &string)
 
     }
     const char *str = string.getString();
-    glCallLists(string.getLength(), GL_UNSIGNED_BYTE, str);
+    glCallLists((GLsizei)string.getLength(), GL_UNSIGNED_BYTE, str);
 }
 
 ////////////////////////////////////////////////////////////////////////
