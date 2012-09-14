@@ -63,14 +63,6 @@
 #include <float.h>
 #include <vector>
 
-// Formats for 1-4 component textures
-static GLenum formats[] = {
-    GL_LUMINANCE,
-    GL_LUMINANCE_ALPHA,
-    GL_RGB,
-    GL_RGBA
-};
-
 SO_ELEMENT_SOURCE(SoGLTextureImageElement);
 
 ////////////////////////////////////////////////////////////////////////
@@ -352,8 +344,8 @@ SoGLTextureImageElement::sendTex(SoState *state)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Not default
     
     // Format in memory
-    int format         = formats[numComponents-1];
-    int internalFormat = formats[numComponents-1];
+    int format         = image.getFormat();
+    int internalFormat = image.getFormat();
 
     SbBool buildList = !SoCacheElement::anyOpen(state);
     if (buildList) {

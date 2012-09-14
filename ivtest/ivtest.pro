@@ -38,6 +38,7 @@ SOURCES += main.cpp \
            testEndian.cpp \
            testFile.cpp \
            testOffscreen.cpp \
-           testModels.cpp
+           testModels.cpp \
+           testImage.cpp
 
 LIBS += -L../build -lgtest
