@@ -28,7 +28,6 @@ public:
     SoSFBool    write;
     SoSFEnum    function;
     SoSFVec2f   range;
-    SoSFBool    clearBuffer;
 
 SoINTERNAL public:
         static void initClass();

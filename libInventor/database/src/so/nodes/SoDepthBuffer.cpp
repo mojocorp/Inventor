@@ -85,4 +85,21 @@ SoDepthBuffer::GLRender(SoGLRenderAction * action)
 {
     SoState * state = action->getState();
 
+    SbBool    curtest;
+    SbBool    curwrite;
+    SoDepthBufferElement::DepthWriteFunction    curfunc;
+    SbVec2f   currange;
+
+    SoDepthBufferElement::get(state, curtest, curwrite, curfunc, currange);
+
+    if (!test.isIgnored())
+        curtest = test.getValue();
+    if (!write.isIgnored())
+        curwrite = write.getValue();
+    if (!function.isIgnored())
+        curfunc = (SoDepthBufferElement::DepthWriteFunction)function.getValue();
+    if (!range.isIgnored())
+        currange = range.getValue();
+
+    SoDepthBufferElement::set(state, curtest, curwrite, curfunc, currange);
 }
