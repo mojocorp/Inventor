@@ -587,7 +587,7 @@ SoOutput::write(const char *s)
 ////////////////////////////////////////////////////////////////////////
 {
     size_t n = strlen(s);
-    int nsize = (n + 3) & ~0003;
+    size_t nsize = (n + 3) & ~0003;
 
     if (! wroteHeader)
         writeHeader();
@@ -610,7 +610,7 @@ SoOutput::write(const char *s)
             curBuf += 4;
             memcpy((void *)curBuf, (const void *)s, n);
             curBuf += n;
-            for (int i=0; i<(nsize-n); i++)
+            for (size_t i=0; i<(nsize-n); i++)
                 *curBuf++ = 0;
         }
         else {
@@ -620,7 +620,7 @@ SoOutput::write(const char *s)
             DGL_HTON_INT32(m, n);
             fp.write(&m, sizeof(int), 1);
             memcpy(tmpBuffer, (const void *)s, n);
-            for (int i=0; i<(nsize-n); i++)
+            for (size_t i=0; i<(nsize-n); i++)
                 tmpBuffer[n+i] = 0;
             fp.write(tmpBuffer, sizeof(char), nsize);
             fp.flush();

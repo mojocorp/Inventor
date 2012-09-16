@@ -2610,7 +2610,7 @@ SoInput::addReference(const SbName &name,	// Reference name
     // If we're reading a 1.0 file and the name is an '_' followed by
     // all digits, don't name the node.
     if (n[0] == '_' &&  curFile->ivVersion == 1.0f) {
-        int i;
+        size_t i;
         for (i = 1; i < length; i++) {
             if (!isdigit(n[i])) break;
         }
