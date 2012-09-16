@@ -291,7 +291,7 @@ SbString::deleteSubString(int startChar, int endChar)
 
         size_t	numToMove = len - endChar - 1;
 
-        for (int i = 0; i < numToMove; i++)
+        for (size_t i = 0; i < numToMove; i++)
             string[startChar + i] = string[endChar + i + 1];
         string[startChar + numToMove] = '\0';
     }
