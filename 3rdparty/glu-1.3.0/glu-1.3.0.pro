@@ -14,20 +14,20 @@ CONFIG(release, debug|release) {
 
 DEPENDPATH += . \
               sgi \
-              include\GL \
-              sgi\include \
-              sgi\libtess \
-              sgi\libutil \
-              sgi\libnurbs\interface \
-              sgi\libnurbs\internals \
-              sgi\libnurbs\nurbtess
+              include/GL \
+              sgi/include \
+              sgi/libtess \
+              sgi/libutil \
+              sgi/libnurbs/interface \
+              sgi/libnurbs/internals \
+              sgi/libnurbs/nurbtess
 INCLUDEPATH += include \
-               sgi\include \
-               sgi\libtess \
-               sgi\libutil \
-               sgi\libnurbs\interface \
-               sgi\libnurbs\internals \
-               sgi\libnurbs\nurbtess
+               sgi/include \
+               sgi/libtess \
+               sgi/libutil \
+               sgi/libnurbs/interface \
+               sgi/libnurbs/internals \
+               sgi/libnurbs/nurbtess
 
 # Input
 HEADERS += include/GL/glu.h \
