@@ -105,6 +105,7 @@ SoElement::initElements()
     SoSwitchElement::initClass();
     SoTextureCoordinateBindingElement::initClass();
     SoTextureCoordinateElement::initClass();
+    SoTextureCoordinate3Element::initClass();
     SoTextureImageElement::initClass();
     SoTextureMatrixElement::initClass();
     SoTextureQualityElement::initClass();
@@ -137,6 +138,7 @@ SoElement::initElements()
     SoGLRenderPassElement::initClass();
     SoGLShapeHintsElement::initClass();
     SoGLTextureCoordinateElement::initClass();
+    SoGLTextureCoordinate3Element::initClass();
     SoGLTextureEnabledElement::initClass();
     SoGLTextureImageElement::initClass();
     SoGLTextureMatrixElement::initClass();
