@@ -91,6 +91,7 @@
 #include <Inventor/elements/SoGLRenderPassElement.h>
 #include <Inventor/elements/SoGLShapeHintsElement.h>
 #include <Inventor/elements/SoGLTextureCoordinateElement.h>
+#include <Inventor/elements/SoGLTextureCoordinate3Element.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
 #include <Inventor/elements/SoGLTextureImageElement.h>
 #include <Inventor/elements/SoGLTextureMatrixElement.h>
@@ -121,6 +122,7 @@
 #include <Inventor/elements/SoSwitchElement.h>
 #include <Inventor/elements/SoTextureCoordinateBindingElement.h>
 #include <Inventor/elements/SoTextureCoordinateElement.h>
+#include <Inventor/elements/SoTextureCoordinate3Element.h>
 #include <Inventor/elements/SoTextureImageElement.h>
 #include <Inventor/elements/SoTextureMatrixElement.h>
 #include <Inventor/elements/SoTextureQualityElement.h>

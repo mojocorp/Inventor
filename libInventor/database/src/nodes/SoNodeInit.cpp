@@ -148,6 +148,7 @@ SoNode::initClasses()
     SoText2::initClass();
     SoText3::initClass();
     SoTextureCoordinate2::initClass();
+    SoTextureCoordinate3::initClass();
     SoTextureCoordinateBinding::initClass();
     SoTextureCoordinateFunction::initClass();
     SoTextureCoordinateDefault::initClass();

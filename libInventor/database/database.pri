@@ -160,6 +160,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoGLTextureEnabledElement.h \
            database/include/Inventor/elements/SoGLTextureImageElement.h \
            database/include/Inventor/elements/SoGLTextureMatrixElement.h \
+           database/include/Inventor/elements/SoGLTextureCoordinate3Element.h \
            database/include/Inventor/elements/SoGLTextureUnitElement.h \
            database/include/Inventor/elements/SoGLUpdateAreaElement.h \
            database/include/Inventor/elements/SoGLViewingMatrixElement.h \
@@ -194,6 +195,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoTextureImageElement.h \
            database/include/Inventor/elements/SoTextureMatrixElement.h \
            database/include/Inventor/elements/SoTextureQualityElement.h \
+           database/include/Inventor/elements/SoTextureCoordinate3Element.h \
            database/include/Inventor/elements/SoTextureUnitElement.h \
            database/include/Inventor/elements/SoTransparencyTypeElement.h \
            database/include/Inventor/elements/SoUnitsElement.h \
@@ -409,6 +411,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/nodes/SoTextureCoordinateFunction.h \
            database/include/Inventor/nodes/SoTextureCoordinateObject.h \
            database/include/Inventor/nodes/SoTextureCoordinatePlane.h \
+           database/include/Inventor/nodes/SoTextureCoordinate3.h \
            database/include/Inventor/nodes/SoTextureUnit.h \
            database/include/Inventor/nodes/SoTransform.h \
            database/include/Inventor/nodes/SoTransformation.h \
@@ -634,6 +637,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/elements/SoGLTextureEnabledElement.cpp \
            database/src/elements/SoGLTextureImageElement.cpp \
            database/src/elements/SoGLTextureMatrixElement.cpp \
+           database/src/elements/SoGLTextureCoordinate3Element.cpp \
            database/src/elements/SoGLTextureUnitElement.cpp \
            database/src/elements/SoGLUpdateAreaElement.cpp \
            database/src/elements/SoGLViewingMatrixElement.cpp \
@@ -666,6 +670,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/elements/SoTextureImageElement.cpp \
            database/src/elements/SoTextureMatrixElement.cpp \
            database/src/elements/SoTextureQualityElement.cpp \
+           database/src/elements/SoTextureCoordinate3Element.cpp \
            database/src/elements/SoTextureUnitElement.cpp \
            database/src/elements/SoTransparencyTypeElement.cpp \
            database/src/elements/SoUnitsElement.cpp \
@@ -855,6 +860,8 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/nodes/SoTextureCoordinateFunction.cpp \
            database/src/nodes/SoTextureCoordinateObject.cpp \
            database/src/nodes/SoTextureCoordinatePlane.cpp \
+           database/src/nodes/SoTextureCoordinate3.cpp \
+           database/src/nodes/SoTextureUnit.cpp \
            database/src/nodes/SoTransform.cpp \
            database/src/nodes/SoTransformation.cpp \
            database/src/nodes/SoTransformSeparator.cpp \
