@@ -127,13 +127,17 @@ class INVENTOR_API SoTexture2 : public SoNode {
     enum Model {
         MODULATE    = GL_MODULATE,  ///< The texture color is multiplied by the surface color
         DECAL       = GL_DECAL,     ///< The texture color replaces the surface color
-        BLEND       = GL_BLEND      ///< Blends between the surface color and a specified blend color
+        BLEND       = GL_BLEND,     ///< Blends between the surface color and a specified blend color
+        REPLACE     = GL_REPLACE    ///< The texture color replaces the surface color (OpenGL >= 1.1)
     };
 
     /// Texture wrap type
     enum Wrap {
-        REPEAT      = GL_REPEAT,    ///< Repeats texture outside 0-1 texture coordinate range
-        CLAMP       = GL_CLAMP      ///< Clamps texture coordinates to lie within 0-1 range
+        REPEAT          = GL_REPEAT,          ///< Repeats texture outside 0-1 texture coordinate range
+        CLAMP           = GL_CLAMP,           ///< Clamps texture coordinates to lie within 0-1 range
+        CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER, ///< (OpenGL >= 1.3)
+        CLAMP_TO_EDGE   = GL_CLAMP_TO_EDGE,   ///< (OpenGL >= 1.2)
+        MIRRORED_REPEAT = GL_MIRRORED_REPEAT  ///< (OpenGL >= 1.4)
     };
 
     // Fields.
