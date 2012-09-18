@@ -153,6 +153,7 @@ SoNode::initClasses()
     SoTextureCoordinateDefault::initClass();
     SoTextureCoordinateEnvironment::initClass();
     SoTextureCoordinatePlane::initClass();
+    SoTextureUnit::initClass();
     SoTexture2::initClass();
     SoTexture2Transform::initClass();
     SoTransform::initClass();
