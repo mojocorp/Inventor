@@ -6,6 +6,7 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SbVec2s.h>
+#include <Inventor/SbVec3s.h>
 #include <Inventor/SbRefPtr.h>
 
 class INVENTOR_API SbImage {
@@ -20,15 +21,15 @@ public:
     };
 
     SbImage();
-    SbImage(const SbVec2s &size, Format fmt);
     SbImage(const SbVec2s &size, Format fmt, const unsigned char *bytes);
+    SbImage(const SbVec3s &size, Format fmt, const unsigned char *bytes);
     SbImage(const SbString & filename);
 
     /// Destructor.
     virtual ~SbImage();
 
     /// Returns the size of the image.
-    const SbVec2s & getSize() const;
+    const SbVec3s & getSize() const;
 
     /// Return the internal format.
     Format getFormat() const;
@@ -48,9 +49,8 @@ public:
     /// Loads an image from the file with the given filename.
     bool load(const SbString & filename);
 
-    void setValue(const SbVec2s & size,
-                  Format fmt,
-                  const unsigned char *bytes);
+    void setValue(const SbVec2s & size, Format fmt, const unsigned char *bytes);
+    void setValue(const SbVec3s & size, Format fmt, const unsigned char *bytes);
 
     /// Assigns a shallow copy of the given image to this image and returns a reference to this image.
     const SbImage & operator =(const SbImage &other);
@@ -73,11 +73,9 @@ private:
     public:
         SbImageRef();
         SbImageRef(const SbImageRef * other);
-        SbImageRef(const SbVec2s & size, Format format, const unsigned char * bytes = NULL);
+        SbImageRef(const SbVec3s & size, Format format, const unsigned char * bytes = NULL);
 
-        void setValue(const SbVec2s & size,
-                      Format format,
-                      const unsigned char * bytes);
+        void setValue(const SbVec3s & size, Format format, const unsigned char * bytes);
         bool isNull() const;
         int getNumComponents() const;
         bool hasAlphaChannel() const;
@@ -86,7 +84,7 @@ private:
         bool operator ==(const SbImageRef &other) const;
         void dispose();
 
-        SbVec2s  size;          // Width and height of image
+        SbVec3s  size;          // Width and height of image
         Format format;          // Image format
         unsigned char * bytes;  // Array of pixels
     private:

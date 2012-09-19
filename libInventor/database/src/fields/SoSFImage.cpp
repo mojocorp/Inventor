@@ -123,7 +123,7 @@ SoSFImage::getValue(SbVec2s &s, int &nc) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    s = value.getSize();
+    s = SbVec2s(value.getSize().getValue());
     nc = value.getNumComponents();
 
     return value.getConstBytes();
@@ -141,7 +141,7 @@ SoSFImage::startEditing(SbVec2s &s, int &nc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    s = value.getSize();
+    s = SbVec2s(value.getSize().getValue());
     nc = value.getNumComponents();
     return value.getBytes();
 }
@@ -196,7 +196,7 @@ SoSFImage::readValue(SoInput *in)
     break;
     }
 
-    SbImage image = SbImage(size, fmt);
+    SbImage image = SbImage(size, fmt, NULL);
     unsigned char *bytes = image.getBytes();
 
     int byte = 0;
@@ -249,7 +249,7 @@ SoSFImage::writeValue(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbVec2s & size = value.getSize();
+    const SbVec3s & size = value.getSize();
     int numComponents = value.getNumComponents();
     const unsigned char * bytes = value.getConstBytes();
 
