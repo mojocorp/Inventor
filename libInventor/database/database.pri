@@ -56,6 +56,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/SbVec2f.h \
            database/include/Inventor/SbVec2s.h \
            database/include/Inventor/SbVec2i32.h \
+           database/include/Inventor/SbVec3s.h \
            database/include/Inventor/SbVec3f.h \
            database/include/Inventor/SbVec3i32.h \
            database/include/Inventor/SbVec3d.h \
@@ -517,6 +518,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/SbVec2f.cpp \
            database/src/SbVec2s.cpp \
            database/src/SbVec2i32.cpp \
+           database/src/SbVec3s.cpp \
            database/src/SbVec3f.cpp \
            database/src/SbVec3i32.cpp \
            database/src/SbVec3d.cpp \
