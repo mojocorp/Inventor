@@ -5,19 +5,19 @@
 #include <stdlib.h>
 
 SbImage::SbImageRef::SbImageRef()
-    : size(0,0), format(Format_Invalid), bytes(0)
+    : size(0,0,0), format(Format_Invalid), bytes(0)
 {
 
 }
 
 SbImage::SbImageRef::SbImageRef(const SbImageRef * other)
-   : size(0,0), format(Format_Invalid), bytes(0)
+   : size(0,0,0), format(Format_Invalid), bytes(0)
 {
     setValue(other->size, other->format, other->bytes);
 }
 
-SbImage::SbImageRef::SbImageRef(const SbVec2s &_size, Format _format, const unsigned char *_bytes)
-    : size(0,0), format(Format_Invalid), bytes(0)
+SbImage::SbImageRef::SbImageRef(const SbVec3s &_size, Format _format, const unsigned char *_bytes)
+    : size(0,0,0), format(Format_Invalid), bytes(0)
 {
     setValue(_size, _format, _bytes);
 }
@@ -27,7 +27,7 @@ SbImage::SbImageRef::~SbImageRef()
     dispose();
 }
 
-void SbImage::SbImageRef::setValue(const SbVec2s &_size,
+void SbImage::SbImageRef::setValue(const SbVec3s &_size,
                                    Format _format,
                                    const unsigned char *_bytes)
 {
@@ -57,7 +57,7 @@ bool SbImage::SbImageRef::read(const SbString & filename)
     w = h = 0;
 
     if (ReadImage(filename.getString(), w, h, nc, bytes)) {
-        size = SbVec2s(w,h);
+        size = SbVec3s(w,h,1);
         switch(nc){
         case 1: format = Format_Luminance; break;
         case 2: format = Format_Luminance_Alpha; break;
@@ -105,7 +105,7 @@ bool SbImage::SbImageRef::operator ==(const SbImageRef &other) const
 
 void SbImage::SbImageRef::dispose()
 {
-    size.setValue(0,0);
+    size.setValue(0,0,0);
     format = Format_Invalid;
     delete [] bytes;
     bytes = NULL;
@@ -126,13 +126,13 @@ SbImage::SbImage()
 
 }
 
-SbImage::SbImage(const SbVec2s &size, Format fmt)
-    : d(new SbImageRef(size, fmt))
+SbImage::SbImage(const SbVec2s &size, Format fmt, const unsigned char *bytes)
+    : d(new SbImageRef(SbVec3s(size[0], size[1], 1), fmt, bytes))
 {
 
 }
 
-SbImage::SbImage(const SbVec2s &size, Format fmt, const unsigned char *bytes)
+SbImage::SbImage(const SbVec3s &size, Format fmt, const unsigned char *bytes)
     : d(new SbImageRef(size, fmt, bytes))
 {
 
@@ -165,12 +165,12 @@ SbImage::~SbImage()
 //
 // Use: public
 
-const SbVec2s&
+const SbVec3s&
 SbImage::getSize() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static SbVec2s dummy(0, 0);
+    static SbVec3s dummy(0, 0, 0);
     return d ? d->size : dummy;
 }
 
@@ -289,6 +289,28 @@ SbImage::load(const SbString & fname)
 
 void
 SbImage::setValue(const SbVec2s &size,
+                  Format fmt,
+                  const unsigned char *bytes)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    detach();
+
+    if (!d)
+        d = new SbImageRef;
+
+    d->setValue(SbVec3s(size[0], size[1], 1), fmt, bytes);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//
+//
+// Use: public
+
+void
+SbImage::setValue(const SbVec3s &size,
                   Format fmt,
                   const unsigned char *bytes)
 //

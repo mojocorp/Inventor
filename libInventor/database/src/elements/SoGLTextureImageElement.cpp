@@ -314,10 +314,10 @@ SoGLTextureImageElement::sendTex(SoState *state)
         return;
     }
 
-    const SbVec2s & size = image.getSize();
+    const SbVec3s & size = image.getSize();
     int numComponents = image.getNumComponents();
 
-    SbVec2s newSize = size;
+    SbVec3s newSize = size;
     if ( !GLEW_ARB_texture_non_power_of_two ) {
         // Scale the image to closest power of 2 smaller than maximum
         // texture size:
