@@ -111,21 +111,21 @@ SoLazyElement::init(SoState *)
     ivState.colorMaterial	= FALSE;
     ivState.blending		= FALSE;
     ivState.lightModel		= PHONG;
-    
+
     // Initialize default color storage if not already done
     if (defaultDiffuseColor == NULL) {
-	defaultDiffuseColor	= new SbColor;
-	*defaultDiffuseColor	= getDefaultDiffuse();
-	defaultTransparency	= new float;
-	*defaultTransparency	= getDefaultTransparency();
-	defaultColorIndices	= new int32_t;
-	*defaultColorIndices	= getDefaultColorIndex();
-	defaultPackedColor	= new uint32_t;
-	*defaultPackedColor	= getDefaultPacked();
+        defaultDiffuseColor	= new SbColor;
+        *defaultDiffuseColor	= getDefaultDiffuse();
+        defaultTransparency	= new float;
+        *defaultTransparency	= getDefaultTransparency();
+        defaultColorIndices	= new int32_t;
+        *defaultColorIndices	= getDefaultColorIndex();
+        defaultPackedColor	= new uint32_t;
+        *defaultPackedColor	= getDefaultPacked();
     }
-    
+
     //following value will be matched with the default color, must
-    //differ from 1 (invalid) and any  legitimate nodeid. 
+    //differ from 1 (invalid) and any  legitimate nodeid.
     ivState.diffuseNodeId	= 0;
     ivState.transpNodeId	= 0;
     //zero corresponds to transparency off (default).
@@ -139,213 +139,213 @@ SoLazyElement::init(SoState *)
     ivState.numTransparencies	= 1;
     ivState.packed		= FALSE;
     ivState.packedTransparent	= FALSE;
-    ivState.transpType		= SoGLRenderAction::SCREEN_DOOR;  
+    ivState.transpType		= SoGLRenderAction::SCREEN_DOOR;
     ivState.cacheLevelSetBits	= 0;
     ivState.cacheLevelSendBits	= 0;
-    
+
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the indexed diffuse color in the element 
+//    get the indexed diffuse color in the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 const SbColor &
-SoLazyElement::getDiffuse(SoState* state, int index) 
+SoLazyElement::getDiffuse(SoState* state, int index)
 {
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);  
+    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);
 #ifdef DEBUG
     if (index > curElt->ivState.numDiffuseColors || index < 0){
-	SoDebugError::post("SoLazyElement::getDiffuse", 
-			"invalid index");
+        SoDebugError::post("SoLazyElement::getDiffuse",
+                           "invalid index");
         return(*defaultDiffuseColor);
     }
 #endif
     if (!curElt->ivState.packed) return (curElt->ivState.diffuseColors[index]);
-    unpacker = SbColor( 
-       ((curElt->ivState.packedColors[index] & 0xff000000) >> 24) * 1.0f/255,  
-       ((curElt->ivState.packedColors[index] & 0xff0000) >> 16) * 1.0f/255,  		
-       ((curElt->ivState.packedColors[index] & 0xff00)>> 8) * 1.0f/255); 
+    unpacker = SbColor(
+                ((curElt->ivState.packedColors[index] & 0xff000000) >> 24) * 1.0f/255,
+                ((curElt->ivState.packedColors[index] & 0xff0000) >> 16) * 1.0f/255,
+                ((curElt->ivState.packedColors[index] & 0xff00)>> 8) * 1.0f/255);
     return unpacker;
-      
+
 }
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the indexed transparency in the element 
+//    get the indexed transparency in the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 float
-SoLazyElement::getTransparency(SoState* state, int index)  
+SoLazyElement::getTransparency(SoState* state, int index)
 {
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);  
+    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);
 #ifdef DEBUG
     if (index > curElt->ivState.numTransparencies || index < 0){
-	SoDebugError::post("SoLazyElement::getTransparency", 
-			"invalid index");
+        SoDebugError::post("SoLazyElement::getTransparency",
+                           "invalid index");
         return(*curElt->defaultTransparency);
     }
 #endif
     if (!curElt->ivState.packed) return (curElt->ivState.transparencies[index]);
     return( 1.0f - ((curElt->ivState.packedColors[index] & 0xff) * 1.0f/255));
-             
+
 }
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the color index from the element 
+//    get the color index from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 int32_t
-SoLazyElement::getColorIndex(SoState* state, int index)  
+SoLazyElement::getColorIndex(SoState* state, int index)
 {
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);  
+    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);
 #ifdef DEBUG
     if (index > curElt->ivState.numDiffuseColors || index < 0){
-	SoDebugError::post("SoLazyElement::getColorIndex", 
-			"invalid index");
+        SoDebugError::post("SoLazyElement::getColorIndex",
+                           "invalid index");
         return(curElt->getDefaultColorIndex());
     }
 #endif
     return (curElt->ivState.colorIndices[index]);
-             
+
 }
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the packed color from the element 
+//    get the packed color from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 const uint32_t*
-SoLazyElement::getPackedColors(SoState* state) 
-{ 
+SoLazyElement::getPackedColors(SoState* state)
+{
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);    
+    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);
     return curElt->ivState.packedColors;
 }
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the color index from the element 
+//    get the color index from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 const int32_t *
-SoLazyElement::getColorIndices(SoState* state) 
-{   
+SoLazyElement::getColorIndices(SoState* state)
+{
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);           
+    if(state->isCacheOpen()) curElt->registerGetDependence(state, DIFFUSE_MASK);
     return curElt->ivState.colorIndices;
 }
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the ambient color from the element 
+//    get the ambient color from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 const SbColor&
-SoLazyElement::getAmbient(SoState* state) 
+SoLazyElement::getAmbient(SoState* state)
 {
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) curElt->registerGetDependence(state, AMBIENT_MASK);      
+    if(state->isCacheOpen()) curElt->registerGetDependence(state, AMBIENT_MASK);
     return curElt->ivState.ambientColor;
-} 
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the emissive color from the element 
+//    get the emissive color from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 const SbColor&
-SoLazyElement::getEmissive(SoState* state) 
-{ 
+SoLazyElement::getEmissive(SoState* state)
+{
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) curElt->registerGetDependence(state, EMISSIVE_MASK);   
+    if(state->isCacheOpen()) curElt->registerGetDependence(state, EMISSIVE_MASK);
     return curElt->ivState.emissiveColor;
-} 
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the specular color from the element 
+//    get the specular color from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 const SbColor&
-SoLazyElement::getSpecular(SoState* state) 
-{   
+SoLazyElement::getSpecular(SoState* state)
+{
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) curElt->registerGetDependence(state, SPECULAR_MASK); 
+    if(state->isCacheOpen()) curElt->registerGetDependence(state, SPECULAR_MASK);
     return curElt->ivState.specularColor;
-} 
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the shininess from the element 
+//    get the shininess from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 float
-SoLazyElement::getShininess(SoState* state) 
-{	
+SoLazyElement::getShininess(SoState* state)
+{
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) 
-	curElt->registerGetDependence(state, SHININESS_MASK);     
+    if(state->isCacheOpen())
+        curElt->registerGetDependence(state, SHININESS_MASK);
     return curElt->ivState.shininess;
-} 
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the color material state from the element 
+//    get the color material state from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 SbBool
-SoLazyElement::getColorMaterial(SoState* state) 
-{   
+SoLazyElement::getColorMaterial(SoState* state)
+{
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) 
-	curElt->registerGetDependence(state, COLOR_MATERIAL_MASK);  
+    if(state->isCacheOpen())
+        curElt->registerGetDependence(state, COLOR_MATERIAL_MASK);
     return curElt->ivState.colorMaterial;
-}  
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the blending state from the element 
+//    get the blending state from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 SbBool
-SoLazyElement::getBlending(SoState* state) 
-{   
+SoLazyElement::getBlending(SoState* state)
+{
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) curElt->registerGetDependence(state, BLENDING_MASK);  
+    if(state->isCacheOpen()) curElt->registerGetDependence(state, BLENDING_MASK);
     return curElt->ivState.blending;
-}  
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    get the light model from the element 
+//    get the light model from the element
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
 int32_t
-SoLazyElement::getLightModel(SoState* state) 
-{   
+SoLazyElement::getLightModel(SoState* state)
+{
     SoLazyElement* curElt = getInstance(state);
-    if(state->isCacheOpen()) 
-	curElt->registerGetDependence(state, LIGHT_MODEL_MASK);  
+    if(state->isCacheOpen())
+        curElt->registerGetDependence(state, LIGHT_MODEL_MASK);
     return curElt->ivState.lightModel;
-}   
+}
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -353,213 +353,213 @@ SoLazyElement::getLightModel(SoState* state)
 //
 // use:  public, SoEXTENDER, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
-SoLazyElement::setDiffuse(SoState *state, SoNode *node, int32_t numColors, 
-	    const SbColor *colors, SoColorPacker *cPacker)
+///////////////////////////////////////////////////////////////////////
+void
+SoLazyElement::setDiffuse(SoState *state, SoNode *node, int32_t numColors,
+                          const SbColor *colors, SoColorPacker *cPacker)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     //Because we are getting the transparency value from state, there
     //is a get-dependence
     if(state->isCacheOpen())curElt->registerGetDependence(state, DIFFUSE_MASK);
     if (curElt->ivState.diffuseNodeId !=  node->getNodeId() ||
-	 (!cPacker->transpMatch(curElt->ivState.transpNodeId))){
-	getWInstance(state)->setDiffuseElt(node,  numColors, colors, cPacker);
+            (!cPacker->transpMatch(curElt->ivState.transpNodeId))){
+        getWInstance(state)->setDiffuseElt(node,  numColors, colors, cPacker);
     }
-    else if (state->isCacheOpen()){       
-	curElt->registerRedundantSet(state, DIFFUSE_MASK);
+    else if (state->isCacheOpen()){
+        curElt->registerRedundantSet(state, DIFFUSE_MASK);
     }
 }
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for transparency 
+// Description: static set() method for transparency
 //
 // use:  public, SoEXTENDER, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
-SoLazyElement::setTransparency(SoState *state, SoNode *node, int32_t numTransp, 
-	    const float *transp, SoColorPacker *cPacker)
+///////////////////////////////////////////////////////////////////////
+void
+SoLazyElement::setTransparency(SoState *state, SoNode *node, int32_t numTransp,
+                               const float *transp, SoColorPacker *cPacker)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     //Because we are getting the diffuse value from state, there
     //is a get-dependence
     if(state->isCacheOpen())curElt->registerGetDependence(state, DIFFUSE_MASK);
-    
+
     uint32_t testNodeId;
     if(numTransp == 1 && transp[0] == 0.0) testNodeId = 0;
     else testNodeId = node->getNodeId();
-    
-    if ((curElt->ivState.transpNodeId != testNodeId) ||	
-	(!cPacker->diffuseMatch(curElt->ivState.diffuseNodeId)))
-	getWInstance(state)->setTranspElt(node, numTransp, transp, cPacker);
-    else if (state->isCacheOpen()) 
-	curElt->registerRedundantSet(state, TRANSPARENCY_MASK|DIFFUSE_MASK); 
-}	    
+
+    if ((curElt->ivState.transpNodeId != testNodeId) ||
+            (!cPacker->diffuseMatch(curElt->ivState.diffuseNodeId)))
+        getWInstance(state)->setTranspElt(node, numTransp, transp, cPacker);
+    else if (state->isCacheOpen())
+        curElt->registerRedundantSet(state, TRANSPARENCY_MASK|DIFFUSE_MASK);
+}
 ///////////////////////////////////////////////////////////////////////
 //
 // Description: static set() method for color indices
 //
 // use:  public, SoEXTENDER, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
-SoLazyElement::setColorIndices(SoState *state, SoNode *node, int32_t numIndices, 
-	    const int32_t *indices)
+///////////////////////////////////////////////////////////////////////
+void
+SoLazyElement::setColorIndices(SoState *state, SoNode *node, int32_t numIndices,
+                               const int32_t *indices)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (curElt->ivState.diffuseNodeId !=  node->getNodeId())
-	getWInstance(state)->setColorIndexElt(node, numIndices, indices);
-    else if (state->isCacheOpen()) 
-	curElt->registerRedundantSet(state, DIFFUSE_MASK); 
-}	    
+        getWInstance(state)->setColorIndexElt(node, numIndices, indices);
+    else if (state->isCacheOpen())
+        curElt->registerRedundantSet(state, DIFFUSE_MASK);
+}
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for transparencyType 
+// Description: static set() method for transparencyType
 //
 // use:  public, SoINTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
+///////////////////////////////////////////////////////////////////////
+void
 SoLazyElement::setTransparencyType(SoState *state, int32_t type)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (curElt->ivState.transpType != type)
-	curElt->setTranspTypeElt( type);  
+        curElt->setTranspTypeElt( type);
 }
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for packed colors 
+// Description: static set() method for packed colors
 //
 // use:  public, SoEXTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
+///////////////////////////////////////////////////////////////////////
+void
 SoLazyElement::setPacked(SoState *state, SoNode *node,
-        int32_t numColors, const uint32_t *colors, bool hasTransparency)
+                         int32_t numColors, const uint32_t *colors, bool hasTransparency)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
-    if (curElt->ivState.diffuseNodeId != (node->getNodeId()) ||	    
-	    (!(curElt->ivState.packed)) || 
-	    (curElt->ivState.packedColors != colors)){
-    getWInstance(state)->setPackedElt( node, numColors, colors, hasTransparency);
-    } 
-    else if (state->isCacheOpen()) 
+    if (curElt->ivState.diffuseNodeId != (node->getNodeId()) ||
+            (!(curElt->ivState.packed)) ||
+            (curElt->ivState.packedColors != colors)){
+        getWInstance(state)->setPackedElt( node, numColors, colors, hasTransparency);
+    }
+    else if (state->isCacheOpen())
         curElt->registerRedundantSet(state, DIFFUSE_MASK|TRANSPARENCY_MASK);
 }
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for ambient color 
+// Description: static set() method for ambient color
 //
 // use:  public, SoEXTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
+///////////////////////////////////////////////////////////////////////
+void
 SoLazyElement::setAmbient(SoState *state, const SbColor* color)
-{    
+{
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (*color != curElt->ivState.ambientColor){
-	getWInstance(state)->setAmbientElt(color);
-    }  
-    else if (state->isCacheOpen()){	    
-	curElt->registerRedundantSet(state, AMBIENT_MASK);
+        getWInstance(state)->setAmbientElt(color);
     }
-}	
+    else if (state->isCacheOpen()){
+        curElt->registerRedundantSet(state, AMBIENT_MASK);
+    }
+}
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for emissive color 
+// Description: static set() method for emissive color
 //
 // use:  public, SoEXTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
+///////////////////////////////////////////////////////////////////////
+void
 SoLazyElement::setEmissive(SoState *state, const SbColor* color)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (*color != curElt->ivState.emissiveColor)
-	getWInstance(state)->setEmissiveElt(color);
-    else if  (state->isCacheOpen())	    
-	curElt->registerRedundantSet(state, EMISSIVE_MASK);
-}	
+        getWInstance(state)->setEmissiveElt(color);
+    else if  (state->isCacheOpen())
+        curElt->registerRedundantSet(state, EMISSIVE_MASK);
+}
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for specular color 
+// Description: static set() method for specular color
 //
 // use:  public, SoEXTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
+///////////////////////////////////////////////////////////////////////
+void
 SoLazyElement::setSpecular(SoState *state, const SbColor* color)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (*color != curElt->ivState.specularColor)
-	getWInstance(state)->setSpecularElt(color);	    
-    else if   (state->isCacheOpen()) 	    
-	curElt->registerRedundantSet(state, SPECULAR_MASK);
+        getWInstance(state)->setSpecularElt(color);
+    else if   (state->isCacheOpen())
+        curElt->registerRedundantSet(state, SPECULAR_MASK);
 }
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for shininess 
+// Description: static set() method for shininess
 //
 // use:  public, SoEXTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
+///////////////////////////////////////////////////////////////////////
+void
 SoLazyElement::setShininess(SoState *state, float value)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (fabsf(value - curElt->ivState.shininess)> SO_LAZY_SHINY_THRESHOLD)
-	getWInstance(state)->setShininessElt(value);
+        getWInstance(state)->setShininessElt(value);
     else if (state->isCacheOpen())
-	curElt->registerRedundantSet(state, SHININESS_MASK);
+        curElt->registerRedundantSet(state, SHININESS_MASK);
 }
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for blending 
+// Description: static set() method for blending
 //
 // use:  public, SoEXTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
+///////////////////////////////////////////////////////////////////////
+void
 SoLazyElement::setBlending(SoState *state,  SbBool value)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (value != curElt->ivState.blending)
-	getWInstance(state)->setBlendingElt( value);
+        getWInstance(state)->setBlendingElt( value);
     else if (state->isCacheOpen())
-	curElt->registerRedundantSet(state, BLENDING_MASK);
+        curElt->registerRedundantSet(state, BLENDING_MASK);
 }
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for light model 
+// Description: static set() method for light model
 //
 // use:  public, SoEXTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
+///////////////////////////////////////////////////////////////////////
+void
 SoLazyElement::setLightModel(SoState *state, const int32_t model)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (model != curElt->ivState.lightModel)
-	getWInstance(state)->setLightModelElt(state,  model);
+        getWInstance(state)->setLightModelElt(state,  model);
     else if (state->isCacheOpen())
-	curElt->registerRedundantSet(state, LIGHT_MODEL_MASK);
+        curElt->registerRedundantSet(state, LIGHT_MODEL_MASK);
 }
 ///////////////////////////////////////////////////////////////////////
 //
-// Description: static set() method for color material 
+// Description: static set() method for color material
 //
 // use:  public, SoEXTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
+///////////////////////////////////////////////////////////////////////
+void
 SoLazyElement::setColorMaterial(SoState *state, SbBool value)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
     if (value != curElt->ivState.colorMaterial)
-	getWInstance(state)->setColorMaterialElt(value);
+        getWInstance(state)->setColorMaterialElt(value);
     else if (state->isCacheOpen())
-	curElt->registerRedundantSet(state, COLOR_MATERIAL_MASK);
+        curElt->registerRedundantSet(state, COLOR_MATERIAL_MASK);
 }
 ///////////////////////////////////////////////////////////////////////
 //
@@ -567,120 +567,120 @@ SoLazyElement::setColorMaterial(SoState *state, SbBool value)
 //
 // use:  public, SoEXTERNAL, static
 //
-///////////////////////////////////////////////////////////////////////  
-void	
-SoLazyElement::setMaterials(SoState *state,  SoNode* node, 
-    uint32_t bitmask, SoColorPacker *cPacker,  
-    const SoMFColor& diffuse, const SoMFFloat& transp, const SoMFColor& ambient,
-    const SoMFColor& emissive, const SoMFColor& specular, 
-    const SoMFFloat& shininess)
+///////////////////////////////////////////////////////////////////////
+void
+SoLazyElement::setMaterials(SoState *state,  SoNode* node,
+                            uint32_t bitmask, SoColorPacker *cPacker,
+                            const SoMFColor& diffuse, const SoMFFloat& transp, const SoMFColor& ambient,
+                            const SoMFColor& emissive, const SoMFColor& specular,
+                            const SoMFFloat& shininess)
 {
-    uint32_t realSet = 0;    
+    uint32_t realSet = 0;
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
-    
+
     // If we are setting transparency and not diffuse, or vice-versa,
     // then there is a get-dependence:
     if(state->isCacheOpen()){
-	uint32_t tempMask = bitmask & (DIFFUSE_MASK | TRANSPARENCY_MASK);
-	if (tempMask  && tempMask != (DIFFUSE_MASK | TRANSPARENCY_MASK))
-	    curElt->registerGetDependence(state, DIFFUSE_MASK);
+        uint32_t tempMask = bitmask & (DIFFUSE_MASK | TRANSPARENCY_MASK);
+        if (tempMask  && tempMask != (DIFFUSE_MASK | TRANSPARENCY_MASK))
+            curElt->registerGetDependence(state, DIFFUSE_MASK);
     }
     // build a mask (realSet) indicating what really will be set in the state:
     if ((bitmask & EMISSIVE_MASK)&&(emissive[0] != curElt->ivState.emissiveColor))
-	realSet |= EMISSIVE_MASK;
+        realSet |= EMISSIVE_MASK;
     if ((bitmask & SPECULAR_MASK)&&(specular[0] != curElt->ivState.specularColor))
-	realSet |= SPECULAR_MASK; 
+        realSet |= SPECULAR_MASK;
     if ((bitmask & AMBIENT_MASK)&&(ambient[0] != curElt->ivState.ambientColor))
-	realSet |= AMBIENT_MASK;
+        realSet |= AMBIENT_MASK;
     if ((bitmask & SHININESS_MASK) &&
-	    fabsf(shininess[0] - curElt->ivState.shininess)> 
-	    SO_LAZY_SHINY_THRESHOLD) realSet |= SHININESS_MASK;
-	    
-    uint32_t nodeId = node->getNodeId();
-    if ((bitmask & DIFFUSE_MASK) && 
-	nodeId != curElt->ivState.diffuseNodeId) realSet |= DIFFUSE_MASK;
+            fabsf(shininess[0] - curElt->ivState.shininess)>
+            SO_LAZY_SHINY_THRESHOLD) realSet |= SHININESS_MASK;
 
-    //For transparency nodeid, opaque nodes are identified as nodeId = 0:       
+    uint32_t nodeId = node->getNodeId();
+    if ((bitmask & DIFFUSE_MASK) &&
+            nodeId != curElt->ivState.diffuseNodeId) realSet |= DIFFUSE_MASK;
+
+    //For transparency nodeid, opaque nodes are identified as nodeId = 0:
     if(transp.getNum() == 1 && transp[0] == 0.0) nodeId = 0;
-    
-    if (curElt->ivState.transpNodeId != nodeId && (bitmask & TRANSPARENCY_MASK))  
-	realSet |= TRANSPARENCY_MASK;
-	
-    if (realSet){ 
-	curElt = getWInstance(state);
-	curElt->setMaterialElt(node, realSet, cPacker,  
-	    diffuse, transp, ambient, emissive, specular, shininess);
+
+    if (curElt->ivState.transpNodeId != nodeId && (bitmask & TRANSPARENCY_MASK))
+        realSet |= TRANSPARENCY_MASK;
+
+    if (realSet){
+        curElt = getWInstance(state);
+        curElt->setMaterialElt(node, realSet, cPacker,
+                               diffuse, transp, ambient, emissive, specular, shininess);
     }
     //Indicate redundant set for colors that matched the one in the state:
-    if (state->isCacheOpen()){ 
-	uint32_t notRealSet = bitmask & (~realSet);
-	if(notRealSet) curElt->registerRedundantSet(state, notRealSet);
-    }  
-    
+    if (state->isCacheOpen()){
+        uint32_t notRealSet = bitmask & (~realSet);
+        if(notRealSet) curElt->registerRedundantSet(state, notRealSet);
+    }
+
 }
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the Diffuse color in the element 
+//    set the Diffuse color in the element
 //    virtual, to be overridden
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setDiffuseElt(SoNode * node,  int32_t numColors,  
-	const SbColor *colors, SoColorPacker*)
+SoLazyElement::setDiffuseElt(SoNode * node,  int32_t numColors,
+                             const SbColor *colors, SoColorPacker*)
 {
 
     ivState.diffuseNodeId = node->getNodeId();
     ivState.diffuseColors = colors;
     ivState.numDiffuseColors = numColors;
-  
+
     ivState.packed=FALSE;
     ivState.packedTransparent = FALSE;
 }
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the transparency in the element 
+//    set the transparency in the element
 //    virtual, to be overridden
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setTranspElt(SoNode *node, int32_t numTrans, 
-    const float *transpar, SoColorPacker* )
+SoLazyElement::setTranspElt(SoNode *node, int32_t numTrans,
+                            const float *transpar, SoColorPacker* )
 {
 
     ivState.numTransparencies = numTrans;
     ivState.transparencies = transpar;
     ivState.stippleNum = 0;
     if (transpar[0] > 0.0) {
-	if (ivState.transpType == SoGLRenderAction::SCREEN_DOOR){
-	    ivState.stippleNum =
-		(int)(transpar[0]*getNumPatterns());
-	}	
+        if (ivState.transpType == SoGLRenderAction::SCREEN_DOOR){
+            ivState.stippleNum =
+                    (int)(transpar[0]*getNumPatterns());
+        }
     }
     if (numTrans == 1 && transpar[0] == 0.0) ivState.transpNodeId = 0;
-	else ivState.transpNodeId = node->getNodeId();
+    else ivState.transpNodeId = node->getNodeId();
     ivState.packed=FALSE;
     ivState.packedTransparent = FALSE;
-  
+
 
 }
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the color indices in the element 
+//    set the color indices in the element
 //    virtual, to be overridden
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setColorIndexElt( SoNode * node,  int32_t numIndices,  
-	const int32_t *indices)
+SoLazyElement::setColorIndexElt( SoNode * node,  int32_t numIndices,
+                                 const int32_t *indices)
 {
 
     ivState.diffuseNodeId = node->getNodeId();
@@ -693,14 +693,14 @@ SoLazyElement::setColorIndexElt( SoNode * node,  int32_t numIndices,
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the transparency type in the element 
+//    set the transparency type in the element
 //    (not virtual)
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setTranspTypeElt(  int32_t type)  
+SoLazyElement::setTranspTypeElt(  int32_t type)
 
 {
     ivState.transpType = type;
@@ -709,24 +709,24 @@ SoLazyElement::setTranspTypeElt(  int32_t type)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the packed diffuse color in the element 
+//    set the packed diffuse color in the element
 //    virtual, to be overridden
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setPackedElt( SoNode *node,  int32_t numColors,  
-    const uint32_t* colors, bool hasTransparency)
-{  
+SoLazyElement::setPackedElt( SoNode *node,  int32_t numColors,
+                             const uint32_t* colors, bool hasTransparency)
+{
     ivState.diffuseNodeId   = node->getNodeId();
     ivState.numDiffuseColors = numColors;
     ivState.numTransparencies = hasTransparency ? numColors : 0;
 
-    ivState.stippleNum = 0;	
+    ivState.stippleNum = 0;
     if ((ivState.transpType == SoGLRenderAction::SCREEN_DOOR) && ((colors[0]&0xff) != 0xff)){
         ivState.stippleNum = (int)(getNumPatterns()*(1.-(colors[0] & 0xff)*(1./255.)));
-    }   
+    }
     ivState.packedColors = colors;
     ivState.packed = TRUE;
     ivState.packedTransparent = hasTransparency;
@@ -734,7 +734,7 @@ SoLazyElement::setPackedElt( SoNode *node,  int32_t numColors,
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the Ambient color in the element 
+//    set the Ambient color in the element
 //    virtual, to be overridden
 //
 // Use: protected
@@ -750,7 +750,7 @@ SoLazyElement::setAmbientElt(const SbColor* color )
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the Emissive color in the element 
+//    set the Emissive color in the element
 //    virtual, to be overridden
 //
 // Use: protected
@@ -767,7 +767,7 @@ SoLazyElement::setEmissiveElt(const SbColor* color )
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the Specular color in the element 
+//    set the Specular color in the element
 //    Virtual, to be overridden
 //
 // Use: protected
@@ -783,8 +783,8 @@ SoLazyElement::setSpecularElt(const SbColor* color )
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the Shininess in the element 
-//    virtual, to be overridden 
+//    set the Shininess in the element
+//    virtual, to be overridden
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
@@ -798,8 +798,8 @@ SoLazyElement::setShininessElt(float value )
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the ColorMaterial in the element 
-//    virtual, to be overridden 
+//    set the ColorMaterial in the element
+//    virtual, to be overridden
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
@@ -814,8 +814,8 @@ SoLazyElement::setColorMaterialElt( SbBool value )
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the blending enablement in the element 
-//    virtual, to be overridden 
+//    set the blending enablement in the element
+//    virtual, to be overridden
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
@@ -830,8 +830,8 @@ SoLazyElement::setBlendingElt(SbBool value )
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set the light model in the element 
-//    virtual, to be overridden 
+//    set the light model in the element
+//    virtual, to be overridden
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
@@ -843,53 +843,53 @@ SoLazyElement::setLightModelElt(SoState *state, int32_t model)
     ivState.lightModel = model;
     // also set the shapestyle version of this:
     SoShapeStyleElement::setLightModel(state, model);
-    if (model == BASE_COLOR) setColorMaterialElt(FALSE);    
+    if (model == BASE_COLOR) setColorMaterialElt(FALSE);
 }
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    set all materials in the element 
-//    virtual, to be overridden 
+//    set all materials in the element
+//    virtual, to be overridden
 //
 // Use: protected
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setMaterialElt(SoNode* node, uint32_t mask, SoColorPacker*,  
-    const SoMFColor& diffuse, const SoMFFloat& transp, 
-    const SoMFColor& ambient, const SoMFColor& emissive, 
-    const SoMFColor& specular, const SoMFFloat& shininess)
+SoLazyElement::setMaterialElt(SoNode* node, uint32_t mask, SoColorPacker*,
+                              const SoMFColor& diffuse, const SoMFFloat& transp,
+                              const SoMFColor& ambient, const SoMFColor& emissive,
+                              const SoMFColor& specular, const SoMFFloat& shininess)
 {
     if (mask & DIFFUSE_MASK){
-	ivState.diffuseNodeId = node->getNodeId();
-	ivState.diffuseColors = diffuse.getValues(0);
-	ivState.numDiffuseColors = diffuse.getNum(); 
-	ivState.packed=FALSE;
-	ivState.packedTransparent = FALSE;
+        ivState.diffuseNodeId = node->getNodeId();
+        ivState.diffuseColors = diffuse.getValues(0);
+        ivState.numDiffuseColors = diffuse.getNum();
+        ivState.packed=FALSE;
+        ivState.packedTransparent = FALSE;
     }
     if (mask&TRANSPARENCY_MASK){
-	ivState.numTransparencies = transp.getNum();
-	ivState.transparencies = transp.getValues(0);
-	ivState.stippleNum = 0;
-	if ((ivState.transparencies[0]> 0.0) &&
-		(ivState.transpType == SoGLRenderAction::SCREEN_DOOR)) {
-	    ivState.stippleNum = 
-		(int)(ivState.transparencies[0]*getNumPatterns());
-	}
-	ivState.packed=FALSE;
-	ivState.packedTransparent = FALSE;
+        ivState.numTransparencies = transp.getNum();
+        ivState.transparencies = transp.getValues(0);
+        ivState.stippleNum = 0;
+        if ((ivState.transparencies[0]> 0.0) &&
+                (ivState.transpType == SoGLRenderAction::SCREEN_DOOR)) {
+            ivState.stippleNum =
+                    (int)(ivState.transparencies[0]*getNumPatterns());
+        }
+        ivState.packed=FALSE;
+        ivState.packedTransparent = FALSE;
     }
     if (mask&AMBIENT_MASK)
-	ivState.ambientColor = ambient[0];  
-    
+        ivState.ambientColor = ambient[0];
+
     if (mask&EMISSIVE_MASK)
-	ivState.emissiveColor = emissive[0];
-	
+        ivState.emissiveColor = emissive[0];
+
     if (mask&SPECULAR_MASK)
-	ivState.specularColor = specular[0];
-    
+        ivState.specularColor = specular[0];
+
     if (mask&SHININESS_MASK)
-	ivState.shininess = shininess[0];  
+        ivState.shininess = shininess[0];
 }
 ////////////////////////////////////////////////////////////////////////
 //
@@ -903,9 +903,9 @@ void
 SoLazyElement::push(SoState *)
 {
     SoLazyElement *prevElt = (SoLazyElement*)getNextInStack();
-  
+
     ivState = prevElt->ivState;
-   
+
 }
 
 
@@ -940,8 +940,8 @@ SbBool
 SoLazyElement::matches(const SoElement*) const
 {
 #ifdef DEBUG
-    SoDebugError::post("SoLazyElement::matches", 
-	    "Should never be called\n");
+    SoDebugError::post("SoLazyElement::matches",
+                       "Should never be called\n");
 #endif
     return TRUE;
 }
@@ -955,8 +955,8 @@ SoElement*
 SoLazyElement::copyMatchInfo() const
 {
 #ifdef DEBUG
-    SoDebugError::post("SoLazyElement::copyMatchInfo", 
-	    "Should never be called\n");
+    SoDebugError::post("SoLazyElement::copyMatchInfo",
+                       "Should never be called\n");
 #endif
     return NULL;
 }
