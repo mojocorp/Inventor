@@ -135,8 +135,8 @@ SoGLLazyElement::init(SoState *state)
     // Also, begin with GL and Inventor out of synch:
     invalidBits			= ALL_MASK;
     // and nothing sent to GL
-    GLSendBits			= 0;   
-     
+    GLSendBits			= 0;
+
     // Determine if GL is in color index mode
     GLboolean	b;
     glGetBooleanv(GL_RGBA_MODE, &b);
@@ -154,15 +154,15 @@ void
 SoGLLazyElement::push(SoState *)
 {
     SoGLLazyElement *prevElt = (SoGLLazyElement*)getNextInStack();
-     
+
     // The push always happens before a  true set()
     
-    ivState = prevElt->ivState;        
+    ivState = prevElt->ivState;
     glState = prevElt->glState;
     
-    colorIndex		    = prevElt->colorIndex;      
-    invalidBits		    = prevElt->invalidBits;
-    GLSendBits		    = 0;
+    colorIndex   = prevElt->colorIndex;
+    invalidBits  = prevElt->invalidBits;
+    GLSendBits   = 0;
 }
 
 
@@ -177,7 +177,7 @@ SoGLLazyElement::push(SoState *)
 void
 SoGLLazyElement::pop(SoState *, const SoElement *prevTopElement)
 {
-    // 
+    //
     //Copy all GL parts back from previous top element.
     //Mark those that changed with invalidBits.
     
@@ -192,7 +192,7 @@ SoGLLazyElement::pop(SoState *, const SoElement *prevTopElement)
     
     //copy GL state:
     glState = prevTop->glState;
- 
+
 
 }
 
@@ -205,31 +205,31 @@ SoGLLazyElement::pop(SoState *, const SoElement *prevTopElement)
 //
 ////////////////////////////////////////////////////////////////////////
 void
-SoGLLazyElement::setDiffuseElt(SoNode *node,  
-    int32_t numColors, const SbColor* colors, SoColorPacker *cPacker)
+SoGLLazyElement::setDiffuseElt(SoNode *node, int32_t numColors, const SbColor* colors, SoColorPacker *cPacker)
 {
-    if (colorIndex) return;
+    if (colorIndex)
+        return;
+
     ivState.diffuseColors = colors;
-    ivState.numDiffuseColors = numColors;        
-    ivState.diffuseNodeId = (node->getNodeId()); 
+    ivState.numDiffuseColors = numColors;
+    ivState.diffuseNodeId = (node->getNodeId());
     ivState.packed = FALSE;
     ivState.packedTransparent = FALSE;
 
     //Pack the colors and transparencies, if necessary:
-    if(!cPacker->diffuseMatch(ivState.diffuseNodeId) ||
-	    (!cPacker->transpMatch(ivState.transpNodeId)))
-	packColors(cPacker);
-	    
+    if (!cPacker->diffuseMatch(ivState.diffuseNodeId) || (!cPacker->transpMatch(ivState.transpNodeId)))
+        packColors(cPacker);
+
     ivState.packedColors = cPacker->getPackedColors();
-			   
+
     // for open caches,  record the fact that set was called:
     ivState.cacheLevelSetBits |= DIFFUSE_MASK;
 
     if (ivState.diffuseNodeId != glState.GLDiffuseNodeId)
         invalidBits |= DIFFUSE_MASK;
 
-  }
-  
+}
+
 /////////////////////////////////////////////////////////////////////////
 //
 // Description:  set transparency type
@@ -241,14 +241,14 @@ SoGLLazyElement::setDiffuseElt(SoNode *node,
 void
 SoGLLazyElement::setTranspTypeElt(int32_t type)
 {
-    if(ivState.transpType != type){
-	ivState.transpType = type;
-	// make sure transparencies send:
-	invalidBits |= TRANSPARENCY_MASK;
-	glState.GLStippleNum = -1;
+    if (ivState.transpType != type) {
+        ivState.transpType = type;
+        // make sure transparencies send:
+        invalidBits |= TRANSPARENCY_MASK;
+        glState.GLStippleNum = -1;
     }
 }  
-  
+
 /////////////////////////////////////////////////////////////////////////
 //
 // Description:  set transparency in element
@@ -259,7 +259,7 @@ SoGLLazyElement::setTranspTypeElt(int32_t type)
 ////////////////////////////////////////////////////////////////////////
 void
 SoGLLazyElement::setTranspElt(SoNode *node,  
-    int32_t numTrans, const float *trans, SoColorPacker *cPacker)
+                              int32_t numTrans, const float *trans, SoColorPacker *cPacker)
 {
     ivState.numTransparencies = numTrans;
     ivState.transparencies = trans;
@@ -269,32 +269,31 @@ SoGLLazyElement::setTranspElt(SoNode *node,
 
     ivState.stippleNum = 0;
     if (trans[0] > 0.0) {
-	if (ivState.transpType == SoGLRenderAction::SCREEN_DOOR){
-	    ivState.stippleNum =
-		(int)(trans[0]*getNumPatterns());
-	}	
+        if (ivState.transpType == SoGLRenderAction::SCREEN_DOOR) {
+            ivState.stippleNum = (int)(trans[0]*getNumPatterns());
+        }
     }
     if (numTrans == 1 && trans[0] == 0) ivState.transpNodeId = 0;
     else ivState.transpNodeId = node->getNodeId();
     ivState.packed = FALSE;
     ivState.packedTransparent = FALSE;
-    if(!cPacker->diffuseMatch(ivState.diffuseNodeId) ||
-	    (!cPacker->transpMatch(ivState.transpNodeId)))
-	packColors(cPacker);
-	    
+
+    if (!cPacker->diffuseMatch(ivState.diffuseNodeId) || (!cPacker->transpMatch(ivState.transpNodeId)))
+        packColors(cPacker);
+
     ivState.packedColors = cPacker->getPackedColors();
-			   
+
     // for open caches, record the fact that set was called:
     ivState.cacheLevelSetBits |= (TRANSPARENCY_MASK|DIFFUSE_MASK);
 
-    if (ivState.transpNodeId != glState.GLTranspNodeId) 
-	invalidBits |= DIFFUSE_MASK;
-	
+    if (ivState.transpNodeId != glState.GLTranspNodeId)
+        invalidBits |= DIFFUSE_MASK;
+
     if (ivState.stippleNum != glState.GLStippleNum)
         invalidBits |= TRANSPARENCY_MASK;
     else invalidBits &= ~TRANSPARENCY_MASK;
 
-  }
+}
 /////////////////////////////////////////////////////////////////////////
 //
 // Description:  set color indices in element
@@ -305,13 +304,15 @@ SoGLLazyElement::setTranspElt(SoNode *node,
 ////////////////////////////////////////////////////////////////////////
 void
 SoGLLazyElement::setColorIndexElt(SoNode *node, 
-	 int32_t numIndices, const int32_t *indices)
+                                  int32_t numIndices, const int32_t *indices)
 {
-    if (!colorIndex) return;
+    if (!colorIndex)
+        return;
+
     ivState.numDiffuseColors = numIndices;
     ivState.colorIndices = indices;
-      
-    ivState.diffuseNodeId = (node->getNodeId()); 
+
+    ivState.diffuseNodeId = (node->getNodeId());
     ivState.packed = FALSE;
     ivState.packedTransparent = FALSE;
 
@@ -335,33 +336,34 @@ SoGLLazyElement::setColorIndexElt(SoNode *node,
 ////////////////////////////////////////////////////////////////////////
 void
 SoGLLazyElement::setPackedElt(SoNode *node, int32_t numColors, 
-    const uint32_t* colors, bool hasTransparency)
+                              const uint32_t* colors, bool hasTransparency)
 {
-    if (colorIndex) return;
-    ivState.packedColors	= colors;
-    ivState.numDiffuseColors	= numColors;
-    ivState.numTransparencies	= hasTransparency ? numColors : 0;
-    ivState.diffuseNodeId	= node->getNodeId();
-    ivState.transpNodeId	= hasTransparency ? node->getNodeId() : 0;
+    if (colorIndex)
+        return;
+
+    ivState.packedColors	  = colors;
+    ivState.numDiffuseColors  = numColors;
+    ivState.numTransparencies = hasTransparency ? numColors : 0;
+    ivState.diffuseNodeId	  = node->getNodeId();
+    ivState.transpNodeId	  = hasTransparency ? node->getNodeId() : 0;
     
-    ivState.stippleNum = 0;	
-    if ((colors[0]&0xff) != 0xff){ 	
-	if(ivState.transpType == SoGLRenderAction::SCREEN_DOOR){
-	    ivState.stippleNum = (int)(getNumPatterns()*
-		(1.-(colors[0] & 0xff)*(1./255.)));
-	}	    
+    ivState.stippleNum = 0;
+    if ((colors[0]&0xff) != 0xff) {
+        if (ivState.transpType == SoGLRenderAction::SCREEN_DOOR) {
+            ivState.stippleNum = (int)(getNumPatterns()*(1.-(colors[0] & 0xff)*(1./255.)));
+        }
     }
     
-    ivState.packed		= TRUE;
+    ivState.packed = TRUE;
     ivState.packedTransparent = hasTransparency;
 
     // For open caches, record the fact that set was called:
-    ivState.cacheLevelSetBits |= (DIFFUSE_MASK|TRANSPARENCY_MASK);	
- 
-    if (invalidBits & (DIFFUSE_MASK|TRANSPARENCY_MASK)) return;
+    ivState.cacheLevelSetBits |= (DIFFUSE_MASK|TRANSPARENCY_MASK);
 
-    if (ivState.diffuseNodeId != glState.GLDiffuseNodeId ||
-	ivState.transpNodeId != glState.GLTranspNodeId)
+    if (invalidBits & (DIFFUSE_MASK|TRANSPARENCY_MASK))
+        return;
+
+    if (ivState.diffuseNodeId != glState.GLDiffuseNodeId || ivState.transpNodeId != glState.GLTranspNodeId)
         invalidBits |= DIFFUSE_MASK;
     else invalidBits &= ~DIFFUSE_MASK;
     
@@ -385,14 +387,14 @@ SoGLLazyElement::setAmbientElt(const SbColor* color)
     ivState.ambientColor.setValue((float*)color);
 
     // For open caches, record the fact that set was called:
-    ivState.cacheLevelSetBits |= AMBIENT_MASK;	
+    ivState.cacheLevelSetBits |= AMBIENT_MASK;
 
 
-    for(int i=0; i<3; i++){
-	if (ivState.ambientColor[i] != glState.GLAmbient[i]){
-	    invalidBits |= AMBIENT_MASK;
-	    return;
-	}
+    for(int i=0; i<3; i++) {
+        if (ivState.ambientColor[i] != glState.GLAmbient[i]) {
+            invalidBits |= AMBIENT_MASK;
+            return;
+        }
     }
     invalidBits &= ~AMBIENT_MASK;
 }
@@ -411,13 +413,13 @@ SoGLLazyElement::setEmissiveElt(const SbColor* color)
     ivState.emissiveColor.setValue((float*)color);
 
     // For open caches, record the fact that set was called:
-    ivState.cacheLevelSetBits |= EMISSIVE_MASK;	
- 
-    for(int i=0; i<3; i++){
-	if (ivState.emissiveColor[i] != glState.GLEmissive[i]){
-	    invalidBits |= EMISSIVE_MASK;
-	    return;
-	}
+    ivState.cacheLevelSetBits |= EMISSIVE_MASK;
+
+    for(int i=0; i<3; i++) {
+        if (ivState.emissiveColor[i] != glState.GLEmissive[i]) {
+            invalidBits |= EMISSIVE_MASK;
+            return;
+        }
     }
     invalidBits &= ~EMISSIVE_MASK;
 }
@@ -435,13 +437,13 @@ SoGLLazyElement::setSpecularElt(const SbColor* color)
     ivState.specularColor.setValue((float*)color);
 
     // For open caches, record the fact that set was called:
-    ivState.cacheLevelSetBits |= SPECULAR_MASK;	
+    ivState.cacheLevelSetBits |= SPECULAR_MASK;
 
-    for(int i=0; i<3; i++){
-	if (ivState.specularColor[i] != glState.GLSpecular[i]){
-	    invalidBits |= SPECULAR_MASK;
-	    return;
-	}
+    for(int i=0; i<3; i++) {
+        if (ivState.specularColor[i] != glState.GLSpecular[i]) {
+            invalidBits |= SPECULAR_MASK;
+            return;
+        }
     }
     invalidBits &= ~SPECULAR_MASK;
 }
@@ -460,12 +462,12 @@ SoGLLazyElement::setShininessElt(float value)
     ivState.shininess = value;
 
     // For open caches, record the fact that set was called:
-    ivState.cacheLevelSetBits |= SHININESS_MASK;	
+    ivState.cacheLevelSetBits |= SHININESS_MASK;
 
     // set invalid bit based on value
     if (fabsf(ivState.shininess - glState.GLShininess) > SO_LAZY_SHINY_THRESHOLD)
-	    invalidBits |= SHININESS_MASK;
-	else invalidBits &= ~SHININESS_MASK;
+        invalidBits |= SHININESS_MASK;
+    else invalidBits &= ~SHININESS_MASK;
     return;
 }
 /////////////////////////////////////////////////////////////////////////
@@ -480,17 +482,19 @@ void
 SoGLLazyElement::setColorMaterialElt(SbBool value)
 {
     // don't turn on colorMaterial if lighting off:
-    if (ivState.lightModel == BASE_COLOR) value = FALSE;
+    if (ivState.lightModel == BASE_COLOR)
+        value = FALSE;
+
     ivState.colorMaterial = value;
 
     // For open caches, record the fact that set was called:
-	ivState.cacheLevelSetBits |= COLOR_MATERIAL_MASK;	
- 
+    ivState.cacheLevelSetBits |= COLOR_MATERIAL_MASK;
+
 
     // set invalid bit based on value
     if (ivState.colorMaterial != glState.GLColorMaterial)
-	    invalidBits |= COLOR_MATERIAL_MASK;
-	else invalidBits &= ~COLOR_MATERIAL_MASK;
+        invalidBits |= COLOR_MATERIAL_MASK;
+    else invalidBits &= ~COLOR_MATERIAL_MASK;
     return;
 }
 /////////////////////////////////////////////////////////////////////////
@@ -507,18 +511,18 @@ SoGLLazyElement::setLightModelElt(SoState *state, int32_t value)
     ivState.lightModel = value;
 
     // For Open caches, record the fact that set was called:
-	ivState.cacheLevelSetBits |= LIGHT_MODEL_MASK;	
+    ivState.cacheLevelSetBits |= LIGHT_MODEL_MASK;
 
     // also set the shapestyle version of this:
     SoShapeStyleElement::setLightModel(state, value);
 
     // set invalid bit based on value
     if (ivState.lightModel != glState.GLLightModel)
-	    invalidBits |= LIGHT_MODEL_MASK;
-	else invalidBits &= ~LIGHT_MODEL_MASK;
+        invalidBits |= LIGHT_MODEL_MASK;
+    else invalidBits &= ~LIGHT_MODEL_MASK;
     // set Color Material off if necessary:
     if (ivState.lightModel == BASE_COLOR)
-	setColorMaterialElt(FALSE);
+        setColorMaterialElt(FALSE);
     return;
 }
 /////////////////////////////////////////////////////////////////////////
@@ -536,11 +540,11 @@ SoGLLazyElement::setBlendingElt(SbBool value)
     ivState.blending = value;
 
     // For open caches, record the fact that set was called:
-    ivState.cacheLevelSetBits |= BLENDING_MASK;	
- 
+    ivState.cacheLevelSetBits |= BLENDING_MASK;
+
     // set invalid bit based on value
     if (ivState.blending != glState.GLblending)
-	invalidBits |= BLENDING_MASK;
+        invalidBits |= BLENDING_MASK;
     else invalidBits &= ~BLENDING_MASK;
 
     return;
@@ -557,96 +561,91 @@ SoGLLazyElement::setBlendingElt(SbBool value)
 
 void
 SoGLLazyElement::setMaterialElt(SoNode* node, uint32_t mask,
-    SoColorPacker *cPacker,  
-    const SoMFColor& diffuse, const SoMFFloat& transp, 
-    const SoMFColor& ambient, const SoMFColor& emissive, 
-    const SoMFColor& specular, const SoMFFloat& shininess)
+                                SoColorPacker *cPacker,
+                                const SoMFColor& diffuse, const SoMFFloat& transp,
+                                const SoMFColor& ambient, const SoMFColor& emissive,
+                                const SoMFColor& specular, const SoMFFloat& shininess)
 {
-    if ((mask & DIFFUSE_MASK) && !colorIndex ){
-	ivState.diffuseColors = diffuse.getValues(0);
-	ivState.numDiffuseColors = diffuse.getNum();        
-	ivState.diffuseNodeId = (node->getNodeId()); 
-	ivState.packed = FALSE;
-	ivState.packedTransparent = FALSE;	
+    if ((mask & DIFFUSE_MASK) && !colorIndex ) {
+        ivState.diffuseColors = diffuse.getValues(0);
+        ivState.numDiffuseColors = diffuse.getNum();
+        ivState.diffuseNodeId = (node->getNodeId());
+        ivState.packed = FALSE;
+        ivState.packedTransparent = FALSE;
     }
     
-    if (mask & TRANSPARENCY_MASK){
+    if (mask & TRANSPARENCY_MASK) {
         ivState.numTransparencies = transp.getNum();
-	ivState.transparencies = transp.getValues(0);    
-	ivState.stippleNum = 0;
-	if (ivState.numTransparencies == 1 && ivState.transparencies[0] == 0.0)
-	    ivState.transpNodeId = 0;
-	else { 
-	    ivState.transpNodeId = node->getNodeId();
-	    if (ivState.transparencies[0] != 0.0 &&	   
-		    ivState.transpType == SoGLRenderAction::SCREEN_DOOR){
-		ivState.stippleNum =
-		    (int)(ivState.transparencies[0]*getNumPatterns());
-	    }	
-	}
-	    
-	if  (ivState.stippleNum != glState.GLStippleNum)
-	    invalidBits |= TRANSPARENCY_MASK;
-	else invalidBits &= ~TRANSPARENCY_MASK;
+        ivState.transparencies = transp.getValues(0);
+        ivState.stippleNum = 0;
+        if (ivState.numTransparencies == 1 && ivState.transparencies[0] == 0.0) {
+            ivState.transpNodeId = 0;
+        } else {
+            ivState.transpNodeId = node->getNodeId();
+            if (ivState.transparencies[0] != 0.0 && ivState.transpType == SoGLRenderAction::SCREEN_DOOR) {
+                ivState.stippleNum = (int)(ivState.transparencies[0]*getNumPatterns());
+            }
+        }
+
+        if  (ivState.stippleNum != glState.GLStippleNum)
+            invalidBits |= TRANSPARENCY_MASK;
+        else invalidBits &= ~TRANSPARENCY_MASK;
     }
     
     // do combined packed color/transparency work:
-    if (mask & (DIFFUSE_MASK|TRANSPARENCY_MASK)){
-	if(!cPacker->diffuseMatch(ivState.diffuseNodeId) ||
-		(!cPacker->transpMatch(ivState.transpNodeId)))
-	    packColors(cPacker);
-	 
-	if (ivState.diffuseNodeId != glState.GLDiffuseNodeId ||
-		ivState.transpNodeId != glState.GLTranspNodeId)
-	    invalidBits |= DIFFUSE_MASK;
-	else invalidBits &= ~DIFFUSE_MASK;	
-	    
-	ivState.packedColors = cPacker->getPackedColors(); 
+    if (mask & (DIFFUSE_MASK|TRANSPARENCY_MASK)) {
+        if (!cPacker->diffuseMatch(ivState.diffuseNodeId) || (!cPacker->transpMatch(ivState.transpNodeId)))
+            packColors(cPacker);
+
+        if (ivState.diffuseNodeId != glState.GLDiffuseNodeId || ivState.transpNodeId != glState.GLTranspNodeId)
+            invalidBits |= DIFFUSE_MASK;
+        else invalidBits &= ~DIFFUSE_MASK;
+
+        ivState.packedColors = cPacker->getPackedColors();
     }
-       
-    if (mask & AMBIENT_MASK){
-	ivState.ambientColor = ambient[0];
-	invalidBits &= ~AMBIENT_MASK;
-        for (int i=0; i<3; i++){
-	    if (ivState.ambientColor[i] != glState.GLAmbient[i]){
-		invalidBits |= AMBIENT_MASK;
-		break;
-	    }
-	}   
-    }  
-    
-    if (mask & EMISSIVE_MASK){
-	ivState.emissiveColor = emissive[0];
-	invalidBits &= ~EMISSIVE_MASK;
-        for (int i=0; i<3; i++){
-	    if (ivState.emissiveColor[i] != glState.GLEmissive[i]){
-		invalidBits |= EMISSIVE_MASK;
-		break;
-	    }
-	}   
-    }
-	
-    if (mask & SPECULAR_MASK){
-	ivState.specularColor = specular[0];
-	invalidBits &= ~SPECULAR_MASK;
-        for (int i=0; i<3; i++){
-	    if (ivState.specularColor[i] != glState.GLSpecular[i]){
-		invalidBits |= SPECULAR_MASK;
-		break;
-	    }
-	}   
+
+    if (mask & AMBIENT_MASK) {
+        ivState.ambientColor = ambient[0];
+        invalidBits &= ~AMBIENT_MASK;
+        for (int i=0; i<3; i++) {
+            if (ivState.ambientColor[i] != glState.GLAmbient[i]) {
+                invalidBits |= AMBIENT_MASK;
+                break;
+            }
+        }
     }
     
-    if (mask & SHININESS_MASK){
-	ivState.shininess = shininess[0];
-	if (fabsf(ivState.shininess - glState.GLShininess) 
-		> SO_LAZY_SHINY_THRESHOLD){
-	    invalidBits |= SHININESS_MASK;
-	}      
-	else invalidBits &= ~SHININESS_MASK;       
+    if (mask & EMISSIVE_MASK) {
+        ivState.emissiveColor = emissive[0];
+        invalidBits &= ~EMISSIVE_MASK;
+        for (int i=0; i<3; i++) {
+            if (ivState.emissiveColor[i] != glState.GLEmissive[i]) {
+                invalidBits |= EMISSIVE_MASK;
+                break;
+            }
+        }
+    }
+
+    if (mask & SPECULAR_MASK) {
+        ivState.specularColor = specular[0];
+        invalidBits &= ~SPECULAR_MASK;
+        for (int i=0; i<3; i++) {
+            if (ivState.specularColor[i] != glState.GLSpecular[i]) {
+                invalidBits |= SPECULAR_MASK;
+                break;
+            }
+        }
+    }
+    
+    if (mask & SHININESS_MASK) {
+        ivState.shininess = shininess[0];
+        if (fabsf(ivState.shininess - glState.GLShininess) > SO_LAZY_SHINY_THRESHOLD) {
+            invalidBits |= SHININESS_MASK;
+        }
+        else invalidBits &= ~SHININESS_MASK;
     }
     // For open caches, record the fact that set was called:
-    ivState.cacheLevelSetBits |= mask;	  
+    ivState.cacheLevelSetBits |= mask;
 }
 //////////////////////////////////////////////////////////////////////////
 //
@@ -670,17 +669,16 @@ SoGLLazyElement::sendVPPacked(SoState* state, const unsigned char* pcolor)
 {
     unsigned char _pcolor[4] = {0,0,0,0};
     DGL_HTON_INT32(*((int32_t*)_pcolor), *((int32_t*)pcolor));
-  
-    if (glState.GLColorMaterial || 
-	(glState.GLLightModel == BASE_COLOR))
+
+    if (glState.GLColorMaterial || (glState.GLLightModel == BASE_COLOR)) {
         glColor4ubv((const GLubyte*)_pcolor);
-    else{
+    } else{
         float col4[4];
-	col4[3] = (_pcolor[3]) * 1.0f/255;
-	col4[2] = (_pcolor[2]) * 1.0f/255;
-	col4[1] = (_pcolor[1]) * 1.0f/255;
-	col4[0] = (_pcolor[0]) * 1.0f/255;
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, col4);
+        col4[3] = (_pcolor[3]) * 1.0f/255;
+        col4[2] = (_pcolor[2]) * 1.0f/255;
+        col4[1] = (_pcolor[1]) * 1.0f/255;
+        col4[0] = (_pcolor[0]) * 1.0f/255;
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, col4);
     }
     
     //Remember what things we are sending to GL, they have to be invalidated:
@@ -689,37 +687,36 @@ SoGLLazyElement::sendVPPacked(SoState* state, const unsigned char* pcolor)
     //Now see about sending transparency:
 
     // If Stipple is not being used, nothing to be done for transparency.
-    if (ivState.transpType == SoGLRenderAction::SCREEN_DOOR){
-    
-	uint32_t trans = _pcolor[3];
-    
-	// If transparency was off and is still off, can quit here    
-	if (glState.GLStippleNum != 0 || trans != 0xff) {
+    if (ivState.transpType == SoGLRenderAction::SCREEN_DOOR) {
 
-	    // Setup GL stipple with the new value being specified		  
-	    int newStipNum = (int)(getNumPatterns()*(1.-trans*(1.0/255.)));
-	    if (newStipNum != glState.GLStippleNum){
-	    
-		// a real send is occurring: 
-		sendMask |= TRANSPARENCY_MASK;   	       		
-			
-		if (newStipNum >0){
-		    sendStipple(state, newStipNum);
-		    // if previously was off, turn on GLStipple
-		    if (glState.GLStippleNum <= 0)
-			glEnable(GL_POLYGON_STIPPLE);
-		} 
-		else{
-		    glDisable(GL_POLYGON_STIPPLE);			    
-		}
-		glState.GLStippleNum = newStipNum;
-	
-	    }
-	}
+        uint32_t trans = _pcolor[3];
+
+        // If transparency was off and is still off, can quit here
+        if (glState.GLStippleNum != 0 || trans != 0xff) {
+
+            // Setup GL stipple with the new value being specified
+            int newStipNum = (int)(getNumPatterns()*(1.-trans*(1.0/255.)));
+            if (newStipNum != glState.GLStippleNum) {
+
+                // a real send is occurring:
+                sendMask |= TRANSPARENCY_MASK;
+
+                if (newStipNum >0) {
+                    sendStipple(state, newStipNum);
+                    // if previously was off, turn on GLStipple
+                    if (glState.GLStippleNum <= 0)
+                        glEnable(GL_POLYGON_STIPPLE);
+                } else {
+                    glDisable(GL_POLYGON_STIPPLE);
+                }
+                glState.GLStippleNum = newStipNum;
+
+            }
+        }
     }
     
     //Now reset/invalidate the diffuse and possibly transparency components.
- 
+
     reset(state, sendMask);
 }
 /////////////////////////////////////////////////////////////////////////
@@ -736,15 +733,15 @@ void
 SoGLLazyElement::registerRedundantSet(SoState* state, uint32_t bitmask)
 {
 #ifdef DEBUG
-    if (!(state->isCacheOpen())){
-    	SoDebugError::post("SoGLLazyElement::registerRedundantSet",
-			   "Cache is not open!"); 
+    if (!(state->isCacheOpen())) {
+        SoDebugError::post("SoGLLazyElement::registerRedundantSet",
+                           "Cache is not open!");
     }
 #endif /*DEBUG*/
     //Must obtain a writable version of element (i.e. may need to push)
     SoGLLazyElement *le = (SoGLLazyElement*)getWInstance(state);
     le->ivState.cacheLevelSetBits |= bitmask;
- 
+
 }
 /////////////////////////////////////////////////////////////////////////
 //
@@ -759,24 +756,23 @@ void
 SoGLLazyElement::registerGetDependence(SoState* state, uint32_t bitmask)
 {
 #ifdef DEBUG
-    if (!(state->isCacheOpen())){
-    	SoDebugError::post("SoGLLazyElement::registerGetDependence",
-			   "Cache is not open!"); 
+    if (!(state->isCacheOpen())) {
+        SoDebugError::post("SoGLLazyElement::registerGetDependence",
+                           "Cache is not open!");
     }
 #endif /*DEBUG*/
-    SoGLRenderCache* thisCache = (SoGLRenderCache*)
-	    SoCacheElement::getCurrentCache((SoState*)state);
+    SoGLRenderCache* thisCache = (SoGLRenderCache*)SoCacheElement::getCurrentCache((SoState*)state);
     SoGLLazyElement* cacheLazyElt = thisCache->getLazyElt();
     uint32_t levelSetBits = ivState.cacheLevelSetBits;
     uint32_t didRealSendBits = cacheLazyElt->GLSendBits;
-	
+
     //If there was no set and no real send, there is an IV dependence:
     uint32_t checkIV = bitmask & (~didRealSendBits) & (~levelSetBits);
 
-    if (checkIV) { 
-	copyIVValues(checkIV,cacheLazyElt);
-	thisCache->setLazyBits(checkIV, 0, 0);
-    } 
+    if (checkIV) {
+        copyIVValues(checkIV,cacheLazyElt);
+        thisCache->setLazyBits(checkIV, 0, 0);
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -795,60 +791,59 @@ SoGLLazyElement::reset(SoState* state, uint32_t bitmask) const
     le->invalidBits |= bitmask;
     //Set GLSendBits, so invalidation will persist after pop().
     le->GLSendBits |= bitmask;
-     
+
     //  If cache is open, we must assume that there has been a GLSend
     //  of the component being reset, and set the corresponding GLSendBit.
-    if (state->isCacheOpen()){
-	SoGLRenderCache* thisCache = (SoGLRenderCache*)
-		SoCacheElement::getCurrentCache((SoState*)state);
-	SoGLLazyElement* cacheLazyElt = thisCache->getLazyElt();
-	cacheLazyElt->GLSendBits |= bitmask;
+    if (state->isCacheOpen()) {
+        SoGLRenderCache* thisCache = (SoGLRenderCache*)SoCacheElement::getCurrentCache((SoState*)state);
+        SoGLLazyElement* cacheLazyElt = thisCache->getLazyElt();
+        cacheLazyElt->GLSendBits |= bitmask;
     }
-    	
-    for(int j=0; (j< SO_LAZY_NUM_COMPONENTS) && bitmask; j++, bitmask >>=1){ 
-	if (bitmask&1) {
-	    switch(j) {
-		case(LIGHT_MODEL_CASE):
-		    le->glState.GLLightModel = -1;
-		    break;
-		    	
-		case(COLOR_MATERIAL_CASE):
-		    le->glState.GLColorMaterial = -1;
-		    break;
-		
-		case(DIFFUSE_CASE):
-		    le->glState.GLDiffuseNodeId = 1;
-		    le->glState.GLTranspNodeId = 1;
-		    break;
-		    
-		case(AMBIENT_CASE):
-    		    le->glState.GLAmbient[0]= -1;		   		    
-		    break;
 
-		case(EMISSIVE_CASE):
-		    le->glState.GLEmissive[0] = -1;
-		    break;
-		 
-		case(SPECULAR_CASE):
-		    le->glState.GLSpecular[0] = -1;
-		    break;
-    		
-		case(SHININESS_CASE):
-		    le->glState.GLShininess = -1;
-		    break;		    
-		    
-		case(TRANSPARENCY_CASE):
-		    le->glState.GLStippleNum = -1;
-		    break;
-		    
-		case(BLENDING_CASE):
-		    le->glState.GLblending = -1;
-		    break;		    
+    for(int j=0; (j< SO_LAZY_NUM_COMPONENTS) && bitmask; j++, bitmask >>=1) {
+        if (bitmask&1) {
+            switch(j) {
+            case(LIGHT_MODEL_CASE):
+                le->glState.GLLightModel = -1;
+                break;
 
-    	    }
-	}
-   }
-   return;
+            case(COLOR_MATERIAL_CASE):
+                le->glState.GLColorMaterial = -1;
+                break;
+
+            case(DIFFUSE_CASE):
+                le->glState.GLDiffuseNodeId = 1;
+                le->glState.GLTranspNodeId = 1;
+                break;
+
+            case(AMBIENT_CASE):
+                le->glState.GLAmbient[0]= -1;
+                break;
+
+            case(EMISSIVE_CASE):
+                le->glState.GLEmissive[0] = -1;
+                break;
+
+            case(SPECULAR_CASE):
+                le->glState.GLSpecular[0] = -1;
+                break;
+
+            case(SHININESS_CASE):
+                le->glState.GLShininess = -1;
+                break;
+
+            case(TRANSPARENCY_CASE):
+                le->glState.GLStippleNum = -1;
+                break;
+
+            case(BLENDING_CASE):
+                le->glState.GLblending = -1;
+                break;
+
+            }
+        }
+    }
+    return;
 }
 ////////////////////////////////////////////////////////////////////////
 //
@@ -864,357 +859,335 @@ SoGLLazyElement::reset(SoState* state, uint32_t bitmask) const
 
 SbBool
 SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV, 
-	const SoGLLazyElement *stateLazyElt) 
+                                 const SoGLLazyElement *stateLazyElt)
 
 {
     // check to make sure transparency type has not changed:
-    if(ivState.transpType != stateLazyElt->ivState.transpType){
+    if (ivState.transpType != stateLazyElt->ivState.transpType) {
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+        if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
             std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
             std::cerr << "transparency type match failed," << std::endl;
             std::cerr << "prev,  current " << ivState.transpType << " " << stateLazyElt->ivState.transpType << std::endl;
-	}
+        }
 #endif /*DEBUG*/       
-	return FALSE;
+        return FALSE;
     }
     
-    int i;
     uint32_t bitmask = checkIV;
- 
-    for(i=0; (i< SO_LAZY_NUM_COMPONENTS)&&bitmask; i++,bitmask>>=1){
 
-    	if (bitmask & 1){
+    for(int i=0; (i< SO_LAZY_NUM_COMPONENTS)&&bitmask; i++,bitmask>>=1) {
 
-            int j;
-            switch(i){
-		case(LIGHT_MODEL_CASE):
-		    if (ivState.lightModel != stateLazyElt->ivState.lightModel){
+        if (bitmask & 1) {
+            switch(i) {
+            case(LIGHT_MODEL_CASE):
+                if (ivState.lightModel != stateLazyElt->ivState.lightModel) {
 #ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "lightModel match failed," << std::endl;
-                            std::cerr << "prev,  current " << ivState.lightModel << " " << stateLazyElt->ivState.lightModel << std::endl;
-			}
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "lightModel match failed," << std::endl;
+                        std::cerr << "prev,  current " << ivState.lightModel << " " << stateLazyElt->ivState.lightModel << std::endl;
+                    }
 #endif /*DEBUG*/	   
-			return FALSE;
-		    }
-		    break;
-		    		     
-		case(COLOR_MATERIAL_CASE):
-		    if (ivState.colorMaterial != 
-			stateLazyElt->ivState.colorMaterial){
+                    return FALSE;
+                }
+                break;
+
+            case(COLOR_MATERIAL_CASE):
+                if (ivState.colorMaterial != stateLazyElt->ivState.colorMaterial) {
 #ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "colorMaterial match failed," << std::endl;
-                            std::cerr << "prev,  current " << ivState.colorMaterial << " " << stateLazyElt->ivState.colorMaterial << std::endl;
-			}
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "colorMaterial match failed," << std::endl;
+                        std::cerr << "prev,  current " << ivState.colorMaterial << " " << stateLazyElt->ivState.colorMaterial << std::endl;
+                    }
 #endif /*DEBUG*/	   
-			return FALSE;
-		    }			
-		    break;
-		    
-		case(DIFFUSE_CASE):
-		    if (ivState.diffuseNodeId != 
-			stateLazyElt->ivState.diffuseNodeId ||
-			ivState.transpNodeId !=
-			stateLazyElt->ivState.transpNodeId){
+                    return FALSE;
+                }
+                break;
+
+            case(DIFFUSE_CASE):
+                if (ivState.diffuseNodeId != stateLazyElt->ivState.diffuseNodeId ||
+                    ivState.transpNodeId != stateLazyElt->ivState.transpNodeId) {
 #ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "diffuse&trans match failed," << std::endl;
-                            std::cerr << "prev,  current "
-                                      << ivState.diffuseNodeId << " " << ivState.transpNodeId << ", "
-                                      << stateLazyElt->ivState.diffuseNodeId << " "
-                                      << stateLazyElt->ivState.transpNodeId << std::endl;
-			}
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "diffuse&trans match failed," << std::endl;
+                        std::cerr << "prev,  current "
+                                  << ivState.diffuseNodeId << " " << ivState.transpNodeId << ", "
+                                  << stateLazyElt->ivState.diffuseNodeId << " "
+                                  << stateLazyElt->ivState.transpNodeId << std::endl;
+                    }
 #endif /*DEBUG*/	   		    
-			return (FALSE);
-		    }
-		    break;		    		    
-	    	case(AMBIENT_CASE):
-	            for(j=0; j<3; j++){
-		    	if (ivState.ambientColor[j]!=
-			    stateLazyElt->ivState.ambientColor[j]){
+                    return (FALSE);
+                }
+                break;
+            case(AMBIENT_CASE):
+                for(int j=0; j<3; j++) {
+                    if (ivState.ambientColor[j] != stateLazyElt->ivState.ambientColor[j]) {
 #ifdef DEBUG
-			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                               std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                               std::cerr << "ambient " << j << " match failed," << std::endl;
-                               std::cerr << "prev,  current " << ivState.ambientColor[j] << " "
-                                                              << stateLazyElt->ivState.ambientColor[j] << std::endl;
-			    }
+                        if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "ambient " << j << " match failed," << std::endl;
+                            std::cerr << "prev,  current " << ivState.ambientColor[j] << " "
+                                      << stateLazyElt->ivState.ambientColor[j] << std::endl;
+                        }
 #endif /*DEBUG*/				 
-			    return(FALSE);
-			}
-  	            }	
-	            break;
+                        return(FALSE);
+                    }
+                }
+                break;
 
-	    	case(EMISSIVE_CASE):
-	    	    for(j=0; j<3; j++){
-		    	if (ivState.emissiveColor[j]!=
-			    stateLazyElt->ivState.emissiveColor[j]){
+            case(EMISSIVE_CASE):
+                for(int j=0; j<3; j++) {
+                    if (ivState.emissiveColor[j] != stateLazyElt->ivState.emissiveColor[j]) {
 #ifdef DEBUG
-			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                               std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                               std::cerr << "emissive " << j << " match failed," << std::endl;
-                               std::cerr << "prev,  current "
-                                         << ivState.emissiveColor[j] << " "
-                                         << stateLazyElt->ivState.emissiveColor[j] << std::endl;
-			    }
+                        if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "emissive " << j << " match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << ivState.emissiveColor[j] << " "
+                                      << stateLazyElt->ivState.emissiveColor[j] << std::endl;
+                        }
 #endif /*DEBUG*/			 
-		    	    return(FALSE);
-			}
-  	            }	
-	    	    break;
+                        return(FALSE);
+                    }
+                }
+                break;
 
-	    	case(SPECULAR_CASE):
-	            for(j=0; j<3; j++){
-		    	if (ivState.specularColor[j]!=
-			    stateLazyElt->ivState.specularColor[j]){
+            case(SPECULAR_CASE):
+                for(int j=0; j<3; j++) {
+                    if (ivState.specularColor[j] != stateLazyElt->ivState.specularColor[j]) {
 #ifdef DEBUG
-			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                                std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                                std::cerr << "specular " << j << " match failed," << std::endl;
-                                std::cerr << "prev,  current "
-                                          << ivState.specularColor[j] << " "
-                                          << stateLazyElt->ivState.specularColor[j] << std::endl;
-			    }
+                        if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "specular " << j << " match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << ivState.specularColor[j] << " "
+                                      << stateLazyElt->ivState.specularColor[j] << std::endl;
+                        }
 #endif /*DEBUG*/				 
-		             return(FALSE);
-			}
-  	    	    }	
-	    	    break;
+                        return(FALSE);
+                    }
+                }
+                break;
 
-	    	case(SHININESS_CASE):
-	            if (fabsf(ivState.shininess - stateLazyElt->ivState.shininess)
-			>  SO_LAZY_SHINY_THRESHOLD){
+            case(SHININESS_CASE):
+                if (fabsf(ivState.shininess - stateLazyElt->ivState.shininess) >  SO_LAZY_SHINY_THRESHOLD) {
 #ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "shininess match failed," << std::endl;
-                            std::cerr << "prev,  current "
-                                      << ivState.shininess << " "
-                                      << stateLazyElt->ivState.shininess << std::endl;
-			}
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "shininess match failed," << std::endl;
+                        std::cerr << "prev,  current "
+                                  << ivState.shininess << " "
+                                  << stateLazyElt->ivState.shininess << std::endl;
+                    }
 #endif /*DEBUG*/	   			  
-		        return (FALSE);
-		    }
-	    	    break;
-		     
-		case(BLENDING_CASE):
-		    if (ivState.blending != stateLazyElt->ivState.blending){
-#ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "blend match failed," << std::endl;
-                            std::cerr << "prev,  current "
-                                      << ivState.blending << " "
-                                      << stateLazyElt->ivState.blending << std::endl;
-			}
-#endif /*DEBUG*/		    
-			return FALSE;
-		    }
-		    break;
-		    
+                    return (FALSE);
+                }
+                break;
 
-		case(TRANSPARENCY_CASE):			   		    
-		    if (ivState.stippleNum != 
-			    stateLazyElt->ivState.stippleNum){			
+            case(BLENDING_CASE):
+                if (ivState.blending != stateLazyElt->ivState.blending) {
 #ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "IVstipple match failed," << std::endl;
-                            std::cerr << "prev,  current "
-                                      << ivState.stippleNum << " "
-                                      << stateLazyElt->ivState.stippleNum << std::endl;
-			}
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "blend match failed," << std::endl;
+                        std::cerr << "prev,  current "
+                                  << ivState.blending << " "
+                                  << stateLazyElt->ivState.blending << std::endl;
+                    }
+#endif /*DEBUG*/		    
+                    return FALSE;
+                }
+                break;
+
+
+            case(TRANSPARENCY_CASE):
+                if (ivState.stippleNum != stateLazyElt->ivState.stippleNum) {
+#ifdef DEBUG
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "IVstipple match failed," << std::endl;
+                        std::cerr << "prev,  current "
+                                  << ivState.stippleNum << " "
+                                  << stateLazyElt->ivState.stippleNum << std::endl;
+                    }
 #endif /*DEBUG*/			
-			return FALSE;
-		    }
-		    break;
-		        	
-	    	default:
+                    return FALSE;
+                }
+                break;
+
+            default:
 #ifdef DEBUG
-	        SoDebugError::post("SoGLLazyElement::matches",
-				   "Invalid component of element"); 
+                SoDebugError::post("SoGLLazyElement::matches",
+                                   "Invalid component of element");
 #endif /*DEBUG*/
-		break;
-            } 
+                break;
+            }
         }
     }
     
-    if (!(bitmask = checkGL)) return TRUE;
- 
-    for(i=0;  (i< SO_LAZY_NUM_COMPONENTS)&&bitmask; i++,bitmask>>=1){
+    if (!(bitmask = checkGL))
+        return TRUE;
 
-    	if (bitmask & 1){
+    for(int i=0;  (i< SO_LAZY_NUM_COMPONENTS)&&bitmask; i++,bitmask>>=1) {
 
-            int j;
-            switch(i){
-		case(LIGHT_MODEL_CASE):
-		    if (glState.GLLightModel != 
-			stateLazyElt->glState.GLLightModel){
-#ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "GLLightModel match failed," << std::endl;
-                            std::cerr << "prev,  current "
-                                      << glState.GLLightModel << " "
-                                      << stateLazyElt->glState.GLLightModel << std::endl;
-			}
-#endif /*DEBUG*/		    
-			return FALSE;
-		    }
-		    break;
-		    	     
-		case(COLOR_MATERIAL_CASE):
-		    if (glState.GLColorMaterial != 
-			stateLazyElt->glState.GLColorMaterial){
-#ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "GLColorMaterial match failed," << std::endl;
-                            std::cerr << "prev,  current "
-                                      << glState.GLColorMaterial << " "
-                                      << stateLazyElt->glState.GLColorMaterial << std::endl;
-			}
-#endif /*DEBUG*/		    
-			return FALSE;
-		    }
-		    break;
+        if (bitmask & 1) {
 
-		case(DIFFUSE_CASE):
-		    if (glState.GLDiffuseNodeId != 
-			stateLazyElt->glState.GLDiffuseNodeId ||
-			glState.GLTranspNodeId != 
-			stateLazyElt->glState.GLTranspNodeId){
+            switch(i) {
+            case(LIGHT_MODEL_CASE):
+                if (glState.GLLightModel != stateLazyElt->glState.GLLightModel) {
 #ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "GLDiffuse&Transp match failed," << std::endl;
-                            std::cerr << "prev,  current "
-                                      << glState.GLDiffuseNodeId << " "
-                                      << glState.GLTranspNodeId << ", "
-                                      << stateLazyElt->glState.GLDiffuseNodeId << " "
-                                      << stateLazyElt->glState.GLTranspNodeId << std::endl;			}
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "GLLightModel match failed," << std::endl;
+                        std::cerr << "prev,  current "
+                                  << glState.GLLightModel << " "
+                                  << stateLazyElt->glState.GLLightModel << std::endl;
+                    }
 #endif /*DEBUG*/		    
-			return (FALSE);
-		    }
-		    break;
-		    
-    	    	case(AMBIENT_CASE):
-	            for(j=0; j<3; j++){
-		    	if (glState.GLAmbient[j]!=
-			    stateLazyElt->glState.GLAmbient[j]) {
+                    return FALSE;
+                }
+                break;
+
+            case(COLOR_MATERIAL_CASE):
+                if (glState.GLColorMaterial != stateLazyElt->glState.GLColorMaterial) {
 #ifdef DEBUG
-			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                               std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                               std::cerr << "GLambient " << j << " match failed," << std::endl;
-                               std::cerr << "prev,  current "
-                                         << glState.GLAmbient[j] << " "
-                                         << stateLazyElt->glState.GLAmbient[j] << std::endl;
-			    }
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "GLColorMaterial match failed," << std::endl;
+                        std::cerr << "prev,  current "
+                                  << glState.GLColorMaterial << " "
+                                  << stateLazyElt->glState.GLColorMaterial << std::endl;
+                    }
+#endif /*DEBUG*/		    
+                    return FALSE;
+                }
+                break;
+
+            case(DIFFUSE_CASE):
+                if (glState.GLDiffuseNodeId != stateLazyElt->glState.GLDiffuseNodeId ||
+                    glState.GLTranspNodeId != stateLazyElt->glState.GLTranspNodeId) {
+#ifdef DEBUG
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "GLDiffuse&Transp match failed," << std::endl;
+                        std::cerr << "prev,  current "
+                                  << glState.GLDiffuseNodeId << " "
+                                  << glState.GLTranspNodeId << ", "
+                                  << stateLazyElt->glState.GLDiffuseNodeId << " "
+                                  << stateLazyElt->glState.GLTranspNodeId << std::endl;			}
+#endif /*DEBUG*/		    
+                    return (FALSE);
+                }
+                break;
+
+            case(AMBIENT_CASE):
+                for(int j=0; j<3; j++) {
+                    if (glState.GLAmbient[j] != stateLazyElt->glState.GLAmbient[j]) {
+#ifdef DEBUG
+                        if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "GLambient " << j << " match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << glState.GLAmbient[j] << " "
+                                      << stateLazyElt->glState.GLAmbient[j] << std::endl;
+                        }
 #endif /*DEBUG*/			
-			    return(FALSE);
-			}
-  	            }	
-	            break;
+                        return(FALSE);
+                    }
+                }
+                break;
 
-	    	case(EMISSIVE_CASE):
-	    	    for(j=0; j<3; j++){
-		    	if (glState.GLEmissive[j]!=
-			    stateLazyElt->glState.GLEmissive[j]){ 
+            case(EMISSIVE_CASE):
+                for(int j=0; j<3; j++) {
+                    if (glState.GLEmissive[j] != stateLazyElt->glState.GLEmissive[j]) {
 #ifdef DEBUG
-			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                              std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                              std::cerr << "GLemissive " << j << " match failed," << std::endl;
-                              std::cerr << "prev,  current "
-                                        << glState.GLEmissive[j] << " "
-                                        << stateLazyElt->glState.GLEmissive[j] << std::endl;
-			    }
+                        if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "GLemissive " << j << " match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << glState.GLEmissive[j] << " "
+                                      << stateLazyElt->glState.GLEmissive[j] << std::endl;
+                        }
 #endif /*DEBUG*/			
-		    	    return(FALSE);
-			}
-  	            }	
-	    	    break;
+                        return(FALSE);
+                    }
+                }
+                break;
 
-	    	case(SPECULAR_CASE):
-	            for(j=0; j<3; j++){
-		    	if (glState.GLSpecular[j]!=
-			    stateLazyElt->glState.GLSpecular[j]){
+            case(SPECULAR_CASE):
+                for(int j=0; j<3; j++) {
+                    if (glState.GLSpecular[j] != stateLazyElt->glState.GLSpecular[j]) {
 #ifdef DEBUG
-			    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                               std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                               std::cerr << "GLspecular " << j << " match failed," << std::endl;
-                               std::cerr << "prev,  current "
-                                         << glState.GLSpecular[j] << " "
-                                         << stateLazyElt->glState.GLSpecular[j] << std::endl;
-			    }
+                        if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                            std::cerr << "GLspecular " << j << " match failed," << std::endl;
+                            std::cerr << "prev,  current "
+                                      << glState.GLSpecular[j] << " "
+                                      << stateLazyElt->glState.GLSpecular[j] << std::endl;
+                        }
 #endif /*DEBUG*/			 
-		             return(FALSE);
-			}
-  	    	    }	
-	    	    break;
+                        return(FALSE);
+                    }
+                }
+                break;
 
-	    	case(SHININESS_CASE):
-	            if (fabsf(glState.GLShininess - 
-			stateLazyElt->glState.GLShininess)> 
-			    SO_LAZY_SHINY_THRESHOLD){
+            case(SHININESS_CASE):
+                if (fabsf(glState.GLShininess - stateLazyElt->glState.GLShininess) > SO_LAZY_SHINY_THRESHOLD) {
 #ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "GLshininess match failed," << std::endl;
-                            std::cerr << "prev,  current "
-                                      << glState.GLShininess << " "
-                                      << stateLazyElt->glState.GLShininess << std::endl;
-			}
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "GLshininess match failed," << std::endl;
+                        std::cerr << "prev,  current "
+                                  << glState.GLShininess << " "
+                                  << stateLazyElt->glState.GLShininess << std::endl;
+                    }
 #endif /*DEBUG*/			     
-		        return (FALSE);
-		    }
-	    	     break;
-		     
-	       	case(BLENDING_CASE):
-		    if (glState.GLblending != 
-			stateLazyElt->glState.GLblending){
-#ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "GLblending match failed," << std::endl;
-                            std::cerr << "prev,  current "
-                                      << glState.GLblending << " "
-                                      << stateLazyElt->glState.GLblending << std::endl;
-			}
-#endif /*DEBUG*/		    
-			return FALSE;
-		    }
-		    break;
+                    return (FALSE);
+                }
+                break;
 
-		    
-		case(TRANSPARENCY_CASE):			
-		    if (glState.GLStippleNum !=
-			    stateLazyElt->glState.GLStippleNum){			       		       
+            case(BLENDING_CASE):
+                if (glState.GLblending != stateLazyElt->glState.GLblending) {
 #ifdef DEBUG
-			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                            std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
-                            std::cerr << "GLstipple match failed," << std::endl;
-                            std::cerr << "prev, current  "
-                                      << glState.GLStippleNum << " "
-                                      << stateLazyElt->glState.GLStippleNum << std::endl;
-			}
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "GLblending match failed," << std::endl;
+                        std::cerr << "prev,  current "
+                                  << glState.GLblending << " "
+                                  << stateLazyElt->glState.GLblending << std::endl;
+                    }
+#endif /*DEBUG*/		    
+                    return FALSE;
+                }
+                break;
+
+
+            case(TRANSPARENCY_CASE):
+                if (glState.GLStippleNum != stateLazyElt->glState.GLStippleNum) {
+#ifdef DEBUG
+                    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                        std::cerr << "CACHE DEBUG: cache not valid" << std::endl;
+                        std::cerr << "GLstipple match failed," << std::endl;
+                        std::cerr << "prev, current  "
+                                  << glState.GLStippleNum << " "
+                                  << stateLazyElt->glState.GLStippleNum << std::endl;
+                    }
 #endif /*DEBUG*/	
-			return FALSE;			
-		    }
-		    break; 
-		    
-	    	default:
+                    return FALSE;
+                }
+                break;
+
+            default:
 #ifdef DEBUG
-	        SoDebugError::post("SoGLLazyElement::matches",
-				   "Invalid component of element"); 
+                SoDebugError::post("SoGLLazyElement::matches",
+                                   "Invalid component of element");
 #endif /*DEBUG*/
-		break;
-	    }
-	    
+                break;
+            }
+
         }
     }
 
@@ -1236,16 +1209,14 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 SoGLLazyElement *
 SoGLLazyElement::copyLazyMatchInfo(SoState *state)
 {
-//  force a push, so we can set the setBits in a new element.
-    SoGLLazyElement* newElt = 
-	(SoGLLazyElement *)SoLazyElement::getWInstance(state);
+    //  force a push, so we can set the setBits in a new element.
+    SoGLLazyElement* newElt = (SoGLLazyElement *)SoLazyElement::getWInstance(state);
     newElt->ivState.cacheLevelSetBits = 0;
-    newElt->ivState.cacheLevelSendBits = 0;    
-    SoGLLazyElement *result =
-	(SoGLLazyElement *)getTypeId().createInstance();
+    newElt->ivState.cacheLevelSendBits = 0;
+    SoGLLazyElement *result = (SoGLLazyElement *)getTypeId().createInstance();
 
     result->GLSendBits = 0;
-    result->ivState.transpType = newElt->ivState.transpType;    
+    result->ivState.transpType = newElt->ivState.transpType;
     return result;
 }
 
@@ -1277,258 +1248,249 @@ SoGLLazyElement::reallySend(const SoState *state, uint32_t bitmask)
     uint32_t sendBits = bitmask & invalidBits;
     uint32_t realSendBits = 0;
     // with base_color, don't send nondiffuse colors.
-    if (ivState.lightModel == BASE_COLOR) sendBits &= ~OTHER_COLOR_MASK;
+    if (ivState.lightModel == BASE_COLOR)
+        sendBits &= ~OTHER_COLOR_MASK;
 
-    //everything that was requested to send will be valid afterward, 
-   
+    //everything that was requested to send will be valid afterward,
+
     invalidBits &= ~(sendBits);
     
     SbBool sendit;
 
-    for(int j = 0; (j< SO_LAZY_NUM_COMPONENTS) && (sendBits != 0); 
-		j++,sendBits >>=1){
-	if (sendBits & 1){
-	    int i;
-	    switch(j){
-		// Note that lightmodel and colormaterial have to send
-		// before diffuse, so that we can force send diffuse
-				
-		case(LIGHT_MODEL_CASE):
-		    if (glState.GLLightModel == ivState.lightModel) break;
-		    if (ivState.lightModel == PHONG){
-			glEnable(GL_LIGHTING);
-			if (colorIndex)glShadeModel(GL_FLAT);
-		    }
-		    else {
-		        glDisable(GL_LIGHTING);
-			if (colorIndex) glShadeModel(GL_SMOOTH);
-		    }
-		    glState.GLLightModel = ivState.lightModel;
-		    realSendBits |= LIGHT_MODEL_MASK;
-		    //force-send the diffuse color:
-		    sendBits |= (DIFFUSE_MASK >> LIGHT_MODEL_CASE);
-		    glState.GLDiffuseNodeId = 1;
-		    break;
-	
-		case(COLOR_MATERIAL_CASE):	       	
-		    // Handle color material if light model does not change:
-		    if (ivState.colorMaterial == glState.GLColorMaterial) break;					    	 		
-		    realSendBits |= COLOR_MATERIAL_MASK;	       
-		    glState.GLColorMaterial = ivState.colorMaterial;
-		    if (ivState.colorMaterial){
-			    glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
-			    glEnable(GL_COLOR_MATERIAL);
-      			}
-		    else glDisable(GL_COLOR_MATERIAL);
+    for(int j = 0; (j< SO_LAZY_NUM_COMPONENTS) && (sendBits != 0); j++,sendBits >>=1) {
+        if (sendBits & 1) {
+            switch(j) {
+            // Note that lightmodel and colormaterial have to send
+            // before diffuse, so that we can force send diffuse
+
+            case(LIGHT_MODEL_CASE):
+                if (glState.GLLightModel == ivState.lightModel) break;
+                if (ivState.lightModel == PHONG) {
+                    glEnable(GL_LIGHTING);
+                    if (colorIndex)
+                        glShadeModel(GL_FLAT);
+                }
+                else {
+                    glDisable(GL_LIGHTING);
+                    if (colorIndex)
+                        glShadeModel(GL_SMOOTH);
+                }
+                glState.GLLightModel = ivState.lightModel;
+                realSendBits |= LIGHT_MODEL_MASK;
+                //force-send the diffuse color:
+                sendBits |= (DIFFUSE_MASK >> LIGHT_MODEL_CASE);
+                glState.GLDiffuseNodeId = 1;
+                break;
+
+            case(COLOR_MATERIAL_CASE):
+                // Handle color material if light model does not change:
+                if (ivState.colorMaterial == glState.GLColorMaterial) break;
+                realSendBits |= COLOR_MATERIAL_MASK;
+                glState.GLColorMaterial = ivState.colorMaterial;
+                if (ivState.colorMaterial) {
+                    glColorMaterial(GL_FRONT_AND_BACK, GL_DIFFUSE);
+                    glEnable(GL_COLOR_MATERIAL);
+                }
+                else glDisable(GL_COLOR_MATERIAL);
 #ifdef DEBUG
-		    if ((glState.GLLightModel == BASE_COLOR) &&
-			(glState.GLColorMaterial)){
-			    SoDebugError::post("SoGLLazyElement::reallySend", 
-			    "ColorMaterial being used with BASE_COLOR");
-			}
+                if ((glState.GLLightModel == BASE_COLOR) &&
+                        (glState.GLColorMaterial)) {
+                    SoDebugError::post("SoGLLazyElement::reallySend",
+                                       "ColorMaterial being used with BASE_COLOR");
+                }
 #endif /*DEBUG*/		  
-		    // ensure diffuse color will send:
-		    sendBits |= (DIFFUSE_MASK >> COLOR_MATERIAL_CASE);
-		    glState.GLDiffuseNodeId = 1;			    
-		    break;
-	    
-		case(DIFFUSE_CASE): 		 
-		    // in this case, always send color[0]
-		    if (glState.GLDiffuseNodeId == ivState.diffuseNodeId &&
-			glState.GLTranspNodeId == ivState.transpNodeId)
-			break;
-		    realSendBits |= DIFFUSE_MASK;
-		    glState.GLDiffuseNodeId = ivState.diffuseNodeId;
-		    glState.GLTranspNodeId = ivState.transpNodeId;
-		    
-		    if(colorIndex){
+                // ensure diffuse color will send:
+                sendBits |= (DIFFUSE_MASK >> COLOR_MATERIAL_CASE);
+                glState.GLDiffuseNodeId = 1;
+                break;
+
+            case(DIFFUSE_CASE):
+                // in this case, always send color[0]
+                if (glState.GLDiffuseNodeId == ivState.diffuseNodeId &&
+                    glState.GLTranspNodeId == ivState.transpNodeId)
+                    break;
+                realSendBits |= DIFFUSE_MASK;
+                glState.GLDiffuseNodeId = ivState.diffuseNodeId;
+                glState.GLTranspNodeId = ivState.transpNodeId;
+
+                if (colorIndex) {
 #ifdef DEBUG
-			if (glState.GLLightModel != BASE_COLOR){
-			    SoDebugError::post("SoGLLazyElement::reallySend", 
-			    "PHONG shading used in colorIndex mode");
-			}
+                    if (glState.GLLightModel != BASE_COLOR) {
+                        SoDebugError::post("SoGLLazyElement::reallySend",
+                                           "PHONG shading used in colorIndex mode");
+                    }
 #endif					  	
-			glIndexi((GLint)ivState.colorIndices[0]);
-			break;
-		    }
-		    float col4[4];		    
-		 
-		    if (glState.GLColorMaterial || 
-			(glState.GLLightModel== BASE_COLOR)) {
-			    uint32_t pColors;
-			    DGL_HTON_INT32(pColors, *(ivState.packedColors));
-			    glColor4ubv((GLubyte*)&pColors);
-		    }
-		    else{		
-			col4[3] =  (ivState.packedColors[0] & 
-			    0xff)   * 1.0f/255;
-			col4[2] = ((ivState.packedColors[0] & 
-			    0xff00) >>  8) * 1.0f/255;
-			col4[1] = ((ivState.packedColors[0] & 
-			    0xff0000)>> 16) * 1.0f/255;
-			col4[0] = ((ivState.packedColors[0] & 
-			    0xff000000)>>24) * 1.0f/255;
-			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, col4);
-		    }		  
-		    break;
-		    		      
-		case(AMBIENT_CASE):     
-		    sendit = FALSE;
-       	    	    for(i=0; i<3; i++){
-			if (glState.GLAmbient[i] != ivState.ambientColor[i]){ 
-			    sendit=TRUE;
-			    glState.GLAmbient[i]=ivState.ambientColor[i];
-			}
-		    }
-		    if (!sendit) break;
-		    realSendBits |= AMBIENT_MASK;
-		    glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT,
-			(GLfloat*)glState.GLAmbient); 
-		    break;
+                    glIndexi((GLint)ivState.colorIndices[0]);
+                    break;
+                }
+                float col4[4];
 
-		case(EMISSIVE_CASE):
-		    sendit = FALSE;
-       	    	    for(i=0; i<3; i++){
-			if (glState.GLEmissive[i]!=ivState.emissiveColor[i]){
-			    sendit = TRUE;
-			    glState.GLEmissive[i]=ivState.emissiveColor[i];
-			}
-		    }
-		    if (!sendit) break;
-		    realSendBits |= EMISSIVE_MASK;
-		    glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION,
-			(GLfloat*)glState.GLEmissive); 
-		    break;
+                if (glState.GLColorMaterial || (glState.GLLightModel== BASE_COLOR)) {
+                    uint32_t pColors;
+                    DGL_HTON_INT32(pColors, *(ivState.packedColors));
+                    glColor4ubv((GLubyte*)&pColors);
+                }
+                else{
+                    col4[3] =  (ivState.packedColors[0] & 0xff)   * 1.0f/255;
+                    col4[2] = ((ivState.packedColors[0] & 0xff00) >>  8) * 1.0f/255;
+                    col4[1] = ((ivState.packedColors[0] & 0xff0000)>> 16) * 1.0f/255;
+                    col4[0] = ((ivState.packedColors[0] & 0xff000000)>>24) * 1.0f/255;
+                    glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, col4);
+                }
+                break;
 
-		case(SPECULAR_CASE):
-		    sendit = FALSE;
-       	    	    for(i=0; i<3; i++){
-			if (glState.GLSpecular[i]!=ivState.specularColor[i]){
-			    sendit = TRUE;
-			    glState.GLSpecular[i]=ivState.specularColor[i];
-			}
-		    }
-		    if (!sendit) break;
-		    realSendBits |= SPECULAR_MASK;
-		    glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,
-			(GLfloat*)glState.GLSpecular); 
-		    break;
+            case(AMBIENT_CASE):
+                sendit = FALSE;
+                for(int i=0; i<3; i++) {
+                    if (glState.GLAmbient[i] != ivState.ambientColor[i]) {
+                        sendit=TRUE;
+                        glState.GLAmbient[i]=ivState.ambientColor[i];
+                    }
+                }
+                if (!sendit)
+                    break;
+                realSendBits |= AMBIENT_MASK;
+                glMaterialfv(GL_FRONT_AND_BACK,GL_AMBIENT, (GLfloat*)glState.GLAmbient);
+                break;
 
-		case(SHININESS_CASE):
-		    if (fabsf(glState.GLShininess-ivState.shininess)<
-			SO_LAZY_SHINY_THRESHOLD) break;
-		    realSendBits |= SHININESS_MASK;
-		    glState.GLShininess=ivState.shininess;
-		    glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS,
-			(GLfloat)glState.GLShininess*128.0f); 
-		    break;
-		    
-	   	case(BLENDING_CASE):
-		       		    
-		    if (glState.GLblending == ivState.blending) break;
-		    realSendBits |= BLENDING_MASK;		
-		    glState.GLblending = ivState.blending;
-		    if (ivState.blending == TRUE){
-		        glEnable(GL_BLEND);		     	
-		    }
-		    // blend is being turned off:
-       		    else glDisable(GL_BLEND);				    	      		
-		    break;
-		  		 
-		case(TRANSPARENCY_CASE):		
-			
-		    if (ivState.stippleNum == glState.GLStippleNum) break;
-		    
-		    if (ivState.stippleNum == 0){
-			glDisable(GL_POLYGON_STIPPLE);
-		    }
-		    else{
-			sendStipple(state, ivState.stippleNum);
-			if (glState.GLStippleNum <= 0)
-			    glEnable(GL_POLYGON_STIPPLE);
-		    }
-		    glState.GLStippleNum = ivState.stippleNum;			
-	    		    		
-		    realSendBits |= TRANSPARENCY_MASK;	       		    
-		    break;
-	    }
-	}
+            case(EMISSIVE_CASE):
+                sendit = FALSE;
+                for(int i=0; i<3; i++) {
+                    if (glState.GLEmissive[i]!=ivState.emissiveColor[i]) {
+                        sendit = TRUE;
+                        glState.GLEmissive[i]=ivState.emissiveColor[i];
+                    }
+                }
+                if (!sendit)
+                    break;
+                realSendBits |= EMISSIVE_MASK;
+                glMaterialfv(GL_FRONT_AND_BACK,GL_EMISSION, (GLfloat*)glState.GLEmissive);
+                break;
+
+            case(SPECULAR_CASE):
+                sendit = FALSE;
+                for(int i=0; i<3; i++) {
+                    if (glState.GLSpecular[i]!=ivState.specularColor[i]) {
+                        sendit = TRUE;
+                        glState.GLSpecular[i]=ivState.specularColor[i];
+                    }
+                }
+                if (!sendit)
+                    break;
+                realSendBits |= SPECULAR_MASK;
+                glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR, (GLfloat*)glState.GLSpecular);
+                break;
+
+            case(SHININESS_CASE):
+                if (fabsf(glState.GLShininess-ivState.shininess) < SO_LAZY_SHINY_THRESHOLD)
+                    break;
+                realSendBits |= SHININESS_MASK;
+                glState.GLShininess=ivState.shininess;
+                glMaterialf(GL_FRONT_AND_BACK,GL_SHININESS, (GLfloat)glState.GLShininess*128.0f);
+                break;
+
+            case(BLENDING_CASE):
+
+                if (glState.GLblending == ivState.blending)
+                    break;
+                realSendBits |= BLENDING_MASK;
+                glState.GLblending = ivState.blending;
+                if (ivState.blending == TRUE) {
+                    glEnable(GL_BLEND);
+                }
+                // blend is being turned off:
+                else glDisable(GL_BLEND);
+                break;
+
+            case(TRANSPARENCY_CASE):
+
+                if (ivState.stippleNum == glState.GLStippleNum) break;
+
+                if (ivState.stippleNum == 0) {
+                    glDisable(GL_POLYGON_STIPPLE);
+                } else {
+                    sendStipple(state, ivState.stippleNum);
+                    if (glState.GLStippleNum <= 0)
+                        glEnable(GL_POLYGON_STIPPLE);
+                }
+                glState.GLStippleNum = ivState.stippleNum;
+
+                realSendBits |= TRANSPARENCY_MASK;
+                break;
+            }
+        }
     }
     //Record the real_sends:
     GLSendBits |= realSendBits;
     
     // if cache is open, record required info:
-    if (state->isCacheOpen()){
-	SoGLRenderCache* thisCache = (SoGLRenderCache*)
-		SoCacheElement::getCurrentCache((SoState*)state);
-	SoGLLazyElement* cacheLazyElt = thisCache->getLazyElt();
-	uint32_t didRealSendBits = cacheLazyElt->GLSendBits;
-	uint32_t levelSetBits = ivState.cacheLevelSetBits;
-	uint32_t levelSendBits = ivState.cacheLevelSendBits;
-	
-	// To determine which of doSend, checkGL, and checkIV bits to set,
-	// All combinations of the bits
-	//	A:  levelSendBits
-	//	B:  levelSetBits
-	//	C:  didRealSendBits
-	//	D:  realSendBits
-	// are considered.  The following matrix describes the resulting
-	// dependencies:
-	//
-	//		A=0	    A=1		A=0	    A=1
-	//		B=0	    B=0		B=1	    B=1
-	//
-	//  C=0,D=0	IV=GL	    (IV=GL)	GL	    GL
-	//			    
-	//  C=0,D=1	IV	    (IV)	OK	    OK
-	//
-	//  C=1,D=0	IV	    (IV)	OK	    OK
-	//
-	//  C=1,D=1	IV	    IV		OK	    OK
-	//
-	//  In the above, OK means no dependence, a dependence in parens
-	//  means that the dependence is already implied by another
-	//  send in the same scene graph.
-		
-	// doSend flag indicates dependencies on IV=GL; these are components
-	// with no set and a non-real send in the cache.
-	uint32_t doSend = bitmask&(~didRealSendBits)&(~realSendBits) 
-	    &(~levelSetBits)&(~levelSendBits);
-	     	    
-	// checkIV flag indicates dependence on IV.  These are components that
-	// did a real send not preceded by a set:
-	uint32_t checkIV = bitmask&(~levelSetBits)&
-	    (((~levelSendBits)&(realSendBits))|
-	    ((~levelSendBits)&(didRealSendBits))|
-	    ((didRealSendBits)&(realSendBits)));
-	    
-	//checkGL indicates a dependence on GL.  These are components that did
-	//a non-real send after a real set.
-	uint32_t checkGL = bitmask&(~didRealSendBits)&(~realSendBits)
-	    &(levelSetBits);
+    if (state->isCacheOpen()) {
+        SoGLRenderCache* thisCache = (SoGLRenderCache*)SoCacheElement::getCurrentCache((SoState*)state);
+        SoGLLazyElement* cacheLazyElt = thisCache->getLazyElt();
+        uint32_t didRealSendBits = cacheLazyElt->GLSendBits;
+        uint32_t levelSetBits = ivState.cacheLevelSetBits;
+        uint32_t levelSendBits = ivState.cacheLevelSendBits;
 
-	//with light model, a dependence on IV=GL is also a dependence on GL
-	
-	if(doSend & LIGHT_MODEL_MASK){
-	    checkGL |= LIGHT_MODEL_MASK;       
-	}
-	//with diffuse colors, if there are multiple colors, an IV=GL 
-	//dependence is also an IV dependence
-	if((doSend & DIFFUSE_MASK)&&(ivState.numDiffuseColors > 1)){
-	    checkIV |= DIFFUSE_MASK;
-	}	    
-	cacheLazyElt->GLSendBits |= realSendBits;
-	if (checkGL) copyGLValues(checkGL,cacheLazyElt);  
-	if (checkIV) copyIVValues(checkIV,cacheLazyElt);
- 	thisCache->setLazyBits(checkIV, checkGL, doSend);
-	
-	//If we set a bit in levelSendBits, must do this on a writable element:
-	if (ivState.cacheLevelSendBits != (ivState.cacheLevelSendBits|bitmask)){
-	    SoGLLazyElement* le = 
-		(SoGLLazyElement*)getWInstance((SoState *)state);
-	    le->ivState.cacheLevelSendBits |= bitmask;
-	}
-    }	
+        // To determine which of doSend, checkGL, and checkIV bits to set,
+        // All combinations of the bits
+        //	A:  levelSendBits
+        //	B:  levelSetBits
+        //	C:  didRealSendBits
+        //	D:  realSendBits
+        // are considered.  The following matrix describes the resulting
+        // dependencies:
+        //
+        //		A=0	    A=1		A=0	    A=1
+        //		B=0	    B=0		B=1	    B=1
+        //
+        //  C=0,D=0	IV=GL	    (IV=GL)	GL	    GL
+        //
+        //  C=0,D=1	IV	    (IV)	OK	    OK
+        //
+        //  C=1,D=0	IV	    (IV)	OK	    OK
+        //
+        //  C=1,D=1	IV	    IV		OK	    OK
+        //
+        //  In the above, OK means no dependence, a dependence in parens
+        //  means that the dependence is already implied by another
+        //  send in the same scene graph.
+
+        // doSend flag indicates dependencies on IV=GL; these are components
+        // with no set and a non-real send in the cache.
+        uint32_t doSend = bitmask&(~didRealSendBits)&(~realSendBits)&(~levelSetBits)&(~levelSendBits);
+
+        // checkIV flag indicates dependence on IV.  These are components that
+        // did a real send not preceded by a set:
+        uint32_t checkIV = bitmask&(~levelSetBits)&
+                (((~levelSendBits)&(realSendBits))|
+                 ((~levelSendBits)&(didRealSendBits))|
+                 ((didRealSendBits)&(realSendBits)));
+
+        //checkGL indicates a dependence on GL.  These are components that did
+        //a non-real send after a real set.
+        uint32_t checkGL = bitmask&(~didRealSendBits)&(~realSendBits)&(levelSetBits);
+
+        //with light model, a dependence on IV=GL is also a dependence on GL
+
+        if (doSend & LIGHT_MODEL_MASK) {
+            checkGL |= LIGHT_MODEL_MASK;
+        }
+        //with diffuse colors, if there are multiple colors, an IV=GL
+        //dependence is also an IV dependence
+        if ((doSend & DIFFUSE_MASK)&&(ivState.numDiffuseColors > 1)) {
+            checkIV |= DIFFUSE_MASK;
+        }
+        cacheLazyElt->GLSendBits |= realSendBits;
+        if (checkGL) copyGLValues(checkGL,cacheLazyElt);
+        if (checkIV) copyIVValues(checkIV,cacheLazyElt);
+        thisCache->setLazyBits(checkIV, checkGL, doSend);
+
+        //If we set a bit in levelSendBits, must do this on a writable element:
+        if (ivState.cacheLevelSendBits != (ivState.cacheLevelSendBits|bitmask)) {
+            SoGLLazyElement* le = (SoGLLazyElement*)getWInstance((SoState *)state);
+            le->ivState.cacheLevelSendBits |= bitmask;
+        }
+    }
 
     return;
 }
@@ -1550,37 +1512,35 @@ SoGLLazyElement::sendDiffuseByIndex(int index) const
     //check to make sure lazy element has updated GL state;
     //this method should only be called after an initial call to
     //SoLazyElement::reallySend
-    if ((invalidBits & NO_COLOR_MASK) != 0){
-	SoDebugError::post("SoGLLazyElement::sendDiffuseByIndex", 
-	    "Indexed send not preceded by send of lazy element");	
+    if ((invalidBits & NO_COLOR_MASK) != 0) {
+        SoDebugError::post("SoGLLazyElement::sendDiffuseByIndex",
+                           "Indexed send not preceded by send of lazy element");
     }
-    if (index >= ivState.numDiffuseColors){
-	SoDebugError::post("SoGLLazyElement::sendDiffuseByIndex", 
-	    "Not enough diffuse colors provided");
+    if (index >= ivState.numDiffuseColors) {
+        SoDebugError::post("SoGLLazyElement::sendDiffuseByIndex",
+                           "Not enough diffuse colors provided");
     }
-    if (index >= ivState.numTransparencies && 
-	    ivState.numTransparencies > 1){
-	SoDebugError::post("SoGLLazyElement::sendDiffuseByIndex", 
-	    "Not enough transparencies provided");
+    if (index >= ivState.numTransparencies && ivState.numTransparencies > 1) {
+        SoDebugError::post("SoGLLazyElement::sendDiffuseByIndex",
+                           "Not enough transparencies provided");
     }
 #endif /*DEBUG*/
     //If in color index mode, ignore transparency.
-    if (colorIndex){
-	glIndexi((GLint)ivState.colorIndices[index]);
-	return;
+    if (colorIndex) {
+        glIndexi((GLint)ivState.colorIndices[index]);
+        return;
     }
-    	    
+
     if (glState.GLColorMaterial || (glState.GLLightModel == BASE_COLOR)) {
-	uint32_t pColors;
-	DGL_HTON_INT32(pColors, *(ivState.packedColors+index));
-	glColor4ubv((GLubyte*)&pColors);
-    }
-    else {
-      	col4[3] =  (ivState.packedColors[index] & 0xff)   * 1.0f/255;
-	col4[2] = ((ivState.packedColors[index] & 0xff00) >>  8) * 1.0f/255;
-	col4[1] = ((ivState.packedColors[index] & 0xff0000)>> 16) * 1.0f/255;
-	col4[0] = ((ivState.packedColors[index] & 0xff000000)>>24) * 1.0f/255;
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, col4);
+        uint32_t pColors;
+        DGL_HTON_INT32(pColors, *(ivState.packedColors+index));
+        glColor4ubv((GLubyte*)&pColors);
+    } else {
+        col4[3] =  (ivState.packedColors[index] & 0xff)   * 1.0f/255;
+        col4[2] = ((ivState.packedColors[index] & 0xff00) >>  8) * 1.0f/255;
+        col4[1] = ((ivState.packedColors[index] & 0xff0000)>> 16) * 1.0f/255;
+        col4[0] = ((ivState.packedColors[index] & 0xff000000)>>24) * 1.0f/255;
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, col4);
     }
     return;
 }
@@ -1597,35 +1557,34 @@ SoGLLazyElement::sendDiffuseByIndex(int index) const
 ////////////////////////////////////////////////////////////////////////////
 void 
 SoGLLazyElement::mergeCacheInfo(SoGLRenderCache* childCache, 
-    SoGLRenderCache* parentCache, uint32_t doSendFlag, uint32_t checkIVFlag, 
-    uint32_t checkGLFlag)
+                                SoGLRenderCache* parentCache, uint32_t doSendFlag, uint32_t checkIVFlag,
+                                uint32_t checkGLFlag)
 {	
     SoGLLazyElement* parentLazyElt = parentCache->getLazyElt();
     SoGLLazyElement* childLazyElt = childCache->getLazyElt();
     uint32_t parentDidRealSendBits = parentLazyElt->GLSendBits;
     uint32_t parentSetBits = ivState.cacheLevelSetBits;
-    uint32_t doSend = (~parentDidRealSendBits)& doSendFlag 
-	&(~ivState.cacheLevelSendBits)&(~ivState.cacheLevelSetBits);
+    uint32_t doSend = (~parentDidRealSendBits)& doSendFlag
+            &(~ivState.cacheLevelSendBits)&(~ivState.cacheLevelSetBits);
     uint32_t checkIV =  checkIVFlag & (~ivState.cacheLevelSetBits);
     uint32_t checkGL = (~parentDidRealSendBits)& checkGLFlag;
-	
-  	
-    if (checkGL) 
-	childLazyElt->copyGLValues(checkGL, parentLazyElt);
-    if (checkIV) 
-	childLazyElt->copyIVValues(checkIV, parentLazyElt);  
+
+
+    if (checkGL)
+        childLazyElt->copyGLValues(checkGL, parentLazyElt);
+    if (checkIV)
+        childLazyElt->copyIVValues(checkIV, parentLazyElt);
     
     // in addition we must consider the case where the parent cache issued
-    // a set, and the child issued a send which was not a real_send. 	
-    uint32_t moreGL = (~parentDidRealSendBits)&(parentSetBits)&
-	( checkGLFlag|doSendFlag );
+    // a set, and the child issued a send which was not a real_send.
+    uint32_t moreGL = (~parentDidRealSendBits)&(parentSetBits)&( checkGLFlag|doSendFlag );
     if (moreGL) copyGLValues(moreGL,parentLazyElt);
     
-    parentCache->setLazyBits
-	    (checkIV, checkGL|moreGL, doSend);
+    parentCache->setLazyBits(checkIV, checkGL|moreGL, doSend);
+
     // merge the child didRealSendBits into parent:
     parentLazyElt->GLSendBits |= childLazyElt->GLSendBits;
- 
+
     
 }	
 ////////////////////////////////////////////////////////////////////////
@@ -1642,64 +1601,54 @@ SoGLLazyElement::mergeCacheInfo(SoGLRenderCache* childCache,
 ////////////////////////////////////////////////////////////////////////
 void
 SoGLLazyElement::getCopyGL(SoGLLazyElement* cacheLazyElement, 
-    SoGLLazyElement::GLLazyState& cacheGLState)
+                           SoGLLazyElement::GLLazyState& cacheGLState)
 {
     uint32_t bitmask = cacheLazyElement->GLSendBits;
-    for(int j=0; (j<SO_LAZY_NUM_COMPONENTS)&&bitmask; j++, bitmask>>=1){
+    for(int j=0; (j<SO_LAZY_NUM_COMPONENTS)&&bitmask; j++, bitmask>>=1) {
 
-    	if (bitmask&1){
-	    int i;         
-	    switch(j){
-		case(LIGHT_MODEL_CASE):
-		    cacheGLState.GLLightModel = glState.GLLightModel;
-		    break;
-	    
-		case(COLOR_MATERIAL_CASE):
-		    cacheGLState.GLColorMaterial = 
-			glState.GLColorMaterial;
-		    break;
-	    
-		case(DIFFUSE_CASE):
-		    cacheGLState.GLDiffuseNodeId = 
-			glState.GLDiffuseNodeId;
-		    cacheGLState.GLTranspNodeId = 
-			glState.GLTranspNodeId;
-		    break;
-		    
-		case(AMBIENT_CASE):
-       	    	    for(i=0; i<3; i++)
-			cacheGLState.GLAmbient[i] = 
-			    glState.GLAmbient[i];
-		    break;
+        if (bitmask&1) {
+            switch(j) {
+            case(LIGHT_MODEL_CASE):
+                cacheGLState.GLLightModel = glState.GLLightModel;
+                break;
 
-		case(EMISSIVE_CASE):
-       	    	    for(i=0; i<3; i++)
-			cacheGLState.GLEmissive[i] = 
-			    glState.GLEmissive[i];
-		    break;
+            case(COLOR_MATERIAL_CASE):
+                cacheGLState.GLColorMaterial = glState.GLColorMaterial;
+                break;
 
-		case(SPECULAR_CASE):
-       	    	    for(i=0; i<3; i++)
-			cacheGLState.GLSpecular[i] = 
-			    glState.GLSpecular[i];
-		    break;
+            case(DIFFUSE_CASE):
+                cacheGLState.GLDiffuseNodeId = glState.GLDiffuseNodeId;
+                cacheGLState.GLTranspNodeId = glState.GLTranspNodeId;
+                break;
 
-		case(SHININESS_CASE):
-		    cacheGLState.GLShininess = 
-			glState.GLShininess;
-		    break;
-		    
-		case(BLENDING_CASE):
-		    cacheGLState.GLblending = 
-			glState.GLblending;
-		    break;
-		 		      
-		case(TRANSPARENCY_CASE):
-		    cacheGLState.GLStippleNum =
-			glState.GLStippleNum;
-		    break;
-    	    }
-	}
+            case(AMBIENT_CASE):
+                for(int i=0; i<3; i++)
+                    cacheGLState.GLAmbient[i] = glState.GLAmbient[i];
+                break;
+
+            case(EMISSIVE_CASE):
+                for(int i=0; i<3; i++)
+                    cacheGLState.GLEmissive[i] = glState.GLEmissive[i];
+                break;
+
+            case(SPECULAR_CASE):
+                for(int i=0; i<3; i++)
+                    cacheGLState.GLSpecular[i] = glState.GLSpecular[i];
+                break;
+
+            case(SHININESS_CASE):
+                cacheGLState.GLShininess = glState.GLShininess;
+                break;
+
+            case(BLENDING_CASE):
+                cacheGLState.GLblending = glState.GLblending;
+                break;
+
+            case(TRANSPARENCY_CASE):
+                cacheGLState.GLStippleNum = glState.GLStippleNum;
+                break;
+            }
+        }
     }
 }
 ////////////////////////////////////////////////////////////////////////
@@ -1714,67 +1663,56 @@ SoGLLazyElement::getCopyGL(SoGLLazyElement* cacheLazyElement,
 ////////////////////////////////////////////////////////////////////////
 void
 SoGLLazyElement::reallyCopyBackGL(uint32_t bitmask, 
-    SoGLLazyElement::GLLazyState& cacheGLState)
+                                  SoGLLazyElement::GLLazyState& cacheGLState)
 {
     GLSendBits |= bitmask;
     invalidBits |= bitmask;
-   
-    for(int j=0; (j<SO_LAZY_NUM_COMPONENTS)&&bitmask; j++, bitmask>>=1){
 
-    	if (bitmask&1){
-	    int i;         
-	    switch(j){
-		case(LIGHT_MODEL_CASE):
-		    glState.GLLightModel = 
-			cacheGLState.GLLightModel;
-		    break;
-	    
-		case(COLOR_MATERIAL_CASE):
-		    glState.GLColorMaterial = 
-			cacheGLState.GLColorMaterial;
-		    break;
-		    
-		case(DIFFUSE_CASE):
-		    glState.GLDiffuseNodeId = 
-			cacheGLState.GLDiffuseNodeId;
-		    glState.GLTranspNodeId = 
-			cacheGLState.GLTranspNodeId;
-		    break;
+    for(int j=0; (j<SO_LAZY_NUM_COMPONENTS)&&bitmask; j++, bitmask>>=1) {
 
-		case(AMBIENT_CASE):
-       	    	    for(i=0; i<3; i++)
-			glState.GLAmbient[i] = 
-			    cacheGLState.GLAmbient[i];
-		    break;
+        if (bitmask&1) {
+            switch(j) {
+            case(LIGHT_MODEL_CASE):
+                glState.GLLightModel = cacheGLState.GLLightModel;
+                break;
 
-		case(EMISSIVE_CASE):
-       	    	    for(i=0; i<3; i++)
-			glState.GLEmissive[i] = 
-			    cacheGLState.GLEmissive[i];
-		    break;
+            case(COLOR_MATERIAL_CASE):
+                glState.GLColorMaterial = cacheGLState.GLColorMaterial;
+                break;
 
-		case(SPECULAR_CASE):
-       	    	    for(i=0; i<3; i++)
-			glState.GLSpecular[i] = 
-			    cacheGLState.GLSpecular[i];
-		    break;
+            case(DIFFUSE_CASE):
+                glState.GLDiffuseNodeId = cacheGLState.GLDiffuseNodeId;
+                glState.GLTranspNodeId = cacheGLState.GLTranspNodeId;
+                break;
 
-		case(SHININESS_CASE):
-		    glState.GLShininess = 
-			cacheGLState.GLShininess;
-		    break;
-   
-		case(BLENDING_CASE):
-		    glState.GLblending = 
-			cacheGLState.GLblending;
-		    break;
-		  
-		case(TRANSPARENCY_CASE):				
-		    glState.GLStippleNum =
-			cacheGLState.GLStippleNum;		   
-		    break;
-	    }
-	}
+            case(AMBIENT_CASE):
+                for(int i=0; i<3; i++)
+                    glState.GLAmbient[i] = cacheGLState.GLAmbient[i];
+                break;
+
+            case(EMISSIVE_CASE):
+                for(int i=0; i<3; i++)
+                    glState.GLEmissive[i] = cacheGLState.GLEmissive[i];
+                break;
+
+            case(SPECULAR_CASE):
+                for(int i=0; i<3; i++)
+                    glState.GLSpecular[i] = cacheGLState.GLSpecular[i];
+                break;
+
+            case(SHININESS_CASE):
+                glState.GLShininess = cacheGLState.GLShininess;
+                break;
+
+            case(BLENDING_CASE):
+                glState.GLblending = cacheGLState.GLblending;
+                break;
+
+            case(TRANSPARENCY_CASE):
+                glState.GLStippleNum = cacheGLState.GLStippleNum;
+                break;
+            }
+        }
     }
 }
 ////////////////////////////////////////////////////////////////////////
@@ -1790,52 +1728,51 @@ SoGLLazyElement::reallyCopyBackGL(uint32_t bitmask,
 void
 SoGLLazyElement::copyGLValues(uint32_t bitmask,SoGLLazyElement* lazyElt)
 {
-    for(int j=0; (j<SO_LAZY_NUM_COMPONENTS)&&bitmask; j++, bitmask>>=1){
+    for(int j=0; (j<SO_LAZY_NUM_COMPONENTS)&&bitmask; j++, bitmask>>=1) {
 
-    	if (bitmask&1){
-	    int i;         
-	    switch(j){
-		case(LIGHT_MODEL_CASE):
-		    lazyElt->glState.GLLightModel = glState.GLLightModel;
-		    break;
-		
-		case(COLOR_MATERIAL_CASE):
-		    lazyElt->glState.GLColorMaterial = glState.GLColorMaterial;
-		    break;
-		    
-		case(DIFFUSE_CASE):
-		    lazyElt->glState.GLDiffuseNodeId = glState.GLDiffuseNodeId;
-		    lazyElt->glState.GLTranspNodeId = glState.GLTranspNodeId;
-		    break;
+        if (bitmask&1) {
+            switch(j) {
+            case(LIGHT_MODEL_CASE):
+                lazyElt->glState.GLLightModel = glState.GLLightModel;
+                break;
 
-		case(AMBIENT_CASE):
-       	    	    for(i=0; i<3; i++)
-			lazyElt->glState.GLAmbient[i]=glState.GLAmbient[i];
-		    break;
+            case(COLOR_MATERIAL_CASE):
+                lazyElt->glState.GLColorMaterial = glState.GLColorMaterial;
+                break;
 
-		case(EMISSIVE_CASE):
-       	    	    for(i=0; i<3; i++)
-			lazyElt->glState.GLEmissive[i]=glState.GLEmissive[i];
-		    break;
+            case(DIFFUSE_CASE):
+                lazyElt->glState.GLDiffuseNodeId = glState.GLDiffuseNodeId;
+                lazyElt->glState.GLTranspNodeId = glState.GLTranspNodeId;
+                break;
 
-		case(SPECULAR_CASE):
-       	    	    for(i=0; i<3; i++)
-			lazyElt->glState.GLSpecular[i]=glState.GLSpecular[i];
-		    break;
+            case(AMBIENT_CASE):
+                for(int i=0; i<3; i++)
+                    lazyElt->glState.GLAmbient[i]=glState.GLAmbient[i];
+                break;
 
-		case(SHININESS_CASE):
-		    lazyElt->glState.GLShininess=glState.GLShininess;
-		    break;
-		    
-		case(BLENDING_CASE):
-		    lazyElt->glState.GLblending = glState.GLblending;
-		    break;
-	        		    
-		case(TRANSPARENCY_CASE):		  
-		    lazyElt->glState.GLStippleNum = glState.GLStippleNum;
-		    break;    
-	    }
-	}
+            case(EMISSIVE_CASE):
+                for(int i=0; i<3; i++)
+                    lazyElt->glState.GLEmissive[i]=glState.GLEmissive[i];
+                break;
+
+            case(SPECULAR_CASE):
+                for(int i=0; i<3; i++)
+                    lazyElt->glState.GLSpecular[i]=glState.GLSpecular[i];
+                break;
+
+            case(SHININESS_CASE):
+                lazyElt->glState.GLShininess=glState.GLShininess;
+                break;
+
+            case(BLENDING_CASE):
+                lazyElt->glState.GLblending = glState.GLblending;
+                break;
+
+            case(TRANSPARENCY_CASE):
+                lazyElt->glState.GLStippleNum = glState.GLStippleNum;
+                break;
+            }
+        }
     }
 }
 
@@ -1851,56 +1788,52 @@ SoGLLazyElement::copyGLValues(uint32_t bitmask,SoGLLazyElement* lazyElt)
 void
 SoGLLazyElement::copyIVValues(uint32_t bitmask,SoGLLazyElement* lazyElt)
 {
-    for(int j=0; (j<SO_LAZY_NUM_COMPONENTS)&&bitmask; j++, bitmask>>=1){
+    for(int j=0; (j<SO_LAZY_NUM_COMPONENTS)&&bitmask; j++, bitmask>>=1) {
 
-    	if (bitmask&1){
-	    int i;         
-	    switch(j){
-		
-		case(LIGHT_MODEL_CASE):
-		    lazyElt->ivState.lightModel = ivState.lightModel;
-		    break;
-		
-		case(COLOR_MATERIAL_CASE):
-		    lazyElt->ivState.colorMaterial = ivState.colorMaterial;
-		    break;
-		    
-		case(DIFFUSE_CASE):
-		    lazyElt->ivState.diffuseNodeId = ivState.diffuseNodeId;
-		    lazyElt->ivState.transpNodeId = ivState.transpNodeId;
-		    break;
-		    
-		case(AMBIENT_CASE):
-       	    	    for(i=0; i<3; i++)
-			lazyElt->ivState.ambientColor[i] = 
-			    ivState.ambientColor[i];
-		    break;
+        if (bitmask&1) {
+            switch(j) {
 
-		case(EMISSIVE_CASE):
-       	    	    for(i=0; i<3; i++)
-			lazyElt->ivState.emissiveColor[i] = 
-			    ivState.emissiveColor[i];
-		    break;
+            case(LIGHT_MODEL_CASE):
+                lazyElt->ivState.lightModel = ivState.lightModel;
+                break;
 
-		case(SPECULAR_CASE):
-       	    	    for(i=0; i<3; i++)
-			lazyElt->ivState.specularColor[i] = 
-			    ivState.specularColor[i];
-		    break;
+            case(COLOR_MATERIAL_CASE):
+                lazyElt->ivState.colorMaterial = ivState.colorMaterial;
+                break;
 
-		case(SHININESS_CASE):
-		    lazyElt->ivState.shininess = ivState.shininess;
-		    break;
-		    
-		case(BLENDING_CASE):
-		    lazyElt->ivState.blending = ivState.blending;
-		    break;
+            case(DIFFUSE_CASE):
+                lazyElt->ivState.diffuseNodeId = ivState.diffuseNodeId;
+                lazyElt->ivState.transpNodeId = ivState.transpNodeId;
+                break;
 
-		case(TRANSPARENCY_CASE):		
-		    lazyElt->ivState.stippleNum = ivState.stippleNum;		
-		    break;
-	    }
-	}
+            case(AMBIENT_CASE):
+                for(int i=0; i<3; i++)
+                    lazyElt->ivState.ambientColor[i] = ivState.ambientColor[i];
+                break;
+
+            case(EMISSIVE_CASE):
+                for(int i=0; i<3; i++)
+                    lazyElt->ivState.emissiveColor[i] = ivState.emissiveColor[i];
+                break;
+
+            case(SPECULAR_CASE):
+                for(int i=0; i<3; i++)
+                    lazyElt->ivState.specularColor[i] = ivState.specularColor[i];
+                break;
+
+            case(SHININESS_CASE):
+                lazyElt->ivState.shininess = ivState.shininess;
+                break;
+
+            case(BLENDING_CASE):
+                lazyElt->ivState.blending = ivState.blending;
+                break;
+
+            case(TRANSPARENCY_CASE):
+                lazyElt->ivState.stippleNum = ivState.stippleNum;
+                break;
+            }
+        }
     }
 }
 ////////////////////////////////////////////////////////////////////////
@@ -1917,25 +1850,24 @@ SoGLLazyElement::packColors(SoColorPacker *cPacker)
 {
     //First determine if we have enough space:
     if (cPacker->getSize() < ivState.numDiffuseColors)
-	cPacker->reallocate(ivState.numDiffuseColors);
+        cPacker->reallocate(ivState.numDiffuseColors);
 
     uint32_t *packedArray = cPacker->getPackedColors();
-    SbBool multTrans = (ivState.numTransparencies >= ivState.numDiffuseColors);    
+    SbBool multTrans = (ivState.numTransparencies >= ivState.numDiffuseColors);
     int indx = 0;
     uint32_t transp;
-    for (int i=0; i< ivState.numDiffuseColors; i++){
-	if (isPacked()){
-	    if (i == 0 || multTrans) 
-		transp = (uint32_t)((1.0 - ivState.transparencies[i])*255.);	  
-	    packedArray[i] = (ivState.packedColors[i] & 0xffffff00)|
-		(transp & 0xff);			    	       
-	}
-	else{
-	    if (multTrans) indx = i;
-	    packedArray[i] = (ivState.diffuseColors + i)->
-		getPackedValue(ivState.transparencies[indx]);	    
-	}
-	
+    for (int i=0; i< ivState.numDiffuseColors; i++) {
+        if (isPacked()) {
+            if (i == 0 || multTrans)
+                transp = (uint32_t)((1.0 - ivState.transparencies[i])*255.);
+            packedArray[i] = (ivState.packedColors[i] & 0xffffff00)|(transp & 0xff);
+        }
+        else{
+            if (multTrans)
+                indx = i;
+            packedArray[i] = (ivState.diffuseColors + i)->getPackedValue(ivState.transparencies[indx]);
+        }
+
     }
     cPacker->setNodeIds(ivState.diffuseNodeId, ivState.transpNodeId);
 }
@@ -1974,66 +1906,63 @@ int	SoGLLazyElement::patternListContext;
 void
 SoGLLazyElement::sendStipple(const SoState *state, int patIndex )
 {
- 
+
 #ifdef DEBUG
-    if (patIndex <= 0 || patIndex > getNumPatterns()){
-	SoDebugError::post("SoGLLazyElement::sendStipple", 
-	    		   "Invalid pattern index");
+    if (patIndex <= 0 || patIndex > getNumPatterns()) {
+        SoDebugError::post("SoGLLazyElement::sendStipple",
+                           "Invalid pattern index");
     }
 #endif /*DEBUG*/
 
-	    // Create pattern arrays if not already done
-	    if (! patternsCreated) {
-		createPatterns();
-		patternsCreated = TRUE;
+    // Create pattern arrays if not already done
+    if (! patternsCreated) {
+        createPatterns();
+        patternsCreated = TRUE;
 
-		// Make sure we know that no patterns were sent
-		int	i;
-		for (i = 0; i <= getNumPatterns(); i++)
-		    patternListDefined[i] = FALSE;
-	    }
+        // Make sure we know that no patterns were sent
+        for (int i = 0; i <= getNumPatterns(); i++)
+            patternListDefined[i] = FALSE;
+    }
 
-	    // Determine the current cache context
-	    int currentContext = SoGLCacheContextElement::get((SoState*)state);
+    // Determine the current cache context
+    int currentContext = SoGLCacheContextElement::get((SoState*)state);
 
-	    // If we already have a display list for this pattern
-	    if (patternListDefined[patIndex]) {
+    // If we already have a display list for this pattern
+    if (patternListDefined[patIndex]) {
 
-		// If the cache context is valid, just call the list
-		if (currentContext == patternListContext)
-		    glCallList(patternListBase + patIndex);
+        // If the cache context is valid, just call the list
+        if (currentContext == patternListContext)
+            glCallList(patternListBase + patIndex);
 
-		// Otherwise, just send the pattern
-		else
-		    glPolygonStipple(patterns[patIndex]);
-	    }
+        // Otherwise, just send the pattern
+        else
+            glPolygonStipple(patterns[patIndex]);
+    }
 
-	    // If we are in the middle of building a cache or the
-	    // context is different from the one in which we allocated
-	    // the display lists, we can't create a new display list,
-	    // so just send the pattern as is
-	    else if (state->isCacheOpen() ||
-		     (patternListBase >= 0 &&
-		      currentContext != patternListContext))
-		glPolygonStipple(patterns[patIndex]);
+    // If we are in the middle of building a cache or the
+    // context is different from the one in which we allocated
+    // the display lists, we can't create a new display list,
+    // so just send the pattern as is
+    else if (state->isCacheOpen() || (patternListBase >= 0 && currentContext != patternListContext)) {
+        glPolygonStipple(patterns[patIndex]);
 
-	    // Otherwise, build a display list and send it
-	    else {
+    // Otherwise, build a display list and send it
+    } else {
 
-		// If we haven't allocated the pattern list indices, do so
-		if (patternListBase < 0) {
-		    patternListBase = (int) glGenLists(getNumPatterns() + 1);
-		    patternListContext = currentContext;
-		}
+        // If we haven't allocated the pattern list indices, do so
+        if (patternListBase < 0) {
+            patternListBase = (int) glGenLists(getNumPatterns() + 1);
+            patternListContext = currentContext;
+        }
 
-		// Create and send the list
-		glNewList(patternListBase + patIndex, GL_COMPILE_AND_EXECUTE);
-		glPolygonStipple(patterns[patIndex]);
-		glEndList();
+        // Create and send the list
+        glNewList(patternListBase + patIndex, GL_COMPILE_AND_EXECUTE);
+        glPolygonStipple(patterns[patIndex]);
+        glEndList();
 
-		patternListDefined[patIndex] = TRUE;
-	    }
-	
+        patternListDefined[patIndex] = TRUE;
+    }
+
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2061,33 +1990,32 @@ SoGLLazyElement::createPatterns()
     };
 
     uint8_t		pat[8];
-    int			pattern, x, y;
 
     // For each pattern
-    for (pattern = 0; pattern <= 64; pattern++) {
+    for (int pattern = 0; pattern <= 64; pattern++) {
 
-	// Set up an 8x8 pixel pattern in "pat", 1 bit per pixel
-	for (y = 0; y < 8; y++) {
-	    pat[y] = 0;
-	    for (x = 0; x < 8; x++)
-		if (ditherMatrix[y][x] >= pattern)
-		    pat[y] |= (1 << (7 - x));
-	}
+        // Set up an 8x8 pixel pattern in "pat", 1 bit per pixel
+        for (int y = 0; y < 8; y++) {
+            pat[y] = 0;
+            for (int x = 0; x < 8; x++)
+                if (ditherMatrix[y][x] >= pattern)
+                    pat[y] |= (1 << (7 - x));
+        }
 
-	// Store the 8x8 pattern in the correct slot in "patterns".
-	// Since we need a 32x32, replicate the pattern 4 times in
-	// each dimension.
+        // Store the 8x8 pattern in the correct slot in "patterns".
+        // Since we need a 32x32, replicate the pattern 4 times in
+        // each dimension.
 
 #define PAT_INDEX(x, y)		((y) * 4 + x)
 
-	for (y = 0; y < 8; y++) {
-	    for (x = 0; x < 4; x++) {
-		patterns[pattern][PAT_INDEX(x, y +  0)] = pat[y];
-		patterns[pattern][PAT_INDEX(x, y +  8)] = pat[y];
-		patterns[pattern][PAT_INDEX(x, y + 16)] = pat[y];
-		patterns[pattern][PAT_INDEX(x, y + 24)] = pat[y];
-	    }
-	}
+        for (int y = 0; y < 8; y++) {
+            for (int x = 0; x < 4; x++) {
+                patterns[pattern][PAT_INDEX(x, y +  0)] = pat[y];
+                patterns[pattern][PAT_INDEX(x, y +  8)] = pat[y];
+                patterns[pattern][PAT_INDEX(x, y + 16)] = pat[y];
+                patterns[pattern][PAT_INDEX(x, y + 24)] = pat[y];
+            }
+        }
 
 #undef PAT_INDEX
 
