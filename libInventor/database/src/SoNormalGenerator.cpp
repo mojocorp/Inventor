@@ -118,14 +118,14 @@ SoNormalGenerator::~SoNormalGenerator()
 ////////////////////////////////////////////////////////////////////////
 {
     if (points != NULL)
-	delete [] points;
+        delete [] points;
 
     if (vertNormals != faceNormals)
-	delete [] faceNormals;
+        delete [] faceNormals;
 
     // Do NOT delete vertNormals. The caller is responsible for this.
 }
-    
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -155,19 +155,19 @@ SoNormalGenerator::polygonVertex(const SbVec3f &point)
 {
     // Make sure there's enough room for a new vertex point and face normal
     if (numPoints == maxPoints) {
-	SbVec3f *newArray;
+        SbVec3f *newArray;
 
-	newArray = new SbVec3f [2 * maxPoints];
-	memcpy(newArray, points, (int) (maxPoints * sizeof(SbVec3f)));
-	delete [] points;
-	points = newArray;
+        newArray = new SbVec3f [2 * maxPoints];
+        memcpy(newArray, points, (int) (maxPoints * sizeof(SbVec3f)));
+        delete [] points;
+        points = newArray;
 
-	newArray = new SbVec3f [maxPoints * 2];
-	memcpy(newArray, faceNormals, (int) (maxPoints * sizeof(SbVec3f)));
-	delete [] faceNormals;
-	faceNormals = newArray;
+        newArray = new SbVec3f [maxPoints * 2];
+        memcpy(newArray, faceNormals, (int) (maxPoints * sizeof(SbVec3f)));
+        delete [] faceNormals;
+        faceNormals = newArray;
 
-	maxPoints *= 2;
+        maxPoints *= 2;
     }
 
     // Add the new point
@@ -188,7 +188,6 @@ SoNormalGenerator::endPolygon()
 ////////////////////////////////////////////////////////////////////////
 {
     int32_t	numVertices = numPoints - beginPolygonIndex;
-    int32_t	i, j;
     SbVec3f	sum(0.0, 0.0, 0.0);
 
     // Calculate a normal for this polygon.  Use Newell's method.
@@ -198,13 +197,13 @@ SoNormalGenerator::endPolygon()
     // translate the first vertex of the polygon to the origin and
     // pull all the other vertices along with it:
     const SbVec3f &firstPoint = points[beginPolygonIndex];
-    for (i = 0; i < numVertices; i++) {
-	j = i + 1;
-	if (j == numVertices)
-	    j = 0;
-	sum +=
-	    (points[beginPolygonIndex + i]-firstPoint).cross(
-	     points[beginPolygonIndex + j]-firstPoint);
+    for (int32_t i = 0; i < numVertices; i++) {
+        int32_t j = i + 1;
+        if (j == numVertices)
+            j = 0;
+        sum +=
+                (points[beginPolygonIndex + i]-firstPoint).cross(
+                    points[beginPolygonIndex + j]-firstPoint);
     }
 
     // Store the face normal for all of these points
@@ -212,11 +211,11 @@ SoNormalGenerator::endPolygon()
 
     // Invert if face is clockwise
     if (!isCCW) {
-	sum.negate();
+        sum.negate();
     }
 
-    for (i = 0; i < numVertices; i++)
-	faceNormals[beginPolygonIndex + i] = sum;
+    for (int32_t i = 0; i < numVertices; i++)
+        faceNormals[beginPolygonIndex + i] = sum;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -228,8 +227,8 @@ SoNormalGenerator::endPolygon()
 
 void
 SoNormalGenerator::triangle(const SbVec3f &p1,
-			    const SbVec3f &p2,
-			    const SbVec3f &p3)
+                            const SbVec3f &p2,
+                            const SbVec3f &p3)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -250,16 +249,17 @@ SoNormalGenerator::triangle(const SbVec3f &p1,
 // Use: internal
 
 static inline int32_t
-hash(const SbVec3f &vertex, const SbVec3f &scale, const SbVec3f &base,
-     int32_t numPoints)
+hash(const SbVec3f &vertex, const SbVec3f &scale, const SbVec3f &base, int32_t numPoints)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int32_t result;
-    result = (int32_t) floor((vertex+base).dot(scale));
+    int32_t result = (int32_t) floor((vertex+base).dot(scale));
 
-    if (result < 0) return 0;
-    if (result >= numPoints) return numPoints-1;
+    if (result < 0)
+        return 0;
+    if (result >= numPoints)
+        return numPoints-1;
+
     return result;
 }
 
@@ -276,22 +276,18 @@ SoNormalGenerator::generate(float creaseAngle)
 ////////////////////////////////////////////////////////////////////////
 {
     // First, check for fast case of normal-per-face:
-    if (creaseAngle < 0.01) {
-	vertNormals = faceNormals;
-	numVertNormals = numPoints;
-	return;
+    if (creaseAngle < 0.01f) {
+        vertNormals = faceNormals;
+        numVertNormals = numPoints;
+        return;
     }
 
-    SbBox3f	box;
-    SbVec3f	hashScale, sum, base;
-    float	tolerance, cosCreaseAngle = cos(creaseAngle);
-    int32_t	i, j, hashValue, lowHashValue, highHashValue, hv;
-    int32_t	*hashTable, *hashNext, *indirect;
-    SbBool	found;
+    float cosCreaseAngle = cos(creaseAngle);
 
     // Compute the bounding box of all vertices
-    for (i = 0; i < numPoints; i++)
-	box.extendBy(points[i]);
+    SbBox3f	box;
+    for (int32_t i = 0; i < numPoints; i++)
+        box.extendBy(points[i]);
 
     // We will use a hash function to determine which vertices are
     // coincident within some tolerance. The tolerance is a function
@@ -302,19 +298,19 @@ SoNormalGenerator::generate(float creaseAngle)
     // for this to be slow: all the points would have to be on the
     // exact wrong diagonal plane through the bounding box for them to
     // hash to the same value.]
-    hashScale = box.getSize();
-    tolerance = (hashScale[0] + hashScale[1] + hashScale[2]) / 10000;
+    SbVec3f hashScale = box.getSize();
+    float tolerance = (hashScale[0] + hashScale[1] + hashScale[2]) / 10000;
     SbVec3f toleranceVec(tolerance, tolerance, tolerance);
     if (hashScale[0] != 0.0)
-	hashScale[0] = .333f * numPoints / hashScale[0];
+        hashScale[0] = .333f * numPoints / hashScale[0];
     if (hashScale[1] != 0.0)
-	hashScale[1] = .333f * numPoints / hashScale[1];
+        hashScale[1] = .333f * numPoints / hashScale[1];
     if (hashScale[2] != 0.0)
-	hashScale[2] = .333f * numPoints / hashScale[2];
+        hashScale[2] = .333f * numPoints / hashScale[2];
 
     // Compute the base for the hash function, which is just the
     // minimum point of the bounding box:
-    base = -box.getMin();
+    SbVec3f base = -box.getMin();
 
     // Make a hash table.  There are numPoints entries in the hash
     // table. Each table entry points to the first point in the list
@@ -322,48 +318,46 @@ SoNormalGenerator::generate(float creaseAngle)
     // "hashNext" array points to the next point in the list. The
     // "indirect" table is a circularly linked list of indices that
     // are within tolerance of each other.
-    hashTable = new int32_t[numPoints];
-    hashNext  = new int32_t[numPoints];
-    indirect  = new int32_t[numPoints];
-    for (i = 0; i < numPoints; i++) {
-	hashTable[i] = -1;
-	hashNext[i]  = -1;
-	indirect[i]  = -1;
+    int32_t *hashTable = new int32_t[numPoints];
+    int32_t *hashNext  = new int32_t[numPoints];
+    int32_t *indirect  = new int32_t[numPoints];
+    for (int32_t i = 0; i < numPoints; i++) {
+        hashTable[i] = -1;
+        hashNext[i]  = -1;
+        indirect[i]  = -1;
     }
 
     // Insert all points into the hash table.  Find common vertices.
-    for (i = 0; i < numPoints; i++) {
-	// Compute hash key
-	hashValue = hash(points[i], hashScale, base, numPoints);
+    for (int32_t i = 0; i < numPoints; i++) {
+        // Compute hash key
+        int32_t hashValue = hash(points[i], hashScale, base, numPoints);
 
-	// Set up "next" link
-	hashNext[i] = hashTable[hashValue];
+        // Set up "next" link
+        hashNext[i] = hashTable[hashValue];
 
-	// Enter in table
-	hashTable[hashValue] = i;
+        // Enter in table
+        hashTable[hashValue] = i;
 
-	// Find all other vertices that are within tolerance
-	found = FALSE;
-	lowHashValue  = hash(points[i] - toleranceVec, hashScale,
-			     base, numPoints);
-	highHashValue  = hash(points[i] + toleranceVec, hashScale,
-			      base, numPoints);
+        // Find all other vertices that are within tolerance
+        SbBool found = FALSE;
+        int32_t lowHashValue  = hash(points[i] - toleranceVec, hashScale, base, numPoints);
+        int32_t highHashValue  = hash(points[i] + toleranceVec, hashScale, base, numPoints);
 
-	for (hv = lowHashValue; hv <= highHashValue; hv++) {
-	    for (j = hashTable[hv]; found == FALSE && j >= 0; j = hashNext[j]){
-        if (i != j && points[j].equals(points[i], tolerance)) {
-		    // Splice into the circularly linked list
-		    indirect[i] = indirect[j];
-		    indirect[j] = i;
-		    found = TRUE;
-		    break;
-		}
-	    }
+        for (int32_t hv = lowHashValue; hv <= highHashValue; hv++) {
+            for (int32_t j = hashTable[hv]; found == FALSE && j >= 0; j = hashNext[j]){
+                if (i != j && points[j].equals(points[i], tolerance)) {
+                    // Splice into the circularly linked list
+                    indirect[i] = indirect[j];
+                    indirect[j] = i;
+                    found = TRUE;
+                    break;
+                }
+            }
 
-	    // If no match found, link point to itself
-	    if (found == FALSE)
-		indirect[i] = i;
-	}
+            // If no match found, link point to itself
+            if (found == FALSE)
+                indirect[i] = i;
+        }
     }
 
     // At this point, we're done with points[]; re-use storage to hold
@@ -374,26 +368,25 @@ SoNormalGenerator::generate(float creaseAngle)
 
     // Calculate normals for all polygons
     SbVec3f zeroVec(0,0,0);
-    for(i = 0; i < numPoints; i++) {
-	sum = faceNormals[i];
+    for(int32_t i = 0; i < numPoints; i++) {
+        SbVec3f sum = faceNormals[i];
 
-	// This vertex is part of a degenerate face if its normal is
-	// (mostly) the same as the zero vector.
-	// We use a fixed tolerance for normals (suggested by Tim Wiegand)
-	// since normals are unit length
-    SbBool isDegenerate = zeroVec.equals(sum, 1.e-4f);
+        // This vertex is part of a degenerate face if its normal is
+        // (mostly) the same as the zero vector.
+        // We use a fixed tolerance for normals (suggested by Tim Wiegand)
+        // since normals are unit length
+        SbBool isDegenerate = zeroVec.equals(sum, 1.e-4f);
 
-	// Smooth normals if face normals are within crease angle
-	for (j = indirect[i]; j != i; j = indirect[j]) {
+        // Smooth normals if face normals are within crease angle
+        for (int32_t j = indirect[i]; j != i; j = indirect[j]) {
 
-	    // If this vertex is part of a degenerate face, we always
-	    // want to smooth to get the normal:
-	    if (isDegenerate ||
-		faceNormals[i].dot(faceNormals[j]) > cosCreaseAngle) 
-		sum += faceNormals[j];
-	}
-	sum.normalize();
-	vertNormals[i] = sum;
+            // If this vertex is part of a degenerate face, we always
+            // want to smooth to get the normal:
+            if (isDegenerate || faceNormals[i].dot(faceNormals[j]) > cosCreaseAngle)
+                sum += faceNormals[j];
+        }
+        sum.normalize();
+        vertNormals[i] = sum;
     }
 
     delete [] hashTable;
@@ -413,8 +406,10 @@ SoNormalGenerator::setNumNormals(int newNum)
 //
 ////////////////////////////////////////////////////////////////////////
 {   
-    if (newNum > numVertNormals) setNormal(newNum, SbVec3f(0,0,0));
-    else if (newNum < numVertNormals) numVertNormals = newNum;
+    if (newNum > numVertNormals)
+        setNormal(newNum, SbVec3f(0,0,0));
+    else if (newNum < numVertNormals)
+        numVertNormals = newNum;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -431,20 +426,19 @@ SoNormalGenerator::setNormal(int32_t index, const SbVec3f &newNormal)
 {   
     // Make sure there's enough room for the new normal
     if (index >= numVertNormals) {
-	int32_t    newNumVertNormals = numVertNormals;
-	
-	if (newNumVertNormals <= 0) newNumVertNormals = index + 1;
-		
-	while (index >= newNumVertNormals)
-	    newNumVertNormals *= 2;
+        int32_t newNumVertNormals = numVertNormals;
 
-	SbVec3f *newVertNormals = new SbVec3f [newNumVertNormals];
-	memcpy(newVertNormals, vertNormals,
-	      (int) (numVertNormals * sizeof(SbVec3f)));
-	if (vertNormals != faceNormals)
-	    delete [] vertNormals;
-	vertNormals    = newVertNormals;
-	numVertNormals = newNumVertNormals;
+        if (newNumVertNormals <= 0) newNumVertNormals = index + 1;
+
+        while (index >= newNumVertNormals)
+            newNumVertNormals *= 2;
+
+        SbVec3f *newVertNormals = new SbVec3f [newNumVertNormals];
+        memcpy(newVertNormals, vertNormals, (int) (numVertNormals * sizeof(SbVec3f)));
+        if (vertNormals != faceNormals)
+            delete [] vertNormals;
+        vertNormals    = newVertNormals;
+        numVertNormals = newNumVertNormals;
     }
 
     // Store new normal
