@@ -37,6 +37,7 @@ SOURCES += main.cpp \
            testString.cpp \
            testEndian.cpp \
            testFile.cpp \
+           testFields.cpp \
            testOffscreen.cpp \
            testModels.cpp \
            testImage.cpp
