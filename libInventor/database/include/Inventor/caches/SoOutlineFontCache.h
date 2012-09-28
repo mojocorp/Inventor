@@ -101,7 +101,7 @@ class SoOutlineFontCache : public SoCache
     float	getHeight() const { return fontSize; }
 
     // Returns the 2D bounding box of a character
-    void	getCharBBox(const char c, SbBox2f &result);
+    void	getCharBBox(const wchar_t c, SbBox2f &result);
     // ... and the bounding box of the font's bevel
     void	getProfileBBox(SbBox2f &result);
 
@@ -113,15 +113,15 @@ class SoOutlineFontCache : public SoCache
     SbBool	hasProfile() const { return  (nProfileVerts > 1); }
 
     // Returns how far to advance after drawing given character:
-    SbVec2f	getCharOffset(const char c);
+    SbVec2f	getCharOffset(const wchar_t c);
 
     // Uses the given glu tesselator to generate triangles for the
     // given character.  This is used for both rendering and
     // generating primitives, with just different callback routines
     // registered.
-    void	generateFrontChar(const char c, GLUtesselator *tobj);
+    void	generateFrontChar(const wchar_t c, GLUtesselator *tobj);
     // Ditto, for sides of characters:
-    void	generateSideChar(const char c, SideCB callbackFunc);
+    void	generateSideChar(const wchar_t c, SideCB callbackFunc);
 
     // Renders a string in cases where display lists can't be buit.
     void	renderFront(SoState *state, const SbString &string, GLUtesselator *tobj);
@@ -139,12 +139,12 @@ class SoOutlineFontCache : public SoCache
     // Returns TRUE if this font cache has a display list for the
     // given character.  It will try to build a display list, if it
     // can.
-    SbBool	hasFrontDisplayList(SoState *state, const char c, GLUtesselator *tobj);
-    SbBool	hasSideDisplayList(SoState *state, const char c, SideCB callbackFunc);
+    SbBool	hasFrontDisplayList(SoState *state, const wchar_t c, GLUtesselator *tobj);
+    SbBool	hasSideDisplayList(SoState *state, const wchar_t c, SideCB callbackFunc);
 
     // Return a convnient little class representing a character's
     // outline.
-    SoFontOutline *getOutline(const char c);
+    SoFontOutline *getOutline(const wchar_t c);
 
     // Some helper routines for generateSide:
     void figureSegmentNorms(std::vector<SbVec2f> & result, int nPoints, const SbVec2f *points, float cosCreaseAngle, SbBool isClosed);
@@ -157,8 +157,8 @@ class SoOutlineFontCache : public SoCache
 
     // Display lists for fronts, sides:
     int context;
-    std::map<char, SoGLDisplayList*> frontList;
-    std::map<char, SoGLDisplayList*> sideList;
+    std::map<wchar_t, SoGLDisplayList*> frontList;
+    std::map<wchar_t, SoGLDisplayList*> sideList;
 
     // Profile information:
     float	cosCreaseAngle;
@@ -168,7 +168,7 @@ class SoOutlineFontCache : public SoCache
     std::vector<SbVec2f> profileNorms;	// Profile normals ((nProfileVerts-1)*2 of them)
 
     // List of outlines; these are also cached and created when needed.
-    std::map<char, SoFontOutline*> outlines;
+    std::map<wchar_t, SoFontOutline*> outlines;
 
     // Font size
     float	fontSize;
