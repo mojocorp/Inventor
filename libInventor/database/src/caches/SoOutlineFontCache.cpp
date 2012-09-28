@@ -429,17 +429,11 @@ SoOutlineFontCache::generateFrontChar(const char c,
 
     tesselationError = FALSE;
     gluTessBeginPolygon( tobj, NULL );
-    gluTessBeginContour( tobj );
 
     // Get outline for character
     SoFontOutline *outline = getOutline(c);
     for (size_t i = 0; i < outline->getNumOutlines(); i++) {
-
-        // It would be nice if the font manager told us the type of
-        // each outline...
-        gluTessEndContour( tobj );
         gluTessBeginContour( tobj );
-
         for (size_t j = 0; j < outline->getNumVerts(i); j++) {
             const SbVec2f &t = outline->getVertex(i,j);
             v[0] = t[0];
@@ -451,8 +445,8 @@ SoOutlineFontCache::generateFrontChar(const char c,
             // back at the gluEndPolygon call.
             gluTessVertex(tobj, v, (GLvoid*)&t);
         }
+        gluTessEndContour( tobj );
     }
-    gluTessEndContour( tobj );
     gluTessEndPolygon( tobj );
 
     // If there was an error tesselating the character, just generate
@@ -756,7 +750,7 @@ SoOutlineFontCache::generateSideChar(const char c, SideCB callbackFunc)
     for (size_t i = 0; i < outline->getNumOutlines(); i++) {
         // For each outline:
 
-        int nOutline = outline->getNumVerts(i);
+        size_t nOutline = outline->getNumVerts(i);
 
         SbVec2f *oVerts = new SbVec2f[nOutline];
         // Copy in verts so figureSegmentNorms can handle them..

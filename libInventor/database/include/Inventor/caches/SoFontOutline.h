@@ -22,8 +22,8 @@ class SoFontOutline {
 
     // Query routines:
     size_t	    getNumOutlines() const { return verts.size(); }
-    size_t	    getNumVerts(int i) const { return verts[i].size(); }
-    const SbVec2f & getVertex(int i, int j) const { return verts[i][j]; }
+    size_t	    getNumVerts(size_t i) const { return verts[i].size(); }
+    const SbVec2f & getVertex(size_t i, size_t j) const { return verts[i][j]; }
     const SbVec2f & getCharAdvance() const { return charAdvance; }
     const SbBox2f & getBoundingBox() const { return bbox;}
 
