@@ -198,8 +198,8 @@ class SoOutlineFontCache : public SoCache
     // And tables telling us if a display list has been created for
     // each character in the font (we do that lazily since it is
     // expensive):
-    SbBool	*frontFlags;
-    SbBool	*sideFlags;
+    std::vector<bool> frontFlags;
+    std::vector<bool> sideFlags;
 
     // List of outlines; these are also cached and created when
     // needed.

@@ -184,11 +184,11 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
     int numChars = 256;  // ??? NEED TO REALLY KNOW HOW MANY CHARACTERS IN FONT!
     sidesHaveTexCoords = FALSE;
 
-    frontFlags = new SbBool[numChars];
-    sideFlags = new SbBool[numChars];
+    frontFlags.resize(numChars);
+    sideFlags.resize(numChars);
     outlines.resize(numChars);
     for (int i = 0; i < numChars; i++) {
-        frontFlags[i] = sideFlags[i] = FALSE;
+        frontFlags[i] = sideFlags[i] = false;
         outlines[i] = NULL;
     }
 
@@ -255,10 +255,6 @@ SoOutlineFontCache::~SoOutlineFontCache()
 ////////////////////////////////////////////////////////////////////////
 {
     if (face) {
-
-        delete[] frontFlags;
-        delete[] sideFlags;
-
         // Free up cached outlines
         for (size_t i = 0; i < outlines.size(); i++) {
             delete outlines[i];
@@ -542,10 +538,12 @@ SoOutlineFontCache::hasFrontDisplayList(const char c,
 ////////////////////////////////////////////////////////////////////////
 {
     // If we have one, return TRUE
-    if (frontFlags[c] == TRUE) return TRUE;
+    if (frontFlags[c] == true)
+        return TRUE;
 
     // If we don't and we can't build one, return FALSE.
-    if (otherOpen) return FALSE;
+    if (otherOpen)
+        return FALSE;
 
     // Build one:
     glNewList(frontList->getFirstIndex()+c, GL_COMPILE);
@@ -553,7 +551,7 @@ SoOutlineFontCache::hasFrontDisplayList(const char c,
     const SbVec2f & t = getOutline(c)->getCharAdvance();
     glTranslatef(t[0], t[1], 0.0);
     glEndList();
-    frontFlags[c] = TRUE;
+    frontFlags[c] = true;
 
     return TRUE;
 }
@@ -572,7 +570,8 @@ SoOutlineFontCache::hasSideDisplayList(const char c,
 ////////////////////////////////////////////////////////////////////////
 {
     // If we have one, return TRUE
-    if (sideFlags[c] == TRUE) return TRUE;
+    if (sideFlags[c] == true)
+        return TRUE;
 
     // If we don't and we can't build one, return FALSE.
     if (otherOpen) return FALSE;
@@ -587,7 +586,7 @@ SoOutlineFontCache::hasSideDisplayList(const char c,
     const SbVec2f & t = getOutline(c)->getCharAdvance();
     glTranslatef(t[0], t[1], 0.0);
     glEndList();
-    sideFlags[c] = TRUE;
+    sideFlags[c] = true;
 
     return TRUE;
 }
