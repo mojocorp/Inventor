@@ -64,6 +64,7 @@
 #include <Inventor/caches/SoCache.h>
 
 #include <vector>
+#include <map>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -198,12 +199,12 @@ class SoOutlineFontCache : public SoCache
     // And tables telling us if a display list has been created for
     // each character in the font (we do that lazily since it is
     // expensive):
-    std::vector<bool> frontFlags;
-    std::vector<bool> sideFlags;
+    std::map<char, bool> frontFlags;
+    std::map<char, bool> sideFlags;
 
     // List of outlines; these are also cached and created when
     // needed.
-    std::vector<SoFontOutline*> outlines;
+    std::map<char, SoFontOutline*> outlines;
 
     // Font size
     float	fontSize;

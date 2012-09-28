@@ -181,16 +181,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
         }
     }
 
-    int numChars = 256;  // ??? NEED TO REALLY KNOW HOW MANY CHARACTERS IN FONT!
     sidesHaveTexCoords = FALSE;
-
-    frontFlags.resize(numChars);
-    sideFlags.resize(numChars);
-    outlines.resize(numChars);
-    for (int i = 0; i < numChars; i++) {
-        frontFlags[i] = sideFlags[i] = false;
-        outlines[i] = NULL;
-    }
 
     // Get profile info:
     const SoNodeList &profiles = SoProfileElement::get(state);
@@ -256,8 +247,9 @@ SoOutlineFontCache::~SoOutlineFontCache()
 {
     if (face) {
         // Free up cached outlines
-        for (size_t i = 0; i < outlines.size(); i++) {
-            delete outlines[i];
+        std::map<char, SoFontOutline*>::iterator it;
+        for (it=outlines.begin(); it!=outlines.end(); it++) {
+            delete it->second;
         }
         outlines.clear();
 
@@ -486,7 +478,7 @@ SoOutlineFontCache::setupToRenderFront(SoState *state)
     if (!otherOpen && !frontList) {
         frontList = new SoGLDisplayList(state,
                                         SoGLDisplayList::DISPLAY_LIST,
-                                        outlines.size());
+                                        256);
         frontList->ref();
     }
     if (frontList) {
@@ -512,7 +504,7 @@ SoOutlineFontCache::setupToRenderSide(SoState *state, SbBool willTexture)
     if (!otherOpen && !sideList) {
         sideList = new SoGLDisplayList(state,
                                         SoGLDisplayList::DISPLAY_LIST,
-                                        outlines.size());
+                                        256);
         sideList->ref();
         sidesHaveTexCoords = willTexture;
     }
