@@ -90,9 +90,6 @@ class SoOutlineFontCache : public SoCache
     // Given a state, find an appropriate outline font.
     static SoOutlineFontCache	*getFont(SoState *, SbBool forRender);
 
-    // Checks to see if this font is valid
-    SbBool	isValid(SoState *state) const;
-
     // Figures out if this cache is valid for rendering (the base
     // class isValid can be used for all other actions)
     SbBool	isRenderValid(SoState *state) const;
@@ -101,7 +98,7 @@ class SoOutlineFontCache : public SoCache
     float	getWidth(const SbString &string);
 
     // Returns height of font
-    float	getHeight() { return fontSize; }
+    float	getHeight() const { return fontSize; }
 
     // Returns the 2D bounding box of a character
     void	getCharBBox(const char c, SbBox2f &result);
@@ -126,23 +123,12 @@ class SoOutlineFontCache : public SoCache
     // Ditto, for sides of characters:
     void	generateSideChar(const char c, SideCB callbackFunc);
 
-    // Set up for GL rendering:
-    void	setupToRenderFront(SoState *state);
-    void	setupToRenderSide(SoState *state, SbBool willTexture);
-
     // Renders a string in cases where display lists can't be buit.
-    void	renderFront(const SbString &string,
-                            GLUtesselator *tobj);
-    void	renderSide(const SbString &string,
-                           SideCB callbackFunc);
+    void	renderFront(SoState *state, const SbString &string, GLUtesselator *tobj);
+    void	renderSide(SoState *state, const SbString &string, SideCB callbackFunc);
 
     // Callback registered with GLU used to detect tesselation errors.
     static void errorCB(GLenum whichErr);
-
-  protected:
-
-    // Free up display lists before being deleted
-    virtual void	destroy(SoState *state);
 
   private:
     // Constructor
@@ -153,53 +139,35 @@ class SoOutlineFontCache : public SoCache
     // Returns TRUE if this font cache has a display list for the
     // given character.  It will try to build a display list, if it
     // can.
-    SbBool	hasFrontDisplayList(const char c, GLUtesselator *tobj);
-    SbBool	hasSideDisplayList(const char c, SideCB callbackFunc);
+    SbBool	hasFrontDisplayList(SoState *state, const char c, GLUtesselator *tobj);
+    SbBool	hasSideDisplayList(SoState *state, const char c, SideCB callbackFunc);
 
     // Return a convnient little class representing a character's
     // outline.
-    SoFontOutline	*getOutline(const char c);
+    SoFontOutline *getOutline(const char c);
 
     // Some helper routines for generateSide:
-    void figureSegmentNorms(SbVec2f *result, int nPoints,
-         const SbVec2f *points, float cosCreaseAngle, SbBool isClosed);
-    void figureSegmentTexCoords(float *texCoords, int nPoints,
-         const SbVec2f *points, SbBool isClosed);
-    void fillBevel(SbVec3f *result, int nPoints,
-                   const SbVec2f *points, const SbVec2f &translation,
-                   const SbVec2f &n1, const SbVec2f &n2);
-    void fillBevelN(SbVec3f *result, int nPoints,
-                    const SbVec2f *norms, const SbVec2f &n);
+    void figureSegmentNorms(SbVec2f *result, int nPoints, const SbVec2f *points, float cosCreaseAngle, SbBool isClosed);
+    void figureSegmentTexCoords(float *texCoords, int nPoints, const SbVec2f *points, SbBool isClosed);
+    void fillBevel(SbVec3f *result, int nPoints, const SbVec2f *points, const SbVec2f &translation, const SbVec2f &n1, const SbVec2f &n2);
+    void fillBevelN(SbVec3f *result, int nPoints, const SbVec2f *norms, const SbVec2f &n);
 
     // Texture coordinates in side display lists
     int		sidesHaveTexCoords;
 
     // Display lists for fronts, sides:
-    SoGLDisplayList *frontList;
-    SoGLDisplayList *sideList;
+    int context;
+    std::map<char, SoGLDisplayList*> frontList;
+    std::map<char, SoGLDisplayList*> sideList;
 
     // Profile information:
     float	cosCreaseAngle;
     int32_t	nProfileVerts;	// Number of points in profile
     SbVec2f	*profileVerts;	// Profile vertices
-    float	*sTexCoords;	// Texture coordinates along profile
-                                // (nProfileVerts of them)
-    SbVec2f	*profileNorms;	// Profile normals
-                                // ((nProfileVerts-1)*2 of them)
+    float	*sTexCoords;	// Texture coordinates along profile (nProfileVerts of them)
+    SbVec2f	*profileNorms;	// Profile normals ((nProfileVerts-1)*2 of them)
 
-    // This flag will be true if there is another cache open (if
-    // building GL display lists for render caching, that means we
-    // can't also build display lists).
-    SbBool	otherOpen;
-
-    // And tables telling us if a display list has been created for
-    // each character in the font (we do that lazily since it is
-    // expensive):
-    std::map<char, bool> frontFlags;
-    std::map<char, bool> sideFlags;
-
-    // List of outlines; these are also cached and created when
-    // needed.
+    // List of outlines; these are also cached and created when needed.
     std::map<char, SoFontOutline*> outlines;
 
     // Font size
