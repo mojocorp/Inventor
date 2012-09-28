@@ -16,7 +16,7 @@ class SoFontOutline {
   public:
     // Constructor, takes a pointer to the font-library outline
     // structure and the font's size:
-    SoFontOutline(char ch, FT_Face face, float fontSize);
+    SoFontOutline(wchar_t ch, FT_Face face, float fontSize);
     // Destructor
     ~SoFontOutline();
 

@@ -154,6 +154,13 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
 #endif
                 }
             }
+        } else {
+            if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
+#ifdef DEBUG
+                SoDebugError::post("SoText3::getFont",
+                                   "Couldn't find font Utopia-Regular!");
+#endif
+            }
         }
     }
 
@@ -221,14 +228,14 @@ SoOutlineFontCache::~SoOutlineFontCache()
     if (face) {
         // Free up cached outlines
         {
-        std::map<char, SoFontOutline*>::iterator it;
-        for (it=outlines.begin(); it!=outlines.end(); it++) {
-            delete it->second;
+            std::map<wchar_t, SoFontOutline*>::iterator it;
+            for (it=outlines.begin(); it!=outlines.end(); it++) {
+                delete it->second;
+            }
+            outlines.clear();
         }
-        outlines.clear();
-}
 
-        std::map<char, SoGLDisplayList*>::iterator it;
+        std::map<wchar_t, SoGLDisplayList*>::iterator it;
         for (it=frontList.begin(); it!=frontList.end(); it++) {
             it->second->unref(NULL);
         }
@@ -273,9 +280,9 @@ SoOutlineFontCache::getWidth(const SbString &string)
 ////////////////////////////////////////////////////////////////////////
 {
     float total = 0.0;
-    const char *chars = string.getString();
+    std::wstring chars = string.toStdWString();
 
-    for (size_t i = 0; i < string.getLength(); i++) {
+    for (size_t i = 0; i < chars.size(); i++) {
         const SoFontOutline *outline = getOutline(chars[i]);
         total += outline->getCharAdvance()[0];
     }
@@ -291,7 +298,7 @@ SoOutlineFontCache::getWidth(const SbString &string)
 // Use: private
 
 void
-SoOutlineFontCache::getCharBBox(const char c, SbBox2f &result)
+SoOutlineFontCache::getCharBBox(const wchar_t c, SbBox2f &result)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -314,7 +321,7 @@ SoOutlineFontCache::getCharBBox(const char c, SbBox2f &result)
 // Use: private
 
 SoFontOutline *
-SoOutlineFontCache::getOutline(const char c)
+SoOutlineFontCache::getOutline(const wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -337,7 +344,7 @@ SoOutlineFontCache::getOutline(const char c)
 // Use: private
 
 SbVec2f
-SoOutlineFontCache::getCharOffset(const char c)
+SoOutlineFontCache::getCharOffset(const wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -356,7 +363,7 @@ SoOutlineFontCache::getCharOffset(const char c)
 // Use: public, internal
 
 void
-SoOutlineFontCache::generateFrontChar(const char c,
+SoOutlineFontCache::generateFrontChar(const wchar_t c,
                                       GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -421,7 +428,7 @@ SoOutlineFontCache::generateFrontChar(const char c,
 // Use: internal
 
 SbBool
-SoOutlineFontCache::hasFrontDisplayList(SoState *state, const char c, GLUtesselator *tobj)
+SoOutlineFontCache::hasFrontDisplayList(SoState *state, const wchar_t c, GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -457,7 +464,7 @@ SoOutlineFontCache::hasFrontDisplayList(SoState *state, const char c, GLUtessela
 // Use: internal
 
 SbBool
-SoOutlineFontCache::hasSideDisplayList(SoState *state, const char c, SideCB callbackFunc)
+SoOutlineFontCache::hasSideDisplayList(SoState *state, const wchar_t c, SideCB callbackFunc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -501,9 +508,9 @@ SoOutlineFontCache::renderFront(SoState *state, const SbString &string, GLUtesse
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const char *str = string.getString();
+    std::wstring str = string.toStdWString();
 
-    for (size_t i = 0; i < string.getLength(); i++) {
+    for (size_t i = 0; i < str.size(); i++) {
         if (hasFrontDisplayList(state, str[i], tobj)) {
             frontList[str[i]]->call(state);
         }
@@ -528,9 +535,9 @@ SoOutlineFontCache::renderSide(SoState *state, const SbString &string, SideCB ca
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const char *str = string.getString();
+    std::wstring str = string.toStdWString();
 
-    for (size_t i = 0; i < string.getLength(); i++) {
+    for (size_t i = 0; i < str.size(); i++) {
         if (hasSideDisplayList(state, str[i], callbackFunc)) {
             sideList[str[i]]->call(state);
         }
@@ -594,7 +601,7 @@ SoOutlineFontCache::getProfileBBox(SbBox2f &profileBox)
 // Use: private
 
 void
-SoOutlineFontCache::generateSideChar(const char c, SideCB callbackFunc)
+SoOutlineFontCache::generateSideChar(const wchar_t c, SideCB callbackFunc)
 //
 ////////////////////////////////////////////////////////////////////////
 {

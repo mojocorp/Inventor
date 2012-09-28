@@ -283,6 +283,8 @@ SoFont::initFontMap()
             s_font_map["Times-Oblique"] = "c:\\Windows\\Fonts\\timesi.ttf";
             s_font_map["Times-Bold Oblique"] = "c:\\Windows\\Fonts\\timesbi.ttf";
 
+            s_font_map["Arial Unicode"] = "c:\\Windows\\Fonts\\ARIALUNI.TTF";
+
 #elif defined(SB_OS_MACX)
             s_font_map["Courier"] = "/Library/Fonts/Courier New.ttf";
             s_font_map["Courier-Regular"] = "/Library/Fonts/Courier New.ttf";
@@ -303,6 +305,8 @@ SoFont::initFontMap()
             s_font_map["Times-Bold"] = "/Library/Fonts/Times New Roman Bold.ttf";
             s_font_map["Times-Bold Oblique"] = "/Library/Fonts/Times New Roman Bold Italic.ttf";
 
+            s_font_map["Arial Unicode"] = "/Library/Fonts/Arial Unicode.ttf";
+
 #else
             s_font_map["Courier"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
             s_font_map["Courier-Regular"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
@@ -322,6 +326,8 @@ SoFont::initFontMap()
             s_font_map["Times-Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Italic.ttf";
             s_font_map["Times-Bold"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold.ttf";
             s_font_map["Times-Bold Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold_Italic.ttf";
+
+            s_font_map["Arial Unicode"] = "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf";
 #endif
             initialized = true;
     }

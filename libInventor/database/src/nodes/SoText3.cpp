@@ -186,7 +186,7 @@ SoText3::getCharacterBounds(SoState *state, int stringIndex, int charIndex)
 
     float height = myFont->getHeight();
 
-    const char *chars = string[stringIndex].getString();
+    std::wstring chars = string[stringIndex].toStdWString();
     float width = (myFont->getCharOffset(chars[charIndex]))[0];
 
     // Figure out where origin of character is:
@@ -691,10 +691,9 @@ SoText3::getFrontBBox(SbBox2f &result)
         // Starting position of string, based on justification:
         SbVec2f charPosition = getStringOffset(line);
 
-        const SbString &str = string[line];
-        const char *chars = str.getString();
+        std::wstring chars = string[line].toStdWString();
 
-        for (size_t character = 0; character < str.getLength(); character++) {
+        for (size_t character = 0; character < chars.size(); character++) {
             myFont->getCharBBox(chars[character], charBBox);
             if (!charBBox.isEmpty()) {
                 SbVec2f min = charBBox.getMin() + charPosition;
@@ -753,7 +752,7 @@ SoText3::getCharacterOffset(int line, int whichChar)
 {
     SbVec2f result = getStringOffset(line);
 
-    const char *chars = string[line].getString();
+    std::wstring chars = string[line].toStdWString();
 
     // Now add on all of the character advances up to char:
     for (int i = 0; i < whichChar; i++) {
@@ -805,8 +804,6 @@ SoText3::generateFront(int line)
 {
     static GLUtesselator *tobj = NULL;
 
-    const char *chars = string[line].getString();
-
     if (tobj == NULL) {
         tobj = gluNewTess();
         gluTessCallback(tobj, (GLenum)GLU_BEGIN,  (void (CALLBACK*)())SoText3::beginCB);
@@ -819,7 +816,8 @@ SoText3::generateFront(int line)
 
     SoTextDetail *d = (SoTextDetail *)genPrimVerts[0]->getDetail();
 
-    for (size_t i = 0; i < string[line].getLength(); i++) {
+    std::wstring chars = string[line].toStdWString();
+    for (size_t i = 0; i < chars.size(); i++) {
         d->setCharacterIndex(i);
 
         myFont->generateFrontChar(chars[i], tobj);
@@ -842,11 +840,11 @@ SoText3::generateSide(int line)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const char *chars = string[line].getString();
+    std::wstring chars = string[line].toStdWString();
 
     SoTextDetail *d = (SoTextDetail *)genPrimVerts[0]->getDetail();
 
-    for (size_t i = 0; i < string[line].getLength(); i++) {
+    for (size_t i = 0; i < chars.size(); i++) {
         d->setCharacterIndex(i);
 
         myFont->generateSideChar(chars[i], generateSideTris);
