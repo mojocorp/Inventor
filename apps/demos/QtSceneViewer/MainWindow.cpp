@@ -16,7 +16,7 @@ MainWindow::MainWindow()
     QCoreApplication::setApplicationName("SceneViewer");
 
     viewer = new SoQtExaminerViewer(this, NULL, TRUE, SoQtFullViewer::BUILD_ALL, SoQtViewer::BROWSER);
-    
+
     setCentralWidget(viewer->getWidget());
 
     createActions();
@@ -32,6 +32,8 @@ MainWindow::MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    delete viewer;
+
     writeSettings();
     event->accept();
 }
