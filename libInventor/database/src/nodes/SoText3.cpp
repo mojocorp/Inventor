@@ -278,13 +278,12 @@ SoText3::GLRender(SoGLRenderAction *action)
     if ((parts.getValue() & SIDES) && (myFont->hasProfile())) {
         if (materialPerPart) mb.send(1, FALSE);
 
-        myFont->setupToRenderSide(state, genTexCoord);
         for (int line = 0; line < string.getNum(); line++) {
             glPushMatrix();
             SbVec2f p = getStringOffset(line);
             if (p[0] != 0.0 || p[1] != 0.0)
                 glTranslatef(p[0], p[1], 0.0);
-            myFont->renderSide(string[line], renderSideTris);
+            myFont->renderSide(state, string[line], renderSideTris);
             glPopMatrix();
         }
     }
@@ -296,8 +295,6 @@ SoText3::GLRender(SoGLRenderAction *action)
         }
         glNormal3f(0, 0, -1);
         glFrontFace(GL_CW);
-
-        myFont->setupToRenderFront(state);
 
         if (genTexCoord) {
             glPushAttrib(GL_TEXTURE_BIT);
@@ -322,7 +319,7 @@ SoText3::GLRender(SoGLRenderAction *action)
             SbVec2f p = getStringOffset(line);
             if (p[0] != 0.0 || p[1] != 0.0)
                 glTranslatef(p[0], p[1], 0.0);
-            myFont->renderFront(string[line], tobj);
+            myFont->renderFront(state, string[line], tobj);
             glPopMatrix();
         }
 
@@ -343,8 +340,6 @@ SoText3::GLRender(SoGLRenderAction *action)
         }
 
         glNormal3f(0, 0, 1);
-
-        myFont->setupToRenderFront(state);
 
         if (genTexCoord) {
             glPushAttrib(GL_TEXTURE_BIT);
@@ -367,7 +362,7 @@ SoText3::GLRender(SoGLRenderAction *action)
             SbVec2f p = getStringOffset(line);
             if (p[0] != 0.0 || p[1] != 0.0)
                 glTranslatef(p[0], p[1], 0.0);
-            myFont->renderFront(string[line], tobj);
+            myFont->renderFront(state, string[line], tobj);
             glPopMatrix();
         }
 
@@ -667,6 +662,7 @@ SoText3::setupFontCache(SoState *state, SbBool forRender)
     }
     if (myFont == NULL) {
         myFont = SoOutlineFontCache::getFont(state, forRender);
+        myFont->ref();
     }
     state->pop();
     return  myFont != NULL;
