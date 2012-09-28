@@ -147,10 +147,10 @@ class SoOutlineFontCache : public SoCache
     SoFontOutline *getOutline(const char c);
 
     // Some helper routines for generateSide:
-    void figureSegmentNorms(SbVec2f *result, int nPoints, const SbVec2f *points, float cosCreaseAngle, SbBool isClosed);
-    void figureSegmentTexCoords(float *texCoords, int nPoints, const SbVec2f *points, SbBool isClosed);
+    void figureSegmentNorms(std::vector<SbVec2f> & result, int nPoints, const SbVec2f *points, float cosCreaseAngle, SbBool isClosed);
+    void figureSegmentTexCoords(std::vector<float> & texCoords, int nPoints, const SbVec2f *points, SbBool isClosed);
     void fillBevel(SbVec3f *result, int nPoints, const SbVec2f *points, const SbVec2f &translation, const SbVec2f &n1, const SbVec2f &n2);
-    void fillBevelN(SbVec3f *result, int nPoints, const SbVec2f *norms, const SbVec2f &n);
+    void fillBevelN(SbVec3f *result, const std::vector<SbVec2f> & norms, const SbVec2f &n);
 
     // Texture coordinates in side display lists
     int		sidesHaveTexCoords;
@@ -164,8 +164,8 @@ class SoOutlineFontCache : public SoCache
     float	cosCreaseAngle;
     int32_t	nProfileVerts;	// Number of points in profile
     SbVec2f	*profileVerts;	// Profile vertices
-    float	*sTexCoords;	// Texture coordinates along profile (nProfileVerts of them)
-    SbVec2f	*profileNorms;	// Profile normals ((nProfileVerts-1)*2 of them)
+    std::vector<float>   sTexCoords;	// Texture coordinates along profile (nProfileVerts of them)
+    std::vector<SbVec2f> profileNorms;	// Profile normals ((nProfileVerts-1)*2 of them)
 
     // List of outlines; these are also cached and created when needed.
     std::map<char, SoFontOutline*> outlines;
