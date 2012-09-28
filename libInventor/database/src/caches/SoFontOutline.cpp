@@ -27,7 +27,7 @@ SoFontOutline::SoFontOutline()
 //
 // Use: internal
 
-SoFontOutline::SoFontOutline(char ch, FT_Face face, float size)
+SoFontOutline::SoFontOutline(wchar_t ch, FT_Face face, float size)
 //
 ////////////////////////////////////////////////////////////////////////
 {
