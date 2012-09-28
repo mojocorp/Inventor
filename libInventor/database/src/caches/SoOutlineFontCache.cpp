@@ -184,7 +184,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
         // may be averaged with the normal for the next segment, depending
         // on whether or not the angle between the segments is greater
         // than the creaseAngle.
-        profileNorms = new SbVec2f[nSegments*2];
+        profileNorms.resize(nSegments*2);
         figureSegmentNorms(profileNorms, (int) nProfileVerts, profileVerts,
                            cosCreaseAngle, FALSE);
         // Need to flip all the normals because of the way the profiles
@@ -194,7 +194,7 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
         }
 
         // Figure out S texture coordinates, which run along the profile:
-        sTexCoords = new float[nProfileVerts];
+        sTexCoords.resize(nProfileVerts);
         figureSegmentTexCoords(sTexCoords, (int) nProfileVerts,
                                profileVerts, FALSE);
         // And reverse them, so 0 is at the back of the profile:
@@ -202,9 +202,6 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
         for (int i = 0; i < nProfileVerts; i++) {
             sTexCoords[i] = max - sTexCoords[i];
         }
-    } else {
-        profileNorms = NULL;
-        sTexCoords = NULL;
     }
 
     fonts.push_back(this);
@@ -241,8 +238,6 @@ SoOutlineFontCache::~SoOutlineFontCache()
 
         if (hasProfile()) {
             delete[] profileVerts;
-            delete[] sTexCoords;
-            delete[] profileNorms;
         }
 
         // Only destroy the font library font if no other font caches
@@ -620,13 +615,13 @@ SoOutlineFontCache::generateSideChar(const char c, SideCB callbackFunc)
         }
 
         // First, figure out a set of normals for the outline:
-        SbVec2f *oNorms = new SbVec2f[nOutline*2];
+        std::vector<SbVec2f> oNorms(nOutline*2);
         figureSegmentNorms(oNorms, nOutline, oVerts, cosCreaseAngle, TRUE);
 
         // And appropriate texture coordinates:
         // Figure out T texture coordinates, which run along the
         // outline:
-        float *tTexCoords = new float[nOutline+1];
+        std::vector<float> tTexCoords(nOutline+1);
         figureSegmentTexCoords(tTexCoords, nOutline, oVerts, TRUE);
 
         // Now, generate a set of triangles for each segment in the
@@ -656,19 +651,18 @@ SoOutlineFontCache::generateSideChar(const char c, SideCB callbackFunc)
             // New normals are calculated for both ends of this
             // segment, since the normals may or may not be shared
             // with the previous segment.
-            fillBevelN(bevelN1, (int)(nProfileVerts-1)*2, profileNorms, oNorms[j*2]);
+            fillBevelN(bevelN1, profileNorms, oNorms[j*2]);
 
             int j2 = (j+1)%nOutline;
             // fill out second bevel:
             fillBevel(s2, (int) nProfileVerts, profileVerts,
                       outline->getVertex(i,j2),
                       oNorms[j*2+1], oNorms[j2*2]);
-            fillBevelN(bevelN2, (int)(nProfileVerts-1)*2, profileNorms,
-                       oNorms[j*2+1]);
+            fillBevelN(bevelN2, profileNorms, oNorms[j*2+1]);
 
             // And generate triangles between the two bevels:
             (*callbackFunc)((int) nProfileVerts, s1, bevelN1, s2, bevelN2,
-                             sTexCoords, &tTexCoords[j]);
+                            &sTexCoords[0], &tTexCoords[j]);
 
             // Swap bevel1/2 (avoids some recomputation)
             SbVec3f *t;
@@ -678,8 +672,6 @@ SoOutlineFontCache::generateSideChar(const char c, SideCB callbackFunc)
         delete [] bevel2;
         delete [] bevelN1;
         delete [] bevel1;
-        delete [] tTexCoords;
-        delete [] oNorms;
         delete [] oVerts;
     }
 }
@@ -697,7 +689,7 @@ SoOutlineFontCache::generateSideChar(const char c, SideCB callbackFunc)
 // Use: private
 
 void
-SoOutlineFontCache::figureSegmentNorms(SbVec2f *norms, int nPoints,
+SoOutlineFontCache::figureSegmentNorms(std::vector<SbVec2f> & norms, int nPoints,
                             const SbVec2f *points,  float cosCreaseAngle,
                             SbBool isClosed)
 //
@@ -754,7 +746,7 @@ SoOutlineFontCache::figureSegmentNorms(SbVec2f *norms, int nPoints,
 // Use: private
 
 void
-SoOutlineFontCache::figureSegmentTexCoords(float *texCoords, int nPoints,
+SoOutlineFontCache::figureSegmentTexCoords(std::vector<float> & texCoords, int nPoints,
                             const SbVec2f *points, SbBool isClosed)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -827,14 +819,14 @@ SoOutlineFontCache::fillBevel(SbVec3f *result, int nPoints,
 //    outline's segments.
 
 void
-SoOutlineFontCache::fillBevelN(SbVec3f *result, int nNorms,
-          const SbVec2f *norms,
+SoOutlineFontCache::fillBevelN(SbVec3f *result,
+          const std::vector<SbVec2f> & norms,
           const SbVec2f &n)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Now, for each point:
-    for (int i = 0; i < nNorms; i++) {
+    for (size_t i = 0; i < norms.size(); i++) {
         // This is really the 2D rotation formula,
         // x = x' cos(angle) - y' sin(angle)
         // y = x' sin(angle) + y' cos(angle)
