@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -148,7 +148,7 @@ SoAsciiText::~SoAsciiText()
 ////////////////////////////////////////////////////////////////////////
 //
 //  This initializes the SoAsciiText class.
-//  
+//
 void
 SoAsciiText::initClass()
 //
@@ -225,17 +225,17 @@ SoAsciiText::GLRender(SoGLRenderAction *action)
         glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
     }
-    
+
     for (int line = 0; line < string.getNum(); line++) {
         glPushMatrix();
         float w = (line < width.getNum()) ? width[line] : 0;
         SbVec2f p = getStringOffset(line, w);
         if (p[0] != 0.0 || p[1] != 0.0)
             glTranslatef(p[0], p[1], 0.0);
-        renderFront(action, string[line], w, tobj);
+        myFont->renderFront(string[line], tobj);
         glPopMatrix();
     }
-    
+
     if (genTexCoord) {
         glPopAttrib();
     }
@@ -301,7 +301,7 @@ SoAsciiText::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
     // If no lines and no characters, return empty bbox:
     if (outlineBox.isEmpty()) return;
-    
+
     const SbVec2f &boxMin = outlineBox.getMin();
     const SbVec2f &boxMax = outlineBox.getMax();
 
@@ -375,7 +375,7 @@ SoAsciiText::generatePrimitives(SoAction *action)
     v1.setNormal(SbVec3f(0, 0, 1));
     v2.setNormal(SbVec3f(0, 0, 1));
     v3.setNormal(SbVec3f(0, 0, 1));
-    
+
     for (int line = 0; line < string.getNum(); line++) {
         detail.setStringIndex(line);
 
@@ -491,7 +491,7 @@ SoAsciiText::getStringOffset(int line, float width)
 ////////////////////////////////////////////////////////////////////////
 {
     SbVec2f result(0,0);
-    
+
     if (justification.getValue() == RIGHT) {
         if (width <= 0)
             width = myFont->getWidth(string[line]);
@@ -506,54 +506,6 @@ SoAsciiText::getStringOffset(int line, float width)
 
     return result;
 }
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Render the fronts of the given string.  The GL transformation
-//    matrix is munged by this routine-- surround it by
-//    PushMatrix/PopMatrix.
-//
-// Use: public, internal
-
-void
-SoAsciiText::renderFront(SoGLRenderAction *, const SbString &string,
-                         float width, GLUtesselator *tobj)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const char *chars = string.getString();
-
-    // if we have a fixed width, use it.
-    float off = 0;
-    if (width > 0) {
-        float naturalWidth = myFont->getWidth(string);
-        off = (width - naturalWidth) / (string.getLength() - 1);
-    }
-    
-    // First, try to figure out if we can use glCallLists:
-    SbBool useCallLists = TRUE;
-
-    for (size_t i = 0; i < string.getLength(); i++) {
-        // See if the font cache already has (or can build) a display
-        // list for this character:
-        if (!myFont->hasFrontDisplayList(chars[i], tobj)) {
-            useCallLists = FALSE;
-            break;
-        }
-    }
-    
-    // if we have display lists for all of the characters, use
-    // glCallLists:
-    if (useCallLists && off == 0) {
-        myFont->callFrontLists(string);
-    }
-    // if we don't, draw the string character-by-character, using the
-    // display lists we do have:
-    else {
-        myFont->renderFront(string, tobj);
-    }
-}    
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -573,7 +525,7 @@ SoAsciiText::createTriangleDetail(SoRayPickAction *,
 {
     SoTextDetail *result = new SoTextDetail;
     const SoTextDetail *old = (const SoTextDetail *)v1->getDetail();
-    
+
     result->setPart(old->getPart());
     result->setStringIndex(old->getStringIndex());
     result->setCharacterIndex(old->getCharacterIndex());
@@ -612,14 +564,14 @@ SoAsciiText::generateFront(const SbString &string, float width)
     genWhichVertex = 0;
 
     SoTextDetail *d = (SoTextDetail *)genPrimVerts[0]->getDetail();
-    
+
     // if we have a fixed width, use it.
     float off = 0;
     if (width > 0) {
         float naturalWidth = myFont->getWidth(string);
         off = (width - naturalWidth) / (string.getLength() - 1);
     }
-    
+
     for (size_t i = 0; i < string.getLength(); i++) {
         d->setCharacterIndex(i);
 
@@ -684,12 +636,12 @@ SoAsciiText::vtxCB(void *v)
     vertex[2] = genTranslate[2];
 
     SoAsciiText *t3 = currentGeneratingNode;
-    
+
     // Fill in one of the primitive vertices:
     genPrimVerts[genWhichVertex]->setPoint(vertex);
 
     SbVec4f texCoord;
-    
+
     // And texture coordinates:
     if (genTexCoord) {
         float textHeight = t3->myFont->getHeight();

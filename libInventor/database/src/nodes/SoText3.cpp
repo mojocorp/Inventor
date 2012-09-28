@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -166,7 +166,7 @@ SoText3::getCharacterBounds(SoState *state, int stringIndex, int charIndex)
 
     if (!setupFontCache(state))
         return result;  // Empty bbox
-    
+
 #ifdef DEBUG
     if (stringIndex >= string.getNum()) {
         SoDebugError::post("SoText3::getCharacterBounds",
@@ -183,18 +183,18 @@ SoText3::getCharacterBounds(SoState *state, int stringIndex, int charIndex)
 
     float frontZ, backZ;
     myFont->getProfileBounds(frontZ, backZ);
-    
+
     float height = myFont->getHeight();
 
     const char *chars = string[stringIndex].getString();
     float width = (myFont->getCharOffset(chars[charIndex]))[0];
-    
+
     // Figure out where origin of character is:
     SbVec2f charPosition = getStringOffset(stringIndex);
     for (int i = 0; i < charIndex; i++) {
         charPosition += myFont->getCharOffset(chars[i]);
     }
-    
+
     // Ok, have width, height, depth and starting position of text,
     // can create the bounds box:
     if (parts.getValue() & (FRONT|SIDES)) {
@@ -284,7 +284,7 @@ SoText3::GLRender(SoGLRenderAction *action)
             SbVec2f p = getStringOffset(line);
             if (p[0] != 0.0 || p[1] != 0.0)
                 glTranslatef(p[0], p[1], 0.0);
-            renderSide(action, line);
+            myFont->renderSide(string[line], renderSideTris);
             glPopMatrix();
         }
     }
@@ -322,7 +322,7 @@ SoText3::GLRender(SoGLRenderAction *action)
             SbVec2f p = getStringOffset(line);
             if (p[0] != 0.0 || p[1] != 0.0)
                 glTranslatef(p[0], p[1], 0.0);
-            renderFront(action, line, tobj);
+            myFont->renderFront(string[line], tobj);
             glPopMatrix();
         }
 
@@ -367,7 +367,7 @@ SoText3::GLRender(SoGLRenderAction *action)
             SbVec2f p = getStringOffset(line);
             if (p[0] != 0.0 || p[1] != 0.0)
                 glTranslatef(p[0], p[1], 0.0);
-            renderFront(action, line, tobj);
+            myFont->renderFront(string[line], tobj);
             glPopMatrix();
         }
 
@@ -445,7 +445,7 @@ SoText3::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
     // If no lines and no characters, return empty bbox:
     if (outlineBox.isEmpty()) return;
-    
+
     // .. and extend it based on what parts are turned on:
     float firstZ, lastZ;
     myFont->getProfileBounds(firstZ, lastZ);
@@ -729,7 +729,7 @@ SoText3::getStringOffset(int line)
 ////////////////////////////////////////////////////////////////////////
 {
     SbVec2f result(0,0);
-    
+
     if (justification.getValue() == RIGHT) {
         float width = myFont->getWidth(string[line]);
         result[0] = -width;
@@ -756,7 +756,7 @@ SoText3::getCharacterOffset(int line, int whichChar)
 ////////////////////////////////////////////////////////////////////////
 {
     SbVec2f result = getStringOffset(line);
-    
+
     const char *chars = string[line].getString();
 
     // Now add on all of the character advances up to char:
@@ -764,85 +764,6 @@ SoText3::getCharacterOffset(int line, int whichChar)
         result += myFont->getCharOffset(chars[i]);
     }
     return result;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Render the fronts of the given string.  The GL transformation
-//    matrix is munged by this routine-- surround it by
-//    PushMatrix/PopMatrix.
-//
-// Use: public, internal
-
-void
-SoText3::renderFront(SoGLRenderAction *, int line,
-                     GLUtesselator *tobj)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const char *chars = string[line].getString();
-
-    // First, try to figure out if we can use glCallLists:
-    SbBool useCallLists = TRUE;
-
-    for (size_t i = 0; i < string[line].getLength(); i++) {
-        // See if the font cache already has (or can build) a display
-        // list for this character:
-        if (!myFont->hasFrontDisplayList(chars[i], tobj)) {
-            useCallLists = FALSE;
-            break;
-        }
-    }
-    // if we have display lists for all of the characters, use
-    // glCallLists:
-    if (useCallLists) {
-        myFont->callFrontLists(string[line]);
-    }
-    // if we don't, draw the string character-by-character, using the
-    // display lists we do have:
-    else {
-        myFont->renderFront(string[line], tobj);
-    }
-}    
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Render the sides of the given string.  The GL transformation
-//    matrix is munged by this routine-- surround it by
-//    PushMatrix/PopMatrix.
-//
-// Use: private
-
-void
-SoText3::renderSide(SoGLRenderAction *, int line)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const char *chars = string[line].getString();
-
-    // First, try to figure out if we can use glCallLists:
-    SbBool useCallLists = TRUE;
-
-    for (size_t i = 0; i < string[line].getLength(); i++) {
-        // See if the font cache already has (or can build) a display
-        // list for this character:
-        if (!myFont->hasSideDisplayList(chars[i], renderSideTris)) {
-            useCallLists = FALSE;
-            break;
-        }
-    }
-    // if we have display lists for all of the characters, use
-    // glCallLists:
-    if (useCallLists) {
-        myFont->callSideLists(string[line]);
-    }
-    // if we don't, draw the string character-by-character, using the
-    // display lists we do have:
-    else {
-        myFont->renderSide(string[line], renderSideTris);
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -863,7 +784,7 @@ SoText3::createTriangleDetail(SoRayPickAction *,
 {
     SoTextDetail *result = new SoTextDetail;
     const SoTextDetail *old = (const SoTextDetail *)v1->getDetail();
-    
+
     result->setPart(old->getPart());
     result->setStringIndex(old->getStringIndex());
     result->setCharacterIndex(old->getCharacterIndex());
@@ -957,7 +878,7 @@ SoText3::generateSideTris(int nPoints, const SbVec3f *p1, const SbVec3f *n1,
 {
     float vertex[3];
     SbVec4f texCoord(0,0,0,1);
-    
+
     const SbVec3f *p[2]; p[0] = p1; p[1] = p2;
     const SbVec3f *n[2]; n[0] = n1; n[1] = n2;
 
@@ -1082,12 +1003,12 @@ SoText3::vtxCB(void *v)
     vertex[2] = genTranslate[2];
 
     SoText3 *t3 = currentGeneratingNode;
-    
+
     // Fill in one of the primitive vertices:
     genPrimVerts[genWhichVertex]->setPoint(vertex);
 
     SbVec4f texCoord;
-    
+
     // And texture coordinates:
     if (genTexCoord) {
         float textHeight = t3->myFont->getHeight();

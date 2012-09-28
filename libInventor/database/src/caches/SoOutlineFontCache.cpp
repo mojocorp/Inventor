@@ -586,44 +586,6 @@ SoOutlineFontCache::hasSideDisplayList(const char c,
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Assuming that there are display lists built for all the
-//    characters in given string, render them using the GL's CallLists
-//    routine.
-//
-// Use: internal
-
-void
-SoOutlineFontCache::callFrontLists(const SbString &string)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const char *str = string.getString();
-
-    glCallLists(string.getLength(), GL_UNSIGNED_BYTE, str);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Assuming that there are display lists built for all the
-//    characters in given string, render them using the GL's CallLists
-//    routine.
-//
-// Use: internal
-
-void
-SoOutlineFontCache::callSideLists(const SbString &string)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const char *str = string.getString();
-
-    glCallLists(string.getLength(), GL_UNSIGNED_BYTE, str);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Assuming that there are not display lists built for all the
 //    characters in given string, render the string.
 //
