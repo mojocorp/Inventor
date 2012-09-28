@@ -184,10 +184,6 @@ class INVENTOR_API SoAsciiText : public SoShape {
     // of characters and justification)
     SbVec2f getStringOffset(int line, float width);
     
-    // Render the fronts of the characters
-    void renderFront(SoGLRenderAction *action, const SbString &string,
-		     float width, GLUtesselator *tobj);
-    
     // Creates a text detail when picking:
     SoDetail * createTriangleDetail(SoRayPickAction *,
 				    const SoPrimitiveVertex *,
