@@ -130,16 +130,6 @@ class SoOutlineFontCache : public SoCache
     void	setupToRenderFront(SoState *state);
     void	setupToRenderSide(SoState *state, SbBool willTexture);
 
-    // Returns TRUE if this font cache has a display list for the
-    // given character.  It will try to build a display list, if it
-    // can.
-    SbBool	hasFrontDisplayList(const char c, GLUtesselator *tobj);
-    SbBool	hasSideDisplayList(const char c, SideCB callbackFunc);
-
-    // Renders an entire string by using the GL callList() function.
-    void	callFrontLists(const SbString &string);
-    void	callSideLists(const SbString &string);
-
     // Renders a string in cases where display lists can't be buit.
     void	renderFront(const SbString &string,
                             GLUtesselator *tobj);
@@ -159,6 +149,12 @@ class SoOutlineFontCache : public SoCache
     SoOutlineFontCache(SoState *);
     // Destructor
     ~SoOutlineFontCache();
+
+    // Returns TRUE if this font cache has a display list for the
+    // given character.  It will try to build a display list, if it
+    // can.
+    SbBool	hasFrontDisplayList(const char c, GLUtesselator *tobj);
+    SbBool	hasSideDisplayList(const char c, SideCB callbackFunc);
 
     // Return a convnient little class representing a character's
     // outline.
