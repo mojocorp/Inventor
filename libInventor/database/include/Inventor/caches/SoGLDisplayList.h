@@ -112,16 +112,16 @@ public:
     //
     // Get methods
     //
-    Type getType() {
+    Type getType() const {
         return type;
     }
-    int getNumAllocated() {
+    int getNumAllocated() const {
         return num;
     }
-    GLuint getFirstIndex() {
+    GLuint getFirstIndex() const {
         return startIndex;
     }
-    int getContext() {
+    int getContext() const {
         return context;
     }
 
