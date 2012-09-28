@@ -59,7 +59,6 @@ SoOutlineFontCache::getFont(SoState *state, SbBool forRender)
         SoOutlineFontCache *c = fonts[i];
         if (forRender ? c->isRenderValid(state) : c->isValid(state)) {
             result = c; // Loop will terminate...
-            result->ref(); // Increment ref count
         }
     }
     // If none match:
@@ -78,22 +77,6 @@ SoOutlineFontCache::getFont(SoState *state, SbBool forRender)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Sees if this font is valid.  If it is valid, it also makes it
-//    current.
-//
-// Use: public
-
-SbBool
-SoOutlineFontCache::isValid(SoState *state) const
-//
-////////////////////////////////////////////////////////////////////////
-{
-    return SoCache::isValid(state);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Figures out if this cache is valid for rendering.
 //
 // Use: internal
@@ -106,20 +89,16 @@ SoOutlineFontCache::isRenderValid(SoState *state) const
     // Special cache case here:  if we generated side display lists
     // without texture coordinates AND we need texture coordinates,
     // we'll have to regenerate and this cache is invalid:
-    if (sideList) {
-        if (!sidesHaveTexCoords &&
-            SoGLTextureEnabledElement::get(state)) {
+    if (!sideList.empty()) {
+        if (!sidesHaveTexCoords && SoGLTextureEnabledElement::get(state)) {
             return FALSE;
         }
     }
 
-    if (!isValid(state)) return FALSE;
-
-    if (frontList &&
-        frontList->getContext() != SoGLCacheContextElement::get(state))
+    if (!isValid(state))
         return FALSE;
-    if (sideList &&
-        sideList->getContext() != SoGLCacheContextElement::get(state))
+
+    if (context != SoGLCacheContextElement::get(state))
         return FALSE;
 
     return TRUE;
@@ -133,13 +112,10 @@ SoOutlineFontCache::isRenderValid(SoState *state) const
 // Use: private
 
 SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
-        SoCache(state)
+    SoCache(state), context(-1)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    ref();
-
-    frontList = sideList = NULL;
     face = NULL;
 
     // Add element dependencies explicitly here; making 'this' the
@@ -247,11 +223,21 @@ SoOutlineFontCache::~SoOutlineFontCache()
 {
     if (face) {
         // Free up cached outlines
+        {
         std::map<char, SoFontOutline*>::iterator it;
         for (it=outlines.begin(); it!=outlines.end(); it++) {
             delete it->second;
         }
         outlines.clear();
+}
+
+        std::map<char, SoGLDisplayList*>::iterator it;
+        for (it=frontList.begin(); it!=frontList.end(); it++) {
+            it->second->unref(NULL);
+        }
+        for (it=sideList.begin(); it!=sideList.end(); it++) {
+            it->second->unref(NULL);
+        }
 
         if (hasProfile()) {
             delete[] profileVerts;
@@ -272,42 +258,11 @@ SoOutlineFontCache::~SoOutlineFontCache()
         }
         fonts.erase(std::find(fonts.begin(), fonts.end(), this));
     }
-}
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Destroy this cache.  Called by unref(); frees up OpenGL display
-//    lists.
-//
-// Use: protected, virtual
-
-void
-SoOutlineFontCache::destroy(SoState *)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // Pass in NULL to unref because this cache may be destroyed
-    // from an action _other_ than GLRender:
-    if (frontList) {
-        frontList->unref(NULL);
-        frontList = NULL;
+    if (fonts.empty()) {
+        FT_Done_FreeType(library);
+        library = NULL;
     }
-    if (sideList) {
-        sideList->unref(NULL);
-        sideList = NULL;
-    }
-
-    SoCache::destroy(NULL);
-
-    for (size_t i=0; i<fonts.size(); i++) {
-        fonts[i]->unref();
-    }
-    fonts.clear();
-
-    FT_Done_FreeType(library);
-
-    library = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -326,7 +281,7 @@ SoOutlineFontCache::getWidth(const SbString &string)
     const char *chars = string.getString();
 
     for (size_t i = 0; i < string.getLength(); i++) {
-        SoFontOutline *outline = getOutline(chars[i]);
+        const SoFontOutline *outline = getOutline(chars[i]);
         total += outline->getCharAdvance()[0];
     }
 
@@ -465,85 +420,36 @@ SoOutlineFontCache::generateFrontChar(const char c,
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Sets up for GL rendering.
-//
-// Use: internal
-
-void
-SoOutlineFontCache::setupToRenderFront(SoState *state)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    otherOpen = SoCacheElement::anyOpen(state);
-    if (!otherOpen && !frontList) {
-        frontList = new SoGLDisplayList(state,
-                                        SoGLDisplayList::DISPLAY_LIST,
-                                        256);
-        frontList->ref();
-    }
-    if (frontList) {
-        // Set correct list base
-        glListBase(frontList->getFirstIndex());
-        frontList->addDependency(state);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sets up for GL rendering.
-//
-// Use: internal
-
-void
-SoOutlineFontCache::setupToRenderSide(SoState *state, SbBool willTexture)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    otherOpen = SoCacheElement::anyOpen(state);
-    if (!otherOpen && !sideList) {
-        sideList = new SoGLDisplayList(state,
-                                        SoGLDisplayList::DISPLAY_LIST,
-                                        256);
-        sideList->ref();
-        sidesHaveTexCoords = willTexture;
-    }
-    if (sideList) {
-        // Set correct list base
-        glListBase(sideList->getFirstIndex());
-        sideList->addDependency(state);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Returns TRUE if a display lists exists for given character.
 //    Tries to build a display list, if it can.
 //
 // Use: internal
 
 SbBool
-SoOutlineFontCache::hasFrontDisplayList(const char c,
-                                        GLUtesselator *tobj)
+SoOutlineFontCache::hasFrontDisplayList(SoState *state, const char c, GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // If we have one, return TRUE
-    if (frontFlags[c] == true)
+    if (frontList[c])
         return TRUE;
 
     // If we don't and we can't build one, return FALSE.
-    if (otherOpen)
+    if (SoCacheElement::anyOpen(state))
         return FALSE;
 
+    context = SoGLCacheContextElement::get(state);
+
     // Build one:
-    glNewList(frontList->getFirstIndex()+c, GL_COMPILE);
+    frontList[c] = new SoGLDisplayList(state, SoGLDisplayList::DISPLAY_LIST);
+    frontList[c]->ref();
+    frontList[c]->addDependency(state);
+    glNewList(frontList[c]->getFirstIndex(), GL_COMPILE);
+
     generateFrontChar(c, tobj);
     const SbVec2f & t = getOutline(c)->getCharAdvance();
     glTranslatef(t[0], t[1], 0.0);
-    glEndList();
-    frontFlags[c] = true;
+    frontList[c]->close(state);
 
     return TRUE;
 }
@@ -556,20 +462,25 @@ SoOutlineFontCache::hasFrontDisplayList(const char c,
 // Use: internal
 
 SbBool
-SoOutlineFontCache::hasSideDisplayList(const char c,
-                                       SideCB callbackFunc)
+SoOutlineFontCache::hasSideDisplayList(SoState *state, const char c, SideCB callbackFunc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // If we have one, return TRUE
-    if (sideFlags[c] == true)
+    if (sideList[c])
         return TRUE;
 
     // If we don't and we can't build one, return FALSE.
-    if (otherOpen) return FALSE;
+    if (SoCacheElement::anyOpen(state))
+        return FALSE;
+
+    sidesHaveTexCoords = SoGLTextureEnabledElement::get(state);
 
     // Build one:
-    glNewList(sideList->getFirstIndex()+c, GL_COMPILE);
+    sideList[c] = new SoGLDisplayList(state, SoGLDisplayList::DISPLAY_LIST);
+    sideList[c]->ref();
+    sideList[c]->addDependency(state);
+    glNewList(sideList[c]->getFirstIndex(), GL_COMPILE);
 
     glBegin(GL_QUADS);    // Render as independent quads:
     generateSideChar(c, callbackFunc);
@@ -577,8 +488,7 @@ SoOutlineFontCache::hasSideDisplayList(const char c,
 
     const SbVec2f & t = getOutline(c)->getCharAdvance();
     glTranslatef(t[0], t[1], 0.0);
-    glEndList();
-    sideFlags[c] = true;
+    sideList[c]->close(state);
 
     return TRUE;
 }
@@ -592,16 +502,15 @@ SoOutlineFontCache::hasSideDisplayList(const char c,
 // Use: internal
 
 void
-SoOutlineFontCache::renderFront(const SbString &string,
-                                GLUtesselator *tobj)
+SoOutlineFontCache::renderFront(SoState *state, const SbString &string, GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const char *str = string.getString();
 
     for (size_t i = 0; i < string.getLength(); i++) {
-        if (frontFlags[str[i]]) {
-            glCallList(frontList->getFirstIndex()+str[i]);
+        if (hasFrontDisplayList(state, str[i], tobj)) {
+            frontList[str[i]]->call(state);
         }
         else {
             generateFrontChar(str[i], tobj);
@@ -620,16 +529,15 @@ SoOutlineFontCache::renderFront(const SbString &string,
 // Use: internal
 
 void
-SoOutlineFontCache::renderSide(const SbString &string,
-                               SideCB callbackFunc)
+SoOutlineFontCache::renderSide(SoState *state, const SbString &string, SideCB callbackFunc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const char *str = string.getString();
 
     for (size_t i = 0; i < string.getLength(); i++) {
-        if (sideFlags[str[i]]) {
-            glCallList(sideList->getFirstIndex()+str[i]);
+        if (hasSideDisplayList(state, str[i], callbackFunc)) {
+            sideList[str[i]]->call(state);
         }
         else {
             glBegin(GL_QUADS);

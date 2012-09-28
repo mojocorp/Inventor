@@ -208,8 +208,6 @@ SoAsciiText::GLRender(SoGLRenderAction *action)
 
     glNormal3f(0, 0, 1);
 
-    myFont->setupToRenderFront(state);
-
     if (genTexCoord) {
         glPushAttrib(GL_TEXTURE_BIT);
         glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
@@ -232,7 +230,7 @@ SoAsciiText::GLRender(SoGLRenderAction *action)
         SbVec2f p = getStringOffset(line, w);
         if (p[0] != 0.0 || p[1] != 0.0)
             glTranslatef(p[0], p[1], 0.0);
-        myFont->renderFront(string[line], tobj);
+        myFont->renderFront(state, string[line], tobj);
         glPopMatrix();
     }
 
@@ -420,6 +418,7 @@ SoAsciiText::setupFontCache(SoState *state, SbBool forRender)
     }
     if (myFont == NULL) {
         myFont = SoOutlineFontCache::getFont(state, forRender);
+        myFont->ref();
     }
     state->pop();
     return  myFont != NULL;

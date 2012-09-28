@@ -216,13 +216,6 @@ class INVENTOR_API SoText3 : public SoShape {
     // starts:
     SbVec2f getCharacterOffset(int line, int whichChar);
 
-    // Render the fronts of the characters
-    void renderFront(SoGLRenderAction *action, int line,
-		     GLUtesselator *tobj);
-    
-    // Render the sides of the characters
-    void renderSide(SoGLRenderAction *action, int line);
-
     // Creates a text detail when picking:
     SoDetail * createTriangleDetail(SoRayPickAction *,
 				    const SoPrimitiveVertex *,
