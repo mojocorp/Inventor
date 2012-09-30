@@ -190,7 +190,7 @@ SoBitmapFontCache::~SoBitmapFontCache()
 ////////////////////////////////////////////////////////////////////////
 {
     if (face) {
-        std::map<char, FLbitmap*>::iterator it;
+        std::map<wchar_t, FLbitmap*>::iterator it;
         for (it = bitmaps.begin(); it != bitmaps.end(); it++) {
             delete [] it->second->bitmap;
             delete it->second;
@@ -225,7 +225,7 @@ SoBitmapFontCache::destroy(SoState *)
 {
     // Pass in NULL to unref because this cache may be destroyed
     // from an action _other_ than GLRender:
-    std::map<char, SoGLDisplayList*>::iterator it;
+    std::map<wchar_t, SoGLDisplayList*>::iterator it;
     for (it=list.begin(); it != list.end(); it++) {
         it->second->unref(NULL);
     }
@@ -260,7 +260,7 @@ SoBitmapFontCache::isRenderValid(SoState *state) const
 // Use: internal
 
 SbBool
-SoBitmapFontCache::hasDisplayList(SoState *state, unsigned char c)
+SoBitmapFontCache::hasDisplayList(SoState *state, wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -293,7 +293,7 @@ SoBitmapFontCache::hasDisplayList(SoState *state, unsigned char c)
 // Use: internal, public
 
 void
-SoBitmapFontCache::getCharBbox(char c, SbBox3f &box)
+SoBitmapFontCache::getCharBbox(wchar_t c, SbBox3f &box)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -317,7 +317,7 @@ SoBitmapFontCache::getCharBbox(char c, SbBox3f &box)
 // Use: internal, public
 
 SbVec3f
-SoBitmapFontCache::getCharOffset(char c)
+SoBitmapFontCache::getCharOffset(wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -342,7 +342,7 @@ SoBitmapFontCache::getWidth(const SbString &str)
 {
     float result = 0.0;
 
-    const char *chars = str.getString();
+    std::wstring chars = str.toStdWString();
     for (size_t i = 0; i < str.getLength(); i++) {
         const FLbitmap *bmap = getBitmap(chars[i]);
         if (bmap != NULL)
@@ -377,7 +377,7 @@ SoBitmapFontCache::getHeight()
 // Use: internal public
 
 void
-SoBitmapFontCache::drawCharacter(unsigned char c)
+SoBitmapFontCache::drawCharacter(wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -422,7 +422,7 @@ SoBitmapFontCache::drawString(SoState *state, const SbString &string)
 
     // if we don't, draw the string character-by-character, using the
     // display lists we do have:
-    const unsigned char *chars = (unsigned char*)string.getString();
+    std::wstring chars = string.toStdWString();
     for (size_t i = 0; i < string.getLength(); i++) {
         if (hasDisplayList(state, chars[i])) {
             list[chars[i]]->call(state);
@@ -446,7 +446,7 @@ SoBitmapFontCache::drawString(SoState *state, const SbString &string)
 //
 // Use: private
 const SoBitmapFontCache::FLbitmap *
-SoBitmapFontCache::getBitmap(unsigned char c)
+SoBitmapFontCache::getBitmap(wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
