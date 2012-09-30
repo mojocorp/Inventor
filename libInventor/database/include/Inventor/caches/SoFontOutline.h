@@ -27,12 +27,7 @@ class SoFontOutline {
     const SbVec2f & getCharAdvance() const { return charAdvance; }
     const SbBox2f & getBoundingBox() const { return bbox;}
 
-    static SoFontOutline *getNullOutline();
-
   private:
-    // Internal constructor used by getNullOutline:
-    SoFontOutline();
-
     static int moveTo(FT_Vector *to, SoFontOutline* fo);
     static int lineTo(FT_Vector *to, SoFontOutline* fo);
     static int conicTo(FT_Vector *control, FT_Vector *to, SoFontOutline* fo);

@@ -8,21 +8,6 @@
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//   Internal constructor used by getNullOutline
-//
-// Use: internal, static
-
-SoFontOutline::SoFontOutline()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    scale = 1.0f;
-    charAdvance = SbVec2f(0,0);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //   Copy info from the font library into a more convenient form.
 //
 // Use: internal
@@ -31,49 +16,59 @@ SoFontOutline::SoFontOutline(wchar_t ch, FT_Face face, float size)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if(FT_Load_Char(face, ch, FT_LOAD_IGNORE_TRANSFORM | FT_LOAD_NO_SCALE)) {
+    FT_UInt index = FT_Get_Char_Index(face, ch);
+    if(FT_Load_Glyph(face, index, FT_LOAD_IGNORE_TRANSFORM | FT_LOAD_NO_SCALE)) {
 #ifdef DEBUG
         SoDebugError::post("SoFontOutline",
-                           "FT_Load_Char failed");
+                           "FT_Load_Glyph failed");
 #endif
     }
 
     scale = size / (float)face->units_per_EM;
 
-    static FT_Outline_Funcs ft2_outline_funcs = {
-        (FT_Outline_MoveTo_Func)moveTo,
-        (FT_Outline_LineTo_Func)lineTo,
-        (FT_Outline_ConicTo_Func)conicTo,
-        (FT_Outline_CubicTo_Func)cubicTo,
-        0,0
-    };
+    if (index == 0) {
+        verts.resize(1);
+        verts[0].push_back(SbVec2f(0.0f, 0.0f)*size);
+        verts[0].push_back(SbVec2f(1.0f, 0.0f)*size);
+        verts[0].push_back(SbVec2f(1.0f, 1.0f)*size);
+        verts[0].push_back(SbVec2f(0.0f, 1.0f)*size);
 
-    FT_Outline *outline = &face->glyph->outline;
+        charAdvance = SbVec2f(1.0f, 0.0f);
+    } else {
+        static FT_Outline_Funcs ft2_outline_funcs = {
+            (FT_Outline_MoveTo_Func)moveTo,
+            (FT_Outline_LineTo_Func)lineTo,
+            (FT_Outline_ConicTo_Func)conicTo,
+            (FT_Outline_CubicTo_Func)cubicTo,
+            0,0
+        };
 
-    verts.reserve(outline->n_contours);
+        FT_Outline *outline = &face->glyph->outline;
 
-    charAdvance = SbVec2f(face->glyph->advance.x,
-                          face->glyph->advance.y)*scale;
+        verts.reserve(outline->n_contours);
 
-    FT_Outline_Decompose (outline, &ft2_outline_funcs, this);
+        charAdvance = SbVec2f(face->glyph->advance.x,
+                              face->glyph->advance.y)*scale;
+
+        FT_Outline_Decompose (outline, &ft2_outline_funcs, this);
+
+        // reverse the contours if necessary
+        if (!(outline->flags & FT_OUTLINE_REVERSE_FILL)) {
+            for (size_t ctr=0; ctr<verts.size(); ctr++) {
+                std::reverse(verts[ctr].begin(), verts[ctr].end());
+            }
+        }
+        for (size_t ctr=0; ctr<verts.size(); ctr++) {
+            if (verts[ctr].front().equals(verts[ctr].back(), 10E-6)) {
+                verts[ctr].pop_back();
+            }
+        }
+    }
 
     bbox.makeEmpty();
     for (size_t ctr=0; ctr<verts.size(); ctr++) {
         for (size_t v=0; v<verts[ctr].size(); v++) {
             bbox.extendBy(verts[ctr][v]);
-        }
-    }
-
-    // reverse the contours if necessary
-    if (!(outline->flags & FT_OUTLINE_REVERSE_FILL)) {
-        for (size_t ctr=0; ctr<verts.size(); ctr++) {
-            std::reverse(verts[ctr].begin(), verts[ctr].end());
-        }
-    }
-
-    for (size_t ctr=0; ctr<verts.size(); ctr++) {
-        if (verts[ctr].front().equals(verts[ctr].back(), 10E-6)) {
-            verts[ctr].pop_back();
         }
     }
 }
@@ -90,21 +85,6 @@ SoFontOutline::~SoFontOutline()
 ////////////////////////////////////////////////////////////////////////
 {
 
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//   Get a do-nothing outline:
-//
-// Use: internal, static
-
-SoFontOutline *
-SoFontOutline::getNullOutline()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    return new SoFontOutline;
 }
 
 /*

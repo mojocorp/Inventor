@@ -304,11 +304,7 @@ SoOutlineFontCache::getCharBBox(const wchar_t c, SbBox2f &result)
 {
     result.makeEmpty();
 
-    if (!face) return;
-
-    SoFontOutline *outline = getOutline(c);
-
-    result = outline->getBoundingBox();
+    result = getOutline(c)->getBoundingBox();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -325,9 +321,6 @@ SoOutlineFontCache::getOutline(const wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!face) {
-        return SoFontOutline::getNullOutline();
-    }
     if (outlines[c] == NULL) {
         outlines[c] = new SoFontOutline(c, face, fontSize);
     }
