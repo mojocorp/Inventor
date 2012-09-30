@@ -70,8 +70,8 @@
 /////////////////////    SoBitmapFontCache  //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // Static variables for SoBitmapFontCache
-SbPList *SoBitmapFontCache::fonts = NULL;
-FT_Library SoBitmapFontCache::library;
+std::vector<SoBitmapFontCache*> SoBitmapFontCache::fonts;
+FT_Library SoBitmapFontCache::library = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -85,10 +85,8 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (fonts == NULL) {
+    if (library == NULL) {
         // One-time font library initialization
-        fonts = new SbPList;
-
         if (FT_Init_FreeType( &library )) {
 #ifdef DEBUG
             SoDebugError::post("SoBitmapFontCache::getFont",
@@ -99,8 +97,8 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
     }
 
     SoBitmapFontCache *result = NULL;
-    for (int i = 0; i < fonts->getLength() && result == NULL; i++) {
-        SoBitmapFontCache *fc = (SoBitmapFontCache *)(*fonts)[i];
+    for (size_t i = 0; i < fonts.size() && result == NULL; i++) {
+        SoBitmapFontCache *fc = fonts[i];
         if (forRender ? fc->isRenderValid(state) : fc->isValid(state)) {
             result = fc;
             result->ref();
@@ -127,13 +125,12 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
 //
 // Use: internal, private
 
-SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
+SoBitmapFontCache::SoBitmapFontCache(SoState *state)
+    : SoCache(state), context(-1)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     ref();
-
-    list = NULL;
 
     // Grab all the stuff we'll need to determine our validity from
     // the state.
@@ -152,7 +149,6 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
             SoDebugError::post("SoBitmapFontCache::getFont",
                                "Couldn't load embeded font Utopia-Regular!");
 #endif
-            numChars = 0;
         }
     } else {
         SbFile file;
@@ -178,15 +174,7 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
 
     FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
 
-    numChars = 256;  // ??? JUST DO ASCII FOR NOW!
-    listFlags.resize(numChars);
-    bitmaps.resize(numChars);
-    for (int i = 0; i < numChars; i++) {
-        listFlags[i] = FALSE;
-        bitmaps[i] = NULL;
-    }
-
-    fonts->append(this);
+    fonts.push_back(this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -202,29 +190,23 @@ SoBitmapFontCache::~SoBitmapFontCache()
 ////////////////////////////////////////////////////////////////////////
 {
     if (face) {
-        for (int i = 0; i < numChars; i++) {
-            if (bitmaps[i] != NULL) {
-                delete [] bitmaps[i]->bitmap;
-                delete bitmaps[i];
-                bitmaps[i] = NULL;
-            }
+        std::map<char, FLbitmap*>::iterator it;
+        for (it = bitmaps.begin(); it != bitmaps.end(); it++) {
+            delete [] it->second->bitmap;
+            delete it->second;
         }
         // Only destroy the font library font if no other font caches
         // are using the same font identifier:
         SbBool otherUsing = FALSE;
-        for (int i = 0; i < fonts->getLength(); i++) {
-            SoBitmapFontCache *t = (SoBitmapFontCache *)(*fonts)[i];
+        for (size_t i = 0; i < fonts.size(); i++) {
+            SoBitmapFontCache *t = fonts[i];
             if (t != this && t->face == face) otherUsing = TRUE;
         }
         if (!otherUsing) {
             FT_Done_Face(face);
             face = NULL;
         }
-
-        listFlags.clear();
-        bitmaps.clear();
-
-        fonts->remove(fonts->find(this));
+        fonts.erase(std::find(fonts.begin(), fonts.end(), this));
     }
 }
 
@@ -243,9 +225,9 @@ SoBitmapFontCache::destroy(SoState *)
 {
     // Pass in NULL to unref because this cache may be destroyed
     // from an action _other_ than GLRender:
-    if (list) {
-        list->unref(NULL);
-        list = NULL;
+    std::map<char, SoGLDisplayList*>::iterator it;
+    for (it=list.begin(); it != list.end(); it++) {
+        it->second->unref(NULL);
     }
 
     SoCache::destroy(NULL);
@@ -263,38 +245,10 @@ SoBitmapFontCache::isRenderValid(SoState *state) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!list) return isValid(state);
+    if (list.empty()) return isValid(state);
     else
-        return (list->getContext() == SoGLCacheContextElement::get(state)
+        return (context == SoGLCacheContextElement::get(state)
                  && isValid(state));
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sets up for GL rendering.
-//
-// Use: internal
-
-void
-SoBitmapFontCache::setupToRender(SoState *state)
-//
-////////////////////////////////////////////////////////////////////////
-{
-
-    otherOpen = SoCacheElement::anyOpen(state);
-
-    if (!otherOpen && !list) {
-        list = new SoGLDisplayList(state,
-                                   SoGLDisplayList::DISPLAY_LIST,
-                                   numChars);
-        list->ref();
-    }
-    if (list) {
-        // Set correct list base
-        glListBase(list->getFirstIndex());
-        list->addDependency(state);
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -306,49 +260,29 @@ SoBitmapFontCache::setupToRender(SoState *state)
 // Use: internal
 
 SbBool
-SoBitmapFontCache::hasDisplayList(unsigned char c)
+SoBitmapFontCache::hasDisplayList(SoState *state, unsigned char c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // If we have one, return TRUE
-    if (listFlags[c] == TRUE)
+    if (list[c])
         return TRUE;
 
     // If we don't and we can't build one, return FALSE.
-    if (otherOpen)
+    if (SoCacheElement::anyOpen(state))
         return FALSE;
 
+    context = SoGLCacheContextElement::get(state);
+
     // Build one:
-    glNewList(list->getFirstIndex()+c, GL_COMPILE);
+    list[c] = new SoGLDisplayList(state, SoGLDisplayList::DISPLAY_LIST);
+    list[c]->ref();
+    list[c]->addDependency(state);
+    glNewList(list[c]->getFirstIndex(), GL_COMPILE);
     drawCharacter(c);
-    glEndList();
-    listFlags[c] = TRUE;
+    list[c]->close(state);
 
     return TRUE;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Assuming that there are display lists built for all the
-//    characters in given string, render them using the GL's CallLists
-//    routine.
-//
-// Use: internal
-
-void
-SoBitmapFontCache::callLists(const SbString &string)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    for (size_t i=0; i<string.getLength(); i++)
-    {
-        if (!listFlags[string.getString()[i]])
-            printf("no display list for %c\n", string.getString()[i]);
-
-    }
-    const char *str = string.getString();
-    glCallLists((GLsizei)string.getLength(), GL_UNSIGNED_BYTE, str);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -441,9 +375,6 @@ SoBitmapFontCache::getHeight()
 //    Draws a bitmap
 //
 // Use: internal public
-//#define RGBA
-//#define LUMI
-#define LUMIA
 
 void
 SoBitmapFontCache::drawCharacter(unsigned char c)
@@ -470,25 +401,10 @@ SoBitmapFontCache::drawCharacter(unsigned char c)
 // Use: internal public
 
 void
-SoBitmapFontCache::drawString(const SbString &string)
+SoBitmapFontCache::drawString(SoState *state, const SbString &string)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool useCallLists = TRUE;
-
-    const unsigned char *chars = (unsigned char*)string.getString();
-
-    // If there aren't any other caches open, build display lists for
-    // the characters we can:
-    for (size_t i = 0; i < string.getLength(); i++) {
-        // See if the font cache already has (or can build) a display
-        // list for this character:
-        if (!hasDisplayList(chars[i])) {
-            useCallLists = FALSE;
-            break;
-        }
-    }
-
     //
     // Set up OpenGL state for rendering text, and push
     // attributes so that we can restore when done.
@@ -504,18 +420,15 @@ SoBitmapFontCache::drawString(const SbString &string)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glDisable(GL_TEXTURE_2D);
 
-    // if we have display lists for all of the characters, use
-    // glCallLists:
-    if (useCallLists) {
-        callLists(string);
-    } else {
-        // if we don't, draw the string character-by-character, using the
-        // display lists we do have:
-        for (size_t i = 0; i < string.getLength(); i++) {
-            if (!hasDisplayList(chars[i])) {
-                drawCharacter(chars[i]);
-            }
-            else glCallList(list->getFirstIndex()+chars[i]);
+    // if we don't, draw the string character-by-character, using the
+    // display lists we do have:
+    const unsigned char *chars = (unsigned char*)string.getString();
+    for (size_t i = 0; i < string.getLength(); i++) {
+        if (hasDisplayList(state, chars[i])) {
+            list[chars[i]]->call(state);
+        }
+        else {
+            drawCharacter(chars[i]);
         }
     }
 

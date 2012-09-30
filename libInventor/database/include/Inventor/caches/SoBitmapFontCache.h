@@ -65,6 +65,7 @@
 #include FT_FREETYPE_H
 
 #include <vector>
+#include <map>
 
 // An internal class that makes life easier:
 
@@ -84,9 +85,6 @@ public:
     // checks the GL cache context in addition to other elements)
     SbBool isRenderValid(SoState *state) const;
 
-    // Set up for GL rendering:
-    void setupToRender(SoState *state);
-
     // Returns the amount the current raster position will be advanced
     // after drawing the given character.
     SbVec3f getCharOffset(char c);
@@ -101,7 +99,7 @@ public:
     float getHeight();
 
     // Draws the given string
-    void drawString(const SbString &string);
+    void drawString(SoState *state, const SbString &string);
 
 
 protected:
@@ -131,30 +129,18 @@ private:
     // Returns TRUE if this font cache has a display list for the
     // given character.  It will try to build a display list, if it
     // can.
-    SbBool hasDisplayList(unsigned char c);
-
-    // Renders an entire string by using the GL callList() function.
-    void callLists(const SbString &string);
+    SbBool hasDisplayList(SoState *state, unsigned char c);
 
     const FLbitmap *getBitmap(unsigned char c);
 
     // Static list of all fonts.  OPTIMIZATION:  If there turn out to
     // be applications that use lots of fonts, we could change this
     // list into a dictionary keyed off the font name.
-    static SbPList *fonts;
+    static std::vector<SoBitmapFontCache*> fonts;
 
-    int  numChars;  // Number of characters in this font
-
-    SoGLDisplayList *list;
-    std::vector<SbBool> listFlags;// Flag for each character-- have we built
-    // GL display list yet?
-    std::vector<FLbitmap*> bitmaps; // Cached bitmaps for each character.  NULL
-    // if bitmap hasn't been fetched yet.
-
-    // This flag will be true if there is another cache open (if
-    // building GL display lists for render caching, that means we
-    // can't also build display lists).
-    SbBool otherOpen;
+    int context;
+    std::map<char, SoGLDisplayList*> list;
+    std::map<char, FLbitmap*> bitmaps; // Cached bitmaps for each character.
 
     // And some font library stuff:
     static FT_Library library;
