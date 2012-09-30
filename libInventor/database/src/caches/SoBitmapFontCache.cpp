@@ -165,14 +165,15 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
                 SoDebugError::post("SoBitmapFontCache::getFont",
                                    "Couldn't find font %s, replacing with Utopia-Regular", fontName.getString());
 #endif
-                if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
-#ifdef DEBUG
-                    SoDebugError::post("SoText2::getFont",
-                                       "Couldn't find font Utopia-Regular!");
-#endif
-                }
             }
         }
+    }
+
+    if (!face && FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
+#ifdef DEBUG
+        SoDebugError::post("SoText2::getFont",
+                           "Couldn't find font Utopia-Regular!");
+#endif
     }
 
     FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
