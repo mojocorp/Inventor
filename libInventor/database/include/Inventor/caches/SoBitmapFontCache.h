@@ -87,10 +87,10 @@ public:
 
     // Returns the amount the current raster position will be advanced
     // after drawing the given character.
-    SbVec3f getCharOffset(char c);
+    SbVec3f getCharOffset(wchar_t c);
 
     // Get the pixel-space bounding box of a given character.
-    void getCharBbox(char c, SbBox3f &box);
+    void getCharBbox(wchar_t c, SbBox3f &box);
 
     // Gets the width (in pixels) of the given string
     float getWidth(const SbString &str);
@@ -124,14 +124,14 @@ private:
     virtual ~SoBitmapFontCache();
 
     // Draws the given character (using GL)
-    void drawCharacter(unsigned char c);
+    void drawCharacter(wchar_t c);
 
     // Returns TRUE if this font cache has a display list for the
     // given character.  It will try to build a display list, if it
     // can.
-    SbBool hasDisplayList(SoState *state, unsigned char c);
+    SbBool hasDisplayList(SoState *state, wchar_t c);
 
-    const FLbitmap *getBitmap(unsigned char c);
+    const FLbitmap *getBitmap(wchar_t c);
 
     // Static list of all fonts.  OPTIMIZATION:  If there turn out to
     // be applications that use lots of fonts, we could change this
@@ -139,8 +139,8 @@ private:
     static std::vector<SoBitmapFontCache*> fonts;
 
     int context;
-    std::map<char, SoGLDisplayList*> list;
-    std::map<char, FLbitmap*> bitmaps; // Cached bitmaps for each character.
+    std::map<wchar_t, SoGLDisplayList*> list;
+    std::map<wchar_t, FLbitmap*> bitmaps; // Cached bitmaps for each character.
 
     // And some font library stuff:
     static FT_Library library;

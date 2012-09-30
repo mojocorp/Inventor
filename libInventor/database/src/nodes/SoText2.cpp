@@ -348,12 +348,10 @@ SoText2::rayPick(SoRayPickAction *action)
         // Starting position of string, based on justification:
         SbVec3f charPosition = getPixelStringOffset(line) + screenOrigin;
 
-        const SbString &str = string[line];
-        const char *chars = str.getString();
+        std::wstring chars = string[line].toStdWString();
 
         SbVec3f p0, p1, p2, p3;
-        size_t chr;
-        for (size_t chr = 0; chr < str.getLength(); chr++) {
+        for (size_t chr = 0; chr < chars.size(); chr++) {
             fontCache->getCharBbox(chars[chr], charBbox);
 
             if (!charBbox.isEmpty()) {
@@ -405,13 +403,14 @@ SoText2::rayPick(SoRayPickAction *action)
                 // adding on the x-offset of each character until we
                 // go past the picked point:
                 charPosition = getPixelStringOffset(line) + screenOrigin;
-                for (chr = 0; chr < str.getLength(); chr++) {
+                for (size_t chr = 0; chr < chars.size(); chr++) {
                     charPosition += fontCache->getCharOffset(chars[chr]);
                     // Assuming left-to-right drawing of characters:
-                    if (charPosition[0] >= screenPoint[0]) break;
+                    if (charPosition[0] >= screenPoint[0]) {
+                        detail->setCharacterIndex(chr);
+                        break;
+                    }
                 }
-
-                detail->setCharacterIndex(chr);
 
                 pp->setDetail(detail, this);
                 pp->setMaterialIndex(0);
@@ -492,10 +491,9 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
         // Starting position of string, based on justification:
         SbVec3f charPosition = getPixelStringOffset(line) + screenOrigin;
 
-        const SbString &str = string[line];
-        const char *chars = str.getString();
+        std::wstring chars = string[line].toStdWString();
 
-        for (size_t chr = 0; chr < str.getLength(); chr++) {
+        for (size_t chr = 0; chr < chars.size(); chr++) {
             fontCache->getCharBbox(chars[chr], charBbox);
             if (!charBbox.isEmpty()) {
                 SbVec3f min = charBbox.getMin() + charPosition;
