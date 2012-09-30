@@ -232,8 +232,6 @@ SoText2::GLRender(SoGLRenderAction *action)
     SoGLLazyElement::setLightModel(state, SoGLLazyElement::BASE_COLOR);
     // Turn off texturing
     SoGLTextureEnabledElement::set(state, FALSE);
-    
-    fontCache->setupToRender(state);
 
     // Send first color
     SoMaterialBundle mb(action);
@@ -252,7 +250,7 @@ SoText2::GLRender(SoGLRenderAction *action)
     // avoiding getting the projection/view/model matrices:
     if (string.getNum() == 1 && justification.getValue() == LEFT) {
         glRasterPos3f(0,0,0);
-        fontCache->drawString(string[0]);
+        fontCache->drawString(state, string[0]);
     }
     // General case:
     else {
@@ -282,7 +280,7 @@ SoText2::GLRender(SoGLRenderAction *action)
             SbVec3f lineOrigin = toObjectSpace(charPosition, screenToObj, vpr);
             glRasterPos3fv(&lineOrigin[0]);
 
-            fontCache->drawString(str);
+            fontCache->drawString(state, str);
         }
         // Don't auto-cache above, since dependent on camera:
         SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
