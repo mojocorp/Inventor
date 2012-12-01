@@ -207,7 +207,8 @@ SoText2::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!shouldGLRender(action)) return;
+    if (!shouldGLRender(action))
+        return;
 
     SoState *state = action->getState();
 
@@ -261,7 +262,7 @@ SoText2::GLRender(SoGLRenderAction *action)
 
         SbMatrix screenToObj = objToScreen.inverse();
 
-        SbViewportRegion vpr = SoViewportRegionElement::get(state);
+        const SbViewportRegion & vpr = SoViewportRegionElement::get(state);
 
         // The origin of the text on the screen is the object-space point
         // 0,0,0:
@@ -271,8 +272,6 @@ SoText2::GLRender(SoGLRenderAction *action)
             // Starting position of string, based on justification:
             SbVec3f charPosition = getPixelStringOffset(line) + screenOrigin;
 
-            const SbString &str = string[line];
-
             // Transform the screen-space starting position into object
             // space, and feed that back to the glRasterPos command (which
             // will turn around and transform it back into screen-space,
@@ -280,7 +279,7 @@ SoText2::GLRender(SoGLRenderAction *action)
             SbVec3f lineOrigin = toObjectSpace(charPosition, screenToObj, vpr);
             glRasterPos3fv(&lineOrigin[0]);
 
-            fontCache->drawString(state, str);
+            fontCache->drawString(state, string[line]);
         }
         // Don't auto-cache above, since dependent on camera:
         SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
