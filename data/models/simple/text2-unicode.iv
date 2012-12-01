@@ -3,7 +3,7 @@
 Separator {
     Font {
 	name	"Arial Unicode"
-	size	20
+	size	50
     }
     Separator {
 	Material {
