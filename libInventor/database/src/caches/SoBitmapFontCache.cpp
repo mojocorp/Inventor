@@ -303,9 +303,7 @@ SoBitmapFontCache::getCharBbox(wchar_t c, SbBox3f &box)
     if (bmap == NULL)
         return;
 
-    box.extendBy(SbVec3f(-bmap->xorig, -bmap->yorig, 0));
-    box.extendBy(SbVec3f(bmap->width - bmap->xorig,
-                         bmap->height - bmap->yorig, 0));
+    box.setBounds(0,0,0, bmap->width, bmap->height, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -409,7 +407,6 @@ SoBitmapFontCache::drawString(SoState *state, const SbString &string)
     // Set up OpenGL state for rendering text, and push
     // attributes so that we can restore when done.
     //
-    glDrawBuffer(GL_BACK);
     glPushAttrib( GL_ENABLE_BIT | GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
     glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
 
@@ -418,7 +415,6 @@ SoBitmapFontCache::drawString(SoState *state, const SbString &string)
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glDisable(GL_TEXTURE_2D);
 
     // if we don't, draw the string character-by-character, using the
     // display lists we do have:
