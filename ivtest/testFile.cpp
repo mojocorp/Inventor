@@ -2,7 +2,29 @@
 
 #include <Inventor/SbFile.h>
 
-TEST(SbFile, BaseName) {
+class SbFileTest : public ::testing::Test {
+protected:
+    virtual void SetUp() {}
+    virtual void TearDown() {}
+
+    // Helper to create an unicode file on disk.
+    SbString createUnicodeFilename()
+    {
+        SbString chineeseFilename = SbString::fromUtf8("\345\215\216\346\226\207\344\273\277\345\256\213.ttf");
+        if (!SbFile::exists(chineeseFilename)) {
+            SbFile file;
+            if (file.open(chineeseFilename, "wb")) {
+                file.close();
+            }else{
+                printf("ERROR: Cannot create unicode file for testing.\n");
+            }
+        }
+
+        return chineeseFilename;
+    }
+};
+
+TEST_F(SbFileTest, BaseName) {
 
     SbString filename1("/tmp/archive.tar.gz");
     SbString filename2("C:/tmp\\archive.tar.gz");
@@ -15,7 +37,7 @@ TEST(SbFile, BaseName) {
 
 }
 
-TEST(SbFile, Extension) {
+TEST_F(SbFileTest, Extension) {
 
     SbString filename("/tmp/../archive.tar.gz");
 
@@ -25,7 +47,7 @@ TEST(SbFile, Extension) {
     EXPECT_TRUE(SbFile::extension(chineeseFont) == "ttf");
 }
 
-TEST(SbFile, Dirname) {
+TEST_F(SbFileTest, Dirname) {
     SbString filename1("/tmp/archive.tar.gz");
     SbString filename2("C:/tmp\\archive.tar.gz");
 
@@ -33,23 +55,7 @@ TEST(SbFile, Dirname) {
     EXPECT_TRUE(SbFile::dirName(filename2) == "C:/tmp\\");
 }
 
-// Helper to create an unicode file on disk.
-SbString createUnicodeFilename()
-{
-    SbString chineeseFilename = SbString::fromUtf8("\345\215\216\346\226\207\344\273\277\345\256\213.ttf");
-    if (!SbFile::exists(chineeseFilename)) {
-        SbFile file;
-        if (file.open(chineeseFilename, "wb")) {
-            file.close();
-        }else{
-            printf("ERROR: Cannot create unicode file for testing.\n");
-        }
-    }
-
-    return chineeseFilename;
-}
-
-TEST(SbFile, Exist) {
+TEST_F(SbFileTest, Exist) {
     SbString filename = createUnicodeFilename();
 
     EXPECT_TRUE(SbFile::exists(filename));
@@ -57,11 +63,11 @@ TEST(SbFile, Exist) {
     EXPECT_FALSE(SbFile::exists(""));
 }
 
-TEST(SbFile, Open) {
+TEST_F(SbFileTest, Open) {
     SbString filename = createUnicodeFilename();
 
     SbFile file;
-    EXPECT_TRUE(file.open(filename, "rb"));
+    ASSERT_TRUE(file.open(filename, "rb"));
     EXPECT_TRUE(file.isOpen());
     file.close();
     EXPECT_FALSE(file.isOpen());
