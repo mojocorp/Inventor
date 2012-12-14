@@ -185,8 +185,6 @@ private:
 
     // Return the format used in the rendering
     GLenum getFormat() const;
-
-    static void putHex( FILE *fp, char val, int &hexPos );
 };
 
 #endif /* _SO_OFFSCREEN_RENDERER_ */
