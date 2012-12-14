@@ -63,10 +63,10 @@ public:
     /// Returns true if the file specified by fileName exists; otherwise returns false.
     static bool exists(const SbString & fileName);
 
-    /// Static version of baseName().
+    /// Returns the base name of the file without the path.
     static SbString baseName(const SbString & filename);
 
-    /// Static version of extension().
+    /// Returns the complete extension of the file.
     static SbString extension(const SbString & filename);
 
     /// Gets directory part of file name including the trailing @c /.
