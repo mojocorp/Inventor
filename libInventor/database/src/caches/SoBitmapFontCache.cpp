@@ -64,6 +64,8 @@
 
 #include <Inventor/errors/SoDebugError.h>
 
+#include <algorithm>
+
 #include "utopia-regular.cpp"
 
 //////////////////////////////////////////////////////////////////////////////
