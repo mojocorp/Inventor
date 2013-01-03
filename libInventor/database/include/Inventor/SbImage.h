@@ -21,6 +21,7 @@ public:
     };
 
     SbImage();
+    SbImage(const SbImage&);
     SbImage(const SbVec2s &size, Format fmt, const unsigned char *bytes);
     SbImage(const SbVec3s &size, Format fmt, const unsigned char *bytes);
     SbImage(const SbString & filename);
@@ -74,31 +75,7 @@ public:
 private:
     void detach();
 
-    class SbImageRef : public SbRefCounted
-    {
-    public:
-        SbImageRef();
-        SbImageRef(const SbImageRef * other);
-        SbImageRef(const SbVec3s & size, Format format, const unsigned char * bytes = NULL);
-
-        void setValue(const SbVec3s & size, Format format, const unsigned char * bytes);
-        bool isNull() const;
-        int getNumComponents() const;
-        bool hasAlphaChannel() const;
-        bool read(const SbString & filename);
-
-        bool operator ==(const SbImageRef &other) const;
-        void dispose();
-
-        SbVec3s  size;          // Width and height of image
-        Format format;          // Image format
-        unsigned char * bytes;  // Array of pixels
-    private:
-
-        ~SbImageRef();
-    };
-
-    SbRefPtr<SbImageRef> d;
+    SbRefPtr<class SbImageRef> d;
 };
 
 #endif /* _SB_IMAGE_ */
