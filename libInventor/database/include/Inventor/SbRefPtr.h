@@ -15,7 +15,7 @@ public:
             p->ref();
     }
 
-    SbRefPtr(const SbRefPtr &other) : p(other.p)
+    SbRefPtr(const SbRefPtr<T> &other) : p(other.p)
     {
         if (p)
             p->ref();
@@ -30,13 +30,13 @@ public:
         }
     }
 
-    SbRefPtr const &operator=(const SbRefPtr &other)
+    SbRefPtr<T> &operator=(const SbRefPtr<T> &other)
     {
         *this=other.p;
         return *this;
     }
 
-    const SbRefPtr &operator=(T *other)
+    SbRefPtr<T> &operator=(T *other)
     {
         if(p!=other) {
             T* backup = p;
@@ -52,7 +52,7 @@ public:
     operator bool() const { return p!=0; }
     T *operator->() const { return p; }
     T &operator*() const { return *p; }
-    T* data() const { return p; }
+    T* get() const { return p; }
 
 private:
     T *p;
