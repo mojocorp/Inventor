@@ -196,7 +196,7 @@ SoSFImage::readValue(SoInput *in)
     break;
     }
 
-    SbImage image = SbImage(size, fmt, NULL);
+    SbImage image(size, fmt, NULL);
     unsigned char *bytes = image.getBytes();
 
     int byte = 0;

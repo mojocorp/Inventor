@@ -4,31 +4,55 @@
 #include <image.h>
 #include <stdlib.h>
 
-SbImage::SbImageRef::SbImageRef()
-    : size(0,0,0), format(Format_Invalid), bytes(0)
+class SbImageRef : public SbRefCounted
+{
+public:
+    SbImageRef();
+    SbImageRef(const SbImageRef * other);
+    SbImageRef(const SbVec3s & size, SbImage::Format format, const unsigned char * bytes = NULL);
+
+    void setValue(const SbVec3s & size, SbImage::Format format, const unsigned char * bytes);
+    bool isNull() const;
+    int getNumComponents() const;
+    bool hasAlphaChannel() const;
+    bool read(const SbString & filename);
+
+    bool operator ==(const SbImageRef &other) const;
+    void dispose();
+
+    SbVec3s  size;          // Width and height of image
+    SbImage::Format format;          // Image format
+    unsigned char * bytes;  // Array of pixels
+private:
+
+    ~SbImageRef();
+};
+
+SbImageRef::SbImageRef()
+    : size(0,0,0), format(SbImage::Format_Invalid), bytes(0)
 {
 
 }
 
-SbImage::SbImageRef::SbImageRef(const SbImageRef * other)
-   : size(0,0,0), format(Format_Invalid), bytes(0)
+SbImageRef::SbImageRef(const SbImageRef * other)
+   : size(0,0,0), format(SbImage::Format_Invalid), bytes(0)
 {
     setValue(other->size, other->format, other->bytes);
 }
 
-SbImage::SbImageRef::SbImageRef(const SbVec3s &_size, Format _format, const unsigned char *_bytes)
-    : size(0,0,0), format(Format_Invalid), bytes(0)
+SbImageRef::SbImageRef(const SbVec3s &_size, SbImage::Format _format, const unsigned char *_bytes)
+    : size(0,0,0), format(SbImage::Format_Invalid), bytes(0)
 {
     setValue(_size, _format, _bytes);
 }
 
-SbImage::SbImageRef::~SbImageRef()
+SbImageRef::~SbImageRef()
 {
     dispose();
 }
 
-void SbImage::SbImageRef::setValue(const SbVec3s &_size,
-                                   Format _format,
+void SbImageRef::setValue(const SbVec3s &_size,
+                                   SbImage::Format _format,
                                    const unsigned char *_bytes)
 {
     if (bytes && (bytes == _bytes)) {
@@ -49,7 +73,7 @@ void SbImage::SbImageRef::setValue(const SbVec3s &_size,
     }
 }
 
-bool SbImage::SbImageRef::read(const SbString & filename)
+bool SbImageRef::read(const SbString & filename)
 {
     dispose();
 
@@ -59,10 +83,10 @@ bool SbImage::SbImageRef::read(const SbString & filename)
     if (ReadImage(filename.getString(), w, h, nc, bytes)) {
         size = SbVec3s(w,h,1);
         switch(nc){
-        case 1: format = Format_Luminance; break;
-        case 2: format = Format_Luminance_Alpha; break;
-        case 3: format = Format_RGB24; break;
-        case 4: format = Format_RGBA32; break;
+        case 1: format = SbImage::Format_Luminance; break;
+        case 2: format = SbImage::Format_Luminance_Alpha; break;
+        case 3: format = SbImage::Format_RGB24; break;
+        case 4: format = SbImage::Format_RGBA32; break;
         default: break;
         }
         return true;
@@ -70,28 +94,28 @@ bool SbImage::SbImageRef::read(const SbString & filename)
     return false;
 }
 
-bool SbImage::SbImageRef::isNull() const
+bool SbImageRef::isNull() const
 {
-    return (size[0] == 0 || size[1] == 0 || format == Format_Invalid);
+    return (size[0] == 0 || size[1] == 0 || format == SbImage::Format_Invalid);
 }
 
-int SbImage::SbImageRef::getNumComponents() const
+int SbImageRef::getNumComponents() const
 {
     switch(format) {
-    case Format_Luminance:       return 1;
-    case Format_Luminance_Alpha: return 2;
-    case Format_RGB24:           return 3;
-    case Format_RGBA32:          return 4;
+    case SbImage::Format_Luminance:       return 1;
+    case SbImage::Format_Luminance_Alpha: return 2;
+    case SbImage::Format_RGB24:           return 3;
+    case SbImage::Format_RGBA32:          return 4;
     default:                     return 0;
     }
 }
 
-bool SbImage::SbImageRef::hasAlphaChannel() const
+bool SbImageRef::hasAlphaChannel() const
 {
-    return (format == Format_Luminance_Alpha || format == Format_RGBA32);
+    return (format == SbImage::Format_Luminance_Alpha || format == SbImage::Format_RGBA32);
 }
 
-bool SbImage::SbImageRef::operator ==(const SbImageRef &other) const
+bool SbImageRef::operator ==(const SbImageRef &other) const
 {
     // Check easy stuff first
     if (size != other.size || format != other.format)
@@ -103,10 +127,10 @@ bool SbImage::SbImageRef::operator ==(const SbImageRef &other) const
     return true;
 }
 
-void SbImage::SbImageRef::dispose()
+void SbImageRef::dispose()
 {
     size.setValue(0,0,0);
-    format = Format_Invalid;
+    format = SbImage::Format_Invalid;
     delete [] bytes;
     bytes = NULL;
 }
@@ -122,6 +146,12 @@ SbImage::SbImage()
     : d(0)
 //
 ////////////////////////////////////////////////////////////////////////
+{
+
+}
+
+SbImage::SbImage(const SbImage & other)
+    : d(other.d)
 {
 
 }
@@ -384,7 +414,7 @@ SbImage::detach()
 ////////////////////////////////////////////////////////////////////////
 {
     if (d && d->getRefCount() > 1) {
-        d = new SbImageRef(d.data());
+        d = new SbImageRef(d.get());
     }
 }
 
