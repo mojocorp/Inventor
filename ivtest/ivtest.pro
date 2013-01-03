@@ -3,6 +3,7 @@ TARGET   = ivtest
 CONFIG  += opengl console
 CONFIG  -= app_bundle
 DESTDIR  = ../build
+DEFINES += GTEST_LINKED_AS_SHARED_LIBRARY
 
 LIBS += -L../build -lInventor
 linux-g++: LIBS += -lGLU
