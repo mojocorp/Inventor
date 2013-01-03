@@ -48,7 +48,7 @@ TEST_F(testIO, ascii) {
     ASSERT_TRUE(out.openFile(qPrintable(asciiModel)));
 
     SoWriteAction wa(&out);
-    wa.apply(graph.data());
+    wa.apply(graph.get());
 
     out.closeFile();
 
@@ -63,7 +63,7 @@ TEST_F(testIO, ascii) {
     sa.setType(SoNode::getClassTypeId());
     sa.setInterest(SoSearchAction::ALL);
     sa.setSearchingAll(TRUE);
-    sa.apply(root.data());
+    sa.apply(root.get());
     SoPathList & pl = sa.getPaths();
 
     EXPECT_EQ(2, pl.getLength());
@@ -75,7 +75,7 @@ TEST_F(testIO, binary) {
     ASSERT_TRUE(out.openFile(qPrintable(binaryModel)));
 
     SoWriteAction wa(&out);
-    wa.apply(graph.data());
+    wa.apply(graph.get());
 
     out.closeFile();
 
@@ -90,7 +90,7 @@ TEST_F(testIO, binary) {
     sa.setType(SoNode::getClassTypeId());
     sa.setInterest(SoSearchAction::ALL);
     sa.setSearchingAll(TRUE);
-    sa.apply(root.data());
+    sa.apply(root.get());
     SoPathList & pl = sa.getPaths();
 
     EXPECT_EQ(2, pl.getLength());
@@ -101,7 +101,7 @@ TEST_F(testIO, utf8_text) {
     SoSearchAction sa;
     sa.setType(SoText2::getClassTypeId());
     sa.setInterest(SoSearchAction::FIRST);
-    sa.apply(graph.data());
+    sa.apply(graph.get());
     EXPECT_TRUE(sa.getPath()->getTail());
 
     SoText2 *text = dynamic_cast<SoText2*>(sa.getPath()->getTail());
@@ -114,7 +114,7 @@ TEST_F(testIO, utf8_text) {
     ASSERT_TRUE(out.openFile(qPrintable(utf8Model)));
 
     SoWriteAction wa(&out);
-    wa.apply(graph.data());
+    wa.apply(graph.get());
 
     out.closeFile();
 
@@ -130,7 +130,7 @@ TEST_F(testIO, utf8_text) {
     sa.setType(SoNode::getClassTypeId());
     sa.setInterest(SoSearchAction::ALL);
     sa.setSearchingAll(TRUE);
-    sa.apply(root.data());
+    sa.apply(root.get());
     SoPathList & pl = sa.getPaths();
 
     EXPECT_EQ(2, pl.getLength());
@@ -140,7 +140,7 @@ TEST_F(testIO, utf8_text) {
     SoSearchAction sa;
     sa.setType(SoText2::getClassTypeId());
     sa.setInterest(SoSearchAction::FIRST);
-    sa.apply(graph.data());
+    sa.apply(graph.get());
     EXPECT_TRUE(sa.getPath()->getTail());
 
     SoText2 *text = dynamic_cast<SoText2*>(sa.getPath()->getTail());
@@ -154,7 +154,7 @@ TEST_F(testIO, utf8_binary) {
     SoSearchAction sa;
     sa.setType(SoText2::getClassTypeId());
     sa.setInterest(SoSearchAction::FIRST);
-    sa.apply(graph.data());
+    sa.apply(graph.get());
     EXPECT_TRUE(sa.getPath()->getTail());
 
     SoText2 *text = dynamic_cast<SoText2*>(sa.getPath()->getTail());
@@ -167,7 +167,7 @@ TEST_F(testIO, utf8_binary) {
     ASSERT_TRUE(out.openFile(qPrintable(utf8Model)));
 
     SoWriteAction wa(&out);
-    wa.apply(graph.data());
+    wa.apply(graph.get());
 
     out.closeFile();
 
@@ -183,7 +183,7 @@ TEST_F(testIO, utf8_binary) {
     sa.setType(SoNode::getClassTypeId());
     sa.setInterest(SoSearchAction::ALL);
     sa.setSearchingAll(TRUE);
-    sa.apply(root.data());
+    sa.apply(root.get());
     SoPathList & pl = sa.getPaths();
 
     EXPECT_EQ(2, pl.getLength());
@@ -193,7 +193,7 @@ TEST_F(testIO, utf8_binary) {
     SoSearchAction sa;
     sa.setType(SoText2::getClassTypeId());
     sa.setInterest(SoSearchAction::FIRST);
-    sa.apply(graph.data());
+    sa.apply(graph.get());
     EXPECT_TRUE(sa.getPath()->getTail());
 
     SoText2 *text = dynamic_cast<SoText2*>(sa.getPath()->getTail());
