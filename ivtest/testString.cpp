@@ -128,7 +128,7 @@ int Dec2Oct(int n)
 
 void printstring(const SbString & str) {
     const unsigned char *data = (unsigned char*)str.getString();
-    for (int i=0; i<strlen(str.getString()); i++) {
+    for (size_t i=0; i<strlen(str.getString()); i++) {
         if (data[i] < 0x80) {
             printf("%c", data[i]);
         } else {
