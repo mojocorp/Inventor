@@ -28,10 +28,10 @@ TEST(SbMatrix, constructors) {
     EXPECT_FLOAT_EQ(0.0f, m[3][2]);
     EXPECT_FLOAT_EQ(1.0f, m[3][3]);
 
-    SbMat m2 = {1.0f, 0.0f, 0.0f, 0.0f,
-                0.0f, 1.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 1.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 1.0f };
+    SbMat m2 = {{1.0f, 0.0f, 0.0f, 0.0f},
+                {0.0f, 1.0f, 0.0f, 0.0f},
+                {0.0f, 0.0f, 1.0f, 0.0f},
+                {0.0f, 0.0f, 0.0f, 1.0f} };
 
     SbMatrix m3(m2);
 

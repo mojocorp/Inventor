@@ -610,7 +610,7 @@ SoOutlineFontCache::generateSideChar(const wchar_t c, SideCB callbackFunc)
 
         SbVec2f *oVerts = new SbVec2f[nOutline];
         // Copy in verts so figureSegmentNorms can handle them..
-        for (int j = 0; j < nOutline; j++) {
+        for (size_t j = 0; j < nOutline; j++) {
             oVerts[j] = outline->getVertex(i, j);
         }
 
@@ -647,7 +647,7 @@ SoOutlineFontCache::generateSideChar(const wchar_t c, SideCB callbackFunc)
         SbVec3f *s1 = bevel1;
         SbVec3f *s2 = bevel2;
 
-        for (int j = 0; j < nOutline; j++) {
+        for (size_t j = 0; j < nOutline; j++) {
             // New normals are calculated for both ends of this
             // segment, since the normals may or may not be shared
             // with the previous segment.
