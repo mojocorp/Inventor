@@ -100,8 +100,8 @@
 //
 
 SbMatrixd::SbMatrixd(double a11, double a12, double a13, double a14,
-                     double a21, double a22, double a23, double a24, 
-                     double a31, double a32, double a33, double a34, 
+                     double a21, double a22, double a23, double a24,
+                     double a31, double a32, double a33, double a34,
                      double a41, double a42, double a43, double a44)
 {
     matrix[0][0] = a11;
@@ -210,7 +210,7 @@ SbMatrixd::identity()
 {
     return SbMatrixd(1.0, 0.0, 0.0, 0.0,
                      0.0, 1.0, 0.0, 0.0,
-                     0.0, 0.0, 1.0, 0.0, 
+                     0.0, 0.0, 1.0, 0.0,
                      0.0, 0.0, 0.0, 1.0);
 }
 
@@ -364,11 +364,11 @@ double
 SbMatrixd::det3(int r1, int r2, int r3, int c1, int c2, int c3) const
 {
     return (   matrix[r1][c1] * matrix[r2][c2] * matrix[r3][c3]
-	    +  matrix[r1][c2] * matrix[r2][c3] * matrix[r3][c1]
-	    +  matrix[r1][c3] * matrix[r2][c1] * matrix[r3][c2]
-	    -  matrix[r1][c1] * matrix[r2][c3] * matrix[r3][c2]
-	    -  matrix[r1][c2] * matrix[r2][c1] * matrix[r3][c3]
-	    -  matrix[r1][c3] * matrix[r2][c2] * matrix[r3][c1]);
+            +  matrix[r1][c2] * matrix[r2][c3] * matrix[r3][c1]
+            +  matrix[r1][c3] * matrix[r2][c1] * matrix[r3][c2]
+            -  matrix[r1][c1] * matrix[r2][c3] * matrix[r3][c2]
+            -  matrix[r1][c2] * matrix[r2][c1] * matrix[r3][c3]
+            -  matrix[r1][c3] * matrix[r2][c2] * matrix[r3][c1]);
 }
 
 //
@@ -379,9 +379,9 @@ double
 SbMatrixd::det4() const
 {
     return (   matrix[0][3] * det3(1, 2, 3, 0, 1, 2)
-	    +  matrix[1][3] * det3(0, 2, 3, 0, 1, 2)
-	    +  matrix[2][3] * det3(0, 1, 3, 0, 1, 2)
-	    +  matrix[3][3] * det3(0, 1, 2, 0, 1, 2));
+            +  matrix[1][3] * det3(0, 2, 3, 0, 1, 2)
+            +  matrix[2][3] * det3(0, 1, 3, 0, 1, 2)
+            +  matrix[3][3] * det3(0, 1, 2, 0, 1, 2));
 }
 
 //
@@ -420,10 +420,10 @@ SbMatrixd::det4() const
  *	  eigenvalue d[k].
  * rot	: The number of jacobi rotations required to perform the operation.
  */
-	       
+
 SbBool
 SbMatrixd::factor(SbMatrixd &r, SbVec3d &s, SbMatrixd &u, SbVec3d &t,
-		 SbMatrixd &proj) const
+                  SbMatrixd &proj) const
 {
     double	det;		/* Determinant of matrix A	*/
     double	det_sign;	/* -1 if det < 0, 1 if det > 0	*/
@@ -439,11 +439,11 @@ SbMatrixd::factor(SbMatrixd &r, SbVec3d &s, SbMatrixd &u, SbVec3d &t,
     scratch = 1.0;
     
     for (i = 0; i < 3; i++) {
-	for (j = 0; j < 3; j++) {
-	    a.matrix[i][j] *= scratch;
-	}
-	t[i] = matrix[3][i] * scratch;
-	a.matrix[3][i] = a.matrix[i][3] = 0.0;
+        for (j = 0; j < 3; j++) {
+            a.matrix[i][j] *= scratch;
+        }
+        t[i] = matrix[3][i] * scratch;
+        a.matrix[3][i] = a.matrix[i][3] = 0.0;
     }
     a.matrix[3][3] = 1.0;
     
@@ -451,7 +451,7 @@ SbMatrixd::factor(SbMatrixd &r, SbVec3d &s, SbMatrixd &u, SbVec3d &t,
     det = a.det3();
     det_sign = (det < 0.0 ? -1.0 : 1.0);
     if (det_sign * det < 1e-12)
-	return(FALSE);		// singular
+        return(FALSE);		// singular
     
     /* (4) B = A * A^  (here A^ means A transpose) */
     b = a * a.transpose();
@@ -460,16 +460,16 @@ SbMatrixd::factor(SbMatrixd &r, SbVec3d &s, SbMatrixd &u, SbVec3d &t,
 
     // find min / max eigenvalues and do ratio test to determine singularity
     
-    r = SbMatrixd(evectors[0][0], evectors[0][1], evectors[0][2], 0.0, 
-		 evectors[1][0], evectors[1][1], evectors[1][2], 0.0, 
-		 evectors[2][0], evectors[2][1], evectors[2][2], 0.0, 
-		 0.0, 0.0, 0.0, 1.0);
+    r = SbMatrixd(evectors[0][0], evectors[0][1], evectors[0][2], 0.0,
+                  evectors[1][0], evectors[1][1], evectors[1][2], 0.0,
+                  evectors[2][0], evectors[2][1], evectors[2][2], 0.0,
+                  0.0, 0.0, 0.0, 1.0);
     
     /* Compute s = sqrt(evalues), with sign. Set si = s-inverse */
     si.makeIdentity();
     for (i = 0; i < 3; i++) {
-	s[i] = det_sign * sqrt(evalues[i]);
-	si.matrix[i][i] = 1.0 / s[i];
+        s[i] = det_sign * sqrt(evalues[i]);
+        si.matrix[i][i] = 1.0 / s[i];
     }
     
     /* (5) Compute U = R^ S! R A. */
@@ -485,7 +485,7 @@ SbMatrixd::factor(SbMatrixd &r, SbVec3d &s, SbMatrixd &u, SbVec3d &t,
 #define SB_JACOBI_RANK	3
 void
 SbMatrixd::jacobi3(double evalues[SB_JACOBI_RANK],
-		  SbVec3d evectors[SB_JACOBI_RANK], int &rots) const
+                   SbVec3d evectors[SB_JACOBI_RANK], int &rots) const
 {
     double	sm;		// smallest entry
     double	theta;		// angle for Jacobi rotation
@@ -500,12 +500,12 @@ SbMatrixd::jacobi3(double evalues[SB_JACOBI_RANK],
     
     // initializations
     for (i = 0; i < SB_JACOBI_RANK; i++) {
-	b[i] = evalues[i] = matrix[i][i];
-	z[i] = 0.0;
-	for (j = 0; j < SB_JACOBI_RANK; j++) {
-	    evectors[i][j] = (i == j) ? 1.0 : 0.0;
-	    a[i][j] = matrix[i][j];
-	}
+        b[i] = evalues[i] = matrix[i][i];
+        z[i] = 0.0;
+        for (j = 0; j < SB_JACOBI_RANK; j++) {
+            evectors[i][j] = (i == j) ? 1.0 : 0.0;
+            a[i][j] = matrix[i][j];
+        }
     }
     
     rots = 0;
@@ -513,84 +513,84 @@ SbMatrixd::jacobi3(double evalues[SB_JACOBI_RANK],
     // Why 50? I don't know--it's the way the folks who wrote the
     // algorithm did it:
     for (i = 0; i < 50; i++) {
-	sm = 0.0;
-	for (p = 0; p < SB_JACOBI_RANK - 1; p++)
-	    for (q = p+1; q < SB_JACOBI_RANK; q++)
-		sm += ABS(a[p][q]);
-	
-	if (sm == 0.0)
-	    return;
-	
-	thresh = (i < 3 ?
-		  (.2 * sm / (SB_JACOBI_RANK * SB_JACOBI_RANK)) :
-		  0.0);
-	
-	for (p = 0; p < SB_JACOBI_RANK - 1; p++) {
-	    for (q = p+1; q < SB_JACOBI_RANK; q++) {
-		
-		g = 100.0 * ABS(a[p][q]);
-		
-		if (i > 3 && (ABS(evalues[p]) + g == ABS(evalues[p])) &&
-		    (ABS(evalues[q]) + g == ABS(evalues[q])))
-		    a[p][q] = 0.0;
-		
-		else if (ABS(a[p][q]) > thresh) {
-		    h = evalues[q] - evalues[p];
-		    
-		    if (ABS(h) + g == ABS(h))
-			t = a[p][q] / h;
-		    else {
-			theta = .5 * h / a[p][q];
-			t = 1.0 / (ABS(theta) + sqrt(1 + theta * theta));
-			if (theta < 0.0)  t = -t;
-		    }
-		    // End of computing tangent of rotation angle
-		    
-		    c = 1.0 / sqrt(1.0 + t*t);
-		    s = t * c;
-		    tau = s / (1.0 + c);
-		    h = t * a[p][q];
-		    z[p]    -= h;
-		    z[q]    += h;
-		    evalues[p] -= h;
-		    evalues[q] += h;
-		    a[p][q] = 0.0;
-		    
-		    for (j = 0; j < p; j++) {
-			g = a[j][p];
-			h = a[j][q];
-			a[j][p] = g - s * (h + g * tau);
-			a[j][q] = h + s * (g - h * tau);
-		    }
-		    
-		    for (j = p+1; j < q; j++) {
-			g = a[p][j];
-			h = a[j][q];
-			a[p][j] = g - s * (h + g * tau);
-			a[j][q] = h + s * (g - h * tau);
-		    }
-		    
-		    for (j = q+1; j < SB_JACOBI_RANK; j++) {
-			g = a[p][j];
-			h = a[q][j];
-			a[p][j] = g - s * (h + g * tau);
-			a[q][j] = h + s * (g - h * tau);
-		    }
-		    
-		    for (j = 0; j < SB_JACOBI_RANK; j++) {
-			g = evectors[j][p];
-			h = evectors[j][q];
-			evectors[j][p] = g - s * (h + g * tau);
-			evectors[j][q] = h + s * (g - h * tau);
-		    }
-		}
-		rots++;
-	    }
-	}
-	for (p = 0; p < SB_JACOBI_RANK; p++) {
-	    evalues[p] = b[p] += z[p];
-	    z[p] = 0;
-	}
+        sm = 0.0;
+        for (p = 0; p < SB_JACOBI_RANK - 1; p++)
+            for (q = p+1; q < SB_JACOBI_RANK; q++)
+                sm += ABS(a[p][q]);
+
+        if (sm == 0.0)
+            return;
+
+        thresh = (i < 3 ?
+                      (.2 * sm / (SB_JACOBI_RANK * SB_JACOBI_RANK)) :
+                      0.0);
+
+        for (p = 0; p < SB_JACOBI_RANK - 1; p++) {
+            for (q = p+1; q < SB_JACOBI_RANK; q++) {
+
+                g = 100.0 * ABS(a[p][q]);
+
+                if (i > 3 && (ABS(evalues[p]) + g == ABS(evalues[p])) &&
+                        (ABS(evalues[q]) + g == ABS(evalues[q])))
+                    a[p][q] = 0.0;
+
+                else if (ABS(a[p][q]) > thresh) {
+                    h = evalues[q] - evalues[p];
+
+                    if (ABS(h) + g == ABS(h))
+                        t = a[p][q] / h;
+                    else {
+                        theta = .5 * h / a[p][q];
+                        t = 1.0 / (ABS(theta) + sqrt(1 + theta * theta));
+                        if (theta < 0.0)  t = -t;
+                    }
+                    // End of computing tangent of rotation angle
+
+                    c = 1.0 / sqrt(1.0 + t*t);
+                    s = t * c;
+                    tau = s / (1.0 + c);
+                    h = t * a[p][q];
+                    z[p]    -= h;
+                    z[q]    += h;
+                    evalues[p] -= h;
+                    evalues[q] += h;
+                    a[p][q] = 0.0;
+
+                    for (j = 0; j < p; j++) {
+                        g = a[j][p];
+                        h = a[j][q];
+                        a[j][p] = g - s * (h + g * tau);
+                        a[j][q] = h + s * (g - h * tau);
+                    }
+
+                    for (j = p+1; j < q; j++) {
+                        g = a[p][j];
+                        h = a[j][q];
+                        a[p][j] = g - s * (h + g * tau);
+                        a[j][q] = h + s * (g - h * tau);
+                    }
+
+                    for (j = q+1; j < SB_JACOBI_RANK; j++) {
+                        g = a[p][j];
+                        h = a[q][j];
+                        a[p][j] = g - s * (h + g * tau);
+                        a[q][j] = h + s * (g - h * tau);
+                    }
+
+                    for (j = 0; j < SB_JACOBI_RANK; j++) {
+                        g = evectors[j][p];
+                        h = evectors[j][q];
+                        evectors[j][p] = g - s * (h + g * tau);
+                        evectors[j][q] = h + s * (g - h * tau);
+                    }
+                }
+                rots++;
+            }
+        }
+        for (p = 0; p < SB_JACOBI_RANK; p++) {
+            evalues[p] = b[p] += z[p];
+            z[p] = 0;
+        }
     }
 }
 #undef SB_JACOBI_RANK
@@ -609,12 +609,12 @@ SbMatrixd::inverse() const
 {
     // Trivial case
     if (IS_IDENTITY(matrix))
-	return SbMatrixd::identity();
+        return SbMatrixd::identity();
 
     // Affine case...
     SbMatrixd affineAnswer;
     if (  affine_inverse( SbMatrixd(matrix), affineAnswer ) )
-	return affineAnswer;
+        return affineAnswer;
 
     int         index[4];
     double       d, invmat[4][4], temp;
@@ -626,61 +626,61 @@ SbMatrixd::inverse() const
     if(inverse.LUDecomposition(index, d)) {
 
 #ifdef DEBUGGING
-	for(j = 0; j < 4; j++) {
-	    for(i = 0; i < 4; i++)
-		invmat[j][i] = 0.0;
-	    invmat[j][j] = 1.0;
-	    inverse.LUBackSubstitution(index, invmat[j]);
-	}
+        for(j = 0; j < 4; j++) {
+            for(i = 0; i < 4; i++)
+                invmat[j][i] = 0.0;
+            invmat[j][j] = 1.0;
+            inverse.LUBackSubstitution(index, invmat[j]);
+        }
 #else
-	invmat[0][0] = 1.0;
-	invmat[0][1] = 0.0;
-	invmat[0][2] = 0.0;
-	invmat[0][3] = 0.0;
-	inverse.LUBackSubstitution(index, invmat[0]);
-	invmat[1][0] = 0.0;
-	invmat[1][1] = 1.0;
-	invmat[1][2] = 0.0;
-	invmat[1][3] = 0.0;
-	inverse.LUBackSubstitution(index, invmat[1]);
-	invmat[2][0] = 0.0;
-	invmat[2][1] = 0.0;
-	invmat[2][2] = 1.0;
-	invmat[2][3] = 0.0;
-	inverse.LUBackSubstitution(index, invmat[2]);
-	invmat[3][0] = 0.0;
-	invmat[3][1] = 0.0;
-	invmat[3][2] = 0.0;
-	invmat[3][3] = 1.0;
-	inverse.LUBackSubstitution(index, invmat[3]);
+        invmat[0][0] = 1.0;
+        invmat[0][1] = 0.0;
+        invmat[0][2] = 0.0;
+        invmat[0][3] = 0.0;
+        inverse.LUBackSubstitution(index, invmat[0]);
+        invmat[1][0] = 0.0;
+        invmat[1][1] = 1.0;
+        invmat[1][2] = 0.0;
+        invmat[1][3] = 0.0;
+        inverse.LUBackSubstitution(index, invmat[1]);
+        invmat[2][0] = 0.0;
+        invmat[2][1] = 0.0;
+        invmat[2][2] = 1.0;
+        invmat[2][3] = 0.0;
+        inverse.LUBackSubstitution(index, invmat[2]);
+        invmat[3][0] = 0.0;
+        invmat[3][1] = 0.0;
+        invmat[3][2] = 0.0;
+        invmat[3][3] = 1.0;
+        inverse.LUBackSubstitution(index, invmat[3]);
 #endif /* DEBUGGING */
 
 #ifdef DEBUGGING
-	// transpose invmat
-	for(j = 0; j < 4; j++) {
-	    for(i = 0; i < j; i++) {
-		temp = invmat[i][j];
-		invmat[i][j] = invmat[j][i];
-		invmat[j][i] = temp;
-	    }
-	}
+        // transpose invmat
+        for(j = 0; j < 4; j++) {
+            for(i = 0; i < j; i++) {
+                temp = invmat[i][j];
+                invmat[i][j] = invmat[j][i];
+                invmat[j][i] = temp;
+            }
+        }
 #else
 #define SWAP(i,j) \
-	temp = invmat[i][j]; \
-	invmat[i][j] = invmat[j][i]; \
-	invmat[j][i] = temp;
+    temp = invmat[i][j]; \
+    invmat[i][j] = invmat[j][i]; \
+    invmat[j][i] = temp;
 
-	SWAP(1,0);
-	
-	SWAP(2,0);
-	SWAP(2,1);
-	
-	SWAP(3,0);
-	SWAP(3,1);
-	SWAP(3,2);
+        SWAP(1,0);
+
+        SWAP(2,0);
+        SWAP(2,1);
+
+        SWAP(3,0);
+        SWAP(3,1);
+        SWAP(3,2);
 #undef SWAP	
 #endif /* DEBUGGING */
-	inverse.setValue(invmat);
+        inverse.setValue(invmat);
     }
 
     return inverse;
@@ -719,12 +719,12 @@ SbBool
 SbMatrixd::affine_inverse(const SbMatrixd &in, SbMatrixd &out) const
 {
     // Check if matrix is affine...
-    if ( in[0][3] != 0.0 || in[1][3] != 0.0 || in[2][3] != 0.0 || 
-	 in[3][3] != 1.0 )
-	return FALSE;
+    if ( in[0][3] != 0.0 || in[1][3] != 0.0 || in[2][3] != 0.0 ||
+         in[3][3] != 1.0 )
+        return FALSE;
 
     // Calculate the determinant of submatrix A and determine if the matrix
-    // is singular as limited by the double precision floating 
+    // is singular as limited by the double precision floating
     // point data representation
 
     double det_1;
@@ -732,9 +732,9 @@ SbMatrixd::affine_inverse(const SbMatrixd &in, SbMatrixd &out) const
 
 #define ACCUMULATE \
     if (temp >= 0.0) \
-	pos += temp; \
+    pos += temp; \
     else             \
-	neg += temp;
+    neg += temp;
 
     pos = neg = 0.0;
     temp =  in[0][0] * in[1][1] * in[2][2];
@@ -758,7 +758,7 @@ SbMatrixd::affine_inverse(const SbMatrixd &in, SbMatrixd &out) const
     // Is the submatrix A singular?
     temp = det_1 / (pos - neg);
     if (ABS(temp) < PRECISION_LIMIT)
-	return FALSE;
+        return FALSE;
 
     // Calculate inverse(A) = adj(A) / det(A)
     det_1 = 1.0 / det_1;
@@ -773,15 +773,15 @@ SbMatrixd::affine_inverse(const SbMatrixd &in, SbMatrixd &out) const
     out[2][2] =  (in[0][0] * in[1][1] - in[0][1] * in[1][0]) * det_1;
 
     // Calculate -C * inverse(A)
-    out[3][0] = -( in[3][0] * out[0][0] + 
-		   in[3][1] * out[1][0] + 
-		   in[3][2] * out[2][0] );
-    out[3][1] = -( in[3][0] * out[0][1] + 
-		   in[3][1] * out[1][1] + 
-		   in[3][2] * out[2][1] );
-    out[3][2] = -( in[3][0] * out[0][2] + 
-		   in[3][1] * out[1][2] + 
-		   in[3][2] * out[2][2] );
+    out[3][0] = -( in[3][0] * out[0][0] +
+                   in[3][1] * out[1][0] +
+                   in[3][2] * out[2][0] );
+    out[3][1] = -( in[3][0] * out[0][1] +
+                   in[3][1] * out[1][1] +
+                   in[3][2] * out[2][1] );
+    out[3][2] = -( in[3][0] * out[0][2] +
+                   in[3][1] * out[1][2] +
+                   in[3][2] * out[2][2] );
 
     // Fill in last column
     out[0][3] = out[1][3] = out[2][3] = 0.0;
@@ -824,8 +824,8 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
         for(j = 0; j < 4; j++)
             if((temp = ABS(matrix[i][j])) > big) big = temp;
         if(big == 0.0) {
-	    matrix[i][i] = 1e-6;
-	    big = matrix[i][i];
+            matrix[i][i] = 1e-6;
+            big = matrix[i][i];
         }
         vv[i] = 1.0 / big;
     }
@@ -837,14 +837,14 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
     if((temp = ABS(matrix[i][2])) > big) big = temp; \
     if((temp = ABS(matrix[i][3])) > big) big = temp; \
     if(big == 0.0) { \
-	matrix[i][i] = 1e-6; \
-	big = matrix[i][i]; \
-    } \
+    matrix[i][i] = 1e-6; \
+    big = matrix[i][i]; \
+} \
     vv[i] = 1.0 / big;
 
-    COMPUTE_VV(0);	
-    COMPUTE_VV(1);	
-    COMPUTE_VV(2);	
+    COMPUTE_VV(0);
+    COMPUTE_VV(1);
+    COMPUTE_VV(2);
     COMPUTE_VV(3);
 #undef COMPUTE_VV	
 #endif /* DEBUGGING */
@@ -855,7 +855,7 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
 
     for(j = 0; j < 4; j++) {
 
-	// BLOCK 1
+        // BLOCK 1
         for(i = 0; i < j; i++) {
             sum = matrix[i][j];
             for(k = 0; k < i; k++)
@@ -865,7 +865,7 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
 
         big = 0.0;
 
-	// BLOCK 2
+        // BLOCK 2
         for(i = j; i < 4; i++) {
             sum = matrix[i][j];
             for(k = 0; k < j; k++)
@@ -877,7 +877,7 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
             }
         }
 
-	// BLOCK 3
+        // BLOCK 3
         if(j != imax) {
             for(k = 0; k < 4; k++) {
                 dum = matrix[imax][k];
@@ -888,17 +888,17 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
             vv[imax] = vv[j];
         }
 
-	// BLOCK 4
+        // BLOCK 4
         index[j] = imax;
         if(matrix[j][j] == 0.0) matrix[j][j] = 1e-20;
-	
-	// BLOCK 5
+
+        // BLOCK 5
         if(j != 4 - 1) {
             dum = 1.0 / (matrix[j][j]);
             for(i = j + 1; i < 4; i++)
                 matrix[i][j] *= dum;
         }
-	
+
     }
     
 #else
@@ -907,13 +907,13 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
     // version of the above code. First, some macros that
     // never change.
     
-// macro for block 3, inner k loop
+    // macro for block 3, inner k loop
 #define BLOCK3INNER(j,k) \
     dum = matrix[imax][k]; \
     matrix[imax][k] = matrix[j][k]; \
     matrix[j][k] = dum;
 
-// macro for block 4
+    // macro for block 4
 #define BLOCK4(j) \
     index[j] = imax; \
     if(matrix[j][j] == 0.0) matrix[j][j] = 1e-20;
@@ -931,30 +931,30 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
 
     // BLOCK 2, j = 0
     
-// macro for block 2 when j == 0
-// inner k loop does nothing when j == 0
+    // macro for block 2 when j == 0
+    // inner k loop does nothing when j == 0
 #define BLOCK2J0(i) \
     sum = matrix[i][0]; \
     if((dum = vv[i] * ABS(sum)) >= big) { \
-	big = dum; \
-	imax = i; \
-    }
-	
+    big = dum; \
+    imax = i; \
+}
+
     // for(i = j; i < 4; i++)
     BLOCK2J0(0)
     BLOCK2J0(1)
     BLOCK2J0(2)
     BLOCK2J0(3)
 #undef BLOCK2J0
-    
+
     // BLOCK 3, j = 0
     if(0 != imax) {
-	BLOCK3INNER(0,0);
-	BLOCK3INNER(0,1);
-	BLOCK3INNER(0,2);
-	BLOCK3INNER(0,3);
-	d = -d;
-	vv[imax] = vv[0];
+        BLOCK3INNER(0,0);
+        BLOCK3INNER(0,1);
+        BLOCK3INNER(0,2);
+        BLOCK3INNER(0,3);
+        d = -d;
+        vv[imax] = vv[0];
     }
 
     // BLOCK 4, j = 0
@@ -963,9 +963,9 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
     // BLOCK 5, j = 0
     dum = 1.0 / (matrix[0][0]);
     // for(i = j + 1; i < 4; i++)
-	matrix[1][0] *= dum;
-	matrix[2][0] *= dum;
-	matrix[3][0] *= dum;
+    matrix[1][0] *= dum;
+    matrix[2][0] *= dum;
+    matrix[3][0] *= dum;
 
     // *********************************************
     // j = 1
@@ -975,36 +975,36 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
     // for(i = 0; i < j; i++) {
     sum = matrix[0][1];
     // for(k = 0; k < i; k++)
-	// nothing    
+    // nothing
 
     big = 0.0;
 
     // BLOCK 2, j = 1
     
-// macro for block 2 when j == 1
+    // macro for block 2 when j == 1
 #define BLOCK2J1(i) \
     sum = matrix[i][1]; \
     sum -= matrix[i][0] * matrix[0][1]; \
     matrix[i][1] = sum; \
     if((dum = vv[i] * ABS(sum)) >= big) { \
-	big = dum; \
-	imax = i; \
-    }
-	
+    big = dum; \
+    imax = i; \
+}
+
     // for(i = j; i < 4; i++)
     BLOCK2J1(1)
     BLOCK2J1(2)
     BLOCK2J1(3)
 #undef BLOCK2J1
-    
+
     // BLOCK 3, j = 1
     if(1 != imax) {
-	BLOCK3INNER(1,0);
-	BLOCK3INNER(1,1);
-	BLOCK3INNER(1,2);
-	BLOCK3INNER(1,3);
-	d = -d;
-	vv[imax] = vv[1];
+        BLOCK3INNER(1,0);
+        BLOCK3INNER(1,1);
+        BLOCK3INNER(1,2);
+        BLOCK3INNER(1,3);
+        d = -d;
+        vv[imax] = vv[1];
     }
 
     // BLOCK 4, j = 1
@@ -1013,8 +1013,8 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
     // BLOCK 5, j = 1
     dum = 1.0f / (matrix[1][1]);
     // for(i = j + 1; i < 4; i++)
-	matrix[2][1] *= dum;
-	matrix[3][1] *= dum;
+    matrix[2][1] *= dum;
+    matrix[3][1] *= dum;
     
     // *********************************************
     // j = 2
@@ -1022,44 +1022,44 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
 
     // BLOCK 1, j = 2
     // for(i = 0; i < j; i++) {
-	// i = 0
-	sum = matrix[0][2];
-	// for(k = 0; k < i; k++)
-	    // nothing
-	// i = 1	    
-	sum = matrix[1][2];
-	// for(k = 0; k < i; k++)
-	    sum -= matrix[1][0] * matrix[0][2];
-	matrix[1][2] = sum;
-	
+    // i = 0
+    sum = matrix[0][2];
+    // for(k = 0; k < i; k++)
+    // nothing
+    // i = 1
+    sum = matrix[1][2];
+    // for(k = 0; k < i; k++)
+    sum -= matrix[1][0] * matrix[0][2];
+    matrix[1][2] = sum;
+
     big = 0.0;
 
     // BLOCK 2, j = 2
     
-// macro for block 2 when j == 2
+    // macro for block 2 when j == 2
 #define BLOCK2J2(i) \
     sum = matrix[i][2]; \
     sum -= matrix[i][0] * matrix[0][2]; \
     sum -= matrix[i][1] * matrix[1][2]; \
     matrix[i][2] = sum; \
     if((dum = vv[i] * ABS(sum)) >= big) { \
-	big = dum; \
-	imax = i; \
-    }
-	
+    big = dum; \
+    imax = i; \
+}
+
     // for(i = j; i < 4; i++)
     BLOCK2J2(2)
     BLOCK2J2(3)
 #undef BLOCK2J2
-    
+
     // BLOCK 3, j = 2
     if(2 != imax) {
-	BLOCK3INNER(2,0);
-	BLOCK3INNER(2,1);
-	BLOCK3INNER(2,2);
-	BLOCK3INNER(2,3);
-	d = -d;
-	vv[imax] = vv[2];
+        BLOCK3INNER(2,0);
+        BLOCK3INNER(2,1);
+        BLOCK3INNER(2,2);
+        BLOCK3INNER(2,3);
+        d = -d;
+        vv[imax] = vv[2];
     }
 
     // BLOCK 4, j = 2
@@ -1068,7 +1068,7 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
     // BLOCK 5, j = 2
     dum = 1.0f / (matrix[2][2]);
     // for(i = j + 1; i < 4; i++)
-	matrix[3][2] *= dum;
+    matrix[3][2] *= dum;
 
     // *********************************************
     // j = 3
@@ -1076,27 +1076,27 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
 
     // BLOCK 1, j = 3
     // for(i = 0; i < j; i++) {
-	// i = 0
-	    sum = matrix[0][3];
-	    // for(k = 0; k < i; k++)
-		// nothing
-	// i = 1	    
-	    sum = matrix[1][3];
-	    // for(k = 0; k < i; k++)
-		sum -= matrix[1][0] * matrix[0][3];
-	    matrix[1][3] = sum;
-	// i = 2
-	    sum = matrix[2][3];
-	    // for(k = 0; k < i; k++)
-		sum -= matrix[2][0] * matrix[0][3];
-		sum -= matrix[2][1] * matrix[1][3];
-	    matrix[2][3] = sum;
-	
+    // i = 0
+    sum = matrix[0][3];
+    // for(k = 0; k < i; k++)
+    // nothing
+    // i = 1
+    sum = matrix[1][3];
+    // for(k = 0; k < i; k++)
+    sum -= matrix[1][0] * matrix[0][3];
+    matrix[1][3] = sum;
+    // i = 2
+    sum = matrix[2][3];
+    // for(k = 0; k < i; k++)
+    sum -= matrix[2][0] * matrix[0][3];
+    sum -= matrix[2][1] * matrix[1][3];
+    matrix[2][3] = sum;
+
     big = 0.0;
 
     // BLOCK 2, j = 3
     
-// macro for block 2 when j == 3
+    // macro for block 2 when j == 3
 #define BLOCK2J3(i) \
     sum = matrix[i][3]; \
     sum -= matrix[i][0] * matrix[0][3]; \
@@ -1104,22 +1104,22 @@ SbMatrixd::LUDecomposition(int index[4], double &d)
     sum -= matrix[i][2] * matrix[2][3]; \
     matrix[i][3] = sum; \
     if((dum = vv[i] * ABS(sum)) >= big) { \
-	big = dum; \
-	imax = i; \
-    }
-	
+    big = dum; \
+    imax = i; \
+}
+
     // for(i = j; i < 4; i++)
     BLOCK2J3(3)
 #undef BLOCK2J3
-    
+
     // BLOCK 3, j = 3
     if(3 != imax) {
-	BLOCK3INNER(3,0);
-	BLOCK3INNER(3,1);
-	BLOCK3INNER(3,2);
-	BLOCK3INNER(3,3);
-	d = -d;
-	vv[imax] = vv[3];
+        BLOCK3INNER(3,0);
+        BLOCK3INNER(3,1);
+        BLOCK3INNER(3,2);
+        BLOCK3INNER(3,3);
+        d = -d;
+        vv[imax] = vv[3];
     }
 
     // BLOCK 4, j = 3
@@ -1164,8 +1164,8 @@ SbMatrixd::LUBackSubstitution(int index[4], double b[4]) const
     sum = b[ip]; \
     b[ip] = b[i]; \
     if(ii >= 0) \
-	for(j = ii; j <= i - 1; j++) \
-	    sum -= matrix[i][j] * b[j]; \
+    for(j = ii; j <= i - 1; j++) \
+    sum -= matrix[i][j] * b[j]; \
     else if(sum) ii = i; \
     b[i] = sum;
 
@@ -1192,7 +1192,7 @@ SbMatrixd::LUBackSubstitution(int index[4], double b[4]) const
 
     sum = b[1] - matrix[1][2]*b[2] - matrix[1][3]*b[3];
     b[1] = sum / matrix[1][1];
-	
+
     sum = b[0] - matrix[0][1]*b[1] - matrix[0][2]*b[2] - matrix[0][3]*b[3];
     b[0] = sum / matrix[0][0];
 #endif /* DEBUGGING */
@@ -1206,9 +1206,9 @@ SbMatrixd
 SbMatrixd::transpose() const
 {
     return SbMatrixd(matrix[0][0], matrix[1][0], matrix[2][0], matrix[3][0],
-		    matrix[0][1], matrix[1][1], matrix[2][1], matrix[3][1],
-		    matrix[0][2], matrix[1][2], matrix[2][2], matrix[3][2],
-		    matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3]);
+                     matrix[0][1], matrix[1][1], matrix[2][1], matrix[3][1],
+                     matrix[0][2], matrix[1][2], matrix[2][2], matrix[3][2],
+                     matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3]);
 }
 
 //
@@ -1217,10 +1217,10 @@ SbMatrixd::transpose() const
 
 void
 SbMatrixd::setTransform(const SbVec3d &translation,
-                 const SbRotationd &rotation,
-		 const SbVec3d &scaleFactor,
-                 const SbRotationd &scaleOrientation,
-		 const SbVec3d &center)
+                        const SbRotationd &rotation,
+                        const SbVec3d &scaleFactor,
+                        const SbRotationd &scaleOrientation,
+                        const SbVec3d &center)
 {
 #define TRANSLATE(vec)		m.setTranslate(vec), multLeft(m)
 #define ROTATE(rot)		rot.getValue(m), multLeft(m)
@@ -1229,30 +1229,30 @@ SbMatrixd::setTransform(const SbVec3d &translation,
     makeIdentity();
     
     if (translation != SbVec3d(0,0,0))
-	TRANSLATE(translation);
+        TRANSLATE(translation);
 
     if (center != SbVec3d(0,0,0))
-	TRANSLATE(center);
+        TRANSLATE(center);
 
     if (rotation != SbRotationd(0,0,0,1))
-	ROTATE(rotation);
+        ROTATE(rotation);
 
     if (scaleFactor != SbVec3d(1,1,1)) {
         SbRotationd so = scaleOrientation;
         if (so != SbRotationd(0,0,0,1))
-	    ROTATE(so);
-	
-	m.setScale(scaleFactor);
-	multLeft(m);
+            ROTATE(so);
+
+        m.setScale(scaleFactor);
+        multLeft(m);
 
         if (so != SbRotationd(0,0,0,1)) {
-	    so.invert();
-	    ROTATE(so);
-	}
+            so.invert();
+            ROTATE(so);
+        }
     }
 
     if (center != SbVec3d(0,0,0))
-	TRANSLATE(-center);
+        TRANSLATE(-center);
 
 #undef TRANSLATE
 #undef ROTATE
@@ -1276,36 +1276,36 @@ SbMatrixd::setTransform(const SbVec3d &t, const SbRotationd &r, const SbVec3d &s
 
 void
 SbMatrixd::getTransform(SbVec3d &translation,
-                    SbRotationd &rotation,
-		    SbVec3d &scaleFactor,
-                    SbRotationd &scaleOrientation,
-		    const SbVec3d &center) const
+                        SbRotationd &rotation,
+                        SbVec3d &scaleFactor,
+                        SbRotationd &scaleOrientation,
+                        const SbVec3d &center) const
 {
     SbMatrixd so, rot, proj;
     if (center != SbVec3d(0,0,0)) {
-	// to get fields for a non-0 center, we
-	// need to decompose a new matrix "m" such
-	// that [-center][m][center] = [this]
-	// i.e., [m] = [center][this][-center]
-	// (this trick stolen from Showcase code)
-	SbMatrixd m,c;
-	m.setTranslate(-center);
-	m.multLeft(*this);
-	c.setTranslate(center);
-	m.multLeft(c);
-	m.factor(so,scaleFactor,rot,translation,proj);
+        // to get fields for a non-0 center, we
+        // need to decompose a new matrix "m" such
+        // that [-center][m][center] = [this]
+        // i.e., [m] = [center][this][-center]
+        // (this trick stolen from Showcase code)
+        SbMatrixd m,c;
+        m.setTranslate(-center);
+        m.multLeft(*this);
+        c.setTranslate(center);
+        m.multLeft(c);
+        m.factor(so,scaleFactor,rot,translation,proj);
     }
     else
-	this->factor(so,scaleFactor,rot,translation,proj);
+        this->factor(so,scaleFactor,rot,translation,proj);
 
-    scaleOrientation.setValue(so.transpose());  // have to transpose because factor 
-				        // gives us transpose of correct answer.
+    scaleOrientation.setValue(so.transpose());  // have to transpose because factor
+    // gives us transpose of correct answer.
     rotation.setValue(rot);
 }
 
 void
 SbMatrixd::getTransform(SbVec3d &t, SbRotationd &r,
-                      SbVec3d &s, SbRotationd &so) const
+                        SbVec3d &s, SbRotationd &so) const
 {
     getTransform(t, r, s, so, SbVec3d(0,0,0));
 }
@@ -1325,16 +1325,16 @@ SbMatrixd::multRight(const SbMatrixd &m)
 {
     // Trivial cases
     if (IS_IDENTITY(m))
-	return *this;
+        return *this;
     else if (IS_IDENTITY(matrix))
-	return (*this = m);
-	
+        return (*this = m);
+
     SbMatd	tmp;
 
 #define MULT_RIGHT(i,j) (matrix[i][0]*m.matrix[0][j] + \
-			 matrix[i][1]*m.matrix[1][j] + \
-			 matrix[i][2]*m.matrix[2][j] + \
-			 matrix[i][3]*m.matrix[3][j])
+    matrix[i][1]*m.matrix[1][j] + \
+    matrix[i][2]*m.matrix[2][j] + \
+    matrix[i][3]*m.matrix[3][j])
 
     tmp[0][0] = MULT_RIGHT(0,0);
     tmp[0][1] = MULT_RIGHT(0,1);
@@ -1367,16 +1367,16 @@ SbMatrixd::multLeft(const SbMatrixd &m)
 {
     // Trivial cases
     if (IS_IDENTITY(m))
-	return *this;
+        return *this;
     else if (IS_IDENTITY(matrix))
-	return (*this = m);
-	
+        return (*this = m);
+
     SbMatd	tmp;
 
 #define MULT_LEFT(i,j) (m.matrix[i][0]*matrix[0][j] + \
-			m.matrix[i][1]*matrix[1][j] + \
-			m.matrix[i][2]*matrix[2][j] + \
-			m.matrix[i][3]*matrix[3][j])
+    m.matrix[i][1]*matrix[1][j] + \
+    m.matrix[i][2]*matrix[2][j] + \
+    m.matrix[i][3]*matrix[3][j])
 
     tmp[0][0] = MULT_LEFT(0,0);
     tmp[0][1] = MULT_LEFT(0,1);
@@ -1411,13 +1411,13 @@ SbMatrixd::multMatrixVec(const SbVec3d &src, SbVec3d &dst) const
     double	x,y,z,w;
     
     x = matrix[0][0]*src[0] + matrix[0][1]*src[1] +
-	matrix[0][2]*src[2] + matrix[0][3];
+        matrix[0][2]*src[2] + matrix[0][3];
     y = matrix[1][0]*src[0] + matrix[1][1]*src[1] +
-	matrix[1][2]*src[2] + matrix[1][3];
+        matrix[1][2]*src[2] + matrix[1][3];
     z = matrix[2][0]*src[0] + matrix[2][1]*src[1] +
-	matrix[2][2]*src[2] + matrix[2][3];
+        matrix[2][2]*src[2] + matrix[2][3];
     w = matrix[3][0]*src[0] + matrix[3][1]*src[1] +
-	matrix[3][2]*src[2] + matrix[3][3];
+        matrix[3][2]*src[2] + matrix[3][3];
     
     dst.setValue(x/w, y/w, z/w);
 }
@@ -1432,13 +1432,13 @@ SbMatrixd::multVecMatrix(const SbVec3d &src, SbVec3d &dst) const
     double	x,y,z,w;
     
     x = src[0]*matrix[0][0] + src[1]*matrix[1][0] +
-	src[2]*matrix[2][0] + matrix[3][0];
+        src[2]*matrix[2][0] + matrix[3][0];
     y = src[0]*matrix[0][1] + src[1]*matrix[1][1] +
-	src[2]*matrix[2][1] + matrix[3][1];
+        src[2]*matrix[2][1] + matrix[3][1];
     z = src[0]*matrix[0][2] + src[1]*matrix[1][2] +
-	src[2]*matrix[2][2] + matrix[3][2];
+        src[2]*matrix[2][2] + matrix[3][2];
     w = src[0]*matrix[0][3] + src[1]*matrix[1][3] +
-	src[2]*matrix[2][3] + matrix[3][3];
+        src[2]*matrix[2][3] + matrix[3][3];
     
     dst.setValue(x/w, y/w, z/w);
 }
@@ -1471,10 +1471,10 @@ SbMatrixd::multDirMatrix(const SbVec3d &src, SbVec3d &dst) const
 void
 SbMatrixd::multLineMatrix(const SbLine &src, SbLine &dst) const
 {
-	SbVec3d pos, dir;
-	multVecMatrix(SbVec3d(src.getPosition()), pos);
-	multDirMatrix(SbVec3d(src.getDirection()), dir);
-	dst.setValue(SbVec3f(pos), SbVec3f(pos+dir));
+    SbVec3d pos, dir;
+    multVecMatrix(SbVec3d(src.getPosition()), pos);
+    multDirMatrix(SbVec3d(src.getDirection()), dir);
+    dst.setValue(SbVec3f(pos), SbVec3f(pos+dir));
 }
 
 
@@ -1500,8 +1500,8 @@ SbMatrixd::print(FILE *fp) const
     int	i, j;
     
     for (i = 0; i < 4; i++)
-	for (j = 0; j < 4; j++)
-	    fprintf(fp, "%10.5g%c", matrix[i][j], j < 3 ? '\t' : '\n');
+        for (j = 0; j < 4; j++)
+            fprintf(fp, "%10.5g%c", matrix[i][j], j < 3 ? '\t' : '\n');
 }
 
 ////////////////////////////////////////////
@@ -1571,26 +1571,26 @@ int
 operator ==(const SbMatrixd &m1, const SbMatrixd &m2)
 {
     return (
-	    m1.matrix[0][0] == m2.matrix[0][0] &&
-	    m1.matrix[0][1] == m2.matrix[0][1] &&
-	    m1.matrix[0][2] == m2.matrix[0][2] &&
-	    m1.matrix[0][3] == m2.matrix[0][3] &&
+                m1.matrix[0][0] == m2.matrix[0][0] &&
+                m1.matrix[0][1] == m2.matrix[0][1] &&
+                m1.matrix[0][2] == m2.matrix[0][2] &&
+                m1.matrix[0][3] == m2.matrix[0][3] &&
 
-	    m1.matrix[1][0] == m2.matrix[1][0] &&
-	    m1.matrix[1][1] == m2.matrix[1][1] &&
-	    m1.matrix[1][2] == m2.matrix[1][2] &&
-	    m1.matrix[1][3] == m2.matrix[1][3] &&
+                m1.matrix[1][0] == m2.matrix[1][0] &&
+                m1.matrix[1][1] == m2.matrix[1][1] &&
+                m1.matrix[1][2] == m2.matrix[1][2] &&
+                m1.matrix[1][3] == m2.matrix[1][3] &&
 
-	    m1.matrix[2][0] == m2.matrix[2][0] &&
-	    m1.matrix[2][1] == m2.matrix[2][1] &&
-	    m1.matrix[2][2] == m2.matrix[2][2] &&
-	    m1.matrix[2][3] == m2.matrix[2][3] &&
+                m1.matrix[2][0] == m2.matrix[2][0] &&
+                m1.matrix[2][1] == m2.matrix[2][1] &&
+                m1.matrix[2][2] == m2.matrix[2][2] &&
+                m1.matrix[2][3] == m2.matrix[2][3] &&
 
-	    m1.matrix[3][0] == m2.matrix[3][0] &&
-	    m1.matrix[3][1] == m2.matrix[3][1] &&
-	    m1.matrix[3][2] == m2.matrix[3][2] &&
-	    m1.matrix[3][3] == m2.matrix[3][3]
-	    );
+                m1.matrix[3][0] == m2.matrix[3][0] &&
+                m1.matrix[3][1] == m2.matrix[3][1] &&
+                m1.matrix[3][2] == m2.matrix[3][2] &&
+                m1.matrix[3][3] == m2.matrix[3][3]
+                );
 }
 
 //
@@ -1604,11 +1604,11 @@ SbMatrixd::equals(const SbMatrixd &m, double tolerance) const
     double	d;
 
     for (i = 0; i < 4; i++)
-	for (j = 0; j < 4; j++) {
-	    d = matrix[i][j] - m.matrix[i][j];
-	    if (ABS(d) > tolerance)
-		return FALSE;
-	}
+        for (j = 0; j < 4; j++) {
+            d = matrix[i][j] - m.matrix[i][j];
+            if (ABS(d) > tolerance)
+                return FALSE;
+        }
 
     return TRUE;
 }
