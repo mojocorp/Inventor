@@ -172,15 +172,15 @@ SbCylinder::intersect(const SbLine &line, SbVec3f &enter, SbVec3f &exit) const
     SbBool intersected = unitCylinderIntersect(cylLine, cylEnter, cylExit);
 
     if (intersected) {
-	// transform back to original space
-	SbMatrix fromUnitCylSpace = toUnitCylSpace.inverse();
+        // transform back to original space
+        SbMatrix fromUnitCylSpace = toUnitCylSpace.inverse();
 
-	fromUnitCylSpace.multVecMatrix(cylEnter, enter);
-	enter += axis.getPosition();
+        fromUnitCylSpace.multVecMatrix(cylEnter, enter);
+        enter += axis.getPosition();
 
-	fromUnitCylSpace.multVecMatrix(cylExit, exit);
-	exit += axis.getPosition();
-    }    
+        fromUnitCylSpace.multVecMatrix(cylExit, exit);
+        exit += axis.getPosition();
+    }
 
     return intersected;
 }    
@@ -203,11 +203,10 @@ SbCylinder::intersect(const SbLine &line, SbVec3f &enter, SbVec3f &exit) const
 
 SbBool
 SbCylinder::unitCylinderIntersect(const SbLine &l,
-				  SbVec3f &enter, SbVec3f &exit)
+                                  SbVec3f &enter, SbVec3f &exit)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float		t0, t1;
     const SbVec3f	&pos = l.getPosition(), &dir = l.getDirection();
     SbBool		doesIntersect = TRUE;
 
@@ -222,23 +221,24 @@ SbCylinder::unitCylinderIntersect(const SbLine &l,
 
     // if discriminant is negative, no intersection
     if (discr < 0.0) {
-	doesIntersect = FALSE;
+        doesIntersect = FALSE;
     }
     else {
-	float sqroot = float(sqrtf(discr));
+        float sqroot = float(sqrtf(discr));
 
-	// magic to stabilize the answer
-	if (B > 0.0) {
-	    t0 = -(2.0f * C) / (sqroot + B);
-	    t1 = -(sqroot + B) / (2.0f * A);
-	}
-	else {
-	    t0 = (2.0f * C) / (sqroot - B);
-	    t1 = (sqroot - B) / (2.0f * A);
-	}	    
+        // magic to stabilize the answer
+        float t0, t1;
+        if (B > 0.0) {
+            t0 = -(2.0f * C) / (sqroot + B);
+            t1 = -(sqroot + B) / (2.0f * A);
+        }
+        else {
+            t0 = (2.0f * C) / (sqroot - B);
+            t1 = (sqroot - B) / (2.0f * A);
+        }
 
-	enter = pos + (dir * t0);
-	exit = pos + (dir * t1);
+        enter = pos + (dir * t0);
+        exit = pos + (dir * t1);
     }
 
     return doesIntersect;
