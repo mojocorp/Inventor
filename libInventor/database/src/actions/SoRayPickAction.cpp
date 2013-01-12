@@ -61,6 +61,8 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/SbRotation.h>
 
+#include <cmath>
+
 SO_ACTION_SOURCE(SoRayPickAction);
 
 ////////////////////////////////////////////////////////////////////////
@@ -766,22 +768,20 @@ SoRayPickAction::rayDistance(const SbVec3f &start, const SbVec3f &direction,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-#define ABS(x) ((x) < 0.0 ? -(x) : (x))
-
     // Find the vector component with the maximum absolute value
     float	max, c;
     int		which;
 
-    max = ABS(direction[0]);
+    max = std::abs(direction[0]);
     which = 0;
 
-    c = ABS(direction[1]);
+    c = std::abs(direction[1]);
     if (c > max) {
 	max = c;
 	which = 1;
     }
 
-    c = ABS(direction[2]);
+    c = std::abs(direction[2]);
     if (c > max) {
 	max = c;
 	which = 2;
@@ -792,6 +792,4 @@ SoRayPickAction::rayDistance(const SbVec3f &start, const SbVec3f &direction,
 	return 0.0;
 
     return (point[which] - start[which]) / direction[which];
-
-#undef ABS
 }

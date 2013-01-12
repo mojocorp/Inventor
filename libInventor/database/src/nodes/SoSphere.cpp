@@ -70,6 +70,8 @@
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoSphere.h>
 
+#include <math.h>
+
 SO_NODE_SOURCE(SoSphere);
 
 // Computes S and T texture coordinates from point on surface

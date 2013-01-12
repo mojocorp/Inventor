@@ -64,6 +64,7 @@
 #include <Inventor/fields/SoMFFloat.h>
 #include <SoDebug.h>
 #include <machine.h>
+#include <math.h>
 
 #include <iostream>
 
