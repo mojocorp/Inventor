@@ -71,6 +71,7 @@
 #include <QKeyEvent>
 #include <QMouseEvent>
 
+#include <math.h>
 /*
  * Defines
  */

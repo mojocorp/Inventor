@@ -59,6 +59,8 @@
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/fields/SoMFColor.h>
 
+#include <math.h>
+
 SO_ELEMENT_SOURCE(SoLazyElement);
 static	SbColor unpacker(0, 0, 0);
 

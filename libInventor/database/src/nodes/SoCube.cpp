@@ -71,6 +71,8 @@
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoCube.h>
 
+#include <math.h>
+
 SO_NODE_SOURCE(SoCube);
 
 // Cube geometry
