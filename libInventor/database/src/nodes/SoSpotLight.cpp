@@ -59,6 +59,8 @@
 #include <Inventor/SbVec3f.h>
 #include <Inventor/SbVec4f.h>
 
+#include <math.h>
+
 SO_NODE_SOURCE(SoSpotLight);
 
 ////////////////////////////////////////////////////////////////////////

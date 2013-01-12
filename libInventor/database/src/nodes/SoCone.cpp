@@ -78,6 +78,8 @@
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoCone.h>
 
+#include <math.h>
+
 SO_NODE_SOURCE(SoCone);
 
 // Shorthand for testing whether current parts includes PART

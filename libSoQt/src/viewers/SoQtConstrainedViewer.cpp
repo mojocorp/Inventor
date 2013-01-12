@@ -61,6 +61,7 @@
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/Qt/viewers/SoQtConstrainedViewer.h>
 
+#include <math.h>
 
 /*
  * Defines

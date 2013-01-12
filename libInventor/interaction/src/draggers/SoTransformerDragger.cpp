@@ -79,7 +79,7 @@
 #include <Inventor/draggers/SoTransformerDragger.h>
 #include "geom/SoTransformerDraggerGeom.h"
 
-#define _ABS(x) ((x) < 0 ? -(x) : (x))
+#include <cmath>
 
 int    SoTransformerDragger::colinearThreshold = 4;
 
@@ -3186,13 +3186,12 @@ SoTransformerDragger::isColinear(SbVec2f a1[2], SbVec2f a2[2], int pixels)
     float B = 1.0f;
     float C = -yIntercept;
 
-    float dist1 = _ABS((A*a2[0][0] + B*a2[0][1] + C)/sqrtf(A*A + B*B));
+    float dist1 = std::abs((A*a2[0][0] + B*a2[0][1] + C)/std::sqrt(A*A + B*B));
 
     if (dist1 > (float)pixels)
 	return FALSE;
     else {
-        float dist2 = 
-	    _ABS((A*a2[1][0] + B*a2[1][1] + C)/sqrtf(A*A + B*B));
+        float dist2 = std::abs((A*a2[1][0] + B*a2[1][1] + C)/std::sqrt(A*A + B*B));
 
         if (dist2 > (float)pixels)
 	    return FALSE;

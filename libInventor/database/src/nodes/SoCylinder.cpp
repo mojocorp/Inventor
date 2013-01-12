@@ -72,6 +72,8 @@
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoCylinder.h>
 
+#include <math.h>
+
 SO_NODE_SOURCE(SoCylinder);
 
 // Shorthand for testing whether current parts includes PART
