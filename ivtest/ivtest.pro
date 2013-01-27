@@ -3,15 +3,17 @@ TARGET   = ivtest
 CONFIG  += opengl console
 CONFIG  -= app_bundle
 DESTDIR  = ../build
-DEFINES += GTEST_LINKED_AS_SHARED_LIBRARY
+DEFINES += GTEST_CREATE_SHARED_LIBRARY
 
 LIBS += -L../build -lInventor
 linux-g++: LIBS += -lGLU
 
-INCLUDEPATH += . pdiff ../3rdparty/gtest-1.6.0/include
+INCLUDEPATH += . pdiff gtest
 INCLUDEPATH += ../libInventor/database/include \
                ../libInventor/interaction/include \
                ../libInventor/nodekits/include
+
+SOURCES += gtest/gtest-all.cc
 
 HEADERS += pdiff/CompareArgs.h \
            pdiff/LPyramid.h \
@@ -43,4 +45,4 @@ SOURCES += main.cpp \
            testModels.cpp \
            testImage.cpp
 
-LIBS += -L../build -lgtest
+LIBS += -L../build
