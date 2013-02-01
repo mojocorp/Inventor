@@ -50,7 +50,6 @@ HEADERS += include/_SoXtColorEditor.h \
            include/SoXtSliderModule.h \
            include/SoXtSliderModules.h \
            include/SoXtSliderTool.h \
-           src/sgi_visual.h \
            src/mixedMode/SoFloatCallbackList.h \
            src/viewers/SoXtBitmapButton.h \
            include/Inventor/Xt/SoXt.h \
@@ -85,8 +84,7 @@ HEADERS += include/_SoXtColorEditor.h \
            include/Inventor/Xt/viewers/SoXtViewer.h \
            include/Inventor/Xt/viewers/SoXtWalkViewer.h
 
-SOURCES += src/sgi_visual.c \
-           src/SoGLwDAUtil.c \
+SOURCES += src/SoGLwDAUtil.c \
            src/SoGLwDrawA.c \
            src/SoGLwMDrawA.c \
            src/viewers/Sgm/ThumbWheel.c \
