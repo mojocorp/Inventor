@@ -3,6 +3,8 @@
 # macosx : qmake -r -spec macx-g++
 # windows: qmake -r -tp vc
 ######################################################################
+# linux: bison libxt-dev libxi-dev lesstif2-dev
+######################################################################
 TEMPLATE  = subdirs
 CONFIG   += ordered
 
