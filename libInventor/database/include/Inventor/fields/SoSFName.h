@@ -56,7 +56,6 @@
 #ifndef  _SO_SF_NAME_
 #define  _SO_SF_NAME_
 
-#include <Inventor/SbString.h>
 #include <Inventor/fields/SoSubField.h>
 
 /// Field containg a name.
