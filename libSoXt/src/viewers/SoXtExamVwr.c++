@@ -51,6 +51,7 @@
  */
 #include <stdlib.h>
 #include <inttypes.h>
+#include <math.h>
 #include <X11/Intrinsic.h>
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
