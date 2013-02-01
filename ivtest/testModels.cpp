@@ -10,7 +10,7 @@
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-class ModelTest : public ::testing::TestWithParam<const char*>
+class ModelTest_GLCTX : public ::testing::TestWithParam<const char*>
 {
 protected:
     QImage snapFile(const QFileInfo & src, const QFileInfo & dst)
@@ -59,7 +59,7 @@ protected:
 
 };
 
-TEST_P(ModelTest, all) {
+TEST_P(ModelTest_GLCTX, all) {
     QString oivhome(getenv("OIV_HOME"));
 
     QFileInfo srcFilename = oivhome + "/" + GetParam();
@@ -81,7 +81,7 @@ TEST_P(ModelTest, all) {
 }
 
 INSTANTIATE_TEST_CASE_P(root,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/bird.iv",
                             "data/models/chair.iv",
@@ -98,13 +98,13 @@ INSTANTIATE_TEST_CASE_P(root,
                             "data/models/torus.iv",
                             "data/models/wheel.iv"));
 INSTANTIATE_TEST_CASE_P(buildings,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/buildings/Barcelona.iv",
                             "data/models/buildings/temple.iv",
                             "data/models/buildings/windmill.iv"));
 INSTANTIATE_TEST_CASE_P(chess,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/chess/bishop.iv",
                             "data/models/chess/chessboard.iv",
@@ -114,30 +114,30 @@ INSTANTIATE_TEST_CASE_P(chess,
                             "data/models/chess/queen.iv",
                             "data/models/chess/rook.iv"));
 INSTANTIATE_TEST_CASE_P(cyberhead,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/CyberHeads/josie.iv",
                             "data/models/CyberHeads/paul.iv",
                             "data/models/CyberHeads/rikk.iv"));
 INSTANTIATE_TEST_CASE_P(food,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/food/apple.iv",
                             "data/models/food/banana.iv",
                             "data/models/food/mushroom.iv",
                             "data/models/food/pear.iv"));
 INSTANTIATE_TEST_CASE_P(furniture,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/furniture/ceilingLamp.iv",
                             "data/models/furniture/table.iv"));
 INSTANTIATE_TEST_CASE_P(geography,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/geography/coasts.iv",
                             "data/models/geography/earth.iv"));
 INSTANTIATE_TEST_CASE_P(household,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/household/canstick.iv",
                             "data/models/household/manillaFolder.iv",
@@ -150,7 +150,7 @@ INSTANTIATE_TEST_CASE_P(household,
                             "data/models/household/teapot.iv",
                             "data/models/household/trackLights.iv"));
 INSTANTIATE_TEST_CASE_P(machines,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/machines/coarseGear.iv",
                             "data/models/machines/compressor.iv",
@@ -161,7 +161,7 @@ INSTANTIATE_TEST_CASE_P(machines,
                             "data/models/machines/vise.iv",
                             "data/models/machines/windTunnel.iv"));
 INSTANTIATE_TEST_CASE_P(robots,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/robots/cubeMan.iv",
                             "data/models/robots/cylMan.iv",
@@ -170,20 +170,20 @@ INSTANTIATE_TEST_CASE_P(robots,
                             "data/models/robots/robotcop.iv",
                             "data/models/robots/sphereMan.iv"));
 INSTANTIATE_TEST_CASE_P(scenes,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/scenes/chesschairs.iv",
                             "data/models/scenes/curtain.iv",
                             "data/models/scenes/glider.iv",
                             "data/models/scenes/stagedancers.iv"));
 INSTANTIATE_TEST_CASE_P(sgi,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/sgi/indigo.iv",
                             "data/models/sgi/logo.iv",
                             "data/models/sgi/sgilogo.iv"));
 INSTANTIATE_TEST_CASE_P(simple,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/simple/10by10.iv",
                             "data/models/simple/axis.iv",
@@ -207,7 +207,7 @@ INSTANTIATE_TEST_CASE_P(simple,
                             "data/models/simple/tri.iv",
                             "data/models/simple/triangleStripSet.iv"));
 INSTANTIATE_TEST_CASE_P(toys,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/toys/cannon.iv",
                             "data/models/toys/dart.iv",
@@ -216,7 +216,7 @@ INSTANTIATE_TEST_CASE_P(toys,
                             "data/models/toys/legoDog.iv",
                             "data/models/toys/top.iv"));
 INSTANTIATE_TEST_CASE_P(vehicules,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "data/models/vehicles/767.iv",
                             "data/models/vehicles/aircar.iv",
@@ -227,7 +227,7 @@ INSTANTIATE_TEST_CASE_P(vehicules,
                             "data/models/vehicles/spacestation.iv",
                             "data/models/vehicles/x29.iv"));
 INSTANTIATE_TEST_CASE_P(nurbs,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "ivtest/data/nurbs/Circle.iv",
                             "ivtest/data/nurbs/SoIndexedNurbsCurve.iv",
@@ -236,11 +236,11 @@ INSTANTIATE_TEST_CASE_P(nurbs,
                             "ivtest/data/nurbs/SoNurbsProfile.iv",
                             "ivtest/data/nurbs/SoNurbsSurface.iv"));
 INSTANTIATE_TEST_CASE_P(shapes,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "ivtest/data/shapes/creaseAngle.iv"));
 INSTANTIATE_TEST_CASE_P(draggers,
-                        ModelTest,
+                        ModelTest_GLCTX,
                         ::testing::Values(
                             "ivtest/data/draggers/CenterballDragger.iv",
                             "ivtest/data/draggers/DirectionalLightDragger.iv",
