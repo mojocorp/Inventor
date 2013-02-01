@@ -211,6 +211,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/engines/SoCounter.h \
            database/include/Inventor/engines/SoElapsedTime.h \
            database/include/Inventor/engines/SoEngine.h \
+           database/include/Inventor/engines/SoEngineOutput.h \
            database/include/Inventor/engines/SoEngines.h \
            database/include/Inventor/engines/SoFieldConverter.h \
            database/include/Inventor/engines/SoGate.h \
@@ -688,6 +689,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/engines/SoCounter.cpp \
            database/src/engines/SoElapsedTime.cpp \
            database/src/engines/SoEngine.cpp \
+           database/src/engines/SoEngineOutput.cpp \
            database/src/engines/SoEngineInit.cpp \
            database/src/engines/SoFieldConverter.cpp \
            database/src/engines/SoFieldConverters.cpp \
