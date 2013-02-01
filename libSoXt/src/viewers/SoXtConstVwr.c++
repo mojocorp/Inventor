@@ -58,6 +58,7 @@
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/Xt/viewers/SoXtConstrainedViewer.h>
 
+#include <math.h>
 
 /*
  * Defines
