@@ -9,7 +9,7 @@
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <Inventor/nodes/SoSeparator.h>
 
-TEST(testOffscreen, offscreen) {
+TEST(testOffscreen_GLCTX, offscreen) {
     SoSeparator * root = new SoSeparator;
     root->ref();
 
