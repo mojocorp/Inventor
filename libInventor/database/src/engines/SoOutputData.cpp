@@ -57,6 +57,7 @@
 #include <Inventor/engines/SoOutputData.h>
 #include <Inventor/engines/SoEngine.h>
 #include <Inventor/errors/SoDebugError.h>
+#include <cstddef>
 
 // Syntax for reading/writing type information to files
 #define OPEN_BRACE_CHAR		'['
@@ -71,9 +72,9 @@
 //////////////////////////////////////////////////////////////////////////////
 
 struct SoOutputEntry {
-    SbName      name;   // Name of output
-    ptrdiff_t   offset; // Offset of output within object
-    SoType      type;   // Type of output
+    SbName           name;   // Name of output
+    std::ptrdiff_t   offset; // Offset of output within object
+    SoType           type;   // Type of output
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -187,7 +188,7 @@ SoEngineOutputData::getIndex(const SoEngine *func,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    ptrdiff_t offset = (const char *) output - (const char *) func;
+    std::ptrdiff_t offset = (const char *) output - (const char *) func;
 
     // Loop through the list looking for the correct offset:
     // (we'll assume this won't be very slow, since the list will
