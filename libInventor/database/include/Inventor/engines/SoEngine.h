@@ -58,6 +58,7 @@
 #define  _SO_ENGINE_
 
 #include <Inventor/fields/SoFieldContainer.h>
+#include <Inventor/engines/SoEngineOutput.h>
 #include <Inventor/SoLists.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
@@ -203,82 +204,5 @@ private:
     SbBool  notifying;
     friend class SoEngineOutput;
 };
-
-/// Class for all engine outputs.
-/// \ingroup Engines
-/// <tt>SoEngineOuput</tt> is the class for all engine output fields.
-/// There is no public constructor routine for this class.
-/// Only the engine classes create instances of <tt>SoEngineOutput</tt>
-///
-///
-/// Each engine creates one or more engine outputs.
-/// The type of the output is documented in the engine reference pages.
-/// There is also an <tt>SoEngineOutput</tt>  method for querying
-/// the connection type.
-///
-///
-/// The application can at any time enable or disable the engine outputs.
-/// By default the engine outputs are enabled.
-/// \sa SoEngine
-class INVENTOR_API SoEngineOutput {
-
-public:
-    /// Returns the type of field this output can connect to.
-    SoType getConnectionType() const;
-
-    /// Returns the number of fields this output is writing to,
-    /// and adds pointers to those fields to the given list.
-    int getForwardConnections(SoFieldList &list) const;
-
-    /// Enables or disables all connections from this ouptut. If the
-    /// connections are disabled, values will not be output along them.
-    /// By default, outputs are enabled.
-    void enable(SbBool flag);
-
-    /// Returns TRUE if this output is currently enabled.
-    SbBool isEnabled() const {
-        return enabled;
-    }
-
-    /// Returns containing engine.
-    SoEngine * getContainer() const  {
-        return container;
-    }
-
-SoINTERNAL public:
-    SoEngineOutput();
-
-    virtual ~SoEngineOutput();
-
-    void setContainer(SoEngine *eng) {
-        container = eng;
-    }
-
-    // Adds/removes connection to field
-    void addConnection(SoField *);
-    void removeConnection(SoField *);
-
-    // Number of connections this output currently has
-    int getNumConnections() const {
-        return connections.getLength();
-    }
-
-    // Returns the fields this output is writing into
-    SoField * operator[](int i) const {
-        return connections.get(i);
-    }
-
-    // Before evaluating (which is done with the regular field API),
-    // we must disable notification on all the fields we're about to
-    // write into.  After evaluating, the bits are restored:
-    void prepareToWrite() const;
-    void doneWriting() const;
-
-private:
-    SbBool  enabled;
-    SoFieldList  connections;
-    SoEngine  *container;
-};
-
 #endif /* _SO_ENGINE_ */
 
