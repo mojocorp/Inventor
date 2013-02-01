@@ -60,6 +60,7 @@
 #include <Inventor/fields/SoField.h>
 #include <Inventor/fields/SoFieldData.h>
 #include <Inventor/nodes/SoNode.h>
+#include <cstddef>
 
 // Syntax for reading/writing type information to files
 #define OPEN_BRACE_CHAR		'['
@@ -83,8 +84,8 @@
 //////////////////////////////////////////////////////////////////////////////
 
 struct SoFieldEntry {
-    SbName		name;		// Name of field
-    ptrdiff_t		offset;		// Offset of field within object
+    SbName         name;   // Name of field
+    std::ptrdiff_t offset; // Offset of field within object
 };
 
 struct SoEnumEntry {
