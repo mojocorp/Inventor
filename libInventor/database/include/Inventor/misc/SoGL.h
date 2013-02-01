@@ -11,9 +11,5 @@
 #   include <GL/glu.h>
 #endif
 
-#ifdef SB_HAS_X11
-#   include <GL/glx.h>
-#endif
-
 #endif /* _SO_GL_ */
 
