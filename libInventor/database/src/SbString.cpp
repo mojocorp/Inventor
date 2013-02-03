@@ -218,7 +218,7 @@ SbString::toStdWString () const
     wstr.resize(wlen);
     MultiByteToWideChar(CP_UTF8, 0, string, -1, (LPWSTR)wstr.data(), (int)wstr.length());
 #else
-    setlocale(LC_CTYPE, "en_US.UTF-8");
+    setlocale(LC_CTYPE, !getenv("LANG") ? "en_US.UTF-8" : "");
     size_t wlen = mbstowcs(NULL, string, 0);
     wstr.resize(wlen);
     mbstowcs((wchar_t*)wstr.data(), string, wlen+1);
@@ -425,7 +425,7 @@ SbString::fromWideChar(const wchar_t *wcs, int size)
 
     WideCharToMultiByte(CP_UTF8, 0, wcs, -1, str.string, (int)len+1, NULL, NULL);
 #else
-    setlocale(LC_CTYPE, "en_US.UTF-8");
+    setlocale(LC_CTYPE, "C.UTF-8") || setlocale(LC_CTYPE, "en_US.UTF-8");
     size_t len = (size == -1) ? wcstombs(NULL, wcs, 0) : size;
     str.expand(len);
     wcstombs(str.string, wcs, len+1);
