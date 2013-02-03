@@ -56,18 +56,18 @@ TEST(SbString, Find) {
     SbString str ("There are two needles in this haystack with needles.");
     SbString str2 ("needle");
 
-    EXPECT_EQ(str.find(str2), 14);
-    EXPECT_EQ(str.find("needles",15), 44);
-    EXPECT_EQ(str.find("There", 14), -1);
+    EXPECT_EQ(14, str.find(str2));
+    EXPECT_EQ(44, str.find("needles",15));
+    EXPECT_EQ(-1, str.find("There", 14));
 }
 
 TEST(SbString, Rfind) {
     SbString str ("There are two needles in this haystack with needles.");
     SbString str2 ("needle");
 
-    EXPECT_EQ(str.rfind(str2), 44);
-    EXPECT_EQ(str.rfind("needles",43), 14);
-    EXPECT_EQ(str.rfind("haystack", 14), -1);
+    EXPECT_EQ(44, str.rfind(str2));
+    EXPECT_EQ(14, str.rfind("needles",43));
+    EXPECT_EQ(-1, str.rfind("haystack", 14));
 }
 
 TEST(SbString, Operators) {
@@ -102,12 +102,12 @@ TEST(SbString, UTF8) {
     SbString string2 = SbString::fromUtf8("Kl\303\274ft skr\303\244ms inf\303\266r ");
     SbString string3 = SbString::fromUtf8("p\303\245 f\303\251d\303\251ral \303\251lectoral gro\303\237e");
 
-    EXPECT_EQ(string1.getLength(), 45);
-    EXPECT_EQ(string2.getLength(), 19);
-    EXPECT_EQ(string3.getLength(), 26);
+    EXPECT_EQ(45, string1.getLength());
+    EXPECT_EQ(19, string2.getLength());
+    EXPECT_EQ(26, string3.getLength());
 
     SbString string4 = string2 + string3;
-    EXPECT_EQ(string4.getLength(), 45);
+    EXPECT_EQ(45, string4.getLength());
 
     EXPECT_TRUE(string1 == string4);
 }
@@ -143,12 +143,12 @@ TEST(SbString, WideChar) {
     SbString string2 = SbString::fromWideChar(L"Hello ");
     SbString string3 = SbString::fromWideChar(L"World");
 
-    EXPECT_EQ(string1.getLength(), 11);
-    EXPECT_EQ(string2.getLength(), 6);
-    EXPECT_EQ(string3.getLength(), 5);
+    EXPECT_EQ(11, string1.getLength());
+    EXPECT_EQ(6, string2.getLength());
+    EXPECT_EQ(5, string3.getLength());
 
     SbString string4 = string2 + string3;
-    EXPECT_EQ(string4.getLength(), 11);
+    EXPECT_EQ(11, string4.getLength());
 
     EXPECT_TRUE(string1 == string4);
 
@@ -168,7 +168,7 @@ TEST(SbString, WideChar) {
 
     // Japaneese: the quick brown fox jumped over the lazy dog
     SbString string8 = SbString::fromUtf8("\351\200\237\343\201\204\350\214\266\350\211\262\343\201\256\343\202\255\343\203\204\343\203\215\343\201\257\346\200\240\346\203\260\343\201\252\347\212\254\345\242\227\344\273\245\344\270\212");
-    EXPECT_TRUE(string8.getLength() == 16);
+    EXPECT_EQ(16, string8.getLength());
     stdstring = string8.toStdWString();
-    EXPECT_TRUE(stdstring.length() == 16);
+    EXPECT_EQ(16, stdstring.length());
 }
