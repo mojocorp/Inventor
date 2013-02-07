@@ -68,22 +68,20 @@
 // Use: public
 
 SoTextureCoordinateBundle::SoTextureCoordinateBundle(SoAction *action,
-						     SbBool forRendering,
-						     SbBool setUpDefault) :
-	SoBundle(action)
-//
-////////////////////////////////////////////////////////////////////////
+                                                     SbBool forRendering,
+                                                     SbBool setUpDefault) :
+    SoBundle(action)
+  //
+  ////////////////////////////////////////////////////////////////////////
 {
     isRendering = forRendering;
-    //??? When Gavin gets back, he can explain if tCoords is really needed:
-    tCoords = NULL;
 
     setFunction = FALSE;
 
     if (isRendering)
-	setUpForGLRender(action);
+        setUpForGLRender(action);
     else
-	setUpForPrimGen(action, setUpDefault);
+        setUpForPrimGen(action, setUpDefault);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -109,7 +107,7 @@ SoTextureCoordinateBundle::~SoTextureCoordinateBundle()
 
 void
 SoTextureCoordinateBundle::setUpForPrimGen(SoAction *action,
-					   SbBool setUpDefault)
+                                           SbBool setUpDefault)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -121,33 +119,33 @@ SoTextureCoordinateBundle::setUpForPrimGen(SoAction *action,
 
     switch (texCoordElt->getType()) {
 
-      case SoTextureCoordinateElement::EXPLICIT:
-	if (texCoordElt->getNum() < 1) {
-	    // Don't bother computing the function if not requested
-	    if (setUpDefault) {
-		// Set up a texture coordinate function that compute the
-		// texture coordinates. We need to do this through the
-		// element so the state can be restored correctly.
-		state->push();
-		SoNode *currentNode = action->getCurPathTail();	
-		SoTextureCoordinateElement::setFunction(state, currentNode,
-							generateCoord, this);
-		// Get the new instance in here
-		texCoordElt = SoTextureCoordinateElement::getInstance(state);
+    case SoTextureCoordinateElement::EXPLICIT:
+        if (texCoordElt->getNum() < 1) {
+            // Don't bother computing the function if not requested
+            if (setUpDefault) {
+                // Set up a texture coordinate function that compute the
+                // texture coordinates. We need to do this through the
+                // element so the state can be restored correctly.
+                state->push();
+                SoNode *currentNode = action->getCurPathTail();
+                SoTextureCoordinateElement::setFunction(state, currentNode,
+                                                        generateCoord, this);
+                // Get the new instance in here
+                texCoordElt = SoTextureCoordinateElement::getInstance(state);
 
-		setUpDefaultCoordSpace(action);
+                setUpDefaultCoordSpace(action);
 
-		setFunction = TRUE;
-	    }
-	    isFunc = TRUE;
-	} else {
-	    isFunc = FALSE;
-	}
-	break;
+                setFunction = TRUE;
+            }
+            isFunc = TRUE;
+        } else {
+            isFunc = FALSE;
+        }
+        break;
 
-      case SoTextureCoordinateElement::FUNCTION:
-	isFunc = TRUE;
-	break;
+    case SoTextureCoordinateElement::FUNCTION:
+        isFunc = TRUE;
+        break;
     }
 }
 
@@ -164,60 +162,57 @@ SoTextureCoordinateBundle::setUpForGLRender(SoAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     if (! SoGLTextureEnabledElement::get(action->getState()))
-	needCoords = isFunc = FALSE;
+        needCoords = isFunc = FALSE;
 
     else {
-	// Access a GL version of the element for sending texture
-	// coordinates to GL
-	texCoordElt   = SoTextureCoordinateElement::getInstance(state);
-	GLTexCoordElt = (const SoGLTextureCoordinateElement *) texCoordElt;
+        // Access a GL version of the element for sending texture
+        // coordinates to GL
+        texCoordElt   = SoTextureCoordinateElement::getInstance(state);
+        GLTexCoordElt = (const SoGLTextureCoordinateElement *) texCoordElt;
 
-	switch (GLTexCoordElt->getType()) {
+        switch (GLTexCoordElt->getType()) {
 
-	  case SoGLTextureCoordinateElement::EXPLICIT:
-	    if (GLTexCoordElt->getNum() > 0) {
-		needCoords = TRUE;
-		isFunc     = FALSE;
-	    } else {
-		// Set up the default coordinate function before it is
-		// used by the SoGLTextureCoordinateElement
-		setUpDefaultCoordSpace(action);
+        case SoGLTextureCoordinateElement::EXPLICIT:
+            if (GLTexCoordElt->getNum() > 0) {
+                needCoords = TRUE;
+                isFunc     = FALSE;
+            } else {
+                // Set up the default coordinate function before it is
+                // used by the SoGLTextureCoordinateElement
+                setUpDefaultCoordSpace(action);
 
-		// Set up a texture coordinate function that will do the
-		// correct tex gen stuff. We need to do this through the
-		// element so the state can be restored correctly.
-		state->push();
-		setFunction = TRUE;
-		SoNode *currentNode = action->getCurPathTail();
-		SoGLTextureCoordinateElement::
-		    setTexGen(state, currentNode, setUpTexGen, this,
-			      generateCoord, this);
+                // Set up a texture coordinate function that will do the
+                // correct tex gen stuff. We need to do this through the
+                // element so the state can be restored correctly.
+                state->push();
+                setFunction = TRUE;
+                SoNode *currentNode = action->getCurPathTail();
+                SoGLTextureCoordinateElement::setTexGen(state, currentNode, setUpTexGen, this, generateCoord, this);
 
-		// Get the new instance in here
-		texCoordElt   = SoTextureCoordinateElement::getInstance(state);
-		GLTexCoordElt = (const SoGLTextureCoordinateElement *)
-		    texCoordElt;
+                // Get the new instance in here
+                texCoordElt   = SoTextureCoordinateElement::getInstance(state);
+                GLTexCoordElt = (const SoGLTextureCoordinateElement *)texCoordElt;
 
 
-		// No longer need coordinates, since texgen does the job
-		needCoords = FALSE;
+                // No longer need coordinates, since texgen does the job
+                needCoords = FALSE;
 
-		// Set this flag to TRUE so that if we are using primitive
-		// generation to do the rendering, we can tell that we
-		// have a function to use
-		isFunc = TRUE;
-	    }
-	    break;
+                // Set this flag to TRUE so that if we are using primitive
+                // generation to do the rendering, we can tell that we
+                // have a function to use
+                isFunc = TRUE;
+            }
+            break;
 
-	  case SoGLTextureCoordinateElement::FUNCTION:
+        case SoGLTextureCoordinateElement::FUNCTION:
 #ifdef DEBUG
-	    SoDebugError::post(
-		"SoTextureCoordinateBundle::setUpForGLRender",
-		"GLTextureCoordinateElement is FUNCTION!");
+            SoDebugError::post(
+                        "SoTextureCoordinateBundle::setUpForGLRender",
+                        "GLTextureCoordinateElement is FUNCTION!");
 #endif
-	    needCoords = isFunc = FALSE;
-	    break;
-	}
+            needCoords = isFunc = FALSE;
+            break;
+        }
     }
 }
 
@@ -242,9 +237,8 @@ SoTextureCoordinateBundle::setUpDefaultCoordSpace(SoAction *action)
     SoNode *tail = action->getCurPathTail();
 #ifdef DEBUG
     if (!tail->isOfType(SoShape::getClassTypeId())) {
-	SoDebugError::post(
-	    "SoTextureCoordinateBundle::setUpDefaultCoordSpace",
-	    "Tail of path is not a shape node!");
+        SoDebugError::post("SoTextureCoordinateBundle::setUpDefaultCoordSpace",
+                           "Tail of path is not a shape node!");
     }
 #endif
     SoShape *shape = (SoShape *)tail;
@@ -253,21 +247,21 @@ SoTextureCoordinateBundle::setUpDefaultCoordSpace(SoAction *action)
     SbVec3f center;
     shape->computeBBox(action, box, center);
 
-    const SbVec3f	&min    = box.getMin();
-    SbVec3f		boxSize = box.getMax() - min;
+    const SbVec3f &min = box.getMin();
+    SbVec3f boxSize = box.getMax() - min;
 
     // Look for the largest two dimensions of the box
     if (boxSize[0] > boxSize[1] && boxSize[0] > boxSize[2]) {
-	coordS = 0;
-	coordT = boxSize[1] > boxSize[2] ? 1 : 2;
+        coordS = 0;
+        coordT = boxSize[1] > boxSize[2] ? 1 : 2;
     }
     else if (boxSize[1] > boxSize[2]) {
-	coordS = 1;
-	coordT = boxSize[0] > boxSize[2] ? 0 : 2;
+        coordS = 1;
+        coordT = boxSize[0] > boxSize[2] ? 0 : 2;
     }
     else {
-	coordS = 2;
-	coordT = boxSize[0] > boxSize[1] ? 0 : 1;
+        coordS = 2;
+        coordT = boxSize[0] > boxSize[1] ? 0 : 1;
     }
 
     // Set up vectors for S and T coordinates. The length of the
@@ -291,8 +285,8 @@ SoTextureCoordinateBundle::setUpDefaultCoordSpace(SoAction *action)
 
 const SbVec4f &
 SoTextureCoordinateBundle::generateCoord(void *userData,
-					 const SbVec3f &point,
-					 const SbVec3f & /* normal */)
+                                         const SbVec3f &point,
+                                         const SbVec3f & /* normal */)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -309,9 +303,9 @@ SoTextureCoordinateBundle::generateCoord(void *userData,
 
 
     result.setValue(point[sDim] * tcb->sVector[sDim] + tcb->sVector[3],
-		    point[tDim] * tcb->tVector[tDim] + tcb->tVector[3],
-		    0.0,
-		    1.0);
+            point[tDim] * tcb->tVector[tDim] + tcb->tVector[3],
+            0.0,
+            1.0);
 
     return result;
 }

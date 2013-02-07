@@ -81,14 +81,13 @@
 //
 typedef void SoTexCoordTexgenCB(void *userdata);
 
-SoEXTENDER class INVENTOR_API SoGLTextureCoordinateElement :
-				public SoTextureCoordinateElement {
+SoEXTENDER class INVENTOR_API SoGLTextureCoordinateElement : public SoTextureCoordinateElement {
 
     SO_ELEMENT_HEADER(SoGLTextureCoordinateElement);
 
   public:
     /// Initializes element.
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     /// TextureCoordinateFunction nodes that use texgen must define and
     /// register a callback that makes the appropriate GL calls.
@@ -99,13 +98,13 @@ SoEXTENDER class INVENTOR_API SoGLTextureCoordinateElement :
     /// function that will return the results of the texgen function
     /// (needed because some nodes render by using their
     /// generatePrimitives method).
-    static void		setTexGen(SoState *state, SoNode *node, 
-	    SoTexCoordTexgenCB *texGenFunc, void *texGenData = NULL,
-	    SoTextureCoordinateFunctionCB *func = NULL,
-	    void *funcData = NULL);
+    static void setTexGen(SoState *state, SoNode *node,
+                          SoTexCoordTexgenCB *texGenFunc, void *texGenData = NULL,
+                          SoTextureCoordinateFunctionCB *func = NULL,
+                          void *funcData = NULL);
 
     /// Returns code indicating what has been set in state/element
-    virtual CoordType	getType() const;
+    virtual CoordType getType() const;
 
     /// Returns the top (current) instance of the element in the state.
     /// The send routines are called on an instance
@@ -114,28 +113,27 @@ SoEXTENDER class INVENTOR_API SoGLTextureCoordinateElement :
     static const SoGLTextureCoordinateElement * getInstance(SoState *state);
 
     /// Send routine for EXPLICIT case:
-    void		send(int index) const;
+    void send(int index) const;
 
     /// Override push() method to set up new instance
-    virtual void	push(SoState *state);
+    virtual void push(SoState *state);
 
     /// Override pop() method to maintain GL state
-    virtual void	pop(SoState *state, const SoElement *prevTopElement);
+    virtual void pop(SoState *state, const SoElement *prevTopElement);
 
   SoINTERNAL public:
     // Initializes the SoGLTextureCoordinateElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
-    void	setElt(SoTexCoordTexgenCB *function,
-		       void *userData = NULL);
+    void setElt(SoTexCoordTexgenCB *function, void *userData = NULL);
 
     virtual ~SoGLTextureCoordinateElement();
 
   private:
-    SoTexCoordTexgenCB	*texgenCB;
-    void		*texgenCBData;
-    SoState 		*copiedFromParent;
+    SoTexCoordTexgenCB  *texgenCB;
+    void                *texgenCBData;
+    SoState             *copiedFromParent;
 };
 
 #endif /* _SO_GL_TEXTURE_COORDINATE_ELEMENT */
