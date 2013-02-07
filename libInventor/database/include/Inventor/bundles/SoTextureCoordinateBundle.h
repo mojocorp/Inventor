@@ -118,16 +118,14 @@ public:
 
     /// Returns texture coordinate computed by function during
     /// primitive generation or rendering
-    SbVec4f  get(const SbVec3f &point, const SbVec3f &normal) const {
+    const SbVec4f & get(const SbVec3f &point, const SbVec3f &normal) const {
         return texCoordElt->get(point, normal);
     }
 
     /// Returns indexed texture coordinate during primitive generation
     /// or rendering
-    SbVec4f get(int index) const {
-        if (tCoords) return(SbVec4f(tCoords[index][0],tCoords[index][1],
-                                        0.0, 1.0));
-        else return texCoordElt->get4(index);
+    const SbVec4f & get(int index) const {
+        return texCoordElt->get4(index);
     }
 
     /// Sends indexed texture coordinate to GL during rendering
@@ -150,12 +148,9 @@ private:
     int   coordS, coordT;
     // These hold the vectors used for default texture coordinate generation
     SbVec4f  sVector, tVector;
-    // This holds the texture coords from a vertexProperty node:
-    const SbVec2f * tCoords;
 
     // Sets up bundle for primitive generation or rendering
-    void setUpForPrimGen(SoAction *action,
-                         SbBool setUpDefault);
+    void setUpForPrimGen(SoAction *action, SbBool setUpDefault);
     void setUpForGLRender(SoAction *action);
 
     // Sets up for default texture coordinate generation
