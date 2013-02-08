@@ -31,6 +31,7 @@ DEPENDPATH += database \
               database/src/upgraders
 
 INCLUDEPATH += database/src/engines \
+               database/src/opengl \
                database/include/Inventor/misc
 
 
@@ -462,6 +463,8 @@ PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
            database/src/engines/SoEngineUtil.h \
            database/src/engines/SoFieldConverters.h \
            database/src/fields/SoGlobalField.h \
+           database/src/opengl/SbGLContext.h \
+           database/src/opengl/SbGLFramebufferObject.h \
            database/src/upgraders/SoUpgraders.h \
            database/src/upgraders/SoV1DrawStyle.h \
            database/src/upgraders/SoV1Environment.h \
@@ -556,6 +559,8 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/SoTempPath.cpp \
            database/src/SoTranscribe.cpp \
            database/src/SoType.cpp \
+           database/src/opengl/SbGLContext.cpp \
+           database/src/opengl/SbGLFramebufferObject.cpp \
            database/src/projectors/SbCylinderPlaneProjector.cpp \
            database/src/projectors/SbCylinderProjector.cpp \
            database/src/projectors/SbCylinderSectionProjector.cpp \
