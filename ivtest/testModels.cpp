@@ -46,8 +46,8 @@ protected:
         SoOffscreenRenderer offscreenRenderer(vpRegion);
 
         EXPECT_TRUE(offscreenRenderer.render(root));
-
-        QImage img = QImage(offscreenRenderer.getBuffer(), 640, 480, QImage::Format_RGB888).convertToFormat(QImage::Format_RGB32).mirrored();
+        const SbImage & offsceen = offscreenRenderer.getImage();
+        QImage img = QImage(offsceen.getConstBytes(), 640, 480, QImage::Format_RGB888).convertToFormat(QImage::Format_RGB32).mirrored();
         //img.save(dst.fileName());
         if (!dst.exists()) {
             img.save(dst.filePath());

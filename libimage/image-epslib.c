@@ -12,7 +12,7 @@ int putHex(FILE *fp, char val, int hexPos )
     return hexPos;
 }
 
-int writeEps(FILE * fp, int w, int h, int nc, unsigned char * bytes, float px, float py)
+int writeEps(FILE * fp, int w, int h, int nc, const unsigned char * bytes, float px, float py)
 {
     int numValues, hexpos, row, i;
     unsigned char * ptr;

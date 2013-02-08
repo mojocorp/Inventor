@@ -7,7 +7,7 @@
 extern "C" {
 #endif
 
-int writeEps(FILE * fp, int w, int h, int nc, unsigned char * bytes, float px, float py);
+int writeEps(FILE * fp, int w, int h, int nc, const unsigned char * bytes, float px, float py);
 
 #ifdef __cplusplus
 }
