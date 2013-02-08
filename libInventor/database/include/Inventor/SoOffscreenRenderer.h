@@ -64,7 +64,9 @@
 #include <Inventor/SbColor.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SbVec2s.h>
+#include <Inventor/SbImage.h>
 
+class SoBase;
 class SoNode;
 class SoPath;
 class SoGLRenderAction;
@@ -90,10 +92,10 @@ public:
     ~SoOffscreenRenderer();
 
     enum Components {
-        LUMINANCE = 1,
-        LUMINANCE_TRANSPARENCY = 2,
-        RGB = 3,                      // The default
-        RGB_TRANSPARENCY = 4
+        LUMINANCE              = SbImage::Format_Luminance,
+        LUMINANCE_TRANSPARENCY = SbImage::Format_Luminance_Alpha,
+        RGB                    = SbImage::Format_RGB24, // The default
+        RGB_TRANSPARENCY       = SbImage::Format_RGBA32
     };
 
     /// Returns the number of pixels per inch (in the horizontal direction) of
@@ -145,6 +147,9 @@ public:
     /// Renders the given scene, specified as a node or a path, into an off-screen buffer.
     SbBool render( SoPath *scene );
 
+    /// Returns the SbImage containing the rendered image.
+    const SbImage & getImage() const;
+
     /// Returns the buffer containing the rendered image.  The buffer is an
     /// array of unsigned characters.  Each pixel is stored sequentially by
     /// scanline, starting with the lower left corner.  The data stored for
@@ -152,7 +157,7 @@ public:
     /// Pixels are stored in RGBA order and are packed without any padding
     /// between pixels or scanlines.  The buffer is allocated by the offscreen
     /// renderer class and the space is deleted when the instance is destructed.
-    unsigned char * getBuffer() const;
+    const unsigned char * getBuffer() const;
 
     /// Writes the buffer as a .rgb file to the given file pointer.
     SbBool writeToRGB( FILE *fp ) const;
@@ -164,27 +169,14 @@ public:
     SbBool writeToPostScript( FILE *fp, const SbVec2f &printSize ) const;
 
 private:
-    unsigned char *     pixelBuffer;
     Components          comps;
     SbColor             backgroundColor;
-    SbVec2s             vpSize;
-    SoGLRenderAction *userAction, *offAction;
+    SoGLRenderAction   *userAction, *offAction;
     uint32_t            cacheContext;
-    SbViewportRegion    renderedViewport;
-    GLuint              framebuffer;
-    GLuint              renderbuffer;
-    GLuint              depthbuffer;
+    SbImage             framebuffer;
+    class SbGLContext  *ctx;
 
-    class SoOffscreenRendererInternal* internal;
-
-    // Setup the framebuffer
-    bool resize(const SbVec2s & size);
-
-    // Read pixels back from the Pixmap
-    void readPixels();
-
-    // Return the format used in the rendering
-    GLenum getFormat() const;
+    bool renderGeneric( SoBase *base );
 };
 
 #endif /* _SO_OFFSCREEN_RENDERER_ */

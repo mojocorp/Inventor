@@ -28,12 +28,25 @@ TEST(testOffscreen_GLCTX, offscreen) {
     SbViewportRegion vpRegion(400, 300);
     SoOffscreenRenderer offscreenRenderer(vpRegion);
 
-    EXPECT_TRUE(offscreenRenderer.render(root));
+    {
+        EXPECT_TRUE(offscreenRenderer.render(root));
 
+        QImage ref(":/ivtest/baseline/offscreen/cube400x300.png");
+        QImage img = QImage(offscreenRenderer.getImage().getConstBytes(), 400, 300, QImage::Format_RGB888).mirrored();
+
+        EXPECT_IMG_EQ(ref, img);
+    }
+
+    {
+        offscreenRenderer.setViewportRegion(SbViewportRegion(800,600));
+        EXPECT_TRUE(offscreenRenderer.render(root));
+
+        QImage ref(":/ivtest/baseline/offscreen/cube800x600.png");
+        QImage img = QImage(offscreenRenderer.getImage().getConstBytes(), 800, 600, QImage::Format_RGB888).mirrored();
+
+        EXPECT_IMG_EQ(ref, img);
+    }
     root->unref();
 
-    QImage ref(":/ivtest/baseline/offscreen/cube.png");
-    QImage img = QImage(offscreenRenderer.getBuffer(), 400, 300, QImage::Format_RGB888).mirrored();
 
-    EXPECT_IMG_EQ(ref, img);
 }
