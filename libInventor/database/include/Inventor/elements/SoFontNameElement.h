@@ -96,7 +96,7 @@ public:
     virtual void print(FILE *fp) const;
 
 SoINTERNAL public:
-    // Initializes the SoNormalBindingElement class
+    // Initializes the SoFontNameElement class
     static void initClass();
 
 protected:

@@ -89,6 +89,7 @@
 #include <Inventor/elements/SoGLPolygonOffsetElement.h>
 #include <Inventor/elements/SoGLProjectionMatrixElement.h>
 #include <Inventor/elements/SoGLRenderPassElement.h>
+#include <Inventor/elements/SoGLShaderProgramElement.h>
 #include <Inventor/elements/SoGLShapeHintsElement.h>
 #include <Inventor/elements/SoGLTextureCoordinateElement.h>
 #include <Inventor/elements/SoGLTextureCoordinate3Element.h>
@@ -96,6 +97,7 @@
 #include <Inventor/elements/SoGLTextureImageElement.h>
 #include <Inventor/elements/SoGLTextureMatrixElement.h>
 #include <Inventor/elements/SoGLTextureUnitElement.h>
+#include <Inventor/elements/SoGLUniformElement.h>
 #include <Inventor/elements/SoGLUpdateAreaElement.h>
 #include <Inventor/elements/SoGLViewingMatrixElement.h>
 #include <Inventor/elements/SoGLViewportRegionElement.h>

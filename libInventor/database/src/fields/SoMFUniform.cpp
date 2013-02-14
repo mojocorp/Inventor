@@ -1,0 +1,125 @@
+#include <Inventor/fields/SoMFUniform.h>
+#include <stdlib.h>
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// SoMFUniform class
+//
+//////////////////////////////////////////////////////////////////////////////
+
+// Use standard definitions of all basic methods
+SO_MFIELD_SOURCE_MALLOC(SoMFUniform, SbUniform, const SbUniform &);
+SO_MFIELD_SETVALUESPOINTER_SOURCE(SoMFUniform, SbUniform, SbUniform);
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoMFUniform class.
+//
+// Use: internal
+
+void
+SoMFUniform::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFUniform, "MFUniform", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Sets one vector value from 2 separate floats. (Convenience function)
+//
+// Use: public
+
+void
+SoMFUniform::set1Value(int index, float x, float y)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    set1Value(index, SbUniform(x, y));
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Sets to one vector value from 2 separate floats. (Convenience function)
+//
+// Use: public
+
+void
+SoMFUniform::setValue(float x, float y)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    setValue(SbUniform(x, y));
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Reads one (indexed) value from file. Returns FALSE on error.
+//
+// Use: private
+
+SbBool
+SoMFUniform::read1Value(SoInput *in, int index)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return (in->read(values[index][0]) &&
+	    in->read(values[index][1]));
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Writes one (indexed) value to file.
+//
+// Use: private
+
+void
+SoMFUniform::write1Value(SoOutput *out, int index) const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    out->write(values[index][0]);
+
+    if (! out->isBinary())
+	out->write(' ');
+
+    out->write(values[index][1]);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Writes array of binary values to file as one chunk.
+//
+// Use: private
+
+void
+SoMFUniform::writeBinaryValues(SoOutput *out) const
+
+//
+////////////////////////////////////////////////////////////////////////
+{
+    out->writeBinaryArray((float *) values, 2 * num);
+}
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Reads array of binary values from file as one chunk.
+//
+// Use: private
+
+SbBool
+SoMFUniform::readBinaryValues(SoInput *in, int numToRead)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return (in->readBinaryArray((float *) values, 2 * numToRead));
+}

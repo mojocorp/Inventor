@@ -77,6 +77,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/SbPList.h \
            database/include/Inventor/SbString.h \
            database/include/Inventor/SbTime.h \
+           database/include/Inventor/SbUniform.h \
            database/include/Inventor/SbViewportRegion.h \
            database/include/Inventor/So.h \
            database/include/Inventor/SoDB.h \
@@ -158,12 +159,14 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoGLProjectionMatrixElement.h \
            database/include/Inventor/elements/SoGLRenderPassElement.h \
            database/include/Inventor/elements/SoGLShapeHintsElement.h \
+           database/include/Inventor/elements/SoGLShaderProgramElement.h \
            database/include/Inventor/elements/SoGLTextureCoordinateElement.h \
            database/include/Inventor/elements/SoGLTextureEnabledElement.h \
            database/include/Inventor/elements/SoGLTextureImageElement.h \
            database/include/Inventor/elements/SoGLTextureMatrixElement.h \
            database/include/Inventor/elements/SoGLTextureCoordinate3Element.h \
            database/include/Inventor/elements/SoGLTextureUnitElement.h \
+           database/include/Inventor/elements/SoGLUniformElement.h \
            database/include/Inventor/elements/SoGLUpdateAreaElement.h \
            database/include/Inventor/elements/SoGLViewingMatrixElement.h \
            database/include/Inventor/elements/SoGLViewportRegionElement.h \
@@ -266,6 +269,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/fields/SoMFString.h \
            database/include/Inventor/fields/SoMFTime.h \
            database/include/Inventor/fields/SoMFUInt32.h \
+           database/include/Inventor/fields/SoMFUniform.h \
            database/include/Inventor/fields/SoMFUShort.h \
            database/include/Inventor/fields/SoMFVec2f.h \
            database/include/Inventor/fields/SoMFVec3f.h \
@@ -396,6 +400,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/nodes/SoRotor.h \
            database/include/Inventor/nodes/SoScale.h \
            database/include/Inventor/nodes/SoSeparator.h \
+           database/include/Inventor/nodes/SoShaderProgram.h \
            database/include/Inventor/nodes/SoShape.h \
            database/include/Inventor/nodes/SoShapeHints.h \
            database/include/Inventor/nodes/SoShuttle.h \
@@ -466,6 +471,8 @@ PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
            database/src/fields/SoGlobalField.h \
            database/src/opengl/SbGLContext.h \
            database/src/opengl/SbGLFramebufferObject.h \
+           database/src/opengl/SbGLShader.h \
+           database/src/opengl/SbGLShaderProgram.h \
            database/src/upgraders/SoUpgraders.h \
            database/src/upgraders/SoV1DrawStyle.h \
            database/src/upgraders/SoV1Environment.h \
@@ -519,6 +526,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/SbSphere.cpp \
            database/src/SbString.cpp \
            database/src/SbTime.cpp \
+           database/src/SbUniform.cpp \
            database/src/SbVec2f.cpp \
            database/src/SbVec2s.cpp \
            database/src/SbVec2i32.cpp \
@@ -562,6 +570,8 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/SoType.cpp \
            database/src/opengl/SbGLContext.cpp \
            database/src/opengl/SbGLFramebufferObject.cpp \
+           database/src/opengl/SbGLShader.cpp \
+           database/src/opengl/SbGLShaderProgram.cpp \
            database/src/projectors/SbCylinderPlaneProjector.cpp \
            database/src/projectors/SbCylinderProjector.cpp \
            database/src/projectors/SbCylinderSectionProjector.cpp \
@@ -640,6 +650,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/elements/SoGLPolygonOffsetElement.cpp \
            database/src/elements/SoGLProjectionMatrixElement.cpp \
            database/src/elements/SoGLRenderPassElement.cpp \
+           database/src/elements/SoGLShaderProgramElement.cpp \
            database/src/elements/SoGLShapeHintsElement.cpp \
            database/src/elements/SoGLTextureCoordinateElement.cpp \
            database/src/elements/SoGLTextureEnabledElement.cpp \
@@ -647,6 +658,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/elements/SoGLTextureMatrixElement.cpp \
            database/src/elements/SoGLTextureCoordinate3Element.cpp \
            database/src/elements/SoGLTextureUnitElement.cpp \
+           database/src/elements/SoGLUniformElement.cpp \
            database/src/elements/SoGLUpdateAreaElement.cpp \
            database/src/elements/SoGLViewingMatrixElement.cpp \
            database/src/elements/SoGLViewportRegionElement.cpp \
@@ -749,6 +761,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/fields/SoMFString.cpp \
            database/src/fields/SoMFTime.cpp \
            database/src/fields/SoMFUInt32.cpp \
+           database/src/fields/SoMFUniform.cpp \
            database/src/fields/SoMFUShort.cpp \
            database/src/fields/SoMFVec2f.cpp \
            database/src/fields/SoMFVec3f.cpp \
@@ -852,6 +865,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/nodes/SoRotor.cpp \
            database/src/nodes/SoScale.cpp \
            database/src/nodes/SoSeparator.cpp \
+           database/src/nodes/SoShaderProgram.cpp \
            database/src/nodes/SoShape.cpp \
            database/src/nodes/SoShapeHints.cpp \
            database/src/nodes/SoShuttle.cpp \

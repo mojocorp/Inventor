@@ -141,6 +141,8 @@ SoNode::initClasses()
     SoRotation::initClass();
     SoRotationXYZ::initClass();
     SoScale::initClass();
+    SoShaderParameter::initClass();
+    SoShaderProgram::initClass();
     SoShapeHints::initClass();
     SoSphere::initClass();
     SoSpotLight::initClass();

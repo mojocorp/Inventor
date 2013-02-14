@@ -1,0 +1,35 @@
+#Inventor V2.1 ascii
+
+Separator {
+	TextureUnit {
+        unit 0
+    }
+    Texture2 {
+	    filename "../../../data/textures/crate.jpg"
+    }
+	TextureUnit {
+        unit 1
+    }
+	Texture2 {
+	    filename "../../../data/textures/checker.jpg"
+    }
+    SoShaderProgram {
+        vertex "void main(void)
+                {
+				   gl_TexCoord[0] = gl_MultiTexCoord0;
+                   gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;
+                }"
+
+        fragment "uniform sampler2D tex0;
+				  uniform sampler2D tex1;
+
+                  void main()
+                 {
+					vec4 t0 = texture2D(tex0, gl_TexCoord[0].st);
+					vec4 t1 = texture2D(tex1, gl_TexCoord[0].st);
+					gl_FragColor = mix(t0, t1, 0.3);
+                 }"
+    }
+    Cube {
+    }
+}

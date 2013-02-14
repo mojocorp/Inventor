@@ -136,6 +136,7 @@ SoElement::initElements()
     SoGLPolygonOffsetElement::initClass();
     SoGLProjectionMatrixElement::initClass();
     SoGLRenderPassElement::initClass();
+    SoGLShaderProgramElement::initClass();
     SoGLShapeHintsElement::initClass();
     SoGLTextureCoordinateElement::initClass();
     SoGLTextureCoordinate3Element::initClass();
@@ -143,6 +144,7 @@ SoElement::initElements()
     SoGLTextureImageElement::initClass();
     SoGLTextureMatrixElement::initClass();
     SoGLTextureUnitElement::initClass();
+    SoGLUniformElement::initClass();
     SoGLUpdateAreaElement::initClass();
     SoGLViewingMatrixElement::initClass();
     SoGLViewportRegionElement::initClass();
