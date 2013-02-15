@@ -206,7 +206,7 @@ SoNurbsCurve::generatePrimitives(SoAction *action)
 
     gluDeleteNurbsRenderer( theNurb );
 
-    for (int i=0; i<data.vertices.size()-1; i+=2) {
+    for (size_t i=0; i<data.vertices.size()-1; i+=2) {
         SoPrimitiveVertex pv[2];
         pv[0].setPoint(data.vertices[i]);
         pv[1].setPoint(data.vertices[i+1]);

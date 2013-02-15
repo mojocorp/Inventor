@@ -199,7 +199,7 @@ SoType::fromName(SbName name)
     void *b = NULL;
 
 #ifdef DEBUG
-	char *longestName = "/usr/lib/InventorDSO/.so";
+    const char *longestName = "/usr/lib/InventorDSO/.so";
 #endif // DEBUG
 	const char *libDir = "lib";
 	const char *abiName = "";
@@ -291,8 +291,7 @@ SoType::fromName(SbName name)
 #define DUMMY_FUNC "initClass__%d%s%s"
 #endif
 
-	sprintf(dummyFunc, DUMMY_FUNC, name.getLength(),
-		nameChars, abiName);
+    sprintf(dummyFunc, DUMMY_FUNC, (int)name.getLength(), nameChars, abiName);
 
 #endif  // SB_OS_WIN
 

@@ -889,7 +889,7 @@ SoInput::read(SbString &s)
                 else
                     buf = buffer;
                 SbBool ok =
-                    (curFile->fp.read(buf, sizeof(char), n) == n);
+                    (curFile->fp.read(buf, sizeof(char), n) == (size_t)n);
                 if (ok) {
                     size_t pad = ((n+3) & ~003) - n;
                     char padbuf[4];
@@ -1209,7 +1209,7 @@ SoInput::read(double &d)
 // Use: public
 
 SbBool
-SoInput::readBinaryArray(unsigned char *c, int length)
+SoInput::readBinaryArray(unsigned char *c, size_t length)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1226,7 +1226,7 @@ SoInput::readBinaryArray(unsigned char *c, int length)
     }
     else {
         size_t i = curFile->fp.read(c, sizeof(unsigned char), length);
-        if (i != length)
+        if (i != (size_t)length)
             return FALSE;
     }
     return ok;
@@ -1240,7 +1240,7 @@ SoInput::readBinaryArray(unsigned char *c, int length)
 // Use: public
 
 SbBool
-SoInput::readBinaryArray(int32_t *l, int length)
+SoInput::readBinaryArray(int32_t *l, size_t length)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1255,7 +1255,7 @@ SoInput::readBinaryArray(int32_t *l, int length)
 // Use: public
 
 SbBool
-SoInput::readBinaryArray(float *f, int length)
+SoInput::readBinaryArray(float *f, size_t length)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1270,7 +1270,7 @@ SoInput::readBinaryArray(float *f, int length)
 // Use: public
 
 SbBool
-SoInput::readBinaryArray(double *d, int length)
+SoInput::readBinaryArray(double *d, size_t length)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1892,7 +1892,6 @@ SoInput::popFile()
 SbBool
 SoInput::readHex(uint32_t &l)
 {
-    int		i;
     char	str[32];	// Number can't be longer than this
     char	*s = str;
     SbBool	ret;

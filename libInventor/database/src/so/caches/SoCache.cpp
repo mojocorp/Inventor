@@ -201,6 +201,8 @@ SoCache::addCacheDependency(const SoState *state, SoCache *subCache)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    SB_UNUSED(subCache);
+
     std::list<SoElement*>::const_iterator it;
     for(it = elementsUsed.begin(); it != elementsUsed.end(); it++) {
         const SoElement *eltInCache = *it;

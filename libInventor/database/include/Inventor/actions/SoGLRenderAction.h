@@ -207,10 +207,10 @@ public:
     /// render caching) can be shared between render actions; for example, see
     /// the documentation on GLX contexts for information on when OpenGL
     /// display lists can be shared between GLX windows.
-    void setCacheContext(uint32_t context);
+    void setCacheContext(int context);
 
     /// Returns the OpenGL cache context.
-    uint32_t getCacheContext() const;
+    int getCacheContext() const;
 
     /// Sets whether or not "remote" rendering is happening.
     /// Inventor's auto-render-caching algorithm will choose to cache
@@ -322,7 +322,7 @@ private:
     SbBox3f  *bboxes; // Bounding boxes of objects
     int   numBBoxes; // Number of bboxes allocated
 
-    uint32_t  cacheContext;   // GL cache context
+    int     cacheContext;   // GL cache context
     SbBool  remoteRendering;// Remote rendering?
 
     // Stuff needed to implement rendering of delayed paths
