@@ -17,3 +17,4 @@ UpgradeLog.*
 vc90*
 .DS_Store
 *.pro.user
+doc/html/*
