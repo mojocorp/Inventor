@@ -228,7 +228,7 @@ SoGLRenderAction::setTransparencyType(TransparencyType type)
 // Use: public
 
 void
-SoGLRenderAction::setCacheContext(uint32_t context)
+SoGLRenderAction::setCacheContext(int context)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -247,7 +247,7 @@ SoGLRenderAction::setCacheContext(uint32_t context)
 //
 // Use: public
 
-uint32_t
+int
 SoGLRenderAction::getCacheContext() const
 //
 ////////////////////////////////////////////////////////////////////////
@@ -555,7 +555,7 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
     }
 
     // Set the GL cache context:
-    SoGLCacheContextElement::set(state, (int) cacheContext, delayObjs, remoteRendering);
+    SoGLCacheContextElement::set(state, cacheContext, delayObjs, remoteRendering);
     
     SoTransparencyTypeElement::set(state, (SoTransparencyTypeElement::TransparencyType)transpType);
     

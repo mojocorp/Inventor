@@ -928,7 +928,7 @@ SoOutput::convertShort(short s, char *to)
     char jjj[16];
 
     DGL_HTON_INT32( INT32(jjj), l );
-    for (int i=0; i<sizeof(int32_t); i++)  to[i] = jjj[i];
+    for (size_t i=0; i<sizeof(int32_t); i++)  to[i] = jjj[i];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -947,7 +947,7 @@ SoOutput::convertInt32(int32_t l, char *to)
 
     DGL_HTON_INT32( INT32(jjj), l );
 
-    for (int i=0; i<sizeof(int32_t); i++)  to[i] = jjj[i];
+    for (size_t i=0; i<sizeof(int32_t); i++)  to[i] = jjj[i];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -966,7 +966,7 @@ SoOutput::convertFloat(float f, char *to)
 
     DGL_HTON_FLOAT( FLOAT(jjj), f );
 
-    for (int i=0; i<sizeof(float); i++)  to[i] = jjj[i];
+    for (size_t i=0; i<sizeof(float); i++)  to[i] = jjj[i];
 }
 
 ////////////////////////////////////////////////////////////////////////

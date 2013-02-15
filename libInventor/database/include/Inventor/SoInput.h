@@ -228,10 +228,10 @@ SoEXTENDER public:
     SbBool read(unsigned short &s);
     SbBool read(float     &f);
     SbBool read(double     &d);
-    SbBool readBinaryArray(unsigned char *c, int length);
-    SbBool readBinaryArray(int32_t *l, int length);
-    SbBool readBinaryArray(float *f, int length);
-    SbBool readBinaryArray(double *d, int length);
+    SbBool readBinaryArray(unsigned char *c, size_t length);
+    SbBool readBinaryArray(int32_t *l, size_t length);
+    SbBool readBinaryArray(float *f, size_t length);
+    SbBool readBinaryArray(double *d, size_t length);
 
     // Returns TRUE if current file/buffer is at EOF
     SbBool eof() const;

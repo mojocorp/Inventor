@@ -181,16 +181,16 @@ public:
     virtual void print(FILE *fp) const;
 
     // Returns an unique cache context id.
-    static uint32_t getUniqueCacheContext();
+    static int getUniqueCacheContext();
 
 SoINTERNAL public:
     static void initClass();
 
 protected:
-    int   context;
-    SbBool  is2PassTransp;
-    SbBool  isRemoteRendering;
-    int   autoCacheBits;
+    int      context;
+    SbBool   is2PassTransp;
+    SbBool   isRemoteRendering;
+    int      autoCacheBits;
 
     virtual ~SoGLCacheContextElement();
 

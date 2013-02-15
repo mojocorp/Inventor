@@ -122,7 +122,7 @@ SoGLLightIdElement::increment(SoState *state)
 
     // Being overridden?
     if (elt == NULL)
-	return -1;
+        return -1;
 
     // Increment the current data in the element. Since we initialize
     // this to -1 in init() and copy it in push(), the data field is
@@ -132,7 +132,7 @@ SoGLLightIdElement::increment(SoState *state)
 
     // Too many sources?
     if (elt->data >= getMaxGLSources())
-	return -1;
+        return -1;
 
     // It's a valid source, so enable it
     glEnable((GLenum)(GL_LIGHT0 + elt->data));
@@ -155,9 +155,9 @@ SoGLLightIdElement::getMaxGLSources()
 {
     // Inquire GL if not already done
     if (maxGLSources < 0) {
-	GLint	max;
-	glGetIntegerv(GL_MAX_LIGHTS, &max);
-	maxGLSources = max;
+        GLint	max;
+        glGetIntegerv(GL_MAX_LIGHTS, &max);
+        maxGLSources = max;
     }
 
     return maxGLSources;
@@ -194,16 +194,14 @@ SoGLLightIdElement::pop(SoState *state, const SoElement *prevTopElement)
     // open caches capture it
     capture(state);
 
-    const SoGLLightIdElement *prevElt =
-	(const SoGLLightIdElement *) prevTopElement;
-    int	i, max;
+    const SoGLLightIdElement *prevElt = (const SoGLLightIdElement *) prevTopElement;
 
     // Disable previous light(s), if valid. All lights between the
     // previous element and this one should be turned off.
-    max = getMaxGLSources();
-    for (i = (int) prevElt->data; i > data; i--)
-	if (i < max)
-	    glDisable((GLenum)(GL_LIGHT0 + i));
+    int max = getMaxGLSources();
+    for (int i = (int) prevElt->data; i > data; i--)
+        if (i < max)
+            glDisable((GLenum)(GL_LIGHT0 + i));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -221,7 +219,7 @@ SoGLLightIdElement::print(FILE *fp) const
 {
     SoElement::print(fp);
 
-    fprintf(fp, "\tLight id = %ld\n", data);
+    fprintf(fp, "\tLight id = %d\n", data);
 }
 #else  /* DEBUG */
 void

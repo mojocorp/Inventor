@@ -232,7 +232,7 @@ SoNurbsSurface::generatePrimitives(SoAction *action)
 
     gluDeleteNurbsRenderer( nurbsObj );
 
-    for (int i=0; i<data.vertices.size()-2; i+=3) {
+    for (size_t i=0; i<data.vertices.size()-2; i+=3) {
         SoPrimitiveVertex pv[3];
         pv[0].setPoint(data.vertices[i]);
         pv[1].setPoint(data.vertices[i+1]);
