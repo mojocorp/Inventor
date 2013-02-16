@@ -58,7 +58,7 @@
 #include <Inventor/nodes/SoRotationXYZ.h>
 
 class ClockHands {
-  public:
+public:
     SoRotationXYZ   *hour;
     SoRotationXYZ   *minute;
     SoRotationXYZ   *second;
@@ -94,9 +94,9 @@ setupHands(SoGroup *root)
     SoCounter *minuteCounter, *hourCounter;
 
     // Engines to convert the clock ticks into radian angles of rotation
-    SoCalculator *secondRadians = new SoCalculator; 
-    SoCalculator *minuteRadians = new SoCalculator; 
-    SoCalculator *hourRadians = new SoCalculator; 
+    SoCalculator *secondRadians = new SoCalculator;
+    SoCalculator *minuteRadians = new SoCalculator;
+    SoCalculator *hourRadians = new SoCalculator;
 
     // Rotation of the hands
     ClockHands	*rotation = new ClockHands;
@@ -110,8 +110,8 @@ setupHands(SoGroup *root)
     // Search for Names which denote the hands of the clock,
     // then insert these rotations into the clock geometry and
     // attach engines to update the rotations.
-    // Also, since the hands will be constantly moving, turn 
-    // render caching off for these separators. 
+    // Also, since the hands will be constantly moving, turn
+    // render caching off for these separators.
 
     SoSeparator *s;
 
@@ -119,12 +119,12 @@ setupHands(SoGroup *root)
     s = (SoSeparator *)root->getByName("SecondHand");
     if (s != NULL && s->isOfType(SoSeparator::getClassTypeId())) {
 
-	rotation->second = new SoRotationXYZ;
-	rotation->second->axis = SoRotationXYZ::Z;
-	s->insertChild(rotation->second, 0);
+        rotation->second = new SoRotationXYZ;
+        rotation->second->axis = SoRotationXYZ::Z;
+        s->insertChild(rotation->second, 0);
 
         // Second hand ticks from 0 to 59 in one minute (60 seconds)
-	secondTimer = new SoTimeCounter;
+        secondTimer = new SoTimeCounter;
         secondTimer->min = 0;
         secondTimer->max = 59;
         secondTimer->frequency = 1./60.;
@@ -133,68 +133,68 @@ setupHands(SoGroup *root)
         secondRadians->expression = "oa=-a*M_PI/30.0";
         rotation->second->angle.connectFrom(&secondRadians->oa);
 
-	s->renderCaching = SoSeparator::OFF;
-	foundSecond = TRUE;
+        s->renderCaching = SoSeparator::OFF;
+        foundSecond = TRUE;
     }
 
-    // Hour hand 
+    // Hour hand
     s = (SoSeparator *)root->getByName("HourHand");
     if (s != NULL && s->isOfType(SoSeparator::getClassTypeId())) {
-	s->renderCaching = SoSeparator::OFF;
-	rotation->hour = new SoRotationXYZ;
-	rotation->hour->axis = SoRotationXYZ::Z;
-	s->insertChild(rotation->hour, 0);
+        s->renderCaching = SoSeparator::OFF;
+        rotation->hour = new SoRotationXYZ;
+        rotation->hour->axis = SoRotationXYZ::Z;
+        s->insertChild(rotation->hour, 0);
 
-	hourCounter = new SoCounter;
-	hourCounter->min = 0;
-	hourCounter->max = 11;
+        hourCounter = new SoCounter;
+        hourCounter->min = 0;
+        hourCounter->max = 11;
         hourCounter->reset = currentHour;
         hourRadians->a.connectFrom(&hourCounter->output);
         hourRadians->expression = "oa=-((a+b/60.)*M_PI/6.0)";
         rotation->hour->angle.connectFrom(&hourRadians->oa);
     } else {
-	return (FALSE); // The hour hand is required
+        return (FALSE); // The hour hand is required
     }
 
-    // Minute hand 
+    // Minute hand
     s = (SoSeparator *)root->getByName("MinuteHand");
     if (s != NULL && s->isOfType(SoSeparator::getClassTypeId())) {
-	s->renderCaching = SoSeparator::OFF;
-	rotation->minute = new SoRotationXYZ;
-	rotation->minute->axis = SoRotationXYZ::Z;
-	s->insertChild(rotation->minute, 0);
+        s->renderCaching = SoSeparator::OFF;
+        rotation->minute = new SoRotationXYZ;
+        rotation->minute->axis = SoRotationXYZ::Z;
+        s->insertChild(rotation->minute, 0);
 
- 	// If the clock has a second hand:
-	// use the second timer to figure out when to tick the minutes
-  	if (foundSecond) {
-	    minuteCounter = new SoCounter;
-	    minuteCounter->min = 0;
-	    minuteCounter->max = 59;
+        // If the clock has a second hand:
+        // use the second timer to figure out when to tick the minutes
+        if (foundSecond) {
+            minuteCounter = new SoCounter;
+            minuteCounter->min = 0;
+            minuteCounter->max = 59;
             minuteCounter->reset = currentMinute;
-	    minuteCounter->trigger.connectFrom(&secondTimer->syncOut);
+            minuteCounter->trigger.connectFrom(&secondTimer->syncOut);
             minuteRadians->a.connectFrom(&minuteCounter->output);
 
-	    hourCounter->trigger.connectFrom(&minuteCounter->syncOut);
+            hourCounter->trigger.connectFrom(&minuteCounter->syncOut);
             hourRadians->b.connectFrom(&minuteCounter->output);
-	} 
-	// If the clock doesn't have a second hand:
+        }
+        // If the clock doesn't have a second hand:
         // use a minute timer
-	else {
-	    minuteTimer = new SoTimeCounter;
+        else {
+            minuteTimer = new SoTimeCounter;
             minuteTimer->min = 0;
             minuteTimer->max = 59;
             minuteTimer->frequency = 1./3600.;
             minuteTimer->reset = currentMinute;
             minuteRadians->a.connectFrom(&minuteTimer->output);
 
-	    hourCounter->trigger.connectFrom(&minuteTimer->syncOut);
+            hourCounter->trigger.connectFrom(&minuteTimer->syncOut);
             hourRadians->b.connectFrom(&minuteTimer->output);
-	}
+        }
 
         minuteRadians->expression = "oa=-a*M_PI/30.0";
         rotation->minute->angle.connectFrom(&minuteRadians->oa);
     } else {
-	return (FALSE);  // The minute hand is required
+        return (FALSE);  // The minute hand is required
     }
 
     return (TRUE);
@@ -206,9 +206,9 @@ main(int argc, char **argv)
     char *filename = "clockData.iv";
 
     if (argc != 2) {
-	fprintf(stderr, "NOTE: You can specify your own geometry file.\n");
-	fprintf(stderr, "Run: %s inputFile\n",  argv[0]);
-	fprintf(stderr, "Running with the default geometry, %s\n", filename);
+        fprintf(stderr, "NOTE: You can specify your own geometry file.\n");
+        fprintf(stderr, "Run: %s inputFile\n",  argv[0]);
+        fprintf(stderr, "Running with the default geometry, %s\n", filename);
     }
     else filename = argv[1];
     
@@ -219,28 +219,28 @@ main(int argc, char **argv)
     
     Widget mainWindow = SoXt::init("Time");
     if (mainWindow == NULL)
-	exit (1);
+        exit (1);
 
     // Read in the scene graph
     SoInput in;
     if (!in.openFile(filename)) {
         fprintf(stderr, "Error - could not open %s.\n", filename);
-	exit(1);
+        exit(1);
     }
 
     SoSeparator *root = SoDB::readAll(&in);
     if (root == NULL) {
         fprintf(stderr, "Error - could not read %s.\n", filename);
-	exit(1);
-    }
-    root->ref();
-	
-    if (! setupHands(root)) {
-        fprintf(stderr, "Error - cannot use %s for the clock.\n", 
-			filename);
         exit(1);
     }
-	
+    root->ref();
+
+    if (! setupHands(root)) {
+        fprintf(stderr, "Error - cannot use %s for the clock.\n",
+                filename);
+        exit(1);
+    }
+
     // Build and initialize the Inventor render area widget
     SoXtExaminerViewer *examiner = new SoXtExaminerViewer(mainWindow);
     examiner->setSize(SbVec2s(100, 100));
