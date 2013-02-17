@@ -116,11 +116,11 @@ SoQtFullViewer::SoQtFullViewer(
 
     // pre-create actions
     pickAction = new QAction (SoQtIcon::getIcon (SoQtIcon::PICK), tr("Pick mode"), this);
-    connect (pickAction, SIGNAL (triggered(bool)), this, SLOT (setPickMode()));
+    connect (pickAction, SIGNAL (triggered(bool)), this, SLOT (setPickModeCB()));
     pickAction->setCheckable (true);
 
     viewAction = new QAction (SoQtIcon::getIcon (SoQtIcon::VIEW), tr("View mode"), this);
-    connect (viewAction, SIGNAL (triggered(bool)), this, SLOT (setViewMode()));
+    connect (viewAction, SIGNAL (triggered(bool)), this, SLOT (setViewModeCB()));
     viewAction->setCheckable (true);
 
     QActionGroup* interactionGroup = new QActionGroup(this);
@@ -131,7 +131,7 @@ SoQtFullViewer::SoQtFullViewer(
     viewAction->setChecked (isViewing());
 
     seekAction = new QAction (SoQtIcon::getIcon (SoQtIcon::SEEK), tr("Seek mode"), this);
-    connect (seekAction, SIGNAL (triggered(bool)), this, SLOT (setSeekMode(bool)));
+    connect (seekAction, SIGNAL (triggered(bool)), this, SLOT (setSeekModeCB(bool)));
     seekAction->setCheckable (true);
     seekAction->setChecked (isSeekMode());
 
@@ -145,17 +145,17 @@ SoQtFullViewer::SoQtFullViewer(
     connect (viewAllAction, SIGNAL (triggered(bool)), this, SLOT (viewAll()));
 
     viewingAction = new QAction (tr("Viewing"), this);
-    connect (viewingAction, SIGNAL (triggered(bool)), this, SLOT (setViewing(bool)));
+    connect (viewingAction, SIGNAL (triggered(bool)), this, SLOT (setViewingCB(bool)));
     viewingAction->setCheckable (true);
     viewingAction->setChecked (isViewing());
 
     IDM_MPOPUP_DECORAT = new QAction (tr("Decoration"), this);
-    connect (IDM_MPOPUP_DECORAT, SIGNAL (triggered(bool)), this, SLOT (setDecoration(bool)));
+    connect (IDM_MPOPUP_DECORAT, SIGNAL (triggered(bool)), this, SLOT (setDecorationCB(bool)));
     IDM_MPOPUP_DECORAT->setCheckable (true);
     IDM_MPOPUP_DECORAT->setChecked (decorationFlag);
 
     IDM_MPOPUP_HLIGHT = new QAction (tr("Headlight"),  this);
-    connect (IDM_MPOPUP_HLIGHT, SIGNAL (triggered(bool)), this, SLOT (setHeadlight(bool)));
+    connect (IDM_MPOPUP_HLIGHT, SIGNAL (triggered(bool)), this, SLOT (setHeadlightCB(bool)));
     IDM_MPOPUP_HLIGHT->setCheckable (true);
     IDM_MPOPUP_HLIGHT->setChecked (isHeadlight());
 	
