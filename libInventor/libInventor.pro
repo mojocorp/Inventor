@@ -14,6 +14,7 @@ CONFIG(debug, debug|release) {
 linux-g++ {
     CONFIG += x11
     INCLUDEPATH += /usr/include/freetype2/
+    LIBS += -lGLU
 }
 
 win32 {
