@@ -6,9 +6,9 @@ DESTDIR    = ../../../build
 DEFINES += "IVPREFIX="
 DEPENDPATH += .
 INCLUDEPATH += . \
-               ../../../lib/database/include/ \
-               ../../../lib/interaction/include/ \
-               ../../../lib/nodekits/include/ \
+               ../../../libInventor/database/include/ \
+               ../../../libInventor/interaction/include/ \
+               ../../../libInventor/nodekits/include/ \
                ../../../libSoXt/include
 
 LIBS += -L../../../build -lInventor -lSoXt

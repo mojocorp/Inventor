@@ -55,43 +55,11 @@
 #include <stdlib.h> // for system() and getenv()
 #include <unistd.h> // for access()
 
-#include <X11/StringDefs.h>
-#include <X11/Intrinsic.h>
-#include <X11/Xatom.h>
-
-#include <Xm/Protocols.h>
-#include <Xm/Xm.h>
-#include <Xm/BulletinB.h>
-#include <Xm/CascadeB.h>
-#include <Xm/CascadeBG.h>
-#include <Xm/FileSB.h>
-#include <Xm/Form.h>
-#include <Xm/Label.h>
-#include <Xm/FileSB.h>
-#include <Xm/PushB.h>
-#include <Xm/PushBG.h>
-#include <Xm/SeparatoG.h>
-#include <Xm/Text.h>
-#include <Xm/ToggleB.h>
-#include <Xm/ToggleBG.h>
-#include <Xm/DropTrans.h>
-
 #include <Inventor/SoDB.h>
 #include <Inventor/misc/SoByteStream.h>
 #include <Inventor/SoNodeKitPath.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/SoLists.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtClipboard.h>
-#include <Inventor/Xt/SoXtDirectionalLightEditor.h>
-#include <Inventor/Xt/SoXtMaterialEditor.h>
-#include <Inventor/Xt/SoXtPrintDialog.h>
-#include <Inventor/Xt/SoXtResource.h>
-#include <Inventor/Xt/SoXtTransformSliderSet.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
-#include <Inventor/Xt/viewers/SoXtFlyViewer.h>
-#include <Inventor/Xt/viewers/SoXtPlaneViewer.h>
-#include <Inventor/Xt/viewers/SoXtWalkViewer.h>
 #include <Inventor/actions/SoBoxHighlightRenderAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>
 #include <Inventor/actions/SoGetMatrixAction.h>
@@ -135,6 +103,39 @@
 #include "../../samples/widgets/MyFileRead.h"
 #include "../../samples/widgets/MyDropSite.h"
 #include "../../samples/common/InventorLogo.h"
+
+#include <Inventor/Xt/SoXt.h>
+#include <Inventor/Xt/SoXtClipboard.h>
+#include <Inventor/Xt/SoXtDirectionalLightEditor.h>
+#include <Inventor/Xt/SoXtMaterialEditor.h>
+#include <Inventor/Xt/SoXtPrintDialog.h>
+#include <Inventor/Xt/SoXtResource.h>
+#include <Inventor/Xt/SoXtTransformSliderSet.h>
+#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Xt/viewers/SoXtFlyViewer.h>
+#include <Inventor/Xt/viewers/SoXtPlaneViewer.h>
+#include <Inventor/Xt/viewers/SoXtWalkViewer.h>
+
+#include <X11/StringDefs.h>
+#include <X11/Intrinsic.h>
+#include <X11/Xatom.h>
+
+#include <Xm/Protocols.h>
+#include <Xm/Xm.h>
+#include <Xm/BulletinB.h>
+#include <Xm/CascadeB.h>
+#include <Xm/CascadeBG.h>
+#include <Xm/FileSB.h>
+#include <Xm/Form.h>
+#include <Xm/Label.h>
+#include <Xm/FileSB.h>
+#include <Xm/PushB.h>
+#include <Xm/PushBG.h>
+#include <Xm/SeparatoG.h>
+#include <Xm/Text.h>
+#include <Xm/ToggleB.h>
+#include <Xm/ToggleBG.h>
+#include <Xm/DropTrans.h>
 
 #include <GL/gl.h>
 #ifdef DEBUG
