@@ -63,7 +63,6 @@
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoLazyElement.h>
 #include <Inventor/elements/SoOverrideElement.h>
-#include <Inventor/elements/SoWindowElement.h>
 #include <Inventor/nodes/SoLocateHighlight.h>
 
 #ifdef DEBUG
@@ -125,8 +124,6 @@ SoLocateHighlight::SoLocateHighlight()
     
     isBuiltIn = TRUE;
 
-    // Locate highlighting vars
-    highlightingPass = FALSE;
     // make a colorPacker
     colorPacker = new SoColorPacker;
 }
@@ -165,20 +162,19 @@ SoLocateHighlight::GLRenderBelowPath(SoGLRenderAction *action)
 
 ////////////////////////////////////////////////////////////////////////
 {
+    SoState *state = action->getState();
+
+    // prevent diffuse & emissive color from leaking out...
+    state->push();
+
     // Set up state for locate highlighting (if necessary)
-    GLint oldDepthFunc;
-    SbBool drawHighlighted = preRender(action, oldDepthFunc);
+    preRender(action);
     
     // now invoke the parent method
     SoSeparator::GLRenderBelowPath(action);
     
-    // Restore old depth buffer model if needed
-    if (drawHighlighted || highlightingPass)
-        glDepthFunc((GLenum)oldDepthFunc);
-    
     // Clean up state if needed
-    if (drawHighlighted)
-        action->getState()->pop();
+    state->pop();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -193,20 +189,19 @@ SoLocateHighlight::GLRenderInPath(SoGLRenderAction *action)
 
 ////////////////////////////////////////////////////////////////////////
 {
+    SoState *state = action->getState();
+
+    // prevent diffuse & emissive color from leaking out...
+    state->push();
+
     // Set up state for locate highlighting (if necessary)
-    GLint oldDepthFunc;
-    SbBool drawHighlighted = preRender(action, oldDepthFunc);
-    
+    preRender(action);
+
     // now invoke the parent method
-    SoSeparator::GLRenderInPath(action);
-    
-    // Restore old depth buffer model if needed
-    if (drawHighlighted || highlightingPass)
-        glDepthFunc((GLenum)oldDepthFunc);
-    
+    SoSeparator::GLRenderBelowPath(action);
+
     // Clean up state if needed
-    if (drawHighlighted)
-        action->getState()->pop();
+    state->pop();
 }
 
 ///////////////////////////////////////////////////////////////////
@@ -217,7 +212,7 @@ SoLocateHighlight::GLRenderInPath(SoGLRenderAction *action)
 // Use: private
 
 SbBool
-SoLocateHighlight::preRender(SoGLRenderAction *action, int &oldDepthFunc)
+SoLocateHighlight::preRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -227,19 +222,10 @@ SoLocateHighlight::preRender(SoGLRenderAction *action, int &oldDepthFunc)
     
     SoState *state = action->getState();
     
-    // ??? prevent caching at this level - for some reason the
-    // ??? SoWindowElement::copyMatchInfo() method get called, which should
-    // ??? never be called. We are not caching this node correctly yet....
-    SoCacheElement::invalidate(state);
-    
     SbBool drawHighlighted = (mode.getValue() == ON || isHighlighted(action));
     
     if (drawHighlighted) {
-
-        // prevent diffuse & emissive color from leaking out...
-        state->push();
-
-        SbColor col = color.getValue();
+        const SbColor &col = color.getValue();
 
         // Emissive Color
         SoOverrideElement::setEmissiveColorOverride(state, this, TRUE);
@@ -250,17 +236,6 @@ SoLocateHighlight::preRender(SoGLRenderAction *action, int &oldDepthFunc)
             SoOverrideElement::setDiffuseColorOverride(state, this, TRUE);
             SoLazyElement::setDiffuse(state, this, 1, &col, colorPacker);
         }
-    }
-
-    // Draw on top of other things at same z-buffer depth if:
-    // [a] we're highlighted
-    // [b] this is the highlighting pass. This occurs when changing from
-    //     non-hilit to lit OR VICE VERSA.
-    // Otherwise, leave it alone...
-    if (drawHighlighted || highlightingPass) {
-        glGetIntegerv(GL_DEPTH_FUNC, &oldDepthFunc);
-        if (oldDepthFunc != GL_LEQUAL)
-            glDepthFunc(GL_LEQUAL);
     }
     
     return drawHighlighted;
@@ -362,7 +337,6 @@ SoLocateHighlight::redrawHighlighted(
         }
     }
     
-    SoPath *pathToRender;
     // save the path to ourself for later de-highlight
     if (doHighlight) {
 
@@ -370,79 +344,13 @@ SoLocateHighlight::redrawHighlighted(
             currentHighlightPath->unref();
         currentHighlightPath = (SoFullPath *) action->getCurPath()->copy();
         currentHighlightPath->ref();
-
-        // We will be rendering this new path to highlight it
-        pathToRender = currentHighlightPath;
-        pathToRender->ref();
     }
     // delete our path if we are no longer highlighted
     else {
-
-        // We will be rendering this old path to unhighlight it
-        pathToRender = currentHighlightPath;
-        pathToRender->ref();
-
         currentHighlightPath->unref();
         currentHighlightPath = NULL;
     }
-
-    // If highlighting is forced on for this node, we don't need this special render.
-    if (mode.getValue() != AUTO) {
-        pathToRender->unref();
-        return;
-    }
-    
-    SoState *state = action->getState();
-
-    // TODO: Remove all this code and replace by a FBO.
-    WEWindow window;
-    WEContext context;
-    WEDisplay display;
-    SoGLRenderAction *glAction;
-    SoWindowElement::get(state, window, context, display, glAction);
-
-#if defined(SB_OS_LINUX)
-    // If we don't have a current window, then simply return...
-    if (window == 0 || context == NULL || display == NULL || glAction == NULL)
-        return;
-
-    // set the current window
-    if (glXGetCurrentContext() != context)
-        glXMakeCurrent(display, window, context);
-#elif defined(SB_OS_WIN)
-    // If we don't have a current window, then simply return...
-    if (window == 0 || context == NULL || glAction == NULL)
-        return;
-    if (wglGetCurrentContext() != context) {
-        HDC hdc = GetDC(window);
-        wglMakeCurrent(hdc, context);
-        ReleaseDC(window, hdc);
-    }
-#elif defined(SB_OS_MACX)
-    // If we don't have a current window, then simply return...
-    if (window == 0 || context == NULL || glAction == NULL)
-        return;
-    if (CGLGetCurrentContext() != context)
-        CGLSetCurrentContext(context);
-#else
-#  error "SoLocateHighlight has not been ported to this OS"
-#endif
-    // render into the front buffer (save the current buffering type)
-    GLint whichBuffer;
-    glGetIntegerv(GL_DRAW_BUFFER, &whichBuffer);
-    if (whichBuffer != GL_FRONT)
-        glDrawBuffer(GL_FRONT);
-
-    highlightingPass = TRUE;
-    glAction->apply(pathToRender);
-    highlightingPass = FALSE;
-
-    // restore the buffering type
-    if (whichBuffer != GL_FRONT)
-        glDrawBuffer((GLenum)whichBuffer);
-    glFlush();
-    
-    pathToRender->unref();
+    touch();
 }
 
 ////////////////////////////////////////////////////////////////////////
