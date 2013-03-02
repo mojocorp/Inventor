@@ -115,61 +115,61 @@ class INVENTOR_API SoLocateHighlight : public SoSeparator {
 
     SO_NODE_HEADER(SoLocateHighlight);
 
-  public:
+public:
 
     /// Possible values for draw style
     enum Styles {
-        EMISSIVE,	    ///< changes emissive color only (default)
+        EMISSIVE,           ///< changes emissive color only (default)
         EMISSIVE_DIFFUSE    ///< changes emissive and diffuse colors
     };
 
     /// Possible values for the mode
     enum Modes {
-        AUTO, 		    ///< highlight when mouse is over (default)
-        ON,		    ///< always highlight
-        OFF		    ///< never highlight
+        AUTO,    ///< highlight when mouse is over (default)
+        ON,      ///< always highlight
+        OFF      ///< never highlight
     };
 
     // Fields
-    SoSFColor	color;	///< highlighting color - default [.3, .3, .3]
-    SoSFEnum	style;	///< highlighting draw style - default EMISSIVE
-    SoSFEnum	mode;	///< Whether to highlight or not - default AUTO
+    SoSFColor    color;    ///< highlighting color - default [.3, .3, .3]
+    SoSFEnum     style;    ///< highlighting draw style - default EMISSIVE
+    SoSFEnum     mode;    ///< Whether to highlight or not - default AUTO
 
     /// Creates a LocateHighlight node with default settings.
     SoLocateHighlight();
 
-  SoEXTENDER public:
+SoEXTENDER public:
     // Override handleEvent to look for mouse motion, to do a
     // pick and highlight if mouse is over us. The GLRender methods
     // are redefined to draw highlighted if needed.
-    virtual void	handleEvent( SoHandleEventAction *action );
-    virtual void	GLRenderBelowPath(SoGLRenderAction *action);
-    virtual void	GLRenderInPath(SoGLRenderAction *action);
+    virtual void handleEvent( SoHandleEventAction *action );
+    virtual void GLRenderBelowPath(SoGLRenderAction *action);
+    virtual void GLRenderInPath(SoGLRenderAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();	// initialize the class
+SoINTERNAL public:
+    static void initClass();	// initialize the class
 
     // This will de-highlight the currently highlighted node if any.
     // this should be called when the cursor leaves a window or a mode
     // changes happen which would prevent a highlighted node from receiving
     // more mouse motion events. The GL render action used to render into
     // that window needs to be passed to correctly un-highlight.
-    static void		turnOffCurrentHighlight(SoGLRenderAction *action);
+    static void turnOffCurrentHighlight(SoGLRenderAction *action);
 
-  protected:
+protected:
     virtual ~SoLocateHighlight();
     
     // This is called when this nodes needs to highlight or de-highlight. It
     // can be used by subclasses to be told when the status change.
-    virtual void	redrawHighlighted(SoAction *act, SbBool flag);
+    virtual void redrawHighlighted(SoAction *act, SbBool flag);
     
-  private:
+private:
     // highlighting stuff
-    SbBool		highlightingPass;
+    SbBool highlightingPass;
     static SoFullPath   *currentHighlightPath;
-    SbBool		isHighlighted(SoAction *action);
-    SbBool		preRender(SoGLRenderAction *act, int &oldDepthFunc);
-    SoColorPacker	*colorPacker;
+    SbBool isHighlighted(SoAction *action);
+    SbBool preRender(SoGLRenderAction *act, int &oldDepthFunc);
+    SoColorPacker *colorPacker;
 };
 
 
