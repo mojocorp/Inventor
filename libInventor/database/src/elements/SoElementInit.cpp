@@ -151,5 +151,4 @@ SoElement::initElements()
     // Other derived classes 
     SoBBoxModelMatrixElement::initClass();
     SoLocalBBoxMatrixElement::initClass();
-    SoWindowElement::initClass();
 }

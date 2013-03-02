@@ -55,7 +55,6 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/errors/SoDebugError.h>
-#include <Inventor/elements/SoWindowElement.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/nodes/SoSelection.h>
 #include <Inventor/nodes/SoLocateHighlight.h>
@@ -141,7 +140,6 @@ SoXtRenderArea::constructorCommon(
 {    
     addVisibilityChangeCallback(visibilityChangeCB, this);
     setClassName(thisClassName);
-    firstEvent = TRUE;
     
     // set up the device list
     deviceList = new SbPList;
@@ -611,19 +609,6 @@ SoXtRenderArea::processEvent(XAnyEvent *anyevent)
     SbBool handled = overlaySceneMgr->processEvent(soevent);
     if (! handled) {
 	sceneMgr->processEvent(soevent);
-	
-	// now check to make sure that we updated the handle event action
-	// with the current window the very first time. This is needed
-	// because the SoState does not exists until the action is
-	// applied, and we only update those during enter/leave notify.
-	if (firstEvent) {
-	    SoState *state = sceneMgr->getHandleEventAction()->getState();
-	    if (state) {
-		SoWindowElement::set(state, getNormalWindow(), 
-		    getNormalContext(), getDisplay(), getGLRenderAction());
-		firstEvent = FALSE;
-	    }
-	}
     }
 }
 
@@ -1144,13 +1129,6 @@ SoXtRenderArea::windowEventCB(Widget w, SoXtRenderArea *p, XAnyEvent *xe, Boolea
 	SoGLRenderAction *glAct = p->sceneMgr->getGLRenderAction();
 	if (glAct)
 	    SoLocateHighlight::turnOffCurrentHighlight(glAct);
-	
-	SoState *state = p->sceneMgr->getHandleEventAction()->getState();
-	if (state)
-	    SoWindowElement::set(state, (Window) NULL, NULL, NULL, NULL);
-	state = p->sceneMgr->getGLRenderAction()->getState();
-	if (state && state->getDepth() == 1)
-	    SoWindowElement::set(state, (Window) NULL, NULL, NULL, NULL);
     }
 }
 

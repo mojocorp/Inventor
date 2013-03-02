@@ -340,8 +340,6 @@ private:
     static void		selectionChangeCB(void *userData, SoSelection *s);
     static void		overlaySelectionChangeCB(void *userData, SoSelection *s);
     SoSelection		*selection, *overlaySelection;
-
-    SbBool		firstEvent; // used to init the action SoWindowElement
     
     void        activate();		// connects the sensor
     void        deactivate();		// disconnects the sensor

@@ -203,7 +203,6 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoViewingMatrixElement.h \
            database/include/Inventor/elements/SoViewportRegionElement.h \
            database/include/Inventor/elements/SoViewVolumeElement.h \
-           database/include/Inventor/elements/SoWindowElement.h \
            database/include/Inventor/engines/SoBoolOperation.h \
            database/include/Inventor/engines/SoCalculator.h \
            database/include/Inventor/engines/SoCompose.h \
@@ -684,7 +683,6 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/elements/SoViewingMatrixElement.cpp \
            database/src/elements/SoViewportRegionElement.cpp \
            database/src/elements/SoViewVolumeElement.cpp \
-           database/src/elements/SoWindowElement.cpp \
            database/src/engines/SoBoolOperation.cpp \
            database/src/engines/SoCalcExpr.cpp \
            database/src/engines/SoCalculator.cpp \
