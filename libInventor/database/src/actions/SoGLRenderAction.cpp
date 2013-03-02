@@ -65,7 +65,6 @@
 #include <Inventor/elements/SoShapeStyleElement.h>
 #include <Inventor/elements/SoTransparencyTypeElement.h>
 #include <Inventor/elements/SoGLLazyElement.h>
-#include <Inventor/elements/SoWindowElement.h>
 #include <Inventor/elements/SoGLDepthBufferElement.h>
 
 SO_ACTION_SOURCE(SoGLRenderAction);
@@ -149,7 +148,6 @@ SoGLRenderAction::initClass()
     SO_ENABLE(SoGLRenderAction, SoGLLazyElement);
     SO_ENABLE(SoGLRenderAction, SoGLRenderPassElement);
     SO_ENABLE(SoGLRenderAction, SoViewportRegionElement);
-    SO_ENABLE(SoGLRenderAction, SoWindowElement);
     SO_ENABLE(SoGLRenderAction, SoTransparencyTypeElement);
     SO_ENABLE(SoGLRenderAction, SoStereoElement);
     SO_ENABLE(SoGLRenderAction, SoGLDepthBufferElement);

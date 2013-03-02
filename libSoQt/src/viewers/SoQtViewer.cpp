@@ -527,9 +527,9 @@ SoQtViewer::setViewing(SbBool flag)
     // currently highlighted nodes (since the object will never receive
     // any motion events).
     if (viewingFlag) {
-	SoGLRenderAction *glAct = getGLRenderAction();
-	if (glAct)
-	    SoLocateHighlight::turnOffCurrentHighlight(glAct);
+    SoGLRenderAction *glAct = getGLRenderAction();
+    if (glAct)
+        SoLocateHighlight::turnOffCurrentHighlight(glAct);
     }
 }
 

@@ -53,7 +53,6 @@
 
 #include <Inventor/actions/SoHandleEventAction.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
-#include <Inventor/elements/SoWindowElement.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/events/SoEvent.h>
 
@@ -120,7 +119,6 @@ SoHandleEventAction::initClass()
     SO_ACTION_INIT_CLASS(SoHandleEventAction, SoAction);
 
     SO_ENABLE(SoHandleEventAction, SoViewportRegionElement);
-    SO_ENABLE(SoHandleEventAction, SoWindowElement);
 }
 
 ////////////////////////////////////////////////////////////////////////

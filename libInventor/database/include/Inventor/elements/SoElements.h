@@ -132,6 +132,5 @@
 #include <Inventor/elements/SoViewVolumeElement.h>
 #include <Inventor/elements/SoViewingMatrixElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
-#include <Inventor/elements/SoWindowElement.h>
 
 #endif /* _SO_ELEMENTS_ */

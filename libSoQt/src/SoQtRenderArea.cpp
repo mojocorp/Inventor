@@ -66,7 +66,6 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/errors/SoDebugError.h>
-#include <Inventor/elements/SoWindowElement.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/nodes/SoSelection.h>
 #include <Inventor/nodes/SoLocateHighlight.h>
@@ -150,7 +149,6 @@ SoQtRenderArea::constructorCommon(
 
 
     setClassName(thisClassName);
-    firstEvent = TRUE;
     
     // set up the device list
     deviceList = new SbPList;
@@ -574,26 +572,6 @@ SoQtRenderArea::processEvent(QEvent *anyevent)
     SbBool handled = overlaySceneMgr->processEvent(soevent);
     if (! handled) {
         handled = sceneMgr->processEvent (soevent);
-        // now check to make sure that we updated the handle event action
-        // with the current window the very first time. This is needed
-        // because the SoState does not exists until the action is
-        // applied, and we only update those during enter/leave notify.
-        if (firstEvent) {
-            SoState *state = sceneMgr->getHandleEventAction()->getState();
-            if (state) {
-#ifdef WIN32
-                SoWindowElement::set (state, getNormalWidget()->winId(),
-                    wglGetCurrentContext(), NULL, getGLRenderAction());
-#elif defined(__APPLE__) && !defined(APPLE_GLX)
-                SoWindowElement::set (state, getNormalWidget()->winId(),
-                    CGLGetCurrentContext(), NULL, getGLRenderAction());
-#else
-                SoWindowElement::set (state, getNormalWidget()->winId(),
-                                      glXGetCurrentContext(), QX11Info::display() , getGLRenderAction());
-#endif
-                firstEvent = FALSE;
-            }
-        }
     }
     // consume event if it was handled
     anyevent->setAccepted (handled);
