@@ -5,7 +5,6 @@
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
-#include <Inventor/elements/SoFontNameElement.h>
 #include <Inventor/elements/SoFontSizeElement.h>
 #include <Inventor/elements/SoComplexityElement.h>
 #include <Inventor/elements/SoComplexityTypeElement.h>
@@ -23,11 +22,8 @@
 #include <cmath>
 #include <algorithm>
 
-#include "utopia-regular.cpp"
-
 SbBool SoOutlineFontCache::tesselationError = FALSE;
 std::vector<SoOutlineFontCache*> SoOutlineFontCache::fonts;
-FT_Library SoOutlineFontCache::library = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -43,17 +39,6 @@ SoOutlineFontCache::getFont(SoState *state, SbBool forRender)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (library == NULL) {
-        // One-time font library initialization
-        if (FT_Init_FreeType( &library )) {
-#ifdef DEBUG
-            SoDebugError::post("SoOutlineFontCache::getFont",
-                               "FT_Init_FreeType failed");
-#endif
-            return NULL;
-        }
-    }
-
     SoOutlineFontCache *result = NULL;
     for (size_t i = 0; i < fonts.size() && result == NULL; i++) {
         SoOutlineFontCache *c = fonts[i];
@@ -112,57 +97,16 @@ SoOutlineFontCache::isRenderValid(SoState *state) const
 // Use: private
 
 SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
-    SoCache(state), context(-1)
+    SoFontCache(state), context(-1)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    face = NULL;
-
     // Add element dependencies explicitly here; making 'this' the
     // CacheElement doesn't work if we are being constructed in an
     // action that doesn't have caches.
-    const SbName & fontName = SoFontNameElement::get(state);
-    addElement(state->getConstElement(SoFontNameElement::getClassStackIndex()));
 
     // Remember size
     fontSize = SoFontSizeElement::get(state);
-    addElement(state->getConstElement(SoFontSizeElement::getClassStackIndex()));
-
-    if (fontName == SoFontNameElement::getDefault() || fontName == "Utopia-Regular") {
-        if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
-#ifdef DEBUG
-            SoDebugError::post("SoBitmapFontCache::getFont",
-                               "Couldn't load embeded font Utopia-Regular!");
-#endif
-        }
-    } else {
-        SbFile file;
-        if (file.open(SoFont::getFontFileName(fontName), "rb")) {
-            buffer.resize(SbFile::size(SoFont::getFontFileName(fontName)));
-            file.read(&buffer[0], 1, buffer.size());
-
-            if (FT_New_Memory_Face(library, &buffer[0], (FT_Long)buffer.size(), 0, &face)) {
-#ifdef DEBUG
-                SoDebugError::post("SoText3::getFont",
-                                   "Couldn't find font %s, replacing with Utopia-Regular",
-                                   fontName.getString());
-#endif
-                if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
-#ifdef DEBUG
-                    SoDebugError::post("SoText3::getFont",
-                                       "Couldn't find font Utopia-Regular!");
-#endif
-                }
-            }
-        } else {
-            if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
-#ifdef DEBUG
-                SoDebugError::post("SoText3::getFont",
-                                   "Couldn't find font Utopia-Regular!");
-#endif
-            }
-        }
-    }
 
     sidesHaveTexCoords = FALSE;
 
@@ -259,11 +203,6 @@ SoOutlineFontCache::~SoOutlineFontCache()
             face = NULL;
         }
         fonts.erase(std::find(fonts.begin(), fonts.end(), this));
-    }
-
-    if (fonts.empty()) {
-        FT_Done_FreeType(library);
-        library = NULL;
     }
 }
 

@@ -56,7 +56,6 @@
 #include <Inventor/caches/SoBitmapFontCache.h>
 #include <Inventor/caches/SoGLDisplayList.h>
 
-#include <Inventor/elements/SoFontNameElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/elements/SoFontSizeElement.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
@@ -66,14 +65,11 @@
 
 #include <algorithm>
 
-#include "utopia-regular.cpp"
-
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////    SoBitmapFontCache  //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // Static variables for SoBitmapFontCache
 std::vector<SoBitmapFontCache*> SoBitmapFontCache::fonts;
-FT_Library SoBitmapFontCache::library = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -87,17 +83,6 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (library == NULL) {
-        // One-time font library initialization
-        if (FT_Init_FreeType( &library )) {
-#ifdef DEBUG
-            SoDebugError::post("SoBitmapFontCache::getFont",
-                               "FT_Init_FreeType failed");
-#endif
-            return NULL;
-        }
-    }
-
     SoBitmapFontCache *result = NULL;
     for (size_t i = 0; i < fonts.size() && result == NULL; i++) {
         SoBitmapFontCache *fc = fonts[i];
@@ -128,7 +113,7 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
 // Use: internal, private
 
 SoBitmapFontCache::SoBitmapFontCache(SoState *state)
-    : SoCache(state), context(-1)
+    : SoFontCache(state), context(-1)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -140,39 +125,6 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state)
     addElement(state->getConstElement(SoViewportRegionElement::getClassStackIndex()));
 
     float fontSize = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
-    addElement(state->getConstElement(SoFontSizeElement::getClassStackIndex()));
-
-    const SbName & fontName = SoFontNameElement::get(state);
-
-    addElement(state->getConstElement(SoFontNameElement::getClassStackIndex()));
-    if (fontName == SoFontNameElement::getDefault() || fontName == "Utopia-Regular") {
-        if (FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
-#ifdef DEBUG
-            SoDebugError::post("SoBitmapFontCache::getFont",
-                               "Couldn't load embeded font Utopia-Regular!");
-#endif
-        }
-    } else {
-        SbFile file;
-        if (file.open(SoFont::getFontFileName(fontName), "rb")) {
-            buffer.resize(SbFile::size(SoFont::getFontFileName(fontName)));
-            file.read(&buffer[0], 1, buffer.size());
-
-            if (FT_New_Memory_Face(library, &buffer[0], (FT_Long)buffer.size(), 0, &face)) {
-#ifdef DEBUG
-                SoDebugError::post("SoBitmapFontCache::getFont",
-                                   "Couldn't find font %s, replacing with Utopia-Regular", fontName.getString());
-#endif
-            }
-        }
-    }
-
-    if (!face && FT_New_Memory_Face(library, binary_utopia_regular, BINARY_UTOPIA_REGULAR_SIZE, 0, &face)) {
-#ifdef DEBUG
-        SoDebugError::post("SoText2::getFont",
-                           "Couldn't find font Utopia-Regular!");
-#endif
-    }
 
     FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
 
