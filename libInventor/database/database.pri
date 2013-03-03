@@ -110,6 +110,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/bundles/SoTextureCoordinateBundle.h \
            database/include/Inventor/caches/SoBoundingBoxCache.h \
            database/include/Inventor/caches/SoCache.h \
+           database/include/Inventor/caches/SoFontCache.h \
            database/include/Inventor/caches/SoGLCacheList.h \
            database/include/Inventor/caches/SoGLDisplayList.h \
            database/include/Inventor/caches/SoGLRenderCache.h \
@@ -593,6 +594,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/caches/SoFontOutline.cpp \
            database/src/caches/SoBoundingBoxCache.cpp \
            database/src/caches/SoCache.cpp \
+           database/src/caches/SoFontCache.cpp \
            database/src/caches/SoGLCacheList.cpp \
            database/src/caches/SoGLDisplayList.cpp \
            database/src/caches/SoGLRenderCache.cpp \

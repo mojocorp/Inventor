@@ -56,13 +56,10 @@
 #ifndef  _SO_BITMAP_FONT_CACHE_
 #define  _SO_BITMAP_FONT_CACHE_
 
-#include <Inventor/caches/SoCache.h>
+#include <Inventor/caches/SoFontCache.h>
 #include <Inventor/SbBox3f.h>
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/SbStdint.h>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
 
 #include <vector>
 #include <map>
@@ -75,7 +72,7 @@
 // and knows exactly which elements it depends on.
 class SoGLDisplayList;
 
-class SoBitmapFontCache : public SoCache {
+class SoBitmapFontCache : public SoFontCache {
 public:
     // Return a font (either a new one or an old one) that is valid
     // for the given state.
@@ -141,11 +138,5 @@ private:
     int context;
     std::map<wchar_t, SoGLDisplayList*> list;
     std::map<wchar_t, FLbitmap*> bitmaps; // Cached bitmaps for each character.
-
-    // And some font library stuff:
-    static FT_Library library;
-    FT_Face face;
-
-    std::vector<unsigned char> buffer;
 };
 #endif /* _SO_BITMAP_FONT_CACHE_ */

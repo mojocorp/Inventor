@@ -61,6 +61,7 @@
 #include <Inventor/SoPath.h>
 #include <Inventor/SoType.h>
 #include <Inventor/actions/SoAction.h>
+#include <Inventor/caches/SoFontCache.h>
 #include <Inventor/details/SoDetail.h>
 #include <Inventor/elements/SoElement.h>
 #include <Inventor/engines/SoEngine.h>
@@ -184,6 +185,8 @@ SoDB::init()
 	// Setup for file reading (initializes list of directories to
 	// search in).
 	SoInput::init();
+
+    SoFontCache::init();
 
 	// Set up field conversion dictionary
 	conversionDict = new SbDict;

@@ -61,13 +61,10 @@
 #include <Inventor/SbVec3f.h>
 #include <Inventor/SbBox2f.h>
 #include <Inventor/SbString.h>
-#include <Inventor/caches/SoCache.h>
+#include <Inventor/caches/SoFontCache.h>
 
 #include <vector>
 #include <map>
-
-#include <ft2build.h>
-#include FT_FREETYPE_H
 
 class SoFontOutline;
 class SoGLDisplayList;
@@ -84,7 +81,7 @@ typedef void SideCB(int nPoints,
 // This is pretty heavyweight-- it is responsible for doing all of the
 // grunt work of figuring out the polygons making up the characters in
 // the font.
-class SoOutlineFontCache : public SoCache
+class SoOutlineFontCache : public SoFontCache
 {
   public:
     // Given a state, find an appropriate outline font.
@@ -176,20 +173,12 @@ class SoOutlineFontCache : public SoCache
     // Flag used to detect tesselation errors:
     static SbBool tesselationError;
 
-    // Font library identifier for this font
-    FT_Face	face;
-
-    // Font library context for all outline fonts
-    static FT_Library	library;
-
     // Global list of available fonts; a 'font' in this case is a
     // unique set of font name, font size, complexity value/type, and
     // set of profiles-- if any of these changes, the set of polygons
     // representing the font will change, and a different font will be
     // used.
     static std::vector<SoOutlineFontCache*>	fonts;
-
-    std::vector<unsigned char> buffer;
 };
 
 #endif /* _SO_OUTLINE_FONT_CACHE_ */
