@@ -60,7 +60,7 @@ protected:
 };
 
 TEST_P(ModelTest_GLCTX, all) {
-    QString oivhome(getenv("OIV_HOME"));
+    QString oivhome(getenv("OIVHOME"));
 
     QFileInfo srcFilename = oivhome + "/" + GetParam();
     ASSERT_TRUE(srcFilename.exists());

@@ -15,7 +15,7 @@ public:
         if (fileName.toLower().startsWith(":"))
         {
             QString newFileName = fileName;
-            newFileName.replace(":", getenv("OIV_HOME"));
+            newFileName.replace(":", getenv("OIVHOME"));
             return new QFSFileEngine(newFileName);
         }
         return 0;
@@ -24,8 +24,8 @@ public:
 
 int main(int argc, char **argv)
 {
-    if (!getenv("OIV_HOME") || !QDir(getenv("OIV_HOME") + QString("/ivtest")).exists()) {
-        printf("ERROR: OIV_HOME is not set or the directory doesn't exist.");
+    if (!getenv("OIVHOME") || !QDir(getenv("OIVHOME") + QString("/ivtest")).exists()) {
+        printf("ERROR: OIVHOME is not set or the directory doesn't exist.");
         return 1;
     }
 
