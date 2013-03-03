@@ -6,7 +6,7 @@
 #include <QCryptographicHash>
 
 TEST(testImage, jpg) {
-    SbString filename = getenv("OIV_HOME") + SbString("/data/textures/brick.jpg");
+    SbString filename = getenv("OIVHOME") + SbString("/data/textures/brick.jpg");
 
     SbImage img(filename);
 
@@ -21,7 +21,7 @@ TEST(testImage, jpg) {
 }
 
 TEST(testImage, rgb) {
-    SbString filename = getenv("OIV_HOME") + SbString("/data/textures/brick.rgb");
+    SbString filename = getenv("OIVHOME") + SbString("/data/textures/brick.rgb");
 
     SbImage img(filename);
 
