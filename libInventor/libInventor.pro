@@ -23,7 +23,7 @@ win32 {
     INCLUDEPATH += ../3rdparty/pthreads-w32 \
                    ../3rdparty/freetype/include \
                    ../3rdparty/libjpeg \
-                   ../3rdparty/glu-1.3.0/include
+                   ../3rdparty/glu/include
 
     DEFINES += PTW32_STATIC_LIB
     LIBS += -lpthreads-w32 -lWSock32
