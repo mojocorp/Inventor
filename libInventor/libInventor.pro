@@ -22,7 +22,7 @@ win32 {
     
     INCLUDEPATH += ../3rdparty/freetype/include \
                    ../3rdparty/libjpeg \
-                   ../3rdparty/glu-1.3.0/include
+                   ../3rdparty/glu/include
 
     # required libs for OpenGL
     LIBS += -lopengl32 -lUser32 -lGdi32
