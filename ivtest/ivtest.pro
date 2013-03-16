@@ -29,6 +29,7 @@ HEADERS += utils.h
 SOURCES += main.cpp \
            utils.cpp \
            testUtils.cpp \
+           testVersion.cpp \
            testVec2f.cpp \
            testVec3f.cpp \
            testColor.cpp \
