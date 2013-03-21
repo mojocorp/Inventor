@@ -553,16 +553,14 @@ SoText2::getPixelStringOffset(int line)
 ////////////////////////////////////////////////////////////////////////
 {
     SbVec3f result(0,0,0);
-    
+    SbVec2s size = fontCache->getSize(string[line]);
     if (justification.getValue() == RIGHT) {
-        float width = fontCache->getWidth(string[line]);
-        result[0] = -width;
+        result[0] = -size[0];
     }
     if (justification.getValue() == CENTER) {
-        float width = fontCache->getWidth(string[line]);
-        result[0] = -width/2.0f;
+        result[0] = -size[0]/2.0f;
     }
-    result[1] = -line*fontCache->getHeight()*spacing.getValue()*2;
+    result[1] = -line*size[1]*spacing.getValue()*2;
 
     return result;
 }

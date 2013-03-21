@@ -57,6 +57,7 @@
 #define  _SO_BITMAP_FONT_CACHE_
 
 #include <Inventor/caches/SoFontCache.h>
+#include <Inventor/SbVec2s.h>
 #include <Inventor/SbBox3f.h>
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/SbStdint.h>
@@ -89,11 +90,8 @@ public:
     // Get the pixel-space bounding box of a given character.
     void getCharBbox(wchar_t c, SbBox3f &box);
 
-    // Gets the width (in pixels) of the given string
-    float getWidth(const SbString &str);
-
-    // Gets the height of the font, in pixels
-    float getHeight();
+    // Gets the size (in pixels) of the given string
+    SbVec2s getSize(const SbString &str);
 
     // Draws the given string
     void drawString(SoState *state, const SbString &string);
