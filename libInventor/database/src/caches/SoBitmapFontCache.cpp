@@ -283,42 +283,26 @@ SoBitmapFontCache::getCharOffset(wchar_t c)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Returns the width of given string.
+//    Returns the size of given string.
 //
 // Use: internal, public
 
-float
-SoBitmapFontCache::getWidth(const SbString &str)
+SbVec2s
+SoBitmapFontCache::getSize(const SbString &str)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float result = 0.0;
+    SbVec2s result(0, 0);
 
     std::wstring chars = str.toStdWString();
     for (size_t i = 0; i < str.getLength(); i++) {
         const FLbitmap *bmap = getBitmap(chars[i]);
-        if (bmap != NULL)
-            result += bmap->xmove;
+        if (bmap != NULL) {
+            result[0] += bmap->xmove;
+            result[1] = std::max(result[1], (short)bmap->height);
+        }
     }
     return result;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns the height of given string.
-//
-// Use: internal, public
-
-float
-SoBitmapFontCache::getHeight()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const FLbitmap *bmap = getBitmap('M');
-    if (bmap != NULL)
-        return bmap->height - bmap->yorig;
-    else return 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
