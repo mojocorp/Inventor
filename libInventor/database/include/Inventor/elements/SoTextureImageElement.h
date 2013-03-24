@@ -75,38 +75,45 @@ SoEXTENDER class INVENTOR_API SoTextureImageElement : public SoReplacedElement {
 
   public:
     /// Initializes element.
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     /// sets the current image, wrap, and model:
-    static void		set(SoState *state, SoNode *node,
-                const SbImage &img,
-                int wrapS, int wrapT, int model,
-                const SbColor &blendColor);
+    static void set(SoState *state, SoNode *node,
+                    const SbImage &img,
+                    int wrapS, int wrapT, int model,
+                    int magFilter, int minFilter,
+                    const SbColor &blendColor);
 
     static const SbImage & get(SoState *state,
-                    int &wrapS, int &wrapT, int &model,
-				    SbColor &blendColor);
+                               int &wrapS, int &wrapT, int &model,
+                               int &magFilter, int &minFilter,
+                               SbColor &blendColor);
+
+    static const SbImage & get(SoState *state,
+                               int &wrapS, int &wrapT, int &model,
+                               SbColor &blendColor);
 
     /// Returns TRUE if the texture contains transparency info
-    static SbBool	containsTransparency(SoState *state);
+    static SbBool containsTransparency(SoState *state);
 
     /// Returns the default texture image
     static const unsigned char *getDefault(SbVec2s &s, int &nc);
 
     /// Print info about image for debugging
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
   SoINTERNAL public:
     // Initializes the class
-    static void		initClass();
+    static void initClass();
 
   protected:
     virtual void setElt(const SbImage &img,
-                   int wrapS, int wrapT, int model,
-                   const SbColor &blendColor);
+                        int wrapS, int wrapT, int model,
+                        int magFilter, int minFilter,
+                        const SbColor &blendColor);
 
     SbImage image;
-    int		wrapS, wrapT, model;
+    int wrapS, wrapT, model, magFilter, minFilter;
     SbColor	blendColor;
 
     virtual ~SoTextureImageElement();

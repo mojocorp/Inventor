@@ -91,8 +91,8 @@ SoEXTENDER class INVENTOR_API SoGLTextureImageElement : public SoTextureImageEle
     static SoGLDisplayList *
     set(SoState *state, SoNode *node,
         const SbImage &img,
-        float texQuality,
         int wrapS, int wrapT, int model,
+        int magFilter, int minFilter,
         const SbColor &blendColor, SoGLDisplayList *list);
 
     /// Override pop() method so side effects can occur in GL
@@ -120,7 +120,6 @@ SoEXTENDER class INVENTOR_API SoGLTextureImageElement : public SoTextureImageEle
     void		sendTex(SoState *state);
 
     SoGLDisplayList	*list;
-    float		quality;
 };
 
 #endif /* _SO_GL_TEXTURE_IMAGE_ELEMENT */
