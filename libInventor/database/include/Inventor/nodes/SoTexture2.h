@@ -140,6 +140,18 @@ class INVENTOR_API SoTexture2 : public SoNode {
         MIRRORED_REPEAT = GL_MIRRORED_REPEAT  ///< (OpenGL >= 1.4)
     };
 
+    /// Texture filter
+    enum Filter
+    {
+        AUTO  = 0, ///< Default. The texture filter depend on SoComplexity::textureQuality.
+        NEAREST = GL_NEAREST,
+        LINEAR = GL_LINEAR,
+        NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
+        NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
+        LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
+        LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
+    };
+
     // Fields.
     /// Names file from which to read texture image. Currently only SGI .rgb
     /// files are supported. If the filename is not an absolute path name, the
@@ -150,61 +162,69 @@ class INVENTOR_API SoTexture2 : public SoNode {
     /// of <b>"../tofu.rgb"</b> is read from <b>/usr/people/bob/models/food.iv</b>,
     /// then <b>/usr/people/bob/tofu.rgb</b> will be read (assuming <b>tofu.rgb</b>
     /// isn't found in the directories maintained by <tt>SoInput</tt>).
-    SoSFString		filename;
+    SoSFString filename;
 
     /// Contains an in-memory representation of the texture map. It is either
     /// the contents of the file read from #filename, an image read
     /// directly from an Inventor file, or an image set programmatically using
     /// the methods provided by <tt>SoSFImage</tt>.
-    SoSFImage		image;
+    SoSFImage image;
 
     /// Indicates what to do when texture coordinates in the S (horizontal)
     /// direction lie outside the range 0-1.
-    SoSFEnum		wrapS;
+    SoSFEnum wrapS;
 
     /// Indicates what to do when texture coordinates in the T (vertical)
     /// direction lie outside the range 0-1.
-    SoSFEnum		wrapT;
+    SoSFEnum wrapT;
 
     /// Specifies how to map texture onto surface.
-    SoSFEnum		model;
+    SoSFEnum model;
 
     /// Color used for <b>BLEND</b> model.
-    SoSFColor		blendColor;
+    SoSFColor blendColor;
+
+    /// Texture minifying function.
+    SoSFEnum minFilter;
+
+    /// Texture magnification function.
+    SoSFEnum magFilter;
 
     /// Creates a texture node with default settings.
     SoTexture2();
     
   SoEXTENDER public:
-    virtual void	doAction(SoAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	callback(SoCallbackAction *action);
+    virtual void doAction(SoAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void callback(SoCallbackAction *action);
 
   SoINTERNAL public:
-    static void		initClass();
+    static void initClass();
 
   protected:
     // Reads stuff into instance. Returns FALSE on error.
-    virtual SbBool	readInstance(SoInput *in, unsigned short flags);
+    virtual SbBool readInstance(SoInput *in, unsigned short flags);
 
     virtual ~SoTexture2();
 
-    int		    getReadStatus() const { return readStatus; }
-    void	    setReadStatus(int s)	{ readStatus = s; }
+    int getReadStatus() const { return readStatus; }
+    void setReadStatus(int s) { readStatus = s; }
 
   private:
+    int getMinFilter(float texQuality) const;
+    int getMagFilter(float texQuality) const;
+
     // These keep the image and filename fields in sync.
-    SoFieldSensor *	imageSensor;
-    static void		imageChangedCB(void *, SoSensor *);
-    SoFieldSensor *	filenameSensor;
-    static void		filenameChangedCB(void *, SoSensor *);
+    SoFieldSensor *imageSensor;
+    static void imageChangedCB(void *, SoSensor *);
+    SoFieldSensor *filenameSensor;
+    static void filenameChangedCB(void *, SoSensor *);
     
-    int			readStatus;
-    
+    int readStatus;
 
     // Display list info for this texture:
     SoGLDisplayList *renderList;
-    float	renderListQuality;
+    float renderListQuality;
 };
 
 #endif /* _SO_TEXTURE_2_ */
