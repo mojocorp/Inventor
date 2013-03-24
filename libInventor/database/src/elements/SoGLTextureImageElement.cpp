@@ -60,7 +60,6 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
 
-#include <float.h>
 #include <vector>
 
 SO_ELEMENT_SOURCE(SoGLTextureImageElement);
@@ -143,6 +142,7 @@ SoGLTextureImageElement::pop(SoState *state, const SoElement *)
 void
 SoGLTextureImageElement::setElt(const SbImage &,
                                 int, int, int,
+                                int, int,
                                 const SbColor &)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -168,8 +168,9 @@ SoGLTextureImageElement::setElt(const SbImage &,
 SoGLDisplayList *
 SoGLTextureImageElement::set(SoState *state, SoNode *node,
                              const SbImage &img,
-                             float _quality, int _wrapS, int _wrapT,
-                             int _model, const SbColor &_blendColor,
+                             int _wrapS, int _wrapT, int _model,
+                             int _magFilter, int _minFilter,
+                             const SbColor &_blendColor,
                              SoGLDisplayList *_list)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -182,10 +183,11 @@ SoGLTextureImageElement::set(SoState *state, SoNode *node,
     if (elt != NULL) {
         elt->SoTextureImageElement::setElt(img,
                                            _wrapS, _wrapT,
-                                           _model, _blendColor);
+                                           _model,
+                                           _magFilter, _minFilter,
+                                           _blendColor);
 
         elt->list = _list;
-        elt->quality = _quality;
         elt->sendTexEnv(state);
         elt->sendTex(state);
         return elt->list;
@@ -253,27 +255,6 @@ nearestPowerOf2(GLuint value)
     }
 }
 
-//
-// Helper table; mapping from textureQuality to OpenGL filter type:
-//
-struct qualityFilterTable {
-    float quality;
-    GLint filter;
-    bool needMipMaps;
-};
-
-//
-// Defaults for RealityEngine (mip-mapped by default):
-//
-static qualityFilterTable mipmap_minQFTable[] = {
-    { 0.1f, GL_NEAREST, false},
-    { 0.5f, GL_LINEAR, false},
-    { 0.7f, GL_NEAREST_MIPMAP_NEAREST, true},
-    { 0.8f, GL_NEAREST_MIPMAP_LINEAR, true},
-    { 0.9f, GL_LINEAR_MIPMAP_NEAREST, true},
-    { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, true},
-};
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -329,13 +310,6 @@ SoGLTextureImageElement::sendTex(SoState *state)
         newSize[1] = size[1] > maxsize ? maxsize : 1 << nearestPowerOf2(size[1]);
     }
 
-    int i;
-    for (i = 0; quality > mipmap_minQFTable[i].quality; i++) /* Do nothing */;
-    int minFilter = mipmap_minQFTable[i].filter;
-    int magFilter = (quality < 0.5 ? GL_NEAREST : GL_LINEAR);
-    bool needMipMaps = mipmap_minQFTable[i].needMipMaps;
-
-
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Not default
     
     // Format in memory
@@ -359,6 +333,8 @@ SoGLTextureImageElement::sendTex(SoState *state)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
     
+    bool needMipMaps = (minFilter >= GL_NEAREST_MIPMAP_NEAREST) && (minFilter <= GL_LINEAR_MIPMAP_LINEAR);
+
     std::vector<GLubyte> level0;
     if (newSize != size) {
         level0.resize(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));

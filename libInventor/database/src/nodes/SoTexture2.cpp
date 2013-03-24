@@ -66,6 +66,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <float.h>
 
 SO_NODE_SOURCE(SoTexture2);
 
@@ -278,6 +279,27 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
     tex->setReadStatus(!img.isNull());
 }
 
+//
+// Helper table; mapping from textureQuality to OpenGL filter type:
+//
+struct qualityFilterTable {
+    float quality;
+    GLint filter;
+    bool needMipMaps;
+};
+
+//
+// Defaults for RealityEngine (mip-mapped by default):
+//
+static qualityFilterTable mipmap_minQFTable[] = {
+    { 0.1f, GL_NEAREST, false},
+    { 0.5f, GL_LINEAR, false},
+    { 0.7f, GL_NEAREST_MIPMAP_NEAREST, true},
+    { 0.8f, GL_NEAREST_MIPMAP_LINEAR, true},
+    { 0.9f, GL_LINEAR_MIPMAP_NEAREST, true},
+    { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, true},
+};
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -299,9 +321,17 @@ SoTexture2::doAction(SoAction *action)
         SoTextureOverrideElement::setImageOverride(state, TRUE);
     }
 
+    float texQuality = SoTextureQualityElement::get(state);
+    int i;
+    for (i = 0; texQuality > mipmap_minQFTable[i].quality; i++) /* Do nothing */;
+    int minFilter = mipmap_minQFTable[i].filter;
+    int magFilter = (texQuality < 0.5 ? GL_NEAREST : GL_LINEAR);
+    bool needMipMaps = mipmap_minQFTable[i].needMipMaps;
+
     SoTextureImageElement::set(state, this, image.getValue(),
                                wrapS.getValue(), wrapT.getValue(),
-                               model.getValue(), blendColor.getValue());
+                               model.getValue(),
+                               magFilter, minFilter, blendColor.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -381,15 +411,22 @@ SoTexture2::GLRender(SoGLRenderAction *action)
         // the list must go away if the node is deleted or the
         // image is changed.
 
+        int i;
+        for (i = 0; texQuality > mipmap_minQFTable[i].quality; i++) /* Do nothing */;
+        int minFilter = mipmap_minQFTable[i].filter;
+        int magFilter = (texQuality < 0.5 ? GL_NEAREST : GL_LINEAR);
+        bool needMipMaps = mipmap_minQFTable[i].needMipMaps;
+
         // See if renderList is valid (in the right context, with
         // the right texture quality):
         int context = SoGLCacheContextElement::get(state);
         if (renderList && renderList->getContext() == context &&
                 texQuality == renderListQuality) {
             SoGLTextureImageElement::set(
-                        state, this, image.getValue(), texQuality,
+                        state, this, image.getValue(),
                         wrapS.getValue(), wrapT.getValue(),
-                        m, blendColor.getValue(), renderList);
+                        m, magFilter, minFilter,
+                        blendColor.getValue(), renderList);
         }  // Not valid, try to build
         else {
             // Free up old list, if necessary:
@@ -398,9 +435,10 @@ SoTexture2::GLRender(SoGLRenderAction *action)
                 renderList = NULL;
             }
             renderList = SoGLTextureImageElement::set(
-                        state, this, image.getValue(), texQuality,
+                        state, this, image.getValue(),
                         wrapS.getValue(), wrapT.getValue(),
-                        m, blendColor.getValue(), NULL);
+                        m, magFilter, minFilter,
+                        blendColor.getValue(), NULL);
             if (renderList)
                 renderList->ref();
             renderListQuality = texQuality;

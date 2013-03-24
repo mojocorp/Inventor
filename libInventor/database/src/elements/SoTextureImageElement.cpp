@@ -107,6 +107,7 @@ void
 SoTextureImageElement::set(SoState *state, SoNode *node,
                const SbImage &img,
                int wrapS, int wrapT, int model,
+               int magFilter, int minFilter,
                const SbColor &blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -116,7 +117,7 @@ SoTextureImageElement::set(SoState *state, SoNode *node,
     // Get an instance we can change (pushing if necessary)
     elt = (SoTextureImageElement *) getElement(state, classStackIndex, node);
 
-    elt->setElt(img, wrapS, wrapT, model, blendColor);
+    elt->setElt(img, wrapS, wrapT, model, magFilter, minFilter, blendColor);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -130,6 +131,7 @@ SoTextureImageElement::set(SoState *state, SoNode *node,
 void
 SoTextureImageElement::setElt(const SbImage &_image,
                   int _wrapS, int _wrapT, int _model,
+                  int _magFilter, int _minFilter,
                   const SbColor &_blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -138,6 +140,8 @@ SoTextureImageElement::setElt(const SbImage &_image,
     wrapS = _wrapS;
     wrapT = _wrapT;
     model = _model;
+    magFilter = _magFilter;
+    minFilter = _minFilter;
     blendColor = _blendColor;
 }
 
@@ -151,7 +155,7 @@ SoTextureImageElement::setElt(const SbImage &_image,
 const SbImage &
 SoTextureImageElement::get(SoState *state,
                int &_wrapS, int &_wrapT,
-			   int &_model, SbColor &_blendColor)
+               int &_model, int &_magFilter, int &_minFilter, SbColor &_blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -159,6 +163,35 @@ SoTextureImageElement::get(SoState *state,
 
     elt = (const SoTextureImageElement *)
 	getConstElement(state, classStackIndex);
+
+    _wrapS = elt->wrapS;
+    _wrapT = elt->wrapT;
+    _model = elt->model;
+    _magFilter = elt->magFilter;
+    _minFilter = elt->minFilter;
+    _blendColor = elt->blendColor;
+
+    return elt->image;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Returns texture image from state.
+//
+// Use: public, static
+
+const SbImage &
+SoTextureImageElement::get(SoState *state,
+               int &_wrapS, int &_wrapT,
+               int &_model, SbColor &_blendColor)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    const SoTextureImageElement *elt;
+
+    elt = (const SoTextureImageElement *)
+    getConstElement(state, classStackIndex);
 
     _wrapS = elt->wrapS;
     _wrapT = elt->wrapT;

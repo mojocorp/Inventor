@@ -189,7 +189,7 @@ class INVENTOR_API SoTexture2 : public SoNode {
 
     virtual ~SoTexture2();
 
-    int		    getReadStatus()		{ return readStatus; }
+    int		    getReadStatus() const { return readStatus; }
     void	    setReadStatus(int s)	{ readStatus = s; }
 
   private:
