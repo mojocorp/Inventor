@@ -198,6 +198,31 @@ SoMFEnum::setEnums(int num, int *vals, SbName *names)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Called by nodes to get legal enum names and values
+//
+// Use: extender public
+
+int
+SoMFEnum::getEnum(int idx, SbName & name) const
+
+//
+////////////////////////////////////////////////////////////////////////
+{
+#ifdef DEBUG
+    if (idx < 0 || idx >= numEnums) {
+        SoDebugError::post("SoMFEnum::getEnum",
+                           "idx (%d) out of range", idx);
+        return -1;
+    }
+#endif
+
+    name = enumNames[idx];
+    return enumValues[idx];
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Looks up enum name, returns value. Returns FALSE if not found.
 //
 // Use: protected
