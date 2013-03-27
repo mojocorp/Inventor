@@ -99,6 +99,12 @@ class INVENTOR_API SoMFEnum : public SoMField {
     // Sets up value/name correspondances
     void		setEnums(int num, int *vals, SbName *names);
 
+    /// Returns the number of enum.
+    int getNumEnums(void) const { return numEnums; }
+
+    /// Returns the value of the Nth enum.
+    int getEnum(int idx, SbName & name) const;
+
   SoINTERNAL public:
     static void		initClass();
 
