@@ -87,7 +87,7 @@ SbString::SbString() {
 
 SbString::SbString(const char *str) {
     string = staticStorage;
-    *this = fromLatin1(str);
+    *this = fromUtf8(str);
 }
 
 //

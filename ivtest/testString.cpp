@@ -93,6 +93,11 @@ TEST(SbString, Operators) {
     stringB += "an ascii string";
 
     EXPECT_TRUE(stringA == stringB);
+
+    stringA = SbString::fromUtf8("Kl\303\274ft skr\303\244ms inf\303\266r p\303\245 f\303\251d\303\251ral \303\251lectoral gro\303\237e");
+    stringB = "Kl\303\274ft skr\303\244ms inf\303\266r p\303\245 f\303\251d\303\251ral \303\251lectoral gro\303\237e";
+
+    EXPECT_TRUE(stringA == stringB);
 }
 
 TEST(SbString, UTF8) {
@@ -110,6 +115,10 @@ TEST(SbString, UTF8) {
     EXPECT_EQ(45, string4.getLength());
 
     EXPECT_TRUE(string1 == string4);
+
+    SbString string5("Kl\303\274ft skr\303\244ms inf\303\266r p\303\245 f\303\251d\303\251ral \303\251lectoral gro\303\237e");
+
+    EXPECT_TRUE(string1 == string5);
 }
 
 
