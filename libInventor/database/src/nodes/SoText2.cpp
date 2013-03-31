@@ -68,6 +68,7 @@
 #include <Inventor/elements/SoProjectionMatrixElement.h>
 #include <Inventor/elements/SoViewingMatrixElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
+
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoText2.h>
 #include <Inventor/caches/SoBitmapFontCache.h>
@@ -212,6 +213,14 @@ SoText2::GLRender(SoGLRenderAction *action)
 
     SoState *state = action->getState();
 
+    // Don't auto-cache above, since dependent on camera:
+    SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
+
+    if (!action->isRenderingDelayedPaths()) {
+        action->addDelayedPath(action->getCurPath()->copy());
+        return;
+    }
+
     state->push();
 
     // Get a font cache we can pull stuff out of
@@ -231,60 +240,72 @@ SoText2::GLRender(SoGLRenderAction *action)
 
     // Turn off lighting
     SoGLLazyElement::setLightModel(state, SoGLLazyElement::BASE_COLOR);
-    // Turn off texturing
-    SoGLTextureEnabledElement::set(state, FALSE);
+
+    // Enable texture mapping
+    SoGLTextureEnabledElement::set(state, TRUE);
 
     // Send first color
     SoMaterialBundle mb(action);
     mb.sendFirst();
-    
-    const SbColor &	color = SoGLLazyElement::getDiffuse(state, 0);
 
-    glPushAttrib(GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
+    fontCache->open(state, this);
 
-    glPixelTransferf(GL_RED_SCALE,   color[0]);
-    glPixelTransferf(GL_GREEN_SCALE, color[1]);
-    glPixelTransferf(GL_BLUE_SCALE,  color[2]);
+    const SbViewportRegion & vpr = SoViewportRegionElement::get(state);
+    const SbVec2s & vpsize = vpr.getViewportSizePixels();
 
-    // Special-case left-justified, single-line text, which we know
-    // starts at (0,0,0) in object space, so we can help caching by
-    // avoiding getting the projection/view/model matrices:
-    if (string.getNum() == 1 && justification.getValue() == LEFT) {
-        glRasterPos3f(0,0,0);
-        fontCache->drawString(state, string[0]);
+    SbMatrix objToScreen;
+    objToScreen = SoProjectionMatrixElement::get(state);
+    objToScreen = objToScreen.multLeft(SoViewingMatrixElement::get(state));
+    objToScreen = objToScreen.multLeft(SoModelMatrixElement::get(state));
+
+    SbVec3f screenOrigin(0.0f, 0.0f, 0.0f);
+    objToScreen.multVecMatrix(screenOrigin, screenOrigin);
+    screenOrigin[0] = (screenOrigin[0] + 1.0f) * 0.5f * vpsize[0];
+    screenOrigin[1] = (screenOrigin[1] + 1.0f) * 0.5f * vpsize[1];
+
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0, vpsize[0], 0, vpsize[1], -1.0f, 1.0f);
+
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+
+    //
+    // Set up OpenGL state for rendering text, and push
+    // attributes so that we can restore when done.
+    //
+    glPushAttrib( GL_ENABLE_BIT | GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
+    glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
+
+    glAlphaFunc(GL_GEQUAL, 0.0625);
+    glEnable(GL_ALPHA_TEST);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_POLYGON_OFFSET_LINE);
+    glPolygonOffset(0.0, -3);
+
+    for (int line = 0; line < string.getNum(); line++) {
+        // Starting position of string, based on justification:
+        SbVec3f charPosition = getPixelStringOffset(line) + screenOrigin;
+
+        glTranslatef(charPosition[0], charPosition[1], -charPosition[2]);
+
+        fontCache->drawString(state, string[line]);
     }
-    // General case:
-    else {
-        SbMatrix objToScreen;
-        objToScreen = SoProjectionMatrixElement::get(state);
-        objToScreen = objToScreen.multLeft(SoViewingMatrixElement::get(state));
-        objToScreen = objToScreen.multLeft(SoModelMatrixElement::get(state));
 
-        SbMatrix screenToObj = objToScreen.inverse();
-
-        const SbViewportRegion & vpr = SoViewportRegionElement::get(state);
-
-        // The origin of the text on the screen is the object-space point
-        // 0,0,0:
-        SbVec3f screenOrigin = fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
-
-        for (int line = 0; line < string.getNum(); line++) {
-            // Starting position of string, based on justification:
-            SbVec3f charPosition = getPixelStringOffset(line) + screenOrigin;
-
-            // Transform the screen-space starting position into object
-            // space, and feed that back to the glRasterPos command (which
-            // will turn around and transform it back into screen-space,
-            // but oh well).
-            SbVec3f lineOrigin = toObjectSpace(charPosition, screenToObj, vpr);
-            glRasterPos3fv(&lineOrigin[0]);
-
-            fontCache->drawString(state, string[line]);
-        }
-        // Don't auto-cache above, since dependent on camera:
-        SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
-    }
+    //
+    // Restore OpenGL state.
+    //
+    glPopClientAttrib();
     glPopAttrib();
+
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+
     state->pop();
 }
 
@@ -333,7 +354,7 @@ SoText2::rayPick(SoRayPickAction *action)
 
     SbMatrix screenToObj = objToScreen.inverse();
 
-    SbViewportRegion vpr = SoViewportRegionElement::get(state);
+    const SbViewportRegion & vpr = SoViewportRegionElement::get(state);
 
     // The origin of the text on the screen is the object-space point
     // 0,0,0:
@@ -477,7 +498,7 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
     SbMatrix screenToObj = objToScreen.inverse();
 
-    SbViewportRegion vpr = SoViewportRegionElement::get(state);
+    const SbViewportRegion & vpr = SoViewportRegionElement::get(state);
 
     // The origin of the text on the screen is the object-space point
     // 0,0,0:

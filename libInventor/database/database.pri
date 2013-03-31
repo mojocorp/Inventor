@@ -318,6 +318,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/misc/SoCompactPathList.h \
            database/include/Inventor/misc/SoGL.h \
            database/include/Inventor/misc/SoGLContext.h \
+           database/include/Inventor/misc/SbSkylineBinPack.h \
            database/include/Inventor/misc/SoNormalGenerator.h \
            database/include/Inventor/misc/SoNotification.h \
            database/include/Inventor/misc/SoState.h \
@@ -779,6 +780,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/fields/SoSFVec3f.cpp \
            database/src/fields/SoSFVec4f.cpp \
            database/src/misc/SoGLContext.cpp \
+           database/src/misc/SbSkylineBinPack.cpp \
            database/src/nodes/SoAnnotation.cpp \
            database/src/nodes/SoArray.cpp \
            database/src/nodes/SoAsciiText.cpp \

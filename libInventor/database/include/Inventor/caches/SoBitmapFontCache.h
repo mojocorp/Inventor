@@ -58,10 +58,12 @@
 
 #include <Inventor/caches/SoFontCache.h>
 #include <Inventor/SbVec2s.h>
+#include <Inventor/SbVec2f.h>
 #include <Inventor/SbBox3f.h>
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/SbStdint.h>
-
+#include <Inventor/SbImage.h>
+#include <Inventor/misc/SbSkylineBinPack.h>
 #include <vector>
 #include <map>
 
@@ -93,6 +95,8 @@ public:
     // Gets the size (in pixels) of the given string
     SbVec2s getSize(const SbString &str);
 
+    void open(SoState *state, SoNode *node);
+
     // Draws the given string
     void drawString(SoState *state, const SbString &string);
 
@@ -102,15 +106,16 @@ protected:
     virtual void destroy(SoState *state);
 
 private:
-    typedef struct FLbitmap {
+     struct FLbitmap{
+         SbVec2f uvmin;
+         SbVec2f uvmax;
          int width;
          int height;
-         float xorig;
-         float yorig;
-         float xmove;
-         float ymove;
-         unsigned char *bitmap;
-     } FLbitmap;
+         int xorig;
+         int yorig;
+         int xmove;
+         int ymove;
+     };
 
     // Constructor.
     SoBitmapFontCache(SoState *state);
@@ -118,15 +123,7 @@ private:
     // Destructor
     virtual ~SoBitmapFontCache();
 
-    // Draws the given character (using GL)
-    void drawCharacter(wchar_t c);
-
-    // Returns TRUE if this font cache has a display list for the
-    // given character.  It will try to build a display list, if it
-    // can.
-    SbBool hasDisplayList(SoState *state, wchar_t c);
-
-    const FLbitmap *getBitmap(wchar_t c);
+    const FLbitmap &getBitmap(wchar_t c);
 
     // Static list of all fonts.  OPTIMIZATION:  If there turn out to
     // be applications that use lots of fonts, we could change this
@@ -134,7 +131,10 @@ private:
     static std::vector<SoBitmapFontCache*> fonts;
 
     int context;
-    std::map<wchar_t, SoGLDisplayList*> list;
-    std::map<wchar_t, FLbitmap*> bitmaps; // Cached bitmaps for each character.
+    SoGLDisplayList* renderList;
+    std::map<wchar_t, FLbitmap> bitmaps; // Cached bitmaps for each character.
+
+    SbImage data;
+    SbSkylineBinPack binpack;
 };
 #endif /* _SO_BITMAP_FONT_CACHE_ */

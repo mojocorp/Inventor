@@ -60,6 +60,7 @@
 #include <Inventor/elements/SoFontSizeElement.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoCacheElement.h>
+#include <Inventor/elements/SoGLTextureImageElement.h>
 
 #include <Inventor/errors/SoDebugError.h>
 
@@ -113,10 +114,12 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
 // Use: internal, private
 
 SoBitmapFontCache::SoBitmapFontCache(SoState *state)
-    : SoFontCache(state), context(-1)
+    : SoFontCache(state), context(-1), renderList(NULL), binpack(SbVec2s(512, 512))
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    data.setValue(binpack.getSize(), SbImage::Format_Luminance_Alpha, NULL);
+
     ref();
 
     // Grab all the stuff we'll need to determine our validity from
@@ -144,11 +147,6 @@ SoBitmapFontCache::~SoBitmapFontCache()
 ////////////////////////////////////////////////////////////////////////
 {
     if (face) {
-        std::map<wchar_t, FLbitmap*>::iterator it;
-        for (it = bitmaps.begin(); it != bitmaps.end(); it++) {
-            delete [] it->second->bitmap;
-            delete it->second;
-        }
         // Only destroy the font library font if no other font caches
         // are using the same font identifier:
         SbBool otherUsing = FALSE;
@@ -179,9 +177,9 @@ SoBitmapFontCache::destroy(SoState *)
 {
     // Pass in NULL to unref because this cache may be destroyed
     // from an action _other_ than GLRender:
-    std::map<wchar_t, SoGLDisplayList*>::iterator it;
-    for (it=list.begin(); it != list.end(); it++) {
-        it->second->unref(NULL);
+    if (renderList) {
+        renderList->unref(NULL);
+        renderList = NULL;
     }
 
     SoCache::destroy(NULL);
@@ -199,44 +197,10 @@ SoBitmapFontCache::isRenderValid(SoState *state) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (list.empty()) return isValid(state);
+    if (!renderList) return isValid(state);
     else
         return (context == SoGLCacheContextElement::get(state)
                  && isValid(state));
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns TRUE if a display lists exists for given character.
-//    Tries to build a display list, if it can.
-//
-// Use: internal
-
-SbBool
-SoBitmapFontCache::hasDisplayList(SoState *state, wchar_t c)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // If we have one, return TRUE
-    if (list[c])
-        return TRUE;
-
-    // If we don't and we can't build one, return FALSE.
-    if (SoCacheElement::anyOpen(state))
-        return FALSE;
-
-    context = SoGLCacheContextElement::get(state);
-
-    // Build one:
-    list[c] = new SoGLDisplayList(state, SoGLDisplayList::DISPLAY_LIST);
-    list[c]->ref();
-    list[c]->addDependency(state);
-    glNewList(list[c]->getFirstIndex(), GL_COMPILE);
-    drawCharacter(c);
-    list[c]->close(state);
-
-    return TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -253,11 +217,9 @@ SoBitmapFontCache::getCharBbox(wchar_t c, SbBox3f &box)
 {
     box.makeEmpty();
 
-    const FLbitmap *bmap = getBitmap(c);
-    if (bmap == NULL)
-        return;
+    const FLbitmap & bmap = getBitmap(c);
 
-    box.setBounds(0,0,0, bmap->width, bmap->height, 0);
+    box.setBounds(0,0,0, bmap.width, bmap.height, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -273,11 +235,9 @@ SoBitmapFontCache::getCharOffset(wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const FLbitmap *bmap = getBitmap(c);
-    if (bmap != NULL)
-        return SbVec3f(bmap->xmove, bmap->ymove, 0);
-    else
-        return SbVec3f(0,0,0);
+    const FLbitmap & bmap = getBitmap(c);
+
+    return SbVec3f(bmap.xmove, bmap.ymove, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -296,39 +256,40 @@ SoBitmapFontCache::getSize(const SbString &str)
 
     std::wstring chars = str.toStdWString();
     for (size_t i = 0; i < str.getLength(); i++) {
-        const FLbitmap *bmap = getBitmap(chars[i]);
-        if (bmap != NULL) {
-            result[0] += bmap->xmove;
-            result[1] = std::max(result[1], (short)bmap->height);
-        }
+        const FLbitmap & bmap = getBitmap(chars[i]);
+        result[0] += bmap.xmove;
+        result[1] = std::max(result[1], (short)bmap.height);
     }
     return result;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Draws a bitmap
-//
-// Use: internal public
-
 void
-SoBitmapFontCache::drawCharacter(wchar_t c)
-//
-////////////////////////////////////////////////////////////////////////
+SoBitmapFontCache::open(SoState *state, SoNode *node)
 {
-    const FLbitmap *bmap = getBitmap(c);
+    SbColor blendColor(0,0,0);
 
-    if (bmap != NULL) {
-        glBitmap(0, 0, 0, 0,bmap->xorig, bmap->yorig, NULL);
-        if (bmap->bitmap) {
-            glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-            glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
-            glDrawPixels(bmap->width, bmap->height, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, bmap->bitmap);
+    if (renderList && renderList->getContext() == context) {
+        SoGLTextureImageElement::set(
+                    state, node, data,
+                    GL_CLAMP, GL_CLAMP,
+                    GL_MODULATE, GL_NEAREST, GL_NEAREST, blendColor, renderList);
+    }  // Not valid, try to build
+    else {
+        // Free up old list, if necessary:
+        if (renderList) {
+            renderList->unref(state);
+            renderList = NULL;
         }
-        glBitmap(0, 0, 0.0f, 0.0f, bmap->xmove-bmap->xorig, bmap->ymove-bmap->yorig, NULL);
+        context = SoGLCacheContextElement::get(state);
+        renderList = SoGLTextureImageElement::set(
+                    state, node, data,
+                    GL_CLAMP, GL_CLAMP,
+                    GL_MODULATE, GL_NEAREST, GL_NEAREST, blendColor, NULL);
+        if (renderList)
+            renderList->ref();
     }
 }
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -341,36 +302,28 @@ SoBitmapFontCache::drawString(SoState *state, const SbString &string)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    //
-    // Set up OpenGL state for rendering text, and push
-    // attributes so that we can restore when done.
-    //
-    glPushAttrib( GL_ENABLE_BIT | GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
-    glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
-
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.3f);
-
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    // if we don't, draw the string character-by-character, using the
-    // display lists we do have:
     std::wstring chars = string.toStdWString();
     for (size_t i = 0; i < string.getLength(); i++) {
-        if (hasDisplayList(state, chars[i])) {
-            list[chars[i]]->call(state);
-        }
-        else {
-            drawCharacter(chars[i]);
-        }
-    }
+        const FLbitmap & bmap = getBitmap(chars[i]);
+        if (bmap.width && bmap.height) {
+            int x1 = bmap.xorig;
+            int y1 = bmap.yorig;
+            int x2 = x1 + bmap.width;
+            int y2 = y1 + bmap.height;
 
-    //
-    // Restore OpenGL state.
-    //
-    glPopClientAttrib();
-    glPopAttrib();
+            glBegin(GL_QUADS);
+            glTexCoord2f(bmap.uvmin[0], bmap.uvmin[1]);
+            glVertex3i(x1, y1, 0);
+            glTexCoord2f(bmap.uvmax[0], bmap.uvmin[1]);
+            glVertex3i(x2, y1, 0);
+            glTexCoord2f(bmap.uvmax[0], bmap.uvmax[1]);
+            glVertex3i(x2, y2, 0);
+            glTexCoord2f(bmap.uvmin[0], bmap.uvmax[1]);
+            glVertex3i(x1, y2, 0);
+            glEnd();
+        }
+        glTranslatef(bmap.xmove, bmap.ymove, 0);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -379,16 +332,13 @@ SoBitmapFontCache::drawString(SoState *state, const SbString &string)
 //    Returns a bitmap.
 //
 // Use: private
-const SoBitmapFontCache::FLbitmap *
+const SoBitmapFontCache::FLbitmap &
 SoBitmapFontCache::getBitmap(wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (bitmaps[c])
+    if (bitmaps.find(c) != bitmaps.end())
         return bitmaps[c];
-
-    bitmaps[c] = new FLbitmap;
-    bitmaps[c]->bitmap = NULL;
 
     if(FT_Load_Char(face, c, FT_LOAD_RENDER)) {
 #ifdef DEBUG
@@ -400,27 +350,32 @@ SoBitmapFontCache::getBitmap(wchar_t c)
     FT_GlyphSlot glyph = face->glyph;
     FT_Bitmap bitmap = glyph->bitmap;
 
-    bitmaps[c]->width = bitmap.width;
-    bitmaps[c]->height = bitmap.rows;
+    bitmaps[c].width = bitmap.width;
+    bitmaps[c].height = bitmap.rows;
 
-    bitmaps[c]->xorig = glyph->bitmap_left;
-    bitmaps[c]->yorig = glyph->bitmap_top - glyph->bitmap.rows;
-    bitmaps[c]->xmove = glyph->advance.x / 64.0f;
-    bitmaps[c]->ymove = glyph->advance.y / 64.0f;
+    SbBox2s rect;
+    binpack.insert(bitmaps[c].width, bitmaps[c].height, rect, false);
+    int xmin = rect.getMin()[0];
+    int ymin = rect.getMin()[1];
+
+    bitmaps[c].uvmin[0] = xmin / (float)binpack.getSize()[0];
+    bitmaps[c].uvmin[1] = ymin / (float)binpack.getSize()[1];
+    bitmaps[c].uvmax[0] = rect.getMax()[0] / (float)binpack.getSize()[0];
+    bitmaps[c].uvmax[1] = rect.getMax()[1] / (float)binpack.getSize()[1];
+
+    bitmaps[c].xorig = glyph->bitmap_left;
+    bitmaps[c].yorig = glyph->bitmap_top - glyph->bitmap.rows;
+    bitmaps[c].xmove = glyph->advance.x >> 6;
+    bitmaps[c].ymove = glyph->advance.y >> 6;
 
     if (bitmap.width && bitmap.rows) {
-        //Allocate memory for the texture data.
-        bitmaps[c]->bitmap = new unsigned char[2 * bitmaps[c]->width * bitmaps[c]->height];
-
         unsigned char* src = face->glyph->bitmap.buffer;
-        unsigned char* dest = bitmaps[c]->bitmap;
+        unsigned char* dest = data.getBytes();
 
-        for(int y=0; y<bitmaps[c]->height; y++)
-        {
-            for(int x = 0; x < bitmaps[c]->width; x++)
-            {
-                dest[2*(x+y*bitmap.width)+0] = 255;
-                dest[2*(x+y*bitmap.width)+1] = src[x+(bitmap.rows - 1 - y)*bitmap.width];
+        for(int y=0; y<bitmaps[c].height; y++) {
+            for(int x = 0; x < bitmaps[c].width; x++) {
+                dest[2*(x+xmin +(y+ymin)*binpack.getSize()[0])+0] = 255;
+                dest[2*(x+xmin +(y+ymin)*binpack.getSize()[0])+1] = src[x+(bitmap.rows - 1 - y)*bitmap.width];
             }
         }
     }
