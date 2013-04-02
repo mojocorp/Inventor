@@ -161,6 +161,7 @@ SoGlobalField::create(const SbName &name, SoType type, SbBool &alreadyExists)
 // Use: private
 
 SoGlobalField::SoGlobalField(const SbName &name, SoField *field)
+    : SoFieldContainer()
 //
 //////////////////////////////////////////////////////////////////////////////
 {

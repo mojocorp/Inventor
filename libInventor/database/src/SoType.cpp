@@ -71,13 +71,13 @@ SoINTERNAL struct SoTypeData {
 };
 
 int				SoType::nextIndex;
-int				SoType::arraySize;
-SoTypeData *			SoType::typeData;
+int				SoType::arraySize = 0;
+SoTypeData *			SoType::typeData = NULL;
 
 // Dictionary mapping SbNames to pointers into indices in the typeData
 // array (pointers into the array would be bad, since the array can
 // move around as it gets expanded, but indices are OK):
-SbDict *			SoType::nameDict;
+SbDict *			SoType::nameDict = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -447,16 +447,16 @@ SoType::expandTypeData()
 ////////////////////////////////////////////////////////////////////////
 {
     if (typeData == NULL) {
-	arraySize = INITIAL_ARRAY_SIZE;
-	typeData = new SoTypeData[arraySize];
+        arraySize = INITIAL_ARRAY_SIZE;
+        typeData = new SoTypeData[arraySize];
     }
     else {
-	SoTypeData *newTypeData = new SoTypeData[2 * arraySize];
-	memcpy((void *) newTypeData, (void *) typeData,
-	      arraySize * sizeof(SoTypeData));
-	delete[] typeData;
-	typeData = newTypeData;
-	arraySize *= 2;
+        SoTypeData *newTypeData = new SoTypeData[2 * arraySize];
+        memcpy((void *) newTypeData, (void *) typeData,
+               arraySize * sizeof(SoTypeData));
+        delete[] typeData;
+        typeData = newTypeData;
+        arraySize *= 2;
     }
 }
 
