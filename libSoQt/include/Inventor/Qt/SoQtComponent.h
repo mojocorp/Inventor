@@ -102,7 +102,7 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     // visibility changed callbacks if the state changes (see
     // addVisibilityChangeCallback()).
     //
-    SbBool   		isVisible();
+    SbBool isVisible() const;
     
     //
     // This returns the base widget for this component.
@@ -110,8 +110,8 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     // topmost widget beneath the shell.
     // Call getShellWidget() to obtain the shell.
     //
-    QWidget*	getWidget() const { return _baseWidget; }
-    QWidget*	baseWidget() const { return getWidget(); }
+    QWidget* getWidget() const;
+    QWidget* baseWidget() const;
     
     //
     // Returns TRUE if this component is a top level shell component (has its
@@ -120,12 +120,11 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     // Also method to return the shell widget (NULL if the shell hasn't been
     // created by this component).
     //
-    SbBool		isTopLevelShell() const	    { return topLevelShell; }
-    QWidget*	getShellWidget() const
-			    { return topLevelShell ? parentWidget : NULL; }
+    SbBool isTopLevelShell() const;
+    QWidget* getShellWidget() const;
 
     // Return the parent widget, be it a shell or not
-    QWidget*	getParentWidget() const	    { return parentWidget; }
+    QWidget* getParentWidget() const;
     
     //
     // Convenience routines on the widget - setSize calls XtSetValue.
@@ -205,8 +204,6 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     SbBool  wasNotTopLevel;
   private:
     
-    SbBool	topLevelShell;	// TRUE if in its own window
-    SbBool	createdShell;	// TRUE if we created that toplevel shell
     QWidget	   *parentWidget;	// topLevel shell if in its own window
     QWidget	   *_baseWidget;	// returned by getWidget()
     SbString	_name;		// name of this widget
@@ -216,7 +213,6 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     SbString	_classname;
     
     // visibiltity stuff
-    SbBool	    visibleState;
     SbBool      fullScreenEnabled;
 };
 

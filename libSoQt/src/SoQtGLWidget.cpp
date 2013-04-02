@@ -232,11 +232,8 @@ SoQtGLWidget::SoQtGLWidget(
     attribList.setStereo(glModes & SO_GLX_STEREO);
     attribList.setRgba(glModes & SO_GLX_RGB);
     attribList.setStencil(glModes & SO_GLX_STENCIL);
-    /*
-    if (glModes & SO_GLX_ZBUFFER) {
-	attribList[n++] = GLX_DEPTH_SIZE;
-	attribList[n++] = 1;
-    }*/
+    attribList.setOverlay(glModes & SO_GLX_OVERLAY);
+    attribList.setDepth(glModes & SO_GLX_ZBUFFER);
     
     // Build the widget tree, and let SoQtComponent know about our base widget.
     if (buildNow)
