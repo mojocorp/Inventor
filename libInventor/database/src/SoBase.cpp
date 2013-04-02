@@ -126,6 +126,7 @@ SoBase::SoBase()
 
     writeStuff.hasName = 0;
     writeStuff.writeCounter = 0;
+    writeStuff.multWriteRef = FALSE;
     writeStuff.writeRefFromField = FALSE;
 
 #ifdef DEBUG

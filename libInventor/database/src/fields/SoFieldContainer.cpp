@@ -79,8 +79,8 @@ SbPList	*SoFieldContainer::copyDictList = NULL;
 // These are used by SoFieldContainer::get() to hold the returned
 // field string
 // We rely on the compiler to initialize them to zero for us...
-char	*SoFieldContainer::fieldBuf;
-size_t	 SoFieldContainer::fieldBufSize;
+char	*SoFieldContainer::fieldBuf = NULL;
+size_t	 SoFieldContainer::fieldBufSize = 0;
 
 SoType	SoFieldContainer::classTypeId;
 
