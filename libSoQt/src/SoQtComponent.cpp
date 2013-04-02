@@ -87,15 +87,7 @@ SoQtComponent::SoQtComponent(
     size.setValue(0, 0);
     // This is set by subclasses through setBaseWidget()
     _baseWidget = NULL;
-    // create a shell window if necessary
-    createdShell = (parent == NULL || !buildInsideParent);
-    topLevelShell = (createdShell || (parent != NULL && parent->isWindow()));
- 	if (createdShell) {
-		QWidget* parentShell = (parent != NULL) ? parent : NULL;
-		parentWidget = new QWidget(parent);
-		parentWidget->setObjectName(getWidgetName().getString());
-    }
-    else parentWidget = parent;
+    parentWidget = parent;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -114,14 +106,42 @@ SoQtComponent::~SoQtComponent()
 // Set the base widget and install the destroy handler.
 //
 SbBool
-SoQtComponent::isVisible()
+SoQtComponent::isVisible() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (_baseWidget != NULL)
-		visibleState = _baseWidget->isVisible();
-    
-    return visibleState;
+    return _baseWidget ? _baseWidget->isVisible() : FALSE;
+}
+
+QWidget*
+SoQtComponent::getWidget() const
+{
+    return _baseWidget;
+}
+
+QWidget*
+SoQtComponent::baseWidget() const
+{
+    return _baseWidget;
+}
+
+SbBool
+SoQtComponent::isTopLevelShell() const
+{
+    return _baseWidget ? _baseWidget->isWindow() : FALSE;
+}
+
+QWidget*
+SoQtComponent::getShellWidget() const
+{
+    return _baseWidget;
+}
+
+// Return the parent widget, be it a shell or not
+QWidget*
+SoQtComponent::getParentWidget() const
+{
+    return parentWidget;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -135,6 +155,8 @@ SoQtComponent::setBaseWidget(QWidget *w)
 { 
     _baseWidget = w;
 
+    if (!_baseWidget->parentWidget())
+        _baseWidget->setParent(parentWidget);
 }
 
 ////////////////////////////////////////////////////////////////////////

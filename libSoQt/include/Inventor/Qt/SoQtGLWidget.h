@@ -62,7 +62,8 @@
 #include <Inventor/Qt/SoQtComponent.h>
 #include <Inventor/SoType.h>
 #include <Inventor/SbLinear.h>
-#include <QGLWidget>
+#include <QCursor>
+#include <QGLFormat>
 
 /*
  * Defines used when specifying the glModes flag to the constructor.
@@ -80,6 +81,7 @@ class QGLFormat;
 class QGLWidget;
 class QGLContext;
 class QGridLayout;
+class QContextMenuEvent;
 
 //////////////////////////////////////////////////////////////////////////////
 //
