@@ -78,8 +78,10 @@ class SOQT_EXPORT SoQt {
   public:
     // This binds Inventor with Qt so that they may work together.
     // It calls SoDB::init(), SoNodeKit::init(), SoInteraction::init
-    static void           init(const char *appName,
-                                 const char *className = "Inventor");
+    static void init(const char *appName, const char *className = "Inventor");
+
+    // Cleanup-up Inventor.
+    static void finish();
 
     // This retrieves and dispatches events (loops forever).
     // It is equivalent to QApplication::exec().

@@ -38,5 +38,11 @@ int main(int argc, char **argv)
 
     LocalResourcesHandler engine;
 
-    return RUN_ALL_TESTS();
+    int res = RUN_ALL_TESTS();
+
+    SoInteraction::finish();
+    SoNodeKit::finish();
+    SoDB::finish();
+
+    return res;
 }

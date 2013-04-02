@@ -163,6 +163,9 @@ SoINTERNAL public:
     // Initialize the type system
     static void init();
 
+    // Clean-up the type system
+    static void finish();
+
     // Get data
     short getData() const  {
         return storage.data;

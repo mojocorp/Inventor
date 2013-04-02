@@ -288,6 +288,29 @@ SoDB::init()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Clean-up the global database.
+// Use: public, static
+
+void
+SoDB::finish()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    if (globalDB) {
+        SoType::finish();
+
+        delete realTimeSensor;
+        delete realTime;
+        delete headerList;
+        delete conversionDict;
+
+        delete globalDB;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns a character string identifying the version of the
 //    Inventor library in use.
 //

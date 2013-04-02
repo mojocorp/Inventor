@@ -72,6 +72,7 @@ class INVENTOR_API SoNodeKit {
     /// SoInteraction::init() and SoXt::init(), so if you have made either of
     /// these calls, there is no need to call SoNodeKit::init() directly.
     static void		init();
+    static void		finish();
   private:
     static SbBool	initialized;	// has nodekit been initialized
 };
