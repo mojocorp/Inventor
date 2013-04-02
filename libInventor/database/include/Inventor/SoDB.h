@@ -106,6 +106,9 @@ public:
     /// Initialization routine. Creates global database
     static void  init();
 
+    /// Clean-up routine. Delete global database
+    static void  finish();
+
     /// Returns a character string identifying the version of the Inventor library in use.
     static const char *getVersion();
 

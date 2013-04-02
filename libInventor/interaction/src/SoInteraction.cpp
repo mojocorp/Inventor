@@ -139,6 +139,26 @@ SoInteraction::init()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Cleanu-up all interaction class.
+//
+// Use: public
+
+void
+SoInteraction::finish()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Only initialize once
+    if (initialized) {
+
+
+        initialized = FALSE;
+    }
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //  Initializes the type ID for this manipulator node. This
 //  should be called once after SoInteraction::init().
 //

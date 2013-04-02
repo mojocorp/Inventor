@@ -72,12 +72,12 @@ SoINTERNAL struct SoTypeData {
 
 int				SoType::nextIndex;
 int				SoType::arraySize = 0;
-SoTypeData *			SoType::typeData = NULL;
+SoTypeData *	SoType::typeData = NULL;
 
 // Dictionary mapping SbNames to pointers into indices in the typeData
 // array (pointers into the array would be bad, since the array can
 // move around as it gets expanded, but indices are OK):
-SbDict *			SoType::nameDict = NULL;
+SbDict *		SoType::nameDict = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -105,6 +105,22 @@ SoType::init()
 
     // The first real type will have index 1
     nextIndex = 1;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up the type system.  Called by SoDB::finish.
+//
+// Use: public, static
+
+void
+SoType::finish()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    delete [] typeData;
+    delete nameDict;
 }
 
 ////////////////////////////////////////////////////////////////////////

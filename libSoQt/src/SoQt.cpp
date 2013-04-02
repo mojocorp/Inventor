@@ -73,6 +73,8 @@ class SoQtEventHandler : public QObject {
   public:
     SoQtEventHandler();
 
+    ~SoQtEventHandler();
+
   protected:
     virtual void timerEvent( QTimerEvent * event );
 
@@ -119,6 +121,21 @@ SoQt::init (const char* /*appName*/, const char* /*className*/)
     eventHandler = new SoQtEventHandler();
 }
 
+void
+SoQt::finish()
+{
+    // see if we are already initialized!
+    if (initialized) {
+        delete eventHandler;
+
+        SoInteraction::finish();
+        SoNodeKit::finish();
+        SoDB::finish();
+
+        initialized = false;
+    }
+}
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -151,6 +168,14 @@ SoQtEventHandler::SoQtEventHandler()
     // If we don't call this and no new things happen, then the callbacks
     // will never be set up.
     setUpCallbacks();
+}
+
+SoQtEventHandler::~SoQtEventHandler()
+{
+    SoDB::getSensorManager()->setChangedCallback(NULL, NULL);
+
+    killTimer(qtTimer);
+    killTimer(qtWorkProc);
 }
 
 void 
