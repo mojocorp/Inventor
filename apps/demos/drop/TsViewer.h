@@ -51,7 +51,8 @@
 #ifndef  _SIMPLE_VIEWER_
 #define  _SIMPLE_VIEWER_
 
-#include <Inventor/Xt/viewers/SoXtViewer.h>
+#include <QCursor>
+#include <Inventor/Qt/viewers/SoQtViewer.h>
 #include <Inventor/SbLinear.h>
 
 
@@ -61,17 +62,17 @@
 // Drop Viewer - viewer which only operates in viewing mode.  Used with
 // the drop game.
 //
-class TsViewer : public SoXtViewer {
+class TsViewer : public SoQtViewer {
  public:
     // constructor/destructor
     TsViewer(
-        Widget parent = NULL,
+        QWidget *parent = NULL,
         const char *name = NULL);
     ~TsViewer();
     
  protected:
     // redefine this to process the events
-    virtual void	processEvent(XAnyEvent *anyevent);
+    virtual void	processEvent(QEvent *anyevent);
     
     // redefine this to cache the renderArea size
     virtual void	sizeChanged(const SbVec2s &newSize);
@@ -80,7 +81,7 @@ class TsViewer : public SoXtViewer {
     // viewer state variables
     int		    mode;
     SbBool	    createdCursors;
-    Cursor	    vwrCursor, seekCursor;
+    QCursor	    vwrCursor, seekCursor;
     SbVec2s	    locator;    // mouse position
     SbVec2s	    movement;   // mouse movement
     SbVec2s	    windowSize; // cached size of the window

@@ -50,6 +50,7 @@
 
 #include <Inventor/nodes/SoVertexShape.h>
 #include <Inventor/nodes/SoSeparator.h>
+#include <Inventor/nodes/SoVertexProperty.h>
 
 ////////////////////////////////////////////////////////////////////////
 //

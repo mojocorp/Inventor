@@ -50,7 +50,7 @@
  _______________________________________________________________________
  */
 	       
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/misc/SoChildList.h>

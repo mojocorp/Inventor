@@ -60,7 +60,7 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbTime.h>
 #include <Inventor/SoLists.h>
-#include <Inventor/Xt/SoXtComponent.h>
+#include <Inventor/Qt/SoQtComponent.h>
 
 class SoEventCallback;
 class SoTranslation;
@@ -90,10 +90,10 @@ enum TxAxes {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class TsField : public SoXtComponent {
+class TsField : public SoQtComponent {
 public:
     TsField( int res,
-             Widget parent = NULL,
+             QWidget *parent = NULL,
              const char *name = NULL, 
              SbBool buildInsideParent = TRUE);
    ~TsField();
@@ -182,7 +182,7 @@ private:
     static void     handleKeyboard(void *data, SoEventCallback *node);
 
     // Builds the widget.
-    virtual Widget  buildWidget(Widget parent, const char *name);
+    virtual QWidget* buildWidget(QWidget *parent, const char *name);
 };
 
 #endif /* _TS_FIELD_ */

@@ -48,10 +48,13 @@
 #include <unistd.h>
 #include <string.h>
 
+#include <QApplication>
+#include <QGridLayout>
+#include <QPushButton>
+#include <QLabel>
+#include <QSlider>
+#include <QCheckBox>
 
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoCacheElement.h>
@@ -68,18 +71,14 @@
 #include <Inventor/nodes/SoTextureCoordinateBinding.h>
 #include <Inventor/nodes/SoTextureCoordinatePlane.h>
 #include <Inventor/sensors/SoIdleSensor.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 
 #include "../../samples/common/InventorLogo.h"
 #include "QuadThing.h"
 #include "Background.h"
-
-#include <Xm/Xm.h>
-#include <Xm/Text.h>
-#include <Xm/Form.h>
-#include <Xm/ScrollBar.h>
-#include <Xm/LabelG.h>
-#include <Xm/PushBG.h>
-#include <Xm/ToggleBG.h>
+#include "qmorf.h"
 
 //
 // The list of things we'll morph between
@@ -218,7 +217,6 @@ static const int SHAPE = 1;
 static int lastColor = (-1);
 static double animationTime[2] = { 0.0, 0.0 };
 static int whatIsAnimating[2] = { 1, 1 };
-static Widget sliders[2];
 static SbTime lastTime;
 
 //
@@ -276,8 +274,10 @@ setValue(int what, double value)
 // another.  This also updates the slider widgets.
 //
 void
-morfCallback(void *, SoSensor *sensor)
+morfCallback(void *userdata, SoSensor *sensor)
 {
+    QMorfWidget *widget = (QMorfWidget*)userdata;
+
     static const double transition_time = 4.0;	// Seconds
 
     SbTime now = SbTime::getTimeOfDay();
@@ -288,9 +288,7 @@ morfCallback(void *, SoSensor *sensor)
     {
 	setValue(COLOR, animationTime[COLOR] + dt.getValue());
 	double t = animationTime[COLOR] / objectList.getLength();
-	Arg resources[1];
-	XtSetArg(resources[0], XmNvalue, t * SLIDER_MAX);
-	XtSetValues(sliders[COLOR], resources, 1);
+    widget->colorSlider->setValue(t * SLIDER_MAX);
 	bgColor += dt;
 	if (!nobackground)
 	    background->animateColor(bgColor.getValue());
@@ -299,72 +297,13 @@ morfCallback(void *, SoSensor *sensor)
     {
 	setValue(SHAPE, animationTime[SHAPE] + dt.getValue());
 	double t = animationTime[SHAPE] / objectList.getLength();
-	Arg resources[1];
-	XtSetArg(resources[0], XmNvalue, t * SLIDER_MAX);
-	XtSetValues(sliders[SHAPE], resources, 1);
+    widget->shapeSlider->setValue(t * SLIDER_MAX);
 	bgShape += dt / 3.0;
 	if (!nobackground)
 	    background->animateShape(bgShape.getValue());
     }
-
     lastTime = now;
     sensor->schedule();
-}
-
-//
-// These two callbacks cooperate to figure out if rendering with
-// textures turned on is too slow.  The first is called from a
-// callback node at the top of the scene graph, and notes the time
-// when rendering starts.  The second is a render abort callback, and
-// will turn off texturing if it is determined to be too slow.
-// They both only check the first few frames so they don't slow
-// traversal down excessively.
-//
-static int TimeSet = 0;
-static SbTime renderTime;
-
-static void
-setTimeCallback(void *, SoAction *action)
-{
-    if (action->isOfType(SoGLRenderAction::getClassTypeId()) &&
-	TimeSet < 4) {
-
-	renderTime.setToTimeOfDay();
-
-	if (TimeSet == 0) {
-	    animationSensor->schedule();
-	    lastTime = renderTime;
-	}
-
-	// This node must not be cached!
-	SoCacheElement::invalidate(action->getState());
-
-	++TimeSet;
-    }
-}
-static SoGLRenderAction::AbortCode
-checkTimeCallback(void *data)
-{
-    static int turnedOff = 0;
-
-    // If textures aren't turned off already...
-    if ((TimeSet > 1) && (TimeSet < 4) && !turnedOff) {
-	SbTime delta = SbTime::getTimeOfDay() - renderTime;
-	if (delta > SbTime(.5)) {
-	    fprintf(stderr, "Disabling textures, "
-		    "they are too slow\n");
-
-	    // Turn off textures...
-	    FromTexSwitch->whichChild = 1;
-	    ToTexSwitch->whichChild = 1;
-	    turnedOff = TRUE;
-	    // And turn off render abort callback
-	    SoGLRenderAction *ra = (SoGLRenderAction *)data;
-	    ra->setAbortCallback(NULL, NULL);
-	    return SoGLRenderAction::ABORT;
-	}
-    }
-    return SoGLRenderAction::CONTINUE;
 }
 
 void
@@ -414,7 +353,7 @@ parse_args(int argc, char **argv)
 		"they must contain QuadMeshes (qmorf can\n");
 	fprintf(stderr, "only morph QuadMesh nodes).\n");
 	fprintf(stderr, "The directory "
-		IVPREFIX "/share/data/models/CyberHeads "
+        "OIVHOME/data/models/CyberHeads "
 		"contains good data to morph.\n");
 
 	exit(7);
@@ -422,24 +361,16 @@ parse_args(int argc, char **argv)
 }
 
 //
-// Callback for quit button
-//
-void
-quitCallback(Widget, XtPointer, XtPointer)
-{
-    exit(0);
-}
-
-//
 // Callback for 'About...' button
 //
 void
-showAboutDialog(Widget, XtPointer, XtPointer)
+QMorfWidget::showAboutDialog()
 {
-    if (access(IVPREFIX "/demos/Inventor/qmorf.about", R_OK) != 0)
+#if TODO
+    if (access("/demos/Inventor/qmorf.about", R_OK) != 0)
     {
 	system("xmessage 'Sorry, could not find "
-	       IVPREFIX "/demos/Inventor/qmorf.about' > /dev/null");
+           "/demos/Inventor/qmorf.about' > /dev/null");
 	return;
     }
     char command[100];
@@ -453,62 +384,54 @@ showAboutDialog(Widget, XtPointer, XtPointer)
 	return;
     }
 
-    sprintf(command, "acroread " IVPREFIX "/demos/Inventor/qmorf.about &");
+    sprintf(command, "acroread /demos/Inventor/qmorf.about &");
     system(command);
+#endif
 }	
 
 //
 // Callback for the animation buttons
 //
-static void
-toggleAnimation(Widget, XtPointer mydata, XtPointer)
+void
+QMorfWidget::toggleShapeAnimation()
 {
-    if ((long)mydata == COLOR)
-    {
-	if (whatIsAnimating[COLOR])
-	    stopAnimating(COLOR);
-	else startAnimating(COLOR);
-    }
-    else
-    {
-	if (whatIsAnimating[SHAPE])
-	    stopAnimating(SHAPE);
-	else startAnimating(SHAPE);
-    }
+    if (whatIsAnimating[SHAPE])
+        stopAnimating(SHAPE);
+    else startAnimating(SHAPE);
+}
+
+void
+QMorfWidget::toggleColorAnimation()
+{
+    if (whatIsAnimating[COLOR])
+        stopAnimating(COLOR);
+    else startAnimating(COLOR);
 }
 
 //
 // Callbacks for color and shape sliders
 //
-static void
-dragColorSlider(Widget, XtPointer mydata, XtPointer cbstruct)
+void
+QMorfWidget::dragColorSlider(int value)
 {
     if (whatIsAnimating[COLOR])
     {
-	stopAnimating(COLOR);
-	Arg resources[1];
-	XtSetArg(resources[0], XmNset, 0);
-	XtSetValues((Widget)mydata, resources, 1);
+    stopAnimating(COLOR);
     }
-    int value = ((XmScrollBarCallbackStruct *)cbstruct)->value;
     double fv = value * objectList.getLength() / (double)SLIDER_MAX;
     setValue(COLOR, fv);
 }
-static void
-dragShapeSlider(Widget, XtPointer mydata, XtPointer cbstruct)
+
+void
+QMorfWidget::dragShapeSlider(int value)
 {
     if (whatIsAnimating[SHAPE])
     {
-	stopAnimating(SHAPE);
-	Arg resources[1];
-	XtSetArg(resources[0], XmNset, 0);
-	XtSetValues((Widget)mydata, resources, 1);
+    stopAnimating(SHAPE);
     }
-    int value = ((XmScrollBarCallbackStruct *)cbstruct)->value;
     double fv = value * objectList.getLength() / (double)SLIDER_MAX;
     setValue(SHAPE, fv);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -519,11 +442,22 @@ dragShapeSlider(Widget, XtPointer mydata, XtPointer cbstruct)
 static void
 logoCB(void *, SoAction *action)
 {
-    if (action->isOfType(SoGLRenderAction::getClassTypeId())) 
-	glViewport(0, 0, 80, 80);	// See Dave Mott for details!
+    if (action->isOfType(SoGLRenderAction::getClassTypeId())) {
+        static int pushedViewport = 0;
+        if (!pushedViewport) {
+            pushedViewport = 1;
+            glPushAttrib(GL_VIEWPORT_BIT);
+            glViewport(0, 0, 80, 80);
+        }
+        else {
+            pushedViewport = 0;
+            glPopAttrib();
+        }
+    }
 }
+
 static void
-setOverlayLogo(SoXtRenderArea *ra)
+setOverlayLogo(SoSeparator *sep)
 {
     static SoSeparator *logo = NULL;
 
@@ -535,10 +469,10 @@ setOverlayLogo(SoXtRenderArea *ra)
         SoCallback *cb = new SoCallback;    // sets GL viewport
         cb->setCallback(logoCB);
         logo->insertChild(cb, 0);
+        logo->addChild(cb); // Will pop viewport
     }
-    SbColor col(1, 1, 1);
-    ra->setOverlayColorMap(1, 1, &col);
-    ra->setOverlaySceneGraph(logo);
+
+    sep->addChild(logo);
 }
 
 
@@ -547,117 +481,54 @@ setOverlayLogo(SoXtRenderArea *ra)
 // Create and layout all of the UI stuff (I'm really not very fond of
 // Motif).
 //
-static SoXtExaminerViewer *
-buildUI( Widget appWindow, 
-	 SoNode *root, 
-	 SoPerspectiveCamera *c)
+QMorfWidget::QMorfWidget(SoSeparator *root, SoPerspectiveCamera *c)
 //////////////////////////////////////////////////////////////////////
 {
-    //
-    // Form that everything is part of...
-    //
-    Arg resources[20]; int n = 0;
-    XtSetArg(resources[n], "width", 600); n++;
-    XtSetArg(resources[n], "height", 600); n++;
-    Widget form = XmCreateForm(appWindow, "form", resources, n); n = 0;
+    QVBoxLayout *vlayout = new QVBoxLayout(this);
+    vlayout->setMargin(0);
 
-    //
-    // 8 widgets at bottom of window:
-    // 2 buttons, 2 labels, 2 sliders, and 2 toggle buttons
-    //
-    Widget w[8];
+    QGridLayout *grid = new QGridLayout();
 
-#define STRING(a) XmStringCreateSimple(a)
-    XtSetArg(resources[n], XmNlabelString, STRING("Animate")); ++n;
-    XtSetArg(resources[n], XmNrightAttachment, XmATTACH_FORM); ++n;
-    XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_FORM); ++n;
-    XtSetArg(resources[n], XmNset, 1); ++n;
-    w[2] = XmCreateToggleButtonGadget(form, "colorAnimate", resources,
-				      n);
-    XtAddCallback(w[2], XmNvalueChangedCallback,
-		  toggleAnimation, (XtPointer)(unsigned long)COLOR);
-    n = 0;
-    XtSetArg(resources[n], XmNlabelString, STRING("Animate")); ++n;
-    XtSetArg(resources[n], XmNrightAttachment, XmATTACH_FORM); ++n;
-    XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNbottomWidget, w[2]); n++;
-    XtSetArg(resources[n], XmNset, 1); ++n;
-    w[5] = XmCreateToggleButtonGadget(form, "shapeAnimate", resources,
-				      n);
-    XtAddCallback(w[5], XmNvalueChangedCallback,
-		  toggleAnimation, (XtPointer)(unsigned long)SHAPE);
-    n = 0;
+    QPushButton *aboutPushButton = new QPushButton("About...", this);
+    connect(aboutPushButton, SIGNAL(clicked()), SLOT(showAboutDialog()));
 
-    XtSetArg(resources[n], XmNlabelString, STRING("Quit")); ++n;
-    XtSetArg(resources[n], XmNleftAttachment, XmATTACH_FORM); ++n;
-    XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_FORM); ++n;
-    w[7] = XmCreatePushButtonGadget(form, "quit", resources, n);
-    XtAddCallback(w[7], XmNactivateCallback,
-		  quitCallback, NULL);
-    n = 0;
-    XtSetArg(resources[n], XmNlabelString, STRING("About...")); ++n;
-    XtSetArg(resources[n], XmNleftAttachment, XmATTACH_FORM); ++n;
-    XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNbottomWidget, w[7]); ++n;
-    w[6] = XmCreatePushButtonGadget(form, "about", resources, n);
-    XtAddCallback(w[6], XmNactivateCallback,
-		  showAboutDialog, NULL);
-    n = 0;
+    QPushButton *quitPushButton = new QPushButton("Quit...", this);
+    connect(quitPushButton, SIGNAL(clicked()), SLOT(close()));
 
-    XtSetArg(resources[n], XmNlabelString, STRING("Color")); ++n;
-    XtSetArg(resources[n], XmNleftAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNleftWidget, w[6]); n++;
-    XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_FORM); ++n;
-    w[0] = XmCreateLabelGadget(form, "colorLabel", resources, n);
-    n = 0;
-    XtSetArg(resources[n], XmNlabelString, STRING("Shape")); ++n;
-    XtSetArg(resources[n], XmNleftAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNleftWidget, w[6]); n++;
-    XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNbottomWidget, w[2]); n++;
-    XtSetArg(resources[n], XmNbottomOffset, 4); ++n;
-    w[3] = XmCreateLabelGadget(form, "shapeLabel", resources, n);
-    n = 0;
+    shapeSlider = new QSlider(Qt::Horizontal, this);
+    shapeSlider->setRange(0, SLIDER_MAX + SLIDER_MAX/20);
+    shapeSlider->setSingleStep(SLIDER_MAX/40);
+    shapeSlider->setPageStep(SLIDER_MAX/20);
+    connect(shapeSlider, SIGNAL(sliderMoved(int)), SLOT(dragShapeSlider(int)));
 
-    XtSetArg(resources[n], XmNmaximum, SLIDER_MAX + SLIDER_MAX/20); ++n;
-    XtSetArg(resources[n], XmNsliderSize, SLIDER_MAX/20); ++n;
-    XtSetArg(resources[n], XmNincrement, SLIDER_MAX/40); ++n;
-    XtSetArg(resources[n], XmNpageIncrement, SLIDER_MAX/20); ++n;
-    XtSetArg(resources[n], XmNshowArrows, FALSE); ++n;
-    XtSetArg(resources[n], XmNorientation, XmHORIZONTAL); ++n;
-    int tn = n;
-    XtSetArg(resources[n], XmNleftAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNleftWidget, w[3]); n++;
-    XtSetArg(resources[n], XmNrightAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNrightWidget, w[2]); n++;
-    XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_FORM); ++n;
-    XtSetArg(resources[n], XmNbottomOffset, 4); ++n;
-    w[1] = XmCreateScrollBar(form, "colorScrollbar", resources, n);
-    sliders[COLOR] = w[1];
-    XtAddCallback(w[1], XmNdragCallback,
-		  dragColorSlider, (XtPointer)w[2]);
-    XtAddCallback(w[1], XmNvalueChangedCallback,
-		  dragColorSlider, (XtPointer)w[2]);
-    n = tn;
-    XtSetArg(resources[n], XmNleftAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNleftWidget, w[3]); n++;
-    XtSetArg(resources[n], XmNrightAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNrightWidget, w[5]); n++;
-    XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_WIDGET); ++n;
-    XtSetArg(resources[n], XmNbottomWidget, w[1]); n++;
-    XtSetArg(resources[n], XmNbottomOffset, 10); ++n;
-    w[4] = XmCreateScrollBar(form, "shapeScrollbar", resources, n);
-    sliders[SHAPE] = w[4];
-    XtAddCallback(w[4], XmNdragCallback,
-		  dragShapeSlider, (XtPointer)w[5]);
-    XtAddCallback(w[4], XmNvalueChangedCallback,
-		  dragShapeSlider, (XtPointer)w[5]);
-    n = 0;
-    
+    colorSlider = new QSlider(Qt::Horizontal, this);
+    colorSlider->setRange(0, SLIDER_MAX + SLIDER_MAX/20);
+    colorSlider->setSingleStep(SLIDER_MAX/40);
+    colorSlider->setPageStep(SLIDER_MAX/20);
+    connect(colorSlider, SIGNAL(sliderMoved(int)), SLOT(dragColorSlider(int)));
+
+    shapeAnimateCheckBox = new QCheckBox("Animate", this);
+    shapeAnimateCheckBox->setChecked(whatIsAnimating[COLOR]);
+    connect(shapeAnimateCheckBox, SIGNAL(clicked()), SLOT(toggleShapeAnimation()));
+
+    colorAnimateCheckBox = new QCheckBox("Animate", this);
+    colorAnimateCheckBox->setChecked(whatIsAnimating[SHAPE]);
+    connect(colorAnimateCheckBox, SIGNAL(clicked()), SLOT(toggleColorAnimation()));
+
+    grid->addWidget(aboutPushButton, 0, 0);
+    grid->addWidget(quitPushButton, 1, 0);
+    grid->addWidget(new QLabel("Shape", this), 0, 1);
+    grid->addWidget(new QLabel("Color", this), 1, 1);
+
+    grid->addWidget(shapeSlider, 0, 2);
+    grid->addWidget(colorSlider, 1, 2);
+
+    grid->addWidget(shapeAnimateCheckBox, 0, 3);
+    grid->addWidget(colorAnimateCheckBox, 1, 3);
     //
     // Create viewer:
     //
-    SoXtExaminerViewer *viewer = new SoXtExaminerViewer(form);
+    SoQtExaminerViewer *viewer = new SoQtExaminerViewer();
     viewer->setSceneGraph(root);
     viewer->setCamera(c);
     viewer->setTransparencyType(SoGLRenderAction::BLEND);
@@ -668,32 +539,21 @@ buildUI( Widget appWindow,
     viewer->setAutoClipping(FALSE);
     // Set the draw style to as is, otherwise we'll never see
     // any texture mapping on systems without graphics hardware
-    viewer->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_AS_IS);
+    viewer->setDrawStyle(SoQtViewer::STILL, SoQtViewer::VIEW_AS_IS);
+
+    vlayout->addWidget(viewer->getWidget());
+    vlayout->addLayout(grid);
 
     // Add Inventor logo to viewer
-    setOverlayLogo( viewer );
-
-    XtSetArg(resources[n], XmNtopAttachment, XmATTACH_FORM); n++;
-    XtSetArg(resources[n], XmNleftAttachment, XmATTACH_FORM); n++;
-    XtSetArg(resources[n], XmNrightAttachment, XmATTACH_FORM); n++;
-    XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_WIDGET); n++;
-    XtSetArg(resources[n], XmNbottomWidget, w[6]); n++;
-    XtSetValues(viewer->getWidget(), resources, n); n = 0;
-
-    viewer->show();
-
-    XtManageChildren(w, 8);
-
-    XtManageChild(form);
-
-    return viewer;
+    setOverlayLogo( root );
 }
 
 int
 main(int argc, char **argv)
 {
-    Widget appWindow = SoXt::init(argv[0]);
-    if ( appWindow == NULL ) exit( 1 );
+    QApplication app(argc, argv);
+
+    SoQt::init("qmorf");
 
     parse_args(argc, argv);
 
@@ -708,13 +568,6 @@ main(int argc, char **argv)
     hints->vertexOrdering = SoShapeHints::COUNTERCLOCKWISE;
     hints->faceType = SoShapeHints::CONVEX;
     root->insertChild(hints, 0);
-
-    // Set up a callback node at the beginning of the scene graph that
-    // will set renderTime, which is used to figure out if texturing
-    // is too slow and should be turned off.
-    SoCallback *setTime = new SoCallback;
-    root->addChild(setTime);
-    setTime->setCallback(setTimeCallback, NULL);
 
     SoPerspectiveCamera *camera = new SoPerspectiveCamera;
     root->addChild(camera);
@@ -794,18 +647,14 @@ main(int argc, char **argv)
 	root->addChild(background->getSceneGraph());
     }
 
-    SoXtExaminerViewer *viewer = buildUI(appWindow, root, camera);
+    QMorfWidget widget(root, camera);
 
-    // Setup a render abort to turn off texturing if it is too slow:
-    viewer->getGLRenderAction()->setAbortCallback(checkTimeCallback,
-					  viewer->getGLRenderAction());
-
-    animationSensor = new SoIdleSensor(morfCallback, NULL);
+    animationSensor = new SoIdleSensor(morfCallback, &widget);
+    animationSensor->schedule();
     // The animation sensor is scheduled the first time the scene is
     // rendered.
+    widget.resize(600, 600);
+    widget.show();
 
-    SoXt::show( appWindow );
-    SoXt::mainLoop();
-
-    return 0;
+    return SoQt::mainLoop();
 }

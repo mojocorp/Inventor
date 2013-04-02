@@ -43,8 +43,10 @@
 #include <dlfcn.h>
 #include <unistd.h>
 #include <Inventor/SoDB.h>
+#include <Inventor/SoInteraction.h>
+#include <Inventor/nodekits/SoNodeKit.h>
 #include <Inventor/nodekits/SoBaseKit.h>
-#include <Inventor/Xt/SoXt.h>
+
 
 static void
 print_usage(const char *progname)
@@ -81,7 +83,9 @@ parse_args(int argc, char **argv)
 
 main(int argc, char **argv)
 {
-    SoXt::init(argv[0]);
+    SoDB::init();
+    SoNodeKit::init();
+    SoInteraction::init();
 
     // Parse arguments
 

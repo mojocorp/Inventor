@@ -40,7 +40,7 @@
 
 #include <assert.h>
 
-#include <Inventor/system/SbGL.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SoDB.h>
 
 #include <Inventor/SbBox.h>

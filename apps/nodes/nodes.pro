@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = BarChart Decal GeneralizedCylinder
+#SUBDIRS = BarChart Decal GeneralizedCylinder

@@ -40,6 +40,7 @@
 //
 
 #include <stdio.h>
+#include <math.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/fields/SoMFVec3f.h>

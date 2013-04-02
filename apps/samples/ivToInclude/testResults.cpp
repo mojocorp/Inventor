@@ -55,16 +55,16 @@
 //
 #include "foo.h"
 
+#include <QApplication>
 
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
-#include <X11/Intrinsic.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/nodes/SoSeparator.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
-#include <Inventor/Xt/SoXt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
 
 SoNode *
 readFromIncludeFile()
@@ -87,18 +87,18 @@ readFromIncludeFile()
 
 main( int argc, char **argv )
 {
-   // Initialize Inventor and Xt
-   Widget appWindow = SoXt::init(argv[0]);
-   if ( appWindow == NULL ) exit( 1 );
+    QApplication app(argc, argv);
+
+   // Initialize Inventor and Qt
+   SoQt::init(argv[0]);
 
    SoNode *root = readFromIncludeFile();
    root->ref();
 
-   SoXtExaminerViewer *viewer = new SoXtExaminerViewer(appWindow);
+   SoQtExaminerViewer *viewer = new SoQtExaminerViewer();
    viewer->setSceneGraph( root );
    viewer->show();
    viewer->viewAll();
 
-   SoXt::show( appWindow );
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

@@ -51,7 +51,8 @@
 #include <unistd.h>
 #include <assert.h>
 #include <Inventor/SoDB.h>
-#include <Inventor/Xt/SoXt.h>
+#include <Inventor/SoInteraction.h>
+#include <Inventor/nodekits/SoNodeKit.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoOutput.h>
@@ -81,7 +82,9 @@ parse_args(int argc, char **argv, char **variableName)
 
 main(int argc, char **argv)
 {
-    SoXt::init(argv[0]);
+    SoDB::init();
+    SoNodeKit::init();
+    SoInteraction::init();
 
     // Parse arguments
     char *variableName = NULL;

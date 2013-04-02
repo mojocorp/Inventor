@@ -50,10 +50,12 @@
  _______________________________________________________________________
  */
 
+#include <QApplication>
+
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-#include <Inventor/Xt/SoXt.h>
+#include <Inventor/Qt/SoQt.h>
 #include "TsField.h"
 
 #define  FIELD_RESOLUTION   4
@@ -70,11 +72,12 @@
  _______________________________________________________________________
  */
 int
-main( int, char **argv )
+main( int argc, char **argv )
 {
-    // Initialize Inventor and Xt
-    Widget appWindow = SoXt::init(argv[0]);
-    if ( appWindow == NULL ) exit( 1 );
+    QApplication app(argc, argv);
+
+    // Initialize Inventor and Qt
+    SoQt::init(argv[0]);
 
     //
     // Initialize a random number generator to be used in selecting the
@@ -85,14 +88,13 @@ main( int, char **argv )
     srand48 ((long) tvec);
 
     // Build the layout of the game.
-    TsField  *field  = new TsField( FIELD_RESOLUTION, appWindow );
+    TsField  *field  = new TsField( FIELD_RESOLUTION);
     field->setTitle( "Drop" );
     field->initGame();
     field->show();
 
-    // Enter the Xt event loop
-    SoXt::show( appWindow );
-    SoXt::mainLoop();
+    // Enter the Qt event loop
+    return SoQt::mainLoop();
 }
 
 

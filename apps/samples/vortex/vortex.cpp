@@ -51,13 +51,12 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
+#include <QApplication>
 
 #include <unistd.h>
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPrimitiveVertex.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>
 #include <Inventor/nodes/SoCamera.h>
@@ -74,6 +73,8 @@
 #include <Inventor/nodes/SoSphere.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/sensors/SoTimerSensor.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 
 struct Options {
     int		numGrowthFrames;
@@ -424,41 +425,25 @@ timerCB(void *, SoSensor *)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Callback for Xt events, used to set up the timer sensor once the
-//    main window has been mapped.
-//
-
-static void
-eventHandler(Widget, XtPointer *data, XAnyEvent *xe, Boolean *)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SoTimerSensor *timer = (SoTimerSensor *) data;
-
-    if (xe->type == MapNotify)
-	timer->schedule();
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Mainline
 //
 
-void
+int
 main(int argc, char **argv)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    QApplication app(argc, argv);
+
     SoInput		in;
     SoNode		*root;
-    SoXtExaminerViewer	*viewer;
+    SoQtExaminerViewer	*viewer;
     SoTimerSensor	*timer;
     SoSeparator		*newRoot;
 
     // Init Inventor
-    Widget mainWindow = SoXt::init(argv[0]);
+    SoQt::init("vortex");
 
     // Parse arguments
     if (! parseArgs(argc, argv)) {
@@ -479,7 +464,7 @@ main(int argc, char **argv)
     }
 
     root->ref();
-    viewer = new SoXtExaminerViewer(mainWindow);
+    viewer = new SoQtExaminerViewer();
     viewer->setBackgroundColor(SbColor(0.1, 0.1, 0.3));
     newRoot = buildGraph(root);
     newRoot->ref();
@@ -493,14 +478,12 @@ main(int argc, char **argv)
     newRoot->unref();
 
     viewer->show();
-    SoXt::show(mainWindow);
 
     timer = new SoTimerSensor(timerCB, NULL);
     timer->setInterval(0.03333);
 
     // Wait for the window to be mapped before scheduling the timer
-    XtAddEventHandler(mainWindow, StructureNotifyMask, False,
-		      (XtEventHandler) eventHandler, (XtPointer) timer);
+    timer->schedule();
 
-    SoXt::mainLoop();
+    return  SoQt::mainLoop();
 }
