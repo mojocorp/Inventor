@@ -62,6 +62,8 @@
 #include <Inventor/nodes/SoNode.h>
 #include <cstddef>
 
+#include <vector>
+
 // Syntax for reading/writing type information to files
 #define OPEN_BRACE_CHAR		'['
 #define CLOSE_BRACE_CHAR	']'
@@ -90,10 +92,9 @@ struct SoFieldEntry {
 
 struct SoEnumEntry {
     SbName		typeName;	// Name of enum type
-    int			num;		// number of values
-    int			arraySize;	// size of arrays
-    int			*vals;		// array of values
-    SbName		*names;		// array of names
+
+    std::vector<int> vals;	// array of values
+    std::vector<SbName> names; // array of names
 
     SoEnumEntry(const SbName &name);
     SoEnumEntry(const SoEnumEntry &o);
@@ -107,29 +108,21 @@ int SoEnumEntry::growSize = 6;
 SoEnumEntry::SoEnumEntry(const SbName &name)
 {
     typeName	= name;
-    num		= 0;
-    arraySize	= growSize;
-    vals	= new int[arraySize];
-    names	= new SbName[arraySize];
+
+    vals.reserve(growSize);
+    names.reserve(growSize);
 }
 
 SoEnumEntry::SoEnumEntry(const SoEnumEntry &o)
 {
-    typeName	= o.typeName,
-    num		= o.num;
-    arraySize	= num;
-    vals		= new int[arraySize];
-    names		= new SbName[arraySize];
-    for (int i=0; i<num; i++) {
-	vals[i] = o.vals[i];
-	names[i] = o.names[i];
-    }
+    typeName = o.typeName;
+    vals = o.vals;
+    names = o.names;
 }
 
 SoEnumEntry::~SoEnumEntry()
 {
-    delete [] vals;
-    delete [] names;
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -370,7 +363,7 @@ stripWhite(const char *name)
 
 void
 SoFieldData::addEnumValue(const char *typeNameArg, const char *valNameArg,
-			  int val)
+                          int val)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -380,34 +373,24 @@ SoFieldData::addEnumValue(const char *typeNameArg, const char *valNameArg,
 
     // look for an entry for this type name
     for (int i=0; i<enums.getLength(); i++) {
-	e = (struct SoEnumEntry *) enums[i];
-	if (e->typeName == typeName)
-	    break;
-	else
-	    e = NULL;
+        e = (struct SoEnumEntry *) enums[i];
+        if (e->typeName == typeName)
+            break;
+        else
+            e = NULL;
     }
     // make an entry if there wasn't one already
     if (e == NULL) {
-	e = new SoEnumEntry(typeName);
-	enums.append((void*) e);
+        e = new SoEnumEntry(typeName);
+        enums.append((void*) e);
     }
     // grow arrays if needed
-    if (e->num == e->arraySize) {
-	e->arraySize += SoEnumEntry::growSize;
-	int *ovals = e->vals;
-	SbName *onames = e->names;
-	e->vals = new int[e->arraySize];
-	e->names = new SbName[e->arraySize];
-	for (int i=0; i<e->num; i++) {
-	    e->vals[i] = ovals[i];
-	    e->names[i] = onames[i];
-	}
-	delete [] ovals;
-	delete [] onames;
+    if (e->vals.capacity() == e->vals.size()) {
+        e->vals.reserve(e->vals.size() + SoEnumEntry::growSize);
+        e->names.reserve(e->names.size() + SoEnumEntry::growSize);
     }
-    e->vals[e->num] = val;
-    e->names[e->num] = valName;
-    e->num++;
+    e->vals.push_back(val);
+    e->names.push_back(valName);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -427,13 +410,13 @@ SoFieldData::getEnumData(const char *typeNameArg, int &num,
 
     // look for an entry for this type name
     for (int i=0; i<enums.getLength(); i++) {
-	struct SoEnumEntry *e = (struct SoEnumEntry *) enums[i];
-	if (e->typeName == typeName) {
-	    num		= e->num;
-	    vals	= e->vals;
-	    names	= e->names;
-	    return;
-	}
+        struct SoEnumEntry *e = (struct SoEnumEntry *) enums[i];
+        if (e->typeName == typeName) {
+            num		= e->vals.size();
+            vals	= e->vals.data();
+            names	= e->names.data();
+            return;
+        }
     }
     // no entry found.
     num = 0;
