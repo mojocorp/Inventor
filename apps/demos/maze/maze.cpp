@@ -40,10 +40,12 @@
 //
 //  See the README file in this directory for a complete explanation.
 //
+#include <QApplication>
+
+#include <Inventor/SbBasic.h>
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <X11/Intrinsic.h>
 #include <math.h>
 
 #include <Inventor/SoInput.h>
@@ -75,16 +77,13 @@
 #include <Inventor/nodes/SoTriangleStripSet.h>
 #include <Inventor/sensors/SoAlarmSensor.h>
 #include <Inventor/sensors/SoTimerSensor.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 
 #include "../../samples/common/InventorLogo.h"
 
 #include "box.h"
 #include "mazes.h"
-#ifndef NO_AUDIO
-#include "PlayClass.h"
-#endif
 
 #define GRAVITATIONAL_CONSTANT 50.0
 #define WALL_THICKNESS         0.08
@@ -129,16 +128,15 @@ float   dropVelocity = 0.0;
 SbVec2f oneVector;
 
 #ifndef NO_AUDIO
-PlayClass *victory;
-PlayClass *ballSound;
+#include <QSound>
 
 // Audio files have moved between IRIX 5.3 and IRIX 6.2
 #if defined(LIBAUDIOFILE_VERSION) && LIBAUDIOFILE_VERSION == 2
 static char *myVictorySound = IVPREFIX "/share/data/sounds/prosonus/musictags/tag3.aiff";
 static char *myBallSound    = IVPREFIX "/share/data/sounds/prosonus/sfx/glass_break.aiff";
 #else
-static char *myVictorySound = "/usr/lib/sounds/prosonus/musictags/tag3.aiff";
-static char *myballSound    = "/usr/lib/sounds/prosonus/sfx/glass_break.aiff";
+static char *myVictorySound = "/System/Library/Sounds/Glass.aiff";
+static char *myBallSound    = "/System/Library/Sounds/Sosumi.aiff";
 #endif
 
 #endif
@@ -804,8 +802,7 @@ dropBall( float et )
 #ifndef NO_AUDIO
     // play the drop sound 
     if (ballHeight <=-2.5) {
-        sginap(20);
-        ballSound->start();
+        QSound::play(myBallSound);
     }
 #endif
 }
@@ -1074,7 +1071,7 @@ animateBall( void *, SoSensor * )
 
             // Play the Victory Audio 
 #ifndef NO_AUDIO   
-            victory->start();
+            QSound::play(myVictorySound);
 #endif
             doneGame = TRUE;
         }
@@ -1117,12 +1114,21 @@ static void
 logoCB(void *, SoAction *action)
 {
     if (action->isOfType(SoGLRenderAction::getClassTypeId())) {
-        glViewport(0, 0, 80, 80);
+        static int pushedViewport = 0;
+        if (!pushedViewport) {
+            pushedViewport = 1;
+            glPushAttrib(GL_VIEWPORT_BIT);
+            glViewport(0, 0, 80, 80);
+        }
+        else {
+            pushedViewport = 0;
+            glPopAttrib();
+        }
     }
 }
 
 static void
-setOverlayLogo(SoXtRenderArea *ra)
+setOverlayLogo(SoSeparator *sep)
 {
     static SoSeparator *logo = NULL;
 
@@ -1136,29 +1142,20 @@ setOverlayLogo(SoXtRenderArea *ra)
         SoCallback *cb = new SoCallback;
         cb->setCallback(logoCB);
         logo->insertChild(cb, 0);
+        logo->addChild(cb); // Will pop viewport
     }
 
-    SbColor col(1, 1, 1);
-    ra->setOverlayColorMap(1, 1, &col);
-    ra->setOverlaySceneGraph(logo);
+    sep->addChild(logo);
 }
 
 int
 main(int argc, char *argv[])
 {
-    Widget              mainWindow;
+    QApplication app(argc, argv);
 
     // Initialize Inventor
-    mainWindow = SoXt::init("Inventor Maze");
+    SoQt::init("Inventor Maze");
     SoDB::setDelaySensorTimeout(SbTime(0.0));
-
-#ifndef NO_AUDIO
-    // Initialize the audio for the victory sound
-    victory = new PlayClass("Victory");
-    victory->setFilename(myVictorySound);
-    ballSound = new PlayClass("BallSound");
-    ballSound->setFilename(myBallSound);
-#endif
 
     oneVector.setValue(1.0, 1.0);
 
@@ -1285,7 +1282,7 @@ main(int argc, char *argv[])
     // Create a viewer and begin the game
     SoSeparator *mainRoot = new SoSeparator;
     SoEventCallback *eventCB = new SoEventCallback;
-    SoXtExaminerViewer *vwr = new SoXtExaminerViewer(mainWindow);
+    SoQtExaminerViewer *vwr = new SoQtExaminerViewer();
     SoPerspectiveCamera *cam = new SoPerspectiveCamera;
 
     // Setup event callbacks
@@ -1328,9 +1325,8 @@ main(int argc, char *argv[])
     vwr->show();
 
     // Set the overlay graph - Inventor logo
-    setOverlayLogo(vwr);
+    setOverlayLogo(mainRoot);
 
-    SoXt::show(mainWindow);
-    SoXt::mainLoop();
+    return SoQt::mainLoop();
 }
 

@@ -40,14 +40,14 @@
 //
 //  See the README file in this directory for a complete explanation.
 //
+#include <QApplication>
 
 #include <stdlib.h>
-#include <X11/Intrinsic.h>
 #include <math.h>
 
 #include <Inventor/SoDB.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/engines/SoTimeCounter.h>
 #include <Inventor/engines/SoCounter.h>
 #include <Inventor/engines/SoCalculator.h>
@@ -200,9 +200,11 @@ setupHands(SoGroup *root)
     return (TRUE);
 }
 
-void
+int
 main(int argc, char **argv)
 {
+    QApplication app(argc, argv);
+
     char *filename = "clockData.iv";
 
     if (argc != 2) {
@@ -216,10 +218,8 @@ main(int argc, char **argv)
     printf("Middle mouse to pan the view.\n");
     printf("Left and middle together to zoom the view\n");
     printf("Right mouse for a popup menu showing more viewing features\n");
-    
-    Widget mainWindow = SoXt::init("Time");
-    if (mainWindow == NULL)
-        exit (1);
+
+    SoQt::init("Time");
 
     // Read in the scene graph
     SoInput in;
@@ -242,8 +242,8 @@ main(int argc, char **argv)
     }
 
     // Build and initialize the Inventor render area widget
-    SoXtExaminerViewer *examiner = new SoXtExaminerViewer(mainWindow);
-    examiner->setSize(SbVec2s(100, 100));
+    SoQtExaminerViewer *examiner = new SoQtExaminerViewer();
+    examiner->setSize(SbVec2s(500, 500));
     examiner->setDecoration(FALSE);
     examiner->setFeedbackVisibility(FALSE);
     examiner->setSceneGraph(root);
@@ -251,7 +251,6 @@ main(int argc, char **argv)
     examiner->show();
     examiner->viewAll();
 
-    SoXt::show(mainWindow);
-    SoXt::mainLoop();
+    return SoQt::mainLoop();
 }
 

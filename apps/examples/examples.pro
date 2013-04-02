@@ -1,2 +1,2 @@
 TEMPLATE = subdirs
-SUBDIRS = Mentor Toolmaker
+#SUBDIRS = Mentor Toolmaker

@@ -40,7 +40,6 @@
 //
 
 #include <math.h>
-#include <unistd.h>
 #include <stdlib.h>
 
 #include <Inventor/SbLinear.h>
@@ -58,6 +57,12 @@
 #define ABS(a) ((a) < 0.0 ? -(a) : (a))
 #define CLAMP(a, b, c) ((b) > (a) ? (b) : ((a) > (c) ? (c) : (a)))
 #define SMOOTH(a) ((a)*(a)*(3.0 - 2.0*(a)))
+
+#ifdef WIN32
+#  define srand48() srand((long)time(NULL))
+#  define drand48() (double(rand())/RAND_MAX)
+#  define lrand48() rand()
+#endif
 
 static const int HASH_SIZE=751; // two of my favorite prime numbers
 static const int HASH_VALUE=911;
@@ -231,13 +236,13 @@ FlashBackground::Noise(SbVec3f &p)
     SbVec3f q = p;
     if (q[0] < 0.0)
 	q[0] += BIG_NOISE;
-    q[0] = fmod(q[0], (double) BIG_NOISE);
+    q[0] = fmod(q[0], (float) BIG_NOISE);
     if (q[1] < 0.0)
 	q[1] += BIG_NOISE;
-    q[1] = fmod(q[1], (double) BIG_NOISE);
+    q[1] = fmod(q[1], (float) BIG_NOISE);
     if (q[2] < 0.0)
 	q[2] += BIG_NOISE;
-    q[2] = fmod(q[2], (double) BIG_NOISE);
+    q[2] = fmod(q[2], (float) BIG_NOISE);
 
     x0 = (uint32_t) q[0];
     y0 = (uint32_t) q[1];

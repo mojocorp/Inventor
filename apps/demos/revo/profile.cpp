@@ -43,7 +43,7 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include <Inventor/Xt/SoXt.h>
+#include <Inventor/Qt/SoQt.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/nodes/SoCoordinate3.h>
 #include <Inventor/nodes/SoLightModel.h>
@@ -53,7 +53,7 @@
 #include <Inventor/sensors/SoNodeSensor.h>
 #include <Inventor/sensors/SoSensor.h>
 
-#include <Xm/Text.h>
+//#include <Xm/Text.h>
 
 #include "LineManip.h"
 #include "Useful.h"

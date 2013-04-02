@@ -49,9 +49,6 @@
  */
 
 //--------------------------- Include ----------------------------------
-#include <X11/Intrinsic.h>
-#include <Xm/Xm.h>
-
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoCoordinate3.h>
 #include <Inventor/nodes/SoIndexedFaceSet.h>

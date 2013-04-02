@@ -53,8 +53,6 @@
 #include <stdio.h>
 #include <math.h>
 #include <sys/types.h>
-#include <Xm/Xm.h>
-#include <Xm/Form.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/SoDB.h>
@@ -86,11 +84,17 @@
 #include <Inventor/sensors/SoAlarmSensor.h>
 #include <Inventor/sensors/SoDataSensor.h>
 #include <Inventor/sensors/SoTimerSensor.h>
+#include <Inventor/nodes/SoOrthographicCamera.h>
+#include <Inventor/nodes/SoPerspectiveCamera.h>
 #include "../../samples/common/InventorLogo.h"
 #include "TsPieces.h"
 #include "TsField.h"
 #include "TsViewer.h"
 #include "MotifHelp.h"
+
+#ifdef WIN32
+#  define drand48() double(rand())/RAND_MAX;
+#endif
 
 #define FLD_VERTICAL_SHIFT    -10.0
 #define FLD_TOTAL_ROWS           12
@@ -166,10 +170,10 @@ static int orientationTable[24][3] = {
 //
 TsField::TsField(
     int res,
-    Widget parent,
+    QWidget *parent,
     const char *name, 
     SbBool buildInsideParent)
-        : SoXtComponent(
+        : SoQtComponent(
             parent,
             name, 
             buildInsideParent)
@@ -213,7 +217,7 @@ TsField::TsField(
     currentRate     = skillRates[skillLevel];
     currentFraction = 2.0;
 
-    Widget w = buildWidget(parent, name);
+    QWidget *w = buildWidget(parent, name);
     setBaseWidget(w);
 }
 
@@ -239,38 +243,23 @@ TsField::~TsField()
 //
 // Use: public
 
-Widget
+QWidget*
 TsField::buildWidget(
-    Widget       parent,
+    QWidget       *parent,
     const char * name )
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
     viewer      = new TsViewer(parent, name);
-
-    // Create all of the widgets for the game and put them in a form widget
-    Widget widget          = XmCreateForm( parent, "form", NULL, 0 );
-    Widget viewerWidget    = viewer->getWidget();
-
     viewer->setSize( SbVec2s( 660, 990 ) );
     SoDirectionalLight *dirLgt = viewer->getHeadlight();
     dirLgt->intensity = 1.0;
 
-    XtManageChild (viewerWidget);
-
-    ARG_VARS(10);
-
-    RESET_ARGS();
-    ADD_LEFT_FORM(0);
-    ADD_TOP_FORM(0);
-    ADD_BOTTOM_FORM(0);
-    XtSetValues(viewerWidget, ARGS);
-
     if (block == NULL)
         buildBlock();
 
-    return widget;
+    return viewer->getWidget();
 }
 
 
@@ -286,7 +275,7 @@ logoCB(void *, SoAction *action)
 	if (!pushedViewport) {
 	    pushedViewport = 1;
 	    glPushAttrib(GL_VIEWPORT_BIT);
-	    glViewport(0, 0, 80, 80);
+        glViewport(0, 0, 80, 80);
 	}
 	else {
 	    pushedViewport = 0;
@@ -366,6 +355,8 @@ TsField::initGame()
     //
     fieldRoot  = new SoSeparator;
     fieldRoot->ref();
+    fieldRoot->addChild (new SoPerspectiveCamera);
+
     SoEventCallback *eventNode  = new SoEventCallback;
     fieldRoot->addChild (eventNode);
     createFloorAndGrid();
@@ -535,6 +526,7 @@ TsField::initGame()
     // as annontation.
     //
     overRoot   = new SoSeparator;
+    SoOrthographicCamera *overCam = new SoOrthographicCamera;
     SoSeparator   *scoreRoot  = new SoSeparator;
     SoFont        *overFont   = new SoFont;
     SoLightModel  *overModel  = new SoLightModel;
@@ -542,12 +534,7 @@ TsField::initGame()
     SoText2       *overText   = new SoText2;
     SoTranslation *overXl1    = new SoTranslation;
     SoTranslation *overXl2    = new SoTranslation;
-    SbColor       *colorMap   = new SbColor[4];
 
-    colorMap[0].setValue(1.0, 0.0, 0.0);
-    colorMap[1].setValue(0.7, 0.7, 0.7);
-    colorMap[2].setValue(0.0, 0.0, 1.0);
-    colorMap[3].setValue(1.0, 1.0, 1.0);
     overModel->model = SoLightModel::BASE_COLOR;
     overFont->size   = 20;
     overColor->index = 1;
@@ -564,6 +551,7 @@ TsField::initGame()
     scoreRoot->addChild(overText);
     scoreRoot->addChild(overXl2);
     scoreRoot->addChild(overScore);
+    overRoot->addChild(overCam);
     overRoot->addChild(overModel);
     overRoot->addChild(scoreRoot);
 
@@ -591,12 +579,11 @@ TsField::initGame()
     logo->insertChild(logoColor, 0);
     overRoot->addChild(logo);
 
+    fieldRoot->addChild(overRoot);
 
     // Initialize the viewer for the field
     viewer->setAutoClipping (FALSE);
     viewer->setSceneGraph( fieldRoot );
-    viewer->setOverlaySceneGraph( overRoot );
-    viewer->setOverlayColorMap(0, 4, colorMap);
     SoCamera *gameCamera      = viewer->getCamera();
     gameCamera->nearDistance  = 0.6;
     gameCamera->farDistance   = 60.0;

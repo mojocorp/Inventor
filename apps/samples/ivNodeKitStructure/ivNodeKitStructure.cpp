@@ -40,11 +40,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <dlfcn.h>
-#include <unistd.h>
 #include <Inventor/SoDB.h>
+#include <Inventor/SoInteraction.h>
+#include <Inventor/nodekits/SoNodeKit.h>
 #include <Inventor/nodekits/SoBaseKit.h>
-#include <Inventor/Xt/SoXt.h>
+
 
 static void
 print_usage(const char *progname)
@@ -59,33 +59,36 @@ print_usage(const char *progname)
     exit(99);
 }
 
-static void
+static int
 parse_args(int argc, char **argv)
 {
     int err = 0;	// Flag: error in options?
-    int c;
-    
-    while ((c = getopt(argc, argv, "h")) != -1) {
-	switch(c) {
-	  case 'h':	// Help
-	  default:
-	    err = 1;
-	    break;
-	}
+    int optind = 1;
+
+    for (int i=1; i<argc; i++) {
+        if (strcmp(argv[i], "-h") == 0) {
+            // Help
+            err = 1;
+            optind = i;
+        }
     }
 
     if (err) {
-	print_usage(argv[0]);
+        print_usage(argv[0]);
     }
+    return optind;
 }
 
+int
 main(int argc, char **argv)
 {
-    SoXt::init(argv[0]);
+    SoDB::init();
+    SoNodeKit::init();
+    SoInteraction::init();
 
     // Parse arguments
 
-    parse_args(argc, argv);
+    int optind = parse_args(argc, argv);
     char *classString;
 
     if (optind != (argc - 1))
@@ -122,9 +125,7 @@ main(int argc, char **argv)
     }
 
     if (classType == SoType::badType()) {
-	fprintf(stderr, "ERROR: The given className is not a valid\n");
-	fprintf(stderr, "       node type. Message retrieved \n");
-	fprintf(stderr, "       from dlerror() follows:\n%s\n", dlerror());
+    fprintf(stderr, "ERROR: The given className is not a valid node type.\n");
 	exit(0);
     }
     else if ( ! classType.isDerivedFrom(SoBaseKit::getClassTypeId())) {

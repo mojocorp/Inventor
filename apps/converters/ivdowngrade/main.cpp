@@ -48,7 +48,6 @@
  _______________________________________________________________________
  */
 
-#include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <Inventor/SbDict.h>
@@ -87,44 +86,44 @@ extern SoNode *downgradeToV2(SoNode *n);
 void
 getargs(int argc, char *argv[])
 {
-    int c, err=0, showUsage = 0;
-    while ((c = getopt(argc, argv, "hbv:")) != -1) switch (c) {
-	case 'h':
-	    // help
-	    showUsage = 1;
-	    break;
-	    
-	case 'b': 
-	    // We cannot do a binary write, because the binary format
-	    // for groups changed from 1.0 to 2.0. We check for the 
-	    // option only because it is expected that Inventor file
-	    // translators support -b.
-	    break;
-	    
-	case 'v': 
-	    // Version we are downgrading to: 1.0 or 2.0
-	    targetVersion = atof(optarg);
-	    break;
-	default: err = 1;
+    int optind=1, err=0, showUsage = 0;
+    for (int i=1; i<argc; i++) {
+        if (strcmp(argv[i], "-h") == 0) {
+            // help
+            showUsage = 1;
+            optind = i;
+        } else if (strcmp(argv[i], "-b") == 0) {
+            // We cannot do a binary write, because the binary format
+            // for groups changed from 1.0 to 2.0. We check for the
+            // option only because it is expected that Inventor file
+            // translators support -b.
+            optind = i;
+        } else if (strcmp(argv[i], "-v") == 0) {
+            // Version we are downgrading to: 1.0 or 2.0
+            targetVersion = atof(argv[i+1]);
+            optind = i+1;
+        } else {
+            err = 1;
+        }
     }
     if (optind == argc-2) {
-	infile = argv[argc-2];
-	outfile = argv[argc-1];
+        infile = argv[argc-2];
+        outfile = argv[argc-1];
     }
     else if (optind == argc-1) {
-	infile = argv[argc-1];
-	// outfile is stdout
+        infile = argv[argc-1];
+        // outfile is stdout
     }
     // ??? else read from stdin ? ... else err = 1; //??? can't read from stdin right now.
     
     if (targetVersion != 1.0 && targetVersion != 2.0)
-	err = 1;
+        err = 1;
 
     if (showUsage || err) {
-	fprintf(stderr, "Usage: %s [-v targetVersion] inputFile outputFile\n", argv[0]);
-	
-	if (err)
-	    exit(-1);
+        fprintf(stderr, "Usage: %s [-v targetVersion] inputFile outputFile\n", argv[0]);
+
+        if (err)
+            exit(-1);
     }
 }
 

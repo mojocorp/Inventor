@@ -48,15 +48,13 @@
  _______________________________________________________________________
  */
 
-#include <math.h>
+#include <QMouseEvent>
 
-#include <X11/Intrinsic.h>
-#include <X11/Xlib.h>
-#include <X11/keysym.h>
+#include <math.h>
 
 #include <Inventor/nodes/SoOrthographicCamera.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
-#include <Inventor/Xt/SoXtCursors.h>
+#include <Inventor/Qt/SoQtCursors.h>
 #include "TsViewer.h"
 
 
@@ -76,13 +74,13 @@ enum ViewerModes {
 // Public constructor - build the widget right now
 //
 TsViewer::TsViewer(
-    Widget parent,
+    QWidget *parent,
     const char *name)
-        : SoXtViewer(
+        : SoQtViewer(
             parent,
             name, 
             TRUE, 
-            SoXtViewer::BROWSER, 
+            SoQtViewer::BROWSER,
             TRUE)  
 //
 ////////////////////////////////////////////////////////////////////////
@@ -110,7 +108,7 @@ TsViewer::~TsViewer()
 // Use: protected
 
 void
-TsViewer::processEvent(XAnyEvent *xe)
+TsViewer::processEvent(QEvent *xe)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -120,29 +118,28 @@ TsViewer::processEvent(XAnyEvent *xe)
     // Recieving events guarantees that the window has 
     // been mapped.
     if (!createdCursors) {
-	defineCursors();
-	Widget w = SoXtRenderArea::getWidget();
-	XDefineCursor(XtDisplay(w), XtWindow(w), vwrCursor);
+        defineCursors();
+        setCursor(vwrCursor);
     }
     
-    XButtonEvent    *be;
-    XMotionEvent    *me;
+    QMouseEvent    *be;
+    QMouseEvent    *me;
+    QKeyEvent      *ke;
 
-    switch(xe->type) {
-        case KeyPress:
-            KeySym          key;
-            key = XLookupKeysym((XKeyEvent *)xe, 0);
-            switch ( key ) {
-                case XK_Home:
+    switch(xe->type()) {
+        case QEvent::KeyPress:
+            ke = (QKeyEvent *)xe;
+            switch (ke->key()) {
+                case Qt::Key_Home:
                     resetToHomePosition();
                     return;
             }
             break;
-        case ButtonPress:
-	    be = (XButtonEvent *)xe;
-	    locator[0] = windowSize[0] - be->x;
-	    locator[1] = windowSize[1] - be->y;
-	    if (be->button == Button1) {
+        case QEvent::MouseButtonPress:
+        be = (QMouseEvent *)xe;
+        locator[0] = windowSize[0] - be->x();
+        locator[1] = windowSize[1] - be->y();
+        if (be->button() == Qt::LeftButton) {
 		switch (mode) {
 		    case IDLE_MODE: 
 			interactiveCountInc();
@@ -150,7 +147,7 @@ TsViewer::processEvent(XAnyEvent *xe)
 		}
                 switchMode(ROT_MODE);
 	    }
-            else if (be->button == Button2) {
+        else if (be->button() == Qt::RightButton) {
 		switch (mode) {
 		    case IDLE_MODE: 
 			interactiveCountInc();
@@ -160,9 +157,9 @@ TsViewer::processEvent(XAnyEvent *xe)
             }
             return;
 	    
-	case ButtonRelease:
-	    be = (XButtonEvent *)xe;
-	    if (be->button == Button1) {
+    case QEvent::MouseButtonRelease:
+        be = (QMouseEvent *)xe;
+        if (be->button() == Qt::LeftButton) {
                 if (mode == ROT_MODE)
                 {
   		    switchMode(IDLE_MODE);
@@ -171,7 +168,7 @@ TsViewer::processEvent(XAnyEvent *xe)
                 else
   		    switchMode(TRANS_MODE);
 	    }
-            else if (be->button == Button2) {
+        else if (be->button() == Qt::RightButton) {
                 if (mode == TRANS_MODE)
                 {
   		    switchMode(IDLE_MODE);
@@ -182,12 +179,12 @@ TsViewer::processEvent(XAnyEvent *xe)
             }
             return;
 	    
-	case MotionNotify:
-            me = (XMotionEvent *)xe;
+    case QEvent::MouseMove:
+            me = (QMouseEvent *)xe;
             movement[0] = locator[0];
             movement[1] = locator[1];
-   	    locator[0] = windowSize[0] - me->x;
-	    locator[1] = windowSize[1] - me->y;
+            locator[0] = windowSize[0] - me->x();
+            locator[1] = windowSize[1] - me->y();
 	    if (mode == TRANS_MODE)
 		translateCamera();
 	    else if (mode == ROT_MODE)
@@ -196,10 +193,9 @@ TsViewer::processEvent(XAnyEvent *xe)
             }
             return;
     }
-
     // Pass all other events to the render area so they will be given
     // to the scene graph.
-    SoXtRenderArea::processEvent(xe);
+    SoQtRenderArea::processEvent(xe);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -217,20 +213,15 @@ TsViewer::switchMode(int newMode)
 ////////////////////////////////////////////////////////////////////////
 {
     // needed to define new cursors
-    Widget w = SoXtRenderArea::getWidget();
-    Display *display = (w != NULL) ? XtDisplay(w) : NULL;
-    Window window = (w != NULL) ? XtWindow(w) : 0;
-    if (!createdCursors && window != 0)
+    if (!createdCursors)
 	defineCursors();
-    
+
     // switch to new viewer mode
     mode = newMode;
     switch (mode) {
 	case IDLE_MODE:
-	    if (window != 0)
-		XDefineCursor(display, window, vwrCursor);
+        setCursor(vwrCursor);
 	    break;
-	    
 	case TRANS_MODE:
 	    {
 		// Figure out the focal plane
@@ -250,8 +241,7 @@ TsViewer::switchMode(int newMode)
 			locator[1] / float(windowSize[1])), line);
 		focalplane.intersect(line, locator3D);
 	    }
-	    if (window != 0)
-		XDefineCursor(display, window, vwrCursor);
+        setCursor(vwrCursor);
 	    break;
     }
 }
@@ -275,7 +265,7 @@ TsViewer::sizeChanged(const SbVec2s &newSize)
     windowSize = newSize;
     
     // call parent class
-    SoXtViewer::sizeChanged(newSize);
+    SoQtViewer::sizeChanged(newSize);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -292,26 +282,9 @@ TsViewer::defineCursors()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    XColor foreground;
-    Pixmap source;
-    Display *display = getDisplay();
-    Drawable d = DefaultRootWindow(display);
-    
-    // set a red color
-    foreground.red = 65535;
-    foreground.green = foreground.blue = 0;
-    
-    // cursor
-    source = XCreateBitmapFromData(display, d, 
-			so_xt_curved_hand_bits, 
-			so_xt_curved_hand_width, 
-			so_xt_curved_hand_height);
-    vwrCursor = XCreatePixmapCursor(display, source, source, 
-			&foreground, &foreground, 
-			so_xt_curved_hand_x_hot, 
-			so_xt_curved_hand_y_hot);
-    XFreePixmap(display, source);
-    
+    vwrCursor = SoQtCursor::getCursor(SoQtCursor::CURVED_HAND);
+    seekCursor = SoQtCursor::getCursor(SoQtCursor::TARGET);
+
     createdCursors = TRUE;
 }
 

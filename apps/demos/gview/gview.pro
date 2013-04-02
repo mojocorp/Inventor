@@ -4,8 +4,18 @@
 
 TEMPLATE = app
 TARGET = 
+CONFIG -= app_bundle
+QT += opengl
+DESTDIR = ../../../build
+
 DEPENDPATH += .
 INCLUDEPATH += .
+INCLUDEPATH += ../../../lib/database/include \
+               ../../../lib/interaction/include \
+               ../../../lib/nodekits/include \
+               ../../../libSoQt/include
+
+LIBS += -L../../../build -lInventor -lSoQt
 
 # Input
 HEADERS += Actions.h \

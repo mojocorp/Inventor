@@ -63,6 +63,8 @@
 
 #include <QCursor>
 
+#include <Inventor/Qt/SoQt.h>
+
 namespace SoQtCursor {
 
 enum CursorType {
@@ -78,7 +80,7 @@ enum CursorType {
     TILT
 };
 
-QCursor getCursor (CursorType type);
+SOQT_EXPORT QCursor getCursor (CursorType type);
 
 }
 

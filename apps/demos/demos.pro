@@ -1,4 +1,4 @@
 TEMPLATE = subdirs
 #SUBDIRS = QtSceneViewer XtSceneViewer drop gview maze noodle qmorf revo textomatic
-SUBDIRS = QtSceneViewer
+SUBDIRS = drop QtSceneViewer maze qmorf
 x11: SUBDIRS += XtSceneViewer
