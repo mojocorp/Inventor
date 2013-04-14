@@ -113,6 +113,7 @@ public:
             if (it.key()->context() == ctx) {
                 return it.value();
             }
+            it++;
         }
 #ifdef DEBUG
         SoDebugError::post("SoQGLWidgetProxy::getDisplayListShareGroup",

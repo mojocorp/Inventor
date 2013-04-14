@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/1viewer.png</file>
+        <file>images/2viewers.png</file>
+        <file>images/4viewers.png</file>
+        <file>images/fullscreen.png</file>
+        <file>images/glyphicons_186_move.png</file>
+        <file>images/home.png</file>
+        <file>images/ortho.png</file>
+        <file>images/persp.png</file>
+        <file>images/pickMode.png</file>
+        <file>images/seekMode.png</file>
+        <file>images/sethome.png</file>
+        <file>images/viewAll.png</file>
+        <file>images/viewMode.png</file>
+    </qresource>
+</RCC>
