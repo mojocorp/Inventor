@@ -74,7 +74,7 @@ public:
     SbLineProjector();
 
     /// Destructor
-    ~SbLineProjector() {};
+    virtual ~SbLineProjector() {};
 
     /// Returns an instance that is a copy of this instance. The caller
     /// is responsible for deleting the copy when done.

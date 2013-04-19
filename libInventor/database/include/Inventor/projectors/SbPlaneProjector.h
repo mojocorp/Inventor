@@ -83,7 +83,7 @@ public:
                      SbBool orient = FALSE);
 
     /// Destructor
-    ~SbPlaneProjector() {};
+    virtual ~SbPlaneProjector() {};
 
     /// Returns an instance that is a copy of this instance. The caller
     /// is responsible for deleting the copy when done.

@@ -78,7 +78,7 @@
 class INVENTOR_API SbCylinderProjector : public SbProjector {
 public:
     // Destructor
-    ~SbCylinderProjector() {};
+    virtual ~SbCylinderProjector() {};
 
     /// Apply the projector using the given point, returning the
     /// point in three dimensions that it projects to.

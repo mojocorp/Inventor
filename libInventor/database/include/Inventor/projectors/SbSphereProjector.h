@@ -128,7 +128,7 @@ public:
     virtual void setWorkingSpace(const SbMatrix &space);
 
     // Destructor
-    ~SbSphereProjector() {};
+    virtual ~SbSphereProjector() {};
 
 protected:
     // Constructors
