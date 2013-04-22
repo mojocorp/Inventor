@@ -846,7 +846,6 @@ SoNodekitCatalog::narrowTypes( const SbName &theName,
 	return;
 
     SoType oldType        = theEntry->getType();
-    SoType oldDefaultType = theEntry->getDefaultType();
 
     // Make sure that the new types is derived from the old type.
     // Parts in derived classes must be subclasses of the types they
@@ -910,7 +909,7 @@ SoNodekitCatalog::clone( SoType typeOfThis ) const
     if (numEntries == 0)
 	theClone->entries = NULL;
     else {
-	theClone->entries = new ( SoNodekitCatalogEntry *[numEntries]);
+    theClone->entries = new SoNodekitCatalogEntry *[numEntries];
 	for (int i = 0; i < numEntries; i++) {
 	    if ( i == SO_CATALOG_THIS_PART_NUM )
 		theClone->entries[i] = entries[i]->clone( typeOfThis, 
@@ -1265,7 +1264,7 @@ SoNodekitCatalog::addEntry( const SbName &theName,
     // IF ALL TESTS WERE PASSED...
 
     // expand the list by one slot
-    newArray = new ( SoNodekitCatalogEntry *[numEntries + 1]);
+    newArray = new SoNodekitCatalogEntry *[numEntries + 1];
     if ( entries != NULL ) {
 	for (int i = 0; i < numEntries; i++ )
 	    newArray[i] = entries[i];

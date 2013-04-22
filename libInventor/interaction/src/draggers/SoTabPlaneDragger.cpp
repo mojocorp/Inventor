@@ -402,9 +402,9 @@ SoTabPlaneDragger::dragStart()
     if (restartState != INACTIVE ) {
 	currentState = restartState;
     }
-    else if (pickPath && pickPath->containsNode(translator.getValue()) ||
-        getSurrogatePartPickedName() == "translator" ) {
-	currentState = TRANSLATING;
+    else if ((pickPath && pickPath->containsNode(translator.getValue())) ||
+             getSurrogatePartPickedName() == "translator" ) {
+        currentState = TRANSLATING;
     }
     else if ( pickPath && pickPath->containsNode( scaleTabs.getValue() )) {
 
@@ -878,7 +878,6 @@ SoTabPlaneDragger::reallyAdjustScaleTabSize(SoGLRenderAction *action)
 
     SbMatrix localToWorld = getLocalToWorldMatrix();
     SbMatrix viewMat = SoViewingMatrixElement::get(action->getState());
-    SbMatrix viewMatInv = viewMat.inverse();
     SbMatrix projMat = SoProjectionMatrixElement::get(action->getState());
     SbMatrix lclToScr = localToWorld * viewMat * projMat;
 

@@ -153,7 +153,6 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
 #elif defined(SB_OS_MACX)
     
     CGDirectDisplayID display = CGMainDisplayID();
-    CGSize size = CGDisplayScreenSize(display);
 
     // Get the dimensions of the screen (25.4mm = 1 inch)
     return CGDisplayPixelsWide(display) * 25.4f / (float)CGDisplayScreenSize(display).width;

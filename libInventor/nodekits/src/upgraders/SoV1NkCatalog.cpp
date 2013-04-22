@@ -772,7 +772,6 @@ SoV1NodekitCatalog::narrowTypes( const SbName &theName,
 	return;
 
     const SoType oldType        = theEntry->getType();
-    const SoType oldDefaultType = theEntry->getDefaultType();
 
     // Make sure that the new types is derived from the old type.
     // Parts in derived classes must be subclasses of the types they
@@ -814,7 +813,7 @@ SoV1NodekitCatalog::clone( const SoType &typeOfThis ) const
     if (numEntries == 0)
 	theClone->entries = NULL;
     else {
-	theClone->entries = new ( SoV1NodekitCatalogEntry *[numEntries]);
+    theClone->entries = new SoV1NodekitCatalogEntry *[numEntries];
 	for (int i = 0; i < numEntries; i++) {
 	    if ( entries[i]->getName() == "this" )
 		theClone->entries[i] = entries[i]->clone( typeOfThis, 
@@ -1137,7 +1136,7 @@ SoV1NodekitCatalog::addEntry( const SbName &theName,
     // IF ALL TESTS WERE PASSED...
 
     // expand the list by one slot
-    newArray = new ( SoV1NodekitCatalogEntry *[numEntries + 1]);
+    newArray = new SoV1NodekitCatalogEntry *[numEntries + 1];
     if ( entries != NULL ) {
 	for (int i = 0; i < numEntries; i++ )
 	    newArray[i] = entries[i];

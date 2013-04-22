@@ -577,8 +577,8 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action)
     // with the cache.  If the camera changes, this element will cause
     // the cache to be blown for this node and the nurbs surface will be
     // regenerated.
-    SbMatrix vMat = SoViewingMatrixElement::get (action->getState());
-    SbMatrix mMat = SoModelMatrixElement::get (action->getState());
+    SoViewingMatrixElement::get (action->getState());
+    SoModelMatrixElement::get (action->getState());
 
     // Begin the surface.
     gluBeginSurface(nurbsObj);

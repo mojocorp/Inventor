@@ -34,5 +34,5 @@ void SoGLContext::setCurrentContext(uint32_t cacheId)
     s_cacheId = cacheId;
 }
 
-#undef glewGetContext()
+#undef glewGetContext
 #include "glew.c"

@@ -1075,10 +1075,8 @@ SoField::referencesCopy() const
     // ??? careful to test for this when we call checkCopy(). It's
     // ??? probably not worth the effort, since people won't copy
     // ??? complicated engine networks often.
-    if (containerKnownToBeEngine ||
-	container->isOfType(SoEngine::getClassTypeId()) &&
-	((SoEngine *) container)->shouldCopy())
-	return TRUE;
+    if (containerKnownToBeEngine || (container->isOfType(SoEngine::getClassTypeId()) && ((SoEngine *) container)->shouldCopy()))
+        return TRUE;
 
     return FALSE;
 }
