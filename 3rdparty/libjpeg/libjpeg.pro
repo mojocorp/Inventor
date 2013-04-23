@@ -10,6 +10,9 @@ DEPENDPATH += .
 INCLUDEPATH += .
 CONFIG -= qt flat
 CONFIG += static
+
+DEFINES += _CRT_SECURE_NO_WARNINGS
+
 # Input
 HEADERS += jchuff.h \
            jconfig.h \
