@@ -11,6 +11,8 @@ CONFIG(debug, debug|release) {
     DEFINES += DEBUG
 }
 
+DEFINES += GLEW_BUILD
+
 linux-g++ {
     CONFIG += x11
     INCLUDEPATH += /usr/include/freetype2/
