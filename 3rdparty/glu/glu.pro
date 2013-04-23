@@ -6,7 +6,7 @@ DESTDIR  = ../../build
 CONFIG += opengl static
 CONFIG -= qt
 
-DEFINES += LIBRARYBUILD RESOLVE_3D_TEXTURE_SUPPORT
+DEFINES += LIBRARYBUILD RESOLVE_3D_TEXTURE_SUPPORT _CRT_SECURE_NO_WARNINGS
 
 CONFIG(release, debug|release) {
  DEFINES += NDEBUG
@@ -133,8 +133,7 @@ HEADERS += include/GL/glu.h \
            sgi/libnurbs/nurbtess/searchTree.h \
            sgi/libnurbs/nurbtess/zlassert.h \
            sgi/libtess/priorityq-heap.c
-SOURCES += sgi/dummy.cc \
-           sgi/libtess/dict.c \
+SOURCES += sgi/libtess/dict.c \
            sgi/libtess/geom.c \
            sgi/libtess/memalloc.c \
            sgi/libtess/mesh.c \

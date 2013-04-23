@@ -32,6 +32,9 @@
 #include "gluint.h"
 #include <GL/glu.h>
 
+#ifndef GL_ARB_imaging
+#define     GL_TABLE_TOO_LARGE 0x8031
+#endif
 
 struct token_string
 {
