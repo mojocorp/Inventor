@@ -493,6 +493,7 @@ PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
 
 HEADERS += $$PUBLIC_HEADERS $$PRIVATE_HEADERS
 
+win32: QMAKE_YACCFLAGS += -l
 YACCSOURCES += database/src/engines/SoCalcParse.y
 
 SOURCES += database/src/SbBox3f.cpp \
