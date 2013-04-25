@@ -69,6 +69,8 @@
 #include <Inventor/SbName.h>
 #include <Inventor/SbDict.h>
 
+#include <vector>
+
 class SoTypeList;
 struct SoTypeData;
 
@@ -91,7 +93,7 @@ struct SoTypeData;
 class INVENTOR_API SoType {
 public:
     /// Returns the type associated with the given name.
-    static SoType fromName(SbName name);
+    static SoType fromName(const SbName & name);
 
     /// Returns the name associated with a type.
     SbName getName() const;
@@ -182,32 +184,21 @@ SoINTERNAL public:
 
     // Get the number of types currently registed in the types dictionary.
     // This is used by SoAction when setting up the action method list.
-    static int getNumTypes()  {
-        return nextIndex;
-    }
+    static size_t getNumTypes();
 
 private:
     // SoTypes are passed around on the stack a lot, and are cast to
     // void *'s; they MUST fit into a single word.
     struct {
-unsigned int data :
-        16;
-unsigned int index :
-        15;  // Assumes we have fewer than
-        // 32,768 types
-unsigned int isPublic :
-        1; // 0 if is an internal class
+        unsigned int data : 16;
+        unsigned int index : 15;  // Assumes we have fewer than 32,768 types
+        unsigned int isPublic : 1; // 0 if is an internal class
     } storage;
 
-    // name->sotype dictionary
-    static SbDict *nameDict;
+    static int find(const SbName & name);
 
     // array of SoTypeData
-    static int  nextIndex;
-    static int  arraySize;
-    static SoTypeData *typeData;
-
-    static void  expandTypeData();
+    static std::vector<SoTypeData> typeData;
 };
 
 #endif /* _SO_TYPE_ */
