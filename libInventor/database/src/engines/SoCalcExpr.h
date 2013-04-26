@@ -42,45 +42,10 @@
 
 #include <string>
 
-#define Expr SoCalcExpr 
-#define ExprList SoCalcExprList 
-#define Const SoCalcConst 
-#define Var SoCalcVar 
-#define Func SoCalcFunc 
-#define Func_d SoCalcFunc_d 
-#define Func_dd SoCalcFunc_dd 
-#define Func_id SoCalcFunc_id 
-#define Func_v SoCalcFunc_v 
-#define Funcv_v SoCalcFuncv_v 
-#define Func_vv SoCalcFunc_vv 
-#define Funcv_vv SoCalcFuncv_vv 
-#define Funcv_ddd SoCalcFuncv_ddd 
-#define BinaryOp SoCalcBinaryOp 
-#define Assign SoCalcAssign 
-#define AssignIndex SoCalcAssignIndex
-#define Plus SoCalcPlus 
-#define Minus SoCalcMinus 
-#define Mult SoCalcMult 
-#define Divide SoCalcDivide 
-#define Mod SoCalcMod 
-#define Index SoCalcIndex 
-#define LessThan SoCalcLessThan 
-#define GreaterThan SoCalcGreaterThan 
-#define LessEQ SoCalcLessEQ 
-#define GreaterEQ SoCalcGreaterEQ 
-#define Equals SoCalcEquals 
-#define NotEquals SoCalcNotEquals 
-#define And SoCalcAnd 
-#define Or SoCalcOr 
-#define Not SoCalcNot 
-#define Negate SoCalcNegate 
-#define Ternary SoCalcTernary 
-#define Parser SoCalcParser 
-
 //
 // base expression class
 //
-class Expr {
+class SoCalcExpr {
   public:
     enum Type {
 	FLOAT,
@@ -88,8 +53,8 @@ class Expr {
     };
     Type	type;
 
-    Expr(Type t) : type(t) {}
-    virtual ~Expr();
+    SoCalcExpr(Type t) : type(t) {}
+    virtual ~SoCalcExpr();
 
     virtual void	print(int level);
     virtual float	getFloat();
@@ -104,7 +69,7 @@ class Expr {
     }
 
   protected:
-    friend class Parser;
+    friend class SoCalcParser;
     // global flag gets set true if there was an error
     static SbBool error;
 
@@ -124,16 +89,16 @@ class Expr {
 //
 // List of expressions
 //
-class ExprList : public SbPList {
+class SoCalcExprList : public SbPList {
   public:
-    ExprList() {}
-    ExprList(const ExprList &l) : SbPList() { copy(l); }
-    ~ExprList() { truncate(0); }
+    SoCalcExprList() {}
+    SoCalcExprList(const SoCalcExprList &l) : SbPList() { copy(l); }
+    ~SoCalcExprList() { truncate(0); }
 
     void truncate(int n);
-    void append(Expr *e) { SbPList::append((void*) e); }
-    Expr *operator[](int i) const
-	{ return (Expr*) (*(const SbPList*)this)[i]; }
+    void append(SoCalcExpr *e) { SbPList::append((void*) e); }
+    SoCalcExpr *operator[](int i) const
+    { return (SoCalcExpr*) (*(const SbPList*)this)[i]; }
 
     // evaluate each expression in the list.
     void eval();
@@ -145,20 +110,20 @@ class ExprList : public SbPList {
 //
 // Terminal expressions
 //
-class Const : public Expr {
+class SoCalcConst : public SoCalcExpr {
   public:
     const float	val;
-    Const(float v) : Expr(FLOAT), val(v) {}
-    ~Const();
+    SoCalcConst(float v) : SoCalcExpr(FLOAT), val(v) {}
+    ~SoCalcConst();
     virtual void print(int level);
     virtual float getFloat();
 };
 
-class Var : public Expr {
+class SoCalcVar : public SoCalcExpr {
   public:
     std::string    name;
-    Var(const char *nm, Type type);
-    ~Var();
+    SoCalcVar(const char *nm, Type type);
+    ~SoCalcVar();
     virtual void	print(int level);
     virtual float	getFloat();
     virtual SbVec3f	getVec3f();
@@ -174,111 +139,111 @@ class Var : public Expr {
 //
 // Functions
 //
-class Func : public Expr
+class SoCalcFunc : public SoCalcExpr
 {
   public:
     const char *const name;
-    virtual Func *dup() const = 0;
-    ~Func();
-    virtual void setArgs(ExprList *args) = 0;
+    virtual SoCalcFunc *dup() const = 0;
+    ~SoCalcFunc();
+    virtual void setArgs(SoCalcExprList *args) = 0;
     virtual void print(int level);
   protected:
-    Func(const char *nm, Type type);
-    ExprList	*args;
+    SoCalcFunc(const char *nm, Type type);
+    SoCalcExprList	*args;
 };
 
-class Func_d : public Func
+class SoCalcFunc_d : public SoCalcFunc
 {
   public:
-    Func_d(const char *name, double (*f)(double));
-    ~Func_d();
-    virtual Func *dup() const;
+    SoCalcFunc_d(const char *name, double (*f)(double));
+    ~SoCalcFunc_d();
+    virtual SoCalcFunc *dup() const;
     virtual float getFloat();
-    virtual void setArgs(ExprList *args);
+    virtual void setArgs(SoCalcExprList *args);
   private:
     double	(*const func)(double);
 };
 
-class Func_dd : public Func
+class SoCalcFunc_dd : public SoCalcFunc
 {
   public:
-    Func_dd(const char *name, double (*f)(double, double)) : Func(name, FLOAT), func(f) {}
-    ~Func_dd();
-    virtual Func *dup() const;
+    SoCalcFunc_dd(const char *name, double (*f)(double, double)) : SoCalcFunc(name, FLOAT), func(f) {}
+    ~SoCalcFunc_dd();
+    virtual SoCalcFunc *dup() const;
     virtual float getFloat();
-    virtual void setArgs(ExprList *args);
+    virtual void setArgs(SoCalcExprList *args);
   private:
     double	(*const func)(double, double);
 };
 
-class Func_id : public Func
+class SoCalcFunc_id : public SoCalcFunc
 {
   public:
-    Func_id(const char *name, double (*f)(int, double)) : Func(name, FLOAT), func(f) {}
-    ~Func_id();
-    virtual Func *dup() const;
+    SoCalcFunc_id(const char *name, double (*f)(int, double)) : SoCalcFunc(name, FLOAT), func(f) {}
+    ~SoCalcFunc_id();
+    virtual SoCalcFunc *dup() const;
     virtual float getFloat();
-    virtual void setArgs(ExprList *args);
+    virtual void setArgs(SoCalcExprList *args);
   private:
     double	(*const func)(int, double);
 };
 
-class Func_v : public Func
+class SoCalcFunc_v : public SoCalcFunc
 {
   public:
-    Func_v(const char *name, double (*f)(const SbVec3f &)) : Func(name, FLOAT), func(f) {}
-    ~Func_v();
-    virtual Func *dup() const;
+    SoCalcFunc_v(const char *name, double (*f)(const SbVec3f &)) : SoCalcFunc(name, FLOAT), func(f) {}
+    ~SoCalcFunc_v();
+    virtual SoCalcFunc *dup() const;
     virtual float getFloat();
-    virtual void setArgs(ExprList *args);
+    virtual void setArgs(SoCalcExprList *args);
   private:
     double	(*const func)(const SbVec3f &);
 };
 
-class Funcv_v : public Func
+class SoCalcFuncv_v : public SoCalcFunc
 {
   public:
-    Funcv_v(const char *name, SbVec3f (*f)(const SbVec3f &)) : Func(name, VEC3F), func(f) {}
-    ~Funcv_v();
-    virtual Func *dup() const;
+    SoCalcFuncv_v(const char *name, SbVec3f (*f)(const SbVec3f &)) : SoCalcFunc(name, VEC3F), func(f) {}
+    ~SoCalcFuncv_v();
+    virtual SoCalcFunc *dup() const;
     virtual SbVec3f getVec3f();
-    virtual void setArgs(ExprList *args);
+    virtual void setArgs(SoCalcExprList *args);
   private:
     SbVec3f	(*const func)(const SbVec3f &);
 };
 
-class Func_vv : public Func
+class SoCalcFunc_vv : public SoCalcFunc
 {
   public:
-    Func_vv(const char *name, double (*f)(const SbVec3f &, const SbVec3f &)) : Func(name, FLOAT), func(f) {}
-    ~Func_vv();
-    virtual Func *dup() const;
+    SoCalcFunc_vv(const char *name, double (*f)(const SbVec3f &, const SbVec3f &)) : SoCalcFunc(name, FLOAT), func(f) {}
+    ~SoCalcFunc_vv();
+    virtual SoCalcFunc *dup() const;
     virtual float getFloat();
-    virtual void setArgs(ExprList *args);
+    virtual void setArgs(SoCalcExprList *args);
   private:
     double	(*const func)(const SbVec3f &, const SbVec3f &);
 };
 
-class Funcv_vv : public Func
+class SoCalcFuncv_vv : public SoCalcFunc
 {
   public:
-    Funcv_vv(const char *name, SbVec3f (*f)(const SbVec3f &, const SbVec3f &)) : Func(name, VEC3F), func(f) {}
-    ~Funcv_vv();
-    virtual Func *dup() const;
+    SoCalcFuncv_vv(const char *name, SbVec3f (*f)(const SbVec3f &, const SbVec3f &)) : SoCalcFunc(name, VEC3F), func(f) {}
+    ~SoCalcFuncv_vv();
+    virtual SoCalcFunc *dup() const;
     virtual SbVec3f getVec3f();
-    virtual void setArgs(ExprList *args);
+    virtual void setArgs(SoCalcExprList *args);
   private:
     SbVec3f	(*const func)(const SbVec3f &, const SbVec3f &);
 };
 
-class Funcv_ddd : public Func
+class SoCalcFuncv_ddd : public SoCalcFunc
 {
   public:
-    Funcv_ddd(const char *name, SbVec3f (*f)(double, double, double)) : Func(name, VEC3F), func(f) {}
-    ~Funcv_ddd();
-    virtual Func *dup() const;
+    SoCalcFuncv_ddd(const char *name, SbVec3f (*f)(double, double, double)) : SoCalcFunc(name, VEC3F), func(f) {}
+    ~SoCalcFuncv_ddd();
+    virtual SoCalcFunc *dup() const;
     virtual SbVec3f getVec3f();
-    virtual void setArgs(ExprList *args);
+    virtual void setArgs(SoCalcExprList *args);
   private:
     SbVec3f	(*const func)(double, double, double);
 };
@@ -286,200 +251,200 @@ class Funcv_ddd : public Func
 //
 // Operations
 //
-class BinaryOp : public Expr
+class SoCalcBinaryOp : public SoCalcExpr
 {
   public:
     virtual void print(int level);
   protected:
     // bit mask to select allowed operation types
     enum Types { FF=(1<<0), FV=(1<<1), VF=(1<<2), VV=(1<<3) };
-    BinaryOp(Expr *ea, Expr *eb, int TypeBits);
-    ~BinaryOp();
-    Expr	*a, *b;
+    SoCalcBinaryOp(SoCalcExpr *ea, SoCalcExpr *eb, int TypeBits);
+    ~SoCalcBinaryOp();
+    SoCalcExpr	*a, *b;
 };
 
-class Assign : public BinaryOp
+class SoCalcAssign : public SoCalcBinaryOp
 {
   public:
-    Assign(Expr *a, Expr *b) : BinaryOp(a,b,FF|VV) { type=a->type; }
-    ~Assign();
+    SoCalcAssign(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF|VV) { type=a->type; }
+    ~SoCalcAssign();
     virtual float getFloat();
     virtual SbVec3f getVec3f();
 };
 
-class AssignIndex : public Expr
+class SoCalcAssignIndex : public SoCalcExpr
 {
   public:
     // Expression is "a[b] = c"
-    AssignIndex(Expr *a, Expr *b, Expr *c);
-    ~AssignIndex();
+    SoCalcAssignIndex(SoCalcExpr *a, SoCalcExpr *b, SoCalcExpr *c);
+    ~SoCalcAssignIndex();
     virtual float getFloat();
   private:
-    Expr *a, *b, *c;
+    SoCalcExpr *a, *b, *c;
 };
 
-class Plus : public BinaryOp
+class SoCalcPlus : public SoCalcBinaryOp
 {
   public:
-    Plus(Expr *a, Expr *b) : BinaryOp(a,b,FF|VV) { type=a->type; }
-    ~Plus();
+    SoCalcPlus(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF|VV) { type=a->type; }
+    ~SoCalcPlus();
     virtual float getFloat();
     virtual SbVec3f getVec3f();
 };
 
-class Minus : public BinaryOp
+class SoCalcMinus : public SoCalcBinaryOp
 {
   public:
-    Minus(Expr *a, Expr *b) : BinaryOp(a,b,FF|VV) { type=a->type; }
-    ~Minus();
+    SoCalcMinus(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF|VV) { type=a->type; }
+    ~SoCalcMinus();
     virtual float getFloat();
     virtual SbVec3f getVec3f();
 };
 
-class Mult : public BinaryOp
+class SoCalcMult : public SoCalcBinaryOp
 {
   public:
-    Mult(Expr *a, Expr *b) : BinaryOp(a,b,FF|FV|VF) { type=a->type==b->type?a->type:VEC3F; }
-    ~Mult();
+    SoCalcMult(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF|FV|VF) { type=a->type==b->type?a->type:VEC3F; }
+    ~SoCalcMult();
     virtual float getFloat();
     virtual SbVec3f getVec3f();
 };
 
-class Divide : public BinaryOp
+class SoCalcDivide : public SoCalcBinaryOp
 {
   public:
-    Divide(Expr *a, Expr *b) : BinaryOp(a,b,FF|VF) { type=a->type; }
-    ~Divide();
+    SoCalcDivide(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF|VF) { type=a->type; }
+    ~SoCalcDivide();
     virtual float getFloat();
     virtual SbVec3f getVec3f();
 };
 
-class Mod : public BinaryOp
+class SoCalcMod : public SoCalcBinaryOp
 {
   public:
-    Mod(Expr *a, Expr *b) : BinaryOp(a,b,FF) { type=FLOAT; }
-    ~Mod();
+    SoCalcMod(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF) { type=FLOAT; }
+    ~SoCalcMod();
     virtual float getFloat();
 };
 
-class Index : public BinaryOp
+class SoCalcIndex : public SoCalcBinaryOp
 {
   public:
-    Index(Expr *a, Expr *b) : BinaryOp(a,b,VF) { type=FLOAT; }
-    ~Index();
+    SoCalcIndex(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,VF) { type=FLOAT; }
+    ~SoCalcIndex();
     virtual float getFloat();
 };
 
-class LessThan : public BinaryOp
+class SoCalcLessThan : public SoCalcBinaryOp
 {
   public:
-    LessThan(Expr *a, Expr *b) : BinaryOp(a,b,FF) { type=FLOAT; }
-    ~LessThan();
+    SoCalcLessThan(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF) { type=FLOAT; }
+    ~SoCalcLessThan();
     virtual float getFloat();
 };
 
-class GreaterThan : public BinaryOp
+class SoCalcGreaterThan : public SoCalcBinaryOp
 {
   public:
-    GreaterThan(Expr *a, Expr *b) : BinaryOp(a,b,FF) { type=FLOAT; }
-    ~GreaterThan();
+    SoCalcGreaterThan(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF) { type=FLOAT; }
+    ~SoCalcGreaterThan();
     virtual float getFloat();
 };
 
-class LessEQ : public BinaryOp
+class SoCalcLessEQ : public SoCalcBinaryOp
 {
   public:
-    LessEQ(Expr *a, Expr *b) : BinaryOp(a,b,FF) { type=FLOAT; }
-    ~LessEQ();
+    SoCalcLessEQ(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF) { type=FLOAT; }
+    ~SoCalcLessEQ();
     virtual float getFloat();
 };
 
-class GreaterEQ : public BinaryOp
+class SoCalcGreaterEQ : public SoCalcBinaryOp
 {
   public:
-    GreaterEQ(Expr *a, Expr *b) : BinaryOp(a,b,FF) { type=FLOAT; }
-    ~GreaterEQ();
+    SoCalcGreaterEQ(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF) { type=FLOAT; }
+    ~SoCalcGreaterEQ();
     virtual float getFloat();
 };
 
-class Equals : public BinaryOp
+class SoCalcEquals : public SoCalcBinaryOp
 {
   public:
-    Equals(Expr *a, Expr *b) : BinaryOp(a,b,FF) { type=FLOAT; }
-    ~Equals();
+    SoCalcEquals(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF) { type=FLOAT; }
+    ~SoCalcEquals();
     virtual float getFloat();
 };
 
-class NotEquals : public BinaryOp
+class SoCalcNotEquals : public SoCalcBinaryOp
 {
   public:
-    NotEquals(Expr *a, Expr *b) : BinaryOp(a,b,FF) { type=FLOAT; }
-    ~NotEquals();
+    SoCalcNotEquals(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF) { type=FLOAT; }
+    ~SoCalcNotEquals();
     virtual float getFloat();
 };
 
-class And : public BinaryOp
+class SoCalcAnd : public SoCalcBinaryOp
 {
   public:
-    And(Expr *a, Expr *b) : BinaryOp(a,b,FF) { type=FLOAT; }
-    ~And();
+    SoCalcAnd(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF) { type=FLOAT; }
+    ~SoCalcAnd();
     virtual float getFloat();
 };
 
-class Or : public BinaryOp
+class SoCalcOr : public SoCalcBinaryOp
 {
   public:
-    Or(Expr *a, Expr *b) : BinaryOp(a,b,FF) { type=FLOAT; }
-    ~Or();
+    SoCalcOr(SoCalcExpr *a, SoCalcExpr *b) : SoCalcBinaryOp(a,b,FF) { type=FLOAT; }
+    ~SoCalcOr();
     virtual float getFloat();
 };
 
-class Not : public Expr
+class SoCalcNot : public SoCalcExpr
 {
   public:
-    Not(Expr *exp) : Expr(FLOAT), e(exp) {}
-    ~Not();
+    SoCalcNot(SoCalcExpr *exp) : SoCalcExpr(FLOAT), e(exp) {}
+    ~SoCalcNot();
     virtual float getFloat();
     virtual void print(int level);
   private:
-    Expr *e;
+    SoCalcExpr *e;
 };
 
-class Negate : public Expr
+class SoCalcNegate : public SoCalcExpr
 {
   public:
-    Negate(Expr *exp) : Expr(exp->type), e(exp) { }
-    ~Negate();
-    virtual float getFloat();
-    virtual SbVec3f getVec3f();
-    virtual void print(int level);
-  private:
-    Expr *e;
-};
-
-class Ternary : public Expr
-{
-  public:
-    Ternary(Expr *a, Expr *b, Expr *c);
-    ~Ternary();
+    SoCalcNegate(SoCalcExpr *exp) : SoCalcExpr(exp->type), e(exp) { }
+    ~SoCalcNegate();
     virtual float getFloat();
     virtual SbVec3f getVec3f();
     virtual void print(int level);
   private:
-    Expr *etest;
-    Expr *etrue;
-    Expr *efalse;
+    SoCalcExpr *e;
+};
+
+class SoCalcTernary : public SoCalcExpr
+{
+  public:
+    SoCalcTernary(SoCalcExpr *a, SoCalcExpr *b, SoCalcExpr *c);
+    ~SoCalcTernary();
+    virtual float getFloat();
+    virtual SbVec3f getVec3f();
+    virtual void print(int level);
+  private:
+    SoCalcExpr *etest;
+    SoCalcExpr *etrue;
+    SoCalcExpr *efalse;
 };
 
 //
 // Top-level parser class
 //
-class Parser {
+class SoCalcParser {
   public:
-    Parser(float *(*lookupFloatField)(void *data, const char *name),
+    SoCalcParser(float *(*lookupFloatField)(void *data, const char *name),
 	 SbVec3f *(*lookupVec3fField)(void *data, const char *name),
 	void *data);
-    ~Parser();
+    ~SoCalcParser();
 
     // parse some more expressions, add to the collection
     SbBool	parse(const char *buf);
@@ -495,7 +460,7 @@ class Parser {
     SbVec3f *(*lookupVec3fField)(void *data, const char *name);
     void *data;
 
-    ExprList	*elist;
+    SoCalcExprList	*elist;
 };
 
 #endif

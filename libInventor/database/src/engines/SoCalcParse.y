@@ -35,7 +35,7 @@ extern "C" int yylex();
 int yyparse();
 
 static const char *In;
-static ExprList   *EList;
+static SoCalcExprList   *EList;
 
 static const struct {
     const char *name;
@@ -56,30 +56,30 @@ static const struct {
 
 static const struct {
     const char *name;
-    Expr::Type  type;
+    SoCalcExpr::Type  type;
 } Inputs[] = {
-    { "a", Expr::FLOAT}, { "b", Expr::FLOAT},
-    { "c", Expr::FLOAT}, { "d", Expr::FLOAT},
-    { "e", Expr::FLOAT}, { "f", Expr::FLOAT},
-    { "g", Expr::FLOAT}, { "h", Expr::FLOAT},
-    { "A", Expr::VEC3F}, { "B", Expr::VEC3F},
-    { "C", Expr::VEC3F}, { "D", Expr::VEC3F},
-    { "E", Expr::VEC3F}, { "F", Expr::VEC3F},
-    { "G", Expr::VEC3F}, { "H", Expr::VEC3F},
+    { "a", SoCalcExpr::FLOAT}, { "b", SoCalcExpr::FLOAT},
+    { "c", SoCalcExpr::FLOAT}, { "d", SoCalcExpr::FLOAT},
+    { "e", SoCalcExpr::FLOAT}, { "f", SoCalcExpr::FLOAT},
+    { "g", SoCalcExpr::FLOAT}, { "h", SoCalcExpr::FLOAT},
+    { "A", SoCalcExpr::VEC3F}, { "B", SoCalcExpr::VEC3F},
+    { "C", SoCalcExpr::VEC3F}, { "D", SoCalcExpr::VEC3F},
+    { "E", SoCalcExpr::VEC3F}, { "F", SoCalcExpr::VEC3F},
+    { "G", SoCalcExpr::VEC3F}, { "H", SoCalcExpr::VEC3F},
 }, Outputs[] = {
-    { "oa", Expr::FLOAT}, { "ob", Expr::FLOAT},
-    { "oc", Expr::FLOAT}, { "od", Expr::FLOAT},
-    { "oA", Expr::VEC3F}, { "oB", Expr::VEC3F},
-    { "oC", Expr::VEC3F}, { "oD", Expr::VEC3F},
+    { "oa", SoCalcExpr::FLOAT}, { "ob", SoCalcExpr::FLOAT},
+    { "oc", SoCalcExpr::FLOAT}, { "od", SoCalcExpr::FLOAT},
+    { "oA", SoCalcExpr::VEC3F}, { "oB", SoCalcExpr::VEC3F},
+    { "oC", SoCalcExpr::VEC3F}, { "oD", SoCalcExpr::VEC3F},
 }, Vars[] = {
-    { "ta", Expr::FLOAT}, { "tb", Expr::FLOAT},
-    { "tc", Expr::FLOAT}, { "td", Expr::FLOAT},
-    { "te", Expr::FLOAT}, { "tf", Expr::FLOAT},
-    { "tg", Expr::FLOAT}, { "th", Expr::FLOAT},
-    { "tA", Expr::VEC3F}, { "tB", Expr::VEC3F},
-    { "tC", Expr::VEC3F}, { "tD", Expr::VEC3F},
-    { "tE", Expr::VEC3F}, { "tF", Expr::VEC3F},
-    { "tG", Expr::VEC3F}, { "tH", Expr::VEC3F},
+    { "ta", SoCalcExpr::FLOAT}, { "tb", SoCalcExpr::FLOAT},
+    { "tc", SoCalcExpr::FLOAT}, { "td", SoCalcExpr::FLOAT},
+    { "te", SoCalcExpr::FLOAT}, { "tf", SoCalcExpr::FLOAT},
+    { "tg", SoCalcExpr::FLOAT}, { "th", SoCalcExpr::FLOAT},
+    { "tA", SoCalcExpr::VEC3F}, { "tB", SoCalcExpr::VEC3F},
+    { "tC", SoCalcExpr::VEC3F}, { "tD", SoCalcExpr::VEC3F},
+    { "tE", SoCalcExpr::VEC3F}, { "tF", SoCalcExpr::VEC3F},
+    { "tG", SoCalcExpr::VEC3F}, { "tH", SoCalcExpr::VEC3F},
 };
 #define NINPUTS (sizeof(Inputs)/sizeof(Inputs[0]))
 #define NOUTPUTS (sizeof(Outputs)/sizeof(Outputs[0]))
@@ -96,7 +96,7 @@ static SbVec3f vec3f(double a, double b, double c) { return SbVec3f(float(a),flo
 #define NFUNCS 25
 
 static struct {
-    const Func *func;
+    const SoCalcFunc *func;
 } Funcs[NFUNCS];
 
 %}
@@ -107,8 +107,8 @@ static struct {
 
 %union
 {
-    Expr    *expr;
-    ExprList    *list;
+    SoCalcExpr    *expr;
+    SoCalcExprList    *list;
 }
 
 %type <expr> asgn primary_expression postfix_expression
@@ -129,13 +129,13 @@ asgnlist:
 
 asgn:
     OUTPUT '=' conditional_expression
-                { $$ = new Assign($1, $3); }
+                { $$ = new SoCalcAssign($1, $3); }
     | OUTPUT '[' conditional_expression ']' '=' conditional_expression
-                { $$ = new AssignIndex($1, $3, $6); }
+                { $$ = new SoCalcAssignIndex($1, $3, $6); }
     | VAR    '=' conditional_expression
-                { $$ = new Assign($1, $3); }
+                { $$ = new SoCalcAssign($1, $3); }
     | VAR '[' conditional_expression ']' '=' conditional_expression
-                { $$ = new AssignIndex($1, $3, $6); }
+                { $$ = new SoCalcAssignIndex($1, $3, $6); }
     ;
 
 primary_expression:
@@ -149,76 +149,76 @@ primary_expression:
 postfix_expression:
         primary_expression    { $$ = $1; }
         | postfix_expression '[' conditional_expression ']'
-                 { $$ = new Index($1, $3); }
-    | FUNC '(' args ')'    { ((Func *)$1)->setArgs($3); $$ = $1; }
+                 { $$ = new SoCalcIndex($1, $3); }
+    | FUNC '(' args ')'    { ((SoCalcFunc *)$1)->setArgs($3); $$ = $1; }
         ;
 
 args    :
-    conditional_expression        { ($$ = new ExprList)->append($1); }
+    conditional_expression        { ($$ = new SoCalcExprList)->append($1); }
     | args ',' conditional_expression { $1->append($3); $$ = $1; }
     ;
 
 unary_expression:
         postfix_expression
-        | '-' unary_expression    { $$ = new Negate($2); }
-        | '!' unary_expression    { $$ = new Not($2); }
+        | '-' unary_expression    { $$ = new SoCalcNegate($2); }
+        | '!' unary_expression    { $$ = new SoCalcNot($2); }
         ;
 
 multiplicative_expression:
         unary_expression
         | multiplicative_expression '*' unary_expression
-            { $$ = new Mult($1, $3); }
+            { $$ = new SoCalcMult($1, $3); }
         | multiplicative_expression '/' unary_expression
-            { $$ = new Divide($1, $3); }
+            { $$ = new SoCalcDivide($1, $3); }
         | multiplicative_expression '%' unary_expression
-            { $$ = new Mod($1, $3); }
+            { $$ = new SoCalcMod($1, $3); }
         ;
 
 additive_expression:
         multiplicative_expression
         | additive_expression '+' multiplicative_expression
-            { $$ = new Plus($1, $3); }
+            { $$ = new SoCalcPlus($1, $3); }
         | additive_expression '-' multiplicative_expression
-            { $$ = new Minus($1, $3); }
+            { $$ = new SoCalcMinus($1, $3); }
         ;
 
 relational_expression:
         additive_expression
         | relational_expression '<' additive_expression
-            { $$ = new LessThan($1, $3); }
+            { $$ = new SoCalcLessThan($1, $3); }
         | relational_expression '>' additive_expression
-            { $$ = new GreaterThan($1, $3); }
+            { $$ = new SoCalcGreaterThan($1, $3); }
         | relational_expression LEQ additive_expression
-            { $$ = new LessEQ($1, $3); }
+            { $$ = new SoCalcLessEQ($1, $3); }
         | relational_expression GEQ additive_expression
-            { $$ = new GreaterEQ($1, $3); }
+            { $$ = new SoCalcGreaterEQ($1, $3); }
         ;
 
 equality_expression:
         relational_expression
         | equality_expression EQEQ relational_expression
-            { $$ = new Equals($1, $3); }
+            { $$ = new SoCalcEquals($1, $3); }
         | equality_expression NEQ relational_expression
-            { $$ = new NotEquals($1, $3); }
+            { $$ = new SoCalcNotEquals($1, $3); }
         ;
 
 logical_AND_expression:
         equality_expression
         | logical_AND_expression ANDAND equality_expression
-            { $$ = new And($1, $3); }
+            { $$ = new SoCalcAnd($1, $3); }
         ;
 
 logical_OR_expression:
         logical_AND_expression
         | logical_OR_expression OROR logical_AND_expression
-            { $$ = new Or($1, $3); }
+            { $$ = new SoCalcOr($1, $3); }
         ;
 
 conditional_expression:
         logical_OR_expression
         | logical_OR_expression '?' conditional_expression ':'
                 conditional_expression
-            { $$ = new Ternary($1, $3, $5); }
+            { $$ = new SoCalcTernary($1, $3, $5); }
         ;
 
 %%
@@ -237,31 +237,31 @@ initFuncs()
 #define MAKEFUNC(CLASS, NAME)                              \
     Funcs[i++].func = new CLASS(SO__QUOTE(NAME),NAME)
 
-    MAKEFUNC(Func_d, acos);
-    MAKEFUNC(Func_d, asin);
-    MAKEFUNC(Func_d, atan);
-    MAKEFUNC(Func_dd, atan2);
-    MAKEFUNC(Func_d, ceil);
-    MAKEFUNC(Func_d, cos);
-    MAKEFUNC(Func_d, cosh);
-    MAKEFUNC(Funcv_vv, cross);
-    MAKEFUNC(Func_vv, dot);
-    MAKEFUNC(Func_d, exp);
-    MAKEFUNC(Func_d, fabs);
-    MAKEFUNC(Func_d, floor);
-    MAKEFUNC(Func_dd, fmod);
-    MAKEFUNC(Func_v, length);
-    MAKEFUNC(Func_d, log);
-    MAKEFUNC(Func_d, log10);
-    MAKEFUNC(Funcv_v, normalize);
-    MAKEFUNC(Func_dd, pow);
-    MAKEFUNC(Func_d, rand);
-    MAKEFUNC(Func_d, sin);
-    MAKEFUNC(Func_d, sinh);
-    MAKEFUNC(Func_d, sqrt);
-    MAKEFUNC(Func_d, tan);
-    MAKEFUNC(Func_d, tanh);
-    MAKEFUNC(Funcv_ddd, vec3f);
+    MAKEFUNC(SoCalcFunc_d, acos);
+    MAKEFUNC(SoCalcFunc_d, asin);
+    MAKEFUNC(SoCalcFunc_d, atan);
+    MAKEFUNC(SoCalcFunc_dd, atan2);
+    MAKEFUNC(SoCalcFunc_d, ceil);
+    MAKEFUNC(SoCalcFunc_d, cos);
+    MAKEFUNC(SoCalcFunc_d, cosh);
+    MAKEFUNC(SoCalcFuncv_vv, cross);
+    MAKEFUNC(SoCalcFunc_vv, dot);
+    MAKEFUNC(SoCalcFunc_d, exp);
+    MAKEFUNC(SoCalcFunc_d, fabs);
+    MAKEFUNC(SoCalcFunc_d, floor);
+    MAKEFUNC(SoCalcFunc_dd, fmod);
+    MAKEFUNC(SoCalcFunc_v, length);
+    MAKEFUNC(SoCalcFunc_d, log);
+    MAKEFUNC(SoCalcFunc_d, log10);
+    MAKEFUNC(SoCalcFuncv_v, normalize);
+    MAKEFUNC(SoCalcFunc_dd, pow);
+    MAKEFUNC(SoCalcFunc_d, rand);
+    MAKEFUNC(SoCalcFunc_d, sin);
+    MAKEFUNC(SoCalcFunc_d, sinh);
+    MAKEFUNC(SoCalcFunc_d, sqrt);
+    MAKEFUNC(SoCalcFunc_d, tan);
+    MAKEFUNC(SoCalcFunc_d, tanh);
+    MAKEFUNC(SoCalcFuncv_ddd, vec3f);
 
 #ifdef DEBUG
     // Sanity check
@@ -271,47 +271,47 @@ initFuncs()
 #endif /* DEBUG */
 }
 
-static Const *
+static SoCalcConst *
 isConst(const char *nm)
 {
     for (size_t i=0; i<NCONSTANTS; i++)
         if (strcmp(nm, Constants[i].name)==0)
-            return new Const(float(Constants[i].val));
+            return new SoCalcConst(float(Constants[i].val));
     return NULL;
 }
 
-static Func *
+static SoCalcFunc *
 isFunc(const char *nm)
 {
     for (int i=0; i<NFUNCS; i++) {
-        const Func *f = Funcs[i].func;
+        const SoCalcFunc *f = Funcs[i].func;
         if (strcmp(nm, f->name)==0)
             return f->dup();
     }
     return NULL;
 }
 
-static Var *
+static SoCalcVar *
 isInput(const char *nm)
 {
     for (size_t i=0; i<NINPUTS; i++) if (strcmp(nm, Inputs[i].name)==0)
-        return new Var(nm, Inputs[i].type);
+        return new SoCalcVar(nm, Inputs[i].type);
     return NULL;
 }
 
-static Var *
+static SoCalcVar *
 isOutput(const char *nm)
 {
     for (size_t i=0; i<NOUTPUTS; i++) if (strcmp(nm, Outputs[i].name)==0)
-        return new Var(nm, Outputs[i].type);
+        return new SoCalcVar(nm, Outputs[i].type);
     return NULL;
 }
 
-static Var *
+static SoCalcVar *
 isVar(const char *nm)
 {
     for (size_t i=0; i<NVARS; i++) if (strcmp(nm, Vars[i].name)==0)
-        return new Var(nm, Vars[i].type);
+        return new SoCalcVar(nm, Vars[i].type);
     return NULL;
 }
 
@@ -365,7 +365,7 @@ int yylex()
         *cp = 0;
         In--;    // push back last character "read"
 
-        yylval.expr = new Const((float)atof(buf));
+        yylval.expr = new SoCalcConst((float)atof(buf));
         return CONST;
     }
 
@@ -411,7 +411,7 @@ yyerror(const char *)
 }
 
 SbBool
-SoCalcParse(ExprList *elist, const char *buf)
+SoCalcParse(SoCalcExprList *elist, const char *buf)
 {
     static SbBool initted = FALSE;
 
@@ -435,7 +435,7 @@ main()
     extern int yydebug;
     yydebug = 1;
 #endif
-    EList = new ExprList;
+    EList = new SoCalcExprList;
 
     while (gets(buf)) {
     In = buf;

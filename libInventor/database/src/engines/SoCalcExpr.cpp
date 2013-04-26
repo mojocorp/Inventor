@@ -115,28 +115,28 @@ static SbVec3f *lookupvec3f(void *, const char *nm)
 // base expression class
 //
 
-SbBool Expr::error;
-float *(*Expr::lookupFloatField)(void *, const char *) = lookupfloat;
-SbVec3f *(*Expr::lookupVec3fField)(void *, const char *) = lookupvec3f;
-void *Expr::data;
+SbBool SoCalcExpr::error;
+float *(*SoCalcExpr::lookupFloatField)(void *, const char *) = lookupfloat;
+SbVec3f *(*SoCalcExpr::lookupVec3fField)(void *, const char *) = lookupvec3f;
+void *SoCalcExpr::data;
 
 
 
-Expr::~Expr() {}
+SoCalcExpr::~SoCalcExpr() {}
 
 void
-Expr::print(int level)
+SoCalcExpr::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
-    printf("Expr: type %s\n", type == FLOAT ? "FLOAT" : "VEC3F");
+    printf("SoCalcExpr: type %s\n", type == FLOAT ? "FLOAT" : "VEC3F");
 #else
     SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
 void
-Expr::printSpace(int level)
+SoCalcExpr::printSpace(int level)
 {
 #ifdef DEBUG
     for (int i = level / 2; i > 0; --i)
@@ -154,32 +154,32 @@ Expr::printSpace(int level)
 }
 
 float
-Expr::getFloat() {
-    err("Expr: internal error: can't get float val");
+SoCalcExpr::getFloat() {
+    err("SoCalcExpr: internal error: can't get float val");
     return 0;
 }
 
 SbVec3f
-Expr::getVec3f() {
-    err("Expr: internal error: can't get vector val");
+SoCalcExpr::getVec3f() {
+    err("SoCalcExpr: internal error: can't get vector val");
     return SbVec3f(0,0,0);
 }
 
 
 float
-Expr::setFloat(float) {
-    err("Expr: internal error: can't set float val");
+SoCalcExpr::setFloat(float) {
+    err("SoCalcExpr: internal error: can't set float val");
     return 0;
 }
 
 SbVec3f
-Expr::setVec3f(const SbVec3f &) {
-    err("Expr: internal error: can't set vector val");
+SoCalcExpr::setVec3f(const SbVec3f &) {
+    err("SoCalcExpr: internal error: can't set vector val");
     return SbVec3f(0,0,0);
 }
 
 void
-Expr::eval() {
+SoCalcExpr::eval() {
     if (type == FLOAT)
 	getFloat();
     else
@@ -187,7 +187,7 @@ Expr::eval() {
 }
 
 void
-Expr::err(const char *formatString ...)
+SoCalcExpr::err(const char *formatString ...)
 {
     char        buf[1000];
     va_list     ap;
@@ -207,7 +207,7 @@ Expr::err(const char *formatString ...)
 // List of expressions
 //
 void
-ExprList::truncate(int n)
+SoCalcExprList::truncate(int n)
 {
     for (int i=n; i<getLength(); i++)
     {
@@ -218,14 +218,14 @@ ExprList::truncate(int n)
 }
 
 void
-ExprList::eval()
+SoCalcExprList::eval()
 {
     for (int i=0; i<getLength(); i++)
 	(*this)[i]->eval();
 }
 
 void
-ExprList::print()
+SoCalcExprList::print()
 {
 #ifdef DEBUG
     printf("List: %d expressions\n", getLength());
@@ -239,28 +239,28 @@ ExprList::print()
 //
 // Terminal expressions
 //
-Const::~Const() {}
+SoCalcConst::~SoCalcConst() {}
 
 void
-Const::print(int level)
+SoCalcConst::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
-    printf("Const: val = %g\n", val);
+    printf("SoCalcConst: val = %g\n", val);
 #else
     SB_UNUSED(level);
 #endif /* DEBUG */
 }
 
 float
-Const::getFloat()
+SoCalcConst::getFloat()
 {
     return val;
 }
 
 
-Var::Var(const char *nm, Type type)
-    : Expr(type), name(nm)
+SoCalcVar::SoCalcVar(const char *nm, Type type)
+    : SoCalcExpr(type), name(nm)
 {
     if (type == FLOAT)
     pfloat = lookupFloatField(data, name.c_str());
@@ -268,13 +268,13 @@ Var::Var(const char *nm, Type type)
     pvec3f = lookupVec3fField(data, name.c_str());
 }
 
-Var::~Var() { }
+SoCalcVar::~SoCalcVar() { }
 
-void Var::print(int level)
+void SoCalcVar::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
-    printf("Var: name = %s, value = ", name.c_str());
+    printf("SoCalcVar: name = %s, value = ", name.c_str());
     if (type == FLOAT)
 	printf("%g", *pfloat);
     else
@@ -285,22 +285,22 @@ void Var::print(int level)
 #endif /* DEBUG */
 }
 
-float Var::getFloat()
+float SoCalcVar::getFloat()
 {
     return *pfloat;
 }
 
-SbVec3f Var::getVec3f()
+SbVec3f SoCalcVar::getVec3f()
 {
     return *pvec3f;
 }
 
-float Var::setFloat(float v)
+float SoCalcVar::setFloat(float v)
 {
     return *pfloat = v;
 }
 
-SbVec3f Var::setVec3f(const SbVec3f &v)
+SbVec3f SoCalcVar::setVec3f(const SbVec3f &v)
 {
     return *pvec3f = v;
 }
@@ -308,15 +308,15 @@ SbVec3f Var::setVec3f(const SbVec3f &v)
 //
 // Functions
 //
-Func::Func(const char *nm, Type type) : Expr(type), name(nm), args(NULL) {}
-Func::~Func() { delete args; }
+SoCalcFunc::SoCalcFunc(const char *nm, Type type) : SoCalcExpr(type), name(nm), args(NULL) {}
+SoCalcFunc::~SoCalcFunc() { delete args; }
 
 void
-Func::print(int level)
+SoCalcFunc::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
-    printf("Func: name = %s, %d args:\n", name, args->getLength());
+    printf("SoCalcFunc: name = %s, %d args:\n", name, args->getLength());
     for (int i = 0; i < args->getLength(); i++)
 	(*args)[i]->print(level + 1);
 #else
@@ -324,12 +324,12 @@ Func::print(int level)
 #endif /* DEBUG */
 }
 
-Func_d::Func_d(const char *name, double (*f)(double)) :
-		Func(name, FLOAT), func(f) {}
-Func_d::~Func_d() {}
-Func *Func_d::dup() const { return new Func_d(name, func); }
-float Func_d::getFloat() { return (*func)((*args)[0]->getFloat()); }
-void Func_d::setArgs(ExprList *a)
+SoCalcFunc_d::SoCalcFunc_d(const char *name, double (*f)(double)) :
+        SoCalcFunc(name, FLOAT), func(f) {}
+SoCalcFunc_d::~SoCalcFunc_d() {}
+SoCalcFunc *SoCalcFunc_d::dup() const { return new SoCalcFunc_d(name, func); }
+float SoCalcFunc_d::getFloat() { return (*func)((*args)[0]->getFloat()); }
+void SoCalcFunc_d::setArgs(SoCalcExprList *a)
 {
     args = a;
     if (args->getLength() != 1)
@@ -338,13 +338,13 @@ void Func_d::setArgs(ExprList *a)
 	err("Function %s: argument must be scalar", name);
 };
 
-Func_dd::~Func_dd() {}
-Func *Func_dd::dup() const { return new Func_dd(name, func); }
-float Func_dd::getFloat() {
-    Expr *e0 = (*args)[0], *e1 = (*args)[1];
+SoCalcFunc_dd::~SoCalcFunc_dd() {}
+SoCalcFunc *SoCalcFunc_dd::dup() const { return new SoCalcFunc_dd(name, func); }
+float SoCalcFunc_dd::getFloat() {
+    SoCalcExpr *e0 = (*args)[0], *e1 = (*args)[1];
     return (*func)(e0->getFloat(), e1->getFloat());
 }
-void Func_dd::setArgs(ExprList *a)
+void SoCalcFunc_dd::setArgs(SoCalcExprList *a)
 {
     args = a;
     if (args->getLength() != 2)
@@ -355,13 +355,13 @@ void Func_dd::setArgs(ExprList *a)
 	err("Function %s: second argument must be scalar", name);
 };
 
-Func_id::~Func_id() {}
-Func *Func_id::dup() const { return new Func_id(name, func); }
-float Func_id::getFloat() {
-    Expr *e0 = (*args)[0], *e1 = (*args)[1];
+SoCalcFunc_id::~SoCalcFunc_id() {}
+SoCalcFunc *SoCalcFunc_id::dup() const { return new SoCalcFunc_id(name, func); }
+float SoCalcFunc_id::getFloat() {
+    SoCalcExpr *e0 = (*args)[0], *e1 = (*args)[1];
     return (*func)((int) e0->getFloat(), e1->getFloat());
 }
-void Func_id::setArgs(ExprList *a)
+void SoCalcFunc_id::setArgs(SoCalcExprList *a)
 {
     args = a;
     if (args->getLength() != 2)
@@ -372,10 +372,10 @@ void Func_id::setArgs(ExprList *a)
 	err("Function %s: second argument must be scalar", name);
 };
 
-Func_v::~Func_v() {}
-Func *Func_v::dup() const { return new Func_v(name, func); }
-float Func_v::getFloat() { return (*func)((*args)[0]->getVec3f()); }
-void Func_v::setArgs(ExprList *a)
+SoCalcFunc_v::~SoCalcFunc_v() {}
+SoCalcFunc *SoCalcFunc_v::dup() const { return new SoCalcFunc_v(name, func); }
+float SoCalcFunc_v::getFloat() { return (*func)((*args)[0]->getVec3f()); }
+void SoCalcFunc_v::setArgs(SoCalcExprList *a)
 {
     args = a;
     if (args->getLength() != 1)
@@ -384,10 +384,10 @@ void Func_v::setArgs(ExprList *a)
 	err("Function %s: first argument must be vector", name);
 };
 
-Funcv_v::~Funcv_v() {}
-Func *Funcv_v::dup() const { return new Funcv_v(name, func); }
-SbVec3f Funcv_v::getVec3f() { return (*func)((*args)[0]->getVec3f()); }
-void Funcv_v::setArgs(ExprList *a)
+SoCalcFuncv_v::~SoCalcFuncv_v() {}
+SoCalcFunc *SoCalcFuncv_v::dup() const { return new SoCalcFuncv_v(name, func); }
+SbVec3f SoCalcFuncv_v::getVec3f() { return (*func)((*args)[0]->getVec3f()); }
+void SoCalcFuncv_v::setArgs(SoCalcExprList *a)
 {
     args = a;
     if (args->getLength() != 1)
@@ -396,13 +396,13 @@ void Funcv_v::setArgs(ExprList *a)
 	err("Function %s: first argument must be vector", name);
 };
 
-Func_vv::~Func_vv() {}
-Func *Func_vv::dup() const { return new Func_vv(name, func); }
-float Func_vv::getFloat() {
-    Expr *e0 = (*args)[0], *e1 = (*args)[1];
+SoCalcFunc_vv::~SoCalcFunc_vv() {}
+SoCalcFunc *SoCalcFunc_vv::dup() const { return new SoCalcFunc_vv(name, func); }
+float SoCalcFunc_vv::getFloat() {
+    SoCalcExpr *e0 = (*args)[0], *e1 = (*args)[1];
     return (*func)(e0->getVec3f(), e1->getVec3f());
 }
-void Func_vv::setArgs(ExprList *a)
+void SoCalcFunc_vv::setArgs(SoCalcExprList *a)
 {
     args = a;
     if (args->getLength() != 2)
@@ -413,13 +413,13 @@ void Func_vv::setArgs(ExprList *a)
 	err("Function %s: second argument must be vector", name);
 };
 
-Funcv_vv::~Funcv_vv() {}
-Func *Funcv_vv::dup() const { return new Funcv_vv(name, func); }
-SbVec3f Funcv_vv::getVec3f() {
-    Expr *e0 = (*args)[0], *e1 = (*args)[1];
+SoCalcFuncv_vv::~SoCalcFuncv_vv() {}
+SoCalcFunc *SoCalcFuncv_vv::dup() const { return new SoCalcFuncv_vv(name, func); }
+SbVec3f SoCalcFuncv_vv::getVec3f() {
+    SoCalcExpr *e0 = (*args)[0], *e1 = (*args)[1];
     return (*func)(e0->getVec3f(), e1->getVec3f());
 }
-void Funcv_vv::setArgs(ExprList *a)
+void SoCalcFuncv_vv::setArgs(SoCalcExprList *a)
 {
     args = a;
     if (args->getLength() != 2)
@@ -430,13 +430,13 @@ void Funcv_vv::setArgs(ExprList *a)
 	err("Function %s: second argument must be vector", name);
 };
 
-Funcv_ddd::~Funcv_ddd() {}
-Func *Funcv_ddd::dup() const { return new Funcv_ddd(name, func); }
-SbVec3f Funcv_ddd::getVec3f() {
-    Expr *e0 = (*args)[0], *e1 = (*args)[1], *e2 = (*args)[2];
+SoCalcFuncv_ddd::~SoCalcFuncv_ddd() {}
+SoCalcFunc *SoCalcFuncv_ddd::dup() const { return new SoCalcFuncv_ddd(name, func); }
+SbVec3f SoCalcFuncv_ddd::getVec3f() {
+    SoCalcExpr *e0 = (*args)[0], *e1 = (*args)[1], *e2 = (*args)[2];
     return (*func)(e0->getFloat(), e1->getFloat(), e2->getFloat());
 }
-void Funcv_ddd::setArgs(ExprList *a)
+void SoCalcFuncv_ddd::setArgs(SoCalcExprList *a)
 {
     args = a;
     if (args->getLength() != 3)
@@ -452,8 +452,8 @@ void Funcv_ddd::setArgs(ExprList *a)
 //
 // Operations
 //
-BinaryOp::~BinaryOp() { delete a; delete b; }
-BinaryOp::BinaryOp(Expr *ea, Expr *eb, int TypeBits) : Expr(ea->type), a(ea), b(eb)
+SoCalcBinaryOp::~SoCalcBinaryOp() { delete a; delete b; }
+SoCalcBinaryOp::SoCalcBinaryOp(SoCalcExpr *ea, SoCalcExpr *eb, int TypeBits) : SoCalcExpr(ea->type), a(ea), b(eb)
 {
     SbBool OK = FALSE;
 
@@ -474,25 +474,25 @@ BinaryOp::BinaryOp(Expr *ea, Expr *eb, int TypeBits) : Expr(ea->type), a(ea), b(
 	    a->typeName(), b->typeName());
 }
 
-AssignIndex::AssignIndex(Expr *_a, Expr *_b, Expr *_c) 
-	: Expr(Expr::FLOAT)
+SoCalcAssignIndex::SoCalcAssignIndex(SoCalcExpr *_a, SoCalcExpr *_b, SoCalcExpr *_c)
+    : SoCalcExpr(SoCalcExpr::FLOAT)
 {
     a = _a;
     b = _b;
     c = _c;
 
-    if (a->type != Expr::VEC3F)
+    if (a->type != SoCalcExpr::VEC3F)
 	err("In expressions of the form 'A[b] = c', A must be a vector");
-    if (b->type != Expr::FLOAT)
+    if (b->type != SoCalcExpr::FLOAT)
 	err("In expressions of the form 'A[b] = c', b must be a float");
-    if (c->type != Expr::FLOAT)
+    if (c->type != SoCalcExpr::FLOAT)
 	err("In expressions of the form 'A[b] = c', c must be a float");
 }
     
-AssignIndex::~AssignIndex() {}
+SoCalcAssignIndex::~SoCalcAssignIndex() {}
 
 float
-AssignIndex::getFloat() 
+SoCalcAssignIndex::getFloat()
 {
     float result = c->getFloat();
     SbVec3f val = a->getVec3f();
@@ -506,7 +506,7 @@ AssignIndex::getFloat()
     return result;
 }
 
-void BinaryOp::print(int level)
+void SoCalcBinaryOp::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
@@ -518,60 +518,60 @@ void BinaryOp::print(int level)
 #endif /* DEBUG */
 }
 
-Assign::~Assign() {}
-Plus::~Plus() {}
-Minus::~Minus() {}
-Mult::~Mult() {}
-Divide::~Divide() {}
-Mod::~Mod() {}
-Index::~Index() {}
+SoCalcAssign::~SoCalcAssign() {}
+SoCalcPlus::~SoCalcPlus() {}
+SoCalcMinus::~SoCalcMinus() {}
+SoCalcMult::~SoCalcMult() {}
+SoCalcDivide::~SoCalcDivide() {}
+SoCalcMod::~SoCalcMod() {}
+SoCalcIndex::~SoCalcIndex() {}
 
-float Assign::getFloat() { return a->setFloat(b->getFloat()); }
-SbVec3f Assign::getVec3f() { return a->setVec3f(b->getVec3f()); }
+float SoCalcAssign::getFloat() { return a->setFloat(b->getFloat()); }
+SbVec3f SoCalcAssign::getVec3f() { return a->setVec3f(b->getVec3f()); }
 
-float Plus::getFloat() { return a->getFloat() + b->getFloat(); }
-SbVec3f Plus::getVec3f() { return a->getVec3f() + b->getVec3f(); }
+float SoCalcPlus::getFloat() { return a->getFloat() + b->getFloat(); }
+SbVec3f SoCalcPlus::getVec3f() { return a->getVec3f() + b->getVec3f(); }
 
-float Minus::getFloat(){ return a->getFloat() - b->getFloat(); }
-SbVec3f Minus::getVec3f() { return a->getVec3f() - b->getVec3f(); }
+float SoCalcMinus::getFloat(){ return a->getFloat() - b->getFloat(); }
+SbVec3f SoCalcMinus::getVec3f() { return a->getVec3f() - b->getVec3f(); }
 
-float Mult::getFloat() { return a->getFloat() * b->getFloat(); }
-SbVec3f Mult::getVec3f()
+float SoCalcMult::getFloat() { return a->getFloat() * b->getFloat(); }
+SbVec3f SoCalcMult::getVec3f()
 {
     return (a->type == FLOAT) ?
 	a->getFloat() * b->getVec3f() :
 	a->getVec3f() * b->getFloat();
 }
 
-float Divide::getFloat() { return a->getFloat() / b->getFloat(); }
-SbVec3f Divide::getVec3f() { return a->getVec3f() / b->getFloat(); }
+float SoCalcDivide::getFloat() { return a->getFloat() / b->getFloat(); }
+SbVec3f SoCalcDivide::getVec3f() { return a->getVec3f() / b->getFloat(); }
 
-float Mod::getFloat() { return (int) a->getFloat() % (int) b->getFloat(); }
+float SoCalcMod::getFloat() { return (int) a->getFloat() % (int) b->getFloat(); }
 
-float Index::getFloat() { return a->getVec3f()[(int) b->getFloat()]; }
+float SoCalcIndex::getFloat() { return a->getVec3f()[(int) b->getFloat()]; }
 
-LessThan::~LessThan() {}
-GreaterThan::~GreaterThan() {}
-LessEQ::~LessEQ() {}
-GreaterEQ::~GreaterEQ() {}
-Equals::~Equals() {}
-NotEquals::~NotEquals() {}
-And::~And() {}
-Or::~Or() {}
+SoCalcLessThan::~SoCalcLessThan() {}
+SoCalcGreaterThan::~SoCalcGreaterThan() {}
+SoCalcLessEQ::~SoCalcLessEQ() {}
+SoCalcGreaterEQ::~SoCalcGreaterEQ() {}
+SoCalcEquals::~SoCalcEquals() {}
+SoCalcNotEquals::~SoCalcNotEquals() {}
+SoCalcAnd::~SoCalcAnd() {}
+SoCalcOr::~SoCalcOr() {}
 
-float LessThan::getFloat() { return a->getFloat() < b->getFloat(); }
-float GreaterThan::getFloat() { return a->getFloat() > b->getFloat(); }
-float LessEQ::getFloat() { return a->getFloat() <= b->getFloat(); }
-float GreaterEQ::getFloat() { return a->getFloat() >= b->getFloat(); }
-float Equals::getFloat() { return a->getFloat() == b->getFloat(); }
-float NotEquals::getFloat() { return a->getFloat() != b->getFloat(); }
-float And::getFloat() { return a->getFloat() && b->getFloat(); }
-float Or::getFloat() { return a->getFloat() || b->getFloat(); }
+float SoCalcLessThan::getFloat() { return a->getFloat() < b->getFloat(); }
+float SoCalcGreaterThan::getFloat() { return a->getFloat() > b->getFloat(); }
+float SoCalcLessEQ::getFloat() { return a->getFloat() <= b->getFloat(); }
+float SoCalcGreaterEQ::getFloat() { return a->getFloat() >= b->getFloat(); }
+float SoCalcEquals::getFloat() { return a->getFloat() == b->getFloat(); }
+float SoCalcNotEquals::getFloat() { return a->getFloat() != b->getFloat(); }
+float SoCalcAnd::getFloat() { return a->getFloat() && b->getFloat(); }
+float SoCalcOr::getFloat() { return a->getFloat() || b->getFloat(); }
 
-Not::~Not() { delete e; }
-float Not::getFloat() { return ! e->getFloat(); }
+SoCalcNot::~SoCalcNot() { delete e; }
+float SoCalcNot::getFloat() { return ! e->getFloat(); }
 
-void Not::print(int level)
+void SoCalcNot::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
@@ -582,11 +582,11 @@ void Not::print(int level)
 #endif /* DEBUG */
 }
 
-Negate::~Negate() { delete e; }
-float Negate::getFloat() { return - e->getFloat(); }
-SbVec3f Negate::getVec3f() { return - e->getVec3f(); }
+SoCalcNegate::~SoCalcNegate() { delete e; }
+float SoCalcNegate::getFloat() { return - e->getFloat(); }
+SbVec3f SoCalcNegate::getVec3f() { return - e->getVec3f(); }
 
-void Negate::print(int level)
+void SoCalcNegate::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
@@ -597,9 +597,9 @@ void Negate::print(int level)
 #endif /* DEBUG */
 }
 
-Ternary::~Ternary() { delete etest; delete etrue; delete efalse; }
-Ternary::Ternary(Expr *a, Expr *b, Expr *c)
-    : Expr(Expr::FLOAT), etest(a), etrue(b), efalse(c)
+SoCalcTernary::~SoCalcTernary() { delete etest; delete etrue; delete efalse; }
+SoCalcTernary::SoCalcTernary(SoCalcExpr *a, SoCalcExpr *b, SoCalcExpr *c)
+    : SoCalcExpr(SoCalcExpr::FLOAT), etest(a), etrue(b), efalse(c)
 {
     if (etest->type != FLOAT)
 	err("Ternary:: conditional expression in ?: operator must be scalar");
@@ -611,10 +611,10 @@ Ternary::Ternary(Expr *a, Expr *b, Expr *c)
     type = etrue->type;
 };
 
-float Ternary::getFloat() { return etest->getFloat() ? etrue->getFloat() : efalse->getFloat(); }
-SbVec3f Ternary::getVec3f() { return etest->getFloat() ? etrue->getVec3f() : efalse->getVec3f(); }
+float SoCalcTernary::getFloat() { return etest->getFloat() ? etrue->getFloat() : efalse->getFloat(); }
+SbVec3f SoCalcTernary::getVec3f() { return etest->getFloat() ? etrue->getVec3f() : efalse->getVec3f(); }
 
-void Ternary::print(int level)
+void SoCalcTernary::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
@@ -633,7 +633,7 @@ void Ternary::print(int level)
 **
 ******************************************/
 
-Parser::Parser(float *(*lf)(void *data, const char *name),
+SoCalcParser::SoCalcParser(float *(*lf)(void *data, const char *name),
 	       SbVec3f *(*lv)(void *data, const char *name),
 	       void *d)
 {
@@ -641,24 +641,24 @@ Parser::Parser(float *(*lf)(void *data, const char *name),
     lookupVec3fField = lv;
     data = d;
 
-    elist = new ExprList;
+    elist = new SoCalcExprList;
 }
 
-Parser::~Parser()
+SoCalcParser::~SoCalcParser()
 {
     delete elist;
 }
 
 SbBool
-Parser::parse(const char *buf)
+SoCalcParser::parse(const char *buf)
 {
-    Expr::lookupFloatField = lookupFloatField;
-    Expr::lookupVec3fField = lookupVec3fField;
-    Expr::data = data;
+    SoCalcExpr::lookupFloatField = lookupFloatField;
+    SoCalcExpr::lookupVec3fField = lookupVec3fField;
+    SoCalcExpr::data = data;
 
-    Expr::error = FALSE;
+    SoCalcExpr::error = FALSE;
 
-    extern SbBool SoCalcParse(ExprList *, const char *);
+    extern SbBool SoCalcParse(SoCalcExprList *, const char *);
 
     if (SoCalcParse(elist, buf))
 	return FALSE;
@@ -668,5 +668,5 @@ Parser::parse(const char *buf)
     elist->print();
 #endif
 
-    return !Expr::error;
+    return !SoCalcExpr::error;
 }
