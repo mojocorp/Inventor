@@ -260,21 +260,21 @@ Const::getFloat()
 
 
 Var::Var(const char *nm, Type type)
-    : Expr(type), name(strdup(nm))
+    : Expr(type), name(nm)
 {
     if (type == FLOAT)
-	pfloat = lookupFloatField(data, name);
+    pfloat = lookupFloatField(data, name.c_str());
     else
-	pvec3f = lookupVec3fField(data, name);
+    pvec3f = lookupVec3fField(data, name.c_str());
 }
 
-Var::~Var() { free((void *) name); }
+Var::~Var() { }
 
 void Var::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
-    printf("Var: name = %s, value = ", name);
+    printf("Var: name = %s, value = ", name.c_str());
     if (type == FLOAT)
 	printf("%g", *pfloat);
     else

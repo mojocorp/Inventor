@@ -40,6 +40,8 @@
 #include <Inventor/SbLinear.h>
 #include <Inventor/SbPList.h>
 
+#include <string>
+
 #define Expr SoCalcExpr 
 #define ExprList SoCalcExprList 
 #define Const SoCalcConst 
@@ -154,7 +156,7 @@ class Const : public Expr {
 
 class Var : public Expr {
   public:
-    const char		*const name;
+    std::string    name;
     Var(const char *nm, Type type);
     ~Var();
     virtual void	print(int level);
