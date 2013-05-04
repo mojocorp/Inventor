@@ -767,41 +767,39 @@ SoPath::write(SoWriteAction *writeAction) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i, j, index;
     SoOutput	*out = writeAction->getOutput();
-    SoChildList	*children;
 
     if (writeHeader(out, FALSE, FALSE))
-	return;
+        return;
 
     if (getHead() != NULL) {
 
-	// Write out the head node
-	writeAction->traverse(getHead());
+        // Write out the head node
+        writeAction->traverse(getHead());
 
-	// Write number of indices (after head) first
-	if (! out->isBinary())
-	    out->indent();
-	out->write(getFullLength() - 1);
-	if (! out->isBinary())
-	    out->write('\n');
+        // Write number of indices (after head) first
+        if (! out->isBinary())
+            out->indent();
+        out->write(getFullLength() - 1);
+        if (! out->isBinary())
+            out->write('\n');
 
-	for (i = 1; i < getFullLength(); i++) {
+        for (int i = 1; i < getFullLength(); i++) {
 
-	    // Adjust index if necessary by checking if nodes will be
-	    // written or not
-	    index = indices[i];
-	    children = nodes[i-1]->getChildren();
-	    for (j = 0; j < indices[i]; j++)
-		if (! (*children)[j]->shouldWrite())
-		    --index;
+            // Adjust index if necessary by checking if nodes will be
+            // written or not
+            int index = indices[i];
+            SoChildList	*children = nodes[i-1]->getChildren();
+            for (int j = 0; j < indices[i]; j++)
+                if (! (*children)[j]->shouldWrite())
+                    --index;
 
-	    if (! out->isBinary())
-		out->indent();
-	    out->write(index);
-	    if (! out->isBinary())
-		out->write('\n');
-	}
+            if (! out->isBinary())
+                out->indent();
+            out->write(index);
+            if (! out->isBinary())
+                out->write('\n');
+        }
     }
 
     writeFooter(out);
@@ -956,27 +954,26 @@ SoPath::readInstance(SoInput *in, unsigned short /* flags not used */)
     ok = SoBase::read(in, rootBase, SoNode::getClassTypeId());
 
     if (ok && rootBase != NULL) {
-	int	numIndices, index, i;
+        setHead((SoNode *) rootBase);
 
-	setHead((SoNode *) rootBase);
+        // Read indices of rest of nodes in path
+        int numIndices;
+        if (! in->read(numIndices)) {
+            SoReadError::post(in, "Couldn't read number of indices in path");
+            ok = FALSE;
+        }
 
-	// Read indices of rest of nodes in path
-	if (! in->read(numIndices)) {
-	    SoReadError::post(in, "Couldn't read number of indices in path");
-	    ok = FALSE;
-	}
+        else
+            for (int i = 0; i < numIndices; i++) {
+                int index;
+                if (! in->read(index)) {
+                    SoReadError::post(in, "Couldn't read indices of path");
+                    ok = FALSE;
+                    break;
+                }
 
-	else
-	    for (i = 0; i < numIndices; i++) {
-
-		if (! in->read(index)) {
-		    SoReadError::post(in, "Couldn't read indices of path");
-		    ok = FALSE;
-		    break;
-		}
-
-		append(index);
-	    }
+                append(index);
+            }
     }
 
     return ok;
@@ -995,32 +992,30 @@ SoPath::truncate(int start, SbBool doNotify)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
-
 #ifdef DEBUG
     if (start < 0 || (start > 0 && start >= getFullLength())) {
-	SoDebugError::post("SoPath::truncate", "Starting index is invalid");
-	return;
+        SoDebugError::post("SoPath::truncate", "Starting index is invalid");
+        return;
     }
 #endif /* DEBUG */
 
     // Remove path from all affected nodes' auditors lists
     if (doAuditors)
-	for (i = start; i < getFullLength(); i++) {
-	    SoChildList *childList = nodes[i]->getChildren();
-	    if (childList != NULL) {
-		childList->removePathAuditor(this);
-	    }
-	}
+        for (int i = start; i < getFullLength(); i++) {
+            SoChildList *childList = nodes[i]->getChildren();
+            if (childList != NULL) {
+                childList->removePathAuditor(this);
+            }
+        }
 
     // Truncate both lists
     nodes.truncate(start);
     indices.truncate(start);
 
     if (start < minNumPublic) {
-	minNumPublic = numPublic = start;
+        minNumPublic = numPublic = start;
     }
 
     if (doAuditors && doNotify)
-	startNotify();
+        startNotify();
 }

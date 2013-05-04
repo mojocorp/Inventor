@@ -168,7 +168,6 @@ SoLOD::getBoundingBox(SoGetBoundingBoxAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     SbVec3f	totalCenter(0,0,0);
-    int		numCenters = 0;
     int		numIndices;
     const int	*indices;
     SoState	*state = action->getState();
@@ -177,51 +176,52 @@ SoLOD::getBoundingBox(SoGetBoundingBoxAction *action)
     //If no children, quit:
     if ( getNumChildren() < 1 ) return;
 
-    //If BELOW_PATH or NO_PATH, traverse all children to widen bbox 
+    //If BELOW_PATH or NO_PATH, traverse all children to widen bbox
     // do a push and pop before each traverse so as to not accumulate state
     if (pc == SoAction::NO_PATH || pc == SoAction::BELOW_PATH){
-	for (int i = 1; i < getNumChildren(); i++) {
-	    state->push();
-	    children->traverse(action, i, i);
-	    if (action->isCenterSet()) {
-		totalCenter += action->getCenter();
-		numCenters++;
-		action->resetCenter();
-	    }
-	    state->pop();
-	}
-	// State from the first child is allowed to leak out.  NOTE!
-	// CALLING whichToTraverse() IN THIS METHOD RESULTS IN A
-	// SEVERE PERFORMANCE DEGRADATION!  Because calling
-	// whichToTraverse causes dependencies on the model and view
-	// matrices, which makes bounding box caches invalid whenever
-	// the view changes, which makes render culling very slow.
-	children->traverse(action, 0, 0);
-	if (action->isCenterSet()) {
-	    totalCenter += action->getCenter();
-	    numCenters++;
-	    action->resetCenter();
-	}
+        int		numCenters = 0;
+        for (int i = 1; i < getNumChildren(); i++) {
+            state->push();
+            children->traverse(action, i, i);
+            if (action->isCenterSet()) {
+                totalCenter += action->getCenter();
+                numCenters++;
+                action->resetCenter();
+            }
+            state->pop();
+        }
+        // State from the first child is allowed to leak out.  NOTE!
+        // CALLING whichToTraverse() IN THIS METHOD RESULTS IN A
+        // SEVERE PERFORMANCE DEGRADATION!  Because calling
+        // whichToTraverse causes dependencies on the model and view
+        // matrices, which makes bounding box caches invalid whenever
+        // the view changes, which makes render culling very slow.
+        children->traverse(action, 0, 0);
+        if (action->isCenterSet()) {
+            totalCenter += action->getCenter();
+            numCenters++;
+            action->resetCenter();
+        }
 
-	// Now, set the center to be the average. Don't re-transform the
-	// average, which should already be transformed.
-	if (numCenters != 0)
-	    action->setCenter(totalCenter / (float)numCenters, FALSE);
+        // Now, set the center to be the average. Don't re-transform the
+        // average, which should already be transformed.
+        if (numCenters != 0)
+            action->setCenter(totalCenter / (float)numCenters, FALSE);
     }
     
-    // if IN_PATH, traverse the (first) child in path to accumulate state:    	   
+    // if IN_PATH, traverse the (first) child in path to accumulate state:
     if (pc == SoAction::IN_PATH){
 #ifdef DEBUG
-	if(numIndices > 1){
-	    SoDebugError::post("SoLOD::getBoundingBox", 
-		"IN_PATH traversal should not traverse multiple children");
-	}
+        if(numIndices > 1){
+            SoDebugError::post("SoLOD::getBoundingBox",
+                               "IN_PATH traversal should not traverse multiple children");
+        }
 #endif /*DEBUG*/
-	SoNode *kid = (SoNode *)children->get(indices[0]);
-	if (numIndices>0 && kid->affectsState()) {
-	    children->traverse(action, indices[0], indices[0]);
-	}
-	return;
+        SoNode *kid = (SoNode *)children->get(indices[0]);
+        if (numIndices>0 && kid->affectsState()) {
+            children->traverse(action, indices[0], indices[0]);
+        }
+        return;
     }
 }
 

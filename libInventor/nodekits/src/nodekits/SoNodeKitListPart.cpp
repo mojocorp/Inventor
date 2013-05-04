@@ -575,12 +575,11 @@ SoNodeKitListPart::setContainerType( SoType newContainerType )
 
     // If necessary, create a new container node of the correct type:
     SoGroup *oldContainer = (SoGroup *) containerNode.getValue();
-    SoGroup *newContainer = NULL;
 
     if (  oldContainer == NULL ||
 	 !oldContainer->isOfType( newContainerType ) ) {
 
-	newContainer = (SoGroup *) newContainerType.createInstance(); 
+    SoGroup *newContainer = (SoGroup *) newContainerType.createInstance();
 	newContainer->ref();
 
 	    // copy children from oldContainer to new one.

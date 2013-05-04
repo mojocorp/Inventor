@@ -620,12 +620,11 @@ SoDragger::setTempPathToThis( const SoPath *somethingClose )
     // We use it later to reconstruct the path if the parent/child pairs
     // are still okay, but the indices in the path have changed.
     if ( tempPathToThis != NULL ) {
-	SoNode *pathNode;
 
 	tempPathNumKidsHack = new SbPList( tempPathToThis->getLength() );
 
 	for ( int i = 0; i < tempPathToThis->getLength(); i++ ) {
-	    pathNode = tempPathToThis->getNode(i);
+        SoNode *pathNode = tempPathToThis->getNode(i);
 	    if ( !pathNode  || !pathNode->getChildren() )
 		tempPathNumKidsHack->append( (void *) 0 );
 	    else
@@ -864,7 +863,7 @@ SoDragger::shouldGrabBasedOnSurrogate( const SoPath *pickPath,
 {
     // The pickPath must contain the surrogatePath
     if ( pickPath->containsPath( surrogatePath ) == FALSE )
-	return FALSE;
+        return FALSE;
 
     const SoFullPath *fullPick = (const SoFullPath *) pickPath;
     const SoFullPath *fullSurr = (const SoFullPath *) surrogatePath;
@@ -875,13 +874,12 @@ SoDragger::shouldGrabBasedOnSurrogate( const SoPath *pickPath,
     // Go from the tail of pickPath backwards.
     // If you find a dragger before you find surrTail, return FALSE.
     // Otherwise, return TRUE.
-    SoNode *pickNode;
     for (int i = fullPick->getLength() - 1; i >= 0; i-- ) {
-	pickNode = fullPick->getNode(i);
-	if (pickNode == surrTail)
-	    return TRUE;
-	if (pickNode->isOfType( SoDragger::getClassTypeId() ))
-	    return FALSE;
+        SoNode *pickNode = fullPick->getNode(i);
+        if (pickNode == surrTail)
+            return TRUE;
+        if (pickNode->isOfType( SoDragger::getClassTypeId() ))
+            return FALSE;
     }
     // Should never get here...
     return FALSE;

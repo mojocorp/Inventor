@@ -169,10 +169,8 @@ SoBaseList::truncate(int start)		// first index to remove
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-
     if (addRefs) {
-        for ( i = start; i < getLength(); i++) {
+        for (int i = start; i < getLength(); i++) {
             if ( (*this)[i] ) {
                 (*this)[i]->unref();
             }
@@ -194,12 +192,10 @@ SoBaseList::copy(const SoBaseList &bList)	// list to copy from
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-
     truncate(0);
 
     if (addRefs) {
-        for (i = 0; i < bList.getLength(); i++) {
+        for (int i = 0; i < bList.getLength(); i++) {
             if ( bList[i] ) {
                 bList[i]->ref();
             }

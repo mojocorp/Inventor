@@ -318,36 +318,34 @@ SoUnknownNode::write(SoWriteAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
-
     SbBool saveNotify = enableNotify(FALSE);
 
     // Remember alternateRep, if set:
     SoNode *alternateRep = NULL;
 
     if (hasChildren) {
-	if (getNumChildren() != 0) {
-	    alternateRep = getChild(0);
-	    alternateRep->ref();
-	}
+        if (getNumChildren() != 0) {
+            alternateRep = getChild(0);
+            alternateRep->ref();
+        }
 
-	// Add hiddenChildren to regular child list temporarily:
-	removeAllChildren();
-	for (i = 0; i < hiddenChildren.getLength(); i++) {
-	    addChild(hiddenChildren[i]);
-	}
-	// Now write:
-	SoGroup::write(action);
+        // Add hiddenChildren to regular child list temporarily:
+        removeAllChildren();
+        for (int i = 0; i < hiddenChildren.getLength(); i++) {
+            addChild(hiddenChildren[i]);
+        }
+        // Now write:
+        SoGroup::write(action);
 
-	removeAllChildren();
+        removeAllChildren();
     }
     else {
-	SoNode::write(action);
+        SoNode::write(action);
     }
 
     if (alternateRep != NULL) {
-	addChild(alternateRep);
-	alternateRep->unref();
+        addChild(alternateRep);
+        alternateRep->unref();
     }
 
     enableNotify(saveNotify);

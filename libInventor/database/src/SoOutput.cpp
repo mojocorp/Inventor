@@ -380,8 +380,6 @@ SoOutput::setFloatPrecision(int precision)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char tmp[8];
-
     // Invalid precision specified; use default format string
     if (precision < 0 || precision > 8)
     {
@@ -396,6 +394,7 @@ SoOutput::setFloatPrecision(int precision)
     // Build the output format string from the input parameters
     else
     {
+        char tmp[8];
         sprintf(tmp, "%%.%dg", precision);
         fmtString = SbString(tmp);
     }

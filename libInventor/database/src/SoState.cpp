@@ -237,7 +237,7 @@ SoState::pop()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoElement *poppedElt, *nextInStack;
+    SoElement *poppedElt;
 
     --depth;
 
@@ -250,28 +250,28 @@ SoState::pop()
 
     // Call pop() for all elements that were at previous depth
     for (poppedElt = topElement;
-	 poppedElt != NULL && poppedElt->getDepth() > depth;
-	 poppedElt = poppedElt->getNext()) {
+         poppedElt != NULL && poppedElt->getDepth() > depth;
+         poppedElt = poppedElt->getNext()) {
 
-	// Find next element in same stack as popped element. This
-	// element will become the new top of that stack.
-	nextInStack = poppedElt->getNextInStack();
+        // Find next element in same stack as popped element. This
+        // element will become the new top of that stack.
+        SoElement *nextInStack = poppedElt->getNextInStack();
 
-	// Give new top element in stack a chance to update things.
-	// Pass old element instance just in case.
-	poppedElt->getNextInStack()->pop(this, poppedElt);
+        // Give new top element in stack a chance to update things.
+        // Pass old element instance just in case.
+        nextInStack->pop(this, poppedElt);
 
     }
 
     // Actually pop all such elements
     while (topElement != NULL && topElement->getDepth() > depth) {
-	poppedElt = topElement;
+        poppedElt = topElement;
 
-	// Remove from main stack
-	topElement = topElement->getNext();
+        // Remove from main stack
+        topElement = topElement->getNext();
 
-	// Remove from element stack
-	stack[poppedElt->getStackIndex()] = poppedElt->getNextInStack();
+        // Remove from element stack
+        stack[poppedElt->getStackIndex()] = poppedElt->getNextInStack();
     }
 }
 

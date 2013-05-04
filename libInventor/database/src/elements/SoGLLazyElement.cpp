@@ -1324,7 +1324,6 @@ SoGLLazyElement::reallySend(const SoState *state, uint32_t bitmask)
                     glIndexi((GLint)ivState.colorIndices[0]);
                     break;
                 }
-                float col4[4];
 
                 if (glState.GLColorMaterial || (glState.GLLightModel== BASE_COLOR)) {
                     uint32_t pColors;
@@ -1332,6 +1331,7 @@ SoGLLazyElement::reallySend(const SoState *state, uint32_t bitmask)
                     glColor4ubv((GLubyte*)&pColors);
                 }
                 else{
+                    float col4[4];
                     col4[3] =  (ivState.packedColors[0] & 0xff)   * 1.0f/255;
                     col4[2] = ((ivState.packedColors[0] & 0xff00) >>  8) * 1.0f/255;
                     col4[1] = ((ivState.packedColors[0] & 0xff0000)>> 16) * 1.0f/255;
@@ -1508,7 +1508,6 @@ SoGLLazyElement::reallySend(const SoState *state, uint32_t bitmask)
 void
 SoGLLazyElement::sendDiffuseByIndex(int index) const
 {
-    float col4[4];
 #ifdef DEBUG
     //check to make sure lazy element has updated GL state;
     //this method should only be called after an initial call to
@@ -1537,6 +1536,7 @@ SoGLLazyElement::sendDiffuseByIndex(int index) const
         DGL_HTON_INT32(pColors, *(ivState.packedColors+index));
         glColor4ubv((GLubyte*)&pColors);
     } else {
+        float col4[4];
         col4[3] =  (ivState.packedColors[index] & 0xff)   * 1.0f/255;
         col4[2] = ((ivState.packedColors[index] & 0xff00) >>  8) * 1.0f/255;
         col4[1] = ((ivState.packedColors[index] & 0xff0000)>> 16) * 1.0f/255;

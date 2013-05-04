@@ -104,7 +104,7 @@ SoCache::~SoCache()
 {
     // Get rid of all the elements in list
     std::list<SoElement*>::const_iterator it;
-    for(it = elementsUsed.begin(); it != elementsUsed.end(); it++)
+    for(it = elementsUsed.begin(); it != elementsUsed.end(); ++it)
         delete *it;
 
     delete[] elementsUsedFlags;
@@ -204,7 +204,7 @@ SoCache::addCacheDependency(const SoState *state, SoCache *subCache)
     SB_UNUSED(subCache);
 
     std::list<SoElement*>::const_iterator it;
-    for(it = elementsUsed.begin(); it != elementsUsed.end(); it++) {
+    for(it = elementsUsed.begin(); it != elementsUsed.end(); ++it) {
         const SoElement *eltInCache = *it;
 
         //
@@ -253,7 +253,7 @@ SoCache::isValid(const SoState *state) const
 
     // Compare used elements for match
     std::list<SoElement*>::const_iterator it;
-    for(it = elementsUsed.begin(); it != elementsUsed.end(); it++) {
+    for(it = elementsUsed.begin(); it != elementsUsed.end(); ++it) {
         const SoElement *eltInCache = *it;
         const SoElement *eltInState =
                 state->getConstElement(eltInCache->getStackIndex());
@@ -295,7 +295,7 @@ SoCache::getInvalidElement(const SoState *state) const
 {
     // Compare used elements for match
     std::list<SoElement*>::const_iterator it;
-    for(it = elementsUsed.begin(); it != elementsUsed.end(); it++) {
+    for(it = elementsUsed.begin(); it != elementsUsed.end(); ++it) {
         const SoElement *eltInCache = *it;
         const SoElement *eltInState =
                 state->getConstElement(eltInCache->getStackIndex());

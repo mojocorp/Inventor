@@ -630,9 +630,7 @@ SoWWWInline::readInstance(SoInput *in, unsigned short flags)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool readOK = TRUE;
-    
-    readOK = SoNode::readInstance(in, flags);
+    SbBool readOK = SoNode::readInstance(in, flags);
 
     // If no fetch CB and there is an alternate rep, use it as child data
     if (readOK && fetchURLcb == NULL && alternateRep.getValue() != NULL) {

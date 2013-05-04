@@ -488,7 +488,7 @@ SoFaceSet::generatePrimitives(SoAction *action)
     SoTextureCoordinateBundle	tcb(action, FALSE, ! forPicking);
     const SoCoordinateElement	*ce;
     int				curVert, vert;
-    int				face, numFaces, vertsInFace;
+    int				face, numFaces;
     Binding			materialBinding, normalBinding;
 
     ce = SoCoordinateElement::getInstance(action->getState());
@@ -512,7 +512,7 @@ SoFaceSet::generatePrimitives(SoAction *action)
     for (face = 0; face < numFaces; face++) {
 
         // Figure out number of vertices in this face
-        vertsInFace = (int) numVertices[face];
+        int vertsInFace = (int) numVertices[face];
         if (vertsInFace == SO_FACE_SET_USE_REST_OF_VERTICES)
             vertsInFace = (int) ce->getNum() - curVert;
 
@@ -791,7 +791,7 @@ SoFaceSet::generateDefaultNormals(SoState *state, SoNormalBundle *nb)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int				numFaces, curCoord, vertsInFace, i, j;
+    int				numFaces, curCoord, i, j;
     int				startInd;
     const SoCoordinateElement	*ce = NULL;
     const SbVec3f 		*vpCoords = NULL;
@@ -812,7 +812,7 @@ SoFaceSet::generateDefaultNormals(SoState *state, SoNormalBundle *nb)
     for (i = 0; i < numFaces; i++) {
         nb->beginPolygon();
 
-        vertsInFace = (int) numVertices[i];
+        int vertsInFace = (int) numVertices[i];
         if (vertsInFace == SO_FACE_SET_USE_REST_OF_VERTICES)
             vertsInFace = numCoords - curCoord;
 

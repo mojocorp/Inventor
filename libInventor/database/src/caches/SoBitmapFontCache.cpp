@@ -145,7 +145,7 @@ SoBitmapFontCache::~SoBitmapFontCache()
 {
     if (face) {
         std::map<wchar_t, FLbitmap*>::iterator it;
-        for (it = bitmaps.begin(); it != bitmaps.end(); it++) {
+        for (it = bitmaps.begin(); it != bitmaps.end(); ++it) {
             delete [] it->second->bitmap;
             delete it->second;
         }
@@ -180,7 +180,7 @@ SoBitmapFontCache::destroy(SoState *)
     // Pass in NULL to unref because this cache may be destroyed
     // from an action _other_ than GLRender:
     std::map<wchar_t, SoGLDisplayList*>::iterator it;
-    for (it=list.begin(); it != list.end(); it++) {
+    for (it=list.begin(); it != list.end(); ++it) {
         it->second->unref(NULL);
     }
 

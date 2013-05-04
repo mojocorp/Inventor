@@ -1301,7 +1301,6 @@ SoField::read(SoInput *in, const SbName &name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char	c;
     SbBool	shouldReadConnection = FALSE;
     SbBool	gotValue = FALSE;
 
@@ -1311,95 +1310,96 @@ SoField::read(SoInput *in, const SbName &name)
     flags.notifyEnabled = FALSE;
 
     if (in->isBinary()) {
-	short	readFlags;
+        short	readFlags;
 
-	if (! readValue(in)) {
-	    SoReadError::post(in,
-			      "Couldn't read binary value for field \"%s\"",
-			      name.getString());
-	    flags.notifyEnabled = wasNotifyEnabled;
-	    return FALSE;
-	}
+        if (! readValue(in)) {
+            SoReadError::post(in,
+                              "Couldn't read binary value for field \"%s\"",
+                              name.getString());
+            flags.notifyEnabled = wasNotifyEnabled;
+            return FALSE;
+        }
 
-	// Read flags
-	if (! in->read(readFlags)) {
-	    SoReadError::post(in,
-			      "Couldn't read binary flags for field \"%s\"",
-			      name.getString());
-	    flags.notifyEnabled = wasNotifyEnabled;
-	    return FALSE;
-	}
+        // Read flags
+        if (! in->read(readFlags)) {
+            SoReadError::post(in,
+                              "Couldn't read binary flags for field \"%s\"",
+                              name.getString());
+            flags.notifyEnabled = wasNotifyEnabled;
+            return FALSE;
+        }
 
-	// (Don't use setIgnored() to set this, since it would cause
-	// notification, which we don't want to have happen for trigger
-	// fields.)
-	flags.ignored = (readFlags & FIELD_IGNORED) != 0;
-	shouldReadConnection = (readFlags & FIELD_CONNECTED) != 0;
-	setDefault((readFlags & FIELD_DEFAULT) != 0);
-	gotValue      = TRUE;
+        // (Don't use setIgnored() to set this, since it would cause
+        // notification, which we don't want to have happen for trigger
+        // fields.)
+        flags.ignored = (readFlags & FIELD_IGNORED) != 0;
+        shouldReadConnection = (readFlags & FIELD_CONNECTED) != 0;
+        setDefault((readFlags & FIELD_DEFAULT) != 0);
+        gotValue      = TRUE;
     }
 
     // ASCII version...
     else {
-	// Check for ignore flag with no value
-	if (in->read(c) && c == IGNORE_CHAR) {
-	    setDefault(TRUE);
-	    setIgnored(TRUE);
+        // Check for ignore flag with no value
+        char c;
+        if (in->read(c) && c == IGNORE_CHAR) {
+            setDefault(TRUE);
+            setIgnored(TRUE);
 
-	    // Check for connection to engine/field
-	    if (in->read(c) && c == CONNECTION_CHAR)
-		shouldReadConnection = TRUE;
-	    else
-		in->putBack(c);
-	    gotValue = FALSE;
-	}
+            // Check for connection to engine/field
+            if (in->read(c) && c == CONNECTION_CHAR)
+                shouldReadConnection = TRUE;
+            else
+                in->putBack(c);
+            gotValue = FALSE;
+        }
 
-	else {
-	    setIgnored(FALSE);
+        else {
+            setIgnored(FALSE);
 
-	    // If character is connection character, we just use the
-	    // default value and skip the reading-value stuff
-	    if (c != CONNECTION_CHAR) {
-		in->putBack(c);
+            // If character is connection character, we just use the
+            // default value and skip the reading-value stuff
+            if (c != CONNECTION_CHAR) {
+                in->putBack(c);
 
-		if (! readValue(in)) {
-		    SoReadError::post(in,
-				      "Couldn't read value for field \"%s\"",
-				      name.getString());
-		    flags.notifyEnabled = wasNotifyEnabled;
-		    return FALSE;
-		}
+                if (! readValue(in)) {
+                    SoReadError::post(in,
+                                      "Couldn't read value for field \"%s\"",
+                                      name.getString());
+                    flags.notifyEnabled = wasNotifyEnabled;
+                    return FALSE;
+                }
 
-		gotValue = TRUE;
-		setDefault(FALSE);
+                gotValue = TRUE;
+                setDefault(FALSE);
 
-		// Check for ignore flag after value
-		if (in->read(c) && c == IGNORE_CHAR) {
-		    // (Don't use setIgnored() to set this, since it
-		    // would cause notification, which we don't want
-		    // to have happen for trigger fields.)
-		    flags.ignored = TRUE;
+                // Check for ignore flag after value
+                if (in->read(c) && c == IGNORE_CHAR) {
+                    // (Don't use setIgnored() to set this, since it
+                    // would cause notification, which we don't want
+                    // to have happen for trigger fields.)
+                    flags.ignored = TRUE;
 
-		    // Get character to check for connection to
-		    // engine/field below.
-		    in->read(c);
-		}
-	    } else {
-		gotValue = FALSE;
-	    }
+                    // Get character to check for connection to
+                    // engine/field below.
+                    in->read(c);
+                }
+            } else {
+                gotValue = FALSE;
+            }
 
-	    // Check for connection to engine/field
-	    if (c == CONNECTION_CHAR)
-		shouldReadConnection = TRUE;
-	    else
-		in->putBack(c);
-	}
+            // Check for connection to engine/field
+            if (c == CONNECTION_CHAR)
+                shouldReadConnection = TRUE;
+            else
+                in->putBack(c);
+        }
     }
 
     // Read connection info if necessary.
     if (shouldReadConnection  && !readConnection(in)) {
-	flags.notifyEnabled = wasNotifyEnabled;
-	return FALSE;
+        flags.notifyEnabled = wasNotifyEnabled;
+        return FALSE;
     }
 
     // Turn notification back the way it was:
@@ -1408,9 +1408,9 @@ SoField::read(SoInput *in, const SbName &name)
     // If a value was read (even if there's a connection), call
     // valueChanged. Otherwise, just notify.
     if (gotValue) {
-	valueChanged(FALSE);
+        valueChanged(FALSE);
     } else {
-	startNotify();
+        startNotify();
     }
 
     return TRUE;
@@ -1499,14 +1499,13 @@ SoField::readConnection(SoInput *in)
     else if (connContainer->isOfType(SoEngine::getClassTypeId())) {
 	SoEngine	*engine = (SoEngine *) connContainer;
 	SoField		*connField;
-	SoEngineOutput	*connOutput;
 
 	connField = engine->getField(fieldName);
 
 	if (connField == NULL) {
 
 	    // See if it's an output
-	    connOutput = engine->getOutput(fieldName);
+        SoEngineOutput	*connOutput = engine->getOutput(fieldName);
 
 	    if (connOutput == NULL) {
 		const char *eName = engine->getTypeId().getName().getString();

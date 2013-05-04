@@ -110,7 +110,6 @@ SoMFBitMask::read1Value(SoInput *in, int index)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char	c;
     SbName	n;
     int		v;
 
@@ -118,75 +117,76 @@ SoMFBitMask::read1Value(SoInput *in, int index)
 
     if (in->isBinary()) {
 
-	// Read all non-empty strings
-	while (in->read(n, TRUE) && ! (! n) ) {
-	    if (findEnumValue(n, v))
-		values[index] |= v;
+        // Read all non-empty strings
+        while (in->read(n, TRUE) && ! (! n) ) {
+            if (findEnumValue(n, v))
+                values[index] |= v;
 
-	    else {
-		SoReadError::post(in,
-				  "Unknown SoMFBitMask bit mask value \"%s\"",
-				  n.getString());
-		return FALSE;
-	    }
-	}
+            else {
+                SoReadError::post(in,
+                                  "Unknown SoMFBitMask bit mask value \"%s\"",
+                                  n.getString());
+                return FALSE;
+            }
+        }
     }
 
     else {
-	// Read first character
-	if (! in->read(c))
-	    return FALSE;
+        char c;
+        // Read first character
+        if (! in->read(c))
+            return FALSE;
 
-	// Check for parenthesized list of bitwise-or'ed flags
-	if (c == OPEN_PAREN) {
+        // Check for parenthesized list of bitwise-or'ed flags
+        if (c == OPEN_PAREN) {
 
-	    values[index] = 0;
+            values[index] = 0;
 
-	    // Read names separated by BITWISE_OR
-	    while (TRUE) {
-		if (in->read(n, TRUE) && ! (! n) ) {
+            // Read names separated by BITWISE_OR
+            while (TRUE) {
+                if (in->read(n, TRUE) && ! (! n) ) {
 
-		    if (findEnumValue(n, v))
-			values[index] |= v;
+                    if (findEnumValue(n, v))
+                        values[index] |= v;
 
-		    else {
-			SoReadError::post(in, "Unknown SoMFBitMask bit "
-					  "mask value \"%s\"", n.getString());
-			return FALSE;
-		    }
-		}
+                    else {
+                        SoReadError::post(in, "Unknown SoMFBitMask bit "
+                                          "mask value \"%s\"", n.getString());
+                        return FALSE;
+                    }
+                }
 
-		if (! in->read(c)) {
-		    SoReadError::post(in, "EOF reached before '%c' "
-				      "in SoMFBitMask value", CLOSE_PAREN);
-		    return FALSE;
-		}
+                if (! in->read(c)) {
+                    SoReadError::post(in, "EOF reached before '%c' "
+                                      "in SoMFBitMask value", CLOSE_PAREN);
+                    return FALSE;
+                }
 
-		if (c == CLOSE_PAREN)
-		    break;
+                if (c == CLOSE_PAREN)
+                    break;
 
-		else if (c != BITWISE_OR) {
-		    SoReadError::post(in, "Expected '%c' or '%c', got '%c' "
-				      "in SoMFBitMask value",
-				      BITWISE_OR, CLOSE_PAREN, c);
-		    return FALSE;
-		}
-	    }
-	}
+                else if (c != BITWISE_OR) {
+                    SoReadError::post(in, "Expected '%c' or '%c', got '%c' "
+                                      "in SoMFBitMask value",
+                                      BITWISE_OR, CLOSE_PAREN, c);
+                    return FALSE;
+                }
+            }
+        }
 
-	else {
-	    in->putBack(c);
+        else {
+            in->putBack(c);
 
-	    // Read mnemonic value as a character string identifier
-	    if (! in->read(n, TRUE))
-		return FALSE;
+            // Read mnemonic value as a character string identifier
+            if (! in->read(n, TRUE))
+                return FALSE;
 
-	    if (! findEnumValue(n, values[index])) {
-		SoReadError::post(in, "Unknown SoMFBitMask bit "
-				  "mask value \"%s\"", n.getString());
-		return FALSE;
-	    }
-	}
+            if (! findEnumValue(n, values[index])) {
+                SoReadError::post(in, "Unknown SoMFBitMask bit "
+                                  "mask value \"%s\"", n.getString());
+                return FALSE;
+            }
+        }
     }
 
     return TRUE;
@@ -206,59 +206,58 @@ SoMFBitMask::write1Value(SoOutput *out, int index) const
 ////////////////////////////////////////////////////////////////////////
 {
     const SbName	*n;
-    int			i;
 
 #ifdef DEBUG
     if (enumValues == NULL) {
-	SoDebugError::post("SoMFBitMask::write1Value",
-			   "Enum values were never initialized");
-	return;
+        SoDebugError::post("SoMFBitMask::write1Value",
+                           "Enum values were never initialized");
+        return;
     }
 #endif				/* DEBUG */
 
     // Look for one flag that matches entire value (if any)
-    if (findEnumName(values[index], n))
-	out->write(n->getString());
+    if (findEnumName(values[index], n)) {
+        out->write(n->getString());
 
     // Otherwise, pull out 1 bit mask at a time until the value is complete
-    else {
+    } else {
         int     v = values[index];
 
-	if (! out->isBinary())
-	    out->write(OPEN_PAREN);
+        if (! out->isBinary())
+            out->write(OPEN_PAREN);
 
-        for (i = 0; i < numEnums; i++) {
+        for (int i = 0; i < numEnums; i++) {
 
-	    // Mask must match exactly
-	    if ( (enumValues[i] & v) == enumValues[i]) {
+            // Mask must match exactly
+            if ( (enumValues[i] & v) == enumValues[i]) {
 
-		out->write(enumNames[i].getString());
+                out->write(enumNames[i].getString());
 
-		// Turn off those bits
-		v &= ~enumValues[i];
+                // Turn off those bits
+                v &= ~enumValues[i];
 
-		if (v == 0)
+                if (v == 0)
                     break;
 
-		if (! out->isBinary()) {
-		    out->write(' ');
-		    out->write(BITWISE_OR);
-		    out->write(' ');
-		}
-	    }
-	}
+                if (! out->isBinary()) {
+                    out->write(' ');
+                    out->write(BITWISE_OR);
+                    out->write(' ');
+                }
+            }
+        }
 
         // All bits must have been written out
         if (v != 0)
-	    SoDebugError::post("SoMFBitMask::write1Value",
-			       "unable to write some bits (%#x)", v);
+            SoDebugError::post("SoMFBitMask::write1Value",
+                               "unable to write some bits (%#x)", v);
 
-	if (! out->isBinary())
-	    out->write(CLOSE_PAREN);
+        if (! out->isBinary())
+            out->write(CLOSE_PAREN);
     }
 
     if (out->isBinary())
-	out->write("");
+        out->write("");
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -169,17 +169,14 @@ SoFieldData::~SoFieldData()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    struct SoFieldEntry *tmpField;
-    struct SoEnumEntry  *tmpEnum;
-
     // Delete the list of fields and enums;
     for (int i=0; i<fields.getLength(); i++) {
-        tmpField = (struct SoFieldEntry *)fields[i];
+        struct SoFieldEntry *tmpField = (struct SoFieldEntry *)fields[i];
         delete tmpField;
     }
 
     for (int j=0; j<enums.getLength(); j++) {
-        tmpEnum = (struct SoEnumEntry *)enums[j];
+        struct SoEnumEntry  *tmpEnum = (struct SoEnumEntry *)enums[j];
         delete tmpEnum;
     }
 }
@@ -225,34 +222,31 @@ SoFieldData::overlay(SoFieldContainer *to, const SoFieldContainer *from,
     const SoFieldData *fromFD = from->getFieldData();
     const SoFieldData   *toFD =   to->getFieldData();
 
-    SoField	*fromField, *toField;
-    int		i;
+    for (int i = 0; i < fromFD->fields.getLength(); i++) {
 
-    for (i = 0; i < fromFD->fields.getLength(); i++) {
+        // Access the fields using the appropriate field data instances
+        SoField	*toField   =   toFD->getField(to,   i);
+        SoField	*fromField = fromFD->getField(from, i);
 
-	// Access the fields using the appropriate field data instances
-	toField   =   toFD->getField(to,   i);
-	fromField = fromFD->getField(from, i);
+        // If both fields have default values, we don't bother copying
+        // the value:
+        if (! fromField->isDefault() || ! toField->isDefault())
+            // This method copies just the value...
+            toField->copyFrom(*fromField);
 
-	// If both fields have default values, we don't bother copying
-	// the value:
-	if (! fromField->isDefault() || ! toField->isDefault())
-	    // This method copies just the value...
-	    toField->copyFrom(*fromField);
+        // ... so we still have to copy the rest
+        toField->setIgnored(fromField->isIgnored());
+        toField->setDefault(fromField->isDefault());
+        toField->enableNotify(fromField->isNotifyEnabled());
 
-	// ... so we still have to copy the rest
-	toField->setIgnored(fromField->isIgnored());
-	toField->setDefault(fromField->isDefault());
-	toField->enableNotify(fromField->isNotifyEnabled());
+        // Allow the field to fix itself up after the copy. Most
+        // fields do nothing here, but node, path, and engine fields
+        // need to make sure instances are handled properly.
+        toField->fixCopy(copyConnections);
 
-	// Allow the field to fix itself up after the copy. Most
-	// fields do nothing here, but node, path, and engine fields
-	// need to make sure instances are handled properly.
-	toField->fixCopy(copyConnections);
-
-	// Copy the connection if necessary
-	if (fromField->isConnected() && copyConnections)
-	    toField->copyConnection(fromField);
+        // Copy the connection if necessary
+        if (fromField->isConnected() && copyConnections)
+            toField->copyConnection(fromField);
     }
 }
 

@@ -415,20 +415,19 @@ SoPath *
 SoSelection::copyFromThis(const SoPath *path) const
 {
     if (path == NULL)
-	return NULL;
-	
-    SoNode *node;
-    int i, indexToThis = -1;
+        return NULL;
+
+    int indexToThis = -1;
     SoPath *p = NULL;
 
     SoFullPath *fullInPath = (SoFullPath *) path;
 
-    for (i = 0; i < fullInPath->getLength(); i++) {
-	node = fullInPath->getNode(i);
-	if (node == (SoNode *) this) {
-	    indexToThis = i;
-	    break;
-	}
+    for (int i = 0; i < fullInPath->getLength(); i++) {
+        SoNode *node = fullInPath->getNode(i);
+        if (node == (SoNode *) this) {
+            indexToThis = i;
+            break;
+        }
     }
     
     if (indexToThis != -1) {

@@ -327,9 +327,6 @@ SoSensorManager::processDelayQueue(SbBool isIdle)
     }
 #endif
 
-    SoSensor		*prev;
-    SoDelayQueueSensor	*first;
-
     if (delayQueue == NULL)
 	return;
 
@@ -365,9 +362,9 @@ SoSensorManager::processDelayQueue(SbBool isIdle)
 	// Find first sensor that has not yet been triggered (its
 	// counter is not the same as our current counter), saving
 	// previous sensor in queue (to keep links accurate)
-	prev = NULL;
+    SoSensor *prev = NULL;
 
-	first = (SoDelayQueueSensor *) delayQueue;
+    SoDelayQueueSensor *first = (SoDelayQueueSensor *) delayQueue;
 	while (first != NULL) {
 	    // Process this sensor IF:
 	    // -- it wasn't processed before, and
@@ -425,17 +422,16 @@ SoSensorManager::processDelayQueue(SbBool isIdle)
 void
 SoSensorManager::processImmediateQueue()
 {
-    SoDelayQueueSensor	*first;
     static int		processingImmediate = FALSE;
 
     if (delayQueue == NULL)
-	return;
+        return;
 
     // Triggering an immediate sensor may initiate notification,
     // calling this method recursively. To avoid doing extra work,
     // just return if we are already processing immediate sensors.
     if (processingImmediate)
-	return;
+        return;
 
     processingImmediate = TRUE;
     processingQueue++;
@@ -445,22 +441,22 @@ SoSensorManager::processImmediateQueue()
     // do.) No counter check is made here.
 
     while (delayQueue != NULL &&
-	   ((SoDelayQueueSensor *) delayQueue)->getPriority() == 0) {
+           ((SoDelayQueueSensor *) delayQueue)->getPriority() == 0) {
 
-	first = (SoDelayQueueSensor *) delayQueue;
-	delayQueue = delayQueue->getNextInQueue();
+        SoDelayQueueSensor *first = (SoDelayQueueSensor *) delayQueue;
+        delayQueue = delayQueue->getNextInQueue();
 
-	first->setNextInQueue(NULL);
+        first->setNextInQueue(NULL);
 
 #if 0
-	if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	    SoDebug::RTPrintf("Triggering immediate sensor  "
-			      "Name: %s, priority: %d\n",
-			      SoDebug::PtrName(first), first->getPriority());
-	
-	}
+        if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
+            SoDebug::RTPrintf("Triggering immediate sensor  "
+                              "Name: %s, priority: %d\n",
+                              SoDebug::PtrName(first), first->getPriority());
+
+        }
 #endif
-	((SoSensor *) first)->trigger();
+        ((SoSensor *) first)->trigger();
     }
 
     processingImmediate = FALSE;
@@ -481,7 +477,6 @@ SoSensorManager::processTimerQueue()
 ////////////////////////////////////////////////////////////////////////
 {
     ++processingQueue;
-    SoSensor	*first;
 
     // NOTE: Infinite loops are possible if timerQueue sensors
     // reschedule themselves inside their trigger() routine.  This
@@ -497,7 +492,7 @@ SoSensorManager::processTimerQueue()
 	       SbTime::getTimeOfDay()) {
 
 	// Get pointer to first sensor
-	first = timerQueue;
+    SoSensor *first = timerQueue;
 
 	// Remove sensor from queue.
 	timerQueue = timerQueue->getNextInQueue();

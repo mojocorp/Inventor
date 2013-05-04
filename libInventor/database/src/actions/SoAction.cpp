@@ -694,35 +694,33 @@ SoAction::splitPathList(const SoPathList &sortedList,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numPaths, curStart, i;
-    SoNode	*curHead;
-
-    numPaths = sortedList.getLength();
+    int numPaths = sortedList.getLength();
 
     // Create a list to hold one of the split lists
     SoPathList	splitList(numPaths);
 
     // Split list while there are still paths to examine
-    curStart = 0;
+    int curStart = 0;
     while (curStart < numPaths) {
 
-	// Gather all paths with same head
-	curHead = sortedList[curStart]->getHead();
-	splitList.append(sortedList[curStart]);
+        // Gather all paths with same head
+        SoNode	*curHead = sortedList[curStart]->getHead();
+        splitList.append(sortedList[curStart]);
 
-	for (i = curStart + 1; i < numPaths; i++) {
-	    if (sortedList[i]->getHead() != curHead)
-		break;
-	    splitList.append(sortedList[i]);
-	}
+        int i;
+        for (i = curStart + 1; i < numPaths; i++) {
+            if (sortedList[i]->getHead() != curHead)
+                break;
+            splitList.append(sortedList[i]);
+        }
 
-	// Apply action to split list. Indicate that it's the last
-	// path list if there are no more paths after these.
-	apply(splitList, origPathList, i >= numPaths);
+        // Apply action to split list. Indicate that it's the last
+        // path list if there are no more paths after these.
+        apply(splitList, origPathList, i >= numPaths);
 
-	// Prepare for next set of paths
-	splitList.truncate(0);
-	curStart = i;
+        // Prepare for next set of paths
+        splitList.truncate(0);
+        curStart = i;
     }
 }
 

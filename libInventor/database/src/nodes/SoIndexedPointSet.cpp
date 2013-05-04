@@ -148,7 +148,6 @@ SoIndexedPointSet::GLRender(SoGLRenderAction *action)
 
     // Figure out number of points in set
     const SoGLCoordinateElement	*ce = (const SoGLCoordinateElement *)SoCoordinateElement::getInstance(action->getState());
-    int curCoord = 0;
     int32_t numPts = coordIndex.getNum();
     int32_t numMat = materialIndex.getNum();
     int32_t numNorm = normalIndex.getNum();
@@ -176,6 +175,7 @@ SoIndexedPointSet::GLRender(SoGLRenderAction *action)
         mb.sendFirst();
         if (mb.isColorOnly())
             normalPerPoint = FALSE;
+        int curCoord = 0;
         if (! mb.isColorOnly() && ! normalPerPoint && ne->getNum() > 0)
             ne->send(normalIndex[curCoord]);
 
@@ -233,7 +233,7 @@ SoIndexedPointSet::generatePrimitives(SoAction *action)
 
     SbBool			materialPerPoint, normalPerPoint, texCoordsIndexed;
     int32_t			numPts;
-    int				curCoord, i;
+    int				curCoord;
     SoPrimitiveVertex		pv;
     SoPointDetail		detail;
 
@@ -294,7 +294,7 @@ SoIndexedPointSet::generatePrimitives(SoAction *action)
         if (forPicking)
             delta = 0.0f;
 
-        for (i = 0; i < numPts; i++, fraction += delta) {
+        for (int i = 0; i < numPts; i++, fraction += delta) {
 
             // Check to see if this point should be skipped due to complexity
             if (fraction >= 1.0) {

@@ -204,7 +204,7 @@ SoLineSet::generatePrimitives(SoAction *action)
     SoTextureCoordinateBundle	tcb(action, FALSE, ! forPicking);
     const SoCoordinateElement	*ce;
     int				curVert, curSeg, curNormal, curMaterial, vert;
-    int				line, numLines, vertsInLine;
+    int				line, numLines;
     Binding			materialBinding, normalBinding;
 
 
@@ -251,7 +251,7 @@ SoLineSet::generatePrimitives(SoAction *action)
 	detail.setLineIndex(line);
 
 	// Figure out number of vertices in this line
-	vertsInLine = (int) numVertices[line];
+    int vertsInLine = (int) numVertices[line];
         if (vertsInLine == SO_LINE_SET_USE_REST_OF_VERTICES)
 	    vertsInLine = (int) ce->getNum() - curVert;
 
@@ -356,20 +356,20 @@ SoLineSet::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 ////////////////////////////////////////////////////////////////////////
 {
     // First, compute the number of vertices the line set uses
-    int	numLines = (int) numVertices.getNum(), numVerts = 0, i;
+    int	numLines = (int) numVertices.getNum(), numVerts = 0;
 
     if (numLines == 0)
-	return;
+        return;
 
     // Count up total number of vertices used. If the last entry in
     // numVertices is SO_LINE_SET_USE_REST_OF_VERTICES, then we need
     // to use all of the vertices.
-    if (numVertices[numLines - 1] == SO_LINE_SET_USE_REST_OF_VERTICES)
-	numVerts = -1;
-
-    else
-	for (i = 0; i < numLines; i++)
-	    numVerts += (int) numVertices[i];
+    if (numVertices[numLines - 1] == SO_LINE_SET_USE_REST_OF_VERTICES) {
+        numVerts = -1;
+    } else {
+        for (int i = 0; i < numLines; i++)
+            numVerts += (int) numVertices[i];
+    }
 
     // Next, call the method on SoNonIndexedShape that computes the
     // bounding box and center of the given number of coordinates

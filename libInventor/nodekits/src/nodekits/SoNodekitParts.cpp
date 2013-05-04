@@ -849,8 +849,6 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 {
     existedBefore = FALSE;
 
-    SoFullPath *answerPath = NULL;
-
     // IS THERE A BRACKET, WHICH SIGNIFIES INDEXING INTO A LIST?
     if ( nameOfPart.rfind('[') != -1 ) {
 
@@ -864,7 +862,7 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 
 	// get the list given by 'listNameCopy'
 	SbBool listExistedBefore;
-	answerPath = getSingleNamePathToPart( listNameCopy, makeIfNeeded, 
+    SoFullPath *answerPath = getSingleNamePathToPart( listNameCopy, makeIfNeeded,
 				      TRUE, publicCheck, listExistedBefore );
 	if (answerPath == NULL){
 	    free(listNameCopy);
@@ -1408,7 +1406,6 @@ SoNodekitParts::createPathToAnyPart( const SbName &nameOfPart,
     existedBefore = FALSE;
 
     char   *nameCopy, *firstName, *remainderString;
-    SoNode *firstNode = NULL;
     SoFullPath *firstPath = NULL, *secondPath = NULL, *answer = NULL;
 
     // JUST A SINGLE NAME...
@@ -1436,7 +1433,7 @@ SoNodekitParts::createPathToAnyPart( const SbName &nameOfPart,
 
 	firstPath->ref();
 
-	firstNode = firstPath->getTail();
+    SoNode *firstNode = firstPath->getTail();
 
 	if ( firstNode == NULL ) {
 	    answer = NULL;      // can't look any further
@@ -1589,13 +1586,13 @@ SoNodekitParts::createPathDownTo( const SbName &nameOfPart, SoNode *theNode )
 ////////////////////////////////////////////////////////////////////////
 {
     if ( theNode == NULL )
-	return NULL;
+        return NULL;
 
     // construct a path from 'this' to the given part.
     SoNode    *childNode = NULL;
     SoGroup   *parentNode = NULL;
     SoBaseKit *thisNode = NULL;
-    int     childPartNum, parentPartNum, count;
+    int     childPartNum, count;
     int     *backwardsKidIndexArray;
 
     // allocate enough room to hold all the entries...
@@ -1608,31 +1605,31 @@ SoNodekitParts::createPathDownTo( const SbName &nameOfPart, SoNode *theNode )
     // go backwards up the catalog to the top, saving the child index
     // at each step of the way.
     for ( count = 0; childNode != thisNode; count++ ) {
-	parentPartNum = catalog->getParentPartNumber( childPartNum );
-	if ( parentPartNum != SO_CATALOG_THIS_PART_NUM ) {
-	    parentNode = (SoGroup *) fieldList[ parentPartNum ]->getValue();
-	    if ( !parentNode->isOfType( SoGroup::getClassTypeId() ) ) {
+        int parentPartNum = catalog->getParentPartNumber( childPartNum );
+        if ( parentPartNum != SO_CATALOG_THIS_PART_NUM ) {
+            parentNode = (SoGroup *) fieldList[ parentPartNum ]->getValue();
+            if ( !parentNode->isOfType( SoGroup::getClassTypeId() ) ) {
 #ifdef DEBUG
-		SoDebugError::post("NodekitParts::createPathDownTo",
-		"Parent part not derived from a group");
+                SoDebugError::post("NodekitParts::createPathDownTo",
+                                   "Parent part not derived from a group");
 #endif
                 delete [ /*numEntries*/ ] backwardsKidIndexArray;
-		return NULL;
-	    }
-	    backwardsKidIndexArray[ count ] = parentNode->findChild( childNode);
-	    childPartNum = parentPartNum;
-	    childNode = parentNode;
-	}
-	else {
-	    backwardsKidIndexArray[ count ] = thisNode->findChild( childNode );
-	    childNode = thisNode;
-	}
+                return NULL;
+            }
+            backwardsKidIndexArray[ count ] = parentNode->findChild( childNode);
+            childPartNum = parentPartNum;
+            childNode = parentNode;
+        }
+        else {
+            backwardsKidIndexArray[ count ] = thisNode->findChild( childNode );
+            childNode = thisNode;
+        }
     }
 
     SoFullPath *answer = (SoFullPath *) new SoPath( rootPointer );
     answer->ref();
     for( int i = count - 1; i >= 0; i-- ) {
-	answer->append( backwardsKidIndexArray[i] );
+        answer->append( backwardsKidIndexArray[i] );
     }
 
     delete [ /*numEntries*/ ] backwardsKidIndexArray;

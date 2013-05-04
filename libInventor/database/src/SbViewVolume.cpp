@@ -396,59 +396,56 @@ SbViewVolume::getAlignRotation(SbBool rightAngleOnly) const
 
     if (! rightAngleOnly) {
 
-	// First rotate so that y-axis becomes "up".
-	result.setValue(yAxis, up);
+        // First rotate so that y-axis becomes "up".
+        result.setValue(yAxis, up);
 
-	// Then rotate about "up" so the x-axis becomes "right".
-	rotMat.setRotate(result);
-	rotMat.multDirMatrix(SbVec3f(1.0, 0.0, 0.0), newRight);
+        // Then rotate about "up" so the x-axis becomes "right".
+        rotMat.setRotate(result);
+        rotMat.multDirMatrix(SbVec3f(1.0, 0.0, 0.0), newRight);
 
-	// Need to make certain that the rotation is phrased as a rot
-	// about the y axis.  If we just use
-	// SbRotation(newRight,right), in the case where 'newRight' is
-	// opposite direction of 'right' the algorithm gives us a 180
-	// degree rot about z, not y, which screws things up.
-	float thetaCos = newRight.dot(right);
-	if (thetaCos < -0.99999) {
-	    result *= SbRotation( SbVec3f(0.f,1.f,0.f), 3.14159f );
-	}
-	else {
-	    result *= SbRotation(newRight, right);
-	}
+        // Need to make certain that the rotation is phrased as a rot
+        // about the y axis.  If we just use
+        // SbRotation(newRight,right), in the case where 'newRight' is
+        // opposite direction of 'right' the algorithm gives us a 180
+        // degree rot about z, not y, which screws things up.
+        float thetaCos = newRight.dot(right);
+        if (thetaCos < -0.99999) {
+            result *= SbRotation( SbVec3f(0.f,1.f,0.f), 3.14159f );
+        }
+        else {
+            result *= SbRotation(newRight, right);
+        }
     }
 
     else {
-	SbRotation	rotToUp, rot1, rot2;
-	SbVec3f		vec;
-	float		d, max;
-	int		i;
+        SbVec3f		vec;
 
-	// Rotate to get the best possible rotation to put Y close to "up"
-	rotToUp.setValue(yAxis, up.getClosestAxis());
+        // Rotate to get the best possible rotation to put Y close to "up"
+        SbRotation rotToUp(yAxis, up.getClosestAxis());
 
-	// Rotate to get the best possible rotation to put X close to "right".
-	rotMat.setRotate(rotToUp);
-	rotMat.multDirMatrix(SbVec3f(1.0, 0.0, 0.0), newRight);
+        // Rotate to get the best possible rotation to put X close to "right".
+        rotMat.setRotate(rotToUp);
+        rotMat.multDirMatrix(SbVec3f(1.0, 0.0, 0.0), newRight);
 
-	// Find which of the 4 rotations that are multiples of 90
-	// degrees about the y-axis brings X closest to right
+        // Find which of the 4 rotations that are multiples of 90
+        // degrees about the y-axis brings X closest to right
 
-	max = -237.4f;
+        float max = -237.4f;
 
-	for (i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
 
-	    // Rotate by -90, 0, 90, 180 degrees
-	    rot1.setValue(yAxis, (i-1) * (float)M_PI_2);
+            // Rotate by -90, 0, 90, 180 degrees
+            SbRotation rot1(yAxis, (i-1) * (float)M_PI_2);
 
-	    rot2 = rot1 * rotToUp;
-	    rotMat.setRotate(rot2);
-	    rotMat.multDirMatrix(newRight, vec);
-	    d = vec.dot(right);
-	    if (d > max) {
-		result = rot2;
-		max = d;
-	    }
-	}
+            SbRotation rot2 = rot1 * rotToUp;
+            rotMat.setRotate(rot2);
+            rotMat.multDirMatrix(newRight, vec);
+            float d = vec.dot(right);
+            if (d > max) {
+                result = rot2;
+                max = d;
+            }
+        }
     }
 
     return result;

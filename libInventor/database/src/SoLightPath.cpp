@@ -165,15 +165,14 @@ SoLightPath::getNode(int i) const
 /////////////////////////////////////////////////////////////
 {
     SoNode * curNode = headNode;
-    SoChildList *children;
     for(int j=0; j<i; j++){
         //traverse all (even hidden) children
-        children = curNode->getChildren();
+        SoChildList *children = curNode->getChildren();
 #ifdef DEBUG
         // Make sure it's valid:
         if(children == NULL || j>= getFullLength()) {
             SoDebugError::post("SoLightPath::getNode",
-                         "Error, no child at level");
+                               "Error, no child at level");
         }
 #endif
         curNode = (*children)[indices[j+1]];

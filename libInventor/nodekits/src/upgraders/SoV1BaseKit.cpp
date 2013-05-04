@@ -324,7 +324,7 @@ SoV1BaseKit::interpretCustomData(SoV1CustomNode *inst, // Node to interpret for
     fData += strlen( SO_V1_BASEKIT_FILEDATA_HEADER );
 
     char    *newPartName, *newChildNumString;
-    int     newChildNum, partNum, parentPartNum;
+    int     newChildNum, parentPartNum;
     SoGroup *parentNode;
     SoNode  *childNode;
     SbBool  isOk;
@@ -343,7 +343,7 @@ SoV1BaseKit::interpretCustomData(SoV1CustomNode *inst, // Node to interpret for
 	sscanf( newChildNumString, "%d", &newChildNum );
 
 	// find and check the partNum for this part	
-	partNum = theCat->getPartNumber( newPartName );
+    int partNum = theCat->getPartNumber( newPartName );
 	if ( partNum == SO_V1_CATALOG_NAME_NOT_FOUND ) {
 #ifdef DEBUG
 	    SoDebugError::postWarning("SoV1BaseKit::interpretCustomData",
@@ -418,14 +418,13 @@ SoV1BaseKit::interpretCustomData(SoV1CustomNode *inst, // Node to interpret for
 	if ( isOk && theCat->isList( partNum ) ) {
 	    const SbPList listTypes = theCat->getListItemTypes( partNum );
 	    SoType  *babyType;
-	    SoNode  *theBaby;
 	    SoGroup *grp = (SoGroup *) childNode;
 
 	    for (int babyNum = 0;
 		 (babyNum < grp->getNumChildren()) && (isOk == TRUE);
 		 babyNum++ ) {
 
-		theBaby = grp->getChild( babyNum );
+        SoNode  *theBaby = grp->getChild( babyNum );
 		SbBool  foundBaby = FALSE;
 
 		for ( int j = 0;

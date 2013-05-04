@@ -198,10 +198,6 @@ SoType::fromName(const SbName & name)
 {
     int b = 0;
 
-#ifdef DEBUG
-    const char *longestName = "/usr/lib/InventorDSO/.so";
-#endif // DEBUG
-
     //
 	// XXX Alex -- add additional layer of abstraction on top
  	// of this to make porting to other platforms easier.
@@ -244,6 +240,7 @@ SoType::fromName(const SbName & name)
 	// Temporary storage
 	char DSOFile[101], dummyFunc[101];
 #ifdef DEBUG
+    const char *longestName = "/usr/lib/InventorDSO/.so";
 	if (name.getLength()+strlen(longestName) > 100) {
 	    SoDebugError::post("SoType::fromName",
 			       "Type name '%s' is too long\n", nameChars);

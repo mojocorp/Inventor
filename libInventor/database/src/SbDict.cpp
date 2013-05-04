@@ -252,14 +252,13 @@ SbBool
 SbDict::remove(uintptr_t key)
 {
     SbDictEntry		*&entry = findEntry(key);
-    SbDictEntry		*tmp;
 
-    if (entry == NULL)
-	return FALSE;
-    else {
-	tmp = entry;
-	entry = entry->next;
-	delete tmp;
-	return TRUE;
+    if (entry == NULL) {
+        return FALSE;
+    } else {
+        SbDictEntry	*tmp = entry;
+        entry = entry->next;
+        delete tmp;
+        return TRUE;
     }
 }

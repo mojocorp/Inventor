@@ -174,11 +174,10 @@ SoSphere::rayPick(SoRayPickAction *action)
 {
     SbVec3f		enterPoint, exitPoint, normal;
     SbVec4f		texCoord(0.0, 0.0, 0.0, 1.0);
-    SoPickedPoint	*pp;
 
     // First see if the object is pickable
     if (! shouldRayPick(action))
-	return;
+        return;
 
     // Compute the picking ray in our current object space
     computeObjectSpaceRay(action);
@@ -189,26 +188,27 @@ SoSphere::rayPick(SoRayPickAction *action)
 
     // Intersect with pick ray. If found, set up picked point(s)
     if (sph.intersect(action->getLine(), enterPoint, exitPoint)) {
-	if (action->isBetweenPlanes(enterPoint) &&
-	    (pp = action->addIntersection(enterPoint)) != NULL) {
+        SoPickedPoint	*pp;
+        if (action->isBetweenPlanes(enterPoint) &&
+                (pp = action->addIntersection(enterPoint)) != NULL) {
 
-	    normal = enterPoint;
-	    normal.normalize();
-	    pp->setObjectNormal(normal);
-	    COMPUTE_S_T(enterPoint, texCoord[0], texCoord[1]);
-	    pp->setObjectTextureCoords(texCoord);
-	}
+            normal = enterPoint;
+            normal.normalize();
+            pp->setObjectNormal(normal);
+            COMPUTE_S_T(enterPoint, texCoord[0], texCoord[1]);
+            pp->setObjectTextureCoords(texCoord);
+        }
 
-	if (action->isBetweenPlanes(exitPoint) &&
-	    (pp = action->addIntersection(exitPoint)) != NULL) {
+        if (action->isBetweenPlanes(exitPoint) &&
+                (pp = action->addIntersection(exitPoint)) != NULL) {
 
-	    normal = exitPoint;
-	    normal.normalize();
-	    pp->setObjectNormal(normal);
-	    COMPUTE_S_T(exitPoint, texCoord[0], texCoord[1]);
-	    texCoord[2] = texCoord[3] = 0.0;
-	    pp->setObjectTextureCoords(texCoord);
-	}
+            normal = exitPoint;
+            normal.normalize();
+            pp->setObjectNormal(normal);
+            COMPUTE_S_T(exitPoint, texCoord[0], texCoord[1]);
+            texCoord[2] = texCoord[3] = 0.0;
+            pp->setObjectTextureCoords(texCoord);
+        }
     }
 }
 
@@ -242,7 +242,7 @@ SoSphere::generatePrimitives(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i, j, k, s_x, s_y, s_z, order, octant;
+    int		i, j, k, octant;
     float	botWidth, topWidth, yTop, yBot, tmp;
     SbVec3f	vec;
     int		depth;
@@ -277,10 +277,10 @@ SoSphere::generatePrimitives(SoAction *action)
     }
 
     for (octant = 0; octant < 8; octant++) {
-        s_x = -(((octant & 01) << 1) - 1);
-        s_y = -( (octant & 02)       - 1);
-        s_z = -(((octant & 04) >> 1) - 1);
-        order = s_x * s_y * s_z;
+        int s_x = -(((octant & 01) << 1) - 1);
+        int s_y = -( (octant & 02)       - 1);
+        int s_z = -(((octant & 04) >> 1) - 1);
+        int order = s_x * s_y * s_z;
 
         for (i = 0; i < depth - 1; i++) {
             yBot = (float) i      / depth;

@@ -146,10 +146,9 @@ SoCallbackList::invokeCallbacks(void *callbackData)
 //////////////////////////////////////////////////////////////////////////////
 {
     int len = list.getLength();
-    SoCallbackStruct *cb;
     
     for (int i = 0; i < len; i++) {
-        cb = (SoCallbackStruct *) list[i];
+        SoCallbackStruct *cb = (SoCallbackStruct *) list[i];
         (*cb->func) (cb->userData, callbackData);
     }
 }   

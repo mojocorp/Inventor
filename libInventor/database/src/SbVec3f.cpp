@@ -78,7 +78,7 @@
 
  SbVec3f::SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2)
  {
-     float	v[3], del, mx[3][3], mi[3][3];
+     float	v[3], del, mx[3][3];
 
      // create 3x3 matrix of normal coefficients
      mx[0][0] = p0.getNormal()[0];
@@ -94,51 +94,51 @@
      // find determinant of matrix to use for divisor
      del = DET3(mx);
 
- //    printf("mx = %10.5f %10.5f %10.5f\n", mx[0][0], mx[0][1], mx[0][2]);
- //    printf("     %10.5f %10.5f %10.5f\n", mx[1][0], mx[1][1], mx[1][2]);
- //    printf("     %10.5f %10.5f %10.5f\n", mx[2][0], mx[2][1], mx[2][2]);
+     //    printf("mx = %10.5f %10.5f %10.5f\n", mx[0][0], mx[0][1], mx[0][2]);
+     //    printf("     %10.5f %10.5f %10.5f\n", mx[1][0], mx[1][1], mx[1][2]);
+     //    printf("     %10.5f %10.5f %10.5f\n", mx[2][0], mx[2][1], mx[2][2]);
      if(del > -DELTA && del < DELTA) {	// if singular, just set to the origin
- 	vec[0] = 0;
- 	vec[1] = 0;
- 	vec[2] = 0;
+         vec[0] = 0;
+         vec[1] = 0;
+         vec[2] = 0;
      }
      else {
- 	v[0] = p0.getDistanceFromOrigin();
- 	v[1] = p1.getDistanceFromOrigin();
- 	v[2] = p2.getDistanceFromOrigin();
+         v[0] = p0.getDistanceFromOrigin();
+         v[1] = p1.getDistanceFromOrigin();
+         v[2] = p2.getDistanceFromOrigin();
 
- //	printf("v = %10.5f\n    %10.5f\n    %10.5f\n", v[0], v[1], v[2]);
+         //	printf("v = %10.5f\n    %10.5f\n    %10.5f\n", v[0], v[1], v[2]);
+         float mi[3][3];
+         mi[0][0] = v[0]; mi[0][1] = mx[0][1]; mi[0][2] = mx[0][2];
+         mi[1][0] = v[1]; mi[1][1] = mx[1][1]; mi[1][2] = mx[1][2];
+         mi[2][0] = v[2]; mi[2][1] = mx[2][1]; mi[2][2] = mx[2][2];
 
- 	mi[0][0] = v[0]; mi[0][1] = mx[0][1]; mi[0][2] = mx[0][2];
- 	mi[1][0] = v[1]; mi[1][1] = mx[1][1]; mi[1][2] = mx[1][2];
- 	mi[2][0] = v[2]; mi[2][1] = mx[2][1]; mi[2][2] = mx[2][2];
+         //	printf("mi = %10.5f %10.5f %10.5f\n", mi[0][0], mi[0][1], mi[0][2]);
+         //	printf("     %10.5f %10.5f %10.5f\n", mi[1][0], mi[1][1], mi[1][2]);
+         //	printf("     %10.5f %10.5f %10.5f\n", mi[2][0], mi[2][1], mi[2][2]);
 
- //	printf("mi = %10.5f %10.5f %10.5f\n", mi[0][0], mi[0][1], mi[0][2]);
- //	printf("     %10.5f %10.5f %10.5f\n", mi[1][0], mi[1][1], mi[1][2]);
- //	printf("     %10.5f %10.5f %10.5f\n", mi[2][0], mi[2][1], mi[2][2]);
+         vec[0] = DET3(mi) / del;
+         mi[0][0] = mx[0][0]; mi[0][1] = v[0]; mi[0][2] = mx[0][2];
+         mi[1][0] = mx[1][0]; mi[1][1] = v[1]; mi[1][2] = mx[1][2];
+         mi[2][0] = mx[2][0]; mi[2][1] = v[2]; mi[2][2] = mx[2][2];
 
- 	vec[0] = DET3(mi) / del;
- 	mi[0][0] = mx[0][0]; mi[0][1] = v[0]; mi[0][2] = mx[0][2];
- 	mi[1][0] = mx[1][0]; mi[1][1] = v[1]; mi[1][2] = mx[1][2];
- 	mi[2][0] = mx[2][0]; mi[2][1] = v[2]; mi[2][2] = mx[2][2];
+         //	printf("mi = %10.5f %10.5f %10.5f\n", mi[0][0], mi[0][1], mi[0][2]);
+         //	printf("     %10.5f %10.5f %10.5f\n", mi[1][0], mi[1][1], mi[1][2]);
+         //	printf("     %10.5f %10.5f %10.5f\n", mi[2][0], mi[2][1], mi[2][2]);
 
- //	printf("mi = %10.5f %10.5f %10.5f\n", mi[0][0], mi[0][1], mi[0][2]);
- //	printf("     %10.5f %10.5f %10.5f\n", mi[1][0], mi[1][1], mi[1][2]);
- //	printf("     %10.5f %10.5f %10.5f\n", mi[2][0], mi[2][1], mi[2][2]);
+         vec[1] = DET3(mi) / del;
+         mi[0][0] = mx[0][0]; mi[0][1] = mx[0][1]; mi[0][2] = v[0];
+         mi[1][0] = mx[1][0]; mi[1][1] = mx[1][1]; mi[1][2] = v[1];
+         mi[2][0] = mx[2][0]; mi[2][1] = mx[2][1]; mi[2][2] = v[2];
 
- 	vec[1] = DET3(mi) / del;
- 	mi[0][0] = mx[0][0]; mi[0][1] = mx[0][1]; mi[0][2] = v[0];
- 	mi[1][0] = mx[1][0]; mi[1][1] = mx[1][1]; mi[1][2] = v[1];
- 	mi[2][0] = mx[2][0]; mi[2][1] = mx[2][1]; mi[2][2] = v[2];
+         //	printf("mi = %10.5f %10.5f %10.5f\n", mi[0][0], mi[0][1], mi[0][2]);
+         //	printf("     %10.5f %10.5f %10.5f\n", mi[1][0], mi[1][1], mi[1][2]);
+         //	printf("     %10.5f %10.5f %10.5f\n", mi[2][0], mi[2][1], mi[2][2]);
 
- //	printf("mi = %10.5f %10.5f %10.5f\n", mi[0][0], mi[0][1], mi[0][2]);
- //	printf("     %10.5f %10.5f %10.5f\n", mi[1][0], mi[1][1], mi[1][2]);
- //	printf("     %10.5f %10.5f %10.5f\n", mi[2][0], mi[2][1], mi[2][2]);
-
- 	vec[2] = DET3(mi) / del;
+         vec[2] = DET3(mi) / del;
      }
 
- //    printf("%10.5f %10.5f %10.5f\n", vec[0], vec[1], vec[2]);
+     //    printf("%10.5f %10.5f %10.5f\n", vec[0], vec[1], vec[2]);
  }
 
  //

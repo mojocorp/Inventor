@@ -599,51 +599,50 @@ SoTranReceiver::getNodeNames(SoInput *in, SoNode *root,
 ////////////////////////////////////////////////////////////////////////
 {
     SbName		name;
-    void		*ptr;
     SoTranDictEntry	*e;
 
     // Read reference as SbName to get unique pointer
     if (! in->read(name))
-	return FALSE;
+        return FALSE;
 
     if (lookForNode) {
 
-	// See if the node is already in the dictionary. If so,
-	// increment the reference count and return the old root.
-	if (nameToEntryDict.find((unsigned long) name.getString(), ptr)) {
-	    e = (SoTranDictEntry *) ptr;
-	    e->refCount++;
+        // See if the node is already in the dictionary. If so,
+        // increment the reference count and return the old root.
+        void *ptr;
+        if (nameToEntryDict.find((unsigned long) name.getString(), ptr)) {
+            e = (SoTranDictEntry *) ptr;
+            e->refCount++;
 
-	    oldRoot = e->node;
-	}
+            oldRoot = e->node;
+        }
 
-	// Otherwise, add a new entry
-	else {
-	    addEntry(root, name);
-	    oldRoot = NULL;
-	}
+        // Otherwise, add a new entry
+        else {
+            addEntry(root, name);
+            oldRoot = NULL;
+        }
     }
 
     else
-	oldRoot = NULL;
+        oldRoot = NULL;
 
     if (root->isOfType(SoGroup::getClassTypeId())) {
 
-	SoNode		*child;
-	SoGroup		*group = (SoGroup *) root;
-	int		i;
+        SoNode		*child;
+        SoGroup		*group = (SoGroup *) root;
 
-	for (i = 0; i < group->getNumChildren(); i++) {
+        for (int i = 0; i < group->getNumChildren(); i++) {
 
-	    // Recurse
-	    if (! getNodeNames(in, group->getChild(i), oldRoot == NULL, child))
-		return FALSE;
+            // Recurse
+            if (! getNodeNames(in, group->getChild(i), oldRoot == NULL, child))
+                return FALSE;
 
-	    // If child node was already in dictionary, replace child
-	    // of group with node from dictionary.
-	    if (child != NULL)
-		group->replaceChild(i, child);
-	}
+            // If child node was already in dictionary, replace child
+            // of group with node from dictionary.
+            if (child != NULL)
+                group->replaceChild(i, child);
+        }
     }
 
     return TRUE;

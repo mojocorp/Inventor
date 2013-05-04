@@ -334,8 +334,6 @@ SoGroup::readInstance(SoInput *in, unsigned short flags)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool readOK = TRUE;
-
     // First, turn off notification for this node
     SbBool saveNotify = enableNotify(FALSE);
 
@@ -345,14 +343,14 @@ SoGroup::readInstance(SoInput *in, unsigned short flags)
     // is found that is not a valid field name - it could be the name
     // of a child node.
     SbBool notBuiltIn; // Not used
-    readOK = getFieldData()->read(in, this, FALSE, notBuiltIn);
+    SbBool readOK = getFieldData()->read(in, this, FALSE, notBuiltIn);
     if (!readOK) return readOK;
 
     // If binary BUT was written without children (which can happen
     // if it was read as an unknown node and then written out in
     // binary), don't try to read children:
-    if (!in->isBinary() || (flags & IS_GROUP)) 
-	readOK = readChildren(in);
+    if (!in->isBinary() || (flags & IS_GROUP))
+        readOK = readChildren(in);
     
     // Re-enable notification
     enableNotify(saveNotify);
@@ -378,53 +376,53 @@ SoGroup::readChildren(SoInput *in)
     // If reading binary, read number of children first
     if (in->isBinary()) {
 
-	int	numToRead, i;
+        int	numToRead;
 
-	if (!in->read(numToRead))
-	    ret = FALSE;
+        if (!in->read(numToRead))
+            ret = FALSE;
 
-	else {
-	    for (i = 0; i < numToRead; i++) {
+        else {
+            for (int i = 0; i < numToRead; i++) {
 
-		if (SoBase::read(in, base, SoNode::getClassTypeId()) &&
-		    base != NULL)
-		    addChild((SoNode *) base);
+                if (SoBase::read(in, base, SoNode::getClassTypeId()) &&
+                        base != NULL)
+                    addChild((SoNode *) base);
 
-		// Running out of children is now an error, since the
-		// number of children in the file must be exact
-		else {
-		    ret = FALSE;
-		    break;
-		}
-	    }
-	    // If we are reading a 1.0 file, read the GROUP_END_MARKER
-	    if (ret && in->getIVVersion() == 1.0f) {
-		const int GROUP_END_MARKER = -1;
-		int marker;
+                // Running out of children is now an error, since the
+                // number of children in the file must be exact
+                else {
+                    ret = FALSE;
+                    break;
+                }
+            }
+            // If we are reading a 1.0 file, read the GROUP_END_MARKER
+            if (ret && in->getIVVersion() == 1.0f) {
+                const int GROUP_END_MARKER = -1;
+                int marker;
 
-		// Read end marker if it is there. If not, some sort of
-		// error occurred.
-		if (! in->read(marker) || marker != GROUP_END_MARKER)
-		    ret = FALSE;
-	    }
-	}
+                // Read end marker if it is there. If not, some sort of
+                // error occurred.
+                if (! in->read(marker) || marker != GROUP_END_MARKER)
+                    ret = FALSE;
+            }
+        }
     }
 
     // ASCII: Read children until none left. Deal with children
     // causing errors by adding them as is.
     else {
-	while (TRUE) {
-	    ret = SoBase::read(in, base, SoNode::getClassTypeId()) && ret;
+        while (TRUE) {
+            ret = SoBase::read(in, base, SoNode::getClassTypeId()) && ret;
 
-	    // Add child, even if error occurred, unless there is no
-	    // child to add.
-	    if (base != NULL)
-		addChild((SoNode *) base);
+            // Add child, even if error occurred, unless there is no
+            // child to add.
+            if (base != NULL)
+                addChild((SoNode *) base);
 
-	    // Stop when we run out of valid children
-	    else
-		break;
-	}
+            // Stop when we run out of valid children
+            else
+                break;
+        }
     }
 
     return ret;

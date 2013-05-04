@@ -670,7 +670,6 @@ SoBase::removeName(SoBase *b, const char *name)
     SbPList	*list;
     SbBool	found;
     void	*t;
-    int		i;
 
     b->writeStuff.hasName = 0;
 
@@ -679,14 +678,13 @@ SoBase::removeName(SoBase *b, const char *name)
 
     // Look for name within list
     if (found) {
-	list = (SbPList *) t;
-	i    = list->find(b);
+        list = (SbPList *) t;
+        int i = list->find(b);
 
-	if (i < 0)
-	    found = FALSE;
-
-	else
-	    list->remove(i);
+        if (i < 0)
+            found = FALSE;
+        else
+            list->remove(i);
     }
 
     // And remove from objName dict:
@@ -694,9 +692,9 @@ SoBase::removeName(SoBase *b, const char *name)
 
 #ifdef DEBUG
     if (! found)
-	SoDebugError::post("SoBase::removeName",
-			   "Name \"%s\" (base %x) is not in dictionary",
-			   name, b);
+        SoDebugError::post("SoBase::removeName",
+                           "Name \"%s\" (base %x) is not in dictionary",
+                           name, b);
 #endif
 
     return;
@@ -1073,7 +1071,6 @@ SoBase::readBase(SoInput *in, SbName &className, SoBase *&base)
 {
     SbBool		gotChar;
     SbName		refName;
-    char		c;
     SbBool		ret = TRUE, flush = FALSE;
 
     // Assume NULL for now
@@ -1082,63 +1079,58 @@ SoBase::readBase(SoInput *in, SbName &className, SoBase *&base)
     // Check for definition of new node/path
     if (className == DEFINITION_KEYWORD) {
 
-	if (! in->read(refName, FALSE) || ! in->read(className, TRUE)) {
-	    SoReadError::post(in, "Premature end of file after "
-			      DEFINITION_KEYWORD);
-	    ret = FALSE;
-	}
+        if (! in->read(refName, FALSE) || ! in->read(className, TRUE)) {
+            SoReadError::post(in, "Premature end of file after %s", DEFINITION_KEYWORD);
+            ret = FALSE;
+        }
 
-	if (! refName) {
-	    SoReadError::post(in, "No name given after ", DEFINITION_KEYWORD);
-	    ret = FALSE;
-	}
+        if (! refName) {
+            SoReadError::post(in, "No name given after %s", DEFINITION_KEYWORD);
+            ret = FALSE;
+        }
 
-	if (! className) {
-	    SoReadError::post(in, "Invalid definition of %s",
-			      refName.getString());
-	    ret = FALSE;
-	}
+        if (! className) {
+            SoReadError::post(in, "Invalid definition of %s", refName.getString());
+            ret = FALSE;
+        }
     }
 
     if (ret) {
 
-	// Save whether the file is binary in
-	// case we open another file before we get to the close brace.
-	SbBool isBinary = in->isBinary();
+        // Save whether the file is binary in
+        // case we open another file before we get to the close brace.
+        SbBool isBinary = in->isBinary();
 
-	// Look for open brace.
-	if (!isBinary &&
-	    (! (gotChar = in->read(c)) || c != OPEN_BRACE)) {
-	    if (gotChar)
-		SoReadError::post(in, "Expected '%c'; got '%c'",
-				  OPEN_BRACE, c);
-	    else
-		SoReadError::post(in, "Expected '%c'; got EOF", OPEN_BRACE);
-	    ret = FALSE;
-	}
+        // Look for open brace.
+        char c;
+        if (!isBinary && (! (gotChar = in->read(c)) || c != OPEN_BRACE)) {
+            if (gotChar) {
+                SoReadError::post(in, "Expected '%c'; got '%c'",
+                                  OPEN_BRACE, c);
+            } else {
+                SoReadError::post(in, "Expected '%c'; got EOF", OPEN_BRACE);
+            }
+            ret = FALSE;
+        } else {
+            ret = readBaseInstance(in, className, refName, base);
 
-	else {
-	    ret = readBaseInstance(in, className, refName, base);
+            if (! ret)
+                flush = TRUE;
 
-	    if (! ret)
-		flush = TRUE;
-
-	    // Read closing brace.
-	    else if (! isBinary &&
-		     (! (gotChar = in->read(c)) || c != CLOSE_BRACE)) {
-		if (gotChar)
-		    SoReadError::post(in, "Expected '%c'; got '%c'",
-				      CLOSE_BRACE, c);
-		else
-		    SoReadError::post(in, "Expected '%c'; got EOF",
-				      CLOSE_BRACE);
-		ret = FALSE;
-	    }
-	}
+            // Read closing brace.
+            else if (! isBinary && (! (gotChar = in->read(c)) || c != CLOSE_BRACE)) {
+                if (gotChar) {
+                    SoReadError::post(in, "Expected '%c'; got '%c'", CLOSE_BRACE, c);
+                } else {
+                    SoReadError::post(in, "Expected '%c'; got EOF", CLOSE_BRACE);
+                }
+                ret = FALSE;
+            }
+        }
     }
 
     if (! ret && flush && ! in->isBinary())
-	flushInput(in);
+        flushInput(in);
 
     return ret;
 }

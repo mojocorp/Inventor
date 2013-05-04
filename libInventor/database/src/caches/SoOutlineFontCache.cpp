@@ -173,17 +173,17 @@ SoOutlineFontCache::~SoOutlineFontCache()
         // Free up cached outlines
         {
             std::map<wchar_t, SoFontOutline*>::iterator it;
-            for (it=outlines.begin(); it!=outlines.end(); it++) {
+            for (it=outlines.begin(); it!=outlines.end(); ++it) {
                 delete it->second;
             }
             outlines.clear();
         }
 
         std::map<wchar_t, SoGLDisplayList*>::iterator it;
-        for (it=frontList.begin(); it!=frontList.end(); it++) {
+        for (it=frontList.begin(); it!=frontList.end(); ++it) {
             it->second->unref(NULL);
         }
-        for (it=sideList.begin(); it!=sideList.end(); it++) {
+        for (it=sideList.begin(); it!=sideList.end(); ++it) {
             it->second->unref(NULL);
         }
 
@@ -194,7 +194,7 @@ SoOutlineFontCache::~SoOutlineFontCache()
         // Only destroy the font library font if no other font caches
         // are using the same font identifier:
         SbBool otherUsing = FALSE;
-        for (size_t i = 0; i < fonts.size(); i++) {
+        for (size_t i = 0; i < fonts.size(); ++i) {
             SoOutlineFontCache *t = fonts[i];
             if (t != this && t->face == face) otherUsing = TRUE;
         }

@@ -169,8 +169,6 @@ SoMField::deleteValues(int start,	// Starting index
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	lastToCopy, i;
-
     if (numToDelete < 0)
         numToDelete = getNum() - start;
 
@@ -180,8 +178,8 @@ SoMField::deleteValues(int start,	// Starting index
 
     else {
         // Copy from the end of the array to the middle
-        lastToCopy = (getNum() - 1) - numToDelete;
-        for (i = start; i <= lastToCopy; i++)
+        int lastToCopy = (getNum() - 1) - numToDelete;
+        for (int i = start; i <= lastToCopy; i++)
             copyValue(i, i + numToDelete);
 
         // Truncate the array
@@ -338,18 +336,16 @@ SoMField::readValue(SoInput *in)
 
     else {
         char	c;
-        int	curIndex = 0;
 
         // Check for multiple field values
         if (in->read(c) && c == OPEN_BRACE_CHAR) {
-
+            int curIndex = 0;
             // Check for no values: just an open and close brace
             if (in->read(c) && c == CLOSE_BRACE_CHAR)
                 ;					// Do nothing now
 
             else {
                 in->putBack(c);
-
                 while (TRUE) {
 
                     // Make some room at end if necessary
@@ -422,13 +418,10 @@ SoMField::writeValue(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
-
     if (out->isBinary()) {
         out->write(num);
         writeBinaryValues(out);
     }
-
     else {
         if (num == 1)
             write1Value(out, 0);
@@ -441,7 +434,7 @@ SoMField::writeValue(SoOutput *out) const
 
             out->incrementIndent(4);
 
-            for (i = 0; i < num; i++) {
+            for (int i = 0; i < num; i++) {
 
                 write1Value(out, i);
 

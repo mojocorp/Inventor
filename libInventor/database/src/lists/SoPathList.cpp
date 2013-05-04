@@ -68,11 +68,8 @@ SoPathList::findPath(const SoPath &path)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-    SoPath	*testPath;
-
-    for(i = 0; i < getLength(); i++) {
-        testPath = (*this)[i];
+    for(int i = 0; i < getLength(); i++) {
+        SoPath	*testPath = (*this)[i];
         if (*testPath == path)
             return i;
     }
@@ -126,12 +123,8 @@ SoPathList::uniquify()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			i, lastSame;
-    const SoPath	*p1;
-    const SoPath	*p2;
-
     // Remove duplicates from the end to minimize array shuffling
-    for (i = getLength() - 2; i >= 0; i--) {
+    for (int i = getLength() - 2; i >= 0; i--) {
 
         // Use the SoPath::findFork() method to determine the last
         // node that is on a common chain for both paths. Since the
@@ -139,10 +132,10 @@ SoPathList::uniquify()
         // end of the first path. If it is, the second one is a
         // duplicate and can be removed.
 
-        p1 = (*this)[i];
-        p2 = (*this)[i + 1];
+        const SoPath *p1 = (*this)[i];
+        const SoPath *p2 = (*this)[i + 1];
 
-        lastSame = p1->findFork(p2);
+        int lastSame = p1->findFork(p2);
 
         if (lastSame == p1->getLength() - 1)
             remove(i + 1);

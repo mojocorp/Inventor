@@ -465,7 +465,6 @@ SbLine::intersect(const SbVec3f &v0, const SbVec3f &v1, const SbVec3f &v2,
     float intersection1 = getPosition()[axis1] + t * getDirection()[axis1];
 
     SbVec2f	diff0, diff1, diff2;
-    SbBool	isInter = FALSE;
     float	alpha, beta;
 
     diff0[0] = intersection0 - v0[axis0];
@@ -479,7 +478,7 @@ SbLine::intersect(const SbVec3f &v0, const SbVec3f &v1, const SbVec3f &v2,
     // Graphics Gems to provide a little more numeric
     // stability. However, it can still miss some valid intersections
     // on very tiny triangles.
-    isInter = FALSE;
+    SbBool isInter = FALSE;
     beta = ((diff0[1] * diff1[0] - diff0[0] * diff1[1]) /
 	    (diff2[1] * diff1[0] - diff2[0] * diff1[1]));
     if (beta >= 0.0 && beta <= 1.0) {

@@ -86,20 +86,17 @@ SoEngineOutputData::SoEngineOutputData(const SoEngineOutputData *from)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			i;
-    struct SoOutputEntry *fromOutput, *toOutput;
-
     if (from == NULL)
-	return;
+        return;
 
-    for (i = 0; i < from->outputs.getLength(); i++) {
+    for (int i = 0; i < from->outputs.getLength(); i++) {
 
-	fromOutput = (struct SoOutputEntry *) from->outputs[i];
+        struct SoOutputEntry *fromOutput = (struct SoOutputEntry *) from->outputs[i];
 
-	toOutput = new struct SoOutputEntry;
-	*toOutput = *fromOutput;
+        struct SoOutputEntry *toOutput = new struct SoOutputEntry;
+        *toOutput = *fromOutput;
 
-	outputs.append((void *) toOutput);
+        outputs.append((void *) toOutput);
     }
 }
 

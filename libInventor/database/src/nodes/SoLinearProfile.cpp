@@ -224,18 +224,15 @@ SoLinearProfile::getVertices(SoState *state,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoProfileCoordinateElement	*pce;
-    int					i;
-
-    pce = SoProfileCoordinateElement::getInstance(state);
+    const SoProfileCoordinateElement *pce = SoProfileCoordinateElement::getInstance(state);
 
     nVertices = getNumPoints(index, pce->getNum());
     if (nVertices > 0) {
-	vertices  = new SbVec2f[nVertices];
-    
-	for (i = 0; i < nVertices; i++)
-	    vertices[i] = pce->get2(getIndex(i, index, pce->getNum()));
+        vertices  = new SbVec2f[nVertices];
+
+        for (int i = 0; i < nVertices; i++)
+            vertices[i] = pce->get2(getIndex(i, index, pce->getNum()));
     } else {
-	vertices = NULL;
+        vertices = NULL;
     }
 }

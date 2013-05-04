@@ -161,18 +161,15 @@ SoV1SceneKit::setCameraNumber(int camNum )
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoGroup	*grp;
-    SoSwitch    *sw;
-    SbPList     eltTypes;
-
-    grp = (SoGroup *) getAnyPart("cameraList",SoSwitch::getClassTypeId(),TRUE, FALSE, FALSE );
-    int 	numCams = grp->getNumChildren();
+    SoGroup	*grp = (SoGroup *) getAnyPart("cameraList",SoSwitch::getClassTypeId(),TRUE, FALSE, FALSE );
+    int numCams = grp->getNumChildren();
     if ( camNum == 0 || (camNum >= 0 && camNum < numCams) ) {
-	sw = (SoSwitch *) grp;
+        SoSwitch *sw = (SoSwitch *) grp;
 
-	sw->whichChild.setValue( camNum );
+        sw->whichChild.setValue( camNum );
     }
 }
+
 SoNode *
 SoV1SceneKit::createNewNode()
 {

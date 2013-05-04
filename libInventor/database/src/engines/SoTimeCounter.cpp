@@ -408,36 +408,36 @@ SoTimeCounter::evaluate()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
     // get current time value
     SbTime now = timeIn.getValue();
 
     // find out the current segment
     if (state==ON) {
 
-	// move baseTime to the start of the current cycle
-	while (now - baseTime >= period) baseTime += period;
-	while (baseTime - now > period) baseTime -= period;
+        // move baseTime to the start of the current cycle
+        while (now - baseTime >= period) baseTime += period;
+        while (baseTime - now > period) baseTime -= period;
 
-	// search for the offset
-	SbTime offset = now - baseTime;
-	for (i=nStages-1; i; i--)
-	    if (offset >= stages[i].offset)
-		break;
+        // search for the offset
+        SbTime offset = now - baseTime;
+        int i;
+        for (i=nStages-1; i; i--)
+            if (offset >= stages[i].offset)
+                break;
 
-	curStage = i;
+        curStage = i;
     }
 
 #ifdef DEVELOP
-printf("TimeCounter::evaluate state=%s now=%s baseTime=%s offset=%s "
-       "curStage=%d output=%d\n",
-       state==ON		? "ON    " :
-       state==PAUSED		? "PAUSED" : "??????",
-       now.format("%s.%i").getString(),
-       baseTime.format("%s.%i").getString(),
-       (now-baseTime).format("%s.%i").getString(),
-       curStage,
-       stages[curStage].val);
+    printf("TimeCounter::evaluate state=%s now=%s baseTime=%s offset=%s "
+           "curStage=%d output=%d\n",
+           state==ON		? "ON    " :
+                              state==PAUSED		? "PAUSED" : "??????",
+           now.format("%s.%i").getString(),
+           baseTime.format("%s.%i").getString(),
+           (now-baseTime).format("%s.%i").getString(),
+           curStage,
+           stages[curStage].val);
 #endif
     SO_ENGINE_OUTPUT(output, SoSFShort, setValue(stages[curStage].val));
     prevStage = curStage;
