@@ -4,7 +4,7 @@
 
 int putHex(FILE *fp, char val, int hexPos )
 {
-    fprintf(fp, "%02hx", (unsigned char)val);
+    fprintf(fp, "%02hx", (unsigned short)val);
     if (++hexPos >= 32) {
         fprintf(fp, "\n");
         hexPos = 0;
@@ -15,7 +15,6 @@ int putHex(FILE *fp, char val, int hexPos )
 int writeEps(FILE * fp, int w, int h, int nc, const unsigned char * bytes, float px, float py)
 {
     int numValues, hexpos, row, i;
-    unsigned char * ptr;
 
     // Write the PostScript header
     fprintf(fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
@@ -59,7 +58,7 @@ int writeEps(FILE * fp, int w, int h, int nc, const unsigned char * bytes, float
 
     for (row=h-1; row>=0; row--) {
         
-        ptr = bytes + row*w*nc;
+        const unsigned char * ptr = bytes + row*w*nc;
 
         // Write out the scanline
         for (i=0; i<numValues; i++)

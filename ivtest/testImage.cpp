@@ -17,7 +17,7 @@ TEST(testImage, jpg) {
 
     QCryptographicHash hash(QCryptographicHash::Md5);
     hash.addData((const char*)img.getConstBytes(), 3*128*128);
-    EXPECT_TRUE(hash.result().toHex() == "5e825515437455dc1d38309ec909a9b0");
+    EXPECT_TRUE(hash.result().toHex() == "82746c26e854c66effa9044b90b356cf");
 }
 
 TEST(testImage, rgb) {

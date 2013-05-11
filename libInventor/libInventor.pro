@@ -53,4 +53,4 @@ include(database/database.pri)
 include(interaction/interaction.pri)
 include(nodekits/nodekits.pri)
 
-LIBS += -L$$OUT_PWD/../build -limage -ljpeg -lfreetype
+LIBS += -L$$OUT_PWD/../build -limage -lfreetype

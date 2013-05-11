@@ -50,10 +50,11 @@ public:
     /// Loads an image from the file with the given filename.
     /// Format | Description                      | Support
     /// -------|----------------------------------|-----------
-    /// RGB	   | Silicon Graphics Image (SGI)     | Read
-    /// GIF	   | Graphic Interchange Format       | Read
-    /// JPG	   | Joint Photographic Experts Group | Read
-    /// JPEG   | Joint Photographic Experts Group | Read
+    /// RGB    | Silicon Graphics Image (SGI)     | Read
+    /// GIF    | Graphic Interchange Format       | Read
+    /// JPG    | Joint Photographic Experts Group | Read
+    /// PNG    | Portable Network Graphics        | Read
+    /// TGA    | Truevision Targa                 | Read
     bool load(const SbString & filename);
 
     void setValue(const SbVec2s & size, Format fmt, const unsigned char *bytes);
