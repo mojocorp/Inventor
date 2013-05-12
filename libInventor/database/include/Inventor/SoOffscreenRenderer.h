@@ -157,16 +157,16 @@ public:
     /// Pixels are stored in RGBA order and are packed without any padding
     /// between pixels or scanlines.  The buffer is allocated by the offscreen
     /// renderer class and the space is deleted when the instance is destructed.
-    const unsigned char * getBuffer() const;
+    SB_DECL_DEPRECATED const unsigned char * getBuffer() const;
 
     /// Writes the buffer as a .rgb file to the given file pointer.
-    SbBool writeToRGB( FILE *fp ) const;
+    SB_DECL_DEPRECATED SbBool writeToRGB( FILE *fp ) const;
 
     /// Writes the buffer as encapsulated PostScript. If a print size is not
     /// given, the size of the image in the buffer is adjusted so it is the
     /// same as the apparent size of the viewport region on the current device.
-    SbBool writeToPostScript( FILE *fp ) const;
-    SbBool writeToPostScript( FILE *fp, const SbVec2f &printSize ) const;
+    SB_DECL_DEPRECATED SbBool writeToPostScript( FILE *fp ) const;
+    SB_DECL_DEPRECATED SbBool writeToPostScript( FILE *fp, const SbVec2f &printSize ) const;
 
 private:
     Components          comps;
