@@ -59,8 +59,6 @@
 #ifndef  _SO_OFFSCREEN_RENDERER_
 #define  _SO_OFFSCREEN_RENDERER_
 
-#include <stdio.h>
-#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbColor.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SbVec2s.h>
