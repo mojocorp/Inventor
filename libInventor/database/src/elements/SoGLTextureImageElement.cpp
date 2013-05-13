@@ -313,8 +313,28 @@ SoGLTextureImageElement::sendTex(SoState *state)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Not default
     
     // Format in memory
-    int format         = image.getFormat();
-    int internalFormat = image.getFormat();
+    int format = GL_INVALID_VALUE;
+    switch(image.getFormat())
+    {
+    case SbImage::Format_Luminance:
+        format = GL_LUMINANCE;
+        break;
+    case SbImage::Format_Luminance_Alpha:
+        format = GL_LUMINANCE_ALPHA;
+        break;
+    case SbImage::Format_RGB24:
+        format = GL_RGB;
+        break;
+    case SbImage::Format_RGBA32:
+        format = GL_RGBA;
+        break;
+    default:
+        SoDebugError::post("SoGLTextureImageElement::sendTex",
+                           "Invalid image format");
+        break;
+    }
+
+    int internalFormat = format;
 
     SbBool buildList = !SoCacheElement::anyOpen(state);
     if (buildList) {

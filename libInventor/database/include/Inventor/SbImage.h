@@ -1,8 +1,6 @@
 #ifndef _SB_IMAGE_
 #define _SB_IMAGE_
 
-#include <Inventor/misc/SoGL.h>
-
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SbVec2s.h>
@@ -14,10 +12,10 @@ public:
     enum Format
     {
         Format_Invalid,
-        Format_Luminance       = GL_LUMINANCE,
-        Format_Luminance_Alpha = GL_LUMINANCE_ALPHA,
-        Format_RGB24           = GL_RGB,
-        Format_RGBA32          = GL_RGBA
+        Format_Luminance,
+        Format_Luminance_Alpha,
+        Format_RGB24,
+        Format_RGBA32
     };
 
     SbImage();
