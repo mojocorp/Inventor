@@ -72,8 +72,6 @@
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-#include <Inventor/misc/SoGL.h>   // For GLenum declaration
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoAsciiText
@@ -196,7 +194,7 @@ class INVENTOR_API SoAsciiText : public SoShape {
     void generateFront(const SbString &string, float width);
     
     // Static callbacks invoked by the glu tesselation code:
-    static void beginCB(GLenum primType);
+    static void beginCB(unsigned int primType);
     static void endCB();
     static void vtxCB(void *vertex);
     

@@ -61,8 +61,6 @@
 #include <Inventor/SbBox3f.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-#include <Inventor/misc/SoGL.h>
-
 class SoCube;
 class SoDetail;
 class SoFaceDetail;
@@ -71,6 +69,7 @@ class SoPickedPoint;
 class SoPointDetail;
 class SoPrimitiveVertex;
 class SoState;
+class GLUtesselator;
 
 /// Abstract base class for all shape nodes.
 /// \ingroup Nodes
@@ -305,10 +304,10 @@ class INVENTOR_API SoShape : public SoNode {
     void		allocateVerts();
 
     // Static methods called by the GLU tesselation routines
-    static void beginCB(GLenum primType);
+    static void beginCB(unsigned int primType);
     static void vtxCB(void *vertex);
     static void endCB();
-    static void errorCB(GLenum err);
+    static void errorCB(unsigned int err);
 };
 
 #endif /* _SO_SHAPE_ */

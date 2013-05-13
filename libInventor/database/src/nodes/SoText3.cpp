@@ -954,7 +954,7 @@ SoText3::renderSideTris(int nPoints, const SbVec3f *p1, const SbVec3f *n1,
 // Use: static, private
 
 void
-SoText3::beginCB(GLenum primType)
+SoText3::beginCB(unsigned int primType)
 //
 ////////////////////////////////////////////////////////////////////////
 {

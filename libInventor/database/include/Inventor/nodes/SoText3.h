@@ -63,8 +63,6 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-#include <Inventor/misc/SoGL.h>   // For GLenum declaration
-
 class SoOutlineFontCache;
 class SoPrimitiveVertex;
 class SoTextureCoordinateElement;
@@ -243,7 +241,7 @@ class INVENTOR_API SoText3 : public SoShape {
 		const float *tTexCoords);
 
     // Static callbacks invoked by the glu tesselation code:
-    static void beginCB(GLenum primType);
+    static void beginCB(unsigned int primType);
     static void endCB();
     static void vtxCB(void *vertex);
     

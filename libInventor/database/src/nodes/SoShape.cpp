@@ -933,7 +933,7 @@ SoShape::endShape()
 // Use: static, private
 
 void
-SoShape::beginCB(GLenum primType)
+SoShape::beginCB(unsigned int primType)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -992,7 +992,7 @@ SoShape::endCB()
 // Use: static, private
 
 void
-SoShape::errorCB(GLenum err)
+SoShape::errorCB(unsigned int err)
 //
 ////////////////////////////////////////////////////////////////////////
 {

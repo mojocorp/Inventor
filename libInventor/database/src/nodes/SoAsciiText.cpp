@@ -592,7 +592,7 @@ SoAsciiText::generateFront(const SbString &string, float width)
 // Use: static, private
 
 void
-SoAsciiText::beginCB(GLenum primType)
+SoAsciiText::beginCB(unsigned int primType)
 //
 ////////////////////////////////////////////////////////////////////////
 {
