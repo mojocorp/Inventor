@@ -337,11 +337,10 @@ SoInteractionKit::setAnyPartAsDefault(const SbName &partName,
 
 		// Cast to a full path:
 		    SoFullPath *fp = (SoFullPath *) testP;
-		// The part is the tail of the full path:
-                    SoNode *tester;
 		// Owner is first nodekit above the tail:
 		    for (int ind = 1; ind < fp->getLength(); ind ++ ) {
-			tester = fp->getNodeFromTail(ind);
+            // The part is the tail of the full path:
+            SoNode *tester = fp->getNodeFromTail(ind);
 			if ( tester->isOfType(SoBaseKit::getClassTypeId()) ) {
 			    owner = (SoBaseKit *) tester;
 			    break;
@@ -1192,14 +1191,12 @@ SoInteractionKit::readInstance( SoInput *in, unsigned short flags )
     // separator node.  These can stay.
 
     // Run through every name in the surrogatePartNameList.
-	char   *theName;
-	SoNode *thePart;
 	for ( int i = 0; i < surrogatePartNameList->getLength(); i++ ) {
 
-	    theName = (char *) (*surrogatePartNameList)[i];
+        const char *theName = (char *) (*surrogatePartNameList)[i];
 
 	    // Check if a part exists for it. 
-		thePart = SO_CHECK_ANY_PART( this, theName, SoNode );
+        SoNode *thePart = SO_CHECK_ANY_PART( this, theName, SoNode );
 
 	    // If the part is NULL or an empty group or an empty separator, 
 	    // the surrogate path can stay. Otherwise, remove it.

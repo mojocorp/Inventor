@@ -617,12 +617,11 @@ SoCamera::getJitterSample(int numPasses, int curPass, SbVec2f &samplePoint)
     // ones not in the kernel
     else {
         static float *	extraSamples = NULL;
-        static int	numExtraSamples = 0;
 
         // Do the allocation (if necessary) only on the first pass, to
         // avoid unnecessary tests
         if (curPass == 1) {
-
+            const int numExtraSamples = 0;
             int	numExtraNeeded = numPasses - 66;
 
             if (numExtraSamples < numExtraNeeded) {
