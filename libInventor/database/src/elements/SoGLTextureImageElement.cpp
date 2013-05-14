@@ -255,6 +255,60 @@ nearestPowerOf2(GLuint value)
     }
 }
 
+static GLint getGLModel(int model)
+{
+    switch(model)
+    {
+    case SoTextureImageElement::MODULATE: return GL_MODULATE;
+    case SoTextureImageElement::DECAL:    return GL_DECAL;
+    case SoTextureImageElement::BLEND:    return GL_BLEND;
+    case SoTextureImageElement::REPLACE:  return GL_REPLACE;
+    default: break;
+    }
+#ifdef DEBUG
+    SoDebugError::post("SoGLTextureImageElement::getGLModel",
+                       "Invalid Texture Model");
+#endif
+    return GL_INVALID_VALUE;
+}
+
+static GLint getGLWrap(int wrap)
+{
+    switch(wrap)
+    {
+    case SoTextureImageElement::REPEAT:          return GL_REPEAT;
+    case SoTextureImageElement::CLAMP:           return GL_CLAMP;
+    case SoTextureImageElement::CLAMP_TO_BORDER: return GL_CLAMP_TO_BORDER;
+    case SoTextureImageElement::CLAMP_TO_EDGE:   return GL_CLAMP_TO_EDGE;
+    case SoTextureImageElement::MIRRORED_REPEAT: return GL_MIRRORED_REPEAT;
+    default: break;
+    }
+#ifdef DEBUG
+    SoDebugError::post("SoGLTextureImageElement::getGLWrap",
+                       "Invalid Texture Wrap");
+#endif
+    return GL_INVALID_VALUE;
+}
+
+static GLint getGLFilter(int filter)
+{
+    switch(filter)
+    {
+    case SoTextureImageElement::NEAREST:                return GL_NEAREST;
+    case SoTextureImageElement::LINEAR:                 return GL_LINEAR;
+    case SoTextureImageElement::NEAREST_MIPMAP_NEAREST: return GL_NEAREST_MIPMAP_NEAREST;
+    case SoTextureImageElement::NEAREST_MIPMAP_LINEAR:  return GL_NEAREST_MIPMAP_LINEAR;
+    case SoTextureImageElement::LINEAR_MIPMAP_NEAREST:  return GL_LINEAR_MIPMAP_NEAREST;
+    case SoTextureImageElement::LINEAR_MIPMAP_LINEAR:   return GL_LINEAR_MIPMAP_LINEAR;
+    default: break;
+    }
+#ifdef DEBUG
+    SoDebugError::post("SoGLTextureImageElement::getGLFilter",
+                       "Invalid Texture Filter");
+#endif
+    return GL_INVALID_VALUE;
+}
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -270,8 +324,8 @@ SoGLTextureImageElement::sendTexEnv(SoState *)
 ////////////////////////////////////////////////////////////////////////
 {
     // This state isn't stored in a texture object:
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, model);
-    if (model == GL_BLEND) {
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, getGLModel(model));
+    if (getGLModel(model) == GL_BLEND) {
         glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, blendColor.getValue());
     }
 }
@@ -348,12 +402,12 @@ SoGLTextureImageElement::sendTex(SoState *state)
         glBindTexture(GL_TEXTURE_2D, 0);
 
     // These need to go inside the display list or texture object
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, getGLFilter(magFilter));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, getGLFilter(minFilter));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, getGLWrap(wrapS));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, getGLWrap(wrapT));
     
-    bool needMipMaps = (minFilter >= GL_NEAREST_MIPMAP_NEAREST) && (minFilter <= GL_LINEAR_MIPMAP_LINEAR);
+    bool needMipMaps = (getGLFilter(minFilter) >= GL_NEAREST_MIPMAP_NEAREST) && (getGLFilter(minFilter) <= GL_LINEAR_MIPMAP_LINEAR);
 
     std::vector<GLubyte> level0;
     if (newSize != size) {

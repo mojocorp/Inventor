@@ -64,8 +64,6 @@
 #include <Inventor/sensors/SoFieldSensor.h>
 #include <Inventor/SbImage.h>
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <float.h>
 
 SO_NODE_SOURCE(SoTexture2);
@@ -297,20 +295,20 @@ SoTexture2::getMinFilter(float texQuality) const
     // Helper table; mapping from textureQuality to OpenGL filter type:
     //
     struct qualityFilterTable {
-        float quality;
-        GLint filter;
+        float  quality;
+        Filter filter;
     };
 
     //
     // Defaults for RealityEngine (mip-mapped by default):
     //
     static qualityFilterTable mipmap_minQFTable[] = {
-        { 0.1f, GL_NEAREST},
-        { 0.5f, GL_LINEAR},
-        { 0.7f, GL_NEAREST_MIPMAP_NEAREST},
-        { 0.8f, GL_NEAREST_MIPMAP_LINEAR},
-        { 0.9f, GL_LINEAR_MIPMAP_NEAREST},
-        { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR},
+        { 0.1f, NEAREST},
+        { 0.5f, LINEAR},
+        { 0.7f, NEAREST_MIPMAP_NEAREST},
+        { 0.8f, NEAREST_MIPMAP_LINEAR},
+        { 0.9f, LINEAR_MIPMAP_NEAREST},
+        { FLT_MAX, LINEAR_MIPMAP_LINEAR},
     };
 
     if (minFilter.getValue() != AUTO)
@@ -328,7 +326,7 @@ SoTexture2::getMagFilter(float texQuality) const
     if (magFilter.getValue() != AUTO)
         return magFilter.getValue();
 
-    return (texQuality < 0.5 ? GL_NEAREST : GL_LINEAR);
+    return (texQuality < 0.5 ? NEAREST : LINEAR);
 }
 ////////////////////////////////////////////////////////////////////////
 //

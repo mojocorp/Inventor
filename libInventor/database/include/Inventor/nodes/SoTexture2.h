@@ -61,8 +61,7 @@
 #include <Inventor/fields/SoSFImage.h>
 #include <Inventor/fields/SoSFString.h>
 #include <Inventor/nodes/SoSubNode.h>
-
-#include <Inventor/misc/SoGL.h>
+#include <Inventor/elements/SoTextureImageElement.h>
 
 class SoSensor;
 class SoFieldSensor;
@@ -125,31 +124,31 @@ class INVENTOR_API SoTexture2 : public SoNode {
   public:
     /// Texture model
     enum Model {
-        MODULATE    = GL_MODULATE,  ///< The texture color is multiplied by the surface color
-        DECAL       = GL_DECAL,     ///< The texture color replaces the surface color
-        BLEND       = GL_BLEND,     ///< Blends between the surface color and a specified blend color
-        REPLACE     = GL_REPLACE    ///< The texture color replaces the surface color (OpenGL >= 1.1)
+        MODULATE    = SoTextureImageElement::MODULATE,  ///< The texture color is multiplied by the surface color
+        DECAL       = SoTextureImageElement::DECAL,     ///< The texture color replaces the surface color
+        BLEND       = SoTextureImageElement::BLEND,     ///< Blends between the surface color and a specified blend color
+        REPLACE     = SoTextureImageElement::REPLACE    ///< The texture color replaces the surface color (OpenGL >= 1.1)
     };
 
     /// Texture wrap type
     enum Wrap {
-        REPEAT          = GL_REPEAT,          ///< Repeats texture outside 0-1 texture coordinate range
-        CLAMP           = GL_CLAMP,           ///< Clamps texture coordinates to lie within 0-1 range
-        CLAMP_TO_BORDER = GL_CLAMP_TO_BORDER, ///< (OpenGL >= 1.3)
-        CLAMP_TO_EDGE   = GL_CLAMP_TO_EDGE,   ///< (OpenGL >= 1.2)
-        MIRRORED_REPEAT = GL_MIRRORED_REPEAT  ///< (OpenGL >= 1.4)
+        REPEAT          = SoTextureImageElement::REPEAT,          ///< Repeats texture outside 0-1 texture coordinate range
+        CLAMP           = SoTextureImageElement::CLAMP,           ///< Clamps texture coordinates to lie within 0-1 range
+        CLAMP_TO_BORDER = SoTextureImageElement::CLAMP_TO_BORDER, ///< (OpenGL >= 1.3)
+        CLAMP_TO_EDGE   = SoTextureImageElement::CLAMP_TO_EDGE,   ///< (OpenGL >= 1.2)
+        MIRRORED_REPEAT = SoTextureImageElement::MIRRORED_REPEAT  ///< (OpenGL >= 1.4)
     };
 
     /// Texture filter
     enum Filter
     {
-        AUTO  = 0, ///< Default. The texture filter depend on SoComplexity::textureQuality.
-        NEAREST = GL_NEAREST,
-        LINEAR = GL_LINEAR,
-        NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
-        NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
-        LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
-        LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
+        AUTO                   = SoTextureImageElement::AUTO, ///< Default. The texture filter depend on SoComplexity::textureQuality.
+        NEAREST                = SoTextureImageElement::NEAREST,
+        LINEAR                 = SoTextureImageElement::LINEAR,
+        NEAREST_MIPMAP_NEAREST = SoTextureImageElement::NEAREST_MIPMAP_NEAREST,
+        NEAREST_MIPMAP_LINEAR  = SoTextureImageElement::NEAREST_MIPMAP_LINEAR,
+        LINEAR_MIPMAP_NEAREST  = SoTextureImageElement::LINEAR_MIPMAP_NEAREST,
+        LINEAR_MIPMAP_LINEAR   = SoTextureImageElement::LINEAR_MIPMAP_LINEAR
     };
 
     // Fields.
