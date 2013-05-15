@@ -195,36 +195,6 @@ SoGLTextureImageElement::set(SoState *state, SoNode *node,
     return NULL;
 }
 
-// Helper table; for integers 1-15, returns the high-bit (0-3):
-static signed char powTable[0x10] = {
-    -1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3
-};
-
-//
-// Helper routine; given an integer, return next higher power of 2.
-// This is convoluted, but pretty fast (about 1.6 times faster than
-// a naive bit-shifting algorithm).
-//
-static inline int
-nextPowerOf2(int num)
-{
-#ifdef DEBUG
-    if (num <= 0) {
-        SoDebugError::post("SoGLTextureImageElement::nextPowerOf2",
-                           "size <= 0");
-        return 0;
-    }
-#endif
-    int t, bits = 0;
-    int mask = 0xF;
-    // Find closest to 4-bits:
-    for (t = num-1; (t & (~mask)) != 0; bits += 4, t = t>>4) ;
-
-    // Find high-bit:
-    bits += powTable[t];
-    return bits + 1;
-}
-
 //
 // Helper routine stolen from the gluBuild2DMipMaps code:
 //
