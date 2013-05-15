@@ -13,7 +13,7 @@ linux-g++ {
     CONFIG += x11
 }
 
-SUBDIRS += 3rdparty libimage libInventor ivtest libSoQt apps
+SUBDIRS += 3rdparty libInventor ivtest libSoQt apps
 
 x11: SUBDIRS += libSoXt
 

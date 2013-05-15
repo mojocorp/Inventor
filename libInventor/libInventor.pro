@@ -41,10 +41,6 @@ macx {
     INCLUDEPATH += ../3rdparty/freetype/include
 }
 
-DEPENDPATH += ../libimage
-
-INCLUDEPATH += ../libimage
-
 INCLUDEPATH+= database/include \
               interaction/include \
               nodekits/include
@@ -53,4 +49,4 @@ include(database/database.pri)
 include(interaction/interaction.pri)
 include(nodekits/nodekits.pri)
 
-LIBS += -L$$OUT_PWD/../build -limage -lfreetype
+LIBS += -L$$OUT_PWD/../build -lfreetype

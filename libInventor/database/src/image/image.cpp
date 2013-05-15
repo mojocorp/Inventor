@@ -1,6 +1,5 @@
-#include "image.h"
-
-#include "image-sgi.h"
+#include "image/image.h"
+#include "image/image-sgi.h"
 
 extern "C" unsigned char *stbi_load(char const *filename,     int *x, int *y, int *comp, int req_comp);
 extern "C" void stbi_image_free(void *retval_from_stbi_load);
@@ -9,7 +8,7 @@ extern "C" void stbi_image_free(void *retval_from_stbi_load);
 #include <string>
 #include <vector>
 
-bool ReadSGIImage(const std::string & filename, int &w, int &h, int &nc, unsigned char *&bytes);
+bool ReadSGIImage(const SbString & filename, int &w, int &h, int &nc, unsigned char *&bytes);
 
 void stbi_flip_copy(int w, int h, int comp, const unsigned char *from, unsigned char *to)
 {
@@ -25,9 +24,9 @@ void stbi_flip_copy(int w, int h, int comp, const unsigned char *from, unsigned 
    }
 }
 
-bool ReadImage(const char* filename, int &w, int &h, int &nc, unsigned char *&bytes)
+bool ReadImage(const SbString & filename, int &w, int &h, int &nc, unsigned char *&bytes)
 {
-    unsigned char *data = stbi_load(filename, &w, &h, &nc, 0);
+    unsigned char *data = stbi_load(filename.getString(), &w, &h, &nc, 0);
 
     if (data) {
         bytes = new unsigned char[w*h*nc];
@@ -39,9 +38,9 @@ bool ReadImage(const char* filename, int &w, int &h, int &nc, unsigned char *&by
     return ReadSGIImage(filename, w, h, nc, bytes);
 }
 
-bool ReadSGIImage(const std::string & filename, int &w, int &h, int &nc, unsigned char *&bytes)
+bool ReadSGIImage(const SbString & filename, int &w, int &h, int &nc, unsigned char *&bytes)
 {
-    sgi_t * sgip = sgiOpen(filename.c_str(), SGI_READ, 0, 0, 0, 0, 0);
+    sgi_t * sgip = sgiOpen(filename.getString(), SGI_READ, 0, 0, 0, 0, 0);
     if (!sgip)
         return false;
 

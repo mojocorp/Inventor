@@ -1,4 +1,4 @@
-#include "image-eps.h"
+#include "image/image-eps.h"
 
 #include <stdio.h>
 

@@ -31,7 +31,7 @@
  *   write_rle16() - Write 16-bit RLE data.
  */
 
-#include "image-sgi.h"
+#include "image/image-sgi.h"
 
 
 /*

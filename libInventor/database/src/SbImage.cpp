@@ -1,7 +1,7 @@
 #include <Inventor/SbImage.h>
 #include <Inventor/SoInput.h>
 
-#include <image.h>
+#include "image/image.h"
 #include <stdlib.h>
 
 class SbImageRef : public SbRefCounted
@@ -80,7 +80,7 @@ bool SbImageRef::read(const SbString & filename)
     int w,h,nc;
     w = h = 0;
 
-    if (ReadImage(filename.getString(), w, h, nc, bytes)) {
+    if (ReadImage(filename, w, h, nc, bytes)) {
         size = SbVec3s(w,h,1);
         switch(nc){
         case 1: format = SbImage::Format_Luminance; break;

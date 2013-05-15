@@ -29,7 +29,8 @@ DEPENDPATH += database \
               database/src/sensors \
               database/src/upgraders
 
-INCLUDEPATH += database/src/engines \
+INCLUDEPATH += database/src \
+               database/src/engines \
                database/src/opengl \
                database/include/Inventor/misc
 
@@ -460,6 +461,9 @@ PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
            database/src/engines/SoEngineUtil.h \
            database/src/engines/SoFieldConverters.h \
            database/src/fields/SoGlobalField.h \
+           database/src/image/image.h \
+           database/src/image/image-sgi.h \
+           database/src/image/image-eps.h \
            database/src/opengl/SbGLContext.h \
            database/src/opengl/SbGLFramebufferObject.h \
            database/src/upgraders/SoUpgraders.h \
@@ -775,6 +779,10 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/fields/SoSFVec2f.cpp \
            database/src/fields/SoSFVec3f.cpp \
            database/src/fields/SoSFVec4f.cpp \
+           database/src/image/image.cpp \
+           database/src/image/image-sgilib.c \
+           database/src/image/image-epslib.c \
+           database/src/image/stb_image.c \
            database/src/misc/SoGLContext.cpp \
            database/src/nodes/SoAnnotation.cpp \
            database/src/nodes/SoArray.cpp \

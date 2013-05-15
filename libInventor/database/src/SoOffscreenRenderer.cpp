@@ -65,8 +65,8 @@
 #include "SbGLFramebufferObject.h"
 #include "SbGLContext.h"
 
-#include <image-sgi.h>
-#include <image-eps.h>
+#include "image/image-sgi.h"
+#include "image/image-eps.h"
 
 ////////////////////////////////////////////////////////////////////////
 //
