@@ -1585,7 +1585,7 @@ SoInput::putBack(const char *string)
 // Use: public
 
 bool
-SoInput::findFile(const SbString & fileName, SbString &fullName) const
+SoInput::findFile(const SbString & fileName, SbString &fullName)
 //
 ////////////////////////////////////////////////////////////////////////
 {

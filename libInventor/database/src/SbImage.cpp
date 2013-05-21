@@ -285,14 +285,10 @@ SbImage::load(const SbString & fname)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoInput in;
-    if (!in.openFile(fname.getString(), TRUE)) {
+    SbString filename;
+    if (!SoInput::findFile(fname, filename)) {
         return false;
     }
-
-    SbString filename = in.getCurFileName();
-
-    in.closeFile();
 
     detach();
 

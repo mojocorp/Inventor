@@ -264,6 +264,8 @@ SoINTERNAL public:
     // Looks up a reference, returning the base pointer or NULL
     SoBase * findReference(const SbName &name) const;
 
+    // Looks for named file. Returns false if not found.
+    static bool findFile(const SbString & fileName, SbString &fullName);
 private:
     static SbStringList *directories; // Directory search path.
     SbPList  files;  // Stack of SoInputFiles (depth >=1)
@@ -283,10 +285,6 @@ private:
     void  setIVVersion(float version) {
         curFile->ivVersion = version;
     }
-
-    // Looks for named file. Returns false if not found.
-    bool findFile(const SbString & fileName,
-                     SbString &fullName) const;
 
     // Initializes reading from file
     bool  initFile(const SbString & fileName,
