@@ -72,39 +72,6 @@ class SoBase;
 class SoDB;
 class SbStringList;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Structure: SoInputFile (internal)
-//
-//  This structure holds info about an opened file for use in the SoInput
-//  class.
-//
-//  One of the items is a dictionary that correlates reference names
-//  in files to nodes and paths (SoBase instances).
-//
-//////////////////////////////////////////////////////////////////////////////
-
-SoINTERNAL struct SoInputFile {
-    SbString  name;  // Name of file
-    SbString  fullName; // Name of file with full path
-    SbFile fp;  // File pointer
-    void  *buffer; // Buffer to read from (or NULL)
-    char  *curBuf; // Current location in buffer
-    size_t  bufSize; // Buffer size
-    int   lineNum; // Number of line currently reading
-    SbBool  binary;  // TRUE if file has binary data
-    SbBool  readHeader; // TRUE if header was checked for A/B
-    SbBool  headerOk; // TRUE if header was read ok
-    SbDict  *refDict; // Node/path reference dictionary
-    SbBool  borrowedDict; // TRUE if dict from another SoInput
-    float  ivVersion; // Version if standard Inventor file;
-    SbString  headerString; // The header string of the input file
-    SoDBHeaderCB *postReadCB; // CB to be called after reading file
-    void  *CBData; // User data to pass to the postReadCB
-
-    SoInputFile();   // Too complex for inlining
-};
-
 /// Used to read Inventor data files.
 /// \ingroup General
 /// This class is used by the <tt>SoDB</tt> reading routines when reading
@@ -191,10 +158,7 @@ public:
     /// Returns the Inventor file version of the file being read (e.g. 2.1).
     /// If the file has a header registered through \c SoDB::registerHeader(),
     /// the returned version is the Inventor version registered with the header.
-    float getIVVersion() {
-        return curFile->ivVersion;
-    }
-
+    float getIVVersion() const;
 
 SoEXTENDER public:
     // Returns whether current file/buffer being read is binary
@@ -282,9 +246,7 @@ private:
     SbBool              backupBufUsed;  // True if backupBuf contains data
 
     // Set the Inventor version number of the current file
-    void  setIVVersion(float version) {
-        curFile->ivVersion = version;
-    }
+    void setIVVersion(float version);
 
     // Initializes reading from file
     bool  initFile(const SbString & fileName,
@@ -296,9 +258,7 @@ private:
     SbBool  checkHeader();
 
     // Returns TRUE if reading from memory buffer rather than file
-    SbBool  fromBuffer() const {
-        return (curFile->buffer != NULL);
-    }
+    SbBool  fromBuffer() const;
 
     // Skips over white space in input. Pops file if EOF is hit.
     // Returns FALSE on error.
@@ -308,10 +268,7 @@ private:
     SbBool  popFile();
 
     // Returns number of bytes left in current buffer
-    size_t  freeBytesInBuf() const {
-        return (curFile->bufSize -
-                (curFile->curBuf - (char *) curFile->buffer));
-    }
+    size_t  freeBytesInBuf() const;
 
     // Reads integer, unsigned integer, or floating-point number.
     // Returns FALSE on EOF or error
@@ -347,8 +304,6 @@ private:
                                            register size_t len);
     void                convertDoubleArray( char *from, register double *to,
                                             register size_t len);
-    friend class SoBase;
-    friend class SoDB;
 };
 
 #endif /* _SO_INPUT_ */

@@ -800,8 +800,8 @@ SoBase::read(SoInput *in, SoBase *&base, SoType expectedType)
     // Read header: name and opening brace. If not found, not an error -
     // just nothing to return.
     if (! in->read(name, TRUE)) {
-	base = NULL;
-	ret = in->curFile->headerOk;
+        base = NULL;
+        ret = in->isValidFile();
     }
 
     // If name is empty, treat this as EOF. This happens, for example,

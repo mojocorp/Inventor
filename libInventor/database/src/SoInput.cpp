@@ -79,6 +79,39 @@ SbStringList *SoInput::directories = NULL;
 #	define ENV_SEPARATOR ": \t"
 #endif
 
+//////////////////////////////////////////////////////////////////////////////
+//
+//  Structure: SoInputFile (internal)
+//
+//  This structure holds info about an opened file for use in the SoInput
+//  class.
+//
+//  One of the items is a dictionary that correlates reference names
+//  in files to nodes and paths (SoBase instances).
+//
+//////////////////////////////////////////////////////////////////////////////
+
+SoINTERNAL struct SoInputFile {
+    SbString  name;  // Name of file
+    SbString  fullName; // Name of file with full path
+    SbFile fp;  // File pointer
+    void  *buffer; // Buffer to read from (or NULL)
+    char  *curBuf; // Current location in buffer
+    size_t  bufSize; // Buffer size
+    int   lineNum; // Number of line currently reading
+    SbBool  binary;  // TRUE if file has binary data
+    SbBool  readHeader; // TRUE if header was checked for A/B
+    SbBool  headerOk; // TRUE if header was read ok
+    SbDict  *refDict; // Node/path reference dictionary
+    SbBool  borrowedDict; // TRUE if dict from another SoInput
+    float  ivVersion; // Version if standard Inventor file;
+    SbString  headerString; // The header string of the input file
+    SoDBHeaderCB *postReadCB; // CB to be called after reading file
+    void  *CBData; // User data to pass to the postReadCB
+
+    SoInputFile();   // Too complex for inlining
+};
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -659,6 +692,38 @@ SoInput::getHeader()
         (void) checkHeader();
 
     return curFile->headerString;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Returns the Inventor file version of the file being read (e.g. 2.1).
+//    If the file has a header registered through \c SoDB::registerHeader(),
+//    the returned version is the Inventor version registered with the header.
+//
+// Use: public
+
+float
+SoInput::getIVVersion() const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return curFile->ivVersion;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Set the Inventor version number of the current file
+//
+// Use: private
+
+void
+SoInput::setIVVersion(float version)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    curFile->ivVersion = version;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1754,6 +1819,21 @@ SoInput::checkHeader()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Returns TRUE if reading from memory buffer rather than file
+//
+// Use: private
+
+SbBool
+SoInput::fromBuffer() const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return (curFile->buffer != NULL);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Skips over white space (blanks, tabs, newlines) and Inventor
 //    comments (from COMMENT_CHAR to end of line). Keeps current line
 //    number up-to-date. Returns FALSE on error.
@@ -1879,6 +1959,22 @@ SoInput::popFile()
     curFile = (struct SoInputFile *) files[depth - 2];
 
     return TRUE;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Returns number of bytes left in current buffer
+//
+// Use: private
+
+size_t
+SoInput::freeBytesInBuf() const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return (curFile->bufSize -
+            (curFile->curBuf - (char *) curFile->buffer));
 }
 
 ////////////////////////////////////////////////////////////////////////
