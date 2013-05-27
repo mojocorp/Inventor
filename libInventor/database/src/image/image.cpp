@@ -8,7 +8,7 @@ extern "C" void stbi_image_free(void *retval_from_stbi_load);
 #include <string>
 #include <vector>
 
-bool ReadSGIImage(const SbString & filename, int &w, int &h, int &nc, unsigned char *&bytes);
+bool ReadSGIImage(const SbString & filename, SbImage & image);
 
 void stbi_flip_copy(int w, int h, int comp, const unsigned char *from, unsigned char *to)
 {
@@ -24,21 +24,30 @@ void stbi_flip_copy(int w, int h, int comp, const unsigned char *from, unsigned 
    }
 }
 
-bool ReadImage(const SbString & filename, int &w, int &h, int &nc, unsigned char *&bytes)
+bool ReadImage(const SbString & filename, SbImage & image)
 {
+    int w,h,nc;
     unsigned char *data = stbi_load(filename.getString(), &w, &h, &nc, 0);
 
     if (data) {
-        bytes = new unsigned char[w*h*nc];
-        stbi_flip_copy(w, h, nc, data, bytes);
+        SbImage::Format format = SbImage::Format_Invalid;
+        switch(nc){
+        case 1: format = SbImage::Format_Luminance; break;
+        case 2: format = SbImage::Format_Luminance_Alpha; break;
+        case 3: format = SbImage::Format_RGB24; break;
+        case 4: format = SbImage::Format_RGBA32; break;
+        default: break;
+        }
+        image.setValue(SbVec2s(w,h), format, w*h*nc, NULL);
+        stbi_flip_copy(w, h, nc, data, image.getBytes());
         stbi_image_free(data);
         return true;
     }
 
-    return ReadSGIImage(filename, w, h, nc, bytes);
+    return ReadSGIImage(filename, image);
 }
 
-bool ReadSGIImage(const SbString & filename, int &w, int &h, int &nc, unsigned char *&bytes)
+bool ReadSGIImage(const SbString & filename, SbImage & image)
 {
     sgi_t * sgip = sgiOpen(filename.getString(), SGI_READ, 0, 0, 0, 0, 0);
     if (!sgip)
@@ -52,11 +61,22 @@ bool ReadSGIImage(const SbString & filename, int &w, int &h, int &nc, unsigned c
       return false;
     }
 
-    w = sgip->xsize;
-    h = sgip->ysize;
-    nc = sgip->zsize;
+    int w = sgip->xsize;
+    int h = sgip->ysize;
+    int nc = sgip->zsize;
 
-    bytes = new unsigned char[w*h*nc];
+    SbImage::Format format = SbImage::Format_Invalid;
+    switch(nc){
+    case 1: format = SbImage::Format_Luminance; break;
+    case 2: format = SbImage::Format_Luminance_Alpha; break;
+    case 3: format = SbImage::Format_RGB24; break;
+    case 4: format = SbImage::Format_RGBA32; break;
+    default: break;
+    }
+
+    image.setValue(SbVec2s(w,h), format, w*h*nc, NULL);
+
+    unsigned char *bytes = image.getBytes();
 
     std::vector<unsigned short> rbuf(w);
     bool readOK = true;

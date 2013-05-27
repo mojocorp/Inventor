@@ -100,23 +100,26 @@ SbGLFramebufferObject::release()
 SbImage
 SbGLFramebufferObject::toImage(SbImage::Format fmt) const
 {
-    SbImage img(m_size, fmt, NULL);
-
     // Format in memory
     GLenum format = GL_INVALID_VALUE;
+    size_t numBytes = 0;
     switch(fmt)
     {
     case SbImage::Format_Luminance:
         format = GL_LUMINANCE;
+        numBytes = m_size[0] * m_size[1];
         break;
     case SbImage::Format_Luminance_Alpha:
         format = GL_LUMINANCE_ALPHA;
+        numBytes = m_size[0] * m_size[1] * 2;
         break;
     case SbImage::Format_RGB24:
         format = GL_RGB;
+        numBytes = m_size[0] * m_size[1] * 3;
         break;
     case SbImage::Format_RGBA32:
         format = GL_RGBA;
+        numBytes = m_size[0] * m_size[1] * 4;
         break;
     default:
         SoDebugError::post("SbGLFramebufferObject::toImage",
@@ -124,10 +127,12 @@ SbGLFramebufferObject::toImage(SbImage::Format fmt) const
         break;
     }
 
+    SbImage img(m_size, fmt, numBytes, NULL);
+
     glPushAttrib( GL_PIXEL_MODE_BIT );
     glReadBuffer( GL_COLOR_ATTACHMENT0_EXT);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glReadPixels(0, 0, m_size[0], m_size[1], (GLenum)format, GL_UNSIGNED_BYTE, (GLvoid *)img.getBytes());
+    glReadPixels(0, 0, m_size[0], m_size[1], format, GL_UNSIGNED_BYTE, (GLvoid *)img.getBytes());
     glPopAttrib();
 
     return img;

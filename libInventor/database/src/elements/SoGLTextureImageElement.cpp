@@ -320,7 +320,6 @@ SoGLTextureImageElement::sendTex(SoState *state)
     }
 
     const SbVec3s & size = image.getSize();
-    int numComponents = image.getNumComponents();
 
     SbVec3s newSize = size;
     if ( !GLEW_ARB_texture_non_power_of_two ) {
@@ -381,7 +380,7 @@ SoGLTextureImageElement::sendTex(SoState *state)
 
     std::vector<GLubyte> level0;
     if (newSize != size) {
-        level0.resize(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
+        level0.resize(image.getNumBytes()*sizeof(GLubyte));
 
         // Use gluScaleImage (which does linear interpolation or box
         // filtering) if using a linear interpolation magnification

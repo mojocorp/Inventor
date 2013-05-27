@@ -20,8 +20,8 @@ public:
 
     SbImage();
     SbImage(const SbImage&);
-    SbImage(const SbVec2s &size, Format fmt, const unsigned char *bytes);
-    SbImage(const SbVec3s &size, Format fmt, const unsigned char *bytes);
+    SbImage(const SbVec2s &size, Format fmt, size_t numBytes, const unsigned char *bytes);
+    SbImage(const SbVec3s &size, Format fmt, size_t numBytes, const unsigned char *bytes);
     SbImage(const SbString & filename);
 
     /// Destructor.
@@ -32,6 +32,9 @@ public:
 
     /// Return the internal format.
     Format getFormat() const;
+
+    /// Returns the number of unsigned bytes the image contains.
+    size_t getNumBytes() const;
 
     /// Returns the number of components.
     int getNumComponents() const;
@@ -55,8 +58,8 @@ public:
     /// TGA    | Truevision Targa                 | Read
     bool load(const SbString & filename);
 
-    void setValue(const SbVec2s & size, Format fmt, const unsigned char *bytes);
-    void setValue(const SbVec3s & size, Format fmt, const unsigned char *bytes);
+    void setValue(const SbVec2s & size, Format fmt, size_t numBytes, const unsigned char *bytes);
+    void setValue(const SbVec3s & size, Format fmt, size_t numBytes, const unsigned char *bytes);
 
     /// Assigns a shallow copy of the given image to this image and returns a reference to this image.
     const SbImage & operator =(const SbImage &other);

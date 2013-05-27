@@ -2,30 +2,30 @@
 #include <Inventor/SoInput.h>
 
 #include "image/image.h"
-#include <stdlib.h>
+#include <vector>
 
 class SbImageRef : public SbRefCounted
 {
 public:
     SbImageRef();
     SbImageRef(const SbImageRef * other);
-    SbImageRef(const SbVec3s & size, SbImage::Format format, const unsigned char * bytes = NULL);
+    SbImageRef(const SbVec3s & size, SbImage::Format format, size_t numBytes, const unsigned char * bytes = NULL);
 
-    void setValue(const SbVec3s & size, SbImage::Format format, const unsigned char * bytes);
+    void setValue(const SbVec3s & size, SbImage::Format format, size_t numBytes, const unsigned char * bytes);
     bool isNull() const;
     int getNumComponents() const;
+    size_t getNumBytes() const;
+    unsigned char* getBytes();
     bool hasAlphaChannel() const;
-    bool read(const SbString & filename);
 
     bool operator ==(const SbImageRef &other) const;
-    void dispose();
 
-    SbVec3s  size;          // Width and height of image
-    SbImage::Format format;          // Image format
-    unsigned char * bytes;  // Array of pixels
+    SbVec3s  size;                    // Width and height of image
+    SbImage::Format format;           // Image format
 private:
-
     ~SbImageRef();
+
+     std::vector<unsigned char> bytes; // Array of pixels
 };
 
 SbImageRef::SbImageRef()
@@ -35,63 +35,37 @@ SbImageRef::SbImageRef()
 }
 
 SbImageRef::SbImageRef(const SbImageRef * other)
-   : size(0,0,0), format(SbImage::Format_Invalid), bytes(0)
+   : size(0,0,0), format(SbImage::Format_Invalid)
 {
-    setValue(other->size, other->format, other->bytes);
+    setValue(other->size, other->format, other->bytes.size(), &other->bytes[0]);
 }
 
-SbImageRef::SbImageRef(const SbVec3s &_size, SbImage::Format _format, const unsigned char *_bytes)
-    : size(0,0,0), format(SbImage::Format_Invalid), bytes(0)
+SbImageRef::SbImageRef(const SbVec3s &_size, SbImage::Format _format, size_t _numBytes, const unsigned char *_bytes)
+    : size(0,0,0), format(SbImage::Format_Invalid)
 {
-    setValue(_size, _format, _bytes);
+    setValue(_size, _format, _numBytes, _bytes);
 }
 
 SbImageRef::~SbImageRef()
 {
-    dispose();
+
 }
 
 void SbImageRef::setValue(const SbVec3s &_size,
-                                   SbImage::Format _format,
-                                   const unsigned char *_bytes)
+                          SbImage::Format _format,
+                          size_t _numBytes,
+                          const unsigned char *_bytes)
 {
-    if (bytes && (bytes == _bytes)) {
+    if (!bytes.empty() && (&bytes[0] == _bytes)) {
         return;
     }
 
-    dispose();
-
     size = _size;
     format = _format;
+    bytes.resize(_numBytes);
 
-    size_t numBytes = size[0]*size[1]*getNumComponents();
-
-    if (numBytes != 0) {
-        bytes = new unsigned char[numBytes];
-        if (_bytes)
-            memcpy(bytes, _bytes, numBytes);
-    }
-}
-
-bool SbImageRef::read(const SbString & filename)
-{
-    dispose();
-
-    int w,h,nc;
-    w = h = 0;
-
-    if (ReadImage(filename, w, h, nc, bytes)) {
-        size = SbVec3s(w,h,1);
-        switch(nc){
-        case 1: format = SbImage::Format_Luminance; break;
-        case 2: format = SbImage::Format_Luminance_Alpha; break;
-        case 3: format = SbImage::Format_RGB24; break;
-        case 4: format = SbImage::Format_RGBA32; break;
-        default: break;
-        }
-        return true;
-    }
-    return false;
+    if (_bytes)
+        memcpy(&bytes[0], _bytes, bytes.size());
 }
 
 bool SbImageRef::isNull() const
@@ -110,6 +84,16 @@ int SbImageRef::getNumComponents() const
     }
 }
 
+size_t SbImageRef::getNumBytes() const
+{
+    return bytes.size();
+}
+
+unsigned char* SbImageRef::getBytes()
+{
+    return (bytes.size() ? &bytes[0] : NULL);
+}
+
 bool SbImageRef::hasAlphaChannel() const
 {
     return (format == SbImage::Format_Luminance_Alpha || format == SbImage::Format_RGBA32);
@@ -121,18 +105,10 @@ bool SbImageRef::operator ==(const SbImageRef &other) const
     if (size != other.size || format != other.format)
         return false;
 
-    if (memcmp(bytes, other.bytes, size[0] * size[1] * getNumComponents()) != 0)
+    if (memcmp(&bytes[0], &other.bytes[0], bytes.size()) != 0)
         return false;
 
     return true;
-}
-
-void SbImageRef::dispose()
-{
-    size.setValue(0,0,0);
-    format = SbImage::Format_Invalid;
-    delete [] bytes;
-    bytes = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -156,14 +132,14 @@ SbImage::SbImage(const SbImage & other)
 
 }
 
-SbImage::SbImage(const SbVec2s &size, Format fmt, const unsigned char *bytes)
-    : d(new SbImageRef(SbVec3s(size[0], size[1], 1), fmt, bytes))
+SbImage::SbImage(const SbVec2s &size, Format fmt, size_t numBytes, const unsigned char *bytes)
+    : d(new SbImageRef(SbVec3s(size[0], size[1], 1), fmt, numBytes, bytes))
 {
 
 }
 
-SbImage::SbImage(const SbVec3s &size, Format fmt, const unsigned char *bytes)
-    : d(new SbImageRef(size, fmt, bytes))
+SbImage::SbImage(const SbVec3s &size, Format fmt, size_t numBytes, const unsigned char *bytes)
+    : d(new SbImageRef(size, fmt, numBytes, bytes))
 {
 
 }
@@ -226,6 +202,22 @@ SbImage::getFormat() const
 //
 // Use: public
 
+size_t
+SbImage::getNumBytes() const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return d ? d->getNumBytes() : 0;
+}
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//
+//
+// Use: public
+
 int
 SbImage::getNumComponents() const
 //
@@ -246,7 +238,7 @@ SbImage::getConstBytes() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return d ? d->bytes : 0;
+    return d ? d->getBytes() : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -263,7 +255,7 @@ SbImage::getBytes()
 {
     detach();
 
-    return d ? d->bytes : 0;
+    return d ? d->getBytes() : 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -307,7 +299,7 @@ SbImage::load(const SbString & fname)
     if (!d)
         d = new SbImageRef;
 
-    return d->read(filename);
+    return ReadImage(filename, *this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -320,6 +312,7 @@ SbImage::load(const SbString & fname)
 void
 SbImage::setValue(const SbVec2s &size,
                   Format fmt,
+                  size_t numBytes,
                   const unsigned char *bytes)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -329,7 +322,7 @@ SbImage::setValue(const SbVec2s &size,
     if (!d)
         d = new SbImageRef;
 
-    d->setValue(SbVec3s(size[0], size[1], 1), fmt, bytes);
+    d->setValue(SbVec3s(size[0], size[1], 1), fmt, numBytes, bytes);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -342,6 +335,7 @@ SbImage::setValue(const SbVec2s &size,
 void
 SbImage::setValue(const SbVec3s &size,
                   Format fmt,
+                  size_t numBytes,
                   const unsigned char *bytes)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -351,7 +345,7 @@ SbImage::setValue(const SbVec3s &size,
     if (!d)
         d = new SbImageRef;
 
-    d->setValue(size, fmt, bytes);
+    d->setValue(size, fmt, numBytes, bytes);
 }
 
 ////////////////////////////////////////////////////////////////////////

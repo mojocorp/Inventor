@@ -2,8 +2,9 @@
 #define LIBIMAGE_H
 
 #include <Inventor/SbString.h>
+#include <Inventor/SbImage.h>
 
 /// Read JPG, GIF and SGI only
-bool ReadImage(const SbString & filename, int &w, int &h, int &nc, unsigned char *&bytes);
+bool ReadImage(const SbString & filename, SbImage & image);
 
 #endif // LIBIMAGE

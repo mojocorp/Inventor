@@ -108,7 +108,7 @@ SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b, CopyPolicy
         break;
     }
 
-    setValue(SbImage(s, fmt, b));
+    setValue(SbImage(s, fmt, s[0]*s[1]*nc, b));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -193,10 +193,10 @@ SoSFImage::readValue(SoInput *in)
                "Unsupported number of components %d, should be 1,2,3 or 4",
                numComponents);
 #endif
-    break;
+    return FALSE;
     }
 
-    SbImage image(size, fmt, NULL);
+    SbImage image(size, fmt, size[0]*size[1]*numComponents, NULL);
     unsigned char *bytes = image.getBytes();
 
     int byte = 0;
