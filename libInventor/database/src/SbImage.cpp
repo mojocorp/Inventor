@@ -11,38 +11,50 @@ public:
     SbImageRef(const SbImageRef * other);
     SbImageRef(const SbVec3s & size, SbImage::Format format, size_t numBytes, const unsigned char * bytes = NULL);
 
+    const SbVec3s & getSize() const;
+    bool setActiveMipmap(int level);
     void setValue(const SbVec3s & size, SbImage::Format format, size_t numBytes, const unsigned char * bytes);
     bool isNull() const;
     int getNumComponents() const;
     size_t getNumBytes() const;
     unsigned char* getBytes();
+    size_t getNumMipmaps() const;
     bool hasAlphaChannel() const;
+    bool isCompressed() const;
 
     bool operator ==(const SbImageRef &other) const;
 
-    SbVec3s  size;                    // Width and height of image
     SbImage::Format format;           // Image format
-private:
-    ~SbImageRef();
 
-     std::vector<unsigned char> bytes; // Array of pixels
+private:
+    struct SubImage {
+        SbVec3s  size;                     // Width and height of image
+        std::vector<unsigned char> bytes;  // Array of pixels
+    };
+    size_t level;
+
+    std::vector<SubImage> mipmaps;
+
+    ~SbImageRef();
 };
 
 SbImageRef::SbImageRef()
-    : size(0,0,0), format(SbImage::Format_Invalid), bytes(0)
+    : format(SbImage::Format_Invalid), level(0)
 {
-
+    setActiveMipmap(0);
 }
 
 SbImageRef::SbImageRef(const SbImageRef * other)
-   : size(0,0,0), format(SbImage::Format_Invalid)
+   : format(SbImage::Format_Invalid), level(0)
 {
-    setValue(other->size, other->format, other->bytes.size(), &other->bytes[0]);
+    setActiveMipmap(0);
+    setValue(other->mipmaps[level].size, other->format, other->mipmaps[level].bytes.size(), &other->mipmaps[level].bytes[0]);
 }
 
 SbImageRef::SbImageRef(const SbVec3s &_size, SbImage::Format _format, size_t _numBytes, const unsigned char *_bytes)
-    : size(0,0,0), format(SbImage::Format_Invalid)
+    : format(SbImage::Format_Invalid), level(0)
 {
+    setActiveMipmap(0);
     setValue(_size, _format, _numBytes, _bytes);
 }
 
@@ -51,26 +63,49 @@ SbImageRef::~SbImageRef()
 
 }
 
+const SbVec3s &
+SbImageRef::getSize() const
+{
+    return mipmaps[level].size;
+}
+
+size_t
+SbImageRef::getNumMipmaps() const
+{
+    return mipmaps.size();
+}
+
+bool
+SbImageRef::setActiveMipmap(int _level)
+{
+    level = _level;
+    if (mipmaps.size() < level + 1) {
+        mipmaps.resize(level + 1);
+    }
+    return true;
+}
+
 void SbImageRef::setValue(const SbVec3s &_size,
                           SbImage::Format _format,
                           size_t _numBytes,
                           const unsigned char *_bytes)
 {
-    if (!bytes.empty() && (&bytes[0] == _bytes)) {
+    if (mipmaps[level].bytes.size() && (&mipmaps[level].bytes[0] == _bytes)) {
         return;
     }
 
-    size = _size;
     format = _format;
-    bytes.resize(_numBytes);
+    mipmaps[level].size = _size;
+    mipmaps[level].bytes.resize(_numBytes);
 
-    if (_bytes)
-        memcpy(&bytes[0], _bytes, bytes.size());
+    if (_bytes) {
+        memcpy(&mipmaps[level].bytes[0], _bytes, mipmaps[level].bytes.size());
+    }
 }
 
 bool SbImageRef::isNull() const
 {
-    return (size[0] == 0 || size[1] == 0 || format == SbImage::Format_Invalid);
+    return (mipmaps[level].size[0] == 0 || mipmaps[level].size[1] == 0 || format == SbImage::Format_Invalid);
 }
 
 int SbImageRef::getNumComponents() const
@@ -80,34 +115,67 @@ int SbImageRef::getNumComponents() const
     case SbImage::Format_Luminance_Alpha: return 2;
     case SbImage::Format_RGB24:           return 3;
     case SbImage::Format_RGBA32:          return 4;
-    default:                     return 0;
+    case SbImage::Format_RGB_S3TC_DXT1:   return 3;
+    case SbImage::Format_RGBA_S3TC_DXT1:  return 4;
+    case SbImage::Format_RGBA_S3TC_DXT3:  return 4;
+    case SbImage::Format_RGBA_S3TC_DXT5:  return 4;
+    default:                              return 0;
     }
+}
+
+unsigned char * SbImageRef::getBytes()
+{
+    return (mipmaps[level].bytes.size() ? &mipmaps[level].bytes[0] : NULL);
 }
 
 size_t SbImageRef::getNumBytes() const
 {
-    return bytes.size();
-}
-
-unsigned char* SbImageRef::getBytes()
-{
-    return (bytes.size() ? &bytes[0] : NULL);
+    return mipmaps[level].bytes.size();
 }
 
 bool SbImageRef::hasAlphaChannel() const
 {
-    return (format == SbImage::Format_Luminance_Alpha || format == SbImage::Format_RGBA32);
+    switch(format) {
+    case SbImage::Format_Luminance:       return false;
+    case SbImage::Format_Luminance_Alpha: return true;
+    case SbImage::Format_RGB24:           return false;
+    case SbImage::Format_RGBA32:          return true;
+    case SbImage::Format_RGB_S3TC_DXT1:   return false;
+    case SbImage::Format_RGBA_S3TC_DXT1:  return true;
+    case SbImage::Format_RGBA_S3TC_DXT3:  return true;
+    case SbImage::Format_RGBA_S3TC_DXT5:  return true;
+    default:                              return false;
+    }
+}
+
+bool SbImageRef::isCompressed() const
+{
+    switch(format) {
+    case SbImage::Format_Luminance:       return false;
+    case SbImage::Format_Luminance_Alpha: return false;
+    case SbImage::Format_RGB24:           return false;
+    case SbImage::Format_RGBA32:          return false;
+    case SbImage::Format_RGB_S3TC_DXT1:   return true;
+    case SbImage::Format_RGBA_S3TC_DXT1:  return true;
+    case SbImage::Format_RGBA_S3TC_DXT3:  return true;
+    case SbImage::Format_RGBA_S3TC_DXT5:  return true;
+    default:                              return false;
+    }
 }
 
 bool SbImageRef::operator ==(const SbImageRef &other) const
 {
     // Check easy stuff first
-    if (size != other.size || format != other.format)
+    if (mipmaps.size() != other.mipmaps.size() || format != other.format)
         return false;
 
-    if (memcmp(&bytes[0], &other.bytes[0], bytes.size()) != 0)
-        return false;
+    for (size_t i=0; i<mipmaps.size(); i++) {
+        if (mipmaps[i].size != other.mipmaps[i].size)
+            return false;
 
+        if (memcmp(&mipmaps[i].bytes[0], &other.mipmaps[i].bytes[0], mipmaps[i].bytes.size()) != 0)
+            return false;
+    }
     return true;
 }
 
@@ -177,7 +245,7 @@ SbImage::getSize() const
 ////////////////////////////////////////////////////////////////////////
 {
     static SbVec3s dummy(0, 0, 0);
-    return d ? d->size : dummy;
+    return d ? d->getSize() : dummy;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -224,6 +292,18 @@ SbImage::getNumComponents() const
 ////////////////////////////////////////////////////////////////////////
 {
     return d ? d->getNumComponents() : 0;
+}
+
+size_t
+SbImage::getNumMipmaps() const
+{
+    return d ? d->getNumMipmaps() : 0;
+}
+
+bool
+SbImage::setActiveMipmap(unsigned int level)
+{
+    return d ? d->setActiveMipmap(level) : false;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -389,6 +469,21 @@ SbImage::hasAlphaChannel() const
 ////////////////////////////////////////////////////////////////////////
 {
     return d ? d->hasAlphaChannel() : false;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//
+//
+// Use: public
+
+bool
+SbImage::isCompressed() const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return d ? d->isCompressed() : false;
 }
 
 ////////////////////////////////////////////////////////////////////////

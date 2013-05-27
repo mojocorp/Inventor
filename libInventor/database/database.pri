@@ -464,6 +464,7 @@ PRIVATE_HEADERS += database/include/Inventor/caches/SoBitmapFontCache.h \
            database/src/image/image.h \
            database/src/image/image-sgi.h \
            database/src/image/image-eps.h \
+           database/src/image/dds.h \
            database/src/opengl/SbGLContext.h \
            database/src/opengl/SbGLFramebufferObject.h \
            database/src/upgraders/SoUpgraders.h \
@@ -783,6 +784,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/image/image-sgilib.c \
            database/src/image/image-epslib.c \
            database/src/image/stb_image.c \
+           database/src/image/dds.cpp \
            database/src/misc/SoGLContext.cpp \
            database/src/nodes/SoAnnotation.cpp \
            database/src/nodes/SoArray.cpp \

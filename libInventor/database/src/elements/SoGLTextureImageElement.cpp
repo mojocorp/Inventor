@@ -313,30 +313,20 @@ SoGLTextureImageElement::sendTex(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    image.setActiveMipmap(0);
+    if (image.isNull())
+        return;
+
     if (list) {
         // use display list
         list->call(state);
         return;
     }
 
-    const SbVec3s & size = image.getSize();
-
-    SbVec3s newSize = size;
-    if ( !GLEW_ARB_texture_non_power_of_two ) {
-        // Scale the image to closest power of 2 smaller than maximum
-        // texture size:
-        GLint maxsize = 0;
-        glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxsize);
-
-        // Use nearest power of 2:
-        newSize[0] = size[0] > maxsize ? maxsize : 1 << nearestPowerOf2(size[0]);
-        newSize[1] = size[1] > maxsize ? maxsize : 1 << nearestPowerOf2(size[1]);
-    }
-
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Not default
     
     // Format in memory
-    int format = GL_INVALID_VALUE;
+    GLenum format = GL_INVALID_VALUE;
     switch(image.getFormat())
     {
     case SbImage::Format_Luminance:
@@ -350,6 +340,18 @@ SoGLTextureImageElement::sendTex(SoState *state)
         break;
     case SbImage::Format_RGBA32:
         format = GL_RGBA;
+        break;
+    case SbImage::Format_RGB_S3TC_DXT1:
+        format = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+        break;
+    case SbImage::Format_RGBA_S3TC_DXT1:
+        format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+        break;
+    case SbImage::Format_RGBA_S3TC_DXT3:
+        format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+        break;
+    case SbImage::Format_RGBA_S3TC_DXT5:
+        format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
         break;
     default:
         SoDebugError::post("SoGLTextureImageElement::sendTex",
@@ -375,33 +377,68 @@ SoGLTextureImageElement::sendTex(SoState *state)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, getGLFilter(minFilter));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, getGLWrap(wrapS));
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, getGLWrap(wrapT));
-    
+
     bool needMipMaps = (getGLFilter(minFilter) >= GL_NEAREST_MIPMAP_NEAREST) && (getGLFilter(minFilter) <= GL_LINEAR_MIPMAP_LINEAR);
 
-    std::vector<GLubyte> level0;
-    if (newSize != size) {
-        level0.resize(image.getNumBytes()*sizeof(GLubyte));
+    if (!image.isCompressed()) {
 
-        // Use gluScaleImage (which does linear interpolation or box
-        // filtering) if using a linear interpolation magnification
-        // filter:
-        gluScaleImage(
-                    (GLenum)format, size[0], size[1], GL_UNSIGNED_BYTE, image.getConstBytes(),
-                    newSize[0], newSize[1], GL_UNSIGNED_BYTE, &level0[0]);
-    }
-    
-    if(needMipMaps && GLEW_VERSION_1_4 && !GLEW_VERSION_3_0) {
-        glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-    }
+        const SbVec3s & size = image.getSize();
 
-    // Send level-0 mipmap:
-    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, newSize[0], newSize[1],
-                 0, (GLenum)format, GL_UNSIGNED_BYTE,
-                 level0.empty() ? image.getConstBytes() : &level0[0]);
-    
-    // If necessary, send other mipmaps:
-    if (needMipMaps && GLEW_VERSION_3_0) {
-        glGenerateMipmap(GL_TEXTURE_2D);
+        SbVec3s newSize = size;
+        if ( !GLEW_ARB_texture_non_power_of_two ) {
+            // Scale the image to closest power of 2 smaller than maximum
+            // texture size:
+            GLint maxsize = 0;
+            glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxsize);
+
+            // Use nearest power of 2:
+            newSize[0] = size[0] > maxsize ? maxsize : 1 << nearestPowerOf2(size[0]);
+            newSize[1] = size[1] > maxsize ? maxsize : 1 << nearestPowerOf2(size[1]);
+        }
+
+        std::vector<GLubyte> level0;
+        if (newSize != size) {
+            level0.resize(image.getNumBytes()*sizeof(GLubyte));
+
+            // Use gluScaleImage (which does linear interpolation or box
+            // filtering) if using a linear interpolation magnification
+            // filter:
+            gluScaleImage(format, size[0], size[1], GL_UNSIGNED_BYTE, image.getConstBytes(),
+                          newSize[0], newSize[1], GL_UNSIGNED_BYTE, &level0[0]);
+        }
+
+        if(needMipMaps && GLEW_VERSION_1_4 && !GLEW_VERSION_3_0) {
+            glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+        }
+
+        // Send level-0 mipmap:
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, newSize[0], newSize[1],
+                     0, format, GL_UNSIGNED_BYTE,
+                     level0.empty() ? image.getConstBytes() : &level0[0]);
+
+        // If necessary, send other mipmaps:
+        if (needMipMaps && GLEW_VERSION_3_0) {
+            glGenerateMipmap(GL_TEXTURE_2D);
+        }
+    } else {
+        if (GLEW_EXT_texture_compression_s3tc) {
+            GLint numLevels = needMipMaps ? (GLint)image.getNumMipmaps() : 1;
+            for (GLint level=0; level<numLevels; level++)
+            {
+                image.setActiveMipmap(level);
+
+                const SbVec3s & mipSize = image.getSize();
+
+                glCompressedTexImage2D (GL_TEXTURE_2D, level, format,
+                                        mipSize[0], mipSize[1], 0,
+                                        (GLsizei)image.getNumBytes(), image.getConstBytes());
+            }
+            image.setActiveMipmap(0);
+        } else {
+            SoDebugError::post("SoGLTextureImageElement::sendTex",
+                               "compressed texture is not supported "
+                               "by your OpenGL implementation");
+        }
     }
 
     if (buildList) {

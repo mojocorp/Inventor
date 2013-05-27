@@ -5,6 +5,14 @@
 
 #include <QCryptographicHash>
 
+TEST(testImage, formats) {
+    ASSERT_EQ(0, SbImage::Format_Invalid);
+    ASSERT_EQ(1, SbImage::Format_Luminance);
+    ASSERT_EQ(2, SbImage::Format_Luminance_Alpha);
+    ASSERT_EQ(3, SbImage::Format_RGB24);
+    ASSERT_EQ(4, SbImage::Format_RGBA32);
+}
+
 TEST(testImage, jpg) {
     SbString filename = getenv("OIVHOME") + SbString("/data/textures/brick.jpg");
 

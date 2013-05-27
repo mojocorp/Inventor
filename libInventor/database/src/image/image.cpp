@@ -1,5 +1,6 @@
 #include "image/image.h"
 #include "image/image-sgi.h"
+#include "image/dds.h"
 
 extern "C" unsigned char *stbi_load(char const *filename,     int *x, int *y, int *comp, int req_comp);
 extern "C" void stbi_image_free(void *retval_from_stbi_load);
@@ -10,7 +11,7 @@ extern "C" void stbi_image_free(void *retval_from_stbi_load);
 
 bool ReadSGIImage(const SbString & filename, SbImage & image);
 
-void stbi_flip_copy(int w, int h, int comp, const unsigned char *from, unsigned char *to)
+static void stbi_flip_copy(int w, int h, int comp, const unsigned char *from, unsigned char *to)
 {
    int stride = w * comp;
    const unsigned char *p1 = from;
@@ -26,6 +27,8 @@ void stbi_flip_copy(int w, int h, int comp, const unsigned char *from, unsigned 
 
 bool ReadImage(const SbString & filename, SbImage & image)
 {
+    image.setActiveMipmap(0);
+
     int w,h,nc;
     unsigned char *data = stbi_load(filename.getString(), &w, &h, &nc, 0);
 
@@ -44,7 +47,13 @@ bool ReadImage(const SbString & filename, SbImage & image)
         return true;
     }
 
-    return ReadSGIImage(filename, image);
+    if (ReadSGIImage(filename, image))
+        return true;
+
+    if (ReadDDSImage(filename, image))
+        return true;
+
+    return false;
 }
 
 bool ReadSGIImage(const SbString & filename, SbImage & image)
