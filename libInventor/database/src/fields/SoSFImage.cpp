@@ -180,6 +180,10 @@ SoSFImage::readValue(SoInput *in)
         !in->read(numComponents))
         return FALSE;
 
+    // Ignore empty images.
+    if (size[0] == 0 || size[1] == 0 || numComponents == 0)
+        return TRUE;
+
     SbImage::Format fmt = SbImage::Format_Invalid;
 
     switch(numComponents) {
