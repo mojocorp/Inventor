@@ -2,6 +2,13 @@
 
 #include <Inventor/SbMatrix.h>
 
+TEST(SbMatrix, Size) {
+    //  WARNING!!!!!  Transcription of arrays of this class assume that the
+    //                only data stored in this class are 16 consecutive values.
+    //                Do not add any extra data members!!!
+    EXPECT_EQ(16*sizeof(float), sizeof(SbMatrix));
+}
+
 TEST(SbMatrix, constructors) {
     SbMatrix m( 1.0f, 0.0f, 0.0f, 0.0f,
                 0.0f, 1.0f, 0.0f, 0.0f,
