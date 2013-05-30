@@ -135,10 +135,10 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoCoordinateElement.h \
            database/include/Inventor/elements/SoCreaseAngleElement.h \
            database/include/Inventor/elements/SoDepthBufferElement.h \
-           database/include/Inventor/elements/SoGLDepthBufferElement.h \
            database/include/Inventor/elements/SoDrawStyleElement.h \
            database/include/Inventor/elements/SoElement.h \
            database/include/Inventor/elements/SoElements.h \
+           database/include/Inventor/elements/SoEnvironmentElement.h \
            database/include/Inventor/elements/SoFloatElement.h \
            database/include/Inventor/elements/SoFocalDistanceElement.h \
            database/include/Inventor/elements/SoFontNameElement.h \
@@ -146,7 +146,9 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoGLCacheContextElement.h \
            database/include/Inventor/elements/SoGLClipPlaneElement.h \
            database/include/Inventor/elements/SoGLCoordinateElement.h \
+           database/include/Inventor/elements/SoGLDepthBufferElement.h \
            database/include/Inventor/elements/SoGLDrawStyleElement.h \
+           database/include/Inventor/elements/SoGLEnvironmentElement.h \
            database/include/Inventor/elements/SoGLLazyElement.h \
            database/include/Inventor/elements/SoGLLightIdElement.h \
            database/include/Inventor/elements/SoGLLinePatternElement.h \
@@ -623,6 +625,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/elements/SoDrawStyleElement.cpp \
            database/src/elements/SoElement.cpp \
            database/src/elements/SoElementInit.cpp \
+           database/src/elements/SoEnvironmentElement.cpp \
            database/src/elements/SoFloatElement.cpp \
            database/src/elements/SoFocalDistanceElement.cpp \
            database/src/elements/SoFontNameElement.cpp \
@@ -632,6 +635,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/elements/SoGLClipPlaneElement.cpp \
            database/src/elements/SoGLCoordinateElement.cpp \
            database/src/elements/SoGLDrawStyleElement.cpp \
+           database/src/elements/SoGLEnvironmentElement.cpp \
            database/src/elements/SoGLLazyElement.cpp \
            database/src/elements/SoGLLightIdElement.cpp \
            database/src/elements/SoGLLinePatternElement.cpp \

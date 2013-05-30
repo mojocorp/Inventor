@@ -51,11 +51,12 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/misc/SoGL.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoLightAttenuationElement.h>
 #include <Inventor/elements/SoViewVolumeElement.h>
+#include <Inventor/elements/SoEnvironmentElement.h>
+#include <Inventor/elements/SoGLEnvironmentElement.h>
 #include <Inventor/nodes/SoEnvironment.h>
 
 SO_NODE_SOURCE(SoEnvironment);
@@ -119,8 +120,41 @@ SoEnvironment::initClass()
     SO__NODE_INIT_CLASS(SoEnvironment, "Environment", SoNode);
 
     // Enable elements for appropriate actions:
-
+    SO_ENABLE(SoGLRenderAction, SoLightAttenuationElement);
     SO_ENABLE(SoCallbackAction, SoLightAttenuationElement);
+    SO_ENABLE(SoGLRenderAction, SoGLEnvironmentElement);
+    SO_ENABLE(SoCallbackAction, SoEnvironmentElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Typical action method.
+//
+// Use: extender
+
+void
+SoEnvironment::doAction(SoAction *action)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    float visibility = fogVisibility.getValue();
+
+    // Check for visibility of 0, which is the default value - this
+    // means that we should use the far plane of the current view
+    // volume as the visibility
+    if (visibility == 0.0) {
+        const SbViewVolume &vol = SoViewVolumeElement::get(action->getState());
+        visibility = vol.getNearDist() + vol.getDepth();
+    }
+
+    SoEnvironmentElement::set(action->getState(), this,
+                              ambientIntensity.getValue(),
+                              ambientColor.getValue(),
+                              attenuation.getValue(),
+                              (int32_t)fogType.getValue(),
+                              fogColor.getValue(),
+                              visibility);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -135,79 +169,7 @@ SoEnvironment::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	v3;
-    SbVec4f	v4;
-
-    //////////////////////
-    //
-    // Set up ambient lighting.
-    //
-
-    // RGBA ambient intensity is the product of the color and
-    // intensity, with 1.0 alpha
-    v3 = ambientIntensity.getValue() * ambientColor.getValue();
-    v4.setValue(v3[0], v3[1], v3[2], 1.0);
-    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, v4.getValue());
-
-    //////////////////////
-    //
-    // Set up light attenuation. This is stored in the
-    // SoLightAttenuationElement, which is then accessed by subsequent
-    // light sources.
-    //
-
-    SoLightAttenuationElement::set(action->getState(), this,
-				   attenuation.getValue());
-
-    //////////////////////
-    //
-    // Set up fog.
-    //
-    FogType	type = (FogType) fogType.getValue();
-
-    if (type == NONE)
-	glDisable(GL_FOG);
-
-    else {
-	float visibility = fogVisibility.getValue();
-
-	// Check for visibility of 0, which is the default value - this
-	// means that we should use the far plane of the current view
-	// volume as the visibility
-	if (visibility == 0.0) {
-	    const SbViewVolume &vol =
-		SoViewVolumeElement::get(action->getState());
-	    visibility = vol.getNearDist() + vol.getDepth();
-	}
-
-	glEnable(GL_FOG);
-	glFogfv(GL_FOG_COLOR, fogColor.getValue().getValue());
-
-	switch (type) {
-
-	  case NONE:
-	    // Can't get here!
-	    break;
-
-	  case HAZE:
-	    // Set up linear ramp based on visibility
-	    glFogf(GL_FOG_MODE,		GL_LINEAR);
-	    glFogf(GL_FOG_START,	0.0);
-	    glFogf(GL_FOG_END,		visibility);
-	    break;
-	    
-	  case FOG:
-	    glEnable(GL_FOG);
-	    glFogf(GL_FOG_MODE,		GL_EXP);
-	    glFogf(GL_FOG_DENSITY,	computeDensity(visibility, FALSE));
-	    break;
-	    
-	  case SMOKE:
-	    glFogf(GL_FOG_MODE,		GL_EXP2);
-	    glFogf(GL_FOG_DENSITY,	computeDensity(visibility, TRUE));
-	    break;
-	}
-    }
+    SoEnvironment::doAction(action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -221,39 +183,5 @@ SoEnvironment::callback(SoCallbackAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoLightAttenuationElement::set(action->getState(), this,
-                                   attenuation.getValue());
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Computes fog density based on visibility.
-//
-// Use: private
-
-float
-SoEnvironment::computeDensity(float visibility, SbBool squared)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    //
-    // We want nearly total opacity at a distance of "visibility" from
-    // the eye. The exponential GL fog function is:
-    //
-    //		f = e ** (-density * distance)
-    //
-    // (the exponent is squared in the SMOKE case)
-    //
-    // Since this function approaches 0 asymptotically, we have to
-    // choose a reasonable cutoff point that approximates total
-    // opacity. e ** -4 is about 0.018, so all we have to do is make
-    // the exponent equal to -4 at a distance of "visibility".
-    //
-
-    if (squared)
-	return 2.0f / visibility;
-
-    else
-	return 4.0f / visibility;
+    SoEnvironment::doAction(action);
 }

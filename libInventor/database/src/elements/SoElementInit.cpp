@@ -80,6 +80,7 @@ SoElement::initElements()
     SoCoordinateElement::initClass();
     SoCreaseAngleElement::initClass();
     SoDrawStyleElement::initClass();
+    SoEnvironmentElement::initClass();
     SoFocalDistanceElement::initClass();
     SoFontNameElement::initClass();
     SoFontSizeElement::initClass();
@@ -126,6 +127,7 @@ SoElement::initElements()
     SoGLClipPlaneElement::initClass();
     SoGLCoordinateElement::initClass();
     SoGLDrawStyleElement::initClass();
+    SoGLEnvironmentElement::initClass();
     SoGLLazyElement::initClass();
     SoGLLightIdElement::initClass();
     SoGLLinePatternElement::initClass();
