@@ -141,70 +141,67 @@ SoMultipleCopy::doAction(SoAction *action)
     int		numIndices;
     const int	*indices;
     int		lastChild;
-    int		index;
-    SbBool	gettingBBox;
-
-    SbVec3f	totalCenter(0,0,0);		// For bbox
-    int		numCenters = 0, i;		// For bbox
 
     // We have to do some extra stuff here for computing bboxes
-    gettingBBox = action->isOfType(SoGetBoundingBoxAction::getClassTypeId());
+    SbBool gettingBBox = action->isOfType(SoGetBoundingBoxAction::getClassTypeId());
 
     // Determine which children to traverse, if any
     switch (action->getPathCode(numIndices, indices)) {
-      case SoAction::NO_PATH:
-      case SoAction::BELOW_PATH:
-	lastChild = getNumChildren() - 1;
-	break;
+    case SoAction::NO_PATH:
+    case SoAction::BELOW_PATH:
+        lastChild = getNumChildren() - 1;
+        break;
 
-      case SoAction::IN_PATH:
-	// If this node is in a path, that means the path goes to one
-	// of its children. There's no need to traverse this path more
-	// than once in this case.
-	lastChild = indices[numIndices - 1];
-	action->getState()->push();
-	children->traverse(action, 0, lastChild);
-	action->getState()->pop();
-	return;
+    case SoAction::IN_PATH:
+        // If this node is in a path, that means the path goes to one
+        // of its children. There's no need to traverse this path more
+        // than once in this case.
+        lastChild = indices[numIndices - 1];
+        action->getState()->push();
+        children->traverse(action, 0, lastChild);
+        action->getState()->pop();
+        return;
 
-      case SoAction::OFF_PATH:
-	// This differs from SoGroup: if the node is not on the
-	// path, don't bother traversing its children. Effectively the
-	// same as a separator to the rest of the graph.
-	return;
+    case SoAction::OFF_PATH:
+        // This differs from SoGroup: if the node is not on the
+        // path, don't bother traversing its children. Effectively the
+        // same as a separator to the rest of the graph.
+        return;
     }
 
-    for (index = 0; index < matrix.getNum(); index++) {
-	action->getState()->push();
+    SbVec3f totalCenter(0,0,0); // For bbox
+    int     numCenters = 0;     // For bbox
+    for (int index = 0; index < matrix.getNum(); index++) {
+        action->getState()->push();
 
-	// Set value in switch element to current index
-	SoSwitchElement::set(action->getState(), index);
+        // Set value in switch element to current index
+        SoSwitchElement::set(action->getState(), index);
 
-	// Transform
-	SoModelMatrixElement::mult(action->getState(), this, matrix[index]);
+        // Transform
+        SoModelMatrixElement::mult(action->getState(), this, matrix[index]);
 
-	// Set the center correctly after each child
-	if (gettingBBox) {
-	    SoGetBoundingBoxAction *bba = (SoGetBoundingBoxAction *) action;
+        // Set the center correctly after each child
+        if (gettingBBox) {
+            SoGetBoundingBoxAction *bba = (SoGetBoundingBoxAction *) action;
 
-	    for (i = 0; i <= lastChild; i++) {
-		children->traverse(action, i, i);
-		if (bba->isCenterSet()) {
-		    totalCenter += bba->getCenter();
-		    numCenters++;
-		    bba->resetCenter();
-		}
-	    }
-	}
-	else
-	    children->traverse(action, 0, lastChild);
+            for (int i = 0; i <= lastChild; i++) {
+                children->traverse(action, i, i);
+                if (bba->isCenterSet()) {
+                    totalCenter += bba->getCenter();
+                    numCenters++;
+                    bba->resetCenter();
+                }
+            }
+        }
+        else
+            children->traverse(action, 0, lastChild);
 
-	action->getState()->pop();
+        action->getState()->pop();
     }
 
     if (gettingBBox && numCenters > 0)
-	((SoGetBoundingBoxAction *) action)->setCenter(totalCenter/(float)numCenters,
-						       FALSE);
+        ((SoGetBoundingBoxAction *) action)->setCenter(totalCenter/(float)numCenters,
+                                                       FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -301,28 +298,27 @@ SoMultipleCopy::handleEvent(SoHandleEventAction *action)
     int		numIndices;
     const int	*indices;
     int		lastChild;
-    int		index;
 
     // Determine which children to traverse, if any
     switch (action->getPathCode(numIndices, indices)) {
-      case SoAction::NO_PATH:
-      case SoAction::BELOW_PATH:
-	lastChild = getNumChildren() - 1;
-	break;
+    case SoAction::NO_PATH:
+    case SoAction::BELOW_PATH:
+        lastChild = getNumChildren() - 1;
+        break;
 
-      case SoAction::IN_PATH:
-	lastChild = indices[numIndices - 1];
-	break;
+    case SoAction::IN_PATH:
+        lastChild = indices[numIndices - 1];
+        break;
 
-      case SoAction::OFF_PATH:
-	return;
+    case SoAction::OFF_PATH:
+        return;
     }
 
-    for (index = 0; index < matrix.getNum(); index++) {
-	action->getState()->push();
-	SoSwitchElement::set(action->getState(), index);
-	children->traverse(action, 0, lastChild);
-	action->getState()->pop();
+    for (int index = 0; index < matrix.getNum(); index++) {
+        action->getState()->push();
+        SoSwitchElement::set(action->getState(), index);
+        children->traverse(action, 0, lastChild);
+        action->getState()->pop();
     }
 }
 
@@ -347,7 +343,7 @@ SoMultipleCopy::getMatrix(SoGetMatrixAction *action)
     // traversed.
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH)
-	children->traverse(action, 0, indices[numIndices - 1]);
+        children->traverse(action, 0, indices[numIndices - 1]);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -374,27 +370,27 @@ SoMultipleCopy::search(SoSearchAction *action)
     SoNode::search(action);
 
     if (action->isFound())
-	return;
+        return;
 
     // See if we're supposed to search only if the stuff under the
     // multipleCopy is relevant to the search path
 
     switch (action->getPathCode(numIndices, indices)) {
 
-      case SoAction::NO_PATH:
-      case SoAction::BELOW_PATH:
-	lastChild = getNumChildren() - 1;
-	break;
+    case SoAction::NO_PATH:
+    case SoAction::BELOW_PATH:
+        lastChild = getNumChildren() - 1;
+        break;
 
-      case SoAction::IN_PATH:
-	lastChild = indices[numIndices - 1];
-	break;
+    case SoAction::IN_PATH:
+        lastChild = indices[numIndices - 1];
+        break;
 
-      case SoAction::OFF_PATH:
-	if (! action->isSearchingAll())
-	    return;
-	lastChild = getNumChildren() - 1;
-	break;
+    case SoAction::OFF_PATH:
+        if (! action->isSearchingAll())
+            return;
+        lastChild = getNumChildren() - 1;
+        break;
     }
 
     action->getState()->push();
