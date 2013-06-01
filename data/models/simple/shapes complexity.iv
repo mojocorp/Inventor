@@ -1,0 +1,190 @@
+#Inventor V2.1 ascii
+
+Separator {
+    LightModel {
+	model	BASE_COLOR
+    }
+    DrawStyle {
+	style	LINES
+    }
+    DEF cubes Separator {
+	Translation {
+	    translation	-3 -3 0
+	}
+	Separator {
+	    Complexity {
+		value	0
+	    }
+	    Translation {
+		translation	-1.5 1.5 0
+	    }
+	    Cube {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	0.6
+	    }
+	    Translation {
+		translation	1.5 1.5 0
+	    }
+	    Cube {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	0.8
+	    }
+	    Translation {
+		translation	-1.5 -1.5 0
+	    }
+	    Cube {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	1
+	    }
+	    Translation {
+		translation	1.5 -1.5 0
+	    }
+	    Cube {
+	    }
+	}
+    }
+    DEF cones Separator {
+	Translation {
+	    translation	3 -3 0
+	}
+	Separator {
+	    Complexity {
+		value	0
+	    }
+	    Translation {
+		translation	-1.5 1.5 0
+	    }
+	    Cone {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	0.6
+	    }
+	    Translation {
+		translation	1.5 1.5 0
+	    }
+	    Cone {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	0.8
+	    }
+	    Translation {
+		translation	-1.5 -1.5 0
+	    }
+	    Cone {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	1
+	    }
+	    Translation {
+		translation	1.5 -1.5 0
+	    }
+	    Cone {
+	    }
+	}
+    }
+    DEF cylinders Separator {
+	Translation {
+	    translation	-3 3 0
+	}
+	Separator {
+	    Complexity {
+		value	0
+	    }
+	    Translation {
+		translation	-1.5 1.5 0
+	    }
+	    Cylinder {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	0.6
+	    }
+	    Translation {
+		translation	1.5 1.5 0
+	    }
+	    Cylinder {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	0.8
+	    }
+	    Translation {
+		translation	-1.5 -1.5 0
+	    }
+	    Cylinder {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	1
+	    }
+	    Translation {
+		translation	1.5 -1.5 0
+	    }
+	    Cylinder {
+	    }
+	}
+    }
+    DEF spheres Separator {
+	Translation {
+	    translation	3 3 0
+	}
+	Separator {
+	    Complexity {
+		value	0
+	    }
+	    Translation {
+		translation	-1.5 1.5 0
+	    }
+	    Sphere {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	0.6
+	    }
+	    Translation {
+		translation	1.5 1.5 0
+	    }
+	    Sphere {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	0.8
+	    }
+	    Translation {
+		translation	-1.5 -1.5 0
+	    }
+	    Sphere {
+	    }
+	}
+	Separator {
+	    Complexity {
+		value	1
+	    }
+	    Translation {
+		translation	1.5 -1.5 0
+	    }
+	    Sphere {
+	    }
+	}
+    }
+}
