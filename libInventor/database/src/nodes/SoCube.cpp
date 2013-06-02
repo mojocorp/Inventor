@@ -287,23 +287,17 @@ SoCube::generatePrimitives(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool		materialPerFace;
-    int			numDivisions, face, vert;
-    float		s;
-    SbVec3f		pt, norm;
-    float		w, h, d;
-    SbVec4f		tex;
-    SbBool		genTexCoords;
-    SoPrimitiveVertex	pv;
-    SoCubeDetail	detail;
-    const SoTextureCoordinateElement	*tce;
+    SbVec3f		pt;
 
-    materialPerFace = isMaterialPerFace(action);
-    numDivisions    = computeNumDivisions(action);
+    SbBool materialPerFace = isMaterialPerFace(action);
+    int numDivisions       = computeNumDivisions(action);
 
+    SoPrimitiveVertex pv;
+    SoCubeDetail detail;
     pv.setDetail(&detail);
 
     // Determine whether we should generate our own texture coordinates
+    SbBool genTexCoords;
     switch (SoTextureCoordinateElement::getType(action->getState())) {
       case SoTextureCoordinateElement::EXPLICIT:
         genTexCoords = TRUE;
@@ -315,17 +309,20 @@ SoCube::generatePrimitives(SoAction *action)
 
     // If we're not generating our own coordinates, we'll need the
     // texture coordinate element to get coords based on points/normals.
-    if (! genTexCoords)
+    SbVec4f tex;
+    const SoTextureCoordinateElement *tce = NULL;
+    if (! genTexCoords) {
         tce = SoTextureCoordinateElement::getInstance(action->getState());
-    else {
+    } else {
         tex[2] = 0.0;
         tex[3] = 1.0;
     }
 
+    float w, h, d;
     getSize(w, h, d);
 
 
-    for (face = 0; face < 6; face++) {
+    for (int face = 0; face < 6; face++) {
 
         if (face == 0 || materialPerFace)
             pv.setMaterialIndex(face);
@@ -335,7 +332,7 @@ SoCube::generatePrimitives(SoAction *action)
         // Simple case of one polygon per face
         if (numDivisions == 1) {
             beginShape(action, TRIANGLE_STRIP);
-            vert = 3;
+            int vert = 3;
             pt.setValue((*verts[face][vert])[0] * w,
                         (*verts[face][vert])[1] * h,
                         (*verts[face][vert])[2] * d);
@@ -413,7 +410,7 @@ SoCube::generatePrimitives(SoAction *action)
                 beginShape(action, TRIANGLE_STRIP);
 
                 // Send points at left end of strip
-                s = 0.0;
+                float s = 0.0;
                 pt = topPoint;
                 pt[0] *= w;
                 pt[1] *= h;
@@ -753,9 +750,8 @@ SoCube::GLRenderBoundingBox(SoGLRenderAction *action, const SbBox3f &bbox)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			face, vert;
     SoMaterialBundle	mb(action);
-    SbVec3f		scale, tmp;
+    SbVec3f		tmp;
 
     // Make sure textures are disabled, just to speed things up
     action->getState()->push();
@@ -766,16 +762,16 @@ SoCube::GLRenderBoundingBox(SoGLRenderAction *action, const SbBox3f &bbox)
 
     // Scale and translate the cube to the correct spot
     const SbVec3f	&translate = bbox.getCenter();
-    scale = 0.5 * bbox.getSize();
+    SbVec3f scale = 0.5 * bbox.getSize();
 
-    for (face = 0; face < 6; face++) {
+    for (int face = 0; face < 6; face++) {
 
         if (! mb.isColorOnly())
             glNormal3fv(normals[face].getValue());
 
         glBegin(GL_POLYGON);
 
-        for (vert = 0; vert < 4; vert++)
+        for (int vert = 0; vert < 4; vert++)
             glVertex3fv((SCALE(*verts[face][vert]) + translate).getValue());
 
         glEnd();
