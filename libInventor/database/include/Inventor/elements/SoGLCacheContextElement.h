@@ -58,6 +58,8 @@
 
 #include <Inventor/elements/SoSubElement.h>
 
+#include <list>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoCacheContextElement
@@ -74,7 +76,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SbIntList;
 class SoGLDisplayList;
 
 SoEXTENDER class INVENTOR_API SoGLCacheContextElement : public SoElement {
@@ -179,7 +180,7 @@ private:
     // to free up a display list at any time.
     static void freeList(SoState *state, SoGLDisplayList *list);
 
-    static SbPList * waitingToBeFreed; // Allocated in ::init
+    static std::list<SoGLDisplayList*> waitingToBeFreed;
 
     friend class SoGLDisplayList;
 };

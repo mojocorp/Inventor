@@ -58,7 +58,7 @@
 
 SO_ELEMENT_SOURCE(SoGLCacheContextElement);
 
-SbPList		*SoGLCacheContextElement::waitingToBeFreed = NULL;
+std::list<SoGLDisplayList*> SoGLCacheContextElement::waitingToBeFreed;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -84,7 +84,6 @@ void
 SoGLCacheContextElement::initClass()
 {
     SO_ELEMENT_INIT_CLASS(SoGLCacheContextElement, SoElement);
-    waitingToBeFreed = new SbPList;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -134,11 +133,13 @@ SoGLCacheContextElement::set(SoState *state, int ctx,
 
     // Look through the list of display lists waiting to be freed, and
     // free any that match the context:
-    for (int i = waitingToBeFreed->getLength()-1; i >= 0; i--) {
-        SoGLDisplayList *dl = (SoGLDisplayList *)(*waitingToBeFreed)[i];
-        if (dl->getContext() == ctx) {
-            waitingToBeFreed->remove(i);
-            delete dl;
+    std::list<SoGLDisplayList*>::iterator it = waitingToBeFreed.begin();
+    while (it!=waitingToBeFreed.end()) {
+        if ((*it)->getContext() == ctx) {
+            delete *it;
+            it = waitingToBeFreed.erase(it);
+        } else {
+            ++it;
         }
     }
 }
@@ -184,7 +185,7 @@ SoGLCacheContextElement::freeList(SoState *state,
     if (state != NULL  &&  get(state) == dl->getContext()) {
         delete dl;
     } else {
-        waitingToBeFreed->append(dl);
+        waitingToBeFreed.push_back(dl);
     }
 }
 
