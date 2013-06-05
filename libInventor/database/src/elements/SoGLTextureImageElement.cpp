@@ -135,28 +135,6 @@ SoGLTextureImageElement::pop(SoState *state, const SoElement *)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Sets image.
-//
-// Use: protected, virtual
-
-void
-SoGLTextureImageElement::setElt(const SbImage &,
-                                int, int, int,
-                                int, int,
-                                const SbColor &)
-//
-////////////////////////////////////////////////////////////////////////
-{
-#ifdef DEBUG
-    SoDebugError::post("SoGLTextureImageElement::setElt",
-                       "Nodes must call SoGLTextureImageElement::set"
-                       " for GLRender, not SoTextureImageElement::set");
-#endif
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Does the right GL stuff.  This takes a GL display list that can
 //    be used to render the texture; if -1 is passed in as the display
 //    list, this will try to build a display list (if there are none
@@ -165,7 +143,7 @@ SoGLTextureImageElement::setElt(const SbImage &,
 //
 // Use: public, static
 
-SoGLDisplayList *
+void
 SoGLTextureImageElement::set(SoState *state, SoNode *node,
                              const SbImage &img,
                              int _wrapS, int _wrapT, int _model,
@@ -190,9 +168,7 @@ SoGLTextureImageElement::set(SoState *state, SoNode *node,
         elt->list = _list;
         elt->sendTexEnv(state);
         elt->sendTex(state);
-        return elt->list;
     }
-    return NULL;
 }
 
 //
@@ -313,15 +289,17 @@ SoGLTextureImageElement::sendTex(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+#ifdef DEBUG
+    if (!list) {
+        SoDebugError::post("SoGLTextureImageElement::sendTex",
+                           "NULL texture cache!!!");
+        return;
+    }
+#endif
+
     image.setActiveMipmap(0);
     if (image.isNull())
         return;
-
-    if (list) {
-        // use display list
-        list->call(state);
-        return;
-    }
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Not default
     
@@ -363,7 +341,6 @@ SoGLTextureImageElement::sendTex(SoState *state)
 
     SbBool buildList = !SoCacheElement::anyOpen(state);
     if (buildList) {
-        list = new SoGLDisplayList(state, SoGLDisplayList::TEXTURE_OBJECT);
         list->open(state);
     }
 

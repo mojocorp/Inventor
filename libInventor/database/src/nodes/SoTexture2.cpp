@@ -444,11 +444,12 @@ SoTexture2::GLRender(SoGLRenderAction *action)
         int context = SoGLCacheContextElement::get(state);
         if (renderList && renderList->getContext() == context &&
                 texQuality == renderListQuality) {
-            SoGLTextureImageElement::set(
+            SoTextureImageElement::set(
                         state, this, image.getValue(),
                         wrapS.getValue(), wrapT.getValue(),
                         m, magFilter, minFilter,
-                        blendColor.getValue(), renderList);
+                        blendColor.getValue());
+            renderList->call(state);
         }  // Not valid, try to build
         else {
             // Free up old list, if necessary:
@@ -456,13 +457,13 @@ SoTexture2::GLRender(SoGLRenderAction *action)
                 renderList->unref(state);
                 renderList = NULL;
             }
-            renderList = SoGLTextureImageElement::set(
-                        state, this, image.getValue(),
-                        wrapS.getValue(), wrapT.getValue(),
-                        m, magFilter, minFilter,
-                        blendColor.getValue(), NULL);
-            if (renderList)
-                renderList->ref();
+            renderList = new SoGLDisplayList(state, SoGLDisplayList::TEXTURE_OBJECT);
+            renderList->ref();
+            SoGLTextureImageElement::set(state, this, image.getValue(),
+                                         wrapS.getValue(), wrapT.getValue(),
+                                         m, magFilter, minFilter,
+                                         blendColor.getValue(), renderList);
+
             renderListQuality = texQuality;
         }
     }
