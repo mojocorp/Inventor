@@ -57,10 +57,11 @@
 #ifndef  _SO_EVENT_CALLBACK_
 #define  _SO_EVENT_CALLBACK_
 
-#include <Inventor/misc/SoCallbackList.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/actions/SoHandleEventAction.h>
+
+#include <vector>
 
 class SoEvent;
 class SoEventCallback;
@@ -195,7 +196,14 @@ class INVENTOR_API SoEventCallback : public SoNode {
     SoPath		*pathOfInterest;
     
     // List of callback functions, event types, and user data.
-    SbPList *		cblist;
+    // internal class for storing event types, callback funcs, user data
+    typedef struct {
+        SoType		       eventType;
+        SoEventCallbackCB *func;
+        void		      *userData;
+    } SoEventCallbackData;
+
+    std::vector<SoEventCallbackData> cblist;
     
     // This is set for each SoHandleEventAction traversal of this node
     // so that the apps callback routine can invoke methods on the action.
