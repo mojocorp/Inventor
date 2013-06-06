@@ -118,7 +118,7 @@ protected:
     // The default view volume is undefined.
     // The default working space is identity (world space).
     SbProjector();
-    ~SbProjector() {};
+    virtual ~SbProjector() {};
 
     // Given this mouse point, return the line it projects to
     // in working space.
