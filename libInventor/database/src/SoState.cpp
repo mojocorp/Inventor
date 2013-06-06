@@ -68,9 +68,6 @@ SoState::SoState(SoAction *_action, const SoTypeList &enabledElements)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-    SoElement	*elt;
-
     action = _action;
     depth = 0;
 
@@ -81,25 +78,25 @@ SoState::SoState(SoAction *_action, const SoTypeList &enabledElements)
     stack = new SoElement * [numStacks];
 
     // Initialize all stacks to NULL
-    for (i = 0; i < numStacks; i++)
-	stack[i] = NULL;
+    for (int i = 0; i < numStacks; i++)
+        stack[i] = NULL;
 
     // Allocate and initialize one instance of each enabled element.
     // While doing this, set up threaded stack of elements
     topElement = NULL;
-    for (i = 0; i < enabledElements.getLength(); i++) {
-	// Skip bad elements
-	if (enabledElements[i].isBad())
-	    continue;
+    for (int i = 0; i < enabledElements.getLength(); i++) {
+        // Skip bad elements
+        if (enabledElements[i].isBad())
+            continue;
 
-	elt = (SoElement *) enabledElements[i].createInstance();
-	elt->setDepth(depth);
-	stack[elt->getStackIndex()] = elt;
-	elt->init(this);
-	elt->setNext(topElement);
-	elt->setNextInStack(NULL);
-	elt->setNextFree(NULL);
-	topElement = elt;
+        SoElement *elt = (SoElement *) enabledElements[i].createInstance();
+        elt->setDepth(depth);
+        stack[elt->getStackIndex()] = elt;
+        elt->init(this);
+        elt->setNext(topElement);
+        elt->setNextInStack(NULL);
+        elt->setNextFree(NULL);
+        topElement = elt;
     }
 
     // Push state to avoid clobbering initial element instances
@@ -125,22 +122,20 @@ SoState::~SoState()
 
 #ifdef DEBUG
     if (depth != 0) {
-	SoDebugError::post("SoState::~SoState",
-			   "State destroyed with non-zero (%d) "
-			   "depth", depth);
+        SoDebugError::post("SoState::~SoState",
+                           "State destroyed with non-zero (%d) "
+                           "depth", depth);
     }
 #endif
 
     // Get rid of all the elements on all the stacks.
-    SoElement *elt, *nextElt;
-    int i;
-    for (i = 0; i < numStacks; i++) {
-	elt = stack[i];
-	while (elt != NULL) {
-	    nextElt = elt->getNextFree();
-	    delete elt;
-	    elt = nextElt;
-	}
+    for (int i = 0; i < numStacks; i++) {
+        SoElement *elt = stack[i];
+        while (elt != NULL) {
+            SoElement *nextElt = elt->getNextFree();
+            delete elt;
+            elt = nextElt;
+        }
     }
 
     // Get rid of stack pointer array
@@ -166,10 +161,10 @@ SoState::getElement(int stackIndex)
     // end up not being sorted by depth).  We'll check and make sure
     // that doesn't happen:
     if (depth < topElement->getDepth()) {
-	SoDebugError::post("SoState::getElement", 
-	    "Elements must not be changed while the state is being "
-	    "popped (element being changed: %s).",
-	    SoElement::getIdFromStackIndex(stackIndex).getName().getString());
+        SoDebugError::post("SoState::getElement",
+                           "Elements must not be changed while the state is being "
+                           "popped (element being changed: %s).",
+                           SoElement::getIdFromStackIndex(stackIndex).getName().getString());
     }
 #endif
 
@@ -178,47 +173,47 @@ SoState::getElement(int stackIndex)
 
 #ifdef DEBUG
     if (elt == NULL) {
-	SoDebugError::post("SoState::getElement", "%s is not enabled",
-	    SoElement::getIdFromStackIndex(stackIndex).getName().getString());
-	return NULL;
+        SoDebugError::post("SoState::getElement", "%s is not enabled",
+                           SoElement::getIdFromStackIndex(stackIndex).getName().getString());
+        return NULL;
     }
 #endif /* DEBUG */
 
     // If element is not at current depth, we have to push a new
     // element on the stack
     if (elt->getDepth() < depth) {
-	SoElement *newElt;
+        SoElement *newElt;
 
-	// Each element stack is a doubly-linked list.  The
-	// nextInStack pointer points to the next lowest element, and
-	// the nextFree pointer points to the next hightest element.
-	// The top element's nextFree pointer points to a free element.
-	//
-	// With this scheme we only have to allocate elements for the
-	// stack once; pushing and popping during subsequent
-	// traversals just move the topElement pointer up and down the
-	// list.
-	if (elt->getNextFree()) {
-	    newElt = elt->getNextFree();
-	} else {
-	    newElt = (SoElement *)(elt->getTypeId().createInstance());
-	    elt->setNextFree(newElt);
-	    newElt->setNextInStack(elt);
-	    newElt->setNextFree(NULL);
-	}
+        // Each element stack is a doubly-linked list.  The
+        // nextInStack pointer points to the next lowest element, and
+        // the nextFree pointer points to the next hightest element.
+        // The top element's nextFree pointer points to a free element.
+        //
+        // With this scheme we only have to allocate elements for the
+        // stack once; pushing and popping during subsequent
+        // traversals just move the topElement pointer up and down the
+        // list.
+        if (elt->getNextFree()) {
+            newElt = elt->getNextFree();
+        } else {
+            newElt = (SoElement *)(elt->getTypeId().createInstance());
+            elt->setNextFree(newElt);
+            newElt->setNextInStack(elt);
+            newElt->setNextFree(NULL);
+        }
 
-	newElt->setDepth(depth);
+        newElt->setDepth(depth);
 
-	// Add it to the all-element stack
-	newElt->setNext(topElement);
+        // Add it to the all-element stack
+        newElt->setNext(topElement);
 
-	topElement = stack[stackIndex] = newElt;
+        topElement = stack[stackIndex] = newElt;
 
-	// Call push on new element in case it has side effects
-	newElt->push(this);
+        // Call push on new element in case it has side effects
+        newElt->push(this);
 
-	// Return new element
-	elt = newElt;
+        // Return new element
+        elt = newElt;
     }
 
     return elt;
@@ -286,26 +281,23 @@ void
 SoState::print(FILE *fp)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-    const SoElement	*elt;
-    int			i;
-
+{  
     fprintf(fp, "_________________________________________________________\n");
     fprintf(fp, "SoState\n");
     fprintf(fp, "_________________________________________________________\n");
 
-    for (i = 0; i < numStacks; i++) {
+    for (int i = 0; i < numStacks; i++) {
 
-	// Print only enabled element stacks
-	if (stack[i] != NULL) {
+        // Print only enabled element stacks
+        if (stack[i] != NULL) {
 
-	    fprintf(fp, "  stack[%02d]:\n", i);
+            fprintf(fp, "  stack[%02d]:\n", i);
 
-	    for (elt = stack[i]; elt != NULL; elt = elt->getNextInStack()) {
-		fprintf(fp, "    ");
-		elt->print(fp);
-	    }
-	}
+            for (const SoElement *elt = stack[i]; elt != NULL; elt = elt->getNextInStack()) {
+                fprintf(fp, "    ");
+                elt->print(fp);
+            }
+        }
     }
 
     fprintf(fp, "_________________________________________________________\n");

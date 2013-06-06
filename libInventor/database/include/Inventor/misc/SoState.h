@@ -149,13 +149,13 @@ SoINTERNAL public:
     }
 
 private:
-    SoAction  *action; // Action instance state is in
-    int   depth;  // Current depth
-    SoElement  **stack; // Array of element stacks
-    int   numStacks; // Number of stacks in array
-    SoElement *  topElement; // First element in threaded stack
+    SoAction   *action;     // Action instance state is in
+    int         depth;      // Current depth
+    SoElement **stack;      // Array of element stacks
+    int         numStacks;  // Number of stacks in array
+    SoElement  *topElement; // First element in threaded stack
 
-    SbBool  cacheOpen; // TRUE if a cache is open
+    SbBool      cacheOpen;  // TRUE if a cache is open
 };
 
 #endif /* _SO_STATE_ */
