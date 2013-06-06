@@ -215,7 +215,7 @@
 #define swap16(x) _byteswap_ushort(x)
 #define swap32(x) _byteswap_ulong(x)
 #define swap64(x) _byteswap_uint64(x)
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
 #define swap16(x) (((x) & 0xFF00) >> 8 | ((x) & 0x00FF) << 8)
 #define swap32(x) __builtin_bswap32(x)
 #define swap64(x) __builtin_bswap64(x)
