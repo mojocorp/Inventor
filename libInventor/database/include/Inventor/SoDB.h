@@ -60,6 +60,8 @@
 #include <Inventor/SoType.h>
 #include <Inventor/SbPList.h>
 
+#include <map>
+
 class SoBase;
 class SoSFRealTime;
 class SoSeparator;
@@ -333,7 +335,7 @@ private:
     // is created by mangling the types of the two fields to convert
     // from. The dictionary maps the key to the type of the conversion
     // engine.
-    static SbDict *conversionDict;
+    static std::map<uint32_t, short> conversionDict;
 
     // Returns a conversionDict key from the two given field type id's.
     static uint32_t getConversionKey(SoType fromField, SoType toField) {

@@ -178,6 +178,9 @@ SoINTERNAL public:
         return storage.index;
     }
 
+    // Find and return a type from the given key.
+    static SoType fromKey(short key);
+
     // Mark this type as internal; if internal, getAllDerivedFrom and
     // fromName will not return the type.
     void makeInternal();
