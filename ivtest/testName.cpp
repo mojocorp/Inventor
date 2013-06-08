@@ -16,6 +16,10 @@ TEST(testName, Constructors) {
 
     SbName name4(SbString("an ascii string"));
     EXPECT_TRUE(name4 == name2);
+
+    // SbName should share storage in a dict. Same string should use the
+    // same storage, same adress.
+    EXPECT_EQ(name2.getString(), name4.getString());
 }
 
 TEST(testName, length) {
