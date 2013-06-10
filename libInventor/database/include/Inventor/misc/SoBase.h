@@ -64,6 +64,8 @@
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
+#include <map>
+
 class SoBaseList;
 class SoInput;
 class SoNode;
@@ -335,7 +337,7 @@ private:
 
     // And this dictionary maps the other way, from an SoBase * to a
     // name.
-    static SbDict *objNameDict;
+    static std::map<const SoBase*, SbName> objNameDict;
 };
 
 #endif /* _SO_BASE_ */

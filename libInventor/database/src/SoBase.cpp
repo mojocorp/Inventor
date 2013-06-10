@@ -70,7 +70,7 @@
 
 // The global name dictionaries
 SbDict		*SoBase::nameObjDict;
-SbDict		*SoBase::objNameDict;
+std::map<const SoBase*, SbName> SoBase::objNameDict;
 
 // Syntax for writing instances to files
 #define OPEN_BRACE		'{'
@@ -106,7 +106,6 @@ SoBase::initClass()
 
     // Set up global name dictionaries
     nameObjDict = new SbDict;
-    objNameDict = new SbDict;
 
     globalFieldName = new SbName("GlobalField");
 }
@@ -274,17 +273,18 @@ SoBase::getName() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    void *n;
+    if (!writeStuff.hasName)
+        return SbName("");
 
-    if (!writeStuff.hasName) return SbName("");
-    if (!objNameDict->find((unsigned long)this, n)) {
+    std::map<const SoBase*, SbName>::const_iterator it = objNameDict.find(this);
+    if (it == objNameDict.end()) {
 #ifdef DEBUG
-	SoDebugError::post("SoBase::getName",
-			   "hasName is TRUE, but couldn't find name!\n");
+        SoDebugError::post("SoBase::getName",
+                           "hasName is TRUE, but couldn't find name!\n");
 #endif
-	return SbName("");
+        return SbName("");
     }
-    return SbName((char *)n);
+    return it->second;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -301,13 +301,8 @@ SoBase::setName(const SbName &newName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    //Following 4 lines just do what getName() would do, repeating that code
-    //here fixes a thread-safe bug
-    void *n;
-    SbName oldName("");
-    if ((writeStuff.hasName) && (objNameDict->find((unsigned long)this, n)))
-	oldName = SbName((char *)n); 
-    
+    SbName oldName = getName();
+
     if (oldName.getLength() != 0)
 	removeName(this, oldName.getString());
 
@@ -652,7 +647,7 @@ SoBase::addName(SoBase *b, const char *name)
     list->append(b);
 
     // And append to the objName dictionary:
-    objNameDict->enter((unsigned long)b, (void *)name);
+    objNameDict[b] = name;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -668,13 +663,12 @@ SoBase::removeName(SoBase *b, const char *name)
 ////////////////////////////////////////////////////////////////////////
 {
     SbPList	*list;
-    SbBool	found;
     void	*t;
 
     b->writeStuff.hasName = 0;
 
     // Look for name list
-    found = nameObjDict->find((unsigned long) name, t);
+    SbBool found = nameObjDict->find((unsigned long) name, t);
 
     // Look for name within list
     if (found) {
@@ -688,7 +682,7 @@ SoBase::removeName(SoBase *b, const char *name)
     }
 
     // And remove from objName dict:
-    found |= objNameDict->remove((unsigned long)b);
+    found |= (objNameDict.erase(b) > 0);
 
 #ifdef DEBUG
     if (! found)
