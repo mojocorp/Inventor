@@ -120,7 +120,6 @@
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/sensors/SoSensor.h>
 
-class SbDict;
 class SoFieldSensor;
 /// Jack-shaped object you rotate, translate, or scale by dragging with the mouse.
 /// \ingroup Draggers

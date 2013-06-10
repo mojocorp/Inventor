@@ -52,7 +52,6 @@
  */
 
 #include <stdlib.h>
-#include <Inventor/SbDict.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SbFile.h>
 #include <Inventor/SoDB.h>

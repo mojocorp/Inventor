@@ -87,7 +87,6 @@
 #include <Inventor/sensors/SoSensor.h>
 
 
-class SbDict;
 class SbSphereProjector;
 class SoFieldSensor;
 

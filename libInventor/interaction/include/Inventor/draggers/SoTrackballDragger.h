@@ -90,7 +90,6 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/fields/SoSFRotation.h>
 
-class SbDict;
 class SoGroup;
 class SoRotation;
 class SbSphereProjector;

@@ -87,7 +87,6 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/sensors/SoSensor.h>
 
-class SbDict;
 class SbLineProjector;
 class SoFieldSensor;
 /// Object you can translate along a line by dragging With the mouse.

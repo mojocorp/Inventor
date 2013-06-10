@@ -98,7 +98,6 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/sensors/SoSensor.h>
 
-class SbDict;
 class SbPlaneProjector;
 class SoFieldSensor;
 /// Object you can translate within a plane by dragging with the mouse.

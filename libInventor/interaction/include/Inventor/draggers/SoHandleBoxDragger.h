@@ -103,7 +103,6 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/sensors/SoSensor.h>
 
-class SbDict;
 class SoDrawStyle;
 class SbPlaneProjector;
 class SbLineProjector;

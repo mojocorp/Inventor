@@ -95,7 +95,6 @@
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/sensors/SoSensor.h>
 
-class SbDict;
 class SoFieldSensor;
 /// Box-like object you scale, rotate, and translate by dragging with the mouse.
 /// \ingroup Draggers
