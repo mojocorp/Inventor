@@ -1,6 +1,7 @@
 #include <QAbstractFileEngineHandler>
 #include <QFSFileEngine>
 
+#include <SoDebug.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInteraction.h>
 #include <Inventor/nodekits/SoNodeKit.h>
@@ -24,7 +25,7 @@ public:
 
 int main(int argc, char **argv)
 {
-    if (!getenv("OIVHOME") || !QDir(getenv("OIVHOME") + QString("/ivtest")).exists()) {
+    if (!SoDebug::GetEnv("OIVHOME") || !QDir(SoDebug::GetEnv("OIVHOME") + QString("/ivtest")).exists()) {
         printf("ERROR: OIVHOME is not set or the directory doesn't exist.");
         return 1;
     }
