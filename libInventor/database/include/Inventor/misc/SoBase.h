@@ -70,6 +70,7 @@ class SoNode;
 class SoNotList;
 class SoOutput;
 class SoPath;
+class SbDict;
 
 /// Base class for all nodes, paths, and engines.
 /// \ingroup General

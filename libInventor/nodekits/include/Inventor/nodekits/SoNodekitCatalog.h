@@ -62,6 +62,7 @@
 #include <Inventor/SbString.h>
 #include <Inventor/SoLists.h>
 #include <Inventor/SoType.h>
+#include <Inventor/SbDict.h>
 
 #define SO_CATALOG_NAME_NOT_FOUND -1
 #define SO_CATALOG_THIS_PART_NUM   0

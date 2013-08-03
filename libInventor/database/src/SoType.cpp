@@ -210,8 +210,6 @@ SoType::fromName(const SbName & name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int b = 0;
-
     //
 	// XXX Alex -- add additional layer of abstraction on top
  	// of this to make porting to other platforms easier.
@@ -228,7 +226,7 @@ SoType::fromName(const SbName & name)
     // Look for an existing type; if the type begins with "So", then
     // look at a type matching the stuff after the "So", also.  If not
     // found, we'll try the DSO thing:
-    b = find(name);
+    int b = find(name);
     SbBool notFound = (b == -1);
     if (notFound && (name.getLength() > 2)  && (nameString.getSubString(0,1) == "So")) {
         b = find(SbName(nameChars+2));

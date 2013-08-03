@@ -67,7 +67,6 @@
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbName.h>
-#include <Inventor/SbDict.h>
 
 #include <vector>
 
