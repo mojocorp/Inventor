@@ -846,43 +846,43 @@ SoInteractionKit::setAnySurrogatePath( const SbName &partName,
     //        then the part below it can have no value as of yet. So we don't
     //        need to bother removing its surrogate path (which is what 
     //        we do when 'from' is NULL.
-	if (from == NULL) {
+    if (from == NULL) {
 
-	    // See if there's a '.' and/or a '[' in the partName.
-	    // (as in "childList[0].appearance")
-	    // If so, get the string up to whichever came first.
-	    // This will be the 'intermediary' we look for.
-	    const char *dotPtr   = strchr( partName.getString(), '.' );
-	    const char *brackPtr = strchr( partName.getString(), '[' );
+        // See if there's a '.' and/or a '[' in the partName.
+        // (as in "childList[0].appearance")
+        // If so, get the string up to whichever came first.
+        // This will be the 'intermediary' we look for.
+        int dotPtr   = partName.find('.');
+        int brackPtr = partName.find('[');
 
-	    if ( dotPtr != NULL || brackPtr != NULL ) {
-		char *nameCopy = strdup( partName.getString() );
-		char *firstName;
-		if (dotPtr == NULL)
-		    firstName = strtok( nameCopy, "[");
-		else if (brackPtr == NULL || dotPtr < brackPtr)
-		    firstName = strtok( nameCopy, ".");
-		else 
-		    firstName = strtok( nameCopy, "[");
+        if ( dotPtr != -1 || brackPtr != -1 ) {
+            char *nameCopy = strdup( partName.getString() );
+            char *firstName;
+            if (dotPtr == -1)
+                firstName = strtok( nameCopy, "[");
+            else if (brackPtr == -1 || dotPtr < brackPtr)
+                firstName = strtok( nameCopy, ".");
+            else
+                firstName = strtok( nameCopy, "[");
 
-		// Okay, look for the part, then free the string copy.
-		int firstPartNum = cat->getPartNumber( firstName );
+            // Okay, look for the part, then free the string copy.
+            int firstPartNum = cat->getPartNumber( firstName );
 
-		SoNode *firstPartNode = NULL; 
-		if ( firstPartNum != SO_CATALOG_NAME_NOT_FOUND ) {
-		    // Check if the part is there.
-		    // 2nd arg is FALSE, 'cause we don't want to create part.
-		    // 3rd arg is TRUE 'cause this better be a leaf.
-		    firstPartNode = SoBaseKit::getAnyPart( firstName, 
-						FALSE, TRUE, publicCheck );
-		}
-		free (nameCopy);
+            SoNode *firstPartNode = NULL;
+            if ( firstPartNum != SO_CATALOG_NAME_NOT_FOUND ) {
+                // Check if the part is there.
+                // 2nd arg is FALSE, 'cause we don't want to create part.
+                // 3rd arg is TRUE 'cause this better be a leaf.
+                firstPartNode = SoBaseKit::getAnyPart( firstName,
+                                                       FALSE, TRUE, publicCheck );
+            }
+            free (nameCopy);
 
-		// If the intermediary doesn't exist, return TRUE
-		if (firstPartNode == NULL)
-		    return TRUE;
-	    }
-	}
+            // If the intermediary doesn't exist, return TRUE
+            if (firstPartNode == NULL)
+                return TRUE;
+        }
+    }
 
 
     //   [0] Temporarily ref 'from' and 'this'

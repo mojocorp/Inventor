@@ -506,24 +506,21 @@ SoDB::isValidHeader(const char *testString)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char buf[81], *c;
-
     // Use only the first 80 characters
-    strncpy(buf,testString,80);
-
-    // Make sure it is NULL-terminated
-    buf[80] = '\0';
+    SbString buf(testString, 0, 80);
 
     // Find first newline in string, if any, and end the string there
-    if ((c = strchr(buf,'\n')) != NULL)
-	*c = '\0';
+    int index = buf.find('\n');
+    if (index != -1) {
+        buf = buf.getSubString(0, index);
+    }
 
-    SbString paddedHeader = SoOutput::padHeader(SbString(buf)); 
-       
+    SbString paddedHeader = SoOutput::padHeader(buf);
+
     for (int i = headerList->getLength()-1; i >= 0; i--) {
-	SoDBHeaderData *data = (SoDBHeaderData *) (*headerList)[i];
-	if (data->headerString == paddedHeader)
-	    return (TRUE);
+        SoDBHeaderData *data = (SoDBHeaderData *) (*headerList)[i];
+        if (data->headerString == paddedHeader)
+            return (TRUE);
     }
     
     // Didn't find this string in the list of valid headers.

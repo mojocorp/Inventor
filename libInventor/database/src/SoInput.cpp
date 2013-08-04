@@ -2715,13 +2715,13 @@ SoInput::addReference(const SbName &name,	// Reference name
 
     if (addToGlobalDict) {
         // Look for the first '+':
-        const char *firstPlus = strchr(n, '+');
+        int firstPlus = name.find('+');
 
-        if (firstPlus == NULL) {
+        if (firstPlus == -1) {
             base->setName(name);
         }
-        else if (firstPlus != n) {
-            SbName instanceName(SbString(n, 0, firstPlus-n-1));
+        else if (firstPlus > 0) {
+            SbName instanceName(SbString(n, 0, firstPlus-1));
             base->setName(instanceName);
         }
     }
