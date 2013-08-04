@@ -826,19 +826,19 @@ SoBaseKit::createDefaultParts()
 // Use: private
 
 void
-SoBaseKit::skipWhiteSpace(char *&string)
+SoBaseKit::skipWhiteSpace(char *&string) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Keep going while space and comments appear
     // Skip over space characters
     while (*string && isspace(*string))
-	string++;
+        string++;
 
     // If next character is comment character, flush until end of line
     if (*string == __SO_COMMENT_CHAR) {
-	while (*string)
-	 string++;
+        while (*string)
+            string++;
     }
 }
 

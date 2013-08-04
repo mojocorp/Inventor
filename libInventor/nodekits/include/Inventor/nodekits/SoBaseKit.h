@@ -622,7 +622,7 @@ class INVENTOR_API SoBaseKit : public SoNode {
     virtual ~SoBaseKit();
 
   private:
-    void skipWhiteSpace(char *&string);
+    void skipWhiteSpace(char *&string) const;
 
     // Returns FALSE if every field has either [a] hasDefaultValue() == TRUE or
     // [b] isDefault() == TRUE
