@@ -6,7 +6,7 @@ SbGLFramebufferObject::SbGLFramebufferObject(const SbVec2s & size, GLenum format
 {
     // Generate the framebuffer object
     glGenFramebuffersEXT(1, &m_framebuffer);
-    glBindFramebuffer(GL_FRAMEBUFFER, m_framebuffer);
+    glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_framebuffer);
 
     // Generate the render buffers
     glGenRenderbuffersEXT(1, &m_colorbuffer);
