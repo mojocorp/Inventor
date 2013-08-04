@@ -71,11 +71,12 @@
 // Use: protected
 
 SoActionMethodList::SoActionMethodList(SoActionMethodList *parentList)
+    : parent(parentList),
+      numValidTypes(0)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    parent = parentList;
-    numValidTypes = 0;
+
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -1152,7 +1152,7 @@ SoInput::read(SbName &n,		// Name to read into
     } else if (curFile->binary) {                                             \
         int n = sizeof(dglType);                                              \
         int pad = ((n+3) & ~0003) - n;                                        \
-        dglType tnum;                                                         \
+        dglType tnum = 0;                                                         \
         if (fromBuffer()) {                                                   \
             if (eof()) {                                                      \
                 ok = FALSE;                                                   \

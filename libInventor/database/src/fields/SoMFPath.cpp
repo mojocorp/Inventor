@@ -285,48 +285,47 @@ SoMFPath::notify(SoNotList *list)
     // If there is nothing on the list, which would be the case if the
     // field has been read from file, do the notify thing.
     if (list->getFirstRec() == NULL) {
-	SoMField::notify(list);
+        SoMField::notify(list);
         return;
     }
 
-    SbBool		doNotify;
-    int			i;
-    const SoBase 	*firstBase = list->getFirstRec()->getBase();
-
+    const SoBase *firstBase = list->getFirstRec()->getBase();
 
     // Find the path or path head node that started notification
+    int	i;
     for (i = 0; i < num; i++) {
-	if (firstBase == values[i] || firstBase == heads[i])
-	    break;
+        if (firstBase == values[i] || firstBase == heads[i])
+            break;
     }
 
     // This should never happen...
     if (i == num)
-	return;
+        return;
 
     // If the path started notification:
+    SbBool doNotify = FALSE;
     if (firstBase == values[i])
-	doNotify = TRUE;
+        doNotify = TRUE;
 
     // If the notification came through the head node
     else if (firstBase == heads[i])
-	doNotify = values[i]->isRelevantNotification(list);
+        doNotify = values[i]->isRelevantNotification(list);
 
     // If the head node of the path changed, detach from old head and
     // attach to new:
     if (values[i]->getHead() != heads[i]) {
-	// Detach from old:
-	if (heads[i] != NULL)
-	    heads[i]->removeAuditor(this, SoNotRec::FIELD);
-	heads[i] = values[i]->getHead();
-	// Attach to new:
-	if (heads[i] != NULL)
-	    heads[i]->addAuditor(this, SoNotRec::FIELD);
+        // Detach from old:
+        if (heads[i] != NULL)
+            heads[i]->removeAuditor(this, SoNotRec::FIELD);
+        heads[i] = values[i]->getHead();
+        // Attach to new:
+        if (heads[i] != NULL)
+            heads[i]->addAuditor(this, SoNotRec::FIELD);
     }
 
     // Notify if we're supposed to...
     if (doNotify)
-	SoMField::notify(list);
+        SoMField::notify(list);
 }
 
 ////////////////////////////////////////////////////////////////////////

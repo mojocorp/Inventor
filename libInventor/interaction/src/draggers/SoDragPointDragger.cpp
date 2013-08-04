@@ -999,7 +999,7 @@ SoDragPointDragger::metaKeyChangeCB( void *, SoDragger *inDragger )
 	    // [b] Set up a plane or line projector oriented like newDragger.
 	    // [c] Find out where current mouse position intersects that new 
 	    //     plane or line. The new gesture will continue from there.
-		SoDragger *newDragger;
+        SoDragger *newDragger = NULL;
 		SbVec3f    projPt;
 		SbLineProjector  lp;
 		SbPlaneProjector pp;

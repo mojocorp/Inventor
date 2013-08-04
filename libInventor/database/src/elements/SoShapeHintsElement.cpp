@@ -248,44 +248,45 @@ SoShapeHintsElement::copyMatchInfo() const
 void
 SoShapeHintsElement::print(FILE *fp) const
 {
-    const char *orderName, *shapeName, *faceName;
-
     SoElement::print(fp);
 
+    const char *orderName = "UNKNOWN_ORDERING";
     switch (vertexOrdering) {
-      case UNKNOWN_ORDERING:
-	orderName = "UNKNOWN_ORDERING";
-	break;
-      case CLOCKWISE:
-	orderName = "CLOCKWISE";
-	break;
-      case COUNTERCLOCKWISE:
-	orderName = "COUNTERCLOCKWISE";
-	break;
-      default:	// Just to shut CC up
-	break;
+    case UNKNOWN_ORDERING:
+        orderName = "UNKNOWN_ORDERING";
+        break;
+    case CLOCKWISE:
+        orderName = "CLOCKWISE";
+        break;
+    case COUNTERCLOCKWISE:
+        orderName = "COUNTERCLOCKWISE";
+        break;
+    default:	// Just to shut CC up
+        break;
     }
 
+    const char *shapeName = "UNKNOWN_SHAPE_TYPE";
     switch (shapeType) {
-      case UNKNOWN_SHAPE_TYPE:
-	shapeName = "UNKNOWN_SHAPE_TYPE";
-	break;
-      case SOLID:
-	shapeName = "SOLID";
-	break;
-      default:	// Just to shut CC up
-	break;
+    case UNKNOWN_SHAPE_TYPE:
+        shapeName = "UNKNOWN_SHAPE_TYPE";
+        break;
+    case SOLID:
+        shapeName = "SOLID";
+        break;
+    default:	// Just to shut CC up
+        break;
     }
 
+    const char *faceName = "UNKNOWN_FACE_TYPE";
     switch (faceType) {
-      case UNKNOWN_FACE_TYPE:
-	faceName = "UNKNOWN_FACE_TYPE";
-	break;
-      case CONVEX:
-	faceName = "CONVEX";
-	break;
-      default:	// Just to shut CC up
-	break;
+    case UNKNOWN_FACE_TYPE:
+        faceName = "UNKNOWN_FACE_TYPE";
+        break;
+    case CONVEX:
+        faceName = "CONVEX";
+        break;
+    default:	// Just to shut CC up
+        break;
     }
 
     fprintf(fp,

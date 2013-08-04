@@ -95,7 +95,7 @@ public:
 private:
     SoActionMethod parentMethod(SoType); // Method from parent node
     SoActionMethodList *parent;
-    int   numValidTypes;   // Stores the number of types at most
+    size_t numValidTypes;   // Stores the number of types at most
     // recent setup
 
     // Dummy action used internally

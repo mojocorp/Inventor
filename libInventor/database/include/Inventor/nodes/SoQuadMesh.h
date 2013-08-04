@@ -178,7 +178,6 @@ class INVENTOR_API SoQuadMesh : public SoNonIndexedShape {
 
     
   private:
-    SbVec3f		*generatedNormals;	// Array of generated normals
 
     // Returns current material or normal binding from action's state
     static Binding	getMaterialBinding(SoAction *action);

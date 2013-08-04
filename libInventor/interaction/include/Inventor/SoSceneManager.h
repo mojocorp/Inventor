@@ -265,7 +265,6 @@ class INVENTOR_API SoSceneManager {
     SoHandleEventAction	*handleEventAction;
     SoNode		*scene;
     SoNodeSensor	*sceneSensor;	// attached to root for auto-redraw
-    uint32_t	redrawPriority;	// Priority of sceneSensor
     SbBool		active;		// set TRUE if we are active
     SbBool		needZbuffer;
     SbBool		needToSendVP; // TRUE when glViewport() needs to be called
