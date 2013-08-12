@@ -54,7 +54,7 @@
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SoNodeKitPath.h>
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>

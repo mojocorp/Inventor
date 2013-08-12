@@ -52,7 +52,7 @@
  */
 
 #include <Inventor/SoDB.h>
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/fields/SoSFPath.h>
 

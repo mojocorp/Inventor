@@ -60,6 +60,7 @@
 #include <Inventor/misc/SoCompactPathList.h>
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/misc/SoState.h>
+#include <Inventor/misc/SoTempPath.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/SoPath.h>

@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/SoNodeKitPath.h>
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/nodekits/SoBaseKit.h>

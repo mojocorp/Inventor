@@ -53,6 +53,7 @@
 #include <Inventor/actions/SoHandleEventAction.h>
 #include <Inventor/nodes/SoWWWAnchor.h>
 #include <Inventor/SoPickedPoint.h>
+#include <Inventor/SoFullPath.h>
 
 SoWWWAnchorCB *		SoWWWAnchor::fetchURLcb = NULL;
 void *			SoWWWAnchor::fetchURLdata = NULL;

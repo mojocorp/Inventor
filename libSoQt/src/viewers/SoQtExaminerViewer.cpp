@@ -58,6 +58,7 @@
 #include <math.h>
 
 #include <Inventor/SoDB.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 #include <Inventor/fields/SoSFTime.h>

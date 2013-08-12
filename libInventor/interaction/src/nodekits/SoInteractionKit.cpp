@@ -55,6 +55,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoNodeKitPath.h>
 #include <Inventor/errors/SoDebugError.h>

@@ -54,6 +54,7 @@
 
 #include <SoDebug.h>
 
+#include <Inventor/SoFullPath.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>

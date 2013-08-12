@@ -53,7 +53,7 @@
 
 
 #include <Inventor/SoDB.h>
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/SoNodeKitPath.h>
 #include <Inventor/nodekits/SoBaseKit.h>
 #include <Inventor/errors/SoDebugError.h>

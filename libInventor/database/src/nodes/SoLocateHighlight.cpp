@@ -54,7 +54,7 @@
 
 #include <Inventor/misc/SoGL.h>
 
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/events/SoEvent.h>
 #include <Inventor/events/SoLocation2Event.h>

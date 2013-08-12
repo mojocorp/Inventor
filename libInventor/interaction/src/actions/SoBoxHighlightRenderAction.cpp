@@ -53,7 +53,7 @@
 
 #include <limits.h>
 #include <math.h>
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/SoNodeKitPath.h>
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>

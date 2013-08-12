@@ -53,6 +53,7 @@
 #include <assert.h>
 #include <Inventor/SbDict.h>
 #include <Inventor/SoDB.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/SoInteraction.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/actions/SoSearchAction.h>

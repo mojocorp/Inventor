@@ -54,6 +54,7 @@
 
 #include <stdio.h>
 #include <Inventor/SoDB.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoGroup.h>
 #include <Inventor/nodes/SoMaterial.h>

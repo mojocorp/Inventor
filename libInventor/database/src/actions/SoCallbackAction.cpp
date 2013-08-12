@@ -77,6 +77,7 @@
 #include <Inventor/elements/SoViewVolumeElement.h>
 #include <Inventor/elements/SoViewingMatrixElement.h>
 #include <Inventor/nodes/SoShape.h>
+#include <Inventor/SoFullPath.h>
 
 struct nodeTypeCallback {
     SoType					type;

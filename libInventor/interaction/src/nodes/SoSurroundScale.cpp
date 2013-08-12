@@ -53,6 +53,7 @@
 
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SoDB.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>

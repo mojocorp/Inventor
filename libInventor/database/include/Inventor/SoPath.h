@@ -64,7 +64,6 @@
 
 class SoPathList;
 class SoWriteAction;
-class SoTempPath;
 
 /// Path that points to a list of hierarchical nodes.
 /// \ingroup General

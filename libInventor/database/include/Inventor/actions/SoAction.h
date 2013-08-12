@@ -57,7 +57,6 @@
 #define  _SO_ACTION_
 
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/misc/SoTempPath.h>
 #include <Inventor/SoLightPath.h>
 #include <Inventor/actions/SoActionMethodList.h>
 #include <Inventor/actions/SoEnabledElementsList.h>
@@ -68,6 +67,7 @@ class SoCompactPathList;
 class SoNode;
 class SoState;
 class SoPath;
+class SoTempPath;
 
 /// Abstract base class for all actions.
 /// \ingroup Actions

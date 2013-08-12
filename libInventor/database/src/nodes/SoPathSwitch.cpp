@@ -59,6 +59,7 @@
 #include <Inventor/actions/SoPickAction.h>
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/nodes/SoPathSwitch.h>
+#include <Inventor/SoFullPath.h>
 
 SO_NODE_SOURCE(SoPathSwitch);
 

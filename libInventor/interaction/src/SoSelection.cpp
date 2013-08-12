@@ -58,6 +58,7 @@
 #include <Inventor/SoLists.h>
 #include <Inventor/SoOutput.h>
 #include <Inventor/SoPickedPoint.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoHandleEventAction.h>
 #include <Inventor/actions/SoSearchAction.h>

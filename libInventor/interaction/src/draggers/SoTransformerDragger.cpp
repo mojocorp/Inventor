@@ -55,6 +55,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <Inventor/SoDB.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 #include <Inventor/events/SoEvent.h>
 #include <Inventor/events/SoMouseButtonEvent.h>

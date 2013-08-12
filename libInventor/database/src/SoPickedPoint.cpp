@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SoPath.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/actions/SoGetMatrixAction.h>
 #include <Inventor/details/SoDetail.h>
