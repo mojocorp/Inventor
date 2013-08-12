@@ -58,8 +58,6 @@
 #include <stdlib.h>
 #include <Inventor/errors/SoDebugError.h>
 
-#include <machine.h>		// Inventor data goo lib
-
 #include <Inventor/SoDB.h>
 #include <Inventor/SoOutput.h>
 

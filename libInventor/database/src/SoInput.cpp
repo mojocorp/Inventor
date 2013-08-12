@@ -54,7 +54,6 @@
  _______________________________________________________________________
  */
 
-#include <machine.h>		// This is included in the Inventor tree
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
