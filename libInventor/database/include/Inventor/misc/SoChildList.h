@@ -57,7 +57,7 @@
 #ifndef _SO_CHILD_LIST_
 #define _SO_CHILD_LIST_
 
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoNodeList.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -80,6 +80,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 class SoAction;
+class SoPath;
 
 SoEXTENDER class INVENTOR_API SoChildList : public SoNodeList {
 

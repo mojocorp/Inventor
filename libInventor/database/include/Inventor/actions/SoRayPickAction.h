@@ -56,7 +56,7 @@
 #ifndef  _SO_RAY_PICK_ACTION_
 #define  _SO_RAY_PICK_ACTION_
 
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoPickedPointList.h>
 #include <Inventor/SbBox3f.h>
 #include <Inventor/SbMatrix.h>
 #include <Inventor/SbViewVolume.h>

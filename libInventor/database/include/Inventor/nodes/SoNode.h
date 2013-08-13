@@ -57,7 +57,7 @@
 #define  _SO_NODE_
 
 #include <Inventor/fields/SoFieldContainer.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoNodeList.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 

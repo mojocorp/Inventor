@@ -63,7 +63,7 @@
 #ifndef  _SO_NODE_LISTS_
 #define  _SO_NODE_LISTS_
 
-#include <Inventor/SbPList.h>
+#include <Inventor/lists/SoBaseList.h>
 
 class SoNode;
 

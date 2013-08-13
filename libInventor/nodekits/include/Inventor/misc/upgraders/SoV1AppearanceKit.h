@@ -59,7 +59,7 @@
 #define  _SO_V1_APPEARANCE_KIT_
 
 #include <Inventor/misc/upgraders/SoV1BaseKit.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoNodeList.h>
 
 
 ////////////////////////////////////////////////////////////////////

@@ -104,6 +104,7 @@
 #include <Inventor/nodes/SoVertexProperty.h>
 #include <Inventor/nodes/SoWWWAnchor.h>
 #include <Inventor/nodes/SoWWWInline.h>
+#include <Inventor/lists/SoFieldList.h>
 
 #include "SoEnvironmentV1.h"
 #include "SoPickStyleV1.h"

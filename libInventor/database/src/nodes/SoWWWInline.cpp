@@ -63,7 +63,7 @@
 #include <Inventor/nodes/SoLevelOfDetail.h>
 #include <Inventor/nodes/SoWWWInline.h>
 
-#include <Inventor/SoLists.h>
+#include <Inventor/misc/SoChildList.h>
 
 #include <Inventor/sensors/SoFieldSensor.h>
 

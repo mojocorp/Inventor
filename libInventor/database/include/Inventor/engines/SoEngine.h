@@ -59,14 +59,13 @@
 
 #include <Inventor/fields/SoFieldContainer.h>
 #include <Inventor/engines/SoEngineOutput.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoEngineList.h>
+#include <Inventor/lists/SoEngineOutputList.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
 class SoFieldData;
-class SoEngineList;
 class SoEngineOutput;
-class SoEngineOutputList;
 class SoEngineOutputData;
 class SoField;
 class SoOutput;

@@ -57,7 +57,7 @@
 #define  _SO_ENABLEDELEMENTSLIST_
 
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoTypeList.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

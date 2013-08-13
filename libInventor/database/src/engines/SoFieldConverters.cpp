@@ -54,6 +54,7 @@
 #include <Inventor/engines/SoFieldConverter.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/fields/SoFields.h>
+#include <Inventor/lists/SoTypeList.h>
 #include "SoFieldConverters.h"
 
 //

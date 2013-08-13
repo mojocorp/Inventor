@@ -57,6 +57,7 @@
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/fields/SoSFNode.h>
+#include <Inventor/lists/SoFieldList.h>
 #include <SoUnknownNode.h>
 
 // Because of the special treatment of fieldData, we can't use the

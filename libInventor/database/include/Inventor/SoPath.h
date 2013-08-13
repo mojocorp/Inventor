@@ -59,10 +59,9 @@
 
 #include <Inventor/misc/SoBase.h>
 #include <Inventor/nodes/SoNode.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoPathList.h>
 #include <Inventor/lists/SbIntList.h>
 
-class SoPathList;
 class SoWriteAction;
 
 /// Path that points to a list of hierarchical nodes.

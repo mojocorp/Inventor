@@ -60,7 +60,7 @@
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbString.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoTypeList.h>
 #include <Inventor/SoType.h>
 #include <Inventor/SbDict.h>
 

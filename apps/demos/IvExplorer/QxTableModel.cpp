@@ -9,6 +9,7 @@
 #include <Inventor/fields/SoField.h> 
 #include <Inventor/sensors/SoFieldSensor.h>
 #include <Inventor/sensors/SoNodeSensor.h>
+#include <Inventor/lists/SoFieldList.h>
 
 QxTableModel::QxTableModel(QObject *parent)
     : QAbstractTableModel(parent),

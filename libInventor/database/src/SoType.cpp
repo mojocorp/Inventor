@@ -52,7 +52,7 @@
  */
 
 #include <Inventor/SoType.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoTypeList.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <stdlib.h>
 #include <algorithm>

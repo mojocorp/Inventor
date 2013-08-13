@@ -72,6 +72,7 @@
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoSeparator.h>
+#include <Inventor/lists/SoFieldList.h>
 
 #ifdef DEBUG
 #include <SoDebug.h>

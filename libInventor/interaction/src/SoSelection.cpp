@@ -55,7 +55,6 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoInteraction.h>
-#include <Inventor/SoLists.h>
 #include <Inventor/SoOutput.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/SoFullPath.h>

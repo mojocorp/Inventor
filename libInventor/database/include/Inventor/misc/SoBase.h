@@ -60,13 +60,13 @@
 #define  _SO_BASE_
 
 #include <Inventor/misc/SoBasic.h>
+#include <Inventor/lists/SoBaseList.h>
 #include <Inventor/lists/SoAuditorList.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
 #include <map>
 
-class SoBaseList;
 class SoInput;
 class SoNode;
 class SoNotList;

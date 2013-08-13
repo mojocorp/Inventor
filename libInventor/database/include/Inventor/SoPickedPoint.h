@@ -60,12 +60,13 @@
 #include <Inventor/SbVec4f.h>
 #include <Inventor/SbMatrix.h>
 #include <Inventor/SbViewportRegion.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoDetailList.h>
 
 class SoDetail;
 class SoGetMatrixAction;
 class SoPath;
 class SoState;
+class SoNode;
 
 /// Represents point on surface of picked object.
 /// \ingroup General

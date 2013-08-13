@@ -57,7 +57,7 @@
 #ifndef  _SO_COMPACT_PATH_LIST_
 #define  _SO_COMPACT_PATH_LIST_
 
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoPathList.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

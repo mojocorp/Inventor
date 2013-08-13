@@ -75,7 +75,7 @@
 #define SO_STATE_GET_CONST_ELEMENT(stackIndex)\
  return stack[stackIndex];
 
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoTypeList.h>
 
 class SoAction;
 class SoElement;
