@@ -132,8 +132,6 @@ SoQtFullViewer::SoQtFullViewer(
 
     seekAction = new QAction (SoQtIcon::getIcon (SoQtIcon::SEEK), tr("Seek mode"), this);
     connect (seekAction, SIGNAL (triggered(bool)), this, SLOT (setSeekModeCB(bool)));
-    seekAction->setCheckable (true);
-    seekAction->setChecked (isSeekMode());
 
     gotoHomeAction = new QAction (SoQtIcon::getIcon (SoQtIcon::HOME), tr("Goto home position"), this);
     connect (gotoHomeAction, SIGNAL (triggered(bool)), this, SLOT (resetToHomePosition()));

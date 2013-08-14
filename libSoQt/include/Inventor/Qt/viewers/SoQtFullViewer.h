@@ -143,8 +143,8 @@ public slots:
     void showPreferences();
 
 protected slots:
-    void setSeekModeCB(bool state) { SoQtViewer::setSeekMode(state); }
-    void setViewingCB(bool state) { SoQtViewer::setViewing(state); }
+    void setSeekModeCB(bool state) { setSeekMode(true); }
+    void setViewingCB(bool state) { setViewing(state); }
     void setDecorationCB(bool state) { setDecoration((SbBool)state); }
     void setHeadlightCB(bool state) { setHeadlight((SbBool)state); }
     void setPickModeCB() { setViewing    (false); }
