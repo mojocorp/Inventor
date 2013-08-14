@@ -197,17 +197,14 @@ SoQtComponent::setFullScreen( bool enable )
     enable = enable && fullScreenEnabled;
 
     if (_baseWidget) {
-        if ((_baseWidget->windowState() & Qt::WindowFullScreen) == enable)
+        if (_baseWidget->isFullScreen() == enable)
             return;
 
         if (enable) {
-            wasNotTopLevel = !_baseWidget->isWindow();
-            _baseWidget->setWindowFlags(_baseWidget->windowFlags () | Qt::Window);
+            _baseWidget->setWindowFlags(_baseWidget->windowFlags() | Qt::Window);
             _baseWidget->showFullScreen();
         } else {
-            if (wasNotTopLevel)
-                _baseWidget->setWindowFlags(_baseWidget->windowFlags () & ~Qt::Window);
-
+            _baseWidget->setWindowFlags(_baseWidget->windowFlags() & ~Qt::Window);
             _baseWidget->showNormal();
         }
     }

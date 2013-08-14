@@ -166,8 +166,6 @@ SoQtFullViewer::SoQtFullViewer(
     bottomWheelVal = 0.0;
     leftWheelVal = 0.0;
 
-    // (the popup menu is created when it is shown for the first time)
-    setPopupMenuEnabled ((buildFlag & BUILD_POPUP) != 0);
     rightWheelStr  = tr("Motion Z");
     bottomWheelStr = tr("Motion X");
     leftWheelStr   = tr("Motion Y");
@@ -181,6 +179,7 @@ SoQtFullViewer::SoQtFullViewer(
     mainPopup = NULL;
     clientPopup = NULL;
     popupEnabled = (buildFlag & BUILD_POPUP) != 0;
+
 	// init buttons stuff
    appButtonList = new SbPList;
 
@@ -188,10 +187,6 @@ SoQtFullViewer::SoQtFullViewer(
     if (buildNow) {
 	setBaseWidget(buildWidget(getParentWidget()));
     }
-	
-    // build the popup menu 
-    if (popupEnabled)
-    	buildPopupMenu();
 }
 
 
@@ -368,9 +363,6 @@ SoQtFullViewer::setPopupMenuEnabled (SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     popupEnabled = flag;
-
-	if (popupEnabled)
-		buildPopupMenu();
 }
 
 void
@@ -529,7 +521,10 @@ SoQtFullViewer::buildPopupMenu()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    mainPopup = new QMenu (popupTitle, getGlxMgrWidget());
+    if (mainPopup)
+        return;
+
+    mainPopup = new QMenu (popupTitle, baseWidget());
     mainPopup->addMenu (buildFunctionsSubmenu(mainPopup));
     mainPopup->addMenu (buildDrawStyleSubmenu(mainPopup));
     mainPopup->addAction (viewingAction);
@@ -679,6 +674,9 @@ SoQtFullViewer::contextMenuEvent(QContextMenuEvent *event)
         return;
     }
 
+    // build the popup menu
+    buildPopupMenu();
+
     if (mainPopup != NULL) {
         QAction* res = mainPopup->exec(event->globalPos());
         if (res == IDM_DPOPUP_ASIS)
@@ -781,10 +779,6 @@ SoQtFullViewer::buildWidget(QWidget *parent)
     decorationFlag = !decorationFlag;   // enable routine to be called
     setDecoration(! decorationFlag);
     
-    // build the popup menu 
-    if (popupEnabled)
-    	buildPopupMenu();
-
     return mgrWidget;
 }
 

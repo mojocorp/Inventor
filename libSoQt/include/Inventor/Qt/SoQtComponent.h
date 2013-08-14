@@ -200,8 +200,6 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     //
     void    openHelpCard(const char *cardName);
     
-    // For fullscreen mode.
-    SbBool  wasNotTopLevel;
   private:
     
     QWidget	   *parentWidget;	// topLevel shell if in its own window
