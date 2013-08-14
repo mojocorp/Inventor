@@ -97,10 +97,10 @@ public:
     
     //
     // Get the current normal and overlay GLX windows, which are needed
-    // as arguments to glXMakeCurrent() when doing drawing in the normal 
+    // as arguments to glXMakeCurrent() when doing drawing in the normal
     // or overlay planes.
     //
-    // NOTE: These should NOT be cached by users because these will 
+    // NOTE: These should NOT be cached by users because these will
     // change dynamically when the visual is changed (like when
     // setDoubleBuffer() is called).
     //
@@ -113,14 +113,14 @@ public:
     QGLWidget* getNormalWidget()     	    { return (glModes & SO_GLX_DOUBLE) ? doubleBufferWidget : singleBufferWidget; }
     QGLWidget* getOverlayWidget()    	    { return getNormalWidget(); }
 
-	//
+    //
     // Specify exactly what the visual should be for the normal and overlay
-    // window. This allows the user to create all possible visuals supported 
+    // window. This allows the user to create all possible visuals supported
     // by OpenGL. The XVisualInfo structure should be a valid OpenGL visual
     // returned by glXChooseVisual().
     //
-	virtual void setNormalVisual (const QGLFormat& format);
-	QGLFormat getNormalVisual();
+    virtual void setNormalVisual (const QGLFormat& format);
+    QGLFormat getNormalVisual();
     virtual void    setOverlayVisual(const QGLFormat& format);
     QGLFormat getOverlayVisual();
     
@@ -143,15 +143,15 @@ public:
     // Inventor 2.1 changed the behavior of double buffered windows to
     // redraw temporary to the front buffer when an expose event is received
     // or when a new sceneGraph() is set on an SoQtRenderArea. This does not
-    // apply for general interactive rendering. The idea is that it is 
+    // apply for general interactive rendering. The idea is that it is
     // better to see something redraw (especially if it is slow) than
-    // to see garbage in the window (in the expose case) or an old invalid 
+    // to see garbage in the window (in the expose case) or an old invalid
     // scene graph (in the SoQtRenderArea::setSceneGraph() case).
     //
     // This API enables you to turn this functionality OFF if for some reason
     // you are unable to prevent repeated expose from causing a redraw (which
-    // is bad and should be fixed, as it gets worse for large scenes). 
-    // This will be the case for example if you can't create a pulldown 
+    // is bad and should be fixed, as it gets worse for large scenes).
+    // This will be the case for example if you can't create a pulldown
     // menu in the popup planes.
     //
     // NOTE: this api might be removed in some future releases and is only
@@ -183,16 +183,16 @@ protected:
     // If buildNow is FALSE, this will not build its widget tree until
     // buildWidget() is explicity called; else, buildWidget() is called here.
     SoQtGLWidget(
-	    QWidget *parent = NULL,
-	    const char *name = NULL, 
-	    SbBool buildInsideParent = TRUE, 
-	    int glModes = SO_GLX_RGB, 
-	    SbBool buildNow = TRUE);
+            QWidget *parent = NULL,
+            const char *name = NULL,
+            SbBool buildInsideParent = TRUE,
+            int glModes = SO_GLX_RGB,
+            SbBool buildNow = TRUE);
     virtual ~SoQtGLWidget();
 
     // subclasses MUST redefine redraw() to draw in the normal bit planes.
     // redrawOverlay() should be defined if the overlay planes are being
-    // used, and processEvent() should be defined if X events are being 
+    // used, and processEvent() should be defined if X events are being
     // received (see eventMask).
     virtual void	redraw() = 0;
     virtual void redrawOverlay();
@@ -208,7 +208,7 @@ protected:
     virtual void initGraphic();
     virtual void	initOverlayGraphic();
     virtual void	sizeChanged(const SbVec2s &newSize);
-    virtual void widgetChanged (QWidget* newWidget);    
+    virtual void widgetChanged (QWidget* newWidget);
     
     // sets/gets the size of the qgl widget(s) - Note this size could be
     // different from the SoQtComponent::getSize() method which return

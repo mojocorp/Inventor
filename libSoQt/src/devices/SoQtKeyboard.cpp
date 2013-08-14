@@ -100,10 +100,10 @@ SoQtKeyboard::~SoQtKeyboard()
 #if 0
 void
 SoQtKeyboard::enable(
-    Widget w,
-    XtEventHandler proc, 
-    XtPointer clientData,
-    Window)
+        Widget w,
+        XtEventHandler proc,
+        XtPointer clientData,
+        Window)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -120,9 +120,9 @@ SoQtKeyboard::enable(
 //
 void
 SoQtKeyboard::disable(
-    Widget w,
-    XtEventHandler proc, 
-    XtPointer clientData)
+        Widget w,
+        XtEventHandler proc,
+        XtPointer clientData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -146,16 +146,16 @@ SoQtKeyboard::translateEvent(QEvent *qe)
     
     // switch on event type
     switch (qe->type()) {
-	case QEvent::KeyPress:
-	    event = translateKeyEvent((QKeyEvent *) qe, SoButtonEvent::DOWN);
-	    break;
-	    
-	case QEvent::KeyRelease:
-	    event = translateKeyEvent((QKeyEvent *) qe, SoButtonEvent::UP);
-	    break;
-	    
-	default:
-	    break;
+    case QEvent::KeyPress:
+        event = translateKeyEvent((QKeyEvent *) qe, SoButtonEvent::DOWN);
+        break;
+
+    case QEvent::KeyRelease:
+        event = translateKeyEvent((QKeyEvent *) qe, SoButtonEvent::UP);
+        break;
+
+    default:
+        break;
     }
     
     return event;
@@ -163,142 +163,142 @@ SoQtKeyboard::translateEvent(QEvent *qe)
 
 SoKeyboardEvent::Key lookupKey (int qtKeyCode, bool keyPad)
 {
-  // NOTE: SoKeyboardConstants.h has provided an exact mapping
-  // from X11/keysymdef.h for keyboard symbols. So this file was
-  // referenced for missing key codes.
-  // some key codes have been skipped out of lazyness...
-  if (keyPad) {
-    // keypad keys are marked with a modifier flag under Qt
-    switch (qtKeyCode) {
-            case Qt::Key_Comma:   // better safe than sorry
-            case Qt::Key_Period:  return SoKeyboardEvent::PAD_PERIOD;
-            case Qt::Key_0:       return SoKeyboardEvent::PAD_0;
-            case Qt::Key_1:       return SoKeyboardEvent::PAD_1;
-            case Qt::Key_2:       return SoKeyboardEvent::PAD_2;
-            case Qt::Key_3:       return SoKeyboardEvent::PAD_3;
-            case Qt::Key_4:       return SoKeyboardEvent::PAD_4;
-            case Qt::Key_5:       return SoKeyboardEvent::PAD_5;
-            case Qt::Key_6:       return SoKeyboardEvent::PAD_6;
-            case Qt::Key_7:       return SoKeyboardEvent::PAD_7;
-            case Qt::Key_8:       return SoKeyboardEvent::PAD_8;
-            case Qt::Key_9:       return SoKeyboardEvent::PAD_9;
-            case Qt::Key_Plus:    return SoKeyboardEvent::PAD_ADD;
-            case Qt::Key_Minus:   return SoKeyboardEvent::PAD_SUBTRACT;
-            case Qt::Key_Asterisk: return SoKeyboardEvent::PAD_MULTIPLY;
-            case Qt::Key_Slash:   return SoKeyboardEvent::PAD_DIVIDE;
-            case Qt::Key_Enter:   return SoKeyboardEvent::PAD_ENTER;
-              // Qt (Version 4.2.2) doesn't get the numpad modifier right for MacOSX:
+    // NOTE: SoKeyboardConstants.h has provided an exact mapping
+    // from X11/keysymdef.h for keyboard symbols. So this file was
+    // referenced for missing key codes.
+    // some key codes have been skipped out of lazyness...
+    if (keyPad) {
+        // keypad keys are marked with a modifier flag under Qt
+        switch (qtKeyCode) {
+        case Qt::Key_Comma:   // better safe than sorry
+        case Qt::Key_Period:  return SoKeyboardEvent::PAD_PERIOD;
+        case Qt::Key_0:       return SoKeyboardEvent::PAD_0;
+        case Qt::Key_1:       return SoKeyboardEvent::PAD_1;
+        case Qt::Key_2:       return SoKeyboardEvent::PAD_2;
+        case Qt::Key_3:       return SoKeyboardEvent::PAD_3;
+        case Qt::Key_4:       return SoKeyboardEvent::PAD_4;
+        case Qt::Key_5:       return SoKeyboardEvent::PAD_5;
+        case Qt::Key_6:       return SoKeyboardEvent::PAD_6;
+        case Qt::Key_7:       return SoKeyboardEvent::PAD_7;
+        case Qt::Key_8:       return SoKeyboardEvent::PAD_8;
+        case Qt::Key_9:       return SoKeyboardEvent::PAD_9;
+        case Qt::Key_Plus:    return SoKeyboardEvent::PAD_ADD;
+        case Qt::Key_Minus:   return SoKeyboardEvent::PAD_SUBTRACT;
+        case Qt::Key_Asterisk: return SoKeyboardEvent::PAD_MULTIPLY;
+        case Qt::Key_Slash:   return SoKeyboardEvent::PAD_DIVIDE;
+        case Qt::Key_Enter:   return SoKeyboardEvent::PAD_ENTER;
+            // Qt (Version 4.2.2) doesn't get the numpad modifier right for MacOSX:
 #if !defined(__APPLE__)
-              // Keypad-Keys without numlock, but we return the number codes anyway:
-            case Qt::Key_Delete:  return SoKeyboardEvent::PAD_PERIOD;
-            case Qt::Key_Insert:  return SoKeyboardEvent::PAD_0;
-            case Qt::Key_End:     return SoKeyboardEvent::PAD_1;
-            case Qt::Key_Down:    return SoKeyboardEvent::PAD_2;
-            case Qt::Key_PageDown: return SoKeyboardEvent::PAD_3;
-            case Qt::Key_Left:    return SoKeyboardEvent::PAD_4;
-            case Qt::Key_Clear:   return SoKeyboardEvent::PAD_5;
-            case Qt::Key_Right:   return SoKeyboardEvent::PAD_6;
-            case Qt::Key_Home:    return SoKeyboardEvent::PAD_7;
-            case Qt::Key_Up:      return SoKeyboardEvent::PAD_8;
-            case Qt::Key_PageUp:  return SoKeyboardEvent::PAD_9;
-              // These ones you normally don't get with a PC keyboard:
-            case Qt::Key_F1:      return SoKeyboardEvent::PAD_F1;
-            case Qt::Key_F2:      return SoKeyboardEvent::PAD_F2;
-            case Qt::Key_F3:      return SoKeyboardEvent::PAD_F3;
-            case Qt::Key_F4:      return SoKeyboardEvent::PAD_F4;
-            case Qt::Key_Space:   return SoKeyboardEvent::PAD_SPACE;
-            case Qt::Key_Tab:     return SoKeyboardEvent::PAD_TAB;
+            // Keypad-Keys without numlock, but we return the number codes anyway:
+        case Qt::Key_Delete:  return SoKeyboardEvent::PAD_PERIOD;
+        case Qt::Key_Insert:  return SoKeyboardEvent::PAD_0;
+        case Qt::Key_End:     return SoKeyboardEvent::PAD_1;
+        case Qt::Key_Down:    return SoKeyboardEvent::PAD_2;
+        case Qt::Key_PageDown: return SoKeyboardEvent::PAD_3;
+        case Qt::Key_Left:    return SoKeyboardEvent::PAD_4;
+        case Qt::Key_Clear:   return SoKeyboardEvent::PAD_5;
+        case Qt::Key_Right:   return SoKeyboardEvent::PAD_6;
+        case Qt::Key_Home:    return SoKeyboardEvent::PAD_7;
+        case Qt::Key_Up:      return SoKeyboardEvent::PAD_8;
+        case Qt::Key_PageUp:  return SoKeyboardEvent::PAD_9;
+            // These ones you normally don't get with a PC keyboard:
+        case Qt::Key_F1:      return SoKeyboardEvent::PAD_F1;
+        case Qt::Key_F2:      return SoKeyboardEvent::PAD_F2;
+        case Qt::Key_F3:      return SoKeyboardEvent::PAD_F3;
+        case Qt::Key_F4:      return SoKeyboardEvent::PAD_F4;
+        case Qt::Key_Space:   return SoKeyboardEvent::PAD_SPACE;
+        case Qt::Key_Tab:     return SoKeyboardEvent::PAD_TAB;
 #endif
+        }
     }
-  }
-  switch (qtKeyCode) {
-        case Qt::Key_Escape:      return SoKeyboardEvent::ESCAPE;
-        case Qt::Key_Tab:         return SoKeyboardEvent::TAB;
-          // case Qt::Key_Backtab:     return SoKeyboardEvent::ANY;
-        case Qt::Key_Backspace:   return SoKeyboardEvent::BACKSPACE;
-        case Qt::Key_Return:      return SoKeyboardEvent::RETURN;
-        case Qt::Key_Enter:       return SoKeyboardEvent::ENTER;
-        case Qt::Key_Insert:      return SoKeyboardEvent::INSERT;
-        case Qt::Key_Delete:      return (SoKeyboardEvent::Key) 0xFFFF; // taken from X11/keysymdef.h
-        case Qt::Key_Pause:       return SoKeyboardEvent::PAUSE;
-        case Qt::Key_Print:       return SoKeyboardEvent::PRINT;
-        case Qt::Key_SysReq:      return (SoKeyboardEvent::Key) 0xFF15; // taken from X11/keysymdef.h
-          // case Qt::Key_Clear:       return SoKeyboardEvent::ANY;
-        case Qt::Key_Home:        return SoKeyboardEvent::HOME;
-        case Qt::Key_End:         return SoKeyboardEvent::END;
-        case Qt::Key_Left:        return SoKeyboardEvent::LEFT_ARROW;
-        case Qt::Key_Up:          return SoKeyboardEvent::UP_ARROW;
-        case Qt::Key_Right:       return SoKeyboardEvent::RIGHT_ARROW;
-        case Qt::Key_Down:        return SoKeyboardEvent::DOWN_ARROW;
-        case Qt::Key_PageUp:      return SoKeyboardEvent::PAGE_UP;
-        case Qt::Key_PageDown:    return SoKeyboardEvent::PAGE_DOWN;
-        case Qt::Key_Shift:       return SoKeyboardEvent::LEFT_SHIFT;
-        case Qt::Key_Control:     return SoKeyboardEvent::LEFT_CONTROL;
-        case Qt::Key_Meta:        return (SoKeyboardEvent::Key) 0xFFE7; // taken from X11/keysymdef.h
-        case Qt::Key_Alt:         return SoKeyboardEvent::LEFT_ALT;
-        case Qt::Key_AltGr:       return SoKeyboardEvent::RIGHT_ALT;
-        case Qt::Key_CapsLock:    return SoKeyboardEvent::CAPS_LOCK;
-        case Qt::Key_NumLock:     return SoKeyboardEvent::NUM_LOCK;
-        case Qt::Key_ScrollLock:  return SoKeyboardEvent::SCROLL_LOCK;
-        case Qt::Key_Super_L:     return (SoKeyboardEvent::Key) 0xFFEB; // taken from X11/keysymdef.h
-        case Qt::Key_Super_R:     return (SoKeyboardEvent::Key) 0xFFEC; // taken from X11/keysymdef.h
-        case Qt::Key_Menu:        return (SoKeyboardEvent::Key) 0xFF67; // taken from X11/keysymdef.h
-        case Qt::Key_Hyper_L:     return (SoKeyboardEvent::Key) 0xFFED; // taken from X11/keysymdef.h
-        case Qt::Key_Hyper_R:     return (SoKeyboardEvent::Key) 0xFFEE; // taken from X11/keysymdef.h
-        case Qt::Key_Help:        return (SoKeyboardEvent::Key) 0xFF6A; // taken from X11/keysymdef.h
-          // case Qt::Key_Direction_L: return SoKeyboardEvent::ANY;
-          // case Qt::Key_Direction_R: return SoKeyboardEvent::ANY;
-        case Qt::Key_A:           return SoKeyboardEvent::A;
-        case Qt::Key_B:           return SoKeyboardEvent::B;
-        case Qt::Key_C:           return SoKeyboardEvent::C;
-        case Qt::Key_D:           return SoKeyboardEvent::D;
-        case Qt::Key_E:           return SoKeyboardEvent::E;
-        case Qt::Key_F:           return SoKeyboardEvent::F;
-        case Qt::Key_G:           return SoKeyboardEvent::G;
-        case Qt::Key_H:           return SoKeyboardEvent::H;
-        case Qt::Key_I:           return SoKeyboardEvent::I;
-        case Qt::Key_J:           return SoKeyboardEvent::J;
-        case Qt::Key_K:           return SoKeyboardEvent::K;
-        case Qt::Key_L:           return SoKeyboardEvent::L;
-        case Qt::Key_M:           return SoKeyboardEvent::M;
-        case Qt::Key_N:           return SoKeyboardEvent::N;
-        case Qt::Key_O:           return SoKeyboardEvent::O;
-        case Qt::Key_P:           return SoKeyboardEvent::P;
-        case Qt::Key_Q:           return SoKeyboardEvent::Q;
-        case Qt::Key_R:           return SoKeyboardEvent::R;
-        case Qt::Key_S:           return SoKeyboardEvent::S;
-        case Qt::Key_T:           return SoKeyboardEvent::T;
-        case Qt::Key_U:           return SoKeyboardEvent::U;
-        case Qt::Key_V:           return SoKeyboardEvent::V;
-        case Qt::Key_W:           return SoKeyboardEvent::W;
-        case Qt::Key_X:           return SoKeyboardEvent::X;
-        case Qt::Key_Y:           return SoKeyboardEvent::Y;
-        case Qt::Key_Z:           return SoKeyboardEvent::Z;
-        case Qt::Key_Multi_key:         return (SoKeyboardEvent::Key) 0xFF20; // taken from X11/keysymdef.h
-        case Qt::Key_Codeinput:         return (SoKeyboardEvent::Key) 0xFF37; // taken from X11/keysymdef.h
-        case Qt::Key_SingleCandidate:   return (SoKeyboardEvent::Key) 0xFF3C; // taken from X11/keysymdef.h
-        case Qt::Key_MultipleCandidate: return (SoKeyboardEvent::Key) 0xFF3D; // taken from X11/keysymdef.h
-        case Qt::Key_PreviousCandidate: return (SoKeyboardEvent::Key) 0xFF3E; // taken from X11/keysymdef.h
-        case Qt::Key_Mode_switch:       return (SoKeyboardEvent::Key) 0xFF7E; // taken from X11/keysymdef.h
-        default:
-          if (qtKeyCode >= Qt::Key_F1 && qtKeyCode <= Qt::Key_F35) {
+    switch (qtKeyCode) {
+    case Qt::Key_Escape:      return SoKeyboardEvent::ESCAPE;
+    case Qt::Key_Tab:         return SoKeyboardEvent::TAB;
+        // case Qt::Key_Backtab:     return SoKeyboardEvent::ANY;
+    case Qt::Key_Backspace:   return SoKeyboardEvent::BACKSPACE;
+    case Qt::Key_Return:      return SoKeyboardEvent::RETURN;
+    case Qt::Key_Enter:       return SoKeyboardEvent::ENTER;
+    case Qt::Key_Insert:      return SoKeyboardEvent::INSERT;
+    case Qt::Key_Delete:      return (SoKeyboardEvent::Key) 0xFFFF; // taken from X11/keysymdef.h
+    case Qt::Key_Pause:       return SoKeyboardEvent::PAUSE;
+    case Qt::Key_Print:       return SoKeyboardEvent::PRINT;
+    case Qt::Key_SysReq:      return (SoKeyboardEvent::Key) 0xFF15; // taken from X11/keysymdef.h
+        // case Qt::Key_Clear:       return SoKeyboardEvent::ANY;
+    case Qt::Key_Home:        return SoKeyboardEvent::HOME;
+    case Qt::Key_End:         return SoKeyboardEvent::END;
+    case Qt::Key_Left:        return SoKeyboardEvent::LEFT_ARROW;
+    case Qt::Key_Up:          return SoKeyboardEvent::UP_ARROW;
+    case Qt::Key_Right:       return SoKeyboardEvent::RIGHT_ARROW;
+    case Qt::Key_Down:        return SoKeyboardEvent::DOWN_ARROW;
+    case Qt::Key_PageUp:      return SoKeyboardEvent::PAGE_UP;
+    case Qt::Key_PageDown:    return SoKeyboardEvent::PAGE_DOWN;
+    case Qt::Key_Shift:       return SoKeyboardEvent::LEFT_SHIFT;
+    case Qt::Key_Control:     return SoKeyboardEvent::LEFT_CONTROL;
+    case Qt::Key_Meta:        return (SoKeyboardEvent::Key) 0xFFE7; // taken from X11/keysymdef.h
+    case Qt::Key_Alt:         return SoKeyboardEvent::LEFT_ALT;
+    case Qt::Key_AltGr:       return SoKeyboardEvent::RIGHT_ALT;
+    case Qt::Key_CapsLock:    return SoKeyboardEvent::CAPS_LOCK;
+    case Qt::Key_NumLock:     return SoKeyboardEvent::NUM_LOCK;
+    case Qt::Key_ScrollLock:  return SoKeyboardEvent::SCROLL_LOCK;
+    case Qt::Key_Super_L:     return (SoKeyboardEvent::Key) 0xFFEB; // taken from X11/keysymdef.h
+    case Qt::Key_Super_R:     return (SoKeyboardEvent::Key) 0xFFEC; // taken from X11/keysymdef.h
+    case Qt::Key_Menu:        return (SoKeyboardEvent::Key) 0xFF67; // taken from X11/keysymdef.h
+    case Qt::Key_Hyper_L:     return (SoKeyboardEvent::Key) 0xFFED; // taken from X11/keysymdef.h
+    case Qt::Key_Hyper_R:     return (SoKeyboardEvent::Key) 0xFFEE; // taken from X11/keysymdef.h
+    case Qt::Key_Help:        return (SoKeyboardEvent::Key) 0xFF6A; // taken from X11/keysymdef.h
+        // case Qt::Key_Direction_L: return SoKeyboardEvent::ANY;
+        // case Qt::Key_Direction_R: return SoKeyboardEvent::ANY;
+    case Qt::Key_A:           return SoKeyboardEvent::A;
+    case Qt::Key_B:           return SoKeyboardEvent::B;
+    case Qt::Key_C:           return SoKeyboardEvent::C;
+    case Qt::Key_D:           return SoKeyboardEvent::D;
+    case Qt::Key_E:           return SoKeyboardEvent::E;
+    case Qt::Key_F:           return SoKeyboardEvent::F;
+    case Qt::Key_G:           return SoKeyboardEvent::G;
+    case Qt::Key_H:           return SoKeyboardEvent::H;
+    case Qt::Key_I:           return SoKeyboardEvent::I;
+    case Qt::Key_J:           return SoKeyboardEvent::J;
+    case Qt::Key_K:           return SoKeyboardEvent::K;
+    case Qt::Key_L:           return SoKeyboardEvent::L;
+    case Qt::Key_M:           return SoKeyboardEvent::M;
+    case Qt::Key_N:           return SoKeyboardEvent::N;
+    case Qt::Key_O:           return SoKeyboardEvent::O;
+    case Qt::Key_P:           return SoKeyboardEvent::P;
+    case Qt::Key_Q:           return SoKeyboardEvent::Q;
+    case Qt::Key_R:           return SoKeyboardEvent::R;
+    case Qt::Key_S:           return SoKeyboardEvent::S;
+    case Qt::Key_T:           return SoKeyboardEvent::T;
+    case Qt::Key_U:           return SoKeyboardEvent::U;
+    case Qt::Key_V:           return SoKeyboardEvent::V;
+    case Qt::Key_W:           return SoKeyboardEvent::W;
+    case Qt::Key_X:           return SoKeyboardEvent::X;
+    case Qt::Key_Y:           return SoKeyboardEvent::Y;
+    case Qt::Key_Z:           return SoKeyboardEvent::Z;
+    case Qt::Key_Multi_key:         return (SoKeyboardEvent::Key) 0xFF20; // taken from X11/keysymdef.h
+    case Qt::Key_Codeinput:         return (SoKeyboardEvent::Key) 0xFF37; // taken from X11/keysymdef.h
+    case Qt::Key_SingleCandidate:   return (SoKeyboardEvent::Key) 0xFF3C; // taken from X11/keysymdef.h
+    case Qt::Key_MultipleCandidate: return (SoKeyboardEvent::Key) 0xFF3D; // taken from X11/keysymdef.h
+    case Qt::Key_PreviousCandidate: return (SoKeyboardEvent::Key) 0xFF3E; // taken from X11/keysymdef.h
+    case Qt::Key_Mode_switch:       return (SoKeyboardEvent::Key) 0xFF7E; // taken from X11/keysymdef.h
+    default:
+        if (qtKeyCode >= Qt::Key_F1 && qtKeyCode <= Qt::Key_F35) {
             // handle function keys economically
             return (SoKeyboardEvent::Key) (qtKeyCode - Qt::Key_F1 + SoKeyboardEvent::F1);
-          } else if (qtKeyCode >= 0x20 && qtKeyCode <= 0x7f ||
-            qtKeyCode >= 0xa0 && qtKeyCode <= 0xff)
-          {
+        } else if (qtKeyCode >= 0x20 && qtKeyCode <= 0x7f ||
+                   qtKeyCode >= 0xa0 && qtKeyCode <= 0xff)
+        {
             // ascii+latin1 key codes are the same, except for the
             // letters A-Z (upper vs. lower case) which are handled above
             return (SoKeyboardEvent::Key) qtKeyCode;
-          } else {
+        } else {
             return SoKeyboardEvent::ANY;
-          }
-  }
+        }
+    }
 }
 
 SoKeyboardEvent *
 SoQtKeyboard::translateKeyEvent(QKeyEvent *ke,
-				SoButtonEvent::State whichState)
+                                SoButtonEvent::State whichState)
 {
     SoKeyboardEvent::Key whichKey = lookupKey (ke->key(), ke->modifiers() & Qt::KeypadModifier);
     fillInEventState (keyEvent, ke);

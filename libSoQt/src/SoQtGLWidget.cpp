@@ -207,13 +207,13 @@ QMap<SoQGLWidgetProxy*, int> SoQGLWidgetProxy::contextMap;
 // Constructor
 //
 SoQtGLWidget::SoQtGLWidget(
-    QWidget *parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    int modes, 
-    SbBool buildNow) : SoQtComponent(parent, name, buildInsideParent)
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget *parent,
+        const char *name,
+        SbBool buildInsideParent,
+        int modes,
+        SbBool buildNow) : SoQtComponent(parent, name, buildInsideParent)
+  //
+  ////////////////////////////////////////////////////////////////////////
 {
     // window related variables
     mgrWidget = NULL;
@@ -238,7 +238,7 @@ SoQtGLWidget::SoQtGLWidget(
     
     // Build the widget tree, and let SoQtComponent know about our base widget.
     if (buildNow)
-	setBaseWidget(buildWidget(getParentWidget()));
+        setBaseWidget(buildWidget(getParentWidget()));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -296,7 +296,7 @@ SoQtGLWidget::getNormalVisual()
 ////////////////////////////////////////////////////////////////////////
 {
     if (! getNormalWidget())
-	return QGLFormat();
+        return QGLFormat();
     
     return getNormalWidget()->format();
 }
@@ -313,7 +313,7 @@ SoQtGLWidget::getOverlayVisual()
 ////////////////////////////////////////////////////////////////////////
 {
     if (! getOverlayWidget())
-	return QGLFormat();
+        return QGLFormat();
     
     return getOverlayWidget()->format();
 }
@@ -330,13 +330,13 @@ SoQtGLWidget::setDoubleBuffer(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == isDoubleBuffer())
-	return;
- 
-   // set the gl mode and update the attribute list
+        return;
+
+    // set the gl mode and update the attribute list
     attribList.setDoubleBuffer(flag);
     destroyNormalWindows();
     buildNormalGLXWidget(attribList);
-	
+
     // prevent a redraw a redraw from happening until we receive an
     // expose event - this will prevent too many redraws from happening
     // if the scene graph also changes at the same time.
@@ -356,10 +356,10 @@ SoQtGLWidget::setStereoBuffer(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == isStereoBuffer())
-	return;
+        return;
     
     // update the attribute list
-	// now set the flag and create the new window with given visual
+    // now set the flag and create the new window with given visual
     attribList.setStereo(flag);
     destroyNormalWindows();
     buildNormalGLXWidget(attribList); // this MUST be called after we destroy the old contexes
@@ -443,16 +443,16 @@ SoQtGLWidget::buildWidget(QWidget *parent)
     mgrWidget->setLayout(new QVBoxLayout(mgrWidget));
     mgrWidget->layout()->setMargin(0);
     mgrWidget->layout()->setSpacing(0);
-	
+
     // pick an initial size if set
     SbVec2s size = (glxSize[0] && glxSize[1]) ? glxSize : getSize();
     if (size[0] && size[1]) {
         mgrWidget->resize(size[0], size[1]);
     }
-   
+
     buildNormalGLXWidget(attribList);
     if (glModes & SO_GLX_OVERLAY) // make this the top window
-	buildOverlayGLXWidget(attribList);
+        buildOverlayGLXWidget(attribList);
     
     return mgrWidget;
 }
@@ -481,9 +481,9 @@ SoQtGLWidget::buildNormalGLXWidget(const QGLFormat & format)
 
     // assign the right widget var and manage widget
     if (isDoubleBuffer())
-	doubleBufferWidget = glx;
+        doubleBufferWidget = glx;
     else
-	singleBufferWidget = glx;
+        singleBufferWidget = glx;
     
     
     // prevent a redraw a redraw from happening until we receive an
@@ -518,15 +518,15 @@ SoQtGLWidget::setBorder(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == isBorder())
-	return;
+        return;
     
     // set the border size and update the widgets
     borderSize = flag ? 2 : 0;
     
-	if (mgrWidget) {
-		mgrWidget->setLineWidth(borderSize);
-		mgrWidget->setFrameStyle(flag ? QFrame::Box : QFrame::NoFrame);
-	}
+    if (mgrWidget) {
+        mgrWidget->setLineWidth(borderSize);
+        mgrWidget->setFrameStyle(flag ? QFrame::Box : QFrame::NoFrame);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -544,7 +544,7 @@ SoQtGLWidget::setDrawToFrontBufferEnable(SbBool flag)
     
     // clear the flag is disabled
     if (! enableDrawToFrontBuffer)
-	drawToFrontBuffer = FALSE;
+        drawToFrontBuffer = FALSE;
 }
 
 SbBool
@@ -627,20 +627,20 @@ SoQtGLWidget::setGlxSize(SbVec2s newSize)
 ////////////////////////////////////////////////////////////////////////
 {
     if (newSize == glxSize)
-	return;
+        return;
     
     // now set the container widget size (children will resize automatically)
     if (mgrWidget)
-		mgrWidget->resize(glxSize[0], glxSize[1]);
+        mgrWidget->resize(glxSize[0], glxSize[1]);
     // else we havn't built yet, so cache this initial build size
     else
-	glxSize = newSize;
+        glxSize = newSize;
 }
 
 void
 SoQtGLWidget::eventHandler(QWidget *w, SoQtGLWidget *p, QEvent *qe, bool *)
 {
-   p->processEvent(qe);
+    p->processEvent(qe);
 }
 
 //

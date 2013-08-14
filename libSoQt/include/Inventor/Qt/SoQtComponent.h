@@ -75,12 +75,12 @@ typedef void SoQtComponentCB(void *userData, SoQtComponent *comp);
 typedef void SoQtComponentVisibilityCB(void *userData, SbBool visibleFlag);
 
 class SOQT_EXPORT SoQtComponent : public QObject {
-  public:
+public:
     //
-    // This shows and hides the component. If this is a topLevelShell 
+    // This shows and hides the component. If this is a topLevelShell
     // component, then show() will Realize and Map the window, else it
     // will simply Manage the widget.
-    // Hide calls the appropriate XUnmapWindow() or XtUnmanageChild() 
+    // Hide calls the appropriate XUnmapWindow() or XtUnmanageChild()
     // routines (check SoQt::show and hide man pages for detail).
     //
     // In addition, show() will also pop the component window to the top
@@ -97,7 +97,7 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     // is iconified).
     //
     // Subclasses should call this routine before redrawing anything
-    // and in any sensor trigger methods. Calling this will check the 
+    // and in any sensor trigger methods. Calling this will check the
     // current visibility (which is really cheap) and invoke the
     // visibility changed callbacks if the state changes (see
     // addVisibilityChangeCallback()).
@@ -106,7 +106,7 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     
     //
     // This returns the base widget for this component.
-    // If the component created its own shell, this returns the 
+    // If the component created its own shell, this returns the
     // topmost widget beneath the shell.
     // Call getShellWidget() to obtain the shell.
     //
@@ -137,29 +137,29 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     void setFullScreenEnable( const SbBool enable ) { fullScreenEnabled = enable; }
     SbBool isFullScreenEnable() const { return fullScreenEnabled; }
 
- 	//
+    //
     // The title can be set for topLevel shell components or components
-    // which are directly under a shell widget (i.e. components which 
+    // which are directly under a shell widget (i.e. components which
     // have their own window).
     //
     void    	    	setTitle(const char *newTitle);
     const char *    	getTitle() const		{ return title.getString(); }
     void    	    	setIconTitle(const char *newIconTitle);
     const char *    	getIconTitle() const		{ return iconTitle.getString(); }
- 	//
+    //
     // Widget name and class - these are used when looking up X resource
     // values for the widget (each subclass provides a className).
     //
-    const SbString	getWidgetName() const	{ return _name; }    
+    const SbString	getWidgetName() const	{ return _name; }
     const SbString	getClassName() const { return _classname; }
     
     virtual ~SoQtComponent();
     
-  protected:
+protected:
     //
     // If `parent` widget is suplied AND `buildInsideParent` is TRUE, this
     // component will build inside the given parent widget, else
-    // it will create its own topLevelShell widget (component resides in 
+    // it will create its own topLevelShell widget (component resides in
     // its own window).
     // The topLevelShell can either be created under the given
     // parent shell (`parent` != NULL) or under the main window.
@@ -167,20 +167,20 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     // The name is used for looking up X resource values. If NULL,
     // then this component inherits resource values defined for its class.
     //
-    // Calling setBaseWidget is needed for looking up Xt like 
+    // Calling setBaseWidget is needed for looking up Xt like
     // resources in the widget tree. It will use the class name of
     // the Inventor component (e.g. SoQtRenderArea) instead of
     // the class name of the Motif widget this component employs
     // (e.g. XmForm).
-    // 
+    //
     // Thus apps are able to do this in their app-defaults file:
     //
     // *SoQtRenderArea*BackgroundColor: salmon
     //
     SoQtComponent(
-	    QWidget *parent = NULL,
-	    const char *name = NULL, 
-	    SbBool buildInsideParent = TRUE);
+            QWidget *parent = NULL,
+            const char *name = NULL,
+            SbBool buildInsideParent = TRUE);
 
     // Subclasses need to call this method passing the top most
     // widget after it has been created.
@@ -200,7 +200,7 @@ class SOQT_EXPORT SoQtComponent : public QObject {
     //
     void    openHelpCard(const char *cardName);
     
-  private:
+private:
     
     QWidget	   *parentWidget;	// topLevel shell if in its own window
     QWidget	   *_baseWidget;	// returned by getWidget()

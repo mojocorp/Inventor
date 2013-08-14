@@ -87,22 +87,22 @@
 // Public constructor - build the widget right now
 //
 SoQtThumbWheel::SoQtThumbWheel(
-    Qt::Orientation ori,
-    QWidget *parent)
-        : QWidget(parent)
-//
-////////////////////////////////////////////////////////////////////////
+        Qt::Orientation ori,
+        QWidget *parent)
+    : QWidget(parent)
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
     interactive = false;
     value = 0.0f;
     orientation = ori;
 
     if (orientation == Qt::Horizontal) {
-      setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-      setCursor(Qt::SizeHorCursor);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        setCursor(Qt::SizeHorCursor);
     } else {
-      setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-      setCursor(Qt::SizeVerCursor);
+        setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+        setCursor(Qt::SizeVerCursor);
     }
 }
 
@@ -134,7 +134,7 @@ SoQtThumbWheel::paintEvent(QPaintEvent *)
 ////////////////////////////////////////////////////////////////////////
 {
     if (! isVisible())
-	return;
+        return;
 
     QPainter p(this);
 
@@ -156,70 +156,70 @@ SoQtThumbWheel::paintEvent(QPaintEvent *)
     x1++; y1++; x2--; y2--;
     p.drawRect(x1, y1, x2, y2);
     x1++; y1++; x2--; y2--;
-      
+
     if (orientation == Qt::Horizontal) {
         p.setPen(DARK3_UI_COLOR); p.drawLine(x1,y2,x2,y2);
         p.setPen(BLACK_UI_COLOR); p.drawLine(x1,y1,x2,y1);
-	y1++; y2--;
-	
-	l = x2 - x1;
-	d = 0;
+        y1++; y2--;
+
+        l = x2 - x1;
+        d = 0;
         p.setPen(BLACK_UI_COLOR);
         p.drawLine(x1+d, y1,x2-d, y1);
         p.drawLine(x1+d, y2,x2-d, y2);
-	d = (short)(l * .06);
+        d = (short)(l * .06);
         p.setPen(DARK2_UI_COLOR);
         p.drawLine(x1+d, y1,x2-d, y1);
         p.drawLine(x1+d, y2,x2-d, y2);
-	d = (short)(l * .12);
+        d = (short)(l * .12);
         p.setPen(DARK1_UI_COLOR);
         p.drawLine(x1+d, y1,x2-d, y1);
         p.drawLine(x1+d, y2,x2-d, y2);
-	d = (short)(l * .20);
+        d = (short)(l * .20);
         p.setPen(MAIN_UI_COLOR);
         p.drawLine(x1+d, y1,x2-d, y1);
         p.drawLine(x1+d, y2,x2-d, y2);
-	d = (short)(l * .30);
+        d = (short)(l * .30);
         p.setPen(LIGHT1_UI_COLOR);
         p.drawLine(x1+d, y1,x2-d, y1);
         p.drawLine(x1+d, y2,x2-d, y2);
-	d = (short)(l * .40);
+        d = (short)(l * .40);
         p.setPen(WHITE_UI_COLOR);
         p.drawLine(x1+d, y1,x2-d, y1);
         p.drawLine(x1+d, y2,x2-d, y2);
-	x1++; y1++; x2--; y2--;
+        x1++; y1++; x2--; y2--;
     }
     else {
         p.setPen(DARK3_UI_COLOR); p.drawLine(x1,y1,x1,y2);
         p.setPen(BLACK_UI_COLOR); p.drawLine(x2,y1,x2,y2);
-	x1++; x2--;
-	
-	l = y2 - y1;
-	d = 0;
+        x1++; x2--;
+
+        l = y2 - y1;
+        d = 0;
         p.setPen(BLACK_UI_COLOR);
         p.drawLine(x1, y1+d,x1, y2-d);
         p.drawLine(x2, y1+d,x2, y2-d);
-	d = (short)(l * .06);
+        d = (short)(l * .06);
         p.setPen(DARK2_UI_COLOR);
         p.drawLine(x1, y1+d,x1, y2-d);
         p.drawLine(x2, y1+d,x2, y2-d);
-	d = (short)(l * .12);
+        d = (short)(l * .12);
         p.setPen(DARK1_UI_COLOR);
         p.drawLine(x1, y1+d,x1, y2-d);
         p.drawLine(x2, y1+d,x2, y2-d);
-	d = (short)(l * .20);
+        d = (short)(l * .20);
         p.setPen(MAIN_UI_COLOR);
         p.drawLine(x1, y1+d,x1, y2-d);
         p.drawLine(x2, y1+d,x2, y2-d);
-	d = (short)(l * .30);
+        d = (short)(l * .30);
         p.setPen(LIGHT1_UI_COLOR);
         p.drawLine(x1, y1+d,x1, y2-d);
         p.drawLine(x2, y1+d,x2, y2-d);
-	d = (short)(l * .40);
+        d = (short)(l * .40);
         p.setPen(WHITE_UI_COLOR);
         p.drawLine(x1, y1+d,x1, y2-d);
         p.drawLine(x2, y1+d,x2, y2-d);
-	x1++; y1++; x2--; y2--;
+        x1++; y1++; x2--; y2--;
     }
     
     //p.setPen(MAIN_UI_COLOR);
@@ -233,78 +233,78 @@ SoQtThumbWheel::paintEvent(QPaintEvent *)
     ang_inc = M_PI / TICK_NUM;
     n = (int)(floorf(angle / ang_inc));
     angle -= n * ang_inc;
-       
+
     if (orientation == Qt::Horizontal) {
         mid = size[0] / 2;
-	rad = mid - UI_THICK - 2;
-	
-	for (i=0; i<TICK_NUM; i++) {
-	    x = mid - (short)(cosf(angle) * rad) - 1;
-	    
-	    if (i<PART1 || i>(TICK_NUM - PART1)) {
+        rad = mid - UI_THICK - 2;
+
+        for (i=0; i<TICK_NUM; i++) {
+            x = mid - (short)(cosf(angle) * rad) - 1;
+
+            if (i<PART1 || i>(TICK_NUM - PART1)) {
                 p.setPen(BLACK_UI_COLOR); p.drawLine(x, y1,x, y2);
-		x++; 
+                x++;
                 p.setPen(DARK1_UI_COLOR); p.drawLine(x, y1,x, y2);
-	    }
-	    else if (i<PART2 || i>(TICK_NUM - PART2)) {
+            }
+            else if (i<PART2 || i>(TICK_NUM - PART2)) {
                 p.setPen(DARK3_UI_COLOR); p.drawLine(x, y1,x, y2);
-	    }
-	    else if (i<PART3 || i>(TICK_NUM - PART3)) {
+            }
+            else if (i<PART3 || i>(TICK_NUM - PART3)) {
                 p.setPen(LIGHT1_UI_COLOR); p.drawLine(x, y1,x, y2);
-		x++; 
+                x++;
                 p.setPen(DARK2_UI_COLOR); p.drawLine(x, y1,x, y2);
-	    }
-	    else if (i<PART4 || i>(TICK_NUM - PART4)) {
+            }
+            else if (i<PART4 || i>(TICK_NUM - PART4)) {
                 p.setPen(WHITE_UI_COLOR); p.drawLine(x, y1,x, y2);
-		x++; 
+                x++;
                 p.setPen(DARK2_UI_COLOR); p.drawLine(x, y1,x, y2);
-	    }
-	    else {
+            }
+            else {
                 p.setPen(WHITE_UI_COLOR);
                 x--; p.drawLine(x, y1,x, y2);
                 x++; p.drawLine(x, y1,x, y2);
                 p.setPen(DARK2_UI_COLOR);
                 x++; p.drawLine(x, y1,x, y2);
-	    }
-	    
-	    angle += ang_inc;
-	}
+            }
+
+            angle += ang_inc;
+        }
     }
     else {
         mid = size[1] / 2;
-	rad = mid - UI_THICK - 2;
-	
-	for (i=0; i<TICK_NUM; i++) {
-	    y = mid - (short)(cosf(angle) * rad);
-	    
-	    if (i<PART1 || i>(TICK_NUM - PART1)) {
+        rad = mid - UI_THICK - 2;
+
+        for (i=0; i<TICK_NUM; i++) {
+            y = mid - (short)(cosf(angle) * rad);
+
+            if (i<PART1 || i>(TICK_NUM - PART1)) {
                 p.setPen(BLACK_UI_COLOR); p.drawLine(x1, y,x2, y);
-		y--; 
+                y--;
                 p.setPen(DARK1_UI_COLOR); p.drawLine(x1, y,x2, y);
-	    }
-	    else if (i<PART2 || i>(TICK_NUM - PART2)) {
+            }
+            else if (i<PART2 || i>(TICK_NUM - PART2)) {
                 p.setPen(DARK3_UI_COLOR); p.drawLine(x1, y,x2, y);
-	    }
-	    else if (i<PART3 || i>(TICK_NUM - PART3)) {
+            }
+            else if (i<PART3 || i>(TICK_NUM - PART3)) {
                 p.setPen(LIGHT1_UI_COLOR); p.drawLine(x1, y,x2, y);
-		y--; 
+                y--;
                 p.setPen(DARK2_UI_COLOR); p.drawLine(x1, y,x2, y);
-	    }
-	    else if (i<PART4 || i>(TICK_NUM - PART4)) {
+            }
+            else if (i<PART4 || i>(TICK_NUM - PART4)) {
                 p.setPen(WHITE_UI_COLOR); p.drawLine(x1, y,x2, y);
-		y--; 
+                y--;
                 p.setPen(DARK2_UI_COLOR); p.drawLine(x1, y,x2, y);
-	    }
-	    else {
+            }
+            else {
                 p.setPen(WHITE_UI_COLOR);
                 y++; p.drawLine(x1, y,x2, y);
                 y--; p.drawLine(x1, y,x2, y);
                 p.setPen(DARK2_UI_COLOR);
                 y--; p.drawLine(x1, y,x2, y);
-	    }
-	    
-	    angle += ang_inc;
-	}
+            }
+
+            angle += ang_inc;
+        }
     }
 }
 
@@ -382,7 +382,7 @@ SoQtThumbWheel::setValue(float v)
 ////////////////////////////////////////////////////////////////////////
 {
     if (value == v)
-    	return;
+        return;
     
     value = v;
     

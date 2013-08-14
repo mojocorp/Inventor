@@ -100,10 +100,10 @@ SoQtMouse::~SoQtMouse()
 #if 0
 void
 SoQtMouse::enable(
-    Widget w,
-    XtEventHandler proc, 
-    XtPointer clientData,
-    Window)
+        Widget w,
+        XtEventHandler proc,
+        XtPointer clientData,
+        Window)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -120,9 +120,9 @@ SoQtMouse::enable(
 //
 void
 SoQtMouse::disable(
-    Widget w,
-    XtEventHandler proc, 
-    XtPointer clientData)
+        Widget w,
+        XtEventHandler proc,
+        XtPointer clientData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -146,21 +146,21 @@ SoQtMouse::translateEvent(QEvent *qe)
     
     // switch on event type
     switch (qe->type()) {
-	case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonPress:
     case QEvent::MouseButtonDblClick:
-	    event = translateButtonEvent((QMouseEvent *) qe, SoButtonEvent::DOWN);
-	    break;
-	    
-	case QEvent::MouseButtonRelease:
-	    event = translateButtonEvent((QMouseEvent *) qe, SoButtonEvent::UP);
-	    break;
-	    
-	case QEvent::MouseMove:
-	    event = translateMotionEvent((QMouseEvent *) qe);
-	    break;
-	    
-	default:
-	    break;
+        event = translateButtonEvent((QMouseEvent *) qe, SoButtonEvent::DOWN);
+        break;
+
+    case QEvent::MouseButtonRelease:
+        event = translateButtonEvent((QMouseEvent *) qe, SoButtonEvent::UP);
+        break;
+
+    case QEvent::MouseMove:
+        event = translateMotionEvent((QMouseEvent *) qe);
+        break;
+
+    default:
+        break;
     }
     
     return event;
@@ -168,7 +168,7 @@ SoQtMouse::translateEvent(QEvent *qe)
 
 SoMouseButtonEvent *
 SoQtMouse::translateButtonEvent(QMouseEvent *be,
-				SoButtonEvent::State whichState)
+                                SoButtonEvent::State whichState)
 {
     SoMouseButtonEvent::Button whichButton;
     switch (be->button()) {

@@ -66,7 +66,7 @@
 
 
 class SoQtMouse : public SoQtDevice {
-  public:
+public:
     SoQtMouse();
     ~SoQtMouse();
     
@@ -81,8 +81,8 @@ class SoQtMouse : public SoQtDevice {
     // returning NULL if the event is not from this device.
     //
     virtual const SoEvent * translateEvent(QEvent *xevent);
-  
-  private:
+
+private:
     SoLocation2Event	*loc2Event;	// mouse motion
     SoMouseButtonEvent	*buttonEvent;	// mouse button press
 

@@ -75,7 +75,7 @@ class QWidget;
 class SoQtEventHandler;
 
 class SOQT_EXPORT SoQt {
-  public:
+public:
     // This binds Inventor with Qt so that they may work together.
     // It calls SoDB::init(), SoNodeKit::init(), SoInteraction::init
     static void init(const char *appName, const char *className = "Inventor");
@@ -88,7 +88,7 @@ class SOQT_EXPORT SoQt {
     static int             mainLoop();
     
 
-  private:
+private:
     static bool initialized;
     static SoQtEventHandler*  eventHandler;
 };

@@ -106,20 +106,20 @@ SoSFTime *SoQtViewer::viewerRealTime = NULL;
 // Use: protected
 
 SoQtViewer::SoQtViewer(
-    QWidget* parent,
-    const char *name, 
-    SbBool buildInsideParent,
-    SoQtViewer::Type t, 
-    SbBool buildNow) 
-: SoQtRenderArea (
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    TRUE,   // getMouseInput
-	    TRUE,   // getKeyboardInput
-	    FALSE)  // buildNow
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget* parent,
+        const char *name,
+        SbBool buildInsideParent,
+        SoQtViewer::Type t,
+        SbBool buildNow)
+    : SoQtRenderArea (
+          parent,
+          name,
+          buildInsideParent,
+          TRUE,   // getMouseInput
+          TRUE,   // getKeyboardInput
+          FALSE)  // buildNow
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
     // init local vars
     type = t;
@@ -141,7 +141,7 @@ SoQtViewer::SoQtViewer(
     viewerSpeed = 1.0;  // default. SoQtFullViewer add UI to increase/decrease
 
     if (! viewerRealTime)
-	viewerRealTime = (SoSFTime *) SoDB::getGlobalField("realTime");
+        viewerRealTime = (SoSFTime *) SoDB::getGlobalField("realTime");
     
     // init auto clipping stuff
     autoClipFlag = TRUE;
@@ -232,8 +232,8 @@ SoQtViewer::SoQtViewer(
     
     // Build the widget tree, and let SoQtComponent know about our base widget.
     if (buildNow) {
-	QWidget* w = buildWidget(getParentWidget());
-	setBaseWidget(w);
+        QWidget* w = buildWidget(getParentWidget());
+        setBaseWidget(w);
     }
 }
 
@@ -249,7 +249,7 @@ SoQtViewer::~SoQtViewer()
 {
     // detach everything
     if ( sceneGraph != NULL )
-	setSceneGraph(NULL);
+        setSceneGraph(NULL);
     sceneRoot->unref();
     
     // delete everything
@@ -277,78 +277,78 @@ SoQtViewer::setSceneGraph(SoNode *newScene)
     // give it the scene graph now. This is a one shot deal, which
     // cannot be done in the constructor.
     if (SoQtRenderArea::getSceneGraph() == NULL)
-	SoQtRenderArea::setSceneGraph(sceneRoot);
+        SoQtRenderArea::setSceneGraph(sceneRoot);
     
     // draw new scene graphs to the front buffer by default since
     // the scene will be different (we might has well see something
     // happening for the first redraw).
     if (isDrawToFrontBufferEnable())
-	drawToFrontBuffer = TRUE;
+        drawToFrontBuffer = TRUE;
     
     //
     // detach everything that depends on the old sceneGraph
     //
     if ( sceneGraph != NULL ) {
-	setCamera(NULL);
-	sceneRoot->removeChild(sceneGraph);
+        setCamera(NULL);
+        sceneRoot->removeChild(sceneGraph);
     }
     
     sceneGraph = newScene;
     
     //
-    // now assign the new sceneGraph, find or create the new camera 
+    // now assign the new sceneGraph, find or create the new camera
     // and attach things back.
     //
     if ( sceneGraph != NULL ) {
-	sceneRoot->addChild(sceneGraph);
-	
-	// search for first camera in the scene
-	SoSearchAction sa;
-	sa.setType(SoCamera::getClassTypeId());
-	sa.setSearchingAll(FALSE); // don't look under off switches
-	sa.apply(sceneGraph);
-	
-	SoCamera *newCamera = NULL;
-	if (sa.getPath())
-	    newCamera = (SoCamera *)((SoFullPath *)sa.getPath())->getTail();
-	
-	// if no camera found create one of the right kind...
-	if ( newCamera == NULL ) {
-	    
-	    newCamera = (SoCamera*) cameraType.createInstance();
-	    if (newCamera == NULL) {
+        sceneRoot->addChild(sceneGraph);
+
+        // search for first camera in the scene
+        SoSearchAction sa;
+        sa.setType(SoCamera::getClassTypeId());
+        sa.setSearchingAll(FALSE); // don't look under off switches
+        sa.apply(sceneGraph);
+
+        SoCamera *newCamera = NULL;
+        if (sa.getPath())
+            newCamera = (SoCamera *)((SoFullPath *)sa.getPath())->getTail();
+
+        // if no camera found create one of the right kind...
+        if ( newCamera == NULL ) {
+
+            newCamera = (SoCamera*) cameraType.createInstance();
+            if (newCamera == NULL) {
 #ifdef DEBUG
-		SoDebugError::post("SoQtViewer::setSceneGraph",
-		    "unknown camera type!");
+                SoDebugError::post("SoQtViewer::setSceneGraph",
+                                   "unknown camera type!");
 #endif
-		// ??? what should we do here ?
-		cameraType = SoPerspectiveCamera::getClassTypeId();
-		newCamera = new SoPerspectiveCamera;
-	    }
-	    createdCamera = TRUE;
-	    
-	    if (type == SoQtViewer::BROWSER)
-		// add camera after drawstyle stuff
-		sceneRoot->insertChild(newCamera, 1);
-	    else {
-		// check to make sure scene starts with at least a group node
-		if ( sceneGraph->isOfType(SoGroup::getClassTypeId()) )
-		    ((SoGroup *)sceneGraph)->insertChild(newCamera, 0);
-		else {
-		    // make scene start with a group node
-		    SoGroup *group = new SoGroup;
-		    group->addChild(newCamera);
-		    group->addChild(sceneGraph);
-		    sceneRoot->addChild(group);
-		    sceneRoot->removeChild(sceneGraph);
-		    sceneGraph = group;
-		}
-	    }
-	    
-	    newCamera->viewAll(sceneGraph, SbViewportRegion(getGlxSize()));
-	}
-	
-	setCamera(newCamera);
+                // ??? what should we do here ?
+                cameraType = SoPerspectiveCamera::getClassTypeId();
+                newCamera = new SoPerspectiveCamera;
+            }
+            createdCamera = TRUE;
+
+            if (type == SoQtViewer::BROWSER)
+                // add camera after drawstyle stuff
+                sceneRoot->insertChild(newCamera, 1);
+            else {
+                // check to make sure scene starts with at least a group node
+                if ( sceneGraph->isOfType(SoGroup::getClassTypeId()) )
+                    ((SoGroup *)sceneGraph)->insertChild(newCamera, 0);
+                else {
+                    // make scene start with a group node
+                    SoGroup *group = new SoGroup;
+                    group->addChild(newCamera);
+                    group->addChild(sceneGraph);
+                    sceneRoot->addChild(group);
+                    sceneRoot->removeChild(sceneGraph);
+                    sceneGraph = group;
+                }
+            }
+
+            newCamera->viewAll(sceneGraph, SbViewportRegion(getGlxSize()));
+        }
+
+        setCamera(newCamera);
     }
     
     // recompute the scene size variables...
@@ -368,8 +368,8 @@ SoQtViewer::recomputeSceneSize()
 ////////////////////////////////////////////////////////////////////////
 {
     if (! sceneGraph || ! sceneRoot) {
-	sceneSize = 0.0;
-	return;
+        sceneSize = 0.0;
+        return;
     }
     
     // Use assignment notation to disambiguate from expression (edison)
@@ -378,17 +378,17 @@ SoQtViewer::recomputeSceneSize()
     SbBox3f bbox = bboxAct.getBoundingBox();
     
     if (bbox.isEmpty()) {
-	sceneSize = 0.0;
-	return;
+        sceneSize = 0.0;
+        return;
     }
     
     float x, y, z;
     bbox.getSize(x, y, z);
     sceneSize = (x > z) ? x : z;
     if (y > sceneSize)
-	sceneSize = y;
+        sceneSize = y;
     if (sceneSize <= 0.0)
-	sceneSize = 0.0;
+        sceneSize = 0.0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -420,32 +420,32 @@ SoQtViewer::setCamera(SoCamera *newCamera)
 {
     // check for trivual return
     if (camera == newCamera)
-	return;
+        return;
     
     //
     // detach everything that depended on the old camera
     //
     if ( camera != NULL ) {
-	
+
         if (headlightFlag) {
-	    setHeadlight(FALSE);
-	    headlightFlag = TRUE;  // can later be turned on
+            setHeadlight(FALSE);
+            headlightFlag = TRUE;  // can later be turned on
         }
-    	
-	if (viewingFlag) {
-	    setViewing(FALSE);
-	    viewingFlag = TRUE;  // can later be turned on
-	}
-	
-	// remove the camera if we created one outside of the
-	// scene graph.
-    	if (createdCamera && type == SoQtViewer::BROWSER) {
-	    if (sceneRoot->findChild(camera) >= 0)
-    		sceneRoot->removeChild(camera);
-	    createdCamera = FALSE;
-	}
-	
-    	camera->unref();
+
+        if (viewingFlag) {
+            setViewing(FALSE);
+            viewingFlag = TRUE;  // can later be turned on
+        }
+
+        // remove the camera if we created one outside of the
+        // scene graph.
+        if (createdCamera && type == SoQtViewer::BROWSER) {
+            if (sceneRoot->findChild(camera) >= 0)
+                sceneRoot->removeChild(camera);
+            createdCamera = FALSE;
+        }
+
+        camera->unref();
     }
     
     camera = newCamera;
@@ -454,19 +454,19 @@ SoQtViewer::setCamera(SoCamera *newCamera)
     // attach everything that depends on the new camera
     //
     if ( camera != NULL) {
-	camera->ref();
-	
-	if (headlightFlag) {
-	    headlightFlag = FALSE;  // enables the routine to be called
-	    setHeadlight(TRUE);
-	}
-	
-	if (viewingFlag) {
-	    viewingFlag = FALSE;  // enables the routine to be called
-	    setViewing(TRUE);
-	}
-	
-	saveHomePosition();
+        camera->ref();
+
+        if (headlightFlag) {
+            headlightFlag = FALSE;  // enables the routine to be called
+            setHeadlight(TRUE);
+        }
+
+        if (viewingFlag) {
+            viewingFlag = FALSE;  // enables the routine to be called
+            setViewing(TRUE);
+        }
+
+        saveHomePosition();
     }
 }
 
@@ -482,12 +482,12 @@ SoQtViewer::setCameraType(SoType type)
 ////////////////////////////////////////////////////////////////////////
 {
     if (type.isDerivedFrom(SoPerspectiveCamera::getClassTypeId()) ||
-	type.isDerivedFrom(SoOrthographicCamera::getClassTypeId()))
-	cameraType = type;
+            type.isDerivedFrom(SoOrthographicCamera::getClassTypeId()))
+        cameraType = type;
 #ifdef DEBUG
     else
-	SoDebugError::post("SoQtViewer::setCameraType",
-			"unknown camera type!");
+        SoDebugError::post("SoQtViewer::setCameraType",
+                           "unknown camera type!");
 #endif
 }
 
@@ -503,7 +503,7 @@ SoQtViewer::viewAll()
 ////////////////////////////////////////////////////////////////////////
 {
     if ( camera != NULL )
-	camera->viewAll(sceneGraph,SbViewportRegion(getGlxSize()));
+        camera->viewAll(sceneGraph,SbViewportRegion(getGlxSize()));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -518,7 +518,7 @@ SoQtViewer::setViewing(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == viewingFlag)
-	return;
+        return;
     
     viewingFlag = flag;
     
@@ -526,9 +526,9 @@ SoQtViewer::setViewing(SbBool flag)
     // currently highlighted nodes (since the object will never receive
     // any motion events).
     if (viewingFlag) {
-    SoGLRenderAction *glAct = getGLRenderAction();
-    if (glAct)
-        SoLocateHighlight::turnOffCurrentHighlight(glAct);
+        SoGLRenderAction *glAct = getGLRenderAction();
+        if (glAct)
+            SoLocateHighlight::turnOffCurrentHighlight(glAct);
     }
 }
 
@@ -558,14 +558,14 @@ SoQtViewer::setAutoClipping(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (autoClipFlag == flag)
-	return;
+        return;
     
     autoClipFlag = flag;
     
     // cause a redraw to correctly place the near and far plane now that
     // auto clipping is on.
     if (autoClipFlag)
-	scheduleRedraw();
+        scheduleRedraw();
 }
 
 void
@@ -574,7 +574,7 @@ SoQtViewer::setAutoClipTolerance ( float tolerance )
     autoClipTolerance = tolerance;
 
     if (autoClipFlag)
-	scheduleRedraw();
+        scheduleRedraw();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -665,8 +665,8 @@ SoQtViewer::setHeadlight(SbBool insertFlag)
 {
     // check for trivial return
     if (camera == NULL || headlightFlag == insertFlag) {
-	headlightFlag = insertFlag;
-	return;
+        headlightFlag = insertFlag;
+        return;
     }
     
     //
@@ -674,20 +674,20 @@ SoQtViewer::setHeadlight(SbBool insertFlag)
     //
     SoSearchAction sa;
     if (insertFlag)
-	sa.setNode(camera);
+        sa.setNode(camera);
     else {
-	sa.setNode(headlightGroup);
-	sa.setSearchingAll(TRUE); // find under OFF switches for removal
+        sa.setNode(headlightGroup);
+        sa.setSearchingAll(TRUE); // find under OFF switches for removal
     }
     sa.apply(sceneRoot);
     SoFullPath *fullPath = (SoFullPath *) sa.getPath();
     if (!fullPath) {
 #if DEBUG
-	SoDebugError::post("SoQtViewer::setHeadlight",
-			    insertFlag ? "ERROR: cannot find camera in graph" :
-			    "ERROR: cannot find headlight in graph");
+        SoDebugError::post("SoQtViewer::setHeadlight",
+                           insertFlag ? "ERROR: cannot find camera in graph" :
+                                        "ERROR: cannot find headlight in graph");
 #endif
-	return;
+        return;
     }
     SoGroup *parent = (SoGroup *) fullPath->getNodeFromTail(1);
     
@@ -697,30 +697,30 @@ SoQtViewer::setHeadlight(SbBool insertFlag)
     // inserts/remove the headlight group node
     //
     if (headlightFlag) {
-	int camIndex;
-	
-	// check to make sure that the camera parent is not a switch node
-	// (VRML camera viewpoints are kept under a switch node). Otherwise
-	// we will insert the headlight right before the switch node.
-	if (parent->isOfType(SoSwitch::getClassTypeId())) {
-	    SoNode *switchNode = parent;
-	    parent = (SoGroup *) fullPath->getNodeFromTail(2);
-	    camIndex = parent->findChild(switchNode);
-	}
-	else
-	    camIndex = parent->findChild(camera);
-	
-	// return if headlight is already there (this should be an error !)
-	if (parent->findChild(headlightGroup) >= 0)
-	    return;
-	
-	// insert the light group right after the camera
-	if (camIndex >= 0)
-	    parent->insertChild(headlightGroup, camIndex+1);
+        int camIndex;
+
+        // check to make sure that the camera parent is not a switch node
+        // (VRML camera viewpoints are kept under a switch node). Otherwise
+        // we will insert the headlight right before the switch node.
+        if (parent->isOfType(SoSwitch::getClassTypeId())) {
+            SoNode *switchNode = parent;
+            parent = (SoGroup *) fullPath->getNodeFromTail(2);
+            camIndex = parent->findChild(switchNode);
+        }
+        else
+            camIndex = parent->findChild(camera);
+
+        // return if headlight is already there (this should be an error !)
+        if (parent->findChild(headlightGroup) >= 0)
+            return;
+
+        // insert the light group right after the camera
+        if (camIndex >= 0)
+            parent->insertChild(headlightGroup, camIndex+1);
     }
     else {
-	if (parent->findChild(headlightGroup) >= 0)
-	    parent->removeChild(headlightGroup);
+        if (parent->findChild(headlightGroup) >= 0)
+            parent->removeChild(headlightGroup);
     }
 }
 
@@ -732,7 +732,7 @@ SoQtViewer::setHeadlight(SbBool insertFlag)
 // Use: virtual public
 void
 SoQtViewer::setDrawStyle(
-	    SoQtViewer::DrawType type, SoQtViewer::DrawStyle style)
+        SoQtViewer::DrawType type, SoQtViewer::DrawStyle style)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -741,38 +741,38 @@ SoQtViewer::setDrawStyle(
     checkForDrawStyle = FALSE;
     
     if (type == STILL) {
-	if (stillDrawStyle == style)
-	    return;
-	if (style == VIEW_SAME_AS_STILL) {
+        if (stillDrawStyle == style)
+            return;
+        if (style == VIEW_SAME_AS_STILL) {
 #ifdef DEBUG
-	    SoDebugError::post("SoQtViewer::setDrawStyle", 
-		"illegal VIEW_SAME_AS_STILL draw style passed for STILL !");
+            SoDebugError::post("SoQtViewer::setDrawStyle",
+                               "illegal VIEW_SAME_AS_STILL draw style passed for STILL !");
 #endif
-	    return; 
-	}
-	stillDrawStyle = style;
-	
-	if (! interactiveFlag || interactiveDrawStyle == VIEW_SAME_AS_STILL
-	    || (interactiveDrawStyle == VIEW_NO_TEXTURE && style != VIEW_AS_IS))
-		    setCurrentDrawStyle(style);
-	else if (interactiveFlag && interactiveDrawStyle == VIEW_NO_TEXTURE && 
-	    style == VIEW_AS_IS)
-		    setCurrentDrawStyle(interactiveDrawStyle);
+            return;
+        }
+        stillDrawStyle = style;
+
+        if (! interactiveFlag || interactiveDrawStyle == VIEW_SAME_AS_STILL
+                || (interactiveDrawStyle == VIEW_NO_TEXTURE && style != VIEW_AS_IS))
+            setCurrentDrawStyle(style);
+        else if (interactiveFlag && interactiveDrawStyle == VIEW_NO_TEXTURE &&
+                 style == VIEW_AS_IS)
+            setCurrentDrawStyle(interactiveDrawStyle);
     }
     else {
-	// else it type == INTERACTIVE
-	
-	if (interactiveDrawStyle == style)
-	    return;
-	interactiveDrawStyle = style;
-	
-	if (interactiveFlag) {
-	    if (style == VIEW_SAME_AS_STILL || 
-	       (style == VIEW_NO_TEXTURE && stillDrawStyle != VIEW_AS_IS))
-		setCurrentDrawStyle(stillDrawStyle);
-	    else
-		setCurrentDrawStyle(style);
-	}
+        // else it type == INTERACTIVE
+
+        if (interactiveDrawStyle == style)
+            return;
+        interactiveDrawStyle = style;
+
+        if (interactiveFlag) {
+            if (style == VIEW_SAME_AS_STILL ||
+                    (style == VIEW_NO_TEXTURE && stillDrawStyle != VIEW_AS_IS))
+                setCurrentDrawStyle(stillDrawStyle);
+            else
+                setCurrentDrawStyle(style);
+        }
     }
 }
 
@@ -790,84 +790,84 @@ SoQtViewer::setCurrentDrawStyle(SoQtViewer::DrawStyle style)
 ////////////////////////////////////////////////////////////////////////
 {
     if (style != VIEW_AS_IS)
-	drawStyleSwitch->whichChild = SO_SWITCH_ALL;
+        drawStyleSwitch->whichChild = SO_SWITCH_ALL;
     
     switch(style) {
-	case VIEW_AS_IS:
-	    drawStyleSwitch->whichChild = SO_SWITCH_NONE;
-	    break;
-	    
-	case VIEW_HIDDEN_LINE:
-	    // texture is always off under the switch node.
-	    // List only stuff common to both rendering passes
-	    // (the rest is done when rendering)
-	    drawStyleNode->style.setIgnored(FALSE);
-	    drawStyleNode->pointSize.setIgnored(TRUE);
-	    lightModelNode->model = SoLightModel::BASE_COLOR;
-	    lightModelNode->model.setIgnored(FALSE);
-	    complexityNode->type.setIgnored(TRUE);
-	    complexityNode->value.setIgnored(TRUE);
-	    break;
-	    
-	case VIEW_NO_TEXTURE:
-	case VIEW_LOW_COMPLEXITY:
-	    // texture is always off under the switch node
-	    drawStyleNode->style.setIgnored(TRUE);
-	    drawStyleNode->pointSize.setIgnored(TRUE);
-	    lightModelNode->model.setIgnored(TRUE);
-	    colorNode->orderedRGBA.setIgnored(TRUE);
-	    matBindingNode->value.setIgnored(TRUE);
-	    complexityNode->type.setIgnored(TRUE);
-	    complexityNode->value.setIgnored(style != VIEW_LOW_COMPLEXITY);
-	    break;
-	    
-	case VIEW_LINE:
-	case VIEW_LOW_RES_LINE:
-	case VIEW_POINT:
-	case VIEW_LOW_RES_POINT:
-	    // texture is always off under the switch node
-	    drawStyleNode->style = (style == VIEW_LINE || style == VIEW_LOW_RES_LINE) ? 
-		SoDrawStyle::LINES : SoDrawStyle::POINTS;
-	    drawStyleNode->style.setIgnored(FALSE);
-	    drawStyleNode->pointSize.setIgnored(style != VIEW_POINT && style != VIEW_LOW_RES_POINT);
-	    lightModelNode->model = SoLightModel::BASE_COLOR;
-	    lightModelNode->model.setIgnored(FALSE);
-	    colorNode->orderedRGBA.setIgnored(TRUE);
-	    matBindingNode->value.setIgnored(TRUE);
-	    
-	    // Force a lower complexity for the low res draw styles
-	    // ??? this only works if the object didn't have
-	    // ??? something lower in the first place...
-	    if (style == VIEW_LOW_RES_LINE || style == VIEW_LOW_RES_POINT) {
-		complexityNode->type = SoComplexity::OBJECT_SPACE;
-		complexityNode->type.setIgnored(FALSE);
-		complexityNode->value.setIgnored(FALSE);
-	    }
-	    else {
-		complexityNode->type.setIgnored(TRUE);
-		complexityNode->value.setIgnored(TRUE);
-	    }
-	    break;
-	    
-	case VIEW_BBOX:
-	    // texture is always off under the switch node
-	    drawStyleNode->style = SoDrawStyle::LINES;
-	    drawStyleNode->style.setIgnored(FALSE);
-	    drawStyleNode->pointSize.setIgnored(TRUE);
-	    lightModelNode->model = SoLightModel::BASE_COLOR;
-	    lightModelNode->model.setIgnored(FALSE);
-	    colorNode->orderedRGBA.setIgnored(TRUE);
-	    matBindingNode->value.setIgnored(TRUE);
-	    complexityNode->type = SoComplexity::BOUNDING_BOX;
-	    complexityNode->type.setIgnored(FALSE);
-	    complexityNode->value.setIgnored(TRUE);
-	    break;
-	    
-	case VIEW_SAME_AS_STILL:
+    case VIEW_AS_IS:
+        drawStyleSwitch->whichChild = SO_SWITCH_NONE;
+        break;
+
+    case VIEW_HIDDEN_LINE:
+        // texture is always off under the switch node.
+        // List only stuff common to both rendering passes
+        // (the rest is done when rendering)
+        drawStyleNode->style.setIgnored(FALSE);
+        drawStyleNode->pointSize.setIgnored(TRUE);
+        lightModelNode->model = SoLightModel::BASE_COLOR;
+        lightModelNode->model.setIgnored(FALSE);
+        complexityNode->type.setIgnored(TRUE);
+        complexityNode->value.setIgnored(TRUE);
+        break;
+
+    case VIEW_NO_TEXTURE:
+    case VIEW_LOW_COMPLEXITY:
+        // texture is always off under the switch node
+        drawStyleNode->style.setIgnored(TRUE);
+        drawStyleNode->pointSize.setIgnored(TRUE);
+        lightModelNode->model.setIgnored(TRUE);
+        colorNode->orderedRGBA.setIgnored(TRUE);
+        matBindingNode->value.setIgnored(TRUE);
+        complexityNode->type.setIgnored(TRUE);
+        complexityNode->value.setIgnored(style != VIEW_LOW_COMPLEXITY);
+        break;
+
+    case VIEW_LINE:
+    case VIEW_LOW_RES_LINE:
+    case VIEW_POINT:
+    case VIEW_LOW_RES_POINT:
+        // texture is always off under the switch node
+        drawStyleNode->style = (style == VIEW_LINE || style == VIEW_LOW_RES_LINE) ?
+                    SoDrawStyle::LINES : SoDrawStyle::POINTS;
+        drawStyleNode->style.setIgnored(FALSE);
+        drawStyleNode->pointSize.setIgnored(style != VIEW_POINT && style != VIEW_LOW_RES_POINT);
+        lightModelNode->model = SoLightModel::BASE_COLOR;
+        lightModelNode->model.setIgnored(FALSE);
+        colorNode->orderedRGBA.setIgnored(TRUE);
+        matBindingNode->value.setIgnored(TRUE);
+
+        // Force a lower complexity for the low res draw styles
+        // ??? this only works if the object didn't have
+        // ??? something lower in the first place...
+        if (style == VIEW_LOW_RES_LINE || style == VIEW_LOW_RES_POINT) {
+            complexityNode->type = SoComplexity::OBJECT_SPACE;
+            complexityNode->type.setIgnored(FALSE);
+            complexityNode->value.setIgnored(FALSE);
+        }
+        else {
+            complexityNode->type.setIgnored(TRUE);
+            complexityNode->value.setIgnored(TRUE);
+        }
+        break;
+
+    case VIEW_BBOX:
+        // texture is always off under the switch node
+        drawStyleNode->style = SoDrawStyle::LINES;
+        drawStyleNode->style.setIgnored(FALSE);
+        drawStyleNode->pointSize.setIgnored(TRUE);
+        lightModelNode->model = SoLightModel::BASE_COLOR;
+        lightModelNode->model.setIgnored(FALSE);
+        colorNode->orderedRGBA.setIgnored(TRUE);
+        matBindingNode->value.setIgnored(TRUE);
+        complexityNode->type = SoComplexity::BOUNDING_BOX;
+        complexityNode->type.setIgnored(FALSE);
+        complexityNode->value.setIgnored(TRUE);
+        break;
+
+    case VIEW_SAME_AS_STILL:
 #ifdef DEBUG
-            SoDebugError::post("SoQtViewer::setCurrentDrawStyle", "VIEW_SAME_AS_STILL was passed !");
+        SoDebugError::post("SoQtViewer::setCurrentDrawStyle", "VIEW_SAME_AS_STILL was passed !");
 #endif
-	    break;
+        break;
     }
     
     setZbufferState();
@@ -903,9 +903,9 @@ SoQtViewer::setNormalVisual(const QGLFormat & vis)
     
     // now update the buffering type
     if (isDoubleBuffer())
-	setBufferingType(BUFFER_DOUBLE);
+        setBufferingType(BUFFER_DOUBLE);
     else
-	setBufferingType(BUFFER_SINGLE);
+        setBufferingType(BUFFER_SINGLE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -936,7 +936,7 @@ SoQtViewer::setBufferingType(SoQtViewer::BufferType type)
 ////////////////////////////////////////////////////////////////////////
 {
     if (bufferType == type)
-    	return;
+        return;
     
     // remove interactive callback
     if (bufferType == BUFFER_INTERACTIVE) {
@@ -947,17 +947,17 @@ SoQtViewer::setBufferingType(SoQtViewer::BufferType type)
     bufferType = type;
     
     switch(bufferType) {
-        case BUFFER_SINGLE:
-            SoQtRenderArea::setDoubleBuffer(FALSE);
-            break;
-        case BUFFER_DOUBLE:
-            SoQtRenderArea::setDoubleBuffer(TRUE);
-            break;
-        case BUFFER_INTERACTIVE:
-            SoQtRenderArea::setDoubleBuffer(FALSE);
-            addStartCallback(SoQtViewer::bufferStartCallback);
-            addFinishCallback(SoQtViewer::bufferFinishCallback);
-            break;
+    case BUFFER_SINGLE:
+        SoQtRenderArea::setDoubleBuffer(FALSE);
+        break;
+    case BUFFER_DOUBLE:
+        SoQtRenderArea::setDoubleBuffer(TRUE);
+        break;
+    case BUFFER_INTERACTIVE:
+        SoQtRenderArea::setDoubleBuffer(FALSE);
+        addStartCallback(SoQtViewer::bufferStartCallback);
+        addFinishCallback(SoQtViewer::bufferFinishCallback);
+        break;
     }
 }
 
@@ -978,13 +978,13 @@ SoQtViewer::setSeekMode(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (!isViewing())
-	return;
+        return;
     
     // check if seek is being turned off while seek animation is happening
     if ( !flag && seekAnimationSensor->getAttachedField() ) {
-	seekAnimationSensor->detach();
-	seekAnimationSensor->unschedule();
-	interactiveCountDec();
+        seekAnimationSensor->detach();
+        seekAnimationSensor->unschedule();
+        interactiveCountDec();
     }
     
     seekModeFlag = flag;
@@ -1106,63 +1106,63 @@ SoQtViewer::doRendering()
     // check if we need two pass rendering for hidden line rendering
     //
     
-    SbBool drawHiddenLine = 
-	(stillDrawStyle == VIEW_HIDDEN_LINE && (! interactiveFlag ||
-				interactiveDrawStyle == VIEW_NO_TEXTURE ||
-				interactiveDrawStyle == VIEW_LOW_COMPLEXITY ||
-				interactiveDrawStyle == VIEW_SAME_AS_STILL)) 
-	|| (interactiveFlag && interactiveDrawStyle == VIEW_HIDDEN_LINE);
-	
+    SbBool drawHiddenLine =
+            (stillDrawStyle == VIEW_HIDDEN_LINE && (! interactiveFlag ||
+                                                    interactiveDrawStyle == VIEW_NO_TEXTURE ||
+                                                    interactiveDrawStyle == VIEW_LOW_COMPLEXITY ||
+                                                    interactiveDrawStyle == VIEW_SAME_AS_STILL))
+            || (interactiveFlag && interactiveDrawStyle == VIEW_HIDDEN_LINE);
+
     if (camera != NULL && drawHiddenLine) {
-	
-	// ??? what do we do about highlights ??
-	
-	// the smaller the near clipping plane is relative to the far
-	// plane, the smaller the zbuffer offset needs to be (because
-	// the granularity will be pretty big). The closer the clipping
-	// planes are relative to each other, the bigger the zbuffer offset
-	// needs to be (because the zbuffer granularity will be small).
-	// The scale factor was found empirically to work best with the
-	// current settings of near/far.
-	float zOffset = camera->nearDistance.getValue() / 
-	    (40 * camera->farDistance.getValue());
-	
-	//
-	// render the first pass as solid, using the background color
-	// for the object base color.
-	//
-	
-	drawStyleNode->style = SoDrawStyle::FILLED;
-	colorNode->orderedRGBA = getBackgroundColor().getPackedValue();
-	colorNode->orderedRGBA.setIgnored(FALSE);
-	matBindingNode->value.setIgnored(FALSE);
-	
-	// ??? this should match the SoQtRenderArea::actualRedraw()
-	// ??? method exactly (apart for not clearing the z-buffer)
-	glDepthRange(zOffset, 1); // enable wireframe to be draw on top
-	getSceneManager()->render(isClearBeforeRender(), TRUE);
-	
-	//
-	// render the second pass as wireframe
-	// (the first pass rendered the objects solid with base color
-	// set to the background color to set the zbuffer values)
-	//
-	
-	drawStyleNode->style = SoDrawStyle::LINES;
-	colorNode->orderedRGBA.setIgnored(TRUE);
-	matBindingNode->value.setIgnored(TRUE);
-	
-	// ??? this should match the SoQtRenderArea::actualRedraw()
-	// ??? method exactly (apart for not clearing the color and z-buffer)
-	glDepthRange(0,1-zOffset); // enable wireframe to be draw on top
-	getSceneManager()->render(FALSE, FALSE);
-	
-	glDepthRange(0, 1); // restore the range
+
+        // ??? what do we do about highlights ??
+
+        // the smaller the near clipping plane is relative to the far
+        // plane, the smaller the zbuffer offset needs to be (because
+        // the granularity will be pretty big). The closer the clipping
+        // planes are relative to each other, the bigger the zbuffer offset
+        // needs to be (because the zbuffer granularity will be small).
+        // The scale factor was found empirically to work best with the
+        // current settings of near/far.
+        float zOffset = camera->nearDistance.getValue() /
+                (40 * camera->farDistance.getValue());
+
+        //
+        // render the first pass as solid, using the background color
+        // for the object base color.
+        //
+
+        drawStyleNode->style = SoDrawStyle::FILLED;
+        colorNode->orderedRGBA = getBackgroundColor().getPackedValue();
+        colorNode->orderedRGBA.setIgnored(FALSE);
+        matBindingNode->value.setIgnored(FALSE);
+
+        // ??? this should match the SoQtRenderArea::actualRedraw()
+        // ??? method exactly (apart for not clearing the z-buffer)
+        glDepthRange(zOffset, 1); // enable wireframe to be draw on top
+        getSceneManager()->render(isClearBeforeRender(), TRUE);
+
+        //
+        // render the second pass as wireframe
+        // (the first pass rendered the objects solid with base color
+        // set to the background color to set the zbuffer values)
+        //
+
+        drawStyleNode->style = SoDrawStyle::LINES;
+        colorNode->orderedRGBA.setIgnored(TRUE);
+        matBindingNode->value.setIgnored(TRUE);
+
+        // ??? this should match the SoQtRenderArea::actualRedraw()
+        // ??? method exactly (apart for not clearing the color and z-buffer)
+        glDepthRange(0,1-zOffset); // enable wireframe to be draw on top
+        getSceneManager()->render(FALSE, FALSE);
+
+        glDepthRange(0, 1); // restore the range
     }
     else {
-	// ??? this should match the SoQtRenderArea::actualRedraw()
-	// ??? method exactly (apart for not clearing the z-buffer)
-	getSceneManager()->render(isClearBeforeRender(), ! isZbufferOff());
+        // ??? this should match the SoQtRenderArea::actualRedraw()
+        // ??? method exactly (apart for not clearing the z-buffer)
+        getSceneManager()->render(isClearBeforeRender(), ! isZbufferOff());
     }
 }
 
@@ -1182,11 +1182,11 @@ SoQtViewer::isZbufferOff()
 {
     DrawStyle style = (interactiveFlag ? interactiveDrawStyle : stillDrawStyle);
     if (interactiveFlag && interactiveDrawStyle == VIEW_SAME_AS_STILL)
-	style = stillDrawStyle;
+        style = stillDrawStyle;
     
     // for these draw styles, turn the zbuffer off
-    return (style == VIEW_LOW_RES_LINE || style == VIEW_LOW_RES_POINT 
-	|| style == VIEW_BBOX);
+    return (style == VIEW_LOW_RES_LINE || style == VIEW_LOW_RES_POINT
+            || style == VIEW_BBOX);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1204,14 +1204,14 @@ SoQtViewer::setZbufferState()
 ////////////////////////////////////////////////////////////////////////
 {
     if (getNormalWidget() == NULL)
-	return;
+        return;
     
     bindNormalContext();
     
     if (isZbufferOff())
-	glDisable(GL_DEPTH_TEST);
+        glDisable(GL_DEPTH_TEST);
     else
-	glEnable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1227,7 +1227,7 @@ SoQtViewer::saveHomePosition()
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     origPosition = camera->position.getValue();
     origOrientation = camera->orientation.getValue();
@@ -1237,9 +1237,9 @@ SoQtViewer::saveHomePosition()
     
     // save camera height (changed by zooming)
     if (camera->isOfType(SoPerspectiveCamera::getClassTypeId()))
-	origHeight = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
+        origHeight = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
     else if (camera->isOfType(SoOrthographicCamera::getClassTypeId()))
-	origHeight = ((SoOrthographicCamera *)camera)->height.getValue();
+        origHeight = ((SoOrthographicCamera *)camera)->height.getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1255,7 +1255,7 @@ SoQtViewer::resetToHomePosition()
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     camera->position = origPosition;
     camera->orientation = origOrientation;
@@ -1265,9 +1265,9 @@ SoQtViewer::resetToHomePosition()
     
     // restore camera height (changed by zooming)
     if (camera->isOfType(SoPerspectiveCamera::getClassTypeId()))
-	((SoPerspectiveCamera *)camera)->heightAngle.setValue(origHeight);
+        ((SoPerspectiveCamera *)camera)->heightAngle.setValue(origHeight);
     else if (camera->isOfType(SoOrthographicCamera::getClassTypeId()))
-	((SoOrthographicCamera *)camera)->height.setValue(origHeight);
+        ((SoOrthographicCamera *)camera)->height.setValue(origHeight);
 }
 
 
@@ -1290,7 +1290,7 @@ SoQtViewer::processCommonEvents (QEvent* qe)
     // ??? this is a simple work around for bug #113991 - Xt translation
     // ??? tables would be better than dealing with events directly.
     if (SoQtRenderArea::invokeAppCB(qe))
-	    return TRUE;
+        return TRUE;
     
     //
     // check for special key which turns viewing on/off
@@ -1300,8 +1300,8 @@ SoQtViewer::processCommonEvents (QEvent* qe)
         if (ke->key() == Qt::Key_Escape) {
             setViewing( !isViewing() );  // toggle the viewing mode...
             qe->accept();
-	    	return TRUE;
-        } 
+            return TRUE;
+        }
         else if (!isViewing() && (ke->key() == Qt::Key_Alt)) {
             // Alt-key goes from PICK to VIEW if
             // 1] we are not in VIEW mode already
@@ -1312,7 +1312,7 @@ SoQtViewer::processCommonEvents (QEvent* qe)
             qe->accept();
             return TRUE;
         }
-    } 
+    }
     else if (qe->type() == QEvent::KeyRelease) {
         QKeyEvent *ke = (QKeyEvent *)qe;
         if (altSwitchBack && (ke->key() == Qt::Key_Alt)) {
@@ -1322,7 +1322,7 @@ SoQtViewer::processCommonEvents (QEvent* qe)
             qe->accept();
             return TRUE;
         }
-    } 
+    }
     else if (qe->type() == QEvent::Enter) {
         //
         // because the application might use Alt-key for motif menu
@@ -1332,7 +1332,7 @@ SoQtViewer::processCommonEvents (QEvent* qe)
         Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
         if (!altSwitchBack && (modifiers & Qt::AltModifier)) {
             altSwitchBack = TRUE;   // later return back
-	    	setViewing(TRUE);
+            setViewing(TRUE);
         }
         else if (altSwitchBack && !(modifiers & Qt::AltModifier)) {
             setViewing(FALSE);
@@ -1342,12 +1342,12 @@ SoQtViewer::processCommonEvents (QEvent* qe)
     
     // send the event to the scene graph if viewing is off
     if ( !isViewing() ) {
-        // prevent renderArea from sending the event to the app twice 
+        // prevent renderArea from sending the event to the app twice
         // since it is done above...
-		SoQtRenderAreaEventCB *saveFunc = appEventHandler;
-		appEventHandler = NULL;
-		SoQtRenderArea::processEvent(qe);
-		appEventHandler = saveFunc;
+        SoQtRenderAreaEventCB *saveFunc = appEventHandler;
+        appEventHandler = NULL;
+        SoQtRenderArea::processEvent(qe);
+        appEventHandler = saveFunc;
 
         return TRUE;
     }
@@ -1360,40 +1360,40 @@ SoQtViewer::processCommonEvents (QEvent* qe)
     
     switch(qe->type()) {
     case QEvent::KeyPress:
-        {
-            QKeyEvent *ke = (QKeyEvent *)qe;
-            switch ( ke->key() ) {
-    case Qt::Key_Home:
-        resetToHomePosition();
-        ke->accept();
-        break;
-    case Qt::Key_S:
-        setSeekMode( !isSeekMode() );
-        // ??? this is kind of a hack, but it is needed
-        // ??? until a better solution is found
-        if ( isSeekMode() && interactiveCount != 0 ) {
-            interactiveCount = 0;
-            finishCBList->invokeCallbacks(this);
-        }
-        ke->accept();
-        break;
-    case Qt::Key_Left:
-    case Qt::Key_Up:
-    case Qt::Key_Right:
-    case Qt::Key_Down:
-        arrowKeyPressed (ke->key());
-        ke->accept();
-        break;
-	default:
-	    handled = FALSE;
-	    break;
+    {
+        QKeyEvent *ke = (QKeyEvent *)qe;
+        switch ( ke->key() ) {
+        case Qt::Key_Home:
+            resetToHomePosition();
+            ke->accept();
+            break;
+        case Qt::Key_S:
+            setSeekMode( !isSeekMode() );
+            // ??? this is kind of a hack, but it is needed
+            // ??? until a better solution is found
+            if ( isSeekMode() && interactiveCount != 0 ) {
+                interactiveCount = 0;
+                finishCBList->invokeCallbacks(this);
             }
+            ke->accept();
+            break;
+        case Qt::Key_Left:
+        case Qt::Key_Up:
+        case Qt::Key_Right:
+        case Qt::Key_Down:
+            arrowKeyPressed (ke->key());
+            ke->accept();
+            break;
+        default:
+            handled = FALSE;
+            break;
         }
+    }
         break;
     default:
-	    handled = FALSE;
+        handled = FALSE;
         break;
-    }	
+    }
     
     return handled;
 }
@@ -1413,7 +1413,7 @@ SoQtViewer::interactiveCountInc()
     interactiveCount++;
     
     if (interactiveCount == 1)
-	startCBList->invokeCallbacks(this);
+        startCBList->invokeCallbacks(this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1429,9 +1429,9 @@ SoQtViewer::interactiveCountDec()
 ////////////////////////////////////////////////////////////////////////
 {
     if (interactiveCount > 0) {
-	interactiveCount--;
-	if (interactiveCount == 0)
-	    finishCBList->invokeCallbacks(this);
+        interactiveCount--;
+        if (interactiveCount == 0)
+            finishCBList->invokeCallbacks(this);
     }
 }
 
@@ -1456,8 +1456,8 @@ SoQtViewer::seekToPoint(const SbVec2s &mouseLocation)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL) {
-	setSeekMode(FALSE);
-	return FALSE;
+        setSeekMode(FALSE);
+        return FALSE;
     }
     
     // do the picking
@@ -1471,39 +1471,39 @@ SoQtViewer::seekToPoint(const SbVec2s &mouseLocation)
     // makes sure something got picked
     SoPickedPoint *pp = pick.getPickedPoint();
     if ( pp == NULL ) {
-	setSeekMode(FALSE);
-	return FALSE;
+        setSeekMode(FALSE);
+        return FALSE;
     }
     
     //
     // Get picked point and normal if detailtSeek
     //
     if (detailSeekFlag) {
-	
-	seekPoint = pp->getPoint();
-	seekNormal = pp->getNormal();
-	
-	// check to make sure normal points torward the camera, else
-	// flip the normal around
-	if ( seekNormal.dot(camera->position.getValue() - seekPoint) < 0 )
-	    seekNormal.negate();
+
+        seekPoint = pp->getPoint();
+        seekNormal = pp->getNormal();
+
+        // check to make sure normal points torward the camera, else
+        // flip the normal around
+        if ( seekNormal.dot(camera->position.getValue() - seekPoint) < 0 )
+            seekNormal.negate();
     }
     //
     // else get object bounding box as the seek point and the camera
     // orientation as the normal.
     //
     else {
-	// get center of object's bounding box
-	// Use assignment notation to disambiguate from expression (edison)
-	SoGetBoundingBoxAction bba = SoGetBoundingBoxAction(SbViewportRegion(getGlxSize()));
-	bba.apply(pp->getPath());
-	SbBox3f bbox = bba.getBoundingBox();
-	seekPoint = bbox.getCenter();
-	
-	// keep the camera oriented the same way
-	SbMatrix mx;
-	mx = camera->orientation.getValue();
-	seekNormal.setValue(mx[2][0], mx[2][1], mx[2][2]);
+        // get center of object's bounding box
+        // Use assignment notation to disambiguate from expression (edison)
+        SoGetBoundingBoxAction bba = SoGetBoundingBoxAction(SbViewportRegion(getGlxSize()));
+        bba.apply(pp->getPath());
+        SbBox3f bbox = bba.getBoundingBox();
+        seekPoint = bbox.getCenter();
+
+        // keep the camera oriented the same way
+        SbMatrix mx;
+        mx = camera->orientation.getValue();
+        seekNormal.setValue(mx[2][0], mx[2][1], mx[2][2]);
     }
     
     
@@ -1513,19 +1513,19 @@ SoQtViewer::seekToPoint(const SbVec2s &mouseLocation)
     
     computeSeekVariables = TRUE;
     if (seekAnimTime == 0) {
-	
-	// jump to new location, no animation needed
-	interpolateSeekAnimation(1.0);
+
+        // jump to new location, no animation needed
+        interpolateSeekAnimation(1.0);
     }
     else {
-	// schedule sensor and call viewer start callbacks
-	if ( ! seekAnimationSensor->getAttachedField() ) {
-	    seekAnimationSensor->attach(viewerRealTime);
-	    seekAnimationSensor->schedule();
-	    interactiveCountInc();
-	}
-	
-	seekStartTime = viewerRealTime->getValue();
+        // schedule sensor and call viewer start callbacks
+        if ( ! seekAnimationSensor->getAttachedField() ) {
+            seekAnimationSensor->attach(viewerRealTime);
+            seekAnimationSensor->schedule();
+            interactiveCountInc();
+        }
+
+        seekStartTime = viewerRealTime->getValue();
     }
     
     return TRUE;    // successfull
@@ -1548,16 +1548,16 @@ SoQtViewer::computeSeekFinalOrientation()
     
     // find the camera final orientation
     if ( isDetailSeek() ) {
-	
-	// get the camera new orientation
-	mx = camera->orientation.getValue();
-	viewVector.setValue(-mx[2][0], -mx[2][1], -mx[2][2]);
-	SbRotation changeOrient;
-	changeOrient.setValue(viewVector, seekPoint - camera->position.getValue());
-	newCamOrientation = camera->orientation.getValue() * changeOrient;
+
+        // get the camera new orientation
+        mx = camera->orientation.getValue();
+        viewVector.setValue(-mx[2][0], -mx[2][1], -mx[2][2]);
+        SbRotation changeOrient;
+        changeOrient.setValue(viewVector, seekPoint - camera->position.getValue());
+        newCamOrientation = camera->orientation.getValue() * changeOrient;
     }
     else
-	newCamOrientation = camera->orientation.getValue();
+        newCamOrientation = camera->orientation.getValue();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1640,7 +1640,7 @@ SoQtViewer::adjustCameraClippingPlanes()
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // get the scene bounding box
     autoClipBboxAction->setViewportRegion(SbViewportRegion(getGlxSize()));
@@ -1660,16 +1660,16 @@ SoQtViewer::adjustCameraClippingPlanes()
     
     // get screen align bbox and figure the near and far plane values
     SbBox3f bbox = xfbbox.project();
-    // take negative value and opposite to what one might think 
+    // take negative value and opposite to what one might think
     // because the camera points down the -Z axis
     float farDist = - bbox.getMin()[2];
     float nearDist = - bbox.getMax()[2];
 
     // scene is behind the camera so don't change the planes
     if (farDist < 0)
-	return;
+        return;
     
-    // check for minimum near plane value (Value will be negative 
+    // check for minimum near plane value (Value will be negative
     // when the camera is inside the bounding box).
     // Note: there needs to be a minimum near value for perspective
     // camera because of zbuffer resolution problem (plus the values
@@ -1708,11 +1708,11 @@ SoXtViewer::copyView(Time eventTime)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+    return;
     
     if (clipboard == NULL)
-    	clipboard = new SoXtClipboard(getWidget());
-    
+        clipboard = new SoXtClipboard(getWidget());
+
     clipboard->copy(camera, eventTime);
 }
 
@@ -1729,8 +1729,8 @@ SoQtViewer::pasteView(Time eventTime)
 ////////////////////////////////////////////////////////////////////////
 {
     if (clipboard == NULL)
-    	clipboard = new SoXtClipboard(getWidget());
-    
+        clipboard = new SoXtClipboard(getWidget());
+
     clipboard->paste(eventTime, SoXtViewer::pasteDoneCB, this);
 }
 
@@ -1750,15 +1750,15 @@ SoQtViewer::pasteDoneCB(void *userData, SoPathList *pathList)
     
     // search for a camera in the paste data
     for (int i = 0; i < pathList->getLength(); i++) {
-	SoFullPath *fullP = (SoFullPath *) (*pathList)[i];
-	if (fullP->getTail()->isOfType(SoCamera::getClassTypeId())) {
-	    newCamera = (SoCamera *) fullP->getTail();
-	    break;
-	}
+    SoFullPath *fullP = (SoFullPath *) (*pathList)[i];
+    if (fullP->getTail()->isOfType(SoCamera::getClassTypeId())) {
+        newCamera = (SoCamera *) fullP->getTail();
+        break;
+    }
     }
 
     if (newCamera != NULL)
-	((SoXtViewer *) userData)->changeCameraValues(newCamera);
+    ((SoXtViewer *) userData)->changeCameraValues(newCamera);
     
     // We delete the callback data when done with it.
     delete pathList;
@@ -1778,11 +1778,11 @@ SoQtViewer::changeCameraValues(SoCamera *newCamera)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // only paste cameras of the same type
     if (camera->getTypeId() != newCamera->getTypeId())
-	return;
+        return;
 
     // give our camera the values of the new camera
     camera->position	    = newCamera->position;
@@ -1793,11 +1793,11 @@ SoQtViewer::changeCameraValues(SoCamera *newCamera)
 
     // get the height or heightAngle
     if (camera->isOfType(SoPerspectiveCamera::getClassTypeId()))
-	((SoPerspectiveCamera *)camera)->heightAngle = 
-		((SoPerspectiveCamera *)newCamera)->heightAngle;
+        ((SoPerspectiveCamera *)camera)->heightAngle =
+            ((SoPerspectiveCamera *)newCamera)->heightAngle;
     else
-	((SoOrthographicCamera *)camera)->height = 
-		((SoOrthographicCamera *)newCamera)->height;
+        ((SoOrthographicCamera *)camera)->height =
+            ((SoOrthographicCamera *)newCamera)->height;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1813,28 +1813,28 @@ SoQtViewer::toggleCameraType()
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // create the camera of the opposite kind and compute the wanted height
     // or heightAngle of the new camera.
     SoCamera *newCam;
     if (camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
-	float angle = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
-	float height = camera->focalDistance.getValue() * tanf(angle/2);
-	newCam = new SoOrthographicCamera;
-	((SoOrthographicCamera *)newCam)->height = 2 * height;
+        float angle = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
+        float height = camera->focalDistance.getValue() * tanf(angle/2);
+        newCam = new SoOrthographicCamera;
+        ((SoOrthographicCamera *)newCam)->height = 2 * height;
     }
     else if (camera->isOfType(SoOrthographicCamera::getClassTypeId())) {
-	float height = ((SoOrthographicCamera *)camera)->height.getValue() / 2;
-	float angle = atanf(height / camera->focalDistance.getValue());
-	newCam = new SoPerspectiveCamera;
-	((SoPerspectiveCamera *)newCam)->heightAngle = 2 * angle;
+        float height = ((SoOrthographicCamera *)camera)->height.getValue() / 2;
+        float angle = atanf(height / camera->focalDistance.getValue());
+        newCam = new SoPerspectiveCamera;
+        ((SoPerspectiveCamera *)newCam)->heightAngle = 2 * angle;
     }
     else {
 #ifdef DEBUG
         SoDebugError::post("SoQtViewer::toggleCameraType", "unknown camera type!");
 #endif
-	return;
+        return;
     }
     
     newCam->ref();
@@ -1852,16 +1852,16 @@ SoQtViewer::toggleCameraType()
     sa.apply(sceneRoot);
     SoFullPath *fullCamPath = (SoFullPath *) sa.getPath();
     if (fullCamPath) {
-	SoGroup *parent = (SoGroup *)fullCamPath->getNode(fullCamPath->getLength() - 2);
-	parent->insertChild(newCam, parent->findChild(camera));
-	SoCamera *oldCam = camera;
-	setCamera(newCam);
-	
-	// remove the old camera if it is still there (setCamera() might
-	// have removed it) and set the created flag to true (for next time)
-	if (parent->findChild(oldCam) >= 0)
-	    parent->removeChild(oldCam);
-	createdCamera = TRUE;
+        SoGroup *parent = (SoGroup *)fullCamPath->getNode(fullCamPath->getLength() - 2);
+        parent->insertChild(newCam, parent->findChild(camera));
+        SoCamera *oldCam = camera;
+        setCamera(newCam);
+
+        // remove the old camera if it is still there (setCamera() might
+        // have removed it) and set the created flag to true (for next time)
+        if (parent->findChild(oldCam) >= 0)
+            parent->removeChild(oldCam);
+        createdCamera = TRUE;
     }
 #ifdef DEBUG
     else
@@ -1886,17 +1886,17 @@ SoQtViewer::arrowKeyPressed (int key)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // get the camera near plane height value
     float dist;
     if (camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
-	float angle = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
-	float length = camera->nearDistance.getValue();
-	dist = length * tanf(angle);
+        float angle = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
+        float length = camera->nearDistance.getValue();
+        dist = length * tanf(angle);
     }
     else if (camera->isOfType(SoOrthographicCamera::getClassTypeId()))
-	dist = ((SoOrthographicCamera *)camera)->height.getValue();
+        dist = ((SoOrthographicCamera *)camera)->height.getValue();
     dist /= 2.0;
     
     // get camera right/left/up/down direction
@@ -1904,20 +1904,20 @@ SoQtViewer::arrowKeyPressed (int key)
     mx = camera->orientation.getValue();
     SbVec3f dir;
     switch(key) {
-        case Qt::Key_Up:
-            dir.setValue(mx[1][0], mx[1][1], mx[1][2]);
-            break;
-        case Qt::Key_Down:
-            dir.setValue(-mx[1][0], -mx[1][1], -mx[1][2]);
-            break;
-        case Qt::Key_Right:
-            dir.setValue(mx[0][0], mx[0][1], mx[0][2]);
-            dist *= camera->aspectRatio.getValue();
-            break;
-        case Qt::Key_Left:
-            dir.setValue(-mx[0][0], -mx[0][1], -mx[0][2]);
-            dist *= camera->aspectRatio.getValue();
-            break;
+    case Qt::Key_Up:
+        dir.setValue(mx[1][0], mx[1][1], mx[1][2]);
+        break;
+    case Qt::Key_Down:
+        dir.setValue(-mx[1][0], -mx[1][1], -mx[1][2]);
+        break;
+    case Qt::Key_Right:
+        dir.setValue(mx[0][0], mx[0][1], mx[0][2]);
+        dist *= camera->aspectRatio.getValue();
+        break;
+    case Qt::Key_Left:
+        dir.setValue(-mx[0][0], -mx[0][1], -mx[0][2]);
+        dist *= camera->aspectRatio.getValue();
+        break;
     }
     
     // finally reposition the camera
@@ -1951,15 +1951,15 @@ SoQtViewer::drawStyleStartCallback(void *, SoQtViewer *v)
     
     // if still and move draw styles are the same, return...
     if (v->interactiveDrawStyle == VIEW_SAME_AS_STILL ||
-	v->interactiveDrawStyle == v->stillDrawStyle)
-	return;
+            v->interactiveDrawStyle == v->stillDrawStyle)
+        return;
     
     // if we have "MOVE NO TEXTURE", then we have nothing
-    // to do if we have a current draw style (since they all have 
+    // to do if we have a current draw style (since they all have
     // texturing turned off in the first place).
     if (v->interactiveDrawStyle == VIEW_NO_TEXTURE &&
-	v->stillDrawStyle != VIEW_AS_IS)
-	return;
+            v->stillDrawStyle != VIEW_AS_IS)
+        return;
     
     v->setCurrentDrawStyle(v->interactiveDrawStyle);
 }
@@ -1971,15 +1971,15 @@ SoQtViewer::drawStyleFinishCallback(void *, SoQtViewer *v)
     
     // if still and move draw styles are the same, return...
     if (v->interactiveDrawStyle == VIEW_SAME_AS_STILL ||
-	v->interactiveDrawStyle == v->stillDrawStyle)
-	return;
+            v->interactiveDrawStyle == v->stillDrawStyle)
+        return;
     
     // if we have "MOVE NO TEXTURE", then we have nothing
-    // to do if we have a current draw style (since they all have 
+    // to do if we have a current draw style (since they all have
     // texturing turned off in the first place).
     if (v->interactiveDrawStyle == VIEW_NO_TEXTURE &&
-	v->stillDrawStyle != VIEW_AS_IS)
-	return;
+            v->stillDrawStyle != VIEW_AS_IS)
+        return;
     
     v->setCurrentDrawStyle(v->stillDrawStyle);
 }
@@ -2003,21 +2003,21 @@ SoQtViewer::seekAnimationSensorCB(void *p, SoSensor *)
     SbTime time = viewerRealTime->getValue();
     float sec = float((time - v->seekStartTime).getValue());
     if (sec == 0.0)
-	sec = 1.0/72.0;	// at least one frame (needed for first call)
+        sec = 1.0/72.0;	// at least one frame (needed for first call)
     float t = (sec / v->seekAnimTime);
     
     // check to make sure the values are correctly clipped
     if (t > 1.0)
-    	t = 1.0;
+        t = 1.0;
     else if ((1.0 - t) < 0.0001)
-	t = 1.0; // this will be the last one...
+        t = 1.0; // this will be the last one...
     
     // call subclasses to interpolate the animation
     v->interpolateSeekAnimation(t);
     
     // stops seek if this was the last interval
     if (t == 1.0)
-	v->setSeekMode(FALSE);
+        v->setSeekMode(FALSE);
 }
 
 
@@ -2171,14 +2171,14 @@ SoQtViewer::drawViewerRollFeedback(SbVec2s center, SbVec2s loc)
     float vx = loc[0] - center[0];
     float vy = loc[1] - center[1];
     if (vx==0 && vy==0) {
-	ang = 0;
-	    dist = 3; // minimum size (given the circle thickness)
+        ang = 0;
+        dist = 3; // minimum size (given the circle thickness)
     }
     else {
-	ang = atan2(vy, vx) * 180.0 / M_PI;
-	dist = sqrtf(vx*vx + vy*vy);
-	if (dist < 3)
-	    dist = 3; // minimum size (given the circle thickness)
+        ang = atan2(vy, vx) * 180.0 / M_PI;
+        dist = sqrtf(vx*vx + vy*vy);
+        if (dist < 3)
+            dist = 3; // minimum size (given the circle thickness)
     }
     float cirAng = -ang + 90; // gluPartialDisk() angle is REALLY backward !!
     
@@ -2215,7 +2215,7 @@ SoQtViewer::drawViewerRollFeedback(SbVec2s center, SbVec2s loc)
     glRotatef(ang+ANGLE_LEN, 0, 0, 1);
     glTranslatef(dist, 0, 0);
     DRAW_ARROW_MACRO
-    glPopMatrix();
+            glPopMatrix();
     
     // draw the CW arrow
     glPushMatrix();
@@ -2224,6 +2224,6 @@ SoQtViewer::drawViewerRollFeedback(SbVec2s center, SbVec2s loc)
     glTranslatef(dist, 0, 0);
     glScalef(1, -1, 1);
     DRAW_ARROW_MACRO
-    glPopMatrix();
+            glPopMatrix();
 }
 

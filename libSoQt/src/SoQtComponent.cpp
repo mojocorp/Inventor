@@ -74,9 +74,9 @@ static const char *thisClassName = "SoQtComponent";
 // Constructor
 //
 SoQtComponent::SoQtComponent(
-    QWidget *parent,
-    const char *name, 
-    SbBool buildInsideParent)
+        QWidget *parent,
+        const char *name,
+        SbBool buildInsideParent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -169,8 +169,8 @@ SoQtComponent::setSize(const SbVec2s &newSize)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-	if (_baseWidget != NULL)
-    	_baseWidget->resize(newSize[0], newSize[1]);
+    if (_baseWidget != NULL)
+        _baseWidget->resize(newSize[0], newSize[1]);
     // cache value for later builds
     size = newSize;
 }
@@ -185,8 +185,8 @@ SoQtComponent::getSize()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-	if (_baseWidget != NULL)
-    	size.setValue(_baseWidget->width(), _baseWidget->height());
+    if (_baseWidget != NULL)
+        size.setValue(_baseWidget->width(), _baseWidget->height());
 
     return size;
 }
@@ -229,7 +229,7 @@ SoQtComponent::setTitle(const char *newTitle)
     title = newTitle;
     
     if (_baseWidget != NULL)
-	_baseWidget->setWindowTitle(title.getString());
+        _baseWidget->setWindowTitle(title.getString());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -255,7 +255,7 @@ SoQtComponent::show()
 {
     // Display that widget!
     if (_baseWidget)
-	 _baseWidget->show();
+        _baseWidget->show();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -268,7 +268,7 @@ SoQtComponent::hide()
 ////////////////////////////////////////////////////////////////////////
 {
     if (_baseWidget)
-	 _baseWidget->hide();
+        _baseWidget->hide();
 
 }
 

@@ -93,14 +93,14 @@ class SoFieldSensor;
 
 class SoQtFlyViewer : public SoQtConstrainedViewer {
     Q_OBJECT
- public:
+public:
     
     SoQtFlyViewer(
-        QWidget *parent = NULL,
-        const char *name = NULL,
-        SbBool buildInsideParent = TRUE,
-        SoQtFullViewer::BuildFlag flag = BUILD_ALL,
-        SoQtViewer::Type type = BROWSER);
+            QWidget *parent = NULL,
+            const char *name = NULL,
+            SbBool buildInsideParent = TRUE,
+            SoQtFullViewer::BuildFlag flag = BUILD_ALL,
+            SoQtViewer::Type type = BROWSER);
 
     ~SoQtFlyViewer();
 
@@ -112,23 +112,23 @@ class SoQtFlyViewer : public SoQtConstrainedViewer {
     virtual void    setCamera(SoCamera *cam);
     virtual void    setCursorEnabled(SbBool onOrOff);
     
-    // This is redefined to prevent the camera type from being changed 
+    // This is redefined to prevent the camera type from being changed
     virtual void    setCameraType(SoType type);
     
- protected:
-  
+protected:
+
     // This constructor takes a boolean whether to build the widget now.
     // Subclasses can pass FALSE, then call SoQtFlyViewer::buildWidget()
     // when they are ready for it to be built.
     SoEXTENDER
     SoQtFlyViewer(
-        QWidget *parent,
-        const char *name,
-        SbBool buildInsideParent,
-        SoQtFullViewer::BuildFlag flag,
-        SoQtViewer::Type type,
-        SbBool buildNow);
-	    
+            QWidget *parent,
+            const char *name,
+            SbBool buildInsideParent,
+            SoQtFullViewer::BuildFlag flag,
+            SoQtViewer::Type type,
+            SbBool buildNow);
+
     // redefine these
     virtual const char *    getDefaultWidgetName() const;
     virtual const char *    getDefaultTitle() const;
@@ -146,7 +146,7 @@ class SoQtFlyViewer : public SoQtConstrainedViewer {
     // Define this to bring the viewer help card
     virtual void        openViewerHelpCard();
     
- private:
+private:
     // viewer state variables
     int             mode;
     SbBool          createdCursors;

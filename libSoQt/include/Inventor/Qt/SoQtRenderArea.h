@@ -92,14 +92,14 @@ class SOQT_EXPORT SoQtRenderArea : public SoQtGLWidget {
     Q_OBJECT
 
 public:
-	// Passing FALSE for getMouseInput means the mouse will be ignored.
+    // Passing FALSE for getMouseInput means the mouse will be ignored.
     // Passing FALSE for getKeyboardInput means the keyboard will be ignored.
     SoQtRenderArea (
-	QWidget* parent = NULL, 
-	const char *name = NULL, 
-	SbBool buildInsideParent = TRUE, 
-	SbBool getMouseInput = TRUE,
-	SbBool getKeyboardInput = TRUE);
+            QWidget* parent = NULL,
+            const char *name = NULL,
+            SbBool buildInsideParent = TRUE,
+            SbBool getMouseInput = TRUE,
+            SbBool getKeyboardInput = TRUE);
     ~SoQtRenderArea();
     
     //
@@ -113,10 +113,10 @@ public:
     //
     void		    setOverlaySceneGraph(SoNode *newScene);
     SoNode *		    getOverlaySceneGraph()
-				{ return overlaySceneMgr->getSceneGraph();}
+    { return overlaySceneMgr->getSceneGraph();}
     
     //
-    // Handle/Unhandle devices. When registerDevice is called, the 
+    // Handle/Unhandle devices. When registerDevice is called, the
     // render area will register interest in events which that device
     // generates, and pass those events into the scene graph.
     // unregisterDevice means the render area will no longer listen
@@ -130,27 +130,27 @@ public:
     // (default to black (0,0,0));
     //
     void		    setBackgroundColor(const SbColor &c)
-				{ sceneMgr->setBackgroundColor(c); }
+    { sceneMgr->setBackgroundColor(c); }
     const SbColor &	    getBackgroundColor() const
-				{ return sceneMgr->getBackgroundColor(); }
+    { return sceneMgr->getBackgroundColor(); }
     
     //
     // Sets/gets the window background color when in color index mode.
     // (default to black (index 0)).
     //
     void		    setBackgroundIndex(int index)
-				{ sceneMgr->setBackgroundIndex(index); }
+    { sceneMgr->setBackgroundIndex(index); }
     int			    getBackgroundIndex() const
-				{ return sceneMgr->getBackgroundIndex(); }
+    { return sceneMgr->getBackgroundIndex(); }
     
     //
     // Sets/gets the overlay window background color index.
     // (default to 0 (clear color)).
     //
     void		    setOverlayBackgroundIndex(int index)
-				{ overlaySceneMgr->setBackgroundIndex(index); }
+    { overlaySceneMgr->setBackgroundIndex(index); }
     int			    getOverlayBackgroundIndex() const
-				{ return overlaySceneMgr->getBackgroundIndex(); }
+    { return overlaySceneMgr->getBackgroundIndex(); }
     
     //
     // Sets the colors to use when displaying in color index mode.
@@ -163,18 +163,18 @@ public:
     void	setOverlayColorMap(int startIndex, int num, const SbColor *colors);
     
     // Sets/gets current viewport region to use for rendering
-    void	setViewportRegion(const SbViewportRegion &newRegion) 
-		    { sceneMgr->getGLRenderAction()->setViewportRegion(newRegion); }
+    void	setViewportRegion(const SbViewportRegion &newRegion)
+    { sceneMgr->getGLRenderAction()->setViewportRegion(newRegion); }
     const SbViewportRegion &getViewportRegion() const
-		    { return sceneMgr->getGLRenderAction()->getViewportRegion(); }
+    { return sceneMgr->getGLRenderAction()->getViewportRegion(); }
     
     //
-    // Transparency level setting methods which specifies how 
+    // Transparency level setting methods which specifies how
     // transparent objects are rendered (quality/speed trade off).
-    // 
+    //
     void	setTransparencyType(SoGLRenderAction::TransparencyType type);
     SoGLRenderAction::TransparencyType	getTransparencyType() const
-		    { return sceneMgr->getGLRenderAction()->getTransparencyType(); }
+    { return sceneMgr->getGLRenderAction()->getTransparencyType(); }
 
     
     //
@@ -182,22 +182,22 @@ public:
     //
     void    	    setAntialiasing(SbBool smoothing, int numPasses);
     void    	    getAntialiasing(SbBool &smoothing, int &numPasses) const
-			    { sceneMgr->getAntialiasing(smoothing, numPasses); }
+    { sceneMgr->getAntialiasing(smoothing, numPasses); }
     
     //
     // Enable/prevent window clearing from happening before a rendering
     // starts (default is clearBeforeRender TRUE).
     //
     void		    setClearBeforeRender(SbBool trueOrFalse, SbBool zbTrueOrFalse = TRUE)
-					    { clearFirst = trueOrFalse; clearZFirst = zbTrueOrFalse; }
+    { clearFirst = trueOrFalse; clearZFirst = zbTrueOrFalse; }
     SbBool		    isClearBeforeRender() const
-					    { return clearFirst; }
-    SbBool          isClearZBufferBeforeRender() const 
-                        { return clearZFirst; }
+    { return clearFirst; }
+    SbBool          isClearZBufferBeforeRender() const
+    { return clearZFirst; }
     void		    setClearBeforeOverlayRender(SbBool trueOrFalse)
-					    { clearOverlayFirst = trueOrFalse; }
+    { clearOverlayFirst = trueOrFalse; }
     SbBool		    isClearBeforeOverlayRender() const
-					    { return clearOverlayFirst; }
+    { return clearOverlayFirst; }
     
     //
     // The render area will automatically redraw whenever something
@@ -211,12 +211,12 @@ public:
     // Sets/gets the priority of the redraw sensor and get the
     // default priority number.
     void		setRedrawPriority(uint32_t priority)
-				{ sceneMgr->setRedrawPriority(priority);
-				  overlaySceneMgr->setRedrawPriority(priority); }
+    { sceneMgr->setRedrawPriority(priority);
+        overlaySceneMgr->setRedrawPriority(priority); }
     uint32_t	getRedrawPriority() const
-				{ return sceneMgr->getRedrawPriority(); }
+    { return sceneMgr->getRedrawPriority(); }
     static uint32_t getDefaultRedrawPriority()
-				{ return SoSceneManager::getDefaultRedrawPriority(); }
+    { return SoSceneManager::getDefaultRedrawPriority(); }
 
     //
     // Calling this forces the render area to be redrawn now.
@@ -250,9 +250,9 @@ public:
     // to the scene graph.
     //
     void    	    setEventCallback(
-		    	    SoQtRenderAreaEventCB *fcn, 
-			    void *userData = NULL)
-			    { appEventHandler = fcn; appEventHandlerData = userData; }
+            SoQtRenderAreaEventCB *fcn,
+            void *userData = NULL)
+    { appEventHandler = fcn; appEventHandlerData = userData; }
     
     // Access to the scene manager
     void		setSceneManager(SoSceneManager *sm) { sceneMgr = sm; }
@@ -261,38 +261,38 @@ public:
     SoSceneManager *	getOverlaySceneManager() const { return overlaySceneMgr; }
     
     // Access to GL render action
-    void		setGLRenderAction(SoGLRenderAction *ra) 
-			    { sceneMgr->setGLRenderAction(ra); }
+    void		setGLRenderAction(SoGLRenderAction *ra)
+    { sceneMgr->setGLRenderAction(ra); }
     SoGLRenderAction	*getGLRenderAction() const
-			    { return sceneMgr->getGLRenderAction(); }
+    { return sceneMgr->getGLRenderAction(); }
 
     // Access to overlay GL render action
-    void		setOverlayGLRenderAction(SoGLRenderAction *ra) 
-			    { overlaySceneMgr->setGLRenderAction(ra); }
+    void		setOverlayGLRenderAction(SoGLRenderAction *ra)
+    { overlaySceneMgr->setGLRenderAction(ra); }
     SoGLRenderAction	*getOverlayGLRenderAction() const
-			    { return overlaySceneMgr->getGLRenderAction(); }
+    { return overlaySceneMgr->getGLRenderAction(); }
 
-  protected:
-  
+protected:
+
     //
     // This constructor takes a boolean whether to build the widget now.
     // Subclasses can pass FALSE, then call SoQtRenderArea::buildWidget()
     // when they are ready for it to be built.
 
     SoQtRenderArea(
-	    QWidget *parent,
-	    const char *name, 
-	    SbBool buildInsideParent, 
-	    SbBool getMouseInput,
-	    SbBool getKeyboardInput, 
-	    SbBool buildNow);
-	
+            QWidget *parent,
+            const char *name,
+            SbBool buildInsideParent,
+            SbBool getMouseInput,
+            SbBool getKeyboardInput,
+            SbBool buildNow);
+
     //
     // redraw() calls actualRedraw(), followed by swapbuffers if necessary.
     // actualRedraw will have the scene manager render the scene. Rendering
     // is broken up into two routines like this so that subclasses can
     // redefine or simply add to rendering (in actualRedraw) without having
-    // to worry about being visible, seting up the window or 
+    // to worry about being visible, seting up the window or
     // single/double buffer swapping.
     //
     virtual void	redraw();
@@ -307,7 +307,7 @@ public:
     virtual void initGraphic();
     virtual void initOverlayGraphic();
     virtual void sizeChanged(const SbVec2s &newSize);
- 
+
 
     QWidget*		buildWidget(QWidget* parent);
     
@@ -322,9 +322,9 @@ public:
     // application event callback variables
     SoQtRenderAreaEventCB *appEventHandler;
     void    	    	  *appEventHandlerData;
- 	// invoke the application event callback - returns what the app cb returns
+    // invoke the application event callback - returns what the app cb returns
     SbBool		invokeAppCB(QEvent *anyevent);
-	
+
     virtual void visibilityChanged (bool flag);
 
 private:
@@ -346,9 +346,9 @@ private:
     
     // this is called by both constructors
     void constructorCommon(
-	    SbBool getMouseInput,
-	    SbBool getKeyboardInput, 
-	    SbBool buildNow);
+            SbBool getMouseInput,
+            SbBool getKeyboardInput,
+            SbBool buildNow);
 };
 
 

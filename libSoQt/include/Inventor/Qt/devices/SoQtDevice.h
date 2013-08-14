@@ -70,7 +70,7 @@ class SoQtEventHandler;
 class QEvent;
 
 class SOQT_EXPORT SoQtDevice {
-  public:
+public:
     // these functions will enable/disable this device for the passed widget.
     // the callback function f will be invoked when events occur in w.
     // data is the clientData which will be passed.
@@ -89,14 +89,14 @@ class SOQT_EXPORT SoQtDevice {
     void		setWindowSize(const SbVec2s &s)	{ winSize = s; }
     const SbVec2s &	getWindowSize() const		{ return winSize; }
 
-  protected:
+protected:
     // set the window coordinate from the passed x,y value. This will flip
     // the y value to convert from Qt coordinates to So coordinates.
     inline void		setEventPosition(SoEvent *event, int x, int y);
     
     inline void fillInEventState (SoEvent* event, QInputEvent* ie);
-   
-  private:
+
+private:
     SbVec2s		winSize;    // size of the window this device works in
     SbVec2s     lastMousePos;
 };
@@ -115,7 +115,7 @@ SoQtDevice::fillInEventState (SoEvent* event, QInputEvent* ie)
 {
     QMouseEvent* me = dynamic_cast<QMouseEvent*>(ie);
 
-    if (me) 
+    if (me)
         setEventPosition(event, me->x(), me->y());
     else
         setEventPosition(event, lastMousePos[0], lastMousePos[1]);

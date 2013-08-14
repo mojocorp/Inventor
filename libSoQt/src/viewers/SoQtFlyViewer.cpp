@@ -76,10 +76,10 @@
  * Defines
  */
 enum ViewerModes {
-    STILL_MODE, 
-    FLY_MODE, 
-    TILT_MODE, 
-    SEEK_MODE, 
+    STILL_MODE,
+    FLY_MODE,
+    TILT_MODE,
+    SEEK_MODE,
     SET_UP_MODE
 };
 
@@ -112,11 +112,11 @@ typedef struct {
 } RES_LABELS;
 static RES_LABELS rl;
 static const char *defaultLabel[]={
-	"Fly Viewer",  
-	"Fly Viewer Preference Sheet", 
-	"Flying speed:",
-	" increase ",
-	" decrease "
+    "Fly Viewer",
+    "Fly Viewer Preference Sheet",
+    "Flying speed:",
+    " increase ",
+    " decrease "
 };
 
 
@@ -125,20 +125,20 @@ static const char *defaultLabel[]={
 // Public constructor - build the widget right now
 //
 SoQtFlyViewer::SoQtFlyViewer(
-    QWidget *parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SoQtFullViewer::BuildFlag b, 
-    SoQtViewer::Type t)
-	: SoQtConstrainedViewer(
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    b, 
-	    t, 
-	    FALSE) // tell base class not to build just yet  
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget *parent,
+        const char *name,
+        SbBool buildInsideParent,
+        SoQtFullViewer::BuildFlag b,
+        SoQtViewer::Type t)
+    : SoQtConstrainedViewer(
+          parent,
+          name,
+          buildInsideParent,
+          b,
+          t,
+          FALSE) // tell base class not to build just yet
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
     // In this case, render area is what the app wants, so buildNow = TRUE
     constructorCommon(TRUE);
@@ -149,23 +149,23 @@ SoQtFlyViewer::SoQtFlyViewer(
 // SoEXTENDER constructor - the subclass tells us whether to build or not
 //
 SoQtFlyViewer::SoQtFlyViewer(
-    QWidget *parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SoQtFullViewer::BuildFlag b, 
-    SoQtViewer::Type t, 
-    SbBool buildNow)
-	: SoQtConstrainedViewer(
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    b, 
-	    t, 
-	    TRUE) // tell base class not to build just yet  
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget *parent,
+        const char *name,
+        SbBool buildInsideParent,
+        SoQtFullViewer::BuildFlag b,
+        SoQtViewer::Type t,
+        SbBool buildNow)
+    : SoQtConstrainedViewer(
+          parent,
+          name,
+          buildInsideParent,
+          b,
+          t,
+          TRUE) // tell base class not to build just yet
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
-    // In this case, render area may be what the app wants, 
+    // In this case, render area may be what the app wants,
     // or it may want a subclass of render area. Pass along buildNow
     // as it was passed to us.
     constructorCommon(buildNow);
@@ -184,27 +184,27 @@ SoQtFlyViewer::constructorCommon(SbBool buildNow)
 {
     // init vars
     mode = STILL_MODE;
-	createdCursors = FALSE;
+    createdCursors = FALSE;
 
     speedLimitFactor = 0.5;
     setClassName("SoQtFlyViewer");
 
     // init animation variables
     animationSensor = new SoFieldSensor(SoQtFlyViewer::animationSensorCB, this);
-	
-	if (buildNow) {
-	// get resources...
-	rl.flyViewer     = defaultLabel[0];
-	rl.fvPrefSheet   = defaultLabel[1];
-	rl.flyingSpeed   = defaultLabel[2];
-	rl.increase      = defaultLabel[3];
-	rl.decrease      = defaultLabel[4];
-		
-    // assign decoration names
-    setPopupMenuString( rl.flyViewer );
-    setPrefSheetString( rl.fvPrefSheet );
-	QWidget* w = buildWidget(getParentWidget());
-	setBaseWidget(w);
+
+    if (buildNow) {
+        // get resources...
+        rl.flyViewer     = defaultLabel[0];
+        rl.fvPrefSheet   = defaultLabel[1];
+        rl.flyingSpeed   = defaultLabel[2];
+        rl.increase      = defaultLabel[3];
+        rl.decrease      = defaultLabel[4];
+
+        // assign decoration names
+        setPopupMenuString( rl.flyViewer );
+        setPrefSheetString( rl.fvPrefSheet );
+        QWidget* w = buildWidget(getParentWidget());
+        setBaseWidget(w);
     }
 }
 
@@ -232,26 +232,26 @@ SoQtFlyViewer::setViewing (SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == viewingFlag)
-	return;
+        return;
     
     // call the base class
     SoQtConstrainedViewer::setViewing(flag);
 
     // set the right cursor
-	if (!createdCursors)
-	    defineCursors();
-		
-        if (isViewing()) {
-            setCursor (viewerCursor);
-        } else {
-            unsetCursor();
-        }
+    if (!createdCursors)
+        defineCursors();
+
+    if (isViewing()) {
+        setCursor (viewerCursor);
+    } else {
+        unsetCursor();
+    }
 
     // erase viewer feedback
     if (mode != STILL_MODE)
-	switchMode(STILL_MODE);
+        switchMode(STILL_MODE);
     else
-	scheduleRedraw();
+        scheduleRedraw();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -266,34 +266,34 @@ SoQtFlyViewer::setCursorEnabled(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == cursorEnabledFlag)
-	return;
+        return;
     
     cursorEnabledFlag = flag;
     
     if (! isViewing())
-	return;
+        return;
 
     // now set the right cursor on the window
     if (flag) {
-	
-	if (! createdCursors)
-	    defineCursors();
-	
+
+        if (! createdCursors)
+            defineCursors();
+
         switch(mode) {
-            case STILL_MODE:
-            case FLY_MODE:
-            case TILT_MODE:
-                setCursor (viewerCursor);
-                break;
-            case SEEK_MODE:
-                setCursor (seekCursor);
-                break;
-            case SET_UP_MODE:
-                setCursor (upCursor);
-                break;
+        case STILL_MODE:
+        case FLY_MODE:
+        case TILT_MODE:
+            setCursor (viewerCursor);
+            break;
+        case SEEK_MODE:
+            setCursor (seekCursor);
+            break;
+        case SET_UP_MODE:
+            setCursor (upCursor);
+            break;
         }
     }
-	else
+    else
         unsetCursor();
 }
 
@@ -310,16 +310,16 @@ SoQtFlyViewer::setCamera(SoCamera *newCamera)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == newCamera)
-	return;
+        return;
     
     // call parent class
     SoQtConstrainedViewer::setCamera(newCamera);
     
     // now make sure the camera is not orthographic, else switch to
     // perspective.
-    if (camera != NULL && 
-	camera->isOfType(SoOrthographicCamera::getClassTypeId()))
-	toggleCameraType();
+    if (camera != NULL &&
+            camera->isOfType(SoOrthographicCamera::getClassTypeId()))
+        toggleCameraType();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -337,7 +337,7 @@ SoQtFlyViewer::setCameraType(SoType type)
 #ifdef DEBUG
     if (! type.isDerivedFrom(SoPerspectiveCamera::getClassTypeId()))
         SoDebugError::post("SoQtFlyViewer::setCameraType()",
-                        "ignored - must be perspective camera");
+                           "ignored - must be perspective camera");
 #endif
 }
 
@@ -353,16 +353,16 @@ SoQtFlyViewer::setSeekMode(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (!isViewing())
-	return;
+        return;
     
     // call the base class
     SoQtConstrainedViewer::setSeekMode(flag);
     
     // set the new viewer mode
     if (isSeekMode())
-	switchMode(SEEK_MODE);
+        switchMode(SEEK_MODE);
     else
-	switchMode(STILL_MODE);
+        switchMode(STILL_MODE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -425,7 +425,7 @@ SoQtFlyViewer::processEvent(QEvent *qe)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // check for leave and enter  notify, in which case the viewer 
+    // check for leave and enter  notify, in which case the viewer
     // temporaly stops flying and resume flying if it was flying.
     if (isViewing() && mode == FLY_MODE) {
         if (qe->type() == QEvent::Leave) {
@@ -442,10 +442,10 @@ SoQtFlyViewer::processEvent(QEvent *qe)
     }
 
     if ( processCommonEvents(qe) )
-	return;
+        return;
     
     if (!createdCursors) {
-	defineCursors();
+        defineCursors();
     }
     
 
@@ -455,43 +455,43 @@ SoQtFlyViewer::processEvent(QEvent *qe)
 
     switch(qe->type()) {
     case QEvent::MouseButtonPress:
-        {
-            me = (QMouseEvent*) qe;
-            if (me->button() != Qt::LeftButton && me->button() != Qt::MidButton) {
-                break;
-            }
-            locator[0] = me->x();
-            locator[1] = raSize[1] - me->y();
-            switch(mode) {
-                case STILL_MODE:
-                    // check if both buttons are down
-                    if ((me->button() == Qt::LeftButton && me->buttons() & Qt::MidButton) ||
-                        (me->button() == Qt::MidButton  && me->buttons() & Qt::LeftButton))
-						break;
-                    switchMode(FLY_MODE);
-                    changeMaxStraightSpeed (me->button() == Qt::LeftButton);
-                    speed = maxSpeed;
-                    break;
-                case FLY_MODE:
-                    // check if both buttons are down
-                    if ((me->button() == Qt::LeftButton && me->buttons() & Qt::MidButton) ||
-                        (me->button() == Qt::MidButton  && me->buttons() & Qt::LeftButton))
-                        switchMode(STILL_MODE);
-                    else
-                        changeMaxStraightSpeed (me->button() == Qt::LeftButton);
-                    break;
-                case SEEK_MODE:
-                    if (me->button() == Qt::LeftButton)
-                        seekToPoint(locator);
-                    break;
-                case SET_UP_MODE:
-                    if (me->button() == Qt::LeftButton) {
-                        findUpDirection(locator);
-                        switchMode(STILL_MODE);
-                    }
-                    break;
-            }
+    {
+        me = (QMouseEvent*) qe;
+        if (me->button() != Qt::LeftButton && me->button() != Qt::MidButton) {
+            break;
         }
+        locator[0] = me->x();
+        locator[1] = raSize[1] - me->y();
+        switch(mode) {
+        case STILL_MODE:
+            // check if both buttons are down
+            if ((me->button() == Qt::LeftButton && me->buttons() & Qt::MidButton) ||
+                    (me->button() == Qt::MidButton  && me->buttons() & Qt::LeftButton))
+                break;
+            switchMode(FLY_MODE);
+            changeMaxStraightSpeed (me->button() == Qt::LeftButton);
+            speed = maxSpeed;
+            break;
+        case FLY_MODE:
+            // check if both buttons are down
+            if ((me->button() == Qt::LeftButton && me->buttons() & Qt::MidButton) ||
+                    (me->button() == Qt::MidButton  && me->buttons() & Qt::LeftButton))
+                switchMode(STILL_MODE);
+            else
+                changeMaxStraightSpeed (me->button() == Qt::LeftButton);
+            break;
+        case SEEK_MODE:
+            if (me->button() == Qt::LeftButton)
+                seekToPoint(locator);
+            break;
+        case SET_UP_MODE:
+            if (me->button() == Qt::LeftButton) {
+                findUpDirection(locator);
+                switchMode(STILL_MODE);
+            }
+            break;
+        }
+    }
         break;
 
     case QEvent::MouseMove:
@@ -499,57 +499,57 @@ SoQtFlyViewer::processEvent(QEvent *qe)
         locator[0] = me->x();
         locator[1] = raSize[1] - me->y();
         switch(mode) {
-            case FLY_MODE:
-                // find new max speed based on curvature
-                calculateMaxSpeed();
-                break;
-            case TILT_MODE:
-                // reset the camera orientation
-                camera->orientation = camStartOrientation;
+        case FLY_MODE:
+            // find new max speed based on curvature
+            calculateMaxSpeed();
+            break;
+        case TILT_MODE:
+            // reset the camera orientation
+            camera->orientation = camStartOrientation;
 
-                // rotate right/left
-                if (locator[0] != startPos[0]) {
-                    float angle = (startPos[0] - locator[0]) / float(raSize[0]);
-                    SbRotation rot(upDirection, angle * 2 * M_PI);
-                    camera->orientation = camera->orientation.getValue() * rot;
-                }
+            // rotate right/left
+            if (locator[0] != startPos[0]) {
+                float angle = (startPos[0] - locator[0]) / float(raSize[0]);
+                SbRotation rot(upDirection, angle * 2 * M_PI);
+                camera->orientation = camera->orientation.getValue() * rot;
+            }
 
-                // tilt up/down
-                if (locator[1] != startPos[1]) {
-                    float angle = (locator[1] - startPos[1]) / float(raSize[1]);
-                    tiltCamera(angle * 2 * M_PI);
-                }
-                break;
+            // tilt up/down
+            if (locator[1] != startPos[1]) {
+                float angle = (locator[1] - startPos[1]) / float(raSize[1]);
+                tiltCamera(angle * 2 * M_PI);
+            }
+            break;
         }
         break;
 
     case QEvent::KeyPress:
         ke = (QKeyEvent *) qe;
         switch (ke->key()) {
-            case Qt::Key_U:
-                if (isSeekMode()) {
-                    setSeekMode(FALSE);
-                }
-                switchMode( (mode == SET_UP_MODE) ? STILL_MODE : SET_UP_MODE );
-                break;
-            case Qt::Key_Control:
-                if (mode == STILL_MODE || mode == FLY_MODE) {
-                    interactiveCountInc();
-                    switchMode(TILT_MODE);
-                }
-                break;
+        case Qt::Key_U:
+            if (isSeekMode()) {
+                setSeekMode(FALSE);
+            }
+            switchMode( (mode == SET_UP_MODE) ? STILL_MODE : SET_UP_MODE );
+            break;
+        case Qt::Key_Control:
+            if (mode == STILL_MODE || mode == FLY_MODE) {
+                interactiveCountInc();
+                switchMode(TILT_MODE);
+            }
+            break;
         }
         break;
 
     case QEvent::KeyRelease:
         ke = (QKeyEvent *) qe;
         switch (ke->key()) {
-            case Qt::Key_Control:
-                if (mode == TILT_MODE) {
-                    switchMode(STILL_MODE);
-                    interactiveCountDec();
-                }
-                break;
+        case Qt::Key_Control:
+            if (mode == TILT_MODE) {
+                switchMode(STILL_MODE);
+                interactiveCountDec();
+            }
+            break;
         default: break;
         }
         break;
@@ -569,7 +569,7 @@ SoQtFlyViewer::switchMode(int newMode)
 ////////////////////////////////////////////////////////////////////////
 {
     if (mode == newMode)
-	return;
+        return;
     
     // assing new mode
     SbBool redrawNeeded = TRUE;
@@ -577,44 +577,44 @@ SoQtFlyViewer::switchMode(int newMode)
     mode = newMode;
 
     if (!createdCursors)
-	defineCursors();
+        defineCursors();
     
     // check the old viewer mode
     switch(prevMode) {
-	case FLY_MODE:
-	    animationSensor->detach();
-	    animationSensor->unschedule();
-	    interactiveCountDec();
-	    break;
+    case FLY_MODE:
+        animationSensor->detach();
+        animationSensor->unschedule();
+        interactiveCountDec();
+        break;
     }
     
     // switch to new viewer mode
     switch(newMode) {
-        case STILL_MODE:
-            setCursor (viewerCursor);
-            break;
-        case FLY_MODE:
-            animationSensor->attach(viewerRealTime);
-            animationSensor->schedule();
-            prevAnimTime = viewerRealTime->getValue();
-            interactiveCountInc();
-            speed = maxSpeed = maxStraightSpeed = 0;
-            speedLimit = sceneSize * speedLimitFactor;
-            redrawNeeded = FALSE; // wait for sensor to fire
-            setCursor (viewerCursor);
-            break;
-        case TILT_MODE:
-            // save mouse and camera starting values
-            startPos = locator;
-            camStartOrientation = camera->orientation.getValue();
-            setCursor (viewerCursor);
-            break;
-        case SEEK_MODE:
-            setCursor (seekCursor);
-            break;
-        case SET_UP_MODE:
-            setCursor (upCursor);
-            break;
+    case STILL_MODE:
+        setCursor (viewerCursor);
+        break;
+    case FLY_MODE:
+        animationSensor->attach(viewerRealTime);
+        animationSensor->schedule();
+        prevAnimTime = viewerRealTime->getValue();
+        interactiveCountInc();
+        speed = maxSpeed = maxStraightSpeed = 0;
+        speedLimit = sceneSize * speedLimitFactor;
+        redrawNeeded = FALSE; // wait for sensor to fire
+        setCursor (viewerCursor);
+        break;
+    case TILT_MODE:
+        // save mouse and camera starting values
+        startPos = locator;
+        camStartOrientation = camera->orientation.getValue();
+        setCursor (viewerCursor);
+        break;
+    case SEEK_MODE:
+        setCursor (seekCursor);
+        break;
+    case SET_UP_MODE:
+        setCursor (upCursor);
+        break;
     }
 
     if (redrawNeeded)
@@ -636,13 +636,13 @@ SoQtFlyViewer::actualRedraw()
     
     // now draw the viewer feedback
     if (isViewing() && camera != NULL) {
-	
-	setFeedbackOrthoProjection(getGlxSize());
-	
-	drawViewerFeedback();
-	
-	// now restore state
-	restoreGLStateAfterFeedback();
+
+        setFeedbackOrthoProjection(getGlxSize());
+
+        drawViewerFeedback();
+
+        // now restore state
+        restoreGLStateAfterFeedback();
     }
 }
 
@@ -665,21 +665,21 @@ SoQtFlyViewer::drawViewerFeedback()
     short ty = short(raSize[1] * TEXT_DY);
     glRasterPos2s(tx, ty);
     TEXT_COLOR;
-// ???alain
+    // ???alain
 #if 0
     char str[10];
     switch(mode) {
-	case STILL_MODE: charstr("Still"); break;
-	case TILT_MODE: charstr("Tilting"); break;
-	case SEEK_MODE:
-	charstr("Seeking");
-	break;
-	case SET_UP_MODE: charstr("Set Up Direction"); break;
-	case FLY_MODE:
-	    charstr("Flying  ");
-	    sprintf(str, "%f", speed);
-	    charstr(str);
-	    break;
+    case STILL_MODE: charstr("Still"); break;
+    case TILT_MODE: charstr("Tilting"); break;
+    case SEEK_MODE:
+        charstr("Seeking");
+        break;
+    case SET_UP_MODE: charstr("Set Up Direction"); break;
+    case FLY_MODE:
+        charstr("Flying  ");
+        sprintf(str, "%f", speed);
+        charstr(str);
+        break;
     }
 #endif
     
@@ -703,21 +703,21 @@ SoQtFlyViewer::drawViewerFeedback()
     cmov2s(x2+10, y-5); charstr("+");
 #endif
     if (mode == FLY_MODE) {
-	// draw the maximum speed bar
-	short l = short((x2-x1) * maxStraightSpeed / speedLimit);
-	MAX_SPEED_COL;
-	glLineWidth(5);
-	glBegin(GL_LINES);
-	glVertex2s(x1, y); glVertex2s(x1+l, y);
-	glEnd();
-	
-	// draw the current speed bar
-	l = short((x2-x1) * speed / speedLimit);
-	CUR_SPEED_COL;
-	glLineWidth(3);
-	glBegin(GL_LINES);
-	glVertex2s(x1, y); glVertex2s(x1+l, y);
-	glEnd();
+        // draw the maximum speed bar
+        short l = short((x2-x1) * maxStraightSpeed / speedLimit);
+        MAX_SPEED_COL;
+        glLineWidth(5);
+        glBegin(GL_LINES);
+        glVertex2s(x1, y); glVertex2s(x1+l, y);
+        glEnd();
+
+        // draw the current speed bar
+        l = short((x2-x1) * speed / speedLimit);
+        CUR_SPEED_COL;
+        glLineWidth(3);
+        glBegin(GL_LINES);
+        glVertex2s(x1, y); glVertex2s(x1+l, y);
+        glEnd();
     }
     
     //
@@ -725,28 +725,28 @@ SoQtFlyViewer::drawViewerFeedback()
     //
     glLineWidth(1);
     if (mode == TILT_MODE) {
-	// draw cross at starting point
-	DARK_COLOR;
-	glBegin(GL_LINES);
-	glVertex2s(startPos[0] - CROSS, startPos[1]);
-	glVertex2s(startPos[0] + CROSS, startPos[1]);
-	glVertex2s(startPos[0], startPos[1] - CROSS);
-	glVertex2s(startPos[0], startPos[1] + CROSS);
-	glEnd();
+        // draw cross at starting point
+        DARK_COLOR;
+        glBegin(GL_LINES);
+        glVertex2s(startPos[0] - CROSS, startPos[1]);
+        glVertex2s(startPos[0] + CROSS, startPos[1]);
+        glVertex2s(startPos[0], startPos[1] - CROSS);
+        glVertex2s(startPos[0], startPos[1] + CROSS);
+        glEnd();
     }
     else {
 #if 0
-	static GLUquadricObj *quad = NULL;
-	if (! quad) quad = gluNewQuadric();
-	
-	// draw small circle at screen center
-	DARK_COLOR;
-	circi(raSize[0]/2, raSize[1]/2, CIRCLE_RAD);
+        static GLUquadricObj *quad = NULL;
+        if (! quad) quad = gluNewQuadric();
+
+        // draw small circle at screen center
+        DARK_COLOR;
+        circi(raSize[0]/2, raSize[1]/2, CIRCLE_RAD);
 #endif
     }
     
     //
-    // finally draw the small directional axis 
+    // finally draw the small directional axis
     //
 #if 0
 #define DRAW_AXIS(color, x, y, z) \
@@ -774,9 +774,9 @@ SoQtFlyViewer::drawViewerFeedback()
     pushmatrix();
     multmatrix((Matrix) (float *) mx);
     DRAW_AXIS(0x6666ff, 1, 0, 0)
-    DRAW_AXIS(0x66ff66, 0, 1, 0)
-    DRAW_AXIS(0xff6666, 0, 0, 1)
-    (viewVector.dot(bboxDir) < 0) ? cpack(0x66ffff) : cpack(0xff66ff);
+            DRAW_AXIS(0x66ff66, 0, 1, 0)
+            DRAW_AXIS(0xff6666, 0, 0, 1)
+            (viewVector.dot(bboxDir) < 0) ? cpack(0x66ffff) : cpack(0xff66ff);
     bgnline(); v3f(center.getValue()); v3f(bboxDir.getValue()); endline();
     popmatrix();
     zbuffer(FALSE);
@@ -797,7 +797,7 @@ SoQtFlyViewer::defineCursors()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   
+
     // viewing cursor
     viewerCursor = SoQtCursor::getCursor (SoQtCursor::VIEWING);
     
@@ -823,7 +823,7 @@ SoQtFlyViewer::doCameraAnimation()
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     //
     // get time interval since last call
@@ -834,7 +834,7 @@ SoQtFlyViewer::doCameraAnimation()
     
     // make sure to have at least a delta time for the first call.
     if (sec == 0.0)
-	sec = 1.0/72.0;
+        sec = 1.0/72.0;
     
     //
     // turn the camera left/right using the distance^2 which gives a nice
@@ -844,10 +844,10 @@ SoQtFlyViewer::doCameraAnimation()
     float dist = (locator[0] - raSize[0]/2) / float(raSize[0]);
     float angle = TURN_SPEED * (dist * dist) * sec;
     if (angle != 0.0) {
-	if (dist < 0)
-	    angle = -angle;
-	SbRotation rot(upDirection, -angle);
-	camera->orientation = camera->orientation.getValue() * rot;
+        if (dist < 0)
+            angle = -angle;
+        SbRotation rot(upDirection, -angle);
+        camera->orientation = camera->orientation.getValue() * rot;
     }
     
     //
@@ -857,33 +857,33 @@ SoQtFlyViewer::doCameraAnimation()
     dist = (locator[1] - raSize[1]/2) / float(raSize[1]);
     angle = TURN_SPEED * (dist * dist) * sec;
     if (dist < 0)
-	angle = -angle;
+        angle = -angle;
     if (angle != 0.0)
-	tiltCamera(angle);
+        tiltCamera(angle);
     
     //
     // move the camera forward
     //
     float dollyDist = speed * sec;
     if (dollyDist > 0.0) {
-	// get camera forward direction
-	SbMatrix mx;
-	mx = camera->orientation.getValue();
-	SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
-	
-	// now move camera foward by distance
-	camera->position = camera->position.getValue() + forward * dollyDist;
+        // get camera forward direction
+        SbMatrix mx;
+        mx = camera->orientation.getValue();
+        SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
+
+        // now move camera foward by distance
+        camera->position = camera->position.getValue() + forward * dollyDist;
     }
     
     //
     // increase the current speed if we havn't reach max speed yet
     //
     if ((speed > 0 && speed < maxSpeed) || (speed < 0 && speed > maxSpeed)) {
-	speed *= powf(3.0, sec);
-	
-	// clip the value to the maxSpeed
-	if ((speed > 0 && speed > maxSpeed) || (speed < 0 && speed < maxSpeed))
-	    speed = maxSpeed;
+        speed *= powf(3.0, sec);
+
+        // clip the value to the maxSpeed
+        if ((speed > 0 && speed > maxSpeed) || (speed < 0 && speed < maxSpeed))
+            speed = maxSpeed;
     }
 }
 
@@ -899,8 +899,8 @@ SoQtFlyViewer::rightWheelMotion(float newVal)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float dist = (newVal - rightWheelVal) * sceneSize * viewerSpeed 
-	    * WHEEL_DOLLY_FACTOR;
+    float dist = (newVal - rightWheelVal) * sceneSize * viewerSpeed
+            * WHEEL_DOLLY_FACTOR;
     
     // get camera forward direction
     SbMatrix mx;
@@ -928,29 +928,29 @@ SoQtFlyViewer::changeMaxStraightSpeed(SbBool increase)
 {
     // check if we are just starting
     if (maxStraightSpeed == 0)
-	maxStraightSpeed = increase ? MIN_SPEED * speedLimit : - MIN_SPEED * speedLimit;
+        maxStraightSpeed = increase ? MIN_SPEED * speedLimit : - MIN_SPEED * speedLimit;
     else {
-	
-	// find the new maxStraightSpeed
-	if ((maxStraightSpeed > 0 && increase) ||
-	    (maxStraightSpeed < 0 && !increase))
-	    maxStraightSpeed *= MAX_INC;
-	else
-	    maxStraightSpeed /= MAX_INC;
-	
-	// clip to speedLimit boundaries
-	if (maxStraightSpeed > speedLimit)
-	    maxStraightSpeed = speedLimit;
-	else if (maxStraightSpeed < -speedLimit)
-	    maxStraightSpeed = -speedLimit;
-	
-	// check if we are less than the minimum speed, in which 
-	// case we just stop flying
-	float min = MIN_SPEED * speedLimit;
-	if (maxStraightSpeed > -min && maxStraightSpeed < min) {
-	    switchMode(STILL_MODE);
-	    return;
-	}
+
+        // find the new maxStraightSpeed
+        if ((maxStraightSpeed > 0 && increase) ||
+                (maxStraightSpeed < 0 && !increase))
+            maxStraightSpeed *= MAX_INC;
+        else
+            maxStraightSpeed /= MAX_INC;
+
+        // clip to speedLimit boundaries
+        if (maxStraightSpeed > speedLimit)
+            maxStraightSpeed = speedLimit;
+        else if (maxStraightSpeed < -speedLimit)
+            maxStraightSpeed = -speedLimit;
+
+        // check if we are less than the minimum speed, in which
+        // case we just stop flying
+        float min = MIN_SPEED * speedLimit;
+        if (maxStraightSpeed > -min && maxStraightSpeed < min) {
+            switchMode(STILL_MODE);
+            return;
+        }
     }
     
     // given the new maxStraightSpeed, calculate the maxSpeed
@@ -979,10 +979,10 @@ SoQtFlyViewer::calculateMaxSpeed()
     if (dy > 1.0) dy = 1.0;
     
     // assign new maxSpeed and clip the current speed if needed
-    maxSpeed = (dx > dy) ? (1.0 - dx) * maxStraightSpeed : 
-			    (1.0 - dy) * maxStraightSpeed;
+    maxSpeed = (dx > dy) ? (1.0 - dx) * maxStraightSpeed :
+                           (1.0 - dy) * maxStraightSpeed;
     if ((speed > 0 && speed > maxSpeed) || (speed < 0 && speed < maxSpeed))
-	speed = maxSpeed;
+        speed = maxSpeed;
 }
 
 ////////////////////////////////////////////////////////////////////////

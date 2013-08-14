@@ -99,12 +99,12 @@
  */
 
 enum ViewerModes {
-    PICK_MODE, 
-    VIEW_MODE, 
-    SPIN_MODE_ACTIVE, 
-    PAN_MODE, 
-    PAN_MODE_ACTIVE, 
-    DOLLY_MODE_ACTIVE, 
+    PICK_MODE,
+    VIEW_MODE,
+    SPIN_MODE_ACTIVE,
+    PAN_MODE,
+    PAN_MODE_ACTIVE,
+    DOLLY_MODE_ACTIVE,
     SEEK_MODE
 };
 // size of the rotation buffer, which is used to animate the spinning ball.
@@ -124,13 +124,13 @@ typedef struct {
 static RES_LABELS rl;
 
 static const char *defaultLabel[]={
-	"Examiner Viewer",  
-	"Roty", 
-	"Rotx",
-	"Examiner Viewer Preference Sheet",
-	"Zoom",  
-	"Dolly",   
-	"axes size:"
+    "Examiner Viewer",
+    "Roty",
+    "Rotx",
+    "Examiner Viewer Preference Sheet",
+    "Zoom",
+    "Dolly",
+    "axes size:"
 };
 
 
@@ -138,68 +138,68 @@ static const char *defaultLabel[]={
 // The point of interest geometry description
 //
 const char *SoQtExaminerViewer::geometryBuffer = "\
-#Inventor V2.0 ascii\n\
-\
-Separator { \
-    PickStyle { style UNPICKABLE } \
-    LightModel { model BASE_COLOR } \
-    MaterialBinding { value PER_PART } \
-    DrawStyle { lineWidth 2 } \
-    Coordinate3 { point [0 0 0, 1 0 0, 0 1 0, 0 0 1] } \
-    BaseColor { rgb [1 0 0, 0 1 0, 0 0 1] } \
-    IndexedLineSet { coordIndex [1, 0, 2, -1, 0, 3] } \
-     \
-    LightModel { model PHONG } \
-    MaterialBinding { value OVERALL } \
-    Complexity { value .1 } \
-    Separator { \
-        Material { \
+        #Inventor V2.0 ascii\n\
+            \
+            Separator { \
+            PickStyle { style UNPICKABLE } \
+            LightModel { model BASE_COLOR } \
+            MaterialBinding { value PER_PART } \
+            DrawStyle { lineWidth 2 } \
+            Coordinate3 { point [0 0 0, 1 0 0, 0 1 0, 0 0 1] } \
+            BaseColor { rgb [1 0 0, 0 1 0, 0 0 1] } \
+            IndexedLineSet { coordIndex [1, 0, 2, -1, 0, 3] } \
+            \
+            LightModel { model PHONG } \
+            MaterialBinding { value OVERALL } \
+            Complexity { value .1 } \
+            Separator { \
+            Material { \
             diffuseColor    [ 0.5 0 0 ] \
             emissiveColor   [ 0.5 0 0 ] \
-        } \
-        Translation { translation 1 0 0 } \
-        RotationXYZ { axis Z angle -1.570796327 } \
-        Cone { bottomRadius .2 height .3 } \
-    } \
-    Separator { \
-        Material { \
+            } \
+            Translation { translation 1 0 0 } \
+            RotationXYZ { axis Z angle -1.570796327 } \
+            Cone { bottomRadius .2 height .3 } \
+            } \
+            Separator { \
+            Material { \
             diffuseColor    [ 0 0.5 0 ] \
             emissiveColor   [ 0 0.5 0 ] \
-        } \
-        Translation { translation 0 1 0 } \
-        Cone { bottomRadius .2 height .3 } \
-    } \
-    Material { \
-        diffuseColor    [ 0 0 0.5 ] \
-        emissiveColor   [ 0 0 0.5 ] \
-    } \
-    Translation { translation 0 0 1 } \
-    RotationXYZ { axis X angle 1.570796327 } \
-    Cone { bottomRadius .2 height .3 } \
-} ";
+            } \
+            Translation { translation 0 1 0 } \
+            Cone { bottomRadius .2 height .3 } \
+            } \
+            Material { \
+            diffuseColor    [ 0 0 0.5 ] \
+            emissiveColor   [ 0 0 0.5 ] \
+            } \
+            Translation { translation 0 0 1 } \
+            RotationXYZ { axis X angle 1.570796327 } \
+            Cone { bottomRadius .2 height .3 } \
+            } ";
 
 
-static const char *thisClassName = "SoQtExaminerViewer";
+        static const char *thisClassName = "SoQtExaminerViewer";
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Public constructor - build the widget right now
 //
 SoQtExaminerViewer::SoQtExaminerViewer(
-    QWidget* parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SoQtFullViewer::BuildFlag b, 
-    SoQtViewer::Type t)
-	: SoQtFullViewer(
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    b, 
-	    t, 
-	    FALSE) // tell GLWidget not to build just yet  
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget* parent,
+        const char *name,
+        SbBool buildInsideParent,
+        SoQtFullViewer::BuildFlag b,
+        SoQtViewer::Type t)
+    : SoQtFullViewer(
+          parent,
+          name,
+          buildInsideParent,
+          b,
+          t,
+          FALSE) // tell GLWidget not to build just yet
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
     // In this case, render area is what the app wants, so buildNow = TRUE
     constructorCommon(TRUE);
@@ -210,23 +210,23 @@ SoQtExaminerViewer::SoQtExaminerViewer(
 // SoEXTENDER constructor - the subclass tells us whether to build or not
 //
 SoQtExaminerViewer::SoQtExaminerViewer(
-    QWidget* parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SoQtFullViewer::BuildFlag b, 
-    SoQtViewer::Type t, 
-    SbBool buildNow)
-	: SoQtFullViewer(
-	    parent,
-	    name, 
-	    buildInsideParent,
-	    b,  
-	    t, 
-	   FALSE) // tell GLWidget not to build just yet  
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget* parent,
+        const char *name,
+        SbBool buildInsideParent,
+        SoQtFullViewer::BuildFlag b,
+        SoQtViewer::Type t,
+        SbBool buildNow)
+    : SoQtFullViewer(
+          parent,
+          name,
+          buildInsideParent,
+          b,
+          t,
+          FALSE) // tell GLWidget not to build just yet
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
-    // In this case, render area may be what the app wants, 
+    // In this case, render area may be what the app wants,
     // or it may want a subclass of render area. Pass along buildNow
     // as it was passed to us.
     constructorCommon(buildNow);
@@ -245,9 +245,9 @@ SoQtExaminerViewer::constructorCommon(SbBool buildNow)
 {
     // init local vars
     mode = isViewing() ? VIEW_MODE : PICK_MODE;
-	createdCursors = FALSE;
+    createdCursors = FALSE;
 
-	
+
     setSize( SbVec2s(500, 390) );  // default size
     setClassName(thisClassName);
     
@@ -263,7 +263,7 @@ SoQtExaminerViewer::constructorCommon(SbBool buildNow)
     rotBuffer = new SbRotation[ROT_BUFF_SIZE];
     lastMotionTime = QDateTime::currentDateTime().addSecs (-1);
     animationSensor = new
-        SoFieldSensor(SoQtExaminerViewer::animationSensorCB, this);
+            SoFieldSensor(SoQtExaminerViewer::animationSensorCB, this);
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
         SoDebug::NamePtr("examinerSpinSensor", animationSensor);
@@ -276,14 +276,14 @@ SoQtExaminerViewer::constructorCommon(SbBool buildNow)
     sphereSheet = new SbSphereSheetProjector;
     sphereSheet->setViewVolume( vv );
     sphereSheet->setSphere( SbSphere( SbVec3f(0, 0, 0), .7f) );
-  
+
 
 
     
     // Build the widget tree, and let SoQtComponent know about our base widget.
-	if (buildNow) {
-	QWidget* w = buildWidget(getParentWidget());
-	setBaseWidget(w);
+    if (buildNow) {
+        QWidget* w = buildWidget(getParentWidget());
+        setBaseWidget(w);
     }
 }
 
@@ -302,7 +302,7 @@ SoQtExaminerViewer::~SoQtExaminerViewer()
 
     delete sphereSheet;
     if (feedbackRoot)
-	feedbackRoot->unref();
+        feedbackRoot->unref();
 
     delete [] rotBuffer;
 }
@@ -311,9 +311,9 @@ void
 SoQtExaminerViewer::setViewingMode( ViewingMode viewingMode )
 {
     switch(viewingMode) {
-        case VIEWING_MODE_SPIN: switchMode(SPIN_MODE_ACTIVE); break;
-        case VIEWING_MODE_PAN:  switchMode(PAN_MODE_ACTIVE); break;
-        case VIEWING_MODE_ZOOM: switchMode(DOLLY_MODE_ACTIVE); break;
+    case VIEWING_MODE_SPIN: switchMode(SPIN_MODE_ACTIVE); break;
+    case VIEWING_MODE_PAN:  switchMode(PAN_MODE_ACTIVE); break;
+    case VIEWING_MODE_ZOOM: switchMode(DOLLY_MODE_ACTIVE); break;
     }
 }
 
@@ -330,8 +330,8 @@ SoQtExaminerViewer::setFeedbackVisibility(SbBool insertFlag)
 {
     // check for trivial return
     if (camera == NULL || feedbackFlag == insertFlag) {
-	feedbackFlag = insertFlag;
-	return;
+        feedbackFlag = insertFlag;
+        return;
     }
 
     //
@@ -339,20 +339,20 @@ SoQtExaminerViewer::setFeedbackVisibility(SbBool insertFlag)
     //
     SoSearchAction sa;
     if (insertFlag)
-	sa.setNode(camera);
+        sa.setNode(camera);
     else {
-	sa.setNode(feedbackRoot);
-	sa.setSearchingAll(TRUE); // find under OFF switches for removal
+        sa.setNode(feedbackRoot);
+        sa.setSearchingAll(TRUE); // find under OFF switches for removal
     }
     sa.apply(sceneRoot);
     SoFullPath *fullPath = (SoFullPath *) sa.getPath();
     if (!fullPath) {
 #if DEBUG
-	SoDebugError::post("SoQtExaminerViewer::setFeedbackVisibility",
-			    insertFlag ? "ERROR: cannot find camera in graph" :
-			    "ERROR: cannot find axis feedback in graph");
+        SoDebugError::post("SoQtExaminerViewer::setFeedbackVisibility",
+                           insertFlag ? "ERROR: cannot find camera in graph" :
+                                        "ERROR: cannot find axis feedback in graph");
 #endif
-	return;
+        return;
     }
     SoGroup *parent = (SoGroup *) fullPath->getNodeFromTail(1);
     
@@ -360,45 +360,45 @@ SoQtExaminerViewer::setFeedbackVisibility(SbBool insertFlag)
     
     // make sure the feedback has been built
     if (!feedbackRoot)
-	createFeedbackNodes();
+        createFeedbackNodes();
     
     //
     // inserts/remove the feedback axis group
     //
     
     if (feedbackFlag) {
-	int camIndex;
-	
-	// check to make sure that the camera parent is not a switch node
-	// (VRML camera viewpoints are kept under a switch node). Otherwise
-	// we will insert the feedback after the switch node.
-	if (parent->isOfType(SoSwitch::getClassTypeId())) {
-	    SoNode *switchNode = parent;
-	    parent = (SoGroup *) fullPath->getNodeFromTail(2);
-	    camIndex = parent->findChild(switchNode);
-	}
-	else
-	    camIndex = parent->findChild(camera);
-	
-	// return if feedback is already there (this should be an error !)
-	if (parent->findChild(feedbackRoot) >= 0)
-	    return;
-	
-	// insert the feedback right after the camera+headlight (index+2)
-	if (camIndex >= 0) {
-	    if (isHeadlight())
-		parent->insertChild(feedbackRoot, camIndex+2);
-	    else
-		parent->insertChild(feedbackRoot, camIndex+1);
-	}
-	
-	// make sure the feedback switch is turned to the correct state now
-	// that the feedback root has been inserted in the scene
-	feedbackSwitch->whichChild.setValue(viewingFlag ? SO_SWITCH_ALL : SO_SWITCH_NONE);
+        int camIndex;
+
+        // check to make sure that the camera parent is not a switch node
+        // (VRML camera viewpoints are kept under a switch node). Otherwise
+        // we will insert the feedback after the switch node.
+        if (parent->isOfType(SoSwitch::getClassTypeId())) {
+            SoNode *switchNode = parent;
+            parent = (SoGroup *) fullPath->getNodeFromTail(2);
+            camIndex = parent->findChild(switchNode);
+        }
+        else
+            camIndex = parent->findChild(camera);
+
+        // return if feedback is already there (this should be an error !)
+        if (parent->findChild(feedbackRoot) >= 0)
+            return;
+
+        // insert the feedback right after the camera+headlight (index+2)
+        if (camIndex >= 0) {
+            if (isHeadlight())
+                parent->insertChild(feedbackRoot, camIndex+2);
+            else
+                parent->insertChild(feedbackRoot, camIndex+1);
+        }
+
+        // make sure the feedback switch is turned to the correct state now
+        // that the feedback root has been inserted in the scene
+        feedbackSwitch->whichChild.setValue(viewingFlag ? SO_SWITCH_ALL : SO_SWITCH_NONE);
     }
     else {
-	if (parent->findChild(feedbackRoot) >= 0)
-	    parent->removeChild(feedbackRoot);
+        if (parent->findChild(feedbackRoot) >= 0)
+            parent->removeChild(feedbackRoot);
     }
 
 
@@ -419,12 +419,12 @@ SoQtExaminerViewer::setFeedbackSize (int newSize)
 ////////////////////////////////////////////////////////////////////////
 {
     if (feedbackSize == newSize)
-	return;
+        return;
     
     // assign new value and redraw (since it is not a field in the scene)
     feedbackSize = newSize;
     if (isFeedbackVisible() && isViewing())
-	scheduleRedraw();
+        scheduleRedraw();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -440,18 +440,18 @@ SoQtExaminerViewer::viewAll()
 {
     // stop spinning
     if ( isAnimating() )
-    	stopAnimating();
+        stopAnimating();
     
     // temporarily remove the feedback geometry
     if (feedbackFlag && isViewing() && feedbackSwitch)
-	feedbackSwitch->whichChild.setValue( SO_SWITCH_NONE );
+        feedbackSwitch->whichChild.setValue( SO_SWITCH_NONE );
     
     // call the base class
     SoQtFullViewer::viewAll();
     
     // now add the geometry back in
     if (feedbackFlag && isViewing() && feedbackSwitch)
-	feedbackSwitch->whichChild.setValue( SO_SWITCH_ALL );
+        feedbackSwitch->whichChild.setValue( SO_SWITCH_ALL );
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -467,7 +467,7 @@ SoQtExaminerViewer::resetToHomePosition()
 {
     // stop spinning
     if ( isAnimating() )
-    	stopAnimating();
+        stopAnimating();
     
     // call the base class
     SoQtFullViewer::resetToHomePosition();
@@ -485,26 +485,26 @@ SoQtExaminerViewer::setCamera(SoCamera *newCamera)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == newCamera)
-	return;
+        return;
     
-    // set the right thumbwheel label and toggle button image based on 
+    // set the right thumbwheel label and toggle button image based on
     // the camera type
-    if (newCamera != NULL && (camera == NULL || 
-        newCamera->getTypeId() != camera->getTypeId())) {
+    if (newCamera != NULL && (camera == NULL ||
+                              newCamera->getTypeId() != camera->getTypeId())) {
         if (newCamera->isOfType(SoOrthographicCamera::getClassTypeId())) {
             cameraAction->setIcon (SoQtIcon::getIcon (SoQtIcon::ORTHO));
-	    	setRightWheelString(rl.zoom);
-        } 
-		else {
+            setRightWheelString(rl.zoom);
+        }
+        else {
             cameraAction->setIcon (SoQtIcon::getIcon (SoQtIcon::PERSP));
-	    	setRightWheelString(rl.dolly);
+            setRightWheelString(rl.dolly);
         }
     }
 
     // detach feedback which depends on camera
     if ( feedbackFlag ) {
-	setFeedbackVisibility(FALSE);
-	feedbackFlag = TRUE;  // can later be turned on
+        setFeedbackVisibility(FALSE);
+        feedbackFlag = TRUE;  // can later be turned on
     }
     
     // call parent class
@@ -512,8 +512,8 @@ SoQtExaminerViewer::setCamera(SoCamera *newCamera)
     
     // attach feedback back on
     if ( feedbackFlag ) {
-	feedbackFlag = FALSE; // enables routine to be called
-	setFeedbackVisibility(TRUE);
+        feedbackFlag = FALSE; // enables routine to be called
+        setFeedbackVisibility(TRUE);
     }
 }
 
@@ -530,7 +530,7 @@ SoQtExaminerViewer::setViewing(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == viewingFlag)
-	return;
+        return;
     
     // call the parent class
     SoQtFullViewer::setViewing(flag);
@@ -539,7 +539,7 @@ SoQtExaminerViewer::setViewing(SbBool flag)
     
     // show/hide the feedback geometry based on the viewing state
     if (feedbackFlag && feedbackSwitch)
-	feedbackSwitch->whichChild.setValue(viewingFlag ? SO_SWITCH_ALL : SO_SWITCH_NONE);
+        feedbackSwitch->whichChild.setValue(viewingFlag ? SO_SWITCH_ALL : SO_SWITCH_NONE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -554,12 +554,12 @@ SoQtExaminerViewer::setCursorEnabled(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == cursorEnabledFlag)
-	return;
+        return;
     
     cursorEnabledFlag = flag;
     
     if (! isViewing())
-	return;
+        return;
     
     updateCursor();
 }
@@ -698,31 +698,31 @@ SoQtExaminerViewer::updateViewerMode (int modifiers, int buttons)
     }
     // LEFT+MIDDLE down
     if (buttons & Qt::LeftButton && buttons & Qt::MidButton) {
-	switchMode(DOLLY_MODE_ACTIVE);
+        switchMode(DOLLY_MODE_ACTIVE);
     }
     
     // LEFT down
     else if (buttons & Qt::LeftButton) {
-	if (modifiers & Qt::ControlModifier)
-	    switchMode(PAN_MODE_ACTIVE);
-	else
-	    switchMode(SPIN_MODE_ACTIVE);
+        if (modifiers & Qt::ControlModifier)
+            switchMode(PAN_MODE_ACTIVE);
+        else
+            switchMode(SPIN_MODE_ACTIVE);
     }
     
     // MIDDLE DOWN
     else if (buttons & Qt::MidButton) {
-	if (modifiers & Qt::ControlModifier)
-	    switchMode(DOLLY_MODE_ACTIVE);
-	else
-	    switchMode(PAN_MODE_ACTIVE);
+        if (modifiers & Qt::ControlModifier)
+            switchMode(DOLLY_MODE_ACTIVE);
+        else
+            switchMode(PAN_MODE_ACTIVE);
     }
     
     // no buttons down...
     else {
-	if (modifiers & Qt::ControlModifier)
-	    switchMode(PAN_MODE);
-	else
-	    switchMode(VIEW_MODE);
+        if (modifiers & Qt::ControlModifier)
+            switchMode(PAN_MODE);
+        else
+            switchMode(VIEW_MODE);
     }
 }
 
@@ -749,47 +749,47 @@ SoQtExaminerViewer::switchMode(int newMode)
     
     // switch to new viewer mode
     switch (newMode) {
-        case PICK_MODE:
-		// ???? is if are going into PICK mode and some of our
-		// mouse buttons are still down, make sure to decrement
-		// interactive count correctly (correct draw style). One
-		// for the LEFT and one for MIDDLE mouse.
-                    if (QApplication::mouseButtons() & Qt::LeftButton && prevMode != SEEK_MODE)
-					 interactiveCountDec(); 
-                    if (QApplication::mouseButtons() & Qt::MidButton && prevMode != SEEK_MODE)
-					 interactiveCountDec();
-	    stopAnimating();
-	    break;
-	    
-	case SPIN_MODE_ACTIVE:
-	    // set the sphere sheet starting point
-	    sphereSheet->project(
-		SbVec2f(locator[0]/float(raSize[0]), locator[1]/float(raSize[1])) );
-	    
-	    // reset the animation queue
-	    firstIndex = 0;
-	    lastIndex = -1;
-	    break;
-	    
-	case PAN_MODE_ACTIVE:
-	    {
-	    // Figure out the focal plane
-	    SbMatrix mx;
-	    mx = camera->orientation.getValue();
-	    SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
-	    SbVec3f fp = camera->position.getValue() + 
-		forward * camera->focalDistance.getValue();
-	    focalplane = SbPlane(forward, fp);
-	    
-	    // map mouse starting position onto the panning plane
-	    SbViewVolume    cameraVolume;
-	    SbLine	    line;
-	    cameraVolume = camera->getViewVolume(raSize[0]/float(raSize[1]));
-	    cameraVolume.projectPointToLine(
-		SbVec2f(locator[0]/float(raSize[0]), locator[1]/float(raSize[1])), line);
-	    focalplane.intersect(line, locator3D);
-	    }
-	    break;
+    case PICK_MODE:
+        // ???? is if are going into PICK mode and some of our
+        // mouse buttons are still down, make sure to decrement
+        // interactive count correctly (correct draw style). One
+        // for the LEFT and one for MIDDLE mouse.
+        if (QApplication::mouseButtons() & Qt::LeftButton && prevMode != SEEK_MODE)
+            interactiveCountDec();
+        if (QApplication::mouseButtons() & Qt::MidButton && prevMode != SEEK_MODE)
+            interactiveCountDec();
+        stopAnimating();
+        break;
+
+    case SPIN_MODE_ACTIVE:
+        // set the sphere sheet starting point
+        sphereSheet->project(
+                    SbVec2f(locator[0]/float(raSize[0]), locator[1]/float(raSize[1])) );
+
+        // reset the animation queue
+        firstIndex = 0;
+        lastIndex = -1;
+        break;
+
+    case PAN_MODE_ACTIVE:
+    {
+        // Figure out the focal plane
+        SbMatrix mx;
+        mx = camera->orientation.getValue();
+        SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
+        SbVec3f fp = camera->position.getValue() +
+                forward * camera->focalDistance.getValue();
+        focalplane = SbPlane(forward, fp);
+
+        // map mouse starting position onto the panning plane
+        SbViewVolume    cameraVolume;
+        SbLine	    line;
+        cameraVolume = camera->getViewVolume(raSize[0]/float(raSize[1]));
+        cameraVolume.projectPointToLine(
+                    SbVec2f(locator[0]/float(raSize[0]), locator[1]/float(raSize[1])), line);
+        focalplane.intersect(line, locator3D);
+    }
+        break;
     }
 }
 
@@ -805,7 +805,7 @@ SoQtExaminerViewer::updateCursor()
 ////////////////////////////////////////////////////////////////////////
 {
     if (! createdCursors)
-	defineCursors();
+        defineCursors();
     
     // the viewer cursor are not enabled, then we don't set a new cursor.
     // Instead erase the old viewer cursor.
@@ -816,27 +816,27 @@ SoQtExaminerViewer::updateCursor()
     
     // ...else set the right cursor for the viewer mode....
     switch(mode) {
-	case PICK_MODE:
-	    setCursor(Qt::ArrowCursor);
-	    break;
-	    
-	case VIEW_MODE:
-	case SPIN_MODE_ACTIVE:
-	    setCursor(spinCursor);
-	    break;
-	    
-	case DOLLY_MODE_ACTIVE:
-	    setCursor(dollyCursor);
-	    break;
-	    
-	case PAN_MODE:
-	case PAN_MODE_ACTIVE:
-	    setCursor(panCursor);
-	    break;
-	    
-	case SEEK_MODE:
-	    setCursor(seekCursor);
-	    break;
+    case PICK_MODE:
+        setCursor(Qt::ArrowCursor);
+        break;
+
+    case VIEW_MODE:
+    case SPIN_MODE_ACTIVE:
+        setCursor(spinCursor);
+        break;
+
+    case DOLLY_MODE_ACTIVE:
+        setCursor(dollyCursor);
+        break;
+
+    case PAN_MODE:
+    case PAN_MODE_ACTIVE:
+        setCursor(panCursor);
+        break;
+
+    case SEEK_MODE:
+        setCursor(seekCursor);
+        break;
     }
 }
 
@@ -854,29 +854,29 @@ SoQtExaminerViewer::actualRedraw()
     // place the feedback at the focal point
     // ??? we really only need to do this when the camera changes
     if (isViewing() && feedbackFlag && camera != NULL && feedbackRoot) {
-	
-	// adjust the position to be at the focal point
-	SbMatrix mx;
-	mx = camera->orientation.getValue();
-	SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
-	feedbackTransNode->translation = camera->position.getValue() + 
-	    camera->focalDistance.getValue() * forward;
-	
-	// adjust the size to be constant on the screen
-	float height = 1.0f;
-	if (camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
-	    float angle = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
-	    height = camera->focalDistance.getValue() * tanf(angle/2);
-	}
-	else if (camera->isOfType(SoOrthographicCamera::getClassTypeId()))
-	    height = ((SoOrthographicCamera *)camera)->height.getValue() / 2;
-	
-	// ??? getGlxSize[1] == 0 the very first time, so return in that case
-	// ??? else the redraws are 3 times slower from now on !! (alain)
-	if (getGlxSize()[1] != 0) {
-	    float size = 2.0 * height * feedbackSize / float (getGlxSize()[1]);
-	    feedbackScaleNode->scaleFactor.setValue(size, size, size);
-	}
+
+        // adjust the position to be at the focal point
+        SbMatrix mx;
+        mx = camera->orientation.getValue();
+        SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
+        feedbackTransNode->translation = camera->position.getValue() +
+                camera->focalDistance.getValue() * forward;
+
+        // adjust the size to be constant on the screen
+        float height = 1.0f;
+        if (camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
+            float angle = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
+            height = camera->focalDistance.getValue() * tanf(angle/2);
+        }
+        else if (camera->isOfType(SoOrthographicCamera::getClassTypeId()))
+            height = ((SoOrthographicCamera *)camera)->height.getValue() / 2;
+
+        // ??? getGlxSize[1] == 0 the very first time, so return in that case
+        // ??? else the redraws are 3 times slower from now on !! (alain)
+        if (getGlxSize()[1] != 0) {
+            float size = 2.0 * height * feedbackSize / float (getGlxSize()[1]);
+            feedbackScaleNode->scaleFactor.setValue(size, size, size);
+        }
     }
     
     // have the base class draw the scene
@@ -895,7 +895,7 @@ SoQtExaminerViewer::setAnimationEnabled(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (animationEnabled == flag)
-	return;
+        return;
     
     animationEnabled = flag;
     if ( !animationEnabled && isAnimating())
@@ -914,10 +914,10 @@ SoQtExaminerViewer::stopAnimating()
 ////////////////////////////////////////////////////////////////////////
 {
     if (animatingFlag) {
-	animatingFlag = FALSE;
-	animationSensor->detach();
-	animationSensor->unschedule();
-	interactiveCountDec();
+        animatingFlag = FALSE;
+        animationSensor->detach();
+        animationSensor->unschedule();
+        interactiveCountDec();
     }
 }
 
@@ -933,11 +933,11 @@ SoQtExaminerViewer::setSeekMode(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if ( !isViewing() )
-	return;
+        return;
     
     // stop spinning
     if (isAnimating())
-    	stopAnimating();
+        stopAnimating();
     
     // call the base class
     SoQtFullViewer::setSeekMode(flag);
@@ -1084,10 +1084,10 @@ SoQtExaminerViewer::defineCursors()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-	// spin cursor
+    // spin cursor
     spinCursor = SoQtCursor::getCursor(SoQtCursor::CURVED_HAND);
-	
-	// panning cursor
+
+    // panning cursor
     panCursor = SoQtCursor::getCursor(SoQtCursor::FLAT_HAND);
     
     // dolly cursor
@@ -1112,7 +1112,7 @@ SoQtExaminerViewer::rotateCamera(const SbRotation &rot)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // get center of rotation
     SbRotation camRot = camera->orientation.getValue();
@@ -1121,7 +1121,7 @@ SoQtExaminerViewer::rotateCamera(const SbRotation &rot)
     mx = camRot;
     SbVec3f forward( -mx[2][0], -mx[2][1], -mx[2][2]);
     SbVec3f center = camera->position.getValue()
-	+ radius * forward;
+            + radius * forward;
     
     // apply new rotation to the camera
     camRot = rot * camRot;
@@ -1147,7 +1147,7 @@ SoQtExaminerViewer::panCamera(const SbVec2f &newLocator)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // map new mouse location into the camera focal plane
     SbViewVolume    cameraVolume;
@@ -1159,8 +1159,8 @@ SoQtExaminerViewer::panCamera(const SbVec2f &newLocator)
     focalplane.intersect(line, newLocator3D);
     
     // move the camera by the delta 3D position amount
-    camera->position = camera->position.getValue() + 
-	(locator3D - newLocator3D);
+    camera->position = camera->position.getValue() +
+            (locator3D - newLocator3D);
     
     // You would think we would have to set locator3D to
     // newLocator3D here.  But we don't, because moving the camera
@@ -1195,7 +1195,7 @@ SoQtExaminerViewer::spinCamera(const SbVec2f &newLocator)
     
     // check if queue is full
     if (((lastIndex+1) % ROT_BUFF_SIZE) == firstIndex)
-	firstIndex = ((firstIndex+1) % ROT_BUFF_SIZE);
+        firstIndex = ((firstIndex+1) % ROT_BUFF_SIZE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1213,7 +1213,7 @@ SoQtExaminerViewer::dollyCamera(const SbVec2s &newLocator)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // moving the mouse up/down will move the camera futher/closer.
     // moving the camera sideway will not move the camera at all
@@ -1275,34 +1275,34 @@ SoQtExaminerViewer::doSpinAnimation()
     //
     
     if (computeAverage) {
-	float averageAngle, angle;
-	SbVec3f averageAxis, axis;
-	
-	// get number of samples
-	int num = (((lastIndex - firstIndex) + 1 + 
-	    ROT_BUFF_SIZE) % ROT_BUFF_SIZE);
-	
-	// check for not enough samples
-	if (num < 2) {
-	    stopAnimating();
-	    return;
-	}
-	
-	// get average axis of rotation
-	// ??? right now only take one sample
-	rotBuffer[firstIndex].getValue(averageAxis, angle);
-	
-	// get average angle of rotation
-	averageAngle = 0;
-	for (int i=0; i<num; i++) {
-	    int n = (firstIndex + i) % ROT_BUFF_SIZE;
-	    rotBuffer[n].getValue(axis, angle);
-	    averageAngle += angle;
-	}
-	averageAngle /= float(num);
-	
-	averageRotation.setValue(averageAxis, averageAngle);
-	computeAverage = FALSE;
+        float averageAngle, angle;
+        SbVec3f averageAxis, axis;
+
+        // get number of samples
+        int num = (((lastIndex - firstIndex) + 1 +
+                    ROT_BUFF_SIZE) % ROT_BUFF_SIZE);
+
+        // check for not enough samples
+        if (num < 2) {
+            stopAnimating();
+            return;
+        }
+
+        // get average axis of rotation
+        // ??? right now only take one sample
+        rotBuffer[firstIndex].getValue(averageAxis, angle);
+
+        // get average angle of rotation
+        averageAngle = 0;
+        for (int i=0; i<num; i++) {
+            int n = (firstIndex + i) % ROT_BUFF_SIZE;
+            rotBuffer[n].getValue(axis, angle);
+            averageAngle += angle;
+        }
+        averageAngle /= float(num);
+
+        averageRotation.setValue(averageAxis, averageAngle);
+        computeAverage = FALSE;
     }
     
     //
@@ -1324,27 +1324,27 @@ SoQtExaminerViewer::buildWidget(QWidget* parent)
 ////////////////////////////////////////////////////////////////////////
 {
     // Get a resource value for menu title.
-	setPopupMenuString(rl.examinViewer);
+    setPopupMenuString(rl.examinViewer);
 
     // Create the root widget and register it with a class name
     QWidget* w = SoQtFullViewer::buildWidget(parent);
     
-	// Full viewer registered the widget for us
+    // Full viewer registered the widget for us
     //setAnimationEnabled(flag);
     //setFeedbackVisibility(flag);
     //feedbackSize = val;
-        //
+    //
     rl.roty = defaultLabel[1];
     rl.rotx = defaultLabel[2];
     rl.preferenceSheet = defaultLabel[3];
     rl.zoom = defaultLabel[4];
     rl.dolly = defaultLabel[5];
     rl.axesSizeLabel = defaultLabel[6];
-	
-	// assign decoration names
-	setBottomWheelString(rl.roty);
-	setLeftWheelString(rl.rotx);
-	setPrefSheetString(rl.preferenceSheet);
+
+    // assign decoration names
+    setBottomWheelString(rl.roty);
+    setLeftWheelString(rl.rotx);
+    setPrefSheetString(rl.preferenceSheet);
     
     return w;
 }
@@ -1362,9 +1362,9 @@ SoQtExaminerViewer::createViewerButtons(QToolBar* parent)
 {
     // create the default buttons
     SoQtFullViewer::createViewerButtons(parent);
-        cameraAction = new QAction(SoQtIcon::getIcon(SoQtIcon::PERSP), tr("Perspective"), this);
-	cameraAction->setCheckable(true);
-	connect (cameraAction, SIGNAL (triggered(bool)), SLOT (camPushCB()));
+    cameraAction = new QAction(SoQtIcon::getIcon(SoQtIcon::PERSP), tr("Perspective"), this);
+    cameraAction->setCheckable(true);
+    connect (cameraAction, SIGNAL (triggered(bool)), SLOT (camPushCB()));
 
     // add this button to the list...
     parent->addAction (cameraAction);
@@ -1385,7 +1385,7 @@ SoQtExaminerViewer::createFeedbackNodes()
 {
     // make sure we havn't built this yet...
     if (feedbackRoot)
-	return;
+        return;
     
     feedbackRoot	= new SoSeparator(1);
     feedbackSwitch	= new SoSwitch(3);
@@ -1400,11 +1400,11 @@ SoQtExaminerViewer::createFeedbackNodes()
     SoNode *node;
     SbBool ok = SoDB::read(&in, node);
     if (ok && node != NULL)
-	feedbackSwitch->addChild(node);
+        feedbackSwitch->addChild(node);
 #ifdef DEBUG
     else
-	SoDebugError::post("SoQtExaminerViewer::createFeedbackNodes",
-			    "couldn't read feedback axis geometry");
+        SoDebugError::post("SoQtExaminerViewer::createFeedbackNodes",
+                           "couldn't read feedback axis geometry");
 #endif
 }
 
@@ -1448,22 +1448,22 @@ SoQtExaminerViewer::animationSensorCB (void *v, SoSensor *)
 void
 SoQtExaminerViewer::visibilityChanged (bool visible)
 {
-	SoQtFullViewer::visibilityChanged(visible);
+    SoQtFullViewer::visibilityChanged(visible);
 
     // only do this if we are/were spinning....
     if (! animatingFlag)
-	return;
+        return;
     
     if (visible) {
-	// we now are visible again so attach the field sensor
-	animationSensor->attach(viewerRealTime);
+        // we now are visible again so attach the field sensor
+        animationSensor->attach(viewerRealTime);
     }
     else {
-	// if hidden, detach the field sensor, but don't change the
-	// animatingFlag var to let us know we need to turn it back on
-	// when we become visible....
-	animationSensor->detach();
-	animationSensor->unschedule();
+        // if hidden, detach the field sensor, but don't change the
+        // animatingFlag var to let us know we need to turn it back on
+        // when we become visible....
+        animationSensor->detach();
+        animationSensor->unschedule();
     }
 }
 

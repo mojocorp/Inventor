@@ -92,13 +92,13 @@ class SoQtPreferenceDialog;
 class SOQT_EXPORT SoQtFullViewer : public SoQtViewer {
     Q_OBJECT
 
-  public:
+public:
     // This specifies what should be build by default in the constructor
     enum BuildFlag {
-	BUILD_NONE	    = 0x00, 
-	BUILD_DECORATION    = 0x01, 
-	BUILD_POPUP	    = 0x02, 
-	BUILD_ALL	    = 0xff
+        BUILD_NONE	    = 0x00,
+        BUILD_DECORATION    = 0x01,
+        BUILD_POPUP	    = 0x02,
+        BUILD_ALL	    = 0xff
     };
     
     //
@@ -114,19 +114,19 @@ class SOQT_EXPORT SoQtFullViewer : public SoQtViewer {
     SbBool  	    isPopupMenuEnabled()    { return popupEnabled; }
     
     //
-    // Add/remove push buttons for the application, which will be placed 
+    // Add/remove push buttons for the application, which will be placed
     // in the left hand side decoration trim.
-    // The add() method appends the button to the end of the list, while 
+    // The add() method appends the button to the end of the list, while
     // insert() places the button at the specified index (starting at 0).
     //
-	QWidget* getAppPushButtonParent() const { return appButtonForm; }
+    QWidget* getAppPushButtonParent() const { return appButtonForm; }
     void        addAppPushButton(QAbstractButton* newButton);
     void        insertAppPushButton(QAbstractButton* newButton, int index);
     void	    removeAppPushButton(QAbstractButton* oldButton);
     int         findAppPushButton(QAbstractButton* oldButton)
-				{ return appButtonList->find(oldButton); }
+    { return appButtonList->find(oldButton); }
     int         lengthAppPushButton()
-				{ return appButtonList->getLength(); }
+    { return appButtonList->getLength(); }
     
     QWidget*    getRenderAreaWidget()   { return raWidget; }
     
@@ -137,7 +137,7 @@ public slots:
     virtual void    setHeadlight(SbBool onOrOff);
     virtual void    setFullScreen(bool enable);
     virtual void    setDrawStyle(SoQtViewer::DrawType type,
-                        SoQtViewer::DrawStyle style);
+                                 SoQtViewer::DrawStyle style);
     virtual void    setCamera(SoCamera *cam);
 
     void showPreferences();
@@ -153,12 +153,12 @@ protected slots:
 protected:
     // Constructor/Destructor
     SoQtFullViewer(
-	QWidget* parent,
-	const char *name, 
-	SbBool buildInsideParent, 
-	SoQtFullViewer::BuildFlag flag, 
-	SoQtViewer::Type type, 
-	SbBool buildNow);
+            QWidget* parent,
+            const char *name,
+            SbBool buildInsideParent,
+            SoQtFullViewer::BuildFlag flag,
+            SoQtViewer::Type type,
+            SbBool buildNow);
     ~SoQtFullViewer();
 
     virtual void    setSeekMode(SbBool onOrOff);
@@ -176,18 +176,18 @@ protected:
     float   	    rightWheelVal, bottomWheelVal, leftWheelVal;
     QLabel          *rightWheelLabel, *bottomWheelLabel, *leftWheelLabel;
 
-	// widget list of viewer buttons
+    // widget list of viewer buttons
 
     // The button widget should be used as the parent widget
     // when creating new buttons
     QWidget*        getButtonWidget() const { return appButtonForm; }
 
     // popup menu vars
-	SbBool  	    popupEnabled;
+    SbBool  	    popupEnabled;
     QPointer<QMenu> mainPopup, funcPopup, drawPopup;
     QMenu          *clientPopup;
     QString         popupTitle;
-	
+
     QAction		   *viewingAction;
     QAction        *IDM_MPOPUP_DECORAT;
     QAction        *IDM_MPOPUP_HLIGHT;
@@ -234,7 +234,7 @@ protected:
     QAction        *gotoHomeAction;
     QAction        *setHomeAction;
     QAction        *viewAllAction;
-	
+
     //
     // popup menu build routines
     //
@@ -244,7 +244,7 @@ protected:
     QMenu*          buildFunctionsSubmenu(QMenu* popup);
     QMenu*          buildDrawStyleSubmenu(QMenu* popup);
     void            contextMenuEvent(QContextMenuEvent *event);
-	
+
     //
     // Preference sheet build routines
     //
@@ -252,7 +252,7 @@ protected:
     virtual void    createPrefSheet(QTabWidget*){}
 
     // Subclasses SHOULD redefine these to do viewer specific tasks
-    // since these do nothing in the base class. those routines are 
+    // since these do nothing in the base class. those routines are
     // called by the thumb wheels whenever they rotate.
     virtual void    	rightWheelMotion(float);
     virtual void    	bottomWheelMotion(float);
@@ -275,7 +275,7 @@ protected slots:
     void		setLeftWheelString(const char *name);
     void		setRightWheelString(const char *name);
     
-    // Subclasses SHOULD redefine the openViewerHelpCard() routine to bring 
+    // Subclasses SHOULD redefine the openViewerHelpCard() routine to bring
     // their help card (called by push button and popup menu entry).
     // They can simply call SoQtComponent::openHelpCard() to open their
     // specific help card.
@@ -296,8 +296,8 @@ protected:
     QString         prefSheetStr;
 
     virtual void setCameraZoom (float zoom);
-	float	    getCameraZoom();
-	
+    float	    getCameraZoom();
+
     // callback functions for thumbwheels
     Q_SLOT void    rightWheelCB(float);
     Q_SLOT void    bottomWheelCB(float);

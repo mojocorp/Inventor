@@ -172,7 +172,7 @@ protected:
             SoQtFullViewer::BuildFlag flag,
             SoQtViewer::Type type,
             SbBool buildNow);
-	    
+
     // redefine these
     virtual const char *    getDefaultWidgetName() const;
     virtual const char *    getDefaultTitle() const;

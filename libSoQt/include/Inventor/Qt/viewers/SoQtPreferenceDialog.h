@@ -6,7 +6,7 @@
 #include <Inventor/SbVec2f.h>
 
 namespace Ui {
-    class SoQtPreferenceDialog;
+class SoQtPreferenceDialog;
 }
 
 class SoCamera;

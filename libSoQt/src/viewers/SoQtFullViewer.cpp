@@ -86,29 +86,29 @@ static const char *thisClassName = "SoQtFullViewer";
 // Use: protected
 
 SoQtFullViewer::SoQtFullViewer(
-    QWidget* parent,
-    const char *name, 
-    SbBool buildInsideParent,
-    SoQtFullViewer::BuildFlag buildFlag, 
-    SoQtViewer::Type t, 
-    SbBool buildNow) 
-	: SoQtViewer(
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    t, 
-        FALSE)  // buildNow
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget* parent,
+        const char *name,
+        SbBool buildInsideParent,
+        SoQtFullViewer::BuildFlag buildFlag,
+        SoQtViewer::Type t,
+        SbBool buildNow)
+    : SoQtViewer(
+          parent,
+          name,
+          buildInsideParent,
+          t,
+          FALSE)  // buildNow
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
     setClassName(thisClassName);
     
     setSize(SbVec2s(500, 390));  // default size
     // init decoration vars
     decorationFlag = (buildFlag & BUILD_DECORATION) != 0;
-	mgrWidget = NULL;
+    mgrWidget = NULL;
 
-       appButtonForm = NULL;
+    appButtonForm = NULL;
     rightWheelLabel = NULL;
     bottomWheelLabel = NULL;
     leftWheelLabel = NULL;
@@ -156,7 +156,7 @@ SoQtFullViewer::SoQtFullViewer(
     connect (IDM_MPOPUP_HLIGHT, SIGNAL (triggered(bool)), this, SLOT (setHeadlightCB(bool)));
     IDM_MPOPUP_HLIGHT->setCheckable (true);
     IDM_MPOPUP_HLIGHT->setChecked (isHeadlight());
-	
+
     IDM_MPOPUP_FULLSCREEN = new QAction (tr("FullScreen"),  this);
     IDM_MPOPUP_FULLSCREEN->setCheckable (true);
     IDM_MPOPUP_FULLSCREEN->setChecked (isFullScreen());
@@ -171,21 +171,21 @@ SoQtFullViewer::SoQtFullViewer(
     leftWheelStr   = tr("Motion Y");
 
     popupTitle  = tr("Viewer Menu");
-	// init pref sheet vars
+    // init pref sheet vars
     prefSheetShellWidget = NULL;
     prefSheetStr  = tr("Viewer Preference Sheet");
-	
-	// init popup menu vars
+
+    // init popup menu vars
     mainPopup = NULL;
     clientPopup = NULL;
     popupEnabled = (buildFlag & BUILD_POPUP) != 0;
 
-	// init buttons stuff
-   appButtonList = new SbPList;
+    // init buttons stuff
+    appButtonList = new SbPList;
 
     // Build the widget tree, and let SoXtComponent know about our base widget.
     if (buildNow) {
-	setBaseWidget(buildWidget(getParentWidget()));
+        setBaseWidget(buildWidget(getParentWidget()));
     }
 }
 
@@ -202,7 +202,7 @@ SoQtFullViewer::~SoQtFullViewer()
 ////////////////////////////////////////////////////////////////////////
 {
     delete appButtonList;
-	delete prefSheetShellWidget;
+    delete prefSheetShellWidget;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -217,7 +217,7 @@ SoQtFullViewer::setViewing (SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == viewingFlag)
-	return;
+        return;
 
     // call the base class
     SoQtViewer::setViewing(flag);
@@ -242,7 +242,7 @@ SoQtFullViewer::setHeadlight (SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == isHeadlight())
-	return;
+        return;
     
     // call base class routine
     SoQtViewer::setHeadlight (flag);
@@ -328,21 +328,21 @@ SoQtFullViewer::setDecoration (SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (mgrWidget == NULL || flag == decorationFlag) {
-    	decorationFlag = flag;
-	return;
+        decorationFlag = flag;
+        return;
     }
     decorationFlag = flag;
 
-	// check if decoration needs to be built
-	// ??? just need to check one the decoration form widget ?
-	if (leftTrimForm == NULL)
-	    buildDecoration(mgrWidget);
-		
-	// show the decoration
+    // check if decoration needs to be built
+    // ??? just need to check one the decoration form widget ?
+    if (leftTrimForm == NULL)
+        buildDecoration(mgrWidget);
+
+    // show the decoration
     if (leftTrimForm)
         leftTrimForm->setVisible (decorationFlag);
     if (rightTrimForm)
-       rightTrimForm->setVisible (decorationFlag);
+        rightTrimForm->setVisible (decorationFlag);
 
     if (bottomTrimForm)
         bottomTrimForm->setVisible (decorationFlag);
@@ -426,7 +426,7 @@ SoQtFullViewer::removeAppPushButton(QAbstractButton* oldButton)
     // find the index where the button is
     int index = appButtonList->find(oldButton);
     if (index == -1)
-	return;
+        return;
     
     // remove from the list and redo the layout
     int lastIndex = appButtonList->getLength() - 1;
@@ -754,26 +754,26 @@ SoQtFullViewer::buildWidget(QWidget *parent)
     
     mgrWidget = new QWidget(parent);
 
-	mgrWidget->setObjectName(getWidgetName().getString());
-	mgrLayout = new QGridLayout(mgrWidget);
+    mgrWidget->setObjectName(getWidgetName().getString());
+    mgrLayout = new QGridLayout(mgrWidget);
     mgrLayout->setMargin(0);
     mgrLayout->setSpacing(0);
 
     SbVec2s size = getSize();
     if ((size[0] != 0) && (size[1] != 0)) {
-		mgrWidget->resize(size[0], size[1]);
+        mgrWidget->resize(size[0], size[1]);
     }
-	
-	// build the components
+
+    // build the components
     raWidget = SoQtRenderArea::buildWidget(mgrWidget);
     raWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     if (decorationFlag)
-    	buildDecoration(mgrWidget);
+        buildDecoration(mgrWidget);
     
     //
     // Layout
     //
-	mgrLayout->addWidget(raWidget, 1, 1);
+    mgrLayout->addWidget(raWidget, 1, 1);
     
     // manage children
     decorationFlag = !decorationFlag;   // enable routine to be called
@@ -804,8 +804,8 @@ SoQtFullViewer::buildDecoration(QWidget *parent)
     mgrLayout->addWidget(leftTrimForm, 1, 0);
     mgrLayout->addWidget(bottomTrimForm, 2, 0, 1, 3);
     mgrLayout->addWidget(rightTrimForm, 1, 2);
- }
- 
+}
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -964,7 +964,7 @@ SoQtFullViewer::setCameraZoom (float zoom)
 #if DEBUG
     } else {
         SoDebugError::post ("SoQtFullViewer::setCameraZoom",
-                "unknown camera type");
+                            "unknown camera type");
 #endif
     }
 }
@@ -982,7 +982,7 @@ SoQtFullViewer::getCameraZoom()
     } else {
 #if DEBUG
         SoDebugError::post("SoQtFullViewer::getCameraZoom",
-                            "unknown camera type");
+                           "unknown camera type");
 #endif
         return 0.0;
     }

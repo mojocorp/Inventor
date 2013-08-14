@@ -125,7 +125,7 @@ protected:
             SbBool buildNow);
 
     QWidget*            buildWidget(QWidget* parent);
-        
+
     // redefine these
     virtual const char *    getDefaultWidgetName() const;
     virtual const char *    getDefaultTitle() const;

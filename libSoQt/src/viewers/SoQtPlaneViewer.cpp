@@ -78,12 +78,12 @@
  */
 
 enum ViewerModes {
-    PICK_MODE, 
+    PICK_MODE,
     VIEW_MODE,
-    DOLLY_MODE_ACTIVE, 
-    PAN_MODE, 
-    PAN_MODE_ACTIVE, 
-    ROLL_MODE_ACTIVE, 
+    DOLLY_MODE_ACTIVE,
+    PAN_MODE,
+    PAN_MODE_ACTIVE,
+    ROLL_MODE_ACTIVE,
     SEEK_MODE
 };
 
@@ -98,12 +98,12 @@ typedef struct {
 } RES_LABELS;
 static RES_LABELS rl;
 static const char *defaultLabel[]={
-	"Plane Viewer",  
-	"transX", 
-	"transY",
-	"Plane Viewer Preference Sheet",
-	"Dolly",
-	"Zoom"
+    "Plane Viewer",
+    "transX",
+    "transY",
+    "Plane Viewer Preference Sheet",
+    "Dolly",
+    "Zoom"
 };
 
 
@@ -112,20 +112,20 @@ static const char *defaultLabel[]={
 // Public constructor - build the widget right now
 //
 SoQtPlaneViewer::SoQtPlaneViewer(
-    QWidget *parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SoQtFullViewer::BuildFlag b, 
-    SoQtViewer::Type t)
-	: SoQtFullViewer(
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    b, 
-	    t, 
-	    FALSE) // tell base class not to build just yet  
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget *parent,
+        const char *name,
+        SbBool buildInsideParent,
+        SoQtFullViewer::BuildFlag b,
+        SoQtViewer::Type t)
+    : SoQtFullViewer(
+          parent,
+          name,
+          buildInsideParent,
+          b,
+          t,
+          FALSE) // tell base class not to build just yet
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
     // In this case, render area is what the app wants, so buildNow = TRUE
     constructorCommon(TRUE);
@@ -136,23 +136,23 @@ SoQtPlaneViewer::SoQtPlaneViewer(
 // SoEXTENDER constructor - the subclass tells us whether to build or not
 //
 SoQtPlaneViewer::SoQtPlaneViewer(
-    QWidget *parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SoQtFullViewer::BuildFlag b, 
-    SoQtViewer::Type t, 
-    SbBool buildNow)
-	: SoQtFullViewer(
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    b, 
-	    t, 
-	    FALSE) // tell base class not to build just yet  
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget *parent,
+        const char *name,
+        SbBool buildInsideParent,
+        SoQtFullViewer::BuildFlag b,
+        SoQtViewer::Type t,
+        SbBool buildNow)
+    : SoQtFullViewer(
+          parent,
+          name,
+          buildInsideParent,
+          b,
+          t,
+          FALSE) // tell base class not to build just yet
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
-    // In this case, render area may be what the app wants, 
+    // In this case, render area may be what the app wants,
     // or it may want a subclass of render area. Pass along buildNow
     // as it was passed to us.
     constructorCommon(buildNow);
@@ -179,7 +179,7 @@ SoQtPlaneViewer::constructorCommon(SbBool buildNow)
     // Build the widget tree, and let SoQtComponent know about our base widget.
     if (buildNow) {
         QWidget* w = buildWidget(getParentWidget());
-	setBaseWidget(w);
+        setBaseWidget(w);
     }
 }
 
@@ -276,7 +276,7 @@ SoQtPlaneViewer::setViewing(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == viewingFlag)
-	return;
+        return;
     
     // call the base class
     SoQtFullViewer::setViewing(flag);
@@ -296,12 +296,12 @@ SoQtPlaneViewer::setCursorEnabled(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == cursorEnabledFlag)
-	return;
+        return;
     
     cursorEnabledFlag = flag;
     
     if (! isViewing())
-	return;
+        return;
     
     updateCursor();
 }
@@ -318,20 +318,20 @@ SoQtPlaneViewer::setCamera(SoCamera *newCamera)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == newCamera)
-	return;
+        return;
 
-    // set the right thumbwheel label and toggle button image based on 
+    // set the right thumbwheel label and toggle button image based on
     // the camera type
-    if (newCamera != NULL && (camera == NULL || 
-	newCamera->getTypeId() != camera->getTypeId())) {
-	if (newCamera->isOfType(SoOrthographicCamera::getClassTypeId())) {
+    if (newCamera != NULL && (camera == NULL ||
+                              newCamera->getTypeId() != camera->getTypeId())) {
+        if (newCamera->isOfType(SoOrthographicCamera::getClassTypeId())) {
             cameraAction->setIcon (SoQtIcon::getIcon (SoQtIcon::ORTHO));
-	    setRightWheelString( rl.zoom );
-	}
-	else {
+            setRightWheelString( rl.zoom );
+        }
+        else {
             cameraAction->setIcon (SoQtIcon::getIcon (SoQtIcon::PERSP));
-	    setRightWheelString( rl.dolly );
-	}
+            setRightWheelString( rl.dolly );
+        }
     }
 
     // call parent class
@@ -350,10 +350,10 @@ SoQtPlaneViewer::processEvent(QEvent *qe)
 ////////////////////////////////////////////////////////////////////////
 {
     if ( processCommonEvents(qe) )
-	return;
+        return;
     
     if (!createdCursors)
-	updateCursor();
+        updateCursor();
 
     QMouseEvent    *be;
     QMouseEvent    *me;
@@ -369,66 +369,66 @@ SoQtPlaneViewer::processEvent(QEvent *qe)
     case QEvent::MouseButtonRelease:
         be = (QMouseEvent *)qe;
         if (be->button() != Qt::LeftButton && be->button() != Qt::MidButton)
-	    break;
-	
+            break;
+
         locator[0] = be->x();
         locator[1] = raSize[1] - be->y();
-	if (mode == SEEK_MODE) {
+        if (mode == SEEK_MODE) {
             if (qe->type() == QEvent::MouseButtonPress)
-		seekToPoint(locator);
-	}
-	else {
+                seekToPoint(locator);
+        }
+        else {
             if (qe->type() == QEvent::MouseButtonPress)
-		interactiveCountInc();
-	    else // ButtonRelease
-		interactiveCountDec();
+                interactiveCountInc();
+            else // ButtonRelease
+                interactiveCountDec();
             updateViewerMode(be->modifiers(), be->buttons());
-	}
-	break;
-	
+        }
+        break;
+
     case QEvent::KeyPress:
     case QEvent::KeyRelease:
         ke = (QKeyEvent *)qe;
-	
+
         locator[0] = QCursor::pos().x();
         locator[1] = raSize[1] - QCursor::pos().y();
         if (ke->modifiers() & Qt::ControlModifier)
             updateViewerMode(ke->modifiers(), buttons);
-	break;
-	
+        break;
+
     case QEvent::MouseMove:
         me = (QMouseEvent *)qe;
-	switch (mode) {
-	    case DOLLY_MODE_ACTIVE:
-                dollyCamera( SbVec2s(me->x(), raSize[1] - me->y()) );
-		break;
-	    case PAN_MODE_ACTIVE:
-                translateCamera(SbVec2f(me->x()/float(raSize[0]), (raSize[1] - me->y())/float(raSize[1])));
-		break;
-	    case ROLL_MODE_ACTIVE:
-                rollCamera( SbVec2s(me->x(), raSize[1] - me->y()) );
-		break;
-	}
-	break;
-	
+        switch (mode) {
+        case DOLLY_MODE_ACTIVE:
+            dollyCamera( SbVec2s(me->x(), raSize[1] - me->y()) );
+            break;
+        case PAN_MODE_ACTIVE:
+            translateCamera(SbVec2f(me->x()/float(raSize[0]), (raSize[1] - me->y())/float(raSize[1])));
+            break;
+        case ROLL_MODE_ACTIVE:
+            rollCamera( SbVec2s(me->x(), raSize[1] - me->y()) );
+            break;
+        }
+        break;
+
     case QEvent::Leave:
     case QEvent::Enter:
-	//
-	// because the application might use Ctrl-key for motif menu
-	// accelerators we might not receive a key-up event, so make sure
-	// to reset any Ctrl mode if we loose focus, but don't do anything
-	// if Ctrl-key is not down (nothing to do) or if a mouse button 
-	// is down (we will get another leaveNotify).
-	//
+        //
+        // because the application might use Ctrl-key for motif menu
+        // accelerators we might not receive a key-up event, so make sure
+        // to reset any Ctrl mode if we loose focus, but don't do anything
+        // if Ctrl-key is not down (nothing to do) or if a mouse button
+        // is down (we will get another leaveNotify).
+        //
         if (! (modifiers & Qt::ControlModifier))
-	    break;
+            break;
         if (buttons & Qt::LeftButton || buttons & Qt::MidButton)
-	    break;
+            break;
         if (qe->type() == QEvent::Leave)
-	    switchMode(VIEW_MODE);
-	else
+            switchMode(VIEW_MODE);
+        else
             updateViewerMode(modifiers, buttons);
-	break;
+        break;
     default: break;
     }
 }
@@ -444,39 +444,39 @@ SoQtPlaneViewer::updateViewerMode(int modifiers, int buttons)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // ??? WARNING - this routine ONLY works because of 
+    // ??? WARNING - this routine ONLY works because of
     // ??? SoQtViewer::updateEventState() which is called for us
-    // ??? by SoQtViewer::processCommonEvents(). 
+    // ??? by SoQtViewer::processCommonEvents().
     // ??? (XEvent state for button and modifier keys is not updated
     // ??? until after the event is received. WEIRD)
     
     // LEFT+MIDDLE down
     if (buttons & Qt::LeftButton && buttons & Qt::MidButton) {
-	switchMode(DOLLY_MODE_ACTIVE);
+        switchMode(DOLLY_MODE_ACTIVE);
     }
     
     // LEFT down
     else if (buttons & Qt::LeftButton) {
         if (modifiers & Qt::ControlModifier)
-	    switchMode(PAN_MODE_ACTIVE);
-	else
-	    switchMode(DOLLY_MODE_ACTIVE);
+            switchMode(PAN_MODE_ACTIVE);
+        else
+            switchMode(DOLLY_MODE_ACTIVE);
     }
     
     // MIDDLE DOWN
     else if (buttons & Qt::MidButton) {
         if (modifiers & Qt::ControlModifier)
-	    switchMode(ROLL_MODE_ACTIVE);
-	else
-	    switchMode(PAN_MODE_ACTIVE);
+            switchMode(ROLL_MODE_ACTIVE);
+        else
+            switchMode(PAN_MODE_ACTIVE);
     }
     
     // no buttons down...
     else {
         if (modifiers & Qt::ControlModifier)
-	    switchMode(PAN_MODE);
-	else
-	    switchMode(VIEW_MODE);
+            switchMode(PAN_MODE);
+        else
+            switchMode(VIEW_MODE);
     }
 }
 
@@ -501,45 +501,45 @@ SoQtPlaneViewer::switchMode(int newMode)
     
     // check the old viewer mode for redraw need
     if (prevMode == ROLL_MODE_ACTIVE)
-	redrawNeeded = TRUE;
+        redrawNeeded = TRUE;
     
     // switch to new viewer mode
     switch (newMode) {
-	case PICK_MODE:
-            if (QApplication::mouseButtons() & Qt::LeftButton && prevMode != SEEK_MODE)
-                interactiveCountDec();
-            if (QApplication::mouseButtons() & Qt::MidButton && prevMode != SEEK_MODE)
-                interactiveCountDec();
-	    break;
-	    
-	case PAN_MODE_ACTIVE:
-	    {
-	    // Figure out the focal plane
-	    SbMatrix mx;
-	    mx = camera->orientation.getValue();
-	    SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
-	    SbVec3f fp = camera->position.getValue() + 
-		forward * camera->focalDistance.getValue();
-	    focalplane = SbPlane(forward, fp);
-	    
-	    // map mouse starting position onto the panning plane
-	    SbVec2s raSize = getGlxSize();
-	    SbViewVolume    cameraVolume;
-	    SbLine	    line;
-	    cameraVolume = camera->getViewVolume(raSize[0]/float(raSize[1]));
-	    cameraVolume.projectPointToLine(
-		SbVec2f(locator[0]/float(raSize[0]), locator[1]/float(raSize[1])), line);
-	    focalplane.intersect(line, locator3D);
-	    }
-	    break;
-	    
-	case ROLL_MODE_ACTIVE:
-	    redrawNeeded = TRUE;
-	    break;
+    case PICK_MODE:
+        if (QApplication::mouseButtons() & Qt::LeftButton && prevMode != SEEK_MODE)
+            interactiveCountDec();
+        if (QApplication::mouseButtons() & Qt::MidButton && prevMode != SEEK_MODE)
+            interactiveCountDec();
+        break;
+
+    case PAN_MODE_ACTIVE:
+    {
+        // Figure out the focal plane
+        SbMatrix mx;
+        mx = camera->orientation.getValue();
+        SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
+        SbVec3f fp = camera->position.getValue() +
+                forward * camera->focalDistance.getValue();
+        focalplane = SbPlane(forward, fp);
+
+        // map mouse starting position onto the panning plane
+        SbVec2s raSize = getGlxSize();
+        SbViewVolume    cameraVolume;
+        SbLine	    line;
+        cameraVolume = camera->getViewVolume(raSize[0]/float(raSize[1]));
+        cameraVolume.projectPointToLine(
+                    SbVec2f(locator[0]/float(raSize[0]), locator[1]/float(raSize[1])), line);
+        focalplane.intersect(line, locator3D);
+    }
+        break;
+
+    case ROLL_MODE_ACTIVE:
+        redrawNeeded = TRUE;
+        break;
     }
     
     if (redrawNeeded)
-	scheduleRedraw();
+        scheduleRedraw();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -554,35 +554,35 @@ SoQtPlaneViewer::updateCursor()
 ////////////////////////////////////////////////////////////////////////
 {
     if (! createdCursors)
-	defineCursors();
+        defineCursors();
     
     // the viewer cursor are not enabled, then we don't set a new cursor.
     // Instead erase the old viewer cursor.
     if (! cursorEnabledFlag) {
         unsetCursor();
-	return;
+        return;
     }
     
     // ...else set the right cursor for the viewer mode....
     switch(mode) {
-	case PICK_MODE:
-	case ROLL_MODE_ACTIVE:
-            unsetCursor();
-	    break;
-	    
-	case VIEW_MODE:
-	case DOLLY_MODE_ACTIVE:
-            setCursor(dollyCursor);
-	    break;
-	    
-	case PAN_MODE:
-	case PAN_MODE_ACTIVE:
-            setCursor(transCursor);
-	    break;
-	    
-	case SEEK_MODE:
-            setCursor(seekCursor);
-	    break;
+    case PICK_MODE:
+    case ROLL_MODE_ACTIVE:
+        unsetCursor();
+        break;
+
+    case VIEW_MODE:
+    case DOLLY_MODE_ACTIVE:
+        setCursor(dollyCursor);
+        break;
+
+    case PAN_MODE:
+    case PAN_MODE_ACTIVE:
+        setCursor(transCursor);
+        break;
+
+    case SEEK_MODE:
+        setCursor(seekCursor);
+        break;
     }
 }
 
@@ -602,13 +602,13 @@ SoQtPlaneViewer::actualRedraw()
     
     // now draw the viewer feedback
     if (isViewing() && mode == ROLL_MODE_ACTIVE) {
-	
-	setFeedbackOrthoProjection(getGlxSize());
-	
-	drawViewerRollFeedback(getGlxSize()/2, locator);
-	
-	// now restore state
-	restoreGLStateAfterFeedback();
+
+        setFeedbackOrthoProjection(getGlxSize());
+
+        drawViewerRollFeedback(getGlxSize()/2, locator);
+
+        // now restore state
+        restoreGLStateAfterFeedback();
     }
 }
 
@@ -624,7 +624,7 @@ SoQtPlaneViewer::setSeekMode(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if ( !isViewing() )
-	return;
+        return;
     
     // call the base class
     SoQtFullViewer::setSeekMode(flag);
@@ -702,7 +702,7 @@ SoQtPlaneViewer::bottomWheelMotion(float newVal)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // get camera right vector and translate camera by given amount
     SbMatrix mx;
@@ -727,7 +727,7 @@ SoQtPlaneViewer::leftWheelMotion(float newVal)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // get camera up vector and translate camera by given amount
     SbMatrix mx;
@@ -754,26 +754,26 @@ SoQtPlaneViewer::rightWheelMotion(float newVal)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     if (camera->isOfType(SoOrthographicCamera::getClassTypeId())) {
-	// change the ortho camera height
-	SoOrthographicCamera *cam = (SoOrthographicCamera *) camera;
-	cam->height = cam->height.getValue() * powf(2.0, newVal - rightWheelVal);
+        // change the ortho camera height
+        SoOrthographicCamera *cam = (SoOrthographicCamera *) camera;
+        cam->height = cam->height.getValue() * powf(2.0, newVal - rightWheelVal);
     }
     else {
-	// shorter/grow the focal distance given the wheel rotation
-	float focalDistance = camera->focalDistance.getValue();;
-	float newFocalDist = focalDistance;
-	newFocalDist *= powf(2.0, newVal - rightWheelVal);
-	
-	// finally reposition the camera
-	SbMatrix mx;
-	mx = camera->orientation.getValue();
-	SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
-	camera->position = camera->position.getValue() + 
-			   (focalDistance - newFocalDist) * forward;
-	camera->focalDistance = newFocalDist;
+        // shorter/grow the focal distance given the wheel rotation
+        float focalDistance = camera->focalDistance.getValue();;
+        float newFocalDist = focalDistance;
+        newFocalDist *= powf(2.0, newVal - rightWheelVal);
+
+        // finally reposition the camera
+        SbMatrix mx;
+        mx = camera->orientation.getValue();
+        SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
+        camera->position = camera->position.getValue() +
+                (focalDistance - newFocalDist) * forward;
+        camera->focalDistance = newFocalDist;
     }
     
     rightWheelVal = newVal;
@@ -818,7 +818,7 @@ SoQtPlaneViewer::rollCamera(const SbVec2s &newLocator)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     SbVec2s center = getGlxSize()/2;
     SbVec2s p1, p2;
@@ -854,7 +854,7 @@ SoQtPlaneViewer::translateCamera(const SbVec2f &newLocator)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // map new mouse location into the camera focal plane
     SbViewVolume    cameraVolume;
@@ -866,8 +866,8 @@ SoQtPlaneViewer::translateCamera(const SbVec2f &newLocator)
     focalplane.intersect(line, newLocator3D);
     
     // move the camera by the delta 3D position amount
-    camera->position = camera->position.getValue() + 
-	(locator3D - newLocator3D);
+    camera->position = camera->position.getValue() +
+            (locator3D - newLocator3D);
     
     // You would think we would have to set locator3D to
     // newLocator3D here.  But we don't, because moving the camera
@@ -891,29 +891,29 @@ SoQtPlaneViewer::dollyCamera(const SbVec2s &newLocator)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // moving the mouse up/down will move the camera futher/closer.
     // moving the camera sideway will not move the camera at all
     float d = (newLocator[1] - locator[1]) / 40.0;
     
     if (camera->isOfType(SoOrthographicCamera::getClassTypeId())) {
-	// change the ortho camera height
-	SoOrthographicCamera *cam = (SoOrthographicCamera *) camera;
-	cam->height = cam->height.getValue() * powf(2.0, d);
+        // change the ortho camera height
+        SoOrthographicCamera *cam = (SoOrthographicCamera *) camera;
+        cam->height = cam->height.getValue() * powf(2.0, d);
     }
     else {
-	// shorter/grow the focal distance given the mouse move
-	float focalDistance = camera->focalDistance.getValue();;
-	float newFocalDist = focalDistance * powf(2.0, d);
-	
-	// finally reposition the camera
-	SbMatrix mx;
-	mx = camera->orientation.getValue();
-	SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
-	camera->position = camera->position.getValue() + 
-			   (focalDistance - newFocalDist) * forward;
-	camera->focalDistance = newFocalDist;
+        // shorter/grow the focal distance given the mouse move
+        float focalDistance = camera->focalDistance.getValue();;
+        float newFocalDist = focalDistance * powf(2.0, d);
+
+        // finally reposition the camera
+        SbMatrix mx;
+        mx = camera->orientation.getValue();
+        SbVec3f forward(-mx[2][0], -mx[2][1], -mx[2][2]);
+        camera->position = camera->position.getValue() +
+                (focalDistance - newFocalDist) * forward;
+        camera->focalDistance = newFocalDist;
     }
     
     locator = newLocator;
@@ -932,7 +932,7 @@ SoQtPlaneViewer::setPlane(const SbVec3f &newNormal, const SbVec3f &newRight)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // get center of rotation
     SbRotation camRot = camera->orientation.getValue();
@@ -941,7 +941,7 @@ SoQtPlaneViewer::setPlane(const SbVec3f &newNormal, const SbVec3f &newRight)
     mx = camRot;
     SbVec3f forward( -mx[2][0], -mx[2][1], -mx[2][2]);
     SbVec3f center = camera->position.getValue()
-	+ radius * forward;
+            + radius * forward;
     
     // rotate the camera to be aligned with the new plane normal
     SbRotation rot( -forward, newNormal);
@@ -975,17 +975,17 @@ SoQtPlaneViewer::computeTranslateValues()
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     float height;
     
     if (camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
-	float angle = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
-	float dist = camera->focalDistance.getValue();
-	height = dist * tanf(angle);
+        float angle = ((SoPerspectiveCamera *)camera)->heightAngle.getValue();
+        float dist = camera->focalDistance.getValue();
+        height = dist * tanf(angle);
     }
     else if (camera->isOfType(SoOrthographicCamera::getClassTypeId()))
-	height = ((SoOrthographicCamera *)camera)->height.getValue();
+        height = ((SoOrthographicCamera *)camera)->height.getValue();
     
     transYspeed = height / 2;
     transXspeed = transYspeed * camera->aspectRatio.getValue();

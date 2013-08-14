@@ -66,7 +66,7 @@
 class QKeyEvent;
 
 class SoQtKeyboard : public SoQtDevice {
-  public:
+public:
     SoQtKeyboard();
     ~SoQtKeyboard();
     
@@ -81,8 +81,8 @@ class SoQtKeyboard : public SoQtDevice {
     // returning NULL if the event is not from this device.
     //
     virtual const SoEvent * translateEvent(QEvent *qevent);
-  
-  private:
+
+private:
     SoKeyboardEvent	*keyEvent;	// keyboard press or release
 
     SoKeyboardEvent	*translateKeyEvent(QKeyEvent *ke, SoButtonEvent::State s);

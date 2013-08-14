@@ -68,7 +68,7 @@
  */
 
 #define MIN_ANGLE	(5*M_PI/180.)	// minimum angle between look at 
-				    // direction and up direction (in rad)
+// direction and up direction (in rad)
 
 
 ////////////////////////////////////////////////////////////////////////
@@ -78,21 +78,21 @@
 // Use: protected
 
 SoQtConstrainedViewer::SoQtConstrainedViewer(
-    QWidget *parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SoQtFullViewer::BuildFlag b, 
-    SoQtViewer::Type t, 
-    SbBool buildNow)
-	: SoQtFullViewer(
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    b, 
-	    t, 
-	    FALSE) // tell GLWidget not to build just yet  
-//
-////////////////////////////////////////////////////////////////////////
+        QWidget *parent,
+        const char *name,
+        SbBool buildInsideParent,
+        SoQtFullViewer::BuildFlag b,
+        SoQtViewer::Type t,
+        SbBool buildNow)
+    : SoQtFullViewer(
+          parent,
+          name,
+          buildInsideParent,
+          b,
+          t,
+          FALSE) // tell GLWidget not to build just yet
+    //
+    ////////////////////////////////////////////////////////////////////////
 {
     // init local vars
     upDirection.setValue(0, 1, 0);
@@ -105,8 +105,8 @@ SoQtConstrainedViewer::SoQtConstrainedViewer(
     
     // Build the widget tree, and let SoXtComponent know about our base widget.
     if (buildNow) {
-	QWidget* w = buildWidget(getParentWidget());
-	setBaseWidget(w);
+        QWidget* w = buildWidget(getParentWidget());
+        setBaseWidget(w);
     }
 }
 
@@ -136,8 +136,8 @@ SoQtConstrainedViewer::recomputeSceneSize()
 ////////////////////////////////////////////////////////////////////////
 {
     if (! sceneGraph || ! sceneRoot) {
-	sceneSize = sceneHeight = 0.0;
-	return;
+        sceneSize = sceneHeight = 0.0;
+        return;
     }
     
     // Use assignment notation to disambiguate from expression (edison)
@@ -146,8 +146,8 @@ SoQtConstrainedViewer::recomputeSceneSize()
     SbBox3f bbox = bboxAct.getBoundingBox();
     
     if (bbox.isEmpty()) {
-	sceneSize = sceneHeight = 0.0;
-	return;
+        sceneSize = sceneHeight = 0.0;
+        return;
     }
     
     // ??? this assumes Y is up right now (for sceneHeight)
@@ -156,9 +156,9 @@ SoQtConstrainedViewer::recomputeSceneSize()
     sceneSize = (x > z) ? x : z;
     
     if (sceneSize <= 0.0)
-	sceneSize = 0.0;
+        sceneSize = 0.0;
     if (sceneHeight <= 0.0)
-	sceneHeight = 0.0;
+        sceneHeight = 0.0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -179,8 +179,8 @@ SoQtConstrainedViewer::setUpDirection(const SbVec3f &newUpDirection)
     
     // rotate the camera and check for constrain
     if (camera != NULL) {
-	camera->orientation = rot * camera->orientation.getValue();
-	checkForCameraUpConstrain();
+        camera->orientation = rot * camera->orientation.getValue();
+        checkForCameraUpConstrain();
     }
 }
 
@@ -201,7 +201,7 @@ SoQtConstrainedViewer::setCamera(SoCamera *newCamera)
     
     // now check for constrains
     if (camera != NULL)
-	checkForCameraUpConstrain();
+        checkForCameraUpConstrain();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -253,7 +253,7 @@ SoQtConstrainedViewer::bottomWheelMotion(float newVal)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // get rotation and apply to camera
     SbRotation rot(upDirection, bottomWheelVal - newVal);
@@ -293,7 +293,7 @@ SoQtConstrainedViewer::tiltCamera(float deltaAngle)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // get camera forward direction
     SbMatrix mx;
@@ -308,25 +308,25 @@ SoQtConstrainedViewer::tiltCamera(float deltaAngle)
     rot.getValue(axis, angle);
     // make angle in [-PI,PI] range
     if (angle > M_PI)
-	angle -= 2*M_PI;
+        angle -= 2*M_PI;
     else if (angle < -M_PI)
-	angle += 2*M_PI;
+        angle += 2*M_PI;
     // make rotation toward up direction positive angle
     if (angle < 0.0) {
-	angle = -angle;
-	axis = -axis;
+        angle = -angle;
+        axis = -axis;
     }
     
     // check if we are already looking almost along the up direction
-    if ( (angle <= MIN_ANGLE && deltaAngle > 0) || 
-	 (angle >= (M_PI - MIN_ANGLE) && deltaAngle < 0) )
-    return;
+    if ( (angle <= MIN_ANGLE && deltaAngle > 0) ||
+         (angle >= (M_PI - MIN_ANGLE) && deltaAngle < 0) )
+        return;
     
     // clamp the angle change as to not get too close along the up direction
     if (deltaAngle > 0 && deltaAngle > (angle - MIN_ANGLE))
-	deltaAngle = angle - MIN_ANGLE;
+        deltaAngle = angle - MIN_ANGLE;
     else if (deltaAngle < 0 && deltaAngle < (angle + MIN_ANGLE - M_PI))
-	deltaAngle = angle + MIN_ANGLE - M_PI;
+        deltaAngle = angle + MIN_ANGLE - M_PI;
     
     // finally rotate the camera by the given angle
     rot.setValue(axis, deltaAngle);
@@ -350,21 +350,21 @@ SoQtConstrainedViewer::computeSeekFinalOrientation()
     
     // find the camera final orientation
     if ( isDetailSeek() ) {
-	
-	// get the camera unconstrained new orientation
-	mx = camera->orientation.getValue();
-	viewVector.setValue(-mx[2][0], -mx[2][1], -mx[2][2]);
-	SbRotation changeOrient;
-	changeOrient.setValue(viewVector, seekPoint - camera->position.getValue());
-	newCamOrientation = camera->orientation.getValue() * changeOrient;
-	
-	// check for constrains
-	camera->orientation = newCamOrientation;
-	checkForCameraUpConstrain();
-	newCamOrientation = camera->orientation.getValue();
+
+        // get the camera unconstrained new orientation
+        mx = camera->orientation.getValue();
+        viewVector.setValue(-mx[2][0], -mx[2][1], -mx[2][2]);
+        SbRotation changeOrient;
+        changeOrient.setValue(viewVector, seekPoint - camera->position.getValue());
+        newCamOrientation = camera->orientation.getValue() * changeOrient;
+
+        // check for constrains
+        camera->orientation = newCamOrientation;
+        checkForCameraUpConstrain();
+        newCamOrientation = camera->orientation.getValue();
     }
     else
-	newCamOrientation = camera->orientation.getValue();
+        newCamOrientation = camera->orientation.getValue();
 }
 
 
@@ -384,7 +384,7 @@ SoQtConstrainedViewer::checkForCameraUpConstrain()
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // adjust the camera if necessary so that the new right vector
     // lies in a plane parallel to our old right vector
@@ -403,11 +403,11 @@ SoQtConstrainedViewer::checkForCameraUpConstrain()
     // a right vector, so we choose the newRight. Otherwise, we have
     // to rotate our orientation from the newRight to the idealRight.
     if (idealRight != SbVec3f(0.0, 0.0, 0.0)) {
-	// rotate to idealRight!
-	SbRotation rot(newRight, idealRight);
-	camera->orientation.setValue(
-	    camera->orientation.getValue() * rot);
-    }	
+        // rotate to idealRight!
+        SbRotation rot(newRight, idealRight);
+        camera->orientation.setValue(
+                    camera->orientation.getValue() * rot);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -425,11 +425,11 @@ SoQtConstrainedViewer::changeCameraValues(SoCamera *newCamera)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // only paste cameras of the same type
     if (camera->getTypeId() != newCamera->getTypeId())
-	return;
+        return;
 
     // let the base class copy camera values
     SoQtFullViewer::changeCameraValues(newCamera);
@@ -453,7 +453,7 @@ SoQtConstrainedViewer::findUpDirection(const SbVec2s &mouseLocation)
 ////////////////////////////////////////////////////////////////////////
 {
     if (camera == NULL)
-	return;
+        return;
     
     // do the picking
     SbVec2s size = getGlxSize();
@@ -467,16 +467,16 @@ SoQtConstrainedViewer::findUpDirection(const SbVec2s &mouseLocation)
     // get the picked point.
     SoPickedPoint *pp = pick.getPickedPoint();
     if (pp == NULL)
-	return;
+        return;
     SbVec3f normal = pp->getNormal();
     
     // check whether the normal is pointing toward the camera, else
     // flip the normal around.
     SbVec3f point = pp->getPoint();;
     if ( normal.dot(camera->position.getValue() - point) < 0 )
-	normal.negate();
+        normal.negate();
     
-//printf("%f %f %f\n", normal[0], normal[1], normal[2]);
+    //printf("%f %f %f\n", normal[0], normal[1], normal[2]);
     
     setUpDirection(normal);
 }

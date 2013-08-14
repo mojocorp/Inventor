@@ -69,9 +69,9 @@
 
 class SOQT_EXPORT SoQtConstrainedViewer : public SoQtFullViewer {
     Q_OBJECT
- public:
+public:
     
-    // 
+    //
     // Specifies the upward direction of the viewer. This up direction is
     // used by the viewers to constrain the camera when tilting up/down, and
     // also used when rotating the camera right/left.
@@ -88,14 +88,14 @@ class SOQT_EXPORT SoQtConstrainedViewer : public SoQtFullViewer {
     virtual void    resetToHomePosition();
     virtual void    recomputeSceneSize();
     
- protected:
+protected:
     SoQtConstrainedViewer(
-	QWidget *parent,
-	const char *name, 
-	SbBool buildInsideParent, 
-	SoQtFullViewer::BuildFlag flag, 
-	SoQtViewer::Type type, 
-	SbBool buildNow);
+            QWidget *parent,
+            const char *name,
+            SbBool buildInsideParent,
+            SoQtFullViewer::BuildFlag flag,
+            SoQtViewer::Type type,
+            SbBool buildNow);
     ~SoQtConstrainedViewer();
     
     SbVec3f	    upDirection;
@@ -108,7 +108,7 @@ class SOQT_EXPORT SoQtConstrainedViewer : public SoQtFullViewer {
     // Redefine these to do constrained viewing tasks.
     // The bottom wheel rotates the camera around the up direction, the
     // left wheel tilts the camera up/down constraning to 180 degree from
-    // the up direction. 
+    // the up direction.
     virtual void    	bottomWheelMotion(float newVal);
     virtual void    	leftWheelMotion(float newVal);
     
@@ -132,7 +132,7 @@ class SOQT_EXPORT SoQtConstrainedViewer : public SoQtFullViewer {
     // Redefine this to keep the up vector when seeking
     virtual void	computeSeekFinalOrientation();
     
- private:
+private:
     SbVec3f	    origUpDirection; // used to save/reset
 };
 

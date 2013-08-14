@@ -101,7 +101,7 @@ typedef void SoQtViewerCB (void *userData, SoQtViewer *viewer);
 class SOQT_EXPORT SoQtViewer : public SoQtRenderArea {
     Q_OBJECT
 
-  public:
+public:
     
     //
     // An EDITOR viewer will create a camera under the user supplied scene
@@ -109,8 +109,8 @@ class SOQT_EXPORT SoQtViewer : public SoQtRenderArea {
     // scene and will leave the camera behind when supplied with a new scene.
     //
     // A BROWSER viewer will also create a camera if it cannot find one in
-    // the scene, but will place it above the scene graph node (camera will 
-    // not appear in the user supplied scene graph), and will automatically 
+    // the scene, but will place it above the scene graph node (camera will
+    // not appear in the user supplied scene graph), and will automatically
     // remove it when another scene is supplied to the viewer.
     //
     enum Type {
@@ -121,7 +121,7 @@ class SOQT_EXPORT SoQtViewer : public SoQtRenderArea {
     //
     // list of possible drawing styles
     //
-    // Note: Refer to the SoQtViewer man pages for a complete 
+    // Note: Refer to the SoQtViewer man pages for a complete
     // description of those draw styles.
     //
     enum DrawStyle {
@@ -179,7 +179,7 @@ class SOQT_EXPORT SoQtViewer : public SoQtRenderArea {
     //
     // Set and get the camera type that will be created by the viewer if no
     // cameras are found in the scene graph. Possible choices are :
-    //	    - SoPerspectiveCamera::getClassTypeId() 
+    //	    - SoPerspectiveCamera::getClassTypeId()
     //	    - SoOrthographicCamera::getClassTypeId()
     //
     // NOTE: the set method will only take affect next time a scene graph
@@ -208,18 +208,18 @@ public slots:
     
     //
     // Sets/gets the current drawing style in the main view - The user
-    // can specify the INTERACTIVE draw style (draw style used when 
+    // can specify the INTERACTIVE draw style (draw style used when
     // the scene changes) independently from the STILL style.
     //
     // STILL defaults to VIEW_AS_IS.
     // INTERACTIVE defaults to VIEW_NO_TEXTURE on machine that do not support
     // fast texturing, VIEW_SAME_AS_STILL otherwise.
     //
-    // Refer to the SoQtViewer man pages for a complete description 
+    // Refer to the SoQtViewer man pages for a complete description
     // of those draw styles.
     //
-    virtual void    setDrawStyle(SoQtViewer::DrawType type, 
-				SoQtViewer::DrawStyle style);
+    virtual void    setDrawStyle(SoQtViewer::DrawType type,
+                                 SoQtViewer::DrawStyle style);
     SoQtViewer::DrawStyle getDrawStyle (SoQtViewer::DrawType type);
     
     //
@@ -234,7 +234,7 @@ public slots:
 
     //
     // Set/get whether the viewer is turned on or off. When turned off
-    // events over the renderArea are sent down the sceneGraph 
+    // events over the renderArea are sent down the sceneGraph
     // (picking can occurs). (default viewing is ON)
     //
     virtual void    setViewing(SbBool onOrOff);
@@ -251,15 +251,15 @@ public slots:
     // This can be used when setting a busy cursor on the application shell.
     //
     // Subclasses should redefine this routine to call XUndefineCursor()
-    // or XDefineCursor() with the appropariate glyth. The base class 
+    // or XDefineCursor() with the appropariate glyth. The base class
     // routine only sets the flag.
     //
     virtual void    setCursorEnabled(SbBool onOrOff);
     SbBool  	    isCursorEnabled() const   { return cursorEnabledFlag; }
     
     //
-    // Set and get the auto clipping plane. When auto clipping is ON, the 
-    // camera near and far planes are dynamically adjusted to be as tight 
+    // Set and get the auto clipping plane. When auto clipping is ON, the
+    // camera near and far planes are dynamically adjusted to be as tight
     // as possible (least amount of stuff is clipped). When OFF, the user
     // is expected to manually set those planes within the preference sheet.
     // (default is ON).
@@ -278,7 +278,7 @@ public slots:
     // to see the affect and /usr/gfx/setmon needs to be called to set the
     // monitor in stereo mode.
     //
-    // The user can also specify what the offset between the two views 
+    // The user can also specify what the offset between the two views
     // should be.
     //
     virtual SbBool  isStereoViewing() const;
@@ -313,13 +313,13 @@ public slots:
     // Note: The viewer pointer 'this' is passed as callback data
     //
     void    addStartCallback(SoQtViewerCB *f, void *userData = NULL)
-		    { startCBList->addCallback((SoCallbackListCB *)f, userData); }
+    { startCBList->addCallback((SoCallbackListCB *)f, userData); }
     void    addFinishCallback(SoQtViewerCB *f, void *userData = NULL)
-		    { finishCBList->addCallback((SoCallbackListCB *)f, userData); }
+    { finishCBList->addCallback((SoCallbackListCB *)f, userData); }
     void    removeStartCallback(SoQtViewerCB *f, void *userData = NULL)
-		    { startCBList->removeCallback((SoCallbackListCB *)f, userData); }
+    { startCBList->removeCallback((SoCallbackListCB *)f, userData); }
     void    removeFinishCallback(SoQtViewerCB *f, void *userData = NULL)
-		    { finishCBList->removeCallback((SoCallbackListCB *)f, userData); }
+    { finishCBList->removeCallback((SoCallbackListCB *)f, userData); }
     
     // copy/paste the view. eventTime should be the time of the X event
     // which initiated the copy or paste (e.g. if copy/paste is initiated
@@ -333,20 +333,20 @@ public slots:
     
     // This can be used to let the viewer know that the scene graph
     // has changed so that the viewer can recompute things like speed which
-    // depend on the scene graph size. 
+    // depend on the scene graph size.
     //
-    // NOTE: This routine is automatically called whenever setSceneGraph() 
+    // NOTE: This routine is automatically called whenever setSceneGraph()
     // is called.
     virtual void	recomputeSceneSize();
     
-  protected:
+protected:
     // Constructor/Destructor
     SoQtViewer (
-	QWidget* parent,
-	const char *name, 
-	SbBool buildInsideParent, 
-	SoQtViewer::Type type, 
-	SbBool buildNow);
+            QWidget* parent,
+            const char *name,
+            SbBool buildInsideParent,
+            SoQtViewer::Type type,
+            SbBool buildNow);
     ~SoQtViewer();
     
     // global vars
@@ -376,15 +376,15 @@ public slots:
 
 protected slots:
     // Invokes the start and finish viewing callbacks. Subclasses NEED to call
-    // those routines when they start and finish doing interactive viewing 
-    // operations so that correct interactive drawing style and buffering 
+    // those routines when they start and finish doing interactive viewing
+    // operations so that correct interactive drawing style and buffering
     // types, as well as application callbacks, gets set and called properly.
     //
     // Those routines simply increment and decrement a counter. When the counter
-    // changes from 0->1 the start viewing callbacks are called. When the counter 
+    // changes from 0->1 the start viewing callbacks are called. When the counter
     // changes back from 1->0 the finish viewing callbacks are called.
-    // The counter approach enables different parts of a viewer to call those 
-    // routines withough having to know about each others (which is not 
+    // The counter approach enables different parts of a viewer to call those
+    // routines withough having to know about each others (which is not
     //
     void	    interactiveCountInc();
     void	    interactiveCountDec();
@@ -397,9 +397,9 @@ protected:
     // and the normal at that point. It will also schedule the sensor to animate
     // if necessary. The routine retuns TRUE if something got picked...
     //
-    // Note: if detailSeek is on, the point and normal correspond to the exact 
+    // Note: if detailSeek is on, the point and normal correspond to the exact
     //	    3D location under the cursor.
-    //	    if detailSeek if off, the object bbox center and the camera 
+    //	    if detailSeek if off, the object bbox center and the camera
     //	    orientation are instead returned.
     SbBool	    seekToPoint(const SbVec2s &mouseLocation);
     
@@ -447,13 +447,13 @@ protected:
     virtual void    toggleCameraType();
     
     //
-    // Convenience routines which subclasses can use when drawing viewer 
-    // feedback which may be common across multiple viewers. There is for 
+    // Convenience routines which subclasses can use when drawing viewer
+    // feedback which may be common across multiple viewers. There is for
     // example a convenience routine which sets an orthographics projection
     // and a method to draw common feedback like the roll anchor (used by
     // a couple of viewers).
     //
-    // All drawing routines assume that the window and projection is 
+    // All drawing routines assume that the window and projection is
     // already set by the caller.
     //
     // set an ortho projection of the glx window size - this also turns
@@ -477,7 +477,7 @@ protected:
     SoGetBoundingBoxAction *autoClipBboxAction;
     virtual void	adjustCameraClippingPlanes();
     
- private:
+private:
     // current state vars
     SoType		cameraType;
     BufferType		bufferType;

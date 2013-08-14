@@ -165,7 +165,7 @@ SoQtPreferenceDialog::setZoom(double zoom)
     if (zoom > 0.0) {
         // check for valid perspective camera range
         if ( viewer->camera != NULL &&
-            viewer->camera->isOfType(SoPerspectiveCamera::getClassTypeId()) ) {
+             viewer->camera->isOfType(SoPerspectiveCamera::getClassTypeId()) ) {
             zoom = (zoom < 0.01) ? 0.01 : ((zoom > 179.99) ? 179.99 : zoom);
         }
 
@@ -196,7 +196,7 @@ SoQtPreferenceDialog::zoomMinFieldChanged (double value)
 {
     // check for valid perspective camera range
     if (viewer->camera != NULL &&
-        viewer->camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
+            viewer->camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
         value = (value < 0.01) ? 0.01 : ((value > 178.99) ? 178.99 : value);
 
         // finally update the slider to reflect the changes
@@ -210,7 +210,7 @@ SoQtPreferenceDialog::zoomMaxFieldChanged (double value)
 {
     // check for valid perspective camera range
     if (viewer->camera != NULL &&
-        viewer->camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
+            viewer->camera->isOfType(SoPerspectiveCamera::getClassTypeId())) {
         value = (value < 0.01) ? 0.01 : ((value > 178.99) ? 178.99 : value);
 
         // finally update the slider to reflect the changes

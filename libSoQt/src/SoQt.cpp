@@ -70,15 +70,15 @@
 
 // this class ties Inventor sensors into Xt events
 class SoQtEventHandler : public QObject {
-  public:
+public:
     SoQtEventHandler();
 
     ~SoQtEventHandler();
 
-  protected:
+protected:
     virtual void timerEvent( QTimerEvent * event );
 
-  private:
+private:
     bool        timerOn;
     int         qtTimer;
     SbTime      currentDeadline;
@@ -162,8 +162,8 @@ SoQtEventHandler::SoQtEventHandler()
     qtWorkProc  = -1;
 
     SoDB::getSensorManager()->setChangedCallback
-        (SoQtEventHandler::sensorManagerChangedCallback,
-         this);
+            (SoQtEventHandler::sensorManagerChangedCallback,
+             this);
     // Call this once because things might already be in the timer queue.
     // If we don't call this and no new things happen, then the callbacks
     // will never be set up.
@@ -195,8 +195,8 @@ SoQtEventHandler::setUpCallbacks()
 
     // If we have a timer at some point, schedule that
     if (SoDB::getSensorManager()->isTimerSensorPending(nextEvent)) {
-	// Only change the timer if its deadline is different from the
-	// current one.
+        // Only change the timer if its deadline is different from the
+        // current one.
         if (qtTimer==-1 || nextEvent != currentDeadline) {
             currentDeadline = nextEvent;
             long msec = (nextEvent - SbTime::getTimeOfDay()).getMsecValue();
@@ -210,7 +210,7 @@ SoQtEventHandler::setUpCallbacks()
 
     // If we have an idle task, schedule a workproc for it
     if (SoDB::getSensorManager()->isDelaySensorPending()) {
-	// only schedule it if one is not already active
+        // only schedule it if one is not already active
         if (qtWorkProc==-1) {
             qtWorkProc = startTimer (0);
         }
