@@ -191,7 +191,7 @@ SoLineSet::generatePrimitives(SoAction *action)
     // put vertex property into state, if it exists:
     SoVertexProperty* vp = (SoVertexProperty*)vertexProperty.getValue();
     if(vp){
-	vp->doAction(action);
+        vp->doAction(action);
     }
 
     // When generating primitives for picking, delay computing default
@@ -214,7 +214,7 @@ SoLineSet::generatePrimitives(SoAction *action)
     // Test for auto-normal case
     const SoNormalElement *ne = SoNormalElement::getInstance(state);
     if (ne->getNum() == 0) {
-	normalBinding = OVERALL;
+        normalBinding = OVERALL;
     }
 
     curVert = (int) startIndex.getValue();
@@ -226,99 +226,99 @@ SoLineSet::generatePrimitives(SoAction *action)
     curNormal   = (normalBinding   == PER_VERTEX ? curVert : 0);
 
     if (forPicking) {
-	SbVec4f	tc(0.0, 0.0, 0.0, 0.0);
-	pvs[0].setTextureCoords(tc);
-	pvs[1].setTextureCoords(tc);
+        SbVec4f	tc(0.0, 0.0, 0.0, 0.0);
+        pvs[0].setTextureCoords(tc);
+        pvs[1].setTextureCoords(tc);
     }
 
     pvs[0].setDetail(&detail);
     pvs[1].setDetail(&detail);
 
     if (normalBinding == OVERALL) {
-	if (ne->getNum() > 0) {
-	    pvs[0].setNormal(ne->get(0));
-	    pvs[1].setNormal(ne->get(0));
-	} else {
-	    pvs[0].setNormal(SbVec3f(0,0,0));
-	    pvs[1].setNormal(SbVec3f(0,0,0));
-	}	    
+        if (ne->getNum() > 0) {
+            pvs[0].setNormal(ne->get(0));
+            pvs[1].setNormal(ne->get(0));
+        } else {
+            pvs[0].setNormal(SbVec3f(0,0,0));
+            pvs[1].setNormal(SbVec3f(0,0,0));
+        }
     }
 
     // For each polyline
     numLines = numVertices.getNum();
     for (line = 0; line < numLines; line++) {
 
-	detail.setLineIndex(line);
+        detail.setLineIndex(line);
 
-	// Figure out number of vertices in this line
-    int vertsInLine = (int) numVertices[line];
+        // Figure out number of vertices in this line
+        int vertsInLine = (int) numVertices[line];
         if (vertsInLine == SO_LINE_SET_USE_REST_OF_VERTICES)
-	    vertsInLine = (int) ce->getNum() - curVert;
+            vertsInLine = (int) ce->getNum() - curVert;
 
-	for (vert = 0; vert < vertsInLine; vert++) {
+        for (vert = 0; vert < vertsInLine; vert++) {
 
-	    pv = &pvs[vert % 2];
+            pv = &pvs[vert % 2];
 
-	    pv->setPoint(ce->get3(curVert));
+            pv->setPoint(ce->get3(curVert));
 
-	    if (materialBinding == PER_VERTEX && vert > 0)
-		pv->setMaterialIndex(++curMaterial);
-	    if (normalBinding == PER_VERTEX && vert > 0)
-		pv->setNormal(ne->get(++curNormal));
+            if (materialBinding == PER_VERTEX && vert > 0)
+                pv->setMaterialIndex(++curMaterial);
+            if (normalBinding == PER_VERTEX && vert > 0)
+                pv->setNormal(ne->get(++curNormal));
 
-	    // Set up a point detail for the current vertex
-	    pd.setCoordinateIndex(curVert);
-	    pd.setMaterialIndex(curMaterial);
-	    pd.setNormalIndex(curNormal);
-	    pd.setTextureCoordIndex(curVert);
+            // Set up a point detail for the current vertex
+            pd.setCoordinateIndex(curVert);
+            pd.setMaterialIndex(curMaterial);
+            pd.setNormalIndex(curNormal);
+            pd.setTextureCoordIndex(curVert);
 
-	    // Replace the appropriate point detail in the line
-	    // detail, based on the vertex index
-	    if ((vert & 1) == 0)
-		detail.setPoint0(&pd);
-	    else
-		detail.setPoint1(&pd);
+            // Replace the appropriate point detail in the line
+            // detail, based on the vertex index
+            if ((vert & 1) == 0)
+                detail.setPoint0(&pd);
+            else
+                detail.setPoint1(&pd);
 
-	    if (tcb.isFunction()) {
-		if (! forPicking)
-		    pv->setTextureCoords(tcb.get(pv->getPoint(),
-						 pv->getNormal()));
-	    }
-	    else
-		pv->setTextureCoords(tcb.get(curVert));
+            if (tcb.isFunction()) {
+                if (! forPicking)
+                    pv->setTextureCoords(tcb.get(pv->getPoint(),
+                                                 pv->getNormal()));
+            }
+            else
+                pv->setTextureCoords(tcb.get(curVert));
 
-	    if (vert > 0) {
-		detail.setPartIndex(curSeg++);
+            if (vert > 0) {
+                detail.setPartIndex(curSeg++);
 
-		invokeLineSegmentCallbacks(action,
-					   &pvs[(vert - 1) % 2],
-					   &pvs[(vert - 0) % 2]);
+                invokeLineSegmentCallbacks(action,
+                                           &pvs[(vert - 1) % 2],
+                        &pvs[(vert - 0) % 2]);
 
-		if (materialBinding == PER_SEGMENT) {
-		    curMaterial++;
-		    pvs[0].setMaterialIndex(curMaterial);
-		    pvs[1].setMaterialIndex(curMaterial);
-		}
-		if (normalBinding == PER_SEGMENT) {
-		    curNormal++;
-		    pvs[0].setNormal(ne->get(curNormal));
-		    pvs[1].setNormal(ne->get(curNormal));
-		}
-	    }
+                if (materialBinding == PER_SEGMENT) {
+                    curMaterial++;
+                    pvs[0].setMaterialIndex(curMaterial);
+                    pvs[1].setMaterialIndex(curMaterial);
+                }
+                if (normalBinding == PER_SEGMENT) {
+                    curNormal++;
+                    pvs[0].setNormal(ne->get(curNormal));
+                    pvs[1].setNormal(ne->get(curNormal));
+                }
+            }
 
-	    curVert++;
-	}
+            curVert++;
+        }
 
-	if (materialBinding == PER_LINE) {
-	    curMaterial++;
-	    pvs[0].setMaterialIndex(curMaterial);
-	    pvs[1].setMaterialIndex(curMaterial);
-	}
-	if (normalBinding == PER_LINE) {
-	    curNormal++;
-	    pvs[0].setNormal(ne->get(curNormal));
-	    pvs[1].setNormal(ne->get(curNormal));
-	}
+        if (materialBinding == PER_LINE) {
+            curMaterial++;
+            pvs[0].setMaterialIndex(curMaterial);
+            pvs[1].setMaterialIndex(curMaterial);
+        }
+        if (normalBinding == PER_LINE) {
+            curNormal++;
+            pvs[0].setNormal(ne->get(curNormal));
+            pvs[1].setNormal(ne->get(curNormal));
+        }
     }
     state->pop();
 }
@@ -386,9 +386,9 @@ SoLineSet::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
 SoDetail *
 SoLineSet::createLineSegmentDetail(SoRayPickAction *action,
-				   const SoPrimitiveVertex *v1,
-				   const SoPrimitiveVertex *,
-				   SoPickedPoint *pp)
+                                   const SoPrimitiveVertex *v1,
+                                   const SoPrimitiveVertex *,
+                                   SoPickedPoint *pp)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -404,8 +404,8 @@ SoLineSet::createLineSegmentDetail(SoRayPickAction *action,
     // in the picked point
     SoTextureCoordinateBundle	tcb(action, FALSE);
     if (tcb.isFunction())
-	pp->setObjectTextureCoords(tcb.get(pp->getObjectPoint(),
-					   pp->getObjectNormal()));
+        pp->setObjectTextureCoords(tcb.get(pp->getObjectPoint(),
+                                           pp->getObjectNormal()));
 
     // The face/part indices are in the incoming details
     detail->setLineIndex(d->getLineIndex());
@@ -427,20 +427,20 @@ SoLineSet::getMaterialBinding(SoAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     switch (SoMaterialBindingElement::get(action->getState())) {
-      case SoMaterialBindingElement::OVERALL:
-	return OVERALL;
+    case SoMaterialBindingElement::OVERALL:
+        return OVERALL;
 
-      case SoMaterialBindingElement::PER_PART:
-      case SoMaterialBindingElement::PER_PART_INDEXED:
-	return PER_SEGMENT;
+    case SoMaterialBindingElement::PER_PART:
+    case SoMaterialBindingElement::PER_PART_INDEXED:
+        return PER_SEGMENT;
 
-      case SoMaterialBindingElement::PER_FACE:
-      case SoMaterialBindingElement::PER_FACE_INDEXED:
-	return PER_LINE;
+    case SoMaterialBindingElement::PER_FACE:
+    case SoMaterialBindingElement::PER_FACE_INDEXED:
+        return PER_LINE;
 
-      case SoMaterialBindingElement::PER_VERTEX:
-      case SoMaterialBindingElement::PER_VERTEX_INDEXED:
-	return PER_VERTEX;
+    case SoMaterialBindingElement::PER_VERTEX:
+    case SoMaterialBindingElement::PER_VERTEX_INDEXED:
+        return PER_VERTEX;
     }
     return OVERALL; // Shut up C++ compiler
 }
@@ -459,20 +459,20 @@ SoLineSet::getNormalBinding(SoAction *action)
 {
     switch (SoNormalBindingElement::get(action->getState())) {
 
-      case SoNormalBindingElement::OVERALL:
-	return OVERALL;
+    case SoNormalBindingElement::OVERALL:
+        return OVERALL;
 
-      case SoNormalBindingElement::PER_PART:
-      case SoNormalBindingElement::PER_PART_INDEXED:
-	return PER_SEGMENT;
+    case SoNormalBindingElement::PER_PART:
+    case SoNormalBindingElement::PER_PART_INDEXED:
+        return PER_SEGMENT;
 
-      case SoNormalBindingElement::PER_FACE:
-      case SoNormalBindingElement::PER_FACE_INDEXED:
-	return PER_LINE;
+    case SoNormalBindingElement::PER_FACE:
+    case SoNormalBindingElement::PER_FACE_INDEXED:
+        return PER_LINE;
 
-      case SoNormalBindingElement::PER_VERTEX:
-      case SoNormalBindingElement::PER_VERTEX_INDEXED:
-	return PER_VERTEX;
+    case SoNormalBindingElement::PER_VERTEX:
+    case SoNormalBindingElement::PER_VERTEX_INDEXED:
+        return PER_VERTEX;
     }
     return OVERALL; // Shut up C++ compiler
 }
@@ -492,25 +492,25 @@ SoLineSet::wouldGenerateNormals(SoState *state)
 ////////////////////////////////////////////////////////////////////////
 {
     if (SoNormalBindingElement::get(state) ==
-	SoNormalBindingElement::PER_VERTEX_INDEXED) {
-	
-	// Figure out how many normals we need:
-	int numVerts = 0;
-	int numLines = (int) numVertices.getNum();
+            SoNormalBindingElement::PER_VERTEX_INDEXED) {
 
-	if (numLines == 0)
-	    return FALSE;
+        // Figure out how many normals we need:
+        int numVerts = 0;
+        int numLines = (int) numVertices.getNum();
 
-	// Count up total number of vertices used. If the last entry in
-	// numVertices is SO_LINE_SET_USE_REST_OF_VERTICES, then we need
-	// to use all of the vertices.
+        if (numLines == 0)
+            return FALSE;
+
+        // Count up total number of vertices used. If the last entry in
+        // numVertices is SO_LINE_SET_USE_REST_OF_VERTICES, then we need
+        // to use all of the vertices.
         if (numVertices[numLines - 1] == SO_LINE_SET_USE_REST_OF_VERTICES)
-	    numVerts =
-		(int)(SoCoordinateElement::getInstance(state))->getNum();
-	else for (int i = 0; i < numLines; i++)
-	    numVerts += (int) numVertices[i];
-	const SoNormalElement *ne = SoNormalElement::getInstance(state);
-	if (numVerts > ne->getNum()) return TRUE;
+            numVerts =
+                    (int)(SoCoordinateElement::getInstance(state))->getNum();
+        else for (int i = 0; i < numLines; i++)
+            numVerts += (int) numVertices[i];
+        const SoNormalElement *ne = SoNormalElement::getInstance(state);
+        if (numVerts > ne->getNum()) return TRUE;
     }
     
     return FALSE;
@@ -541,219 +541,203 @@ SoLineSet::GLRender(SoGLRenderAction *action)
     }
 
     if (vpCache.mightNeedSomethingFromState(shapeStyle)) {
-	// push state, in case we need to turn off lighting:
-	state->push();
-	SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
+        // push state, in case we need to turn off lighting:
+        state->push();
+        SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
         vpCache.fillInCache(vp, state);
 
-       if (vpCache.shouldGenerateNormals(shapeStyle)) {
-	    // turn off lighting
-	    SoGLLazyElement::setLightModel(state, SoLazyElement::BASE_COLOR);
-	    // reset shapeStyle
-	    shapeStyle = 	
-		(SoShapeStyleElement*)SoShapeStyleElement::get(state);
-	    }
-      
+        if (vpCache.shouldGenerateNormals(shapeStyle)) {
+            // turn off lighting
+            SoGLLazyElement::setLightModel(state, SoLazyElement::BASE_COLOR);
+            // reset shapeStyle
+            shapeStyle = (SoShapeStyleElement*)SoShapeStyleElement::get(state);
+        }
 
-	// If using USE_REST_OF_VERTICES (-1), need to figure out how
-	// many vertices there are every time:
-	SbBool usingUSE_REST = FALSE;
-	SbBool nvNotifyEnabled = TRUE;
-	int numPolylines = numVertices.getNum();
-	if (numPolylines && numVertices[numPolylines-1] < 0) {
-	    usingUSE_REST = TRUE;
-	    nvNotifyEnabled = numVertices.enableNotify(FALSE);
-	    totalNumVertices = 0;
-	    for (int i = 0; i < numPolylines-1; i++) 
-		totalNumVertices += numVertices[i];
 
-	    numVertices.set1Value(numPolylines-1, 
-		vpCache.numVerts - totalNumVertices - startIndex.getValue());
-	    totalNumVertices = vpCache.numVerts - startIndex.getValue();
-	    vpCache.needFromState |=
-		SoVertexPropertyCache::COORD_FROM_STATE_BIT;
-	} else if (totalNumVertices < 0) {
-	    totalNumVertices = 0;
-	    for (int i = 0; i < numPolylines; i++) 
-		totalNumVertices += numVertices[i];
-	}	    
+        // If using USE_REST_OF_VERTICES (-1), need to figure out how
+        // many vertices there are every time:
+        SbBool usingUSE_REST = FALSE;
+        SbBool nvNotifyEnabled = TRUE;
+        int numPolylines = numVertices.getNum();
+        if (numPolylines && numVertices[numPolylines-1] < 0) {
+            usingUSE_REST = TRUE;
+            nvNotifyEnabled = numVertices.enableNotify(FALSE);
+            totalNumVertices = 0;
+            for (int i = 0; i < numPolylines-1; i++)
+                totalNumVertices += numVertices[i];
 
-   	SoTextureCoordinateBundle *tcb = NULL;
-	uint32_t useTexCoordsAnyway = 0;
+            numVertices.set1Value(numPolylines-1, vpCache.numVerts - totalNumVertices - startIndex.getValue());
+            totalNumVertices = vpCache.numVerts - startIndex.getValue();
+            vpCache.needFromState |= SoVertexPropertyCache::COORD_FROM_STATE_BIT;
+        } else if (totalNumVertices < 0) {
+            totalNumVertices = 0;
+            for (int i = 0; i < numPolylines; i++)
+                totalNumVertices += numVertices[i];
+        }
+
+        SoTextureCoordinateBundle *tcb = NULL;
+        uint32_t useTexCoordsAnyway = 0;
         if (vpCache.shouldGenerateTexCoords(shapeStyle)) {
-	    tcb = new SoTextureCoordinateBundle(action, TRUE, TRUE);
-	}
-	else if (shapeStyle->isTextureFunction() && vpCache.haveTexCoordsInVP()){    
-	    useTexCoordsAnyway = SoVertexPropertyCache::TEXCOORD_BIT;
-	    SoGLTextureCoordinateElement::setTexGen(state, this, NULL);
-	}
+            tcb = new SoTextureCoordinateBundle(action, TRUE, TRUE);
+        }
+        else if (shapeStyle->isTextureFunction() && vpCache.haveTexCoordsInVP()){
+            useTexCoordsAnyway = SoVertexPropertyCache::TEXCOORD_BIT;
+            SoGLTextureCoordinateElement::setTexGen(state, this, NULL);
+        }
 
 
-	//If lighting or texturing is off, this vpCache and other things
-	//need to be reconstructed when lighting or texturing is turned
-	//on, so we set the bits in the VP cache:
-	if(! shapeStyle->needNormals()) vpCache.needFromState |= 
-		SoVertexPropertyCache::NORMAL_BITS;
-	if(! shapeStyle->needTexCoords()) vpCache.needFromState |= 
-		SoVertexPropertyCache::TEXCOORD_BIT;
+        //If lighting or texturing is off, this vpCache and other things
+        //need to be reconstructed when lighting or texturing is turned
+        //on, so we set the bits in the VP cache:
+        if(! shapeStyle->needNormals())
+            vpCache.needFromState |= SoVertexPropertyCache::NORMAL_BITS;
+        if(! shapeStyle->needTexCoords())
+            vpCache.needFromState |= SoVertexPropertyCache::TEXCOORD_BIT;
 
-	// If doing multiple colors, turn on ColorMaterial:
-	if (vpCache.getNumColors() > 1) {
-	    SoGLLazyElement::setColorMaterial(state, TRUE);
-	}
-	//
-	// Ask LazyElement to setup:
-	//
-	SoGLLazyElement *lazyElt = (SoGLLazyElement *)
-	    SoLazyElement::getInstance(state);
+        // If doing multiple colors, turn on ColorMaterial:
+        if (vpCache.getNumColors() > 1) {
+            SoGLLazyElement::setColorMaterial(state, TRUE);
+        }
+        //
+        // Ask LazyElement to setup:
+        //
+        SoGLLazyElement *lazyElt = (SoGLLazyElement *)SoLazyElement::getInstance(state);
 
-	if(vpCache.colorIsInVtxProp()){
-	    lazyElt->send(state, SoLazyElement::ALL_MASK);
-	    lazyElt->sendVPPacked(state, ( unsigned char*)
-		vpCache.getColors(0));
-	}
-	else lazyElt->send(state, SoLazyElement::ALL_MASK);
-	
+        if(vpCache.colorIsInVtxProp()){
+            lazyElt->send(state, SoLazyElement::ALL_MASK);
+            lazyElt->sendVPPacked(state, ( unsigned char*)vpCache.getColors(0));
+        }
+        else lazyElt->send(state, SoLazyElement::ALL_MASK);
+
 #ifdef DEBUG	
-	// Check for enough colors, normals, texcoords, vertices:
-	if (vpCache.numVerts < startIndex.getValue()+totalNumVertices){
-	    SoDebugError::post("SoLineSet::GLRender",
-		"Too few vertices specified;"
-		" need %d, have %d", startIndex.getValue()+totalNumVertices,
-		vpCache.numVerts);
-	}
-	int numNormalsNeeded = 0;
-	if (shapeStyle->needNormals()) switch (vpCache.getNormalBinding()) {
-	  case SoNormalBindingElement::OVERALL:
-	    numNormalsNeeded = 1;
-	    break;
-	  case SoNormalBindingElement::PER_VERTEX:
-	  case SoNormalBindingElement::PER_VERTEX_INDEXED:
-	    numNormalsNeeded = totalNumVertices + startIndex.getValue();
-	    break;
-	  case SoNormalBindingElement::PER_PART:
-	  case SoNormalBindingElement::PER_PART_INDEXED:
-	    {
-		for (int i = 0; i < numPolylines; i++) 
-		    numNormalsNeeded += numVertices[i]-1;
-	    }
-	    break;
-	  case SoNormalBindingElement::PER_FACE:
-	  case SoNormalBindingElement::PER_FACE_INDEXED:
-	    numNormalsNeeded = numPolylines;
-	    break;
-	}
-	if (vpCache.getNumNormals() < numNormalsNeeded)
-	    SoDebugError::post("SoLineSet::GLRender",
-			       "Too few normals specified;"
-			       " need %d, have %d", numNormalsNeeded,
-			       vpCache.getNumNormals());
+        // Check for enough colors, normals, texcoords, vertices:
+        if (vpCache.numVerts < startIndex.getValue()+totalNumVertices){
+            SoDebugError::post("SoLineSet::GLRender",
+                               "Too few vertices specified;"
+                               " need %d, have %d", startIndex.getValue()+totalNumVertices,
+                               vpCache.numVerts);
+        }
+        int numNormalsNeeded = 0;
+        if (shapeStyle->needNormals()) {
+            switch (vpCache.getNormalBinding()) {
+            case SoNormalBindingElement::OVERALL:
+                numNormalsNeeded = 1;
+                break;
+            case SoNormalBindingElement::PER_VERTEX:
+            case SoNormalBindingElement::PER_VERTEX_INDEXED:
+                numNormalsNeeded = totalNumVertices + startIndex.getValue();
+                break;
+            case SoNormalBindingElement::PER_PART:
+            case SoNormalBindingElement::PER_PART_INDEXED:
+            {
+                for (int i = 0; i < numPolylines; i++)
+                    numNormalsNeeded += numVertices[i]-1;
+            }
+                break;
+            case SoNormalBindingElement::PER_FACE:
+            case SoNormalBindingElement::PER_FACE_INDEXED:
+                numNormalsNeeded = numPolylines;
+                break;
+            }
+        }
+        if (vpCache.getNumNormals() < numNormalsNeeded) {
+            SoDebugError::post("SoLineSet::GLRender",
+                               "Too few normals specified;"
+                               " need %d, have %d", numNormalsNeeded,
+                               vpCache.getNumNormals());
+        }
 
-	if ((shapeStyle->needTexCoords() || useTexCoordsAnyway) && 
-	    !vpCache.shouldGenerateTexCoords(shapeStyle)) {
+        if ((shapeStyle->needTexCoords() || useTexCoordsAnyway) && !vpCache.shouldGenerateTexCoords(shapeStyle)) {
 
-	    if (vpCache.getNumTexCoords() < 
-				totalNumVertices+startIndex.getValue())
-		SoDebugError::post("SoLineSet::GLRender",
-		"Too few texture coordinates specified;"
-		" need %d, have %d", totalNumVertices + startIndex.getValue(),
-		 vpCache.getNumTexCoords());
-	}
-	int numColorsNeeded = 0;
-	switch (vpCache.getMaterialBinding()) {
-	  case SoMaterialBindingElement::OVERALL:
-	    break;
-	  case SoMaterialBindingElement::PER_VERTEX:
-	  case SoMaterialBindingElement::PER_VERTEX_INDEXED:
-	    numColorsNeeded = totalNumVertices+startIndex.getValue();
-	    break;
-	  case SoMaterialBindingElement::PER_PART:
-	  case SoMaterialBindingElement::PER_PART_INDEXED:
-	    {
-		for (int i = 0; i < numPolylines; i++) 
-		    numColorsNeeded += numVertices[i]-1;
-	    }
-	    break;
-	  case SoMaterialBindingElement::PER_FACE:
-	  case SoMaterialBindingElement::PER_FACE_INDEXED:
-	    numColorsNeeded = numPolylines;
-	    break;
-	}
-	if (vpCache.getNumColors() < numColorsNeeded)
-	    SoDebugError::post("SoLineSet::GLRender",
-			       "Too few diffuse colors specified;"
-			       " need %d, have %d", numColorsNeeded,
-			       vpCache.getNumColors());
+            if (vpCache.getNumTexCoords() < totalNumVertices+startIndex.getValue())
+                SoDebugError::post("SoLineSet::GLRender",
+                                   "Too few texture coordinates specified;"
+                                   " need %d, have %d", totalNumVertices + startIndex.getValue(),
+                                   vpCache.getNumTexCoords());
+        }
+        int numColorsNeeded = 0;
+        switch (vpCache.getMaterialBinding()) {
+        case SoMaterialBindingElement::OVERALL:
+            break;
+        case SoMaterialBindingElement::PER_VERTEX:
+        case SoMaterialBindingElement::PER_VERTEX_INDEXED:
+            numColorsNeeded = totalNumVertices+startIndex.getValue();
+            break;
+        case SoMaterialBindingElement::PER_PART:
+        case SoMaterialBindingElement::PER_PART_INDEXED:
+        {
+            for (int i = 0; i < numPolylines; i++)
+                numColorsNeeded += numVertices[i]-1;
+        }
+            break;
+        case SoMaterialBindingElement::PER_FACE:
+        case SoMaterialBindingElement::PER_FACE_INDEXED:
+            numColorsNeeded = numPolylines;
+            break;
+        }
+        if (vpCache.getNumColors() < numColorsNeeded)
+            SoDebugError::post("SoLineSet::GLRender",
+                               "Too few diffuse colors specified;"
+                               " need %d, have %d", numColorsNeeded,
+                               vpCache.getNumColors());
 #endif
 
-	// Call the appropriate render loop:
-	(this->*renderFunc[useTexCoordsAnyway | 
-		vpCache.getRenderCase(shapeStyle)])(action);
-	
-	// If doing multiple colors, turn off ColorMaterial:
-	if (vpCache.getNumColors() > 1) {
-	    ((SoGLLazyElement *)SoLazyElement::getInstance(state))->
-	    	reset(state, SoLazyElement::DIFFUSE_MASK);
-	    SoGLLazyElement::setColorMaterial(state, FALSE);
-	}
+        // Call the appropriate render loop:
+        (this->*renderFunc[useTexCoordsAnyway | vpCache.getRenderCase(shapeStyle)])(action);
 
-	// Restore USE_REST_OF_VERTICES (-1)
-	if (usingUSE_REST) {
-	    numVertices.set1Value(numPolylines-1, -1);
+        // If doing multiple colors, turn off ColorMaterial:
+        if (vpCache.getNumColors() > 1) {
+            ((SoGLLazyElement *)SoLazyElement::getInstance(state))->reset(state, SoLazyElement::DIFFUSE_MASK);
+            SoGLLazyElement::setColorMaterial(state, FALSE);
+        }
+
+        // Restore USE_REST_OF_VERTICES (-1)
+        if (usingUSE_REST) {
+            numVertices.set1Value(numPolylines-1, -1);
             numVertices.enableNotify(nvNotifyEnabled);
-	}	    
-	
-	// Influence auto-caching algorithm:
-	if (totalNumVertices < AUTO_CACHE_LS_MIN_WITHOUT_VP &&
-	    vpCache.mightNeedSomethingFromState(shapeStyle)) {
-	    SoGLCacheContextElement::shouldAutoCache(state,
-		SoGLCacheContextElement::DO_AUTO_CACHE);
-	} else if (totalNumVertices > AUTO_CACHE_LS_MAX &&
-		   !SoGLCacheContextElement::getIsRemoteRendering(state)) {
-	    SoGLCacheContextElement::shouldAutoCache(state,
-		SoGLCacheContextElement::DONT_AUTO_CACHE);
-	}	    
+        }
+
+        // Influence auto-caching algorithm:
+        if (totalNumVertices < AUTO_CACHE_LS_MIN_WITHOUT_VP && vpCache.mightNeedSomethingFromState(shapeStyle)) {
+            SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DO_AUTO_CACHE);
+        } else if (totalNumVertices > AUTO_CACHE_LS_MAX && !SoGLCacheContextElement::getIsRemoteRendering(state)) {
+            SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
+        }
 
         if (tcb) {
-	    delete tcb;
-	}
+            delete tcb;
+        }
         state->pop();
     }
     else {
-	// If doing multiple colors, turn on ColorMaterial:
-	if (vpCache.getNumColors() > 1) {
-	    SoGLLazyElement::setColorMaterial(state, TRUE);
-	}
-	//
-	// Ask LazyElement to setup:
-	//
- 	SoGLLazyElement *lazyElt = (SoGLLazyElement *)
-	    SoLazyElement::getInstance(state);
-	
-	if(vpCache.colorIsInVtxProp()){
-	    lazyElt->send(state, SoLazyElement::ALL_MASK);
-	    lazyElt->sendVPPacked(state, (unsigned char*)
-		vpCache.getColors(0));
-	}
-	else lazyElt->send(state, SoLazyElement::ALL_MASK);
+        // If doing multiple colors, turn on ColorMaterial:
+        if (vpCache.getNumColors() > 1) {
+            SoGLLazyElement::setColorMaterial(state, TRUE);
+        }
+        //
+        // Ask LazyElement to setup:
+        //
+        SoGLLazyElement *lazyElt = (SoGLLazyElement *)SoLazyElement::getInstance(state);
 
-	// Call the appropriate render loop:
-	(this->*renderFunc[vpCache.getRenderCase(shapeStyle)])(action);	
+        if(vpCache.colorIsInVtxProp()){
+            lazyElt->send(state, SoLazyElement::ALL_MASK);
+            lazyElt->sendVPPacked(state, (unsigned char*)vpCache.getColors(0));
+        }
+        else lazyElt->send(state, SoLazyElement::ALL_MASK);
 
-	// If doing multiple colors, turn off ColorMaterial:
-	if (vpCache.getNumColors() > 1) {
-	    SoGLLazyElement::setColorMaterial(state, FALSE);
-	    ((SoGLLazyElement *)SoLazyElement::getInstance(state))->
-	    	reset(state, SoLazyElement::DIFFUSE_MASK);
-	}
+        // Call the appropriate render loop:
+        (this->*renderFunc[vpCache.getRenderCase(shapeStyle)])(action);
 
-	// Influence auto-caching algorithm:
-	if (totalNumVertices > AUTO_CACHE_LS_MAX &&
-	    !SoGLCacheContextElement::getIsRemoteRendering(state)) {
+        // If doing multiple colors, turn off ColorMaterial:
+        if (vpCache.getNumColors() > 1) {
+            SoGLLazyElement::setColorMaterial(state, FALSE);
+            ((SoGLLazyElement *)SoLazyElement::getInstance(state))->reset(state, SoLazyElement::DIFFUSE_MASK);
+        }
 
-	    SoGLCacheContextElement::shouldAutoCache(state,
-			    SoGLCacheContextElement::DONT_AUTO_CACHE);
-	}	    
+        // Influence auto-caching algorithm:
+        if (totalNumVertices > AUTO_CACHE_LS_MAX && !SoGLCacheContextElement::getIsRemoteRendering(state)) {
+            SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
+        }
     }
 
     return;
@@ -773,10 +757,10 @@ SoLineSet::notify(SoNotList *list)
 ////////////////////////////////////////////////////////////////////////
 {
     if ((list->getLastRec()->getType() == SoNotRec::CONTAINER) &&
-	((list->getLastField() == &vertexProperty) ||
-	 (list->getLastField() == &numVertices))) {
-	vpCache.invalidate();
-	totalNumVertices = -1;
+            ((list->getLastField() == &vertexProperty) ||
+             (list->getLastField() == &numVertices))) {
+        vpCache.invalidate();
+        totalNumVertices = -1;
     }
 
     SoNonIndexedShape::notify(list);
