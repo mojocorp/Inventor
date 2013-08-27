@@ -198,18 +198,10 @@ SoLineSet::generatePrimitives(SoAction *action)
     // texture coordinates
     SbBool forPicking = action->isOfType(SoRayPickAction::getClassTypeId());
 
-    SoPrimitiveVertex		pvs[2], *pv;
-    SoLineDetail		detail;
-    SoPointDetail		pd;
     SoTextureCoordinateBundle	tcb(action, FALSE, ! forPicking);
-    const SoCoordinateElement	*ce;
-    int				curVert, curSeg, curNormal, curMaterial, vert;
-    int				line, numLines;
-    Binding			materialBinding, normalBinding;
 
-
-    materialBinding = getMaterialBinding(action);
-    normalBinding   = getNormalBinding(action);
+    Binding materialBinding = getMaterialBinding(action);
+    Binding normalBinding   = getNormalBinding(action);
 
     // Test for auto-normal case
     const SoNormalElement *ne = SoNormalElement::getInstance(state);
@@ -217,20 +209,22 @@ SoLineSet::generatePrimitives(SoAction *action)
         normalBinding = OVERALL;
     }
 
-    curVert = (int) startIndex.getValue();
-    curSeg  = 0;
+    int curVert = (int) startIndex.getValue();
+    int curSeg  = 0;
 
-    ce = SoCoordinateElement::getInstance(state);
+    const SoCoordinateElement *ce = SoCoordinateElement::getInstance(state);
 
-    curMaterial = (materialBinding == PER_VERTEX ? curVert : 0);
-    curNormal   = (normalBinding   == PER_VERTEX ? curVert : 0);
+    int curMaterial = (materialBinding == PER_VERTEX ? curVert : 0);
+    int curNormal   = (normalBinding   == PER_VERTEX ? curVert : 0);
 
+    SoPrimitiveVertex pvs[2];
     if (forPicking) {
         SbVec4f	tc(0.0, 0.0, 0.0, 0.0);
         pvs[0].setTextureCoords(tc);
         pvs[1].setTextureCoords(tc);
     }
 
+    SoLineDetail detail;
     pvs[0].setDetail(&detail);
     pvs[1].setDetail(&detail);
 
@@ -245,8 +239,8 @@ SoLineSet::generatePrimitives(SoAction *action)
     }
 
     // For each polyline
-    numLines = numVertices.getNum();
-    for (line = 0; line < numLines; line++) {
+    int numLines = numVertices.getNum();
+    for (int line = 0; line < numLines; line++) {
 
         detail.setLineIndex(line);
 
@@ -255,9 +249,9 @@ SoLineSet::generatePrimitives(SoAction *action)
         if (vertsInLine == SO_LINE_SET_USE_REST_OF_VERTICES)
             vertsInLine = (int) ce->getNum() - curVert;
 
-        for (vert = 0; vert < vertsInLine; vert++) {
+        for (int vert = 0; vert < vertsInLine; vert++) {
 
-            pv = &pvs[vert % 2];
+            SoPrimitiveVertex *pv = &pvs[vert % 2];
 
             pv->setPoint(ce->get3(curVert));
 
@@ -267,6 +261,7 @@ SoLineSet::generatePrimitives(SoAction *action)
                 pv->setNormal(ne->get(++curNormal));
 
             // Set up a point detail for the current vertex
+            SoPointDetail pd;
             pd.setCoordinateIndex(curVert);
             pd.setMaterialIndex(curMaterial);
             pd.setNormalIndex(curNormal);
@@ -283,16 +278,14 @@ SoLineSet::generatePrimitives(SoAction *action)
                 if (! forPicking)
                     pv->setTextureCoords(tcb.get(pv->getPoint(),
                                                  pv->getNormal()));
-            }
-            else
+            } else {
                 pv->setTextureCoords(tcb.get(curVert));
+            }
 
             if (vert > 0) {
                 detail.setPartIndex(curSeg++);
 
-                invokeLineSegmentCallbacks(action,
-                                           &pvs[(vert - 1) % 2],
-                        &pvs[(vert - 0) % 2]);
+                invokeLineSegmentCallbacks(action, &pvs[(vert - 1) % 2], &pvs[(vert - 0) % 2]);
 
                 if (materialBinding == PER_SEGMENT) {
                     curMaterial++;
