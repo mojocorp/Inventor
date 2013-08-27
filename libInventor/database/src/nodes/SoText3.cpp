@@ -69,6 +69,8 @@
 #include <Inventor/nodes/SoText3.h>
 #include <Inventor/caches/SoOutlineFontCache.h>
 
+#include <cmath>
+
 // Static stuff is used while generating primitives:
 SoText3 *SoText3::currentGeneratingNode = NULL;
 SoPrimitiveVertex *SoText3::genPrimVerts[3];
@@ -500,11 +502,8 @@ SoText3::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
         // And figure out the maximum profile offset, and expand
         // out the outline's bbox:
         //
-# define max(a,b)               (a<b ? b : a)
-# define abs(x)                 (x>=0 ? x : -(x))
-        float maxOffset = max(abs(pBoxMin[1]), abs(pBoxMax[1]));
-#undef max
-#undef abs
+        float maxOffset = std::max(std::abs(pBoxMin[1]), std::abs(pBoxMax[1]));
+
         min.setValue(boxMin[0]-maxOffset, boxMin[1]-maxOffset, firstZ);
         max.setValue(boxMax[0]+maxOffset, boxMax[1]+maxOffset, lastZ);
         box.extendBy(min);
