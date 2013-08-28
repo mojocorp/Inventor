@@ -130,6 +130,7 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/elements/SoBBoxModelMatrixElement.h \
            database/include/Inventor/elements/SoCacheElement.h \
            database/include/Inventor/elements/SoClipPlaneElement.h \
+           database/include/Inventor/elements/SoColorPacker.h \
            database/include/Inventor/elements/SoComplexityElement.h \
            database/include/Inventor/elements/SoComplexityTypeElement.h \
            database/include/Inventor/elements/SoCoordinateElement.h \
@@ -617,6 +618,7 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/elements/SoBBoxModelMatrixElement.cpp \
            database/src/elements/SoCacheElement.cpp \
            database/src/elements/SoClipPlaneElement.cpp \
+           database/src/elements/SoColorPacker.cpp \
            database/src/elements/SoComplexityElement.cpp \
            database/src/elements/SoComplexityTypeElement.cpp \
            database/src/elements/SoCoordinateElement.cpp \

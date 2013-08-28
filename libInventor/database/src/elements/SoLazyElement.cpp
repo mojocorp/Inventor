@@ -55,6 +55,7 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/elements/SoSubElement.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
+#include <Inventor/elements/SoColorPacker.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/fields/SoMFColor.h>
@@ -983,56 +984,4 @@ SoLazyElement::registerRedundantSet(SoState* , uint32_t)
 void
 SoLazyElement::registerGetDependence(SoState* , uint32_t)
 {
-}
-///////////////////////////////////////////////////////////////////////////
-//
-// class:  SoColorPacker
-//
-// Maintains a packed color array to store current colors.  Intended to
-// be used by all property nodes that can issue setDiffuse or setTransparency
-/////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//  constructor for  SoColorPacker
-//
-// use: public
-//
-////////////////////////////////////////////////////////////////////////////
-SoColorPacker::
-SoColorPacker()
-{
-    packedColors = NULL;
-    packedArraySize = 0;
-    //Assign nodeids that can never occur in practice:
-    diffuseNodeId = transpNodeId = 2;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//  destructor
-//
-//  use: public
-////////////////////////////////////////////////////////////////////////////
-SoColorPacker::~SoColorPacker()
-{
-    if(packedColors != NULL) delete [] packedColors;
-}
-
-////////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//
-//  reallocate packed color array for SoColorPacker
-//
-// use: public, SoINTERNAL
-//
-////////////////////////////////////////////////////////////////////////////
-void
-SoColorPacker::reallocate(int32_t size)
-{
-    if (packedColors != NULL) delete [] packedColors;
-    packedColors = new uint32_t[size];
-    packedArraySize = size;
 }

@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |    This file defines the SoLazyElement and SoColorPacker classes.
+ |    This file defines the SoLazyElement class.
  |
  |   Author(s)        : Alan Norton, Gavin Bell
  |
@@ -357,51 +357,6 @@ private:
                                    const SoMFColor&, const SoMFColor&, const SoMFColor&, const SoMFFloat&);
 
 };
-
-///////////////////////////////////////////////////////////////////////////
-//
-// Class: SoColorPacker
-// This class is meant to be used by all property nodes that set either
-// a diffuse color or transparency in the lazy element.  It maintains
-// a cache of the current diffuse color and transparency in a packed
-// color array.
-//////////////////////////////////////////////////////////////////////////
-
-class INVENTOR_API SoColorPacker {
-public:
-    //Constructor, makes a colorPacker with NULL packedColor pointer:
-    SoColorPacker();
-
-    // destructor, deletes packed color array
-    ~SoColorPacker();
-
-    uint32_t* getPackedColors() const
-        { return packedColors;}
-
-    SbBool diffuseMatch(uint32_t nodeId) const
-        { return (nodeId == diffuseNodeId);}
-
-    SbBool transpMatch(uint32_t nodeId) const
-        { return (nodeId == transpNodeId);}
-
-    void setNodeIds(uint32_t diffNodeId, uint32_t tNodeId)
-        {diffuseNodeId = diffNodeId; transpNodeId = tNodeId;}
-
-    int32_t getSize() const
-        { return packedArraySize;}
-
-    void reallocate(int32_t size);
-
-private:
-    // nodeids are used for testing cache validity
-    uint32_t    transpNodeId;
-    uint32_t    diffuseNodeId;
-    // array of packed colors, or NULL if empty
-    uint32_t*    packedColors;
-    // size of packed color array (not necessarily number of valid colors)
-    int32_t    packedArraySize;
-};
-
 
 #endif /* _SO_LAZY_ELEMENT */
 

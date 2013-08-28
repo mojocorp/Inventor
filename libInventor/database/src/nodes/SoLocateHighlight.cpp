@@ -63,6 +63,7 @@
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoLazyElement.h>
 #include <Inventor/elements/SoOverrideElement.h>
+#include <Inventor/elements/SoColorPacker.h>
 #include <Inventor/nodes/SoLocateHighlight.h>
 
 #ifdef DEBUG

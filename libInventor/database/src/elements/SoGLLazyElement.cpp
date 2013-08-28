@@ -58,6 +58,7 @@
 #include <Inventor/misc/SoState.h>
 #include <Inventor/elements/SoSubElement.h>
 #include <Inventor/elements/SoCacheElement.h>
+#include <Inventor/elements/SoColorPacker.h>
 #include <Inventor/caches/SoGLRenderCache.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/fields/SoMFColor.h>

@@ -55,6 +55,7 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/elements/SoOverrideElement.h>
+#include <Inventor/elements/SoColorPacker.h>
 #include <Inventor/nodes/SoMaterial.h>
 
 SO_NODE_SOURCE(SoMaterial);
