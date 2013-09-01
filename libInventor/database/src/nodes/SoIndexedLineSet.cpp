@@ -86,40 +86,6 @@ const int AUTO_CACHE_ILS_MIN_WITHOUT_VP = 100000;
 // built (because they'll use too much memory):
 const int AUTO_CACHE_ILS_MAX = 10000000;
 
-// 32 different rendering loops; the 5 bits used to determine the
-// rendering case are:
-// 43210  BITS            Routine suffix
-// -----  ----            --------------
-// 00...  Overall mtl     (Om)
-// 01...  Part mtl        (Pm)
-// 10...  Face mtl        (Fm)
-// 11...  Vtx mtl         (Vm)
-// ..00.  Overall/No norm (On)
-// ..01.  Part norm       (Pn)
-// ..10.  Face norm       (Fn)
-// ..11.  Vtx norm        (Vn)
-// ....0  No texcoord     -none-
-// ....1  Vtx texcoord    (T)
-//
-SoIndexedLineSet::PMILS SoIndexedLineSet::renderFunc[32] = {
-    &SoIndexedLineSet::OmOn, &SoIndexedLineSet::OmOnT,
-    &SoIndexedLineSet::OmPn, &SoIndexedLineSet::OmPnT,
-    &SoIndexedLineSet::OmFn, &SoIndexedLineSet::OmFnT,
-    &SoIndexedLineSet::OmVn, &SoIndexedLineSet::OmVnT,
-    &SoIndexedLineSet::PmOn, &SoIndexedLineSet::PmOnT,
-    &SoIndexedLineSet::PmPn, &SoIndexedLineSet::PmPnT,
-    &SoIndexedLineSet::PmFn, &SoIndexedLineSet::PmFnT,
-    &SoIndexedLineSet::PmVn, &SoIndexedLineSet::PmVnT,
-    &SoIndexedLineSet::FmOn, &SoIndexedLineSet::FmOnT,
-    &SoIndexedLineSet::FmPn, &SoIndexedLineSet::FmPnT,
-    &SoIndexedLineSet::FmFn, &SoIndexedLineSet::FmFnT,
-    &SoIndexedLineSet::FmVn, &SoIndexedLineSet::FmVnT,
-    &SoIndexedLineSet::VmOn, &SoIndexedLineSet::VmOnT,
-    &SoIndexedLineSet::VmPn, &SoIndexedLineSet::VmPnT,
-    &SoIndexedLineSet::VmFn, &SoIndexedLineSet::VmFnT,
-    &SoIndexedLineSet::VmVn, &SoIndexedLineSet::VmVnT,
-    };
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -149,7 +115,7 @@ SoIndexedLineSet::~SoIndexedLineSet()
 ////////////////////////////////////////////////////////////////////////
 {
     if (numVertices)
-	delete[] numVertices;
+        delete[] numVertices;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -185,64 +151,55 @@ SoIndexedLineSet::generatePrimitives(SoAction *action)
     //  put VertProp into state, if it exists.
     SoVertexProperty *vp = (SoVertexProperty*)vertexProperty.getValue();
     if(vp){
-	vp->doAction(action);
+        vp->doAction(action);
     }
     // When generating primitives for picking, delay computing default
     // texture coordinates
     SbBool forPicking = action->isOfType(SoRayPickAction::getClassTypeId());
 
     SoPrimitiveVertex		pvs[2], *pv;
-    SoLineDetail		detail;
     SoPointDetail		pd;
     SoTextureCoordinateBundle	tcb(action, FALSE, ! forPicking);
-    const SoCoordinateElement	*ce;
-    int				curLine, curSeg, curVert, curCoord;
-    int				curMaterial, curNormal, curTexCoord;
-    int				vertsInLine;
-    int				numIndices;
-    const int32_t			*coordIndices, *matlIndices;
-    const int32_t			*normIndices, *texCoordIndices;
-    Binding			materialBinding, normalBinding;
-    SbBool			texCoordsIndexed;
 
-    materialBinding  = getMaterialBinding(action);
-    normalBinding    = getNormalBinding(action);
-    texCoordsIndexed = areTexCoordsIndexed(action);
+    Binding materialBinding  = getMaterialBinding(action);
+    Binding normalBinding    = getNormalBinding(action);
+    SbBool texCoordsIndexed = areTexCoordsIndexed(action);
 
     // Test for auto-normal case
     const SoNormalElement *ne = SoNormalElement::getInstance(state);
     if (ne->getNum() == 0) {
-	normalBinding = OVERALL;
+        normalBinding = OVERALL;
     }
 
-    curLine = curSeg = curCoord = curVert = vertsInLine = 0;
+    int curLine = 0, curSeg = 0, curCoord = 0, curVert = 0, vertsInLine = 0;
 
-    ce = SoCoordinateElement::getInstance(state);
+    const SoCoordinateElement *ce = SoCoordinateElement::getInstance(state);
 
+    SoLineDetail detail;
     pvs[0].setDetail(&detail);
     pvs[1].setDetail(&detail);
 
-    numIndices      = coordIndex.getNum();
-    coordIndices    = coordIndex.getValues(0);
-    matlIndices     = materialIndex.getValues(0);
-    normIndices     = normalIndex.getValues(0);
-    texCoordIndices = textureCoordIndex.getValues(0);
+    int numIndices      = coordIndex.getNum();
+    const int32_t *coordIndices    = coordIndex.getValues(0);
+    const int32_t *matlIndices     = materialIndex.getValues(0);
+    const int32_t *normIndices     = normalIndex.getValues(0);
+    const int32_t *texCoordIndices = textureCoordIndex.getValues(0);
 
     // Check for special case of 1 index of SO_END_LINE_INDEX. This
     // means that coord indices are to be used for materials, normals,
     // or texture coords as well
     if (materialIndex.getNum() == 1 && matlIndices[0] == SO_END_LINE_INDEX)
-	matlIndices = coordIndices;
-    if (normalIndex.getNum() == 1 && normIndices[0] == SO_END_LINE_INDEX) 
-	normIndices = coordIndices;
+        matlIndices = coordIndices;
+    if (normalIndex.getNum() == 1 && normIndices[0] == SO_END_LINE_INDEX)
+        normIndices = coordIndices;
     if (textureCoordIndex.getNum() == 1 &&
-	texCoordIndices[0] == SO_END_LINE_INDEX)
-	texCoordIndices = coordIndices;
+            texCoordIndices[0] == SO_END_LINE_INDEX)
+        texCoordIndices = coordIndices;
 
     if (forPicking) {
-	SbVec4f	tc(0.0, 0.0, 0.0, 0.0);
-	pvs[0].setTextureCoords(tc);
-	pvs[1].setTextureCoords(tc);
+        SbVec4f	tc(0.0, 0.0, 0.0, 0.0);
+        pvs[0].setTextureCoords(tc);
+        pvs[1].setTextureCoords(tc);
     }
 
     // Step through all the coordinate indices, building lines out
@@ -250,130 +207,126 @@ SoIndexedLineSet::generatePrimitives(SoAction *action)
 
     while (curCoord < numIndices) {
 
-	detail.setLineIndex(curLine);
+        detail.setLineIndex(curLine);
 
-	// Loop through all vertices of current line
-	while (curCoord < numIndices &&
-	       coordIndices[curCoord] != SO_END_LINE_INDEX) {
+        // Loop through all vertices of current line
+        int curMaterial;
+        while (curCoord < numIndices &&
+               coordIndices[curCoord] != SO_END_LINE_INDEX) {
 
-	    switch (materialBinding) {
-	      case OVERALL:
-		curMaterial = 0;
-		break;
-	      case PER_SEGMENT:
-		curMaterial = curSeg;
-		break;
-	      case PER_SEGMENT_INDEXED:
-		curMaterial = (int) matlIndices[curSeg];
-		break;
-	      case PER_LINE:
-		curMaterial = curLine;
-		break;
-	      case PER_LINE_INDEXED:
-		curMaterial = (int) matlIndices[curLine];
-		break;
-	      case PER_VERTEX:
-		curMaterial = curVert;
-		break;
-	      case PER_VERTEX_INDEXED:
-		curMaterial = (int) matlIndices[curCoord];
-		break;
-	    }
-	    switch (normalBinding) {
-	      case OVERALL:
-		curNormal = 0;
-		break;
-	      case PER_SEGMENT:
-		curNormal = curSeg;
-		break;
-	      case PER_SEGMENT_INDEXED:
-		curNormal = (int) normIndices[curSeg];
-		break;
-	      case PER_LINE:
-		curNormal = curLine;
-		break;
-	      case PER_LINE_INDEXED:
-		curNormal = (int) normIndices[curLine];
-		break;
-	      case PER_VERTEX:
-		curNormal = curVert;
-		break;
-	      case PER_VERTEX_INDEXED:
-		curNormal = (int) normIndices[curCoord];
-		break;
-	    }
-	    curTexCoord = (texCoordsIndexed ?
-			   (int) texCoordIndices[curCoord] : curCoord);
+            switch (materialBinding) {
+            case OVERALL:
+                curMaterial = 0;
+                break;
+            case PER_SEGMENT:
+                curMaterial = curSeg;
+                break;
+            case PER_SEGMENT_INDEXED:
+                curMaterial = (int) matlIndices[curSeg];
+                break;
+            case PER_LINE:
+                curMaterial = curLine;
+                break;
+            case PER_LINE_INDEXED:
+                curMaterial = (int) matlIndices[curLine];
+                break;
+            case PER_VERTEX:
+                curMaterial = curVert;
+                break;
+            case PER_VERTEX_INDEXED:
+                curMaterial = (int) matlIndices[curCoord];
+                break;
+            }
+            int curNormal;
+            switch (normalBinding) {
+            case OVERALL:
+                curNormal = 0;
+                break;
+            case PER_SEGMENT:
+                curNormal = curSeg;
+                break;
+            case PER_SEGMENT_INDEXED:
+                curNormal = (int) normIndices[curSeg];
+                break;
+            case PER_LINE:
+                curNormal = curLine;
+                break;
+            case PER_LINE_INDEXED:
+                curNormal = (int) normIndices[curLine];
+                break;
+            case PER_VERTEX:
+                curNormal = curVert;
+                break;
+            case PER_VERTEX_INDEXED:
+                curNormal = (int) normIndices[curCoord];
+                break;
+            }
+            int curTexCoord = (texCoordsIndexed ? (int) texCoordIndices[curCoord] : curCoord);
 
-	    pv = &pvs[curVert % 2];
+            pv = &pvs[curVert % 2];
 
-	    pv->setPoint(ce->get3((int) coordIndices[curCoord]));
-	    pv->setMaterialIndex(curMaterial);
-	    if (curNormal < ne->getNum())
-		pv->setNormal(ne->get(curNormal));
-	    else pv->setNormal(SbVec3f(0,0,0));
+            pv->setPoint(ce->get3((int) coordIndices[curCoord]));
+            pv->setMaterialIndex(curMaterial);
+            if (curNormal < ne->getNum())
+                pv->setNormal(ne->get(curNormal));
+            else pv->setNormal(SbVec3f(0,0,0));
 
-	    // Set up a point detail for the current vertex
-	    pd.setCoordinateIndex((int) coordIndices[curCoord]);
-	    pd.setMaterialIndex(curMaterial);
-	    pd.setNormalIndex(curNormal);
-	    pd.setTextureCoordIndex(curTexCoord);
+            // Set up a point detail for the current vertex
+            pd.setCoordinateIndex((int) coordIndices[curCoord]);
+            pd.setMaterialIndex(curMaterial);
+            pd.setNormalIndex(curNormal);
+            pd.setTextureCoordIndex(curTexCoord);
 
-	    // Replace the appropriate point detail in the line
-	    // detail, based on the vertex index
-	    if ((curVert & 1) == 0)
-		detail.setPoint0(&pd);
-	    else
-		detail.setPoint1(&pd);
+            // Replace the appropriate point detail in the line
+            // detail, based on the vertex index
+            if ((curVert & 1) == 0)
+                detail.setPoint0(&pd);
+            else
+                detail.setPoint1(&pd);
 
-	    if (tcb.isFunction()) {
-		if (! forPicking)
-		    pv->setTextureCoords(tcb.get(pv->getPoint(),
-						 pv->getNormal()));
-	    }
-	    else
-		pv->setTextureCoords(tcb.get(curTexCoord));
+            if (tcb.isFunction()) {
+                if (! forPicking)
+                    pv->setTextureCoords(tcb.get(pv->getPoint(), pv->getNormal()));
+            }
+            else
+                pv->setTextureCoords(tcb.get(curTexCoord));
 
-	    // If we have at least two vertices in the current line
-	    if (++vertsInLine >= 2) {
-		detail.setPartIndex(curSeg);
+            // If we have at least two vertices in the current line
+            if (++vertsInLine >= 2) {
+                detail.setPartIndex(curSeg);
 
-		// Handle per-segment stuff specially, since we have
-		// to make sure both points/details are the same
-		if (materialBinding == PER_SEGMENT ||
-		    materialBinding == PER_SEGMENT_INDEXED) {
-		    pvs[0].setMaterialIndex(curMaterial);
-		    pvs[1].setMaterialIndex(curMaterial);
-		}
-		if (normalBinding == PER_SEGMENT ||
-		    normalBinding == PER_SEGMENT_INDEXED) {
-		    pvs[0].setNormal(ne->get(curNormal));
-		    pvs[1].setNormal(ne->get(curNormal));
-		}
+                // Handle per-segment stuff specially, since we have
+                // to make sure both points/details are the same
+                if (materialBinding == PER_SEGMENT || materialBinding == PER_SEGMENT_INDEXED) {
+                    pvs[0].setMaterialIndex(curMaterial);
+                    pvs[1].setMaterialIndex(curMaterial);
+                }
+                if (normalBinding == PER_SEGMENT || normalBinding == PER_SEGMENT_INDEXED) {
+                    pvs[0].setNormal(ne->get(curNormal));
+                    pvs[1].setNormal(ne->get(curNormal));
+                }
 
-		invokeLineSegmentCallbacks(action,
-					   &pvs[(curVert - 1) % 2],
-					   &pvs[(curVert - 0) % 2]);
+                invokeLineSegmentCallbacks(action, &pvs[(curVert - 1) % 2], &pvs[(curVert - 0) % 2]);
 
-		//
-		// Increment per-segment stuff
-		//
-		curSeg++;
-	    }
+                //
+                // Increment per-segment stuff
+                //
+                curSeg++;
+            }
 
-	    //
-	    // Increment per-vertex stuff
-	    //
-	    curVert++;
-	    curCoord++;
-	}
+            //
+            // Increment per-vertex stuff
+            //
+            curVert++;
+            curCoord++;
+        }
 
-	//
-	// Increment per-line stuff
-	//
-	curCoord++; 	// Skip over the END_LINE_INDEX
-	curLine++;
-	vertsInLine = 0;
+        //
+        // Increment per-line stuff
+        //
+        curCoord++; 	// Skip over the END_LINE_INDEX
+        curLine++;
+        vertsInLine = 0;
     }
     state->pop();
 }
@@ -408,16 +361,15 @@ SoIndexedLineSet::getBoundingBox(SoGetBoundingBoxAction *action)
 
 SoDetail *
 SoIndexedLineSet::createLineSegmentDetail(SoRayPickAction *action,
-					  const SoPrimitiveVertex *v1,
-					  const SoPrimitiveVertex *,
-					  SoPickedPoint *pp)
+                                          const SoPrimitiveVertex *v1,
+                                          const SoPrimitiveVertex *,
+                                          SoPickedPoint *pp)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SoLineDetail	*detail = new SoLineDetail;
-    const SoLineDetail	*d;
 
-    d = (const SoLineDetail *) v1->getDetail();
+    const SoLineDetail *d = (const SoLineDetail *) v1->getDetail();
 
     detail->setPoint0(d->getPoint0());
     detail->setPoint1(d->getPoint1());
@@ -425,9 +377,10 @@ SoIndexedLineSet::createLineSegmentDetail(SoRayPickAction *action,
     // Compute texture coordinates at intersection point and store it
     // in the picked point
     SoTextureCoordinateBundle	tcb(action, FALSE);
-    if (tcb.isFunction())
-	pp->setObjectTextureCoords(tcb.get(pp->getObjectPoint(),
-					   pp->getObjectNormal()));
+    if (tcb.isFunction()) {
+        pp->setObjectTextureCoords(tcb.get(pp->getObjectPoint(),
+                                           pp->getObjectNormal()));
+    }
 
     // The face/part indices are in the incoming details
     detail->setLineIndex(d->getLineIndex());
@@ -448,28 +401,28 @@ SoIndexedLineSet::getMaterialBinding(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    switch (SoMaterialBindingElement::get(action->getState())) {
+    switch (SoMaterialBindingElement::get(action->getState()))
+    {
+    case SoMaterialBindingElement::OVERALL:
+        return OVERALL;
 
-      case SoMaterialBindingElement::OVERALL:
-	return OVERALL;
+    case SoMaterialBindingElement::PER_PART:
+        return PER_SEGMENT;
 
-      case SoMaterialBindingElement::PER_PART:
-	return PER_SEGMENT;
+    case SoMaterialBindingElement::PER_PART_INDEXED:
+        return PER_SEGMENT_INDEXED;
 
-      case SoMaterialBindingElement::PER_PART_INDEXED:
-	return PER_SEGMENT_INDEXED;
+    case SoMaterialBindingElement::PER_FACE:
+        return PER_LINE;
 
-      case SoMaterialBindingElement::PER_FACE:
-	return PER_LINE;
+    case SoMaterialBindingElement::PER_FACE_INDEXED:
+        return PER_LINE_INDEXED;
 
-      case SoMaterialBindingElement::PER_FACE_INDEXED:
-	return PER_LINE_INDEXED;
+    case SoMaterialBindingElement::PER_VERTEX:
+        return PER_VERTEX;
 
-      case SoMaterialBindingElement::PER_VERTEX:
-	return PER_VERTEX;
-
-      case SoMaterialBindingElement::PER_VERTEX_INDEXED:
-	return PER_VERTEX_INDEXED;
+    case SoMaterialBindingElement::PER_VERTEX_INDEXED:
+        return PER_VERTEX_INDEXED;
     }
     return OVERALL; // Shut up C++ compiler
 }
@@ -486,27 +439,28 @@ SoIndexedLineSet::getNormalBinding(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    switch (SoNormalBindingElement::get(action->getState())) {
-      case SoNormalBindingElement::OVERALL:
-	return OVERALL;
+    switch (SoNormalBindingElement::get(action->getState()))
+    {
+    case SoNormalBindingElement::OVERALL:
+        return OVERALL;
 
-      case SoNormalBindingElement::PER_PART:
-	return PER_SEGMENT;
+    case SoNormalBindingElement::PER_PART:
+        return PER_SEGMENT;
 
-      case SoNormalBindingElement::PER_PART_INDEXED:
-	return PER_SEGMENT_INDEXED;
+    case SoNormalBindingElement::PER_PART_INDEXED:
+        return PER_SEGMENT_INDEXED;
 
-      case SoNormalBindingElement::PER_FACE:
-	return PER_LINE;
+    case SoNormalBindingElement::PER_FACE:
+        return PER_LINE;
 
-      case SoNormalBindingElement::PER_FACE_INDEXED:
-	return PER_LINE_INDEXED;
+    case SoNormalBindingElement::PER_FACE_INDEXED:
+        return PER_LINE_INDEXED;
 
-      case SoNormalBindingElement::PER_VERTEX:
-	return PER_VERTEX;
+    case SoNormalBindingElement::PER_VERTEX:
+        return PER_VERTEX;
 
-      case SoNormalBindingElement::PER_VERTEX_INDEXED:
-	return PER_VERTEX_INDEXED;
+    case SoNormalBindingElement::PER_VERTEX_INDEXED:
+        return PER_VERTEX_INDEXED;
     }
     return OVERALL; // Shut up C++ compiler
 }
@@ -525,28 +479,27 @@ SoIndexedLineSet::wouldGenerateNormals(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (SoNormalBindingElement::get(state) ==
-	SoNormalBindingElement::PER_VERTEX_INDEXED) {
-	
-	// Figure out how many normals we need:
-	int i;
-	int numNeeded = 0;
-	const SoMFInt32 *nIndices;
+    if (SoNormalBindingElement::get(state) == SoNormalBindingElement::PER_VERTEX_INDEXED) {
 
-	if (normalIndex.getNum() == 1 &&
-	    normalIndex[0] == SO_END_LINE_INDEX) {
-	    nIndices = &coordIndex;
-	}
-	else {
-	    nIndices = &normalIndex;
-	}
-	// Find greatest index:
-	for (i = 0; i < nIndices->getNum(); i++) {
-	    if ((*nIndices)[i] > numNeeded)
-		numNeeded = (int) (*nIndices)[i];
-	}
-	const SoNormalElement *ne = SoNormalElement::getInstance(state);
-	if (numNeeded > ne->getNum()) return TRUE;
+        // Figure out how many normals we need:
+
+        const SoMFInt32 *nIndices;
+        if (normalIndex.getNum() == 1 && normalIndex[0] == SO_END_LINE_INDEX) {
+            nIndices = &coordIndex;
+        }
+        else {
+            nIndices = &normalIndex;
+        }
+        // Find greatest index:
+        int numNeeded = 0;
+        for (int i = 0; i < nIndices->getNum(); i++) {
+            if ((*nIndices)[i] > numNeeded)
+                numNeeded = (int) (*nIndices)[i];
+        }
+
+        const SoNormalElement *ne = SoNormalElement::getInstance(state);
+        if (numNeeded > ne->getNum())
+            return TRUE;
     }
     
     return FALSE;
@@ -567,8 +520,7 @@ SoIndexedLineSet::GLRender(SoGLRenderAction *action)
     SoState *state = action->getState();
 
     // Get ShapeStyleElement
-    SoShapeStyleElement *shapeStyle = 
-	(SoShapeStyleElement*)SoShapeStyleElement::get(state);
+    SoShapeStyleElement *shapeStyle = (SoShapeStyleElement*)SoShapeStyleElement::get(state);
 
     // First see if the object is visible and should be rendered now:
     if (shapeStyle->mightNotRender()) {
@@ -577,128 +529,118 @@ SoIndexedLineSet::GLRender(SoGLRenderAction *action)
     }
 
     if (vpCache.mightNeedSomethingFromState(shapeStyle)) {
-	// Push state, in case need change to base_color lighting:
-	// Rather than generate normals, we just turn off lighting if
-	// normals are needed.
-	state->push();
+        // Push state, in case need change to base_color lighting:
+        // Rather than generate normals, we just turn off lighting if
+        // normals are needed.
+        state->push();
 
-	SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
+        SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
         vpCache.fillInCache(vp, state);
 
-	if (vpCache.shouldGenerateNormals(shapeStyle)) {
-	    // turn off lighting
-	    SoGLLazyElement::setLightModel(state, SoLazyElement::BASE_COLOR);
-	    // reobtain shapeStyleElement 
-	    shapeStyle = 	
-		(SoShapeStyleElement*)SoShapeStyleElement::get(state);
+        if (vpCache.shouldGenerateNormals(shapeStyle)) {
+            // turn off lighting
+            SoGLLazyElement::setLightModel(state, SoLazyElement::BASE_COLOR);
+            // reobtain shapeStyleElement
+            shapeStyle = (SoShapeStyleElement*)SoShapeStyleElement::get(state);
         }
 
-	// Setup numVertices, numPolylines and numSegments:
-	if (numPolylines < 0)
-	    countPolylinesAndSegments();
+        // Setup numVertices, numPolylines and numSegments:
+        if (numPolylines < 0)
+            countPolylinesAndSegments();
 
-	SoTextureCoordinateBundle *tcb = NULL;
-	uint32_t useTexCoordsAnyway = 0;
-        if (vpCache.shouldGenerateTexCoords(shapeStyle)) {	
-	    tcb = new SoTextureCoordinateBundle(action, TRUE, TRUE);
-	}
-	else if (shapeStyle->isTextureFunction() && vpCache.haveTexCoordsInVP()){
-	    useTexCoordsAnyway = SoVertexPropertyCache::TEXCOORD_BIT;
-	    SoGLTextureCoordinateElement::setTexGen(state, this, NULL);
-	}
-	 
-	// set up pointers
-	// (this is a method on SoIndexedShape):
-	// note that segments correspond to parts, polylines to faces
-	setupIndices(numSegments, numPolylines, shapeStyle->needNormals(), 
-		(useTexCoordsAnyway || shapeStyle->needTexCoords()));
+        SoTextureCoordinateBundle *tcb = NULL;
+        uint32_t useTexCoordsAnyway = 0;
+        if (vpCache.shouldGenerateTexCoords(shapeStyle)) {
+            tcb = new SoTextureCoordinateBundle(action, TRUE, TRUE);
+        }
+        else if (shapeStyle->isTextureFunction() && vpCache.haveTexCoordsInVP()){
+            useTexCoordsAnyway = SoVertexPropertyCache::TEXCOORD_BIT;
+            SoGLTextureCoordinateElement::setTexGen(state, this, NULL);
+        }
 
-	//If lighting or texturing is off, this vpCache and other things
-	//need to be reconstructed when lighting or texturing is turned
-	//on, so we set the bits in the VP cache:
-	if(! shapeStyle->needNormals()) vpCache.needFromState |= 
-		SoVertexPropertyCache::NORMAL_BITS;
-	if(! shapeStyle->needTexCoords()) vpCache.needFromState |= 
-		SoVertexPropertyCache::TEXCOORD_BIT;
+        // set up pointers
+        // (this is a method on SoIndexedShape):
+        // note that segments correspond to parts, polylines to faces
+        setupIndices(numSegments, numPolylines, shapeStyle->needNormals(),
+                     (useTexCoordsAnyway || shapeStyle->needTexCoords()));
 
-	// If doing multiple colors, turn on ColorMaterial:
-	if (vpCache.getNumColors() > 1) {
-	    SoGLLazyElement::setColorMaterial(state, TRUE);
-	}
-	//
-	// Ask LazyElement to setup:
-	//
-	SoGLLazyElement *lazyElt = (SoGLLazyElement *)
-	    SoLazyElement::getInstance(state);
+        //If lighting or texturing is off, this vpCache and other things
+        //need to be reconstructed when lighting or texturing is turned
+        //on, so we set the bits in the VP cache:
+        if(! shapeStyle->needNormals())
+            vpCache.needFromState |= SoVertexPropertyCache::NORMAL_BITS;
+        if(! shapeStyle->needTexCoords())
+            vpCache.needFromState |= SoVertexPropertyCache::TEXCOORD_BIT;
 
-	if(vpCache.colorIsInVtxProp()){
-	    lazyElt->send(state, SoLazyElement::ALL_MASK);
-	    lazyElt->sendVPPacked(state, (const unsigned char*)
-		vpCache.getColors(0));
-	}
-	else lazyElt->send(state, SoLazyElement::ALL_MASK);
-	
-	// Call the appropriate render loop:
-	(this->*renderFunc[useTexCoordsAnyway | 
-		vpCache.getRenderCase(shapeStyle)])(action);
-	
-	// If doing multiple colors, turn off ColorMaterial:
-	if (vpCache.getNumColors() > 1) {
-	    SoGLLazyElement::setColorMaterial(state, FALSE);
-	    ((SoGLLazyElement *)SoLazyElement::getInstance(state))->
-	    	reset(state, SoLazyElement::DIFFUSE_MASK);
-	}
-	    
-	
-	// Influence auto-caching algorithm:
-	if (coordIndex.getNum() < AUTO_CACHE_ILS_MIN_WITHOUT_VP &&
-	    vpCache.mightNeedSomethingFromState(shapeStyle)) {
-	    SoGLCacheContextElement::shouldAutoCache(state,
-		SoGLCacheContextElement::DO_AUTO_CACHE);
-	} else if (coordIndex.getNum() > AUTO_CACHE_ILS_MAX &&
-		   !SoGLCacheContextElement::getIsRemoteRendering(state)) {
-	    SoGLCacheContextElement::shouldAutoCache(state,
-			SoGLCacheContextElement::DONT_AUTO_CACHE);
-	}	    
+        // If doing multiple colors, turn on ColorMaterial:
+        if (vpCache.getNumColors() > 1) {
+            SoGLLazyElement::setColorMaterial(state, TRUE);
+        }
+        //
+        // Ask LazyElement to setup:
+        //
+        SoGLLazyElement *lazyElt = (SoGLLazyElement *)SoLazyElement::getInstance(state);
+
+        if(vpCache.colorIsInVtxProp()){
+            lazyElt->send(state, SoLazyElement::ALL_MASK);
+            lazyElt->sendVPPacked(state, (const unsigned char*)vpCache.getColors(0));
+        }
+        else
+            lazyElt->send(state, SoLazyElement::ALL_MASK);
+
+        // Call the appropriate render loop:
+        GLRenderGeneric(action);
+
+        // If doing multiple colors, turn off ColorMaterial:
+        if (vpCache.getNumColors() > 1) {
+            SoGLLazyElement::setColorMaterial(state, FALSE);
+            ((SoGLLazyElement *)SoLazyElement::getInstance(state))->
+                    reset(state, SoLazyElement::DIFFUSE_MASK);
+        }
+
+
+        // Influence auto-caching algorithm:
+        if (coordIndex.getNum() < AUTO_CACHE_ILS_MIN_WITHOUT_VP && vpCache.mightNeedSomethingFromState(shapeStyle)) {
+            SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DO_AUTO_CACHE);
+        } else if (coordIndex.getNum() > AUTO_CACHE_ILS_MAX && !SoGLCacheContextElement::getIsRemoteRendering(state)) {
+            SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
+        }
 
         if (tcb) {
-	    delete tcb;
-	}
-	state->pop();
+            delete tcb;
+        }
+        state->pop();
     }
     else {
-	// If doing multiple colors, turn on ColorMaterial:
-	if (vpCache.getNumColors() > 1) {
-	    SoGLLazyElement::setColorMaterial(state, TRUE);
-	}
-	//
-	// Ask LazyElement to setup:
-	//
-	SoGLLazyElement *lazyElt = (SoGLLazyElement *)
-	    SoLazyElement::getInstance(state);
-	
-	if(vpCache.colorIsInVtxProp()){
-	    lazyElt->send(state, SoLazyElement::ALL_MASK);
-	    lazyElt->sendVPPacked(state, (const unsigned char*)
-		vpCache.getColors(0));
-	}
-	else lazyElt->send(state, SoLazyElement::ALL_MASK);
+        // If doing multiple colors, turn on ColorMaterial:
+        if (vpCache.getNumColors() > 1) {
+            SoGLLazyElement::setColorMaterial(state, TRUE);
+        }
+        //
+        // Ask LazyElement to setup:
+        //
+        SoGLLazyElement *lazyElt = (SoGLLazyElement *)SoLazyElement::getInstance(state);
 
-	// Call the appropriate render loop:
-	(this->*renderFunc[vpCache.getRenderCase(shapeStyle)])(action);	
-	if (vpCache.getNumColors() > 1) {
-	    SoGLLazyElement::setColorMaterial(state, FALSE);
-	    ((SoGLLazyElement *)SoLazyElement::getInstance(state))->
-	    	reset(state, SoLazyElement::DIFFUSE_MASK);
-	}
+        if(vpCache.colorIsInVtxProp()){
+            lazyElt->send(state, SoLazyElement::ALL_MASK);
+            lazyElt->sendVPPacked(state, (const unsigned char*)vpCache.getColors(0));
+        }
+        else
+            lazyElt->send(state, SoLazyElement::ALL_MASK);
 
-	// Influence auto-caching algorithm:
-	if (coordIndex.getNum() > AUTO_CACHE_ILS_MAX &&
-	    !SoGLCacheContextElement::getIsRemoteRendering(state)) {
+        // Call the appropriate render loop:
+        GLRenderGeneric(action);
+        if (vpCache.getNumColors() > 1) {
+            SoGLLazyElement::setColorMaterial(state, FALSE);
+            ((SoGLLazyElement *)SoLazyElement::getInstance(state))->
+                    reset(state, SoLazyElement::DIFFUSE_MASK);
+        }
 
-	    SoGLCacheContextElement::shouldAutoCache(state,
-			SoGLCacheContextElement::DONT_AUTO_CACHE);
-	}	    
+        // Influence auto-caching algorithm:
+        if (coordIndex.getNum() > AUTO_CACHE_ILS_MAX && !SoGLCacheContextElement::getIsRemoteRendering(state)) {
+
+            SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
+        }
     }
     return;
 }
@@ -715,17 +657,18 @@ SoIndexedLineSet::GLRender(SoGLRenderAction *action)
 void 
 SoIndexedLineSet::countPolylinesAndSegments()
 {
-    if (numPolylines > 0) return; // Already counted
+    if (numPolylines > 0)
+        return; // Already counted
+
     numPolylines = 0;
-    int i, numVerts = 0;
-    for(i = 0; i < coordIndex.getNum(); i++){
-	if (coordIndex[i] == SO_END_LINE_INDEX || 
-	    (i == coordIndex.getNum()-1)) {
-	    ++numPolylines;
-	} 
-	if (coordIndex[i] != SO_END_LINE_INDEX) {
-	    ++numVerts;
-	}
+    int numVerts = 0;
+    for(int i = 0; i < coordIndex.getNum(); i++){
+        if (coordIndex[i] == SO_END_LINE_INDEX || (i == coordIndex.getNum()-1)) {
+            ++numPolylines;
+        }
+        if (coordIndex[i] != SO_END_LINE_INDEX) {
+            ++numVerts;
+        }
     }
     numSegments = numVerts - numPolylines;
 
@@ -733,21 +676,21 @@ SoIndexedLineSet::countPolylinesAndSegments()
     // Then fill in its values:
     int np = 0;
     int nv = 0;
-    for(i = 0; i< coordIndex.getNum(); i++){
-	if (coordIndex[i] == SO_END_LINE_INDEX ){
-	    numVertices[np] = nv;
-	    nv=0;
-	    np++;	        
-	}
-	else {
-	    nv++;
-	    if (i == coordIndex.getNum()-1){
-		numVertices[np] = nv;
-	    }
-	}	
+    for(int i = 0; i< coordIndex.getNum(); i++){
+        if (coordIndex[i] == SO_END_LINE_INDEX ){
+            numVertices[np] = nv;
+            nv=0;
+            np++;
+        }
+        else {
+            nv++;
+            if (i == coordIndex.getNum()-1){
+                numVertices[np] = nv;
+            }
+        }
     }
 }    
-    
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -761,1525 +704,112 @@ SoIndexedLineSet::notify(SoNotList *list)
 ////////////////////////////////////////////////////////////////////////
 {
     // If coordIndex changes, must recount:
-    if (list->getLastRec()->getType() == SoNotRec::CONTAINER &&
-	list->getLastField() == &coordIndex) {
-	if (numVertices)
-	    delete[] numVertices;
-	numVertices = NULL;
-	numPolylines = numSegments = -1;
+    if (list->getLastRec()->getType() == SoNotRec::CONTAINER && list->getLastField() == &coordIndex) {
+        if (numVertices)
+            delete[] numVertices;
+        numVertices = NULL;
+        numPolylines = numSegments = -1;
     }
 
     SoIndexedShape::notify(list);
 }    
 
-//////////////////////////////////////////////////////////////////////////
-// Following preprocessor-generated routines handle all combinations of
-// Normal binding (per vertex, per face, per part, overall/none)
-// Color Binding (per vertex, per face, per part, overall)
-// Textures (on or off)
-//////////////////////////////////////////////////////////////////////////
-// Material overall:
-
 void
-SoIndexedLineSet::
-OmOn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
+SoIndexedLineSet::GLRenderGeneric(SoGLRenderAction* action )
+{
+    SoState *state = action->getState();
+
+    SbBool renderAsPoints = (SoDrawStyleElement::get(state) == SoDrawStyleElement::POINTS);
+    Binding materialBinding = getMaterialBinding(action);
+    Binding normalBinding   = getNormalBinding(action);
+
+    // Test for auto-normal case
+    const SoNormalElement *ne = SoNormalElement::getInstance(state);
+    if (ne->getNum() == 0) {
+        normalBinding = OVERALL;
+    }
+
+    int vtxCtr = 0;
+
+    const char *vertexPtr = vpCache.getVertices(0);
+    const unsigned int vertexStride = vpCache.getVertexStride();
+    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
     const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
+
+    const char *colorPtr = vpCache.getColors(0);
+    const unsigned int colorStride = vpCache.getColorStride();
+    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
+    const int32_t *const colorIndx = getColorIndices();
+
+    const char *normalPtr = vpCache.getNormals(0);
+    const unsigned int normalStride = vpCache.getNormalStride();
+    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
+    const int32_t *const normalIndx = getNormalIndices();
+
+    const char *texCoordPtr = vpCache.getTexCoords(0);
+    const unsigned int texCoordStride = vpCache.getTexCoordStride();
+    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
+    const int32_t *const tCoordIndx = getTexCoordIndices();
 
     // Send one normal, if there are any normals in vpCache:
-    if (vpCache.getNumNormals() > 0)
-        vpCache.sendNormal(vpCache.getNormals(0));
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
+    if (normalBinding == OVERALL) {
+        if (vpCache.getNumNormals() > 0)
+            vpCache.sendNormal(vpCache.getNormals(0));
     }
-}
 
+    // For each polyline
+    for (int polyline = 0; polyline < numPolylines; polyline++) {
 
-void
-SoIndexedLineSet::
-OmOnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    // Send one normal, if there are any normals in vpCache:
-    if (vpCache.getNumNormals() > 0)
-        vpCache.sendNormal(vpCache.getNormals(0));
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts);
         if(renderAsPoints){
             glBegin(GL_POINTS);
         }
         else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-OmPn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    int nrmCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[nrmCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-OmPnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    int nrmCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[nrmCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-OmFn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*normalFunc)(normalPtr+normalStride*normalIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-OmFnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*normalFunc)(normalPtr+normalStride*normalIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-OmVn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-OmVnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-PmOn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    // Send one normal, if there are any normals in vpCache:
-    if (vpCache.getNumNormals() > 0)
-        vpCache.sendNormal(vpCache.getNormals(0));
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int clrCtr = 0;
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-PmOnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    // Send one normal, if there are any normals in vpCache:
-    if (vpCache.getNumNormals() > 0)
-        vpCache.sendNormal(vpCache.getNormals(0));
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int clrCtr = 0;
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-PmPn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int nrmCtr = 0;
-    int clrCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
-                (*normalFunc)(normalPtr+normalStride*normalIndx[nrmCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-PmPnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int nrmCtr = 0;
-    int clrCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
-                (*normalFunc)(normalPtr+normalStride*normalIndx[nrmCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-PmFn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int clrCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*normalFunc)(normalPtr+normalStride*normalIndx[polyline]);
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-
+            if (materialBinding == PER_SEGMENT || normalBinding == PER_SEGMENT) {
+                glBegin(GL_LINES);
+            } else {
+                glBegin(GL_LINE_STRIP);
+            }
         }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-PmFnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int clrCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*normalFunc)(normalPtr+normalStride*normalIndx[polyline]);
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-PmVn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int clrCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-            (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-PmVnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int clrCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-            (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[clrCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-FmOn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    // Send one normal, if there are any normals in vpCache:
-    if (vpCache.getNumNormals() > 0)
-        vpCache.sendNormal(vpCache.getNormals(0));
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*colorFunc)(colorPtr+colorStride*colorIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-FmOnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    // Send one normal, if there are any normals in vpCache:
-    if (vpCache.getNumNormals() > 0)
-        vpCache.sendNormal(vpCache.getNormals(0));
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*colorFunc)(colorPtr+colorStride*colorIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-FmPn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int nrmCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
 
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*colorFunc)(colorPtr+colorStride*colorIndx[polyline]);
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
+        if (materialBinding == PER_LINE) {
+            (*colorFunc)(colorPtr+colorStride*colorIndx[polyline]);
         }
-        else {
-            glBegin(GL_LINES);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[nrmCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-FmPnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int nrmCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*colorFunc)(colorPtr+colorStride*colorIndx[polyline]);
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[nrmCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-FmFn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*colorFunc)(colorPtr+colorStride*colorIndx[polyline]);
-        (*normalFunc)(normalPtr+normalStride*normalIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-FmFnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*colorFunc)(colorPtr+colorStride*colorIndx[polyline]);
-        (*normalFunc)(normalPtr+normalStride*normalIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-FmVn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*colorFunc)(colorPtr+colorStride*colorIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
+        if (normalBinding == PER_LINE) {
+            (*normalFunc)(normalPtr+normalStride*normalIndx[polyline]);
         }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-FmVnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*colorFunc)(colorPtr+colorStride*colorIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
 
-            glBegin(GL_LINE_STRIP);
+        // Figure out number of vertices in this line
+        int vertsInLine = numVertices[polyline];
+        if (materialBinding == PER_SEGMENT || normalBinding == PER_SEGMENT) {
+            vertsInLine--;
         }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-VmOn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
 
-    // Send one normal, if there are any normals in vpCache:
-    if (vpCache.getNumNormals() > 0)
-        vpCache.sendNormal(vpCache.getNormals(0));
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
+        for (int vert = 0; vert < vertsInLine; vert++) {
 
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
+       if (materialBinding == PER_VERTEX || materialBinding == PER_SEGMENT || materialBinding == OVERALL) {
                 (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-VmOnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    // Send one normal, if there are any normals in vpCache:
-    if (vpCache.getNumNormals() > 0)
-        vpCache.sendNormal(vpCache.getNormals(0));
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-VmPn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int nrmCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-            (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[nrmCtr++]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-VmPnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    int nrmCtr = 0;
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts) -1;
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-            glBegin(GL_LINES);
-            (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
-
-        }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[nrmCtr++]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-                (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
-        }
-        glEnd();
-        vtxCtr+=2;  // Skip over -1 at end of polyline, plus last vtx.
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-VmFn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*normalFunc)(normalPtr+normalStride*normalIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-VmFnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        (*normalFunc)(normalPtr+normalStride*normalIndx[polyline]);
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
-                (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
-
-
-void
-SoIndexedLineSet::
-VmVn
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
+            }
+            if (normalBinding == PER_VERTEX || normalBinding == PER_SEGMENT || normalBinding == OVERALL) {
                 (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-                (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
-        }
-        glEnd();
-        vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
-    }
-}
+            }
 
-
-void
-SoIndexedLineSet::
-VmVnT
-    (SoGLRenderAction* action ) {
-    const int np = numPolylines;
-    const int* numverts = numVertices;
-    const int32_t *const vertexIndex = coordIndex.getValues(0);
-    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
-                      SoDrawStyleElement::POINTS);
-
-    const char *vertexPtr = vpCache.getVertices(0);
-    const unsigned int vertexStride = vpCache.getVertexStride();
-    SoVPCacheFunc *const vertexFunc = vpCache.vertexFunc;
-    const char *colorPtr = vpCache.getColors(0);
-    const unsigned int colorStride = vpCache.getColorStride();
-    SoVPCacheFunc *const colorFunc = vpCache.colorFunc;
-    const int32_t *const colorIndx = getColorIndices();
-    const char *normalPtr = vpCache.getNormals(0);
-    const unsigned int normalStride = vpCache.getNormalStride();
-    SoVPCacheFunc *const normalFunc = vpCache.normalFunc;
-    const int32_t *const normalIndx = getNormalIndices();
-
-    const char *texCoordPtr = vpCache.getTexCoords(0);
-    const unsigned int texCoordStride = vpCache.getTexCoordStride();
-    SoVPCacheFunc *const texCoordFunc = vpCache.texCoordFunc;
-    const int32_t *const tCoordIndx = getTexCoordIndices();
-    int vtxCtr = 0;
-    int v;
-    for (int polyline = 0; polyline < np; polyline++) {
-        const int nv = (*numverts);
-        if(renderAsPoints){
-            glBegin(GL_POINTS);
-        }
-        else {
-
-            glBegin(GL_LINE_STRIP);
-        }
-        for (v = 0; v < nv; v++) {
-                (*normalFunc)(normalPtr+normalStride*normalIndx[vtxCtr]);
-                (*colorFunc)(colorPtr+colorStride*colorIndx[vtxCtr]);
+            if (vpCache.getNumTexCoords() > 0) {
                 (*texCoordFunc)(texCoordPtr+texCoordStride*tCoordIndx[vtxCtr]);
-                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
+            }
+
+            (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr++]);
+
+            if (materialBinding == PER_SEGMENT || normalBinding == PER_SEGMENT) {
+                (*vertexFunc)(vertexPtr+vertexStride*vertexIndex[vtxCtr]);
+            }
         }
         glEnd();
+
+        // Skip over last vtx.
+        if (materialBinding == PER_SEGMENT || normalBinding == PER_SEGMENT) {
+            vtxCtr++;
+        }
+
         vtxCtr++;  //skip over -1 at end of polyline
-        ++numverts;
     }
 }

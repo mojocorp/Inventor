@@ -186,32 +186,7 @@ class INVENTOR_API SoLineSet : public SoNonIndexedShape {
     // shouldn't be cached because they'll take up too much memory).
     int				totalNumVertices;
 
-    // 32 different render functions; names are formed like this:
-    // Om -- overall material  Pm -- per part material
-    // Fm -- per face material Vm -- per vertex material
-    // On -- overall normal    Pm -- per part normal
-    // Fn -- per face normal   Vm -- per vertex normal
-    // T  -- per vertex texture coordinates
-    void OmOn(SoGLRenderAction *); void OmOnT(SoGLRenderAction *);
-    void OmPn(SoGLRenderAction *); void OmPnT(SoGLRenderAction *);
-    void OmFn(SoGLRenderAction *); void OmFnT(SoGLRenderAction *);
-    void OmVn(SoGLRenderAction *); void OmVnT(SoGLRenderAction *);
-    void PmOn(SoGLRenderAction *); void PmOnT(SoGLRenderAction *);
-    void PmPn(SoGLRenderAction *); void PmPnT(SoGLRenderAction *);
-    void PmFn(SoGLRenderAction *); void PmFnT(SoGLRenderAction *);
-    void PmVn(SoGLRenderAction *); void PmVnT(SoGLRenderAction *);
-    void FmOn(SoGLRenderAction *); void FmOnT(SoGLRenderAction *);
-    void FmPn(SoGLRenderAction *); void FmPnT(SoGLRenderAction *);
-    void FmFn(SoGLRenderAction *); void FmFnT(SoGLRenderAction *);
-    void FmVn(SoGLRenderAction *); void FmVnT(SoGLRenderAction *);
-    void VmOn(SoGLRenderAction *); void VmOnT(SoGLRenderAction *);
-    void VmPn(SoGLRenderAction *); void VmPnT(SoGLRenderAction *);
-    void VmFn(SoGLRenderAction *); void VmFnT(SoGLRenderAction *);
-    void VmVn(SoGLRenderAction *); void VmVnT(SoGLRenderAction *);
-
-    // Array of function pointers to render functions:
-    static PMLS renderFunc[32];
-
+    void GLRenderGeneric(SoGLRenderAction *action);
 };
 
 #endif /* _SO_LINE_SET_ */
