@@ -46,9 +46,23 @@ SoColorPacker::~SoColorPacker()
 //
 ////////////////////////////////////////////////////////////////////////////
 void
-SoColorPacker::reallocate(int32_t size)
+SoColorPacker::reallocate(size_t size)
 {
     if (packedColors != NULL) delete [] packedColors;
     packedColors = new uint32_t[size];
     packedArraySize = size;
+}
+
+void
+SoColorPacker::packColors(const SbColor *diffuseColors, size_t numDiffuseColors,
+                          const float *transparencies, size_t numTransparencies)
+{
+    //First determine if we have enough space:
+    if (packedArraySize < numDiffuseColors)
+        reallocate(numDiffuseColors);
+
+    SbBool multTrans = (numTransparencies >= numDiffuseColors);
+    for (size_t i=0; i< numDiffuseColors; i++) {
+        packedColors[i] = diffuseColors[i].getPackedValue(transparencies[multTrans ? i : 0]);
+    }
 }

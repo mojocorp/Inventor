@@ -66,6 +66,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include <Inventor/SbBasic.h>
+#include <Inventor/SbColor.h>
 
 class INVENTOR_API SoColorPacker {
 public:
@@ -87,19 +88,22 @@ public:
     void setNodeIds(uint32_t diffNodeId, uint32_t tNodeId)
         {diffuseNodeId = diffNodeId; transpNodeId = tNodeId;}
 
-    int32_t getSize() const
+    size_t getSize() const
         { return packedArraySize;}
 
-    void reallocate(int32_t size);
-
+    //Pack the current diffuse and transparency
+    void packColors(const SbColor *diffuseColors, size_t numDiffuseColors,
+                    const float *transparencies, size_t numTransparencies);
 private:
+    void reallocate(size_t size);
+
     // nodeids are used for testing cache validity
     uint32_t    transpNodeId;
     uint32_t    diffuseNodeId;
     // array of packed colors, or NULL if empty
     uint32_t*    packedColors;
     // size of packed color array (not necessarily number of valid colors)
-    int32_t    packedArraySize;
+    size_t    packedArraySize;
 };
 
 #endif /* _SO_COLOR_PACKER */
