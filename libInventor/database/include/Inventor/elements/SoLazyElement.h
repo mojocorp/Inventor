@@ -192,7 +192,7 @@ public:
 
     //Specify inventor defaults for colors, etc.
     static SbColor    getDefaultDiffuse()
-        {return SbColor(0.8f, 0.8f, 0.8f);}
+        {return defaultDiffuseColor;}
     static SbColor    getDefaultAmbient()
         {return SbColor(0.2f, 0.2f, 0.2f);}
     static SbColor    getDefaultSpecular()
@@ -202,13 +202,13 @@ public:
     static float    getDefaultShininess()
         {return 0.2f;}
     static uint32_t    getDefaultPacked()
-        {return (0xccccccff);}
+        {return defaultPackedColor;}
     static float    getDefaultTransparency()
-        {return 0.0f;}
+        {return defaultTransparency;}
     static int32_t    getDefaultLightModel()
         {return PHONG;}
     static int32_t    getDefaultColorIndex()
-        {return 1;}
+        {return defaultColorIndices;}
 
     SB_DECL_DEPRECATED static void setAmbient(SoState *state, const SbColor* color) { setAmbient(state, *color); }
     SB_DECL_DEPRECATED static void setEmissive(SoState *state, const SbColor* color){ setEmissive(state, *color); }
@@ -327,10 +327,10 @@ protected:
     //  store pointers to the default color, transp so that we can set
     //  point to them if no other color or transp has been set.
 
-    static SbColor    *defaultDiffuseColor;
-    static float      *defaultTransparency;
-    static int32_t    *defaultColorIndices;
-    static uint32_t   *defaultPackedColor;
+    static SbColor    defaultDiffuseColor;
+    static float      defaultTransparency;
+    static int32_t    defaultColorIndices;
+    static uint32_t   defaultPackedColor;
 
     // Returns number of transparency levels supported with stipple
     // patterns. (Add one - solid - that is not included in this number.)

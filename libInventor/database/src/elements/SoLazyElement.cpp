@@ -63,12 +63,11 @@
 #include <math.h>
 
 SO_ELEMENT_SOURCE(SoLazyElement);
-static	SbColor unpacker(0, 0, 0);
 
-SbColor	*SoLazyElement::defaultDiffuseColor = NULL;
-float	*SoLazyElement::defaultTransparency = NULL;
-int32_t	*SoLazyElement::defaultColorIndices = NULL;
-uint32_t	*SoLazyElement::defaultPackedColor  = NULL;
+SbColor  SoLazyElement::defaultDiffuseColor = SbColor(0.8f, 0.8f, 0.8f);
+float    SoLazyElement::defaultTransparency = 0.0f;
+int32_t  SoLazyElement::defaultColorIndices = 1;
+uint32_t SoLazyElement::defaultPackedColor  = 0xccccccff;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -115,28 +114,16 @@ SoLazyElement::init(SoState *)
     ivState.blending		= FALSE;
     ivState.lightModel		= PHONG;
 
-    // Initialize default color storage if not already done
-    if (defaultDiffuseColor == NULL) {
-        defaultDiffuseColor	= new SbColor;
-        *defaultDiffuseColor	= getDefaultDiffuse();
-        defaultTransparency	= new float;
-        *defaultTransparency	= getDefaultTransparency();
-        defaultColorIndices	= new int32_t;
-        *defaultColorIndices	= getDefaultColorIndex();
-        defaultPackedColor	= new uint32_t;
-        *defaultPackedColor	= getDefaultPacked();
-    }
-
     //following value will be matched with the default color, must
     //differ from 1 (invalid) and any  legitimate nodeid.
     ivState.diffuseNodeId	= 0;
     ivState.transpNodeId	= 0;
     //zero corresponds to transparency off (default).
     ivState.stippleNum		= 0;
-    ivState.diffuseColors	= defaultDiffuseColor;
-    ivState.transparencies	= defaultTransparency;
-    ivState.colorIndices	= defaultColorIndices;
-    ivState.packedColors	= defaultPackedColor;
+    ivState.diffuseColors	= &defaultDiffuseColor;
+    ivState.transparencies	= &defaultTransparency;
+    ivState.colorIndices	= &defaultColorIndices;
+    ivState.packedColors	= &defaultPackedColor;
 
     ivState.numDiffuseColors	= 1;
     ivState.numTransparencies	= 1;
@@ -164,9 +151,10 @@ SoLazyElement::getDiffuse(SoState* state, int index)
     if (index > curElt->ivState.numDiffuseColors || index < 0){
         SoDebugError::post("SoLazyElement::getDiffuse",
                            "invalid index");
-        return(*defaultDiffuseColor);
+        return defaultDiffuseColor;
     }
 #endif
+    static	SbColor unpacker(0, 0, 0);
     if (!curElt->ivState.packed) return (curElt->ivState.diffuseColors[index]);
     unpacker = SbColor(
                 ((curElt->ivState.packedColors[index] & 0xff000000) >> 24) * 1.0f/255,
@@ -191,7 +179,7 @@ SoLazyElement::getTransparency(SoState* state, int index)
     if (index > curElt->ivState.numTransparencies || index < 0){
         SoDebugError::post("SoLazyElement::getTransparency",
                            "invalid index");
-        return(*curElt->defaultTransparency);
+        return curElt->defaultTransparency;
     }
 #endif
     if (!curElt->ivState.packed) return (curElt->ivState.transparencies[index]);
