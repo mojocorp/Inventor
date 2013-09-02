@@ -458,10 +458,10 @@ SoLazyElement::setPacked(SoState *state, SoNode *node,
 //
 ///////////////////////////////////////////////////////////////////////
 void
-SoLazyElement::setAmbient(SoState *state, const SbColor* color)
+SoLazyElement::setAmbient(SoState *state, const SbColor& color)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
-    if (*color != curElt->ivState.ambientColor){
+    if (color != curElt->ivState.ambientColor){
         getWInstance(state)->setAmbientElt(color);
     }
     else if (state->isCacheOpen()){
@@ -476,10 +476,10 @@ SoLazyElement::setAmbient(SoState *state, const SbColor* color)
 //
 ///////////////////////////////////////////////////////////////////////
 void
-SoLazyElement::setEmissive(SoState *state, const SbColor* color)
+SoLazyElement::setEmissive(SoState *state, const SbColor& color)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
-    if (*color != curElt->ivState.emissiveColor)
+    if (color != curElt->ivState.emissiveColor)
         getWInstance(state)->setEmissiveElt(color);
     else if  (state->isCacheOpen())
         curElt->registerRedundantSet(state, EMISSIVE_MASK);
@@ -492,10 +492,10 @@ SoLazyElement::setEmissive(SoState *state, const SbColor* color)
 //
 ///////////////////////////////////////////////////////////////////////
 void
-SoLazyElement::setSpecular(SoState *state, const SbColor* color)
+SoLazyElement::setSpecular(SoState *state, const SbColor& color)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
-    if (*color != curElt->ivState.specularColor)
+    if (color != curElt->ivState.specularColor)
         getWInstance(state)->setSpecularElt(color);
     else if   (state->isCacheOpen())
         curElt->registerRedundantSet(state, SPECULAR_MASK);
@@ -744,10 +744,10 @@ SoLazyElement::setPackedElt( SoNode *node,  int32_t numColors,
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setAmbientElt(const SbColor* color )
+SoLazyElement::setAmbientElt(const SbColor& color )
 
 {
-    ivState.ambientColor.setValue((float*)color);
+    ivState.ambientColor = color;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -760,10 +760,10 @@ SoLazyElement::setAmbientElt(const SbColor* color )
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setEmissiveElt(const SbColor* color )
+SoLazyElement::setEmissiveElt(const SbColor& color )
 
 {
-    ivState.emissiveColor.setValue((float*)color);
+    ivState.emissiveColor = color;
 }
 
 
@@ -777,10 +777,10 @@ SoLazyElement::setEmissiveElt(const SbColor* color )
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setSpecularElt(const SbColor* color )
+SoLazyElement::setSpecularElt(const SbColor& color )
 //
 {
-    ivState.specularColor.setValue((float*)color);
+    ivState.specularColor = color;
 }
 
 ////////////////////////////////////////////////////////////////////////

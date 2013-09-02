@@ -384,9 +384,9 @@ SoGLLazyElement::setPackedElt(SoNode *node, int32_t numColors,
 //
 /////////////////////////////////////////////////////////////////////////
 void
-SoGLLazyElement::setAmbientElt(const SbColor* color)
+SoGLLazyElement::setAmbientElt(const SbColor& color)
 {
-    ivState.ambientColor.setValue((float*)color);
+    ivState.ambientColor = color;
 
     // For open caches, record the fact that set was called:
     ivState.cacheLevelSetBits |= AMBIENT_MASK;
@@ -410,9 +410,9 @@ SoGLLazyElement::setAmbientElt(const SbColor* color)
 //
 /////////////////////////////////////////////////////////////////////////
 void
-SoGLLazyElement::setEmissiveElt(const SbColor* color)
+SoGLLazyElement::setEmissiveElt(const SbColor& color)
 {
-    ivState.emissiveColor.setValue((float*)color);
+    ivState.emissiveColor = color;
 
     // For open caches, record the fact that set was called:
     ivState.cacheLevelSetBits |= EMISSIVE_MASK;
@@ -434,9 +434,9 @@ SoGLLazyElement::setEmissiveElt(const SbColor* color)
 //
 /////////////////////////////////////////////////////////////////////////
 void
-SoGLLazyElement::setSpecularElt(const SbColor* color)
+SoGLLazyElement::setSpecularElt(const SbColor& color)
 {
-    ivState.specularColor.setValue((float*)color);
+    ivState.specularColor = color;
 
     // For open caches, record the fact that set was called:
     ivState.cacheLevelSetBits |= SPECULAR_MASK;

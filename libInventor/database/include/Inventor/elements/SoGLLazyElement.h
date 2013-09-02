@@ -234,9 +234,9 @@ private:
     virtual void setColorIndexElt( SoNode*, int32_t numIndices,
                                    const int32_t *indices);
 
-    virtual void setAmbientElt(const SbColor* color);
-    virtual void setEmissiveElt( const SbColor* color);
-    virtual void setSpecularElt(const SbColor* color);
+    virtual void setAmbientElt(const SbColor& color);
+    virtual void setEmissiveElt( const SbColor& color);
+    virtual void setSpecularElt(const SbColor& color);
     virtual void setShininessElt( float color);
     virtual void setColorMaterialElt( SbBool value);
     virtual void setBlendingElt( SbBool value);

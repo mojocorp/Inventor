@@ -139,9 +139,9 @@ public:
                               int32_t numColors, const uint32_t *colors, bool hasTransparency);
     static void        setColorIndices(SoState *state, SoNode *node,
                                     int32_t numIndices, const int32_t *indices);
-    static void        setAmbient(SoState *state, const SbColor* color);
-    static void        setEmissive(SoState *state, const SbColor* color);
-    static void        setSpecular(SoState *state, const SbColor* color);
+    static void        setAmbient(SoState *state, const SbColor& color);
+    static void        setEmissive(SoState *state, const SbColor& color);
+    static void        setSpecular(SoState *state, const SbColor& color);
     static void        setShininess(SoState *state, float value);
     static void        setColorMaterial(SoState *state, SbBool value);
     static void        setBlending(SoState *state,  SbBool value);
@@ -210,6 +210,9 @@ public:
     static int32_t    getDefaultColorIndex()
         {return 1;}
 
+    SB_DECL_DEPRECATED static void setAmbient(SoState *state, const SbColor* color) { setAmbient(state, *color); }
+    SB_DECL_DEPRECATED static void setEmissive(SoState *state, const SbColor* color){ setEmissive(state, *color); }
+    SB_DECL_DEPRECATED static void setSpecular(SoState *state, const SbColor* color){ setSpecular(state, *color); }
 SoINTERNAL public:
 
         // set method for use in SoMaterial nodes:
@@ -345,9 +348,9 @@ private:
                                  const float *trans, SoColorPacker *cPacker);
 
     virtual void    setTranspTypeElt(int32_t type);
-    virtual void    setAmbientElt(const SbColor* color);
-    virtual void    setEmissiveElt(const SbColor* color);
-    virtual void    setSpecularElt(const SbColor* color);
+    virtual void    setAmbientElt(const SbColor& color);
+    virtual void    setEmissiveElt(const SbColor& color);
+    virtual void    setSpecularElt(const SbColor& color);
     virtual void    setShininessElt(float value);
     virtual void    setColorMaterialElt(SbBool value);
     virtual void    setBlendingElt(SbBool value);
