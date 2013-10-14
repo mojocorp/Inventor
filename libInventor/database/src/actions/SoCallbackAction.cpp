@@ -135,30 +135,28 @@ SoCallbackAction::~SoCallbackAction()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
-
     // Free up the structures in the callback lists:
 
-    for (i = 0; i < preCallbackList.getLength(); i++)
-	delete (nodeTypeCallback *) preCallbackList[i];
+    for (size_t i = 0; i < preCallbackList.size(); i++)
+        delete preCallbackList[i];
 
-    for (i = 0; i < postCallbackList.getLength(); i++)
-	delete (nodeTypeCallback *) postCallbackList[i];
+    for (size_t i = 0; i < postCallbackList.size(); i++)
+        delete postCallbackList[i];
 
-    for (i = 0; i < preTailCallbackList.getLength(); i++)
-	delete (nodeTypeCallback *) preTailCallbackList[i];
+    for (size_t i = 0; i < preTailCallbackList.size(); i++)
+        delete preTailCallbackList[i];
 
-    for (i = 0; i < postTailCallbackList.getLength(); i++)
-	delete (nodeTypeCallback *) postTailCallbackList[i];
+    for (size_t i = 0; i < postTailCallbackList.size(); i++)
+        delete postTailCallbackList[i];
 
-    for (i = 0; i < triangleCallbackList.getLength(); i++)
-	delete (triangleCallback *) triangleCallbackList[i];
+    for (size_t i = 0; i < triangleCallbackList.size(); i++)
+        delete triangleCallbackList[i];
 
-    for (i = 0; i < lineSegmentCallbackList.getLength(); i++)
-	delete (lineSegmentCallback *) lineSegmentCallbackList[i];
+    for (size_t i = 0; i < lineSegmentCallbackList.size(); i++)
+        delete lineSegmentCallbackList[i];
 
-    for (i = 0; i < pointCallbackList.getLength(); i++)
-	delete (pointCallback *) pointCallbackList[i];
+    for (size_t i = 0; i < pointCallbackList.size(); i++)
+        delete pointCallbackList[i];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -195,7 +193,7 @@ SoCallbackAction::addPreCallback(SoType type,
     cbStruct->cb = cb;
     cbStruct->data = data;
 
-    preCallbackList.append((void *)cbStruct);
+    preCallbackList.push_back(cbStruct);
 }
 
 void
@@ -208,7 +206,7 @@ SoCallbackAction::addPostCallback(SoType type,
     cbStruct->cb = cb;
     cbStruct->data = data;
 
-    postCallbackList.append((void *)cbStruct);
+    postCallbackList.push_back(cbStruct);
 }
 
 void
@@ -219,7 +217,7 @@ SoCallbackAction::addPreTailCallback(SoCallbackAction::SoCallbackActionCB cb,
     cbStruct->cb = cb;
     cbStruct->data = data;
 
-    preTailCallbackList.append((void *)cbStruct);
+    preTailCallbackList.push_back(cbStruct);
 }
 
 void
@@ -230,7 +228,7 @@ SoCallbackAction::addPostTailCallback(SoCallbackAction::SoCallbackActionCB cb,
     cbStruct->cb = cb;
     cbStruct->data = data;
 
-    postTailCallbackList.append((void *)cbStruct);
+    postTailCallbackList.push_back(cbStruct);
 }
 
 void
@@ -242,7 +240,7 @@ SoCallbackAction::addTriangleCallback(SoType type,
     cbStruct->cb = cb;
     cbStruct->data = data;
 
-    triangleCallbackList.append((void *)cbStruct);
+    triangleCallbackList.push_back(cbStruct);
 }
 
 void SoCallbackAction::addLineSegmentCallback(SoType type,
@@ -253,7 +251,7 @@ void SoCallbackAction::addLineSegmentCallback(SoType type,
     cbStruct->cb = cb;
     cbStruct->data = data;
 
-    lineSegmentCallbackList.append((void *)cbStruct);
+    lineSegmentCallbackList.push_back(cbStruct);
 }
 
 void
@@ -264,7 +262,7 @@ SoCallbackAction::addPointCallback(SoType type, SoPointCB cb, void *data)
     cbStruct->cb = cb;
     cbStruct->data = data;
 
-    pointCallbackList.append((void *)cbStruct);
+    pointCallbackList.push_back(cbStruct);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -611,47 +609,42 @@ SoCallbackAction::invokePreCallbacks(const SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Response		newResponse;
-    nodeTypeCallback	*typeCb;
-    tailCallback	*tailCb;
-    int			i;
-
     // If we had been pruning, stop. (We know that if this node is
     // traversed, it wasn't pruned.)
     if (response == PRUNE)
-	response = CONTINUE;
+        response = CONTINUE;
 
-    for (i = 0; i < preCallbackList.getLength(); i++) {
-	typeCb = (nodeTypeCallback *)preCallbackList[i];
-	if (node->isOfType(typeCb->type)) {
-	    newResponse = (typeCb->cb)(typeCb->data, this, node);
-	    if (newResponse != CONTINUE) {
-		response = newResponse;
-		if (newResponse == ABORT) {
-		    setTerminated(TRUE);
-		    return;
-		}
-	    }
-	}
+    for (size_t i = 0; i < preCallbackList.size(); i++) {
+        nodeTypeCallback *typeCb = preCallbackList[i];
+        if (node->isOfType(typeCb->type)) {
+            Response newResponse = (typeCb->cb)(typeCb->data, this, node);
+            if (newResponse != CONTINUE) {
+                response = newResponse;
+                if (newResponse == ABORT) {
+                    setTerminated(TRUE);
+                    return;
+                }
+            }
+        }
     }
 
     const SoPath *pathAppliedTo = getPathAppliedTo();
 
-    if (preTailCallbackList.getLength() > 0 &&
-	pathAppliedTo != NULL &&
-	(*getCurPath()) == (*pathAppliedTo)) {
+    if (preTailCallbackList.size() > 0 &&
+            pathAppliedTo != NULL &&
+            (*getCurPath()) == (*pathAppliedTo)) {
 
-	for (i = 0; i < preTailCallbackList.getLength(); i++) {
-	    tailCb = (tailCallback *)preTailCallbackList[i];
-	    newResponse = (tailCb->cb)(tailCb->data, this, node);
-	    if (newResponse != CONTINUE) {
-		response = newResponse;
-		if (newResponse == ABORT) {
-		    setTerminated(TRUE);
-		    return;
-		}
-	    }
-	}
+        for (size_t i = 0; i < preTailCallbackList.size(); i++) {
+            tailCallback *tailCb = preTailCallbackList[i];
+            Response newResponse = (tailCb->cb)(tailCb->data, this, node);
+            if (newResponse != CONTINUE) {
+                response = newResponse;
+                if (newResponse == ABORT) {
+                    setTerminated(TRUE);
+                    return;
+                }
+            }
+        }
     }
 }
 
@@ -667,43 +660,38 @@ SoCallbackAction::invokePostCallbacks(const SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Response		newResponse;
-    nodeTypeCallback	*typeCb;
-    tailCallback	*tailCb;
-    int			i;
-
     if (response == PRUNE)
-	response = CONTINUE;
+        response = CONTINUE;
 
-    for (i = 0; i < postCallbackList.getLength(); i++) {
-	typeCb = (nodeTypeCallback *)postCallbackList[i];
-	if (node->isOfType(typeCb->type)) {
-	    newResponse = (typeCb->cb)(typeCb->data, this, node);
-	    if (newResponse != CONTINUE)
-		response = newResponse;
-	    if (newResponse == ABORT) {
-		setTerminated(TRUE);
-		return;
-	    }
-	}
+    for (size_t i = 0; i < postCallbackList.size(); i++) {
+        nodeTypeCallback *typeCb = postCallbackList[i];
+        if (node->isOfType(typeCb->type)) {
+            Response newResponse = (typeCb->cb)(typeCb->data, this, node);
+            if (newResponse != CONTINUE)
+                response = newResponse;
+            if (newResponse == ABORT) {
+                setTerminated(TRUE);
+                return;
+            }
+        }
     }
 
     const SoPath *pathAppliedTo = getPathAppliedTo();
 
-    if (postTailCallbackList.getLength() > 0 &&
-	pathAppliedTo != NULL &&
-	(*getCurPath()) == (*pathAppliedTo)) {
+    if (postTailCallbackList.size() > 0 &&
+            pathAppliedTo != NULL &&
+            (*getCurPath()) == (*pathAppliedTo)) {
 
-	for (i = 0; i < postTailCallbackList.getLength(); i++) {
-	    tailCb = (tailCallback *)postTailCallbackList[i];
-	    newResponse = (tailCb->cb)(tailCb->data, this, node);
-	    if (newResponse != CONTINUE)
-		response = newResponse;
-	    if (newResponse == ABORT) {
-		setTerminated(TRUE);
-		return;
-	    }
-	}
+        for (size_t i = 0; i < postTailCallbackList.size(); i++) {
+            tailCallback *tailCb = postTailCallbackList[i];
+            Response newResponse = (tailCb->cb)(tailCb->data, this, node);
+            if (newResponse != CONTINUE)
+                response = newResponse;
+            if (newResponse == ABORT) {
+                setTerminated(TRUE);
+                return;
+            }
+        }
     }
 }
 
@@ -722,13 +710,10 @@ SoCallbackAction::invokeTriangleCallbacks(const SoShape *shape,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    triangleCallback	*triCb;
-    int			i;
-
-    for (i = 0; i < triangleCallbackList.getLength(); i++) {
-	triCb = (triangleCallback *)triangleCallbackList[i];
-	if (shape->isOfType(triCb->type))
-	    (triCb->cb)(triCb->data, this, v1, v2, v3);
+    for (size_t i = 0; i < triangleCallbackList.size(); i++) {
+        triangleCallback *triCb = triangleCallbackList[i];
+        if (shape->isOfType(triCb->type))
+            (triCb->cb)(triCb->data, this, v1, v2, v3);
     }
 }
 
@@ -746,13 +731,10 @@ SoCallbackAction::invokeLineSegmentCallbacks(const SoShape *shape,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    lineSegmentCallback	*lsCb;
-    int			i;
-
-    for (i = 0; i < lineSegmentCallbackList.getLength(); i++) {
-	lsCb = (lineSegmentCallback *)lineSegmentCallbackList[i];
-	if (shape->isOfType(lsCb->type))
-	    (lsCb->cb)(lsCb->data, this, v1, v2);
+    for (size_t i = 0; i < lineSegmentCallbackList.size(); i++) {
+        lineSegmentCallback *lsCb = lineSegmentCallbackList[i];
+        if (shape->isOfType(lsCb->type))
+            (lsCb->cb)(lsCb->data, this, v1, v2);
     }
 }
 
@@ -769,13 +751,10 @@ SoCallbackAction::invokePointCallbacks(const SoShape *shape,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    pointCallback	*pntCb;
-    int			i;
-
-    for (i = 0; i < pointCallbackList.getLength(); i++) {
-	pntCb = (pointCallback *)pointCallbackList[i];
-	if (shape->isOfType(pntCb->type))
-	    (pntCb->cb)(pntCb->data, this, v);
+    for (size_t i = 0; i < pointCallbackList.size(); i++) {
+        pointCallback *pntCb = pointCallbackList[i];
+        if (shape->isOfType(pntCb->type))
+            (pntCb->cb)(pntCb->data, this, v);
     }
 }
 
@@ -793,26 +772,21 @@ SoCallbackAction::shouldGeneratePrimitives(const SoShape *shape) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    triangleCallback	*triCb;
-    lineSegmentCallback	*lsCb;
-    pointCallback	*pntCb;
-    int			i;
-
     // Look at each callback list to see if there is an occurrence of
     // this shape type.  Return TRUE if the type is found.
-    for (i = 0; i < triangleCallbackList.getLength(); i++) {
-	triCb = (triangleCallback *)triangleCallbackList[i];
-	if (shape->isOfType(triCb->type))
-            return TRUE; 
-    }
-    for (i = 0; i < lineSegmentCallbackList.getLength(); i++) {
-	lsCb = (lineSegmentCallback *)lineSegmentCallbackList[i];
-	if (shape->isOfType(lsCb->type))
+    for (size_t i = 0; i < triangleCallbackList.size(); i++) {
+        triangleCallback *triCb = triangleCallbackList[i];
+        if (shape->isOfType(triCb->type))
             return TRUE;
     }
-    for (i = 0; i < pointCallbackList.getLength(); i++) {
-	pntCb = (pointCallback *)pointCallbackList[i];
-	if (shape->isOfType(pntCb->type))
+    for (size_t i = 0; i < lineSegmentCallbackList.size(); i++) {
+        lineSegmentCallback *lsCb = lineSegmentCallbackList[i];
+        if (shape->isOfType(lsCb->type))
+            return TRUE;
+    }
+    for (size_t i = 0; i < pointCallbackList.size(); i++) {
+        pointCallback *pntCb = pointCallbackList[i];
+        if (shape->isOfType(pntCb->type))
             return TRUE;
     }
 
