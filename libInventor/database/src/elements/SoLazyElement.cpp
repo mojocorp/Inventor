@@ -142,7 +142,7 @@ SoLazyElement::init(SoState *)
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
-const SbColor &
+SbColor
 SoLazyElement::getDiffuse(SoState* state, int index)
 {
     SoLazyElement* curElt = getInstance(state);
@@ -154,14 +154,14 @@ SoLazyElement::getDiffuse(SoState* state, int index)
         return defaultDiffuseColor;
     }
 #endif
-    static	SbColor unpacker(0, 0, 0);
-    if (!curElt->ivState.packed) return (curElt->ivState.diffuseColors[index]);
-    unpacker = SbColor(
-                ((curElt->ivState.packedColors[index] & 0xff000000) >> 24) * 1.0f/255,
-                ((curElt->ivState.packedColors[index] & 0xff0000) >> 16) * 1.0f/255,
-                ((curElt->ivState.packedColors[index] & 0xff00)>> 8) * 1.0f/255);
-    return unpacker;
+    if (!curElt->ivState.packed)
+        return (curElt->ivState.diffuseColors[index]);
 
+    SbColor unpacker;
+    float transparency;
+    unpacker.setPackedValue(curElt->ivState.packedColors[index], transparency);
+
+    return unpacker;
 }
 ////////////////////////////////////////////////////////////////////////
 //

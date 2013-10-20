@@ -150,7 +150,7 @@ public:
     // get() methods get value from Inventor state.  The public methods are
     // static, they get an instance of the element.  If there is a cache,
     // the appropriate virtual registerGetDependence is called.
-    static const SbColor &    getDiffuse(SoState* state, int index);
+    static SbColor            getDiffuse(SoState* state, int index);
     static float              getTransparency(SoState*, int index);
     static const uint32_t    *getPackedColors(SoState*);
     static const int32_t     *getColorIndices(SoState*);
