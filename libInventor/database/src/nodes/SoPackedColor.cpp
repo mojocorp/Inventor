@@ -73,6 +73,7 @@ SoPackedColor::SoPackedColor()
     SO_NODE_CONSTRUCTOR(SoPackedColor);
     SO_NODE_ADD_FIELD(orderedRGBA, (SoLazyElement::getDefaultPacked()));
     isBuiltIn = TRUE;
+    transparent = FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -117,13 +118,12 @@ SoPackedColor::doAction(SoAction *action)
 {
     SoState *state = action->getState();
 
-    if (! orderedRGBA.isIgnored() && orderedRGBA.getNum() > 0
-	&& ! SoOverrideElement::getDiffuseColorOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setDiffuseColorOverride(state, this, TRUE);
-	}
-	SoLazyElement::setPacked(state, this,
-        orderedRGBA.getNum(), orderedRGBA.getValues(0), isTransparent() ? true : false);
+    if (! orderedRGBA.isIgnored() && orderedRGBA.getNum() > 0 && ! SoOverrideElement::getDiffuseColorOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setDiffuseColorOverride(state, this, TRUE);
+        }
+        SoLazyElement::setPacked(state, this,
+                                 orderedRGBA.getNum(), orderedRGBA.getValues(0), isTransparent() ? true : false);
     }
 }
 
@@ -145,7 +145,7 @@ SoPackedColor::GLRender(SoGLRenderAction *action)
     // prevents cache dependencies in some cases that were
     // specifically optimized for Inventor 2.0.
     if (orderedRGBA.getNum() == 1 && !orderedRGBA.isIgnored())
-	SoGLLazyElement::sendAllMaterial(action->getState());
+        SoGLLazyElement::sendAllMaterial(action->getState());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -175,15 +175,14 @@ SoPackedColor::notify(SoNotList *list)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ((list->getLastRec()->getType() == SoNotRec::CONTAINER) &&
-	(list->getLastField() == &orderedRGBA) ) {
-	transparent = FALSE;
-	for(int i = 0; i < orderedRGBA.getNum(); i++){
-	    if((orderedRGBA[i] & 0xff) != 0xff){
-		transparent = TRUE;
-		break;
-	    }	
-	}
+    if ((list->getLastRec()->getType() == SoNotRec::CONTAINER) && (list->getLastField() == &orderedRGBA) ) {
+        transparent = FALSE;
+        for(int i = 0; i < orderedRGBA.getNum(); i++){
+            if((orderedRGBA[i] & 0xff) != 0xff){
+                transparent = TRUE;
+                break;
+            }
+        }
     }
 
     SoNode::notify(list);

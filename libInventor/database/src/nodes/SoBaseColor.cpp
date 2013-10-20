@@ -120,14 +120,12 @@ SoBaseColor::doAction(SoAction *action)
 {
     SoState *state = action->getState();
 
-    if (! rgb.isIgnored() && rgb.getNum() > 0
-	&& ! SoOverrideElement::getDiffuseColorOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setDiffuseColorOverride(state, this, TRUE);
-	}
-	SoGLLazyElement::setDiffuse(state, this, rgb.getNum(), 
-	    rgb.getValues(0), colorPacker);
-
+    if (! rgb.isIgnored() && rgb.getNum() > 0 && ! SoOverrideElement::getDiffuseColorOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setDiffuseColorOverride(state, this, TRUE);
+        }
+        SoGLLazyElement::setDiffuse(state, this, rgb.getNum(),
+                                    rgb.getValues(0), colorPacker);
     }
 }
 
@@ -149,7 +147,7 @@ SoBaseColor::GLRender(SoGLRenderAction *action)
     // prevents cache dependencies in some cases that were
     // specifically optimized for Inventor 2.0.
     if (rgb.getNum() == 1)
-	SoGLLazyElement::sendAllMaterial(action->getState());
+        SoGLLazyElement::sendAllMaterial(action->getState());
 }
 
 ////////////////////////////////////////////////////////////////////////
