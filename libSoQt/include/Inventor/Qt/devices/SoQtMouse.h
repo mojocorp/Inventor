@@ -68,7 +68,7 @@
 class SoQtMouse : public SoQtDevice {
 public:
     SoQtMouse();
-    ~SoQtMouse();
+    virtual ~SoQtMouse();
     
     // these functions will enable/disable this device for the passed widget.
     // the callback function f will be invoked when events occur in w.
