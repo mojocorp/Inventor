@@ -267,3 +267,18 @@ INSTANTIATE_TEST_CASE_P(draggers,
                             "ivtest/data/draggers/Translate1Dragger.iv",
                             "ivtest/data/draggers/Translate2Dragger.iv"
                             ));
+
+
+INSTANTIATE_TEST_CASE_P(apps,
+                        ModelTest_GLCTX,
+                        ::testing::Values(
+                            "apps/examples/data/bookshelf.iv",
+                            "apps/examples/data/desk.iv",
+                            "apps/examples/data/dogDish.iv",
+                            "apps/examples/data/duck.iv",
+                            "apps/examples/data/eatAtJosies.iv",
+                            "apps/examples/data/flower.iv",
+                            "apps/examples/data/jumpyMan.iv",
+                            "apps/examples/data/luxo.iv",
+                            "apps/examples/data/parkbench.iv"
+                            ));
