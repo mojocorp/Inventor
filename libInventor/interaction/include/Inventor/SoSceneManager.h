@@ -91,7 +91,7 @@ class INVENTOR_API SoSceneManager {
     SoSceneManager();
 
     /// Destructor.
-    ~SoSceneManager();
+    virtual ~SoSceneManager();
     
     /// Apply an \c SoGLRenderAction to the scene graph managed here.
     /// The caller is responsible for setting up a window to render into.
