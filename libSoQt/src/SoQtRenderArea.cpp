@@ -306,26 +306,13 @@ SoQtRenderArea::setColorMap(int startIndex, int num, const SbColor *colors)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-#if 0
-    // save those colors for future uses (if the widget hasn't been
-    // built yet, or next time it gets built)
-    if (mapColors != NULL)
-        free(mapColors);
-    mapColors = (XColor *) malloc(sizeof(XColor) * num);
-    mapColorNum = num;
-    XColor *xcol = mapColors;
-    for (int i=0; i<num; i++, xcol++) {
-        xcol->red   = (unsigned short) (colors[i][0] * 65535);
-        xcol->green = (unsigned short) (colors[i][1] * 65535);
-        xcol->blue  = (unsigned short) (colors[i][2] * 65535);
-        xcol->flags = DoRed|DoGreen|DoBlue;
-        xcol->pixel = startIndex + i;
+    QGLColormap colormap;
+    for (int i = 0; i < num; i++) {
+        const SbColor &c = colors[i];
+        colormap.setEntry ( startIndex+i, qRgb(255*c[0], 255*c[1], 255*c[2]));
     }
 
-    // now load those colors into the color map
-    if (colorMap != 0)
-        XStoreColors(getDisplay(), colorMap, mapColors, mapColorNum);
-#endif
+    getNormalWidget()->setColormap (colormap);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -340,29 +327,16 @@ SoQtRenderArea::setOverlayColorMap(int startIndex, int num, const SbColor *color
 //
 ////////////////////////////////////////////////////////////////////////
 {
-#if 0
     if (! getOverlayWidget())
         return;
 
-    // save those colors for future uses (if the widget hasn't been
-    // built yet, or next time it gets built)
-    if (overlayMapColors != NULL)
-        free(overlayMapColors);
-    overlayMapColors = (XColor *) malloc(sizeof(XColor) * num);
-    overlayMapColorNum = num;
-    XColor *xcol = overlayMapColors;
-    for (int i=0; i<num; i++, xcol++) {
-        xcol->red   = (unsigned short) (colors[i][0] * 65535);
-        xcol->green = (unsigned short) (colors[i][1] * 65535);
-        xcol->blue  = (unsigned short) (colors[i][2] * 65535);
-        xcol->flags = DoRed|DoGreen|DoBlue;
-        xcol->pixel = startIndex + i;
+    QGLColormap colormap;
+    for (int i = 0; i < num; i++) {
+        const SbColor &c = colors[i];
+        colormap.setEntry ( startIndex+i, qRgb(255*c[0], 255*c[1], 255*c[2]));
     }
 
-    // now load those colors into the color map
-    if (overlayColorMap != 0)
-        XStoreColors(getDisplay(), overlayColorMap, overlayMapColors, overlayMapColorNum);
-#endif
+    getOverlayWidget()->setColormap (colormap);
 }
 
 ////////////////////////////////////////////////////////////////////////
