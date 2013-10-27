@@ -112,6 +112,11 @@ SoQt::init (const char* /*appName*/, const char* /*className*/)
     }
     initialized = true;
 
+    if (!qApp) {
+        static int argc = 1;
+        static char argv[1][5] = {{"SoQt"}};
+        new QApplication(argc, (char**)argv);
+    }
     // init Inventor
     SoDB::init();
     SoNodeKit::init();
