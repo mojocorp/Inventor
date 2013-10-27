@@ -46,8 +46,8 @@
 
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/engines/SoCalculator.h>
 #include <Inventor/engines/SoElapsedTime.h>
 #include <Inventor/engines/SoTimeCounter.h>
@@ -58,14 +58,14 @@
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoTranslation.h>
+#include <math.h>
 
 int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);  
-   if (myWindow == NULL) exit(1);     
-
+   SoQt::init(argv[0]);  
+        
    SoSeparator *root = new SoSeparator;
    root->ref();
 
@@ -136,12 +136,11 @@ main(int , char **argv)
 // CODE FOR The Inventor Mentor ENDS HERE
 /////////////////////////////////////////////////////////////
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
    myRenderArea->setSceneGraph(root);
    myRenderArea->setTitle("Flower Dance");
    myRenderArea->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

@@ -45,8 +45,8 @@
 
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/engines/SoBoolOperation.h>
 #include <Inventor/engines/SoCompose.h>
 #include <Inventor/engines/SoElapsedTime.h>
@@ -62,6 +62,7 @@
 #include <Inventor/nodes/SoSphere.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoTranslation.h>
+#include <math.h>
 
 void myMousePressCB(void *, SoEventCallback *);
 
@@ -73,9 +74,8 @@ main(int , char **argv)
    printf("Click the left mouse button to toggle between the two ducks.\n");
 
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);  
-   if (myWindow == NULL) exit(1);     
-
+   SoQt::init(argv[0]);  
+        
    SoSeparator *root = new SoSeparator;
    root->ref();
 
@@ -182,13 +182,12 @@ main(int , char **argv)
 // CODE FOR The Inventor Mentor ENDS HERE
 /////////////////////////////////////////////////////////////
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
    myRenderArea->setSceneGraph(root);
    myRenderArea->setTitle("Duck and Duckling");
    myRenderArea->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 
 // This routine is called for every mouse button event.

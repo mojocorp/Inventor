@@ -42,8 +42,8 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
@@ -53,8 +53,7 @@
 int
 main(int , char **argv)
 {
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   SoQt::init(argv[0]);
 
    SoSeparator *root = new SoSeparator;
    root->ref();
@@ -64,13 +63,11 @@ main(int , char **argv)
    root->addChild(new SoCone);
 
    // Set up viewer:
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Examiner Viewer");
    myViewer->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

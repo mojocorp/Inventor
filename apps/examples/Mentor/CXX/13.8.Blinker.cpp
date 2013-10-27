@@ -45,8 +45,8 @@
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/nodes/SoBlinker.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
@@ -58,8 +58,8 @@ int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);  
-   if (myWindow == NULL) exit(1);     
+   SoQt::init(argv[0]);  
+        
 
    // Set up camera and light
    SoSeparator *root = new SoSeparator;
@@ -105,15 +105,15 @@ main(int , char **argv)
 //////////////////////////////////////////////////////////////
 
    // Set up and display render area 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
    SbViewportRegion myRegion(myRenderArea->getSize()); 
    myCamera->viewAll(root, myRegion);
 
    myRenderArea->setSceneGraph(root);
    myRenderArea->setTitle("Neon");
    myRenderArea->show();
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   
+   return SoQt::mainLoop();
 }
 
   

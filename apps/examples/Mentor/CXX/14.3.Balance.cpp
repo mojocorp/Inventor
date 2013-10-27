@@ -66,8 +66,8 @@
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 
 #include <Inventor/actions/SoWriteAction.h>
 
@@ -143,9 +143,8 @@ tipTheBalance(
 int
 main(int , char **argv)
 {
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
-
+   SoQt::init(argv[0]);
+   
    SoSceneKit *myScene = new SoSceneKit;
    myScene->ref();
 
@@ -222,7 +221,7 @@ main(int , char **argv)
    myText->set("transform { translation 0 -2 0 }");
    myScene->setPart("childList[1]", myText);
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
 
    // Get camera from scene and tell it to viewAll...
    SoPerspectiveCamera *myCamera = SO_GET_PART(myScene,
@@ -233,6 +232,5 @@ main(int , char **argv)
    myRenderArea->setTitle("Balance Scale Made of Nodekits");
    myRenderArea->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

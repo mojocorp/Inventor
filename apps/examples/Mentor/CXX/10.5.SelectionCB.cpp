@@ -45,11 +45,10 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <X11/Intrinsic.h>
 #include <Inventor/Sb.h>
 #include <Inventor/SoInput.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
@@ -99,8 +98,7 @@ int
 main(int argc, char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   SoQt::init(argv[0]);
 
    // Create and set up the selection node
    SoSelection *selectionRoot = new SoSelection;
@@ -147,7 +145,7 @@ main(int argc, char **argv)
    textRoot->addChild(myText);
    root->addChild(textRoot);
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
    myRenderArea->setSceneGraph(selectionRoot);
    myRenderArea->setTitle("My Selection Callback");
    myRenderArea->show();
@@ -157,7 +155,6 @@ main(int argc, char **argv)
             myRenderArea->getViewportRegion();
    myCamera->viewAll(root, myViewport, 2.0);
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

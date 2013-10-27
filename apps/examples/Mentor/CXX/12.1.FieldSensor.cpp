@@ -43,8 +43,8 @@
 
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoCamera.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/sensors/SoFieldSensor.h>
@@ -69,8 +69,8 @@ main(int argc, char **argv)
       exit(1);
    }
 
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   SoQt::init(argv[0]);
+   
 
    SoInput inputFile;
    if (inputFile.openFile(argv[1]) == FALSE) {
@@ -81,8 +81,8 @@ main(int argc, char **argv)
    SoSeparator *root = SoDB::readAll(&inputFile);
    root->ref();
 
-   SoXtExaminerViewer *myViewer =
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer =
+            new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Camera Sensor");
    myViewer->show();
@@ -94,6 +94,5 @@ main(int argc, char **argv)
             new SoFieldSensor(cameraChangedCB, camera);
    mySensor->attach(&camera->position);
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

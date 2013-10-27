@@ -54,9 +54,9 @@
 #include <Inventor/nodes/SoRotationXYZ.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTexture2.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
-
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
+#include <math.h>
 
 SbBool 
 generateTextureMap (SoNode *root, SoTexture2 *texture, 
@@ -84,10 +84,8 @@ generateTextureMap (SoNode *root, SoTexture2 *texture,
 int
 main(int, char **argv)
 {
-   // Initialize Inventor and Xt
-   Widget appWindow = SoXt::init(argv[0]);
-   if (appWindow == NULL)
-      exit(1);
+   // Initialize Inventor
+   SoQt::init(argv[0]);
 
    // Make a scene from reading in a file
    SoSeparator *texRoot = new SoSeparator;
@@ -125,17 +123,16 @@ main(int, char **argv)
    root->addChild(new SoCube);
 
    // Initialize an Examiner Viewer
-   SoXtExaminerViewer *viewer =
-            new SoXtExaminerViewer(appWindow);
+   SoQtExaminerViewer *viewer =
+            new SoQtExaminerViewer();
    viewer->setSceneGraph(root);
    viewer->setTitle("Offscreen Rendered Texture");
 
    // In Inventor 2.1, if the machine does not have hardware texture
    // mapping, we must override the default drawStyle to display textures.
-   viewer->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_AS_IS);
+   viewer->setDrawStyle(SoQtViewer::STILL, SoQtViewer::VIEW_AS_IS);
 
    viewer->show();
 
-   SoXt::show(appWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

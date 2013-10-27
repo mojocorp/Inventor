@@ -44,10 +44,10 @@
  *  through a Callback node.
  *----------------------------------------------------------*/
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbLinear.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/nodes/SoCallback.h>
 #include <Inventor/nodes/SoCube.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
@@ -58,6 +58,7 @@
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/elements/SoGLLazyElement.h>
+#include <math.h>
 
 float   floorObj[81][3];
 
@@ -174,7 +175,7 @@ int
 main(int, char **)
 {
    // Initialize Inventor utilities
-   Widget myWindow = SoXt::init("Example 17.1");
+   SoQt::init("Example 17.1");
 
    buildFloor();
 
@@ -197,12 +198,11 @@ main(int, char **)
    buildScene(root);
    
    // Initialize an Inventor Xt RenderArea and draw the scene.
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
    myRenderArea->setSceneGraph(root);
    myRenderArea->setTitle("OpenGL Callback");
    myRenderArea->setBackgroundColor(SbColor(.8, .8, .8));
    myRenderArea->show();
    
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

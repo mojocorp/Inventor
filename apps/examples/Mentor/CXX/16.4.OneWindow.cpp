@@ -47,9 +47,9 @@
 #include <stdlib.h>
 #include <Xm/Form.h>
 #include <Inventor/SoDB.h>          
-#include <Inventor/Xt/SoXt.h>          
+#include <Inventor/Qt/SoQt.h>          
 #include <Inventor/Xt/SoXtMaterialEditor.h>
-#include <Inventor/Xt/SoXtRenderArea.h>  
+#include <Inventor/Qt/SoQtRenderArea.h>  
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
@@ -59,14 +59,14 @@ int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
+   SoQt::init(argv[0]);
    
    // Build the form to hold both components
    Widget myForm = XtCreateWidget("Form", 
             xmFormWidgetClass, myWindow, NULL, 0);
    
    // Build the render area and Material Editor
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myForm);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea(myForm);
    myRenderArea->setSize(SbVec2s(200, 200));
    SoXtMaterialEditor *myEditor = 
             new SoXtMaterialEditor(myForm);
@@ -115,8 +115,7 @@ main(int , char **argv)
    myRenderArea->show();
    myEditor->show();
    SoXt::show(myForm);    // this calls XtManageChild
-   SoXt::show(myWindow);  // this calls XtRealizeWidget
    
    // Loop forever
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

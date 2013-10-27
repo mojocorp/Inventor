@@ -50,13 +50,14 @@
 
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoRotation.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/sensors/SoTimerSensor.h>
+#include <math.h>
 
 ///////////////////////////////////////////////////////////
 // CODE FOR The Inventor Mentor STARTS HERE
@@ -98,9 +99,8 @@ main(int argc, char **argv)
      exit(1);
    }
 
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
-
+   SoQt::init(argv[0]);
+   
    SoSeparator *root = new SoSeparator;
    root->ref();
    
@@ -130,12 +130,11 @@ main(int argc, char **argv)
    }
    root->addChild(SoDB::readAll(&inputFile));
 
-   SoXtExaminerViewer *myViewer =
-               new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer =
+               new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Two Timers");
    myViewer->show();
 
-   SoXt::show(myWindow);  // Display main window
-   SoXt::mainLoop();        // Main Inventor event loop
+   return SoQt::mainLoop();        // Main Inventor event loop
 }

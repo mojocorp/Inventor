@@ -43,8 +43,8 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoCube.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTexture2.h>
@@ -52,8 +52,7 @@
 int
 main(int , char **argv)
 {
-   Widget myWindow = SoXt::init(argv[0]);
-   if(myWindow == NULL) exit(1);
+   SoQt::init(argv[0]);
 
    SoSeparator *root = new SoSeparator;
    root->ref();
@@ -66,17 +65,16 @@ main(int , char **argv)
    // Make a cube
    root->addChild(new SoCube);
 
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = 
+            new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Default Texture Coords");
 
    // In Inventor 2.1, if the machine does not have hardware texture
    // mapping, we must override the default drawStyle to display textures.
-   myViewer->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_AS_IS);
+   myViewer->setDrawStyle(SoQtViewer::STILL, SoQtViewer::VIEW_AS_IS);
 
    myViewer->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

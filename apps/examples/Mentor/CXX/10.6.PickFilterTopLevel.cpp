@@ -46,15 +46,13 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <X11/StringDefs.h>
-#include <X11/Intrinsic.h>
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/SoPickedPoint.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/actions/SoBoxHighlightRenderAction.h>
 #include <Inventor/nodes/SoSelection.h>
 
@@ -82,7 +80,7 @@ int
 main(int argc, char *argv[])
 {
    // Initialization
-   Widget mainWindow = SoXt::init(argv[0]);
+   SoQt::init(argv[0]);
     
    // Open the data file
    SoInput in;   
@@ -108,13 +106,13 @@ main(int argc, char *argv[])
 
    // Create two viewers, one to show the pick filter for top level
    // selection, the other to show default selection.
-   SoXtExaminerViewer *viewer1 = new SoXtExaminerViewer(mainWindow);
+   SoQtExaminerViewer *viewer1 = new SoQtExaminerViewer();
    viewer1->setSceneGraph(topLevelSel);
    viewer1->setGLRenderAction(new SoBoxHighlightRenderAction());
    viewer1->redrawOnSelectionChange(topLevelSel);
    viewer1->setTitle("Top Level Selection");
 
-   SoXtExaminerViewer *viewer2 = new SoXtExaminerViewer();
+   SoQtExaminerViewer *viewer2 = new SoQtExaminerViewer();
    viewer2->setSceneGraph(defaultSel);
    viewer2->setGLRenderAction(new SoBoxHighlightRenderAction());    
    viewer2->redrawOnSelectionChange(defaultSel);
@@ -123,7 +121,6 @@ main(int argc, char *argv[])
    viewer1->show();
    viewer2->show();
    
-   SoXt::show(mainWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

@@ -49,8 +49,8 @@
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/nodes/SoBlinker.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
@@ -62,9 +62,8 @@
 int
 main(int, char **argv)
 {
-   // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   // Initialize Inventor
+   SoQt::init(argv[0]);
 
    SoSeparator *root = new SoSeparator;
    root->ref();
@@ -100,7 +99,7 @@ main(int, char **argv)
    root->addChild(myMaterial);
    root->addChild(fileContents);
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
 
    // Establish camera positions. 
    // First do a viewAll on all three cameras.  
@@ -119,6 +118,5 @@ main(int, char **argv)
    myRenderArea->setTitle("Cameras");
    myRenderArea->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

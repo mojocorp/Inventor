@@ -50,8 +50,8 @@
 
 #include <stdlib.h>
 #include <Inventor/Sb.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/actions/SoBoxHighlightRenderAction.h>
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/events/SoKeyboardEvent.h>
@@ -86,8 +86,8 @@ main(int , char **argv)
    printf("Up and Down arrows       - scale selected objects\n");
 
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   SoQt::init(argv[0]);
+   
 
    // Create and set up the selection node
    SoSelection *selectionRoot = new SoSelection;
@@ -159,7 +159,7 @@ main(int , char **argv)
    selectionRoot->addChild(cylRoot);
 
    // Create a render area for viewing the scene
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
    myRenderArea->setSceneGraph(selectionRoot);
    myRenderArea->setGLRenderAction(new SoBoxHighlightRenderAction());
    myRenderArea->redrawOnSelectionChange(selectionRoot);
@@ -171,8 +171,8 @@ main(int , char **argv)
 
    // Show our application window, and loop forever...
    myRenderArea->show();
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+
+   return SoQt::mainLoop();
 }
 
 ///////////////////////////////////////////////////////////////

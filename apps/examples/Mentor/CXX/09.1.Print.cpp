@@ -51,11 +51,11 @@
 #include <Inventor/events/SoKeyboardEvent.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoEventCallback.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 
 typedef struct cbdata {
-    SoXtExaminerViewer *vwr;
+    SoQtExaminerViewer *vwr;
     char               *filename;
     SoNode             *scene;
 } callbackData;
@@ -65,7 +65,7 @@ typedef struct cbdata {
 
 SbBool 
 printToPostScript (SoNode *root, FILE *file,
-   SoXtExaminerViewer *viewer, int printerDPI)
+   SoQtExaminerViewer *viewer, int printerDPI)
 {
    // Calculate size of the images in inches which is equal to
    // the size of the viewport in pixels divided by the number
@@ -143,10 +143,8 @@ processKeyEvents( void *data, SoEventCallback *cb )
 int
 main(int argc, char **argv)
 {
-   // Initialize Inventor and Xt
-   Widget appWindow = SoXt::init(argv[0]);
-   if (appWindow == NULL)
-      exit(1);
+   // Initialize Inventor
+   SoQt::init(argv[0]);
 
    // Verify the command line arguments
    if (argc != 3) {
@@ -171,9 +169,9 @@ main(int argc, char **argv)
       exit (1);
    root->addChild(geomObject);
 
-   SoXtExaminerViewer *viewer =
-         new SoXtExaminerViewer(appWindow, NULL, TRUE, 
-            SoXtExaminerViewer::BUILD_ALL, SoXtExaminerViewer::EDITOR);
+   SoQtExaminerViewer *viewer =
+         new SoQtExaminerViewer(appWindow, NULL, TRUE, 
+            SoQtExaminerViewer::BUILD_ALL, SoQtExaminerViewer::EDITOR);
    viewer->setSceneGraph(root);
    viewer->setTitle("Print to PostScript");
 
@@ -186,7 +184,6 @@ main(int argc, char **argv)
          processKeyEvents, data);
    viewer->show();
 
-   SoXt::show(appWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

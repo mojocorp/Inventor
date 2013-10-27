@@ -46,21 +46,22 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoRotationXYZ.h>
 #include <Inventor/nodes/SoScale.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTranslation.h>
+#include <math.h>
 
 int
 main(int, char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   SoQt::init(argv[0]);
+   
 
    SoSeparator *root = new SoSeparator;
    root->ref();
@@ -106,13 +107,12 @@ main(int, char **argv)
    rightSep->addChild(fileContents);
 
    // Construct a renderArea and display the scene.
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = 
+            new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Transform Ordering");
    myViewer->viewAll();
    myViewer->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

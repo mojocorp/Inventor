@@ -43,8 +43,8 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoFont.h>
 #include <Inventor/nodes/SoGroup.h>
 #include <Inventor/nodes/SoLinearProfile.h>
@@ -57,9 +57,8 @@
 int
 main(int argc, char **argv)
 {
-
-   Widget myWindow = SoXt::init(argv[0]);
-   if(myWindow == NULL) exit(1);
+   // Initialize Inventor.
+   SoQt::init(argv[0]); // pass the app name
 
    SoGroup *root = new SoGroup;
    root->ref();
@@ -132,13 +131,11 @@ main(int argc, char **argv)
    
    root->addChild(myText3);
 
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Complex 3D Text");
    myViewer->show();
    myViewer->viewAll();
    
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

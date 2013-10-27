@@ -51,17 +51,16 @@
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTransform.h>
 
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 
 #include <Inventor/draggers/SoTranslate1Dragger.h>
 
 int
 main(int , char **argv)
 {
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
-
+   SoQt::init(argv[0]);
+   
    SoSeparator *root = new SoSeparator;
    root->ref();
 
@@ -84,13 +83,12 @@ main(int , char **argv)
    myCone->bottomRadius.connectFrom(&myEngine->x);
 
    // Display them in a viewer
-   SoXtExaminerViewer *myViewer 
-      = new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer 
+      = new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Dragger Edits Cone Radius");
    myViewer->viewAll();
    myViewer->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

@@ -50,8 +50,8 @@
 #include <Inventor/SoInput.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/nodes/SoCone.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 
 static char *overlayScene = "\
 #Inventor V2.0 ascii\n\
@@ -73,7 +73,7 @@ int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
+   SoQt::init(argv[0]);
 
    // read the scene graph in
    SoInput in;
@@ -87,7 +87,7 @@ main(int , char **argv)
    // Allocate the viewer, set the overlay scene and
    // load the overlay color map with the wanted color.
    SbColor color(.5, 1, .5);
-   SoXtExaminerViewer *myViewer = new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = new SoQtExaminerViewer();
    myViewer->setSceneGraph(new SoCone);
    myViewer->setOverlaySceneGraph(scene);
    myViewer->setOverlayColorMap(1, 1, &color);
@@ -95,6 +95,6 @@ main(int , char **argv)
    
    // Show the viewer and loop forever
    myViewer->show();
-   XtRealizeWidget(myWindow);
-   SoXt::mainLoop();
+
+   return SoQt::mainLoop();
 }

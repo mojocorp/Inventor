@@ -47,8 +47,8 @@
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoBaseColor.h>
 #include <Inventor/nodes/SoCamera.h>
 #include <Inventor/nodes/SoComplexity.h>
@@ -63,6 +63,7 @@
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTexture2.h>
 #include <Inventor/nodes/SoTranslation.h>
+#include <math.h>
 
 static char *floorData = 
    "#Inventor V2.0 ascii\n"
@@ -193,10 +194,8 @@ makeSurface()
 int
 main(int, char **argv)
 {
-   // Initialize Inventor and Xt
-   Widget appWindow = SoXt::init(argv[0]);
-   if (appWindow == NULL)
-      exit(1);
+   // Initialize Inventor
+   SoQt::init(argv[0]);
 
    SoSeparator *root  = new SoSeparator;
    root->ref();
@@ -255,8 +254,8 @@ main(int, char **argv)
    root->addChild(shadow);
 
    // Initialize an Examiner Viewer
-   SoXtExaminerViewer *viewer =
-            new SoXtExaminerViewer(appWindow);
+   SoQtExaminerViewer *viewer =
+            new SoQtExaminerViewer();
    viewer->setSceneGraph(root);
    viewer->setTitle("Bezier Surface");
    SoCamera *cam = viewer->getCamera();
@@ -264,7 +263,6 @@ main(int, char **argv)
    cam->pointAt(SbVec3f(-2.0, -2.0, -4.0));
    viewer->show();
 
-   SoXt::show(appWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

@@ -47,8 +47,8 @@
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoSeparator.h>
 
 /////////////////////////////////////////////////////////////
@@ -127,18 +127,17 @@ int
 main(int argc, char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   SoQt::init(argv[0]);
+   
 
    SoNode *root = makeDodecahedron();
    root->ref();
 
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = 
+            new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("String Reader");
    myViewer->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

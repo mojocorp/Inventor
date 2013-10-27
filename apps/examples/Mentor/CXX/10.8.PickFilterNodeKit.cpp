@@ -44,14 +44,11 @@
  *  care of the part creation details.
  *------------------------------------------------------------*/
 
-#include <X11/StringDefs.h>
-#include <X11/Intrinsic.h>
-
 #include <Inventor/SoPath.h>
 #include <Inventor/SoPickedPoint.h>
-#include <Inventor/Xt/SoXt.h>
+#include <Inventor/Qt/SoQt.h>
 #include <Inventor/Xt/SoXtMaterialEditor.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/actions/SoBoxHighlightRenderAction.h>
 #include <Inventor/nodekits/SoShapeKit.h>
 #include <Inventor/nodes/SoCube.h>
@@ -154,7 +151,7 @@ int
 main(int , char *argv[])
 {
    // Initialization
-   Widget mainWindow = SoXt::init(argv[0]);
+   SoQt::init(argv[0]);
     
    // Create our scene graph.
    SoSelection *sel = new SoSelection;
@@ -162,7 +159,7 @@ main(int , char *argv[])
    sel->addChild(buildScene());
 
    // Create a viewer with a render action that displays highlights
-   SoXtExaminerViewer *viewer = new SoXtExaminerViewer(mainWindow);
+   SoQtExaminerViewer *viewer = new SoQtExaminerViewer(mainWindow);
    viewer->setSceneGraph(sel);
    viewer->setGLRenderAction(new SoBoxHighlightRenderAction());
    viewer->redrawOnSelectionChange(sel);
@@ -184,7 +181,6 @@ main(int , char *argv[])
    sel->setPickFilterCallback(pickFilterCB);
    sel->addSelectionCallback(selectCB, &userData);
    
-   SoXt::show(mainWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

@@ -42,8 +42,8 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoCoordinate3.h>
 #include <Inventor/nodes/SoFaceSet.h>
 #include <Inventor/nodes/SoMaterial.h>
@@ -146,23 +146,21 @@ makeObeliskFaceSet()
 int
 main(int, char **argv)
 {
-   // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   // Initialize Inventor
+   SoQt::init(argv[0]);
 
    SoSeparator *root = new SoSeparator;
    root->ref();
 
    root->addChild(makeObeliskFaceSet());
 
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer =
+            new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Face Set: Obelisk");
    myViewer->show();
    myViewer->viewAll();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

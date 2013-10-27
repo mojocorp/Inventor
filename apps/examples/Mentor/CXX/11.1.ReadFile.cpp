@@ -46,8 +46,8 @@
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoSeparator.h>
 
 /////////////////////////////////////////////////////////////
@@ -81,14 +81,14 @@ int
 main(int argc, char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
+   SoQt::init(argv[0]);
 
    // Read the file
    SoSeparator *scene = readFile("/usr/share/src/Inventor/examples/data/bookshelf.iv");
 
    // Create a viewer
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = 
+            new SoQtExaminerViewer();
 
    // attach and show viewer
    myViewer->setSceneGraph(scene);
@@ -96,7 +96,6 @@ main(int argc, char **argv)
    myViewer->show();
     
    // Loop forever
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

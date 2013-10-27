@@ -77,8 +77,8 @@
 #include <Inventor/nodes/SoSphere.h>
 #include <Inventor/nodes/SoTransform.h>
 
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 
 // function prototypes
 void selectionCallback(void *, SoPath *);
@@ -99,9 +99,8 @@ int
 main(int, char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
-
+   SoQt::init(argv[0]);
+   
    // create and set up the selection node
    SoSelection *selectionRoot = new SoSelection;
    selectionRoot->ref();
@@ -175,15 +174,14 @@ main(int, char **argv)
    myDragger->addStartCallback(dragStartCallback,wrapperMat);
    myDragger->addFinishCallback(dragFinishCallback,wrapperMat);
 
-   SoXtExaminerViewer *myViewer 
-      = new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer 
+      = new SoQtExaminerViewer();
    myViewer->setSceneGraph(selectionRoot);
    myViewer->setTitle("Attaching Manipulators");
    myViewer->show();
    myViewer->viewAll();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 
 // Is this node of a type that is influenced by transforms?

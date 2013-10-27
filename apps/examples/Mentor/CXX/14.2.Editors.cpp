@@ -54,10 +54,10 @@
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
-#include <Inventor/Xt/SoXt.h>
+#include <Inventor/Qt/SoQt.h>
 #include <Inventor/Xt/SoXtDirectionalLightEditor.h>
 #include <Inventor/Xt/SoXtMaterialEditor.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/nodekits/SoCameraKit.h>
 #include <Inventor/nodekits/SoLightKit.h>
 #include <Inventor/nodekits/SoSceneKit.h>
@@ -70,9 +70,8 @@ int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
-
+   SoQt::init(argv[0]);
+   
    // SCENE!
    SoSceneKit *myScene = new SoSceneKit;
    myScene->ref();
@@ -121,7 +120,7 @@ main(int , char **argv)
    ltEditor->setTitle("Lighting of Desk");
    ltEditor->show();
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
 
    // Set up Camera with ViewAll...
    // -- use the SO_GET_PART macro to get the camera node.
@@ -140,7 +139,6 @@ main(int , char **argv)
    myRenderArea->setTitle("Main Window: Desk In A Scene Kit");
    myRenderArea->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

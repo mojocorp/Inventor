@@ -49,18 +49,8 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/nodes/SoNode.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
-#include <GL/glx.h>
-
-// window attribute list to create a color index visual.
-// This will create a double buffered color index window
-// with the maximum number of bits and a zbuffer.
-int attribList[] = {
-   GLX_DOUBLEBUFFER, 
-   GLX_BUFFER_SIZE, 1, 
-   GLX_DEPTH_SIZE, 1, 
-   None };
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 
 // list of colors to load in the color map
 static float colors[3][3] = {{.2, .2, .2}, {.5, 1, .5}, {.5, .5, 1}};
@@ -81,8 +71,8 @@ Separator { \
 int
 main(int , char **argv)
 {
-   // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
+   // Initialize Inventor.
+   SoQt::init(argv[0]); // pass the app name
    
    // read the scene graph in
    SoInput in;
@@ -92,29 +82,17 @@ main(int , char **argv)
       printf("Couldn't read scene\n");
       exit(1);
    }
-   
-   // create the color index visual
-   XVisualInfo *vis = glXChooseVisual(XtDisplay(myWindow), 
-      XScreenNumberOfScreen(XtScreen(myWindow)), attribList);
-   if (! vis) {
-      printf("Couldn't create visual\n");
-      exit(1);
-   }
-   
+
    // allocate the viewer, set the scene, the visual and
    // load the color map with the wanted colors.
    //
    // Color 0 will be used for the background (default) while
    // color 1 and 2 are used by the objects.
    //
-   SoXtExaminerViewer *myViewer = new SoXtExaminerViewer(myWindow);
-   myViewer->setNormalVisual(vis);
+   SoQtExaminerViewer *myViewer = new SoQtExaminerViewer();
    myViewer->setColorMap(0, 3, (SbColor *) colors);
    myViewer->setSceneGraph(scene);
    myViewer->setTitle("Color Index Mode");
    
-   // Show the viewer and loop forever...
-   myViewer->show();
-   XtRealizeWidget(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();      // Main Inventor event loop
 }

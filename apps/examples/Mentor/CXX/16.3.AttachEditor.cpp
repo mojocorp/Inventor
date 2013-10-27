@@ -45,9 +45,9 @@
 
 #include <stdlib.h>
 #include <Inventor/SoDB.h>         
-#include <Inventor/Xt/SoXt.h>         
+#include <Inventor/Qt/SoQt.h>         
 #include <Inventor/Xt/SoXtMaterialEditor.h>
-#include <Inventor/Xt/SoXtRenderArea.h>  
+#include <Inventor/Qt/SoQtRenderArea.h>  
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
@@ -57,10 +57,10 @@ int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
+   SoQt::init(argv[0]);
    
    // Build the render area in the applications main window
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
    myRenderArea->setSize(SbVec2s(200, 200));
    
    // Build the material editor in its own window
@@ -96,9 +96,8 @@ main(int , char **argv)
    // Show the application window and the material editor
    myRenderArea->setTitle("Attach Editor");
    myRenderArea->show();
-   SoXt::show(myWindow);
    myEditor->show();
 
    // Loop forever
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

@@ -43,8 +43,8 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoComplexity.h>
 #include <Inventor/nodes/SoFont.h>
 #include <Inventor/nodes/SoGroup.h>
@@ -60,8 +60,7 @@
 int
 main(int, char **argv)
 {
-   Widget myWindow = SoXt::init(argv[0]);
-   if(myWindow == NULL) exit(1);
+   SoQt::init(argv[0]);
 
    SoGroup *root = new SoGroup;
    root->ref();
@@ -118,18 +117,17 @@ main(int, char **argv)
    asiaSep->addChild(asiaTransform);
    asiaSep->addChild(asiaText);
 
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = 
+            new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("3D Text");
 
    // In Inventor 2.1, if the machine does not have hardware texture
    // mapping, we must override the default drawStyle to display textures.
-   myViewer->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_AS_IS);
+   myViewer->setDrawStyle(SoQtViewer::STILL, SoQtViewer::VIEW_AS_IS);
 
    myViewer->show();
    myViewer->viewAll();
    
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

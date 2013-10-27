@@ -48,15 +48,12 @@
  *  object rather than select the manipulator.
  *------------------------------------------------------------*/
 
-#include <X11/StringDefs.h>
-#include <X11/Intrinsic.h>
-
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/SoPickedPoint.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/manips/SoHandleBoxManip.h>
 #include <Inventor/nodes/SoBaseColor.h>
 #include <Inventor/nodes/SoFont.h>
@@ -237,7 +234,7 @@ int
 main(int , char *argv[])
 {
    // Initialization
-   Widget mainWindow = SoXt::init(argv[0]);
+   SoQt::init(argv[0]);
     
    // Create a scene graph. Use the toggle selection policy.
    SoSelection *sel = new SoSelection;
@@ -246,7 +243,7 @@ main(int , char *argv[])
    sel->addChild(buildScene());
 
    // Create a viewer
-   SoXtExaminerViewer *viewer = new SoXtExaminerViewer(mainWindow);
+   SoQtExaminerViewer *viewer = new SoQtExaminerViewer();
    viewer->setSceneGraph(sel);
    viewer->setTitle("Select Through Manips");
    viewer->show();
@@ -256,7 +253,6 @@ main(int , char *argv[])
    sel->addDeselectionCallback(deselCB);
    sel->setPickFilterCallback(pickFilterCB);
     
-   SoXt::show(mainWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 

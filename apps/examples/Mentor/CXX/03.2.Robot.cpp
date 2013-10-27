@@ -45,8 +45,8 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoCube.h>
 #include <Inventor/nodes/SoCylinder.h>
 #include <Inventor/nodes/SoMaterial.h>
@@ -162,9 +162,8 @@ makeRobot()
 int
 main(int , char **argv)
 {
-   // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   // Initialize Inventor
+   SoQt::init(argv[0]);
 
    SoSeparator *root = new SoSeparator;
    root->ref();
@@ -172,15 +171,13 @@ main(int , char **argv)
    // This function contains our code fragment.
    root->addChild(makeRobot());
 
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Robot");
    myViewer->show();
    myViewer->viewAll();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
 
 

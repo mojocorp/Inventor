@@ -47,8 +47,8 @@
  *----------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/draggers/SoTranslate1Dragger.h>
 #include <Inventor/engines/SoCalculator.h>
 #include <Inventor/nodekits/SoShapeKit.h>
@@ -60,8 +60,8 @@
 int
 main(int , char **argv)
 {
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+   // Initialize Inventor.
+   SoQt::init(argv[0]); // pass the app name
 
    SoSeparator *root = new SoSeparator;
    root->ref();
@@ -132,13 +132,11 @@ main(int , char **argv)
       = (SoTransform *) textKit->getPart("transform",TRUE);
    textXf->translation.connectFrom(&myCalc->oA);
 
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = new SoQtExaminerViewer();
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Slider Box");
    myViewer->viewAll();
    myViewer->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();      // Main Inventor event loop
 }

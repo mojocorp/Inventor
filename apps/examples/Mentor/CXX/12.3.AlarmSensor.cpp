@@ -42,12 +42,13 @@
  *------------------------------------------------------------*/
 
 #include <stdlib.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/nodes/SoCone.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/sensors/SoAlarmSensor.h>
+#include <math.h>
 
 ///////////////////////////////////////////////////////////
 // CODE FOR The Inventor Mentor STARTS HERE
@@ -68,8 +69,7 @@ raiseFlagCallback(void *data, SoSensor *)
 int
 main(int , char **argv)
 {
-   Widget myWindow = SoXt::init(argv[0]); // pass the app name
-   if (myWindow == NULL) exit(1);
+   SoQt::init(argv[0]); // pass the app name
 
    ///////////////////////////////////////////////////////////
    // CODE FOR The Inventor Mentor STARTS HERE
@@ -92,15 +92,14 @@ main(int , char **argv)
    myCone->bottomRadius = 0.1;
    root->addChild(myCone);
 
-   SoXtExaminerViewer *myViewer = new
-      SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = new
+      SoQtExaminerViewer();
 
    // Put our scene in myViewer, change the title
    myViewer->setSceneGraph(root);
    myViewer->setTitle("Raise The Cone");
    myViewer->show();
 
-   SoXt::show(myWindow);  // Display main window
-   SoXt::mainLoop();      // Main Inventor event loop
+   return SoQt::mainLoop();      // Main Inventor event loop
 }
 

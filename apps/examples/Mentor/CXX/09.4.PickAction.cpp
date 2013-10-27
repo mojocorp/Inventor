@@ -49,8 +49,8 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoPickedPoint.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>
 #include <Inventor/actions/SoRayPickAction.h>
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/events/SoMouseButtonEvent.h>
@@ -61,6 +61,7 @@
 #include <Inventor/nodes/SoTranslation.h>
 
 #include <stdlib.h>
+#include <math.h>
 
 ///////////////////////////////////////////////////////////////
 // CODE FOR The Inventor Mentor STARTS HERE
@@ -115,8 +116,7 @@ main(int, char **argv)
    SoMouseButtonEvent  myMouseEvent;
 
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]); 
-   if (myWindow == NULL) exit(1);
+   SoQt::init(argv[0]); 
 
    SoSeparator *root = new SoSeparator;
    root->ref();
@@ -151,7 +151,7 @@ main(int, char **argv)
    root->addChild(starObject);  // second star object
 
    // Create a render area in which to see our scene graph.
-   SoXtExaminerViewer *myViewer = new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = new SoQtExaminerViewer();
 
    // Turn off viewing to allow picking
    myViewer->setViewing(FALSE);
@@ -169,7 +169,6 @@ main(int, char **argv)
       myMousePressCB,
       myViewer->getSceneManager()->getSceneGraph());
 
-   SoXt::show(myWindow);  
-   SoXt::mainLoop();      
+   return SoQt::mainLoop();      
 }
 

@@ -45,8 +45,8 @@
 
 #include <stdlib.h>
 #include <Inventor/SoDB.h>
-#include <Inventor/Xt/SoXt.h>
-#include <Inventor/Xt/SoXtRenderArea.h>
+#include <Inventor/Qt/SoQt.h>
+#include <Inventor/Qt/SoQtRenderArea.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
@@ -57,9 +57,8 @@ int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);  
-   if (myWindow == NULL) exit(1);     
-
+   SoQt::init(argv[0]);  
+     
    SoSeparator *root = new SoSeparator;
    root->ref();
    
@@ -76,12 +75,11 @@ main(int , char **argv)
    root->addChild(myText);
    myText->string.connectFrom(SoDB::getGlobalField("realTime"));
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+   SoQtRenderArea *myRenderArea = new SoQtRenderArea();
    myCamera->viewAll(root, myRenderArea->getSize());
    myRenderArea->setSceneGraph(root);
    myRenderArea->setTitle("Date & Time");
    myRenderArea->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }

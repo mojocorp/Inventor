@@ -45,19 +45,19 @@
 
 #include <stdlib.h>
 #include <Inventor/SoDB.h>         
-#include <Inventor/Xt/SoXt.h>         
-#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>  
+#include <Inventor/Qt/SoQt.h>         
+#include <Inventor/Qt/viewers/SoQtExaminerViewer.h>  
 #include <Inventor/nodes/SoSeparator.h>
 
 int
 main(int , char **argv)
 {
    // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
+   SoQt::init(argv[0]);
    
    // Build the viewer in the applications main window
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
+   SoQtExaminerViewer *myViewer = 
+            new SoQtExaminerViewer();
    
    // Read the geometry from a file and add to the scene
    SoInput myInput;
@@ -72,8 +72,7 @@ main(int , char **argv)
    
    // Show the main window
    myViewer->show();
-   SoXt::show(myWindow);
 
    // Loop forever
-   SoXt::mainLoop();
+   return SoQt::mainLoop();
 }
