@@ -96,7 +96,7 @@ SoControllerButtonEvent::isButtonPressEvent(const SoEvent* e,
   if (e->isOfType(SoControllerButtonEvent::getClassTypeId())) {
     const SoControllerButtonEvent* bev = (const SoControllerButtonEvent*)e;
     if ((bev->getState() == SoButtonEvent::DOWN) &&
-        ((whichButton == -1) ||
+        ((whichButton == SoControllerButtonEvent::ANY) ||
          (whichButton == bev->getButton())))
       return TRUE;
   }
@@ -110,7 +110,7 @@ SoControllerButtonEvent::isButtonReleaseEvent(const SoEvent* e,
   if (e->isOfType(SoControllerButtonEvent::getClassTypeId())) {
     const SoControllerButtonEvent* bev = (const SoControllerButtonEvent*)e;
     if ((bev->getState() == SoButtonEvent::UP) &&
-        ((whichButton == -1) ||
+        ((whichButton == SoControllerButtonEvent::ANY) ||
          (whichButton == bev->getButton())))
       return TRUE;
   }
