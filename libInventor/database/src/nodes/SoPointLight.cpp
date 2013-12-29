@@ -116,51 +116,46 @@ SoPointLight::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int32_t	id;
-
     // Don't turn light on if it's off
-    if (! on.getValue())
-	return;
+    if (!on.getValue())
+        return;
 
     // Get a new light id to use for this light
-    id = SoGLLightIdElement::increment(action->getState());
+    int id = SoGLLightIdElement::increment(action->getState());
 
     // Element is being overridden or we have too many sources for GL
     // to handle? Skip the whole deal.
     if (id < 0)
-	return;
+        return;
 
     //
     // Create a new source and send it to GL. The SoGLLightIdElement
     // has already enabled the light.
     //
 
-    SbVec3f	v3;
-    SbVec4f	v4;
-
-    id = GL_LIGHT0 + id;
+    GLenum light = GL_LIGHT0 + id;
 
     // RGBA intensities of source are the product of the color and
     // intensity, with 1.0 alpha
-    v3 = intensity.getValue() * color.getValue();
-    v4.setValue(v3[0], v3[1], v3[2], 1.0);
+    SbVec3f v3 = intensity.getValue() * color.getValue();
+    SbVec4f v4(v3[0], v3[1], v3[2], 1.0);
 
-    glLightfv((GLenum) id, GL_AMBIENT, SbVec4f(0.0, 0.0, 0.0, 1.0).getValue());
-    glLightfv((GLenum) id, GL_DIFFUSE,  v4.getValue());
-    glLightfv((GLenum) id, GL_SPECULAR, v4.getValue());
+    glLightfv(light, GL_AMBIENT, SbVec4f(0.0, 0.0, 0.0, 1.0).getValue());
+    glLightfv(light, GL_DIFFUSE,  v4.getValue());
+    glLightfv(light, GL_SPECULAR, v4.getValue());
 
     // Set position
     v3 = location.getValue();
     v4.setValue(v3[0], v3[1], v3[2], 1.0);
-    glLightfv((GLenum) id, GL_POSITION, v4.getValue());
+    glLightfv(light, GL_POSITION, v4.getValue());
 
     // Make sure no spotlight stuff is on
-    glLightf((GLenum) id, GL_SPOT_EXPONENT, 0.0);
-    glLightf((GLenum) id, GL_SPOT_CUTOFF, 180.0);
+    glLightf(light, GL_SPOT_EXPONENT, 0.0);
+    glLightf(light, GL_SPOT_CUTOFF, 180.0);
 
     // Attenuation is accessed from the state
     const SbVec3f &atten = SoLightAttenuationElement::get(action->getState());
-    glLightf((GLenum) id, GL_CONSTANT_ATTENUATION,  atten[2]);
-    glLightf((GLenum) id, GL_LINEAR_ATTENUATION,    atten[1]);
-    glLightf((GLenum) id, GL_QUADRATIC_ATTENUATION, atten[0]);
+    glLightf(light, GL_CONSTANT_ATTENUATION,  atten[2]);
+    glLightf(light, GL_LINEAR_ATTENUATION,    atten[1]);
+    glLightf(light, GL_QUADRATIC_ATTENUATION, atten[0]);
 }
