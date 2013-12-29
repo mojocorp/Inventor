@@ -84,29 +84,29 @@ class INVENTOR_API SoTextureCoordinateEnvironment : public SoTextureCoordinateFu
 
     SO_NODE_HEADER(SoTextureCoordinateEnvironment);
 
-  public:
+public:
     // No fields
 
     /// Creates a texture function node with default settings.
     SoTextureCoordinateEnvironment();
 
-  SoEXTENDER public:
-    void		GLRender(SoGLRenderAction *action);
-    void		pick(SoPickAction *action);
-    void		callback(SoCallbackAction *action);
+SoEXTENDER public:
+    void GLRender(SoGLRenderAction *action);
+    void pick(SoPickAction *action);
+    void callback(SoCallbackAction *action);
     
-    void		doAction(SoAction *action);
+    void doAction(SoAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
-  protected:
+protected:
     virtual ~SoTextureCoordinateEnvironment();
 
-  private:
+private:
     // Callback used internally to project a point:
     static const SbVec4f &valueCallback(void *instance,
-	const SbVec3f &point, const SbVec3f &normal);
+                                        const SbVec3f &point, const SbVec3f &normal);
 
     // Callback used internally to send GL texgen commands:
     static void doTexgen(void *);

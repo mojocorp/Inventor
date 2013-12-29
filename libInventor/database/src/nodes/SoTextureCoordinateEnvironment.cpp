@@ -105,7 +105,7 @@ SoTextureCoordinateEnvironment::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO__NODE_INIT_CLASS(SoTextureCoordinateEnvironment,
-		  "TextureCoordinateEnvironment", SoTextureCoordinateFunction);
+                        "TextureCoordinateEnvironment", SoTextureCoordinateFunction);
 
     // Elements are enabled by SoTextureCoordinate nodes.
 }
@@ -119,8 +119,8 @@ SoTextureCoordinateEnvironment::initClass()
 
 const SbVec4f &
 SoTextureCoordinateEnvironment::valueCallback(void *action,
-    const SbVec3f &point,
-    const SbVec3f &normal)
+                                              const SbVec3f &point,
+                                              const SbVec3f &normal)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -159,8 +159,8 @@ SoTextureCoordinateEnvironment::valueCallback(void *action,
     // This is static so we can return a reference to it
     static SbVec4f result;
     result.setValue(reflection[0] / magnitude + 0.5f,
-		    reflection[1] / magnitude + 0.5f,
-		    0.0f, 1.0f);
+            reflection[1] / magnitude + 0.5f,
+            0.0f, 1.0f);
 
     return result;
 }
@@ -179,15 +179,11 @@ SoTextureCoordinateEnvironment::GLRender(SoGLRenderAction *action)
 {
     SoState *state = action->getState();
 
-    // Special case to workaround OpenGL on Indigo/IndigoII bug:
-    if (SoTextureOverrideElement::getQualityOverride(state) &&
-	SoTextureQualityElement::get(state) == 0.0) return;
-
     // Let the state know that the GL is generating texture
     // coordinates.
     SoGLTextureCoordinateElement::setTexGen(state, this,
-					    doTexgen, this,
-					    valueCallback, action);
+                                            doTexgen, this,
+                                            valueCallback, action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -252,6 +248,6 @@ SoTextureCoordinateEnvironment::doAction(SoAction *action)
     SoState *state = action->getState();
 
     SoTextureCoordinateElement::setFunction(state, this,
-					    valueCallback, action);
+                                            valueCallback, action);
 }
 
