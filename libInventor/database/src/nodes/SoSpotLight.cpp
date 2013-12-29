@@ -123,14 +123,12 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int32_t	id;
-
     // Don't turn light on if it's off
-    if (! on.getValue())
+    if (!on.getValue())
         return;
 
     // Get a new light id to use for this light
-    id = SoGLLightIdElement::increment(action->getState());
+    int id = SoGLLightIdElement::increment(action->getState());
 
     // Element is being overridden or we have too many sources for GL
     // to handle? Skip the whole deal.
@@ -142,28 +140,25 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
     // has already enabled the light.
     //
 
-    SbVec3f	v3;
-    SbVec4f	v4;
-
-    id = GL_LIGHT0 + id;
+    GLenum light = GL_LIGHT0 + id;
 
     // RGBA intensities of source are the product of the color and
     // intensity, with 1.0 alpha
-    v3 = intensity.getValue() * color.getValue();
-    v4.setValue(v3[0], v3[1], v3[2], 1.0);
+    SbVec3f v3 = intensity.getValue() * color.getValue();
+    SbVec4f v4(v3[0], v3[1], v3[2], 1.0);
 
-    glLightfv((GLenum) id, GL_AMBIENT, SbVec4f(0.0, 0.0, 0.0, 1.0).getValue());
-    glLightfv((GLenum) id, GL_DIFFUSE,  v4.getValue());
-    glLightfv((GLenum) id, GL_SPECULAR, v4.getValue());
+    glLightfv(light, GL_AMBIENT, SbVec4f(0.0, 0.0, 0.0, 1.0).getValue());
+    glLightfv(light, GL_DIFFUSE,  v4.getValue());
+    glLightfv(light, GL_SPECULAR, v4.getValue());
 
     // Set position
     v3 = location.getValue();
     v4.setValue(v3[0], v3[1], v3[2], 1.0);
-    glLightfv((GLenum) id, GL_POSITION, v4.getValue());
+    glLightfv(light, GL_POSITION, v4.getValue());
 
     // Set up spotlight stuff. Note that the GL angle must be specified
     // in degrees, though the field is in radians
-    glLightfv((GLenum) id, GL_SPOT_DIRECTION, direction.getValue().getValue());
+    glLightfv(light, GL_SPOT_DIRECTION, direction.getValue().getValue());
     //???
     //???  This is a temporary fix, inserted because of a bug in openGL:
     //???  You should be able to set GL_SPOT_EXPONENT to 0 and have it work. (It
@@ -174,14 +169,14 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
     //???
     float dropRate = dropOffRate.getValue();
     if (dropRate <= 0.0)
-        glLightf((GLenum) id, GL_SPOT_EXPONENT, (GLfloat).01f);
+        glLightf(light, GL_SPOT_EXPONENT, (GLfloat).01f);
     else
-        glLightf((GLenum) id, GL_SPOT_EXPONENT,  (GLfloat)dropRate * 128.0f);
-    glLightf((GLenum) id, GL_SPOT_CUTOFF, (GLfloat)(cutOffAngle.getValue()*(180.0/M_PI)));
+        glLightf(light, GL_SPOT_EXPONENT,  (GLfloat)dropRate * 128.0f);
+    glLightf(light, GL_SPOT_CUTOFF, (GLfloat)(cutOffAngle.getValue()*(180.0/M_PI)));
 
     // Attenuation is accessed from the state
     const SbVec3f &atten = SoLightAttenuationElement::get(action->getState());
-    glLightf((GLenum) id, GL_CONSTANT_ATTENUATION,  atten[2]);
-    glLightf((GLenum) id, GL_LINEAR_ATTENUATION,    atten[1]);
-    glLightf((GLenum) id, GL_QUADRATIC_ATTENUATION, atten[0]);
+    glLightf(light, GL_CONSTANT_ATTENUATION,  atten[2]);
+    glLightf(light, GL_LINEAR_ATTENUATION,    atten[1]);
+    glLightf(light, GL_QUADRATIC_ATTENUATION, atten[0]);
 }
