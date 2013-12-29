@@ -159,19 +159,7 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
     // Set up spotlight stuff. Note that the GL angle must be specified
     // in degrees, though the field is in radians
     glLightfv(light, GL_SPOT_DIRECTION, direction.getValue().getValue());
-    //???
-    //???  This is a temporary fix, inserted because of a bug in openGL:
-    //???  You should be able to set GL_SPOT_EXPONENT to 0 and have it work. (It
-    //???  was fine in regular gl).  But in openGL, setting it to 0 results in
-    //???  the light behaving like a point light, regardless of the cutoff angle.
-    //???  So, if dropOffRate is 0, well send down a value of .01 instead.
-    //???
-    //???
-    float dropRate = dropOffRate.getValue();
-    if (dropRate <= 0.0)
-        glLightf(light, GL_SPOT_EXPONENT, (GLfloat).01f);
-    else
-        glLightf(light, GL_SPOT_EXPONENT,  (GLfloat)dropRate * 128.0f);
+    glLightf(light, GL_SPOT_EXPONENT,  (GLfloat)dropOffRate.getValue() * 128.0f);
     glLightf(light, GL_SPOT_CUTOFF, (GLfloat)(cutOffAngle.getValue()*(180.0/M_PI)));
 
     // Attenuation is accessed from the state
