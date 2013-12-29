@@ -127,7 +127,7 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
 
     // Don't turn light on if it's off
     if (! on.getValue())
-	return;
+        return;
 
     // Get a new light id to use for this light
     id = SoGLLightIdElement::increment(action->getState());
@@ -135,7 +135,7 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
     // Element is being overridden or we have too many sources for GL
     // to handle? Skip the whole deal.
     if (id < 0)
-	return;
+        return;
 
     //
     // Create a new source and send it to GL. The SoGLLightIdElement
@@ -164,18 +164,18 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
     // Set up spotlight stuff. Note that the GL angle must be specified
     // in degrees, though the field is in radians
     glLightfv((GLenum) id, GL_SPOT_DIRECTION, direction.getValue().getValue());
-//???
-//???  This is a temporary fix, inserted because of a bug in openGL:
-//???  You should be able to set GL_SPOT_EXPONENT to 0 and have it work. (It
-//???  was fine in regular gl).  But in openGL, setting it to 0 results in 
-//???  the light behaving like a point light, regardless of the cutoff angle.
-//???  So, if dropOffRate is 0, well send down a value of .01 instead.
-//???  
-//???
+    //???
+    //???  This is a temporary fix, inserted because of a bug in openGL:
+    //???  You should be able to set GL_SPOT_EXPONENT to 0 and have it work. (It
+    //???  was fine in regular gl).  But in openGL, setting it to 0 results in
+    //???  the light behaving like a point light, regardless of the cutoff angle.
+    //???  So, if dropOffRate is 0, well send down a value of .01 instead.
+    //???
+    //???
     float dropRate = dropOffRate.getValue();
     if (dropRate <= 0.0)
         glLightf((GLenum) id, GL_SPOT_EXPONENT, (GLfloat).01f);
-    else 
+    else
         glLightf((GLenum) id, GL_SPOT_EXPONENT,  (GLfloat)dropRate * 128.0f);
     glLightf((GLenum) id, GL_SPOT_CUTOFF, (GLfloat)(cutOffAngle.getValue()*(180.0/M_PI)));
 
