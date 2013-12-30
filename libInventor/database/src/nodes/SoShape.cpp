@@ -53,6 +53,7 @@
 
 
 #include <Inventor/misc/SoGL.h>
+#include <Inventor/misc/SoGlu.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/SoPrimitiveVertex.h>

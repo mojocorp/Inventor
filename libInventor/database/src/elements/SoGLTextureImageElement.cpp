@@ -52,6 +52,7 @@
  */
 
 #include <Inventor/misc/SoGL.h>
+#include <Inventor/misc/SoGlu.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/caches/SoGLDisplayList.h>

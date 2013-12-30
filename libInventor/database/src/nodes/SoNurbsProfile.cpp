@@ -52,6 +52,7 @@
  */
 
 #include <Inventor/misc/SoGL.h>
+#include <Inventor/misc/SoGlu.h>
 #include <Inventor/elements/SoComplexityElement.h>
 #include <Inventor/elements/SoComplexityTypeElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>

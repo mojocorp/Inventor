@@ -68,6 +68,7 @@
 
 class SoFontOutline;
 class SoGLDisplayList;
+class GLUtesselator;
 
 // Callback function for sides of characters-- passed the number of
 // points going back, and points and normals on either edge of the

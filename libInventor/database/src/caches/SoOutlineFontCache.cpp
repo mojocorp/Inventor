@@ -18,6 +18,7 @@
 #include <Inventor/nodes/SoShape.h>
 #include <Inventor/nodes/SoProfile.h>
 #include <Inventor/nodes/SoFont.h>
+#include <Inventor/misc/SoGlu.h>
 
 #include <cmath>
 #include <algorithm>

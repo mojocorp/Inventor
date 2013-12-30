@@ -52,6 +52,7 @@
  */
 
 #include <Inventor/misc/SoGL.h>
+#include <Inventor/misc/SoGlu.h>
 #include <math.h>
 #include <Inventor/SbBox3f.h>
 #include <Inventor/SoDB.h>

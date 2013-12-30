@@ -5,11 +5,5 @@
 
 #define glewGetContext() SoGLContext::getCurrentContext()
 
-#ifdef SB_OS_MACX
-#   include <OpenGL/glu.h>
-#else
-#   include <GL/glu.h>
-#endif
-
 #endif /* _SO_GL_ */
 

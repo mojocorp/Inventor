@@ -6,6 +6,8 @@
 #ifndef GLEW_MX
 #   define GLEW_MX
 #endif
+#define GLEW_NO_GLU
+
 #include <Inventor/misc/GL/glew.h>
 
 SoEXTENDER class INVENTOR_API SoGLContext
