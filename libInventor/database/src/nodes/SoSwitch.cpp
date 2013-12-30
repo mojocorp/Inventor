@@ -151,24 +151,24 @@ SoSwitch::affectsState() const
 {
     int which;
     if (whichChild.isIgnored())
-	which = SO_SWITCH_NONE;
+        which = SO_SWITCH_NONE;
     else
-	which = whichChild.getValue();
+        which = whichChild.getValue();
 
     // Special case-- if called during application of an
     // SoSearchAction that is searching all:
     if (SoSearchAction::duringSearchAll)
-	which = SO_SWITCH_ALL;
+        which = SO_SWITCH_ALL;
 
     if (whichChild.isIgnored() || which == SO_SWITCH_NONE)
-	return FALSE;
+        return FALSE;
 
     if (which == SO_SWITCH_ALL ||
-	which == SO_SWITCH_INHERIT)
-	return TRUE;
+            which == SO_SWITCH_INHERIT)
+        return TRUE;
 
     if (getChild(which)->affectsState())
-	return TRUE;
+        return TRUE;
 
     return FALSE;
 }
@@ -189,13 +189,11 @@ SoSwitch::doAction(SoAction *action)
     const int	*indices;
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH) {
-	int	i;
-	for (i = 0; i < numIndices; i++)
-	    doChild(action, indices[i]);
+        for (int i = 0; i < numIndices; i++)
+            doChild(action, indices[i]);
     }
-
     else
-	doChild(action);
+        doChild(action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -295,14 +293,14 @@ SoSwitch::getMatrix(SoGetMatrixAction *action)
 
     switch (action->getPathCode(numIndices, indices)) {
 
-      case SoAction::NO_PATH:
-      case SoAction::BELOW_PATH:
-	break;
+    case SoAction::NO_PATH:
+    case SoAction::BELOW_PATH:
+        break;
 
-      case SoAction::OFF_PATH:
-      case SoAction::IN_PATH:
-	SoSwitch::doAction(action);
-	break;
+    case SoAction::OFF_PATH:
+    case SoAction::IN_PATH:
+        SoSwitch::doAction(action);
+        break;
     }
 }
 
@@ -320,17 +318,17 @@ SoSwitch::search(SoSearchAction *action)
 {
     // if the action is searching everything, then do so...
     if (action->isSearchingAll())
-	SoGroup::search(action);
+        SoGroup::search(action);
 
     // Otherwise, traverse according to the regular switch node rules
     else {
-	// First, make sure this node is found if we are searching for
-	// switches
-	SoNode::search(action);
+        // First, make sure this node is found if we are searching for
+        // switches
+        SoNode::search(action);
 
-	// Recurse
-	if (! action->isFound())
-	    SoSwitch::doAction(action);
+        // Recurse
+        if (! action->isFound())
+            SoSwitch::doAction(action);
     }
 }
 
@@ -352,79 +350,78 @@ SoSwitch::doChild(SoAction *action, int matchIndex)
     int32_t	which;
 
     if (whichChild.isIgnored())
-	which = SO_SWITCH_NONE;
-
+        which = SO_SWITCH_NONE;
     else
-	which = whichChild.getValue();
+        which = whichChild.getValue();
 
     // If index is inherited from state, get value from there
     if (which == SO_SWITCH_INHERIT) {
 
-	which = SoSwitchElement::get(action->getState());
+        which = SoSwitchElement::get(action->getState());
 
-	// Make sure it is in range
-	if (which >= getNumChildren())
-	    which %= getNumChildren();
+        // Make sure it is in range
+        if (which >= getNumChildren())
+            which %= getNumChildren();
     }
 
     // Store resulting index in state if not already inherited from there
     else
-	SoSwitchElement::set(action->getState(), which);
+        SoSwitchElement::set(action->getState(), which);
 
     // Now we have the real value to deal with
 
     switch (which) {
 
-      case SO_SWITCH_NONE:
-	break;
+    case SO_SWITCH_NONE:
+        break;
 
-      case SO_SWITCH_ALL:
-	// If traversing to compute bounding box, we have to do some
-	// work in between children
-	if (action->isOfType(SoGetBoundingBoxAction::getClassTypeId())) {
-	    SoGetBoundingBoxAction *bba = (SoGetBoundingBoxAction *) action;
-	    SbVec3f	totalCenter(0.0, 0.0, 0.0);
-	    int		numCenters = 0;
-	    int 	lastChild = (matchIndex >= 0 ? matchIndex :
-				     getNumChildren()  - 1);
+    case SO_SWITCH_ALL:
+        // If traversing to compute bounding box, we have to do some
+        // work in between children
+        if (action->isOfType(SoGetBoundingBoxAction::getClassTypeId())) {
+            SoGetBoundingBoxAction *bba = (SoGetBoundingBoxAction *) action;
+            SbVec3f	totalCenter(0.0, 0.0, 0.0);
+            int		numCenters = 0;
+            int 	lastChild = (matchIndex >= 0 ? matchIndex :
+                                                   getNumChildren()  - 1);
 
-	    for (int i = 0; i <= lastChild; i++) {
-		children->traverse(bba, i, i);
-		if (bba->isCenterSet()) {
-		    totalCenter += bba->getCenter();
-		    numCenters++;
-		    bba->resetCenter();
-		}
-	    }
-	    // Now, set the center to be the average:
-	    if (numCenters != 0)
-		bba->setCenter(totalCenter / (float)numCenters, FALSE);
-	}
-	else {
-	    if (matchIndex >= 0)
-		children->traverse(action, 0, matchIndex);
-	    else
-		children->traverse(action);
-	}
-	break;
+            for (int i = 0; i <= lastChild; i++) {
+                children->traverse(bba, i, i);
+                if (bba->isCenterSet()) {
+                    totalCenter += bba->getCenter();
+                    numCenters++;
+                    bba->resetCenter();
+                }
+            }
+            // Now, set the center to be the average:
+            if (numCenters != 0)
+                bba->setCenter(totalCenter / (float)numCenters, FALSE);
+        }
+        else {
+            if (matchIndex >= 0)
+                children->traverse(action, 0, matchIndex);
+            else
+                children->traverse(action);
+        }
+        break;
 
-      default:
+    default:
 
-	// Make sure index is reasonable
-	if (which < 0 || which >= getNumChildren()) {
+        // Make sure index is reasonable
+        if (which < 0 || which >= getNumChildren()) {
 #ifdef DEBUG	
-	    SoDebugError::post("SoSwitch::doChild",
-			       "Child index %d is out of range %d - %d "
-			       "(applying %s)",
-			       which, 0, getNumChildren() - 1,
-			       action->getTypeId().getName().getString());
+            SoDebugError::post("SoSwitch::doChild",
+                               "Child index %d is out of range %d - %d "
+                               "(applying %s)",
+                               which, 0, getNumChildren() - 1,
+                               action->getTypeId().getName().getString());
 #endif /* DEBUG */			       
-	    break;
-	}
+            break;
+        }
 
-	// Traverse indicated child
-	if (matchIndex < 0 || matchIndex == which)
-	    children->traverse(action, (int) which);
+        // Traverse indicated child
+        if (matchIndex < 0 || matchIndex == which)
+            children->traverse(action, (int) which);
     }
 }
 
@@ -466,42 +463,42 @@ SoSwitch::write(SoWriteAction *action)
     // In write-reference counting phase
     if (out->getStage() == SoOutput::COUNT_REFS) {
 
-	// Increment our write reference count
-	addWriteReference(out);
+        // Increment our write reference count
+        addWriteReference(out);
 
-	// If this is the first reference (i.e., we don't now have
-	// multiple references), also count all appropriate children
-	if (! hasMultipleWriteRefs()) {
-	    for (int i = 0; i <= lastChild; i++) {
-		action->pushCurPath(i);
-		action->traverse(getChild(i));
-		action->popCurPath(pc);
-	    }
-	}
+        // If this is the first reference (i.e., we don't now have
+        // multiple references), also count all appropriate children
+        if (! hasMultipleWriteRefs()) {
+            for (int i = 0; i <= lastChild; i++) {
+                action->pushCurPath(i);
+                action->traverse(getChild(i));
+                action->popCurPath(pc);
+            }
+        }
     }
 
     // In writing phase, we have to do some more work
     else if (! writeHeader(out, TRUE, FALSE)) {
 
-	// Write fields
-	const SoFieldData *fieldData = getFieldData();
-	fieldData->write(out, this);
+        // Write fields
+        const SoFieldData *fieldData = getFieldData();
+        fieldData->write(out, this);
 
-	// We KNOW that all children should be written, so don't
-	// bother calling shouldWrite()
+        // We KNOW that all children should be written, so don't
+        // bother calling shouldWrite()
 
-	// If writing binary format, write out number of children
-	// that are going to be written
-	if (out->isBinary())
-	    out->write(getNumChildren());
+        // If writing binary format, write out number of children
+        // that are going to be written
+        if (out->isBinary())
+            out->write(getNumChildren());
 
-	for (int i = 0; i <= lastChild; i++) {
-	    action->pushCurPath(i);
-	    action->traverse(getChild(i));
-	    action->popCurPath(pc);
-	}
+        for (int i = 0; i <= lastChild; i++) {
+            action->pushCurPath(i);
+            action->traverse(getChild(i));
+            action->popCurPath(pc);
+        }
 
-	// Write post-children stuff
-	writeFooter(out);
+        // Write post-children stuff
+        writeFooter(out);
     }
 }

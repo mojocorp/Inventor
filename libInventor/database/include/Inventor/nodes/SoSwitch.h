@@ -100,9 +100,9 @@ class INVENTOR_API SoSwitch : public SoGroup {
 
     SO_NODE_HEADER(SoSwitch);
 
-  public:
+public:
     // Fields
-    SoSFInt32		whichChild;	///< Index of the child to traverse, or one of SO_SWITCH_NONE, SO_SWITCH_INHERIT, or SO_SWITCH_ALL.
+    SoSFInt32 whichChild; ///< Index of the child to traverse, or one of SO_SWITCH_NONE, SO_SWITCH_INHERIT, or SO_SWITCH_ALL.
 
     /// Creates a switch node with default settings.
     SoSwitch();
@@ -112,32 +112,32 @@ class INVENTOR_API SoSwitch : public SoGroup {
 
     /// Overrides method in SoNode to return FALSE if there is no
     /// selected child or the selected child does not affect the state.
-    virtual SbBool	affectsState() const;
+    virtual SbBool affectsState() const;
 
-  SoEXTENDER public:
+SoEXTENDER public:
     // Implement actions
-    virtual void	doAction(SoAction *action);
-    virtual void	callback(SoCallbackAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	pick(SoPickAction *action);
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
-    virtual void	handleEvent(SoHandleEventAction *action);
-    virtual void	getMatrix(SoGetMatrixAction *action);
-    virtual void	search(SoSearchAction *action);
-    virtual void	write(SoWriteAction *action);
+    virtual void doAction(SoAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void pick(SoPickAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void handleEvent(SoHandleEventAction *action);
+    virtual void getMatrix(SoGetMatrixAction *action);
+    virtual void search(SoSearchAction *action);
+    virtual void write(SoWriteAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+SoINTERNAL public:
+    static void initClass();
 
-  protected:
+protected:
     // Generic traversal of children
-    void		traverseChildren(SoAction *action);
+    void traverseChildren(SoAction *action);
 
     virtual ~SoSwitch();
 
-  private:
+private:
     // Traverses correct child. If matchIndex >=0, child index must match
-    void		doChild(SoAction *action, int matchIndex = -1);
+    void doChild(SoAction *action, int matchIndex = -1);
 };
 
 #endif /* _SO_SWITCH_ */
