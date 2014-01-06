@@ -93,7 +93,7 @@ public:
 
     /// Returns a reasonable hash key for string
     uint32_t hash() {
-        return SbString::hash(string);
+        return SbString::hash(string.data());
     }
 
     /// Returns the number of characters in this string.
@@ -101,16 +101,15 @@ public:
 
     /// Returns true if the string has no characters; otherwise returns false.
     bool isEmpty() const {
-        return (string[0] == '\0');
+        return string.empty();
     }
 
-    /// Sets string to be the empty string (""). If freeOld is TRUE
-    /// (default), any old storage is freed up
-    void makeEmpty(SbBool freeOld = TRUE);
+    /// Sets string to be the empty string ("").
+    void makeEmpty();
 
     /// Returns pointer to the UTF-8 character string
     const char * getString() const {
-        return string;
+        return string.data();
     }
 
     /// Returns an std::wstring encoded in utf16.
@@ -206,14 +205,7 @@ SoINTERNAL public:
     static uint32_t hash(const char *s);    // Hash function
 
 private:
-    char  *string;  // String pointer
-    size_t   storageSize;
-
-    // This is used if the string fits in a reasonably small space
-#define SB_STRING_STATIC_STORAGE_SIZE  32
-    char  staticStorage[SB_STRING_STATIC_STORAGE_SIZE];
-
-    void  expand(size_t bySize); // Makes more room
+    std::string string;  // String pointer
 };
 
 #endif /* _SB_STRING_ */

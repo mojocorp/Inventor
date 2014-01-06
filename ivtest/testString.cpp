@@ -12,11 +12,11 @@ TEST(SbString, Constructors) {
 
     SbString string2("an ascii string", 3, 7);
 
-    EXPECT_TRUE(string2 == "ascii");
+    EXPECT_STREQ("ascii", string2.getString());
 
     SbString string3(123456789);
 
-    EXPECT_TRUE(string3 == "123456789");
+    EXPECT_STREQ("123456789", string3.getString());
 }
 
 TEST(SbString, Empty) {
@@ -98,6 +98,22 @@ TEST(SbString, Operators) {
     stringB = "Kl\303\274ft skr\303\244ms inf\303\266r p\303\245 f\303\251d\303\251ral \303\251lectoral gro\303\237e";
 
     EXPECT_TRUE(stringA == stringB);
+}
+
+TEST(SbString, getSubString) {
+    SbString str ("There are two needles in this haystack with needles.");
+    EXPECT_STREQ("are two needles in this haystack with needles.", str.getSubString(6).getString());
+    EXPECT_STREQ("are two needles in this", str.getSubString(6, 28).getString());
+}
+
+TEST(SbString, deleteSubString) {
+    SbString str ("There are two needles in this haystack with needles.");
+    str.deleteSubString(6);
+    EXPECT_STREQ("There ", str.getString());
+
+    str = "There are two needles in this haystack with needles.";
+    str.deleteSubString(6, 28);
+    EXPECT_STREQ("There  haystack with needles.", str.getString());
 }
 
 TEST(SbString, UTF8) {

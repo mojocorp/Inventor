@@ -63,7 +63,7 @@
 #endif
 
 // "Counting characters in UTF-8 strings is fast" by Kragen Sitaker
-size_t strlen_utf8(const char *s) {
+size_t strlen_utf8(const std::string & s) {
     size_t i = 0, j = 0;
     while (s[i]) {
         if ((s[i] & 0xc0) != 0x80) j++;
@@ -77,8 +77,7 @@ size_t strlen_utf8(const char *s) {
 //
 
 SbString::SbString() {
-    string = staticStorage;
-    string[0] = '\0';
+
 }
 
 //
@@ -86,7 +85,6 @@ SbString::SbString() {
 //
 
 SbString::SbString(const char *str) {
-    string = staticStorage;
     *this = fromUtf8(str);
 }
 
@@ -96,16 +94,7 @@ SbString::SbString(const char *str) {
 
 SbString::SbString(const char *str, size_t start, size_t end)
 {
-    size_t size = end - start + 1;
-
-    if (size < SB_STRING_STATIC_STORAGE_SIZE)
-        string = staticStorage;
-    else
-        string = new char[size+1];
-
-    strncpy(string, str+start, size);
-    string[size] = '\0';
-    storageSize = size;
+    string = std::string(str, start, end - start + 1);
 }
 
 //
@@ -113,7 +102,6 @@ SbString::SbString(const char *str, size_t start, size_t end)
 //
 
 SbString::SbString(const SbString &str) {
-    string = staticStorage;
     *this = str;
 }
 
@@ -124,11 +112,11 @@ SbString::SbString(const SbString &str) {
 
 SbString::SbString(int digitString)
 {
-    string = staticStorage;
+    string.resize(32);
 #ifdef SB_OS_WIN
-    _snprintf(string,SB_STRING_STATIC_STORAGE_SIZE,"%d",digitString);
+    _snprintf(&string[0], string.size(),"%d",digitString);
 #else
-    snprintf(string,SB_STRING_STATIC_STORAGE_SIZE,"%d",digitString);
+    snprintf(&string[0], string.size(),"%d",digitString);
 #endif
 }
 
@@ -138,33 +126,7 @@ SbString::SbString(int digitString)
 
 SbString::~SbString()
 {
-    if (string != staticStorage)
-        delete [] string;
-}
 
-//
-// Makes more room in storage for string for n more bytes,
-// allocating or reallocating if necessary.
-//
-
-void
-SbString::expand(size_t bySize)
-{
-    size_t newSize = strlen(string) + bySize + 1;
-
-    if (newSize >= SB_STRING_STATIC_STORAGE_SIZE &&
-            (string == staticStorage || newSize > storageSize)) {
-
-        char *newString = new char[newSize];
-
-        strcpy(newString, string);
-
-        if (string != staticStorage)
-            delete [] string;
-
-        string      = newString;
-        storageSize = newSize;
-    }
 }
 
 // Simple hashing algorithm that will xor all the characters in a string
@@ -199,14 +161,9 @@ SbString::getLength() const
 //
 
 void
-SbString::makeEmpty(SbBool freeOld)
+SbString::makeEmpty()
 {
-    if (string != staticStorage) {
-        if (freeOld)
-            delete [] string;
-        string = staticStorage;
-    }
-    string[0] = '\0';
+    string.clear();
 }
 
 std::wstring
@@ -214,14 +171,14 @@ SbString::toStdWString () const
 {
     std::wstring wstr;
 #ifdef SB_OS_WIN
-    int wlen = MultiByteToWideChar(CP_UTF8, 0, string, -1, NULL, 0) - 1;
+    int wlen = MultiByteToWideChar(CP_UTF8, 0, &string[0], -1, NULL, 0) - 1;
     wstr.resize(wlen);
-    MultiByteToWideChar(CP_UTF8, 0, string, -1, (LPWSTR)wstr.data(), (int)wstr.length());
+    MultiByteToWideChar(CP_UTF8, 0, &string[0], -1, (LPWSTR)wstr.data(), (int)wstr.length());
 #else
     setlocale(LC_CTYPE, !getenv("LANG") ? "en_US.UTF-8" : "");
-    size_t wlen = mbstowcs(NULL, string, 0);
+    size_t wlen = mbstowcs(NULL, &string[0], 0);
     wstr.resize(wlen);
-    mbstowcs((wchar_t*)wstr.data(), string, wlen+1);
+    mbstowcs((wchar_t*)wstr.data(), &string[0], wlen+1);
 #endif
     return wstr;
 }
@@ -229,7 +186,7 @@ SbString::toStdWString () const
 int
 SbString::find(const SbString & str, int pos) const
 {
-    size_t index = std::string(string).find(str.getString(), pos);
+    size_t index = string.find(str.getString(), pos);
 
     return (index!=std::string::npos) ? (int)index : -1;
 }
@@ -239,7 +196,7 @@ SbString::rfind(const SbString & str, int pos) const
 {
     pos = (pos==-1) ? (int)std::string::npos : pos;
 
-    size_t index = std::string(string).rfind(str.string, pos);
+    size_t index = string.rfind(str.string, pos);
 
     return (index!=std::string::npos) ? (int)index : -1;
 }
@@ -253,16 +210,11 @@ SbString::rfind(const SbString & str, int pos) const
 SbString
 SbString::getSubString(int startChar, int endChar) const
 {
-    size_t		len = strlen(string);
+    size_t size = (endChar!=-1) ? endChar - startChar + 1 : std::string::npos;
 
-    // Get substring that starts at specified character
-    SbString	tmp = SbString::fromUtf8(&string[startChar]);
-
-    // Delete characters from end if necessary
-    if (endChar >= 0 && endChar < (int)len - 1)
-        tmp.deleteSubString(endChar - startChar + 1);
-
-    return tmp;
+    SbString str;
+    str.string = string.substr(startChar, size);
+    return str;
 }
 
 //
@@ -274,31 +226,10 @@ SbString::getSubString(int startChar, int endChar) const
 void
 SbString::deleteSubString(int startChar, int endChar)
 {
-    size_t len = strlen(string);
-
-    // Modify string in place
-    if (endChar < 0 || endChar >= (int)len - 1)
-        string[startChar] = '\0';
-    else {
-
-#ifdef DEBUG
-        if (startChar > endChar) {
-            SoDebugError::post("SbString::deleteSubString",
-                               "startChar > endChar");
-            return;
-        }
-#endif
-
-        size_t	numToMove = len - endChar - 1;
-
-        for (size_t i = 0; i < numToMove; i++)
-            string[startChar + i] = string[endChar + i + 1];
-        string[startChar + numToMove] = '\0';
-    }
-
-    // Use temporary string to allow us to free up old storage if necessary
-    SbString	tmp = SbString::fromUtf8(string);
-    *this = tmp;
+    std::string str = string;
+    string = std::string(str, 0, startChar);
+    if (endChar != -1)
+        string += std::string(str, endChar+1, std::string::npos);
 }
 
 //
@@ -307,41 +238,7 @@ SbString::deleteSubString(int startChar, int endChar)
 SbString &
 SbString::operator =(const SbString &str)
 {
-    size_t size = (str.string == NULL) ? 0 : strlen(str.string) + 1;
-
-    // If the string we are assigning to this is a pointer into the
-    // string already in this, we have to make sure we don't step on
-    // the old string.
-    if (str.string >= string &&
-            str.string < string + (string != staticStorage ? storageSize :
-                            SB_STRING_STATIC_STORAGE_SIZE)) {
-
-        SbString tmp = str;
-        *this = tmp;
-        return *this;
-    }
-
-    // If there's enough room in the static storage, use it. First,
-    // free up string if it was allocated.
-    if (size < SB_STRING_STATIC_STORAGE_SIZE) {
-        if (string != staticStorage)
-            makeEmpty();
-    }
-
-    // If we were using the static storage, we have to allocate a new string
-    else if (string == staticStorage)
-        string = new char[size];
-
-    // Otherwise, if there is not enough room in the currently
-    // allocated string, allocate a new one. If there is, use it again.
-    else if (size > storageSize) {
-        delete [] string;
-        string = new char[size];
-    }
-
-    // Copy away!
-    strncpy(string, str.string, size);
-    storageSize = size;
+    string = str.string;
     return *this;
 }
 
@@ -352,8 +249,7 @@ SbString::operator =(const SbString &str)
 SbString &
 SbString::operator +=(const SbString &str)
 {
-    expand(strlen(str.string));
-    strcat(string, str.string);
+    string += str.string;
     return *this;
 }
 
@@ -364,10 +260,7 @@ SbString::operator +=(const SbString &str)
 bool
 operator ==(const SbString &str1, const SbString &str2)
 {
-    if (str2.string == NULL)
-        return ((str1.getLength() == 0) ? 1 : 0);
-
-    return (str1.string[0] == str2.string[0] && ! strcmp(str1.string, str2.string));
+    return (str1.string == str2.string);
 }
 
 //
@@ -380,7 +273,7 @@ SbString::fromLatin1(const char *latin1, int size)
 
     if (latin1) {
         size_t len = (size > 0) ? size : strlen(latin1);
-        str.expand(2*len);
+        str.string.resize(2*len);
 
         for (size_t i=0; i<len;) {
             unsigned char c = latin1[i];
@@ -403,11 +296,7 @@ SbString
 SbString::fromUtf8(const char *utf8, int size)
 {
     SbString str;
-    if (utf8) {
-        size_t len = (size > 0) ? size : strlen(utf8);
-        str.expand(len);
-        strncat(str.string, utf8, len);
-    }
+    str.string = utf8 ? utf8 : "";
     return str;
 }
 
@@ -421,14 +310,13 @@ SbString::fromWideChar(const wchar_t *wcs, int size)
 
 #ifdef SB_OS_WIN
     size_t len = (size == -1) ? WideCharToMultiByte( CP_UTF8, 0, wcs, -1, NULL, 0,  NULL, NULL) - 1 : size;
-    str.expand(len);
-
-    WideCharToMultiByte(CP_UTF8, 0, wcs, -1, str.string, (int)len+1, NULL, NULL);
+    str.string.resize(len);
+    WideCharToMultiByte(CP_UTF8, 0, wcs, -1, &str.string[0], (int)len+1, NULL, NULL);
 #else
     setlocale(LC_CTYPE, "C.UTF-8") || setlocale(LC_CTYPE, "en_US.UTF-8");
     size_t len = (size == -1) ? wcstombs(NULL, wcs, 0) : size;
-    str.expand(len);
-    wcstombs(str.string, wcs, len+1);
+    str.string.resize(len);
+    wcstombs(&str.string[0], wcs, len+1);
 #endif
 
     return str;
