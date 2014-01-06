@@ -59,13 +59,14 @@
 
 #include <Inventor/nodes/SoGroup.h>
 
+#include <map>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoUpgrader
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class SbDict;
 class INVENTOR_API SoUpgrader : public SoGroup {
 
     SO_NODE_ABSTRACT_HEADER(SoUpgrader);
@@ -115,9 +116,9 @@ class INVENTOR_API SoUpgrader : public SoGroup {
 
   private:
     // The dictionaries associating class names with upgrader types.
-    static SbDict	*getUpgradeDict(float version);
-    static SbDict	*upgradeDictV1;
-    static SbDict	*upgradeDictV2;
+    static std::map<SbName, SoType> & getUpgradeDict(float version);
+    static std::map<SbName, SoType> upgradeDictV1;
+    static std::map<SbName, SoType> upgradeDictV2;
 };
 
 // Macro to initialize upgrader classes.  Pass in the name of the

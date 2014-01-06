@@ -68,7 +68,7 @@
 #include "SoGlobalField.h"
 
 // SbName to SoGlobalField* dictionary.  Keyed by the name.
-SbDict *SoGlobalField::nameDict;
+std::map<SbName, SoGlobalField*> SoGlobalField::nameDict;
 
 // The GlobalFieldContainer type (the name is simply GlobalField)
 SoType SoGlobalField::classTypeId;
@@ -87,7 +87,6 @@ SoGlobalField::initClass()
 {
     classTypeId = SoType::createType(SoFieldContainer::getClassTypeId(),
 				     "GlobalField", NULL);
-    nameDict = new SbDict(20);  // Assume small number of global fields
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -176,15 +175,13 @@ SoGlobalField::SoGlobalField(const SbName &name, SoField *field)
     field->setContainer(this);
     field->setDefault(FALSE);
 
-    unsigned long key = (unsigned long)(name.getString());
 #ifdef DEBUG
-    void *junk;
-    if (nameDict->find(key, junk) != FALSE)
-	SoDebugError::post("SoGlobalField::SoGlobalField",
-			   "There is already a global field named %s",
-			   name.getString());
-#endif		
-    nameDict->enter(key, this);
+    if (find(name))
+        SoDebugError::post("SoGlobalField::SoGlobalField",
+                           "There is already a global field named %s",
+                           name.getString());
+#endif
+    nameDict[name] = this;
 
     fieldData = new SoFieldData;
     fieldData->addField(this, name.getString(), field);
@@ -209,10 +206,9 @@ SoGlobalField::~SoGlobalField()
     // for the "dummy" instance that is created to read in a real
     // instance of a global field.
     if (fieldData == NULL)
-	return;
+        return;
 
-    unsigned long key = (unsigned long)(getName().getString());
-    nameDict->remove(key);
+    nameDict.erase(getName());
 
     delete value;
 }
@@ -230,10 +226,11 @@ SoGlobalField::find(const SbName &name)
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    unsigned long key = (unsigned long)(name.getString());
-    void *result;
-    if (nameDict->find(key, result) == FALSE) return NULL;
-    return (SoGlobalField *)result;
+    std::map<SbName, SoGlobalField*>::const_iterator it = nameDict.find(name);
+    if (it == nameDict.end())
+        return NULL;
+
+    return it->second;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -250,26 +247,24 @@ SoGlobalField::changeName(const SbName &newName)
 
 {
     // Remove old entry from dictionary
-    unsigned long key = (unsigned long)(getName().getString());
-    nameDict->remove(key);
+    nameDict.erase(getName());
 
     // Create a new fieldData with the correct name for the field:
     SoField *field = value;
     delete fieldData;
     fieldData = new SoFieldData;
     fieldData->addField(this, newName.getString(), field);
-    key = (unsigned long)(getName().getString());
 
     // If there is already an entry with the new name...
-    void *oldGlobalField;
-    if (nameDict->find(key, oldGlobalField) == TRUE) {
-	// Delete the old one
-	((SoGlobalField *)oldGlobalField)->unref();
-	nameDict->remove(key);
+    SoGlobalField *oldGlobalField = find(getName());
+    if (oldGlobalField) {
+        // Delete the old one
+        oldGlobalField->unref();
+        nameDict.erase(getName());
     }
 
     // Enter this node under the new name
-    nameDict->enter(key, this);
+    nameDict[getName()] = this;
 }
 
 //////////////////////////////////////////////////////////////////////////////

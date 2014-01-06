@@ -53,14 +53,13 @@
 
 #include <assert.h>
 #include <Inventor/SoInput.h>
-#include <Inventor/SbDict.h>
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 
 SO_NODE_ABSTRACT_SOURCE(SoUpgrader);
 
 // Static variables:
-SbDict *SoUpgrader::upgradeDictV1 = NULL;
-SbDict *SoUpgrader::upgradeDictV2 = NULL;
+std::map<SbName, SoType> SoUpgrader::upgradeDictV1;
+std::map<SbName, SoType> SoUpgrader::upgradeDictV2;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -93,20 +92,34 @@ SoUpgrader::~SoUpgrader()
 
 ////////////////////////////////////////////////////////////////////////
 //
+// Description:
+//    This initializes the SoUpgrader class.
+//
+// Use: internal
+
+void
+SoUpgrader::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_ABSTRACT_CLASS(SoUpgrader, "Upgrader", SoGroup);
+
+    classTypeId.makeInternal();
+}
+
+////////////////////////////////////////////////////////////////////////
+//
 //  Return either the V1.0 or V2.0 dictionary
 //
-SbDict *
+std::map<SbName, SoType> &
 SoUpgrader::getUpgradeDict(float version)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbDict *upgradeDict = NULL;
     if (version == 1.0)
-	upgradeDict = upgradeDictV1;
-    else if (version == 2.0)
-	upgradeDict = upgradeDictV2;
+        return upgradeDictV1;
 
-    return upgradeDict;
+    return upgradeDictV2;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -122,8 +135,6 @@ SoUpgrader::registerUpgrader(const SoType &type, const SbName &className,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const char *str = className.getString();
-
 #ifdef DEBUG
     // There are 1.0 and 2.0 upgraders right now...
     if (version != 1.0 && version != 2.0) {
@@ -134,18 +145,17 @@ SoUpgrader::registerUpgrader(const SoType &type, const SbName &className,
     }
 #endif
 
-    SbDict *upgradeDict = getUpgradeDict(version);
-    assert(upgradeDict != NULL);
+    std::map<SbName, SoType> & upgradeDict = getUpgradeDict(version);
     	
 #ifdef DEBUG
-    void *t;
-    if (upgradeDict->find((unsigned long)str, t) != 0) {
-	SoDebugError::post("SoUpgrader::register", "Upgrader already "
-			   "registered for class %s", str);
+    std::map<SbName, SoType>::const_iterator it = upgradeDict.find(className);
+    if (it != upgradeDict.end()) {
+        SoDebugError::post("SoUpgrader::register", "Upgrader already "
+                           "registered for class %s", className.getString());
     }
 #endif
 
-    upgradeDict->enter((unsigned long)str, (void *)&type);    
+    upgradeDict[className] = type;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -164,13 +174,13 @@ SoUpgrader::getUpgrader(const SbName &className, float version)
     if (version != 1.0 && version != 2.0) return NULL;
     
     // Look in dictionary for converter type:
-    void *t;
-    if (! getUpgradeDict(version)->find((unsigned long) className.getString(), t))
-	return NULL;
+    const std::map<SbName, SoType> & upgradeDict = getUpgradeDict(version);
+    std::map<SbName, SoType>::const_iterator it = upgradeDict.find(className);
 
-    SoType *type = (SoType *) t;
+    if (it == upgradeDict.end())
+        return NULL;
     
-    return (SoUpgrader *)type->createInstance();
+    return (SoUpgrader *)it->second.createInstance();
 }
 
 ////////////////////////////////////////////////////////////////////////

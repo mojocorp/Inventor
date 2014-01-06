@@ -69,7 +69,7 @@
 #include "fields/SoGlobalField.h"
 
 // The global name dictionaries
-SbDict		*SoBase::nameObjDict;
+std::map<std::string, SbPList*> SoBase::nameObjDict;
 std::map<const SoBase*, SbName> SoBase::objNameDict;
 
 // Syntax for writing instances to files
@@ -103,9 +103,6 @@ SoBase::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     classTypeId = SoType::createType(SoType::badType(), "Base");
-
-    // Set up global name dictionaries
-    nameObjDict = new SbDict;
 
     globalFieldName = new SbName("GlobalField");
 }
@@ -621,18 +618,18 @@ SoBase::addName(SoBase *b, const char *name)
 ////////////////////////////////////////////////////////////////////////
 {
     SbPList *list;
-    void *t;
 
     b->writeStuff.hasName = 1;
 
     // Look for name:
-    if (!nameObjDict->find((unsigned long)name, t)) {
-	// If not found, create a BaseList and enter it in the
-	// dictionary
-	list = new SbPList;
-	nameObjDict->enter((unsigned long)name, list);
+    std::map<std::string, SbPList*>::const_iterator it = nameObjDict.find(name);
+    if (it == nameObjDict.end()) {
+        // If not found, create a BaseList and enter it in the
+        // dictionary
+        list = new SbPList;
+        nameObjDict[name] = list;
     } else {
-	list = (SbPList *)t;
+        list = it->second;
     }
 
 #ifdef DEBUG
@@ -662,17 +659,15 @@ SoBase::removeName(SoBase *b, const char *name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbPList	*list;
-    void	*t;
-
     b->writeStuff.hasName = 0;
 
     // Look for name list
-    SbBool found = nameObjDict->find((unsigned long) name, t);
+    std::map<std::string, SbPList*>::const_iterator it = nameObjDict.find(name);
+    SbBool found = (it != nameObjDict.end());
 
     // Look for name within list
     if (found) {
-        list = (SbPList *) t;
+        SbPList	*list = it->second;
         int i = list->find(b);
 
         if (i < 0)
@@ -707,19 +702,18 @@ SoBase::getNamedBase(const SbName &name, SoType type)
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (nameObjDict == NULL) {
+    if (nameObjDict.empty()) {
 	SoDebugError::post("SoBase::getName",
 			   "SoDBinit() has not yet been called");
 	return NULL;
     }
 #endif
 
-    SbPList *list;
-    void *t;
     // Lookup the name in the dictionary
-    if (! nameObjDict->find((unsigned long) name.getString(), t))
-	return NULL;
-    list = (SbPList *)t;
+    std::map<std::string, SbPList*>::const_iterator it = nameObjDict.find(name.getString());
+    if (it == nameObjDict.end())
+        return NULL;
+    SbPList *list = it->second;
 
     // Search backwards through the list.  Return the last item of the
     // appropriate type.
@@ -744,7 +738,7 @@ SoBase::getNamedBases(const SbName &name, SoBaseList &result, SoType type)
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (nameObjDict == NULL) {
+    if (nameObjDict.empty()) {
 	SoDebugError::post("SoBase::getName",
 			   "SoDBinit() has not yet been called");
 	return 0;
@@ -752,14 +746,13 @@ SoBase::getNamedBases(const SbName &name, SoBaseList &result, SoType type)
 #endif
 
     int numAdded = 0;
-    SbPList *list;
 
-    void *t;
     // Lookup the name in the dictionary
-    if (! nameObjDict->find((unsigned long) name.getString(), t))
-	return 0;
+    std::map<std::string, SbPList*>::const_iterator it = nameObjDict.find(name.getString());
+    if (it == nameObjDict.end())
+        return 0;
 
-    list = (SbPList *)t;
+    SbPList *list = it->second;
     // Search backwards through the list.  Add all items of the
     // appropriate type to the result list.
     for (int i = list->getLength()-1; i >= 0; i--) {

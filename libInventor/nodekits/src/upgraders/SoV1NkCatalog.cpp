@@ -329,16 +329,11 @@ SoV1NodekitCatalog::getPartNumber( const SbName &theName ) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    void *castPNum;
+    std::map<SbName, int>::const_iterator it = partNameDict.find(theName);
+    if ( it != partNameDict.end() )
+        return it->second;
 
-    if ( partNameDict.find( (unsigned long) theName.getString(), castPNum ) )
-#if (_MIPS_SZPTR == 64 || __ia64 || __x86_64__)
-	return ( (int) ((long) castPNum) );  // System long
-#else
-	return ( (int) castPNum );
-#endif
-    else 
-	return SO_V1_CATALOG_NAME_NOT_FOUND;
+    return SO_V1_CATALOG_NAME_NOT_FOUND;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -820,9 +815,7 @@ SoV1NodekitCatalog::clone( const SoType &typeOfThis ) const
 							  typeOfThis );
 	    else
 		theClone->entries[i] = entries[i]->clone();
-	    theClone->partNameDict.enter( (unsigned long)
-					  entries[i]->getName().getString(), 
-					  (void *) (unsigned long) i );
+        theClone->partNameDict[entries[i]->getName()] = i;
 	}
     }
 
@@ -1159,8 +1152,7 @@ SoV1NodekitCatalog::addEntry( const SbName &theName,
     entries[numEntries - 1] = newEntry;
 
     // add the new name to the quick-reference part name dictionary
-    partNameDict.enter( (unsigned long) theName.getString(),
-			(void *) (unsigned long) (numEntries - 1));
+    partNameDict[theName] = numEntries - 1;
 
     // parent is no longer a leaf node in the nodekit structure
     if ( parentEntry != NULL )

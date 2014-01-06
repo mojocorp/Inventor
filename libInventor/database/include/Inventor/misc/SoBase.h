@@ -72,7 +72,6 @@ class SoNode;
 class SoNotList;
 class SoOutput;
 class SoPath;
-class SbDict;
 
 /// Base class for all nodes, paths, and engines.
 /// \ingroup General
@@ -333,7 +332,7 @@ private:
     // contain SoBases-- a BaseList isn't used because we don't want
     // the items on the list to be reference counted, otherwise they
     // will never get deleted).
-    static SbDict *nameObjDict;
+    static std::map<std::string, SbPList*> nameObjDict;
 
     // And this dictionary maps the other way, from an SoBase * to a
     // name.

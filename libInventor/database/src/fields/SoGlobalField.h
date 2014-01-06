@@ -62,10 +62,11 @@
 #ifndef  _SO_GLOBALFIELD_
 #define  _SO_GLOBALFIELD_
 
-#include <Inventor/SbDict.h>
 #include <Inventor/fields/SoSFName.h>
 #include <Inventor/fields/SoFieldContainer.h>
 #include <Inventor/fields/SoFieldData.h>
+
+#include <map>
 
 class SoGlobalField : public SoFieldContainer {
     
@@ -111,7 +112,7 @@ class SoGlobalField : public SoFieldContainer {
 
     SoType getType() const;	/* Convenience used internally */
 
-    static SbDict	*nameDict;
+    static std::map<SbName, SoGlobalField*> nameDict;
     static SoType	classTypeId;
 
     SoField *value;	/* The field all this is for! */
