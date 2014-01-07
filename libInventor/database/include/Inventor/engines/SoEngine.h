@@ -152,6 +152,8 @@ SoINTERNAL public:
 
     // Initialize ALL Inventor engine classes
     static void initClasses();
+    static void finishClasses();
+
 
     // Writes instance to SoOutput. (Used only for last stage of writing)
     virtual void writeInstance(SoOutput *out);

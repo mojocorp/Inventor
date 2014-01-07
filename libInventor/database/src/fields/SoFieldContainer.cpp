@@ -74,7 +74,7 @@
 
 // This is a list of SbDict instances used duting copy operations to
 // keep track of instances. It is a list to allow recursive copying.
-SbPList	*SoFieldContainer::copyDictList = NULL;
+SbPList	SoFieldContainer::copyDictList;
 
 // These are used by SoFieldContainer::get() to hold the returned
 // field string
@@ -98,6 +98,23 @@ SoFieldContainer::initClass()
 {
     classTypeId = SoType::createType(SoBase::getClassTypeId(),
 				     "FieldContainer");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up.
+// Use: public, static
+
+void
+SoFieldContainer::finishClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    for (int i=0; i<copyDictList.getLength(); i++) {
+        delete copyDictList[i];
+    }
+    copyDictList.truncate(0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -597,16 +614,13 @@ SoFieldContainer::initCopyDict()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (copyDictList == NULL)
-	copyDictList = new SbPList;
-
     SbDict *copyDict = new SbDict;
 
     // Insert the new dictionary at the beginning. Since most copies
     // are non-recursive, having to make room in the list won't happen
     // too frequently. Accessing the list happens a lot, so using slot
     // 0 will speed that up some.
-    copyDictList->insert(copyDict, 0);
+    copyDictList.insert(copyDict, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -622,7 +636,7 @@ SoFieldContainer::addCopy(const SoFieldContainer *orig,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbDict *copyDict = (SbDict *) (*copyDictList)[0];
+    SbDict *copyDict = (SbDict *) copyDictList[0];
 
     // Add a reference when entering an instance into the
     // dictionary. The references are removed before the dictionary is
@@ -654,7 +668,7 @@ SoFieldContainer::checkCopy(const SoFieldContainer *orig)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbDict *copyDict = (SbDict *) (*copyDictList)[0];
+    SbDict *copyDict = (SbDict *) copyDictList[0];
 
     void *copyPtr;
     if (! copyDict->find((unsigned long) orig, copyPtr))
@@ -679,10 +693,10 @@ SoFieldContainer::findCopy(const SoFieldContainer *orig,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! copyDictList || ! (*copyDictList)[0])
-	return NULL;
+    if (!copyDictList[0])
+        return NULL;
 
-    SbDict *copyDict = (SbDict *) (*copyDictList)[0];
+    SbDict *copyDict = (SbDict *) copyDictList[0];
 
     void *copyPtr;
     if (! copyDict->find((unsigned long) orig, copyPtr))
@@ -714,21 +728,21 @@ SoFieldContainer::copyDone()
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (copyDictList->getLength() <= 0) {
+    if (copyDictList.getLength() <= 0) {
 	SoDebugError::post("SoFieldContainer::copyDone",
 			   "No dictionary left to get rid of");
 	return;
     }
 #endif /* DEBUG */
 
-    SbDict *copyDict = (SbDict *) (*copyDictList)[0];
+    SbDict *copyDict = (SbDict *) copyDictList[0];
 
     // Unref every instance in the copy dictionary
     copyDict->applyToAll(unrefCopy);
 
     delete copyDict;
 
-    copyDictList->remove(0);
+    copyDictList.remove(0);
 }
 
 ////////////////////////////////////////////////////////////////////////

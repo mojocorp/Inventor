@@ -175,3 +175,17 @@ SoNode::initClasses()
     SoRotor::initClass();
     SoShuttle::initClass();
 }
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up.
+// Use: public, static
+
+void
+SoNode::finishClasses()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SoFont::finishClass();
+}

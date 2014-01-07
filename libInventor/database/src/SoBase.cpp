@@ -88,7 +88,7 @@ SoType		SoBase::classTypeId;
 uint32_t	SoBase::currentWriteCounter = 0;
 
 // This speed up reading a little:
-static SbName *globalFieldName;
+static SbName *globalFieldName = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -105,6 +105,23 @@ SoBase::initClass()
     classTypeId = SoType::createType(SoType::badType(), "Base");
 
     globalFieldName = new SbName("GlobalField");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up.
+// Use: public, static
+
+void
+SoBase::finishClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    nameObjDict.clear();
+    objNameDict.clear();
+
+    delete globalFieldName;
 }
 
 ////////////////////////////////////////////////////////////////////////

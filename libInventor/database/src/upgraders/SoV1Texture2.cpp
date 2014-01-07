@@ -63,7 +63,7 @@ SO_NODE_SOURCE(SoV1Texture2);
 // List of textures that we've created so we can share textures with
 // the same filename, just like Inventor 1
 //
-SbPList *SoV1Texture2::textureList = NULL;
+SbPList SoV1Texture2::textureList;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -138,6 +138,32 @@ SoV1Texture2::~SoV1Texture2()
 //
 ////////////////////////////////////////////////////////////////////////
 {
+}
+
+void
+SoV1Texture2::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_UPGRADER_INIT_CLASS(SoV1Texture2);
+    SO_REGISTER_UPGRADER(Texture2, 1.0);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up.
+// Use: public, static
+
+void
+SoV1Texture2::finishClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    for (int i = 0; i < textureList.getLength(); i++) {
+        delete textureList[i];
+    }
+    textureList.truncate(0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -260,17 +286,14 @@ SoV1Texture2::findTexture2(SoTexture2 *&tex)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (textureList == NULL) {
-	textureList = new SbPList;
-    }
-    for (int i = 0; i < textureList->getLength(); i++) {
-	tex = (SoTexture2 *)(*textureList)[i];
-	if (matches(tex))
-	    return TRUE;
+    for (int i = 0; i < textureList.getLength(); i++) {
+        tex = (SoTexture2 *)textureList[i];
+        if (matches(tex))
+            return TRUE;
     }
     // Not found, create a new one and add to list:
     tex = SO_UPGRADER_CREATE_NEW(SoTexture2);
-    textureList->append(tex);
+    textureList.append(tex);
 
     // And add a node sensor so we can remove the texture from the
     // list if it is deleted:
@@ -343,6 +366,6 @@ SoV1Texture2::nodeDeletedCB(void *node, SoSensor *sensor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    textureList->remove(textureList->find(node));
+    textureList.remove(textureList.find(node));
     delete sensor;
 }

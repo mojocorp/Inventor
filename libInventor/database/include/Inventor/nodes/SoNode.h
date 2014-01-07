@@ -167,7 +167,8 @@ class INVENTOR_API SoNode : public SoFieldContainer {
     static void		initClass();
 
     // Initialize ALL Inventor node classes
-    static void		initClasses();
+    static void	initClasses();
+    static void finishClasses();
 
     // Initiates notification from an instance.
     virtual void	startNotify();

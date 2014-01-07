@@ -293,14 +293,33 @@ SoDB::finish()
 ////////////////////////////////////////////////////////////////////////
 {
     if (globalDB) {
-        SoType::finish();
 
         delete realTimeSensor;
         delete realTime;
         delete headerList;
         conversionDict.clear();
 
+        SoUpgrader::finishClasses();
+        SoDetail::finishClasses();
+        SoEvent::finishClasses();
+        SoEngine::finishClasses();
+        SoField::finishClasses();
+        SoNode::finishClasses();
+        SoAction::finishClasses();
+        SoElement::finishElements();
+        SoError::finishClasses();
+
+        SoGlobalField::finishClass();
+        SoPath::finishClass();
+        SoFieldContainer::finishClass();
+        SoBase::finishClass();
+
+        //CRASH SoFontCache::finish();
+        SoInput::finish();
+        SoType::finish();
+
         delete globalDB;
+        globalDB = NULL;
     }
 }
 

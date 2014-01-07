@@ -155,6 +155,7 @@ class INVENTOR_API SoLineHighlightRenderAction : public SoGLRenderAction {
    
  SoINTERNAL public: 
    static void initClass();
+   static void finishClass();
 
   protected:
     // Nodes which comprise the local highlight graph

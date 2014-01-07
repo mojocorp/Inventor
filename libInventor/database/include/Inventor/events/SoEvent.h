@@ -164,6 +164,7 @@ SoINTERNAL public:
 
     // Initialize ALL Inventor event classes
     static void initClasses();
+    static void finishClasses();
 
 private:
     // all of these are set according to when the event occurred

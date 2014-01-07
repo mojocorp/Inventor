@@ -156,6 +156,7 @@ SoINTERNAL public:
 
     // Initialize ALL Inventor error classes
     static void initClasses();
+    static void finishClasses();
 
 protected:
     // The default error handler callback - it just prints to stderr

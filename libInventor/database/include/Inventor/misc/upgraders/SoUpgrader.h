@@ -83,10 +83,12 @@ class INVENTOR_API SoUpgrader : public SoGroup {
 					 const SbName &className,
 					 float version);
   SoINTERNAL public:
-    static void		initClass();
+    static void	initClass();
+    static void	finishClass();
 
     // Initialize ALL upgraders.
-    static void		initClasses();
+    static void	initClasses();
+    static void	finishClasses();
 
     // This is the key method that reads in fields, calls the
     // createNewNode() method (which is responsible for looking at the

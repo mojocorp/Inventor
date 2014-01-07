@@ -129,7 +129,8 @@ class SoV1Texture2 : public SoUpgrader {
     SoV1Texture2();
 
   SoINTERNAL public:
-    static void		initClass();
+    static void	initClass();
+    static void	finishClass();
 
     virtual SoNode	*createNewNode();
 
@@ -142,7 +143,7 @@ class SoV1Texture2 : public SoUpgrader {
 
     static void nodeDeletedCB(void *node, SoSensor *sensor);
 
-    static SbPList *textureList;
+    static SbPList textureList;
 };
 
 #endif /* _SO_V1TEXTURE2_ */

@@ -73,6 +73,7 @@ class SoGlobalField : public SoFieldContainer {
   public:
     // Setup type information
     static void initClass();
+    static void finishClass();
 
     // Create a new global field with the given name and of the given
     // type, if one doesn't yet exists.  This returns NULL if one

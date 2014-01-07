@@ -133,6 +133,21 @@ SoNodeKit::finish()
 {
     // Only initialize once
     if (initialized) {
+        SoV1NodeKit::finish();
+        SoNodeKitDetail::finishClass();
+        SoSceneKit::finishClass();
+        SoCameraKit::finishClass();
+        SoLightKit::finishClass();
+        SoShapeKit::finishClass();
+        SoWrapperKit::finishClass();
+        SoSeparatorKit::finishClass();
+        SoAppearanceKit::finishClass();
+        SoBaseKit::finishClass();
+
+        SoNodeKitListPart::finishClass();
+        SoNodekitCatalog::finishClass();
+
+        SoDB::finish();
 
         initialized = FALSE;
     }
@@ -220,6 +235,23 @@ SoNodekitCatalog::initClass()
     emptyList = new SoTypeList;
     badType   = new SoType();
     *badType = SoType::badType();
+}
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up.
+// Use: public, static
+
+void
+SoNodekitCatalog::finishClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    delete badType;
+    delete emptyList;
+    delete emptyName;
 }
 
 ////////////////////////////////////////////////////////////////////////

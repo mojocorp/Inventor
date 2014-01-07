@@ -158,6 +158,7 @@ class INVENTOR_API SoBoxHighlightRenderAction : public SoGLRenderAction {
    
  SoINTERNAL public: 
     static void initClass();
+    static void finishClass();
 
   protected:
     void updateBbox(SoPath *p);

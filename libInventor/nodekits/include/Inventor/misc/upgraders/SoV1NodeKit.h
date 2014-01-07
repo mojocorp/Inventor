@@ -69,7 +69,9 @@
 
 SoEXTENDER class SoV1NodeKit {
   public:
-    static void		init(); // init all nodeKit classes
+    /// init all nodeKit classes
+    static void	init();
+    static void	finish();
 };
 
 #endif /* _SO_V1_NODE_KIT_ */

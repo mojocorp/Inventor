@@ -115,14 +115,13 @@ class INVENTOR_API SoFont : public SoNode {
     virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
 
   SoINTERNAL public:
-    static void		initClass();
+    static void	initClass();
+    static void	finishClass();
 
   protected:
     virtual ~SoFont();
 
     static std::map<SbName, SbString> s_font_map;
-
-    static void initFontMap();
 };
 
 #endif /* _SO_FONT_ */

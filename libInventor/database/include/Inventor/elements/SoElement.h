@@ -125,6 +125,7 @@ public:
 SoINTERNAL public:
     /// Initialize ALL Inventor element classes
     static void initElements();
+    static void finishElements();
 
     /// Initializes the SoElement class
     static void initClass();

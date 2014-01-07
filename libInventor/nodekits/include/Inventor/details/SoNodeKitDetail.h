@@ -125,7 +125,8 @@ class INVENTOR_API SoNodeKitDetail : public SoDetail {
     void setPartName( const SbName &theName )      { myPartName = theName; }
 
   SoINTERNAL public:
-    static void		initClass();
+    static void	initClass();
+    static void	finishClass();
 
   protected:
     SoBaseKit       *myNodeKit;

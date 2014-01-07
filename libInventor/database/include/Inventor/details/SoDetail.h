@@ -91,6 +91,7 @@ SoINTERNAL public:
 
     // Initialize ALL Inventor detail classes
     static void initClasses();
+    static void finishClasses();
 
 protected:
     // Constructor is protected since this is an abstract class

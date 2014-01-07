@@ -150,8 +150,26 @@ SoInteraction::finish()
 {
     // Only initialize once
     if (initialized) {
-
-
+        SoLineHighlightRenderAction::finishClass();
+        SoBoxHighlightRenderAction::finishClass();
+        SoSelection::finishClass();
+        SoSpotLightManip::finishClass();
+        SoDirectionalLightManip::finishClass();
+        SoPointLightManip::finishClass();
+        SoTransformerManip::finishClass();
+        SoTransformBoxManip::finishClass();
+        SoTrackballManip::finishClass();
+        SoTabBoxManip::finishClass();
+        SoJackManip::finishClass();
+        SoHandleBoxManip::finishClass();
+        SoCenterballManip::finishClass();
+        SoTransformManip::finishClass();
+        SoDragger::finishClass();
+        SoInteractionKit::finishClass();
+        SoSurroundScale::finishClass();
+        SoAntiSquish::finishClass();
+        SoNodeKit::finish();
+        SoDB::finish();
         initialized = FALSE;
     }
 }
@@ -393,6 +411,20 @@ SoBoxHighlightRenderAction::initClass()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Clean-up.
+// Use: public, static
+
+void
+SoBoxHighlightRenderAction::finishClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes the SoGLRenderAction class.
 //
 void
@@ -401,6 +433,20 @@ SoLineHighlightRenderAction::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_ACTION_INIT_CLASS(SoLineHighlightRenderAction, SoGLRenderAction);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up.
+// Use: public, static
+
+void
+SoLineHighlightRenderAction::finishClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+
 }
 
 ////////////////////////////////////////////////////////////////////////

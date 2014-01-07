@@ -180,6 +180,7 @@ class INVENTOR_API SoNodekitCatalog {
 
     /// initializes static variables.
     static void initClass();
+    static void finishClass();
 
     /// Returns number of entries in the catalog.
     int        getNumEntries() const { return numEntries; };

@@ -321,7 +321,8 @@ class INVENTOR_API SoField {
     static void		initClass();
 
     // Initialize ALL Inventor node classes
-    static void		initClasses();
+    static void	initClasses();
+    static void finishClasses();
 
     // Sets default flag
     void		setDefault(SbBool def)	{ flags.hasDefault = def; }
