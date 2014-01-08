@@ -59,8 +59,9 @@
 #define _SB_NAME_
 
 #include <Inventor/SbBasic.h>
-#include <Inventor/SbNameEntry.h>
 #include <Inventor/SbString.h>
+
+#include <set>
 
 /// Character string stored in a hash table.
 /// \ingroup Basics
@@ -81,15 +82,10 @@ public:
     SbName();
 
     /// Constructor that initializes to given character string
-    SbName(const char *s) {
-        entry = SbNameEntry::insert(s);
-    }
+    SbName(const char *s);
 
     /// Constructor that initializes to given SbString
-    SbName(const SbString &s) {
-        entry = SbNameEntry::insert(s.getString());
-    }
-
+    SbName(const SbString &s);
 
     /// Constructor that initializes to another SbName
     SbName(const SbName &n) {
@@ -98,14 +94,18 @@ public:
 
     ~SbName() {}
 
+    // Initialize
+    static void init();
+    static void finish();
+
     /// Returns pointer to the character string
     const char  *getString() const {
-        return entry->string;
+        return entry->data();
     }
 
     /// Returns length of string
     size_t getLength() const {
-        return entry->length;
+        return entry->length();
     }
 
     /// Return the position of the first occurrence in the char of the searched content, -1 if not found.
@@ -132,46 +132,48 @@ public:
 
     /// Unary "not" operator; returns TRUE if string is empty ("")
     int operator !() const   {
-        return entry->isEmpty();
+        return entry->empty();
     }
 
     /// Less than operator (using alphabetical order).
     bool operator<(const SbName &other) const {
-        return *entry < *other.entry;
+        return (*entry) < (*other.entry);
     }
 
-    /// Equality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int operator ==(const SbName &n, const char *s) {
-        return n.entry->isEqual(s);
+    /// Equality operator for SbName/char* comparison
+    friend INVENTOR_API bool operator ==(const SbName &n, const char *s) {
+        return (*n.entry) == s;
     }
 
-    /// Equality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int operator ==(const char *s, const SbName &n) {
-        return n.entry->isEqual(s);
+    /// Equality operator for SbName/char* comparison
+    friend INVENTOR_API bool operator ==(const char *s, const SbName &n) {
+        return (*n.entry) == s;
     }
 
-    /// Equality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int operator ==(const SbName &n1, const SbName &n2) {
+    /// Equality operator for SbName/SbName comparison
+    friend INVENTOR_API bool operator ==(const SbName &n1, const SbName &n2) {
         return n1.entry == n2.entry;
     }
 
-    /// Inequality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int operator !=(const SbName &n, const char *s) {
-        return ! n.entry->isEqual(s);
+    /// Inequality operator for SbName/char* comparison
+    friend INVENTOR_API bool operator !=(const SbName &n, const char *s) {
+        return (*n.entry) != s;
     }
 
-    /// Inequality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int operator !=(const char *s, const SbName &n) {
-        return ! n.entry->isEqual(s);
+    /// Inequality operator for SbName/char* comparison
+    friend INVENTOR_API bool operator !=(const char *s, const SbName &n) {
+        return (*n.entry) != s;
     }
 
-    /// Inequality operator for SbName/char* and SbName/SbName comparison
-    friend INVENTOR_API int operator !=(const SbName &n1, const SbName &n2) {
+    /// Inequality operator for SbName/SbName comparison
+    friend INVENTOR_API bool operator !=(const SbName &n1, const SbName &n2) {
         return n1.entry != n2.entry;
     }
 
 private:
-    const SbNameEntry *entry;  // Name string storage
+    const std::string *entry;  // Name string storage
+
+    static std::set<std::string> entries;
 };
 
 #endif /* _SB_NAME_ */

@@ -57,6 +57,7 @@
 #include <Inventor/SbName.h>
 #include <ctype.h>
 
+std::set<std::string> SbName::entries;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -75,7 +76,47 @@ SbName::SbName()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    entry = SbNameEntry::insert("");
+    entry = &(*entries.insert("").first);
+}
+
+SbName::SbName(const char *s)
+{
+    entry = &(*entries.insert(s).first);
+}
+
+SbName::SbName(const SbString &s)
+{
+    entry = &(*entries.insert(s.getString()).first);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initialize.  Called by SoDB::init.
+//
+// Use: public, static
+
+void
+SbName::init()
+//
+////////////////////////////////////////////////////////////////////////
+{
+
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up.
+//
+// Use: public, static
+
+void
+SbName::finish()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    entries.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -91,10 +132,9 @@ SbName::find(const char c) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const char * pos = strchr(entry->string, c);
-    if (pos==NULL)
-        return -1;
-    return (int)(pos - entry->string);
+    size_t index = entry->find(c);
+
+    return (index!=std::string::npos) ? (int)index : -1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -110,10 +150,9 @@ SbName::rfind(char c) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const char * pos = strrchr(entry->string, c);
-    if (pos==NULL)
-        return -1;
-    return (int)(pos - entry->string);
+    size_t index = entry->rfind(c);
+
+    return (index!=std::string::npos) ? (int)index : -1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -130,7 +169,8 @@ SbName::isIdentStartChar(char c)
 ////////////////////////////////////////////////////////////////////////
 {
     // Digits are illegal as first character:
-    if (isdigit(c)) return FALSE;
+    if (isdigit(c))
+        return FALSE;
 
     return isIdentChar(c);
 }
@@ -149,7 +189,8 @@ SbName::isIdentChar(char c)
 ////////////////////////////////////////////////////////////////////////
 {
     // Only 0-9, a-z, A-Z and _ are legal:
-    if (isalnum(c) || c == '_') return TRUE;
+    if (isalnum(c) || c == '_')
+        return TRUE;
 
     return FALSE;
 }
@@ -168,7 +209,8 @@ SbName::isBaseNameStartChar(char c)
 ////////////////////////////////////////////////////////////////////////
 {
     // Digits are illegal as first character:
-    if (isdigit(c)) return FALSE;
+    if (isdigit(c))
+        return FALSE;
 
     return isIdentChar(c);
 }
@@ -193,11 +235,12 @@ SbName::isBaseNameChar(char c)
 ////////////////////////////////////////////////////////////////////////
 {
     // First, quick check for common case:
-    if (isalnum(c)) return TRUE;
+    if (isalnum(c))
+        return TRUE;
 
     // Now, look for bad characters:
-    if ((strchr(badCharacters, c) != NULL) ||
-	isspace(c) || iscntrl(c)) return FALSE;
+    if ((strchr(badCharacters, c) != NULL) || isspace(c) || iscntrl(c))
+        return FALSE;
 
     // Anything left must be OK
     return TRUE;

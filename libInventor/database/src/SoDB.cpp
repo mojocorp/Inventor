@@ -178,6 +178,8 @@ SoDB::init()
 
 	globalDB = new SoDB;
 
+    SbName::init();
+
 	// Initialize the runtime type system
 	SoType::init();
 
@@ -317,6 +319,7 @@ SoDB::finish()
         //CRASH SoFontCache::finish();
         SoInput::finish();
         SoType::finish();
+        SbName::finish();
 
         delete globalDB;
         globalDB = NULL;

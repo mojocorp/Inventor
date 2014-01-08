@@ -53,7 +53,6 @@ PUBLIC_HEADERS += database/include/machine.h \
            database/include/Inventor/SbStdint.h \
            database/include/Inventor/SbLinear.h \
            database/include/Inventor/SbName.h \
-           database/include/Inventor/SbNameEntry.h \
            database/include/Inventor/SbVec2f.h \
            database/include/Inventor/SbVec2s.h \
            database/include/Inventor/SbVec2i32.h \
@@ -518,7 +517,6 @@ SOURCES += database/src/SbBox3f.cpp \
            database/src/SbMatrix.cpp \
            database/src/SbMatrixd.cpp \
            database/src/SbName.cpp \
-           database/src/SbNameEntry.cpp \
            database/src/SbPlane.cpp \
            database/src/SbRotation.cpp \
            database/src/SbRotationd.cpp \
