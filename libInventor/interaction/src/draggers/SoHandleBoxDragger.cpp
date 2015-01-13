@@ -1134,16 +1134,6 @@ SoHandleBoxDragger::scaleGeomSizeOnlyDrag()
 	oldRadius = (startHitPt - origin).length();
 	newRadius = (newHitPt - origin).length();
 
-    // Find the change in scale.
-	float delta = 1.0;
-	if ( newRadius != 0.0 && oldRadius != 0.0 ) {
-	    delta = newRadius / oldRadius;
-	}
-
-//OBSOLETE        SbVec3f relScale = getDraggerScale();
-//OBSOLETE        relScale *= delta;
-//OBSOLETE        setDraggerScale( relScale );
-
     return TRUE;
 }
 
