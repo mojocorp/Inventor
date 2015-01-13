@@ -480,14 +480,13 @@ SbLine::intersect(const SbVec3f &v0, const SbVec3f &v1, const SbVec3f &v2,
     // on very tiny triangles.
     SbBool isInter = FALSE;
     beta = ((diff0[1] * diff1[0] - diff0[0] * diff1[1]) /
-	    (diff2[1] * diff1[0] - diff2[0] * diff1[1]));
+            (diff2[1] * diff1[0] - diff2[0] * diff1[1]));
     if (beta >= 0.0 && beta <= 1.0) {
-	alpha = -1.0;
-	if (diff1[1] < -EPSILON || diff1[1] > EPSILON) 
-	    alpha = (diff0[1] - beta * diff2[1]) / diff1[1];
-	else
-	    alpha = (diff0[0] - beta * diff2[0]) / diff1[0];
-	isInter = (alpha >= 0.0 && alpha + beta <= 1.0);
+        if (diff1[1] < -EPSILON || diff1[1] > EPSILON)
+            alpha = (diff0[1] - beta * diff2[1]) / diff1[1];
+        else
+            alpha = (diff0[0] - beta * diff2[0]) / diff1[0];
+        isInter = (alpha >= 0.0 && alpha + beta <= 1.0);
     }
 
     //

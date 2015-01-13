@@ -148,42 +148,38 @@ SoDrawStyle::doAction(SoAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     SoState	*state = action->getState();
-    SbBool	isFilled;
 
     if (! style.isIgnored()
-	&& ! SoOverrideElement::getDrawStyleOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setDrawStyleOverride(state, this, TRUE);
-	}
-	SoDrawStyleElement::set(state,
-				(SoDrawStyleElement::Style) style.getValue());
-	isFilled = style.getValue() == FILLED;
+            && ! SoOverrideElement::getDrawStyleOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setDrawStyleOverride(state, this, TRUE);
+        }
+        SoDrawStyleElement::set(state,
+                                (SoDrawStyleElement::Style) style.getValue());
     }
-    else
-	isFilled = TRUE;
 
     if (! pointSize.isIgnored()
-	&& ! SoOverrideElement::getPointSizeOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setPointSizeOverride(state, this, TRUE);
-	}
-	SoPointSizeElement::set(state, pointSize.getValue());
+            && ! SoOverrideElement::getPointSizeOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setPointSizeOverride(state, this, TRUE);
+        }
+        SoPointSizeElement::set(state, pointSize.getValue());
     }
 
     if (! lineWidth.isIgnored()
-	&& ! SoOverrideElement::getLineWidthOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setLineWidthOverride(state, this, TRUE);
-	}
-	SoLineWidthElement::set(state, lineWidth.getValue());
+            && ! SoOverrideElement::getLineWidthOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setLineWidthOverride(state, this, TRUE);
+        }
+        SoLineWidthElement::set(state, lineWidth.getValue());
     }
 
     if (! linePattern.isIgnored()
-	&& ! SoOverrideElement::getLinePatternOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setLinePatternOverride(state, this, TRUE);
-	}
-	SoLinePatternElement::set(state, linePattern.getValue());
+            && ! SoOverrideElement::getLinePatternOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setLinePatternOverride(state, this, TRUE);
+        }
+        SoLinePatternElement::set(state, linePattern.getValue());
     }
 }
 

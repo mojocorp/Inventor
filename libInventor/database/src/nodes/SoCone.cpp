@@ -593,7 +593,6 @@ SoCone::generatePrimitives(SoAction *action)
             pv.setPoint(pt);
             pv.setTextureCoords(tex);
             shapeVertex(&pv);
-            s += ds;
 
             endShape();
 
@@ -857,7 +856,6 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action,
             if (doTextures)
                 glTexCoord2f(s, tTop);
             glVertex3fv(SCALE(pt).getValue());
-            s += ds;
 
             glEnd();
 

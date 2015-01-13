@@ -589,7 +589,6 @@ SoCylinder::generatePrimitives(SoAction *action)
             pv.setPoint(pt);
             pv.setTextureCoords(tex);
             shapeVertex(&pv);
-            s += ds;
 
             endShape();
 
@@ -990,7 +989,6 @@ SoCylinder::GLRenderGeneric(SoGLRenderAction *action,
             if (doTextures)
                 glTexCoord2f(s, tTop);
             glVertex3fv(SCALE(pt).getValue());
-            s += ds;
 
             glEnd();
 

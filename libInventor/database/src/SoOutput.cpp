@@ -601,7 +601,7 @@ SoOutput::write(const char *s)
         // string, followed by padding out to the word boundary.
         //
         if (isToBuffer()) {
-            int m = n;
+            int m;
             DGL_HTON_INT32(m, n);
             *((int *)curBuf) = m;
             curBuf += 4;
@@ -613,7 +613,7 @@ SoOutput::write(const char *s)
         else {
             if (!makeRoomInTmpBuf(nsize))
                 return;
-            int m = n;
+            int m;
             DGL_HTON_INT32(m, n);
             fp.write(&m, sizeof(int), 1);
             memcpy(tmpBuffer, (const void *)s, n);

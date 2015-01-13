@@ -386,14 +386,13 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
         // by pixel, whereas the .rgb file stores pixel information arranged
         // by color component.  So scanlines of component data must be
         // accumulated before a row can be written.
-        const unsigned char *tbuf = framebuffer.getConstBytes() + row * framebuffer.getSize()[0]*components*2;
 
         // Convert each color component
         for (int comp=0; comp<components; comp++) {
             unsigned short *trow = rowBuf;
 
             // Convert a row
-            tbuf = pBuf + comp;
+            const unsigned char *tbuf = pBuf + comp;
             for (int j=0; j<framebuffer.getSize()[0]; j++, tbuf += components)
                 *trow++ = (short)*tbuf;
             sgiPutRow( image, rowBuf, row, comp );
