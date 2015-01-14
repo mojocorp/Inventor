@@ -63,7 +63,7 @@ SO_NODE_SOURCE(SoV1Texture2);
 // List of textures that we've created so we can share textures with
 // the same filename, just like Inventor 1
 //
-SbPList SoV1Texture2::textureList;
+std::vector<SoTexture2*> SoV1Texture2::textureList;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -160,10 +160,10 @@ SoV1Texture2::finishClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = 0; i < textureList.getLength(); i++) {
-        delete textureList[i];
+    for (size_t i=0; i<textureList.size(); i++) {
+        textureList[i]->unref();
     }
-    textureList.truncate(0);
+    textureList.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -286,14 +286,14 @@ SoV1Texture2::findTexture2(SoTexture2 *&tex)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = 0; i < textureList.getLength(); i++) {
-        tex = (SoTexture2 *)textureList[i];
+    for (size_t i = 0; i < textureList.size(); i++) {
+        tex = textureList[i];
         if (matches(tex))
             return TRUE;
     }
     // Not found, create a new one and add to list:
     tex = SO_UPGRADER_CREATE_NEW(SoTexture2);
-    textureList.append(tex);
+    textureList.push_back(tex);
 
     // And add a node sensor so we can remove the texture from the
     // list if it is deleted:
@@ -366,6 +366,7 @@ SoV1Texture2::nodeDeletedCB(void *node, SoSensor *sensor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    textureList.remove(textureList.find(node));
+    std::vector<SoTexture2*>::iterator it = std::find(textureList.begin(), textureList.end(), node);
+    textureList.erase(it);
     delete sensor;
 }

@@ -67,6 +67,8 @@
 #include <Inventor/fields/SoSFVec2f.h>
 #include <Inventor/fields/SoSFFloat.h>
 
+#include <vector>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoV1Texture2
@@ -143,7 +145,7 @@ class SoV1Texture2 : public SoUpgrader {
 
     static void nodeDeletedCB(void *node, SoSensor *sensor);
 
-    static SbPList textureList;
+    static std::vector<SoTexture2*> textureList;
 };
 
 #endif /* _SO_V1TEXTURE2_ */
