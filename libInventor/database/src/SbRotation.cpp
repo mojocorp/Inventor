@@ -59,7 +59,7 @@
 #include <Inventor/SbVec3f.h>
 #include <Inventor/errors/SoDebugError.h>
 
-#include <math.h>
+#include <cmath>
 
 // amount squared to figure if two floats are equal
 #define DELTA 1e-6
@@ -409,12 +409,12 @@ SbRotation::setValue(const SbMatrixd &m)
 
 #ifdef DEBUG
     // Check to be sure output matches input:
-    SbMatrix check;
+    SbMatrixd check;
     getValue(check);
     SbBool ok = TRUE;
     for (i = 0; i < 4 && ok; i++) {
 	for (j = 0; j < 4 && ok; j++) {
-	    if (fabsf(m[i][j]-check[i][j]) > 1.0e-5)
+        if (std::abs(m[i][j]-check[i][j]) > 1.0e-5)
 		ok = FALSE;
 	}
     }
