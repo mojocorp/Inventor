@@ -35,7 +35,7 @@
  */
 
 #ifndef _SB_BOX2S_
-#define _SB_BOX2s_
+#define _SB_BOX2S_
 
 #include <Inventor/SbVec2s.h>
 
