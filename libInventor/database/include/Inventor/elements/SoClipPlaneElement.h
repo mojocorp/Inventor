@@ -59,6 +59,9 @@
 #include <Inventor/SbPlane.h>
 #include <Inventor/elements/SoAccumulatedElement.h>
 
+#include <vector>
+
+struct So_ClipPlane;
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoClipPlaneElement
@@ -110,7 +113,7 @@ SoINTERNAL public:
     static void initClass();
 
 protected:
-    SbPList  planes;  // List of plane structures
+    std::vector<So_ClipPlane*>  planes;  // List of plane structures
     int   startIndex; // Index of 1st plane created
     // in this instance
 

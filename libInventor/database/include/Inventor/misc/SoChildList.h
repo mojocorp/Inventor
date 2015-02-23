@@ -59,6 +59,9 @@
 
 #include <Inventor/lists/SoNodeList.h>
 
+#include <vector>
+#include <algorithm>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoChildList
@@ -119,17 +122,21 @@ SoINTERNAL public:
     // SoPath calls these to be notified of changes in scene graph
     // topology:
     void addPathAuditor(SoPath *p) {
-        auditors.append(p);
+        auditors.push_back(p);
     }
     void removePathAuditor(SoPath *p) {
-        auditors.remove(auditors.find(p));
+        std::vector<SoPath*>::iterator it = std::find(auditors.begin(),
+                                                      auditors.end(),
+                                                      p);
+        if(it != auditors.end())
+            auditors.erase(it);
     }
 
 private:
     SoNode  *parent;
-    // This is a PList and not a PathList because PathList ref()s the
+    // This is a vector and not a PathList because PathList ref()s the
     // paths it contains, and that screws up Path reference counting.
-    SbPList  auditors;
+    std::vector<SoPath*> auditors;
 };
 
 #endif /* _SO_CHILD_LIST_ */

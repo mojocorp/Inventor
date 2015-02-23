@@ -61,6 +61,8 @@
 #include <Inventor/caches/SoCache.h>
 #include <Inventor/elements/SoGLLazyElement.h>
 
+#include <vector>
+
 ////////////////////////////////////////////////////////////////////////
 //
 //  Class SoGLRenderCache:
@@ -128,7 +130,7 @@ private:
 
     SoGLDisplayList *list;  // Display list structure
     SbBool  listOpen; // Whether display list is open
-    SbPList  nestedCaches; // List of nested caches
+    std::vector<SoGLDisplayList*>  nestedCaches; // List of nested caches
 
     // Save state that opened a cache, to use when it is closed:
     SoState *  saveState;

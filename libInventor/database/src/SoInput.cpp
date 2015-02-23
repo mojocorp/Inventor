@@ -152,10 +152,10 @@ SoInput::SoInput()
 ////////////////////////////////////////////////////////////////////////
 {
     // Create new file and push on stack
-    curFile = new struct SoInputFile;
+    curFile = new SoInputFile;
     curFile->fp.setFilePointer(stdin);
 
-    files.append((void *) curFile);
+    files.push_back(curFile);
 
     // Make it read from stdin
     initFile("<stdin>", NULL);
@@ -216,10 +216,10 @@ SoInput::SoInput(SoInput *dictIn)
 ////////////////////////////////////////////////////////////////////////
 {
     // Create new file and push on stack
-    curFile = new struct SoInputFile;
+    curFile = new SoInputFile;
     curFile->fp.setFilePointer(stdin);
 
-    files.append((void *) curFile);
+    files.push_back(curFile);
 
     // Make it read from stdin and use the passed dictionary
     initFile("<stdin>", NULL,
@@ -502,10 +502,10 @@ SoInput::pushFile(const SbString & fileName)	// Name of file
     }
 
     // Allocate a new file structure and push onto stack
-    curFile = new struct SoInputFile;
+    curFile = new SoInputFile;
     curFile->fp.open(fullName, "rb");
 
-    files.append(curFile);
+    files.push_back(curFile);
 
     // Initialize reading from file
     initFile(fileName, &fullName);
@@ -535,8 +535,8 @@ SoInput::closeFile()
 ////////////////////////////////////////////////////////////////////////
 {
     // Close all files opened here
-    for (int i = 0; i < files.getLength(); i++) {
-        struct SoInputFile *f = (struct SoInputFile *) files[i];
+    for (size_t i = 0; i < files.size(); i++) {
+        SoInputFile *f = files[i];
 
         f->fp.close();
 
@@ -548,8 +548,8 @@ SoInput::closeFile()
     }
 
     // Remove all but the first file from the stack
-    if (files.getLength() > 1)
-        files.truncate(1);
+    if (files.size() > 1)
+        files.resize(1);
 
     // Reset to read from stdin again
     curFile->fp.setFilePointer(stdin);
@@ -1096,7 +1096,7 @@ SoInput::read(SbName &n,		// Name to read into
             // stack, call this method again to try reading from the
             // next file.
 
-            if (curFile->binary && eof() && files.getLength() > 1)
+            if (curFile->binary && eof() && files.size() > 1)
                 return read(n, validIdent);
 
             return FALSE;
@@ -1591,19 +1591,18 @@ SoInput::getLocationString(SbString &string) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const struct SoInputFile	*f;
-    int				i = files.getLength() - 1;
-    char			buf[10000];
-
     string.makeEmpty();
 
-    f = (const struct SoInputFile *) files[i];
+    int	i = files.size() - 1;
+    const SoInputFile *f = files[i];
+
+    char buf[10000];
     sprintf(buf, "\tOccurred at line %3d in %s",
             f->lineNum, f->fullName.getString());
     string = buf;
 
     for (--i ; i >= 0; --i) {
-        f = (const struct SoInputFile *) files[i];
+        f = files[i];
         sprintf(buf, "\n\tIncluded at line %3d in %s",
                 f->lineNum, f->fullName.getString());
         string += buf;
@@ -1956,21 +1955,21 @@ SoInput::popFile()
     if (curFile->postReadCB)
         (*curFile->postReadCB)(curFile->CBData, this);
 
-    int depth = files.getLength();
+    int depth = files.size();
 
     // Nothing to pop if we're already in last file on stack
     if (depth == 1)
         return FALSE;
 
     // Remove one file
-    files.truncate(depth - 1);
+    files.resize(depth - 1);
 
     // Free up structure for current file and set to new one
     curFile->fp.close();
 
     delete curFile->refDict;
     delete curFile;
-    curFile = (struct SoInputFile *) files[depth - 2];
+    curFile = files[depth - 2];
 
     return TRUE;
 }

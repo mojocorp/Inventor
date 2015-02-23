@@ -150,13 +150,12 @@ SoChildList::insert(SoNode *child, int addBefore)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
-
     SoNodeList::insert(child, addBefore);
 
     // If any paths go through the parent, make sure they get updated
-    for (i = 0; i < auditors.getLength(); i++)
-	((SoPath *)auditors[i])->insertIndex(parent, addBefore);
+    for (size_t i = 0; i < auditors.size(); i++) {
+        auditors[i]->insertIndex(parent, addBefore);
+    }
 
     // Express interest by parent in child's modification
     child->addAuditor(parent, SoNotRec::PARENT);
@@ -177,14 +176,13 @@ SoChildList::remove(int which)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
-
     // Remove interest of parent in child
     (*this)[which]->removeAuditor(parent, SoNotRec::PARENT);
 
     // If any paths go through the parent, make sure they get updated
-    for (i = 0; i < auditors.getLength(); i++)
-	((SoPath *)auditors[i])->removeIndex(parent, which);
+    for (size_t i = 0; i < auditors.size(); i++) {
+        auditors[i]->removeIndex(parent, which);
+    }
 
     SoNodeList::remove(which);
 
@@ -204,25 +202,21 @@ SoChildList::truncate(int start)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int which;
-
     // Remove children from right to left. This allows the indices to
     // remain correct during the removal and also keeps the paths that
     // audit the group from doing too much work. (A path has to adjust
     // indices if we remove a child before the one in the path.) It
     // also minimizes shuffling of entries in the children array.
 
-    for (which = getLength() - 1; which >= start; --which) {
-	int i;
+    for (int which = getLength() - 1; which >= start; --which) {
+        // Remove interest of parent in child
+        (*this)[which]->removeAuditor(parent, SoNotRec::PARENT);
 
-	// Remove interest of parent in child
-	(*this)[which]->removeAuditor(parent, SoNotRec::PARENT);
+        // If any paths go through the parent, make sure they get updated
+        for (size_t i = 0; i < auditors.size(); i++)
+            auditors[i]->removeIndex(parent, which);
 
-	// If any paths go through the parent, make sure they get updated
-	for (i = 0; i < auditors.getLength(); i++)
-	    ((SoPath *)auditors[i])->removeIndex(parent, which);
-
-	SoNodeList::remove(which);
+        SoNodeList::remove(which);
     }
 
     // the parent has changed; notify its auditors
@@ -269,14 +263,13 @@ SoChildList::set(int which, SoNode *child)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
-
     // Remove interest of parent in old child
     (*this)[which]->removeAuditor(parent, SoNotRec::PARENT);
 
     // If any paths go through the parent, make sure they get updated
-    for (i = 0; i < auditors.getLength(); i++)
-	((SoPath *)auditors[i])->replaceIndex(parent, which, child);
+    for (size_t i = 0; i < auditors.size(); i++) {
+        auditors[i]->replaceIndex(parent, which, child);
+    }
 
     // Replace child
     SoNodeList::set(which, child);

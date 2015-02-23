@@ -60,15 +60,17 @@
 #define  _SO_OUTPUT_DATA_
 
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/SbPList.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
+
+#include <vector>
 
 class SoEngine;
 class SoFieldContainer;
 class SoInput;
 class SoOutput;
 class SoEngineOutput;
+struct SoOutputEntry;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -105,8 +107,8 @@ public:
                    SoType type);
 
     /// Returns number of outputs
-    int getNumOutputs() const {
-        return outputs.getLength();
+    size_t getNumOutputs() const {
+        return outputs.size();
     }
 
     /// Returns name of output with given index
@@ -130,7 +132,7 @@ public:
     void writeDescriptions(SoOutput *out,
                            SoEngine *engine) const;
 private:
-    SbPList  outputs; // List of outputs (SoOutputEntry)
+    std::vector<SoOutputEntry*>  outputs; // List of outputs (SoOutputEntry)
 };
 
 #endif /* _SO_OUTPUT_DATA_ */

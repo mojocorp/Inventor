@@ -280,8 +280,6 @@ SoWriteAction::traversePathList(SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
-
     // The doOneStage flag will be TRUE (see below) if we are being
     // applied during the count stage once we have all the path lists.
     // In this case, just do normal traversal on the compact path list
@@ -289,7 +287,7 @@ SoWriteAction::traversePathList(SoNode *node)
 	const SoPathList *list = getPathListAppliedTo();
 
 	// First, make sure each path in the list is counted
-	for (i = 0; i < list->getLength(); i++)
+    for (int i = 0; i < list->getLength(); i++)
 	    (*list)[i]->addWriteReference(output);
 
 	// Do traversal
@@ -306,8 +304,8 @@ SoWriteAction::traversePathList(SoNode *node)
 
     // If this is not the last list, save it for later and do nothing else
     else if (! isLastPathListAppliedTo()) {
-	SoPathList	*copy = new SoPathList(*getPathListAppliedTo());
-	savedLists.append(copy);
+        SoPathList	*copy = new SoPathList(*getPathListAppliedTo());
+        savedLists.push_back(copy);
     }
 
     // Otherwise, process all the lists
@@ -325,22 +323,22 @@ SoWriteAction::traversePathList(SoNode *node)
 	// Count first; do all saved lists first, then the last one.
 	// Apply the action to each path list.
 	output->setStage(SoOutput::COUNT_REFS);
-	for (i = 0; i < savedLists.getLength(); i++)
+    for (size_t i = 0; i < savedLists.size(); i++)
 	    apply(* (const SoPathList *) savedLists[i], TRUE);
 	apply(*getPathListAppliedTo(), TRUE);
 
 	// Then write each path from original list by applying the
 	// action to the path
 	output->setStage(SoOutput::WRITE);
-	for (i = 0; i < getOriginalPathListAppliedTo()->getLength(); i++)
+    for (int i = 0; i < getOriginalPathListAppliedTo()->getLength(); i++)
 	    apply((*getOriginalPathListAppliedTo())[i]);
 
 	doOneStage = FALSE;
 
 	// Free up saved lists and clear out list
-	for (i = 0; i < savedLists.getLength(); i++)
+    for (size_t i = 0; i < savedLists.size(); i++)
 	    delete (SoPathList *) savedLists[i];
-	savedLists.truncate(0);
+    savedLists.clear();
 
 	// Restore the state of the continuing flag
 	continuing = saveContinuing;

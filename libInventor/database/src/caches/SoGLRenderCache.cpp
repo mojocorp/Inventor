@@ -95,12 +95,13 @@ SoGLRenderCache::~SoGLRenderCache()
 ////////////////////////////////////////////////////////////////////////
 {
     // Unref all of the nested caches
-    for (int i = 0; i < nestedCaches.getLength(); i++)
-	((SoGLDisplayList *) nestedCaches[i])->unref();
+    for (size_t i = 0; i < nestedCaches.size(); i++) {
+        nestedCaches[i]->unref();
+    }
 
     // delete the GLLazyElement
     if (GLCacheLazyElement != NULL)
-	delete GLCacheLazyElement;
+        delete GLCacheLazyElement;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -180,7 +181,7 @@ SoGLRenderCache::addNestedCache(SoGLDisplayList *child)
 ////////////////////////////////////////////////////////////////////////
 {
     // Add the cache to the list of nested caches
-    nestedCaches.append(child);
+    nestedCaches.push_back(child);
 
     // Increment the reference count on the nested cache
     child->ref();

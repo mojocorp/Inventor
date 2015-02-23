@@ -61,16 +61,18 @@
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbDict.h>
-#include <Inventor/SbPList.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SbFile.h>
 #include <Inventor/SoDB.h>
+
+#include <vector>
 
 class SoNode;
 class SoPath;
 class SoBase;
 class SoDB;
 class SbStringList;
+struct SoInputFile;
 
 /// Used to read Inventor data files.
 /// \ingroup General
@@ -235,7 +237,7 @@ SoINTERNAL public:
     static bool findFile(const SbString & fileName, SbString &fullName);
 private:
     static SbStringList *directories; // Directory search path.
-    SbPList  files;  // Stack of SoInputFiles (depth >=1)
+    std::vector<SoInputFile*>  files;  // Stack of SoInputFiles (depth >=1)
     struct SoInputFile *curFile; // Top of stack
     SbString  backBuf; // For strings that are put back
     int   backBufIndex; // Index into backBuf (-1 if no buf)
