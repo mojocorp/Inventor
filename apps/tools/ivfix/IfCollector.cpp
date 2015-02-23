@@ -35,6 +35,7 @@
  */
 
 #include <Inventor/SoLists.h>
+#include <Inventor/SoFullPath.h>
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/nodekits/SoBaseKit.h>

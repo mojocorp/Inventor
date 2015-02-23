@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
-#SUBDIRS = ivAddVP ivcat ivfix ivinfo ivnorm
+SUBDIRS = ivAddVP ivcat ivfix ivinfo ivnorm
 # ivperf ivview

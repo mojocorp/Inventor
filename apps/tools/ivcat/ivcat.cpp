@@ -56,6 +56,7 @@
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/nodekits/SoBaseKit.h>
+#include <Inventor/SoFullPath.h>
 
 static void
 print_usage(const char *progname)
@@ -215,7 +216,7 @@ nukeTextureNodes(SoNode *&root)
     }
 }
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     int expandFileNodes = 0;
     int expandTextureNodes = 0;

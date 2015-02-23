@@ -40,6 +40,7 @@
 #include <Inventor/nodes/SoGroup.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoPackedColor.h>
+#include <Inventor/SoFullPath.h>
 
 #include "IfAssert.h"
 #include "IfReplacer.h"

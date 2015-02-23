@@ -297,12 +297,11 @@ IfBuilder::setFlags(SoCallbackAction *cba, SbBool *flags)
 		SoLazyElement::PHONG);
 
     // Do texture coordinates only if there is a texture
-    SbVec2s s;
-    int nc, wrapS, wrapT, model;
+    int wrapS, wrapT, model;
     SbColor blendColor;
-    flags[1] = (SoTextureImageElement::get(cba->getState(), s, nc,
+    flags[1] = !SoTextureImageElement::get(cba->getState(),
 					   wrapS, wrapT,
-					   model, blendColor) != NULL);
+                       model, blendColor).isNull();
 }
 
 /////////////////////////////////////////////////////////////////////////////
