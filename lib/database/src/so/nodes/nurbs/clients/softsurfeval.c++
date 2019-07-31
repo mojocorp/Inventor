@@ -418,7 +418,7 @@ _SoNurbsSurfaceEvaluator::evalpoint2i( long u, long v )
 void
 _SoNurbsSurfaceEvaluator::compute( REAL *domain, int index, int place )
 {
-    assert( equal(vvals[index], domain[1]) );
+    assert( vvals[index] == domain[1] );
     if( ((place >= valid[index][0]) && (place < valid[index][1])) ) {
 	assert( place != 0 );
 	for( _SoNurbsSurfaceMap *map = firstMap(); isMap( map ); map = nextMap(map) )

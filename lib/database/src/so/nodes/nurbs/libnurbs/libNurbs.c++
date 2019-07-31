@@ -95,4 +95,3 @@
 #include "trimvertpool.c++"
 #include "uarray.c++"
 #include "varray.c++"
-#include "qsort.c++"

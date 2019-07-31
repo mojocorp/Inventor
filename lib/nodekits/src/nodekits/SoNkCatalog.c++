@@ -336,7 +336,7 @@ SoNodekitCatalog::getPartNumber( const SbName &theName ) const
     void *castPNum;
 
     if ( partNameDict.find( (unsigned long) theName.getString(), castPNum ) )
-#if (_MIPS_SZPTR == 64 || __ia64)
+#if (_MIPS_SZPTR == 64 || __ia64 || __LP64__)
 	return ( (int) ((long) castPNum) );  // System long
 #else
 	return ( (int) castPNum );
