@@ -424,8 +424,7 @@ SoGLTextureImageElement::sendTex(SoState *state)
     
     GLubyte *level0 = NULL;
     if (newSize != size) {
-	level0 = (GLubyte *)
-	    alloca(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
+	level0 = new unsigned char[newSize[0]*newSize[1]*numComponents];
 
 	// Use gluScaleImage (which does linear interpolation or box
 	// filtering) if using a linear interpolation magnification
@@ -448,8 +447,7 @@ SoGLTextureImageElement::sendTex(SoState *state)
 	
 	const GLubyte *prevLevel = NULL;
 	if (level0 == NULL) {
-	    level0 = (GLubyte *)
-		alloca(newSize[0]*newSize[1]*numComponents*sizeof(GLubyte));
+		level0 = new unsigned char[newSize[0]*newSize[1]*numComponents];
 	    prevLevel = bytes;
 	}
 	else {
@@ -511,4 +509,6 @@ SoGLTextureImageElement::sendTex(SoState *state)
     }
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4);  // Reset to default
+        if (level0 != NULL)
+	   delete [] level0;
 }

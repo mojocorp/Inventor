@@ -537,17 +537,6 @@ SoXtGLWidget::setStereoBuffer(SbBool flag)
 	    return;
 	}
     }
-
-    // if there is no overlay context, need to create one that is
-    // persistent for new normal/stereo context to share with.
-    static GLXContext pctx = 0;
-    if (!ctxOverlay && !pctx) {
-	pctx = glXCreateContext(XtDisplay(mgrWidget), vis, ctxNormal, True);
-	glXCopyContext(XtDisplay(mgrWidget), ctxNormal, pctx, GL_ALL_ATTRIB_BITS);
-	SbPList* contextList =
-	    contextListKeeper.find(XtDisplay(mgrWidget), SCREEN(mgrWidget));
-	contextList->append(pctx);
-    }
     
     // now set the flag and create the new window with given visual
     SET_BIT(glModes, SO_GLX_STEREO, flag);
