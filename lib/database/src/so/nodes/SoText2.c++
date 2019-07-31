@@ -1400,7 +1400,6 @@ SoBitmapFontCache::freeBitmap(unsigned long, void* value)
 #include <Inventor/elements/SoFontSizeElement.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
-#include <Inventor/elements/SoLightModelElement.h>
 #include <Inventor/elements/SoMaterialBindingElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/elements/SoProjectionMatrixElement.h>
@@ -1640,8 +1639,8 @@ SoText2::GLRender(SoGLRenderAction *action)
     }
 
     // Turn off lighting
-    SoLightModelElement::set(state,
-			     SoLightModelElement::BASE_COLOR);
+    SoLazyElement::setLightModel(state,
+                 SoLazyElement::BASE_COLOR);
     // Turn off texturing
     SoGLTextureEnabledElement::set(state, FALSE);
     
