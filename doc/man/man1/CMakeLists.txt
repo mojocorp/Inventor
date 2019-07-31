@@ -1,0 +1,11 @@
+install(FILES
+    SceneViewer.1
+    inventor.1
+    iv2toiv1.1
+    ivcat.1
+    ivdowngrade.1
+    ivfix.1
+    ivinfo.1
+    ivview.1
+DESTINATION man/man1
+)
