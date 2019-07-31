@@ -1,0 +1,7 @@
+file(GLOB files "CXX/*.c++")
+foreach(file ${files})
+    get_filename_component(basename ${file} NAME)
+    string(REPLACE ".c++" "" basename "${basename}")
+    add_executable(${basename} ${file})
+    target_link_libraries(${basename} Inventor InventorXt)
+endforeach()
