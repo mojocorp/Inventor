@@ -158,7 +158,7 @@ class SoRotateCylindricalDragger : public SoDragger
     virtual ~SoRotateCylindricalDragger();
 
   private:
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 

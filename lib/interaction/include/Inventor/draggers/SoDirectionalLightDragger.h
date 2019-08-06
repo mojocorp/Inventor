@@ -172,7 +172,7 @@ class SoDirectionalLightDragger : public SoDragger {
     ~SoDirectionalLightDragger();
 
   private:
-    static const char		geomBuffer[];
+    static const unsigned char geomBuffer[];
 };
 
 #endif /* _SO_DIRECTIONAL_LIGHT_DRAGGER_ */

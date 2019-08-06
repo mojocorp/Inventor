@@ -221,7 +221,7 @@ SoInteractionKit::copyContents(const SoFieldContainer *fromFC,
 //
 void
 SoInteractionKit::readDefaultParts(const char   *fileName, 
-				const char   defaultBuffer[], 
+				const unsigned char   defaultBuffer[], 
 				int defBufSize )
 //
 ////////////////////////////////////////////////////////////////////////
@@ -541,7 +541,7 @@ SoInteractionKit::readFromFile(const char *fileName)
 // Use: protected
 //
 SoGroup *
-SoInteractionKit::readFromBuffer(const char defaultBuffer[], int defBufSize )
+SoInteractionKit::readFromBuffer(const unsigned char defaultBuffer[], int defBufSize )
 //
 ////////////////////////////////////////////////////////////////////////
 {

@@ -193,7 +193,7 @@ class SoSpotLightDragger : public SoDragger
     virtual ~SoSpotLightDragger();
 
   private:
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 #endif  /* _SO_SPOT_LIGHT_DRAGGER_ */

@@ -298,7 +298,7 @@ class SoHandleBoxDragger : public SoDragger {
     SbBool		scaleGeomSizeOnlyDrag();
 
     // character strings from which the shared geometry is read
-    static const char geomBuffer[];		
+    static const unsigned char geomBuffer[];		
 };
 
 #endif /* _SO_HANDLEBOX_DRAGGER_ */

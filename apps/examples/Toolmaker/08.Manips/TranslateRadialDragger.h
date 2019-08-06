@@ -129,7 +129,7 @@ class TranslateRadialDragger : public SoDragger
 
   private:
 
-   static const char geomBuffer[];
+   static const unsigned char geomBuffer[];
 
    // Destructor.
    ~TranslateRadialDragger();

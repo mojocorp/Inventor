@@ -142,7 +142,7 @@ class SoRotateDiscDragger : public SoDragger
 
   private:
     // Default geometry
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 
