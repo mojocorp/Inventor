@@ -144,7 +144,7 @@ class SoPointLightDragger : public SoDragger
 
   private:
 
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 #endif  /* _SO_POINT_LIGHT_DRAGGER_ */

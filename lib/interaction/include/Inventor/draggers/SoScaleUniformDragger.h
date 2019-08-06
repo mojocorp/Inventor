@@ -142,7 +142,7 @@ class SoScaleUniformDragger : public SoDragger
     virtual ~SoScaleUniformDragger();
 
   private:
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };
 
 #endif  /* _SO_SCALE_UNIFORM_DRAGGER_ */

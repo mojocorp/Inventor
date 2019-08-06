@@ -141,7 +141,7 @@ class SoTranslate1Dragger : public SoDragger
     virtual ~SoTranslate1Dragger();
 
   private:
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 #endif  /* _SO_TRANSLATE_1_DRAGGER_ */

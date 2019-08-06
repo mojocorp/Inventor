@@ -156,7 +156,7 @@ class SoTabBoxDragger : public SoDragger
     virtual ~SoTabBoxDragger();
 
   private:
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 #endif  /* _SO_TAB_BOX_DRAGGER_ */

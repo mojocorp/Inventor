@@ -202,7 +202,7 @@ class SoInteractionKit : public SoBaseKit {
     virtual SbBool readInstance(SoInput *in, unsigned short flags);
 
     static void readDefaultParts( const char *fileName,        // file to read
-		                  const char defaultBuffer[],   // if no file,
+		                  const unsigned char defaultBuffer[],   // if no file,
 				    int defBufSize );	     // read from buffer
 
     // Protected versions of these methods that allow you to set non-leaf
@@ -275,7 +275,7 @@ class SoInteractionKit : public SoBaseKit {
 
     // used to read information by 'readDefaultParts'
     static SoGroup *readFromFile(const char *fileName);
-    static SoGroup *readFromBuffer( const char defaultBuffer[], int defBufSize);
+    static SoGroup *readFromBuffer( const unsigned char defaultBuffer[], int defBufSize);
 };
 
 #endif /* _SO_INTERACTION_KIT_ */

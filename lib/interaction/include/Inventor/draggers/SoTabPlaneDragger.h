@@ -197,7 +197,7 @@ class SoTabPlaneDragger : public SoDragger
     virtual ~SoTabPlaneDragger();
 
   private:
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 };    
 
 #endif  /* _SO_TAB_PLANE_DRAGGER_ */
