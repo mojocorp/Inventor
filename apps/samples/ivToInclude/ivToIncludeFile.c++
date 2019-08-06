@@ -111,9 +111,9 @@ int main(int argc, char **argv)
     void *buf;
     size_t size;
     out.getBuffer(buf, size);
-    char *outputBuffer = (char *) buf;
-    fprintf( stdout, "const char %s[] = {\n", variableName );
-    fprintf(stderr,"bufferSize = %d\n", size);
+    unsigned char *outputBuffer = (unsigned char *) buf;
+    fprintf( stdout, "const unsigned char %s[] = {\n", variableName );
+    fprintf(stderr,"bufferSize = %lu\n", size);
     // All but last number get commas afterwards
     for ( int j = 0; j < size-1; j++ ) {
     fprintf( stdout, "0x%x,", outputBuffer[j] );

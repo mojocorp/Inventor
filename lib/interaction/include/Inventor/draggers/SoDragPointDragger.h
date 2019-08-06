@@ -239,7 +239,7 @@ class SoDragPointDragger : public SoDragger
     // Sets the offsetWorkLimit box and updates the feedback geometry 
     void  updateLimitBoxAndFeedback();
 
-    static const char geomBuffer[];
+    static const unsigned char geomBuffer[];
 
     //  Cached values to make updating feedback more efficient
     SoNode *oldXAxisNode;
