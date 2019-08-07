@@ -51,7 +51,7 @@
 // Header file for new action class
 #include "GetVolumeAction.h"
 
-main()
+int main()
 {
    // Initialize Inventor
    SoInteraction::init();

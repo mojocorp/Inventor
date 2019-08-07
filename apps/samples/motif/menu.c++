@@ -462,8 +462,8 @@ buildMainWindow(Widget parent, SoNode *sceneGraph)
 //  main - init Inventor and Xt, set up a scene graph and the main window,
 //  display this window, and loop forever...
 //
-void
-main(unsigned int /*argc*/, char *argv[])
+int
+main(int /*argc*/, char *argv[])
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -491,5 +491,6 @@ main(unsigned int /*argc*/, char *argv[])
 	SoXt::show(mainWindow);
 	SoXt::mainLoop();
     }
+    return 0;
 }
 

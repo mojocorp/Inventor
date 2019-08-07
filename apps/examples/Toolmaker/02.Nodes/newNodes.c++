@@ -57,7 +57,7 @@
 #include "Pyramid.h"
 #include "Alternate.h"
 
-main(int, char **argv)
+int main(int, char **argv)
 {
    SoInput      myInput;
    SoSeparator  *root;

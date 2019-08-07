@@ -49,7 +49,7 @@
 #include "../02.Nodes/Pyramid.h"
 #include "PyramidKit.h"
 
-main(int, char **argv)
+int main(int, char **argv)
 {
    // Initialize Inventor and Xt
    Widget myWindow = SoXt::init(argv[0]);

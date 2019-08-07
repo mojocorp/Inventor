@@ -152,8 +152,8 @@ msg()
     printf("to reset the camera to its home position.\n");
 }
 
-void
-main(unsigned int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     if (argc != 2) {
 	printf("Usage: %s filename\n", argv[0]);
@@ -187,5 +187,6 @@ main(unsigned int argc, char *argv[])
 	// loop forever
 	SoXt::mainLoop();
     }
+	return 0;
 }
 
