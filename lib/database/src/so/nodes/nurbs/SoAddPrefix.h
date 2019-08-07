@@ -43,7 +43,7 @@
 #define _lib_nurbs(name) _SoNurbs/**/name
 #endif
 
-#include "../_undefs.h"
-#include "../_defines.h"
+#include "_undefs.h"
+#include "_defines.h"
 
 #endif

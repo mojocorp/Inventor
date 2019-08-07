@@ -49,6 +49,8 @@
 #include "pwlarc.h"
 #include "simplemath.h"
 
+#include <cmath>
+
 /* local preprocessor definitions */
 #define	ZERO		0.000001
 
@@ -332,7 +334,7 @@ Arc::check( void )
 
 inline long tooclose( REAL x, REAL y )
 {
-    return (abs(x-y) < TOL) ?  1 : 0;
+    return (std::abs(x-y) < TOL) ?  1 : 0;
 }
 
 

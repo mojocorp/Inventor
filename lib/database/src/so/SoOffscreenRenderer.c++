@@ -521,8 +521,8 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
         }
     }
     iclose( image );
-    delete pBuf;
-    delete rowBuf;
+    delete [] pBuf;
+    delete [] rowBuf;
     return TRUE;
 }
 
@@ -542,7 +542,7 @@ SoOffscreenRenderer::putHex(
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fprintf(fp, "%02hx", (unsigned char)val);
+    fprintf(fp, "%02hhx", (unsigned char)val);
     if (++hexPos >= 32) {
         fprintf(fp, "\n");
         hexPos = 0;
@@ -681,7 +681,7 @@ SoOffscreenRenderer::writeToPostScript(
     fprintf(fp, "grestore\n");
     fprintf(fp, "showpage\n");
 
-    delete pBuf;
+    delete [] pBuf;
     return TRUE;
 }
 

@@ -4,9 +4,11 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
-#ifndef __gl_h_
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#else
 #include <GL/gl.h>
-#endif /* __gl_h_ */
+#endif
 
 #ifdef __cplusplus
 extern "C" {
