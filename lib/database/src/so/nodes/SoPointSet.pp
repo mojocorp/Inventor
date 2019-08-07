@@ -66,7 +66,7 @@
 #include <Inventor/details/SoPointDetail.h>
 #include <Inventor/elements/SoComplexityElement.h>
 #include <Inventor/elements/SoGLCoordinateElement.h>
-#include <Inventor/elements/SoLightModelElement.h>
+#include <Inventor/elements/SoLazyElement.h>
 #include <Inventor/elements/SoMaterialBindingElement.h>
 #include <Inventor/elements/SoNormalBindingElement.h>
 #include <Inventor/elements/SoGLNormalElement.h>
@@ -156,8 +156,8 @@ SoPointSet::GLRender(SoGLRenderAction *action)
 	    SoGLNormalElement::getInstance(state);
 
 	if (ne->getNum() == 0) {
-	    SoLightModelElement::set(state,
-				     SoLightModelElement::BASE_COLOR);
+	    SoLazyElement::setLightModel(state,
+				     SoLazyElement::BASE_COLOR);
 	    normalPerPoint = FALSE;
 	}
 

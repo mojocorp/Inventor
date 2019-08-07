@@ -68,7 +68,7 @@
 #include <Inventor/elements/SoGLCoordinateElement.h>
 #include <Inventor/elements/SoGLTextureCoordinateElement.h>
 #include <Inventor/elements/SoGLNormalElement.h>
-#include <Inventor/elements/SoLightModelElement.h>
+#include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/elements/SoMaterialBindingElement.h>
 #include <Inventor/elements/SoNormalBindingElement.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
