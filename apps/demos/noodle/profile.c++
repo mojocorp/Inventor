@@ -88,8 +88,8 @@ leaveLineManipWindow(Widget, XtPointer mydata, XEvent *, Boolean *cont)
 
 SoSeparator * 
 createLineGraphCommon( SoPerspectiveCamera *&c, LineManip2 *&theManip, 
-		       Widget theWidget, char *gridFileName, 
-		       char *gridDfltBuf )
+               Widget theWidget, const char *gridFileName,
+               const char *gridDfltBuf )
 {
     SoSeparator *result = new SoSeparator;
     result->ref();
