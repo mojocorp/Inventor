@@ -174,7 +174,7 @@ SoEXTENDER class SoOverrideElement : public SoElement {
     static SbBool	getFontSizeOverride(SoState *state)
 	{ SO_GET_OVERRIDE(FONT_SIZE); }
 
-    // Returns TRUE iff SoLightModelElement is overridden.
+    // Returns TRUE iff SoLazyElement is overridden.
     static SbBool	getLightModelOverride(SoState *state)
 	{ SO_GET_OVERRIDE(LIGHT_MODEL); }
 
@@ -267,7 +267,7 @@ SoEXTENDER class SoOverrideElement : public SoElement {
 					    SbBool override)
 	{ SO_SET_OVERRIDE(FONT_SIZE); }
 
-    // set override flag for SoLightModelElement.
+    // set override flag for SoLazyElement.
     static void		setLightModelOverride(SoState *state, SoNode *,
 					      SbBool override)
 	{ SO_SET_OVERRIDE(LIGHT_MODEL); }
