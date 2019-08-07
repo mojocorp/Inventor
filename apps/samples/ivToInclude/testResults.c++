@@ -85,7 +85,7 @@ readFromIncludeFile()
     return root;
 }
 
-main( int argc, char **argv )
+int main( int argc, char **argv )
 {
    // Initialize Inventor and Xt
    Widget appWindow = SoXt::init(argv[0]);

@@ -58,7 +58,7 @@
 #include "RotTransManip.h"
 #include "Coordinate3Manip.h"
 
-main(int, char **argv)
+int main(int, char **argv)
 {
    SoInput      myInput;
    SoSeparator  *root;

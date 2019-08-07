@@ -101,8 +101,8 @@ usage()
     printf("to reset the transform affecting the cube.\n");
 }
 
-void
-main(unsigned int, char *argv[])
+int
+main(int, char *argv[])
 {
     Widget mainWindow = SoXt::init(argv[0]);
 
@@ -128,5 +128,6 @@ main(unsigned int, char *argv[])
     
     // loop forever
     SoXt::mainLoop();
+    return 0;
 }
 

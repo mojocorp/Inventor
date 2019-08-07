@@ -627,7 +627,7 @@ processLine(const Line &line)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-main(int, char *argv[])
+int main(int, char *argv[])
 {
     char	buf[1024];
     Line	line;
