@@ -251,7 +251,7 @@ SoNodekitCatalogEntry::printCheck() const
     if ( listPart ) {
 	fprintf( stdout, "listItemTypes = " );
 	for ( int i = 0; i < listItemTypes.getLength(); i++ ) {
-	    fprintf( stdout,"  %d  ", listItemTypes[i].getName().getString() );
+	    fprintf( stdout,"  %ld  ", (long)listItemTypes[i].getName().getString() );
 	}
 	fprintf( stdout, "\n" );
     }
