@@ -49,7 +49,7 @@
 // Header files for new node class
 #include "JumpingJackKit.h"
 
-main(int, char **argv)
+int main(int, char **argv)
 {
    // Initialize Inventor and Xt
    Widget myWindow = SoXt::init(argv[0]);

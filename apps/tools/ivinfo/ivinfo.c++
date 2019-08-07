@@ -159,7 +159,7 @@ parseArgs(int argc, char **argv, SoInput &in)
     }
 }
 
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
     SoInput	in;
     SoNode	*root;

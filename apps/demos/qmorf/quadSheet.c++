@@ -68,7 +68,7 @@ createQuadSheet(int sizex, int sizey)
     return result;
 }
 
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     SoDB::init();
 

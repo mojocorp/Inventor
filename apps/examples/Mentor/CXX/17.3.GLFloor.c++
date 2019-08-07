@@ -198,7 +198,7 @@ drawFloor()
 }
 
 
-main(int, char **)
+int main(int, char **)
 {
    // Initialize Inventor
    SoDB::init();
