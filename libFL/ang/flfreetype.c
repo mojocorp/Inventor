@@ -385,10 +385,6 @@ void
 _flFTDeleteGlyphChar(FLFreeTypeOutline *outline)
 {
   TRACE(("_flFTDeleteGlyphChar: outline=%p\n", outline));
-
-  if (outline) {
-    FT_Done_GlyphSlot(outline->glyph);
-  }
 }
 
 short

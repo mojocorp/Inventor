@@ -53,6 +53,7 @@
 
 #include <Inventor/SoDB.h>
 #include <Inventor/engines/SoTimeCounter.h>
+#include <cstdlib>
 
 SO_ENGINE_SOURCE(SoTimeCounter);
 
@@ -267,7 +268,7 @@ SoTimeCounter::inputChanged(SoField *whichInput)
 
 	// reallocate stage array
 	delete [] stages;
-	nStages	= 1+abs((mx-mn)/stp);
+    nStages	= 1+std::abs((mx-mn)/stp);
 	stages	= new struct Stage[nStages + 1];	// sentinnel on end
 
 	// make sure curStage isn't out of range

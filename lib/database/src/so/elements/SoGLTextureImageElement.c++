@@ -60,9 +60,7 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
 
-#ifdef __sgi
 #include <alloca.h>
-#endif
 #include <float.h>
 
 // Formats for 1-4 component textures

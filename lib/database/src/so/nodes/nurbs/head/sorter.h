@@ -51,6 +51,8 @@ protected:
 
 private:
     void		qs1( char *, char * );
+    __inline char *med3(char *a, char *b, char *c);
+    void qs1(void *aa, size_t n, size_t es);
     int 		es;
 };
 #endif /* __glusorter_h_ */

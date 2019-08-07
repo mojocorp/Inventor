@@ -81,6 +81,8 @@ friend class Patchlist;
     int			needsNonSamplingSubdivision( void );
 
 private:
+    REAL* alloc_pts( void );
+    void alloc_all_pts( void );
 
     Mapdesc*		mapdesc;
     Patch*		next;
