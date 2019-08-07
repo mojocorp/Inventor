@@ -143,12 +143,12 @@ extern int errno;		/* missing from errno.h			*/
  * Linux i386/ia64 machine dependent setup
  */
 
-#if __i386__ || __ia64__
+#if __linux__
 
 #define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
 #define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
 
-#endif /* __i386__ || __ia64__ */
+#endif /* __linux__ */
 
 
 /*
@@ -326,12 +326,12 @@ extern float dgl_ntoh_double();
  */
 
 #if MACHINE_FLOAT_FORMAT == DGL_NON_IEEE
-#if __i386__ || __ia64__ || (__APPLE__ && __LITTLE_ENDIAN__)
+#if __linux__ || (__APPLE__ && __LITTLE_ENDIAN__)
 void mem_hton_float(float *t, float *f);
 void mem_ntoh_float(float *t, float *f);
 void mem_hton_double(double *t, double *f);
 void mem_ntoh_double(double *t, double *f);
-#endif /* __i386__ || __ia64__ || (__APPLE__ && __LITTLE_ENDIAN__) */
+#endif /* __linux__ || (__APPLE__ && __LITTLE_ENDIAN__) */
 #define DGL_HTON_FLOAT(t,f) mem_hton_float(&t,&f)
 #define DGL_NTOH_FLOAT(t,f) mem_ntoh_float(&t,&f)
 #define DGL_HTON_DOUBLE(t,f) mem_hton_double(&t,&f)
