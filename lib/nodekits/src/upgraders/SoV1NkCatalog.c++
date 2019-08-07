@@ -119,8 +119,8 @@ SoV1NodekitCatalogEntry::printCheck() const
     if ( listPart ) {
 	fprintf( stdout, "listItemTypes = " );
 	for ( int i = 0; i < listItemTypes.getLength(); i++ ) {
-	    fprintf( stdout,"  %d  ", 
-		     ((SoType *) listItemTypes[i])->getName().getString() );
+	    fprintf( stdout,"  %ld  ", 
+		     (long)((SoType *) listItemTypes[i])->getName().getString() );
 	}
 	fprintf( stdout, "\n" );
     }
