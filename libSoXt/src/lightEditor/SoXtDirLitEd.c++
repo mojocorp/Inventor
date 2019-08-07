@@ -107,10 +107,10 @@ enum {
 
 // Resources for labels.
 typedef struct {
-	char *inten;
+    char *inten;
 } RES_LABELS;
 static RES_LABELS rl;
-static char *defaults[]={ 
+static const char *defaults[]={
 	"Inten "
 };
 
@@ -121,7 +121,7 @@ static char *defaults[]={
     XmToggleButtonSetState((Widget) BUTTON, FALSE, FALSE)
 
 
-char *SoXtDirectionalLightEditor::geomBuffer = 
+const char *SoXtDirectionalLightEditor::geomBuffer =
 "#Inventor V2.0 ascii\n\
 Separator {\n\
     DEF DIR_LIGHT_EDITOR_ROTATOR Group {\n\
@@ -449,7 +449,7 @@ SoXtDirectionalLightEditor::buildWidget(Widget parent)
     // get resources...
        SoXtResource xr(parent);
        if (!xr.getResource( "inten", "Inten", rl.inten ))
-	   rl.inten = defaults[0];
+       rl.inten = (char*)defaults[0];
 
     //
     // create a top level form to hold everything together

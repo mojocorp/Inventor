@@ -60,9 +60,9 @@
 #include <Inventor/elements/SoOverrideElement.h>
 #include <Inventor/nodes/SoFontStyle.h>
 
-SO_NODE_SOURCE(SoFontStyle);
+SO_NODE_SOURCE(SoFontStyle)
 
-char *SoFontStyle::fontList[][4] = 
+const char *SoFontStyle::fontList[][4] =
 		    {
 			{ "Utopia-Regular", "Utopia-Bold", 
 			  "Utopia-Italic", "Utopia-BoldItalic" }, 
