@@ -61,12 +61,12 @@ class NoodleSurfaceGizmo;
 class Interface;
 
 struct NoodleButtonInfo {
-    char *name;
+    const char *name;
     int   id;
     int   buttonType;  // PUSH, TOGGLE, RADIO
     SbBool isOn;       // relevant for toggles.
-    char *accelerator; // e.g. "Alt <Key> p"
-    char *accelText;   // text that appears in the menu item
+    const char *accelerator; // e.g. "Alt <Key> p"
+    const char *accelText;   // text that appears in the menu item
 };
 
 struct NoodleMenuItem {

@@ -133,14 +133,14 @@ enum MenuItems {
 };
 
 struct SoSceneViewerButton {
-    char        *name;
+    const char    *name;
     int		id;
     int  	buttonType; // PUSH, TOGGLE, RADIO
-    char	*accelerator; // e.g. "Alt <Key> p" or "Ctrl <Key> u"
+    const char	*accelerator; // e.g. "Alt <Key> p" or "Ctrl <Key> u"
     char	*accelText;   // text that appears in the menu item
 };
 struct SoSceneViewerMenu {
-    char        *name;
+    const char    *name;
     int	    	id;
     struct 	SoSceneViewerButton *subMenu;
     int		subItemCount;

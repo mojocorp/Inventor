@@ -1047,8 +1047,8 @@ Interface::build( Widget parentWidget )
 		//
                 // Check for keyboard accelerator
 		//
-                char *accel = pulldownData[i].subMenu[j].accelerator;
-                char *accelText = pulldownData[i].subMenu[j].accelText;
+                const char *accel = pulldownData[i].subMenu[j].accelerator;
+                char *accelText = (char*)pulldownData[i].subMenu[j].accelText;
                 XmString xmstr = NULL;
                 if (accel != NULL) {
                     XtSetArg(args[n], XmNaccelerator, accel); n++;

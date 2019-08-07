@@ -164,7 +164,7 @@ class SoXtDirectionalLightEditor : public SoXtComponent {
     SoNodeSensor    	*lightSensor;
     SoNodeSensor    	*cameraSensor;
     SoDirectionalLightManip 	*dirLightManip;
-    static char		*geomBuffer;
+    static const char		*geomBuffer;
     SbBool  	    	ignoreCallback; // TRUE while callback should be ignored
     SoCallbackList	*callbackList;
     

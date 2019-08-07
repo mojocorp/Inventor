@@ -48,7 +48,7 @@
 // char *myGrdiXYBuffer
 //
 
-char *myGridBuffer =
+const char *myGridBuffer =
 { "#Inventor V2.0 ascii\n\
 \n\
 Separator {\n\
@@ -81,7 +81,7 @@ Separator {\n\
 	LineSet { numVertices [ 2, 2 ] }\n\
 }"};
 
-char *myProfileGridBuffer =
+const char *myProfileGridBuffer =
 { "#Inventor V2.0 ascii\n\
 \n\
 Separator {\n\
@@ -116,7 +116,7 @@ Separator {\n\
 
 
 
-char *myGridXYBuffer =
+const char *myGridXYBuffer =
 { "#Inventor V2.0 ascii\n\
 \n\
 Separator {\n\
