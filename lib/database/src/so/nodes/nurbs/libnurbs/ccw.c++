@@ -504,10 +504,11 @@ Subdivider::bbox( register REAL sa, register REAL sb, register REAL sc,
  *		-1 if the computation is ill-conditioned.
  *----------------------------------------------------------------------------
  */
+ #include <cmath>
 int
 Subdivider::ccw( TrimVertex *a, TrimVertex *b, TrimVertex *c )
 {
     REAL d = det3( a, b, c );
-    if( abs(d) < 0.0001 ) return -1;
+    if( std::abs(d) < 0.0001 ) return -1;
     return (d < 0.0) ? 0 : 1;
 }

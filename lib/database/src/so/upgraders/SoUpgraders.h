@@ -71,6 +71,7 @@
 #include "SoV1Separator.h"
 #include "SoV1ShapeHints.h"
 #include "SoV1Texture2.h"
+#include "SoV1Text2.h"
 #include "SoV1Text3.h"
 #include "SoV1TextureCoordinateCube.h"
 #include "SoV1TextureCoordinateCylinder.h"
