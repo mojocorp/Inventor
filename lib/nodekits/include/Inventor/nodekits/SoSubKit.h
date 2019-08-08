@@ -236,12 +236,13 @@ className::getNodekitCatalog() const					      \
 #define SO__KIT_INHERIT_CATALOG(className)	          		      \
     /* get a copy of the catalog from the base class */                       \
     do { 								      \
-	if (firstInstance) 						      \
-	    if (parentNodekitCatalogPtr == NULL)  /* only true in SoBaseKit */\
+    if (firstInstance) {						      \
+        if (parentNodekitCatalogPtr == NULL)  /* only true in SoBaseKit */\
 		nodekitCatalog = new SoNodekitCatalog;                        \
-	    else						      	      \
+        else						      	      \
 		nodekitCatalog						      \
-	      =(*parentNodekitCatalogPtr)->clone(SoType::fromName(SO__QUOTE(className)));\
+          =(*parentNodekitCatalogPtr)->clone(SoType::fromName(SO__QUOTE(className)));\
+    } \
     }									      \
     while (0)
 

@@ -178,13 +178,6 @@ Arc::print( void )
 {
     Arc_ptr jarc = this;
 
-    if( ! this ) {
-#ifndef NDEBUG
-	dprintf( "\n\nEMPTY TRIM\n\n" );
-#endif
-	return;
-    }
-
 #ifndef NDEBUG
     dprintf( "BGNTRIM\n" );
 #endif
@@ -248,7 +241,6 @@ neq_vert( REAL	*v1, REAL *v2 )
 int
 Arc::check( void )
 {
-    if( this == 0 ) return 1;
     Arc_ptr jarc = this;
     do {
 	assert( jarc->pwlArc || jarc->bezierArc );

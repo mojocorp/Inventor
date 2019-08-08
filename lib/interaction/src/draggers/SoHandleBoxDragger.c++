@@ -973,6 +973,8 @@ SoHandleBoxDragger::scaleDrag()
 		case BAK_Z_SCALE:
 		    scaleCenter.setValue(  startHitPt[0], startHitPt[1],  0);
 		    break;
+		default:
+			break;
 	    }
 	}
 	else {  // With alt key down, edge being pulled should move and 
@@ -1026,6 +1028,8 @@ SoHandleBoxDragger::scaleDrag()
 		    // This mode always scales about origin.
 		    scaleCenter.setValue( 0, 0, 0);
 		    break;
+		default:
+			break;
 	    }
 	}
 
@@ -1345,6 +1349,8 @@ SoHandleBoxDragger::setHighlights()
    	    enableNotify(TRUE);
 	    touch();
 	    return;
+	default:
+		break;
     }
 
     // The other states require some things on, some things off.
@@ -1527,6 +1533,8 @@ SoHandleBoxDragger::setFeedbackArrows()
 		}
 		arrowTrans->translation.setValue(SbVec3f(0,0,-1));
 		break;
+		default:
+			break;
 	}
     }
     else {
@@ -1561,6 +1569,8 @@ SoHandleBoxDragger::setFeedbackArrows()
 		setSwitchValue( arrow6Switch.getValue(), 0  );
 		arrowTrans->translation.setValue(SbVec3f(0,0,-1));
 		break;
+		default:
+			break;
 	}
     }
 }

@@ -416,38 +416,38 @@ SoQuadMesh::generateDefaultNormals(SoState *state, SoNormalBundle *nb)
 	    c0 = c - 1;
 	    c1 = c + 1;
 	    if (ce == NULL){
-	    	if (r0 < 0)
+	    	if (r0 < 0) {
 		    if (VX(0, c) == VX(numPerCol - 1, c)) r0 = numPerCol - 2;
-		    else				  r0 = 0;
-		if (r1 == numPerCol)
+		    else				  r0 = 0; }
+		if (r1 == numPerCol) {
 		    if (VX(0, c) == VX(numPerCol - 1, c)) r1 = 1;
-		    else				  r1 = numPerCol - 1;
+		    else				  r1 = numPerCol - 1; }
 
-		if (c0 < 0)
+		if (c0 < 0) {
 		    if (VX(r, 0) == VX(r, numPerRow - 1)) c0 = numPerRow - 2;
-		    else				  c0 = 0;
-		if (c1 == numPerRow)
+		    else				  c0 = 0; }
+		if (c1 == numPerRow) {
 		    if (VX(r, 0) == VX(r, numPerRow - 1)) c1 = 1;
-		    else				  c1 = numPerRow - 1;
+		    else				  c1 = numPerRow - 1; }
 
 		dr = VX(r1, c) - VX(r0, c);
 		dc = VX(r, c1) - VX(r, c0);
 
 	    }
 	    else if (ce->is3D()) {
-		if (r0 < 0)
+		if (r0 < 0) {
 		    if (CX(0, c) == CX(numPerCol - 1, c)) r0 = numPerCol - 2;
-		    else				  r0 = 0;
-		if (r1 == numPerCol)
+		    else				  r0 = 0; }
+		if (r1 == numPerCol) {
 		    if (CX(0, c) == CX(numPerCol - 1, c)) r1 = 1;
-		    else				  r1 = numPerCol - 1;
+		    else				  r1 = numPerCol - 1; }
 
-		if (c0 < 0)
+		if (c0 < 0) {
 		    if (CX(r, 0) == CX(r, numPerRow - 1)) c0 = numPerRow - 2;
-		    else				  c0 = 0;
-		if (c1 == numPerRow)
+		    else				  c0 = 0; }
+		if (c1 == numPerRow) {
 		    if (CX(r, 0) == CX(r, numPerRow - 1)) c1 = 1;
-		    else				  c1 = numPerRow - 1;
+		    else				  c1 = numPerRow - 1; }
 
 		dr = CX(r1, c) - CX(r0, c);
 		dc = CX(r, c1) - CX(r, c0);

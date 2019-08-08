@@ -381,19 +381,19 @@ int yylex()
 	}
 	*cp = 0;
 
-	if (yylval.expr = isConst(buf))
+	if ((yylval.expr = isConst(buf)))
 	    return CONST;
 
-	if (yylval.expr = isFunc(buf))
+	if ((yylval.expr = isFunc(buf)))
 	    return FUNC;
 
-	if (yylval.expr = isInput(buf))
+	if ((yylval.expr = isInput(buf)))
 	    return INPUT;
 
-	if (yylval.expr = isOutput(buf))
+	if ((yylval.expr = isOutput(buf)))
 	    return OUTPUT;
 
-	if (yylval.expr = isVar(buf))
+	if ((yylval.expr = isVar(buf)))
 	    return VAR;
 
     }

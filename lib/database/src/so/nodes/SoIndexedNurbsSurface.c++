@@ -267,6 +267,8 @@ SoIndexedNurbsSurface::GLRender( SoGLRenderAction *action )
         case SoDrawStyleElement::LINES:
             gluNurbsProperty (nurbsObj, (GLenum)GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
             break;
+        default:
+            break;
     }
     gluNurbsProperty (nurbsObj, (GLenum)GLU_SAMPLING_TOLERANCE, (GLfloat)pixTolerance);
 
