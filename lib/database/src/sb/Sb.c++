@@ -66,5 +66,5 @@
 #include "SbString.c++"
 #include "SbTime.c++"
 #include "SbVec.c++"
-#include "SbView.c++"
+#include "SbViewVolume.c++"
 #include "SbViewportRegion.c++"
