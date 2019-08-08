@@ -49,7 +49,7 @@ SoTypeTranslationTable::table[] =
     { N_C4DR, "N_C4DR" }
 };
 
-char *
+const char *
 SoTypeTranslationTable::toStr( long type )
 {
     const int n = sizeof( table ) / sizeof( table[0] );

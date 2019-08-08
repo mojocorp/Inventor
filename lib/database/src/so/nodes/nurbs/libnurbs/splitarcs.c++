@@ -81,7 +81,7 @@ Subdivider::split( Bin& bin, Bin& left, Bin& right, int param, REAL value )
     }
 
     Arc_ptr jarc, *last;
-    for( last = list; jarc=intersections.removearc(); last++ )
+    for( last = list; (jarc=intersections.removearc()); last++ )
 	*last = jarc;
 
     if( param == 0 ) { /* sort into increasing t order */

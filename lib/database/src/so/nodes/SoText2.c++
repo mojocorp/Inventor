@@ -888,7 +888,7 @@ SoBitmapFontCache::createUniFontList(const char* fontNameList, float size)
     s = (char*)nameCopy;
     fontNums = new SbPList;
       
-    while (s1 = (char *)strchr(s, ';')) {
+    while ((s1 = (char *)strchr(s, ';'))) {
        *s1 = (char)NULL;  /* font name is pointed to s */
 
        if ((fn = flCreateFont((const GLubyte*)s, mat, 0, NULL)) == (FLfontNumber)0) {

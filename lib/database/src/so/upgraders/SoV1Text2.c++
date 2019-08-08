@@ -181,7 +181,7 @@ SoV1Text2::convertToUTF8(const SbString &strng)
     size_t inbytes = strng.getLength();
     size_t outbytes = 2*inbytes;
     char* output = (char*)UCSBuf;    
-    if ((iconv(codeConvert1, &input, &inbytes, &output, &outbytes) != NULL)){
+    if ((iconv(codeConvert1, &input, &inbytes, &output, &outbytes) == -1)){
 #ifdef DEBUG
 	SoDebugError::post("SoV1Text2::convertToUTF8", 
 	    "Error converting text to UCS-2");

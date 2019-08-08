@@ -389,7 +389,7 @@ SoTabPlaneDragger::dragStart()
     if (restartState != INACTIVE ) {
 	currentState = restartState;
     }
-    else if (pickPath && pickPath->containsNode(translator.getValue()) ||
+    else if ((pickPath && pickPath->containsNode(translator.getValue())) ||
         getSurrogatePartPickedName() == "translator" ) {
 	currentState = TRANSLATING;
     }

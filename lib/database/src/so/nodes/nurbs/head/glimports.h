@@ -43,12 +43,13 @@
  */
 
 #include <stdio.h>
+#include <new>
 
 #include "mystdlib.h"
 #include "mystdio.h"
 
-inline void *
-operator new( size_t s )
+void *
+operator new( size_t s ) throw(std::bad_alloc)
 {
     void *p = malloc( s );
     if( p ) {
@@ -61,8 +62,8 @@ operator new( size_t s )
     }
 }
 
-inline void
-operator delete( void *p )
+void
+operator delete( void *p ) throw()
 {
     if( p ) free( p );
 }
