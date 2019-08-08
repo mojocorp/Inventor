@@ -101,7 +101,7 @@ Bin::adopt()
     markall();
 
     Arc_ptr orphan;
-    while( orphan = removearc() ) {
+    while( (orphan = removearc()) ) {
 	for( Arc_ptr parent = orphan->next; parent != orphan; parent = parent->next ) {
 	    if (! parent->ismarked() ) {
 		orphan->link = parent->link;

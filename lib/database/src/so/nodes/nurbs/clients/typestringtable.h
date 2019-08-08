@@ -36,12 +36,12 @@
 
 struct SoTypeStringPair {
     long type;
-    char *str;
+    const char *str;
 };
 
 struct SoTypeTranslationTable {
     static SoTypeStringPair	table[];
-    char *			toStr( long );
+    const char *		toStr( long );
 };
 
 

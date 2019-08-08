@@ -44,6 +44,7 @@
 #include <stdlib.h>
 #include <X11/Intrinsic.h>
 #include <math.h>
+#include <time.h>
 
 #include <Inventor/SoDB.h>
 #include <Inventor/Xt/SoXt.h>

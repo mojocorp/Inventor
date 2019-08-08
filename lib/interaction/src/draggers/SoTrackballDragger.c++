@@ -432,16 +432,16 @@ SoTrackballDragger::dragStart()
 	currentState = SCALE;
     else if (shftDown)
 	currentState = USER_AXIS_ADJUST;
-    else if (pickPath && pickPath->containsNode( XRotatorSwitch.getValue()  ) ||
+    else if ((pickPath && pickPath->containsNode( XRotatorSwitch.getValue())  ) ||
 	      getSurrogatePartPickedName() == "XRotator" )
 	currentState = X_ROTATE;
-    else if (pickPath && pickPath->containsNode( YRotatorSwitch.getValue()  ) ||
+    else if ((pickPath && pickPath->containsNode( YRotatorSwitch.getValue())  ) ||
 	      getSurrogatePartPickedName() == "YRotator" )
 	currentState = Y_ROTATE;
-    else if (pickPath && pickPath->containsNode( ZRotatorSwitch.getValue()  ) ||
+    else if ((pickPath && pickPath->containsNode( ZRotatorSwitch.getValue())  ) ||
 	      getSurrogatePartPickedName() == "ZRotator" )
 	currentState = Z_ROTATE;
-    else if (pickPath && pickPath->containsNode(userRotatorSwitch.getValue()) ||
+    else if ((pickPath && pickPath->containsNode(userRotatorSwitch.getValue())) ||
 	      getSurrogatePartPickedName() == "userRotator" )
 	currentState = USER_AXIS_ROTATE;
     else 
@@ -461,6 +461,8 @@ SoTrackballDragger::dragStart()
 	case USER_AXIS_ROTATE:
 	    constrainedAxis = userAxisVec;
 	    break;
+    default:
+        break;
     }
 
     // Working space is space after "antiSquish"

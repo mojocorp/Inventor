@@ -187,18 +187,18 @@ SbBox3f::intersect(const SbBox3f &bb) const
 // view volume.  In (x,w) space, a point (x,w) is clipped depending on
 // which quadrant it is in:
 //
-//    x=-w       x=w
-//      \   Q0   /
-//       \  IN  /
-//        \    /
-//         \  /
-// Q1       \/  Q2
-// CLIPPED  /\  CLIPPED    
-//         /  \ 
-//        /    \ 
-//       /  Q3  \ 
-//      / CLIPPED\ 
-//
+/*    x=-w       x=w
+        \   Q0   /
+         \  IN  /
+          \    /
+           \  /
+   Q1       \/  Q2
+   CLIPPED  /\  CLIPPED    
+           /  \  
+          /    \
+         /  Q3  \ 
+        / CLIPPED\ 
+*/  
 // If the axis-aligned box [(Xmin,Xmax),(Wmin,Wmax)] lies entirely in
 // Q0, then it is entirely inside the X-axis clipping planes (IN
 // case).  If it is not in Q0 at all, then it is clipped (OUT).  If it
