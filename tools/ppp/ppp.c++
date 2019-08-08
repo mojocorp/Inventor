@@ -111,11 +111,13 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <string>
+#include <vector>
+#include <map>
 
 // There is a nasty cyclic make dependency if we try to use libdatabase.a,
 // so instead just include the following code directly:
 #undef DEBUG
-#include "../../lib/database/src/sb/Sb.c++"
 
 // Special characters
 #define MAGIC_CHAR		'@'
@@ -140,17 +142,17 @@ enum LineType {
 
 // A line of input (or of a definition)
 struct Line {
-    SbString	string;			// String holding line (inc. newline)
+    std::string	string;			// String holding line (inc. newline)
     LineType	type;			// Type of line
-    SbName	varName;		// Variable named on line (if approp.)
+    std::string	varName;		// Variable named on line (if approp.)
     int		indentation;		// Indentation of line
     int		firstChar;		// Index of 1st non-whitespace char
 };
 
 // A variable
 struct Variable {
-    SbName	name;			// Name of variable
-    SbPList	definition;		// One Line per line of
+    std::string	name;			// Name of variable
+    std::vector<void*>	definition;		// One Line per line of
 					// definition
     Variable	*prev;			// The previous definition for
 					// nested definitions.
@@ -162,14 +164,14 @@ static int		lineNo;
 // Variable whose definition we are currently adding to
 static Variable		*curVariable = NULL;
 
-// This is set to TRUE when ignoring lines that are in a conditional
+// This is set to true when ignoring lines that are in a conditional
 // text block that failed the test. It is a stack so we can restore it
 // properly. The top of the stack is in curIgnore.
-static SbBool		ignoreText[1000] = { FALSE };
+static bool		ignoreText[1000] = { false };
 static int		curIgnore = 0;
 
 // Holds dictionary relating variables to names
-static SbDict		*varDict;
+static std::map<std::string, void*>		varDict;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -201,7 +203,7 @@ storeVariableName(Line &line)
     const char	*c;
 
     // Move past special characters and space after them
-    for (c = line.string.getString(); *c != MAGIC_CHAR; c++) ;
+    for (c = line.string.c_str(); *c != MAGIC_CHAR; c++) ;
     c++;
     if (*c == DEFINITION_CHAR) {
 	c++;
@@ -238,9 +240,9 @@ storeLineType(Line &line)
 
     // Find first non-space character, saving indentation
     line.indentation = 0;
-    for (c = line.string.getString(); isspace(*c); c++)
+    for (c = line.string.c_str(); isspace(*c); c++)
 	line.indentation += (*c == '\t' ? 8 : 1);
-    line.firstChar = c - line.string.getString();
+    line.firstChar = c - line.string.c_str();
 
     // If it's not a special character, we're done
     if (*c != MAGIC_CHAR)
@@ -294,13 +296,9 @@ storeLineType(Line &line)
 //////////////////////////////////////////////////////////////////////////////
 
 static Variable *
-findVariable(const SbName &name)
+findVariable(const std::string &name)
 {
-    void	*varPtr;
-
-    varDict->find((unsigned long) name.getString(), varPtr);
-
-    return (Variable *) varPtr;
+    return (Variable *) varDict[name];
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -310,14 +308,13 @@ findVariable(const SbName &name)
 //////////////////////////////////////////////////////////////////////////////
 
 static void
-removeVariable(const SbName &name)
+removeVariable(const std::string &name)
 {
     Variable *oldVar = findVariable(name);
 
     if (oldVar != NULL)
-	delete oldVar;
-
-    varDict->remove((unsigned long) name.getString());
+	    delete oldVar;
+        varDict.erase(name);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -331,16 +328,16 @@ static void
 addVariable(Variable *var)
 {
     removeVariable(var->name);
-    varDict->enter((unsigned long) var->name.getString(), var);
+    varDict[var->name] = var;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Returns TRUE if we are in the middle of defining a variable.
+// Returns true if we are in the middle of defining a variable.
 //
 //////////////////////////////////////////////////////////////////////////////
 
-static SbBool
+static bool
 inDefinition()
 {
     return (curVariable != NULL);
@@ -382,7 +379,7 @@ addToDefinition(const Line &line, int indentOffset)
     *defLine = line;
     defLine->indentation += indentOffset;
 
-    curVariable->definition.append(defLine);
+    curVariable->definition.push_back(defLine);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -412,7 +409,7 @@ processOneLineDefinition(const Line &line)
     const char	*c;
 
     // Move past special characters and space after them
-    for (c = line.string.getString(); *c != MAGIC_CHAR; c++) ;
+    for (c = line.string.c_str(); *c != MAGIC_CHAR; c++) ;
     c += 2;
     for ( ; isspace(*c); c++) ;
 
@@ -484,10 +481,10 @@ printWithIndentation(const char *string, int indentation)
 
 // Forward reference
 static void processNonDefLine(const Line &line, int indentOffset,
-			      SbBool immediate);
+			      bool immediate);
 
 static void
-substitute(const Line &line, int indentOffset, SbBool immediate)
+substitute(const Line &line, int indentOffset, bool immediate)
 {
     // Look up definition
     Variable	*variable = findVariable(line.varName);
@@ -499,15 +496,15 @@ substitute(const Line &line, int indentOffset, SbBool immediate)
     // delimiter is removed from indentation of all lines within
     // definition
     int		firstIndentation, i;
-    SbBool	gotFirstLine = FALSE;
+    bool	gotFirstLine = false;
 
-    for (i = 0; i < variable->definition.getLength(); i++) {
+    for (i = 0; i < variable->definition.size(); i++) {
 	const Line &line = * (const Line *) variable->definition[i];
 
 	if (! gotFirstLine && (line.type != BEGIN_CONDITIONAL &&
 			       line.type != END_CONDITIONAL)) {
 	    firstIndentation = line.indentation;
-	    gotFirstLine = TRUE;
+	    gotFirstLine = true;
 	}
 
 	processNonDefLine(line, indentOffset - firstIndentation, immediate);
@@ -516,20 +513,20 @@ substitute(const Line &line, int indentOffset, SbBool immediate)
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Returns TRUE if the given conditional line will reject text
+// Returns true if the given conditional line will reject text
 //
 //////////////////////////////////////////////////////////////////////////////
 
-static SbBool
+static bool
 shouldIgnore(const Line &line)
 {
-    SbBool result = TRUE;
-    char *tmp = strdup(line.string.getString()+3);
+    bool result = true;
+    char *tmp = strdup(line.string.c_str()+3);
     char *t;
 
     t = strtok(tmp, "| \t\n");
     while (t && result) {
-	if (findVariable(SbName(t))) result = FALSE;
+	if (findVariable(t)) result = false;
 	t = strtok(NULL, "| \t\n");
     }
     free(tmp);
@@ -546,12 +543,12 @@ shouldIgnore(const Line &line)
 //////////////////////////////////////////////////////////////////////////////
 
 static void
-processNonDefLine(const Line &line, int indentOffset, SbBool immediate)
+processNonDefLine(const Line &line, int indentOffset, bool immediate)
 {
     // If we are in rejected conditional text, skip this line
     if (ignoreText[curIgnore]) {
 	if (line.type == BEGIN_CONDITIONAL)
-	    ignoreText[++curIgnore] = TRUE;
+	    ignoreText[++curIgnore] = true;
 	else if (line.type == END_CONDITIONAL)
 	    --curIgnore;
     }
@@ -577,7 +574,7 @@ processNonDefLine(const Line &line, int indentOffset, SbBool immediate)
 
     // Otherwise, print the line as is
     else
-	printWithIndentation(line.string.getString() + line.firstChar,
+	printWithIndentation(line.string.c_str() + line.firstChar,
 			     line.indentation + indentOffset);
 }
 
@@ -617,7 +614,7 @@ processLine(const Line &line)
       case BEGIN_CONDITIONAL:
       case END_CONDITIONAL:
       case OTHER:
-	processNonDefLine(line, 0, FALSE);
+	processNonDefLine(line, 0, false);
     }
 }
 
@@ -634,8 +631,6 @@ int main(int, char *argv[])
 
     progName = argv[0];
     lineNo   = 1;
-
-    varDict = new SbDict;
 
     while(fgets(buf, 1024, stdin) != NULL) {
 	line.string = buf;
