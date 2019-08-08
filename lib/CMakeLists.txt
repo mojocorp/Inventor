@@ -398,7 +398,7 @@ set(DATABASE_SOURCES
     database/src/sb/SbString.c++
     database/src/sb/SbTime.c++
     database/src/sb/SbVec.c++
-    database/src/sb/SbView.c++
+    database/src/sb/SbViewVolume.c++
     database/src/sb/SbViewportRegion.c++
     database/src/sb/projectors/SbCylinderPlaneProjector.c++
     database/src/sb/projectors/SbCylinderProjector.c++
@@ -414,7 +414,7 @@ set(DATABASE_SOURCES
     database/src/so/SoAuditorList.c++
     database/src/so/SoBase.c++
     database/src/so/SoByteStream.c++
-    database/src/so/SoCBList.c++
+    database/src/so/SoCallbackList.c++
     database/src/so/SoChildList.c++
     database/src/so/SoCompactPathList.c++
     database/src/so/SoDB.c++
@@ -723,7 +723,7 @@ set(DATABASE_SOURCES
     database/src/so/sensors/SoOneShotSensor.c++
     database/src/so/sensors/SoPathSensor.c++
     database/src/so/sensors/SoSensor.c++
-    database/src/so/sensors/SoSensorMgr.c++
+    database/src/so/sensors/SoSensorManager.c++
     database/src/so/sensors/SoTimerQueueSensor.c++
     database/src/so/sensors/SoTimerSensor.c++
     database/src/so/upgraders/SoUpgrader.c++
@@ -871,10 +871,10 @@ set(INTERACTION_PUBLIC_HEADERS
 )
 set(INTERACTION_SOURCES
     interaction/src/SoInteraction.c++
-    interaction/src/SoSceneMgr.c++
+    interaction/src/SoSceneManager.c++
     interaction/src/SoSelection.c++
-    interaction/src/actions/SoBoxHL.c++
-    interaction/src/actions/SoLineHL.c++
+    interaction/src/actions/SoBoxHighlightRenderAction.c++
+    interaction/src/actions/SoLineHighlightRenderAction.c++
     interaction/src/draggers/SoCenterballDragger.c++
     interaction/src/draggers/SoDirectionalLightDragger.c++
     interaction/src/draggers/SoDragPointDragger.c++
@@ -920,16 +920,16 @@ set(INTERACTION_SOURCES
     interaction/src/draggers/geom/SoTranslate1DraggerGeom.h
     interaction/src/draggers/geom/SoTranslate2DraggerGeom.h
     interaction/src/manips/SoCenterballManip.c++
-    interaction/src/manips/SoDirLtManip.c++
-    interaction/src/manips/SoHbox.c++
+    interaction/src/manips/SoDirectionalLightManip.c++
+    interaction/src/manips/SoHandleBoxManip.c++
     interaction/src/manips/SoJackManip.c++
-    interaction/src/manips/SoPtLtManip.c++
-    interaction/src/manips/SoSpotLtManip.c++
+    interaction/src/manips/SoPointLightManip.c++
+    interaction/src/manips/SoSpotLightManip.c++
     interaction/src/manips/SoTabBoxManip.c++
-    interaction/src/manips/SoTball.c++
+    interaction/src/manips/SoTrackballManip.c++
     interaction/src/manips/SoTransformManip.c++
     interaction/src/manips/SoTransformerManip.c++
-    interaction/src/manips/SoXformBox.c++
+    interaction/src/manips/SoTransformBoxManip.c++
     interaction/src/nodekits/SoInteractionKit.c++
     interaction/src/nodes/SoAntiSquish.c++
     interaction/src/nodes/SoSurroundScale.c++
@@ -992,12 +992,12 @@ set(NODEKIT_PUBLIC_HEADERS
 set(NODEKIT_SOURCES
     nodekits/src/SoNodeKitPath.c++
     nodekits/src/details/SoNodeKitDetail.c++
-    nodekits/src/nodekits/SoAppearKit.c++
+    nodekits/src/nodekits/SoAppearanceKit.c++
     nodekits/src/nodekits/SoBaseKit.c++
     nodekits/src/nodekits/SoCameraKit.c++
     nodekits/src/nodekits/SoLightKit.c++
-    nodekits/src/nodekits/SoNkCatalog.c++
-    nodekits/src/nodekits/SoNkParts.c++
+    nodekits/src/nodekits/SoNodeKitCatalog.c++
+    nodekits/src/nodekits/SoNodeKitParts.c++
     nodekits/src/nodekits/SoNodeKit.c++
     nodekits/src/nodekits/SoNodeKitListPart.c++
     nodekits/src/nodekits/SoSceneKit.c++
