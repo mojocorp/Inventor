@@ -63,13 +63,11 @@
 
 class SoFieldContainer;
 
-// C-api: prefix=SoFieldSens
 class SoFieldSensor : public SoDataSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data
     SoFieldSensor();
-    // C-api: name=CreateCB
     SoFieldSensor(SoSensorCB *func, void *data);
 
     // Destructor

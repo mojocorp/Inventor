@@ -68,8 +68,6 @@ class SoCallbackList;
 typedef void SoXtComponentCB(void *userData, SoXtComponent *comp);
 typedef void SoXtComponentVisibilityCB(void *userData, SbBool visibleFlag);
 
-// C-api: abstract
-// C-api: prefix=SoXtComp
 class SoXtComponent {
   public:
     //
@@ -83,9 +81,7 @@ class SoXtComponent {
     // and de-iconify if necessary, to make sure the component is visible
     // by the user.
     //
-    // C-api: expose
     virtual void 	show();
-    // C-api: expose
     virtual void 	hide();
     
     //
@@ -153,7 +149,6 @@ class SoXtComponent {
     // Note: there is only one callback because the user may decide to
     // delete this component when it is closed.
     //
-    // C-api: name=setWinCloseCB
     void		setWindowCloseCallback(
 			    SoXtComponentCB *func, void *data = NULL)
 					{ windowCloseFunc = func; windowCloseData = data; }
@@ -162,7 +157,6 @@ class SoXtComponent {
     // this returns the SoXtComponent for this widget.
     // If the widget is not a Inventor component, then NULL is returned.
     //
-    // C-api: name=getComp
     static SoXtComponent	*getComponent(Widget w);
     
     //
@@ -172,7 +166,6 @@ class SoXtComponent {
     const char *	getWidgetName() const	{ return _name; }    
     const char *	getClassName() const { return _classname.getString(); }
     
-    // C-api: expose
     virtual ~SoXtComponent();
     
   protected:

@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoConeDtl
 class SoConeDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoConeDetail);

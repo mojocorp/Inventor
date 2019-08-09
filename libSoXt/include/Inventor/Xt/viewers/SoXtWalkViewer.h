@@ -95,7 +95,6 @@ class	SoFieldSensor;
 //  
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtWalkVwr
 class SoXtWalkViewer : public SoXtConstrainedViewer {
  public:
     
@@ -105,7 +104,6 @@ class SoXtWalkViewer : public SoXtConstrainedViewer {
 	SbBool buildInsideParent = TRUE, 
 	SoXtFullViewer::BuildFlag flag = BUILD_ALL, 
 	SoXtViewer::Type type = BROWSER);
-    // C-api: interpret #define SoXtWalkVwrCreateStd(parent,name) SoXtWalkVwrCreate(parent,name,TRUE,SO_XT_FULL_VWR_BUILD_ALL,SO_XT_VWR_BROWSER)
     ~SoXtWalkViewer();
     
     //

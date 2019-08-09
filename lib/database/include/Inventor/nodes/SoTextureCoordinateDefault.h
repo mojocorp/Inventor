@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTexDflt
 class SoTextureCoordinateDefault : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinateDefault);

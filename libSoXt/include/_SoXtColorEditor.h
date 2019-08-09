@@ -91,7 +91,6 @@ typedef void _SoXtColorEditorCB(void *userData, const SbColor *color);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtColEd
 class _SoXtColorEditor : public SoXtComponent {
     
   public:
@@ -134,9 +133,7 @@ class _SoXtColorEditor : public SoXtComponent {
     // NOTE: it can only be attached to either a single field or a multiple 
     // field at any given time.
     //
-    // C-api: name=attachSF
     void		attach(SoSFColor *color, SoBase *node);
-    // C-api: name=attachMF
     void		attach(SoMFColor *color, int index, SoBase *node);
     void		detach();
     SbBool		isAttached() 	    	{ return attached; }
@@ -149,11 +146,9 @@ class _SoXtColorEditor : public SoXtComponent {
     // NOTE: this is independent to the attach/detach routines, and 
     // therefore can be used in conjunction.
     //
-    // C-api: name=addColChangedCB
     inline void		addColorChangedCallback(
 				_SoXtColorEditorCB *f, 
 				void *userData = NULL);
-    // C-api: name=removeColChangedCB
     inline void		removeColorChangedCallback(
 				_SoXtColorEditorCB *f, 
 				void *userData = NULL);
@@ -164,9 +159,7 @@ class _SoXtColorEditor : public SoXtComponent {
     // NOTE: setColor() will call colorChanged callbacks if the color 
     // differs.
     //
-    // C-api: name=setCol
     void		setColor(const SbColor &color);
-    // C-api: name=getCol
     const SbColor &	getColor()	{ return baseRGB; }
     
     //
@@ -178,18 +171,14 @@ class _SoXtColorEditor : public SoXtComponent {
     //
     // Sets/gets which slider should be displayed. (default INTENSITY)
     //
-    // C-api: name=setCurSldrs
     void    	setCurrentSliders(_SoXtColorEditor::Sliders whichSliders);
-    // C-api: name=getCurSldrs
     _SoXtColorEditor::Sliders getCurrentSliders() 	{ return whichSliders; }
     
     //
     // Set/get the update frequency of when colorChanged callbacks should 
     // be called. (default CONTINUOUS).
     //
-    // C-api: name=setUpdateFreq
     void	setUpdateFrequency(_SoXtColorEditor::UpdateFrequency freq);
-    // C-api: name=getUpdateFreq
     _SoXtColorEditor::UpdateFrequency getUpdateFrequency()
 						    { return updateFreq; }
     

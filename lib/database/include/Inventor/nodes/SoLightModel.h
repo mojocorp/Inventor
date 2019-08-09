@@ -68,8 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoLModel
-// C-api: public=model, nearColor, farColor
 class SoLightModel : public SoNode {
 
     SO_NODE_HEADER(SoLightModel);

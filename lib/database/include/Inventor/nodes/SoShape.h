@@ -70,7 +70,6 @@ class SoPointDetail;
 class SoPrimitiveVertex;
 class SoState;
 
-// C-api: end
 
 //  GLU Library version dependency.  Introduced in Irix 6.2.
 #ifndef gluTESSELATOR
@@ -82,7 +81,6 @@ extern "C" struct GLUtriangulatorObj;
 #endif
 #endif
 
-// C-api: begin
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -93,7 +91,6 @@ extern "C" struct GLUtriangulatorObj;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
 class SoShape : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoShape);

@@ -84,7 +84,6 @@ typedef SbBool SoXtRenderAreaEventCB(void *userData, XAnyEvent *anyevent);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtRA
 class SoXtRenderArea : public SoXtGLWidget {
   public:
     // Passing FALSE for getMouseInput means the mouse will be ignored.
@@ -95,25 +94,18 @@ class SoXtRenderArea : public SoXtGLWidget {
 	SbBool buildInsideParent = TRUE, 
 	SbBool getMouseInput = TRUE,
 	SbBool getKeyboardInput = TRUE);
-    // C-api: interpret #define SoXtRACreateStd(parent,name) SoXtRACreate(parent,name,TRUE,TRUE,TRUE)
     ~SoXtRenderArea();
     
     //
     // Sets/gets the scene graph to render.
     //
-    // C-api: expose
-    // C-api: name=setScene
     virtual void	    setSceneGraph(SoNode *newScene);
-    // C-api: expose
-    // C-api: name=getScene
     virtual SoNode *	    getSceneGraph();
     
     //
     // Sets/gets the scene graph to render in the overlay bit planes.
     //
-    // C-api: name=setOverScene
     void		    setOverlaySceneGraph(SoNode *newScene);
-    // C-api: name=getOverScene
     SoNode *		    getOverlaySceneGraph()
 				{ return overlaySceneMgr->getSceneGraph();}
     
@@ -131,10 +123,8 @@ class SoXtRenderArea : public SoXtGLWidget {
     // Sets/gets the window background color when in RGB mode.
     // (default to black (0,0,0));
     //
-    // C-api: name=setBkgCol
     void		    setBackgroundColor(const SbColor &c)
 				{ sceneMgr->setBackgroundColor(c); }
-    // C-api: name=getBkgCol
     const SbColor &	    getBackgroundColor() const
 				{ return sceneMgr->getBackgroundColor(); }
     
@@ -142,10 +132,8 @@ class SoXtRenderArea : public SoXtGLWidget {
     // Sets/gets the window background color when in color index mode.
     // (default to black (index 0)).
     //
-    // C-api: name=setBkgInd
     void		    setBackgroundIndex(int index)
 				{ sceneMgr->setBackgroundIndex(index); }
-    // C-api: name=getBkgInd
     int			    getBackgroundIndex() const
 				{ return sceneMgr->getBackgroundIndex(); }
     
@@ -153,30 +141,24 @@ class SoXtRenderArea : public SoXtGLWidget {
     // Sets/gets the overlay window background color index.
     // (default to 0 (clear color)).
     //
-    // C-api: name=setOverBkgInd
     void		    setOverlayBackgroundIndex(int index)
 				{ overlaySceneMgr->setBackgroundIndex(index); }
-    // C-api: name=getOverBkgInd
     int			    getOverlayBackgroundIndex() const
 				{ return overlaySceneMgr->getBackgroundIndex(); }
     
     //
     // Sets the colors to use when displaying in color index mode.
     //
-    // C-api: name=setColMap
     void	setColorMap(int startIndex, int num, const SbColor *colors);
     
     //
     // Sets the colors to use for overlay bit planes.
     //
-    // C-api: name=setOverColMap
     void	setOverlayColorMap(int startIndex, int num, const SbColor *colors);
     
     // Sets/gets current viewport region to use for rendering
-    // C-api: name=setVPReg
     void	setViewportRegion(const SbViewportRegion &newRegion) 
 		    { sceneMgr->getGLRenderAction()->setViewportRegion(newRegion); }
-    // C-api: name=getVPReg
     const SbViewportRegion &getViewportRegion() const
 		    { return sceneMgr->getGLRenderAction()->getViewportRegion(); }
     
@@ -184,9 +166,7 @@ class SoXtRenderArea : public SoXtGLWidget {
     // Transparency level setting methods which specifies how 
     // transparent objects are rendered (quality/speed trade off).
     // 
-    // C-api: name=setTranspType
     void	setTransparencyType(SoGLRenderAction::TransparencyType type);
-    // C-api: name=getTranspType
     SoGLRenderAction::TransparencyType	getTransparencyType() const
 		    { return sceneMgr->getGLRenderAction()->getTransparencyType(); }
 
@@ -206,10 +186,8 @@ class SoXtRenderArea : public SoXtGLWidget {
 					    { clearFirst = trueOrFalse; }
     SbBool		    isClearBeforeRender() const
 					    { return clearFirst; }
-    // C-api: name=setClearBeforeOverRender
     void		    setClearBeforeOverlayRender(SbBool trueOrFalse)
 					    { clearOverlayFirst = trueOrFalse; }
-    // C-api: name=isClearBeforeOverRender
     SbBool		    isClearBeforeOverlayRender() const
 					    { return clearOverlayFirst; }
     
@@ -238,7 +216,6 @@ class SoXtRenderArea : public SoXtGLWidget {
     // (which is the default).
     //
     void		    render()		{ redraw(); }
-    // C-api: name=renderOver
     void		    renderOverlay()	{ redrawOverlay(); }
     
     //
@@ -247,7 +224,6 @@ class SoXtRenderArea : public SoXtGLWidget {
     // auto-redraw if FALSE.
     //
     void		    scheduleRedraw();
-    // C-api: name=scheduleOverRedraw
     void		    scheduleOverlayRedraw();
     
     // Call this convenience method to have this render area redraw
@@ -255,9 +231,7 @@ class SoXtRenderArea : public SoXtGLWidget {
     // is useful if using a highlight render action like the
     // SoBoxHighlightRenderAction to correctly render whenever the
     // selection changes. Pass NULL to turn this off.
-    // C-api: name=redrawOnSelChange
     void		    redrawOnSelectionChange(SoSelection *s);
-    // C-api: name=redrawOverOnSelChange
     void		    redrawOverlayOnSelectionChange(SoSelection *s);
     
     //
@@ -267,35 +241,26 @@ class SoXtRenderArea : public SoXtGLWidget {
     // If callback returns FALSE, then the event will be sent
     // to the scene graph.
     //
-    // C-api: name=setEvCB
     void    	    setEventCallback(
 		    	    SoXtRenderAreaEventCB *fcn, 
 			    void *userData = NULL)
 			    { appEventHandler = fcn; appEventHandlerData = userData; }
     
     // Access to the scene manager
-    // C-api: name=setSceneMgr
     void		setSceneManager(SoSceneManager *sm) { sceneMgr = sm; }
-    // C-api: name=getSceneMgr
     SoSceneManager *	getSceneManager() const { return sceneMgr; }
-    // C-api: name=setOverSceneMgr
     void		setOverlaySceneManager(SoSceneManager *sm) { overlaySceneMgr = sm; }
-    // C-api: name=getOverSceneMgr
     SoSceneManager *	getOverlaySceneManager() const { return overlaySceneMgr; }
     
     // Access to GL render action
-    // C-api: name=setGLRenderAct
     void		setGLRenderAction(SoGLRenderAction *ra) 
 			    { sceneMgr->setGLRenderAction(ra); }
-    // C-api: name=getGLRenderAct
     SoGLRenderAction	*getGLRenderAction() const
 			    { return sceneMgr->getGLRenderAction(); }
 
     // Access to overlay GL render action
-    // C-api: name=setOverGLRenderAct
     void		setOverlayGLRenderAction(SoGLRenderAction *ra) 
 			    { overlaySceneMgr->setGLRenderAction(ra); }
-    // C-api: name=getOverGLRenderAct
     SoGLRenderAction	*getOverlayGLRenderAction() const
 			    { return overlaySceneMgr->getGLRenderAction(); }
 

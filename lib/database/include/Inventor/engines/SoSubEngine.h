@@ -99,7 +99,6 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/fields/SoFieldData.h>
 
-// C-api: end
 
 ///////////////////////
 //
@@ -415,6 +414,5 @@
 	}								      \
     } while(0)
 
-// C-api: begin
 
 #endif /* _SO_SUB_ENGINE_ */

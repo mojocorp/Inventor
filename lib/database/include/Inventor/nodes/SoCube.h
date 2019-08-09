@@ -69,7 +69,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=width, height, depth
 class SoCube : public SoShape {
 
     SO_NODE_HEADER(SoCube);

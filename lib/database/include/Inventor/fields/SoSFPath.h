@@ -68,7 +68,6 @@ class SoPath;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSPath
 class SoSFPath : public SoSField {
 
     // Use standard field stuff

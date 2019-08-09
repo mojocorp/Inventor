@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSRot
 class SoSFRotation : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFRotation, SbRotation, const SbRotation &);
@@ -76,20 +75,16 @@ class SoSFRotation : public SoSField {
     //
 
     // Return value as axis and angle
-    // C-api: name=GetAxisAngle
     void	getValue(SbVec3f &axis, float &angle) const
 	{ evaluate(); value.getValue(axis, angle); }
 
     // Set value from 4 floats defining rotation quaternion
-    // C-api: name=SetQ_U_A_T
     void	setValue(float q0, float q1, float q2, float q3);
     
     // Set value from array of 4 floats defining rotation quaternion
-    // C-api: name=SetQuat
     void	setValue(const float q[4]);
 
     // Set value from axis and angle in radians
-    // C-api: name=SetAxisAngle
     void	setValue(const SbVec3f &axis, float angle);
 
   SoINTERNAL public:

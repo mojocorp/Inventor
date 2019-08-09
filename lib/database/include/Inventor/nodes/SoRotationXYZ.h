@@ -68,8 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoRotXYZ
-// C-api: public=axis, angle
 class SoRotationXYZ : public SoTransformation {
 
     SO_NODE_HEADER(SoRotationXYZ);

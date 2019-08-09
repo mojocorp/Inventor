@@ -86,7 +86,6 @@ class SoFieldSensor;
 
 class SoGroup;
 
-// C-api: public=name
 class SoFile : public SoNode {
 
     SO_NODE_HEADER(SoFile);

@@ -120,7 +120,6 @@ class SoTranSender {
 
     // Database change routines
     void		insert(SoNode *node);
-    // C-api: name=insertUnder
     void		insert(SoNode *node, SoNode *parent, int n);
     void		remove(SoNode *parent, int n);
     void		replace(SoNode *parent, int n, SoNode *newNode);

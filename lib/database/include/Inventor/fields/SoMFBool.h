@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMBool
 class SoMFBool : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFBool, SbBool, SbBool);

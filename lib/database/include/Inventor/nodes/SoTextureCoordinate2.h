@@ -67,8 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTexCoord2
-// C-api: public=point
 class SoTextureCoordinate2 : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinate2);

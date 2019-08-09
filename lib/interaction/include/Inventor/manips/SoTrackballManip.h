@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTballManip
 class SoTrackballManip : public SoTransformManip {
 
     SO_NODE_HEADER(SoTrackballManip);

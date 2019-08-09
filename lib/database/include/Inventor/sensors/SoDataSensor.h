@@ -66,16 +66,12 @@ class SoNotList;
 
 #include <Inventor/sensors/SoDelayQueueSensor.h>
 
-// C-api: abstract
-// C-api: prefix=SoDataSens
 class SoDataSensor : public SoDelayQueueSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data
-    // C-api: end
     SoDataSensor();
     SoDataSensor(SoSensorCB *func, void *data);
-    // C-api: begin
 
     // Destructor
     virtual ~SoDataSensor();
@@ -83,7 +79,6 @@ class SoDataSensor : public SoDelayQueueSensor {
     // Sets a callback to call when the item (SoBase) to which the
     // sensor is attached is about to be deleted. Set this to NULL to
     // remove the callback.
-    // C-api: name=setDelCB
     void		setDeleteCallback(SoSensorCB *func, void *data = NULL)
 	{ deleteFunc = func; deleteData = data; }
 
@@ -96,13 +91,11 @@ class SoDataSensor : public SoDelayQueueSensor {
     // isn't immediate then the sensor may be scheduled several times,
     // and there isn't one particular node that can be said to have
     // caused the trigger.
-    // C-api: name=getTrigNode
     SoNode *		getTriggerNode() const;
 
     // Like getTriggerNode(), but returns the field that started
     // notification (NULL if the sensor isn't priority 0 or if
     // notification didn't start at a field).
-    // C-api: name=getTrigField
     SoField *		getTriggerField() const;
     
     // Returns the path from the node to which this sensor is attached
@@ -110,16 +103,13 @@ class SoDataSensor : public SoDelayQueueSensor {
     // must be called before the sensor is scheduled, or this will
     // return NULL.  It will also return NULL if the sensor is not
     // immediate or if the notification doesn't go through a node
-    // C-api: name=getTrigPath
     SoPath *		getTriggerPath() const;
 
     // Sets/returns the flag that indicates whether the trigger path
     // (see getTriggerPath()) is available to callback methods. This
     // is FALSE by default. Note that setting this to TRUE will add a
     // little overhead when the sensor is notified.
-    // C-api: name=setTrigPathFlag
     void		setTriggerPathFlag(SbBool flag) { doTrigPath = flag; }
-    // C-api: name=getTrigPathFlag
     SbBool		getTriggerPathFlag() const	{ return doTrigPath; }
 
     // Override unschedule() to reset trigNode and trigPath.

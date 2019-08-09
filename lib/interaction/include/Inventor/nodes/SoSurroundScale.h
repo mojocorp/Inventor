@@ -107,7 +107,6 @@ class SoFullPath;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=numNodesUpToContainer,numNodesUpToReset
 class SoSurroundScale : public SoTransformation {
 
     SO_NODE_HEADER(SoSurroundScale);

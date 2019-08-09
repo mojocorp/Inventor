@@ -66,10 +66,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoOrthoCam
-// C-api: public= viewportMapping, position, orientation, aspectRatio
-// C-api: public= nearDistance, farDistance, focalDistance
-// C-api: public= height
 class SoOrthographicCamera : public SoCamera {
 
     SO_NODE_HEADER(SoOrthographicCamera);
@@ -82,7 +78,6 @@ class SoOrthographicCamera : public SoCamera {
     SoOrthographicCamera();
 
     // Scales the height of the camera, in this case, the 'height' field.
-    // C-api: begin
     virtual void	scaleHeight( float scaleFactor );
 
     // Fills in a view volume structure, based on the camera. If the

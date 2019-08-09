@@ -94,7 +94,6 @@ typedef void SoXtDirectionalLightEditorCB(void *userData, const SoDirectionalLig
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtDirLtEd
 class SoXtDirectionalLightEditor : public SoXtComponent {
   public:
     SoXtDirectionalLightEditor(
@@ -109,9 +108,7 @@ class SoXtDirectionalLightEditor : public SoXtComponent {
     SbBool		isAttached()	{ return (dirLight != NULL); }
     
     // Set new values in the light editor
-    // C-api: name=setLt
     void    	    	setLight(const SoDirectionalLight &newLight);
-    // C-api: name=getLt
     const SoDirectionalLight &getLight() const { return *dirLight; }
     
     //
@@ -119,11 +116,9 @@ class SoXtDirectionalLightEditor : public SoXtComponent {
     // and setting the material. At the time dictated by setUpdateFrequency
     // the callbacks will be called with the new material.
     //
-    // C-api: name=addLtChangedCB
     inline void		addLightChangedCallback(
 				SoXtDirectionalLightEditorCB *f, 
 				void *userData = NULL);
-    // C-api: name=removeLtChangedCB
     inline void		removeLightChangedCallback(
 				SoXtDirectionalLightEditorCB *f, 
 				void *userData = NULL);

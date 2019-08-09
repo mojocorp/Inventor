@@ -71,11 +71,8 @@ _______________________________________________________________________
 //
 ///////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: name=SoXtSldrsBase
 class SoXtSliderSetBase : public SoXtComponent {
   public:
-    // C-api: expose
       virtual void setNode( SoNode *newNode );
 
       SoNode * getNode() const { return _editNode; }

@@ -83,8 +83,6 @@ class SoCoordinateElement;
 class SoNormalBundle;
 class SoCoordinateElement;
 
-// C-api: prefix=SoIndTriStripSet
-// C-api: public=coordIndex, materialIndex, normalIndex, textureCoordIndex, vertexProperty
 class SoIndexedTriangleStripSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedTriangleStripSet);

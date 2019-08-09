@@ -81,7 +81,6 @@
 
 #include <Inventor/elements/SoElement.h>
 
-// C-api: end
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -204,6 +203,5 @@ className::createInstance()						      \
 	    classStackIndex = parentClass::classStackIndex;		      \
     } while (0)
 
-// C-api: begin
 
 #endif /* _SO_SUB_ELEMENT_ */

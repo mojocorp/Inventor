@@ -92,13 +92,11 @@ class SoGroup;
 //
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoKit
 class SoBaseKit : public SoNode {
 
     // Instead of calling SO_KIT_HEADER(className) here,
     // which is the norm for all nodekits, explicitly write the contents
     // of that macro, so as to expose the base class virtual function
-    // getNodekitCatalog for the C-api...
     //
     SO_NODE_HEADER(SoBaseKit);
 
@@ -106,13 +104,10 @@ class SoBaseKit : public SoNode {
     static SoNodekitCatalog *nodekitCatalog; /* design of this class */
     static const SoNodekitCatalog **parentNodekitCatalogPtr; /* parent design */
   public:
-    // C-api: name=getClassNkitCat
     static const SoNodekitCatalog *getClassNodekitCatalog()
 	{ return nodekitCatalog; }
 
     /* Returns an SoNodekitCatalog for the node */
-    // C-api: expose
-    // C-api: name=getCat
     virtual const SoNodekitCatalog *getNodekitCatalog() const;
     // ...end of contents of SO_KIT_HEADER
 
@@ -144,7 +139,6 @@ class SoBaseKit : public SoNode {
     //
     // Prints an error if the environment variable IV_DEBUG_KIT_PARTS is set 
     // and 'partName' can't be found in catalog of this or any derived part.
-    // C-api: expose
     virtual SoNode *getPart( const SbName &partName, SbBool makeIfNeeded );
 
     // Given a node or a path to a node, sees if it's a part in the 
@@ -161,7 +155,6 @@ class SoBaseKit : public SoNode {
     //
     // Prints an error if the environment variable IV_DEBUG_KIT_PARTS is set 
     // and 'partName' can't be found in catalog of this or any derived part.
-    // C-api: expose
     virtual SoNodeKitPath *createPathToPart( const SbName &partName, 
 		    SbBool makeIfNeeded, const SoPath *pathToExtend = NULL );
 		   
@@ -181,7 +174,6 @@ class SoBaseKit : public SoNode {
     //
     // Prints an error if the environment variable IV_DEBUG_KIT_PARTS is set 
     // and 'partName' can't be found in catalog of this or any derived part.
-    // C-api: expose
     virtual SbBool setPart( const SbName &partName, SoNode *from );
 
     //
@@ -189,7 +181,6 @@ class SoBaseKit : public SoNode {
     //
     // set routine returns FALSE if it cannot find the parameter to set
     SbBool set(char *nameValuePairListString);
-    // C-api: name=set2
     SbBool set(char *partNameString, char *parameterString);
 
     // DO NODEKITS TRAVERSE THEIR CHILDREN DURING A SEARCH ACTION?
@@ -390,11 +381,9 @@ class SoBaseKit : public SoNode {
 // The macro SO_CHECK_PART will not build the part if it is not already in the
 // kit, since it sends 'FALSE' as the 'makeIfNeeded' argument.
 //
-// CAUTION:  These macros will not work in the C-api, and nothing will be
 //           gained from making them.  So, don't make them.
 
 
-// C-api: end
 #ifdef DEBUG
 #define SO_GET_PART( kitContainingPart, partName, partClassName )              \
         ((partClassName *) SoBaseKit::typeCheck( partName,                     \
@@ -428,6 +417,5 @@ class SoBaseKit : public SoNode {
         ((partClassName *) kitContainingPart->getAnyPart( partName, FALSE,   \
 							  FALSE, FALSE ))
 #endif
-// C-api: begin
 
 #endif  /* _SO_BASE_KIT_ */

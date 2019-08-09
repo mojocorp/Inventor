@@ -103,11 +103,9 @@ class SoBase {
     void			touch()		{ startNotify(); }
 
     // Returns type identifier for SoBase class
-    // C-api: expose
     static SoType		getClassTypeId() { return classTypeId; }
 
     // Returns type identifier for base
-    // C-api: expose
     virtual SoType		getTypeId() const = 0;
 
     // Returns TRUE if base is of given type or is derived from it
@@ -115,11 +113,9 @@ class SoBase {
 
     // Routines for naming objects:
     // getName() returns SbName("") if the object has no name.
-    // C-api: expose
     virtual SbName		getName() const;
 
     // setName(SbName("")) to un-name an object
-    // C-api: expose
     virtual void		setName(const SbName &name);
 
   protected:

@@ -79,7 +79,6 @@ _______________________________________________________________________
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtMtlSldrs
 class SoXtMaterialSliderSet : public SoXtSliderSet {
   public:
     SoXtMaterialSliderSet(

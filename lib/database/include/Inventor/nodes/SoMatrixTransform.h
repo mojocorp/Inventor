@@ -68,8 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMx
-// C-api: public= matrix
 class SoMatrixTransform : public SoTransformation {
 
     SO_NODE_HEADER(SoMatrixTransform);

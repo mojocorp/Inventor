@@ -102,7 +102,6 @@ class NurbMaker;
 //
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=GenCylinder
 class GeneralizedCylinder : public SoSeparatorKit {
 
     SO_KIT_HEADER(GeneralizedCylinder);

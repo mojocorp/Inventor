@@ -66,7 +66,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=family,style
 class SoFontStyle : public SoFont {
 
     SO_NODE_HEADER(SoFontStyle);

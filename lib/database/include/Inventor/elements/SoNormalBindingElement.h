@@ -82,16 +82,12 @@ SoEXTENDER class SoNormalBindingElement : public SoInt32Element {
 	PER_VERTEX = 7,		// One normal for each vertex
 	PER_VERTEX_INDEXED = 8	// One normal for each vertex, indexed
         
-// C-api: end
 #ifndef IV_STRICT
         // Obsolete bindings:
         ,                       // Comma to continue list
-// C-api: begin
         DEFAULT = PER_VERTEX_INDEXED,
         NONE = OVERALL
-// C-api: end
 #endif
-// C-api: begin
 
     };
 

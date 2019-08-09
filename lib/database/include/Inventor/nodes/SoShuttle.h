@@ -68,7 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=translation,translation0,translation1,speed,on
 class SoShuttle : public SoTranslation {
 
     SO_NODE_HEADER(SoShuttle);

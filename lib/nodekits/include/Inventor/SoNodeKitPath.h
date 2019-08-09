@@ -74,13 +74,11 @@ class SoSearchAction;
 //  
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoNkitPath
 class SoNodeKitPath : public SoPath {
 
   public:
 
     // Returns length of path chain (number of nodes)
-    // C-api: name=getLen
     int			getLength() const;
 
     // Returns the last nodeKit in a path chain.
@@ -106,7 +104,6 @@ class SoNodeKitPath : public SoPath {
 
     // Adds all nodeKits in path to end of chain; head node of fromPath must
     // be a part of current last node
-    // C-api: name=AppendPath
     void		append(const SoNodeKitPath *fromPath);
 
     // Returns TRUE if the passed nodeKit is in the path chain

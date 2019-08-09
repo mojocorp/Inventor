@@ -84,7 +84,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMxAct
 class SoGetMatrixAction : public SoAction {
 
     SO_ACTION_HEADER(SoGetMatrixAction);
@@ -97,29 +96,23 @@ class SoGetMatrixAction : public SoAction {
     virtual ~SoGetMatrixAction();
 
     // Sets current viewport region to use for action
-    // C-api: name=setVPReg
     void		setViewportRegion(const SbViewportRegion &newRegion);
 
     // Returns current viewport region
-    // C-api: name=getVPReg
     const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
 
     // Returns cumulative transformation matrix and inverse matrix
     // Extenders:  your transformation nodes should get these and
     // directly modify them.  Users:  you should treat these as
     // constants.
-    // C-api: name=getMx
     SbMatrix &		getMatrix() 		{ return ctm; }
-    // C-api: name=getInv
     SbMatrix &		getInverse()		{ return inv; }
 
     // Returns cumulative texture transformation matrix and inverse matrix
     // Extenders:  your textureTransformation nodes should get these
     // and directly modify them.  Users:  you should treat these as
     // constants.
-    // C-api: name=getTexMx
     SbMatrix &		getTextureMatrix() 	{ return texCtm; }
-    // C-api: name=getTexInv
     SbMatrix &		getTextureInverse()	{ return texInv; }
 
   SoINTERNAL public:

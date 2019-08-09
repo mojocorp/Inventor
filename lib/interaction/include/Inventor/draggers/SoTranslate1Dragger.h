@@ -91,8 +91,6 @@ class SbDict;
 class SbLineProjector;
 class SoFieldSensor;
 
-// C-api: prefix=SoXlate1Drag
-// C-api: public=translation
 class SoTranslate1Dragger : public SoDragger
 {
     SO_KIT_HEADER(SoTranslate1Dragger);

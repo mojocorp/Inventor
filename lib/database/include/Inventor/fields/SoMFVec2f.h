@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMV2f
 class SoMFVec2f : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFVec2f, SbVec2f, const SbVec2f &);
@@ -76,23 +75,18 @@ class SoMFVec2f : public SoMField {
     //
 
     // Set values from array of arrays of 2 floats
-    // C-api: name=SetXYs
     void	setValues(int start, int num, const float xy[][2]);
 
     // Set one value from 2 floats
-	// C-api: name=Set1X_Y
     void	set1Value(int index, float x, float y);
 
     // Set one value from 2 floats in array
-	// C-api: name=Set1XY
     void	set1Value(int index, const float xy[2]);
 
     // Set to one value from 2 floats
-	// C-api: name=SetX_Y
     void	setValue(float x, float y);
 
     // Set to one value from 2 floats in array
-	// C-api: name=SetXY
     void	setValue(const float xy[2]);
 
   SoINTERNAL public:

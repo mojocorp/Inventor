@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoPtDtl
 class SoPointDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoPointDetail);
@@ -78,18 +77,14 @@ class SoPointDetail : public SoDetail {
     virtual ~SoPointDetail();
 
     // Returns the index of the point in the relevant coordinate node
-    // C-api: name=getCoordInd
     int32_t	getCoordinateIndex() const	{ return coordIndex; }
 
     // These returns the index of the material, normal, and texture
     // coordinates for the point. Note that they may not always be
     // valid indices into nodes (e.g., if normals or texture
     // coordinates are generated automatically).
-    // C-api: name=getMtlInd
     int32_t	getMaterialIndex() const	{ return materialIndex; }
-    // C-api: name=getNormInd
     int32_t	getNormalIndex() const		{ return normalIndex; }
-    // C-api: name=getTexCoordInd
     int32_t	getTextureCoordIndex() const	{ return texCoordIndex; }
 
     // Returns an instance that is a copy of this instance. The caller

@@ -65,7 +65,6 @@
 // NOTE: this does not generate any SoEvent.
 // It simply makes sure the passed X events occur in the widget.
 
-// C-api: prefix=SoXtInFocus
 class SoXtInputFocus : public SoXtDevice {
   public:
     //
@@ -88,7 +87,6 @@ class SoXtInputFocus : public SoXtDevice {
     // this converts an X event into an SoEvent,
     // returning NULL if the event is not from this device.
     //
-    // C-api: name=xlateEv
     virtual const SoEvent * translateEvent(XAnyEvent *xevent);
   
   private:

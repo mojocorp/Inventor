@@ -79,7 +79,6 @@ typedef void SoXtPrintDialogCB(void *userData, SoXtPrintDialog *dialog);
 //
 ///////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtPrintDlog
 class SoXtPrintDialog : public SoXtComponent {
   public:
     // Constructors and destructor.
@@ -87,7 +86,6 @@ class SoXtPrintDialog : public SoXtComponent {
 	Widget parent = NULL,
 	const char *name = NULL, 
 	SbBool buildInsideParent = TRUE);
-    // C-api: name=CreateAct
     SoXtPrintDialog(
         SoGLRenderAction *act,
 	Widget parent = NULL,
@@ -96,33 +94,24 @@ class SoXtPrintDialog : public SoXtComponent {
    ~SoXtPrintDialog();
 
     // Sets/gets the node to be used for printing
-    // C-api: name=setScenePath
     void        setSceneGraph( SoPath *path );
-    // C-api: name=setScene
     void        setSceneGraph( SoNode *root );
 
-    // C-api: name=getScene
     SoNode      *getSceneGraph()   	{ return rootNode; }
-    // C-api: name=getScenePath
     SoPath      *getSceneGraphPath()   	{ return rootPath; }
 
-    // C-api: name=setAct
     void 	setGLRenderAction(const SoGLRenderAction *act);
-    // C-api: name=getAct
     SoGLRenderAction *getGLRenderAction();
 
     // Sets the size of the printing
-    // C-api: name=setPrintSizeInches
     void        setPrintSize( const SbVec2f &s );
     void        setPrintSize( const SbVec2s &s );
 
     // These two callbacks are used before and after a print
     // action is performed.
-    // C-api: name=setBeforePrintCB
     inline void	setBeforePrintCallback(
 			SoXtPrintDialogCB *f,
 			void *userData = NULL);
-    // C-api: name=setAfterPrintCB
     inline void	setAfterPrintCallback(
 			SoXtPrintDialogCB *f,
 			void *userData = NULL);

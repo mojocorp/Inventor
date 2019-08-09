@@ -75,8 +75,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTexCoordBind
-// C-api: public=value
 class SoTextureCoordinateBinding : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinateBinding);
@@ -87,14 +85,10 @@ class SoTextureCoordinateBinding : public SoNode {
 	PER_VERTEX_INDEXED =
 	    SoTextureCoordinateBindingElement::PER_VERTEX_INDEXED,
 
-// C-api: end
 #ifndef IV_STRICT
-// C-api: begin
 	// Obsolete bindings:
 	DEFAULT		  = PER_VERTEX_INDEXED
-// C-api: end
 #endif
-// C-api: begin
     };
 
     // Fields

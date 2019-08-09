@@ -87,7 +87,6 @@ class SoXtBitmapButton;
 //  
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtPlnVwr
 class SoXtPlaneViewer : public SoXtFullViewer {
  public:
     SoXtPlaneViewer(
@@ -96,7 +95,6 @@ class SoXtPlaneViewer : public SoXtFullViewer {
 	SbBool buildInsideParent = TRUE, 
 	SoXtFullViewer::BuildFlag flag = BUILD_ALL, 
 	SoXtViewer::Type type = BROWSER);
-    // C-api: interpret #define SoXtPlnVwrCreateStd(parent,name) SoXtPlnVwrCreate(parent,name,TRUE,SO_XT_FULL_VWR_BUILD_ALL,SO_XT_VWR_BROWSER)
     ~SoXtPlaneViewer();
     
     //

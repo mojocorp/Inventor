@@ -81,8 +81,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoInd
 class SoIndexedShape : public SoVertexShape {
 
     SO_NODE_ABSTRACT_HEADER(SoIndexedShape);

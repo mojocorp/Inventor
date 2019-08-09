@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMName
 class SoMFName : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFName, SbName, const SbName &);
@@ -75,11 +74,9 @@ class SoMFName : public SoMField {
     //
 
     // Set values from array of character strings
-    // C-api: name=SetStrs
     void	setValues(int start, int num, const char *strings[]);
 
     // Set one value from character string
-    // C-api: name=SetStr
     void	setValue(const char *string);
 
   SoINTERNAL public:

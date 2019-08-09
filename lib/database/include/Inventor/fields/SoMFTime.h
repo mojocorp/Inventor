@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMTime
 class SoMFTime : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFTime, SbTime, const SbTime &);

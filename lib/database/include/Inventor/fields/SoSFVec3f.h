@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSV3f
 class SoSFVec3f : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFVec3f, SbVec3f, const SbVec3f &);
@@ -76,11 +75,9 @@ class SoSFVec3f : public SoSField {
     //
 
     // Set value from 3 floats
-    // C-api: name=SetX_Y_Z
     void	setValue(float x, float y, float z);
 
     // Set value from array of 3 floats
-    // C-api: name=SetXYZ
     void	setValue(const float xyz[3]);
 
 
