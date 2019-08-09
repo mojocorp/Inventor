@@ -94,8 +94,6 @@ class SoGetBoundingBoxAction;
 //
 /////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoComputeBBox
-// C-api: public=node,path,min,max,boxCenter,objectCenter
 class SoComputeBoundingBox : public SoEngine {
 
     SO_ENGINE_HEADER(SoComputeBoundingBox);
@@ -115,9 +113,7 @@ class SoComputeBoundingBox : public SoEngine {
     SoComputeBoundingBox();
 
     // Sets/returns viewport region to use for bounding box computation
-    // C-api: name=setVPReg
     void		   setViewportRegion(const SbViewportRegion &vpReg);
-    // C-api: name=getVPReg
     const SbViewportRegion &getViewportRegion() const;
 
   SoINTERNAL public:

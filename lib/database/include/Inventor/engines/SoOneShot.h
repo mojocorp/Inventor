@@ -65,8 +65,6 @@
 #include <Inventor/fields/SoSFTime.h>
 #include <Inventor/fields/SoSFBitMask.h>
 
-// C-api: public=duration,trigger,flags,disable,timeIn
-// C-api: public=timeOut,isActive,ramp
 class SoOneShot : public SoEngine {
 
     SO_ENGINE_HEADER(SoOneShot);

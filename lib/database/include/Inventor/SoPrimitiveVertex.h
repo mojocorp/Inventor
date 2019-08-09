@@ -81,13 +81,11 @@ class SoDetail;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoPrimVtx
 class SoPrimitiveVertex {
 
   public:
     // Constructors
     SoPrimitiveVertex();
-    // C-api: name=CreateCopy
     SoPrimitiveVertex(const SoPrimitiveVertex &pv);
 
     // Destructor
@@ -95,21 +93,16 @@ class SoPrimitiveVertex {
 
     // These return the surface point, normal, and texture coordinates
     // in object space:
-    // C-api: name=getPt
     const SbVec3f &	getPoint() const		{ return point; }
-    // C-api: name=getNorm
     const SbVec3f &	getNormal() const		{ return normal; }
-    // C-api: name=getTexCoords
     const SbVec4f &	getTextureCoords() const	{ return texCoords; }
 
     // Returns the index into the current set of materials of the
     // material active at the vertex
-    // C-api: name=getMtlInd
     int			getMaterialIndex() const    { return materialIndex; }
 
     // Returns the detail giving more info about the vertex. Note that
     // this pointer may be NULL.
-    // C-api: name=getDtl
     const SoDetail *	getDetail() const		{ return detail; }
 
     // Copy assignment operator. Note that just the pointer to the

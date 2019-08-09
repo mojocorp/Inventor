@@ -96,7 +96,6 @@ typedef void SoXtClipboardImportCB(
 //	
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoClpBrd
 class SoXtClipboard {
   public:
     // Constructor.
@@ -128,19 +127,15 @@ class SoXtClipboard {
     //	    INVENTOR_2_0_FILE
     
     // This copies the passed node.
-    // C-api: name=copyNode
     void    copy(SoNode *node, Time eventTime);
     
     // This copies path.
-    // C-api: name=copyPath
     void    copy(SoPath *path, Time eventTime);
 
     // This copies all the paths in pathList.
-    // C-api: name=copyPathList
     void    copy(SoPathList *pathList, Time eventTime);
     
     // This copies non-Inventor data to the clipboard
-    // C-api: name=copyData
     void    copy(Atom dataType, void *data, uint32_t numBytes, Time eventTime);
 
     // Paste - make a request to the X server so we can import data for paste.

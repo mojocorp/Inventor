@@ -86,7 +86,6 @@
 //
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoAppearKit
 class SoAppearanceKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoAppearanceKit);

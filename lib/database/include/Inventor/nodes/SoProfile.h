@@ -72,9 +72,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoProf
-// C-api: public=index, linkage
 class SoProfile : public SoNode{
 
     SO_NODE_ABSTRACT_HEADER(SoProfile);

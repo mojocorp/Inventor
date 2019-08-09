@@ -57,7 +57,6 @@
  _______________________________________________________________________
  */
 
-// C-api: end
 
 #ifndef _SB_DICT_
 #define _SB_DICT_
@@ -113,7 +112,6 @@ SoEXTENDER class SbDict {
 
     // Calls given routine (passing value,data) for each entry in dictionary.
     //  The order of entries is not guaranteed to mean anything.
-    // C-api: name=applyToAllWithData
     void	applyToAll(void (*rtn)(unsigned long key, void *value, void *data), 
 			   void *data );
 

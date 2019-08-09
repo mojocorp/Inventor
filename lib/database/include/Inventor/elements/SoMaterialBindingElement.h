@@ -82,16 +82,12 @@ SoEXTENDER class SoMaterialBindingElement : public SoInt32Element {
 	PER_VERTEX = 7,		// One material for each vertex
 	PER_VERTEX_INDEXED = 8	// One material for each vertex, indexed
 
-// C-api: end
 #ifndef IV_STRICT
         // Obsolete bindings:
 	,			// Comma to continue list
-// C-api: begin
 	DEFAULT = OVERALL,
 	NONE = OVERALL
-// C-api: end
 #endif
-// C-api: begin
 
     };
 

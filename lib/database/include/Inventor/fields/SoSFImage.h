@@ -65,7 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSImg
 class SoSFImage : public SoSField {
     // Uses only some of the standard field stuff (because there is no
     // SbImage type):
@@ -75,13 +74,11 @@ class SoSFImage : public SoSField {
   public:
     // getValue returns the size, number of components and a constant
     // pointer to the image.
-    // C-api: name=get
     const unsigned char *	getValue(SbVec2s &size, int &nc) const;
 
     // setValue copies the image given to it into internal storage.
     // See startEditing() for a way of avoiding the copy if you are
     // doing a getValue() followed immediately by a setValue().
-    // C-api: name=set
     void			setValue(const SbVec2s &size, int nc,
 					 const unsigned char *bytes);
     
@@ -93,9 +90,7 @@ class SoSFImage : public SoSField {
     // Avoid copying the values in/out, if you are just changing the
     // bytes and not changing the dimensions of the image.  This is
     // equivalent to getValue, but returns a pointer you can change.
-    // C-api: name=startEdit
     unsigned char *		startEditing(SbVec2s &size, int &nc);
-    // C-api: name=finishEdit
     void			finishEditing();
 
   SoINTERNAL public:

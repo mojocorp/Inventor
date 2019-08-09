@@ -86,7 +86,6 @@
 //                                           
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoLtKit
 class SoLightKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoLightKit);

@@ -79,7 +79,6 @@ typedef void SoWWWInlineFetchURLCB(
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=name,bboxCenter,bboxSize
 class SoWWWInline : public SoNode {
 
     SO_NODE_HEADER(SoWWWInline);
@@ -112,13 +111,10 @@ class SoWWWInline : public SoNode {
     SoGroup             *copyChildren() const;
     
     // Request that URL data be fetched, and tell whether the URL data is here
-    // C-api: name=reqURLData
     void		requestURLData() 
 			    { if (! kidsRequested) requestChildrenFromURL(); }
-    // C-api: name=isURLDataReq
     SbBool		isURLDataRequested() const { return kidsRequested; }
     SbBool		isURLDataHere() const { return kidsAreHere; }
-    // C-api: name=cancelURLDataReq
     void		cancelURLDataRequest() 
 			    { if (!kidsAreHere) kidsRequested = FALSE; }
 
@@ -128,19 +124,14 @@ class SoWWWInline : public SoNode {
     SoNode *		getChildData() const;
 
     // Allow the viewer to fetch URLs when needed.
-    // C-api: name=setFetchCB
     static void setFetchURLCallBack(SoWWWInlineFetchURLCB *f, void *userData);
 
     // Allow the user to specify how bounding boxes are displayed
-    // C-api: name=setBboxVis
     static void setBoundingBoxVisibility(BboxVisibility b) { bboxVisibility = b; } 
-    // C-api: name=getBboxVis
     static BboxVisibility getBoundingBoxVisibility() { return bboxVisibility; }
 
     // Allow the user to specify the bounding box color
-    // C-api: name=setBboxCol
     static void setBoundingBoxColor(SbColor &c) { bboxColor = c; }
-    // C-api: name=getBboxCol
     static const SbColor &getBoundingBoxColor() { return bboxColor; }
 
 

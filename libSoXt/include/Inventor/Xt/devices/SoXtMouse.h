@@ -89,7 +89,6 @@ class SoXtMouse : public SoXtDevice {
     // this converts an X event into an SoEvent,
     // returning NULL if the event is not from this device.
     //
-    // C-api: name=xlateEv
     virtual const SoEvent * translateEvent(XAnyEvent *xevent);
   
   private:

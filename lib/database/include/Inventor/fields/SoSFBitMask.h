@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSBitMask
 class SoSFBitMask : public SoSFEnum {
 
     // Use standard field stuff for derived class;

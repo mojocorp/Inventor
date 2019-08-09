@@ -130,7 +130,6 @@
 #include <Inventor/SoInput.h>
 #include <Inventor/SoOutput.h>
 
-// C-api: end
 
 //===========================================================================
 //
@@ -794,6 +793,5 @@ className::allocValues(int newNum)					      \
 	SO_MFIELD_REQUIRED_SOURCE(className);				      \
 	SO_MFIELD_DERIVED_CONSTRUCTOR_SOURCE(className)
 
-// C-api: begin
 
 #endif /* _SO_SUB_FIELD_ */

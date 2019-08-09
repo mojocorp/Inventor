@@ -110,7 +110,6 @@
 #ifndef  _SO_SUB_KIT_
 #define  _SO_SUB_KIT_
 
-// C-api: end
 
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/fields/SoSFNode.h>
@@ -547,6 +546,5 @@ className::getNodekitCatalog() const					      \
    createNodekitPartsList(); \
    createDefaultParts()
 
-// C-api: begin
 
 #endif /* _SO_SUB_KIT_ */

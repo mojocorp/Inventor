@@ -80,8 +80,6 @@ class SoCoordinateElement;
 class SoNormalBundle;
 class SoState;
 
-// C-api: prefix=SoFSet
-// C-api: public=startIndex, numVertices, vertexProperty
 class SoFaceSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoFaceSet);

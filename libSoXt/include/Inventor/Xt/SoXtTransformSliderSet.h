@@ -76,7 +76,6 @@ _______________________________________________________________________
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtXfSldrs
 class SoXtTransformSliderSet : public SoXtSliderSet {
   public:
     SoXtTransformSliderSet( 

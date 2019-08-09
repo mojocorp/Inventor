@@ -92,7 +92,6 @@ typedef void *SoOutputReallocCB(void *ptr, size_t newSize);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoOut
 class SoOutput {
  public:
 
@@ -103,11 +102,9 @@ class SoOutput {
     ~SoOutput();
 
     // Sets file pointer to write to
-    // C-api: name=setFilePtr
     void		setFilePointer(FILE *newFP);
 
     // Returns file pointer writing to, or NULL if writing to buffer
-    // C-api: name=getFilePtr
     FILE *		getFilePointer() const;
 
     // Opens named file, sets file pointer to result. Returns FALSE on error
@@ -118,7 +115,6 @@ class SoOutput {
 
     // Sets up buffer to write to, initial size, reallocation function,
     // and offset in buffer at which to begin writing.
-    // C-api: name=setBuf
     void		setBuffer(void *bufPointer, size_t initSize,
 				  SoOutputReallocCB *reallocFunc, 
 				  int32_t offset = 0);
@@ -126,7 +122,6 @@ class SoOutput {
     // Returns pointer to buffer and the total bytes written in the buffer
     // from the start of the buffer (not from offset!)
     // Returns FALSE if not writing into buffer.
-    // C-api: name=getBuf
     SbBool		getBuffer(void *&bufPointer, size_t &nBytes) const;
 
     // The actual number of bytes allocated to the buffer may be larger
@@ -134,31 +129,23 @@ class SoOutput {
     size_t		getBufferSize() const { return bufSize; }
     
     // Resets buffer for output again; output starts over at beginning
-    // C-api: name=resetBuf
     void		resetBuffer();
 
     // Indicates whether output should be ASCII (default) or binary
-    // C-api: name=setBin
     void		setBinary(SbBool flag);
 
     // Returns current state of binary flag
-    // C-api: name=isBin
     SbBool		isBinary() const		{ return binary; }
 
     // Specify the header used when writing the file
-    // C-api: name=setHdrStr
     void		setHeaderString(const SbString &str);
     // Specify to use the default header (ascii or binary)
-    // C-api: name=resetHdrStr
     void		resetHeaderString();
     
-    // C-api: name=getDfltASCIIHdr
     static SbString	getDefaultASCIIHeader();
-    // C-api: name=getDfltBinHdr
     static SbString	getDefaultBinaryHeader();
 
     // Sets the precision for outputing real numbers
-    // C-api: name=setFltPrcsn
     void		setFloatPrecision(int precision);
 							
   SoEXTENDER public:
@@ -181,39 +168,23 @@ class SoOutput {
 	{ indentLevel -= amount; }
 
     // Writes item of particular type to current file pointer/buffer
-    // C-api: name=writeChar
     void		write(char	     c);
-    // C-api: name=writeCharStr
     void		write(const char    *s);
-    // C-api: name=writeString
     void		write(const SbString &s);
-    // C-api: name=writeName
     void		write(const SbName   &n);
-    // C-api: name=writeInt
     void		write(int	     i);
-    // C-api: name=writeUInt
     void		write(unsigned int   i);
-    // C-api: name=writeShort
     void		write(short	     s);
-    // C-api: name=writeUShort
     void		write(unsigned short s);
-    // was ... C-api: name=writeInt32
     //     but typedef makes this redundant
     //void		write(int32_t	     l);
-    // was ... C-api: name=writeUInt32
     //     but typedef makes this redundant
     //void		write(uint32_t	     l);
-    // C-api: name=writeFloat
     void		write(float	     f);
-    // C-api: name=writeDbl
     void		write(double	     d);
-    // C-api: name=writeBinCharArray
     void                writeBinaryArray(unsigned char *c, int length);
-    // C-api: name=writeBinInt32Array
     void                writeBinaryArray(int32_t *l, int length);
-    // C-api: name=writeBinFloatArray
     void                writeBinaryArray(float *f, int length);
-    // C-api: name=writeBinDblArray
     void                writeBinaryArray(double *d, int length);
 
     // Writes indentation to file/buffer based on current indentation level

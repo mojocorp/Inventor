@@ -82,11 +82,9 @@
 // Function that TextureCoordinateFunction nodes register to compute
 // texture coordinates.  Given the point and normal, compute a texture
 // coordinate and return it:
-// C-api: end
 typedef const SbVec4f &
 	SoTextureCoordinateFunctionCB(void *userdata, const SbVec3f &point,
 				      const SbVec3f &normal);
-// C-api: begin
 
 SoEXTENDER class SoTextureCoordinateElement : public SoReplacedElement {
 

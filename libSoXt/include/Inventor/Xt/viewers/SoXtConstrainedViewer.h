@@ -65,8 +65,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoXtConstrVwr
 class SoXtConstrainedViewer : public SoXtFullViewer {
  public:
     
@@ -76,9 +74,7 @@ class SoXtConstrainedViewer : public SoXtFullViewer {
     // also used when rotating the camera right/left.
     // The default is the +Y (0,1,0) direction.
     //
-    // C-api: name=setUpDir
     void	    setUpDirection(const SbVec3f &newUpDirection);
-    // C-api: name=getUpDir
     SbVec3f	    getUpDirection()		    { return upDirection; }
     
     //

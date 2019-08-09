@@ -62,7 +62,6 @@
 
 #define SO_XT_ALL_KEYBOARD_EVENTS (KeyPressMask | KeyReleaseMask)
 
-// C-api: prefix=SoXtKbd
 class SoXtKeyboard : public SoXtDevice {
   public:
     //
@@ -85,7 +84,6 @@ class SoXtKeyboard : public SoXtDevice {
     // this converts an X event into an SoEvent,
     // returning NULL if the event is not from this device.
     //
-    // C-api: name=xlateEv
     virtual const SoEvent * translateEvent(XAnyEvent *xevent);
   
   private:

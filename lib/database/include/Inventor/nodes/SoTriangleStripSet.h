@@ -85,8 +85,6 @@ class SoCoordinateElement;
 #define SO_TRI_STRIP_SET_USE_REST_OF_VERTICES	(-1)
 #endif
 
-// C-api: prefix=SoTriStripSet
-// C-api: public=startIndex, numVertices, vertexProperty
 class SoTriangleStripSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoTriangleStripSet);

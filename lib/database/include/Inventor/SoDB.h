@@ -100,7 +100,6 @@ class SoDB {
     // Reads a path from the file specified by the given SoInput,
     // returning a pointer to the resulting path in path. Returns
     // FALSE on error.
-    // C-api: name=ReadPath
     static SbBool	read(SoInput *in, SoPath *&path);
 
     // Reads all graphs from the file specified by the given SoInput.

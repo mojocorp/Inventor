@@ -53,7 +53,6 @@
  _______________________________________________________________________
  */
 
-// C-api: end
 
 #ifndef  _SO_NORMAL_GENERATOR_
 #define  _SO_NORMAL_GENERATOR_

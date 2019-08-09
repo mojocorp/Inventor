@@ -74,7 +74,6 @@ typedef void SoEventCallbackCB(void *userData, SoEventCallback *node);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoEvCB
 class SoEventCallback : public SoNode {
 
     SO_NODE_HEADER(SoEventCallback);
@@ -97,11 +96,9 @@ class SoEventCallback : public SoNode {
     // SoEvent::getClassTypeId() as the eventType. Else, pass the type
     // of event you are interested in (e.g.
     // SoLocation2Event::getClassTypeId() for mouse motion)
-    // C-api: name=addEvCB
     void		addEventCallback(SoType eventType,
 					 SoEventCallbackCB *f,
 					 void *userData = NULL);
-    // C-api: name=removeEvCB
     void		removeEventCallback(SoType eventType,
 					    SoEventCallbackCB *f,
 					    void *userData = NULL);
@@ -113,16 +110,13 @@ class SoEventCallback : public SoNode {
     //
     
     // Returns the SoHandleEventAction being applied
-    // C-api: name=getAct
     SoHandleEventAction *	getAction() const { return eventAction; }
 
     // Returns the event being handled by the action
-    // C-api: name=getEv
     const SoEvent *		getEvent() const
 	{ return (eventAction != NULL ? eventAction->getEvent() : NULL); }
 
     // Returns pick information from the action
-    // C-api: name=getPckPt
     const SoPickedPoint *	getPickedPoint() const
 	{ return (eventAction != NULL ? eventAction->getPickedPoint() : NULL);}
     
@@ -144,11 +138,9 @@ class SoEventCallback : public SoNode {
     // grab. While grabbing, the node will consume all events;
     // however, the callback functions are still only invoked for
     // events of interest.
-    // C-api: name=grabEv
     void		grabEvents()
 	{ if (eventAction != NULL) eventAction->setGrabber(this); }
 
-    // C-api: name=releaseEv
     void		releaseEvents()
 	{ if (eventAction != NULL) eventAction->releaseGrabber(); }
 

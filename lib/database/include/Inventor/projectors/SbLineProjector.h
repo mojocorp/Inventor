@@ -59,7 +59,6 @@
 
 #include <Inventor/projectors/SbProjector.h>
 
-// C-api: prefix=SbLineProj
 class SbLineProjector : public SbProjector
 {
   public:
@@ -85,8 +84,6 @@ class SbLineProjector : public SbProjector
     const SbLine &	getLine() const		  { return line; }
 
     // Get a vector on this line given two normalized mouse points.
-    // C-api: expose
-    // C-api: name=getVecMouse2
     virtual SbVec3f	getVector(const SbVec2f &mousePosition1,
 				  const SbVec2f &mousePosition2);
 					    
@@ -96,17 +93,13 @@ class SbLineProjector : public SbProjector
     // if the working space transform is changing since
     // the new point will be in a different space than
     // the old one.
-    // C-api: expose
-    // C-api: name=getVecMouse1
     virtual SbVec3f	getVector(const SbVec2f &mousePosition);
 					    
     // Set the initialial from a mouse position.
-    // C-api: name=setStartPosMouse
     void		setStartPosition(const SbVec2f &mousePosition)
 				{ lastPoint = project(mousePosition); }
 
     // Set the initialial position from a point on the projector.
-    // C-api: name=setStartPosPt
     void		setStartPosition(const SbVec3f &point)
 						{ lastPoint = point; }
   protected:

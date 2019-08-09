@@ -60,7 +60,6 @@
 #include <Inventor/SbLinear.h>
 #include <Inventor/events/SoEvent.h>
 
-// C-api: name=SoXtDev
 class SoXtDevice {
   public:
     // these functions will enable/disable this device for the passed widget.
@@ -68,24 +67,18 @@ class SoXtDevice {
     // data is the clientData which will be passed.
     // For enable, the window is also passed, since Glx widgets can have
     // more than one window (normal, overlay, popup)
-    // C-api: expose
     virtual void        enable(Widget w, XtEventHandler f,
 			       XtPointer data, Window win = 0) = 0;
-    // C-api: expose
     virtual void        disable(Widget w, XtEventHandler f, XtPointer data) = 0;
     
     // this converts an X event into an SoEvent.
     // this returns NULL if the event is not from this device.
-    // C-api: expose
-    // C-api: name=xlateEv
     virtual const SoEvent * translateEvent(XAnyEvent *xevent) = 0;
 
     // set the window size so that the device can correctly convert X
     // window coordinates (origin at top,left) into Inventor window
     // coordinates (origin at bottom,left).
-    // C-api: name=setWinSize
     void		setWindowSize(const SbVec2s &s)	{ winSize = s; }
-    // C-api: name=getWinSize
     const SbVec2s &	getWindowSize() const		{ return winSize; }
 
   protected:

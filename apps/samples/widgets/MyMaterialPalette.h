@@ -87,7 +87,6 @@ typedef void MyMaterialPaletteCB(void *userData, const SoMaterial *mtl);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtMtlPalGiz
 class MyMaterialPalette : public SoXtComponent {
   public:
     // pass the home directory of the material palettes as dir
@@ -107,13 +106,11 @@ class MyMaterialPalette : public SoXtComponent {
     // Callbacks - register functions that will be called whenever the user
     // chooses a new material from the palette.
     // (This component cannot be attached to a database - it is read only)
-    // C-api: name=addCB
     void    addCallback(
     	    	MyMaterialPaletteCB *f,
 		void *userData = NULL)
 	{ callbackList.addCallback((SoCallbackListCB *) f, userData);}
 
-    // C-api: name=removeCB
     void    removeCallback(
     	    	MyMaterialPaletteCB *f,
 		void *userData = NULL)

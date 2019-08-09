@@ -67,8 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoNorm
-// C-api: public=vector
 class SoNormal : public SoNode {
 
     SO_NODE_HEADER(SoNormal);

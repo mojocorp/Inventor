@@ -70,8 +70,6 @@ _______________________________________________________________________
 //
 ///////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoXtSldrs
 class SoXtSliderSet : public SoXtSliderSetBase {
   public:
   // internal:

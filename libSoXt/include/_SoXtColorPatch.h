@@ -68,7 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtColPatch
 class _SoXtColorPatch : public SoXtGLWidget {
 
   public:
@@ -82,9 +81,7 @@ class _SoXtColorPatch : public SoXtGLWidget {
     //
     // set/get routines to specify the patch top color
     //
-    // C-api: name=setCol
     void		setColor(const SbColor &rgb);
-    // C-api: name=getCol
     const SbColor &	getColor()	{ return color; }
   
   protected:

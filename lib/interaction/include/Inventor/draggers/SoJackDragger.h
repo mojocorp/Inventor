@@ -123,8 +123,6 @@
 class SbDict;
 class SoFieldSensor;
 
-// C-api: prefix=SoJackDrag
-// C-api: public=rotation,translation,scaleFactor
 class SoJackDragger : public SoDragger
 {
     SO_KIT_HEADER(SoJackDragger);

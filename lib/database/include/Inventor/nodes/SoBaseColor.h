@@ -68,8 +68,6 @@ class SoColorPacker;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoBaseCol
-// C-api: public= rgb
 class SoBaseColor : public SoNode {
 
     SO_NODE_HEADER(SoBaseColor);

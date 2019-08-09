@@ -85,17 +85,11 @@ class SoXtResource {
     //	  xr.getResource("colorSliders", "ColorSliders", rgbOrHsv);
     //	  xr.getResource("updateFrequency", "UpdateFrequency", freq);
     
-    // C-api: name=getCol
     SbBool   	getResource(const char *resName, const char *resClass, SbColor &c);
-    // C-api: name=getInt
     SbBool   	getResource(const char *resName, const char *resClass, short &i);
-    // C-api: name=getUShort
     SbBool   	getResource(const char *resName, const char *resClass, unsigned short &u);
-    // C-api: name=getStr
     SbBool   	getResource(const char *resName, const char *resClass, char *&s);
-    // C-api: name=getBool
     SbBool   	getResource(const char *resName, const char *resClass, SbBool &b);
-    // C-api: name=getFloat
     SbBool   	getResource(const char *resName, const char *resClass, float &f);
 
   private:

@@ -74,7 +74,6 @@ typedef void SoWWWAnchorCB(
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=name,description,map
 class SoWWWAnchor : public SoLocateHighlight {
 
     SO_NODE_HEADER(SoWWWAnchor);
@@ -105,14 +104,12 @@ class SoWWWAnchor : public SoLocateHighlight {
     // Application callbacks invoked when the mouse is clicked on an 
     // anchor (activate) so that the app can fetch the URL or call
     // netscape/mosaic to fetch the URL.
-    // C-api: name=setFetchCB
     static void setFetchURLCallBack( 
         SoWWWAnchorCB *f, void *userData); 
 
     // Application callbacks invoked when the mouse is moved over an
     // anchor so that the app can provide feedback such as changing the
     // cursor, or displaying the anchor description or URL.
-    // C-api: name=setHLCB
     static void setHighlightURLCallBack(
 	SoWWWAnchorCB *f, void *userData);
 

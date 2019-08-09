@@ -92,8 +92,6 @@ class SbDict;
 class SbLineProjector;
 class SoFieldSensor;
 
-// C-api: prefix=SoScaleUniDrag
-// C-api: public=scaleFactor
 class SoScaleUniformDragger : public SoDragger
 {
     SO_KIT_HEADER(SoScaleUniformDragger);

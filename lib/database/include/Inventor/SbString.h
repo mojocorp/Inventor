@@ -71,7 +71,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbStr
 class SbString {
   public:
 
@@ -80,22 +79,18 @@ class SbString {
 					  string[0] = '\0'; }
 
     // Constructor that initializes to given character string
-    // C-api: name=CreateStr
     SbString(const char *str)		{ string = staticStorage;
 					  *this = str; }
 
     // Constructor that initializes to given character string
-    // C-api: name=CreateSubStr
     SbString(const char *str, int start, int end);
 
     // Constructor that initializes to given SbString
-    // C-api: name=CreateCopy
     SbString(const SbString &str)	{ string = staticStorage;
 					  *this = str.string; }
 
     // Constructor that initializes to string formed from given integer.
     // For example, SbString(1234) gives the string "1234".
-    // C-api: name=CreateInt
     SbString(int digitString);
 
     // Destructor
@@ -105,68 +100,54 @@ class SbString {
     uint32_t		hash()		{ return SbString::hash(string); }
 
     // Returns length of string
-    // C-api: name=getLen
     int			getLength() const	{ return strlen(string); }
 
     // Sets string to be the empty string (""). If freeOld is TRUE
     // (default), any old storage is freed up
-    // C-api: name=empty
     void		makeEmpty(SbBool freeOld = TRUE);
 
     // Returns pointer to the character string
-    // C-api: name=getStr
     const char *	getString() const	{ return string; }
 
     // Returns new string representing sub-string from startChar to
     // endChar, inclusive. If endChar is -1 (the default), the
     // sub-string from startChar until the end is returned.
-    // C-api: name=getSubStr
     SbString		getSubString(int startChar, int endChar = -1) const;
 
     // Deletes the characters from startChar to endChar, inclusive,
     // from the string. If endChar is -1 (the default), all characters
     // from startChar until the end are deleted.
-    // C-api: name=deleteSubStr
     void		deleteSubString(int startChar, int endChar = -1);
 
     // Assignment operator for character string, SbString
-    // C-api: name=CopyStr
     SbString &		operator =(const char *str);
     SbString &		operator =(const SbString &str)
 	{ return (*this = str.string); }
 
     // Concatenation operator "+=" for string, SbString
-    // C-api: name=concatStr
     SbString &		operator +=(const char *str);
 
-    // C-api: name=concat
     SbString &		operator +=(const SbString &str);
 
     // Unary "not" operator; returns TRUE if string is empty ("")
     int			operator !() const { return (string[0] == '\0'); }
 
     // Equality operator for SbString/char* and SbString/SbString comparison
-    // C-api: name=IsEqStr
     friend int		operator ==(const SbString &str, const char *s);
-// C-api: end
 
     friend int		operator ==(const char *s, const SbString &str)
 	{ return (str == s); }
 
-// C-api: begin
 
     friend int		operator ==(const SbString &str1, const SbString &str2)
 	{ return (str1 == str2.string); }
 
     // Inequality operator for SbString/char* and SbString/SbString comparison
-    // C-api: name=IsNEqStr
     friend int		operator !=(const SbString &str, const char *s);
-// C-api: end
 
     friend int		operator !=(const char *s, const SbString &str)
 	{ return (str != s); }
 
-// C-api: begin
     friend int		operator !=(const SbString &str1,
 				    const SbString &str2)
 	{ return (str1 != str2.string); }
@@ -194,7 +175,6 @@ class SbString {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: end
 
 SoINTERNAL class SbNameEntry {
 
@@ -240,7 +220,6 @@ friend class SbName;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: begin
 
 class SbName {
   public:
@@ -248,27 +227,21 @@ class SbName {
     SbName();
 
     // Constructor that initializes to given character string
-    // C-api: name=CreateStr
     SbName(const char *s)		{ entry = SbNameEntry::insert(s); }
 
     // Constructor that initializes to given SbString
-    // C-api: name=CreateSbStr
     SbName(const SbString &s)	{ entry = SbNameEntry::insert(s.getString()); }
 
 
     // Constructor that initializes to another SbName
-    // C-api: name=CreateSbName
-    // C-api: keepSbName
     SbName(const SbName &n)			{ entry = n.entry; }
 
     ~SbName()					{}
 
     // Returns pointer to the character string
-    // C-api: name=getStr
     const char		*getString() const	{ return entry->string; }
 
     // Returns length of string
-    // C-api: name=getLen
     int			getLength() const   { return strlen(entry->string); }
 
     // Returns TRUE if given character is a legal starting character
@@ -291,32 +264,22 @@ class SbName {
     int			operator !() const   { return entry->isEmpty(); }
 
     // Equality operator for SbName/char* and SbName/SbName comparison
-    // C-api: name=IsEqStr
-    // C-api: keepSbName
     friend int		operator ==(const SbName &n, const char *s)
 	{ return n.entry->isEqual(s); }
 
-// C-api: end
     friend int		operator ==(const char *s, const SbName &n)
 	{ return n.entry->isEqual(s); }
-// C-api: begin
 
-    // C-api: keepSbName
     friend int 		operator ==(const SbName &n1, const SbName &n2)
 	{ return n1.entry == n2.entry; }
 
     // Inequality operator for SbName/char* and SbName/SbName comparison
-    // C-api: name=IsNEqStr
-    // C-api: keepSbName
     friend int		operator !=(const SbName &n, const char *s)
 	{ return ! n.entry->isEqual(s); }
 
-// C-api: end
     friend int		operator !=(const char *s, const SbName &n)
 	{ return ! n.entry->isEqual(s); }
-// C-api: begin
 
-    // C-api: keepSbName
     friend int 		operator !=(const SbName &n1, const SbName &n2)
 	{ return n1.entry != n2.entry; }
 

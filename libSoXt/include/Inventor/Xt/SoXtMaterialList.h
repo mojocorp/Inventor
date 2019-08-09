@@ -74,7 +74,6 @@ typedef void SoXtMaterialListCB(void *userData, const SoMaterial *mtl);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtMtlList
 class SoXtMaterialList : public SoXtComponent {
   public:
     // pass the home directory of the material palettes as dir
@@ -88,13 +87,11 @@ class SoXtMaterialList : public SoXtComponent {
     // Callbacks - register functions that will be called whenever the user
     // chooses a new material from the list.
     // (This component cannot be attached to a database - it is read only)
-    // C-api: name=addCB
     void    addCallback(
     	    	SoXtMaterialListCB *f,
 		void *userData = NULL)
 	{ callbackList->addCallback((SoCallbackListCB *) f, userData);}
 
-    // C-api: name=removeCB
     void    removeCallback(
     	    	SoXtMaterialListCB *f,
 		void *userData = NULL)

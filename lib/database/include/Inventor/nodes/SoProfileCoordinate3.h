@@ -67,8 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoProfCoord3
-// C-api: public= point
 class SoProfileCoordinate3 : public SoNode {
 
     SO_NODE_HEADER(SoProfileCoordinate3);

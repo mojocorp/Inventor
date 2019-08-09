@@ -86,7 +86,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=center,ranges
 class SoLOD : public SoGroup {
 
     SO_NODE_HEADER(SoLOD);
@@ -100,7 +99,6 @@ class SoLOD : public SoGroup {
     SoLOD();
 
     // Constructor that takes approximate number of children
-    // C-api: name=CreateN
     SoLOD(int nChildren);
 
   SoEXTENDER public:

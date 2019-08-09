@@ -72,8 +72,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoCyl
-// C-api: public=parts, radius, height
 class SoCylinder : public SoShape {
 
     SO_NODE_HEADER(SoCylinder);
@@ -96,7 +94,6 @@ class SoCylinder : public SoShape {
     SoCylinder();
 
     // Turns on/off a part of the cylinder. (Convenience functions)
-    // C-api: begin
     void		addPart(SoCylinder::Part part);
     void		removePart(SoCylinder::Part part);
 

@@ -51,7 +51,6 @@
 #include <Inventor/nodes/SoSpotLight.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 
-// C-api: prefix=SoSpotLtManip
 class SoSpotLightManip : public SoSpotLight
 {
     SO_NODE_HEADER(SoSpotLightManip);
@@ -60,7 +59,6 @@ class SoSpotLightManip : public SoSpotLight
     // Constructors
     SoSpotLightManip();
 
-    // C-api: name=getDrag
     SoDragger *getDragger();
 
     SbBool replaceNode( SoPath *p );

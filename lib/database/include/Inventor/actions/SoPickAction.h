@@ -67,8 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoPickAct
 class SoPickAction : public SoAction {
 
     SO_ACTION_HEADER(SoPickAction);
@@ -77,11 +75,9 @@ class SoPickAction : public SoAction {
     // Sets current viewport region to use for picking. Even though
     // picking may not involve a window per se, some nodes need this
     // information to determine their size and placement.
-    // C-api: name=setVPReg
     void		setViewportRegion(const SbViewportRegion &newRegion);
 
     // Returns current viewport region
-    // C-api: name=getVPReg
     const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
 
   SoEXTENDER public:

@@ -79,8 +79,6 @@ class SoState;
 // next line begins
 #define SO_END_LINE_INDEX	(-1)
 
-// C-api: prefix=SoIndLSet
-// C-api: public=coordIndex, materialIndex, normalIndex, textureCoordIndex, vertexProperty
 class SoIndexedLineSet : public SoIndexedShape {
 
     SO_NODE_HEADER(SoIndexedLineSet);

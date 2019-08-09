@@ -88,7 +88,6 @@ class	SoFieldSensor;
 //  
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtFlyVwr
 class SoXtFlyViewer : public SoXtConstrainedViewer {
  public:
     
@@ -98,7 +97,6 @@ class SoXtFlyViewer : public SoXtConstrainedViewer {
 	SbBool buildInsideParent = TRUE, 
 	SoXtFullViewer::BuildFlag flag = BUILD_ALL,
 	SoXtViewer::Type type = BROWSER);
-    // C-api: interpret #define SoXtFlyVwrCreateStd(parent,name) SoXtFlyVwrCreate(parent,name,TRUE,SO_XT_FULL_VWR_BUILD_ALL,SO_XT_VWR_BROWSER)
     ~SoXtFlyViewer();
     
     //

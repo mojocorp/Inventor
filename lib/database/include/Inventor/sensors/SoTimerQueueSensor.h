@@ -64,13 +64,11 @@
 #include <Inventor/sensors/SoSensor.h>
 #include <Inventor/SbTime.h>
 
-// C-api: prefix=SoTimerQSens
 class SoTimerQueueSensor : public SoSensor {
 
   public:
     // Constructors. The second form takes standard callback function and data
     SoTimerQueueSensor();
-    // C-api: name=createCB
     SoTimerQueueSensor(SoSensorCB *func, void *data);
 
     // Destructor
@@ -78,7 +76,6 @@ class SoTimerQueueSensor : public SoSensor {
 
     // Returns the time at which the sensor is scheduled to be
     // triggered. Results are undefined if the sensor is not scheduled.
-    // C-api: name=getTrigTime
     const SbTime &	getTriggerTime() const		{ return trigTime; }
 
     // Scheduling methods

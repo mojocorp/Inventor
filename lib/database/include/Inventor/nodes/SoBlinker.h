@@ -69,7 +69,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=whichChild,speed,on
 class SoBlinker : public SoSwitch {
 
     SO_NODE_HEADER(SoBlinker);

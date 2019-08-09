@@ -71,7 +71,6 @@
 // be cast to this type.
 typedef void SoFloatCallbackListCB(void *userData, float callbackData);
 
-// C-api: prefix=SoFCBList
 class SoFloatCallbackList {
     
   public:
@@ -85,17 +84,12 @@ class SoFloatCallbackList {
     // parameter, and callback specific data as the second parameter.
     // e.g. (*f)(userData, callbackData);
 
-    // C-api: name=addCB
     void    addCallback(SoFloatCallbackListCB *f, void *userData = NULL);
-    // C-api: name=removeCB
     void    removeCallback(SoFloatCallbackListCB *f, void *userData = NULL);
     
-    // C-api: name=clearCB
     void    clearCallbacks()			    { list.truncate(0); }
-    // C-api: name=getNumCB
     int	    getNumCallbacks() const		    { return list.getLength(); }
 
-    // C-api: name=invokeCB
     void    invokeCallbacks(float callbackData);
 
   private:

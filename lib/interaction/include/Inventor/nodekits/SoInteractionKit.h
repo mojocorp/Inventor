@@ -80,8 +80,6 @@ class SoPathList;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoInteractKit
-// C-api: public=renderCaching, boundingBoxCaching, renderCulling, pickCulling
 class SoInteractionKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoInteractionKit);
@@ -110,7 +108,6 @@ class SoInteractionKit : public SoBaseKit {
     //       else { // leave it
     //       }
     //
-    // C-api: expose
     virtual SbBool  setPartAsPath( const SbName &partName, 
 				   SoPath *surrogatePath );
 

@@ -60,7 +60,6 @@
 
 #include <Inventor/projectors/SbProjector.h>
 
-// C-api: prefix=SbPlnProj
 class SbPlaneProjector : public SbProjector
 {
   public:
@@ -71,7 +70,6 @@ class SbPlaneProjector : public SbProjector
     SbPlaneProjector(SbBool orient = FALSE);
     
     // Constructor that takes a plane.
-    // C-api: name=createPln
     SbPlaneProjector(const SbPlane &plane,
 		     SbBool orient = FALSE);
 
@@ -89,10 +87,8 @@ class SbPlaneProjector : public SbProjector
     virtual SbVec3f	project(const SbVec2f &point);
 
     // Set/get the plane to use.
-    // C-api: name=setPln
     void		setPlane(const SbPlane &plane);
 
-    // C-api: name=getPln
     const SbPlane &	getPlane() const		  { return plane; }
 
     // Set/get whether the projector should be oriented towards
@@ -106,8 +102,6 @@ class SbPlaneProjector : public SbProjector
     SbBool		isOrientToEye()	const		{ return orientToEye; }
 
     // Get a vector on this plane given two normalized mouse points.
-    // C-api: expose
-    // C-api: name=getVecMouse2
     virtual SbVec3f	getVector(const SbVec2f &mousePosition1,
 				  const SbVec2f &mousePosition2);
 					    
@@ -117,17 +111,13 @@ class SbPlaneProjector : public SbProjector
     // if the working space transform is changing since
     // the new point will be in a different space than
     // the old one.
-    // C-api: expose
-    // C-api: name=getVecMouse1
     virtual SbVec3f	getVector(const SbVec2f &mousePosition);
 					    
     // Set the initialial from a mouse position.
-    // C-api: name=setStartPosMouse
     void		setStartPosition(const SbVec2f &mousePosition)
 					{ lastPoint = project(mousePosition); }
 
     // Set the initialial position from a point on the projector.
-    // C-api: name=setStartPosPt
     void		setStartPosition(const SbVec3f &point)
 					    { lastPoint = point; }
   protected:

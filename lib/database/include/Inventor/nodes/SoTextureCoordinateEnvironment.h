@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTexEnv
 class SoTextureCoordinateEnvironment : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinateEnvironment);

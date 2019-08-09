@@ -72,7 +72,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=parts, bottomRadius, height
 class SoCone : public SoShape {
 
     SO_NODE_HEADER(SoCone);
@@ -145,5 +144,4 @@ class SoCone : public SoShape {
 					      SbVec3f &exitPoint) const;
 };
 
-// C-api: begin
 #endif /* _SO_CONE_ */

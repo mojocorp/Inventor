@@ -74,7 +74,6 @@ _______________________________________________________________________
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtLtSldrs
 class SoXtLightSliderSet : public SoXtSliderSet {
   public:
     SoXtLightSliderSet( 

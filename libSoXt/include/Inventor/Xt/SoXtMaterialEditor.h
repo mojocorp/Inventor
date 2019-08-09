@@ -92,7 +92,6 @@ typedef void SoXtMaterialEditorCB(void *userData, const SoMaterial *mtl);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtMtlEd
 class SoXtMaterialEditor : public SoXtComponent {
   public:
     // UpdateFrequency is how often new values should be sent
@@ -119,11 +118,9 @@ class SoXtMaterialEditor : public SoXtComponent {
     // and setting the material. At the time dictated by setUpdateFrequency
     // the callbacks will be called with the new material.
     //
-    // C-api: name=addMtlChangedCB
     inline void		addMaterialChangedCallback(
 				SoXtMaterialEditorCB *f, 
 				void *userData = NULL);
-    // C-api: name=removeMtlChangedCB
     inline void		removeMaterialChangedCallback(
 				SoXtMaterialEditorCB *f, 
 				void *userData = NULL);
@@ -132,9 +129,7 @@ class SoXtMaterialEditor : public SoXtComponent {
     // Set/get the update frequency of when materialChanged callbacks should 
     // be called. (default CONTINUOUS).
     //
-    // C-api: name=setUpdateFreq
     void	setUpdateFrequency(SoXtMaterialEditor::UpdateFrequency freq);
-    // C-api: name=getUpdateFreq
     SoXtMaterialEditor::UpdateFrequency getUpdateFrequency()
 						    { return updateFreq; }
     
@@ -144,9 +139,7 @@ class SoXtMaterialEditor : public SoXtComponent {
     virtual void    	hide();
     
     // Set new values for the material editor, or get current values
-    // C-api: name=setMtl
     void    	    	setMaterial(const SoMaterial &mtl);
-    // C-api: name=getMtl
     const SoMaterial &	getMaterial() const { return *localMaterial; }
     
   protected:

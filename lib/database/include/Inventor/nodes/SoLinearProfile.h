@@ -72,8 +72,6 @@
 // only one value in the index field).
 #define SO_LINEAR_PROFILE_USE_REST_OF_VERTICES	(-1)
 
-// C-api: prefix=SoLProf
-// C-api: public=index, linkage
 class SoLinearProfile : public SoProfile{
 
     SO_NODE_HEADER(SoLinearProfile);

@@ -63,7 +63,6 @@
 #include <Inventor/events/SoMotion3Event.h>
 #include <Inventor/events/SoSpaceballButtonEvent.h>
 
-// C-api: prefix=SoXtSpball
 class SoXtSpaceball : public SoXtDevice {
   public:
     enum Mask {
@@ -85,7 +84,6 @@ class SoXtSpaceball : public SoXtDevice {
     // to a different display than the one used by SoXt::init().
 
     SoXtSpaceball(SoXtSpaceball::Mask mask = SoXtSpaceball::ALL);
-    // C-api: name=CreateD
     SoXtSpaceball(Display *d, SoXtSpaceball::Mask mask = SoXtSpaceball::ALL);
     ~SoXtSpaceball();
     
@@ -100,26 +98,20 @@ class SoXtSpaceball : public SoXtDevice {
     // this converts an X event into an SoEvent,
     // returning NULL if the event is not from this device.
     //
-    // C-api: name=xlateEv
     virtual const SoEvent * translateEvent(XAnyEvent *xevent);
   
     // the spaceball reports rotations and translations as integers.
     // these values must be scaled to be useful. these methods allow
     // the scale values to be set. 
     // default values are .006 for translation and .006 for scale.
-    // C-api: name=setRotScaleFactor
     void		setRotationScaleFactor(float f)    { rotScale = f; }
-    // C-api: name=getRotScaleFactor
     float		getRotationScaleFactor() const     { return rotScale; }
-    // C-api: name=setXlateScaleFactor
     void		setTranslationScaleFactor(float f) { transScale = f; }
-    // C-api: name=getXlateScaleFactor
     float		getTranslationScaleFactor() const  { return transScale; }
     
     // Return whether or not the spaceball device exists for use.
     // Method with no argument checks on the primary display.
     static SbBool	exists() { return exists(SoXt::getDisplay()); }
-    // C-api: name=existsD
     static SbBool	exists(Display *d);
     
   private:
