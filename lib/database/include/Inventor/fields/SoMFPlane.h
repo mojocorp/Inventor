@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMPln
 class SoMFPlane : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFPlane, SbPlane, SbPlane);

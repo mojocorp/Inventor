@@ -74,8 +74,6 @@ class	SoXtBitmapButton;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoXtFullVwr
 class SoXtFullViewer : public SoXtViewer {
   public:
     // This specifies what should be build by default in the constructor
@@ -89,17 +87,13 @@ class SoXtFullViewer : public SoXtViewer {
     //
     // Show/hide the viewer component trims (default ON)
     //
-    // C-api: name=setDecor
     void    	    setDecoration(SbBool onOrOff);
-    // C-api: name=isDecor
     SbBool  	    isDecoration()	    { return decorationFlag; }
     
     //
     // Enable/disable the popup menu (default enabled)
     //
-    // C-api: name=SetPopupEnabled
     void    	    setPopupMenuEnabled(SbBool trueOrFalse);
-    // C-api: name=IsPopupEnabled
     SbBool  	    isPopupMenuEnabled()    { return popupEnabled; }
     
     //
@@ -108,25 +102,18 @@ class SoXtFullViewer : public SoXtViewer {
     // The add() method appends the button to the end of the list, while 
     // insert() places the button at the specified index (starting at 0).
     //
-    // C-api: name=getAppPushBtnParent
     // returns the parent widget, which is needed when creating new buttons
     // NOTE that this will be NULL if the decoration is NOT created in the
     // constructor (see the BuildFlag) until it is shown.
     Widget	    getAppPushButtonParent() const { return appButtonForm; }
-    // C-api: name=addAppPushBtn
     void	    addAppPushButton(Widget newButton);
-    // C-api: name=insertAppPushBtn
     void	    insertAppPushButton(Widget newButton, int index);
-    // C-api: name=removeAppPushBtn
     void	    removeAppPushButton(Widget oldButton);
-    // C-api: name=findAppPushBtn
     int		    findAppPushButton(Widget oldButton)
 				{ return appButtonList->find(oldButton); }
-    // C-api: name=lengthAppPushBtn
     int		    lengthAppPushButton()
 				{ return appButtonList->getLength(); }
     
-    // C-api: name=getRAWidget
     Widget	    getRenderAreaWidget()   { return raWidget; }
     
     // redefine these from the base class

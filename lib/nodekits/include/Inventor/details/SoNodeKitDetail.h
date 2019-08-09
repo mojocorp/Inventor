@@ -77,7 +77,6 @@ class SoBaseKit;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoNkDtl
 class SoNodeKitDetail : public SoDetail {
     
     SO_DETAIL_HEADER(SoNodeKitDetail);

@@ -60,7 +60,6 @@
 #include <GL/glx.h>
 #include <Inventor/Xt/SoXtComponent.h>
 
-// C-api: end
 /*
  * Defines used when specifying the glModes flag to the constructor.
  * (used instead of the glx.h defines which do overlap)
@@ -70,7 +69,6 @@
 #define SO_GLX_ZBUFFER	(1<<2)
 #define SO_GLX_OVERLAY	(1<<3)
 #define SO_GLX_STEREO	(1<<4)
-// C-api: begin
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -80,7 +78,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
 class SoXtGLWidget : public SoXtComponent {
   public:
     
@@ -93,19 +90,13 @@ class SoXtGLWidget : public SoXtComponent {
     // change dynamically when the visual is changed (like when
     // setDoubleBuffer() is called).
     //
-    // C-api: name=getNormWin
     Window  	getNormalWindow();
-    // C-api: name=getOverWin
     Window   	getOverlayWindow();
     
-    // C-api: name=getNormCtx
     GLXContext	getNormalContext()     	    { return ctxNormal; }
-    // C-api: name=getOverCtx
     GLXContext	getOverlayContext()    	    { return ctxOverlay; }
     
-    // C-api: name=getNormWidget
     Widget	getNormalWidget()     	    { return (glModes & SO_GLX_DOUBLE) ? doubleBufferWidget : singleBufferWidget; }
-    // C-api: name=getOverWidget
     Widget	getOverlayWidget()    	    { return overlayWidget; }
     
     //
@@ -114,25 +105,16 @@ class SoXtGLWidget : public SoXtComponent {
     // by OpenGL. The XVisualInfo structure should be a valid OpenGL visual
     // returned by glXChooseVisual().
     //
-    // C-api: expose
-    // C-api: name=setNormVis
     virtual void    setNormalVisual(XVisualInfo *vis);
-    // C-api: name=getNormVis
     XVisualInfo *   getNormalVisual();
-    // C-api: expose
-    // C-api: name=setOverVis
     virtual void    setOverlayVisual(XVisualInfo *vis);
-    // C-api: name=getOverVis
     XVisualInfo *   getOverlayVisual();
     
     //
     // Routine which allows to dynamically change between single and
     // double buffering.
     //
-    // C-api: expose
-    // C-api: name=setDblBuf
     virtual void    setDoubleBuffer(SbBool onOrOff);
-    // C-api: name=isDblBuf
     SbBool  	    isDoubleBuffer()  	    { return (glModes & SO_GLX_DOUBLE); }
     
     //
@@ -160,9 +142,7 @@ class SoXtGLWidget : public SoXtComponent {
     // NOTE: this api might be removed in some future releases and is only
     // intended as a porting help for Inventor 2.0 to 2.1
     //
-    // C-api: name=setDrwFrontBuf
     void	setDrawToFrontBufferEnable(SbBool enableFlag);
-    // C-api: name=isDrwFrontBuf
     SbBool	isDrawToFrontBufferEnable() const   { return enableDrawToFrontBuffer; }
     
   protected:

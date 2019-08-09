@@ -73,7 +73,6 @@
 #include <Inventor/actions/SoAction.h>
 #include <Inventor/SbString.h>
 
-// C-api: end
 /////////////////////////////////////////////////////////////////////////////
 //
 // Macros to be called within the class definition header for an action
@@ -176,6 +175,5 @@ className::getEnabledElements() const					      \
 
 #define SO_ACTION_ADD_METHOD(nodeClass, method)				      \
     addMethod(nodeClass::getClassTypeId(), method)
-// C-api: begin
 
 #endif /* _SO_SUB_ACTION_ */

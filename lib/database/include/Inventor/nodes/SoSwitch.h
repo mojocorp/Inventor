@@ -76,7 +76,6 @@
 #define SO_SWITCH_INHERIT	(-2)	/* Inherit value from state	*/
 #define SO_SWITCH_ALL		(-3)	/* Traverse all children	*/
 
-// C-api: public=whichChild
 class SoSwitch : public SoGroup {
 
     SO_NODE_HEADER(SoSwitch);
@@ -89,7 +88,6 @@ class SoSwitch : public SoGroup {
     SoSwitch();
 
     // Constructor that takes approximate number of children
-    // C-api: name=CreateN
     SoSwitch(int nChildren);
 
     // Overrides method in SoNode to return FALSE if there is no

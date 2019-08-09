@@ -106,8 +106,6 @@ class SoTimerSensor;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTballDrag
-// C-api: public=rotation,scaleFactor
 class SoTrackballDragger : public SoDragger {
 
     SO_KIT_HEADER(SoTrackballDragger);
@@ -147,9 +145,7 @@ class SoTrackballDragger : public SoDragger {
     SoSFRotation rotation;
     SoSFVec3f scaleFactor;
 
-    // C-api: name=isAnimEnabled
     SbBool isAnimationEnabled() { return animationEnabled; }
-    // C-api: name=setAnimEnabled
     void setAnimationEnabled( SbBool newVal );
 
   SoINTERNAL public:

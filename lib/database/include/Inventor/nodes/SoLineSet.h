@@ -84,8 +84,6 @@ class SoState;
 #endif
 
 
-// C-api: prefix=SoLSet
-// C-api: public=startIndex, numVertices, vertexProperty
 class SoLineSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoLineSet);

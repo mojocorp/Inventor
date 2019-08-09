@@ -76,7 +76,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=vertexOrdering,shapeType,faceType, creaseAngle
 class SoShapeHints : public SoNode {
 
     SO_NODE_HEADER(SoShapeHints);

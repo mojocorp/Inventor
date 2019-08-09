@@ -78,7 +78,6 @@ typedef void _SoXtColorWheelCB(void *userData, const float hsv[3]);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtColWhl
 class _SoXtColorWheel : public SoXtGLWidget {
 
   public:
@@ -95,9 +94,7 @@ class _SoXtColorWheel : public SoXtGLWidget {
     // NOTE: if calling setBaseColor() changes the marker position the
     // valueChanged callbacks will be called with the new hsv color.
     //
-    // C-api: name=setBaseCol
     void    	setBaseColor(const float hsv[3]);
-    // C-api: name=getBaseCol
     const float *getBaseColor()     	{ return hsvColor; }
     
     //
@@ -115,37 +112,31 @@ class _SoXtColorWheel : public SoXtGLWidget {
     // NOTE: the start and finish callbacks are only to signal when the mouse
     // goes down and up. No valid callback data is passed (NULL passed).
     //
-    // C-api: name=addStartCB
     void    addStartCallback(
 		    _SoXtColorWheelCB *f,
 		    void *userData = NULL)
 	    { startCallbacks->addCallback((SoCallbackListCB *) f, userData); }
 
-    // C-api: name=addValueChangedCB
     void    addValueChangedCallback(
 		    _SoXtColorWheelCB *f, 
 		    void *userData = NULL)
 	    { changedCallbacks->addCallback((SoCallbackListCB *) f, userData); }
 	
-    // C-api: name=addFinishCB
     void    addFinishCallback(
 		    _SoXtColorWheelCB *f,
 		    void *userData = NULL)
 	    { finishCallbacks->addCallback((SoCallbackListCB *) f, userData); }
 				       
-    // C-api: name=removeStartCB
     void    removeStartCallback(
 		    _SoXtColorWheelCB *f,
 		    void *userData = NULL)
 	    { startCallbacks->removeCallback((SoCallbackListCB *) f, userData); }
 
-    // C-api: name=removeValueChangedCB
     void    removeValueChangedCallback(
 		    _SoXtColorWheelCB *f,
 		    void *userData = NULL)
 	    { changedCallbacks->removeCallback((SoCallbackListCB *) f, userData); }
 
-    // C-api: name=removeFinishCB
     void    removeFinishCallback(
 		    _SoXtColorWheelCB *f,
 		    void *userData = NULL)

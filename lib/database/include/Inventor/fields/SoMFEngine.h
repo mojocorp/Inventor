@@ -68,7 +68,6 @@ class SoEngine;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMEngine
 class SoMFEngine : public SoMField {
 
     // Use standard field stuff

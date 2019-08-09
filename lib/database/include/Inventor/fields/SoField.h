@@ -78,11 +78,9 @@ class SoOutput;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
 class SoField {
   public:
     // Destructor
-    // C-api: expose
     virtual ~SoField();
 
     // Sets/returns ignored flag
@@ -90,15 +88,12 @@ class SoField {
     SbBool		isIgnored() const	{ return flags.ignored; }
 
     // Returns default flag
-    // C-api: name=isDflt
     SbBool		isDefault() const	{ return flags.hasDefault; }
 
     // Returns type identifier for SoField class
-    // C-api: expose
     static SoType	getClassTypeId()	{ return classTypeId; }
 
     // Returns type identifier for field
-    // C-api: expose
     virtual SoType	getTypeId() const = 0;
 
     // Returns TRUE if field is of given type or is derived from it
@@ -108,47 +103,36 @@ class SoField {
     // enabled. This flag may be set even if no connection is
     // currently established. The flag will remain in effect until
     // changed again.
-    // C-api: name=enableConn
     void		enableConnection(SbBool flag);
-    // C-api: name=isConnEnabled
     SbBool		isConnectionEnabled() const
 	{ return flags.connectionEnabled; }
 
     // Connects the field to the given output of an engine or to
     // another field. Returns FALSE if the connection could not be made.
-    // C-api: name=connFrom
     SbBool		connectFrom(SoEngineOutput *engineOutput);
-    // C-api: name=connFromField
     SbBool		connectFrom(SoField *field);
 
     // Disconnects the field from whatever it's connected to. Harmless
     // if not already connected.
-    // C-api: name=disconn
     void		disconnect();
 
     // Returns TRUE if the field is connected. The last two return
     // TRUE if the field is connected specifically to an engine
     // output or field.
-    // C-api: name=isConn
     SbBool		isConnected() const	{ return flags.connected; }
-    // C-api: name=isConnFromEngine
     SbBool		isConnectedFromEngine() const
 	{ return (flags.connected &&   flags.fromEngine); }
-    // C-api: name=isConnFromField
     SbBool		isConnectedFromField() const
 	{ return (flags.connected && ! flags.fromEngine); }
 
     // Returns the engine output or field the field is connected to.
     // Returns FALSE if there is no connection of the appropriate type.
-    // C-api: name=getConnEngine
     SbBool		getConnectedEngine(SoEngineOutput *&engineOutput) const;
-    // C-api: name=getConnField
     SbBool		getConnectedField(SoField *&field) const;
 
     // Returns the number of fields (in Engines or Nodes) that this
     // field is writing to, and adds pointers to those fields to the
     // given field list.
-    // C-api: name=getForwardConn
     int			getForwardConnections(SoFieldList &list) const;
 
     // Returns the containing node or engine
@@ -157,12 +141,10 @@ class SoField {
     // Sets value of field from the Inventor data file format
     // information in the value string.  Returns TRUE if successful,
     // FALSE otherwise.
-    // C-api: name=setFromStr
     SbBool		set(const char *valueString);
 
     // Stores field value (in the same format expected by the set()
     // method) in the given SbString
-    // C-api: name=getIntoStr
     void		get(SbString &valueString);
 
     // Simulates a change to the field data, causing attached sensors
@@ -360,7 +342,6 @@ friend class SoEngineOutput;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
 class SoSField : public SoField {
   public:
     // Destructor
@@ -396,7 +377,6 @@ class SoSField : public SoField {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
 class SoMField : public SoField {
 
   public:
@@ -413,13 +393,10 @@ class SoMField : public SoField {
 
     // Delete num values, starting at start. A num of -1 (the default)
     // means delete all values after start, inclusive
-    // C-api: expose
-    // C-api: name=del
     virtual void	deleteValues(int start, int num = -1);
 
     // Insert space for num values starting at start.  The initial
     // values in the new space are undefined.
-    // C-api: expose
     virtual void	insertSpace(int start, int num);
 
     // These are equivalent to the SoField::set() and SoField::get()

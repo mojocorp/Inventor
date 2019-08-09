@@ -71,7 +71,6 @@ class SoEvent;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoEvAct
 class SoHandleEventAction : public SoAction {
 
     SO_ACTION_HEADER(SoHandleEventAction);
@@ -84,19 +83,15 @@ class SoHandleEventAction : public SoAction {
     virtual ~SoHandleEventAction();
 
     // Sets current viewport region to use for the event processing
-    // C-api: name=setVPReg
     void		setViewportRegion(const SbViewportRegion &newRegion);
 
 
     // Returns current viewport region
-    // C-api: name=getVPReg
     const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
 
 
     // Sets/returns the event to handle
-    // C-api: name=setEv
     void		setEvent(const SoEvent *ev)	{ event = ev; }
-    // C-api: name=getEv
     const SoEvent *	getEvent() const		{ return event; }
 
     // Sets/returns whether any node has yet handled the event
@@ -125,11 +120,9 @@ class SoHandleEventAction : public SoAction {
     // action if necessary to find this object. The storage for the
     // pickedPoint remains valid as long as the SoHandleEventAction is
     // not re-used or deleted.
-    // C-api: name=getPickPt
     const SoPickedPoint *getPickedPoint();
 
     // Return a list of objects hit, sorted from front to back
-    // C-api: name=getPickPtList
     const SoPickedPointList &getPickedPointList();
 
   SoINTERNAL public:

@@ -74,7 +74,6 @@ class SoXt {
 
     // This alternate form of init allows the app to initialize Xt.
     // This calls SoDB::init(), SoNodeKit::init(), SoInteraction::init
-    // C-api: name=initWithWidget
     static void             init(Widget topLevelWidget);
 
     // This retrieves and dispatches events (loops forever).
@@ -120,9 +119,7 @@ class SoXt {
     // Encoding uses the XmSTRING_DEFAULT_CHARSET.
     // The app is responsible for freeing memory afterwards.
     // (Call XmStringFree() to free an XmString, and free() to free the char*.)
-    // C-api: name=encodeStr
     static XmString	    encodeString(char *s);
-    // C-api: name=decodeStr
     static char *	    decodeString(XmString xs);
     
     // Convenience routine which sets/gets the size of the given widget
@@ -141,7 +138,6 @@ class SoXt {
     // button, which distroys the dialog, is the only button displayed.
     // The argument widget is used to create the error dialog (using 
     // XmCreateErrorDialog()) which will be centered around
-    // C-api: name=createSimpleErrDlog
     static void		    createSimpleErrorDialog(
 				    Widget widget, char *dialogTitle, 
 				    char *errorStr1, char *errorStr2 = NULL);
@@ -163,7 +159,6 @@ class SoXt {
     // the pulldown/popup look right) and remove it when no longer needed 
     // (to make sure the OpenGL overlay widget color map is correctly loaded
     // for 8 bit machines).
-    // C-api: name=regColMapLoad
     static void		    registerColormapLoad(Widget widget, Widget shell);
     
     // Convenience routine to insert/remove the given widget colormap onto the
@@ -172,7 +167,6 @@ class SoXt {
     // colormap first into the existing list using XGetWMColormapWindows() and 
     // XSetWMColormapWindows().
     static void		    addColormapToShell(Widget widget, Widget shell);
-    // C-api: name=remColMapFromShell
     static void		    removeColormapFromShell(Widget widget, Widget shell);
 
 SoINTERNAL public:

@@ -66,9 +66,6 @@
 
 class SoCalcParser;
 
-// C-api: public=a,b,c,d,e,f,g,h,A,B,C,D,E,F,G,H,expression
-// C-api: public=oa,ob,oc,od,oA,oB,oC,oD
-// C-api: prefix=SoCalc
 class SoCalculator : public SoEngine {
 
     SO_ENGINE_HEADER(SoCalculator);

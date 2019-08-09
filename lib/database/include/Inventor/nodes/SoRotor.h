@@ -68,7 +68,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=rotation,speed,on
 class SoRotor : public SoRotation {
 
     SO_NODE_HEADER(SoRotor);

@@ -70,8 +70,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoColInd
-// C-api: public= index
 class SoColorIndex : public SoNode {
 
     SO_NODE_HEADER(SoColorIndex);

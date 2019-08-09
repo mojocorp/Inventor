@@ -91,8 +91,6 @@ class SbDict;
 class SbSphereProjector;
 class SoFieldSensor;
 
-// C-api: prefix=SoRotSphDrag
-// C-api: public=rotation
 class SoRotateSphericalDragger : public SoDragger
 {
     SO_KIT_HEADER(SoRotateSphericalDragger);
@@ -117,9 +115,7 @@ class SoRotateSphericalDragger : public SoDragger
     // is deleted.
     // Note that the center and radius of the sphere used by the
     // projector are determined by the dragger during dragStart.
-    // C-api: name=setProj
     void			setProjector(SbSphereProjector *p);
-    // C-api: name=getProj
     const SbSphereProjector *	getProjector() const	 { return sphereProj; }
 
   SoINTERNAL public:

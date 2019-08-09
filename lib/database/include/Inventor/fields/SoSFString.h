@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSStr
 class SoSFString : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFString, SbString, const SbString &);
@@ -75,7 +74,6 @@ class SoSFString : public SoSField {
     //
 
     // Set value from character string
-    // C-api: name=SetStr
     void	setValue(const char *string);
 
   SoINTERNAL public:

@@ -67,7 +67,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=scaleFactor
 class SoScale : public SoTransformation {
 
     SO_NODE_HEADER(SoScale);

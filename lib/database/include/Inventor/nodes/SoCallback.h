@@ -77,7 +77,6 @@
 // Callback functions registered with this node should be of this type.
 typedef void SoCallbackCB(void *userData, SoAction *action);
 
-// C-api: prefix=SoCB
 class SoCallback : public SoNode {
 
     SO_NODE_HEADER(SoCallback);
@@ -87,7 +86,6 @@ class SoCallback : public SoNode {
     SoCallback();
 
     // Sets pointer to callback function and user data
-    // C-api: name=setCB
     void	setCallback(SoCallbackCB *func, void *userData = NULL)
 	{ callbackFunc = func; callbackData = userData; }
 

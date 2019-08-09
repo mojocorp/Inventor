@@ -73,20 +73,15 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoDtl
 class SoDetail {
   public:
     // Destructor
-    // C-api: expose
     virtual ~SoDetail();
 
     // Returns type identifier for SoDetail class
-    // C-api: expose
     static SoType	getClassTypeId() { return classTypeId; }
 
     // Returns type identifier for detail
-    // C-api: expose
     virtual SoType	getTypeId() const = 0;
 
     // Returns TRUE if detail is of given type or is derived from it

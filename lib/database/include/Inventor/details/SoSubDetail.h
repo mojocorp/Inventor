@@ -70,7 +70,6 @@
 
 #include <Inventor/details/SoDetail.h>
 
-// C-api: end
 /////////////////////////////////////////////////////////////////////////////
 //
 // Macros to be called within the class definition header for a detail
@@ -135,6 +134,5 @@ className::getTypeId() const						      \
     classTypeId = SoType::createType(parentClass::getClassTypeId(),	      \
 				     SO__QUOTE(className), NULL)
 
-// C-api: begin
 
 #endif /* _SO_SUB_DETAIL_ */

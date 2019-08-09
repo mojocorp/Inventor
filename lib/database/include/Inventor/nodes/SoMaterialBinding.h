@@ -69,8 +69,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMtlBind
-// C-api: public=value
 class SoMaterialBinding : public SoNode {
 
     SO_NODE_HEADER(SoMaterialBinding);
@@ -92,15 +90,11 @@ class SoMaterialBinding : public SoNode {
 	// One material for each vertex, indexed
 	PER_VERTEX_INDEXED= SoMaterialBindingElement::PER_VERTEX_INDEXED,
 
-// C-api: end
 #ifndef IV_STRICT
-// C-api: begin
 	// Obsolete bindings:
 	DEFAULT		  = OVERALL,
 	NONE		  = OVERALL
-// C-api: end
 #endif
-// C-api: begin
     };
 
     // Fields

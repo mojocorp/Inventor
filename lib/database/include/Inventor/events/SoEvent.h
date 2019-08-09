@@ -62,17 +62,14 @@
 #include <Inventor/SbTime.h>
 #include <Inventor/SoType.h>
 
-// C-api: prefix=SoEv
 class SoEvent {
   public:
   
     // Constructor and destructor
     SoEvent();
-    // C-api: expose
     virtual ~SoEvent();
     
     // returns typeId of this event
-    // C-api: expose
     virtual SoType	getTypeId() const;
     
     // typeId of the class
@@ -87,18 +84,14 @@ class SoEvent {
     
     // set/get window pixel position of the locator when the event occurred.
     // position is relative to the lower left corner of the viewport
-    // C-api: name=setPos
     void		setPosition(const SbVec2s &p)	{ position = p; }
-    // C-api: name=getPos
     const SbVec2s &	getPosition() const		{ return position; }
 
     // get position reletive to the specified viewport bounds
-    // C-api: name=getPosInVP
     const SbVec2s &	getPosition(const SbViewportRegion &vpRgn) const;
 
     // get position reletive to the specified viewport bounds
     // and normalize this value between 0.0 and 1.0
-    // C-api: name=getNormPos
     const SbVec2f & getNormalizedPosition(const SbViewportRegion &vpRgn) const;
 
     // set the state of the modifier keys when the event occurred

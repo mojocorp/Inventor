@@ -80,10 +80,8 @@
 // 
 // -----------------------------------
 
-// C-api: end
 typedef float SbMat[4][4];
 
-// C-api: begin
 
 class SbVec3f;
 class SbVec2f;
@@ -113,12 +111,7 @@ class SbBox3f;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbV3f
-// C-api.h: struct SbVec3f {
-// C-api.h: 	float vec[3];
-// C-api.h: };
 
-// C-api: end
 
 class SbVec3f {
   public:
@@ -136,57 +129,34 @@ class SbVec3f {
     // Constructor given 3 planes
     SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2);
 
-// C-api: begin
     // Returns right-handed cross product of vector and another vector
     SbVec3f	cross(const SbVec3f &v) const;
-// C-api: end
 
     // Returns dot (inner) product of vector and another vector
     float	dot(const SbVec3f &v) const;
-// C-api.h: #define SbV3fDot(_v0, _v1)
-// C-api.h:     ((_v0).vec[0] * (_v1).vec[0] + (_v0).vec[1] * (_v1).vec[1] +
-// C-api.h:      (_v0).vec[2] * (_v1).vec[2])
 
     // Returns pointer to array of 3 components
     const float	*getValue() const			{ return vec; }
-// C-api.h: #define SbV3fGetXYZ(_xyz, _src)
-// C-api.h:     (((_xyz)[0] = (_src).vec[0]), ((_xyz)[1] = (_src).vec[1]),
-// C-api.h:	 ((_xyz)[2] = (_src).vec[2]))
 
     // Returns 3 individual components
     void	getValue(float &x, float &y, float &z) const;
-// C-api.h: #define SbV3fGetX_Y_Z(_x, _y, _z, _src)
-// C-api.h:     (((_x) = (_src).vec[0]), ((_y) = (_src).vec[1]), ((_z) = (_src).vec[2]))
 
     // Returns geometric length of vector
     float	length() const;
-// C-api.h: #define SbV3fLen(_v)
-// C-api.h:     (sqrtf(SbV3fDot((_v), (_v))))
 
-// C-api: begin
     // Changes vector to be unit length
-    // C-api: name=norm
     float	normalize();
-// C-api: end
 
     // Negates each component of vector in place
     void	negate();
-// C-api.h: #define SbV3fNegate(_v)
-// C-api.h: 	SbV3fMultBy(_v, -1.0)
 
     // Sets value of vector from array of 3 components
     SbVec3f &	setValue(const float v[3])
 	 { vec[0] = v[0]; vec[1] = v[1]; vec[2] = v[2]; return *this; }
-// C-api.h: #define SbV3fSetXYZ(_dest, _src)
-// C-api.h:     (((_dest).vec[0] = (_src)[0]), ((_dest).vec[1] = (_src)[1]),
-// C-api.h:      ((_dest).vec[2] = (_src)[2]))
 
     // Sets value of vector from 3 individual components
     SbVec3f &	setValue(float x, float y, float z)
 	 { vec[0] = x; vec[1] = y; vec[2] = z; return *this; }
-// C-api.h: #define SbV3fSetX_Y_Z(_dest, _x, _y, _z)
-// C-api.h:     (((_dest).vec[0] = (_x)), ((_dest).vec[1] = (_y)),
-// C-api.h:      ((_dest).vec[2] = (_z)))
 
     // Sets value of vector to be convex combination of 3 other
     // vectors, using barycentic coordinates
@@ -199,13 +169,9 @@ class SbVec3f {
 
     // Component-wise scalar multiplication and division operators
     SbVec3f &	operator *=(float d);
-// C-api.h: #define SbV3fMultBy(_v, _s)
-// C-api.h:     (((_v).vec[0] *= (_s)), ((_v).vec[1] *= (_s)), ((_v).vec[2] *= (_s)))
 
     SbVec3f &	operator /=(float d)
 	{ return *this *= (1.0 / d); }
-// C-api.h: #define SbV3fDivBy(_v, _s)
-// C-api.h:     (((_v).vec[0] /= (_s)), ((_v).vec[1] /= (_s)), ((_v).vec[2] /= (_s)))
 
     // Component-wise vector addition and subtraction operators
     SbVec3f &	operator +=(SbVec3f v);
@@ -223,18 +189,9 @@ class SbVec3f {
 
     // Component-wise binary vector addition and subtraction operators
     friend SbVec3f	operator +(const SbVec3f &v1, const SbVec3f &v2);
-// C-api.h: #define SbV3fAdd(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]),
-// C-api.h:      ((_dest).vec[2] = (_src1).vec[2] + (_src2).vec[2]))
 
     friend SbVec3f	operator -(const SbVec3f &v1, const SbVec3f &v2);
-// C-api.h: #define SbV3fSub(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]),
-// C-api.h:      ((_dest).vec[2] = (_src1).vec[2] - (_src2).vec[2]))
 
-// C-api: begin
     // Equality comparison operator
     friend int		operator ==(const SbVec3f &v1, const SbVec3f &v2);
     friend int		operator !=(const SbVec3f &v1, const SbVec3f &v2)
@@ -261,12 +218,7 @@ class SbVec3f {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbV2f
-// C-api.h: struct SbVec2f {
-// C-api.h: 	float vec[2];
-// C-api.h: };
 
-// C-api: end
 
 class SbVec2f {
   public:
@@ -282,44 +234,27 @@ class SbVec2f {
 
     // Returns dot (inner) product of vector and another vector
     float	dot(const SbVec2f &v) const;
-// C-api.h: #define SbV2fDot(_v0, _v1)
-// C-api.h:     ((_v0).vec[0] * (_v1).vec[0] + (_v0).vec[1] * (_v1).vec[1])
 
     // Returns pointer to array of 2 components
     const float	*getValue() const			{ return vec; }
-// C-api.h: #define SbV2fGetXY(_xy, _src)
-// C-api.h:     (((_xy)[0] = (_src).vec[0]), ((_xy)[1] = (_src).vec[1]))
 
     // Returns 2 individual components
     void	getValue(float &x, float &y) const;
-// C-api.h: #define SbV2fGetX_Y(_x, _y, _src)
-// C-api.h:     (((_x) = (_src).vec[0]), ((_y) = (_src).vec[1]))
 
     // Returns geometric length of vector
     float	length() const;
-// C-api.h: #define SbV2fLen(_v)
-// C-api.h:     (sqrtf(SbV2fDot((_v), (_v))))
 
     // Negates each component of vector in place
     void	negate();
-// C-api.h: #define SbV2fNegate(_v)
-// C-api.h: 	SbV2fMultBy(_v, -1.0)
 
-// C-api: begin
     // Changes vector to be unit length
-    // C-api: name=norm
     float	normalize();
-// C-api: end
 
     // Sets value of vector from array of 2 components
     SbVec2f &	setValue(const float v[2]);
-// C-api.h: #define SbV2fSetXY(_dest, _src)
-// C-api.h:     (((_dest).vec[0] = (_src)[0]), ((_dest).vec[1] = (_src)[1]))
 
     // Sets value of vector from 2 individual components
     SbVec2f &	setValue(float x, float y);
-// C-api.h: #define SbV2fSetX_Y(_dest, _x, _y)
-// C-api.h:     (((_dest).vec[0] = (_x)), ((_dest).vec[1] = (_y)))
 
     // Accesses indexed component of vector
     float &	  operator [](int i) 		{ return (vec[i]); }
@@ -327,13 +262,9 @@ class SbVec2f {
 
     // Component-wise scalar multiplication and division operators
     SbVec2f &	operator *=(float d);
-// C-api.h: #define SbV2fMultBy(_v, _s)
-// C-api.h:     (((_v).vec[0] *= (_s)), ((_v).vec[1] *= (_s)))
 
     SbVec2f &	operator /=(float d)
 	{ return *this *= (1.0 / d); }
-// C-api.h: #define SbV2fDivBy(_v, _s)
-// C-api.h:     (((_v).vec[0] /= (_s)), ((_v).vec[1] /= (_s)))
 
     // Component-wise vector addition and subtraction operators
     SbVec2f &	operator +=(const SbVec2f &u);
@@ -351,16 +282,9 @@ class SbVec2f {
 
     // Component-wise binary vector addition and subtraction operators
     friend SbVec2f	operator +(const SbVec2f &v1, const SbVec2f &v2);
-// C-api.h: #define SbV2fAdd(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]))
 
     friend SbVec2f	operator -(const SbVec2f &v1, const SbVec2f &v2);
-// C-api.h: #define SbV2fSub(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]))
 
-// C-api: begin
     // Equality comparison operator
     friend int		operator ==(const SbVec2f &v1, const SbVec2f &v2);
     friend int		operator !=(const SbVec2f &v1, const SbVec2f &v2)
@@ -383,12 +307,7 @@ class SbVec2f {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbV2s
-// C-api.h: struct SbVec2s {
-// C-api.h: 	short vec[2];
-// C-api.h: };
 
-// C-api: end
 
 class SbVec2s {
   public:
@@ -404,33 +323,21 @@ class SbVec2s {
 
     // Returns dot (inner) product of vector and another vector
     int32_t	dot(const SbVec2s &v) const;
-// C-api.h: #define SbV2sDot(_v0, _v1)
-// C-api.h:     ((_v0).vec[0] * (_v1).vec[0] + (_v0).vec[1] * (_v1).vec[1])
 
     // Returns pointer to array of 2 components
     const short	*getValue() const			{ return vec; }
-// C-api.h: #define SbV2sGetXY(_dest, _src)
-// C-api.h:     (((_dest)[0] = (_src).vec[0]), ((_dest)[1] = (_src).vec[1]))
 
     // Returns 2 individual components
     void	getValue(short &x, short &y) const;
-// C-api.h: #define SbV2sGetX_Y(_x, _y, _src)
-// C-api.h:     (((_x) = (_src).vec[0]), ((_y) = (_src).vec[1]))
 
     // Negates each component of vector in place
     void	negate();
-// C-api.h: #define SbV2sNegate(_v)
-// C-api.h: 	SbV2sMultBy(_v, -1.0)
 
     // Sets value of vector from array of 2 components
     SbVec2s &	setValue(const short v[2]);
-// C-api.h: #define SbV2sSetXY(_dest, _src)
-// C-api.h:     (((_dest).vec[0] = (_src)[0]), ((_dest)[1] = (_src)[1]))
 
     // Sets value of vector from 2 individual components
     SbVec2s &	setValue(short x, short y);
-// C-api.h: #define SbV2sSetX_Y(_dest, _x, _y)
-// C-api.h:     (((_dest).vec[0] = (_x)), ((_dest).vec[1] = (_y)))
 
     // Accesses indexed component of vector
     short &	  operator [](int i) 		{ return (vec[i]); }
@@ -439,14 +346,10 @@ class SbVec2s {
     // Component-wise scalar multiplication and division operators
     SbVec2s &	operator *=(int d);
     SbVec2s &	operator *=(double d);
-// C-api.h: #define SbV2sMultBy(_v, _s)
-// C-api.h:     (((_v).vec[0] *= (_s)), ((_v).vec[1] *= (_s)))
 
     SbVec2s &	operator /=(int d);
     SbVec2s &	operator /=(double d)
 	{ return *this *= (1.0 / d); }
-// C-api.h: #define SbV2sDivBy(_v, _s)
-// C-api.h:     (((_v).vec[0] /= (_s)), ((_v).vec[1] /= (_s)))
 
     // Component-wise vector addition and subtraction operators
     SbVec2s &	operator +=(const SbVec2s &u);
@@ -468,16 +371,9 @@ class SbVec2s {
 
     // Component-wise binary vector addition and subtraction operators
     friend SbVec2s	operator +(const SbVec2s &v1, const SbVec2s &v2);
-// C-api.h: #define SbV2sAdd(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]))
 
     friend SbVec2s	operator -(const SbVec2s &v1, const SbVec2s &v2);
-// C-api.h: #define SbV2sSub(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]))
 
-// C-api: begin
     // Equality comparison operator
     friend int		operator ==(const SbVec2s &v1, const SbVec2s &v2);
     friend int		operator !=(const SbVec2s &v1, const SbVec2s &v2)
@@ -496,12 +392,7 @@ class SbVec2s {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbV4f
-// C-api.h: struct SbVec4f {
-// C-api.h: 	float vec[4];
-// C-api.h: };
 
-// C-api: end
 
 class SbVec4f {
   public:
@@ -517,54 +408,30 @@ class SbVec4f {
 
     // Returns dot (inner) product of vector and another vector
     float	dot(const SbVec4f &v) const;
-// C-api.h: #define SbV4fDot(_v0, _v1)
-// C-api.h:     ((_v0).vec[0] * (_v1).vec[0] + (_v0).vec[1] * (_v1).vec[1] +
-// C-api.h:      (_v0).vec[2] * (_v1).vec[2] + (_v0).vec[3] * (_v1).vec[3])
 
-// C-api: begin
     // Returns the real portion of the vector by dividing by the fourth value
     void	getReal(SbVec3f &v) const;
-// C-api: end
 
     // Returns pointer to array of 4 components
     const float	*getValue() const			{ return vec; }
-// C-api.h: #define SbV4fGetXYZW(_dest, _src)
-// C-api.h:     (((_dest)[0] = (_src).vec[0]), ((_dest)[1] = (_src).vec[1]),
-// C-api.h:      ((_dest)[2] = (_src).vec[2]), ((_dest)[3] = (_src).vec[3]))
 
     // Returns 4 individual components
     void	getValue(float &x, float &y, float &z, float &w) const;
-// C-api.h: #define SbV4fGetX_Y_Z_W(_x, _y, _z, _w, _src)
-// C-api.h:     (((_x) = (_src).vec[0]), ((_y) = (_src).vec[1]),
-// C-api.h:      ((_z) = (_src).vec[2]), ((_w) = (_src).vec[3]))
 
     // Returns geometric length of vector
     float	length() const;
-// C-api.h: #define SbV4fLen(_v)
-// C-api.h:     (sqrtf(SbV4fDot((_v), (_v))))
 
     // Negates each component of vector in place
     void	negate();
-// C-api.h: #define SbV4fNegate(_v)
-// C-api.h: 	SbV4fMultBy(_v, -1.0)
 
-// C-api: begin
     // Changes vector to be unit length
-    // C-api: name=norm
     float	normalize();
-// C-api: end
 
     // Sets value of vector from array of 4 components
     SbVec4f &	setValue(const float v[4]);
-// C-api.h: #define SbV4fSetXYZW(_dest, _src)
-// C-api.h:     (((_dest).vec[0] = (_src)[0]), ((_dest).vec[1] = (_src)[1]),
-// C-api.h:      ((_dest).vec[2] = (_src)[2]), ((_dest).vec[3] = (_src)[3]))
 
     // Sets value of vector from 4 individual components
     SbVec4f &	setValue(float x, float y, float z, float w);
-// C-api.h: #define SbV4fSetX_Y_Z_W(_dest, _x, _y, _z, _w)
-// C-api.h:     (((_dest).vec[0] = (_x)), ((_dest).vec[1] = (_y)),
-// C-api.h:      ((_dest).vec[2] = (_z)), ((_dest).vec[3] = (_w)))
 
     // Accesses indexed component of vector
     float &	  operator [](int i) 		{ return (vec[i]); }
@@ -572,15 +439,9 @@ class SbVec4f {
 
     // Component-wise scalar multiplication and division operators
     SbVec4f &	operator *=(float d);
-// C-api.h: #define SbV4fMultBy(_v, _s)
-// C-api.h:     (((_v).vec[0] *= (_s)), ((_v).vec[1] *= (_s)),
-// C-api.h:      ((_v).vec[2] *= (_s)), ((_v).vec[3] *= (_s)))
 
     SbVec4f &	operator /=(float d)
 	{ return *this *= (1.0 / d); }
-// C-api.h: #define SbV4fDivBy(_v, _s)
-// C-api.h:     (((_v).vec[0] /= (_s)), ((_v).vec[1] /= (_s)),
-// C-api.h:      ((_v).vec[2] /= (_s)), ((_v).vec[3] /= (_s)))
 
     // Component-wise vector addition and subtraction operators
     SbVec4f &	operator +=(const SbVec4f &u);
@@ -598,20 +459,9 @@ class SbVec4f {
 
     // Component-wise binary vector addition and subtraction operators
     friend SbVec4f	operator +(const SbVec4f &v1, const SbVec4f &v2);
-// C-api.h: #define SbV4fAdd(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] + (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] + (_src2).vec[1]),
-// C-api.h:      ((_dest).vec[2] = (_src1).vec[2] + (_src2).vec[2]))
-// C-api.h:      ((_dest).vec[3] = (_src1).vec[3] + (_src2).vec[3]))
 
     friend SbVec4f	operator -(const SbVec4f &v1, const SbVec4f &v2);
-// C-api.h: #define SbV4fSub(_dest, _src1, _src2)
-// C-api.h:     (((_dest).vec[0] = (_src1).vec[0] - (_src2).vec[0]),
-// C-api.h:      ((_dest).vec[1] = (_src1).vec[1] - (_src2).vec[1]),
-// C-api.h:      ((_dest).vec[2] = (_src1).vec[2] - (_src2).vec[2]))
-// C-api.h:      ((_dest).vec[3] = (_src1).vec[3] - (_src2).vec[3]))
 
-// C-api: begin
     // Equality comparison operator
     friend int		operator ==(const SbVec4f &v1, const SbVec4f &v2);
     friend int		operator !=(const SbVec4f &v1, const SbVec4f &v2)
@@ -634,12 +484,7 @@ class SbVec4f {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbRot
-// C-api.h: struct SbRotation {
-// C-api.h: 	float quat[4];
-// C-api.h: };
 
-// C-api: end
 
 class SbRotation {
   public:
@@ -671,24 +516,15 @@ class SbRotation {
     // Returns pointer to array of 4 components defining quaternion
     const float	*	getValue() const
 	{ return (quat); }
-// C-api.h: #define SbRotGetQuat(_dest, _src)
-// C-api.h:     (((_dest)[0] = (_src).quat[0]), ((_dest)[1] = (_src).quat[1]),
-// C-api.h:      ((_dest)[2] = (_src).quat[2]), ((_dest)[3] = (_src).quat[3]))
 
     // Returns 4 individual components of rotation quaternion 
     void		getValue(float &q0, float &q1,
 				 float &q2, float &q3) const;
-// C-api.h: #define SbRotGetQ_U_A_T(_x, _y, _z, _w, _src)
-// C-api.h:     (((_x) = (_src).quat[0]), ((_y) = (_src).quat[1]),
-// C-api.h:      ((_z) = (_src).quat[2]), ((_w) = (_src).quat[3]))
 
-// C-api: begin
     // Returns corresponding 3D rotation axis vector and angle in radians
-    // C-api: name=getAxisAngle
     void		getValue(SbVec3f &axis, float &radians) const;
 
     // Returns corresponding 4x4 rotation matrix
-    // C-api: name=getMx
     void		getValue(SbMatrix &matrix) const;
 
     // Changes a rotation to be its inverse
@@ -697,41 +533,28 @@ class SbRotation {
     // Returns the inverse of a rotation
     SbRotation		inverse() const
 	{ SbRotation q = *this; return q.invert(); }
-// C-api: end
 
     // Sets value of rotation from array of 4 components of a quaternion
     SbRotation &	setValue(const float q[4]);
-// C-api.h: #define SbRotSetQuat(_dest, _src)
-// C-api.h:     (((_dest).quat[0] = (_src)[0]), ((_dest).quat[1] = (_src)[1]),
-// C-api.h:      ((_dest).quat[2] = (_src)[2]), ((_dest).quat[3] = (_src)[3]))
 
     // Sets value of rotation from 4 individual components of a quaternion 
     SbRotation &	setValue(float q0, float q1, float q2, float q3);
-// C-api.h: #define SbRotSetQ_U_A_T(_dest, _x, _y, _z, _w)
-// C-api.h:     (((_dest).quat[0] = (_x)), ((_dest).quat[1] = (_y)),
-// C-api.h:      ((_dest).quat[2] = (_z)), ((_dest).quat[3] = (_w)))
 
-// C-api: begin
     // Sets value of rotation from a rotation matrix
     // I don't know what will happen if you call this with something
     // that isn't a rotation.
-    // C-api: name=setMx
     SbRotation &	setValue(const SbMatrix &m);
 
     // Sets value of vector from 3D rotation axis vector and angle in radians
-    // C-api: name=setAxisAngle
     SbRotation &	setValue(const SbVec3f &axis, float radians);
 
     // Sets rotation to rotate one direction vector to another
-    // C-api: name=setFromTo
     SbRotation &	setValue(const SbVec3f &rotateFrom,
 				 const SbVec3f &rotateTo);
-// C-api: end
 
     // Multiplies by another rotation; results in product of rotations
     SbRotation &	 operator *=(const SbRotation &q);
 
-// C-api: begin
     // Equality comparison operator
     friend int	operator ==(const SbRotation &q1, const SbRotation &q2);
     friend int	operator !=(const SbRotation &q1, const SbRotation &q2)
@@ -758,7 +581,6 @@ class SbRotation {
 			      const SbRotation &rot1, float t);
 
     // Null rotation
-    // C-api: name=ident
     static SbRotation	identity()
 	{ return SbRotation(0.0, 0.0, 0.0, 1.0); }
 
@@ -780,12 +602,7 @@ class SbRotation {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbMx
-// C-api.h: struct SbMatrix {
-// C-api.h: 	float mx[4][4];
-// C-api.h: };
 
-// C-api: end
 
 class SbMatrix {
   public:
@@ -807,42 +624,34 @@ class SbMatrix {
 
     public:
 
-// C-api: begin
     // Sets matrix to be identity
-    // C-api: name=makeIdent
     void	makeIdentity();
 
     // Returns an identity matrix 
-    // C-api: name=ident
     static SbMatrix	identity();
 
     // Sets matrix to rotate by given rotation
-    // C-api: name=setRot
     void	setRotate(const SbRotation &q);
 
     // Sets matrix to scale by given uniform factor
     void	setScale(float s);
 
     // Sets matrix to scale by given vector
-    // C-api: name=scaleVec
     void	setScale(const SbVec3f &s);
 
     // Sets matrix to translate by given vector
-    // C-api: name=setXlate
     void	setTranslate(const SbVec3f &t);
 
     // Composes the matrix based on a translation, rotation, scale,
     // orientation for scale, and center.  The "center" is the
     // center point for scaling and rotation.  The "scaleOrientation"
     // chooses the primary axes for the scale.
-    // C-api: name=setXform
     void	setTransform(
 			const SbVec3f &translation,
 			const SbRotation &rotation,
 			const SbVec3f &scaleFactor,
 			const SbRotation &scaleOrientation,
 			const SbVec3f &center);
-// C-api: end
     // Overloaded methods as a kludge because the compiler won't let
     // us have SbVec3f(0,0,0) as a default value:
     void	setTransform(const SbVec3f &t, const SbRotation &r,
@@ -853,7 +662,6 @@ class SbMatrix {
 			     const SbVec3f &s, const SbRotation &so)
     		{ setTransform(t, r, s, so, SbVec3f(0,0,0)); }
 
-// C-api: begin
     // Decomposes the matrix into a translation, rotation, scale,
     // and scale orientation.  Any projection information is discarded.
     // The decomposition depends upon choice of center point for
@@ -861,13 +669,11 @@ class SbMatrix {
     // Note that if the center is 0, decompose() is the same as
     // factor() where "t" is translation, "u" is rotation, "s" is scaleFactor,
     // and "r" is ScaleOrientattion.
-    // C-api: name=getXform
     void	getTransform(SbVec3f &translation,
 			  SbRotation &rotation,
 			  SbVec3f &scaleFactor,
 			  SbRotation &scaleOrientation,
 			  const SbVec3f &center) const;
-// C-api: end
     void	getTransform(SbVec3f &t, SbRotation &r,
 			  SbVec3f &s, SbRotation &so) const
 		{ getTransform(t, r, s, so, SbVec3f(0,0,0)); }
@@ -879,10 +685,8 @@ class SbMatrix {
     void	getValue(SbMat &m) const;
     const SbMat &	getValue() const { return matrix; }
 
-// C-api: begin
     // Returns determinant of 3x3 submatrix composed of given row and
     // column indices (0-3 for each).
-    // C-api: name=det3Mx
     float	det3(int r1, int r2, int r3, int c1, int c2, int c3) const;
 
     // Returns determinant of upper-left 3x3 submatrix
@@ -904,12 +708,10 @@ class SbMatrix {
 
     // Perform in-place LU decomposition of matrix.  indx is index of rows
     // in matrix. d is the parity of row swaps.  Returns FALSE if singular
-    // C-api: name=LUDecomp
     SbBool	LUDecomposition(int index[4], float &d);
 
     // Perform back-substitution on LU-decomposed matrix. Index is
     // permutation of rows from original matrix
-    // C-api: name=LUBackSub
     void	LUBackSubstitution(int index[4], float b[4]) const;
 
     // Returns transpose of matrix
@@ -923,22 +725,18 @@ class SbMatrix {
     SbMatrix &	multLeft(const SbMatrix &m);	// this = m * this
 
     // Multiplies matrix by given column vector, giving vector result
-    // C-api: name=multMxVec
     void	multMatrixVec(const SbVec3f &src, SbVec3f &dst) const;
 
     // Multiplies given row vector by matrix, giving vector result
-    // C-api: name=multVecMx
     void	multVecMatrix(const SbVec3f &src, SbVec3f &dst) const;
 
     // Multiplies given row vector by matrix, giving vector result
     // src is assumed to be a direction vector, so translation part of
     // matrix is ignored.
-    // C-api: name=multDirMx
     void	multDirMatrix(const SbVec3f &src, SbVec3f &dst) const;
 
     // Multiplies the given line's origin by the matrix, and the
     // line's direction by the rotation portion of the matrix
-    // C-api: name=multLineMx
     void	multLineMatrix(const SbLine &src, SbLine &dst) const;
 
 
@@ -946,7 +744,6 @@ class SbMatrix {
 
     // Prints a formatted version of the matrix to the given file pointer
     void	print(FILE *fp) const;
-// C-api: end
 
 
     // Cast: returns pointer to storage of first element
@@ -962,9 +759,7 @@ class SbMatrix {
     // Sets value from 4x4 array of elements
     SbMatrix &	operator =(const SbMat &m);
 
-// C-api: begin
     SbMatrix &	operator =(const SbMatrix &m);
-// C-api: end
     // This silly little inline method is needed because some
     // compilers won't use the above method...
 #ifdef __sgi
@@ -974,7 +769,6 @@ class SbMatrix {
     // Sets value from a rotation
     SbMatrix &	operator =(const SbRotation &q)	{ setRotate(q); return *this; }
 
-// C-api: begin
     // Performs right multiplication with another matrix
     SbMatrix &	operator *=(const SbMatrix &m)	{ return multRight(m); }
 
@@ -1008,7 +802,6 @@ class SbMatrix {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbViewVol
 
 class SbViewVolume {
   public:
@@ -1021,26 +814,21 @@ class SbViewVolume {
     // first is a viewing matrix, which is guaranteed to be an affine
     // transformation.  The second is suitable for use as a projection
     // matrix in GL.
-    // C-api: name=getMxs
     void		getMatrices(SbMatrix &affine, SbMatrix &proj) const;
 
     // Like the method above, but returns the affine and projection parts
     // together in one matrix (i.e. affine.multRight( proj ) ).
-    // C-api: name=getMx
     SbMatrix		getMatrix() const;
 
     // Returns a matrix that transforms the view volume into camera
     // space: it translates the view volume so the view point is at
     // the origin, and rotates it so the view direction is along the
     // negative z axis.
-    // C-api: name=getBoxMx
     SbMatrix		getCameraSpaceMatrix() const;
 
     // Maps a 2d point (in 0 <= x,y <= 1) to a 3d line.
-    // C-api: name=projPtToLine
     void		projectPointToLine(const SbVec2f &pt,
 					SbLine &line) const;
-    // C-api: name=projPtToLinePts				
     void		projectPointToLine(const SbVec2f &pt,
 				       SbVec3f &line0, SbVec3f &line1) const;
 
@@ -1049,24 +837,20 @@ class SbViewVolume {
     // The z-screen coordinate represents the homogonized z coordinate
     // which goes (non-linearly) from 0 at the near clipping plane to
     // 1 at the far clipping plane.
-    // C-api: name=projToScreen
     void		projectToScreen(const SbVec3f &src,
 					SbVec3f &dst) const;
 
     // Returns a plane parallel to the near (or far) plane of the view
     // volume at a given distance from the projection point (eye)
-    // C-api: name=getPln
     SbPlane		getPlane(float distFromEye) const;
 
     // Returns the point along the line of sight at the given distance
     // from the projection point (eye)
-    // C-api: name=getSightPt
     SbVec3f		getSightPoint(float distFromEye) const;
 
     // Returns the projection of a given point in normalized screen
     // coords (see projectToScreen()) onto the plane parallel to the
     // near plane that is at distFromEye units from the eye
-    // C-api: name=getPlnPt
     SbVec3f		getPlanePoint(float distFromEye,
 				      const SbVec2f &normPoint) const;
 
@@ -1075,7 +859,6 @@ class SbViewVolume {
     // the view and it's positive y-axis is up. If rightAngleOnly is
     // TRUE, it will come as close as it can to this goal by using
     // only 90 degree rotations.
-    // C-api: name=getAlignRot
     SbRotation		getAlignRotation(SbBool rightAngleOnly = FALSE) const;
 
     // Returns a scale factor that would scale a unit sphere centered
@@ -1087,21 +870,18 @@ class SbViewVolume {
     // Projects the given 3D bounding box onto the near plane and
     // returns the size (in normalized screen coords) of the
     // rectangular region that encloses it
-    // C-api: name=projBox
     SbVec2f		projectBox(const SbBox3f &box) const;
 
     // Given a view volume, this narrows the view to the given sub-rectangle
     // of the near plane. The coordinates of the rectangle are between
     // 0 and 1, where (0,0) is the lower-left corner of the near plane
     // and (1,1) is the upper-right corner.
-    // C-api: name=narrow2d
     SbViewVolume	narrow(float left,  float bottom,
 			       float right, float top) const;
 
     // Narrow a view volume by the given box.  The box must lie inside
     // the unit cube, and the view will be shrunk according to the
     // size of the box.
-    // C-api: name=narrow3d
     SbViewVolume	narrow(const SbBox3f &box) const;
 
     // Sets up an orthographic view volume with the given sides.
@@ -1114,26 +894,22 @@ class SbViewVolume {
     // and aspect ratio. The parameters are the same as for the GL
     // perspective() routine, except that the field of view angle is
     // specified in radians.
-    // C-api: name=persp
     void		perspective(float fovy, float aspect,
 				    float near, float far);
 
     // Rotate the camera view direction.  Note that this accomplishes
     // the reverse of doing a GL rotate() command after defining a
     // camera, which rotates the scene viewed by the camera.
-    // C-api: name=rotCam
     void		rotateCamera(const SbRotation &q);
 
     // Translate the camera viewpoint.  Note that this accomplishes
     // the reverse of doing a GL translate() command after defining a
     // camera, which translates the scene viewed by the camera.
-    // C-api: name=xlateCam
     void		translateCamera(const SbVec3f &v);
 
     // Returns the positive z axis in eye space.  In this coordinate
     // system, the z value of the near plane should be GREATER than the
     // z value of the far plane.
-    // C-api: name=zVec
     SbVec3f		zVector() const;
 
     // Returns a narrowed view volume which contains as tightly as
@@ -1158,13 +934,10 @@ class SbViewVolume {
 	PERSPECTIVE 
     };
 
-    // C-api: name=getProjType
     ProjectionType	getProjectionType() const  { return type; }
 
-    // C-api: name=getProjPt
     const SbVec3f &	getProjectionPoint() const { return projPoint; }
 
-    // C-api: name=getProjDir
     const SbVec3f &	getProjectionDirection() const   { return projDir; }
 
     // Returns distance from projection point to near plane
@@ -1227,11 +1000,9 @@ class SbViewVolume {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: public=pos, dir
 
 class SbLine {
   public:
-// C-api: end
     SbLine()	{}
 
     // Construct a line from two points lying on the line.  If you
@@ -1243,25 +1014,20 @@ class SbLine {
     // Set that value!
     void		setValue(const SbVec3f &p0, const SbVec3f &p1);
 
-// C-api: begin
     // Find closest points between the two lines. Return FALSE if they are 
     // parallel, otherwise return TRUE.
-    // C-api: name=getClosestPts
     SbBool		getClosestPoints(const SbLine  &line2,
 					 SbVec3f &ptOnThis,
 					 SbVec3f &ptOnLine2 ) const;
 
     // Returns the closest point on the line to the given point.
-    // C-api: name=getClosestPt
     SbVec3f		getClosestPoint(const SbVec3f &point) const;
 
-// C-api: end
 
     // Accessors
     const SbVec3f &	getPosition() const	{ return pos; }
     const SbVec3f &	getDirection() const	{ return dir; }
 
-// C-api: begin
 
   SoINTERNAL public:
     // Intersect the line with a box, point, line, and triangle.
@@ -1301,12 +1067,9 @@ class SbLine {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbPln
-// C-api: public=normalVec, distance
 
 class SbPlane {
   public:
-// C-api: end
     SbPlane()	{}
 
     // Construct a plane given 3 points.
@@ -1322,7 +1085,6 @@ class SbPlane {
     // Orientation is given by the normal vector n.
     SbPlane(const SbVec3f &n, const SbVec3f &p);
 
-// C-api: begin
     // Offset a plane by a given distance.
     void		offset(float d);
 
@@ -1338,13 +1100,11 @@ class SbPlane {
     // defined by the plane
     SbBool		isInHalfSpace(const SbVec3f &point) const;
 
-// C-api: end
 
     // Accessors
     const SbVec3f &	getNormal() const		{ return normalVec; }
     float		getDistanceFromOrigin() const	{ return distance; }
 
-// C-api: begin
     // Equality/inequality comparison operators
     friend int		operator ==(const SbPlane &p1, const SbPlane &p2);
     friend int		operator !=(const SbPlane &p1, const SbPlane &p2)
@@ -1369,12 +1129,9 @@ class SbPlane {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbCyl
-// C-api: public=axis, radius
 
 class SbCylinder {
   public:
-// C-api: end
     // Constructor
     SbCylinder();
 
@@ -1392,10 +1149,8 @@ class SbCylinder {
     const SbLine & 	getAxis() const			{ return axis; }
     float		getRadius() const		{ return radius; }
 
-// C-api: begin
     // Intersect line and cylinder, returning TRUE if there is an intersection
     SbBool	intersect(const SbLine &l, SbVec3f &intersection) const;
-    // C-api: name=intersect2
     SbBool	intersect(const SbLine &l,
 			  SbVec3f &enter, SbVec3f &exit) const;
 
@@ -1416,13 +1171,10 @@ class SbCylinder {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SbSph
-// C-api: public=center, radius
 
 class SbSphere {
   public:
 
-// C-api: end
     // Boring default constructor
     SbSphere()	{}
 
@@ -1440,13 +1192,11 @@ class SbSphere {
     const SbVec3f & 	getCenter() const		{ return center; }
     float		getRadius() const		{ return radius; }
 
-// C-api: begin
     // Return a sphere containing a given box
     void	circumscribe(const SbBox3f &box);
 
     // Intersect line and sphere, returning TRUE if there is an intersection
     SbBool	intersect(const SbLine &l, SbVec3f &intersection) const;
-    // C-api: name=intersect2
     SbBool	intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
 
   private:

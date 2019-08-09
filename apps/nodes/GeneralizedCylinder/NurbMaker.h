@@ -65,7 +65,6 @@ class SoIndexedNurbsSurface;
 //
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=NrbMkr
 class NurbMaker {
 
   public:

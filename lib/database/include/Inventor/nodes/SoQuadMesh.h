@@ -76,8 +76,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoQMesh
-// C-api: public=startIndex, verticesPerColumn, verticesPerRow, vertexProperty
 class SoQuadMesh : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoQuadMesh);

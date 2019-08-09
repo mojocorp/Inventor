@@ -64,7 +64,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTexFunc
 class SoTextureCoordinateFunction : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinateFunction);

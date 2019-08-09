@@ -94,8 +94,6 @@ typedef void SoXtViewerCB(void *userData, SoXtViewer *viewer);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: abstract
-// C-api: prefix=SoXtVwr
 class SoXtViewer : public SoXtRenderArea {
   public:
     
@@ -159,10 +157,7 @@ class SoXtViewer : public SoXtRenderArea {
     // first camera found when setSceneGraph() is called isn't the one
     // the user really wants to edit.
     //
-    // C-api: expose
-    // C-api: name=setCam
     virtual void    setCamera(SoCamera *cam);
-    // C-api: name=getCam
     SoCamera	    *getCamera()	    { return camera; }
     
     //
@@ -176,28 +171,19 @@ class SoXtViewer : public SoXtRenderArea {
     //
     // By default a perspective camera will be created if needed.
     //
-    // C-api: expose
-    // C-api: name=setCamType
     virtual void    setCameraType(SoType type);
-    // C-api: name=getCamType
     SoType	    getCameraType()         { return cameraType; }
     
     //
     // Camera routines.
     //
-    // C-api: expose
     virtual void    viewAll();
-    // C-api: expose
-    // C-api: name=saveHomePos
     virtual void    saveHomePosition();
-    // C-api: expose
-    // C-api: name=resetToHomePos
     virtual void    resetToHomePosition();
     
     //
     // Turns the headlight on/off. (default ON)
     //
-    // C-api: expose
     virtual void    setHeadlight(SbBool onOrOff);
     SbBool  	    isHeadlight()	    { return headlightFlag; }
     SoDirectionalLight *getHeadlight()	    { return headlightNode; }
@@ -214,21 +200,15 @@ class SoXtViewer : public SoXtRenderArea {
     // Refer to the SoXtViewer man pages for a complete description 
     // of those draw styles.
     //
-    // C-api: expose
-    // C-api: name=setDStyle
     virtual void    setDrawStyle(SoXtViewer::DrawType type, 
 				SoXtViewer::DrawStyle style);
-    // C-api: name=getDStyle
     SoXtViewer::DrawStyle getDrawStyle(SoXtViewer::DrawType type);
     
     //
     // Sets/gets the current buffering type in the main view.
     // (default BUFFER_DOUBLE)
     //
-    // C-api: expose
-    // C-api: name=setBufType
     virtual void    setBufferingType( SoXtViewer::BufferType type);
-    // C-api: name=getBufType
     SoXtViewer::BufferType getBufferingType()	    { return bufferType; }
     
     // redefine this to call the viewer setBufferingType() method instead.
@@ -239,7 +219,6 @@ class SoXtViewer : public SoXtRenderArea {
     // events over the renderArea are sent down the sceneGraph 
     // (picking can occurs). (default viewing is ON)
     //
-    // C-api: expose
     virtual void    setViewing(SbBool onOrOff);
     SbBool  	    isViewing() const  	    { return viewingFlag; };
     
@@ -257,7 +236,6 @@ class SoXtViewer : public SoXtRenderArea {
     // or XDefineCursor() with the appropariate glyth. The base class 
     // routine only sets the flag.
     //
-    // C-api: expose
     virtual void    setCursorEnabled(SbBool onOrOff);
     SbBool  	    isCursorEnabled() const   { return cursorEnabledFlag; }
     
@@ -268,9 +246,7 @@ class SoXtViewer : public SoXtRenderArea {
     // is expected to manually set those planes within the preference sheet.
     // (default is ON).
     //
-    // C-api: name=setAutoClip
     void	    setAutoClipping(SbBool onOrOff);
-    // C-api: name=isAutoClip
     SbBool	    isAutoClipping() const	    { return autoClipFlag; }
     
     //
@@ -295,9 +271,7 @@ class SoXtViewer : public SoXtRenderArea {
     // Routine to determine whether or not to orient camera on
     // picked point (detail on) or center of the object's bounding box
     // (detail off). Default is detail on.
-    // C-api: name=setDtlSeek
     void    	    setDetailSeek(SbBool onOrOff)   { detailSeekFlag = onOrOff; };
-    // C-api: name=isDtlSeek
     SbBool  	    isDetailSeek() 	    	    { return detailSeekFlag; }
     
     // Set the time a seek takes to change to the new camera location.
@@ -313,16 +287,12 @@ class SoXtViewer : public SoXtRenderArea {
     //
     // Note: The viewer pointer 'this' is passed as callback data
     //
-    // C-api: name=addStartCB
     void    addStartCallback(SoXtViewerCB *f, void *userData = NULL)
 		    { startCBList->addCallback((SoCallbackListCB *)f, userData); }
-    // C-api: name=addFinishCB
     void    addFinishCallback(SoXtViewerCB *f, void *userData = NULL)
 		    { finishCBList->addCallback((SoCallbackListCB *)f, userData); }
-    // C-api: name=removeStartCB
     void    removeStartCallback(SoXtViewerCB *f, void *userData = NULL)
 		    { startCBList->removeCallback((SoCallbackListCB *)f, userData); }
-    // C-api: name=removeFinishCB
     void    removeFinishCallback(SoXtViewerCB *f, void *userData = NULL)
 		    { finishCBList->removeCallback((SoCallbackListCB *)f, userData); }
     
@@ -342,8 +312,6 @@ class SoXtViewer : public SoXtRenderArea {
     //
     // NOTE: This routine is automatically called whenever setSceneGraph() 
     // is called.
-    // C-api: expose
-    // C-api: name=recompSceneSiz
     virtual void	recomputeSceneSize();
     
   protected:

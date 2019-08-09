@@ -82,7 +82,6 @@ typedef void _SoXtSliderCB(void *userData, float val);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtSldr
 class _SoXtSlider : public SoXtGLWidget {
   public:
     
@@ -126,28 +125,22 @@ class _SoXtSlider : public SoXtGLWidget {
     // NOTE: the start and finish callbacks are only to signal when the mouse
     // goes down and up. No valid callback data is passed (0.0 passed).
     //
-    // C-api: name=addStartCB
     void	addStartCallback(
 			_SoXtSliderCB *f,
 			void *userData = NULL);
-    // C-api: name=addValueChangedCB
     void	addValueChangedCallback(
 			_SoXtSliderCB *f,
 			void *userData = NULL);
-    // C-api: name=addFinishCB
     void	addFinishCallback(
 			_SoXtSliderCB *f,
 			void *userData = NULL);
 
-    // C-api: name=removeStartCB
     void	removeStartCallback(
 			_SoXtSliderCB *f,
 			void *userData = NULL);
-    // C-api: name=removeValueChangedCB
     void	removeValueChangedCallback(
 			_SoXtSliderCB *f,
 			void *userData = NULL);
-    // C-api: name=removeFinishCB
     void	removeFinishCallback(
 			_SoXtSliderCB *f,
 			void *userData = NULL);

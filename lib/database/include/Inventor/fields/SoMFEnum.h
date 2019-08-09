@@ -75,7 +75,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMEnum
 class SoMFEnum : public SoMField {
 
     // Use standard field stuff
@@ -87,11 +86,9 @@ class SoMFEnum : public SoMField {
     //
 
     // Set value from SbName or character string
-    // C-api: name=setStr
     void		setValue(const SbName &name);
 
     // Set indexed value from SbName or character string
-    // C-api: name=set1Str
     void		set1Value(int index, const SbName &name);
 
   SoEXTENDER public:
@@ -114,7 +111,6 @@ class SoMFEnum : public SoMField {
     virtual SbBool	findEnumName(int val, const SbName *&name) const;
 };
 
-// C-api: end
 
 ////////////////////////////////////////////
 //
@@ -171,6 +167,5 @@ class SoMFEnum : public SoMField {
 //
 /////////////////////////////////////////////////////////////////////////////
 
-// C-api: begin
 
 #endif /* _SO_MF_ENUM_ */

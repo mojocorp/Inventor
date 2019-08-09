@@ -84,7 +84,6 @@
 //                                           
 ////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoCamKit
 class SoCameraKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoCameraKit);

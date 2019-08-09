@@ -77,7 +77,6 @@
 //  All non-rendering actions are inherited as is from SoSeparator.
 //
 //////////////////////////////////////////////////////////////////////////////
-// C-api: prefix=SoAnnot
 class SoAnnotation : public SoSeparator {
 
     SO_NODE_HEADER(SoAnnotation);

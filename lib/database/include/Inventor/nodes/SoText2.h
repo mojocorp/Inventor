@@ -61,9 +61,7 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-// C-api: end
 class SoBitmapFontCache;  // Internal class
-// C-api: begin
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -76,8 +74,6 @@ class SoBitmapFontCache;  // Internal class
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoTxt2
-// C-api: public=string, interval, justification
 class SoText2 : public SoShape {
 
     SO_NODE_HEADER(SoText2);

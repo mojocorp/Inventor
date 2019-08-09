@@ -108,28 +108,22 @@ class SoPath;
 // Error handling callbacks are of this type:
 typedef void	SoErrorCB(const SoError *error, void *data);
 
-// C-api: prefix=SoErr
 class SoError {
 
   public:
     // Sets/returns handler callback for SoError class
-    // C-api: name=setHndlrCB
     static void		setHandlerCallback(SoErrorCB *cb, void *data)
 	{ handlerCB = cb; cbData = data; }
-    // C-api: name=getHndlrCB
     static SoErrorCB *	getHandlerCallback()	{ return handlerCB; }
-    // C-api: name=getHndlrData
     static void *	getHandlerData()	{ return cbData; }
 
     // Returns debug string containing full error info from instance
-    // C-api: name=getDbgStr
     const SbString &	getDebugString() const { return debugString; }
 
     // Returns type identifier for SoError class
     static SoType	getClassTypeId()	{ return classTypeId; }
 
     // Returns type identifier for error instance
-    // C-api: expose
     virtual SoType	getTypeId() const;
 
     // Returns TRUE if instance is of given type or is derived from it

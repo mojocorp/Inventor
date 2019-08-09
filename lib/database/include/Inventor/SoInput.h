@@ -128,7 +128,6 @@ SoINTERNAL struct SoInputFile {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoIn
 class SoInput {
  public:
 
@@ -141,33 +140,25 @@ class SoInput {
     // Adds a directory to list of directories to search to find named
     // files to open. Directories searched in order. By default, the list
     // contains just the current directory.
-    // C-api: name=addDirFirst
     static void		addDirectoryFirst(const char *dirName);
-    // C-api: name=addDirLast
     static void		addDirectoryLast(const char *dirName);
 
     // Adds directories that are named in the value of the given
     // environment variable. Directories may be separated by colons
     // or whitespace in the value.
-    // C-api: name=addEnvDirsFirst
     static void		addEnvDirectoriesFirst(const char *envVarName);
-    // C-api: name=addEnvDirsLast
     static void		addEnvDirectoriesLast(const char *envVarName);
 
     // Removes given directory from list.
-    // C-api: name=removeDir
     static void		removeDirectory(const char *dirName);
 
     // Clears list of directories, including the current directory.
-    // C-api: name=clearDirs
     static void		clearDirectories();
 
     // Returns the current list of directories.
-    // C-api: name=getDirs
     static const SbStringList &getDirectories();
 
     // Sets initial file pointer to read from. Clears stack if necessary.
-    // C-api: name=setFilePtr
     void		setFilePointer(FILE *newFP);
 
     // Opens named file, sets file pointer to result. Clears stack if
@@ -196,7 +187,6 @@ class SoInput {
     const char *	getCurFileName() const;
 
     // Sets up buffer to read from and its size
-    // C-api: name=setBuf
     void		setBuffer(void *bufPointer, size_t bufSize);
 
     // Returns number of bytes read from buffer. Returns 0 if not
@@ -235,35 +225,21 @@ class SoInput {
     // skip white space before reading and return FALSE on EOF or if
     // item could not be read.
     SbBool		read(char	    &c);
-    // C-api: name=readStr
     SbBool		read(SbString       &s);
-    // C-api: name=readName
     SbBool		read(SbName	    &n, SbBool validIdent = FALSE);
-    // C-api: name=readInt
     SbBool		read(int	    &i);
-    // C-api: name=readUInt
     SbBool		read(unsigned int   &i);
-    // C-api: name=readShort
     SbBool		read(short	    &s);
-    // C-api: name=readUShort
     SbBool		read(unsigned short &s);
-    // was ... C-api: name=readInt32
     //     but typedef makes this redundant.
     //SbBool		read(int32_t	    &l);
-    // was ... C-api: name=readUInt32
     //     but typedef makes this redundant.
     //SbBool		read(uint32_t	    &l);
-    // C-api: name=readFloat
     SbBool		read(float	    &f);
-    // C-api: name=readDbl
     SbBool		read(double	    &d);
-    // C-api: name=readBinCharArray
     SbBool		readBinaryArray(unsigned char *c, int length);
-    // C-api: name=readBinInt32Array
     SbBool		readBinaryArray(int32_t *l, int length);
-    // C-api: name=readBinFloatArray
     SbBool		readBinaryArray(float *f, int length);
-    // C-api: name=readBinDblArray
     SbBool		readBinaryArray(double *d, int length);
 
     // Returns TRUE if current file/buffer is at EOF

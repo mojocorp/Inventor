@@ -67,12 +67,10 @@
 
 #include <inttypes.h>
 #include <sys/types.h>
-// C-api: end
 #ifdef __sgi
 #include <libc.h>
 #include <sgidefs.h>
 #endif /* __sgi */
-// C-api: begin
 #include <stdio.h>
 
 #ifndef FALSE

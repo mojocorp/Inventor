@@ -78,7 +78,6 @@ typedef void MyThumbWheelCB(void *userData, float val);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=MyThumbWhl
 class MyThumbWheel : public SoXtGLWidget {
 
   public:
@@ -107,28 +106,22 @@ class MyThumbWheel : public SoXtGLWidget {
     // NOTE: the start and finish callbacks are only to signal when the mouse
     // goes down and up. No valid callback data is passed (NULL passed).
     //
-    // C-api: name=addStartCB
     void	addStartCallback(
 			MyThumbWheelCB *f,
 			void *userData = NULL);
-    // C-api: name=addValueChangedCB
     void	addValueChangedCallback(
 			MyThumbWheelCB *f,
 			void *userData = NULL);
-    // C-api: name=addFinishCB
     void	addFinishCallback(
 			MyThumbWheelCB *f,
 			void *userData = NULL);
 
-    // C-api: name=removeStartCB
     void	removeStartCallback(
 			MyThumbWheelCB *f,
 			void *userData = NULL);
-    // C-api: name=removeValueChangedCB
     void	removeValueChangedCallback(
 			MyThumbWheelCB *f,
 			void *userData = NULL);
-    // C-api: name=removeFinishCB
     void	removeFinishCallback(
 			MyThumbWheelCB *f,
 			void *userData = NULL);

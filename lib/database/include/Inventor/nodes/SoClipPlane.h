@@ -73,8 +73,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoClipPln
-// C-api: public=plane,on
 class SoClipPlane : public SoNode {
 
     SO_NODE_HEADER(SoClipPlane);

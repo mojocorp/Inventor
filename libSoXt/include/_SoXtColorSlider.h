@@ -76,7 +76,6 @@ class SbVec2f;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtColSldr
 class _SoXtColorSlider : public _SoXtSlider {
     
  public:
@@ -117,9 +116,7 @@ class _SoXtColorSlider : public _SoXtSlider {
     // NOTE: if calling setBaseColor() changes the thumb position the
     // valueChanged callbacks will be called with the new value.
     //
-    // C-api: name=setBaseCol
     void	setBaseColor(const float rgbOrHsv[3]);
-    // C-api: name=getBaseCol
     const float *getBaseColor()     	{ return color; }
     
     //

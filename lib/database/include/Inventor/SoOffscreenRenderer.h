@@ -82,13 +82,11 @@ class SoGLRenderAction;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoOffRnd
 class SoOffscreenRenderer {
  public:
 
     // Constructor
     SoOffscreenRenderer( const SbViewportRegion &viewportRegion );
-    // C-api: name=CreateAct
     SoOffscreenRenderer( SoGLRenderAction *ra );
 
     // Destructor
@@ -101,61 +99,45 @@ class SoOffscreenRenderer {
         RGB_TRANSPARENCY = 4
     };
 
-    // C-api: name=getScrPixPerInch
     static float	getScreenPixelsPerInch();
 
     // Set/get the components to be rendered
-    // C-api: name=setComp
     void		setComponents( Components components )
 				{comps = components;}
-    // C-api: name=getComp
     Components		getComponents() const
 				{return comps;}
 
     // Set/get the viewport region
-    // C-api: name=setVP
     void		setViewportRegion( const SbViewportRegion &region );
-    // C-api: name=getVP
     const SbViewportRegion  &getViewportRegion() const;
 
     // Get the maximum supported resolution of the viewport.
-    // C-api: name=getMaxRes
     static SbVec2s	getMaximumResolution();
 
     // Set/get the background color
-    // C-api: name=setBkgCol
     void		setBackgroundColor( const SbColor &c )
 				{backgroundColor = c;}
-    // C-api: name=getBkgCol
     const SbColor & getBackgroundColor() const
 				{return backgroundColor;}
 
     // Set and get the render action to use
-    // C-api: name=setAct
     void                      setGLRenderAction(SoGLRenderAction *ra);
-    // C-api: name=getAct
     SoGLRenderAction *        getGLRenderAction() const;
 
     // Render the given scene into a buffer
-    // C-api: name=rnd
     SbBool		render( SoNode *scene );
-    // C-api: name=rndPath
     SbBool		render( SoPath *scene );
 
     // Return the buffer containing the rendering
-    // C-api: name=getBuff
     unsigned char *     getBuffer() const;
 
     // Write the buffer as a .rgb file into the given FILE
-    // C-api: name=toRGB
     SbBool		writeToRGB( FILE *fp ) const;
 
     // Write the buffer into encapsulated PostScript.  If a print size is
     // not given, adjust the size of the print so it is WYSIWYG with respect
     // to the viewport region on the current device.
-    // C-api: name=toPS
     SbBool		writeToPostScript( FILE *fp ) const;
-    // C-api: name=toPSSize
     SbBool		writeToPostScript( FILE *fp,
                                 const SbVec2f &printSize ) const;
 

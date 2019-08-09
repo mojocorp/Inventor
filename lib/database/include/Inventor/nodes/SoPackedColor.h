@@ -70,8 +70,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoPCol
-// C-api: public= orderedRGBA
 class SoPackedColor : public SoNode {
 
     SO_NODE_HEADER(SoPackedColor);

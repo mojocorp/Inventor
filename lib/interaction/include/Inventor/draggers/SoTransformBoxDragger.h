@@ -98,8 +98,6 @@
 class SbDict;
 class SoFieldSensor;
 
-// C-api: prefix=SoXfBoxDrag
-// C-api: public=rotation,translation,scaleFactor
 class SoTransformBoxDragger : public SoDragger
 {
     SO_KIT_HEADER(SoTransformBoxDragger);

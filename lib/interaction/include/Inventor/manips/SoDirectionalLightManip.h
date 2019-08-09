@@ -71,7 +71,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoDirLtManip
 class SoDirectionalLightManip : public SoDirectionalLight {
 
     SO_NODE_HEADER(SoDirectionalLightManip);
@@ -79,7 +78,6 @@ class SoDirectionalLightManip : public SoDirectionalLight {
   public:
     SoDirectionalLightManip();
 
-    // C-api: name=getDrag
     SoDragger *getDragger();
 
     SbBool replaceNode( SoPath *p );

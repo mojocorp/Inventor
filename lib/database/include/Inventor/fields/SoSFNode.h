@@ -68,7 +68,6 @@ class SoNode;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoSNode
 class SoSFNode : public SoSField {
 
     // Use standard field stuff

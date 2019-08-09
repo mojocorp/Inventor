@@ -70,8 +70,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoMultCopy
-// C-api: public=matrix
 class SoMultipleCopy : public SoGroup {
 
     SO_NODE_HEADER(SoMultipleCopy);

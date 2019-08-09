@@ -94,7 +94,6 @@ class SoXtBitmapButton;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtExamVwr
 class SoXtExaminerViewer : public SoXtFullViewer {
   public:
     SoXtExaminerViewer(
@@ -103,16 +102,13 @@ class SoXtExaminerViewer : public SoXtFullViewer {
 	SbBool buildInsideParent = TRUE, 
 	SoXtFullViewer::BuildFlag flag = BUILD_ALL, 
 	SoXtViewer::Type type = BROWSER);
-    // C-api: interpret #define SoXtExamVwrCreateStd(parent,name) SoXtExamVwrCreate(parent,name,TRUE,SO_XT_FULL_VWR_BUILD_ALL,SO_XT_VWR_BROWSER)
     ~SoXtExaminerViewer();
     
     //
     // Show/hide the point of rotation feedback, which only appears while
     // in Viewing mode. (default OFF)
     //
-    // C-api: name=setFeedbackVis
     void	setFeedbackVisibility(SbBool onOrOff);
-    // C-api: name=isFeedbackVis
     SbBool	isFeedbackVisible() const	{ return feedbackFlag; }
     
     //
@@ -125,18 +121,14 @@ class SoXtExaminerViewer : public SoXtFullViewer {
     // Enable/disable the animation feature of the viewer. 
     // (enabled by default)
     //
-    // C-api: name=SetAnimEnabled
     void    	setAnimationEnabled(SbBool onOrOff);
-    // C-api: name=IsAnimEnabled
     SbBool  	isAnimationEnabled()		{ return animationEnabled; }
     
     //
     // Stop animation, if it is occurring, and queuery if the viewer is 
     // currently animating.
     //
-    // C-api: name=StopAnim
     void    	stopAnimating();
-    // C-api: name=IsAnim
     SbBool  	isAnimating()  			{ return animatingFlag; }
     
     //

@@ -85,7 +85,6 @@ typedef void MySimpleMaterialEditorCB(void *userData,
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// C-api: prefix=SoXtMtlEd
 class MySimpleMaterialEditor : public SoXtComponent {
   public:
     MySimpleMaterialEditor(
@@ -96,9 +95,7 @@ class MySimpleMaterialEditor : public SoXtComponent {
    ~MySimpleMaterialEditor();
     
     // sets/gets the current material
-    // C-api: name=setMtl
     void    	    	setMaterial(const SoMaterial *mtl);
-    // C-api: name=getMtl
     const SoMaterial *	getMaterial() const	    { return material; }
     
     // specify whether the material name is being displayed
@@ -106,25 +103,20 @@ class MySimpleMaterialEditor : public SoXtComponent {
     // material name methods to display and retreive the name.
     // (default set in constructor to FALSE).
     //
-    // C-api: name=isMtlNameVisible
     SbBool		isMaterialNameVisible()   { return nameVisible; }
     
     // set/gets the material name which will be displayed (if set to
     // be visible) in the text field.
-    // C-api: name=setMtlName
     void    	    	setMaterialName(const char *name);
-    // C-api: name=getMtlName
     const char *	getMaterialName() const	    { return materialName; }
     
     // Callbacks - register functions that will be called whenever the user
     // chooses a new material (accept button)
-    // C-api: name=addCB
     void    addCallback(
     	    	MySimpleMaterialEditorCB *f,
 		void *userData = NULL)
 	{ callbackList.addCallback((SoCallbackListCB *) f, userData);}
     
-    // C-api: name=removeCB
     void    removeCallback(
     	    	MySimpleMaterialEditorCB *f,
 		void *userData = NULL)

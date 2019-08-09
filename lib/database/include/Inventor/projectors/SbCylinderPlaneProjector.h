@@ -64,7 +64,6 @@
 
 #include <Inventor/projectors/SbCylinderSectionProjector.h>
 
-// C-api: prefix=SbCylPlnProj
 class SbCylinderPlaneProjector : public SbCylinderSectionProjector
 {
   public:
@@ -78,7 +77,6 @@ class SbCylinderPlaneProjector : public SbCylinderSectionProjector
     SbCylinderPlaneProjector(float edgeTol = .9, SbBool orientToEye = TRUE);
 
     // Constructor taking the cylinder.
-    // C-api: name=createCyl
     SbCylinderPlaneProjector( const SbCylinder &cyl,
 			      float edgeTol = .9,
 			      SbBool orientToEye = TRUE);
