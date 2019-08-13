@@ -78,10 +78,6 @@ typedef void	(*SoActionMethod)(SoAction *, SoNode *);
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#if _COMPILER_VERSION>=710
-#  pragma set woff 1375
-#endif
-
 SoINTERNAL class SoActionMethodList : public SbPList {
 
   public:
@@ -111,10 +107,6 @@ SoINTERNAL class SoActionMethodList : public SbPList {
     static void		dummyAction(SoAction *, SoNode *);
 
 };
-
-#if _COMPILER_VERSION>=710
-#  pragma reset woff 1375
-#endif
 
 //////////////////////////////////////////////////////////////////////////////
 //
