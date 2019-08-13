@@ -75,10 +75,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 
-#if _COMPILER_VERSION>=710
-#  pragma set woff 1375
-#endif
-
 class SoDebugError : public SoError {
 
   public:
@@ -133,9 +129,5 @@ class SoDebugError : public SoError {
 
     Severity		severity;	// Severity of error
 };
-
-#if _COMPILER_VERSION>=710
-#  pragma reset woff 1375
-#endif
 
 #endif /* _SO_DEBUG_ERROR */

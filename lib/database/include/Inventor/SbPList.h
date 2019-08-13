@@ -72,10 +72,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#if _COMPILER_VERSION>=710
-#  pragma set woff 1375
-#endif
-
 class SbPList {
   public:
 
@@ -242,9 +238,5 @@ SoEXTENDER class SbStringList : public SbPList {
 	{ return ( (SbString *&) ( (*(const SbPList *) this) [i] ) ); }
 };
 
-
-#if _COMPILER_VERSION>=710
-#  pragma reset woff 1375
-#endif
 
 #endif /* _SB_PLIST_ */
