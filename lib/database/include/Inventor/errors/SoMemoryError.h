@@ -72,10 +72,6 @@
 //////////////////////////////////////////////////////////////////////////////
 
 
-#if _COMPILER_VERSION>=710
-#  pragma set woff 1375
-#endif
-
 class SoMemoryError : public SoError {
 
   public:
@@ -110,9 +106,5 @@ class SoMemoryError : public SoError {
     static SoErrorCB	*handlerCB;	// Handler callback for class
     static void		*cbData;	// User data for callback
 };
-
-#if _COMPILER_VERSION>=710
-#  pragma reset woff 1375
-#endif
 
 #endif /* _SO_MEMORY_ERROR */
