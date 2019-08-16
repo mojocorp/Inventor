@@ -1,0 +1,61 @@
+/*! \file qmorf
+    \brief 3d morphing program
+    
+    \section SYNOPSIS
+    qmorf [qfile1] [qfile2] ...
+    
+    \section DESCRIPTION
+    qmorf  reads  in a series of Inventor quad mesh files and draws an ani-
+    mated sequence which metamorphoses from one object to the next.	 These
+    quad  mesh  files  must	meet  the exact specifications described below
+    (40x40).
+    
+    Qmorf is not related to other morphing programs (like the program  used
+    to  produce  the  effects in Michael Jackson's "Black or White" video).
+    Those programs use image warping techniques to modify 2D  images;  this
+    program actually modifies an object's 3D geometry.
+    
+    qmorf was written using the Open Inventor 3d Toolkit.  Currently, qmorf
+    is only able to interpolate between files that contain QuadMeshes  with
+    40  by 40 vertices (1521 quads).  Standard C++ code is used to linearly
+    interpolate the positions of the vertices of the intermediate geometry.
+    Open  Inventor is used to linearly interpolate the objects' textures or
+    materials.  The intermediate geometry is drawn twice,  first  with  the
+    first  set  of  materials  or  textures or materials applied.  Then the
+    object is drawn again with the second  set  of  materials  or  textures
+    applied, modified to be semi-transparent.  Open Inventor (using OpenGL)
+    blends the semi-transparent object with the already drawn geometry.  By
+    varying the level of transparency, a smooth fade from one object's tex-
+    ture to the next is achieved.  The  background  is  derived  from  code
+    originally  written  by	Drew  Olbrich.	It is a 21 by 21 QuadMesh (400
+    quads) with a different material at each vertex.  The positions of  the
+    vertices  are  determined  by a variety of mathematical functions (e.g.
+    sine waves, exponential functions, etc), while the  colors  are	deter-
+    mined by a fractal noise function.  The positions and colors are edited
+    each frame of the animation , interpolating from one set  of  positions
+    and  colors  to the next.  The total number of quads in any given frame
+    is 3,442 (1552*2+400).  The main window of the program is the  standard
+    Inventor  Examiner  Viewer  Xt  component.   The button and sliders are
+    Motif widgets.
+    
+    Textures are automatically turned off if too slow!
+    
+    About button
+          Brings up a short summary about qmorf.
+    
+    Quit button
+          Quits qmorf.
+    
+    \section SOURCE CODE
+    Note that the source code to maze comes with the Open Inventor 3d Tool-
+    kit.
+    
+    \section FILES
+    /usr/share/data/models/CyberHeads/* - Sample qmorf files
+    /usr/share/src/Inventor/demos/qmorf/* - Source to qmorf
+    
+    \section CREDITS
+    Data for the heads courtesy of:	Cyberware Laboratory Inc.
+    
+    \sa drop, maze, textomatic, revo, SceneViewer, inventor, ivview, noodle
+*/

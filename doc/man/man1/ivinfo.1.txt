@@ -1,0 +1,28 @@
+/*! \file ivinfo
+    \brief Prints information about Inventor files
+    
+    \section SYNOPSIS
+    ivinfo [-h] [file]
+    
+    \section DESCRIPTION
+    ivinfo  prints  (to  standard output) information about the named file.
+    (If no input file is given, ivinfo reads from the standard input.)  The
+    information  includes  whether  the  file is in ASCII or binary format,
+    and, for each scene graph in the file, the number of nodes in the graph
+    and the contents of any SoInfo nodes contained in it.
+    
+    \section OPTIONS
+     The following command line options are allowed:
+    
+    -h   Prints out the usage for the command.
+    
+    \section SOURCE CODE
+    Note  that  the	source	code to ivinfo comes with the Open Inventor 3d
+    Toolkit.
+    
+    \section FILES
+    /usr/share/data/models/* - Sample 3D data  files
+    /usr/share/src/Inventor/tools/ivinfo/* - Source to ivinfo
+    
+    \sa gview, inventor, ivcat, ivview, drop, maze, noodle, qmorf, revo, showcase, textomatic
+*/

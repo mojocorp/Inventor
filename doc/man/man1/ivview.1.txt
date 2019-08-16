@@ -1,0 +1,72 @@
+/*! \file ivview
+    \brief fast, interactive 3D viewer of Inventor files
+    
+    \section SYNOPSIS
+    ivview [-hpw] [files | < file]
+    
+    \section DESCRIPTION
+    ivview  reads  an Inventor file (or files) and provides a simple inter-
+    face to quickly view 3D data. The input files must be valid Inventor 3D
+    files  (versions  1.0  or 2.0).	All the files specified at the command
+    line are read in and rendered.
+    
+    ivview presents a single window containing an Inventor viewer (examiner
+    viewer or the walk viewer) and a menu bar.
+    
+    Note that if you click and hold the right mouse button, the viewer pop-
+    up capabilities will be displayed.  Also, note that the	viewer	has  a
+    help card that provides detailed instruction on how to use it.
+    
+    The menu bar contains the following menus:
+    
+    File
+          This  menu  presents a file Open button, (reads an Inventor file
+          and replaces existing object), an About button, (displays infor-
+          mation about the program), and a Quit button.
+    
+    Options
+          This  menu  includes  a  High quality transparency toggle button
+          that turns the high-quality transparency option on and off (high
+          quality	uses  DELAYED_BLEND  transparency,  low  quality  uses
+          SCREEN_DOOR transparency), and an Edit background  color	button
+          that  pops up the Inventor Color Editor to change the background
+          color.
+    
+    Optimize
+          This menu includes an Optimize for speed toggle button that will
+          run  the	ivfix  utility and a Cull backfaces toggle button that
+          will insert an SoShapeHints node that will cause only front-fac-
+          ing  polygons  to be drawn.  When checked, both of these options
+          apply to the current scene and any  scenes  read	in  using  the
+          File/Open menu.  Note that the ivfix utility completely restruc-
+          tures the scene, losing any interaction or  animation  nodes  or
+          engines.
+    
+    \section OPTIONS
+    The following command line options are allowed:
+    
+    -h     Prints the usage message for ivview.
+    
+    -p     Enables the performance meter.  Off by default.
+    
+    -w     Use an SoXtWalkViewer instead of the default SoXtExaminerViewer.
+          Off by default.  This option is incompatible with the -p option.
+    
+    \section EXAMPLES
+          ivview < /usr/share/data/models/toys/jackInTheBox.iv
+    
+          ivview -w /usr/share/data/models/buildings/Barcelona.iv
+    
+          ivview myCameraAndLights.iv myObject.iv
+    
+    
+    \section SOURCE CODE
+    Note  that  the	source	code to ivview comes with the Open Inventor 3D
+    Toolkit.
+    
+    \section FILES
+    /usr/share/data/models/*    -	Sample	   Inventor	data	 files
+    /usr/share/src/Inventor/tools/ivview/* - Source to ivview
+    
+    \sa inventor, ivfix, ivcat, ivinfo, SceneViewer, gview
+*/

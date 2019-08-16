@@ -1,0 +1,48 @@
+/*! \file ivcat
+    \brief concatenates and converts Inventor files
+    
+    \section SYNOPSIS
+    ivcat [-bfht] [-o file] [file ...]
+    
+    \section DESCRIPTION
+    ivcat  reads  each  file  in  sequence and then writes each out.  If no
+    input file is given, or a filename of "-"  is  specified,  ivcat  reads
+    from  the  standard  input  file.   The	input files must be valid Open
+    Inventor 3D Interchange Format files (1.0 or 2.0).
+    
+    The following command line options are allowed:
+    
+    -b   Write out the files in binary Inventor format.  The default is  to
+        write out the files in Inventor's ASCII format.
+    
+    -f   Remove  all SoFile nodes.  This has the effect of condensing hier-
+        archical files into a single file.
+    
+    -h   Print usage message.
+    
+    -o file
+        Send the output to the given file, instead of to the standard out-
+        put.
+    
+    -t   Expand  SoTexture2	nodes  to  explictly  include the texture data
+        rather than a file name.
+    
+    \section EXAMPLES
+    To convert from binary to ASCII Inventor
+    
+          ivcat < binaryfile.iv > asciifile.iv
+    
+    To convert from ASCII to binary Inventor:
+    
+          ivcat -b < asciifile.iv > binaryfile.iv
+    
+    \section SOURCE CODE
+    Note that the source code to ivcat comes  with  the  Open  Inventor  3d
+    Toolkit.
+    
+    \section FILES
+     /usr/share/data/models/* - Sample Inventor data files
+    /usr/share/src/Inventor/tools/ivcat/* - Source to ivcat
+    
+    \sa inventor, ivview, noodle, SceneViewer, gview
+*/

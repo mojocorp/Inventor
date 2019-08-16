@@ -1,0 +1,92 @@
+/*! \file maze
+    \brief a nostalgic 3d game
+    
+    \section SYNOPSIS
+    maze [maze file]
+    
+    \section DESCRIPTION
+    maze  is a fun 3d game that will test your ability to navigate a marble
+    through a 3d maze by tilting the floor of the maze.  The object of  the
+    game  is to maneuver the marble through the entire maze without falling
+    into any of the holes.  There is only one path through the maze and  it
+    is NOT marked.
+    
+    Use  the  left  mouse  to  control the tilt of the maze floor.  You can
+    adjust the view of maze by pressing the right mouse button and choosing
+    the  Decoration	on menu button.  This will add some additional buttons
+    around the window which can be used to adjust the  view	of  the  maze.
+    Click  the top right toggle button to switch into viewing mode and then
+    adjust your view by pressing the  left  and/or  middle  mouse  buttons.
+    Click the "?" button to get help on how to use the viewer. When you are
+    done adjusting your view, hit the toggle button again and resume  play.
+    Be careful to not disorient your play by overadjusting the view.
+    
+    The  game  offers 3 levels of difficulty; press the "1" key to play the
+    starter maze, the "2" key for the difficult maze, and the "3"  key  for
+    the  masochist  maze. Pressing these keys at ANY TIME will restart the
+    game at that level. Pressing the "r" key will restart the game at  the
+    current level.
+    
+    If  the marble falls in a hole, press the "r", "1", "2", or "3" key to
+    restart the game.
+    
+    maze was written using the Inventor 3d Toolkit.
+    
+    \section BUILDING YOUR OWN MAZE
+    You can build your own mazes by creating maze files and then running
+    maze with the maze file as an argument. The top array specifies the
+    location of horizontal walls, the middle array specifies the location
+    of vertical walls, and the bottom array specifies locations of holes.
+    In the first two arrays, a 1 means a wall is present, and a 0 means no
+    wall is present. In the third array, a 1 means a hole is present. A
+    value of 2 in the hole array signifies the starting point, and a value
+    of 3 signifies the ending (winning) point in the maze.
+    
+    Here's the starter (level 1) maze file:
+    
+    1 1 1 1 1 1 1 1 1 1 1 1
+    0 0 1 1 0 0 1 1 0 0 0 1
+    0 1 0 0 1 1 0 0 0 0 0 1
+    1 0 0 1 1 0 1 1 0 0 1 1
+    0 0 1 0 0 0 0 0 0 1 0 1
+    0 0 0 0 1 0 0 1 0 0 0 1
+    0 1 0 1 0 0 0 0 0 0 0 1
+    0 0 0 0 0 1 1 0 0 0 0 1
+    1 1 0 0 1 0 0 0 0 0 0 1
+    0 1 1 1 0 0 1 0 0 0 0 1
+    0 0 0 0 0 0 0 1 0 0 0 1
+    1 1 1 1 1 1 1 1 1 1 1 1
+    
+    1 1 0 0 0 1 0 0 1 0 0 1
+    1 0 0 0 1 0 0 0 0 1 0 1
+    1 0 1 0 0 0 0 0 0 0 0 1
+    1 0 1 0 0 0 0 1 0 0 1 1
+    1 0 1 0 0 1 0 0 1 0 0 1
+    1 0 1 0 0 0 0 0 1 0 0 1
+    1 0 0 0 1 1 0 0 1 0 0 1
+    1 0 1 0 1 0 0 1 1 0 1 1
+    1 0 0 0 0 0 0 1 0 0 1 1
+    1 0 0 0 0 1 0 0 1 0 1 1
+    1 0 0 0 1 0 0 0 0 0 1 1
+    1 1 1 1 1 1 1 1 1 1 1 1
+    
+    1 0 0 0 0 0 0 2 0 0 0
+    0 0 1 0 0 0 1 0 0 1 0
+    0 0 0 0 0 0 0 0 1 0 0
+    0 0 0 0 0 1 0 0 0 0 1
+    0 0 0 0 0 0 0 0 1 0 0
+    0 1 1 0 0 1 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 0 0 0 0 0 0 0 0
+    0 0 0 1 0 0 0 0 1 0 0
+    0 0 1 0 0 1 0 0 0 0 0
+    0 0 0 0 1 0 0 0 0 0 3
+    
+    \section SOURCE CODE
+    Note that the source code to maze comes with the Open Inventor 3d Toolkit.
+    
+    \section FILES
+    /usr/share/src/Inventor/demos/maze/* - Source to maze
+    
+    \sa drop, SceneViewer, inventor, ivview,  noodle,  qmorf,  revo,  showcase, textomatic
+*/

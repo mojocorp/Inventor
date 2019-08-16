@@ -1,0 +1,37 @@
+/*! \file ivdowngrade
+    \brief converts Inventor 2.1 files to the Inventor 2.0 and 1.0 formats
+    
+    \section SYNOPSIS
+    ivdowngrade [-v targetVersion] [infile outfile | infile ]
+    
+    \section DESCRIPTION
+    ivdowngrade reads the input file infile and converts it to the Inventor
+    format  specified  by  -v  targetVersion , either 1.0 or 2.0. If the -v
+    option is not specified, an Inventor V2.0 file will be  generated.  The
+    input file can be in Inventor or VRML format. The output will always be
+    in ascii format.  If no output file is specified, ivdowngrade writes to
+    stdout. If  no input file is specified as well, ivdowngrade reads from
+    stdin.
+    
+    \section EXAMPLE
+    ivdowngrade -v 1.0 foo.iv moo.iv
+         Downgrades the file foo.iv to Inventor V1.0  format,  writing  to
+         moo.iv.
+    
+    ivdowngrade goo.iv
+         Downgrades  the  file  goo.iv to Inventor V2.0 format, writing to
+         stdout.
+    
+    \section NOTES
+    Because of differences between the 1.0 and 2.0 file formats, some  data
+    may  be	lost  during the conversion to 1.0. For instance, the 2.0 file
+    format for SoSeparator contains fields for caching and culling, but the
+    1.0 format for SoSeparator has no fields. This information is lost dur-
+    ing the conversion process.
+    No data is lost going from the 2.1 to the 2.0 format.
+    
+    \section FILES
+    /usr/share/data/models/* - Sample Inventor data files
+    
+    \sa inventor, ivcat, ivview, SceneViewer, gview, webspace
+*/

@@ -1,0 +1,123 @@
+/*! \file gview
+    \brief graph viewer for Inventor 3d databases
+    
+    \section SYNOPSIS
+    gview [file | < file]
+    
+    \section DESCRIPTION
+    gview is a program for viewing, editing, and learning about Inventor 3d
+    scene graphs.  There are two views of the Inventor scene  graph:  a  3d
+    rendered  view  (left) and a scene graph view (right).  The 3d rendered
+    view displays the data in an examiner viewer and  allows  selection  as
+    well  as viewing.  The scene graph view renders the scene database as a
+    directed acyclic graph illustrating  the  structure  and  relationships
+    within  the  database.	This view is displayed in a GraphViewer compo-
+    nent, which is derived from the Inventor plane viewer. Each node in the
+    graph is represented by a 3D icon.
+    
+    If  you	select	an  object in one view, it will be highlighted in both
+    views.  This is a very interesting way to learn	about  Inventor  scene
+    databases.  You can create new objects, edit the values of objects, and
+    rearrange the structure of the database by cutting and  pasting.   (See
+    the descriptions of the menu items for details.)
+    This  program is especially useful for Inventor programmers who want to
+    analyze a specific database or who wish	to  experiment	with  Inventor
+    features and visualize the database at the same time.
+    
+    \section GVIEW MENU
+    The top bar contains the following three items under the gview menu:
+    
+    Save in gview.iv
+          Saves  the  Inventor scene (as displayed in the examiner viewer)
+          in the file gview.iv.
+    
+    Save display graph in disp.iv
+          Saves the scene representing the	graph  (as  displayed  in  the
+          graph viewer) in the file disp.iv.
+    
+    Quit
+          The usual.
+    
+    \section GRAPH VIEWER MENU
+    The  top bar in the right-hand graph viewer window contains the follow-
+    ing menus:
+    
+    Graph
+          This menu contains an Update button that updates the graph  view
+          based  on changes made to the scene graph.  (This is useful only
+          if the GraphViewer component is used in  some  application  that
+          can  modify  the	structure  of  the  original  scene graph; the
+          GraphViewer does not update  based  on  changes  to  this  scene
+          graph, since that would be too expensive.)
+    
+    Edit
+          This menu enables cutting, copying, pasting, and duplicating the
+          selected node in the scene graph. When pasting (or  duplicating,
+          which  is  copying  and  pasting	in  one operation), you have a
+          choice of pasting a copy of the node or a reference to (instance
+          of)  it. Feedback appears to indicate where the copy or instance
+          will be located.
+    
+    Select
+          This menu allows you to change easily which node is selected.
+    
+    Group
+          This menu allows you to hide or show nodes under a  group  node.
+          If  a group node is selected, the Open button displays the imme-
+          diate children of the group, while Open All displays all descen-
+          dants.   Close hides all descendants, and Toggle toggles between
+          the open and closed states.
+    
+    Inst
+          When a node is the child of more than one parent, each  instance
+          after  the  first is displayed as an instance icon (a letter "I"
+          in the default icons). When an instance icon  is	selected,  the
+          Toggle  button  in  this menu toggles the display of a line that
+          connects the instance icon to the node it is an instance of. The
+          Swap  button  exchanges  the instance icon with this other node.
+          (This can be useful to examine nodes  under  an  instance  of  a
+          group node.)
+    
+    Node
+          The  Create  button  in this menu brings up a NodeCreator widget
+          that allows you to create a new instance of any built-in	Inven-
+          tor  node  class.  Once a type is selected or typed in, feedback
+          appears in the GraphViewer to help you place the new node in the
+          graph.  The  Edit  Fields  button brings up a FieldEditor widget
+          that allows you to edit the values of fields in a selected node.
+    
+    \section SHORTCUTS
+    Each menu button has a corresponding keyboard shortcut displayed in the
+    pull-down menu.	Double-clicking on a  node  icon  initiates  a	common
+    action  for  that  type	of  node. For a group, it is equivalent to the
+    Group Toggle button.  For an instance, it is  equivalent  to  the  Inst
+    Toggle  button.	 For any other node, it is equivalent to the Node Edit
+    Fields button.
+    
+    \section ICONS
+    The 3D icons used to represent nodes in the scene graph are read from a
+    file  called  gviewIcons.iv.   This  file is searched for in (in order)
+    directories specified in the  IV_GRAPH_DIR  environment	variable,  the
+    current	directory,  and  the usual place this file gets installed (See
+    the FILES section).
+    
+    Each icon in this file is represented by a subgraph (rooted by a  sepa-
+    rator)  whose first N children are label nodes; each of the label nodes
+    defines one node type to be represented by that subgraph. Icons	follow
+    the  node hierarchy; that is, the icon representing a group is used for
+    all group nodes that don't have explicitly different icons.
+    
+    The default icon set is chosen to be similar to the icons used  in  the
+    Inventor documentation.
+    
+    \section SOURCE CODE
+    Note  that  the source code to gview comes with the Open Inventor 3d
+    Toolkit.
+    
+    \section FILES
+    /usr/share/data/models/* - Sample 3D data  files
+    /usr/share/src/Inventor/demos/gview/* - Source to gview	
+    /usr/demos/data/Inventor/gviewIcons.iv - Default icon file
+    
+    \sa SceneViewer, drop, inventor, ivcat,  ivview,  noodle,  showcase,  revo, textomatic
+*/
