@@ -1,7 +1,7 @@
 /*! \file noodle
     \brief interactive 3d modeling program
     
-    \section SYNOPSIS
+    \section Synopsis
     noodle
     
     \section DESCRIPTION
@@ -53,11 +53,11 @@
     Inventor format (can be imported into any Inventor program, even if the
     GeneralizedCylinder DSO is not loaded on the host system).
     
-    \section SOURCE CODE
+    \section Source code
     Note that the source code to noodle comes with the Open Inventor 3d
     Toolkit.
     
-    \section FILES
+    \section Files
     /usr/share/src/Inventor/demos/noodle/* - Source to noodle
     
     \sa SceneViewer, drop, inventor, ivview, gview, maze,  qmorf,  revo,  showcase, textomatic

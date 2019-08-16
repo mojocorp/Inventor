@@ -1,7 +1,7 @@
 /*! \file SceneViewer
     \brief 3d editor and viewer for Inventor scenes
     
-    \section SYNOPSIS
+    \section Synopsis
     SceneViewer [-e env_file] [file]
     
     \section DESCRIPTION
@@ -57,7 +57,7 @@
     For more information on how to use the viewers and editors employed  by
     the scene viewer, please see SceneViewer's runtime help cards.
     
-    \section SOURCE CODE
+    \section Source code
     Note  that  the source code to SceneViewer comes with the Open Inventor
     3d Toolkit.
     
@@ -68,7 +68,7 @@
           Read the passed environment file, and use  the  lights,  camera,
           and environment settings found there.
     
-    \section FILES
+    \section Files
     /usr/share/data/models/*  -  Sample 3D data files 
     /usr/share/src/Inventor/demos/SceneViewer/* - Source to SceneViewer
     

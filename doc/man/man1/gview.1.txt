@@ -1,7 +1,7 @@
 /*! \file gview
     \brief graph viewer for Inventor 3d databases
     
-    \section SYNOPSIS
+    \section Synopsis
     gview [file | < file]
     
     \section DESCRIPTION
@@ -110,11 +110,11 @@
     The default icon set is chosen to be similar to the icons used  in  the
     Inventor documentation.
     
-    \section SOURCE CODE
+    \section Source code
     Note  that  the source code to gview comes with the Open Inventor 3d
     Toolkit.
     
-    \section FILES
+    \section Files
     /usr/share/data/models/* - Sample 3D data  files
     /usr/share/src/Inventor/demos/gview/* - Source to gview	
     /usr/demos/data/Inventor/gviewIcons.iv - Default icon file

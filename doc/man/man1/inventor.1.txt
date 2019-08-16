@@ -1,7 +1,5 @@
-/*! \file Inventor
-    \brief a toolkit for writing 3D programs
+/*! \mainpage Inventor - a toolkit for writing 3D programs
     
-    \section DESCRIPTION
     The Open Inventor 3D Toolkit is an object-oriented toolkit that simpli-
     fies and abstracts the task of writing graphics programming into a  set
     of  easy  to use objects.  These objects range from low-level data-cen-
@@ -34,7 +32,7 @@
     fast that programs can perform 3D  locate  highlighting	as  the  mouse
     moves across a 3D window.
     
-    \section INTERACTION, EVENTS, AND DEVICES
+    \par Interaction, events, and devices
     Inventor  defines a event model for writing 3D interaction.  This model
     is window system independent.  It is quite easy to  use	and  makes  3D
     direct  manipulation programming possible.  Inventor includes a variety
@@ -43,22 +41,22 @@
     model encourages programmers  to  extend  the  system  to  support  new
     devices and event types.
     
-    \section FILE FORMAT
+    \par File format
     The  Inventor 3D File Format is SGI's standard for 3D data.  The format
     supports both an ASCII and private binary format.  The binary format is
     network-neutral and thus can be exported across machine boundaries.
     
-    \section BENEFITS
+    \par Benefits
     Programming  3D	graphics  applications with Inventor results in large-
     scale productivity increases.  This also increases with	time  as  more
     tools utilize the Inventor paradigm, user interfaces, and standard file
     format.
     
-    \section DOCUMENTATION
+    \par Documentation
     A list of online documentation is available in the General FAQ  section
     of the web site provided at the end of this man page.
     
-    \section SOURCE CODE
+    \par Source code
     The  Inventor  Toolkit  includes  source  code to NUMEROUS programs and
     examples.
     

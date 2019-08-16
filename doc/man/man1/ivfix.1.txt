@@ -1,7 +1,7 @@
 /*! \file ivfix
     \brief restructures an Inventor object for improved rendering performance
     
-    \section SYNOPSIS
+    \section Synopsis
     ivfix [ -ahntvV ] [ -d dir ] [infile] [outfile]
     
     \section DESCRIPTION
@@ -52,15 +52,15 @@
     
     -V   (Very verbose) Display more detailed status information.
     
-    \section SOURCE CODE
+    \section Source code
     Note  that  the	source	code  to ivfix comes with the Open Inventor 3d
     Toolkit.
     
-    \section FILES
+    \section Files
     /usr/share/data/models/* - Sample 3D data  files
     /usr/share/src/Inventor/tools/ivfix/* - Source to ivfix
     
-    \section EXAMPLES
+    \section Examples
           ivfix < slowObject.iv > quickObject.iv
     
     \sa inventor,  ivview,  ivcat, ivinfo, SceneViewer, gview, drop, maze, noodle, revo, showcase, textomatic

@@ -1,7 +1,7 @@
 /*! \file qmorf
     \brief 3d morphing program
     
-    \section SYNOPSIS
+    \section Synopsis
     qmorf [qfile1] [qfile2] ...
     
     \section DESCRIPTION
@@ -46,15 +46,15 @@
     Quit button
           Quits qmorf.
     
-    \section SOURCE CODE
+    \section Source code
     Note that the source code to maze comes with the Open Inventor 3d Tool-
     kit.
     
-    \section FILES
+    \section Files
     /usr/share/data/models/CyberHeads/* - Sample qmorf files
     /usr/share/src/Inventor/demos/qmorf/* - Source to qmorf
     
-    \section CREDITS
+    \section Credits
     Data for the heads courtesy of:	Cyberware Laboratory Inc.
     
     \sa drop, maze, textomatic, revo, SceneViewer, inventor, ivview, noodle

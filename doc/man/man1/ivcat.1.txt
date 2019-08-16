@@ -1,7 +1,7 @@
 /*! \file ivcat
     \brief concatenates and converts Inventor files
     
-    \section SYNOPSIS
+    \section Synopsis
     ivcat [-bfht] [-o file] [file ...]
     
     \section DESCRIPTION
@@ -27,7 +27,7 @@
     -t   Expand  SoTexture2	nodes  to  explictly  include the texture data
         rather than a file name.
     
-    \section EXAMPLES
+    \section Examples
     To convert from binary to ASCII Inventor
     
           ivcat < binaryfile.iv > asciifile.iv
@@ -36,11 +36,11 @@
     
           ivcat -b < asciifile.iv > binaryfile.iv
     
-    \section SOURCE CODE
+    \section Source code
     Note that the source code to ivcat comes  with  the  Open  Inventor  3d
     Toolkit.
     
-    \section FILES
+    \section Files
      /usr/share/data/models/* - Sample Inventor data files
     /usr/share/src/Inventor/tools/ivcat/* - Source to ivcat
     

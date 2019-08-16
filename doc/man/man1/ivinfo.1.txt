@@ -1,7 +1,7 @@
 /*! \file ivinfo
     \brief Prints information about Inventor files
     
-    \section SYNOPSIS
+    \section Synopsis
     ivinfo [-h] [file]
     
     \section DESCRIPTION
@@ -16,11 +16,11 @@
     
     -h   Prints out the usage for the command.
     
-    \section SOURCE CODE
+    \section Source code
     Note  that  the	source	code to ivinfo comes with the Open Inventor 3d
     Toolkit.
     
-    \section FILES
+    \section Files
     /usr/share/data/models/* - Sample 3D data  files
     /usr/share/src/Inventor/tools/ivinfo/* - Source to ivinfo
     

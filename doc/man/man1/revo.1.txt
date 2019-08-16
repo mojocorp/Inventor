@@ -1,7 +1,7 @@
 /*! \file revo
     \brief creates revolved 3d surfaces
     
-    \section SYNOPSIS
+    \section Synopsis
     revo
     
     \section DESCRIPTION
@@ -80,11 +80,11 @@
           the copy button will disappear when revo exits, so  be  sure  to
           paste your creations before exiting.
     
-    \section SOURCE CODE
+    \section Source code
     Note that the source code to revo comes with the Open Inventor 3d Tool-
     kit.
     
-    \section FILES
+    \section Files
     /usr/share/src/Inventor/demos/revo/* - Source to revo
     
     \sa SceneViewer, drop, gview, inventor, ivview, maze, noodle, qmorf,  showcase, textomatic

@@ -1,7 +1,7 @@
 /*! \file ivview
     \brief fast, interactive 3D viewer of Inventor files
     
-    \section SYNOPSIS
+    \section Synopsis
     ivview [-hpw] [files | < file]
     
     \section DESCRIPTION
@@ -60,11 +60,11 @@
           ivview myCameraAndLights.iv myObject.iv
     
     
-    \section SOURCE CODE
+    \section Source code
     Note  that  the	source	code to ivview comes with the Open Inventor 3D
     Toolkit.
     
-    \section FILES
+    \section Files
     /usr/share/data/models/*    -	Sample	   Inventor	data	 files
     /usr/share/src/Inventor/tools/ivview/* - Source to ivview
     
