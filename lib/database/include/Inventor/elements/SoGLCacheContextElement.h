@@ -294,7 +294,6 @@ SoEXTENDER class SoGLCacheContextElement : public SoElement {
 
     static SbPList *	waitingToBeFreed;	// Allocated in ::init
     static SbPList *	extensionList;		// Allocated in ::init
-    static SbIntList *	mipmapSupportList;	// Allocated in ::init
 
 friend class SoGLDisplayList;
 };

@@ -64,7 +64,6 @@ SO_ELEMENT_SOURCE(SoGLCacheContextElement);
 
 SbPList		*SoGLCacheContextElement::waitingToBeFreed = NULL;
 SbPList		*SoGLCacheContextElement::extensionList = NULL;
-SbIntList	*SoGLCacheContextElement::mipmapSupportList = NULL;
 
 // Internal struct:
 struct extInfo {
@@ -260,49 +259,11 @@ SoGLCacheContextElement::extSupported(SoState *state, int ext)
 //    mip-mapped textures quickly.
 //
 SbBool
-SoGLCacheContextElement::areMipMapsFast(SoState *state)
+SoGLCacheContextElement::areMipMapsFast(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int ctx = get(state);
-
-    // See if we already know:
-    for (int i = 0; i < mipmapSupportList->getLength(); i+=2) {
-	if ((*mipmapSupportList)[i] == ctx)
-	    return (*mipmapSupportList)[i+1];
-    }
-    // Don't know, figure it out:
-
-    SbBool result;
-    if (strncmp((const char *)glGetString(GL_VENDOR), "SGI", 3) == 0) {
-	
-	const char *renderer = (const char *)glGetString(GL_RENDERER);
-	// Indy and XL
-	if (strncmp(renderer, "NEWPORT", 7) == 0)
-	    result = FALSE;
-	// Personal Iris, XS, XZ, Extreme...
-	else if (strncmp(renderer, "GR", 2) == 0)
-	    result = FALSE;
-	else if (strncmp(renderer, "GU", 2) == 0)
-	    result = FALSE;
-	// VGX and VGXT
-	else if (strncmp(renderer, "VGX", 3) == 0)
-	    result = FALSE;
-	// Indigo Entry
-	else if (strncmp(renderer, "LIGHT", 5) == 0)
-	    result = FALSE;
-	// IndigoII Impact
-	else if (strncmp(renderer, "IMPACT", 6) == 0)
-	    result = TRUE;
-	else
-	    result = TRUE; // Re's are fast, assume all future SGI
-			   // machines will do fast texturing.
-    }
-    else result = FALSE;  // Assume non-SGI machines do texturing slowly
-
-    mipmapSupportList->append(ctx);
-    mipmapSupportList->append(result);
-    return result;
+    return TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
