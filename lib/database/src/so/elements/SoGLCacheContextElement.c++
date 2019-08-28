@@ -384,11 +384,7 @@ SoGLDisplayList::SoGLDisplayList(SoState *state, Type _type,
 
     if (type == TEXTURE_OBJECT) {
 #ifdef GL_EXT_texture_object
-#ifdef GL_VERSION_1_1
 	glGenTextures(1, &startIndex);
-#else
-	glGenTexturesEXT(1, &startIndex);
-#endif
 #ifdef DEBUG
 	if (num != 1)
 	    SoDebugError::post("SoGLDisplayList", "Sorry, can only "
@@ -453,11 +449,7 @@ SoGLDisplayList::open(SoState *, int index)
 {
     if (type == TEXTURE_OBJECT) {
 #ifdef GL_EXT_texture_object
-#ifdef GL_VERSION_1_1
 	glBindTexture(GL_TEXTURE_2D, startIndex+index);
-#else
-	glBindTextureEXT(GL_TEXTURE_2D, startIndex+index);
-#endif
 #endif
     } else {
 	glNewList(startIndex+index, GL_COMPILE_AND_EXECUTE);
@@ -495,11 +487,7 @@ SoGLDisplayList::call(SoState *state, int index)
 {
     if (type == TEXTURE_OBJECT) {
 #ifdef GL_EXT_texture_object
-#ifdef GL_VERSION_1_1
 	glBindTexture(GL_TEXTURE_2D, startIndex+index);
-#else
-	glBindTextureEXT(GL_TEXTURE_2D, startIndex+index);
-#endif
 #endif
     } else {
 	glCallList(startIndex+index);
@@ -539,11 +527,7 @@ SoGLDisplayList::~SoGLDisplayList()
 {
     if (type == TEXTURE_OBJECT) {
 #ifdef GL_EXT_texture_object
-#ifdef GL_VERSION_1_1
 	glDeleteTextures(1, &startIndex);
-#else
-	glDeleteTexturesEXT(1, &startIndex);
-#endif
 #endif
     } else {
 	glDeleteLists(startIndex, num);
