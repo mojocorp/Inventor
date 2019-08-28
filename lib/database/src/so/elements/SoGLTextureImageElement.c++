@@ -407,11 +407,7 @@ SoGLTextureImageElement::sendTex(SoState *state)
     // unbind the current texture object so we don't overwrite it's state.
 #ifdef GL_EXT_texture_object
     if (!buildList)
-#ifdef GL_VERSION_1_1
 	glBindTexture(GL_TEXTURE_2D, 0);
-#else
-	glBindTextureEXT(GL_TEXTURE_2D, 0);
-#endif
 #endif
 
     // These need to go inside the display list or texture object
