@@ -85,6 +85,26 @@ SO_KIT_SOURCE(SoSpotLightDragger);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//  Initializes the type ID for this dragger node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoSpotLightDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(
+               SoSpotLightDragger,	// class
+               "SpotLightDragger",	// name to be written to files
+               SoDragger		// parent class
+    );
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //  Constructors. Each constructor calls constructorSub(), which
 //  does work that is common to each.
 //

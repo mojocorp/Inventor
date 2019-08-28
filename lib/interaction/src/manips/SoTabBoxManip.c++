@@ -67,6 +67,22 @@ SO_NODE_SOURCE(SoTabBoxManip);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//  Initializes the type ID for this manipulator node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoTabBoxManip::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTabBoxManip, "TabBoxManip", SoTransformManip);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //  Constructors. Each constructor calls constructorSub(), which
 //  does work that is common to each.
 //

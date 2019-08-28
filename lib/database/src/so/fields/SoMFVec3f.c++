@@ -66,6 +66,21 @@ SO_MFIELD_SOURCE_MALLOC(SoMFVec3f, SbVec3f, const SbVec3f &);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoMFVec3f class.
+//
+// Use: internal
+
+void
+SoMFVec3f::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFVec3f, "MFVec3f", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets values from array of arrays of 3 floats. This can be useful
 //    in some applications that have vectors stored in this manner and
 //    want to keep them that way for efficiency.

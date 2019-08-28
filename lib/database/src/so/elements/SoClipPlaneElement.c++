@@ -73,6 +73,19 @@ struct So_ClipPlane {
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoClipPlaneElement class.
+//
+// Use: internal
+
+void
+SoClipPlaneElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoClipPlaneElement, SoAccumulatedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

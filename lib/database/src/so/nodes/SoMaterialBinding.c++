@@ -62,6 +62,26 @@ SO_NODE_SOURCE(SoMaterialBinding);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoMaterialBinding class.
+//
+// Use: internal
+
+void
+SoMaterialBinding::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoMaterialBinding, "MaterialBinding", SoNode);
+
+    // Enable elements for appropriate actions:
+    SO_ENABLE(SoGLRenderAction, SoMaterialBindingElement);
+    SO_ENABLE(SoCallbackAction, SoMaterialBindingElement);
+    SO_ENABLE(SoPickAction,     SoMaterialBindingElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

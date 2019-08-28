@@ -58,6 +58,25 @@ SO_ELEMENT_ABSTRACT_SOURCE(SoInt32Element);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoInt32Element class.
+//
+// Use: internal
+
+void
+SoInt32Element::initClass()
+{
+    // We can't use the SO_ELEMENT_INIT_CLASS() macro here, because we
+    // don't want to set the stackIndex for this class to anything
+    // real. So we'll just do the rest by hand.
+
+    classTypeId = SoType::createType(SoElement::getClassTypeId(),
+                     "SoInt32Element", NULL);
+    classStackIndex = -1;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

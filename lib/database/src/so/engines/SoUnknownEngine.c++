@@ -62,6 +62,21 @@
 // per-instance input and output data:
 SO__ENGINE_VARS(SoUnknownEngine);
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoUnknownEngine class.
+//
+// Use: internal
+
+void
+SoUnknownEngine::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_CLASS(SoUnknownEngine, "UnknownEngine", SoEngine);
+}
+
 SoType
 SoUnknownEngine::getTypeId() const
 {

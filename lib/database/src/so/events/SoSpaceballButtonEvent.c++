@@ -57,6 +57,22 @@ SO_EVENT_SOURCE(SoSpaceballButtonEvent);
 
 ////////////////////////////////////////////////////////////////////////
 //
+// Class initialization
+//
+// SoINTERNAL public
+//
+void
+SoSpaceballButtonEvent::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new event type id
+    classTypeId = SoType::createType(
+    SoButtonEvent::getClassTypeId(), "SpaceballButtonEvent");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
 // Constructor
 //
 SoSpaceballButtonEvent::SoSpaceballButtonEvent()

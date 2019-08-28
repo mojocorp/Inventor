@@ -71,6 +71,29 @@ SO_NODE_SOURCE(SoSwitch);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoSwitch class.
+//
+// Use: internal
+
+void
+SoSwitch::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoSwitch, "Switch", SoGroup);
+
+    SO_ENABLE(SoCallbackAction, SoSwitchElement);
+    SO_ENABLE(SoGLRenderAction, SoSwitchElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoSwitchElement);
+    SO_ENABLE(SoGetMatrixAction, SoSwitchElement);
+    SO_ENABLE(SoHandleEventAction, SoSwitchElement);
+    SO_ENABLE(SoPickAction, SoSwitchElement);
+    SO_ENABLE(SoSearchAction, SoSwitchElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

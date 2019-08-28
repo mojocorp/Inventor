@@ -59,6 +59,19 @@ SO_ELEMENT_SOURCE(SoNormalElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoNormalElement class.
+//
+// Use: internal
+
+void
+SoNormalElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoNormalElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

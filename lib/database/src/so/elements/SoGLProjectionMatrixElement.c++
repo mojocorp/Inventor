@@ -59,6 +59,20 @@ SO_ELEMENT_SOURCE(SoGLProjectionMatrixElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLProjectionMatrixElement class.
+//
+// Use: internal
+
+void
+SoGLProjectionMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLProjectionMatrixElement,
+              SoProjectionMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

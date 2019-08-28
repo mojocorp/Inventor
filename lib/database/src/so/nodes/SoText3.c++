@@ -327,6 +327,23 @@ SO_NODE_SOURCE(SoText3);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoText3 class.
+//
+// Use: internal
+
+void
+SoText3::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoText3, "Text3", SoShape);
+
+    // Font name and size elements are enabled by the SoFont node
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public
@@ -2992,6 +3009,23 @@ SbBool SoText3::genTexCoord = TRUE;
 const SoTextureCoordinateElement *SoText3::tce = NULL;
 
 SO_NODE_SOURCE(SoText3);
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoText3 class.
+//
+// Use: internal
+
+void
+SoText3::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoText3, "Text3", SoShape);
+
+    // Font name and size elements are enabled by the SoFont node
+}
 
 ////////////////////////////////////////////////////////////////////////
 //

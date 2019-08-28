@@ -63,6 +63,24 @@ SO_NODE_SOURCE(SoTextureCoordinateDefault);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTextureCoordinateDefault class.
+//
+// Use: internal
+
+void
+SoTextureCoordinateDefault::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTextureCoordinateDefault,
+              "TextureCoordinateDefault", SoTextureCoordinateFunction);
+
+    // Elements are enabled by SoTextureCoordinate nodes.
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

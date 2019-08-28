@@ -59,6 +59,19 @@ SO_ELEMENT_SOURCE(SoDrawStyleElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoDrawStyleElement class.
+//
+// Use: internal
+
+void
+SoDrawStyleElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoDrawStyleElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

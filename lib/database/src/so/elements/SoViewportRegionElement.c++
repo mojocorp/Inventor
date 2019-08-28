@@ -60,6 +60,20 @@ SO_ELEMENT_SOURCE(SoViewportRegionElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoViewportRegionElement class.
+//
+// Use: internal
+
+void
+SoViewportRegionElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoViewportRegionElement, SoElement);
+    emptyViewportRegion = new SbViewportRegion(0, 0);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

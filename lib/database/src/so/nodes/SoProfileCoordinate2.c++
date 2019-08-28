@@ -63,6 +63,27 @@ SO_NODE_SOURCE(SoProfileCoordinate2);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoProfileCoordinate2 class.
+//
+// Use: internal
+
+void
+SoProfileCoordinate2::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoProfileCoordinate2, "ProfileCoordinate2", SoNode);
+
+    // Enable elements for appropriate actions:
+    SO_ENABLE(SoGLRenderAction, SoProfileCoordinateElement);
+    SO_ENABLE(SoCallbackAction, SoProfileCoordinateElement);
+    SO_ENABLE(SoPickAction,	SoProfileCoordinateElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoProfileCoordinateElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

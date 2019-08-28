@@ -64,6 +64,23 @@ SO_ACTION_SOURCE(SoGetBoundingBoxAction);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoGetBoundingBoxAction class.
+//
+// Use: internal
+
+void
+SoGetBoundingBoxAction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_ACTION_INIT_CLASS(SoGetBoundingBoxAction, SoAction);
+
+    SO_ENABLE(SoGetBoundingBoxAction, SoViewportRegionElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

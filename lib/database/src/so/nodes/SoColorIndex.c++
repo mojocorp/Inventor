@@ -54,9 +54,26 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoLazyElement.h>
 #include <Inventor/elements/SoOverrideElement.h>
+#include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/nodes/SoColorIndex.h>
 
 SO_NODE_SOURCE(SoColorIndex);
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoColorIndex class.
+//
+// Use: internal
+
+void
+SoColorIndex::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoColorIndex, "ColorIndex", SoNode);
+    SO_ENABLE(SoGLRenderAction, SoGLLazyElement);
+}
 
 ////////////////////////////////////////////////////////////////////////
 //

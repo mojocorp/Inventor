@@ -61,6 +61,27 @@ SO_NODE_ABSTRACT_SOURCE(SoLight);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoLight class. Since this is an abstract
+//    class, this doesn't need to deal with field data. Subclasses,
+//    do, however.
+//
+// Use: internal
+
+void
+SoLight::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_ABSTRACT_CLASS(SoLight, "Light", SoNode);
+
+    // Enable elements used by light source classes:
+    SO_ENABLE(SoGLRenderAction, SoGLLightIdElement);
+    SO_ENABLE(SoGLRenderAction, SoLightAttenuationElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: protected

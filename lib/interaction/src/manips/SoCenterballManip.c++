@@ -69,6 +69,22 @@ SO_NODE_SOURCE(SoCenterballManip);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//  Initializes the type ID for this manipulator node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoCenterballManip::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoCenterballManip, "CenterballManip", SoTransformManip);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //  Constructors. Each constructor calls constructorSub(), which
 //  does work that is common to each.
 //

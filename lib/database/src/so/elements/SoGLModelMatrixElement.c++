@@ -62,6 +62,19 @@ SO_ELEMENT_SOURCE(SoGLModelMatrixElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLModelMatrixElement class.
+//
+// Use: internal
+
+void
+SoGLModelMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLModelMatrixElement, SoModelMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

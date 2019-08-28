@@ -60,6 +60,19 @@ SO_ELEMENT_SOURCE(SoGLCoordinateElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLCoordinateElement class.
+//
+// Use: internal
+
+void
+SoGLCoordinateElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLCoordinateElement, SoCoordinateElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

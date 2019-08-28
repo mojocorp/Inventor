@@ -65,6 +65,21 @@
 // Can't use _DERIVED_SOURCE macro because need to implement a destructor:
 SO_SFIELD_REQUIRED_SOURCE(SoSFBitMask);
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoSFBitMask class.
+//
+// Use: internal
+
+void
+SoSFBitMask::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoSFBitMask, "SFBitMask", SoSFEnum);
+}
+
 SoSFBitMask::SoSFBitMask()
 {
 }

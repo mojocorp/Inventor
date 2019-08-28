@@ -59,6 +59,19 @@ SO_ELEMENT_SOURCE(SoOverrideElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoOverrideElement class.
+//
+// Use: internal
+
+void
+SoOverrideElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoOverrideElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Initializes element.  All flags are initialized to FALSE (0).
 //
 // Use: public

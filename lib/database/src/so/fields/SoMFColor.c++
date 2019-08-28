@@ -66,6 +66,21 @@ SO_MFIELD_SOURCE_MALLOC(SoMFColor, SbColor, const SbColor &);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoMFColor class.
+//
+// Use: internal
+
+void
+SoMFColor::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFColor, "MFColor", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets RGB values from array of arrays of 3 floats. This can be useful
 //    in some applications that have colors stored in this manner and
 //    want to keep them that way for efficiency.

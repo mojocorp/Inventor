@@ -71,6 +71,25 @@
 
 SO_KIT_SOURCE(SoJackDragger);
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//  Initializes the type ID for this dragger node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoJackDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(
+               SoJackDragger,	// class
+               "JackDragger",	// name to be written to files
+               SoDragger	// parent class
+    );
+}
 
 ////////////////////////////////////////////////////////////////////////
 //

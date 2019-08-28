@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoFontNameElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoFontNameElement class.
+//
+// Use: internal
+
+void
+SoFontNameElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoFontNameElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

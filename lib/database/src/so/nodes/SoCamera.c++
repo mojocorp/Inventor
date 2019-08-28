@@ -76,6 +76,53 @@ SO_NODE_ABSTRACT_SOURCE(SoCamera);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoCamera class. Since this is an abstract
+//    class, this doesn't need to deal with field data. Subclasses,
+//    do, however.
+//
+// Use: internal
+
+void
+SoCamera::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_ABSTRACT_CLASS(SoCamera, "Camera", SoNode);
+
+    // Enable elements used:
+
+    SO_ENABLE(SoCallbackAction, SoFocalDistanceElement);
+    SO_ENABLE(SoCallbackAction, SoProjectionMatrixElement);
+    SO_ENABLE(SoCallbackAction, SoViewVolumeElement);
+    SO_ENABLE(SoCallbackAction, SoViewingMatrixElement);
+    SO_ENABLE(SoCallbackAction, SoViewportRegionElement);
+
+    SO_ENABLE(SoGetBoundingBoxAction, SoFocalDistanceElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoProjectionMatrixElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoViewVolumeElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoViewingMatrixElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoViewportRegionElement);
+
+    SO_ENABLE(SoGLRenderAction, SoFocalDistanceElement);
+    SO_ENABLE(SoGLRenderAction, SoGLProjectionMatrixElement);
+    SO_ENABLE(SoGLRenderAction, SoViewVolumeElement);
+    SO_ENABLE(SoGLRenderAction, SoGLViewingMatrixElement);
+    SO_ENABLE(SoGLRenderAction, SoGLViewportRegionElement);
+    SO_ENABLE(SoGLRenderAction, SoGLUpdateAreaElement);
+
+    SO_ENABLE(SoHandleEventAction, SoViewVolumeElement);
+    SO_ENABLE(SoHandleEventAction, SoViewportRegionElement);
+
+    SO_ENABLE(SoRayPickAction, SoFocalDistanceElement);
+    SO_ENABLE(SoRayPickAction, SoProjectionMatrixElement);
+    SO_ENABLE(SoRayPickAction, SoViewVolumeElement);
+    SO_ENABLE(SoRayPickAction, SoViewingMatrixElement);
+    SO_ENABLE(SoRayPickAction, SoViewportRegionElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: protected

@@ -62,6 +62,26 @@ SO_NODE_SOURCE(SoClipPlane);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoClipPlane class.
+//
+// Use: internal
+
+void
+SoClipPlane::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoClipPlane, "ClipPlane", SoNode);
+
+    // Enable clip plane element
+    SO_ENABLE(SoCallbackAction, SoClipPlaneElement);
+    SO_ENABLE(SoPickAction,	SoClipPlaneElement);
+    SO_ENABLE(SoGLRenderAction, SoGLClipPlaneElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

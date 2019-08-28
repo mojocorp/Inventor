@@ -61,6 +61,21 @@ SbBool SoSearchAction::duringSearchAll = FALSE;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoSearchAction class.
+//
+// Use: internal
+
+void
+SoSearchAction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_ACTION_INIT_CLASS(SoSearchAction, SoAction);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor. Sets up default values: search for first node, no
 //    exact match necessary.
 //

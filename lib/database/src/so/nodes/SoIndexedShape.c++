@@ -65,6 +65,22 @@ int SoIndexedShape::numConsecutiveIndicesAllocated = 0;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoIndexedShape class.
+//
+// Use: internal
+
+void
+SoIndexedShape::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_ABSTRACT_CLASS(SoIndexedShape, "IndexedShape",
+                 SoVertexShape);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: protected

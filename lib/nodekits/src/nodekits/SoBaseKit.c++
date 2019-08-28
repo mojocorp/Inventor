@@ -92,6 +92,27 @@ SbBool SoBaseKit::searchingChildren = FALSE;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoBaseKit class.
+//
+// Use: internal
+
+void
+SoBaseKit::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // We can not attempt to inherit a parentNodekitCatalogPtr
+    // from SoNode (it is undefined there).
+    // Therefore, we don't call SO_KIT_INIT_CLASS here.
+    // We just call it for SO_NODE and set parentNodekitCatalog to NULL
+
+    SO__NODE_INIT_CLASS(SoBaseKit, "BaseKit", SoNode);
+    parentNodekitCatalogPtr = NULL;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    This prints a diagram of the parts in this class
 //
 // Use: static, internal

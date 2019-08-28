@@ -65,6 +65,19 @@ SO_ELEMENT_SOURCE(SoCacheElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoCacheElement class.
+//
+// Use: internal
+
+void
+SoCacheElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoCacheElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

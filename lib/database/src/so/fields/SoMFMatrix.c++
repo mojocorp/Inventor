@@ -66,6 +66,21 @@ SO_MFIELD_SOURCE_MALLOC(SoMFMatrix, SbMatrix, const SbMatrix &);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoMFMatrix class.
+//
+// Use: internal
+
+void
+SoMFMatrix::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__FIELD_INIT_CLASS(SoMFMatrix, "MFMatrix", SoMField);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Sets one matrix value from 16 separate floats. (Convenience function)
 //
 // Use: public

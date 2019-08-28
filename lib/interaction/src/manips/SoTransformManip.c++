@@ -73,6 +73,22 @@ SO_NODE_SOURCE(SoTransformManip);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//  Initializes the type ID for this manipulator node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoTransformManip::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTransformManip, "TransformManip", SoTransform);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //  Constructor.
 //
 // Use: public

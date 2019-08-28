@@ -63,6 +63,21 @@
 // regular SO_NODE_SOURCE macro.
 SO__NODE_VARS(SoUnknownNode);
 
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoUnknownNode class.
+//
+// Use: internal
+
+void
+SoUnknownNode::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoUnknownNode, "UnknownNode", SoNode);
+}
+
 SoType
 SoUnknownNode::getTypeId() const
 {

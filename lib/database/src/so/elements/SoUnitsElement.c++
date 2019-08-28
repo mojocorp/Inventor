@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoUnitsElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoUnitsElement class.
+//
+// Use: internal
+
+void
+SoUnitsElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoUnitsElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

@@ -59,6 +59,24 @@ SoType	SoDetail::classTypeId;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes class.
+//
+// Use: internal
+//
+
+void
+SoDetail::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new type id
+    // No real parent id, so pass 'badType' as the parent type
+    classTypeId = SoType::createType(SoType::badType(), "SoDetail", NULL);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: protected

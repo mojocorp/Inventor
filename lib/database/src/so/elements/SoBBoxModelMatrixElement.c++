@@ -64,6 +64,19 @@ SO_ELEMENT_SOURCE(SoBBoxModelMatrixElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoBBoxModelMatrixElement class.
+//
+// Use: internal
+
+void
+SoBBoxModelMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoBBoxModelMatrixElement, SoModelMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

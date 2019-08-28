@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoTextureImageElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoTextureImageElement class.
+//
+// Use: internal
+
+void
+SoTextureImageElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoTextureImageElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private
