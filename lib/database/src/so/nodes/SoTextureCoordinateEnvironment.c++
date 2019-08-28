@@ -159,15 +159,9 @@ SoTextureCoordinateEnvironment::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoState *state = action->getState();
-
-    // Special case to workaround OpenGL on Indigo/IndigoII bug:
-    if (SoTextureOverrideElement::getQualityOverride(state) &&
-	SoTextureQualityElement::get(state) == 0.0) return;
-
     // Let the state know that the GL is generating texture
     // coordinates.
-    SoGLTextureCoordinateElement::setTexGen(state, this,
+    SoGLTextureCoordinateElement::setTexGen(action->getState(), this,
 					    doTexgen, this,
 					    valueCallback, action);
 }
