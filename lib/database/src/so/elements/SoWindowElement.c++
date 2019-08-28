@@ -59,6 +59,19 @@ SO_ELEMENT_SOURCE(SoWindowElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoWindowElement class.
+//
+// Use: internal
+
+void
+SoWindowElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoWindowElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

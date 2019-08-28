@@ -70,6 +70,28 @@ SO_NODE_SOURCE(SoTexture2);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTexture2 class.
+//
+// Use: internal
+
+void
+SoTexture2::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTexture2, "Texture2", SoNode);
+
+    SO_ENABLE(SoGLRenderAction, SoGLTextureImageElement);
+    SO_ENABLE(SoCallbackAction, SoTextureImageElement);
+    SO_ENABLE(SoGLRenderAction, SoTextureOverrideElement);
+    SO_ENABLE(SoCallbackAction, SoTextureOverrideElement);
+    SO_ENABLE(SoGLRenderAction, SoGLTextureEnabledElement);
+    SO_ENABLE(SoGLRenderAction, SoShapeStyleElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

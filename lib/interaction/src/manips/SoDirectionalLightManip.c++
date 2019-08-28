@@ -73,6 +73,23 @@ SO_NODE_SOURCE(SoDirectionalLightManip);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//  Initializes the type ID for this manipulator node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public, internal
+//
+void
+SoDirectionalLightManip::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoDirectionalLightManip, "DirectionalLightManip",
+               SoDirectionalLight);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 SoDirectionalLightManip::SoDirectionalLightManip()

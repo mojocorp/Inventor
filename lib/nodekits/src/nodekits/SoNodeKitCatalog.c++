@@ -76,6 +76,24 @@ SoType  *SoNodekitCatalog::badType   = NULL;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes static variables.
+//
+// Use: public
+
+void
+SoNodekitCatalog::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    emptyName = new SbName("");
+    emptyList = new SoTypeList;
+    badType   = new SoType();
+    *badType = SoType::badType();
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: internal

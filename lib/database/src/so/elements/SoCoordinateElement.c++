@@ -62,6 +62,19 @@ SbVec3f	*SoCoordinateElement::defaultCoord3 = NULL;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoCoordinateElement class.
+//
+// Use: internal
+
+void
+SoCoordinateElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoCoordinateElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

@@ -61,6 +61,19 @@ SO_ELEMENT_SOURCE(SoTextureCoordinateElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoTextureCoordinateElement class.
+//
+// Use: internal
+
+void
+SoTextureCoordinateElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoTextureCoordinateElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

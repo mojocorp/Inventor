@@ -65,6 +65,24 @@ SO_NODE_SOURCE(SoTextureCoordinatePlane);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTextureCoordinatePlane class.
+//
+// Use: internal
+
+void
+SoTextureCoordinatePlane::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTextureCoordinatePlane,
+              "TextureCoordinatePlane", SoTextureCoordinateFunction);
+
+    // Elements are enabled by SoTextureCoordinate nodes.
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

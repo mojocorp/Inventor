@@ -60,6 +60,19 @@ SO_ELEMENT_SOURCE(SoGLUpdateAreaElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLUpdateAreaElement class.
+//
+// Use: internal
+
+void
+SoGLUpdateAreaElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLUpdateAreaElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

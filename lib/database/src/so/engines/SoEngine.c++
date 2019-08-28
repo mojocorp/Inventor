@@ -78,6 +78,25 @@ SoType	SoEngine::classTypeId;				// Type identifier
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the base SoEngine class.  Called by
+//    SoDB::init().
+//
+// Use: internal
+
+void
+SoEngine::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new engine type id
+    // No real parent id
+    classTypeId = SoType::createType(SoFieldContainer::getClassTypeId(),
+    SbName("Engine"), 0, 0);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor.  Engines are assumed to need evaluation when
 //    first created (this is probably being paranoid, since
 //    needsEvaluation is set when a connection is made to a engine

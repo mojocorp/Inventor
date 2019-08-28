@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoProjectionMatrixElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoProjectionMatrixElement class.
+//
+// Use: internal
+
+void
+SoProjectionMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoProjectionMatrixElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

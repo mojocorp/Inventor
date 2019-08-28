@@ -62,6 +62,19 @@ SO_ELEMENT_SOURCE(SoGLTextureEnabledElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLTextureEnabledElement class.
+//
+// Use: internal
+
+void
+SoGLTextureEnabledElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLTextureEnabledElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

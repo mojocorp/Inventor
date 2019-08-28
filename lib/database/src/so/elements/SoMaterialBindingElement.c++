@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoMaterialBindingElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoMaterialBindingElement class.
+//
+// Use: internal
+
+void
+SoMaterialBindingElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoMaterialBindingElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

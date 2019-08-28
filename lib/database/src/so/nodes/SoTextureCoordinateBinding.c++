@@ -61,6 +61,27 @@ SO_NODE_SOURCE(SoTextureCoordinateBinding);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTextureCoordinateBinding class.
+//
+// Use: internal
+
+void
+SoTextureCoordinateBinding::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTextureCoordinateBinding, "TextureCoordinateBinding",
+               SoNode);
+
+    // Enable elements for appropriate actions:
+    SO_ENABLE(SoCallbackAction, SoTextureCoordinateBindingElement);
+    SO_ENABLE(SoGLRenderAction, SoTextureCoordinateBindingElement);
+    SO_ENABLE(SoPickAction, SoTextureCoordinateBindingElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

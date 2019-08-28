@@ -59,6 +59,19 @@ SO_ELEMENT_SOURCE(SoGLViewportRegionElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLViewportRegionElement class.
+//
+// Use: internal
+
+void
+SoGLViewportRegionElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLViewportRegionElement, SoViewportRegionElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

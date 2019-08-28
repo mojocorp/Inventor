@@ -59,6 +59,19 @@ SO_ELEMENT_SOURCE(SoLocalBBoxMatrixElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoLocalBBoxMatrixElement class.
+//
+// Use: internal
+
+void
+SoLocalBBoxMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoLocalBBoxMatrixElement, SoElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

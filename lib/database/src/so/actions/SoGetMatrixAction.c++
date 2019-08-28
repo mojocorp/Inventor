@@ -59,6 +59,23 @@ SO_ACTION_SOURCE(SoGetMatrixAction);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoGetMatrixAction class.
+//
+// Use: internal
+
+void
+SoGetMatrixAction::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO_ACTION_INIT_CLASS(SoGetMatrixAction, SoAction);
+
+    SO_ENABLE(SoGetMatrixAction, SoViewportRegionElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

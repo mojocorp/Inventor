@@ -57,6 +57,22 @@ SO_EVENT_SOURCE(SoMouseButtonEvent);
 
 ////////////////////////////////////////////////////////////////////////
 //
+// Class initialization
+//
+// SoINTERNAL public
+//
+void
+SoMouseButtonEvent::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new event type id
+    classTypeId = SoType::createType(
+    SoButtonEvent::getClassTypeId(), "MouseButtonEvent");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
 // Constructor
 //
 SoMouseButtonEvent::SoMouseButtonEvent()

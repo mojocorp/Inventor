@@ -61,6 +61,19 @@ SO_ELEMENT_SOURCE(SoGLDrawStyleElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLDrawStyleElement class.
+//
+// Use: internal
+
+void
+SoGLDrawStyleElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLDrawStyleElement, SoDrawStyleElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

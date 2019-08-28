@@ -62,6 +62,19 @@ int	SoGLLightIdElement::maxGLSources = -1;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLLightIdElement class.
+//
+// Use: internal
+
+void
+SoGLLightIdElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLLightIdElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

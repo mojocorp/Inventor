@@ -71,6 +71,19 @@ SO_ELEMENT_SOURCE(SoGLLazyElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLLazyElement class.
+//
+// Use: internal
+
+void
+SoGLLazyElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLLazyElement, SoLazyElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: SoINTERNAL public

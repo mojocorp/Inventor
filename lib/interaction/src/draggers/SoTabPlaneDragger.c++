@@ -93,6 +93,22 @@ SO_KIT_SOURCE(SoTabPlaneDragger);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//  Initializes the type ID for this dragger node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoTabPlaneDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoTabPlaneDragger, "TabPlaneDragger", SoDragger);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //  Constructors. Each constructor calls constructorSub(), which
 //  does work that is common to each.
 //

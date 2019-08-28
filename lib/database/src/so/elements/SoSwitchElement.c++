@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoSwitchElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoSwitchElement class.
+//
+// Use: internal
+
+void
+SoSwitchElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoSwitchElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

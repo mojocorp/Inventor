@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoPointSizeElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoPointSizeElement class.
+//
+// Use: internal
+
+void
+SoPointSizeElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoPointSizeElement, SoFloatElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoLightAttenuationElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoLightAttenuationElement class.
+//
+// Use: internal
+
+void
+SoLightAttenuationElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoLightAttenuationElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

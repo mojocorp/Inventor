@@ -96,6 +96,27 @@ SO_NODE_SOURCE(SoTransform);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoTransform class.
+//
+// Use: internal
+
+void
+SoTransform::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTransform, "Transform", SoTransformation);
+
+    SO_ENABLE(SoCallbackAction,		SoModelMatrixElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoBBoxModelMatrixElement);
+    SO_ENABLE(SoGetBoundingBoxAction,	SoLocalBBoxMatrixElement);
+    SO_ENABLE(SoPickAction,		SoModelMatrixElement);
+    SO_ENABLE(SoGLRenderAction,		SoGLModelMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

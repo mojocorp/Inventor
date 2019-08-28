@@ -123,6 +123,22 @@ SoIndexedTriangleStripSet::PMTSS SoIndexedTriangleStripSet::renderFunc[32] = {
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoIndexedTriangleStripSet class.
+//
+// Use: internal
+
+void
+SoIndexedTriangleStripSet::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoIndexedTriangleStripSet,
+			"IndexedTriangleStripSet", SoIndexedShape);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

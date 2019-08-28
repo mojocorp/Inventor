@@ -60,6 +60,22 @@ SO_NODE_ABSTRACT_SOURCE(SoNonIndexedShape);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoNonIndexedShape class.
+//
+// Use: internal
+
+void
+SoNonIndexedShape::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_ABSTRACT_CLASS(SoNonIndexedShape, "NonIndexedShape",
+                 SoVertexShape);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: protected

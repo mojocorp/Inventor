@@ -60,6 +60,19 @@ SO_ELEMENT_SOURCE(SoGLViewingMatrixElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLViewingMatrixElement class.
+//
+// Use: internal
+
+void
+SoGLViewingMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLViewingMatrixElement, SoViewingMatrixElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

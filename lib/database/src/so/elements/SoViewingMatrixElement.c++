@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoViewingMatrixElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoViewingMatrixElement class.
+//
+// Use: internal
+
+void
+SoViewingMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoViewingMatrixElement, SoReplacedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

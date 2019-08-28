@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoComplexityElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoComplexityElement class.
+//
+// Use: internal
+
+void
+SoComplexityElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoComplexityElement, SoFloatElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

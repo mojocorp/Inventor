@@ -121,6 +121,23 @@ int	SoField::fieldBufSize;		// Used by SoField::get()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoField class.
+//
+// Use: internal
+
+void
+SoField::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Allocate a new field type id. There's no real parent id, so we
+    // can't use the regular macro.
+    classTypeId = SoType::createType(SoType::badType(), "Field");
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Helper routine, allocates the auditorInfo structure, if needed:
 //
 // Use: private, static

@@ -60,6 +60,19 @@ SO_ELEMENT_SOURCE(SoGLNormalElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLNormalElement class.
+//
+// Use: internal
+
+void
+SoGLNormalElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLNormalElement, SoNormalElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

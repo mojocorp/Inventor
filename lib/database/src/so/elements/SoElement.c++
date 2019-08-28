@@ -68,6 +68,40 @@ SoTypeList     *SoElement::stackToType;
 // If we run out of slots in the array of free lists, add this many more
 #define FREE_LIST_INCREMENT	10
 
+// This is the initial number of slots in the array of types that's
+// indexed by stack index.  There is one slot per element class, so
+// this number should be at least as large as the number of standard
+// element classes in Inventor.
+#define NUM_STACK_INDICES	100
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes the SoElement class.
+//
+// Use: internal
+
+void
+SoElement::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    nextStackIndex = 0;
+
+    // Initialize type id and unique id
+    classTypeId = SoType::createType(SoType::badType(), "Element", NULL);
+
+    // Initialize stack index to a bad value since this is an abstract
+    // class that can't appear in stacks
+    classStackIndex = -1;
+
+#ifdef DEBUG
+    // Create list that correlates stack indices to type id's
+    stackToType = new SoTypeList(NUM_STACK_INDICES);
+#endif
+}
+#undef NUM_STACK_INDICES
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:

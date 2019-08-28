@@ -62,6 +62,22 @@ SO_ENGINE_ABSTRACT_SOURCE(SoFieldConverter);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoFieldConverter class.
+//
+// Use: internal
+
+void
+SoFieldConverter::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_ABSTRACT_CLASS(SoFieldConverter, "FieldConverter",
+                       SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

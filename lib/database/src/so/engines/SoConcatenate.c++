@@ -90,6 +90,22 @@ SO__ENGINE_VARS(SoConcatenate);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoConcatenate class.
+//
+// Use: internal
+
+void
+SoConcatenate::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__ENGINE_INIT_CLASS(SoConcatenate, "Concatenate",
+                       SoEngine);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor; takes the type of SoConcatenate desired:
 //
 // Use: public

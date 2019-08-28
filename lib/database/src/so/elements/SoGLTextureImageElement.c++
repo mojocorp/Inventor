@@ -93,6 +93,19 @@ SO_ELEMENT_SOURCE(SoGLTextureImageElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLTextureImageElement class.
+//
+// Use: internal
+
+void
+SoGLTextureImageElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLTextureImageElement, SoTextureImageElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

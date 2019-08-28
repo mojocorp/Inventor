@@ -64,6 +64,19 @@ SO_ELEMENT_SOURCE(SoProfileElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoProfileElement class.
+//
+// Use: internal
+
+void
+SoProfileElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoProfileElement, SoAccumulatedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: public

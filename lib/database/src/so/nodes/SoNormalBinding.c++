@@ -61,6 +61,26 @@ SO_NODE_SOURCE(SoNormalBinding);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    This initializes the SoNormalBinding class.
+//
+// Use: internal
+
+void
+SoNormalBinding::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoNormalBinding, "NormalBinding", SoNode);
+
+    // Enable elements for appropriate actions:
+    SO_ENABLE(SoGLRenderAction, SoNormalBindingElement);
+    SO_ENABLE(SoCallbackAction, SoNormalBindingElement);
+    SO_ENABLE(SoPickAction, SoNormalBindingElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 // Use: public

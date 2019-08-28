@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoTextureMatrixElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoTextureMatrixElement class.
+//
+// Use: internal
+
+void
+SoTextureMatrixElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoTextureMatrixElement, SoAccumulatedElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

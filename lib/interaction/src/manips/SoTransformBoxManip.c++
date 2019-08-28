@@ -66,6 +66,22 @@ SO_NODE_SOURCE(SoTransformBoxManip);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//  Initializes the type ID for this manipulator node. This
+//  should be called once after SoInteraction::init().
+//
+// Use: public
+//
+void
+SoTransformBoxManip::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoTransformBoxManip, "TransformBoxManip", SoTransformManip);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //  Constructors. Each constructor calls constructorSub(), which
 //  does work that is common to each.
 //

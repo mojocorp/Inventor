@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoNormalBindingElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoNormalBindingElement class.
+//
+// Use: internal
+
+void
+SoNormalBindingElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoNormalBindingElement, SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

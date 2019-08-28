@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoTextureCoordinateBindingElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoTextureCoordinateBindingElement class.
+//
+// Use: internal
+
+void
+SoTextureCoordinateBindingElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoTextureCoordinateBindingElement,SoInt32Element);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

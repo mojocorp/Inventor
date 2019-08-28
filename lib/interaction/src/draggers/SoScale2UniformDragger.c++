@@ -71,6 +71,22 @@ SO_KIT_SOURCE(SoScale2UniformDragger);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initialize the dragger
+//
+// Use: public, internal
+//
+void
+SoScale2UniformDragger::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__KIT_INIT_CLASS(SoScale2UniformDragger, "Scale2UniformDragger",
+               SoDragger);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Constructor
 //
 SoScale2UniformDragger::SoScale2UniformDragger()

@@ -63,6 +63,19 @@ SO_ELEMENT_SOURCE(SoGLClipPlaneElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoGLClipPlaneElement class.
+//
+// Use: internal
+
+void
+SoGLClipPlaneElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoGLClipPlaneElement, SoClipPlaneElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

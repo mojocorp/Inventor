@@ -62,6 +62,26 @@ void		*SoDebugError::cbData;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoDebugError class.
+//
+// Use: internal
+
+void
+SoDebugError::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Initialize type id
+    classTypeId = SoType::createType(SoError::getClassTypeId(), "DebugError");
+
+    // Set handler to default handler
+    handlerCB = defaultHandlerCB;
+    cbData    = NULL;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns type id of instance.
 //
 // Use: public

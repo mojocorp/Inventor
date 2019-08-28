@@ -67,6 +67,20 @@ SbColor	*SoLazyElement::defaultDiffuseColor = NULL;
 float	*SoLazyElement::defaultTransparency = NULL;
 int32_t	*SoLazyElement::defaultColorIndices = NULL;
 uint32_t	*SoLazyElement::defaultPackedColor  = NULL;
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Initializes SoLazyElement class.
+//
+// Use: internal
+
+void
+SoLazyElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoLazyElement, SoElement);
+}
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:

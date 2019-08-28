@@ -58,6 +58,19 @@ SO_ELEMENT_SOURCE(SoLineWidthElement);
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes SoLineWidthElement class.
+//
+// Use: internal
+
+void
+SoLineWidthElement::initClass()
+{
+    SO_ELEMENT_INIT_CLASS(SoLineWidthElement, SoFloatElement);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Destructor.
 //
 // Use: private

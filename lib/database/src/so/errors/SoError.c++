@@ -67,6 +67,28 @@ SbBool		 SoError::wasInitted;
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Initializes the SoError class.
+//
+// Use: internal
+
+void
+SoError::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Initialize type id
+    classTypeId = SoType::createType(SoType::badType(), "Error");
+
+    // Set handler to default handler
+    handlerCB = defaultHandlerCB;
+    cbData    = NULL;
+
+    wasInitted = TRUE;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Returns type id of instance.
 //
 // Use: public
