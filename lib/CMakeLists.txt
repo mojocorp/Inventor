@@ -823,9 +823,6 @@ set(DATABASE_SOURCES ${DATABASE_SOURCES} ${BISON_SoCalcParse_OUTPUTS})
 add_definitions(-DLIBRARYBUILD)
 include_directories(database/src/so/nodes/nurbs database/src/so/nodes/nurbs/clients database/src/so/nodes/nurbs/head )
 
-# SoText*
-add_definitions(-DIRIX_6)
-
 set(INTERACTION_PUBLIC_HEADERS
     interaction/include/Inventor/SoInteraction.h
     interaction/include/Inventor/SoSceneManager.h
