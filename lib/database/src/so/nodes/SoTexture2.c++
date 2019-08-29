@@ -489,7 +489,7 @@ SbBool ReadGIFImage(const SoInput& in, int &w, int &h, int &nc,
     int ncolors;
     int bgIndex;
     int errCode;
-    XColor *colors = (XColor*) malloc(GIF_MAXCOLORMAPSIZE * sizeof(XColor));
+    GIF_Color *colors = (GIF_Color*) malloc(GIF_MAXCOLORMAPSIZE * sizeof(GIF_Color));
     FILE *fp = in.getCurFile();
     fseek(fp, 0, SEEK_SET);
     

@@ -25,6 +25,9 @@
 #include <string.h>
 #include "readGIF.h"
 
+#define DoRed                  (1<<0)
+#define DoGreen                (1<<1)
+#define DoBlue                 (1<<2)
 
 #define LOCALCOLORMAP		0x80
 #define INTERLACE		0x40
@@ -73,7 +76,7 @@ static struct {
 static int readColorMap(FILE *fd, int number, unsigned char buffer[][256],
 								int *gray);
 static int doExtension(FILE *fd, int label);
-static unsigned char* readImage(FILE *fd, int len, int height, XColor *colors,
+static unsigned char* readImage(FILE *fd, int len, int height, GIF_Color *colors,
 		int cmapSize, unsigned char cmap[][GIF_MAXCOLORMAPSIZE],
 		int gray, int interlace, int ignore);
 static void initLWZ(int input_code_size);
@@ -94,7 +97,7 @@ static int max_code, max_code_size;
 static int clear_code, end_code;
 
 
-unsigned char* readGIF(FILE *fd, int *w, int *h, XColor *colors, int *ncolors,
+unsigned char* readGIF(FILE *fd, int *w, int *h, GIF_Color *colors, int *ncolors,
 						int *bgIndex, int *errCode)
 {
     unsigned char buf[16];
@@ -383,7 +386,7 @@ static int doExtension(FILE *fd, int label)
 }
 
 
-static unsigned char* readImage(FILE *fd, int len, int height, XColor *colors,
+static unsigned char* readImage(FILE *fd, int len, int height, GIF_Color *colors,
 			int cmapSize, unsigned char cmap[][GIF_MAXCOLORMAPSIZE],
 			int gray, int interlace, int ignore)
 {
