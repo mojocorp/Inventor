@@ -25,7 +25,6 @@
 
 
 #include <stdio.h>
-#include <X11/Xlib.h>
 
 
 /* Public GIF information */
@@ -53,7 +52,15 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-extern unsigned char* readGIF(FILE *fd, int *w, int *h, XColor *colors,
+typedef struct
+{
+    unsigned long pixel;
+    unsigned short red, green, blue;
+    char flags;  /* do_red, do_green, do_blue */
+    char pad;
+} GIF_Color;
+
+extern unsigned char* readGIF(FILE *fd, int *w, int *h, GIF_Color *colors,
 				int *ncolors, int *bgIndex, int *errCode);
 #ifdef __cplusplus
 }
