@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.11.4)
 project(Inventor)
 
+option(BUILD_DOC "Build documentation" ON)
+option(BUILD_APPS "Build applications" ON)
+option(BUILD_EXAMPLES "Build examples" ON)
+
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -38,5 +42,7 @@ add_subdirectory(libimage)
 add_subdirectory(lib)
 add_subdirectory(libSoXt)
 add_subdirectory(data)
-add_subdirectory(doc)
+if(BUILD_DOC)
+    add_subdirectory(doc)
+endif()
 add_subdirectory(apps)
