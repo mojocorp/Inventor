@@ -110,25 +110,4 @@ typedef int	SbBool;
 #define SoEXTENDER
 #define SoINTERNAL
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Map the single-precision math functions to the regular ones on
-// machines that don't support them.
-//
-/////////////////////////////////////////////////////////////////////////////
-
-#ifdef _DOUBLE_MATH_ONLY
-
-#define acosf acos
-#define asinf asin
-#define atanf atan
-#define atan2f atan2
-#define cosf cos
-#define sinf sin
-#define tanf tan
-#define powf pow
-#define sqrtf sqrt
-
-#endif /* _DOUBLE_MATH_ONLY */
-
 #endif /* _SB_BASIC_ */
