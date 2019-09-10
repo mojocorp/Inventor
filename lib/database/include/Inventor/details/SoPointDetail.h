@@ -98,17 +98,6 @@ class SoPointDetail : public SoDetail {
     void	setNormalIndex(int32_t i)		{ normalIndex	= i; }
     void	setTextureCoordIndex(int32_t i)	{ texCoordIndex	= i; }
 
-#ifndef IV_STRICT
-     void      setCoordinateIndex(long i)			// System long
-			{ setCoordinateIndex ((int32_t) i); }
-     void      setMaterialIndex(long i)				// System long
-			{ setMaterialIndex ((int32_t) i); }
-     void      setNormalIndex(long i)				// System long
-			{ setNormalIndex ((int32_t) i); }
-     void      setTextureCoordIndex(long i)			// System long
-			{ setTextureCoordIndex ((int32_t) i); }
-#endif
-
   SoINTERNAL public:
     static void	initClass();
 

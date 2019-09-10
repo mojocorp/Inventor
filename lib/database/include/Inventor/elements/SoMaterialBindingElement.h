@@ -81,14 +81,6 @@ SoEXTENDER class SoMaterialBindingElement : public SoInt32Element {
 	PER_FACE_INDEXED = 6,	// One material for each face, indexed
 	PER_VERTEX = 7,		// One material for each vertex
 	PER_VERTEX_INDEXED = 8	// One material for each vertex, indexed
-
-#ifndef IV_STRICT
-        // Obsolete bindings:
-	,			// Comma to continue list
-	DEFAULT = OVERALL,
-	NONE = OVERALL
-#endif
-
     };
 
     // Initializes element
@@ -97,11 +89,6 @@ SoEXTENDER class SoMaterialBindingElement : public SoInt32Element {
     // Sets the current material binding in the state
     static void		set(SoState *state, Binding binding)
 	{ SoInt32Element::set(classStackIndex, state, (int32_t)binding); }
-
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, Binding binding)
-        { set(state, binding); }
-#endif
 
     // Returns current material binding from the state
     static Binding	get(SoState *state)

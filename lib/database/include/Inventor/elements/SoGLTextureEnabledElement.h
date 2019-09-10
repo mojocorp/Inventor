@@ -95,11 +95,6 @@ SoEXTENDER class SoGLTextureEnabledElement :
     // default).
     static void		set(SoState *state, SbBool value);
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, SbBool value)
-        { set(state, value); }
-#endif
-
     // Used by shapes to figure out if they need to send texture
     // coordinates:
     static SbBool	get(SoState *state)

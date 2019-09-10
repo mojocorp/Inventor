@@ -100,13 +100,6 @@ SoEXTENDER class SoShapeHintsElement : public SoElement {
     static void		set(SoState *state, VertexOrdering vertexOrdering,
 			    ShapeType shapeType, FaceType faceType);
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, 
-			    VertexOrdering vertexOrdering,
-                            ShapeType shapeType, FaceType faceType)
-        { set(state, vertexOrdering, shapeType, faceType); }
-#endif
-
     // Returns current shape hints from the state
     static void		get(SoState *state,
 			    VertexOrdering &vertexOrdering,

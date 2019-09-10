@@ -78,11 +78,6 @@ SoEXTENDER class SoPointSizeElement : public SoFloatElement {
     static void		set(SoState *state, float size)
 	{ SoFloatElement::set(classStackIndex, state, size); }
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, float size)
-        { set(state, size); }
-#endif
-
     // Returns current point size from the state
     static float	get(SoState *state)
 	{ return SoFloatElement::get(classStackIndex, state); }

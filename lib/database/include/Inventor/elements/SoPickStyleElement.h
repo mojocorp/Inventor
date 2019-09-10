@@ -85,11 +85,6 @@ SoEXTENDER class SoPickStyleElement : public SoInt32Element {
     static void		set(SoState *state, Style style)
 	{ SoInt32Element::set(classStackIndex, state, (int32_t)style); }
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, Style style)
-        { set(state, style); }
-#endif
-
     // Returns current pick style from the state
     static Style	get(SoState *state)
 	{ return (Style)SoInt32Element::get(classStackIndex, state); }

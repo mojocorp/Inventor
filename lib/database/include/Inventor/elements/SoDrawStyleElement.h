@@ -85,11 +85,6 @@ SoEXTENDER class SoDrawStyleElement : public SoInt32Element {
     // Sets the current draw style in the state
     static void		set(SoState *state, Style style);
 
-#ifndef IV_STRICT
-    static void         set(SoState *state, SoNode *, Style style)
-        { set(state, style); }
-#endif
-
     // Returns current draw style from the state
     static Style	get(SoState *state)
 	{ return (Style)SoInt32Element::get(classStackIndex, state); }
