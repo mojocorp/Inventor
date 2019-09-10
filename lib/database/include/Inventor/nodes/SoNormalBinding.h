@@ -89,12 +89,6 @@ class SoNormalBinding : public SoNode {
 	PER_VERTEX	  = SoNormalBindingElement::PER_VERTEX,
 	// One normal for each vertex, indexed
 	PER_VERTEX_INDEXED= SoNormalBindingElement::PER_VERTEX_INDEXED,
-
-#ifndef IV_STRICT
-	// Obsolete bindings:
-	DEFAULT		  = PER_VERTEX_INDEXED,
-	NONE		  = PER_VERTEX_INDEXED
-#endif
     };
 
     // Fields

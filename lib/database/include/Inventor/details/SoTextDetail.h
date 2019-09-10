@@ -101,13 +101,6 @@ class SoTextDetail : public SoDetail {
     void		setStringIndex(int32_t i)		{ stringIndex = i; }
     void		setCharacterIndex(int32_t i)	{ charIndex = i; }
 
-#ifndef IV_STRICT
-    void    setStringIndex(long i)				// System long
-		{ setStringIndex((int32_t) i); }
-    void    setCharacterIndex(long i)				// System long
-		{ setCharacterIndex((int32_t) i); }
-#endif
-
   SoINTERNAL public:
     static void		initClass();
 

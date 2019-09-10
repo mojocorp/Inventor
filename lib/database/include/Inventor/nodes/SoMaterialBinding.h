@@ -89,12 +89,6 @@ class SoMaterialBinding : public SoNode {
 	PER_VERTEX	  = SoMaterialBindingElement::PER_VERTEX,
 	// One material for each vertex, indexed
 	PER_VERTEX_INDEXED= SoMaterialBindingElement::PER_VERTEX_INDEXED,
-
-#ifndef IV_STRICT
-	// Obsolete bindings:
-	DEFAULT		  = OVERALL,
-	NONE		  = OVERALL
-#endif
     };
 
     // Fields

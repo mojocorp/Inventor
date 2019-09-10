@@ -70,19 +70,6 @@ class SoSFInt32 : public SoSField {
     SO_SFIELD_HEADER(SoSFInt32, int32_t, int32_t);
 
   SoINTERNAL public:
-#ifndef IV_STRICT
-#if (_MIPS_SZLONG == 32)
-//
-//  If the system long has exactly 32 bits, support methods that have "long" 
-//  in the argument list.
-//
-    long  operator =(long newValue)				  // System long
-		{ setValue((int32_t)newValue); return (newValue); }
-    void  setValue(long newValue)				  // System long
-		{ setValue((int32_t)newValue); }
-#endif
-#endif
-
     static void		initClass();
 };
 

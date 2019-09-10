@@ -84,11 +84,6 @@ class SoTextureCoordinateBinding : public SoNode {
 	PER_VERTEX	   = SoTextureCoordinateBindingElement::PER_VERTEX,
 	PER_VERTEX_INDEXED =
 	    SoTextureCoordinateBindingElement::PER_VERTEX_INDEXED,
-
-#ifndef IV_STRICT
-	// Obsolete bindings:
-	DEFAULT		  = PER_VERTEX_INDEXED
-#endif
     };
 
     // Fields

@@ -90,11 +90,6 @@ SoEXTENDER class SoGLLightIdElement : public SoInt32Element {
     // Otherwise, enables light source.
     static int		increment(SoState *state);
 
-#ifndef IV_STRICT
-    static int		increment(SoState *state, SoNode *)
-	{ return increment(state); }
-#endif
-
     // Returns current light id from the state
     static int		get(SoState *state)
 	{ return (int)SoInt32Element::get(classStackIndex, state); }
