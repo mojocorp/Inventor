@@ -83,6 +83,7 @@
 #include <Inventor/nodes/SoAsciiText.h>
 #include <Inventor/nodes/SoProfile.h>
 
+#include <algorithm>
 
 #define VALIDATE_CHAR(c)    (((c) >= 0x20 && (c) <= 0x7F) ? (c) : 0x3f)
 
@@ -904,14 +905,11 @@ SoAsciiText::vtxCB(void *v)
 	    // defines a triangle.
 	    break;
 
-// Useful macro:
-#define SWAP(a, b) { SoPrimitiveVertex *t = a; a = b; b = t; }
-
 	  case GL_TRIANGLE_FAN:
 	    // For triangle fans, vertex zero stays the same, but
 	    // vertex 2 becomes vertex 1, and the next vertex to come
 	    // in will replace vertex 2 (the old vertex 1).
-	    SWAP(genPrimVerts[1], genPrimVerts[2]);
+        std::swap(genPrimVerts[1], genPrimVerts[2]);
 	    genWhichVertex = 2;
 	    break;
 
@@ -919,11 +917,10 @@ SoAsciiText::vtxCB(void *v)
 	    // For triangle strips, vertex 1 becomes vertex 0, vertex
 	    // 2 becomes vertex 1, and the new triangle will replace
 	    // vertex 2 (the old vertex 0).
-	    SWAP(genPrimVerts[1], genPrimVerts[0]);
-	    SWAP(genPrimVerts[2], genPrimVerts[1]);
+        std::swap(genPrimVerts[1], genPrimVerts[0]);
+        std::swap(genPrimVerts[2], genPrimVerts[1]);
 	    genWhichVertex = 2;
 	    break;
-#undef SWAP
 	}
     }
 }
