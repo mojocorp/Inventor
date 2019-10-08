@@ -53,9 +53,10 @@
 #include <Inventor/nodes/SoQuadMesh.h>
 #include <Inventor/nodes/SoOrthographicCamera.h>
 
+#include <cmath>
+
 #include "Background.h"
 
-#define ABS(a) ((a) < 0.0 ? -(a) : (a))
 #define CLAMP(a, b, c) ((b) > (a) ? (b) : ((a) > (c) ? (c) : (a)))
 #define SMOOTH(a) ((a)*(a)*(3.0 - 2.0*(a)))
 
@@ -349,7 +350,7 @@ FlashBackground::shapeFunction(Shape shape, SbVec3f &xy)
 	xy[1] = xy[1]*xy[1]*xy[1];
 	break;
       case SHAPE_WALLS :
-	dx = (1.0 - ABS(xy[0] - 0.5)*2.0);
+    dx = (1.0 - std::abs(xy[0] - 0.5)*2.0);
 	dx = 1.0 - exp(dx);
 	if (xy[1] != 1.0)
 	    xy[1] += xy[1]*dx*0.8;

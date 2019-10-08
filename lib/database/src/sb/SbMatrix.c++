@@ -56,16 +56,12 @@
 
 #include <Inventor/SbLinear.h>
 
+#include <algorithm>
+#include <cmath>
+
 // amount squared to figure if two floats are equal
 // (used for operator == right now)
 #define DELTA 1e-6
-
-//
-// Handy absolute value macro:
-//
-
-#define ABS(a)		((a) < 0.0 ? -(a) : (a))
-
 
 //
 // Macro for checking is a matrix is idenity.
@@ -490,7 +486,7 @@ SbMatrix::jacobi3(float evalues[SB_JACOBI_RANK],
 	sm = 0.0;
 	for (p = 0; p < SB_JACOBI_RANK - 1; p++)
 	    for (q = p+1; q < SB_JACOBI_RANK; q++)
-		sm += ABS(a[p][q]);
+        sm += std::abs(a[p][q]);
 	
 	if (sm == 0.0)
 	    return;
@@ -502,20 +498,20 @@ SbMatrix::jacobi3(float evalues[SB_JACOBI_RANK],
 	for (p = 0; p < SB_JACOBI_RANK - 1; p++) {
 	    for (q = p+1; q < SB_JACOBI_RANK; q++) {
 		
-		g = 100.0 * ABS(a[p][q]);
+        g = 100.0 * std::abs(a[p][q]);
 		
-		if (i > 3 && (ABS(evalues[p]) + g == ABS(evalues[p])) &&
-		    (ABS(evalues[q]) + g == ABS(evalues[q])))
+        if (i > 3 && (std::abs(evalues[p]) + g == std::abs(evalues[p])) &&
+            (std::abs(evalues[q]) + g == std::abs(evalues[q])))
 		    a[p][q] = 0.0;
 		
-		else if (ABS(a[p][q]) > thresh) {
+        else if (std::abs(a[p][q]) > thresh) {
 		    h = evalues[q] - evalues[p];
 		    
-		    if (ABS(h) + g == ABS(h))
+            if (std::abs(h) + g == std::abs(h))
 			t = a[p][q] / h;
 		    else {
 			theta = .5 * h / a[p][q];
-			t = 1.0 / (ABS(theta) + sqrt(1 + theta * theta));
+            t = 1.0 / (std::abs(theta) + sqrt(1 + theta * theta));
 			if (theta < 0.0)  t = -t;
 		    }
 		    // End of computing tangent of rotation angle
@@ -640,11 +636,9 @@ SbMatrix::inverse() const
 	}
 #else
 #define SWAP(i,j) \
-	temp = invmat[i][j]; \
-	invmat[i][j] = invmat[j][i]; \
-	invmat[j][i] = temp;
+    std::swap(invmat[i][j], invmat[j][i]);
 
-	SWAP(1,0);
+    SWAP(1,0);
 	
 	SWAP(2,0);
 	SWAP(2,1);
@@ -731,7 +725,7 @@ SbMatrix::affine_inverse(const SbMatrix &in, SbMatrix &out) const
 
     // Is the submatrix A singular?
     temp = det_1 / (pos - neg);
-    if (ABS(temp) < PRECISION_LIMIT)
+    if (std::abs(temp) < PRECISION_LIMIT)
 	return FALSE;
 
     // Calculate inverse(A) = adj(A) / det(A)
@@ -796,7 +790,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
     for(i = 0; i < 4; i++) {
         big = 0.0;
         for(j = 0; j < 4; j++)
-            if((temp = ABS(matrix[i][j])) > big) big = temp;
+            if((temp = std::abs(matrix[i][j])) > big) big = temp;
         if(big == 0.0) {
 	    matrix[i][i] = 1e-6;
 	    big = matrix[i][i];
@@ -806,10 +800,10 @@ SbMatrix::LUDecomposition(int index[4], float &d)
 #else
 #define COMPUTE_VV(i) \
     big = 0.0; \
-    if((temp = ABS(matrix[i][0])) > big) big = temp; \
-    if((temp = ABS(matrix[i][1])) > big) big = temp; \
-    if((temp = ABS(matrix[i][2])) > big) big = temp; \
-    if((temp = ABS(matrix[i][3])) > big) big = temp; \
+    if((temp = std::abs(matrix[i][0])) > big) big = temp; \
+    if((temp = std::abs(matrix[i][1])) > big) big = temp; \
+    if((temp = std::abs(matrix[i][2])) > big) big = temp; \
+    if((temp = std::abs(matrix[i][3])) > big) big = temp; \
     if(big == 0.0) { \
 	matrix[i][i] = 1e-6; \
 	big = matrix[i][i]; \
@@ -845,7 +839,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
             for(k = 0; k < j; k++)
                 sum -= matrix[i][k] * matrix[k][j];
             matrix[i][j] = sum;
-            if((dum = vv[i] * ABS(sum)) >= big) {
+            if((dum = vv[i] * std::abs(sum)) >= big) {
                 big = dum;
                 imax = i;
             }
@@ -909,7 +903,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
 // inner k loop does nothing when j == 0
 #define BLOCK2J0(i) \
     sum = matrix[i][0]; \
-    if((dum = vv[i] * ABS(sum)) >= big) { \
+    if((dum = vv[i] * std::abs(sum)) >= big) { \
 	big = dum; \
 	imax = i; \
     }
@@ -960,7 +954,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
     sum = matrix[i][1]; \
     sum -= matrix[i][0] * matrix[0][1]; \
     matrix[i][1] = sum; \
-    if((dum = vv[i] * ABS(sum)) >= big) { \
+    if((dum = vv[i] * std::abs(sum)) >= big) { \
 	big = dum; \
 	imax = i; \
     }
@@ -1016,7 +1010,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
     sum -= matrix[i][0] * matrix[0][2]; \
     sum -= matrix[i][1] * matrix[1][2]; \
     matrix[i][2] = sum; \
-    if((dum = vv[i] * ABS(sum)) >= big) { \
+    if((dum = vv[i] * std::abs(sum)) >= big) { \
 	big = dum; \
 	imax = i; \
     }
@@ -1077,7 +1071,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
     sum -= matrix[i][1] * matrix[1][3]; \
     sum -= matrix[i][2] * matrix[2][3]; \
     matrix[i][3] = sum; \
-    if((dum = vv[i] * ABS(sum)) >= big) { \
+    if((dum = vv[i] * std::abs(sum)) >= big) { \
 	big = dum; \
 	imax = i; \
     }
@@ -1563,7 +1557,7 @@ SbMatrix::equals(const SbMatrix &m, float tolerance) const
     for (i = 0; i < 4; i++)
 	for (j = 0; j < 4; j++) {
 	    d = matrix[i][j] - m.matrix[i][j];
-	    if (ABS(d) > tolerance)
+        if (std::abs(d) > tolerance)
 		return FALSE;
 	}
 
