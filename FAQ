@@ -167,5 +167,14 @@ MISCELLANEOUS TECHNICAL QUESTIONS FOR Open Inventor Open Source Release
 
     ivview /usr/share/data/models/buildings/windmill.iv
 
+  What packages are required on Ubuntu?
+  -------------------------------------
+
+  - libfreetype6-dev
+  - bison
+  - libjpeg-dev
+  - libmotif-dev
+  - libxi-dev
+  - libglw1-mesa-dev
 
 Last updated: $Date: 2005/01/14 22:58:15 $

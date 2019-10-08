@@ -25,7 +25,6 @@ TREE STRUCTURE
 		doc      - reference manual pages
 		lib      - Inventor database, interaction, and nodekit source
 		libSoXt  - Inventor Xt components and viewers source
-		make     - makefile definitions and rules
 		tools    - preprocessor for generating shape source files
 		libimage - library to read SGI RGB files
 		libFL    - font library (IRIX, Linux ix86, and Solaris only).
