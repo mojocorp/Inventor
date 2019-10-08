@@ -67,7 +67,7 @@
 #include <Inventor/Xt/viewers/SoXtFullViewer.h>
 
 // components
-class	MyColorEditor;
+class	_SoXtColorEditor;
 class	SoXtMaterialEditor;
 class	SoXtPrintDialog;
 class	SoXtTransformSliderSet;
@@ -368,7 +368,7 @@ class SoSceneViewer : public SoXtComponent {
     void		setAntialiasing(SbBool onOrOff); // Turns AA-ing on/off
     
     // Background color
-    MyColorEditor   	*backgroundColorEditor;
+    _SoXtColorEditor   	*backgroundColorEditor;
     const SbColor &	getBackgroundColor()	{ return currentViewer->getBackgroundColor(); }
     void		editBackgroundColor();	// Invokes color editor on bkg
     static void	    	backgroundColorCallback(void *userData,
@@ -395,7 +395,7 @@ class SoSceneViewer : public SoXtComponent {
     void    	    	createMaterialEditor();
     
     // Color editor
-    MyColorEditor   	*colorEditor;
+    _SoXtColorEditor   	*colorEditor;
     void		createColorEditor();
 
 
@@ -457,7 +457,7 @@ class SoSceneViewer : public SoXtComponent {
     void		addAttachedLightManipGeometry();
     
     // Ambient lighting color
-    MyColorEditor   	*ambientColorEditor;
+    _SoXtColorEditor   	*ambientColorEditor;
     void		editAmbientColor();	// Invokes color editor on amb
     static void	    	ambientColorCallback(void *userData,
 				const SbColor *color);

@@ -44,7 +44,7 @@
 #include "MyTextureEditor.h"
 #include "MyMaterialPalette.h"
 #include "MySimpleMaterialEditor.h"
-#include "MyColorEditor.h"
+#include "_SoXtColorEditor.h"
 #include "MyThumbWheel.h"
 
 void usage(char *name)
@@ -75,7 +75,7 @@ main( int argc , char *argv[])
     switch(*argv[1]) {
 	case 'm': comp = new MySimpleMaterialEditor(mainWindow); break;
 	case 'M': comp = new SoXtMaterialEditor(mainWindow); break;
-	case 'c': comp = new MyColorEditor(mainWindow); break;
+    case 'c': comp = new _SoXtColorEditor(mainWindow); break;
 	case 't': comp = new MyThumbWheel(mainWindow); break;
 	case 'p': comp = new MyMaterialPalette(mainWindow); break;
 	case 'T': comp = new MyTextureEditor(mainWindow); break;

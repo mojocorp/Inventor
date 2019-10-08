@@ -66,8 +66,8 @@
 
 class SoMaterial;
 class SoXtRenderArea;
-class MyColorWheel;
-class MyColorSlider;
+class _SoXtColorWheel;
+class _SoXtColorSlider;
 class SoXtClipboard;
 class SoPathList;
 class MySimpleMaterialEditor;
@@ -150,8 +150,8 @@ class MySimpleMaterialEditor : public SoXtComponent {
     SoMaterial	    *material, *savedMaterial;
     char	    *materialName, *savedMaterialName;
     SoXtRenderArea  *renderArea;
-    MyColorWheel  *colWheel;
-    MyColorSlider *colSlider;
+    _SoXtColorWheel  *colWheel;
+    _SoXtColorSlider *colSlider;
     Widget	    sldWidgets[3], nameField;
     float	    metalness, savedMetalness, smoothness, savedSmoothness;
     SbColor	    baseColor, savedBaseColor;

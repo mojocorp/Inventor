@@ -88,8 +88,8 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <GL/gl.h>
 
-#include "MyColorWheel.h"
-#include "MyColorSlider.h"
+#include "_SoXtColorWheel.h"
+#include "_SoXtColorSlider.h"
 #include "MyThumbWheel.h"
 #include "MyTextureEditor.h"
 
@@ -526,14 +526,14 @@ MyTextureEditor::buildWidget(Widget parent)
     // create all the comps
     Widget menu = buildMenu(form);
     
-    colWheel = new MyColorWheel(form);
+    colWheel = new _SoXtColorWheel(form);
     colWheel->setSize(SbVec2s(110, 110));
     colWheel->setWYSIWYG(TRUE);
     colWheel->addValueChangedCallback(
 	MyTextureEditor::colWheelCB, this);
     Widget wheelW = colWheel->getWidget();
     
-    colSlider = new MyColorSlider(form, NULL, TRUE, MyColorSlider::VALUE_SLIDER);
+    colSlider = new _SoXtColorSlider(form, NULL, TRUE, _SoXtColorSlider::VALUE_SLIDER);
     colSlider->setNumericFieldVisible(FALSE);
     colSlider->setSize(SbVec2s(1, 23));
     colSlider->addValueChangedCallback(

@@ -57,9 +57,9 @@
 #include <X11/Intrinsic.h>
 
 #include <Inventor/Xt/devices/SoXtMouse.h>
-#include "MyFloatCallbackList.h"
+#include "SoFloatCallbackList.h"
 #include "MyThumbWheel.h"
-#include "MyUIRegion.h"
+#include "_SoXtUIRegion.h"
 #include <GL/gl.h>
 
 
@@ -141,9 +141,9 @@ MyThumbWheel::constructorCommon(SbBool horiz, SbBool buildNow)
     mouse = new SoXtMouse(ButtonPressMask | ButtonReleaseMask | ButtonMotionMask);
     
     // init local vars
-    startCallbacks  	= new MyFloatCallbackList;
-    changedCallbacks 	= new MyFloatCallbackList;
-    finishCallbacks 	= new MyFloatCallbackList;
+    startCallbacks  	= new SoFloatCallbackList;
+    changedCallbacks 	= new SoFloatCallbackList;
+    finishCallbacks 	= new SoFloatCallbackList;
     interactive = FALSE;
     value = 0.0;
     horizontal = horiz;
@@ -200,7 +200,7 @@ MyThumbWheel::redraw()
     x2 = size[0] - 1;
     y2 = size[1] - 1;
     
-    drawDownUIBorders(x1, y1, x2, y2);
+    SoDrawDownUIBorders(x1, y1, x2, y2);
     x1+=UI_THICK; y1+=UI_THICK; x2-=UI_THICK; y2-=UI_THICK;
     
     LIGHT1_UI_COLOR;
@@ -493,24 +493,24 @@ MyThumbWheel::sizeChanged(const SbVec2s &newSize)
 
 void
 MyThumbWheel::addStartCallback(MyThumbWheelCB *f, void *userData)
-{ startCallbacks->addCallback((MyFloatCallbackListCB *)f, userData); }
+{ startCallbacks->addCallback((SoFloatCallbackListCB *)f, userData); }
 	
 void
 MyThumbWheel::addValueChangedCallback(MyThumbWheelCB *f, void *userData)
-{ changedCallbacks->addCallback((MyFloatCallbackListCB *)f, userData); }
+{ changedCallbacks->addCallback((SoFloatCallbackListCB *)f, userData); }
 
 void
 MyThumbWheel::addFinishCallback(MyThumbWheelCB *f, void *userData)
-{ finishCallbacks->addCallback((MyFloatCallbackListCB *)f, userData); }
+{ finishCallbacks->addCallback((SoFloatCallbackListCB *)f, userData); }
 
 void
 MyThumbWheel::removeStartCallback(MyThumbWheelCB *f, void *userData)
-{ startCallbacks->removeCallback((MyFloatCallbackListCB *)f, userData); }
+{ startCallbacks->removeCallback((SoFloatCallbackListCB *)f, userData); }
 	
 void
 MyThumbWheel::removeValueChangedCallback(MyThumbWheelCB *f, void *userData)
-{ changedCallbacks->removeCallback((MyFloatCallbackListCB *)f, userData); }
+{ changedCallbacks->removeCallback((SoFloatCallbackListCB *)f, userData); }
 
 void
 MyThumbWheel::removeFinishCallback(MyThumbWheelCB *f, void *userData)
-{ finishCallbacks->removeCallback((MyFloatCallbackListCB *)f, userData); }
+{ finishCallbacks->removeCallback((SoFloatCallbackListCB *)f, userData); }

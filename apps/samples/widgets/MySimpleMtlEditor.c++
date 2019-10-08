@@ -75,8 +75,8 @@
 #include <Inventor/Xt/SoXtRenderArea.h>
 #include <Inventor/errors/SoDebugError.h>
 
-#include "MyColorWheel.h"
-#include "MyColorSlider.h"
+#include "_SoXtColorWheel.h"
+#include "_SoXtColorSlider.h"
 #include "MySimpleMaterialEditor.h"
 
 
@@ -303,13 +303,13 @@ MySimpleMaterialEditor::buildWidget(Widget parent)
     renderArea->setTransparencyType(SoGLRenderAction::BLEND); // spheres are last
     Widget raWidget = renderArea->getWidget();
     
-    colWheel = new MyColorWheel(form);
+    colWheel = new _SoXtColorWheel(form);
     colWheel->setSize(SbVec2s(126, 120));
     colWheel->addValueChangedCallback(MySimpleMaterialEditor::colWheelCB, this);
     colWheel->setWYSIWYG(TRUE);
     Widget colWheelWidget = colWheel->getWidget();
     
-    colSlider = new MyColorSlider(form, NULL, TRUE, MyColorSlider::VALUE_SLIDER);
+    colSlider = new _SoXtColorSlider(form, NULL, TRUE, _SoXtColorSlider::VALUE_SLIDER);
     colSlider->setNumericFieldVisible(FALSE);
     colSlider->setSize(SbVec2s(126, 24));
     colSlider->addValueChangedCallback(MySimpleMaterialEditor::colSliderCB, this);
