@@ -87,22 +87,6 @@
 
 
 /*
- * CRAY machine dependent setup
- */
-
-#ifdef _CRAY
-
-#define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
-#define signed			/* CRAY default is signed chars	*/
-#ifndef __STDC__
-#include <use_stdc.h>		/* Make sure we use the ANSI C compiler. */
-#endif
-
-#endif /* _CRAY */
-
-
-/*
  * SUN/BSD machine dependent setup
  */
 
@@ -115,28 +99,6 @@
 typedef unsigned long ulong;	/* System long missing from types.h	*/
 
 #endif /* sun */
-
-
-/*
- * VAX VMS/BSD machine dependent setup
- */
-
-#if vax
-
-#define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
-#define signed			/* VAX default is signed chars		*/
-#if vms				/* VMS only statements			*/
-#define	HZ	100		/* missing from param.h			*/
-#define dn_perror dgl_perror	/* use normal error handler		*/
-#define fork vfork		/* just for now - doesn't really work	*/
-#else				/* VAX/BSD only statements		*/
-#define HZ 60			/* missing from param.h			*/
-typedef unsigned long ulong;	/* System long missing from types.h	*/
-extern int errno;		/* missing from errno.h			*/
-#endif /* vms */
-
-#endif /* vax */
 
 
 /*
@@ -169,45 +131,8 @@ extern int errno;		/* missing from errno.h			*/
 
 
 /*
- * IBM RS/6000 series machine dependent setup
- */
-
-#ifdef _IBMR2
-
-#define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
-#undef DOUBLE	/* bogusly defined in <gai/g3dm2types.h> */
-
-#endif
-
-
-
-/*
  * 32/64-bit architecture dependent statements
  */
-
-#ifdef _CRAY
-
-#define size_char 1
-#define size_short 2
-#define size_int 4
-#define size_long 4		/* System long */
-#define size_float 4
-#define size_double 8
-#define size_Fontchar 8
-#ifdef __STDC__
-#define M_SIZEOF(x) size_##x
-#else
-#define M_SIZEOF(x) size_/**/x
-#endif /*__STDC__*/
-
-#else /* SGI and not CRAY */
-
-#define M_SIZEOF(x) sizeof(x)
-
-#endif /* ifdef _CRAY */
-
-
 
 /*
  * Defines for the various data formats
@@ -231,24 +156,6 @@ extern int errno;		/* missing from errno.h			*/
  * DGL_BIG_ENDIAN: no conversion necessary (INTEGER)
  */
 
-#ifdef	_CRAY
-
-#ifdef __cplusplus
-extern "C" {
-	void DGL_HTON_SHORT(char *, short);
-	void DGL_HTON_LONG(char *, long);	/* System long */
-	long dgl_ntoh_long(char *);		/* System long */
-	short dgl_ntoh_short(char *);
-};
-#else
-extern long dgl_ntoh_long();			/* System long */
-extern short dgl_ntoh_short();
-#endif /* __cplusplus_ */
-#define DGL_NTOH_LONG(t,f)  t = dgl_ntoh_long(f)	/* System long */
-#define DGL_NTOH_SHORT(t,f)  t = dgl_ntoh_short(f)
-
-#else /* SGI or !_CRAY */
-
 #if MACHINE_WORD_FORMAT == DGL_BIG_ENDIAN
 #define DGL_HTON_SHORT(t,f) t = f
 #define DGL_NTOH_SHORT DGL_HTON_SHORT
@@ -256,28 +163,11 @@ extern short dgl_ntoh_short();
 #define DGL_NTOH_INT32 DGL_HTON_INT32
 #endif /* MACHINE_WORD_FORMAT */
 
-#endif /* _CRAY */
 
 
 /*
  * DGL_BIG_IEEE: no conversion necessary (FLOAT)
  */
-
-#ifdef _CRAY
-
-#ifdef __cplusplus
-extern "C" {
-    float dgl_ntoh_float(char *);
-    float dgl_ntoh_double(char *);
-};
-#else
-extern float dgl_ntoh_float();
-extern float dgl_ntoh_double();
-#endif /* __cplusplus */
-#define DGL_NTOH_FLOAT(t,f)  t = dgl_ntoh_float(f)
-#define DGL_NTOH_DOUBLE(t,f)  t = dgl_ntoh_double(f)
-
-#else 	/* SGI or !_CRAY */
 
 #if MACHINE_FLOAT_FORMAT == DGL_BIG_IEEE
 #define DGL_HTON_FLOAT(t,f) t = f
@@ -285,9 +175,6 @@ extern float dgl_ntoh_double();
 #define DGL_HTON_DOUBLE(t,f) t = f
 #define DGL_NTOH_DOUBLE DGL_HTON_DOUBLE
 #endif
-
-#endif /* _CRAY */
-
 
 /*
  * DGL_LITTLE_ENDIAN: conversion necessary (INTEGER)
@@ -343,16 +230,9 @@ void mem_ntoh_double(double *t, double *f);
  * get/set a data item located at address p regardless what it really is
  */
 
-#ifdef _CRAY
-#define LONG(p) (p)		/* System long */
-#define FLOAT(p) (p)
-#define DOUBLE(p) (p)
-#define SHORT(p) (p)
-#else /* !_CRAY */
 #define INT32(p) (*(int32_t *)(p))
 #define FLOAT(p) (*(float *)(p))
 #define DOUBLE(p) (*(double *)(p))
 #define SHORT(p) (*(short *)(p))
-#endif
 
 #endif /* __MACHINE_H__ */
