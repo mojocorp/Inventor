@@ -42,12 +42,12 @@
 #include <Inventor/SoDB.h>	// for file reading
 #include <Inventor/SoInput.h>	// for file reading
 #include <Inventor/Xt/SoXt.h>	// For SoXt::init()
-#include "MyExaminerViewer.h"
+#include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
 
 int main(int argc, char *argv[])
 {
     if (argc != 2) {
-	printf("Usage: %s data_file\n", argv[0]);
+    printf("Usage: %s data_file\n", argv[0]);
 	return(1);
     }
     
@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 	return(1);
     
     // create and show the viewer
-    MyExaminerViewer *myViewer = new MyExaminerViewer(myWindow);
+    SoXtExaminerViewer *myViewer = new SoXtExaminerViewer(myWindow);
     myViewer->setSceneGraph(scene);
     myViewer->show();
     SoXt::show(myWindow);
