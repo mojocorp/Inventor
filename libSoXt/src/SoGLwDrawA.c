@@ -378,7 +378,7 @@ Initialize (SoGLwDrawingAreaWidget req, SoGLwDrawingAreaWidget new,
     if (req->core.width == 0)
 	new->core.width = 100;
     if (req->core.height == 0)
-	new->core.width = 100;
+    new->core.height = 100;
 
     new->core.depth = new->SoglwDrawingArea.visualInfo->depth;
 

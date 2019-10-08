@@ -16,14 +16,6 @@ MyTextureEditor:
 	    A component which displays palettes of textures, as well
 	    as let you edit how the texture is applied to an object.
 
-MyColorEditor:
-MyColorPatch:
-MyColorSlider:
-MyColorWheel:
-MySlider:
-MyThumbWheel:
-	    Componenets that used be in the Inventor 1.0 library.
-
 Other useful code in libInventorWidget.a:
 -----------------------------------------
 MyDropSite:

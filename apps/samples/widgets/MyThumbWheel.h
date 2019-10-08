@@ -66,7 +66,7 @@
 
 
 class SoXtMouse;
-class MyFloatCallbackList;
+class SoFloatCallbackList;
 
 // callback function prototypes
 typedef void MyThumbWheelCB(void *userData, float val);
@@ -157,9 +157,9 @@ class MyThumbWheel : public SoXtGLWidget {
     SoXtMouse	*mouse;
     
     // callback variables
-    MyFloatCallbackList *startCallbacks;
-    MyFloatCallbackList *changedCallbacks;
-    MyFloatCallbackList *finishCallbacks;
+    SoFloatCallbackList *startCallbacks;
+    SoFloatCallbackList *changedCallbacks;
+    SoFloatCallbackList *finishCallbacks;
     SbBool  	interactive;
 
     // this is called by both constructors

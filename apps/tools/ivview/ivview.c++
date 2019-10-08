@@ -61,7 +61,7 @@
 #include <Inventor/nodes/SoText2.h>
 #include <Inventor/sensors/SoTimerSensor.h>
 
-#include "../../samples/widgets/MyColorEditor.h"
+#include "_SoXtColorEditor.h"
 #include "ivviewMenus.h"
 
 #define SCREEN(w) XScreenNumberOfScreen(XtScreen(w))
@@ -802,10 +802,10 @@ newSceneCB(Widget, void *, XmFileSelectionBoxCallbackStruct *data)
 static void
 editBackgroundColor()
 {
-    static MyColorEditor *backgroundColorEditor = NULL;
+    static _SoXtColorEditor *backgroundColorEditor = NULL;
 
     if (backgroundColorEditor == NULL) {
-	backgroundColorEditor = new MyColorEditor;
+    backgroundColorEditor = new _SoXtColorEditor;
 	backgroundColorEditor->setColor(SbColor(0, 0, 0));
         backgroundColorEditor->setTitle( "Background Color" );
         backgroundColorEditor->addColorChangedCallback(

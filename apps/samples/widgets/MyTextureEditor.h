@@ -74,8 +74,8 @@ class SoTextureCoordinateFunction;
 class SoNode;
 class SoSeparator;
 class SoXtExaminerViewer;
-class MyColorWheel;
-class MyColorSlider;
+class _SoXtColorWheel;
+class _SoXtColorSlider;
 class MyThumbWheel;
 
 struct TextureNameStruct;
@@ -190,8 +190,8 @@ class MyTextureEditor : public SoXtComponent {
     
     // component vars and callbacks
     SbBool	    ignoreCallback;
-    MyColorWheel    *colWheel;
-    MyColorSlider   *colSlider;
+    _SoXtColorWheel    *colWheel;
+    _SoXtColorSlider   *colSlider;
     SoXtExaminerViewer *viewer;
     MyThumbWheel    *scaleXThumb, *scaleYThumb;
     float	    oldXThumbVal, oldYThumbVal;

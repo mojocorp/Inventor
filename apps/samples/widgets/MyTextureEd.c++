@@ -73,7 +73,6 @@
 #include <Xm/SelectioB.h>
 #include <Xm/MessageB.h>
 #include <Xm/FileSB.h>
-#include <GL/GLwMDrawA.h>
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoCube.h>
@@ -88,8 +87,9 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <GL/gl.h>
 
-#include "MyColorWheel.h"
-#include "MyColorSlider.h"
+#include "SoGLwMDrawA.h"
+#include "_SoXtColorWheel.h"
+#include "_SoXtColorSlider.h"
 #include "MyThumbWheel.h"
 #include "MyTextureEditor.h"
 
@@ -526,14 +526,14 @@ MyTextureEditor::buildWidget(Widget parent)
     // create all the comps
     Widget menu = buildMenu(form);
     
-    colWheel = new MyColorWheel(form);
+    colWheel = new _SoXtColorWheel(form);
     colWheel->setSize(SbVec2s(110, 110));
     colWheel->setWYSIWYG(TRUE);
     colWheel->addValueChangedCallback(
 	MyTextureEditor::colWheelCB, this);
     Widget wheelW = colWheel->getWidget();
     
-    colSlider = new MyColorSlider(form, NULL, TRUE, MyColorSlider::VALUE_SLIDER);
+    colSlider = new _SoXtColorSlider(form, NULL, TRUE, _SoXtColorSlider::VALUE_SLIDER);
     colSlider->setNumericFieldVisible(FALSE);
     colSlider->setSize(SbVec2s(1, 23));
     colSlider->addValueChangedCallback(
@@ -799,27 +799,39 @@ MyTextureEditor::buildTexturePaletteWidget(Widget parent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    static int attributeList[] = { GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
+                                   GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
+    XVisualInfo *vis = glXChooseVisual(XtDisplay(parent), XScreenNumberOfScreen(XtScreen(parent)), attributeList);
+    if (! vis) {
+#ifdef DEBUG
+        SoDebugError::post("MyTextureEditor::buildTexturePaletteWidget",
+                 "could not create visual");
+#endif
+        return NULL;
+    }
+
     Arg args[12];
     int n = 0;
     
+    XtSetArg(args[n], SoGLwNvisualInfo, vis); n++;
     XtSetArg(args[n], XtNwidth, GLX_SIZE); n++;
     XtSetArg(args[n], XtNheight, GLX_SIZE); n++;
-    XtSetArg(args[n], GLwNrgba, TRUE); n++;
+    XtSetArg(args[n], SoGLwNrgba, TRUE); n++;
     // This makes sure we get the maximum buffer configuration 
     // (by showing interest the number of bits)
-    XtSetArg(args[n], GLwNredSize, 1); n++; 
-    XtSetArg(args[n], GLwNgreenSize, 1); n++; 
-    XtSetArg(args[n], GLwNblueSize, 1); n++; 
+    XtSetArg(args[n], SoGLwNredSize, 1); n++;
+    XtSetArg(args[n], SoGLwNgreenSize, 1); n++;
+    XtSetArg(args[n], SoGLwNblueSize, 1); n++;
     
-    Widget glx = XtCreateWidget("paletteGLX", glwMDrawingAreaWidgetClass, 
+    Widget glx = XtCreateWidget("paletteGLX", SoglwMDrawingAreaWidgetClass,
 	parent, args, n);
     widgetList[TEXTURE_GLX] = glx;
     
     XtUninstallTranslations(glx);
     
-    XtAddCallback(glx, GLwNginitCallback, 
+    XtAddCallback(glx, SoGLwNginitCallback,
 	(XtCallbackProc) MyTextureEditor::glxInitCB, (XtPointer) this);
-    XtAddCallback(glx, GLwNexposeCallback, 
+    XtAddCallback(glx, SoGLwNexposeCallback,
 	(XtCallbackProc) MyTextureEditor::glxExposeCB, (XtPointer) this);
     XtAddEventHandler(glx, 
 	(PointerMotionMask | ButtonPressMask | ButtonReleaseMask | LeaveWindowMask), 
@@ -2447,19 +2459,31 @@ MyTextureEditor::openImageDialog()
     widgetList[DIALOG_INFO] = labels[0] = XmCreateLabelGadget(form, "imageInfo", NULL, 0);
     widgetList[DIALOG_NAME] = labels[1] = XmCreateLabelGadget(form, "imageName", NULL, 0);
     
+    static int attributeList[] = { GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
+                                   GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
+    XVisualInfo *vis = glXChooseVisual(XtDisplay(shell), XScreenNumberOfScreen(XtScreen(shell)), attributeList);
+    if (! vis) {
+#ifdef DEBUG
+        SoDebugError::post("MyTextureEditor::openImageDialog",
+                 "could not create visual");
+#endif
+        return;
+    }
+
     // create the image glx window
     n = 0;
-    XtSetArg(args[n], GLwNrgba, TRUE); n++;
-    XtSetArg(args[n], GLwNredSize, 1); n++; 
-    XtSetArg(args[n], GLwNgreenSize, 1); n++; 
-    XtSetArg(args[n], GLwNblueSize, 1); n++; 
-    glx = XtCreateWidget("imageDialogGLX", glwMDrawingAreaWidgetClass, form, args, n);
+    XtSetArg(args[n], SoGLwNvisualInfo, vis); n++;
+    XtSetArg(args[n], SoGLwNrgba, TRUE); n++;
+    XtSetArg(args[n], SoGLwNredSize, 1); n++;
+    XtSetArg(args[n], SoGLwNgreenSize, 1); n++;
+    XtSetArg(args[n], SoGLwNblueSize, 1); n++;
+    glx = XtCreateWidget("imageDialogGLX", SoglwMDrawingAreaWidgetClass, form, args, n);
     widgetList[DIALOG_IMAGE] = glx;
     
     XtUninstallTranslations(glx);
-    XtAddCallback(glx, GLwNginitCallback, 
+    XtAddCallback(glx, SoGLwNginitCallback,
 	(XtCallbackProc) MyTextureEditor::imageDialogInitCB, (XtPointer) this);
-    XtAddCallback(glx, GLwNexposeCallback, 
+    XtAddCallback(glx, SoGLwNexposeCallback,
 	(XtCallbackProc) MyTextureEditor::imageDialogExposeCB, (XtPointer) this);
     
     //
@@ -2559,7 +2583,7 @@ MyTextureEditor::glxInitCB(Widget glx, MyTextureEditor *p, void *)
 {
     // create a GLX context
     XVisualInfo *vis;
-    XtVaGetValues(glx, GLwNvisualInfo, &vis, NULL);
+    XtVaGetValues(glx, SoGLwNvisualInfo, &vis, NULL);
     p->paletteCtx = glXCreateContext(XtDisplay(glx), vis, NULL, GL_TRUE);
     
     glXMakeCurrent(XtDisplay(glx), XtWindow(glx), p->paletteCtx);
@@ -2588,7 +2612,7 @@ MyTextureEditor::imageDialogInitCB(Widget glx, MyTextureEditor *p, void *)
 {
     // create a GLX context
     XVisualInfo *vis;
-    XtVaGetValues(glx, GLwNvisualInfo, &vis, NULL);
+    XtVaGetValues(glx, SoGLwNvisualInfo, &vis, NULL);
     p->imageDialogCtx = glXCreateContext(XtDisplay(glx), vis, NULL, GL_TRUE);
     
     glXMakeCurrent(XtDisplay(glx), XtWindow(glx), p->imageDialogCtx);
