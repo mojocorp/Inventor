@@ -20,12 +20,7 @@
 #include <Inventor/errors/SoDebugError.h>
 #include "SoCalcExpr.h"
 #include <stdio.h>
-#ifdef __APPLE__
 #include <float.h>
-#include <limits.h>
-#else
-#include <values.h>
-#endif
 #include <math.h>
 #include <ctype.h>
 #include <strings.h>
@@ -42,12 +37,8 @@ static const struct {
     const char *name;
     float	val;
 } Constants[] = {
-    { "MAXFLOAT",	MAXFLOAT },
-#ifdef __APPLE__
+    { "MAXFLOAT",	FLT_MAX },
     { "MINFLOAT",	FLT_MIN },
-#else
-    { "MINFLOAT",	MINFLOAT },
-#endif
     { "M_E",		M_E },
     { "M_LOG2E",	M_LOG2E },
     { "M_LOG10E",	M_LOG10E },
