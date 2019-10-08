@@ -152,7 +152,7 @@ set(SOXT_SOURCES
 include_directories(src/viewers)
 
 add_library (InventorXt SHARED ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOXT_SOURCES})
-target_link_libraries(InventorXt PUBLIC Inventor ${OPENGL_LIBRARY} ${X11_LIBRARIES} ${X11_Xt_LIB} ${X11_Xi_LIB} ${X11_GL_LIB} ${MOTIF_LIBRARIES})
+target_link_libraries(InventorXt PUBLIC Inventor ${OPENGL_LIBRARY} ${MOTIF_LIBRARIES} ${X11_LIBRARIES} ${X11_Xt_LIB} ${X11_Xi_LIB} ${X11_GL_LIB})
 target_include_directories (InventorXt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 install(TARGETS InventorXt CONFIGURATIONS Debug DESTINATION lib/InventorDebug)
