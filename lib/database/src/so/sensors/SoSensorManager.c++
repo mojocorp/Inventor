@@ -57,9 +57,6 @@
 #ifdef SB_OS_IRIX
 #include <osfcn.h>
 #endif // SB_OS_IRIX
-#ifdef __APPLE__
-#include <unistd.h>
-#endif // __APPLE__
 
 #ifdef DEBUG
 #include <SoDebug.h>
