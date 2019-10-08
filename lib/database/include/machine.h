@@ -50,16 +50,6 @@
  |   and defines for converting basic datatypes across machines.
  |   This is only used by the SoInput and SoOutput classes defined
  |   in the Inventor lib/database source.
- |       TO ADD A NEW MACHINE:
- |
- |		1. Add a machine independent setup section
- |		   (define MACHINE_WORD_FORMAT and MACHINE_FLOAT_FORMAT)
- |
- |		2. Define DGL_HTON_*, DGL_NTOH_*, and SHORT/INT32/FLOAT/DOUBLE
- |
- |       IMPORTANT NOTE: The only complete examples found in this
- |   file are the SGI and Cray implementations.  Note that the other
- |   implementations are incomplete!
  |
  |   Author(s)		: Dave Immel
  |
@@ -67,15 +57,32 @@
  _______________________________________________________________________
  */
 
+#if defined(__APPLE__)
+#  define SB_OS_MACX
+#elif defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
+#  define SB_OS_WIN32
+#  define SB_OS_WIN64
+#  define SB_OS_WIN
+#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#  define SB_OS_WIN32
+#  define SB_OS_WIN
+#elif defined(__sun) || defined(sun)
+#  define SB_OS_SOLARIS
+#elif defined(__linux__) || defined(__linux)
+#  define SB_OS_LINUX
+#elif defined(__sgi)
+#  define SB_OS_IRIX
+#else
+#  error "Inventor has not been ported to this OS"
+#endif
 
 /*
  * SGI machine dependent setup
  */
 
-#if sgi
+#ifdef SB_OS_IRIX
 
-#define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
+#define SB_BYTE_ORDER SB_BIG_ENDIAN
 #if m68000			/* on 3K, times() returns 60'ths regardless */
 #undef HZ
 #define HZ 60
@@ -83,67 +90,81 @@
 				make m68020 behave like everyone */
 #endif /* m68000 */
 
-#endif /* sgi */
+#endif /* SB_OS_IRIX */
 
 
 /*
- * SUN/BSD machine dependent setup
+ * SUN Solaris machine dependent setup
  */
 
-#if sun
+#ifdef SB_OS_SOLARIS
 
-#define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
+#define SB_BYTE_ORDER SB_BIG_ENDIAN
 #define signed			/* SUN default is signed chars		*/
 #define h_errno errno		/* BSD has these merged???		*/
 typedef unsigned long ulong;	/* System long missing from types.h	*/
 
-#endif /* sun */
+#endif /* SB_OS_SOLARIS */
 
+/*
+ * Windows machine dependent setup
+ */
+
+#ifdef SB_OS_WIN
+
+#define SB_BYTE_ORDER SB_LITTLE_ENDIAN
+
+#endif /* SB_OS_WIN */
 
 /*
  * Linux i386/ia64 machine dependent setup
  */
 
-#if __linux__
+#ifdef SB_OS_LINUX
 
-#define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
+#include <endian.h>
 
-#endif /* __linux__ */
+#if __BYTE_ORDER == __BIG_ENDIAN
+#   define SB_BYTE_ORDER SB_BIG_ENDIAN
+#elif __BYTE_ORDER == __LITTLE_ENDIAN
+#   define SB_BYTE_ORDER SB_LITTLE_ENDIAN
+#endif
+
+#endif /* SB_OS_LINUX */
 
 
 /*
  * Apple Darwin (Mac OS X) machine dependent setup
  */
 
-#ifdef __APPLE__
+#ifdef SB_OS_MACX
 
 #ifdef __LITTLE_ENDIAN__
-#define MACHINE_WORD_FORMAT	DGL_LITTLE_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_NON_IEEE
+#define SB_BYTE_ORDER SB_LITTLE_ENDIAN
 #else /* __LITTLE_ENDIAN */
-#define MACHINE_WORD_FORMAT	DGL_BIG_ENDIAN
-#define MACHINE_FLOAT_FORMAT	DGL_BIG_IEEE
+#define SB_BYTE_ORDER SB_BIG_ENDIAN
 #endif /* __LITTLE_ENDIAN */
 
-#endif /* __APPLE__ */
-
+#endif /* SB_OS_MACX */
 
 /*
- * 32/64-bit architecture dependent statements
+ * Platform sanity check.
  */
+
+#if !defined(SB_BYTE_ORDER)
+#  error "Byte order needs to be set up for your CPU type."
+#endif
 
 /*
  * Defines for the various data formats
  */
 
-#define DGL_LITTLE_ENDIAN 1		/* integer formats		*/
-#define DGL_BIG_ENDIAN 2
+#define SB_LITTLE_ENDIAN 1
+#define SB_BIG_ENDIAN 2
 
-#define DGL_BIG_IEEE 1			/* floating point formats	*/
-#define DGL_NON_IEEE 3
-
+/*
+ * 32/64-bit architecture dependent statements
+ */
 
 /*
  * Data conversion (byte swapping) algorithms:
@@ -153,23 +174,15 @@ typedef unsigned long ulong;	/* System long missing from types.h	*/
 
 
 /*
- * DGL_BIG_ENDIAN: no conversion necessary (INTEGER)
+ * SB_BIG_ENDIAN: no conversion necessary
  */
 
-#if MACHINE_WORD_FORMAT == DGL_BIG_ENDIAN
+#if SB_BYTE_ORDER == SB_BIG_ENDIAN
 #define DGL_HTON_SHORT(t,f) t = f
 #define DGL_NTOH_SHORT DGL_HTON_SHORT
 #define DGL_HTON_INT32(t,f) t = f
 #define DGL_NTOH_INT32 DGL_HTON_INT32
-#endif /* MACHINE_WORD_FORMAT */
 
-
-
-/*
- * DGL_BIG_IEEE: no conversion necessary (FLOAT)
- */
-
-#if MACHINE_FLOAT_FORMAT == DGL_BIG_IEEE
 #define DGL_HTON_FLOAT(t,f) t = f
 #define DGL_NTOH_FLOAT DGL_HTON_FLOAT
 #define DGL_HTON_DOUBLE(t,f) t = f
@@ -177,52 +190,47 @@ typedef unsigned long ulong;	/* System long missing from types.h	*/
 #endif
 
 /*
- * DGL_LITTLE_ENDIAN: conversion necessary (INTEGER)
- *	NOTE: non-floating point conversions are the same for both
- *		directions and thus one macro suffices
+ * SB_LITTLE_ENDIAN: conversion necessary
  */
 
-#if MACHINE_WORD_FORMAT == DGL_LITTLE_ENDIAN
+#if SB_BYTE_ORDER == SB_LITTLE_ENDIAN
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#define swap16(x) _byteswap_ushort(x)
+#define swap32(x) _byteswap_ulong(x)
+#define swap64(x) _byteswap_uint64(x)
+#elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 2))
+#define swap16(x) (((x) & 0xFF00) >> 8 | ((x) & 0x00FF) << 8)
+#define swap32(x) __builtin_bswap32(x)
+#define swap64(x) __builtin_bswap64(x)
+#else
+#define swap16(x) \
+        (((x) & 0xFF00) >> 8 | ((x) & 0x00FF) << 8)
+#define swap32(x) \
+        ((((x) & 0xff000000) >> 24) | \
+         (((x) & 0x00ff0000) >>  8) | \
+         (((x) & 0x0000ff00) <<  8) | \
+         (((x) & 0x000000ff) << 24))
+#define swap64(x) \
+        (((x) >> 56) | \
+        (((x) >> 40) & 0xff00) | \
+        (((x) >> 24) & 0xff0000) | \
+        (((x) >> 8)  & 0xff000000) | \
+        (((x) << 8)  & ((uint64_t)0xff << 32)) | \
+        (((x) << 24) & ((uint64_t)0xff << 40)) | \
+        (((x) << 40) & ((uint64_t)0xff << 48)) | \
+        (((x) << 56)))
+#endif
 /* like DGL_HTON_INT32, but more efficient if f is a constant */
-#define DGL_HTON_SHORT(t,f) 	\
-	{			\
-		short _from = f,_to;	\
-		((char *)&_to)[0] = ((char *)&_from)[1];	\
-		((char *)&_to)[1] = ((char *)&_from)[0];	\
-		t = _to;	\
-	}
+#define DGL_HTON_SHORT(t,f)  (t = swap16(f))
+#define DGL_HTON_INT32(t,f)  (t = swap32(f))
+#define DGL_HTON_FLOAT(t,f)  (*(int32_t*)&t = swap32(*(int32_t*)&f))
+#define DGL_HTON_DOUBLE(t,f) (*(int64_t*)&t = swap64(*(int64_t*)&f))
+
 #define DGL_NTOH_SHORT DGL_HTON_SHORT
-#define DGL_HTON_INT32(t,f)	\
-	{			\
-		int32_t _from = f,_to;	\
-		((char *)&_to)[0] = ((char *)&_from)[3];	\
-		((char *)&_to)[1] = ((char *)&_from)[2];	\
-		((char *)&_to)[2] = ((char *)&_from)[1];	\
-		((char *)&_to)[3] = ((char *)&_from)[0];	\
-		t = _to;	\
-	}
 #define DGL_NTOH_INT32 DGL_HTON_INT32
-
-#endif /* LITTLE_ENDIAN */
-
-
-/*
- * DGL_NON_IEEE: conversion necessary (FLOAT)
- *	conversion is done within procedure calls for simplicity
- */
-
-#if MACHINE_FLOAT_FORMAT == DGL_NON_IEEE
-#if __linux__ || (__APPLE__ && __LITTLE_ENDIAN__)
-void mem_hton_float(float *t, float *f);
-void mem_ntoh_float(float *t, float *f);
-void mem_hton_double(double *t, double *f);
-void mem_ntoh_double(double *t, double *f);
-#endif /* __linux__ || (__APPLE__ && __LITTLE_ENDIAN__) */
-#define DGL_HTON_FLOAT(t,f) mem_hton_float(&t,&f)
-#define DGL_NTOH_FLOAT(t,f) mem_ntoh_float(&t,&f)
-#define DGL_HTON_DOUBLE(t,f) mem_hton_double(&t,&f)
-#define DGL_NTOH_DOUBLE(t,f) mem_ntoh_double(&t,&f)
+#define DGL_NTOH_FLOAT DGL_HTON_FLOAT
+#define DGL_NTOH_DOUBLE DGL_HTON_DOUBLE
 #endif
 
 

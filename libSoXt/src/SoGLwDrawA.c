@@ -168,9 +168,9 @@ static XtResource initializeResources[] = {
 static XtResource backgroundResources[] = {
 
 #ifdef __GLX_MOTIF
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 #define USE_SGI_COLOR_RESOURCES
-#endif /* __sgi */
+#endif /* SB_OS_IRIX */
 #endif /* __GLX_MOTIF */
 
 #ifdef USE_SGI_COLOR_RESOURCES

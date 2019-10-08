@@ -38,7 +38,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 #include <alloca.h>
 #endif
 #include <assert.h>

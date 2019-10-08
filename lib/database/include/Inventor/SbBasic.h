@@ -67,10 +67,10 @@
 
 #include <inttypes.h>
 #include <sys/types.h>
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 #include <libc.h>
 #include <sgidefs.h>
-#endif /* __sgi */
+#endif /* SB_OS_IRIX */
 #include <stdio.h>
 
 #ifndef FALSE
