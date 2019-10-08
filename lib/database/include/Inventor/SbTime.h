@@ -65,11 +65,6 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 
-#ifdef _CRAY
-#define trunc(x) x
-#endif /* _CRAY */
-
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SbTime
