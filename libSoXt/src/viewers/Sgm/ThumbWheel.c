@@ -183,7 +183,7 @@ static XtResource resources[] = {
     XmRImmediate,
     (XtPointer)TRUE,
   },
-#ifndef __sgi
+#ifndef SB_OS_IRIX
   {
     XmNtraversalOn,
     XmCTraversalOn,
@@ -193,7 +193,7 @@ static XtResource resources[] = {
     XmRImmediate,
     (XtPointer)FALSE,
   },
-#endif /* !__sgi */
+#endif /* !SB_OS_IRIX */
 };
 #undef OFFSET
 

@@ -3004,7 +3004,7 @@ SoXtFullViewer::clipFieldCB(Widget field, SoXtFullViewer *v, void *)
     XmProcessTraversal(SoXt::getShellWidget(field), XmTRAVERSE_CURRENT);
 }
 
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 static void destroyStereoInfoDialogCB(Widget dialog, void *, void *)
 { XtDestroyWidget(dialog); }
 
@@ -3207,7 +3207,7 @@ SoXtFullViewer::stereoPrefSheetToggleCB(Widget toggle, Widget parent, void *)
 	XtManageChild(thumb);
 	XtManageChild(label);
 	
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 	// bring a dialog to tell the user to look at setmon to set
 	// the monitor to stereo mode
 	if (! sameState)

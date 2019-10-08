@@ -615,7 +615,6 @@ set(DATABASE_SOURCES
     database/src/so/fields/SoSFVec2f.c++
     database/src/so/fields/SoSFVec3f.c++
     database/src/so/fields/SoSFVec4f.c++
-    database/src/so/linux.c++
     database/src/so/nodes/readGIF.c
     database/src/so/nodes/SoAnnotation.c++
     database/src/so/nodes/SoArray.c++

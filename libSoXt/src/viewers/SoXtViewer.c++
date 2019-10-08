@@ -59,7 +59,7 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 #include <X11/extensions/SGIStereo.h>
 #endif
 
@@ -137,7 +137,7 @@ SoXtViewer::SoXtViewer(
     interactiveCount = 0;
     bufferType = isDoubleBuffer() ? BUFFER_DOUBLE : BUFFER_SINGLE;
     stereoOffset = 3.0;
-#ifdef __sgi
+#ifdef SB_OS_IRIX
     useSGIStereoExt = FALSE;
 #endif
     sceneSize = 0.0;	// not computed yet.
@@ -592,7 +592,7 @@ SoXtViewer::setStereoViewing(SbBool flag)
     // First, check to see if the OpenGL stereo visual can be created
     setStereoBuffer(flag);
     
-#ifdef __sgi
+#ifdef SB_OS_IRIX
     // since OpenGL stereo failed, see if the SGI extension will work
     // by checking whether the X server supports it....
     int first_event, first_error;
@@ -665,7 +665,7 @@ SoXtViewer::isStereoViewing()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-#ifdef __sgi
+#ifdef SB_OS_IRIX
     return (isStereoBuffer() || useSGIStereoExt);
 #else
     // done in SoXtGLWidget
@@ -1074,7 +1074,7 @@ SoXtViewer::actualRedraw()
 	float radius = camera->focalDistance.getValue();
 	SbVec3f center = camOrigPos + radius * forward;
 	
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 	//
 	// if we are splitting the screen in half (loose vertical resolution)
 	// then change the aspect ratio to squish the objects to make them 
@@ -1091,7 +1091,7 @@ SoXtViewer::actualRedraw()
 	//
 	// change the camera for the LEFT eye view, and render
 	//
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 	if (useSGIStereoExt) {
 	    XSGISetStereoBuffer(getDisplay(), getNormalWindow(), STEREO_BUFFER_LEFT);
 	    XSync(getDisplay(), False);
@@ -1116,7 +1116,7 @@ SoXtViewer::actualRedraw()
 	//
 	// change the camera for the RIGHT eye view, and render
 	//
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 	if (useSGIStereoExt) {
 	    XSGISetStereoBuffer(getDisplay(), getNormalWindow(), STEREO_BUFFER_RIGHT);
 	    XSync(getDisplay(), False);
@@ -1147,7 +1147,7 @@ SoXtViewer::actualRedraw()
 	camera->orientation = camOrigRot;
 	camera->enableNotify(TRUE);
 	
-#ifdef __sgi
+#ifdef SB_OS_IRIX
 	if (! useSGIStereoExt)
 #endif
 	    // restore to draw to both buffer (viewer feedback)

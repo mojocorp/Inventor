@@ -83,9 +83,9 @@
 
 #include "geom/SoTabPlaneDraggerGeom.h"
 
-#ifndef __sgi
+#ifndef SB_OS_IRIX
 #define _ABS(x) ((x) < 0 ? -(x) : (x))
-#endif // !__sgi
+#endif // !SB_OS_IRIX
 
 
 SO_KIT_SOURCE(SoTabPlaneDragger);

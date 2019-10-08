@@ -1768,12 +1768,12 @@ SoXtPrintDialog::print()
 
         // Send the file to the printer
 
-#ifdef __sgi
+#ifdef SB_OS_IRIX
         union wait waitStatus;
 #else
 	int waitStatus;
         typedef void (*SIG_PF)(int);
-#endif // __sgi
+#endif // SB_OS_IRIX
         SIG_PF     childstat;
         pid_t      wpid;
 
@@ -1795,11 +1795,11 @@ SoXtPrintDialog::print()
         // Restore catching dead babies.
         //
         (void) signal(SIGCHLD, childstat);
-#ifdef __sgi
+#ifdef SB_OS_IRIX
         if (!(WIFEXITED(waitStatus) && waitStatus.w_retcode == 0))
 #else
 	if (!(WIFEXITED(waitStatus) && WEXITSTATUS(waitStatus) == 0))
-#endif // __sgi
+#endif // SB_OS_IRIX
             SoDebugError::post("SoXtPrintDialog::print",
                     "Print Error. Diagnose with Print Manager.");
         unlink(tempPSFileName);
