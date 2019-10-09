@@ -103,7 +103,7 @@ SbViewportRegion::SbViewportRegion(short width, short height)
 //
 // Use: public
 
-SbViewportRegion::SbViewportRegion(SbVec2s winSize)
+SbViewportRegion::SbViewportRegion(const SbVec2s &winSize)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -139,7 +139,7 @@ SbViewportRegion::SbViewportRegion(const SbViewportRegion &vpReg)
 // Use: public
 
 void
-SbViewportRegion::setWindowSize(SbVec2s winSize)
+SbViewportRegion::setWindowSize(const SbVec2s &winSize)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -161,7 +161,7 @@ SbViewportRegion::setWindowSize(SbVec2s winSize)
 // Use: public
 
 void
-SbViewportRegion::setViewport(SbVec2f origin, SbVec2f size)
+SbViewportRegion::setViewport(const SbVec2f &origin, const SbVec2f &size)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -182,7 +182,7 @@ SbViewportRegion::setViewport(SbVec2f origin, SbVec2f size)
 // Use: public
 
 void
-SbViewportRegion::setViewportPixels(SbVec2s origin, SbVec2s size)
+SbViewportRegion::setViewportPixels(const SbVec2s &origin, const SbVec2s &size)
 //
 ////////////////////////////////////////////////////////////////////////
 {
