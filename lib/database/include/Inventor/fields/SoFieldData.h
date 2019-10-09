@@ -60,7 +60,7 @@
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbPList.h>
-#include <Inventor/SbString.h>
+#include <Inventor/SbName.h>
 
 class SoField;
 class SoInput;

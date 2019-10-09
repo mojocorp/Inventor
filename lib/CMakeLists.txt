@@ -43,6 +43,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/SbColor.h
     database/include/Inventor/SbDict.h
     database/include/Inventor/SbLinear.h
+    database/include/Inventor/SbName.h
     database/include/Inventor/SbPList.h
     database/include/Inventor/SbString.h
     database/include/Inventor/SbTime.h

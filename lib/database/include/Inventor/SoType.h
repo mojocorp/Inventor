@@ -66,7 +66,7 @@
 #define  _SO_TYPE_
 
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/SbString.h>
+#include <Inventor/SbName.h>
 #include <Inventor/SbDict.h>
 
 class SoTypeList;

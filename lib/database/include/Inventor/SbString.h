@@ -45,8 +45,8 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file contains definitions of the SbString and SbName
- |	classes, which are useful variations on our friend, the
+ |	This file contains definitions of the SbString
+ |	class, which are useful variations on our friend, the
  |	character string.
  |
  |   Author(s)		: Paul S. Strauss, Nick Thompson
@@ -165,126 +165,6 @@ class SbString {
     char		staticStorage[SB_STRING_STATIC_STORAGE_SIZE];
 
     void		expand(int bySize);	// Makes more room
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbNameEntry (internal to SB)
-//
-//  This is used to make lists of SbName instances.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-SoINTERNAL class SbNameEntry {
-
-  public:
-    // Returns TRUE if entry's string is empty ("")
-    SbBool		isEmpty() const   { return (string[0] == '\0'); }
-
-    // Returns TRUE if entry's string is same as passed string
-    SbBool		isEqual(const char *s) const
-	{ return (string[0] == s[0] && ! strcmp(string, s)); }
-
-  private:
-    static int		nameTableSize;	// Number of buckets in name table
-    static SbNameEntry	**nameTable;	// Array of name entries
-    static struct SbNameChunk *chunk;	// Chunk of memory for string storage
-
-    const char		*string;	// String for this entry
-    uint32_t		hashValue;	// Its hash value
-    SbNameEntry		*next;		// Pointer to next entry
-
-    // Initializes SbNameEntry class - done only once
-    static void		initClass();
-
-    // Constructor
-    SbNameEntry(const char *s, uint32_t h, SbNameEntry *n)
-	{ string = s; hashValue = h; next = n; }
-
-    // Inserts string in table
-    static const SbNameEntry *	insert(const char *s);
-
-friend class SbName;
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbName
-//
-//  An SbName is a character string that is stored in a special table.
-//  When a string is stored in this table, a pointer to the storage is
-//  returned. Two identical strings will return the same pointer. This
-//  means that comparison of two SbNames for equality can be
-//  accomplished by comparing their pointers!
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-class SbName {
-  public:
-    // Default constructor
-    SbName();
-
-    // Constructor that initializes to given character string
-    SbName(const char *s)		{ entry = SbNameEntry::insert(s); }
-
-    // Constructor that initializes to given SbString
-    SbName(const SbString &s)	{ entry = SbNameEntry::insert(s.getString()); }
-
-
-    // Constructor that initializes to another SbName
-    SbName(const SbName &n)			{ entry = n.entry; }
-
-    ~SbName()					{}
-
-    // Returns pointer to the character string
-    const char		*getString() const	{ return entry->string; }
-
-    // Returns length of string
-    int			getLength() const   { return strlen(entry->string); }
-
-    // Returns TRUE if given character is a legal starting character
-    // for an identifier
-    static SbBool 	isIdentStartChar(char c);
-
-    // Returns TRUE if given character is a legal nonstarting
-    // character for an identifier
-    static SbBool	isIdentChar(char c);
-
-    // Returns TRUE if given character is a legal starting character
-    // for an SoBase's name
-    static SbBool 	isBaseNameStartChar(char c);
-
-    // Returns TRUE if given character is a legal nonstarting
-    // character for an SoBase's name
-    static SbBool	isBaseNameChar(char c);
-
-    // Unary "not" operator; returns TRUE if string is empty ("")
-    int			operator !() const   { return entry->isEmpty(); }
-
-    // Equality operator for SbName/char* and SbName/SbName comparison
-    friend int		operator ==(const SbName &n, const char *s)
-	{ return n.entry->isEqual(s); }
-
-    friend int		operator ==(const char *s, const SbName &n)
-	{ return n.entry->isEqual(s); }
-
-    friend int 		operator ==(const SbName &n1, const SbName &n2)
-	{ return n1.entry == n2.entry; }
-
-    // Inequality operator for SbName/char* and SbName/SbName comparison
-    friend int		operator !=(const SbName &n, const char *s)
-	{ return ! n.entry->isEqual(s); }
-
-    friend int		operator !=(const char *s, const SbName &n)
-	{ return ! n.entry->isEqual(s); }
-
-    friend int 		operator !=(const SbName &n1, const SbName &n2)
-	{ return n1.entry != n2.entry; }
-
-  private:
-    const SbNameEntry	*entry;		// Name string storage
 };
 
 #endif /* _SB_STRING_ */
