@@ -82,7 +82,7 @@ class SbViewportRegion {
 
     // Constructor that takes window size as width and height in
     // pixels as SbVec2s
-    SbViewportRegion(SbVec2s winSize);
+    SbViewportRegion(const SbVec2s &winSize);
 
     // Constructor that takes an SbViewportRegion to copy from
     SbViewportRegion(const SbViewportRegion &vpReg);
@@ -93,7 +93,7 @@ class SbViewportRegion {
 
     // Changes window size to given width and height in pixels, given
     // as SbVec2s
-    void		setWindowSize(SbVec2s winSize);
+    void		setWindowSize(const SbVec2s &winSize);
 
     // Sets viewport to given region, specified as normalized window
     // coordinates: (0,0) is the lower-left corner, (1,1) is the upper-right.
@@ -103,7 +103,7 @@ class SbViewportRegion {
 
     // Sets viewport to region with given origin (lower-left corner)
     // and size, given as normalized coordinate vectors.
-    void		setViewport(SbVec2f origin, SbVec2f size);
+    void		setViewport(const SbVec2f &origin, const SbVec2f &size);
 
     // Sets viewport to given region, specified as pixel coordinates
     // in window: (0,0) is the lower-left corner
@@ -113,7 +113,7 @@ class SbViewportRegion {
 
     // Sets viewport to region with given origin (lower-left corner)
     // and size, given as pixel coordinates.
-    void		setViewportPixels(SbVec2s origin, SbVec2s size);
+    void		setViewportPixels(const SbVec2s &origin, const SbVec2s &size);
 
     // Returns window size in pixels
     const SbVec2s &	getWindowSize() const		{ return windowSize; }
