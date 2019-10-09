@@ -59,48 +59,8 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 
-#include <string.h>
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbNameEntry (internal to SB)
-//
-//  This is used to make lists of SbName instances.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-SoINTERNAL class SbNameEntry {
-
-  public:
-    // Returns TRUE if entry's string is empty ("")
-    SbBool		isEmpty() const   { return (string[0] == '\0'); }
-
-    // Returns TRUE if entry's string is same as passed string
-    SbBool		isEqual(const char *s) const
-    { return (string[0] == s[0] && ! strcmp(string, s)); }
-
-  private:
-    static int		nameTableSize;	// Number of buckets in name table
-    static SbNameEntry	**nameTable;	// Array of name entries
-    static struct SbNameChunk *chunk;	// Chunk of memory for string storage
-
-    const char		*string;	// String for this entry
-    uint32_t		hashValue;	// Its hash value
-    SbNameEntry		*next;		// Pointer to next entry
-
-    // Initializes SbNameEntry class - done only once
-    static void		initClass();
-
-    // Constructor
-    SbNameEntry(const char *s, uint32_t h, SbNameEntry *n)
-    { string = s; hashValue = h; next = n; }
-
-    // Inserts string in table
-    static const SbNameEntry *	insert(const char *s);
-
-friend class SbName;
-};
+#include <set>
+#include <string>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -121,10 +81,10 @@ class SbName {
     SbName();
 
     // Constructor that initializes to given character string
-    SbName(const char *s)		{ entry = SbNameEntry::insert(s); }
+    SbName(const char *s);
 
     // Constructor that initializes to given SbString
-    SbName(const SbString &s)	{ entry = SbNameEntry::insert(s.getString()); }
+    SbName(const SbString &s);
 
 
     // Constructor that initializes to another SbName
@@ -133,10 +93,10 @@ class SbName {
     ~SbName()					{}
 
     // Returns pointer to the character string
-    const char		*getString() const	{ return entry->string; }
+    const char		*getString() const	{ return entry->data(); }
 
     // Returns length of string
-    int			getLength() const   { return strlen(entry->string); }
+    size_t			getLength() const   { return entry->length(); }
 
     // Returns TRUE if given character is a legal starting character
     // for an identifier
@@ -155,30 +115,37 @@ class SbName {
     static SbBool	isBaseNameChar(char c);
 
     // Unary "not" operator; returns TRUE if string is empty ("")
-    int			operator !() const   { return entry->isEmpty(); }
+    int			operator !() const   { return entry->empty(); }
+
+    /// Less than operator (using alphabetical order).
+    bool operator<(const SbName &other) const {
+        return (*entry) < (*other.entry);
+    }
 
     // Equality operator for SbName/char* and SbName/SbName comparison
-    friend int		operator ==(const SbName &n, const char *s)
-    { return n.entry->isEqual(s); }
+    friend bool		operator ==(const SbName &n, const char *s)
+    { return (*n.entry) == s; }
 
-    friend int		operator ==(const char *s, const SbName &n)
-    { return n.entry->isEqual(s); }
+    friend bool		operator ==(const char *s, const SbName &n)
+    { return (*n.entry) == s; }
 
-    friend int 		operator ==(const SbName &n1, const SbName &n2)
+    friend bool 		operator ==(const SbName &n1, const SbName &n2)
     { return n1.entry == n2.entry; }
 
     // Inequality operator for SbName/char* and SbName/SbName comparison
-    friend int		operator !=(const SbName &n, const char *s)
-    { return ! n.entry->isEqual(s); }
+    friend bool		operator !=(const SbName &n, const char *s)
+    { return (*n.entry) != s; }
 
     friend int		operator !=(const char *s, const SbName &n)
-    { return ! n.entry->isEqual(s); }
+    { return (*n.entry) != s; }
 
-    friend int 		operator !=(const SbName &n1, const SbName &n2)
+    friend bool 		operator !=(const SbName &n1, const SbName &n2)
     { return n1.entry != n2.entry; }
 
   private:
-    const SbNameEntry	*entry;		// Name string storage
+    const std::string	*entry;		// Name string storage
+
+    static std::set<std::string> entries;
 };
 
 #endif /* _SB_NAME_ */

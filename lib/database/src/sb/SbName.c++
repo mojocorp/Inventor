@@ -43,7 +43,7 @@
  |   $Revision: 1.2 $
  |
  |   Classes:
- |	SbNameEntry, SbName
+ |	SbName
  |
  |   Author(s)		: Nick Thompson, Paul S. Strauss
  |
@@ -57,128 +57,7 @@
 #include <Inventor/SbName.h>
 #include <ctype.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// SbNameEntry class. Instances of this class are stored in a hash
-// table that is used to find names quickly. All of these methods are
-// private. Some are used by SbName, which is a friend class.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////
-//
-// This structure contains a chunk of memory in which strings are
-// stored. Doing this reduces memory fragmentation.
-//
-////////////////////////////////////////////
-
-// The size of a chunk is about a page (4K) minus room for other stuff
-// in the structure
-#define CHUNK_SIZE	4000
-
-struct SbNameChunk {
-    char		mem[CHUNK_SIZE];	// Chunk o'memory
-    char		*curByte;		// Current byte of chunk
-    int			bytesLeft;		// Bytes left in chunk
-    struct SbNameChunk	*next;			// Pointer to next chunk
-};
-
-int		SbNameEntry::nameTableSize; // Number of buckets in name table
-SbNameEntry **	SbNameEntry::nameTable;	    // Array of name entries
-struct SbNameChunk *SbNameEntry::chunk;	    // Chunk of memory for string store
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Initializes SbNameEntry class. This is done only once.
-//
-// Use: private
-
-void
-SbNameEntry::initClass()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    int i;
-
-    // Allocate and empty name hash table
-
-    nameTableSize = 1999;	// About 2000 (primed)
-    nameTable	  = new SbNameEntry *[nameTableSize];
-
-    for (i = 0; i < nameTableSize; i++)
-	nameTable[i] = NULL;
-
-    chunk = NULL;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Inserts a string into the hash table.
-//
-// Use: private
-
-const SbNameEntry *
-SbNameEntry::insert(const char *s)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    uint32_t		h = SbString::hash(s);
-    uint32_t		i;
-    SbNameEntry		*entry;
-    SbNameEntry		*head;
-
-    if (nameTableSize == 0)
-	initClass();
-
-    i = h % nameTableSize;
-    entry = head = nameTable[i];
-
-    // Look for entry with same string
-    while (entry != NULL) {
-	if (entry->hashValue == h && entry->isEqual(s))
-	    break;
-	entry = entry->next;
-    }
-
-    // If not there, create one
-    if (entry == NULL) {
-
-	int len = strlen(s) + 1;
-
-	// If there's no way to fit this string in a chunk
-	if (len >= CHUNK_SIZE)
-	    s = strdup(s);
-
-	else {
-
-	    // Make sure there's room in the current chunk; create a
-	    // new chunk if necessary.
-	    if (chunk == NULL || chunk->bytesLeft < len) {
-		struct SbNameChunk	*newChunk = new SbNameChunk;
-
-		newChunk->curByte   = newChunk->mem;
-		newChunk->bytesLeft = CHUNK_SIZE;
-		newChunk->next      = chunk;
-
-		chunk = newChunk;
-	    }
-
-	    // Store string in chunk
-	    strcpy(chunk->curByte, s);
-	    s = chunk->curByte;
-
-	    chunk->curByte   += len;
-	    chunk->bytesLeft -= len;
-	}
-
-	entry = new SbNameEntry(s, h, head);
-	nameTable[i] = entry;
-    }
-
-    return entry;
-}
+std::set<std::string> SbName::entries;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -197,7 +76,17 @@ SbName::SbName()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    entry = SbNameEntry::insert("");
+    entry = &(*entries.insert("").first);
+}
+
+SbName::SbName(const char *s)
+{
+    entry = &(*entries.insert(s).first);
+}
+
+SbName::SbName(const SbString &s)
+{
+    entry = &(*entries.insert(s.getString()).first);
 }
 
 ////////////////////////////////////////////////////////////////////////
