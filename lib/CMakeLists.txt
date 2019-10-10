@@ -42,6 +42,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/SbBox.h
     database/include/Inventor/SbColor.h
     database/include/Inventor/SbDict.h
+    database/include/Inventor/SbFile.h
     database/include/Inventor/SbLinear.h
     database/include/Inventor/SbName.h
     database/include/Inventor/SbPList.h
@@ -389,6 +390,7 @@ set(DATABASE_SOURCES
     database/src/sb/SbColor.c++
     database/src/sb/SbCylinder.c++
     database/src/sb/SbDict.c++
+    database/src/sb/SbFile.c++
     database/src/sb/SbLine.c++
     database/src/sb/SbMatrix.c++
     database/src/sb/SbName.c++
