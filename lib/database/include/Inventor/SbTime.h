@@ -133,11 +133,7 @@ class SbTime {
 
     // Set time from a double (in seconds)
     void		setValue(double sec)
-#ifdef SB_OS_IRIX
-	{ t.tv_sec = time_t(trunc(sec)); 
-#else
 	{ t.tv_sec = time_t(int(sec)); 
-#endif // SB_OS_IRIX
 	  t.tv_usec = long((sec - t.tv_sec) * 1000000.0); }
 
     // Set time from seconds + microseconds

@@ -56,9 +56,6 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <dlfcn.h>
 #include <stdlib.h>
-#ifdef SB_OS_IRIX
-#include <sgidefs.h>
-#endif // SB_OS_IRIX
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -197,32 +194,6 @@ SoType::fromName(SbName name)
 {
     void *b = NULL;
 
-#ifdef SB_OS_IRIX
-//  The following #ifdefs deal with the different names and
-//  directories for o32, n32, and n64 compilation.  The libs
-//  reside in different directories, and the CC compilers 
-//  mangle names slightly differently.  
-//
-#ifdef DEBUG
-#if   (_MIPS_SIM == _MIPS_SIM_ABI32)
-        char *longestName = "/usr/local/lib/InventorDSO/.so";
-#elif (_MIPS_SIM == _MIPS_SIM_NABI32)
-       char *longestName = "/usr/local/lib32/InventorDSO/.so";
-#elif (_MIPS_SIM == _MIPS_SIM_ABI64)
-        char *longestName = "/usr/local/lib64/InventorDSO/.so";
-#endif
-#endif
-#if   (_MIPS_SIM == _MIPS_SIM_ABI32)
-        const char *libDir = "lib";
-        const char *abiName = "SFv";
-#elif (_MIPS_SIM == _MIPS_SIM_NABI32)
-        const char *libDir = "lib32";
-        const char *abiName = "SGv";
-#elif (_MIPS_SIM == _MIPS_SIM_ABI64)
-        const char *libDir = "lib64";
-        const char *abiName = "SGv";
-#endif
-#else // SB_OS_IRIX
 #ifdef DEBUG
 	char *longestName = "/usr/lib/InventorDSO/.so";
 #endif // DEBUG
@@ -233,7 +204,6 @@ SoType::fromName(SbName name)
  	// of this to make porting to other platforms easier.
 	//
 #define sgidlopen_version(a,b,c,d) dlopen((a),(b))
-#endif // SB_OS_IRIX
 
     const char *nameChars = name.getString();
     SbString nameString(nameChars);  // For easier manipulation...
