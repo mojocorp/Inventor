@@ -59,9 +59,8 @@
 #ifndef _SB_TIME_
 #define _SB_TIME_
 
-#include <sys/time.h>
-#include <math.h>
-#include <limits.h>
+#include <time.h>
+
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 
@@ -85,8 +84,7 @@ class SbTime {
     SbTime(double sec);
 
     // Constructor taking seconds + microseconds
-    SbTime(time_t sec, long usec)		// System long from <sys/time.h>
-	{ t.tv_sec = sec; t.tv_usec = usec; }
+    SbTime(time_t sec, long usec);		// System long from <sys/time.h>
 
   private:
     // Constructor taking milliseconds
@@ -108,10 +106,7 @@ class SbTime {
   public:
 
     // Constructor taking struct timeval
-    SbTime(const struct timeval *tv)
-	{ t.tv_sec = tv->tv_sec; t.tv_usec = tv->tv_usec; }
-
-    // Destructors for C
+    SbTime(const struct timeval *tv);
 
     // Get the current time (seconds since Jan 1, 1970)
     static SbTime		getTimeOfDay();
@@ -123,47 +118,32 @@ class SbTime {
     static SbTime		zero()
 	{ return SbTime(0, 0); }
 
-#ifndef INT32_MAX
-#define INT32_MAX INT_MAX
-#endif // !INT32_MAX
-
     // Get a time far, far into the future
-    static SbTime		max()
-	{ return SbTime(INT32_MAX, 999999); }
+    static SbTime		maxTime();
 
     // Set time from a double (in seconds)
-    void		setValue(double sec)
-	{ t.tv_sec = time_t(int(sec)); 
-	  t.tv_usec = long((sec - t.tv_sec) * 1000000.0); }
+    void		setValue(double sec);
 
     // Set time from seconds + microseconds
-    void		setValue(time_t sec, long usec)  	// System long
-	{ t.tv_sec = sec; t.tv_usec = usec; }
+    void		setValue(time_t sec, long usec);  	// System long
 
     // Set time from a struct timeval
-    void		setValue(const struct timeval *tv)
-	{ t.tv_sec = tv->tv_sec; t.tv_usec = tv->tv_usec; }
+    void		setValue(const struct timeval *tv);
 
     // Set time from milliseconds
-    void		setMsecValue(unsigned long msec)  	// System long
-	{ t.tv_sec = time_t(msec/1000); 
-	  t.tv_usec = long(1000 * (msec % 1000)); }
+    void		setMsecValue(unsigned long msec);  	// System long
 
     // Get time in seconds as a double
-    double		getValue() const
-	{ return (double) t.tv_sec + (double) t.tv_usec / 1000000.0; }
+    double		getValue() const;
 
     // Get time in seconds & microseconds
-    void		getValue(time_t &sec, long &usec) const  // System long
-	{ sec = t.tv_sec; usec = t.tv_usec; }
+    void		getValue(time_t &sec, long &usec) const;  // System long
 
     // Get time in a struct timeval
-    void		getValue(struct timeval *tv) const
-	{ tv->tv_sec = t.tv_sec; tv->tv_usec = t.tv_usec; }
+    void		getValue(struct timeval *tv) const;
 
     // Get time in milliseconds (for Xt)
-    unsigned long	getMsecValue() const			// System long
-	{ return t.tv_sec * 1000 + t.tv_usec / 1000; }
+    unsigned long	getMsecValue() const;			// System long
 
     // Convert to a string.  The default format is seconds with
     // 3 digits of fraction precision.  See the SbTime man page for
@@ -190,9 +170,7 @@ class SbTime {
 	{ return (*this = *this - tm); }
 
     // Unary negation
-    SbTime			operator -() const
-	{ return (t.tv_usec == 0) ? SbTime(- t.tv_sec, 0)
-	      : SbTime(- t.tv_sec - 1, 1000000 - t.tv_usec); }
+    SbTime			operator -() const;
 
     // multiplication by scalar
     friend SbTime		operator *(const SbTime &tm, double s);
@@ -216,67 +194,22 @@ class SbTime {
 	{ return getValue() / tm.getValue(); }
 
     // modulus for two times
-    SbTime			operator %(const SbTime &tm) const
-	{ return *this - tm * floor(*this / tm); }
+    SbTime			operator %(const SbTime &tm) const;
 
     // equality operators
-    int				operator ==(const SbTime &tm) const
-	{ return (t.tv_sec == tm.t.tv_sec) && (t.tv_usec == tm.t.tv_usec); }
+    int				operator ==(const SbTime &tm) const;
 
-    int				operator !=(const SbTime &tm) const
-	{ return ! (*this == tm); }
+    int				operator !=(const SbTime &tm) const;
 
     // relational operators
-    inline SbBool		operator <(const SbTime &tm) const;
-    inline SbBool		operator >(const SbTime &tm) const;
-    inline SbBool		operator <=(const SbTime &tm) const;
-    inline SbBool		operator >=(const SbTime &tm) const;
+    SbBool		operator <(const SbTime &tm) const;
+    SbBool		operator >(const SbTime &tm) const;
+    SbBool		operator <=(const SbTime &tm) const;
+    SbBool		operator >=(const SbTime &tm) const;
 
   private:
-    struct timeval		t;
+    long tv_sec;
+    long tv_usec;
 };
-
-
-
-inline SbBool
-SbTime::operator <(const SbTime &tm) const
-{
-    if ((t.tv_sec < tm.t.tv_sec) ||
-	(t.tv_sec == tm.t.tv_sec && t.tv_usec < tm.t.tv_usec))
-	return TRUE;
-    else
-	return FALSE;
-}
-
-inline SbBool
-SbTime::operator >(const SbTime &tm) const
-{
-    if ((t.tv_sec > tm.t.tv_sec) ||
-	(t.tv_sec == tm.t.tv_sec && t.tv_usec > tm.t.tv_usec))
-	return TRUE;
-    else
-	return FALSE;
-}
-
-inline SbBool
-SbTime::operator <=(const SbTime &tm) const
-{
-    if ((t.tv_sec < tm.t.tv_sec) ||
-	(t.tv_sec == tm.t.tv_sec && t.tv_usec <= tm.t.tv_usec))
-	return TRUE;
-    else
-	return FALSE;
-}
-
-inline SbBool
-SbTime::operator >=(const SbTime &tm) const
-{
-    if ((t.tv_sec > tm.t.tv_sec) ||
-	(t.tv_sec == tm.t.tv_sec && t.tv_usec >= tm.t.tv_usec))
-	return TRUE;
-    else
-	return FALSE;
-}
-
 
 #endif /* _SB_TIME_ */
