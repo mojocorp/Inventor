@@ -118,6 +118,36 @@ SbString::makeEmpty()
 }
 
 //
+// Searches the string for the content specified in str, and returns the position of the first occurrence in the string.
+// When pos is specified the search only includes characters on or after position pos, ignoring any possible occurrences in previous locations.
+// If the content is not found, -1 is returned.
+//  
+
+int
+SbString::find(const SbString & str, int pos) const
+{
+    size_t index = string.find(str.getString(), pos);
+
+    return (index!=std::string::npos) ? (int)index : -1;
+}
+
+//
+// Searches the string for the content specified in str, and returns the position of the last occurrence in the string.
+// When pos is specified, the search only includes characters between the beginning of the string and position pos, ignoring any possible occurrences after pos.
+// If the content is not found, -1 is returned.
+//
+    
+int
+SbString::rfind(const SbString & str, int pos) const
+{
+    pos = (pos==-1) ? (int)std::string::npos : pos;
+
+    size_t index = string.rfind(str.string, pos);
+
+    return (index!=std::string::npos) ? (int)index : -1;
+}
+
+//
 // Returns new string representing given sub-string. If endChar is
 // -1 (the default), the sub-string from startChar until the end
 // is returned.
