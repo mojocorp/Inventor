@@ -120,7 +120,6 @@
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/sensors/SoSensor.h>
 
-class SbDict;
 class SoFieldSensor;
 
 class SoJackDragger : public SoDragger

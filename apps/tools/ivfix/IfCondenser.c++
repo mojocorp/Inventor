@@ -35,7 +35,6 @@
  */
 
 #include <Inventor/SbBox.h>
-#include <Inventor/SbDict.h>
 #include <Inventor/nodes/SoCoordinate3.h>
 #include <Inventor/nodes/SoIndexedShape.h>
 #include <Inventor/nodes/SoMaterialBinding.h>
