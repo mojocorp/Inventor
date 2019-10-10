@@ -58,6 +58,8 @@
 
 #include <Inventor/sensors/SoSensorManager.h>
 #include <Inventor/SoType.h>
+
+#include <map>
 #include <Inventor/SbPList.h>
 
 class SoBase;
@@ -67,7 +69,6 @@ class SoInput;
 class SoPath;
 class SoNode;
 class SoField;
-class SbDict;
 
 typedef void SoDBHeaderCB(void *userData, SoInput *in);
 
@@ -235,7 +236,7 @@ class SoDB {
     // is created by mangling the types of the two fields to convert
     // from. The dictionary maps the key to the type of the conversion
     // engine.
-    static SbDict	*conversionDict;
+    static std::map<uint32_t, short> conversionDict;
 
     // Returns a conversionDict key from the two given field type id's.
     static uint32_t 	getConversionKey(SoType fromField, SoType toField)
