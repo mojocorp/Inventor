@@ -99,11 +99,26 @@ class SbString {
     // Returns length of string
     size_t			getLength() const	{ return string.size(); }
 
+    /// Returns true if the string has no characters; otherwise returns false.
+    bool isEmpty() const {
+        return string.empty();
+    }
+
     // Sets string to be the empty string ("").
     void		makeEmpty();
 
     // Returns pointer to the character string
     const char *	getString() const	{ return string.data(); }
+
+    /// Searches the string for the content specified in str, and returns the position of the first occurrence in the string.
+    /// When pos is specified the search only includes characters on or after position pos, ignoring any possible occurrences in previous locations.
+    /// If the content is not found, -1 is returned.
+    int find(const SbString & str, int pos = 0) const;
+
+    /// Searches the string for the content specified in str, and returns the position of the last occurrence in the string.
+    /// When pos is specified, the search only includes characters between the beginning of the string and position pos, ignoring any possible occurrences after pos.
+    /// If the content is not found, -1 is returned.
+    int rfind(const SbString & str, int pos = -1) const;
 
     // Returns new string representing sub-string from startChar to
     // endChar, inclusive. If endChar is -1 (the default), the

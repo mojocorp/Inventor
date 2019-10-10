@@ -98,6 +98,12 @@ class SbName {
     // Returns length of string
     size_t			getLength() const   { return entry->length(); }
 
+    /// Return the position of the first occurrence in the char of the searched content, -1 if not found.
+    int find(char c) const;
+
+    /// Return the position of the last occurrence in the char of the searched content, -1 if not found.
+    int rfind(char c) const;
+	
     // Returns TRUE if given character is a legal starting character
     // for an identifier
     static SbBool 	isIdentStartChar(char c);
