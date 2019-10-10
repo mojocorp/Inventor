@@ -62,6 +62,7 @@
 #include <Inventor/SbString.h>
 #include <Inventor/SoLists.h>
 #include <Inventor/SoType.h>
+#include <map>
 
 #define SO_CATALOG_NAME_NOT_FOUND -1
 #define SO_CATALOG_THIS_PART_NUM   0
@@ -253,7 +254,7 @@ class SoNodekitCatalog {
 
     int 		  numEntries;   // how many entries?
     SoNodekitCatalogEntry **entries;    // the array of entries
-    SbDict                partNameDict; // For fast lookup of part numbers
+    std::map<SbName, int>   partNameDict; // For fast lookup of part numbers
 
     // Used for testing various aspects of new entries into a catalog
     SbBool    checkName( const SbName &theName );

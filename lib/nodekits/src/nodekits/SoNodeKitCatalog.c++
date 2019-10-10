@@ -351,15 +351,10 @@ SoNodekitCatalog::getPartNumber( const SbName &theName ) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    void *castPNum;
+    std::map<SbName, int>::const_iterator it = partNameDict.find(theName);
+    if ( it != partNameDict.end() )
+        return it->second;
 
-    if ( partNameDict.find( (unsigned long) theName.getString(), castPNum ) )
-#if (_MIPS_SZPTR == 64 || __ia64 || __LP64__)
-	return ( (int) ((long) castPNum) );  // System long
-#else
-	return ( (int) castPNum );
-#endif
-    else 
 	return SO_CATALOG_NAME_NOT_FOUND;
 }
 
@@ -862,7 +857,6 @@ SoNodekitCatalog::narrowTypes( const SbName &theName,
 	return;
 
     SoType oldType        = theEntry->getType();
-    SoType oldDefaultType = theEntry->getDefaultType();
 
     // Make sure that the new types is derived from the old type.
     // Parts in derived classes must be subclasses of the types they
@@ -933,9 +927,7 @@ SoNodekitCatalog::clone( SoType typeOfThis ) const
 							  typeOfThis );
 	    else
 		theClone->entries[i] = entries[i]->clone();
-	    theClone->partNameDict.enter( (unsigned long) 
-					  entries[i]->getName().getString(), 
-					  (void *) (unsigned long) i );
+        theClone->partNameDict[entries[i]->getName()] = i;
 	}
     }
 
@@ -1302,8 +1294,7 @@ SoNodekitCatalog::addEntry( const SbName &theName,
     entries[numEntries - 1] = newEntry;
 
     // add the new name to the quick-reference part name dictionary
-    partNameDict.enter( (unsigned long) theName.getString(), 
-			(void *) (unsigned long) (numEntries - 1));
+    partNameDict[theName] = numEntries - 1;
 
     // parent is no longer a leaf node in the nodekit structure
     if ( parentEntry != NULL ) {
