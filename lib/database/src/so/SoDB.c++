@@ -52,7 +52,6 @@
  */
 
 #include <stdlib.h>
-#include <Inventor/SbDict.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
@@ -148,7 +147,7 @@ int		SoDB::notifyCount = 0;
 SbPList		*SoDB::headerList;
 
 // This dictionary stores field conversion engine types
-SbDict		*SoDB::conversionDict;
+std::map<uint32_t, short> SoDB::conversionDict;
 
 // The global realTime field:
 SoSFRealTime	*SoDB::realTime;
@@ -184,9 +183,7 @@ SoDB::init()
 	// search in).
 	SoInput::init();
 
-	// Set up field conversion dictionary
-	conversionDict = new SbDict;
-	
+
 	//
 	// Initialize all standard classes. The significant ordering
 	// rules are:
@@ -694,8 +691,7 @@ SoDB::addConverter(SoType fromField, SoType toField, SoType converterFunc)
     }
 #endif
 
-    conversionDict->enter(getConversionKey(fromField, toField),
-			  * (void **) &converterFunc);
+    conversionDict[getConversionKey(fromField, toField)] = converterFunc.getKey();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -710,10 +706,9 @@ SoDB::addConverter(SoType fromField, SoType toField, SoType converterFunc)
 SoType
 SoDB::getConverter(SoType fromField, SoType toField)
 {
-    void	*typePtr;
-
-    if (conversionDict->find(getConversionKey(fromField, toField), typePtr))
-	return * (SoType *) &typePtr;
+    uint32_t key = getConversionKey(fromField, toField);
+    if (conversionDict.find(key) != conversionDict.end())
+        return SoType::fromKey(conversionDict[key]);
 
     return SoType::badType();
 }
