@@ -197,6 +197,7 @@ SoInput::SoInput(SoInput *dictIn)
     // Create new file and push on stack
     curFile = new SoInputFile;
     curFile->fp.setFilePointer(stdin);
+
     files.push_back(curFile);
 
     // Make it read from stdin and use the passed dictionary
@@ -344,12 +345,8 @@ SoInput::removeDirectory(const char *dirName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-    SbString	*dir;
-
-    for (i = 0; i < directories->getLength(); i++) {
-
-	dir = (*directories)[i];
+    for (int i = 0; i < directories->getLength(); i++) {
+        SbString *dir = (*directories)[i];
 
 	if (*dir == dirName) {
 	    directories->remove(i);
@@ -2703,7 +2700,7 @@ SoInput::addReference(const SbName &name,	// Reference name
     // Enter in dictionary : generates a CC warning...
     curFile->refDict->enter((unsigned long) name.getString(), (void *) base);
 
-    int length = name.getLength();
+    size_t length = name.getLength();
     if (length == 0) return;
 
     const char *n = name.getString();
@@ -2711,7 +2708,7 @@ SoInput::addReference(const SbName &name,	// Reference name
     // If we're reading a 1.0 file and the name is an '_' followed by
     // all digits, don't name the node.
     if (n[0] == '_' &&  curFile->ivVersion == 1.0f) {
-	int i;
+        size_t i;
 	for (i = 1; i < length; i++) {
 	    if (!isdigit(n[i])) break;
 	}
@@ -2720,13 +2717,13 @@ SoInput::addReference(const SbName &name,	// Reference name
 
     if (addToGlobalDict) {
 	// Look for the first '+':
-    const char *firstPlus = strchr(n, '+');
+        int firstPlus = name.find('+');
 
-	if (firstPlus == NULL) {
+        if (firstPlus == -1) {
 	    base->setName(name);
 	}
-	else if (firstPlus != n) {
-	    SbName instanceName(SbString(n, 0, firstPlus-n-1));
+        else if (firstPlus > 0) {
+            SbName instanceName(SbString(n, 0, firstPlus-1));
 	    base->setName(instanceName);
 	}
     }
