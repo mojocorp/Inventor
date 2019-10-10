@@ -101,25 +101,6 @@ SoUpgrader::initClasses()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    This initializes the SoUpgrader class.
-//
-// Use: internal
-
-void
-SoUpgrader::initClass()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SO__NODE_INIT_ABSTRACT_CLASS(SoUpgrader, "Upgrader", SoGroup);
-
-    classTypeId.makeInternal();
-    upgradeDictV1 = new SbDict(50);
-    upgradeDictV2 = new SbDict(10); // there are only a few classes to upgrade
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    This initializes the SoV1CustomNode class.
 //
 // Use: internal
