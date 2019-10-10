@@ -121,7 +121,7 @@ SoByteStream::convert(SoPathList *pathList, SbBool binaryFormat)
     // Write all the paths in the path list into an in-memory buffer
     SoWriteAction wa;
     SoOutput *out = wa.getOutput();
-    out->setBinary(binaryFormat);
+    out->setFormat(binaryFormat ? SoOutput::BINARY : SoOutput::ASCII);
     out->setBuffer(malloc(128), 128, realloc);
 
     for (int i = 0; i < pathList->getLength(); i++) {
@@ -203,7 +203,7 @@ SoByteStream::unconvert(SoByteStream *bs)
 //  Use: static, public
 //
 SoPathList *
-SoByteStream::unconvert(void *data, uint32_t numBytes)
+SoByteStream::unconvert(void *data, size_t numBytes)
 //
 //////////////////////////////////////////////////////////////////////////////
 {
