@@ -61,9 +61,10 @@
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbDict.h>
-#include <Inventor/SbPList.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoDB.h>
+
+#include <vector>
 
 class SoNode;
 class SoPath;
@@ -275,7 +276,7 @@ class SoInput {
 
   private:
     static SbStringList *directories;	// Directory search path.
-    SbPList		files;		// Stack of SoInputFiles (depth >=1)
+    std::vector<SoInputFile*>  files;  // Stack of SoInputFiles (depth >=1)
     struct SoInputFile	*curFile;	// Top of stack
     SbString		backBuf;	// For strings that are put back
     int			backBufIndex;	// Index into backBuf (-1 if no buf)
