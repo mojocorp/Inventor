@@ -76,13 +76,12 @@ static const char *defaultBinaryHeader = "#Inventor V2.1 binary";
 // Use: public
 
 SoOutput::SoOutput()
+    : fp(stdout)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fp		= stdout;
     buffer	= NULL;
     toBuffer	= FALSE;
-    openedHere	= FALSE;
     anyRef	= FALSE;
     binary	= FALSE;
     compact	= FALSE;
@@ -106,13 +105,12 @@ SoOutput::SoOutput()
 // Use: internal
 
 SoOutput::SoOutput(SoOutput *dictOut)
+    : fp(stdout)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fp		= stdout;
     buffer	= NULL;
     toBuffer	= FALSE;
-    openedHere	= FALSE;
     anyRef	= FALSE;
     binary	= FALSE;
     compact	= FALSE;
@@ -176,8 +174,7 @@ SoOutput::setFilePointer(FILE *newFP)		// New file pointer
     // Close open file, if any
     closeFile();
 
-    fp		= newFP;
-    openedHere	= FALSE;
+    fp.setFilePointer(newFP);
     wroteHeader = FALSE;
     toBuffer	= FALSE;
 
@@ -201,7 +198,7 @@ SoOutput::getFilePointer() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return isToBuffer() ? NULL : fp;
+    return isToBuffer() ? NULL : fp.getFilePointer();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -218,19 +215,17 @@ SoOutput::openFile(const char *fileName)	// Name of file
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FILE *newFP = fopen(fileName, "w");
 
     // Close open file, if any
     closeFile();
 
-    if (newFP == NULL) {
+    fp.open(fileName, "w");
+    if (!fp.isOpen()) {
 	SoDebugError::post("SoOutput::openFile",
 			   "Can't open file \"%s\" for writing", fileName);
 	return FALSE;
     }
 
-    fp		= newFP;
-    openedHere	= TRUE;
     wroteHeader = FALSE;
     toBuffer	= FALSE;
 
@@ -257,10 +252,7 @@ SoOutput::closeFile()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (openedHere) {
-	fclose(fp);
-	openedHere = FALSE;
-    }
+    fp.close();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -375,7 +367,6 @@ SoOutput::setFloatPrecision(int precision)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char tmp[8];
 
     // Invalid precision specified; use default format string
     if (precision < 0 || precision > 8)
@@ -391,6 +382,7 @@ SoOutput::setFloatPrecision(int precision)
     // Build the output format string from the input parameters
     else
     {
+        char tmp[8];
 	sprintf(tmp, "%%.%dg", precision);
 	fmtString = SbString(tmp);
     }
@@ -513,13 +505,13 @@ SoOutput::write(char c)
             tmpBuffer[1] = 0;
             tmpBuffer[2] = 0;
             tmpBuffer[3] = 0;
-            fwrite((void *)tmpBuffer, sizeof(char), 4, fp);
-            fflush(fp);
+            fp.write(tmpBuffer, sizeof(char), 4);
+            fp.flush();
         }
     }
 
     else if (! isToBuffer())
-	putc(c, fp);
+        fp.write(&c, sizeof(char), 1);
 
     else
 	*curBuf++ = c;
@@ -537,8 +529,8 @@ SoOutput::write(const char *s)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int n = strlen(s);
-    int nsize = (n + 3) & ~0003;
+    size_t n = strlen(s);
+    size_t nsize = (n + 3) & ~0003;
 
     if (! wroteHeader)
 	writeHeader();
@@ -555,32 +547,32 @@ SoOutput::write(const char *s)
         // string, followed by padding out to the word boundary.
         //
         if (isToBuffer()) {
-            int m = n;
+            int m;
             DGL_HTON_INT32(m, n);
             *((int *)curBuf) = m;
             curBuf += 4;
 	    memcpy((void *)curBuf, (const void *)s, n);
 	    curBuf += n;
-            for (int i=0; i<(nsize-n); i++) 
+            for (size_t i=0; i<(nsize-n); i++)
                 *curBuf++ = 0;
         }
         else {
             if (!makeRoomInTmpBuf(nsize))
                 return;
-            int m = n;
+            int m;
             DGL_HTON_INT32(m, n);
-            fwrite((void *)&m, sizeof(int), 1, fp);
+            fp.write(&m, sizeof(int), 1);
 	    memcpy(tmpBuffer, (const void *)s, n);
-            for (int i=0; i<(nsize-n); i++) 
+            for (size_t i=0; i<(nsize-n); i++)
                 tmpBuffer[n+i] = 0;
-            fwrite((void *)tmpBuffer, sizeof(char), nsize, fp);
-            fflush(fp);
+            fp.write(tmpBuffer, sizeof(char), nsize);
+            fp.flush();
         }
     }
 
-    else if (! isToBuffer())
-        fputs(s, fp);
-
+    else if (! isToBuffer()) {
+        fp.write(s, sizeof(char), strlen(s));
+    }
     else {
 	strcpy(curBuf, s);
 	curBuf += n;		// Don't increment over NUL char
@@ -601,10 +593,9 @@ SoOutput::write(const SbString &s)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (isBinary())
+    if (isBinary()) {
 	write(s.getString());
-
-    else {
+    } else {
 	const char *c;
 
 	write('\"');
@@ -633,9 +624,9 @@ SoOutput::write(const SbName &s)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (isBinary())
+    if (isBinary()) {
 	write(s.getString());
-
+    }
     else {
 	const char *c;
 
@@ -671,12 +662,12 @@ SoOutput::write(const SbName &s)
             if (!makeRoomInTmpBuf(sizeof(dglType)))			      \
                 return;							      \
             dglFunc(num, tmpBuffer);                                          \
-            fwrite((void *)tmpBuffer, sizeof(dglType), 1, fp);              \
-            fflush(fp);                                                       \
+            fp.write(tmpBuffer, sizeof(dglType), 1);                          \
+            fp.flush();                                                       \
         }                                                                     \
     }									      \
     else if (! isToBuffer())						      \
-	fprintf(fp, formatString, num);					      \
+        fprintf(fp.getFilePointer(), formatString, num);					  \
     else {								      \
 	char	str[20];						      \
 	sprintf(str, formatString, num);				      \
@@ -696,8 +687,8 @@ SoOutput::write(const SbName &s)
         if (!makeRoomInTmpBuf(length*sizeof(type))) 			      \
             return;							      \
         dglFunc(array, tmpBuffer, length);                                    \
-        fwrite((void *)tmpBuffer, sizeof(type), length, fp);                \
-        fflush(fp); 							      \
+        fp.write(tmpBuffer, sizeof(type), length);                            \
+        fp.flush();                                                           \
     }                                                                         \
 
 
@@ -766,38 +757,6 @@ SoOutput::write(unsigned short s)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Writes a int32_t integer to current file/buffer.
-//
-// Use: public
-
-//     made redundant by typedef of int32_t
-//void
-//SoOutput::write(int32_t l)
-////
-//////////////////////////////////////////////////////////////////////////
-//{
-//    WRITE_NUM(l, "%ld", convertInt32, int32_t);
-//}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Writes an uint32_teger to current file/buffer.
-//
-// Use: public
-
-//     made redundant by typedef of uint32_t
-//void
-//SoOutput::write(uint32_t l)
-////
-//////////////////////////////////////////////////////////////////////////
-//{
-//    WRITE_NUM(l, "%#lx", convertInt32, int32_t);
-//}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Writes a float to current file/buffer.
 //
 // Use: public
@@ -833,7 +792,7 @@ SoOutput::write(double d)
 // Use: public
 
 void
-SoOutput::writeBinaryArray(unsigned char *c, int length)
+SoOutput::writeBinaryArray(const unsigned char *c, int length)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -846,8 +805,8 @@ SoOutput::writeBinaryArray(unsigned char *c, int length)
     curBuf += length * sizeof(unsigned char);
     }
     else {
-    fwrite((void *)c, sizeof(unsigned char), length, fp);
-	fflush(fp);
+        fp.write(c, sizeof(unsigned char), length);
+        fp.flush();
     }
 }
 
@@ -1117,9 +1076,7 @@ SoOutput::indent()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-
-    for (i = indentLevel / 2; i > 0; --i)
+    for (int i = indentLevel / 2; i > 0; --i)
 	write('\t');
 
     if (indentLevel & 1) {

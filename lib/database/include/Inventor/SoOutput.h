@@ -63,6 +63,7 @@
 #include <Inventor/SbDict.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SbName.h>
+#include <Inventor/SbFile.h>
 
 class SoBase;
 
@@ -177,13 +178,9 @@ class SoOutput {
     void		write(unsigned int   i);
     void		write(short	     s);
     void		write(unsigned short s);
-    //     but typedef makes this redundant
-    //void		write(int32_t	     l);
-    //     but typedef makes this redundant
-    //void		write(uint32_t	     l);
     void		write(float	     f);
     void		write(double	     d);
-    void                writeBinaryArray(unsigned char *c, int length);
+    void writeBinaryArray(const unsigned char *c, int length);
     void                writeBinaryArray(int32_t *l, int length);
     void                writeBinaryArray(float *f, int length);
     void                writeBinaryArray(double *d, int length);
@@ -215,7 +212,7 @@ class SoOutput {
 	{ return (isCompact() || isBinary()) ? 0 : annotation; }
 
   private:
-    FILE		*fp;		// File writing to
+    SbFile    fp;  // File writing to
     SbBool		toBuffer;	// TRUE if writing to buffer
     char                *tmpBuffer;     // For binary write to file
     void		*buffer;	// Buffer writing to
@@ -223,7 +220,6 @@ class SoOutput {
     size_t		bufSize;	// Maximum buffer size
     size_t		tmpBufSize;	// Maximum temporary buffer size
     SoOutputReallocCB	*reallocFunc;	// Reallocation function for buffer
-    SbBool		openedHere;	// TRUE if SoOutput opened file
     SbBool		binary;		// TRUE if writing binary data
     SbBool		compact;	// TRUE if writing in compact form
     SbBool		wroteHeader;	// TRUE if header was written

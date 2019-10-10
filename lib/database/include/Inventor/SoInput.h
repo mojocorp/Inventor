@@ -71,40 +71,10 @@ class SoPath;
 class SoBase;
 class SoDB;
 class SbStringList;
+struct SoInputFile;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Structure: SoInputFile (internal)
-//
-//  This structure holds info about an opened file for use in the SoInput
-//  class.
-//
-//  One of the items is a dictionary that correlates reference names
-//  in files to nodes and paths (SoBase instances).
-//
-//////////////////////////////////////////////////////////////////////////////
-
-SoINTERNAL struct SoInputFile {
-    SbString		name;		// Name of file
-    SbString		fullName;	// Name of file with full path
-    FILE		*fp;		// File pointer
-    void		*buffer;	// Buffer to read from (or NULL)
-    char		*curBuf;	// Current location in buffer
-    size_t		bufSize;	// Buffer size
-    int			lineNum;	// Number of line currently reading
-    SbBool		openedHere;	// TRUE if opened by SoInput
-    SbBool		binary;		// TRUE if file has binary data
-    SbBool		readHeader;	// TRUE if header was checked for A/B
-    SbBool		headerOk;	// TRUE if header was read ok
-    SbDict		*refDict;	// Node/path reference dictionary
-    SbBool		borrowedDict;	// TRUE if dict from another SoInput
-    float		ivVersion;	// Version if standard Inventor file;
-    SbString		headerString;	// The header string of the input file
-    SoDBHeaderCB	*postReadCB;	// CB to be called after reading file
-    void		*CBData;	// User data to pass to the postReadCB
-
-    SoInputFile();			// Too complex for inlining
-};
+/// Used to read Inventor data files.
+/// \ingroup General
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -198,8 +168,7 @@ class SoInput {
     SbString		getHeader();
     
     // Returns the Inventor version of the file being read.
-    float		getIVVersion()	
-	{ return curFile->ivVersion; }
+    float		getIVVersion() const;
     
     
   SoEXTENDER public:
@@ -232,16 +201,12 @@ class SoInput {
     SbBool		read(unsigned int   &i);
     SbBool		read(short	    &s);
     SbBool		read(unsigned short &s);
-    //     but typedef makes this redundant.
-    //SbBool		read(int32_t	    &l);
-    //     but typedef makes this redundant.
-    //SbBool		read(uint32_t	    &l);
     SbBool		read(float	    &f);
     SbBool		read(double	    &d);
-    SbBool		readBinaryArray(unsigned char *c, int length);
-    SbBool		readBinaryArray(int32_t *l, int length);
-    SbBool		readBinaryArray(float *f, int length);
-    SbBool		readBinaryArray(double *d, int length);
+    SbBool readBinaryArray(unsigned char *c, size_t length);
+    SbBool readBinaryArray(int32_t *l, size_t length);
+    SbBool readBinaryArray(float *f, size_t length);
+    SbBool readBinaryArray(double *d, size_t length);
 
     // Returns TRUE if current file/buffer is at EOF
     SbBool		eof() const;
@@ -274,6 +239,8 @@ class SoInput {
     // Looks up a reference, returning the base pointer or NULL
     SoBase *		findReference(const SbName &name) const;
 
+    // Looks for named file. Returns false if not found.
+    static bool findFile(const SbString & fileName, SbString &fullName);
   private:
     static SbStringList *directories;	// Directory search path.
     std::vector<SoInputFile*>  files;  // Stack of SoInputFiles (depth >=1)
@@ -290,16 +257,11 @@ class SoInput {
     SbBool              backupBufUsed;  // True if backupBuf contains data
     
     // Set the Inventor version number of the current file
-    void		setIVVersion(float version) 
-	{ curFile->ivVersion = version; }
-
-    // Looks for named file and opens it. Returns NULL if not found.
-    FILE *		findFile(const char *fileName,
-				 SbString &fullName) const;
+    void		setIVVersion(float version);
 
     // Initializes reading from file
-    void		initFile(FILE *newFP, const char *fileName,
-				 SbString *fullName, SbBool openedHere,
+    bool  initFile(const SbString & fileName,
+                   SbString *fullName,
 				 SbDict *refDict = NULL);
 
     // Checks current file for ASCII/binary header comment. Returns
@@ -307,8 +269,7 @@ class SoInput {
     SbBool		checkHeader();
 
     // Returns TRUE if reading from memory buffer rather than file
-    SbBool		fromBuffer() const
-	{ return (curFile->buffer != NULL); }
+    SbBool		fromBuffer() const;
 
     // Skips over white space in input. Pops file if EOF is hit.
     // Returns FALSE on error.
@@ -318,9 +279,7 @@ class SoInput {
     SbBool		popFile();
 
     // Returns number of bytes left in current buffer
-    size_t		freeBytesInBuf() const
-	{ return (curFile->bufSize -
-		  (curFile->curBuf - (char *) curFile->buffer)); }
+    size_t		freeBytesInBuf() const;
 
     // Reads integer, unsigned integer, or floating-point number.
     // Returns FALSE on EOF or error
@@ -349,15 +308,13 @@ class SoInput {
     void                convertFloat(char *from, float *f);
     void                convertDouble(char *from, double *d);
     void                convertShortArray( char *from, register short *to,
-                             register int len);
+                                           register size_t len);
     void                convertInt32Array( char *from, register int32_t *to,
-                             register int len);
+                                           register size_t len);
     void                convertFloatArray( char *from, register float *to,
-                             register int len);
+                                           register size_t len);
     void                convertDoubleArray( char *from, register double *to,
-                             register int len);
-friend class SoBase;
-friend class SoDB;
+                                            register size_t len);
 };
 
 #endif /* _SO_INPUT_ */
