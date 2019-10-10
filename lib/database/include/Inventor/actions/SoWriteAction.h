@@ -60,6 +60,8 @@
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/SoOutput.h>
 
+#include <vector>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoWriteAction
@@ -110,7 +112,7 @@ class SoWriteAction : public SoAction {
     SbBool		continuing;	// TRUE only if continueToApply()
 					// was used to apply action
     SbBool		doOneStage;	// TRUE if only supposed to do 1 stage
-    SbPList		savedLists;	// Path lists saved for later apply
+    std::vector<SoPathList*> savedLists; // Path lists saved for later apply
 
     // Performs traversal on a path list, which is a little tricker
     void		traversePathList(SoNode *node);

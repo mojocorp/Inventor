@@ -56,13 +56,6 @@
 #include <Inventor/events/SoEvent.h>
 #include <Inventor/nodes/SoEventCallback.h>
 
-// internal class for storing event types, callback funcs, user data
-typedef struct {
-    SoType		eventType;
-    SoEventCallbackCB	*func;
-    void		*userData;
-} SoEventCallbackData;
-
 SO_NODE_SOURCE(SoEventCallback);
 
 ////////////////////////////////////////////////////////////////////////
@@ -91,7 +84,6 @@ SoEventCallback::SoEventCallback()
     SO_NODE_CONSTRUCTOR(SoEventCallback);
 
     isBuiltIn        = TRUE;
-    cblist	     = new SbPList;
     pathOfInterest   = NULL;
     eventAction	     = NULL;
 }
@@ -106,11 +98,6 @@ SoEventCallback::~SoEventCallback()
 {
     if (pathOfInterest != NULL)
 	pathOfInterest->unref();
-
-    // delete the data elements, and delete the callback list
-    for (int i = 0; i < cblist->getLength(); i++)
-	delete (SoEventCallbackData *) (*cblist)[i];
-    delete cblist;
 }
 
 
@@ -127,11 +114,12 @@ SoEventCallback::addEventCallback(
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoEventCallbackData *data = new SoEventCallbackData;
-    data->eventType = eventType;
-    data->func = f;
-    data->userData = userData;
-    cblist->append(data);
+    SoEventCallbackData data;
+    data.eventType = eventType;
+    data.func = f;
+    data.userData = userData;
+
+    cblist.push_back(data);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -146,16 +134,17 @@ SoEventCallback::removeEventCallback(
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // loop from the end of the list, in case we remove items
-    for (int i = cblist->getLength() - 1; i >= 0; i--) {
-	SoEventCallbackData *data = (SoEventCallbackData *) (*cblist)[i];
-	if ((data->eventType == eventType) &&
-	    (data->func == f) &&
-	    (data->userData == userData)) {
+    std::vector<SoEventCallbackData>::iterator it=cblist.begin();
+    while (it!=cblist.end()) {
+        const SoEventCallbackData &data = *it;
+        if ((data.eventType == eventType) &&
+            (data.func == f) &&
+            (data.userData == userData)) {
 	    
 	    // found the func/event type/data triplet - remove it!
-	    cblist->remove(i);
-	    delete data;
+            it = cblist.erase(it);
+        } else {
+            ++it;
 	}
     }
 }
@@ -202,10 +191,11 @@ SoEventCallback::invokeCallbacks(const SoEvent *e)
 ////////////////////////////////////////////////////////////////////////
 {
     // Call all callback funcs interested in this event type
-    for (int i = 0; i < cblist->getLength(); i++) {
-	SoEventCallbackData *data = (SoEventCallbackData *) (*cblist)[i];
-	if (e->isOfType(data->eventType)) {
-	    (*data->func) (data->userData, this);
+    std::vector<SoEventCallbackData>::const_iterator it;
+    for (it=cblist.begin(); it!=cblist.end(); ++it) {
+        const SoEventCallbackData &cb = *it;
+        if (e->isOfType(cb.eventType)) {
+            (*cb.func) (cb.userData, this);
 	}
     }
 }

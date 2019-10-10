@@ -54,11 +54,6 @@
 #include <Inventor/misc/SoCallbackList.h>
 #include <Inventor/errors/SoDebugError.h>
 
-typedef struct {
-    SoCallbackListCB	*func;
-    void		*userData;
-} SoCallbackStruct;
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Constructor
@@ -77,11 +72,7 @@ SoCallbackList::~SoCallbackList()
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    int len = list.getLength();
-    
-    for (int i = 0; i < len; i++) {
-    	delete (SoCallbackStruct *) list[i];
-    }
+
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -98,11 +89,11 @@ SoCallbackList::addCallback(SoCallbackListCB *f, void *userData)
     if (f == NULL)
     	return;
 	
-    SoCallbackStruct *cb = new SoCallbackStruct;
-    cb->func = f;
-    cb->userData = userData;
+    SoCallbackStruct cb;
+    cb.func = f;
+    cb.userData = userData;
     
-    list.append(cb);
+    list.push_back(cb);
 }   
 
 //////////////////////////////////////////////////////////////////////////////
@@ -115,24 +106,22 @@ SoCallbackList::removeCallback(SoCallbackListCB *f, void *userData)
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    int len = list.getLength();
-    SoCallbackStruct *cb;
-    int found = 0;
-    
-    for (int i = 0; (i < len) && (! found); i++) {
-	cb = (SoCallbackStruct *) list[i];
-	if ((cb->func == f) && (cb->userData == userData)) {
-	    list.remove(i);
-	    delete cb;
-	    found = 1;
+    std::vector<SoCallbackStruct>::iterator it=list.begin();
+    while (it != list.end()) {
+        const SoCallbackStruct & cb = *it;
+        if ((cb.func == f) && (cb.userData == userData)) {
+            break;
+        } else {
+            ++it;
 	}
     }
     
 #ifdef DEBUG
-    if (! found)
+    if (it == list.end()) {
 	SoDebugError::post("SoCallbackList::removeCallback",
 			   "Passed function and userData not found in "
 			   "callback list");
+    }
 #endif
 }   
 
@@ -146,11 +135,9 @@ SoCallbackList::invokeCallbacks(void *callbackData)
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    int len = list.getLength();
-    SoCallbackStruct *cb;
-    
-    for (int i = 0; i < len; i++) {
-	cb = (SoCallbackStruct *) list[i];
-	(*cb->func) (cb->userData, callbackData);
+    std::vector<SoCallbackStruct>::const_iterator it;
+    for (it=list.begin(); it!=list.end(); ++it) {
+        const SoCallbackStruct &cb = *it;
+        (*cb.func) (cb.userData, callbackData);
     }
 }   
