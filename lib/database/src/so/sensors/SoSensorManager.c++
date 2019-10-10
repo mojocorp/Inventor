@@ -54,9 +54,6 @@
 #include <Inventor/sensors/SoSensorManager.h>
 #include <Inventor/sensors/SoSensors.h>
 #include <Inventor/errors/SoDebugError.h>
-#ifdef SB_OS_IRIX
-#include <osfcn.h>
-#endif // SB_OS_IRIX
 
 #ifdef DEBUG
 #include <SoDebug.h>

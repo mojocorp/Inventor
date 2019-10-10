@@ -83,11 +83,6 @@
 
 #include "geom/SoTabPlaneDraggerGeom.h"
 
-#ifndef SB_OS_IRIX
-#define _ABS(x) ((x) < 0 ? -(x) : (x))
-#endif // !SB_OS_IRIX
-
-
 SO_KIT_SOURCE(SoTabPlaneDragger);
 
 ////////////////////////////////////////////////////////////////////////
@@ -553,10 +548,10 @@ SoTabPlaneDragger::translateDrag()
 	if ( translateDir == -1 ) {
 	    // The 1-D direction is not defined.  Calculate it
 	    // based on which direction got the maximum locater motion.
-	    if (    _ABS( localMotion[0]) > _ABS( localMotion[1]) 
-		&& _ABS( localMotion[0]) > _ABS( localMotion[2]) )
+        if (    std::abs( localMotion[0]) > std::abs( localMotion[1])
+        && std::abs( localMotion[0]) > std::abs( localMotion[2]) )
 		translateDir = 0;
-	    else if (    _ABS( localMotion[1]) > _ABS( localMotion[2]) )
+        else if (    std::abs( localMotion[1]) > std::abs( localMotion[2]) )
 		translateDir = 1;
 	    else 
 		translateDir = 2;
@@ -727,9 +722,9 @@ SoTabPlaneDragger::cornerScaleDrag()
 
     // [3] Change in scale is the ratio of new to old
 #define TINY 0.0001
-    float xAxisDelta = (_ABS(newDiff[0]) < TINY || _ABS(oldDiff[0]) 
+    float xAxisDelta = (std::abs(newDiff[0]) < TINY || std::abs(oldDiff[0])
 			< TINY) ? 1.0 : newDiff[0] / oldDiff[0];
-    float yAxisDelta = (_ABS(newDiff[1]) < TINY || _ABS(oldDiff[1]) 
+    float yAxisDelta = (std::abs(newDiff[1]) < TINY || std::abs(oldDiff[1])
 			< TINY) ? 1.0 : newDiff[1] / oldDiff[1];
 #undef TINY
 
