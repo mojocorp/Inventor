@@ -54,6 +54,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <Inventor/SbPList.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/Xt/SoXt.h>
 #include <Inventor/Xt/SoXtGLWidget.h>

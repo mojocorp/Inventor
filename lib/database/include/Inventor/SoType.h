@@ -67,7 +67,8 @@
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbName.h>
-#include <Inventor/SbDict.h>
+
+#include <vector>
 
 class SoTypeList;
 struct SoTypeData;
@@ -76,12 +77,9 @@ struct SoTypeData;
 // SoType has no virtual functions to keep it small...
 //
 class SoType {
-#ifdef __DELTA
-#  pragma __nondynamic_class
-#endif
   public:
     // Get a type from a name
-    static SoType	fromName(SbName name);
+    static SoType	fromName(const SbName &name);
 
     // Get name
     SbName		getName() const;
@@ -153,7 +151,7 @@ class SoType {
 
     // Get the number of types currently registed in the types dictionary.
     // This is used by SoAction when setting up the action method list.
-    static int		getNumTypes()		{ return nextIndex; }
+    static size_t getNumTypes();
 
   private:
     // SoTypes are passed around on the stack a lot, and are cast to
@@ -165,15 +163,11 @@ class SoType {
 	unsigned int	isPublic :1; // 0 if is an internal class
     } storage;
 
-    // name->sotype dictionary
-    static SbDict	*nameDict;
+    static int find(const SbName & name);
 
     // array of SoTypeData
-    static int		nextIndex;
-    static int		arraySize;
-    static SoTypeData	*typeData;
+    static std::vector<SoTypeData> typeData;
 
-    static void		expandTypeData();
 };
 
 #endif /* _SO_TYPE_ */

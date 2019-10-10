@@ -67,6 +67,7 @@ class SoInput;
 class SoPath;
 class SoNode;
 class SoField;
+class SbDict;
 
 typedef void SoDBHeaderCB(void *userData, SoInput *in);
 

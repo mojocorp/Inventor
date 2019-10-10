@@ -58,6 +58,7 @@
 #include <stdlib.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <algorithm>
 
 SoINTERNAL struct SoTypeData {
     SoType		type;
@@ -66,14 +67,7 @@ SoINTERNAL struct SoTypeData {
     void		*(*createMethod)();
 };
 
-int				SoType::nextIndex;
-int				SoType::arraySize;
-SoTypeData *			SoType::typeData;
-
-// Dictionary mapping SbNames to pointers into indices in the typeData
-// array (pointers into the array would be bad, since the array can
-// move around as it gets expanded, but indices are OK):
-SbDict *			SoType::nameDict;
+std::vector<SoTypeData>	SoType::typeData;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -87,20 +81,15 @@ SoType::init()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    nameDict = new SbDict;
-
     // This will change when expandTypeData() is called below
-    arraySize = 0;
-    typeData = NULL;
+    typeData.reserve(128);
 
     // Initialize bad type at index 0. Make room first.
-    expandTypeData();
-    typeData->type.storage.index = 0;
-    typeData->type.storage.isPublic = 1;
-    typeData->type.storage.data  = 0;
-
-    // The first real type will have index 1
-    nextIndex = 1;
+    SoTypeData td;
+    td.type.storage.index = 0;
+    td.type.storage.isPublic = 1;
+    td.type.storage.data  = 0;
+    typeData.push_back(td);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -161,13 +150,10 @@ SoType::getAllDerivedFrom(SoType type, SoTypeList &typeList)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numAdded, i;
-    SoType	curType;
-
     // Gather all valid types into array (skip index 0 - badType)
-    numAdded = 0;
-    for (i = 1; i < nextIndex; i++) {
-	curType = typeData[i].type;
+    int numAdded = 0;
+    for (size_t i = 1; i < typeData.size(); i++) {
+        SoType curType = typeData[i].type;
 
 	// See if the type corresponds to a non-abstract node class 
 	if (! curType.isBad() && curType.isDerivedFrom(type) &&
@@ -188,12 +174,10 @@ SoType::getAllDerivedFrom(SoType type, SoTypeList &typeList)
 // Use: public, static
 
 SoType
-SoType::fromName(SbName name)
+SoType::fromName(const SbName & name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    void *b = NULL;
-
 #ifdef DEBUG
 	char *longestName = "/usr/lib/InventorDSO/.so";
 #endif // DEBUG
@@ -211,12 +195,11 @@ SoType::fromName(SbName name)
     // Look for an existing type; if the type begins with "So", then
     // look at a type matching the stuff after the "So", also.  If not
     // found, we'll try the DSO thing:
-    SbBool notFound = !nameDict->find((unsigned long) nameChars, b);
-    if (notFound && (name.getLength() > 2)  &&
-	(nameString.getSubString(0,1) == "So")) {
-
-	notFound = !nameDict->find((unsigned long)SbName(nameChars+2).getString(),
-				  b);
+    int b = find(name);
+    SbBool notFound = (b == -1);
+    if (notFound && (name.getLength() > 2)  && (nameString.getSubString(0,1) == "So")) {
+        b = find(SbName(nameChars+2));
+        notFound = (b == -1);
     }
     if (notFound) {
 	// Do the DSO thing.
@@ -282,26 +265,27 @@ SoType::fromName(SbName name)
 	       "Could not find %s::initClass in %s.",
 			       nameChars, DSOFile);
 #endif	    
-	    b = NULL;
+	    b = 0;
 	} else {
 	    (*dsoFunc)();  // Call initClass
 
 	    // Now, try to find the type again.
-	    if (!nameDict->find((unsigned long) nameChars, b)) {
+         b = find(name);
+         if (b == -1) {
 #ifdef DEBUG
 		SoDebugError::post("SoType::fromName",
 			"%s::initClass did not initialize SoType!",
 			nameChars);
 #endif	    
-		b = NULL;
+             b = 0;
 	    }
 	}
     }
 
-    if (b == NULL)
+    if (b <= 0)
 	return SoType::badType();
 
-    SoType result = typeData[(intptr_t)(b)].type;
+    SoType result = typeData[b].type;
 
     if (result.storage.isPublic == 0) {
 #ifdef DEBUG
@@ -330,24 +314,18 @@ SoType::createType(SoType parent, SbName name,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoType	t;	
-    SoTypeData	*td;
-
-    if (nextIndex >= arraySize)
-	expandTypeData();
-
-    t.storage.index = nextIndex++;
+    SoType t;
+    t.storage.index = typeData.size();
     t.storage.isPublic = 1;
     t.storage.data	= data;
 
-    td = typeData + t.storage.index;
+    SoTypeData td;
+    td.type	= t;
+    td.parent = parent;
+    td.name	= name;
+    td.createMethod	= createMethod;
 
-    td->type		= t;
-    td->parent		= parent;
-    td->name		= name;
-    td->createMethod	= createMethod;
-
-    nameDict->enter((unsigned long) name.getString(), (void *)(unsigned long)t.storage.index);
+    typeData.push_back(td);
 
     return t;
 }
@@ -379,9 +357,7 @@ SoType::overrideType(SoType oldType, void * (*createMethod)())
 			   oldType.getName().getString());
 #endif
 
-    SoTypeData *td = typeData + oldType.storage.index;
-
-    td->createMethod	= createMethod;
+    typeData[oldType.storage.index].createMethod = createMethod;
 
     return oldType;
 }
@@ -406,32 +382,40 @@ SoType::makeInternal()
     typeData[storage.index].type.storage.isPublic = 0;
 }
 
-#define INITIAL_ARRAY_SIZE	64
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//
+//
+//
+// Use: private, static
+
+size_t
+SoType::getNumTypes()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return typeData.size();
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Make the table of type data bigger.
+//
+//
 //
 // Use: private, static
 
-void
-SoType::expandTypeData()
+int
+SoType::find(const SbName & name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (typeData == NULL) {
-	arraySize = INITIAL_ARRAY_SIZE;
-	typeData = new SoTypeData[arraySize];
+    for (size_t i=0; i<typeData.size(); i++) {
+        if (typeData[i].name == name)
+            return i;
     }
-    else {
-	SoTypeData *newTypeData = new SoTypeData[2 * arraySize];
-	memcpy((void *) newTypeData, (void *) typeData,
-	      arraySize * sizeof(SoTypeData));
-	delete[] typeData;
-	typeData = newTypeData;
-	arraySize *= 2;
-    }
+    return -1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -476,9 +460,7 @@ SoType::canCreateInstance() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTypeData	*data = &typeData[storage.index];
-
-    return (data->createMethod != NULL);
+    return (typeData[storage.index].createMethod != NULL);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -494,10 +476,10 @@ SoType::createInstance() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTypeData	*data = &typeData[storage.index];
+    SoTypeData &data = typeData[storage.index];
 
-    if (data->createMethod != NULL)
-	 return (*data->createMethod)();
+    if (data.createMethod != NULL)
+        return (*data.createMethod)();
 
     return NULL;
 }
