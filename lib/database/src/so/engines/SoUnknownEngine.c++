@@ -95,7 +95,7 @@ SoUnknownEngine::getOutputData() const
 void *
 SoUnknownEngine::createInstance()
 {
-    return (void *)(new SoUnknownEngine);
+    return new SoUnknownEngine;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -146,7 +146,6 @@ SoUnknownEngine::~SoUnknownEngine()
     for (int j=0; j<numOutputs; j++)
         delete outputList[j];
 
-    if (className) free((void *)className);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -162,7 +161,7 @@ SoUnknownEngine::setClassName( const char *name )
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    className = strdup( name );
+    className = name;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -194,7 +193,7 @@ SoUnknownEngine::copyContents(const SoFieldContainer *fromFC,
 {
     // Make sure the copy has the correct class name
     const SoUnknownEngine *fromUnk = (const SoUnknownEngine *) fromFC;
-    setClassName(fromUnk->className);
+    setClassName(fromUnk->className.getString());
 
     // For each input in the original engine, create a new input and add
     // it to the new engine
@@ -259,5 +258,5 @@ SoUnknownEngine::getFileFormatName() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return className;
+    return className.getString();
 }

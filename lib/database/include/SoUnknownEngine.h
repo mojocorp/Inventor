@@ -91,7 +91,7 @@ class SoUnknownEngine : public SoEngine {
 
     // The class name read from the file.  This is used when writing the
     // engine back out.
-    char		*className;
+    SbName className;
 
     // Destructor
     ~SoUnknownEngine();
