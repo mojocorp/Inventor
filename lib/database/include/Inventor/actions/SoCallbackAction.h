@@ -69,8 +69,16 @@
 #include <Inventor/nodes/SoTextureCoordinateBinding.h>
 #include <Inventor/nodes/SoUnits.h>
 
+#include <vector>
+
 class SoPrimitiveVertex;
 class SoShape;
+
+struct nodeTypeCallback;
+struct tailCallback;
+struct triangleCallback;
+struct lineSegmentCallback;
+struct pointCallback;
 
 //
 // Typedefs for callback routines used with the callbacks for
@@ -292,15 +300,15 @@ class SoCallbackAction : public SoAction {
 
   private:
     // Callback lists
-    SbPList		preCallbackList;
-    SbPList		postCallbackList;
+    std::vector<nodeTypeCallback*>    preCallbackList;
+    std::vector<nodeTypeCallback*>    postCallbackList;
 
-    SbPList		preTailCallbackList;
-    SbPList		postTailCallbackList;
+    std::vector<tailCallback*>        preTailCallbackList;
+    std::vector<tailCallback*>        postTailCallbackList;
 
-    SbPList		triangleCallbackList;
-    SbPList		lineSegmentCallbackList;
-    SbPList		pointCallbackList;
+    std::vector<triangleCallback*>    triangleCallbackList;
+    std::vector<lineSegmentCallback*> lineSegmentCallbackList;
+    std::vector<pointCallback*>       pointCallbackList;
 
     // Response from last callback
     Response		response;

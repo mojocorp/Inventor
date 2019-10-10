@@ -59,13 +59,16 @@
 #define  _SO_FIELD_DATA_
 
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/SbPList.h>
 #include <Inventor/SbName.h>
+
+#include <vector>
 
 class SoField;
 class SoInput;
 class SoFieldContainer;
 class SoOutput;
+struct SoFieldEntry;
+struct SoEnumEntry;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -114,7 +117,7 @@ SoINTERNAL class SoFieldData {
 				SbBool copyConnections) const;
 
     // Returns number of fields
-    int			getNumFields() const	{ return fields.getLength(); }
+    int			getNumFields() const	{ return fields.size(); }
 
     // Returns name of field with given index
     const SbName &	getFieldName(int index) const;
@@ -183,8 +186,8 @@ SoINTERNAL class SoFieldData {
 				SoInput *in, SoFieldContainer *object,
 				int numFieldsWritten) const;
 
-    SbPList		fields;		// List of fields (SoFieldEntry)
-    SbPList		enums;		// List of enums (SoEnumEntry)
+    std::vector<SoFieldEntry*> fields;		// List of fields (SoFieldEntry)
+    std::vector<SoEnumEntry*>  enums;		// List of enums (SoEnumEntry)
 };    
 
 #endif /* _SO_FIELD_DATA_ */

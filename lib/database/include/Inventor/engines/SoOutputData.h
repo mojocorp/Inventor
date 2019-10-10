@@ -64,11 +64,14 @@
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
+#include <vector>
+
 class SoEngine;
 class SoFieldContainer;
 class SoInput;
 class SoOutput;
 class SoEngineOutput;
+struct SoOutputEntry;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -106,7 +109,7 @@ SoINTERNAL class SoEngineOutputData {
 				  SoType type);
 
     // Returns number of outputs
-    int			getNumOutputs() const	{ return outputs.getLength(); }
+    size_t			getNumOutputs() const	{ return outputs.size(); }
 
     // Returns name of output with given index
     const SbName &	getOutputName(int index) const;
@@ -129,7 +132,7 @@ SoINTERNAL class SoEngineOutputData {
     void		writeDescriptions(SoOutput *out,
 					 SoEngine *engine) const;
   private:
-    SbPList		outputs;	// List of outputs (SoOutputEntry)
+    std::vector<SoOutputEntry*>  outputs; // List of outputs (SoOutputEntry)
 };    
 
 #endif /* _SO_OUTPUT_DATA_ */

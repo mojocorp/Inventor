@@ -89,10 +89,9 @@ struct SoFieldEntry {
 
 struct SoEnumEntry {
     SbName		typeName;	// Name of enum type
-    int			num;		// number of values
-    int			arraySize;	// size of arrays
-    int			*vals;		// array of values
-    SbName		*names;		// array of names
+
+    std::vector<int> vals;	// array of values
+    std::vector<SbName> names; // array of names
 
     SoEnumEntry(const SbName &name);
     SoEnumEntry(const SoEnumEntry &o);
@@ -106,29 +105,21 @@ int SoEnumEntry::growSize = 6;
 SoEnumEntry::SoEnumEntry(const SbName &name)
 {
     typeName	= name;
-    num		= 0;
-    arraySize	= growSize;
-    vals	= new int[arraySize];
-    names	= new SbName[arraySize];
+
+    vals.reserve(growSize);
+    names.reserve(growSize);
 }
 
 SoEnumEntry::SoEnumEntry(const SoEnumEntry &o)
 {
-    typeName	= o.typeName,
-    num		= o.num;
-    arraySize	= num;
-    vals		= new int[arraySize];
-    names		= new SbName[arraySize];
-    for (int i=0; i<num; i++) {
-	vals[i] = o.vals[i];
-	names[i] = o.names[i];
-    }
+    typeName = o.typeName;
+    vals = o.vals;
+    names = o.names;
 }
 
 SoEnumEntry::~SoEnumEntry()
 {
-    delete [] vals;
-    delete [] names;
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -138,8 +129,7 @@ SoEnumEntry::~SoEnumEntry()
 //
 // Use: public
 
-SoFieldData::SoFieldData(const SoFieldData &src) :
-	fields(src.fields.getLength())
+SoFieldData::SoFieldData(const SoFieldData &src)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -155,8 +145,7 @@ SoFieldData::SoFieldData(const SoFieldData &src) :
 //
 // Use: public
 
-SoFieldData::SoFieldData(const SoFieldData *src) :
-	fields(src ? src->fields.getLength() : 0)
+SoFieldData::SoFieldData(const SoFieldData *src)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -175,17 +164,14 @@ SoFieldData::~SoFieldData()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    struct SoFieldEntry *tmpField;
-    struct SoEnumEntry  *tmpEnum;
-
     // Delete the list of fields and enums;
-    for (int i=0; i<fields.getLength(); i++) {
-        tmpField = (struct SoFieldEntry *)fields[i];
+    for (size_t i=0; i<fields.size(); i++) {
+        SoFieldEntry *tmpField = fields[i];
         delete tmpField;
     }
 
-    for (int j=0; j<enums.getLength(); j++) {
-        tmpEnum = (struct SoEnumEntry *)enums[j];
+    for (size_t j=0; j<enums.size(); j++) {
+        SoEnumEntry  *tmpEnum = enums[j];
         delete tmpEnum;
     }
 }
@@ -208,7 +194,7 @@ SoFieldData::addField(SoFieldContainer *defobj,	// Object with default values
     newField->name   = fieldName;
     newField->offset = (const char *) field - (const char *) defobj;
 
-    fields.append((void *) newField);
+    fields.push_back(newField);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -231,14 +217,11 @@ SoFieldData::overlay(SoFieldContainer *to, const SoFieldContainer *from,
     const SoFieldData *fromFD = from->getFieldData();
     const SoFieldData   *toFD =   to->getFieldData();
 
-    SoField	*fromField, *toField;
-    int		i;
-
-    for (i = 0; i < fromFD->fields.getLength(); i++) {
+    for (size_t i = 0; i < fromFD->fields.size(); i++) {
 
 	// Access the fields using the appropriate field data instances
-	toField   =   toFD->getField(to,   i);
-	fromField = fromFD->getField(from, i);
+        SoField	*toField   =   toFD->getField(to,   i);
+        SoField	*fromField = fromFD->getField(from, i);
 
 	// If both fields have default values, we don't bother copying
 	// the value:
@@ -274,7 +257,7 @@ SoFieldData::getFieldName(int index) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return ((SoFieldEntry *) fields[index])->name;
+    return fields[index]->name;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -290,8 +273,7 @@ SoFieldData::getField(const SoFieldContainer *object, int index) const
 ////////////////////////////////////////////////////////////////////////
 {
     // This generates a CC warning; there's not much we can do about it...
-    return (SoField *) ((char *) object +
-			((SoFieldEntry *) fields[index])->offset);
+    return (SoField *) ((char *) object + fields[index]->offset);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -378,8 +360,8 @@ SoFieldData::addEnumValue(const char *typeNameArg, const char *valNameArg,
     SbName valName = stripWhite(valNameArg);
 
     // look for an entry for this type name
-    for (int i=0; i<enums.getLength(); i++) {
-	e = (struct SoEnumEntry *) enums[i];
+    for (size_t i=0; i<enums.size(); i++) {
+        e = enums[i];
 	if (e->typeName == typeName)
 	    break;
 	else
@@ -388,25 +370,15 @@ SoFieldData::addEnumValue(const char *typeNameArg, const char *valNameArg,
     // make an entry if there wasn't one already
     if (e == NULL) {
 	e = new SoEnumEntry(typeName);
-	enums.append((void*) e);
+        enums.push_back(e);
     }
     // grow arrays if needed
-    if (e->num == e->arraySize) {
-	e->arraySize += SoEnumEntry::growSize;
-	int *ovals = e->vals;
-	SbName *onames = e->names;
-	e->vals = new int[e->arraySize];
-	e->names = new SbName[e->arraySize];
-	for (int i=0; i<e->num; i++) {
-	    e->vals[i] = ovals[i];
-	    e->names[i] = onames[i];
-	}
-	delete [] ovals;
-	delete [] onames;
+    if (e->vals.capacity() == e->vals.size()) {
+        e->vals.reserve(e->vals.size() + SoEnumEntry::growSize);
+        e->names.reserve(e->names.size() + SoEnumEntry::growSize);
     }
-    e->vals[e->num] = val;
-    e->names[e->num] = valName;
-    e->num++;
+    e->vals.push_back(val);
+    e->names.push_back(valName);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -425,12 +397,12 @@ SoFieldData::getEnumData(const char *typeNameArg, int &num,
     SbName typeName = stripWhite(typeNameArg);
 
     // look for an entry for this type name
-    for (int i=0; i<enums.getLength(); i++) {
-	struct SoEnumEntry *e = (struct SoEnumEntry *) enums[i];
+    for (size_t i=0; i<enums.size(); i++) {
+        SoEnumEntry *e = enums[i];
 	if (e->typeName == typeName) {
-	    num		= e->num;
-	    vals	= e->vals;
-	    names	= e->names;
+            num		= e->vals.size();
+            vals	= e->vals.data();
+            names	= e->names.data();
 	    return;
 	}
     }
@@ -467,7 +439,7 @@ SoFieldData::readFieldDescriptions(
 
     SbBool isBinary = in->isBinary();
 
-    SbBool hadFieldsDefined = fields.getLength() > 0;
+    SbBool hadFieldsDefined = fields.size() > 0;
 
     if (!isBinary) 
 	if (! ((gotChar = in->read(c)) || c != OPEN_BRACE_CHAR))
@@ -592,7 +564,7 @@ SoFieldData::read(SoInput *in, SoFieldContainer *object,
 	}
 	// In the old file format, objects with no fields
 	// didn't write out anything for the field values:
-	if (fields.getLength() == 0) return TRUE;
+    if (fields.size() == 0) return TRUE;
 
 	// This is mostly like Inventor 2.1 file format, except that
 	// there is no NOT_BUILTIN_BIT:
@@ -722,15 +694,15 @@ SoFieldData::read(SoInput *in, SoFieldContainer *object,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
-    for (i = 0; i < fields.getLength(); i++) {
+    size_t i;
+    for (i = 0; i < fields.size(); i++) {
 	if (fieldName == getFieldName(i)) {
 	    if (! getField(object, i)->read(in, fieldName))
 		return FALSE;
 	    break;
 	}
     }
-    if (i == fields.getLength())
+    if (i == fields.size())
 	foundName = FALSE;
     else foundName = TRUE;
 
@@ -762,7 +734,7 @@ SoFieldData::write(SoOutput *out, const SoFieldContainer *container) const
 	// fields we'll describe):
 	if (out->isBinary()) {
 	    unsigned short numToWrite = 0;
-	    for (int i = 0; i < fields.getLength(); i++) {
+        for (size_t i = 0; i < fields.size(); i++) {
 		SoField *field = getField(container, i);
 		if (field->shouldWrite())
 		    numToWrite++;
@@ -777,7 +749,7 @@ SoFieldData::write(SoOutput *out, const SoFieldContainer *container) const
     }
 
     // Let each field do its thing
-    for (int i = 0; i < fields.getLength(); i++) {
+    for (size_t i = 0; i < fields.size(); i++) {
 
 	SoField *field = getField(container, i);
 
@@ -868,25 +840,25 @@ SoFieldData::copy(const SoFieldData *from)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			i;
     if (from == NULL)
 	return;
 
     // Copy field entries
-    for (i = 0; i < from->fields.getLength(); i++) {
+    fields.resize(from->fields.size());
+    for (size_t i = 0; i < from->fields.size(); i++) {
 
-	struct SoFieldEntry *fromField =
-	    (struct SoFieldEntry *) from->fields[i];
+        const SoFieldEntry *fromField = from->fields[i];
 
-	fields.append((void *) new struct SoFieldEntry(*fromField));
+        fields[i] = new SoFieldEntry(*fromField);
     }
 
     // Copy enum entries
-    for (i = 0; i < from->enums.getLength(); i++) {
+    enums.resize(from->enums.size());
+    for (size_t i = 0; i < from->enums.size(); i++) {
 
-	struct SoEnumEntry *fromEnum = (struct SoEnumEntry *) from->enums[i];
+        SoEnumEntry *fromEnum = from->enums[i];
 
-	enums.append((void *) new struct SoEnumEntry(*fromEnum));
+        enums[i] = new SoEnumEntry(*fromEnum);
     }
 }
 
@@ -904,11 +876,9 @@ SoFieldData::isSame(const SoFieldContainer *c1,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
-
-    for (i = 0; i < fields.getLength(); i++)
+    for (size_t i = 0; i < fields.size(); i++) {
 	if (! getField(c1, i)->isSame(*getField(c2, i)))
 	    return FALSE;
-
+    }
     return TRUE;
 }

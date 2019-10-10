@@ -85,20 +85,17 @@ SoEngineOutputData::SoEngineOutputData(const SoEngineOutputData *from)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			i;
-    struct SoOutputEntry *fromOutput, *toOutput;
-
     if (from == NULL)
 	return;
 
-    for (i = 0; i < from->outputs.getLength(); i++) {
+    for (size_t i = 0; i < from->outputs.size(); i++) {
 
-	fromOutput = (struct SoOutputEntry *) from->outputs[i];
+        const SoOutputEntry *fromOutput = from->outputs[i];
 
-	toOutput = new struct SoOutputEntry;
+        SoOutputEntry *toOutput = new SoOutputEntry;
 	*toOutput = *fromOutput;
 
-	outputs.append((void *) toOutput);
+        outputs.push_back(toOutput);
     }
 }
 
@@ -111,8 +108,8 @@ SoEngineOutputData::~SoEngineOutputData()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = 0; i < outputs.getLength(); i++) {
-	delete (struct SoOutputEntry *)outputs[i];
+    for (size_t i = 0; i < outputs.size(); i++) {
+        delete outputs[i];
     }
 }
 
@@ -139,7 +136,7 @@ SoEngineOutputData::addOutput(
     newOutput->offset = (const char *) output - (const char *) defEngine;
     newOutput->type = type;
 
-    outputs.append((void *) newOutput);
+    outputs.push_back(newOutput);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -192,9 +189,10 @@ SoEngineOutputData::getIndex(const SoEngine *func,
     // Loop through the list looking for the correct offset:
     // (we'll assume this won't be very slow, since the list will
     // typically be very short):
-    for (int i = 0; i < outputs.getLength(); i++) {
-	SoOutputEntry *entry = (SoOutputEntry *)outputs[i];
-	if (entry->offset == offset) return i;
+    for (size_t i = 0; i < outputs.size(); i++) {
+        const SoOutputEntry *entry = outputs[i];
+        if (entry->offset == offset)
+            return i;
     }
 
     // This should never happen.
@@ -216,10 +214,10 @@ SoEngineOutputData::getType(int index) const
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (index >= outputs.getLength())
+    if (index >= outputs.size())
 	SoDebugError::post("SoEngineOutputData::getType",
 			   "Trying to get type of output %d, but engine has "
-			   "only %d outputs", index, outputs.getLength());
+               "only %d outputs", index, outputs.size());
 #endif /* DEBUG */
     return ((SoOutputEntry *)(outputs[index]))->type;
 }
@@ -264,7 +262,7 @@ SoEngineOutputData::readDescriptions(SoInput *in, SoEngine *object) const
 	}
     }
 
-    SbBool hadOutputsDefined = outputs.getLength() > 0;
+    SbBool hadOutputsDefined = outputs.size() > 0;
 
     if (!isBinary) {
 	if (! ((gotChar = in->read(c)) || c != OPEN_BRACE_CHAR))

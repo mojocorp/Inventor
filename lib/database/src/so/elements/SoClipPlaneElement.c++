@@ -108,7 +108,7 @@ SoClipPlaneElement::init(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    planes.truncate(0);
+    planes.clear();
     startIndex = 0;
 }
 
@@ -160,7 +160,7 @@ SoClipPlaneElement::push(SoState *)
     // be freed up when this instance goes away, so we save the
     // starting index to allow us to fix this in pop().
     planes = elt->planes;
-    startIndex = planes.getLength();
+    startIndex = planes.size();
     nodeIds = elt->nodeIds;
 }
 
@@ -181,8 +181,9 @@ SoClipPlaneElement::pop(SoState *, const SoElement *prevTopElement)
 	(const SoClipPlaneElement *) prevTopElement;
 
     // Free up any plane structures that were created by prevElt
-    for (int i = prevElt->startIndex; i < prevElt->planes.getLength(); i++)
-	delete (So_ClipPlane *) prevElt->planes[i];
+    for (size_t i = prevElt->startIndex; i < prevElt->planes.size(); i++) {
+        delete prevElt->planes[i];
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -213,7 +214,7 @@ SoClipPlaneElement::getNum() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return planes.getLength();
+    return planes.size();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -230,13 +231,13 @@ SoClipPlaneElement::get(int index, SbBool inWorldSpace) const
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (index < 0 || index >= planes.getLength())
+    if (index < 0 || index >= planes.size())
 	SoDebugError::post("SoClipPlaneElement::get",
 			   "Index (%d) is out of range 0 - %d",
-			   index, planes.getLength() - 1);
+               index, planes.size() - 1);
 #endif /* DEBUG */
 
-    So_ClipPlane *plane = (So_ClipPlane *) planes[index];
+    So_ClipPlane *plane = planes[index];
 
     if (! inWorldSpace)
 	return plane->objPlane;
@@ -290,5 +291,5 @@ SoClipPlaneElement::addToElt(const SbPlane &plane,
     newPlane->objToWorld	= modelMatrix;
     newPlane->worldPlaneValid	= FALSE;
 
-    planes.append(newPlane);
+    planes.push_back(newPlane);
 }

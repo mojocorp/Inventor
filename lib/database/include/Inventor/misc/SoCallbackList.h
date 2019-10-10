@@ -59,13 +59,9 @@
 #ifndef  _SO_CALLBACK_LIST_
 #define  _SO_CALLBACK_LIST_
 
-#include <Inventor/SbPList.h>
+#include <Inventor/SbBasic.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCallbackList
-//
-//////////////////////////////////////////////////////////////////////////////
+#include <vector>
 
 // Callback functions that are registered with this class should
 // be cast to this type.
@@ -87,15 +83,19 @@ class SoCallbackList {
     void    addCallback(SoCallbackListCB *f, void *userData = NULL);
     void    removeCallback(SoCallbackListCB *f, void *userData = NULL);
     
-    void    clearCallbacks()			    { list.truncate(0); }
-    int	    getNumCallbacks() const		    { return list.getLength(); }
+    void    clearCallbacks()			    { list.clear(); }
+    size_t	    getNumCallbacks() const		    { return list.size(); }
 
     void    invokeCallbacks(void *callbackData);
 
   private:
   
     // callbackList holds a list of functions and user data
-    SbPList 	list;
+    typedef struct {
+        SoCallbackListCB *func;
+        void             *userData;
+    } SoCallbackStruct;
+    std::vector<SoCallbackStruct>  list;
 };
 
 #endif  /* _SO_CALLBACK_LIST_ */
