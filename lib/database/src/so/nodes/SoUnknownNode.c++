@@ -59,6 +59,8 @@
 #include <Inventor/fields/SoSFNode.h>
 #include <SoUnknownNode.h>
 
+#include <cstring>
+
 // Because of the special treatment of fieldData, we can't use the
 // regular SO_NODE_SOURCE macro.
 SO__NODE_VARS(SoUnknownNode);

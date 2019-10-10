@@ -42,7 +42,7 @@
  |
  */
 
-
+#include <cstring>
 #include <stdio.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>

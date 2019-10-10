@@ -49,6 +49,8 @@
  _______________________________________________________________________
  */
 
+#include <cstring>
+
 #include <Inventor/actions/SoWriteAction.h>
 #include "SoText3V2.h"
 

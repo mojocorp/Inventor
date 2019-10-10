@@ -56,6 +56,7 @@
 
 #include <Inventor/SbName.h>
 #include <ctype.h>
+#include <cstring>
 
 std::set<std::string> SbName::entries;
 

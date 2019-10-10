@@ -49,7 +49,7 @@
  */
 
 #include <stdio.h>
-
+#include <cstring>
 #include <assert.h>
 #include <Inventor/SbDict.h>
 #include <Inventor/SoDB.h>

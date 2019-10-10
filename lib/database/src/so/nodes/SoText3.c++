@@ -88,7 +88,7 @@
 // Additional for Banyan(6.2):
 #include <flclient.h>
 #include <iconv.h>
-#include <machine.h>
+#include <cstring>
 
 // First, a more convenient structure for outlines:
 class SoFontOutline {

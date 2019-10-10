@@ -58,18 +58,9 @@
 // Constructor that initializes to a substring.
 //
 
-SbString::SbString(const char *str, int start, int end)
+SbString::SbString(const char *str, size_t start, size_t end)
 {
-    int size = end - start + 1;
-
-    if (size < SB_STRING_STATIC_STORAGE_SIZE)
-	string = staticStorage;
-    else
-	string = new char[size+1];
-
-    strncpy(string, str+start, size);
-    string[size] = '\0';
-    storageSize = size;
+    string = std::string(str, start, end - start + 1);
 }
 
 //
@@ -79,11 +70,12 @@ SbString::SbString(const char *str, int start, int end)
 
 SbString::SbString(int digitString)
 {
-    char	buf[32];
-
-    string = staticStorage;
-    sprintf(buf, "%d", digitString);
-    *this = buf;
+    string.resize(32);
+#ifdef SB_OS_WIN
+    _snprintf(&string[0], string.size(),"%d",digitString);
+#else
+    snprintf(&string[0], string.size(),"%d",digitString);
+#endif
 }
 
 //
@@ -92,33 +84,6 @@ SbString::SbString(int digitString)
 
 SbString::~SbString()
 {
-    if (string != staticStorage)
-	delete [] string;
-}
-
-//
-// Makes more room in storage for string for n more bytes,
-// allocating or reallocating if necessary.
-//
-
-void
-SbString::expand(int bySize)
-{
-    int newSize = strlen(string) + bySize + 1;
-
-    if (newSize >= SB_STRING_STATIC_STORAGE_SIZE &&
-	(string == staticStorage || newSize > storageSize)) {
-
-	char *newString = new char[newSize];
-
-	strcpy(newString, string);
-
-	if (string != staticStorage)
-	    delete [] string;
-
-	string      = newString;
-	storageSize = newSize;
-    }
 }
 
 // Simple hashing algorithm that will xor all the characters in a string
@@ -147,14 +112,9 @@ SbString::hash(const char *s)
 //
 
 void
-SbString::makeEmpty(SbBool freeOld)
+SbString::makeEmpty()
 {
-    if (string != staticStorage) {
-	if (freeOld)
-	    delete [] string;
-	string = staticStorage;
-    }
-    string[0] = '\0';
+    string.clear();
 }
 
 //
@@ -166,16 +126,11 @@ SbString::makeEmpty(SbBool freeOld)
 SbString
 SbString::getSubString(int startChar, int endChar) const
 {
-    int		len = getLength();
+    size_t size = (endChar!=-1) ? endChar - startChar + 1 : std::string::npos;
 
-    // Get substring that starts at specified character
-    SbString	tmp = &string[startChar];
-
-    // Delete characters from end if necessary
-    if (endChar >= 0 && endChar < len - 1)
-	tmp.deleteSubString(endChar - startChar + 1);
-
-    return tmp;
+    SbString str;
+    str.string = string.substr(startChar, size);
+    return str;
 }
 
 //
@@ -187,31 +142,10 @@ SbString::getSubString(int startChar, int endChar) const
 void
 SbString::deleteSubString(int startChar, int endChar)
 {
-    int		len = getLength();
-
-    // Modify string in place
-    if (endChar < 0 || endChar >= len - 1)
-	string[startChar] = '\0';
-    else {
-
-#ifdef DEBUG
-	if (startChar > endChar) {
-	    SoDebugError::post("SbString::deleteSubString",
-			       "startChar > endChar");
-	    return;
-	}
-#endif
-
-	int	i, numToMove = len - endChar - 1;
-
-	for (i = 0; i < numToMove; i++)
-	    string[startChar + i] = string[endChar + i + 1];
-	string[startChar + numToMove] = '\0';
-    }
-
-    // Use temporary string to allow us to free up old storage if necessary
-    SbString	tmp = string;
-    *this = tmp;
+    std::string str = string;
+    string = std::string(str, 0, startChar);
+    if (endChar != -1)
+        string += std::string(str, endChar+1, std::string::npos);
 }
 
 //
@@ -221,41 +155,7 @@ SbString::deleteSubString(int startChar, int endChar)
 SbString &
 SbString::operator =(const char *str)
 {
-    int size = (str == NULL ? 0 : strlen(str)) + 1;
-
-    // If the string we are assigning to this is a pointer into the
-    // string already in this, we have to make sure we don't step on
-    // the old string.
-    if (str >= string &&
-	str < string + (string != staticStorage ? storageSize :
-			SB_STRING_STATIC_STORAGE_SIZE)) {
-
-	SbString tmp = str;
-	*this = tmp;
-	return *this;
-    }
-
-    // If there's enough room in the static storage, use it. First,
-    // free up string if it was allocated.
-    if (size < SB_STRING_STATIC_STORAGE_SIZE) {
-	if (string != staticStorage)
-	    makeEmpty();
-    }
-
-    // If we were using the static storage, we have to allocate a new string
-    else if (string == staticStorage)
-	string = new char[size];
-
-    // Otherwise, if there is not enough room in the currently
-    // allocated string, allocate a new one. If there is, use it again.
-    else if (size > storageSize) {
-	delete [] string;
-	string = new char[size];
-    }
-
-    // Copy away!
-    strcpy(string, str);
-    storageSize = size;
+    string = str;
     return *this;
 }
 
@@ -266,10 +166,7 @@ SbString::operator =(const char *str)
 SbString &
 SbString::operator +=(const char *str)
 {
-    if (str != NULL) {
-	expand(strlen(str));
-	strcat(string, str);
-    }
+    string += str;
     return *this;
 }
 
@@ -280,7 +177,7 @@ SbString::operator +=(const char *str)
 SbString &
 SbString::operator +=(const SbString &str)
 {
-    (*this) += str.getString();
+    string += str.string;
     return *this;
 }
 
@@ -288,18 +185,18 @@ SbString::operator +=(const SbString &str)
 // Equality operator for SbString/char* and SbString/SbString comparison
 //
 
-int
+bool
 operator ==(const SbString &str, const char *s)
 {
-    return (str.string[0] == s[0] && ! strcmp(str.string, s));
+    return (str.string == s);
 }
 
 //
 // Inequality operator for SbString/char* and SbString/SbString comparison
 //
 
-int
+bool
 operator !=(const SbString &str, const char *s)
 {
-    return (str.string[0] != s[0] || strcmp(str.string, s));
+    return (str.string != s);
 }

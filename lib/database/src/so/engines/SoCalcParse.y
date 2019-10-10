@@ -25,6 +25,7 @@
 #include <ctype.h>
 #include <strings.h>
 #include <stdlib.h>
+#include <cstring>
 
 void yyerror(const char *);
 extern "C" int	yylex();

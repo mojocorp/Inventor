@@ -78,6 +78,8 @@
 #include "upgraders/SoUpgraders.h"	    /* V1 upgraders */
 #include "fields/SoGlobalField.h"	    /* GlobalField routines	*/
 
+#include <cstring>
+
 // Internal class for storing headers and the corresponding 
 // callback functions.
 SoINTERNAL struct SoDBHeaderData {

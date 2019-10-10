@@ -66,6 +66,8 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/errors/SoReadError.h>
 
+#include <cstring>
+
 // Static list of directories to search in.  Allocated by SoInput::init.
 SbStringList *SoInput::directories = NULL;
 

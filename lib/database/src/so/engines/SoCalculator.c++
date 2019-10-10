@@ -61,6 +61,8 @@
 #include "SoCalcExpr.h"
 #include "SoEngineUtil.h"
 
+#include <cstring>
+
 SO_ENGINE_SOURCE(SoCalculator);
 
 ////////////////////////////////////////////////////////////////////////
