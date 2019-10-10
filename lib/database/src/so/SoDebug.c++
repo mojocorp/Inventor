@@ -52,7 +52,6 @@
  */
 
 #include <SoDebug.h>
-#include <Inventor/SbDict.h>
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/fields/SoField.h>
@@ -60,14 +59,16 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-static SbDict *ptrNameDict = NULL;
-static SbDict *envDict = NULL;
+#include <string>
+#include <map>
+
+static std::map<void*, std::string> ptrNameDict;
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
 //    Fast version of getenv(), stores environment strings in an
-//    SbDict for fast lookup (the standard getenv() does a linear
+//    map for fast lookup (the standard getenv() does a linear
 //    search through your whole environment).
 //
 // Use: public 
@@ -77,20 +78,14 @@ SoDebug::GetEnv(const char *envVar)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (envDict == NULL) envDict = new SbDict;
-
-    SbName name(envVar);
-    unsigned long key = (unsigned long)name.getString();
-
-    void *value;
+    static std::map<std::string, const char*> envDict;
 
     // Try looking in the dictionary first...
-    if (!envDict->find(key, value)) {
-	value = (void *)getenv(envVar);
-	envDict->enter(key, value);
+    if (envDict.find(envVar) == envDict.end()) {
+        envDict[envVar] = getenv(envVar);
     }
 
-    return (const char *)value;
+    return envDict[envVar];
 }
 
 #define MAXLEN 200
@@ -147,7 +142,7 @@ SoDebug::RTPrintf(const char *formatString ...)
 //
 // Description:
 //    Give a pointer a name.  This can be extremely useful when trying
-//    to track objects through queues, etc...  Uses an SbDict so this
+//    to track objects through queues, etc...  Uses a map so this
 //    is fast...
 //
 // Use: public 
@@ -157,10 +152,7 @@ SoDebug::NamePtr(const char *name, void *ptr)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (ptrNameDict == NULL) ptrNameDict = new SbDict;
-
-    // Ignore const-cast-away warning
-    ptrNameDict->enter((unsigned long)ptr, (void *)name);
+    ptrNameDict[ptr] = name;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -175,12 +167,13 @@ SoDebug::PtrName(void *ptr)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (ptrNameDict == NULL) ptrNameDict = new SbDict;
+    static const char *defaultName = "<noName>";
 
-    void *value;
-    if (!ptrNameDict->find((unsigned long)ptr, value))
-	return "<noName>";
-    return (const char *)value;
+    std::map<void*, std::string>::const_iterator it = ptrNameDict.find(ptr);
+    if (it != ptrNameDict.end())
+        return it->second.c_str();
+
+    return defaultName;
 }
 
 ////////////////////////////////////////////////////////////////////////
