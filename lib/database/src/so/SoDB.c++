@@ -144,7 +144,7 @@ SoDB		*SoDB::globalDB = NULL;
 int		SoDB::notifyCount = 0;
 
 // This list stores information for the registered headers
-SbPList		*SoDB::headerList;
+std::vector<SoDBHeaderData*> SoDB::headerList;
 
 // This dictionary stores field conversion engine types
 std::map<uint32_t, short> SoDB::conversionDict;
@@ -206,8 +206,7 @@ SoDB::init()
 
 	SoUpgrader::initClasses();
 	
-	// Create the header list, and register valid headers we know about
-	headerList = new SbPList;
+        // Register valid headers we know about
 	SoDB::registerHeader(SoOutput::getDefaultASCIIHeader(),  
 			    	FALSE, 2.1f,
 				NULL, NULL, NULL);
@@ -311,7 +310,7 @@ SoDB::registerHeader(const SbString &header, SbBool isBinary, float ivVersion,
 {
     // Header string cannot be greater than 80 characters in length,
     // and must have at least one character beyond the initial comment char.
-    int headerLength = header.getLength();
+    size_t headerLength = header.getLength();
     if (headerLength > 80 || headerLength < 2)
 	return (FALSE);
 	
@@ -321,7 +320,7 @@ SoDB::registerHeader(const SbString &header, SbBool isBinary, float ivVersion,
 	return (FALSE);
 	
     // The string must not contain any newline characters.
-    for (int i = 1; i < header.getLength(); i++)
+    for (size_t i = 1; i < header.getLength(); i++)
 	if (string[i] == '\n')
 	    return (FALSE);
 	 
@@ -337,7 +336,7 @@ SoDB::registerHeader(const SbString &header, SbBool isBinary, float ivVersion,
     data->preCB = preCB;
     data->postCB = postCB;
     data->userData = userData;
-    headerList->append(data);
+    headerList.push_back(data);
      
     return (TRUE);
 }
@@ -354,7 +353,7 @@ SoDB::getNumHeaders()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (headerList->getLength());
+    return headerList.size();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -369,15 +368,14 @@ SoDB::getHeaderString(int whichHeader)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (whichHeader < 0 || whichHeader >= headerList->getLength())
-	return (SbString(""));
+    if (whichHeader < 0 || whichHeader >= headerList.size())
+        return SbString("");
 	
-    SoDBHeaderData *data = NULL;
-    data = (SoDBHeaderData *) (*headerList)[whichHeader];
+    const SoDBHeaderData *data = headerList[whichHeader];
     if (!data)
-	return (SbString(""));
+        return SbString("");
 	
-    return (data->headerString);	
+    return data->headerString;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -407,13 +405,12 @@ SoDB::getHeaderData(const SbString &header,
     SbString paddedHeader = SoOutput::padHeader(header);
     
     // First look for an exact match
-    for (int i = headerList->getLength()-1; i >= 0 && whichHeader == -1; i--) {
-	data = (SoDBHeaderData *) (*headerList)[i];
+    for (int i = headerList.size()-1; i >= 0 && whichHeader == -1; i--) {
+        data = headerList[i];
 	SbString registeredString = data->headerString;
 	
 	if (paddedHeader == registeredString) {
 		whichHeader = i;
-		
 	} 
     }
     
@@ -421,22 +418,22 @@ SoDB::getHeaderData(const SbString &header,
     // look for a substring that is a valid registered string
     if (whichHeader == -1 && substringOK) {
     
-	for (int i = headerList->getLength()-1; i >= 0 && whichHeader == -1; i--) {
-	    data = (SoDBHeaderData *) (*headerList)[i];
+    for (int i = headerList.size()-1; i >= 0 && whichHeader == -1; i--) {
+        data = headerList[i];
 	    SbString registeredString = data->headerString;	
 	
 	    if (paddedHeader.getLength() >= registeredString.getLength()) {
 	    
 		// See how much padding there is in the registered header string
 		const char *registeredStr = data->headerString.getString();
-		int lastNonPadChar = registeredString.getLength() - 1;
+		size_t lastNonPadChar = registeredString.getLength() - 1;
 		while (registeredStr[lastNonPadChar] == ' ' && lastNonPadChar > 0) 
 		    lastNonPadChar--;
 		
 		// Is the registered header (minus the padding) a substring 
 		// of the the given header string?
-		if (registeredString.getSubString(0, lastNonPadChar) == 
-			paddedHeader.getSubString(0, lastNonPadChar)) {
+		if (registeredString.getSubString(0, (int)lastNonPadChar) == 
+			paddedHeader.getSubString(0, (int)lastNonPadChar)) {
 		    whichHeader = i;			
 		}
 	    }	    
@@ -452,7 +449,7 @@ SoDB::getHeaderData(const SbString &header,
 	return (FALSE);
     }
     
-    data = (SoDBHeaderData *) (*headerList)[whichHeader];
+    data = headerList[whichHeader];
     isBinary = data->isBinary;
     ivVersion = data->ivVersion;
     preCB = data->preCB;
@@ -491,14 +488,14 @@ SoDB::isValidHeader(const char *testString)
 
     SbString paddedHeader = SoOutput::padHeader(SbString(buf)); 
        
-    for (int i = headerList->getLength()-1; i >= 0; i--) {
-	SoDBHeaderData *data = (SoDBHeaderData *) (*headerList)[i];
-	if (data->headerString == paddedHeader)
-	    return (TRUE);
+    for (int i = headerList.size()-1; i >= 0; i--) {
+        const SoDBHeaderData *data = headerList[i];
+        if (data->headerString == paddedHeader)
+            return TRUE;
     }
     
     // Didn't find this string in the list of valid headers.
-    return (FALSE);
+    return FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////

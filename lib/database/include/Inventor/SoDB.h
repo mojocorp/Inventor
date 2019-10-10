@@ -60,7 +60,7 @@
 #include <Inventor/SoType.h>
 
 #include <map>
-#include <Inventor/SbPList.h>
+#include <vector>
 
 class SoBase;
 class SoSFRealTime;
@@ -69,6 +69,7 @@ class SoInput;
 class SoPath;
 class SoNode;
 class SoField;
+struct SoDBHeaderData;
 
 typedef void SoDBHeaderCB(void *userData, SoInput *in);
 
@@ -230,7 +231,7 @@ class SoDB {
     static SoSFRealTime	*realTime;
     
     // List of valid header strings, and their corresponding callbacks
-    static SbPList	*headerList;
+    static std::vector<SoDBHeaderData*> headerList;
 
     // This dictionary stores field conversion engine types. The key
     // is created by mangling the types of the two fields to convert

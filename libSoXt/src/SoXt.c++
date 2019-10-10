@@ -54,6 +54,7 @@
 
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/SoDB.h>
+#include <Inventor/SbPList.h>
 #include <Inventor/SoInteraction.h>
 #include <Inventor/nodekits/SoNodeKit.h>
 #include <Inventor/sensors/SoSensorManager.h>
