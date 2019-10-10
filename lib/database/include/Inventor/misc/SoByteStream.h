@@ -90,7 +90,7 @@ class SoByteStream {
 
     // Access the byte stream data
     void *    	    	getData()   	{ return data; }
-    uint32_t   		getNumBytes()	{ return numBytes; }
+    size_t   		getNumBytes()	{ return numBytes; }
     
     // Unconvert a byte stream back to a path list.
     // This static routine performs an SoDB::read on the data,
@@ -98,7 +98,7 @@ class SoByteStream {
     
     static SoPathList *	unconvert(SoByteStream *byteStream);
     
-    static SoPathList *	unconvert(void *data, uint32_t numBytes);
+    static SoPathList *	unconvert(void *data, size_t numBytes);
   
   SoEXTENDER public:
     // This allows apps to store raw data here without converting 
@@ -109,7 +109,7 @@ class SoByteStream {
      
   private:
     void		*data;
-    uint32_t		numBytes;
+    size_t      numBytes;
     SbBool		isRaw;
 };
 

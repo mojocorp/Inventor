@@ -96,6 +96,11 @@ typedef void *SoOutputReallocCB(void *ptr, size_t newSize);
 
 class SoOutput {
  public:
+    /// Enum that determines formats for writing
+    enum Format {
+        ASCII,
+        BINARY
+    };
 
     // Constructor (default SoOutput writes to stdout)
     SoOutput();
@@ -137,13 +142,24 @@ class SoOutput {
     void		setBinary(SbBool flag);
 
     // Returns current state of binary flag
-    SbBool		isBinary() const		{ return binary; }
+    SbBool		isBinary() const		{ return (format == BINARY) ? TRUE : FALSE; }
 
+    /// Sets the output format.
+    /// This must be called before writing any data (default ASCII).
+    void setFormat(Format fmt);
+
+    /// Returns the current format.
+    Format getFormat() const {
+        return format;
+    }
     // Specify the header used when writing the file
     void		setHeaderString(const SbString &str);
     // Specify to use the default header (ascii or binary)
     void		resetHeaderString();
     
+    /// Returns the string representing the current header.
+    SbString getHeaderString() const;
+
     static SbString	getDefaultASCIIHeader();
     static SbString	getDefaultBinaryHeader();
 
@@ -220,7 +236,6 @@ class SoOutput {
     size_t		bufSize;	// Maximum buffer size
     size_t		tmpBufSize;	// Maximum temporary buffer size
     SoOutputReallocCB	*reallocFunc;	// Reallocation function for buffer
-    SbBool		binary;		// TRUE if writing binary data
     SbBool		compact;	// TRUE if writing in compact form
     SbBool		wroteHeader;	// TRUE if header was written
     int			indentLevel;	// Current indentation level
@@ -232,6 +247,7 @@ class SoOutput {
     Stage		curStage;	// Stage of operation
     SbString		headerString;	// The header 
     SbString		fmtString;	// Output format
+    Format    format; // Output format
 
     // Writes correct file header string to current file/buffer
     void		writeHeader();

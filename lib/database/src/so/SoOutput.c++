@@ -83,7 +83,6 @@ SoOutput::SoOutput()
     buffer	= NULL;
     toBuffer	= FALSE;
     anyRef	= FALSE;
-    binary	= FALSE;
     compact	= FALSE;
     wroteHeader	= FALSE;
     tmpBuffer   = NULL;
@@ -93,6 +92,7 @@ SoOutput::SoOutput()
     annotation	= 0;
     headerString = SbString("");
     fmtString	= SbString("%g");
+    format = ASCII;
 
     reset();
 }
@@ -112,7 +112,6 @@ SoOutput::SoOutput(SoOutput *dictOut)
     buffer	= NULL;
     toBuffer	= FALSE;
     anyRef	= FALSE;
-    binary	= FALSE;
     compact	= FALSE;
     wroteHeader	= FALSE;
     tmpBuffer   = NULL;
@@ -128,6 +127,7 @@ SoOutput::SoOutput(SoOutput *dictOut)
 	borrowedDict = TRUE;
 	refDict	= dictOut->refDict;
     }
+    format = ASCII;
 
     reset();
 }
@@ -343,7 +343,22 @@ SoOutput::setBinary(SbBool flag)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    binary = flag;
+    setFormat(flag ? BINARY : ASCII);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Indicates whether output should be ASCII (default) or UTF8.
+//
+// Use: public
+
+void
+SoOutput::setFormat(Format fmt)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    format = fmt;
 
     // If writing to file, initialize the temporary output for buffering
     // data before writing.
@@ -352,7 +367,6 @@ SoOutput::setBinary(SbBool flag)
         tmpBuffer = (char *)malloc(64);
         tmpBufSize = 64;
     }
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -418,6 +432,32 @@ SoOutput::resetHeaderString()
 ////////////////////////////////////////////////////////////////////////
 {
     headerString.makeEmpty();
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Return the current header string
+//
+// Use: public
+
+SbString
+SoOutput::getHeaderString() const
+//
+////////////////////////////////////////////////////////////////////////
+{
+    if (headerString != "")
+        return headerString;
+
+    switch(format) {
+    case BINARY:
+        return defaultBinaryHeader;
+    case ASCII:
+        return defaultASCIIHeader;
+    default:
+        break;
+    }
+    return defaultASCIIHeader;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1086,27 +1126,18 @@ SoOutput::writeHeader()
 	return;
 
     if (isBinary()) {
-	binary = FALSE;
-	if (headerString == "") {
-	    SbString defaultHeader = SoOutput::padHeader(defaultBinaryHeader);
-	    write(defaultHeader.getString());
-	} else {
-	    // Make sure the string is padded for correct alignment, in case
-	    // it's used in a binary file
-	    SbString paddedString = SoOutput::padHeader(headerString);
-	    write(paddedString.getString());
-	}  
-	write('\n');
-	binary = TRUE;
-    }
+        // Make sure the string is padded for correct alignment, in case
+        // it's used in a binary file
+        SbString paddedString = SoOutput::padHeader(getHeaderString());
 
-    else {
-	if (headerString == "")
-	    write(defaultASCIIHeader);
-	else
-	    write(headerString.getString());
-	write('\n');
-	write('\n');
+        format = ASCII;
+        write(paddedString.getString());
+        write('\n');
+        format = BINARY;
+    } else {
+        write(getHeaderString().getString());
+        write('\n');
+        write('\n');
     }
 }
 
