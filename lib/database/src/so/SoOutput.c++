@@ -867,12 +867,7 @@ SoOutput::convertShort(short s, char *to)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int32_t l = (int32_t)s;
-    char jjj[16];
-    int i;
-
-    DGL_HTON_INT32( INT32(jjj), l );
-    for (i=0; i<sizeof(int32_t); i++)  to[i] = jjj[i];
+    DGL_HTON_SHORT( SHORT(to), s );
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -887,12 +882,7 @@ SoOutput::convertInt32(int32_t l, char *to)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char jjj[16];
-    int i;
-
-    DGL_HTON_INT32( INT32(jjj), l );
-
-    for (i=0; i<sizeof(int32_t); i++)  to[i] = jjj[i];
+    DGL_HTON_INT32( INT32(to), l );
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -907,12 +897,7 @@ SoOutput::convertFloat(float f, char *to)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char jjj[64];
-    int i;
-
-    DGL_HTON_FLOAT( FLOAT(jjj), f );
-
-    for (i=0; i<sizeof(float); i++)  to[i] = jjj[i];
+    DGL_HTON_FLOAT( FLOAT(to), f );
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -945,21 +930,11 @@ SoOutput::convertShortArray( register short *from,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register char *b = to;
-
-    while (len > 4) {		// unroll the loop a bit
-	DGL_HTON_SHORT( SHORT(b), from[0]);
-    DGL_HTON_SHORT( SHORT(b + sizeof(short)),   from[1]);
-    DGL_HTON_SHORT( SHORT(b + sizeof(short)*2), from[2]);
-    DGL_HTON_SHORT( SHORT(b + sizeof(short)*3), from[3]);
-    b += sizeof(short)*4;
-	from += 4;
-	len -= 4;
-    }
+    register short *b = (short*)to;
     while (len-- > 0) {
-	DGL_HTON_SHORT( SHORT(b),*from);
-    b += sizeof(short);
-	from++;
+        DGL_HTON_SHORT(*b, *from);
+        b++;
+        from++;
     }
 }
 
@@ -978,22 +953,11 @@ SoOutput::convertInt32Array( int32_t *from,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register char  *b = to;
-    register int32_t  *f = from;
-
-    while (len > 4) {		// unroll the loop a bit
-	DGL_HTON_INT32( INT32(b), f[0]);
-    DGL_HTON_INT32( INT32(b + sizeof(int32_t)),   f[1]);
-    DGL_HTON_INT32( INT32(b + sizeof(int32_t)*2), f[2]);
-    DGL_HTON_INT32( INT32(b + sizeof(int32_t)*3), f[3]);
-    b += sizeof(int32_t)*4;
-	f += 4;
-	len -= 4;
-    }
+    register int32_t *b = (int32_t*)to;
     while (len-- > 0) {
-	DGL_HTON_INT32( INT32(b),*f);
-    b += sizeof(int32_t);
-	f++;
+        DGL_HTON_INT32(*b, *from);
+        b++;
+        from++;
     }
 }
 
@@ -1012,22 +976,11 @@ SoOutput::convertFloatArray( float *from,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register char  *b = to;
-    register float *f = from;
-
-    while (len > 4) {		// unroll the loop a bit
-	DGL_HTON_FLOAT( FLOAT(b), f[0]);
-    DGL_HTON_FLOAT( FLOAT(b + sizeof(float)),   f[1]);
-    DGL_HTON_FLOAT( FLOAT(b + sizeof(float)*2), f[2]);
-    DGL_HTON_FLOAT( FLOAT(b + sizeof(float)*3), f[3]);
-    b += sizeof(float)*4;
-	f += 4;
-	len -= 4;
-    }
+    register float *b = (float*)to;
     while (len-- > 0) {
-	DGL_HTON_FLOAT( FLOAT(b),*f);
-    b += sizeof(float);
-	f++;
+        DGL_HTON_FLOAT(*b, *from);
+        b++;
+        from++;
     }
 }
 
@@ -1046,21 +999,11 @@ SoOutput::convertDoubleArray( register double *from,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register char *b = to;
-
-    while (len > 4) {		// unroll the loop a bit
-	DGL_HTON_DOUBLE( DOUBLE(b), from[0]);
-    DGL_HTON_DOUBLE( DOUBLE(b + sizeof(double)),   from[1]);
-    DGL_HTON_DOUBLE( DOUBLE(b + sizeof(double)*2), from[2]);
-    DGL_HTON_DOUBLE( DOUBLE(b + sizeof(double)*3), from[3]);
-    b += sizeof(double)*4;
-	from += 4;
-	len -= 4;
-    }
+    register double *b = (double*)to;
     while (len-- > 0) {
-	DGL_HTON_DOUBLE( DOUBLE(b),*from);
-    b += sizeof(double);
-	from++;
+        DGL_HTON_DOUBLE(*b, *from);
+        b++;
+        from++;
     }
 }
 
