@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-#include <dlfcn.h>
 #include <ctype.h>
 
 #include <Inventor/SoDB.h>
@@ -89,7 +88,7 @@ SoType		SoBase::classTypeId;
 uint32_t	SoBase::currentWriteCounter = 0;
 
 // This speed up reading a little:
-static SbName *globalFieldName;
+static SbName *globalFieldName = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
