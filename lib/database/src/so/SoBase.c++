@@ -70,8 +70,8 @@
 #include "fields/SoGlobalField.h"
 
 // The global name dictionaries
-SbDict		*SoBase::nameObjDict;
-SbDict		*SoBase::objNameDict;
+std::map<SbName, std::vector<SoBase*> > SoBase::nameObjDict;
+std::map<const SoBase*, SbName> SoBase::objNameDict;
 
 // Syntax for writing instances to files
 #define OPEN_BRACE		'{'
@@ -105,9 +105,6 @@ SoBase::initClass()
 {
     classTypeId = SoType::createType(SoType::badType(), "Base");
 
-    // Set up global name dictionaries
-    nameObjDict = new SbDict;
-    objNameDict = new SbDict;
 
     globalFieldName = new SbName("GlobalField");
 }
@@ -274,17 +271,18 @@ SoBase::getName() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    void *n;
+    if (!writeStuff.hasName)
+        return SbName("");
 
-    if (!writeStuff.hasName) return SbName("");
-    if (!objNameDict->find((unsigned long)this, n)) {
+    std::map<const SoBase*, SbName>::const_iterator it = objNameDict.find(this);
+    if (it == objNameDict.end()) {
 #ifdef DEBUG
 	SoDebugError::post("SoBase::getName",
 			   "hasName is TRUE, but couldn't find name!\n");
 #endif
 	return SbName("");
     }
-    return SbName((char *)n);
+    return it->second;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -301,13 +299,8 @@ SoBase::setName(const SbName &newName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    //Following 4 lines just do what getName() would do, repeating that code
-    //here fixes a thread-safe bug
-    void *n;
-    SbName oldName("");
-    if ((writeStuff.hasName) && (objNameDict->find((unsigned long)this, n)))
-	oldName = SbName((char *)n); 
-    
+    SbName oldName = getName();
+
     if (oldName.getLength() != 0)
 	removeName(this, oldName.getString());
 
@@ -626,34 +619,22 @@ SoBase::addName(SoBase *b, const char *name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbPList *list;
-    void *t;
-
     b->writeStuff.hasName = 1;
 
-    // Look for name:
-    if (!nameObjDict->find((unsigned long)name, t)) {
-	// If not found, create a BaseList and enter it in the
-	// dictionary
-	list = new SbPList;
-	nameObjDict->enter((unsigned long)name, list);
-    } else {
-	list = (SbPList *)t;
-    }
-
+    std::vector<SoBase*> & list = nameObjDict[name];
 #ifdef DEBUG
     // Make sure it isn't already on the list
-    if (list->find(b) != -1)
-	SoDebugError::post("SoBase::addName",
-			   "Base %x with name \"%s\" is already in dictionary",
-			   b, name);
+    if (std::find(list.begin(), list.end(), b) != list.end())
+        SoDebugError::post("SoBase::addName",
+                           "Base %x with name \"%s\" is already in dictionary",
+                            b, name);
 #endif
 
     // Add name to the list:
-    list->append(b);
+    list.push_back(b);
 
     // And append to the objName dictionary:
-    objNameDict->enter((unsigned long)b, (void *)name);
+    objNameDict[b] = name;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -668,39 +649,24 @@ SoBase::removeName(SoBase *b, const char *name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbPList	*list;
-    SbBool	found;
-    void	*t;
-    int		i;
 
     b->writeStuff.hasName = 0;
 
-    // Look for name list
-    found = nameObjDict->find((unsigned long) name, t);
-
-    // Look for name within list
-    if (found) {
-	list = (SbPList *) t;
-	i    = list->find(b);
-
-	if (i < 0)
-	    found = FALSE;
-
-	else
-	    list->remove(i);
-    }
-
-    // And remove from objName dict:
-    found |= objNameDict->remove((unsigned long)b);
-
 #ifdef DEBUG
-    if (! found)
-	SoDebugError::post("SoBase::removeName",
-			   "Name \"%s\" (base %x) is not in dictionary",
-			   name, b);
+    if (objNameDict.find(b) == objNameDict.end())
+        SoDebugError::post("SoBase::removeName",
+                           "Name \"%s\" (base %x) is not in dictionary",
+                           name, b);
 #endif
 
-    return;
+    // Look for name list
+    std::vector<SoBase*> & list = nameObjDict[name];
+    list.erase(std::remove(list.begin(), list.end(), b), list.end());
+
+    // And remove from objName dict:
+    objNameDict.erase(b);
+
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -716,25 +682,22 @@ SoBase::getNamedBase(const SbName &name, SoType type)
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (nameObjDict == NULL) {
+    if (nameObjDict.empty()) {
 	SoDebugError::post("SoBase::getName",
 			   "SoDBinit() has not yet been called");
 	return NULL;
     }
 #endif
 
-    SbPList *list;
-    void *t;
     // Lookup the name in the dictionary
-    if (! nameObjDict->find((unsigned long) name.getString(), t))
-	return NULL;
-    list = (SbPList *)t;
+    std::vector<SoBase*> & list = nameObjDict[name];
 
     // Search backwards through the list.  Return the last item of the
     // appropriate type.
-    for (int i = list->getLength()-1; i >= 0; i--) {
-	SoBase *b = (SoBase *)(*list)[i];
-	if (b->isOfType(type)) return b;
+    for (int i = list.size()-1; i >= 0; i--) {
+        SoBase *b = list[i];
+        if (b->isOfType(type))
+            return b;
     }
     return NULL;
 }
@@ -753,7 +716,7 @@ SoBase::getNamedBases(const SbName &name, SoBaseList &result, SoType type)
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (nameObjDict == NULL) {
+    if (nameObjDict.empty()) {
 	SoDebugError::post("SoBase::getName",
 			   "SoDBinit() has not yet been called");
 	return 0;
@@ -761,22 +724,18 @@ SoBase::getNamedBases(const SbName &name, SoBaseList &result, SoType type)
 #endif
 
     int numAdded = 0;
-    SbPList *list;
 
-    void *t;
     // Lookup the name in the dictionary
-    if (! nameObjDict->find((unsigned long) name.getString(), t))
-	return 0;
+    std::vector<SoBase*> & list = nameObjDict[name];
 
-    list = (SbPList *)t;
     // Search backwards through the list.  Add all items of the
     // appropriate type to the result list.
-    for (int i = list->getLength()-1; i >= 0; i--) {
-	SoBase *b = (SoBase *)(*list)[i];
-	if (b->isOfType(type)) {
-	    result.append(b);
-	    numAdded++;
-	}
+    for (int i = list.size()-1; i >= 0; i--) {
+        SoBase *b = list[i];
+        if (b->isOfType(type)) {
+            result.append(b);
+            numAdded++;
+        }
     }
     return numAdded;
 }

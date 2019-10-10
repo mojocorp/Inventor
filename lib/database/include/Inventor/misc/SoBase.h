@@ -64,6 +64,8 @@
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
+#include <map>
+
 class SoBaseList;
 class SoInput;
 class SoNode;
@@ -293,11 +295,11 @@ class SoBase {
     // contain SoBases-- a BaseList isn't used because we don't want
     // the items on the list to be reference counted, otherwise they
     // will never get deleted).
-    static SbDict	*nameObjDict;
+    static std::map<SbName, std::vector<SoBase*> > nameObjDict;
 
     // And this dictionary maps the other way, from an SoBase * to a
     // name.
-    static SbDict	*objNameDict;
+    static std::map<const SoBase*, SbName> objNameDict;
 };
 
 #endif /* _SO_BASE_ */
