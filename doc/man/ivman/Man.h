@@ -37,6 +37,8 @@
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
+#include <cstring>
+
 enum Language {
     ALL,
     C,

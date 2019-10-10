@@ -70,6 +70,8 @@
 #include <stdlib.h>
 #include "SoGlobalField.h"
 
+#include <cstring>
+
 // Special characters in files
 #define OPEN_BRACE_CHAR		'['
 #define CLOSE_BRACE_CHAR	']'

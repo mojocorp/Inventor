@@ -59,6 +59,7 @@
 #include <Inventor/SoPath.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <stdlib.h>
+#include <cstring>
 
 ////////////////////////////////////////////////////////////////////////
 //

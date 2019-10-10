@@ -60,6 +60,8 @@
 #include <Inventor/SbString.h>
 #include <Inventor/SbPList.h>
 
+#include <cstring>
+
 SO_ELEMENT_SOURCE(SoGLCacheContextElement);
 
 SbPList		*SoGLCacheContextElement::waitingToBeFreed = NULL;

@@ -66,6 +66,7 @@
 #include <Inventor/misc/SoNotification.h>
 
 #include <stdlib.h>
+#include <cstring>
 
 // Syntax for reading/writing type information to files
 #define OPEN_BRACE_CHAR		'['

@@ -63,6 +63,8 @@
 #include <Inventor/SoDB.h>
 #include <Inventor/SoOutput.h>
 
+#include <cstring>
+
 static const char *defaultASCIIHeader =  "#Inventor V2.1 ascii";
 static const char *defaultBinaryHeader = "#Inventor V2.1 binary";
     

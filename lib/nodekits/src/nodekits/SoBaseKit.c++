@@ -80,6 +80,7 @@
 
 #include <stdlib.h>
 #include <ctype.h>
+#include <cstring>
 
 // Defines for printing out file data for nodekits
 #define SO_BASEKIT_FILEDATA_HEADER "partName\/childNum pairs [ "

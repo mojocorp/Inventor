@@ -62,6 +62,8 @@
 #include "nurbs/SoCurveMaps.h"
 #include "nurbs/SoCurveRender.h"
 
+#include <cstring>
+
 SO_NODE_SOURCE(SoNurbsProfile);
 
 ////////////////////////////////////////////////////////////////////////

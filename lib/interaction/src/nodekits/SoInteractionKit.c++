@@ -69,6 +69,8 @@
 #include <Inventor/actions/SoHandleEventAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>
 
+#include <cstring>
+
 SO_KIT_SOURCE(SoInteractionKit);
 
 ////////////////////////////////////////////////////////////////////////

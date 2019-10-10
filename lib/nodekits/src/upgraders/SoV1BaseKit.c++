@@ -63,6 +63,7 @@
 #include <Inventor/nodekits/SoBaseKit.h>
 #include <Inventor/errors/SoDebugError.h>
 
+#include <cstring>
 
 // Defines for printing out file data for nodekits
 #define SO_V1_BASEKIT_FILEDATA_HEADER "partName/childNum pairs [ "

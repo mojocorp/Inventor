@@ -78,8 +78,7 @@
 #include <flclient.h>
 #include <math.h>
 #include <iconv.h>
-#include <machine.h>
-
+#include <cstring>
 
 // An internal class that makes life easier:
 

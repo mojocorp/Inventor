@@ -60,7 +60,7 @@
 
 #include <Inventor/SbBasic.h>
 
-#include <string.h>
+#include <string>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -75,19 +75,16 @@ class SbString {
   public:
 
     // Default constructor
-    SbString()				{ string = staticStorage; 
-					  string[0] = '\0'; }
+    SbString()				{}
 
     // Constructor that initializes to given character string
-    SbString(const char *str)		{ string = staticStorage;
-					  *this = str; }
+    SbString(const char *str)		{ string = str; }
 
     // Constructor that initializes to given character string
-    SbString(const char *str, int start, int end);
+    SbString(const char *str, size_t start, size_t end);
 
     // Constructor that initializes to given SbString
-    SbString(const SbString &str)	{ string = staticStorage;
-					  *this = str.string; }
+    SbString(const SbString &str)	{ string = str.string; }
 
     // Constructor that initializes to string formed from given integer.
     // For example, SbString(1234) gives the string "1234".
@@ -97,17 +94,16 @@ class SbString {
     ~SbString();
 
     // Returns a reasonable hash key for string
-    uint32_t		hash()		{ return SbString::hash(string); }
+    uint32_t		hash()		{ return SbString::hash(string.data()); }
 
     // Returns length of string
-    int			getLength() const	{ return strlen(string); }
+    size_t			getLength() const	{ return string.size(); }
 
-    // Sets string to be the empty string (""). If freeOld is TRUE
-    // (default), any old storage is freed up
-    void		makeEmpty(SbBool freeOld = TRUE);
+    // Sets string to be the empty string ("").
+    void		makeEmpty();
 
     // Returns pointer to the character string
-    const char *	getString() const	{ return string; }
+    const char *	getString() const	{ return string.data(); }
 
     // Returns new string representing sub-string from startChar to
     // endChar, inclusive. If endChar is -1 (the default), the
@@ -122,7 +118,7 @@ class SbString {
     // Assignment operator for character string, SbString
     SbString &		operator =(const char *str);
     SbString &		operator =(const SbString &str)
-	{ return (*this = str.string); }
+    { return (*this = str.string.data()); }
 
     // Concatenation operator "+=" for string, SbString
     SbString &		operator +=(const char *str);
@@ -130,23 +126,23 @@ class SbString {
     SbString &		operator +=(const SbString &str);
 
     // Unary "not" operator; returns TRUE if string is empty ("")
-    int			operator !() const { return (string[0] == '\0'); }
+    bool			operator !() const { return string.empty(); }
 
     // Equality operator for SbString/char* and SbString/SbString comparison
-    friend int		operator ==(const SbString &str, const char *s);
+    friend bool		operator ==(const SbString &str, const char *s);
 
-    friend int		operator ==(const char *s, const SbString &str)
-	{ return (str == s); }
+    friend bool		operator ==(const char *s, const SbString &str)
+	{ return (str.string == s); }
 
 
-    friend int		operator ==(const SbString &str1, const SbString &str2)
-	{ return (str1 == str2.string); }
+    friend bool		operator ==(const SbString &str1, const SbString &str2)
+    { return (str1.string == str2.string); }
 
     // Inequality operator for SbString/char* and SbString/SbString comparison
-    friend int		operator !=(const SbString &str, const char *s);
+    friend bool		operator !=(const SbString &str, const char *s);
 
-    friend int		operator !=(const char *s, const SbString &str)
-	{ return (str != s); }
+    friend bool		operator !=(const char *s, const SbString &str)
+	{ return (str.string != s); }
 
     friend const SbString operator +( const SbString & s1, const SbString & s2 ) {
         SbString t(s1);
@@ -156,21 +152,14 @@ class SbString {
 
     friend int		operator !=(const SbString &str1,
 				    const SbString &str2)
-	{ return (str1 != str2.string); }
+    { return (str1.string != str2.string); }
 
   SoINTERNAL public:
 
     static uint32_t	hash(const char *s);    // Hash function
 
   private:
-    char		*string;		// String pointer
-    int			storageSize;
-
-    // This is used if the string fits in a reasonably small space
-#define SB_STRING_STATIC_STORAGE_SIZE		32
-    char		staticStorage[SB_STRING_STATIC_STORAGE_SIZE];
-
-    void		expand(int bySize);	// Makes more room
+    std::string string;  // String storage
 };
 
 #endif /* _SB_STRING_ */

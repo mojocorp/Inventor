@@ -63,6 +63,8 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoSeparator.h>
 
+#include <cstring>
+
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Constructor
