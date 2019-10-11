@@ -55,6 +55,8 @@
 #include <Inventor/sensors/SoSensors.h>
 #include <Inventor/errors/SoDebugError.h>
 
+#include <sys/select.h>
+
 #ifdef DEBUG
 #include <SoDebug.h>
 static SbTime startTime;

@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-
+#include <climits>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <Inventor/SbLinear.h>
