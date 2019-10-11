@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <GL/gl.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -185,7 +186,7 @@ SoCamera::pointAt(const SbVec3f &targetPoint)
     SbVec3f	d(targetPoint - position.getValue());
 
     SbRotation	yRot(SbVec3f(0,1,0), atan2(-d[0], -d[2]));
-    SbRotation  xRot(SbVec3f(1,0,0), atan2(d[1], sqrtf(d[0]*d[0] + d[2]*d[2])));
+    SbRotation  xRot(SbVec3f(1,0,0), atan2(d[1], std::sqrt(d[0]*d[0] + d[2]*d[2])));
 
     orientation.setValue(xRot * yRot);
 }

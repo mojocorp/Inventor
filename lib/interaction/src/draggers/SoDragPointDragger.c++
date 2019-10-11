@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-
+#include <cmath>
 #include <stdio.h>
 #include <limits.h>
 
@@ -563,12 +563,12 @@ SoDragPointDragger::setFeedbackGeometry()
 	SbVec3f current = getMotionMatrix()[3];
 	SbVec3f start   = getStartMotionMatrix()[3];
 	SbVec3f motion  = current - start;
-	if (    fabs( motion[0]) > fabs( motion[1])
-	     && fabs( motion[0]) > fabs( motion[2]))
+    if (    std::abs( motion[0]) > std::abs( motion[1])
+         && std::abs( motion[0]) > std::abs( motion[2]))
 	     translateDir = 0;
-	else if ( fabs( motion[1]) > fabs( motion[2]))
+    else if ( std::abs( motion[1]) > std::abs( motion[2]))
 	    translateDir = 1;
-	else if ( fabs( motion[2] ) > TINY )
+    else if ( std::abs( motion[2] ) > TINY )
 	    translateDir = 2;
     }
 #undef TINY

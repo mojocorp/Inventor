@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/projectors/SbCylinderSectionProjector.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <stdio.h>
@@ -291,7 +292,7 @@ SbCylinderSectionProjector::setupTolerance()
     
     // find disntance from the center of the cylinder to the tolerance
     // plane
-    planeDist = sqrtf((cylinder.getRadius()*cylinder.getRadius()) - 
+    planeDist = std::sqrt((cylinder.getRadius()*cylinder.getRadius()) -
 		(tolDist * tolDist));
 
     // plane given direction and distance to origin

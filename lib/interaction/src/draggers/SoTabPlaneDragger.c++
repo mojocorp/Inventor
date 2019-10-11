@@ -644,7 +644,7 @@ SoTabPlaneDragger::edgeScaleDrag()
 
     // [3] Change in scale is the ratio of newDist to oldDist
 #define TINY 0.0001
-    float delta = ( fabs(oldDist) < TINY || fabs(newDist) < TINY) 
+    float delta = ( std::abs(oldDist) < TINY || std::abs(newDist) < TINY)
 		    ? 1.0 : newDist / oldDist;
 #undef TINY
 

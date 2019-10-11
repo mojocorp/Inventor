@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-
+#include <cmath>
 #include <stdio.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/sensors/SoFieldSensor.h>
@@ -1630,7 +1630,7 @@ SoTransformerDragger::scaleDrag()
     SbVec3f delta( 1.0, 1.0, 1.0 );
     int ind;
     for ( ind = 0; ind < 3; ind++ ) {
-	if ((fabs(newDiff[ind]) > TINY) && (fabs(oldDiff[ind]) > TINY))
+    if ((std::abs(newDiff[ind]) > TINY) && (std::abs(oldDiff[ind]) > TINY))
 	    delta[ind] = newDiff[ind] / oldDiff[ind];
     }
 #undef TINY
@@ -1893,7 +1893,7 @@ SoTransformerDragger::getShouldRotateAsDisc()
 	sightDir.normalize();
 
     // Compare the dot product to the minDiscRotDot field:
-	if (  fabs( sightDir.dot( worldAxis )) > minDiscRotDot.getValue() )
+    if (  std::abs( sightDir.dot( worldAxis )) > minDiscRotDot.getValue() )
 	    return TRUE;
 	else
 	    return FALSE;
@@ -2979,7 +2979,7 @@ SoTransformerDragger::getMouseGestureDirection(SbBool xAllowed,
 	int i;
 	for (i = 0; i < 3; i++)
 	    for (int j = 0; j < 2; j++)
-		if ( fabs(worldDir[i][j].dot(worldDir[i][j])) < TINY )
+        if ( std::abs(worldDir[i][j].dot(worldDir[i][j])) < TINY )
 		    areAnyTiny = TRUE;
 #undef TINY
 #define BEEF_UP_FACTOR 1000
@@ -3054,7 +3054,7 @@ SoTransformerDragger::getMouseGestureDirection(SbBool xAllowed,
 	    axisVec[1] = (screenEnd[axis][end] - screenOrigin)[1];
 	    axisVec.normalize();
 
-	    float distance = fabs( locaterVec.dot(axisVec) );
+        float distance = std::abs( locaterVec.dot(axisVec) );
 
 	    if (distance >= closestDist) {
 		answer = axis;
@@ -3202,13 +3202,13 @@ SoTransformerDragger::isColinear(SbVec2f a1[2], SbVec2f a2[2], int pixels)
     B = 1.0;
     C = -yIntercept;
 
-    dist1 = std::abs((A*a2[0][0] + B*a2[0][1] + C)/sqrtf(A*A + B*B));
+    dist1 = std::abs((A*a2[0][0] + B*a2[0][1] + C)/std::sqrt(A*A + B*B));
 
     if (dist1 > (float)pixels)
 	return FALSE;
     else {
         dist2 = 
-        std::abs((A*a2[1][0] + B*a2[1][1] + C)/sqrtf(A*A + B*B));
+        std::abs((A*a2[1][0] + B*a2[1][1] + C)/std::sqrt(A*A + B*B));
 
         if (dist2 > (float)pixels)
 	    return FALSE;

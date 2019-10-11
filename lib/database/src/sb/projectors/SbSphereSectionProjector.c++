@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/projectors/SbSphereSectionProjector.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <stdio.h>
@@ -286,7 +287,7 @@ SbSphereSectionProjector::setupTolerance()
     // find disntance from the center of the sphere to the tolerance
     // plane
     planeDist =
-	sqrtf((sphere.getRadius()*sphere.getRadius()) -
+    std::sqrt((sphere.getRadius()*sphere.getRadius()) -
 	      (tolDist * tolDist));
 
     // If we are intersecting with the back half of the sphere, then
@@ -354,7 +355,7 @@ SbSphereSectionProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
 
 	// Check for degenerate cases
 	float theta = d / sphere.getRadius();
-	if ( fabs(theta) < 0.000001 || fabs(theta) > 1.0 )
+    if ( std::abs(theta) < 0.000001 || std::abs(theta) > 1.0 )
 	    return rollRot;
 
 	diff1.normalize();

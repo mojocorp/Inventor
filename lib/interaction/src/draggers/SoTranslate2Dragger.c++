@@ -293,7 +293,7 @@ SoTranslate2Dragger::drag()
 	    // The 1-D direction is not defined. Calculate it based on which
 	    // direction got the maximum locater motion.
             if ( isAdequateConstraintMotion() ) {
-		if ( fabs( motion[0]) > fabs( motion[1]))
+        if ( std::abs( motion[0]) > std::abs( motion[1]))
 		    translateDir = 0;
 		else 
 		    translateDir = 1;

@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/SbLinear.h>
 #include <Inventor/SbBox.h>
 
@@ -148,7 +149,7 @@ SbSphere::intersect(const SbLine &l, SbVec3f &intersection) const
     }
     else {
 	// compute t0: (-B - sqrt(B^2 - 4AC)) / 2A  (A = 1)
-	sqroot = sqrtf(discr);
+    sqroot = std::sqrt(discr);
 	t = (-B - sqroot) * 0.5;
 	if (t < 0.0) {
 	    // no intersection, try t1: (-B + sqrt(B^2 - 4AC)) / 2A  (A = 1)
@@ -201,7 +202,7 @@ SbSphere::intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const
 	doesIntersect = FALSE;
     }
     else {
-	sqroot = sqrtf(discr);
+    sqroot = std::sqrt(discr);
 	    
 	float t0 = (-B - sqroot) * 0.5;
 	enter = l.getPosition() + (l.getDirection() * t0);

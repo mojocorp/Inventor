@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-
+#include <cmath>
 #include <stdio.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/sensors/SoFieldSensor.h>
@@ -905,10 +905,10 @@ SoHandleBoxDragger::translateDrag()
 	    // The 1-D direction is not defined.  Calculate it
 	    // based on which direction got the maximum locater motion.
 	    if ( isAdequateConstraintMotion() ) {
-		if (    fabs( workSpaceMotion[0]) > fabs( workSpaceMotion[1]) 
-		     && fabs( workSpaceMotion[0]) > fabs( workSpaceMotion[2]) )
+        if (    std::abs( workSpaceMotion[0]) > std::abs( workSpaceMotion[1])
+             && std::abs( workSpaceMotion[0]) > std::abs( workSpaceMotion[2]) )
 		    translateDir = 0;
-		else if (fabs( workSpaceMotion[1]) > fabs( workSpaceMotion[2]) )
+        else if (std::abs( workSpaceMotion[1]) > std::abs( workSpaceMotion[2]) )
 		    translateDir = 1;
 		else 
 		    translateDir = 2;
@@ -1075,7 +1075,7 @@ SoHandleBoxDragger::scaleDrag()
     SbVec3f delta( 1.0, 1.0, 1.0 );
     int ind;
     for ( ind = 0; ind < 3; ind++ ) {
-	if ((fabs(newDiff[ind]) > TINY) && (fabs(oldDiff[ind]) > TINY))
+    if ((std::abs(newDiff[ind]) > TINY) && (std::abs(oldDiff[ind]) > TINY))
 	    delta[ind] = newDiff[ind] / oldDiff[ind];
     }
 #undef TINY

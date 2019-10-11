@@ -51,6 +51,8 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
+
 #include <Inventor/SoDB.h>
 #include <Inventor/sensors/SoTimerSensor.h>
 
@@ -172,7 +174,7 @@ SoTimerSensor::schedule()
     // before the current time, add sufficient whole intervals to get
     // it past the current time.
     setTriggerTime(baseTime +
-		   interval * ceil((now - baseTime) / interval + 0.0000001));
+           interval * std::ceil((now - baseTime) / interval + 0.0000001));
 
     // Do standard scheduling stuff
     SoTimerQueueSensor::schedule();
@@ -231,7 +233,7 @@ SoTimerSensor::reschedule(const SbTime &now)
 	// at the end of the next interval from now. Otherwise, this
 	// sensor would just saturate the queue.
 	SbTime triggerTime = baseTime 
-	    + interval * ceil((now - baseTime) / interval
+        + interval * std::ceil((now - baseTime) / interval
 			  + 0.0000001);
 
 	setTriggerTime(triggerTime);

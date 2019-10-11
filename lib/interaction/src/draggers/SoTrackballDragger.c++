@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-
+#include <cmath>
 #include <stdio.h>
 
 #include <Inventor/errors/SoDebugError.h>
@@ -308,9 +308,9 @@ SoTrackballDragger::setUpConnections( SbBool onOff, SbBool doItAlways )
 
 	    // decide whether or not to display the spinning wheel.
 	    // only show it if does not line up with a major axis.
-	    if (   ( fabs(userAxisVec[0]) > 0.99 )
-		|| ( fabs(userAxisVec[1]) > 0.99 )
-		|| ( fabs(userAxisVec[2]) > 0.99 ) ) {
+        if (   ( std::abs(userAxisVec[0]) > 0.99 )
+        || ( std::abs(userAxisVec[1]) > 0.99 )
+        || ( std::abs(userAxisVec[2]) > 0.99 ) ) {
 		setSwitchValue( userAxisSwitch.getValue(), SO_SWITCH_NONE );
 		setSwitchValue( userRotatorSwitch.getValue(), SO_SWITCH_NONE );
 	    }
@@ -724,7 +724,7 @@ SoTrackballDragger::scaleDrag()
 
     // [3] Change in scale is ratio of newRad to oldRad
 #define TINY .0001
-    float delta = (fabs(oldRad) < TINY || fabs(newRad) < TINY)
+    float delta = (std::abs(oldRad) < TINY || std::abs(newRad) < TINY)
 		    ? 1.0 : newRad / oldRad;
 #undef TINY
 
@@ -787,9 +787,9 @@ SoTrackballDragger::userStripeDrag()
 
     // decide whether or not to display the spinning wheel.
     // only show it if does not line up with a major axis.
-    if (   ( fabs(userAxisVec[0]) > 0.99 )
-        || ( fabs(userAxisVec[1]) > 0.99 )
-	|| ( fabs(userAxisVec[2]) > 0.99 ) ) {
+    if (   ( std::abs(userAxisVec[0]) > 0.99 )
+        || ( std::abs(userAxisVec[1]) > 0.99 )
+    || ( std::abs(userAxisVec[2]) > 0.99 ) ) {
 	setSwitchValue( userAxisSwitch.getValue(), SO_SWITCH_NONE );
 	setSwitchValue( userRotatorSwitch.getValue(), SO_SWITCH_NONE );
     }

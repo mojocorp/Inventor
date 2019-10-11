@@ -1788,9 +1788,9 @@ SoDragger::getTransformFast(  SbMatrix &mtx, SbVec3f &translation,
     // scaleOrientation is identity() and we are free to factor the matrix.
     // Only need to test two sets, since 3rd answer is implicit.
 #define TINY 0.00001
-    if (       fabs( matXVec.dot( matYVec )) > TINY )
+    if (       std::abs( matXVec.dot( matYVec )) > TINY )
 	canDoFast = FALSE;
-    else if (  fabs( matYVec.dot( matZVec )) > TINY )
+    else if (  std::abs( matYVec.dot( matZVec )) > TINY )
 	canDoFast = FALSE;
 #undef TINY
 

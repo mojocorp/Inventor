@@ -274,7 +274,7 @@ SbPlaneProjector::project(const SbVec2f &point)
     // If at this point the plane is flat against the view plane, all 
     // cursor positions will yield a valid intersection with the plane.
 	SbBool isFlatAgainstViewPlane = FALSE;
-	if ( fabs( postAffineNormal.dot( postAffineEyeDir )) == 1.0 ) 
+    if ( std::abs( postAffineNormal.dot( postAffineEyeDir )) == 1.0 )
 	    isFlatAgainstViewPlane = TRUE;
 
     // It is important that our postAffinePlnPnt be in front of the eye.
@@ -379,11 +379,11 @@ SbPlaneProjector::project(const SbVec2f &point)
 	    float   distJ = -1 * viewVol.getNearDist();
 	    SbVec3f normL = normM.cross( normN );
 	    int indexU, indexV, indexW;
-	    if (   fabs(normL[0]) > fabs(normL[1]) 
-		&& fabs(normL[0]) > fabs(normL[2]) ) {
+        if (   std::abs(normL[0]) > std::abs(normL[1])
+        && std::abs(normL[0]) > std::abs(normL[2]) ) {
 		indexW = 0; indexU = 1; indexV = 2;
 	    }
-	    else if ( fabs(normL[1]) > fabs(normL[2]) ) {
+        else if ( std::abs(normL[1]) > std::abs(normL[2]) ) {
 		indexW = 1; indexU = 0; indexV = 2;
 	    }
 	    else {
