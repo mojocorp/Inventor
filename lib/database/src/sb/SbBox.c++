@@ -430,9 +430,9 @@ SbBox3f::getClosestPoint(const SbVec3f &point)
 
 	// Side to snap side that has greatest magnitude in the vector.
 	SbVec3f mag;
-	mag[0] = fabs(vec[0]);
-	mag[1] = fabs(vec[1]);
-	mag[2] = fabs(vec[2]);
+    mag[0] = std::abs(vec[0]);
+    mag[1] = std::abs(vec[1]);
+    mag[2] = std::abs(vec[2]);
 
 	result = mag;
 
@@ -1070,8 +1070,8 @@ SbBox2f::getClosestPoint(const SbVec2f &point)
 	    vec[1] /= halfY;
 
 	// Side to snap to has greatest magnitude in the vector.
-	float magX = fabs(vec[0]);
-	float magY = fabs(vec[1]);
+    float magX = std::abs(vec[0]);
+    float magY = std::abs(vec[1]);
 
 	if (magX > magY) {
 	    result[0] = (vec[0] > 0) ? 1.0 : -1.0;

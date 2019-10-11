@@ -273,7 +273,7 @@ SoScale2UniformDragger::drag()
 
     // [3] Change in scale is the ratio of newDist to oldDist
 #define TINY 0.0001
-    float scaleMotion = (fabs(newDist) < TINY || fabs(oldDist) < TINY) 
+    float scaleMotion = (std::abs(newDist) < TINY || std::abs(oldDist) < TINY)
 		       ? 1.0 : newDist / oldDist;
 #undef TINY
 

@@ -54,6 +54,8 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
+
 #include <Inventor/SbLinear.h>
 
 // amount squared to figure if two floats are equal
@@ -187,7 +189,7 @@ SbVec3f::getValue(float &x, float &y, float &z) const
 float
 SbVec3f::length() const
 {
-    return sqrtf(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
+    return std::sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
 }
 
 //
@@ -611,7 +613,7 @@ SbVec2f::getValue(float &x, float &y) const
 float
 SbVec2f::length() const
 {
-    return sqrtf(vec[0] * vec[0] + vec[1] * vec[1]);
+    return std::sqrt(vec[0] * vec[0] + vec[1] * vec[1]);
 }
 
 //
@@ -811,7 +813,7 @@ SbVec4f::getValue(float &x, float &y, float &z, float &w) const
 float
 SbVec4f::length() const
 {
-    return sqrtf(vec[0] * vec[0] + vec[1] * vec[1]
+    return std::sqrt(vec[0] * vec[0] + vec[1] * vec[1]
 		 + vec[2] * vec[2] + vec[3] * vec[3]);
 }
 

@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/SbLinear.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -221,7 +222,7 @@ SbCylinder::unitCylinderIntersect(const SbLine &l,
 	doesIntersect = FALSE;
     }
     else {
-	sqroot = sqrtf(discr);
+    sqroot = std::sqrt(discr);
 
 	// magic to stabilize the answer
 	if (B > 0.0) {

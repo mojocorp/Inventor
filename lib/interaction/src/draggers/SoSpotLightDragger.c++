@@ -522,7 +522,7 @@ SoSpotLightDragger::drag()
 	    // If both conditions are violated, use the value closer to 
 	    // the current angle.
 	    if ( isPosZ && isNewOppositeStart ) {
-		if ( fabs(curAngle - 0.0) < fabs((M_PI/2.0) - curAngle) )
+        if ( std::abs(curAngle - 0.0) < std::abs((M_PI/2.0) - curAngle) )
 		    theta = 0.0;
 		else 
 		    theta = M_PI / 2.0;
