@@ -52,8 +52,10 @@
  */
 
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoDB.h>
+#include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>
 #include <Inventor/actions/SoRayPickAction.h>
@@ -65,15 +67,14 @@
 #include <Inventor/elements/SoCoordinateElement.h>
 #include <Inventor/elements/SoDrawStyleElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
+#include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/elements/SoProjectionMatrixElement.h>
 #include <Inventor/elements/SoViewingMatrixElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/nodes/SoIndexedNurbsCurve.h>
-#include "nurbs/SoAddPrefix.h"
-#include "nurbs/SoGLRender.h"
-#include "nurbs/SoPickRender.h"
-#include "nurbs/SoPrimRender.h"
+
+#include <vector>
 
 SO_NODE_SOURCE(SoIndexedNurbsCurve);
 
@@ -146,8 +147,7 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
 
     // Draw unlit:
     if (SoLazyElement::getLightModel(state) != SoLazyElement::BASE_COLOR) {
-    SoLazyElement::setLightModel(state,
-                 SoLazyElement::BASE_COLOR);
+        SoLazyElement::setLightModel(state, SoLazyElement::BASE_COLOR);
     }
     // Make sure textures are disabled, as texturing of NURBS curves
     // has not been implemented.
@@ -159,82 +159,16 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
     SoMaterialBundle	mb(action);
     mb.sendFirst();
 
-    const SoCoordinateElement   *ce =
-            SoCoordinateElement::getInstance(state);
-
-
     //
     // Create a NURBS library renderer, and use it by making regular
     // GL calls to it.
     //
-    _SoNurbsGLRender *GLRender = new _SoNurbsGLRender();
+    GLUnurbs *theNurb = gluNewNurbsRenderer();
 
-    float val = SoComplexityElement::get(state);
-    if (val < 0.0) val = 0.0;
-    if (val > 1.0) val = 1.0;
+    // Draw the curve
+    drawNURBS (theNurb, action);
 
-    if (SoComplexityTypeElement::get(state) ==
-         SoComplexityTypeElement::OBJECT_SPACE)
-    {
-        //
-        // Set the nurbs properties to render the curve with uniform
-        // tessellation over the whole curve.
-        //
-        int   steps;
-        if (val < 0.5)  steps = (int)(18.0 *val) + 1;
-        else            steps = (int)(380.0*val) - 180;
-
-        GLRender->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
-        GLRender->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
-        GLRender->setnurbsproperty( N_V3D,  N_S_STEPS, steps);
-        GLRender->setnurbsproperty( N_V3D,  N_T_STEPS, steps);
-        GLRender->setnurbsproperty( N_V3DR, N_S_STEPS, steps);
-        GLRender->setnurbsproperty( N_V3DR, N_T_STEPS, steps);
-    }
-    else
-    {
-        //
-        // Set the nurbs properties to render the curve with a view
-        // dependent tessellation using the given pixel tolerance.
-        //
-        float pixTolerance;
-
-        if      (val < 0.10) pixTolerance = 10;
-        else if (val < 0.20) pixTolerance = 8;
-        else if (val < 0.30) pixTolerance = 6;
-        else if (val < 0.40) pixTolerance = 4;
-        else if (val < 0.50) pixTolerance = 2;
-        else if (val < 0.70) pixTolerance = 1;
-        else if (val < 0.80) pixTolerance = .5;
-        else if (val < 0.90) pixTolerance = .25;
-        else                 pixTolerance = .125;
-
-        GLRender->setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
-        GLRender->setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
-        GLRender->setnurbsproperty( N_V3D,  N_PIXEL_TOLERANCE, pixTolerance );
-        GLRender->setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE, pixTolerance );
-
-        //
-        // Calculate the total viewing matrix by concatenating the modeling
-        // matrix, the camera's viewing matrix, and the projection matrix.
-        // Pass the resulting matrix to the NURBS library for use in
-        // determining sampling and culling of the curve.
-        //
-        const SbViewportRegion & vpRegion =
-                SoViewportRegionElement::get(state);
-        const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
-        SbMatrix totalMat;
-        calcTotalMatrix (state, totalMat);
-        GLRender->loadMatrices (totalMat, vpSize);
-    }
-
-    // Draw the curve.
-    drawNURBS (GLRender, state);
-    delete GLRender;
+    gluDeleteNurbsRenderer( theNurb );
 
     // Restore state
     state->pop();
@@ -242,71 +176,21 @@ SoIndexedNurbsCurve::GLRender(SoGLRenderAction *action)
     return;
 }
 
-////////////////////////////////////////////////////////////////////////
+namespace {
 //
 // Description:
-//    Implements ray picking
+//    Gets details back from the NURBS library and sends them to the
+//    generate primitive callbacks.
 //
-// Use: protected
+struct glu_cb_data {
+    std::vector<SbVec3f> vertices;
+};
 
 void
-SoIndexedNurbsCurve::rayPick(SoRayPickAction *action)
-//
-////////////////////////////////////////////////////////////////////////
+vertexCallback(float *vertex, glu_cb_data * userData)
 {
-    // First see if the object is pickable
-    if (! shouldRayPick(action))
-	return;
-
-    action->setObjectSpace();
-
-    //
-    // Create an SoPickRender class which performs picking with the
-    // software NURBS library.
-    //
-    _SoNurbsPickRender pickRender(action);
-    float pixTolerance;
-    float val = SoComplexityElement::get(action->getState());
-    if      (val < 0.10) pixTolerance = 10;
-    else if (val < 0.20) pixTolerance = 8;
-    else if (val < 0.30) pixTolerance = 6;
-    else if (val < 0.40) pixTolerance = 4;
-    else if (val < 0.50) pixTolerance = 2;
-    else if (val < 0.70) pixTolerance = 1;
-    else if (val < 0.80) pixTolerance = .5;
-    else if (val < 0.90) pixTolerance = .25;
-    else                 pixTolerance = .125;
-
-    //
-    // Use screen space tessellation with the pixel tolerance
-    // set to pixTolerance, and notify the library that the sampling
-    // and culling matrices will be passed in.
-    //
-    pickRender.setnurbsproperty (N_V3D,  N_PIXEL_TOLERANCE, pixTolerance);
-    pickRender.setnurbsproperty (N_V3DR, N_PIXEL_TOLERANCE, pixTolerance);
-    pickRender.setnurbsproperty (N_V3D,N_SAMPLINGMETHOD, N_PARAMETRICDISTANCE);
-    pickRender.setnurbsproperty (N_V3DR,N_SAMPLINGMETHOD,N_PARAMETRICDISTANCE);
-    pickRender.setnurbsproperty (N_V3D,  N_CULLING, N_CULLINGON);
-    pickRender.setnurbsproperty (N_V3DR, N_CULLING, N_CULLINGON);
-
-    //
-    // Calculate the total viewing matrix by concatenating the modeling
-    // matrix, the camera's viewing matrix, and the projection matrix.
-    // Pass the resulting matrix to the NURBS library for use in determining
-    // sampling and culling of the curve.
-    //
-    const SbViewportRegion & vpRegion =
-            SoViewportRegionElement::get(action->getState());
-    const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
-    SbMatrix totalMat;
-    calcTotalMatrix(action->getState(), totalMat);
-    pickRender.loadMatrices(totalMat, vpSize);
-
-    //
-    // Draw the NURBS curve.  The SoPickRender class will receive primitive
-    // drawn by the NURBS library and test them for intersection.
-    //
-    drawNURBS(&pickRender, action->getState());
+    userData->vertices.push_back(SbVec3f(vertex[0], vertex[1], vertex[2]));
+}
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -321,117 +205,29 @@ SoIndexedNurbsCurve::generatePrimitives(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    _SoNurbsPrimRender   primRender(action, primCB, (void *)this);
-
-    //
-    // Find the number of steps required for tessellation and the pixel
-    // tolerance used for tessellation.
-    //
-    float val = SoComplexityElement::get(action->getState());
-
-    if (SoComplexityTypeElement::get(action->getState()) ==
-         SoComplexityTypeElement::OBJECT_SPACE)
-    {
-        //
-        // Set the nurbs properties to render the curve with uniform
-        // tessellation over the whole curve.
-        //
-        int   steps;
-        if (val < 0.5)  steps = (int)(18.0 *val) + 1;
-        else            steps = (int)(380.0*val) - 180;
-
-        primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
-        primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_FIXEDRATE );
-        primRender.setnurbsproperty( N_V3D,  N_S_STEPS, steps);
-        primRender.setnurbsproperty( N_V3D,  N_T_STEPS, steps);
-        primRender.setnurbsproperty( N_V3DR, N_S_STEPS, steps);
-        primRender.setnurbsproperty( N_V3DR, N_T_STEPS, steps);
-    }
-    else
-    {
-        //
-        // Set the nurbs properties to render the curve with a view
-        // dependent tessellation using the given pixel tolerance.
-        //
-        float pixTolerance;
-
-        if      (val < 0.10) pixTolerance = 10;
-        else if (val < 0.20) pixTolerance = 8;
-        else if (val < 0.30) pixTolerance = 6;
-        else if (val < 0.40) pixTolerance = 4;
-        else if (val < 0.50) pixTolerance = 2;
-        else if (val < 0.70) pixTolerance = 1;
-        else if (val < 0.80) pixTolerance = .5;
-        else if (val < 0.90) pixTolerance = .25;
-        else                 pixTolerance = .125;
-
-        primRender.setnurbsproperty( N_V3D,  N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
-        primRender.setnurbsproperty( N_V3DR, N_SAMPLINGMETHOD,
-                N_PARAMETRICDISTANCE );
-        primRender.setnurbsproperty( N_V3D,  N_PIXEL_TOLERANCE, pixTolerance );
-        primRender.setnurbsproperty( N_V3DR, N_PIXEL_TOLERANCE, pixTolerance );
-
-        //
-        // Calculate the total viewing matrix by concatenating the modeling
-        // matrix, the camera's viewing matrix, and the projection matrix.
-        // Pass the resulting matrix to the NURBS library for use in
-        // determining sampling and culling of the surface.
-        //
-        const SbViewportRegion & vpRegion =
-                SoViewportRegionElement::get(action->getState());
-        const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
-        SbMatrix totalMat;
-        calcTotalMatrix (action->getState(), totalMat);
-        primRender.loadMatrices (totalMat, vpSize);
-    }
+    GLUnurbs *theNurb = gluNewNurbsRenderer();
 
     //
     // Draw the NURBS surface.  The SoPrimRender class will receive primitive
     // drawn by the NURBS library, triangulate them, and send them to the
     // callback.
-    drawNURBS(&primRender, action->getState());
-}
+    glu_cb_data data;
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Gets details back from the NURBS library and sends them to the
-//    generate primitive callbacks.
-//
-// Use: private, static
+    gluNurbsProperty(theNurb, GLU_NURBS_MODE, GLU_NURBS_TESSELLATOR);
+    gluNurbsCallbackData(theNurb, &data);
+    gluNurbsCallback(theNurb, GLU_NURBS_VERTEX_DATA,    (void (SB_CALLBACK*)())vertexCallback);
 
-void
-SoIndexedNurbsCurve::primCB(
-    SoAction *act,
-    SoPrimitiveVertex *vertices,
-    void *userData)
+    drawNURBS(theNurb, action);
 
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SoIndexedNurbsCurve *curve = (SoIndexedNurbsCurve *)userData;
-    curve->sendPrimitive(act, vertices);
-}
+    gluDeleteNurbsRenderer( theNurb );
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sends primitives to the generate primitive callbacks.
-//
-// Use: internal, public
+    for (size_t i=0; i<data.vertices.size()-1; i+=2) {
+        SoPrimitiveVertex pv[2];
+        pv[0].setPoint(data.vertices[i]);
+        pv[1].setPoint(data.vertices[i+1]);
 
-void
-SoIndexedNurbsCurve::sendPrimitive(
-    SoAction *act,
-    SoPrimitiveVertex *vertices )
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    invokeLineSegmentCallbacks(act, &vertices[0], &vertices[1]);
+        invokeLineSegmentCallbacks(action, &pv[0], &pv[1]);
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -463,17 +259,11 @@ SoIndexedNurbsCurve::getBoundingBox(SoGetBoundingBoxAction *action)
 
 void
 SoIndexedNurbsCurve::computeBBox(SoAction *action,
-				 SbBox3f &box, SbVec3f &center)
+                                 SbBox3f &box, SbVec3f &center)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoCoordinateElement   *ce =
-            SoCoordinateElement::getInstance(action->getState());
-    const int32_t                  *coordIndices;
-    int32_t			numCoordIndices;
-    int				i;
-
-    numCoordIndices   = coordIndex.getNum();
+    const int32_t numCoordIndices = coordIndex.getNum();
 
     // Check for a degenerate curve
     if (numCoordIndices == 0)
@@ -484,21 +274,19 @@ SoIndexedNurbsCurve::computeBBox(SoAction *action,
     // If the coordinates are rational, divide the first three values by
     // the fourth value before extending the bounding box.
     //
-    coordIndices      = coordIndex.getValues(0);
+    const int32_t               *coordIndices = coordIndex.getValues(0);
+    const SoCoordinateElement   *ce           = SoCoordinateElement::getInstance(action->getState());
     center.setValue(0.0, 0.0, 0.0);
     if (ce->is3D()) {
-        for (i=0; i<numCoordIndices; i++)
-        {
+        for (int i=0; i<numCoordIndices; i++) {
             const SbVec3f &coord = ce->get3((int)coordIndices[i]);
             box.extendBy(coord);
             center += coord;
         }
-    }
-    else {
-        SbVec3f		        tmpCoord;
-        for (i=0; i<numCoordIndices; i++)
-        {
+    } else {
+        for (int i=0; i<numCoordIndices; i++) {
             const SbVec4f &coord = ce->get4((int)coordIndices[i]);
+            SbVec3f	tmpCoord;
             coord.getReal(tmpCoord);
             box.extendBy(tmpCoord);
             center += tmpCoord;
@@ -518,57 +306,100 @@ SoIndexedNurbsCurve::computeBBox(SoAction *action,
 
 void
 SoIndexedNurbsCurve::drawNURBS(
-    _SoNurbsNurbsTessellator *render,
-    SoState *state )
+        GLUnurbs *render,
+        SoAction *action)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoCoordinateElement   *ce =
-            SoCoordinateElement::getInstance(state);
-    const int32_t          	*coordIndices;
-    int32_t			numCoordIndices;
-    int32_t                	type, offset;
-    float               	*coords;
-    int				i;
+    SoState *state = action->getState();
 
-    numCoordIndices   = coordIndex.getNum();
+    const SoCoordinateElement   *ce = SoCoordinateElement::getInstance(state);
+
+    const int32_t numCoordIndices   = coordIndex.getNum();
 
     // Check for a degenerate curve
     if (numCoordIndices == 0)
         return;
-    
+
+    float val = SoComplexityElement::get(state);
+    if (val < 0.0) val = 0.0f;
+    if (val > 1.0) val = 1.0f;
+
+    if (SoComplexityTypeElement::get(state) == SoComplexityTypeElement::OBJECT_SPACE) {
+        //
+        // Set the nurbs properties to render the curve with uniform
+        // tessellation over the whole curve.
+        //
+        gluNurbsProperty(render, GLU_SAMPLING_METHOD, GLU_DOMAIN_DISTANCE);
+        gluNurbsProperty(render, GLU_U_STEP, 200*val);
+    } else {
+        //
+        // Set the nurbs properties to render the curve with a view
+        // dependent tessellation using the given pixel tolerance.
+        //
+        float pixTolerance;
+
+        if      (val < 0.10f) pixTolerance = 10.f;
+        else if (val < 0.20f) pixTolerance = 8.f;
+        else if (val < 0.30f) pixTolerance = 6.f;
+        else if (val < 0.40f) pixTolerance = 4.f;
+        else if (val < 0.50f) pixTolerance = 2.f;
+        else if (val < 0.70f) pixTolerance = 1.f;
+        else if (val < 0.80f) pixTolerance = .5f;
+        else if (val < 0.90f) pixTolerance = .25f;
+        else                 pixTolerance = .125f;
+
+        gluNurbsProperty(render, GLU_SAMPLING_METHOD, GLU_OBJECT_PATH_LENGTH);
+        gluNurbsProperty(render, GLU_SAMPLING_TOLERANCE, pixTolerance);
+    }
+
+    if (!action->isOfType(SoGLRenderAction::getClassTypeId())) {
+        const SbMatrix matModelView = SoModelMatrixElement::get(state) * SoViewingMatrixElement::get(state);
+        const SbMatrix & matProjection = SoProjectionMatrixElement::get(state);
+
+        const SbViewportRegion & vpRegion = SoViewportRegionElement::get(state);
+        const SbVec2s & vpOrig = vpRegion.getViewportOriginPixels();
+        const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
+
+        GLint viewport[4]={vpOrig[0],
+                           vpOrig[1],
+                           vpSize[0],
+                           vpSize[1]};
+
+        gluNurbsProperty(render, GLU_AUTO_LOAD_MATRIX, GL_FALSE);
+        gluLoadSamplingMatrices(render,
+                                (float*)matModelView.getValue(),
+                                (float*)matProjection.getValue(),
+                                viewport);
+    }
+
     //
     // Get the array of control points.  Check to see if they are
     // non-rational or rational.
     //
-    coordIndices      = coordIndex.getValues(0);
+    const int32_t *coordIndices = coordIndex.getValues(0);
+    std::vector<GLfloat> coords;
     if (ce->is3D()) {
-        coords = new float[3*numCoordIndices];
-        float *tmpCoord = coords;
-        for (i=0; i<numCoordIndices; i++)
+        coords.resize(3*numCoordIndices);
+        for (int i=0; i<numCoordIndices; i++)
         {
-            const SbVec3f &c3 = ce->get3((int)coordIndices[i]);
-            *tmpCoord++ = c3[0];
-            *tmpCoord++ = c3[1];
-            *tmpCoord++ = c3[2];
+            const SbVec3f &c3 = ce->get3(coordIndices[i]);
+            coords[3*i+0] = c3[0];
+            coords[3*i+1] = c3[1];
+            coords[3*i+2] = c3[2];
         }
-        offset = 3 * sizeof(float);
-        type = N_V3D;
     }
     else {
-        coords = new float[4*numCoordIndices];
-        float *tmpCoord = coords;
-        for (i=0; i<numCoordIndices; i++)
+        coords.resize(4*numCoordIndices);
+        for (int i=0; i<numCoordIndices; i++)
         {
-            const SbVec4f &c4 = ce->get4((int)coordIndices[i]);
-            *tmpCoord++ = c4[0];
-            *tmpCoord++ = c4[1];
-            *tmpCoord++ = c4[2];
-            *tmpCoord++ = c4[3];
+            const SbVec4f &c4 = ce->get4(coordIndices[i]);
+            coords[3*i+0] = c4[0];
+            coords[3*i+1] = c4[1];
+            coords[3*i+2] = c4[2];
+            coords[3*i+3] = c4[3];
         }
-        offset = 4 * sizeof(float);
-        type = N_V3DR;
     }
 
     //
@@ -576,74 +407,12 @@ SoIndexedNurbsCurve::drawNURBS(
     // NurbsTessellator instead which will make calls to the
     // software NURBS library.
     //
-    render->bgncurve(0);
-    render->nurbscurve (knotVector.getNum(),
-        (INREAL *) knotVector.getValues(0),
-        offset, (INREAL *)coords,
-        knotVector.getNum() - numControlPoints.getValue(),
-        type);
-
-    render->endcurve();
-    delete[] coords;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Calculate the total transformation matrix by contatenating the
-//    modeling matrix, the camera's viewing matrix, and the projection
-//    matrix all together.
-//
-// Use: protected
-
-void
-SoIndexedNurbsCurve::calcTotalMatrix(
-    SoState *state,
-    SbMatrix &totalMat )
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SbMatrix mMat, pMat, vMat;
-    SbMatrix viewMat;
-
-    mMat = SoModelMatrixElement::get (state);
-    pMat = SoProjectionMatrixElement::get (state);
-    vMat = SoViewingMatrixElement::get (state);
-    multMatrix4d (viewMat, mMat, vMat);
-    multMatrix4d (totalMat, viewMat, pMat);
-}
-
-
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Multiply two matrices together.
-//    new = [left][right]
-//
-// Use: protected
-
-void
-SoIndexedNurbsCurve::multMatrix4d (
-   SbMatrix &n,
-   SbMatrix left,
-   SbMatrix right )
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    int i;
-
-    for (i=0; i<4; i++)
-    {
-        n[i][0] = left[i][0]*right[0][0] + left[i][1]*right[1][0] +
-                  left[i][2]*right[2][0] + left[i][3]*right[3][0];
-        n[i][1] = left[i][0]*right[0][1] + left[i][1]*right[1][1] +
-                  left[i][2]*right[2][1] + left[i][3]*right[3][1];
-        n[i][2] = left[i][0]*right[0][2] + left[i][1]*right[1][2] +
-                  left[i][2]*right[2][2] + left[i][3]*right[3][2];
-        n[i][3] = left[i][0]*right[0][3] + left[i][1]*right[1][3] +
-                  left[i][2]*right[2][3] + left[i][3]*right[3][3];
-    }
+    gluBeginCurve(render);
+    gluNurbsCurve(render,
+                  knotVector.getNum(),
+                  (float*)knotVector.getValues(0),
+                  ce->is3D() ? 3 : 4, coords.data(),
+                  knotVector.getNum() - numControlPoints.getValue(),
+                  ce->is3D() ? GL_MAP1_VERTEX_3 : GL_MAP1_VERTEX_4);
+    gluEndCurve(render);
 }

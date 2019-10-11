@@ -74,8 +74,7 @@
 
 class SoState;
 class SoPrimitiveVertex;
-class _SoNurbsNurbsTessellator;
-
+class GLUnurbs;
 class SoNurbsCurve : public SoShape {
 
     SO_NODE_HEADER(SoNurbsCurve);
@@ -90,15 +89,12 @@ class SoNurbsCurve : public SoShape {
 
   SoEXTENDER public:
     virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
 
     // Redefine this to tell open caches that they contain lines
     virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
 
   SoINTERNAL public:
     static void		initClass();
-
-    void                sendPrimitive(SoAction *, SoPrimitiveVertex *);
 
   protected:
     // Generates triangles representing a sphere
@@ -111,16 +107,7 @@ class SoNurbsCurve : public SoShape {
     ~SoNurbsCurve();
 
   private:
-
-    void                drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state);
-
-    void                calcTotalMatrix( SoState *state, SbMatrix &totalMat );
-
-    void                multMatrix4d ( SbMatrix &n, SbMatrix left,
-                              SbMatrix right );
-
-    // This callback gets details from the NURBS library
-    static void         primCB(SoAction *, SoPrimitiveVertex *, void *);
+    void drawNURBS(GLUnurbs *nurbsObj, SoAction *action);
 };
 
 #endif /* _SO_NURBS_CURVE_ */
