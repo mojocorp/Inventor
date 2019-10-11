@@ -1,5 +1,5 @@
 find_package(OpenGL REQUIRED)
-find_package(X11)
+find_package(X11 REQUIRED)
 find_package(BISON REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(Iconv REQUIRED)
@@ -7,33 +7,18 @@ find_package(Iconv REQUIRED)
 # On Mac OS X, GLX is provided as a separate OpenGL implementation, different
 # from the standard OpenGL framework which provides support for GLUT and native
 # Mac OS X applications.
-if (X11_FOUND)
-        if (APPLE)
-                find_path (X11_GL_INCLUDE_PATH GL/glx.h ${X11_INC_SEARCH_PATH})
-                if (NOT X11_GL_INCLUDE_PATH)
-                        message (ERROR "Could not find GL/glx.h")
-                        set (X11_FOUND FALSE)
-                endif (NOT X11_GL_INCLUDE_PATH)
-                set (X11_INCLUDE_DIR ${X11_INCLUDE_DIR} ${X11_GL_INCLUDE_PATH})
+if (APPLE)
+    find_path (X11_GL_INCLUDE_PATH GL/gl.h ${X11_INC_SEARCH_PATH})
+    if (NOT X11_GL_INCLUDE_PATH)
+        message (ERROR "Could not find GL/gl.h")
+    endif (NOT X11_GL_INCLUDE_PATH)
+    include_directories (${X11_INCLUDE_DIR} ${X11_GL_INCLUDE_PATH})
 
-                find_library (X11_GL_LIB GL ${X11_LIB_SEARCH_PATH})
-                if (NOT X11_GL_LIB)
-                        message (ERROR "Could not find libGL.dylib")
-                        set (X11_FOUND FALSE)
-                endif (NOT X11_GL_LIB)
-
-                find_library (X11_GLU_LIB GLU ${X11_LIB_SEARCH_PATH})
-                if (NOT X11_GLU_LIB)
-                        message (WARNING "Could not find libGLU.dylib")
-                        set (X11_FOUND FALSE)
-                endif (NOT X11_GLU_LIB)
-        else ()
-                set (X11_INCLUDE_DIR ${X11_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
-                set (X11_GL_LIB ${OPENGL_gl_LIBRARY})
-                set (X11_GLU_LIB ${OPENGL_glu_LIBRARY})
-        endif ()
-        include_directories (${X11_INCLUDE_DIR})
-endif (X11_FOUND)
+    find_library (X11_GL_LIB GL ${X11_LIB_SEARCH_PATH})
+    if (NOT X11_GL_LIB)
+        message (ERROR "Could not find libGL.dylib")
+    endif (NOT X11_GL_LIB)
+endif ()
 
 
 set(DATABASE_PUBLIC_HEADERS
@@ -703,18 +688,6 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoVertexShape.c++
     database/src/so/nodes/SoWWWAnchor.c++
     database/src/so/nodes/SoWWWInline.c++
-    database/src/so/nodes/nurbs/SoCurveMaps.c++
-    database/src/so/nodes/nurbs/SoCurveRender.c++
-    database/src/so/nodes/nurbs/SoCurveRndEvl.c++
-    database/src/so/nodes/nurbs/SoGLRender.c++
-    database/src/so/nodes/nurbs/SoPickEvals.c++
-    database/src/so/nodes/nurbs/SoPickMaps.c++
-    database/src/so/nodes/nurbs/SoPickRender.c++
-    database/src/so/nodes/nurbs/SoPrimEvals.c++
-    database/src/so/nodes/nurbs/SoPrimMaps.c++
-    database/src/so/nodes/nurbs/SoPrimRender.c++
-    database/src/so/nodes/nurbs/clients/nurbsClient.c++
-    database/src/so/nodes/nurbs/libnurbs/libNurbs.c++
     database/src/so/nodes/readGIF.h
     database/src/so/sensors/SoAlarmSensor.c++
     database/src/so/sensors/SoDataSensor.c++
@@ -820,10 +793,6 @@ endforeach()
 include_directories(database/src/so/engines)
 BISON_TARGET(SoCalcParse database/src/so/engines/SoCalcParse.y ${CMAKE_CURRENT_BINARY_DIR}/SoCalcParse.c++)
 set(DATABASE_SOURCES ${DATABASE_SOURCES} ${BISON_SoCalcParse_OUTPUTS})
-
-# nurbs
-add_definitions(-DLIBRARYBUILD)
-include_directories(database/src/so/nodes/nurbs database/src/so/nodes/nurbs/clients database/src/so/nodes/nurbs/head )
 
 set(INTERACTION_PUBLIC_HEADERS
     interaction/include/Inventor/SoInteraction.h
@@ -1045,7 +1014,7 @@ set(PRIVATE_HEADERS ${DATABASE_PRIVATE_HEADERS})
 set(SOURCES ${DATABASE_SOURCES} ${NODEKIT_SOURCES} ${INTERACTION_SOURCES})
 
 add_library (Inventor SHARED ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOURCES})
-target_link_libraries(Inventor PUBLIC ${OPENGL_LIBRARY} ${X11_LIBRARIES} ${X11_GL_LIB} PRIVATE ${JPEG_LIBRARIES} ${Iconv_LIBRARIES} FLWrapper image)
+target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} ${X11_GL_LIB} PRIVATE GLU ${JPEG_LIBRARIES} ${Iconv_LIBRARIES} FLWrapper image)
 target_include_directories (Inventor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/database/include ${CMAKE_CURRENT_SOURCE_DIR}/nodekits/include ${CMAKE_CURRENT_SOURCE_DIR}/interaction/include)
 
 install(TARGETS Inventor CONFIGURATIONS Debug DESTINATION lib/InventorDebug COMPONENT devel)

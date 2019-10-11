@@ -106,4 +106,9 @@ typedef int	SbBool;
 #define SoEXTENDER
 #define SoINTERNAL
 
+#ifdef SB_OS_WIN
+#  define SB_CALLBACK    __stdcall
+#else
+#  define SB_CALLBACK
+#endif
 #endif /* _SB_BASIC_ */
