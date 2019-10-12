@@ -105,7 +105,7 @@ SoPointDetail		*SoShape::vertDetails = NULL;
 SoPrimitiveVertex	*SoShape::polyVerts = NULL;
 SoPointDetail		*SoShape::polyDetails = NULL;
 int			SoShape::numPolyVertsAllocated = 0;
-gluTESSELATOR		*SoShape::tobj = NULL;
+GLUtesselator		*SoShape::tobj = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //

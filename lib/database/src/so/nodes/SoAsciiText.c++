@@ -90,7 +90,7 @@
 // Font library:
 #include <flclient.h>
 
-gluTESSELATOR *junk;
+GLUtesselator *junk;
 const char *morejunk = "__glu_h";
 const char *garbage  = "GLU_VERSION_1_2";
 
@@ -164,7 +164,7 @@ class MyOutlineFontCache : public SoCache
     // given character.  This is used for both rendering and
     // generating primitives, with just different callback routines
     // registered.
-    void	generateFrontChar(const char c, gluTESSELATOR *tobj);
+    void	generateFrontChar(const char c, GLUtesselator *tobj);
 
     // Set up for GL rendering:
     void	setupToRenderFront(SoState *state);
@@ -172,14 +172,14 @@ class MyOutlineFontCache : public SoCache
     // Returns TRUE if this font cache has a display list for the
     // given character.  It will try to build a display list, if it
     // can.
-    SbBool	hasFrontDisplayList(const char c, gluTESSELATOR *tobj);
+    SbBool	hasFrontDisplayList(const char c, GLUtesselator *tobj);
 
     // Renders an entire string by using the GL callList() function.
     void	callFrontLists(const SbString &string, float off);
 
     // Renders a string in cases where display lists can't be buit.
     void	renderFront(const SbString &string, float width, 
-			    gluTESSELATOR *tobj);
+                GLUtesselator *tobj);
 
     // Callback registered with GLU used to detect tesselation errors.
     static void errorCB(GLenum whichErr);
@@ -345,7 +345,7 @@ SoAsciiText::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static gluTESSELATOR *tobj = NULL;
+    static GLUtesselator *tobj = NULL;
 
     // First see if the object is visible and should be rendered now
     if (! shouldGLRender(action))
@@ -369,7 +369,7 @@ SoAsciiText::GLRender(SoGLRenderAction *action)
     }
 
     if (tobj == NULL) {
-	tobj = (gluTESSELATOR *)gluNewTess();
+    tobj = (GLUtesselator *)gluNewTess();
 	gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (*)())glBegin);
 	gluTessCallback(tobj, (GLenum)GLU_END, (void (*)())glEnd);
 	gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (*)())glVertex2fv);
@@ -695,7 +695,7 @@ SoAsciiText::getStringOffset(int line, float width)
 
 void
 SoAsciiText::renderFront(SoGLRenderAction *, const SbString &string,
-		     float width, gluTESSELATOR *tobj)
+             float width, GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -773,12 +773,12 @@ SoAsciiText::generateFront(const SbString &string, float width)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static gluTESSELATOR *tobj = NULL;
+    static GLUtesselator *tobj = NULL;
 
     const char *chars = string.getString();
 
     if (tobj == NULL) {
-	tobj = (gluTESSELATOR *)gluNewTess();
+    tobj = (GLUtesselator *)gluNewTess();
 	gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (*)())SoAsciiText::beginCB);
 	gluTessCallback(tobj, (GLenum)GLU_END, (void (*)())SoAsciiText::endCB);
 	gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (*)())SoAsciiText::vtxCB);
@@ -1389,7 +1389,7 @@ MyOutlineFontCache::getCharOffset(const char c)
 
 void
 MyOutlineFontCache::generateFrontChar(const char c,
-				      gluTESSELATOR *tobj)
+                      GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1507,7 +1507,7 @@ MyOutlineFontCache::setupToRenderFront(SoState *state)
 
 SbBool
 MyOutlineFontCache::hasFrontDisplayList(const char c, 
-					gluTESSELATOR *tobj)
+                    GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1564,7 +1564,7 @@ MyOutlineFontCache::callFrontLists(const SbString &string, float off)
 
 void
 MyOutlineFontCache::renderFront(const SbString &string, float off, 
-				gluTESSELATOR *tobj)
+                GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {

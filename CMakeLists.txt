@@ -35,7 +35,7 @@ elseif(UNIX)
   add_definitions(-DIVPREFIX="/usr")
 endif()
 
-
+add_subdirectory(3rdparty)
 add_subdirectory(tools)
 add_subdirectory(libFL)
 add_subdirectory(libimage)
