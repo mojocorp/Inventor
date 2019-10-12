@@ -148,6 +148,12 @@ class SbString {
     friend int		operator !=(const char *s, const SbString &str)
 	{ return (str != s); }
 
+    friend const SbString operator +( const SbString & s1, const SbString & s2 ) {
+        SbString t(s1);
+        t += s2;
+        return t;
+    }
+
     friend int		operator !=(const SbString &str1,
 				    const SbString &str2)
 	{ return (str1 != str2.string); }

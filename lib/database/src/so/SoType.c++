@@ -51,13 +51,11 @@
  _______________________________________________________________________
  */
 
+#include <machine.h>
 #include <Inventor/SoType.h>
 #include <Inventor/SoLists.h>
 #include <Inventor/errors/SoDebugError.h>
-#include <dlfcn.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include <algorithm>
 
 SoINTERNAL struct SoTypeData {
@@ -193,17 +191,6 @@ SoType::fromName(const SbName & name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-#ifdef DEBUG
-	char *longestName = "/usr/lib/InventorDSO/.so";
-#endif // DEBUG
-	const char *libDir = "lib";
-	const char *abiName = "";
-	//
-	// XXX Alex -- add additional layer of abstraction on top
- 	// of this to make porting to other platforms easier.
-	//
-#define sgidlopen_version(a,b,c,d) dlopen((a),(b))
-
     const char *nameChars = name.getString();
     SbString nameString(nameChars);  // For easier manipulation...
 
@@ -217,72 +204,9 @@ SoType::fromName(const SbName & name)
         notFound = (b == -1);
     }
     if (notFound) {
-	// Do the DSO thing.
-	// First, try the regular name, which will use the normal rld
-	// search path (LD_LIBRARY_PATH followed by the system directories:
-	//   /usr/lib or /usr/lib32 or /usr/lib64 and /lib   ).
-	// If that fails, try:
-	// Current directory (if not root)
-	// /usr/local/lib/InventorDSO (if not root)  (or 32, 64)
-	// /usr/lib/InventorDSO (always)  (or 32, 64)
 
-	SbBool isRoot = ((geteuid()!=getuid()) || (getegid()!=getgid())
-			 || (getuid() == 0));
-
-	void *dsoHandle = NULL;
-       
-	// Temporary storage
-	char DSOFile[101], dummyFunc[101];
-#ifdef DEBUG
-	if (name.getLength()+strlen(longestName) > 100) {
-	    SoDebugError::post("SoType::fromName",
-			       "Type name '%s' is too long\n", nameChars);
-	    return SoType::badType();
-	}
-	// Note: don't have to check dummyFunc, since "/usr/local..."
-	// string is longer than the initClass__... string.
-#endif
-
-	sprintf(DSOFile, "%s.so", nameChars);
-	dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
-
-	if (dsoHandle == NULL && !isRoot) {
-	    sprintf(DSOFile, "./%s.so", nameChars);
-	    dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
-	}	    
-	if (dsoHandle == NULL && !isRoot) {
-	    sprintf(DSOFile, "/usr/local/%s/InventorDSO/%s.so", 
-                                 libDir, nameChars);
-	    dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
-	}	    
-	if (dsoHandle == NULL) {
-	    sprintf(DSOFile,"/usr/%s/InventorDSO/%s.so", libDir, nameChars);
-	    dsoHandle = sgidlopen_version(DSOFile, RTLD_LAZY, "sgi3.0", 0);
-	}	    
-
-	if (dsoHandle  == NULL)
-	    return SoType::badType();
-
-#if ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1))
-#define DUMMY_FUNC "_ZN%d%s9initClassEv"
-#else
-#define DUMMY_FUNC "initClass__%d%s%s"
-#endif
-
-	sprintf(dummyFunc, DUMMY_FUNC, name.getLength(),
-		nameChars, abiName);
-
-	void (*dsoFunc)();
-	dsoFunc = (void (*)())dlsym(dsoHandle, dummyFunc);
-	if (dsoFunc == NULL) {
-#ifdef DEBUG
-	    SoDebugError::post("SoType::fromName",
-	       "Could not find %s::initClass in %s.",
-			       nameChars, DSOFile);
-#endif	    
-	    b = 0;
-	} else {
-	    (*dsoFunc)();  // Call initClass
+         if (!dsoInitClass(nameString))
+             return SoType::badType();
 
 	    // Now, try to find the type again.
          b = find(name);
@@ -293,7 +217,6 @@ SoType::fromName(const SbName & name)
 			nameChars);
 #endif	    
              b = 0;
-	    }
 	}
     }
 
@@ -497,4 +420,59 @@ SoType::createInstance() const
         return (*data.createMethod)();
 
     return NULL;
+}
+#ifdef SB_OS_WIN
+#   include <windows.h>
+#   define SB_DLOPEN(a,b)   LoadLibraryA(a)
+#   define SB_DLSYM(a,b)    GetProcAddress(a, b)
+#   define SB_DLHANDLE      HINSTANCE
+#else
+#   include <dlfcn.h>
+#   define SB_DLOPEN(a,b)   dlopen(a,b)
+#   define SB_DLSYM(a,b)    dlsym(a, b)
+#   define SB_DLHANDLE      void*
+#endif
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Given a name, try to load a dynamic library.
+//
+// Use: internal, static
+bool
+SoType::dsoInitClass(const SbString & name)
+//
+////////////////////////////////////////////////////////////////////////
+{
+#if defined(SB_OS_WIN)
+    SbString dsoFilename = name + ".dll";
+#elif defined(SB_OS_MACX)
+    SbString dsoFilename = "lib" + name + ".dylib";
+#else
+    SbString dsoFilename = "lib" + name + ".so";
+#endif
+    SB_DLHANDLE handle = SB_DLOPEN(dsoFilename.getString(), RTLD_LAZY | RTLD_GLOBAL);
+    if (handle==NULL)
+        return false;
+    char dsoSymbol[101];
+#ifdef SB_OS_WIN
+    sprintf(dsoSymbol, "?initClass@%s@@SAXXZ", name.getString());
+#else
+#if defined(__GNUC__) && __GNUC__ >= 3
+    sprintf(dsoSymbol, "_ZN%d%s9initClassEv", (int)name.getLength(), name.getString());
+#   else
+    sprintf(dsoSymbol, "initClass__%d%s", (int)name.getLength(), name.getString());
+#   endif
+#endif
+    void (*dsoFunc)() = (void (*)())SB_DLSYM(handle, dsoSymbol);
+    if (dsoFunc==NULL) {
+#ifdef DEBUG
+            SoDebugError::post("SoType::fromName",
+                               "Could not find %s::initClass in %s.",
+                               name.getString(), dsoFilename.getString());
+#endif
+        return false;
+    }
+    (*dsoFunc)();  // Call initClass
+    return true;
 }
