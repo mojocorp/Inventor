@@ -41,7 +41,7 @@
 #include <X11/IntrinsicP.h>
 #include <X11/StringDefs.h>
 #include <GL/glx.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Xm/PrimitiveP.h>
 #include "SoGLwDrawAP.h"
 

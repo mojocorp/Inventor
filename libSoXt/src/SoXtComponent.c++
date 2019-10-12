@@ -71,7 +71,7 @@
 #include <Xm/MessageB.h>
 #include <Xm/Protocols.h>
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 
 static char *helpDialogTitle = "Help Card Error Dialog";

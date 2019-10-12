@@ -67,7 +67,7 @@
 #include <Xm/Label.h>
 #include <Xm/LabelG.h>
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 
 /*

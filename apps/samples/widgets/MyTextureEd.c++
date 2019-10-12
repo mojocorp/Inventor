@@ -85,7 +85,7 @@
 #include <Inventor/Xt/SoXt.h>
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
 #include <Inventor/errors/SoDebugError.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 #include "SoGLwMDrawA.h"
 #include "_SoXtColorWheel.h"

@@ -52,7 +52,7 @@
  */
 
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 #include <Inventor/SoPath.h>
 #include <Inventor/SoPickedPoint.h>

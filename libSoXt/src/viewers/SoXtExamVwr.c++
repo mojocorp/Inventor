@@ -80,7 +80,7 @@
 #include <Inventor/Xt/SoXtIcons.h>
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
 #include "SoXtBitmapButton.h"
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 
 #ifdef DEBUG

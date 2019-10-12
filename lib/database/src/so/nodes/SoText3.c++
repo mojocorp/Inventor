@@ -52,7 +52,7 @@
  _______________________________________________________________________
  */
 #include <machine.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <GL/glu.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoPrimitiveVertex.h>

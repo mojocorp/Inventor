@@ -73,7 +73,7 @@
 #include <Inventor/Xt/SoXtCursors.h>
 #include <Inventor/Xt/viewers/SoXtWalkViewer.h>
 #include <Inventor/Xt/SoXtResource.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 
 /*

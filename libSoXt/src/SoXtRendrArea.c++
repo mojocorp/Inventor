@@ -64,7 +64,7 @@
 #include <Inventor/Xt/SoXtRenderArea.h>
 #include <Inventor/Xt/devices/SoXtKeyboard.h>
 #include <Inventor/Xt/devices/SoXtMouse.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <GL/glx.h>
 #include <stdlib.h>
 

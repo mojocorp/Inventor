@@ -93,7 +93,7 @@
 #include "_SoXtColorEditor.h"
 #include "_SoXtColorSlider.h"
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/errors/SoDebugError.h>
 
 /*
