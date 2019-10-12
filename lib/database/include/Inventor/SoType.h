@@ -168,6 +168,8 @@ class SoType {
 
     static int find(const SbName & name);
 
+    static bool dsoInitClass(const SbString & name);
+
     // array of SoTypeData
     static std::vector<SoTypeData> typeData;
 
