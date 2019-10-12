@@ -175,7 +175,7 @@ class SoOutlineFontCache : public SoCache
     // given character.  This is used for both rendering and
     // generating primitives, with just different callback routines
     // registered.
-    void	generateFrontChar(const char* c, gluTESSELATOR *tobj);
+    void	generateFrontChar(const char* c, GLUtesselator *tobj);
     // Ditto, for sides of characters:
     void	generateSideChar(const char* c, SideCB callbackFunc);
 
@@ -186,7 +186,7 @@ class SoOutlineFontCache : public SoCache
     // Returns TRUE if this font cache has a display list for the
     // given UCS character.  It will try to build a display list, if it
     // can.
-    SbBool	hasFrontDisplayList(const char* c, gluTESSELATOR *tobj);
+    SbBool	hasFrontDisplayList(const char* c, GLUtesselator *tobj);
     SbBool	hasSideDisplayList(const char* c, SideCB callbackFunc);
 
     // Renders an entire line by using the GL callList() function.
@@ -194,7 +194,7 @@ class SoOutlineFontCache : public SoCache
     void	callSideLists(int line);
 
     // Renders a  UCS string in cases where display lists can't be buit.
-    void	renderFront(int line,   gluTESSELATOR *tobj);
+    void	renderFront(int line,   GLUtesselator *tobj);
     void	renderSide(int line,  SideCB callbackFunc);
 
     // Callback registered with GLU used to detect tesselation errors.
@@ -484,7 +484,7 @@ SoText3::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static gluTESSELATOR *tobj = NULL;
+    static GLUtesselator *tobj = NULL;
 
     // First see if the object is visible and should be rendered now
     if (! shouldGLRender(action))
@@ -1033,7 +1033,7 @@ SoText3::getCharacterOffset(int line, int whichChar)
 
 void
 SoText3::renderFront(SoGLRenderAction *, int line,
-		     gluTESSELATOR *tobj)
+             GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1142,7 +1142,7 @@ SoText3::generateFront(int line)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static gluTESSELATOR *tobj = NULL;
+    static GLUtesselator *tobj = NULL;
 
     const char *chars = myFont->getUCSString(line);
 
@@ -1950,7 +1950,7 @@ SoOutlineFontCache::getCharOffset(const char* c)
 
 void
 SoOutlineFontCache::generateFrontChar(const char* c,
-				      gluTESSELATOR *tobj)
+                      GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1959,12 +1959,8 @@ SoOutlineFontCache::generateFrontChar(const char* c,
     GLdouble v[3];
 
     tesselationError = FALSE;
-#ifdef GLU_VERSION_1_2
     gluTessBeginPolygon(tobj, NULL);
     gluTessBeginContour(tobj);
-#else
-    gluBeginPolygon(tobj);
-#endif
     
     // Get outline for character
     SoFontOutline *outline = getOutline(c);
@@ -1973,12 +1969,8 @@ SoOutlineFontCache::generateFrontChar(const char* c,
 
 	// It would be nice if the font manager told us the type of
 	// each outline...
-#ifdef GLU_VERSION_1_2
 	gluTessEndContour(tobj);
 	gluTessBeginContour(tobj);
-#else
-	gluNextContour(tobj, (GLenum)GLU_UNKNOWN);
-#endif
 
 	for (int j = 0; j < outline->getNumVerts(i); j++) {
 	    SbVec2f &t = outline->getVertex(i,j);
@@ -1992,12 +1984,8 @@ SoOutlineFontCache::generateFrontChar(const char* c,
 	    gluTessVertex(tobj, v, &t);
 	}
     }
-#ifdef GLU_VERSION_1_2
     gluTessEndContour(tobj);
     gluTessEndPolygon(tobj);
-#else
-    gluEndPolygon(tobj);
-#endif
 
     // If there was an error tesselating the character, just generate
     // a bounding box for the character:
@@ -2010,24 +1998,17 @@ SoOutlineFontCache::generateFrontChar(const char* c,
 	    boxVerts[1].setValue(boxVerts[2][0], boxVerts[0][1]);
 	    boxVerts[3].setValue(boxVerts[0][0], boxVerts[2][1]);
 
-#ifdef GLU_VERSION_1_2
 	    gluTessBeginPolygon(tobj, NULL);
 	    gluTessBeginContour(tobj);
-#else
-	    gluBeginPolygon(tobj);
-#endif
+
 	    for (i = 0; i < 4; i++) {
 		v[0] = boxVerts[i][0];
 		v[1] = boxVerts[i][1];
 		v[2] = 0.0;
 		gluTessVertex(tobj, v, &boxVerts[i]);
 	    }
-#ifdef GLU_VERSION_1_2
 	    gluTessEndContour(tobj);
 	    gluTessEndPolygon(tobj);
-#else
-	    gluEndPolygon(tobj);
-#endif
 	}
     }
 }
@@ -2095,7 +2076,7 @@ SoOutlineFontCache::setupToRenderSide(SoState *state, SbBool willTexture)
 
 SbBool
 SoOutlineFontCache::hasFrontDisplayList(const char* c,
-					gluTESSELATOR *tobj)
+                    GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -2205,7 +2186,7 @@ SoOutlineFontCache::callSideLists(int line)
 
 void
 SoOutlineFontCache::renderFront(int line,
-				gluTESSELATOR *tobj)
+                GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {

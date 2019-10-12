@@ -5,33 +5,13 @@ find_package(Motif REQUIRED)
 # On Mac OS X, GLX is provided as a separate OpenGL implementation, different
 # from the standard OpenGL framework which provides support for GLUT and native
 # Mac OS X applications.
-if (X11_FOUND)
-        if (APPLE)
-                find_path (X11_GL_INCLUDE_PATH GL/glx.h ${X11_INC_SEARCH_PATH})
-                if (NOT X11_GL_INCLUDE_PATH)
-                        message (ERROR "Could not find GL/glx.h")
-                        set (X11_FOUND FALSE)
-                endif (NOT X11_GL_INCLUDE_PATH)
-                set (X11_INCLUDE_DIR ${X11_INCLUDE_DIR} ${X11_GL_INCLUDE_PATH})
-
-                find_library (X11_GL_LIB GL ${X11_LIB_SEARCH_PATH})
-                if (NOT X11_GL_LIB)
-                        message (ERROR "Could not find libGL.dylib")
-                        set (X11_FOUND FALSE)
-                endif (NOT X11_GL_LIB)
-
-                find_library (X11_GLU_LIB GLU ${X11_LIB_SEARCH_PATH})
-                if (NOT X11_GLU_LIB)
-                        message (WARNING "Could not find libGLU.dylib")
-                        set (X11_FOUND FALSE)
-                endif (NOT X11_GLU_LIB)
-        else ()
-                set (X11_INCLUDE_DIR ${X11_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR})
-                set (X11_GL_LIB ${OPENGL_gl_LIBRARY})
-                set (X11_GLU_LIB ${OPENGL_glu_LIBRARY})
-        endif ()
-        include_directories (${X11_INCLUDE_DIR})
-endif (X11_FOUND)
+if (APPLE AND X11_FOUND)
+    find_path (X11_GL_INCLUDE_PATH GL/gl.h ${X11_INC_SEARCH_PATH})
+    if (NOT X11_GL_INCLUDE_PATH)
+        message (ERROR "Could not find GL/gl.h")
+    endif (NOT X11_GL_INCLUDE_PATH)
+    include_directories(${X11_GL_INCLUDE_PATH})
+endif ()
 
 set(PUBLIC_HEADERS
     include/Inventor/Xt/SoXt.h
@@ -152,8 +132,8 @@ set(SOXT_SOURCES
 include_directories(src/viewers)
 
 add_library (InventorXt SHARED ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOXT_SOURCES})
-target_link_libraries(InventorXt PUBLIC Inventor ${OPENGL_LIBRARY} ${MOTIF_LIBRARIES} ${X11_LIBRARIES} ${X11_Xt_LIB} ${X11_Xi_LIB} ${X11_GL_LIB})
-target_include_directories (InventorXt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
+target_link_libraries(InventorXt PUBLIC Inventor OpenGL::GL ${MOTIF_LIBRARIES} ${X11_LIBRARIES} ${X11_Xt_LIB} ${X11_Xi_LIB} ${X11_GL_LIB} PRIVATE GLU)
+target_include_directories (InventorXt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${MOTIF_INCLUDE_DIR})
 
 install(TARGETS InventorXt CONFIGURATIONS Debug DESTINATION lib/InventorDebug)
 install(TARGETS InventorXt CONFIGURATIONS Release DESTINATION lib)

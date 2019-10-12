@@ -36,6 +36,7 @@
 #ifndef __glubufpool_h_
 #define __glubufpool_h_
 
+#include <assert.h>
 #include "gluos.h"
 #include "myassert.h"
 #include "mystdlib.h"
