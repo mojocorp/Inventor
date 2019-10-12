@@ -26,14 +26,22 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/SbBasic.h
     database/include/Inventor/SbBox.h
     database/include/Inventor/SbColor.h
+    database/include/Inventor/SbCylinder.h
     database/include/Inventor/SbDict.h
     database/include/Inventor/SbFile.h
+    database/include/Inventor/SbLine.h
     database/include/Inventor/SbLinear.h
+    database/include/Inventor/SbMatrix.h
     database/include/Inventor/SbName.h
+    database/include/Inventor/SbPlane.h
     database/include/Inventor/SbPList.h
+    database/include/Inventor/SbRotation.h
     database/include/Inventor/SbString.h
+    database/include/Inventor/SbSphere.h
     database/include/Inventor/SbTime.h
+    database/include/Inventor/SbVec.h
     database/include/Inventor/SbViewportRegion.h
+    database/include/Inventor/SbViewVolume.h
     database/include/Inventor/So.h
     database/include/Inventor/SoDB.h
     database/include/Inventor/SoInput.h

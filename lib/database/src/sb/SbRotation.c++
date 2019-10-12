@@ -53,7 +53,9 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
+#include <cmath>
+#include <Inventor/SbRotation.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/errors/SoDebugError.h>
 
 // amount squared to figure if two floats are equal
@@ -98,7 +100,7 @@ SbRotation::getValue(SbVec3f &axis, float &radians) const
 
     if ((len = q.length()) > 0.00001) {
 	axis	= q * (1.0 / len);
-	radians	= 2.0 * acosf(quat[3]);
+    radians	= 2.0 * std::acos(quat[3]);
     }
 
     else {
@@ -287,7 +289,7 @@ SbRotation::setValue(const SbMatrix &m)
     }
     if (m[0][0]+m[1][1]+m[2][2] > m[i][i]) {
 	// Compute w first:
-	quat[3] = sqrt(m[0][0]+m[1][1]+m[2][2]+m[3][3])/2.0;
+    quat[3] = std::sqrt(m[0][0]+m[1][1]+m[2][2]+m[3][3])/2.0;
 
 	// And compute other values:
 	quat[0] = (m[1][2]-m[2][1])/(4*quat[3]);
@@ -299,7 +301,7 @@ SbRotation::setValue(const SbMatrix &m)
 	j = (i+1)%3; k = (i+2)%3;
     
 	// Compute first value:
-	quat[i] = sqrt(m[i][i]-m[j][j]-m[k][k]+m[3][3])/2.0;
+    quat[i] = std::sqrt(m[i][i]-m[j][j]-m[k][k]+m[3][3])/2.0;
        
 	// And the others:
 	quat[j] = (m[i][j]+m[j][i])/(4*quat[i]);
