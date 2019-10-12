@@ -56,7 +56,7 @@
 #ifndef  _SO_FACE_SET_
 #define  _SO_FACE_SET_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/nodes/SoNonIndexedShape.h>
 

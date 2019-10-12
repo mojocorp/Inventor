@@ -68,7 +68,7 @@
 #ifndef  _SO_TEXTURE_COORDINATE_ELEMENT
 #define  _SO_TEXTURE_COORDINATE_ELEMENT
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/elements/SoReplacedElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

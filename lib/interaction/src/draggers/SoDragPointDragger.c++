@@ -59,7 +59,6 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/SoPickedPoint.h>
 

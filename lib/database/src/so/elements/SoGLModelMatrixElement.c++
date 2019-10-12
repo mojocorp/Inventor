@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <Inventor/SbRotation.h>
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoGLModelMatrixElement.h>
 #include <Inventor/elements/SoGLViewingMatrixElement.h>

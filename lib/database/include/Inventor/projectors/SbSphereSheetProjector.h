@@ -69,6 +69,7 @@
 #ifndef _SB_SPHERE_SHEET_PROJECTOR_
 #define _SB_SPHERE_SHEET_PROJECTOR_
 
+#include <Inventor/SbPlane.h>
 #include <Inventor/projectors/SbSphereProjector.h>
 
 class SbSphereSheetProjector : public SbSphereProjector

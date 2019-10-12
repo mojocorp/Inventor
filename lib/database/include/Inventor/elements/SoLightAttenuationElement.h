@@ -56,7 +56,7 @@
 #ifndef  _SO_LIGHT_ATTENUATION_ELEMENT
 #define  _SO_LIGHT_ATTENUATION_ELEMENT
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/elements/SoReplacedElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

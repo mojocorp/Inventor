@@ -51,7 +51,10 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/projectors/SbCylinderPlaneProjector.h>
+#include <Inventor/SbRotation.h>
+#include <Inventor/SbCylinder.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <stdio.h>
 
@@ -207,7 +210,7 @@ SbCylinderPlaneProjector::getRotation(
 	if ((cosAngle > 1.0) || (cosAngle < -1.0))
 	    return SbRotation::identity();
 	    
-	float angle = acosf(cosAngle);
+    float angle = std::acos(cosAngle);
 
 	// This will either be the same as the cylinder's
 	// axis, or the same but with direction reversed

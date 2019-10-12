@@ -57,7 +57,6 @@
 #define  _SO_LOCATION2_EVENT_
 
 #include <Inventor/SbBasic.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/events/SoSubEvent.h>
 
 

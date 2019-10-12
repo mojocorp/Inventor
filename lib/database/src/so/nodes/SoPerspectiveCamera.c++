@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <Inventor/SbSphere.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 #include <math.h>
 

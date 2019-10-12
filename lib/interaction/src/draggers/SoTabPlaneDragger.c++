@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
+#include <cmath>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/SoPickedPoint.h>

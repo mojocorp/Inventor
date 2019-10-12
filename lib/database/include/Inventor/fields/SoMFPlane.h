@@ -56,6 +56,7 @@
 #ifndef  _SO_MF_PLANE_
 #define  _SO_MF_PLANE_
 
+#include <Inventor/SbPlane.h>
 #include <Inventor/fields/SoSubField.h>
 
 //////////////////////////////////////////////////////////////////////////////

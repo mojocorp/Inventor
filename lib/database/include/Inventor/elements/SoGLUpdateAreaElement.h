@@ -56,7 +56,7 @@
 #ifndef  _SO_UPDATE_AREA_ELEMENT
 #define  _SO_UPDATE_AREA_ELEMENT
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/elements/SoSubElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

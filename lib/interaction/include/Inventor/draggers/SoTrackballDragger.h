@@ -83,7 +83,6 @@
 #ifndef  _SO_TRACKBALL_DRAGGER_
 #define  _SO_TRACKBALL_DRAGGER_
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/SbTime.h>
 #include <Inventor/sensors/SoSensor.h>
 #include <Inventor/draggers/SoDragger.h>

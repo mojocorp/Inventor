@@ -58,6 +58,7 @@
 #ifndef _SB_PLANE_PROJECTOR_
 #define _SB_PLANE_PROJECTOR_
 
+#include <Inventor/SbPlane.h>
 #include <Inventor/projectors/SbProjector.h>
 
 class SbPlaneProjector : public SbProjector

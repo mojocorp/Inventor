@@ -57,7 +57,6 @@
 #ifndef  _SO_TRANSFORM_MANIP_
 #define  _SO_TRANSFORM_MANIP_
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/sensors/SoFieldSensor.h>

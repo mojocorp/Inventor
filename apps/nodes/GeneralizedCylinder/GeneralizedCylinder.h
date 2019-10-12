@@ -46,6 +46,8 @@
 #ifndef _GENERALIZED_CYLINDER_
 #define _GENERALIZED_CYLINDER_
 
+#include <cmath>
+#include <Inventor/SbRotation.h>
 #include <Inventor/nodekits/SoBaseKit.h>
 #include <Inventor/nodekits/SoSeparatorKit.h>
 #include <Inventor/fields/SoSFShort.h>

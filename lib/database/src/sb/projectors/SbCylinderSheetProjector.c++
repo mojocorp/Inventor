@@ -51,7 +51,9 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/projectors/SbCylinderSheetProjector.h>
+#include <Inventor/SbRotation.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <stdio.h>
 
@@ -274,7 +276,7 @@ SbCylinderSheetProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
     else if (sinHalfAngle > 1.0)
         sinHalfAngle = 1.0;
 
-    float angle = 2.0 * asin(sinHalfAngle);
+    float angle = 2.0 * std::asin(sinHalfAngle);
 
     // This cross product gets flaky when the
     // angle between v1 and v2 gets small -

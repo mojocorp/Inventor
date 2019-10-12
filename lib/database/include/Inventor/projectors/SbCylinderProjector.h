@@ -61,6 +61,7 @@
 #ifndef _SB_CYLINDER_PROJECTOR_
 #define _SB_CYLINDER_PROJECTOR_
 
+#include <Inventor/SbCylinder.h>
 #include <Inventor/projectors/SbProjector.h>
 
 class SbCylinderProjector : public SbProjector

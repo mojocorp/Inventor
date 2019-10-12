@@ -53,8 +53,6 @@
 
 
 #include <stdio.h>
-#include <stdio.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 
 #include <Inventor/manips/SoTransformBoxManip.h>

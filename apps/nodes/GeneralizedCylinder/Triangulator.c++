@@ -39,6 +39,7 @@
 // robust or well-designed (or complete or...).
 //
 
+#include <math.h>
 #include <stdio.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/fields/SoMFInt32.h>

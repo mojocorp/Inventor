@@ -56,7 +56,7 @@
 #ifndef  _SO_VIEW_VOLUME_ELEMENT
 #define  _SO_VIEW_VOLUME_ELEMENT
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbViewVolume.h>
 #include <Inventor/elements/SoReplacedElement.h>
 
 //////////////////////////////////////////////////////////////////////////////

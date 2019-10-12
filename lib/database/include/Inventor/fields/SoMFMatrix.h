@@ -57,7 +57,7 @@
 #define  _SO_MF_MATRIX_
 
 #include <Inventor/fields/SoSubField.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbMatrix.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

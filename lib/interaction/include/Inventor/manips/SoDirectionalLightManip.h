@@ -57,7 +57,6 @@
 #ifndef  _SO_DIRECTIONAL_LIGHT_MANIP_
 #define  _SO_DIRECTIONAL_LIGHT_MANIP_
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
 #include <Inventor/sensors/SoFieldSensor.h>

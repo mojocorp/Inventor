@@ -65,7 +65,6 @@
 
 
 #include <stdio.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/sensors/SoFieldSensor.h>

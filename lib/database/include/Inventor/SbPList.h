@@ -61,7 +61,7 @@
 #define _SB_PLIST_
 
 #include <Inventor/SbBasic.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
