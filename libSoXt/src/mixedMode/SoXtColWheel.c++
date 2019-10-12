@@ -62,7 +62,7 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 /*
  * Defines

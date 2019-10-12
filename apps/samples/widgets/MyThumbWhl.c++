@@ -60,7 +60,7 @@
 #include "SoFloatCallbackList.h"
 #include "MyThumbWheel.h"
 #include "_SoXtUIRegion.h"
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 
 /*

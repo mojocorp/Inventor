@@ -8,9 +8,9 @@ find_package(Iconv REQUIRED)
 # from the standard OpenGL framework which provides support for GLUT and native
 # Mac OS X applications.
 if (APPLE)
-    find_path (X11_GL_INCLUDE_PATH GL/gl.h ${X11_INC_SEARCH_PATH})
+    find_path (X11_GL_INCLUDE_PATH GL/glx.h ${X11_INC_SEARCH_PATH})
     if (NOT X11_GL_INCLUDE_PATH)
-        message (ERROR "Could not find GL/gl.h")
+        message (ERROR "Could not find GL/glx.h")
     endif (NOT X11_GL_INCLUDE_PATH)
     include_directories (${X11_INCLUDE_DIR} ${X11_GL_INCLUDE_PATH})
 
@@ -233,6 +233,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/misc/SoCallbackList.h
     database/include/Inventor/misc/SoChildList.h
     database/include/Inventor/misc/SoCompactPathList.h
+    database/include/Inventor/misc/SoGL.h
     database/include/Inventor/misc/SoNormalGenerator.h
     database/include/Inventor/misc/SoNotification.h
     database/include/Inventor/misc/SoState.h

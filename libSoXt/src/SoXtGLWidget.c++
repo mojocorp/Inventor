@@ -63,7 +63,7 @@
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
 #include <Xm/Form.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 
 /*

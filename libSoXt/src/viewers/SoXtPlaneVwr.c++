@@ -64,7 +64,7 @@
 #include <Inventor/Xt/SoXtIcons.h>
 #include <Inventor/Xt/SoXtResource.h>
 #include "SoXtBitmapButton.h"
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 /*
  *  Defines

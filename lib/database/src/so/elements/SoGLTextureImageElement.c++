@@ -52,7 +52,7 @@
  */
 
 #include <GL/glu.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoGLTextureImageElement.h>

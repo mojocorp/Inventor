@@ -43,7 +43,7 @@
  *---------------------------------------------------------*/
 
 #include <GL/glx.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <GL/glu.h>
 #include <stdio.h>
 #include <unistd.h>

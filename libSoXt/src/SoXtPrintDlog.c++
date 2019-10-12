@@ -86,7 +86,7 @@
 #include <Xm/SeparatoG.h>
 #include <Xm/Text.h>
 #include <Xm/ToggleB.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 
 // Definitions for PostScript Output

@@ -44,7 +44,7 @@
  *  through a Callback node.
  *----------------------------------------------------------*/
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/Xt/SoXt.h>
 #include <Inventor/Xt/SoXtRenderArea.h>

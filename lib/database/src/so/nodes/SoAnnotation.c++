@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/nodes/SoAnnotation.h>

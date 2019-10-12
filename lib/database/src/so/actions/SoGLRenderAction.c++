@@ -52,7 +52,7 @@
  */
 
 #include <float.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>

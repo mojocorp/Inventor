@@ -6,9 +6,9 @@ find_package(Motif REQUIRED)
 # from the standard OpenGL framework which provides support for GLUT and native
 # Mac OS X applications.
 if (APPLE AND X11_FOUND)
-    find_path (X11_GL_INCLUDE_PATH GL/gl.h ${X11_INC_SEARCH_PATH})
+    find_path (X11_GL_INCLUDE_PATH GL/glx.h ${X11_INC_SEARCH_PATH})
     if (NOT X11_GL_INCLUDE_PATH)
-        message (ERROR "Could not find GL/gl.h")
+        message (ERROR "Could not find GL/glx.h")
     endif (NOT X11_GL_INCLUDE_PATH)
     include_directories(${X11_GL_INCLUDE_PATH})
 endif ()

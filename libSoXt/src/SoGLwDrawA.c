@@ -37,7 +37,7 @@
 #include <X11/IntrinsicP.h>
 #include <X11/StringDefs.h>
 #include <GL/glx.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #ifdef __GLX_MOTIF
 #include <Xm/PrimitiveP.h>
 #include "SoGLwMDrawAP.h"

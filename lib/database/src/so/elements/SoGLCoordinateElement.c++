@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoGLCoordinateElement.h>
 #include <Inventor/errors/SoDebugError.h>
 

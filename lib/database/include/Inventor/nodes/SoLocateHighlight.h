@@ -63,7 +63,7 @@
 #ifndef  _SO_LOCATE_HIGHLIGHT_
 #define  _SO_LOCATE_HIGHLIGHT_
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoSeparator.h>

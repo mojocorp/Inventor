@@ -38,7 +38,7 @@
 #define _SoGLwDrawA_h
 
 #include <GL/glx.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 /****************************************************************
  *
