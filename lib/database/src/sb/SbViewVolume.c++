@@ -51,8 +51,10 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbViewVolume.h>
 #include <Inventor/SbBox.h>
+#include <Inventor/SbRotation.h>
+#include <Inventor/SbLine.h>
 #include <math.h> // for M_PI_2
 
 ////////////////////////////////////////////

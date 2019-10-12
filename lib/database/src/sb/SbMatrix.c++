@@ -54,7 +54,9 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbMatrix.h>
+#include <Inventor/SbRotation.h>
+#include <Inventor/SbLine.h>
 
 #include <algorithm>
 #include <cmath>
@@ -1224,6 +1226,18 @@ SbMatrix::setTransform(const SbVec3f &translation,
 
 #undef TRANSLATE
 #undef ROTATE
+}
+
+void
+SbMatrix::setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s)
+{
+    setTransform(t, r, s, SbRotation(0,0,0,1), SbVec3f(0,0,0));
+}
+
+void
+SbMatrix::setTransform(const SbVec3f &t, const SbRotation &r, const SbVec3f &s, const SbRotation &so)
+{
+    setTransform(t, r, s, so, SbVec3f(0,0,0));
 }
 
 //

@@ -51,8 +51,9 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/SbBox.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbLine.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -281,14 +282,14 @@ SbLine::intersect(float angle, const SbBox3f &box) const
 	// cone will be largest).  The amount of fuzz at this point will
 	// be the minimum we can use.  Expand the box by that amount and
 	// do an intersection.
-	double tanA = tan(angle);
+    double tanA = std::tan(angle);
 	for(i = 0; i < 8; i++) {
 	    SbVec3f point(i & 01 ? min[0] : max[0],
 			  i & 02 ? min[1] : max[1],
 			  i & 04 ? min[2] : max[2]);
 	    // how far is point from line origin??
 	    SbVec3f	diff(point - getPosition());
-	    double	thisFuzz = sqrt(diff.dot(diff)) * tanA;
+        double	thisFuzz = std::sqrt(diff.dot(diff)) * tanA;
 
 	    if (thisFuzz > fuzz)
 		fuzz = thisFuzz;

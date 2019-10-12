@@ -52,7 +52,8 @@
  */
 
 #include <cmath>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbCylinder.h>
+#include <Inventor/SbRotation.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

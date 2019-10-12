@@ -56,7 +56,8 @@
 
 #include <cmath>
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
+#include <Inventor/SbPlane.h>
 
 // amount squared to figure if two floats are equal
 // (used for Vec2f and Vec3f right now)
