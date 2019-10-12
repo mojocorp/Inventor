@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <Inventor/SbRotation.h>
 #include <Inventor/elements/SoLocalBBoxMatrixElement.h>
 #include <Inventor/errors/SoDebugError.h>
 

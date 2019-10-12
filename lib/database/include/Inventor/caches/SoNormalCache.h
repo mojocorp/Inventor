@@ -58,7 +58,7 @@
 #ifndef  _SO_NORMAL_CACHE
 #define  _SO_NORMAL_CACHE
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/caches/SoCache.h>
 
 ////////////////////////////////////////////////////////////////////////

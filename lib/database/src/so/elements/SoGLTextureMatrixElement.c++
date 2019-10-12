@@ -51,6 +51,8 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
+#include <Inventor/SbRotation.h>
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoGLTextureMatrixElement.h>
 

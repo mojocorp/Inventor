@@ -56,7 +56,7 @@
 #ifndef  _SO_CUBE_
 #define  _SO_CUBE_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 

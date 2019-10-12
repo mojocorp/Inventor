@@ -57,6 +57,7 @@
 #define  _SO_CALLBACK_ACTION_
 
 #include <Inventor/SbBox.h>
+#include <Inventor/SbViewVolume.h>
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/nodes/SoComplexity.h>
 #include <Inventor/nodes/SoDrawStyle.h>

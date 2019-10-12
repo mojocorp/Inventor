@@ -70,7 +70,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 
 class SbViewportRegion {
   public:

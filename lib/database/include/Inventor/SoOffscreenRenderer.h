@@ -63,7 +63,7 @@
 #include <GL/glx.h>
 #include <Inventor/SbColor.h>
 #include <Inventor/SbViewportRegion.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <X11/Xlib.h>
 
 class SoNode;

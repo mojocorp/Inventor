@@ -41,6 +41,7 @@
  *  Source file for "Ticker" engine.
  *------------------------------------------------------------*/
 
+#include <cmath>
 #include <Inventor/SoDB.h>
 #include "Ticker.h"
 

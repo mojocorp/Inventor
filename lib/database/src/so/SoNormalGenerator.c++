@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-
+#include <cmath>
 #include <Inventor/SbBox.h>
 #include <Inventor/misc/SoNormalGenerator.h>
 
@@ -254,7 +254,7 @@ hash(const SbVec3f &vertex, const SbVec3f &scale, const SbVec3f &base,
 ////////////////////////////////////////////////////////////////////////
 {
     int32_t result;
-    result = (int32_t) floor((vertex+base).dot(scale));
+    result = (int32_t) std::floor((vertex+base).dot(scale));
 
     if (result < 0) return 0;
     if (result >= numPoints) return numPoints-1;
@@ -282,7 +282,7 @@ SoNormalGenerator::generate(float creaseAngle)
 
     SbBox3f	box;
     SbVec3f	hashScale, sum, base;
-    float	tolerance, cosCreaseAngle = cos(creaseAngle);
+    float	tolerance, cosCreaseAngle = std::cos(creaseAngle);
     int32_t	i, j, hashValue, lowHashValue, highHashValue, hv;
     int32_t	*hashTable, *hashNext, *indirect;
     SbBool	found;

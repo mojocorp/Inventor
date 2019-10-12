@@ -53,6 +53,7 @@
 
 #include <cmath>
 #include <Inventor/projectors/SbCylinderSectionProjector.h>
+#include <Inventor/SbRotation.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <stdio.h>
 

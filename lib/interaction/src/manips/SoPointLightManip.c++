@@ -53,6 +53,7 @@
 
 
 #include <stdio.h>
+#include <Inventor/SbRotation.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoGroup.h>

@@ -53,6 +53,7 @@
 
 
 #include <stdio.h>
+#include <Inventor/SbRotation.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/sensors/SoFieldSensor.h>

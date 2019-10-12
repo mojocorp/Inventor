@@ -77,7 +77,6 @@
 #ifndef  _SO_TAB_PLANE_DRAGGER_
 #define  _SO_TAB_PLANE_DRAGGER_
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/sensors/SoSensor.h>
 #include <Inventor/projectors/SbLineProjector.h>
 #include <Inventor/projectors/SbPlaneProjector.h>

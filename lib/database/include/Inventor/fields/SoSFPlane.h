@@ -57,7 +57,7 @@
 #define  _SO_SF_PLANE_
 
 #include <Inventor/fields/SoSubField.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbPlane.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

@@ -37,7 +37,7 @@
 #ifndef _SO_CALC_EXPR_
 #define _SO_CALC_EXPR_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/SbPList.h>
 
 #define Expr SoCalcExpr 

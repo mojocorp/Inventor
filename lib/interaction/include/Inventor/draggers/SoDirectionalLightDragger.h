@@ -105,7 +105,6 @@
 #ifndef  _SO_DIRECTIONAL_LIGHT_DRAGGER_
 #define  _SO_DIRECTIONAL_LIGHT_DRAGGER_
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/fields/SoSFRotation.h>

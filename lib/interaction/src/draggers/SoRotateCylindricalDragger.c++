@@ -53,7 +53,6 @@
 
 
 #include <stdio.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 #include <Inventor/SoInput.h>

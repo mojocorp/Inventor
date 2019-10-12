@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/SoDB.h>
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/engines/SoCalculator.h>

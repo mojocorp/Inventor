@@ -56,7 +56,7 @@
 #ifndef  _SO_INDEXED_NURBS_SURFACE_
 #define  _SO_INDEXED_NURBS_SURFACE_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbBox.h>
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/fields/SoMFInt32.h>

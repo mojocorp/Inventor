@@ -56,7 +56,7 @@
 #ifndef  _SO_COORDINATE_ELEMENT
 #define  _SO_COORDINATE_ELEMENT
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/elements/SoReplacedElement.h>
 
 

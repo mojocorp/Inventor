@@ -58,6 +58,7 @@
 #ifndef _SB_SPHERE_PROJECTOR_
 #define _SB_SPHERE_PROJECTOR_
 
+#include <Inventor/SbSphere.h>
 #include <Inventor/projectors/SbProjector.h>
 
 class SbSphereProjector : public SbProjector

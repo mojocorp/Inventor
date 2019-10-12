@@ -54,7 +54,6 @@
 #include <climits>
 #include <Inventor/misc/SoGL.h>
 #include <GL/glu.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/SoPrimitiveVertex.h>

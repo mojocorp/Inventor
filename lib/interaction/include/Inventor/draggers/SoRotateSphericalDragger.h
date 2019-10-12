@@ -81,7 +81,7 @@
 #ifndef  _SO_ROTATE_SPHERICAL_DRAGGER_
 #define  _SO_ROTATE_SPHERICAL_DRAGGER_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/sensors/SoSensor.h>

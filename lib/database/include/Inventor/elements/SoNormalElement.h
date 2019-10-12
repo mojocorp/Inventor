@@ -58,7 +58,7 @@
 
 
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/elements/SoReplacedElement.h>
 #include <Inventor/errors/SoDebugError.h>
 
