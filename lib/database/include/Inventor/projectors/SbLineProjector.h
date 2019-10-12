@@ -57,6 +57,7 @@
 #ifndef _SB_LINE_PROJECTOR_
 #define _SB_LINE_PROJECTOR_
 
+#include <Inventor/SbLine.h>
 #include <Inventor/projectors/SbProjector.h>
 
 class SbLineProjector : public SbProjector

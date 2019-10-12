@@ -53,7 +53,6 @@
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SbTime.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoNode.h>

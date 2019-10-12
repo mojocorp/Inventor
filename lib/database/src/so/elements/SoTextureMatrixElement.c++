@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <Inventor/SbRotation.h>
 #include <Inventor/elements/SoTextureMatrixElement.h>
 
 SO_ELEMENT_SOURCE(SoTextureMatrixElement);

@@ -51,7 +51,10 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/projectors/SbSphereSheetProjector.h>
+#include <Inventor/SbLine.h>
+#include <Inventor/SbRotation.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <stdio.h>
 
@@ -302,7 +305,7 @@ SbSphereSheetProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
     else if (t > 1.0)
 	return SbRotation::identity(); // Too much; bag it
 
-    float angle = 2.0 * asin(t);
+    float angle = 2.0 * std::asin(t);
 
     SbVec3f v1(p1 - planePoint);
     SbVec3f v2(p2 - planePoint);

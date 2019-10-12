@@ -57,6 +57,7 @@
 #define  _SO_CAMERA_
 
 #include <Inventor/SbBox.h>
+#include <Inventor/SbViewVolume.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/fields/SoSFFloat.h>

@@ -58,7 +58,6 @@
 
 #include <stdio.h>
 #include <math.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/projectors/SbPlaneProjector.h>

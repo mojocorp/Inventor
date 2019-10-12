@@ -52,7 +52,6 @@
  */
 #include <stdio.h>
 #include <assert.h>
-#include <Inventor/SbLinear.h>
 #include <Inventor/SoOffscreenRenderer.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/actions/SoGLRenderAction.h>

@@ -56,7 +56,7 @@
 #ifndef  _SO_CLIP_PLANE_ELEMENT
 #define  _SO_CLIP_PLANE_ELEMENT
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbPlane.h>
 #include <Inventor/elements/SoAccumulatedElement.h>
 
 #include <vector>

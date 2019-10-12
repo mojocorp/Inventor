@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <Inventor/SbSphere.h>
 #include <Inventor/nodes/SoOrthographicCamera.h>
 
 SO_NODE_SOURCE(SoOrthographicCamera);

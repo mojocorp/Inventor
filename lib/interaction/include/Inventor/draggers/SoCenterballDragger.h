@@ -101,7 +101,7 @@
 #ifndef  _SO_CENTERBALL_DRAGGER_
 #define  _SO_CENTERBALL_DRAGGER_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/sensors/SoSensor.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>

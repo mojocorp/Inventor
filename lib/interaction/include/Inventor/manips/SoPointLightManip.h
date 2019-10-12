@@ -57,7 +57,6 @@
 #ifndef  _SO_POINT_LIGHT_MANIP_
 #define  _SO_POINT_LIGHT_MANIP_
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/nodes/SoPointLight.h>
 #include <Inventor/sensors/SoFieldSensor.h>

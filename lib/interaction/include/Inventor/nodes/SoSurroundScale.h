@@ -56,6 +56,7 @@
 #ifndef  _SO_SURROUND_SCALE_
 #define  _SO_SURROUND_SCALE_
 
+#include <Inventor/SbMatrix.h>
 #include <Inventor/fields/SoFieldData.h>
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/nodes/SoTransformation.h>

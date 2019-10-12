@@ -57,7 +57,7 @@
 #define  _SO_SF_IMAGE_
 
 #include <Inventor/fields/SoSubField.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

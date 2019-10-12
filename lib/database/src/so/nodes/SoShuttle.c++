@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/SoDB.h>
 #include <Inventor/engines/SoElapsedTime.h>
 #include <Inventor/engines/SoCalculator.h>
@@ -246,7 +247,7 @@ SoShuttle::translationSensorCB(void *data, SoSensor *)
     float a = shuttle->calc->a[0];
     float b = shuttle->calc->b[0];
     // invert the expression: alpha = .5 + .5 sin(a*b*2*PI + c)
-    shuttle->calc->c.setValue(asin(2*alpha-1) - a*b*2*M_PI);
+    shuttle->calc->c.setValue(std::asin(2*alpha-1) - a*b*2*M_PI);
 }
 
 ////////////////////////////////////////////////////////////////////////

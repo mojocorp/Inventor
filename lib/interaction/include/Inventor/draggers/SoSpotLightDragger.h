@@ -107,7 +107,6 @@
 #ifndef  _SO_SPOT_LIGHT_DRAGGER_
 #define  _SO_SPOT_LIGHT_DRAGGER_
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/fields/SoSFFloat.h>

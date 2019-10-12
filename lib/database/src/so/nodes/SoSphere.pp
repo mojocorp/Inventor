@@ -56,6 +56,7 @@
 
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/SbBox.h>
+#include <Inventor/SbSphere.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/actions/SoGLRenderAction.h>

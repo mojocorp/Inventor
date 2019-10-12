@@ -83,7 +83,6 @@
 #ifndef  _SO_SCALE_2_DRAGGER_
 #define  _SO_SCALE_2_DRAGGER_
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/sensors/SoSensor.h>

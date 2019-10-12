@@ -53,8 +53,8 @@
  */
 
 #include <stdio.h>
+#include <cmath>
 
-#include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/SoPath.h>

@@ -61,7 +61,8 @@
 #ifndef _SB_PROJECTOR_
 #define _SB_PROJECTOR_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbMatrix.h>
+#include <Inventor/SbViewVolume.h>
 
 class SbProjector
 {

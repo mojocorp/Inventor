@@ -56,7 +56,7 @@
 #ifndef  _SO_PROFILE_
 #define  _SO_PROFILE_
 
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
 #include <Inventor/elements/SoProfileElement.h>
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/fields/SoSFEnum.h>
