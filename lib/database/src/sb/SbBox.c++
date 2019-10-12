@@ -55,9 +55,11 @@
  */
 
 #include <Inventor/SbBox.h>
+#include <Inventor/SbMatrix.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <limits.h>
 #include <float.h>    /* For FLT_MAX */
+#include <cmath>
 
 //
 // Return the center of a box

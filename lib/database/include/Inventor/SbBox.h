@@ -59,8 +59,9 @@
 #ifndef _SB_BOX_
 #define _SB_BOX_
 
-#include <Inventor/SbBasic.h>
-#include <Inventor/SbLinear.h>
+#include <Inventor/SbVec.h>
+#include <Inventor/SbPlane.h>
+#include <Inventor/SbMatrix.h>
 
 class SbBox3f {
   public:
