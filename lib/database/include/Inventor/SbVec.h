@@ -178,6 +178,131 @@ class SbVec3f {
 
 //////////////////////////////////////////////////////////////////////////////
 //
+//  Class: SbVec3s
+//
+//  3D vector used to represent points or directions. Each component of
+//  the vector is a floating-point number.
+//
+//  WARNING!!!!!  Transcription of arrays of this class assume that the
+//                only data stored in this class are three consecutive values.
+//                Do not add any extra data members!!!
+//
+//////////////////////////////////////////////////////////////////////////////
+class SbVec3s {
+public:
+    // Default constructor
+    SbVec3s() { }
+
+    // Constructor given an array of 3 components
+    SbVec3s(const short v[3]) {
+        vec[0] = v[0];
+        vec[1] = v[1];
+        vec[2] = v[2];
+    }
+
+    // Constructor given 3 individual components
+    SbVec3s(short x, short y, short z) {
+        vec[0] = x;
+        vec[1] = y;
+        vec[2] = z;
+    }
+
+    // Returns right-handed cross product of vector and another vector
+    SbVec3s cross(const SbVec3s &v) const;
+
+    // Returns dot (inner) product of vector and another vector
+    short dot(const SbVec3s &v) const;
+
+    // Returns pointer to array of 3 components
+    const short *getValue() const {
+        return vec;
+    }
+
+    // Returns 3 individual components
+    void getValue(short &x, short &y, short &z) const;
+
+    // Negates each component of vector in place
+    void negate();
+
+    // Sets value of vector from array of 3 components
+    SbVec3s & setValue(const short v[3]) {
+        vec[0] = v[0];
+        vec[1] = v[1];
+        vec[2] = v[2];
+        return *this;
+    }
+
+    // Sets value of vector from 3 individual components
+    SbVec3s & setValue(short x, short y, short z) {
+        vec[0] = x;
+        vec[1] = y;
+        vec[2] = z;
+        return *this;
+    }
+
+    // Accesses indexed component of vector
+    short & operator [](int i) {
+        return (vec[i]);
+    }
+
+    // Accesses indexed component of vector
+    const short & operator [](int i) const {
+        return (vec[i]);
+    }
+
+    // Component-wise scalar multiplication operator
+    SbVec3s & operator *=(short d);
+
+    // Component-wise scalar division operator
+    SbVec3s & operator /=(short d) {
+        vec[0] /= d;
+        vec[1] /= d;
+        vec[2] /= d;
+        return *this;
+    }
+
+    // Component-wise vector addition operator
+    SbVec3s & operator +=(SbVec3s v);
+
+    // Component-wise vector subtraction operator
+    SbVec3s & operator -=(SbVec3s v);
+
+    // Nondestructive unary negation - returns a new vector
+    SbVec3s operator -() const;
+
+    // Component-wise binary scalar multiplication operator
+    friend SbVec3s operator *(const SbVec3s &v, short d);
+
+    // Component-wise binary scalar multiplication operator
+    friend SbVec3s operator *(short d, const SbVec3s &v) {
+        return v * d;
+    }
+
+    // Component-wise binary scalar division operator
+    friend SbVec3s operator /(const SbVec3s &v, short d) {
+        return SbVec3s(v[0]/d, v[1]/d, v[2]/d);
+    }
+
+    // Component-wise binary vector addition operator
+    friend SbVec3s operator +(const SbVec3s &v1, const SbVec3s &v2);
+
+    // Component-wise binary vector subtraction operator
+    friend SbVec3s operator -(const SbVec3s &v1, const SbVec3s &v2);
+
+    // Equality comparison operator
+    friend int  operator ==(const SbVec3s &v1, const SbVec3s &v2);
+
+    // Inequality comparison operator
+    friend int  operator !=(const SbVec3s &v1, const SbVec3s &v2) {
+        return !(v1 == v2);
+    }
+
+protected:
+    short vec[3];  // Storage for vector components
+};
+
+//////////////////////////////////////////////////////////////////////////////
+//
 //  Class: SbVec2f
 //
 //  2D vector used to represet points or directions. Each component of

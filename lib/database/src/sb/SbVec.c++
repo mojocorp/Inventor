@@ -387,6 +387,148 @@ SbVec3f::getClosestAxis() const
 
 //////////////////////////////////////////////////////////////////////////////
 //
+// Vec3s class
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//
+// Returns dot (inner) product of vector and another vector
+//
+
+short
+SbVec3s::dot(const SbVec3s &v) const
+{
+    return (vec[0] * v.vec[0] +
+            vec[1] * v.vec[1] +
+            vec[2] * v.vec[2]);
+}
+
+//
+// Returns 3 individual components
+//
+
+void
+SbVec3s::getValue(short &x, short &y, short &z) const
+{
+    x = vec[0];
+    y = vec[1];
+    z = vec[2];
+}
+
+//
+// Negates each component of vector in place
+//
+
+void
+SbVec3s::negate()
+{
+    vec[0] = -vec[0];
+    vec[1] = -vec[1];
+    vec[2] = -vec[2];
+}
+
+//
+// Component-wise scalar multiplication operator
+//
+
+SbVec3s &
+SbVec3s::operator *=(short d)
+{
+    vec[0] *= d;
+    vec[1] *= d;
+    vec[2] *= d;
+
+    return *this;
+}
+
+//
+// Component-wise vector addition operator
+//
+
+SbVec3s &
+SbVec3s::operator +=(SbVec3s v)
+{
+    vec[0] += v.vec[0];
+    vec[1] += v.vec[1];
+    vec[2] += v.vec[2];
+
+    return *this;
+}
+
+//
+// Component-wise vector subtraction operator
+//
+
+SbVec3s &
+SbVec3s::operator -=(SbVec3s v)
+{
+    vec[0] -= v.vec[0];
+    vec[1] -= v.vec[1];
+    vec[2] -= v.vec[2];
+
+    return *this;
+}
+
+//
+// Nondestructive unary negation - returns a new vector
+//
+
+SbVec3s
+SbVec3s::operator -() const
+{
+    return SbVec3s(-vec[0], -vec[1], -vec[2]);
+}
+
+//
+// Component-wise binary scalar multiplication operator
+//
+
+SbVec3s
+operator *(const SbVec3s &v, short d)
+{
+    return SbVec3s(v.vec[0] * d,
+                   v.vec[1] * d,
+                   v.vec[2] * d);
+}
+
+//
+// Component-wise binary vector addition operator
+//
+
+SbVec3s
+operator +(const SbVec3s &v1, const SbVec3s &v2)
+{
+    return SbVec3s(v1.vec[0] + v2.vec[0],
+                   v1.vec[1] + v2.vec[1],
+                   v1.vec[2] + v2.vec[2]);
+}
+
+//
+// Component-wise binary vector subtraction operator
+//
+
+SbVec3s
+operator -(const SbVec3s &v1, const SbVec3s &v2)
+{
+    return SbVec3s(v1.vec[0] - v2.vec[0],
+                   v1.vec[1] - v2.vec[1],
+                   v1.vec[2] - v2.vec[2]);
+}
+
+//
+// Equality comparison operator. Componenents must match exactly.
+//
+
+int
+operator ==(const SbVec3s &v1, const SbVec3s &v2)
+{
+    return (v1.vec[0] == v2.vec[0] &&
+            v1.vec[1] == v2.vec[1] &&
+            v1.vec[2] == v2.vec[2]);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
 // Vec2s class
 //
 //////////////////////////////////////////////////////////////////////////////
