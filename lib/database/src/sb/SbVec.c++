@@ -82,7 +82,8 @@
   - m[2][1] * m[1][2] * m[0][0]	\
   - m[2][2] * m[1][0] * m[0][1]))
 
-SbVec3f::SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2)
+template <class Type>
+SbVec3<Type>::SbVec3(SbPlane &p0, SbPlane &p1, SbPlane &p2)
 {
     float	v[3], del, mx[3][3], mi[3][3];
 
@@ -148,216 +149,21 @@ SbVec3f::SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2)
 }
 
 //
-// Returns right-handed cross product of vector and another vector
-//
-
-SbVec3f
-SbVec3f::cross(const SbVec3f &v) const
-{
-    return SbVec3f(vec[1] * v.vec[2] - vec[2] * v.vec[1],
-		  vec[2] * v.vec[0] - vec[0] * v.vec[2],
-		  vec[0] * v.vec[1] - vec[1] * v.vec[0]);
-}
-
-//
-// Returns dot (inner) product of vector and another vector
-//
-
-float
-SbVec3f::dot(const SbVec3f &v) const
-{
-    return (vec[0] * v.vec[0] +
-	    vec[1] * v.vec[1] +
-	    vec[2] * v.vec[2]);
-}
-
-//
-// Returns 3 individual components
-//
-
-void
-SbVec3f::getValue(float &x, float &y, float &z) const
-{
-    x = vec[0];
-    y = vec[1];
-    z = vec[2];
-}
-
-//
-// Returns geometric length of vector
-//
-
-float
-SbVec3f::length() const
-{
-    return std::sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]);
-}
-
-//
-// Negates each component of vector in place
-//
-
-void
-SbVec3f::negate()
-{
-    vec[0] = -vec[0];
-    vec[1] = -vec[1];
-    vec[2] = -vec[2];
-}
-
-//
-// Changes vector to be unit length
-//
-
-float
-SbVec3f::normalize()
-{
-    float len = length();
-
-    if (len != 0.0)
-	(*this) *= (1.0 / len);
-
-    else setValue(0.0, 0.0, 0.0);
-
-    return len;
-}
-
-SbVec3f &
-SbVec3f::setValue(const SbVec3f &barycentric,
-		  const SbVec3f &v0, const SbVec3f &v1, const SbVec3f &v2)
-{
-    *this = v0 * barycentric[0] + v1 * barycentric[1] + v2 * barycentric[2];
-    return (*this);
-}
-    
-
-//
-// Component-wise scalar multiplication operator
-//
-
-SbVec3f &
-SbVec3f::operator *=(float d)
-{
-    vec[0] *= d;
-    vec[1] *= d;
-    vec[2] *= d;
-
-    return *this;
-}
-
-//
-// Component-wise vector addition operator
-//
-
-SbVec3f &
-SbVec3f::operator +=(SbVec3f v)
-{
-    vec[0] += v.vec[0];
-    vec[1] += v.vec[1];
-    vec[2] += v.vec[2];
-
-    return *this;
-}
-
-//
-// Component-wise vector subtraction operator
-//
-
-SbVec3f &
-SbVec3f::operator -=(SbVec3f v)
-{
-    vec[0] -= v.vec[0];
-    vec[1] -= v.vec[1];
-    vec[2] -= v.vec[2];
-
-    return *this;
-}
-
-//
-// Nondestructive unary negation - returns a new vector
-//
-
-SbVec3f
-SbVec3f::operator -() const
-{
-    return SbVec3f(-vec[0], -vec[1], -vec[2]);
-}
-
-//
-// Component-wise binary scalar multiplication operator
-//
-
-SbVec3f
-operator *(const SbVec3f &v, float d)
-{
-    return SbVec3f(v.vec[0] * d,
-		  v.vec[1] * d,
-		  v.vec[2] * d);
-}
-
-//
-// Component-wise binary vector addition operator
-//
-
-SbVec3f
-operator +(const SbVec3f &v1, const SbVec3f &v2)
-{
-    return SbVec3f(v1.vec[0] + v2.vec[0],
-		  v1.vec[1] + v2.vec[1],
-		  v1.vec[2] + v2.vec[2]);
-}
-
-//
-// Component-wise binary vector subtraction operator
-//
-
-SbVec3f
-operator -(const SbVec3f &v1, const SbVec3f &v2)
-{
-    return SbVec3f(v1.vec[0] - v2.vec[0],
-		   v1.vec[1] - v2.vec[1],
-		   v1.vec[2] - v2.vec[2]);
-}
-
-//
-// Equality comparison operator. Componenents must match exactly.
-//
-
-int
-operator ==(const SbVec3f &v1, const SbVec3f &v2)
-{
-    return (v1.vec[0] == v2.vec[0] &&
-	    v1.vec[1] == v2.vec[1] &&
-	    v1.vec[2] == v2.vec[2]);
-}
-
-//
-// Equality comparison operator within a tolerance.
-//
-
-SbBool
-SbVec3f::equals(const SbVec3f v, float tolerance) const
-{
-    SbVec3f	diff = *this - v;
-
-    return diff.dot(diff) <= tolerance;
-}
-
-//
 // Returns principal axis that is closest (based on maximum dot
 // product) to this vector.
 //
 
-SbVec3f
-SbVec3f::getClosestAxis() const
+template <class Type>
+SbVec3<Type>
+SbVec3<Type>::getClosestAxis() const
 {
-    SbVec3f	axis(0.0, 0.0, 0.0), bestAxis;
-    float	d, max = -21.234;
+    SbVec3<Type>	axis(0.0, 0.0, 0.0), bestAxis;
+    Type	d, max = -21.234;
 
 #define TEST_AXIS()							      \
     if ((d = dot(axis)) > max) {					      \
-	max = d;							      \
-	bestAxis = axis;						      \
+    max = d;							      \
+    bestAxis = axis;						      \
     }
 
     axis[0] = 1.0;	// +x axis
@@ -384,6 +190,9 @@ SbVec3f::getClosestAxis() const
 
     return bestAxis;
 }
+
+// Explicit template instantiation
+template class SbVec3<float>;
 
 //////////////////////////////////////////////////////////////////////////////
 //

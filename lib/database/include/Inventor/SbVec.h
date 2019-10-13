@@ -63,6 +63,7 @@
 #ifndef _SB_VEC_
 #define _SB_VEC_
 
+#include <cmath>
 #include <Inventor/SbBasic.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -80,101 +81,183 @@
 
 class SbPlane;
 
-class SbVec3f {
+template <typename Type>
+class SbVec3 {
   public:
     // Default constructor
-    SbVec3f()						{ }
+    SbVec3()						{ }
 
     // Constructor given an array of 3 components
-    SbVec3f(const float v[3])
+    SbVec3(const Type v[3])
      { vec[0] = v[0]; vec[1] = v[1]; vec[2] = v[2]; }
 
     // Constructor given 3 individual components
-    SbVec3f(float x, float y, float z)
+    SbVec3(Type x, Type y, Type z)
      { vec[0] = x; vec[1] = y; vec[2] = z; }
 
     // Constructor given 3 planes
-    SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2);
+    SbVec3(SbPlane &p0, SbPlane &p1, SbPlane &p2);
 
     // Returns right-handed cross product of vector and another vector
-    SbVec3f	cross(const SbVec3f &v) const;
+    SbVec3<Type>	cross(const SbVec3<Type> &v) const
+    {
+        return SbVec3<Type>(vec[1] * v.vec[2] - vec[2] * v.vec[1],
+                            vec[2] * v.vec[0] - vec[0] * v.vec[2],
+                            vec[0] * v.vec[1] - vec[1] * v.vec[0]);
+    }
 
     // Returns dot (inner) product of vector and another vector
-    float	dot(const SbVec3f &v) const;
+    Type	dot(const SbVec3<Type> &v) const
+    { return (vec[0] * v.vec[0] + vec[1] * v.vec[1] + vec[2] * v.vec[2]); }
 
     // Returns pointer to array of 3 components
-    const float	*getValue() const			{ return vec; }
+    const Type	*getValue() const			{ return vec; }
 
     // Returns 3 individual components
-    void	getValue(float &x, float &y, float &z) const;
+    void	getValue(Type &x, Type &y, Type &z) const
+    {
+        x = vec[0];
+        y = vec[1];
+        z = vec[2];
+    }
 
     // Returns geometric length of vector
-    float	length() const;
+    Type	length() const
+    { return std::sqrt(vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]); }
 
     // Changes vector to be unit length
-    float	normalize();
+    Type	normalize()
+    {
+        Type len = length();
+
+        if (len != 0.0)
+        (*this) *= (1.0 / len);
+
+        else setValue(0.0, 0.0, 0.0);
+
+        return len;
+    }
 
     // Negates each component of vector in place
-    void	negate();
+    void	negate()
+    {
+        vec[0] = -vec[0];
+        vec[1] = -vec[1];
+        vec[2] = -vec[2];
+    }
 
     // Sets value of vector from array of 3 components
-    SbVec3f &	setValue(const float v[3])
+    SbVec3<Type> &	setValue(const Type v[3])
      { vec[0] = v[0]; vec[1] = v[1]; vec[2] = v[2]; return *this; }
 
     // Sets value of vector from 3 individual components
-    SbVec3f &	setValue(float x, float y, float z)
+    SbVec3<Type> &	setValue(Type x, Type y, Type z)
      { vec[0] = x; vec[1] = y; vec[2] = z; return *this; }
 
     // Sets value of vector to be convex combination of 3 other
     // vectors, using barycentic coordinates
-    SbVec3f &	setValue(const SbVec3f &barycentic,
-        const SbVec3f &v0, const SbVec3f &v1, const SbVec3f &v2);
+    SbVec3<Type> &	setValue(const SbVec3<Type> &barycentric,
+        const SbVec3<Type> &v0, const SbVec3<Type> &v1, const SbVec3<Type> &v2)
+    {
+        *this = v0 * barycentric[0] + v1 * barycentric[1] + v2 * barycentric[2];
+        return (*this);
+    }
 
     // Accesses indexed component of vector
-    float &	  operator [](int i) 		{ return (vec[i]); }
-    const float & operator [](int i) const	{ return (vec[i]); }
+    Type &	  operator [](int i) 		{ return (vec[i]); }
+    const Type & operator [](int i) const	{ return (vec[i]); }
 
     // Component-wise scalar multiplication and division operators
-    SbVec3f &	operator *=(float d);
+    SbVec3<Type> &	operator *=(Type d)
+    {
+        vec[0] *= d;
+        vec[1] *= d;
+        vec[2] *= d;
 
-    SbVec3f &	operator /=(float d)
+        return *this;
+    }
+
+    SbVec3<Type> &	operator /=(Type d)
     { return *this *= (1.0 / d); }
 
     // Component-wise vector addition and subtraction operators
-    SbVec3f &	operator +=(SbVec3f v);
-    SbVec3f &	operator -=(SbVec3f v);
+    SbVec3<Type> &	operator +=(SbVec3<Type> v)
+    {
+        vec[0] += v.vec[0];
+        vec[1] += v.vec[1];
+        vec[2] += v.vec[2];
+
+        return *this;
+    }
+    SbVec3<Type> &	operator -=(SbVec3<Type> v)
+    {
+        vec[0] -= v.vec[0];
+        vec[1] -= v.vec[1];
+        vec[2] -= v.vec[2];
+
+        return *this;
+    }
 
     // Nondestructive unary negation - returns a new vector
-    SbVec3f	operator -() const;
+    SbVec3<Type>	operator -() const
+    { return SbVec3<Type>(-vec[0], -vec[1], -vec[2]); }
 
     // Component-wise binary scalar multiplication and division operators
-    friend SbVec3f	operator *(const SbVec3f &v, float d);
-    friend SbVec3f	operator *(float d, const SbVec3f &v)
+    friend SbVec3<Type>	operator *(const SbVec3<Type> &v, Type d)
+    {
+        return SbVec3<Type>(v.vec[0] * d,
+                            v.vec[1] * d,
+                            v.vec[2] * d);
+    }
+    friend SbVec3<Type>	operator *(Type d, const SbVec3<Type> &v)
     { return v * d; }
-    friend SbVec3f	operator /(const SbVec3f &v, float d)
+    friend SbVec3<Type>	operator /(const SbVec3<Type> &v, Type d)
     { return v * (1.0 / d); }
 
     // Component-wise binary vector addition and subtraction operators
-    friend SbVec3f	operator +(const SbVec3f &v1, const SbVec3f &v2);
+    friend SbVec3<Type>	operator +(const SbVec3<Type> &v1, const SbVec3<Type> &v2)
+    {
+        return SbVec3<Type>(v1.vec[0] + v2.vec[0],
+                            v1.vec[1] + v2.vec[1],
+                            v1.vec[2] + v2.vec[2]);
+    }
 
-    friend SbVec3f	operator -(const SbVec3f &v1, const SbVec3f &v2);
+    friend SbVec3<Type>	operator -(const SbVec3<Type> &v1, const SbVec3<Type> &v2)
+    {
+        return SbVec3<Type>(v1.vec[0] - v2.vec[0],
+                            v1.vec[1] - v2.vec[1],
+                            v1.vec[2] - v2.vec[2]);
+    }
 
     // Equality comparison operator
-    friend int		operator ==(const SbVec3f &v1, const SbVec3f &v2);
-    friend int		operator !=(const SbVec3f &v1, const SbVec3f &v2)
+    friend int		operator ==(const SbVec3<Type> &v1, const SbVec3<Type> &v2)
+    {
+        return (v1.vec[0] == v2.vec[0] &&
+            v1.vec[1] == v2.vec[1] &&
+            v1.vec[2] == v2.vec[2]);
+    }
+
+    friend int		operator !=(const SbVec3<Type> &v1, const SbVec3<Type> &v2)
     { return !(v1 == v2); }
 
     // Equality comparison within given tolerance - the square of the
     // length of the maximum distance between the two vectors
-    SbBool		equals(const SbVec3f v, float tolerance) const;
+    SbBool		equals(const SbVec3<Type> &v, float tolerance) const
+    {
+        SbVec3<Type>	diff = *this - v;
+        return diff.dot(diff) <= tolerance;
+    }
 
     // Returns principal axis that is closest (based on maximum dot
     // product) to this vector
-    SbVec3f		getClosestAxis() const;
+    SbVec3<Type>		getClosestAxis() const;
 
   protected:
-    float	vec[3];		// Storage for vector components
+    Type	vec[3];		// Storage for vector components
 };
+
+typedef SbVec3<float> SbVec3f;
+//class SbVec3f : public SbVec3<float> { using SbVec3::SbVec3; };
 
 //////////////////////////////////////////////////////////////////////////////
 //
