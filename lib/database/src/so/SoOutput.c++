@@ -85,8 +85,6 @@ SoOutput::SoOutput()
     anyRef	= FALSE;
     compact	= FALSE;
     wroteHeader	= FALSE;
-    tmpBuffer   = NULL;
-    tmpBufSize  = 0;
     refDict	= new SbDict;
     borrowedDict= FALSE;
     annotation	= 0;
@@ -114,8 +112,6 @@ SoOutput::SoOutput(SoOutput *dictOut)
     anyRef	= FALSE;
     compact	= FALSE;
     wroteHeader	= FALSE;
-    tmpBuffer   = NULL;
-    tmpBufSize  = 0;
     annotation	= 0;
     fmtString	= SbString("%g");
 
@@ -146,10 +142,7 @@ SoOutput::~SoOutput()
     closeFile();
 
     if (! borrowedDict)
-	delete refDict;
-
-    if (tmpBuffer != NULL)
-        free((void *)tmpBuffer);
+        delete refDict;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -178,9 +171,8 @@ SoOutput::setFilePointer(FILE *newFP)		// New file pointer
     wroteHeader = FALSE;
     toBuffer	= FALSE;
 
-    if (isBinary() && (tmpBuffer == NULL)) {
-        tmpBuffer = (char *)malloc(64);
-        tmpBufSize = 64;
+    if (isBinary() && tmpBuffer.empty()) {
+        tmpBuffer.resize(8);
     }
 
     reset();
@@ -231,9 +223,8 @@ SoOutput::openFile(const char *fileName)	// Name of file
 
     reset();
 
-    if (isBinary() && (tmpBuffer == NULL)) {
-        tmpBuffer = (char *)malloc(64);
-        tmpBufSize = 64;
+    if (isBinary() && tmpBuffer.empty()) {
+        tmpBuffer.resize(8);
     }
 
     return TRUE;
@@ -280,11 +271,7 @@ SoOutput::setBuffer(void *bufPointer, size_t initSize,
 	curBuf = (char *) buffer + (int) offset;
     }
     
-    if (tmpBuffer != NULL) {
-        free( (void *)tmpBuffer );
-        tmpBuffer = NULL;
-        tmpBufSize = 0;
-    }
+    tmpBuffer.clear();
 
     wroteHeader = FALSE;
 
@@ -364,8 +351,7 @@ SoOutput::setFormat(Format fmt)
     // data before writing.
     if (!isToBuffer())
     {
-        tmpBuffer = (char *)malloc(64);
-        tmpBufSize = 64;
+        tmpBuffer.resize(8);
     }
 }
 
@@ -541,11 +527,11 @@ SoOutput::write(char c)
             *curBuf++ = 0;
         }
         else {
-            *tmpBuffer = c;
+            *tmpBuffer.data() = c;
             tmpBuffer[1] = 0;
             tmpBuffer[2] = 0;
             tmpBuffer[3] = 0;
-            fp.write(tmpBuffer, sizeof(char), 4);
+            fp.write(tmpBuffer.data(), sizeof(char), 4);
             fp.flush();
         }
     }
@@ -597,15 +583,14 @@ SoOutput::write(const char *s)
                 *curBuf++ = 0;
         }
         else {
-            if (!makeRoomInTmpBuf(nsize))
-                return;
+            tmpBuffer.resize(nsize);
             int m;
             DGL_HTON_INT32(m, n);
             fp.write(&m, sizeof(int), 1);
-	    memcpy(tmpBuffer, (const void *)s, n);
+        memcpy(tmpBuffer.data(), (const void *)s, n);
             for (size_t i=0; i<(nsize-n); i++)
                 tmpBuffer[n+i] = 0;
-            fp.write(tmpBuffer, sizeof(char), nsize);
+            fp.write(tmpBuffer.data(), sizeof(char), nsize);
             fp.flush();
         }
     }
@@ -698,11 +683,10 @@ SoOutput::write(const SbName &s)
             dglFunc(num, curBuf);	  				      \
             curBuf += sizeof(dglType);                                      \
         }                                                                     \
-        else {                                                                \
-            if (!makeRoomInTmpBuf(sizeof(dglType)))			      \
-                return;							      \
-            dglFunc(num, tmpBuffer);                                          \
-            fp.write(tmpBuffer, sizeof(dglType), 1);                          \
+        else { \
+            tmpBuffer.resize(sizeof(dglType));     \
+            dglFunc(num, tmpBuffer.data());                                          \
+            fp.write(tmpBuffer.data(), sizeof(dglType), 1);                          \
             fp.flush();                                                       \
         }                                                                     \
     }									      \
@@ -723,11 +707,10 @@ SoOutput::write(const SbName &s)
         dglFunc(array, curBuf, length);                                       \
         curBuf += length * sizeof(type);                                    \
     }									      \
-    else {                                                                    \
-        if (!makeRoomInTmpBuf(length*sizeof(type))) 			      \
-            return;							      \
-        dglFunc(array, tmpBuffer, length);                                    \
-        fp.write(tmpBuffer, sizeof(type), length);                            \
+    else { \
+        tmpBuffer.resize(length*sizeof(type)); \
+        dglFunc(array, tmpBuffer.data(), length);                                    \
+        fp.write(tmpBuffer.data(), sizeof(type), length);                            \
         fp.flush();                                                           \
     }                                                                         \
 
@@ -1180,41 +1163,6 @@ SoOutput::makeRoomInBuf(size_t nBytes)
 
     return TRUE;
 }
-
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Makes sure temporary buffer can contain nBytes more bytes. Returns
-//    FALSE if this is not possible.
-//
-// Use: private
-
-SbBool
-SoOutput::makeRoomInTmpBuf(size_t nBytes)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    if (tmpBuffer == NULL)
-        return FALSE;
-	    
-    // If not enough room in tmpBuffer for nBytes more, realloc
-    if (nBytes >= tmpBufSize) {
-	// While not enough room, double size of buffer
-	while (nBytes >= tmpBufSize)
-	    tmpBufSize *= 2;
-	    
-	// Now realloc a new buffer that is big enough
-	tmpBuffer = (char *)::realloc((void *)tmpBuffer, tmpBufSize);
-    }
-    
-    // Test for bad reallocation
-    if (tmpBuffer == NULL)
-	return FALSE;
-
-    return TRUE;
-}
-
 
 ////////////////////////////////////////////////////////////////////////
 //

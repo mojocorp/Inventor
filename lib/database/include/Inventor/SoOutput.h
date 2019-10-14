@@ -59,6 +59,7 @@
 #ifndef  _SO_OUTPUT_
 #define  _SO_OUTPUT_
 
+#include <vector>
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbDict.h>
 #include <Inventor/SbString.h>
@@ -230,11 +231,10 @@ class SoOutput {
   private:
     SbFile    fp;  // File writing to
     SbBool		toBuffer;	// TRUE if writing to buffer
-    char                *tmpBuffer;     // For binary write to file
+    std::vector<char> tmpBuffer;     // For binary write to file
     void		*buffer;	// Buffer writing to
     char		*curBuf;	// Current pointer in buffer
     size_t		bufSize;	// Maximum buffer size
-    size_t		tmpBufSize;	// Maximum temporary buffer size
     SoOutputReallocCB	*reallocFunc;	// Reallocation function for buffer
     SbBool		compact;	// TRUE if writing in compact form
     SbBool		wroteHeader;	// TRUE if header was written
@@ -266,9 +266,6 @@ class SoOutput {
 
     // Makes sure current buffer can contain nBytes more bytes
     SbBool		makeRoomInBuf(size_t nBytes);
-
-    // Makes sure temporary buffer can contain nBytes more bytes
-    SbBool		makeRoomInTmpBuf(size_t nBytes);
 
     // Adds a reference to dictionary, returning the reference id
     // created for it.
