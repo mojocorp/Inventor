@@ -644,35 +644,31 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
     existedBefore = FALSE;
 
     // IS THERE A BRACKET, WHICH SIGNIFIES INDEXING INTO A LIST?
-    if ( strrchr( nameOfPart.getString(), '[') != NULL ) {
+    if ( nameOfPart.rfind('[') != -1 ) {
+        SbString listNameCopy = nameOfPart.getString();
 
-	char *listNameCopy = strdup( nameOfPart.getString());
-	int  arrayIndex;
+        int  arrayIndex;
+        if ( !parseListItem( (char*)listNameCopy.getString(), arrayIndex)) {
+            return NULL;
+        }
 
-	if ( !parseListItem( listNameCopy, arrayIndex)) {
-	    free ( listNameCopy );
-	    return NULL;
-	}
+        // get the list given by 'listNameCopy'
+        SbBool listExistedBefore;
+        SoNode *n = getSingleNamePart( listNameCopy, makeIfNeeded, TRUE,
+                        publicCheck, listExistedBefore );
+        if ( n == NULL ) {
+            return NULL;
+        }
 
-	// get the list given by 'listNameCopy'
-	SbBool listExistedBefore;
-	SoNode *n = getSingleNamePart( listNameCopy, makeIfNeeded, TRUE, 
-					publicCheck, listExistedBefore );
-	if ( n == NULL ) {
-	    free ( listNameCopy );
-	    return NULL;
-	}
-
-	if ( !n->isOfType( SoNodeKitListPart::getClassTypeId() ) ){
+        if ( !n->isOfType( SoNodeKitListPart::getClassTypeId() ) ){
 #ifdef DEBUG
-	    SoDebugError::post("SoNodekitParts::getSingleNamePart",
-	    		       "part specified %s was not a list", listNameCopy );
+            SoDebugError::post("SoNodekitParts::getSingleNamePart",
+                               "part specified %s was not a list", listNameCopy );
 #endif
-	    if ( listExistedBefore == FALSE ) {
-		// if we just created the list, we'd better get rid of it...
-		setSingleNamePart( listNameCopy, NULL, TRUE );
+            if ( listExistedBefore == FALSE ) {
+            // if we just created the list, we'd better get rid of it...
+            setSingleNamePart( listNameCopy, NULL, TRUE );
 	    }
-	    free( listNameCopy);
 	    return NULL;
 	}
 
@@ -712,7 +708,6 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
 		}
 #endif
 	    }
-	    free( listNameCopy);
 	    return( newNode );
 	}
 
@@ -738,13 +733,11 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
 		// if we just created the list, we'd better get rid of it...
 		setSingleNamePart( listNameCopy, NULL, TRUE );
 	    }
-	    free( listNameCopy);
 	    return NULL;
 	}
 
 	// return entry number 'arrayIndex'
 	existedBefore = TRUE;
-	free( listNameCopy);
 	return( listGroup->getChild( arrayIndex ) );
     }
 
@@ -857,14 +850,13 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
     SoFullPath *answerPath = NULL;
 
     // IS THERE A BRACKET, WHICH SIGNIFIES INDEXING INTO A LIST?
-    if ( strrchr( nameOfPart.getString(), '[') != NULL ) {
+    if ( nameOfPart.rfind('[') != -1 ) {
 
-	char *listNameCopy = strdup( nameOfPart.getString());
-	int  arrayIndex;
+        SbString listNameCopy = nameOfPart.getString();
+        int  arrayIndex;
 
-	if (!parseListItem( listNameCopy, arrayIndex)){
-	    free(listNameCopy);
-	    return NULL;
+        if (!parseListItem( (char*)listNameCopy.getString(), arrayIndex)){
+            return NULL;
 	}
 
 	// get the list given by 'listNameCopy'
@@ -872,7 +864,6 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 	answerPath = getSingleNamePathToPart( listNameCopy, makeIfNeeded, 
 				      TRUE, publicCheck, listExistedBefore );
 	if (answerPath == NULL){
-	    free(listNameCopy);
 	    return NULL;
 	}
 
@@ -889,7 +880,6 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 		    // if we just created the list, we'd better get rid of it...
 		    setSingleNamePart( listNameCopy, NULL, TRUE );
 		}
-		free(listNameCopy);
 		return NULL;
 	}
 
@@ -939,7 +929,6 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 	        answerPath->unref();
 		answerPath = NULL;
 	    }
-	    free( listNameCopy);
 	    return answerPath;
 	}
 
@@ -965,7 +954,6 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 		// if we just created the list, we'd better get rid of it...
 		setSingleNamePart( listNameCopy, NULL, TRUE );
 	    }
-	    free(listNameCopy);
 	    return NULL;
 	}
 
@@ -976,7 +964,6 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 	answerPath->append( arrayIndex );
 	answerPath->unrefNoDelete();
 	existedBefore = TRUE;
-	free(listNameCopy);
 	return answerPath;
     }
 
@@ -1105,12 +1092,11 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 ////////////////////////////////////////////////////////////////////////
 {
     // IS THERE A BRACKET, WHICH SIGNIFIES INDEXING INTO A LIST?
-    if ( strrchr( nameOfPart.getString(), '[') != NULL ) {
-	char *listNameCopy = strdup( nameOfPart.getString());
+    if ( nameOfPart.rfind('[') != -1 ) {
+    SbString listNameCopy = nameOfPart.getString();
 	int  arrayIndex;
 
-	if (!parseListItem( listNameCopy, arrayIndex )){
-	    free(listNameCopy);
+    if (!parseListItem( (char*)listNameCopy.getString(), arrayIndex )){
 	    return FALSE;
 	}
 
@@ -1123,11 +1109,9 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 	SoNode *n = getSingleNamePart( listNameCopy, needToMake, TRUE, 
 				       !anyPart, listExistedBefore );
 	if ( n == NULL && needToMake == FALSE ) {
-	    free(listNameCopy);
 	    return TRUE;
 	}
 	if ( n == NULL && needToMake == TRUE ) {
-	    free(listNameCopy);
 	    return FALSE;
 	}
 
@@ -1140,7 +1124,6 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 		// if we just created the list, we'd better get rid of it...
 		setSingleNamePart( listNameCopy, NULL, TRUE );
 	    }
-	    free(listNameCopy);
 	    return FALSE;
 	}
 
@@ -1155,7 +1138,6 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 		// if we just created the list, we'd better get rid of it...
 		setSingleNamePart( listNameCopy, NULL, TRUE );
 	    }
-	    free(listNameCopy);
 	    return TRUE;
 	}
 
@@ -1186,7 +1168,6 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 		    fprintf(stderr,"\n");
 		}
 #endif
-	        free(listNameCopy);
 		return TRUE;
 	    }
 	}
@@ -1200,7 +1181,6 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 	    // if we just created the list, we'd better get rid of it...
 	    setSingleNamePart( listNameCopy, NULL, TRUE );
 	}
-	free(listNameCopy);
 	return FALSE;
     }
 
@@ -1327,20 +1307,20 @@ SoNodekitParts::getAnyPart( const SbName &nameOfPart, SbBool makeIfNeeded,
 {
     existedBefore = FALSE;
 
-    char   *nameCopy, *firstName, *remainderString;
+    char   *firstName, *remainderString;
     SoNode *firstNode = NULL, *secondNode = NULL;
 
     // JUST A SINGLE NAME...
-    if ( strrchr( nameOfPart.getString(), '.' ) == NULL )
+    if ( nameOfPart.rfind('.') == -1 )
 	return getSingleNamePart( nameOfPart, makeIfNeeded, leafCheck, 
 				  publicCheck, existedBefore );
 
     // OTHERWISE, A COMPOUND NAME of the form:  part1.part2.part3 etc.
     // copy the string
-    nameCopy = strdup( nameOfPart.getString() );
+    SbString nameCopy = nameOfPart.getString();
 
     // break string into two parts
-    firstName = strtok( nameCopy, ".");   // everything before the first '.'
+    firstName = strtok( (char*)nameCopy.getString(), ".");   // everything before the first '.'
     remainderString = strtok( NULL, "");  // everything else
 
     // get node for first part
@@ -1383,7 +1363,6 @@ SoNodekitParts::getAnyPart( const SbName &nameOfPart, SbBool makeIfNeeded,
 	}
 	existedBefore = firstExistedBefore && secondExistedBefore;
     }
-    free ( nameCopy );
     return secondNode;
 }
 
@@ -1422,21 +1401,20 @@ SoNodekitParts::createPathToAnyPart( const SbName &nameOfPart,
 {
     existedBefore = FALSE;
 
-    char   *nameCopy, *firstName, *remainderString;
-    SoNode *firstNode = NULL;
+    char   *firstName, *remainderString;
     SoFullPath *firstPath = NULL, *secondPath = NULL, *answer = NULL;
 
     // JUST A SINGLE NAME...
-    if ( strrchr( nameOfPart.getString(), '.' ) == NULL )
+    if ( nameOfPart.rfind('.') == -1 )
 	return getSingleNamePathToPart( nameOfPart, makeIfNeeded, 
 				    leafCheck, publicCheck, existedBefore );
 
     // OTHERWISE, A COMPOUND NAME of the form:  part1.part2.part3 etc.
     // copy the string
-    nameCopy = strdup( nameOfPart.getString() );
+    SbString nameCopy = nameOfPart.getString();
 
     // break string into two parts
-    firstName = strtok( nameCopy, ".");   // everything before the first '.'
+    firstName = strtok( (char*)nameCopy.getString(), ".");   // everything before the first '.'
     remainderString = strtok( NULL, "");  // everything else
 
     // get node for first part
@@ -1451,7 +1429,7 @@ SoNodekitParts::createPathToAnyPart( const SbName &nameOfPart,
 
 	firstPath->ref();
 
-	firstNode = firstPath->getTail();
+        SoNode *firstNode = firstPath->getTail();
 
 	if ( firstNode == NULL ) {
 	    answer = NULL;      // can't look any further
@@ -1498,7 +1476,6 @@ SoNodekitParts::createPathToAnyPart( const SbName &nameOfPart,
 	firstPath->unref();
     if ( secondPath )
 	secondPath->unref();
-    free ( nameCopy );
     return answer;
 }
 
@@ -1516,20 +1493,20 @@ SoNodekitParts::setAnyPart( const SbName &nameOfPart, SoNode *newPartNode,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char   *nameCopy, *firstName, *remainderString;
+    char   *firstName, *remainderString;
     SoNode *firstNode = NULL;
     SbBool answer;
 
     // JUST A SINGLE NAME...
-    if ( strrchr( nameOfPart.getString(), '.' ) == NULL )
+    if ( nameOfPart.rfind('.') == -1 )
 	return setSingleNamePart( nameOfPart, newPartNode, anyPart );
 
     // OTHERWISE, A COMPOUND NAME of the form:  part1.part2.part3 etc.
     // copy the string
-    nameCopy = strdup( nameOfPart.getString() );
+    SbString nameCopy = nameOfPart.getString();
 
     // break string into two parts
-    firstName = strtok( nameCopy, ".");   // everything before the first '.'
+    firstName = strtok( (char*)nameCopy.getString(), ".");   // everything before the first '.'
     remainderString = strtok( NULL, "");  // everything else
 
     // Get firstNode:
@@ -1584,7 +1561,6 @@ SoNodekitParts::setAnyPart( const SbName &nameOfPart, SoNode *newPartNode,
 	}
     }
 
-    free ( nameCopy );
     return answer;
 }
 
@@ -1611,10 +1587,9 @@ SoNodekitParts::createPathDownTo( const SbName &nameOfPart, SoNode *theNode )
     SoGroup   *parentNode = NULL;
     SoBaseKit *thisNode = NULL;
     int     childPartNum, parentPartNum, count;
-    int     *backwardsKidIndexArray;
 
     // allocate enough room to hold all the entries...
-    backwardsKidIndexArray = new int[numEntries];
+    std::vector<int> backwardsKidIndexArray(numEntries);
 
     thisNode      = rootPointer;
     childPartNum  = catalog->getPartNumber( nameOfPart );
@@ -1648,8 +1623,6 @@ SoNodekitParts::createPathDownTo( const SbName &nameOfPart, SoNode *theNode )
     for( int i = count - 1; i >= 0; i-- ) {
 	answer->append( backwardsKidIndexArray[i] );
     }
-
-    delete [ /*numEntries*/ ] backwardsKidIndexArray;
     answer->unrefNoDelete();
     return answer;
 }

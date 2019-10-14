@@ -476,20 +476,17 @@ SoDB::isValidHeader(const char *testString)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char buf[81], *c;
-
     // Use only the first 80 characters
-    strncpy(buf,testString,80);
-
-    // Make sure it is NULL-terminated
-    buf[80] = '\0';
+    SbString buf(testString, 0, 80);
 
     // Find first newline in string, if any, and end the string there
-    if ((c = strchr(buf,'\n')) != NULL)
-	*c = '\0';
+    int index = buf.find('\n');
+    if (index != -1) {
+        buf = buf.getSubString(0, index);
+    }
 
-    SbString paddedHeader = SoOutput::padHeader(SbString(buf)); 
-       
+    SbString paddedHeader = SoOutput::padHeader(buf);
+
     for (int i = headerList.size()-1; i >= 0; i--) {
         const SoDBHeaderData *data = headerList[i];
         if (data->headerString == paddedHeader)
@@ -772,10 +769,6 @@ SoDB::read(SoInput *in, SoBase *&base)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool	ret;
-    const char	*dataFileName;
-    char	*searchPath = NULL;
-
 #ifdef DEBUG
     if (globalDB == NULL) {
 	SoDebugError::post("SoDB::read", "SoDB::init() was never called");
@@ -786,22 +779,16 @@ SoDB::read(SoInput *in, SoBase *&base)
     // Before reading, see if the SoInput is reading from a named
     // file. If so, make sure the directory search path in the SoInput
     // is set up to read from the same directory the file is in.
-    dataFileName = in->getCurFileName();
+    SbString dataFileName = in->getCurFileName();
 
-    if (dataFileName != NULL) {
-	const char *slashPtr;
-
-	// Set up the directory search stack if necessary. Look for
-	// the last '/' in the path. If there is none, there's no
-	// path. Otherwise, remove the slash and everything after it.
-	if ((slashPtr = strrchr(dataFileName, '/')) != NULL) {
-	    searchPath = strdup(dataFileName);
-	    searchPath[slashPtr - dataFileName] = '\0';
-	    SoInput::addDirectoryFirst(searchPath);
-	}
+    SbString searchPath;
+    if (!dataFileName.isEmpty()) {
+        searchPath = SbFile::dirName(dataFileName);
+        if (!searchPath.isEmpty())
+            SoInput::addDirectoryFirst(searchPath);
     }
 
-    ret = SoBase::read(in, base, SoBase::getClassTypeId());
+    SbBool ret = SoBase::read(in, base, SoBase::getClassTypeId());
 
     // If no valid base was read, but we haven't hit EOF, that means
     // that there's extra crap in the input that's not an Inventor
@@ -814,9 +801,8 @@ SoDB::read(SoInput *in, SoBase *&base)
     }
 
     // Clean up directory list if necessary
-    if (searchPath != NULL) {
+    if (!searchPath.isEmpty()) {
 	SoInput::removeDirectory(searchPath);
-	free(searchPath);
     }
 
     return ret;

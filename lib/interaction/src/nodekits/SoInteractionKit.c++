@@ -373,9 +373,9 @@ SoInteractionKit::setAnyPartAsDefault(const SbName &partName,
 		    // If contains '.' character (e.g., "duck.foot.toe")
 		    // take LAST word.
 		    const char *partStringInOwner;
-		    const char *lastDot = strrchr(partName.getString(), '.' );
-		    if (lastDot)
-			partStringInOwner = lastDot+1;
+            const int lastDot = partName.rfind('.' );
+            if (lastDot != -1)
+            partStringInOwner = partName.getString()+lastDot+1;
 		    else
 			partStringInOwner = partName.getString();
 
@@ -449,9 +449,9 @@ SoInteractionKit::setAnyPartAsDefault(const SbName &partName,
 	// If contains '.' character (e.g., "duck.foot.toe")
 	// take LAST word.
 	const char *partStringInOwner;
-	const char *lastDot = strrchr(partName.getString(), '.' );
-	if (lastDot)
-	    partStringInOwner = lastDot+1;
+    const int lastDot = partName.rfind('.' );
+    if (lastDot != -1)
+        partStringInOwner = partName.getString()+lastDot+1;
 	else
 	    partStringInOwner = partName.getString();
 
@@ -875,14 +875,14 @@ SoInteractionKit::setAnySurrogatePath( const SbName &partName,
 	    const char *brackPtr = strchr( partName.getString(), '[' );
 
 	    if ( dotPtr != NULL || brackPtr != NULL ) {
-		char *nameCopy = strdup( partName.getString() );
+        SbString nameCopy = partName.getString();
 		char *firstName;
 		if (dotPtr == NULL)
-		    firstName = strtok( nameCopy, "[");
+            firstName = strtok( (char*)nameCopy.getString(), "[");
 		else if (brackPtr == NULL || dotPtr < brackPtr)
-		    firstName = strtok( nameCopy, ".");
+            firstName = strtok( (char*)nameCopy.getString(), ".");
 		else 
-		    firstName = strtok( nameCopy, "[");
+            firstName = strtok( (char*)nameCopy.getString(), "[");
 
 		// Okay, look for the part, then free the string copy.
 		int firstPartNum = cat->getPartNumber( firstName );
@@ -895,7 +895,6 @@ SoInteractionKit::setAnySurrogatePath( const SbName &partName,
 		    firstPartNode = SoBaseKit::getAnyPart( firstName, 
 						FALSE, TRUE, publicCheck );
 		}
-		free (nameCopy);
 
 		// If the intermediary doesn't exist, return TRUE
 		if (firstPartNode == NULL)

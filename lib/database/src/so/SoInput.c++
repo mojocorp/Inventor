@@ -249,7 +249,7 @@ SoInput::~SoInput()
 // Use: public, static
 
 void
-SoInput::addDirectoryFirst(const char *dirName)
+SoInput::addDirectoryFirst(const SbString &dirName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -265,7 +265,7 @@ SoInput::addDirectoryFirst(const char *dirName)
 // Use: public, static
 
 void
-SoInput::addDirectoryLast(const char *dirName)
+SoInput::addDirectoryLast(const SbString &dirName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -282,11 +282,11 @@ SoInput::addDirectoryLast(const char *dirName)
 // Use: public, static
 
 void
-SoInput::addEnvDirectoriesFirst(const char *envVarName)
+SoInput::addEnvDirectoriesFirst(const SbString &envVarName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbString dirs = getenv(envVarName);
+    SbString dirs = getenv(envVarName.getString());
 
     if (!dirs.isEmpty()) {
         int start = 0, end = 0, i = 0;
@@ -311,11 +311,11 @@ SoInput::addEnvDirectoriesFirst(const char *envVarName)
 // Use: public, static
 
 void
-SoInput::addEnvDirectoriesLast(const char *envVarName)
+SoInput::addEnvDirectoriesLast(const SbString &envVarName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbString dirs = getenv(envVarName);
+    SbString dirs = getenv(envVarName.getString());
 
     if (!dirs.isEmpty()) {
         int start = 0, end = 0;
@@ -337,7 +337,7 @@ SoInput::addEnvDirectoriesLast(const char *envVarName)
 // Use: public, static
 
 void
-SoInput::removeDirectory(const char *dirName)
+SoInput::removeDirectory(const SbString &dirName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -430,7 +430,7 @@ SoInput::setFilePointer(FILE *newFP)		// New file pointer
 // Use: public
 
 SbBool
-SoInput::openFile(const char *fileName, SbBool okIfNotFound)
+SoInput::openFile(const SbString &fileName, SbBool okIfNotFound)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -439,7 +439,7 @@ SoInput::openFile(const char *fileName, SbBool okIfNotFound)
     if (!findFile(fileName, fullName)) {
 	if (! okIfNotFound)
 	    SoReadError::post(this,
-            "Can't open file \"%s\" for reading", fileName);
+            "Can't open file \"%s\" for reading", fileName.getString());
 	return FALSE;
     }
 
@@ -468,7 +468,7 @@ SoInput::openFile(const char *fileName, SbBool okIfNotFound)
 // Use: public
 
 SbBool
-SoInput::pushFile(const char *fileName)	// Name of file
+SoInput::pushFile(const SbString &fileName)	// Name of file
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -480,7 +480,7 @@ SoInput::pushFile(const char *fileName)	// Name of file
 
         if (!newFP.isOpen()) {
 	SoDebugError::post("SoInput::pushFile",
-                               "Can't open file \"%s\" for reading", fileName);
+                               "Can't open file \"%s\" for reading", fileName.getString());
 	return FALSE;
         }
     }

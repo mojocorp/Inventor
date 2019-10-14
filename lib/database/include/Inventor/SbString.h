@@ -108,7 +108,7 @@ class SbString {
     void		makeEmpty();
 
     // Returns pointer to the character string
-    const char *	getString() const	{ return string.data(); }
+    const char *	getString() const	{ return string.c_str(); }
 
     /// Searches the string for the content specified in str, and returns the position of the first occurrence in the string.
     /// When pos is specified the search only includes characters on or after position pos, ignoring any possible occurrences in previous locations.
