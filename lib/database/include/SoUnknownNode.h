@@ -56,6 +56,7 @@
 #ifndef  _SO_UNKNOWN_NODE_
 #define  _SO_UNKNOWN_NODE_
 
+#include <string>
 #include <Inventor/fields/SoFieldData.h>
 #include <Inventor/nodes/SoGroup.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -120,7 +121,7 @@ class SoUnknownNode : public SoGroup {
     SoFieldData		*instanceFieldData;
 
     // Real class name
-    const char *className;
+    std::string className;
 
     // List of hidden children.
     SoChildList		hiddenChildren;

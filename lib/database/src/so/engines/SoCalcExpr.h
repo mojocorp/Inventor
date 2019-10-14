@@ -37,6 +37,7 @@
 #ifndef _SO_CALC_EXPR_
 #define _SO_CALC_EXPR_
 
+#include <string>
 #include <Inventor/SbVec.h>
 #include <Inventor/SbPList.h>
 
@@ -155,7 +156,7 @@ class Const : public Expr {
 
 class Var : public Expr {
   public:
-    const char		*const name;
+    const std::string name;
     Var(const char *nm, Type type);
     ~Var();
     virtual void	print(int level);
