@@ -111,17 +111,17 @@ class SoInput {
     // Adds a directory to list of directories to search to find named
     // files to open. Directories searched in order. By default, the list
     // contains just the current directory.
-    static void		addDirectoryFirst(const char *dirName);
-    static void		addDirectoryLast(const char *dirName);
+    static void		addDirectoryFirst(const SbString &dirName);
+    static void		addDirectoryLast(const SbString &dirName);
 
     // Adds directories that are named in the value of the given
     // environment variable. Directories may be separated by colons
     // or whitespace in the value.
-    static void		addEnvDirectoriesFirst(const char *envVarName);
-    static void		addEnvDirectoriesLast(const char *envVarName);
+    static void		addEnvDirectoriesFirst(const SbString &envVarName);
+    static void		addEnvDirectoriesLast(const SbString &envVarName);
 
     // Removes given directory from list.
-    static void		removeDirectory(const char *dirName);
+    static void		removeDirectory(const SbString &dirName);
 
     // Clears list of directories, including the current directory.
     static void		clearDirectories();
@@ -136,12 +136,12 @@ class SoInput {
     // necessary. Returns FALSE on error. If okIfNotFound is FALSE
     // (the default), it prints an error message if the file could not
     // be found.
-    SbBool		openFile(const char *fileName,
+    SbBool		openFile(const SbString &fileName,
 				 SbBool okIfNotFound = FALSE);
 
     // Opens named file, pushes resulting file pointer onto stack.
     // Returns FALSE on error
-    SbBool		pushFile(const char *fileName);
+    SbBool		pushFile(const SbString &fileName);
 
     // Closes all files on stack opened with openFile or pushFile
     void		closeFile();
