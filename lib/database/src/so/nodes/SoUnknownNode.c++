@@ -100,7 +100,7 @@ SoUnknownNode::createInstance()
 		       "Unknown nodes should be created only by "
 		       "SoBase::read methods when reading");
 #endif
-    return (void *)(new SoUnknownNode());
+    return new SoUnknownNode();
 }
 
 
@@ -118,7 +118,6 @@ SoUnknownNode::SoUnknownNode() : hiddenChildren(this)
     SO_NODE_CONSTRUCTOR(SoUnknownNode);
 
     instanceFieldData = new SoFieldData(fieldData);
-    className = NULL;
 
     hasChildren = TRUE;
 }
@@ -136,7 +135,7 @@ SoUnknownNode::setClassName( const char *name )
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    className = strdup(name);
+    className = name;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -163,8 +162,6 @@ SoUnknownNode::~SoUnknownNode()
         delete fieldList[i];
 
     delete instanceFieldData;
-
-    if (className) free((void *)className);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -260,7 +257,6 @@ SoUnknownNode::createFromIsA(SoMFString *isA)
 	    t.isDerivedFrom(SoNode::getClassTypeId())) {
 
 	    SoNode *alternateRep = (SoNode *)t.createInstance();
-	    alternateRep->ref();
 #ifdef DEBUG
 	    if (alternateRep == NULL) {
 		SoDebugError::post("SoUnknownNode::createFromIsA",
@@ -270,6 +266,7 @@ SoUnknownNode::createFromIsA(SoMFString *isA)
 		return;
 	    }
 #endif
+            alternateRep->ref();
 	    // Copy over all fields that are shared:
 	    int num = instanceFieldData->getNumFields();
 	    for (int j=0; j<num; j++) {
@@ -321,8 +318,6 @@ SoUnknownNode::write(SoWriteAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
-
     SbBool saveNotify = enableNotify(FALSE);
 
     // Remember alternateRep, if set:
@@ -336,7 +331,7 @@ SoUnknownNode::write(SoWriteAction *action)
 
 	// Add hiddenChildren to regular child list temporarily:
 	removeAllChildren();
-	for (i = 0; i < hiddenChildren.getLength(); i++) {
+        for (int i = 0; i < hiddenChildren.getLength(); i++) {
 	    addChild(hiddenChildren[i]);
 	}
 	// Now write:
@@ -418,7 +413,7 @@ SoUnknownNode::copyContents(const SoFieldContainer *fromFC,
 {
     // Make sure the copy has the correct class name
     const SoUnknownNode *fromUnk = (const SoUnknownNode *) fromFC;
-    setClassName(fromUnk->className);
+    setClassName(fromUnk->className.c_str());
 
     // For each field in the original node, create a new field and add
     // it to the new node
@@ -491,6 +486,6 @@ SoUnknownNode::getFileFormatName() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return className;
+    return className.c_str();
 }
 
