@@ -100,6 +100,7 @@ class SoOutput {
     /// Enum that determines formats for writing
     enum Format {
         ASCII,
+        UTF8,
         BINARY
     };
 
@@ -116,7 +117,7 @@ class SoOutput {
     FILE *		getFilePointer() const;
 
     // Opens named file, sets file pointer to result. Returns FALSE on error
-    SbBool		openFile(const char *fileName);
+    SbBool		openFile(const SbString &fileName);
 
     // Closes file if opened with openFile. (Does nothing if not.)
     void		closeFile();
@@ -158,10 +159,16 @@ class SoOutput {
     // Specify to use the default header (ascii or binary)
     void		resetHeaderString();
     
-    /// Returns the string representing the current header.
+    // Returns the string representing the current header.
     SbString getHeaderString() const;
 
+    // Returns the string representing the default ASCII header.
     static SbString	getDefaultASCIIHeader();
+
+    // Returns the string representing the default UTF-8 header.
+    static SbString getDefaultUTF8Header();
+
+    // Returns the string representing the default binary header.
     static SbString	getDefaultBinaryHeader();
 
     // Sets the precision for outputing real numbers
