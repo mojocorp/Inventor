@@ -51,12 +51,20 @@
  _______________________________________________________________________
  */
 
+#include <machine.h>
+#include <clocale>
+#include <cstdlib>
+#include <cstring>
 #include <Inventor/SbString.h>
 #include <Inventor/errors/SoDebugError.h>
 
 //
 // Constructor that initializes to a substring.
 //
+
+SbString::SbString(const char *str) {
+    *this = fromUtf8(str);
+}
 
 SbString::SbString(const char *str, size_t start, size_t end)
 {
@@ -107,6 +115,22 @@ SbString::hash(const char *s)
 }
 
 //
+// Returns length of string
+//
+
+size_t
+SbString::getLength() const
+{
+    // "Counting characters in UTF-8 strings is fast" by Kragen Sitaker
+    size_t i = 0, j = 0;
+    while (string[i]) {
+        if ((string[i] & 0xc0) != 0x80) j++;
+        i++;
+    }
+    return j;
+}
+
+//
 // Sets string to be the empty string (""). If freeOld is TRUE
 // (default), any old storage is freed up.
 //
@@ -115,6 +139,27 @@ void
 SbString::makeEmpty()
 {
     string.clear();
+}
+
+//
+// Returns an std::wstring encoded in utf16.
+//
+
+std::wstring
+SbString::toStdWString () const
+{
+    std::wstring wstr;
+#ifdef SB_OS_WIN
+    const int wlen = MultiByteToWideChar(CP_UTF8, 0, &string[0], -1, NULL, 0) - 1;
+    wstr.resize(wlen);
+    MultiByteToWideChar(CP_UTF8, 0, &string[0], -1, (LPWSTR)wstr.data(), (int)wstr.length());
+#else
+    setlocale(LC_CTYPE, !getenv("LANG") ? "en_US.UTF-8" : "");
+    const size_t wlen = mbstowcs(NULL, &string[0], 0);
+    wstr.resize(wlen);
+    mbstowcs((wchar_t*)wstr.data(), &string[0], wlen+1);
+#endif
+    return wstr;
 }
 
 //
@@ -185,7 +230,14 @@ SbString::deleteSubString(int startChar, int endChar)
 SbString &
 SbString::operator =(const char *str)
 {
-    string = str;
+    *this = SbString(str);
+    return *this;
+}
+
+SbString &
+SbString::operator =(const SbString &str)
+{
+    string = str.string;
     return *this;
 }
 
@@ -196,7 +248,7 @@ SbString::operator =(const char *str)
 SbString &
 SbString::operator +=(const char *str)
 {
-    string += str;
+    *this += SbString(str);
     return *this;
 }
 
@@ -230,3 +282,65 @@ operator !=(const SbString &str, const char *s)
 {
     return (str.string != s);
 }
+
+//
+// Creates a string from ISO-8859-1.
+//
+
+SbString
+SbString::fromLatin1(const char *latin1, int size)
+{
+    SbString str;
+
+    if (latin1) {
+        const size_t len = (size > 0) ? size : strlen(latin1);
+        str.string.reserve(2*len);
+
+        for (size_t i=0; i<len; i++) {
+            const unsigned char c = latin1[i];
+            if (c < 0x80) {
+                str.string.push_back(c);
+            } else {
+                str.string.push_back(0xC0 | (c >> 6));
+                str.string.push_back(0x80 | (c & 0x3F));
+            }
+        }
+    }
+    return str;
+}
+
+//
+// Creates a string from UTF-8.
+//
+
+SbString
+SbString::fromUtf8(const char *utf8, int size)
+{
+    SbString str;
+    str.string = utf8 ? utf8 : "";
+    return str;
+}
+
+//
+// Creates a string from UTF-16 (wide character).
+//
+
+SbString
+SbString::fromWideChar(const wchar_t *wcs, int size)
+{
+    SbString str;
+
+#ifdef SB_OS_WIN
+    const size_t len = (size == -1) ? WideCharToMultiByte( CP_UTF8, 0, wcs, -1, NULL, 0,  NULL, NULL) - 1 : size;
+    str.string.resize(len);
+    WideCharToMultiByte(CP_UTF8, 0, wcs, -1, &str.string[0], (int)len+1, NULL, NULL);
+#else
+    setlocale(LC_CTYPE, "C.UTF-8") || setlocale(LC_CTYPE, "en_US.UTF-8");
+    const size_t len = (size == -1) ? wcstombs(NULL, wcs, 0) : size;
+    str.string.resize(len);
+    wcstombs(&str.string[0], wcs, len+1);
+#endif
+
+    return str;
+}
+

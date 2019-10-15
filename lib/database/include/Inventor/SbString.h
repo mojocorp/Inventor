@@ -78,7 +78,7 @@ class SbString {
     SbString()				{}
 
     // Constructor that initializes to given character string
-    SbString(const char *str)		{ string = str; }
+    SbString(const char *str);
 
     // Constructor that initializes to given character string
     SbString(const char *str, size_t start, size_t end);
@@ -97,7 +97,7 @@ class SbString {
     uint32_t		hash()		{ return SbString::hash(string.data()); }
 
     // Returns length of string
-    size_t			getLength() const	{ return string.size(); }
+    size_t			getLength() const;
 
     /// Returns true if the string has no characters; otherwise returns false.
     bool isEmpty() const {
@@ -109,6 +109,9 @@ class SbString {
 
     // Returns pointer to the character string
     const char *	getString() const	{ return string.c_str(); }
+
+    // Returns an std::wstring encoded in utf16.
+    std::wstring toStdWString () const;
 
     /// Searches the string for the content specified in str, and returns the position of the first occurrence in the string.
     /// When pos is specified the search only includes characters on or after position pos, ignoring any possible occurrences in previous locations.
@@ -132,8 +135,7 @@ class SbString {
 
     // Assignment operator for character string, SbString
     SbString &		operator =(const char *str);
-    SbString &		operator =(const SbString &str)
-    { return (*this = str.string.data()); }
+    SbString &		operator =(const SbString &str);
 
     // Concatenation operator "+=" for string, SbString
     SbString &		operator +=(const char *str);
@@ -168,6 +170,15 @@ class SbString {
     friend int		operator !=(const SbString &str1,
 				    const SbString &str2)
     { return (str1.string != str2.string); }
+
+    // Creates a string from ISO-8859-1.
+    static SbString fromLatin1(const char *latin, int size = -1);
+
+    // Creates a string from UTF-8.
+    static SbString fromUtf8(const char *utf8, int size = -1);
+
+    // Creates a string from UTF-16 (wide character).
+    static SbString fromWideChar(const wchar_t *wcs, int size = -1);
 
   SoINTERNAL public:
 
