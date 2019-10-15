@@ -68,6 +68,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/bundles/SoMaterialBundle.h
     database/include/Inventor/bundles/SoNormalBundle.h
     database/include/Inventor/bundles/SoTextureCoordinateBundle.h
+    database/include/Inventor/caches/SoBitmapFontCache.h
     database/include/Inventor/caches/SoBoundingBoxCache.h
     database/include/Inventor/caches/SoCache.h
     database/include/Inventor/caches/SoGLCacheList.h
@@ -443,6 +444,7 @@ set(DATABASE_SOURCES
     database/src/so/bundles/SoMaterialBundle.c++
     database/src/so/bundles/SoNormalBundle.c++
     database/src/so/bundles/SoTextureCoordinateBundle.c++
+    database/src/so/caches/SoBitmapFontCache.c++
     database/src/so/caches/SoBoundingBoxCache.c++
     database/src/so/caches/SoCache.c++
     database/src/so/caches/SoGLCacheList.c++
