@@ -63,7 +63,6 @@
 #ifndef  _SO_LOCATE_HIGHLIGHT_
 #define  _SO_LOCATE_HIGHLIGHT_
 
-#include <Inventor/misc/SoGL.h>
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoSeparator.h>
@@ -136,7 +135,7 @@ class SoLocateHighlight : public SoSeparator {
     SbBool		highlightingPass;
     static SoFullPath   *currentHighlightPath;
     SbBool		isHighlighted(SoAction *action);
-    SbBool		preRender(SoGLRenderAction *act, GLint &oldDepthFunc);
+    SbBool		preRender(SoGLRenderAction *act, int &oldDepthFunc);
     SoColorPacker	*colorPacker;
 };
 

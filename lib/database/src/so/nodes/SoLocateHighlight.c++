@@ -167,7 +167,7 @@ SoLocateHighlight::GLRenderBelowPath(SoGLRenderAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // Set up state for locate highlighting (if necessary)
-    GLint oldDepthFunc;
+    int oldDepthFunc;
     SbBool drawHighlighted = preRender(action, oldDepthFunc);
     
     // now invoke the parent method
@@ -218,7 +218,7 @@ SoLocateHighlight::GLRenderInPath(SoGLRenderAction *action)
 // Use: private
 
 SbBool
-SoLocateHighlight::preRender(SoGLRenderAction *action, GLint &oldDepthFunc)
+SoLocateHighlight::preRender(SoGLRenderAction *action, int &oldDepthFunc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
