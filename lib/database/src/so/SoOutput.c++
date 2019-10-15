@@ -66,6 +66,7 @@
 #include <cstring>
 
 static const char *defaultASCIIHeader =  "#Inventor V2.1 ascii";
+static const char *defaultUTF8Header =   "#Inventor V2.1 utf8";
 static const char *defaultBinaryHeader = "#Inventor V2.1 binary";
     
 ////////////////////////////////////////////////////////////////////////
@@ -203,7 +204,7 @@ SoOutput::getFilePointer() const
 // Use: public
 
 SbBool
-SoOutput::openFile(const char *fileName)	// Name of file
+SoOutput::openFile(const SbString &fileName)	// Name of file
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -214,7 +215,7 @@ SoOutput::openFile(const char *fileName)	// Name of file
     fp.open(fileName, "w");
     if (!fp.isOpen()) {
 	SoDebugError::post("SoOutput::openFile",
-			   "Can't open file \"%s\" for writing", fileName);
+               "Can't open file \"%s\" for writing", fileName.getString());
 	return FALSE;
     }
 
@@ -440,6 +441,8 @@ SoOutput::getHeaderString() const
         return defaultBinaryHeader;
     case ASCII:
         return defaultASCIIHeader;
+    case UTF8:
+        return defaultUTF8Header;
     default:
         break;
     }
@@ -459,7 +462,21 @@ SoOutput::getDefaultASCIIHeader()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (SbString(defaultASCIIHeader));
+    return SbString(defaultASCIIHeader);
+}
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Return the default UTF8 header string (ie the latest version
+//    of the standard Inventor utf8 header)
+//
+// Use: public, static
+SbString
+SoOutput::getDefaultUTF8Header()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    return SbString(defaultUTF8Header);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -476,7 +493,7 @@ SoOutput::getDefaultBinaryHeader()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (SoOutput::padHeader(SbString(defaultBinaryHeader)));
+    return SoOutput::padHeader(SbString(defaultBinaryHeader));
 }
 
 ////////////////////////////////////////////////////////////////////////
