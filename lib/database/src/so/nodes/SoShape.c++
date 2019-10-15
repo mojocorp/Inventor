@@ -98,7 +98,6 @@ int			SoShape::nestLevel = 0;
 SoAction		*SoShape::primAction = NULL;
 int			SoShape::primVertNum = 0;
 int			SoShape::polyVertNum = 0;
-SoShape			*SoShape::primShape = NULL;
 SoPrimitiveVertex	*SoShape::primVerts = NULL;
 SoPointDetail		*SoShape::vertDetails = NULL;
 SoPrimitiveVertex	*SoShape::polyVerts = NULL;
@@ -674,7 +673,6 @@ SoShape::beginShape(SoAction *action, TriangleShape shapeType,
 
     primShapeType = shapeType;
     primVertNum   = 0;
-    primShape	  = this;
     primAction    = action;
 
     // Save face detail unless we are called recursively
@@ -871,130 +869,89 @@ SoShape::endShape()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
+    // Static methods called by the GLU tesselation routines
+    struct glu_callbacks {
+        // Called by the GLU tesselator when we are beginning a triangle
+        // strip, fan, or set of independent triangles.
+        static void beginCB(GLenum primType, SoShape *primShape)
+        {
+            switch(primType) {
+                case GL_TRIANGLE_STRIP:
+                    primShape->beginShape(primShape->primAction, TRIANGLE_STRIP);
+                break;
+                case GL_TRIANGLE_FAN:
+                    primShape->beginShape(primShape->primAction, TRIANGLE_FAN);
+                break;
+                case GL_TRIANGLES:
+                    primShape->beginShape(primShape->primAction, TRIANGLES);
+                break;
+            }
+        }
+
+        // Called by the GLU tesselator when we are generating primitives.
+        //static void vtxCB(SoPrimitiveVertex *vertex_data, SoShape *primShape) { primShape->shapeVertex(vertex_data); }
+        static void vtxCB(float  *vertex_data, SoShape *primShape) {
+            SoPointDetail pd;
+            SoPrimitiveVertex vd;
+            vd.setDetail(&pd);
+            vd.setPoint(SbVec3f(vertex_data));
+            primShape->shapeVertex(&vd);
+        }
+
+        // Called by the GLU tesselator when we are done with the
+        static void endCB(SoShape *primShape) { primShape->endShape(); }
+
+        // Called by the GLU tesselator if there is an error (typically because the polygons self-intersects).
+        static void errorCB(GLenum err) { SoDebugError::post("SoShape::errorCB", "GLU error: %s", gluErrorString(err)); }
+    };
 
     switch (primShapeType) {
-      case TRIANGLE_STRIP:
-      case TRIANGLE_FAN:
-      case TRIANGLES:
-	primVertNum = 0;
-	break;
+        case TRIANGLE_STRIP:
+        case TRIANGLE_FAN:
+        case TRIANGLES:
+            primVertNum = 0;
+        break;
 
-      case POLYGON:
-	// Don't bother with degenerate polygons
-	if (polyVertNum < 3) {
-	    polyVertNum = 0;
-	    break;
-	}
+        case POLYGON:
+            // Don't bother with degenerate polygons
+            if (polyVertNum < 3) {
+                polyVertNum = 0;
+                break;
+            }
 
-	// Concave polygons need to be tesselated; we'll use the
-	// GLU routines to do this:
-	if (tobj == NULL) {
-	    tobj = gluNewTess();
-	    gluTessCallback(tobj, (GLenum)GLU_BEGIN,
-			    (void (*)())SoShape::beginCB);
-	    gluTessCallback(tobj, (GLenum)GLU_END, 
-			    (void (*)())SoShape::endCB);
-	    gluTessCallback(tobj, (GLenum)GLU_VERTEX, 
-			    (void (*)())SoShape::vtxCB);
-	    gluTessCallback(tobj, (GLenum)GLU_ERROR,
-			    (void (*)())SoShape::errorCB);
-	}
-	gluTessBeginPolygon(tobj, NULL);
-	gluTessBeginContour(tobj);
+            // Concave polygons need to be tesselated; we'll use the
+            // GLU routines to do this:
+            if (tobj == NULL) {
+                tobj = gluNewTess();
+                gluTessCallback(tobj, (GLenum)GLU_TESS_BEGIN_DATA,
+                        (void (*)())glu_callbacks::beginCB);
+                gluTessCallback(tobj, (GLenum)GLU_TESS_END_DATA,
+                        (void (*)())glu_callbacks::endCB);
+                gluTessCallback(tobj, (GLenum)GLU_TESS_VERTEX_DATA,
+                        (void (*)())glu_callbacks::vtxCB);
+                gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR,
+                        (void (*)())glu_callbacks::errorCB);
+            }
+            gluTessBeginPolygon(tobj, this);
+            gluTessBeginContour(tobj);
 
-	for (i = 0; i < polyVertNum; i++) {
-	    const SbVec3f &t = polyVerts[i].getPoint();
+            for (int i = 0; i < polyVertNum; i++) {
+                const SbVec3f &t = polyVerts[i].getPoint();
 
-	    GLdouble dv[3];  // glu requires double...
-	    dv[0] = t[0]; dv[1] = t[1]; dv[2] = t[2];
-	    gluTessVertex(tobj, dv, (void *)&polyVerts[i]);
-	}
-	gluTessEndContour(tobj);
-	gluTessEndPolygon(tobj);
+                GLdouble dv[3];  // glu requires double...
+                dv[0] = t[0]; dv[1] = t[1]; dv[2] = t[2];
+                gluTessVertex(tobj, dv, (void *)&polyVerts[i]);
+            }
+            gluTessEndContour(tobj);
+            gluTessEndPolygon(tobj);
 
-	polyVertNum = 0;
-	break;
+            polyVertNum = 0;
+        break;
     }
 
     nestLevel--;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Called by the GLU tesselator when we are beginning a triangle
-//    strip, fan, or set of independent triangles.
-//
-// Use: static, private
-
-void
-SoShape::beginCB(GLenum primType)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    switch(primType) {
-      case GL_TRIANGLE_STRIP:
-	primShape->beginShape(primShape->primAction, TRIANGLE_STRIP);
-	break;
-      case GL_TRIANGLE_FAN:
-	primShape->beginShape(primShape->primAction, TRIANGLE_FAN);
-	break;
-      case GL_TRIANGLES:
-	primShape->beginShape(primShape->primAction, TRIANGLES);
-	break;
-    }
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Called by the GLU tesselator when we are generating primitives.
-//
-// Use: static, private
-
-void
-SoShape::vtxCB(void *data)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const SoPrimitiveVertex *v = (const SoPrimitiveVertex *)data;
-
-    primShape->shapeVertex(v);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Called by the GLU tesselator when we are done with the
-//    strip/fan/etc.
-//
-// Use: static, private
-
-void
-SoShape::endCB()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    primShape->endShape();
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Called by the GLU tesselator if there is an error (typically
-//    because the polygons self-intersects).
-//
-// Use: static, private
-
-void
-SoShape::errorCB(GLenum err)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SoDebugError::post("SoShape::errorCB",
-		       "GLU error: %s", gluErrorString(err));
-}
 
 //
 // This macro is used by the rendering methods to follow:

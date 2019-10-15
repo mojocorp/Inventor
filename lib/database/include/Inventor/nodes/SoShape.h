@@ -61,8 +61,6 @@
 #include <Inventor/SbMatrix.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-#include <Inventor/misc/SoGL.h>
-
 class SoCube;
 class SoDetail;
 class SoFaceDetail;
@@ -259,7 +257,6 @@ class SoShape : public SoNode {
     static SoAction	*primAction;	// Action primitives generated for
     static int		primVertNum;	// Number of vertices so far
     static int		polyVertNum;	// Number of poly vertices so far
-    static SoShape	*primShape;	// Shape primitives generated for
 
     // These are static for speed, so we don't have to allocate them
     // once for each polygon or set of polygons.
@@ -304,12 +301,6 @@ class SoShape : public SoNode {
 
     // Helper routine that allocate space for concave polygon vertices
     void		allocateVerts();
-
-    // Static methods called by the GLU tesselation routines
-    static void beginCB(GLenum primType);
-    static void vtxCB(void *vertex);
-    static void endCB();
-    static void errorCB(GLenum err);
 };
 
 #endif /* _SO_SHAPE_ */
