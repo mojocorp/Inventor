@@ -74,6 +74,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/caches/SoGLCacheList.h
     database/include/Inventor/caches/SoGLRenderCache.h
     database/include/Inventor/caches/SoNormalCache.h
+    database/include/Inventor/caches/SoOutlineFontCache.h
     database/include/Inventor/details/SoConeDetail.h
     database/include/Inventor/details/SoCubeDetail.h
     database/include/Inventor/details/SoCylinderDetail.h
@@ -450,6 +451,7 @@ set(DATABASE_SOURCES
     database/src/so/caches/SoGLCacheList.c++
     database/src/so/caches/SoGLRenderCache.c++
     database/src/so/caches/SoNormalCache.c++
+    database/src/so/caches/SoOutlineFontCache.c++
     database/src/so/details/SoConeDetail.c++
     database/src/so/details/SoCubeDetail.c++
     database/src/so/details/SoCylinderDetail.c++
