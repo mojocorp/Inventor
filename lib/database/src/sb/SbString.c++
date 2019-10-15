@@ -55,6 +55,7 @@
 #include <clocale>
 #include <cstdlib>
 #include <cstring>
+#include <sstream>
 #include <Inventor/SbString.h>
 #include <Inventor/errors/SoDebugError.h>
 
@@ -78,12 +79,9 @@ SbString::SbString(const char *str, size_t start, size_t end)
 
 SbString::SbString(int digitString)
 {
-    string.resize(32);
-#ifdef SB_OS_WIN
-    _snprintf(&string[0], string.size(),"%d",digitString);
-#else
-    snprintf(&string[0], string.size(),"%d",digitString);
-#endif
+    std::ostringstream oss;
+    oss << digitString;
+    string = oss.str();
 }
 
 //
