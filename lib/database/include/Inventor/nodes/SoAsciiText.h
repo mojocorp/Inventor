@@ -82,7 +82,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-class MyOutlineFontCache;
+class SoOutlineFontCache;
 class SoPrimitiveVertex;
 class SoTextureCoordinateElement;
 
@@ -138,7 +138,7 @@ class SoAsciiText : public SoShape {
     SbVec2f getStringOffset(int line, float width);
     
     // Render the fronts of the characters
-    void renderFront(SoGLRenderAction *action, const SbString &string,
+    void renderFront(SoGLRenderAction *action, int line,
              float width, struct GLUtesselator *tobj);
     
     // Creates a text detail when picking:
@@ -150,7 +150,7 @@ class SoAsciiText : public SoShape {
 
     // Generates the fronts of the characters, by getting the outlines
     // and calling the glu tesselation code:
-    void generateFront(const SbString &string, float width);
+    void generateFront(int line, float width);
     
     // Static callbacks invoked by the glu tesselation code:
     static void beginCB(GLenum primType);
@@ -161,7 +161,7 @@ class SoAsciiText : public SoShape {
     // MyOutlineFontCache is an internal, opaque class used to
     // maintain gl display lists and other information for each
     // character in a font.
-    MyOutlineFontCache *myFont;
+    SoOutlineFontCache *myFont;
 
     // All this stuff is used while generating primitives:
     static SoAsciiText *currentGeneratingNode;
