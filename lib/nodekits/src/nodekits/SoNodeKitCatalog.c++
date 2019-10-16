@@ -295,8 +295,7 @@ SoNodekitCatalog::SoNodekitCatalog()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    numEntries = 0;
-    entries    = NULL;
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -311,13 +310,8 @@ SoNodekitCatalog::~SoNodekitCatalog()
 ////////////////////////////////////////////////////////////////////////
 {
     // delete all the members of the entries array
-    for ( int i = 0; i < numEntries; i++ )
-	delete entries[i];
-
-    // delete the entries array itself
-    if (entries != NULL)
-	delete [] entries;
-
+    for ( size_t i = 0; i < entries.size(); i++ )
+        delete entries[i];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -332,10 +326,10 @@ SoNodekitCatalog::printCheck() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fprintf( stdout, "catalog printout: number of entries = %d\n", numEntries );
-    for( int i = 0; i < numEntries; i++ ) {
-	fprintf( stdout, "#%d\n", i );
-	entries[i]->printCheck();
+    fprintf( stdout, "catalog printout: number of entries = %lu\n", entries.size() );
+    for( size_t i = 0; i < entries.size(); i++ ) {
+        fprintf( stdout, "#%lu\n", i );
+        entries[i]->printCheck();
     }
 }
 
@@ -371,10 +365,10 @@ SoNodekitCatalog::getName( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the name of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->getName();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->getName();
     else
-	return *emptyName;
+        return *emptyName;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -390,10 +384,10 @@ SoNodekitCatalog::getType( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the type of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->getType();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->getType();
     else
-	return *badType;
+        return *badType;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -424,10 +418,10 @@ SoNodekitCatalog::getDefaultType( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the defaultType of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->getDefaultType();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->getDefaultType();
     else
-	return *badType;
+        return *badType;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -458,10 +452,10 @@ SoNodekitCatalog::isNullByDefault( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the value for this entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->isNullByDefault();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->isNullByDefault();
     else
-	return TRUE;
+        return TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -492,10 +486,10 @@ SoNodekitCatalog::isLeaf( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the type of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->isLeaf();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->isLeaf();
     else
-	return TRUE;
+        return TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -526,10 +520,10 @@ SoNodekitCatalog::getParentName( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->getParentName();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->getParentName();
     else
-	return *emptyName;
+        return *emptyName;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -592,10 +586,10 @@ SoNodekitCatalog::getRightSiblingName( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->getRightSiblingName();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->getRightSiblingName();
     else
-	return *emptyName;
+        return *emptyName;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -658,10 +652,10 @@ SoNodekitCatalog::isList( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the type of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->isList();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->isList();
     else
-	return FALSE;
+        return FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -692,10 +686,10 @@ SoNodekitCatalog::getListContainerType( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the defaultType of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->getListContainerType();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->getListContainerType();
     else
-	return *badType;
+        return *badType;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -726,10 +720,10 @@ SoNodekitCatalog::getListItemTypes( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return the type of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->getListItemTypes();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->getListItemTypes();
     else
-	return ( *emptyList );
+        return ( *emptyList );
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -760,10 +754,10 @@ SoNodekitCatalog::isPublic( int thePartNumber ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // return whether the part is public, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	return entries[thePartNumber]->isPublic();
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        return entries[thePartNumber]->isPublic();
     else
-	return TRUE;
+        return TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -798,8 +792,8 @@ SoNodekitCatalog::addListItemType( int thePartNumber,
 {
     // add typeToAdd to the entry's listItemTypes, if you can find
     // the entry...
-    if ( thePartNumber >= 0 && thePartNumber < numEntries )
-	entries[thePartNumber]->addListItemType( typeToAdd );
+    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+        entries[thePartNumber]->addListItemType( typeToAdd );
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -846,8 +840,8 @@ SoNodekitCatalog::narrowTypes( const SbName &theName,
 {
     int thePartNumber = getPartNumber( theName );
 
-    if ( thePartNumber < 0 || thePartNumber >= numEntries )
-	return;
+    if ( thePartNumber < 0 || thePartNumber >= entries.size() )
+        return;
 
     SoNodekitCatalogEntry *theEntry = entries[thePartNumber];
 
@@ -893,8 +887,8 @@ SoNodekitCatalog::setNullByDefault( const SbName &theName,
 {
     int thePartNumber = getPartNumber( theName );
 
-    if ( thePartNumber < 0 || thePartNumber >= numEntries )
-	return;
+    if ( thePartNumber < 0 || thePartNumber >= entries.size() )
+        return;
 
     entries[thePartNumber]->setNullByDefault( newNullByDefault );
 }
@@ -916,20 +910,14 @@ SoNodekitCatalog::clone( SoType typeOfThis ) const
     SoNodekitCatalog      *theClone;
 
     theClone = new SoNodekitCatalog;
-    theClone->numEntries = numEntries;
-    if (numEntries == 0)
-	theClone->entries = NULL;
-    else {
-	theClone->entries = new SoNodekitCatalogEntry *[numEntries];
-	for (int i = 0; i < numEntries; i++) {
+    theClone->entries.resize(entries.size());
+    for (size_t i = 0; i < entries.size(); i++) {
 	    if ( i == SO_CATALOG_THIS_PART_NUM )
-		theClone->entries[i] = entries[i]->clone( typeOfThis, 
-							  typeOfThis );
+            theClone->entries[i] = entries[i]->clone( typeOfThis, typeOfThis );
 	    else
-		theClone->entries[i] = entries[i]->clone();
+            theClone->entries[i] = entries[i]->clone();
         theClone->partNameDict[entries[i]->getName()] = i;
 	}
-    }
 
     return theClone;
 }
@@ -1149,7 +1137,7 @@ SoNodekitCatalog::checkAndGetSiblings(
     leftEntry = NULL;
     rightEntry = NULL;
 
-    for ( int i = 0; i < numEntries; i++ ) {
+    for ( int i = 0; i < entries.size(); i++ ) {
 	if ( entries[i]->getParentName() == theParentName ) {
 	    // is it the left sibling?
 	    if ( entries[i]->getRightSiblingName() == theRightSiblingName )
@@ -1261,7 +1249,7 @@ SoNodekitCatalog::addEntry( const SbName &theName,
 					      theListContainerType ) )
 	return FALSE;
 
-    if ( numEntries == SO_CATALOG_THIS_PART_NUM  && theName != "this" ) {
+    if ( entries.size() == SO_CATALOG_THIS_PART_NUM  && theName != "this" ) {
 #ifdef DEBUG
 	SoDebugError::post("SoNodekitCatalog::addEntry",
 		" Entry number %d must be named \"this\" ",
@@ -1272,16 +1260,6 @@ SoNodekitCatalog::addEntry( const SbName &theName,
 
     // IF ALL TESTS WERE PASSED...
 
-    // expand the list by one slot
-    newArray = new SoNodekitCatalogEntry *[numEntries + 1];
-    if ( entries != NULL ) {
-	for (int i = 0; i < numEntries; i++ )
-	    newArray[i] = entries[i];
-	delete [] entries;
-    }
-    entries = newArray;
-    numEntries++;	
-
     // make a list containing only the given list item type.
     SoTypeList listItemTypeList(0);
     listItemTypeList.append( theListItemType );
@@ -1291,10 +1269,10 @@ SoNodekitCatalog::addEntry( const SbName &theName,
 	    theNullByDefault, theParentName, theRightSiblingName,
 	    theListPart,theListContainerType, listItemTypeList, thePublicPart);
     // enter the new entry in the array
-    entries[numEntries - 1] = newEntry;
+    entries.push_back(newEntry);
 
     // add the new name to the quick-reference part name dictionary
-    partNameDict[theName] = numEntries - 1;
+    partNameDict[theName] = entries.size() - 1;
 
     // parent is no longer a leaf node in the nodekit structure
     if ( parentEntry != NULL ) {

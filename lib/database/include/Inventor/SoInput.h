@@ -248,9 +248,7 @@ class SoInput {
     SbString		backBuf;	// For strings that are put back
     int			backBufIndex;	// Index into backBuf (-1 if no buf)
 
-    void                *tmpBuffer;     // Buffer for binary read from file
-    char                *curTmpBuf;     // Current location in temporary buffer
-    size_t              tmpBufSize;     // Size of temporary buffer
+    std::vector<char>   tmpBuffer;     // Buffer for binary read from file
 
     char                backupBuf[8];   // Buffer for storing data that
                                         // has been read but can't be put back.
@@ -299,22 +297,19 @@ class SoInput {
     // Reads given character from buffer into string. Returns 0 or 1
     int			readChar(char *string, char charToRead);
 
-    // Make room in the temporary buffer for reading from a binary file
-    SbBool              makeRoomInBuf(size_t nBytes);
-
     // Convert datatypes to network format during writing
     void                convertShort(char *from, short *s);
     void                convertInt32(char *from, int32_t *l);
     void                convertFloat(char *from, float *f);
     void                convertDouble(char *from, double *d);
-    void                convertShortArray( char *from, register short *to,
-                                           register size_t len);
-    void                convertInt32Array( char *from, register int32_t *to,
-                                           register size_t len);
-    void                convertFloatArray( char *from, register float *to,
-                                           register size_t len);
-    void                convertDoubleArray( char *from, register double *to,
-                                            register size_t len);
+    void                convertShortArray( char *from, short *to,
+                                           size_t len);
+    void                convertInt32Array( char *from, int32_t *to,
+                                           size_t len);
+    void                convertFloatArray( char *from, float *to,
+                                           size_t len);
+    void                convertDoubleArray( char *from, double *to,
+                                            size_t len);
 };
 
 #endif /* _SO_INPUT_ */

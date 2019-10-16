@@ -81,6 +81,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <cstring>
+#include <vector>
 
 // Defines for printing out file data for nodekits
 #define SO_BASEKIT_FILEDATA_HEADER "partName\/childNum pairs [ "
@@ -925,11 +926,11 @@ SoBaseKit::readInstance( SoInput *in, unsigned short /*flags*/ )
 	SbBool wasSetUp = setUpConnections( FALSE );
 
     // [1] make a temporary list of all the part fields.
-	int      numParts       = nodekitPartsList->numEntries;
+    const int      numParts       = nodekitPartsList->numEntries;
 	// firstPartField is 1. Part 0 is 'this' and is not treated here.
 	int      firstPartField = 1;
 	SoSFNode **realPartFldLst = nodekitPartsList->fieldList;
-	SoSFNode **tempPartFldLst = new SoSFNode *[numParts];
+    std::vector<SoSFNode*> tempPartFldLst(numParts);
 
 	int i;
 	for ( i = firstPartField; i < numParts; i++ ) {
@@ -1067,7 +1068,6 @@ SoBaseKit::readInstance( SoInput *in, unsigned short /*flags*/ )
 	for ( i = firstPartField; i < numParts; i++ ) {
 	    delete tempPartFldLst[i];
 	}
-	delete [] tempPartFldLst;
 
     // Turn connections and notification back on for node
 	setUpConnections( wasSetUp );
@@ -1263,11 +1263,11 @@ SoBaseKit::copyContents(const SoFieldContainer *fromFC, SbBool copyConnections)
     //  [7] undo temporary ref of the copy.
 
     //  [1] create a temporary list to store copies of all part fields.
-	int numParts = origKit->nodekitPartsList->numEntries;
+    const int numParts = origKit->nodekitPartsList->numEntries;
 	// firstPartField is 1. Part 0 is 'this' and is not treated here.
 	int      firstPartField = 1;
 	SoSFNode **realPartFldLst = nodekitPartsList->fieldList;
-	SoSFNode **tempPartFldLst = new SoSFNode *[numParts];
+    std::vector<SoSFNode*> tempPartFldLst (numParts);
 
 	int i;
 	for ( i = firstPartField; i < numParts; i++ )
@@ -1394,7 +1394,6 @@ SoBaseKit::copyContents(const SoFieldContainer *fromFC, SbBool copyConnections)
 	for ( i = firstPartField; i < numParts; i++ ) {
 	    delete tempPartFldLst[i];
 	}
-	delete [] tempPartFldLst;
 
 
     //  [7] re-instate connections of the copy.

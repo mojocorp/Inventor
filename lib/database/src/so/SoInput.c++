@@ -161,9 +161,6 @@ SoInput::SoInput()
 
     backBufIndex = -1;	// No buffer
 
-    tmpBuffer = NULL;
-    tmpBufSize = 0;
-
     backupBufUsed = FALSE;
 }
 
@@ -210,9 +207,6 @@ SoInput::SoInput(SoInput *dictIn)
 	     (dictIn == NULL ? NULL : dictIn->curFile->refDict));
 
     backBufIndex = -1;	// No buffer
-
-    tmpBuffer = NULL;
-    tmpBufSize = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -232,12 +226,6 @@ SoInput::~SoInput()
     if (curFile->refDict != NULL && ! curFile->borrowedDict)
 	delete curFile->refDict;
     delete curFile;
-
-    if (tmpBuffer != NULL) {
-        free (tmpBuffer);
-        tmpBuffer = NULL;
-        tmpBufSize = 0;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -412,10 +400,8 @@ SoInput::setFilePointer(FILE *newFP)		// New file pointer
     curFile->fp.setFilePointer(newFP);
     initFile("<user-defined file pointer>", NULL);
 
-    if (tmpBuffer == NULL) {
-        tmpBuffer = malloc(64);
-        tmpBufSize = 64;
-        curTmpBuf = (char *)tmpBuffer;
+    if (tmpBuffer.empty()) {
+        tmpBuffer.resize(64);
     }
 }
 
@@ -450,10 +436,8 @@ SoInput::openFile(const SbString &fileName, SbBool okIfNotFound)
     curFile->fp.open(fullName, "rb");
     initFile(fileName, &fullName);
 
-    if (tmpBuffer == NULL) {
-        tmpBuffer = malloc(64);
-        tmpBufSize = 64;
-        curTmpBuf = (char *)tmpBuffer;
+    if (tmpBuffer.empty()) {
+        tmpBuffer.resize(64);
     }
 
     return TRUE;
@@ -493,10 +477,8 @@ SoInput::pushFile(const SbString &fileName)	// Name of file
     // Initialize reading from file
     initFile(fileName, &fullName);
 
-    if (tmpBuffer == NULL) {
-        tmpBuffer = malloc(64);
-        tmpBufSize = 64;
-        curTmpBuf = (char *)tmpBuffer;
+    if (tmpBuffer.empty()) {
+        tmpBuffer.resize(64);
     }
 
     return TRUE;
@@ -627,11 +609,7 @@ SoInput::setBuffer(void *bufPointer, size_t bufSize)
     curFile->headerString.makeEmpty();
 
     // Delete the temporary buffer if it has been allocated
-    if (tmpBuffer != NULL) {
-        free (tmpBuffer);
-        tmpBuffer = NULL;
-        tmpBufSize = 0;
-    }
+    tmpBuffer.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1167,9 +1145,9 @@ SoInput::read(SbName &n,		// Name to read into
                 return TRUE;                                                  \
             }                                                                 \
             char padbuf[4];                                                   \
-            makeRoomInBuf(sizeof(dglType));                                 \
-            ok = curFile->fp.read((char *)tmpBuffer, sizeof(dglType), 1) != 0;\
-            dglFunc((char *)tmpBuffer, (dglType *)&tnum);                     \
+            tmpBuffer.resize(sizeof(dglType));                                 \
+            ok = curFile->fp.read(tmpBuffer.data(), sizeof(dglType), 1) != 0;\
+            dglFunc(tmpBuffer.data(), (dglType *)&tnum);                     \
             if (pad != 0) {                                                   \
                 ok = curFile->fp.read(padbuf, sizeof(char), pad) != 0;        \
         }                                                                     \
@@ -1197,12 +1175,12 @@ SoInput::read(SbName &n,		// Name to read into
         }								      \
     }                                                                         \
     else { 								      \
-        makeRoomInBuf(length * sizeof(type));				      \
-        size_t i = curFile->fp.read(tmpBuffer, sizeof(type), length);         \
+        tmpBuffer.resize(length * sizeof(type));				      \
+        size_t i = curFile->fp.read(tmpBuffer.data(), sizeof(type), length);         \
         if (i != length) {                                                    \
             return FALSE;                                                     \
         }                                                                     \
-        dglFunc((char *)tmpBuffer, (type *)array, length);		      \
+        dglFunc(tmpBuffer.data(), (type *)array, length);		      \
     } 									      \
     return ok
 
@@ -1415,12 +1393,12 @@ SoInput::convertDouble(char *from, double *d)
 
 void
 SoInput::convertShortArray( char *from,
-                            register short *to,
-                            register size_t len)
+                            short *to,
+                            size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register char *b = from;
+    char *b = from;
 
     len >>= 1;			// convert bytes to short
     while (len > 4) {		// unroll the loop a bit
@@ -1449,14 +1427,14 @@ SoInput::convertShortArray( char *from,
 // Use: private
 
 void
-SoInput::convertInt32Array( char *from,
-                           register int32_t *to,
-                            register size_t len)
+SoInput::convertInt32Array(char *from,
+                           int32_t *to,
+                           size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register int32_t  *t = to;
-    register char  *b = from;
+    int32_t  *t = to;
+    char  *b = from;
 
     while (len > 4) {		// unroll the loop a bit
 	DGL_NTOH_INT32( t[0], INT32(b));
@@ -1486,12 +1464,12 @@ SoInput::convertInt32Array( char *from,
 void
 SoInput::convertFloatArray( char  *from,
                             float *to,
-                            register size_t len)
+                            size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register float *t = to;
-    register char  *b = from;
+    float *t = to;
+    char  *b = from;
 
     while (len > 4) {		// unroll the loop a bit
 	DGL_NTOH_FLOAT( t[0], FLOAT(b));
@@ -1520,12 +1498,12 @@ SoInput::convertFloatArray( char  *from,
 
 void
 SoInput::convertDoubleArray( char *from,
-                             register double *to,
-                             register size_t len)
+                             double *to,
+                             size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register char *b = from;
+    char *b = from;
 
     len >>= 3;			// convert bytes to doubles
     while (len > 4) {		// unroll the loop a bit
@@ -1769,10 +1747,8 @@ SoInput::checkHeader()
 	
 		if (isBinary) {
 		    curFile->binary = TRUE;
-		    if (tmpBuffer == NULL) {
-			tmpBuffer = malloc(64);
-			tmpBufSize = 64;
-			curTmpBuf = (char *)tmpBuffer;
+            if (tmpBuffer.empty()) {
+                tmpBuffer.resize(64);
 		    }
 		} else {		    
 		    curFile->binary = FALSE;		    
@@ -2762,41 +2738,3 @@ SoInput::findReference(const SbName &name) const // Reference name
     return NULL;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Makes sure temp buffer can contain nBytes more bytes. Returns
-//    FALSE if this is not possible.
-//
-// Use: private
-
-SbBool
-SoInput::makeRoomInBuf(size_t nBytes)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // If already had problems with buffer, stop
-    if (tmpBuffer == NULL)
-        return FALSE;
-
-    // If buffer not big enough, realloc a bigger one
-    if (nBytes >= tmpBufSize) {
-	// While not enough room, double size of buffer
-	while (nBytes >= tmpBufSize)
-	    tmpBufSize *= 2;
-
-        void* ptr = realloc(tmpBuffer, tmpBufSize);
-
-	// Test for bad reallocation
-        if (ptr == NULL) {
-            free (tmpBuffer);
-            tmpBuffer = NULL;
-            tmpBufSize = 0;
-
-            return FALSE;
-        }
-        tmpBuffer = ptr;
-    }
-
-    return TRUE;
-}

@@ -52,10 +52,11 @@
  */
 
 #include <cmath>
+#include <vector>
+#include <string.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/misc/SoNormalGenerator.h>
 
-#include <string.h>
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -284,7 +285,6 @@ SoNormalGenerator::generate(float creaseAngle)
     SbVec3f	hashScale, sum, base;
     float	tolerance, cosCreaseAngle = std::cos(creaseAngle);
     int32_t	i, j, hashValue, lowHashValue, highHashValue, hv;
-    int32_t	*hashTable, *hashNext, *indirect;
     SbBool	found;
 
     // Compute the bounding box of all vertices
@@ -320,9 +320,9 @@ SoNormalGenerator::generate(float creaseAngle)
     // "hashNext" array points to the next point in the list. The
     // "indirect" table is a circularly linked list of indices that
     // are within tolerance of each other.
-    hashTable = new int32_t[numPoints];
-    hashNext  = new int32_t[numPoints];
-    indirect  = new int32_t[numPoints];
+    std::vector<int32_t> hashTable(numPoints);
+    std::vector<int32_t> hashNext(numPoints);
+    std::vector<int32_t> indirect(numPoints);
     for (i = 0; i < numPoints; i++) {
 	hashTable[i] = -1;
 	hashNext[i]  = -1;
@@ -393,10 +393,6 @@ SoNormalGenerator::generate(float creaseAngle)
 	sum.normalize();
 	vertNormals[i] = sum;
     }
-
-    delete [] hashTable;
-    delete [] hashNext;
-    delete [] indirect;
 }
 
 ////////////////////////////////////////////////////////////////////////

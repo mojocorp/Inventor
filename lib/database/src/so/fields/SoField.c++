@@ -117,8 +117,7 @@ struct SoFieldAuditorInfo {
 //////////////////////////////////////////////////////////////////////////////
 
 SoType	SoField::classTypeId;		// Type identifier
-char	*SoField::fieldBuf;		// Used by SoField::get()
-int	SoField::fieldBufSize;		// Used by SoField::get()
+std::vector<char> SoField::fieldBuf;		// Used by SoField::get()
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -695,13 +694,12 @@ SoField::get(SbString &valueString)
     evaluate();
 
     // Prepare a character buffer and SoOutput for writing field strings
-    if (fieldBufSize == 0) {
-	fieldBufSize = 1028;
-	fieldBuf = (char *) malloc((unsigned) fieldBufSize);
+    if (fieldBuf.empty()) {
+        fieldBuf.resize(1028);
     }
 
     // Set up output into a string buffer
-    out.setBuffer((void *) fieldBuf, fieldBufSize, &SoField::reallocFieldBuf);
+    out.setBuffer((void *) fieldBuf.data(), fieldBuf.size(), &SoField::reallocFieldBuf);
 
     // Make sure that the file header and lots of white space will NOT
     // be written into the string
@@ -731,7 +729,7 @@ SoField::get(SbString &valueString)
     out.reset();
 
     // Store the result in the passed SbString
-    valueString = fieldBuf;
+    valueString = fieldBuf.data();
 
     setDefault(wasDefault);
 }
@@ -1825,10 +1823,9 @@ SoField::reallocFieldBuf(void *ptr, size_t newSize)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fieldBuf = (char *) realloc(ptr, newSize);
-    fieldBufSize = newSize;
+    fieldBuf.resize(newSize);
 
-    return fieldBuf;
+    return fieldBuf.data();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1907,8 +1904,7 @@ SoSField::SoSField()
 //
 //////////////////////////////////////////////////////////////////////////////
 
-char	*SoMField::fieldBuf;		// Used by SoMField::get1()
-int	SoMField::fieldBufSize;		// Used by SoMField::get1()
+std::vector<char> SoMField::fieldBuf;		// Used by SoMField::get1()
 SoType	SoMField::classTypeId;
 
 ////////////////////////////////////////////////////////////////////////
@@ -2095,13 +2091,12 @@ SoMField::get1(int index, SbString &valueString)
     evaluate();
 
     // Prepare a character buffer and SoOutput for writing field strings
-    if (fieldBufSize == 0) {
-	fieldBufSize = 1028;
-	fieldBuf = (char *) malloc((unsigned) fieldBufSize);
+    if (fieldBuf.empty()) {
+        fieldBuf.resize(1028);
     }
 
     // Set up output into a string buffer
-    out.setBuffer((void *) fieldBuf, fieldBufSize, &SoMField::reallocFieldBuf);
+    out.setBuffer((void *) fieldBuf.data(), fieldBuf.size(), &SoMField::reallocFieldBuf);
 
     // Make sure that the file header and lots of white space will NOT
     // be written into the string
@@ -2114,7 +2109,7 @@ SoMField::get1(int index, SbString &valueString)
     out.reset();
 
     // Store the result in the passed SbString
-    valueString = fieldBuf;
+    valueString = fieldBuf.data();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -2371,10 +2366,9 @@ SoMField::reallocFieldBuf(void *ptr, size_t newSize)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fieldBuf = (char *) realloc(ptr, newSize);
-    fieldBufSize = newSize;
+    fieldBuf.resize(newSize);
 
-    return fieldBuf;
+    return fieldBuf.data();
 }
 
 

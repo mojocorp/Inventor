@@ -75,6 +75,7 @@
 #define SO_STATE_GET_CONST_ELEMENT(stackIndex)\
 	return stack[stackIndex];
 
+#include <vector>
 #include <Inventor/SoLists.h>
 
 class SoAction;
@@ -139,8 +140,7 @@ SoEXTENDER class SoState {
   private:
     SoAction		*action;	// Action instance state is in
     int			depth;		// Current depth
-    SoElement		**stack;	// Array of element stacks
-    int			numStacks;	// Number of stacks in array
+    std::vector<SoElement*>	stack;	// Array of element stacks
     SoElement *		topElement;	// First element in threaded stack
 
     SbBool		cacheOpen;	// TRUE if a cache is open

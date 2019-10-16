@@ -83,8 +83,7 @@ SoFaceDetail::SoFaceDetail()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    point = NULL;
-    numPoints = 0;
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -99,8 +98,7 @@ SoFaceDetail::~SoFaceDetail()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (point != NULL)
-	delete [] point;
+
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -122,9 +120,9 @@ SoFaceDetail::copy() const
     newDetail->faceIndex = faceIndex;
     newDetail->partIndex = partIndex;
 
-    newDetail->setNumPoints(numPoints);
-    for (int i = 0; i < numPoints; i++)
-	newDetail->setPoint(i, &point[i]);
+    newDetail->setNumPoints(point.size());
+    for (size_t i = 0; i < point.size(); i++)
+        newDetail->setPoint(i, &point[i]);
 
     return newDetail;
 }
@@ -143,17 +141,7 @@ SoFaceDetail::setNumPoints(int32_t num)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // Free up old ones if necessary
-    if (point != NULL && numPoints < num) {
-	delete [] point;
-	point = NULL;	// So they get allocated below
-    }
-
-    // Allocate space if necessary
-    if (point == NULL && num > 0)
-	point = new SoPointDetail[num];
-
-    numPoints = num;
+    point.resize(num);
 }
 
 ////////////////////////////////////////////////////////////////////////

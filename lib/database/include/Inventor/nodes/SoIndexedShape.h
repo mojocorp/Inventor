@@ -56,6 +56,7 @@
 #ifndef  _SO_INDEXED_SHAPE_
 #define  _SO_INDEXED_SHAPE_
 
+#include <vector>
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/nodes/SoVertexShape.h>
 
@@ -126,11 +127,11 @@ class SoIndexedShape : public SoVertexShape {
 
     // These must not be called unless setupIndices has been called first:
     const int32_t *	getNormalIndices()
-	{ return (normalI ? normalI : consecutiveIndices); }
+    { return (normalI ? normalI : consecutiveIndices.data()); }
     const int32_t *	getColorIndices()
-	{ return (colorI ? colorI : consecutiveIndices); }
+    { return (colorI ? colorI : consecutiveIndices.data()); }
     const int32_t *	getTexCoordIndices()
-	{ return (texCoordI ? texCoordI : consecutiveIndices); }
+    { return (texCoordI ? texCoordI : consecutiveIndices.data()); }
 
     // Keep indices up to date if things change
     virtual void	notify(SoNotList *list);
@@ -141,6 +142,7 @@ class SoIndexedShape : public SoVertexShape {
     // Internal routines used to allocate sequential indices so the
     // same rendering loops can be used for indexed or non-indexed
     // cases:
+    std::vector<int32_t>	consecutiveIndicesWithHoles;
     void	allocateSequential(int howMany);
     int32_t*	allocateSequentialWithHoles();
 
@@ -148,8 +150,7 @@ class SoIndexedShape : public SoVertexShape {
     const int32_t	*texCoordI;
     const int32_t	*colorI;
     const int32_t	*normalI;
-    static int32_t	*consecutiveIndices;
-    static int	numConsecutiveIndicesAllocated;
+    static std::vector<int32_t>	consecutiveIndices;
 
     unsigned char materialBinding;
     unsigned char normalBinding;
