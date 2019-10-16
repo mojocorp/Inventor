@@ -76,7 +76,8 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#include <Inventor/SoLists.h>
+#include <vector>
+#include <Inventor/SbBasic.h>
 
 class SoElement;
 class SoState;
@@ -126,8 +127,8 @@ SoEXTENDER class SoCache {
     virtual ~SoCache();
 
   private:
-    SbPList		elementsUsed;		// Elements used in cache
-    unsigned char	*elementsUsedFlags;	// Which elements on list
+    std::vector<SoElement*>	elementsUsed;		// Elements used in cache
+    std::vector<unsigned char>	elementsUsedFlags;	// Which elements on list
 
     int			refCount;		// Reference count
     int			invalidated;		// True if invalidate called

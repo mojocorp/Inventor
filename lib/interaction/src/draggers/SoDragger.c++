@@ -144,7 +144,6 @@ SoDragger::SoDragger()
 
     // initialize tempPathToThis, pickPath
     tempPathToThis = NULL;
-    tempPathNumKidsHack = NULL;
     pickPath = NULL;
 
     // initialize surrogatePick info.
@@ -191,10 +190,7 @@ SoDragger::~SoDragger()
 	delete tempPathToThis;
 	tempPathToThis = NULL;
     }
-    if ( tempPathNumKidsHack != NULL ) {
-	delete tempPathNumKidsHack;
-	tempPathNumKidsHack = NULL;
-    }
+    tempPathNumKidsHack.clear();
 
     if ( activeChildDragger )
 	activeChildDragger->unref();
@@ -577,10 +573,7 @@ SoDragger::setTempPathToThis( const SoPath *somethingClose )
 	delete tempPathToThis;
 	tempPathToThis = NULL;
     }
-    if (tempPathNumKidsHack != NULL) {
-	delete tempPathNumKidsHack;
-	tempPathNumKidsHack = NULL;
-    }
+    tempPathNumKidsHack.clear();
 
     // Figure out tempPathToThis from somethingClose, which may 
     // not be exactly what we need...
@@ -621,15 +614,14 @@ SoDragger::setTempPathToThis( const SoPath *somethingClose )
     if ( tempPathToThis != NULL ) {
 	SoNode *pathNode;
 
-	tempPathNumKidsHack = new SbPList( tempPathToThis->getLength() );
+    tempPathNumKidsHack.reserve( tempPathToThis->getLength() );
 
 	for ( int i = 0; i < tempPathToThis->getLength(); i++ ) {
 	    pathNode = tempPathToThis->getNode(i);
 	    if ( !pathNode  || !pathNode->getChildren() )
-		tempPathNumKidsHack->append( (void *) 0 );
+        tempPathNumKidsHack.push_back( 0 );
 	    else
-		tempPathNumKidsHack->append( 
-			    (void *) (unsigned long) pathNode->getChildren()->getLength() );
+        tempPathNumKidsHack.push_back( pathNode->getChildren()->getLength() );
 	}
     }
 
@@ -653,7 +645,7 @@ SoDragger::isTempPathToThisOk()
     //     This whole method is a hack!
     // 
 
-    if ( tempPathToThis == NULL || tempPathNumKidsHack == NULL)
+    if ( tempPathToThis == NULL || tempPathNumKidsHack.empty())
 	return FALSE;
 
     SbBool isOkay = TRUE;
@@ -701,11 +693,7 @@ SoDragger::isTempPathToThisOk()
 		int indexInPath = tempPathToThis->getIndex(numFmHead+1);
 
 		int numKidsNow    = children->getLength();
-#if (_MIPS_SZPTR == 64 || __ia64 || __LP64__)
-		int numKidsBefore = (int) ((long) (*tempPathNumKidsHack)[numFmHead]);
-#else
-		int numKidsBefore = (int) (*tempPathNumKidsHack)[numFmHead];
-#endif
+        int numKidsBefore = tempPathNumKidsHack[numFmHead];
 
 		// To be correct, the childNode has to be the correct numbered
 		// child under the parent, and the parent should still
@@ -721,9 +709,7 @@ SoDragger::isTempPathToThisOk()
 		    int bestSpot = indexInPath;
 		    if ( numKidsNow != numKidsBefore ) {
 			// update the number of kids.
-			tempPathNumKidsHack->remove(numFmHead);
-			tempPathNumKidsHack->insert( (void *) (unsigned long) numKidsNow,
-						    numFmHead);
+            tempPathNumKidsHack[numFmHead] = numKidsNow;
 
 			bestSpot = indexInPath + (numKidsNow - numKidsBefore);
 		    }
@@ -781,10 +767,7 @@ SoDragger::isTempPathToThisOk()
 	    delete tempPathToThis;
 	    tempPathToThis = NULL;
 	}
-	if (tempPathNumKidsHack != NULL) {
-	    delete tempPathNumKidsHack;
-	    tempPathNumKidsHack = NULL;
-	}
+    tempPathNumKidsHack.clear();
     }
 
     return isOkay;

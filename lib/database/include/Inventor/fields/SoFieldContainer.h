@@ -60,6 +60,7 @@
 #ifndef  _SO_FIELD_CONTAINER_
 #define  _SO_FIELD_CONTAINER_
 
+#include <stack>
 #include <Inventor/misc/SoBase.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -227,11 +228,7 @@ class SoFieldContainer : public SoBase {
 
     // This holds a list of SbDict instances used during copy
     // operations. It is a list to allow recursive copying.
-    static SbPList	*copyDictList;
-
-    // And this callback is used to unref() all instances in the
-    // copyDict when copyDone() is called
-    static void		unrefCopy(unsigned long key, void *instPtr);
+    static std::stack<std::map<const SoFieldContainer*, const SoFieldContainer*> > copyDictList;
 
     // These are used by SoFieldContainer::get() to hold
     // the returned field string

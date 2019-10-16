@@ -60,7 +60,6 @@
 #define  _SO_OUTPUT_DATA_
 
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/SbPList.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
