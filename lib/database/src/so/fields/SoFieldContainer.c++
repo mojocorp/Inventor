@@ -75,7 +75,7 @@
 
 // This is a list of SbDict instances used duting copy operations to
 // keep track of instances. It is a list to allow recursive copying.
-SbPList	*SoFieldContainer::copyDictList = NULL;
+std::stack<std::map<const SoFieldContainer*, const SoFieldContainer*> > SoFieldContainer::copyDictList;
 
 // These are used by SoFieldContainer::get() to hold the returned
 // field string
@@ -596,16 +596,13 @@ SoFieldContainer::initCopyDict()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (copyDictList == NULL)
-	copyDictList = new SbPList;
-
-    SbDict *copyDict = new SbDict;
+    std::map<const SoFieldContainer*, const SoFieldContainer*> copyDict;
 
     // Insert the new dictionary at the beginning. Since most copies
     // are non-recursive, having to make room in the list won't happen
     // too frequently. Accessing the list happens a lot, so using slot
     // 0 will speed that up some.
-    copyDictList->insert(copyDict, 0);
+    copyDictList.push(copyDict);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -621,7 +618,7 @@ SoFieldContainer::addCopy(const SoFieldContainer *orig,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbDict *copyDict = (SbDict *) (*copyDictList)[0];
+    std::map<const SoFieldContainer*, const SoFieldContainer*> &copyDict = copyDictList.top();
 
     // Add a reference when entering an instance into the
     // dictionary. The references are removed before the dictionary is
@@ -636,7 +633,7 @@ SoFieldContainer::addCopy(const SoFieldContainer *orig,
     // a copied instance, we reset the flag to TRUE.
     ((SoFieldContainer *) copy)->notifyEnabled = FALSE;
 
-    copyDict->enter((unsigned long) orig, (void *) copy);
+    copyDict[orig] = copy;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -653,13 +650,10 @@ SoFieldContainer::checkCopy(const SoFieldContainer *orig)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbDict *copyDict = (SbDict *) (*copyDictList)[0];
+    const std::map<const SoFieldContainer*, const SoFieldContainer*> &copyDict = copyDictList.top();
+    std::map<const SoFieldContainer*, const SoFieldContainer*>::const_iterator it = copyDict.find(orig);
 
-    void *copyPtr;
-    if (! copyDict->find((unsigned long) orig, copyPtr))
-	return NULL;
-
-    return (SoFieldContainer *) copyPtr;
+    return (it != copyDict.end()) ? (SoFieldContainer *) it->second : NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -678,23 +672,23 @@ SoFieldContainer::findCopy(const SoFieldContainer *orig,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! copyDictList || ! (*copyDictList)[0])
-	return NULL;
+    if (copyDictList.empty())
+        return NULL;
 
-    SbDict *copyDict = (SbDict *) (*copyDictList)[0];
+    const std::map<const SoFieldContainer*, const SoFieldContainer*> &copyDict = copyDictList.top();
 
-    void *copyPtr;
-    if (! copyDict->find((unsigned long) orig, copyPtr))
-	return NULL;
+    std::map<const SoFieldContainer*, const SoFieldContainer*>::const_iterator it = copyDict.find(orig);
+    if (it == copyDict.end())
+        return NULL;
 
-    SoFieldContainer *copyFC = (SoFieldContainer *) copyPtr;
+    SoFieldContainer *copyFC = (SoFieldContainer *)it->second;
 
     // ??? Copy the contents only if the notifyEnabled flag is FALSE,
     // indicating that the copy has not yet been done. See the HACK
     // ALERT above.
     if (! copyFC->notifyEnabled) {
-	copyFC->notifyEnabled = TRUE;
-	copyFC->copyContents(orig, copyConnections);
+        copyFC->notifyEnabled = TRUE;
+        copyFC->copyContents(orig, copyConnections);
     }
 
     return copyFC;
@@ -713,43 +707,28 @@ SoFieldContainer::copyDone()
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (copyDictList->getLength() <= 0) {
-	SoDebugError::post("SoFieldContainer::copyDone",
-			   "No dictionary left to get rid of");
-	return;
+    if (copyDictList.empty()) {
+        SoDebugError::post("SoFieldContainer::copyDone",
+                   "No dictionary left to get rid of");
+        return;
     }
 #endif /* DEBUG */
 
-    SbDict *copyDict = (SbDict *) (*copyDictList)[0];
+    std::map<const SoFieldContainer*, const SoFieldContainer*> &copyDict = copyDictList.top();
 
     // Unref every instance in the copy dictionary
-    copyDict->applyToAll(unrefCopy);
+    std::map<const SoFieldContainer*, const SoFieldContainer*>::iterator it;
+    for ( it = copyDict.begin(); it != copyDict.end(); it++ ) {
+        SoFieldContainer *inst = (SoFieldContainer*)it->second;
 
-    delete copyDict;
+        // Set the notifyEnabled bit to TRUE if it wasn't already done
+        if (! inst->notifyEnabled)
+            inst->notifyEnabled = TRUE;
 
-    copyDictList->remove(0);
-}
+        inst->unref();
+    }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    This callback is used to unref() all instances in the
-//    copyDict when copyDone() is called.
-//
-// Use: private, static
-
-void
-SoFieldContainer::unrefCopy(unsigned long, void *instPtr)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SoFieldContainer *inst = (SoFieldContainer *) instPtr;
-
-    // Set the notifyEnabled bit to TRUE if it wasn't already done
-    if (! inst->notifyEnabled)
-	inst->notifyEnabled = TRUE;
-
-    inst->unref();
+    copyDictList.pop();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -769,7 +748,7 @@ SoFieldContainer::copyContents(const SoFieldContainer *fromFC,
     // Access the field data and overlay it
     const SoFieldData *fieldData = getFieldData();
     if (fieldData != NULL)
-	fieldData->overlay(this, fromFC, copyConnections);
+        fieldData->overlay(this, fromFC, copyConnections);
 
     // Copy the name, if it has one
     const SbName &name = fromFC->getName();

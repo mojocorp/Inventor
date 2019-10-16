@@ -56,6 +56,8 @@
 #ifndef  _SO_CACHE_CONTEXT_ELEMENT
 #define  _SO_CACHE_CONTEXT_ELEMENT
 
+#include <vector>
+#include <map>
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoSubElement.h>
 
@@ -152,10 +154,10 @@ SoEXTENDER class SoGLDisplayList {
     //
     // Get methods
     //
-    Type getType() { return type; }
-    int getNumAllocated() { return num; }
-    GLuint getFirstIndex() { return startIndex; }
-    int getContext() { return context; }
+    Type getType() const { return type; }
+    int getNumAllocated() const { return num; }
+    GLuint getFirstIndex() const { return startIndex; }
+    int getContext() const { return context; }
 
   private:
     ~SoGLDisplayList();
@@ -168,8 +170,6 @@ SoEXTENDER class SoGLDisplayList {
     static int texture_object_extensionID;
 friend class SoGLCacheContextElement;
 };
-
-class SbIntList;
 
 SoEXTENDER class SoGLCacheContextElement : public SoElement {
 
@@ -289,8 +289,8 @@ SoEXTENDER class SoGLCacheContextElement : public SoElement {
     static void		freeList(SoState *state,
 				 SoGLDisplayList *list);
 
-    static SbPList *	waitingToBeFreed;	// Allocated in ::init
-    static SbPList *	extensionList;		// Allocated in ::init
+    static std::map<int, std::vector<SoGLDisplayList*> > waitingToBeFreed;	// Allocated in ::init
+    static std::vector<struct extInfo> extensionList;		// Allocated in ::init
 
 friend class SoGLDisplayList;
 };

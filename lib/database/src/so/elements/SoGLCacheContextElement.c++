@@ -61,16 +61,17 @@
 #include <Inventor/SbPList.h>
 
 #include <cstring>
+#include <vector>
 
 SO_ELEMENT_SOURCE(SoGLCacheContextElement);
 
-SbPList		*SoGLCacheContextElement::waitingToBeFreed = NULL;
-SbPList		*SoGLCacheContextElement::extensionList = NULL;
+std::map<int, std::vector<SoGLDisplayList*> > SoGLCacheContextElement::waitingToBeFreed;
+std::vector<struct extInfo> SoGLCacheContextElement::extensionList;
 
 // Internal struct:
 struct extInfo {
     SbString string;
-    SbIntList support;
+    std::vector<int> support;
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -84,8 +85,6 @@ void
 SoGLCacheContextElement::initClass()
 {
     SO_ELEMENT_INIT_CLASS(SoGLCacheContextElement, SoElement);
-    waitingToBeFreed = new SbPList;
-    extensionList = new SbPList;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -150,13 +149,11 @@ SoGLCacheContextElement::set(SoState *state, int ctx,
 
     // Look through the list of display lists waiting to be freed, and
     // free any that match the context:
-    for (int i = waitingToBeFreed->getLength()-1; i >= 0; i--) {
-	SoGLDisplayList *dl = (SoGLDisplayList *)(*waitingToBeFreed)[i];
-	if (dl->getContext() == ctx) {
-	    waitingToBeFreed->remove(i);
-	    delete dl;
-	}
+    std::vector<SoGLDisplayList*> & lst = waitingToBeFreed[ctx];
+    for (int i = 0; i<lst.size(); i++) {
+        delete lst[i];
     }
+    lst.clear();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -201,9 +198,9 @@ SoGLCacheContextElement::freeList(SoState *state,
 ////////////////////////////////////////////////////////////////////////
 {
     if (state != NULL  &&  get(state) == dl->getContext()) {
-	delete dl;
+        delete dl;
     } else {
-	waitingToBeFreed->append(dl);
+        waitingToBeFreed[dl->getContext()].push_back(dl);
     }
 }
 
@@ -220,14 +217,15 @@ SoGLCacheContextElement::getExtID(const char *str)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = 0; i < extensionList->getLength(); i++) {
-	extInfo *e = (extInfo *)(*extensionList)[i];
-	if (e->string == str) return i;
+    for (size_t i = 0; i < extensionList.size(); i++) {
+        const extInfo &e = extensionList[i];
+        if (e.string == str)
+            return i;
     }
-    extInfo *e = new extInfo;
-    e->string = str;
-    extensionList->append(e);
-    return extensionList->getLength()-1;
+    extInfo e;
+    e.string = str;
+    extensionList.push_back(e);
+    return extensionList.size()-1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -248,23 +246,24 @@ SoGLCacheContextElement::extSupported(SoState *state, int ext)
 			   "you MUST use SoGLCacheContextElement::getExtID");
     }
 #endif
-    extInfo *e = (extInfo *)(*extensionList)[ext];
+    extInfo &e = extensionList[ext];
     int ctx = get(state);
 
     // The support list is a list of context,flag pairs (flag is TRUE
     // if the render context supports the extension).  This linear
     // search assumes that there will be a small number of render
     // contexts.
-    for (int i = 0; i < e->support.getLength(); i+=2) {
-	if (e->support[i] == ctx) return e->support[i+1];
+    for (int i = 0; i < e.support.size(); i+=2) {
+        if (e.support[i] == ctx)
+            return e.support[i+1];
     }
     // Ask GL if supported:
     SbBool supported = 
 	strstr((const char *)glGetString(GL_EXTENSIONS),
-	       e->string.getString()) 
+           e.string.getString())
 	    != NULL;
-    e->support.append(ctx);
-    e->support.append(supported);
+    e.support.push_back(ctx);
+    e.support.push_back(supported);
 
     return supported;
 }

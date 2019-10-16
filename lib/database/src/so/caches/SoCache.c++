@@ -79,7 +79,7 @@ SoCache::SoCache(SoState *state)
 
     depth = state->getDepth();
 
-    int bytesNeeded = (SoElement::getNumStackIndices()+7)/8;
+    const int bytesNeeded = (SoElement::getNumStackIndices()+7)/8;
 
     // Set the size of the elementsUsedFlags to be the maximum number
     // of elements currently enabled.  This is safe because if more
@@ -87,8 +87,8 @@ SoCache::SoCache(SoState *state)
     // care about them-- if a node that used the new element was added
     // below this cache, it would cause notification and would cause
     // the cache to be blown.
-    elementsUsedFlags = new unsigned char[bytesNeeded];
-    memset(elementsUsedFlags, 0, bytesNeeded);
+    elementsUsedFlags.resize(bytesNeeded);
+    std::fill(elementsUsedFlags.begin(), elementsUsedFlags.end(), 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -102,13 +102,9 @@ SoCache::~SoCache()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
-
     // Get rid of all the elements in list
-    for (i = 0; i < elementsUsed.getLength(); i++)
-	delete (SoElement *) elementsUsed[i];
-
-    delete[] elementsUsedFlags;
+    for (size_t i = 0; i < elementsUsed.size(); i++)
+        delete elementsUsed[i];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -156,7 +152,7 @@ SoCache::unref(SoState *state)
 ////////////////////////////////////////////////////////////////////////
 {
     if (--refCount == 0)
-	destroy(state);
+        destroy(state);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -173,18 +169,17 @@ SoCache::addElement(const SoElement *elt)
 ////////////////////////////////////////////////////////////////////////
 {
     // See if element is already on list
-    int byte = elt->getStackIndex() / 8;
-    int bit = elt->getStackIndex() % 8;
-    if (elt->getDepth() >= depth
-		|| ((elementsUsedFlags[byte] >> bit) & 1))
-	return;
+    const int byte = elt->getStackIndex() / 8;
+    const int bit = elt->getStackIndex() % 8;
+    if (elt->getDepth() >= depth || ((elementsUsedFlags[byte] >> bit) & 1))
+        return;
 
     // Make a copy we can later call matches() on:
     SoElement *newElt = elt->copyMatchInfo();
     newElt->setDepth(elt->getDepth());
 
     // Add it to the list
-    elementsUsed.append((void *) newElt);
+    elementsUsed.push_back(newElt);
     elementsUsedFlags[byte] |= (1 << bit);
 }
 
@@ -202,19 +197,18 @@ SoCache::addCacheDependency(const SoState *state, SoCache *subCache)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = 0; i < subCache->elementsUsed.getLength(); i++) {
-	const SoElement *eltInCache =
-	    (const SoElement *) subCache->elementsUsed[i];
+    for (size_t i = 0; i < subCache->elementsUsed.size(); i++) {
+        const SoElement *eltInCache = subCache->elementsUsed[i];
 
-	//
-	// This is pretty subtle: the depth of the element in the
-	// cache may not match the depth of the (matching) element in
-	// the state (a cache may be built at a node that is instanced
-	// at two different depths, for example).  Because the depths
-	// must be correct for the elementsUsed list to work
-	// correctly, we must depend on the element in the state.
-	//
-	addElement(state->getConstElement(eltInCache->getStackIndex()));
+        //
+        // This is pretty subtle: the depth of the element in the
+        // cache may not match the depth of the (matching) element in
+        // the state (a cache may be built at a node that is instanced
+        // at two different depths, for example).  Because the depths
+        // must be correct for the elementsUsed list to work
+        // correctly, we must depend on the element in the state.
+        //
+        addElement(state->getConstElement(eltInCache->getStackIndex()));
     }
 }
 
@@ -248,35 +242,32 @@ SoCache::isValid(const SoState *state) const
 	    fprintf(stderr, "an uncacheable node.\n");
 	}	    
 #endif
-	return FALSE;
+        return FALSE;
     }
 
-    int	i;
-
     // Compare used elements for match
-    for (i = 0; i < elementsUsed.getLength(); i++) {
-	const SoElement *eltInCache = (const SoElement *) elementsUsed[i];
-	const SoElement *eltInState =
-	    state->getConstElement(eltInCache->getStackIndex());
+    for (size_t i = 0; i < elementsUsed.size(); i++) {
+        const SoElement *eltInCache = elementsUsed[i];
+        const SoElement *eltInState = state->getConstElement(eltInCache->getStackIndex());
 
-	// If cache's version of element doesn't match what's in the
-	// state, the cache is not valid.
-	if (!eltInCache->matches(eltInState)) {
+        // If cache's version of element doesn't match what's in the
+        // state, the cache is not valid.
+        if (!eltInCache->matches(eltInState)) {
 
 #ifdef DEBUG
-	    if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-		fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid",
-			this);
-		fprintf(stderr, " because element %s does not match:\n",
-			eltInState->getTypeId().getName().getString());
-		fprintf(stderr, "------\nElement in state:\n");
-		eltInState->print(stderr);
-		fprintf(stderr, "------\nElement in cache:\n");
-		eltInCache->print(stderr);
-	    }
+            if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+                fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid",
+                    this);
+                fprintf(stderr, " because element %s does not match:\n",
+                    eltInState->getTypeId().getName().getString());
+                fprintf(stderr, "------\nElement in state:\n");
+                eltInState->print(stderr);
+                fprintf(stderr, "------\nElement in cache:\n");
+                eltInCache->print(stderr);
+            }
 #endif
-	    return FALSE;
-	}	    
+            return FALSE;
+        }
     }
 
     return TRUE;
@@ -296,19 +287,16 @@ SoCache::getInvalidElement(const SoState *state) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
-
     // Compare used elements for match
-    for (i = 0; i < elementsUsed.getLength(); i++) {
-	const SoElement *eltInCache = (const SoElement *) elementsUsed[i];
-	const SoElement *eltInState =
-	    state->getConstElement(eltInCache->getStackIndex());
+    for (size_t i = 0; i < elementsUsed.size(); i++) {
+        const SoElement *eltInCache = elementsUsed[i];
+        const SoElement *eltInState = state->getConstElement(eltInCache->getStackIndex());
 
-	if (eltInCache != eltInState && !
-	    eltInCache->matches(eltInState)) {
+        if (eltInCache != eltInState && !
+            eltInCache->matches(eltInState)) {
 
-	    return eltInState;
-	}	    
+            return eltInState;
+        }
     }
 
     return NULL;

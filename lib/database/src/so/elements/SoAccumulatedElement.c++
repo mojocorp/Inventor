@@ -119,16 +119,8 @@ SoAccumulatedElement::matches(const SoElement *elt) const
 ////////////////////////////////////////////////////////////////////////
 {
     const SoAccumulatedElement	*accElt = (const SoAccumulatedElement *) elt;
-    int				i;
 
-    if (accElt->nodeIds.getLength() != nodeIds.getLength())
-	return FALSE;
-
-    for (i = 0; i < nodeIds.getLength(); i++)
-	if (nodeIds[i] != accElt->nodeIds[i])
-	    return FALSE;
-
-    return TRUE;
+    return (accElt->nodeIds == nodeIds) ? TRUE : FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -143,7 +135,7 @@ SoAccumulatedElement::clearNodeIds()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    nodeIds.truncate(0);
+    nodeIds.clear();
     accumulatesWithParentFlag = FALSE;
 }
 
@@ -163,29 +155,12 @@ SoAccumulatedElement::addNodeId(const SoNode *node)
 {
 #ifdef DEBUG
     if (node == NULL) {
-	SoDebugError::post("SoAccumulatedElement::addNodeId",
-			   "NULL node pointer passed");
-	return;
+        SoDebugError::post("SoAccumulatedElement::addNodeId",
+                   "NULL node pointer passed");
+        return;
     }
 #endif /* DEBUG */
-
-    int			i;
-    unsigned long	id = (unsigned long)node->getNodeId();
-
-    // Search through list for correct place for id
-    for (i = 0; i < nodeIds.getLength(); i++)
-	if (id <= (unsigned long) nodeIds[i])
-	    break;
-
-    // Otherwise, i will contain the index where the new element belongs
-    if (i >= nodeIds.getLength())
-	nodeIds.append((void *) id);
-	
-    // Insert it in the list if it is not already there:
-    else { 
-	if (id != (unsigned long) nodeIds[i])
-	    nodeIds.insert((void *) id, i);
-    }
+    nodeIds.insert(node->getNodeId());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -208,8 +183,8 @@ SoAccumulatedElement::setNodeId(const SoNode *node)
     }
 #endif /* DEBUG */
 
-    nodeIds.truncate(0);
-    nodeIds.append((void *) (unsigned long) node->getNodeId());
+    nodeIds.clear();
+    nodeIds.insert(node->getNodeId());
 
     accumulatesWithParentFlag = FALSE;
 }
@@ -227,8 +202,7 @@ SoAccumulatedElement::copyMatchInfo() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoAccumulatedElement *result =
-	(SoAccumulatedElement *)getTypeId().createInstance();
+    SoAccumulatedElement *result = (SoAccumulatedElement *)getTypeId().createInstance();
 
     result->nodeIds = nodeIds;
 
@@ -252,10 +226,9 @@ SoAccumulatedElement::captureThis(SoState *state) const
     SoElement::captureThis(state);  // Capture this...
 
     if (accumulatesWithParentFlag) {
-	SoAccumulatedElement *parent =
-	    (SoAccumulatedElement *)getNextInStack();
-	if (parent)
-	    parent->captureThis(state);
+        SoAccumulatedElement *parent = (SoAccumulatedElement *)getNextInStack();
+        if (parent)
+            parent->captureThis(state);
     }
 }
 
@@ -275,8 +248,8 @@ SoAccumulatedElement::print(FILE *fp) const
     SoElement::print(fp);
 
     fprintf(fp, "NodeIds: [ ");
-    for (int i = 0; i < nodeIds.getLength(); i++) {
-	fprintf(fp, "%d, ", nodeIds[i]);
+    for (std::set<uint32_t>::iterator it=nodeIds.begin(); it!=nodeIds.end(); ++it) {
+        fprintf(fp, "%d, ", *it);
     }
     fprintf(fp, "]\n");
 }

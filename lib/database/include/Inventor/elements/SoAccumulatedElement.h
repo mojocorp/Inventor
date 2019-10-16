@@ -83,6 +83,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
+#include <set>
 #include <Inventor/elements/SoSubElement.h>
 
 SoEXTENDER class SoAccumulatedElement : public SoElement {
@@ -124,7 +125,7 @@ SoEXTENDER class SoAccumulatedElement : public SoElement {
     // This stores the list of node id's as pointers, since they
     // should be the same length as int32_ts. The id's are sorted by
     // increasing value, to make comparisons easier.
-    SbPList		nodeIds;
+    std::set<uint32_t> nodeIds;
   private:
 
     SbBool		accumulatesWithParentFlag;

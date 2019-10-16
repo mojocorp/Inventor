@@ -64,6 +64,7 @@
 #ifndef  _SO_DRAGGER_
 #define  _SO_DRAGGER_
 
+#include <vector>
 #include <Inventor/SbBox.h>
 #include <Inventor/SbViewVolume.h>
 #include <Inventor/SbViewportRegion.h>
@@ -522,7 +523,7 @@ class SoDragger : public SoInteractionKit {
     // under us. The variable tempPathNumKidsHack helps us fix up paths
     // that have changed since the path was set.
     SoTempPath		*tempPathToThis;
-    SbPList   		*tempPathNumKidsHack;
+    std::vector<int> tempPathNumKidsHack;
     // Determines if this path can actually be used. Since a temp path 
     // does not ref the nodes, some nodes my get deleted out from
     // under us. This routine makes sure that everythings all right.
