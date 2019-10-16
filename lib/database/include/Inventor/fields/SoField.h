@@ -56,6 +56,7 @@
 #ifndef  _SO_FIELD_
 #define  _SO_FIELD_
 
+#include <vector>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 #include <Inventor/misc/SoNotification.h>
@@ -280,8 +281,7 @@ class SoField {
     static SoType	classTypeId;
 
     // These are used by SoField::get() to hold the returned field string
-    static char		*fieldBuf;
-    static int		fieldBufSize;
+    static std::vector<char> fieldBuf;
 
     // The "flags" field contains several bit flags:
     struct {
@@ -426,8 +426,7 @@ class SoMField : public SoField {
     static SoType	classTypeId;
 
     // These are used by SoMField::get1() to hold the returned field string
-    static char		*fieldBuf;
-    static int		fieldBufSize;
+    static std::vector<char> fieldBuf;
 
     // Allocates room for num values. Copies old values (if any) into
     // new area. Deletes old area, if any.

@@ -59,8 +59,7 @@
 
 SO_NODE_ABSTRACT_SOURCE(SoIndexedShape);
 
-int32_t *SoIndexedShape::consecutiveIndices = NULL;
-int SoIndexedShape::numConsecutiveIndicesAllocated = 0;
+std::vector<int32_t> SoIndexedShape::consecutiveIndices;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -111,15 +110,6 @@ SoIndexedShape::~SoIndexedShape()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (materialBinding == SoMaterialBindingElement::PER_VERTEX)      
-	    delete[] ((int32_t *)colorI);
-	
-    if (normalBinding == SoNormalBindingElement::PER_VERTEX) 
-	    delete[] ((int32_t *)normalI);
-	    
-    if (texCoordBinding == SoTextureCoordinateBindingElement::PER_VERTEX) 
-	    delete[] ((int32_t *)texCoordI);
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -316,8 +306,7 @@ SoIndexedShape::setupIndices(int numParts, int numFaces,
     if (materialBinding != vpCache.getMaterialBinding()) {
 	// Free if old binding was PER_VERTEX:
 	if (materialBinding == SoMaterialBindingElement::PER_VERTEX) {
-	    // Ok to cast const away here:
-	    delete[] ((int32_t *)colorI);
+        consecutiveIndicesWithHoles.clear();
 	    colorI = NULL;
 	}
 	materialBinding = vpCache.getMaterialBinding();
@@ -446,8 +435,7 @@ SoIndexedShape::setupIndices(int numParts, int numFaces,
     if (needNormals && (normalBinding != vpCache.getNormalBinding())) {
 	// Free if old binding was PER_VERTEX:
 	if (normalBinding == SoNormalBindingElement::PER_VERTEX) {
-	    // Ok to cast const away here:
-	    delete[] ((int32_t *)normalI);
+        consecutiveIndicesWithHoles.clear();
 	    normalI = NULL;
 	}
 	normalBinding = vpCache.getNormalBinding();
@@ -577,8 +565,7 @@ SoIndexedShape::setupIndices(int numParts, int numFaces,
     if (needTexCoords && (texCoordBinding != vpCache.getTexCoordBinding())) {
 	// Free if old binding was PER_VERTEX:
 	if (texCoordBinding == SoTextureCoordinateBindingElement::PER_VERTEX) {
-	    // Ok to cast const away here:
-	    delete[] ((int32_t *)texCoordI);
+        consecutiveIndicesWithHoles.clear();
 	    texCoordI = NULL;
 	}
 	texCoordBinding = vpCache.getTexCoordBinding();
@@ -654,15 +641,12 @@ SoIndexedShape::allocateSequential(int howMany)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (howMany > numConsecutiveIndicesAllocated) {
-	numConsecutiveIndicesAllocated = howMany;
-	if (consecutiveIndices != NULL) {
-	    delete[] consecutiveIndices;
-	}
-	consecutiveIndices = new int32_t[howMany];
-	for (int i = 0; i < howMany; i++) {
-	    consecutiveIndices[i] = i;
-	}
+    if (howMany > consecutiveIndices.size()) {
+        const size_t start = consecutiveIndices.size();
+        consecutiveIndices.resize(howMany);
+        for (size_t i = start; i < consecutiveIndices.size(); i++) {
+            consecutiveIndices[i] = i;
+        }
     }
 }
 
@@ -680,15 +664,15 @@ SoIndexedShape::allocateSequentialWithHoles()
 ////////////////////////////////////////////////////////////////////////
 {
     int count = 0;
-    int num = coordIndex.getNum();
-    int32_t *result = new int32_t[num];
+    const int num = coordIndex.getNum();
+    consecutiveIndicesWithHoles.resize(num);
     for (int i = 0; i < num; i++) {
-	if (coordIndex[i] >= 0) {
-	    result[i] = count;
-	    count++;
-	}
-	else
-	    result[i] = coordIndex[i]; // Just copy-over negatives
+        if (coordIndex[i] >= 0) {
+            consecutiveIndicesWithHoles[i] = count;
+            count++;
+        }
+        else
+            consecutiveIndicesWithHoles[i] = coordIndex[i]; // Just copy-over negatives
     }
-    return result;
+    return consecutiveIndicesWithHoles.data();
 }

@@ -119,7 +119,6 @@ SoGLRenderAction::SoGLRenderAction(const SbViewportRegion &viewportRegion)
     delayObjs		= FALSE;
     sortObjs		= FALSE;
     ba			= NULL;
-    bboxes		= NULL;
     cacheContext	= 0;
     remoteRendering	= FALSE;
 
@@ -144,10 +143,7 @@ SoGLRenderAction::~SoGLRenderAction()
 ////////////////////////////////////////////////////////////////////////
 {
     if (ba != NULL)
-	delete ba;
-
-    if (bboxes != NULL)
-	delete [] bboxes;
+        delete ba;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -359,9 +355,8 @@ SoGLRenderAction::handleTransparency(SbBool isTransparent)
 	    // case, don't add the path if it is the same as any of
 	    // the previous ones.
 	    SbBool	isCopy = FALSE;
-	    int		i;
 
-	    for (i = 0; i < transpPaths.getLength(); i++) {
+            for (int i = 0; i < transpPaths.getLength(); i++) {
 		if (*curPath == *transpPaths[i]) {
 		    isCopy = TRUE;
 		    break;
@@ -517,10 +512,9 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
 	return;
     }
 
-    int		pass;
     float	passFrac = 1.0 / (float) getNumPasses();
 
-    for (pass = 0; pass < getNumPasses(); pass++) {
+    for (int pass = 0; pass < getNumPasses(); pass++) {
 
 	// Stuff to do between passes:
 	if (pass > 0) {
@@ -619,7 +613,7 @@ SoGLRenderAction::renderTransparentObjs()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i, numObjs = transpPaths.getLength(), numToDo;
+    const int numObjs = transpPaths.getLength();
 
     // Indicate that we are doing transparent objects so we know not
     // to render all passes
@@ -651,33 +645,24 @@ SoGLRenderAction::renderTransparentObjs()
 	}
 
 	// Make sure there is room for the bounding boxes
-	if (bboxes == NULL) {
-	    bboxes = new SbBox3f[numObjs];
-	    numBBoxes = numObjs;
-	}
-	else if (numBBoxes < numObjs) {
-	    delete [] bboxes;
-	    bboxes = new SbBox3f[numObjs];
-	    numBBoxes = numObjs;
-	}
+    bboxes.resize(numObjs);
 
-	for (i = 0; i < numObjs; i++) {
+	for (int i = 0; i < numObjs; i++) {
 	    ba->apply(transpPaths[i]);
-	    bboxes[i] = ba->getBoundingBox();
+	    bboxes[i] = ba->getBoundingBox().getMax()[2];
 	}
 
 	// Render them in sorted order
-	for (numToDo = numObjs; numToDo > 0; --numToDo) {
-	    int		farthest;
-	    float	zFar;
+	for (int numToDo = numObjs; numToDo > 0; --numToDo) {
+            int		farthest = -1;
 
 	    // Use selection sort, since number of objects is usually small
 
 	    // Look for bbox with smallest zmax (farthest from camera!)
-	    zFar = FLT_MAX;
-	    for (i = 0; i < numObjs; i++) {
-		if (bboxes[i].getMax()[2] < zFar) {
-		    zFar = bboxes[i].getMax()[2];
+	    float zFar = FLT_MAX;
+	    for (int i = 0; i < numObjs; i++) {
+		if (bboxes[i] < zFar) {
+		    zFar = bboxes[i];
 		    farthest = i;
 		}
 	    }
@@ -686,7 +671,7 @@ SoGLRenderAction::renderTransparentObjs()
 	    apply(transpPaths[farthest]);
 
 	    // Mark it as being far
-	    bboxes[farthest].getMax()[2] = FLT_MAX;
+        bboxes[farthest] = FLT_MAX;
 	}
     }
 

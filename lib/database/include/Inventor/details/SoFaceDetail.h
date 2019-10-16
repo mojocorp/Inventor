@@ -56,6 +56,7 @@
 #ifndef _SO_FACE_DETAIL_
 #define _SO_FACE_DETAIL_
 
+#include <vector>
 #include <Inventor/details/SoPointDetail.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -77,7 +78,7 @@ class SoFaceDetail : public SoDetail {
     virtual ~SoFaceDetail();
 
     // Returns the number of points in the face
-    int32_t			getNumPoints() const	{ return numPoints; }
+    int32_t			getNumPoints() const	{ return point.size(); }
 
     // Returns the point detail for the indexed point of the face
     const SoPointDetail *	getPoint(int i) const	{ return &point[i]; }
@@ -110,8 +111,7 @@ class SoFaceDetail : public SoDetail {
     static void			initClass();
 
   private:
-    SoPointDetail		*point;
-    int32_t			numPoints;
+    std::vector<SoPointDetail> point;
     int32_t			faceIndex, partIndex;
 };
 

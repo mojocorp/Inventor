@@ -56,11 +56,12 @@
 #ifndef  _SO_GL_RENDER_ACTION_
 #define  _SO_GL_RENDER_ACTION_
 
+#include <vector>
+
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
 
-class	SbBox3f;
 class	SoGetBoundingBoxAction;
 
 // Callback functions used between rendering passes should be of this type.
@@ -246,8 +247,7 @@ class SoGLRenderAction : public SoAction {
     SbBool		sortObjs;	// TRUE if objects are to be sorted
     SoPathList		transpPaths;	// Paths to transparent objects
     SoGetBoundingBoxAction *ba;		// For computing bounding boxes
-    SbBox3f		*bboxes;	// Bounding boxes of objects
-    int			numBBoxes;	// Number of bboxes allocated
+    std::vector<float> bboxes; // Bounding boxes zmax of objects
 
     uint32_t		cacheContext;   // GL cache context
     SbBool		remoteRendering;// Remote rendering?

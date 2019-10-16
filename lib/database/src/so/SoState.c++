@@ -68,38 +68,34 @@ SoState::SoState(SoAction *_action, const SoTypeList &enabledElements)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-    SoElement	*elt;
-
     action = _action;
     depth = 0;
 
     // Find out number of elements
-    numStacks = SoElement::getNumStackIndices();
+    const size_t numStacks = SoElement::getNumStackIndices();
 
     // Allocate stack pointers
-    stack = new SoElement * [numStacks];
+    stack.resize(numStacks);
 
     // Initialize all stacks to NULL
-    for (i = 0; i < numStacks; i++)
-	stack[i] = NULL;
+    std::fill(stack.begin(), stack.end(), (SoElement *)NULL);
 
     // Allocate and initialize one instance of each enabled element.
     // While doing this, set up threaded stack of elements
     topElement = NULL;
-    for (i = 0; i < enabledElements.getLength(); i++) {
-	// Skip bad elements
-	if (enabledElements[i].isBad())
-	    continue;
+    for (int i = 0; i < enabledElements.getLength(); i++) {
+        // Skip bad elements
+        if (enabledElements[i].isBad())
+            continue;
 
-	elt = (SoElement *) enabledElements[i].createInstance();
-	elt->setDepth(depth);
-	stack[elt->getStackIndex()] = elt;
-	elt->init(this);
-	elt->setNext(topElement);
-	elt->setNextInStack(NULL);
-	elt->setNextFree(NULL);
-	topElement = elt;
+        SoElement *elt = (SoElement *) enabledElements[i].createInstance();
+        elt->setDepth(depth);
+        stack[elt->getStackIndex()] = elt;
+        elt->init(this);
+        elt->setNext(topElement);
+        elt->setNextInStack(NULL);
+        elt->setNextFree(NULL);
+        topElement = elt;
     }
 
     // Push state to avoid clobbering initial element instances
@@ -132,19 +128,14 @@ SoState::~SoState()
 #endif
 
     // Get rid of all the elements on all the stacks.
-    SoElement *elt, *nextElt;
-    int i;
-    for (i = 0; i < numStacks; i++) {
-	elt = stack[i];
-	while (elt != NULL) {
-	    nextElt = elt->getNextFree();
-	    delete elt;
-	    elt = nextElt;
-	}
+    for (size_t i = 0; i < stack.size(); i++) {
+        SoElement *elt = stack[i];
+        while (elt != NULL) {
+            SoElement *nextElt = elt->getNextFree();
+            delete elt;
+            elt = nextElt;
+        }
     }
-
-    // Get rid of stack pointer array
-    delete[] stack;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -288,22 +279,21 @@ SoState::print(FILE *fp)
 ////////////////////////////////////////////////////////////////////////
 {
     const SoElement	*elt;
-    int			i;
 
     fprintf(fp, "_________________________________________________________\n");
     fprintf(fp, "SoState\n");
     fprintf(fp, "_________________________________________________________\n");
 
-    for (i = 0; i < numStacks; i++) {
+    for (size_t i = 0; i < stack.size(); i++) {
 
 	// Print only enabled element stacks
 	if (stack[i] != NULL) {
 
-	    fprintf(fp, "  stack[%02d]:\n", i);
+        fprintf(fp, "  stack[%02lu]:\n", i);
 
 	    for (elt = stack[i]; elt != NULL; elt = elt->getNextInStack()) {
-		fprintf(fp, "    ");
-		elt->print(fp);
+            fprintf(fp, "    ");
+            elt->print(fp);
 	    }
 	}
     }

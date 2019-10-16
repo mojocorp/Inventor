@@ -80,8 +80,7 @@ std::stack<std::map<const SoFieldContainer*, const SoFieldContainer*> > SoFieldC
 // These are used by SoFieldContainer::get() to hold the returned
 // field string
 // We rely on the compiler to initialize them to zero for us...
-char	*SoFieldContainer::fieldBuf;
-int	 SoFieldContainer::fieldBufSize;
+std::vector<char> SoFieldContainer::fieldBuf;
 
 SoType	SoFieldContainer::classTypeId;
 
@@ -303,13 +302,12 @@ SoFieldContainer::get(SbString &fieldDataString, SoOutput *dictOut)
     SoOutput	out(dictOut);
 
     // Prepare a character buffer and SoOutput for writing field strings
-    if (fieldBufSize == 0) {
-	fieldBufSize = 1028;
-	fieldBuf = (char *) malloc((unsigned) fieldBufSize);
+    if (fieldBuf.empty()) {
+        fieldBuf.resize(1028);
     }
 
     // Set up output into a string buffer
-    out.setBuffer((void *) fieldBuf, fieldBufSize,
+    out.setBuffer((void *) fieldBuf.data(), fieldBuf.size(),
 		  &SoFieldContainer::reallocFieldBuf);
 
     // Make sure that the file header and lots of white space will NOT
@@ -332,7 +330,7 @@ SoFieldContainer::get(SbString &fieldDataString, SoOutput *dictOut)
     out.reset();
 
     // Store the result in the passed SbString
-    fieldDataString = fieldBuf;
+    fieldDataString = fieldBuf.data();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -434,10 +432,9 @@ SoFieldContainer::reallocFieldBuf(void *ptr, size_t newSize)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fieldBuf = (char *) realloc(ptr, newSize);
-    fieldBufSize = newSize;
+    fieldBuf.resize(newSize);
 
-    return fieldBuf;
+    return fieldBuf.data();
 }
 
 ////////////////////////////////////////////////////////////////////////

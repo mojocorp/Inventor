@@ -58,11 +58,12 @@
 #ifndef  _SO_NODEKIT_CATALOG
 #define  _SO_NODEKIT_CATALOG
 
+#include <vector>
+#include <map>
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoLists.h>
 #include <Inventor/SoType.h>
-#include <map>
 
 #define SO_CATALOG_NAME_NOT_FOUND -1
 #define SO_CATALOG_THIS_PART_NUM   0
@@ -160,7 +161,7 @@ class SoNodekitCatalog {
     static void initClass();
 
     // How many entries in this catalog?
-    int        getNumEntries() const { return numEntries; };
+    int        getNumEntries() const { return entries.size(); };
 
     // inquiry routines, to find out about entries in the catalog,
     // Questions may be asked based on name or partNumber.
@@ -252,8 +253,7 @@ class SoNodekitCatalog {
     static const SoTypeList *emptyList;
     static SoType  *badType;
 
-    int 		  numEntries;   // how many entries?
-    SoNodekitCatalogEntry **entries;    // the array of entries
+    std::vector<SoNodekitCatalogEntry*> entries;    // the array of entries
     std::map<SbName, int>   partNameDict; // For fast lookup of part numbers
 
     // Used for testing various aspects of new entries into a catalog

@@ -57,6 +57,7 @@
 #ifndef  _SO_COMPACT_PATH_LIST_
 #define  _SO_COMPACT_PATH_LIST_
 
+#include <vector>
 #include <Inventor/SoLists.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -112,7 +113,7 @@ SoINTERNAL class SoCompactPathList {
     void		pop();
 
   private:
-    int			*array;		// Path list as a series of integers
+    std::vector<int> array;		// Path list as a series of integers
     int			curNode;	// Index of current node in array
     int			*stack;		// Current traversal stack of indices
     int			stackDepth;	// Depth of stack

@@ -91,10 +91,10 @@ SoCompactPathList::SoCompactPathList(const SoPathList &list)
 {
     // Determine number of indices we will need and check for path
     // list validity
-    int		arraySize = computeArraySize(list);
+    const int arraySize = computeArraySize(list);
 
     // Allocate stuff
-    array = new int [arraySize];
+    array.resize(arraySize);
     stack = new int [128];		// Should be deep enough
 
     // Store paths in compact form in array
@@ -124,7 +124,6 @@ SoCompactPathList::~SoCompactPathList()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    delete [] array;
     delete [] stack;
 }
 
