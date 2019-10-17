@@ -1,6 +1,3 @@
-find_package(Freetype REQUIRED)
-include_directories(${FREETYPE_INCLUDE_DIRS})
-
 find_package(OpenGL REQUIRED)
 
 include_directories(src)
@@ -18,5 +15,5 @@ set(SOURCES
 )
 
 add_library (FLWrapper STATIC ${HEADERS} ${SOURCES})
-target_link_libraries(FLWrapper ${FREETYPE_LIBRARIES} ${OPENGL_LIBRARY} )
+target_link_libraries(FLWrapper PUBLIC freetype ${OPENGL_LIBRARY} )
 target_include_directories (FLWrapper PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
