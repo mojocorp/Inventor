@@ -54,6 +54,7 @@
 #include <GL/glu.h>
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoCacheElement.h>
+#include <Inventor/elements/SoGLDisplayList.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoGLTextureImageElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>

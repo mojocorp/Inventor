@@ -103,6 +103,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoGLCacheContextElement.h
     database/include/Inventor/elements/SoGLClipPlaneElement.h
     database/include/Inventor/elements/SoGLCoordinateElement.h
+    database/include/Inventor/elements/SoGLDisplayList.h
     database/include/Inventor/elements/SoGLDrawStyleElement.h
     database/include/Inventor/elements/SoGLLazyElement.h
     database/include/Inventor/elements/SoGLLightIdElement.h
@@ -479,6 +480,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoGLCacheContextElement.c++
     database/src/so/elements/SoGLClipPlaneElement.c++
     database/src/so/elements/SoGLCoordinateElement.c++
+    database/src/so/elements/SoGLDisplayList.c++
     database/src/so/elements/SoGLDrawStyleElement.c++
     database/src/so/elements/SoGLLazyElement.c++
     database/src/so/elements/SoGLLightIdElement.c++

@@ -55,6 +55,7 @@
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/caches/SoBitmapFontCache.h>
 #include <Inventor/elements/SoCacheElement.h>
+#include <Inventor/elements/SoGLDisplayList.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoFontNameElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
