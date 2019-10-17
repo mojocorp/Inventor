@@ -63,8 +63,6 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-#include <Inventor/misc/SoGL.h>   // For GLenum declaration
-
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SoText3
@@ -140,7 +138,7 @@ class SoText3 : public SoShape {
     SbBool setupFontCache(SoState *state, SbBool forRender = FALSE);
 
     // Return bounding box of the fronts of all characters.
-    void getFrontBBox(SbBox2f &result);
+    SbBox2f getFrontBBox();
 
     // Figure out how much each line of text is offset (based on width
     // of characters and justification)
@@ -149,13 +147,6 @@ class SoText3 : public SoShape {
     // Figure out where a particular character in a particular line
     // starts:
     SbVec2f getCharacterOffset(int line, int whichChar);
-
-    // Render the fronts of the characters
-    void renderFront(SoGLRenderAction *action, int line,
-             struct GLUtesselator *tobj);
-    
-    // Render the sides of the characters
-    void renderSide(SoGLRenderAction *action, int line);
 
     // Creates a text detail when picking:
     SoDetail * createTriangleDetail(SoRayPickAction *,
@@ -184,7 +175,7 @@ class SoText3 : public SoShape {
 		const float *tTexCoords);
 
     // Static callbacks invoked by the glu tesselation code:
-    static void beginCB(GLenum primType);
+    static void beginCB(unsigned int primType);
     static void endCB();
     static void vtxCB(void *vertex);
     
@@ -192,7 +183,7 @@ class SoText3 : public SoShape {
     // SoOutlineFontCache is an internal, opaque class used to
     // maintain gl display lists and other information for each
     // character in a font.
-    SoOutlineFontCache *myFont;
+    SoOutlineFontCache *fontCache;
 
     // All this stuff is used while generating primitives:
     static SoText3 *currentGeneratingNode;

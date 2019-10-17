@@ -80,6 +80,12 @@ class SoFont : public SoNode {
     // Constructor
     SoFont();
 
+    // Returns the full font path
+    static SbString getFontFileName(const SbName & fontName);
+
+    // Register a font with corresponding path.
+    static void addFontFileName(const SbName & fontName, const SbString & fontPath);
+
   SoEXTENDER public:
     virtual void	doAction(SoAction *action);
     virtual void	GLRender(SoGLRenderAction *action);

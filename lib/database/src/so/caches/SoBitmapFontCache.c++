@@ -51,102 +51,25 @@
  _______________________________________________________________________
  */
 #include <cstring>
+#include <algorithm>
 #include <machine.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/caches/SoBitmapFontCache.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLDisplayList.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
-#include <Inventor/elements/SoFontNameElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/elements/SoFontSizeElement.h>
+#include <Inventor/errors/SoDebugError.h>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 //////////////////////////////////////////////////////////////////////////////
 /////////////////////    SoBitmapFontCache  //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // Static variables for SoBitmapFontCache
-SbPList *SoBitmapFontCache::fonts = NULL;
-FLcontext SoBitmapFontCache::flContext;
-
-//The conversion code (from UTF-8 to UCS-2) is static, set only once.
-iconv_t SoBitmapFontCache::conversionCode = NULL;
-
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Convert MFString to UCS string, if necessary.
-//
-// Use: internal
-
-SbBool
-SoBitmapFontCache::convertToUCS(uint32_t nodeid,
-                   const SoMFString& strings)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    if (nodeid == currentNodeId) return TRUE;
-    currentNodeId = nodeid;
-
-    //delete previously converted UCS string
-    int i;
-    for (i = 0; i< UCSStrings.getLength(); i++){
-    delete [] (char*)UCSStrings[i];
-    }
-    UCSStrings.truncate(0);
-    UCSNumChars.truncate(0);
-
-    //make sure conversion code already set:
-    if (conversionCode == NULL){
-    conversionCode = iconv_open("UCS-2", "UTF-8");
-    }
-
-    if ( conversionCode == (iconv_t)-1 ){
-#ifdef DEBUG
-    SoDebugError::post("SoBitmapFontCache::convertToUCS",
-        "Invalid UTF-8 to UCS-2 conversion");
-#endif /*DEBUG*/
-    return FALSE;
-    }
-
-    //for each line of text, allocate a sufficiently large buffer:
-    //An extra two bytes allocated, since glCallLists likes to trample it.
-    for (i = 0; i< strings.getNum(); i++){
-    UCSStrings[i] = new char[2*strings[i].getLength()+2];
-
-    char* input = (char *)strings[i].getString();
-    size_t inbytes = strings[i].getLength();
-    size_t outbytes = 2*inbytes+2;
-    char* output = (char*)UCSStrings[i];
-
-    if ((iconv(conversionCode, &input, &inbytes, &output, &outbytes) == (size_t)-1)){
-#ifdef DEBUG
-        SoDebugError::post("SoBitmapFontCache::convertToUCS",
-        "Error converting text to UCS-2");
-#endif /*DEBUG*/
-
-    }
-
-    if (inbytes){
-#ifdef DEBUG
-        SoDebugError::post("SoBitmapFontCache::convertToUCS",
-        "Incomplete conversion to UCS-2");
-#endif /*DEBUG*/
-        return FALSE;
-    }
-
-    UCSNumChars[i] = (void*)((2*strings[i].getLength()+2 - outbytes)>>1);
-
-        int j;
-        for (j = 0; j < getNumUCSChars(i); j++) {
-            char* c = (char*)UCSStrings[i]+j*2;
-            DGL_HTON_SHORT(SHORT(c), SHORT(c));
-        }
-    }
-
-    return TRUE;
-
-}
+std::vector<SoBitmapFontCache*> SoBitmapFontCache::fonts;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -160,127 +83,22 @@ SoBitmapFontCache::getFont(SoState *state, SbBool forRender)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (fonts == NULL) {
-    // One-time font library initialization
-    fonts = new SbPList;
-    flContext = flCreateContext(NULL, FL_FONTNAME, NULL,
-                  1.0, 1.0);
-    if (flContext == NULL) {
-#ifdef DEBUG
-        SoDebugError::post("SoText2::getFont",
-                   "flCreateContext returned NULL");
-#endif
-        return NULL;
-    }
-    if (flGetCurrentContext() != flContext)
-        flMakeCurrentContext(flContext);
-    flSetHint(FL_HINT_MINOUTLINESIZE, 24.0);
-    }
-    else if (flContext == NULL) return NULL;
-    else {
-    if (flGetCurrentContext() != flContext)
-        flMakeCurrentContext(flContext);
-    }
-
     SoBitmapFontCache *result = NULL;
-    for (int i = 0; i < fonts->getLength() && result == NULL; i++) {
-    SoBitmapFontCache *fc = (SoBitmapFontCache *)(*fonts)[i];
-    if (!fc->fontNumList) continue;
-    if (forRender ? fc->isRenderValid(state) : fc->isValid(state)) {
-        result = fc;
-        result->ref();
-
-    }
+    for (size_t i = 0; i < fonts.size() && result == NULL; i++) {
+        SoBitmapFontCache *fc = fonts[i];
+        if (forRender ? fc->isRenderValid(state) : fc->isValid(state)) {
+            result = fc;
+            result->ref();
+        }
     }
     if (result == NULL) {
-    result = new SoBitmapFontCache(state);
+        result = new SoBitmapFontCache(state);
 
-    }
-    return result;
-}
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Create a list of font numbers from a list of font names
-//
-// Use: private
-GLubyte *
-SoBitmapFontCache::createUniFontList(const char* fontNameList, float size)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    char *s, *s1, *ends;
-    FLfontNumber fn;
-    float mat[2][2];
-
-    mat[0][0] = mat[1][1] = size;
-    mat[0][1] = mat[1][0] = 0.0;
-
-    //Make a copy of fontNameList so we don't disturb the one we are passed.
-    //Find \n at end of namelist:
-    char * nameCopy = new char[strlen(fontNameList)+1];
-    strcpy(nameCopy, fontNameList);
-
-    //find the last null in nameCopy.
-    s = ends = (char *)strrchr(nameCopy, '\0');
-    *s = ';';  /* put a guard in the end of string */
-
-
-    s = (char*)nameCopy;
-    fontNums = new SbPList;
-
-    while ((s1 = (char *)strchr(s, ';'))) {
-       *s1 = (char)NULL;  /* font name is pointed to s */
-
-       if ((fn = flCreateFont((const GLubyte*)s, mat, 0, NULL)) == (FLfontNumber)0) {
-#ifdef DEBUG
-        SoDebugError::post("SoBitmapFontCache::createUniFontList",
-        "Cannot create font %s", s);
-#endif
-       }
-       else {
-     fontNums->append((void*)(unsigned long)fn);
-       }
-       if(s1 == ends) break;
-       s = (s1 + 1);  /* move to next font name */
-    }
-
-    if (fontNums->getLength() == 0 ) return NULL;
-
-    // create a comma-separated list of font numbers:
-    char *fontList = new char[10*fontNums->getLength()];
-    fontList[0] = '\0';
-    for (int i = 0; i< fontNums->getLength(); i++ ){
-    fn = (FLfontNumber)(long)(*fontNums)[i];
-    sprintf(&fontList[strlen(fontList)], "%d,", fn);
-    }
-    fontList[strlen(fontList) - 1] = '\0'; // the last ',' is replaced with NULL
-
-    delete [] nameCopy;
-
-    return (GLubyte *)fontList;
-
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Sees if this font is valid.  If it is valid, it also makes it
-//    current.
-//
-// Use: public
-
-SbBool
-SoBitmapFontCache::isValid(const SoState *state) const
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SbBool result = SoCache::isValid(state);
-
-    if (result) {
-    if (flGetCurrentContext() != flContext) {
-        flMakeCurrentContext(flContext);
-    }
+        // If error:
+        if (result->face == 0) {
+            delete result;
+            return NULL;
+        }
     }
     return result;
 }
@@ -294,60 +112,23 @@ SoBitmapFontCache::isValid(const SoState *state) const
 //
 // Use: internal, private
 
-SoBitmapFontCache::SoBitmapFontCache(SoState *state) : SoCache(state)
+SoBitmapFontCache::SoBitmapFontCache(SoState *state)
+    : SoFontCache(state), context(-1)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     ref();
 
-    list = NULL;
-
     // Grab all the stuff we'll need to determine our validity from
     // the state.
-    SbName fontName = SoFontNameElement::get(state);
-    addElement(state->getConstElement(
-    SoFontNameElement::getClassStackIndex()));
-    if (fontName == SoFontNameElement::getDefault()) {
-    fontName = SbName("Utopia-Regular");
-    }
     const SbViewportRegion &vpr = SoViewportRegionElement::get(state);
-    addElement(state->getConstElement(
-    SoViewportRegionElement::getClassStackIndex()));
-    float fontSize = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
-    addElement(state->getConstElement(
-    SoFontSizeElement::getClassStackIndex()));
+    addElement(state->getConstElement(SoViewportRegionElement::getClassStackIndex()));
 
-    // Initialize font list
-    fontNumList = createUniFontList(fontName.getString(), fontSize);
+    const float fontSize = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
 
+    FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
 
-    if (fontNumList == NULL) {
-    // Try Utopia-Regular, unless we just did!
-    if (fontName != SbName("Utopia-Regular")) {
-#ifdef DEBUG
-        SoDebugError::post("SoText2::getFont",
-              "Couldn't find font %s, replacing with Utopia-Regular",
-               fontName.getString());
-#endif
-        fontNumList = createUniFontList("Utopia-Regular", fontSize);
-
-    }
-    if (fontNumList == NULL) {
-#ifdef DEBUG
-        SoDebugError::post("SoText3::getFont",
-                   "Couldn't find font Utopia-Regular!");
-#endif
-        numChars = 0;
-    }
-    }
-
-
-    numChars = 65536;  // ??? Just do UCS-2
-    currentNodeId = 0;
-    displayListDict = new SbDict;
-    bitmapDict = new SbDict;
-
-    fonts->append(this);
+    fonts.push_back(this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -362,51 +143,23 @@ SoBitmapFontCache::~SoBitmapFontCache()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (fontNumList) {
-    if (flGetCurrentContext() != flContext) {
-        flMakeCurrentContext(flContext);
-    }
-
-    //Must free every bitmap in dictionary:
-    //this will just apply flFreeBitmap(entry->value)
-
-    bitmapDict->applyToAll(freeBitmap);
-
-    // Only destroy the font library font if no other font caches
-    // are using the same font identifier:
-    // Must go through fontlist and destroy every font that isn't used
-    // by any other cache.
-
-    SbBool otherFonts = (fonts->getLength() > 1);
-    SbDict *otherFontDict;
-    if (otherFonts){
-        otherFontDict = new SbDict;
-        //Enter all the other fontnums into the dictionary:
-        for (int i = 0; i< fonts->getLength(); i++) {
-        SoBitmapFontCache *t = (SoBitmapFontCache *)(*fonts)[i];
-        if ( t == this) continue;
-        for (int j = 0; j< (t->fontNums->getLength()); j++){
-            unsigned long key = (unsigned long)(*(t->fontNums))[j];
-            otherFontDict->enter(key, NULL);
+    if (face) {
+        std::map<wchar_t, FLbitmap*>::iterator it;
+        for (it = bitmaps.begin(); it != bitmaps.end(); ++it) {
+            delete it->second;
         }
+        // Only destroy the font library font if no other font caches
+        // are using the same font identifier:
+        SbBool otherUsing = FALSE;
+        for (size_t i = 0; i < fonts.size(); i++) {
+            SoBitmapFontCache *t = fonts[i];
+            if (t != this && t->face == face) otherUsing = TRUE;
         }
-    }
-    // Now destroy any fonts that don't appear in otherFontDict
-    for (int i = 0; i < fontNums->getLength(); i++){
-        void *value;
-        if ( !otherFonts ||
-            !otherFontDict->find((unsigned long)(*fontNums)[i], value)){
-        flDestroyFont((FLfontNumber)(long)(*fontNums)[i]);
+        if (!otherUsing) {
+            FT_Done_Face(face);
+            face = NULL;
         }
-    }
-    if (otherFonts) delete otherFontDict;
-    delete displayListDict;
-    delete bitmapDict;
-
-    if (fontNumList)	delete [] fontNumList;
-    if (fontNums)		delete fontNums;
-
-    fonts->remove(fonts->find(this));
+        fonts.erase(std::find(fonts.begin(), fonts.end(), this));
     }
 }
 
@@ -425,10 +178,12 @@ SoBitmapFontCache::destroy(SoState *)
 {
     // Pass in NULL to unref because this cache may be destroyed
     // from an action _other_ than GLRender:
-    if (list) {
-    list->unref(NULL);
-    list = NULL;
+    std::map<wchar_t, SoGLDisplayList*>::iterator it;
+    for (it=list.begin(); it != list.end(); ++it) {
+        it->second->unref(NULL);
     }
+    list.clear();
+
     SoCache::destroy(NULL);
 }
 
@@ -444,149 +199,71 @@ SoBitmapFontCache::isRenderValid(SoState *state) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!list) return isValid(state);
+    if (list.empty())
+        return isValid(state);
     else
-    return (list->getContext() == SoGLCacheContextElement::get(state)
-         && isValid(state));
+        return (context == SoGLCacheContextElement::get(state) && isValid(state));
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Sets up for GL rendering.
-//
-// Use: internal
-
-void
-SoBitmapFontCache::setupToRender(SoState *state)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    otherOpen = SoCacheElement::anyOpen(state);
-
-    if (!otherOpen && !list) {
-    list = new SoGLDisplayList(state,
-                   SoGLDisplayList::DISPLAY_LIST,
-                   numChars);
-    list->ref();
-    }
-    if (list) {
-    // Set correct list base
-    glListBase(list->getFirstIndex());
-    list->addDependency(state);
-    }
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns TRUE if a display lists exists for given character.
-//    Tries to build a display list, if it can.
-//
-// Use: internal
-
-SbBool
-SoBitmapFontCache::hasDisplayList(const char* c)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    unsigned char *uc = (unsigned char*)c;
-    unsigned long key = (uc[0]<<8)|uc[1];
-    // If we have one, return TRUE
-    void *value = NULL;
-    if (displayListDict->find(key, value)) return TRUE;
-
-    // If we don't and we can't build one, return FALSE.
-    if (otherOpen) return FALSE;
-
-    // Build one:
-    glNewList(list->getFirstIndex()+key, GL_COMPILE);
-    drawCharacter(c);
-    glEndList();
-
-    displayListDict->enter(key, value);
-
-    return TRUE;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Assuming that there are display lists built for all the
-//    UCS-2 characters in given string, render them.
-//    string should have already been converted from UTF8 form.
-//
-// Use: internal
-
-void
-SoBitmapFontCache::callLists(const char *string, int len)
-//
-////////////////////////////////////////////////////////////////////////
-{
-
-    glCallLists(len, GL_2_BYTES, (unsigned char*)string);
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns the pixel-space bounding box of given UCS-2 character.
+//    Returns the pixel-space bounding box of given character.
 //
 // Use: internal, public
 
-void
-SoBitmapFontCache::getCharBbox(char* c, SbBox3f &box)
+SbBox3f
+SoBitmapFontCache::getCharBbox(wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    box.makeEmpty();
+    const FLbitmap *bmap = getBitmap(c);
+    if (bmap == NULL)
+        return SbBox3f();
 
-    const FLbitmap *bmap = getBitmap((unsigned char*)c);
-    if (bmap == NULL) return;
-
-    box.extendBy(SbVec3f(-bmap->xorig, -bmap->yorig, 0));
-    box.extendBy(SbVec3f(bmap->width - bmap->xorig,
-             bmap->height - bmap->yorig, 0));
+    return SbBox3f(0, 0, 0, bmap->width, bmap->height, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
 //    Returns the amount the current raster position will be advanced
-//    after drawing the given UCS-2 character.
+//    after drawing the given character.
 //
 // Use: internal, public
 
 SbVec3f
-SoBitmapFontCache::getCharOffset(char* c)
+SoBitmapFontCache::getCharOffset(wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const FLbitmap *bmap = getBitmap((unsigned char*)c);
+    const FLbitmap *bmap = getBitmap(c);
     if (bmap != NULL)
-    return SbVec3f(bmap->xmove, bmap->ymove, 0);
-    else return SbVec3f(0,0,0);
+        return SbVec3f(bmap->xmove, bmap->ymove, 0);
+
+    return SbVec3f(0,0,0);
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Returns the width of specified UCS2 string.
+//    Returns the size of given string.
 //
 // Use: internal, public
 
-float
-SoBitmapFontCache::getWidth(int line)
+SbVec2s
+SoBitmapFontCache::getSize(const std::wstring &str)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float result = 0.0;
+    SbVec2s result(0, 0);
 
-    char *str = getUCSString(line);
-    for (int i = 0; i < getNumUCSChars(line); i++) {
-    const FLbitmap *bmap = getBitmap((unsigned char*)(str+2*i));
-    if (bmap != NULL)
-        result += bmap->xmove;
+    for (size_t i = 0; i < str.size(); i++) {
+        const FLbitmap *bmap = getBitmap(str[i]);
+        if (bmap != NULL) {
+            result[0] += bmap->xmove;
+            result[1] = std::max(result[1], (short)bmap->height);
+        }
     }
     return result;
 }
@@ -594,90 +271,87 @@ SoBitmapFontCache::getWidth(int line)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Returns the height of given string.
-//
-// Use: internal, public
-
-float
-SoBitmapFontCache::getHeight()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    //take height from UCS-2 code for "M"
-    const FLbitmap *bmap = getBitmap((unsigned char*)"\000M");
-    if (bmap != NULL)
-    return bmap->height - bmap->yorig;
-    else return 0;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Draws a bitmap, using UCS-2 character
+//    Draws a bitmap
 //
 // Use: internal public
 
 void
-SoBitmapFontCache::drawCharacter(const char* c)
+SoBitmapFontCache::drawCharacter(SoState *state, wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    unsigned char *uc = (unsigned char*)c;
-    const FLbitmap *bmap = getBitmap(uc);
+    // If we have a display list, call it
+    SoGLDisplayList *displaylist = list[c];
+    if (displaylist) {
+        displaylist->call(state);
+        return;
+    }
 
-    if (bmap != NULL)
-    glBitmap(bmap->width, bmap->height, bmap->xorig, bmap->yorig,
-         bmap->xmove, bmap->ymove, bmap->bitmap);
-#ifdef DEBUG
-    else SoDebugError::post("SoBitmapFontCache::drawCharacter",
-    "no bitmap for character %d ", uc[0]*256+uc[1]);
-#endif
+    // If we don't and we can build one.
+    if (!SoCacheElement::anyOpen(state)) {
+        context = SoGLCacheContextElement::get(state);
+
+        // Build one:
+        displaylist = new SoGLDisplayList(state, SoGLDisplayList::DISPLAY_LIST);
+        list[c] = displaylist;
+        displaylist->ref();
+        displaylist->addDependency(state);
+        glNewList(displaylist->getFirstIndex(), GL_COMPILE);
+    }
+
+    const FLbitmap *bmap = getBitmap(c);
+    if (bmap != NULL) {
+        glBitmap(0, 0, 0, 0,bmap->xorig, bmap->yorig, NULL);
+        if (!bmap->bitmap.empty()) {
+            glDrawPixels(bmap->width, bmap->height, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, bmap->bitmap.data());
+        }
+        glBitmap(0, 0, 0.0f, 0.0f, bmap->xmove-bmap->xorig, bmap->ymove-bmap->yorig, NULL);
+    }
+
+    if (!SoCacheElement::anyOpen(state)) {
+        displaylist->close(state);
+        displaylist->call(state);
+    }
 }
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
 //    Draws a whole string.  Tries to build display lists, if it can.
-//    Assumes string is in UCS-2 format.
 //
 // Use: internal public
 
 void
-SoBitmapFontCache::drawString(int line)
+SoBitmapFontCache::drawString(SoState *state, const std::wstring &string, const SbVec3f &origin)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool useCallLists = TRUE;
+    //
+    // Set up OpenGL state for rendering text, and push
+    // attributes so that we can restore when done.
+    //
+    glPushAttrib( GL_ENABLE_BIT | GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
+    glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
 
-    char *str = getUCSString(line);
-    unsigned char *ustr = (unsigned char*)str;
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.3f);
 
-    // If there aren't any other caches open, build display lists for
-    // the characters we can:
-    for (int i = 0; i < getNumUCSChars(line); i++) {
-    // See if the font cache already has (or can build) a display
-    // list for this character:
-    if (!hasDisplayList(str + 2*i)) {
-        useCallLists = FALSE;
-        break;
-    }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glRasterPos3fv(&origin[0]);
+
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
+
+    for (size_t i = 0; i < string.size(); i++) {
+        drawCharacter(state, string[i]);
     }
 
-    // if we have display lists for all of the characters, use
-    // glCallLists:
-    if (useCallLists) {
-    callLists(str, getNumUCSChars(line));
-    } else {
-    // if we don't, draw the string character-by-character, using the
-    // display lists we do have:
-    for (int i = 0; i < getNumUCSChars(line); i++) {
-        if (!hasDisplayList(str + 2*i)) {
-        drawCharacter(str + 2*i);
-        }
-        else glCallList(list->getFirstIndex()+
-        ((ustr[2*i]<<8) | ustr[2*i+1]));
-    }
-    }
+    //
+    // Restore OpenGL state.
+    //
+    glPopClientAttrib();
+    glPopAttrib();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -686,43 +360,56 @@ SoBitmapFontCache::drawString(int line)
 //    Returns a bitmap.
 //
 // Use: private
-
-const FLbitmap *
-SoBitmapFontCache::getBitmap(unsigned char* c)
+const SoBitmapFontCache::FLbitmap *
+SoBitmapFontCache::getBitmap(wchar_t c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!fontNumList) return NULL;
+    FLbitmap *flbitmap = bitmaps[c];
+    if (flbitmap)
+        return flbitmap;
 
-    unsigned long key = (unsigned long)(c[0]<<8 | c[1]);
-    void* value;
-    if(!bitmapDict->find(key, value)){
-    value = (void*)flUniGetBitmap(fontNumList, c);
+    flbitmap = new FLbitmap;
+    bitmaps[c] = flbitmap;
+    flbitmap->bitmap.clear();
 
+    if(FT_Load_Char(face, c, FT_LOAD_RENDER)) {
 #ifdef DEBUG
-    if(value == NULL){
         SoDebugError::post("SoBitmapFontCache::getBitmap",
-        "Invalid Unicode bitmap for character %d", key);
-    }
-#endif /*DEBUG*/
-
-    bitmapDict->enter(key, value);
+                           "FT_Load_Char failed");
+#endif
     }
 
-    return (FLbitmap*)value;
-}
+    FT_GlyphSlot glyph = face->glyph;
+    FT_Bitmap bitmap = glyph->bitmap;
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    free up a bitmap.
-//
-// Use: static, private
-void
-SoBitmapFontCache::freeBitmap(unsigned long, void* value)
-////////////////////////////////////////////////////////////////////////
-{
-    flFreeBitmap((FLbitmap*)value);
-}
+    if(glyph->bitmap.pixel_mode != FT_PIXEL_MODE_GRAY) {
+        SoError::post("SoBitmapFontCache::getBitmap", "Unsupported pixel mode");
+    }
 
-/////////////////////////////////////////////////////////////////////////
+    flbitmap->width = bitmap.width;
+    flbitmap->height = bitmap.rows;
+
+    flbitmap->xorig = glyph->bitmap_left;
+    flbitmap->yorig = float(glyph->bitmap_top) - glyph->bitmap.rows;
+    flbitmap->xmove = glyph->advance.x >> 6;
+    flbitmap->ymove = glyph->advance.y >> 6;
+
+    if (bitmap.width && bitmap.rows) {
+        //Allocate memory for the texture data.
+        flbitmap->bitmap.resize(2 * flbitmap->width * flbitmap->height);
+
+        unsigned char* src = face->glyph->bitmap.buffer;
+        unsigned char* dest = flbitmap->bitmap.data();
+
+        for(int y=0; y<flbitmap->height; y++)
+        {
+            for(int x = 0; x < flbitmap->width; x++)
+            {
+                dest[2*(x+y*bitmap.width)+0] = 255;
+                dest[2*(x+y*bitmap.width)+1] = src[x+(bitmap.rows - 1 - y)*bitmap.width];
+            }
+        }
+    }
+    return flbitmap;
+}

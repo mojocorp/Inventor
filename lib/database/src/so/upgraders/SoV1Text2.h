@@ -86,11 +86,6 @@ class SoV1Text2 : public SoUpgrader {
   SoINTERNAL public:
     static void		initClass();
     virtual SoNode	*createNewNode();
-    
-    //Converter used by both V1Text2 and V1Text3,
-    //upgrades european non-ascii to UTF-8, or
-    //just makes it ascii (in pre Irix 6.2 versions):
-    static const SbString*	convertToUTF8(const SbString& string);
 
   protected:
     virtual ~SoV1Text2();

@@ -60,17 +60,15 @@
 #include <Inventor/elements/SoOverrideElement.h>
 #include <Inventor/nodes/SoFontStyle.h>
 
-SO_NODE_SOURCE(SoFontStyle)
+SO_NODE_SOURCE(SoFontStyle);
 
+// Use font postscript names
 const char *SoFontStyle::fontList[][4] =
-		    {
-			{ "Utopia-Regular", "Utopia-Bold", 
-			  "Utopia-Italic", "Utopia-BoldItalic" }, 
-			{ "Helvetica", "Helvetica-Bold", 
-			  "Helvetica-Oblique", "Helvetica-BoldOblique" }, 
-			{ "Courier", "Courier-Bold", 
-			  "Courier-Oblique", "Courier-BoldOblique" }, 
-		    };
+{
+    { "Times-Roman", "Times-Bold", "Times-Oblique", "Times-Bold Oblique" }, 
+    { "Helvetica", "Helvetica-Bold", "Helvetica-Oblique", "Helvetica-Bold Oblique" }, 
+    { "Courier", "Courier-Bold", "Courier-Oblique", "Courier-Bold Oblique" }, 
+};
 
 ////////////////////////////////////////////////////////////////////////
 //
