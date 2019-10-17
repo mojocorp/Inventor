@@ -103,6 +103,7 @@ SoGLModelMatrixElement::init(SoState *_state)
 
     // Save state in instance in case we need it later
     state = _state;
+    viewEltNodeId = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////

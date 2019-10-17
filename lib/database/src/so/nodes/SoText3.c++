@@ -51,8 +51,12 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
+ 
+#include <cmath>
+#include <algorithm>
 #include <machine.h>
 #include <Inventor/misc/SoGL.h>
+#include <GL/glu.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/actions/SoCallbackAction.h>
@@ -66,13 +70,6 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoText3.h>
-
-#include <algorithm>
-
-// Font library:
-// Additional for Banyan(6.2):
-#include <flclient.h>
-#include <cstring>
 
 
 // Static stuff is used while generating primitives:
@@ -139,7 +136,7 @@ SoText3::SoText3()
     SO_NODE_SET_SF_ENUM_TYPE(parts, Part);
 
     isBuiltIn = TRUE;
-    myFont = NULL;
+    fontCache = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -153,7 +150,8 @@ SoText3::~SoText3()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (myFont != NULL) myFont->unref();
+    if (fontCache != NULL)
+        fontCache->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -180,26 +178,26 @@ SoText3::getCharacterBounds(SoState *state, int stringIndex, int
 			   "stringIndex (%d) out of range (max %d)",
 			   stringIndex, string.getNum());
     }
-    if (charIndex >= myFont->getNumUCSChars(stringIndex)) {
+    if (charIndex >= (int)string[stringIndex].getLength()) {
 	SoDebugError::post("SoText3::getCharacterBounds",
 			   "charIndex (%d) out of range (max %d)",
 			   charIndex,
-			   myFont->getNumUCSChars(stringIndex));
+                           string[stringIndex].getLength());
     }
 #endif
 
     float frontZ, backZ;
-    myFont->getProfileBounds(frontZ, backZ);
+    fontCache->getProfileBounds(frontZ, backZ);
     
-    float height = myFont->getHeight();
+    float height = fontCache->getHeight();
 
-    const char *chars = myFont->getUCSString(stringIndex);
-    float width = (myFont->getCharOffset(chars+2*charIndex))[0];
+    const std::wstring chars = string[stringIndex].toStdWString();
+    const float width = (fontCache->getCharOffset(chars[charIndex]))[0];
     
     // Figure out where origin of character is:
     SbVec2f charPosition = getStringOffset(stringIndex);
     for (int i = 0; i < charIndex; i++) {
-	charPosition += myFont->getCharOffset(chars+2*charIndex);
+        charPosition += fontCache->getCharOffset(chars[i]);
     }
     
     // Ok, have width, height, depth and starting position of text,
@@ -247,8 +245,6 @@ SoText3::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static GLUtesselator *tobj = NULL;
-
     // First see if the object is visible and should be rendered now
     if (! shouldGLRender(action))
 	return;
@@ -271,30 +267,20 @@ SoText3::GLRender(SoGLRenderAction *action)
     }
 
     float firstZ, lastZ;
-    myFont->getProfileBounds(firstZ, lastZ);
-
-    if (tobj == NULL) {
-	tobj = gluNewTess();
-	gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (*)())glBegin);
-	gluTessCallback(tobj, (GLenum)GLU_END, (void (*)())glEnd);
-	gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (*)())glVertex2fv);
-	gluTessCallback(tobj, (GLenum)GLU_ERROR,
-			(void (*)())SoOutlineFontCache::errorCB);
-    }
+    fontCache->getProfileBounds(firstZ, lastZ);
 
     // See if texturing is enabled
     genTexCoord = SoGLTextureEnabledElement::get(action->getState());
 
-    if ((parts.getValue() & SIDES) && (myFont->hasProfile())) {
+    if ((parts.getValue() & SIDES) && (fontCache->hasProfile())) {
 	if (materialPerPart) mb.send(1, FALSE);
 
-	myFont->setupToRenderSide(state, genTexCoord);
 	for (int line = 0; line < string.getNum(); line++) {
 	    glPushMatrix();
 	    SbVec2f p = getStringOffset(line);
 	    if (p[0] != 0.0 || p[1] != 0.0)
 		glTranslatef(p[0], p[1], 0.0);
-	    renderSide(action, line);
+            fontCache->renderSide(state, string[line], renderSideTris);
 	    glPopMatrix();
 	}
     }
@@ -307,14 +293,12 @@ SoText3::GLRender(SoGLRenderAction *action)
 	glNormal3f(0, 0, -1);
 	glFrontFace(GL_CW);
 
-	myFont->setupToRenderFront(state);
-	
-	if (genTexCoord) {
+        if (genTexCoord) {
 	    glPushAttrib(GL_TEXTURE_BIT);
 	    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 	    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 	    GLfloat params[4];
-	    params[0] = -1.0/myFont->getHeight();
+            params[0] = -1.0f/fontCache->getHeight();
 	    params[1] = params[2] = params[3] = 0.0;
 	    glTexGenfv(GL_S, GL_OBJECT_PLANE, params);
 	    params[1] = -params[0];
@@ -332,7 +316,7 @@ SoText3::GLRender(SoGLRenderAction *action)
 	    SbVec2f p = getStringOffset(line);
 	    if (p[0] != 0.0 || p[1] != 0.0)
 		glTranslatef(p[0], p[1], 0.0);
-	    renderFront(action, line, tobj);
+            fontCache->renderFront(state, string[line]);
 	    glPopMatrix();
 	}
 	
@@ -353,15 +337,13 @@ SoText3::GLRender(SoGLRenderAction *action)
 	}
 
 	glNormal3f(0, 0, 1);
-	
-	myFont->setupToRenderFront(state);
 
 	if (genTexCoord) {
 	    glPushAttrib(GL_TEXTURE_BIT);
 	    glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 	    glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
 	    GLfloat params[4];
-	    params[0] = 1.0/myFont->getHeight();
+            params[0] = 1.0f/fontCache->getHeight();
 	    params[1] = params[2] = params[3] = 0.0;
 	    glTexGenfv(GL_S, GL_OBJECT_PLANE, params);
 	    params[1] = params[0];
@@ -377,7 +359,7 @@ SoText3::GLRender(SoGLRenderAction *action)
 	    SbVec2f p = getStringOffset(line);
 	    if (p[0] != 0.0 || p[1] != 0.0)
 		glTranslatef(p[0], p[1], 0.0);
-	    renderFront(action, line, tobj);
+            fontCache->renderFront(state, string[line]);
 	    glPopMatrix();
 	}
 	
@@ -450,15 +432,15 @@ SoText3::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 	return;
 
     // Get the bounding box of all the characters:
-    SbBox2f outlineBox;
-    getFrontBBox(outlineBox);
+    SbBox2f outlineBox = getFrontBBox();
 
     // If no lines and no characters, return empty bbox:
-    if (outlineBox.isEmpty()) return;
+    if (outlineBox.isEmpty())
+        return;
     
     // .. and extend it based on what parts are turned on:
     float firstZ, lastZ;
-    myFont->getProfileBounds(firstZ, lastZ);
+    fontCache->getProfileBounds(firstZ, lastZ);
 
     const SbVec2f &boxMin = outlineBox.getMin();
     const SbVec2f &boxMax = outlineBox.getMax();
@@ -466,16 +448,16 @@ SoText3::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
     // Front and back are straightforward:
     if (prts & FRONT) {
-	SbVec3f min(boxMin[0], boxMin[1], firstZ);
-	SbVec3f max(boxMax[0], boxMax[1], firstZ);
-	box.extendBy(min);
-	box.extendBy(max);
+        SbVec3f min(boxMin[0], boxMin[1], firstZ);
+        SbVec3f max(boxMax[0], boxMax[1], firstZ);
+        box.extendBy(min);
+        box.extendBy(max);
     }
     if (prts & BACK) {
-	SbVec3f min(boxMin[0], boxMin[1], lastZ);
-	SbVec3f max(boxMax[0], boxMax[1], lastZ);
-	box.extendBy(min);
-	box.extendBy(max);
+        SbVec3f min(boxMin[0], boxMin[1], lastZ);
+        SbVec3f max(boxMax[0], boxMax[1], lastZ);
+        box.extendBy(min);
+        box.extendBy(max);
     }
     //
     // Sides are trickier.  We figure out the maximum offset
@@ -491,39 +473,36 @@ SoText3::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
     // offset (correct for positive offsets, conservative for negative
     // offsets).
     //
-    if ((prts & SIDES) && myFont->hasProfile()) {
-	SbBox2f profileBox;
-	myFont->getProfileBBox(profileBox);
+    if ((prts & SIDES) && fontCache->hasProfile()) {
+        SbBox2f profileBox = fontCache->getProfileBBox();
 
-	const SbVec2f &pBoxMin = profileBox.getMin();
-	const SbVec2f &pBoxMax = profileBox.getMax();
-	
-	// If no profile, return the front/back bbox:
-	if (profileBox.isEmpty()) return;
+        const SbVec2f &pBoxMin = profileBox.getMin();
+        const SbVec2f &pBoxMax = profileBox.getMax();
 
-	//
-	// Expand the bounding box forward/backward in case the
-	// profile extends forwards/backwards:
-	//
-	SbVec3f min, max;
-	min.setValue(boxMin[0], boxMin[1], pBoxMin[0]);
-	max.setValue(boxMax[0], boxMax[1], pBoxMax[0]);
-	box.extendBy(min);
-	box.extendBy(max);
+        // If no profile, return the front/back bbox:
+        if (profileBox.isEmpty())
+            return;
 
-	//
-	// And figure out the maximum profile offset, and expand
-	// out the outline's bbox:
-	//
-# define max(a,b)               (a<b ? b : a)
-# define abs(x)                 (x>=0 ? x : -(x))
-	float maxOffset = max(abs(pBoxMin[1]), abs(pBoxMax[1]));
-#undef max
-#undef abs
-	min.setValue(boxMin[0]-maxOffset, boxMin[1]-maxOffset, firstZ);
-	max.setValue(boxMax[0]+maxOffset, boxMax[1]+maxOffset, lastZ);
-	box.extendBy(min);
-	box.extendBy(max);
+        //
+        // Expand the bounding box forward/backward in case the
+        // profile extends forwards/backwards:
+        //
+        SbVec3f min, max;
+        min.setValue(boxMin[0], boxMin[1], pBoxMin[0]);
+        max.setValue(boxMax[0], boxMax[1], pBoxMax[0]);
+        box.extendBy(min);
+        box.extendBy(max);
+
+        //
+        // And figure out the maximum profile offset, and expand
+        // out the outline's bbox:
+        //
+        const float maxOffset = std::max(std::abs(pBoxMin[1]), std::abs(pBoxMax[1]));
+
+        min.setValue(boxMin[0]-maxOffset, boxMin[1]-maxOffset, firstZ);
+        max.setValue(boxMax[0]+maxOffset, boxMax[1]+maxOffset, lastZ);
+        box.extendBy(min);
+        box.extendBy(max);
     }
 }
 
@@ -583,10 +562,10 @@ SoText3::generatePrimitives(SoAction *action)
     }
 
     float firstZ, lastZ;
-    myFont->getProfileBounds(firstZ, lastZ);
+    fontCache->getProfileBounds(firstZ, lastZ);
 
     uint32_t prts = parts.getValue();
-    if ((prts & SIDES) && myFont->hasProfile()) {
+    if ((prts & SIDES) && fontCache->hasProfile()) {
 	if (materialPerPart) {
 	    v1.setMaterialIndex(1);
 	    v2.setMaterialIndex(1);
@@ -666,28 +645,24 @@ SoText3::setupFontCache(SoState *state, SbBool forRender)
     // same depth as when the font cache was built).
     state->push();
 
-    if (myFont != NULL) {
+    if (fontCache != NULL) {
 	SbBool isValid;
 	if (forRender)
-	    isValid = myFont->isRenderValid(state);
+        isValid = fontCache->isRenderValid(state);
 	else
-	    isValid = myFont->isValid(state);
+        isValid = fontCache->isValid(state);
 
 	if (!isValid) {
-	    myFont->unref(state);
-	    myFont = NULL;
+        fontCache->unref(state);
+        fontCache = NULL;
 	}
     }
-    if (myFont == NULL) {
-	myFont = SoOutlineFontCache::getFont(state, forRender);
+    if (fontCache == NULL) {
+    fontCache = SoOutlineFontCache::getFont(state, forRender);
+        fontCache->ref();
     }
-    
-    //The current text must be translated to UCS, unless this
-    //translation has already been done.
-    
-    if(myFont) myFont->convertToUCS(getNodeId(), string);
     state->pop();
-    return  myFont != NULL;
+    return  fontCache != NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -702,34 +677,32 @@ SoText3::setupFontCache(SoState *state, SbBool forRender)
 //
 // Use: private
 
-void
-SoText3::getFrontBBox(SbBox2f &result)
+SbBox2f
+SoText3::getFrontBBox()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBox2f charBBox;
-
-    int line, character;
-    for (line = 0; line < string.getNum(); line++) {
-	// Starting position of string, based on justification:
-	SbVec2f charPosition = getStringOffset(line);
+    SbBox2f result;
+    for (int line = 0; line < string.getNum(); line++) {
+        // Starting position of string, based on justification:
+        SbVec2f charPosition = getStringOffset(line);
        
-	const char *chars = myFont->getUCSString(line);
+        const std::wstring chars = string[line].toStdWString();
 	
-	for (character = 0; character < myFont->getNumUCSChars(line); 
-		character++) {
-	    myFont->getCharBBox(chars+2*character, charBBox);
-	    if (!charBBox.isEmpty()) {
-		SbVec2f min = charBBox.getMin() + charPosition;
-		SbVec2f max = charBBox.getMax() + charPosition;
-		result.extendBy(min);
-		result.extendBy(max);
-	    }
+        for (size_t character = 0; character < chars.size(); character++) {
+            SbBox2f charBBox =fontCache->getCharBBox(chars[character]);
+            if (!charBBox.isEmpty()) {
+                SbVec2f min = charBBox.getMin() + charPosition;
+                SbVec2f max = charBBox.getMax() + charPosition;
+                result.extendBy(min);
+                result.extendBy(max);
+            }
 
-	    // And advance...
-	    charPosition += myFont->getCharOffset(chars+2*character);
-	}
+            // And advance...
+            charPosition += fontCache->getCharOffset(chars[character]);
+        }
     }
+    return result;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -750,14 +723,14 @@ SoText3::getStringOffset(int line)
     SbVec2f result(0,0);
     
     if (justification.getValue() == RIGHT) {
-	float width = myFont->getWidth(line);
+        float width = fontCache->getWidth(string[line].toStdWString());
 	result[0] = -width;
     }
     if (justification.getValue() == CENTER) {
-	float width = myFont->getWidth(line);
-	result[0] = -width/2.0;
+        float width = fontCache->getWidth(string[line].toStdWString());
+        result[0] = -width/2.0f;
     }
-    result[1] = -line*myFont->getHeight()*spacing.getValue();
+    result[1] = -line*fontCache->getHeight()*spacing.getValue();
 
     return result;
 }
@@ -776,92 +749,13 @@ SoText3::getCharacterOffset(int line, int whichChar)
 {
     SbVec2f result = getStringOffset(line);
     
-    const char *chars = myFont->getUCSString(line);
+    const std::wstring chars = string[line].toStdWString();
 
     // Now add on all of the character advances up to char:
     for (int i = 0; i < whichChar; i++) {
-	result += myFont->getCharOffset(chars+2*i);
+        result += fontCache->getCharOffset(chars[i]);
     }
     return result;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Render the fronts of the given string.  The GL transformation
-//    matrix is munged by this routine-- surround it by
-//    PushMatrix/PopMatrix.
-//
-// Use: private, internal
-
-void
-SoText3::renderFront(SoGLRenderAction *, int line,
-             GLUtesselator *tobj)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const char *chars = myFont->getUCSString(line);
-
-    // First, try to figure out if we can use glCallLists:
-    SbBool useCallLists = TRUE;
-
-    for (int i = 0; i < myFont->getNumUCSChars(line); i++) {
-	// See if the font cache already has (or can build) a display
-	// list for this character:
-	if (!myFont->hasFrontDisplayList(chars+2*i, tobj)) {
-	    useCallLists = FALSE;
-	    break;
-	}
-    }
-    // if we have display lists for all of the characters, use
-    // glCallLists:
-    if (useCallLists) {
-	myFont->callFrontLists(line);
-    }
-    // if we don't, draw the string character-by-character, using the
-    // display lists we do have:
-    else {
-	myFont->renderFront(line, tobj);
-    }
-}    
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Render the sides of the given string.  The GL transformation
-//    matrix is munged by this routine-- surround it by
-//    PushMatrix/PopMatrix.
-//
-// Use: private
-
-void
-SoText3::renderSide(SoGLRenderAction *, int line)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const char *chars = myFont->getUCSString(line);
-
-    // First, try to figure out if we can use glCallLists:
-    SbBool useCallLists = TRUE;
-
-    for (int i = 0; i < myFont->getNumUCSChars(line); i++) {
-	// See if the font cache already has (or can build) a display
-	// list for this character:
-	if (!myFont->hasSideDisplayList(chars+2*i, renderSideTris)) {
-	    useCallLists = FALSE;
-	    break;
-	}
-    }
-    // if we have display lists for all of the characters, use
-    // glCallLists:
-    if (useCallLists) {
-	myFont->callSideLists(line);
-    }
-    // if we don't, draw the string character-by-character, using the
-    // display lists we do have:
-    else {
-	myFont->renderSide(line, renderSideTris);
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -907,27 +801,25 @@ SoText3::generateFront(int line)
 {
     static GLUtesselator *tobj = NULL;
 
-    const char *chars = myFont->getUCSString(line);
-
     if (tobj == NULL) {
 	tobj = gluNewTess();
-	gluTessCallback(tobj, (GLenum)GLU_BEGIN, (void (*)())SoText3::beginCB);
-	gluTessCallback(tobj, (GLenum)GLU_END, (void (*)())SoText3::endCB);
-	gluTessCallback(tobj, (GLenum)GLU_VERTEX, (void (*)())SoText3::vtxCB);
-	gluTessCallback(tobj, (GLenum)GLU_ERROR,
-			(void (*)())SoOutlineFontCache::errorCB);
+    gluTessCallback(tobj, (GLenum)GLU_TESS_BEGIN, (void (*)())SoText3::beginCB);
+    gluTessCallback(tobj, (GLenum)GLU_TESS_END, (void (*)())SoText3::endCB);
+    gluTessCallback(tobj, (GLenum)GLU_TESS_VERTEX, (void (*)())SoText3::vtxCB);
+    gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR, (void (*)())SoOutlineFontCache::errorCB);
     }
 
     genWhichVertex = 0;
 
     SoTextDetail *d = (SoTextDetail *)genPrimVerts[0]->getDetail();
 
-    for (int i = 0; i < myFont->getNumUCSChars(line); i++) {
+    std::wstring chars = string[line].toStdWString();
+    for (size_t i = 0; i < chars.size(); i++) {
 	d->setCharacterIndex(i);
 
-	myFont->generateFrontChar(chars+2*i, tobj);
+        fontCache->generateFrontChar(chars[i], tobj);
 
-	SbVec2f p = myFont->getCharOffset(chars+2*i);
+        SbVec2f p = fontCache->getCharOffset(chars[i]);
 	genTranslate[0] += p[0];
 	genTranslate[1] += p[1];
     }
@@ -945,16 +837,16 @@ SoText3::generateSide(int line)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const char *chars = myFont->getUCSString(line);
+    std::wstring chars = string[line].toStdWString();
 
     SoTextDetail *d = (SoTextDetail *)genPrimVerts[0]->getDetail();
 
-    for (int i = 0; i < myFont->getNumUCSChars(line); i++) {
+    for (size_t i = 0; i < chars.size(); i++) {
 	d->setCharacterIndex(i);
 
-	myFont->generateSideChar(chars+2*i, generateSideTris);
+        fontCache->generateSideChar(chars[i], generateSideTris);
 
-	SbVec2f p = myFont->getCharOffset(chars+2*i);
+        SbVec2f p = fontCache->getCharOffset(chars[i]);
 	genTranslate[0] += p[0];
 	genTranslate[1] += p[1];
     }
@@ -1059,7 +951,7 @@ SoText3::renderSideTris(int nPoints, const SbVec3f *p1, const SbVec3f *n1,
 // Use: static, private
 
 void
-SoText3::beginCB(GLenum primType)
+SoText3::beginCB(unsigned int primType)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1110,7 +1002,7 @@ SoText3::vtxCB(void *v)
     
     // And texture coordinates:
     if (genTexCoord) {
-	float textHeight = t3->myFont->getHeight();
+    float textHeight = t3->fontCache->getHeight();
 	texCoord.setValue(vertex[0]/textHeight, vertex[1]/textHeight,
 			  0.0, 1.0);
 	// S coordinates go other way on back...

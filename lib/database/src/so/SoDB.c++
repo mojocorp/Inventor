@@ -59,6 +59,7 @@
 #include <Inventor/SoPath.h>
 #include <Inventor/SoType.h>
 #include <Inventor/actions/SoAction.h>
+#include <Inventor/caches/SoFontCache.h>
 #include <Inventor/details/SoDetail.h>
 #include <Inventor/elements/SoElement.h>
 #include <Inventor/engines/SoEngine.h>
@@ -185,6 +186,7 @@ SoDB::init()
 	// search in).
 	SoInput::init();
 
+        SoFontCache::init();
 
 	//
 	// Initialize all standard classes. The significant ordering

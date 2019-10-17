@@ -2,7 +2,6 @@ find_package(OpenGL REQUIRED)
 find_package(X11 REQUIRED)
 find_package(BISON REQUIRED)
 find_package(JPEG REQUIRED)
-find_package(Iconv REQUIRED)
 
 # On Mac OS X, GLX is provided as a separate OpenGL implementation, different
 # from the standard OpenGL framework which provides support for GLUT and native
@@ -71,6 +70,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/caches/SoBitmapFontCache.h
     database/include/Inventor/caches/SoBoundingBoxCache.h
     database/include/Inventor/caches/SoCache.h
+    database/include/Inventor/caches/SoFontCache.h
     database/include/Inventor/caches/SoGLCacheList.h
     database/include/Inventor/caches/SoGLRenderCache.h
     database/include/Inventor/caches/SoNormalCache.h
@@ -449,6 +449,7 @@ set(DATABASE_SOURCES
     database/src/so/caches/SoBitmapFontCache.c++
     database/src/so/caches/SoBoundingBoxCache.c++
     database/src/so/caches/SoCache.c++
+    database/src/so/caches/SoFontCache.c++
     database/src/so/caches/SoGLCacheList.c++
     database/src/so/caches/SoGLRenderCache.c++
     database/src/so/caches/SoNormalCache.c++
@@ -1029,7 +1030,7 @@ set(PRIVATE_HEADERS ${DATABASE_PRIVATE_HEADERS})
 set(SOURCES ${DATABASE_SOURCES} ${NODEKIT_SOURCES} ${INTERACTION_SOURCES})
 
 add_library (Inventor SHARED ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOURCES})
-target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} ${X11_GL_LIB} PRIVATE GLU ${JPEG_LIBRARIES} ${Iconv_LIBRARIES} FLWrapper image)
+target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} ${X11_GL_LIB} PRIVATE GLU freetype ${JPEG_LIBRARIES} image)
 target_include_directories (Inventor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/database/include ${CMAKE_CURRENT_SOURCE_DIR}/nodekits/include ${CMAKE_CURRENT_SOURCE_DIR}/interaction/include)
 
 install(TARGETS Inventor CONFIGURATIONS Debug DESTINATION lib/InventorDebug COMPONENT devel)

@@ -29,15 +29,8 @@ endif()
 
 add_definitions(-DINVENTOR_VERSION="${INVENTOR_VERSION}")
 
-if(APPLE)
-  add_definitions(-DIVPREFIX="/opt/local/")
-elseif(UNIX)
-  add_definitions(-DIVPREFIX="/usr")
-endif()
-
 add_subdirectory(3rdparty)
 add_subdirectory(tools)
-add_subdirectory(libFL)
 add_subdirectory(libimage)
 add_subdirectory(lib)
 add_subdirectory(libSoXt)

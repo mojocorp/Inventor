@@ -128,6 +128,12 @@ set(SOXT_SOURCES
     src/viewers/SoXtWalkVwr.c++
 )
 
+if(APPLE)
+  add_definitions(-DIVPREFIX="/opt/local/")
+elseif(UNIX)
+  add_definitions(-DIVPREFIX="/usr")
+endif()
+
 # for "Sgm/ThumbWheelP.h"
 include_directories(src/viewers)
 

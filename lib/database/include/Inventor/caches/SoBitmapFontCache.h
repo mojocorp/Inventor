@@ -56,12 +56,12 @@
 #ifndef  _SO_BITMAP_FONT_CACHE_
 #define  _SO_BITMAP_FONT_CACHE_
 
-#include <Inventor/SbBox.h>
-#include <Inventor/caches/SoCache.h>
-#include <Inventor/fields/SoMFString.h>
+#include <string>
+#include <vector>
+#include <map>
 
-#include <flclient.h>
-#include <iconv.h>
+#include <Inventor/caches/SoFontCache.h>
+#include <Inventor/SbBox.h>
 
 class SoGLDisplayList;
 
@@ -73,117 +73,65 @@ class SoGLDisplayList;
 // use the normal list of elements used to determine validity, etc,
 // and knows exactly which elements it depends on.
 
-class SoBitmapFontCache : public SoCache
+class SoBitmapFontCache : public SoFontCache
 {
   public:
     // Return a font (either a new one or an old one) that is valid
     // for the given state.
     static SoBitmapFontCache *	getFont(SoState *state, SbBool forRender);
 
-    // Checks to see if this font is valid
-    SbBool		isValid(const SoState *state) const;
-
     // Use this when rendering to decide if this cache is valid (it
     // checks the GL cache context in addition to other elements)
-    SbBool		isRenderValid(SoState *state) const;
-
-    // Set up for GL rendering:
-    void	setupToRender(SoState *state);
+    SbBool isRenderValid(SoState *state) const;
 
     // Returns the amount the current raster position will be advanced
-    // after drawing the given unicode character.
-    SbVec3f		getCharOffset(char* c);
+    // after drawing the given character.
+    SbVec3f getCharOffset(wchar_t c);
 
-    // Get the pixel-space bounding box of a given unicode character.
-    void		getCharBbox(char* c, SbBox3f &box);
+    // Get the pixel-space bounding box of a given character.
+    SbBox3f getCharBbox(wchar_t c);
 
-    // Gets the width (in pixels) of specified UCS-2 string
-    float		getWidth(int line);
+    // Gets the size (in pixels) of the given string
+    SbVec2s getSize(const std::wstring &str);
 
-    // Gets the height of the font, in pixels
-    float		getHeight();
+    // Draws the given string
+    void drawString(SoState *state, const std::wstring &string, const SbVec3f &origin);
 
-    // Draws the current UCS-2 string
-    void		drawString(int line);
 
-    // Draws the given unicode character (using GL)
-    void		drawCharacter(const char* c);
-
-    //Convert string to UCS-2 format, keep a copy in this cache.
-    //Use nodeid to know when to reconvert.
-    SbBool	convertToUCS(uint32_t nodeid, const SoMFString& string);
-
-    //Returns line of UCS-2 text
-    char *	getUCSString(int line)
-    { return (char*)UCSStrings[line];}
-
-    int		getNumUCSChars(int line)
-    { return (int)(long)UCSNumChars[line];}
-
-  protected:
+protected:
     // Free up display lists before being deleted
-    virtual void	destroy(SoState *state);
+    virtual void destroy(SoState *state);
 
-  private:
+private:
+    typedef struct FLbitmap {
+         int width;
+         int height;
+         float xorig;
+         float yorig;
+         float xmove;
+         float ymove;
+         std::vector<unsigned char> bitmap;
+     } FLbitmap;
+
     // Constructor.
     SoBitmapFontCache(SoState *state);
 
     // Destructor
     virtual ~SoBitmapFontCache();
 
-    // Returns TRUE if this font cache has a display list for the
-    // given unicode UCS-2 character.  It will try to build a display list, if it
-    // can.
-    SbBool	hasDisplayList(const char* c);
+    // Draws the given character (using GL)
+    void drawCharacter(SoState *state, wchar_t c);
 
-    // Renders an entire UCS-2 string by using the GL callList() function.
-    void	callLists(const char *string, int length);
-
-    const FLbitmap *getBitmap(unsigned char* c);
+    const FLbitmap *getBitmap(wchar_t c);
 
     // Static list of all fonts.  OPTIMIZATION:  If there turn out to
     // be applications that use lots of fonts, we could change this
     // list into a dictionary keyed off the font name.
-    static SbPList	*fonts;
+    static std::vector<SoBitmapFontCache*> fonts;
 
-    int		numChars;  // Number of characters in this font
-
-
-
-    SoGLDisplayList *list;
-
-    // Dictionary to point to unicode-character display lists;
-    // Keyed by unicode value
-    SbDict	*displayListDict;
-
-    // Dictionary to point to bitmap; keyed by unicode value.
-    SbDict	*bitmapDict;
-
-    // This flag will be true if there is another cache open (if
-    // building GL display lists for render caching, that means we
-    // can't also build display lists).
-    SbBool	otherOpen;
-
-    // This indicates the nodeId of the last created cache, so we can
-    // know when a new UCS-2 translation is required
-    uint32_t	currentNodeId;
-
-    // And some font library stuff:
-    static FLcontext	flContext;
-
-//  instead of font number, we use a comma-separated list of font numbers.
-    GLubyte* createUniFontList(const char* fontNameList, float fontsize);
-    GLubyte* fontNumList;
-    SbPList* fontNums;
-
-    // char* pointers of UCS-2 strings:
-    SbPList	UCSStrings;
-    // size of these strings, in UCS-2 characters:
-    SbPList	UCSNumChars;
-
-    static iconv_t conversionCode;  // Used for UCS conversion
-    //Routine to release storage of an FLBitmap
-    static void freeBitmap(unsigned long, void* value);
+    int context;
+    std::map<wchar_t, SoGLDisplayList*> list;
+    std::map<wchar_t, FLbitmap*> bitmaps; // Cached bitmaps for each character.
 
 };
 #endif /* _SO_BITMAP_FONT_CACHE_ */

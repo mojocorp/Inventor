@@ -56,21 +56,18 @@
 #ifndef  _SO_OUTLINE_FONT_CACHE_
 #define  _SO_OUTLINE_FONT_CACHE_
 
-#include <GL/glu.h>
-#include <Inventor/SbBox.h>
-#include <Inventor/caches/SoCache.h>
-#include <Inventor/fields/SoMFString.h>
+#include <string>
+#include <vector>
+#include <map>
 
-// Font library:
-#include <flclient.h>
-#include <iconv.h>
+#include <Inventor/misc/SoGL.h>
+#include <Inventor/SbBox.h>
+#include <Inventor/SbString.h>
+#include <Inventor/caches/SoFontCache.h>
 
 class SoFontOutline;
 class SoGLDisplayList;
-
-//
-// Internal class: SoOutlineFontCache
-//
+class GLUtesselator;
 
 // Callback function for sides of characters-- passed the number of
 // points going back, and points and normals on either edge of the
@@ -84,29 +81,26 @@ typedef void SideCB(int nPoints,
 // This is pretty heavyweight-- it is responsible for doing all of the
 // grunt work of figuring out the polygons making up the characters in
 // the font.
-class SoOutlineFontCache : public SoCache
+class SoOutlineFontCache : public SoFontCache
 {
   public:
     // Given a state, find an appropriate outline font.
     static SoOutlineFontCache	*getFont(SoState *, SbBool forRender);
 
-    // Checks to see if this font is valid
-    SbBool	isValid(const SoState *state) const;
-
     // Figures out if this cache is valid for rendering (the base
     // class isValid can be used for all other actions)
     SbBool	isRenderValid(SoState *state) const;
 
-    // Returns the width of specified line number
-    float	getWidth(int line);
+    // Returns the width of given string
+    float	getWidth(const std::wstring &string);
 
     // Returns height of font
-    float	getHeight() { return fontSize; }
+    float	getHeight() const { return fontSize; }
 
-    // Returns the 2D bounding box of a UCS character
-    void	getCharBBox(const char* c, SbBox2f &result);
+    // Returns the 2D bounding box of a character
+    SbBox2f	getCharBBox(const wchar_t c);
     // ... and the bounding box of the font's bevel
-    void	getProfileBBox(SbBox2f &result);
+    SbBox2f	getProfileBBox() const { return profileBBox; }
 
     // Return the first/last point in the profile:
     void	getProfileBounds(float &firstZ, float &lastZ);
@@ -116,54 +110,22 @@ class SoOutlineFontCache : public SoCache
     SbBool	hasProfile() const { return  (nProfileVerts > 1); }
 
     // Returns how far to advance after drawing given character:
-    SbVec2f	getCharOffset(const char* c);
+    SbVec2f	getCharOffset(const wchar_t c);
 
     // Uses the given glu tesselator to generate triangles for the
     // given character.  This is used for both rendering and
     // generating primitives, with just different callback routines
     // registered.
-    void	generateFrontChar(const char* c, GLUtesselator *tobj);
+    void	generateFrontChar(const wchar_t c, GLUtesselator *tobj);
     // Ditto, for sides of characters:
-    void	generateSideChar(const char* c, SideCB callbackFunc);
+    void	generateSideChar(const wchar_t c, SideCB callbackFunc);
 
-    // Set up for GL rendering:
-    void	setupToRenderFront(SoState *state);
-    void	setupToRenderSide(SoState *state, SbBool willTexture);
-
-    // Returns TRUE if this font cache has a display list for the
-    // given UCS character.  It will try to build a display list, if it
-    // can.
-    SbBool	hasFrontDisplayList(const char* c, GLUtesselator *tobj);
-    SbBool	hasSideDisplayList(const char* c, SideCB callbackFunc);
-
-    // Renders an entire line by using the GL callList() function.
-    void	callFrontLists(int line);
-    void	callSideLists(int line);
-
-    // Renders a  UCS string in cases where display lists can't be buit.
-    void	renderFront(int line,   GLUtesselator *tobj);
-    void	renderSide(int line,  SideCB callbackFunc);
+    // Renders a string in cases where display lists can't be buit.
+    void	renderFront(SoState *state, const SbString &string);
+    void	renderSide(SoState *state, const SbString &string, SideCB callbackFunc);
 
     // Callback registered with GLU used to detect tesselation errors.
     static void errorCB(GLenum whichErr);
-
-    //Convert string to UCS format, keep a copy in this cache.
-    //Use nodeid to know when to reconvert.
-    void	convertToUCS(uint32_t nodeid, const SoMFString& string);
-
-    //Returns line of UCS-2 text
-    char *	getUCSString(int line)
-    { return (char*)UCSStrings[line];}
-
-    int		getNumUCSChars(int line)
-    { return (int)(long)UCSNumChars[line];}
-
-    GLubyte *createUniFontList(const char* fontNameList);
-
-  protected:
-
-    // Free up display lists before being deleted
-    virtual void	destroy(SoState *state);
 
   private:
     // Constructor
@@ -171,60 +133,39 @@ class SoOutlineFontCache : public SoCache
     // Destructor
     ~SoOutlineFontCache();
 
-    // Return a convnient little class representing a UCS character's
+    // Returns TRUE if this font cache has a display list for the
+    // given character.  It will try to build a display list, if it
+    // can.
+    SbBool	hasFrontDisplayList(SoState *state, const wchar_t c, GLUtesselator *tobj);
+    SbBool	hasSideDisplayList(SoState *state, const wchar_t c, SideCB callbackFunc);
+    // Return a convnient little class representing a character's
     // outline.
-    SoFontOutline	*getOutline(const char* c);
+    SoFontOutline *getOutline(const wchar_t c);
 
     // Some helper routines for generateSide:
-    void figureSegmentNorms(SbVec2f *result, int nPoints,
-     const SbVec2f *points, float cosCreaseAngle, SbBool isClosed);
-    void figureSegmentTexCoords(float *texCoords, int nPoints,
-     const SbVec2f *points, SbBool isClosed);
-    void fillBevel(SbVec3f *result, int nPoints,
-           const SbVec2f *points, const SbVec2f &translation,
-           const SbVec2f &n1, const SbVec2f &n2);
-    void fillBevelN(SbVec3f *result, int nPoints,
-            const SbVec2f *norms, const SbVec2f &n);
+    void figureSegmentNorms(std::vector<SbVec2f> & result, int nPoints, const SbVec2f *points, float cosCreaseAngle, SbBool isClosed);
+    void figureSegmentTexCoords(std::vector<float> & texCoords, int nPoints, const SbVec2f *points, SbBool isClosed);
+    void fillBevel(SbVec3f *result, int nPoints, const SbVec2f *points, const SbVec2f &translation, const SbVec2f &n1, const SbVec2f &n2);
+    void fillBevelN(SbVec3f *result, const std::vector<SbVec2f> & norms, const SbVec2f &n);
 
     // Texture coordinates in side display lists
     int		sidesHaveTexCoords;
 
-    // Number of characters in this font.
-
-    int		numChars;
-
     // Display lists for fronts, sides:
-    SoGLDisplayList *frontList;
-    SoGLDisplayList *sideList;
+    int context;
+    std::map<wchar_t, SoGLDisplayList*> frontList;
+    std::map<wchar_t, SoGLDisplayList*> sideList;
 
     // Profile information:
     float	cosCreaseAngle;
     int32_t	nProfileVerts;	// Number of points in profile
     SbVec2f	*profileVerts;	// Profile vertices
-    float	*sTexCoords;	// Texture coordinates along profile
-                    // (nProfileVerts of them)
-    SbVec2f	*profileNorms;	// Profile normals
-                // ((nProfileVerts-1)*2 of them)
+    SbBox2f profileBBox; // Profile bounding box
+    std::vector<float>   sTexCoords;	// Texture coordinates along profile (nProfileVerts of them)
+    std::vector<SbVec2f> profileNorms;	// Profile normals ((nProfileVerts-1)*2 of them)
 
-    // This flag will be true if there is another cache open (if
-    // building GL display lists for render caching, that means we
-    // can't also build display lists).
-    SbBool	otherOpen;
-
-    // And tables telling us if a display list has been created for
-    // each character in the font (we do that lazily since it is
-    // expensive):
-    SbDict* frontDict;
-    SbDict* sideDict;
-
-    // dictionary of outlines; these are also cached and created when
-    // needed.
-    SbDict* outlineDict;
-
-    // Remember nodeId that was used to do UCS translation.
-    uint32_t	currentNodeId;
-
-    static iconv_t	conversionCode;
+    // List of outlines; these are also cached and created when needed.
+    std::map<wchar_t, SoFontOutline*> outlines;
 
     // Font size
     float	fontSize;
@@ -232,26 +173,12 @@ class SoOutlineFontCache : public SoCache
     // Flag used to detect tesselation errors:
     static SbBool tesselationError;
 
-    // List of font numbers for this font-list
-    GLubyte* fontNumList;
-    SbPList* fontNums;
-
-    // char* pointers of UCS-2 strings:
-    SbPList	UCSStrings;
-    // size of these strings, in UCS-2 characters:
-    SbPList	UCSNumChars;
-
-    // Font library context for all outline fonts
-    static FLcontext	context;
-
     // Global list of available fonts; a 'font' in this case is a
     // unique set of font name, font size, complexity value/type, and
     // set of profiles-- if any of these changes, the set of polygons
     // representing the font will change, and a different font will be
     // used.
-    static SbPList	*fonts;
-    // Free up an outline (invoked by SbDict::applyToAll):
-    static void freeOutline( unsigned long,  void* value);
+    static std::vector<SoOutlineFontCache*>	fonts;
 };
 
 #endif /* _SO_OUTLINE_FONT_CACHE_ */
