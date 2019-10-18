@@ -178,7 +178,7 @@ SoCallback::GLRender(SoGLRenderAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // Ask to be cached, to match Inventor 2.0 default:
-    SoGLCacheContextElement::shouldAutoCache(action->getState(), TRUE);
+    SoGLCacheContextElement::shouldAutoCache(action->getState(), SoGLCacheContextElement::DO_AUTO_CACHE);
     
     SoCallback::doAction(action);
 }

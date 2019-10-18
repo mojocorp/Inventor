@@ -75,8 +75,6 @@ SoTextureCoordinateBundle::SoTextureCoordinateBundle(SoAction *action,
 ////////////////////////////////////////////////////////////////////////
 {
     isRendering = forRendering;
-    //??? When Gavin gets back, he can explain if tCoords is really needed:
-    tCoords = NULL;
 
     setFunction = FALSE;
 

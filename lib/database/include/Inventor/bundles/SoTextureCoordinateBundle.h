@@ -120,9 +120,7 @@ SoEXTENDER class SoTextureCoordinateBundle : public SoBundle {
     // Returns indexed texture coordinate during primitive generation
     // or rendering
     SbVec4f	 	get(int index) const
-	{ if (tCoords) return(SbVec4f(tCoords[index][0],tCoords[index][1],
-			0.0, 1.0)); 
-		else return texCoordElt->get4(index); }
+    { return texCoordElt->get4(index); }
 
     // Sends indexed texture coordinate to GL during rendering
     void		send(int index) const	{ GLTexCoordElt->send(index); }
@@ -142,8 +140,6 @@ SoEXTENDER class SoTextureCoordinateBundle : public SoBundle {
     int			coordS, coordT;
     // These hold the vectors used for default texture coordinate generation
     SbVec4f		sVector, tVector;
-    // This holds the texture coords from a vertexProperty node:
-    const SbVec2f *	tCoords;
 
     // Sets up bundle for primitive generation or rendering
     void		setUpForPrimGen(SoAction *action,
