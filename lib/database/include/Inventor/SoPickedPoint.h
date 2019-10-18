@@ -208,7 +208,7 @@ class SoPickedPoint {
     void		getMatrix(const SoNode *node) const;
 
     // Multiplies SbVec4f by matrix - for transforming texture coords
-    static SbVec4f multVecMatrix4(const SbMatrix &m, const SbVec4f v);
+    static SbVec4f multVecMatrix4(const SbMatrix &m, const SbVec4f &v);
 };
 
 #endif /* _SO_PICKED_POINT_ */

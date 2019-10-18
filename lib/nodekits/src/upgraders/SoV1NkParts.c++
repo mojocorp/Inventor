@@ -439,7 +439,7 @@ SoV1NodekitParts::getAnyPart( const SbName &nameOfPart, SbBool makeIfNeeded,
 			   "part name %s contains an index, which is illegal",
 			   nameOfPart.getString());
 #endif
-	return FALSE;
+	return NULL;
     }
 
     // IS THE REQUESTED PART IN THIS CATALOG?

@@ -86,7 +86,7 @@ SoMaterialBundle::SoMaterialBundle(SoAction *action) : SoBundle(action)
 
     // Nodes that use material bundles haven't been optimized, and
     // should be render cached if possible:
-    SoGLCacheContextElement::shouldAutoCache(state, TRUE);
+    SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DO_AUTO_CACHE);
 }
 
 ////////////////////////////////////////////////////////////////////////

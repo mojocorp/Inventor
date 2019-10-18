@@ -1042,13 +1042,13 @@ SoBase::readBase(SoInput *in, SbName &className, SoBase *&base)
     if (className == DEFINITION_KEYWORD) {
 
 	if (! in->read(refName, FALSE) || ! in->read(className, TRUE)) {
-	    SoReadError::post(in, "Premature end of file after "
+	    SoReadError::post(in, "Premature end of file after %s"
 			      DEFINITION_KEYWORD);
 	    ret = FALSE;
 	}
 
 	if (! refName) {
-	    SoReadError::post(in, "No name given after ", DEFINITION_KEYWORD);
+	    SoReadError::post(in, "No name given after %s", DEFINITION_KEYWORD);
 	    ret = FALSE;
 	}
 
