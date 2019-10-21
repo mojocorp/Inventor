@@ -56,18 +56,6 @@
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/caches/SoGLRenderCache.h>
 
-int SoGLDisplayList::texture_object_extensionID = -1;
-
-//
-// Workaround for nasty OpenGL bug:  we don't use the texture object
-// extension if the user sets the IV_NO_TEXTURE_OBJECT environment
-// variable, because texture objects are not correctly shared between
-// contexts on RE and impact so multi-windowed applications will
-// display textures in only one window.
-// -- gavin 10/3/95
-//
-static int never_use_texture_object = -1;  // "don't know" initial value
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -91,48 +79,17 @@ SoGLDisplayList::SoGLDisplayList(SoState *state, Type _type,
     // been created).
     context = SoGLCacheContextElement::get(state);
 
-#ifdef GL_EXT_texture_object
-    if (texture_object_extensionID == -1) {
-    texture_object_extensionID =
-        SoGLCacheContextElement::getExtID("GL_EXT_texture_object");
-    }
-    int texObjSupported = SoGLCacheContextElement::extSupported(state,
-                    texture_object_extensionID);
-
-    if (never_use_texture_object == -1) {
-    if (getenv("IV_NO_TEXTURE_OBJECT"))
-        never_use_texture_object = 1;
-    else
-        never_use_texture_object = 0;
-    }
-    if (never_use_texture_object) texObjSupported = 0;
-
-#else
-    int texObjSupported = FALSE;
-#endif
-
-    // Always use display lists if texture objects are not supported:
-    if (_type == TEXTURE_OBJECT && !texObjSupported)
-    type = DISPLAY_LIST;
-    else
     type = _type;
 
     if (type == TEXTURE_OBJECT) {
-#ifdef GL_EXT_texture_object
-    glGenTextures(1, &startIndex);
+    	glGenTextures(1, &startIndex);
 #ifdef DEBUG
-    if (num != 1)
-        SoDebugError::post("SoGLDisplayList", "Sorry, can only "
-                   "construct 1 texture object at a time");
-#endif
-#else
-#ifdef DEBUG
-    SoDebugError::post("SoGLDisplayList", "Texture objects not "
-               "supported, but type not reset!");
-#endif
+    	if (num != 1)
+        	SoDebugError::post("SoGLDisplayList", "Sorry, can only "
+                                   "construct 1 texture object at a time");
 #endif
     } else {
-    startIndex = glGenLists(num);
+    	startIndex = glGenLists(num);
     }
 }
 
@@ -165,8 +122,8 @@ SoGLDisplayList::unref(SoState *state)
 {
     --refCount;
     if (refCount <= 0) {
-    // Let the CacheContextElement delete us:
-    SoGLCacheContextElement::freeList(state, this);
+        // Let the CacheContextElement delete us:
+        SoGLCacheContextElement::freeList(state, this);
     }
 }
 
@@ -183,11 +140,9 @@ SoGLDisplayList::open(SoState *, int index)
 ////////////////////////////////////////////////////////////////////////
 {
     if (type == TEXTURE_OBJECT) {
-#ifdef GL_EXT_texture_object
-    glBindTexture(GL_TEXTURE_2D, startIndex+index);
-#endif
+	    glBindTexture(GL_TEXTURE_2D, startIndex+index);
     } else {
-    glNewList(startIndex+index, GL_COMPILE_AND_EXECUTE);
+    	glNewList(startIndex+index, GL_COMPILE_AND_EXECUTE);
     }
 }
 
@@ -204,7 +159,7 @@ SoGLDisplayList::close(SoState *)
 ////////////////////////////////////////////////////////////////////////
 {
     if (type != TEXTURE_OBJECT) {
-    glEndList();
+        glEndList();
     }
 }
 
@@ -221,11 +176,9 @@ SoGLDisplayList::call(SoState *state, int index)
 ////////////////////////////////////////////////////////////////////////
 {
     if (type == TEXTURE_OBJECT) {
-#ifdef GL_EXT_texture_object
-    glBindTexture(GL_TEXTURE_2D, startIndex+index);
-#endif
+    	glBindTexture(GL_TEXTURE_2D, startIndex+index);
     } else {
-    glCallList(startIndex+index);
+    	glCallList(startIndex+index);
     }
     addDependency(state);
 }
@@ -243,9 +196,8 @@ SoGLDisplayList::addDependency(SoState *state)
 ////////////////////////////////////////////////////////////////////////
 {
     if (state->isCacheOpen()) {
-    SoGLRenderCache *c = (SoGLRenderCache *)
-        SoCacheElement::getCurrentCache(state);
-    c->addNestedCache(this);
+        SoGLRenderCache *c = (SoGLRenderCache *)SoCacheElement::getCurrentCache(state);
+        c->addNestedCache(this);
     }
 }
 
@@ -261,10 +213,8 @@ SoGLDisplayList::~SoGLDisplayList()
 ////////////////////////////////////////////////////////////////////////
 {
     if (type == TEXTURE_OBJECT) {
-#ifdef GL_EXT_texture_object
-    glDeleteTextures(1, &startIndex);
-#endif
+        glDeleteTextures(1, &startIndex);
     } else {
-    glDeleteLists(startIndex, num);
+    	glDeleteLists(startIndex, num);
     }
 }

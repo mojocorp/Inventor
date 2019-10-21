@@ -55,7 +55,6 @@
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLDisplayList.h>
-#include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoGLTextureImageElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
 #include <Inventor/errors/SoDebugError.h>
@@ -72,9 +71,6 @@ static GLenum formats[] = {
     GL_RGBA
 };
 
-// And preferred formats for internal storage, if GL_EXT_texture is
-// supported:
-#ifdef GL_EXT_texture
 static GLint internalFormatsLow[] = {
     GL_LUMINANCE8_EXT,
     GL_LUMINANCE8_ALPHA8_EXT,
@@ -87,7 +83,6 @@ static GLint internalFormatsHigh[] = {
     GL_RGB,
     GL_RGBA
 };
-#endif
 
 SO_ELEMENT_SOURCE(SoGLTextureImageElement);
 
@@ -372,19 +367,10 @@ SoGLTextureImageElement::sendTex(SoState *state)
     // Internal format is just numComponents unless GL_EXT_texture is
     // supported:
     int internalFormat = numComponents;
-#ifdef GL_EXT_texture
-    static int textureExtInt = -1;  // for fast lookup of extension support
-    if (textureExtInt == -1) {
-	textureExtInt =
-	    SoGLCacheContextElement::getExtID("GL_EXT_texture");
-    }
-    if (SoGLCacheContextElement::extSupported(state, textureExtInt)) {
-	if (quality >= 0.8)
-	    internalFormat = internalFormatsHigh[numComponents-1];
-	else
-	    internalFormat = internalFormatsLow[numComponents-1];	
-    }
-#endif
+    if (quality >= 0.8)
+        internalFormat = internalFormatsHigh[numComponents-1];
+    else
+        internalFormat = internalFormatsLow[numComponents-1];
 
     SbBool buildList = !SoCacheElement::anyOpen(state);
     if (buildList) {
@@ -395,10 +381,8 @@ SoGLTextureImageElement::sendTex(SoState *state)
 
     // If we aren't creating a texture object, then we need to 
     // unbind the current texture object so we don't overwrite it's state.
-#ifdef GL_EXT_texture_object
     if (!buildList)
-	glBindTexture(GL_TEXTURE_2D, 0);
-#endif
+        glBindTexture(GL_TEXTURE_2D, 0);
 
     // These need to go inside the display list or texture object
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
