@@ -130,8 +130,7 @@ SoEXTENDER class SoGLDisplayList {
     int num;
     int refCount;
     int	context;
-    static int texture_object_extensionID;
-friend class SoGLCacheContextElement;
+	friend class SoGLCacheContextElement;
 };
 
 #endif /* _SO_GL_DISPLAY_LIST */
