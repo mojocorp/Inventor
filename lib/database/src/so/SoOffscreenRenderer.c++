@@ -55,6 +55,7 @@
 #include <Inventor/SoOffscreenRenderer.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/actions/SoGLRenderAction.h>
+#include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoNode.h>
 #include <image/image-sgi.h>
@@ -66,14 +67,6 @@
 static int attributeList[] = { GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
                                GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
 
-//
-// KLUDGE!!!!!
-// In order to keep caches from being blown away when the contexts
-// is deleted, assign a unique number to them with the rendering action.
-// Start at 10000 and increment.
-//
-static uint32_t SoContextIncrement = 10000;
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -83,7 +76,8 @@ static uint32_t SoContextIncrement = 10000;
 // Use: public
 
 SoOffscreenRenderer::SoOffscreenRenderer(
-    const SbViewportRegion &viewportRegion )
+    const SbViewportRegion &viewportRegion ) :
+    cacheContext(SoGLCacheContextElement::getUniqueCacheContext())
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -103,7 +97,8 @@ SoOffscreenRenderer::SoOffscreenRenderer(
 // Use: public
 
 SoOffscreenRenderer::SoOffscreenRenderer(
-    SoGLRenderAction *act )
+    SoGLRenderAction *act ) :
+    cacheContext(SoGLCacheContextElement::getUniqueCacheContext())
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -309,8 +304,8 @@ SoOffscreenRenderer::render(SoNode *scene)
     // Set the GL cache context for the action to a unique number
     // (we'll use and increment SoContextIncrement), so that it doesn't try
     // to use display lists from other contexts.
-    uint32_t oldContext = act->getCacheContext();
-    act->setCacheContext(SoContextIncrement++);
+    const uint32_t oldContext = act->getCacheContext();
+    act->setCacheContext(cacheContext);
     act->apply(scene);
     act->setCacheContext(oldContext);
 
@@ -357,8 +352,8 @@ SoOffscreenRenderer::render(SoPath *scene)
     // Set the GL cache context for the action to a unique number
     // (we'll use and increment SoContextIncrement), so that it doesn't try
     // to use display lists from other contexts.
-    uint32_t oldContext = act->getCacheContext();
-    act->setCacheContext(SoContextIncrement++);
+    const uint32_t oldContext = act->getCacheContext();
+    act->setCacheContext(cacheContext);
     act->apply(scene);
     act->setCacheContext(oldContext);
 

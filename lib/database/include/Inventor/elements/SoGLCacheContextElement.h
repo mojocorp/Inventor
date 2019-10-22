@@ -194,6 +194,9 @@ SoEXTENDER class SoGLCacheContextElement : public SoElement {
     // Prints element (for debugging)
     virtual void	print(FILE *fp) const;
 
+    // Returns an unique cache context id.
+    static int getUniqueCacheContext();
+
   SoINTERNAL public:
     static void		initClass();
 
