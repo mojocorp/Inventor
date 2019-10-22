@@ -132,10 +132,9 @@ class SoLocateHighlight : public SoSeparator {
     
   private:
     // highlighting stuff
-    SbBool		highlightingPass;
     static SoFullPath   *currentHighlightPath;
     SbBool		isHighlighted(SoAction *action);
-    SbBool		preRender(SoGLRenderAction *act, int &oldDepthFunc);
+    SbBool preRender(SoGLRenderAction *act);
     SoColorPacker	*colorPacker;
 };
 

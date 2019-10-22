@@ -154,7 +154,6 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoViewVolumeElement.h
     database/include/Inventor/elements/SoViewingMatrixElement.h
     database/include/Inventor/elements/SoViewportRegionElement.h
-    database/include/Inventor/elements/SoWindowElement.h
     database/include/Inventor/engines/SoBoolOperation.h
     database/include/Inventor/engines/SoCalculator.h
     database/include/Inventor/engines/SoCompose.h
@@ -541,7 +540,6 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoViewVolumeElement.c++
     database/src/so/elements/SoViewingMatrixElement.c++
     database/src/so/elements/SoViewportRegionElement.c++
-    database/src/so/elements/SoWindowElement.c++
     database/src/so/engines/SoBoolOperation.c++
     database/src/so/engines/SoCalcExpr.c++
     database/src/so/engines/SoCalcExpr.h
