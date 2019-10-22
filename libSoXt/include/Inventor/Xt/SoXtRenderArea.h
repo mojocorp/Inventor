@@ -336,7 +336,6 @@ class SoXtRenderArea : public SoXtGLWidget {
     Widget		deviceWidget;
 
     // static callbacks
-    SbBool		firstEvent; // used to init the action SoWindowElement
     static void		windowEventCB(Widget, SoXtRenderArea *, XAnyEvent *, Boolean *);
     static void		renderCB(void *, SoSceneManager *);
     static void		renderOverlayCB(void *, SoSceneManager *);

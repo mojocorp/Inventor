@@ -64,7 +64,6 @@
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
 #include <Inventor/elements/SoGLLazyElement.h>
-#include <Inventor/elements/SoWindowElement.h>
 
 SO_ACTION_SOURCE(SoGLRenderAction);
 
@@ -85,7 +84,6 @@ SoGLRenderAction::initClass()
     SO_ENABLE(SoGLRenderAction, SoGLLazyElement);
     SO_ENABLE(SoGLRenderAction, SoGLRenderPassElement);
     SO_ENABLE(SoGLRenderAction, SoViewportRegionElement);
-    SO_ENABLE(SoGLRenderAction, SoWindowElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
