@@ -336,3 +336,11 @@ SoGLCacheContextElement::print(FILE *) const
 {
 }
 #endif /* DEBUG */
+
+int
+SoGLCacheContextElement::getUniqueCacheContext()
+{
+    static int s_contextIncrement = 1000;
+    
+    return ++s_contextIncrement;
+}

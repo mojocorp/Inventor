@@ -150,6 +150,7 @@ class SoOffscreenRenderer {
     Components          comps;
     SbColor		backgroundColor;
     SoGLRenderAction	*userAction, *offAction;
+    int                 cacheContext;
     SbViewportRegion    renderedViewport;
 
     // These are used for rendering to the offscreen pixmap
