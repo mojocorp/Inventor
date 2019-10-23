@@ -207,9 +207,6 @@ SoEXTENDER class SoGLCacheContextElement : public SoElement {
     // This routine is pretty quick:
     static SbBool	extSupported(SoState *state, int ext);
 
-    // TRUE if mip-mapped textures are known to be fast:
-    static SbBool	areMipMapsFast(SoState *state);
-
     // Methods used to improve auto-caching algorithm:
 
     // Two bits are stored.  Nodes that should be cached will set the
@@ -294,7 +291,6 @@ SoEXTENDER class SoGLCacheContextElement : public SoElement {
 
     static SbPList *	waitingToBeFreed;	// Allocated in ::init
     static SbPList *	extensionList;		// Allocated in ::init
-    static SbIntList *	mipmapSupportList;	// Allocated in ::init
 
 friend class SoGLDisplayList;
 };
