@@ -68,6 +68,7 @@
 #include <Inventor/elements/SoComplexityTypeElement.h>
 #include <Inventor/elements/SoCoordinateElement.h>
 #include <Inventor/elements/SoCreaseAngleElement.h>
+#include <Inventor/elements/SoDepthBufferElement.h>
 #include <Inventor/elements/SoDrawStyleElement.h>
 #include <Inventor/elements/SoFloatElement.h>
 #include <Inventor/elements/SoFocalDistanceElement.h>
@@ -76,6 +77,7 @@
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/elements/SoGLClipPlaneElement.h>
 #include <Inventor/elements/SoGLCoordinateElement.h>
+#include <Inventor/elements/SoGLDepthBufferElement.h>
 #include <Inventor/elements/SoGLDrawStyleElement.h>
 #include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/elements/SoGLLightIdElement.h>
