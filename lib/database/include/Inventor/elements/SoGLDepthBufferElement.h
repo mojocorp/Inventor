@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,23 +18,21 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
-
-//  -*- C++ -*-
 
 /*
  * Copyright (C) 1990,91   Silicon Graphics, Inc.
@@ -45,60 +43,49 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoAnnotation node class.
- |
- |   Author(s)		: Paul S. Strauss
+ |	This file defines the SoGLDepthBufferElement class.
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
 
-#ifndef  _SO_ANNOTATION_
-#define  _SO_ANNOTATION_
+#ifndef _SO_GL_DEPTH_BUFFER_ELEMENT_
+#define _SO_GL_DEPTH_BUFFER_ELEMENT_
 
-#include <Inventor/nodes/SoSeparator.h>
+#include <Inventor/elements/SoDepthBufferElement.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoAnnotation
-//
-//  Annotation group node: delays rendering its children until all
-//  other nodes have been traversed, turning off depth buffer
-//  comparisons first. The result is that the shapes under the
-//  annotation node are rendered on top of the rest of the scene.
-//
-//  Note that if more than one annotation node is present in a graph,
-//  the order in which they are traversed determines the stacking
-//  order - later nodes are rendered on top of earlier ones. Also note
-//  that since depth buffer comparisons are disabled, complex 3D
-//  objects may not be rendered correctly when used under annotation
-//  nodes.
-//
-//  All non-rendering actions are inherited as is from SoSeparator.
-//
-//////////////////////////////////////////////////////////////////////////////
-class SoAnnotation : public SoSeparator {
+class SoGLDepthBufferElement : public SoDepthBufferElement {
 
-    SO_NODE_HEADER(SoAnnotation);
+    SO_ELEMENT_HEADER(SoGLDepthBufferElement);
 
-  public:
+public:
+    /// Initializes element
+    virtual void	init(SoState *state);
 
-    // No fields
+    virtual void	push(SoState *state);
 
-    // Constructor
-    SoAnnotation();
+    /// Override pop() method so side effects can occur in GL
+    virtual void	pop(SoState *state, const SoElement *prevTopElement);
 
-  SoEXTENDER public:
-    // Implement actions
-    virtual void	GLRenderBelowPath(SoGLRenderAction *action);
-    virtual void	GLRenderInPath(SoGLRenderAction *action);
-
-  SoINTERNAL public:
+SoINTERNAL public:
+    // Initializes the SoGLDepthBufferElement class
     static void		initClass();
 
-  protected:
-    // Destructor
-    virtual ~SoAnnotation();
+protected:
+    virtual void	setElt(SbBool test, SbBool write, DepthWriteFunction function, const SbVec2f & range);
+
+    virtual ~SoGLDepthBufferElement();
+private:
+    enum masks{
+        TEST_MASK  = (1<<0),
+        WRITE_MASK = (1<<1),
+        FUNCT_MASK = (1<<2),
+        RANGE_MASK = (1<<3)
+    };
+
+    uint32_t whatChanged;
+
+    void		send();
 };
 
-#endif /* _SO_ANNOTATION_ */
+#endif /* _SO_GL_DEPTH_BUFFER_ELEMENT_ */

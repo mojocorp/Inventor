@@ -79,6 +79,7 @@ SoElement::initElements()
     SoComplexityTypeElement::initClass();
     SoCoordinateElement::initClass();
     SoCreaseAngleElement::initClass();
+    SoDepthBufferElement::initClass();
     SoDrawStyleElement::initClass();
     SoFocalDistanceElement::initClass();
     SoFontNameElement::initClass();
@@ -119,6 +120,7 @@ SoElement::initElements()
     SoGLCacheContextElement::initClass();
     SoGLClipPlaneElement::initClass();
     SoGLCoordinateElement::initClass();
+    SoGLDepthBufferElement::initClass();
     SoGLDrawStyleElement::initClass();
     SoGLLazyElement::initClass();
     SoGLLightIdElement::initClass();

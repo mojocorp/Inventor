@@ -64,6 +64,7 @@
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
 #include <Inventor/elements/SoGLLazyElement.h>
+#include <Inventor/elements/SoGLDepthBufferElement.h>
 
 SO_ACTION_SOURCE(SoGLRenderAction);
 
@@ -84,6 +85,7 @@ SoGLRenderAction::initClass()
     SO_ENABLE(SoGLRenderAction, SoGLLazyElement);
     SO_ENABLE(SoGLRenderAction, SoGLRenderPassElement);
     SO_ENABLE(SoGLRenderAction, SoViewportRegionElement);
+    SO_ENABLE(SoGLRenderAction, SoGLDepthBufferElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -623,7 +625,8 @@ SoGLRenderAction::renderTransparentObjs()
     // Don't write into z buffer so that ALL transparent objects will
     // be drawn. This makes things look better, even if sorting is not
     // on or if sorting gives the incorrect order.
-    glDepthMask(FALSE);
+    state->push();
+    SoGLDepthBufferElement::set(state, TRUE, FALSE, SoDepthBufferElement::LESS);
 
     // If not sorting, just render them in order
     if (! sortObjs)
@@ -674,7 +677,7 @@ SoGLRenderAction::renderTransparentObjs()
     }
 
     // Restore zwritemask to what we assume it was before...
-    glDepthMask(TRUE);
+    state->pop();
 
     // Get ready for next time
     delayObjs = TRUE;

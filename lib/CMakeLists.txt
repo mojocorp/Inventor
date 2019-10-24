@@ -94,6 +94,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoComplexityTypeElement.h
     database/include/Inventor/elements/SoCoordinateElement.h
     database/include/Inventor/elements/SoCreaseAngleElement.h
+    database/include/Inventor/elements/SoDepthBufferElement.h
     database/include/Inventor/elements/SoDrawStyleElement.h
     database/include/Inventor/elements/SoElement.h
     database/include/Inventor/elements/SoElements.h
@@ -104,6 +105,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoGLCacheContextElement.h
     database/include/Inventor/elements/SoGLClipPlaneElement.h
     database/include/Inventor/elements/SoGLCoordinateElement.h
+    database/include/Inventor/elements/SoGLDepthBufferElement.h
     database/include/Inventor/elements/SoGLDisplayList.h
     database/include/Inventor/elements/SoGLDrawStyleElement.h
     database/include/Inventor/elements/SoGLLazyElement.h
@@ -267,6 +269,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/nodes/SoCoordinate4.h
     database/include/Inventor/nodes/SoCube.h
     database/include/Inventor/nodes/SoCylinder.h
+    database/include/Inventor/nodes/SoDepthBuffer.h
     database/include/Inventor/nodes/SoDirectionalLight.h
     database/include/Inventor/nodes/SoDrawStyle.h
     database/include/Inventor/nodes/SoEnvironment.h
@@ -481,6 +484,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoComplexityTypeElement.c++
     database/src/so/elements/SoCoordinateElement.c++
     database/src/so/elements/SoCreaseAngleElement.c++
+    database/src/so/elements/SoDepthBufferElement.c++
     database/src/so/elements/SoDrawStyleElement.c++
     database/src/so/elements/SoElement.c++
     database/src/so/elements/SoElementInit.c++
@@ -491,6 +495,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoGLCacheContextElement.c++
     database/src/so/elements/SoGLClipPlaneElement.c++
     database/src/so/elements/SoGLCoordinateElement.c++
+    database/src/so/elements/SoGLDepthBufferElement.c++
     database/src/so/elements/SoGLDisplayList.c++
     database/src/so/elements/SoGLDrawStyleElement.c++
     database/src/so/elements/SoGLLazyElement.c++
@@ -643,6 +648,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoCoordinate4.c++
     database/src/so/nodes/SoCube.c++
     database/src/so/nodes/SoCylinder.c++
+    database/src/so/nodes/SoDepthBuffer.c++
     database/src/so/nodes/SoDirectionalLight.c++
     database/src/so/nodes/SoDrawStyle.c++
     database/src/so/nodes/SoEnvironment.c++

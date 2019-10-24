@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -43,36 +43,17 @@
  |   $Revision: 1.1 $
  |
  |   Classes:
- |	SoAnnotation
- |
- |   Author(s)		: Paul S. Strauss
+ |      SoDepthBuffer
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
 
-#include <Inventor/misc/SoGL.h>
+#include <Inventor/nodes/SoDepthBuffer.h>
 #include <Inventor/actions/SoGLRenderAction.h>
-#include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLDepthBufferElement.h>
-#include <Inventor/nodes/SoAnnotation.h>
 
-SO_NODE_SOURCE(SoAnnotation);
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    This initializes the SoAnnotation class.
-//
-// Use: internal
-
-void
-SoAnnotation::initClass()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SO__NODE_INIT_CLASS(SoAnnotation, "Annotation", SoSeparator);
-}
+SO_NODE_SOURCE(SoDepthBuffer)
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -81,26 +62,64 @@ SoAnnotation::initClass()
 //
 // Use: public
 
-SoAnnotation::SoAnnotation()
+SoDepthBuffer::SoDepthBuffer()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SO_NODE_CONSTRUCTOR(SoAnnotation);
+    SO_NODE_CONSTRUCTOR(SoDepthBuffer);
+
+    SO_NODE_ADD_FIELD(test,
+                      (SoDepthBufferElement::getDefaultTest()));
+    SO_NODE_ADD_FIELD(write,
+                      (SoDepthBufferElement::getDefaultWrite()));
+    SO_NODE_ADD_FIELD(function,
+                      (SoDepthBufferElement::getDefaultFunction()));
+    SO_NODE_ADD_FIELD(range,
+                      (SoDepthBufferElement::getDefaultRange()));
+
+    //
+    // Set up static info for enumerated type fields
+    //
+    SO_NODE_DEFINE_ENUM_VALUE(DepthWriteFunction, NEVER);
+    SO_NODE_DEFINE_ENUM_VALUE(DepthWriteFunction, ALWAYS);
+    SO_NODE_DEFINE_ENUM_VALUE(DepthWriteFunction, LESS);
+    SO_NODE_DEFINE_ENUM_VALUE(DepthWriteFunction, LEQUAL);
+    SO_NODE_DEFINE_ENUM_VALUE(DepthWriteFunction, EQUAL);
+    SO_NODE_DEFINE_ENUM_VALUE(DepthWriteFunction, GEQUAL);
+    SO_NODE_DEFINE_ENUM_VALUE(DepthWriteFunction, GREATER);
+    SO_NODE_DEFINE_ENUM_VALUE(DepthWriteFunction, NOTEQUAL);
+
+    SO_NODE_SET_SF_ENUM_TYPE(function, DepthWriteFunction);
 
     isBuiltIn = TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
-// Description:
-//    Destructor
+// Destructor
 //
-// Use: private
 
-SoAnnotation::~SoAnnotation()
+SoDepthBuffer::~SoDepthBuffer()
 //
 ////////////////////////////////////////////////////////////////////////
 {
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    This initializes the SoDepthBuffer class.
+//
+// Use: internal
+
+void
+SoDepthBuffer::initClass()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SO__NODE_INIT_CLASS(SoDepthBuffer,"DepthBuffer", SoNode);
+
+    SO_ENABLE(SoGLRenderAction, SoGLDepthBufferElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -111,64 +130,27 @@ SoAnnotation::~SoAnnotation()
 // Use: extender
 
 void
-SoAnnotation::GLRenderBelowPath(SoGLRenderAction *action)
+SoDepthBuffer::GLRender(SoGLRenderAction * action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // If the action is currently rendering the delayed paths, turn
-    // off depth buffer comparisons and render like a separator
-    if (action->isRenderingDelayedPaths()) {
-        SoState *state = action->getState();
-        state->push();
-        SoGLDepthBufferElement::set(state, FALSE, TRUE, SoDepthBufferElement::LESS);
+    SoState * state = action->getState();
 
-        SoSeparator::GLRenderBelowPath(action);
+    SbBool    curtest;
+    SbBool    curwrite;
+    SoDepthBufferElement::DepthWriteFunction    curfunc;
+    SbVec2f   currange;
 
-        // turn the depth comparisons if it was originally turned on
-        state->pop();
-    }
+    SoDepthBufferElement::get(state, curtest, curwrite, curfunc, currange);
 
-    // Otherwise, tell the render action that we want to render this
-    // node last
-    else {
-        // Since we need to get a chance to add the path to the
-        // action, make sure we're not in any caches
-        SoCacheElement::invalidate(action->getState());
-        action->addDelayedPath(action->getCurPath()->copy());
-    }
-}
+    if (!test.isIgnored())
+        curtest = test.getValue();
+    if (!write.isIgnored())
+        curwrite = write.getValue();
+    if (!function.isIgnored())
+        curfunc = (SoDepthBufferElement::DepthWriteFunction)function.getValue();
+    if (!range.isIgnored())
+        currange = range.getValue();
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Traversal for GL rendering
-//
-// Use: extender
-
-void
-SoAnnotation::GLRenderInPath(SoGLRenderAction *action)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // If the action is currently rendering the delayed paths, turn
-    // off depth buffer comparisons and render like a separator
-    if (action->isRenderingDelayedPaths()) {
-        SoState *state = action->getState();
-        state->push();
-        SoGLDepthBufferElement::set(state, FALSE, TRUE, SoDepthBufferElement::LESS);
-
-        SoSeparator::GLRenderInPath(action);
-
-        // turn the depth comparisons if it was originally turned on
-        state->pop();
-    }
-
-    // Otherwise, tell the render action that we want to render this
-    // node last
-    else {
-        // Since we need to get a chance to add the path to the
-        // action, make sure we're not in any caches
-        SoCacheElement::invalidate(action->getState());
-        action->addDelayedPath(action->getCurPath()->copy());
-    }
+    SoDepthBufferElement::set(state, curtest, curwrite, curfunc, currange);
 }

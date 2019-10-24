@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,23 +18,21 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
-
-//  -*- C++ -*-
 
 /*
  * Copyright (C) 1990,91   Silicon Graphics, Inc.
@@ -45,60 +43,50 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file defines the SoAnnotation node class.
- |
- |   Author(s)		: Paul S. Strauss
+ |	This file defines the SoDepthBuffer node class.
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
 
-#ifndef  _SO_ANNOTATION_
-#define  _SO_ANNOTATION_
+#ifndef _SO_DEPTH_BUFFER_
+#define _SO_DEPTH_BUFFER_
 
-#include <Inventor/nodes/SoSeparator.h>
+#include <Inventor/nodes/SoSubNode.h>
+#include <Inventor/nodes/SoNode.h>
+#include <Inventor/fields/SoSFBool.h>
+#include <Inventor/fields/SoSFEnum.h>
+#include <Inventor/fields/SoSFVec2f.h>
+#include <Inventor/elements/SoDepthBufferElement.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoAnnotation
-//
-//  Annotation group node: delays rendering its children until all
-//  other nodes have been traversed, turning off depth buffer
-//  comparisons first. The result is that the shapes under the
-//  annotation node are rendered on top of the rest of the scene.
-//
-//  Note that if more than one annotation node is present in a graph,
-//  the order in which they are traversed determines the stacking
-//  order - later nodes are rendered on top of earlier ones. Also note
-//  that since depth buffer comparisons are disabled, complex 3D
-//  objects may not be rendered correctly when used under annotation
-//  nodes.
-//
-//  All non-rendering actions are inherited as is from SoSeparator.
-//
-//////////////////////////////////////////////////////////////////////////////
-class SoAnnotation : public SoSeparator {
+class SoDepthBuffer : public SoNode {
+    SO_NODE_HEADER(SoDepthBuffer);
+public:
+    SoDepthBuffer();
 
-    SO_NODE_HEADER(SoAnnotation);
+    enum DepthWriteFunction {
+        NEVER = SoDepthBufferElement::NEVER,
+        ALWAYS = SoDepthBufferElement::ALWAYS,
+        LESS = SoDepthBufferElement::LESS,
+        LEQUAL = SoDepthBufferElement::LEQUAL,
+        EQUAL = SoDepthBufferElement::EQUAL,
+        GEQUAL = SoDepthBufferElement::GEQUAL,
+        GREATER = SoDepthBufferElement::GREATER,
+        NOTEQUAL = SoDepthBufferElement::NOTEQUAL
+    };
 
-  public:
+    SoSFBool    test;
+    SoSFBool    write;
+    SoSFEnum    function;
+    SoSFVec2f   range;
 
-    // No fields
+SoINTERNAL public:
+        static void initClass();
+protected:
+    virtual void GLRender(SoGLRenderAction * action);
 
-    // Constructor
-    SoAnnotation();
-
-  SoEXTENDER public:
-    // Implement actions
-    virtual void	GLRenderBelowPath(SoGLRenderAction *action);
-    virtual void	GLRenderInPath(SoGLRenderAction *action);
-
-  SoINTERNAL public:
-    static void		initClass();
-
-  protected:
-    // Destructor
-    virtual ~SoAnnotation();
+    virtual ~SoDepthBuffer();
 };
 
-#endif /* _SO_ANNOTATION_ */
+#endif /* _SO_DEPTH_BUFFER_ */
+
