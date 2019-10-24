@@ -100,6 +100,9 @@ class SbBox3f {
     // Returns TRUE if intersection of given Box3f and Box3f is not empty
     SbBool	intersect(const SbBox3f &bb) const;
 
+    // Returns TRUE if intersection of given Plane and Box3f is not empty
+    SbBool  intersect(const SbPlane & plane) const;
+
     // Returns TRUE if bounding box is completely outside the
     // view-volume defined by the model+view+projection matrix given.
     // "cullBits" keeps track of which view-volume clipping planes the
@@ -144,6 +147,11 @@ class SbBox3f {
 	  sizeY = max[1] - min[1];
           sizeZ = max[2] - min[2]; }
 
+	// Returns size of box
+    SbVec3f getSize() const {
+        return max - min;
+    }
+	
     // Sets Box3f to contain nothing
     void	makeEmpty();
 
@@ -243,6 +251,11 @@ class SbXfBox3f : private SbBox3f {
     void	getSize(float &sizeX, float &sizeY, float &sizeZ)
 	{ SbBox3f::getSize(sizeX, sizeY, sizeZ); }
 
+	// Returns size of box
+    SbVec3f getSize() const {
+        return SbBox3f::getSize();
+    }
+	
     // Gives the volume of the box (0 for an empty box)
     float	getVolume() const;
 
@@ -345,6 +358,11 @@ class SbBox2f {
     void	getSize(float &sizeX, float &sizeY) const
 	{ sizeX = max[0] - min[0]; sizeY = max[1] - min[1]; }
 
+	// Returns size of box
+    SbVec2f getSize() const {
+        return max - min;
+    }
+	
     // Returns aspect ratio (ratio of width to height) of box
     float	getAspectRatio() const
 	{ return (max[0] - min[0]) / (max[1] - min[1]); }
@@ -425,12 +443,23 @@ class SbBox2s {
     void	getSize(short &sizeX, short &sizeY) const
 	{ sizeX = max[0] - min[0]; sizeY = max[1] - min[1]; }
 
+	// Returns size of box
+    SbVec2s getSize() const {
+        return max - min;
+    }
+
     // Returns aspect ratio (ratio of width to height) of box
     float	getAspectRatio() const
 	{ return float(max[0] - min[0]) / float(max[1] - min[1]); }
 
     // Sets rect to contain nothing
     void	makeEmpty();
+
+	// Checks if the box is empty (degenerate)
+    // note that this relies on boxes being completely degenerate if
+    // they are degenerate at all.  All member functions preserve this
+    // invariant.
+    SbBool	isEmpty() const		{ return max[0] < min[0]; }
 
     // Equality comparisons
     friend int          operator ==(const SbBox2s &b1, const SbBox2s &b2);

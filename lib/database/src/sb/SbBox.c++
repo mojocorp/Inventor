@@ -130,6 +130,36 @@ SbBox3f::intersect(const SbBox3f &bb) const
 	    (bb.max[2] >= min[2]) && (bb.min[2] <= max[2]));
 }
 
+ //
+ // Returns TRUE if intersection of given Plane and Box3f is not empty
+ //
+
+ SbBool
+ SbBox3f::intersect(const SbPlane & plane) const
+ {
+     // Empty boxes can cause problems.
+     if( isEmpty() )
+         return false;
+
+     const SbVec3f & pnorm = plane.getNormal();
+
+     // Use separating axis theorem to test overlap.
+     SbVec3f vmin( pnorm[0] > 0.0 ? min[0] : max[0],
+                   pnorm[1] > 0.0 ? min[1] : max[1],
+                   pnorm[2] > 0.0 ? min[2] : max[2]);
+
+     SbVec3f vmax( pnorm[0] > 0.0 ? max[0] : min[0],
+                   pnorm[1] > 0.0 ? max[1] : min[1],
+                   pnorm[2] > 0.0 ? max[2] : min[2]);
+
+     if(plane.isInHalfSpace(vmin))
+         return false;
+
+     if(plane.isInHalfSpace(vmax))
+         return true;
+
+     return false;
+ }
 
 //
 // View-volume culling: axis-aligned bounding box against view volume,
