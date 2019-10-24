@@ -12,6 +12,13 @@ if (APPLE AND X11_FOUND)
     include_directories(${X11_GL_INCLUDE_PATH})
 endif ()
 
+
+if(APPLE)
+  add_definitions(-DIVPREFIX="/opt/local/")
+elseif(UNIX)
+  add_definitions(-DIVPREFIX="/usr")
+endif()
+
 if(BUILD_APPS)
     add_subdirectory(converters)
     add_subdirectory(demos)
