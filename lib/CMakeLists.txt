@@ -638,8 +638,11 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoClipPlane.c++
     database/src/so/nodes/SoColorIndex.c++
     database/src/so/nodes/SoComplexity.c++
+    database/src/so/nodes/SoCone.c++
     database/src/so/nodes/SoCoordinate3.c++
     database/src/so/nodes/SoCoordinate4.c++
+    database/src/so/nodes/SoCube.c++
+    database/src/so/nodes/SoCylinder.c++
     database/src/so/nodes/SoDirectionalLight.c++
     database/src/so/nodes/SoDrawStyle.c++
     database/src/so/nodes/SoEnvironment.c++
@@ -690,6 +693,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoShape.c++
     database/src/so/nodes/SoShapeHints.c++
     database/src/so/nodes/SoShuttle.c++
+    database/src/so/nodes/SoSphere.c++
     database/src/so/nodes/SoSpotLight.c++
     database/src/so/nodes/SoSwitch.c++
     database/src/so/nodes/SoText2.c++
@@ -786,15 +790,11 @@ set(DATABASE_SOURCES
 
 set(PP_SOURCES
     database/src/so/nodes/SoIndexedTriangleStripSet.pp
-    database/src/so/nodes/SoCube.pp
-    database/src/so/nodes/SoCone.pp
-    database/src/so/nodes/SoSphere.pp
     database/src/so/nodes/SoFaceSet.pp
     database/src/so/nodes/SoQuadMesh.pp
     database/src/so/nodes/SoIndexedFaceSet.pp
     database/src/so/nodes/SoPointSet.pp
     database/src/so/nodes/SoTriangleStripSet.pp
-    database/src/so/nodes/SoCylinder.pp
     database/src/so/nodes/SoIndexedLineSet.pp
     database/src/so/nodes/SoLineSet.pp
 )
