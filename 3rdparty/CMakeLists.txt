@@ -8,9 +8,11 @@ add_subdirectory(freetype2)
 set(INSTALL_GTEST OFF)
 add_subdirectory(googletest)
 
+add_subdirectory(perceptualdiff)
+
 set_target_properties(glad PROPERTIES FOLDER "3rdparty/glad")
 set_target_properties(GLU PROPERTIES FOLDER "3rdparty/GLU")
 set_target_properties(freetype PROPERTIES FOLDER "3rdparty/freetype2")
 set_target_properties(gtest PROPERTIES FOLDER "3rdparty/googletest")
-
+set_target_properties(pdiff PROPERTIES FOLDER "3rdparty/pdiff")
 
