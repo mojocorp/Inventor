@@ -134,6 +134,10 @@ elseif(UNIX)
   add_definitions(-DIVPREFIX="/usr")
 endif()
 
+if (CMAKE_BUILD_TYPE MATCHES DEBUG)
+    add_definitions(-DDEBUG)
+endif ()
+
 # for "Sgm/ThumbWheelP.h"
 include_directories(src/viewers)
 

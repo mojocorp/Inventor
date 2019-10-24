@@ -663,7 +663,7 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
         if ( !n->isOfType( SoNodeKitListPart::getClassTypeId() ) ){
 #ifdef DEBUG
             SoDebugError::post("SoNodekitParts::getSingleNamePart",
-                               "part specified %s was not a list", listNameCopy );
+                               "part specified %s was not a list", listNameCopy.getString() );
 #endif
             if ( listExistedBefore == FALSE ) {
             // if we just created the list, we'd better get rid of it...
@@ -701,7 +701,7 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
 		    fprintf(stderr,"    The part %s does not exist\n",
 					nameOfPart.getString());
 		    fprintf(stderr,"    and could not be created.The list %s\n",
-					    listNameCopy );
+                        listNameCopy.getString() );
 		    fprintf(stderr,"    only specifies abstract types\n");
 		    fprintf(stderr,"    Returning NULL\n");
 		    fprintf(stderr,"\n");
@@ -721,7 +721,7 @@ SoNodekitParts::getSingleNamePart( const SbName &nameOfPart,
 		    fprintf(stderr,"NODE KIT PARTS DEBUG:\n");
 		    fprintf(stderr,"    Could not return the part\n");
 		    fprintf(stderr,"    %s. The list %s only has\n", 
-					nameOfPart.getString(), listNameCopy );
+                    nameOfPart.getString(), listNameCopy.getString() );
 		    fprintf(stderr,"    %d entries. You want entry number %d\n",
 					listGroup->getNumChildren(),arrayIndex);
 		    fprintf(stderr,"    Returning NULL\n");
@@ -873,7 +873,7 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 				    SoNodeKitListPart::getClassTypeId()))  {
 #ifdef DEBUG
 	      SoDebugError::post("SoNodekitParts::getSingleNamePathToPart",
-	      "list named %s is not actually a list part\n", listNameCopy );
+          "list named %s is not actually a list part\n", listNameCopy.getString() );
 #endif
 		answerPath->unref();
 		if ( listExistedBefore == FALSE ) {
@@ -920,7 +920,7 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 		    fprintf(stderr,"    The part %s does not exist\n",
 					nameOfPart.getString());
 		    fprintf(stderr,"    and could not be created.The list %s\n",
-					    listNameCopy );
+                        listNameCopy.getString() );
 		    fprintf(stderr,"    only specifies abstract types\n");
 		    fprintf(stderr,"    Returning NULL\n");
 		    fprintf(stderr,"\n");
@@ -941,7 +941,7 @@ SoNodekitParts::getSingleNamePathToPart(const SbName &nameOfPart,
 	    fprintf(stderr,"\n");
 	    fprintf(stderr,"NODE KIT PARTS DEBUG: Could not return the part\n");
 	    fprintf(stderr,"    %s. The list %s only has\n", 
-				nameOfPart.getString(), listNameCopy );
+                nameOfPart.getString(), listNameCopy.getString() );
 	    fprintf(stderr,"    %d entries, but you want entry number %d\n",
 				listGroup->getNumChildren(), arrayIndex);
 	    fprintf(stderr,"    Returning NULL\n");
@@ -1118,7 +1118,7 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 	if ( !n->isOfType( SoNodeKitListPart::getClassTypeId() ) ){
 #ifdef DEBUG
 	    SoDebugError::post("SoNodekitParts::setSingleNamePart",
-	    "part specified %s was not a list", listNameCopy );
+        "part specified %s was not a list", listNameCopy.getString() );
 #endif
 	    if ( listExistedBefore == FALSE ) {
 		// if we just created the list, we'd better get rid of it...
@@ -1163,7 +1163,7 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 		    fprintf(stderr,"    than %d, the number of entries in \n",
 					listGroup->getNumChildren());
 		    fprintf(stderr,"    the list %s\n",
-					    listNameCopy );
+                        listNameCopy.getString() );
 		    fprintf(stderr,"    Returning NULL\n");
 		    fprintf(stderr,"\n");
 		}
@@ -1175,7 +1175,7 @@ SoNodekitParts::setSingleNamePart( const SbName &nameOfPart,SoNode *newPartNode,
 #ifdef DEBUG
 	SoDebugError::post("SoNodekitParts::setSingleNamePart",
 	"Node given is wrong type. Its type is %s, which is inappropriate for list named %s",
-		 newPartNode->getTypeId().getName().getString(), listNameCopy );
+         newPartNode->getTypeId().getName().getString(), listNameCopy.getString() );
 #endif
 	if ( listExistedBefore == FALSE ) {
 	    // if we just created the list, we'd better get rid of it...
