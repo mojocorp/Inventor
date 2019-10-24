@@ -51,9 +51,9 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/fields/SoSFImage.h>
-
 #include <cstring>
+#include <Inventor/fields/SoSFImage.h>
+#include <Inventor/errors/SoDebugError.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

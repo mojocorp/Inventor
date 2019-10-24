@@ -268,7 +268,7 @@ void Var::print(int level)
 {
 #ifdef DEBUG
     printSpace(level);
-    printf("Var: name = %s, value = ", name);
+    printf("Var: name = %s, value = ", name.c_str());
     if (type == FLOAT)
 	printf("%g", *pfloat);
     else

@@ -241,7 +241,7 @@ SoGLCacheContextElement::extSupported(SoState *state, int ext)
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (ext >= extensionList->getLength()) {
+    if (ext >= extensionList.size()) {
 	SoDebugError::post("SoGLCacheContextElement::extSupported",
 			   "Bad extension ID passed; "
 			   "you MUST use SoGLCacheContextElement::getExtID");
