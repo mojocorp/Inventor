@@ -209,16 +209,9 @@ SoCube::GLRender(SoGLRenderAction *action)
     // See if texturing is enabled
     SbBool doTextures = SoGLTextureEnabledElement::get(action->getState());
 
-    // Render the cube. The GLRenderGeneric() method handles any
-    // case. The GLRenderNvertTnone() handles the case where we are
-    // outputting normals but no texture coordinates. This case is
-    // handled separately since it occurs often and warrants its own
-    // method.
+    // Render the cube.
     SbBool sendNormals = (SoLazyElement::getLightModel(action->getState()) !=
 			  SoLazyElement::BASE_COLOR);
-    if (! doTextures && sendNormals)
-	GLRenderNvertTnone(action);
-    else
 	GLRenderGeneric(action, sendNormals, doTextures);
 }
 
@@ -600,100 +593,6 @@ SoCube::GLRenderGeneric(SoGLRenderAction *action,
 			glVertex3fv(SCALE(topPoint).getValue());
 			glVertex3fv(SCALE(botPoint).getValue());
 		    }
-		}
-
-		glEnd();
-
-		// Get ready for next strip
-		botPoint = nextBotPoint;
-	    }
-	}
-    }
-
-    if (numDivisions == 1)
-	glEnd();
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Renders cube with normals and without texture coordinates.
-//
-// Use: private
-
-void
-SoCube::GLRenderNvertTnone(SoGLRenderAction *action)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SbVec3f scale, tmp;
-    getSize(scale[0], scale[1], scale[2]);
-
-    SbBool		materialPerFace;
-    int			numDivisions, face, vert;
-    SbVec3f		pt, norm;
-    SoMaterialBundle	mb(action);
-
-    materialPerFace = isMaterialPerFace(action);
-    numDivisions    = computeNumDivisions(action);
-
-    // Make sure first material is sent if necessary
-    if (materialPerFace)
-	mb.setUpMultiple();
-    mb.sendFirst();
-
-    if (numDivisions == 1)
-	glBegin(GL_QUADS);
-
-    for (face = 0; face < 6; face++) {
-
-	if (materialPerFace && face > 0)
-	    mb.send(face, numDivisions == 1);
-	glNormal3fv(normals[face].getValue());
-
-	// Simple case of one polygon per face 
-	if (numDivisions == 1) {
-	    for (vert = 0; vert < 4; vert++) {
-		glVertex3fv(SCALE(*verts[face][vert]).getValue());
-	    }
-	}
-
-	// More than one polygon per face
-	else {
-	    float	di = 1.0 / numDivisions;
-	    SbVec3f	topPoint,    botPoint,    nextBotPoint;
-	    SbVec3f	horizSpace, vertSpace;
-	    int		strip, rect;
-
-	    botPoint = *verts[face][0];
-
-	    // Compute spacing between adjacent points in both directions
-	    horizSpace = di * (*verts[face][1] - botPoint);
-	    vertSpace  = di * (*verts[face][3] - botPoint);
-
-	    // For each horizontal strip
-	    for (strip = 0; strip < numDivisions; strip++) {
-
-		// Compute current top point. Save it to use as bottom
-		// of next strip
-		nextBotPoint = topPoint = botPoint + vertSpace;
-
-		glBegin(GL_TRIANGLE_STRIP);
-
-		// Send points at left end of strip
-		glVertex3fv(SCALE(topPoint).getValue());
-		glVertex3fv(SCALE(botPoint).getValue());
-
-		// For each rectangular piece of strip
-		for (rect = 0; rect < numDivisions; rect++) {
-
-		    // Go to next rect
-		    topPoint += horizSpace;
-		    botPoint += horizSpace;
-
-		    // Send points at right side of rect
-		    glVertex3fv(SCALE(topPoint).getValue());
-		    glVertex3fv(SCALE(botPoint).getValue());
 		}
 
 		glEnd();
