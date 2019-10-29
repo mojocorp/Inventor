@@ -60,12 +60,10 @@
 #define  _SO_OFFSCREEN_RENDERER_
 
 #include <stdio.h>
-#include <GL/glx.h>
 #include <Inventor/SbColor.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SbVec.h>
 #include <Inventor/SbImage.h>
-#include <X11/Xlib.h>
 
 class SoNode;
 class SoPath;
@@ -154,28 +152,9 @@ class SoOffscreenRenderer {
     SbViewportRegion    renderedViewport;
 
     // These are used for rendering to the offscreen pixmap
-    Display 		*display;
-    XVisualInfo  	*visual;
-    GLXContext 		context;
-    GLXPixmap 		pixmap;
-    Pixmap 		pmap;
+    struct SbGLXContext* ctx;
 
-    // Setup the offscreen pixmap
-    SbBool		setupPixmap();
-
-    // Initialize an offscreen pixmap
-    static SbBool 	initPixmap( Display * &dpy, XVisualInfo * &vi,
-                                GLXContext &cx, const SbVec2s &sz,
-                                GLXPixmap &glxPmap, Pixmap &xpmap );
-
-    // Read pixels back from the Pixmap
-    void		readPixels();
-
-    // Set the graphics context
-    SbBool		setContext() const;
-
-    // Return the format used in the rendering
-    GLenum		getFormat() const;
+    bool renderGeneric( class SoBase *base );
 };
 
 #endif /* _SO_OFFSCREEN_RENDERER_ */
