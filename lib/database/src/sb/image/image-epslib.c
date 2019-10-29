@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 
-static int putHex(FILE *fp, char val, int hexPos )
+static int putHex(FILE *fp, unsigned char val, int hexPos )
 {
-    fprintf(fp, "%02hx", (unsigned short)val);
+    fprintf(fp, "%02x", val);
     if (++hexPos >= 32) {
         fprintf(fp, "\n");
         hexPos = 0;
@@ -14,8 +14,6 @@ static int putHex(FILE *fp, char val, int hexPos )
 
 int writeEps(FILE * fp, int w, int h, int nc, const unsigned char * bytes, float px, float py)
 {
-    int numValues, hexpos, row, i;
-
     // Write the PostScript header
     fprintf(fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
     fprintf(fp, "%%%%Creator: IRIS program output\n");
@@ -53,15 +51,15 @@ int writeEps(FILE * fp, int w, int h, int nc, const unsigned char * bytes, float
     fprintf(fp, "colorimage\n");
 
     // Convert the pixel values to ASCII hex and write them out.
-    numValues     = w*nc;
-    hexpos        = 0;
+    int numValues     = w*nc;
+    int hexpos        = 0;
 
-    for (row=h-1; row>=0; row--) {
+    for (int row=h-1; row>=0; row--) {
         
         const unsigned char * ptr = bytes + row*w*nc;
 
         // Write out the scanline
-        for (i=0; i<numValues; i++)
+        for (int i=0; i<numValues; i++)
             hexpos = putHex(fp, (char)*ptr++, hexpos);
     }
 

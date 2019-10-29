@@ -52,6 +52,7 @@
  */
 #include <stdio.h>
 #include <assert.h>
+#include <GL/glx.h>
 #include <Inventor/SoOffscreenRenderer.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -61,12 +62,113 @@
 #include <image/image-sgi.h>
 #include <image/image-eps.h>
 
-// Offscreen renderings will always be rendered as RGB images
-// Currently the OpenGL does not support storing alpha channel information
-// in the offscreen pixmap.
-static int attributeList[] = { GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
-                               GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
+struct SbGLXContext{
+    SbGLXContext() :
+        display(NULL),
+        visual(NULL),
+        context(NULL),
+        pixmap(NULL) {
+        // Create an X Display
+        display = XOpenDisplay(NULL);
 
+        if (!display)
+            return;
+
+        // Create a GLX Visual
+        // Offscreen renderings will always be rendered as RGB images
+        // Currently the OpenGL does not support storing alpha channel information
+        // in the offscreen pixmap.
+        static int attributeList[] = { GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
+                                       GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
+        visual = glXChooseVisual(display, DefaultScreen(display), attributeList);
+        if (!visual) {
+            XCloseDisplay(display);
+            display = NULL;
+            return;
+        }
+
+        // Create a GLX Context
+        context = glXCreateContext(display, visual, NULL, TRUE);
+        if (!context) {
+            XCloseDisplay(display);
+            display = NULL;
+            return;
+        }
+    }
+    ~SbGLXContext() {
+        if (display) {
+            glXMakeCurrent(display, 0, 0);
+            glXDestroyContext( display, context );
+            glXDestroyGLXPixmap( display, pixmap );
+            XFreePixmap(display, pmap);
+            XCloseDisplay( display );
+        }
+    }
+
+    bool resize(const SbVec2s &sz) {
+        if (!display) {
+            return false;
+        }
+
+        if(size != sz) {
+            // The pixmap is not the right size.  Destroy it.
+            if (pixmap) {
+                glXMakeCurrent(display, 0, 0);
+                glXDestroyGLXPixmap( display, pixmap );
+                XFreePixmap(display, pmap);
+            }
+
+            // Create X and GLX Pixmap
+            pmap = XCreatePixmap( display, DefaultRootWindow(display), (unsigned int)sz[0], (unsigned int)sz[1], visual->depth );
+            pixmap = glXCreateGLXPixmap( display, visual, pmap );
+            size = sz;
+        }
+
+        // Set the graphics context to point to the offscreen pixmap
+        if (glXMakeCurrent(display, pixmap, context) == 0)
+            return false;
+
+        // Store the pixels as byte aligned rows in the Pixmap
+        glPixelStorei(GL_PACK_ALIGNMENT, 1);
+
+        return true;
+    }
+
+    SbImage getImage(SoOffscreenRenderer::Components comps) {
+        GLenum format;
+        int allocSize;
+        switch (comps) {
+            case SoOffscreenRenderer::LUMINANCE:
+                format = GL_LUMINANCE;
+                allocSize = size[0] * size[1] * 1;
+                break;
+            case SoOffscreenRenderer::LUMINANCE_TRANSPARENCY:
+                format = GL_LUMINANCE_ALPHA;
+                allocSize = size[0] * size[1] * 2;
+                break;
+            case SoOffscreenRenderer::RGB:
+                format = GL_RGB;
+                allocSize = size[0] * size[1] * 3;
+                break;
+            case SoOffscreenRenderer::RGB_TRANSPARENCY:
+                format = GL_RGBA;
+                allocSize = size[0] * size[1] * 4;
+                break;
+        }
+
+        SbImage buffer = SbImage(size, SbImage::Format(comps), allocSize, NULL);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glReadPixels(0, 0, size[0], size[1], format, GL_UNSIGNED_BYTE, (GLvoid *)buffer.getBytes());
+        return buffer;
+    }
+
+    SbVec2s         size;
+    Display 		*display;
+    XVisualInfo  	*visual;
+    GLXContext 		context;
+    GLXPixmap 		pixmap;
+    Pixmap          pmap;
+};
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -84,9 +186,9 @@ SoOffscreenRenderer::SoOffscreenRenderer(
 {
     offAction   = new SoGLRenderAction(viewportRegion);
     userAction  = NULL;
-    display     = NULL;
     comps       = SoOffscreenRenderer::RGB;
     backgroundColor.setValue(0.0, 0.0, 0.0);
+    ctx = new SbGLXContext;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -105,9 +207,9 @@ SoOffscreenRenderer::SoOffscreenRenderer(
 {
     offAction   = new SoGLRenderAction(act->getViewportRegion());
     userAction  = act;
-    display     = NULL;
     comps       = SoOffscreenRenderer::RGB;
     backgroundColor.setValue(0.0, 0.0, 0.0);
+    ctx = new SbGLXContext;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -123,13 +225,7 @@ SoOffscreenRenderer::~SoOffscreenRenderer()
 ////////////////////////////////////////////////////////////////////////
 {
     delete offAction;
-
-    // Delete the pixmap, window, and context, as it is no longer needed
-    if (display != NULL) {
-        glXDestroyGLXPixmap( display, pixmap );
-        glXDestroyContext( display, context );
-        XCloseDisplay( display );
-    }
+    delete ctx;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -146,16 +242,15 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Display *tmpDisplay;
-    float   pix;
+    Display *tmpDisplay = XOpenDisplay(NULL);
 
     // Create an X Display
-    if ((tmpDisplay=XOpenDisplay(NULL)) == NULL)
+    if (tmpDisplay == NULL)
         return 75.0;
 
     // Get the dimensions of the screen
-    pix = DisplayWidth(tmpDisplay, 0) * 25.4 /
-          (float)DisplayWidthMM(tmpDisplay, 0);
+    const float pix = DisplayWidth(tmpDisplay, 0) * 25.4 / (float)DisplayWidthMM(tmpDisplay, 0);
+
     XCloseDisplay(tmpDisplay);
 
     return pix;
@@ -175,15 +270,9 @@ SoOffscreenRenderer::getMaximumResolution()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Display             *dpy = NULL;
-    XVisualInfo         *vi;
-    GLXContext          cx;
-    GLXPixmap           glxpmap;
-    Pixmap              xpmap;
-    SbVec2s             tmpvp(2, 2);
-    GLint params[2];
+    SbGLXContext context;
 
-    if (!initPixmap(dpy, vi, cx, tmpvp, glxpmap, xpmap)) {
+    if (!context.resize(SbVec2s(2, 2))) {
 #ifdef DEBUG
         SoDebugError::post("SoOffscreenRenderer::getMaximumResolution",
                            "Could not initialize Pixmap");
@@ -191,12 +280,10 @@ SoOffscreenRenderer::getMaximumResolution()
         return SbVec2s(-1, -1);
     }
 
+    GLint params[2];
     glGetIntegerv(GL_MAX_VIEWPORT_DIMS, params);
-    glXDestroyGLXPixmap( dpy, glxpmap );
-    glXDestroyContext( dpy, cx );
-    XCloseDisplay(dpy);
 
-    return (SbVec2s((short)params[0], (short)params[1]));
+    return SbVec2s((short)params[0], (short)params[1]);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -281,37 +368,7 @@ SoOffscreenRenderer::render(SoNode *scene)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // Delete the pixel buffer if it has been previously used.
-    pixelBuffer = SbImage();
-
-    // Set the render action to use.
-    SoGLRenderAction *act;
-    if (userAction != NULL)
-        act = userAction;
-    else
-        act = offAction;
-    renderedViewport = act->getViewportRegion();
-
-    // Get the offscreen pixmap ready for rendering
-    if (!setupPixmap()) {
-#ifdef DEBUG
-        SoDebugError::post("SoOffscreenRenderer::render",
-                           "Could not setup Pixmap");
-#endif
-        return FALSE;
-    }
-
-    // Set the GL cache context for the action to a unique number
-    // (we'll use and increment SoContextIncrement), so that it doesn't try
-    // to use display lists from other contexts.
-    const uint32_t oldContext = act->getCacheContext();
-    act->setCacheContext(cacheContext);
-    act->apply(scene);
-    act->setCacheContext(oldContext);
-
-    readPixels();
-
-    return TRUE;
+    return renderGeneric(scene);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -327,25 +384,46 @@ SoOffscreenRenderer::render(SoPath *scene)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    return renderGeneric(scene);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Render
+//
+// Use: private
+
+bool
+SoOffscreenRenderer::renderGeneric( SoBase *base )
+
+//
+////////////////////////////////////////////////////////////////////////
+{
     // Delete the pixel buffer if it has been previously used.
     pixelBuffer = SbImage();
 
     // Set the render action to use.
-    SoGLRenderAction *act;
-    if (userAction != NULL)
-        act = userAction;
-    else
-        act = offAction;
+    SoGLRenderAction *act = userAction ? userAction : offAction;
+
     renderedViewport = act->getViewportRegion();
 
     // Get the offscreen pixmap ready for rendering
-    if (!setupPixmap()) {
+    const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
+
+    if (!ctx->resize(vpSize)) {
 #ifdef DEBUG
-        SoDebugError::post("SoOffscreenRenderer::writeToRGB",
+        SoDebugError::post("SoOffscreenRenderer::renderGeneric",
                            "Could not setup Pixmap");
 #endif
-        return FALSE;
+        return false;
     }
+
+    // Clear the pixmap to the backgroundColor
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
+    glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 0);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // Render the scene into the new graphics context
 
@@ -354,12 +432,15 @@ SoOffscreenRenderer::render(SoPath *scene)
     // to use display lists from other contexts.
     const uint32_t oldContext = act->getCacheContext();
     act->setCacheContext(cacheContext);
-    act->apply(scene);
+    if (base->isOfType(SoNode::getClassTypeId()))
+        act->apply((SoNode *)base);
+    else if (base->isOfType(SoPath::getClassTypeId()))
+        act->apply((SoPath *)base);
     act->setCacheContext(oldContext);
 
-    readPixels();
+    pixelBuffer = ctx->getImage(comps);
 
-    return TRUE;
+    return !pixelBuffer.isNull();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -394,7 +475,6 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
 ////////////////////////////////////////////////////////////////////////
 {
     // Open an image file for writing
-    int dimensions, components;
     if (comps == (SoOffscreenRenderer::LUMINANCE_TRANSPARENCY) ||
        (comps == SoOffscreenRenderer::RGB_TRANSPARENCY)) {
 #ifdef DEBUG
@@ -403,23 +483,16 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
 #endif
         return FALSE;
     }
-    else if (comps == SoOffscreenRenderer::LUMINANCE) {
-        dimensions = 2;
-        components = 1;
-    }
-    else {
-        dimensions = 3;
-        components = 3;
-    }
 
-    // Get the correct viewport size.
-    const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
+    // Get the correct image size.
+    const int width = pixelBuffer.getSize()[0];
+    const int height = pixelBuffer.getSize()[1];
+    const int components = pixelBuffer.getNumComponents();
 
     sgi_t *image;
 
-    if ((image = sgiOpenFile( fp, SGI_WRITE, SGI_COMP_RLE, dimensions,
-            (unsigned int)vpSize[0], (unsigned int)vpSize[1],
-            components )) == NULL)
+    if ((image = sgiOpenFile( fp, SGI_WRITE, SGI_COMP_RLE, 1,
+            width, height, components )) == NULL)
     {
 #ifdef DEBUG
         SoDebugError::post("SoOffscreenRenderer::writeToRGB",
@@ -428,20 +501,11 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
         return FALSE;
     }
 
-    // Get the format of the pixmap data
-    GLenum format = getFormat();
-
     // For each row in the pixel buffer, write the row into the image file
-    unsigned short *rowBuf = new unsigned short[vpSize[0]];
-    unsigned char *pBuf = new unsigned char[vpSize[0]*components*2];
+    std::vector<unsigned short> rowBuf(width);
+    unsigned char const*pBuf = pixelBuffer.getConstBytes();
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    for (int row=0; row<vpSize[1]; row++) {
-        
-        // Read the next scanline of pixels from the offscreen pixmap
-        glReadPixels(0, row, vpSize[0], 1, format,
-                 GL_UNSIGNED_BYTE, (GLvoid *)pBuf);
-
+    for (int row=0; row<height; row++) {
         // The pixel in the pixel buffer store pixel information arranged
         // by pixel, whereas the .rgb file stores pixel information arranged
         // by color component.  So scanlines of component data must be
@@ -449,18 +513,17 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
 
         // Convert each color component
         for (int comp=0; comp<components; comp++) {
-            unsigned short *trow = rowBuf;
+            unsigned short *trow = rowBuf.data();
 
             // Convert a row
             const unsigned char *tbuf = pBuf + comp;
-            for (int j=0; j<vpSize[0]; j++, tbuf += components)
+            for (int j=0; j<width; j++, tbuf += components)
                 *trow++ = (short)*tbuf;
-            sgiPutRow( image, rowBuf, row, comp );
+            sgiPutRow( image, rowBuf.data(), row, comp );
         }
+        pBuf+=components*width;
     }
     sgiClose( image );
-    delete [] pBuf;
-    delete [] rowBuf;
     return TRUE;
 }
 
@@ -478,14 +541,11 @@ SoOffscreenRenderer::writeToPostScript( FILE *fp ) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
-    SbVec2f printSize;
-    float   ppi = renderedViewport.getPixelsPerInch();
+    const SbVec3s &vpSize = pixelBuffer.getSize();
+    const float   ppi = renderedViewport.getPixelsPerInch();
+    const SbVec2f printSize(vpSize[0] / ppi, vpSize[1] / ppi);
 
-    printSize[0] = vpSize[0] / ppi;
-    printSize[1] = vpSize[1] / ppi;
-
-    return (writeToPostScript( fp, printSize ));
+    return writeToPostScript( fp, printSize );
 }
 
 
@@ -506,7 +566,6 @@ SoOffscreenRenderer::writeToPostScript(
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int components;
     if ((comps == LUMINANCE_TRANSPARENCY) ||
         (comps == RGB_TRANSPARENCY)) {
 #ifdef DEBUG
@@ -515,230 +574,14 @@ SoOffscreenRenderer::writeToPostScript(
 #endif
         return FALSE;
     }
-    else if (comps == SoOffscreenRenderer::LUMINANCE) {
-        components = 1;
-    }
-    else {
-        components = 3;
-    }
 
-    return (writeEps(fp, pixelBuffer.getSize()[0], pixelBuffer.getSize()[1], components, pixelBuffer.getConstBytes(), printSize[0], printSize[1]) == 0);
+    const int width = pixelBuffer.getSize()[0];
+    const int height = pixelBuffer.getSize()[1];
+    const int components = pixelBuffer.getNumComponents();
+
+    return (writeEps(fp, width, height, components, pixelBuffer.getConstBytes(), printSize[0], printSize[1]) == 0);
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Setup a pixmap into which the rendering will occur.
-//
-// Use: private
 
-SbBool
-SoOffscreenRenderer::setupPixmap()
 
-//
-////////////////////////////////////////////////////////////////////////
-{
-    const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
- 
-    if (!initPixmap(display, visual, context, vpSize, pixmap, pmap))
-        return FALSE;
-
-    // Clear the pixmap to the backgroundColor
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LEQUAL);
-    glClearColor(backgroundColor[0], backgroundColor[1], backgroundColor[2], 0);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    return TRUE;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Setup a pixmap into which the rendering will occur.
-//
-// Use: static, private
-
-SbBool
-SoOffscreenRenderer::initPixmap(
-    Display *     &dpy,
-    XVisualInfo * &vi,
-    GLXContext    &cx,
-    const SbVec2s &sz,
-    GLXPixmap     &glxpmap,
-    Pixmap        &xpmap )
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // If a display is already open, and is the same size, use it.
-    // Otherwise, close it and open up a fresh one.
-    if (dpy != NULL) {
-
-        // Get the size of the passed pixmap.  If it is the same size
-        // as the passed size, just return.
-        Window root;
-        int x, y;
-        unsigned int width, height, border_width, depth;
-        if (!XGetGeometry(dpy, xpmap, &root, &x, &y, &width, &height,
-                &border_width, &depth)) {
-
-            // Bad pixmap.  Destroy it.
-            glXDestroyGLXPixmap( dpy, glxpmap );
-            glXDestroyContext( dpy, cx );
-            XCloseDisplay(dpy);
-        }
-        else if ((width == sz[0]) && (height == sz[1])) {
-
-            // This pixmap is the right size to use for this rendering.
-            // Make it the current context for rendering.
-            if (!glXMakeCurrent(dpy, glxpmap, cx)) {
-                glXDestroyGLXPixmap( dpy, glxpmap );
-                glXDestroyContext( dpy, cx );
-                XCloseDisplay(dpy);
-                dpy = NULL;
-                return FALSE;
-            }
-
-            // Store the pixels as byte aligned rows in the Pixmap.
-            glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
-            return TRUE;
-        }
-        else {
-   
-            // The pixmap is not the right size.  Destroy it.
-            glXDestroyGLXPixmap( dpy, glxpmap );
-            glXDestroyContext( dpy, cx );
-            XCloseDisplay(dpy);
-        }
-    }
-
-    // Create an X Display
-    if ((dpy = XOpenDisplay(NULL)) == NULL)
-        return FALSE;
-
-    // Create a GLX Visual
-    if ((vi = glXChooseVisual(dpy, DefaultScreen(dpy),
-            attributeList)) == NULL) {
-        XCloseDisplay(dpy);
-        dpy = NULL;
-        return FALSE;
-    }
-
-    // Create a GLX Context
-    if ((cx = glXCreateContext(dpy, vi, NULL, FALSE)) == NULL) {
-        XCloseDisplay(dpy);
-        dpy = NULL;
-        return FALSE;
-    }
-
-    // Create X and GLX Pixmap
-    xpmap = XCreatePixmap( dpy, DefaultRootWindow(dpy),
-            (unsigned int)sz[0], (unsigned int)sz[1], vi->depth );
-    glxpmap = glXCreateGLXPixmap( dpy, vi, xpmap );
-
-    if (!glXMakeCurrent(dpy, glxpmap, cx)) {
-        glXDestroyGLXPixmap( dpy, glxpmap );
-        glXDestroyContext( dpy, cx );
-        XCloseDisplay(dpy);
-        dpy = NULL;
-        return FALSE;
-    }
-
-    // Store the pixels as byte aligned rows in the Pixmap
-    glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
-    return TRUE;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Read the pixels from the Pixmap
-//
-// Use: private
-
-void
-SoOffscreenRenderer::readPixels()
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // Set the graphics context to be the offscreen pixmap
-    if (!setContext())
-        return;
-
-    const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
-
-    int allocSize;
-    switch (comps) {
-        case LUMINANCE: 
-            allocSize = vpSize[0] * vpSize[1] * 1;
-            break;
-        case LUMINANCE_TRANSPARENCY:
-            allocSize = vpSize[0] * vpSize[1] * 2;
-            break;
-        case RGB:
-            allocSize = vpSize[0] * vpSize[1] * 3;
-            break;
-        case RGB_TRANSPARENCY:
-            allocSize = vpSize[0] * vpSize[1] * 4;
-            break;
-    }
-
-    pixelBuffer = SbImage(vpSize, SbImage::Format(comps), allocSize, NULL);
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glReadPixels(0, 0, vpSize[0], vpSize[1], getFormat(),
-                 GL_UNSIGNED_BYTE, (GLvoid *)pixelBuffer.getBytes());
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Set the graphics context to point to the offscreen pixmap
-//
-// Use: private
-
-SbBool
-SoOffscreenRenderer::setContext() const
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    if (!glXMakeCurrent(display, pixmap, context)) {
-        glXDestroyGLXPixmap( display, pixmap );
-        glXDestroyContext( display, context );
-        XCloseDisplay(display);
-        return FALSE;
-    }
-
-    return TRUE;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Get format information
-//
-// Use: private
-
-GLenum
-SoOffscreenRenderer::getFormat() const
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    switch (comps) {
-        case LUMINANCE:
-            return GL_LUMINANCE;
-        case LUMINANCE_TRANSPARENCY:
-            return GL_LUMINANCE_ALPHA;
-        case RGB:
-            return GL_RGB;
-        case RGB_TRANSPARENCY:
-            return GL_RGBA;
-    }
-    return GL_INVALID_ENUM;
-}
 
