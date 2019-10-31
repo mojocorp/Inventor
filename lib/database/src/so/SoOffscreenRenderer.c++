@@ -67,7 +67,7 @@ struct SbGLXContext{
         display(NULL),
         visual(NULL),
         context(NULL),
-        pixmap(NULL) {
+        pixmap(0) {
         // Create an X Display
         display = XOpenDisplay(NULL);
 
