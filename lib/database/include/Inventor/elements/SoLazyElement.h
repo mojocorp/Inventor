@@ -56,13 +56,15 @@
 #ifndef  _SO_LAZY_ELEMENT
 #define  _SO_LAZY_ELEMENT
 
-
+#include <vector>
 #include <Inventor/SbColor.h>
 #include <Inventor/elements/SoElement.h>
 #include <Inventor/elements/SoSubElement.h>
 #include <math.h>
 
-class SoMFFloat; class SoMFColor; class SoColorPacker;
+class SoMFFloat;
+class SoMFColor;
+class SoColorPacker;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -373,13 +375,16 @@ SoEXTENDER class SoLazyElement : public SoElement {
 class SoColorPacker {
     public:
     //Constructor, makes a colorPacker with NULL packedColor pointer:
-    SoColorPacker();
+    SoColorPacker(){
+        //Assign nodeids that can never occur in practice:
+        diffuseNodeId = transpNodeId = 2;
+    }
     
-     // destructor, deletes packed color array
-    ~SoColorPacker();
+     // destructor
+    ~SoColorPacker(){}
     
     uint32_t* getPackedColors() const
-    { return packedColors;}
+    { return (uint32_t*)packedColors.data();}
     
     SbBool diffuseMatch(uint32_t nodeId)
     { return (nodeId == diffuseNodeId);}
@@ -390,19 +395,28 @@ class SoColorPacker {
     void setNodeIds(uint32_t diffNodeId, uint32_t tNodeId)
     {diffuseNodeId = diffNodeId; transpNodeId = tNodeId;}
 
-    int32_t getSize()
-    { return packedArraySize;}
+    size_t getSize() const
+    { return packedColors.size();}
     
-    void reallocate(int32_t size);
+    void reallocate(size_t size)
+    { packedColors.resize(size); }
     
+    void packColors(const SbColor *diffuseColors, size_t numDiffuseColors,
+                    const float *transparencies, size_t numTransparencies)
+    {
+        packedColors.resize(numDiffuseColors);
+
+        const bool multTrans = (numTransparencies >= numDiffuseColors);
+        for (size_t i=0; i< numDiffuseColors; i++) {
+            packedColors[i] = diffuseColors[i].getPackedValue(transparencies[multTrans ? i : 0]);
+        }
+    }
     private:
     // nodeids are used for testing cache validity
     uint32_t	transpNodeId;
     uint32_t	diffuseNodeId;
     // array of packed colors, or NULL if empty
-    uint32_t*	packedColors;
-    // size of packed color array (not necessarily number of valid colors)
-    int32_t	packedArraySize;
+    std::vector<uint32_t>	packedColors;
 };
     
 

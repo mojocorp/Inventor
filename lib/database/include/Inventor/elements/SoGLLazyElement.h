@@ -271,10 +271,6 @@ SoEXTENDER class SoGLLazyElement : public SoLazyElement {
     // Stores cache context in which display lists were created
     static int		patternListContext;
 
-    // Set to TRUE in getInstance()??? if a cache is currently being
-    // built, meaning we can't build a new display list
-    SbBool		cacheOpen;
-
     // Creates and sends the stipple pattern to GL
     void		sendStipple(const SoState *state, int transpIndex);
     

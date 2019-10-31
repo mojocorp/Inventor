@@ -1921,28 +1921,8 @@ SoGLLazyElement::copyIVValues(uint32_t bitmask,SoGLLazyElement* lazyElt)
 void 
 SoGLLazyElement::packColors(SoColorPacker *cPacker)
 {
-    //First determine if we have enough space:
-    if (cPacker->getSize() < ivState.numDiffuseColors)
-	cPacker->reallocate(ivState.numDiffuseColors);
-
-    uint32_t *packedArray = cPacker->getPackedColors();
-    SbBool multTrans = (ivState.numTransparencies >= ivState.numDiffuseColors);    
-    int indx = 0;
-    uint32_t transp;
-    for (int i=0; i< ivState.numDiffuseColors; i++){
-	if (isPacked()){
-	    if (i == 0 || multTrans) 
-		transp = (uint32_t)((1.0 - ivState.transparencies[i])*255.);	  
-	    packedArray[i] = (ivState.packedColors[i] & 0xffffff00)|
-		(transp & 0xff);			    	       
-	}
-	else{
-	    if (multTrans) indx = i;
-	    packedArray[i] = (ivState.diffuseColors + i)->
-		getPackedValue(ivState.transparencies[indx]);	    
-	}
-	
-    }
+    cPacker->packColors(ivState.diffuseColors, ivState.numDiffuseColors,
+                        ivState.transparencies, ivState.numTransparencies);
     cPacker->setNodeIds(ivState.diffuseNodeId, ivState.transpNodeId);
 }
 ////////////////////////////////////////////////////////////////////////////////
