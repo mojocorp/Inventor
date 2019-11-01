@@ -458,19 +458,14 @@ SoNormalGenerator::equal(const SbVec3f &a, const SbVec3f &b, float tolerance)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	diff;
+    if (std::abs(a[0] - b[0]) > tolerance)
+        return FALSE;
 
-    diff = a[0] - b[0];
-    if ((diff < 0.0 ? -diff : diff) > tolerance)
-	return FALSE;
+    if (std::abs(a[1] - b[1]) > tolerance)
+        return FALSE;
 
-    diff = a[1] - b[1];
-    if ((diff < 0.0 ? -diff : diff) > tolerance)
-	return FALSE;
-
-    diff = a[2] - b[2];
-    if ((diff < 0.0 ? -diff : diff) > tolerance)
-	return FALSE;
+    if (std::abs(a[2] - b[2]) > tolerance)
+        return FALSE;
 
     return TRUE;
 }
