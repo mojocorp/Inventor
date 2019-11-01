@@ -115,7 +115,7 @@ SoINTERNAL class SoCompactPathList {
   private:
     std::vector<int> array;		// Path list as a series of integers
     int			curNode;	// Index of current node in array
-    int			*stack;		// Current traversal stack of indices
+    std::vector<int> stack;		// Current traversal stack of indices
     int			stackDepth;	// Depth of stack
 
     // Returns number of path child indices of current node
