@@ -95,7 +95,7 @@ SoCompactPathList::SoCompactPathList(const SoPathList &list)
 
     // Allocate stuff
     array.resize(arraySize);
-    stack = new int [128];		// Should be deep enough
+    stack.resize(128);		// Should be deep enough
 
     // Store paths in compact form in array
     compactPaths(0, 1, list, 0, list.getLength());
@@ -124,7 +124,6 @@ SoCompactPathList::~SoCompactPathList()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    delete [] stack;
 }
 
 ////////////////////////////////////////////////////////////////////////

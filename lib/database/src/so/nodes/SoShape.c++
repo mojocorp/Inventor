@@ -97,12 +97,10 @@ SoFaceDetail		*SoShape::faceDetail = NULL;
 int			SoShape::nestLevel = 0;
 SoAction		*SoShape::primAction = NULL;
 int			SoShape::primVertNum = 0;
-int			SoShape::polyVertNum = 0;
-SoPrimitiveVertex	*SoShape::primVerts = NULL;
-SoPointDetail		*SoShape::vertDetails = NULL;
-SoPrimitiveVertex	*SoShape::polyVerts = NULL;
-SoPointDetail		*SoShape::polyDetails = NULL;
-int			SoShape::numPolyVertsAllocated = 0;
+std::vector<SoPrimitiveVertex>	SoShape::primVerts;
+std::vector<SoPointDetail>		SoShape::vertDetails;
+std::vector<SoPrimitiveVertex>	SoShape::polyVerts;
+std::vector<SoPointDetail>		SoShape::polyDetails;
 GLUtesselator		*SoShape::tobj = NULL;
 
 ////////////////////////////////////////////////////////////////////////
@@ -668,9 +666,9 @@ SoShape::beginShape(SoAction *action, TriangleShape shapeType,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (primVerts == NULL) {
-	primVerts   = new SoPrimitiveVertex[2];
-	vertDetails = new SoPointDetail[2];
+    if (primVerts.empty()) {
+        primVerts.resize(2);
+        vertDetails.resize(2);
     }
 
     primShapeType = shapeType;
@@ -705,8 +703,10 @@ SoShape::beginShape(SoAction *action, TriangleShape shapeType,
 		// Do the same stuff needed for TRIANGLE_FAN:
 		if (faceDetail != NULL)
 		    faceDetail->setNumPoints(3);
-	    }
-	    else polyVertNum = 0;
+        } else {
+            polyVerts.clear();
+            polyDetails.clear();
+        }
 	}
 	break;
     }
@@ -743,21 +743,17 @@ SoShape::shapeVertex(const SoPrimitiveVertex *v)
 	break;
 
       case POLYGON:
-	// Make sure there is enough room in polyVerts array
-	allocateVerts();
-	polyVerts[polyVertNum] = *v;
+
+    polyVerts.push_back(*v);
 
 	if (faceDetail != NULL) {
 
 	    // Save point detail for given vertex in array
-	    polyDetails[polyVertNum] =
-		* (const SoPointDetail *) v->getDetail();
+        polyDetails.push_back(* (const SoPointDetail *) v->getDetail());
 
 	    // Store pointer to point detail in saved polygon vertex
-	    polyVerts[polyVertNum].setDetail(&polyDetails[polyVertNum]);
+        polyVerts.back().setDetail(&polyDetails.back());
 	}
-
-	++polyVertNum;
 	break;
     }
 }
@@ -811,52 +807,6 @@ SoShape::triangleVertex(const SoPrimitiveVertex *v, int vertToReplace)
     }
 
     primVertNum++;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    For polygons, re-allocates the polyVerts array if more space is
-//    needed to hold all vertices.  We have to hold all of the
-//    vertices in memory because the tesellator can't decompose
-//    concave polygons until it has seen all of the vertices.
-//
-// Use: private
-
-void
-SoShape::allocateVerts()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // 8 vertices are allocated to begin with
-    if (polyVerts == NULL) {
-	polyVerts   = new SoPrimitiveVertex[8];
-	polyDetails = new SoPointDetail[8];
-	numPolyVertsAllocated = 8;
-    }
-
-    else {
-	if (polyVertNum >= numPolyVertsAllocated) {
-	    SoPrimitiveVertex *oldVerts   = polyVerts;
-	    SoPointDetail     *oldDetails = polyDetails;
-
-	    // Double storage
-	    numPolyVertsAllocated = polyVertNum*2;
-	    polyVerts   = new SoPrimitiveVertex[numPolyVertsAllocated];
-	    polyDetails = new SoPointDetail[numPolyVertsAllocated];
-
-	    // Copy over old vertices and details
-	    for (int i = 0; i < polyVertNum; i++) {
-		polyVerts[i]   = oldVerts[i];
-		polyDetails[i] = oldDetails[i];
-		polyVerts[i].setDetail(&polyDetails[i]);
-	    }
-
-	    // Delete old storage
-	    delete [] oldVerts;
-	    delete [] oldDetails;
-	}
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -916,8 +866,9 @@ SoShape::endShape()
 
         case POLYGON:
             // Don't bother with degenerate polygons
-            if (polyVertNum < 3) {
-                polyVertNum = 0;
+            if (polyVerts.size() < 3) {
+                polyVerts.clear();
+                polyDetails.clear();
                 break;
             }
 
@@ -937,7 +888,7 @@ SoShape::endShape()
             gluTessBeginPolygon(tobj, this);
             gluTessBeginContour(tobj);
 
-            for (int i = 0; i < polyVertNum; i++) {
+            for (int i = 0; i < polyVerts.size(); i++) {
                 const SbVec3f &t = polyVerts[i].getPoint();
 
                 GLdouble dv[3];  // glu requires double...
@@ -947,7 +898,8 @@ SoShape::endShape()
             gluTessEndContour(tobj);
             gluTessEndPolygon(tobj);
 
-            polyVertNum = 0;
+            polyVerts.clear();
+            polyDetails.clear();
         break;
     }
 
