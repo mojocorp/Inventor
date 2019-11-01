@@ -83,8 +83,6 @@ class SoConvToTrigger : public SoFieldConverter {
     virtual SoField		*getInput(SoType);
     virtual SoEngineOutput	*getOutput(SoType);
 
-    int conversionCase;		// Not used any more
-
     SoFieldData *myInputData;
 };
 

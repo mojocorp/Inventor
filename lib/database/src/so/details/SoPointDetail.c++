@@ -79,11 +79,14 @@ SoPointDetail::initClass()
 // Use: public
 //
 
-SoPointDetail::SoPointDetail()
+SoPointDetail::SoPointDetail() : coordIndex(0)
+                               , materialIndex(0)
+                               , normalIndex(0)
+                               , texCoordIndex(0)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    materialIndex = 0;
+
 }
 
 ////////////////////////////////////////////////////////////////////////

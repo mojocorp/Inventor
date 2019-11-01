@@ -397,21 +397,17 @@ SbBool
 SbMatrix::factor(SbMatrix &r, SbVec3f &s, SbMatrix &u, SbVec3f &t,
 		 SbMatrix &proj) const
 {
-    double	det;		/* Determinant of matrix A	*/
-    double	det_sign;	/* -1 if det < 0, 1 if det > 0	*/
-    double	scratch;
-    int		i, j;
     int		junk;
-    SbMatrix	a, b, si;
+    SbMatrix	si;
     float	evalues[3];
     SbVec3f	evectors[3];
     
-    a = *this;
+    SbMatrix a = *this;
     proj.makeIdentity();
-    scratch = 1.0;
+    double scratch = 1.0;
     
-    for (i = 0; i < 3; i++) {
-	for (j = 0; j < 3; j++) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
 	    a.matrix[i][j] *= scratch;
 	}
 	t[i] = matrix[3][i] * scratch;
@@ -420,11 +416,11 @@ SbMatrix::factor(SbMatrix &r, SbVec3f &s, SbMatrix &u, SbVec3f &t,
     a.matrix[3][3] = 1.0;
     
     /* (3) Compute det A. If negative, set sign = -1, else sign = 1 */
-    det = a.det3();
-    det_sign = (det < 0.0 ? -1.0 : 1.0);
+    double det = a.det3();
+    double det_sign = (det < 0.0 ? -1.0 : 1.0);
     
     /* (4) B = A * A^  (here A^ means A transpose) */
-    b = a * a.transpose();
+    SbMatrix b = a * a.transpose();
     
     b.jacobi3(evalues, evectors, junk);
 
@@ -437,7 +433,7 @@ SbMatrix::factor(SbMatrix &r, SbVec3f &s, SbMatrix &u, SbVec3f &t,
     
     /* Compute s = sqrt(evalues), with sign. Set si = s-inverse */
     si.makeIdentity();
-    for (i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         s[i] = det_sign * std::sqrt(evalues[i]);
 	si.matrix[i][i] = 1.0 / s[i];
     }
@@ -468,14 +464,14 @@ SbMatrix::jacobi3(float evalues[SB_JACOBI_RANK],
     double	thresh;		// threshold below which no rotation done
     double	b[SB_JACOBI_RANK]; // more scratch
     double	z[SB_JACOBI_RANK]; // more scratch
-    int		p, q, i, j;
+    int		p, q;
     double	a[SB_JACOBI_RANK][SB_JACOBI_RANK];
     
     // initializations
-    for (i = 0; i < SB_JACOBI_RANK; i++) {
+    for (int i = 0; i < SB_JACOBI_RANK; i++) {
 	b[i] = evalues[i] = matrix[i][i];
 	z[i] = 0.0;
-	for (j = 0; j < SB_JACOBI_RANK; j++) {
+        for (int j = 0; j < SB_JACOBI_RANK; j++) {
 	    evectors[i][j] = (i == j) ? 1.0 : 0.0;
 	    a[i][j] = matrix[i][j];
 	}
@@ -485,7 +481,7 @@ SbMatrix::jacobi3(float evalues[SB_JACOBI_RANK],
 
     // Why 50? I don't know--it's the way the folks who wrote the
     // algorithm did it:
-    for (i = 0; i < 50; i++) {
+    for (int i = 0; i < 50; i++) {
 	sm = 0.0;
 	for (p = 0; p < SB_JACOBI_RANK - 1; p++)
 	    for (q = p+1; q < SB_JACOBI_RANK; q++)
@@ -529,28 +525,28 @@ SbMatrix::jacobi3(float evalues[SB_JACOBI_RANK],
 		    evalues[q] += h;
 		    a[p][q] = 0.0;
 		    
-		    for (j = 0; j < p; j++) {
+                    for (int j = 0; j < p; j++) {
 			g = a[j][p];
 			h = a[j][q];
 			a[j][p] = g - s * (h + g * tau);
 			a[j][q] = h + s * (g - h * tau);
 		    }
 		    
-		    for (j = p+1; j < q; j++) {
+                    for (int j = p+1; j < q; j++) {
 			g = a[p][j];
 			h = a[j][q];
 			a[p][j] = g - s * (h + g * tau);
 			a[j][q] = h + s * (g - h * tau);
 		    }
 		    
-		    for (j = q+1; j < SB_JACOBI_RANK; j++) {
+                    for (int j = q+1; j < SB_JACOBI_RANK; j++) {
 			g = a[p][j];
 			h = a[q][j];
 			a[p][j] = g - s * (h + g * tau);
 			a[q][j] = h + s * (g - h * tau);
 		    }
 		    
-		    for (j = 0; j < SB_JACOBI_RANK; j++) {
+                    for (int j = 0; j < SB_JACOBI_RANK; j++) {
 			g = evectors[j][p];
 			h = evectors[j][q];
 			evectors[j][p] = g - s * (h + g * tau);
@@ -590,17 +586,14 @@ SbMatrix::inverse() const
 	return affineAnswer;
 
     int         index[4];
-    float       d, invmat[4][4], temp;
+    float       d, invmat[4][4];
     SbMatrix	inverse = *this;
-#ifdef DEBUGGING
-    int         i, j;
-#endif /* DEBUGGING */
 
     if(inverse.LUDecomposition(index, d)) {
 
 #ifdef DEBUGGING
-	for(j = 0; j < 4; j++) {
-	    for(i = 0; i < 4; i++)
+        for(int j = 0; j < 4; j++) {
+            for(int i = 0; i < 4; i++)
 		invmat[j][i] = 0.0;
 	    invmat[j][j] = 1.0;
 	    inverse.LUBackSubstitution(index, invmat[j]);
@@ -632,14 +625,13 @@ SbMatrix::inverse() const
 	// transpose invmat
 	for(j = 0; j < 4; j++) {
 	    for(i = 0; i < j; i++) {
-		temp = invmat[i][j];
+                float temp = invmat[i][j];
 		invmat[i][j] = invmat[j][i];
 		invmat[j][i] = temp;
 	    }
 	}
 #else
-#define SWAP(i,j) \
-    std::swap(invmat[i][j], invmat[j][i]);
+#define SWAP(i,j) std::swap(invmat[i][j], invmat[j][i])
 
     SWAP(1,0);
 	
@@ -698,7 +690,6 @@ SbMatrix::affine_inverse(const SbMatrix &in, SbMatrix &out) const
     // is singular as limited by the double precision floating 
     // point data representation
 
-    double det_1;
     double pos, neg, temp;
 
 #define ACCUMULATE \
@@ -720,7 +711,7 @@ SbMatrix::affine_inverse(const SbMatrix &in, SbMatrix &out) const
     ACCUMULATE
     temp = -in[0][0] * in[1][2] * in[2][1];
     ACCUMULATE
-    det_1 = pos + neg;
+    double det_1 = pos + neg;
 
 #undef ACCUMULATE
 
@@ -783,16 +774,13 @@ SbMatrix::LUDecomposition(int index[4], float &d)
     int         imax;
     float       big, dum, sum, temp;
     float       vv[4];
-#ifdef DEBUGGING
-    int         i, j, k;
-#endif /* DEBUGGING */
 
     d = 1.0;
     
 #ifdef DEBUGGING
-    for(i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; i++) {
         big = 0.0;
-        for(j = 0; j < 4; j++)
+        for(int j = 0; j < 4; j++)
             if((temp = std::abs(matrix[i][j])) > big) big = temp;
         if(big == 0.0) {
 	    matrix[i][i] = 1e-6;
@@ -824,12 +812,12 @@ SbMatrix::LUDecomposition(int index[4], float &d)
     // This is the code as it originally existed.
     // Below this is the unrolled, really unreadable version.
 
-    for(j = 0; j < 4; j++) {
+    for(int j = 0; j < 4; j++) {
 
 	// BLOCK 1
-        for(i = 0; i < j; i++) {
+        for(int i = 0; i < j; i++) {
             sum = matrix[i][j];
-            for(k = 0; k < i; k++)
+            for(int k = 0; k < i; k++)
                 sum -= matrix[i][k] * matrix[k][j];
             matrix[i][j] = sum;
         }
@@ -837,9 +825,9 @@ SbMatrix::LUDecomposition(int index[4], float &d)
         big = 0.0;
 
 	// BLOCK 2
-        for(i = j; i < 4; i++) {
+        for(int i = j; i < 4; i++) {
             sum = matrix[i][j];
-            for(k = 0; k < j; k++)
+            for(int k = 0; k < j; k++)
                 sum -= matrix[i][k] * matrix[k][j];
             matrix[i][j] = sum;
             if((dum = vv[i] * std::abs(sum)) >= big) {
@@ -850,7 +838,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
 
 	// BLOCK 3
         if(j != imax) {
-            for(k = 0; k < 4; k++) {
+            for(int k = 0; k < 4; k++) {
                 dum = matrix[imax][k];
                 matrix[imax][k] = matrix[j][k];
                 matrix[j][k] = dum;
@@ -866,7 +854,7 @@ SbMatrix::LUDecomposition(int index[4], float &d)
 	// BLOCK 5
         if(j != 4 - 1) {
             dum = 1.0 / (matrix[j][j]);
-            for(i = j + 1; i < 4; i++)
+            for(int i = j + 1; i < 4; i++)
                 matrix[i][j] *= dum;
         }
 	
@@ -1115,11 +1103,7 @@ SbMatrix::LUBackSubstitution(int index[4], float b[4]) const
     int         ii = -1, ip, j;
     float       sum;
 #ifdef DEBUGGING
-    int         i;
-#endif /* DEBUGGING */
-
-#ifdef DEBUGGING
-    for(i = 0; i < 4; i++) {
+    for(int i = 0; i < 4; i++) {
         ip = index[i];
         sum = b[ip];
         b[ip] = b[i];
@@ -1148,7 +1132,7 @@ SbMatrix::LUBackSubstitution(int index[4], float b[4]) const
 #endif /* DEBUGGING */
 
 #ifdef DEBUGGING
-    for(i = 4 - 1; i >= 0; i--) {
+    for(int i = 4 - 1; i >= 0; i--) {
         sum = b[i];
         for(j = i + 1; j < 4; j++)
             sum -= matrix[i][j]*b[j];
@@ -1374,16 +1358,10 @@ SbMatrix::multLeft(const SbMatrix &m)
 void
 SbMatrix::multMatrixVec(const SbVec3f &src, SbVec3f &dst) const
 {
-    float	x,y,z,w;
-    
-    x = matrix[0][0]*src[0] + matrix[0][1]*src[1] +
-	matrix[0][2]*src[2] + matrix[0][3];
-    y = matrix[1][0]*src[0] + matrix[1][1]*src[1] +
-	matrix[1][2]*src[2] + matrix[1][3];
-    z = matrix[2][0]*src[0] + matrix[2][1]*src[1] +
-	matrix[2][2]*src[2] + matrix[2][3];
-    w = matrix[3][0]*src[0] + matrix[3][1]*src[1] +
-	matrix[3][2]*src[2] + matrix[3][3];
+    float x = matrix[0][0]*src[0] + matrix[0][1]*src[1] + matrix[0][2]*src[2] + matrix[0][3];
+    float y = matrix[1][0]*src[0] + matrix[1][1]*src[1] + matrix[1][2]*src[2] + matrix[1][3];
+    float z = matrix[2][0]*src[0] + matrix[2][1]*src[1] + matrix[2][2]*src[2] + matrix[2][3];
+    float w = matrix[3][0]*src[0] + matrix[3][1]*src[1] + matrix[3][2]*src[2] + matrix[3][3];
     
     dst.setValue(x/w, y/w, z/w);
 }
@@ -1395,16 +1373,10 @@ SbMatrix::multMatrixVec(const SbVec3f &src, SbVec3f &dst) const
 void
 SbMatrix::multVecMatrix(const SbVec3f &src, SbVec3f &dst) const
 {
-    float	x,y,z,w;
-    
-    x = src[0]*matrix[0][0] + src[1]*matrix[1][0] +
-	src[2]*matrix[2][0] + matrix[3][0];
-    y = src[0]*matrix[0][1] + src[1]*matrix[1][1] +
-	src[2]*matrix[2][1] + matrix[3][1];
-    z = src[0]*matrix[0][2] + src[1]*matrix[1][2] +
-	src[2]*matrix[2][2] + matrix[3][2];
-    w = src[0]*matrix[0][3] + src[1]*matrix[1][3] +
-	src[2]*matrix[2][3] + matrix[3][3];
+    float x = src[0]*matrix[0][0] + src[1]*matrix[1][0] + src[2]*matrix[2][0] + matrix[3][0];
+    float y = src[0]*matrix[0][1] + src[1]*matrix[1][1] + src[2]*matrix[2][1] + matrix[3][1];
+    float z = src[0]*matrix[0][2] + src[1]*matrix[1][2] + src[2]*matrix[2][2] + matrix[3][2];
+    float w = src[0]*matrix[0][3] + src[1]*matrix[1][3] + src[2]*matrix[2][3] + matrix[3][3];
     
     dst.setValue(x/w, y/w, z/w);
 }
@@ -1418,11 +1390,9 @@ SbMatrix::multVecMatrix(const SbVec3f &src, SbVec3f &dst) const
 void
 SbMatrix::multDirMatrix(const SbVec3f &src, SbVec3f &dst) const
 {
-    float	x,y,z;
-    
-    x = src[0]*matrix[0][0] + src[1]*matrix[1][0] + src[2]*matrix[2][0];
-    y = src[0]*matrix[0][1] + src[1]*matrix[1][1] + src[2]*matrix[2][1];
-    z = src[0]*matrix[0][2] + src[1]*matrix[1][2] + src[2]*matrix[2][2];
+    float x = src[0]*matrix[0][0] + src[1]*matrix[1][0] + src[2]*matrix[2][0];
+    float y = src[0]*matrix[0][1] + src[1]*matrix[1][1] + src[2]*matrix[2][1];
+    float z = src[0]*matrix[0][2] + src[1]*matrix[1][2] + src[2]*matrix[2][2];
     
     dst.setValue(x, y, z);
 }
@@ -1463,11 +1433,9 @@ SbMatrix::print(FILE *fp) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i, j;
-    
-    for (i = 0; i < 4; i++)
-	for (j = 0; j < 4; j++)
-	    fprintf(fp, "%10.5g%c", matrix[i][j], j < 3 ? '\t' : '\n');
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++)
+            fprintf(fp, "%10.5g%c", matrix[i][j], j < 3 ? '\t' : '\n');
 }
 
 ////////////////////////////////////////////
@@ -1566,15 +1534,12 @@ operator ==(const SbMatrix &m1, const SbMatrix &m2)
 SbBool
 SbMatrix::equals(const SbMatrix &m, float tolerance) const
 {
-    int		i, j;
-    float	d;
-
-    for (i = 0; i < 4; i++)
-	for (j = 0; j < 4; j++) {
-	    d = matrix[i][j] - m.matrix[i][j];
-        if (std::abs(d) > tolerance)
-		return FALSE;
-	}
+    for (int i = 0; i < 4; i++)
+        for (int j = 0; j < 4; j++) {
+            float d = matrix[i][j] - m.matrix[i][j];
+            if (std::abs(d) > tolerance)
+                return FALSE;
+        }
 
     return TRUE;
 }
