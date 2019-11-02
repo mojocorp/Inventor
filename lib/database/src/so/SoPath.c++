@@ -120,7 +120,7 @@ SoPath::SoPath()
 //
 // Use: public
 
-SoPath::SoPath(int approxLength) : nodes(approxLength), indices(approxLength)
+SoPath::SoPath(int approxLength) : nodes(approxLength)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -130,7 +130,7 @@ SoPath::SoPath(int approxLength) : nodes(approxLength), indices(approxLength)
 			   "Cannot construct paths before "
 			   "calling SoDB::init()");
 #endif /* DEBUG */
-
+    indices.reserve(approxLength);
     doAuditors = TRUE;
     numPublic  = 0;
     minNumPublic  = 0;
@@ -910,7 +910,7 @@ SoPath::append(SoNode *node, int index)
 
     // Append to lists
     nodes.append(node);
-    indices.append(index);
+    indices.push_back(index);
 
     // Tell the childlist of the node that the path cares about it
     if (doAuditors) {
@@ -1016,7 +1016,7 @@ SoPath::truncate(int start, SbBool doNotify)
 
     // Truncate both lists
     nodes.truncate(start);
-    indices.truncate(start);
+    indices.resize(start);
 
     if (start < minNumPublic) {
 	minNumPublic = numPublic = start;
@@ -1102,7 +1102,7 @@ SoLightPath::setHead(SoNode *node)
     truncate(0);
 
     // The head index value is set to -1, it should never be referenced. 
-    indices.append(-1);
+    indices.push_back(-1);
     headNode = node;
 
 }
