@@ -440,7 +440,7 @@ SbMatrix::factor(SbMatrix &r, SbVec3f &s, SbMatrix &u, SbVec3f &t,
     /* Compute s = sqrt(evalues), with sign. Set si = s-inverse */
     si.makeIdentity();
     for (i = 0; i < 3; i++) {
-	s[i] = det_sign * sqrt(evalues[i]);
+        s[i] = det_sign * std::sqrt(evalues[i]);
 	si.matrix[i][i] = 1.0 / s[i];
     }
     
@@ -513,12 +513,12 @@ SbMatrix::jacobi3(float evalues[SB_JACOBI_RANK],
 			t = a[p][q] / h;
 		    else {
 			theta = .5 * h / a[p][q];
-            t = 1.0 / (std::abs(theta) + sqrt(1 + theta * theta));
+                        t = 1.0 / (std::abs(theta) + std::sqrt(1 + theta * theta));
 			if (theta < 0.0)  t = -t;
 		    }
 		    // End of computing tangent of rotation angle
 		    
-		    c = 1.0 / sqrt(1.0 + t*t);
+                    c = 1.0 / std::sqrt(1.0 + t*t);
 		    s = t * c;
 		    tau = s / (1.0 + c);
 		    h = t * a[p][q];

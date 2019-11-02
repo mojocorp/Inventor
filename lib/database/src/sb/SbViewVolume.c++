@@ -51,11 +51,11 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/SbViewVolume.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SbRotation.h>
 #include <Inventor/SbLine.h>
-#include <math.h> // for M_PI_2
 
 ////////////////////////////////////////////
 //
@@ -613,9 +613,7 @@ SbViewVolume::projectBox(const SbBox3f &box) const
 	fBox.extendBy(SbVec2f(screenPoint[i][0], screenPoint[i][1]));
 
     // Return size of box
-    SbVec2f	size;
-    fBox.getSize(size[0], size[1]);
-    return size;
+    return fBox.getSize();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -694,7 +692,7 @@ SbViewVolume::perspective(float fovy, float aspect,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float tanfov = tan(fovy / 2.0);
+    float tanfov = std::tan(fovy / 2.0);
 
     type = PERSPECTIVE;
 

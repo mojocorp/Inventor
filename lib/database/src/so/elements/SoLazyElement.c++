@@ -510,7 +510,7 @@ void
 SoLazyElement::setShininess(SoState *state, float value)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
-    if (fabsf(value - curElt->ivState.shininess)> SO_LAZY_SHINY_THRESHOLD)
+    if (std::abs(value - curElt->ivState.shininess)> SO_LAZY_SHINY_THRESHOLD)
 	getWInstance(state)->setShininessElt(value);
     else if (state->isCacheOpen())
 	curElt->registerRedundantSet(state, SHININESS_MASK);
@@ -595,7 +595,7 @@ SoLazyElement::setMaterials(SoState *state,  SoNode* node,
     if ((bitmask & AMBIENT_MASK)&&(ambient[0] != curElt->ivState.ambientColor))
 	realSet |= AMBIENT_MASK;
     if ((bitmask & SHININESS_MASK) &&
-	    fabsf(shininess[0] - curElt->ivState.shininess)> 
+        std::abs(shininess[0] - curElt->ivState.shininess)>
 	    SO_LAZY_SHINY_THRESHOLD) realSet |= SHININESS_MASK;
 	    
     uint32_t nodeId = node->getNodeId();

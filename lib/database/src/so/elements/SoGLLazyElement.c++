@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoGLLazyElement.h>
@@ -462,7 +463,7 @@ SoGLLazyElement::setShininessElt(float value)
     ivState.cacheLevelSetBits |= SHININESS_MASK;	
 
     // set invalid bit based on value
-    if (fabsf(ivState.shininess - glState.GLShininess) > SO_LAZY_SHINY_THRESHOLD)
+    if (std::abs(ivState.shininess - glState.GLShininess) > SO_LAZY_SHINY_THRESHOLD)
 	    invalidBits |= SHININESS_MASK;
 	else invalidBits &= ~SHININESS_MASK;
     return;
@@ -638,7 +639,7 @@ SoGLLazyElement::setMaterialElt(SoNode* node, uint32_t mask,
     
     if (mask & SHININESS_MASK){
 	ivState.shininess = shininess[0];
-	if (fabsf(ivState.shininess - glState.GLShininess) 
+    if (std::abs(ivState.shininess - glState.GLShininess)
 		> SO_LAZY_SHINY_THRESHOLD){
 	    invalidBits |= SHININESS_MASK;
 	}      
@@ -992,7 +993,7 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 	    	    break;
 
 	    	case(SHININESS_CASE):
-	            if (fabsf(ivState.shininess - stateLazyElt->ivState.shininess)
+                if (std::abs(ivState.shininess - stateLazyElt->ivState.shininess)
 			>  SO_LAZY_SHINY_THRESHOLD){
 #ifdef DEBUG
 			if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
@@ -1164,7 +1165,7 @@ SoGLLazyElement::fullLazyMatches(uint32_t checkGL, uint32_t checkIV,
 	    	    break;
 
 	    	case(SHININESS_CASE):
-	            if (fabsf(glState.GLShininess - 
+                if (std::abs(glState.GLShininess -
 			stateLazyElt->glState.GLShininess)> 
 			    SO_LAZY_SHINY_THRESHOLD){
 #ifdef DEBUG
@@ -1421,7 +1422,7 @@ SoGLLazyElement::reallySend(const SoState *state, uint32_t bitmask)
 		    break;
 
 		case(SHININESS_CASE):
-		    if (fabsf(glState.GLShininess-ivState.shininess)<
+            if (std::abs(glState.GLShininess-ivState.shininess)<
 			SO_LAZY_SHINY_THRESHOLD) break;
 		    realSendBits |= SHININESS_MASK;
 		    glState.GLShininess=ivState.shininess;

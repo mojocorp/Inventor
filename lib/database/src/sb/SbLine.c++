@@ -329,7 +329,7 @@ SbLine::intersect(
 
     t = diff.dot(getDirection());
     if(t > 0) {
-	d = sqrt(diff.dot(diff) - t*t);
+        d = std::sqrt(diff.dot(diff) - t*t);
         if (pickAngle < 0.0)
   	    return (d < -pickAngle);
 	return ((d/t) < pickAngle);
