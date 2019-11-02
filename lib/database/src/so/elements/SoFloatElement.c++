@@ -65,13 +65,7 @@ SO_ELEMENT_ABSTRACT_SOURCE(SoFloatElement);
 void
 SoFloatElement::initClass()
 {
-    // We can't use the SO_ELEMENT_INIT_CLASS() macro here, because we
-    // don't want to set the stackIndex for this class to anything
-    // real. So we'll just do the rest by hand.
-
-    classTypeId = SoType::createType(SoElement::getClassTypeId(),
-                     "SoFloatElement", NULL);
-    classStackIndex = -1;
+    SO_ELEMENT_INIT_ABSTRACT_CLASS(SoFloatElement, SoElement);
 }
 
 ////////////////////////////////////////////////////////////////////////

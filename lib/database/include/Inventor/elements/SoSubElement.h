@@ -186,10 +186,7 @@ className::createInstance()						      \
 	classTypeId = SoType::createType(parentClass::getClassTypeId(),	      \
 					 SO__QUOTE(className),		      \
 					 NULL);				      \
-	if (parentClass::classStackIndex < 0)				      \
-	    classStackIndex = createStackIndex(classTypeId);		      \
-	else								      \
-	    classStackIndex = parentClass::classStackIndex;		      \
+     classStackIndex = -1;                                          \
     } while (0)
 
 #define SO_ELEMENT_INIT_CLASS(className,parentClass)			      \
