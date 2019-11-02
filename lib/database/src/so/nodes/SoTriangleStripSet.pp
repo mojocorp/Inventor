@@ -694,7 +694,7 @@ SoTriangleStripSet::notify(SoNotList *list)
 	totalNumVertices = -1;
     }
 
-    SoShape::notify(list);
+    SoNonIndexedShape::notify(list);
 }
 
 ////////////////////////////////////////////////////////////////////////
