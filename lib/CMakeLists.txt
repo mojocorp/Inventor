@@ -98,6 +98,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoDrawStyleElement.h
     database/include/Inventor/elements/SoElement.h
     database/include/Inventor/elements/SoElements.h
+    database/include/Inventor/elements/SoEnvironmentElement.h
     database/include/Inventor/elements/SoFloatElement.h
     database/include/Inventor/elements/SoFocalDistanceElement.h
     database/include/Inventor/elements/SoFontNameElement.h
@@ -108,6 +109,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoGLDepthBufferElement.h
     database/include/Inventor/elements/SoGLDisplayList.h
     database/include/Inventor/elements/SoGLDrawStyleElement.h
+    database/include/Inventor/elements/SoGLEnvironmentElement.h
     database/include/Inventor/elements/SoGLLazyElement.h
     database/include/Inventor/elements/SoGLLightIdElement.h
     database/include/Inventor/elements/SoGLLinePatternElement.h
@@ -488,6 +490,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoDrawStyleElement.c++
     database/src/so/elements/SoElement.c++
     database/src/so/elements/SoElementInit.c++
+    database/src/so/elements/SoEnvironmentElement.c++
     database/src/so/elements/SoFloatElement.c++
     database/src/so/elements/SoFocalDistanceElement.c++
     database/src/so/elements/SoFontNameElement.c++
@@ -498,6 +501,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoGLDepthBufferElement.c++
     database/src/so/elements/SoGLDisplayList.c++
     database/src/so/elements/SoGLDrawStyleElement.c++
+    database/src/so/elements/SoGLEnvironmentElement.c++
     database/src/so/elements/SoGLLazyElement.c++
     database/src/so/elements/SoGLLightIdElement.c++
     database/src/so/elements/SoGLLinePatternElement.c++
