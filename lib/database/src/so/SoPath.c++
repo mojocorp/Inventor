@@ -61,6 +61,7 @@
 #include <Inventor/errors/SoReadError.h>
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/misc/SoNotification.h>
+#include <Inventor/misc/SoTempPath.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/nodes/SoSeparator.h>
 
