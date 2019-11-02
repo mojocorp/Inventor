@@ -57,7 +57,6 @@
 #define  _SO_ACTION_
 
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/misc/SoTempPath.h>
 #include <Inventor/SoPath.h>
 
 // This is the type of a method function pointer in the table
@@ -66,6 +65,7 @@ class SoCompactPathList;
 class SoNode;
 class SoState;
 class SoLightPath;
+class SoTempPath;
 
 typedef void	(*SoActionMethod)(SoAction *, SoNode *);
 
