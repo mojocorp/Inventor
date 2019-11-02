@@ -771,6 +771,7 @@ SoCamera::setElements(SoAction *action, SbViewVolume &viewVol,
 
     SoViewVolumeElement::set(state, this, viewVol);
     SoViewingMatrixElement::set(state, this, viewMat);
+    SoFocalDistanceElement::set(state, focalDistance.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
