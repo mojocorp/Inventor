@@ -317,7 +317,7 @@ SbRotation::setValue(const SbMatrix &m)
     SbBool ok = TRUE;
     for (i = 0; i < 4 && ok; i++) {
 	for (j = 0; j < 4 && ok; j++) {
-	    if (fabsf(m[i][j]-check[i][j]) > 1.0e-5)
+        if (std::abs(m[i][j]-check[i][j]) > 1.0e-5)
 		ok = FALSE;
 	}
     }
@@ -407,7 +407,7 @@ SbRotation::setValue(const SbVec3f &rotateFrom, const SbVec3f &rotateTo)
 
     // use half-angle formulae
     // sin^2 t = ( 1 - cos (2t) ) / 2
-    axis *= sqrt(0.5 * (1.0 - cost));
+    axis *= std::sqrt(0.5 * (1.0 - cost));
 
     // scale the axis by the sine of half the rotation angle to get
     // the normalized quaternion
@@ -417,7 +417,7 @@ SbRotation::setValue(const SbVec3f &rotateFrom, const SbVec3f &rotateTo)
 
     // cos^2 t = ( 1 + cos (2t) ) / 2
     // w part is cosine of half the rotation angle
-    quat[3] = sqrt(0.5 * (1.0 + cost));
+    quat[3] = std::sqrt(0.5 * (1.0 + cost));
 
     return (*this);
 }
@@ -646,7 +646,7 @@ SbRotation::normalize()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	dist = 1.0 / sqrt(norm());
+    const float dist = 1.0 / std::sqrt(norm());
 
     quat[0] *= dist;
     quat[1] *= dist;

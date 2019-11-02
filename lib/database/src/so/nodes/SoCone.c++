@@ -58,6 +58,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoPickedPoint.h>
@@ -1037,8 +1038,8 @@ SoCone::computeBase(SoAction *action, int &numSides, int &numSections,
 
     // Looking at the XY silhouette of the cone, (t1,t2) is the normal
     // in the XY plane.
-    t1 = radius / sqrt(radius*radius + height*height);
-    t2 = height / sqrt(radius*radius + height*height);
+    t1 = radius / std::sqrt(radius*radius + height*height);
+    t2 = height / std::sqrt(radius*radius + height*height);
 
     for (side = 0; side < numSides; side++) {
 	cosTheta = cos(theta);

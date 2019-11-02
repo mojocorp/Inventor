@@ -49,7 +49,7 @@
  _______________________________________________________________________
  */
 
-#include <math.h>
+#include <cmath>
 #include <float.h>
 #include <Inventor/nodes/SoLevelOfDetail.h>
 #include <Inventor/actions/SoGetMatrixAction.h>
@@ -181,7 +181,7 @@ SoLODV2::write(SoWriteAction *action)
 	    radius *= 0.5;
     
 	    float distance, newScreenArea;
-	    float tanHalf45 = tan((0.5 * 45.0 / 180.0) * M_PI);
+            float tanHalf45 = std::tan((0.5 * 45.0 / 180.0) * M_PI);
 	    
 	    for (j=0; j < range.getNum(); j++) {
 		distance = range[j];

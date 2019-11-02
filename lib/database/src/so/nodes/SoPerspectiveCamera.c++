@@ -51,9 +51,9 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <Inventor/SbSphere.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
-#include <math.h>
 
 #define MINIMUM_NEAR_PLANE 0.01	    /* minimum near clipping distance */
 				    /* (from center) */
@@ -187,7 +187,7 @@ SoPerspectiveCamera::viewBoundingBox(const SbBox3f &box,
     //	    h = height (radius of sphere)
     //	    d = distance to eye
     //	    tan(alpha) gives us h/d
-    float hOverD = tan(heightAngle.getValue()  / 2.0);
+    float hOverD = std::tan(heightAngle.getValue()  / 2.0);
     if (aspect < 1.0)
 	hOverD *= aspect;
 

@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <math.h>
+#include <cmath>
 #include <Inventor/SbColor.h>
 
 //
@@ -75,7 +75,7 @@ SbColor::setHSVValue(float hue, float sat, float val)
 	hue = 0.0;
     else
 	hue *= 6.0;
-    i = (int)(floor(hue));
+    i = (int)(std::floor(hue));
     f = hue-i;
     p = val*(1.0-sat);
     q = val*(1.0-(sat*f));
