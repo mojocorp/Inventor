@@ -57,6 +57,7 @@
 #ifndef  _SO_PATH_
 #define  _SO_PATH_
 
+#include <vector>
 #include <Inventor/misc/SoBase.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/SoLists.h>
@@ -206,7 +207,7 @@ class SoPath : public SoBase {
 
   private:
     SoNodeList		nodes;		// Pointers to nodes
-    SbIntList		indices;	// Child indices
+    std::vector<int>		indices;	// Child indices
     int			numPublic;	// How many children are public
     int			minNumPublic;	// Minimum we KNOW are public
     SbBool		doAuditors;	// TRUE if auditors to be maintained
@@ -303,7 +304,7 @@ class SoLightPath  {
 
     // Adds node specified by childindex to end of chain. 
     void		append(int childIndex) 
-	{ indices.append(childIndex);}
+    { indices.push_back(childIndex);}
 
 
     // Allows path to be treated as a stack: push a node at the end of
@@ -312,7 +313,7 @@ class SoLightPath  {
     void		push()			{ append(-1);}
     void		pop()		{ truncate(getFullLength() - 1); }
     void		setTail(int childIndex) 
-	   	{ indices.set(getFullLength()-1,(void *)(unsigned long)childIndex);}
+        { indices[getFullLength()-1] = childIndex;}
     SoNode *		getTail()
 		{ return getNode(getFullLength()-1);}
 
@@ -324,10 +325,10 @@ class SoLightPath  {
 
     // Returns full length of path chain (number of nodes)
     // note that public/private distinction is ignored.
-    int			getFullLength() const {return indices.getLength();}
+    int			getFullLength() const {return indices.size();}
 
     // Removes all nodes from indexed node on
-    void		truncate(int start) { indices.truncate(start);}
+    void		truncate(int start) { indices.resize(start);}
 
     
     // fills in nodes for a TempPath that is represented by this 
@@ -338,7 +339,7 @@ class SoLightPath  {
 
     ~SoLightPath();
     SoNode *		headNode;	// Pointer to headnode
-    SbIntList		indices;	// Child indices
+    std::vector<int>		indices;	// Child indices
 
 
   friend class SoAction;

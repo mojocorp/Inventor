@@ -49,8 +49,6 @@
  |	list class. An SbPList is a list of (void *) pointers that
  |	allows easy insertion, removal, and other operations.
  |
- |	The SbIntList class allows lists of integers to be created.
- |
  |   Author(s)		: Paul S. Strauss, Nick Thompson, Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
@@ -152,64 +150,6 @@ class SbPList {
     // expand is the lowest level routine.  It just reallocates the
     // array and copies over the old values.
     void	expand(int size);
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbIntList
-//
-//  List of generic (void *) pointers. SbIntList allows random access,
-//  insertion, and removal.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-
-SoINTERNAL class SbIntList : public SbPList {
-
-  public:
-    // Constructors, similar to SbPList
-    SbIntList()					{}
-    SbIntList(int initSize) : SbPList(initSize) {}
-
-    void	append(int integer)
-	{ ((SbPList *) this)->append((void *) (unsigned long) integer); }
-
-    // Returns index of given integer in list, or -1 if not found
-    int		find(int integer)
-	{ return ((SbPList *) this)->find((void *) (unsigned long) integer); }
-
-    // Inserts given integer in list before integer with given index
-    void	insert(int integer, int addBefore)
-	{ ((SbPList *) this)->insert((void *) (unsigned long) integer, addBefore); }
-
-    int &	operator [](int i) const
-    { return ( reinterpret_cast<int &>( (*(const SbPList *) this) [i] ) ); }
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbVec3fList
-//
-//  List of vectors. Probably mostly used for vertices of polygons
-//
-//////////////////////////////////////////////////////////////////////////////
-
-SoINTERNAL class SbVec3fList : public SbPList {
-
-  public:
-     SbVec3fList() {}
-    ~SbVec3fList();
-
-    void	append(SbVec3f *vec)
-	{ ((SbPList *) this)->append((void *) new SbVec3f(vec->getValue())); }
-
-    // Inserts given integer in list before integer with given index
-    void	insert(SbVec3f *vec, int addBefore)
-	{ ((SbPList *) this)->insert((void *) new SbVec3f(vec->getValue()),
-		addBefore); }
-
-    SbVec3f *   operator [](int i) const
-	{ return ( (SbVec3f *) ( (*(const SbPList *) this) [i] ) ); }
 };
 
 //////////////////////////////////////////////////////////////////////////////
