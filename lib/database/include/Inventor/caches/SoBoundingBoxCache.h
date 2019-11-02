@@ -77,7 +77,6 @@ SoEXTENDER class SoBoundingBoxCache : public SoCache {
   public:
     // Constructor and destructor
     SoBoundingBoxCache(SoState *state);
-    ~SoBoundingBoxCache();
 
     // Stores a bounding box and center point in the cache
     void		set(const SbXfBox3f &boundingBox,
@@ -103,6 +102,8 @@ SoEXTENDER class SoBoundingBoxCache : public SoCache {
     SbBool		hasLinesOrPoints() const	 { return hasLOrP; }
 
   private:
+    ~SoBoundingBoxCache();
+
     SbXfBox3f		box;		// Bounding box
     SbBox3f		projectedBox;	// Box in local space
     SbBool		centerSet;	// If the center was set

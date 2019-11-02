@@ -60,12 +60,12 @@
 #define  _SO_INPUT_
 
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/SbDict.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoDB.h>
 
 #include <vector>
 
+class SbDict;
 class SoNode;
 class SoPath;
 class SoBase;

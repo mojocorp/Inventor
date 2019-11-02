@@ -86,7 +86,7 @@ class SoSceneManager {
     // Constructor. 
     SoSceneManager();
     // Destructor.
-    ~SoSceneManager();
+    virtual ~SoSceneManager();
     
     // Render and process events.
     // reinitialize is called to initialize graphics, i.e. for a new window.

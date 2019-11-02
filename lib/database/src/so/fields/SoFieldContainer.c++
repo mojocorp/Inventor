@@ -53,7 +53,6 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SbDict.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoLists.h>
@@ -73,7 +72,7 @@
 #define CLOSE_BRACE_CHAR	']'
 #define VALUE_SEPARATOR_CHAR	','
 
-// This is a list of SbDict instances used duting copy operations to
+// This is a list of map instances used duting copy operations to
 // keep track of instances. It is a list to allow recursive copying.
 std::stack<std::map<const SoFieldContainer*, const SoFieldContainer*> > SoFieldContainer::copyDictList;
 
