@@ -218,7 +218,7 @@ SoEXTENDER class SoGLLazyElement : public SoLazyElement {
 			    
     virtual void	setTranspTypeElt(int32_t type);	
     virtual void	setPackedElt( SoNode *node, 
-			    int32_t numColors,  const uint32_t *packedColors);
+                int32_t numColors,  const uint32_t *packedColors, bool hasTransparency);
 
     virtual void	setColorIndexElt( SoNode*, int32_t numIndices, 
 			    const int32_t *indices);

@@ -139,7 +139,7 @@ SoEXTENDER class SoLazyElement : public SoElement {
     static void	setTransparency(SoState *state, SoNode *node, int32_t numTransp, 
 	    const float *transp, SoColorPacker *cPacker);		    	       
     static void		setPacked(SoState *state, SoNode *node,
-	    int32_t numColors, const uint32_t *colors);	   
+        int32_t numColors, const uint32_t *colors, bool hasTransparency);
     static void		setColorIndices(SoState *state, SoNode *node, 
 	    int32_t numIndices, const int32_t *indices);		    						      
     static void		setAmbient(SoState *state, const SbColor* color);    	            
@@ -343,7 +343,7 @@ SoEXTENDER class SoLazyElement : public SoElement {
     virtual void	setDiffuseElt(SoNode*,  int32_t numColors, 
 	const SbColor *colors, SoColorPacker *cPacker);   
     virtual void	setPackedElt( SoNode *, int32_t numColors, 
-	const uint32_t *colors);
+    const uint32_t *colors, bool hasTransparency);
     virtual void	setColorIndexElt( SoNode*, int32_t numIndices, 
 	const int32_t *indices);	
     virtual void	setTranspElt(SoNode *, int32_t numTrans, 

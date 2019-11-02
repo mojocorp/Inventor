@@ -88,6 +88,7 @@ SoPackedColor::SoPackedColor()
     SO_NODE_CONSTRUCTOR(SoPackedColor);
     SO_NODE_ADD_FIELD(orderedRGBA, (SoLazyElement::getDefaultPacked()));
     isBuiltIn = TRUE;
+    transparent = FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -123,7 +124,7 @@ SoPackedColor::doAction(SoAction *action)
 	    SoOverrideElement::setDiffuseColorOverride(state, this, TRUE);
 	}
 	SoLazyElement::setPacked(state, this,
-			orderedRGBA.getNum(), orderedRGBA.getValues(0));
+            orderedRGBA.getNum(), orderedRGBA.getValues(0), isTransparent());
     }
 }
 
