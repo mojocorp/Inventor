@@ -56,14 +56,14 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <cstring>
+#include <Inventor/SbDict.h>
 #include <Inventor/errors/SoDebugError.h>
 
 #include <machine.h>		// Inventor data goo lib
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SoOutput.h>
-
-#include <cstring>
 
 static const char *defaultASCIIHeader =  "#Inventor V2.1 ascii";
 static const char *defaultUTF8Header =   "#Inventor V2.1 utf8";
@@ -964,13 +964,13 @@ SoOutput::convertDouble(double d, char *to)
 // Use: private
 
 void
-SoOutput::convertShortArray( register short *from,
+SoOutput::convertShortArray( short *from,
                              char *to,
-                             register int len)
+                             int len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register short *b = (short*)to;
+    short *b = (short*)to;
     while (len-- > 0) {
         DGL_HTON_SHORT(*b, *from);
         b++;
@@ -989,11 +989,11 @@ SoOutput::convertShortArray( register short *from,
 void
 SoOutput::convertInt32Array( int32_t *from,
                             char *to,
-                            register int len)
+                            int len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register int32_t *b = (int32_t*)to;
+    int32_t *b = (int32_t*)to;
     while (len-- > 0) {
         DGL_HTON_INT32(*b, *from);
         b++;
@@ -1012,11 +1012,11 @@ SoOutput::convertInt32Array( int32_t *from,
 void
 SoOutput::convertFloatArray( float *from,
                              char *to,
-                             register int len)
+                             int len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register float *b = (float*)to;
+    float *b = (float*)to;
     while (len-- > 0) {
         DGL_HTON_FLOAT(*b, *from);
         b++;
@@ -1033,13 +1033,13 @@ SoOutput::convertFloatArray( float *from,
 // Use: private
 
 void
-SoOutput::convertDoubleArray( register double *from,
+SoOutput::convertDoubleArray( double *from,
                               char *to,
-                              register int len )
+                              int len )
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    register double *b = (double*)to;
+    double *b = (double*)to;
     while (len-- > 0) {
         DGL_HTON_DOUBLE(*b, *from);
         b++;

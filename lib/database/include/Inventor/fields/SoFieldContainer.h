@@ -226,7 +226,7 @@ class SoFieldContainer : public SoBase {
     static SoType	classTypeId;
     SbBool		notifyEnabled;	// Whether notification is enabled
 
-    // This holds a list of SbDict instances used during copy
+    // This holds a list of map instances used during copy
     // operations. It is a list to allow recursive copying.
     static std::stack<std::map<const SoFieldContainer*, const SoFieldContainer*> > copyDictList;
 

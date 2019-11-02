@@ -60,6 +60,7 @@
 #include <stdio.h>
 #include <locale.h>
 #include <cstring>
+#include <Inventor/SbDict.h>
 #include <Inventor/misc/SoBase.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>

@@ -61,12 +61,12 @@
 
 #include <vector>
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/SbDict.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SbName.h>
 #include <Inventor/SbFile.h>
 
 class SoBase;
+class SbDict;
 
 typedef void *SoOutputReallocCB(void *ptr, size_t newSize);
 

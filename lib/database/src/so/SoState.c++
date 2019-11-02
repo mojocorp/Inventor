@@ -228,7 +228,7 @@ SoState::pop()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoElement *poppedElt, *nextInStack;
+    SoElement *poppedElt;
 
     --depth;
 
@@ -246,11 +246,11 @@ SoState::pop()
 
 	// Find next element in same stack as popped element. This
 	// element will become the new top of that stack.
-	nextInStack = poppedElt->getNextInStack();
+        SoElement *nextInStack = poppedElt->getNextInStack();
 
 	// Give new top element in stack a chance to update things.
 	// Pass old element instance just in case.
-	poppedElt->getNextInStack()->pop(this, poppedElt);
+        nextInStack->pop(this, poppedElt);
 
     }
 
@@ -278,8 +278,6 @@ SoState::print(FILE *fp)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoElement	*elt;
-
     fprintf(fp, "_________________________________________________________\n");
     fprintf(fp, "SoState\n");
     fprintf(fp, "_________________________________________________________\n");
@@ -291,7 +289,7 @@ SoState::print(FILE *fp)
 
         fprintf(fp, "  stack[%02lu]:\n", i);
 
-	    for (elt = stack[i]; elt != NULL; elt = elt->getNextInStack()) {
+	    for (const SoElement *elt = stack[i]; elt != NULL; elt = elt->getNextInStack()) {
             fprintf(fp, "    ");
             elt->print(fp);
 	    }

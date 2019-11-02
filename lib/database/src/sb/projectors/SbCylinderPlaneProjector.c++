@@ -76,9 +76,9 @@ SbCylinderPlaneProjector::SbCylinderPlaneProjector(
 
 SbCylinderPlaneProjector::SbCylinderPlaneProjector(
     const SbCylinder &c,
-    float,
+    float edgeTol,
     SbBool orient)
-: SbCylinderSectionProjector(c, orient)
+: SbCylinderSectionProjector(c, edgeTol, orient)
 {
 }
 

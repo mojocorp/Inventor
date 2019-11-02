@@ -206,7 +206,7 @@ static char *noFileNameStr = "<empty>";
 #define hourglass_height 32
 #define hourglass_x_hot 16
 #define hourglass_y_hot 16
-static char hourglass_bits[] = {
+static unsigned char hourglass_bits[] = {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
    0x00, 0xfe, 0xff, 0x00, 0x00, 0x04, 0x40, 0x00, 0x00, 0x04, 0x40, 0x00,
@@ -1588,7 +1588,7 @@ MyTextureEditor::loadPaletteItems()
 	foreground.green = foreground.blue = 0;
 	
 	Pixmap source = XCreateBitmapFromData(display, d, 
-	    hourglass_bits, hourglass_width, hourglass_height);
+        (char*)hourglass_bits, hourglass_width, hourglass_height);
 	cursor = XCreatePixmapCursor(display, source, source, 
 	    &foreground, &foreground, hourglass_x_hot, hourglass_y_hot);
 	XFreePixmap(display, source);
