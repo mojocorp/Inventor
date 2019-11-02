@@ -81,6 +81,7 @@ SoElement::initElements()
     SoCreaseAngleElement::initClass();
     SoDepthBufferElement::initClass();
     SoDrawStyleElement::initClass();
+    SoEnvironmentElement::initClass();
     SoFocalDistanceElement::initClass();
     SoFontNameElement::initClass();
     SoFontSizeElement::initClass();
@@ -122,6 +123,7 @@ SoElement::initElements()
     SoGLCoordinateElement::initClass();
     SoGLDepthBufferElement::initClass();
     SoGLDrawStyleElement::initClass();
+    SoGLEnvironmentElement::initClass();
     SoGLLazyElement::initClass();
     SoGLLightIdElement::initClass();
     SoGLLinePatternElement::initClass();

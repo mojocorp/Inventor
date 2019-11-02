@@ -61,6 +61,7 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoSubNode.h>
+#include <Inventor/elements/SoEnvironmentElement.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -96,10 +97,10 @@ class SoEnvironment : public SoNode {
 
   public:
     enum FogType {	// Type of fog:
-	NONE,			// No fog
-	HAZE,			// Linear increase in opacity with distance
-	FOG,			// Exponential increase in opacity
-	SMOKE			// Exponential squared increase in opacity
+        NONE  = SoEnvironmentElement::NONE, ///< No fog
+        HAZE  = SoEnvironmentElement::HAZE, ///< Linear increase in opacity with distance
+        FOG   = SoEnvironmentElement::FOG,  ///< Exponential increase in opacity
+        SMOKE = SoEnvironmentElement::SMOKE ///< Exponential squared increase in opacity
     };
 
     // Fields
@@ -122,6 +123,7 @@ class SoEnvironment : public SoNode {
     SoEnvironment();
 
   SoEXTENDER public:
+    virtual void    doAction(SoAction *action);
     virtual void	GLRender(SoGLRenderAction *action);
     virtual void	callback(SoCallbackAction *action);
 
@@ -131,9 +133,6 @@ class SoEnvironment : public SoNode {
   protected:
     virtual ~SoEnvironment();
 
-  private:
-    // Computes fog density based on visibility
-    static float	computeDensity(float visibility, SbBool squared);
 };
 
 #endif /* _SO_ENVIRONMENT_ */
