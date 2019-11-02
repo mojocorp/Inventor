@@ -607,6 +607,3 @@ SoSphere::computeDepth(SoAction *action)
 
 #undef COMPUTE_S_T
 
-#ifdef _CRAY
-#undef atan2f
-#endif
