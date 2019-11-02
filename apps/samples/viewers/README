@@ -5,8 +5,7 @@ Run with no arguments to get the usage message.
 
 This directory provides the source code to the Inventor component viewer
 SoXtExaminerViewer, as well as the base classes SoXtFullViewer and
-SoXtViewer. The class name were changed from SoXt* to My* to prevent
-collision with the Inventor classes.
+SoXtViewer.
 
 MyPixmapButton is also provided as a utility class to easily create motif
 pixmap buttons that can be added to viewers. You can use
