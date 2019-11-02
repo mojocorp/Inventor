@@ -230,7 +230,7 @@ SoLocateHighlight::preRender(SoGLRenderAction *action)
 
         // Emissive Color
         SoOverrideElement::setEmissiveColorOverride(state, this, TRUE);
-        SoLazyElement::setEmissive(state, &col);
+        SoLazyElement::setEmissive(state, col);
 
         // Diffuse Color
         if (style.getValue() == EMISSIVE_DIFFUSE) {

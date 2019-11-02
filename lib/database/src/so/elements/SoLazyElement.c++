@@ -51,6 +51,7 @@
  _______________________________________________________________________
 */
 
+#include <cmath>
 #include <Inventor/elements/SoLazyElement.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/elements/SoSubElement.h>
@@ -63,10 +64,10 @@
 SO_ELEMENT_SOURCE(SoLazyElement);
 static	SbColor unpacker(0, 0, 0);
 
-SbColor	*SoLazyElement::defaultDiffuseColor = NULL;
-float	*SoLazyElement::defaultTransparency = NULL;
-int32_t	*SoLazyElement::defaultColorIndices = NULL;
-uint32_t	*SoLazyElement::defaultPackedColor  = NULL;
+SbColor  SoLazyElement::defaultDiffuseColor = SbColor(0.8f, 0.8f, 0.8f);
+float    SoLazyElement::defaultTransparency = 0.0f;
+int32_t  SoLazyElement::defaultColorIndices = 1;
+uint32_t SoLazyElement::defaultPackedColor  = 0xccccccff;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -114,17 +115,6 @@ SoLazyElement::init(SoState *)
     ivState.blending		= FALSE;
     ivState.lightModel		= PHONG;
     
-    // Initialize default color storage if not already done
-    if (defaultDiffuseColor == NULL) {
-	defaultDiffuseColor	= new SbColor;
-	*defaultDiffuseColor	= getDefaultDiffuse();
-	defaultTransparency	= new float;
-	*defaultTransparency	= getDefaultTransparency();
-	defaultColorIndices	= new int32_t;
-	*defaultColorIndices	= getDefaultColorIndex();
-	defaultPackedColor	= new uint32_t;
-	*defaultPackedColor	= getDefaultPacked();
-    }
     
     //following value will be matched with the default color, must
     //differ from 1 (invalid) and any  legitimate nodeid. 
@@ -132,10 +122,10 @@ SoLazyElement::init(SoState *)
     ivState.transpNodeId	= 0;
     //zero corresponds to transparency off (default).
     ivState.stippleNum		= 0;
-    ivState.diffuseColors	= defaultDiffuseColor;
-    ivState.transparencies	= defaultTransparency;
-    ivState.colorIndices	= defaultColorIndices;
-    ivState.packedColors	= defaultPackedColor;
+    ivState.diffuseColors	= &defaultDiffuseColor;
+    ivState.transparencies	= &defaultTransparency;
+    ivState.colorIndices	= &defaultColorIndices;
+    ivState.packedColors	= &defaultPackedColor;
 
     ivState.numDiffuseColors	= 1;
     ivState.numTransparencies	= 1;
@@ -154,7 +144,7 @@ SoLazyElement::init(SoState *)
 //
 // Use: public, static
 ////////////////////////////////////////////////////////////////////////
-const SbColor &
+SbColor
 SoLazyElement::getDiffuse(SoState* state, int index) 
 {
     SoLazyElement* curElt = getInstance(state);
@@ -163,16 +153,17 @@ SoLazyElement::getDiffuse(SoState* state, int index)
     if (index > curElt->ivState.numDiffuseColors || index < 0){
 	SoDebugError::post("SoLazyElement::getDiffuse", 
 			"invalid index");
-        return(*defaultDiffuseColor);
+        return defaultDiffuseColor;
     }
 #endif
-    if (!curElt->ivState.packed) return (curElt->ivState.diffuseColors[index]);
-    unpacker = SbColor( 
-       ((curElt->ivState.packedColors[index] & 0xff000000) >> 24) * 1.0/255,  
-       ((curElt->ivState.packedColors[index] & 0xff0000) >> 16) * 1.0/255,  		
-       ((curElt->ivState.packedColors[index] & 0xff00)>> 8) * 1.0/255); 
+    if (!curElt->ivState.packed)
+        return (curElt->ivState.diffuseColors[index]);
+
+    SbColor unpacker;
+    float transparency;
+    unpacker.setPackedValue(curElt->ivState.packedColors[index], transparency);
+
     return unpacker;
-      
 }
 ////////////////////////////////////////////////////////////////////////
 //
@@ -190,7 +181,7 @@ SoLazyElement::getTransparency(SoState* state, int index)
     if (index > curElt->ivState.numTransparencies || index < 0){
 	SoDebugError::post("SoLazyElement::getTransparency", 
 			"invalid index");
-        return(*curElt->defaultTransparency);
+        return curElt->defaultTransparency;
     }
 #endif
     if (!curElt->ivState.packed) return (curElt->ivState.transparencies[index]);
@@ -457,10 +448,10 @@ SoLazyElement::setPacked(SoState *state, SoNode *node,
 //
 ///////////////////////////////////////////////////////////////////////  
 void	
-SoLazyElement::setAmbient(SoState *state, const SbColor* color)
+SoLazyElement::setAmbient(SoState *state, const SbColor& color)
 {    
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
-    if (*color != curElt->ivState.ambientColor){
+    if (color != curElt->ivState.ambientColor){
 	getWInstance(state)->setAmbientElt(color);
     }  
     else if (state->isCacheOpen()){	    
@@ -475,10 +466,10 @@ SoLazyElement::setAmbient(SoState *state, const SbColor* color)
 //
 ///////////////////////////////////////////////////////////////////////  
 void	
-SoLazyElement::setEmissive(SoState *state, const SbColor* color)
+SoLazyElement::setEmissive(SoState *state, const SbColor& color)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
-    if (*color != curElt->ivState.emissiveColor)
+    if (color != curElt->ivState.emissiveColor)
 	getWInstance(state)->setEmissiveElt(color);
     else if  (state->isCacheOpen())	    
 	curElt->registerRedundantSet(state, EMISSIVE_MASK);
@@ -491,10 +482,10 @@ SoLazyElement::setEmissive(SoState *state, const SbColor* color)
 //
 ///////////////////////////////////////////////////////////////////////  
 void	
-SoLazyElement::setSpecular(SoState *state, const SbColor* color)
+SoLazyElement::setSpecular(SoState *state, const SbColor& color)
 {
     SoLazyElement *curElt = SoLazyElement::getInstance(state);
-    if (*color != curElt->ivState.specularColor)
+    if (color != curElt->ivState.specularColor)
 	getWInstance(state)->setSpecularElt(color);	    
     else if   (state->isCacheOpen()) 	    
 	curElt->registerRedundantSet(state, SPECULAR_MASK);
@@ -744,10 +735,10 @@ SoLazyElement::setPackedElt( SoNode *node,  int32_t numColors,
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setAmbientElt(const SbColor* color )
+SoLazyElement::setAmbientElt(const SbColor& color )
 
 {
-    ivState.ambientColor.setValue((float*)color);
+    ivState.ambientColor = color;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -760,10 +751,10 @@ SoLazyElement::setAmbientElt(const SbColor* color )
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setEmissiveElt(const SbColor* color )
+SoLazyElement::setEmissiveElt(const SbColor& color )
 
 {
-    ivState.emissiveColor.setValue((float*)color);
+    ivState.emissiveColor = color;
 }
 
 
@@ -777,10 +768,10 @@ SoLazyElement::setEmissiveElt(const SbColor* color )
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoLazyElement::setSpecularElt(const SbColor* color )
+SoLazyElement::setSpecularElt(const SbColor& color )
 //
 {
-    ivState.specularColor.setValue((float*)color);
+    ivState.specularColor = color;
 }
 
 ////////////////////////////////////////////////////////////////////////

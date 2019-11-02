@@ -142,9 +142,9 @@ SoEXTENDER class SoLazyElement : public SoElement {
         int32_t numColors, const uint32_t *colors, bool hasTransparency);
     static void		setColorIndices(SoState *state, SoNode *node, 
 	    int32_t numIndices, const int32_t *indices);		    						      
-    static void		setAmbient(SoState *state, const SbColor* color);    	            
-    static void		setEmissive(SoState *state, const SbColor* color);    	    
-    static void		setSpecular(SoState *state, const SbColor* color);		    
+    static void		setAmbient(SoState *state, const SbColor& color);
+    static void		setEmissive(SoState *state, const SbColor& color);
+    static void		setSpecular(SoState *state, const SbColor& color);
     static void		setShininess(SoState *state, float value);		    
     static void		setColorMaterial(SoState *state, SbBool value);    		    
     static void		setBlending(SoState *state,  SbBool value);		
@@ -153,7 +153,7 @@ SoEXTENDER class SoLazyElement : public SoElement {
     // get() methods get value from Inventor state.  The public methods are
     // static, they get an instance of the element.  If there is a cache,
     // the appropriate virtual registerGetDependence is called.
-    static const SbColor &	getDiffuse(SoState* state, int index);	
+    static SbColor	    getDiffuse(SoState* state, int index);	
     static float 		getTransparency(SoState*, int index);
     static const uint32_t	*getPackedColors(SoState*);       
     static const int32_t	*getColorIndices(SoState*);
@@ -196,7 +196,7 @@ SoEXTENDER class SoLazyElement : public SoElement {
 	 
     //Specify inventor defaults for colors, etc.
     static SbColor	getDefaultDiffuse()
-	    {return SbColor(0.8, 0.8, 0.8);}
+	    {return defaultDiffuseColor;}
     static SbColor	getDefaultAmbient()
 	    {return SbColor(0.2, 0.2, 0.2);}    
     static SbColor	getDefaultSpecular()
@@ -206,16 +206,21 @@ SoEXTENDER class SoLazyElement : public SoElement {
     static float	getDefaultShininess()
 	    {return 0.2;}	         
     static uint32_t	getDefaultPacked()
-	    {return (0xccccccff);}	    
+	    {return defaultPackedColor;}	    
     static float	getDefaultTransparency()
-	    {return 0.0;}	    
+	    {return defaultTransparency;}	    
     static int32_t	getDefaultLightModel()
 	    {return PHONG;}
     static int32_t	getDefaultColorIndex()
-	    {return 1;}
+	    {return defaultColorIndices;}
    
     SoINTERNAL public:
     
+	// Deprecated
+    static void setAmbient(SoState *state, const SbColor* color) { setAmbient(state, *color); }
+    static void setEmissive(SoState *state, const SbColor* color){ setEmissive(state, *color); }
+    static void setSpecular(SoState *state, const SbColor* color){ setSpecular(state, *color); }
+	    
     // set method for use in SoMaterial nodes:
     static void	setMaterials(SoState *state, SoNode *node, uint32_t bitmask,
 	SoColorPacker *cPacker,   
@@ -329,10 +334,10 @@ SoEXTENDER class SoLazyElement : public SoElement {
     //  store pointers to the default color, transp so that we can set
     //  point to them if no other color or transp has been set.
     
-    static SbColor	*defaultDiffuseColor;
-    static float	*defaultTransparency;
-    static int32_t	*defaultColorIndices;
-    static uint32_t	*defaultPackedColor;
+    static SbColor	defaultDiffuseColor;
+    static float	defaultTransparency;
+    static int32_t	defaultColorIndices;
+    static uint32_t	defaultPackedColor;
     
     // Returns number of transparency levels supported with stipple
     // patterns. (Add one - solid - that is not included in this number.)
@@ -350,9 +355,9 @@ SoEXTENDER class SoLazyElement : public SoElement {
 	const float *trans, SoColorPacker *cPacker);
 	
     virtual void	setTranspTypeElt(int32_t type);
-    virtual void	setAmbientElt(const SbColor* color);
-    virtual void	setEmissiveElt(const SbColor* color);
-    virtual void	setSpecularElt(const SbColor* color);
+    virtual void	setAmbientElt(const SbColor& color);
+    virtual void	setEmissiveElt(const SbColor& color);
+    virtual void	setSpecularElt(const SbColor& color);
     virtual void	setShininessElt(float value);
     virtual void	setColorMaterialElt(SbBool value);
     virtual void	setBlendingElt(SbBool value);
