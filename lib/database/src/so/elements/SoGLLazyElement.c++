@@ -335,14 +335,14 @@ SoGLLazyElement::setColorIndexElt(SoNode *node,
 ////////////////////////////////////////////////////////////////////////
 void
 SoGLLazyElement::setPackedElt(SoNode *node, int32_t numColors, 
-    const uint32_t* colors)
+    const uint32_t* colors, bool hasTransparency)
 {
     if (colorIndex) return;
     ivState.packedColors	= colors;
     ivState.numDiffuseColors	= numColors;
-    ivState.numTransparencies	= numColors;
+    ivState.numTransparencies	= hasTransparency ? numColors : 0;
     ivState.diffuseNodeId	= node->getNodeId();
-    ivState.transpNodeId	= node->getNodeId();
+    ivState.transpNodeId	= hasTransparency ? node->getNodeId() : 0;
     
     ivState.stippleNum = 0;	
     if ((colors[0]&0xff) != 0xff){ 	
@@ -353,7 +353,7 @@ SoGLLazyElement::setPackedElt(SoNode *node, int32_t numColors,
     }
     
     ivState.packed		= TRUE;
-    ivState.packedTransparent	= ((SoPackedColor*) node)->isTransparent();
+    ivState.packedTransparent	= hasTransparency;
      
     // For open caches, record the fact that set was called:
     ivState.cacheLevelSetBits |= (DIFFUSE_MASK|TRANSPARENCY_MASK);	
