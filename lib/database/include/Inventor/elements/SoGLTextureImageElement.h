@@ -57,6 +57,7 @@
 #define  _SO_GL_TEXTURE_IMAGE_ELEMENT
 
 class SoGLDisplayList;
+class SbImage;
 
 #include <Inventor/elements/SoTextureImageElement.h>
 
@@ -90,8 +91,7 @@ SoEXTENDER class SoGLTextureImageElement : public SoTextureImageElement {
     // list at the right time.
     static SoGLDisplayList *
 	set(SoState *state, SoNode *node,
-	    const SbVec2s &s, int nc,
-	    const unsigned char *bytes,
+        const SbImage &image,
 	    float texQuality,
 	    int wrapS, int wrapT, int model, 
 	    const SbColor &blendColor, SoGLDisplayList *list);
@@ -105,8 +105,7 @@ SoEXTENDER class SoGLTextureImageElement : public SoTextureImageElement {
 
   protected:
     // Catch setElt; if this setElt is called, it is an error...
-    virtual void	setElt(const SbVec2s &s, int nc,
-			       const unsigned char *bytes,
+    virtual void	setElt(const SbImage &image,
 			       int wrapS, int wrapT, int model,
 			       const SbColor &blendColor);
 

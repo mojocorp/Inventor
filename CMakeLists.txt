@@ -31,7 +31,6 @@ add_definitions(-DINVENTOR_VERSION="${INVENTOR_VERSION}")
 
 add_subdirectory(3rdparty)
 add_subdirectory(tools)
-add_subdirectory(libimage)
 add_subdirectory(lib)
 add_subdirectory(libSoXt)
 add_subdirectory(data)

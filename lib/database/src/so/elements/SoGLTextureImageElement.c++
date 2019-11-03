@@ -53,6 +53,7 @@
 
 #include <GL/glu.h>
 #include <Inventor/misc/SoGL.h>
+#include <Inventor/SbImage.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLDisplayList.h>
 #include <Inventor/elements/SoGLTextureImageElement.h>
@@ -142,8 +143,8 @@ SoGLTextureImageElement::pop(SoState *state, const SoElement *)
 {
     // Empty texture, don't need to do anything-- the
     // GLTextureEnabledElement will turn off texturing.
-    if (size[0] == 0 || size[1] == 0 || numComponents == 0) {
-	return;
+    if (image.isNull()) {
+        return;
     }
     // Since popping this element has GL side effects, make sure any
     // open caches capture it
@@ -162,8 +163,8 @@ SoGLTextureImageElement::pop(SoState *state, const SoElement *)
 // Use: protected, virtual
 
 void
-SoGLTextureImageElement::setElt(const SbVec2s &, int, const
-				unsigned char *, int, int, int,
+SoGLTextureImageElement::setElt(const SbImage &,
+                int, int, int,
 				const SbColor &)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -188,8 +189,7 @@ SoGLTextureImageElement::setElt(const SbVec2s &, int, const
 
 SoGLDisplayList *
 SoGLTextureImageElement::set(SoState *state, SoNode *node,
-			     const SbVec2s &_size, int _numComponents,
-			     const unsigned char *_bytes,
+                 const SbImage &image,
 			     float _quality, int _wrapS, int _wrapT,
 			     int _model, const SbColor &_blendColor,
 			     SoGLDisplayList *_list)
@@ -202,8 +202,7 @@ SoGLTextureImageElement::set(SoState *state, SoNode *node,
     elt = (SoGLTextureImageElement *) getElement(state, classStackIndex, node);
 
     if (elt != NULL) {
-	elt->SoTextureImageElement::setElt(_size, _numComponents,
-					   _bytes, _wrapS, _wrapT,
+    elt->SoTextureImageElement::setElt(image, _wrapS, _wrapT,
 					   _model, _blendColor);
 
 	elt->list = _list;
@@ -340,12 +339,15 @@ SoGLTextureImageElement::sendTex(SoState *state)
     // texture size:
     GLint maxsize = 0;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxsize);
-    SbVec2s newSize;
+    SbVec3s newSize;
     int i;
     // Use nearest power of 2 for big textures, use next higher
     // power of 2 for small textures:
-    for (i = 0; i < 2; i++) {
-	if (size[i] > 8) {
+    const SbVec3s &size = image.getSize();
+    const int numComponents = image.getNumComponents();
+
+    for (i = 0; i < 3; i++) {
+    if (size[i] > 8) {
 	    newSize[i] = size[i] > maxsize ?
 		maxsize : 1 << nearestPowerOf2(size[i]);
 	} else {
@@ -398,14 +400,14 @@ SoGLTextureImageElement::sendTex(SoState *state)
 	// filtering) if using a linear interpolation magnification
 	// filter:
 	gluScaleImage(
-	    (GLenum)format, size[0], size[1], GL_UNSIGNED_BYTE, bytes,
+        (GLenum)format, size[0], size[1], GL_UNSIGNED_BYTE, image.getBytes(),
 	    newSize[0], newSize[1], GL_UNSIGNED_BYTE, level0);
     }
     
     // Send level-0 mipmap:
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, newSize[0], newSize[1],
 		 0, (GLenum)format, GL_UNSIGNED_BYTE,
-		 level0 == NULL ? bytes : level0);
+         level0 == NULL ? image.getBytes() : level0);
     
     // If necessary, send other mipmaps:
     if (needMipMaps) {
@@ -416,17 +418,17 @@ SoGLTextureImageElement::sendTex(SoState *state)
 	const GLubyte *prevLevel = NULL;
 	if (level0 == NULL) {
 		level0 = new unsigned char[newSize[0]*newSize[1]*numComponents];
-	    prevLevel = bytes;
+        prevLevel = image.getBytes();
 	}
 	else {
 	    prevLevel = level0;
 	}
     
 	int level = 0;
-	SbVec2s curSize = newSize;
+    SbVec3s curSize = newSize;
 	while (curSize[0] > 1 || curSize[1] > 1) {
 	    ++level;
-	    SbVec2s prevSize = curSize;
+        SbVec3s prevSize = curSize;
     
 	    // When we're box-filtering, we average the 4 pixels
 	    // [(curSize),(curSize+deltas)].  If mipmaps have already

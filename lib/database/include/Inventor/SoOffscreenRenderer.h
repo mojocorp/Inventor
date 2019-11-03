@@ -64,6 +64,7 @@
 #include <Inventor/SbColor.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/SbVec.h>
+#include <Inventor/SbImage.h>
 #include <X11/Xlib.h>
 
 class SoNode;
@@ -93,10 +94,10 @@ class SoOffscreenRenderer {
     ~SoOffscreenRenderer();
 
     enum Components {
-        LUMINANCE = 1,
-        LUMINANCE_TRANSPARENCY = 2,
-        RGB = 3,                      // The default
-        RGB_TRANSPARENCY = 4
+        LUMINANCE              = SbImage::Format_Luminance,
+        LUMINANCE_TRANSPARENCY = SbImage::Format_Luminance_Alpha,
+        RGB                    = SbImage::Format_RGB24, // The default
+        RGB_TRANSPARENCY       = SbImage::Format_RGBA32
     };
 
     static float	getScreenPixelsPerInch();
@@ -128,8 +129,11 @@ class SoOffscreenRenderer {
     SbBool		render( SoNode *scene );
     SbBool		render( SoPath *scene );
 
+	// Returns the SbImage containing the rendered image.
+    const SbImage & getImage() const { return pixelBuffer; }
+	
     // Return the buffer containing the rendering
-    unsigned char *     getBuffer() const;
+    const unsigned char *     getBuffer() const;
 
     // Write the buffer as a .rgb file into the given FILE
     SbBool		writeToRGB( FILE *fp ) const;
@@ -142,7 +146,7 @@ class SoOffscreenRenderer {
                                 const SbVec2f &printSize ) const;
 
   private:
-    unsigned char *	pixelBuffer;
+    SbImage             pixelBuffer;
     Components          comps;
     SbColor		backgroundColor;
     SoGLRenderAction	*userAction, *offAction;
@@ -170,9 +174,7 @@ class SoOffscreenRenderer {
     SbBool		setContext() const;
 
     // Return the format used in the rendering
-    void		getFormat( GLenum &format ) const;
-
-    static void		putHex( FILE *fp, char val, int &hexPos );
+    GLenum		getFormat() const;
 };
 
 #endif /* _SO_OFFSCREEN_RENDERER_ */

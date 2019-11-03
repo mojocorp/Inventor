@@ -1,7 +1,6 @@
 find_package(OpenGL REQUIRED)
 find_package(X11 REQUIRED)
 find_package(BISON REQUIRED)
-find_package(JPEG REQUIRED)
 
 # On Mac OS X, GLX is provided as a separate OpenGL implementation, different
 # from the standard OpenGL framework which provides support for GLUT and native
@@ -28,12 +27,14 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/SbCylinder.h
     database/include/Inventor/SbDict.h
     database/include/Inventor/SbFile.h
+    database/include/Inventor/SbImage.h
     database/include/Inventor/SbLine.h
     database/include/Inventor/SbLinear.h
     database/include/Inventor/SbMatrix.h
     database/include/Inventor/SbName.h
     database/include/Inventor/SbPlane.h
     database/include/Inventor/SbPList.h
+    database/include/Inventor/SbRefPtr.h
     database/include/Inventor/SbRotation.h
     database/include/Inventor/SbString.h
     database/include/Inventor/SbSphere.h
@@ -388,6 +389,7 @@ set(DATABASE_SOURCES
     database/src/sb/SbCylinder.c++
     database/src/sb/SbDict.c++
     database/src/sb/SbFile.c++
+    database/src/sb/SbImage.c++
     database/src/sb/SbLine.c++
     database/src/sb/SbMatrix.c++
     database/src/sb/SbName.c++
@@ -400,6 +402,15 @@ set(DATABASE_SOURCES
     database/src/sb/SbVec.c++
     database/src/sb/SbViewVolume.c++
     database/src/sb/SbViewportRegion.c++
+    database/src/sb/image/dds.c++
+    database/src/sb/image/dds.h
+    database/src/sb/image/image-eps.h
+    database/src/sb/image/image-epslib.c
+    database/src/sb/image/image-sgi.h
+    database/src/sb/image/image-sgilib.c
+    database/src/sb/image/image.c++
+    database/src/sb/image/image.h
+    database/src/sb/image/stb_image.c
     database/src/sb/projectors/SbCylinderPlaneProjector.c++
     database/src/sb/projectors/SbCylinderProjector.c++
     database/src/sb/projectors/SbCylinderSectionProjector.c++
@@ -619,7 +630,6 @@ set(DATABASE_SOURCES
     database/src/so/fields/SoSFVec2f.c++
     database/src/so/fields/SoSFVec3f.c++
     database/src/so/fields/SoSFVec4f.c++
-    database/src/so/nodes/readGIF.c
     database/src/so/nodes/SoAnnotation.c++
     database/src/so/nodes/SoArray.c++
     database/src/so/nodes/SoAsciiText.c++
@@ -704,7 +714,6 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoVertexShape.c++
     database/src/so/nodes/SoWWWAnchor.c++
     database/src/so/nodes/SoWWWInline.c++
-    database/src/so/nodes/readGIF.h
     database/src/so/sensors/SoAlarmSensor.c++
     database/src/so/sensors/SoDataSensor.c++
     database/src/so/sensors/SoDelayQueueSensor.c++
@@ -1030,8 +1039,10 @@ set(PRIVATE_HEADERS ${DATABASE_PRIVATE_HEADERS})
 set(SOURCES ${DATABASE_SOURCES} ${NODEKIT_SOURCES} ${INTERACTION_SOURCES})
 
 add_library (Inventor SHARED ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOURCES})
-target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} ${X11_GL_LIB} PRIVATE GLU freetype ${JPEG_LIBRARIES} image)
-target_include_directories (Inventor PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/database/include ${CMAKE_CURRENT_SOURCE_DIR}/nodekits/include ${CMAKE_CURRENT_SOURCE_DIR}/interaction/include)
+target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} ${X11_GL_LIB} PRIVATE GLU freetype)
+target_include_directories (Inventor
+                            PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/database/include ${CMAKE_CURRENT_SOURCE_DIR}/nodekits/include ${CMAKE_CURRENT_SOURCE_DIR}/interaction/include
+                            PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/database/src/sb ${CMAKE_CURRENT_SOURCE_DIR}/database/src/so)
 
 install(TARGETS Inventor CONFIGURATIONS Debug DESTINATION lib/InventorDebug COMPONENT devel)
 install(TARGETS Inventor CONFIGURATIONS Release DESTINATION lib)

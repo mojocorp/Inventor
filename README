@@ -26,13 +26,6 @@ TREE STRUCTURE
 		lib      - Inventor database, interaction, and nodekit source
 		libSoXt  - Inventor Xt components and viewers source
 		tools    - preprocessor for generating shape source files
-		libimage - library to read SGI RGB files
-		libFL    - font library (IRIX, Linux ix86, and Solaris only).
-			   Includes source code for Ang Bodhi's FreeType
-			   interface.  For more information, visit
-
-				http://www.geocities.com/angbodhi/download
-
 
 DEPENDENCIES
 

@@ -57,6 +57,7 @@
 #define  _SO_TEXTURE_IMAGE_ELEMENT
 
 #include <Inventor/SbColor.h>
+#include <Inventor/SbImage.h>
 #include <Inventor/elements/SoReplacedElement.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -77,20 +78,24 @@ SoEXTENDER class SoTextureImageElement : public SoReplacedElement {
 
     // sets the current image, wrap, and model:
     static void		set(SoState *state, SoNode *node,
-			    const SbVec2s &size, int numComponents,
-			    const unsigned char *bytes,
+                const SbImage &image,
 			    int wrapS, int wrapT, int model,
 			    const SbColor &blendColor);
 
-    static const unsigned char *get(SoState *state, SbVec2s &size,
-				    int &numComponents, int &wrapS,
-				    int &wrapT, int &model, 
+    static const SbImage & get(SoState *state,
+                    int &wrapS, int &wrapT, int &model,
 				    SbColor &blendColor);
+
+    // Deprecated
+    static const unsigned char *get(SoState *state, SbVec2s &size,
+                    int &numComponents, int &wrapS,
+                    int &wrapT, int &model,
+                    SbColor &blendColor);
 
     // Returns TRUE if the texture contains transparency info
     static SbBool	containsTransparency(SoState *state);
 
-    // Returns the default texture image
+    // Deprecated - Returns the default texture image
     static const unsigned char *getDefault(SbVec2s &s, int &nc);
 
     // Print info about image for debugging
@@ -101,14 +106,11 @@ SoEXTENDER class SoTextureImageElement : public SoReplacedElement {
     static void		initClass();
 
   protected:
-    virtual void	setElt(const SbVec2s &s, int nc,
-			       const unsigned char *bytes,
+    virtual void	setElt(const SbImage &image,
 			       int wrapS, int wrapT, int model,
 			       const SbColor &blendColor);
 
-    SbVec2s	size;
-    int		numComponents;
-    const unsigned char *bytes;
+    SbImage image;
     int		wrapS, wrapT, model;
     SbColor	blendColor;
 

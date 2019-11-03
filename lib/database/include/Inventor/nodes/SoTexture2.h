@@ -111,17 +111,13 @@ class SoTexture2 : public SoNode {
   SoINTERNAL public:
     static void		initClass();
 
-    // Read libimage-format file
-    static SbBool   readImage(const SbString& fname, int &w, int &h, int &nc,
-				unsigned char *&bytes);
-
   protected:
     // Reads stuff into instance. Returns FALSE on error.
     virtual SbBool	readInstance(SoInput *in, unsigned short flags);
 
     virtual ~SoTexture2();
 
-    int		    getReadStatus()		{ return readStatus; }
+    int		    getReadStatus()	const   { return readStatus; }
     void	    setReadStatus(int s)	{ readStatus = s; }
 
   private:
@@ -132,7 +128,6 @@ class SoTexture2 : public SoNode {
     static void		filenameChangedCB(void *, SoSensor *);
     
     int			readStatus;
-    
 
     // Display list info for this texture:
     SoGLDisplayList *renderList;
