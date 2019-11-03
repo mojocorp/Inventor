@@ -117,6 +117,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoGLModelMatrixElement.h
     database/include/Inventor/elements/SoGLNormalElement.h
     database/include/Inventor/elements/SoGLPointSizeElement.h
+    database/include/Inventor/elements/SoGLPolygonOffsetElement.h
     database/include/Inventor/elements/SoGLProjectionMatrixElement.h
     database/include/Inventor/elements/SoGLRenderPassElement.h
     database/include/Inventor/elements/SoGLShapeHintsElement.h
@@ -141,6 +142,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoPickRayElement.h
     database/include/Inventor/elements/SoPickStyleElement.h
     database/include/Inventor/elements/SoPointSizeElement.h
+    database/include/Inventor/elements/SoPolygonOffsetElement.h
     database/include/Inventor/elements/SoProfileCoordinateElement.h
     database/include/Inventor/elements/SoProfileElement.h
     database/include/Inventor/elements/SoProjectionMatrixElement.h
@@ -316,6 +318,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/nodes/SoPickStyle.h
     database/include/Inventor/nodes/SoPointLight.h
     database/include/Inventor/nodes/SoPointSet.h
+    database/include/Inventor/nodes/SoPolygonOffset.h
     database/include/Inventor/nodes/SoProfile.h
     database/include/Inventor/nodes/SoProfileCoordinate2.h
     database/include/Inventor/nodes/SoProfileCoordinate3.h
@@ -509,6 +512,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoGLModelMatrixElement.c++
     database/src/so/elements/SoGLNormalElement.c++
     database/src/so/elements/SoGLPointSizeElement.c++
+    database/src/so/elements/SoGLPolygonOffsetElement.c++
     database/src/so/elements/SoGLProjectionMatrixElement.c++
     database/src/so/elements/SoGLRenderPassElement.c++
     database/src/so/elements/SoGLShapeHintsElement.c++
@@ -533,6 +537,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoPickRayElement.c++
     database/src/so/elements/SoPickStyleElement.c++
     database/src/so/elements/SoPointSizeElement.c++
+    database/src/so/elements/SoPolygonOffsetElement.c++
     database/src/so/elements/SoProfileCoordinateElement.c++
     database/src/so/elements/SoProfileElement.c++
     database/src/so/elements/SoProjectionMatrixElement.c++
@@ -691,6 +696,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoPerspectiveCamera.c++
     database/src/so/nodes/SoPickStyle.c++
     database/src/so/nodes/SoPointLight.c++
+    database/src/so/nodes/SoPolygonOffset.c++
     database/src/so/nodes/SoProfile.c++
     database/src/so/nodes/SoProfileCoordinate2.c++
     database/src/so/nodes/SoProfileCoordinate3.c++

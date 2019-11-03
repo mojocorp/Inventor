@@ -99,6 +99,7 @@ SoElement::initElements()
     SoPickRayElement::initClass();
     SoPickStyleElement::initClass();
     SoPointSizeElement::initClass();
+    SoPolygonOffsetElement::initClass();
     SoProfileCoordinateElement::initClass();
     SoProfileElement::initClass();
     SoProjectionMatrixElement::initClass();
@@ -131,6 +132,7 @@ SoElement::initElements()
     SoGLModelMatrixElement::initClass();
     SoGLNormalElement::initClass();
     SoGLPointSizeElement::initClass();
+    SoGLPolygonOffsetElement::initClass();
     SoGLProjectionMatrixElement::initClass();
     SoGLRenderPassElement::initClass();
     SoGLShapeHintsElement::initClass();

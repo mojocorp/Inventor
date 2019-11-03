@@ -88,6 +88,7 @@
 #include <Inventor/elements/SoGLModelMatrixElement.h>
 #include <Inventor/elements/SoGLNormalElement.h>
 #include <Inventor/elements/SoGLPointSizeElement.h>
+#include <Inventor/elements/SoGLPolygonOffsetElement.h>
 #include <Inventor/elements/SoGLProjectionMatrixElement.h>
 #include <Inventor/elements/SoGLRenderPassElement.h>
 #include <Inventor/elements/SoGLShapeHintsElement.h>
@@ -111,6 +112,7 @@
 #include <Inventor/elements/SoPickRayElement.h>
 #include <Inventor/elements/SoPickStyleElement.h>
 #include <Inventor/elements/SoPointSizeElement.h>
+#include <Inventor/elements/SoPolygonOffsetElement.h>
 #include <Inventor/elements/SoProfileCoordinateElement.h>
 #include <Inventor/elements/SoProfileElement.h>
 #include <Inventor/elements/SoProjectionMatrixElement.h>
