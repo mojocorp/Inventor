@@ -63,6 +63,7 @@
 #include <Inventor/elements/SoTextureImageElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
+#include <Inventor/elements/SoTransparencyTypeElement.h>
 #include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/elements/SoGLDepthBufferElement.h>
 
@@ -85,6 +86,7 @@ SoGLRenderAction::initClass()
     SO_ENABLE(SoGLRenderAction, SoGLLazyElement);
     SO_ENABLE(SoGLRenderAction, SoGLRenderPassElement);
     SO_ENABLE(SoGLRenderAction, SoViewportRegionElement);
+    SO_ENABLE(SoGLRenderAction, SoTransparencyTypeElement);
     SO_ENABLE(SoGLRenderAction, SoGLDepthBufferElement);
 }
 
@@ -109,7 +111,7 @@ SoGLRenderAction::SoGLRenderAction(const SbViewportRegion &viewportRegion)
  
     abortCB		= NULL;
 
-    transpType  	= SCREEN_DOOR;
+    transpType          = (TransparencyType)SoTransparencyTypeElement::getDefault();
     doSmooth		= FALSE;
     numPasses		= 1;
     passUpdate		= FALSE;
@@ -501,10 +503,7 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
     SoGLCacheContextElement::set(state, (int) cacheContext, delayObjs,
 				 remoteRendering);
     
-    // Set the transparency bit in the ShapeStyle element
-    // and the lazy element.
-    SoShapeStyleElement::setTransparencyType(state,transpType);
-    SoLazyElement::setTransparencyType(state, transpType);
+    SoTransparencyTypeElement::set(state, (SoTransparencyTypeElement::TransparencyType)transpType);
     
     // Simple case of one pass
     if (getNumPasses() == 1) {

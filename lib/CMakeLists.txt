@@ -156,6 +156,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoTextureImageElement.h
     database/include/Inventor/elements/SoTextureMatrixElement.h
     database/include/Inventor/elements/SoTextureQualityElement.h
+    database/include/Inventor/elements/SoTransparencyTypeElement.h
     database/include/Inventor/elements/SoUnitsElement.h
     database/include/Inventor/elements/SoViewVolumeElement.h
     database/include/Inventor/elements/SoViewingMatrixElement.h
@@ -350,6 +351,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/nodes/SoTransformSeparator.h
     database/include/Inventor/nodes/SoTransformation.h
     database/include/Inventor/nodes/SoTranslation.h
+    database/include/Inventor/nodes/SoTransparencyType.h
     database/include/Inventor/nodes/SoTriangleStripSet.h
     database/include/Inventor/nodes/SoUnits.h
     database/include/Inventor/nodes/SoVertexProperty.h
@@ -550,6 +552,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoTextureImageElement.c++
     database/src/so/elements/SoTextureMatrixElement.c++
     database/src/so/elements/SoTextureQualityElement.c++
+    database/src/so/elements/SoTransparencyTypeElement.c++
     database/src/so/elements/SoUnitsElement.c++
     database/src/so/elements/SoViewVolumeElement.c++
     database/src/so/elements/SoViewingMatrixElement.c++
@@ -726,6 +729,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoTransformSeparator.c++
     database/src/so/nodes/SoTransformation.c++
     database/src/so/nodes/SoTranslation.c++
+    database/src/so/nodes/SoTransparencyType.c++
     database/src/so/nodes/SoUnits.c++
     database/src/so/nodes/SoUnknownNode.c++
     database/src/so/nodes/SoVertexProperty.c++
