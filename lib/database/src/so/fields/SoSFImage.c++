@@ -61,9 +61,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-// Use most of the standard stuff:
-SO__FIELD_ID_SOURCE(SoSFImage);
-SO__FIELD_EQ_SAME_SOURCE(SoSFImage);
+// Use standard definitions of all basic methods
+SO_SFIELD_SOURCE(SoSFImage, SbImage, const SbImage &);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -83,36 +82,6 @@ SoSFImage::initClass()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Constructor
-//
-// Use: public
-
-SoSFImage::SoSFImage()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    size[0] = size[1] = 0;
-    numComponents = 0;
-    bytes = NULL;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Destructor.
-//
-// Use: public
-
-SoSFImage::~SoSFImage()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    if (bytes != NULL) delete[] bytes;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
 //    Sets value, given image dimensions and bytes...
 //
 // Use: public
@@ -122,24 +91,23 @@ SoSFImage::setValue(const SbVec2s &s, int nc, const unsigned char *b)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (bytes != NULL) {
-	delete[] bytes;
-	bytes = NULL;
+    SbImage::Format fmt = SbImage::Format_Invalid;
+
+    switch(nc) {
+    case 1: fmt = SbImage::Format_Luminance; break;
+    case 2: fmt = SbImage::Format_Luminance_Alpha; break;
+    case 3: fmt = SbImage::Format_RGB24; break;
+    case 4: fmt = SbImage::Format_RGBA32; break;
+    default:
+#ifdef DEBUG
+    SoDebugError::postInfo("SoSFImage::setValue",
+               "Unsupported number of components %d, should be 1,2,3 or 4",
+               nc);
+#endif
+        break;
     }
 
-    size = s;
-    numComponents = nc;
-    
-    int numBytes = size[0]*size[1]*numComponents;
-
-    if (numBytes != 0) {
-	bytes = new unsigned char[numBytes];
-	memcpy(bytes, b, numBytes);
-    }
-    else
-        bytes = NULL;
-
-    valueChanged();
+    setValue(SbImage(s, fmt, s[0]*s[1]*nc, b));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -154,54 +122,10 @@ SoSFImage::getValue(SbVec2s &s, int &nc) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    evaluate();
+    s = SbVec2s(value.getSize().getValue());
+    nc = value.getNumComponents();
 
-    s = size;
-    nc = numComponents;
-    
-    return bytes;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Copy image from another field.
-//
-// Use: public
-
-const SoSFImage &
-SoSFImage::operator =(const SoSFImage &f)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SbVec2s s;
-    int nc;
-    const unsigned char *b = f.getValue(s, nc);
-    setValue(s, nc, b);
-
-    return *this;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Returns TRUE if field has same value as given field.
-//
-// Use: public
-
-int
-SoSFImage::operator ==(const SoSFImage &f) const
-//
-////////////////////////////////////////////////////////////////////////
-{
-    // Check easy stuff first
-    if (size != f.size || numComponents != f.numComponents)
-	return FALSE;
-
-    if (memcmp(bytes, f.bytes, size[0] * size[1] * numComponents) != 0)
-	return FALSE;
-
-    return TRUE;
+    return value.getConstBytes();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -216,9 +140,9 @@ SoSFImage::startEditing(SbVec2s &s, int &nc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    s = size;
-    nc = numComponents;
-    return bytes;
+    s = SbVec2s(value.getSize().getValue());
+    nc = value.getNumComponents();
+    return value.getBytes();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -248,13 +172,35 @@ SoSFImage::readValue(SoInput *in)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    SbVec2s size;
+    int numComponents;
     if (!in->read(size[0])  ||
-	!in->read(size[1]) ||
-	!in->read(numComponents))
-	return FALSE;
-    
-    if (bytes != NULL) delete[] bytes;
-    bytes = new unsigned char[size[0]*size[1]*numComponents];
+        !in->read(size[1]) ||
+        !in->read(numComponents))
+        return FALSE;
+
+    // Ignore empty images.
+    if (size[0] == 0 || size[1] == 0 || numComponents == 0)
+        return TRUE;
+
+    SbImage::Format fmt = SbImage::Format_Invalid;
+
+    switch(numComponents) {
+    case 1: fmt = SbImage::Format_Luminance; break;
+    case 2: fmt = SbImage::Format_Luminance_Alpha; break;
+    case 3: fmt = SbImage::Format_RGB24; break;
+    case 4: fmt = SbImage::Format_RGBA32; break;
+    default:
+#ifdef DEBUG
+    SoDebugError::postInfo("SoSFImage::readValue",
+               "Unsupported number of components %d, should be 1,2,3 or 4",
+               numComponents);
+#endif
+    return FALSE;
+    }
+
+    SbImage image(size, fmt, size[0]*size[1]*numComponents, NULL);
+    unsigned char *bytes = image.getBytes();
 
     int byte = 0;
     if (in->isBinary()) {
@@ -277,10 +223,9 @@ SoSFImage::readValue(SoInput *in)
 		}
 	    }
 	}
-    }
-    else {
-	for (int i = 0; i < size[0]*size[1]; i++) {
-	    uint32_t l;
+    } else {
+        for (int i = 0; i < size[0]*size[1]; i++) {
+            uint32_t l;
     
 	    if (!in->readHex(l)) return FALSE;
 	    for (int j = 0; j < numComponents; j++) {
@@ -289,6 +234,8 @@ SoSFImage::readValue(SoInput *in)
 	    }
 	}
     }
+
+    setValue(image);
 
     return TRUE;
 }
@@ -305,6 +252,10 @@ SoSFImage::writeValue(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    const SbVec3s & size = value.getSize();
+    int numComponents = value.getNumComponents();
+    const unsigned char * bytes = value.getConstBytes();
+
     out->write(size[0]);
 
     if (! out->isBinary())
@@ -319,9 +270,8 @@ SoSFImage::writeValue(SoOutput *out) const
 
     if (out->isBinary()) {
 	int numBytes = size[0] * size[1] * numComponents;
-	out->writeBinaryArray(bytes, numBytes);
-    }
-    else {
+        out->writeBinaryArray(bytes, numBytes);
+    } else {
 	int byte = 0;
 	for (int i = 0; i < size[0]*size[1]; i++) {
 	    uint32_t l = 0;

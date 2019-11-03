@@ -57,41 +57,8 @@
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoNode.h>
-
-// gross stuff to read images, grabbed from image.h and the image
-// library.  Had to grab it since the real .h file is not c++ compatible.
-extern "C" {
-
-typedef struct {
-    unsigned short      imagic;         /* stuff saved on disk . . */
-    unsigned short      type;
-    unsigned short      dim;
-    unsigned short      xsize;
-    unsigned short      ysize;
-    unsigned short      zsize;
-    uint32_t       min;
-    uint32_t       max;
-    uint32_t       wastebytes;
-    char                name[80];
-    uint32_t       colormap;
-} IMAGE;
-extern IMAGE *fiopen(int, const char *, int = 0, int = 0,
-                     int = 0, int = 0, int = 0);
-extern void putrow(IMAGE *, short *, unsigned int, unsigned int);
-extern void iclose(IMAGE *);
-};  /* end of extern "C" */
-
-#define TYPEMASK        0xff00
-#define BPPMASK         0x00ff
-#define ITYPE_VERBATIM  0x0000
-#define ITYPE_RLE       0x0100
-#define ISRLE(type)             (((type) & 0xff00) == ITYPE_RLE)
-#define ISVERBATIM(type)        (((type) & 0xff00) == ITYPE_VERBATIM)
-#define BPP(type)               ((type) & BPPMASK)
-#define RLE(bpp)                (ITYPE_RLE | (bpp))
-#define VERBATIM(bpp)           (ITYPE_VERBATIM | (bpp))
-#define IBUFSIZE(pixels)        ( (pixels+(pixels>>6))*sizeof(int32_t) )
-#define RLE_NOP         0x00
+#include <image/image-sgi.h>
+#include <image/image-eps.h>
 
 // Offscreen renderings will always be rendered as RGB images
 // Currently the OpenGL does not support storing alpha channel information
@@ -123,7 +90,6 @@ SoOffscreenRenderer::SoOffscreenRenderer(
 {
     offAction   = new SoGLRenderAction(viewportRegion);
     userAction  = NULL;
-    pixelBuffer = NULL;
     display     = NULL;
     comps       = SoOffscreenRenderer::RGB;
     backgroundColor.setValue(0.0, 0.0, 0.0);
@@ -144,7 +110,6 @@ SoOffscreenRenderer::SoOffscreenRenderer(
 {
     offAction   = new SoGLRenderAction(act->getViewportRegion());
     userAction  = act;
-    pixelBuffer = NULL;
     display     = NULL;
     comps       = SoOffscreenRenderer::RGB;
     backgroundColor.setValue(0.0, 0.0, 0.0);
@@ -163,9 +128,6 @@ SoOffscreenRenderer::~SoOffscreenRenderer()
 ////////////////////////////////////////////////////////////////////////
 {
     delete offAction;
-
-    if( pixelBuffer != NULL )
-        delete pixelBuffer;
 
     // Delete the pixmap, window, and context, as it is no longer needed
     if (display != NULL) {
@@ -325,10 +287,7 @@ SoOffscreenRenderer::render(SoNode *scene)
 ////////////////////////////////////////////////////////////////////////
 {
     // Delete the pixel buffer if it has been previously used.
-    if (pixelBuffer != NULL) {
-        delete pixelBuffer;
-        pixelBuffer = NULL;
-    }
+    pixelBuffer = SbImage();
 
     // Set the render action to use.
     SoGLRenderAction *act;
@@ -355,6 +314,8 @@ SoOffscreenRenderer::render(SoNode *scene)
     act->apply(scene);
     act->setCacheContext(oldContext);
 
+    readPixels();
+
     return TRUE;
 }
 
@@ -372,10 +333,7 @@ SoOffscreenRenderer::render(SoPath *scene)
 ////////////////////////////////////////////////////////////////////////
 {
     // Delete the pixel buffer if it has been previously used.
-    if (pixelBuffer != NULL) {
-        delete pixelBuffer;
-        pixelBuffer = NULL;
-    }
+    pixelBuffer = SbImage();
 
     // Set the render action to use.
     SoGLRenderAction *act;
@@ -404,6 +362,8 @@ SoOffscreenRenderer::render(SoPath *scene)
     act->apply(scene);
     act->setCacheContext(oldContext);
 
+    readPixels();
+
     return TRUE;
 }
 
@@ -414,23 +374,14 @@ SoOffscreenRenderer::render(SoPath *scene)
 //
 // Use: public
 
-unsigned char *
+const unsigned char *
 SoOffscreenRenderer::getBuffer() const
 
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // If the buffer has not been gotten yet, read the pixels into
-    // the buffer.  Return the buffer to the user.
-    if (pixelBuffer == NULL) {
-        
-        if (!setContext())
-            return NULL;
-        ((SoOffscreenRenderer *)this)->readPixels();
-    }
-
-    return pixelBuffer;
+    return pixelBuffer.getConstBytes();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -447,10 +398,6 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // Set the graphics context to be the offscreen pixmap
-    if (!setContext())
-        return FALSE;
-
     // Open an image file for writing
     int dimensions, components;
     if (comps == (SoOffscreenRenderer::LUMINANCE_TRANSPARENCY) ||
@@ -473,10 +420,9 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
     // Get the correct viewport size.
     const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
 
-    int ifile = fileno(fp);
-    IMAGE *image;
+    sgi_t *image;
 
-    if ((image = fiopen( ifile, "w", RLE(1), dimensions,
+    if ((image = sgiOpenFile( fp, SGI_WRITE, SGI_COMP_RLE, dimensions,
             (unsigned int)vpSize[0], (unsigned int)vpSize[1],
             components )) == NULL)
     {
@@ -488,11 +434,10 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
     }
 
     // Get the format of the pixmap data
-    GLenum format;
-    getFormat(format);
+    GLenum format = getFormat();
 
     // For each row in the pixel buffer, write the row into the image file
-    short *rowBuf = new short[vpSize[0]];
+    unsigned short *rowBuf = new unsigned short[vpSize[0]];
     unsigned char *pBuf = new unsigned char[vpSize[0]*components*2];
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
@@ -506,46 +451,22 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
         // by pixel, whereas the .rgb file stores pixel information arranged
         // by color component.  So scanlines of component data must be
         // accumulated before a row can be written.
-        unsigned char *tbuf = pBuf;
 
         // Convert each color component
         for (int comp=0; comp<components; comp++) {
-            short *trow = rowBuf;
+            unsigned short *trow = rowBuf;
 
             // Convert a row
-            tbuf = pBuf + comp;
+            const unsigned char *tbuf = pBuf + comp;
             for (int j=0; j<vpSize[0]; j++, tbuf += components)
                 *trow++ = (short)*tbuf;
-            putrow( image, rowBuf, row, comp );
+            sgiPutRow( image, rowBuf, row, comp );
         }
     }
-    iclose( image );
+    sgiClose( image );
     delete [] pBuf;
     delete [] rowBuf;
     return TRUE;
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Write a hex value into Encapsulated PostScript.
-//
-// Use: private
-
-void
-SoOffscreenRenderer::putHex(
-    FILE *fp,
-    char val,
-    int &hexPos )
-
-//
-////////////////////////////////////////////////////////////////////////
-{
-    fprintf(fp, "%02hhx", (unsigned char)val);
-    if (++hexPos >= 32) {
-        fprintf(fp, "\n");
-        hexPos = 0;
-    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -590,10 +511,6 @@ SoOffscreenRenderer::writeToPostScript(
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // Set the graphics context to be the offscreen pixmap
-    if (!setContext())
-        return FALSE;
-
     int components;
     if ((comps == LUMINANCE_TRANSPARENCY) ||
         (comps == RGB_TRANSPARENCY)) {
@@ -610,78 +527,7 @@ SoOffscreenRenderer::writeToPostScript(
         components = 3;
     }
 
-    // Get the correct viewport region
-    const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
- 
-    // Write the PostScript header
-    fprintf(fp, "%%!PS-Adobe-2.0 EPSF-1.2\n");
-    fprintf(fp, "%%%%Creator: IRIS program output\n");
-    fprintf(fp, "%%%%BoundingBox: 0 0 %d %d\n", vpSize[0], vpSize[1]);
-    fprintf(fp, "%%%%EndComments\n");
-    fprintf(fp, "gsave\n");
-
-    // Write the image into the PostScript file
-    fprintf(fp, "/bwproc {\n");
-    fprintf(fp, "    rgbproc\n");
-    fprintf(fp, "    dup length 3 idiv string 0 3 0\n");
-    fprintf(fp, "    5 -1 roll {\n");
-    fprintf(fp, "    add 2 1 roll 1 sub dup 0 eq\n");
-    fprintf(fp, "    { pop 3 idiv 3 -1 roll dup 4 -1 roll dup\n");
-    fprintf(fp, "        3 1 roll 5 -1 roll put 1 add 3 0 }\n");
-    fprintf(fp, "    { 2 1 roll } ifelse\n");
-    fprintf(fp, "    } forall\n");
-    fprintf(fp, "    pop pop pop\n");
-    fprintf(fp, "} def\n");
-    fprintf(fp, "systemdict /colorimage known not {\n");
-    fprintf(fp, "    /colorimage {\n");
-    fprintf(fp, "        pop\n");
-    fprintf(fp, "        pop\n");
-    fprintf(fp, "        /rgbproc exch def\n");
-    fprintf(fp, "        { bwproc } image\n");
-    fprintf(fp, "    } def\n");
-    fprintf(fp, "} if\n");
-    fprintf(fp, "/picstr %d string def\n", vpSize[0] * components);
-    fprintf(fp, "%d %d scale\n", (int)(printSize[0]*72.0),
-                                 (int)(printSize[1]*72.0));
-    fprintf(fp, "%d %d %d\n", vpSize[0], vpSize[1], 8);
-    fprintf(fp, "[%d 0 0 %d 0 0]\n", vpSize[0], vpSize[1]);
-    fprintf(fp, "{currentfile picstr readhexstring pop}\n");
-    fprintf(fp, "false %d\n", components);
-    fprintf(fp, "colorimage\n");
-    
-    // Get the format of the pixmap data
-    GLenum format;
-    getFormat(format);
-
-    // Convert the pixel values to ASCII hex and write them out.
-    unsigned char *pBuf = new unsigned char[vpSize[0]*components*2];
-
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    int numValues     = vpSize[0]*components;
-    int hexpos        = 0;
-
-    for (int row=0; row<vpSize[1]; row++) {
-
-        // Read the next scanline of pixels from the offscreen pixmap
-        glReadPixels(0, row, vpSize[0], 1, format,
-                 GL_UNSIGNED_BYTE, (GLvoid *)pBuf);
-
-        char *tbuf = (char *)pBuf;
-
-        // Write out the scanline
-        for (int i=0; i<numValues; i++)
-            putHex(fp, (char)*tbuf++, hexpos);
-    }
-
-    if (hexpos)
-        fprintf(fp, "\n");
-
-    // Finish up the PostScript file.
-    fprintf(fp, "grestore\n");
-    fprintf(fp, "showpage\n");
-
-    delete [] pBuf;
-    return TRUE;
+    return (writeEps(fp, pixelBuffer.getSize()[0], pixelBuffer.getSize()[1], components, pixelBuffer.getConstBytes(), printSize[0], printSize[1]) == 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -824,33 +670,32 @@ SoOffscreenRenderer::readPixels()
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    // Set the graphics context to be the offscreen pixmap
+    if (!setContext())
+        return;
+
     const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
 
-    GLenum format;
     int allocSize;
     switch (comps) {
         case LUMINANCE: 
-            format = GL_LUMINANCE;
             allocSize = vpSize[0] * vpSize[1] * 1;
             break;
         case LUMINANCE_TRANSPARENCY:
-            format = GL_LUMINANCE_ALPHA;
             allocSize = vpSize[0] * vpSize[1] * 2;
             break;
         case RGB:
-            format = GL_RGB;
             allocSize = vpSize[0] * vpSize[1] * 3;
             break;
         case RGB_TRANSPARENCY:
-            format = GL_RGBA;
             allocSize = vpSize[0] * vpSize[1] * 4;
             break;
     }
 
-    pixelBuffer = new unsigned char[allocSize];
+    pixelBuffer = SbImage(vpSize, SbImage::Format(comps), allocSize, NULL);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    glReadPixels(0, 0, vpSize[0], vpSize[1], format,
-                 GL_UNSIGNED_BYTE, (GLvoid *)pixelBuffer);
+    glReadPixels(0, 0, vpSize[0], vpSize[1], getFormat(),
+                 GL_UNSIGNED_BYTE, (GLvoid *)pixelBuffer.getBytes());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -883,25 +728,22 @@ SoOffscreenRenderer::setContext() const
 //
 // Use: private
 
-void
-SoOffscreenRenderer::getFormat( GLenum &format ) const
+GLenum
+SoOffscreenRenderer::getFormat() const
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
     switch (comps) {
         case LUMINANCE:
-            format = GL_LUMINANCE;
-            break;
+            return GL_LUMINANCE;
         case LUMINANCE_TRANSPARENCY:
-            format = GL_LUMINANCE_ALPHA;
-            break;
+            return GL_LUMINANCE_ALPHA;
         case RGB:
-            format = GL_RGB;
-            break;
+            return GL_RGB;
         case RGB_TRANSPARENCY:
-            format = GL_RGBA;
-            break;
+            return GL_RGBA;
     }
+    return GL_INVALID_ENUM;
 }
 

@@ -58,6 +58,7 @@
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec.h>
+#include <Inventor/SbImage.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -66,28 +67,21 @@
 //////////////////////////////////////////////////////////////////////////////
 
 class SoSFImage : public SoSField {
-    // Uses only some of the standard field stuff (because there is no
-    // SbImage type):
-    SO_SFIELD_REQUIRED_HEADER(SoSFImage);
-    SO_SFIELD_CONSTRUCTOR_HEADER(SoSFImage);
+    // Use standard field stuff
+    SO_SFIELD_HEADER(SoSFImage, SbImage, const SbImage &);
 
   public:
-    // getValue returns the size, number of components and a constant
+    // Deprecated - getValue returns the size, number of components and a constant
     // pointer to the image.
     const unsigned char *	getValue(SbVec2s &size, int &nc) const;
 
-    // setValue copies the image given to it into internal storage.
+    // Deprecated - setValue copies the image given to it into internal storage.
     // See startEditing() for a way of avoiding the copy if you are
     // doing a getValue() followed immediately by a setValue().
     void			setValue(const SbVec2s &size, int nc,
 					 const unsigned char *bytes);
-    
-    // Equality/inequality tests
-    int				operator ==(const SoSFImage &f) const;
-    int				operator !=(const SoSFImage &f) const
-	{ return ! ((*this) == f); }
 
-    // Avoid copying the values in/out, if you are just changing the
+    // Deprecated - Avoid copying the values in/out, if you are just changing the
     // bytes and not changing the dimensions of the image.  This is
     // equivalent to getValue, but returns a pointer you can change.
     unsigned char *		startEditing(SbVec2s &size, int &nc);
@@ -95,15 +89,6 @@ class SoSFImage : public SoSField {
 
   SoINTERNAL public:
     static void		initClass();
-
-  private:
-    SbVec2s		size;		// Width and height of image
-    int			numComponents;	// Number of components per pixel
-    unsigned char *	bytes;		// Array of pixels
-
-    // Reading and writing
-    virtual SbBool	readValue(SoInput *in);
-    virtual void	writeValue(SoOutput *out) const;
 };
 
 #endif /* _SO_SF_IMAGE_ */

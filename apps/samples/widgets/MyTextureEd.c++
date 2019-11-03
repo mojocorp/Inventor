@@ -74,6 +74,7 @@
 #include <Xm/MessageB.h>
 #include <Xm/FileSB.h>
 
+#include <Inventor/SbImage.h>
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodes/SoCube.h>
 #include <Inventor/nodes/SoText2.h>
@@ -92,37 +93,6 @@
 #include "_SoXtColorSlider.h"
 #include "MyThumbWheel.h"
 #include "MyTextureEditor.h"
-
-
-// stuff to read images (similar to gl/image.h)
-//  Although the IMAGE stuff is in  <gl/image.h>  the prototypes are
-//  incomplete and wrong...  So, we include this stuff here.
-//  Also, the types of some fields change from 5.3 to 6.2, so we use
-//  something to guarantee the size is 32 bits.
-
-extern "C" {
-#define CM_NORMAL		0	/* file contains rows of values which 
-					 * are either RGB values (zsize == 3) 
-					 * or greyramp values (zsize == 1) */
-typedef struct {
-    unsigned short      imagic;         /* stuff saved on disk . . */
-    unsigned short      type;
-    unsigned short      dim;
-    unsigned short      xsize;
-    unsigned short      ysize;
-    unsigned short      zsize;
-    uint32_t            min;
-    uint32_t            max;
-    uint32_t            wastebytes;     
-    char                name[80];
-    uint32_t            colormap;
-} IMAGE;
-extern IMAGE *iopen(const char *, const char *);
-extern void getrow(IMAGE *, short *, int, int);
-extern void iclose(IMAGE *);
-extern void i_seterror(void (*func)(char *));
-};
-
 
 /*
  * Defines
@@ -285,10 +255,6 @@ findPalette(char *str, SbPList *list)
     return pal;
 }
 
-static void imageErrorHandler(char *)
-{ }
-
-
 ////////////////////////////////////////////////////////////////////////
 //
 // constructor
@@ -354,10 +320,6 @@ MyTextureEditor::MyTextureEditor(
 	textureNames[i].name = textureNames[i].fullName = NULL;
 	textureNames[i].iconImage = new char[IMAGE_SIZE*IMAGE_SIZE*3]; // for RGB
     }
-    
-    // set the image lib error handler to prevent iopen() to exit()
-    // when given a non image fileName.
-    i_seterror(imageErrorHandler);
     
     // Build the widget tree, and let SoXtComponent know about our base widget.
     getPaletteNames();
@@ -1735,64 +1697,17 @@ MyTextureEditor::readScaledImage(
 ////////////////////////////////////////////////////////////////////////
 {
     // check to make sure file is a valid image file
-    IMAGE *image;
     if (file == NULL || file[0] == '\0')
-	return FALSE;
-    if ((image = iopen(file, "r")) == NULL)
-	return FALSE;
-    if (image->colormap != CM_NORMAL) {
-	iclose(image);
-	return FALSE;
-    }
+        return FALSE;
+
+    SbImage image;
+    if (!image.load(file))
+        return FALSE;
     
-    zsize = image->zsize;
+    zsize = image.getNumComponents();
     
-    // allocate needed memory
-    short *rbuf, *gbuf, *bbuf;
-    rbuf = new short[image->xsize];
-    if (image->zsize > 2) {
-	gbuf = new short[image->xsize];
-	bbuf = new short[image->xsize];
-    }
-    
-    // read image in, one row at a time
-    char *p = buf;
-    for (int row = 0; row < ysize; row++) {
-	// The row we'll read
-	int rrow = (row*image->ysize)/ysize;
-	
-	if (zsize > 2) {
-	    getrow(image, rbuf, rrow, 0);
-	    getrow(image, gbuf, rrow, 1);
-	    getrow(image, bbuf, rrow, 2);
-	}
-	else
-	    getrow(image, rbuf, rrow, 0);
-	
-	// store these into an unsigned byte RGB format
-	for (int i=0; i < xsize; i++) {
-	    int ri = (i*image->xsize)/xsize;
-	    if (zsize > 2) {
-		*p++ = rbuf[ri];
-		*p++ = gbuf[ri];
-		*p++ = bbuf[ri];
-	    }
-	    else {
-		*p++ = rbuf[ri];
-		*p++ = rbuf[ri];
-		*p++ = rbuf[ri];
-	    }
-	}
-    }
-    
-    // delete image buffers
-    delete [] rbuf;
-    if (zsize > 2) {
-	delete [] gbuf;
-	delete [] bbuf;
-    }
-    
-    iclose(image);
+    memcpy(buf, image.getConstBytes(), image.getNumBytes());
+
     return TRUE;
 }
 
@@ -1809,64 +1724,21 @@ MyTextureEditor::readImage(char *file, int &xsize, int &ysize, int &zsize)
 ////////////////////////////////////////////////////////////////////////
 {
     // check to make sure file is a valid image file
-    IMAGE *image;
     if (file == NULL || file[0] == '\0')
-	return NULL;
-    if ((image = iopen(file, "r")) == NULL)
-	return NULL;
-    if (image->colormap != CM_NORMAL) {
-	iclose(image);
-	return NULL;
-    }
+        return NULL;
+
+    SbImage image;
+    if (!image.load(file))
+        return FALSE;
     
-    xsize = image->xsize;
-    ysize = image->ysize;
-    zsize = image->zsize;
+    xsize = image.getSize()[0];
+    ysize = image.getSize()[1];
+    zsize = image.getNumComponents();
     
     // allocate needed memory
-    short *rbuf, *gbuf, *bbuf;
-    char *buf = new char[image->xsize * image->ysize * 3];
-    rbuf = new short[image->xsize];
-    if (image->zsize > 2) {
-	gbuf = new short[image->xsize];
-	bbuf = new short[image->xsize];
-    }
-    
-    // read image in, one row at a time
-    char *p = buf;
-    for (int row = 0; row < image->ysize; row++) {
-	
-	if (image->zsize > 2) {
-	    getrow(image, rbuf, row, 0);
-	    getrow(image, gbuf, row, 1);
-	    getrow(image, bbuf, row, 2);
-	}
-	else
-	    getrow(image, rbuf, row, 0);
-	
-	// store these into an unsigned byte RGB format
-	for (int i=0; i < image->xsize; i++) {
-	    if (image->zsize > 2) {
-		*p++ = rbuf[i];
-		*p++ = gbuf[i];
-		*p++ = bbuf[i];
-	    }
-	    else {
-		*p++ = rbuf[i];
-		*p++ = rbuf[i];
-		*p++ = rbuf[i];
-	    }
-	}
-    }
-    
-    // delete image buffers
-    delete [] rbuf;
-    if (zsize > 2) {
-	delete [] gbuf;
-	delete [] bbuf;
-    }
-    
-    iclose(image);
+    char *buf = new char[xsize * ysize * 3];
+    memcpy(buf, image.getConstBytes(), image.getNumBytes());
+
     return buf;
 }
 

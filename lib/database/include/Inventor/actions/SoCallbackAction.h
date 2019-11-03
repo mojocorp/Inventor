@@ -58,6 +58,7 @@
 
 #include <Inventor/SbBox.h>
 #include <Inventor/SbViewVolume.h>
+#include <Inventor/SbImage.h>
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/nodes/SoComplexity.h>
 #include <Inventor/nodes/SoDrawStyle.h>
@@ -239,8 +240,7 @@ class SoCallbackAction : public SoAction {
     SoTextureCoordinateBinding::Binding	getTextureCoordinateBinding() const;
     const SbColor &			getTextureBlendColor() const;
     // Returns NULL if no texture is enabled
-    const unsigned char *		getTextureImage(SbVec2s &size,
-							int &numComps) const;
+    SbImage	getTextureImage() const;
     const SbMatrix &			getTextureMatrix() const;
     SoTexture2::Model	getTextureModel() const;
     SoTexture2::Wrap			getTextureWrapS() const;

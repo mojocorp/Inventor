@@ -1,7 +1,7 @@
 #ifndef _SO_GL_
 #define _SO_GL_
 
-#include <Inventor/SbBasic.h>
+#include <machine.h>
 
 #ifdef SB_OS_MACX
 #   include <OpenGL/gl.h>
