@@ -34,6 +34,7 @@
  *
  */
 
+#include <Inventor/SbDict.h>
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoSeparator.h>

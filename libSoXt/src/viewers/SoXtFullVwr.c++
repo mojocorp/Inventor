@@ -74,6 +74,7 @@
 #include <Xm/Text.h>
 #include <Sgm/ThumbWheel.h>
 #include <Xm/MessageB.h>
+#include <Xm/ComboBox.h>
 
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/Xt/SoXt.h>
@@ -192,7 +193,8 @@ typedef struct {
 	char *to;
 	char *nearPlane;
 	char *farPlane;
-	char *cameraRotation;
+    char *stereoOffset;
+    char *stereoBalance;
 	char *stereoErrorTitle;
 	char *stereoError;
 	char *preferences;
@@ -211,7 +213,8 @@ static char *defaults[]={
 	"to:",
 	"near plane:",
 	"far plane:",
-	"camera rotation:",
+    "camera offset:",
+    "parallax balance:",
 	"Stereo Error Dialog",
 	"Stereo Viewing can't be set on this machine.",
 	"Preferences...",
@@ -1060,24 +1063,26 @@ SoXtFullViewer::getResources(SoXtResource *xr)
 	rl.nearPlane      = defaults[6];
     if (!xr->getResource( "farPlane",       "FarPlane",       rl.farPlane ))
 	rl.farPlane       = defaults[7];
-    if (!xr->getResource( "cameraRotation", "CameraRotation", rl.cameraRotation ))
-	rl.cameraRotation = defaults[8];
+    if (!xr->getResource( "stereoOffset", "StereoOffset", rl.stereoOffset ))
+    rl.stereoOffset = defaults[8];
+    if (!xr->getResource( "stereoBalance", "StereoBalance", rl.stereoBalance ))
+    rl.stereoBalance = defaults[9];
     //
     if (!xr->getResource( "stereoErrorTitle", "StereoErrorTitle", rl.stereoErrorTitle ))
-	rl.stereoErrorTitle = defaults[9];
+    rl.stereoErrorTitle = defaults[10];
     if (!xr->getResource( "stereoError",      "StereoError",      rl.stereoError ))
-	rl.stereoError      = defaults[10];
+    rl.stereoError      = defaults[11];
     //
     if (!xr->getResource( "preferences",      "Preferences",      rl.preferences ))
-	rl.preferences      = defaults[11];
+    rl.preferences      = defaults[12];
     if (!xr->getResource( "viewerMenu",       "ViewerMenu",       rl.viewerMenu ))
-	rl.viewerMenu       = defaults[12];
+    rl.viewerMenu       = defaults[13];
     if (!xr->getResource( "viewerSpeed",      "ViewerSpeed",      rl.viewerSpeed ))
-	rl.viewerSpeed      = defaults[13];
+    rl.viewerSpeed      = defaults[14];
     if (!xr->getResource( "increase",          "Increase",         rl.increase ))
-	rl.increase         = defaults[14];
+    rl.increase         = defaults[15];
     if (!xr->getResource( "decrease",          "Decrease",         rl.decrease ))
-	rl.decrease         = defaults[15];
+    rl.decrease         = defaults[16];
 
 
 }
@@ -2205,7 +2210,7 @@ SoXtFullViewer::createStereoPrefSheetGuts(Widget dialog)
     
     // call this routine to bring the additional UI (making it look like
     // the user pressed the toggle).
-    stereoWheelForm = NULL;
+    stereoForm = NULL;
     if ( isStereoViewing() )
 	SoXtFullViewer::stereoPrefSheetToggleCB(toggle, form, NULL);
     
@@ -3102,122 +3107,216 @@ SoXtFullViewer::stereoPrefSheetToggleCB(Widget toggle, Widget parent, void *)
     SoXtFullViewer *v;
     XtVaGetValues(toggle, XmNuserData, &v, NULL);
     
-    //
-    // checks to make sure stereo viewing can be set, else
-    // grey the UI and bring and error message.
-    //
     SbBool toggleState = XmToggleButtonGetState(toggle);
-    SbBool sameState = (toggleState == v->isStereoViewing());
-    if (! sameState)
-	v->setStereoViewing(toggleState);
-    if (toggleState && ! v->isStereoViewing()) {
-	TOGGLE_OFF(toggle);
-	XtVaSetValues(toggle, XmNsensitive, FALSE, NULL);
-	XtVaSetValues(v->stereoLabel, XmNsensitive, FALSE, NULL);
-	SoXt::createSimpleErrorDialog(toggle, rl.stereoErrorTitle, rl.stereoError);
-	return;
-    }
-    
     // show/hide the eye spacing thumbwheel
-    if ( ! v->isStereoViewing() ) {
-	if (v->stereoWheelForm != NULL) {
-	    XtDestroyWidget( v->stereoWheelForm );
-	    v->stereoWheelForm = NULL;
-	}
+    if ( ! toggleState ) {
+        if (v->stereoForm != NULL) {
+            XtDestroyWidget( v->stereoForm );
+            v->stereoForm = NULL;
+        }
     }
     else {
-	if (v->stereoWheelForm != NULL)
-	    return;
-	Widget label, thumb, text;
-	Arg args[12];
-	int n;
-	
-	// create a form to hold everything together
-	Widget form = XtCreateWidget("Stereo thumb form", xmFormWidgetClass, 
-	    parent, NULL, 0);
-	v->stereoWheelForm = form;
-	
-	// create the label
-	label = XtCreateWidget( rl.cameraRotation, xmLabelGadgetClass, 
-	    form, NULL, 0);
-	
-	// allocate the thumbwheel
-	n = 0;
-	XtSetArg(args[n], XmNvalue, 0); n++;
-	XtSetArg(args[n], SgNangleRange, 0); n++;
-	XtSetArg(args[n], SgNunitsPerRotation, 360); n++;
-	XtSetArg(args[n], SgNshowHomeButton, FALSE); n++;
-	XtSetArg(args[n], XmNhighlightThickness, 0); n++;
-	XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
-	thumb = SgCreateThumbWheel(form, NULL, args, n);
-	
-	XtAddCallback(thumb, XmNvalueChangedCallback, 
-	    (XtCallbackProc) SoXtFullViewer::stereoWheelCB, (XtPointer) v);
-	XtAddCallback(thumb, XmNdragCallback, 
-	    (XtCallbackProc) SoXtFullViewer::stereoWheelCB, (XtPointer) v);
-	v->stereoWheelVal = 0;
-	
-	// allocate the text field
-	n = 0;
-	char str[15];
-	sprintf(str, "%.4f", v->getStereoOffset());
-	XtSetArg(args[n], XmNvalue, str); n++;
-	XtSetArg(args[n], XmNhighlightThickness, 1); n++;
-	XtSetArg(args[n], XmNcolumns, 6); n++;
-	v->stereoField = text = XtCreateWidget("", xmTextWidgetClass, 
-	    form, args, n);
-	XtAddCallback(text, XmNactivateCallback, 
-	    (XtCallbackProc) SoXtFullViewer::stereoFieldCB,
-	    (XtPointer) v);
-	
-	// layout
-	n = 0;
-	XtSetArg(args[n], XmNleftAttachment,	XmATTACH_FORM); n++;
-	XtSetArg(args[n], XmNleftOffset,	20); n++;
-	XtSetArg(args[n], XmNtopAttachment,	XmATTACH_WIDGET); n++;
-	XtSetArg(args[n], XmNtopWidget,		toggle); n++;
-	XtSetArg(args[n], XmNtopOffset,		2); n++;
-	XtSetValues(form, args, n);
-	
-	n = 0;
-	XtSetArg(args[n], XmNrightAttachment,   XmATTACH_FORM); n++;
-	XtSetArg(args[n], XmNtopAttachment,	XmATTACH_FORM); n++;
-	XtSetValues(text, args, n);
-	
-	n = 0;
-	XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
-	XtSetArg(args[n], XmNbottomWidget,	text); n++;
-	XtSetArg(args[n], XmNbottomOffset,	3); n++;
-	XtSetArg(args[n], XmNrightAttachment,   XmATTACH_WIDGET); n++;
-	XtSetArg(args[n], XmNrightWidget,	text); n++;
-	XtSetArg(args[n], XmNrightOffset,	3); n++;
-	XtSetValues(thumb, args, n);
-	
-	n = 0;
-	XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
-	XtSetArg(args[n], XmNbottomWidget,	thumb); n++;
-	XtSetArg(args[n], XmNrightAttachment,   XmATTACH_WIDGET); n++;
-	XtSetArg(args[n], XmNrightWidget,	thumb); n++;
-	XtSetArg(args[n], XmNrightOffset,	5); n++;
-	XtSetValues(label, args, n);
-	
-	// manage children
-	XtManageChild(form);
-	XtManageChild(text);
-	XtManageChild(thumb);
-	XtManageChild(label);
-	
-#ifdef SB_OS_IRIX
-	// bring a dialog to tell the user to look at setmon to set
-	// the monitor to stereo mode
-	if (! sameState)
-	    createStereoInfoDialog(SoXt::getShellWidget(toggle));
-#endif
+        if (v->stereoForm != NULL)
+            return;
+
+        Arg args[12];
+        int n;
+
+        // create a form to hold everything together
+        Widget form = XtCreateWidget("Stereo thumb form", xmFormWidgetClass, parent, NULL, 0);
+        v->stereoForm = form;
+
+        // create the combobox
+        char *stype[] = { "Raw Stereo (quad buffer)",
+                           "Anaglyph Red/Cyan",
+                           "Anaglyph Blue/Yellow",
+                           "Anaglyph Green/Magenta" };
+        int count = XtNumber (stype);
+        XmStringTable    str_list;
+        str_list = (XmStringTable) XtMalloc (count * sizeof (XmString *));
+
+        for (int i = 0; i < count; i++)
+            str_list[i] = XmStringCreateLocalized (stype[i]);
+        n = 0;
+        XtSetArg (args[n], XmNitems, str_list);  n++;
+        XtSetArg (args[n], XmNitemCount, count); n++;
+        Widget combo = XmCreateDropDownList (form, "combo", args, n);
+
+        int stereoTypeIndex = v->getStereoType() - SoXtViewer::MONOSCOPIC;
+        if (stereoTypeIndex < SoXtViewer::QUADBUFFER)
+            stereoTypeIndex = SoXtViewer::QUADBUFFER;
+
+        //
+        // checks to make sure stereo viewing can be set, else
+        // grey the UI.
+        //
+        v->setStereoBuffer(true);
+        if (!v->isStereoBuffer())
+            stereoTypeIndex++;
+
+        XmComboBoxSelectItem( combo, str_list[stereoTypeIndex + 1] );
+
+        for (int i = 0; i < n; i++)
+            XmStringFree (str_list[i]);
+        XtFree ((char*) str_list);
+
+        XtAddCallback (combo, XmNselectionCallback, (XtCallbackProc)SoXtFullViewer::stereoTypeComboCB, (XtPointer) v);
+
+        // create the labels
+        Widget typeLabel = XtCreateWidget( "type:", xmLabelGadgetClass, form, NULL, 0);
+        Widget offsetLabel = XtCreateWidget( rl.stereoOffset, xmLabelGadgetClass, form, NULL, 0);
+        Widget balanceLabel = XtCreateWidget( rl.stereoBalance, xmLabelGadgetClass, form, NULL, 0);
+
+        // allocate the offset thumbwheel
+        n = 0;
+        XtSetArg(args[n], XmNvalue, 0); n++;
+        XtSetArg(args[n], SgNangleRange, 0); n++;
+        XtSetArg(args[n], SgNunitsPerRotation, 360); n++;
+        XtSetArg(args[n], SgNshowHomeButton, FALSE); n++;
+        XtSetArg(args[n], XmNhighlightThickness, 0); n++;
+        XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
+        Widget offsetThumb = SgCreateThumbWheel(form, NULL, args, n);
+
+        XtAddCallback(offsetThumb, XmNvalueChangedCallback,
+            (XtCallbackProc) SoXtFullViewer::stereoOffsetWheelCB, (XtPointer) v);
+        XtAddCallback(offsetThumb, XmNdragCallback,
+            (XtCallbackProc) SoXtFullViewer::stereoOffsetWheelCB, (XtPointer) v);
+        v->stereoOffsetWheelVal = 0;
+
+        // allocate the balance thumbwheel
+        n = 0;
+        XtSetArg(args[n], XmNvalue, 0); n++;
+        XtSetArg(args[n], SgNangleRange, 0); n++;
+        XtSetArg(args[n], SgNunitsPerRotation, 360); n++;
+        XtSetArg(args[n], SgNshowHomeButton, FALSE); n++;
+        XtSetArg(args[n], XmNhighlightThickness, 0); n++;
+        XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
+        Widget balanceThumb = SgCreateThumbWheel(form, NULL, args, n);
+
+        XtAddCallback(balanceThumb, XmNvalueChangedCallback,
+            (XtCallbackProc) SoXtFullViewer::stereoBalanceWheelCB, (XtPointer) v);
+        XtAddCallback(balanceThumb, XmNdragCallback,
+            (XtCallbackProc) SoXtFullViewer::stereoBalanceWheelCB, (XtPointer) v);
+        v->stereoBalanceWheelVal = 0;
+
+        // allocate the offset text field
+        n = 0;
+        char str[15];
+        sprintf(str, "%.4f", v->getStereoOffset());
+        XtSetArg(args[n], XmNvalue, str); n++;
+        XtSetArg(args[n], XmNhighlightThickness, 1); n++;
+        XtSetArg(args[n], XmNcolumns, 6); n++;
+        v->stereoOffsetField = XtCreateWidget("", xmTextWidgetClass, form, args, n);
+        XtAddCallback(v->stereoOffsetField, XmNactivateCallback,
+            (XtCallbackProc) SoXtFullViewer::stereoOffsetFieldCB,
+            (XtPointer) v);
+
+        // allocate the balance text field
+        n = 0;
+        sprintf(str, "%.4f", v->getStereoBalance());
+        XtSetArg(args[n], XmNvalue, str); n++;
+        XtSetArg(args[n], XmNhighlightThickness, 1); n++;
+        XtSetArg(args[n], XmNcolumns, 6); n++;
+        v->stereoBalanceField = XtCreateWidget("", xmTextWidgetClass, form, args, n);
+        XtAddCallback(v->stereoBalanceField, XmNactivateCallback,
+            (XtCallbackProc) SoXtFullViewer::stereoBalanceFieldCB,
+            (XtPointer) v);
+
+        // layout
+        n = 0;
+        XtSetArg(args[n], XmNleftAttachment,	XmATTACH_FORM); n++;
+        XtSetArg(args[n], XmNleftOffset,	20); n++;
+        XtSetArg(args[n], XmNtopAttachment,	XmATTACH_WIDGET); n++;
+        XtSetArg(args[n], XmNtopWidget,		toggle); n++;
+        XtSetArg(args[n], XmNtopOffset,		2); n++;
+        XtSetValues(form, args, n);
+
+        n = 0;
+        XtSetArg(args[n], XmNrightAttachment,   XmATTACH_FORM); n++;
+        XtSetArg(args[n], XmNtopAttachment,	XmATTACH_FORM); n++;
+        XtSetValues(combo, args, n);
+
+        n = 0;
+        XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
+        XtSetArg(args[n], XmNbottomWidget,	combo); n++;
+        XtSetArg(args[n], XmNrightAttachment,   XmATTACH_WIDGET); n++;
+        XtSetArg(args[n], XmNrightWidget,	combo); n++;
+        XtSetArg(args[n], XmNrightOffset,	5); n++;
+        XtSetValues(typeLabel, args, n);
+
+        n = 0;
+        XtSetArg(args[n], XmNrightAttachment,   XmATTACH_FORM); n++;
+        XtSetArg(args[n], XmNtopAttachment,	XmATTACH_FORM); n++;
+        XtSetArg(args[n], XmNtopAttachment,	XmATTACH_WIDGET); n++;
+        XtSetArg(args[n], XmNtopWidget,		combo); n++;
+        XtSetArg(args[n], XmNtopOffset,		2); n++;
+        XtSetValues(v->stereoOffsetField, args, n);
+
+        n = 0;
+        XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
+        XtSetArg(args[n], XmNbottomWidget,	v->stereoOffsetField); n++;
+        XtSetArg(args[n], XmNbottomOffset,	3); n++;
+        XtSetArg(args[n], XmNrightAttachment,   XmATTACH_WIDGET); n++;
+        XtSetArg(args[n], XmNrightWidget,	v->stereoOffsetField); n++;
+        XtSetArg(args[n], XmNrightOffset,	3); n++;
+        XtSetValues(offsetThumb, args, n);
+
+        n = 0;
+        XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
+        XtSetArg(args[n], XmNbottomWidget,	offsetThumb); n++;
+        XtSetArg(args[n], XmNrightAttachment,   XmATTACH_WIDGET); n++;
+        XtSetArg(args[n], XmNrightWidget,	offsetThumb); n++;
+        XtSetArg(args[n], XmNrightOffset,	5); n++;
+        XtSetValues(offsetLabel, args, n);
+
+        n = 0;
+        XtSetArg(args[n], XmNrightAttachment,   XmATTACH_FORM); n++;
+        XtSetArg(args[n], XmNtopAttachment,	XmATTACH_FORM); n++;
+        XtSetArg(args[n], XmNtopAttachment,	XmATTACH_WIDGET); n++;
+        XtSetArg(args[n], XmNtopWidget,		v->stereoOffsetField); n++;
+        XtSetArg(args[n], XmNtopOffset,		2); n++;
+        XtSetValues(v->stereoBalanceField, args, n);
+
+        n = 0;
+        XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
+        XtSetArg(args[n], XmNbottomWidget,	v->stereoBalanceField); n++;
+        XtSetArg(args[n], XmNbottomOffset,	3); n++;
+        XtSetArg(args[n], XmNrightAttachment,   XmATTACH_WIDGET); n++;
+        XtSetArg(args[n], XmNrightWidget,	v->stereoBalanceField); n++;
+        XtSetArg(args[n], XmNrightOffset,	3); n++;
+        XtSetValues(balanceThumb, args, n);
+
+        n = 0;
+        XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
+        XtSetArg(args[n], XmNbottomWidget,	balanceThumb); n++;
+        XtSetArg(args[n], XmNrightAttachment,   XmATTACH_WIDGET); n++;
+        XtSetArg(args[n], XmNrightWidget,	balanceThumb); n++;
+        XtSetArg(args[n], XmNrightOffset,	5); n++;
+        XtSetValues(balanceLabel, args, n);
+
+        // manage children
+        XtManageChild(form);
+        XtManageChild(combo);
+        XtManageChild(v->stereoOffsetField);
+        XtManageChild(v->stereoBalanceField);
+        XtManageChild(offsetThumb);
+        XtManageChild(balanceThumb);
+        XtManageChild(typeLabel);
+        XtManageChild(offsetLabel);
+        XtManageChild(balanceLabel);
     }
 }
 
 void
-SoXtFullViewer::stereoWheelCB(Widget, SoXtFullViewer *v, XtPointer *d)
+SoXtFullViewer::stereoTypeComboCB(Widget, SoXtFullViewer *v, XtPointer *d)
+{
+    XmComboBoxCallbackStruct *cb = (XmComboBoxCallbackStruct *) d;
+
+    v->setStereoType(StereoType(SoXtViewer::QUADBUFFER + cb->item_position));
+}
+
+void
+SoXtFullViewer::stereoOffsetWheelCB(Widget, SoXtFullViewer *v, XtPointer *d)
 {
     SgThumbWheelCallbackStruct *data = (SgThumbWheelCallbackStruct *) d;
     
@@ -3230,13 +3329,13 @@ SoXtFullViewer::stereoWheelCB(Widget, SoXtFullViewer *v, XtPointer *d)
 	
 	// shorter/grow the stereo camera offset
 	v->setStereoOffset( v->getStereoOffset() * 
-	    powf(80.0, (data->value - v->stereoWheelVal) / 360.0) );
-	v->stereoWheelVal = data->value;
+        powf(80.0, (data->value - v->stereoOffsetWheelVal) / 360.0) );
+    v->stereoOffsetWheelVal = data->value;
 	
 	// update the text field
 	char str[15];
 	sprintf(str, "%.4f", v->getStereoOffset());
-	XmTextSetString(v->stereoField, str);
+    XmTextSetString(v->stereoOffsetField, str);
 	
 	v->scheduleRedraw();
     }
@@ -3249,7 +3348,38 @@ SoXtFullViewer::stereoWheelCB(Widget, SoXtFullViewer *v, XtPointer *d)
 }
 
 void
-SoXtFullViewer::stereoFieldCB(Widget field, SoXtFullViewer *v, void *)
+SoXtFullViewer::stereoBalanceWheelCB(Widget, SoXtFullViewer *v, XtPointer *d)
+{
+    SgThumbWheelCallbackStruct *data = (SgThumbWheelCallbackStruct *) d;
+
+    if (data->reason == XmCR_DRAG) {
+    // for the first move, invoke the start callbacks
+    if (firstDrag) {
+        v->interactiveCountInc();
+        firstDrag = FALSE;
+    }
+
+    // shorter/grow the stereo camera offset
+    v->setStereoBalance(v->getStereoBalance() *
+        powf(80.0, (data->value - v->stereoBalanceWheelVal) / 360.0) );
+    v->stereoBalanceWheelVal = data->value;
+
+    // update the text field
+    char str[15];
+    sprintf(str, "%.4f", v->getStereoBalance());
+    XmTextSetString(v->stereoBalanceField, str);
+
+    v->scheduleRedraw();
+    }
+    else {
+    // reason = XmCR_VALUE_CHANGED, invoke the finish callbacks
+    v->interactiveCountDec();
+    firstDrag = TRUE;
+    }
+}
+
+void
+SoXtFullViewer::stereoOffsetFieldCB(Widget field, SoXtFullViewer *v, void *)
 {
     // get text value from the label and update camera
     char *str = XmTextGetString(field);
@@ -3265,6 +3395,27 @@ SoXtFullViewer::stereoFieldCB(Widget field, SoXtFullViewer *v, void *)
     sprintf(valStr, "%.4f", v->getStereoOffset());
     XmTextSetString(field, valStr);
     
+    // make the text field loose the focus
+    XmProcessTraversal(SoXt::getShellWidget(field), XmTRAVERSE_CURRENT);
+}
+
+void
+SoXtFullViewer::stereoBalanceFieldCB(Widget field, SoXtFullViewer *v, void *)
+{
+    // get text value from the label and update camera
+    char *str = XmTextGetString(field);
+    float val;
+    if ( sscanf(str, "%f", &val) && val > 0) {
+    v->setStereoBalance(val);
+    v->scheduleRedraw();
+    }
+    free(str);
+
+    // reformat text field
+    char valStr[10];
+    sprintf(valStr, "%.4f", v->getStereoBalance());
+    XmTextSetString(field, valStr);
+
     // make the text field loose the focus
     XmProcessTraversal(SoXt::getShellWidget(field), XmTRAVERSE_CURRENT);
 }

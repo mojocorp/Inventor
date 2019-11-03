@@ -144,6 +144,14 @@ class SoXtViewer : public SoXtRenderArea {
 	BUFFER_INTERACTIVE	// changes to double only when interactive
     };
     
+    enum StereoType{
+        MONOSCOPIC = 0,
+        QUADBUFFER,
+        ANAGLYPH_RED_CYAN,
+        ANAGLYPH_BLUE_YELLOW,
+        ANAGLYPH_GREEN_MAGENTA
+    };
+
     //
     // Sets/gets the scene graph to render. Whenever a new scene is supplied
     // the first camera encountered will be by default used as the edited
@@ -260,10 +268,14 @@ class SoXtViewer : public SoXtRenderArea {
     // The user can also specify what the offset between the two views 
     // should be.
     //
-    virtual void    setStereoViewing(SbBool onOrOff);
-    virtual SbBool  isStereoViewing();
-    void	    setStereoOffset(float dist)	{ stereoOffset = dist; }
-    float	    getStereoOffset()	{ return stereoOffset; }
+    virtual SbBool  isStereoViewing() const;
+    virtual void setStereoType(StereoType type);
+    StereoType getStereoType() const;
+
+    void    setStereoOffset(float dist)	{ stereoOffset = dist; }
+    float   getStereoOffset() const { return stereoOffset; }
+    void    setStereoBalance(float dist)	{ stereoBalance = dist; }
+    float   getStereoBalance() const { return stereoBalance; }
     
     //
     // Seek methods
@@ -454,7 +466,9 @@ class SoXtViewer : public SoXtRenderArea {
     SoType		cameraType;
     BufferType		bufferType;
     SbBool  	    	interactiveFlag; // TRUE while doing interactive work
+    StereoType  stereoType;
     float		stereoOffset;
+    float       stereoBalance;
     SoXtInputFocus	*inputFocus;
     
     // draw style vars

@@ -76,6 +76,7 @@
 #include <Xm/ToggleBG.h>
 #include <Xm/DropTrans.h>
 
+#include <Inventor/SbDict.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/misc/SoByteStream.h>
 #include <Inventor/SoNodeKitPath.h>

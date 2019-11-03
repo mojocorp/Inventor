@@ -292,11 +292,14 @@ class SoXtFullViewer : public SoXtViewer {
     static void	    clipFieldCB(Widget, SoXtFullViewer *, void *);
     
     // stereo viewing pref sheet callbacks and variables
-    Widget	    stereoWheelForm, stereoField, stereoLabel;
-    int		    stereoWheelVal;
+    Widget	    stereoForm, stereoOffsetField, stereoBalanceField, stereoLabel;
+    int		    stereoOffsetWheelVal, stereoBalanceWheelVal;
     static void	    stereoPrefSheetToggleCB(Widget, Widget, void *);
-    static void	    stereoWheelCB(Widget, SoXtFullViewer *, XtPointer *);
-    static void	    stereoFieldCB(Widget, SoXtFullViewer *, void *);
+    static void	    stereoTypeComboCB(Widget, SoXtFullViewer *, XtPointer *);
+    static void	    stereoOffsetWheelCB(Widget, SoXtFullViewer *, XtPointer *);
+    static void	    stereoBalanceWheelCB(Widget, SoXtFullViewer *, XtPointer *);
+    static void	    stereoOffsetFieldCB(Widget, SoXtFullViewer *, void *);
+    static void	    stereoBalanceFieldCB(Widget, SoXtFullViewer *, void *);
     
     // dolly speed pref sheet callbacks
     static void	    speedIncPrefSheetButtonCB(Widget, SoXtFullViewer *, void *);
