@@ -149,6 +149,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoReplacedElement.h
     database/include/Inventor/elements/SoShapeHintsElement.h
     database/include/Inventor/elements/SoShapeStyleElement.h
+    database/include/Inventor/elements/SoStereoElement.h
     database/include/Inventor/elements/SoSubElement.h
     database/include/Inventor/elements/SoSwitchElement.h
     database/include/Inventor/elements/SoTextureCoordinateBindingElement.h
@@ -546,6 +547,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoReplacedElement.c++
     database/src/so/elements/SoShapeHintsElement.c++
     database/src/so/elements/SoShapeStyleElement.c++
+    database/src/so/elements/SoStereoElement.c++
     database/src/so/elements/SoSwitchElement.c++
     database/src/so/elements/SoTextureCoordinateBindingElement.c++
     database/src/so/elements/SoTextureCoordinateElement.c++

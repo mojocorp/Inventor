@@ -87,6 +87,7 @@ SoGLRenderAction::initClass()
     SO_ENABLE(SoGLRenderAction, SoGLRenderPassElement);
     SO_ENABLE(SoGLRenderAction, SoViewportRegionElement);
     SO_ENABLE(SoGLRenderAction, SoTransparencyTypeElement);
+    SO_ENABLE(SoGLRenderAction, SoStereoElement);
     SO_ENABLE(SoGLRenderAction, SoGLDepthBufferElement);
 }
 
@@ -131,6 +132,10 @@ SoGLRenderAction::SoGLRenderAction(const SbViewportRegion &viewportRegion)
     // These three bits keep track of which view-volume planes we need
     // to test against; by default, all bits are 1.
     cullBits		= 7;
+
+    stereoMode      = MONOSCOPIC;
+    stereoOffset    = SoStereoElement::getDefaultOffset();
+    stereoBalance   = SoStereoElement::getDefaultBalace();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -293,6 +298,51 @@ SoGLRenderAction::invalidateState()
 
     // Also invalidate what we think we know...
     whatChanged = ALL;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+//
+//
+//
+// Use: public, virtual
+
+void
+SoGLRenderAction::setStereoMode(StereoMode mode)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    stereoMode = mode;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+//
+//
+//
+// Use: public, virtual
+
+void
+SoGLRenderAction::setStereoOffset(float offset)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    stereoOffset = offset;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+//
+//
+//
+// Use: public, virtual
+
+void
+SoGLRenderAction::setStereoBalance(float balance)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    stereoBalance = balance;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -505,6 +555,8 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
     
     SoTransparencyTypeElement::set(state, (SoTransparencyTypeElement::TransparencyType)transpType);
     
+    SoStereoElement::set(state, (SoStereoElement::StereoMode)stereoMode, stereoOffset, stereoBalance);
+
     // Simple case of one pass
     if (getNumPasses() == 1) {
 	renderPass(node, 0);

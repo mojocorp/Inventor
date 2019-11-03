@@ -69,6 +69,7 @@
 #include <Inventor/elements/SoGLViewportRegionElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/elements/SoViewVolumeElement.h>
+#include <Inventor/elements/SoStereoElement.h>
 #include <Inventor/nodes/SoCamera.h>
 #include <stdlib.h>
 
@@ -362,6 +363,41 @@ SoCamera::GLRender(SoGLRenderAction *action)
 
     // Compute the view volume
     SoCamera::computeView(vpReg, viewVol, changeRegion);
+
+    SoStereoElement::StereoMode stereoMode;
+    float stereoOffset;
+    float stereoBalance;
+    SoStereoElement::get(state, stereoMode, stereoOffset, stereoBalance);
+
+    if (stereoMode != SoStereoElement::MONOSCOPIC) {
+        SbMatrix mx;
+        mx = orientation.getValue();
+        SbVec3f rightVector(mx[0][0], mx[0][1], mx[0][2]);
+
+        const float focalDist = std::max(focalDistance.getValue() * stereoBalance, viewVol.getNearDist());
+
+        // The eye separation is 1/30 of the focal length.
+        float halfOffset = focalDist / 30 * stereoOffset * 0.5f;
+
+        if (stereoMode == SoStereoElement::LEFT_VIEW)
+            halfOffset = -halfOffset;
+
+        // Asymmetric frustum - stereoscopic
+        // http://paulbourke.net/miscellaneous/stereographics/stereorender/
+        float halfWidth = viewVol.getWidth() * 0.5f;
+
+        float clipNear   = viewVol.getNearDist();
+        float clipFar    = clipNear + viewVol.getDepth();
+        float ndfl       = clipNear / focalDist;
+        float clipLeft   = -halfWidth - halfOffset * ndfl;
+        float clipRight  =  halfWidth - halfOffset * ndfl;
+        float clipTop    = viewVol.getHeight() * 0.5f;
+        float clipBottom = -clipTop;
+
+        viewVol.frustum(clipLeft, clipRight, clipBottom, clipTop, clipNear, clipFar);
+        viewVol.rotateCamera(orientation.getValue());
+        viewVol.translateCamera(position.getValue() + rightVector * halfOffset);
+    }
 
     // Draw frame, if necessary, using current (full) viewport
     if (changeRegion) {
