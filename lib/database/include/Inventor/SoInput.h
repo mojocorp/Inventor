@@ -155,7 +155,7 @@ class SoInput {
     FILE *		getCurFile() const;
 
     // Returns full name of current file, or NULL if reading from buffer
-    const char *	getCurFileName() const;
+    const SbString & getCurFileName() const;
 
     // Sets up buffer to read from and its size
     void		setBuffer(void *bufPointer, size_t bufSize);

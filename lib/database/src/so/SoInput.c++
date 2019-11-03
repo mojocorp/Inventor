@@ -562,16 +562,16 @@ SoInput::getCurFile() const
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Returns full name of current file, or NULL if reading from buffer.
+//    Returns full name of current file, or empty string if reading from buffer.
 //
 // Use: public
 
-const char *
+const SbString &
 SoInput::getCurFileName() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return curFile->fullName.getString();
+    return curFile->fullName;
 }
 
 ////////////////////////////////////////////////////////////////////////
