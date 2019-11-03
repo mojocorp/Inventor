@@ -95,28 +95,28 @@ SoEXTENDER class SoOverrideElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoOverrideElement);
 
-    enum {
-	AMBIENT_COLOR	= 0x1,
-	COLOR_INDEX	= 0x2,
-	COMPLEXITY	= 0x4,
-	COMPLEXITY_TYPE	= 0x8,
-	CREASE_ANGLE	= 0x10,
-	DIFFUSE_COLOR	= 0x20,
-	DRAW_STYLE	= 0x40,
-	EMISSIVE_COLOR	= 0x80,
-	FONT_NAME	= 0x100,
-	FONT_SIZE	= 0x200,
-	LIGHT_MODEL	= 0x400,
-	LINE_PATTERN	= 0x800,
-	LINE_WIDTH	= 0x1000,
-	MATERIAL_BINDING= 0x2000, 
-	POINT_SIZE	= 0x4000,
-	PICK_STYLE	= 0x8000,
-	SHAPE_HINTS	= 0x10000,
-	SHININESS	= 0x20000,
-	SPECULAR_COLOR	= 0x40000,
-// TRANSPARENCY is same as diffuse color:  overriding one will override both.
-	TRANSPARENCY	= 0x20
+    enum Flags {
+        AMBIENT_COLOR	= (1<<0),
+        COLOR_INDEX	    = (1<<1),
+        COMPLEXITY	    = (1<<2),
+        COMPLEXITY_TYPE	= (1<<3),
+        CREASE_ANGLE	= (1<<4),
+        DIFFUSE_COLOR	= (1<<5),
+        DRAW_STYLE	    = (1<<6),
+        EMISSIVE_COLOR	= (1<<7),
+        FONT_NAME	    = (1<<8),
+        FONT_SIZE	    = (1<<9),
+        LIGHT_MODEL	    = (1<<10),
+        LINE_PATTERN	= (1<<11),
+        LINE_WIDTH	    = (1<<12),
+        MATERIAL_BINDING= (1<<13),
+        POINT_SIZE	    = (1<<14),
+        PICK_STYLE	    = (1<<15),
+        SHAPE_HINTS	    = (1<<16),
+        SHININESS	    = (1<<17),
+        SPECULAR_COLOR	= (1<<18),
+        // TRANSPARENCY is same as diffuse color:  overriding one will override both.
+        TRANSPARENCY	= DIFFUSE_COLOR
     };
 
   public:
