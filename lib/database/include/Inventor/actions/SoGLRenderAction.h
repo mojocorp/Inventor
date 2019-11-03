@@ -62,6 +62,7 @@
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
 #include <Inventor/elements/SoTransparencyTypeElement.h>
+#include <Inventor/elements/SoStereoElement.h>
 
 class	SoGetBoundingBoxAction;
 
@@ -181,6 +182,22 @@ class SoGLRenderAction : public SoAction {
     // Invalidate the state, forcing it to be recreated at the next apply
     virtual void	invalidateState();
     
+    enum StereoMode {
+      MONOSCOPIC = SoStereoElement::MONOSCOPIC,
+      LEFT_VIEW  = SoStereoElement::LEFT_VIEW,
+      RIGHT_VIEW = SoStereoElement::RIGHT_VIEW
+    };
+
+    /// Sets the stereo mode.
+    void setStereoMode(StereoMode mode);
+
+    /// Sets the stereo offset.
+    /// This is the eye separation when doing stereo rendering.
+    /// Note that the stereo pair can be reversed by supplying a negative eye separation.
+    void setStereoOffset(float offset);
+
+    /// Sets the stereo balance adjustment.
+    void setStereoBalance(float balance);
   SoEXTENDER public:
     // Returns current rendering pass number
     int			getCurPass() const		{ return curPass; }
@@ -286,6 +303,10 @@ class SoGLRenderAction : public SoAction {
     // Keep track of which planes we need to view-volume cull test
     // against:
     int			cullBits;
+
+    StereoMode  stereoMode;
+    float       stereoOffset;
+    float       stereoBalance;
 };
 
 #endif /* _SO_GL_RENDER_ACTION_ */

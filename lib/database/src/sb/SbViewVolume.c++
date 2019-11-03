@@ -716,6 +716,37 @@ SbViewVolume::perspective(float fovy, float aspect,
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+// Set up the frustum for perspective projection.
+// It has the same arguments and functionality as the corresponding 
+// OpenGL glFrustum() function. 
+//
+// Use: public
+void 
+SbViewVolume::frustum(float left, float right,
+                      float bottom, float top,
+                      float nearval, float farval)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    type = PERSPECTIVE;
+
+    projPoint.setValue(0.0f, 0.0f, 0.0f);
+    projDir.setValue(0.0f, 0.0f, -1.0f);
+    nearDist = nearval;
+    nearToFar = farval - nearval;
+
+    llfO.setValue(left, bottom, -nearval);
+    lrfO.setValue(right, bottom, -nearval);
+    ulfO.setValue(left, top, -nearval);
+
+    llf		= llfO + projPoint; // For compatibility
+    lrf		= lrfO + projPoint;
+    ulf		= ulfO + projPoint;
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    Translate the camera viewpoint.  Note that this accomplishes
 //    the reverse of doing a GL translate() command after defining a
 //    camera, which translates the scene viewed by the camera.
