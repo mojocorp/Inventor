@@ -116,6 +116,7 @@ SoEXTENDER class SoOverrideElement : public SoElement {
         SHININESS	    = (1<<17),
         SPECULAR_COLOR	= (1<<18),
         POLYGON_OFFSET  = (1<<19),
+        TRANSPARENCY_TYPE = (1<<20),
         // TRANSPARENCY is same as diffuse color:  overriding one will override both.
         TRANSPARENCY	= DIFFUSE_COLOR
     };
@@ -215,7 +216,11 @@ SoEXTENDER class SoOverrideElement : public SoElement {
     static SbBool	getTransparencyOverride(SoState *state)
 	{ SO_GET_OVERRIDE(TRANSPARENCY); }
 
-    // Returns TRUE if SoPolygonOffsetElement is overridden.
+    // Returns TRUE if SoTransparencyTypeElement is overridden.
+    static SbBool getTransparencyTypeOverride(SoState *state)
+        { SO_GET_OVERRIDE(TRANSPARENCY_TYPE); }
+
+    /// Returns TRUE if SoPolygonOffsetElement is overridden.
     static SbBool	getPolygonOffsetOverride(SoState *state)
         { SO_GET_OVERRIDE(POLYGON_OFFSET); }
 
@@ -325,6 +330,9 @@ SoEXTENDER class SoOverrideElement : public SoElement {
     static void		setTransparencyOverride(SoState *state, SoNode *,
 						 SbBool override);
 	
+    // set override flag for SoTransparencyTypeElement.
+    static void setTransparencyTypeOverride(SoState *state, SoNode *, SbBool override)
+        { SO_SET_OVERRIDE(TRANSPARENCY_TYPE); }
 
     // Prints element (for debugging)
     virtual void	print(FILE *fp) const;

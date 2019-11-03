@@ -61,6 +61,7 @@
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/elements/SoShapeStyleElement.h>
+#include <Inventor/elements/SoTransparencyTypeElement.h>
 
 class	SoGetBoundingBoxAction;
 
@@ -83,13 +84,13 @@ class SoGLRenderAction : public SoAction {
 
     // Various levels of transparency rendering quality
     enum TransparencyType {
-	SCREEN_DOOR,		// Use GL patterns for screen-door transparency
-	ADD,			// Use additive GL alpha blending
-	DELAYED_ADD,		// Use additive blending, do transp objs last
-	SORTED_OBJECT_ADD,	// Use additive blending, sort objects by bbox
-	BLEND,			// Use GL alpha blending
-	DELAYED_BLEND,		// Use GL alpha blending, do transp objs last
-	SORTED_OBJECT_BLEND	// Use GL alpha blending, sort objects by bbox
+        SCREEN_DOOR         = SoTransparencyTypeElement::SCREEN_DOOR,    ///< Use stipple patterns for screen-door transparency
+        ADD                 = SoTransparencyTypeElement::ADD,                ///< Use additive alpha blending
+        DELAYED_ADD         = SoTransparencyTypeElement::DELAYED_ADD,        ///< Uses additive blending, rendering all transparent objects after opaque ones
+        SORTED_OBJECT_ADD   = SoTransparencyTypeElement::SORTED_OBJECT_ADD,  ///< Same as DELAYED_ADD, but sorts transparent objects by distances of bounding boxes from camera
+        BLEND               = SoTransparencyTypeElement::BLEND,              ///< Uses multiplicative alpha blending
+        DELAYED_BLEND       = SoTransparencyTypeElement::DELAYED_BLEND,      ///< Uses multiplicative alpha blending, rendering all transparent objects after opaque ones
+        SORTED_OBJECT_BLEND = SoTransparencyTypeElement::SORTED_OBJECT_BLEND ///< Same as DELAYED_BLEND, but sorts transparent objects by distances of bounding boxes from camera
     };
 
     // Possible return codes from a render abort callback
