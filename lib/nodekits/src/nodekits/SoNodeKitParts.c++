@@ -98,7 +98,7 @@ SoNodekitParts::SoNodekitParts( SoBaseKit *rootOfKit )
     catalog = rootOfKit->getNodekitCatalog();  // assign the catalog
 
     numEntries = catalog->getNumEntries();        // make a empty node list
-    fieldList = new SoSFNode *[numEntries];
+    fieldList.resize(numEntries);
 
     // Make each field in the fieldList point to the field corresponding
     // to the similarly indexed catalog entry.
@@ -147,8 +147,6 @@ SoNodekitParts::~SoNodekitParts()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // delete the nodelist
-    delete [ /*numEntries*/ ] fieldList;
 }
 
 ////////////////////////////////////////////////////////////////////////
