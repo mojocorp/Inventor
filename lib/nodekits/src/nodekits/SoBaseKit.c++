@@ -929,7 +929,7 @@ SoBaseKit::readInstance( SoInput *in, unsigned short /*flags*/ )
     const int      numParts       = nodekitPartsList->numEntries;
 	// firstPartField is 1. Part 0 is 'this' and is not treated here.
 	int      firstPartField = 1;
-	SoSFNode **realPartFldLst = nodekitPartsList->fieldList;
+    const std::vector<SoSFNode*> &realPartFldLst = nodekitPartsList->fieldList;
     std::vector<SoSFNode*> tempPartFldLst(numParts);
 
 	int i;
@@ -1266,7 +1266,7 @@ SoBaseKit::copyContents(const SoFieldContainer *fromFC, SbBool copyConnections)
     const int numParts = origKit->nodekitPartsList->numEntries;
 	// firstPartField is 1. Part 0 is 'this' and is not treated here.
 	int      firstPartField = 1;
-	SoSFNode **realPartFldLst = nodekitPartsList->fieldList;
+    const std::vector<SoSFNode*> &realPartFldLst = nodekitPartsList->fieldList;
     std::vector<SoSFNode*> tempPartFldLst (numParts);
 
 	int i;
@@ -1282,7 +1282,7 @@ SoBaseKit::copyContents(const SoFieldContainer *fromFC, SbBool copyConnections)
     //       set the part to be that node.
     //  [2d] Copy the default flag.
 	const SoNodekitCatalog *cat = origKit->getNodekitCatalog();
-	SoSFNode **origPartFldLst   = origKit->nodekitPartsList->fieldList;
+    const std::vector<SoSFNode*> &origPartFldLst   = origKit->nodekitPartsList->fieldList;
 	SoNode  *copyPart,            *origPart;
 	SoNode  *copyParentPartNode,  *origParentPartNode;
 	SoGroup *copyParentPartGroup, *origParentPartGroup;
@@ -1638,7 +1638,7 @@ SoBaseKit::write( SoWriteAction *action )
 	if (fieldDataForWriting != NULL) {
 
 	    const SoNodekitCatalog *cat      = getNodekitCatalog();
-	    SoSFNode               **pFields = nodekitPartsList->fieldList;
+        const std::vector<SoSFNode*> &pFields = nodekitPartsList->fieldList;
 	    int                    numParts  = nodekitPartsList->numEntries;
 
 	    // Determine if we must force any default parts to write and
@@ -2021,7 +2021,7 @@ void
 SoBaseKit::setDefaultOnNonWritingFields()
 {
     const SoNodekitCatalog *cat      = getNodekitCatalog();
-    SoSFNode               **pFields = nodekitPartsList->fieldList;
+    const std::vector<SoSFNode*> &pFields = nodekitPartsList->fieldList;
     int                    numP      = nodekitPartsList->numEntries;
 
     SoNode *node;
@@ -2102,7 +2102,7 @@ void
 SoBaseKit::undoSetDefaultOnFieldsThatMustWrite()
 {
     const SoNodekitCatalog *cat      = getNodekitCatalog();
-    SoSFNode               **pFields = nodekitPartsList->fieldList;
+    const std::vector<SoSFNode*> &pFields = nodekitPartsList->fieldList;
     int                    numP      = nodekitPartsList->numEntries;
 
     SoNode *node;

@@ -64,6 +64,7 @@
 #ifndef  _SO_NODEKIT_PARTS
 #define  _SO_NODEKIT_PARTS
 
+#include <vector>
 #include <Inventor/nodekits/SoNodekitCatalog.h>
 
 class SoNodeKitListPart;
@@ -94,7 +95,7 @@ SoEXTENDER class SoNodekitParts {
     int			    numEntries;   // must be made equal to numEntries
 					  // in the catalog
     SoBaseKit               *rootPointer; // Pointer to the part 'this'
-    SoSFNode                **fieldList;  // each 'part' is actually just
+    std::vector<SoSFNode*> fieldList;  // each 'part' is actually just
 					  // a node, stored in a field
 
     SbBool makePart( const int partNum );
