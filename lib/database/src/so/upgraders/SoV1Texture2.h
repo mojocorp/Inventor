@@ -132,6 +132,7 @@ class SoV1Texture2 : public SoUpgrader {
 
   SoINTERNAL public:
     static void		initClass();
+    static void	finishClass();
 
     virtual SoNode	*createNewNode();
 

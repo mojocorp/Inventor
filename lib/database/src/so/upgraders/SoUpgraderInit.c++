@@ -101,6 +101,50 @@ SoUpgrader::initClasses()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
+//    Clean-up.
+//
+// Use: public, static
+
+void
+SoUpgrader::finishClasses()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    SoV2LOD::finishClass();
+    SoV2VertexProperty::finishClass();
+    SoV2MaterialIndex::finishClass();
+    SoV2FontStyle::finishClass();
+    SoV2AsciiText::finishClass();
+    SoV2WWWInline::finishClass();
+    SoV2WWWAnchor::finishClass();
+    SoV2Text3::finishClass();
+    SoV2Text2::finishClass();
+
+    SoV1TextureCoordinateSphere::finishClass();
+    SoV1TextureCoordinatePlane::finishClass();
+    SoV1TextureCoordinateEnvironment::finishClass();
+    SoV1TextureCoordinateCylinder::finishClass();
+    SoV1TextureCoordinateCube::finishClass();
+    SoV1Text3::finishClass();
+    SoV1Texture2::finishClass();
+    SoV1ShapeHints::finishClass();
+    SoV1Separator::finishClass();
+    SoV1PickStyle::finishClass();
+    SoV1PackedColor::finishClass();
+    SoV1Material::finishClass();
+    SoV1LightModel::finishClass();
+    SoV1LayerGroup::finishClass();
+    SoV1IndexedTriangleMesh::finishClass();
+    SoV1Environment::finishClass();
+    SoV1DrawStyle::finishClass();
+    SoV1CustomNode::finishClass();
+
+    SoUpgrader::finishClass();
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
 //    This initializes the SoV1CustomNode class.
 //
 // Use: internal
@@ -328,15 +372,6 @@ SoV2Text2::initClass()
 //    This initializes the SoV1Texture2 class.
 //
 // Use: internal
-
-void
-SoV1Texture2::initClass()
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SO_UPGRADER_INIT_CLASS(SoV1Texture2);
-    SO_REGISTER_UPGRADER(Texture2, 1.0);
-}
 
 ////////////////////////////////////////////////////////////////////////
 //

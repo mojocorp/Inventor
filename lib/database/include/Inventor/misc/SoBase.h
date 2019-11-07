@@ -172,6 +172,7 @@ class SoBase {
 
     // Setup type information
     static void		initClass();
+    static void finishClass();
 
     // Increments the current write counter at the start of a write operation
     static void		incrementCurrentWriteCounter()

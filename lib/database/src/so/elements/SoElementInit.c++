@@ -150,3 +150,18 @@ SoElement::initElements()
     SoBBoxModelMatrixElement::initClass();
     SoLocalBBoxMatrixElement::initClass();
 }
+
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up.
+// Use: public, static
+
+void
+SoElement::finishElements()
+//
+////////////////////////////////////////////////////////////////////////
+{
+
+}

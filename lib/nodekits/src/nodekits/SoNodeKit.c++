@@ -118,3 +118,37 @@ SoNodeKit::init()
 	initialized = TRUE;
     }
 }
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up all node kit class.
+//
+// Use: public
+
+void
+SoNodeKit::finish()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Only initialize once
+    if (initialized) {
+        SoV1NodeKit::finish();
+        SoNodeKitDetail::finishClass();
+        SoSceneKit::finishClass();
+        SoCameraKit::finishClass();
+        SoLightKit::finishClass();
+        SoShapeKit::finishClass();
+        SoWrapperKit::finishClass();
+        SoSeparatorKit::finishClass();
+        SoAppearanceKit::finishClass();
+        SoBaseKit::finishClass();
+
+        SoNodeKitListPart::finishClass();
+        SoNodekitCatalog::finishClass();
+
+        SoDB::finish();
+
+        initialized = FALSE;
+    }
+}

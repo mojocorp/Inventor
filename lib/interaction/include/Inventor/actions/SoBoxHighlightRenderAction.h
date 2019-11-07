@@ -123,6 +123,7 @@ class SoBoxHighlightRenderAction : public SoGLRenderAction {
    
  SoINTERNAL public: 
     static void initClass();
+    static void finishClass();
 
   protected:
     void updateBbox(SoPath *p);

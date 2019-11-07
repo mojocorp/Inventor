@@ -215,6 +215,9 @@ class SoInput {
     // 	Init function sets up global directory list
     static void		init();
 
+    // Clean-up.
+    static void finish();
+
     // Constructor that gets reference dictionary from another SoInput
     SoInput(SoInput *dictIn);
 

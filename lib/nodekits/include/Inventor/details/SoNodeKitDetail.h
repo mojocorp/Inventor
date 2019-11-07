@@ -109,6 +109,7 @@ class SoNodeKitDetail : public SoDetail {
 
   SoINTERNAL public:
     static void		initClass();
+    static void	finishClass();
 
   protected:
     SoBaseKit       *myNodeKit;

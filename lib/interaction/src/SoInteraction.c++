@@ -135,3 +135,41 @@ SoInteraction::init()
 	initialized = TRUE;
     }
 }
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Cleanu-up all interaction class.
+//
+// Use: public
+
+void
+SoInteraction::finish()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    // Only initialize once
+    if (initialized) {
+        SoLineHighlightRenderAction::finishClass();
+        SoBoxHighlightRenderAction::finishClass();
+        SoSelection::finishClass();
+        SoSpotLightManip::finishClass();
+        SoDirectionalLightManip::finishClass();
+        SoPointLightManip::finishClass();
+        SoTransformerManip::finishClass();
+        SoTransformBoxManip::finishClass();
+        SoTrackballManip::finishClass();
+        SoTabBoxManip::finishClass();
+        SoJackManip::finishClass();
+        SoHandleBoxManip::finishClass();
+        SoCenterballManip::finishClass();
+        SoTransformManip::finishClass();
+        SoDragger::finishClass();
+        SoInteractionKit::finishClass();
+        SoSurroundScale::finishClass();
+        SoAntiSquish::finishClass();
+        SoNodeKit::finish();
+        SoDB::finish();
+        initialized = FALSE;
+    }
+}

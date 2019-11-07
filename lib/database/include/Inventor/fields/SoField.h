@@ -170,6 +170,7 @@ class SoField {
 
     // Initialize ALL Inventor node classes
     static void		initClasses();
+    static void finishClasses();
 
     // Sets default flag
     void		setDefault(SbBool def)	{ flags.hasDefault = def; }

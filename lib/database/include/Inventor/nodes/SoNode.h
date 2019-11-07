@@ -158,6 +158,7 @@ class SoNode : public SoFieldContainer {
 
     // Initialize ALL Inventor node classes
     static void		initClasses();
+    static void finishClasses();
 
     // Initiates notification from an instance.
     virtual void	startNotify();

@@ -177,6 +177,7 @@ class SoPath : public SoBase {
   SoINTERNAL public:
     // Initializes path class
     static void		initClass();
+    static void finishClass();
 
     // This is called when a node in the path chain has a child added.
     // The passed index is the index of the new child
