@@ -140,6 +140,7 @@ class SoFieldContainer : public SoBase {
   SoINTERNAL public:
     // Setup type information
     static void		initClass();
+    static void finishClass();
 
     // Versions of set() and get() that take SoInput or SoOutput from
     // which to inherit reference dictionary.

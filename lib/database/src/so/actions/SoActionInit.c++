@@ -80,3 +80,17 @@ SoAction::initClasses()
     SoSearchAction::initClass();
     SoWriteAction::initClass();
 }
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up all action classes.
+// Use: public, static
+
+void
+SoAction::finishClasses()
+//
+////////////////////////////////////////////////////////////////////////
+{
+
+}

@@ -95,6 +95,7 @@ class SoFont : public SoNode {
 
   SoINTERNAL public:
     static void		initClass();
+    static void	finishClass();
 
   protected:
     virtual ~SoFont();

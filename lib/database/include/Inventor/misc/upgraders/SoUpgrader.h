@@ -84,9 +84,11 @@ class SoUpgrader : public SoGroup {
 					 float version);
   SoINTERNAL public:
     static void		initClass();
+    static void	finishClass();
 
     // Initialize ALL upgraders.
     static void		initClasses();
+    static void	finishClasses();
 
     // This is the key method that reads in fields, calls the
     // createNewNode() method (which is responsible for looking at the

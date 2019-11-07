@@ -70,6 +70,7 @@
 class SoNodeKit {
   public:
     static void		init(); // init all nodeKit classes
+	static void		finish();
   private:
     static SbBool	initialized;	// has nodekit been initialized
 };

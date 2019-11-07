@@ -74,6 +74,7 @@
 class SoInteraction {
   public:
     static void		init();		// init all interaction classes
+	static void		finish();
   private:
     static SbBool	initialized;	// has interaction been initialized
 };

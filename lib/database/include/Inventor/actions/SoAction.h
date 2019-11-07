@@ -280,6 +280,7 @@ class SoAction {
 
     // Initialize ALL Inventor action classes
     static void		initClasses();
+    static void finishClasses();
 
     // These methods maintain the current path accumulated so far
     // during traversal. The action needs to know whether this path is

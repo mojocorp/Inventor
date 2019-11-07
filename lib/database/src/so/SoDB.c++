@@ -179,6 +179,8 @@ SoDB::init()
 
 	globalDB = new SoDB;
 
+        SbName::init();
+
 	// Initialize the runtime type system
 	SoType::init();
 
@@ -278,6 +280,49 @@ SoDB::init()
 	// make sure that redraws occur even when event processing is
 	// time-consuming.
 	setDelaySensorTimeout(SbTime(1.0/12.0));
+    }
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Clean-up the global database.
+// Use: public, static
+
+void
+SoDB::finish()
+//
+////////////////////////////////////////////////////////////////////////
+{
+    if (globalDB) {
+
+        delete realTimeSensor;
+        delete realTime;
+        headerList.clear();
+        conversionDict.clear();
+
+        SoUpgrader::finishClasses();
+        SoDetail::finishClasses();
+        SoEvent::finishClasses();
+        SoEngine::finishClasses();
+        SoField::finishClasses();
+        SoNode::finishClasses();
+        SoAction::finishClasses();
+        SoElement::finishElements();
+        SoError::finishClasses();
+
+        SoGlobalField::finishClass();
+        SoPath::finishClass();
+        SoFieldContainer::finishClass();
+        SoBase::finishClass();
+
+        //CRASH SoFontCache::finish();
+        SoInput::finish();
+        SoType::finish();
+        SbName::finish();
+
+        delete globalDB;
+        globalDB = NULL;
     }
 }
 

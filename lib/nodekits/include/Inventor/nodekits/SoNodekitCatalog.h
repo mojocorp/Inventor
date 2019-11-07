@@ -159,6 +159,7 @@ class SoNodekitCatalog {
 
     // initializes static variables. 
     static void initClass();
+    static void finishClass();
 
     // How many entries in this catalog?
     int        getNumEntries() const { return entries.size(); };

@@ -92,6 +92,10 @@ class SbName {
 
     ~SbName()					{}
 
+    // Initialize
+    static void init();
+    static void finish();
+  
     // Returns pointer to the character string
     const char		*getString() const	{ return entry->data(); }
 
