@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <algorithm>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoOutput.h>
 #include <Inventor/SoInput.h>
@@ -704,19 +705,19 @@ SoEngineOutput::getForwardConnections(SoFieldList &list) const
 {
     int numConnections = 0;
 
-    for (int i = 0; i < connections.getLength(); i++) {
-	SoField	*field = connections[i];
+    for (int i = 0; i < connections.size(); i++) {
+        SoField	*field = connections[i];
 
-	// Skip over converter, if any
-	SoFieldContainer *container = field->getContainer();
-	if (container->isOfType(SoFieldConverter::getClassTypeId()))
-	    numConnections += ((SoFieldConverter *) container)->
-		getForwardConnections(list);
+        // Skip over converter, if any
+        SoFieldContainer *container = field->getContainer();
+        if (container->isOfType(SoFieldConverter::getClassTypeId()))
+            numConnections += ((SoFieldConverter *) container)->
+            getForwardConnections(list);
 
-	else {
-	    list.append(field);
-	    numConnections++;
-	}
+        else {
+            list.append(field);
+            numConnections++;
+        }
     }
 
     return numConnections;
@@ -775,11 +776,11 @@ SoEngineOutput::addConnection(SoField *field)
 ////////////////////////////////////////////////////////////////////////
 {
     if (field) {
-	// Add to lists of connections
-	connections.append(field);
+        // Add to lists of connections
+        connections.push_back(field);
 
-	// Increment containing engine's reference count
-	container->ref();
+        // Increment containing engine's reference count
+        container->ref();
     }
 
     // This forces the engine to write to the new connection.
@@ -798,14 +799,15 @@ SoEngineOutput::removeConnection(SoField *field)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int index = connections.find(field);
+    std::vector<SoField*>::iterator it = std::find(connections.begin(), connections.end(), field);
+
 #ifdef DEBUG
-    if (index == -1)
+    if (it == connections.end())
 	SoDebugError::post("SoEngineOutput::removeConnection",
 			   "Field is not connected!");
 #endif /* DEBUG */
 
-    connections.remove(index);
+    connections.erase(it);
 
     // Decrement reference count of containing engine
     container->unref();
@@ -823,17 +825,17 @@ SoEngineOutput::prepareToWrite() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = connections.getLength()-1; i >= 0; i--) {
-	SoField *f = connections.get(i);
+    for (int i = connections.size()-1; i >= 0; i--) {
+        SoField *f = connections[i];
 #ifdef DEBUG
-	if (f->flags.isEngineModifying) {
-	    SoDebugError::post("SoEngineOutput::prepareToWrite",
-			       "Internal field flags are wrong; "
-			       "did you call engine->evaluate() "
-			       "instead of engine->evaluateWrapper?");
-	}
+        if (f->flags.isEngineModifying) {
+            SoDebugError::post("SoEngineOutput::prepareToWrite",
+                       "Internal field flags are wrong; "
+                       "did you call engine->evaluate() "
+                       "instead of engine->evaluateWrapper?");
+        }
 #endif
-	f->flags.isEngineModifying = TRUE;
+        f->flags.isEngineModifying = TRUE;
     }
 }
 
@@ -849,8 +851,8 @@ SoEngineOutput::doneWriting() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = connections.getLength()-1; i >= 0; i--) {
-	SoField *f = connections.get(i);
-	f->flags.isEngineModifying = FALSE;
+    for (int i = connections.size()-1; i >= 0; i--) {
+        SoField *f = connections[i];
+        f->flags.isEngineModifying = FALSE;
     }
 }

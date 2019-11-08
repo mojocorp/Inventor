@@ -57,6 +57,7 @@
 #ifndef  _SO_ENGINE_
 #define  _SO_ENGINE_
 
+#include <vector>
 #include <Inventor/fields/SoFieldContainer.h>
 #include <Inventor/SoLists.h>
 #include <Inventor/SbString.h>
@@ -224,11 +225,11 @@ class SoEngineOutput {
 
     // Number of connections this output currently has
     int			getNumConnections() const
-	{ return connections.getLength(); }
+    { return connections.size(); }
 
     // Returns the fields this output is writing into
     SoField *		operator[](int i) const
-	{ return connections.get(i); }
+    { return connections[i]; }
 
     // Before evaluating (which is done with the regular field API),
     // we must disable notification on all the fields we're about to
@@ -238,7 +239,7 @@ class SoEngineOutput {
 
   private:
     SbBool		enabled;
-    SoFieldList		connections;
+    std::vector<SoField*> connections;
     SoEngine		*container;
 };
 
