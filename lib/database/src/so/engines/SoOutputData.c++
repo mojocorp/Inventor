@@ -72,7 +72,7 @@
 
 struct SoOutputEntry {
     SbName		name;		// Name of output
-    int32_t		offset;		// Offset of output within object
+    std::ptrdiff_t      offset; // Offset of output within object
     SoType type;			// Type of output
 };
 
@@ -93,7 +93,7 @@ SoEngineOutputData::SoEngineOutputData(const SoEngineOutputData *from)
         const SoOutputEntry *fromOutput = from->outputs[i];
 
         SoOutputEntry *toOutput = new SoOutputEntry;
-	*toOutput = *fromOutput;
+        *toOutput = *fromOutput;
 
         outputs.push_back(toOutput);
     }
@@ -151,7 +151,7 @@ SoEngineOutputData::getOutputName(int index) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return ((SoOutputEntry *) outputs[index])->name;
+    return outputs[index]->name;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -167,8 +167,7 @@ SoEngineOutputData::getOutput(const SoEngine *func, int index) const
 ////////////////////////////////////////////////////////////////////////
 {
     // This generates a CC warning; there's not much we can do about it...
-    return (SoEngineOutput *) ((char *) func +
-				 ((SoOutputEntry *) outputs[index])->offset);
+    return (SoEngineOutput *) ((char *) func + outputs[index]->offset);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -184,7 +183,7 @@ SoEngineOutputData::getIndex(const SoEngine *func,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int offset = (const char *) output - (const char *) func;
+    std::ptrdiff_t offset = (const char *) output - (const char *) func;
 
     // Loop through the list looking for the correct offset:
     // (we'll assume this won't be very slow, since the list will
