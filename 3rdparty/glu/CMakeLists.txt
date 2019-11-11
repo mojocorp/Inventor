@@ -1,18 +1,5 @@
 find_package(OpenGL REQUIRED)
 
-# On Mac OS X, gl.h is located in an OpenGL subfolder instead of GL.
-# Use the macport GL/gl.h provided by X11.
-if (APPLE)
-    find_package(X11)
-    if (X11_FOUND)
-        find_path (X11_GL_INCLUDE_PATH GL/gl.h ${X11_INC_SEARCH_PATH})
-        if (NOT X11_GL_INCLUDE_PATH)
-            message (ERROR "Could not find GL/gl.h")
-        endif (NOT X11_GL_INCLUDE_PATH)
-        include_directories(${X11_GL_INCLUDE_PATH})
-    endif()
-endif()
-
 set(GLU_HEADERS
     include/GL/glu.h					
     include/GL/glu_mangle.h
@@ -212,7 +199,7 @@ set(GLU_SOURCES
 )
 
 include_directories(src/include src/libnurbs/internals src/libnurbs/interface src/libnurbs/nurbtess)
-add_definitions(-DLIBRARYBUILD)
+add_definitions(-DLIBRARYBUILD -DRESOLVE_3D_TEXTURE_SUPPORT)
 
 add_library(GLU STATIC ${GLU_HEADERS} ${GLU_SOURCES})
 target_link_libraries(GLU PUBLIC OpenGL::GL)

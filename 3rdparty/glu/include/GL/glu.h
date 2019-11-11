@@ -49,17 +49,10 @@
 #define GLAPIENTRYP GLAPIENTRY *
 #endif
 
-#if (defined(_MSC_VER) || defined(__MINGW32__)) && defined(BUILD_GLU32)
-# undef GLAPI
-# define GLAPI __declspec(dllexport)
-#elif (defined(_MSC_VER) || defined(__MINGW32__)) && defined(_DLL)
-/* tag specifying we're building for DLL runtime support */
-# undef GLAPI
-# define GLAPI __declspec(dllimport)
-#elif !defined(GLAPI)
-/* for use with static link lib build of Win32 edition only */
-# define GLAPI extern
-#endif /* _STATIC_MESA support */
+#ifdef GLAPI
+#undef GLAPI
+#define GLAPI extern
+#endif
 
 #ifdef __cplusplus
 extern "C" {
