@@ -217,8 +217,8 @@ SoTrackballDragger::SoTrackballDragger()
     userAxisVec.setValue( 0, 1, 0);
 
     // queues used for animation
-    rotBuffer =  new SbRotation[ROT_BUFFER_SIZE];
-    timeBuffer = new SbTime[ROT_BUFFER_SIZE];
+    rotBuffer.resize(ROT_BUFFER_SIZE);
+    timeBuffer.resize(ROT_BUFFER_SIZE);
 
     // allocate animation sensor
     spinSensor = new SoTimerSensor(&SoTrackballDragger::spinSensorCB, this);
@@ -263,10 +263,6 @@ SoTrackballDragger::~SoTrackballDragger()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // deallocate queues
-    delete [ /*ROT_BUFFER_SIZE*/ ] rotBuffer;
-    delete [ /*ROT_BUFFER_SIZE*/ ] timeBuffer;
-
     delete sphereProj;
     delete stripeProj;
 

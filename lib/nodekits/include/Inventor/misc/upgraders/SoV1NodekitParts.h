@@ -64,6 +64,7 @@
 #ifndef  _SO_V1_NODEKIT_PARTS
 #define  _SO_V1_NODEKIT_PARTS
 
+#include <vector>
 #include <Inventor/misc/upgraders/SoV1NodekitCatalog.h>
 
 class SoGroup;
@@ -92,7 +93,7 @@ SoEXTENDER class SoV1NodekitParts {
 					  // parts
     int			    numEntries;   // must be made equal to numEntries
 					  // in the catalog
-    SoNode                  **nodeList;   // each 'part' is actually just
+    std::vector<SoNode*> nodeList;   // each 'part' is actually just
 					  // a node
     SbBool makePart( const int partNum );
     SbBool replacePart( const int partNum, SoNode *newPartNode );

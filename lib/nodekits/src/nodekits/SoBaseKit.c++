@@ -175,7 +175,7 @@ void SoBaseKit::printSubDiagram( const SbName &rootName, int level )
     level++;
 
     int howMany = cat->getNumEntries();
-    int *inds = new int[howMany];
+    std::vector<int> inds(howMany);
 
     // Find the children parts, going from right to left, and load
     // their indices into the inds array.
@@ -201,8 +201,6 @@ void SoBaseKit::printSubDiagram( const SbName &rootName, int level )
     for (i = curInd - 1; i >= 0; i-- ) {
 	printSubDiagram( cat->getName(inds[i]), level );
     }
-
-    delete [ /*howMany*/ ] inds;
 }
 
 void SoBaseKit::printTable()
@@ -683,7 +681,7 @@ SoBaseKit::setAnyPart( const SbName &partName, SoNode *from, SbBool anyPart )
 // Use: public
 
 SbBool
-SoBaseKit::set(char *nameValuePairListString) 
+SoBaseKit::set(const char *nameValuePairListString)
 		            // the string to use in setting the values
 //
 ////////////////////////////////////////////////////////////////////////
@@ -709,15 +707,13 @@ SoBaseKit::set(char *nameValuePairListString)
 	    break;
 
 	int length = c - string + 1;
-	char *desiredNodeName = new char [length];
-	strncpy(desiredNodeName, string, c - string);
+    std::vector<char> desiredNodeName(length);
+    strncpy(desiredNodeName.data(), string, c - string);
 	desiredNodeName[c - string] = 0;
 	string = c;
 
 	// find that node
-	node = getPart(desiredNodeName, TRUE);
-
-	delete [ /*length*/ ] desiredNodeName;
+    node = getPart(desiredNodeName.data(), TRUE);
 
 	if (node == NULL)      // no node found, return
 	    break;
@@ -740,15 +736,13 @@ SoBaseKit::set(char *nameValuePairListString)
 	    c++;
 
 	length = c - string + 1;
-	char *fielddata = new char [length];
-	strncpy(fielddata, string, c - string);
+    std::vector<char> fielddata(length);
+    strncpy(fielddata.data(), string, c - string);
 	fielddata[c - string] = 0;
 	string = c + 1;
 
 	// call the SoNode::set method to set the fields
-	success &= node->set(fielddata);
-
-	delete [ /*length*/ ] fielddata;
+    success &= node->set(fielddata.data());
     }
     free(stringP);
     return success;
@@ -768,8 +762,8 @@ SoBaseKit::set(char *nameValuePairListString)
 // Use: public
 
 SbBool
-SoBaseKit::set(char *partNameString,     // name of the part
-	       char *parameterString )   // values for the part
+SoBaseKit::set(const char *partNameString,     // name of the part
+           const char *parameterString )   // values for the part
 //
 ////////////////////////////////////////////////////////////////////////
 {

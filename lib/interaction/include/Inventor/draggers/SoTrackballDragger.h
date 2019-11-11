@@ -83,6 +83,7 @@
 #ifndef  _SO_TRACKBALL_DRAGGER_
 #define  _SO_TRACKBALL_DRAGGER_
 
+#include <vector>
 #include <Inventor/SbTime.h>
 #include <Inventor/sensors/SoSensor.h>
 #include <Inventor/draggers/SoDragger.h>
@@ -220,8 +221,8 @@ class SoTrackballDragger : public SoDragger {
     SbTime          spinTime;
     SbTime          scheduleRate;
     SoTimerSensor   *spinSensor;
-    SbRotation      *rotBuffer;
-    SbTime          *timeBuffer;
+    std::vector<SbRotation> rotBuffer;
+    std::vector<SbTime> timeBuffer;
     int             firstIndex, lastIndex;
     SbVec3f         averageAxis;
     float           angleVelocity;
