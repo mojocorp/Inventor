@@ -179,8 +179,8 @@ class SoBaseKit : public SoNode {
     // SETTING FIELDS OF PARTS
     //
     // set routine returns FALSE if it cannot find the parameter to set
-    SbBool set(char *nameValuePairListString);
-    SbBool set(char *partNameString, char *parameterString);
+    SbBool set(const char *nameValuePairListString);
+    SbBool set(const char *partNameString, const char *parameterString);
 
     // DO NODEKITS TRAVERSE THEIR CHILDREN DURING A SEARCH ACTION?
     // By default, they do NOT.
