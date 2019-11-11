@@ -56,6 +56,7 @@
 #ifndef  _SO_MF_PATH_
 #define  _SO_MF_PATH_
 
+#include <vector>
 #include <Inventor/fields/SoSubField.h>
 
 //////////////////////////////////////////////////////////////////////////////
@@ -85,7 +86,7 @@ class SoMFPath : public SoMField {
     virtual SbBool	referencesCopy() const;
 
   private:
-    SoNode		**heads;	// Head nodes of paths (needed
+    std::vector<SoNode*> heads;	// Head nodes of paths (needed
 					// to track notification)
 
     // Override this to maintain write-references in paths

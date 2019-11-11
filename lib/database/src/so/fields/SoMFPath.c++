@@ -95,7 +95,6 @@ SoMFPath::SoMFPath()
 ////////////////////////////////////////////////////////////////////////
 {
     values = NULL;
-    heads = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -252,14 +251,9 @@ SoMFPath::allocValues(int newNum)
     }
 
     // Reallocate heads array and fill it in
-    if (heads != NULL)
-	delete [] heads;
-
-    if (newNum > 0) {
-	heads = new SoNode * [newNum];
-	for (i = 0; i < newNum; i++)
-	    heads[i] = (values[i] != NULL ? values[i]->getHead() : NULL);
-    }
+    heads.resize(newNum);
+    for (i = 0; i < heads.size(); i++)
+        heads[i] = (values[i] != NULL ? values[i]->getHead() : NULL);
 
     num = maxNum = newNum;
 }
