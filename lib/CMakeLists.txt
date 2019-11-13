@@ -125,6 +125,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoGLTextureEnabledElement.h
     database/include/Inventor/elements/SoGLTextureImageElement.h
     database/include/Inventor/elements/SoGLTextureMatrixElement.h
+    database/include/Inventor/elements/SoGLTextureUnitElement.h
     database/include/Inventor/elements/SoGLUpdateAreaElement.h
     database/include/Inventor/elements/SoGLViewingMatrixElement.h
     database/include/Inventor/elements/SoGLViewportRegionElement.h
@@ -157,6 +158,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/elements/SoTextureImageElement.h
     database/include/Inventor/elements/SoTextureMatrixElement.h
     database/include/Inventor/elements/SoTextureQualityElement.h
+    database/include/Inventor/elements/SoTextureUnitElement.h
     database/include/Inventor/elements/SoTransparencyTypeElement.h
     database/include/Inventor/elements/SoUnitsElement.h
     database/include/Inventor/elements/SoViewVolumeElement.h
@@ -348,6 +350,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/nodes/SoTextureCoordinateEnvironment.h
     database/include/Inventor/nodes/SoTextureCoordinateFunction.h
     database/include/Inventor/nodes/SoTextureCoordinatePlane.h
+    database/include/Inventor/nodes/SoTextureUnit.h
     database/include/Inventor/nodes/SoTransform.h
     database/include/Inventor/nodes/SoTransformSeparator.h
     database/include/Inventor/nodes/SoTransformation.h
@@ -523,6 +526,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoGLTextureEnabledElement.c++
     database/src/so/elements/SoGLTextureImageElement.c++
     database/src/so/elements/SoGLTextureMatrixElement.c++
+    database/src/so/elements/SoGLTextureUnitElement.c++
     database/src/so/elements/SoGLUpdateAreaElement.c++
     database/src/so/elements/SoGLViewingMatrixElement.c++
     database/src/so/elements/SoGLViewportRegionElement.c++
@@ -554,6 +558,7 @@ set(DATABASE_SOURCES
     database/src/so/elements/SoTextureImageElement.c++
     database/src/so/elements/SoTextureMatrixElement.c++
     database/src/so/elements/SoTextureQualityElement.c++
+    database/src/so/elements/SoTextureUnitElement.c++
     database/src/so/elements/SoTransparencyTypeElement.c++
     database/src/so/elements/SoUnitsElement.c++
     database/src/so/elements/SoViewVolumeElement.c++
@@ -727,6 +732,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoTextureCoordinateEnvironment.c++
     database/src/so/nodes/SoTextureCoordinateFunction.c++
     database/src/so/nodes/SoTextureCoordinatePlane.c++
+    database/src/so/nodes/SoTextureUnit.c++
     database/src/so/nodes/SoTransform.c++
     database/src/so/nodes/SoTransformSeparator.c++
     database/src/so/nodes/SoTransformation.c++

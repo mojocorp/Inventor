@@ -146,6 +146,7 @@
 #include <Inventor/nodes/SoTextureCoordinateDefault.h>
 #include <Inventor/nodes/SoTextureCoordinateEnvironment.h>
 #include <Inventor/nodes/SoTextureCoordinatePlane.h>
+#include <Inventor/nodes/SoTextureUnit.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/nodes/SoTransformSeparator.h>
 #include <Inventor/nodes/SoTransformation.h>

@@ -111,6 +111,7 @@ SoElement::initElements()
     SoTextureMatrixElement::initClass();
     SoTextureQualityElement::initClass();
     SoTextureOverrideElement::initClass();
+    SoTextureUnitElement::initClass();
     SoTransparencyTypeElement::initClass();
     SoUnitsElement::initClass();
     SoViewVolumeElement::initClass();
@@ -142,6 +143,7 @@ SoElement::initElements()
     SoGLTextureEnabledElement::initClass();
     SoGLTextureImageElement::initClass();
     SoGLTextureMatrixElement::initClass();
+    SoGLTextureUnitElement::initClass();
     SoGLUpdateAreaElement::initClass();
     SoGLViewingMatrixElement::initClass();
     SoGLViewportRegionElement::initClass();
