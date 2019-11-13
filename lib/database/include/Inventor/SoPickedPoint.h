@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -88,27 +88,27 @@ class SoPickedPoint {
 
     // Returns an instance that is a copy of this instance. The caller
     // is responsible for deleting the copy when done.
-    SoPickedPoint *	copy() const;
+    SoPickedPoint *copy() const;
 
     // These return the intersection point and surface normal in world
     // space, and the texture coordinates in image space:
-    const SbVec3f &	getPoint() const	 { return worldPoint; }
-    const SbVec3f &	getNormal() const	 { return worldNormal; }
-    const SbVec4f &	getTextureCoords() const { return imageTexCoords; }
+    const SbVec3f &getPoint() const { return worldPoint; }
+    const SbVec3f &getNormal() const { return worldNormal; }
+    const SbVec4f &getTextureCoords() const { return imageTexCoords; }
 
     // Returns the index into the current set of materials of the
     // material active at the intersection point. Note that if the
     // materials are interpolated between vertices, the index will
     // correspond to the material at one of the vertices.
-    int			getMaterialIndex() const { return materialIndex; }
+    int getMaterialIndex() const { return materialIndex; }
 
     // Returns the path to the object that was intersected
-    SoPath *		getPath() const		 { return path; }
+    SoPath *getPath() const { return path; }
 
     // Returns whether the intersection is actually on the geometry of
     // the character that was hit, as opposed to being on the bounding
     // box. The pick style affects this decision.
-    SbBool		isOnGeometry() const	 { return onGeometry; }
+    SbBool isOnGeometry() const { return onGeometry; }
 
     //////////////////////
     //
@@ -118,94 +118,94 @@ class SoPickedPoint {
     //
 
     // Returns the detail that corresponds to the given node in the path
-    const SoDetail *	getDetail(const SoNode *node = NULL) const;
+    const SoDetail *getDetail(const SoNode *node = NULL) const;
 
     // These return the transformation matrices between world space
     // and the object space corresponding to the given node in the path
-    SbMatrix		getObjectToWorld(const SoNode *node = NULL) const;
-    SbMatrix		getWorldToObject(const SoNode *node = NULL) const;
+    SbMatrix getObjectToWorld(const SoNode *node = NULL) const;
+    SbMatrix getWorldToObject(const SoNode *node = NULL) const;
 
     // These return the texture transformation matrices between image
     // space and the object space corresponding to the given node in
     // the path
-    SbMatrix		getObjectToImage(const SoNode *node = NULL) const;
-    SbMatrix		getImageToObject(const SoNode *node = NULL) const;
+    SbMatrix getObjectToImage(const SoNode *node = NULL) const;
+    SbMatrix getImageToObject(const SoNode *node = NULL) const;
 
     // These return the intersection point, surface normal, and
     // texture coordinates in the object space corresponding to the
     // given node in the path
-    SbVec3f		getObjectPoint(const SoNode *node = NULL) const;
-    SbVec3f		getObjectNormal(const SoNode *node = NULL) const;
-    SbVec4f		getObjectTextureCoords(const SoNode *node=NULL) const;
+    SbVec3f getObjectPoint(const SoNode *node = NULL) const;
+    SbVec3f getObjectNormal(const SoNode *node = NULL) const;
+    SbVec4f getObjectTextureCoords(const SoNode *node = NULL) const;
 
     //
     //////////////////////
 
-  SoEXTENDER public:
-
+    SoEXTENDER
+  public:
     // NOTE: these methods should be called ONLY by the node that
     // causes the SoPickedPoint instance to be created, and ONLY at
     // the time it is created. Setting or changing the normal or
     // texture coordinates at a later time may cause undefined results.
 
     // Sets the normal in object space
-    void		setObjectNormal(const SbVec3f &normal);
+    void setObjectNormal(const SbVec3f &normal);
 
     // Sets the texture coordinates in object space
-    void		setObjectTextureCoords(const SbVec4f &texCoords);
+    void setObjectTextureCoords(const SbVec4f &texCoords);
 
     // Sets the material index
-    void		setMaterialIndex(int index)  { materialIndex = index; }
+    void setMaterialIndex(int index) { materialIndex = index; }
 
     // Sets the detail corresponding to the given node in the path.
     // NULL may be passed to remove a detail. All detail pointers are
     // NULL by default.
-    void		setDetail(SoDetail *detail, SoNode *node);
+    void setDetail(SoDetail *detail, SoNode *node);
 
-  SoINTERNAL public:
-
+    SoINTERNAL
+  public:
     // The constructor is internal since instances are created only by
     // the SoRayPickAction
     SoPickedPoint(const SoPath *path, SoState *state,
-		  const SbVec3f &objSpacePoint);
+                  const SbVec3f &objSpacePoint);
 
   private:
     // This action is used to get the world-to-object matrix
-    static SoGetMatrixAction	*matrixAction;
+    static SoGetMatrixAction *matrixAction;
 
     // Intersection point and normal in world space, and texture
     // coordinates in image space
-    SbVec3f		worldPoint;
-    SbVec3f		worldNormal;
-    SbVec4f		imageTexCoords;
+    SbVec3f worldPoint;
+    SbVec3f worldNormal;
+    SbVec4f imageTexCoords;
 
     // ViewportRegion, which is needed when figuring out matrices
-    SbViewportRegion	vpRegion;
+    SbViewportRegion vpRegion;
 
     // Material index
-    int			materialIndex;
+    int materialIndex;
 
     // TRUE if pick was on geometry of shape as opposed to bbox
-    SbBool		onGeometry;
+    SbBool onGeometry;
 
     // The path to the shape that was picked
-    SoPath		*path;
+    SoPath *path;
 
     // Details corresponding to nodes in path, one per node in path.
     // Many may be NULL.
-    SoDetailList	details;
+    SoDetailList details;
 
     // The pointer to the state allows us to access matrices to
     // convert from object space to world and image space. This
     // pointer is valid only during construction and setting of the
     // info inside the instance.
-    SoState		*state;
+    SoState *state;
 
     // Returns index in path of given node, or -1 if not found
-    int			getNodeIndex(const SoNode *node) const;
+    int getNodeIndex(const SoNode *node) const;
 
     // Applies SoGetMatrixAction to path to node
-    void		getMatrix(const SoNode *node) const;
+    void getMatrix(const SoNode *node) const;
 
     // Multiplies SbVec4f by matrix - for transforming texture coords
     static SbVec4f multVecMatrix4(const SbMatrix &m, const SbVec4f &v);

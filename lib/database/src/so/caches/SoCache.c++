@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -79,7 +79,7 @@ SoCache::SoCache(SoState *state)
 
     depth = state->getDepth();
 
-    const int bytesNeeded = (SoElement::getNumStackIndices()+7)/8;
+    const int bytesNeeded = (SoElement::getNumStackIndices() + 7) / 8;
 
     // Set the size of the elementsUsedFlags to be the maximum number
     // of elements currently enabled.  This is safe because if more
@@ -232,15 +232,14 @@ SoCache::isValid(const SoState *state) const
     // If explicitly invalidated, always return FALSE.
     if (invalidated) {
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-	    fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid ",
-		    this);
-	    fprintf(stderr, "because SoCache::invalidate was called, ");
-	    fprintf(stderr, "probably because a field or node\n");
-	    fprintf(stderr, "underneath a node with a cache changed ");
-	    fprintf(stderr, "or because a node with a cache contained\n");
-	    fprintf(stderr, "an uncacheable node.\n");
-	}	    
+        if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+            fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid ", this);
+            fprintf(stderr, "because SoCache::invalidate was called, ");
+            fprintf(stderr, "probably because a field or node\n");
+            fprintf(stderr, "underneath a node with a cache changed ");
+            fprintf(stderr, "or because a node with a cache contained\n");
+            fprintf(stderr, "an uncacheable node.\n");
+        }
 #endif
         return FALSE;
     }
@@ -248,7 +247,8 @@ SoCache::isValid(const SoState *state) const
     // Compare used elements for match
     for (size_t i = 0; i < elementsUsed.size(); i++) {
         const SoElement *eltInCache = elementsUsed[i];
-        const SoElement *eltInState = state->getConstElement(eltInCache->getStackIndex());
+        const SoElement *eltInState =
+            state->getConstElement(eltInCache->getStackIndex());
 
         // If cache's version of element doesn't match what's in the
         // state, the cache is not valid.
@@ -256,10 +256,9 @@ SoCache::isValid(const SoState *state) const
 
 #ifdef DEBUG
             if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid",
-                    this);
+                fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid", this);
                 fprintf(stderr, " because element %s does not match:\n",
-                    eltInState->getTypeId().getName().getString());
+                        eltInState->getTypeId().getName().getString());
                 fprintf(stderr, "------\nElement in state:\n");
                 eltInState->print(stderr);
                 fprintf(stderr, "------\nElement in cache:\n");
@@ -290,10 +289,10 @@ SoCache::getInvalidElement(const SoState *state) const
     // Compare used elements for match
     for (size_t i = 0; i < elementsUsed.size(); i++) {
         const SoElement *eltInCache = elementsUsed[i];
-        const SoElement *eltInState = state->getConstElement(eltInCache->getStackIndex());
+        const SoElement *eltInState =
+            state->getConstElement(eltInCache->getStackIndex());
 
-        if (eltInCache != eltInState && !
-            eltInCache->matches(eltInState)) {
+        if (eltInCache != eltInState && !eltInCache->matches(eltInState)) {
 
             return eltInState;
         }
@@ -305,7 +304,7 @@ SoCache::getInvalidElement(const SoState *state) const
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Invalidates this cache.  Nodes sometime invalidate open caches. 
+//    Invalidates this cache.  Nodes sometime invalidate open caches.
 //
 // Use: public
 
@@ -316,4 +315,3 @@ SoCache::invalidate()
 {
     invalidated = TRUE;
 }
-

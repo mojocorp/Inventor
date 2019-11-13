@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,60 +53,51 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_MOUSE_BUTTON_EVENT_
-#define  _SO_MOUSE_BUTTON_EVENT_
+#ifndef _SO_MOUSE_BUTTON_EVENT_
+#define _SO_MOUSE_BUTTON_EVENT_
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoButtonEvent.h>
 
 // some convenience macros for determining if an event matches
 
-#define SO_MOUSE_PRESS_EVENT(EVENT,BUTTON) \
-    (SoMouseButtonEvent::isButtonPressEvent(EVENT,SoMouseButtonEvent::BUTTON))
+#define SO_MOUSE_PRESS_EVENT(EVENT, BUTTON)                                    \
+    (SoMouseButtonEvent::isButtonPressEvent(EVENT, SoMouseButtonEvent::BUTTON))
 
-#define SO_MOUSE_RELEASE_EVENT(EVENT,BUTTON) \
-    (SoMouseButtonEvent::isButtonReleaseEvent(EVENT,SoMouseButtonEvent::BUTTON))
-
-
-
+#define SO_MOUSE_RELEASE_EVENT(EVENT, BUTTON)                                  \
+    (SoMouseButtonEvent::isButtonReleaseEvent(EVENT,                           \
+                                              SoMouseButtonEvent::BUTTON))
 
 class SoMouseButtonEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
-    
+
   public:
-    enum Button {
-	ANY = 0, 
-	BUTTON1 = 1, 
-	BUTTON2 = 2, 
-	BUTTON3 = 3
-    };
-    
+    enum Button { ANY = 0, BUTTON1 = 1, BUTTON2 = 2, BUTTON3 = 3 };
+
     // constructor
     SoMouseButtonEvent();
     virtual ~SoMouseButtonEvent();
-    
-    // set/get which button generated the event, either SO_MOUSE_BUTTON1, 
+
+    // set/get which button generated the event, either SO_MOUSE_BUTTON1,
     // SO_MOUSE_BUTTON2, or SO_MOUSE_BUTTON3
-    void		setButton(SoMouseButtonEvent::Button b)  { button = b; }
-    SoMouseButtonEvent::Button	getButton() const	    { return button; }
-    
+    void setButton(SoMouseButtonEvent::Button b) { button = b; }
+    SoMouseButtonEvent::Button getButton() const { return button; }
+
     // convenience routines to see if an SoEvent is a press or release
     // of the passed mouse button
-    static SbBool	isButtonPressEvent(
-			    const SoEvent *e,
-			    SoMouseButtonEvent::Button whichButton);
-			    
-    static SbBool	isButtonReleaseEvent(
-			    const SoEvent *e,
-			    SoMouseButtonEvent::Button whichButton);
-    
-  SoINTERNAL public:
-    static void		initClass();
-    
-  private:
-    Button   	    button;	// which button
-};
+    static SbBool isButtonPressEvent(const SoEvent *            e,
+                                     SoMouseButtonEvent::Button whichButton);
 
+    static SbBool isButtonReleaseEvent(const SoEvent *            e,
+                                       SoMouseButtonEvent::Button whichButton);
+
+    SoINTERNAL
+  public:
+    static void initClass();
+
+  private:
+    Button button; // which button
+};
 
 #endif /* _SO_MOUSE_BUTTON_EVENT_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -76,7 +76,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 // Returns path i from SoPathList list as an SoFullPath
-#define GET_PATH(list, i)	((SoFullPath *) list[i])
+#define GET_PATH(list, i) ((SoFullPath *)list[i])
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -95,7 +95,7 @@ SoCompactPathList::SoCompactPathList(const SoPathList &list)
 
     // Allocate stuff
     array.resize(arraySize);
-    stack.resize(128);		// Should be deep enough
+    stack.resize(128); // Should be deep enough
 
     // Store paths in compact form in array
     compactPaths(0, 1, list, 0, list.getLength());
@@ -106,9 +106,11 @@ SoCompactPathList::SoCompactPathList(const SoPathList &list)
 #if DEBUGGING
     int i;
     printf("SoCompactPathList::array (%d):\n\t", arraySize);
-    for (i = 0; i < arraySize; i++) printf(" %2d", i);
+    for (i = 0; i < arraySize; i++)
+        printf(" %2d", i);
     printf("\n\t");
-    for (i = 0; i < arraySize; i++) printf(" %2d", array[i]);
+    for (i = 0; i < arraySize; i++)
+        printf(" %2d", array[i]);
     printf("\n");
 #endif
 }
@@ -123,8 +125,7 @@ SoCompactPathList::SoCompactPathList(const SoPathList &list)
 SoCompactPathList::~SoCompactPathList()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -139,8 +140,8 @@ SoCompactPathList::reset()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    stackDepth = 0;			// Empty stack
-    curNode    = 0;			// Start at head node
+    stackDepth = 0; // Empty stack
+    curNode = 0;    // Start at head node
 
     // Put a valid node on top of the stack so the last pop() will
     // reset to something reasonable
@@ -164,15 +165,15 @@ SoCompactPathList::getChildren(int &numIndices, const int *&indices)
 {
 #ifdef DEBUG
     if (curNode < 0) {
-	SoDebugError::post("SoCompactPathList::getChildren",
-			   "currently not on a path in list");
-	numIndices = 0;
-	return;
+        SoDebugError::post("SoCompactPathList::getChildren",
+                           "currently not on a path in list");
+        numIndices = 0;
+        return;
     }
 #endif /* DEBUG */
 
     numIndices = getNumIndices();
-    indices    = &array[getStartIndex()];
+    indices = &array[getStartIndex()];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -194,27 +195,27 @@ SoCompactPathList::push(int childIndex)
 {
 #ifdef DEBUG
     if (curNode < 0) {
-	SoDebugError::post("SoCompactPathList::push",
-			   "currently not on a path in list");
-	return FALSE;
+        SoDebugError::post("SoCompactPathList::push",
+                           "currently not on a path in list");
+        return FALSE;
     }
 #endif /* DEBUG */
 
-    int	i;
+    int i;
 
     // See if the node to push is in a path by looking through the
     // children of the current node
     for (i = 0; i < getNumIndices(); i++)
-	if (array[getStartIndex() + i] == childIndex)
-	    break;
+        if (array[getStartIndex() + i] == childIndex)
+            break;
 
     // If child is in a path
     if (i < getNumIndices())
-	curNode = getChild(i);
+        curNode = getChild(i);
 
     // Child is not in a path
     else
-	curNode = -1;
+        curNode = -1;
 
     pushCurNode();
 
@@ -252,28 +253,28 @@ SoCompactPathList::computeArraySize(const SoPathList &list)
 {
 #ifdef DEBUG
     if (list.getLength() == 0) {
-	SoDebugError::post("SoCompactPathList::SoCompactPathList",
-			   "Empty path list");
-	return 1;
+        SoDebugError::post("SoCompactPathList::SoCompactPathList",
+                           "Empty path list");
+        return 1;
     }
 #endif /* DEBUG */
 
-    SoNode	*head = GET_PATH(list, 0)->getHead();
-    int		p, totalLength = 0;
+    SoNode *head = GET_PATH(list, 0)->getHead();
+    int     p, totalLength = 0;
 
     for (p = 0; p < list.getLength(); p++) {
 
-	// Make sure all paths have same head node
-	if (GET_PATH(list, p)->getHead() != head) {
-	    SoDebugError::postWarning("SoCompactPathList::SoCompactPathList",
-				      "Not all paths have same head node");
-	    continue;
-	}
+        // Make sure all paths have same head node
+        if (GET_PATH(list, p)->getHead() != head) {
+            SoDebugError::postWarning("SoCompactPathList::SoCompactPathList",
+                                      "Not all paths have same head node");
+            continue;
+        }
 
-	// Add up lengths of all paths without the head node. This is
-	// probably a lot more than the number of distinct nodes in
-	// the path, but what's a little memory?
-	totalLength += GET_PATH(list, p)->getLength() - 1;
+        // Add up lengths of all paths without the head node. This is
+        // probably a lot more than the number of distinct nodes in
+        // the path, but what's a little memory?
+        totalLength += GET_PATH(list, p)->getLength() - 1;
     }
 
     // Each node will have 3 entries in the array: the child index,
@@ -297,33 +298,32 @@ SoCompactPathList::computeArraySize(const SoPathList &list)
 // Use: private
 
 int
-SoCompactPathList::compactPaths(int curSlot, int depth,
-				const SoPathList &list,
-				int firstPath, int numPaths)
+SoCompactPathList::compactPaths(int curSlot, int depth, const SoPathList &list,
+                                int firstPath, int numPaths)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		nextSlot;
-    int		curIndex, prevIndex, nextIndex;
-    int		firstPathWithChild, numPathsWithChild, curPath, lastPath;
-    int		numChildren, curChild;
+    int nextSlot;
+    int curIndex, prevIndex, nextIndex;
+    int firstPathWithChild, numPathsWithChild, curPath, lastPath;
+    int numChildren, curChild;
 
     // If we are below the depth of the paths, just store a 0 (for no
     // children) and return
     if (depth >= GET_PATH(list, firstPath)->getLength()) {
-	array[curSlot] = 0;
-	return curSlot + 1;
+        array[curSlot] = 0;
+        return curSlot + 1;
     }
 
     // First, count the number of distinct children at the current depth
-    prevIndex   = -1;
+    prevIndex = -1;
     numChildren = 0;
     for (curPath = 0; curPath < numPaths; curPath++) {
-	curIndex = GET_PATH(list, firstPath + curPath)->getIndex(depth);
-	if (curIndex != prevIndex) {
-	    numChildren++;
-	    prevIndex = curIndex;
-	}
+        curIndex = GET_PATH(list, firstPath + curPath)->getIndex(depth);
+        if (curIndex != prevIndex) {
+            numChildren++;
+            prevIndex = curIndex;
+        }
     }
 
     // Store number of children in first slot in array
@@ -338,7 +338,7 @@ SoCompactPathList::compactPaths(int curSlot, int depth,
     //
 
     // Start with first child (from first path)
-    curChild  = 0;
+    curChild = 0;
     curIndex = GET_PATH(list, firstPath)->getIndex(depth);
     firstPathWithChild = firstPath;
     lastPath = firstPath + numPaths - 1;
@@ -346,33 +346,33 @@ SoCompactPathList::compactPaths(int curSlot, int depth,
     // Keep going while there are still paths left to check
     while (firstPathWithChild <= lastPath) {
 
-	// Count the number of paths with the current child (i.e.,
-	// have the same child index as curIndex). There has to be at
-	// least one or we wouldn't be here
-	numPathsWithChild = 1;
-	for (curPath = firstPathWithChild + numPathsWithChild;
-	     curPath <= lastPath; curPath++) {
+        // Count the number of paths with the current child (i.e.,
+        // have the same child index as curIndex). There has to be at
+        // least one or we wouldn't be here
+        numPathsWithChild = 1;
+        for (curPath = firstPathWithChild + numPathsWithChild;
+             curPath <= lastPath; curPath++) {
 
-	    nextIndex = GET_PATH(list, curPath)->getIndex(depth);
+            nextIndex = GET_PATH(list, curPath)->getIndex(depth);
 
-	    if (nextIndex == curIndex)
-		numPathsWithChild++;
-	    else
-		break;		// Found a different child
-	}
+            if (nextIndex == curIndex)
+                numPathsWithChild++;
+            else
+                break; // Found a different child
+        }
 
-	// Store current child and index of child array in array
-	array[curSlot + 1 + curChild]			= curIndex;
-	array[curSlot + 1 + curChild + numChildren]	= nextSlot;
+        // Store current child and index of child array in array
+        array[curSlot + 1 + curChild] = curIndex;
+        array[curSlot + 1 + curChild + numChildren] = nextSlot;
 
-	// Recurse
-	nextSlot = compactPaths(nextSlot, depth + 1, list,
-				firstPathWithChild, numPathsWithChild);
+        // Recurse
+        nextSlot = compactPaths(nextSlot, depth + 1, list, firstPathWithChild,
+                                numPathsWithChild);
 
-	// Prepare for next child
-	curChild++;
-	curIndex = nextIndex;
-	firstPathWithChild += numPathsWithChild;
+        // Prepare for next child
+        curChild++;
+        curIndex = nextIndex;
+        firstPathWithChild += numPathsWithChild;
     }
 
     return nextSlot;

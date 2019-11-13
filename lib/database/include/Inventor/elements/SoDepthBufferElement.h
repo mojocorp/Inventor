@@ -59,7 +59,7 @@ class SoDepthBufferElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoDepthBufferElement);
 
-public:
+  public:
     enum DepthWriteFunction {
         NEVER,
         ALWAYS,
@@ -72,7 +72,7 @@ public:
     };
 
     /// Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     /// Comparison based on value of floats
     virtual SbBool matches(const SoElement *elt) const;
@@ -83,33 +83,35 @@ public:
     /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
-    static void set(SoState * state, SbBool test, SbBool write,
-                    DepthWriteFunction function, const SbVec2f & range = getDefaultRange());
+    static void set(SoState *state, SbBool test, SbBool write,
+                    DepthWriteFunction function,
+                    const SbVec2f &    range = getDefaultRange());
 
-    static void get(SoState * state, SbBool & test_out, SbBool & write_out,
-                    DepthWriteFunction & function_out, SbVec2f & range_out);
+    static void get(SoState *state, SbBool &test_out, SbBool &write_out,
+                    DepthWriteFunction &function_out, SbVec2f &range_out);
 
     /// Returns each default value
-    static bool                 getDefaultTest() { return true; }
-    static bool                 getDefaultWrite(){ return true; }
-    static DepthWriteFunction   getDefaultFunction() { return LESS; }
-    static SbVec2f              getDefaultRange() { return SbVec2f(0.0f, 1.0f); }
+    static bool               getDefaultTest() { return true; }
+    static bool               getDefaultWrite() { return true; }
+    static DepthWriteFunction getDefaultFunction() { return LESS; }
+    static SbVec2f            getDefaultRange() { return SbVec2f(0.0f, 1.0f); }
 
-SoINTERNAL public:
-      // Initializes the SoDepthBufferElement class
-      static void		initClass();
+    SoINTERNAL
+  public:
+    // Initializes the SoDepthBufferElement class
+    static void initClass();
 
-protected:
+  protected:
     // Virtual set methods that subclasses can override.
-    virtual void	setElt(SbBool test, SbBool write,
-                               DepthWriteFunction function, const SbVec2f & range);
+    virtual void setElt(SbBool test, SbBool write, DepthWriteFunction function,
+                        const SbVec2f &range);
 
     virtual ~SoDepthBufferElement();
 
-    SbBool    test;
-    SbBool    write;
+    SbBool             test;
+    SbBool             write;
     DepthWriteFunction function;
-    SbVec2f range;
+    SbVec2f            range;
 };
 
 #endif /* _SO_DEPTH_BUFFER_ELEMENT_ */

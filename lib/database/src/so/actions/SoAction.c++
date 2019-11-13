@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -100,9 +100,9 @@ SoActionMethodList::addMethod(SoType nodeType, SoActionMethod method)
 {
 #ifdef DEBUG
     // Make sure nodeType is a kind of node!
-    if (! nodeType.isDerivedFrom(SoNode::getClassTypeId()))
-	SoDebugError::post("SoAction::addMethod", "%s is not a node type",
-			   nodeType.getName().getString());
+    if (!nodeType.isDerivedFrom(SoNode::getClassTypeId()))
+        SoDebugError::post("SoAction::addMethod", "%s is not a node type",
+                           nodeType.getName().getString());
 #endif /* DEBUG */
 
     numValidTypes = 0;
@@ -122,7 +122,7 @@ SoActionMethodList::setUp()
 ////////////////////////////////////////////////////////////////////////
 {
     if (numValidTypes == SoType::getNumTypes())
-	return;		// Already set up the table
+        return; // Already set up the table
 
     // SoNode's slot must be filled in.  If this action doesn't have a
     // parent action, it is filled in with the null action.  If it
@@ -131,10 +131,10 @@ SoActionMethodList::setUp()
     // dummy action appears in a second pass.
     int i = SoNode::getActionMethodIndex(SoNode::getClassTypeId());
     if ((*this)[i] == NULL) {
-	if (parent == NULL)
-	    (*this)[i] = SoAction::nullAction;
-	else
-	    (*this)[i] = dummyAction;
+        if (parent == NULL)
+            (*this)[i] = SoAction::nullAction;
+        else
+            (*this)[i] = dummyAction;
     }
 
     // Next, find all nodes derived from SoNode (note: it is a good
@@ -146,24 +146,23 @@ SoActionMethodList::setUp()
     // Now, for any empty slots, fill in the slot from a parent with a
     // non-NULL slot:
     for (i = 0; i < nodes.getLength(); i++) {
-	SoType n = nodes[i];
-	if ((*this)[SoNode::getActionMethodIndex(n)] == NULL) {
-	    (*this)[SoNode::getActionMethodIndex(n)] =
-		parentMethod(n);
-	}
+        SoType n = nodes[i];
+        if ((*this)[SoNode::getActionMethodIndex(n)] == NULL) {
+            (*this)[SoNode::getActionMethodIndex(n)] = parentMethod(n);
+        }
     }
 
     // Inherit any undefined methods from parent class
     if (parent != NULL) {
-	parent->setUp();
+        parent->setUp();
 
-	for (i = 0; i < getLength(); i++) {
+        for (i = 0; i < getLength(); i++) {
 
-	    SoActionMethod	&method = (*this)[i];
+            SoActionMethod &method = (*this)[i];
 
-	    if (method == dummyAction)
-		method = (*parent)[i];
-	}
+            if (method == dummyAction)
+                method = (*parent)[i];
+        }
     }
 
     numValidTypes = SoType::getNumTypes();
@@ -173,7 +172,7 @@ SoActionMethodList::setUp()
 //
 // Description:
 //    Dummy action used to mark entries in the action/method table as
-//    empty. 
+//    empty.
 //
 // Use: internal
 
@@ -181,8 +180,7 @@ void
 SoActionMethodList::dummyAction(SoAction *, SoNode *)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -198,12 +196,12 @@ SoActionMethodList::parentMethod(SoType t)
 ////////////////////////////////////////////////////////////////////////
 {
     SoActionMethod m;
-    SoType parent = t;
+    SoType         parent = t;
 
     // Look through parents until non-NULL method is found
     do {
-	parent = parent.getParent();
-	m = (*this)[SoNode::getActionMethodIndex(parent)];
+        parent = parent.getParent();
+        m = (*this)[SoNode::getActionMethodIndex(parent)];
     } while (m == NULL);
 
     return m;
@@ -215,7 +213,7 @@ SoActionMethodList::parentMethod(SoType t)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-int	SoEnabledElementsList::counter = 0;
+int SoEnabledElementsList::counter = 0;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -224,8 +222,7 @@ int	SoEnabledElementsList::counter = 0;
 //
 // Use: internal
 
-SoEnabledElementsList::SoEnabledElementsList(
-	SoEnabledElementsList *parentList)
+SoEnabledElementsList::SoEnabledElementsList(SoEnabledElementsList *parentList)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -249,23 +246,23 @@ SoEnabledElementsList::enable(SoType elementType, int stackIndex)
 
     // If not enabled before or if enabled before but we are now
     // enabling a more-specific subclass, add the element.
-    if (prev.isBad() || 
-	(elementType != prev && elementType.isDerivedFrom(prev))) {
-	elements.set(stackIndex, elementType);
+    if (prev.isBad() ||
+        (elementType != prev && elementType.isDerivedFrom(prev))) {
+        elements.set(stackIndex, elementType);
 
-	// Increment global counter to indicate that lists have changed
-	counter++;
+        // Increment global counter to indicate that lists have changed
+        counter++;
     }
 
 #ifdef DEBUG
     // If we aren't enabling a more general super-class (and therefore
     // don't need to do anything), error:
-    else if (! prev.isDerivedFrom(elementType)) {
-	const char *eltName = elementType.getName().getString();
-	SoDebugError::post("SoAction::enableElement",
-			   "Cannot enable element %s because element %s "
-			   "is already enabled",
-			   eltName, prev.getName().getString());
+    else if (!prev.isDerivedFrom(elementType)) {
+        const char *eltName = elementType.getName().getString();
+        SoDebugError::post("SoAction::enableElement",
+                           "Cannot enable element %s because element %s "
+                           "is already enabled",
+                           eltName, prev.getName().getString());
     }
 #endif
 }
@@ -290,28 +287,28 @@ SoEnabledElementsList::getElements() const
     // has been enabled since the last time we merged.
     if (setUpCounter != counter) {
 
-	// We may enable new things here which could increment the 
-	// enabled elements counter. But all of these elements were already
-	// enabled once by the parent class. So we'll store the counter 
-	// now and restore it after this loop...
-	This->setUpCounter = counter;
+        // We may enable new things here which could increment the
+        // enabled elements counter. But all of these elements were already
+        // enabled once by the parent class. So we'll store the counter
+        // now and restore it after this loop...
+        This->setUpCounter = counter;
 
-	SoEnabledElementsList *parentList = parent;
-	while (parentList) {
-	    int		i;
-	    SoType	t;
+        SoEnabledElementsList *parentList = parent;
+        while (parentList) {
+            int    i;
+            SoType t;
 
-	    for (i = 0; i < parentList->elements.getLength(); i++) {
-		t = parentList->elements[i];
-		if (! t.isBad())
-			This->enable(t, i);
-	    }
+            for (i = 0; i < parentList->elements.getLength(); i++) {
+                t = parentList->elements[i];
+                if (!t.isBad())
+                    This->enable(t, i);
+            }
 
-	    parentList = parentList->parent;
-	}
+            parentList = parentList->parent;
+        }
 
-	// restore the counter...
-	counter = This->setUpCounter;
+        // restore the counter...
+        counter = This->setUpCounter;
     }
 
     return elements;
@@ -323,9 +320,9 @@ SoEnabledElementsList::getElements() const
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoType			SoAction::classTypeId;
-SoEnabledElementsList	*SoAction::enabledElements;
-SoActionMethodList	*SoAction::methods;
+SoType                 SoAction::classTypeId;
+SoEnabledElementsList *SoAction::enabledElements;
+SoActionMethodList *   SoAction::methods;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -348,7 +345,7 @@ SoAction::initClass()
 
     // Enable override element for all actions.
     enabledElements->enable(SoOverrideElement::getClassTypeId(),
-                SoOverrideElement::getClassStackIndex());
+                            SoOverrideElement::getClassStackIndex());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -358,31 +355,31 @@ SoAction::initClass()
 //
 // Use: protected
 
-SoAction::SoAction() : curPath(32)
+SoAction::SoAction()
+    : curPath(32)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SO_ACTION_CONSTRUCTOR(SoAction);
 
 #ifdef DEBUG
-    if (! SoDB::isInitialized())
-	SoDebugError::post("SoAction::SoAction",
-			   "Cannot construct actions before "
-			   "calling SoDB::init()");
+    if (!SoDB::isInitialized())
+        SoDebugError::post("SoAction::SoAction",
+                           "Cannot construct actions before "
+                           "calling SoDB::init()");
 #endif /* DEBUG */
 
-    isBeingApplied	= FALSE;
-    appliedTo.node	= NULL;
-    appliedTo.path	= NULL;
-    appliedTo.pathList	= NULL;
-    state		= NULL;
-    terminated		= FALSE;
-    tempPath		= NULL;
+    isBeingApplied = FALSE;
+    appliedTo.node = NULL;
+    appliedTo.path = NULL;
+    appliedTo.pathList = NULL;
+    state = NULL;
+    terminated = FALSE;
+    tempPath = NULL;
 
     // Make sure enabled elements list is set up the first time this
     // is applied.
     enabledElementsCounter = -1;
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -397,15 +394,15 @@ SoAction::~SoAction()
 ////////////////////////////////////////////////////////////////////////
 {
     if (appliedTo.node != NULL)
-	appliedTo.node->unref();
+        appliedTo.node->unref();
 
     if (appliedTo.path != NULL)
-	appliedTo.path->unref();
+        appliedTo.path->unref();
 
     if (state != NULL)
-	delete state;
+        delete state;
     if (tempPath != NULL)
-	tempPath->unref();	
+        tempPath->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -433,12 +430,11 @@ SoAction::isOfType(SoType type) const
 //////////////////////////////////////////////////////////////////////
 //
 const SoPath *
-SoAction::getCurPath() 
-{
-    if(tempPath == NULL){
-	tempPath = new SoTempPath(32);
-	tempPath->ref();
-        }
+SoAction::getCurPath() {
+    if (tempPath == NULL) {
+        tempPath = new SoTempPath(32);
+        tempPath->ref();
+    }
     curPath.makeTempPath(tempPath);
     return tempPath;
 }
@@ -452,16 +448,16 @@ SoAction::getCurPath()
 //////////////////////////////////////////////////////////////////////
 //
 SoNode *
-SoAction::getCurPathTail() 
-{
+SoAction::getCurPathTail() {
 #ifdef DEBUG
-    if (curPath.getTail() != ((SoFullPath*)getCurPath())->getTail()){
-	SoDebugError::post("SoAction::getCurPathTail\n", 
-	"Inconsistent path tail.  Did you change the scene graph\n"
-	"During traversal?\n");
+    if (curPath.getTail() != ((SoFullPath *)getCurPath())->getTail()) {
+        SoDebugError::post(
+            "SoAction::getCurPathTail\n",
+            "Inconsistent path tail.  Did you change the scene graph\n"
+            "During traversal?\n");
     }
 #endif /*DEBUG*/
-    return(curPath.getTail());
+    return (curPath.getTail());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -480,10 +476,10 @@ SoAction::apply(SoNode *node)
     // Check for the common user error of applying an action to an
     // unreferenced root. This may save some grief.
     if (node->getRefCount() == 0)
-	SoDebugError::postWarning("SoAction::apply",
-				  "Action applied to a node with a 0 "
-				  "reference count. Did you forget to call "
-				  "ref() on the node?");
+        SoDebugError::postWarning("SoAction::apply",
+                                  "Action applied to a node with a 0 "
+                                  "reference count. Did you forget to call "
+                                  "ref() on the node?");
 #endif /* DEBUG */
 
     // If we are already in the middle of being applied, save the
@@ -491,11 +487,11 @@ SoAction::apply(SoNode *node)
     // afterwards. This happens, for example, when the
     // SoGLRenderAction applies itself to traverse transparent paths
     // after normal traversal.
-    SbBool		needToRestore = isBeingApplied;
-    struct AppliedTo	saveAppliedTo;
+    SbBool           needToRestore = isBeingApplied;
+    struct AppliedTo saveAppliedTo;
 
     if (isBeingApplied)
-	saveAppliedTo = appliedTo;
+        saveAppliedTo = appliedTo;
 
     isBeingApplied = TRUE;
 
@@ -515,7 +511,7 @@ SoAction::apply(SoNode *node)
 
     // Restore to previous state if necessary
     if (needToRestore)
-	appliedTo = saveAppliedTo;
+        appliedTo = saveAppliedTo;
 
     isBeingApplied = needToRestore;
 }
@@ -536,10 +532,10 @@ SoAction::apply(SoPath *path)
     // Check for the common user error of applying an action to an
     // unreferenced path. This may save some grief.
     if (path->getRefCount() == 0) {
-	SoDebugError::postWarning("SoAction::apply",
-				  "Action applied to a path with a 0 "
-				  "reference count. Did you forget to call "
-				  "ref() on the path?");
+        SoDebugError::postWarning("SoAction::apply",
+                                  "Action applied to a path with a 0 "
+                                  "reference count. Did you forget to call "
+                                  "ref() on the path?");
     }
 #endif /* DEBUG */
 
@@ -548,22 +544,22 @@ SoAction::apply(SoPath *path)
     // afterwards. This happens, for example, when the
     // SoGLRenderAction applies itself to traverse transparent paths
     // after normal traversal.
-    SbBool		needToRestore = isBeingApplied;
-    struct AppliedTo	saveAppliedTo;
+    SbBool           needToRestore = isBeingApplied;
+    struct AppliedTo saveAppliedTo;
 
     if (isBeingApplied)
-	saveAppliedTo = appliedTo;
+        saveAppliedTo = appliedTo;
 
     isBeingApplied = TRUE;
 
     appliedTo.code = PATH;
     appliedTo.path = path;
     appliedTo.path->ref();
-    appliedTo.curPathCode = (((const SoFullPath *) path)->getLength() == 1 ?
-			     BELOW_PATH : IN_PATH);
+    appliedTo.curPathCode =
+        (((const SoFullPath *)path)->getLength() == 1 ? BELOW_PATH : IN_PATH);
 
     curPath.setHead(path->getHead());
-    terminated    = FALSE;
+    terminated = FALSE;
 
     setUpState();
 
@@ -573,19 +569,21 @@ SoAction::apply(SoPath *path)
 
     // Restore to previous state if necessary
     if (needToRestore) {
-	appliedTo = saveAppliedTo;
+        appliedTo = saveAppliedTo;
 
-	// Restore the head of the path - we assume this is what was
-	// in the current path when we got here. NOTE: This rules out
-	// the possibility that the action was in the middle of being
-	// applied to some graph; it requires that the recursive
-	// apply() was called after the graph was traversed, so the
-	// current path had only the head node in it (the cleanUp()
-	// for the first apply() was not yet called).
-	SoNode *head = (appliedTo.code == NODE ? appliedTo.node :
-			appliedTo.code == PATH ? appliedTo.path->getHead() :
-			(*appliedTo.pathList)[0]->getHead());
-	curPath.setHead(head);
+        // Restore the head of the path - we assume this is what was
+        // in the current path when we got here. NOTE: This rules out
+        // the possibility that the action was in the middle of being
+        // applied to some graph; it requires that the recursive
+        // apply() was called after the graph was traversed, so the
+        // current path had only the head node in it (the cleanUp()
+        // for the first apply() was not yet called).
+        SoNode *head = (appliedTo.code == NODE
+                            ? appliedTo.node
+                            : appliedTo.code == PATH
+                                  ? appliedTo.path->getHead()
+                                  : (*appliedTo.pathList)[0]->getHead());
+        curPath.setHead(head);
     }
 
     isBeingApplied = needToRestore;
@@ -605,12 +603,12 @@ SoAction::apply(const SoPathList &pathList, SbBool obeysRules)
 {
     // Check for empty path list
     if (pathList.getLength() == 0)
-	return;
+        return;
 
     // If path list obeys the rules, just apply the action to it
     if (obeysRules) {
-	apply(pathList, pathList, TRUE);
-	return;
+        apply(pathList, pathList, TRUE);
+        return;
     }
 
     //
@@ -619,24 +617,24 @@ SoAction::apply(const SoPathList &pathList, SbBool obeysRules)
     //
 
     // First, sort the paths
-    SoPathList	sortedPathList(pathList);
+    SoPathList sortedPathList(pathList);
     sortedPathList.sort();
 
     // Remove any duplicate paths and any paths that continue through
     // the tail node of another path
     sortedPathList.uniquify();
 
-    int	numPaths = sortedPathList.getLength();
+    int numPaths = sortedPathList.getLength();
 
     // If all the remaining paths have the same head, just apply to
     // the sorted path list
     const SoNode *firstHead = sortedPathList[0]->getHead();
-    if (sortedPathList[numPaths-1]->getHead() == firstHead)
-	apply(sortedPathList, pathList, TRUE);
+    if (sortedPathList[numPaths - 1]->getHead() == firstHead)
+        apply(sortedPathList, pathList, TRUE);
 
     // Otherwise, we have to break the path list into smaller ones
     else
-	splitPathList(sortedPathList, pathList);
+        splitPathList(sortedPathList, pathList);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -660,11 +658,11 @@ SoAction::nullAction(SoAction *, SoNode *)
 {
 #ifdef DEBUG
     const char *nodeName = n->getTypeId().getName().getString();
-    const char *actName  = a->getTypeId().getName().getString();
-    
+    const char *actName = a->getTypeId().getName().getString();
+
     SoDebugError::postWarning("SoAction::nullAction",
-			      "Called for node %s, action %s",
-			      nodeName, actName);
+                              "Called for node %s, action %s", nodeName,
+                              actName);
 #endif
 }
 
@@ -686,19 +684,17 @@ SoAction::usePathCode(int &numIndices, const int *&indices)
 ////////////////////////////////////////////////////////////////////////
 {
 
-	if (appliedTo.code == PATH) {
-	    // Use "index" storage in instance to return next index
-	    index = appliedTo.path->getIndex(curPath.getFullLength());
-	    numIndices	= 1;
-	    indices	= &index;
-	}
+    if (appliedTo.code == PATH) {
+        // Use "index" storage in instance to return next index
+        index = appliedTo.path->getIndex(curPath.getFullLength());
+        numIndices = 1;
+        indices = &index;
+    }
 
-	// Path list case
-	else
-	    appliedTo.compactPathList->getChildren(numIndices, indices);
-
+    // Path list case
+    else
+        appliedTo.compactPathList->getChildren(numIndices, indices);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -719,53 +715,53 @@ SoAction::pushCurPath(int childIndex)
     // on the path already for this to be true.)
     if (appliedTo.curPathCode == IN_PATH) {
 
-	// If traversing a path list, let it know where we are and
-	// find out if we are still on a path being traversed.
+        // If traversing a path list, let it know where we are and
+        // find out if we are still on a path being traversed.
 
-	if (appliedTo.code == PATH_LIST) {
-	    SbBool	onPath = appliedTo.compactPathList->push(childIndex);
+        if (appliedTo.code == PATH_LIST) {
+            SbBool onPath = appliedTo.compactPathList->push(childIndex);
 
-	    if (! onPath)
-		appliedTo.curPathCode = OFF_PATH;
+            if (!onPath)
+                appliedTo.curPathCode = OFF_PATH;
 
-	    // If still on a path, see if we are at the end by seeing
-	    // if there are any children left on the path
-	    else {
-		int	numChildren;
-		const int *indices;
+            // If still on a path, see if we are at the end by seeing
+            // if there are any children left on the path
+            else {
+                int        numChildren;
+                const int *indices;
 
-		appliedTo.compactPathList->getChildren(numChildren, indices);
-		if (numChildren == 0)
-		    appliedTo.curPathCode = BELOW_PATH;
-		else
-		    appliedTo.curPathCode = IN_PATH;
-	    }
-	}
+                appliedTo.compactPathList->getChildren(numChildren, indices);
+                if (numChildren == 0)
+                    appliedTo.curPathCode = BELOW_PATH;
+                else
+                    appliedTo.curPathCode = IN_PATH;
+            }
+        }
 
-	// Otherwise, we're applying to a path:
-	else {
+        // Otherwise, we're applying to a path:
+        else {
 
-	    // Get new length of current path
-	    int	l = curPath.getFullLength();
+            // Get new length of current path
+            int l = curPath.getFullLength();
 
-	    // There are three possible cases:
-	    // (1) New node is the last node in the path chain    => BELOW_PATH
-	    // (2) It's the next node (not the last) in the chain => IN_PATH
-	    // (3) It veered off the path chain			  => OFF_PATH
+            // There are three possible cases:
+            // (1) New node is the last node in the path chain    => BELOW_PATH
+            // (2) It's the next node (not the last) in the chain => IN_PATH
+            // (3) It veered off the path chain			  => OFF_PATH
 
-	    // If the new node is NOT the next node in the path, we must
-	    // be off the path
-	    const SoNode *nextPathNode = appliedTo.path->getNode(l - 1);
-	    if (curPath.getNode(l - 1) != nextPathNode)
-		appliedTo.curPathCode = OFF_PATH;
+            // If the new node is NOT the next node in the path, we must
+            // be off the path
+            const SoNode *nextPathNode = appliedTo.path->getNode(l - 1);
+            if (curPath.getNode(l - 1) != nextPathNode)
+                appliedTo.curPathCode = OFF_PATH;
 
-	    // Otherwise, if cur path length is now the same as the path
-	    // being applied to, we must at the last node in that path
-	    else if (l == ((const SoFullPath *) appliedTo.path)->getLength())
-		appliedTo.curPathCode = BELOW_PATH;
+            // Otherwise, if cur path length is now the same as the path
+            // being applied to, we must at the last node in that path
+            else if (l == ((const SoFullPath *)appliedTo.path)->getLength())
+                appliedTo.curPathCode = BELOW_PATH;
 
-	    // Otherwise, we're still IN_PATH
-	}
+            // Otherwise, we're still IN_PATH
+        }
     }
 }
 
@@ -788,7 +784,7 @@ SoAction::popCurPath(PathCode prevPathCode)
 
     // If we're traversing a path list, let it know where we are
     if (appliedTo.code == PATH_LIST && appliedTo.curPathCode == IN_PATH)
-	appliedTo.compactPathList->pop();
+        appliedTo.compactPathList->pop();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -864,16 +860,16 @@ SoAction::setUpState()
     // Create state if necessary.  When an new or different element is
     // enabled, the recreateState flag is set.
     if (state == NULL ||
-	enabledElementsCounter != SoEnabledElementsList::getCounter()) {
+        enabledElementsCounter != SoEnabledElementsList::getCounter()) {
 
-	if (state != NULL)
-	    delete state;
+        if (state != NULL)
+            delete state;
 
-	state = new SoState(this, getEnabledElements().getElements());
+        state = new SoState(this, getEnabledElements().getElements());
 
-	// Store current counter in instance
-	enabledElementsCounter = SoEnabledElementsList::getCounter();
-    }	
+        // Store current counter in instance
+        enabledElementsCounter = SoEnabledElementsList::getCounter();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -889,8 +885,8 @@ SoAction::invalidateState()
 ////////////////////////////////////////////////////////////////////////
 {
     if (state != NULL) {
-	delete state;
-	state = NULL;
+        delete state;
+        state = NULL;
     }
 }
 
@@ -908,23 +904,23 @@ SoAction::cleanUp()
 {
     switch (appliedTo.code) {
 
-      case NODE:
-	if (appliedTo.node != NULL) {
-	    appliedTo.node->unref();
-	    appliedTo.node = NULL;
-	}
-	break;
+    case NODE:
+        if (appliedTo.node != NULL) {
+            appliedTo.node->unref();
+            appliedTo.node = NULL;
+        }
+        break;
 
-      case PATH:
-	if (appliedTo.path != NULL) {
-	    appliedTo.path->unref();
-	    appliedTo.path = NULL;
-	}
-	break;
+    case PATH:
+        if (appliedTo.path != NULL) {
+            appliedTo.path->unref();
+            appliedTo.path = NULL;
+        }
+        break;
 
-      case PATH_LIST:
-	appliedTo.pathList = NULL;
-	break;
+    case PATH_LIST:
+        appliedTo.pathList = NULL;
+        break;
     }
 
     curPath.truncate(0);
@@ -941,39 +937,39 @@ SoAction::cleanUp()
 
 void
 SoAction::splitPathList(const SoPathList &sortedList,
-			const SoPathList &origPathList)
+                        const SoPathList &origPathList)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numPaths, curStart, i;
-    SoNode	*curHead;
+    int     numPaths, curStart, i;
+    SoNode *curHead;
 
     numPaths = sortedList.getLength();
 
     // Create a list to hold one of the split lists
-    SoPathList	splitList(numPaths);
+    SoPathList splitList(numPaths);
 
     // Split list while there are still paths to examine
     curStart = 0;
     while (curStart < numPaths) {
 
-	// Gather all paths with same head
-	curHead = sortedList[curStart]->getHead();
-	splitList.append(sortedList[curStart]);
+        // Gather all paths with same head
+        curHead = sortedList[curStart]->getHead();
+        splitList.append(sortedList[curStart]);
 
-	for (i = curStart + 1; i < numPaths; i++) {
-	    if (sortedList[i]->getHead() != curHead)
-		break;
-	    splitList.append(sortedList[i]);
-	}
+        for (i = curStart + 1; i < numPaths; i++) {
+            if (sortedList[i]->getHead() != curHead)
+                break;
+            splitList.append(sortedList[i]);
+        }
 
-	// Apply action to split list. Indicate that it's the last
-	// path list if there are no more paths after these.
-	apply(splitList, origPathList, i >= numPaths);
+        // Apply action to split list. Indicate that it's the last
+        // path list if there are no more paths after these.
+        apply(splitList, origPathList, i >= numPaths);
 
-	// Prepare for next set of paths
-	splitList.truncate(0);
-	curStart = i;
+        // Prepare for next set of paths
+        splitList.truncate(0);
+        curStart = i;
     }
 }
 
@@ -990,8 +986,8 @@ SoAction::splitPathList(const SoPathList &sortedList,
 // Use: private
 
 void
-SoAction::apply(const SoPathList &sortedList,
-		const SoPathList &origPathList, SbBool isLastPathList)
+SoAction::apply(const SoPathList &sortedList, const SoPathList &origPathList,
+                SbBool isLastPathList)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1000,21 +996,21 @@ SoAction::apply(const SoPathList &sortedList,
     // afterwards. This happens, for example, when the
     // SoGLRenderAction applies itself to traverse transparent paths
     // after normal traversal.
-    SbBool		needToRestore = isBeingApplied;
-    struct AppliedTo	saveAppliedTo;
+    SbBool           needToRestore = isBeingApplied;
+    struct AppliedTo saveAppliedTo;
 
     if (isBeingApplied)
-	saveAppliedTo = appliedTo;
+        saveAppliedTo = appliedTo;
 
     isBeingApplied = TRUE;
 
     appliedTo.code = PATH_LIST;
-    appliedTo.pathList       = &sortedList;
-    appliedTo.origPathList   = &origPathList;
+    appliedTo.pathList = &sortedList;
+    appliedTo.origPathList = &origPathList;
     appliedTo.isLastPathList = isLastPathList;
-    appliedTo.curPathCode    =
-	(((const SoFullPath *) sortedList[0])->getLength() == 1 ?
-	 BELOW_PATH : IN_PATH);
+    appliedTo.curPathCode =
+        (((const SoFullPath *)sortedList[0])->getLength() == 1 ? BELOW_PATH
+                                                               : IN_PATH);
 
     curPath.setHead(sortedList[0]->getHead());
     terminated = FALSE;
@@ -1024,34 +1020,35 @@ SoAction::apply(const SoPathList &sortedList,
     // If requested, create compact path lists for easier traversal
     // and apply to them
     if (shouldCompactPathLists())
-	appliedTo.compactPathList = new SoCompactPathList(sortedList);
+        appliedTo.compactPathList = new SoCompactPathList(sortedList);
     else
-	appliedTo.compactPathList = NULL;
+        appliedTo.compactPathList = NULL;
 
     beginTraversal(sortedList[0]->getHead());
 
     cleanUp();
 
     if (appliedTo.compactPathList != NULL)
-	delete appliedTo.compactPathList;
+        delete appliedTo.compactPathList;
 
     // Restore to previous state if necessary
     if (needToRestore) {
-	appliedTo = saveAppliedTo;
+        appliedTo = saveAppliedTo;
 
-	// Restore the head of the path - we assume this is what was
-	// in the current path when we got here. NOTE: This rules out
-	// the possibility that the action was in the middle of being
-	// applied to some graph; it requires that the recursive
-	// apply() was called after the graph was traversed, so the
-	// current path had only the head node in it (the cleanUp()
-	// for the first apply() was not yet called).
-	SoNode *head = (appliedTo.code == NODE ? appliedTo.node :
-			appliedTo.code == PATH ? appliedTo.path->getHead() :
-			(*appliedTo.pathList)[0]->getHead());
-	curPath.setHead(head);
+        // Restore the head of the path - we assume this is what was
+        // in the current path when we got here. NOTE: This rules out
+        // the possibility that the action was in the middle of being
+        // applied to some graph; it requires that the recursive
+        // apply() was called after the graph was traversed, so the
+        // current path had only the head node in it (the cleanUp()
+        // for the first apply() was not yet called).
+        SoNode *head = (appliedTo.code == NODE
+                            ? appliedTo.node
+                            : appliedTo.code == PATH
+                                  ? appliedTo.path->getHead()
+                                  : (*appliedTo.pathList)[0]->getHead());
+        curPath.setHead(head);
     }
 
     isBeingApplied = needToRestore;
 }
-

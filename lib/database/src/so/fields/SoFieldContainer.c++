@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,20 +68,21 @@
 #include <cstring>
 
 // Syntax for reading/writing type information to files
-#define OPEN_BRACE_CHAR		'['
-#define CLOSE_BRACE_CHAR	']'
-#define VALUE_SEPARATOR_CHAR	','
+#define OPEN_BRACE_CHAR '['
+#define CLOSE_BRACE_CHAR ']'
+#define VALUE_SEPARATOR_CHAR ','
 
 // This is a list of map instances used duting copy operations to
 // keep track of instances. It is a list to allow recursive copying.
-std::stack<std::map<const SoFieldContainer*, const SoFieldContainer*> > SoFieldContainer::copyDictList;
+std::stack<std::map<const SoFieldContainer *, const SoFieldContainer *> >
+    SoFieldContainer::copyDictList;
 
 // These are used by SoFieldContainer::get() to hold the returned
 // field string
 // We rely on the compiler to initialize them to zero for us...
 std::vector<char> SoFieldContainer::fieldBuf;
 
-SoType	SoFieldContainer::classTypeId;
+SoType SoFieldContainer::classTypeId;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -95,8 +96,8 @@ SoFieldContainer::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    classTypeId = SoType::createType(SoBase::getClassTypeId(),
-				     "FieldContainer");
+    classTypeId =
+        SoType::createType(SoBase::getClassTypeId(), "FieldContainer");
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -159,13 +160,13 @@ SoFieldContainer::setToDefaults()
 ////////////////////////////////////////////////////////////////////////
 {
     // Create an instance of the same type - it will have default values
-    SoFieldContainer *def = (SoFieldContainer *) getTypeId().createInstance();
+    SoFieldContainer *def = (SoFieldContainer *)getTypeId().createInstance();
     def->ref();
 
     const SoFieldData *fieldData = getFieldData();
 
     if ((fieldData != NULL) && (def != NULL))
-	fieldData->overlay(this, def, FALSE);
+        fieldData->overlay(this, def, FALSE);
 
     def->unref();
 }
@@ -184,11 +185,11 @@ SoFieldContainer::hasDefaultValues() const
 ////////////////////////////////////////////////////////////////////////
 {
     // Create an instance of the same type - it will have default values
-    SoFieldContainer *def = (SoFieldContainer *) getTypeId().createInstance();
+    SoFieldContainer *def = (SoFieldContainer *)getTypeId().createInstance();
     def->ref();
 
     // Compare with this instance
-    SbBool	sameValues = fieldsAreEqual(def);
+    SbBool sameValues = fieldsAreEqual(def);
 
     // Get rid of default instance
     def->unref();
@@ -211,9 +212,9 @@ SoFieldContainer::fieldsAreEqual(const SoFieldContainer *fc) const
 {
 #ifdef DEBUG
     if (getTypeId() != fc->getTypeId()) {
-	SoDebugError::post("SoFieldContainer::fieldsAreEqual",
-			   "Instances are of different types");
-	return FALSE;
+        SoDebugError::post("SoFieldContainer::fieldsAreEqual",
+                           "Instances are of different types");
+        return FALSE;
     }
 #endif /* DEBUG */
 
@@ -233,22 +234,22 @@ SoFieldContainer::fieldsAreEqual(const SoFieldContainer *fc) const
 
 void
 SoFieldContainer::copyFieldValues(const SoFieldContainer *fc,
-				  SbBool copyConnections)
+                                  SbBool                  copyConnections)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     if (getTypeId() != fc->getTypeId()) {
-	SoDebugError::post("SoFieldContainer::copyFieldValues",
-			   "Instances are of different types");
-	return;
+        SoDebugError::post("SoFieldContainer::copyFieldValues",
+                           "Instances are of different types");
+        return;
     }
 #endif /* DEBUG */
 
     // Copy fields in field data instances
     const SoFieldData *fieldData = getFieldData();
     if (fieldData != NULL)
-	fieldData->overlay(this, fc, copyConnections);
+        fieldData->overlay(this, fc, copyConnections);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -270,16 +271,15 @@ SoFieldContainer::set(const char *fieldDataString, SoInput *dictIn)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoFieldData	*fieldData = getFieldData();
+    const SoFieldData *fieldData = getFieldData();
 
     if (fieldData != NULL) {
-	SoInput	in(dictIn);
-	in.setBuffer((void *) fieldDataString, strlen(fieldDataString));
-	SbBool isBuiltIn; // Not used
-	return fieldData->read(&in, this, FALSE, isBuiltIn);
-    }
-    else
-	return FALSE;
+        SoInput in(dictIn);
+        in.setBuffer((void *)fieldDataString, strlen(fieldDataString));
+        SbBool isBuiltIn; // Not used
+        return fieldData->read(&in, this, FALSE, isBuiltIn);
+    } else
+        return FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -302,17 +302,16 @@ SoFieldContainer::get(SbString &fieldDataString, SoOutput *dictOut)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoFieldData	*fieldData = getFieldData();
+    const SoFieldData *fieldData = getFieldData();
 
 #ifdef DEBUG
     if (fieldData == NULL) {
-	SoDebugError::post("SoFieldContainer::get",
-			   "Field data is NULL!");
-	return;
+        SoDebugError::post("SoFieldContainer::get", "Field data is NULL!");
+        return;
     }
 #endif
 
-    SoOutput	out(dictOut);
+    SoOutput out(dictOut);
 
     // Prepare a character buffer and SoOutput for writing field strings
     if (fieldBuf.empty()) {
@@ -320,14 +319,14 @@ SoFieldContainer::get(SbString &fieldDataString, SoOutput *dictOut)
     }
 
     // Set up output into a string buffer
-    out.setBuffer((void *) fieldBuf.data(), fieldBuf.size(),
-		  &SoFieldContainer::reallocFieldBuf);
+    out.setBuffer((void *)fieldBuf.data(), fieldBuf.size(),
+                  &SoFieldContainer::reallocFieldBuf);
 
     // Make sure that the file header and lots of white space will NOT
     // be written into the string
     out.setCompact(TRUE);
 
-    // Prepare to begin writing by incrementing the 
+    // Prepare to begin writing by incrementing the
     // current write counter in SoBase
     SoBase::incrementCurrentWriteCounter();
 
@@ -355,8 +354,7 @@ SoFieldContainer::get(SbString &fieldDataString, SoOutput *dictOut)
 // Use: protected
 
 SbBool
-SoFieldContainer::readInstance(SoInput *in, 
-			       unsigned short /* flags not used */)
+SoFieldContainer::readInstance(SoInput *in, unsigned short /* flags not used */)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -384,13 +382,13 @@ SoFieldContainer::addWriteReference(SoOutput *out, SbBool isFromField)
     // If this is the first reference to this instance and we are not
     // being referenced from a field-to-field connection, give fields
     // a chance to do their thing
-    if (! isFromField && ! hasMultipleWriteRefs()) {
-	SoFieldData	*fieldData = (SoFieldData *) getFieldData();
+    if (!isFromField && !hasMultipleWriteRefs()) {
+        SoFieldData *fieldData = (SoFieldData *)getFieldData();
 
-	// Since the SoOutput is in the COUNT_REFS stage, this call to
-	// write() will just take care of counting references
-	if (fieldData != NULL)
-	    fieldData->write(out, this);
+        // Since the SoOutput is in the COUNT_REFS stage, this call to
+        // write() will just take care of counting references
+        if (fieldData != NULL)
+            fieldData->write(out, this);
     }
 }
 
@@ -406,11 +404,11 @@ SoFieldContainer::writeInstance(SoOutput *out)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! writeHeader(out, FALSE, FALSE)) {
+    if (!writeHeader(out, FALSE, FALSE)) {
 
-	getFieldData()->write(out, this);
+        getFieldData()->write(out, this);
 
-	writeFooter(out);
+        writeFooter(out);
     }
 }
 
@@ -462,14 +460,14 @@ SoFieldContainer::getFields(SoFieldList &list) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			i;
-    const SoFieldData	*fd = getFieldData();
+    int                i;
+    const SoFieldData *fd = getFieldData();
 
     if (fd == NULL)
-	return 0;
+        return 0;
 
     for (i = 0; i < fd->getNumFields(); i++) {
-	list.append(fd->getField(this, i));
+        list.append(fd->getField(this, i));
     }
 
     return fd->getNumFields();
@@ -488,16 +486,16 @@ SoFieldContainer::getField(const SbName &fieldName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			i;
-    const SoFieldData	*fd = getFieldData();
+    int                i;
+    const SoFieldData *fd = getFieldData();
 
     if (fd == NULL)
-	return NULL;
+        return NULL;
 
     // Search fields for one with given name
     for (i = 0; i < fd->getNumFields(); i++)
-	if (fd->getFieldName(i) == fieldName)
-	    return fd->getField(this, i);
+        if (fd->getFieldName(i) == fieldName)
+            return fd->getField(this, i);
 
     // Not found...
     return NULL;
@@ -517,18 +515,18 @@ SoFieldContainer::getFieldName(const SoField *field, SbName &fieldName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			i;
-    const SoFieldData	*fd = getFieldData();
+    int                i;
+    const SoFieldData *fd = getFieldData();
 
     if (fd == NULL)
-	return FALSE;
+        return FALSE;
 
     // Search fields for one with given pointer
     for (i = 0; i < fd->getNumFields(); i++) {
-	if (fd->getField(this, i) == field) {
-	    fieldName = fd->getFieldName(i);
-	    return TRUE;
-	}
+        if (fd->getField(this, i) == field) {
+            fieldName = fd->getFieldName(i);
+            return TRUE;
+        }
     }
 
     // Not found...
@@ -549,46 +547,46 @@ SoFieldContainer::notify(SoNotList *list)
 {
 #ifdef DEBUG
     if (list == NULL) {
-	SoDebugError::post("SoFieldContainer::notify",
-			   "Notification list pointer is NULL");
-	return;
+        SoDebugError::post("SoFieldContainer::notify",
+                           "Notification list pointer is NULL");
+        return;
     }
 #endif /* DEBUG */
 
     // Don't notify if application has disabled notification for some reason
-    if (! isNotifyEnabled())
-	return;
+    if (!isNotifyEnabled())
+        return;
 
     // There are only 2 types of notification possible here: CONTAINER
     // (a field notifying its container), or PARENT (a node notifying
     // its parent). The other types are handled by the other classes.
 
     switch (list->getLastRec()->getType()) {
-      case SoNotRec::CONTAINER:
-	// We don't need to create a new record, since the last
-	// record's base is already set to this. Just notify all
-	// auditors.
-	SoBase::notify(list);
-	break;
+    case SoNotRec::CONTAINER:
+        // We don't need to create a new record, since the last
+        // record's base is already set to this. Just notify all
+        // auditors.
+        SoBase::notify(list);
+        break;
 
-      case SoNotRec::PARENT:
-	// If we're notifying from a child node to a parent node,
-	// create a new record that contains the parent node as a
-	// base, then notify.
-	{
-	    SoNotRec	rec(this);
-	    list->append(&rec);
-	    SoBase::notify(list);
-	}
-	break;
+    case SoNotRec::PARENT:
+        // If we're notifying from a child node to a parent node,
+        // create a new record that contains the parent node as a
+        // base, then notify.
+        {
+            SoNotRec rec(this);
+            list->append(&rec);
+            SoBase::notify(list);
+        }
+        break;
 
-      default:
+    default:
 #ifdef DEBUG
-	SoDebugError::post("SoFieldContainer::notify (internal)",
-			   "Got notification of type %d",
-			   list->getLastRec()->getType());
+        SoDebugError::post("SoFieldContainer::notify (internal)",
+                           "Got notification of type %d",
+                           list->getLastRec()->getType());
 #endif /* DEBUG */
-	break;
+        break;
     }
 }
 
@@ -606,7 +604,7 @@ SoFieldContainer::initCopyDict()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    std::map<const SoFieldContainer*, const SoFieldContainer*> copyDict;
+    std::map<const SoFieldContainer *, const SoFieldContainer *> copyDict;
 
     // Insert the new dictionary at the beginning. Since most copies
     // are non-recursive, having to make room in the list won't happen
@@ -624,11 +622,12 @@ SoFieldContainer::initCopyDict()
 
 void
 SoFieldContainer::addCopy(const SoFieldContainer *orig,
-			  const SoFieldContainer *copy)
+                          const SoFieldContainer *copy)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    std::map<const SoFieldContainer*, const SoFieldContainer*> &copyDict = copyDictList.top();
+    std::map<const SoFieldContainer *, const SoFieldContainer *> &copyDict =
+        copyDictList.top();
 
     // Add a reference when entering an instance into the
     // dictionary. The references are removed before the dictionary is
@@ -641,7 +640,7 @@ SoFieldContainer::addCopy(const SoFieldContainer *orig,
     // this because the notifyEnabled flag is not copied between
     // instances. When copyContents() is called for the first time on
     // a copied instance, we reset the flag to TRUE.
-    ((SoFieldContainer *) copy)->notifyEnabled = FALSE;
+    ((SoFieldContainer *)copy)->notifyEnabled = FALSE;
 
     copyDict[orig] = copy;
 }
@@ -660,10 +659,12 @@ SoFieldContainer::checkCopy(const SoFieldContainer *orig)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const std::map<const SoFieldContainer*, const SoFieldContainer*> &copyDict = copyDictList.top();
-    std::map<const SoFieldContainer*, const SoFieldContainer*>::const_iterator it = copyDict.find(orig);
+    const std::map<const SoFieldContainer *, const SoFieldContainer *>
+        &copyDict = copyDictList.top();
+    std::map<const SoFieldContainer *, const SoFieldContainer *>::const_iterator
+        it = copyDict.find(orig);
 
-    return (it != copyDict.end()) ? (SoFieldContainer *) it->second : NULL;
+    return (it != copyDict.end()) ? (SoFieldContainer *)it->second : NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -677,17 +678,18 @@ SoFieldContainer::checkCopy(const SoFieldContainer *orig)
 // Use: internal, static
 
 SoFieldContainer *
-SoFieldContainer::findCopy(const SoFieldContainer *orig,
-			   SbBool copyConnections)
+SoFieldContainer::findCopy(const SoFieldContainer *orig, SbBool copyConnections)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (copyDictList.empty())
         return NULL;
 
-    const std::map<const SoFieldContainer*, const SoFieldContainer*> &copyDict = copyDictList.top();
+    const std::map<const SoFieldContainer *, const SoFieldContainer *>
+        &copyDict = copyDictList.top();
 
-    std::map<const SoFieldContainer*, const SoFieldContainer*>::const_iterator it = copyDict.find(orig);
+    std::map<const SoFieldContainer *, const SoFieldContainer *>::const_iterator
+        it = copyDict.find(orig);
     if (it == copyDict.end())
         return NULL;
 
@@ -696,7 +698,7 @@ SoFieldContainer::findCopy(const SoFieldContainer *orig,
     // ??? Copy the contents only if the notifyEnabled flag is FALSE,
     // indicating that the copy has not yet been done. See the HACK
     // ALERT above.
-    if (! copyFC->notifyEnabled) {
+    if (!copyFC->notifyEnabled) {
         copyFC->notifyEnabled = TRUE;
         copyFC->copyContents(orig, copyConnections);
     }
@@ -719,20 +721,21 @@ SoFieldContainer::copyDone()
 #ifdef DEBUG
     if (copyDictList.empty()) {
         SoDebugError::post("SoFieldContainer::copyDone",
-                   "No dictionary left to get rid of");
+                           "No dictionary left to get rid of");
         return;
     }
 #endif /* DEBUG */
 
-    std::map<const SoFieldContainer*, const SoFieldContainer*> &copyDict = copyDictList.top();
+    std::map<const SoFieldContainer *, const SoFieldContainer *> &copyDict =
+        copyDictList.top();
 
     // Unref every instance in the copy dictionary
-    std::map<const SoFieldContainer*, const SoFieldContainer*>::iterator it;
-    for ( it = copyDict.begin(); it != copyDict.end(); it++ ) {
-        SoFieldContainer *inst = (SoFieldContainer*)it->second;
+    std::map<const SoFieldContainer *, const SoFieldContainer *>::iterator it;
+    for (it = copyDict.begin(); it != copyDict.end(); it++) {
+        SoFieldContainer *inst = (SoFieldContainer *)it->second;
 
         // Set the notifyEnabled bit to TRUE if it wasn't already done
-        if (! inst->notifyEnabled)
+        if (!inst->notifyEnabled)
             inst->notifyEnabled = TRUE;
 
         inst->unref();
@@ -751,7 +754,7 @@ SoFieldContainer::copyDone()
 
 void
 SoFieldContainer::copyContents(const SoFieldContainer *fromFC,
-			       SbBool copyConnections)
+                               SbBool                  copyConnections)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -762,8 +765,8 @@ SoFieldContainer::copyContents(const SoFieldContainer *fromFC,
 
     // Copy the name, if it has one
     const SbName &name = fromFC->getName();
-    if (! ! name)
-	setName(name);
+    if (!!name)
+        setName(name);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -782,5 +785,5 @@ SoFieldContainer::copyThroughConnection() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (SoFieldContainer *) this;
+    return (SoFieldContainer *)this;
 }

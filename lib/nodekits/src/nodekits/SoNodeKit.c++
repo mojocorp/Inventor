@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -80,42 +80,42 @@ SoNodeKit::init()
 ////////////////////////////////////////////////////////////////////////
 {
     // Only initialize once
-    if (! initialized) {
+    if (!initialized) {
 
-	// Call SoDB::init();
-	// Okay if it's already been called.
-	SoDB::init();
+        // Call SoDB::init();
+        // Okay if it's already been called.
+        SoDB::init();
 
-	//
-	// initialize the nodekit catalog class
-	//
-	SoNodekitCatalog::initClass();
+        //
+        // initialize the nodekit catalog class
+        //
+        SoNodekitCatalog::initClass();
 
-	//
-	// initialize all the node classes
-	//
+        //
+        // initialize all the node classes
+        //
 
-	// base class
-	SoNodeKitListPart::initClass();
+        // base class
+        SoNodeKitListPart::initClass();
 
-	// base class
-	SoBaseKit::initClass();
+        // base class
+        SoBaseKit::initClass();
 
-	SoAppearanceKit::initClass();
-	SoSeparatorKit::initClass();
-	SoWrapperKit::initClass();
-	SoShapeKit::initClass();
-	SoLightKit::initClass();
-	SoCameraKit::initClass();
-	SoSceneKit::initClass();
+        SoAppearanceKit::initClass();
+        SoSeparatorKit::initClass();
+        SoWrapperKit::initClass();
+        SoShapeKit::initClass();
+        SoLightKit::initClass();
+        SoCameraKit::initClass();
+        SoSceneKit::initClass();
 
-	// The detail class -- Not a node class, but a detail used by them.
-	SoNodeKitDetail::initClass();
+        // The detail class -- Not a node class, but a detail used by them.
+        SoNodeKitDetail::initClass();
 
-	// Initialize the V1.0 to V2.0 upgrader classes
-	SoV1NodeKit::init();
+        // Initialize the V1.0 to V2.0 upgrader classes
+        SoV1NodeKit::init();
 
-	initialized = TRUE;
+        initialized = TRUE;
     }
 }
 

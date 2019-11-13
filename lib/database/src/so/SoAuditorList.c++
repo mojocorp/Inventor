@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,11 +64,11 @@
 //
 // Use: public
 
-SoAuditorList::SoAuditorList() : SbPList()
+SoAuditorList::SoAuditorList()
+    : SbPList()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -80,8 +80,7 @@ SoAuditorList::SoAuditorList() : SbPList()
 SoAuditorList::~SoAuditorList()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -96,7 +95,7 @@ SoAuditorList::append(void *auditor, SoNotRec::Type type)
 ////////////////////////////////////////////////////////////////////////
 {
     SbPList::append(auditor);
-    SbPList::append((void *) type);
+    SbPList::append((void *)type);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -115,12 +114,12 @@ SoAuditorList::set(int index, void *auditor, SoNotRec::Type type)
     // (which is the container of fields and engine outputs, so handle
     // that case specially)
     if (SbPList::getLength() == 0)
-	append(auditor, type);
+        append(auditor, type);
 
     else {
-	SbPList *list = this;
-	(*list)[index * 2]     = auditor;
-	(*list)[index * 2 + 1] = (void *) type;
+        SbPList *list = this;
+        (*list)[index * 2] = auditor;
+        (*list)[index * 2 + 1] = (void *)type;
     }
 }
 
@@ -136,11 +135,11 @@ SoAuditorList::find(void *auditor, SoNotRec::Type type) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
+    int i;
 
     for (i = 0; i < SbPList::getLength(); i += 2)
-	if ((*this)[i] == auditor && (*this)[i+1] == (void *) type)
-	    return i / 2;
+        if ((*this)[i] == auditor && (*this)[i + 1] == (void *)type)
+            return i / 2;
 
     return -1;
 }
@@ -172,7 +171,7 @@ SoAuditorList::getType(int index) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (SoNotRec::Type) ((unsigned long) (*this)[index * 2 + 1]);
+    return (SoNotRec::Type)((unsigned long)(*this)[index * 2 + 1]);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -189,10 +188,10 @@ SoAuditorList::remove(int index)
 {
 #ifdef DEBUG
     if (index < 0 || index >= getLength()) {
-	SoDebugError::post("SoAuditorList::remove",
-			   "Index %d is out of range 0 - %d",
-			   index, getLength() - 1);
-	return;
+        SoDebugError::post("SoAuditorList::remove",
+                           "Index %d is out of range 0 - %d", index,
+                           getLength() - 1);
+        return;
     }
 #endif /* DEBUG */
 
@@ -204,7 +203,7 @@ SoAuditorList::remove(int index)
 //
 // Description:
 //    Returns number of auditors in list.
-//    
+//
 //
 // Use: public
 
@@ -228,33 +227,33 @@ SoAuditorList::notify(SoNotList *list)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	numAuditors = getLength();
+    int numAuditors = getLength();
 
     // No auditors? Do nothing.
     if (numAuditors == 0)
-	;
+        ;
 
     // If there's only 1 auditor just propagate to it. (This is the
     // typical case, we assume.)
     else if (numAuditors == 1)
-	notify1(list, 0);
+        notify1(list, 0);
 
     // Otherwise, we have to do some extra work. We have to make a
     // copy of the record list so we can propagate identical
     // information to each auditor.
     else {
-	SoNotList	workingList(list);
-	int		i;
+        SoNotList workingList(list);
+        int       i;
 
-	for (i = 0; i < numAuditors; i++) {
+        for (i = 0; i < numAuditors; i++) {
 
-	    // Copy given list to working list after first time -
-	    // each notification may change stuff in the list
-	    if (i > 0)
-		workingList = *list;
+            // Copy given list to working list after first time -
+            // each notification may change stuff in the list
+            if (i > 0)
+                workingList = *list;
 
-	    notify1(&workingList, i);
-	}
+            notify1(&workingList, i);
+        }
     }
 }
 
@@ -270,27 +269,27 @@ SoAuditorList::notify1(SoNotList *list, int index)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNotRec::Type	audType = getType(index);
+    SoNotRec::Type audType = getType(index);
 
     list->setLastType(audType);
 
     switch (audType) {
 
-	// These 2 cases are notifying a base of some sort
-      case SoNotRec::CONTAINER:
-      case SoNotRec::PARENT:
-	((SoBase *) getObject(index))->notify(list);
-	break;
-	
-	// This one is notifying a data sensor
-      case SoNotRec::SENSOR:
-	((SoDataSensor *) getObject(index))->notify(list);
-	break;
-	
-	// And these two are notifying a connected field
-      case SoNotRec::FIELD:
-      case SoNotRec::ENGINE:
-	((SoField *) getObject(index))->notify(list);
-	break;
+        // These 2 cases are notifying a base of some sort
+    case SoNotRec::CONTAINER:
+    case SoNotRec::PARENT:
+        ((SoBase *)getObject(index))->notify(list);
+        break;
+
+        // This one is notifying a data sensor
+    case SoNotRec::SENSOR:
+        ((SoDataSensor *)getObject(index))->notify(list);
+        break;
+
+        // And these two are notifying a connected field
+    case SoNotRec::FIELD:
+    case SoNotRec::ENGINE:
+        ((SoField *)getObject(index))->notify(list);
+        break;
     }
 }

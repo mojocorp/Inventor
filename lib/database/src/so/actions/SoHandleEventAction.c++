@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -88,14 +88,14 @@ SoHandleEventAction::SoHandleEventAction(const SbViewportRegion &region)
 {
     SO_ACTION_CONSTRUCTOR(SoHandleEventAction);
 
-    event	    = NULL;
-    pickRoot	    = NULL;
-    pickedPoint	    = NULL;
-    pickValid	    = FALSE;
-    usedPickAll	    = FALSE;
-    pickAct	    = new SoRayPickAction(region);
-    eventGrabber    = NULL;
-    vpRegion	    = region;
+    event = NULL;
+    pickRoot = NULL;
+    pickedPoint = NULL;
+    pickValid = FALSE;
+    usedPickAll = FALSE;
+    pickAct = new SoRayPickAction(region);
+    eventGrabber = NULL;
+    vpRegion = region;
 
     // Assume that we need to find only the closest object along the
     // ray. If the user requests all objects (by calling
@@ -116,7 +116,7 @@ SoHandleEventAction::~SoHandleEventAction()
 ////////////////////////////////////////////////////////////////////////
 {
     if (pickRoot != NULL)
-	pickRoot->unref();
+        pickRoot->unref();
 
     delete pickAct;
 }
@@ -136,13 +136,13 @@ SoHandleEventAction::setGrabber(SoNode *node)
 {
     // inform the previous grabber that it's no longer grabbing
     if (eventGrabber)
-	eventGrabber->grabEventsCleanup();
+        eventGrabber->grabEventsCleanup();
 
     eventGrabber = node;
 
     // inform the new node that it's now grabbing
     if (eventGrabber)
-	eventGrabber->grabEventsSetup();
+        eventGrabber->grabEventsSetup();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -159,10 +159,10 @@ SoHandleEventAction::setPickRoot(SoNode *node)
 ////////////////////////////////////////////////////////////////////////
 {
     if (node != NULL)
-	node->ref();
+        node->ref();
 
     if (pickRoot != NULL)
-	pickRoot->unref();
+        pickRoot->unref();
 
     pickRoot = node;
 
@@ -185,29 +185,29 @@ SoHandleEventAction::getPickedPoint()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoPath	*pathAppliedTo;
+    const SoPath *pathAppliedTo;
 
     // Re-use previous pickedPoint if it's still valid
     if (pickValid)
-	return pickedPoint;
+        return pickedPoint;
 
-    // Otherwise, we have to do the pick...
+        // Otherwise, we have to do the pick...
 
 #ifdef DEBUG
     if (event == NULL) {
-	SoDebugError::post("SoHandleEventAction::getPickedPoint",
-			   "Event is NULL");
-	return NULL;
+        SoDebugError::post("SoHandleEventAction::getPickedPoint",
+                           "Event is NULL");
+        return NULL;
     }
 
     if (pickRoot == NULL) {
-	SoDebugError::post("SoHandleEventAction::getPickedPoint",
-			   "Picking root node is NULL");
-	return NULL;
+        SoDebugError::post("SoHandleEventAction::getPickedPoint",
+                           "Picking root node is NULL");
+        return NULL;
     }
 #endif /* DEBUG */
 
-    // Set the pick region, using the raw X position and the windowSize 
+    // Set the pick region, using the raw X position and the windowSize
     // The radius of the region, in pixels, will be 5.0
     pickAct->setPoint(event->getPosition());
     pickAct->setRadius(5.0);
@@ -215,43 +215,43 @@ SoHandleEventAction::getPickedPoint()
     // If the action is being applied to a node or pathList, then
     // apply to the pickRoot
     if (getWhatAppliedTo() != PATH)
-	pickAct->apply(pickRoot);
+        pickAct->apply(pickRoot);
 
     // If the action is applied to a path, use the part of the path
     // from the pickRoot on down. If the pickRoot does not appear in
     // the path being applied to, just apply to the pickRoot node.
     else {
 
-	pathAppliedTo = getPathAppliedTo();
+        pathAppliedTo = getPathAppliedTo();
 
-	// If pickRoot is head of path, just apply action to path
-	if (pathAppliedTo->getHead() == pickRoot)
-	    pickAct->apply( (SoPath *) pathAppliedTo);
+        // If pickRoot is head of path, just apply action to path
+        if (pathAppliedTo->getHead() == pickRoot)
+            pickAct->apply((SoPath *)pathAppliedTo);
 
-	else {
-	    int i;
+        else {
+            int i;
 
-	    // Search for pickRoot in path
-	    for (i = 1; i < pathAppliedTo->getLength(); i++)
-		if (pathAppliedTo->getNode(i) == pickRoot)
-		    break;
+            // Search for pickRoot in path
+            for (i = 1; i < pathAppliedTo->getLength(); i++)
+                if (pathAppliedTo->getNode(i) == pickRoot)
+                    break;
 
-	    // If found, construct a path from the pickRoot on down
-	    if (i < pathAppliedTo->getLength()) {
+            // If found, construct a path from the pickRoot on down
+            if (i < pathAppliedTo->getLength()) {
 
-		// Copy path starting at node i (the pickRoot)
-		SoPath	*newPath = pathAppliedTo->copy(i);
-		newPath->ref();
+                // Copy path starting at node i (the pickRoot)
+                SoPath *newPath = pathAppliedTo->copy(i);
+                newPath->ref();
 
-		pickAct->apply(newPath);
+                pickAct->apply(newPath);
 
-		newPath->unref();
-	    }
+                newPath->unref();
+            }
 
-	    // If not found, just apply to root
-	    else
-		pickAct->apply(pickRoot);
-	}
+            // If not found, just apply to root
+            else
+                pickAct->apply(pickRoot);
+        }
     }
 
     // The returned hit is the first one in the list
@@ -280,18 +280,18 @@ SoHandleEventAction::getPickedPointList()
 
     // If the last pick we did is valid and already set pickAll to
     // TRUE, then we don't need to repick. Otherwise, we do.
-    if (! pickValid || ! usedPickAll) {
+    if (!pickValid || !usedPickAll) {
 
-	pickAct->setPickAll(TRUE);
+        pickAct->setPickAll(TRUE);
 
-	// Make sure the pick always gets done
-	pickValid = FALSE;
+        // Make sure the pick always gets done
+        pickValid = FALSE;
 
-	// Pick as usual, building the list of picked points
-	getPickedPoint();
+        // Pick as usual, building the list of picked points
+        getPickedPoint();
 
-	// Reset this to FALSE, which is the default value
-	pickAct->setPickAll(FALSE);
+        // Reset this to FALSE, which is the default value
+        pickAct->setPickAll(FALSE);
     }
 
     return pickAct->getPickedPointList();
@@ -315,12 +315,12 @@ SoHandleEventAction::beginTraversal(SoNode *node)
 
     // if a node is grabbing, pass the event directly to it.
     if (eventGrabber != NULL)
-	traverse(eventGrabber);
+        traverse(eventGrabber);
 
     // if no grabber or if the grabber declined to handle, pass the event
     // to the scene graph.
-    if (! isHandled())
-	traverse(node);
+    if (!isHandled())
+        traverse(node);
 }
 
 ////////////////////////////////////////////////////////////////////////

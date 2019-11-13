@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -57,7 +57,7 @@
 SO_ELEMENT_SOURCE(SoGLLightIdElement);
 
 // This holds the maximum number of concurrent GL sources
-int	SoGLLightIdElement::maxGLSources = -1;
+int SoGLLightIdElement::maxGLSources = -1;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -67,8 +67,7 @@ int	SoGLLightIdElement::maxGLSources = -1;
 // Use: internal
 
 void
-SoGLLightIdElement::initClass()
-{
+SoGLLightIdElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLLightIdElement, SoInt32Element);
 }
 
@@ -82,8 +81,7 @@ SoGLLightIdElement::initClass()
 SoGLLightIdElement::~SoGLLightIdElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -115,14 +113,14 @@ SoGLLightIdElement::increment(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoGLLightIdElement	*elt;
+    SoGLLightIdElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoGLLightIdElement *) getElement(state, classStackIndex);
+    elt = (SoGLLightIdElement *)getElement(state, classStackIndex);
 
     // Being overridden?
     if (elt == NULL)
-	return -1;
+        return -1;
 
     // Increment the current data in the element. Since we initialize
     // this to -1 in init() and copy it in push(), the data field is
@@ -132,7 +130,7 @@ SoGLLightIdElement::increment(SoState *state)
 
     // Too many sources?
     if (elt->data >= getMaxGLSources())
-	return -1;
+        return -1;
 
     // It's a valid source, so enable it
     glEnable((GLenum)(GL_LIGHT0 + elt->data));
@@ -155,9 +153,9 @@ SoGLLightIdElement::getMaxGLSources()
 {
     // Inquire GL if not already done
     if (maxGLSources < 0) {
-	GLint	max;
-	glGetIntegerv(GL_MAX_LIGHTS, &max);
-	maxGLSources = max;
+        GLint max;
+        glGetIntegerv(GL_MAX_LIGHTS, &max);
+        maxGLSources = max;
     }
 
     return maxGLSources;
@@ -175,7 +173,7 @@ SoGLLightIdElement::push(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    data = ((SoGLLightIdElement *) getNextInStack())->data;
+    data = ((SoGLLightIdElement *)getNextInStack())->data;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -195,15 +193,15 @@ SoGLLightIdElement::pop(SoState *state, const SoElement *prevTopElement)
     capture(state);
 
     const SoGLLightIdElement *prevElt =
-	(const SoGLLightIdElement *) prevTopElement;
-    int	i, max;
+        (const SoGLLightIdElement *)prevTopElement;
+    int i, max;
 
     // Disable previous light(s), if valid. All lights between the
     // previous element and this one should be turned off.
     max = getMaxGLSources();
-    for (i = (int) prevElt->data; i > data; i--)
-	if (i < max)
-	    glDisable((GLenum)(GL_LIGHT0 + i));
+    for (i = (int)prevElt->data; i > data; i--)
+        if (i < max)
+            glDisable((GLenum)(GL_LIGHT0 + i));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -217,15 +215,12 @@ SoGLLightIdElement::pop(SoState *state, const SoElement *prevTopElement)
 
 #ifdef DEBUG
 void
-SoGLLightIdElement::print(FILE *fp) const
-{
+SoGLLightIdElement::print(FILE *fp) const {
     SoElement::print(fp);
 
     fprintf(fp, "\tLight id = %d\n", data);
 }
 #else  /* DEBUG */
 void
-SoGLLightIdElement::print(FILE *) const
-{
-}
+SoGLLightIdElement::print(FILE *) const {}
 #endif /* DEBUG */

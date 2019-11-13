@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -56,8 +56,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_INPUT_
-#define  _SO_INPUT_
+#ifndef _SO_INPUT_
+#define _SO_INPUT_
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbString.h>
@@ -100,8 +100,7 @@ struct SoInputFile;
 //////////////////////////////////////////////////////////////////////////////
 
 class SoInput {
- public:
-
+  public:
     // Constructor (default SoInput reads from stdin)
     SoInput();
 
@@ -111,109 +110,109 @@ class SoInput {
     // Adds a directory to list of directories to search to find named
     // files to open. Directories searched in order. By default, the list
     // contains just the current directory.
-    static void		addDirectoryFirst(const SbString &dirName);
-    static void		addDirectoryLast(const SbString &dirName);
+    static void addDirectoryFirst(const SbString &dirName);
+    static void addDirectoryLast(const SbString &dirName);
 
     // Adds directories that are named in the value of the given
     // environment variable. Directories may be separated by colons
     // or whitespace in the value.
-    static void		addEnvDirectoriesFirst(const SbString &envVarName);
-    static void		addEnvDirectoriesLast(const SbString &envVarName);
+    static void addEnvDirectoriesFirst(const SbString &envVarName);
+    static void addEnvDirectoriesLast(const SbString &envVarName);
 
     // Removes given directory from list.
-    static void		removeDirectory(const SbString &dirName);
+    static void removeDirectory(const SbString &dirName);
 
     // Clears list of directories, including the current directory.
-    static void		clearDirectories();
+    static void clearDirectories();
 
     // Returns the current list of directories.
     static const SbStringList &getDirectories();
 
     // Sets initial file pointer to read from. Clears stack if necessary.
-    void		setFilePointer(FILE *newFP);
+    void setFilePointer(FILE *newFP);
 
     // Opens named file, sets file pointer to result. Clears stack if
     // necessary. Returns FALSE on error. If okIfNotFound is FALSE
     // (the default), it prints an error message if the file could not
     // be found.
-    SbBool		openFile(const SbString &fileName,
-				 SbBool okIfNotFound = FALSE);
+    SbBool openFile(const SbString &fileName, SbBool okIfNotFound = FALSE);
 
     // Opens named file, pushes resulting file pointer onto stack.
     // Returns FALSE on error
-    SbBool		pushFile(const SbString &fileName);
+    SbBool pushFile(const SbString &fileName);
 
     // Closes all files on stack opened with openFile or pushFile
-    void		closeFile();
+    void closeFile();
 
     // Returns TRUE if currently open file is a valid file;
     // that is, it begins with a header that has been registered
     // with SoDB::registerHeader.
-    SbBool		isValidFile();
+    SbBool isValidFile();
 
     // Returns pointer to current file, or NULL if reading from buffer
-    FILE *		getCurFile() const;
+    FILE *getCurFile() const;
 
     // Returns full name of current file, or NULL if reading from buffer
-    const SbString & getCurFileName() const;
+    const SbString &getCurFileName() const;
 
     // Sets up buffer to read from and its size
-    void		setBuffer(void *bufPointer, size_t bufSize);
+    void setBuffer(void *bufPointer, size_t bufSize);
 
     // Returns number of bytes read from buffer. Returns 0 if not
     // reading from a buffer.
-    size_t		getNumBytesRead() const;
+    size_t getNumBytesRead() const;
 
     // Returns the header of the file being read
-    SbString		getHeader();
-    
+    SbString getHeader();
+
     // Returns the Inventor version of the file being read.
-    float		getIVVersion() const;
-    
-    
-  SoEXTENDER public:
+    float getIVVersion() const;
+
+    SoEXTENDER
+  public:
     // Returns whether current file/buffer being read is binary
-    SbBool		isBinary();
+    SbBool isBinary();
 
     // Reads next character from current file/buffer. Returns FALSE on
     // EOF or error.
-    SbBool		get(char &c);
+    SbBool get(char &c);
 
     // Reads next ASCII character from current buffer. Returns FALSE on
     // EOF or error.
-    SbBool		getASCIIBuffer(char &c);
+    SbBool getASCIIBuffer(char &c);
 
     // Reads next ASCII character from current file. Returns FALSE on
     // EOF or error.
-    SbBool		getASCIIFile(char &c);
+    SbBool getASCIIFile(char &c);
 
     // Reads next ASCII format hex value from current file/buffer.
     // Returns FALSE on EOF or error.
-    SbBool		readHex(uint32_t &l);
+    SbBool readHex(uint32_t &l);
 
     // Reads item of particular type from current file pointer/buffer. All
     // skip white space before reading and return FALSE on EOF or if
     // item could not be read.
-    SbBool		read(char	    &c);
-    SbBool		read(SbString       &s);
-    SbBool		read(SbName	    &n, SbBool validIdent = FALSE);
-    SbBool		read(int	    &i);
-    SbBool		read(unsigned int   &i);
-    SbBool		read(short	    &s);
-    SbBool		read(unsigned short &s);
-    SbBool		read(float	    &f);
-    SbBool		read(double	    &d);
+    SbBool read(char &c);
+    SbBool read(SbString &s);
+    SbBool read(SbName &n, SbBool validIdent = FALSE);
+    SbBool read(int &i);
+    SbBool read(unsigned int &i);
+    SbBool read(short &s);
+    SbBool read(unsigned short &s);
+    SbBool read(float &f);
+    SbBool read(double &d);
     SbBool readBinaryArray(unsigned char *c, size_t length);
     SbBool readBinaryArray(int32_t *l, size_t length);
     SbBool readBinaryArray(float *f, size_t length);
     SbBool readBinaryArray(double *d, size_t length);
 
     // Returns TRUE if current file/buffer is at EOF
-    SbBool		eof() const;
+    SbBool eof() const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // 	Init function sets up global directory list
-    static void		init();
+    static void init();
 
     // Clean-up.
     static void finish();
@@ -223,96 +222,92 @@ class SoInput {
 
     // Fills in passed string to contain description of current
     // location in all open input files
-    void		getLocationString(SbString &string) const;
+    void getLocationString(SbString &string) const;
 
     // Puts a just-read character or string back in input stream/buffer
-    void		putBack(char c);
-    void		putBack(const char *string);
+    void putBack(char c);
+    void putBack(const char *string);
 
     // Adds a reference to dictionary in current file.  This may also
     // add a reference to the global dictionary if addToGlobalDict is
     // TRUE (the default).
-    void		addReference(const SbName &name, SoBase *base,
-				     SbBool addToGlobalDict = TRUE);
+    void addReference(const SbName &name, SoBase *base,
+                      SbBool addToGlobalDict = TRUE);
 
     // Removes a reference to dictionary in current file.  This may
     // also remove a reference from the global dictionary.
-    void		removeReference(const SbName &name);
+    void removeReference(const SbName &name);
 
     // Looks up a reference, returning the base pointer or NULL
-    SoBase *		findReference(const SbName &name) const;
+    SoBase *findReference(const SbName &name) const;
 
     // Looks for named file. Returns false if not found.
-    static bool findFile(const SbString & fileName, SbString &fullName);
+    static bool findFile(const SbString &fileName, SbString &fullName);
+
   private:
-    static SbStringList *directories;	// Directory search path.
-    std::vector<SoInputFile*>  files;  // Stack of SoInputFiles (depth >=1)
-    struct SoInputFile	*curFile;	// Top of stack
-    SbString		backBuf;	// For strings that are put back
-    int			backBufIndex;	// Index into backBuf (-1 if no buf)
+    static SbStringList *      directories; // Directory search path.
+    std::vector<SoInputFile *> files;       // Stack of SoInputFiles (depth >=1)
+    struct SoInputFile *       curFile;     // Top of stack
+    SbString                   backBuf;     // For strings that are put back
+    int backBufIndex;                       // Index into backBuf (-1 if no buf)
 
-    std::vector<char>   tmpBuffer;     // Buffer for binary read from file
+    std::vector<char> tmpBuffer; // Buffer for binary read from file
 
-    char                backupBuf[8];   // Buffer for storing data that
-                                        // has been read but can't be put back.
-    SbBool              backupBufUsed;  // True if backupBuf contains data
-    
+    char backupBuf[8];    // Buffer for storing data that
+                          // has been read but can't be put back.
+    SbBool backupBufUsed; // True if backupBuf contains data
+
     // Set the Inventor version number of the current file
-    void		setIVVersion(float version);
+    void setIVVersion(float version);
 
     // Initializes reading from file
-    bool  initFile(const SbString & fileName,
-                   SbString *fullName,
-				 SbDict *refDict = NULL);
+    bool initFile(const SbString &fileName, SbString *fullName,
+                  SbDict *refDict = NULL);
 
     // Checks current file for ASCII/binary header comment. Returns
     // FALSE if no header was found.
-    SbBool		checkHeader();
+    SbBool checkHeader();
 
     // Returns TRUE if reading from memory buffer rather than file
-    SbBool		fromBuffer() const;
+    SbBool fromBuffer() const;
 
     // Skips over white space in input. Pops file if EOF is hit.
     // Returns FALSE on error.
-    SbBool		skipWhiteSpace();
+    SbBool skipWhiteSpace();
 
     // Pops current file from stack, if possible.
-    SbBool		popFile();
+    SbBool popFile();
 
     // Returns number of bytes left in current buffer
-    size_t		freeBytesInBuf() const;
+    size_t freeBytesInBuf() const;
 
     // Reads integer, unsigned integer, or floating-point number.
     // Returns FALSE on EOF or error
-    SbBool		readInteger(int32_t &l);
-    SbBool		readUnsignedInteger(uint32_t &l);
-    SbBool		readReal(double &d);
+    SbBool readInteger(int32_t &l);
+    SbBool readUnsignedInteger(uint32_t &l);
+    SbBool readReal(double &d);
 
     // Reads unsigned integer string into str. Accepts decimal, octal,
     // and hex integers. Returns FALSE on EOF or error
-    SbBool		readUnsignedIntegerString(char *str);
+    SbBool readUnsignedIntegerString(char *str);
 
     // Reads string of decimal or hexadecimal digits into string.
     // Returns number of bytes read.
-    int			readDigits(char *string);
-    int			readHexDigits(char *string);
+    int readDigits(char *string);
+    int readHexDigits(char *string);
 
     // Reads given character from buffer into string. Returns 0 or 1
-    int			readChar(char *string, char charToRead);
+    int readChar(char *string, char charToRead);
 
     // Convert datatypes to network format during writing
-    void                convertShort(char *from, short *s);
-    void                convertInt32(char *from, int32_t *l);
-    void                convertFloat(char *from, float *f);
-    void                convertDouble(char *from, double *d);
-    void                convertShortArray( char *from, short *to,
-                                           size_t len);
-    void                convertInt32Array( char *from, int32_t *to,
-                                           size_t len);
-    void                convertFloatArray( char *from, float *to,
-                                           size_t len);
-    void                convertDoubleArray( char *from, double *to,
-                                            size_t len);
+    void convertShort(char *from, short *s);
+    void convertInt32(char *from, int32_t *l);
+    void convertFloat(char *from, float *f);
+    void convertDouble(char *from, double *d);
+    void convertShortArray(char *from, short *to, size_t len);
+    void convertInt32Array(char *from, int32_t *to, size_t len);
+    void convertFloatArray(char *from, float *to, size_t len);
+    void convertDoubleArray(char *from, double *to, size_t len);
 };
 
 #endif /* _SO_INPUT_ */

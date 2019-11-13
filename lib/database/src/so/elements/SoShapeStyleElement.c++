@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -89,8 +89,7 @@ SoShapeStyleElement::initClass()
 ////////////////////////////////////////////////////////////////////////
 SoShapeStyleElement::~SoShapeStyleElement()
 
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -101,15 +100,14 @@ SoShapeStyleElement::~SoShapeStyleElement()
 //
 ////////////////////////////////////////////////////////////////////////
 void
-SoShapeStyleElement::init(SoState *)
-{
+SoShapeStyleElement::init(SoState *) {
     delayFlags = 0;
     texEnabled = 0;
     texFunc = 0;
     needNorms = 1;
     renderCaseMask = SoVertexPropertyCache::ALL_FROM_STATE_BITS &
-	(~SoVertexPropertyCache::TEXCOORD_BIT) &
-	(~SoVertexPropertyCache::OVERRIDE_FROM_STATE_BIT);
+                     (~SoVertexPropertyCache::TEXCOORD_BIT) &
+                     (~SoVertexPropertyCache::OVERRIDE_FROM_STATE_BIT);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -145,7 +143,7 @@ SoShapeStyleElement::push(SoState *state)
     texFunc = sse->texFunc;
     needNorms = sse->needNorms;
     renderCaseMask = sse->renderCaseMask;
-    //Capture previous element:
+    // Capture previous element:
     sse->capture(state);
 }
 
@@ -157,15 +155,14 @@ SoShapeStyleElement::push(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 void
-SoShapeStyleElement::setDrawStyle(SoState* state, int32_t value) 
-{
-    SoShapeStyleElement *elt = (SoShapeStyleElement *)
-	getElement(state, classStackIndex);
+SoShapeStyleElement::setDrawStyle(SoState *state, int32_t value) {
+    SoShapeStyleElement *elt =
+        (SoShapeStyleElement *)getElement(state, classStackIndex);
 
     if (value == (int32_t)SoDrawStyleElement::INVISIBLE) {
-	elt->delayFlags |= INVISIBLE_BIT;
+        elt->delayFlags |= INVISIBLE_BIT;
     } else {
-	elt->delayFlags &= ~INVISIBLE_BIT;
+        elt->delayFlags &= ~INVISIBLE_BIT;
     }
 }
 
@@ -176,15 +173,14 @@ SoShapeStyleElement::setDrawStyle(SoState* state, int32_t value)
 //
 ////////////////////////////////////////////////////////////////////////
 void
-SoShapeStyleElement::setTransparencyType(SoState* state, int32_t value) 
-{
-    SoShapeStyleElement *elt = (SoShapeStyleElement *)
-	getElement(state, classStackIndex);
+SoShapeStyleElement::setTransparencyType(SoState *state, int32_t value) {
+    SoShapeStyleElement *elt =
+        (SoShapeStyleElement *)getElement(state, classStackIndex);
 
     if (value == (int32_t)SoGLRenderAction::SCREEN_DOOR) {
-	elt->delayFlags &= ~DELAY_TRANSP_BIT;
+        elt->delayFlags &= ~DELAY_TRANSP_BIT;
     } else {
-	elt->delayFlags |= DELAY_TRANSP_BIT;
+        elt->delayFlags |= DELAY_TRANSP_BIT;
     }
 }
 
@@ -196,10 +192,9 @@ SoShapeStyleElement::setTransparencyType(SoState* state, int32_t value)
 //
 ////////////////////////////////////////////////////////////////////////
 SbBool
-SoShapeStyleElement::isScreenDoor(SoState* state)
-{
-    SoShapeStyleElement *elt = (SoShapeStyleElement *)
-	getElement(state, classStackIndex);
+SoShapeStyleElement::isScreenDoor(SoState *state) {
+    SoShapeStyleElement *elt =
+        (SoShapeStyleElement *)getElement(state, classStackIndex);
 
     return !(elt->delayFlags & DELAY_TRANSP_BIT);
 }
@@ -212,15 +207,14 @@ SoShapeStyleElement::isScreenDoor(SoState* state)
 //
 ////////////////////////////////////////////////////////////////////////
 void
-SoShapeStyleElement::setComplexityType( SoState* state, int32_t value) 
-{
-    SoShapeStyleElement *elt = (SoShapeStyleElement *)
-	getElement(state, classStackIndex);
+SoShapeStyleElement::setComplexityType(SoState *state, int32_t value) {
+    SoShapeStyleElement *elt =
+        (SoShapeStyleElement *)getElement(state, classStackIndex);
 
     if (value == (int32_t)SoComplexityTypeElement::BOUNDING_BOX) {
-	elt->delayFlags |= BBOX_BIT;
+        elt->delayFlags |= BBOX_BIT;
     } else {
-	elt->delayFlags &= ~BBOX_BIT;
+        elt->delayFlags &= ~BBOX_BIT;
     }
 }
 
@@ -231,10 +225,9 @@ SoShapeStyleElement::setComplexityType( SoState* state, int32_t value)
 //
 ////////////////////////////////////////////////////////////////////////
 void
-SoShapeStyleElement::setTextureEnabled(SoState *state, SbBool value)
-{
-    SoShapeStyleElement *elt = (SoShapeStyleElement *)
-	getElement(state, classStackIndex);
+SoShapeStyleElement::setTextureEnabled(SoState *state, SbBool value) {
+    SoShapeStyleElement *elt =
+        (SoShapeStyleElement *)getElement(state, classStackIndex);
 
     elt->texEnabled = value;
 
@@ -243,7 +236,7 @@ SoShapeStyleElement::setTextureEnabled(SoState *state, SbBool value)
 
     // Set renderCase bits, if need texcoords:
     if (elt->needTexCoords())
-	elt->renderCaseMask |= SoVertexPropertyCache::TEXCOORD_BIT;
+        elt->renderCaseMask |= SoVertexPropertyCache::TEXCOORD_BIT;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -252,23 +245,22 @@ SoShapeStyleElement::setTextureEnabled(SoState *state, SbBool value)
 //
 ////////////////////////////////////////////////////////////////////////////
 void
-SoShapeStyleElement::setTextureFunction(SoState *state, SbBool value)
-{
-    SoShapeStyleElement *elt = (SoShapeStyleElement *)
-	getElement(state, classStackIndex);
+SoShapeStyleElement::setTextureFunction(SoState *state, SbBool value) {
+    SoShapeStyleElement *elt =
+        (SoShapeStyleElement *)getElement(state, classStackIndex);
 
     elt->texFunc = value;
-    if (value) 
-	elt->renderCaseMask |= SoVertexPropertyCache::TEXTURE_FUNCTION_BIT;
+    if (value)
+        elt->renderCaseMask |= SoVertexPropertyCache::TEXTURE_FUNCTION_BIT;
     else
-	elt->renderCaseMask &= ~SoVertexPropertyCache::TEXTURE_FUNCTION_BIT;
+        elt->renderCaseMask &= ~SoVertexPropertyCache::TEXTURE_FUNCTION_BIT;
 
     // Clear renderCase bits
     elt->renderCaseMask &= ~SoVertexPropertyCache::TEXCOORD_BIT;
 
     // Set renderCase bits, if need texcoords:
     if (elt->needTexCoords())
-	elt->renderCaseMask |= SoVertexPropertyCache::TEXCOORD_BIT;
+        elt->renderCaseMask |= SoVertexPropertyCache::TEXCOORD_BIT;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -278,15 +270,14 @@ SoShapeStyleElement::setTextureFunction(SoState *state, SbBool value)
 //
 /////////////////////////////////////////////////////////////////////////////
 void
-SoShapeStyleElement::setLightModel(SoState *state, int32_t value)
-{
-    SoShapeStyleElement *elt = (SoShapeStyleElement *)
-	getElement(state, classStackIndex);
+SoShapeStyleElement::setLightModel(SoState *state, int32_t value) {
+    SoShapeStyleElement *elt =
+        (SoShapeStyleElement *)getElement(state, classStackIndex);
 
     if (value == (int32_t)SoLightModel::BASE_COLOR) {
-	elt->needNorms = FALSE;
+        elt->needNorms = FALSE;
     } else {
-	elt->needNorms = TRUE;
+        elt->needNorms = TRUE;
     }
 
     // Clear renderCase bits
@@ -294,7 +285,7 @@ SoShapeStyleElement::setLightModel(SoState *state, int32_t value)
 
     // Set renderCase bits, if need normals:
     if (elt->needNormals())
-	elt->renderCaseMask |= SoVertexPropertyCache::NORMAL_BITS;
+        elt->renderCaseMask |= SoVertexPropertyCache::NORMAL_BITS;
 }
 ///////////////////////////////////////////////////////////////////////
 //
@@ -306,15 +297,15 @@ SoShapeStyleElement::setLightModel(SoState *state, int32_t value)
 // use: public, static
 ////////////////////////////////////////////////////////////////////////
 void
-SoShapeStyleElement::setOverrides(SoState *state, SbBool value)
-{
-    SoShapeStyleElement *elt = (SoShapeStyleElement *)
-	getElement(state, classStackIndex);
-    if (value) elt->renderCaseMask |= 
-	SoVertexPropertyCache::OVERRIDE_FROM_STATE_BIT;
-    else elt->renderCaseMask &=
-	(~SoVertexPropertyCache::OVERRIDE_FROM_STATE_BIT);
-}   
+SoShapeStyleElement::setOverrides(SoState *state, SbBool value) {
+    SoShapeStyleElement *elt =
+        (SoShapeStyleElement *)getElement(state, classStackIndex);
+    if (value)
+        elt->renderCaseMask |= SoVertexPropertyCache::OVERRIDE_FROM_STATE_BIT;
+    else
+        elt->renderCaseMask &=
+            (~SoVertexPropertyCache::OVERRIDE_FROM_STATE_BIT);
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -326,9 +317,9 @@ SbBool
 SoShapeStyleElement::matches(const SoElement *elt) const
 
 {
-    const SoShapeStyleElement *le = (const SoShapeStyleElement *) elt;
+    const SoShapeStyleElement *le = (const SoShapeStyleElement *)elt;
     return (delayFlags == le->delayFlags &&
-	    renderCaseMask == le->renderCaseMask);
+            renderCaseMask == le->renderCaseMask);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -345,7 +336,7 @@ SoShapeStyleElement::copyMatchInfo() const
 
 {
     SoShapeStyleElement *result =
-	(SoShapeStyleElement *)getTypeId().createInstance();
+        (SoShapeStyleElement *)getTypeId().createInstance();
 
     result->delayFlags = delayFlags;
     result->needNorms = needNorms;
@@ -367,18 +358,17 @@ SoShapeStyleElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoShapeStyleElement::print(FILE *fp) const
-{
+SoShapeStyleElement::print(FILE *fp) const {
     SoElement::print(fp);
 
     fprintf(fp, "\t");
-    if (needNormals()) fprintf(fp, "need normals, ");
-    if (needTexCoords()) fprintf(fp, "need texcoords, ");
+    if (needNormals())
+        fprintf(fp, "need normals, ");
+    if (needTexCoords())
+        fprintf(fp, "need texcoords, ");
     fprintf(fp, "delayFlags: %d\n", delayFlags);
 }
 #else  /* DEBUG */
 void
-SoShapeStyleElement::print(FILE *) const
-{
-}
+SoShapeStyleElement::print(FILE *) const {}
 #endif /* DEBUG */

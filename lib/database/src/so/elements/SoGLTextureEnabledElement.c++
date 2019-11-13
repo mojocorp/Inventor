@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,8 +67,7 @@ SO_ELEMENT_SOURCE(SoGLTextureEnabledElement);
 // Use: internal
 
 void
-SoGLTextureEnabledElement::initClass()
-{
+SoGLTextureEnabledElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLTextureEnabledElement, SoInt32Element);
 }
 
@@ -82,8 +81,7 @@ SoGLTextureEnabledElement::initClass()
 SoGLTextureEnabledElement::~SoGLTextureEnabledElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -107,11 +105,10 @@ SoGLTextureEnabledElement::init(SoState *)
 // Description:
 //   Set the current texture enablement in the state
 //
-void	
-SoGLTextureEnabledElement::set(SoState *state, SbBool value)
-{
-    SoInt32Element::set(classStackIndex, state, (int32_t)value); 	
-    SoShapeStyleElement::setTextureEnabled(state,value);
+void
+SoGLTextureEnabledElement::set(SoState *state, SbBool value) {
+    SoInt32Element::set(classStackIndex, state, (int32_t)value);
+    SoShapeStyleElement::setTextureEnabled(state, value);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -126,8 +123,8 @@ SoGLTextureEnabledElement::push(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLTextureEnabledElement	*prevElt =
-	(const SoGLTextureEnabledElement *) getNextInStack();
+    const SoGLTextureEnabledElement *prevElt =
+        (const SoGLTextureEnabledElement *)getNextInStack();
 
     data = prevElt->data;
 
@@ -157,11 +154,11 @@ SoGLTextureEnabledElement::pop(SoState *state, const SoElement *childElt)
 
     // If the previous element didn't have the same value...
     const SoGLTextureEnabledElement *child =
-	(const SoGLTextureEnabledElement *)childElt;
-	
+        (const SoGLTextureEnabledElement *)childElt;
+
     // Restore previous enabled flag
     if (data != child->data)
-	send();
+        send();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -182,14 +179,13 @@ SoGLTextureEnabledElement::setElt(int32_t flag)
     // previous element.
 
     if (data != flag) {
-	data = flag;
-	send();
-	copiedFromParent = NULL;
-    }
-    else if (copiedFromParent) {
-	SoGLTextureEnabledElement *parent = 
-	    (SoGLTextureEnabledElement *) getNextInStack();
-	parent->capture(copiedFromParent);
+        data = flag;
+        send();
+        copiedFromParent = NULL;
+    } else if (copiedFromParent) {
+        SoGLTextureEnabledElement *parent =
+            (SoGLTextureEnabledElement *)getNextInStack();
+        parent->capture(copiedFromParent);
     }
 }
 
@@ -206,7 +202,7 @@ SoGLTextureEnabledElement::send()
 ////////////////////////////////////////////////////////////////////////
 {
     if (data)
-	glEnable(GL_TEXTURE_2D);
+        glEnable(GL_TEXTURE_2D);
     else
-	glDisable(GL_TEXTURE_2D);
+        glDisable(GL_TEXTURE_2D);
 }

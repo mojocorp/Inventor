@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -50,7 +50,6 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-
 
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -102,7 +101,8 @@ SoTransformSeparator::SoTransformSeparator()
 //
 // Use: public
 
-SoTransformSeparator::SoTransformSeparator(int nChildren) : SoGroup(nChildren)
+SoTransformSeparator::SoTransformSeparator(int nChildren)
+    : SoGroup(nChildren)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -120,8 +120,7 @@ SoTransformSeparator::SoTransformSeparator(int nChildren) : SoGroup(nChildren)
 SoTransformSeparator::~SoTransformSeparator()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -139,7 +138,7 @@ SoTransformSeparator::doAction(SoAction *action)
     SoState *state = action->getState();
 
     // Remember the current matrix:
-    SbMatrix	saveMat = SoModelMatrixElement::pushMatrix(state);
+    SbMatrix saveMat = SoModelMatrixElement::pushMatrix(state);
 
     // Do regular group stuff
     SoGroup::doAction(action);
@@ -230,8 +229,8 @@ SoTransformSeparator::getMatrix(SoGetMatrixAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numIndices;
-    const int	*indices;
+    int        numIndices;
+    const int *indices;
 
     // Only need to compute matrix if transformSeparator is a node in middle of
     // current path chain. We don't need to push or pop the state,
@@ -239,5 +238,5 @@ SoTransformSeparator::getMatrix(SoGetMatrixAction *action)
     // traversed.
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH)
-	children->traverse(action, 0, indices[numIndices - 1]);
+        children->traverse(action, 0, indices[numIndices - 1]);
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_CONE_
-#define  _SO_CONE_
+#ifndef _SO_CONE_
+#define _SO_CONE_
 
 #include <Inventor/SbVec.h>
 #include <Inventor/fields/SoSFBitMask.h>
@@ -77,70 +77,67 @@ class SoCone : public SoShape {
     SO_NODE_HEADER(SoCone);
 
   public:
-
-    enum Part {			// Cone parts:
-	SIDES	= 0x01,			// The conical part
-	BOTTOM	= 0x02,			// The bottom circular face
-	ALL	= 0x03		 	// All parts
+    enum Part {        // Cone parts:
+        SIDES = 0x01,  // The conical part
+        BOTTOM = 0x02, // The bottom circular face
+        ALL = 0x03     // All parts
     };
 
     // Fields
-    SoSFBitMask		parts;		// Visible parts of cone
-    SoSFFloat		bottomRadius;	// Radius of bottom circular face
-    SoSFFloat		height;		// Size in y dimension
+    SoSFBitMask parts;        // Visible parts of cone
+    SoSFFloat   bottomRadius; // Radius of bottom circular face
+    SoSFFloat   height;       // Size in y dimension
 
     // Constructor
     SoCone();
 
     // Turns on/off a part of the cone. (Convenience functions)
-    void		addPart(SoCone::Part part);
-    void		removePart(SoCone::Part part);
+    void addPart(SoCone::Part part);
+    void removePart(SoCone::Part part);
 
     // Returns whether a given part is on or off. (Convenience function)
-    SbBool		hasPart(SoCone::Part part) const;
+    SbBool hasPart(SoCone::Part part) const;
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Implements actions
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void rayPick(SoRayPickAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Generates triangles representing a cone
-    virtual void	generatePrimitives(SoAction *action);
+    virtual void generatePrimitives(SoAction *action);
 
     // Computes bounding box of cone
-    virtual void	computeBBox(SoAction *action, SbBox3f &box,
-				    SbVec3f &center);
+    virtual void computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center);
     virtual ~SoCone();
 
   private:
-    static SbVec2f	*coordsArray;	// Storage for base coords
-    static SbVec3f	*normalsArray;	// Storage for base normals
-    static int		maxCoords;	// Current max num of coords/normals
+    static SbVec2f *coordsArray;  // Storage for base coords
+    static SbVec3f *normalsArray; // Storage for base normals
+    static int      maxCoords;    // Current max num of coords/normals
 
     // Computes number of sides and sections to use to represent
     // cone (based on complexity), then computes ring of x,z
     // coordinates around base of cone and stores in baseCoords. It
     // computes and stores normals in sideNormals, too.
-    void		computeBase(SoAction *action,
-				    int &numSides, int &numSections,
-				    SbVec2f *&baseCoords,
-				    SbVec3f *&sideNormals) const;
+    void computeBase(SoAction *action, int &numSides, int &numSections,
+                     SbVec2f *&baseCoords, SbVec3f *&sideNormals) const;
 
     // Computes real radius and half-height
-    void		getSize(float &rad, float &hHeight) const;
+    void getSize(float &rad, float &hHeight) const;
 
     // These render the cone
-    void		GLRenderGeneric(SoGLRenderAction *action,
-					SbBool sendNormals, SbBool doTextures);
+    void GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
+                         SbBool doTextures);
 
     // Computes intersection of ray with infinite canonical cone
-    SbBool		intersectInfiniteCone(const SbLine &ray,
-					      SbVec3f &enterPoint,
-					      SbVec3f &exitPoint) const;
+    SbBool intersectInfiniteCone(const SbLine &ray, SbVec3f &enterPoint,
+                                 SbVec3f &exitPoint) const;
 };
 
 #endif /* _SO_CONE_ */

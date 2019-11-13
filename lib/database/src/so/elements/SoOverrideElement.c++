@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,8 +64,7 @@ SO_ELEMENT_SOURCE(SoOverrideElement);
 // Use: internal
 
 void
-SoOverrideElement::initClass()
-{
+SoOverrideElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoOverrideElement, SoElement);
 }
 
@@ -98,7 +97,7 @@ SoOverrideElement::push(SoState *state)
     SoOverrideElement *elt = (SoOverrideElement *)getNextInStack();
 
     flags = elt->flags;
-    elt->capture(state);  // Capture previous element
+    elt->capture(state); // Capture previous element
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -115,7 +114,7 @@ SoOverrideElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoOverrideElement *result =
-	(SoOverrideElement *)getTypeId().createInstance();
+        (SoOverrideElement *)getTypeId().createInstance();
 
     result->flags = flags;
 
@@ -129,22 +128,20 @@ SoOverrideElement::copyMatchInfo() const
 //  Use: static, public.
 /////////////////////////////////////////////////////////////////////////
 void
-SoOverrideElement::setDiffuseColorOverride(SoState *state, SoNode *, 
-    SbBool override)
-{
-    SoOverrideElement	*elt =
-	(SoOverrideElement *)getElement(state, classStackIndex); 
-    if (elt != NULL) { 
-        if (override){
-	    elt->flags |= DIFFUSE_COLOR;
-	    SoShapeStyleElement::setOverrides(state, TRUE);
-	} 
-        else {
+SoOverrideElement::setDiffuseColorOverride(SoState *state, SoNode *,
+                                           SbBool   override) {
+    SoOverrideElement *elt =
+        (SoOverrideElement *)getElement(state, classStackIndex);
+    if (elt != NULL) {
+        if (override) {
+            elt->flags |= DIFFUSE_COLOR;
+            SoShapeStyleElement::setOverrides(state, TRUE);
+        } else {
             elt->flags &= ~DIFFUSE_COLOR;
-	    if (!(elt->flags & MATERIAL_BINDING))
-		SoShapeStyleElement::setOverrides(state, FALSE);
-	}
-    }	          
+            if (!(elt->flags & MATERIAL_BINDING))
+                SoShapeStyleElement::setOverrides(state, FALSE);
+        }
+    }
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -155,22 +152,20 @@ SoOverrideElement::setDiffuseColorOverride(SoState *state, SoNode *,
 //  Use: static, public.
 /////////////////////////////////////////////////////////////////////////
 void
-SoOverrideElement::setTransparencyOverride(SoState *state, SoNode *, 
-    SbBool override)
-{
-    SoOverrideElement	*elt =
-	(SoOverrideElement *)getElement(state, classStackIndex); 
-    if (elt != NULL) { 
-        if (override){
-	    elt->flags |= TRANSPARENCY;
-	    SoShapeStyleElement::setOverrides(state, TRUE);
-	} 
-        else {
+SoOverrideElement::setTransparencyOverride(SoState *state, SoNode *,
+                                           SbBool   override) {
+    SoOverrideElement *elt =
+        (SoOverrideElement *)getElement(state, classStackIndex);
+    if (elt != NULL) {
+        if (override) {
+            elt->flags |= TRANSPARENCY;
+            SoShapeStyleElement::setOverrides(state, TRUE);
+        } else {
             elt->flags &= ~TRANSPARENCY;
-	    if (!(elt->flags & MATERIAL_BINDING))
-		SoShapeStyleElement::setOverrides(state, FALSE);
-	}
-    }	          
+            if (!(elt->flags & MATERIAL_BINDING))
+                SoShapeStyleElement::setOverrides(state, FALSE);
+        }
+    }
 }
 /////////////////////////////////////////////////////////////////////////
 //
@@ -180,22 +175,20 @@ SoOverrideElement::setTransparencyOverride(SoState *state, SoNode *,
 //  Use: static, public.
 /////////////////////////////////////////////////////////////////////////
 void
-SoOverrideElement::setMaterialBindingOverride(SoState *state, SoNode *, 
-    SbBool override)
-{
-    SoOverrideElement	*elt =
-	(SoOverrideElement *)getElement(state, classStackIndex); 
-    if (elt != NULL) { 
-        if (override){
-	    elt->flags |= MATERIAL_BINDING;
-	    SoShapeStyleElement::setOverrides(state, TRUE);
-	} 
-        else {
+SoOverrideElement::setMaterialBindingOverride(SoState *state, SoNode *,
+                                              SbBool   override) {
+    SoOverrideElement *elt =
+        (SoOverrideElement *)getElement(state, classStackIndex);
+    if (elt != NULL) {
+        if (override) {
+            elt->flags |= MATERIAL_BINDING;
+            SoShapeStyleElement::setOverrides(state, TRUE);
+        } else {
             elt->flags &= ~MATERIAL_BINDING;
-	    if (!(elt->flags & (DIFFUSE_COLOR|TRANSPARENCY)))
-		SoShapeStyleElement::setOverrides(state, FALSE);
-	}
-    }	          
+            if (!(elt->flags & (DIFFUSE_COLOR | TRANSPARENCY)))
+                SoShapeStyleElement::setOverrides(state, FALSE);
+        }
+    }
 }
 ////////////////////////////////////////////////////////////////////////
 //
@@ -209,7 +202,7 @@ SoOverrideElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (flags == ((const SoOverrideElement *) elt)->flags);
+    return (flags == ((const SoOverrideElement *)elt)->flags);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -223,8 +216,7 @@ SoOverrideElement::matches(const SoElement *elt) const
 
 #ifdef DEBUG
 void
-SoOverrideElement::print(FILE *fp) const
-{
+SoOverrideElement::print(FILE *fp) const {
     pFlag(fp, "AMBIENT_COLOR", AMBIENT_COLOR);
     pFlag(fp, "COLOR_INDEX", COLOR_INDEX);
     pFlag(fp, "COMPLEXITY", COMPLEXITY);
@@ -248,14 +240,11 @@ SoOverrideElement::print(FILE *fp) const
 }
 #else  /* DEBUG */
 void
-SoOverrideElement::print(FILE *) const
-{
-}
+SoOverrideElement::print(FILE *) const {}
 #endif /* DEBUG */
 
 void
-SoOverrideElement::pFlag(FILE *fp, const char *flagName, int flagBit) const
-{
+SoOverrideElement::pFlag(FILE *fp, const char *flagName, int flagBit) const {
     if (flags & flagBit)
-	fprintf(fp, "%s\t", flagName);
+        fprintf(fp, "%s\t", flagName);
 }

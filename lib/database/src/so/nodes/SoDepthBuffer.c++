@@ -68,14 +68,10 @@ SoDepthBuffer::SoDepthBuffer()
 {
     SO_NODE_CONSTRUCTOR(SoDepthBuffer);
 
-    SO_NODE_ADD_FIELD(test,
-                      (SoDepthBufferElement::getDefaultTest()));
-    SO_NODE_ADD_FIELD(write,
-                      (SoDepthBufferElement::getDefaultWrite()));
-    SO_NODE_ADD_FIELD(function,
-                      (SoDepthBufferElement::getDefaultFunction()));
-    SO_NODE_ADD_FIELD(range,
-                      (SoDepthBufferElement::getDefaultRange()));
+    SO_NODE_ADD_FIELD(test, (SoDepthBufferElement::getDefaultTest()));
+    SO_NODE_ADD_FIELD(write, (SoDepthBufferElement::getDefaultWrite()));
+    SO_NODE_ADD_FIELD(function, (SoDepthBufferElement::getDefaultFunction()));
+    SO_NODE_ADD_FIELD(range, (SoDepthBufferElement::getDefaultRange()));
 
     //
     // Set up static info for enumerated type fields
@@ -102,8 +98,7 @@ SoDepthBuffer::SoDepthBuffer()
 SoDepthBuffer::~SoDepthBuffer()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -117,7 +112,7 @@ SoDepthBuffer::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SO__NODE_INIT_CLASS(SoDepthBuffer,"DepthBuffer", SoNode);
+    SO__NODE_INIT_CLASS(SoDepthBuffer, "DepthBuffer", SoNode);
 
     SO_ENABLE(SoGLRenderAction, SoGLDepthBufferElement);
 }
@@ -130,16 +125,16 @@ SoDepthBuffer::initClass()
 // Use: extender
 
 void
-SoDepthBuffer::GLRender(SoGLRenderAction * action)
+SoDepthBuffer::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoState * state = action->getState();
+    SoState *state = action->getState();
 
-    SbBool    curtest;
-    SbBool    curwrite;
-    SoDepthBufferElement::DepthWriteFunction    curfunc;
-    SbVec2f   currange;
+    SbBool                                   curtest;
+    SbBool                                   curwrite;
+    SoDepthBufferElement::DepthWriteFunction curfunc;
+    SbVec2f                                  currange;
 
     SoDepthBufferElement::get(state, curtest, curwrite, curfunc, currange);
 

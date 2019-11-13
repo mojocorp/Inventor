@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,40 +18,38 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
 
-
- /*
- * Copyright (C) 1990,91   Silicon Graphics, Inc.
- *
- _______________________________________________________________________
- ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
- |
- |   $Revision: 1.2 $
- |
- |   Classes:
- |      SoV1NodekitParts
- |
- |   Author(s)          : Paul Isaacs and Thad Beier
- |
- ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
- _______________________________________________________________________
- */
-
+/*
+* Copyright (C) 1990,91   Silicon Graphics, Inc.
+*
+_______________________________________________________________________
+______________  S I L I C O N   G R A P H I C S   I N C .  ____________
+|
+|   $Revision: 1.2 $
+|
+|   Classes:
+|      SoV1NodekitParts
+|
+|   Author(s)          : Paul Isaacs and Thad Beier
+|
+______________  S I L I C O N   G R A P H I C S   I N C .  ____________
+_______________________________________________________________________
+*/
 
 #include <Inventor/SoDB.h>
 #include <Inventor/misc/upgraders/SoV1NodekitParts.h>
@@ -75,64 +73,61 @@
 //
 // Use: internal
 
-SoV1NodekitParts::SoV1NodekitParts( SoV1BaseKit *rootOfKit,
-				SoV1NodekitParts *partsSoFar )
+SoV1NodekitParts::SoV1NodekitParts(SoV1BaseKit *     rootOfKit,
+                                   SoV1NodekitParts *partsSoFar)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    catalog = rootOfKit->getNodekitCatalog();  // assign the catalog
+    catalog = rootOfKit->getNodekitCatalog(); // assign the catalog
 
-    numEntries = catalog->getNumEntries();        // make an empty node list
+    numEntries = catalog->getNumEntries(); // make an empty node list
     nodeList.resize(numEntries);
     int i;
-    for ( i = 0; i < numEntries; i++ )
-	nodeList[i] = NULL;
+    for (i = 0; i < numEntries; i++)
+        nodeList[i] = NULL;
 
     // make rootOfKit be the entry in the nodeList for 'this'
-    const int partNum = catalog->getPartNumber( "this" );
-    if ( partNum == SO_V1_CATALOG_NAME_NOT_FOUND ) {
+    const int partNum = catalog->getPartNumber("this");
+    if (partNum == SO_V1_CATALOG_NAME_NOT_FOUND) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::SoV1NodekitParts", 
-			   "can't find entry for top node in catalog");
+        SoDebugError::post("SoV1NodekitParts::SoV1NodekitParts",
+                           "can't find entry for top node in catalog");
 #endif
-    }
-    else if ( rootOfKit == NULL ) {
+    } else if (rootOfKit == NULL) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::SoV1NodekitParts", 
-			   "given root node is NULL");
+        SoDebugError::post("SoV1NodekitParts::SoV1NodekitParts",
+                           "given root node is NULL");
 #endif
-    }
-    else if (catalog->getType(partNum) != rootOfKit->getTypeId()){
+    } else if (catalog->getType(partNum) != rootOfKit->getTypeId()) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::SoV1NodekitParts", 
-			   "given root node is of wrong type");
+        SoDebugError::post("SoV1NodekitParts::SoV1NodekitParts",
+                           "given root node is of wrong type");
 #endif
-    }
-    else  {
-	nodeList[partNum] = rootOfKit;
+    } else {
+        nodeList[partNum] = rootOfKit;
     }
 
     // copy parts that already exist in 'partsSoFar' into this
     // partsList
-    if ( partsSoFar != NULL ) {
-	for (i = 0; i < partsSoFar->numEntries; i++ ) {
-	    if (    partsSoFar->nodeList[i] != NULL 
-		 && partsSoFar->nodeList[i] != rootOfKit ) {
+    if (partsSoFar != NULL) {
+        for (i = 0; i < partsSoFar->numEntries; i++) {
+            if (partsSoFar->nodeList[i] != NULL &&
+                partsSoFar->nodeList[i] != rootOfKit) {
 
-		 // the part exists already in 'partsSoFar'
-		 // find the entry in the newly constructed list that
-		 // corresponds to it.
+                // the part exists already in 'partsSoFar'
+                // find the entry in the newly constructed list that
+                // corresponds to it.
 
-		 // first, get name from 'partsSoFar'
-		 const SbName partName = partsSoFar->catalog->getName( i );
+                // first, get name from 'partsSoFar'
+                const SbName partName = partsSoFar->catalog->getName(i);
 
-		 // now, find corresponding entry in THIS list
-		 const int oldPartNum = catalog->getPartNumber( partName );
+                // now, find corresponding entry in THIS list
+                const int oldPartNum = catalog->getPartNumber(partName);
 
-		 if ( oldPartNum != SO_V1_CATALOG_NAME_NOT_FOUND )
-		    nodeList[oldPartNum] = partsSoFar->nodeList[i];
-	    }
-	}
+                if (oldPartNum != SO_V1_CATALOG_NAME_NOT_FOUND)
+                    nodeList[oldPartNum] = partsSoFar->nodeList[i];
+            }
+        }
     }
 }
 
@@ -146,8 +141,7 @@ SoV1NodekitParts::SoV1NodekitParts( SoV1BaseKit *rootOfKit,
 SoV1NodekitParts::~SoV1NodekitParts()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -164,73 +158,74 @@ SoV1NodekitParts::~SoV1NodekitParts()
 // Use: internal
 
 SbBool
-SoV1NodekitParts::makePart( const int partNum )
+SoV1NodekitParts::makePart(const int partNum)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ( !partFoundCheck( partNum ) )
-	return FALSE;
+    if (!partFoundCheck(partNum))
+        return FALSE;
 
     // if the part is already in the Node list, just return TRUE
-    if ( verifyPartExistence( partNum ) )
-	return TRUE;
+    if (verifyPartExistence(partNum))
+        return TRUE;
 
     // create the node
-    const SoNode *inst = (const SoNode *) 
-			    catalog->getDefaultType( partNum ).createInstance();
+    const SoNode *inst =
+        (const SoNode *)catalog->getDefaultType(partNum).createInstance();
 #ifdef DEBUG
-    if ( inst == NULL ) {
-	SoDebugError::post("SoV1NodekitParts::makePart", 
-			   "Can't make part %s. It belongs to an abstract class. Bad parts catalog", catalog->getName(partNum).getString());
-	abort();
+    if (inst == NULL) {
+        SoDebugError::post("SoV1NodekitParts::makePart",
+                           "Can't make part %s. It belongs to an abstract "
+                           "class. Bad parts catalog",
+                           catalog->getName(partNum).getString());
+        abort();
     }
 #endif
-    nodeList[partNum] = (SoNode *) inst;
+    nodeList[partNum] = (SoNode *)inst;
 
-    nodeList[partNum]->ref();  // temporarily ref it, until it has a parent
+    nodeList[partNum]->ref(); // temporarily ref it, until it has a parent
 
     // if it is the topmost part in the nodekit, just return TRUE
-    if ( catalog->getParentName( partNum ) == "" ) {
-	nodeList[partNum]->unref();  // undo the temporary ref
-	return TRUE;
+    if (catalog->getParentName(partNum) == "") {
+        nodeList[partNum]->unref(); // undo the temporary ref
+        return TRUE;
     }
 
     // create its parent part
-    if ( !makePart( catalog->getParentPartNumber( partNum ) ) ) {
+    if (!makePart(catalog->getParentPartNumber(partNum))) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::makePart", 
-			   "can't make parent for part named %s",
-			    catalog->getName(partNum).getString() );
+        SoDebugError::post("SoV1NodekitParts::makePart",
+                           "can't make parent for part named %s",
+                           catalog->getName(partNum).getString());
 #endif
-	nodeList[partNum]->unref();  // undo the temporary ref
-	return FALSE;
+        nodeList[partNum]->unref(); // undo the temporary ref
+        return FALSE;
     }
-    int parentPartNum = catalog->getParentPartNumber( partNum );
+    int parentPartNum = catalog->getParentPartNumber(partNum);
 
     // find the next closest right sibling that already exists
-    int    sibPartNum, searchPartNum;
+    int sibPartNum, searchPartNum;
 
-    for( sibPartNum = -1, 
-	 searchPartNum = catalog->getRightSiblingPartNumber( partNum );
-	 sibPartNum == -1 && searchPartNum != SO_V1_CATALOG_NAME_NOT_FOUND;
-	 searchPartNum = catalog->getRightSiblingPartNumber(searchPartNum )) {
-	if ( verifyPartExistence( searchPartNum ) )
-	    sibPartNum = searchPartNum;
+    for (sibPartNum = -1,
+        searchPartNum = catalog->getRightSiblingPartNumber(partNum);
+         sibPartNum == -1 && searchPartNum != SO_V1_CATALOG_NAME_NOT_FOUND;
+         searchPartNum = catalog->getRightSiblingPartNumber(searchPartNum)) {
+        if (verifyPartExistence(searchPartNum))
+            sibPartNum = searchPartNum;
     }
 
-    SoGroup *parentNode = (SoGroup *) nodeList[parentPartNum];
-    if (sibPartNum == -1 ) {
-	// no right sibling is made yet, so just add this as a child to parent
-	parentNode->addChild( nodeList[partNum] );
-    }
-    else {
-	// find that sibling's index in the parent
-	int sibIndex = parentNode->findChild(nodeList[sibPartNum]);
+    SoGroup *parentNode = (SoGroup *)nodeList[parentPartNum];
+    if (sibPartNum == -1) {
+        // no right sibling is made yet, so just add this as a child to parent
+        parentNode->addChild(nodeList[partNum]);
+    } else {
+        // find that sibling's index in the parent
+        int sibIndex = parentNode->findChild(nodeList[sibPartNum]);
 
-	// insert this node as the new child at that index
-	parentNode->insertChild( nodeList[partNum], sibIndex );
+        // insert this node as the new child at that index
+        parentNode->insertChild(nodeList[partNum], sibIndex);
     }
-    nodeList[partNum]->unref();  // undo the temporary ref
+    nodeList[partNum]->unref(); // undo the temporary ref
     return TRUE;
 }
 
@@ -239,7 +234,7 @@ SoV1NodekitParts::makePart( const int partNum )
 // Description:
 //    Replaces the node described with the one passed in.
 //
-//    If the part already exists, then the current part is removed from 
+//    If the part already exists, then the current part is removed from
 //    its parent and the node list.
 //
 //    Next, the new part is put in the list and made the child of its parent.
@@ -251,74 +246,73 @@ SoV1NodekitParts::makePart( const int partNum )
 // Use: internal
 
 SbBool
-SoV1NodekitParts::replacePart( const int partNum, SoNode *newPartNode )
+SoV1NodekitParts::replacePart(const int partNum, SoNode *newPartNode)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ( !partFoundCheck( partNum ) )
-	return FALSE;
+    if (!partFoundCheck(partNum))
+        return FALSE;
 
-    int parentPartNum = catalog->getParentPartNumber( partNum );
+    int parentPartNum = catalog->getParentPartNumber(partNum);
 
     // make sure the node given is of the proper type
-    if ( newPartNode != NULL
-	 && !newPartNode->isOfType( catalog->getType( partNum ) ) ) {
+    if (newPartNode != NULL &&
+        !newPartNode->isOfType(catalog->getType(partNum))) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::replacePart", 
-			   "the given part is not of the correct type");
+        SoDebugError::post("SoV1NodekitParts::replacePart",
+                           "the given part is not of the correct type");
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     // if an old part is already in the Node list...
-    if ( verifyPartExistence( partNum ) ) {
-	// disconnect the child from its parent
-	((SoGroup *)nodeList[parentPartNum])->removeChild( nodeList[partNum] );
+    if (verifyPartExistence(partNum)) {
+        // disconnect the child from its parent
+        ((SoGroup *)nodeList[parentPartNum])->removeChild(nodeList[partNum]);
     }
 
     // set the part!
     nodeList[partNum] = newPartNode;
 
     // if we only set the node to NULL, then just return
-    if ( newPartNode == NULL)
-	return TRUE;
+    if (newPartNode == NULL)
+        return TRUE;
 
     // if it is the topmost part in the nodekit, just return TRUE
-    if ( catalog->getParentName( partNum ) == "" )
-	return TRUE;
+    if (catalog->getParentName(partNum) == "")
+        return TRUE;
 
     // create its parent part
-    if ( !makePart( catalog->getParentPartNumber( partNum ) ) ) {
+    if (!makePart(catalog->getParentPartNumber(partNum))) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::replacePart", 
-			   "can't make parent for part named %s",
-			    catalog->getName(partNum).getString() );
+        SoDebugError::post("SoV1NodekitParts::replacePart",
+                           "can't make parent for part named %s",
+                           catalog->getName(partNum).getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     // find the next closest right sibling that already exists
     int sibPartNum, searchPartNum;
 
-    for( sibPartNum = -1, 
-	 searchPartNum = catalog->getRightSiblingPartNumber( partNum );
-	 sibPartNum == -1 && searchPartNum != SO_V1_CATALOG_NAME_NOT_FOUND;
-	 searchPartNum = catalog->getRightSiblingPartNumber( searchPartNum)) {
-	if ( verifyPartExistence( searchPartNum ) )
-	    sibPartNum = searchPartNum;
+    for (sibPartNum = -1,
+        searchPartNum = catalog->getRightSiblingPartNumber(partNum);
+         sibPartNum == -1 && searchPartNum != SO_V1_CATALOG_NAME_NOT_FOUND;
+         searchPartNum = catalog->getRightSiblingPartNumber(searchPartNum)) {
+        if (verifyPartExistence(searchPartNum))
+            sibPartNum = searchPartNum;
     }
 
-    SoGroup *parentNode = (SoGroup *) nodeList[parentPartNum];
-    if (sibPartNum == -1 ) {
-	// no right sibling is made yet, so just add this as a child to parent
-	parentNode->addChild( nodeList[partNum] );
-    }
-    else {
-	// find that sibling's index in the parent
-	int sibIndex = parentNode->findChild(nodeList[sibPartNum]);
+    SoGroup *parentNode = (SoGroup *)nodeList[parentPartNum];
+    if (sibPartNum == -1) {
+        // no right sibling is made yet, so just add this as a child to parent
+        parentNode->addChild(nodeList[partNum]);
+    } else {
+        // find that sibling's index in the parent
+        int sibIndex = parentNode->findChild(nodeList[sibPartNum]);
 
-	// insert this node as the new child at that index
-	parentNode->insertChild( nodeList[partNum], sibIndex );
+        // insert this node as the new child at that index
+        parentNode->insertChild(nodeList[partNum], sibIndex);
     }
     return TRUE;
 }
@@ -334,43 +328,42 @@ SoV1NodekitParts::replacePart( const int partNum, SoNode *newPartNode )
 // Use: private
 
 SoNode *
-SoV1NodekitParts::getPartFromThisCatalog( const int partNum, 
-				  SbBool makeIfNeeded, SbBool leafCheck, 
-				  SbBool publicCheck )
+SoV1NodekitParts::getPartFromThisCatalog(const int partNum, SbBool makeIfNeeded,
+                                         SbBool leafCheck, SbBool publicCheck)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ( !partFoundCheck( partNum ) )
-	return FALSE;
+    if (!partFoundCheck(partNum))
+        return FALSE;
 
-    if ( leafCheck ) {
-	if ( !partIsLeafCheck( partNum ) )
-	    return FALSE;
+    if (leafCheck) {
+        if (!partIsLeafCheck(partNum))
+            return FALSE;
     }
-    if ( publicCheck ) {
-	if ( !partIsPublicCheck( partNum ) )
-	    return FALSE;
+    if (publicCheck) {
+        if (!partIsPublicCheck(partNum))
+            return FALSE;
     }
 
-// Don't do this check any more. For this reduced version of SoBaseKit,
-// allow parts that are lists to be returned with getAnyPart()
-//XXX    if ( !partIsNotListCheck( partNum ) )
-//XXX	return FALSE;
+    // Don't do this check any more. For this reduced version of SoBaseKit,
+    // allow parts that are lists to be returned with getAnyPart()
+    // XXX    if ( !partIsNotListCheck( partNum ) )
+    // XXX	return FALSE;
 
-    if ( makeIfNeeded == FALSE ) {
-	// just return whatever you can find
-	if ( partNum != SO_V1_CATALOG_NAME_NOT_FOUND 
-	     && verifyPartExistence(partNum) )
-	    return ( nodeList[ partNum ] );
-	else
-	    return NULL;
+    if (makeIfNeeded == FALSE) {
+        // just return whatever you can find
+        if (partNum != SO_V1_CATALOG_NAME_NOT_FOUND &&
+            verifyPartExistence(partNum))
+            return (nodeList[partNum]);
+        else
+            return NULL;
     }
 
     // otherwise, we need to make the part
-    if ( makePart( partNum ) == TRUE )
-	return ( nodeList[ partNum ] );   // it was made O.K.
+    if (makePart(partNum) == TRUE)
+        return (nodeList[partNum]); // it was made O.K.
     else
-	return NULL;                      // it didn't get made properly
+        return NULL; // it didn't get made properly
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -384,27 +377,25 @@ SoV1NodekitParts::getPartFromThisCatalog( const int partNum,
 // Use: private
 
 SbBool
-SoV1NodekitParts::setPartFromThisCatalog( const int partNum, 
-				         SoNode *newPartNode, SbBool anyPart )
+SoV1NodekitParts::setPartFromThisCatalog(const int partNum, SoNode *newPartNode,
+                                         SbBool anyPart)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ( !partFoundCheck( partNum ) )
-	return FALSE;
-    if ( !anyPart ) {
-	if ( !partIsLeafCheck( partNum ) )
-	    return FALSE;
-	if ( !partIsPublicCheck( partNum ) )
-	    return FALSE;
-	if ( !partIsNotListCheck( partNum ) )
-	    return FALSE;
+    if (!partFoundCheck(partNum))
+        return FALSE;
+    if (!anyPart) {
+        if (!partIsLeafCheck(partNum))
+            return FALSE;
+        if (!partIsPublicCheck(partNum))
+            return FALSE;
+        if (!partIsNotListCheck(partNum))
+            return FALSE;
     }
 
     // otherwise, we need to replace the part that is currently being used
-    return( replacePart( partNum, newPartNode ) );
+    return (replacePart(partNum, newPartNode));
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -414,91 +405,90 @@ SoV1NodekitParts::setPartFromThisCatalog( const int partNum,
 // Use: protected
 
 SoNode *
-SoV1NodekitParts::getAnyPart( const SbName &nameOfPart, SbBool makeIfNeeded, 
-			    SbBool leafCheck, SbBool publicCheck )
+SoV1NodekitParts::getAnyPart(const SbName &nameOfPart, SbBool makeIfNeeded,
+                             SbBool leafCheck, SbBool publicCheck)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // ONLY ALLOW SINGLE NAME PARTS...
-    if ( nameOfPart.rfind('.') != -1 ) {
+    if (nameOfPart.rfind('.') != -1) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::getAnyPart", 
-			   "part name %s is not a single-word part",
-			   nameOfPart.getString());
+        SoDebugError::post("SoV1NodekitParts::getAnyPart",
+                           "part name %s is not a single-word part",
+                           nameOfPart.getString());
 #endif
-	return NULL;
+        return NULL;
     }
 
     // DON'T ALLOW BRACKETS, WHICH SIGNIFY INDEXING INTO A LIST
     // IN THE NEW NODEKITS.
-    if ( nameOfPart.rfind('[') != -1 ) {
+    if (nameOfPart.rfind('[') != -1) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::getAnyPart", 
-			   "part name %s contains an index, which is illegal",
-			   nameOfPart.getString());
+        SoDebugError::post("SoV1NodekitParts::getAnyPart",
+                           "part name %s contains an index, which is illegal",
+                           nameOfPart.getString());
 #endif
-	return NULL;
+        return NULL;
     }
 
     // IS THE REQUESTED PART IN THIS CATALOG?
-    int partNum = catalog->getPartNumber( nameOfPart );
-    if ( partNum != SO_V1_CATALOG_NAME_NOT_FOUND )
+    int partNum = catalog->getPartNumber(nameOfPart);
+    if (partNum != SO_V1_CATALOG_NAME_NOT_FOUND)
 
-	// IF SO, THEN GET IT FROM THIS CATALOG
-	return ( getPartFromThisCatalog( partNum, makeIfNeeded,leafCheck, 
-					    publicCheck));
+        // IF SO, THEN GET IT FROM THIS CATALOG
+        return (getPartFromThisCatalog(partNum, makeIfNeeded, leafCheck,
+                                       publicCheck));
 
     else {
 
-	// ELSE, SEARCH THE CATALOG RECURSIVELY FOR THE DESIRED PART
-	// we need to pass a list to the recursive search saying which
-	// types of nodes we have already checked.  This avoids infinite
-	// loop (does chicken contain egg? does egg contain chicken? etc...)
-	SbPList *typesChecked = new SbPList();
-	int thisPartNum = catalog->getPartNumber( "this" );
-	typesChecked->append( 
-	    (void *) catalog->getType(thisPartNum).getName().getString() );
+        // ELSE, SEARCH THE CATALOG RECURSIVELY FOR THE DESIRED PART
+        // we need to pass a list to the recursive search saying which
+        // types of nodes we have already checked.  This avoids infinite
+        // loop (does chicken contain egg? does egg contain chicken? etc...)
+        SbPList *typesChecked = new SbPList();
+        int      thisPartNum = catalog->getPartNumber("this");
+        typesChecked->append(
+            (void *)catalog->getType(thisPartNum).getName().getString());
 
-	for (int i = 0; i < numEntries; i++ ) {
+        for (int i = 0; i < numEntries; i++) {
 
-	    // does it lie within this 'intermediary' part?
-	    if ( catalog->recursiveSearch(i,nameOfPart,typesChecked) == TRUE){
+            // does it lie within this 'intermediary' part?
+            if (catalog->recursiveSearch(i, nameOfPart, typesChecked) == TRUE) {
 
-		delete typesChecked;  // don't need this anymore
+                delete typesChecked; // don't need this anymore
 
-		// if not making parts and 'intermediary' is NULL...
-		if ( makeIfNeeded == FALSE && !verifyPartExistence( i ) )
-		    return NULL;
+                // if not making parts and 'intermediary' is NULL...
+                if (makeIfNeeded == FALSE && !verifyPartExistence(i))
+                    return NULL;
 
-		// create the intermediary part...
-		if ( !makePart( i ) )
-		    return NULL;   // error making the part
-		// NOTE: it's okay to cast the node into a base kit here,
-		// since the recursive search would only have worked
-		// if it was a nodekit
-		// UGLY, yes, but it works.
+                // create the intermediary part...
+                if (!makePart(i))
+                    return NULL; // error making the part
+                    // NOTE: it's okay to cast the node into a base kit here,
+                    // since the recursive search would only have worked
+                    // if it was a nodekit
+                    // UGLY, yes, but it works.
 #ifdef DEBUG
-		// supposedly unnecessary type checking:
-		if ( !nodeList[i]->isOfType( SoV1BaseKit::getClassTypeId() ) )
-		    return NULL;
+                // supposedly unnecessary type checking:
+                if (!nodeList[i]->isOfType(SoV1BaseKit::getClassTypeId()))
+                    return NULL;
 #endif
-		SoV1BaseKit *intermediary = (SoV1BaseKit *) nodeList[i]; 
+                SoV1BaseKit *intermediary = (SoV1BaseKit *)nodeList[i];
 
-		// now that intermediary is built, get the part from within it
-		return(intermediary->getAnyPart(nameOfPart,
-				    SoNode::getClassTypeId(), makeIfNeeded, 
-				    leafCheck, publicCheck ));
-	    }
-	}
-	delete typesChecked;  // don't need this anymore
-
+                // now that intermediary is built, get the part from within it
+                return (intermediary->getAnyPart(
+                    nameOfPart, SoNode::getClassTypeId(), makeIfNeeded,
+                    leafCheck, publicCheck));
+            }
+        }
+        delete typesChecked; // don't need this anymore
     }
 
     // IF YOU GOT HERE, THE PART COULD NOT BE FOUND
 #ifdef DEBUG
-    SoDebugError::post("SoV1NodekitParts::getAnyPart", 
-			   "entry named %s not found. returning NULL", 
-			   nameOfPart.getString() );
+    SoDebugError::post("SoV1NodekitParts::getAnyPart",
+                       "entry named %s not found. returning NULL",
+                       nameOfPart.getString());
 #endif
     return NULL;
 }
@@ -512,87 +502,86 @@ SoV1NodekitParts::getAnyPart( const SbName &nameOfPart, SbBool makeIfNeeded,
 // Use: private
 
 SbBool
-SoV1NodekitParts::setAnyPart( const SbName &nameOfPart, SoNode *newPartNode, 
-			    SbBool anyPart )
+SoV1NodekitParts::setAnyPart(const SbName &nameOfPart, SoNode *newPartNode,
+                             SbBool anyPart)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // JUST SINGLE NAME PARTS...
-    if ( nameOfPart.rfind('.') != -1 ) {
+    if (nameOfPart.rfind('.') != -1) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::setAnyPart", 
-			   "part name %s is not a single-word part",
-			   nameOfPart.getString());
+        SoDebugError::post("SoV1NodekitParts::setAnyPart",
+                           "part name %s is not a single-word part",
+                           nameOfPart.getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     // DON'T ALLOW BRACKETS, WHICH SIGNIFY INDEXING INTO A LIST
     // IN THE NEW NODEKITS?
-    if ( nameOfPart.rfind('[') != -1 ) {
+    if (nameOfPart.rfind('[') != -1) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::setAnyPart", 
-			   "part name %s contains an index, which is illegal",
-			   nameOfPart.getString());
+        SoDebugError::post("SoV1NodekitParts::setAnyPart",
+                           "part name %s contains an index, which is illegal",
+                           nameOfPart.getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     // NOT A LIST ITEM, IF WE GOT HERE.
 
     // IS THE REQUESTED PART IN THIS CATALOG?
-    int partNum = catalog->getPartNumber( nameOfPart );
-    if ( partNum != SO_V1_CATALOG_NAME_NOT_FOUND )
+    int partNum = catalog->getPartNumber(nameOfPart);
+    if (partNum != SO_V1_CATALOG_NAME_NOT_FOUND)
 
-	// IF SO, THEN SET IT USING THIS CATALOG
-	return ( setPartFromThisCatalog( partNum, newPartNode, anyPart ) );
+        // IF SO, THEN SET IT USING THIS CATALOG
+        return (setPartFromThisCatalog(partNum, newPartNode, anyPart));
 
     else {
 
-	// ELSE, SEARCH THE CATALOG RECURSIVELY FOR THE DESIRED PART
-	// we need to pass a list to the recursive search saying which
-	// types of nodes we have already checked.  This avoids infinite
-	// loop (does chicken contain egg? does egg contain chicken? etc...)
-	SbPList *typesChecked = new SbPList();
-	int thisPartNum = catalog->getPartNumber( "this" );
-	typesChecked->append( 
-	    (void *) catalog->getType(thisPartNum).getName().getString() );
+        // ELSE, SEARCH THE CATALOG RECURSIVELY FOR THE DESIRED PART
+        // we need to pass a list to the recursive search saying which
+        // types of nodes we have already checked.  This avoids infinite
+        // loop (does chicken contain egg? does egg contain chicken? etc...)
+        SbPList *typesChecked = new SbPList();
+        int      thisPartNum = catalog->getPartNumber("this");
+        typesChecked->append(
+            (void *)catalog->getType(thisPartNum).getName().getString());
 
-	for (int i = 0; i < numEntries; i++ ) {
+        for (int i = 0; i < numEntries; i++) {
 
-	    // does it lie within this 'intermediary' part?
-	    if ( catalog->recursiveSearch(i,nameOfPart,typesChecked) == TRUE){
+            // does it lie within this 'intermediary' part?
+            if (catalog->recursiveSearch(i, nameOfPart, typesChecked) == TRUE) {
 
-		delete typesChecked;  // don't need this anymore
+                delete typesChecked; // don't need this anymore
 
-		// create the intermediary part...
-		if ( !makePart( i ) )
-		    return FALSE;   // error making the part
-		// NOTE: it's okay to cast the node into a base kit here,
-		// since the recursive search would only have worked
-		// if it was a nodekit
-		// UGLY, yes, but it works.
+                // create the intermediary part...
+                if (!makePart(i))
+                    return FALSE; // error making the part
+                    // NOTE: it's okay to cast the node into a base kit here,
+                    // since the recursive search would only have worked
+                    // if it was a nodekit
+                    // UGLY, yes, but it works.
 #ifdef DEBUG
-		// supposedly unnecessary type checking:
-		if ( !nodeList[i]->isOfType( SoV1BaseKit::getClassTypeId() ) )
-		    return FALSE;
+                // supposedly unnecessary type checking:
+                if (!nodeList[i]->isOfType(SoV1BaseKit::getClassTypeId()))
+                    return FALSE;
 #endif
-		SoV1BaseKit *intermediary = (SoV1BaseKit *) nodeList[i]; 
+                SoV1BaseKit *intermediary = (SoV1BaseKit *)nodeList[i];
 
-		// now that intermediary is built, set the part within it
-		return(intermediary->setAnyPart(nameOfPart, newPartNode, 
-						anyPart ));
-	    }
-	}
-	delete typesChecked;  // don't need this anymore
-
+                // now that intermediary is built, set the part within it
+                return (
+                    intermediary->setAnyPart(nameOfPart, newPartNode, anyPart));
+            }
+        }
+        delete typesChecked; // don't need this anymore
     }
 
     // IF YOU GOT HERE, THE PART COULD NOT BE FOUND
 #ifdef DEBUG
-    SoDebugError::post("SoV1NodekitParts::setAnyPart", 
-		       "entry named %s not found. returning NULL", 
-		       nameOfPart.getString() );
+    SoDebugError::post("SoV1NodekitParts::setAnyPart",
+                       "entry named %s not found. returning NULL",
+                       nameOfPart.getString());
 #endif
     return FALSE;
 }
@@ -603,14 +592,13 @@ SoV1NodekitParts::setAnyPart( const SbName &nameOfPart, SoNode *newPartNode,
 //    error if partNum is not legal
 //
 SbBool
-SoV1NodekitParts::partFoundCheck( int partNum )
-{
-    if ( partNum == SO_V1_CATALOG_NAME_NOT_FOUND ) {
+SoV1NodekitParts::partFoundCheck(int partNum) {
+    if (partNum == SO_V1_CATALOG_NAME_NOT_FOUND) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::partFoundCheck", 
-			   "can't find part");
+        SoDebugError::post("SoV1NodekitParts::partFoundCheck",
+                           "can't find part");
 #endif
-	return FALSE;
+        return FALSE;
     }
     return TRUE;
 }
@@ -621,15 +609,15 @@ SoV1NodekitParts::partFoundCheck( int partNum )
 //    error if partNum is not a leaf
 //
 SbBool
-SoV1NodekitParts::partIsLeafCheck( int partNum )
-{
-    if ( catalog->isLeaf( partNum ) == FALSE ) {
+SoV1NodekitParts::partIsLeafCheck(int partNum) {
+    if (catalog->isLeaf(partNum) == FALSE) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::partIsLeafCheck", 
-			   "can't return the part %s because it is not a leaf node in the nodekit's structure. returning NULL",
-			   catalog->getName( partNum ).getString() );
+        SoDebugError::post("SoV1NodekitParts::partIsLeafCheck",
+                           "can't return the part %s because it is not a leaf "
+                           "node in the nodekit's structure. returning NULL",
+                           catalog->getName(partNum).getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
     return TRUE;
 }
@@ -640,15 +628,16 @@ SoV1NodekitParts::partIsLeafCheck( int partNum )
 //    error if partNum is not public
 //
 SbBool
-SoV1NodekitParts::partIsPublicCheck( int partNum )
-{
-    if ( catalog->isPublic( partNum ) == FALSE ) {
+SoV1NodekitParts::partIsPublicCheck(int partNum) {
+    if (catalog->isPublic(partNum) == FALSE) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::partIsPublicCheck", 
-	    "can't return the part %s because it is not a public node in the nodekit's structure returning NULL instead",
-			   catalog->getName( partNum ).getString() );
+        SoDebugError::post(
+            "SoV1NodekitParts::partIsPublicCheck",
+            "can't return the part %s because it is not a public node in the "
+            "nodekit's structure returning NULL instead",
+            catalog->getName(partNum).getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
     return TRUE;
 }
@@ -659,15 +648,17 @@ SoV1NodekitParts::partIsPublicCheck( int partNum )
 //    error if partNum is not a list
 //
 SbBool
-SoV1NodekitParts::partIsNotListCheck( int partNum )
-{
-    if ( catalog->isList( partNum ) == TRUE ) {
+SoV1NodekitParts::partIsNotListCheck(int partNum) {
+    if (catalog->isList(partNum) == TRUE) {
 #ifdef DEBUG
-	SoDebugError::post("SoV1NodekitParts::partIsNotListCheck", 
-	    "can't return the part %s because it is a list in the nodekit's structure Lists must be accessed throught the methods in the nodekit. returning NULL instead",
-			   catalog->getName(partNum).getString() );
+        SoDebugError::post(
+            "SoV1NodekitParts::partIsNotListCheck",
+            "can't return the part %s because it is a list in the nodekit's "
+            "structure Lists must be accessed throught the methods in the "
+            "nodekit. returning NULL instead",
+            catalog->getName(partNum).getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
     return TRUE;
 }
@@ -684,29 +675,28 @@ SoV1NodekitParts::partIsNotListCheck( int partNum )
 //    perhaps return NULL.
 //
 SbBool
-SoV1NodekitParts::verifyPartExistence( int partNum )
-{
-    SoNode  *part = nodeList[partNum];
+SoV1NodekitParts::verifyPartExistence(int partNum) {
+    SoNode *part = nodeList[partNum];
 
     // is the part there?
-    if ( part == NULL )
-	return FALSE;
+    if (part == NULL)
+        return FALSE;
 
     // is the part the top of the catalog? Then we're OK
-    if ( partNum == catalog->getPartNumber( "this" ) )
-	return TRUE;
-    
-    int parentPartNum = catalog->getParentPartNumber( partNum );
-    SoGroup *parent = (SoGroup *) nodeList[parentPartNum];
+    if (partNum == catalog->getPartNumber("this"))
+        return TRUE;
+
+    int      parentPartNum = catalog->getParentPartNumber(partNum);
+    SoGroup *parent = (SoGroup *)nodeList[parentPartNum];
 
     // parent should exist.
-    if ( parent == NULL )
-	return FALSE;
+    if (parent == NULL)
+        return FALSE;
 
     // part should be a valid child of parent
-    if ( parent->findChild( part ) < 0 )
-	return FALSE;
+    if (parent->findChild(part) < 0)
+        return FALSE;
 
     // verify the parent
-    return( verifyPartExistence( parentPartNum ) );
+    return (verifyPartExistence(parentPartNum));
 }

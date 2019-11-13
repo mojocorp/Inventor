@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -89,20 +89,20 @@ SoRayPickAction::initClass()
 //
 // Use: public
 
-SoRayPickAction::SoRayPickAction(const SbViewportRegion &viewportRegion) :
-	SoPickAction(viewportRegion)
+SoRayPickAction::SoRayPickAction(const SbViewportRegion &viewportRegion)
+    : SoPickAction(viewportRegion)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SO_ACTION_CONSTRUCTOR(SoRayPickAction);
 
-    VPPoint.setValue(0,0); // Random point
-    VPRadius = 5.0;		 // Big enough for easy line/point picking
+    VPPoint.setValue(0, 0); // Random point
+    VPRadius = 5.0;         // Big enough for easy line/point picking
 
-    lineWasSet     = FALSE;
+    lineWasSet = FALSE;
     rayWasComputed = FALSE;
-    pickAll        = FALSE;
-    normPointSet   = FALSE;
+    pickAll = FALSE;
+    normPointSet = FALSE;
 
     clipToNear = clipToFar = TRUE;
 
@@ -137,10 +137,10 @@ SoRayPickAction::setPoint(const SbVec2s &viewportPoint)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    VPPoint	    = viewportPoint;
-    normPointSet    = FALSE;
-    lineWasSet      = FALSE;
-    rayWasComputed  = FALSE;
+    VPPoint = viewportPoint;
+    normPointSet = FALSE;
+    lineWasSet = FALSE;
+    rayWasComputed = FALSE;
 
     clipToNear = clipToFar = TRUE;
 }
@@ -157,10 +157,10 @@ SoRayPickAction::setNormalizedPoint(const SbVec2f &normPoint)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    normVPPoint	    = normPoint;
-    normPointSet    = TRUE;
-    lineWasSet      = FALSE;
-    rayWasComputed  = FALSE;
+    normVPPoint = normPoint;
+    normPointSet = TRUE;
+    lineWasSet = FALSE;
+    rayWasComputed = FALSE;
 
     clipToNear = clipToFar = TRUE;
 }
@@ -170,7 +170,7 @@ SoRayPickAction::setNormalizedPoint(const SbVec2f &normPoint)
 // Description:
 //    Sets the radius around the point. This is used when testing the
 //    ray against lines and points.
-//    
+//
 // Use: public
 
 void
@@ -179,8 +179,8 @@ SoRayPickAction::setRadius(float radiusInPixels)
 ////////////////////////////////////////////////////////////////////////
 {
     VPRadius = radiusInPixels;
-    lineWasSet      = FALSE;
-    rayWasComputed  = FALSE;
+    lineWasSet = FALSE;
+    rayWasComputed = FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -192,7 +192,7 @@ SoRayPickAction::setRadius(float radiusInPixels)
 
 void
 SoRayPickAction::setRay(const SbVec3f &start, const SbVec3f &direction,
-			float nearDistance, float farDistance)
+                        float nearDistance, float farDistance)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -202,17 +202,15 @@ SoRayPickAction::setRay(const SbVec3f &start, const SbVec3f &direction,
     // non-negative values to use for setting up the perspective view
     // volume. These values will be otherwise ignored.
     if (nearDistance < 0.0) {
-	clipToNear = FALSE;
-	nearDistance = 1.1;
-    }
-    else
-	clipToNear = TRUE;
+        clipToNear = FALSE;
+        nearDistance = 1.1;
+    } else
+        clipToNear = TRUE;
     if (farDistance < 0.0) {
-	clipToFar = FALSE;
-	farDistance = 10.0;
-    }
-    else
-	clipToFar = TRUE;
+        clipToFar = FALSE;
+        farDistance = 10.0;
+    } else
+        clipToFar = TRUE;
 
     // Save values for later. Make the volume perspective for ease.
     worldVol.perspective(0.0, 1.0, nearDistance, farDistance);
@@ -256,38 +254,36 @@ SoRayPickAction::computeWorldSpaceRay()
 {
     // See if the world-space line was set by the user
     if (lineWasSet)
-	return;
+        return;
 
     // Get the current viewport region and view volume from the state
-    const SbViewportRegion	&vpReg   = SoViewportRegionElement::get(state);
-    const SbViewVolume		&viewVol = SoViewVolumeElement::get(state);
+    const SbViewportRegion &vpReg = SoViewportRegionElement::get(state);
+    const SbViewVolume &    viewVol = SoViewVolumeElement::get(state);
 
-    float			invWidth, invHeight;
-    float			normRadius;
+    float invWidth, invHeight;
+    float normRadius;
 
     // Figure out the radius of the pick circle in the near plane as a
     // fraction of the viewport size
-    invWidth  = 1.0 / vpReg.getViewportSizePixels()[0];
+    invWidth = 1.0 / vpReg.getViewportSizePixels()[0];
     invHeight = 1.0 / vpReg.getViewportSizePixels()[1];
-    normRadius = (VPRadius *
-		  (invWidth >= invHeight ? invWidth : invHeight));
+    normRadius = (VPRadius * (invWidth >= invHeight ? invWidth : invHeight));
 
     // If necessary, convert the current pick point from viewport
     // coords into normalized viewport coords
-    if (! normPointSet) {
-	normVPPoint[0] = invWidth  * (VPPoint[0] -
-				      vpReg.getViewportOriginPixels()[0]); 
-	normVPPoint[1] = invHeight * (VPPoint[1] -
-				      vpReg.getViewportOriginPixels()[1]);
+    if (!normPointSet) {
+        normVPPoint[0] =
+            invWidth * (VPPoint[0] - vpReg.getViewportOriginPixels()[0]);
+        normVPPoint[1] =
+            invHeight * (VPPoint[1] - vpReg.getViewportOriginPixels()[1]);
     }
 
     // Narrow the camera's view volume to a small rectangle around
     // the selected point. The width and height of the rectangle
     // are twice the radius.
-    worldVol = viewVol.narrow(normVPPoint[0] - normRadius,
-			      normVPPoint[1] - normRadius,
-			      normVPPoint[0] + normRadius,
-			      normVPPoint[1] + normRadius);
+    worldVol = viewVol.narrow(
+        normVPPoint[0] - normRadius, normVPPoint[1] - normRadius,
+        normVPPoint[0] + normRadius, normVPPoint[1] + normRadius);
 
     // Store the resulting volume in the state so it can be pushed/popped
     SoPickRayElement::set(state, worldVol);
@@ -322,16 +318,16 @@ SoRayPickAction::hasWorldSpaceRay() const
     SbBool ret;
 
     if (lineWasSet)
-	ret = TRUE;
+        ret = TRUE;
 
-    else if (! rayWasComputed)
-	ret = FALSE;
+    else if (!rayWasComputed)
+        ret = FALSE;
 
     else {
-	// Get the top element from the state
-	const SoElement *VVElt =
-	    state->getConstElement(SoViewVolumeElement::getClassStackIndex());
-	ret = (VVElt->getDepth() > 0);
+        // Get the top element from the state
+        const SoElement *VVElt =
+            state->getConstElement(SoViewVolumeElement::getClassStackIndex());
+        ret = (VVElt->getDepth() > 0);
     }
 
     return ret;
@@ -351,10 +347,10 @@ SoRayPickAction::setObjectSpace()
 {
 #ifdef DEBUG
     // Make sure world space ray was set up correctly
-    if (! hasWorldSpaceRay()) {
-	SoDebugError::post("SoRayPickAction::setObjectSpace",
-			   "Camera never set up world space ray");
-	return;
+    if (!hasWorldSpaceRay()) {
+        SoDebugError::post("SoRayPickAction::setObjectSpace",
+                           "Camera never set up world space ray");
+        return;
     }
 #endif /* DEBUG */
 
@@ -383,10 +379,10 @@ SoRayPickAction::setObjectSpace(const SbMatrix &matrix)
 {
 #ifdef DEBUG
     // Make sure world space ray was set up correctly
-    if (! hasWorldSpaceRay()) {
-	SoDebugError::post("SoRayPickAction::setObjectSpace",
-			   "Camera never set up world space ray");
-	return;
+    if (!hasWorldSpaceRay()) {
+        SoDebugError::post("SoRayPickAction::setObjectSpace",
+                           "Camera never set up world space ray");
+        return;
     }
 #endif /* DEBUG */
 
@@ -394,7 +390,7 @@ SoRayPickAction::setObjectSpace(const SbMatrix &matrix)
     computeMatrices();
 
     // Save matrix so it can be used to compute object-space angle later
-    extraMatrix    = matrix.inverse();
+    extraMatrix = matrix.inverse();
     extraMatrixSet = TRUE;
 
     // Compute object-space picking ray
@@ -412,20 +408,18 @@ SoRayPickAction::setObjectSpace(const SbMatrix &matrix)
 // Use: extender
 
 SbBool
-SoRayPickAction::intersect(const SbVec3f &v0,
-			   const SbVec3f &v1,
-			   const SbVec3f &v2,
-			   SbVec3f &intersection, SbVec3f &barycentric,
-			   SbBool &front) const
+SoRayPickAction::intersect(const SbVec3f &v0, const SbVec3f &v1,
+                           const SbVec3f &v2, SbVec3f &intersection,
+                           SbVec3f &barycentric, SbBool &front) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! objLine.intersect(v0, v1, v2, intersection, barycentric, front))
-	return FALSE;
+    if (!objLine.intersect(v0, v1, v2, intersection, barycentric, front))
+        return FALSE;
 
     // Make sure intersection is between near/far bounds
-    if (! isBetweenPlanes(intersection))
-	return FALSE;
+    if (!isBetweenPlanes(intersection))
+        return FALSE;
 
     return TRUE;
 }
@@ -441,12 +435,12 @@ SoRayPickAction::intersect(const SbVec3f &v0,
 
 SbBool
 SoRayPickAction::intersect(const SbVec3f &v0, const SbVec3f &v1,
-			   SbVec3f &intersection) const
+                           SbVec3f &intersection) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     return (objVol.intersect(v0, v1, intersection) &&
-	    isBetweenPlanes(intersection));
+            isBetweenPlanes(intersection));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -462,8 +456,7 @@ SoRayPickAction::intersect(const SbVec3f &point) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (objVol.intersect(point) &&
-	    isBetweenPlanes(point));
+    return (objVol.intersect(point) && isBetweenPlanes(point));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -486,48 +479,48 @@ SoRayPickAction::intersect(const SbBox3f &box, SbBool useFullViewVolume)
     // view volume is a degenerate case - a line.) So just use the
     // object-space line to do the intersection. Also, if
     // useFullViewVolume is FALSE, use this test as well.
-    if (! useFullViewVolume || lineWasSet) {
-	SbVec3f enter, exit;
-	if (! objLine.intersect(box, enter, exit))
-	    return FALSE;
+    if (!useFullViewVolume || lineWasSet) {
+        SbVec3f enter, exit;
+        if (!objLine.intersect(box, enter, exit))
+            return FALSE;
 
-	SbVec3f worldEnter, worldExit;
-	objToWorld.multVecMatrix(enter, worldEnter);
-	objToWorld.multVecMatrix(exit,  worldExit);
+        SbVec3f worldEnter, worldExit;
+        objToWorld.multVecMatrix(enter, worldEnter);
+        objToWorld.multVecMatrix(exit, worldExit);
 
-	// If the bounding box does not lie at least partially between
-	// the near and far clipping planes, there is no valid
-	// intersection. Most of this is stolen from isBetweenPlanes().
-	if (clipToNear || clipToFar) {
+        // If the bounding box does not lie at least partially between
+        // the near and far clipping planes, there is no valid
+        // intersection. Most of this is stolen from isBetweenPlanes().
+        if (clipToNear || clipToFar) {
 
-	    // See if the entry point is past the far plane
-	    float t = worldVol.getProjectionDirection().dot(    
-			worldEnter - worldVol.getProjectionPoint());
-	    if (clipToFar && t > worldVol.nearDist + worldVol.nearToFar)
-		return FALSE;
+            // See if the entry point is past the far plane
+            float t = worldVol.getProjectionDirection().dot(
+                worldEnter - worldVol.getProjectionPoint());
+            if (clipToFar && t > worldVol.nearDist + worldVol.nearToFar)
+                return FALSE;
 
-	    // See if the exit point is in front of the near plane
-	    t = worldVol.getProjectionDirection().dot(    
-			worldExit - worldVol.getProjectionPoint());
-	    if (clipToNear && t < worldVol.nearDist)
-		return FALSE;
-	}
+            // See if the exit point is in front of the near plane
+            t = worldVol.getProjectionDirection().dot(
+                worldExit - worldVol.getProjectionPoint());
+            if (clipToNear && t < worldVol.nearDist)
+                return FALSE;
+        }
 
-	// If we are looking for only the frontmost pick (pickAll is
-	// FALSE) and we have found a previous intersection with an
-	// object, we can reject the box intersection if the entry
-	// point is farther than that intersection point.
-	if (! pickAll && ptList.getLength() > 0 &&
-	    worldVol.getProjectionDirection().dot(ptList[0]->getPoint()) <
-	    worldVol.getProjectionDirection().dot(worldEnter))
-	    return FALSE;
+        // If we are looking for only the frontmost pick (pickAll is
+        // FALSE) and we have found a previous intersection with an
+        // object, we can reject the box intersection if the entry
+        // point is farther than that intersection point.
+        if (!pickAll && ptList.getLength() > 0 &&
+            worldVol.getProjectionDirection().dot(ptList[0]->getPoint()) <
+                worldVol.getProjectionDirection().dot(worldEnter))
+            return FALSE;
 
-	// If we get here, the intersection is valid
-	return TRUE;
+        // If we get here, the intersection is valid
+        return TRUE;
     }
 
     else
-	return objVol.intersect(box);
+        return objVol.intersect(box);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -547,8 +540,8 @@ SoRayPickAction::isBetweenPlanes(const SbVec3f &intersection) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	centerVec;
-    float	t;
+    SbVec3f centerVec;
+    float   t;
 
     // Ok. So we actually do the test in world space. This is because
     // in object space, angles between the projection direction and
@@ -562,23 +555,22 @@ SoRayPickAction::isBetweenPlanes(const SbVec3f &intersection) const
     // The dot product of this vector with the vector from the
     // projection point to the intersection point is the parametric
     // distance to the intersection along the direction of projection.
-    t = worldVol.getProjectionDirection().dot(    
-	    worldIntersection - worldVol.getProjectionPoint());
+    t = worldVol.getProjectionDirection().dot(worldIntersection -
+                                              worldVol.getProjectionPoint());
 
     // Test this distance against the near and far planes. If either
     // plane is disabled, don't test against it.
     if ((clipToNear && t < worldVol.nearDist) ||
-	(clipToFar  && t > worldVol.nearDist + worldVol.nearToFar))
-	return FALSE;
+        (clipToFar && t > worldVol.nearDist + worldVol.nearToFar))
+        return FALSE;
 
     // Test the point against each active user-defined clipping plane
-    const SoClipPlaneElement *elt =
-	SoClipPlaneElement::getInstance(getState());
+    const SoClipPlaneElement *elt = SoClipPlaneElement::getInstance(getState());
 
     // Get each clipping plane in world space and test point
     for (int i = 0; i < elt->getNum(); i++)
-	if (! elt->get(i, TRUE).isInHalfSpace(worldIntersection))
-	    return FALSE;
+        if (!elt->get(i, TRUE).isInHalfSpace(worldIntersection))
+            return FALSE;
 
     // If we've made it this far, accept the intersection point
     return TRUE;
@@ -602,40 +594,40 @@ SoRayPickAction::addIntersection(const SbVec3f &objectSpacePoint)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoPickedPoint *pp = new SoPickedPoint(getCurPath(), getState(),
-					  objectSpacePoint);
+    SoPickedPoint *pp =
+        new SoPickedPoint(getCurPath(), getState(), objectSpacePoint);
 
     // If collecting all objects, find correct place in sorted order
     // and insert point
     if (pickAll) {
-	int	i;
+        int i;
 
-	for (i = 0; i < ptList.getLength(); i++)
-	    if (isCloser(pp, ptList[i]))
-		break;
+        for (i = 0; i < ptList.getLength(); i++)
+            if (isCloser(pp, ptList[i]))
+                break;
 
-	ptList.insert(pp, i);
+        ptList.insert(pp, i);
     }
 
     // If just looking for closest object, replace first object (if
     // any) if new one is closer
     else {
 
-	// Nothing in list yet? Add the new one.
-	if (ptList.getLength() == 0)
-	    ptList.append(pp);
+        // Nothing in list yet? Add the new one.
+        if (ptList.getLength() == 0)
+            ptList.append(pp);
 
-	// New intersection is closer than the one in the list, so
-	// delete the old one and insert the new one.
-	else if (isCloser(pp, ptList[0]))
-	    ptList.set(0, pp);
+        // New intersection is closer than the one in the list, so
+        // delete the old one and insert the new one.
+        else if (isCloser(pp, ptList[0]))
+            ptList.set(0, pp);
 
-	// Point is not going to be stored in list, so get rid of it
-	// now and return NULL
-	else {
-	    delete pp;
-	    pp = NULL;
-	}
+        // Point is not going to be stored in list, so get rid of it
+        // now and return NULL
+        else {
+            delete pp;
+            pp = NULL;
+        }
     }
 
     return pp;
@@ -656,7 +648,7 @@ SoRayPickAction::beginTraversal(SoNode *node)
     // If someone set the ray in world space, store the world-space
     // picking ray in the state
     if (lineWasSet)
-	SoPickRayElement::set(state, worldVol);
+        SoPickRayElement::set(state, worldVol);
 
     // Clear the intersection list
     ptList.truncate(0);
@@ -680,8 +672,8 @@ SoRayPickAction::computeMatrices()
     SbMatrix m = SoModelMatrixElement::get(getState());
 
     if (m != objToWorld) {
-	objToWorld = m;
-	worldToObj = m.inverse();
+        objToWorld = m;
+        worldToObj = m.inverse();
     }
 }
 
@@ -698,41 +690,40 @@ SoRayPickAction::computeObjVolAndLine()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	centerPt;
+    SbVec3f centerPt;
 
     // Transform world-space view volume into object space
     objVol = SoPickRayElement::get(state);
     if (extraMatrixSet) {
-	SbMatrix m = worldToObj * extraMatrix;
-	objVol.transform(m);
-    }
-    else
-	objVol.transform(worldToObj);
+        SbMatrix m = worldToObj * extraMatrix;
+        objVol.transform(m);
+    } else
+        objVol.transform(worldToObj);
 
     // Set up object-space line for easy intersection tests. The line
     // passes through the center of the view volume's viewport.
 
     if (lineWasSet)
-	centerPt = objVol.getProjectionPoint() +objVol.getProjectionDirection();
+        centerPt =
+            objVol.getProjectionPoint() + objVol.getProjectionDirection();
     else
-	centerPt = objVol.llf + 0.5 * ((objVol.ulf - objVol.llf) +
-				       (objVol.lrf - objVol.llf));
+        centerPt = objVol.llf + 0.5 * ((objVol.ulf - objVol.llf) +
+                                       (objVol.lrf - objVol.llf));
 
     if (objVol.getProjectionType() == SbViewVolume::ORTHOGRAPHIC) {
-	float d = objVol.getNearDist();
-	if (d == 0.0)
-	    objLine.setValue(centerPt, 
-			     centerPt + objVol.getProjectionDirection());
-	else {
-	    // Make sure the line points in the right direction
-	    if (d < 0.0)
-		d = -d;
-	    objLine.setValue(centerPt - (d * objVol.getProjectionDirection()),
-			     centerPt);
-	}
-    }
-    else
-	objLine.setValue(objVol.getProjectionPoint(), centerPt);
+        float d = objVol.getNearDist();
+        if (d == 0.0)
+            objLine.setValue(centerPt,
+                             centerPt + objVol.getProjectionDirection());
+        else {
+            // Make sure the line points in the right direction
+            if (d < 0.0)
+                d = -d;
+            objLine.setValue(centerPt - (d * objVol.getProjectionDirection()),
+                             centerPt);
+        }
+    } else
+        objLine.setValue(objVol.getProjectionPoint(), centerPt);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -751,7 +742,7 @@ SoRayPickAction::isCloser(const SoPickedPoint *pp0, const SoPickedPoint *pp1)
     // See which world space point is closer along the viewing
     // direction of the world-space view volume
     return (worldVol.getProjectionDirection().dot(pp0->getPoint()) <
-	    worldVol.getProjectionDirection().dot(pp1->getPoint()));
+            worldVol.getProjectionDirection().dot(pp1->getPoint()));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -764,32 +755,32 @@ SoRayPickAction::isCloser(const SoPickedPoint *pp0, const SoPickedPoint *pp1)
 
 float
 SoRayPickAction::rayDistance(const SbVec3f &start, const SbVec3f &direction,
-			     const SbVec3f &point)
+                             const SbVec3f &point)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Find the vector component with the maximum absolute value
-    float	max, c;
-    int		which;
+    float max, c;
+    int   which;
 
     max = std::abs(direction[0]);
     which = 0;
 
     c = std::abs(direction[1]);
     if (c > max) {
-	max = c;
-	which = 1;
+        max = c;
+        which = 1;
     }
 
     c = std::abs(direction[2]);
     if (c > max) {
-	max = c;
-	which = 2;
+        max = c;
+        which = 2;
     }
 
     // If all components are 0, can't do this
     if (max == 0.0)
-	return 0.0;
+        return 0.0;
 
     return (point[which] - start[which]) / direction[which];
 }

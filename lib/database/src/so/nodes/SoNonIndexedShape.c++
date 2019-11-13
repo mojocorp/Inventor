@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -70,7 +70,7 @@ SoNonIndexedShape::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO__NODE_INIT_ABSTRACT_CLASS(SoNonIndexedShape, "NonIndexedShape",
-                 SoVertexShape);
+                                 SoVertexShape);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -99,8 +99,7 @@ SoNonIndexedShape::SoNonIndexedShape()
 SoNonIndexedShape::~SoNonIndexedShape()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -118,19 +117,19 @@ SoNonIndexedShape::~SoNonIndexedShape()
 
 void
 SoNonIndexedShape::computeCoordBBox(SoAction *action, int numVertices,
-				    SbBox3f &box, SbVec3f &center)
+                                    SbBox3f &box, SbVec3f &center)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int32_t			i, lastIndex;
-    const SoCoordinateElement	*ce = NULL;
-    const SbVec3f 		*vpCoords = NULL;
+    int32_t                    i, lastIndex;
+    const SoCoordinateElement *ce = NULL;
+    const SbVec3f *            vpCoords = NULL;
 
     SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
     if (vp && vp->vertex.getNum() > 0) {
-	vpCoords = vp->vertex.getValues(0);
+        vpCoords = vp->vertex.getValues(0);
     } else {
-	ce = SoCoordinateElement::getInstance(action->getState());
+        ce = SoCoordinateElement::getInstance(action->getState());
     }
 
     // Start with an empty box and zero sum
@@ -140,23 +139,21 @@ SoNonIndexedShape::computeCoordBBox(SoAction *action, int numVertices,
     // Loop through coordinates, keeping max bounding box and sum of coords
     i = startIndex.getValue();
     if (numVertices < 0) {
-	lastIndex = (ce ? ce->getNum() - 1 : vp->vertex.getNum() - 1);
-	numVertices = (int) (lastIndex - i + 1);
-    }
-    else
-	lastIndex = i + numVertices - 1;
+        lastIndex = (ce ? ce->getNum() - 1 : vp->vertex.getNum() - 1);
+        numVertices = (int)(lastIndex - i + 1);
+    } else
+        lastIndex = i + numVertices - 1;
 
     while (i <= lastIndex) {
 
-	const SbVec3f &v = (ce ? ce->get3((int) i) : vpCoords[i]);
+        const SbVec3f &v = (ce ? ce->get3((int)i) : vpCoords[i]);
 
-	box.extendBy(v);
-	center += v;
+        box.extendBy(v);
+        center += v;
 
-	i++;
+        i++;
     }
 
     // The center point is the average of the vertices
-    center /= (float) numVertices;
+    center /= (float)numVertices;
 }
-

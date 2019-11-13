@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,7 +67,8 @@
 //
 // Use: public
 
-SoChildList::SoChildList(SoNode *parentNode) : SoNodeList()
+SoChildList::SoChildList(SoNode *parentNode)
+    : SoNodeList()
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -81,7 +82,8 @@ SoChildList::SoChildList(SoNode *parentNode) : SoNodeList()
 //
 // Use: public
 
-SoChildList::SoChildList(SoNode *parentNode, int size) : SoNodeList(size)
+SoChildList::SoChildList(SoNode *parentNode, int size)
+    : SoNodeList(size)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -95,8 +97,8 @@ SoChildList::SoChildList(SoNode *parentNode, int size) : SoNodeList(size)
 //
 // Use: public
 
-SoChildList::SoChildList(SoNode *parentNode, const SoChildList &l) :
-	SoNodeList(l)
+SoChildList::SoChildList(SoNode *parentNode, const SoChildList &l)
+    : SoNodeList(l)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -209,14 +211,14 @@ SoChildList::truncate(int start)
     // also minimizes shuffling of entries in the children array.
 
     for (int which = getLength() - 1; which >= start; --which) {
-	// Remove interest of parent in child
-	(*this)[which]->removeAuditor(parent, SoNotRec::PARENT);
+        // Remove interest of parent in child
+        (*this)[which]->removeAuditor(parent, SoNotRec::PARENT);
 
-	// If any paths go through the parent, make sure they get updated
+        // If any paths go through the parent, make sure they get updated
         for (size_t i = 0; i < auditors.size(); i++)
             auditors[i]->removeIndex(parent, which);
 
-	SoNodeList::remove(which);
+        SoNodeList::remove(which);
     }
 
     // the parent has changed; notify its auditors
@@ -245,7 +247,7 @@ SoChildList::copy(const SoChildList &cList)
 
     // Express parent's interest in all children
     for (i = 0; i < getLength(); i++)
-	(*this)[i]->addAuditor(parent, SoNotRec::PARENT);
+        (*this)[i]->addAuditor(parent, SoNotRec::PARENT);
 
     // the parent has changed; notify its auditors
     parent->startNotify();
@@ -300,52 +302,51 @@ SoChildList::traverse(SoAction *action, int firstChild, int lastChild)
     // Optimization:  If the node this childList is part of is not in
     // the path, then the path code can't change as we traverse its
     // children, and we can use a more efficient traversal:
-    SoAction::PathCode	pc = action->getCurPathCode();
+    SoAction::PathCode pc = action->getCurPathCode();
 
     if (pc == SoAction::NO_PATH || pc == SoAction::BELOW_PATH) {
-	//begin by pushing nonexistent child:
-	action->pushCurPath();
-	for (i = firstChild; i <= lastChild; i++) {
-	    SoNode *child = (*this)[i];
-	    // Now pop and push in one move:
-	    action->popPushCurPath(i);
-	    action->traverse(child);
+        // begin by pushing nonexistent child:
+        action->pushCurPath();
+        for (i = firstChild; i <= lastChild; i++) {
+            SoNode *child = (*this)[i];
+            // Now pop and push in one move:
+            action->popPushCurPath(i);
+            action->traverse(child);
 
-	    // Stop if action has reached termination condition. (For
-	    // example, search has found what it was looking for, or event
-	    // was handled.)
-	    if (action->hasTerminated())
-		break;
-	}	
+            // Stop if action has reached termination condition. (For
+            // example, search has found what it was looking for, or event
+            // was handled.)
+            if (action->hasTerminated())
+                break;
+        }
         action->popCurPath();
-    }
-    else {
-	for (i = firstChild; i <= lastChild; i++) {
-	    SoNode	*child = (*this)[i];
+    } else {
+        for (i = firstChild; i <= lastChild; i++) {
+            SoNode *child = (*this)[i];
 
-	    // Never traverse a child that does not affect the state
-	    // if we are off the path
-	    if (pc == SoAction::OFF_PATH && ! child->affectsState())
-		continue;
+            // Never traverse a child that does not affect the state
+            // if we are off the path
+            if (pc == SoAction::OFF_PATH && !child->affectsState())
+                continue;
 
-	    // If we are in the path, don't traverse a child that does
-	    // not affect the state if it is not on a path
-	    action->pushCurPath(i);
+            // If we are in the path, don't traverse a child that does
+            // not affect the state if it is not on a path
+            action->pushCurPath(i);
 
-	    // If action code is now OFF_PATH, we know that the child
-	    // was not on a path. Don't traverse it if it does not
-	    // affect the state
-	    if (action->getCurPathCode() != SoAction::OFF_PATH ||
-		child->affectsState())
-		action->traverse(child);
+            // If action code is now OFF_PATH, we know that the child
+            // was not on a path. Don't traverse it if it does not
+            // affect the state
+            if (action->getCurPathCode() != SoAction::OFF_PATH ||
+                child->affectsState())
+                action->traverse(child);
 
-	    action->popCurPath(pc);
+            action->popCurPath(pc);
 
-	    // Stop if action has reached termination condition. (For
-	    // example, search has found what it was looking for, or event
-	    // was handled.)
-	    if (action->hasTerminated())
-		break;
-	}
+            // Stop if action has reached termination condition. (For
+            // example, search has found what it was looking for, or event
+            // was handled.)
+            if (action->hasTerminated())
+                break;
+        }
     }
 }

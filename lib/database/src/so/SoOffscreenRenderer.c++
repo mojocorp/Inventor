@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -62,12 +62,8 @@
 #include <image/image-sgi.h>
 #include <image/image-eps.h>
 
-struct SbGLXContext{
-    SbGLXContext() :
-        display(NULL),
-        visual(NULL),
-        context(NULL),
-        pixmap(0) {
+struct SbGLXContext {
+    SbGLXContext() : display(NULL), visual(NULL), context(NULL), pixmap(0) {
         // Create an X Display
         display = XOpenDisplay(NULL);
 
@@ -76,11 +72,14 @@ struct SbGLXContext{
 
         // Create a GLX Visual
         // Offscreen renderings will always be rendered as RGB images
-        // Currently the OpenGL does not support storing alpha channel information
-        // in the offscreen pixmap.
-        static int attributeList[] = { GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
-                                       GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
-        visual = glXChooseVisual(display, DefaultScreen(display), attributeList);
+        // Currently the OpenGL does not support storing alpha channel
+        // information in the offscreen pixmap.
+        static int attributeList[] = {
+            GLX_RGBA, GLX_RED_SIZE,  1, GLX_GREEN_SIZE,
+            1,        GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE,
+            1,        None};
+        visual =
+            glXChooseVisual(display, DefaultScreen(display), attributeList);
         if (!visual) {
             XCloseDisplay(display);
             display = NULL;
@@ -98,10 +97,10 @@ struct SbGLXContext{
     ~SbGLXContext() {
         if (display) {
             glXMakeCurrent(display, 0, 0);
-            glXDestroyContext( display, context );
-            glXDestroyGLXPixmap( display, pixmap );
+            glXDestroyContext(display, context);
+            glXDestroyGLXPixmap(display, pixmap);
             XFreePixmap(display, pmap);
-            XCloseDisplay( display );
+            XCloseDisplay(display);
         }
     }
 
@@ -110,17 +109,19 @@ struct SbGLXContext{
             return false;
         }
 
-        if(size != sz) {
+        if (size != sz) {
             // The pixmap is not the right size.  Destroy it.
             if (pixmap) {
                 glXMakeCurrent(display, 0, 0);
-                glXDestroyGLXPixmap( display, pixmap );
+                glXDestroyGLXPixmap(display, pixmap);
                 XFreePixmap(display, pmap);
             }
 
             // Create X and GLX Pixmap
-            pmap = XCreatePixmap( display, DefaultRootWindow(display), (unsigned int)sz[0], (unsigned int)sz[1], visual->depth );
-            pixmap = glXCreateGLXPixmap( display, visual, pmap );
+            pmap = XCreatePixmap(display, DefaultRootWindow(display),
+                                 (unsigned int)sz[0], (unsigned int)sz[1],
+                                 visual->depth);
+            pixmap = glXCreateGLXPixmap(display, visual, pmap);
             size = sz;
         }
 
@@ -136,38 +137,39 @@ struct SbGLXContext{
 
     SbImage getImage(SoOffscreenRenderer::Components comps) {
         GLenum format;
-        int allocSize;
+        int    allocSize;
         switch (comps) {
-            case SoOffscreenRenderer::LUMINANCE:
-                format = GL_LUMINANCE;
-                allocSize = size[0] * size[1] * 1;
-                break;
-            case SoOffscreenRenderer::LUMINANCE_TRANSPARENCY:
-                format = GL_LUMINANCE_ALPHA;
-                allocSize = size[0] * size[1] * 2;
-                break;
-            case SoOffscreenRenderer::RGB:
-                format = GL_RGB;
-                allocSize = size[0] * size[1] * 3;
-                break;
-            case SoOffscreenRenderer::RGB_TRANSPARENCY:
-                format = GL_RGBA;
-                allocSize = size[0] * size[1] * 4;
-                break;
+        case SoOffscreenRenderer::LUMINANCE:
+            format = GL_LUMINANCE;
+            allocSize = size[0] * size[1] * 1;
+            break;
+        case SoOffscreenRenderer::LUMINANCE_TRANSPARENCY:
+            format = GL_LUMINANCE_ALPHA;
+            allocSize = size[0] * size[1] * 2;
+            break;
+        case SoOffscreenRenderer::RGB:
+            format = GL_RGB;
+            allocSize = size[0] * size[1] * 3;
+            break;
+        case SoOffscreenRenderer::RGB_TRANSPARENCY:
+            format = GL_RGBA;
+            allocSize = size[0] * size[1] * 4;
+            break;
         }
 
         SbImage buffer = SbImage(size, SbImage::Format(comps), allocSize, NULL);
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glReadPixels(0, 0, size[0], size[1], format, GL_UNSIGNED_BYTE, (GLvoid *)buffer.getBytes());
+        glReadPixels(0, 0, size[0], size[1], format, GL_UNSIGNED_BYTE,
+                     (GLvoid *)buffer.getBytes());
         return buffer;
     }
 
-    SbVec2s         size;
-    Display 		*display;
-    XVisualInfo  	*visual;
-    GLXContext 		context;
-    GLXPixmap 		pixmap;
-    Pixmap          pmap;
+    SbVec2s      size;
+    Display *    display;
+    XVisualInfo *visual;
+    GLXContext   context;
+    GLXPixmap    pixmap;
+    Pixmap       pmap;
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -177,16 +179,15 @@ struct SbGLXContext{
 //
 // Use: public
 
-SoOffscreenRenderer::SoOffscreenRenderer(
-    const SbViewportRegion &viewportRegion ) :
-    cacheContext(SoGLCacheContextElement::getUniqueCacheContext())
+SoOffscreenRenderer::SoOffscreenRenderer(const SbViewportRegion &viewportRegion)
+    : cacheContext(SoGLCacheContextElement::getUniqueCacheContext())
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    offAction   = new SoGLRenderAction(viewportRegion);
-    userAction  = NULL;
-    comps       = SoOffscreenRenderer::RGB;
+    offAction = new SoGLRenderAction(viewportRegion);
+    userAction = NULL;
+    comps = SoOffscreenRenderer::RGB;
     backgroundColor.setValue(0.0, 0.0, 0.0);
     ctx = new SbGLXContext;
 }
@@ -198,16 +199,15 @@ SoOffscreenRenderer::SoOffscreenRenderer(
 //
 // Use: public
 
-SoOffscreenRenderer::SoOffscreenRenderer(
-    SoGLRenderAction *act ) :
-    cacheContext(SoGLCacheContextElement::getUniqueCacheContext())
+SoOffscreenRenderer::SoOffscreenRenderer(SoGLRenderAction *act)
+    : cacheContext(SoGLCacheContextElement::getUniqueCacheContext())
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    offAction   = new SoGLRenderAction(act->getViewportRegion());
-    userAction  = act;
-    comps       = SoOffscreenRenderer::RGB;
+    offAction = new SoGLRenderAction(act->getViewportRegion());
+    userAction = act;
+    comps = SoOffscreenRenderer::RGB;
     backgroundColor.setValue(0.0, 0.0, 0.0);
     ctx = new SbGLXContext;
 }
@@ -249,7 +249,8 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
         return 75.0;
 
     // Get the dimensions of the screen
-    const float pix = DisplayWidth(tmpDisplay, 0) * 25.4 / (float)DisplayWidthMM(tmpDisplay, 0);
+    const float pix = DisplayWidth(tmpDisplay, 0) * 25.4 /
+                      (float)DisplayWidthMM(tmpDisplay, 0);
 
     XCloseDisplay(tmpDisplay);
 
@@ -294,9 +295,7 @@ SoOffscreenRenderer::getMaximumResolution()
 // Use: public
 
 void
-SoOffscreenRenderer::setViewportRegion(
-    const SbViewportRegion &viewportRegion )
-
+SoOffscreenRenderer::setViewportRegion(const SbViewportRegion &viewportRegion)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -311,9 +310,8 @@ SoOffscreenRenderer::setViewportRegion(
 //
 // Use: public
 
-const SbViewportRegion  &
+const SbViewportRegion &
 SoOffscreenRenderer::getViewportRegion() const
-
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -329,9 +327,7 @@ SoOffscreenRenderer::getViewportRegion() const
 // Use: public
 
 void
-SoOffscreenRenderer::setGLRenderAction(
-    SoGLRenderAction *act )
-
+SoOffscreenRenderer::setGLRenderAction(SoGLRenderAction *act)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -348,7 +344,6 @@ SoOffscreenRenderer::setGLRenderAction(
 
 SoGLRenderAction *
 SoOffscreenRenderer::getGLRenderAction() const
-
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -395,7 +390,7 @@ SoOffscreenRenderer::render(SoPath *scene)
 // Use: private
 
 bool
-SoOffscreenRenderer::renderGeneric( SoBase *base )
+SoOffscreenRenderer::renderGeneric(SoBase *base)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -453,7 +448,6 @@ SoOffscreenRenderer::renderGeneric( SoBase *base )
 const unsigned char *
 SoOffscreenRenderer::getBuffer() const
 
-
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -468,15 +462,14 @@ SoOffscreenRenderer::getBuffer() const
 // Use: public
 
 SbBool
-SoOffscreenRenderer::writeToRGB( FILE *fp ) const
-
+SoOffscreenRenderer::writeToRGB(FILE *fp) const
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Open an image file for writing
     if (comps == (SoOffscreenRenderer::LUMINANCE_TRANSPARENCY) ||
-       (comps == SoOffscreenRenderer::RGB_TRANSPARENCY)) {
+        (comps == SoOffscreenRenderer::RGB_TRANSPARENCY)) {
 #ifdef DEBUG
         SoDebugError::post("SoOffscreenRenderer::writeToRGB",
                            "The RGB file format does not support transparency");
@@ -491,9 +484,8 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
 
     sgi_t *image;
 
-    if ((image = sgiOpenFile( fp, SGI_WRITE, SGI_COMP_RLE, 1,
-            width, height, components )) == NULL)
-    {
+    if ((image = sgiOpenFile(fp, SGI_WRITE, SGI_COMP_RLE, 1, width, height,
+                             components)) == NULL) {
 #ifdef DEBUG
         SoDebugError::post("SoOffscreenRenderer::writeToRGB",
                            "could not open image file");
@@ -503,27 +495,27 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
 
     // For each row in the pixel buffer, write the row into the image file
     std::vector<unsigned short> rowBuf(width);
-    unsigned char const*pBuf = pixelBuffer.getConstBytes();
+    unsigned char const *       pBuf = pixelBuffer.getConstBytes();
 
-    for (int row=0; row<height; row++) {
+    for (int row = 0; row < height; row++) {
         // The pixel in the pixel buffer store pixel information arranged
         // by pixel, whereas the .rgb file stores pixel information arranged
         // by color component.  So scanlines of component data must be
         // accumulated before a row can be written.
 
         // Convert each color component
-        for (int comp=0; comp<components; comp++) {
+        for (int comp = 0; comp < components; comp++) {
             unsigned short *trow = rowBuf.data();
 
             // Convert a row
             const unsigned char *tbuf = pBuf + comp;
-            for (int j=0; j<width; j++, tbuf += components)
+            for (int j = 0; j < width; j++, tbuf += components)
                 *trow++ = (short)*tbuf;
-            sgiPutRow( image, rowBuf.data(), row, comp );
+            sgiPutRow(image, rowBuf.data(), row, comp);
         }
-        pBuf+=components*width;
+        pBuf += components * width;
     }
-    sgiClose( image );
+    sgiClose(image);
     return TRUE;
 }
 
@@ -535,19 +527,17 @@ SoOffscreenRenderer::writeToRGB( FILE *fp ) const
 // Use: public
 
 SbBool
-SoOffscreenRenderer::writeToPostScript( FILE *fp ) const
-
+SoOffscreenRenderer::writeToPostScript(FILE *fp) const
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const SbVec3s &vpSize = pixelBuffer.getSize();
-    const float   ppi = renderedViewport.getPixelsPerInch();
-    const SbVec2f printSize(vpSize[0] / ppi, vpSize[1] / ppi);
+    const float    ppi = renderedViewport.getPixelsPerInch();
+    const SbVec2f  printSize(vpSize[0] / ppi, vpSize[1] / ppi);
 
-    return writeToPostScript( fp, printSize );
+    return writeToPostScript(fp, printSize);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -558,16 +548,12 @@ SoOffscreenRenderer::writeToPostScript( FILE *fp ) const
 // Use: public
 
 SbBool
-SoOffscreenRenderer::writeToPostScript(
-        FILE *fp,
-        const SbVec2f &printSize ) const
-
+SoOffscreenRenderer::writeToPostScript(FILE *fp, const SbVec2f &printSize) const
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ((comps == LUMINANCE_TRANSPARENCY) ||
-        (comps == RGB_TRANSPARENCY)) {
+    if ((comps == LUMINANCE_TRANSPARENCY) || (comps == RGB_TRANSPARENCY)) {
 #ifdef DEBUG
         SoDebugError::post("SoOffscreenRenderer::writeToRGB",
                            "PostScript does not support image transparency");
@@ -579,9 +565,6 @@ SoOffscreenRenderer::writeToPostScript(
     const int height = pixelBuffer.getSize()[1];
     const int components = pixelBuffer.getNumComponents();
 
-    return (writeEps(fp, width, height, components, pixelBuffer.getConstBytes(), printSize[0], printSize[1]) == 0);
+    return (writeEps(fp, width, height, components, pixelBuffer.getConstBytes(),
+                     printSize[0], printSize[1]) == 0);
 }
-
-
-
-

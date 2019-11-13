@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -70,40 +70,39 @@
 // Use: public
 
 void
-SoNotRec::print(FILE *fp) const
-{
+SoNotRec::print(FILE *fp) const {
     const char *typeName;
 
     switch (type) {
-      case CONTAINER:
-	typeName = "CONTAINER";
-	break;
-      case PARENT:
-	typeName = "PARENT";
-	break;
-      case SENSOR:
-	typeName = "SENSOR";
-	break;
-      case FIELD:
-	typeName = "FIELD";
-	break;
-      case ENGINE:
-	typeName = "ENGINE";
-	break;
-      default:
-	typeName = "UNSET";
-	break;
+    case CONTAINER:
+        typeName = "CONTAINER";
+        break;
+    case PARENT:
+        typeName = "PARENT";
+        break;
+    case SENSOR:
+        typeName = "SENSOR";
+        break;
+    case FIELD:
+        typeName = "FIELD";
+        break;
+    case ENGINE:
+        typeName = "ENGINE";
+        break;
+    default:
+        typeName = "UNSET";
+        break;
     }
 
     if (fp == NULL)
-	fp = stdout;
+        fp = stdout;
 
     fprintf(fp, "\tSoNotRec @%p: type %s, base %p", this, typeName, base);
 
     if (base != NULL) {
-	const char *baseTypeName = base->getTypeId().getName().getString();
-	fprintf(fp, " (type %s, \"%s\")",
-		baseTypeName, base->getName().getString());
+        const char *baseTypeName = base->getTypeId().getName().getString();
+        fprintf(fp, " (type %s, \"%s\")", baseTypeName,
+                base->getName().getString());
     }
 
     fprintf(fp, "\n");
@@ -125,8 +124,7 @@ SoNotRec::print(FILE *fp) const
 //
 // Use: public
 
-SoNotList::SoNotList()
-{
+SoNotList::SoNotList() {
     first = last = firstAtNode = NULL;
     lastField = NULL;
     timeStamp = SoNode::getNextNodeId();
@@ -140,16 +138,15 @@ SoNotList::SoNotList()
 // Use: public
 
 void
-SoNotList::append(SoNotRec *rec)
-{
+SoNotList::append(SoNotRec *rec) {
     rec->setPrevious(last);
     last = rec;
     if (first == NULL)
-	first = rec;
+        first = rec;
 
-    if (firstAtNode == NULL && 
-	rec->getBase()->isOfType(SoNode::getClassTypeId()))
-	firstAtNode = rec;
+    if (firstAtNode == NULL &&
+        rec->getBase()->isOfType(SoNode::getClassTypeId()))
+        firstAtNode = rec;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -160,11 +157,10 @@ SoNotList::append(SoNotRec *rec)
 // Use: public
 
 void
-SoNotList::append(SoNotRec *rec, SoField *field)
-{
+SoNotList::append(SoNotRec *rec, SoField *field) {
     append(rec);
 
-    lastField   = field;
+    lastField = field;
     firstAtNode = rec;
 }
 
@@ -176,29 +172,27 @@ SoNotList::append(SoNotRec *rec, SoField *field)
 // Use: public
 
 void
-SoNotList::print(FILE *fp) const
-{
-    const SoNotRec	*rec = last;
+SoNotList::print(FILE *fp) const {
+    const SoNotRec *rec = last;
 
     if (fp == NULL)
-	fp = stdout;
+        fp = stdout;
 
     if (rec == NULL) {
-	fprintf(fp, "SoNotList: NULL list\n");
-	return;
+        fprintf(fp, "SoNotList: NULL list\n");
+        return;
     }
 
     fprintf(fp, "SoNotList:\n");
 
     do {
-	rec->print(fp);
+        rec->print(fp);
 
-	if (rec != first)
-	    fprintf(fp, "    ... Was notified from:\n");
+        if (rec != first)
+            fprintf(fp, "    ... Was notified from:\n");
 
-	rec = rec->getPrevious();
+        rec = rec->getPrevious();
     } while (rec != NULL);
 
-    fprintf(fp, "\tfirstAtNode = %p, lastField = %p\n",
-	    firstAtNode, lastField);
+    fprintf(fp, "\tfirstAtNode = %p, lastField = %p\n", firstAtNode, lastField);
 }

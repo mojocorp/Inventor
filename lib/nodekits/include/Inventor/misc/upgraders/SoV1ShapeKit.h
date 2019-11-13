@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |      Defines the SoV1ShapeKit class. 
+ |      Defines the SoV1ShapeKit class.
  |      Subclassed off of SoV1GroupKit, this class adds a set of binding
  |      nodes to the catalog, since (almost) all shapes may want to set
  |      values for the various bindings.
@@ -56,8 +56,8 @@
  _______________________________________________________________________
 */
 
-#ifndef  _SO_V1_SHAPE_KIT_
-#define  _SO_V1_SHAPE_KIT_
+#ifndef _SO_V1_SHAPE_KIT_
+#define _SO_V1_SHAPE_KIT_
 
 #include <Inventor/misc/upgraders/SoV1GroupKit.h>
 
@@ -65,10 +65,10 @@
 //    Class: SoV1ShapeKit
 //
 //    New nodes in this subclass are:
-//         materialBinding, normalBinding,                 
+//         materialBinding, normalBinding,
 //         and textureCoordinateBinding
 //
-//      A parent node that manages a collection of child nodes 
+//      A parent node that manages a collection of child nodes
 //      into a unit with the following structure:
 //
 //                            this
@@ -77,22 +77,23 @@
 //            "callbackList"    |
 //      ---------------------------------------------------------------
 //      |       |           |     |         |          |              |
-//  "pickStyle" |    "transform"  |         |          |              | 
+//  "pickStyle" |    "transform"  |         |          |              |
 //     "appearance"  "texture2Transform"    |          |              |
 //                                          |          |              |
 //                                          |          |              |
 //                                          |          |              |
 //                                          |          |           "childList"
 //                                          |       "shape"
-//          ---------------------------------                   
-//          |         |                  |  |                   
-// "materialBinding"  |                  |  |                     
-//            "normalBinding"            |  |                     
-//           "textureCoordinateFunctionList"|                     
-//                            "textureCoordinateBinding"          
+//          ---------------------------------
+//          |         |                  |  |
+// "materialBinding"  |                  |  |
+//            "normalBinding"            |  |
+//           "textureCoordinateFunctionList"|
+//                            "textureCoordinateBinding"
 //
 ////////////////////////////////////////////////////////////////////
-SoEXTENDER class SoV1ShapeKit : public SoV1GroupKit {
+SoEXTENDER
+class SoV1ShapeKit : public SoV1GroupKit {
 
     // Define typeId and name stuff
     SO_NODE_HEADER(SoV1ShapeKit);
@@ -105,7 +106,7 @@ SoEXTENDER class SoV1ShapeKit : public SoV1GroupKit {
     SoV1ShapeKit();
 
     virtual SoNode *createNewNode();
-    
+
     // If tryToSetPartInNewNode fails, then this routine is called.
     // It will fail for the parts:
     // "textureCoordinateFunctionList".
@@ -113,12 +114,13 @@ SoEXTENDER class SoV1ShapeKit : public SoV1GroupKit {
     // a list.  This routine will take the last function from the list
     // and set it as the part "textureCoordinateFunnction" in the new node.
     // It will also print a warning.
-    virtual SbBool dealWithUpgradedPart( SoBaseKit *newNode,
-				  SoNode *newPart, const SbName &newPartName );
-    SoINTERNAL public:
+    virtual SbBool dealWithUpgradedPart(SoBaseKit *newNode, SoNode *newPart,
+                                        const SbName &newPartName);
+    SoINTERNAL
+  public:
     static void initClass();
 
   protected:
     virtual ~SoV1ShapeKit();
 };
-#endif  /* _SO_V1_SHAPE_KIT_ */
+#endif /* _SO_V1_SHAPE_KIT_ */

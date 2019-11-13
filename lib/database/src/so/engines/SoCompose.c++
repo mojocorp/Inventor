@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -59,30 +59,28 @@
 // Utility macro defines basic source for composition/decomposition
 // engines
 //
-#define SO_COMPOSE__SOURCE(Name)			\
-    SO_ENGINE_SOURCE(Name);				\
-    Name::~Name() { }
+#define SO_COMPOSE__SOURCE(Name)                                               \
+    SO_ENGINE_SOURCE(Name);                                                    \
+    Name::~Name() {}
 
 //////////////////
 //
 // Utility macro defines basic source for composition/decomposition
 // engines
 //
-#define SO_COMPOSE__INIT(Name,String)			\
-    void Name::initClass() {				\
-    SO__ENGINE_INIT_CLASS(Name,String,SoEngine);	\
-    }
-SO_COMPOSE__INIT(SoComposeVec2f,"ComposeVec2f")
-SO_COMPOSE__INIT(SoComposeVec3f,"ComposeVec3f")
-SO_COMPOSE__INIT(SoComposeVec4f,"ComposeVec4f")
-SO_COMPOSE__INIT(SoDecomposeVec2f,"DecomposeVec2f")
-SO_COMPOSE__INIT(SoDecomposeVec3f,"DecomposeVec3f")
-SO_COMPOSE__INIT(SoDecomposeVec4f,"DecomposeVec4f")
-SO_COMPOSE__INIT(SoComposeRotation,"ComposeRotation")
-SO_COMPOSE__INIT(SoComposeRotationFromTo,"ComposeRotationFromTo")
-SO_COMPOSE__INIT(SoDecomposeRotation,"DecomposeRotation")
-SO_COMPOSE__INIT(SoComposeMatrix,"ComposeMatrix")
-SO_COMPOSE__INIT(SoDecomposeMatrix,"DecomposeMatrix")
+#define SO_COMPOSE__INIT(Name, String)                                         \
+    void Name::initClass() { SO__ENGINE_INIT_CLASS(Name, String, SoEngine); }
+SO_COMPOSE__INIT(SoComposeVec2f, "ComposeVec2f")
+SO_COMPOSE__INIT(SoComposeVec3f, "ComposeVec3f")
+SO_COMPOSE__INIT(SoComposeVec4f, "ComposeVec4f")
+SO_COMPOSE__INIT(SoDecomposeVec2f, "DecomposeVec2f")
+SO_COMPOSE__INIT(SoDecomposeVec3f, "DecomposeVec3f")
+SO_COMPOSE__INIT(SoDecomposeVec4f, "DecomposeVec4f")
+SO_COMPOSE__INIT(SoComposeRotation, "ComposeRotation")
+SO_COMPOSE__INIT(SoComposeRotationFromTo, "ComposeRotationFromTo")
+SO_COMPOSE__INIT(SoDecomposeRotation, "DecomposeRotation")
+SO_COMPOSE__INIT(SoComposeMatrix, "ComposeMatrix")
+SO_COMPOSE__INIT(SoDecomposeMatrix, "DecomposeMatrix")
 #undef SO_COMPOSE__INIT
 
 ////////////////////////////////////////////////////////////////////////
@@ -92,26 +90,24 @@ SO_COMPOSE__INIT(SoDecomposeMatrix,"DecomposeMatrix")
 
 SO_COMPOSE__SOURCE(SoComposeVec2f);
 
-SoComposeVec2f::SoComposeVec2f()
-{
+SoComposeVec2f::SoComposeVec2f() {
     SO_ENGINE_CONSTRUCTOR(SoComposeVec2f);
-    SO_ENGINE_ADD_INPUT(x,	  (0.0));
-    SO_ENGINE_ADD_INPUT(y,	  (0.0));
+    SO_ENGINE_ADD_INPUT(x, (0.0));
+    SO_ENGINE_ADD_INPUT(y, (0.0));
     SO_ENGINE_ADD_OUTPUT(vector, SoMFVec2f);
     isBuiltIn = TRUE;
 }
 
 void
-SoComposeVec2f::evaluate()
-{
-    int	nx = x.getNum();
+SoComposeVec2f::evaluate() {
+    int nx = x.getNum();
     int ny = y.getNum();
-    int nout = max(nx,ny);
+    int nout = max(nx, ny);
     SO_ENGINE_OUTPUT(vector, SoMFVec2f, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	float vx = x[clamp(i,nx)];
-	float vy = y[clamp(i,ny)];
-	SO_ENGINE_OUTPUT(vector, SoMFVec2f, set1Value(i, vx, vy));
+    for (int i = 0; i < nout; i++) {
+        float vx = x[clamp(i, nx)];
+        float vy = y[clamp(i, ny)];
+        SO_ENGINE_OUTPUT(vector, SoMFVec2f, set1Value(i, vx, vy));
     }
 }
 
@@ -122,29 +118,27 @@ SoComposeVec2f::evaluate()
 
 SO_COMPOSE__SOURCE(SoComposeVec3f);
 
-SoComposeVec3f::SoComposeVec3f()
-{
+SoComposeVec3f::SoComposeVec3f() {
     SO_ENGINE_CONSTRUCTOR(SoComposeVec3f);
-    SO_ENGINE_ADD_INPUT(x,	  (0.0));
-    SO_ENGINE_ADD_INPUT(y,	  (0.0));
-    SO_ENGINE_ADD_INPUT(z,	  (0.0));
+    SO_ENGINE_ADD_INPUT(x, (0.0));
+    SO_ENGINE_ADD_INPUT(y, (0.0));
+    SO_ENGINE_ADD_INPUT(z, (0.0));
     SO_ENGINE_ADD_OUTPUT(vector, SoMFVec3f);
     isBuiltIn = TRUE;
 }
 
 void
-SoComposeVec3f::evaluate()
-{
-    int	nx = x.getNum();
+SoComposeVec3f::evaluate() {
+    int nx = x.getNum();
     int ny = y.getNum();
     int nz = z.getNum();
-    int nout=max(nx,ny,nz);
+    int nout = max(nx, ny, nz);
     SO_ENGINE_OUTPUT(vector, SoMFVec3f, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	float vx = x[clamp(i,nx)];
-	float vy = y[clamp(i,ny)];
-	float vz = z[clamp(i,nz)];
-	SO_ENGINE_OUTPUT(vector, SoMFVec3f, set1Value(i, vx, vy, vz));
+    for (int i = 0; i < nout; i++) {
+        float vx = x[clamp(i, nx)];
+        float vy = y[clamp(i, ny)];
+        float vz = z[clamp(i, nz)];
+        SO_ENGINE_OUTPUT(vector, SoMFVec3f, set1Value(i, vx, vy, vz));
     }
 }
 
@@ -155,32 +149,30 @@ SoComposeVec3f::evaluate()
 
 SO_COMPOSE__SOURCE(SoComposeVec4f);
 
-SoComposeVec4f::SoComposeVec4f()
-{
+SoComposeVec4f::SoComposeVec4f() {
     SO_ENGINE_CONSTRUCTOR(SoComposeVec4f);
-    SO_ENGINE_ADD_INPUT(x,	  (0.0));
-    SO_ENGINE_ADD_INPUT(y,	  (0.0));
-    SO_ENGINE_ADD_INPUT(z,	  (0.0));
-    SO_ENGINE_ADD_INPUT(w,	  (0.0));
+    SO_ENGINE_ADD_INPUT(x, (0.0));
+    SO_ENGINE_ADD_INPUT(y, (0.0));
+    SO_ENGINE_ADD_INPUT(z, (0.0));
+    SO_ENGINE_ADD_INPUT(w, (0.0));
     SO_ENGINE_ADD_OUTPUT(vector, SoMFVec4f);
     isBuiltIn = TRUE;
 }
 
 void
-SoComposeVec4f::evaluate()
-{
-    int	nx = x.getNum();
+SoComposeVec4f::evaluate() {
+    int nx = x.getNum();
     int ny = y.getNum();
     int nz = z.getNum();
     int nw = w.getNum();
-    int nout=max(nx,ny,nz,nw);
+    int nout = max(nx, ny, nz, nw);
     SO_ENGINE_OUTPUT(vector, SoMFVec4f, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	float vx = x[clamp(i,nx)];
-	float vy = y[clamp(i,ny)];
-	float vz = z[clamp(i,nz)];
-	float vw = w[clamp(i,nw)];
-	SO_ENGINE_OUTPUT(vector, SoMFVec4f, set1Value(i, vx, vy, vz, vw));
+    for (int i = 0; i < nout; i++) {
+        float vx = x[clamp(i, nx)];
+        float vy = y[clamp(i, ny)];
+        float vz = z[clamp(i, nz)];
+        float vw = w[clamp(i, nw)];
+        SO_ENGINE_OUTPUT(vector, SoMFVec4f, set1Value(i, vx, vy, vz, vw));
     }
 }
 
@@ -191,24 +183,22 @@ SoComposeVec4f::evaluate()
 
 SO_COMPOSE__SOURCE(SoDecomposeVec2f);
 
-SoDecomposeVec2f::SoDecomposeVec2f()
-{
+SoDecomposeVec2f::SoDecomposeVec2f() {
     SO_ENGINE_CONSTRUCTOR(SoDecomposeVec2f);
-    SO_ENGINE_ADD_INPUT(vector,	  (SbVec2f(0,0)));
+    SO_ENGINE_ADD_INPUT(vector, (SbVec2f(0, 0)));
     SO_ENGINE_ADD_OUTPUT(x, SoMFFloat);
     SO_ENGINE_ADD_OUTPUT(y, SoMFFloat);
     isBuiltIn = TRUE;
 }
 
 void
-SoDecomposeVec2f::evaluate()
-{
-    int nout=vector.getNum();
+SoDecomposeVec2f::evaluate() {
+    int nout = vector.getNum();
     SO_ENGINE_OUTPUT(x, SoMFFloat, setNum(nout));
     SO_ENGINE_OUTPUT(y, SoMFFloat, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	SO_ENGINE_OUTPUT(x, SoMFFloat, set1Value(i,vector[i][0]));
-	SO_ENGINE_OUTPUT(y, SoMFFloat, set1Value(i,vector[i][1]));
+    for (int i = 0; i < nout; i++) {
+        SO_ENGINE_OUTPUT(x, SoMFFloat, set1Value(i, vector[i][0]));
+        SO_ENGINE_OUTPUT(y, SoMFFloat, set1Value(i, vector[i][1]));
     }
 }
 
@@ -219,10 +209,9 @@ SoDecomposeVec2f::evaluate()
 
 SO_COMPOSE__SOURCE(SoDecomposeVec3f);
 
-SoDecomposeVec3f::SoDecomposeVec3f()
-{
+SoDecomposeVec3f::SoDecomposeVec3f() {
     SO_ENGINE_CONSTRUCTOR(SoDecomposeVec3f);
-    SO_ENGINE_ADD_INPUT(vector,	  (SbVec3f(0,0,0)));
+    SO_ENGINE_ADD_INPUT(vector, (SbVec3f(0, 0, 0)));
     SO_ENGINE_ADD_OUTPUT(x, SoMFFloat);
     SO_ENGINE_ADD_OUTPUT(y, SoMFFloat);
     SO_ENGINE_ADD_OUTPUT(z, SoMFFloat);
@@ -230,16 +219,15 @@ SoDecomposeVec3f::SoDecomposeVec3f()
 }
 
 void
-SoDecomposeVec3f::evaluate()
-{
-    int nout=vector.getNum();
+SoDecomposeVec3f::evaluate() {
+    int nout = vector.getNum();
     SO_ENGINE_OUTPUT(x, SoMFFloat, setNum(nout));
     SO_ENGINE_OUTPUT(y, SoMFFloat, setNum(nout));
     SO_ENGINE_OUTPUT(z, SoMFFloat, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	SO_ENGINE_OUTPUT(x, SoMFFloat, set1Value(i,vector[i][0]));
-	SO_ENGINE_OUTPUT(y, SoMFFloat, set1Value(i,vector[i][1]));
-	SO_ENGINE_OUTPUT(z, SoMFFloat, set1Value(i,vector[i][2]));
+    for (int i = 0; i < nout; i++) {
+        SO_ENGINE_OUTPUT(x, SoMFFloat, set1Value(i, vector[i][0]));
+        SO_ENGINE_OUTPUT(y, SoMFFloat, set1Value(i, vector[i][1]));
+        SO_ENGINE_OUTPUT(z, SoMFFloat, set1Value(i, vector[i][2]));
     }
 }
 
@@ -250,10 +238,9 @@ SoDecomposeVec3f::evaluate()
 
 SO_COMPOSE__SOURCE(SoDecomposeVec4f);
 
-SoDecomposeVec4f::SoDecomposeVec4f()
-{
+SoDecomposeVec4f::SoDecomposeVec4f() {
     SO_ENGINE_CONSTRUCTOR(SoDecomposeVec4f);
-    SO_ENGINE_ADD_INPUT(vector,	  (SbVec4f(0,0,0,0)));
+    SO_ENGINE_ADD_INPUT(vector, (SbVec4f(0, 0, 0, 0)));
     SO_ENGINE_ADD_OUTPUT(x, SoMFFloat);
     SO_ENGINE_ADD_OUTPUT(y, SoMFFloat);
     SO_ENGINE_ADD_OUTPUT(z, SoMFFloat);
@@ -262,18 +249,17 @@ SoDecomposeVec4f::SoDecomposeVec4f()
 }
 
 void
-SoDecomposeVec4f::evaluate()
-{
-    int nout=vector.getNum();
+SoDecomposeVec4f::evaluate() {
+    int nout = vector.getNum();
     SO_ENGINE_OUTPUT(x, SoMFFloat, setNum(nout));
     SO_ENGINE_OUTPUT(y, SoMFFloat, setNum(nout));
     SO_ENGINE_OUTPUT(z, SoMFFloat, setNum(nout));
     SO_ENGINE_OUTPUT(w, SoMFFloat, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	SO_ENGINE_OUTPUT(x, SoMFFloat, set1Value(i,vector[i][0]));
-	SO_ENGINE_OUTPUT(y, SoMFFloat, set1Value(i,vector[i][1]));
-	SO_ENGINE_OUTPUT(z, SoMFFloat, set1Value(i,vector[i][2]));
-	SO_ENGINE_OUTPUT(w, SoMFFloat, set1Value(i,vector[i][3]));
+    for (int i = 0; i < nout; i++) {
+        SO_ENGINE_OUTPUT(x, SoMFFloat, set1Value(i, vector[i][0]));
+        SO_ENGINE_OUTPUT(y, SoMFFloat, set1Value(i, vector[i][1]));
+        SO_ENGINE_OUTPUT(z, SoMFFloat, set1Value(i, vector[i][2]));
+        SO_ENGINE_OUTPUT(w, SoMFFloat, set1Value(i, vector[i][3]));
     }
 }
 
@@ -284,26 +270,24 @@ SoDecomposeVec4f::evaluate()
 
 SO_COMPOSE__SOURCE(SoComposeRotation);
 
-SoComposeRotation::SoComposeRotation()
-{
+SoComposeRotation::SoComposeRotation() {
     SO_ENGINE_CONSTRUCTOR(SoComposeRotation);
-    SO_ENGINE_ADD_INPUT(axis,	  (SbVec3f(0,0,1)));
-    SO_ENGINE_ADD_INPUT(angle,	  (0.0));
+    SO_ENGINE_ADD_INPUT(axis, (SbVec3f(0, 0, 1)));
+    SO_ENGINE_ADD_INPUT(angle, (0.0));
     SO_ENGINE_ADD_OUTPUT(rotation, SoMFRotation);
     isBuiltIn = TRUE;
 }
 
 void
-SoComposeRotation::evaluate()
-{
-    int	naxis = axis.getNum();
+SoComposeRotation::evaluate() {
+    int naxis = axis.getNum();
     int nangle = angle.getNum();
-    int nout=max(naxis,nangle);
+    int nout = max(naxis, nangle);
     SO_ENGINE_OUTPUT(rotation, SoMFRotation, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	SbVec3f vaxis = axis[clamp(i,naxis)];
-	float	vangle = angle[clamp(i,nangle)];
-	SO_ENGINE_OUTPUT(rotation, SoMFRotation, set1Value(i, vaxis, vangle));
+    for (int i = 0; i < nout; i++) {
+        SbVec3f vaxis = axis[clamp(i, naxis)];
+        float   vangle = angle[clamp(i, nangle)];
+        SO_ENGINE_OUTPUT(rotation, SoMFRotation, set1Value(i, vaxis, vangle));
     }
 }
 
@@ -314,26 +298,25 @@ SoComposeRotation::evaluate()
 
 SO_COMPOSE__SOURCE(SoComposeRotationFromTo);
 
-SoComposeRotationFromTo::SoComposeRotationFromTo()
-{
+SoComposeRotationFromTo::SoComposeRotationFromTo() {
     SO_ENGINE_CONSTRUCTOR(SoComposeRotationFromTo);
-    SO_ENGINE_ADD_INPUT(from,	  (SbVec3f(0,0,1)));
-    SO_ENGINE_ADD_INPUT(to,	  (SbVec3f(0,0,1)));
+    SO_ENGINE_ADD_INPUT(from, (SbVec3f(0, 0, 1)));
+    SO_ENGINE_ADD_INPUT(to, (SbVec3f(0, 0, 1)));
     SO_ENGINE_ADD_OUTPUT(rotation, SoMFRotation);
     isBuiltIn = TRUE;
 }
 
 void
-SoComposeRotationFromTo::evaluate()
-{
-    int	nfrom = from.getNum();
-    int	nto = to.getNum();
-    int nout=max(nfrom,nto);
+SoComposeRotationFromTo::evaluate() {
+    int nfrom = from.getNum();
+    int nto = to.getNum();
+    int nout = max(nfrom, nto);
     SO_ENGINE_OUTPUT(rotation, SoMFRotation, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	SbVec3f vfrom = from[clamp(i,nfrom)];
-	SbVec3f vto = to[clamp(i,nto)];
-	SO_ENGINE_OUTPUT(rotation, SoMFRotation, set1Value(i, SbRotation(vfrom, vto)));
+    for (int i = 0; i < nout; i++) {
+        SbVec3f vfrom = from[clamp(i, nfrom)];
+        SbVec3f vto = to[clamp(i, nto)];
+        SO_ENGINE_OUTPUT(rotation, SoMFRotation,
+                         set1Value(i, SbRotation(vfrom, vto)));
     }
 }
 
@@ -344,27 +327,25 @@ SoComposeRotationFromTo::evaluate()
 
 SO_COMPOSE__SOURCE(SoDecomposeRotation);
 
-SoDecomposeRotation::SoDecomposeRotation()
-{
+SoDecomposeRotation::SoDecomposeRotation() {
     SO_ENGINE_CONSTRUCTOR(SoDecomposeRotation);
-    SO_ENGINE_ADD_INPUT(rotation,	  (SbRotation::identity()));
+    SO_ENGINE_ADD_INPUT(rotation, (SbRotation::identity()));
     SO_ENGINE_ADD_OUTPUT(axis, SoMFVec3f);
     SO_ENGINE_ADD_OUTPUT(angle, SoMFFloat);
     isBuiltIn = TRUE;
 }
 
 void
-SoDecomposeRotation::evaluate()
-{
-    int nout=rotation.getNum();
+SoDecomposeRotation::evaluate() {
+    int nout = rotation.getNum();
     SO_ENGINE_OUTPUT(axis, SoMFVec3f, setNum(nout));
     SO_ENGINE_OUTPUT(angle, SoMFFloat, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	SbVec3f vaxis;
-	float	vangle;
-	rotation[i].getValue(vaxis, vangle);
-	SO_ENGINE_OUTPUT(axis, SoMFVec3f, set1Value(i,vaxis));
-	SO_ENGINE_OUTPUT(angle, SoMFFloat, set1Value(i,vangle));
+    for (int i = 0; i < nout; i++) {
+        SbVec3f vaxis;
+        float   vangle;
+        rotation[i].getValue(vaxis, vangle);
+        SO_ENGINE_OUTPUT(axis, SoMFVec3f, set1Value(i, vaxis));
+        SO_ENGINE_OUTPUT(angle, SoMFFloat, set1Value(i, vangle));
     }
 }
 
@@ -375,37 +356,36 @@ SoDecomposeRotation::evaluate()
 
 SO_COMPOSE__SOURCE(SoComposeMatrix);
 
-SoComposeMatrix::SoComposeMatrix()
-{
+SoComposeMatrix::SoComposeMatrix() {
     SO_ENGINE_CONSTRUCTOR(SoComposeMatrix);
-    SO_ENGINE_ADD_INPUT(translation,	(SbVec3f(0,0,0)));
-    SO_ENGINE_ADD_INPUT(rotation,	(SbRotation::identity()));
-    SO_ENGINE_ADD_INPUT(scaleFactor,	(SbVec3f(1,1,1)));
-    SO_ENGINE_ADD_INPUT(scaleOrientation,(SbRotation::identity()));
-    SO_ENGINE_ADD_INPUT(center,		(SbVec3f(0,0,0)));
+    SO_ENGINE_ADD_INPUT(translation, (SbVec3f(0, 0, 0)));
+    SO_ENGINE_ADD_INPUT(rotation, (SbRotation::identity()));
+    SO_ENGINE_ADD_INPUT(scaleFactor, (SbVec3f(1, 1, 1)));
+    SO_ENGINE_ADD_INPUT(scaleOrientation, (SbRotation::identity()));
+    SO_ENGINE_ADD_INPUT(center, (SbVec3f(0, 0, 0)));
     SO_ENGINE_ADD_OUTPUT(matrix, SoMFMatrix);
     isBuiltIn = TRUE;
 }
 
 void
-SoComposeMatrix::evaluate()
-{
+SoComposeMatrix::evaluate() {
     int ntranslation = translation.getNum();
     int nrotation = rotation.getNum();
     int nscaleFactor = scaleFactor.getNum();
     int nscaleOrientation = scaleOrientation.getNum();
     int ncenter = center.getNum();
-    int nout=max(ntranslation,nrotation,nscaleFactor,nscaleOrientation,ncenter);
+    int nout =
+        max(ntranslation, nrotation, nscaleFactor, nscaleOrientation, ncenter);
     SO_ENGINE_OUTPUT(matrix, SoMFMatrix, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	SbVec3f vtrans = translation[clamp(i,ntranslation)];
-	SbRotation vrot = rotation[clamp(i,nrotation)];
-	SbVec3f vscale = scaleFactor[clamp(i,nscaleFactor)];
-	SbRotation vscaleO = scaleOrientation[clamp(i,nscaleOrientation)];
-	SbVec3f vcenter = center[clamp(i,ncenter)];
-	SbMatrix m;
-	m.setTransform(vtrans, vrot, vscale, vscaleO, vcenter);
-	SO_ENGINE_OUTPUT(matrix, SoMFMatrix, set1Value(i, m));
+    for (int i = 0; i < nout; i++) {
+        SbVec3f    vtrans = translation[clamp(i, ntranslation)];
+        SbRotation vrot = rotation[clamp(i, nrotation)];
+        SbVec3f    vscale = scaleFactor[clamp(i, nscaleFactor)];
+        SbRotation vscaleO = scaleOrientation[clamp(i, nscaleOrientation)];
+        SbVec3f    vcenter = center[clamp(i, ncenter)];
+        SbMatrix   m;
+        m.setTransform(vtrans, vrot, vscale, vscaleO, vcenter);
+        SO_ENGINE_OUTPUT(matrix, SoMFMatrix, set1Value(i, m));
     }
 }
 
@@ -416,11 +396,10 @@ SoComposeMatrix::evaluate()
 
 SO_COMPOSE__SOURCE(SoDecomposeMatrix);
 
-SoDecomposeMatrix::SoDecomposeMatrix()
-{
+SoDecomposeMatrix::SoDecomposeMatrix() {
     SO_ENGINE_CONSTRUCTOR(SoDecomposeMatrix);
-    SO_ENGINE_ADD_INPUT(matrix,	  (SbMatrix::identity()));
-    SO_ENGINE_ADD_INPUT(center,	  (SbVec3f(0,0,0)));
+    SO_ENGINE_ADD_INPUT(matrix, (SbMatrix::identity()));
+    SO_ENGINE_ADD_INPUT(center, (SbVec3f(0, 0, 0)));
     SO_ENGINE_ADD_OUTPUT(translation, SoMFVec3f);
     SO_ENGINE_ADD_OUTPUT(rotation, SoMFRotation);
     SO_ENGINE_ADD_OUTPUT(scaleFactor, SoMFVec3f);
@@ -429,26 +408,25 @@ SoDecomposeMatrix::SoDecomposeMatrix()
 }
 
 void
-SoDecomposeMatrix::evaluate()
-{
+SoDecomposeMatrix::evaluate() {
     int nmatrix = matrix.getNum();
     int ncenter = center.getNum();
-    int nout=max(nmatrix,ncenter);
+    int nout = max(nmatrix, ncenter);
     SO_ENGINE_OUTPUT(translation, SoMFVec3f, setNum(nout));
     SO_ENGINE_OUTPUT(rotation, SoMFRotation, setNum(nout));
     SO_ENGINE_OUTPUT(scaleFactor, SoMFVec3f, setNum(nout));
     SO_ENGINE_OUTPUT(scaleOrientation, SoMFRotation, setNum(nout));
-    for (int i=0; i<nout; i++) {
-	SbVec3f trans;
-	SbRotation rot;
-	SbVec3f	scale;
-	SbRotation scaleO;
-	SbVec3f vcenter = center[clamp(i,ncenter)];
-	SbMatrix vmatrix = matrix[clamp(i,nmatrix)];
-	vmatrix.getTransform(trans, rot, scale, scaleO, vcenter);
-	SO_ENGINE_OUTPUT(translation, SoMFVec3f, set1Value(i, trans));
-	SO_ENGINE_OUTPUT(rotation, SoMFRotation, set1Value(i, rot));
-	SO_ENGINE_OUTPUT(scaleFactor, SoMFVec3f, set1Value(i, scale));
-	SO_ENGINE_OUTPUT(scaleOrientation, SoMFRotation, set1Value(i, scaleO));
+    for (int i = 0; i < nout; i++) {
+        SbVec3f    trans;
+        SbRotation rot;
+        SbVec3f    scale;
+        SbRotation scaleO;
+        SbVec3f    vcenter = center[clamp(i, ncenter)];
+        SbMatrix   vmatrix = matrix[clamp(i, nmatrix)];
+        vmatrix.getTransform(trans, rot, scale, scaleO, vcenter);
+        SO_ENGINE_OUTPUT(translation, SoMFVec3f, set1Value(i, trans));
+        SO_ENGINE_OUTPUT(rotation, SoMFRotation, set1Value(i, rot));
+        SO_ENGINE_OUTPUT(scaleFactor, SoMFVec3f, set1Value(i, scale));
+        SO_ENGINE_OUTPUT(scaleOrientation, SoMFRotation, set1Value(i, scaleO));
     }
 }

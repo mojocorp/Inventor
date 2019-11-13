@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_UNKNOWN_NODE_
-#define  _SO_UNKNOWN_NODE_
+#ifndef _SO_UNKNOWN_NODE_
+#define _SO_UNKNOWN_NODE_
 
 #include <string>
 #include <Inventor/fields/SoFieldData.h>
@@ -87,45 +87,47 @@ class SoUnknownNode : public SoGroup {
     // Constructor
     SoUnknownNode();
 
-  SoEXTENDER public:
-    virtual void	write(SoWriteAction *action);
+    SoEXTENDER
+  public:
+    virtual void write(SoWriteAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
-    void                setClassName(const char *name);
+    SoINTERNAL
+  public:
+    static void initClass();
+    void        setClassName(const char *name);
 
   protected:
     // Reads field type information, fields, and children.
-    virtual SbBool	readInstance(SoInput *in, unsigned short flags);
+    virtual SbBool readInstance(SoInput *in, unsigned short flags);
 
     // Override search so we don't search alternateRep
-    virtual void	search(SoSearchAction *action);
+    virtual void search(SoSearchAction *action);
 
     // Returns file format name
     virtual const char *getFileFormatName() const;
 
     // Recursively adds this node and all nodes under it to the copy
     // dictionary. Returns the copy of this node.
-    virtual SoNode *	addToCopyDict() const;
+    virtual SoNode *addToCopyDict() const;
 
     // Copies the contents of the given node into this instance
-    virtual void	copyContents(const SoFieldContainer *fromFC,
-				     SbBool copyConnections);
+    virtual void copyContents(const SoFieldContainer *fromFC,
+                              SbBool                  copyConnections);
 
   private:
     // Used during reading to create an alternateRep from an isA
     // specification.
-    void		createFromIsA(SoMFString *isA);
+    void createFromIsA(SoMFString *isA);
 
     // Per-instance field data
-    SoFieldData		*instanceFieldData;
+    SoFieldData *instanceFieldData;
 
     // Real class name
     std::string className;
 
     // List of hidden children.
-    SoChildList		hiddenChildren;
-  
+    SoChildList hiddenChildren;
+
     // Destructor
     virtual ~SoUnknownNode();
 

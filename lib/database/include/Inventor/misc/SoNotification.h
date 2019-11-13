@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -55,8 +55,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_NOTIFICATION_
-#define  _SO_NOTIFICATION_
+#ifndef _SO_NOTIFICATION_
+#define _SO_NOTIFICATION_
 
 #include <Inventor/SbBasic.h>
 
@@ -95,45 +95,44 @@ class SoField;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SoNotRec {
+SoINTERNAL
+class SoNotRec {
 
   public:
-
     // Notification types (what receives notification). Note that
     // these are also used for maintaining lists of auditors in
     // SoBase instances. Each auditor uses one of these types to
     // indicate how it is auditing the instance. This is then
     // propagated to the auditors in the notification records.
     enum Type {
-	CONTAINER,		// Field notifying container
-	PARENT,			// Child node notifying parent
-	SENSOR,			// Some base notifying sensor
-	FIELD,			// Field notifying connected field
-	ENGINE			// Engine notifying connected field
+        CONTAINER, // Field notifying container
+        PARENT,    // Child node notifying parent
+        SENSOR,    // Some base notifying sensor
+        FIELD,     // Field notifying connected field
+        ENGINE     // Engine notifying connected field
     };
 
     // Constructor - passed the base pointer
-    SoNotRec(SoBase *b)			{ base = b; }
+    SoNotRec(SoBase *b) { base = b; }
 
     // Sets notification type
-    void		setType(SoNotRec::Type t)	{ type = t;	}
+    void setType(SoNotRec::Type t) { type = t; }
 
     // Returns base pointer, type, or previous record in list
-    SoBase *		getBase() const			{ return base;  }
-    SoNotRec::Type	getType() const			{ return type;  }
-    const SoNotRec *	getPrevious() const		{ return previous; }
+    SoBase *        getBase() const { return base; }
+    SoNotRec::Type  getType() const { return type; }
+    const SoNotRec *getPrevious() const { return previous; }
 
     // Sets previous record pointer
-    void		setPrevious(SoNotRec *prev)	{ previous = prev; }
+    void setPrevious(SoNotRec *prev) { previous = prev; }
 
     // Prints a notification record for debugging
-    void		print(FILE *fp) const;
+    void print(FILE *fp) const;
 
   private:
-
-    SoBase		*base;		// Base that changed
-    Type		type;		// Type of record
-    const SoNotRec	*previous;	// Pointer to previous record
+    SoBase *        base;     // Base that changed
+    Type            type;     // Type of record
+    const SoNotRec *previous; // Pointer to previous record
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -151,58 +150,58 @@ SoINTERNAL class SoNotRec {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SoNotList {
+SoINTERNAL
+class SoNotList {
 
   public:
     // Constructor
     SoNotList();
 
     // Copy constructor
-    SoNotList(const SoNotList *copyFrom)		{ *this = *copyFrom; }
+    SoNotList(const SoNotList *copyFrom) { *this = *copyFrom; }
 
     // Appends given non-field record to end of list.
-    void		append(SoNotRec *rec);
+    void append(SoNotRec *rec);
 
     // Appends given (container) field record to end of list. We
     // assume the base in the record is a node.
-    void		append(SoNotRec *rec, SoField *field);
+    void append(SoNotRec *rec, SoField *field);
 
     // Sets the type of the last (current) record in the list
-    void		setLastType(SoNotRec::Type t)
-	{
-	    last->setType(t);
-	    // Reset firstAtNode pointer if we're going through
-	    // field-to-field or engine-to-field connections.
-	    if (t == SoNotRec::FIELD || t == SoNotRec::ENGINE)
-		firstAtNode = NULL;
-	}
+    void setLastType(SoNotRec::Type t) {
+        last->setType(t);
+        // Reset firstAtNode pointer if we're going through
+        // field-to-field or engine-to-field connections.
+        if (t == SoNotRec::FIELD || t == SoNotRec::ENGINE)
+            firstAtNode = NULL;
+    }
 
     // Returns first and last records in list
-    SoNotRec *		getFirstRec() const		{ return first;	}
-    SoNotRec *		getLastRec() const		{ return last;	}
+    SoNotRec *getFirstRec() const { return first; }
+    SoNotRec *getLastRec() const { return last; }
 
     // Returns first record in list that has a node base in the
     // current chain of node-to-node notification. This information is
     // passed to sensor callbacks to indicate which node initiated
     // notification in the graph.
-    SoNotRec *		getFirstRecAtNode() const	{ return firstAtNode; }
+    SoNotRec *getFirstRecAtNode() const { return firstAtNode; }
 
     // Returns last field set by notification (or NULL if notification
     // did not originate at or propagate through a field)
-    SoField *		getLastField() const		{ return lastField; }
+    SoField *getLastField() const { return lastField; }
 
     // Returns the time stamp so nodes can check if notification has
     // already been handled
-    uint32_t		getTimeStamp() const		{ return timeStamp; }
+    uint32_t getTimeStamp() const { return timeStamp; }
 
     // Prints a notification list for debugging
-    void		print(FILE *fp) const;
+    void print(FILE *fp) const;
 
   private:
-    SoNotRec		*first, *last;	// First and last records in list
-    SoNotRec		*firstAtNode;	// First record that has a node base
-    SoField		*lastField;	// Last field that changed
-    uint32_t		timeStamp;	// Time stamp of notification
+    SoNotRec *first, *last; // First and last records in list
+    SoNotRec *firstAtNode;  // First record that has a node base
+    SoField * lastField;    // Last field that changed
+    uint32_t  timeStamp;    // Time stamp of notification
 };
 
 #endif /* _SO_NOTIFICATION_ */

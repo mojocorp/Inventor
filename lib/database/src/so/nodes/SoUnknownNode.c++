@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -50,7 +50,6 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-
 
 #include <stdlib.h>
 #include <Inventor/misc/SoState.h>
@@ -81,28 +80,24 @@ SoUnknownNode::initClass()
 }
 
 SoType
-SoUnknownNode::getTypeId() const
-{
+SoUnknownNode::getTypeId() const {
     return classTypeId;
 }
 
 const SoFieldData *
-SoUnknownNode::getFieldData() const
-{
+SoUnknownNode::getFieldData() const {
     return instanceFieldData;
 }
 
 void *
-SoUnknownNode::createInstance()
-{
+SoUnknownNode::createInstance() {
 #ifdef DEBUG
     SoDebugError::post("SoUnknownNode::createInstance",
-		       "Unknown nodes should be created only by "
-		       "SoBase::read methods when reading");
+                       "Unknown nodes should be created only by "
+                       "SoBase::read methods when reading");
 #endif
     return new SoUnknownNode();
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -111,7 +106,8 @@ SoUnknownNode::createInstance()
 //
 // Use: public
 
-SoUnknownNode::SoUnknownNode() : hiddenChildren(this)
+SoUnknownNode::SoUnknownNode()
+    : hiddenChildren(this)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -130,7 +126,7 @@ SoUnknownNode::SoUnknownNode() : hiddenChildren(this)
 // Use: public
 
 void
-SoUnknownNode::setClassName( const char *name )
+SoUnknownNode::setClassName(const char *name)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -158,7 +154,7 @@ SoUnknownNode::~SoUnknownNode()
     SoFieldList fieldList;
     int         numFields = getFields(fieldList);
 
-    for (int i=0; i<numFields; i++)
+    for (int i = 0; i < numFields; i++)
         delete fieldList[i];
 
     delete instanceFieldData;
@@ -187,37 +183,37 @@ SoUnknownNode::readInstance(SoInput *in, unsigned short flags)
     hasChildren = (!in->isBinary() || (flags & IS_GROUP));
     SbBool result;
     if (hasChildren) {
-	result = SoGroup::readInstance(in, flags);
+        result = SoGroup::readInstance(in, flags);
 
-	// If read ASCII AND didn't read any children, set hasChildren
-	// to FALSE:
-	if (!in->isBinary() && getNumChildren() == 0) hasChildren = FALSE;
+        // If read ASCII AND didn't read any children, set hasChildren
+        // to FALSE:
+        if (!in->isBinary() && getNumChildren() == 0)
+            hasChildren = FALSE;
 
-	// Add all kids to hiddenChildren, then remove them all from the
-	// regular (SoGroup) list
-	for (i = 0; i < getNumChildren(); i++) {
-	    hiddenChildren.append(getChild(i));
-	}
-	removeAllChildren();
-    }
-    else {
-	result = SoNode::readInstance(in, flags);
+        // Add all kids to hiddenChildren, then remove them all from the
+        // regular (SoGroup) list
+        for (i = 0; i < getNumChildren(); i++) {
+            hiddenChildren.append(getChild(i));
+        }
+        removeAllChildren();
+    } else {
+        result = SoNode::readInstance(in, flags);
     }
 
     // Check to see if an alternate representation was read and
     // store a pointer to it if one is found.
-    int num = instanceFieldData->getNumFields();
+    int    num = instanceFieldData->getNumFields();
     SbBool haveAlternateRep = FALSE;
-    for (i=0; i<num; i++) {
+    for (i = 0; i < num; i++) {
         if (instanceFieldData->getFieldName(i) == SbName("alternateRep")) {
-	    SoField *f = instanceFieldData->getField(this, i);
-	    if (f->isOfType(SoSFNode::getClassTypeId())) {
-		haveAlternateRep = TRUE;
-		SoSFNode *alternateRepField = (SoSFNode *)f;
-		SoNode *n = alternateRepField->getValue();
-		if (n != NULL)
-		    addChild(n);
-	    }
+            SoField *f = instanceFieldData->getField(this, i);
+            if (f->isOfType(SoSFNode::getClassTypeId())) {
+                haveAlternateRep = TRUE;
+                SoSFNode *alternateRepField = (SoSFNode *)f;
+                SoNode *  n = alternateRepField->getValue();
+                if (n != NULL)
+                    addChild(n);
+            }
             break;
         }
     }
@@ -225,14 +221,15 @@ SoUnknownNode::readInstance(SoInput *in, unsigned short flags)
     // If no alternateRep was specified, look for a field named "isA"
     // of type MFString and try to automatically create an
     // alternateRep:
-    if (!haveAlternateRep) for (i=0; i<num; i++) {
-        if (instanceFieldData->getFieldName(i) == SbName("isA")) {
-	    SoField *f = instanceFieldData->getField(this, i);
-	    if (f->isOfType(SoMFString::getClassTypeId())) {
-		createFromIsA((SoMFString *)f);
-	    }
-	}
-    }
+    if (!haveAlternateRep)
+        for (i = 0; i < num; i++) {
+            if (instanceFieldData->getFieldName(i) == SbName("isA")) {
+                SoField *f = instanceFieldData->getField(this, i);
+                if (f->isOfType(SoMFString::getClassTypeId())) {
+                    createFromIsA((SoMFString *)f);
+                }
+            }
+        }
 
     return result;
 }
@@ -251,56 +248,56 @@ SoUnknownNode::createFromIsA(SoMFString *isA)
 ////////////////////////////////////////////////////////////////////////
 {
     for (int i = 0; i < isA->getNum(); i++) {
-	SoType t = SoType::fromName((*isA)[i]);
+        SoType t = SoType::fromName((*isA)[i]);
 
-	if (t.canCreateInstance() &&
-	    t.isDerivedFrom(SoNode::getClassTypeId())) {
+        if (t.canCreateInstance() &&
+            t.isDerivedFrom(SoNode::getClassTypeId())) {
 
-	    SoNode *alternateRep = (SoNode *)t.createInstance();
+            SoNode *alternateRep = (SoNode *)t.createInstance();
 #ifdef DEBUG
-	    if (alternateRep == NULL) {
-		SoDebugError::post("SoUnknownNode::createFromIsA",
-				   "SoType.createInstance returned "
-				   "NULL (type %s)",
-				   t.getName().getString());
-		return;
-	    }
+            if (alternateRep == NULL) {
+                SoDebugError::post("SoUnknownNode::createFromIsA",
+                                   "SoType.createInstance returned "
+                                   "NULL (type %s)",
+                                   t.getName().getString());
+                return;
+            }
 #endif
             alternateRep->ref();
-	    // Copy over all fields that are shared:
-	    int num = instanceFieldData->getNumFields();
-	    for (int j=0; j<num; j++) {
-		const SbName &fieldName = instanceFieldData->getFieldName(j);
-		SoField *f = instanceFieldData->getField(this, j);
-		// Don't copy over fields with default values:
-		if (f->isDefault()) continue;
-		
-		SoField *nf = alternateRep->getField(fieldName);
-		if (nf != NULL && nf->getTypeId() == f->getTypeId()) {
-		    nf->copyFrom(*f);
-		    if (f->isConnectedFromField()) {
-			SoField *cf;
-			f->getConnectedField(cf);
-			nf->connectFrom(cf);
-		    } else if (f->isConnectedFromEngine()) {
-			SoEngineOutput *eo;
-			f->getConnectedEngine(eo);
-			nf->connectFrom(eo);
-		    }
-		}
-	    }
-	    // And if alternateRep is a group, copy over hidden
-	    // children:
-	    if (alternateRep->isOfType(SoGroup::getClassTypeId())) {
-		SoGroup *g = (SoGroup *)alternateRep;
-		for (int kid = 0; kid < hiddenChildren.getLength();
-		     kid++) {
-		    g->addChild(hiddenChildren[kid]);
-		}
-	    }
-	    addChild(alternateRep);
-	    return;
-	}
+            // Copy over all fields that are shared:
+            int num = instanceFieldData->getNumFields();
+            for (int j = 0; j < num; j++) {
+                const SbName &fieldName = instanceFieldData->getFieldName(j);
+                SoField *     f = instanceFieldData->getField(this, j);
+                // Don't copy over fields with default values:
+                if (f->isDefault())
+                    continue;
+
+                SoField *nf = alternateRep->getField(fieldName);
+                if (nf != NULL && nf->getTypeId() == f->getTypeId()) {
+                    nf->copyFrom(*f);
+                    if (f->isConnectedFromField()) {
+                        SoField *cf;
+                        f->getConnectedField(cf);
+                        nf->connectFrom(cf);
+                    } else if (f->isConnectedFromEngine()) {
+                        SoEngineOutput *eo;
+                        f->getConnectedEngine(eo);
+                        nf->connectFrom(eo);
+                    }
+                }
+            }
+            // And if alternateRep is a group, copy over hidden
+            // children:
+            if (alternateRep->isOfType(SoGroup::getClassTypeId())) {
+                SoGroup *g = (SoGroup *)alternateRep;
+                for (int kid = 0; kid < hiddenChildren.getLength(); kid++) {
+                    g->addChild(hiddenChildren[kid]);
+                }
+            }
+            addChild(alternateRep);
+            return;
+        }
     }
 }
 
@@ -324,28 +321,27 @@ SoUnknownNode::write(SoWriteAction *action)
     SoNode *alternateRep = NULL;
 
     if (hasChildren) {
-	if (getNumChildren() != 0) {
-	    alternateRep = getChild(0);
-	    alternateRep->ref();
-	}
+        if (getNumChildren() != 0) {
+            alternateRep = getChild(0);
+            alternateRep->ref();
+        }
 
-	// Add hiddenChildren to regular child list temporarily:
-	removeAllChildren();
+        // Add hiddenChildren to regular child list temporarily:
+        removeAllChildren();
         for (int i = 0; i < hiddenChildren.getLength(); i++) {
-	    addChild(hiddenChildren[i]);
-	}
-	// Now write:
-	SoGroup::write(action);
+            addChild(hiddenChildren[i]);
+        }
+        // Now write:
+        SoGroup::write(action);
 
-	removeAllChildren();
-    }
-    else {
-	SoNode::write(action);
+        removeAllChildren();
+    } else {
+        SoNode::write(action);
     }
 
     if (alternateRep != NULL) {
-	addChild(alternateRep);
-	alternateRep->unref();
+        addChild(alternateRep);
+        alternateRep->unref();
     }
 
     enableNotify(saveNotify);
@@ -381,18 +377,18 @@ SoUnknownNode::addToCopyDict() const
 ////////////////////////////////////////////////////////////////////////
 {
     // If this node is already in the dictionary, nothing else to do
-    SoNode *copy = (SoNode *) checkCopy(this);
+    SoNode *copy = (SoNode *)checkCopy(this);
     if (copy == NULL) {
 
-	// Create and add a new instance to the dictionary
-	copy = new SoUnknownNode;
-	copy->ref();
-	addCopy(this, copy);		// Adds a ref()
-	copy->unrefNoDelete();
+        // Create and add a new instance to the dictionary
+        copy = new SoUnknownNode;
+        copy->ref();
+        addCopy(this, copy); // Adds a ref()
+        copy->unrefNoDelete();
 
-	// Recurse on children, if any
-	for (int i = 0; i < hiddenChildren.getLength(); i++)
-	    hiddenChildren[i]->addToCopyDict();
+        // Recurse on children, if any
+        for (int i = 0; i < hiddenChildren.getLength(); i++)
+            hiddenChildren[i]->addToCopyDict();
     }
 
     return copy;
@@ -407,12 +403,12 @@ SoUnknownNode::addToCopyDict() const
 
 void
 SoUnknownNode::copyContents(const SoFieldContainer *fromFC,
-			    SbBool copyConnections)
+                            SbBool                  copyConnections)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Make sure the copy has the correct class name
-    const SoUnknownNode *fromUnk = (const SoUnknownNode *) fromFC;
+    const SoUnknownNode *fromUnk = (const SoUnknownNode *)fromFC;
     setClassName(fromUnk->className.c_str());
 
     // For each field in the original node, create a new field and add
@@ -424,15 +420,15 @@ SoUnknownNode::copyContents(const SoFieldContainer *fromFC,
     // copy the field values ourselves.
 
     const SoFieldData *fromData = fromUnk->getFieldData();
-    SoFieldData  *toData	= (SoFieldData *) getFieldData();
+    SoFieldData *      toData = (SoFieldData *)getFieldData();
 
     int i;
     for (i = 0; i < fromData->getNumFields(); i++) {
 
-	SoField      *fromField	= fromData->getField(fromUnk, i);
-        const SbName fieldName	= fromData->getFieldName(i);
-        SoType       fieldType	= fromField->getTypeId();
-        SoField      *toField	= (SoField *) (fieldType.createInstance());
+        SoField *    fromField = fromData->getField(fromUnk, i);
+        const SbName fieldName = fromData->getFieldName(i);
+        SoType       fieldType = fromField->getTypeId();
+        SoField *    toField = (SoField *)(fieldType.createInstance());
 
         toField->enableNotify(FALSE);
         toField->setContainer(this);
@@ -441,32 +437,32 @@ SoUnknownNode::copyContents(const SoFieldContainer *fromFC,
 
         toData->addField(this, fieldName.getString(), toField);
 
-	toField->setContainer(this);
-	toField->copyFrom(*fromField);
-	toField->setIgnored(fromField->isIgnored());
-	toField->setDefault(fromField->isDefault());
-	toField->fixCopy(copyConnections);
-	if (fromField->isConnected() && copyConnections)
-	    toField->copyConnection(fromField);
+        toField->setContainer(this);
+        toField->copyFrom(*fromField);
+        toField->setIgnored(fromField->isIgnored());
+        toField->setDefault(fromField->isDefault());
+        toField->fixCopy(copyConnections);
+        if (fromField->isConnected() && copyConnections)
+            toField->copyConnection(fromField);
     }
 
     // Copy the kids
     for (i = 0; i < fromUnk->hiddenChildren.getLength(); i++) {
 
-	// If this node is being copied, it must be "inside" (see
-	// SoNode::copy() for details.) Therefore, all of its children
-	// must be inside, as well, since our addToCopyDict() takes
-	// care of that.
-	SoNode *fromKid = fromUnk->getChild(i);
-	SoNode *kidCopy = (SoNode *) findCopy(fromKid, copyConnections);
+        // If this node is being copied, it must be "inside" (see
+        // SoNode::copy() for details.) Therefore, all of its children
+        // must be inside, as well, since our addToCopyDict() takes
+        // care of that.
+        SoNode *fromKid = fromUnk->getChild(i);
+        SoNode *kidCopy = (SoNode *)findCopy(fromKid, copyConnections);
 
 #ifdef DEBUG
-	if (kidCopy == NULL)
-	    SoDebugError::post("(internal) SoUnknownNode::copyContents",
-			       "Child %d has not been copied yet", i);
+        if (kidCopy == NULL)
+            SoDebugError::post("(internal) SoUnknownNode::copyContents",
+                               "Child %d has not been copied yet", i);
 #endif /* DEBUG */
 
-	hiddenChildren.append(kidCopy);
+        hiddenChildren.append(kidCopy);
     }
 
     // No need to copy the override flag, since this flag will have no
@@ -488,4 +484,3 @@ SoUnknownNode::getFileFormatName() const
 {
     return className.c_str();
 }
-

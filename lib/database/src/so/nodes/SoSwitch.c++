@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -50,7 +50,6 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-
 
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -114,7 +113,8 @@ SoSwitch::SoSwitch()
 //
 // Use: public
 
-SoSwitch::SoSwitch(int nChildren) : SoGroup(nChildren)
+SoSwitch::SoSwitch(int nChildren)
+    : SoGroup(nChildren)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -133,8 +133,7 @@ SoSwitch::SoSwitch(int nChildren) : SoGroup(nChildren)
 SoSwitch::~SoSwitch()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -151,24 +150,23 @@ SoSwitch::affectsState() const
 {
     int which;
     if (whichChild.isIgnored())
-	which = SO_SWITCH_NONE;
+        which = SO_SWITCH_NONE;
     else
-	which = whichChild.getValue();
+        which = whichChild.getValue();
 
     // Special case-- if called during application of an
     // SoSearchAction that is searching all:
     if (SoSearchAction::duringSearchAll)
-	which = SO_SWITCH_ALL;
+        which = SO_SWITCH_ALL;
 
     if (whichChild.isIgnored() || which == SO_SWITCH_NONE)
-	return FALSE;
+        return FALSE;
 
-    if (which == SO_SWITCH_ALL ||
-	which == SO_SWITCH_INHERIT)
-	return TRUE;
+    if (which == SO_SWITCH_ALL || which == SO_SWITCH_INHERIT)
+        return TRUE;
 
     if (getChild(which)->affectsState())
-	return TRUE;
+        return TRUE;
 
     return FALSE;
 }
@@ -185,17 +183,17 @@ SoSwitch::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numIndices;
-    const int	*indices;
+    int        numIndices;
+    const int *indices;
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH) {
-	int	i;
-	for (i = 0; i < numIndices; i++)
-	    doChild(action, indices[i]);
+        int i;
+        for (i = 0; i < numIndices; i++)
+            doChild(action, indices[i]);
     }
 
     else
-	doChild(action);
+        doChild(action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -285,8 +283,8 @@ SoSwitch::getMatrix(SoGetMatrixAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numIndices;
-    const int	*indices;
+    int        numIndices;
+    const int *indices;
 
     // Only need to compute matrix if switch is a node in middle of
     // current path chain or is off path chain (since the only way
@@ -295,14 +293,14 @@ SoSwitch::getMatrix(SoGetMatrixAction *action)
 
     switch (action->getPathCode(numIndices, indices)) {
 
-      case SoAction::NO_PATH:
-      case SoAction::BELOW_PATH:
-	break;
+    case SoAction::NO_PATH:
+    case SoAction::BELOW_PATH:
+        break;
 
-      case SoAction::OFF_PATH:
-      case SoAction::IN_PATH:
-	SoSwitch::doAction(action);
-	break;
+    case SoAction::OFF_PATH:
+    case SoAction::IN_PATH:
+        SoSwitch::doAction(action);
+        break;
     }
 }
 
@@ -315,22 +313,21 @@ SoSwitch::getMatrix(SoGetMatrixAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 
-void 
-SoSwitch::search(SoSearchAction *action)
-{
+void
+SoSwitch::search(SoSearchAction *action) {
     // if the action is searching everything, then do so...
     if (action->isSearchingAll())
-	SoGroup::search(action);
+        SoGroup::search(action);
 
     // Otherwise, traverse according to the regular switch node rules
     else {
-	// First, make sure this node is found if we are searching for
-	// switches
-	SoNode::search(action);
+        // First, make sure this node is found if we are searching for
+        // switches
+        SoNode::search(action);
 
-	// Recurse
-	if (! action->isFound())
-	    SoSwitch::doAction(action);
+        // Recurse
+        if (!action->isFound())
+            SoSwitch::doAction(action);
     }
 }
 
@@ -349,82 +346,81 @@ SoSwitch::doChild(SoAction *action, int matchIndex)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int32_t	which;
+    int32_t which;
 
     if (whichChild.isIgnored())
-	which = SO_SWITCH_NONE;
+        which = SO_SWITCH_NONE;
 
     else
-	which = whichChild.getValue();
+        which = whichChild.getValue();
 
     // If index is inherited from state, get value from there
     if (which == SO_SWITCH_INHERIT) {
 
-	which = SoSwitchElement::get(action->getState());
+        which = SoSwitchElement::get(action->getState());
 
-	// Make sure it is in range
-	if (which >= getNumChildren())
-	    which %= getNumChildren();
+        // Make sure it is in range
+        if (which >= getNumChildren())
+            which %= getNumChildren();
     }
 
     // Store resulting index in state if not already inherited from there
     else
-	SoSwitchElement::set(action->getState(), which);
+        SoSwitchElement::set(action->getState(), which);
 
     // Now we have the real value to deal with
 
     switch (which) {
 
-      case SO_SWITCH_NONE:
-	break;
+    case SO_SWITCH_NONE:
+        break;
 
-      case SO_SWITCH_ALL:
-	// If traversing to compute bounding box, we have to do some
-	// work in between children
-	if (action->isOfType(SoGetBoundingBoxAction::getClassTypeId())) {
-	    SoGetBoundingBoxAction *bba = (SoGetBoundingBoxAction *) action;
-	    SbVec3f	totalCenter(0.0, 0.0, 0.0);
-	    int		numCenters = 0;
-	    int 	lastChild = (matchIndex >= 0 ? matchIndex :
-				     getNumChildren()  - 1);
+    case SO_SWITCH_ALL:
+        // If traversing to compute bounding box, we have to do some
+        // work in between children
+        if (action->isOfType(SoGetBoundingBoxAction::getClassTypeId())) {
+            SoGetBoundingBoxAction *bba = (SoGetBoundingBoxAction *)action;
+            SbVec3f                 totalCenter(0.0, 0.0, 0.0);
+            int                     numCenters = 0;
+            int                     lastChild =
+                (matchIndex >= 0 ? matchIndex : getNumChildren() - 1);
 
-	    for (int i = 0; i <= lastChild; i++) {
-		children->traverse(bba, i, i);
-		if (bba->isCenterSet()) {
-		    totalCenter += bba->getCenter();
-		    numCenters++;
-		    bba->resetCenter();
-		}
-	    }
-	    // Now, set the center to be the average:
-	    if (numCenters != 0)
-		bba->setCenter(totalCenter / numCenters, FALSE);
-	}
-	else {
-	    if (matchIndex >= 0)
-		children->traverse(action, 0, matchIndex);
-	    else
-		children->traverse(action);
-	}
-	break;
+            for (int i = 0; i <= lastChild; i++) {
+                children->traverse(bba, i, i);
+                if (bba->isCenterSet()) {
+                    totalCenter += bba->getCenter();
+                    numCenters++;
+                    bba->resetCenter();
+                }
+            }
+            // Now, set the center to be the average:
+            if (numCenters != 0)
+                bba->setCenter(totalCenter / numCenters, FALSE);
+        } else {
+            if (matchIndex >= 0)
+                children->traverse(action, 0, matchIndex);
+            else
+                children->traverse(action);
+        }
+        break;
 
-      default:
+    default:
 
-	// Make sure index is reasonable
-	if (which < 0 || which >= getNumChildren()) {
-#ifdef DEBUG	
-	    SoDebugError::post("SoSwitch::doChild",
-			       "Child index %d is out of range %d - %d "
-			       "(applying %s)",
-			       which, 0, getNumChildren() - 1,
-			       action->getTypeId().getName().getString());
-#endif /* DEBUG */			       
-	    break;
-	}
+        // Make sure index is reasonable
+        if (which < 0 || which >= getNumChildren()) {
+#ifdef DEBUG
+            SoDebugError::post("SoSwitch::doChild",
+                               "Child index %d is out of range %d - %d "
+                               "(applying %s)",
+                               which, 0, getNumChildren() - 1,
+                               action->getTypeId().getName().getString());
+#endif /* DEBUG */
+            break;
+        }
 
-	// Traverse indicated child
-	if (matchIndex < 0 || matchIndex == which)
-	    children->traverse(action, (int) which);
+        // Traverse indicated child
+        if (matchIndex < 0 || matchIndex == which)
+            children->traverse(action, (int)which);
     }
 }
 
@@ -460,48 +456,48 @@ SoSwitch::write(SoWriteAction *action)
     // This code is stolen and modified from SoGroup::write() and
     // SoChildList::traverse()
 
-    int lastChild = getNumChildren() - 1;
+    int                lastChild = getNumChildren() - 1;
     SoAction::PathCode pc = action->getCurPathCode();
 
     // In write-reference counting phase
     if (out->getStage() == SoOutput::COUNT_REFS) {
 
-	// Increment our write reference count
-	addWriteReference(out);
+        // Increment our write reference count
+        addWriteReference(out);
 
-	// If this is the first reference (i.e., we don't now have
-	// multiple references), also count all appropriate children
-	if (! hasMultipleWriteRefs()) {
-	    for (int i = 0; i <= lastChild; i++) {
-		action->pushCurPath(i);
-		action->traverse(getChild(i));
-		action->popCurPath(pc);
-	    }
-	}
+        // If this is the first reference (i.e., we don't now have
+        // multiple references), also count all appropriate children
+        if (!hasMultipleWriteRefs()) {
+            for (int i = 0; i <= lastChild; i++) {
+                action->pushCurPath(i);
+                action->traverse(getChild(i));
+                action->popCurPath(pc);
+            }
+        }
     }
 
     // In writing phase, we have to do some more work
-    else if (! writeHeader(out, TRUE, FALSE)) {
+    else if (!writeHeader(out, TRUE, FALSE)) {
 
-	// Write fields
-	const SoFieldData *fieldData = getFieldData();
-	fieldData->write(out, this);
+        // Write fields
+        const SoFieldData *fieldData = getFieldData();
+        fieldData->write(out, this);
 
-	// We KNOW that all children should be written, so don't
-	// bother calling shouldWrite()
+        // We KNOW that all children should be written, so don't
+        // bother calling shouldWrite()
 
-	// If writing binary format, write out number of children
-	// that are going to be written
-	if (out->isBinary())
-	    out->write(getNumChildren());
+        // If writing binary format, write out number of children
+        // that are going to be written
+        if (out->isBinary())
+            out->write(getNumChildren());
 
-	for (int i = 0; i <= lastChild; i++) {
-	    action->pushCurPath(i);
-	    action->traverse(getChild(i));
-	    action->popCurPath(pc);
-	}
+        for (int i = 0; i <= lastChild; i++) {
+            action->pushCurPath(i);
+            action->traverse(getChild(i));
+            action->popCurPath(pc);
+        }
 
-	// Write post-children stuff
-	writeFooter(out);
+        // Write post-children stuff
+        writeFooter(out);
     }
 }

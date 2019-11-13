@@ -64,8 +64,7 @@ SO_ELEMENT_SOURCE(SoPolygonOffsetElement);
 SoPolygonOffsetElement::~SoPolygonOffsetElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -79,7 +78,7 @@ SoPolygonOffsetElement::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SO_ELEMENT_INIT_CLASS(SoPolygonOffsetElement, SoReplacedElement);
+    SO_ELEMENT_INIT_CLASS(SoPolygonOffsetElement, SoReplacedElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -94,7 +93,8 @@ SoPolygonOffsetElement::init(SoState * /*state*/)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SoPolygonOffsetElement::getDefault(offsetfactor, offsetunits, style, active);
+    SoPolygonOffsetElement::getDefault(offsetfactor, offsetunits, style,
+                                       active);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -105,14 +105,17 @@ SoPolygonOffsetElement::init(SoState * /*state*/)
 // Use: public, static
 
 void
-SoPolygonOffsetElement::set(SoState *state, SoNode *node, float factor, float units, Style styles, SbBool on)
+SoPolygonOffsetElement::set(SoState *state, SoNode *node, float factor,
+                            float units, Style styles, SbBool on)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SoPolygonOffsetElement *elem = (SoPolygonOffsetElement *)SoReplacedElement::getElement(state, classStackIndex, node);
-   
-   if(elem != NULL)
-      elem->setElt(factor, units, styles, on);
+    SoPolygonOffsetElement *elem =
+        (SoPolygonOffsetElement *)SoReplacedElement::getElement(
+            state, classStackIndex, node);
+
+    if (elem != NULL)
+        elem->setElt(factor, units, styles, on);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -123,16 +126,19 @@ SoPolygonOffsetElement::set(SoState *state, SoNode *node, float factor, float un
 // Use: public
 
 void
-SoPolygonOffsetElement::get(SoState *state, float &factor, float &units, Style &styles, SbBool &on)
+SoPolygonOffsetElement::get(SoState *state, float &factor, float &units,
+                            Style &styles, SbBool &on)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   const SoPolygonOffsetElement *elem= (const SoPolygonOffsetElement *)SoElement::getConstElement(state, classStackIndex);
+    const SoPolygonOffsetElement *elem =
+        (const SoPolygonOffsetElement *)SoElement::getConstElement(
+            state, classStackIndex);
 
-   factor = elem->offsetfactor;
-   units  = elem->offsetunits;
-   styles = elem->style;
-   on     = elem->active;
+    factor = elem->offsetfactor;
+    units = elem->offsetunits;
+    styles = elem->style;
+    on = elem->active;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -143,14 +149,15 @@ SoPolygonOffsetElement::get(SoState *state, float &factor, float &units, Style &
 // Use: protected, virtual
 
 void
-SoPolygonOffsetElement::setElt(float _factor, float _units, Style _styles, SbBool _on)
+SoPolygonOffsetElement::setElt(float _factor, float _units, Style _styles,
+                               SbBool _on)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   offsetfactor = _factor;
-   offsetunits  = _units;
-   style        = _styles;
-   active       = _on;
+    offsetfactor = _factor;
+    offsetunits = _units;
+    style = _styles;
+    active = _on;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -161,12 +168,13 @@ SoPolygonOffsetElement::setElt(float _factor, float _units, Style _styles, SbBoo
 // Use: public
 
 void
-SoPolygonOffsetElement::getDefault(float &_factor, float &_units, Style &_styles, SbBool &_on)
+SoPolygonOffsetElement::getDefault(float &_factor, float &_units,
+                                   Style &_styles, SbBool &_on)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   _factor = 0.0f;
-   _units  = 0.0f;
-   _styles = SoPolygonOffsetElement::FILLED;
-   _on     = FALSE;
+    _factor = 0.0f;
+    _units = 0.0f;
+    _styles = SoPolygonOffsetElement::FILLED;
+    _on = FALSE;
 }

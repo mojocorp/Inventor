@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-
 #include <Inventor/SoLists.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoElement.h>
@@ -60,19 +59,19 @@
 
 // Static variables declared in SoElement.h:
 
-int		SoElement::classStackIndex;
-SoType		SoElement::classTypeId;
-int		SoElement::nextStackIndex;
-SoTypeList     *SoElement::stackToType;
+int         SoElement::classStackIndex;
+SoType      SoElement::classTypeId;
+int         SoElement::nextStackIndex;
+SoTypeList *SoElement::stackToType;
 
 // If we run out of slots in the array of free lists, add this many more
-#define FREE_LIST_INCREMENT	10
+#define FREE_LIST_INCREMENT 10
 
 // This is the initial number of slots in the array of types that's
 // indexed by stack index.  There is one slot per element class, so
 // this number should be at least as large as the number of standard
 // element classes in Inventor.
-#define NUM_STACK_INDICES	100
+#define NUM_STACK_INDICES 100
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -112,8 +111,7 @@ SoElement::initClass()
 SoElement::SoElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -125,8 +123,7 @@ SoElement::SoElement()
 SoElement::~SoElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -139,8 +136,7 @@ void
 SoElement::init(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -153,8 +149,7 @@ void
 SoElement::push(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -167,8 +162,7 @@ void
 SoElement::pop(SoState *, const SoElement *)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -181,16 +175,13 @@ SoElement::pop(SoState *, const SoElement *)
 
 #ifdef DEBUG
 void
-SoElement::print(FILE *fp) const
-{
-    fprintf(fp, "Element: type %s, depth %d\n",
-	    typeId.getName().getString(), depth);
+SoElement::print(FILE *fp) const {
+    fprintf(fp, "Element: type %s, depth %d\n", typeId.getName().getString(),
+            depth);
 }
 #else  /* DEBUG */
 void
-SoElement::print(FILE *) const
-{
-}
+SoElement::print(FILE *) const {}
 #endif /* DEBUG */
 
 ////////////////////////////////////////////////////////////////////////
@@ -227,7 +218,7 @@ SoElement::createStackIndex(SoType id)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	stackIndex = nextStackIndex++;
+    int stackIndex = nextStackIndex++;
 
 #ifdef DEBUG
     // Store id in list so we can get it from stack index later
@@ -254,4 +245,3 @@ SoElement::captureThis(SoState *state) const
 {
     SoCacheElement::addElement(state, this);
 }
-

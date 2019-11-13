@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -88,20 +88,20 @@ SoMFColor::initClass()
 // Use: public
 
 void
-SoMFColor::setValues(int start,			// Starting index
-		     int num,			// Number of values to set
-		     const float rgb[][3])	// Array of RGB values
+SoMFColor::setValues(int         start,    // Starting index
+                     int         num,      // Number of values to set
+                     const float rgb[][3]) // Array of RGB values
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	newNum = start + num;
-    int	i;
+    int newNum = start + num;
+    int i;
 
     if (newNum > getNum())
-	makeRoom(newNum);
+        makeRoom(newNum);
 
     for (i = 0; i < num; i++)
-	values[start + i].setValue(rgb[i]);
+        values[start + i].setValue(rgb[i]);
 
     valueChanged();
 }
@@ -116,20 +116,20 @@ SoMFColor::setValues(int start,			// Starting index
 // Use: public
 
 void
-SoMFColor::setHSVValues(int start,		// Starting index
-			int num,		// Number of values to set
-			const float hsv[][3])	// Array of HSV values
+SoMFColor::setHSVValues(int         start,    // Starting index
+                        int         num,      // Number of values to set
+                        const float hsv[][3]) // Array of HSV values
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	newNum = start + num;
-    int	i;
+    int newNum = start + num;
+    int i;
 
     if (newNum > getNum())
-	makeRoom(newNum);
+        makeRoom(newNum);
 
     for (i = 0; i < num; i++)
-	values[start + i].setHSVValue(hsv[i]);
+        values[start + i].setHSVValue(hsv[i]);
 
     valueChanged();
 }
@@ -146,36 +146,31 @@ SoMFColor::setHSVValues(int start,		// Starting index
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoMFColor::setValue(const SbVec3f &vec)
-{
+SoMFColor::setValue(const SbVec3f &vec) {
     setValue(SbColor(vec.getValue()));
 }
 
 void
-SoMFColor::setValue(float r, float g, float b)
-{
+SoMFColor::setValue(float r, float g, float b) {
     setValue(SbColor(r, g, b));
 }
 
 void
-SoMFColor::setValue(const float rgb[3])
-{
+SoMFColor::setValue(const float rgb[3]) {
     setValue(SbColor(rgb));
 }
 
 void
-SoMFColor::setHSVValue(float h, float s, float v)
-{
-    SbColor	c;
+SoMFColor::setHSVValue(float h, float s, float v) {
+    SbColor c;
 
     c.setHSVValue(h, s, v);
     setValue(c);
 }
 
 void
-SoMFColor::setHSVValue(const float hsv[3])
-{
-    SbColor	c;
+SoMFColor::setHSVValue(const float hsv[3]) {
+    SbColor c;
 
     c.setHSVValue(hsv);
     setValue(c);
@@ -193,36 +188,31 @@ SoMFColor::setHSVValue(const float hsv[3])
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoMFColor::set1Value(int index, const SbVec3f &vec)
-{
+SoMFColor::set1Value(int index, const SbVec3f &vec) {
     set1Value(index, SbColor(vec.getValue()));
 }
 
 void
-SoMFColor::set1Value(int index, float r, float g, float b)
-{
+SoMFColor::set1Value(int index, float r, float g, float b) {
     set1Value(index, SbColor(r, g, b));
 }
 
 void
-SoMFColor::set1Value(int index, const float rgb[3])
-{
+SoMFColor::set1Value(int index, const float rgb[3]) {
     set1Value(index, SbColor(rgb));
 }
 
 void
-SoMFColor::set1HSVValue(int index, float h, float s, float v)
-{
-    SbColor	c;
+SoMFColor::set1HSVValue(int index, float h, float s, float v) {
+    SbColor c;
 
     c.setHSVValue(h, s, v);
     set1Value(index, c);
 }
 
 void
-SoMFColor::set1HSVValue(int index, const float hsv[3])
-{
-    SbColor	c;
+SoMFColor::set1HSVValue(int index, const float hsv[3]) {
+    SbColor c;
 
     c.setHSVValue(hsv);
     set1Value(index, c);
@@ -240,9 +230,8 @@ SoMFColor::read1Value(SoInput *in, int index)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (in->read(values[index][0]) &&
-	    in->read(values[index][1]) &&
-	    in->read(values[index][2]));
+    return (in->read(values[index][0]) && in->read(values[index][1]) &&
+            in->read(values[index][2]));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -259,13 +248,13 @@ SoMFColor::write1Value(SoOutput *out, int index) const
 {
     out->write(values[index][0]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(values[index][1]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(values[index][2]);
 }
@@ -283,9 +272,8 @@ SoMFColor::writeBinaryValues(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    out->writeBinaryArray((float *) values, 3 * num);
+    out->writeBinaryArray((float *)values, 3 * num);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -299,5 +287,5 @@ SoMFColor::readBinaryValues(SoInput *in, int numToRead)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (in->readBinaryArray((float *) values, 3 * numToRead));
+    return (in->readBinaryArray((float *)values, 3 * numToRead));
 }

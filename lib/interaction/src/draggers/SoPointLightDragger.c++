@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-
 #include <stdio.h>
 #include <Inventor/SbRotation.h>
 #include <Inventor/SoDB.h>
@@ -61,7 +60,6 @@
 #include <Inventor/draggers/SoPointLightDragger.h>
 
 #include "geom/SoPointLightDraggerGeom.h"
-
 
 SO_KIT_SOURCE(SoPointLightDragger);
 
@@ -94,18 +92,18 @@ SoPointLightDragger::SoPointLightDragger()
     isBuiltIn = TRUE;
 
     // This gives the dragger an overall material.  It is edited by lightManips
-    // to make its dragger match the color of the light.  Any materials within 
-    // other parts will override this one. 
-    SO_KIT_ADD_CATALOG_ENTRY(material, SoMaterial, 
-				TRUE, topSeparator, geomSeparator,TRUE);
+    // to make its dragger match the color of the light.  Any materials within
+    // other parts will override this one.
+    SO_KIT_ADD_CATALOG_ENTRY(material, SoMaterial, TRUE, topSeparator,
+                             geomSeparator, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(translator,SoDragPointDragger,
-				TRUE, topSeparator, geomSeparator  ,TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator, SoDragPointDragger, TRUE, topSeparator,
+                             geomSeparator, TRUE);
 
-    // Read the default geometry 
+    // Read the default geometry
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts( "pointLightDragger.iv",
-			   geomBuffer, sizeof(geomBuffer) );
+        readDefaultParts("pointLightDragger.iv", geomBuffer,
+                         sizeof(geomBuffer));
 
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
 
@@ -115,23 +113,22 @@ SoPointLightDragger::SoPointLightDragger()
     // We need to use a copy of the resource, since the resource is shared
     // by all manips but we are going to edit ours.
     SoNode *resourceMtl = SoNode::getByName("pointLightOverallMaterial");
-    setPartAsDefault("material", resourceMtl->copy() );
-
+    setPartAsDefault("material", resourceMtl->copy());
 
     // Create the simple draggers that comprise this dragger.
     // This dragger uses these:
     // 1 DragPointDragger
-	SoDragPointDragger *trD;
-	trD = SO_GET_ANY_PART( this,"translator", SoDragPointDragger );
+    SoDragPointDragger *trD;
+    trD = SO_GET_ANY_PART(this, "translator", SoDragPointDragger);
 
     // Update the rotation and scale fields when the motionMatrix is set.
-    addValueChangedCallback( &SoPointLightDragger::valueChangedCB );
+    addValueChangedCallback(&SoPointLightDragger::valueChangedCB);
 
     // Updates the motionMatrix when the translationFactor field is set.
-    fieldSensor = new SoFieldSensor( &SoPointLightDragger::fieldSensorCB, this);
-    fieldSensor->setPriority( 0 );
+    fieldSensor = new SoFieldSensor(&SoPointLightDragger::fieldSensorCB, this);
+    fieldSensor->setPriority(0);
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -150,98 +147,94 @@ SoPointLightDragger::~SoPointLightDragger()
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.
-//    Classes that redefine must call setUpConnections(TRUE,TRUE) 
+//    Classes that redefine must call setUpConnections(TRUE,TRUE)
 //    at end of constructor.
 //    Returns the state of the node when this was called.
 SbBool
-SoPointLightDragger::setUpConnections( SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+SoPointLightDragger::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( onOff ) {
+    if (onOff) {
 
-	// We connect AFTER base class.
-	SoDragger::setUpConnections( onOff, FALSE );
+        // We connect AFTER base class.
+        SoDragger::setUpConnections(onOff, FALSE);
 
-	// Set default parts and add callbacks to child draggers.
-	SoDragger *trD = (SoDragger *) getAnyPart( "translator", FALSE );
-	if (trD != NULL) {
+        // Set default parts and add callbacks to child draggers.
+        SoDragger *trD = (SoDragger *)getAnyPart("translator", FALSE);
+        if (trD != NULL) {
 
-	    // Set up the parts in the child dragger
-	    SoNode *n;
-	    n = SoNode::getByName("pointLightTranslatorLineTranslator");
-	    trD->setPartAsDefault("xTranslator.translator", n );
-	    trD->setPartAsDefault("yTranslator.translator", n );
-	    trD->setPartAsDefault("zTranslator.translator", n );
+            // Set up the parts in the child dragger
+            SoNode *n;
+            n = SoNode::getByName("pointLightTranslatorLineTranslator");
+            trD->setPartAsDefault("xTranslator.translator", n);
+            trD->setPartAsDefault("yTranslator.translator", n);
+            trD->setPartAsDefault("zTranslator.translator", n);
 
-	    n = SoNode::getByName( "pointLightTranslatorLineTranslatorActive");
-	    trD->setPartAsDefault("xTranslator.translatorActive", n );
-	    trD->setPartAsDefault("yTranslator.translatorActive", n );
-	    trD->setPartAsDefault("zTranslator.translatorActive", n );
+            n = SoNode::getByName("pointLightTranslatorLineTranslatorActive");
+            trD->setPartAsDefault("xTranslator.translatorActive", n);
+            trD->setPartAsDefault("yTranslator.translatorActive", n);
+            trD->setPartAsDefault("zTranslator.translatorActive", n);
 
-	    n = SoNode::getByName("pointLightTranslatorPlaneTranslator");
-	    trD->setPartAsDefault("yzTranslator.translator", n );
-	    trD->setPartAsDefault("xzTranslator.translator", n );
-	    trD->setPartAsDefault("xyTranslator.translator", n );
+            n = SoNode::getByName("pointLightTranslatorPlaneTranslator");
+            trD->setPartAsDefault("yzTranslator.translator", n);
+            trD->setPartAsDefault("xzTranslator.translator", n);
+            trD->setPartAsDefault("xyTranslator.translator", n);
 
-	    n = SoNode::getByName( "pointLightTranslatorPlaneTranslatorActive");
-	    trD->setPartAsDefault("yzTranslator.translatorActive", n );
-	    trD->setPartAsDefault("xzTranslator.translatorActive", n );
-	    trD->setPartAsDefault("xyTranslator.translatorActive", n );
+            n = SoNode::getByName("pointLightTranslatorPlaneTranslatorActive");
+            trD->setPartAsDefault("yzTranslator.translatorActive", n);
+            trD->setPartAsDefault("xzTranslator.translatorActive", n);
+            trD->setPartAsDefault("xyTranslator.translatorActive", n);
 
-	    registerChildDragger( trD );
-	}
+            registerChildDragger(trD);
+        }
 
-	// Call the sensor CBs to make things are up-to-date.
-	fieldSensorCB( this, NULL );
+        // Call the sensor CBs to make things are up-to-date.
+        fieldSensorCB(this, NULL);
 
-	// Connect the field sensors
-	if (fieldSensor->getAttachedField() != &translation)
-	    fieldSensor->attach( &translation );
-    }
-    else {
+        // Connect the field sensors
+        if (fieldSensor->getAttachedField() != &translation)
+            fieldSensor->attach(&translation);
+    } else {
 
-	// We disconnect BEFORE base class.
+        // We disconnect BEFORE base class.
 
-	// remove callbacks from the child draggers
-        SoDragger *trD = (SoDragger *) getAnyPart( "translator", FALSE );
-        unregisterChildDragger( trD );
+        // remove callbacks from the child draggers
+        SoDragger *trD = (SoDragger *)getAnyPart("translator", FALSE);
+        unregisterChildDragger(trD);
 
-	// Disconnect the field sensors.
-	if (fieldSensor->getAttachedField())
-	    fieldSensor->detach();
+        // Disconnect the field sensors.
+        if (fieldSensor->getAttachedField())
+            fieldSensor->detach();
 
-	SoDragger::setUpConnections( onOff, FALSE );
+        SoDragger::setUpConnections(onOff, FALSE);
     }
 
     return !(connectionsSetUp = onOff);
 }
 
 void
-SoPointLightDragger::valueChangedCB( void *, SoDragger *inDragger )
-{
-    SoPointLightDragger *d = (SoPointLightDragger *) inDragger;
-    SbMatrix motMat = d->getMotionMatrix();
+SoPointLightDragger::valueChangedCB(void *, SoDragger *inDragger) {
+    SoPointLightDragger *d = (SoPointLightDragger *)inDragger;
+    SbMatrix             motMat = d->getMotionMatrix();
 
     SbVec3f    trans, scale;
     SbRotation rot, scaleOrient;
-    motMat.getTransform( trans, rot, scale, scaleOrient );
+    motMat.getTransform(trans, rot, scale, scaleOrient);
 
     // Disconnect the field sensors
     d->fieldSensor->detach();
 
-    if ( d->translation.getValue() != trans )
-	d->translation = trans;
+    if (d->translation.getValue() != trans)
+        d->translation = trans;
 
     // Reconnect the field sensors
-    d->fieldSensor->attach( &(d->translation) );
+    d->fieldSensor->attach(&(d->translation));
 }
 
 void
-SoPointLightDragger::fieldSensorCB(void *inDragger, SoSensor *)
-{
-   SoPointLightDragger *dragger = (SoPointLightDragger *) inDragger;
+SoPointLightDragger::fieldSensorCB(void *inDragger, SoSensor *) {
+    SoPointLightDragger *dragger = (SoPointLightDragger *)inDragger;
 
     SbMatrix motMat = dragger->getMotionMatrix();
     dragger->workFieldsIntoTransform(motMat);
@@ -250,10 +243,9 @@ SoPointLightDragger::fieldSensorCB(void *inDragger, SoSensor *)
 }
 
 void
-SoPointLightDragger::setDefaultOnNonWritingFields()
-{
+SoPointLightDragger::setDefaultOnNonWritingFields() {
     // Try not to write out the sub-draggers.
-	translator.setDefault(TRUE);
+    translator.setDefault(TRUE);
 
     // Call the base class...
     SoDragger::setDefaultOnNonWritingFields();

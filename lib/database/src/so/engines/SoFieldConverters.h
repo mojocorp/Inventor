@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,21 +67,22 @@ class SoConvToTrigger : public SoFieldConverter {
     SO_ENGINE_HEADER(SoConvToTrigger);
 
   public:
-    SoField			*input;
-    SoEngineOutput		output; /* SoSFTrigger */
+    SoField *      input;
+    SoEngineOutput output; /* SoSFTrigger */
 
-  SoINTERNAL public:
-    static void			initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
-    virtual void		evaluate();
-    virtual void		inputChanged(SoField *);
+    virtual void evaluate();
+    virtual void inputChanged(SoField *);
 
   private:
     SoConvToTrigger();
     ~SoConvToTrigger();
 
-    virtual SoField		*getInput(SoType);
-    virtual SoEngineOutput	*getOutput(SoType);
+    virtual SoField *       getInput(SoType);
+    virtual SoEngineOutput *getOutput(SoType);
 
     SoFieldData *myInputData;
 };
@@ -99,24 +100,25 @@ class SoBuiltinFieldConverter : public SoFieldConverter {
     SO_ENGINE_HEADER(SoBuiltinFieldConverter);
 
   public:
-    SoField		*input;
-    SoEngineOutput	*output;
+    SoField *       input;
+    SoEngineOutput *output;
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
+
   private:
     SoBuiltinFieldConverter();
     ~SoBuiltinFieldConverter();
 
-    virtual void	evaluate();
-    void		doConversion(SoField *outField);
+    virtual void evaluate();
+    void         doConversion(SoField *outField);
 
-    virtual SoField		*getInput(SoType);
-    virtual SoEngineOutput	*getOutput(SoType);
+    virtual SoField *       getInput(SoType);
+    virtual SoEngineOutput *getOutput(SoType);
 
     int inType, outType;
 
-    SoFieldData *myInputData;
+    SoFieldData *       myInputData;
     SoEngineOutputData *myOutputData;
 };
-

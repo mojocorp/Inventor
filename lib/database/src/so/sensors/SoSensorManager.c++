@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -73,10 +73,10 @@ SoSensorManager::SoSensorManager()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    changedFunc     = NULL;
+    changedFunc = NULL;
     changedFuncData = NULL;
 
-    delayQueue  = NULL;
+    delayQueue = NULL;
     timerQueue = NULL;
     rescheduleQueue = NULL;
 
@@ -84,8 +84,8 @@ SoSensorManager::SoSensorManager()
     delayQTimeoutSensor = new SoAlarmSensor(delayQTimeoutCB, this);
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	SoDebug::NamePtr("delayQTimeoutSensor", delayQTimeoutSensor);
-	startTime = SbTime::getTimeOfDay();
+        SoDebug::NamePtr("delayQTimeoutSensor", delayQTimeoutSensor);
+        startTime = SbTime::getTimeOfDay();
     }
 #endif
 
@@ -124,26 +124,25 @@ SoSensorManager::insertDelaySensor(SoDelayQueueSensor *s)
     // timeout isn't zero, and the delay queue sensor isn't already
     // scheduled, get the delay queue timeout ready to go
     // off.
-    if ((s->getPriority() != 0) && !delayQTimeoutSensor->isScheduled()
-	&& (delayQTimeout != SbTime::zero())) {
+    if ((s->getPriority() != 0) && !delayQTimeoutSensor->isScheduled() &&
+        (delayQTimeout != SbTime::zero())) {
 
-	delayQTimeoutSensor->unschedule();
-	delayQTimeoutSensor->setTimeFromNow(delayQTimeout);
-	delayQTimeoutSensor->schedule();
-
+        delayQTimeoutSensor->unschedule();
+        delayQTimeoutSensor->setTimeFromNow(delayQTimeout);
+        delayQTimeoutSensor->schedule();
     }
     insert(s, delayQueue);
 
     if (s->getPriority() != 0) {
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	    SoDebug::RTPrintf("Inserted delay queue sensor:  "
-			      "Name: %s, priority: %d\n",
-			      SoDebug::PtrName(s), s->getPriority());
-	}
+        if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
+            SoDebug::RTPrintf("Inserted delay queue sensor:  "
+                              "Name: %s, priority: %d\n",
+                              SoDebug::PtrName(s), s->getPriority());
+        }
 #endif
-	// Call changed callbacks if necessary
-	notifyChanged();
+        // Call changed callbacks if necessary
+        notifyChanged();
     }
 }
 
@@ -161,10 +160,10 @@ SoSensorManager::insertTimerSensor(SoTimerQueueSensor *s)
 {
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	SoDebug::RTPrintf("Inserting timer queue sensor:  "
-			  "Name: %s, trigger time: %g\n",
-			  SoDebug::PtrName(s),
-			  (s->getTriggerTime()-startTime).getValue());
+        SoDebug::RTPrintf("Inserting timer queue sensor:  "
+                          "Name: %s, trigger time: %g\n",
+                          SoDebug::PtrName(s),
+                          (s->getTriggerTime() - startTime).getValue());
     }
 #endif
     insert(s, timerQueue);
@@ -188,8 +187,8 @@ SoSensorManager::removeDelaySensor(SoDelayQueueSensor *s)
     remove(s, delayQueue);
 
     if (s->getPriority() != 0) {
-	// Call changed callbacks if necessary
-	notifyChanged();
+        // Call changed callbacks if necessary
+        notifyChanged();
     }
 }
 
@@ -255,20 +254,19 @@ SoSensorManager::setDelaySensorTimeout(const SbTime &t)
 {
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	SoDebug::RTPrintf("Setting delay sensor timeout to %g\n",
-			  t.getValue());
+        SoDebug::RTPrintf("Setting delay sensor timeout to %g\n", t.getValue());
     }
 #endif
 
     delayQTimeout = t;
 
     if (t == SbTime::zero()) {
-	delayQTimeoutSensor->unschedule();
+        delayQTimeoutSensor->unschedule();
     } else {
-	if (delayQueue != NULL) {
-	    delayQTimeoutSensor->setTimeFromNow(t);
-	    delayQTimeoutSensor->schedule();
-	}
+        if (delayQueue != NULL) {
+            delayQTimeoutSensor->setTimeFromNow(t);
+            delayQTimeoutSensor->schedule();
+        }
     }
 }
 
@@ -303,7 +301,7 @@ SoSensorManager::delayQTimeoutCB(void *data, SoSensor *)
 {
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	SoDebug::RTPrintf("Processing delay queue; timeout expired\n");
+        SoDebug::RTPrintf("Processing delay queue; timeout expired\n");
     }
 #endif
 
@@ -325,15 +323,15 @@ SoSensorManager::processDelayQueue(SbBool isIdle)
 {
 #ifdef DEBUG
     if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	SoDebug::RTPrintf("Processing delay queue (isIdle:%d)\n", isIdle);
+        SoDebug::RTPrintf("Processing delay queue (isIdle:%d)\n", isIdle);
     }
 #endif
 
-    SoSensor		*prev;
-    SoDelayQueueSensor	*first;
+    SoSensor *          prev;
+    SoDelayQueueSensor *first;
 
     if (delayQueue == NULL)
-	return;
+        return;
 
     ++processingQueue;
 
@@ -346,9 +344,9 @@ SoSensorManager::processDelayQueue(SbBool isIdle)
     // it as being not-current; inserting a new sensor does not mark
     // it as current.
 #ifdef DEBUG
-    if (((SoDelayQueueSensor *) delayQueue)->getPriority() == 0)
-	SoDebugError::post("SoSensorManager::processDelayQueue",
-			   "Immediate sensor in delay queue!!!!");
+    if (((SoDelayQueueSensor *)delayQueue)->getPriority() == 0)
+        SoDebugError::post("SoSensorManager::processDelayQueue",
+                           "Immediate sensor in delay queue!!!!");
 #endif
 
     // We want to process all of the sensors currently in the queue.
@@ -364,56 +362,56 @@ SoSensorManager::processDelayQueue(SbBool isIdle)
 
     while (delayQueue != NULL) {
 
-	// Find first sensor that has not yet been triggered (its
-	// counter is not the same as our current counter), saving
-	// previous sensor in queue (to keep links accurate)
-	prev = NULL;
+        // Find first sensor that has not yet been triggered (its
+        // counter is not the same as our current counter), saving
+        // previous sensor in queue (to keep links accurate)
+        prev = NULL;
 
-	first = (SoDelayQueueSensor *) delayQueue;
-	while (first != NULL) {
-	    // Process this sensor IF:
-	    // -- it wasn't processed before, and
-	    // -- it is a OneShot, or an Idle and we have idle time
-	    if (first->getCounter() != delayQCount &&
-		(isIdle || !first->isIdleOnly())) break;
-	    prev = first;
-	    first = (SoDelayQueueSensor *) first->getNextInQueue();
-	}
+        first = (SoDelayQueueSensor *)delayQueue;
+        while (first != NULL) {
+            // Process this sensor IF:
+            // -- it wasn't processed before, and
+            // -- it is a OneShot, or an Idle and we have idle time
+            if (first->getCounter() != delayQCount &&
+                (isIdle || !first->isIdleOnly()))
+                break;
+            prev = first;
+            first = (SoDelayQueueSensor *)first->getNextInQueue();
+        }
 
-	// If we didn't find one, we're done!
-	if (first == NULL)
-	    break;
+        // If we didn't find one, we're done!
+        if (first == NULL)
+            break;
 
-	// Remove sensor from queue
-	if (prev == NULL)
-	    delayQueue = first->getNextInQueue();
-	else
-	    prev->setNextInQueue(first->getNextInQueue());
-	first->setNextInQueue(NULL);
+        // Remove sensor from queue
+        if (prev == NULL)
+            delayQueue = first->getNextInQueue();
+        else
+            prev->setNextInQueue(first->getNextInQueue());
+        first->setNextInQueue(NULL);
 
-	// Mark the sensor with the current counter so it won't
-	// trigger again immediately if it gets added to the queue again
-	first->setCounter(delayQCount);
+        // Mark the sensor with the current counter so it won't
+        // trigger again immediately if it gets added to the queue again
+        first->setCounter(delayQCount);
 
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	    SoDebug::RTPrintf("Triggering delay queue sensor  "
-			      "Name: %s, priority: %d\n",
-			      SoDebug::PtrName(first), first->getPriority());
-	    
-	}
+        if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
+            SoDebug::RTPrintf("Triggering delay queue sensor  "
+                              "Name: %s, priority: %d\n",
+                              SoDebug::PtrName(first), first->getPriority());
+        }
 #endif
-	// Trigger the sensor. NOTE: this can add new entries to the
-	// queue or remove entries.
-	((SoSensor *) first)->trigger();
+        // Trigger the sensor. NOTE: this can add new entries to the
+        // queue or remove entries.
+        ((SoSensor *)first)->trigger();
     }
     --processingQueue;
 
     // If there are still sensors left in the queue after processing,
     // setup the delay queue timeout:
     if ((delayQueue != NULL) && (delayQTimeout != SbTime::zero())) {
-	delayQTimeoutSensor->setTimeFromNow(delayQTimeout);
-	delayQTimeoutSensor->schedule();
+        delayQTimeoutSensor->setTimeFromNow(delayQTimeout);
+        delayQTimeoutSensor->schedule();
     }
 }
 
@@ -425,19 +423,18 @@ SoSensorManager::processDelayQueue(SbBool isIdle)
 // Use: public
 
 void
-SoSensorManager::processImmediateQueue()
-{
-    SoDelayQueueSensor	*first;
-    static int		processingImmediate = FALSE;
+SoSensorManager::processImmediateQueue() {
+    SoDelayQueueSensor *first;
+    static int          processingImmediate = FALSE;
 
     if (delayQueue == NULL)
-	return;
+        return;
 
     // Triggering an immediate sensor may initiate notification,
     // calling this method recursively. To avoid doing extra work,
     // just return if we are already processing immediate sensors.
     if (processingImmediate)
-	return;
+        return;
 
     processingImmediate = TRUE;
     processingQueue++;
@@ -447,12 +444,12 @@ SoSensorManager::processImmediateQueue()
     // do.) No counter check is made here.
 
     while (delayQueue != NULL &&
-	   ((SoDelayQueueSensor *) delayQueue)->getPriority() == 0) {
+           ((SoDelayQueueSensor *)delayQueue)->getPriority() == 0) {
 
-	first = (SoDelayQueueSensor *) delayQueue;
-	delayQueue = delayQueue->getNextInQueue();
+        first = (SoDelayQueueSensor *)delayQueue;
+        delayQueue = delayQueue->getNextInQueue();
 
-	first->setNextInQueue(NULL);
+        first->setNextInQueue(NULL);
 
 #if 0
 	if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
@@ -462,7 +459,7 @@ SoSensorManager::processImmediateQueue()
 	
 	}
 #endif
-	((SoSensor *) first)->trigger();
+        ((SoSensor *)first)->trigger();
     }
 
     processingImmediate = FALSE;
@@ -483,7 +480,7 @@ SoSensorManager::processTimerQueue()
 ////////////////////////////////////////////////////////////////////////
 {
     ++processingQueue;
-    SoSensor	*first;
+    SoSensor *first;
 
     // NOTE: Infinite loops are possible if timerQueue sensors
     // reschedule themselves inside their trigger() routine.  This
@@ -495,27 +492,28 @@ SoSensorManager::processTimerQueue()
 
     // Stop if no sensors left or next sensor really is after now
     while (timerQueue != NULL &&
-	   ((SoTimerQueueSensor *) timerQueue)->getTriggerTime() <= 
-	       SbTime::getTimeOfDay()) {
+           ((SoTimerQueueSensor *)timerQueue)->getTriggerTime() <=
+               SbTime::getTimeOfDay()) {
 
-	// Get pointer to first sensor
-	first = timerQueue;
+        // Get pointer to first sensor
+        first = timerQueue;
 
-	// Remove sensor from queue.
-	timerQueue = timerQueue->getNextInQueue();
-	first->setNextInQueue(NULL);
+        // Remove sensor from queue.
+        timerQueue = timerQueue->getNextInQueue();
+        first->setNextInQueue(NULL);
 
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	    SoDebug::RTPrintf("Triggering timer sensor  "
-		      "Name: %s, trig time: %g\n",
-		      SoDebug::PtrName(first),
-		      (((SoTimerQueueSensor *)first)->
-			      getTriggerTime()-startTime).getValue());
-	}
+        if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
+            SoDebug::RTPrintf(
+                "Triggering timer sensor  "
+                "Name: %s, trig time: %g\n",
+                SoDebug::PtrName(first),
+                (((SoTimerQueueSensor *)first)->getTriggerTime() - startTime)
+                    .getValue());
+        }
 #endif
-	// Trigger the sensor.
-	first->trigger();
+        // Trigger the sensor.
+        first->trigger();
     }
 
     //
@@ -530,19 +528,19 @@ SoSensorManager::processTimerQueue()
     // been triggered, this problem is avoided.
     //
     if (rescheduleQueue != NULL) {
-	SbTime	now = SbTime::getTimeOfDay();
+        SbTime now = SbTime::getTimeOfDay();
 
-	// Now reschedule timers, relative to now
+        // Now reschedule timers, relative to now
 
-	while (rescheduleQueue != NULL) {
-	    SoTimerSensor *timer = (SoTimerSensor *)rescheduleQueue;
-	    // Remove sensor from queue
-	    rescheduleQueue = rescheduleQueue->getNextInQueue();
-	    timer->setNextInQueue(NULL);
+        while (rescheduleQueue != NULL) {
+            SoTimerSensor *timer = (SoTimerSensor *)rescheduleQueue;
+            // Remove sensor from queue
+            rescheduleQueue = rescheduleQueue->getNextInQueue();
+            timer->setNextInQueue(NULL);
 
-	    timer->reschedule(now);
-	}
-    }	
+            timer->reschedule(now);
+        }
+    }
 
     --processingQueue;
 }
@@ -561,7 +559,7 @@ SoSensorManager::isTimerSensorPending(SbTime &tm)
 ////////////////////////////////////////////////////////////////////////
 {
     if (timerQueue != NULL)
-	tm = ((SoTimerQueueSensor *) timerQueue)->getTriggerTime();
+        tm = ((SoTimerQueueSensor *)timerQueue)->getTriggerTime();
     return (timerQueue != NULL);
 }
 
@@ -574,175 +572,168 @@ SoSensorManager::isTimerSensorPending(SbTime &tm)
 
 int
 SoSensorManager::doSelect(int nfds, fd_set *readfds, fd_set *writefds,
-			  fd_set *exceptfds, struct timeval *userTimeOut)
+                          fd_set *exceptfds, struct timeval *userTimeOut)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 
 // Possible sources of events
-#define EVENT_SOURCE_FD			0x01
-#define EVENT_SOURCE_TIMER		0x02
-#define EVENT_SOURCE_IDLE		0x04
-#define EVENT_SOURCE_USER_TIMEOUT	0x08
-#define EVENT_SOURCE_TIMEOUT		0x10
+#define EVENT_SOURCE_FD 0x01
+#define EVENT_SOURCE_TIMER 0x02
+#define EVENT_SOURCE_IDLE 0x04
+#define EVENT_SOURCE_USER_TIMEOUT 0x08
+#define EVENT_SOURCE_TIMEOUT 0x10
 
-    SbTime		now, userDeadline, timeOut, t;
-    fd_set		readfdsTmp, writefdsTmp, exceptfdsTmp;
-    int32_t		eventSources;
-    struct timeval	tvStruct, *tv;
-    int			selectReturn;
+    SbTime         now, userDeadline, timeOut, t;
+    fd_set         readfdsTmp, writefdsTmp, exceptfdsTmp;
+    int32_t        eventSources;
+    struct timeval tvStruct, *tv;
+    int            selectReturn;
 
     now = SbTime::getTimeOfDay();
 
     if (userTimeOut != NULL)
-	userDeadline = now + SbTime(userTimeOut);
+        userDeadline = now + SbTime(userTimeOut);
 
     while (1) {
 
-	eventSources = 0;
+        eventSources = 0;
 
-	// The priority of stuff is:
-	//
-	// 1. Timers.  The set of pending timers will be processed before
-	// an event (or user timeout) is returned.  Note that if
-	// timers saturate the queue (e.g. there is a timer with an
-	// interval of zero), only one event will be processed between
-	// processing the timer queue.
-	//
-	// 2. User timeout.  See the comment above.
-	//
-	// 3. Events.  See the comment above.
-	//
-	// 4. Idle/Delay processes.  OneShot sensors are processed
-	// whenver there is idle time (there are no timers or events
-	// pending) OR when a user-specifiable timeout occurs.  Idle
-	// sensors are processed only when there is idle time.
-	//
+        // The priority of stuff is:
+        //
+        // 1. Timers.  The set of pending timers will be processed before
+        // an event (or user timeout) is returned.  Note that if
+        // timers saturate the queue (e.g. there is a timer with an
+        // interval of zero), only one event will be processed between
+        // processing the timer queue.
+        //
+        // 2. User timeout.  See the comment above.
+        //
+        // 3. Events.  See the comment above.
+        //
+        // 4. Idle/Delay processes.  OneShot sensors are processed
+        // whenver there is idle time (there are no timers or events
+        // pending) OR when a user-specifiable timeout occurs.  Idle
+        // sensors are processed only when there is idle time.
+        //
 
-	// If there are any delay sensors around, set the appropriate bit
-	// and set the timeout to 0
-	if (isDelaySensorPending()) {
-	    timeOut = SbTime::zero();
-	    eventSources |= EVENT_SOURCE_IDLE | EVENT_SOURCE_TIMEOUT;
-	}
+        // If there are any delay sensors around, set the appropriate bit
+        // and set the timeout to 0
+        if (isDelaySensorPending()) {
+            timeOut = SbTime::zero();
+            eventSources |= EVENT_SOURCE_IDLE | EVENT_SOURCE_TIMEOUT;
+        }
 
-	// If there are timers around, see when they are supposed to occur.
-	if (isTimerSensorPending(t)) {
-	    if (t < now) {
-		// If there are timers pending, set the appropriate
-		// bit and set the timeout to 0.
-		timeOut = SbTime::zero();
-		eventSources = EVENT_SOURCE_TIMER | EVENT_SOURCE_TIMEOUT;
-	    }
-	    else {
-		// If there are timer events in the future:
-		if (eventSources & EVENT_SOURCE_IDLE) {
-		    // If there are delay sensors, they will time out
-		    // before us, so do nothing.
-		}
-		else {
-		    // Figure out the appropriate timeout and set the
-		    // right bits.
-		    timeOut = t - now;
-		    eventSources = EVENT_SOURCE_TIMER |
-			EVENT_SOURCE_TIMEOUT;
-		}
-	    }
-	}
+        // If there are timers around, see when they are supposed to occur.
+        if (isTimerSensorPending(t)) {
+            if (t < now) {
+                // If there are timers pending, set the appropriate
+                // bit and set the timeout to 0.
+                timeOut = SbTime::zero();
+                eventSources = EVENT_SOURCE_TIMER | EVENT_SOURCE_TIMEOUT;
+            } else {
+                // If there are timer events in the future:
+                if (eventSources & EVENT_SOURCE_IDLE) {
+                    // If there are delay sensors, they will time out
+                    // before us, so do nothing.
+                } else {
+                    // Figure out the appropriate timeout and set the
+                    // right bits.
+                    timeOut = t - now;
+                    eventSources = EVENT_SOURCE_TIMER | EVENT_SOURCE_TIMEOUT;
+                }
+            }
+        }
 
-	// if there is a user timeout, set the appropriate bit and
-	// timeout value.
-	if (userTimeOut != NULL) {
-	    if (userDeadline <= now) {
-		// If the user deadline has passed, set the appropriate
-		// bit and set the timeout to 0.
-		timeOut = SbTime::zero();
-		eventSources = EVENT_SOURCE_USER_TIMEOUT |
-		    EVENT_SOURCE_TIMEOUT;
-	    }
-	    else {
-		// If there is a deadline in the future, find the
-		// appropriate timeout interval and set the timeout bit.
-		if (eventSources & EVENT_SOURCE_TIMEOUT) {
-		    // something is already scheduled to timeout.
-		    // see if the user timeout is earlier
-		    if (userDeadline - now < timeOut) {
-			timeOut = userDeadline - now;
-			eventSources = EVENT_SOURCE_USER_TIMEOUT |
-			    EVENT_SOURCE_TIMEOUT;
-		    }
-		}
-		else {
-		    // Nothing is scheduled to time out yet.
-		    // Use the user's timeout value.
-		    timeOut = userDeadline - now;
-		    eventSources = EVENT_SOURCE_USER_TIMEOUT |
-			EVENT_SOURCE_TIMEOUT;
-		}
-	    }
-	}
+        // if there is a user timeout, set the appropriate bit and
+        // timeout value.
+        if (userTimeOut != NULL) {
+            if (userDeadline <= now) {
+                // If the user deadline has passed, set the appropriate
+                // bit and set the timeout to 0.
+                timeOut = SbTime::zero();
+                eventSources = EVENT_SOURCE_USER_TIMEOUT | EVENT_SOURCE_TIMEOUT;
+            } else {
+                // If there is a deadline in the future, find the
+                // appropriate timeout interval and set the timeout bit.
+                if (eventSources & EVENT_SOURCE_TIMEOUT) {
+                    // something is already scheduled to timeout.
+                    // see if the user timeout is earlier
+                    if (userDeadline - now < timeOut) {
+                        timeOut = userDeadline - now;
+                        eventSources =
+                            EVENT_SOURCE_USER_TIMEOUT | EVENT_SOURCE_TIMEOUT;
+                    }
+                } else {
+                    // Nothing is scheduled to time out yet.
+                    // Use the user's timeout value.
+                    timeOut = userDeadline - now;
+                    eventSources =
+                        EVENT_SOURCE_USER_TIMEOUT | EVENT_SOURCE_TIMEOUT;
+                }
+            }
+        }
 
-	if (eventSources & EVENT_SOURCE_TIMEOUT) {
-	    tv = &tvStruct;
-	    timeOut.getValue(tv);
-	}
-	else
-	    tv = NULL;
+        if (eventSources & EVENT_SOURCE_TIMEOUT) {
+            tv = &tvStruct;
+            timeOut.getValue(tv);
+        } else
+            tv = NULL;
 
-	// Save the fdset data
-	if (readfds != NULL)
-	    readfdsTmp = *readfds;
-	else
-	    FD_ZERO(&readfdsTmp);
+        // Save the fdset data
+        if (readfds != NULL)
+            readfdsTmp = *readfds;
+        else
+            FD_ZERO(&readfdsTmp);
 
-	if (writefds != NULL)
-	    writefdsTmp = *writefds;
-	else
-	    FD_ZERO(&writefdsTmp);
+        if (writefds != NULL)
+            writefdsTmp = *writefds;
+        else
+            FD_ZERO(&writefdsTmp);
 
-	if (exceptfds != NULL)
-	    exceptfdsTmp = *exceptfds;
-	else
-	    FD_ZERO(&exceptfdsTmp);
+        if (exceptfds != NULL)
+            exceptfdsTmp = *exceptfds;
+        else
+            FD_ZERO(&exceptfdsTmp);
 
-	selectReturn = select(nfds, &readfdsTmp, &writefdsTmp,
-			      &exceptfdsTmp, tv);
-	if (selectReturn < 0) {
-	    perror("select");
-	    return selectReturn;
-	}
-	// if there is anything ready, set the appropriate bits
-	else if (selectReturn > 0)
-	    eventSources |= EVENT_SOURCE_FD;
+        selectReturn =
+            select(nfds, &readfdsTmp, &writefdsTmp, &exceptfdsTmp, tv);
+        if (selectReturn < 0) {
+            perror("select");
+            return selectReturn;
+        }
+        // if there is anything ready, set the appropriate bits
+        else if (selectReturn > 0)
+            eventSources |= EVENT_SOURCE_FD;
 
-	// The order of these if statements determines priority of
-	// event delivery
-	if (eventSources & EVENT_SOURCE_USER_TIMEOUT ||
-	    eventSources & EVENT_SOURCE_FD) {
+        // The order of these if statements determines priority of
+        // event delivery
+        if (eventSources & EVENT_SOURCE_USER_TIMEOUT ||
+            eventSources & EVENT_SOURCE_FD) {
 
-	    // set the fd masks
-	    if (readfds != NULL)
-		*readfds = readfdsTmp;
-	    if (writefds != NULL)
-		*writefds = writefdsTmp;
-	    if (exceptfds != NULL)
-		*exceptfds = exceptfdsTmp;
+            // set the fd masks
+            if (readfds != NULL)
+                *readfds = readfdsTmp;
+            if (writefds != NULL)
+                *writefds = writefdsTmp;
+            if (exceptfds != NULL)
+                *exceptfds = exceptfdsTmp;
 
-	    // Make sure timers get fired even if the event queue is swamped
-	    if (eventSources & EVENT_SOURCE_TIMER)
-		processTimerQueue();
+            // Make sure timers get fired even if the event queue is swamped
+            if (eventSources & EVENT_SOURCE_TIMER)
+                processTimerQueue();
 
-	    return selectReturn;
-	}
+            return selectReturn;
+        }
 
-	else if (eventSources & EVENT_SOURCE_TIMER)
-	    processTimerQueue();
+        else if (eventSources & EVENT_SOURCE_TIMER)
+            processTimerQueue();
 
-	else if (eventSources & EVENT_SOURCE_IDLE)
-	    processDelayQueue(TRUE);
+        else if (eventSources & EVENT_SOURCE_IDLE)
+            processDelayQueue(TRUE);
 
-	// Going around again... update our notion of current time.
-	now		= SbTime::getTimeOfDay();
+        // Going around again... update our notion of current time.
+        now = SbTime::getTimeOfDay();
     }
 }
 
@@ -770,21 +761,21 @@ SoSensorManager::insert(SoSensor *s, SoSensor *&head)
     // Loop through all sensors in queue
     for (next = head; next != NULL; next = next->getNextInQueue()) {
 
-	// Stop if the new sensor should be inserted before the
-	// current one in the queue. Use the virtual isBefore() method
-	// which works for all types of sensors.
-	if (s->isBefore(next))
-	    break;
+        // Stop if the new sensor should be inserted before the
+        // current one in the queue. Use the virtual isBefore() method
+        // which works for all types of sensors.
+        if (s->isBefore(next))
+            break;
 
-	prev = next;
+        prev = next;
     }
 
     // Insert sensor into queue
     s->setNextInQueue(next);
     if (prev == NULL)
-	head = s;
+        head = s;
     else
-	prev->setNextInQueue(s);
+        prev->setNextInQueue(s);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -805,17 +796,17 @@ SoSensorManager::remove(SoSensor *s, SoSensor *&head)
     // Loop through all sensors in queue, looking for s
     for (cur = head; cur != NULL; cur = cur->getNextInQueue()) {
 
-	if (cur == s)
-	    break;
+        if (cur == s)
+            break;
 
-	prev = cur;
+        prev = cur;
     }
 
     // Remove sensor from queue
     if (prev == NULL)
-	head = s->getNextInQueue();
+        head = s->getNextInQueue();
     else
-	prev->setNextInQueue(s->getNextInQueue());
+        prev->setNextInQueue(s->getNextInQueue());
     s->setNextInQueue(NULL);
 }
 
@@ -834,14 +825,12 @@ SoSensorManager::notifyChanged()
 ////////////////////////////////////////////////////////////////////////
 {
     if (changedFunc != NULL && !processingQueue) {
-	changedFunc(changedFuncData);
+        changedFunc(changedFuncData);
 
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	    SoDebug::RTPrintf("SoSensorManager::notifyChanged()\n");
-	}
+        if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
+            SoDebug::RTPrintf("SoSensorManager::notifyChanged()\n");
+        }
 #endif
     }
 }
-
-

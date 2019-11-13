@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,16 +67,11 @@
 ////////////////////////////////////////////////////////////////////////
 
 SbCylinderSheetProjector::SbCylinderSheetProjector(SbBool orient)
-: SbCylinderProjector(orient)
-{
-}
+    : SbCylinderProjector(orient) {}
 
-SbCylinderSheetProjector::SbCylinderSheetProjector(
-    const SbCylinder &c,
-    SbBool orient)
-: SbCylinderProjector(c, orient)
-{
-}
+SbCylinderSheetProjector::SbCylinderSheetProjector(const SbCylinder &c,
+                                                   SbBool            orient)
+    : SbCylinderProjector(c, orient) {}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -111,85 +106,84 @@ SbCylinderSheetProjector::project(const SbVec2f &point)
 ////////////////////////////////////////////////////////////////////////
 {
     SbVec3f result;
-    SbLine workingLine = getWorkingLine(point);
+    SbLine  workingLine = getWorkingLine(point);
 
     if (needSetup)
-	setupPlane();
+        setupPlane();
 
     SbVec3f planeIntersection;
-    
+
     SbVec3f cylIntersection, dontCare;
-    SbBool hitCylinder;
-    if ( intersectFront == TRUE )
-	hitCylinder = cylinder.intersect(workingLine, cylIntersection,dontCare);
-    else 
-	hitCylinder = cylinder.intersect(workingLine,dontCare, cylIntersection);
+    SbBool  hitCylinder;
+    if (intersectFront == TRUE)
+        hitCylinder =
+            cylinder.intersect(workingLine, cylIntersection, dontCare);
+    else
+        hitCylinder =
+            cylinder.intersect(workingLine, dontCare, cylIntersection);
 
     if (hitCylinder) {
-	// drop the cylinder intersection onto the tolerance plane
-	
-	SbLine projectLine(cylIntersection, cylIntersection + planeDir);
-	if (! tolPlane.intersect(projectLine, planeIntersection))
+        // drop the cylinder intersection onto the tolerance plane
+
+        SbLine projectLine(cylIntersection, cylIntersection + planeDir);
+        if (!tolPlane.intersect(projectLine, planeIntersection))
 #ifdef DEBUG
-	    SoDebugError::post("SbCylinderSheetProjector::project",
-			       "Couldn't intersect working line with plane");
+            SoDebugError::post("SbCylinderSheetProjector::project",
+                               "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+            /* Do nothing */;
 #endif
-    }
-    else if (! tolPlane.intersect(workingLine, planeIntersection))
+    } else if (!tolPlane.intersect(workingLine, planeIntersection))
 #ifdef DEBUG
-	SoDebugError::post("SbCylinderSheetProjector::project",
-			   "Couldn't intersect working line with plane");
+        SoDebugError::post("SbCylinderSheetProjector::project",
+                           "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */;
 #endif
 
     SbVec3f vecToPoint = planeIntersection -
-			 cylinder.getAxis().getClosestPoint(planeIntersection);
+                         cylinder.getAxis().getClosestPoint(planeIntersection);
     float dist = vecToPoint.length();
 
-    // Distance on the plane from the axis to the 
-    // to the projection of the point where 
+    // Distance on the plane from the axis to the
+    // to the projection of the point where
     // the cylinder meets the hyperbolic sheet
     float cylSheetDist = cylinder.getRadius() * M_SQRT1_2;
 
     if (dist < cylSheetDist) {
 #ifdef DEBUG
-	if (! hitCylinder)
-	    SoDebugError::post("SbCylinderSheetProjector::project",
-			       "Couldn't intersect with cylinder");
+        if (!hitCylinder)
+            SoDebugError::post("SbCylinderSheetProjector::project",
+                               "Couldn't intersect with cylinder");
 #endif
-	result = cylIntersection;
-    }
-    else {
-	// Project from plane intersection to hyperbolic sheet.
-	// See the SphereSheetProjector for a description
-	// of this hyperbolic function.
-	
-	float f = cylinder.getRadius()*cylinder.getRadius()/2.0;
-	float offsetDist = f / dist;
-	    
-	SbVec3f offset;
-	if (orientToEye) {
-	    
-	    if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE)
-		offset = workingProjPoint - planeIntersection;
-	    else
-		worldToWorking.multDirMatrix(viewVol.zVector(), offset);
-		
-	    offset.normalize();
-	}
-	else {
-	    offset.setValue(0,0,1);
-	}
+        result = cylIntersection;
+    } else {
+        // Project from plane intersection to hyperbolic sheet.
+        // See the SphereSheetProjector for a description
+        // of this hyperbolic function.
 
-	if ( intersectFront == FALSE )
-	    offset *= -1.0;
-	    
-	offset *= offsetDist;
-	
-	result = planeIntersection + offset;
+        float f = cylinder.getRadius() * cylinder.getRadius() / 2.0;
+        float offsetDist = f / dist;
+
+        SbVec3f offset;
+        if (orientToEye) {
+
+            if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE)
+                offset = workingProjPoint - planeIntersection;
+            else
+                worldToWorking.multDirMatrix(viewVol.zVector(), offset);
+
+            offset.normalize();
+        } else {
+            offset.setValue(0, 0, 1);
+        }
+
+        if (intersectFront == FALSE)
+            offset *= -1.0;
+
+        offset *= offsetDist;
+
+        result = planeIntersection + offset;
     }
 
     lastPoint = result;
@@ -217,35 +211,33 @@ SbCylinderSheetProjector::setupPlane()
     // perpendicular to the axis and eyeDir (or z)
     SbVec3f perpDir; // perpendicular to axis and plane
     if (orientToEye) {
-	SbVec3f eyeDir;
-	
-	if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE) {
-	    // find the projection point in working space coords
-	    worldToWorking.multVecMatrix(
-		viewVol.getProjectionPoint(), workingProjPoint);
-	
-	    eyeDir = workingProjPoint - cylinder.getAxis().getPosition();
-	}
-	else {
-	    // Use the projection direction in an orthographic
-	    // view vol
-	    worldToWorking.multDirMatrix(viewVol.zVector(), eyeDir);
-	}	 
+        SbVec3f eyeDir;
 
-	perpDir = (cylinder.getAxis().getDirection()).cross(eyeDir);
-    }
-    else {
-	perpDir = (cylinder.getAxis().getDirection()).cross(SbVec3f(0,0,1));
+        if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE) {
+            // find the projection point in working space coords
+            worldToWorking.multVecMatrix(viewVol.getProjectionPoint(),
+                                         workingProjPoint);
+
+            eyeDir = workingProjPoint - cylinder.getAxis().getPosition();
+        } else {
+            // Use the projection direction in an orthographic
+            // view vol
+            worldToWorking.multDirMatrix(viewVol.zVector(), eyeDir);
+        }
+
+        perpDir = (cylinder.getAxis().getDirection()).cross(eyeDir);
+    } else {
+        perpDir = (cylinder.getAxis().getDirection()).cross(SbVec3f(0, 0, 1));
     }
     planeDir = perpDir.cross(cylinder.getAxis().getDirection());
     planeDir.normalize();
-    if ( intersectFront == FALSE )
-	planeDir *= -1.0;
+    if (intersectFront == FALSE)
+        planeDir *= -1.0;
 
     // for CylinderSheetProjectors, the plane always passed
     // through the origin
     tolPlane = SbPlane(planeDir, cylinder.getAxis().getPosition());
-    
+
     needSetup = FALSE;
 }
 
@@ -266,12 +258,12 @@ SbCylinderSheetProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
     SbVec3f v1 = p1 - cylinder.getAxis().getClosestPoint(p1);
     SbVec3f v2 = p2 - cylinder.getAxis().getClosestPoint(p2);
     SbVec3f diff = v2 - v1;
-	
+
     float d = diff.length();
-	
+
     // prevent numerical instability problems
     float sinHalfAngle = d / (2.0 * cylinder.getRadius());
-    if (sinHalfAngle < -1.0 )
+    if (sinHalfAngle < -1.0)
         sinHalfAngle = -1.0;
     else if (sinHalfAngle > 1.0)
         sinHalfAngle = 1.0;
@@ -285,13 +277,13 @@ SbCylinderSheetProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
 
     // Sb we'll snap it to point either with the
     // axis, or in the opposite direction.
-    float cosAngle = rotAxis.dot(cylinder.getAxis().getDirection()) / 
-			rotAxis.length();
-			
+    float cosAngle =
+        rotAxis.dot(cylinder.getAxis().getDirection()) / rotAxis.length();
+
     if (cosAngle > 0.0)
-	rotAxis = cylinder.getAxis().getDirection();
+        rotAxis = cylinder.getAxis().getDirection();
     else
-	rotAxis = -cylinder.getAxis().getDirection();
+        rotAxis = -cylinder.getAxis().getDirection();
 
     return SbRotation(rotAxis, angle);
 }

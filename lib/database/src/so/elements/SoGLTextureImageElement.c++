@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -65,25 +65,12 @@
 #include <float.h>
 
 // Formats for 1-4 component textures
-static GLenum formats[] = {
-    GL_LUMINANCE,
-    GL_LUMINANCE_ALPHA,
-    GL_RGB,
-    GL_RGBA
-};
+static GLenum formats[] = {GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB, GL_RGBA};
 
 static GLint internalFormatsLow[] = {
-    GL_LUMINANCE8_EXT,
-    GL_LUMINANCE8_ALPHA8_EXT,
-    GL_RGB4_EXT,
-    GL_RGBA4_EXT
-};
-static GLint internalFormatsHigh[] = {
-    GL_LUMINANCE,
-    GL_LUMINANCE_ALPHA,
-    GL_RGB,
-    GL_RGBA
-};
+    GL_LUMINANCE8_EXT, GL_LUMINANCE8_ALPHA8_EXT, GL_RGB4_EXT, GL_RGBA4_EXT};
+static GLint internalFormatsHigh[] = {GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB,
+                                      GL_RGBA};
 
 SO_ELEMENT_SOURCE(SoGLTextureImageElement);
 
@@ -95,8 +82,7 @@ SO_ELEMENT_SOURCE(SoGLTextureImageElement);
 // Use: internal
 
 void
-SoGLTextureImageElement::initClass()
-{
+SoGLTextureImageElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLTextureImageElement, SoTextureImageElement);
 }
 
@@ -110,8 +96,7 @@ SoGLTextureImageElement::initClass()
 SoGLTextureImageElement::~SoGLTextureImageElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -163,16 +148,14 @@ SoGLTextureImageElement::pop(SoState *state, const SoElement *)
 // Use: protected, virtual
 
 void
-SoGLTextureImageElement::setElt(const SbImage &,
-                int, int, int,
-				const SbColor &)
+SoGLTextureImageElement::setElt(const SbImage &, int, int, int, const SbColor &)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     SoDebugError::post("SoGLTextureImageElement::setElt",
-	       "Nodes must call SoGLTextureImageElement::set"
-	       " for GLRender, not SoTextureImageElement::set");
+                       "Nodes must call SoGLTextureImageElement::set"
+                       " for GLRender, not SoTextureImageElement::set");
 #endif
 }
 
@@ -188,35 +171,33 @@ SoGLTextureImageElement::setElt(const SbImage &,
 // Use: public, static
 
 SoGLDisplayList *
-SoGLTextureImageElement::set(SoState *state, SoNode *node,
-                 const SbImage &image,
-			     float _quality, int _wrapS, int _wrapT,
-			     int _model, const SbColor &_blendColor,
-			     SoGLDisplayList *_list)
+SoGLTextureImageElement::set(SoState *state, SoNode *node, const SbImage &image,
+                             float _quality, int _wrapS, int _wrapT, int _model,
+                             const SbColor &_blendColor, SoGLDisplayList *_list)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoGLTextureImageElement	*elt;
+    SoGLTextureImageElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoGLTextureImageElement *) getElement(state, classStackIndex, node);
+    elt = (SoGLTextureImageElement *)getElement(state, classStackIndex, node);
 
     if (elt != NULL) {
-    elt->SoTextureImageElement::setElt(image, _wrapS, _wrapT,
-					   _model, _blendColor);
+        elt->SoTextureImageElement::setElt(image, _wrapS, _wrapT, _model,
+                                           _blendColor);
 
-	elt->list = _list;
-	elt->quality = _quality;
-	elt->sendTexEnv(state);
-	elt->sendTex(state);
-	return elt->list;
+        elt->list = _list;
+        elt->quality = _quality;
+        elt->sendTexEnv(state);
+        elt->sendTex(state);
+        return elt->list;
     }
     return NULL;
 }
 
 // Helper table; for integers 1-15, returns the high-bit (0-3):
-static signed char powTable[0x10] = {
-    -1, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3 };
+static signed char powTable[0x10] = {-1, 0, 1, 1, 2, 2, 2, 2,
+                                     3,  3, 3, 3, 3, 3, 3, 3};
 
 //
 // Helper routine; given an integer, return next higher power of 2.
@@ -224,19 +205,19 @@ static signed char powTable[0x10] = {
 // a naive bit-shifting algorithm).
 //
 static inline int
-nextPowerOf2(int num)
-{
+nextPowerOf2(int num) {
 #ifdef DEBUG
     if (num <= 0) {
-	SoDebugError::post("SoGLTextureImageElement::nextPowerOf2",
-			   "size <= 0");
-	return 0;
+        SoDebugError::post("SoGLTextureImageElement::nextPowerOf2",
+                           "size <= 0");
+        return 0;
     }
 #endif
     int t, bits = 0;
     int mask = 0xF;
     // Find closest to 4-bits:
-    for (t = num-1; (t & (~mask)) != 0; bits += 4, t = t>>4) ;
+    for (t = num - 1; (t & (~mask)) != 0; bits += 4, t = t >> 4)
+        ;
 
     // Find high-bit:
     bits += powTable[t];
@@ -246,19 +227,18 @@ nextPowerOf2(int num)
 //
 // Helper routine stolen from the gluBuild2DMipMaps code:
 //
-// Compute the nearest power of 2 number.  This algorithm is a little 
+// Compute the nearest power of 2 number.  This algorithm is a little
 // strange, but it works quite well.
 //
 static int
-nearestPowerOf2(GLuint value)
-{
+nearestPowerOf2(GLuint value) {
     int i = 0;
 
 #ifdef DEBUG
     if (value <= 0) {
-	SoDebugError::post("SoGLTextureImageElement::nextPowerOf2",
-			   "size <= 0");
-	return 0;
+        SoDebugError::post("SoGLTextureImageElement::nextPowerOf2",
+                           "size <= 0");
+        return 0;
     }
 #endif
 
@@ -266,7 +246,7 @@ nearestPowerOf2(GLuint value)
         if (value == 1) {
             return i;
         } else if (value == 3) {
-            return i+2;
+            return i + 2;
         }
         value = value >> 1;
         i++;
@@ -277,8 +257,8 @@ nearestPowerOf2(GLuint value)
 // Helper table; mapping from textureQuality to OpenGL filter type:
 //
 struct qualityFilterTable {
-    float quality;
-    GLint filter;
+    float  quality;
+    GLint  filter;
     SbBool needMipMaps;
 };
 
@@ -286,12 +266,12 @@ struct qualityFilterTable {
 // Defaults for RealityEngine (mip-mapped by default):
 //
 static qualityFilterTable mipmap_minQFTable[] = {
-    { 0.1, GL_NEAREST, FALSE},
-    { 0.5, GL_LINEAR, FALSE},
-    { 0.7, GL_NEAREST_MIPMAP_NEAREST, TRUE},
-    { 0.8, GL_NEAREST_MIPMAP_LINEAR, TRUE},
-    { 0.9, GL_LINEAR_MIPMAP_NEAREST, TRUE},
-    { FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, TRUE},
+    {0.1, GL_NEAREST, FALSE},
+    {0.5, GL_LINEAR, FALSE},
+    {0.7, GL_NEAREST_MIPMAP_NEAREST, TRUE},
+    {0.8, GL_NEAREST_MIPMAP_LINEAR, TRUE},
+    {0.9, GL_LINEAR_MIPMAP_NEAREST, TRUE},
+    {FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, TRUE},
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -311,8 +291,7 @@ SoGLTextureImageElement::sendTexEnv(SoState *)
     // This state isn't stored in a texture object:
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, model);
     if (model == GL_BLEND) {
-	glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR,
-		   blendColor.getValue());
+        glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, blendColor.getValue());
     }
 }
 
@@ -330,9 +309,9 @@ SoGLTextureImageElement::sendTex(SoState *state)
 ////////////////////////////////////////////////////////////////////////
 {
     if (list) {
-	// use display list
-	list->call(state);
-	return;
+        // use display list
+        list->call(state);
+        return;
     }
 
     // Scale the image to closest power of 2 smaller than maximum
@@ -340,48 +319,48 @@ SoGLTextureImageElement::sendTex(SoState *state)
     GLint maxsize = 0;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxsize);
     SbVec3s newSize;
-    int i;
+    int     i;
     // Use nearest power of 2 for big textures, use next higher
     // power of 2 for small textures:
     const SbVec3s &size = image.getSize();
-    const int numComponents = image.getNumComponents();
+    const int      numComponents = image.getNumComponents();
 
     for (i = 0; i < 3; i++) {
-    if (size[i] > 8) {
-	    newSize[i] = size[i] > maxsize ?
-		maxsize : 1 << nearestPowerOf2(size[i]);
-	} else {
-	    newSize[i] = 1 << nextPowerOf2(size[i]);
-	}
+        if (size[i] > 8) {
+            newSize[i] =
+                size[i] > maxsize ? maxsize : 1 << nearestPowerOf2(size[i]);
+        } else {
+            newSize[i] = 1 << nextPowerOf2(size[i]);
+        }
     }
 
     qualityFilterTable *tbl = mipmap_minQFTable;
-    for (i = 0; quality > tbl[i].quality; i++) /* Do nothing */;
-    int minFilter = tbl[i].filter;
+    for (i = 0; quality > tbl[i].quality; i++) /* Do nothing */
+        ;
+    int    minFilter = tbl[i].filter;
     SbBool needMipMaps = tbl[i].needMipMaps;
-    int magFilter = (quality < 0.5 ? GL_NEAREST : GL_LINEAR);
+    int    magFilter = (quality < 0.5 ? GL_NEAREST : GL_LINEAR);
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);  // Not default
-    
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Not default
+
     // Format in memory
-    int format = formats[numComponents-1];
-    
+    int format = formats[numComponents - 1];
+
     // Internal format is just numComponents unless GL_EXT_texture is
     // supported:
     int internalFormat = numComponents;
     if (quality >= 0.8)
-        internalFormat = internalFormatsHigh[numComponents-1];
+        internalFormat = internalFormatsHigh[numComponents - 1];
     else
-        internalFormat = internalFormatsLow[numComponents-1];
+        internalFormat = internalFormatsLow[numComponents - 1];
 
     SbBool buildList = !SoCacheElement::anyOpen(state);
     if (buildList) {
-	list = new SoGLDisplayList(state,
-				   SoGLDisplayList::TEXTURE_OBJECT);
-	list->open(state);
+        list = new SoGLDisplayList(state, SoGLDisplayList::TEXTURE_OBJECT);
+        list->open(state);
     }
 
-    // If we aren't creating a texture object, then we need to 
+    // If we aren't creating a texture object, then we need to
     // unbind the current texture object so we don't overwrite it's state.
     if (!buildList)
         glBindTexture(GL_TEXTURE_2D, 0);
@@ -391,94 +370,94 @@ SoGLTextureImageElement::sendTex(SoState *state)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
-    
+
     GLubyte *level0 = NULL;
     if (newSize != size) {
-	level0 = new unsigned char[newSize[0]*newSize[1]*numComponents];
+        level0 = new unsigned char[newSize[0] * newSize[1] * numComponents];
 
-	// Use gluScaleImage (which does linear interpolation or box
-	// filtering) if using a linear interpolation magnification
-	// filter:
-	gluScaleImage(
-        (GLenum)format, size[0], size[1], GL_UNSIGNED_BYTE, image.getBytes(),
-	    newSize[0], newSize[1], GL_UNSIGNED_BYTE, level0);
+        // Use gluScaleImage (which does linear interpolation or box
+        // filtering) if using a linear interpolation magnification
+        // filter:
+        gluScaleImage((GLenum)format, size[0], size[1], GL_UNSIGNED_BYTE,
+                      image.getBytes(), newSize[0], newSize[1],
+                      GL_UNSIGNED_BYTE, level0);
     }
-    
+
     // Send level-0 mipmap:
-    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, newSize[0], newSize[1],
-		 0, (GLenum)format, GL_UNSIGNED_BYTE,
-         level0 == NULL ? image.getBytes() : level0);
-    
+    glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, newSize[0], newSize[1], 0,
+                 (GLenum)format, GL_UNSIGNED_BYTE,
+                 level0 == NULL ? image.getBytes() : level0);
+
     // If necessary, send other mipmaps:
     if (needMipMaps) {
-	// Again, the goal is to minimize space allocated and data
-	// movement.  The same array is re-used for all mipmap levels
-	// (and the level0 array is used if possible).
-	
-	const GLubyte *prevLevel = NULL;
-	if (level0 == NULL) {
-		level0 = new unsigned char[newSize[0]*newSize[1]*numComponents];
-        prevLevel = image.getBytes();
-	}
-	else {
-	    prevLevel = level0;
-	}
-    
-	int level = 0;
-    SbVec3s curSize = newSize;
-	while (curSize[0] > 1 || curSize[1] > 1) {
-	    ++level;
-        SbVec3s prevSize = curSize;
-    
-	    // When we're box-filtering, we average the 4 pixels
-	    // [(curSize),(curSize+deltas)].  If mipmaps have already
-	    // bottomed out for a dimension, the delta will be 0,
-	    // otherwise the delta will be 1.
-	    SbVec2s deltas;
-	    if (curSize[0] > 1) {
-		curSize[0] = curSize[0] >> 1;
-		deltas[0] = 1;
-	    } else {
-		deltas[0] = 0;
-	    }
-	    if (curSize[1] > 1) {
-		curSize[1] = curSize[1] >> 1;
-		deltas[1] = 1;
-	    } else {
-		deltas[1] = 0;
-	    }
-    
-	    int byte = 0;
-	    for (int h = 0; h < prevSize[1]; h += (deltas[1]+1)) {
-		for (int w = 0; w < prevSize[0]; w += (deltas[0]+1)) {
-		    for (int b = 0; b < numComponents; b++) {
-    
-			// Helper macro for indexing:
-#define I(w,h,b) (b + (w + (h)*prevSize[0])*numComponents)
-    
-			level0[byte] =
-			    (prevLevel[I(w,h,b)] +
-			     prevLevel[I(w,h+deltas[1],b)] +
-			     prevLevel[I(w+deltas[0],h,b)] +
-			     prevLevel[I(w+deltas[0],h+deltas[1],b)]) / 4;
+        // Again, the goal is to minimize space allocated and data
+        // movement.  The same array is re-used for all mipmap levels
+        // (and the level0 array is used if possible).
+
+        const GLubyte *prevLevel = NULL;
+        if (level0 == NULL) {
+            level0 = new unsigned char[newSize[0] * newSize[1] * numComponents];
+            prevLevel = image.getBytes();
+        } else {
+            prevLevel = level0;
+        }
+
+        int     level = 0;
+        SbVec3s curSize = newSize;
+        while (curSize[0] > 1 || curSize[1] > 1) {
+            ++level;
+            SbVec3s prevSize = curSize;
+
+            // When we're box-filtering, we average the 4 pixels
+            // [(curSize),(curSize+deltas)].  If mipmaps have already
+            // bottomed out for a dimension, the delta will be 0,
+            // otherwise the delta will be 1.
+            SbVec2s deltas;
+            if (curSize[0] > 1) {
+                curSize[0] = curSize[0] >> 1;
+                deltas[0] = 1;
+            } else {
+                deltas[0] = 0;
+            }
+            if (curSize[1] > 1) {
+                curSize[1] = curSize[1] >> 1;
+                deltas[1] = 1;
+            } else {
+                deltas[1] = 0;
+            }
+
+            int byte = 0;
+            for (int h = 0; h < prevSize[1]; h += (deltas[1] + 1)) {
+                for (int w = 0; w < prevSize[0]; w += (deltas[0] + 1)) {
+                    for (int b = 0; b < numComponents; b++) {
+
+                        // Helper macro for indexing:
+#define I(w, h, b) (b + (w + (h)*prevSize[0]) * numComponents)
+
+                        level0[byte] =
+                            (prevLevel[I(w, h, b)] +
+                             prevLevel[I(w, h + deltas[1], b)] +
+                             prevLevel[I(w + deltas[0], h, b)] +
+                             prevLevel[I(w + deltas[0], h + deltas[1], b)]) /
+                            4;
 #undef I
-			byte++;
-		    }
-		}
-	    }
-	    // Send level-N mipmap:
-	    glTexImage2D(GL_TEXTURE_2D, level, internalFormat,
-			 curSize[0], curSize[1],
-			 0, (GLenum)format, GL_UNSIGNED_BYTE, level0);
-	    prevLevel = level0;
-	}
+                        byte++;
+                    }
+                }
+            }
+            // Send level-N mipmap:
+            glTexImage2D(GL_TEXTURE_2D, level, internalFormat, curSize[0],
+                         curSize[1], 0, (GLenum)format, GL_UNSIGNED_BYTE,
+                         level0);
+            prevLevel = level0;
+        }
     }
 
     if (buildList) {
-	list->close(state);
+        list->close(state);
     }
 
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);  // Reset to default
-        if (level0 != NULL)
-	   delete [] level0;
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // Reset to default
+    if (level0 != NULL)
+        delete[] level0;
 }

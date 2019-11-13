@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -49,19 +49,19 @@
  |     For info about the structure of SoTransformerDragger:
  |     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
  |     [2] type:    ivNodeKitStructure SoTransformerDragger.
- |     [3] The program prints a diagram of the scene graph and a table with 
+ |     [3] The program prints a diagram of the scene graph and a table with
  |         information about each part.
  |
  |  The following parts in this dragger are created at construction time.
  |  'ResourceName' corresponds to the name of the default geometry for the
  |  part. The dragger's constructor gets the scene graph for 'ResourceName'
- |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).  
+ |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).
  |
  |  Resource Name:                           Part Name:
  |
  |      transformerOverallStyle              - overallStyle
  |
- |  NOTE: for the translators and rotators, 
+ |  NOTE: for the translators and rotators,
  |        numbering refers to a cube-face:
  |        1=top,2=bot,3=lft,4=rit,5=fnt,6=bak
  |
@@ -73,20 +73,20 @@
  |      transformerRotator1Active           - rotator1Active
  |      (ditto for rotator2-rotator6)
  |
- |  
- |  NOTE: for the scalers, 
- |        numbers refer to a corner: 
- |        1=+x+y+z,  2=+x+y-z, 3=+x-y+z, 
- |        4=+x-y-z,  5=-x+y+z,  6=-x+y-z, 
+ |
+ |  NOTE: for the scalers,
+ |        numbers refer to a corner:
+ |        1=+x+y+z,  2=+x+y-z, 3=+x-y+z,
+ |        4=+x-y-z,  5=-x+y+z,  6=-x+y-z,
  |        7=-x-y+z, 8=-x-y-z
  |      transformerScale1		   - scale1
  |      transformerScale1Active            - scale1Active
  |      (ditto for scale2-scale8)
  |
- |  Feedback for translation 
+ |  Feedback for translation
  |      transformerTranslateBoxFeedback             - translateBoxFeedback
  |
- |  Feedback for scaling 
+ |  Feedback for scaling
  |      transformerScaleBoxFeedback             - scaleBoxFeedback
  |
  |  Feedback for <Control> + scaling
@@ -132,8 +132,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TRANSFORMER_DRAGGER_
-#define  _SO_TRANSFORMER_DRAGGER_
+#ifndef _SO_TRANSFORMER_DRAGGER_
+#define _SO_TRANSFORMER_DRAGGER_
 
 #include <Inventor/SoLists.h>
 #include <Inventor/draggers/SoDragger.h>
@@ -190,7 +190,6 @@ class SoTransformerDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(translator6LocateGroup);
     SO_KIT_CATALOG_ENTRY_HEADER(translator6);
     SO_KIT_CATALOG_ENTRY_HEADER(translator6Active);
-
 
     SO_KIT_CATALOG_ENTRY_HEADER(rotatorSep);
     SO_KIT_CATALOG_ENTRY_HEADER(rotator1Switch);
@@ -308,98 +307,111 @@ class SoTransformerDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(zCircleFeedbackSwitch);
     SO_KIT_CATALOG_ENTRY_HEADER(zCircleFeedback);
 
-
   public:
     // Constructor
     SoTransformerDragger();
 
-    SoSFRotation    rotation;
-    SoSFVec3f       translation;
-    SoSFVec3f       scaleFactor;
-    SoSFFloat       minDiscRotDot; // 0-1, specifies minimum dot product 
-				   // between eyeDir and rotPlane normal before
-				   // switching to cylinder rotation model
-				   // (default = 0.025)
+    SoSFRotation rotation;
+    SoSFVec3f    translation;
+    SoSFVec3f    scaleFactor;
+    SoSFFloat    minDiscRotDot; // 0-1, specifies minimum dot product
+                                // between eyeDir and rotPlane normal before
+                                // switching to cylinder rotation model
+                                // (default = 0.025)
 
-    // Tells the dragger to unsquish its rotation and scale knobs during 
+    // Tells the dragger to unsquish its rotation and scale knobs during
     // the next traversal.
     void unsquishKnobs();
 
     // Controls whether or not locate highlighting is used.
     SbBool isLocateHighlighting() { return locateHighlightOn; }
-    void setLocateHighlighting( SbBool onOff );
+    void   setLocateHighlighting(SbBool onOff);
 
     static void setColinearThreshold(int newVal) { colinearThreshold = newVal; }
-    static int getColinearThreshold() { return colinearThreshold; }
+    static int  getColinearThreshold() { return colinearThreshold; }
 
-  SoEXTENDER public:
-
+    SoEXTENDER
+  public:
     // These convert points and directions from the space of the unit
     // box to world space. Can be useful during callbacks.
-    SbVec3f getBoxPointInWorldSpace( const SbVec3f &pointOnUnitBox );
-    SbVec3f getBoxDirInWorldSpace( const SbVec3f &dirOnUnitBox );
-    SbVec3f getWorldPointInBoxSpace( const SbVec3f &pointInWorldSpace );
-    SbVec2f getWorldPointInPixelSpace( const SbVec3f &thePoint );
+    SbVec3f getBoxPointInWorldSpace(const SbVec3f &pointOnUnitBox);
+    SbVec3f getBoxDirInWorldSpace(const SbVec3f &dirOnUnitBox);
+    SbVec3f getWorldPointInBoxSpace(const SbVec3f &pointInWorldSpace);
+    SbVec2f getWorldPointInPixelSpace(const SbVec3f &thePoint);
 
     // Callbacks would like to know this sometimes.
-    // It's the location in bbox space of the point about which the 
-    // transformer is rotating or scaling.  It's different depending on 
+    // It's the location in bbox space of the point about which the
+    // transformer is rotating or scaling.  It's different depending on
     // which part is picked (determined by getCurrentState()) and
     // which modifier keys are down.
-    SbVec3f getInteractiveCenterInBoxSpace() 
-		{ return interactiveCenterInBoxSpace; }
+    SbVec3f getInteractiveCenterInBoxSpace() {
+        return interactiveCenterInBoxSpace;
+    }
 
-  SoINTERNAL public:
-    static void		initClass();	// initialize the class
+    SoINTERNAL
+  public:
+    static void initClass(); // initialize the class
 
-    enum State
-	{ INACTIVE, 
-	   RIT_X_ROTATE,  TOP_Y_ROTATE,  FNT_Z_ROTATE, 
-	   LFT_X_ROTATE,  BOT_Y_ROTATE,  BAK_Z_ROTATE, 
+    enum State {
+        INACTIVE,
+        RIT_X_ROTATE,
+        TOP_Y_ROTATE,
+        FNT_Z_ROTATE,
+        LFT_X_ROTATE,
+        BOT_Y_ROTATE,
+        BAK_Z_ROTATE,
 
-	  PX_PY_PZ_3D_SCALE, PX_PY_NZ_3D_SCALE, PX_NY_PZ_3D_SCALE, 
-	  PX_NY_NZ_3D_SCALE, NX_PY_PZ_3D_SCALE, NX_PY_NZ_3D_SCALE, 
-	  NX_NY_PZ_3D_SCALE, NX_NY_NZ_3D_SCALE, 
+        PX_PY_PZ_3D_SCALE,
+        PX_PY_NZ_3D_SCALE,
+        PX_NY_PZ_3D_SCALE,
+        PX_NY_NZ_3D_SCALE,
+        NX_PY_PZ_3D_SCALE,
+        NX_PY_NZ_3D_SCALE,
+        NX_NY_PZ_3D_SCALE,
+        NX_NY_NZ_3D_SCALE,
 
-	  RIT_TRANSLATE,  TOP_TRANSLATE,  FNT_TRANSLATE,
-	  LFT_TRANSLATE,  BOT_TRANSLATE,  BAK_TRANSLATE };
+        RIT_TRANSLATE,
+        TOP_TRANSLATE,
+        FNT_TRANSLATE,
+        LFT_TRANSLATE,
+        BOT_TRANSLATE,
+        BAK_TRANSLATE
+    };
 
     State getCurrentState() { return currentState; }
 
   protected:
-
     // Callbacks for drag start, motion, and finish
-    static void startCB( void *, SoDragger * );
-    static void motionCB( void *, SoDragger * );
-    static void finishCB( void *, SoDragger * );
-    
+    static void startCB(void *, SoDragger *);
+    static void motionCB(void *, SoDragger *);
+    static void finishCB(void *, SoDragger *);
+
     SoFieldSensor *translFieldSensor;
     SoFieldSensor *scaleFieldSensor;
     SoFieldSensor *rotateFieldSensor;
-    static void   fieldSensorCB( void *, SoSensor * );
-    static void valueChangedCB( void *, SoDragger * );
+    static void    fieldSensorCB(void *, SoSensor *);
+    static void    valueChangedCB(void *, SoDragger *);
 
     // Callbacks for pressing and releasing the meta keys
-    static void	metaKeyChangeCB( void *, SoDragger *);
+    static void metaKeyChangeCB(void *, SoDragger *);
 
     // These really do the work during startCB, motionCB, and finishCB
-    void	dragStart();
-    void	drag();
-    void	dragFinish();
+    void dragStart();
+    void drag();
+    void dragFinish();
 
     // Sets switch values for all parts in the scale, rotate, and translate
     // assemblies.
-    void setAllPartSwitches( int     scaleAssemblyWhich,
-			     int    rotateAssemblyWhich,
-			     int translateAssemblyWhich );
+    void setAllPartSwitches(int scaleAssemblyWhich, int rotateAssemblyWhich,
+                            int translateAssemblyWhich);
 
     // detach/attach any sensors, callbacks, and/or field connections.
     // Called by:            start/end of SoBaseKit::readInstance
     // and on new copy by:   start/end of SoBaseKit::copy.
-    // Classes that redefine must call setUpConnections(TRUE,TRUE) 
+    // Classes that redefine must call setUpConnections(TRUE,TRUE)
     // at end of constructor.
     // Returns the state of the node when this was called.
-    virtual SbBool setUpConnections( SbBool onOff, SbBool doItAlways = FALSE );
+    virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
 
     virtual void setDefaultOnNonWritingFields();
 
@@ -410,77 +422,77 @@ class SoTransformerDragger : public SoDragger {
     // Tells all nodes in the antiSquishList to recalculate next time through.
     SoNodeList antiSquishList;
 
-    int    getMouseGestureDirection(SbBool xAllowed, SbBool yAllowed, 
-				    SbBool zAllowed);
+    int getMouseGestureDirection(SbBool xAllowed, SbBool yAllowed,
+                                 SbBool zAllowed);
 
-    static int getIgnoreAxis(SbVec2f axis[3][2], SbBool xAllowed, 
-			     SbBool yAllowed, SbBool zAllowed );
+    static int getIgnoreAxis(SbVec2f axis[3][2], SbBool xAllowed,
+                             SbBool yAllowed, SbBool zAllowed);
 
-    static void makeMinorAxisPerpendicularIfColinear( SbVec2f origin, 
-		    SbVec2f axisEnds[3][2], int indexA, int indexB );
+    static void makeMinorAxisPerpendicularIfColinear(SbVec2f origin,
+                                                     SbVec2f axisEnds[3][2],
+                                                     int indexA, int indexB);
 
     static SbBool isColinear(SbVec2f a1[2], SbVec2f a2[2], int pixels);
 
   private:
-
-    State		currentState;     
-    int                 currentDir;   // Used for 1-D operations,
-				        // this variable records the current
-				        // axis being used.
-    // when doing 1-D rot, can rotate as disc (like spinning a turntable) or 
+    State currentState;
+    int   currentDir; // Used for 1-D operations,
+                      // this variable records the current
+                      // axis being used.
+    // when doing 1-D rot, can rotate as disc (like spinning a turntable) or
     // cylinder (like rolling a rolling pin). This flag says which.
-    SbBool              rotatingAsDisc;
+    SbBool rotatingAsDisc;
 
-    SbPlaneProjector           *planeProj;
-    SbLineProjector            *lineProj;
-    SbSphereSectionProjector   *sphereProj;
-    SbCylinderPlaneProjector   *cylProj;
+    SbPlaneProjector *        planeProj;
+    SbLineProjector *         lineProj;
+    SbSphereSectionProjector *sphereProj;
+    SbCylinderPlaneProjector *cylProj;
 
-    State	    restartState;   // used by meta callback. 
-    SbVec3f         worldRestartPt; // used during interaction
+    State   restartState;   // used by meta callback.
+    SbVec3f worldRestartPt; // used during interaction
 
     SbMatrix prevMotionMatrix; // used during rotate interaction
     SbVec3f  prevWorldHitPt;   // used during rotate and translate interaction
     SbVec3f  interactiveCenterInBoxSpace; // used during rotations.
 
     // used to reset prevWorldHitPt after initializing the cylinder projector.
-    // Need to store during rotateInit() since SoDragger provides no method 
+    // Need to store during rotateInit() since SoDragger provides no method
     // to retrieve.
-    SbVec2f  startNormalizedLocaterPosition; 
+    SbVec2f startNormalizedLocaterPosition;
 
-    SbBool          altDown, ctlDown, shftDown;  // used to keep track of
-						 // which meta keys were down.
+    SbBool altDown, ctlDown, shftDown; // used to keep track of
+                                       // which meta keys were down.
     SbBool constraining; // Depends on state of shftDown and which part picked.
 
     // functions which do all the work
-    void	setHighlights();
-    void	setFeedback();
-    void	setFeedbackForTranslate();
-    void	setFeedbackForScale();
-    void	setFeedbackForRotate();
+    void setHighlights();
+    void setFeedback();
+    void setFeedbackForTranslate();
+    void setFeedbackForScale();
+    void setFeedbackForRotate();
 
-    State               getStateFromPick();
-    SbBool		translateInit();
-    SbBool		rotateInit();
-    SbBool		scaleInit();
+    State  getStateFromPick();
+    SbBool translateInit();
+    SbBool rotateInit();
+    SbBool scaleInit();
 
-    SbBool		translateDrag();
-    SbBool		scaleDrag();
+    SbBool translateDrag();
+    SbBool scaleDrag();
 
-    SbBool		rotateDrag();
-    SbBool		rotateConstrainedDrag();
-    SbBool		rotateConstrainedDiscDrag();
-    SbBool		rotateConstrainedCylindricalDrag();
+    SbBool rotateDrag();
+    SbBool rotateConstrainedDrag();
+    SbBool rotateConstrainedDiscDrag();
+    SbBool rotateConstrainedCylindricalDrag();
 
     void initSphereProjector();
     void initDiscProjector();
     void initCylinderProjector();
 
     SbBool getShouldRotateAsDisc();
-    int getConstrainedRotationAxis();
+    int    getConstrainedRotationAxis();
 
     // character strings from which the shared geometry is read
-    static const unsigned char geomBuffer[];		
+    static const unsigned char geomBuffer[];
 
     void setAllDefaultParts();
 

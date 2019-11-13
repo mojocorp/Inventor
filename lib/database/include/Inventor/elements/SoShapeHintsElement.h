@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_SHAPE_HINTS_ELEMENT
-#define  _SO_SHAPE_HINTS_ELEMENT
+#ifndef _SO_SHAPE_HINTS_ELEMENT
+#define _SO_SHAPE_HINTS_ELEMENT
 
 #include <Inventor/elements/SoReplacedElement.h>
 
@@ -68,76 +68,78 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoShapeHintsElement : public SoElement {
+SoEXTENDER
+class SoShapeHintsElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoShapeHintsElement);
 
   public:
-    enum VertexOrdering {	// Hints about ordering of face vertices:
-	UNKNOWN_ORDERING,	//	No ordering info is known
-	CLOCKWISE,		//	Vertices are ordered CW around faces
-	COUNTERCLOCKWISE,	//	Vertices are ordered CCW around faces
-	ORDERING_AS_IS		//	Indicates to set() to leave as is
+    enum VertexOrdering { // Hints about ordering of face vertices:
+        UNKNOWN_ORDERING, //	No ordering info is known
+        CLOCKWISE,        //	Vertices are ordered CW around faces
+        COUNTERCLOCKWISE, //	Vertices are ordered CCW around faces
+        ORDERING_AS_IS    //	Indicates to set() to leave as is
     };
 
-    enum ShapeType {		// Hints about entire shape:
-	UNKNOWN_SHAPE_TYPE,	//	Nothing is known about shape
-	SOLID,			//	Shape is known to be solid
-	SHAPE_TYPE_AS_IS	//	Indicates to set() to leave as is
+    enum ShapeType {        // Hints about entire shape:
+        UNKNOWN_SHAPE_TYPE, //	Nothing is known about shape
+        SOLID,              //	Shape is known to be solid
+        SHAPE_TYPE_AS_IS    //	Indicates to set() to leave as is
     };
 
-    enum FaceType {		// Hints about faces of shape:
-	UNKNOWN_FACE_TYPE,	//	Nothing is known about faces
-	CONVEX,			//	Faces are all convex
-	FACE_TYPE_AS_IS		//	Indicates to set() to leave as is
+    enum FaceType {        // Hints about faces of shape:
+        UNKNOWN_FACE_TYPE, //	Nothing is known about faces
+        CONVEX,            //	Faces are all convex
+        FACE_TYPE_AS_IS    //	Indicates to set() to leave as is
     };
 
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the current shape hints in the state.  Calls virtual
     // method that subclasses can override.
-    static void		set(SoState *state, VertexOrdering vertexOrdering,
-			    ShapeType shapeType, FaceType faceType);
+    static void set(SoState *state, VertexOrdering vertexOrdering,
+                    ShapeType shapeType, FaceType faceType);
 
     // Returns current shape hints from the state
-    static void		get(SoState *state,
-			    VertexOrdering &vertexOrdering,
-			    ShapeType &shapeType, FaceType &faceType);
+    static void get(SoState *state, VertexOrdering &vertexOrdering,
+                    ShapeType &shapeType, FaceType &faceType);
 
     // Returns each default hint
-    static VertexOrdering getDefaultVertexOrdering() {return UNKNOWN_ORDERING;}
-    static ShapeType	  getDefaultShapeType()  { return UNKNOWN_SHAPE_TYPE; }
-    static FaceType	  getDefaultFaceType()   { return CONVEX; }
+    static VertexOrdering getDefaultVertexOrdering() {
+        return UNKNOWN_ORDERING;
+    }
+    static ShapeType getDefaultShapeType() { return UNKNOWN_SHAPE_TYPE; }
+    static FaceType  getDefaultFaceType() { return CONVEX; }
 
     // Push copies the values from the previous element, so set
     // doesn't have to set them if they are set AS_IS.
-    virtual void	push(SoState *state);
+    virtual void push(SoState *state);
 
     // Returns TRUE if the hints match in both elements
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
     // Create and return a copy of this element
-    virtual SoElement	*copyMatchInfo() const;
+    virtual SoElement *copyMatchInfo() const;
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoShapeHintsElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     // Virtual set methods that subclasses can override.
-    virtual void	setElt(VertexOrdering vertexOrdering,
-			       ShapeType shapeType, FaceType faceType);
+    virtual void setElt(VertexOrdering vertexOrdering, ShapeType shapeType,
+                        FaceType faceType);
 
-    VertexOrdering	vertexOrdering;
-    ShapeType		shapeType;
-    FaceType		faceType;
+    VertexOrdering vertexOrdering;
+    ShapeType      shapeType;
+    FaceType       faceType;
 
     virtual ~SoShapeHintsElement();
 };
 
 #endif /* _SO_SHAPE_HINTS_ELEMENT */
-

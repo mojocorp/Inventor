@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,8 +67,7 @@ SO_ELEMENT_SOURCE(SoGLPointSizeElement);
 // Use: internal
 
 void
-SoGLPointSizeElement::initClass()
-{
+SoGLPointSizeElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLPointSizeElement, SoPointSizeElement);
 }
 
@@ -82,8 +81,7 @@ SoGLPointSizeElement::initClass()
 SoGLPointSizeElement::~SoGLPointSizeElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -105,7 +103,6 @@ SoGLPointSizeElement::init(SoState *_state)
     // Save the state so we can get the SoViewportRegionElement when
     // we send the point size to GL
     state = _state;
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -120,8 +117,8 @@ SoGLPointSizeElement::push(SoState *_state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLPointSizeElement	*prevElt =
-	(const SoGLPointSizeElement *) getNextInStack();
+    const SoGLPointSizeElement *prevElt =
+        (const SoGLPointSizeElement *)getNextInStack();
 
     data = prevElt->data;
 
@@ -151,12 +148,11 @@ SoGLPointSizeElement::pop(SoState *state, const SoElement *childElt)
     copiedFromParent = FALSE;
 
     // If the previous element didn't have the same value...
-    const SoGLPointSizeElement *child =
-	(const SoGLPointSizeElement *) childElt;
-	
+    const SoGLPointSizeElement *child = (const SoGLPointSizeElement *)childElt;
+
     // Restore previous point size
     if (data != child->data)
-	send();
+        send();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -177,14 +173,12 @@ SoGLPointSizeElement::setElt(float size)
     // previous element.
 
     if (data != size) {
-	data = size;
-	send();
-	copiedFromParent = FALSE;
-    }
-    else if (copiedFromParent) {
-	SoGLPointSizeElement *parent =
-	    (SoGLPointSizeElement *) getNextInStack();
-	parent->capture(state);
+        data = size;
+        send();
+        copiedFromParent = FALSE;
+    } else if (copiedFromParent) {
+        SoGLPointSizeElement *parent = (SoGLPointSizeElement *)getNextInStack();
+        parent->capture(state);
     }
 }
 
@@ -200,16 +194,16 @@ SoGLPointSizeElement::send()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	size;
+    float size;
 
     // If point size is 0 (the default), use the default GL value of 1.0
     if (data == 0.0)
-	size = 1.0;
+        size = 1.0;
 
     // Otherwise, compute the point size to be the appropriate number
     // of pixels, based on the current viewport region data
     else
-	size = data * SoViewportRegionElement::get(state).getPixelsPerPoint();
+        size = data * SoViewportRegionElement::get(state).getPixelsPerPoint();
 
     glPointSize(size);
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_EVENT_
-#define  _SO_EVENT_
+#ifndef _SO_EVENT_
+#define _SO_EVENT_
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbViewportRegion.h>
@@ -64,67 +64,66 @@
 
 class SoEvent {
   public:
-  
     // Constructor and destructor
     SoEvent();
     virtual ~SoEvent();
-    
+
     // returns typeId of this event
-    virtual SoType	getTypeId() const;
-    
+    virtual SoType getTypeId() const;
+
     // typeId of the class
-    static SoType	getClassTypeId() { return classTypeId; }
-    
+    static SoType getClassTypeId() { return classTypeId; }
+
     // returns TRUE if event is of given type or is derived from it
-    SbBool		isOfType(SoType type) const;
-    
+    SbBool isOfType(SoType type) const;
+
     // returns the time stamp specifying when this event occurred
-    void		setTime(SbTime t)		{ timestamp = t; }
-    SbTime		getTime() const			{ return timestamp; }
-    
+    void   setTime(SbTime t) { timestamp = t; }
+    SbTime getTime() const { return timestamp; }
+
     // set/get window pixel position of the locator when the event occurred.
     // position is relative to the lower left corner of the viewport
-    void		setPosition(const SbVec2s &p)	{ position = p; }
-    const SbVec2s &	getPosition() const		{ return position; }
+    void           setPosition(const SbVec2s &p) { position = p; }
+    const SbVec2s &getPosition() const { return position; }
 
     // get position reletive to the specified viewport bounds
-    const SbVec2s &	getPosition(const SbViewportRegion &vpRgn) const;
+    const SbVec2s &getPosition(const SbViewportRegion &vpRgn) const;
 
     // get position reletive to the specified viewport bounds
     // and normalize this value between 0.0 and 1.0
-    const SbVec2f & getNormalizedPosition(const SbViewportRegion &vpRgn) const;
+    const SbVec2f &getNormalizedPosition(const SbViewportRegion &vpRgn) const;
 
     // set the state of the modifier keys when the event occurred
-    void		setShiftDown(SbBool isDown)	{ shiftDown = isDown; }
-    void		setCtrlDown(SbBool isDown)	{ ctrlDown = isDown; }
-    void		setAltDown(SbBool isDown)	{ altDown = isDown; }
-    
+    void setShiftDown(SbBool isDown) { shiftDown = isDown; }
+    void setCtrlDown(SbBool isDown) { ctrlDown = isDown; }
+    void setAltDown(SbBool isDown) { altDown = isDown; }
+
     // return the state of the modifier keys when the event occurred
-    SbBool		wasShiftDown() const		{ return shiftDown; }
-    SbBool		wasCtrlDown() const		{ return ctrlDown; }
-    SbBool		wasAltDown() const		{ return altDown; }
-    
-  SoINTERNAL public:
+    SbBool wasShiftDown() const { return shiftDown; }
+    SbBool wasCtrlDown() const { return ctrlDown; }
+    SbBool wasAltDown() const { return altDown; }
+
+    SoINTERNAL
+  public:
     // Initializes base event class
-    static void		initClass();
+    static void initClass();
 
     // Initialize ALL Inventor event classes
-    static void		initClasses();
+    static void initClasses();
     static void finishClasses();
-    
+
   private:
     // all of these are set according to when the event occurred
-    SbTime		timestamp;  // time the event occurred
-    SbBool		shiftDown;  // TRUE if shift key was down 
-    SbBool		ctrlDown;   // TRUE if ctrl key was down 
-    SbBool		altDown;    // TRUE if alt key was down 
+    SbTime timestamp; // time the event occurred
+    SbBool shiftDown; // TRUE if shift key was down
+    SbBool ctrlDown;  // TRUE if ctrl key was down
+    SbBool altDown;   // TRUE if alt key was down
 
-    SbVec2s		position;   // locator position when event occurred
-    SbVec2s		viewportPos;	// position relative to viewport
-    SbVec2f		normalizedPos;	// normalized position
+    SbVec2s position;      // locator position when event occurred
+    SbVec2s viewportPos;   // position relative to viewport
+    SbVec2f normalizedPos; // normalized position
 
-    static SoType	classTypeId; // base typeId for all events
+    static SoType classTypeId; // base typeId for all events
 };
-
 
 #endif /* _SO_EVENT_ */

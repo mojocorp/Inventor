@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TEXT_2_
-#define  _SO_TEXT_2_
+#ifndef _SO_TEXT_2_
+#define _SO_TEXT_2_
 
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -79,46 +79,47 @@ class SoText2 : public SoShape {
     SO_NODE_HEADER(SoText2);
 
   public:
-    enum Justification {		// Justification types
-	LEFT	= 0x01,
-	RIGHT	= 0x02,
-	CENTER	= 0x03
+    enum Justification { // Justification types
+        LEFT = 0x01,
+        RIGHT = 0x02,
+        CENTER = 0x03
     };
 
     // Fields
-    SoMFString		string;		// the strings to display
-    SoSFFloat		spacing;	// interval between strings
-    SoSFEnum		justification;
+    SoMFString string;  // the strings to display
+    SoSFFloat  spacing; // interval between strings
+    SoSFEnum   justification;
 
     // Constructor
     SoText2();
 
-  SoEXTENDER public:
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
+    SoEXTENDER
+  public:
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void rayPick(SoRayPickAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // This method is a no-op for SoText2, since there are no
     // primitives it can generate
-    virtual void	generatePrimitives(SoAction *action);
+    virtual void generatePrimitives(SoAction *action);
 
     // Computes bounding box of text
-    virtual void	computeBBox(SoAction *action, SbBox3f &box,
-				    SbVec3f &center);
+    virtual void computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center);
 
     virtual ~SoText2();
 
   private:
     // Based on justification and line spacing, this returns the
     // offset (in pixels) for one of the lines of text.
-    SbVec3f		getPixelStringOffset(int whichLine);
+    SbVec3f getPixelStringOffset(int whichLine);
 
     // Internal class that allows Text2 nodes to share font
     // information, GL display lists, etc.
-    SoBitmapFontCache	*fontCache;
+    SoBitmapFontCache *fontCache;
 };
 
 #endif /* _SO_TEXT_2_ */

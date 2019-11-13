@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -110,8 +110,8 @@ SoSFEngine::~SoSFEngine()
 ////////////////////////////////////////////////////////////////////////
 {
     if (value != NULL) {
-	value->removeAuditor(this, SoNotRec::FIELD);
-	value->unref();
+        value->removeAuditor(this, SoNotRec::FIELD);
+        value->unref();
     }
 }
 
@@ -139,7 +139,7 @@ SoSFEngine::setValue(SoEngine *newValue)
 // Use: public
 
 int
-SoSFEngine::operator ==(const SoSFEngine &f) const
+SoSFEngine::operator==(const SoSFEngine &f) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -158,26 +158,25 @@ SoSFEngine::readValue(SoInput *in)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbName	name;
-    SoBase	*base;
+    SbName  name;
+    SoBase *base;
 
     // See if it's a null pointer
     if (in->read(name)) {
-	if (name == "NULL") {
-	    setVal(NULL);
-	    return TRUE;
-	}
-	else
-	    in->putBack(name.getString());
-    }
-    
-    // Read engine
-    if (! SoBase::read(in, base, SoEngine::getClassTypeId())) {
-	setVal(NULL);
-	return FALSE;
+        if (name == "NULL") {
+            setVal(NULL);
+            return TRUE;
+        } else
+            in->putBack(name.getString());
     }
 
-    setVal((SoEngine *) base);
+    // Read engine
+    if (!SoBase::read(in, base, SoEngine::getClassTypeId())) {
+        setVal(NULL);
+        return FALSE;
+    }
+
+    setVal((SoEngine *)base);
 
     return TRUE;
 }
@@ -200,7 +199,7 @@ SoSFEngine::countWriteRefs(SoOutput *out) const
 
     // Count engine
     if (value != NULL)
-	value->addWriteReference(out);
+        value->addWriteReference(out);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -216,9 +215,9 @@ SoSFEngine::writeValue(SoOutput *out) const
 ////////////////////////////////////////////////////////////////////////
 {
     if (value != NULL)
-	value->writeInstance(out);
+        value->writeInstance(out);
     else
-	out->write("NULL");
+        out->write("NULL");
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -236,23 +235,23 @@ SoSFEngine::setVal(SoEngine *newValue)
 {
     // Play it safe if we are replacing one pointer with the same pointer
     if (newValue != NULL)
-	newValue->ref();
+        newValue->ref();
 
     // Get rid of old engine, if any
     if (value != NULL) {
-	value->removeAuditor(this, SoNotRec::FIELD);
-	value->unref();
+        value->removeAuditor(this, SoNotRec::FIELD);
+        value->unref();
     }
 
     value = newValue;
 
     if (value != NULL) {
-	value->ref();
-	value->addAuditor(this, SoNotRec::FIELD);
+        value->ref();
+        value->addAuditor(this, SoNotRec::FIELD);
     }
 
     if (newValue != NULL)
-	newValue->unref();
+        newValue->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -269,10 +268,10 @@ SoSFEngine::fixCopy(SbBool copyConnections)
 ////////////////////////////////////////////////////////////////////////
 {
     if (value != NULL) {
-	SoEngine *engineCopy =
-	    (SoEngine *) SoFieldContainer::findCopy(value, copyConnections);
-	if (engineCopy != NULL)
-	    setVal(engineCopy);
+        SoEngine *engineCopy =
+            (SoEngine *)SoFieldContainer::findCopy(value, copyConnections);
+        if (engineCopy != NULL)
+            setVal(engineCopy);
     }
 }
 
@@ -290,5 +289,5 @@ SoSFEngine::referencesCopy() const
 {
     // Do the normal test, and also see if the stored engine is a copy
     return (SoSField::referencesCopy() ||
-	    (value != NULL && SoFieldContainer::checkCopy(value) != NULL));
+            (value != NULL && SoFieldContainer::checkCopy(value) != NULL));
 }

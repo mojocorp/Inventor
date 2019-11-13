@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_BBOX_MODEL_MATRIX_ELEMENT
-#define  _SO_BBOX_MODEL_MATRIX_ELEMENT
+#ifndef _SO_BBOX_MODEL_MATRIX_ELEMENT
+#define _SO_BBOX_MODEL_MATRIX_ELEMENT
 
 #include <Inventor/elements/SoModelMatrixElement.h>
 
@@ -72,21 +72,22 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoBBoxModelMatrixElement : public SoModelMatrixElement {
+SoEXTENDER
+class SoBBoxModelMatrixElement : public SoModelMatrixElement {
 
     SO_ELEMENT_HEADER(SoBBoxModelMatrixElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Overrides push() method to copy values from next instance in the stack
-    virtual void	push(SoState *state);
+    virtual void push(SoState *state);
 
     // Allows the SoGetBoundingBoxAction to reset the current model
     // matrix to identity and all currently-open local matrices to
     // identity
-    static void		reset(SoState *state, SoNode *node);
+    static void reset(SoState *state, SoNode *node);
 
     // Because two model matrices are kept track of during the
     // getBoundingBoxAction (the local model matrix, used by
@@ -94,40 +95,39 @@ SoEXTENDER class SoBBoxModelMatrixElement : public SoModelMatrixElement {
     // matrix), replacement routines for pushMatrix/popMatrix must be
     // given; TransformSeparator::getBoundingBox uses these methods to
     // correctly keep both matrices up-to-date.
-    static void		pushMatrix(SoState *state,
-				   SbMatrix &matrix,
-				   SbMatrix &localmatrix);
-    static void		popMatrix(SoState *state,
-				   const SbMatrix &matrix,
-				   const SbMatrix &localmatrix);
+    static void pushMatrix(SoState *state, SbMatrix &matrix,
+                           SbMatrix &localmatrix);
+    static void popMatrix(SoState *state, const SbMatrix &matrix,
+                          const SbMatrix &localmatrix);
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoBBoxModelMatrixElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     // These all override the methods on SoModelMatrixElement to also
     // set the SoLocalBBoxMatrixElement
-    virtual void	makeEltIdentity();
-    virtual void	setElt(const SbMatrix &matrix);
-    virtual void	multElt(const SbMatrix &matrix);
-    virtual void	translateEltBy(const SbVec3f &translation);
-    virtual void	rotateEltBy(const SbRotation &translation);
-    virtual void	scaleEltBy(const SbVec3f &scaleFactor);
+    virtual void makeEltIdentity();
+    virtual void setElt(const SbMatrix &matrix);
+    virtual void multElt(const SbMatrix &matrix);
+    virtual void translateEltBy(const SbVec3f &translation);
+    virtual void rotateEltBy(const SbRotation &translation);
+    virtual void scaleEltBy(const SbVec3f &scaleFactor);
 
     // These must never be called; they print debug errors if called:
-    virtual SbMatrix	pushMatrixElt();
-    virtual void	popMatrixElt(const SbMatrix &m);
+    virtual SbMatrix pushMatrixElt();
+    virtual void     popMatrixElt(const SbMatrix &m);
 
     virtual ~SoBBoxModelMatrixElement();
 
   private:
     // Stores pointer to state so we can access the SoLocalBBoxMatrixElement
-    SoState		*state;
+    SoState *state;
 
     // This is used to make sure the pushMatrix/popMatrix methods are
     // called correctly.
-    static SbBool	pushPopCallOK;
+    static SbBool pushPopCallOK;
 };
 
 #endif /* _SO_BBOX_MODEL_MATRIX_ELEMENT */

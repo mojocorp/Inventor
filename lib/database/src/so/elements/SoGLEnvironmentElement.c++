@@ -67,8 +67,7 @@ SO_ELEMENT_SOURCE(SoGLEnvironmentElement);
 SoGLEnvironmentElement::~SoGLEnvironmentElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -113,7 +112,8 @@ SoGLEnvironmentElement::push(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLEnvironmentElement *prevElt = (const SoGLEnvironmentElement*)getNextInStack();
+    const SoGLEnvironmentElement *prevElt =
+        (const SoGLEnvironmentElement *)getNextInStack();
 
     ambientIntensity = prevElt->ambientIntensity;
     ambientColor = prevElt->ambientColor;
@@ -144,13 +144,12 @@ SoGLEnvironmentElement::pop(SoState *state, const SoElement *childElt)
     capture(state);
 
     // If the previous element didn't have the same value...
-    const SoGLEnvironmentElement *child =	(const SoGLEnvironmentElement*)childElt;
+    const SoGLEnvironmentElement *child =
+        (const SoGLEnvironmentElement *)childElt;
     if (ambientIntensity != child->ambientIntensity ||
         ambientColor != child->ambientColor ||
-        attenuation != child->attenuation ||
-        fogType != child->fogType ||
-        fogColor != child->fogColor ||
-        fogVisibility != child->fogVisibility)
+        attenuation != child->attenuation || fogType != child->fogType ||
+        fogColor != child->fogColor || fogVisibility != child->fogVisibility)
         send();
 }
 
@@ -162,11 +161,10 @@ SoGLEnvironmentElement::pop(SoState *state, const SoElement *childElt)
 // Use: protected, virtual
 
 void
-SoGLEnvironmentElement::setElt(float _ambientIntensity,
+SoGLEnvironmentElement::setElt(float          _ambientIntensity,
                                const SbColor &_ambientColor,
                                const SbVec3f &_attenuation,
-                               const int32_t _fogType,
-                               const SbColor &_fogColor,
+                               const int32_t _fogType, const SbColor &_fogColor,
                                float _fogVisibility)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -204,7 +202,7 @@ SoGLEnvironmentElement::send()
     //
     // Set up fog.
     //
-    FogType	type = (FogType) fogType;
+    FogType type = (FogType)fogType;
 
     if (type == NONE) {
         glDisable(GL_FOG);
@@ -220,20 +218,20 @@ SoGLEnvironmentElement::send()
 
         case HAZE:
             // Set up linear ramp based on visibility
-            glFogf(GL_FOG_MODE,		GL_LINEAR);
-            glFogf(GL_FOG_START,	0.0);
-            glFogf(GL_FOG_END,		fogVisibility);
+            glFogf(GL_FOG_MODE, GL_LINEAR);
+            glFogf(GL_FOG_START, 0.0);
+            glFogf(GL_FOG_END, fogVisibility);
             break;
 
         case FOG:
             glEnable(GL_FOG);
-            glFogf(GL_FOG_MODE,		GL_EXP);
-            glFogf(GL_FOG_DENSITY,	computeDensity(fogVisibility, FALSE));
+            glFogf(GL_FOG_MODE, GL_EXP);
+            glFogf(GL_FOG_DENSITY, computeDensity(fogVisibility, FALSE));
             break;
 
         case SMOKE:
-            glFogf(GL_FOG_MODE,		GL_EXP2);
-            glFogf(GL_FOG_DENSITY,	computeDensity(fogVisibility, TRUE));
+            glFogf(GL_FOG_MODE, GL_EXP2);
+            glFogf(GL_FOG_DENSITY, computeDensity(fogVisibility, TRUE));
             break;
         }
     }

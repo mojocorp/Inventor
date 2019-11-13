@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -69,23 +69,23 @@
 #include "fields/SoGlobalField.h"
 
 // The global name dictionaries
-std::map<SbName, std::vector<SoBase*> > SoBase::nameObjDict;
-std::map<const SoBase*, SbName> SoBase::objNameDict;
+std::map<SbName, std::vector<SoBase *> > SoBase::nameObjDict;
+std::map<const SoBase *, SbName>         SoBase::objNameDict;
 
 // Syntax for writing instances to files
-#define OPEN_BRACE		'{'
-#define CLOSE_BRACE		'}'
-#define DEFINITION_KEYWORD	"DEF"
-#define REFERENCE_KEYWORD	"USE"
-#define NULL_KEYWORD		"NULL"
+#define OPEN_BRACE '{'
+#define CLOSE_BRACE '}'
+#define DEFINITION_KEYWORD "DEF"
+#define REFERENCE_KEYWORD "USE"
+#define NULL_KEYWORD "NULL"
 
-SbString	SoBase::instancePrefix = "+";
+SbString SoBase::instancePrefix = "+";
 
-SbBool		SoBase::traceRefs = FALSE;
+SbBool SoBase::traceRefs = FALSE;
 
-SoType		SoBase::classTypeId;
+SoType SoBase::classTypeId;
 
-uint32_t	SoBase::currentWriteCounter = 0;
+uint32_t SoBase::currentWriteCounter = 0;
 
 // This speed up reading a little:
 static SbName *globalFieldName = NULL;
@@ -103,7 +103,6 @@ SoBase::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     classTypeId = SoType::createType(SoType::badType(), "Base");
-
 
     globalFieldName = new SbName("GlobalField");
 }
@@ -145,8 +144,7 @@ SoBase::SoBase()
 
 #ifdef DEBUG
     if (traceRefs)
-	SoDebugError::postInfo("SoBase::SoBase",
-			       "for %#x", (const void *) this);
+        SoDebugError::postInfo("SoBase::SoBase", "for %#x", (const void *)this);
 #endif /* DEBUG */
 }
 
@@ -163,12 +161,12 @@ SoBase::~SoBase()
 {
     const SbName &myName = getName();
     if (myName != "")
-	removeName(this, myName.getString());
+        removeName(this, myName.getString());
 
 #ifdef DEBUG
     if (traceRefs)
-	SoDebugError::postInfo("SoBase::~SoBase",
-			       "for %#x", (const void *) this);
+        SoDebugError::postInfo("SoBase::~SoBase", "for %#x",
+                               (const void *)this);
 #endif /* DEBUG */
 }
 
@@ -186,13 +184,12 @@ SoBase::ref() const
 ////////////////////////////////////////////////////////////////////////
 {
     // This generates a C++ warning.
-    ((SoBase *) this)->refCount++;
+    ((SoBase *)this)->refCount++;
 
 #ifdef DEBUG
     if (traceRefs)
-	SoDebugError::postInfo("SoBase::ref",
-			       "refCount for %#x + => %2d",
-			       (const void *) this, refCount);
+        SoDebugError::postInfo("SoBase::ref", "refCount for %#x + => %2d",
+                               (const void *)this, refCount);
 #endif /* DEBUG */
 }
 
@@ -211,22 +208,21 @@ SoBase::unref() const
 ////////////////////////////////////////////////////////////////////////
 {
     // This generates a C++ warning.
-    SoBase 	*base = (SoBase *) this;
+    SoBase *base = (SoBase *)this;
 
 #ifdef DEBUG
     if (base->refCount <= 0)
-	SoDebugError::postWarning("SoBase::unref",
-				  "instance has reference count <= 0 already");
+        SoDebugError::postWarning("SoBase::unref",
+                                  "instance has reference count <= 0 already");
 
     if (traceRefs)
-	SoDebugError::postInfo("SoBase::unref",
-			       "refCount for %#x - => %2d",
-			       (const void *) this, refCount - 1);
+        SoDebugError::postInfo("SoBase::unref", "refCount for %#x - => %2d",
+                               (const void *)this, refCount - 1);
 #endif /* DEBUG */
 
     if (--base->refCount == 0)
-	// This generates a C++ warning
-	((SoBase *) this)->destroy();
+        // This generates a C++ warning
+        ((SoBase *)this)->destroy();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -244,17 +240,17 @@ SoBase::unrefNoDelete() const
 ////////////////////////////////////////////////////////////////////////
 {
     // This generates a C++ warning.
-    SoBase 	*base = (SoBase *) this;
+    SoBase *base = (SoBase *)this;
 
 #ifdef DEBUG
     if (base->refCount <= 0)
-	SoDebugError::postWarning("SoBase::unrefNoDelete",
-				  "instance has reference count <= 0 already");
+        SoDebugError::postWarning("SoBase::unrefNoDelete",
+                                  "instance has reference count <= 0 already");
 
     if (traceRefs)
-	SoDebugError::postInfo("SoBase::unrefNoDelete",
-			       "refCount for %#x - => %2d",
-			       (const void *) this, refCount - 1);
+        SoDebugError::postInfo("SoBase::unrefNoDelete",
+                               "refCount for %#x - => %2d", (const void *)this,
+                               refCount - 1);
 #endif /* DEBUG */
     base->refCount--;
 }
@@ -267,8 +263,8 @@ SoBase::unrefNoDelete() const
 //
 // Use: public
 
-SbBool					// Returns TRUE or FALSE
-SoBase::isOfType(SoType type) const	// Type inquiring about
+SbBool                              // Returns TRUE or FALSE
+SoBase::isOfType(SoType type) const // Type inquiring about
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -291,13 +287,14 @@ SoBase::getName() const
     if (!writeStuff.hasName)
         return SbName("");
 
-    std::map<const SoBase*, SbName>::const_iterator it = objNameDict.find(this);
+    std::map<const SoBase *, SbName>::const_iterator it =
+        objNameDict.find(this);
     if (it == objNameDict.end()) {
 #ifdef DEBUG
-	SoDebugError::post("SoBase::getName",
-			   "hasName is TRUE, but couldn't find name!\n");
+        SoDebugError::post("SoBase::getName",
+                           "hasName is TRUE, but couldn't find name!\n");
 #endif
-	return SbName("");
+        return SbName("");
     }
     return it->second;
 }
@@ -319,52 +316,55 @@ SoBase::setName(const SbName &newName)
     SbName oldName = getName();
 
     if (oldName.getLength() != 0)
-	removeName(this, oldName.getString());
+        removeName(this, oldName.getString());
 
     // Empty name: leave unnamed.
-    if (newName.getLength() == 0) return;
+    if (newName.getLength() == 0)
+        return;
 
     // Make sure name is legal
     const char *str = newName.getString();
-    SbBool isBad = 0;
+    SbBool      isBad = 0;
 
     // Check for beginning-with-a-number:
-    if (!SbName::isBaseNameStartChar(str[0])) isBad = TRUE;
+    if (!SbName::isBaseNameStartChar(str[0]))
+        isBad = TRUE;
 
     for (size_t i = 1; i < newName.getLength() && !isBad; i++) {
-	isBad = !SbName::isBaseNameChar(str[i]);
+        isBad = !SbName::isBaseNameChar(str[i]);
     }
 
     if (!isBad) {
-	addName(this, str);
-    }
-    else {
-	// Replace bad characters with underscores
-	SbString goodString;
+        addName(this, str);
+    } else {
+        // Replace bad characters with underscores
+        SbString goodString;
 
-	// Prepend underscore if name begins with number:
-	if (!SbName::isBaseNameStartChar(str[0])) {
-	    goodString += "_";
-	}
-	for (size_t i = 0; i < newName.getLength(); i++) {
-	    // Ugly little hack so we can use SbString's += operator,
-	    // which doesn't do char's (only char *'s):
-	    char temp[2];
-	    temp[0] = str[i]; temp[1] = '\0';
-	    if (!SbName::isBaseNameChar(str[i]))
-		goodString += "_";
-	    else
-		goodString += temp;
-	}
+        // Prepend underscore if name begins with number:
+        if (!SbName::isBaseNameStartChar(str[0])) {
+            goodString += "_";
+        }
+        for (size_t i = 0; i < newName.getLength(); i++) {
+            // Ugly little hack so we can use SbString's += operator,
+            // which doesn't do char's (only char *'s):
+            char temp[2];
+            temp[0] = str[i];
+            temp[1] = '\0';
+            if (!SbName::isBaseNameChar(str[i]))
+                goodString += "_";
+            else
+                goodString += temp;
+        }
 #ifdef DEBUG
-	SoDebugError::post("SoBase::setName", "Bad characters in"
-			   " name '%s'.  Replacing with name '%s'",
-			   str, goodString.getString());
-#endif       
-	// MUST create an SbName here to create persistent storage for
-	// the name.
-	SbName goodName(goodString.getString());
-	addName(this, goodName.getString());
+        SoDebugError::post("SoBase::setName",
+                           "Bad characters in"
+                           " name '%s'.  Replacing with name '%s'",
+                           str, goodString.getString());
+#endif
+        // MUST create an SbName here to create persistent storage for
+        // the name.
+        SbName goodName(goodString.getString());
+        addName(this, goodName.getString());
     }
 }
 
@@ -392,24 +392,24 @@ SoBase::destroy()
 
     for (int i = auditors.getLength() - 1; i >= 0; i--) {
 
-	switch (auditors.getType(i)) {
-	  case SoNotRec::SENSOR:
-	    // Tell sensor that we are going away
-	    ((SoDataSensor *) auditors.getObject(i))->dyingReference();
+        switch (auditors.getType(i)) {
+        case SoNotRec::SENSOR:
+            // Tell sensor that we are going away
+            ((SoDataSensor *)auditors.getObject(i))->dyingReference();
 
-	    // The call to dyingReference() might remove auditors,
-	    // shortening the auditors list; make sure we're not
-	    // trying to access past the end.
-	    if (i > auditors.getLength())
-		i = auditors.getLength();
-	    break;
+            // The call to dyingReference() might remove auditors,
+            // shortening the auditors list; make sure we're not
+            // trying to access past the end.
+            if (i > auditors.getLength())
+                i = auditors.getLength();
+            break;
 
-	  default:
-	    SoDebugError::post("(internal) SoBase::destroy",
-			       "Got an auditor of type %d",
-			       (int) auditors.getType(i));
-	    break;
-	}
+        default:
+            SoDebugError::post("(internal) SoBase::destroy",
+                               "Got an auditor of type %d",
+                               (int)auditors.getType(i));
+            break;
+        }
     }
 
     delete this;
@@ -431,55 +431,55 @@ SoBase::writeHeader(SoOutput *out, SbBool isGroup, SbBool isEngine) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool	isBinary = out->isBinary();
+    SbBool isBinary = out->isBinary();
 
     // Cast const away
-    if (! ((SoBase *) this)->shouldWrite())
-	return TRUE;
+    if (!((SoBase *)this)->shouldWrite())
+        return TRUE;
 
-    if (! isBinary)
-	out->indent();
+    if (!isBinary)
+        out->indent();
 
     // If this instance is named, but not multiply referenced, write
     // out the object's name
-    if (getName().getLength() != 0 && ! hasMultipleWriteRefs()) {
-	// We don't need to bother adding this name to the output
-	// dictionary, since this isn't instanced.
-	writeDef(out, -1);
+    if (getName().getLength() != 0 && !hasMultipleWriteRefs()) {
+        // We don't need to bother adding this name to the output
+        // dictionary, since this isn't instanced.
+        writeDef(out, -1);
     }
     // If multiply-referenced, check the dictionary for a previous definition
     else if (hasMultipleWriteRefs()) {
-	int referenceId = out->findReference(this);
+        int referenceId = out->findReference(this);
 
-	// If already defined, write reference
-	if (referenceId != (-1)) {
-	    writeRef(out, referenceId);
-	    return TRUE;
-	}
+        // If already defined, write reference
+        if (referenceId != (-1)) {
+            writeRef(out, referenceId);
+            return TRUE;
+        }
 
-	// Otherwise, add to dictionary and write definition
-	else
-	    writeDef(out, out->addReference(this));
+        // Otherwise, add to dictionary and write definition
+        else
+            writeDef(out, out->addReference(this));
     }
 
     // Write class name
     out->write(getFileFormatName());
 
-    if (! isBinary) {
-	out->write(' ');
-	out->write(OPEN_BRACE);
+    if (!isBinary) {
+        out->write(' ');
+        out->write(OPEN_BRACE);
 
-	writeAnnotation(out);
+        writeAnnotation(out);
 
-	// Prepare for writing insides
-	out->incrementIndent();
+        // Prepare for writing insides
+        out->incrementIndent();
     } else {
-	unsigned short ioFlags = 0x0;
-	if (isEngine)
-	    ioFlags |= IS_ENGINE;
-	if (isGroup)
-	    ioFlags |= IS_GROUP;
-	out->write(ioFlags);
+        unsigned short ioFlags = 0x0;
+        if (isEngine)
+            ioFlags |= IS_ENGINE;
+        if (isGroup)
+            ioFlags |= IS_GROUP;
+        out->write(ioFlags);
     }
 
     return FALSE;
@@ -497,15 +497,15 @@ SoBase::writeFooter(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! out->isBinary()) {
+    if (!out->isBinary()) {
 
-	// Done writing insides
-	out->decrementIndent();
+        // Done writing insides
+        out->decrementIndent();
 
-	// Write footer
-	out->indent();
-	out->write(CLOSE_BRACE);
-	out->write('\n');
+        // Write footer
+        out->indent();
+        out->write(CLOSE_BRACE);
+        out->write('\n');
     }
 }
 
@@ -537,8 +537,8 @@ SoBase::startNotify()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNotRec	rec(this);
-    SoNotList	list;
+    SoNotRec  rec(this);
+    SoNotList list;
 
     // Indicate to the database that a notification is in progress
     SoDB::startNotify();
@@ -602,13 +602,13 @@ SoBase::removeAuditor(void *auditor, SoNotRec::Type type)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	audIndex = auditors.find(auditor, type);
+    int audIndex = auditors.find(auditor, type);
 
 #ifdef DEBUG
     if (audIndex < 0) {
-	SoDebugError::post("SoBase::removeAuditor",
-			   "can't find auditor %#x\n", auditor);
-	return;
+        SoDebugError::post("SoBase::removeAuditor", "can't find auditor %#x\n",
+                           auditor);
+        return;
     }
 #endif /* DEBUG */
 
@@ -637,13 +637,13 @@ SoBase::addName(SoBase *b, const char *name)
 {
     b->writeStuff.hasName = 1;
 
-    std::vector<SoBase*> & list = nameObjDict[name];
+    std::vector<SoBase *> &list = nameObjDict[name];
 #ifdef DEBUG
     // Make sure it isn't already on the list
     if (std::find(list.begin(), list.end(), b) != list.end())
         SoDebugError::post("SoBase::addName",
                            "Base %x with name \"%s\" is already in dictionary",
-                            b, name);
+                           b, name);
 #endif
 
     // Add name to the list:
@@ -671,18 +671,16 @@ SoBase::removeName(SoBase *b, const char *name)
 #ifdef DEBUG
     if (objNameDict.find(b) == objNameDict.end())
         SoDebugError::post("SoBase::removeName",
-                           "Name \"%s\" (base %x) is not in dictionary",
-                           name, b);
+                           "Name \"%s\" (base %x) is not in dictionary", name,
+                           b);
 #endif
 
     // Look for name list
-    std::vector<SoBase*> & list = nameObjDict[name];
+    std::vector<SoBase *> &list = nameObjDict[name];
     list.erase(std::remove(list.begin(), list.end(), b), list.end());
 
     // And remove from objName dict:
     objNameDict.erase(b);
-
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -699,18 +697,18 @@ SoBase::getNamedBase(const SbName &name, SoType type)
 {
 #ifdef DEBUG
     if (nameObjDict.empty()) {
-	SoDebugError::post("SoBase::getName",
-			   "SoDBinit() has not yet been called");
-	return NULL;
+        SoDebugError::post("SoBase::getName",
+                           "SoDBinit() has not yet been called");
+        return NULL;
     }
 #endif
 
     // Lookup the name in the dictionary
-    std::vector<SoBase*> & list = nameObjDict[name];
+    std::vector<SoBase *> &list = nameObjDict[name];
 
     // Search backwards through the list.  Return the last item of the
     // appropriate type.
-    for (int i = list.size()-1; i >= 0; i--) {
+    for (int i = list.size() - 1; i >= 0; i--) {
         SoBase *b = list[i];
         if (b->isOfType(type))
             return b;
@@ -733,20 +731,20 @@ SoBase::getNamedBases(const SbName &name, SoBaseList &result, SoType type)
 {
 #ifdef DEBUG
     if (nameObjDict.empty()) {
-	SoDebugError::post("SoBase::getName",
-			   "SoDBinit() has not yet been called");
-	return 0;
+        SoDebugError::post("SoBase::getName",
+                           "SoDBinit() has not yet been called");
+        return 0;
     }
 #endif
 
     int numAdded = 0;
 
     // Lookup the name in the dictionary
-    std::vector<SoBase*> & list = nameObjDict[name];
+    std::vector<SoBase *> &list = nameObjDict[name];
 
     // Search backwards through the list.  Add all items of the
     // appropriate type to the result list.
-    for (int i = list.size()-1; i >= 0; i--) {
+    for (int i = list.size() - 1; i >= 0; i--) {
         SoBase *b = list[i];
         if (b->isOfType(type)) {
             result.append(b);
@@ -772,44 +770,44 @@ SoBase::read(SoInput *in, SoBase *&base, SoType expectedType)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbName	name;
-    SbBool	ret;
+    SbName name;
+    SbBool ret;
 
     // Read header: name and opening brace. If not found, not an error -
     // just nothing to return.
-    if (! in->read(name, TRUE)) {
-	base = NULL;
+    if (!in->read(name, TRUE)) {
+        base = NULL;
         ret = in->isValidFile();
     }
 
     // If name is empty, treat this as EOF. This happens, for example,
     // when the last child of a group has been read and the '}' is next.
-    else if (! name) {
-	base = NULL;
-	ret = TRUE;
+    else if (!name) {
+        base = NULL;
+        ret = TRUE;
     }
 
     // Check for special case of name "NULL", indicating a NULL node
     // or path pointer. (This is used for node and path fields.)
     else if (name == NULL_KEYWORD) {
-	base = NULL;
-	ret = TRUE;
+        base = NULL;
+        ret = TRUE;
     }
 
     // Check for reference to existing node/path/function
     else if (name == REFERENCE_KEYWORD)
-	ret = readReference(in, base);
+        ret = readReference(in, base);
     else
-	ret = readBase(in, name, base);
+        ret = readBase(in, name, base);
 
     // Check for type match
     if (base != NULL) {
-	if (! base->isOfType(expectedType)) {
-	    const char *baseName = base->getTypeId().getName().getString();
-	    SoReadError::post(in, "Expected a %s but got a %s",
-			      expectedType.getName().getString(), baseName);
-	    ret = FALSE;
-	}
+        if (!base->isOfType(expectedType)) {
+            const char *baseName = base->getTypeId().getName().getString();
+            SoReadError::post(in, "Expected a %s but got a %s",
+                              expectedType.getName().getString(), baseName);
+            ret = FALSE;
+        }
     }
 
     return ret;
@@ -832,17 +830,17 @@ SoBase::addWriteReference(SoOutput *, SbBool isFromField)
     // If adding a reference from a field-to-field connection, just
     // set that flag to indicate it
     if (isFromField)
-	writeStuff.writeRefFromField = TRUE;
+        writeStuff.writeRefFromField = TRUE;
 
     // Otherwise, update the counter if this is the first reference
     else if (writeStuff.writeCounter != getCurrentWriteCounter()) {
-	writeStuff.writeCounter = getCurrentWriteCounter();
-	writeStuff.multWriteRef = FALSE;
+        writeStuff.writeCounter = getCurrentWriteCounter();
+        writeStuff.multWriteRef = FALSE;
     }
 
     // Otherwise, indicate that we have multiple write references
     else
-	writeStuff.multWriteRef = TRUE;
+        writeStuff.multWriteRef = TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -861,20 +859,20 @@ SoBase::shouldWrite()
     // If there is at least one current write reference
     if (writeStuff.writeCounter == getCurrentWriteCounter()) {
 
-	// If there's also a reference from a field, make sure we know
-	// that we have multiple references and reset the field flag
-	if (writeStuff.writeRefFromField) {
-	    writeStuff.multWriteRef = TRUE;
-	    writeStuff.writeRefFromField = FALSE;
-	}
+        // If there's also a reference from a field, make sure we know
+        // that we have multiple references and reset the field flag
+        if (writeStuff.writeRefFromField) {
+            writeStuff.multWriteRef = TRUE;
+            writeStuff.writeRefFromField = FALSE;
+        }
 
-	return TRUE;
+        return TRUE;
     }
 
     // Ignore cases referenced only from field connections, and reset
     // the flag for next time
     if (writeStuff.writeRefFromField)
-	writeStuff.writeRefFromField = FALSE;
+        writeStuff.writeRefFromField = FALSE;
 
     return FALSE;
 }
@@ -897,23 +895,23 @@ SoBase::writeDef(SoOutput *out, int referenceId) const
 ////////////////////////////////////////////////////////////////////////
 {
     out->write(DEFINITION_KEYWORD);
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     // Assemble the whole identifier at once, so binary writing works
     // properly (it writes the identifier as count followed by the
     // characters).
-    SbString t;
+    SbString      t;
     const SbName &myName = getName();
     if (myName.getLength() != 0)
-	t += myName.getString();
+        t += myName.getString();
     if (referenceId != -1) {
-	t += instancePrefix.getString();
-	t += SbString(referenceId);
+        t += instancePrefix.getString();
+        t += SbString(referenceId);
     }
     out->write(t.getString());
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -931,13 +929,13 @@ SoBase::writeRef(SoOutput *out, int referenceId) const
 ////////////////////////////////////////////////////////////////////////
 {
     out->write(REFERENCE_KEYWORD);
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
-    SbString t;
+    SbString      t;
     const SbName &myName = getName();
     if (myName.getLength() != 0) {
-	t += myName.getString();
+        t += myName.getString();
     }
     t += instancePrefix.getString();
     t += SbString(referenceId);
@@ -960,26 +958,27 @@ SoBase::writeAnnotation(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (out->isBinary()) return;
+    if (out->isBinary())
+        return;
     if (out->getAnnotation()
 #ifdef DEBUG
-	|| traceRefs
+        || traceRefs
 #endif /* DEBUG */
-	) {
-	out->write(" #");
-	if (out->getAnnotation() & SoOutput::ADDRESSES) {
-	    char buf[100];
-	    sprintf(buf, " %p", this);
-	    out->write(buf);
-	}
-	if (out->getAnnotation() & SoOutput::REF_COUNTS
+    ) {
+        out->write(" #");
+        if (out->getAnnotation() & SoOutput::ADDRESSES) {
+            char buf[100];
+            sprintf(buf, " %p", this);
+            out->write(buf);
+        }
+        if (out->getAnnotation() & SoOutput::REF_COUNTS
 #ifdef DEBUG
-	    || traceRefs
+            || traceRefs
 #endif /* DEBUG */
-	    ) {
-	    out->write(" RefCount=");
-	    out->write(refCount);
-	}
+        ) {
+            out->write(" RefCount=");
+            out->write(refCount);
+        }
     }
     out->write('\n');
 }
@@ -998,37 +997,36 @@ SoBase::readReference(SoInput *in, SoBase *&base)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbName	refName;
-    SbBool	ret = TRUE;
+    SbName refName;
+    SbBool ret = TRUE;
 
     // Get name of referenced thing
-    if (! in->read(refName, FALSE)) {
-	SoReadError::post(in, "Premature end of file after "
-			  REFERENCE_KEYWORD);
-	ret = FALSE;
+    if (!in->read(refName, FALSE)) {
+        SoReadError::post(in, "Premature end of file after " REFERENCE_KEYWORD);
+        ret = FALSE;
     }
 
     // Look name up in the dictionary
     else {
-	// Ok, in ASCII we might have read too much-- check for a '.'
-	// in the name, meaning we read the field identifier, too, and
-	// will have to re-figure the name and put back the extra
-	// characters:
-	if ( !in->isBinary()) {
-	    const char *chars = refName.getString();
-	    for (size_t i = 0; i < refName.getLength(); i++) {
-		if (chars[i] == '.') {
-		    in->putBack(chars+i);
-		    refName = SbString(chars, 0, i-1);
-		}
-	    }
-	}
+        // Ok, in ASCII we might have read too much-- check for a '.'
+        // in the name, meaning we read the field identifier, too, and
+        // will have to re-figure the name and put back the extra
+        // characters:
+        if (!in->isBinary()) {
+            const char *chars = refName.getString();
+            for (size_t i = 0; i < refName.getLength(); i++) {
+                if (chars[i] == '.') {
+                    in->putBack(chars + i);
+                    refName = SbString(chars, 0, i - 1);
+                }
+            }
+        }
 
-	if ((base = in->findReference(refName)) == NULL) {
-	    SoReadError::post(in, "Unknown reference \"%s\"",
-			      refName.getString());
-	    ret = FALSE;
-	}
+        if ((base = in->findReference(refName)) == NULL) {
+            SoReadError::post(in, "Unknown reference \"%s\"",
+                              refName.getString());
+            ret = FALSE;
+        }
     }
 
     return ret;
@@ -1047,10 +1045,10 @@ SoBase::readBase(SoInput *in, SbName &className, SoBase *&base)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool		gotChar;
-    SbName		refName;
-    char		c;
-    SbBool		ret = TRUE, flush = FALSE;
+    SbBool gotChar;
+    SbName refName;
+    char   c;
+    SbBool ret = TRUE, flush = FALSE;
 
     // Assume NULL for now
     base = NULL;
@@ -1058,63 +1056,61 @@ SoBase::readBase(SoInput *in, SbName &className, SoBase *&base)
     // Check for definition of new node/path
     if (className == DEFINITION_KEYWORD) {
 
-	if (! in->read(refName, FALSE) || ! in->read(className, TRUE)) {
-	    SoReadError::post(in, "Premature end of file after %s"
-			      DEFINITION_KEYWORD);
-	    ret = FALSE;
-	}
+        if (!in->read(refName, FALSE) || !in->read(className, TRUE)) {
+            SoReadError::post(
+                in, "Premature end of file after %s" DEFINITION_KEYWORD);
+            ret = FALSE;
+        }
 
-	if (! refName) {
-	    SoReadError::post(in, "No name given after %s", DEFINITION_KEYWORD);
-	    ret = FALSE;
-	}
+        if (!refName) {
+            SoReadError::post(in, "No name given after %s", DEFINITION_KEYWORD);
+            ret = FALSE;
+        }
 
-	if (! className) {
-	    SoReadError::post(in, "Invalid definition of %s",
-			      refName.getString());
-	    ret = FALSE;
-	}
+        if (!className) {
+            SoReadError::post(in, "Invalid definition of %s",
+                              refName.getString());
+            ret = FALSE;
+        }
     }
 
     if (ret) {
 
-	// Save whether the file is binary in
-	// case we open another file before we get to the close brace.
-	SbBool isBinary = in->isBinary();
+        // Save whether the file is binary in
+        // case we open another file before we get to the close brace.
+        SbBool isBinary = in->isBinary();
 
-	// Look for open brace.
-	if (!isBinary &&
-	    (! (gotChar = in->read(c)) || c != OPEN_BRACE)) {
-	    if (gotChar)
-		SoReadError::post(in, "Expected '%c'; got '%c'",
-				  OPEN_BRACE, c);
-	    else
-		SoReadError::post(in, "Expected '%c'; got EOF", OPEN_BRACE);
-	    ret = FALSE;
-	}
+        // Look for open brace.
+        if (!isBinary && (!(gotChar = in->read(c)) || c != OPEN_BRACE)) {
+            if (gotChar)
+                SoReadError::post(in, "Expected '%c'; got '%c'", OPEN_BRACE, c);
+            else
+                SoReadError::post(in, "Expected '%c'; got EOF", OPEN_BRACE);
+            ret = FALSE;
+        }
 
-	else {
-	    ret = readBaseInstance(in, className, refName, base);
+        else {
+            ret = readBaseInstance(in, className, refName, base);
 
-	    if (! ret)
-		flush = TRUE;
+            if (!ret)
+                flush = TRUE;
 
-	    // Read closing brace.
-	    else if (! isBinary &&
-		     (! (gotChar = in->read(c)) || c != CLOSE_BRACE)) {
-		if (gotChar)
-		    SoReadError::post(in, "Expected '%c'; got '%c'",
-				      CLOSE_BRACE, c);
-		else
-		    SoReadError::post(in, "Expected '%c'; got EOF",
-				      CLOSE_BRACE);
-		ret = FALSE;
-	    }
-	}
+            // Read closing brace.
+            else if (!isBinary &&
+                     (!(gotChar = in->read(c)) || c != CLOSE_BRACE)) {
+                if (gotChar)
+                    SoReadError::post(in, "Expected '%c'; got '%c'",
+                                      CLOSE_BRACE, c);
+                else
+                    SoReadError::post(in, "Expected '%c'; got EOF",
+                                      CLOSE_BRACE);
+                ret = FALSE;
+            }
+        }
     }
 
-    if (! ret && flush && ! in->isBinary())
-	flushInput(in);
+    if (!ret && flush && !in->isBinary())
+        flushInput(in);
 
     return ret;
 }
@@ -1129,7 +1125,7 @@ SoBase::readBase(SoInput *in, SbName &className, SoBase *&base)
 
 SbBool
 SoBase::readBaseInstance(SoInput *in, const SbName &className,
-			 const SbName &refName, SoBase *&base)
+                         const SbName &refName, SoBase *&base)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1141,7 +1137,7 @@ SoBase::readBaseInstance(SoInput *in, const SbName &className,
     SbBool oldFileFormat = (in->getIVVersion() < 2.1f);
 
     if (isBinary && !oldFileFormat) {
-	in->read(ioFlags);
+        in->read(ioFlags);
     }
 
     // Special case for global fields. Even though the word
@@ -1150,30 +1146,31 @@ SoBase::readBaseInstance(SoInput *in, const SbName &className,
     // twice, the same instance has to be used, so we don't want to
     // create a new instance each time.
     if (className == *globalFieldName) {
-	base = SoGlobalField::read(in);
+        base = SoGlobalField::read(in);
 
-	if (base == NULL) return FALSE;
-	
-	// Store instance in input dictionary if a name was given for
-	// it (do NOT want to add it to the global dictionary; it's
-	// DEF name is not used for that).
-	if (! (!refName))
-	    in->addReference(refName, base, FALSE);
+        if (base == NULL)
+            return FALSE;
 
-	return TRUE;
+        // Store instance in input dictionary if a name was given for
+        // it (do NOT want to add it to the global dictionary; it's
+        // DEF name is not used for that).
+        if (!(!refName))
+            in->addReference(refName, base, FALSE);
+
+        return TRUE;
     }
-    
+
     // And special case for nodes that need conversion from an old
     // version of the file format:
     SoUpgrader *upgrader;
-    if ((upgrader = SoUpgrader::getUpgrader(className, in->getIVVersion()))
-	!= NULL) {
-	    
-	upgrader->ref();
-	SbBool result = upgrader->upgrade(in, refName, base);
-	upgrader->unref();
+    if ((upgrader = SoUpgrader::getUpgrader(className, in->getIVVersion())) !=
+        NULL) {
 
-	return result;
+        upgrader->ref();
+        SbBool result = upgrader->upgrade(in, refName, base);
+        upgrader->unref();
+
+        return result;
     }
 
     // The common case:
@@ -1181,12 +1178,12 @@ SoBase::readBaseInstance(SoInput *in, const SbName &className,
     // Create an instance of named type
     base = createInstance(in, className, ioFlags);
     if (base == NULL)
-	return FALSE;
+        return FALSE;
 
     // Store instance in dictionary if a name was given for it
     // This may also name the base, depending on the form of refName.
-    if (! (!refName))
-	in->addReference(refName, base);
+    if (!(!refName))
+        in->addReference(refName, base);
 
     // Read stuff into instance.  Note that if the node has sensors on
     // its fields,  they might get triggered.  Make sure that the node
@@ -1211,7 +1208,7 @@ SoBase::createInstance(SoInput *in, SbName className, unsigned short ioFlags)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoBase		*instance = NULL;
+    SoBase *instance = NULL;
 
     SbBool isBinary = in->isBinary();
     SbBool oldFileFormat = (in->getIVVersion() < 2.1f);
@@ -1224,92 +1221,95 @@ SoBase::createInstance(SoInput *in, SbName className, unsigned short ioFlags)
 
         SbBool createEngine = FALSE;
 
-	// ASCII, old or new file format (they're the same):
-	if (!isBinary) {
-	    SbString unknownString;
-            SbBool  readOK = in->read(unknownString);
-	    if (!readOK || ((unknownString != "fields" &&
-			     unknownString != "inputs"))) {
-		SoReadError::post(in, "Unknown class \"%s\"",
-				  className.getString());
-		return NULL;
-	    }
-	    in->putBack(unknownString.getString());
-	    if (unknownString == "inputs") {
-		createEngine = TRUE;
-	    }
-	}
+        // ASCII, old or new file format (they're the same):
+        if (!isBinary) {
+            SbString unknownString;
+            SbBool   readOK = in->read(unknownString);
+            if (!readOK ||
+                ((unknownString != "fields" && unknownString != "inputs"))) {
+                SoReadError::post(in, "Unknown class \"%s\"",
+                                  className.getString());
+                return NULL;
+            }
+            in->putBack(unknownString.getString());
+            if (unknownString == "inputs") {
+                createEngine = TRUE;
+            }
+        }
 
-	// Binary, new file format
-	else if (!oldFileFormat && isBinary) {
-	    createEngine = ioFlags & IS_ENGINE;
-	}
+        // Binary, new file format
+        else if (!oldFileFormat && isBinary) {
+            createEngine = ioFlags & IS_ENGINE;
+        }
 
-	// Binary, old file format:
-	else {
-	    SbString unknownString;
-            SbBool  readOK = in->read(unknownString);
-	    if (!readOK || ((unknownString != "fields" &&
-			     unknownString != "inputs"))) {
-		SoReadError::post(in, "Unknown class \"%s\"",
-				  className.getString());
-		return NULL;
-	    }
-	    // Cannot put back the string (which is OK)
-	    if (unknownString == "inputs") {
-		createEngine = TRUE;
-	    }
-	}	    
+        // Binary, old file format:
+        else {
+            SbString unknownString;
+            SbBool   readOK = in->read(unknownString);
+            if (!readOK ||
+                ((unknownString != "fields" && unknownString != "inputs"))) {
+                SoReadError::post(in, "Unknown class \"%s\"",
+                                  className.getString());
+                return NULL;
+            }
+            // Cannot put back the string (which is OK)
+            if (unknownString == "inputs") {
+                createEngine = TRUE;
+            }
+        }
 
         if (!createEngine) {
 #ifdef DEBUG
-	    SoDebugError::postWarning("SoBase::createInstance",
-		"Creating unknown node for object of type %s "
-		"(could not open DSO)", className.getString());
+            SoDebugError::postWarning(
+                "SoBase::createInstance",
+                "Creating unknown node for object of type %s "
+                "(could not open DSO)",
+                className.getString());
 #endif
             SoUnknownNode *tmpNode = new SoUnknownNode();
             tmpNode->setClassName(className.getString());
-	    instance = tmpNode;
-	} else {
+            instance = tmpNode;
+        } else {
 #ifdef DEBUG
-	    SoDebugError::postWarning("SoBase::createInstance",
-		"Creating unknown engine for object of type %s "
-		"(could not open DSO)", className.getString());
+            SoDebugError::postWarning(
+                "SoBase::createInstance",
+                "Creating unknown engine for object of type %s "
+                "(could not open DSO)",
+                className.getString());
 #endif
             SoUnknownEngine *tmpEngine = new SoUnknownEngine;
             tmpEngine->setClassName(className.getString());
-	    instance = tmpEngine;
-	}
+            instance = tmpEngine;
+        }
     }
 
     else if (!type.isDerivedFrom(SoBase::getClassTypeId())) {
-	SoReadError::post(in, "\"%s\" is not an SoBase",
-			  className.getString());
-	instance = NULL;
+        SoReadError::post(in, "\"%s\" is not an SoBase", className.getString());
+        instance = NULL;
     }
 
     else {
-	instance = (SoBase *)type.createInstance();
+        instance = (SoBase *)type.createInstance();
 
-	// We may have the name of an abstract derived class.
-	if (instance == NULL) {
-	    SoReadError::post(in, "class \"%s\" is an abstract class",
-			      className.getString());
-	}
-	// Binary, old file format, not built in: read "fields" field
-	else if (oldFileFormat && isBinary) {
-	    if (instance->isOfType(SoFieldContainer::getClassTypeId())
-	        && !((SoFieldContainer *)instance)->getIsBuiltIn()) {
-		SbString unknownString;
-		SbBool  readOK = in->read(unknownString);
-		if (!readOK || ((unknownString != "fields" &&
-				 unknownString != "inputs"))) {
-		    SoReadError::post(in, "Unknown class \"%s\"",
-				      className.getString());
-		    return NULL;
-		}
-	    }
-	}
+        // We may have the name of an abstract derived class.
+        if (instance == NULL) {
+            SoReadError::post(in, "class \"%s\" is an abstract class",
+                              className.getString());
+        }
+        // Binary, old file format, not built in: read "fields" field
+        else if (oldFileFormat && isBinary) {
+            if (instance->isOfType(SoFieldContainer::getClassTypeId()) &&
+                !((SoFieldContainer *)instance)->getIsBuiltIn()) {
+                SbString unknownString;
+                SbBool   readOK = in->read(unknownString);
+                if (!readOK || ((unknownString != "fields" &&
+                                 unknownString != "inputs"))) {
+                    SoReadError::post(in, "Unknown class \"%s\"",
+                                      className.getString());
+                    return NULL;
+                }
+            }
+        }
     }
 
     return instance;
@@ -1330,16 +1330,16 @@ SoBase::flushInput(SoInput *in)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		nestLevel = 1;
-    char	c;
+    int  nestLevel = 1;
+    char c;
 
     while (nestLevel > 0 && in->get(c)) {
 
-	if (c == CLOSE_BRACE)
-	    nestLevel--;
+        if (c == CLOSE_BRACE)
+            nestLevel--;
 
-	else if (c == OPEN_BRACE)
-	    nestLevel++;
+        else if (c == OPEN_BRACE)
+            nestLevel++;
     }
 }
 

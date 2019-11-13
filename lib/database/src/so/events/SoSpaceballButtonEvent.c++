@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,8 +67,8 @@ SoSpaceballButtonEvent::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     // Allocate a new event type id
-    classTypeId = SoType::createType(
-    SoButtonEvent::getClassTypeId(), "SpaceballButtonEvent");
+    classTypeId = SoType::createType(SoButtonEvent::getClassTypeId(),
+                                     "SpaceballButtonEvent");
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -89,8 +89,7 @@ SoSpaceballButtonEvent::SoSpaceballButtonEvent()
 SoSpaceballButtonEvent::~SoSpaceballButtonEvent()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -100,27 +99,27 @@ SoSpaceballButtonEvent::~SoSpaceballButtonEvent()
 // static public
 //
 SbBool
-SoSpaceballButtonEvent::isButtonPressEvent(const SoEvent *e,
-				SoSpaceballButtonEvent::Button whichButton)
+SoSpaceballButtonEvent::isButtonPressEvent(
+    const SoEvent *e, SoSpaceballButtonEvent::Button whichButton)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool isMatch = FALSE;
-    
+
     // is it a mouse button event?
     if (e->isOfType(SoSpaceballButtonEvent::getClassTypeId())) {
-	const SoSpaceballButtonEvent *se = (const SoSpaceballButtonEvent *) e;
-	
-	// is it a press event?
-	if (se->getState() == SoButtonEvent::DOWN) {
-	
-	    // did the caller want any button press? or do they match?
-	    if ((whichButton == SoSpaceballButtonEvent::ANY) ||
-	        (se->getButton() == whichButton))
-		isMatch = TRUE;
-	}
+        const SoSpaceballButtonEvent *se = (const SoSpaceballButtonEvent *)e;
+
+        // is it a press event?
+        if (se->getState() == SoButtonEvent::DOWN) {
+
+            // did the caller want any button press? or do they match?
+            if ((whichButton == SoSpaceballButtonEvent::ANY) ||
+                (se->getButton() == whichButton))
+                isMatch = TRUE;
+        }
     }
-    
+
     return isMatch;
 }
 
@@ -132,27 +131,26 @@ SoSpaceballButtonEvent::isButtonPressEvent(const SoEvent *e,
 // static public
 //
 SbBool
-SoSpaceballButtonEvent::isButtonReleaseEvent(const SoEvent *e,
-				SoSpaceballButtonEvent::Button whichButton)
+SoSpaceballButtonEvent::isButtonReleaseEvent(
+    const SoEvent *e, SoSpaceballButtonEvent::Button whichButton)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool isMatch = FALSE;
-    
+
     // is it a mouse button event?
     if (e->isOfType(SoSpaceballButtonEvent::getClassTypeId())) {
-	const SoSpaceballButtonEvent *se = (const SoSpaceballButtonEvent *) e;
-	
-	// is it a release event?
-	if (se->getState() == SoButtonEvent::UP) {
-	
-	    // did the caller want any button release? or do they match?
-	    if ((whichButton == SoSpaceballButtonEvent::ANY) ||
-	        (se->getButton() == whichButton))
-		isMatch = TRUE;
-	}
+        const SoSpaceballButtonEvent *se = (const SoSpaceballButtonEvent *)e;
+
+        // is it a release event?
+        if (se->getState() == SoButtonEvent::UP) {
+
+            // did the caller want any button release? or do they match?
+            if ((whichButton == SoSpaceballButtonEvent::ANY) ||
+                (se->getButton() == whichButton))
+                isMatch = TRUE;
+        }
     }
-    
+
     return isMatch;
 }
-

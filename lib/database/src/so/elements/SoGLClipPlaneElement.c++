@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -56,7 +56,7 @@
 #include <Inventor/misc/SoState.h>
 
 // This holds the maximum number of concurrent GL clip planes
-int	SoGLClipPlaneElement::maxGLPlanes = -1;
+int SoGLClipPlaneElement::maxGLPlanes = -1;
 
 SO_ELEMENT_SOURCE(SoGLClipPlaneElement);
 
@@ -68,8 +68,7 @@ SO_ELEMENT_SOURCE(SoGLClipPlaneElement);
 // Use: internal
 
 void
-SoGLClipPlaneElement::initClass()
-{
+SoGLClipPlaneElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLClipPlaneElement, SoClipPlaneElement);
 }
 
@@ -83,8 +82,7 @@ SoGLClipPlaneElement::initClass()
 SoGLClipPlaneElement::~SoGLClipPlaneElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -107,15 +105,15 @@ SoGLClipPlaneElement::pop(SoState *state, const SoElement *prevTopElement)
     // id, for convenience.
 
     const SoGLClipPlaneElement *prevElt =
-	(const SoGLClipPlaneElement *) prevTopElement;
+        (const SoGLClipPlaneElement *)prevTopElement;
 
     int maxId = prevElt->getNum();
     if (maxId > getMaxGLPlanes())
-	maxId = getMaxGLPlanes();
+        maxId = getMaxGLPlanes();
 
     for (int i = prevElt->startIndex; i < maxId; i++)
-	if (i < getMaxGLPlanes())
-	    glDisable((GLenum)(GL_CLIP_PLANE0 + i));
+        if (i < getMaxGLPlanes())
+            glDisable((GLenum)(GL_CLIP_PLANE0 + i));
 
     // Do parent's pop stuff
     SoClipPlaneElement::pop(state, prevTopElement);
@@ -136,9 +134,9 @@ SoGLClipPlaneElement::getMaxGLPlanes()
 {
     // Inquire GL if not already done
     if (maxGLPlanes < 0) {
-	GLint		max;
-	glGetIntegerv(GL_MAX_CLIP_PLANES, &max);
-	maxGLPlanes = (int) max;
+        GLint max;
+        glGetIntegerv(GL_MAX_CLIP_PLANES, &max);
+        maxGLPlanes = (int)max;
     }
 
     return maxGLPlanes;
@@ -152,8 +150,8 @@ SoGLClipPlaneElement::getMaxGLPlanes()
 // Use: protected, virtual
 
 void
-SoGLClipPlaneElement::addToElt(const SbPlane &plane,
-			       const SbMatrix &modelMatrix)
+SoGLClipPlaneElement::addToElt(const SbPlane & plane,
+                               const SbMatrix &modelMatrix)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -163,20 +161,20 @@ SoGLClipPlaneElement::addToElt(const SbPlane &plane,
     // If we haven't run out of clipping planes, send this one to GL.
     // Note that we send the plane in object space, since GL already
     // will transform it by the current model matrix.
-    int	planeId = getNum() - 1;
+    int planeId = getNum() - 1;
     if (planeId < getMaxGLPlanes()) {
 
-	const SbPlane	&objPlane = get(planeId, FALSE);
-	const SbVec3f	&norm     = objPlane.getNormal();
-	GLdouble	planeEquation[4];
+        const SbPlane &objPlane = get(planeId, FALSE);
+        const SbVec3f &norm = objPlane.getNormal();
+        GLdouble       planeEquation[4];
 
-	planeEquation[0] = norm[0];
-	planeEquation[1] = norm[1];
-	planeEquation[2] = norm[2];
-	planeEquation[3] = -objPlane.getDistanceFromOrigin();
+        planeEquation[0] = norm[0];
+        planeEquation[1] = norm[1];
+        planeEquation[2] = norm[2];
+        planeEquation[3] = -objPlane.getDistanceFromOrigin();
 
-	glClipPlane((GLenum)(GL_CLIP_PLANE0 + planeId), planeEquation);
+        glClipPlane((GLenum)(GL_CLIP_PLANE0 + planeId), planeEquation);
 
-	glEnable((GLenum)(GL_CLIP_PLANE0 + planeId));
+        glEnable((GLenum)(GL_CLIP_PLANE0 + planeId));
     }
 }

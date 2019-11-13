@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,8 +45,8 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |      Defines the SoSeparatorKit class. 
- |      Organizes an appearance, a transform, a local transform and a 
+ |      Defines the SoSeparatorKit class.
+ |      Organizes an appearance, a transform, a local transform and a
  |      group of child kits
  |
  |   Author(s)          : Paul Isaacs, Thad Beier
@@ -55,8 +55,8 @@
  _______________________________________________________________________
 */
 
-#ifndef  _SO_SEPARATOR_KIT_
-#define  _SO_SEPARATOR_KIT_
+#ifndef _SO_SEPARATOR_KIT_
+#define _SO_SEPARATOR_KIT_
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodekits/SoBaseKit.h>
@@ -70,15 +70,15 @@
 //     For info about the structure of SoSeparatorKit:
 //     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
 //     [2] type:    ivNodeKitStructure SoSeparatorKit.
-//     [3] The program prints a diagram of the scene graph and a table with 
+//     [3] The program prints a diagram of the scene graph and a table with
 //         information about each part.
 //
 //    New nodes in this subclass are:
-//         callbackList, topSeparator, pickStyle, appearance,                 
-//          transform, texture2Transform, 
+//         callbackList, topSeparator, pickStyle, appearance,
+//          transform, texture2Transform,
 //          childList
 //
-//      A parent node that manages a collection of child nodes 
+//      A parent node that manages a collection of child nodes
 //      into a unit with the following structure:
 //
 //                            this
@@ -90,7 +90,7 @@
 //  "pickStyle" |    "units" "transform"  |                           |
 //     "appearance"  "texture2Transform"                              |
 //                                                                    |
-//                                                                    | 
+//                                                                    |
 //                                                              "childList"
 //
 ////////////////////////////////////////////////////////////////////
@@ -109,18 +109,17 @@ class SoSeparatorKit : public SoBaseKit {
     SO_KIT_CATALOG_ENTRY_HEADER(childList);
 
   public:
-
-    enum CacheEnabled {         // Possible values for caching
-	OFF,                    // Never build or use a cache
-	ON,                     // Always try to build a cache
-	AUTO                    // Decide based on some heuristic
+    enum CacheEnabled { // Possible values for caching
+        OFF,            // Never build or use a cache
+        ON,             // Always try to build a cache
+        AUTO            // Decide based on some heuristic
     };
 
     // Fields
-    SoSFEnum renderCaching;     // OFF/ON/AUTO (see above)
-    SoSFEnum boundingBoxCaching;// OFF/ON/AUTO (see above)
-    SoSFEnum renderCulling;     // OFF/ON/AUTO (see above)
-    SoSFEnum pickCulling;       // OFF/ON/AUTO (see above)
+    SoSFEnum renderCaching;      // OFF/ON/AUTO (see above)
+    SoSFEnum boundingBoxCaching; // OFF/ON/AUTO (see above)
+    SoSFEnum renderCulling;      // OFF/ON/AUTO (see above)
+    SoSFEnum pickCulling;        // OFF/ON/AUTO (see above)
 
     // constructor
     SoSeparatorKit();
@@ -128,25 +127,25 @@ class SoSeparatorKit : public SoBaseKit {
     // Overrides default method on SoNode
     virtual SbBool affectsState() const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
   protected:
-
     // detach/attach any sensors, callbacks, and/or field connections.
     // Called by:            start/end of SoBaseKit::readInstance
     // and on new copy by:   start/end of SoBaseKit::copy.
-    // Classes that redefine must call setUpConnections(TRUE,TRUE) 
+    // Classes that redefine must call setUpConnections(TRUE,TRUE)
     // at end of constructor.
     // Returns the state of the node when this was called.
-    virtual SbBool setUpConnections( SbBool onOff, SbBool doItAlways = FALSE );
+    virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
 
     // Called by the SoBaseKit::write() method. Calls setDefault(TRUE)
     // on the topSeparator. Note that this may be overriden later by basekit
     // if, for example, topSeparator lies on a path that is being written out.
     virtual void setDefaultOnNonWritingFields();
 
-    // This sensor will watch the topSeparator part.  If the part changes to a 
+    // This sensor will watch the topSeparator part.  If the part changes to a
     // new node,  then the fields of the old part will be disconnected and
     // the fields of the new part will be connected.
     // Connections are made from/to the renderCaching, boundingBoxCaching,
@@ -156,13 +155,12 @@ class SoSeparatorKit : public SoBaseKit {
     // topSeparator takes care of it.
     // oldTopSep keeps track of the part for comparison.
     SoFieldSensor *fieldSensor;
-    static void fieldSensorCB( void *, SoSensor *);
-    SoSeparator *oldTopSep;
+    static void    fieldSensorCB(void *, SoSensor *);
+    SoSeparator *  oldTopSep;
 
-    void connectSeparatorFields( SoSeparator *dest, SbBool onOff );
+    void connectSeparatorFields(SoSeparator *dest, SbBool onOff);
 
   protected:
     virtual ~SoSeparatorKit();
-
 };
-#endif  /* _SO_SEPARATOR_KIT_ */
+#endif /* _SO_SEPARATOR_KIT_ */

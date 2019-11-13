@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,8 +67,7 @@ SO_ELEMENT_SOURCE(SoGLLineWidthElement);
 // Use: internal
 
 void
-SoGLLineWidthElement::initClass()
-{
+SoGLLineWidthElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLLineWidthElement, SoLineWidthElement);
 }
 
@@ -82,8 +81,7 @@ SoGLLineWidthElement::initClass()
 SoGLLineWidthElement::~SoGLLineWidthElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -105,7 +103,6 @@ SoGLLineWidthElement::init(SoState *_state)
     // Save the state so we can get the SoViewportRegionElement when
     // we send the line width to GL
     state = _state;
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -120,8 +117,8 @@ SoGLLineWidthElement::push(SoState *_state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLLineWidthElement	*prevElt =
-	(const SoGLLineWidthElement *) getNextInStack();
+    const SoGLLineWidthElement *prevElt =
+        (const SoGLLineWidthElement *)getNextInStack();
 
     data = prevElt->data;
 
@@ -151,12 +148,11 @@ SoGLLineWidthElement::pop(SoState *state, const SoElement *childElt)
     copiedFromParent = FALSE;
 
     // If the previous element didn't have the same value...
-    const SoGLLineWidthElement *child =
-	(const SoGLLineWidthElement *)childElt;
-	
+    const SoGLLineWidthElement *child = (const SoGLLineWidthElement *)childElt;
+
     // Restore previous line width
     if (data != child->data)
-	send();
+        send();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -177,14 +173,12 @@ SoGLLineWidthElement::setElt(float width)
     // previous element.
 
     if (data != width) {
-	data = width;
-	send();
-	copiedFromParent = FALSE;
-    }
-    else if (copiedFromParent) {
-	SoGLLineWidthElement *parent =
-	    (SoGLLineWidthElement *) getNextInStack();
-	parent->capture(state);
+        data = width;
+        send();
+        copiedFromParent = FALSE;
+    } else if (copiedFromParent) {
+        SoGLLineWidthElement *parent = (SoGLLineWidthElement *)getNextInStack();
+        parent->capture(state);
     }
 }
 
@@ -200,16 +194,16 @@ SoGLLineWidthElement::send()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	width;
+    float width;
 
     // If line width is 0 (the default), use the default GL value of 1.0
     if (data == 0.0)
-	width = 1.0;
+        width = 1.0;
 
     // Otherwise, compute the line width to be the appropriate number
     // of pixels, based on the current viewport region data
     else
-	width = data * SoViewportRegionElement::get(state).getPixelsPerPoint();
+        width = data * SoViewportRegionElement::get(state).getPixelsPerPoint();
 
     glLineWidth(width);
 }

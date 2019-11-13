@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -69,8 +69,7 @@ SO_ELEMENT_SOURCE(SoBBoxModelMatrixElement);
 // Use: internal
 
 void
-SoBBoxModelMatrixElement::initClass()
-{
+SoBBoxModelMatrixElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoBBoxModelMatrixElement, SoModelMatrixElement);
 }
 
@@ -84,8 +83,7 @@ SoBBoxModelMatrixElement::initClass()
 SoBBoxModelMatrixElement::~SoBBoxModelMatrixElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -140,21 +138,20 @@ SoBBoxModelMatrixElement::reset(SoState *_state, SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoBBoxModelMatrixElement	*elt;
+    SoBBoxModelMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoBBoxModelMatrixElement *)
-	getElement(_state, classStackIndex);
+    elt = (SoBBoxModelMatrixElement *)getElement(_state, classStackIndex);
 
     if (elt != NULL) {
-	// Reset this element
-	elt->makeEltIdentity();
+        // Reset this element
+        elt->makeEltIdentity();
 
-	// Update node id list in element
-	elt->setNodeId(node);
+        // Update node id list in element
+        elt->setNodeId(node);
 
-	// Reset all open SoLocalBBoxMatrixElement instances
-	SoLocalBBoxMatrixElement::resetAll(_state);
+        // Reset all open SoLocalBBoxMatrixElement instances
+        SoLocalBBoxMatrixElement::resetAll(_state);
     }
 }
 
@@ -274,8 +271,8 @@ SoBBoxModelMatrixElement::scaleEltBy(const SbVec3f &scaleFactor)
 // Use: public, static
 
 void
-SoBBoxModelMatrixElement::pushMatrix(SoState *state,
-		SbMatrix &matrix, SbMatrix &localmatrix)
+SoBBoxModelMatrixElement::pushMatrix(SoState *state, SbMatrix &matrix,
+                                     SbMatrix &localmatrix)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -293,8 +290,8 @@ SoBBoxModelMatrixElement::pushMatrix(SoState *state,
 // Use: public, static
 
 void
-SoBBoxModelMatrixElement::popMatrix(SoState *state,
-		const SbMatrix &matrix, const SbMatrix &localmatrix)
+SoBBoxModelMatrixElement::popMatrix(SoState *state, const SbMatrix &matrix,
+                                    const SbMatrix &localmatrix)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -318,9 +315,10 @@ SoBBoxModelMatrixElement::pushMatrixElt()
 {
 #ifdef DEBUG
     if (!pushPopCallOK)
-	SoDebugError::post("SoBBoxModelMatrixElement::pushMatrixElt",
-		"Nodes must call SoBBoxModelMatrixElement::pushMatrix"
-		" for getBoundingBox, not SoModelMatrixElement::pushMatrix");
+        SoDebugError::post(
+            "SoBBoxModelMatrixElement::pushMatrixElt",
+            "Nodes must call SoBBoxModelMatrixElement::pushMatrix"
+            " for getBoundingBox, not SoModelMatrixElement::pushMatrix");
 #endif
     return SoModelMatrixElement::pushMatrixElt();
 }
@@ -339,9 +337,10 @@ SoBBoxModelMatrixElement::popMatrixElt(const SbMatrix &matrix)
 {
 #ifdef DEBUG
     if (!pushPopCallOK)
-	SoDebugError::post("SoBBoxModelMatrixElement::popMatrixElt",
-               "Nodes must call SoBBoxModelMatrixElement::popMatrix"
-               " for getBoundingBox, not SoModelMatrixElement::popMatrix");
+        SoDebugError::post(
+            "SoBBoxModelMatrixElement::popMatrixElt",
+            "Nodes must call SoBBoxModelMatrixElement::popMatrix"
+            " for getBoundingBox, not SoModelMatrixElement::popMatrix");
 #endif
     SoModelMatrixElement::popMatrixElt(matrix);
 }

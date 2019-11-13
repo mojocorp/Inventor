@@ -65,8 +65,7 @@ SO_ELEMENT_SOURCE(SoGLPolygonOffsetElement);
 SoGLPolygonOffsetElement::~SoGLPolygonOffsetElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -113,12 +112,13 @@ SoGLPolygonOffsetElement::push(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLPolygonOffsetElement *prevElt = (const SoGLPolygonOffsetElement*)getNextInStack();
+    const SoGLPolygonOffsetElement *prevElt =
+        (const SoGLPolygonOffsetElement *)getNextInStack();
 
     offsetfactor = prevElt->offsetfactor;
-    offsetunits  = prevElt->offsetunits;
-    style        = prevElt->style;
-    active       = prevElt->active;
+    offsetunits = prevElt->offsetunits;
+    style = prevElt->style;
+    active = prevElt->active;
 
     copiedFromParent = state;
 }
@@ -145,9 +145,11 @@ SoGLPolygonOffsetElement::pop(SoState *state, const SoElement *childElt)
     copiedFromParent = NULL;
 
     // If the previous element didn't have the same value...
-    const SoGLPolygonOffsetElement *child = (const SoGLPolygonOffsetElement*)childElt;
+    const SoGLPolygonOffsetElement *child =
+        (const SoGLPolygonOffsetElement *)childElt;
 
-    if (offsetfactor != child->offsetfactor || offsetunits != child->offsetunits)
+    if (offsetfactor != child->offsetfactor ||
+        offsetunits != child->offsetunits)
         whatChanged |= VALUE_MASK;
     if (style != child->style)
         whatChanged |= STYLE_MASK;
@@ -166,7 +168,8 @@ SoGLPolygonOffsetElement::pop(SoState *state, const SoElement *childElt)
 // Use: protected, virtual
 
 void
-SoGLPolygonOffsetElement::setElt(float _factor, float _units, Style _styles, SbBool _active)
+SoGLPolygonOffsetElement::setElt(float _factor, float _units, Style _styles,
+                                 SbBool _active)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -187,9 +190,9 @@ SoGLPolygonOffsetElement::setElt(float _factor, float _units, Style _styles, SbB
         SoPolygonOffsetElement::setElt(_factor, _units, _styles, _active);
         send();
         copiedFromParent = NULL;
-    }
-    else if (copiedFromParent) {
-        SoGLPolygonOffsetElement *parent = (SoGLPolygonOffsetElement *)getNextInStack();
+    } else if (copiedFromParent) {
+        SoGLPolygonOffsetElement *parent =
+            (SoGLPolygonOffsetElement *)getNextInStack();
         parent->capture(copiedFromParent);
     }
 }
@@ -206,14 +209,20 @@ SoGLPolygonOffsetElement::send()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if(active) {
+    if (active) {
         if (whatChanged & STYLE_MASK) {
-            if (style & FILLED) glEnable(GL_POLYGON_OFFSET_FILL);
-            else glDisable(GL_POLYGON_OFFSET_FILL);
-            if (style & LINES) glEnable(GL_POLYGON_OFFSET_LINE);
-            else glDisable(GL_POLYGON_OFFSET_LINE);
-            if (style & POINTS) glEnable(GL_POLYGON_OFFSET_POINT);
-            else glDisable(GL_POLYGON_OFFSET_POINT);
+            if (style & FILLED)
+                glEnable(GL_POLYGON_OFFSET_FILL);
+            else
+                glDisable(GL_POLYGON_OFFSET_FILL);
+            if (style & LINES)
+                glEnable(GL_POLYGON_OFFSET_LINE);
+            else
+                glDisable(GL_POLYGON_OFFSET_LINE);
+            if (style & POINTS)
+                glEnable(GL_POLYGON_OFFSET_POINT);
+            else
+                glDisable(GL_POLYGON_OFFSET_POINT);
         }
 
         if ((whatChanged & VALUE_MASK)) {

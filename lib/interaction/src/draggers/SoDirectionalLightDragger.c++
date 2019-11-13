@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,7 +63,6 @@
  _______________________________________________________________________
  */
 
-
 #include <stdio.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPath.h>
@@ -79,7 +78,6 @@
 #include <Inventor/projectors/SbSphereSectionProjector.h>
 
 #include "geom/SoDirectionalLightDraggerGeom.h"
-
 
 SO_KIT_SOURCE(SoDirectionalLightDragger);
 
@@ -97,7 +95,7 @@ SoDirectionalLightDragger::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO__KIT_INIT_CLASS(SoDirectionalLightDragger, "DirectionalLightDragger",
-               SoDragger);
+                       SoDragger);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -114,28 +112,28 @@ SoDirectionalLightDragger::SoDirectionalLightDragger()
     isBuiltIn = TRUE;
 
     // This gives the dragger an overall material.  It is edited by lightManips
-    // to make its dragger match the color of the light.  Any materials within 
-    // other parts will override this one. 
-    SO_KIT_ADD_CATALOG_ENTRY(material, SoMaterial, 
-				TRUE, topSeparator, geomSeparator,TRUE);
+    // to make its dragger match the color of the light.  Any materials within
+    // other parts will override this one.
+    SO_KIT_ADD_CATALOG_ENTRY(material, SoMaterial, TRUE, topSeparator,
+                             geomSeparator, TRUE);
 
     // The translator is kept under a separator along with a
     // rotation that is maintained as the inverse to the rotation of the
     // light. This means that using the rotator does not rotate the
     // coordinate system that we translate the base of the dragger in.
-    SO_KIT_ADD_CATALOG_ENTRY(translatorSep, SoSeparator, 
-				TRUE, topSeparator, geomSeparator,TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translatorRotInv, SoRotation, 
-				TRUE, translatorSep, ,TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator, SoDragPointDragger, 
-				TRUE, translatorSep, ,TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator, SoRotateSphericalDragger, 
-				TRUE, topSeparator, geomSeparator,TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translatorSep, SoSeparator, TRUE, topSeparator,
+                             geomSeparator, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translatorRotInv, SoRotation, TRUE, translatorSep,
+                             , TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator, SoDragPointDragger, TRUE,
+                             translatorSep, , TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(rotator, SoRotateSphericalDragger, TRUE,
+                             topSeparator, geomSeparator, TRUE);
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())
-	readDefaultParts("directionalLightDragger.iv", 
-			  geomBuffer, sizeof(geomBuffer) );
+        readDefaultParts("directionalLightDragger.iv", geomBuffer,
+                         sizeof(geomBuffer));
 
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
     SO_KIT_ADD_FIELD(rotation, (0.0, 0.0, 0.0, 1.0));
@@ -145,34 +143,33 @@ SoDirectionalLightDragger::SoDirectionalLightDragger()
     // Set the overall material.
     // We need to use a copy of the resource, since the resource is shared
     // by all manips but we are going to edit ours.
-    SoNode *resourceMtl 
-	= SoNode::getByName("directionalLightOverallMaterial");
-    setPartAsDefault("material", resourceMtl->copy() );
+    SoNode *resourceMtl = SoNode::getByName("directionalLightOverallMaterial");
+    setPartAsDefault("material", resourceMtl->copy());
 
     // CREATE THE CHILD DRAGGERS:
     // 1 DragpointDragger
     // 1 RotateSphericalDragger
 
-	SoDragPointDragger *trD;
-	trD = SO_GET_ANY_PART( this,"translator", SoDragPointDragger );
+    SoDragPointDragger *trD;
+    trD = SO_GET_ANY_PART(this, "translator", SoDragPointDragger);
 
-	SoRotateSphericalDragger *roD;
-	roD = SO_GET_ANY_PART( this, "rotator", SoRotateSphericalDragger );
+    SoRotateSphericalDragger *roD;
+    roD = SO_GET_ANY_PART(this, "rotator", SoRotateSphericalDragger);
 
     // Update the rotation and translation fields when the motionMatrix is set.
-    addValueChangedCallback( &SoDirectionalLightDragger::valueChangedCB );
+    addValueChangedCallback(&SoDirectionalLightDragger::valueChangedCB);
 
     // Updates the motionMatrix when the translationFactor field is set.
-    translFieldSensor 
-     = new SoFieldSensor( &SoDirectionalLightDragger::fieldSensorCB, this);
-    translFieldSensor->setPriority( 0 );
+    translFieldSensor =
+        new SoFieldSensor(&SoDirectionalLightDragger::fieldSensorCB, this);
+    translFieldSensor->setPriority(0);
 
     // Updates the motionMatrix when the rotation field is set.
-    rotFieldSensor 
-     = new SoFieldSensor( &SoDirectionalLightDragger::fieldSensorCB, this);
-    rotFieldSensor->setPriority( 0 );
+    rotFieldSensor =
+        new SoFieldSensor(&SoDirectionalLightDragger::fieldSensorCB, this);
+    rotFieldSensor->setPriority(0);
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -184,156 +181,148 @@ SoDirectionalLightDragger::~SoDirectionalLightDragger()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (translFieldSensor )
-	delete translFieldSensor;
-    if (rotFieldSensor )
-	delete rotFieldSensor;
+    if (translFieldSensor)
+        delete translFieldSensor;
+    if (rotFieldSensor)
+        delete rotFieldSensor;
 }
 
 //    detach/attach any sensors, callbacks, and/or field connections.
 //    Called by:            start/end of SoBaseKit::readInstance
 //    and on new copy by:   start/end of SoBaseKit::copy.
-//    Classes that redefine must call setUpConnections(TRUE,TRUE) 
+//    Classes that redefine must call setUpConnections(TRUE,TRUE)
 //    at end of constructor.
 //    Returns the state of the node when this was called.
 SbBool
-SoDirectionalLightDragger::setUpConnections( SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+SoDirectionalLightDragger::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( onOff ) {
+    if (onOff) {
 
-	// We connect AFTER base class.
-	SoDragger::setUpConnections( onOff, FALSE );
+        // We connect AFTER base class.
+        SoDragger::setUpConnections(onOff, FALSE);
 
-	// Set default parts and add callbacks to child draggers.
-	SoDragger *trD = (SoDragger *) getAnyPart( "translator", FALSE );
-	if (trD != NULL) {
+        // Set default parts and add callbacks to child draggers.
+        SoDragger *trD = (SoDragger *)getAnyPart("translator", FALSE);
+        if (trD != NULL) {
 
-	    // Set up the parts in the child dragger
-	    SoNode *n;
-	    n = SoNode::getByName("directionalLightTranslatorLineTranslator");
-	    trD->setPartAsDefault("xTranslator.translator", n );
-	    trD->setPartAsDefault("yTranslator.translator", n );
-	    trD->setPartAsDefault("zTranslator.translator", n );
+            // Set up the parts in the child dragger
+            SoNode *n;
+            n = SoNode::getByName("directionalLightTranslatorLineTranslator");
+            trD->setPartAsDefault("xTranslator.translator", n);
+            trD->setPartAsDefault("yTranslator.translator", n);
+            trD->setPartAsDefault("zTranslator.translator", n);
 
-	    n = SoNode::getByName(
-			    "directionalLightTranslatorLineTranslatorActive");
-	    trD->setPartAsDefault("xTranslator.translatorActive", n );
-	    trD->setPartAsDefault("yTranslator.translatorActive", n );
-	    trD->setPartAsDefault("zTranslator.translatorActive", n );
+            n = SoNode::getByName(
+                "directionalLightTranslatorLineTranslatorActive");
+            trD->setPartAsDefault("xTranslator.translatorActive", n);
+            trD->setPartAsDefault("yTranslator.translatorActive", n);
+            trD->setPartAsDefault("zTranslator.translatorActive", n);
 
-	    n = SoNode::getByName("directionalLightTranslatorPlaneTranslator");
-	    trD->setPartAsDefault("yzTranslator.translator", n );
-	    trD->setPartAsDefault("xzTranslator.translator", n );
-	    trD->setPartAsDefault("xyTranslator.translator", n );
+            n = SoNode::getByName("directionalLightTranslatorPlaneTranslator");
+            trD->setPartAsDefault("yzTranslator.translator", n);
+            trD->setPartAsDefault("xzTranslator.translator", n);
+            trD->setPartAsDefault("xyTranslator.translator", n);
 
-	    n = SoNode::getByName(
-			    "directionalLightTranslatorPlaneTranslatorActive");
-	    trD->setPartAsDefault("yzTranslator.translatorActive", n );
-	    trD->setPartAsDefault("xzTranslator.translatorActive", n );
-	    trD->setPartAsDefault("xyTranslator.translatorActive", n );
+            n = SoNode::getByName(
+                "directionalLightTranslatorPlaneTranslatorActive");
+            trD->setPartAsDefault("yzTranslator.translatorActive", n);
+            trD->setPartAsDefault("xzTranslator.translatorActive", n);
+            trD->setPartAsDefault("xyTranslator.translatorActive", n);
 
-	    registerChildDragger( trD );
-	}
+            registerChildDragger(trD);
+        }
 
-	SoRotateSphericalDragger *roD 
-	    = (SoRotateSphericalDragger *) getAnyPart( "rotator", FALSE );
-	if (roD != NULL) {
+        SoRotateSphericalDragger *roD =
+            (SoRotateSphericalDragger *)getAnyPart("rotator", FALSE);
+        if (roD != NULL) {
 
-	    // Give it a projector that moves freely in the radial direction.
-	    // We need this because our geometry is just a little stick, not a 
-	    // big ol' ball
-	    SbSphereSectionProjector *ssp = new SbSphereSectionProjector();
-	    ssp->setRadialFactor( 1.0 );
-	    roD->setProjector(ssp);
+            // Give it a projector that moves freely in the radial direction.
+            // We need this because our geometry is just a little stick, not a
+            // big ol' ball
+            SbSphereSectionProjector *ssp = new SbSphereSectionProjector();
+            ssp->setRadialFactor(1.0);
+            roD->setProjector(ssp);
 
-	    // Set up the parts in the child dragger
-	    roD->setPartAsDefault("rotator", 
-			    "directionalLightRotatorRotator");
-	    roD->setPartAsDefault("rotatorActive", 
-			    "directionalLightRotatorRotatorActive");
-	    roD->setPartAsDefault("feedback", 
-			    "directionalLightRotatorFeedback" );
-	    roD->setPartAsDefault("feedbackActive", 
-			  "directionalLightRotatorFeedbackActive");
+            // Set up the parts in the child dragger
+            roD->setPartAsDefault("rotator", "directionalLightRotatorRotator");
+            roD->setPartAsDefault("rotatorActive",
+                                  "directionalLightRotatorRotatorActive");
+            roD->setPartAsDefault("feedback",
+                                  "directionalLightRotatorFeedback");
+            roD->setPartAsDefault("feedbackActive",
+                                  "directionalLightRotatorFeedbackActive");
 
-	    registerChildDragger( roD );
+            registerChildDragger(roD);
+        }
 
-	}
+        // Call the sensor CBs to make things are up-to-date.
+        fieldSensorCB(this, NULL);
 
-	// Call the sensor CBs to make things are up-to-date.
-	fieldSensorCB( this, NULL );
+        // Connect the field sensors
+        if (rotFieldSensor->getAttachedField() != &rotation)
+            rotFieldSensor->attach(&rotation);
+        if (translFieldSensor->getAttachedField() != &translation)
+            translFieldSensor->attach(&translation);
+    } else {
 
-	// Connect the field sensors
-	if (rotFieldSensor->getAttachedField() != &rotation)
-	    rotFieldSensor->attach( &rotation );
-	if (translFieldSensor->getAttachedField() != &translation)
-	    translFieldSensor->attach( &translation );
-    }
-    else {
+        // We disconnect BEFORE base class.
 
-	// We disconnect BEFORE base class.
+        // remove callbacks from the child draggers
+        SoDragger *trD = (SoDragger *)getAnyPart("translator", FALSE);
+        if (trD)
+            unregisterChildDragger(trD);
 
-	// remove callbacks from the child draggers
-        SoDragger *trD = (SoDragger *) getAnyPart( "translator", FALSE );
-	if (trD)
-        unregisterChildDragger( trD );
+        SoDragger *roD = (SoDragger *)getAnyPart("rotator", FALSE);
+        if (roD)
+            unregisterChildDragger(roD);
 
-        SoDragger *roD = (SoDragger *) getAnyPart( "rotator", FALSE );
-	if (roD)
-        unregisterChildDragger( roD );
+        // Disconnect the field sensors.
+        if (rotFieldSensor->getAttachedField())
+            rotFieldSensor->detach();
+        if (translFieldSensor->getAttachedField())
+            translFieldSensor->detach();
 
-
-	// Disconnect the field sensors.
-	if (rotFieldSensor->getAttachedField())
-	    rotFieldSensor->detach();
-	if (translFieldSensor->getAttachedField())
-	    translFieldSensor->detach();
-
-	SoDragger::setUpConnections( onOff, FALSE );
+        SoDragger::setUpConnections(onOff, FALSE);
     }
 
     return !(connectionsSetUp = onOff);
 }
 
-
 void
-SoDirectionalLightDragger::valueChangedCB( void *, SoDragger *inDragger )
-{
-    SoDirectionalLightDragger *d = (SoDirectionalLightDragger *) inDragger;
-    SbMatrix motMat = d->getMotionMatrix();
+SoDirectionalLightDragger::valueChangedCB(void *, SoDragger *inDragger) {
+    SoDirectionalLightDragger *d = (SoDirectionalLightDragger *)inDragger;
+    SbMatrix                   motMat = d->getMotionMatrix();
 
     SbVec3f    trans, scale;
     SbRotation rot, scaleOrient;
-    motMat.getTransform( trans, rot, scale, scaleOrient );
+    motMat.getTransform(trans, rot, scale, scaleOrient);
 
     // Disconnect the field sensors
     d->translFieldSensor->detach();
     d->rotFieldSensor->detach();
 
-    if ( d->translation.getValue() != trans )
-	d->translation = trans;
-    if ( d->rotation.getValue() != rot )
-	d->rotation = rot;
+    if (d->translation.getValue() != trans)
+        d->translation = trans;
+    if (d->rotation.getValue() != rot)
+        d->rotation = rot;
 
-    // Make the rotation inside the "translaterRotInv" be the inverse 
+    // Make the rotation inside the "translaterRotInv" be the inverse
     // of the new rotation.
-    SbRotation newInv = rot.inverse();
-    SoRotation *rotInv = (SoRotation *) d->getAnyPart("translatorRotInv",TRUE);
+    SbRotation  newInv = rot.inverse();
+    SoRotation *rotInv = (SoRotation *)d->getAnyPart("translatorRotInv", TRUE);
     if (rotInv->rotation.getValue() != newInv)
-	rotInv->rotation = newInv;
+        rotInv->rotation = newInv;
 
     // Reconnect the field sensors
-    d->translFieldSensor->attach( &(d->translation) );
-    d->rotFieldSensor->attach( &(d->rotation) );
+    d->translFieldSensor->attach(&(d->translation));
+    d->rotFieldSensor->attach(&(d->rotation));
 }
 
 void
-SoDirectionalLightDragger::fieldSensorCB(void *inDragger, SoSensor *)
-{
-   SoDirectionalLightDragger *dragger = (SoDirectionalLightDragger *) inDragger;
+SoDirectionalLightDragger::fieldSensorCB(void *inDragger, SoSensor *) {
+    SoDirectionalLightDragger *dragger = (SoDirectionalLightDragger *)inDragger;
 
     SbMatrix motMat = dragger->getMotionMatrix();
     dragger->workFieldsIntoTransform(motMat);
@@ -342,15 +331,14 @@ SoDirectionalLightDragger::fieldSensorCB(void *inDragger, SoSensor *)
 }
 
 void
-SoDirectionalLightDragger::setDefaultOnNonWritingFields()
-{
+SoDirectionalLightDragger::setDefaultOnNonWritingFields() {
     // This node may change after construction, but we still
     // don't want to write it out.
     translatorRotInv.setDefault(TRUE);
 
     // Try not to write out the sub-draggers.
-	translator.setDefault(TRUE);
-	rotator.setDefault(TRUE);
+    translator.setDefault(TRUE);
+    rotator.setDefault(TRUE);
 
     // Call the base class...
     SoDragger::setDefaultOnNonWritingFields();

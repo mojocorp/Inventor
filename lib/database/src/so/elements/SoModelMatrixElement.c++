@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -69,8 +69,7 @@ SO_ELEMENT_SOURCE(SoModelMatrixElement);
 // Use: internal
 
 void
-SoModelMatrixElement::initClass()
-{
+SoModelMatrixElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoModelMatrixElement, SoAccumulatedElement);
 }
 
@@ -84,8 +83,7 @@ SoModelMatrixElement::initClass()
 SoModelMatrixElement::~SoModelMatrixElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -117,10 +115,10 @@ SoModelMatrixElement::push(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement *mtxElt = (SoModelMatrixElement *) getNextInStack();
+    SoModelMatrixElement *mtxElt = (SoModelMatrixElement *)getNextInStack();
 
     modelMatrix = mtxElt->modelMatrix;
-    flags.isModelIdentity  = mtxElt->flags.isModelIdentity;
+    flags.isModelIdentity = mtxElt->flags.isModelIdentity;
     flags.haveCullMatrix = FALSE;
     flags.haveModelCull = FALSE;
     nodeIds = mtxElt->nodeIds;
@@ -138,10 +136,10 @@ SoModelMatrixElement::makeIdentity(SoState *state, SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement	*elt;
+    SoModelMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoModelMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoModelMatrixElement *)getElement(state, classStackIndex);
 
     elt->makeEltIdentity();
 
@@ -157,15 +155,14 @@ SoModelMatrixElement::makeIdentity(SoState *state, SoNode *node)
 // Use: public, static
 
 void
-SoModelMatrixElement::set(SoState *state, SoNode *node,
-			  const SbMatrix &matrix)
+SoModelMatrixElement::set(SoState *state, SoNode *node, const SbMatrix &matrix)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement	*elt;
+    SoModelMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoModelMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoModelMatrixElement *)getElement(state, classStackIndex);
 
     elt->setElt(matrix);
 
@@ -188,13 +185,12 @@ SoModelMatrixElement::pushMatrix(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement	*elt;
+    SoModelMatrixElement *elt;
 
     // This is NOT equivalent to a ::get, so we don't use the
     // SoElement::getConstElement method but instead use the
     // state->getElementNoPush method:
-    elt = (SoModelMatrixElement *) 
-	state->getElementNoPush(classStackIndex);
+    elt = (SoModelMatrixElement *)state->getElementNoPush(classStackIndex);
 
     return elt->pushMatrixElt();
 }
@@ -211,13 +207,12 @@ SoModelMatrixElement::popMatrix(SoState *state, const SbMatrix &matrix)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement	*elt;
+    SoModelMatrixElement *elt;
 
     // This is NOT equivalent to a ::get, so we don't use the
     // SoElement::getConstElement method but instead use the
     // state->getElementNoPush method:
-    elt = (SoModelMatrixElement *) 
-	state->getElementNoPush(classStackIndex);
+    elt = (SoModelMatrixElement *)state->getElementNoPush(classStackIndex);
 
     elt->popMatrixElt(matrix);
 }
@@ -262,15 +257,14 @@ SoModelMatrixElement::popMatrixElt(const SbMatrix &matrix)
 // Use: public, static
 
 void
-SoModelMatrixElement::mult(SoState *state, SoNode *node,
-			   const SbMatrix &matrix)
+SoModelMatrixElement::mult(SoState *state, SoNode *node, const SbMatrix &matrix)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement	*elt;
+    SoModelMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoModelMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoModelMatrixElement *)getElement(state, classStackIndex);
 
     elt->multElt(matrix);
 
@@ -287,14 +281,14 @@ SoModelMatrixElement::mult(SoState *state, SoNode *node,
 
 void
 SoModelMatrixElement::translateBy(SoState *state, SoNode *node,
-				  const SbVec3f &translation)
+                                  const SbVec3f &translation)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement	*elt;
+    SoModelMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoModelMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoModelMatrixElement *)getElement(state, classStackIndex);
 
     elt->translateEltBy(translation);
 
@@ -311,14 +305,14 @@ SoModelMatrixElement::translateBy(SoState *state, SoNode *node,
 
 void
 SoModelMatrixElement::rotateBy(SoState *state, SoNode *node,
-			       const SbRotation &rotation)
+                               const SbRotation &rotation)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement	*elt;
+    SoModelMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoModelMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoModelMatrixElement *)getElement(state, classStackIndex);
 
     elt->rotateEltBy(rotation);
 
@@ -335,14 +329,14 @@ SoModelMatrixElement::rotateBy(SoState *state, SoNode *node,
 
 void
 SoModelMatrixElement::scaleBy(SoState *state, SoNode *node,
-			      const SbVec3f &scaleFactor)
+                              const SbVec3f &scaleFactor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement	*elt;
+    SoModelMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoModelMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoModelMatrixElement *)getElement(state, classStackIndex);
 
     elt->scaleEltBy(scaleFactor);
 
@@ -364,8 +358,7 @@ SoModelMatrixElement::get(SoState *state)
 {
     const SoModelMatrixElement *elt;
 
-    elt = (const SoModelMatrixElement *)
-	getConstElement(state, classStackIndex);
+    elt = (const SoModelMatrixElement *)getConstElement(state, classStackIndex);
 
     return elt->modelMatrix;
 }
@@ -385,8 +378,7 @@ SoModelMatrixElement::get(SoState *state, SbBool &isIdent)
 {
     const SoModelMatrixElement *elt;
 
-    elt = (const SoModelMatrixElement *)
-	getConstElement(state, classStackIndex);
+    elt = (const SoModelMatrixElement *)getConstElement(state, classStackIndex);
 
     isIdent = elt->flags.isModelIdentity;
 
@@ -404,15 +396,12 @@ SoModelMatrixElement::get(SoState *state, SbBool &isIdent)
 
 #ifdef DEBUG
 void
-SoModelMatrixElement::print(FILE *fp) const
-{
+SoModelMatrixElement::print(FILE *fp) const {
     SoAccumulatedElement::print(fp);
 }
 #else  /* DEBUG */
 void
-SoModelMatrixElement::print(FILE *) const
-{
-}
+SoModelMatrixElement::print(FILE *) const {}
 #endif /* DEBUG */
 
 ////////////////////////////////////////////////////////////////////////
@@ -445,7 +434,7 @@ SoModelMatrixElement::setElt(const SbMatrix &matrix)
 ////////////////////////////////////////////////////////////////////////
 {
     modelMatrix = matrix;
-    flags.isModelIdentity  = FALSE;	// Assume the worst
+    flags.isModelIdentity = FALSE; // Assume the worst
     flags.haveModelCull = FALSE;
 }
 
@@ -462,7 +451,7 @@ SoModelMatrixElement::multElt(const SbMatrix &matrix)
 ////////////////////////////////////////////////////////////////////////
 {
     modelMatrix.multLeft(matrix);
-    flags.isModelIdentity  = FALSE;	// Assume the worst
+    flags.isModelIdentity = FALSE; // Assume the worst
     flags.haveModelCull = FALSE;
 }
 
@@ -484,11 +473,11 @@ SoModelMatrixElement::translateEltBy(const SbVec3f &translation)
     // matrix than to multiply two matrices...
 
     for (i = 0; i < 3; i++)
-	modelMatrix[3][i] += (modelMatrix[0][i] * translation[0] +
-			      modelMatrix[1][i] * translation[1] +
-			      modelMatrix[2][i] * translation[2]);
+        modelMatrix[3][i] += (modelMatrix[0][i] * translation[0] +
+                              modelMatrix[1][i] * translation[1] +
+                              modelMatrix[2][i] * translation[2]);
 
-    flags.isModelIdentity  = FALSE;	// Assume the worst
+    flags.isModelIdentity = FALSE; // Assume the worst
     flags.haveModelCull = FALSE;
 }
 
@@ -504,12 +493,12 @@ SoModelMatrixElement::rotateEltBy(const SbRotation &rotation)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	m;
+    SbMatrix m;
 
     rotation.getValue(m);
     modelMatrix.multLeft(m);
 
-    flags.isModelIdentity  = FALSE;	// Assume the worst
+    flags.isModelIdentity = FALSE; // Assume the worst
     flags.haveModelCull = FALSE;
 }
 
@@ -531,12 +520,12 @@ SoModelMatrixElement::scaleEltBy(const SbVec3f &scaleFactor)
     // matrix than to multiply two matrices...
 
     for (i = 0; i < 4; i++) {
-	modelMatrix[0][i] *= scaleFactor[0];
-	modelMatrix[1][i] *= scaleFactor[1];
-	modelMatrix[2][i] *= scaleFactor[2];
+        modelMatrix[0][i] *= scaleFactor[0];
+        modelMatrix[1][i] *= scaleFactor[1];
+        modelMatrix[2][i] *= scaleFactor[2];
     }
 
-    flags.isModelIdentity  = FALSE;	// Assume the worst
+    flags.isModelIdentity = FALSE; // Assume the worst
     flags.haveModelCull = FALSE;
 }
 
@@ -549,14 +538,14 @@ SoModelMatrixElement::scaleEltBy(const SbVec3f &scaleFactor)
 
 void
 SoModelMatrixElement::setCullMatrix(SoState *state, SoNode *node,
-				    const SbMatrix &matrix)
+                                    const SbMatrix &matrix)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoModelMatrixElement	*elt;
+    SoModelMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoModelMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoModelMatrixElement *)getElement(state, classStackIndex);
 
     elt->cullMatrix = matrix;
     elt->flags.haveCullMatrix = TRUE;
@@ -577,48 +566,46 @@ SoModelMatrixElement::getCombinedCullMatrix(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoModelMatrixElement	*elt;
+    const SoModelMatrixElement *elt;
 
-    elt = (const SoModelMatrixElement *) getConstElement(state,
-							 classStackIndex);
+    elt = (const SoModelMatrixElement *)getConstElement(state, classStackIndex);
     if (!elt->flags.haveModelCull) {
-	// Cast const away:
-	SoModelMatrixElement *m_elt = (SoModelMatrixElement *)elt;
+        // Cast const away:
+        SoModelMatrixElement *m_elt = (SoModelMatrixElement *)elt;
 
-	if (!elt->flags.haveCullMatrix) {
-	    // Grab cull matrix from one of our parent elements:
-	    const SoModelMatrixElement *parent = 
-		(const SoModelMatrixElement *)elt->getNextInStack();
+        if (!elt->flags.haveCullMatrix) {
+            // Grab cull matrix from one of our parent elements:
+            const SoModelMatrixElement *parent =
+                (const SoModelMatrixElement *)elt->getNextInStack();
 
-	    while (parent && !parent->flags.haveCullMatrix)
-		parent = 
-		    (const SoModelMatrixElement *)parent->getNextInStack();
+            while (parent && !parent->flags.haveCullMatrix)
+                parent = (const SoModelMatrixElement *)parent->getNextInStack();
 
-	    if (parent) {
-		m_elt->cullMatrix = parent->cullMatrix;
-		m_elt->flags.haveCullMatrix = TRUE;
-	    }
-	    else {
-		// Uh-oh, no cull matrix.
+            if (parent) {
+                m_elt->cullMatrix = parent->cullMatrix;
+                m_elt->flags.haveCullMatrix = TRUE;
+            } else {
+                // Uh-oh, no cull matrix.
 #ifdef DEBUG
-		SoDebugError::post("SoModelMatrixElement::getCombinedCullMatrix",
-				   "No cull matrix set (culling Separator "
-				   "traversed before camera)");
+                SoDebugError::post(
+                    "SoModelMatrixElement::getCombinedCullMatrix",
+                    "No cull matrix set (culling Separator "
+                    "traversed before camera)");
 #endif
-		m_elt->cullMatrix = SbMatrix::identity();
-	    }
-	}
+                m_elt->cullMatrix = SbMatrix::identity();
+            }
+        }
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_MATRIX_CULL"))
-	    SoDebug::RTPrintf("  M*VP calculated\n");
+        if (SoDebug::GetEnv("IV_DEBUG_MATRIX_CULL"))
+            SoDebug::RTPrintf("  M*VP calculated\n");
 #endif
 
-	m_elt->modelCullMatrix = elt->modelMatrix*elt->cullMatrix;
-	m_elt->flags.haveModelCull = TRUE;
+        m_elt->modelCullMatrix = elt->modelMatrix * elt->cullMatrix;
+        m_elt->flags.haveModelCull = TRUE;
     }
 #ifdef DEBUG
     else if (SoDebug::GetEnv("IV_DEBUG_MATRIX_CULL"))
-	SoDebug::RTPrintf("  MVP valid\n");
+        SoDebug::RTPrintf("  MVP valid\n");
 #endif
 
     return elt->modelCullMatrix;
@@ -636,10 +623,10 @@ SoModelMatrixElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoModelMatrixElement	*mmElt = (const SoModelMatrixElement *) elt;
+    const SoModelMatrixElement *mmElt = (const SoModelMatrixElement *)elt;
 
     if (mmElt->flags.haveCullMatrix)
-	return FALSE;
+        return FALSE;
 
     return (SoAccumulatedElement::matches(elt));
 }

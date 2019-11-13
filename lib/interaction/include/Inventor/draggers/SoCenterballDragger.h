@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -52,14 +52,14 @@
  |     For info about the structure of SoCenterballDragger:
  |     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
  |     [2] type:    ivNodeKitStructure SoCenterballDragger.
- |     [3] The program prints a diagram of the scene graph and a table with 
+ |     [3] The program prints a diagram of the scene graph and a table with
  |         information about each part.
  |
  |
  |  The following parts in this dragger are created at construction time.
  |  'ResourceName' corresponds to the name of the default geometry for the
  |  part. The dragger's constructor gets the scene graph for 'ResourceName'
- |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).  
+ |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).
  |
  |  Resource Name:                           Part Name:
  |
@@ -98,8 +98,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_CENTERBALL_DRAGGER_
-#define  _SO_CENTERBALL_DRAGGER_
+#ifndef _SO_CENTERBALL_DRAGGER_
+#define _SO_CENTERBALL_DRAGGER_
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/sensors/SoSensor.h>
@@ -164,53 +164,53 @@ class SoCenterballDragger : public SoDragger {
     SoSFRotation rotation;
     SoSFVec3f    center;
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Saves the matrix that moves the center relative to the motionMatrix
     // after it calls the default SoDragger method.
     virtual void saveStartParameters();
 
-  SoINTERNAL public:
-    static void		initClass();	// initialize the class
+    SoINTERNAL
+  public:
+    static void initClass(); // initialize the class
 
   protected:
-    
     SoFieldSensor *rotFieldSensor;
     SoFieldSensor *centerFieldSensor;
-    static void fieldSensorCB( void *, SoSensor *);
-    static void valueChangedCB( void *, SoDragger *);
+    static void    fieldSensorCB(void *, SoSensor *);
+    static void    valueChangedCB(void *, SoDragger *);
 
     void transferCenterDraggerMotion(SoDragger *childDragger);
 
-    // Differs from SoDragger as follows: If it has a surroundScale node with 
-    // 'ignoreInBbox' set to TRUE, this means surroundScale is calculating its 
-    // bbox for sizing. So we also need to ignore the 'translateToCenter' 
-    // matrix. Take care of this by disabling notification of 
-    // 'translateToCenter', changing it to identity, running action, 
+    // Differs from SoDragger as follows: If it has a surroundScale node with
+    // 'ignoreInBbox' set to TRUE, this means surroundScale is calculating its
+    // bbox for sizing. So we also need to ignore the 'translateToCenter'
+    // matrix. Take care of this by disabling notification of
+    // 'translateToCenter', changing it to identity, running action,
     // and then putting everything back.
-    virtual void        getBoundingBox(SoGetBoundingBoxAction *action);
-    virtual void	getMatrix(SoGetMatrixAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void getMatrix(SoGetMatrixAction *action);
 
-    static void kidStartCB(  void *, SoDragger * );
-    static void kidFinishCB( void *, SoDragger * );
+    static void kidStartCB(void *, SoDragger *);
+    static void kidFinishCB(void *, SoDragger *);
 
-    void setSwitches( SoDragger *activeChild );
+    void setSwitches(SoDragger *activeChild);
 
     // detach/attach any sensors, callbacks, and/or field connections.
     // Also set geometry of childDraggers to be our default instead of their
     // regular default, using our resources.
     // Called by:            start/end of SoBaseKit::readInstance
     // and on new copy by:   start/end of SoBaseKit::copy.
-    // Classes that redefine must call setUpConnections(TRUE,TRUE) 
+    // Classes that redefine must call setUpConnections(TRUE,TRUE)
     // at end of constructor.
     // Returns the state of the node when this was called.
-    virtual SbBool setUpConnections( SbBool onOff, SbBool doItAlways = FALSE );
+    virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
 
     virtual void setDefaultOnNonWritingFields();
 
     ~SoCenterballDragger();
 
   private:
-
     // Used by centerball to save initial matrix of the 'translateToCenter'
     // part when the child begins to move.
     SbMatrix startCenterMatrix;

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,7 +63,8 @@
 //
 // Use: public
 
-SoPathSensor::SoPathSensor() : SoDataSensor()
+SoPathSensor::SoPathSensor()
+    : SoDataSensor()
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -78,8 +79,8 @@ SoPathSensor::SoPathSensor() : SoDataSensor()
 //
 // Use: public
 
-SoPathSensor::SoPathSensor(SoSensorCB *func, void *data) :
-	SoDataSensor(func, data)
+SoPathSensor::SoPathSensor(SoSensorCB *func, void *data)
+    : SoDataSensor(func, data)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -114,14 +115,14 @@ SoPathSensor::attach(SoPath *pathToAttachTo)
 ////////////////////////////////////////////////////////////////////////
 {
     if (path != NULL)
-	detach();
+        detach();
 
     path = (SoFullPath *)pathToAttachTo;
     path->addAuditor(this, SoNotRec::SENSOR);
 
     head = path->getHead();
     if (head != NULL)
-	head->addAuditor(this, SoNotRec::SENSOR);
+        head->addAuditor(this, SoNotRec::SENSOR);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -137,18 +138,18 @@ SoPathSensor::detach()
 ////////////////////////////////////////////////////////////////////////
 {
     if (path != NULL) {
-	path->removeAuditor(this, SoNotRec::SENSOR);
-	path = NULL;
+        path->removeAuditor(this, SoNotRec::SENSOR);
+        path = NULL;
 
-	if (head != NULL) {
-	    head->removeAuditor(this, SoNotRec::SENSOR);
-	    head = NULL;
-	}
+        if (head != NULL) {
+            head->removeAuditor(this, SoNotRec::SENSOR);
+            head = NULL;
+        }
 
-	// If we are scheduled, there's no point leaving it scheduled,
-	// since it's not attached any more to whatever caused it to
-	// become scheduled.
-	unschedule();
+        // If we are scheduled, there's no point leaving it scheduled,
+        // since it's not attached any more to whatever caused it to
+        // become scheduled.
+        unschedule();
     }
 }
 
@@ -176,7 +177,7 @@ SoPathSensor::dyingReference()
     invokeDeleteCallback();
 
     if (getAttachedPath() == dyingPath)
-	detach();
+        detach();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -208,38 +209,38 @@ SoPathSensor::notify(SoNotList *list)
 
     // If the path started notification:
     if (list->getFirstRec()->getBase() == path)
-	doNotify = TRUE;
+        doNotify = TRUE;
 
 #ifdef DEBUG
     // If we are being notified of a change through the path:
     else if (list->getLastRec()->getBase() == path) {
-	SoDebugError::post("(internal) SoPathSensor::notify",
-			   "Path sensor notified by path!");
-	// ignore this notification, we'll get another one through the
-	// head node...
-	doNotify = FALSE;
+        SoDebugError::post("(internal) SoPathSensor::notify",
+                           "Path sensor notified by path!");
+        // ignore this notification, we'll get another one through the
+        // head node...
+        doNotify = FALSE;
     }
 #endif /* DEBUG */
-    
+
     // The complicated case.  We are being notified through the head
     // node, we need to decide whether or not the change is on the
     // path:
     else
-	doNotify = path->isRelevantNotification(list);
+        doNotify = path->isRelevantNotification(list);
 
     // If the head node of the path changes, detach from old head and
     // attach to new:
     if (path->getHead() != head) {
-	// Detach from old:
-	if (head != NULL)
-	    head->removeAuditor(this, SoNotRec::SENSOR);
-	head = path->getHead();
-	// Attach to new:
-	if (head != NULL)
-	    head->addAuditor(this, SoNotRec::SENSOR);
+        // Detach from old:
+        if (head != NULL)
+            head->removeAuditor(this, SoNotRec::SENSOR);
+        head = path->getHead();
+        // Attach to new:
+        if (head != NULL)
+            head->addAuditor(this, SoNotRec::SENSOR);
     }
 
     // Notify if we're supposed to...
     if (doNotify)
-	SoDataSensor::notify(list);
+        SoDataSensor::notify(list);
 }

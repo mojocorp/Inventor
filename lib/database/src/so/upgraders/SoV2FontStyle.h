@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_V2FONTSTYLE_
-#define  _SO_V2FONTSTYLE_
+#ifndef _SO_V2FONTSTYLE_
+#define _SO_V2FONTSTYLE_
 
 #include <Inventor/fields/SoSFBitMask.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -78,36 +78,38 @@ class SoV2FontStyle : public SoUpgrader {
 
   public:
     enum Family {
-	SERIF,		    // Use Serif style (such as Times-Roman)
-	SANS, 		    // Use Sans Serif style (such as Helvetica)
-	TYPEWRITER	    // Use fixed pitch style (such as Courier)
+        SERIF,     // Use Serif style (such as Times-Roman)
+        SANS,      // Use Sans Serif style (such as Helvetica)
+        TYPEWRITER // Use fixed pitch style (such as Courier)
     };
 
     enum Style {
-	NONE = 0,	    // No modification to Family
-	BOLD = 0x1, 	    // Embolden Family
-	ITALIC = 0x2	    // Italicize or Slant Family
+        NONE = 0,    // No modification to Family
+        BOLD = 0x1,  // Embolden Family
+        ITALIC = 0x2 // Italicize or Slant Family
     };
 
     // Fields
-    SoSFEnum	family;
-    SoSFBitMask	style;
-    
-    // Fields from SoFont (we don't care about these - they aren't in the VRML spec)
-    SoSFName	name;
-    SoSFFloat	size;
+    SoSFEnum    family;
+    SoSFBitMask style;
 
-    SoSFNode	alternateRep; // This is what's different from the 2.1 version!
+    // Fields from SoFont (we don't care about these - they aren't in the VRML
+    // spec)
+    SoSFName  name;
+    SoSFFloat size;
+
+    SoSFNode alternateRep; // This is what's different from the 2.1 version!
 
     // Constructor
     SoV2FontStyle();
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
-    virtual SoNode	*createNewNode();
-    
-    //virtual upgrade method used to discard extra characters in binary format:
+    virtual SoNode *createNewNode();
+
+    // virtual upgrade method used to discard extra characters in binary format:
     virtual SbBool upgrade(SoInput *in, const SbName &refName, SoBase *&result);
 
   protected:

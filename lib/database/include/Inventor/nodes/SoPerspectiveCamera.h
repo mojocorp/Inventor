@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_PERSPECTIVE_CAMERA_
-#define  _SO_PERSPECTIVE_CAMERA_
+#ifndef _SO_PERSPECTIVE_CAMERA_
+#define _SO_PERSPECTIVE_CAMERA_
 
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoCamera.h>
@@ -73,28 +73,28 @@ class SoPerspectiveCamera : public SoCamera {
 
   public:
     // Fields (some are inherited from SoCamera)
-    SoSFFloat		heightAngle;	// Angle (in radians) of field
-					// of view, in height direction
+    SoSFFloat heightAngle; // Angle (in radians) of field
+                           // of view, in height direction
 
     // Constructor
     SoPerspectiveCamera();
 
     // Scales the height of the camera, in this case, the 'heightAngle' field.
-    virtual void	scaleHeight( float scaleFactor );
+    virtual void scaleHeight(float scaleFactor);
 
     // Fills in a view volume structure, based on the camera. If the
     // useAspectRatio field is not 0.0 (the default), the camera uses
     // that ratio instead of the one it has.
     virtual SbViewVolume getViewVolume(float useAspectRatio = 0.0) const;
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Positions camera to view passed bounding box with given aspect
     // ratio and current height angle
-    virtual void	viewBoundingBox(const SbBox3f &box,
-					float aspect, float slack);
+    virtual void viewBoundingBox(const SbBox3f &box, float aspect, float slack);
 
     virtual ~SoPerspectiveCamera();
 };

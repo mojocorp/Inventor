@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -59,7 +59,6 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <SoDebug.h>
 
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -68,7 +67,8 @@
 //
 // Use: public
 
-SoGLRenderCache::SoGLRenderCache(SoState *state) : SoCache(state)
+SoGLRenderCache::SoGLRenderCache(SoState *state)
+    : SoCache(state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -100,7 +100,7 @@ SoGLRenderCache::~SoGLRenderCache()
 
     // delete the GLLazyElement
     if (GLCacheLazyElement != NULL)
-	delete GLCacheLazyElement;
+        delete GLCacheLazyElement;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -110,35 +110,35 @@ SoGLRenderCache::~SoGLRenderCache()
 //
 // Use: public, virtual
 
-SbBool      
-SoGLRenderCache::isValid(const SoState *state) const
-{
-    if (!SoCache::isValid(state)) return(FALSE);
+SbBool
+SoGLRenderCache::isValid(const SoState *state) const {
+    if (!SoCache::isValid(state))
+        return (FALSE);
     // get the lazy element from the state:
     SoGLLazyElement *eltInState = SoGLLazyElement::getInstance(state);
-    
+
     // Send the components of the lazy element requiring IV=GL,
     // do this prior to checking GL matches and IV matches.
-    if (doSendFlag) eltInState->send(state, doSendFlag);
+    if (doSendFlag)
+        eltInState->send(state, doSendFlag);
 
     // If cache's version of lazy element doesn't match what's in the
     // state, the cache is not valid.
-    
-    if (!GLCacheLazyElement->
-	    lazyMatches(checkGLFlag,checkIVFlag,eltInState)){
+
+    if (!GLCacheLazyElement->lazyMatches(checkGLFlag, checkIVFlag,
+                                         eltInState)) {
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-	    fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid ",
-		    this);
-	    fprintf(stderr, "Because a lazy element match failed,\n");
-	    fprintf(stderr, "GL and IV flags were %d %d\n", checkGLFlag, 
-		    checkIVFlag);	
-	}
-#endif /*DEBUG*/	   
-	return(FALSE);
+        if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
+            fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid ", this);
+            fprintf(stderr, "Because a lazy element match failed,\n");
+            fprintf(stderr, "GL and IV flags were %d %d\n", checkGLFlag,
+                    checkIVFlag);
+        }
+#endif /*DEBUG*/
+        return (FALSE);
     }
 
-    return(TRUE);
+    return (TRUE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -154,14 +154,15 @@ SoGLRenderCache::destroy(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (listOpen) close();
+    if (listOpen)
+        close();
 
     // Let the GLCacheContext element know that this display list can
     // be freed when the cache context is valid (this destructor may
     // be called when it is illegal to issue any GL commands!)
     if (list) {
-	list->unref();
-	list = NULL;
+        list->unref();
+        list = NULL;
     }
 
     delete GLCacheLazyElement;
@@ -204,9 +205,8 @@ SoGLRenderCache::open(SoState *state)
 #ifdef DEBUG
     // if there is already an open GLRender cache, bail.
     if (SoCacheElement::anyOpen(state) || listOpen) {
-	SoDebugError::post("SoGLRenderCache::open",
-			   "A cache is already open!");
-	return;
+        SoDebugError::post("SoGLRenderCache::open", "A cache is already open!");
+        return;
     }
 #endif /* DEBUG */
 
@@ -221,15 +221,15 @@ SoGLRenderCache::open(SoState *state)
     // set up the GLLazyElement:
 #ifdef DEBUG
     if (GLCacheLazyElement != NULL)
-	SoDebugError::post("SoGLRenderCache::open",
-		"Error reallocating CacheLazyElement");
+        SoDebugError::post("SoGLRenderCache::open",
+                           "Error reallocating CacheLazyElement");
 #endif /*DEBUG*/
 
-    //Get the top Lazy Element, and have it make a copy for the cache:
-    SoGLLazyElement *le = SoGLLazyElement::getInstance(state);	
+    // Get the top Lazy Element, and have it make a copy for the cache:
+    SoGLLazyElement *le = SoGLLazyElement::getInstance(state);
     GLCacheLazyElement = le->copyLazyMatchInfo(state);
-    
-    //initialize flags:
+
+    // initialize flags:
     checkGLFlag = 0;
     checkIVFlag = 0;
     doSendFlag = 0;
@@ -253,10 +253,10 @@ SoGLRenderCache::close()
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (! listOpen) {
-	SoDebugError::post("SoGLRenderCache::close",
-			   "No cache is currently open!");
-	return;
+    if (!listOpen) {
+        SoDebugError::post("SoGLRenderCache::close",
+                           "No cache is currently open!");
+        return;
     }
 
 #endif /* DEBUG */
@@ -265,10 +265,10 @@ SoGLRenderCache::close()
 
     // copy final GLState into CacheLazyElement
     // for anything in lazy element that was sent
-   
-    SoGLLazyElement* le = (SoGLLazyElement*)
-	saveState->getConstElement(SoGLLazyElement::getClassStackIndex());
-    le->getCopyGL(GLCacheLazyElement, cachedGLState);       
+
+    SoGLLazyElement *le = (SoGLLazyElement *)saveState->getConstElement(
+        SoGLLazyElement::getClassStackIndex());
+    le->getCopyGL(GLCacheLazyElement, cachedGLState);
 
     list->close(saveState);
 }
@@ -284,13 +284,13 @@ void
 SoGLRenderCache::call(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
-{ 
+{
 
 #ifdef DEBUG
-    if (! list) {
-	SoDebugError::post("SoGLRenderCache::call",
-			   "Cache was never compiled!");
-	return;
+    if (!list) {
+        SoDebugError::post("SoGLRenderCache::call",
+                           "Cache was never compiled!");
+        return;
     }
 #endif /* DEBUG */
 
@@ -298,21 +298,21 @@ SoGLRenderCache::call(SoState *state)
     SoCacheElement::addCacheDependency(state, this);
 
     list->call(state);
-     
-    // get the current lazy element from the state 
-    SoGLLazyElement* currentLazyElt = SoGLLazyElement::getInstance(state);
-          
-    //If this cache call occurred within a cache, must pass info to
-    //parent cache.
-    if (state->isCacheOpen()){
-	SoGLRenderCache* parentCache = (SoGLRenderCache*)
-		SoCacheElement::getCurrentCache(state);
-	SoGLRenderCache* childCache = this;      
-  	   
-        currentLazyElt->mergeCacheInfo(childCache, parentCache, doSendFlag, 
-	    checkIVFlag, checkGLFlag);
-    }	
-    
+
+    // get the current lazy element from the state
+    SoGLLazyElement *currentLazyElt = SoGLLazyElement::getInstance(state);
+
+    // If this cache call occurred within a cache, must pass info to
+    // parent cache.
+    if (state->isCacheOpen()) {
+        SoGLRenderCache *parentCache =
+            (SoGLRenderCache *)SoCacheElement::getCurrentCache(state);
+        SoGLRenderCache *childCache = this;
+
+        currentLazyElt->mergeCacheInfo(childCache, parentCache, doSendFlag,
+                                       checkIVFlag, checkGLFlag);
+    }
+
     // copy back the CacheLazyElement's GL State
     // also set GLSendBits and invalidBits.
     currentLazyElt->copyBackGL(GLCacheLazyElement, cachedGLState);

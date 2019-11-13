@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -83,8 +83,8 @@ SoTransformVec3f::SoTransformVec3f()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_ENGINE_CONSTRUCTOR(SoTransformVec3f);
-    SO_ENGINE_ADD_INPUT(vector,	  (SbVec3f(0,0,0)));
-    SO_ENGINE_ADD_INPUT(matrix,	  (SbMatrix::identity()));
+    SO_ENGINE_ADD_INPUT(vector, (SbVec3f(0, 0, 0)));
+    SO_ENGINE_ADD_INPUT(matrix, (SbMatrix::identity()));
     SO_ENGINE_ADD_OUTPUT(point, SoMFVec3f);
     SO_ENGINE_ADD_OUTPUT(direction, SoMFVec3f);
     SO_ENGINE_ADD_OUTPUT(normalDirection, SoMFVec3f);
@@ -101,8 +101,7 @@ SoTransformVec3f::SoTransformVec3f()
 SoTransformVec3f::~SoTransformVec3f()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -116,34 +115,34 @@ SoTransformVec3f::evaluate()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	nvector = vector.getNum();
+    int nvector = vector.getNum();
     int nmatrix = matrix.getNum();
-    int nout = max(nvector,nmatrix);
+    int nout = max(nvector, nmatrix);
     SO_ENGINE_OUTPUT(point, SoMFVec3f, setNum(nout));
     SO_ENGINE_OUTPUT(direction, SoMFVec3f, setNum(nout));
     SO_ENGINE_OUTPUT(normalDirection, SoMFVec3f, setNum(nout));
 
-    for (int i=0; i<nout; i++) {
-	const SbVec3f &v = vector[clamp(i,nvector)];
-	const SbMatrix &m = matrix[clamp(i,nmatrix)];
-	SbVec3f p, d;
+    for (int i = 0; i < nout; i++) {
+        const SbVec3f & v = vector[clamp(i, nvector)];
+        const SbMatrix &m = matrix[clamp(i, nmatrix)];
+        SbVec3f         p, d;
 
-	if (point.getNumConnections()) {
-	    m.multVecMatrix(v, p);
-	    SO_ENGINE_OUTPUT(point, SoMFVec3f, set1Value(i, p));
-	}
+        if (point.getNumConnections()) {
+            m.multVecMatrix(v, p);
+            SO_ENGINE_OUTPUT(point, SoMFVec3f, set1Value(i, p));
+        }
 
-	if (direction.getNumConnections() ||
-	    normalDirection.getNumConnections()) {
-	    m.multDirMatrix(v, d);
-	}
+        if (direction.getNumConnections() ||
+            normalDirection.getNumConnections()) {
+            m.multDirMatrix(v, d);
+        }
 
-	if (direction.getNumConnections())
-	    SO_ENGINE_OUTPUT(direction, SoMFVec3f, set1Value(i, d));
+        if (direction.getNumConnections())
+            SO_ENGINE_OUTPUT(direction, SoMFVec3f, set1Value(i, d));
 
-	if (normalDirection.getNumConnections()) {
-	    d.normalize();
-	    SO_ENGINE_OUTPUT(normalDirection, SoMFVec3f, set1Value(i, d));
-	}
+        if (normalDirection.getNumConnections()) {
+            d.normalize();
+            SO_ENGINE_OUTPUT(normalDirection, SoMFVec3f, set1Value(i, d));
+        }
     }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -71,12 +71,11 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_V1_SUB_KIT_
-#define  _SO_V1_SUB_KIT_
+#ifndef _SO_V1_SUB_KIT_
+#define _SO_V1_SUB_KIT_
 
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/misc/upgraders/SoV1NodekitCatalog.h>
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -86,18 +85,17 @@
 
 ////////////////////////////////////////////
 //
-// This defines a catalog describing the arrangement 
+// This defines a catalog describing the arrangement
 // of the subgraph for instances of this class
 //
 
-#define SO_V1_SUBKIT_CATALOG_HEADER(className)				    \
-  private:								    \
-    static SoV1NodekitCatalog *nodekitCatalog; /* design of this class */   \
-  protected:								    \
-    static SoV1NodekitCatalog *getClassNodekitCatalog();		    \
-    /* Returns an SoV1NodekitCatalog for the node */			    \
+#define SO_V1_SUBKIT_CATALOG_HEADER(className)                                 \
+  private:                                                                     \
+    static SoV1NodekitCatalog *nodekitCatalog; /* design of this class */      \
+  protected:                                                                   \
+    static SoV1NodekitCatalog *getClassNodekitCatalog();                       \
+    /* Returns an SoV1NodekitCatalog for the node */                           \
     virtual const SoV1NodekitCatalog *getNodekitCatalog() const
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -109,25 +107,21 @@
 // This declares the static variables defined in SO_V1_SUBKIT_CATALOG_HEADER.
 //
 
-#define SO_V1_SUBKIT_CATALOG_VARS(className)				      \
-SoV1NodekitCatalog   *className::nodekitCatalog = NULL
+#define SO_V1_SUBKIT_CATALOG_VARS(className)                                   \
+    SoV1NodekitCatalog *className::nodekitCatalog = NULL
 
 ////////////////////////////////////////////
 //
 // This implements the methods defined in SO_V1_SUBKIT_CATALOG_HEADER.
 //
 
-#define SO_V1_SUBKIT_CATALOG_METHODS(className)				    \
-const SoV1NodekitCatalog *						    \
-className::getNodekitCatalog() const					    \
-{									    \
-    return nodekitCatalog;						    \
-}									    \
-SoV1NodekitCatalog *							    \
-className::getClassNodekitCatalog()					    \
-{									    \
-    return nodekitCatalog;						    \
-}
+#define SO_V1_SUBKIT_CATALOG_METHODS(className)                                \
+    const SoV1NodekitCatalog *className::getNodekitCatalog() const {           \
+        return nodekitCatalog;                                                 \
+    }                                                                          \
+    SoV1NodekitCatalog *className::getClassNodekitCatalog() {                  \
+        return nodekitCatalog;                                                 \
+    }
 
 ////////////////////////////////////////////
 //
@@ -136,17 +130,16 @@ className::getClassNodekitCatalog()					    \
 // initClass().
 //
 
-#define SO_V1_SUBKIT_INHERIT_CATALOG(className, parentClassName )	      \
-    /* get a copy of the catalog from the base class */                     \
-    if ( !parentClassName::getClassNodekitCatalog() )                       \
-	parentClassName::initClass();                                       \
-    nodekitCatalog                                                           \
-    = (parentClassName::getClassNodekitCatalog())->clone(                   \
-					       className::getClassTypeId() )
+#define SO_V1_SUBKIT_INHERIT_CATALOG(className, parentClassName)               \
+    /* get a copy of the catalog from the base class */                        \
+    if (!parentClassName::getClassNodekitCatalog())                            \
+        parentClassName::initClass();                                          \
+    nodekitCatalog = (parentClassName::getClassNodekitCatalog())               \
+                         ->clone(className::getClassTypeId())
 
 ////////////////////////////////////////////
 //
-// This adds the info for a node to the SoV1NodekitCatalog for a single node. 
+// This adds the info for a node to the SoV1NodekitCatalog for a single node.
 // The parameters are as follows:
 //
 //	name:	      the name used to refer to this node in nodekitCatalog
@@ -157,16 +150,16 @@ className::getClassNodekitCatalog()					    \
 //
 //	parentName:   the reference name of the parent of this node within
 //                    the nodekitCatalog
-//                    NOTE: if this node is to be a direct descendant of 
+//                    NOTE: if this node is to be a direct descendant of
 //                          'this', then parentName should be given as "this"
 //	rightName:    the reference name of the right sibling of this node
 //                    within the nodekitCatalog.
 //                    NOTE: if this node is to be the rightmost child, then
 //                    the rightName should be given as "" (the empty string).
 //      isPublicPart: can a user receive a pointer to this part through
-//                    getPart?  If a part is not a leaf, this property is 
-//		      irrelevant (other parts are always private ). But if it 
-//                    is a leaf, the user's access can be stopped through 
+//                    getPart?  If a part is not a leaf, this property is
+//		      irrelevant (other parts are always private ). But if it
+//                    is a leaf, the user's access can be stopped through
 //                    this field.
 //
 // For example,
@@ -181,25 +174,26 @@ className::getClassNodekitCatalog()					    \
 //    created the class SoWingKit, then the following macros:
 // SO_V1_SUBKIT_ADD_CATALOG_ENTRY("mainSep",SoSeparator,"this","", FALSE);
 // SO_V1_SUBKIT_ADD_CATALOG_ENTRY("rightW",SoWingKit,"mainSep","", TRUE);
-// SO_V1_SUBKIT_ADD_CATALOG_ENTRY("leftW",SoWingKit,"mainSep","rightWing", TRUE);
+// SO_V1_SUBKIT_ADD_CATALOG_ENTRY("leftW",SoWingKit,"mainSep","rightWing",
+// TRUE);
 //    describe a catalog with this structure:
 //
 //                  this
 //                    |
 //              -------------
 //              |           |
-//          leftW        rightW 
+//          leftW        rightW
 
-#define SO_V1_SUBKIT_ADD_CATALOG_ENTRY(name, className, parentName,          \
-	          rightName, isPublicPart )                               \
-   nodekitCatalog->addEntry(name, className::getClassTypeId(),            \
-		    className::getClassTypeId(), parentName,              \
-		  rightName, FALSE, SoType::badType(), isPublicPart  )
+#define SO_V1_SUBKIT_ADD_CATALOG_ENTRY(name, className, parentName, rightName, \
+                                       isPublicPart)                           \
+    nodekitCatalog->addEntry(                                                  \
+        name, className::getClassTypeId(), className::getClassTypeId(),        \
+        parentName, rightName, FALSE, SoType::badType(), isPublicPart)
 
 ////////////////////////////////////////////
 //
-// This adds the info for a node of abstract type to the SoV1NodekitCatalog 
-// for a single node. 
+// This adds the info for a node of abstract type to the SoV1NodekitCatalog
+// for a single node.
 //
 // The parameters are as follows:
 //
@@ -219,34 +213,34 @@ className::getClassNodekitCatalog()					    \
 //
 // For example,
 //
-// SO_V1_SUBKIT_ADD_CATALOG_ABSTRACT_ENTRY("light",SoLight, SoDirectionalLight, 
+// SO_V1_SUBKIT_ADD_CATALOG_ABSTRACT_ENTRY("light",SoLight, SoDirectionalLight,
 //					"this","", TRUE);
 //
 //       makes a part node refered to as "light".
-//       When calling setPart, any node that is a subclass of light can be 
+//       When calling setPart, any node that is a subclass of light can be
 //       used (e.g., SoDirectionalLight, SoSpotLight, SoPointLight )
-//       However, if the user asks for the node (this happens, for example, 
+//       However, if the user asks for the node (this happens, for example,
 //       if the case where there is currently no 'light' and the user calls
 //       GETPART( myKit, "light", SoLight ), then a Directional light
 //       will be created and returned.
-// 
+//
 
-#define SO_V1_SUBKIT_ADD_CATALOG_ABSTRACT_ENTRY(name, className, defaultClassName,\
-		  parentName,  rightName, isPublicPart )                       \
-   nodekitCatalog->addEntry(name, className::getClassTypeId(),                 \
-		    defaultClassName::getClassTypeId(), parentName,            \
-		  rightName, FALSE, SoType::badType(), isPublicPart  )
+#define SO_V1_SUBKIT_ADD_CATALOG_ABSTRACT_ENTRY(                               \
+    name, className, defaultClassName, parentName, rightName, isPublicPart)    \
+    nodekitCatalog->addEntry(                                                  \
+        name, className::getClassTypeId(), defaultClassName::getClassTypeId(), \
+        parentName, rightName, FALSE, SoType::badType(), isPublicPart)
 
 ////////////////////////////////////////////
 //
-// This adds the info for a node list to the SoV1NodekitCatalog 
-// A node list is a group node that is forced (by the nodekit) to contain 
+// This adds the info for a node list to the SoV1NodekitCatalog
+// A node list is a group node that is forced (by the nodekit) to contain
 // children all of the same type.
 // The parameters are as follows:
 //
 //	name:	      Same as in SO_V1_SUBKIT_ADD_CATALOG_ENTRY
 //	className:    Same as in SO_V1_SUBKIT_ADD_CATALOG_ENTRY
-//                    EXCEPT!! 
+//                    EXCEPT!!
 //                    NOTE: since this is going to have children, it must
 //                          be an SoGroup or SoSeparator.
 //	parentName:   Same as in SO_V1_SUBKIT_ADD_CATALOG_ENTRY
@@ -255,7 +249,7 @@ className::getClassNodekitCatalog()					    \
 //	listItemClassName:    The name of the type of node to appear in the
 //                            list. Anything is legal here.
 //      isPublicPart: can a user perform operations on the children of this
-//                    list? 
+//                    list?
 //
 // For example,
 //
@@ -264,24 +258,24 @@ className::getClassNodekitCatalog()					    \
 //
 // makes a Separator node that will later be a list of SoCubes.
 
-#define SO_V1_SUBKIT_ADD_CATALOG_LIST_ENTRY(name, className, parentName,     \
-	          rightName, listItemClassName, isPublicPart )            \
-    nodekitCatalog->addEntry(name, className::getClassTypeId(),           \
-		  className::getClassTypeId(), parentName,                \
-		  rightName, TRUE, listItemClassName::getClassTypeId(),   \
-		  isPublicPart )
+#define SO_V1_SUBKIT_ADD_CATALOG_LIST_ENTRY(                                   \
+    name, className, parentName, rightName, listItemClassName, isPublicPart)   \
+    nodekitCatalog->addEntry(                                                  \
+        name, className::getClassTypeId(), className::getClassTypeId(),        \
+        parentName, rightName, TRUE, listItemClassName::getClassTypeId(),      \
+        isPublicPart)
 
 ////////////////////////////////////////////
 //
 // Assuming that the part 'name' already exists, this macro
 // will add 'newClass' to its listItemTypes.
 //
-// This means that (assuming 'name' is entered into the catalog as a 
+// This means that (assuming 'name' is entered into the catalog as a
 // list), nodes of type 'newClass' will be permitted in the list.
-// 
+//
 // Example:
 //    The macro:
-//      SO_V1_SUBKIT_ADD_CATALOG_LIST_ENTRY("myList", SoSeparator, 
+//      SO_V1_SUBKIT_ADD_CATALOG_LIST_ENTRY("myList", SoSeparator,
 //                                         "myListParent", "", SoCube, TRUE )
 //        creates a list called "myList" that accepts cubes.
 //        calling:
@@ -296,8 +290,8 @@ className::getClassNodekitCatalog()					    \
 //	name:	      Name of the part to add the listItemType to
 //	newClass:     Name of the class to add to 'names' listItemTypes
 
-#define SO_V1_SUBKIT_ADD_LIST_ITEM_TYPE(name, newClass ) 		    \
-    nodekitCatalog->addListItemType(name, newClass::getClassTypeId() )
+#define SO_V1_SUBKIT_ADD_LIST_ITEM_TYPE(name, newClass)                        \
+    nodekitCatalog->addListItemType(name, newClass::getClassTypeId())
 
 ////////////////////////////////////////////
 //
@@ -312,14 +306,14 @@ className::getClassNodekitCatalog()					    \
 //	newClassName: the new className describing this part.
 //
 //	newDefaultClassName:   The new defaultClassName.  If asked to build a
-//                          new node for this part, a node of type 
+//                          new node for this part, a node of type
 //                          newDefaultClassName will be built.
 // For example,
 //
 // If the part "shape" was originally created as part of the SoV1ShapeKit,
 // using the following command (within initClass()):
 //
-// SO_V1_SUBKIT_ADD_CATALOG_ABSTRACT_ENTRY("shape",SoShape, SoSphere, 
+// SO_V1_SUBKIT_ADD_CATALOG_ABSTRACT_ENTRY("shape",SoShape, SoSphere,
 //					"this","", TRUE);
 //
 // and we are creating the subclass SoV1VertexShapeKit,
@@ -327,23 +321,23 @@ className::getClassNodekitCatalog()					    \
 //
 // SO_V1_SUBKIT_CHANGE_ENTRY_TYPE("shape",SoVertexShape, SoFaceSet );
 //
-// This means that in the SoV1VertexShapeKit class, any node used for "shape" 
-// must be derived from SoVertexShape. 
+// This means that in the SoV1VertexShapeKit class, any node used for "shape"
+// must be derived from SoVertexShape.
 // If the SoVertexShape is asked to build the part "shape", it will create
 // an SoFaceSet node, by default.
-// 
-// 
-// Continuing further, the class SoV1FaceSetKit, subclassed from SoV1VertexShapeKit,
-// will contain this command (within initClass()):
+//
+//
+// Continuing further, the class SoV1FaceSetKit, subclassed from
+// SoV1VertexShapeKit, will contain this command (within initClass()):
 //
 // SO_V1_SUBKIT_CHANGE_ENTRY_TYPE("shape",SoFaceSet, SoFaceSet );
 //
-// This class is a leaf class, and only one type of node is acceptable as 
+// This class is a leaf class, and only one type of node is acceptable as
 // "shape", and that is the type SoFaceSet.
 
-#define SO_V1_SUBKIT_CHANGE_ENTRY_TYPE(name, newClassName, newDefaultClassName)  \
-   nodekitCatalog->narrowTypes(name, newClassName::getClassTypeId(),          \
-		                     newDefaultClassName::getClassTypeId())
-
+#define SO_V1_SUBKIT_CHANGE_ENTRY_TYPE(name, newClassName,                     \
+                                       newDefaultClassName)                    \
+    nodekitCatalog->narrowTypes(name, newClassName::getClassTypeId(),          \
+                                newDefaultClassName::getClassTypeId())
 
 #endif /* _SO_V1_SUB_KIT_ */

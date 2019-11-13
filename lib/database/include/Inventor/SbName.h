@@ -74,7 +74,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
 class SbName {
   public:
     // Default constructor
@@ -86,46 +85,47 @@ class SbName {
     // Constructor that initializes to given SbString
     SbName(const SbString &s);
 
-
     // Constructor that initializes to another SbName
-    SbName(const SbName &n)			{ entry = n.entry; }
+    SbName(const SbName &n) { entry = n.entry; }
 
-    ~SbName()					{}
+    ~SbName() {}
 
     // Initialize
     static void init();
     static void finish();
-  
+
     // Returns pointer to the character string
-    const char		*getString() const	{ return entry->data(); }
+    const char *getString() const { return entry->data(); }
 
     // Returns length of string
-    size_t			getLength() const   { return entry->length(); }
+    size_t getLength() const { return entry->length(); }
 
-    /// Return the position of the first occurrence in the char of the searched content, -1 if not found.
+    /// Return the position of the first occurrence in the char of the searched
+    /// content, -1 if not found.
     int find(char c) const;
 
-    /// Return the position of the last occurrence in the char of the searched content, -1 if not found.
+    /// Return the position of the last occurrence in the char of the searched
+    /// content, -1 if not found.
     int rfind(char c) const;
-	
+
     // Returns TRUE if given character is a legal starting character
     // for an identifier
-    static SbBool 	isIdentStartChar(char c);
+    static SbBool isIdentStartChar(char c);
 
     // Returns TRUE if given character is a legal nonstarting
     // character for an identifier
-    static SbBool	isIdentChar(char c);
+    static SbBool isIdentChar(char c);
 
     // Returns TRUE if given character is a legal starting character
     // for an SoBase's name
-    static SbBool 	isBaseNameStartChar(char c);
+    static SbBool isBaseNameStartChar(char c);
 
     // Returns TRUE if given character is a legal nonstarting
     // character for an SoBase's name
-    static SbBool	isBaseNameChar(char c);
+    static SbBool isBaseNameChar(char c);
 
     // Unary "not" operator; returns TRUE if string is empty ("")
-    int			operator !() const   { return entry->empty(); }
+    int operator!() const { return entry->empty(); }
 
     /// Less than operator (using alphabetical order).
     bool operator<(const SbName &other) const {
@@ -133,27 +133,33 @@ class SbName {
     }
 
     // Equality operator for SbName/char* and SbName/SbName comparison
-    friend bool		operator ==(const SbName &n, const char *s)
-    { return (*n.entry) == s; }
+    friend bool operator==(const SbName &n, const char *s) {
+        return (*n.entry) == s;
+    }
 
-    friend bool		operator ==(const char *s, const SbName &n)
-    { return (*n.entry) == s; }
+    friend bool operator==(const char *s, const SbName &n) {
+        return (*n.entry) == s;
+    }
 
-    friend bool 		operator ==(const SbName &n1, const SbName &n2)
-    { return n1.entry == n2.entry; }
+    friend bool operator==(const SbName &n1, const SbName &n2) {
+        return n1.entry == n2.entry;
+    }
 
     // Inequality operator for SbName/char* and SbName/SbName comparison
-    friend bool		operator !=(const SbName &n, const char *s)
-    { return (*n.entry) != s; }
+    friend bool operator!=(const SbName &n, const char *s) {
+        return (*n.entry) != s;
+    }
 
-    friend int		operator !=(const char *s, const SbName &n)
-    { return (*n.entry) != s; }
+    friend int operator!=(const char *s, const SbName &n) {
+        return (*n.entry) != s;
+    }
 
-    friend bool 		operator !=(const SbName &n1, const SbName &n2)
-    { return n1.entry != n2.entry; }
+    friend bool operator!=(const SbName &n1, const SbName &n2) {
+        return n1.entry != n2.entry;
+    }
 
   private:
-    const std::string	*entry;		// Name string storage
+    const std::string *entry; // Name string storage
 
     static std::set<std::string> entries;
 };

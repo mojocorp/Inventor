@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TEXTURE_2_
-#define  _SO_TEXTURE_2_
+#ifndef _SO_TEXTURE_2_
+#define _SO_TEXTURE_2_
 
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -81,57 +81,59 @@ class SoTexture2 : public SoNode {
     SO_NODE_HEADER(SoTexture2);
 
   public:
-    enum Model {			// Texture model
-	MODULATE		= GL_MODULATE,
-	DECAL			= GL_DECAL,
-	BLEND			= GL_BLEND
+    enum Model { // Texture model
+        MODULATE = GL_MODULATE,
+        DECAL = GL_DECAL,
+        BLEND = GL_BLEND
     };
 
-    enum Wrap {				// Texture wrap type
-	REPEAT			= GL_REPEAT,
-	CLAMP			= GL_CLAMP
+    enum Wrap { // Texture wrap type
+        REPEAT = GL_REPEAT,
+        CLAMP = GL_CLAMP
     };
 
     // Fields.
-    SoSFString		filename;	// file to read texture from
-    SoSFImage		image;		// The texture
-    SoSFEnum		wrapS;
-    SoSFEnum		wrapT;
-    SoSFEnum		model;
-    SoSFColor		blendColor;
+    SoSFString filename; // file to read texture from
+    SoSFImage  image;    // The texture
+    SoSFEnum   wrapS;
+    SoSFEnum   wrapT;
+    SoSFEnum   model;
+    SoSFColor  blendColor;
 
     // Constructor
     SoTexture2();
-    
-  SoEXTENDER public:
-    virtual void	doAction(SoAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	callback(SoCallbackAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoEXTENDER
+  public:
+    virtual void doAction(SoAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void callback(SoCallbackAction *action);
+
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Reads stuff into instance. Returns FALSE on error.
-    virtual SbBool	readInstance(SoInput *in, unsigned short flags);
+    virtual SbBool readInstance(SoInput *in, unsigned short flags);
 
     virtual ~SoTexture2();
 
-    int		    getReadStatus()	const   { return readStatus; }
-    void	    setReadStatus(int s)	{ readStatus = s; }
+    int  getReadStatus() const { return readStatus; }
+    void setReadStatus(int s) { readStatus = s; }
 
   private:
     // These keep the image and filename fields in sync.
-    SoFieldSensor *	imageSensor;
-    static void		imageChangedCB(void *, SoSensor *);
-    SoFieldSensor *	filenameSensor;
-    static void		filenameChangedCB(void *, SoSensor *);
-    
-    int			readStatus;
+    SoFieldSensor *imageSensor;
+    static void    imageChangedCB(void *, SoSensor *);
+    SoFieldSensor *filenameSensor;
+    static void    filenameChangedCB(void *, SoSensor *);
+
+    int readStatus;
 
     // Display list info for this texture:
     SoGLDisplayList *renderList;
-    float	renderListQuality;
+    float            renderListQuality;
 };
 
 #endif /* _SO_TEXTURE_2_ */

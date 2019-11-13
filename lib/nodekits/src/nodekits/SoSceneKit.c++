@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,38 +18,38 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
 
- /*
- * Copyright (C) 1990,91   Silicon Graphics, Inc.
- *
- _______________________________________________________________________
- ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
- |
- |   $Revision: 1.1 $
- |
- |   Classes:
- |      SoSceneKit
- |
- |   Author(s)          : Paul Isaacs
- |
- ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
- _______________________________________________________________________
- */
+/*
+* Copyright (C) 1990,91   Silicon Graphics, Inc.
+*
+_______________________________________________________________________
+______________  S I L I C O N   G R A P H I C S   I N C .  ____________
+|
+|   $Revision: 1.1 $
+|
+|   Classes:
+|      SoSceneKit
+|
+|   Author(s)          : Paul Isaacs
+|
+______________  S I L I C O N   G R A P H I C S   I N C .  ____________
+_______________________________________________________________________
+*/
 
 #include <Inventor/SoDB.h>
 #include <Inventor/nodekits/SoNodeKitListPart.h>
@@ -74,7 +74,7 @@ SoSceneKit::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SO__KIT_INIT_CLASS(SoSceneKit, "SceneKit", SoBaseKit );
+    SO__KIT_INIT_CLASS(SoSceneKit, "SceneKit", SoBaseKit);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -94,27 +94,27 @@ SoSceneKit::SoSceneKit()
 
     // Initialize children catalog and add entries to it
     // These are the macros you use to make a catalog.
-    // Use combinations of ...ADD_CATALOG_ENTRY 
+    // Use combinations of ...ADD_CATALOG_ENTRY
     // and ...ADD_CATALOG_LIST_ENTRY.  See SoSubKit.h for more info
     // on syntax of these macros.
 
-    // this is a switch node, so the user can pick which camera to look 
+    // this is a switch node, so the user can pick which camera to look
     // through.
     SO_KIT_ADD_CATALOG_ENTRY(topSeparator, SoSeparator, TRUE, this, , FALSE);
-    SO_KIT_ADD_CATALOG_LIST_ENTRY(cameraList, SoSwitch, TRUE,
-					topSeparator, , SoCameraKit, TRUE );
-    SO_KIT_ADD_CATALOG_LIST_ENTRY(lightList, SoGroup, TRUE,
-					topSeparator, , SoLightKit, TRUE );
-    SO_KIT_ADD_CATALOG_LIST_ENTRY(childList, SoGroup, TRUE,
-					topSeparator, , SoShapeKit, TRUE );
-    SO_KIT_ADD_LIST_ITEM_TYPE(childList, SoSeparatorKit );
+    SO_KIT_ADD_CATALOG_LIST_ENTRY(cameraList, SoSwitch, TRUE, topSeparator, ,
+                                  SoCameraKit, TRUE);
+    SO_KIT_ADD_CATALOG_LIST_ENTRY(lightList, SoGroup, TRUE, topSeparator, ,
+                                  SoLightKit, TRUE);
+    SO_KIT_ADD_CATALOG_LIST_ENTRY(childList, SoGroup, TRUE, topSeparator, ,
+                                  SoShapeKit, TRUE);
+    SO_KIT_ADD_LIST_ITEM_TYPE(childList, SoSeparatorKit);
 
     SO_KIT_INIT_INSTANCE();
 
     // Install a camera kit by default.
-    setPart( "cameraList[0]", new SoCameraKit );
+    setPart("cameraList[0]", new SoCameraKit);
 
-    setCameraNumber( 0 );
+    setCameraNumber(0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -127,8 +127,7 @@ SoSceneKit::SoSceneKit()
 SoSceneKit::~SoSceneKit()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -143,15 +142,15 @@ SoSceneKit::getCameraNumber()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNode *camContainer = getContainerNode( "cameraList" );
+    SoNode *camContainer = getContainerNode("cameraList");
 
-    if (        camContainer == NULL
-         ||   !(camContainer->isOfType( SoSwitch::getClassTypeId() ) ) )
-	return -1;
+    if (camContainer == NULL ||
+        !(camContainer->isOfType(SoSwitch::getClassTypeId())))
+        return -1;
 
-    SoSwitch *camSwitch = (SoSwitch *) camContainer;
+    SoSwitch *camSwitch = (SoSwitch *)camContainer;
 
-    int answer = (int) camSwitch->whichChild.getValue();
+    int answer = (int)camSwitch->whichChild.getValue();
     return answer;
 }
 ////////////////////////////////////////////////////////////////////////
@@ -162,24 +161,24 @@ SoSceneKit::getCameraNumber()
 // Use: public
 
 void
-SoSceneKit::setCameraNumber(int camNum )
+SoSceneKit::setCameraNumber(int camNum)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 
-    SoNode *camContainer = getContainerNode( "cameraList" );
+    SoNode *camContainer = getContainerNode("cameraList");
 
-    if (        camContainer == NULL
-         ||   !(camContainer->isOfType( SoSwitch::getClassTypeId() ) ) )
-	return;
+    if (camContainer == NULL ||
+        !(camContainer->isOfType(SoSwitch::getClassTypeId())))
+        return;
 
-    SoSwitch *camSwitch = (SoSwitch *) camContainer;
+    SoSwitch *camSwitch = (SoSwitch *)camContainer;
 
-    int 	numCams = camSwitch->getNumChildren();
+    int numCams = camSwitch->getNumChildren();
 
-    if ( camNum < 0 || (camNum >= 0 && camNum < numCams) ) {
+    if (camNum < 0 || (camNum >= 0 && camNum < numCams)) {
 
-	camSwitch->whichChild.setValue( camNum );
+        camSwitch->whichChild.setValue(camNum);
     }
 }
 
@@ -191,7 +190,6 @@ SoSceneKit::setCameraNumber(int camNum )
 // Use: public
 //
 SbBool
-SoSceneKit::affectsState() const
-{
+SoSceneKit::affectsState() const {
     return FALSE;
 }

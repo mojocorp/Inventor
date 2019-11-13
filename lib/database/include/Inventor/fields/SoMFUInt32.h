@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_MF_UINT32_
-#define  _SO_MF_UINT32_
+#ifndef _SO_MF_UINT32_
+#define _SO_MF_UINT32_
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -69,16 +69,17 @@ class SoMFUInt32 : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFUInt32, uint32_t, uint32_t);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   private:
     // Returns number of ASCII values to write per output line
-    virtual int		getNumValuesPerLine() const;
+    virtual int getNumValuesPerLine() const;
 
     // Write/Read the values as a block of data
-    virtual void	writeBinaryValues(SoOutput *out) const;
-    virtual SbBool	readBinaryValues(SoInput *in, int numToRead);
+    virtual void   writeBinaryValues(SoOutput *out) const;
+    virtual SbBool readBinaryValues(SoInput *in, int numToRead);
 };
 
 #endif /* _SO_MF_UINT32_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -61,8 +61,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_DELAY_QUEUE_SENSOR_
-#define  _SO_DELAY_QUEUE_SENSOR_
+#ifndef _SO_DELAY_QUEUE_SENSOR_
+#define _SO_DELAY_QUEUE_SENSOR_
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -86,43 +86,44 @@ class SoDelayQueueSensor : public SoSensor {
     // Sets/returns the priority for the sensor. If the priority is
     // changed to 0 (immediate) and it is already scheduled, the
     // sensor is unscheduled and triggered.
-    void		setPriority(uint32_t pri);
-    uint32_t		getPriority() const		{ return priority; }
+    void     setPriority(uint32_t pri);
+    uint32_t getPriority() const { return priority; }
 
     // Returns default sensor priority
-    static uint32_t getDefaultPriority()		{ return 100; }
+    static uint32_t getDefaultPriority() { return 100; }
 
     // Scheduling methods
-    virtual void	schedule();
-    virtual void	unschedule();
-    virtual SbBool	isScheduled() const;
+    virtual void   schedule();
+    virtual void   unschedule();
+    virtual SbBool isScheduled() const;
 
     // This method is overriden by IdleSensors to tell sensor manager
     // that they should only be processed when there really is idle
     // time (and not when the delay queue timeout expires).
-    virtual SbBool	isIdleOnly() const;
-  SoINTERNAL public:
+    virtual SbBool isIdleOnly() const;
+    SoINTERNAL
+  public:
     // Set/inquire counter when sensor was last triggered. This allows
     // the sensor manager to avoid triggering a sensor more than once
     // during the same call to processDelayQueue().
-    void		setCounter(uint32_t c)		{ counter = c;  }
-    uint32_t		getCounter() const		{ return counter; }
+    void     setCounter(uint32_t c) { counter = c; }
+    uint32_t getCounter() const { return counter; }
 
   protected:
     // Triggers the sensor, calling its callback function. This
     // overrides the method in SoSensor because it has to reset the
     // schedule flag before triggering.
-    virtual void	trigger();
+    virtual void trigger();
 
-    SbBool		scheduled;	// Whether sensor is scheduled
+    SbBool scheduled; // Whether sensor is scheduled
 
   private:
-    uint32_t		priority;	// Sensor priority
-    uint32_t		counter;	// Used by sensor manager
+    uint32_t priority; // Sensor priority
+    uint32_t counter;  // Used by sensor manager
 
     // Returns TRUE if this sensor should precede sensor s in the delay
     // queue: it must have a lower priority number than s.
-    virtual SbBool	isBefore(const SoSensor *s) const;
+    virtual SbBool isBefore(const SoSensor *s) const;
 };
 
-#endif  /* _SO_DELAY_QUEUE_SENSOR_ */
+#endif /* _SO_DELAY_QUEUE_SENSOR_ */

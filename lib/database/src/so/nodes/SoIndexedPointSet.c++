@@ -98,8 +98,7 @@ SoIndexedPointSet::SoIndexedPointSet()
 SoIndexedPointSet::~SoIndexedPointSet()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -129,7 +128,7 @@ SoIndexedPointSet::GLRender(SoGLRenderAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // First see if the object is visible and should be rendered now
-    if (! shouldGLRender(action))
+    if (!shouldGLRender(action))
         return;
 
     SoState *state = action->getState();
@@ -138,13 +137,15 @@ SoIndexedPointSet::GLRender(SoGLRenderAction *action)
     // ??? temp fix: also, push enables us to put vertex prop in state.
     state->push();
 
-    SoVertexProperty* vp = (SoVertexProperty*)vertexProperty.getValue();
-    if(vp) {
+    SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
+    if (vp) {
         vp->doAction(action);
     }
 
     // Figure out number of points in set
-    const SoGLCoordinateElement	*ce = (const SoGLCoordinateElement *)SoCoordinateElement::getInstance(action->getState());
+    const SoGLCoordinateElement *ce =
+        (const SoGLCoordinateElement *)SoCoordinateElement::getInstance(
+            action->getState());
     int32_t numPts = coordIndex.getNum();
     int32_t numMat = materialIndex.getNum();
     int32_t numNorm = normalIndex.getNum();
@@ -153,27 +154,27 @@ SoIndexedPointSet::GLRender(SoGLRenderAction *action)
     // called before state->pop() is called:
     {
         SbBool materialPerPoint = areMaterialsPerPoint(action);
-        SbBool normalPerPoint   = areNormalsPerPoint(action);
+        SbBool normalPerPoint = areNormalsPerPoint(action);
 
         // Test for auto-normal case; since this modifies an element this
         // MUST BE DONE BEFORE ANY BUNDLES ARE CREATED!
-        const SoGLNormalElement *ne = (const SoGLNormalElement *)
-                SoGLNormalElement::getInstance(state);
+        const SoGLNormalElement *ne =
+            (const SoGLNormalElement *)SoGLNormalElement::getInstance(state);
 
         if (ne->getNum() == 0) {
             SoGLLazyElement::setLightModel(state, SoGLLazyElement::BASE_COLOR);
             normalPerPoint = FALSE;
         }
 
-        SoMaterialBundle		mb(action);
-        SoTextureCoordinateBundle	tcb(action, TRUE);
+        SoMaterialBundle          mb(action);
+        SoTextureCoordinateBundle tcb(action, TRUE);
 
         // Make sure first material and normal are sent if necessary
         mb.sendFirst();
         if (mb.isColorOnly())
             normalPerPoint = FALSE;
         int curCoord = 0;
-        if (! mb.isColorOnly() && ! normalPerPoint && ne->getNum() > 0)
+        if (!mb.isColorOnly() && !normalPerPoint && ne->getNum() > 0)
             ne->send(normalIndex[curCoord]);
 
         // Get the complexity element and decide how points will be skipped
@@ -228,11 +229,11 @@ SoIndexedPointSet::generatePrimitives(SoAction *action)
     // texture coordinates
     SbBool forPicking = action->isOfType(SoRayPickAction::getClassTypeId());
 
-    SbBool			materialPerPoint, normalPerPoint, texCoordsIndexed;
-    int32_t			numPts;
-    int				curCoord;
-    SoPrimitiveVertex		pv;
-    SoPointDetail		detail;
+    SbBool            materialPerPoint, normalPerPoint, texCoordsIndexed;
+    int32_t           numPts;
+    int               curCoord;
+    SoPrimitiveVertex pv;
+    SoPointDetail     detail;
 
     // Push state, just in case we decide to set the NormalElement
     // because we're doing auto-normal generation.
@@ -240,7 +241,7 @@ SoIndexedPointSet::generatePrimitives(SoAction *action)
     state->push();
 
     // Put vertexProperty stuff into state:
-    SoVertexProperty *vp = (SoVertexProperty*)vertexProperty.getValue();
+    SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
     if (vp) {
         vp->doAction(action);
     }
@@ -248,15 +249,16 @@ SoIndexedPointSet::generatePrimitives(SoAction *action)
     // This extra level of brackets is to make bundle constructors get
     // called before state->pop() is called:
     {
-        const SoGLCoordinateElement	*ce = (const SoGLCoordinateElement *)
-                SoCoordinateElement::getInstance(action->getState());
+        const SoGLCoordinateElement *ce =
+            (const SoGLCoordinateElement *)SoCoordinateElement::getInstance(
+                action->getState());
 
         // Figure out number of points in set
         curCoord = 0;
         numPts = coordIndex.getNum();
 
         materialPerPoint = areMaterialsPerPoint(action);
-        normalPerPoint   = areNormalsPerPoint(action);
+        normalPerPoint = areNormalsPerPoint(action);
         texCoordsIndexed = areTexCoordsIndexed(action);
 
         // Test for auto-normal case; since this modifies an element this
@@ -271,14 +273,16 @@ SoIndexedPointSet::generatePrimitives(SoAction *action)
 
         pv.setDetail(&detail);
 
-        SoTextureCoordinateBundle	tcb(action, FALSE, ! forPicking);
+        SoTextureCoordinateBundle tcb(action, FALSE, !forPicking);
 
         pv.setMaterialIndex(materialIndex[curCoord]);
         detail.setMaterialIndex(materialIndex[curCoord]);
 
-        if (! normalPerPoint) {
-            if (ne->getNum() == 0) pv.setNormal(SbVec3f(0,0,0));
-            else pv.setNormal(ne->get(0));
+        if (!normalPerPoint) {
+            if (ne->getNum() == 0)
+                pv.setNormal(SbVec3f(0, 0, 0));
+            else
+                pv.setNormal(ne->get(0));
             detail.setNormalIndex(0);
         }
 
@@ -314,13 +318,13 @@ SoIndexedPointSet::generatePrimitives(SoAction *action)
                 detail.setMaterialIndex(materialIndex[curCoord]);
             }
             if (tcb.isFunction()) {
-                if (! forPicking)
-                    pv.setTextureCoords(tcb.get(pv.getPoint(),
-                                                pv.getNormal()));
+                if (!forPicking)
+                    pv.setTextureCoords(tcb.get(pv.getPoint(), pv.getNormal()));
                 detail.setTextureCoordIndex(0);
-            }
-            else {
-                int curTexCoord = (texCoordsIndexed ? (int) textureCoordIndex[curCoord] : curCoord);
+            } else {
+                int curTexCoord =
+                    (texCoordsIndexed ? (int)textureCoordIndex[curCoord]
+                                      : curCoord);
                 pv.setTextureCoords(tcb.get(curTexCoord));
                 detail.setTextureCoordIndex(curTexCoord);
             }
@@ -330,9 +334,8 @@ SoIndexedPointSet::generatePrimitives(SoAction *action)
 
             curCoord++;
         }
-
     }
-    state->pop();     // Restore NormalElement
+    state->pop(); // Restore NormalElement
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -364,22 +367,22 @@ SoIndexedPointSet::getBoundingBox(SoGetBoundingBoxAction *action)
 // Use: protected, virtual
 
 SoDetail *
-SoIndexedPointSet::createPointDetail(SoRayPickAction *action,
+SoIndexedPointSet::createPointDetail(SoRayPickAction *        action,
                                      const SoPrimitiveVertex *v,
-                                     SoPickedPoint *pp)
+                                     SoPickedPoint *          pp)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoPointDetail	*detail = new SoPointDetail;
+    SoPointDetail *detail = new SoPointDetail;
 
-    *detail = *((const SoPointDetail *) v->getDetail());
+    *detail = *((const SoPointDetail *)v->getDetail());
 
     // Compute texture coordinates at intersection point and store it
     // in the picked point
-    SoTextureCoordinateBundle	tcb(action, FALSE);
+    SoTextureCoordinateBundle tcb(action, FALSE);
     if (tcb.isFunction())
-        pp->setObjectTextureCoords(tcb.get(pp->getObjectPoint(),
-                                           pp->getObjectNormal()));
+        pp->setObjectTextureCoords(
+            tcb.get(pp->getObjectPoint(), pp->getObjectNormal()));
 
     return detail;
 }
@@ -397,7 +400,7 @@ SoIndexedPointSet::areMaterialsPerPoint(SoAction *action) const
 ////////////////////////////////////////////////////////////////////////
 {
     if (SoMaterialBindingElement::get(action->getState()) ==
-            SoMaterialBindingElement::OVERALL)
+        SoMaterialBindingElement::OVERALL)
         return FALSE;
 
     return TRUE;
@@ -415,8 +418,8 @@ SoIndexedPointSet::areNormalsPerPoint(SoAction *action) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (SoNormalBindingElement::get(action->getState())
-            == SoNormalBindingElement::OVERALL)
+    if (SoNormalBindingElement::get(action->getState()) ==
+        SoNormalBindingElement::OVERALL)
         return FALSE;
 
     return TRUE;

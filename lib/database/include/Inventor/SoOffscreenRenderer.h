@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -56,8 +56,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_OFFSCREEN_RENDERER_
-#define  _SO_OFFSCREEN_RENDERER_
+#ifndef _SO_OFFSCREEN_RENDERER_
+#define _SO_OFFSCREEN_RENDERER_
 
 #include <stdio.h>
 #include <Inventor/SbColor.h>
@@ -82,80 +82,73 @@ class SoGLRenderAction;
 //////////////////////////////////////////////////////////////////////////////
 
 class SoOffscreenRenderer {
- public:
-
+  public:
     // Constructor
-    SoOffscreenRenderer( const SbViewportRegion &viewportRegion );
-    SoOffscreenRenderer( SoGLRenderAction *ra );
+    SoOffscreenRenderer(const SbViewportRegion &viewportRegion);
+    SoOffscreenRenderer(SoGLRenderAction *ra);
 
     // Destructor
     ~SoOffscreenRenderer();
 
     enum Components {
-        LUMINANCE              = SbImage::Format_Luminance,
+        LUMINANCE = SbImage::Format_Luminance,
         LUMINANCE_TRANSPARENCY = SbImage::Format_Luminance_Alpha,
-        RGB                    = SbImage::Format_RGB24, // The default
-        RGB_TRANSPARENCY       = SbImage::Format_RGBA32
+        RGB = SbImage::Format_RGB24, // The default
+        RGB_TRANSPARENCY = SbImage::Format_RGBA32
     };
 
-    static float	getScreenPixelsPerInch();
+    static float getScreenPixelsPerInch();
 
     // Set/get the components to be rendered
-    void		setComponents( Components components )
-				{comps = components;}
-    Components		getComponents() const
-				{return comps;}
+    void       setComponents(Components components) { comps = components; }
+    Components getComponents() const { return comps; }
 
     // Set/get the viewport region
-    void		setViewportRegion( const SbViewportRegion &region );
-    const SbViewportRegion  &getViewportRegion() const;
+    void                    setViewportRegion(const SbViewportRegion &region);
+    const SbViewportRegion &getViewportRegion() const;
 
     // Get the maximum supported resolution of the viewport.
-    static SbVec2s	getMaximumResolution();
+    static SbVec2s getMaximumResolution();
 
     // Set/get the background color
-    void		setBackgroundColor( const SbColor &c )
-				{backgroundColor = c;}
-    const SbColor & getBackgroundColor() const
-				{return backgroundColor;}
+    void           setBackgroundColor(const SbColor &c) { backgroundColor = c; }
+    const SbColor &getBackgroundColor() const { return backgroundColor; }
 
     // Set and get the render action to use
-    void                      setGLRenderAction(SoGLRenderAction *ra);
-    SoGLRenderAction *        getGLRenderAction() const;
+    void              setGLRenderAction(SoGLRenderAction *ra);
+    SoGLRenderAction *getGLRenderAction() const;
 
     // Render the given scene into a buffer
-    SbBool		render( SoNode *scene );
-    SbBool		render( SoPath *scene );
+    SbBool render(SoNode *scene);
+    SbBool render(SoPath *scene);
 
-	// Returns the SbImage containing the rendered image.
-    const SbImage & getImage() const { return pixelBuffer; }
-	
+    // Returns the SbImage containing the rendered image.
+    const SbImage &getImage() const { return pixelBuffer; }
+
     // Return the buffer containing the rendering
-    const unsigned char *     getBuffer() const;
+    const unsigned char *getBuffer() const;
 
     // Write the buffer as a .rgb file into the given FILE
-    SbBool		writeToRGB( FILE *fp ) const;
+    SbBool writeToRGB(FILE *fp) const;
 
     // Write the buffer into encapsulated PostScript.  If a print size is
     // not given, adjust the size of the print so it is WYSIWYG with respect
     // to the viewport region on the current device.
-    SbBool		writeToPostScript( FILE *fp ) const;
-    SbBool		writeToPostScript( FILE *fp,
-                                const SbVec2f &printSize ) const;
+    SbBool writeToPostScript(FILE *fp) const;
+    SbBool writeToPostScript(FILE *fp, const SbVec2f &printSize) const;
 
   private:
-    SbImage             pixelBuffer;
-    Components          comps;
-    SbColor		backgroundColor;
-    SoGLRenderAction	*userAction, *offAction;
-    int                 cacheContext;
-    SbViewportRegion    renderedViewport;
+    SbImage           pixelBuffer;
+    Components        comps;
+    SbColor           backgroundColor;
+    SoGLRenderAction *userAction, *offAction;
+    int               cacheContext;
+    SbViewportRegion  renderedViewport;
 
     // These are used for rendering to the offscreen pixmap
-    struct SbGLXContext* ctx;
+    struct SbGLXContext *ctx;
 
-    bool renderGeneric( class SoBase *base );
+    bool renderGeneric(class SoBase *base);
 };
 
 #endif /* _SO_OFFSCREEN_RENDERER_ */
-

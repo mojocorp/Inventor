@@ -83,10 +83,9 @@ class SbMatrix;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
 class SbPlane {
   public:
-    SbPlane()	{}
+    SbPlane() {}
 
     // Construct a plane given 3 points.
     // Orientation is computed by taking (p1 - p0) x (p2 - p0) and
@@ -102,38 +101,37 @@ class SbPlane {
     SbPlane(const SbVec3f &n, const SbVec3f &p);
 
     // Offset a plane by a given distance.
-    void		offset(float d);
+    void offset(float d);
 
     // Intersect line and plane, returning TRUE if there is an intersection
     // FALSE if line is parallel to plane
-    SbBool		intersect(const SbLine &l,
-                  SbVec3f &intersection) const;
+    SbBool intersect(const SbLine &l, SbVec3f &intersection) const;
 
     // Transforms the plane by the given matrix
-    void		transform(const SbMatrix &matrix);
+    void transform(const SbMatrix &matrix);
 
     // Returns TRUE if the given point is within the half-space
     // defined by the plane
-    SbBool		isInHalfSpace(const SbVec3f &point) const;
-
+    SbBool isInHalfSpace(const SbVec3f &point) const;
 
     // Accessors
-    const SbVec3f &	getNormal() const		{ return normalVec; }
-    float		getDistanceFromOrigin() const	{ return distance; }
+    const SbVec3f &getNormal() const { return normalVec; }
+    float          getDistanceFromOrigin() const { return distance; }
 
     // Equality/inequality comparison operators
-    friend int		operator ==(const SbPlane &p1, const SbPlane &p2);
-    friend int		operator !=(const SbPlane &p1, const SbPlane &p2)
-    { return !(p1 == p2); }
+    friend int operator==(const SbPlane &p1, const SbPlane &p2);
+    friend int operator!=(const SbPlane &p1, const SbPlane &p2) {
+        return !(p1 == p2);
+    }
 
   private:
     // Plane is all p such that normalVec . p - distance = 0
 
     // Normal to the plane
-    SbVec3f	normalVec;
+    SbVec3f normalVec;
 
     // Distance from origin to plane: distance * normalVec is on the plane
-    float	distance;
+    float distance;
 };
 
 #endif /* _SB_PLANE_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -55,9 +55,9 @@
 #include <stdarg.h>
 
 // Static variables declared in SoDebugError.h:
-SoType		SoDebugError::classTypeId;
-SoErrorCB	*SoDebugError::handlerCB;
-void		*SoDebugError::cbData;
+SoType     SoDebugError::classTypeId;
+SoErrorCB *SoDebugError::handlerCB;
+void *     SoDebugError::cbData;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -76,7 +76,7 @@ SoDebugError::initClass()
 
     // Set handler to default handler
     handlerCB = defaultHandlerCB;
-    cbData    = NULL;
+    cbData = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -102,22 +102,22 @@ SoDebugError::getTypeId() const
 // Use: extender
 
 void
-SoDebugError::post(const char *methodName, const char *formatString ...)
+SoDebugError::post(const char *methodName, const char *formatString...)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoDebugError	error;
-    SbString		str;
+    SoDebugError error;
+    SbString     str;
 
     // Same stuff as in base class
-    char	buf[10000];
-    va_list	ap;
+    char    buf[10000];
+    va_list ap;
 
     va_start(ap, formatString);
     vsprintf(buf, formatString, ap);
     va_end(ap);
 
-    str  = "Inventor error in ";
+    str = "Inventor error in ";
     str += methodName;
     str += "(): ";
     str += buf;
@@ -135,22 +135,22 @@ SoDebugError::post(const char *methodName, const char *formatString ...)
 // Use: extender
 
 void
-SoDebugError::postWarning(const char *methodName, const char *formatString ...)
+SoDebugError::postWarning(const char *methodName, const char *formatString...)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoDebugError	error;
-    SbString		str;
+    SoDebugError error;
+    SbString     str;
 
     // Same stuff as in base class
-    char	buf[10000];
-    va_list	ap;
+    char    buf[10000];
+    va_list ap;
 
     va_start(ap, formatString);
     vsprintf(buf, formatString, ap);
     va_end(ap);
 
-    str  = "Inventor warning in ";
+    str = "Inventor warning in ";
     str += methodName;
     str += "(): ";
     str += buf;
@@ -168,22 +168,22 @@ SoDebugError::postWarning(const char *methodName, const char *formatString ...)
 // Use: extender
 
 void
-SoDebugError::postInfo(const char *methodName, const char *formatString ...)
+SoDebugError::postInfo(const char *methodName, const char *formatString...)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoDebugError	error;
-    SbString		str;
+    SoDebugError error;
+    SbString     str;
 
     // Same stuff as in base class
-    char	buf[10000];
-    va_list	ap;
+    char    buf[10000];
+    va_list ap;
 
     va_start(ap, formatString);
     vsprintf(buf, formatString, ap);
     va_end(ap);
 
-    str  = "Inventor: in ";
+    str = "Inventor: in ";
     str += methodName;
     str += "(): ";
     str += buf;

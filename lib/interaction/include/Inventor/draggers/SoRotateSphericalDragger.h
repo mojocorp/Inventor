@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -57,13 +57,13 @@
  |     For info about the structure of SoRotateSphericalDragger:
  |     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
  |     [2] type:    ivNodeKitStructure SoRotateSphericalDragger.
- |     [3] The program prints a diagram of the scene graph and a table with 
+ |     [3] The program prints a diagram of the scene graph and a table with
  |         information about each part.
  |
  |  The following parts in this dragger are created at construction time.
  |  'ResourceName' corresponds to the name of the default geometry for the
  |  part. The dragger's constructor gets the scene graph for 'ResourceName'
- |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).  
+ |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).
  |
  |  Resource Name:                           Part Name:
  |
@@ -78,20 +78,18 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_ROTATE_SPHERICAL_DRAGGER_
-#define  _SO_ROTATE_SPHERICAL_DRAGGER_
+#ifndef _SO_ROTATE_SPHERICAL_DRAGGER_
+#define _SO_ROTATE_SPHERICAL_DRAGGER_
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/sensors/SoSensor.h>
 
-
 class SbSphereProjector;
 class SoFieldSensor;
 
-class SoRotateSphericalDragger : public SoDragger
-{
+class SoRotateSphericalDragger : public SoDragger {
     SO_KIT_HEADER(SoRotateSphericalDragger);
 
     SO_KIT_CATALOG_ENTRY_HEADER(rotatorSwitch);
@@ -108,58 +106,55 @@ class SoRotateSphericalDragger : public SoDragger
     SoSFRotation rotation;
 
     // Set/get a different sphere projector. The default uses an
-    // SbSpherePlaneProjector. 
+    // SbSpherePlaneProjector.
     // Pasing in NULL will cause the default type of projector to be used.
     // The projector will be deleted by this dragger when this dragger
     // is deleted.
     // Note that the center and radius of the sphere used by the
     // projector are determined by the dragger during dragStart.
-    void			setProjector(SbSphereProjector *p);
-    const SbSphereProjector *	getProjector() const	 { return sphereProj; }
+    void                     setProjector(SbSphereProjector *p);
+    const SbSphereProjector *getProjector() const { return sphereProj; }
 
-  SoINTERNAL public:
-    static void		initClass();	// initialize the class
+    SoINTERNAL
+  public:
+    static void initClass(); // initialize the class
 
   protected:
-
-    SbMatrix        prevMotionMatrix; // used during interaction
-    SbVec3f         prevWorldHitPt; // used during interaction
-    SbSphereProjector	*sphereProj;	// Sphere projector to use.
-    SbBool		userProj;	// using a user defined projector?
+    SbMatrix           prevMotionMatrix; // used during interaction
+    SbVec3f            prevWorldHitPt;   // used during interaction
+    SbSphereProjector *sphereProj;       // Sphere projector to use.
+    SbBool             userProj;         // using a user defined projector?
 
     // Redefines this to also copy the projector.
     // The projector needs to be copied since the user can set it.
-    virtual void	copyContents(const SoFieldContainer *fromFC,
-				     SbBool copyConnections);
+    virtual void copyContents(const SoFieldContainer *fromFC,
+                              SbBool                  copyConnections);
 
-    static void startCB( void *, SoDragger * );
-    static void motionCB( void *, SoDragger * );
-    static void doneCB( void *, SoDragger * );
+    static void startCB(void *, SoDragger *);
+    static void motionCB(void *, SoDragger *);
+    static void doneCB(void *, SoDragger *);
 
     SoFieldSensor *fieldSensor;
-    static void fieldSensorCB( void *, SoSensor * );
-    static void valueChangedCB( void *, SoDragger * );
+    static void    fieldSensorCB(void *, SoSensor *);
+    static void    valueChangedCB(void *, SoDragger *);
 
-    void	dragStart();
-    void	drag();
-    void	dragFinish();
+    void dragStart();
+    void drag();
+    void dragFinish();
 
     // detach/attach any sensors, callbacks, and/or field connections.
     // Called by:            start/end of SoBaseKit::readInstance
     // and on new copy by:   start/end of SoBaseKit::copy.
-    // Classes that redefine must call setUpConnections(TRUE,TRUE) 
+    // Classes that redefine must call setUpConnections(TRUE,TRUE)
     // at end of constructor.
     // Returns the state of the node when this was called.
-    virtual SbBool setUpConnections( SbBool onOff, SbBool doItAlways = FALSE );
+    virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
 
     virtual ~SoRotateSphericalDragger();
 
   private:
     // Default geometry
     static const unsigned char geomBuffer[];
-};    
+};
 
-
-#endif  /* _SO_ROTATE_SPHERICAL_DRAGGER_ */
-
-
+#endif /* _SO_ROTATE_SPHERICAL_DRAGGER_ */

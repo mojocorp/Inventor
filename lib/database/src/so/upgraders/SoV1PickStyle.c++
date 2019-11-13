@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -89,8 +89,7 @@ SoV1PickStyle::SoV1PickStyle()
 SoV1PickStyle::~SoV1PickStyle()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -107,20 +106,20 @@ SoV1PickStyle::createNewNode()
     SoPickStyle *result = SO_UPGRADER_CREATE_NEW(SoPickStyle);
 
     // Convert from old enum to new enum
-    if (! style.isDefault()) {
-	switch ((Style) style.getValue()) {
+    if (!style.isDefault()) {
+        switch ((Style)style.getValue()) {
 
-	  case PICKABLE:
-	    result->style = SoPickStyle::SHAPE;
-	    break;
+        case PICKABLE:
+            result->style = SoPickStyle::SHAPE;
+            break;
 
-	  case UNPICKABLE:
-	    result->style = SoPickStyle::UNPICKABLE;
-	    break;
-	}
+        case UNPICKABLE:
+            result->style = SoPickStyle::UNPICKABLE;
+            break;
+        }
 
-	if (style.isIgnored())
-	    result->style.setIgnored(TRUE);
+        if (style.isIgnored())
+            result->style.setIgnored(TRUE);
     }
 
     return result;

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -70,8 +70,7 @@ SO_ELEMENT_SOURCE(SoCacheElement);
 // Use: internal
 
 void
-SoCacheElement::initClass()
-{
+SoCacheElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoCacheElement, SoElement);
 }
 
@@ -85,8 +84,7 @@ SoCacheElement::initClass()
 SoCacheElement::~SoCacheElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -115,22 +113,21 @@ SoCacheElement::set(SoState *state, SoCache *cache)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoCacheElement	*elt;
+    SoCacheElement *elt;
 
 #ifdef DEBUG
     if (cache == NULL) {
-	SoDebugError::post("SoCacheElement::set",
-			   "NULL argument illegal");
-	return;
+        SoDebugError::post("SoCacheElement::set", "NULL argument illegal");
+        return;
     }
-#endif    
+#endif
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoCacheElement *) getElement(state, classStackIndex);
+    elt = (SoCacheElement *)getElement(state, classStackIndex);
 
     if (elt == NULL) {
-	SoDebugError::post("SoCacheElement::set", "unable to access element");
-	return;
+        SoDebugError::post("SoCacheElement::set", "unable to access element");
+        return;
     }
 
     elt->cache = cache;
@@ -152,8 +149,8 @@ SoCacheElement::anyOpen(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoCacheElement *elt = (const SoCacheElement *)
-	state->getConstElement(classStackIndex);
+    const SoCacheElement *elt =
+        (const SoCacheElement *)state->getConstElement(classStackIndex);
 
     // Assume that nobody has set a cache to NULL; that means the only
     // NULL cache is the first instance on the stack, which doesn't
@@ -174,16 +171,15 @@ SoCacheElement::invalidate(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoCacheElement	*cacheElt;
+    const SoCacheElement *cacheElt;
 
     invalidated = TRUE;
 
-    cacheElt = (const SoCacheElement *)
-	state->getConstElement(classStackIndex);
+    cacheElt = (const SoCacheElement *)state->getConstElement(classStackIndex);
 
     while (cacheElt != NULL && cacheElt->cache != NULL) {
-	cacheElt->cache->invalidate();
-	cacheElt = (const SoCacheElement *) cacheElt->getNextInStack();
+        cacheElt->cache->invalidate();
+        cacheElt = (const SoCacheElement *)cacheElt->getNextInStack();
     }
 }
 
@@ -219,7 +215,7 @@ SoCacheElement::pop(SoState *state, const SoElement *prevTopElement)
 ////////////////////////////////////////////////////////////////////////
 {
     // The previous element is gone, so get rid of its cache
-    ((SoCacheElement *) prevTopElement)->cache->unref();
+    ((SoCacheElement *)prevTopElement)->cache->unref();
 
     // Let the state know whether a cache is still open. NOTE: this
     // assumes there can't be an element with a NULL cache deeper than
@@ -242,7 +238,7 @@ SoCacheElement::matches(const SoElement *) const
 ////////////////////////////////////////////////////////////////////////
 {
     SoDebugError::post("SoCacheElement::matches",
-		       "cache elements should never be compared!!!");
+                       "cache elements should never be compared!!!");
 
     return FALSE;
 }
@@ -260,7 +256,7 @@ SoCacheElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoDebugError::post("SoCacheElement::copyMatchInfo",
-		       "cache elements should never be copied!");
+                       "cache elements should never be copied!");
 
     return NULL;
 }
@@ -283,14 +279,13 @@ SoCacheElement::addElement(SoState *state, const SoElement *elt)
     // stack, adding the element if the element's depth is smaller
     // than the depth of the cache element instance.
 
-    const SoCacheElement	*cacheElt;
+    const SoCacheElement *cacheElt;
 
-    cacheElt = (const SoCacheElement *)
-	state->getConstElement(classStackIndex);
+    cacheElt = (const SoCacheElement *)state->getConstElement(classStackIndex);
 
     while (cacheElt != NULL && elt->getDepth() < cacheElt->getDepth()) {
-	cacheElt->cache->addElement(elt);
-	cacheElt = (const SoCacheElement *) cacheElt->getNextInStack();
+        cacheElt->cache->addElement(elt);
+        cacheElt = (const SoCacheElement *)cacheElt->getNextInStack();
     }
 }
 
@@ -310,15 +305,14 @@ SoCacheElement::addCacheDependency(SoState *state, SoCache *cache)
 ////////////////////////////////////////////////////////////////////////
 {
     // Each currently open caching separator has a corresponding
-    // SoCacheElement in the stack.  
+    // SoCacheElement in the stack.
 
-    const SoCacheElement	*cacheElt;
+    const SoCacheElement *cacheElt;
 
-    cacheElt = (const SoCacheElement *)
-	state->getConstElement(classStackIndex);
+    cacheElt = (const SoCacheElement *)state->getConstElement(classStackIndex);
 
     while (cacheElt != NULL && cacheElt->cache != NULL) {
-	cacheElt->cache->addCacheDependency(state, cache);
-	cacheElt = (const SoCacheElement *) cacheElt->getNextInStack();
+        cacheElt->cache->addCacheDependency(state, cache);
+        cacheElt = (const SoCacheElement *)cacheElt->getNextInStack();
     }
 }

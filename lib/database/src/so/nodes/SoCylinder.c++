@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -72,18 +72,18 @@
 SO_NODE_SOURCE(SoCylinder);
 
 // Shorthand for testing whether current parts includes PART
-#define HAS_PART(PARTS, PART)	((PARTS & (PART)) != 0)
+#define HAS_PART(PARTS, PART) ((PARTS & (PART)) != 0)
 
 // Returns S or T texture coord for point on top or bottom of
 // cylinder, given x or z coord
-#define BOT_TEX_S(x)	((x) * .5 + .5)
-#define BOT_TEX_T(z)	((z) * .5 + .5)
-#define TOP_TEX_S(x)	BOT_TEX_S(x)
-#define TOP_TEX_T(z)	(1.0 - BOT_TEX_T(z))
+#define BOT_TEX_S(x) ((x)*.5 + .5)
+#define BOT_TEX_T(z) ((z)*.5 + .5)
+#define TOP_TEX_S(x) BOT_TEX_S(x)
+#define TOP_TEX_T(z) (1.0 - BOT_TEX_T(z))
 
 // Cylinder ring geometry (x,z coords of points around 1 cross-section ring)
-SbVec2f		*SoCylinder::coordsArray;	// Ring x,z coordinates
-int		 SoCylinder::maxCoords;		// Current size of coord array
+SbVec2f *SoCylinder::coordsArray; // Ring x,z coordinates
+int      SoCylinder::maxCoords;   // Current size of coord array
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -114,7 +114,7 @@ SoCylinder::SoCylinder()
     SO_NODE_CONSTRUCTOR(SoCylinder);
     isBuiltIn = TRUE;
 
-    SO_NODE_ADD_FIELD(parts,  (ALL));
+    SO_NODE_ADD_FIELD(parts, (ALL));
     SO_NODE_ADD_FIELD(radius, (1.0));
     SO_NODE_ADD_FIELD(height, (2.0));
 
@@ -126,7 +126,7 @@ SoCylinder::SoCylinder()
 
     // Set size of array to 0 so it will be allocated first time
     if (SO_NODE_IS_FIRST_INSTANCE())
-	maxCoords = 0;
+        maxCoords = 0;
 
     // Set up info in enumerated type field
     SO_NODE_SET_SF_ENUM_TYPE(parts, Part);
@@ -142,8 +142,7 @@ SoCylinder::SoCylinder()
 SoCylinder::~SoCylinder()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -203,15 +202,15 @@ SoCylinder::GLRender(SoGLRenderAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // First see if the object is visible and should be rendered now
-    if (! shouldGLRender(action))
-	return;
+    if (!shouldGLRender(action))
+        return;
 
     // See if texturing is enabled
     SbBool doTextures = SoGLTextureEnabledElement::get(action->getState());
 
     // Render the cylinder.
     SbBool sendNormals = (SoLazyElement::getLightModel(action->getState()) !=
-		   SoLazyElement::BASE_COLOR);
+                          SoLazyElement::BASE_COLOR);
     GLRenderGeneric(action, sendNormals, doTextures);
 }
 
@@ -228,18 +227,18 @@ SoCylinder::rayPick(SoRayPickAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // First see if the object is pickable
-    if (! shouldRayPick(action))
-	return;
+    if (!shouldRayPick(action))
+        return;
 
-    int			curParts =(parts.isIgnored() ? ALL : parts.getValue());
-    SbLine		pickLine;
-    float		radius, halfHeight;
-    SbVec3f		enterPoint, exitPoint, normal;
-    SbVec4f		texCoord;
-    SoPickedPoint	*pp;
-    SoCylinderDetail	*detail;
-    SbBool		materialPerPart;
-    int			numHits = 0;
+    int               curParts = (parts.isIgnored() ? ALL : parts.getValue());
+    SbLine            pickLine;
+    float             radius, halfHeight;
+    SbVec3f           enterPoint, exitPoint, normal;
+    SbVec4f           texCoord;
+    SoPickedPoint *   pp;
+    SoCylinderDetail *detail;
+    SbBool            materialPerPart;
+    int               numHits = 0;
 
     // Compute the picking ray in our current object space
     computeObjectSpaceRay(action);
@@ -248,137 +247,136 @@ SoCylinder::rayPick(SoRayPickAction *action)
     getSize(radius, halfHeight);
 
     // Construct an infinite cylinder to test sides for intersection
-    SbCylinder	infiniteCyl;
+    SbCylinder infiniteCyl;
     infiniteCyl.setRadius(radius);
 
     SoMaterialBindingElement::Binding mbe =
-	SoMaterialBindingElement::get(action->getState());
-    materialPerPart =
-	(mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
-	 mbe == SoMaterialBindingElement::PER_PART);
+        SoMaterialBindingElement::get(action->getState());
+    materialPerPart = (mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
+                       mbe == SoMaterialBindingElement::PER_PART);
 
     // See if the line intersects the cylinder
     if (HAS_PART(curParts, SIDES) &&
-	infiniteCyl.intersect(action->getLine(), enterPoint, exitPoint)) {
+        infiniteCyl.intersect(action->getLine(), enterPoint, exitPoint)) {
 
-	// See if the enter point is within the real cylinder and is
-	// between the near and far clipping planes.
-	if (enterPoint[1] <= halfHeight && enterPoint[1] >= -halfHeight) {
+        // See if the enter point is within the real cylinder and is
+        // between the near and far clipping planes.
+        if (enterPoint[1] <= halfHeight && enterPoint[1] >= -halfHeight) {
 
-	    numHits++;
+            numHits++;
 
-	    if (action->isBetweenPlanes(enterPoint) &&
-		(pp = action->addIntersection(enterPoint)) != NULL) {
+            if (action->isBetweenPlanes(enterPoint) &&
+                (pp = action->addIntersection(enterPoint)) != NULL) {
 
-		// The normal at the point is the same as the point but
-		// with a 0 y coordinate
-		normal.setValue(enterPoint[0], 0.0, enterPoint[2]);
-		normal.normalize();
-		pp->setObjectNormal(normal);
+                // The normal at the point is the same as the point but
+                // with a 0 y coordinate
+                normal.setValue(enterPoint[0], 0.0, enterPoint[2]);
+                normal.normalize();
+                pp->setObjectNormal(normal);
 
-		texCoord.setValue(atan2f(enterPoint[0], enterPoint[2])
-				  * (1.0 / (2.0 * M_PI)) + 0.5,
-				  (enterPoint[1] + halfHeight) /
-				  (2.0 * halfHeight),
-				  0.0, 1.0);
-		pp->setObjectTextureCoords(texCoord);
+                texCoord.setValue(atan2f(enterPoint[0], enterPoint[2]) *
+                                          (1.0 / (2.0 * M_PI)) +
+                                      0.5,
+                                  (enterPoint[1] + halfHeight) /
+                                      (2.0 * halfHeight),
+                                  0.0, 1.0);
+                pp->setObjectTextureCoords(texCoord);
 
-		detail = new SoCylinderDetail();
-		detail->setPart(SIDES);
-		pp->setDetail(detail, this);
-	    }
-	}
+                detail = new SoCylinderDetail();
+                detail->setPart(SIDES);
+                pp->setDetail(detail, this);
+            }
+        }
 
-	// Do same for exit point
-	if (exitPoint[1] <= halfHeight && exitPoint[1] >= -halfHeight) {
-	    numHits++;
+        // Do same for exit point
+        if (exitPoint[1] <= halfHeight && exitPoint[1] >= -halfHeight) {
+            numHits++;
 
-	    if (action->isBetweenPlanes(exitPoint) &&
-		(pp = action->addIntersection(exitPoint)) != NULL) {
-		normal.setValue(exitPoint[0], 0.0, exitPoint[2]);
-		normal.normalize();
-		pp->setObjectNormal(normal);
-		texCoord.setValue(atan2f(exitPoint[0], exitPoint[2])
-				  * (1.0 / (2.0 * M_PI)) + 0.5,
-				  (exitPoint[1] + halfHeight) /
-				  (2.0 * halfHeight),
-				  0.0, 1.0);
-		pp->setObjectTextureCoords(texCoord);
-		detail = new SoCylinderDetail();
-		detail->setPart(SIDES);
-		pp->setDetail(detail, this);
-	    }
-	}
+            if (action->isBetweenPlanes(exitPoint) &&
+                (pp = action->addIntersection(exitPoint)) != NULL) {
+                normal.setValue(exitPoint[0], 0.0, exitPoint[2]);
+                normal.normalize();
+                pp->setObjectNormal(normal);
+                texCoord.setValue(
+                    atan2f(exitPoint[0], exitPoint[2]) * (1.0 / (2.0 * M_PI)) +
+                        0.5,
+                    (exitPoint[1] + halfHeight) / (2.0 * halfHeight), 0.0, 1.0);
+                pp->setObjectTextureCoords(texCoord);
+                detail = new SoCylinderDetail();
+                detail->setPart(SIDES);
+                pp->setDetail(detail, this);
+            }
+        }
     }
 
     // If we haven't hit the cylinder twice already, check for an
     // intersection with the top face
     if (numHits < 2 && HAS_PART(curParts, TOP)) {
-	SbVec3f	norm(0.0, 1.0, 0.0);
+        SbVec3f norm(0.0, 1.0, 0.0);
 
-	// Construct a plane containing the top face
-	SbPlane	topFacePlane(norm, halfHeight);
+        // Construct a plane containing the top face
+        SbPlane topFacePlane(norm, halfHeight);
 
-	// See if the ray hits this plane
-	if (topFacePlane.intersect(action->getLine(), enterPoint)) {
+        // See if the ray hits this plane
+        if (topFacePlane.intersect(action->getLine(), enterPoint)) {
 
-	    // See if the intersection is within the correct radius
-	    // and is within the clipping planes
-	    float distFromYAxisSquared = (enterPoint[0] * enterPoint[0] +
-					  enterPoint[2] * enterPoint[2]);
+            // See if the intersection is within the correct radius
+            // and is within the clipping planes
+            float distFromYAxisSquared =
+                (enterPoint[0] * enterPoint[0] + enterPoint[2] * enterPoint[2]);
 
-	    if (distFromYAxisSquared <= radius * radius) {
+            if (distFromYAxisSquared <= radius * radius) {
 
-		numHits++;
+                numHits++;
 
-		if (action->isBetweenPlanes(enterPoint) &&
-		    (pp = action->addIntersection(enterPoint)) != NULL) {
-		    pp->setObjectNormal(norm);
-		    texCoord.setValue(0.5 + enterPoint[0] / (2.0 * radius),
-				      0.5 - enterPoint[2] / (2.0 * radius),
-				      0.0, 1.0);
-		    pp->setObjectTextureCoords(texCoord);
-		    if (materialPerPart)
-			pp->setMaterialIndex(1);
-		    detail = new SoCylinderDetail();
-		    detail->setPart(TOP);
-		    pp->setDetail(detail, this);
-		}
-	    }
-	}
+                if (action->isBetweenPlanes(enterPoint) &&
+                    (pp = action->addIntersection(enterPoint)) != NULL) {
+                    pp->setObjectNormal(norm);
+                    texCoord.setValue(0.5 + enterPoint[0] / (2.0 * radius),
+                                      0.5 - enterPoint[2] / (2.0 * radius), 0.0,
+                                      1.0);
+                    pp->setObjectTextureCoords(texCoord);
+                    if (materialPerPart)
+                        pp->setMaterialIndex(1);
+                    detail = new SoCylinderDetail();
+                    detail->setPart(TOP);
+                    pp->setDetail(detail, this);
+                }
+            }
+        }
     }
 
     // If we haven't hit the cylinder twice already, check for an
     // intersection with the bottom face
     if (numHits < 2 && HAS_PART(curParts, BOTTOM)) {
-	SbVec3f	norm(0.0, -1.0, 0.0);
+        SbVec3f norm(0.0, -1.0, 0.0);
 
-	// Construct a plane containing the bottom face
-	SbPlane		bottomFacePlane(norm, halfHeight);
+        // Construct a plane containing the bottom face
+        SbPlane bottomFacePlane(norm, halfHeight);
 
-	// See if the ray hits this plane
-	if (bottomFacePlane.intersect(action->getLine(), enterPoint)) {
+        // See if the ray hits this plane
+        if (bottomFacePlane.intersect(action->getLine(), enterPoint)) {
 
-	    // See if the intersection is within the correct radius
-	    // and is within the clipping planes
-	    float distFromYAxisSquared = (enterPoint[0] * enterPoint[0] +
-					  enterPoint[2] * enterPoint[2]);
+            // See if the intersection is within the correct radius
+            // and is within the clipping planes
+            float distFromYAxisSquared =
+                (enterPoint[0] * enterPoint[0] + enterPoint[2] * enterPoint[2]);
 
-	    if (distFromYAxisSquared <= radius * radius &&
-		action->isBetweenPlanes(enterPoint) &&
-		(pp = action->addIntersection(enterPoint)) != NULL) {
-		pp->setObjectNormal(norm);
-		texCoord.setValue(0.5 + enterPoint[0] / (2.0 * radius),
-				  0.5 + enterPoint[2] / (2.0 * radius),
-				  0.0, 1.0);
-		pp->setObjectTextureCoords(texCoord);
-		if (materialPerPart)
-		    pp->setMaterialIndex(2);
-		detail = new SoCylinderDetail();
-		detail->setPart(BOTTOM);
-		pp->setDetail(detail, this);
-	    }
-	}
+            if (distFromYAxisSquared <= radius * radius &&
+                action->isBetweenPlanes(enterPoint) &&
+                (pp = action->addIntersection(enterPoint)) != NULL) {
+                pp->setObjectNormal(norm);
+                texCoord.setValue(0.5 + enterPoint[0] / (2.0 * radius),
+                                  0.5 + enterPoint[2] / (2.0 * radius), 0.0,
+                                  1.0);
+                pp->setObjectTextureCoords(texCoord);
+                if (materialPerPart)
+                    pp->setMaterialIndex(2);
+                detail = new SoCylinderDetail();
+                detail->setPart(BOTTOM);
+                pp->setDetail(detail, this);
+            }
+        }
     }
 }
 
@@ -394,33 +392,32 @@ SoCylinder::computeBBox(SoAction *, SbBox3f &box, SbVec3f &center)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		curParts = (parts.isIgnored() ? ALL : parts.getValue());
+    int curParts = (parts.isIgnored() ? ALL : parts.getValue());
 
-    if (curParts == 0)		// No parts at all!
-	box.setBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    if (curParts == 0) // No parts at all!
+        box.setBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
     else {
-	float	r, h;
-	SbVec3f	min, max;
+        float   r, h;
+        SbVec3f min, max;
 
-	getSize(r, h);
+        getSize(r, h);
 
-	if (HAS_PART(curParts, SIDES | TOP))
-	    max.setValue( r,  h,  r);
-	else
-	    max.setValue( r, -h,  r);
+        if (HAS_PART(curParts, SIDES | TOP))
+            max.setValue(r, h, r);
+        else
+            max.setValue(r, -h, r);
 
-	if (HAS_PART(curParts, SIDES | BOTTOM))
-	    min.setValue(-r, -h, -r);
-	else
-	    min.setValue(-r,  h, -r);
+        if (HAS_PART(curParts, SIDES | BOTTOM))
+            min.setValue(-r, -h, -r);
+        else
+            min.setValue(-r, h, -r);
 
-	box.setBounds(min, max);
+        box.setBounds(min, max);
     }
 
     center.setValue(0.0, 0.0, 0.0);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -434,25 +431,24 @@ SoCylinder::generatePrimitives(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool		materialPerPart;
-    int			curParts, numSides, numSections, side, section;
-    float		yTop, yBot, dy;
-    float		s, ds, tTop, tBot, dt;
-    float		outerRadius, innerRadius, dRadius;
-    SbVec2f		*ringCoords;
-    SbVec3f		pt, norm;
-    float		radius, halfHeight;
-    SbVec4f		tex;
-    SbBool		genTexCoords;
-    SoPrimitiveVertex	pv;
-    SoCylinderDetail	detail;
-    const SoTextureCoordinateElement	*tce;
+    SbBool            materialPerPart;
+    int               curParts, numSides, numSections, side, section;
+    float             yTop, yBot, dy;
+    float             s, ds, tTop, tBot, dt;
+    float             outerRadius, innerRadius, dRadius;
+    SbVec2f *         ringCoords;
+    SbVec3f           pt, norm;
+    float             radius, halfHeight;
+    SbVec4f           tex;
+    SbBool            genTexCoords;
+    SoPrimitiveVertex pv;
+    SoCylinderDetail  detail;
+    const SoTextureCoordinateElement *tce;
 
     SoMaterialBindingElement::Binding mbe =
-	SoMaterialBindingElement::get(action->getState());
-    materialPerPart =
-	(mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
-	 mbe == SoMaterialBindingElement::PER_PART);
+        SoMaterialBindingElement::get(action->getState());
+    materialPerPart = (mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
+                       mbe == SoMaterialBindingElement::PER_PART);
 
     curParts = (parts.isIgnored() ? ALL : parts.getValue());
 
@@ -465,419 +461,404 @@ SoCylinder::generatePrimitives(SoAction *action)
 
     // Determine whether we should generate our own texture coordinates
     switch (SoTextureCoordinateElement::getType(action->getState())) {
-      case SoTextureCoordinateElement::EXPLICIT:
-	genTexCoords = TRUE;
-	break;
-      case SoTextureCoordinateElement::FUNCTION:
-	genTexCoords = FALSE;
-	break;
+    case SoTextureCoordinateElement::EXPLICIT:
+        genTexCoords = TRUE;
+        break;
+    case SoTextureCoordinateElement::FUNCTION:
+        genTexCoords = FALSE;
+        break;
     }
 
     // If we're not generating our own coordinates, we'll need the
     // texture coordinate element to get coords based on points/normals.
-    if (! genTexCoords)
-	tce = SoTextureCoordinateElement::getInstance(action->getState());
+    if (!genTexCoords)
+        tce = SoTextureCoordinateElement::getInstance(action->getState());
     else {
-	tex[2] = 0.0;
-	tex[3] = 1.0;
+        tex[2] = 0.0;
+        tex[3] = 1.0;
     }
 
     getSize(radius, halfHeight);
 
     if (HAS_PART(curParts, SIDES)) {
 
-	// Draw each section of sides as a triangle mesh, from top to bottom
-	yTop = 1.0;
-	dy   = -2.0 / numSections;
-	tTop = 1.0;
-	dt   = -1.0 / numSections;
-	ds   = -1.0 / numSides;
+        // Draw each section of sides as a triangle mesh, from top to bottom
+        yTop = 1.0;
+        dy = -2.0 / numSections;
+        tTop = 1.0;
+        dt = -1.0 / numSections;
+        ds = -1.0 / numSides;
 
-	for (section = 0; section < numSections; section++) {
+        for (section = 0; section < numSections; section++) {
 
-	    yBot = yTop + dy;
+            yBot = yTop + dy;
 
-	    tBot = tTop + dt;
-	    s    = 1.0;
+            tBot = tTop + dt;
+            s = 1.0;
 
-	    detail.setPart(SIDES);
+            detail.setPart(SIDES);
 
-	    beginShape(action, TRIANGLE_STRIP);
+            beginShape(action, TRIANGLE_STRIP);
 
-	    for (side = 0; side < numSides; side++) {
-		pt[0] = ringCoords[side][0];
-		pt[2] = ringCoords[side][1];
+            for (side = 0; side < numSides; side++) {
+                pt[0] = ringCoords[side][0];
+                pt[2] = ringCoords[side][1];
 
-		// Deal with normal
-		norm.setValue(pt[0], 0.0, pt[2]);
-		pv.setNormal(norm);
+                // Deal with normal
+                norm.setValue(pt[0], 0.0, pt[2]);
+                pv.setNormal(norm);
 
-		// Point at bottom of section
-		pt[1] = yBot;
-		pt[0] *= radius;
-		pt[1] *= halfHeight;
-		pt[2] *= radius;
+                // Point at bottom of section
+                pt[1] = yBot;
+                pt[0] *= radius;
+                pt[1] *= halfHeight;
+                pt[2] *= radius;
 
-		if (genTexCoords) {
-		    tex[0] = s;
-		    tex[1] = tBot;
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                if (genTexCoords) {
+                    tex[0] = s;
+                    tex[1] = tBot;
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		// Point at top of section
-		pt[1] = yTop;
-		pt[1] *= halfHeight;
-		if (genTexCoords) {
-		    tex[0] = s;
-		    tex[1] = tTop;
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
-		s += ds;
-	    }
+                // Point at top of section
+                pt[1] = yTop;
+                pt[1] *= halfHeight;
+                if (genTexCoords) {
+                    tex[0] = s;
+                    tex[1] = tTop;
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
+                s += ds;
+            }
 
-	    // Join end of strip back to beginning
-	    side = 0;
-	    s = 0.0;
-	    pt[0] = ringCoords[side][0];
-	    pt[2] = ringCoords[side][1];
+            // Join end of strip back to beginning
+            side = 0;
+            s = 0.0;
+            pt[0] = ringCoords[side][0];
+            pt[2] = ringCoords[side][1];
 
-	    // Deal with normal
-	    norm.setValue(pt[0], 0.0, pt[2]);
-	    pv.setNormal(norm);
+            // Deal with normal
+            norm.setValue(pt[0], 0.0, pt[2]);
+            pv.setNormal(norm);
 
-	    // Point at bottom of section
-	    pt[1] = yBot;
-	    pt[0] *= radius;
-	    pt[1] *= halfHeight;
-	    pt[2] *= radius;
+            // Point at bottom of section
+            pt[1] = yBot;
+            pt[0] *= radius;
+            pt[1] *= halfHeight;
+            pt[2] *= radius;
 
-	    if (genTexCoords) {
-		tex[0] = s;
-		tex[1] = tBot;
-	    }
-	    else
-		tex = tce->get(pt, norm);
-	    pv.setPoint(pt);
-	    pv.setTextureCoords(tex);
-	    shapeVertex(&pv);
+            if (genTexCoords) {
+                tex[0] = s;
+                tex[1] = tBot;
+            } else
+                tex = tce->get(pt, norm);
+            pv.setPoint(pt);
+            pv.setTextureCoords(tex);
+            shapeVertex(&pv);
 
-	    // Point at top of section
-	    pt[1] = yTop;
-	    pt[1] *= halfHeight;
-	    if (genTexCoords) {
-		tex[0] = s;
-		tex[1] = tTop;
-	    }
-	    else
-		tex = tce->get(pt, norm);
-	    pv.setPoint(pt);
-	    pv.setTextureCoords(tex);
-	    shapeVertex(&pv);
-	    s += ds;
+            // Point at top of section
+            pt[1] = yTop;
+            pt[1] *= halfHeight;
+            if (genTexCoords) {
+                tex[0] = s;
+                tex[1] = tTop;
+            } else
+                tex = tce->get(pt, norm);
+            pv.setPoint(pt);
+            pv.setTextureCoords(tex);
+            shapeVertex(&pv);
+            s += ds;
 
-	    endShape();
+            endShape();
 
-	    // Prepare for next section down
-	    yTop = yBot;
-	    tTop = tBot;
-	}
+            // Prepare for next section down
+            yTop = yBot;
+            tTop = tBot;
+        }
     }
 
     // Draw top face as a series of concentric rings. The number of
     // rings is the same as the number of sections of the sides of the
     // cylinder.
     if (HAS_PART(curParts, TOP)) {
-	norm.setValue(0.0, 1.0, 0.0);
-	pt[1] = halfHeight;
+        norm.setValue(0.0, 1.0, 0.0);
+        pt[1] = halfHeight;
 
-	if (materialPerPart)
-	    pv.setMaterialIndex(1);
-	pv.setNormal(norm);
-	detail.setPart(TOP);
+        if (materialPerPart)
+            pv.setMaterialIndex(1);
+        pv.setNormal(norm);
+        detail.setPart(TOP);
 
-	// Start at the outside and work in
-	outerRadius = 1.0;
-	dRadius     = -1.0 / numSections;
-	for (section = numSections - 1; section >= 0; --section) {
+        // Start at the outside and work in
+        outerRadius = 1.0;
+        dRadius = -1.0 / numSections;
+        for (section = numSections - 1; section >= 0; --section) {
 
-	    innerRadius = outerRadius + dRadius;
+            innerRadius = outerRadius + dRadius;
 
-	    // Innermost ring is treated as a triangle fan. This not
-	    // only gets better shading (because the center vertex is
-	    // sent), but also avoids the problem of having a polygon
-	    // with too many vertices.
-	    if (section == 0) {
-		beginShape(action, TRIANGLE_FAN);
+            // Innermost ring is treated as a triangle fan. This not
+            // only gets better shading (because the center vertex is
+            // sent), but also avoids the problem of having a polygon
+            // with too many vertices.
+            if (section == 0) {
+                beginShape(action, TRIANGLE_FAN);
 
-		// Center point comes first
-		pt[0] = pt[2] = 0.0;
-		if (genTexCoords)
-		    tex[0] = tex[1] = 0.5;
-		else
-		    tex = tce->get(norm, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Center point comes first
+                pt[0] = pt[2] = 0.0;
+                if (genTexCoords)
+                    tex[0] = tex[1] = 0.5;
+                else
+                    tex = tce->get(norm, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		// Send all vertices around ring. Go in reverse order
-		// so that vertex ordering is correct
-		for (side = numSides - 1; side >= 0; side--) {
-		    pt[0] = outerRadius * ringCoords[side][0];
-		    pt[2] = outerRadius * ringCoords[side][1];
-		    pt[0] *= radius;
-		    pt[2] *= radius;
-		    if (genTexCoords) {
-			tex[0] = TOP_TEX_S(pt[0]);
-			tex[1] = TOP_TEX_T(pt[2]);
-		    }
-		    else
-			tex = tce->get(pt, norm);
-		    pv.setPoint(pt);
-		    pv.setTextureCoords(tex);
-		    shapeVertex(&pv);
-		}
-		// Send first vertex again
-		pt[0] = outerRadius * ringCoords[numSides - 1][0];
-		pt[2] = outerRadius * ringCoords[numSides - 1][1];
-		pt[0] *= radius;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = TOP_TEX_S(pt[0]);
-		    tex[1] = TOP_TEX_T(pt[2]);
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Send all vertices around ring. Go in reverse order
+                // so that vertex ordering is correct
+                for (side = numSides - 1; side >= 0; side--) {
+                    pt[0] = outerRadius * ringCoords[side][0];
+                    pt[2] = outerRadius * ringCoords[side][1];
+                    pt[0] *= radius;
+                    pt[2] *= radius;
+                    if (genTexCoords) {
+                        tex[0] = TOP_TEX_S(pt[0]);
+                        tex[1] = TOP_TEX_T(pt[2]);
+                    } else
+                        tex = tce->get(pt, norm);
+                    pv.setPoint(pt);
+                    pv.setTextureCoords(tex);
+                    shapeVertex(&pv);
+                }
+                // Send first vertex again
+                pt[0] = outerRadius * ringCoords[numSides - 1][0];
+                pt[2] = outerRadius * ringCoords[numSides - 1][1];
+                pt[0] *= radius;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = TOP_TEX_S(pt[0]);
+                    tex[1] = TOP_TEX_T(pt[2]);
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		endShape();
-	    }
+                endShape();
+            }
 
-	    // Other rings are triangle strips
-	    else {
-		beginShape(action, TRIANGLE_STRIP);
+            // Other rings are triangle strips
+            else {
+                beginShape(action, TRIANGLE_STRIP);
 
-		for (side = 0; side < numSides; side++) {
-		    // Send points on outer and inner rings
-		    pt[0] = outerRadius * ringCoords[side][0];
-		    pt[2] = outerRadius * ringCoords[side][1];
-		    pt[0] *= radius;
-		    pt[2] *= radius;
-		    if (genTexCoords) {
-			tex[0] = TOP_TEX_S(pt[0]);
-			tex[1] = TOP_TEX_T(pt[2]);
-		    }
-		    else
-			tex = tce->get(pt, norm);
-		    pv.setPoint(pt);
-		    pv.setTextureCoords(tex);
-		    shapeVertex(&pv);
-		    pt[0] = innerRadius * ringCoords[side][0];
-		    pt[2] = innerRadius * ringCoords[side][1];
-		    pt[0] *= radius;
-		    pt[2] *= radius;
-		    if (genTexCoords) {
-			tex[0] = TOP_TEX_S(pt[0]);
-			tex[1] = TOP_TEX_T(pt[2]);
-		    }
-		    else
-			tex = tce->get(pt, norm);
-		    pv.setPoint(pt);
-		    pv.setTextureCoords(tex);
-		    shapeVertex(&pv);
-		}
+                for (side = 0; side < numSides; side++) {
+                    // Send points on outer and inner rings
+                    pt[0] = outerRadius * ringCoords[side][0];
+                    pt[2] = outerRadius * ringCoords[side][1];
+                    pt[0] *= radius;
+                    pt[2] *= radius;
+                    if (genTexCoords) {
+                        tex[0] = TOP_TEX_S(pt[0]);
+                        tex[1] = TOP_TEX_T(pt[2]);
+                    } else
+                        tex = tce->get(pt, norm);
+                    pv.setPoint(pt);
+                    pv.setTextureCoords(tex);
+                    shapeVertex(&pv);
+                    pt[0] = innerRadius * ringCoords[side][0];
+                    pt[2] = innerRadius * ringCoords[side][1];
+                    pt[0] *= radius;
+                    pt[2] *= radius;
+                    if (genTexCoords) {
+                        tex[0] = TOP_TEX_S(pt[0]);
+                        tex[1] = TOP_TEX_T(pt[2]);
+                    } else
+                        tex = tce->get(pt, norm);
+                    pv.setPoint(pt);
+                    pv.setTextureCoords(tex);
+                    shapeVertex(&pv);
+                }
 
-		// Join end of strip back to beginning
-		pt[0] = outerRadius * ringCoords[0][0];
-		pt[2] = outerRadius * ringCoords[0][1];
-		pt[0] *= radius;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = TOP_TEX_S(pt[0]);
-		    tex[1] = TOP_TEX_T(pt[2]);
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
-		pt[0] = innerRadius * ringCoords[0][0];
-		pt[2] = innerRadius * ringCoords[0][1];
-		pt[0] *= radius;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = TOP_TEX_S(pt[0]);
-		    tex[1] = TOP_TEX_T(pt[2]);
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Join end of strip back to beginning
+                pt[0] = outerRadius * ringCoords[0][0];
+                pt[2] = outerRadius * ringCoords[0][1];
+                pt[0] *= radius;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = TOP_TEX_S(pt[0]);
+                    tex[1] = TOP_TEX_T(pt[2]);
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
+                pt[0] = innerRadius * ringCoords[0][0];
+                pt[2] = innerRadius * ringCoords[0][1];
+                pt[0] *= radius;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = TOP_TEX_S(pt[0]);
+                    tex[1] = TOP_TEX_T(pt[2]);
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		endShape();
+                endShape();
 
-		// Prepare for next ring
-		outerRadius = innerRadius;
-	    }
-	}
+                // Prepare for next ring
+                outerRadius = innerRadius;
+            }
+        }
     }
 
     // Draw bottom face the same way as the top
     if (HAS_PART(curParts, BOTTOM)) {
-	norm.setValue(0.0, -1.0, 0.0);
-	pt[1] = -halfHeight;
+        norm.setValue(0.0, -1.0, 0.0);
+        pt[1] = -halfHeight;
 
-	if (materialPerPart)
-	    pv.setMaterialIndex(2);
-	pv.setNormal(norm);
-	detail.setPart(BOTTOM);
+        if (materialPerPart)
+            pv.setMaterialIndex(2);
+        pv.setNormal(norm);
+        detail.setPart(BOTTOM);
 
-	// Start at the outside and work in
-	outerRadius = 1.0;
-	dRadius     = -1.0 / numSections;
-	for (section = numSections - 1; section >= 0; --section) {
+        // Start at the outside and work in
+        outerRadius = 1.0;
+        dRadius = -1.0 / numSections;
+        for (section = numSections - 1; section >= 0; --section) {
 
-	    innerRadius = outerRadius + dRadius;
+            innerRadius = outerRadius + dRadius;
 
-	    // Innermost ring is drawn as a triangle fan. This not
-	    // only gets better shading (because the center vertex is
-	    // sent), but also avoids the problem of having a polygon
-	    // with too many vertices.
-	    if (section == 0) {
-		beginShape(action, TRIANGLE_FAN);
+            // Innermost ring is drawn as a triangle fan. This not
+            // only gets better shading (because the center vertex is
+            // sent), but also avoids the problem of having a polygon
+            // with too many vertices.
+            if (section == 0) {
+                beginShape(action, TRIANGLE_FAN);
 
-		// Center point comes first
-		pt[0] = pt[2] = 0.0;
-		if (genTexCoords)
-		    tex[0] = tex[1] = 0.5;
-		else
-		    tex = tce->get(norm, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Center point comes first
+                pt[0] = pt[2] = 0.0;
+                if (genTexCoords)
+                    tex[0] = tex[1] = 0.5;
+                else
+                    tex = tce->get(norm, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		// Send all vertices around ring
-		for (side = 0; side < numSides; side++) {
-		    pt[0] = outerRadius * ringCoords[side][0];
-		    pt[2] = outerRadius * ringCoords[side][1];
-		    pt[0] *= radius;
-		    pt[2] *= radius;
-		    if (genTexCoords) {
-			tex[0] = BOT_TEX_S(pt[0]);
-			tex[1] = BOT_TEX_T(pt[2]);
-		    }
-		    else
-			tex = tce->get(pt, norm);
-		    pv.setPoint(pt);
-		    pv.setTextureCoords(tex);
-		    shapeVertex(&pv);
-		}
-		// Send first vertex again
-		pt[0] = outerRadius * ringCoords[0][0];
-		pt[2] = outerRadius * ringCoords[0][1];
-		pt[0] *= radius;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = BOT_TEX_S(pt[0]);
-		    tex[1] = BOT_TEX_T(pt[2]);
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Send all vertices around ring
+                for (side = 0; side < numSides; side++) {
+                    pt[0] = outerRadius * ringCoords[side][0];
+                    pt[2] = outerRadius * ringCoords[side][1];
+                    pt[0] *= radius;
+                    pt[2] *= radius;
+                    if (genTexCoords) {
+                        tex[0] = BOT_TEX_S(pt[0]);
+                        tex[1] = BOT_TEX_T(pt[2]);
+                    } else
+                        tex = tce->get(pt, norm);
+                    pv.setPoint(pt);
+                    pv.setTextureCoords(tex);
+                    shapeVertex(&pv);
+                }
+                // Send first vertex again
+                pt[0] = outerRadius * ringCoords[0][0];
+                pt[2] = outerRadius * ringCoords[0][1];
+                pt[0] *= radius;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = BOT_TEX_S(pt[0]);
+                    tex[1] = BOT_TEX_T(pt[2]);
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		endShape();
-	    }
+                endShape();
+            }
 
-	    // Other rings are triangle strips
-	    else {
-		beginShape(action, TRIANGLE_STRIP);
+            // Other rings are triangle strips
+            else {
+                beginShape(action, TRIANGLE_STRIP);
 
-		// Go in reverse order so that vertex ordering is correct
-		for (side = numSides - 1; side >= 0; side--) {
-		    // Send points on outer and inner rings
-		    pt[0] = outerRadius * ringCoords[side][0];
-		    pt[2] = outerRadius * ringCoords[side][1];
-		    pt[0] *= radius;
-		    pt[2] *= radius;
-		    if (genTexCoords) {
-			tex[0] = BOT_TEX_S(pt[0]);
-			tex[1] = BOT_TEX_T(pt[2]);
-		    }
-		    else
-			tex = tce->get(pt, norm);
-		    pv.setPoint(pt);
-		    pv.setTextureCoords(tex);
-		    shapeVertex(&pv);
-		    pt[0] = innerRadius * ringCoords[side][0];
-		    pt[2] = innerRadius * ringCoords[side][1];
-		    pt[0] *= radius;
-		    pt[2] *= radius;
-		    if (genTexCoords) {
-			tex[0] = BOT_TEX_S(pt[0]);
-			tex[1] = BOT_TEX_T(pt[2]);
-		    }
-		    else
-			tex = tce->get(pt, norm);
-		    pv.setPoint(pt);
-		    pv.setTextureCoords(tex);
-		    shapeVertex(&pv);
-		}
+                // Go in reverse order so that vertex ordering is correct
+                for (side = numSides - 1; side >= 0; side--) {
+                    // Send points on outer and inner rings
+                    pt[0] = outerRadius * ringCoords[side][0];
+                    pt[2] = outerRadius * ringCoords[side][1];
+                    pt[0] *= radius;
+                    pt[2] *= radius;
+                    if (genTexCoords) {
+                        tex[0] = BOT_TEX_S(pt[0]);
+                        tex[1] = BOT_TEX_T(pt[2]);
+                    } else
+                        tex = tce->get(pt, norm);
+                    pv.setPoint(pt);
+                    pv.setTextureCoords(tex);
+                    shapeVertex(&pv);
+                    pt[0] = innerRadius * ringCoords[side][0];
+                    pt[2] = innerRadius * ringCoords[side][1];
+                    pt[0] *= radius;
+                    pt[2] *= radius;
+                    if (genTexCoords) {
+                        tex[0] = BOT_TEX_S(pt[0]);
+                        tex[1] = BOT_TEX_T(pt[2]);
+                    } else
+                        tex = tce->get(pt, norm);
+                    pv.setPoint(pt);
+                    pv.setTextureCoords(tex);
+                    shapeVertex(&pv);
+                }
 
-		// Join end of strip back to beginning
-		side = numSides - 1;
-		pt[0] = outerRadius * ringCoords[side][0];
-		pt[2] = outerRadius * ringCoords[side][1];
-		pt[0] *= radius;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = BOT_TEX_S(pt[0]);
-		    tex[1] = BOT_TEX_T(pt[2]);
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
-		pt[0] = innerRadius * ringCoords[side][0];
-		pt[2] = innerRadius * ringCoords[side][1];
-		pt[0] *= radius;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = BOT_TEX_S(pt[0]);
-		    tex[1] = BOT_TEX_T(pt[2]);
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Join end of strip back to beginning
+                side = numSides - 1;
+                pt[0] = outerRadius * ringCoords[side][0];
+                pt[2] = outerRadius * ringCoords[side][1];
+                pt[0] *= radius;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = BOT_TEX_S(pt[0]);
+                    tex[1] = BOT_TEX_T(pt[2]);
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
+                pt[0] = innerRadius * ringCoords[side][0];
+                pt[2] = innerRadius * ringCoords[side][1];
+                pt[0] *= radius;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = BOT_TEX_S(pt[0]);
+                    tex[1] = BOT_TEX_T(pt[2]);
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		endShape();
+                endShape();
 
-		// Prepare for next ring
-		outerRadius = innerRadius;
-	    }
-	}
+                // Prepare for next ring
+                outerRadius = innerRadius;
+            }
+        }
     }
 }
 
 //
 // Macro to multiply out coordinates to avoid extra GL calls:
 //
-#define SCALE(pt) (tmp[0] = (pt)[0]*scale[0], tmp[1] = (pt)[1]*scale[1], \
-		   tmp[2] = (pt)[2]*scale[2], tmp)
+#define SCALE(pt)                                                              \
+    (tmp[0] = (pt)[0] * scale[0], tmp[1] = (pt)[1] * scale[1],                 \
+     tmp[2] = (pt)[2] * scale[2], tmp)
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -888,8 +869,8 @@ SoCylinder::generatePrimitives(SoAction *action)
 // Use: private
 
 void
-SoCylinder::GLRenderGeneric(SoGLRenderAction *action,
-			    SbBool sendNormals, SbBool doTextures)
+SoCylinder::GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
+                            SbBool doTextures)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -897,20 +878,19 @@ SoCylinder::GLRenderGeneric(SoGLRenderAction *action,
     getSize(scale[0], scale[1]);
     scale[2] = scale[0];
 
-    SbBool		materialPerPart;
-    int			curParts, numSides, numSections, side, section;
-    float		yTop, yBot, dy;
-    float		s, ds, tTop, tBot, dt;
-    float		outerRadius, innerRadius, dRadius;
-    SbVec2f		*ringCoords;
-    SbVec3f		pt, norm;
-    SoMaterialBundle	mb(action);
+    SbBool           materialPerPart;
+    int              curParts, numSides, numSections, side, section;
+    float            yTop, yBot, dy;
+    float            s, ds, tTop, tBot, dt;
+    float            outerRadius, innerRadius, dRadius;
+    SbVec2f *        ringCoords;
+    SbVec3f          pt, norm;
+    SoMaterialBundle mb(action);
 
     SoMaterialBindingElement::Binding mbe =
-	SoMaterialBindingElement::get(action->getState());
-    materialPerPart =
-	(mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
-	 mbe == SoMaterialBindingElement::PER_PART);
+        SoMaterialBindingElement::get(action->getState());
+    materialPerPart = (mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
+                       mbe == SoMaterialBindingElement::PER_PART);
 
     curParts = (parts.isIgnored() ? ALL : parts.getValue());
 
@@ -924,252 +904,252 @@ SoCylinder::GLRenderGeneric(SoGLRenderAction *action,
 
     if (HAS_PART(curParts, SIDES)) {
 
-	// Draw each section of sides as a triangle mesh, from top to bottom
-	yTop = 1.0;
-	dy   = -2.0 / numSections;
-	tTop = 1.0;
-	dt   = -1.0 / numSections;
-	ds   = -1.0 / numSides;
+        // Draw each section of sides as a triangle mesh, from top to bottom
+        yTop = 1.0;
+        dy = -2.0 / numSections;
+        tTop = 1.0;
+        dt = -1.0 / numSections;
+        ds = -1.0 / numSides;
 
-	for (section = 0; section < numSections; section++) {
+        for (section = 0; section < numSections; section++) {
 
-	    yBot = yTop + dy;
+            yBot = yTop + dy;
 
-	    tBot = tTop + dt;
-	    s    = 1.0;
+            tBot = tTop + dt;
+            s = 1.0;
 
-	    glBegin(GL_TRIANGLE_STRIP);
+            glBegin(GL_TRIANGLE_STRIP);
 
-	    for (side = 0; side < numSides; side++) {
-		pt[0] = ringCoords[side][0];
-		pt[2] = ringCoords[side][1];
+            for (side = 0; side < numSides; side++) {
+                pt[0] = ringCoords[side][0];
+                pt[2] = ringCoords[side][1];
 
-		// Deal with normal
-		norm.setValue(pt[0], 0.0, pt[2]);
-		if (sendNormals)
-		    glNormal3fv(norm.getValue());
+                // Deal with normal
+                norm.setValue(pt[0], 0.0, pt[2]);
+                if (sendNormals)
+                    glNormal3fv(norm.getValue());
 
-		// Point at bottom of section
-		pt[1] = yBot;
-		if (doTextures)
-		    glTexCoord2f(s, tBot);
-		glVertex3fv(SCALE(pt).getValue());
+                // Point at bottom of section
+                pt[1] = yBot;
+                if (doTextures)
+                    glTexCoord2f(s, tBot);
+                glVertex3fv(SCALE(pt).getValue());
 
-		// Point at top of section
-		pt[1] = yTop;
-		if (doTextures)
-		    glTexCoord2f(s, tTop);
-		glVertex3fv(SCALE(pt).getValue());
-		s += ds;
-	    }
+                // Point at top of section
+                pt[1] = yTop;
+                if (doTextures)
+                    glTexCoord2f(s, tTop);
+                glVertex3fv(SCALE(pt).getValue());
+                s += ds;
+            }
 
-	    // Join end of strip back to beginning
-	    side = 0;
-	    s = 0.0;
-	    pt[0] = ringCoords[side][0];
-	    pt[2] = ringCoords[side][1];
+            // Join end of strip back to beginning
+            side = 0;
+            s = 0.0;
+            pt[0] = ringCoords[side][0];
+            pt[2] = ringCoords[side][1];
 
-	    // Deal with normal
-	    norm.setValue(pt[0], 0.0, pt[2]);
-	    if (sendNormals)
-		glNormal3fv(norm.getValue());
+            // Deal with normal
+            norm.setValue(pt[0], 0.0, pt[2]);
+            if (sendNormals)
+                glNormal3fv(norm.getValue());
 
-	    // Point at bottom of section
-	    pt[1] = yBot;
-	    if (doTextures)
-		glTexCoord2f(s, tBot);
-	    glVertex3fv(SCALE(pt).getValue());
+            // Point at bottom of section
+            pt[1] = yBot;
+            if (doTextures)
+                glTexCoord2f(s, tBot);
+            glVertex3fv(SCALE(pt).getValue());
 
-	    // Point at top of section
-	    pt[1] = yTop;
-	    if (doTextures)
-		glTexCoord2f(s, tTop);
-	    glVertex3fv(SCALE(pt).getValue());
-	    s += ds;
+            // Point at top of section
+            pt[1] = yTop;
+            if (doTextures)
+                glTexCoord2f(s, tTop);
+            glVertex3fv(SCALE(pt).getValue());
+            s += ds;
 
-	    glEnd();
+            glEnd();
 
-	    // Prepare for next section down
-	    yTop = yBot;
-	    tTop = tBot;
-	}
+            // Prepare for next section down
+            yTop = yBot;
+            tTop = tBot;
+        }
     }
 
     // Draw top face as a series of concentric rings. The number of
     // rings is the same as the number of sections of the sides of the
     // cylinder.
     if (HAS_PART(curParts, TOP)) {
-	norm.setValue(0.0, 1.0, 0.0);
-	pt[1] = 1.0;
+        norm.setValue(0.0, 1.0, 0.0);
+        pt[1] = 1.0;
 
-	if (materialPerPart)
-	    mb.send(1, FALSE);
-	if (sendNormals)
-	    glNormal3fv(norm.getValue());
+        if (materialPerPart)
+            mb.send(1, FALSE);
+        if (sendNormals)
+            glNormal3fv(norm.getValue());
 
-	// Start at the outside and work in
-	outerRadius = 1.0;
-	dRadius     = -1.0 / numSections;
-	for (section = numSections - 1; section >= 0; --section) {
+        // Start at the outside and work in
+        outerRadius = 1.0;
+        dRadius = -1.0 / numSections;
+        for (section = numSections - 1; section >= 0; --section) {
 
-	    innerRadius = outerRadius + dRadius;
+            innerRadius = outerRadius + dRadius;
 
-	    // Innermost ring is treated as a triangle fan. This not
-	    // only gets better shading (because the center vertex is
-	    // sent), but also avoids the problem of having a polygon
-	    // with too many vertices.
-	    if (section == 0) {
-		glBegin(GL_TRIANGLE_FAN);
+            // Innermost ring is treated as a triangle fan. This not
+            // only gets better shading (because the center vertex is
+            // sent), but also avoids the problem of having a polygon
+            // with too many vertices.
+            if (section == 0) {
+                glBegin(GL_TRIANGLE_FAN);
 
-		// Center point comes first
-		pt[0] = pt[2] = 0.0;
-		if (doTextures)
-		    glTexCoord2f(0.5, 0.5);
-		glVertex3fv(SCALE(pt).getValue());
+                // Center point comes first
+                pt[0] = pt[2] = 0.0;
+                if (doTextures)
+                    glTexCoord2f(0.5, 0.5);
+                glVertex3fv(SCALE(pt).getValue());
 
-		// Send all vertices around ring. Go in reverse order
-		// so that vertex ordering is correct
-		for (side = numSides - 1; side >= 0; side--) {
-		    pt[0] = outerRadius * ringCoords[side][0];
-		    pt[2] = outerRadius * ringCoords[side][1];
-		    if (doTextures)
-			glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
-		    glVertex3fv(SCALE(pt).getValue());
-		}
-		// Send first vertex again
-		pt[0] = outerRadius * ringCoords[numSides - 1][0];
-		pt[2] = outerRadius * ringCoords[numSides - 1][1];
-		if (doTextures)
-		    glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
-		glVertex3fv(SCALE(pt).getValue());
+                // Send all vertices around ring. Go in reverse order
+                // so that vertex ordering is correct
+                for (side = numSides - 1; side >= 0; side--) {
+                    pt[0] = outerRadius * ringCoords[side][0];
+                    pt[2] = outerRadius * ringCoords[side][1];
+                    if (doTextures)
+                        glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
+                    glVertex3fv(SCALE(pt).getValue());
+                }
+                // Send first vertex again
+                pt[0] = outerRadius * ringCoords[numSides - 1][0];
+                pt[2] = outerRadius * ringCoords[numSides - 1][1];
+                if (doTextures)
+                    glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
+                glVertex3fv(SCALE(pt).getValue());
 
-		glEnd();
-	    }
+                glEnd();
+            }
 
-	    // Other rings are triangle strips
-	    else {
-		glBegin(GL_TRIANGLE_STRIP);
+            // Other rings are triangle strips
+            else {
+                glBegin(GL_TRIANGLE_STRIP);
 
-		for (side = 0; side < numSides; side++) {
-		    // Send points on outer and inner rings
-		    pt[0] = outerRadius * ringCoords[side][0];
-		    pt[2] = outerRadius * ringCoords[side][1];
-		    if (doTextures)
-			glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
-		    glVertex3fv(SCALE(pt).getValue());
-		    pt[0] = innerRadius * ringCoords[side][0];
-		    pt[2] = innerRadius * ringCoords[side][1];
-		    if (doTextures)
-			glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
-		    glVertex3fv(SCALE(pt).getValue());
-		}
+                for (side = 0; side < numSides; side++) {
+                    // Send points on outer and inner rings
+                    pt[0] = outerRadius * ringCoords[side][0];
+                    pt[2] = outerRadius * ringCoords[side][1];
+                    if (doTextures)
+                        glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
+                    glVertex3fv(SCALE(pt).getValue());
+                    pt[0] = innerRadius * ringCoords[side][0];
+                    pt[2] = innerRadius * ringCoords[side][1];
+                    if (doTextures)
+                        glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
+                    glVertex3fv(SCALE(pt).getValue());
+                }
 
-		// Join end of strip back to beginning
-		pt[0] = outerRadius * ringCoords[0][0];
-		pt[2] = outerRadius * ringCoords[0][1];
-		if (doTextures)
-		    glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
-		glVertex3fv(SCALE(pt).getValue());
-		pt[0] = innerRadius * ringCoords[0][0];
-		pt[2] = innerRadius * ringCoords[0][1];
-		if (doTextures)
-		    glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
-		glVertex3fv(SCALE(pt).getValue());
+                // Join end of strip back to beginning
+                pt[0] = outerRadius * ringCoords[0][0];
+                pt[2] = outerRadius * ringCoords[0][1];
+                if (doTextures)
+                    glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
+                glVertex3fv(SCALE(pt).getValue());
+                pt[0] = innerRadius * ringCoords[0][0];
+                pt[2] = innerRadius * ringCoords[0][1];
+                if (doTextures)
+                    glTexCoord2f(TOP_TEX_S(pt[0]), TOP_TEX_T(pt[2]));
+                glVertex3fv(SCALE(pt).getValue());
 
-		glEnd();
+                glEnd();
 
-		// Prepare for next ring
-		outerRadius = innerRadius;
-	    }
-	}
+                // Prepare for next ring
+                outerRadius = innerRadius;
+            }
+        }
     }
 
     // Draw bottom face the same way as the top
     if (HAS_PART(curParts, BOTTOM)) {
-	norm.setValue(0.0, -1.0, 0.0);
-	pt[1] = -1.0;
+        norm.setValue(0.0, -1.0, 0.0);
+        pt[1] = -1.0;
 
-	if (materialPerPart)
-	    mb.send(2, FALSE);
-	if (sendNormals)
-	    glNormal3fv(norm.getValue());
+        if (materialPerPart)
+            mb.send(2, FALSE);
+        if (sendNormals)
+            glNormal3fv(norm.getValue());
 
-	// Start at the outside and work in
-	outerRadius = 1.0;
-	dRadius     = -1.0 / numSections;
-	for (section = numSections - 1; section >= 0; --section) {
+        // Start at the outside and work in
+        outerRadius = 1.0;
+        dRadius = -1.0 / numSections;
+        for (section = numSections - 1; section >= 0; --section) {
 
-	    innerRadius = outerRadius + dRadius;
+            innerRadius = outerRadius + dRadius;
 
-	    // Innermost ring is drawn as a triangle fan. This not
-	    // only gets better shading (because the center vertex is
-	    // sent), but also avoids the problem of having a polygon
-	    // with too many vertices.
-	    if (section == 0) {
-		glBegin(GL_TRIANGLE_FAN);
+            // Innermost ring is drawn as a triangle fan. This not
+            // only gets better shading (because the center vertex is
+            // sent), but also avoids the problem of having a polygon
+            // with too many vertices.
+            if (section == 0) {
+                glBegin(GL_TRIANGLE_FAN);
 
-		// Center point comes first
-		pt[0] = pt[2] = 0.0;
-		if (doTextures)
-		    glTexCoord2f(0.5, 0.5);
-		glVertex3fv(SCALE(pt).getValue());
+                // Center point comes first
+                pt[0] = pt[2] = 0.0;
+                if (doTextures)
+                    glTexCoord2f(0.5, 0.5);
+                glVertex3fv(SCALE(pt).getValue());
 
-		// Send all vertices around ring
-		for (side = 0; side < numSides; side++) {
-		    pt[0] = outerRadius * ringCoords[side][0];
-		    pt[2] = outerRadius * ringCoords[side][1];
-		    if (doTextures)
-			glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		    glVertex3fv(SCALE(pt).getValue());
-		}
-		// Send first vertex again
-		pt[0] = outerRadius * ringCoords[0][0];
-		pt[2] = outerRadius * ringCoords[0][1];
-		if (doTextures)
-		    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		glVertex3fv(SCALE(pt).getValue());
+                // Send all vertices around ring
+                for (side = 0; side < numSides; side++) {
+                    pt[0] = outerRadius * ringCoords[side][0];
+                    pt[2] = outerRadius * ringCoords[side][1];
+                    if (doTextures)
+                        glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                    glVertex3fv(SCALE(pt).getValue());
+                }
+                // Send first vertex again
+                pt[0] = outerRadius * ringCoords[0][0];
+                pt[2] = outerRadius * ringCoords[0][1];
+                if (doTextures)
+                    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                glVertex3fv(SCALE(pt).getValue());
 
-		glEnd();
-	    }
+                glEnd();
+            }
 
-	    // Other rings are triangle strips
-	    else {
-		glBegin(GL_TRIANGLE_STRIP);
+            // Other rings are triangle strips
+            else {
+                glBegin(GL_TRIANGLE_STRIP);
 
-		// Go in reverse order so that vertex ordering is correct
-		for (side = numSides - 1; side >= 0; side--) {
-		    // Send points on outer and inner rings
-		    pt[0] = outerRadius * ringCoords[side][0];
-		    pt[2] = outerRadius * ringCoords[side][1];
-		    if (doTextures)
-			glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		    glVertex3fv(SCALE(pt).getValue());
-		    pt[0] = innerRadius * ringCoords[side][0];
-		    pt[2] = innerRadius * ringCoords[side][1];
-		    if (doTextures)
-			glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		    glVertex3fv(SCALE(pt).getValue());
-		}
+                // Go in reverse order so that vertex ordering is correct
+                for (side = numSides - 1; side >= 0; side--) {
+                    // Send points on outer and inner rings
+                    pt[0] = outerRadius * ringCoords[side][0];
+                    pt[2] = outerRadius * ringCoords[side][1];
+                    if (doTextures)
+                        glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                    glVertex3fv(SCALE(pt).getValue());
+                    pt[0] = innerRadius * ringCoords[side][0];
+                    pt[2] = innerRadius * ringCoords[side][1];
+                    if (doTextures)
+                        glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                    glVertex3fv(SCALE(pt).getValue());
+                }
 
-		// Join end of strip back to beginning
-		side = numSides - 1;
-		pt[0] = outerRadius * ringCoords[side][0];
-		pt[2] = outerRadius * ringCoords[side][1];
-		if (doTextures)
-		    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		glVertex3fv(SCALE(pt).getValue());
-		pt[0] = innerRadius * ringCoords[side][0];
-		pt[2] = innerRadius * ringCoords[side][1];
-		if (doTextures)
-		    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		glVertex3fv(SCALE(pt).getValue());
+                // Join end of strip back to beginning
+                side = numSides - 1;
+                pt[0] = outerRadius * ringCoords[side][0];
+                pt[2] = outerRadius * ringCoords[side][1];
+                if (doTextures)
+                    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                glVertex3fv(SCALE(pt).getValue());
+                pt[0] = innerRadius * ringCoords[side][0];
+                pt[2] = innerRadius * ringCoords[side][1];
+                if (doTextures)
+                    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                glVertex3fv(SCALE(pt).getValue());
 
-		glEnd();
+                glEnd();
 
-		// Prepare for next ring
-		outerRadius = innerRadius;
-	    }
-	}
+                // Prepare for next ring
+                outerRadius = innerRadius;
+            }
+        }
     }
 }
 
@@ -1184,70 +1164,70 @@ SoCylinder::GLRenderGeneric(SoGLRenderAction *action,
 
 void
 SoCylinder::computeRing(SoAction *action, int &numSides, int &numSections,
-			SbVec2f *&ringCoords) const
+                        SbVec2f *&ringCoords) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	complexity = SoComplexityElement::get(action->getState());
-    float	theta, dTheta;
-    int		side;
+    float complexity = SoComplexityElement::get(action->getState());
+    float theta, dTheta;
+    int   side;
 
     // In object space, just base number of divisions on complexity
     if (SoComplexityTypeElement::get(action->getState()) ==
-	SoComplexityTypeElement::OBJECT_SPACE) {
+        SoComplexityTypeElement::OBJECT_SPACE) {
 
-	// If complexity is between 0 and .5 (inclusive), use 1 section
-	// and between 3 and 16 sides:
-	if (complexity <= 0.5) {
-	    numSections = 1;
-	    numSides    = (int) (complexity * 26.0 + 3.0);
-	}
+        // If complexity is between 0 and .5 (inclusive), use 1 section
+        // and between 3 and 16 sides:
+        if (complexity <= 0.5) {
+            numSections = 1;
+            numSides = (int)(complexity * 26.0 + 3.0);
+        }
 
-	// If complexity is between .5 and 1, use between 1 and 8 sections
-	// and between 16 and 64 sides:
-	else {
-	    numSections = (int) (14.0 * complexity - 6.0);
-	    numSides    = (int) (complexity * 96.0 - 32.0);
-	}
+        // If complexity is between .5 and 1, use between 1 and 8 sections
+        // and between 16 and 64 sides:
+        else {
+            numSections = (int)(14.0 * complexity - 6.0);
+            numSides = (int)(complexity * 96.0 - 32.0);
+        }
     }
 
     // In screen space, set the number of sides/sections based on the
     // complexity and the size of the cylinder when projected onto the screen.
     else {
-	SbVec2s		rectSize;
-	short		maxSize;
-	float		radius, halfHeight;
+        SbVec2s rectSize;
+        short   maxSize;
+        float   radius, halfHeight;
 
-	getSize(radius, halfHeight);
-	SbVec3f		p(radius, halfHeight, radius);
+        getSize(radius, halfHeight);
+        SbVec3f p(radius, halfHeight, radius);
 
-	getScreenSize(action->getState(), SbBox3f(-p, p), rectSize);
+        getScreenSize(action->getState(), SbBox3f(-p, p), rectSize);
 
-	maxSize = (rectSize[0] > rectSize[1] ? rectSize[0] : rectSize[1]);
+        maxSize = (rectSize[0] > rectSize[1] ? rectSize[0] : rectSize[1]);
 
-	numSections = 1 + (int) (0.2  * complexity * maxSize);
-	numSides    = 3 + (int) (0.25 * complexity * maxSize);
+        numSections = 1 + (int)(0.2 * complexity * maxSize);
+        numSides = 3 + (int)(0.25 * complexity * maxSize);
     }
 
     // Make sure the current storage for ring coordinates is big enough
     if (numSides > maxCoords) {
 
-	if (maxCoords > 0)
-	    delete [] coordsArray;
+        if (maxCoords > 0)
+            delete[] coordsArray;
 
-	maxCoords = numSides;
+        maxCoords = numSides;
 
-	coordsArray = new SbVec2f[maxCoords];
+        coordsArray = new SbVec2f[maxCoords];
     }
 
     ringCoords = coordsArray;
 
     // Compute x and z coordinates around ring
-    theta  = 0.0;
+    theta = 0.0;
     dTheta = 2.0 * M_PI / numSides;
     for (side = 0; side < numSides; side++) {
-	ringCoords[side].setValue(sin(theta), -cos(theta));
-	theta += dTheta;
+        ringCoords[side].setValue(sin(theta), -cos(theta));
+        theta += dTheta;
     }
 }
 
@@ -1263,6 +1243,6 @@ SoCylinder::getSize(float &rad, float &hHeight) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    rad     = (radius.isIgnored() ? 1.0 : radius.getValue());
+    rad = (radius.isIgnored() ? 1.0 : radius.getValue());
     hHeight = (height.isIgnored() ? 1.0 : height.getValue() / 2.0);
 }

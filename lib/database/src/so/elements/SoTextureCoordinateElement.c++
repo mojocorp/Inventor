@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -66,8 +66,7 @@ SO_ELEMENT_SOURCE(SoTextureCoordinateElement);
 // Use: internal
 
 void
-SoTextureCoordinateElement::initClass()
-{
+SoTextureCoordinateElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoTextureCoordinateElement, SoReplacedElement);
 }
 
@@ -81,8 +80,7 @@ SoTextureCoordinateElement::initClass()
 SoTextureCoordinateElement::~SoTextureCoordinateElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -98,11 +96,11 @@ SoTextureCoordinateElement::init(SoState *state)
 {
     SoReplacedElement::init(state);
 
-    whatKind  = EXPLICIT;
-    funcCB    = NULL;
+    whatKind = EXPLICIT;
+    funcCB = NULL;
     numCoords = 0;
-    coords2   = NULL;
-    coords4   = NULL;
+    coords2 = NULL;
+    coords4 = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -118,18 +116,18 @@ SoTextureCoordinateElement::setDefault(SoState *state, SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureCoordinateElement	*elt;
+    SoTextureCoordinateElement *elt;
 
-    elt = (SoTextureCoordinateElement *)
-	getElement(state, classStackIndex, node);
+    elt =
+        (SoTextureCoordinateElement *)getElement(state, classStackIndex, node);
 
     if (elt != NULL) {
-	elt->whatKind = EXPLICIT;
-	elt->numCoords = 0;
-	elt->coords2 = NULL;
-	elt->coords4 = NULL;
+        elt->whatKind = EXPLICIT;
+        elt->numCoords = 0;
+        elt->coords2 = NULL;
+        elt->coords4 = NULL;
     }
-    //The shapeStyle element will track this value:
+    // The shapeStyle element will track this value:
     SoShapeStyleElement::setTextureFunction(state, FALSE);
 }
 
@@ -142,21 +140,21 @@ SoTextureCoordinateElement::setDefault(SoState *state, SoNode *node)
 
 void
 SoTextureCoordinateElement::setFunction(SoState *state, SoNode *node,
-					SoTextureCoordinateFunctionCB *func,
-					void *userData)
+                                        SoTextureCoordinateFunctionCB *func,
+                                        void *                         userData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureCoordinateElement	*elt;
+    SoTextureCoordinateElement *elt;
 
-    elt = (SoTextureCoordinateElement *) getElement(state,
-				    classStackIndex, node);
+    elt =
+        (SoTextureCoordinateElement *)getElement(state, classStackIndex, node);
     if (elt != NULL) {
-	elt->whatKind = FUNCTION;
-	elt->funcCB = func;
-	elt->funcCBData = userData;
+        elt->whatKind = FUNCTION;
+        elt->funcCB = func;
+        elt->funcCBData = userData;
     }
-    //The shapeStyle element will track this value:
+    // The shapeStyle element will track this value:
     SoShapeStyleElement::setTextureFunction(state, TRUE);
 }
 
@@ -169,20 +167,20 @@ SoTextureCoordinateElement::setFunction(SoState *state, SoNode *node,
 
 void
 SoTextureCoordinateElement::set2(SoState *state, SoNode *node,
-				 int32_t numCoords, const SbVec2f *coords)
+                                 int32_t numCoords, const SbVec2f *coords)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureCoordinateElement	*elt;
+    SoTextureCoordinateElement *elt;
 
-    elt = (SoTextureCoordinateElement *)
-	getElement(state, classStackIndex, node);
+    elt =
+        (SoTextureCoordinateElement *)getElement(state, classStackIndex, node);
 
     if (elt != NULL) {
-	elt->whatKind    = EXPLICIT;
-	elt->numCoords   = numCoords;
-	elt->coords2     = coords;
-	elt->coordsAre2D = TRUE;
+        elt->whatKind = EXPLICIT;
+        elt->numCoords = numCoords;
+        elt->coords2 = coords;
+        elt->coordsAre2D = TRUE;
     }
     SoShapeStyleElement::setTextureFunction(state, FALSE);
 }
@@ -196,22 +194,22 @@ SoTextureCoordinateElement::set2(SoState *state, SoNode *node,
 
 void
 SoTextureCoordinateElement::set4(SoState *state, SoNode *node,
-				 int32_t numCoords, const SbVec4f *coords)
+                                 int32_t numCoords, const SbVec4f *coords)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureCoordinateElement	*elt;
+    SoTextureCoordinateElement *elt;
 
-    elt = (SoTextureCoordinateElement *)
-	getElement(state, classStackIndex, node);
+    elt =
+        (SoTextureCoordinateElement *)getElement(state, classStackIndex, node);
 
     if (elt != NULL) {
-	elt->whatKind    = EXPLICIT;
-	elt->numCoords   = numCoords;
-	elt->coords4     = coords;
-	elt->coordsAre2D = FALSE;
+        elt->whatKind = EXPLICIT;
+        elt->numCoords = numCoords;
+        elt->coords4 = coords;
+        elt->coordsAre2D = FALSE;
     }
-     SoShapeStyleElement::setTextureFunction(state, FALSE);
+    SoShapeStyleElement::setTextureFunction(state, FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -256,8 +254,8 @@ SoTextureCoordinateElement::getInstance(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (const SoTextureCoordinateElement *)
-	getConstElement(state, classStackIndex);
+    return (const SoTextureCoordinateElement *)getConstElement(state,
+                                                               classStackIndex);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -270,14 +268,14 @@ SoTextureCoordinateElement::getInstance(SoState *state)
 
 const SbVec4f &
 SoTextureCoordinateElement::get(const SbVec3f &point,
-				const SbVec3f &normal) const
+                                const SbVec3f &normal) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     if (whatKind != FUNCTION)
-	SoDebugError::post("SoTextureCoordinateElement::get",
-			   "Functional texture coordinates were not set!");
+        SoDebugError::post("SoTextureCoordinateElement::get",
+                           "Functional texture coordinates were not set!");
 #endif /* DEBUG */
     return (*funcCB)(funcCBData, point, normal);
 }
@@ -296,36 +294,36 @@ SoTextureCoordinateElement::get2(int index) const
 {
 #ifdef DEBUG
     if (whatKind != EXPLICIT)
-	SoDebugError::post("SoTextureCoordinateElement::get2",
-			   "Explicit texture coordinates were not set!");
+        SoDebugError::post("SoTextureCoordinateElement::get2",
+                           "Explicit texture coordinates were not set!");
 
     if (index < 0 || index >= numCoords)
-	SoDebugError::post("SoTextureCoordinateElement::get2",
-			   "Index (%d) is out of range 0 - %d",
-			   index, numCoords - 1);
+        SoDebugError::post("SoTextureCoordinateElement::get2",
+                           "Index (%d) is out of range 0 - %d", index,
+                           numCoords - 1);
 #endif /* DEBUG */
 
     if (coordsAre2D)
-	return coords2[index];
+        return coords2[index];
 
     // Convert from 4-D if necessary
     else {
-	// Cast the const away...
-	SoTextureCoordinateElement *elt = (SoTextureCoordinateElement *) this;
-	const SbVec4f		   &c4  = coords4[index];
+        // Cast the const away...
+        SoTextureCoordinateElement *elt = (SoTextureCoordinateElement *)this;
+        const SbVec4f &             c4 = coords4[index];
 
-	// If we can't do the projection, or we don't have to
-	if (c4[3] == 0.0 || c4[3] == 1.0) {
-	    elt->convert2[0] = c4[0];
-	    elt->convert2[1] = c4[1];
-	}
+        // If we can't do the projection, or we don't have to
+        if (c4[3] == 0.0 || c4[3] == 1.0) {
+            elt->convert2[0] = c4[0];
+            elt->convert2[1] = c4[1];
+        }
 
-	else {
-	    elt->convert2[0] = c4[0] / c4[3];
-	    elt->convert2[1] = c4[1] / c4[3];
-	}
+        else {
+            elt->convert2[0] = c4[0] / c4[3];
+            elt->convert2[1] = c4[1] / c4[3];
+        }
 
-	return convert2;
+        return convert2;
     }
 }
 
@@ -343,31 +341,31 @@ SoTextureCoordinateElement::get4(int index) const
 {
 #ifdef DEBUG
     if (whatKind != EXPLICIT)
-	SoDebugError::post("SoTextureCoordinateElement::get4",
-			   "Explicit texture coordinates were not set!");
+        SoDebugError::post("SoTextureCoordinateElement::get4",
+                           "Explicit texture coordinates were not set!");
 
     if (index < 0 || index >= numCoords)
-	SoDebugError::post("SoTextureCoordinateElement::get4",
-			   "Index (%d) is out of range 0 - %d",
-			   index, numCoords - 1);
+        SoDebugError::post("SoTextureCoordinateElement::get4",
+                           "Index (%d) is out of range 0 - %d", index,
+                           numCoords - 1);
 #endif /* DEBUG */
 
     // Convert from 2-D if necessary
     if (coordsAre2D) {
-	// Cast the const away...
-	SoTextureCoordinateElement *elt = (SoTextureCoordinateElement *) this;
-	const SbVec2f		   &c2  = coords2[index];
+        // Cast the const away...
+        SoTextureCoordinateElement *elt = (SoTextureCoordinateElement *)this;
+        const SbVec2f &             c2 = coords2[index];
 
-	elt->convert4[0] = c2[0];
-	elt->convert4[1] = c2[1];
-	elt->convert4[2] = 0.0;
-	elt->convert4[3] = 1.0;
+        elt->convert4[0] = c2[0];
+        elt->convert4[1] = c2[1];
+        elt->convert4[2] = 0.0;
+        elt->convert4[3] = 1.0;
 
-	return convert4;
+        return convert4;
     }
 
     else
-	return coords4[index];
+        return coords4[index];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -381,14 +379,10 @@ SoTextureCoordinateElement::get4(int index) const
 
 #ifdef DEBUG
 void
-SoTextureCoordinateElement::print(FILE *fp) const
-{
+SoTextureCoordinateElement::print(FILE *fp) const {
     SoReplacedElement::print(fp);
 }
 #else  /* DEBUG */
 void
-SoTextureCoordinateElement::print(FILE *) const
-{
-}
+SoTextureCoordinateElement::print(FILE *) const {}
 #endif /* DEBUG */
-

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -82,7 +82,8 @@ SoFile::initClass()
 //
 // Use: public
 
-SoFile::SoFile() : children(this)
+SoFile::SoFile()
+    : children(this)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -134,9 +135,9 @@ SoFile::copyChildren() const
     holder->ref();
 
     for (int i = 0; i < children.getLength(); i++)
-	holder->addChild(children[i]);
+        holder->addChild(children[i]);
 
-    SoGroup *result = (SoGroup *) holder->copy(TRUE);
+    SoGroup *result = (SoGroup *)holder->copy(TRUE);
 
     holder->unref();
 
@@ -162,29 +163,28 @@ SoFile::copyContents(const SoFieldContainer *fromFC, SbBool copyConnections)
     SoNode::copyContents(fromFC, copyConnections);
 
     // Copy the kids
-    const SoFile *fromGroup = (const SoFile *) fromFC;
-    SoChildList *fromChildren = fromGroup->getChildren();
+    const SoFile *fromGroup = (const SoFile *)fromFC;
+    SoChildList * fromChildren = fromGroup->getChildren();
     for (int i = 0; i < fromChildren->getLength(); i++) {
 
-	// If this node is being copied, it must be "inside" (see
-	// SoNode::copy() for details.) Therefore, all of its children
-	// must be inside, as well.
-	SoNode *fromKid = (*fromChildren)[i];
-	SoNode *kidCopy = (SoNode *) findCopy(fromKid, copyConnections);
+        // If this node is being copied, it must be "inside" (see
+        // SoNode::copy() for details.) Therefore, all of its children
+        // must be inside, as well.
+        SoNode *fromKid = (*fromChildren)[i];
+        SoNode *kidCopy = (SoNode *)findCopy(fromKid, copyConnections);
 
 #ifdef DEBUG
-	if (kidCopy == NULL)
-	    SoDebugError::post("(internal) SoFile::copyContents",
-			       "Child %d has not been copied yet", i);
+        if (kidCopy == NULL)
+            SoDebugError::post("(internal) SoFile::copyContents",
+                               "Child %d has not been copied yet", i);
 #endif /* DEBUG */
 
-	children.append(kidCopy);
+        children.append(kidCopy);
     }
-    
+
     // Reattach sensor
     nameChangedSensor->attach(&name);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -202,31 +202,30 @@ SoFile::readInstance(SoInput *in, unsigned short flags)
     nameChangedSensor->detach();
 
     // Read field info as usual.
-    if (! SoNode::readInstance(in, flags))
-	readOK = FALSE;
+    if (!SoNode::readInstance(in, flags))
+        readOK = FALSE;
 
     // If file name is default, there's a problem, since the default
     // file name is not a valid one
     else if (name.isDefault()) {
-	SoReadError::post(in, "\"name\" field of SoFile node was never set");
-	readOK = FALSE;
-    }
-    else {
-	// Call nameChangedCB to read in children.  There is a really
-	// cool bug that occurs if we let the sensor do this for us.
-	// The sensor is called right after notification, in
-	// processImmediateQueue.  It would then call nameChanged,
-	// which calls SoDB::read, which sets up the directory search
-	// path.  If there is another File node in that directory
-	// search path, its name field will be set, but, since we are
-	// already in the middle of a processImmediateQueue, its field
-	// sensor isn't called right away.  The SoDB::read returns,
-	// removing the directory it added to the search path,
-	// nameChanged returns, and THEN the field sensor for the
-	// inner File node goes off.  But, by then it is too late--
-	// the directory search path no longer contains the directory
-	// of the containing File node.
-	nameChangedCB(this, NULL);
+        SoReadError::post(in, "\"name\" field of SoFile node was never set");
+        readOK = FALSE;
+    } else {
+        // Call nameChangedCB to read in children.  There is a really
+        // cool bug that occurs if we let the sensor do this for us.
+        // The sensor is called right after notification, in
+        // processImmediateQueue.  It would then call nameChanged,
+        // which calls SoDB::read, which sets up the directory search
+        // path.  If there is another File node in that directory
+        // search path, its name field will be set, but, since we are
+        // already in the middle of a processImmediateQueue, its field
+        // sensor isn't called right away.  The SoDB::read returns,
+        // removing the directory it added to the search path,
+        // nameChanged returns, and THEN the field sensor for the
+        // inner File node goes off.  But, by then it is too late--
+        // the directory search path no longer contains the directory
+        // of the containing File node.
+        nameChangedCB(this, NULL);
     }
 
     // Reattach sensor
@@ -251,33 +250,32 @@ SoFile::nameChangedCB(void *data, SoSensor *)
 
     f->children.truncate(0);
 
-    SoInput in;
+    SoInput         in;
     const SbString &filename = f->name.getValue();
-    
+
     // Open file
     f->readOK = TRUE;
-    if (! in.openFile(filename, TRUE)) {
-	f->readOK = FALSE;
-	SoReadError::post(&in, "Can't open included file \"%s\" in File node",
-			  filename.getString());
+    if (!in.openFile(filename, TRUE)) {
+        f->readOK = FALSE;
+        SoReadError::post(&in, "Can't open included file \"%s\" in File node",
+                          filename.getString());
     }
 
     if (f->readOK) {
-	SoNode	*node;
+        SoNode *node;
 
-	// Read children from opened file.
+        // Read children from opened file.
 
-	while (TRUE) {
-	    if (SoDB::read(&in, node)) {
-		if (node != NULL)
-		    f->children.append(node);
-		else
-		    break;
-	    }
-	    else
-		f->readOK = FALSE;
-	}
-	in.closeFile();
+        while (TRUE) {
+            if (SoDB::read(&in, node)) {
+                if (node != NULL)
+                    f->children.append(node);
+                else
+                    break;
+            } else
+                f->readOK = FALSE;
+        }
+        in.closeFile();
     }
     // Note: if there is an error reading one of the children, the
     // other children will still be added properly...
@@ -295,7 +293,7 @@ SoFile::getChildren() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (SoChildList *) &children;
+    return (SoChildList *)&children;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -310,14 +308,14 @@ SoFile::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numIndices;
-    const int	*indices;
+    int        numIndices;
+    const int *indices;
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH)
-	children.traverse(action, 0, indices[numIndices - 1]);
+        children.traverse(action, 0, indices[numIndices - 1]);
 
     else
-	children.traverse(action);
+        children.traverse(action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -363,28 +361,28 @@ SoFile::getBoundingBox(SoGetBoundingBoxAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	totalCenter(0,0,0);
-    int		numCenters = 0;
-    int		numIndices;
-    const int	*indices;
-    int		lastChild;
+    SbVec3f    totalCenter(0, 0, 0);
+    int        numCenters = 0;
+    int        numIndices;
+    const int *indices;
+    int        lastChild;
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH)
-	lastChild = indices[numIndices - 1];
+        lastChild = indices[numIndices - 1];
     else
-	lastChild = children.getLength() - 1;
+        lastChild = children.getLength() - 1;
 
     for (int i = 0; i <= lastChild; i++) {
-	children.traverse(action, i, i);
-	if (action->isCenterSet()) {
-	    totalCenter += action->getCenter();
-	    numCenters++;
-	    action->resetCenter();
-	}
+        children.traverse(action, i, i);
+        if (action->isCenterSet()) {
+            totalCenter += action->getCenter();
+            numCenters++;
+            action->resetCenter();
+        }
     }
     // Now, set the center to be the average:
     if (numCenters != 0)
-	action->setCenter(totalCenter / numCenters, FALSE);
+        action->setCenter(totalCenter / numCenters, FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -429,8 +427,8 @@ SoFile::getMatrix(SoGetMatrixAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numIndices;
-    const int	*indices;
+    int        numIndices;
+    const int *indices;
 
     // Only need to compute matrix if group is a node in middle of
     // current path chain or is off path chain (since the only way
@@ -439,18 +437,18 @@ SoFile::getMatrix(SoGetMatrixAction *action)
 
     switch (action->getPathCode(numIndices, indices)) {
 
-      case SoAction::NO_PATH:
-	break;
+    case SoAction::NO_PATH:
+        break;
 
-      case SoAction::IN_PATH:
-	children.traverse(action, 0, indices[numIndices - 1]);
-	break;
+    case SoAction::IN_PATH:
+        children.traverse(action, 0, indices[numIndices - 1]);
+        break;
 
-      case SoAction::BELOW_PATH:
-	break;
+    case SoAction::BELOW_PATH:
+        break;
 
-      case SoAction::OFF_PATH:
-	children.traverse(action);
-	break;
+    case SoAction::OFF_PATH:
+        children.traverse(action);
+        break;
     }
 }

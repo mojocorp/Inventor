@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_CACHE_CONTEXT_ELEMENT
-#define  _SO_CACHE_CONTEXT_ELEMENT
+#ifndef _SO_CACHE_CONTEXT_ELEMENT
+#define _SO_CACHE_CONTEXT_ELEMENT
 
 #include <vector>
 #include <map>
@@ -99,13 +99,14 @@ class SoGLDisplayList;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLCacheContextElement : public SoElement {
+SoEXTENDER
+class SoGLCacheContextElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoGLCacheContextElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the current context.  This is done by the renderAction;
     // theoretically, a node that redirected the GL rendering context
@@ -118,22 +119,21 @@ SoEXTENDER class SoGLCacheContextElement : public SoElement {
     // rendering is being done; the SoSeparator auto-caching algorithm
     // uses this information to help decide whether or not to build
     // caches.
-    static void		set(SoState *state, int context,
-			    SbBool is2PassTransparency,
-			    SbBool isRemoteRendering);
+    static void set(SoState *state, int context, SbBool is2PassTransparency,
+                    SbBool isRemoteRendering);
 
     // Gets the current context
-    static int		get(SoState *state);
+    static int get(SoState *state);
 
     // Methods to quickly figure out if an OpenGL extension is
     // available at run-time.
 
     // This is the slow routine-- convert from a string to an integer.
     // The integer should be saved to do quick lookups:
-    static int		getExtID(const char *str);
+    static int getExtID(const char *str);
 
     // This routine is pretty quick:
-    static SbBool	extSupported(SoState *state, int ext);
+    static SbBool extSupported(SoState *state, int ext);
 
     // Methods used to improve auto-caching algorithm:
 
@@ -143,68 +143,63 @@ SoEXTENDER class SoGLCacheContextElement : public SoElement {
     // remote rendering is being done.  DONT_AUTO_CACHE is FALSE by
     // default.  Separators will auto cache if DO_AUTO_CACHE is TRUE
     // and DONT_AUTO_CACHE is FALSE, otherwise they won't auto-cache.
-    enum AutoCache {
-        DO_AUTO_CACHE = 1,
-	DONT_AUTO_CACHE = 2
-    };
+    enum AutoCache { DO_AUTO_CACHE = 1, DONT_AUTO_CACHE = 2 };
 
     // Called by nodes to say that they should/shouldn't be
     // auto-cached (pass TRUE if should, FALSE if shouldn't, don't
     // call this method at all if the node doesn't care):
-    static void		shouldAutoCache(SoState *state, AutoCache bits)
-    {
-	SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
-	    state->getElementNoPush(classStackIndex);
-	elt->autoCacheBits |= (int)bits;
+    static void shouldAutoCache(SoState *state, AutoCache bits) {
+        SoGLCacheContextElement *elt =
+            (SoGLCacheContextElement *)state->getElementNoPush(classStackIndex);
+        elt->autoCacheBits |= (int)bits;
     }
 
     // Used by Separators to set/reset the auto-caching bits:
-    static void		setAutoCacheBits(SoState *state, int bits)
-	{ ((SoGLCacheContextElement *)state->getElementNoPush(
-	    classStackIndex))->autoCacheBits = bits;
-        }
+    static void setAutoCacheBits(SoState *state, int bits) {
+        ((SoGLCacheContextElement *)state->getElementNoPush(classStackIndex))
+            ->autoCacheBits = bits;
+    }
 
-    static int		resetAutoCacheBits(SoState *state)
-	{
-	    SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
-		state->getElementNoPush(classStackIndex);
-	    int result = elt->autoCacheBits;
-	    // Hack warning: I rely on TRUE==DO_AUTO_CACHE
-	    elt->autoCacheBits = elt->isRemoteRendering;
-	    
-	    return result;
-	}
+    static int resetAutoCacheBits(SoState *state) {
+        SoGLCacheContextElement *elt =
+            (SoGLCacheContextElement *)state->getElementNoPush(classStackIndex);
+        int result = elt->autoCacheBits;
+        // Hack warning: I rely on TRUE==DO_AUTO_CACHE
+        elt->autoCacheBits = elt->isRemoteRendering;
 
-    static SbBool	getIsRemoteRendering(SoState *state)
-	{
-	    const SoGLCacheContextElement *elt =
-		(const SoGLCacheContextElement *)
-		    state->getConstElement(classStackIndex);
-	    return elt->isRemoteRendering;
-	}
+        return result;
+    }
+
+    static SbBool getIsRemoteRendering(SoState *state) {
+        const SoGLCacheContextElement *elt =
+            (const SoGLCacheContextElement *)state->getConstElement(
+                classStackIndex);
+        return elt->isRemoteRendering;
+    }
 
     // Standard element stuff:
 
     // Returns TRUE if the widths match in both elements
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
     // Create and return a copy of this element
-    virtual SoElement	*copyMatchInfo() const;
+    virtual SoElement *copyMatchInfo() const;
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
     // Returns an unique cache context id.
     static int getUniqueCacheContext();
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
-    int			context;
-    SbBool		is2PassTransp;
-    SbBool		isRemoteRendering;
-    int			autoCacheBits;
+    int    context;
+    SbBool is2PassTransp;
+    SbBool isRemoteRendering;
+    int    autoCacheBits;
 
     virtual ~SoGLCacheContextElement();
 
@@ -217,13 +212,13 @@ SoEXTENDER class SoGLCacheContextElement : public SoElement {
     // This method is necessary because nodes with caches can be
     // deleted at any time, but we can't necessarily send GL commands
     // to free up a display list at any time.
-    static void		freeList(SoState *state,
-				 SoGLDisplayList *list);
+    static void freeList(SoState *state, SoGLDisplayList *list);
 
-    static std::map<int, std::vector<SoGLDisplayList*> > waitingToBeFreed;	// Allocated in ::init
-    static std::vector<struct extInfo> extensionList;		// Allocated in ::init
+    static std::map<int, std::vector<SoGLDisplayList *> >
+                                       waitingToBeFreed; // Allocated in ::init
+    static std::vector<struct extInfo> extensionList;    // Allocated in ::init
 
-friend class SoGLDisplayList;
+    friend class SoGLDisplayList;
 };
 
 #endif /* _SO_CACHE_CONTEXT_ELEMENT */

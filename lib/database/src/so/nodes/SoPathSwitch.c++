@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -100,7 +100,8 @@ SoPathSwitch::SoPathSwitch()
 //
 // Use: public
 
-SoPathSwitch::SoPathSwitch(int nChildren) : SoGroup(nChildren)
+SoPathSwitch::SoPathSwitch(int nChildren)
+    : SoGroup(nChildren)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -119,8 +120,7 @@ SoPathSwitch::SoPathSwitch(int nChildren) : SoGroup(nChildren)
 SoPathSwitch::~SoPathSwitch()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -136,8 +136,8 @@ SoPathSwitch::doAction(SoAction *action)
 {
     // If path exists and matches current path, traverse children
     if (path.getValue() != NULL &&
-	matchesPath(path.getValue(), action->getCurPath()))
-	SoGroup::doAction(action);
+        matchesPath(path.getValue(), action->getCurPath()))
+        SoGroup::doAction(action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -214,8 +214,8 @@ SoPathSwitch::getMatrix(SoGetMatrixAction *action)
 {
     // If path exists and matches current path, use regular getMatrix()
     if (path.getValue() != NULL &&
-	matchesPath(path.getValue(), action->getCurPath()))
-	SoGroup::getMatrix(action);
+        matchesPath(path.getValue(), action->getCurPath()))
+        SoGroup::getMatrix(action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -232,17 +232,17 @@ SoPathSwitch::search(SoSearchAction *action)
 {
     // if the action is searching everything, then do so...
     if (action->isSearchingAll())
-	SoGroup::search(action);
+        SoGroup::search(action);
 
     // Otherwise, traverse according to the regular switch node rules
     else {
-	// First, make sure this node is found if we are searching for
-	// pathSwitches
-	SoNode::search(action);
+        // First, make sure this node is found if we are searching for
+        // pathSwitches
+        SoNode::search(action);
 
-	// Recurse
-	if (! action->isFound())
-	    SoPathSwitch::doAction(action);
+        // Recurse
+        if (!action->isFound())
+            SoPathSwitch::doAction(action);
     }
 }
 
@@ -259,41 +259,41 @@ SoPathSwitch::search(SoSearchAction *action)
 
 SbBool
 SoPathSwitch::matchesPath(const SoPath *_switchPath,
-			  const SoPath *_currentPath) const
+                          const SoPath *_currentPath) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoFullPath	*switchPath  = (const SoFullPath *) _switchPath;
-    const SoFullPath	*currentPath = (const SoFullPath *) _currentPath;
-    int	c, s;
+    const SoFullPath *switchPath = (const SoFullPath *)_switchPath;
+    const SoFullPath *currentPath = (const SoFullPath *)_currentPath;
+    int               c, s;
 
     // An empty switchPath (but not NULL!) is always a match
     if (switchPath->getLength() == 0)
-	return TRUE;
+        return TRUE;
 
     // There's no way they can match if the switchPath is longer than
     // the current path. Or even if they are the same length, since
     // the switchPath cannot include the pathSwitch node.
     if (switchPath->getLength() >= currentPath->getLength())
-	return FALSE;
+        return FALSE;
 
     // Ignore the last node in the current path (it's the pathSwitch).
     // Compare the rest in reverse order. Any mismatch returns FALSE.
 
-    c = currentPath->getLength() - 2;	// Skip last node
-    s =  switchPath->getLength() - 1;
+    c = currentPath->getLength() - 2; // Skip last node
+    s = switchPath->getLength() - 1;
 
     while (s >= 0) {
-	// Nodes have to be the same
-	if (switchPath->getNode(s)  != currentPath->getNode(c))
-	    return FALSE;
+        // Nodes have to be the same
+        if (switchPath->getNode(s) != currentPath->getNode(c))
+            return FALSE;
 
-	// Indices have to be the same (except for zero'th node)
-	if (c > 0 && s > 0 &&
-	    switchPath->getIndex(s) != currentPath->getIndex(c))
-	    return FALSE;
+        // Indices have to be the same (except for zero'th node)
+        if (c > 0 && s > 0 &&
+            switchPath->getIndex(s) != currentPath->getIndex(c))
+            return FALSE;
 
-	c--, s--;
+        c--, s--;
     }
 
     return TRUE;

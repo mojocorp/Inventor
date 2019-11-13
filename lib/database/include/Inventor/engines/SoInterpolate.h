@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -55,7 +55,7 @@
  |	SO_INTERPOLATE_INITCLASS
  |
  |   Classes:
- |	
+ |
  |      SoInterpolate	(abstract base class)
  |      SoInterpolateFloat
  |      SoInterpolateRotation
@@ -69,8 +69,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_INTERPOLATE_
-#define  _SO_INTERPOLATE_
+#ifndef _SO_INTERPOLATE_
+#define _SO_INTERPOLATE_
 
 #include <Inventor/SoDB.h>
 #include <Inventor/engines/SoSubEngine.h>
@@ -97,17 +97,18 @@ class SoInterpolate : public SoEngine {
 
   public:
     // derived classes will define "input0" and "input1" fields
-    SoSFFloat		alpha;
-    SoEngineOutput	output;
+    SoSFFloat      alpha;
+    SoEngineOutput output;
 
-  SoINTERNAL public:
-    static void		initClass();
-    static void		initClasses();	// init all builtin derived classes
+    SoINTERNAL
+  public:
+    static void initClass();
+    static void initClasses(); // init all builtin derived classes
 
   protected:
     SoInterpolate();
     static int max(int a, int b) { return (a > b) ? a : b; }
-    static int clamp(int i, int n) { return (i < n) ? i : n-1; }
+    static int clamp(int i, int n) { return (i < n) ? i : n - 1; }
 
     ~SoInterpolate();
 };
@@ -124,18 +125,19 @@ class SoInterpolate : public SoEngine {
 // declares variables and methods that all interpolaters support
 //
 
-#define SO_INTERPOLATE_HEADER(className)		      		\
-									\
-    SO_ENGINE_HEADER(className);					\
-									\
-  private:								\
-    ~className();							\
-    virtual void	evaluate();					\
-									\
-  SoINTERNAL public:							\
-    static void		initClass();					\
-									\
-  public:								\
+#define SO_INTERPOLATE_HEADER(className)                                       \
+                                                                               \
+    SO_ENGINE_HEADER(className);                                               \
+                                                                               \
+  private:                                                                     \
+    ~className();                                                              \
+    virtual void evaluate();                                                   \
+                                                                               \
+    SoINTERNAL                                                                 \
+  public:                                                                      \
+    static void initClass();                                                   \
+                                                                               \
+  public:                                                                      \
     className()
 
 //
@@ -146,37 +148,32 @@ class SoInterpolate : public SoEngine {
 // "valType", based on local variable "a" which is a float.
 //
 
-#define SO_INTERPOLATE_SOURCE(className, type,		 		\
-			valType, defaultVal0, defaultVal1, interpVal)	\
-									\
-SO_ENGINE_SOURCE(className);						\
-									\
-className::className()							\
-{									\
-    SO_ENGINE_CONSTRUCTOR(className);					\
-    SO_ENGINE_ADD_INPUT(alpha, (0.0));			      		\
-    SO_ENGINE_ADD_INPUT(input0, defaultVal0);				\
-    SO_ENGINE_ADD_INPUT(input1, defaultVal1);				\
-    SO_ENGINE_ADD_OUTPUT(output, type);			      		\
-    isBuiltIn = TRUE;							\
-}									\
-									\
-className::~className()							\
-{									\
-}									\
-									\
-void									\
-className::evaluate()							\
-{									\
-    int n0 = input0.getNum();						\
-    int n1 = input1.getNum();						\
-    float a = alpha.getValue();						\
-    for (int i=max(n0,n1)-1; i>=0; i--) {				\
-	valType v0 = input0[clamp(i,n0)];				\
-	valType v1 = input1[clamp(i,n1)];				\
-	SO_ENGINE_OUTPUT(output, type, set1Value(i, interpVal));	\
-    }									\
-}
+#define SO_INTERPOLATE_SOURCE(className, type, valType, defaultVal0,           \
+                              defaultVal1, interpVal)                          \
+                                                                               \
+    SO_ENGINE_SOURCE(className);                                               \
+                                                                               \
+    className::className() {                                                   \
+        SO_ENGINE_CONSTRUCTOR(className);                                      \
+        SO_ENGINE_ADD_INPUT(alpha, (0.0));                                     \
+        SO_ENGINE_ADD_INPUT(input0, defaultVal0);                              \
+        SO_ENGINE_ADD_INPUT(input1, defaultVal1);                              \
+        SO_ENGINE_ADD_OUTPUT(output, type);                                    \
+        isBuiltIn = TRUE;                                                      \
+    }                                                                          \
+                                                                               \
+    className::~className() {}                                                 \
+                                                                               \
+    void className::evaluate() {                                               \
+        int   n0 = input0.getNum();                                            \
+        int   n1 = input1.getNum();                                            \
+        float a = alpha.getValue();                                            \
+        for (int i = max(n0, n1) - 1; i >= 0; i--) {                           \
+            valType v0 = input0[clamp(i, n0)];                                 \
+            valType v1 = input1[clamp(i, n1)];                                 \
+            SO_ENGINE_OUTPUT(output, type, set1Value(i, interpVal));           \
+        }                                                                      \
+    }
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -187,13 +184,11 @@ className::evaluate()							\
 // memory used).
 //
 
-#define SO_INTERPOLATE_INITCLASS(className, classPrintName)		\
-									\
-void									\
-className::initClass()							\
-{									\
-    SO__ENGINE_INIT_CLASS(className, classPrintName, SoInterpolate);	\
-}
+#define SO_INTERPOLATE_INITCLASS(className, classPrintName)                    \
+                                                                               \
+    void className::initClass() {                                              \
+        SO__ENGINE_INIT_CLASS(className, classPrintName, SoInterpolate);       \
+    }
 /////////////////////////////////////////////////////////////////////////////
 //
 // Interpolaters for the builtin field types.
@@ -202,32 +197,32 @@ className::initClass()							\
 
 class SoInterpolateFloat : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateFloat);
-    SoMFFloat		input0;
-    SoMFFloat		input1;
+    SoMFFloat input0;
+    SoMFFloat input1;
 };
 
 class SoInterpolateRotation : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateRotation);
-    SoMFRotation	input0;
-    SoMFRotation	input1;
+    SoMFRotation input0;
+    SoMFRotation input1;
 };
 
 class SoInterpolateVec2f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec2f);
-    SoMFVec2f		input0;
-    SoMFVec2f		input1;
+    SoMFVec2f input0;
+    SoMFVec2f input1;
 };
 
 class SoInterpolateVec3f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec3f);
-    SoMFVec3f		input0;
-    SoMFVec3f		input1;
+    SoMFVec3f input0;
+    SoMFVec3f input1;
 };
 
 class SoInterpolateVec4f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec4f);
-    SoMFVec4f		input0;
-    SoMFVec4f		input1;
+    SoMFVec4f input0;
+    SoMFVec4f input1;
 };
 
 #endif /* _SO_INTERPOLATE_ */

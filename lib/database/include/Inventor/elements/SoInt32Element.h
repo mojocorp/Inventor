@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -58,8 +58,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_INT32_ELEMENT
-#define  _SO_INT32_ELEMENT
+#ifndef _SO_INT32_ELEMENT
+#define _SO_INT32_ELEMENT
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -72,39 +72,42 @@
 
 #include <Inventor/elements/SoSubElement.h>
 
-SoEXTENDER class SoInt32Element : public SoElement {
+SoEXTENDER
+class SoInt32Element : public SoElement {
 
     SO_ELEMENT_ABSTRACT_HEADER(SoInt32Element);
 
   public:
     // Comparison based on value of int32_ts
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoInt32Element class
-    static void		initClass();
+    static void initClass();
 
     // Copy method, takes care copying the data.
-    virtual SoElement 	*copyMatchInfo() const;
-    
+    virtual SoElement *copyMatchInfo() const;
+
     // Set value.  Derived classes have static inline methods
     // that pass in the stack index and cast their type into a int32_t.
     // This just gets an appropriate instance and calls the virtual
     // set.
-    static void		set(int stackIndex, SoState *state, int32_t value);
+    static void set(int stackIndex, SoState *state, int32_t value);
 
     // Virtual set that subclasses can override to implement
     // side-effect behaviors.
-    virtual void	setElt(int32_t value);
+    virtual void setElt(int32_t value);
 
     // Get value.  Derived classes have static inline methods to pass
     // in the stackIndex and cast the returned value to the right type.
-    static int32_t		get(int stackIndex, SoState *state)
-    	{return((const SoInt32Element *)
-	    getConstElement(state, stackIndex))->data;}
+    static int32_t get(int stackIndex, SoState *state) {
+        return ((const SoInt32Element *)getConstElement(state, stackIndex))
+            ->data;
+    }
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
   protected:
     // Storage for data.

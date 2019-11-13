@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,8 +45,8 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |      Defines the SoV1GroupKit class. 
- |      Organizes an appearance, a transform, a local transform and a 
+ |      Defines the SoV1GroupKit class.
+ |      Organizes an appearance, a transform, a local transform and a
  |      group of child kits
  |
  |   Author(s)          : Paul Isaacs, Thad Beier
@@ -55,8 +55,8 @@
  _______________________________________________________________________
 */
 
-#ifndef  _SO_V1_GROUP_KIT_
-#define  _SO_V1_GROUP_KIT_
+#ifndef _SO_V1_GROUP_KIT_
+#define _SO_V1_GROUP_KIT_
 
 #include <Inventor/misc/upgraders/SoV1BaseKit.h>
 #include <Inventor/misc/upgraders/SoV1AppearanceKit.h>
@@ -65,11 +65,11 @@
 //    Class: SoV1GroupKit
 //
 //    New nodes in this subclass are:
-//         callbackList, topSeparator, pickStyle, appearance,                 
-//          transform, texture2Transform, 
+//         callbackList, topSeparator, pickStyle, appearance,
+//          transform, texture2Transform,
 //          childList
 //
-//      A parent node that manages a collection of child nodes 
+//      A parent node that manages a collection of child nodes
 //      into a unit with the following structure:
 //
 //                            this
@@ -81,11 +81,12 @@
 //  "pickStyle" |    "transform"  |                                   |
 //     "appearance"  "texture2Transform"                              |
 //                                                                    |
-//                                                                    | 
+//                                                                    |
 //                                                              "childList"
 //
 ////////////////////////////////////////////////////////////////////
-SoEXTENDER class SoV1GroupKit : public SoV1BaseKit {
+SoEXTENDER
+class SoV1GroupKit : public SoV1BaseKit {
 
     // Define typeId and name stuff
     SO_NODE_HEADER(SoV1GroupKit);
@@ -103,15 +104,16 @@ SoEXTENDER class SoV1GroupKit : public SoV1BaseKit {
     // is information we need in the nodelist:
     // SoV1AppearanceKit::unusedTextureXfs.
     // If so, move this into our "texture2Transform" part.
-    // Need to do this because Inventor 1.0 texture had fields for 
+    // Need to do this because Inventor 1.0 texture had fields for
     // texture transforms, but new one does not. So SoV1AppearanceKit just
     // stores this info. We retrieve it and make use of it.
     virtual void setUpNewNode(SoNode *newNode);
-    
-    SoINTERNAL public:
+
+    SoINTERNAL
+  public:
     static void initClass();
 
   protected:
     virtual ~SoV1GroupKit();
 };
-#endif  /* _SO_V1_GROUP_KIT_ */
+#endif /* _SO_V1_GROUP_KIT_ */

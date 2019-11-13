@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -70,9 +70,9 @@ SoV1LightModel::SoV1LightModel()
 {
     SO_NODE_CONSTRUCTOR(SoV1LightModel);
 
-    SO_NODE_ADD_FIELD(model,		(PHONG));
-    SO_NODE_ADD_FIELD(nearColor,	(1.0, 1.0, 1.0));
-    SO_NODE_ADD_FIELD(farColor,		(0.0, 0.0, 0.0));
+    SO_NODE_ADD_FIELD(model, (PHONG));
+    SO_NODE_ADD_FIELD(nearColor, (1.0, 1.0, 1.0));
+    SO_NODE_ADD_FIELD(farColor, (0.0, 0.0, 0.0));
 
     // Set up static info for enumerated type field
     SO_NODE_DEFINE_ENUM_VALUE(Model, PHONG);
@@ -93,8 +93,7 @@ SoV1LightModel::SoV1LightModel()
 SoV1LightModel::~SoV1LightModel()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -110,7 +109,7 @@ SoV1LightModel::createNewNode()
 {
     SoLightModel *result;
 
-    Model mod = (Model) model.getValue();
+    Model mod = (Model)model.getValue();
 
     // Model "DEPTH" no longer exists. If it is used, we add an
     // SoEnvironment node with fog turned on to simulate depth
@@ -119,27 +118,26 @@ SoV1LightModel::createNewNode()
 
     if (mod == DEPTH) {
 
-	SoEnvironment	*env = SO_UPGRADER_CREATE_NEW(SoEnvironment);
+        SoEnvironment *env = SO_UPGRADER_CREATE_NEW(SoEnvironment);
 
-	env->fogType  = SoEnvironment::HAZE;
-	env->fogColor = farColor.getValue();
+        env->fogType = SoEnvironment::HAZE;
+        env->fogColor = farColor.getValue();
 
 #ifdef DEBUG
-	SoDebugError::postWarning("SoV1LightModel::createNewNode",
-				  "converting LightModel depth cueing "
-				  "into an SoEnvironment node with fog");
+        SoDebugError::postWarning("SoV1LightModel::createNewNode",
+                                  "converting LightModel depth cueing "
+                                  "into an SoEnvironment node with fog");
 #endif /* DEBUG */
 
-	return env;
+        return env;
     }
 
     // Regular light model is ok as is
     result = SO_UPGRADER_CREATE_NEW(SoLightModel);
 
-    if (! model.isDefault()) {
-	SO_UPGRADER_COPY_FIELD(model, result);
+    if (!model.isDefault()) {
+        SO_UPGRADER_COPY_FIELD(model, result);
     }
 
     return result;
 }
-

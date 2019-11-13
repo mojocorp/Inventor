@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -138,13 +138,13 @@ SoVertexShape::generateDefaultNormals(SoState *, SoNormalBundle *)
 // Use: protected
 
 void
-SoVertexShape::setNormalCache(SoState *state,
-			      int numNormals, const SbVec3f *normals)
+SoVertexShape::setNormalCache(SoState *state, int numNormals,
+                              const SbVec3f *normals)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (normalCache != NULL)
-	normalCache->unref();
+        normalCache->unref();
 
     normalCache = new SoNormalCache(state);
     normalCache->ref();
@@ -152,7 +152,7 @@ SoVertexShape::setNormalCache(SoState *state,
     normalCache->set(numNormals, normals);
 
     // Set up the dependencies
-#define ADD_DEPENDENCY(elt)						      \
+#define ADD_DEPENDENCY(elt)                                                    \
     normalCache->addElement(state->getConstElement(elt::getClassStackIndex()))
 
     ADD_DEPENDENCY(SoCoordinateElement);
@@ -176,8 +176,8 @@ SoVertexShape::notify(SoNotList *list)
 {
     // Destroy cache, if present
     if (normalCache != NULL) {
-	normalCache->unref();
-	normalCache = NULL;
+        normalCache->unref();
+        normalCache = NULL;
     }
     vpCache.invalidate();
 
@@ -203,31 +203,29 @@ SoVertexShape::shouldGLRender(SoGLRenderAction *action)
 
     // Check if the shape is invisible
     if (SoDrawStyleElement::get(action->getState()) ==
-	SoDrawStyleElement::INVISIBLE)
-	return FALSE;
+        SoDrawStyleElement::INVISIBLE)
+        return FALSE;
 
     // If the shape is transparent and transparent objects are being
     // delayed, don't render now
     // if there is transparency in the vertex property node, the object is
     // transparent.  If there are no colors in the vertexProperty node,
     // we have to check the state.
-    if (!vpCache.colorIsInVtxProp()){
-    	if (action->handleTransparency())
-		return FALSE;
-    }
-    else if (vpCache.transpIsInVtxProp()){
-	if (action->handleTransparency(TRUE))
-		return FALSE;
-    }
-    else
-	    SoLazyElement::setBlending(action->getState(), FALSE);        
+    if (!vpCache.colorIsInVtxProp()) {
+        if (action->handleTransparency())
+            return FALSE;
+    } else if (vpCache.transpIsInVtxProp()) {
+        if (action->handleTransparency(TRUE))
+            return FALSE;
+    } else
+        SoLazyElement::setBlending(action->getState(), FALSE);
 
     // If the current complexity is BOUNDING_BOX, just render the
     // cuboid surrounding the shape and tell the shape to stop
     if (SoComplexityTypeElement::get(action->getState()) ==
-	SoComplexityTypeElement::BOUNDING_BOX) {
-	GLRenderBoundingBox(action);
-	return FALSE;
+        SoComplexityTypeElement::BOUNDING_BOX) {
+        GLRenderBoundingBox(action);
+        return FALSE;
     }
 
     // Otherwise, go ahead and render the object

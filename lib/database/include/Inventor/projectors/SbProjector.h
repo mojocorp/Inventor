@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,33 +64,31 @@
 #include <Inventor/SbMatrix.h>
 #include <Inventor/SbViewVolume.h>
 
-class SbProjector
-{
+class SbProjector {
   public:
     // Apply the projector using the given point, returning the
     // point in three dimensions that it projects to.
     // The point should be normalized from 0-1, with (0,0) at
     // the lower-left.
-    virtual SbVec3f	    project(const SbVec2f &point) = 0;
+    virtual SbVec3f project(const SbVec2f &point) = 0;
 
     // Set/get the view volume to use for the projection.
     // This is typically gotten from SbCamera::getViewVolume.
-    virtual void	    setViewVolume(const SbViewVolume &vol);
+    virtual void setViewVolume(const SbViewVolume &vol);
 
-    const SbViewVolume &    getViewVolume() const	    { return viewVol; }
-    
+    const SbViewVolume &getViewVolume() const { return viewVol; }
+
     // Set/get the transform space to work in. This matrix should transform
     // working space coords into world space.
     // The default matrix is identity, meaning that the default working
     // space is world space.
-    virtual void	    setWorkingSpace(const SbMatrix &space);
+    virtual void setWorkingSpace(const SbMatrix &space);
 
-    const SbMatrix &	    getWorkingSpace() const
-						{ return workingToWorld ; }
+    const SbMatrix &getWorkingSpace() const { return workingToWorld; }
 
     // Returns an instance that is a copy of this instance. The caller
     // is responsible for deleting the copy when done.
-    virtual SbProjector *    copy() const = 0;
+    virtual SbProjector *copy() const = 0;
 
   protected:
     // Default constructor.
@@ -101,11 +99,11 @@ class SbProjector
 
     // Given this mouse point, return the line it projects to
     // in working space.
-    SbLine	getWorkingLine(const SbVec2f &point) const;
-  
-    SbViewVolume	    viewVol;
-    SbMatrix		    worldToWorking;
-    SbMatrix		    workingToWorld;
+    SbLine getWorkingLine(const SbVec2f &point) const;
+
+    SbViewVolume viewVol;
+    SbMatrix     worldToWorking;
+    SbMatrix     workingToWorld;
 };
 
 #endif /* _SB_PROJECTOR_ */

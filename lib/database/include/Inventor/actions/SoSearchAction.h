@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_SEARCH_ACTION_
-#define  _SO_SEARCH_ACTION_
+#ifndef _SO_SEARCH_ACTION_
+#define _SO_SEARCH_ACTION_
 
 #include <Inventor/actions/SoSubAction.h>
 
@@ -77,19 +77,18 @@ class SoSearchAction : public SoAction {
     SO_ACTION_HEADER(SoSearchAction);
 
   public:
-
     // Enum that defines the search criterion:
     enum LookFor {
-	NODE = 0x01,	// Looking for a particular node
-	TYPE = 0x02,	// Looking for a particualr type of node
-	NAME = 0x04	// Looking for a node with a particular name
+        NODE = 0x01, // Looking for a particular node
+        TYPE = 0x02, // Looking for a particualr type of node
+        NAME = 0x04  // Looking for a node with a particular name
     };
 
     // Enum that defines which paths to return:
     enum Interest {
-	FIRST,		// Return only the first path found
-	LAST,		// Return only the last path found
-	ALL		// Return all paths found
+        FIRST, // Return only the first path found
+        LAST,  // Return only the last path found
+        ALL    // Return all paths found
     };
 
     // Constructor (default action searches for first node of or
@@ -100,74 +99,77 @@ class SoSearchAction : public SoAction {
     virtual ~SoSearchAction();
 
     // Reset options back to default values, clears list of returned paths
-    void		reset();
+    void reset();
 
     // Set what to look for; this is a bitmask of the LookFor enum
     // values. Default is no flags at all.
-    void		setFind(int what)	{ lookingFor = what; }
-    int			getFind()		{ return lookingFor; }
+    void setFind(int what) { lookingFor = what; }
+    int  getFind() { return lookingFor; }
 
     // Returns/sets the node to search for
-    SoNode *   		getNode() const		{ return node; }
-    void		setNode(SoNode *n);
+    SoNode *getNode() const { return node; }
+    void    setNode(SoNode *n);
 
     // Returns/sets the node type searching for, and whether the type
     // must match exactly
-    SoType		getType(SbBool &derivedIsOk) const
-	{ derivedIsOk = derivedOk; return type; }	
-    void		setType(SoType t, SbBool derivedIsOk = TRUE);
+    SoType getType(SbBool &derivedIsOk) const {
+        derivedIsOk = derivedOk;
+        return type;
+    }
+    void setType(SoType t, SbBool derivedIsOk = TRUE);
 
     // Returns/sets the name of the node to search for
-    const SbName &	getName() const { return name; }
-    void		setName(const SbName &n);
+    const SbName &getName() const { return name; }
+    void          setName(const SbName &n);
 
     // Returns/sets which paths to return. Default is FIRST.
-    Interest		getInterest() const	{ return interest; }
-    void		setInterest(Interest i)	{ interest = i;    }
+    Interest getInterest() const { return interest; }
+    void     setInterest(Interest i) { interest = i; }
 
     // Returns/sets whether searching uses normal traversal (switches, etc.)
     // or whether it traverses every single node. Default is FALSE;
-    SbBool		isSearchingAll() const	{ return searchingAll; }
-    void		setSearchingAll(SbBool flag) { searchingAll = flag; }
+    SbBool isSearchingAll() const { return searchingAll; }
+    void   setSearchingAll(SbBool flag) { searchingAll = flag; }
 
     // Returns resulting path (if interest is not ALL)
-    SoPath *		getPath() const		{ return retPath; }
+    SoPath *getPath() const { return retPath; }
 
     // Returns resulting path list (if interest is ALL)
-    SoPathList &	getPaths() 		{ return retPaths; }
+    SoPathList &getPaths() { return retPaths; }
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Sets/returns whether action has found all desired nodes
-    void		setFound()		{ setTerminated(TRUE); }
-    SbBool		isFound() const		{ return hasTerminated(); }
+    void   setFound() { setTerminated(TRUE); }
+    SbBool isFound() const { return hasTerminated(); }
 
     // Sets found path or adds to list of found paths (depending on interest)
-    void		addPath(SoPath *path);
+    void addPath(SoPath *path);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
     // This flag is used by the SoSwitch node, which must return a
     // different result from its 'affectsState' method when called
     // during a SearchAction that is searching all children.
-    static SbBool	duringSearchAll;
+    static SbBool duringSearchAll;
 
   protected:
     // Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
   private:
-
-    SoType		type;		// Node type id to search for
-    SbBool		derivedOk;	// Exact match or derived ok
-    SoNode		*node;		// Node to search for
-    SbName		name;		// Name of node to search for	
-    int			lookingFor;     // What to search for
-    Interest		interest;	// Which paths to return
-    SbBool		searchingAll;	// Search all children or follow 
-					// normal traversal rules.
-    SoPath		*retPath;	// Found node (if interest != ALL)
-    SoPathList		retPaths;	// Found nodes (if interest == ALL)
+    SoType   type;         // Node type id to search for
+    SbBool   derivedOk;    // Exact match or derived ok
+    SoNode * node;         // Node to search for
+    SbName   name;         // Name of node to search for
+    int      lookingFor;   // What to search for
+    Interest interest;     // Which paths to return
+    SbBool   searchingAll; // Search all children or follow
+                           // normal traversal rules.
+    SoPath *   retPath;    // Found node (if interest != ALL)
+    SoPathList retPaths;   // Found nodes (if interest == ALL)
 };
 
 #endif /* _SO_SEARCH_ACTION_ */

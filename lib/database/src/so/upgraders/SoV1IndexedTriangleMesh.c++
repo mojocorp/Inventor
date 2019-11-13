@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -85,8 +85,7 @@ SoV1IndexedTriangleMesh::SoV1IndexedTriangleMesh()
 SoV1IndexedTriangleMesh::~SoV1IndexedTriangleMesh()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -100,9 +99,11 @@ SoV1IndexedTriangleMesh::createNewNode()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoIndexedTriangleStripSet *result = SO_UPGRADER_CREATE_NEW(SoIndexedTriangleStripSet);
+    SoIndexedTriangleStripSet *result =
+        SO_UPGRADER_CREATE_NEW(SoIndexedTriangleStripSet);
 
-    if (coordIndex.getNum() < 3) return result;
+    if (coordIndex.getNum() < 3)
+        return result;
 
     result->coordIndex.deleteValues(0);
 
@@ -115,20 +116,23 @@ SoV1IndexedTriangleMesh::createNewNode()
     imat = FALSE;
     itex = FALSE;
 
-    if (normalIndex.getNum() >= coordIndex.getNum()) inorm = TRUE;
+    if (normalIndex.getNum() >= coordIndex.getNum())
+        inorm = TRUE;
     else { // Copy over field...
-	result->normalIndex.setValues(0, normalIndex.getNum(),
-				      normalIndex.getValues(0));
+        result->normalIndex.setValues(0, normalIndex.getNum(),
+                                      normalIndex.getValues(0));
     }
-    if (materialIndex.getNum() >= coordIndex.getNum()) imat = TRUE;
+    if (materialIndex.getNum() >= coordIndex.getNum())
+        imat = TRUE;
     else { // Copy over field...
-	result->materialIndex.setValues(0, materialIndex.getNum(),
-					materialIndex.getValues(0));
+        result->materialIndex.setValues(0, materialIndex.getNum(),
+                                        materialIndex.getValues(0));
     }
-    if (textureCoordIndex.getNum() >= coordIndex.getNum()) itex = TRUE;
+    if (textureCoordIndex.getNum() >= coordIndex.getNum())
+        itex = TRUE;
     else { // Copy over field...
-	result->textureCoordIndex.setValues(0, textureCoordIndex.getNum(),
-				      textureCoordIndex.getValues(0));
+        result->textureCoordIndex.setValues(0, textureCoordIndex.getNum(),
+                                            textureCoordIndex.getValues(0));
     }
 
     // Converting is only tricky because of swaps.  We can get the
@@ -146,74 +150,70 @@ SoV1IndexedTriangleMesh::createNewNode()
 
     for (int i = 0; i < coordIndex.getNum(); i++) {
 
-	// Repeat last vertex:
-	if (coordIndex[i] == SO_SWAP_MESH_INDEX) {
-	    if (triVerts[0] != -1) {
-		addVertex(result, triVerts[0]);
+        // Repeat last vertex:
+        if (coordIndex[i] == SO_SWAP_MESH_INDEX) {
+            if (triVerts[0] != -1) {
+                addVertex(result, triVerts[0]);
 
-		// Emulate swap:
-		int temp = triVerts[0];
-		triVerts[0] = triVerts[1];
-		triVerts[1] = temp;
-	    }
-	    else {
-		// Do nothing
+                // Emulate swap:
+                int temp = triVerts[0];
+                triVerts[0] = triVerts[1];
+                triVerts[1] = temp;
+            } else {
+                // Do nothing
 #ifdef DEBUG
-		SoDebugError::post("SoV1IndexedTriangleMesh",
-		   "Got an SO_SWAP_MESH_INDEX before any vertices");
+                SoDebugError::post(
+                    "SoV1IndexedTriangleMesh",
+                    "Got an SO_SWAP_MESH_INDEX before any vertices");
 #endif
-	    }
-	}
-	// At the end of the mesh, reset triVerts and add END_INDEX
-	// to indexedTriStrip:
-	else if (coordIndex[i] == SO_END_MESH_INDEX) {
-	    addVertex(result, SO_END_MESH_INDEX);
+            }
+        }
+        // At the end of the mesh, reset triVerts and add END_INDEX
+        // to indexedTriStrip:
+        else if (coordIndex[i] == SO_END_MESH_INDEX) {
+            addVertex(result, SO_END_MESH_INDEX);
 
-	    triVerts[0] = triVerts[1] = -1;
-	}
-	// Normal case, got a new vertex:
-	else {
-	    if (coordIndex[i] < 0) {
+            triVerts[0] = triVerts[1] = -1;
+        }
+        // Normal case, got a new vertex:
+        else {
+            if (coordIndex[i] < 0) {
 #ifdef DEBUG
-		SoDebugError::post("SoV1IndexedTriangleMesh",
-		   "coordIndex[%d]=%d out of range",
-				   i, coordIndex[i]);
+                SoDebugError::post("SoV1IndexedTriangleMesh",
+                                   "coordIndex[%d]=%d out of range", i,
+                                   coordIndex[i]);
 #endif
-	    }
-	    else {
-		addVertex(result, i);
+            } else {
+                addVertex(result, i);
 
-		triVerts[0] = triVerts[1];
-		triVerts[1] = i;
-	    }
-	}
+                triVerts[0] = triVerts[1];
+                triVerts[1] = i;
+            }
+        }
     }
     return result;
 }
 
 // Helper routine:
 void
-SoV1IndexedTriangleMesh::addVertex(SoIndexedTriangleStripSet *result,
-				   int v)
-{
+SoV1IndexedTriangleMesh::addVertex(SoIndexedTriangleStripSet *result, int v) {
     int index = result->coordIndex.getNum();
 
-    if (v < 0) {  // Have an END_MESH
-	result->coordIndex.set1Value(index, v);
-	if (inorm)
-	    result->normalIndex.set1Value(index, v);
-	if (imat)
-	    result->materialIndex.set1Value(index, v);
-	if (itex)
-	    result->textureCoordIndex.set1Value(index, v);
+    if (v < 0) { // Have an END_MESH
+        result->coordIndex.set1Value(index, v);
+        if (inorm)
+            result->normalIndex.set1Value(index, v);
+        if (imat)
+            result->materialIndex.set1Value(index, v);
+        if (itex)
+            result->textureCoordIndex.set1Value(index, v);
     } else {
-	result->coordIndex.set1Value(index, coordIndex[v]);
-	if (inorm)
-	    result->normalIndex.set1Value(index, normalIndex[v]);
-	if (imat)
-	    result->materialIndex.set1Value(index, materialIndex[v]);
-	if (itex)
-	    result->textureCoordIndex.set1Value(index,
-						textureCoordIndex[v]);
+        result->coordIndex.set1Value(index, coordIndex[v]);
+        if (inorm)
+            result->normalIndex.set1Value(index, normalIndex[v]);
+        if (imat)
+            result->materialIndex.set1Value(index, materialIndex[v]);
+        if (itex)
+            result->textureCoordIndex.set1Value(index, textureCoordIndex[v]);
     }
 }

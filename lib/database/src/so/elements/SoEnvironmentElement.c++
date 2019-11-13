@@ -65,8 +65,7 @@ SO_ELEMENT_SOURCE(SoEnvironmentElement);
 SoEnvironmentElement::~SoEnvironmentElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -80,7 +79,7 @@ SoEnvironmentElement::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SO_ELEMENT_INIT_CLASS(SoEnvironmentElement, SoReplacedElement);
+    SO_ELEMENT_INIT_CLASS(SoEnvironmentElement, SoReplacedElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -95,8 +94,9 @@ SoEnvironmentElement::init(SoState * /*state*/)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SoEnvironmentElement::getDefault(ambientIntensity, ambientColor, attenuation,
-                                    fogType, fogColor, fogVisibility);
+    SoEnvironmentElement::getDefault(ambientIntensity, ambientColor,
+                                     attenuation, fogType, fogColor,
+                                     fogVisibility);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -107,29 +107,28 @@ SoEnvironmentElement::init(SoState * /*state*/)
 // Use: public, static
 
 void
-SoEnvironmentElement::set(SoState *state, SoNode *node,
-                          float _ambientIntensity,
+SoEnvironmentElement::set(SoState *state, SoNode *node, float _ambientIntensity,
                           const SbColor &_ambientColor,
-                          const SbVec3f &_attenuation,
-                          int32_t _fogType,
-                          const SbColor &_fogColor,
-                          float _fogVisibility)
+                          const SbVec3f &_attenuation, int32_t _fogType,
+                          const SbColor &_fogColor, float _fogVisibility)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SoEnvironmentElement *elem = (SoEnvironmentElement *)SoReplacedElement::getElement(state, classStackIndex, node);
-   
-   if(elem != NULL)
-      elem->setElt(_ambientIntensity, _ambientColor, _attenuation,
-                   _fogType, _fogColor, _fogVisibility);
+    SoEnvironmentElement *elem =
+        (SoEnvironmentElement *)SoReplacedElement::getElement(
+            state, classStackIndex, node);
 
-   //////////////////////
-   //
-   // Set up light attenuation. This is stored in the
-   // SoLightAttenuationElement, which is then accessed by subsequent
-   // light sources.
-   //
-   SoLightAttenuationElement::set(state, node, _attenuation);
+    if (elem != NULL)
+        elem->setElt(_ambientIntensity, _ambientColor, _attenuation, _fogType,
+                     _fogColor, _fogVisibility);
+
+    //////////////////////
+    //
+    // Set up light attenuation. This is stored in the
+    // SoLightAttenuationElement, which is then accessed by subsequent
+    // light sources.
+    //
+    SoLightAttenuationElement::set(state, node, _attenuation);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -140,24 +139,23 @@ SoEnvironmentElement::set(SoState *state, SoNode *node,
 // Use: public
 
 void
-SoEnvironmentElement::get(SoState *state,
-                          float &_ambientIntensity,
-                          SbColor &_ambientColor,
-                          SbVec3f &_attenuation,
-                          int32_t &_fogType,
-                          SbColor &_fogColor,
+SoEnvironmentElement::get(SoState *state, float &_ambientIntensity,
+                          SbColor &_ambientColor, SbVec3f &_attenuation,
+                          int32_t &_fogType, SbColor &_fogColor,
                           float &_fogVisibility)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   const SoEnvironmentElement *elem= (const SoEnvironmentElement *)SoElement::getConstElement(state, classStackIndex);
+    const SoEnvironmentElement *elem =
+        (const SoEnvironmentElement *)SoElement::getConstElement(
+            state, classStackIndex);
 
-   _ambientIntensity = elem->ambientIntensity;
-   _ambientColor = elem->ambientColor;
-   _attenuation = elem->attenuation;
-   _fogType = elem->fogType;
-   _fogColor = elem->fogColor;
-   _fogVisibility = elem->fogVisibility;
+    _ambientIntensity = elem->ambientIntensity;
+    _ambientColor = elem->ambientColor;
+    _attenuation = elem->attenuation;
+    _fogType = elem->fogType;
+    _fogColor = elem->fogColor;
+    _fogVisibility = elem->fogVisibility;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -168,12 +166,10 @@ SoEnvironmentElement::get(SoState *state,
 // Use: protected, virtual
 
 void
-SoEnvironmentElement::setElt(float _ambientIntensity,
+SoEnvironmentElement::setElt(float          _ambientIntensity,
                              const SbColor &_ambientColor,
-                             const SbVec3f &_attenuation,
-                             int32_t _fogType,
-                             const SbColor &_fogColor,
-                             float _fogVisibility)
+                             const SbVec3f &_attenuation, int32_t _fogType,
+                             const SbColor &_fogColor, float _fogVisibility)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -193,11 +189,9 @@ SoEnvironmentElement::setElt(float _ambientIntensity,
 // Use: public
 
 void
-SoEnvironmentElement::getDefault(float &_ambientIntensity,
-                                 SbColor &_ambientColor,
-                                 SbVec3f &_attenuation,
-                                 int32_t &_fogType,
-                                 SbColor &_fogColor,
+SoEnvironmentElement::getDefault(float &  _ambientIntensity,
+                                 SbColor &_ambientColor, SbVec3f &_attenuation,
+                                 int32_t &_fogType, SbColor &_fogColor,
                                  float &_fogVisibility)
 //
 ////////////////////////////////////////////////////////////////////////

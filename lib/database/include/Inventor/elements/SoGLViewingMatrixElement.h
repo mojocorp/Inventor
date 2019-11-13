@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_GL_VIEWING_MATRIX_ELEMENT
-#define  _SO_GL_VIEWING_MATRIX_ELEMENT
+#ifndef _SO_GL_VIEWING_MATRIX_ELEMENT
+#define _SO_GL_VIEWING_MATRIX_ELEMENT
 
 #include <Inventor/elements/SoViewingMatrixElement.h>
 
@@ -71,39 +71,41 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLViewingMatrixElement : public SoViewingMatrixElement {
+SoEXTENDER
+class SoGLViewingMatrixElement : public SoViewingMatrixElement {
 
     SO_ELEMENT_HEADER(SoGLViewingMatrixElement);
 
   public:
     // Override init() and push() to copy state pointer
-    virtual void	init(SoState *state);
-    virtual void	push(SoState *state);
+    virtual void init(SoState *state);
+    virtual void push(SoState *state);
 
     // Override pop() method so side effects can occur in GL
-    virtual void	pop(SoState *state, const SoElement *prevTopElement);
+    virtual void pop(SoState *state, const SoElement *prevTopElement);
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoGLViewingMatrixElement class
-    static void		initClass();
+    static void initClass();
 
     // Used by SoGLModelMatrixElement when it need to figure out if
     // this element has changed between a glPushMatrix() and a
     // glPopMatrix():
-    static uint32_t	getNodeId(SoState *state);
+    static uint32_t getNodeId(SoState *state);
 
   protected:
     // Sets the matrix in an instance. Has GL side effects.
-    virtual void	setElt(const SbMatrix &matrix);
+    virtual void setElt(const SbMatrix &matrix);
 
     virtual ~SoGLViewingMatrixElement();
 
   private:
     // We need to store the state so we can get the model matrix element
-    SoState		*state;
+    SoState *state;
 
     // Sends matrix in element to GL
-    void		send();
+    void send();
 };
 
 #endif /* _SO_GL_VIEWING_MATRIX_ELEMENT */

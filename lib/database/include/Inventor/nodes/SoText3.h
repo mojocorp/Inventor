@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TEXT_3_
-#define  _SO_TEXT_3_
+#ifndef _SO_TEXT_3_
+#define _SO_TEXT_3_
 
 #include <Inventor/SbBox.h>
 #include <Inventor/fields/SoMFString.h>
@@ -80,30 +80,30 @@ class SoText3 : public SoShape {
     SO_NODE_HEADER(SoText3);
 
   public:
-    enum Justification {		// Justification types
-	LEFT	= 0x01,
-	RIGHT	= 0x02,
-	CENTER	= 0x03
+    enum Justification { // Justification types
+        LEFT = 0x01,
+        RIGHT = 0x02,
+        CENTER = 0x03
     };
 
-    enum Part {			// Justification types
-	FRONT	= 0x01,
-	SIDES	= 0x02,
-	BACK  	= 0x04,
-	ALL     = 0x07
+    enum Part { // Justification types
+        FRONT = 0x01,
+        SIDES = 0x02,
+        BACK = 0x04,
+        ALL = 0x07
     };
 
     // Fields
-    SoMFString		string;		// the strings to display
-    SoSFFloat		spacing;	// interval between strings
-    SoSFBitMask		parts;		// Visible parts of text
-    SoSFEnum		justification;
+    SoMFString  string;  // the strings to display
+    SoSFFloat   spacing; // interval between strings
+    SoSFBitMask parts;   // Visible parts of text
+    SoSFEnum    justification;
 
     // Constructor
     SoText3();
 
-  SoEXTENDER public:
-
+    SoEXTENDER
+  public:
     // Method to get the bounds of the given character in the given
     // string.  This must be called during the application of an
     // action; use a callbackAction applied to a Path to the text node
@@ -114,23 +114,22 @@ class SoText3 : public SoShape {
     // while a space character has an empty bounding box,
     // getCharacterBounds() will return a box as high as the font
     // height, as wide as a space, and as deep as the profile.
-    SbBox3f		getCharacterBounds(SoState *state,
-				int stringIndex, int charIndex);
+    SbBox3f getCharacterBounds(SoState *state, int stringIndex, int charIndex);
 
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void rayPick(SoRayPickAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Computes bounding box of text
-    virtual void	computeBBox(SoAction *action, SbBox3f &box,
-				    SbVec3f &center);
+    virtual void computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center);
 
     // Generates primitives
-    virtual void	generatePrimitives(SoAction *);
-    
+    virtual void generatePrimitives(SoAction *);
+
     virtual ~SoText3();
 
   private:
@@ -143,22 +142,20 @@ class SoText3 : public SoShape {
     // Figure out how much each line of text is offset (based on width
     // of characters and justification)
     SbVec2f getStringOffset(int line);
-    
+
     // Figure out where a particular character in a particular line
     // starts:
     SbVec2f getCharacterOffset(int line, int whichChar);
 
     // Creates a text detail when picking:
-    SoDetail * createTriangleDetail(SoRayPickAction *,
-				    const SoPrimitiveVertex *,
-				    const SoPrimitiveVertex *,
-				    const SoPrimitiveVertex *,
-				    SoPickedPoint *);
+    SoDetail *createTriangleDetail(SoRayPickAction *, const SoPrimitiveVertex *,
+                                   const SoPrimitiveVertex *,
+                                   const SoPrimitiveVertex *, SoPickedPoint *);
 
     // Generates the fronts of the characters, by getting the outlines
     // and calling the glu tesselation code:
     void generateFront(int line);
-    
+
     // Generates the sides (bevel) of the characters
     void generateSide(int line);
 
@@ -166,19 +163,19 @@ class SoText3 : public SoShape {
     // SoOutlineFontCache class) can be used to generate primitives
     // and render.
     static void generateSideTris(int nPoints, const SbVec3f *p1,
-		const SbVec3f *n1, const SbVec3f *p2,
-		const SbVec3f *n2, const float *sTexCoords,
-		const float *tTexCoords);
+                                 const SbVec3f *n1, const SbVec3f *p2,
+                                 const SbVec3f *n2, const float *sTexCoords,
+                                 const float *tTexCoords);
     static void renderSideTris(int nPoints, const SbVec3f *p1,
-		const SbVec3f *n1, const SbVec3f *p2,
-		const SbVec3f *n2, const float *sTexCoords,
-		const float *tTexCoords);
+                               const SbVec3f *n1, const SbVec3f *p2,
+                               const SbVec3f *n2, const float *sTexCoords,
+                               const float *tTexCoords);
 
     // Static callbacks invoked by the glu tesselation code:
     static void beginCB(unsigned int primType);
     static void endCB();
     static void vtxCB(void *vertex);
-    
+
     // Private data:
     // SoOutlineFontCache is an internal, opaque class used to
     // maintain gl display lists and other information for each
@@ -186,14 +183,14 @@ class SoText3 : public SoShape {
     SoOutlineFontCache *fontCache;
 
     // All this stuff is used while generating primitives:
-    static SoText3 *currentGeneratingNode;
-    static SoPrimitiveVertex *genPrimVerts[3];
-    static SbVec3f genTranslate;
-    static int genWhichVertex;
-    static uint32_t genPrimType;
-    static SoAction *genAction;
-    static SbBool genBack;
-    static SbBool genTexCoord;
+    static SoText3 *                         currentGeneratingNode;
+    static SoPrimitiveVertex *               genPrimVerts[3];
+    static SbVec3f                           genTranslate;
+    static int                               genWhichVertex;
+    static uint32_t                          genPrimType;
+    static SoAction *                        genAction;
+    static SbBool                            genBack;
+    static SbBool                            genTexCoord;
     static const SoTextureCoordinateElement *tce;
 };
 

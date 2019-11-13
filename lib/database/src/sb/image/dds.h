@@ -4,6 +4,6 @@
 #include <Inventor/SbImage.h>
 #include <Inventor/SbString.h>
 
-bool ReadDDSImage(const SbString & filename, SbImage & image);
+bool ReadDDSImage(const SbString &filename, SbImage &image);
 
 #endif

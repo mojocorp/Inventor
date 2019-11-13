@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -123,13 +123,12 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_SUB_FIELD_
-#define  _SO_SUB_FIELD_
+#ifndef _SO_SUB_FIELD_
+#define _SO_SUB_FIELD_
 
 #include <Inventor/fields/SoField.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoOutput.h>
-
 
 //===========================================================================
 //
@@ -137,76 +136,65 @@
 //
 //===========================================================================
 
-#define SO__FIELD_HEADER(className)					      \
-  public:								      \
-    virtual SoType		getTypeId() const;			      \
-    static SoType		getClassTypeId() { return classTypeId; }      \
-									      \
-    /* Copy from another field of same type */				      \
-    const className &		operator =(const className &f);		      \
-									      \
-  SoINTERNAL public:							      \
-    /* Copy from another field of unknown type (assumed to be same type) */   \
-    virtual void		copyFrom(const SoField &f);		      \
-									      \
-    static void *		createInstance();	/* for SoType	   */ \
-									      \
-    /* Returns TRUE if fields are same type and have same values */	      \
-    virtual SbBool		isSame(const SoField &f) const;		      \
-									      \
-  private:								      \
-    static SoType		classTypeId
+#define SO__FIELD_HEADER(className)                                            \
+  public:                                                                      \
+    virtual SoType getTypeId() const;                                          \
+    static SoType  getClassTypeId() { return classTypeId; }                    \
+                                                                               \
+    /* Copy from another field of same type */                                 \
+    const className &operator=(const className &f);                            \
+                                                                               \
+    SoINTERNAL                                                                 \
+  public:                                                                      \
+    /* Copy from another field of unknown type (assumed to be same type) */    \
+    virtual void copyFrom(const SoField &f);                                   \
+                                                                               \
+    static void *createInstance(); /* for SoType	   */                         \
+                                                                               \
+    /* Returns TRUE if fields are same type and have same values */            \
+    virtual SbBool isSame(const SoField &f) const;                             \
+                                                                               \
+  private:                                                                     \
+    static SoType classTypeId
 
-#define SO__SFIELD_RW_HEADER(className)					      \
-  private:								      \
-    /* Reads value of field from file */				      \
-    virtual SbBool		readValue(SoInput *in);			      \
-									      \
-    /* Writes value of field to file */					      \
-    virtual void		writeValue(SoOutput *out) const
+#define SO__SFIELD_RW_HEADER(className)                                        \
+  private:                                                                     \
+    /* Reads value of field from file */                                       \
+    virtual SbBool readValue(SoInput *in);                                     \
+                                                                               \
+    /* Writes value of field to file */                                        \
+    virtual void writeValue(SoOutput *out) const
 
-#define SO__MFIELD_RW_HEADER(className)					      \
-  private:								      \
-    /* Reads indexed value of field from file */			      \
-    virtual SbBool		read1Value(SoInput *in, int index);	      \
-									      \
-    /* Writes one (indexed) value to file */				      \
-    virtual void		write1Value(SoOutput *out, int index) const
+#define SO__MFIELD_RW_HEADER(className)                                        \
+  private:                                                                     \
+    /* Reads indexed value of field from file */                               \
+    virtual SbBool read1Value(SoInput *in, int index);                         \
+                                                                               \
+    /* Writes one (indexed) value to file */                                   \
+    virtual void write1Value(SoOutput *out, int index) const
 
-#define SO__FIELD_INIT_CLASS(className,classPrintName,parentClass)	      \
-    classTypeId = SoType::createType(parentClass::getClassTypeId(),	      \
-				     classPrintName,			      \
-				     &className::createInstance)
+#define SO__FIELD_INIT_CLASS(className, classPrintName, parentClass)           \
+    classTypeId =                                                              \
+        SoType::createType(parentClass::getClassTypeId(), classPrintName,      \
+                           &className::createInstance)
 
-#define	SO__FIELD_ID_SOURCE(className)					      \
-									      \
-SoType		className::classTypeId;					      \
-									      \
-SoType									      \
-className::getTypeId() const						      \
-{									      \
-    return classTypeId;							      \
-}									      \
-void *									      \
-className::createInstance()						      \
-{									      \
-    return (void *)(new className);					      \
-}
+#define SO__FIELD_ID_SOURCE(className)                                         \
+                                                                               \
+    SoType className::classTypeId;                                             \
+                                                                               \
+    SoType className::getTypeId() const { return classTypeId; }                \
+    void * className::createInstance() { return (void *)(new className); }
 
-#define	SO__FIELD_EQ_SAME_SOURCE(className)				      \
-									      \
-void									      \
-className::copyFrom(const SoField &f)					      \
-{									      \
-    *this = * (const className *) &f;					      \
-}									      \
-									      \
-SbBool									      \
-className::isSame(const SoField &f) const				      \
-{									      \
-    return (getTypeId() == f.getTypeId() &&				      \
-	    (*this) == (const className &) f);				      \
-}
+#define SO__FIELD_EQ_SAME_SOURCE(className)                                    \
+                                                                               \
+    void className::copyFrom(const SoField &f) {                               \
+        *this = *(const className *)&f;                                        \
+    }                                                                          \
+                                                                               \
+    SbBool className::isSame(const SoField &f) const {                         \
+        return (getTypeId() == f.getTypeId() &&                                \
+                (*this) == (const className &)f);                              \
+    }
 
 //===========================================================================
 //
@@ -221,8 +209,7 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_REQUIRED_HEADER(className)				      \
-    SO__FIELD_HEADER(className)
+#define SO_SFIELD_REQUIRED_HEADER(className) SO__FIELD_HEADER(className)
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -230,9 +217,9 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_CONSTRUCTOR_HEADER(className)				      \
-  public:								      \
-    className();							      \
+#define SO_SFIELD_CONSTRUCTOR_HEADER(className)                                \
+  public:                                                                      \
+    className();                                                               \
     virtual ~className()
 
 ////////////////////////////////////////////////////////////////////////////
@@ -242,25 +229,29 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_VALUE_HEADER(className, valueType, valueRef)		      \
-    SO__SFIELD_RW_HEADER(className);					      \
-  public:								      \
-    /* Get the value */							      \
-    valueRef			getValue() const			      \
-	{ evaluate(); return value; }					      \
-									      \
-    /* Set value from a value of the appropriate type */		      \
-    void			setValue(valueRef newValue);		      \
-    valueRef			operator =(valueRef newValue)		      \
-	{ setValue(newValue); return value; }				      \
-									      \
-    /* Equality/inequality test for fields of same type */		      \
-    int				operator ==(const className &f) const;	      \
-    int				operator !=(const className &f) const	      \
-	{ return ! ((*this) == f); }					      \
-									      \
-  protected:								      \
-    valueType			value
+#define SO_SFIELD_VALUE_HEADER(className, valueType, valueRef)                 \
+    SO__SFIELD_RW_HEADER(className);                                           \
+                                                                               \
+  public:                                                                      \
+    /* Get the value */                                                        \
+    valueRef getValue() const {                                                \
+        evaluate();                                                            \
+        return value;                                                          \
+    }                                                                          \
+                                                                               \
+    /* Set value from a value of the appropriate type */                       \
+    void     setValue(valueRef newValue);                                      \
+    valueRef operator=(valueRef newValue) {                                    \
+        setValue(newValue);                                                    \
+        return value;                                                          \
+    }                                                                          \
+                                                                               \
+    /* Equality/inequality test for fields of same type */                     \
+    int operator==(const className &f) const;                                  \
+    int operator!=(const className &f) const { return !((*this) == f); }       \
+                                                                               \
+  protected:                                                                   \
+    valueType value
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -270,12 +261,15 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_DERIVED_VALUE_HEADER(className, valueType, valueRef)	      \
-    SO__SFIELD_RW_HEADER(className);					      \
-  public:								      \
-    /* Since = operator is not inherited, we redefine it here */	      \
-    valueRef			operator =(valueRef newValue)		      \
-	{ setValue(newValue); return value; }
+#define SO_SFIELD_DERIVED_VALUE_HEADER(className, valueType, valueRef)         \
+    SO__SFIELD_RW_HEADER(className);                                           \
+                                                                               \
+  public:                                                                      \
+    /* Since = operator is not inherited, we redefine it here */               \
+    valueRef operator=(valueRef newValue) {                                    \
+        setValue(newValue);                                                    \
+        return value;                                                          \
+    }
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -284,9 +278,9 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_HEADER(className, valueType, valueRef)		      \
-    SO_SFIELD_REQUIRED_HEADER(className);				      \
-    SO_SFIELD_CONSTRUCTOR_HEADER(className);				      \
+#define SO_SFIELD_HEADER(className, valueType, valueRef)                       \
+    SO_SFIELD_REQUIRED_HEADER(className);                                      \
+    SO_SFIELD_CONSTRUCTOR_HEADER(className);                                   \
     SO_SFIELD_VALUE_HEADER(className, valueType, valueRef)
 
 ////////////////////////////////////////////////////////////////////////////
@@ -297,9 +291,9 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_DERIVED_HEADER(className, valueType, valueRef)	      \
-    SO_SFIELD_REQUIRED_HEADER(className);				      \
-    SO_SFIELD_CONSTRUCTOR_HEADER(className);				      \
+#define SO_SFIELD_DERIVED_HEADER(className, valueType, valueRef)               \
+    SO_SFIELD_REQUIRED_HEADER(className);                                      \
+    SO_SFIELD_CONSTRUCTOR_HEADER(className);                                   \
     SO_SFIELD_DERIVED_VALUE_HEADER(className, valueType, valueRef)
 
 //===========================================================================
@@ -315,8 +309,7 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_REQUIRED_HEADER(className)				      \
-    SO__FIELD_HEADER(className)
+#define SO_MFIELD_REQUIRED_HEADER(className) SO__FIELD_HEADER(className)
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -324,9 +317,9 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_CONSTRUCTOR_HEADER(className)				      \
-  public:								      \
-    className();							      \
+#define SO_MFIELD_CONSTRUCTOR_HEADER(className)                                \
+  public:                                                                      \
+    className();                                                               \
     virtual ~className()
 
 ////////////////////////////////////////////////////////////////////////////
@@ -336,60 +329,66 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_VALUE_HEADER(className, valueType, valueRef)		      \
-    SO__MFIELD_RW_HEADER(className);					      \
-  public:								      \
-    /* Get indexed value */						      \
-    valueRef			operator [](int i) const		      \
-	{ evaluate(); return values[i]; }				      \
-									      \
-    /* Get pointer into array of values */				      \
-    const valueType *		getValues(int start) const		      \
-	{ evaluate(); return (const valueType *)(values + start); }	      \
-									      \
-    /* Finds index of value that is equal to given one, or -1 if not	*/    \
-    /* found. If not found and addIfNotFound is TRUE, the new value is	*/    \
-    /* appended to the field. 						*/    \
-    int				find(valueRef targetValue,		      \
-				     SbBool addIfNotFound = FALSE);	      \
-									      \
-    /* Set num values starting at index start from info in newValues */	      \
-    void			setValues(int start, int num,		      \
-					  const valueType *newValues);	      \
-									      \
-    /* Set 1 value at given index */					      \
-    void			set1Value(int index, valueRef newValue);      \
-									      \
-    /* Set field to have one value */					      \
-    void			setValue(valueRef newValue);		      \
-    valueRef			operator =(valueRef newValue)		      \
-	{ setValue(newValue); return newValue; }			      \
-									      \
-    /* Equality/inequality test for fields of same type */		      \
-    int				operator ==(const className &f) const;	      \
-    int				operator !=(const className &f) const	      \
-	{ return ! ((*this) == f); }					      \
-									      \
-    /* Get non-const pointer into array of values for batch edits */	      \
-    valueType *			startEditing()				      \
-	{ evaluate(); return values; }					      \
-									      \
-    /* Indicate that batch edits have finished */			      \
-    void			finishEditing() { valueChanged(); }	      \
-									      \
-  protected:								      \
-    /* Allocates room for num values. Copies old values (if any) into    */   \
-    /* new area.  Deletes old area, if any.  Will reduce room if needed, */   \
-    /* so a value of newNum==0 will delete all values.                   */   \
-    virtual void		allocValues(int newNum);		      \
-									      \
-    /* Deletes all current values, resets number of values */		      \
-    virtual void                deleteAllValues();			      \
-									      \
-    /* Copies value indexed by "from" to value indexed by "to" */	      \
-    virtual void		copyValue(int to, int from);		      \
-									      \
-    valueType			*values
+#define SO_MFIELD_VALUE_HEADER(className, valueType, valueRef)                 \
+    SO__MFIELD_RW_HEADER(className);                                           \
+                                                                               \
+  public:                                                                      \
+    /* Get indexed value */                                                    \
+    valueRef operator[](int i) const {                                         \
+        evaluate();                                                            \
+        return values[i];                                                      \
+    }                                                                          \
+                                                                               \
+    /* Get pointer into array of values */                                     \
+    const valueType *getValues(int start) const {                              \
+        evaluate();                                                            \
+        return (const valueType *)(values + start);                            \
+    }                                                                          \
+                                                                               \
+    /* Finds index of value that is equal to given one, or -1 if not	*/        \
+    /* found. If not found and addIfNotFound is TRUE, the new value is	*/      \
+    /* appended to the field. 						*/                                         \
+    int find(valueRef targetValue, SbBool addIfNotFound = FALSE);              \
+                                                                               \
+    /* Set num values starting at index start from info in newValues */        \
+    void setValues(int start, int num, const valueType *newValues);            \
+                                                                               \
+    /* Set 1 value at given index */                                           \
+    void set1Value(int index, valueRef newValue);                              \
+                                                                               \
+    /* Set field to have one value */                                          \
+    void     setValue(valueRef newValue);                                      \
+    valueRef operator=(valueRef newValue) {                                    \
+        setValue(newValue);                                                    \
+        return newValue;                                                       \
+    }                                                                          \
+                                                                               \
+    /* Equality/inequality test for fields of same type */                     \
+    int operator==(const className &f) const;                                  \
+    int operator!=(const className &f) const { return !((*this) == f); }       \
+                                                                               \
+    /* Get non-const pointer into array of values for batch edits */           \
+    valueType *startEditing() {                                                \
+        evaluate();                                                            \
+        return values;                                                         \
+    }                                                                          \
+                                                                               \
+    /* Indicate that batch edits have finished */                              \
+    void finishEditing() { valueChanged(); }                                   \
+                                                                               \
+  protected:                                                                   \
+    /* Allocates room for num values. Copies old values (if any) into    */    \
+    /* new area.  Deletes old area, if any.  Will reduce room if needed, */    \
+    /* so a value of newNum==0 will delete all values.                   */    \
+    virtual void allocValues(int newNum);                                      \
+                                                                               \
+    /* Deletes all current values, resets number of values */                  \
+    virtual void deleteAllValues();                                            \
+                                                                               \
+    /* Copies value indexed by "from" to value indexed by "to" */              \
+    virtual void copyValue(int to, int from);                                  \
+                                                                               \
+    valueType *values
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -399,12 +398,15 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_DERIVED_VALUE_HEADER(className, valueType, valueRef)	      \
-    SO__MFIELD_RW_HEADER(className);					      \
-  public:								      \
-    /* Since = operator is not inherited, we redefine it here */	      \
-    valueRef			operator =(valueRef newValue)		      \
-	{ setValue(newValue); return newValue; }
+#define SO_MFIELD_DERIVED_VALUE_HEADER(className, valueType, valueRef)         \
+    SO__MFIELD_RW_HEADER(className);                                           \
+                                                                               \
+  public:                                                                      \
+    /* Since = operator is not inherited, we redefine it here */               \
+    valueRef operator=(valueRef newValue) {                                    \
+        setValue(newValue);                                                    \
+        return newValue;                                                       \
+    }
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -413,9 +415,9 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_HEADER(className, valueType, valueRef)		      \
-    SO_MFIELD_REQUIRED_HEADER(className);				      \
-    SO_MFIELD_CONSTRUCTOR_HEADER(className);				      \
+#define SO_MFIELD_HEADER(className, valueType, valueRef)                       \
+    SO_MFIELD_REQUIRED_HEADER(className);                                      \
+    SO_MFIELD_CONSTRUCTOR_HEADER(className);                                   \
     SO_MFIELD_VALUE_HEADER(className, valueType, valueRef)
 
 ////////////////////////////////////////////////////////////////////////////
@@ -426,9 +428,9 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_DERIVED_HEADER(className, valueType, valueRef)	      \
-    SO_MFIELD_REQUIRED_HEADER(className);				      \
-    SO_MFIELD_CONSTRUCTOR_HEADER(className);				      \
+#define SO_MFIELD_DERIVED_HEADER(className, valueType, valueRef)               \
+    SO_MFIELD_REQUIRED_HEADER(className);                                      \
+    SO_MFIELD_CONSTRUCTOR_HEADER(className);                                   \
     SO_MFIELD_DERIVED_VALUE_HEADER(className, valueType, valueRef)
 
 //===========================================================================
@@ -445,27 +447,25 @@ className::isSame(const SoField &f) const				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_INIT_CLASS(className,parentClass)			      \
+#define SO_SFIELD_INIT_CLASS(className, parentClass)                           \
     SO__FIELD_INIT_CLASS(className, SO__QUOTE(className), parentClass)
 
 ////////////////////////////////////////////////////////////////////////////
 //
 // This defines the variables and methods declared in
-// SO_SFIELD_REQUIRED_HEADER(). 
+// SO_SFIELD_REQUIRED_HEADER().
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define	SO_SFIELD_REQUIRED_SOURCE(className)				      \
-									      \
-    SO__FIELD_ID_SOURCE(className);					      \
-    SO__FIELD_EQ_SAME_SOURCE(className)					      \
-									      \
-const className &							      \
-className::operator =(const className &f)				      \
-{									      \
-    setValue(f.getValue());						      \
-    return *this;							      \
-}
+#define SO_SFIELD_REQUIRED_SOURCE(className)                                   \
+                                                                               \
+    SO__FIELD_ID_SOURCE(className);                                            \
+    SO__FIELD_EQ_SAME_SOURCE(className)                                        \
+                                                                               \
+    const className &className::operator=(const className &f) {                \
+        setValue(f.getValue());                                                \
+        return *this;                                                          \
+    }
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -473,36 +473,28 @@ className::operator =(const className &f)				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_CONSTRUCTOR_SOURCE(className)				      \
-									      \
-className::className()							      \
-{									      \
-}									      \
-className::~className()							      \
-{									      \
-}
+#define SO_SFIELD_CONSTRUCTOR_SOURCE(className)                                \
+                                                                               \
+    className::className() {}                                                  \
+    className::~className() {}
 
 ////////////////////////////////////////////////////////////////////////////
 //
 // This defines the variables and methods declared in
-// SO_SFIELD_VALUE_HEADER(). 
+// SO_SFIELD_VALUE_HEADER().
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_VALUE_SOURCE(className, valueType, valueRef)		      \
-									      \
-void									      \
-className::setValue(valueRef newValue)					      \
-{									      \
-    value = newValue;							      \
-    valueChanged();							      \
-}									      \
-									      \
-int									      \
-className::operator ==(const className &f) const			      \
-{									      \
-    return getValue() == f.getValue();					      \
-}
+#define SO_SFIELD_VALUE_SOURCE(className, valueType, valueRef)                 \
+                                                                               \
+    void className::setValue(valueRef newValue) {                              \
+        value = newValue;                                                      \
+        valueChanged();                                                        \
+    }                                                                          \
+                                                                               \
+    int className::operator==(const className &f) const {                      \
+        return getValue() == f.getValue();                                     \
+    }
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -511,10 +503,10 @@ className::operator ==(const className &f) const			      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_SOURCE(className, valueType, valueRef)		      \
-	SO_SFIELD_REQUIRED_SOURCE(className);				      \
-	SO_SFIELD_CONSTRUCTOR_SOURCE(className);			      \
-	SO_SFIELD_VALUE_SOURCE(className, valueType, valueRef)
+#define SO_SFIELD_SOURCE(className, valueType, valueRef)                       \
+    SO_SFIELD_REQUIRED_SOURCE(className);                                      \
+    SO_SFIELD_CONSTRUCTOR_SOURCE(className);                                   \
+    SO_SFIELD_VALUE_SOURCE(className, valueType, valueRef)
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -524,9 +516,9 @@ className::operator ==(const className &f) const			      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_SFIELD_DERIVED_SOURCE(className, valueType, valueRef)	      \
-	SO_SFIELD_REQUIRED_SOURCE(className);				      \
-	SO_SFIELD_CONSTRUCTOR_SOURCE(className)
+#define SO_SFIELD_DERIVED_SOURCE(className, valueType, valueRef)               \
+    SO_SFIELD_REQUIRED_SOURCE(className);                                      \
+    SO_SFIELD_CONSTRUCTOR_SOURCE(className)
 
 //===========================================================================
 //
@@ -542,29 +534,27 @@ className::operator ==(const className &f) const			      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_INIT_CLASS(className,parentClass)			      \
+#define SO_MFIELD_INIT_CLASS(className, parentClass)                           \
     SO__FIELD_INIT_CLASS(className, SO__QUOTE(className), parentClass)
 
 ////////////////////////////////////////////////////////////////////////////
 //
 // This defines the variables and methods declared in
-// SO_MFIELD_REQUIRED_HEADER(). 
+// SO_MFIELD_REQUIRED_HEADER().
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define	SO_MFIELD_REQUIRED_SOURCE(className)				      \
-									      \
-    SO__FIELD_ID_SOURCE(className);					      \
-    SO__FIELD_EQ_SAME_SOURCE(className)					      \
-									      \
-const className &							      \
-className::operator =(const className &f)				      \
-{									      \
-    if (f.getNum() < getNum())						      \
-	deleteAllValues();						      \
-    setValues(0, f.getNum(), f.getValues(0));				      \
-    return *this;							      \
-}
+#define SO_MFIELD_REQUIRED_SOURCE(className)                                   \
+                                                                               \
+    SO__FIELD_ID_SOURCE(className);                                            \
+    SO__FIELD_EQ_SAME_SOURCE(className)                                        \
+                                                                               \
+    const className &className::operator=(const className &f) {                \
+        if (f.getNum() < getNum())                                             \
+            deleteAllValues();                                                 \
+        setValues(0, f.getNum(), f.getValues(0));                              \
+        return *this;                                                          \
+    }
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -575,17 +565,11 @@ className::operator =(const className &f)				      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_CONSTRUCTOR_SOURCE(className)				      \
-									      \
-className::className()							      \
-{									      \
-    values = NULL;							      \
-}									      \
-									      \
-className::~className()							      \
-{									      \
-    deleteAllValues();							      \
-}
+#define SO_MFIELD_CONSTRUCTOR_SOURCE(className)                                \
+                                                                               \
+    className::className() { values = NULL; }                                  \
+                                                                               \
+    className::~className() { deleteAllValues(); }
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -595,101 +579,80 @@ className::~className()							      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_DERIVED_CONSTRUCTOR_SOURCE(className)			      \
-									      \
-className::className()							      \
-{									      \
-}									      \
-									      \
-className::~className()							      \
-{									      \
-}
+#define SO_MFIELD_DERIVED_CONSTRUCTOR_SOURCE(className)                        \
+                                                                               \
+    className::className() {}                                                  \
+                                                                               \
+    className::~className() {}
 
 ////////////////////////////////////////////////////////////////////////////
 //
 // This defines the variables and methods declared in
-// SO_MFIELD_VALUE_HEADER(). 
+// SO_MFIELD_VALUE_HEADER().
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)		      \
-									      \
-int									      \
-className::find(valueRef targetValue, SbBool addIfNotFound)		      \
-{									      \
-    int	i, num = getNum();						      \
-									      \
-    for (i = 0; i < num; i++)						      \
-	if (values[i] == targetValue)					      \
-	    return i;							      \
-									      \
-    if (addIfNotFound)							      \
-	set1Value(num, targetValue);					      \
-									      \
-    return -1;								      \
-}									      \
-									      \
-void									      \
-className::setValues(int start, int num, const valueType *newValues)	      \
-{									      \
-    int	newNum = start + num, i;					      \
-									      \
-    if (newNum > getNum())						      \
-	makeRoom(newNum);						      \
-									      \
-    for (i = 0; i < num; i++)						      \
-	values[start + i] = newValues[i];				      \
-									      \
-    valueChanged();							      \
-}									      \
-									      \
-void									      \
-className::set1Value(int index, valueRef newValue)			      \
-{									      \
-    if (index >= getNum())						      \
-	makeRoom(index + 1);						      \
-    values[index] = newValue;						      \
-    valueChanged();							      \
-}									      \
-									      \
-void									      \
-className::setValue(valueRef newValue)					      \
-{									      \
-    makeRoom(1);							      \
-    values[0] = newValue;						      \
-    valueChanged();							      \
-}									      \
-									      \
-int									      \
-className::operator ==(const className &f) const			      \
-{									      \
-    int			i, num = getNum();				      \
-    const valueType	*myVals, *itsVals;				      \
-									      \
-    if (num != f.getNum())						      \
-	return FALSE;							      \
-									      \
-    myVals  = getValues(0);						      \
-    itsVals = f.getValues(0);						      \
-									      \
-    for (i = 0; i < num; i++)						      \
-	if (! (myVals[i] == itsVals[i]))				      \
-	    return FALSE;						      \
-									      \
-    return TRUE;							      \
-}									      \
-									      \
-void									      \
-className::deleteAllValues()						      \
-{									      \
-    allocValues(0);							      \
-}									      \
-									      \
-void									      \
-className::copyValue(int to, int from)					      \
-{									      \
-    values[to] = values[from];						      \
-}
+#define SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)                 \
+                                                                               \
+    int className::find(valueRef targetValue, SbBool addIfNotFound) {          \
+        int i, num = getNum();                                                 \
+                                                                               \
+        for (i = 0; i < num; i++)                                              \
+            if (values[i] == targetValue)                                      \
+                return i;                                                      \
+                                                                               \
+        if (addIfNotFound)                                                     \
+            set1Value(num, targetValue);                                       \
+                                                                               \
+        return -1;                                                             \
+    }                                                                          \
+                                                                               \
+    void className::setValues(int start, int num,                              \
+                              const valueType *newValues) {                    \
+        int newNum = start + num, i;                                           \
+                                                                               \
+        if (newNum > getNum())                                                 \
+            makeRoom(newNum);                                                  \
+                                                                               \
+        for (i = 0; i < num; i++)                                              \
+            values[start + i] = newValues[i];                                  \
+                                                                               \
+        valueChanged();                                                        \
+    }                                                                          \
+                                                                               \
+    void className::set1Value(int index, valueRef newValue) {                  \
+        if (index >= getNum())                                                 \
+            makeRoom(index + 1);                                               \
+        values[index] = newValue;                                              \
+        valueChanged();                                                        \
+    }                                                                          \
+                                                                               \
+    void className::setValue(valueRef newValue) {                              \
+        makeRoom(1);                                                           \
+        values[0] = newValue;                                                  \
+        valueChanged();                                                        \
+    }                                                                          \
+                                                                               \
+    int className::operator==(const className &f) const {                      \
+        int              i, num = getNum();                                    \
+        const valueType *myVals, *itsVals;                                     \
+                                                                               \
+        if (num != f.getNum())                                                 \
+            return FALSE;                                                      \
+                                                                               \
+        myVals = getValues(0);                                                 \
+        itsVals = f.getValues(0);                                              \
+                                                                               \
+        for (i = 0; i < num; i++)                                              \
+            if (!(myVals[i] == itsVals[i]))                                    \
+                return FALSE;                                                  \
+                                                                               \
+        return TRUE;                                                           \
+    }                                                                          \
+                                                                               \
+    void className::deleteAllValues() { allocValues(0); }                      \
+                                                                               \
+    void className::copyValue(int to, int from) { values[to] = values[from]; }
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -699,30 +662,26 @@ className::copyValue(int to, int from)					      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_ALLOC_SOURCE(className, valueType)			      \
-void									      \
-className::allocValues(int newNum)					      \
-{									      \
-    if (values == NULL)	{						      \
-	if (newNum > 0)							      \
-	    values = new valueType[newNum];				      \
-    }									      \
-    else {								      \
-	valueType	*oldValues = values;				      \
-	int		i;						      \
-									      \
-	if (newNum > 0) {						      \
-	    values = new valueType[newNum];				      \
-	    for (i = 0; i < num && i < newNum; i++)			      \
-		values[i] = oldValues[i];				      \
-	}								      \
-	else								      \
-	    values = NULL;						      \
-	delete [] oldValues;						      \
-    }									      \
-									      \
-    num = maxNum = newNum;						      \
-}
+#define SO_MFIELD_ALLOC_SOURCE(className, valueType)                           \
+    void className::allocValues(int newNum) {                                  \
+        if (values == NULL) {                                                  \
+            if (newNum > 0)                                                    \
+                values = new valueType[newNum];                                \
+        } else {                                                               \
+            valueType *oldValues = values;                                     \
+            int        i;                                                      \
+                                                                               \
+            if (newNum > 0) {                                                  \
+                values = new valueType[newNum];                                \
+                for (i = 0; i < num && i < newNum; i++)                        \
+                    values[i] = oldValues[i];                                  \
+            } else                                                             \
+                values = NULL;                                                 \
+            delete[] oldValues;                                                \
+        }                                                                      \
+                                                                               \
+        num = maxNum = newNum;                                                 \
+    }
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -734,25 +693,23 @@ className::allocValues(int newNum)					      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_MALLOC_SOURCE(className, valueType)			      \
-void									      \
-className::allocValues(int newNum)					      \
-{									      \
-    if (values == NULL) {						      \
-	if (newNum > 0)							      \
-	    values = (valueType *) malloc(sizeof(valueType) * newNum);	      \
-    }									      \
-    else {								      \
-	if (newNum > 0)							      \
-	    values = (valueType *) realloc(values, sizeof(valueType)*newNum); \
-	else {								      \
-	    free((char *) values);					      \
-	    values = NULL;						      \
-	}								      \
-    }									      \
-									      \
-    num = maxNum = newNum;						      \
-}
+#define SO_MFIELD_MALLOC_SOURCE(className, valueType)                          \
+    void className::allocValues(int newNum) {                                  \
+        if (values == NULL) {                                                  \
+            if (newNum > 0)                                                    \
+                values = (valueType *)malloc(sizeof(valueType) * newNum);      \
+        } else {                                                               \
+            if (newNum > 0)                                                    \
+                values =                                                       \
+                    (valueType *)realloc(values, sizeof(valueType) * newNum);  \
+            else {                                                             \
+                free((char *)values);                                          \
+                values = NULL;                                                 \
+            }                                                                  \
+        }                                                                      \
+                                                                               \
+        num = maxNum = newNum;                                                 \
+    }
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -762,11 +719,11 @@ className::allocValues(int newNum)					      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_SOURCE(className, valueType, valueRef)		      \
-	SO_MFIELD_REQUIRED_SOURCE(className)				      \
-	SO_MFIELD_CONSTRUCTOR_SOURCE(className)				      \
-	SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)		      \
-	SO_MFIELD_ALLOC_SOURCE(className, valueType)
+#define SO_MFIELD_SOURCE(className, valueType, valueRef)                       \
+    SO_MFIELD_REQUIRED_SOURCE(className)                                       \
+    SO_MFIELD_CONSTRUCTOR_SOURCE(className)                                    \
+    SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)                     \
+    SO_MFIELD_ALLOC_SOURCE(className, valueType)
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -775,11 +732,11 @@ className::allocValues(int newNum)					      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_SOURCE_MALLOC(className, valueType, valueRef)		      \
-	SO_MFIELD_REQUIRED_SOURCE(className)				      \
-	SO_MFIELD_CONSTRUCTOR_SOURCE(className)				      \
-	SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)		      \
-	SO_MFIELD_MALLOC_SOURCE(className, valueType)
+#define SO_MFIELD_SOURCE_MALLOC(className, valueType, valueRef)                \
+    SO_MFIELD_REQUIRED_SOURCE(className)                                       \
+    SO_MFIELD_CONSTRUCTOR_SOURCE(className)                                    \
+    SO_MFIELD_VALUE_SOURCE(className, valueType, valueRef)                     \
+    SO_MFIELD_MALLOC_SOURCE(className, valueType)
 
 ////////////////////////////////////////////////////////////////////////////
 //
@@ -789,9 +746,8 @@ className::allocValues(int newNum)					      \
 //
 ////////////////////////////////////////////////////////////////////////////
 
-#define SO_MFIELD_DERIVED_SOURCE(className, valueType, valueRef)	      \
-	SO_MFIELD_REQUIRED_SOURCE(className);				      \
-	SO_MFIELD_DERIVED_CONSTRUCTOR_SOURCE(className)
-
+#define SO_MFIELD_DERIVED_SOURCE(className, valueType, valueRef)               \
+    SO_MFIELD_REQUIRED_SOURCE(className);                                      \
+    SO_MFIELD_DERIVED_CONSTRUCTOR_SOURCE(className)
 
 #endif /* _SO_SUB_FIELD_ */

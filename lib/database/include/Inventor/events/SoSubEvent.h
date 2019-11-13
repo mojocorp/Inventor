@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -73,11 +73,10 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_SUB_EVENT_
-#define  _SO_SUB_EVENT_
+#ifndef _SO_SUB_EVENT_
+#define _SO_SUB_EVENT_
 
 #include <Inventor/events/SoEvent.h>
-
 
 //  *** note: many of the macros use the "do { ... } while(0)"
 //  ***       hack to define multiline blocks as a single statement
@@ -95,14 +94,15 @@
 // all subclasses and abstract subclasses must support.
 //
 
-#define SO_EVENT_HEADER()						      \
-  public:								      \
-    static SoType	getClassTypeId()	/* Returns class type id */   \
-				    { return classTypeId; }		      \
-    virtual SoType	getTypeId() const;	/* Returns type id	*/    \
-  private:								      \
-    static SoType	classTypeId		/* Type id		*/
-
+#define SO_EVENT_HEADER()                                                      \
+  public:                                                                      \
+    static SoType getClassTypeId() /* Returns class type id */                 \
+    {                                                                          \
+        return classTypeId;                                                    \
+    }                                                                          \
+    virtual SoType getTypeId() const; /* Returns type id	*/                    \
+  private:                                                                     \
+    static SoType classTypeId /* Type id		*/
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -114,23 +114,16 @@
 // This declares the static variables defined in SO_EVENT_HEADER
 //
 
-#define SO__EVENT_VARS(className)					      \
-    SoType		className::classTypeId
-
+#define SO__EVENT_VARS(className) SoType className::classTypeId
 
 ////////////////////////////////////////////
 //
 // Methods on the type
 //
 
-#define SO__EVENT_METHODS(className)				              \
-									      \
-    SoType								      \
-    className::getTypeId() const					      \
-    {									      \
-	return classTypeId;						      \
-    }
-
+#define SO__EVENT_METHODS(className)                                           \
+                                                                               \
+    SoType className::getTypeId() const { return classTypeId; }
 
 /////////////////////////////////////////////
 //
@@ -138,10 +131,9 @@
 // at file scope
 //
 
-#define	SO_EVENT_SOURCE(className)					      \
-    SO__EVENT_VARS(className);						      \
+#define SO_EVENT_SOURCE(className)                                             \
+    SO__EVENT_VARS(className);                                                 \
     SO__EVENT_METHODS(className)
-
 
 ////////////////////////////////////////////
 //
@@ -151,13 +143,8 @@
 // derived from.
 //
 
-#define SO_EVENT_INIT_CLASS(className,parentClass)			      \
-    classTypeId =							      \
-        SoType::createType(parentClass::getClassTypeId(),		      \
-		   SO__QUOTE(className))
-
-
-
+#define SO_EVENT_INIT_CLASS(className, parentClass)                            \
+    classTypeId = SoType::createType(parentClass::getClassTypeId(),            \
+                                     SO__QUOTE(className))
 
 #endif /* _SO_SUB_EVENT_ */
-

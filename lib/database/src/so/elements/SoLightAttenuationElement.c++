@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,8 +63,7 @@ SO_ELEMENT_SOURCE(SoLightAttenuationElement);
 // Use: internal
 
 void
-SoLightAttenuationElement::initClass()
-{
+SoLightAttenuationElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoLightAttenuationElement, SoReplacedElement);
 }
 
@@ -78,8 +77,7 @@ SoLightAttenuationElement::initClass()
 SoLightAttenuationElement::~SoLightAttenuationElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -105,18 +103,17 @@ SoLightAttenuationElement::init(SoState *)
 
 void
 SoLightAttenuationElement::set(SoState *state, SoNode *node,
-			       const SbVec3f &attenuation)
+                               const SbVec3f &attenuation)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoLightAttenuationElement	*elt;
+    SoLightAttenuationElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoLightAttenuationElement *)
-	getElement(state, classStackIndex, node);
+    elt = (SoLightAttenuationElement *)getElement(state, classStackIndex, node);
 
     if (elt != NULL)
-	elt->attenuation = attenuation;
+        elt->attenuation = attenuation;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -133,8 +130,8 @@ SoLightAttenuationElement::get(SoState *state)
 {
     const SoLightAttenuationElement *elt;
 
-    elt = (const SoLightAttenuationElement *)
-	getConstElement(state, classStackIndex);
+    elt = (const SoLightAttenuationElement *)getConstElement(state,
+                                                             classStackIndex);
 
     return elt->attenuation;
 }
@@ -152,7 +149,7 @@ SoLightAttenuationElement::matches(const SoElement *elt) const
 ////////////////////////////////////////////////////////////////////////
 {
     return (attenuation ==
-	    ((const SoLightAttenuationElement *) elt)->attenuation);
+            ((const SoLightAttenuationElement *)elt)->attenuation);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -169,7 +166,7 @@ SoLightAttenuationElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoLightAttenuationElement *result =
-	(SoLightAttenuationElement *)getTypeId().createInstance();
+        (SoLightAttenuationElement *)getTypeId().createInstance();
 
     result->attenuation = attenuation;
 
@@ -187,16 +184,13 @@ SoLightAttenuationElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoLightAttenuationElement::print(FILE *fp) const
-{
+SoLightAttenuationElement::print(FILE *fp) const {
     SoElement::print(fp);
 
-    fprintf(fp, "\tLight Attenuation = (%g, %g, %g)\n",
-	    attenuation[0], attenuation[1], attenuation[2]);
+    fprintf(fp, "\tLight Attenuation = (%g, %g, %g)\n", attenuation[0],
+            attenuation[1], attenuation[2]);
 }
 #else  /* DEBUG */
 void
-SoLightAttenuationElement::print(FILE *) const
-{
-}
+SoLightAttenuationElement::print(FILE *) const {}
 #endif /* DEBUG */

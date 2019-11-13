@@ -74,37 +74,35 @@ class SbBox3f;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
 class SbSphere {
   public:
-
     // Boring default constructor
-    SbSphere()	{}
+    SbSphere() {}
 
     // Construct a sphere given center and radius
     SbSphere(const SbVec3f &c, float r);
 
     // Change the center and radius
-    void 	setValue(const SbVec3f &c, float r);
+    void setValue(const SbVec3f &c, float r);
 
     // Set just the center or radius
-    void	setCenter(const SbVec3f &c);
-    void	setRadius(float r);
+    void setCenter(const SbVec3f &c);
+    void setRadius(float r);
 
     // Return the center and radius
-    const SbVec3f & 	getCenter() const		{ return center; }
-    float		getRadius() const		{ return radius; }
+    const SbVec3f &getCenter() const { return center; }
+    float          getRadius() const { return radius; }
 
     // Return a sphere containing a given box
-    void	circumscribe(const SbBox3f &box);
+    void circumscribe(const SbBox3f &box);
 
     // Intersect line and sphere, returning TRUE if there is an intersection
-    SbBool	intersect(const SbLine &l, SbVec3f &intersection) const;
-    SbBool	intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
+    SbBool intersect(const SbLine &l, SbVec3f &intersection) const;
+    SbBool intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
 
   private:
-    SbVec3f	center;
-    float	radius;
+    SbVec3f center;
+    float   radius;
 };
 
 #endif /* _SB_SPHERE_ */

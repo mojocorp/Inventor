@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_MF_COLOR_
-#define  _SO_MF_COLOR_
+#ifndef _SO_MF_COLOR_
+#define _SO_MF_COLOR_
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbColor.h>
@@ -76,33 +76,34 @@ class SoMFColor : public SoMField {
     //
 
     // Set RGB/HSV values from array of arrays of 3 floats
-    void		setValues(int start, int num, const float rgb[][3]);
-    void		setHSVValues(int start, int num, const float hsv[][3]);
+    void setValues(int start, int num, const float rgb[][3]);
+    void setHSVValues(int start, int num, const float hsv[][3]);
 
     // Set to one RGB color from SbVec3f, 3 floats, or array of 3 floats
-    void		setValue(const SbVec3f &vec);
-    void		setValue(float r, float g, float b);
-    void		setValue(const float rgb[3]);
+    void setValue(const SbVec3f &vec);
+    void setValue(float r, float g, float b);
+    void setValue(const float rgb[3]);
 
     // Set to one HSV color from 3 floats or array of 3 floats
-    void		setHSVValue(float h, float s, float v);
-    void		setHSVValue(const float hsv[3]);
+    void setHSVValue(float h, float s, float v);
+    void setHSVValue(const float hsv[3]);
 
     // Set one of N RGB colors from SbVec3f, 3 floats, or array of 3 floats
-    void		set1Value(int index, const SbVec3f &vec);
-    void		set1Value(int index, float r, float g, float b);
-    void		set1Value(int index, const float rgb[3]);
+    void set1Value(int index, const SbVec3f &vec);
+    void set1Value(int index, float r, float g, float b);
+    void set1Value(int index, const float rgb[3]);
 
     // Set1 one of N HSV colors from 3 floats or array of 3 floats
-    void		set1HSVValue(int index, float h, float s, float v);
-    void		set1HSVValue(int index, const float hsv[3]);
+    void set1HSVValue(int index, float h, float s, float v);
+    void set1HSVValue(int index, const float hsv[3]);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   private:
-    virtual void	writeBinaryValues(SoOutput *out) const;
-    virtual SbBool	readBinaryValues(SoInput *in, int numToRead);
+    virtual void   writeBinaryValues(SoOutput *out) const;
+    virtual SbBool readBinaryValues(SoInput *in, int numToRead);
 };
 
 #endif /* _SO_MF_COLOR_ */

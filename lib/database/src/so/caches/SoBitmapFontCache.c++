@@ -69,7 +69,7 @@
 /////////////////////    SoBitmapFontCache  //////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 // Static variables for SoBitmapFontCache
-std::vector<SoBitmapFontCache*> SoBitmapFontCache::fonts;
+std::vector<SoBitmapFontCache *> SoBitmapFontCache::fonts;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -122,9 +122,11 @@ SoBitmapFontCache::SoBitmapFontCache(SoState *state)
     // Grab all the stuff we'll need to determine our validity from
     // the state.
     const SbViewportRegion &vpr = SoViewportRegionElement::get(state);
-    addElement(state->getConstElement(SoViewportRegionElement::getClassStackIndex()));
+    addElement(
+        state->getConstElement(SoViewportRegionElement::getClassStackIndex()));
 
-    const float fontSize = SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
+    const float fontSize =
+        SoFontSizeElement::get(state) * vpr.getPixelsPerPoint();
 
     FT_Set_Pixel_Sizes(face, 0, (FT_UInt)fontSize);
 
@@ -144,7 +146,7 @@ SoBitmapFontCache::~SoBitmapFontCache()
 ////////////////////////////////////////////////////////////////////////
 {
     if (face) {
-        std::map<wchar_t, FLbitmap*>::iterator it;
+        std::map<wchar_t, FLbitmap *>::iterator it;
         for (it = bitmaps.begin(); it != bitmaps.end(); ++it) {
             delete it->second;
         }
@@ -153,7 +155,8 @@ SoBitmapFontCache::~SoBitmapFontCache()
         SbBool otherUsing = FALSE;
         for (size_t i = 0; i < fonts.size(); i++) {
             SoBitmapFontCache *t = fonts[i];
-            if (t != this && t->face == face) otherUsing = TRUE;
+            if (t != this && t->face == face)
+                otherUsing = TRUE;
         }
         if (!otherUsing) {
             FT_Done_Face(face);
@@ -178,8 +181,8 @@ SoBitmapFontCache::destroy(SoState *)
 {
     // Pass in NULL to unref because this cache may be destroyed
     // from an action _other_ than GLRender:
-    std::map<wchar_t, SoGLDisplayList*>::iterator it;
-    for (it=list.begin(); it != list.end(); ++it) {
+    std::map<wchar_t, SoGLDisplayList *>::iterator it;
+    for (it = list.begin(); it != list.end(); ++it) {
         it->second->unref(NULL);
     }
     list.clear();
@@ -202,7 +205,8 @@ SoBitmapFontCache::isRenderValid(SoState *state) const
     if (list.empty())
         return isValid(state);
     else
-        return (context == SoGLCacheContextElement::get(state) && isValid(state));
+        return (context == SoGLCacheContextElement::get(state) &&
+                isValid(state));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -241,7 +245,7 @@ SoBitmapFontCache::getCharOffset(wchar_t c)
     if (bmap != NULL)
         return SbVec3f(bmap->xmove, bmap->ymove, 0);
 
-    return SbVec3f(0,0,0);
+    return SbVec3f(0, 0, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -301,11 +305,13 @@ SoBitmapFontCache::drawCharacter(SoState *state, wchar_t c)
 
     const FLbitmap *bmap = getBitmap(c);
     if (bmap != NULL) {
-        glBitmap(0, 0, 0, 0,bmap->xorig, bmap->yorig, NULL);
+        glBitmap(0, 0, 0, 0, bmap->xorig, bmap->yorig, NULL);
         if (!bmap->bitmap.empty()) {
-            glDrawPixels(bmap->width, bmap->height, GL_LUMINANCE_ALPHA, GL_UNSIGNED_BYTE, bmap->bitmap.data());
+            glDrawPixels(bmap->width, bmap->height, GL_LUMINANCE_ALPHA,
+                         GL_UNSIGNED_BYTE, bmap->bitmap.data());
         }
-        glBitmap(0, 0, 0.0f, 0.0f, bmap->xmove-bmap->xorig, bmap->ymove-bmap->yorig, NULL);
+        glBitmap(0, 0, 0.0f, 0.0f, bmap->xmove - bmap->xorig,
+                 bmap->ymove - bmap->yorig, NULL);
     }
 
     if (!SoCacheElement::anyOpen(state)) {
@@ -321,7 +327,8 @@ SoBitmapFontCache::drawCharacter(SoState *state, wchar_t c)
 // Use: internal public
 
 void
-SoBitmapFontCache::drawString(SoState *state, const std::wstring &string, const SbVec3f &origin)
+SoBitmapFontCache::drawString(SoState *state, const std::wstring &string,
+                              const SbVec3f &origin)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -329,8 +336,8 @@ SoBitmapFontCache::drawString(SoState *state, const std::wstring &string, const 
     // Set up OpenGL state for rendering text, and push
     // attributes so that we can restore when done.
     //
-    glPushAttrib( GL_ENABLE_BIT | GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
-    glPushClientAttrib( GL_CLIENT_PIXEL_STORE_BIT);
+    glPushAttrib(GL_ENABLE_BIT | GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
+    glPushClientAttrib(GL_CLIENT_PIXEL_STORE_BIT);
 
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.3f);
@@ -373,7 +380,7 @@ SoBitmapFontCache::getBitmap(wchar_t c)
     bitmaps[c] = flbitmap;
     flbitmap->bitmap.clear();
 
-    if(FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+    if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
 #ifdef DEBUG
         SoDebugError::post("SoBitmapFontCache::getBitmap",
                            "FT_Load_Char failed");
@@ -381,9 +388,9 @@ SoBitmapFontCache::getBitmap(wchar_t c)
     }
 
     FT_GlyphSlot glyph = face->glyph;
-    FT_Bitmap bitmap = glyph->bitmap;
+    FT_Bitmap    bitmap = glyph->bitmap;
 
-    if(glyph->bitmap.pixel_mode != FT_PIXEL_MODE_GRAY) {
+    if (glyph->bitmap.pixel_mode != FT_PIXEL_MODE_GRAY) {
         SoError::post("SoBitmapFontCache::getBitmap", "Unsupported pixel mode");
     }
 
@@ -396,18 +403,17 @@ SoBitmapFontCache::getBitmap(wchar_t c)
     flbitmap->ymove = glyph->advance.y >> 6;
 
     if (bitmap.width && bitmap.rows) {
-        //Allocate memory for the texture data.
+        // Allocate memory for the texture data.
         flbitmap->bitmap.resize(2 * flbitmap->width * flbitmap->height);
 
-        unsigned char* src = face->glyph->bitmap.buffer;
-        unsigned char* dest = flbitmap->bitmap.data();
+        unsigned char *src = face->glyph->bitmap.buffer;
+        unsigned char *dest = flbitmap->bitmap.data();
 
-        for(int y=0; y<flbitmap->height; y++)
-        {
-            for(int x = 0; x < flbitmap->width; x++)
-            {
-                dest[2*(x+y*bitmap.width)+0] = 255;
-                dest[2*(x+y*bitmap.width)+1] = src[x+(bitmap.rows - 1 - y)*bitmap.width];
+        for (int y = 0; y < flbitmap->height; y++) {
+            for (int x = 0; x < flbitmap->width; x++) {
+                dest[2 * (x + y * bitmap.width) + 0] = 255;
+                dest[2 * (x + y * bitmap.width) + 1] =
+                    src[x + (bitmap.rows - 1 - y) * bitmap.width];
             }
         }
     }

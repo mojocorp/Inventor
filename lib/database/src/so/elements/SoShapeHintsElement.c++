@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -81,8 +81,7 @@ SoShapeHintsElement::initClass()
 SoShapeHintsElement::~SoShapeHintsElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -96,9 +95,9 @@ SoShapeHintsElement::init(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    vertexOrdering	= getDefaultVertexOrdering();
-    shapeType		= getDefaultShapeType();
-    faceType		= getDefaultFaceType();
+    vertexOrdering = getDefaultVertexOrdering();
+    shapeType = getDefaultShapeType();
+    faceType = getDefaultFaceType();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -110,17 +109,17 @@ SoShapeHintsElement::init(SoState *)
 
 void
 SoShapeHintsElement::set(SoState *state, VertexOrdering _vertexOrdering,
-			 ShapeType _shapeType, FaceType _faceType)
+                         ShapeType _shapeType, FaceType _faceType)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoShapeHintsElement	*elt;
+    SoShapeHintsElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoShapeHintsElement *) getElement(state, classStackIndex);
+    elt = (SoShapeHintsElement *)getElement(state, classStackIndex);
 
     if (elt != NULL)
-	elt->setElt(_vertexOrdering, _shapeType, _faceType);
+        elt->setElt(_vertexOrdering, _shapeType, _faceType);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -136,12 +135,12 @@ SoShapeHintsElement::push(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoShapeHintsElement	*prevElt =
-	(const SoShapeHintsElement *)getNextInStack();
+    const SoShapeHintsElement *prevElt =
+        (const SoShapeHintsElement *)getNextInStack();
 
-    vertexOrdering	= prevElt->vertexOrdering;
-    faceType		= prevElt->faceType;
-    shapeType		= prevElt->shapeType;
+    vertexOrdering = prevElt->vertexOrdering;
+    faceType = prevElt->faceType;
+    shapeType = prevElt->shapeType;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -154,7 +153,7 @@ SoShapeHintsElement::push(SoState *)
 
 void
 SoShapeHintsElement::setElt(VertexOrdering _vertexOrdering,
-			    ShapeType _shapeType, FaceType _faceType)
+                            ShapeType _shapeType, FaceType _faceType)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -162,11 +161,11 @@ SoShapeHintsElement::setElt(VertexOrdering _vertexOrdering,
     // AS_IS, leave the values alone.
 
     if (_vertexOrdering != ORDERING_AS_IS)
-	vertexOrdering = _vertexOrdering;
+        vertexOrdering = _vertexOrdering;
     if (_shapeType != SHAPE_TYPE_AS_IS)
-	shapeType = _shapeType;
+        shapeType = _shapeType;
     if (_faceType != FACE_TYPE_AS_IS)
-	faceType = _faceType;
+        faceType = _faceType;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -177,20 +176,18 @@ SoShapeHintsElement::setElt(VertexOrdering _vertexOrdering,
 // Use: public, static
 
 void
-SoShapeHintsElement::get(SoState *state,
-			   VertexOrdering &vertexOrdering,
-			   ShapeType &shapeType, FaceType &faceType)
+SoShapeHintsElement::get(SoState *state, VertexOrdering &vertexOrdering,
+                         ShapeType &shapeType, FaceType &faceType)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const SoShapeHintsElement *elt;
 
-    elt = (const SoShapeHintsElement *)
-	getConstElement(state, classStackIndex);
+    elt = (const SoShapeHintsElement *)getConstElement(state, classStackIndex);
 
-    vertexOrdering	= elt->vertexOrdering;
-    shapeType		= elt->shapeType;
-    faceType		= elt->faceType;
+    vertexOrdering = elt->vertexOrdering;
+    shapeType = elt->shapeType;
+    faceType = elt->faceType;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -205,11 +202,10 @@ SoShapeHintsElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoShapeHintsElement *shElt = (const SoShapeHintsElement *) elt;
+    const SoShapeHintsElement *shElt = (const SoShapeHintsElement *)elt;
 
-    return (vertexOrdering == shElt->vertexOrdering	&&
-	    shapeType	   == shElt->shapeType		&&
-	    faceType	   == shElt->faceType);
+    return (vertexOrdering == shElt->vertexOrdering &&
+            shapeType == shElt->shapeType && faceType == shElt->faceType);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -226,12 +222,12 @@ SoShapeHintsElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoShapeHintsElement *result =
-	(SoShapeHintsElement *)getTypeId().createInstance();
+        (SoShapeHintsElement *)getTypeId().createInstance();
 
-    result->vertexOrdering	= vertexOrdering;
-    result->shapeType		= shapeType;
-    result->faceType		= faceType;
-    
+    result->vertexOrdering = vertexOrdering;
+    result->shapeType = shapeType;
+    result->faceType = faceType;
+
     return result;
 }
 
@@ -246,56 +242,53 @@ SoShapeHintsElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoShapeHintsElement::print(FILE *fp) const
-{
+SoShapeHintsElement::print(FILE *fp) const {
     const char *orderName, *shapeName, *faceName;
 
     SoElement::print(fp);
 
     switch (vertexOrdering) {
-      case UNKNOWN_ORDERING:
-	orderName = "UNKNOWN_ORDERING";
-	break;
-      case CLOCKWISE:
-	orderName = "CLOCKWISE";
-	break;
-      case COUNTERCLOCKWISE:
-	orderName = "COUNTERCLOCKWISE";
-	break;
-      default:	// Just to shut CC up
-	break;
+    case UNKNOWN_ORDERING:
+        orderName = "UNKNOWN_ORDERING";
+        break;
+    case CLOCKWISE:
+        orderName = "CLOCKWISE";
+        break;
+    case COUNTERCLOCKWISE:
+        orderName = "COUNTERCLOCKWISE";
+        break;
+    default: // Just to shut CC up
+        break;
     }
 
     switch (shapeType) {
-      case UNKNOWN_SHAPE_TYPE:
-	shapeName = "UNKNOWN_SHAPE_TYPE";
-	break;
-      case SOLID:
-	shapeName = "SOLID";
-	break;
-      default:	// Just to shut CC up
-	break;
+    case UNKNOWN_SHAPE_TYPE:
+        shapeName = "UNKNOWN_SHAPE_TYPE";
+        break;
+    case SOLID:
+        shapeName = "SOLID";
+        break;
+    default: // Just to shut CC up
+        break;
     }
 
     switch (faceType) {
-      case UNKNOWN_FACE_TYPE:
-	faceName = "UNKNOWN_FACE_TYPE";
-	break;
-      case CONVEX:
-	faceName = "CONVEX";
-	break;
-      default:	// Just to shut CC up
-	break;
+    case UNKNOWN_FACE_TYPE:
+        faceName = "UNKNOWN_FACE_TYPE";
+        break;
+    case CONVEX:
+        faceName = "CONVEX";
+        break;
+    default: // Just to shut CC up
+        break;
     }
 
     fprintf(fp,
-	    "\tShape Hints: vertex ordering = %s, shape type = %s,\n"
-	    "\t\t     face type = %s\n",
-	    orderName, shapeName, faceName);
+            "\tShape Hints: vertex ordering = %s, shape type = %s,\n"
+            "\t\t     face type = %s\n",
+            orderName, shapeName, faceName);
 }
 #else  /* DEBUG */
 void
-SoShapeHintsElement::print(FILE *) const
-{
-}
+SoShapeHintsElement::print(FILE *) const {}
 #endif /* DEBUG */

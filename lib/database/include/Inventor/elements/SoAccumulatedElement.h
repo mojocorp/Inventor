@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -57,8 +57,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_ACCUMULATED_ELEMENT
-#define  _SO_ACCUMULATED_ELEMENT
+#ifndef _SO_ACCUMULATED_ELEMENT
+#define _SO_ACCUMULATED_ELEMENT
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -86,38 +86,40 @@
 #include <set>
 #include <Inventor/elements/SoSubElement.h>
 
-SoEXTENDER class SoAccumulatedElement : public SoElement {
+SoEXTENDER
+class SoAccumulatedElement : public SoElement {
 
     SO_ELEMENT_ABSTRACT_HEADER(SoAccumulatedElement);
 
   public:
     // Returns TRUE if the element matches another element, based on node-id's
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoAccumulatedElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     // Clears out the list of node id's
-    void		clearNodeIds();
+    void clearNodeIds();
 
     // Adds the id of the given node to the current list
-    void		addNodeId(const SoNode *node);
+    void addNodeId(const SoNode *node);
 
     // Sets the node id list to JUST the id of the given node
-    void		setNodeId(const SoNode *node);
+    void setNodeId(const SoNode *node);
 
     // Create and return a copy of this element; this will copy the
     // nodeId list properly.
-    virtual SoElement	*copyMatchInfo() const;
+    virtual SoElement *copyMatchInfo() const;
 
     // Override normal capture method to capture elements at other
     // depths that we are accumulating with.
-    virtual void	captureThis(SoState *state) const;
+    virtual void captureThis(SoState *state) const;
 
     // Destructor
     virtual ~SoAccumulatedElement();
@@ -126,9 +128,9 @@ SoEXTENDER class SoAccumulatedElement : public SoElement {
     // should be the same length as int32_ts. The id's are sorted by
     // increasing value, to make comparisons easier.
     std::set<uint32_t> nodeIds;
-  private:
 
-    SbBool		accumulatesWithParentFlag;
+  private:
+    SbBool accumulatesWithParentFlag;
 };
 
 #endif /* _SO_ACCUMULATED_ELEMENT */

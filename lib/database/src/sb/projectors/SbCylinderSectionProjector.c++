@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -66,20 +66,14 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-SbCylinderSectionProjector::SbCylinderSectionProjector(
-    float tol,
-    SbBool orient)
-: SbCylinderProjector(orient)
-{
+SbCylinderSectionProjector::SbCylinderSectionProjector(float tol, SbBool orient)
+    : SbCylinderProjector(orient) {
     setTolerance(tol);
 }
 
-SbCylinderSectionProjector::SbCylinderSectionProjector(
-    const SbCylinder &c,
-    float tol,
-    SbBool orient)
-: SbCylinderProjector(c, orient)
-{
+SbCylinderSectionProjector::SbCylinderSectionProjector(const SbCylinder &c,
+                                                       float tol, SbBool orient)
+    : SbCylinderProjector(c, orient) {
     setTolerance(tol);
 }
 
@@ -116,59 +110,58 @@ SbCylinderSectionProjector::project(const SbVec2f &point)
 ////////////////////////////////////////////////////////////////////////
 {
     SbVec3f result;
-    SbLine workingLine = getWorkingLine(point);
+    SbLine  workingLine = getWorkingLine(point);
 
     if (needSetup)
-	setupTolerance();
+        setupTolerance();
 
     SbVec3f planeIntersection;
     SbVec3f cylIntersection, dontCare;
-    SbBool hitCylinder;
-    if ( intersectFront == TRUE )
-	hitCylinder = cylinder.intersect(workingLine, cylIntersection,dontCare);
+    SbBool  hitCylinder;
+    if (intersectFront == TRUE)
+        hitCylinder =
+            cylinder.intersect(workingLine, cylIntersection, dontCare);
     else
-	hitCylinder = cylinder.intersect(workingLine,dontCare, cylIntersection);
+        hitCylinder =
+            cylinder.intersect(workingLine, dontCare, cylIntersection);
 
     if (hitCylinder) {
-	// drop the cylinder intersection onto the tolerance plane
+        // drop the cylinder intersection onto the tolerance plane
 
-	SbLine projectLine(cylIntersection, cylIntersection + planeDir);
-	if (! tolPlane.intersect(projectLine, planeIntersection))
+        SbLine projectLine(cylIntersection, cylIntersection + planeDir);
+        if (!tolPlane.intersect(projectLine, planeIntersection))
 #ifdef DEBUG
-	    SoDebugError::post("SbCylinderSectionProjector::project",
-			       "Couldn't intersect working line with plane");
+            SoDebugError::post("SbCylinderSectionProjector::project",
+                               "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+            /* Do nothing */;
 #endif
-    }
-    else if (! tolPlane.intersect(workingLine, planeIntersection))
+    } else if (!tolPlane.intersect(workingLine, planeIntersection))
 #ifdef DEBUG
-	SoDebugError::post("SbCylinderSectionProjector::project",
-			   "Couldn't intersect working line with plane");
+        SoDebugError::post("SbCylinderSectionProjector::project",
+                           "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */;
 #endif
 
-    
-    SbVec3f vecToPoint = planeIntersection - 
-			 planeLine.getClosestPoint(planeIntersection);
+    SbVec3f vecToPoint =
+        planeIntersection - planeLine.getClosestPoint(planeIntersection);
     float dist = vecToPoint.length();
-	
+
     if (dist < tolDist) {
 #ifdef DEBUG
-	if (! hitCylinder)
-	    SoDebugError::post("SbCylinderSectionProjector::project",
-			       "Couldn't intersect with cylinder");
+        if (!hitCylinder)
+            SoDebugError::post("SbCylinderSectionProjector::project",
+                               "Couldn't intersect with cylinder");
 #endif
-	result = cylIntersection;
-    }
-    else {
-	// get the point that is on the tolerance line
-	SbVec3f tolVec = vecToPoint;
-	SbVec3f axisPoint = planeIntersection - tolVec;
-	tolVec.normalize();
-	tolVec *= tolDist;
-	result = axisPoint + tolVec;
+        result = cylIntersection;
+    } else {
+        // get the point that is on the tolerance line
+        SbVec3f tolVec = vecToPoint;
+        SbVec3f axisPoint = planeIntersection - tolVec;
+        tolVec.normalize();
+        tolVec *= tolDist;
+        result = axisPoint + tolVec;
     }
 
     lastPoint = result;
@@ -189,14 +182,13 @@ SbCylinderSectionProjector::setTolerance(float t)
 {
 #ifdef DEBUG
     if (t < 0.0) {
-	SoDebugError::post("SbCylinderSectionProjector::setEdgeTolerance",
-			   "Tolerance cannot be less than 0.0");
-	t = 0.0;
-    }
-    else if (t > 1.0) {
-	SoDebugError::post("SbCylinderSectionProjector::setEdgeTolerance",
-			   "Tolerance cannot be greater than 1.0");
-	t = 1.0;
+        SoDebugError::post("SbCylinderSectionProjector::setEdgeTolerance",
+                           "Tolerance cannot be less than 0.0");
+        t = 0.0;
+    } else if (t > 1.0) {
+        SoDebugError::post("SbCylinderSectionProjector::setEdgeTolerance",
+                           "Tolerance cannot be greater than 1.0");
+        t = 1.0;
     }
 #endif
 
@@ -217,28 +209,28 @@ SbCylinderSectionProjector::isWithinTolerance(const SbVec3f &point)
 ////////////////////////////////////////////////////////////////////////
 {
     if (needSetup)
-	setupTolerance();
+        setupTolerance();
 
-    // Drop the point onto the tolerance plane.	
+    // Drop the point onto the tolerance plane.
     SbVec3f planeIntersection;
-    SbLine projectLine(point, point + planeDir);
-    if (! tolPlane.intersect(projectLine, planeIntersection))
+    SbLine  projectLine(point, point + planeDir);
+    if (!tolPlane.intersect(projectLine, planeIntersection))
 #ifdef DEBUG
-	SoDebugError::post("SbCylinderSectionProjector::isWithinTolerance",
-			   "Couldn't intersect working line with plane");
+        SoDebugError::post("SbCylinderSectionProjector::isWithinTolerance",
+                           "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */;
 #endif
-    
-    SbVec3f vecToPoint = planeIntersection - 
-			 planeLine.getClosestPoint(planeIntersection);
+
+    SbVec3f vecToPoint =
+        planeIntersection - planeLine.getClosestPoint(planeIntersection);
     float dist = vecToPoint.length();
-    
+
     if (dist < tolDist)
-	return TRUE;
+        return TRUE;
     else
-	return FALSE;
-}    
+        return FALSE;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -261,50 +253,48 @@ SbCylinderSectionProjector::setupTolerance()
     // perpendicular to the axis and eyeDir (or z)
     SbVec3f perpDir; // perpendicular to axis and plane
     if (orientToEye) {
-	SbVec3f eyeDir;
-	
-	if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE) {
-	    // find the projection point in working space coords
-	    SbVec3f workingProjPoint;
-	    worldToWorking.multVecMatrix(
-		viewVol.getProjectionPoint(), workingProjPoint);
-	
-	    eyeDir = workingProjPoint - cylinder.getAxis().getPosition();
-	}
-	else {
-	    // Use the projection direction in an orthographic
-	    // view vol
-	    worldToWorking.multDirMatrix(viewVol.zVector(), eyeDir);
-	}	 
+        SbVec3f eyeDir;
 
-	perpDir = (cylinder.getAxis().getDirection()).cross(eyeDir);
-    }
-    else {
-	perpDir = (cylinder.getAxis().getDirection()).cross(SbVec3f(0,0,1));
+        if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE) {
+            // find the projection point in working space coords
+            SbVec3f workingProjPoint;
+            worldToWorking.multVecMatrix(viewVol.getProjectionPoint(),
+                                         workingProjPoint);
+
+            eyeDir = workingProjPoint - cylinder.getAxis().getPosition();
+        } else {
+            // Use the projection direction in an orthographic
+            // view vol
+            worldToWorking.multDirMatrix(viewVol.zVector(), eyeDir);
+        }
+
+        perpDir = (cylinder.getAxis().getDirection()).cross(eyeDir);
+    } else {
+        perpDir = (cylinder.getAxis().getDirection()).cross(SbVec3f(0, 0, 1));
     }
     planeDir = perpDir.cross(cylinder.getAxis().getDirection());
     planeDir.normalize();
 
-    if ( intersectFront == FALSE )
-	planeDir *= -1.0;
+    if (intersectFront == FALSE)
+        planeDir *= -1.0;
 
     // distance from planePoint to edge of tolerance
     tolDist = cylinder.getRadius() * tolerance;
-    
+
     // find disntance from the center of the cylinder to the tolerance
     // plane
-    planeDist = std::sqrt((cylinder.getRadius()*cylinder.getRadius()) -
-		(tolDist * tolDist));
+    planeDist = std::sqrt((cylinder.getRadius() * cylinder.getRadius()) -
+                          (tolDist * tolDist));
 
     // plane given direction and distance to origin
-    SbVec3f planePoint = planeDist*planeDir + cylinder.getAxis().getPosition();
+    SbVec3f planePoint =
+        planeDist * planeDir + cylinder.getAxis().getPosition();
     tolPlane = SbPlane(planeDir, planePoint);
     planeLine.setValue(planePoint,
-		       planePoint + cylinder.getAxis().getDirection());
-    
+                       planePoint + cylinder.getAxis().getDirection());
+
     needSetup = FALSE;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -317,24 +307,23 @@ SbCylinderSectionProjector::setupTolerance()
 ////////////////////////////////////////////////////////////////////////
 
 SbRotation
-SbCylinderSectionProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
-{
+SbCylinderSectionProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2) {
     // Find perpendiculars to from cylinder's axis to each
     // point.
     SbVec3f v1 = p1 - cylinder.getAxis().getClosestPoint(p1);
     SbVec3f v2 = p2 - cylinder.getAxis().getClosestPoint(p2);
-	
-    float cosAngle = v1.dot(v2)/(v1.length()*v2.length());
-	
+
+    float cosAngle = v1.dot(v2) / (v1.length() * v2.length());
+
     // prevent numerical instability problems
     if ((cosAngle > 1.0) || (cosAngle < -1.0))
         return SbRotation::identity();
-	    
+
     float angle = acosf(cosAngle);
 
     // This will either be the same as the cylinder's
     // axis, or the same but with direction reversed
     SbVec3f rotAxis = v1.cross(v2);
-	
+
     return SbRotation(rotAxis, angle);
 }

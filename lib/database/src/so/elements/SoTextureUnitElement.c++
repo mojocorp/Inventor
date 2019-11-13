@@ -65,8 +65,7 @@ SO_ELEMENT_SOURCE(SoTextureUnitElement);
 // Use: internal
 
 void
-SoTextureUnitElement::initClass()
-{
+SoTextureUnitElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoTextureUnitElement, SoInt32Element);
 }
 
@@ -80,8 +79,7 @@ SoTextureUnitElement::initClass()
 SoTextureUnitElement::~SoTextureUnitElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -99,10 +97,9 @@ SoTextureUnitElement::init(SoState *)
 }
 
 uint32_t
-SoTextureUnitElement::getMaxTextureUnit(SoState *state)
-{
+SoTextureUnitElement::getMaxTextureUnit(SoState *state) {
     GLint maxUnits = 0;
-    if (dynamic_cast<SoGLRenderAction*>(state->getAction())) {
+    if (dynamic_cast<SoGLRenderAction *>(state->getAction())) {
         glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &maxUnits);
     }
     return maxUnits;

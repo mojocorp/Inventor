@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -49,15 +49,15 @@
  |      various composition and decomposition engines
  |
  |   Classes:
- |       SoComposeVec2f 
- |       SoComposeVec3f 
- |       SoComposeVec4f 
- |       SoComposeRotation 
+ |       SoComposeVec2f
+ |       SoComposeVec3f
+ |       SoComposeVec4f
+ |       SoComposeRotation
  |       SoComposeRotationFromTo
- |       SoDecomposeVec2f 
- |       SoDecomposeVec3f 
- |       SoDecomposeVec4f 
- |       SoDecomposeRotation 
+ |       SoDecomposeVec2f
+ |       SoDecomposeVec3f
+ |       SoDecomposeVec4f
+ |       SoDecomposeRotation
  |
  |   Author(s)		: Ronen Barzel
  |
@@ -65,8 +65,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_COMPOSE_
-#define  _SO_COMPOSE_
+#ifndef _SO_COMPOSE_
+#define _SO_COMPOSE_
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoMFFloat.h>
@@ -77,131 +77,130 @@
 #include <Inventor/fields/SoMFVec4f.h>
 
 // This internal macro defines the standard methods for the composition
-// engines.  These are just basic engine declarations, nothing fancy. 
+// engines.  These are just basic engine declarations, nothing fancy.
 // The macro leaves the class header in "public:" state so it can be
 // followed immediately with the composition input and output declarations.
-#define SO_COMPOSE__HEADER(Name)		\
-	    SO_ENGINE_HEADER(Name);		\
-	  private:				\
-	    ~Name();				\
-	    virtual void evaluate();		\
-	  public:				\
-	    Name();				\
-	    static void initClass()				
+#define SO_COMPOSE__HEADER(Name)                                               \
+    SO_ENGINE_HEADER(Name);                                                    \
+                                                                               \
+  private:                                                                     \
+    ~Name();                                                                   \
+    virtual void evaluate();                                                   \
+                                                                               \
+  public:                                                                      \
+    Name();                                                                    \
+    static void initClass()
 
 ///////////////////////////////////////////////////////////
-// 
+//
 //  Vector composition engines
-// 
+//
 class SoComposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec2f);
-    SoMFFloat		x;	// Input
-    SoMFFloat		y;	// Input
-    SoEngineOutput	vector;	// Output (SoMFVec2f)
+    SoMFFloat      x;      // Input
+    SoMFFloat      y;      // Input
+    SoEngineOutput vector; // Output (SoMFVec2f)
 };
 class SoComposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec3f);
-    SoMFFloat		x;	// Input
-    SoMFFloat		y;	// Input
-    SoMFFloat		z;	// Input
-    SoEngineOutput	vector;	// Output (SoMFVec3f)
+    SoMFFloat      x;      // Input
+    SoMFFloat      y;      // Input
+    SoMFFloat      z;      // Input
+    SoEngineOutput vector; // Output (SoMFVec3f)
 };
 class SoComposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec4f);
-    SoMFFloat		x;	// Input
-    SoMFFloat		y;	// Input
-    SoMFFloat		z;	// Input
-    SoMFFloat		w;	// Input
-    SoEngineOutput	vector;	// Output (SoMFVec4f)
+    SoMFFloat      x;      // Input
+    SoMFFloat      y;      // Input
+    SoMFFloat      z;      // Input
+    SoMFFloat      w;      // Input
+    SoEngineOutput vector; // Output (SoMFVec4f)
 };
 
 ///////////////////////////////////////////////////////////
-// 
+//
 //  Vector decomposition engines
-// 
+//
 class SoDecomposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec2f);
-    SoMFVec2f		vector;	// Input
-    SoEngineOutput	x;	// Output (SoMFFloat)
-    SoEngineOutput	y;	// Output (SoMFFloat)
+    SoMFVec2f      vector; // Input
+    SoEngineOutput x;      // Output (SoMFFloat)
+    SoEngineOutput y;      // Output (SoMFFloat)
 };
 class SoDecomposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec3f);
-    SoMFVec3f		vector;	// Input
-    SoEngineOutput	x;	// Output (SoMFFloat)
-    SoEngineOutput	y;	// Output (SoMFFloat)
-    SoEngineOutput	z;	// Output (SoMFFloat)
+    SoMFVec3f      vector; // Input
+    SoEngineOutput x;      // Output (SoMFFloat)
+    SoEngineOutput y;      // Output (SoMFFloat)
+    SoEngineOutput z;      // Output (SoMFFloat)
 };
 class SoDecomposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec4f);
-    SoMFVec4f		vector;	// Input
-    SoEngineOutput	x;	// Output (SoMFFloat)
-    SoEngineOutput	y;	// Output (SoMFFloat)
-    SoEngineOutput	z;	// Output (SoMFFloat)
-    SoEngineOutput	w;	// Output (SoMFFloat)
+    SoMFVec4f      vector; // Input
+    SoEngineOutput x;      // Output (SoMFFloat)
+    SoEngineOutput y;      // Output (SoMFFloat)
+    SoEngineOutput z;      // Output (SoMFFloat)
+    SoEngineOutput w;      // Output (SoMFFloat)
 };
 
 ///////////////////////////////////////////////////////////
-// 
+//
 //  Rotation composition engines
-// 
+//
 class SoComposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotation);
-    SoMFVec3f		axis;		// Input
-    SoMFFloat		angle;		// Input
-    SoEngineOutput	rotation;	// Output (SoMFRotation)
+    SoMFVec3f      axis;     // Input
+    SoMFFloat      angle;    // Input
+    SoEngineOutput rotation; // Output (SoMFRotation)
 };
 class SoComposeRotationFromTo : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotationFromTo);
-    SoMFVec3f		from;		// Input
-    SoMFVec3f		to;		// Input
-    SoEngineOutput	rotation;	// Output (SoMFRotation)
+    SoMFVec3f      from;     // Input
+    SoMFVec3f      to;       // Input
+    SoEngineOutput rotation; // Output (SoMFRotation)
 };
 
-
 ///////////////////////////////////////////////////////////
-// 
+//
 //  Rotation decomposition engine
-// 
+//
 class SoDecomposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeRotation);
-    SoMFRotation	rotation;	// Input
-    SoEngineOutput	axis;		// Output (SoMFVec3f)
-    SoEngineOutput	angle;		// Output (SoMFFloat)
+    SoMFRotation   rotation; // Input
+    SoEngineOutput axis;     // Output (SoMFVec3f)
+    SoEngineOutput angle;    // Output (SoMFFloat)
 };
 
-
 ///////////////////////////////////////////////////////////
-// 
+//
 //  Matrix composition engine
-// 
+//
 class SoComposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeMatrix);
-    SoMFVec3f		translation;	// Input
-    SoMFRotation	rotation;	// Input
-    SoMFVec3f		scaleFactor;	// Input
-    SoMFRotation	scaleOrientation;//Input
-    SoMFVec3f		center;		// Input
-    SoEngineOutput	matrix;		// Output (SoMFMatrix)
+    SoMFVec3f      translation;      // Input
+    SoMFRotation   rotation;         // Input
+    SoMFVec3f      scaleFactor;      // Input
+    SoMFRotation   scaleOrientation; // Input
+    SoMFVec3f      center;           // Input
+    SoEngineOutput matrix;           // Output (SoMFMatrix)
 };
 
-
 ///////////////////////////////////////////////////////////
-// 
+//
 //  Matrix decomposition engine
 //
 //  Note: a matrix decomposition depends on the choice of
-//  center. So a "center" input is provided (with default 
+//  center. So a "center" input is provided (with default
 //  value 0,0,0) and there is no "center" output.
-// 
+//
 class SoDecomposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeMatrix);
-    SoMFMatrix		matrix;		// Input
-    SoMFVec3f		center;		// Input
-    SoEngineOutput	translation;	// Output (SoMFVec3f)
-    SoEngineOutput	rotation;	// Output (SoMFRotation)
-    SoEngineOutput	scaleFactor;	// Output (SoMFVec3f)
-    SoEngineOutput	scaleOrientation;//Output (SoMFRotation)
+    SoMFMatrix     matrix;           // Input
+    SoMFVec3f      center;           // Input
+    SoEngineOutput translation;      // Output (SoMFVec3f)
+    SoEngineOutput rotation;         // Output (SoMFRotation)
+    SoEngineOutput scaleFactor;      // Output (SoMFVec3f)
+    SoEngineOutput scaleOrientation; // Output (SoMFRotation)
 };
 
-#endif  /* _SO_COMPOSE_ */
+#endif /* _SO_COMPOSE_ */

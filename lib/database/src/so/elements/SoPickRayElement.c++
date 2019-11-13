@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,8 +64,7 @@ SO_ELEMENT_SOURCE(SoPickRayElement);
 // Use: internal
 
 void
-SoPickRayElement::initClass()
-{
+SoPickRayElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoPickRayElement, SoElement);
 }
 
@@ -79,8 +78,7 @@ SoPickRayElement::initClass()
 SoPickRayElement::~SoPickRayElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -111,7 +109,7 @@ SoPickRayElement::matches(const SoElement *) const
 ////////////////////////////////////////////////////////////////////////
 {
     SoDebugError::post("SoPickRayElement::matches",
-		       "This method should never be called!");
+                       "This method should never be called!");
 
     return FALSE;
 }
@@ -129,7 +127,7 @@ SoPickRayElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoDebugError::post("SoPickRayElement::copyMatchInfo",
-		       "This method should never be called!");
+                       "This method should never be called!");
 
     return NULL;
 }
@@ -146,13 +144,13 @@ SoPickRayElement::set(SoState *state, const SbViewVolume &volume)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoPickRayElement	*elt;
+    SoPickRayElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoPickRayElement *) getElement(state, classStackIndex);
+    elt = (SoPickRayElement *)getElement(state, classStackIndex);
 
     if (elt != NULL)
-	elt->volume = volume;
+        elt->volume = volume;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -169,7 +167,7 @@ SoPickRayElement::get(SoState *state)
 {
     const SoPickRayElement *elt;
 
-    elt = (const SoPickRayElement *) getConstElement(state, classStackIndex);
+    elt = (const SoPickRayElement *)getConstElement(state, classStackIndex);
 
     return elt->volume;
 }
@@ -185,34 +183,32 @@ SoPickRayElement::get(SoState *state)
 
 #ifdef DEBUG
 void
-SoPickRayElement::print(FILE *fp) const
-{
+SoPickRayElement::print(FILE *fp) const {
     SoElement::print(fp);
 
     fprintf(fp, "\tPicking Ray\n");
 
-    const SbVec3f	&projPt  = volume.getProjectionPoint();
-    const SbVec3f	&projDir = volume.getProjectionDirection();
+    const SbVec3f &projPt = volume.getProjectionPoint();
+    const SbVec3f &projDir = volume.getProjectionDirection();
 
-    fprintf(fp, "\t\tStarting point = (%g, %g, %g)\n",
-	    projPt[0], projPt[1], projPt[2]);
+    fprintf(fp, "\t\tStarting point = (%g, %g, %g)\n", projPt[0], projPt[1],
+            projPt[2]);
 
-    fprintf(fp, "\t\tDirection      = (%g, %g, %g)\n",
-	    projDir[0], projDir[1], projDir[2]);
+    fprintf(fp, "\t\tDirection      = (%g, %g, %g)\n", projDir[0], projDir[1],
+            projDir[2]);
 
     fprintf(fp, "\t\tProjection is %s\n",
-	    (volume.getProjectionType() == SbViewVolume::ORTHOGRAPHIC ?
-	     "ORTHOGRAPHIC" : "PERSPECTIVE"));
+            (volume.getProjectionType() == SbViewVolume::ORTHOGRAPHIC
+                 ? "ORTHOGRAPHIC"
+                 : "PERSPECTIVE"));
 
     fprintf(fp, "\t\tNear distance  = %g\n", volume.getNearDist());
     fprintf(fp, "\t\tFar  distance  = %g\n",
-	    volume.getNearDist() + volume.getDepth());
+            volume.getNearDist() + volume.getDepth());
 
     fprintf(fp, "\t\tPick radius    = %g\n", 0.5 * volume.getWidth());
 }
 #else  /* DEBUG */
 void
-SoPickRayElement::print(FILE *) const
-{
-}
+SoPickRayElement::print(FILE *) const {}
 #endif /* DEBUG */

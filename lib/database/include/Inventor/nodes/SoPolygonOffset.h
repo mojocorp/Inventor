@@ -52,8 +52,8 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#ifndef  _SO_POLYGON_OFFSET_
-#define  _SO_POLYGON_OFFSET_
+#ifndef _SO_POLYGON_OFFSET_
+#define _SO_POLYGON_OFFSET_
 
 #include <Inventor/elements/SoPolygonOffsetElement.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -65,40 +65,37 @@ class SoAction;
 class SoCallbackAction;
 class SoGLRenderAction;
 
-class SoPolygonOffset : public SoNode
-{
-   SO_NODE_HEADER(SoPolygonOffset);
-   
-   public:
+class SoPolygonOffset : public SoNode {
+    SO_NODE_HEADER(SoPolygonOffset);
 
-      enum Style {
-         FILLED = SoPolygonOffsetElement::FILLED,
-         LINES  = SoPolygonOffsetElement::LINES, 
-         POINTS = SoPolygonOffsetElement::POINTS
-      };
-      
-      // Fields
-      SoSFFloat    factor;
-      SoSFFloat    units;
-      SoSFBitMask  styles;
-      SoSFBool     on;
-      
-      /// Creates a polygon offset node with default settings.
-      SoPolygonOffset();
+  public:
+    enum Style {
+        FILLED = SoPolygonOffsetElement::FILLED,
+        LINES = SoPolygonOffsetElement::LINES,
+        POINTS = SoPolygonOffsetElement::POINTS
+    };
 
-   SoEXTENDER public:
+    // Fields
+    SoSFFloat   factor;
+    SoSFFloat   units;
+    SoSFBitMask styles;
+    SoSFBool    on;
 
-      virtual void doAction(SoAction *action);
-      virtual void callback(SoCallbackAction *action);
-      virtual void GLRender(SoGLRenderAction *action);
+    /// Creates a polygon offset node with default settings.
+    SoPolygonOffset();
 
-   SoINTERNAL public:
+    SoEXTENDER
+  public:
+    virtual void doAction(SoAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
 
-      static void initClass() ;
+    SoINTERNAL
+  public:
+    static void initClass();
 
-   protected:
-      virtual ~SoPolygonOffset();
-
+  protected:
+    virtual ~SoPolygonOffset();
 };
 
-#endif  // _SO_POLYGON_OFFSET_
+#endif // _SO_POLYGON_OFFSET_

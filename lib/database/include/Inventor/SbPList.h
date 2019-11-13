@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -72,7 +72,6 @@
 
 class SbPList {
   public:
-
     // Constructor
     SbPList();
 
@@ -86,97 +85,111 @@ class SbPList {
     ~SbPList();
 
     // Adds given pointer to end of list
-    void	append(void * ptr)
-	{ if (nPtrs + 1 > ptrsSize) expand(nPtrs + 1);
-	  ptrs[nPtrs++] = ptr; }
+    void append(void *ptr) {
+        if (nPtrs + 1 > ptrsSize)
+            expand(nPtrs + 1);
+        ptrs[nPtrs++] = ptr;
+    }
 
     // Returns index of given pointer in list, or -1 if not found
-    int		find(const void *ptr) const;
+    int find(const void *ptr) const;
 
     // Inserts given pointer in list before pointer with given index
-    void	insert(void *ptr, int addBefore);
+    void insert(void *ptr, int addBefore);
 
     // Removes pointer with given index
-    void	remove(int which);
+    void remove(int which);
 
     // Returns number of pointers in list
-    int		getLength() const		{ return (int) nPtrs;	}
+    int getLength() const { return (int)nPtrs; }
 
     // Removes all pointers after one with given index, inclusive
     // ??? should really be an error check in here
-    void	truncate(int start)
-	{ nPtrs = start; }
+    void truncate(int start) { nPtrs = start; }
 
     // Copy a PList
-    void	copy(const SbPList &pl);
+    void copy(const SbPList &pl);
 
-    SbPList &	operator =(const SbPList &pl)	{ copy(pl); return *this; }
+    SbPList &operator=(const SbPList &pl) {
+        copy(pl);
+        return *this;
+    }
 
     // Returns pointer with given index
-    void *&	operator [](int i) const
-    	{ if (i >= nPtrs) grow(i); return ptrs[i]; }
+    void *&operator[](int i) const {
+        if (i >= nPtrs)
+            grow(i);
+        return ptrs[i];
+    }
 
     // equality tests
-    int		operator ==(const SbPList &pl) const
-	{ return pl.nPtrs == nPtrs ? compare(pl) : FALSE; }
-    int		operator !=(const SbPList &pl) const
-	{ return pl.nPtrs == nPtrs ? ! compare(pl) : TRUE; }
-  
-// Internal versions of [] that do not check for bounds:
-  SoINTERNAL public:
-    void *	get(int i) const { return ptrs[i]; }
-    void	set(int i, void *j) { ptrs[i] = j; }
+    int operator==(const SbPList &pl) const {
+        return pl.nPtrs == nPtrs ? compare(pl) : FALSE;
+    }
+    int operator!=(const SbPList &pl) const {
+        return pl.nPtrs == nPtrs ? !compare(pl) : TRUE;
+    }
+
+    // Internal versions of [] that do not check for bounds:
+    SoINTERNAL
+  public:
+    void *get(int i) const { return ptrs[i]; }
+    void  set(int i, void *j) { ptrs[i] = j; }
 
   private:
-
     // NOTE: this must be called only if the number of elements in the two
     // lists is the same, otherwise badness could result
-    int		compare(const SbPList &pl) const;
+    int compare(const SbPList &pl) const;
 
-    void **	ptrs;		// The collection of pointers
-    int		nPtrs;		// Number of pointers used
-    int		ptrsSize;	// Number of pointers allocated
+    void **ptrs;     // The collection of pointers
+    int    nPtrs;    // Number of pointers used
+    int    ptrsSize; // Number of pointers allocated
 
     // There are three(!) methods to expand the list.  grow() is used
     // when space is dynamically created, and needs to be initialized
     // to NULL:
-    void	grow(int max) const;
+    void grow(int max) const;
 
     // setSize is used by grow and in other places internally where we
     // know that nothing needs to be initialized to NULL.
-    void	setSize(int size)
-	{ if (size > ptrsSize) expand(size); nPtrs = size; }
+    void setSize(int size) {
+        if (size > ptrsSize)
+            expand(size);
+        nPtrs = size;
+    }
 
     // expand is the lowest level routine.  It just reallocates the
     // array and copies over the old values.
-    void	expand(int size);
+    void expand(int size);
 };
 
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: SbStringList
 //
-//  A list of strings.  This list is used to list classes associated with 
+//  A list of strings.  This list is used to list classes associated with
 //  a specific error.
 //
 //////////////////////////////////////////////////////////////////////////////
 
 class SbString;
 
-SoEXTENDER class SbStringList : public SbPList {
+SoEXTENDER
+class SbStringList : public SbPList {
   public:
-    void	append(SbString *string)
-	{ ((SbPList *) this)->append((void *) string); }
+    void append(SbString *string) { ((SbPList *)this)->append((void *)string); }
 
-    int 	 find(SbString *string)
-	{ return ((SbPList *) this)->find((void *) string); }
+    int find(SbString *string) {
+        return ((SbPList *)this)->find((void *)string);
+    }
 
-    void	insert(SbString *string, int addBefore)
-	{ ((SbPList *) this)->insert((void *) string, addBefore); }
+    void insert(SbString *string, int addBefore) {
+        ((SbPList *)this)->insert((void *)string, addBefore);
+    }
 
-    SbString *&	operator [](int i) const
-	{ return ( (SbString *&) ( (*(const SbPList *) this) [i] ) ); }
+    SbString *&operator[](int i) const {
+        return ((SbString *&)((*(const SbPList *)this)[i]));
+    }
 };
-
 
 #endif /* _SB_PLIST_ */

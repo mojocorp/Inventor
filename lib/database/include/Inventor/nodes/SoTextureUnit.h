@@ -65,7 +65,7 @@ class SoTextureUnit : public SoNode {
 
     SO_NODE_HEADER(SoTextureUnit);
 
-public:
+  public:
     // Fields:
     //
     SoSFInt32 unit;
@@ -76,31 +76,33 @@ public:
     SoTextureUnit();
 
     /**
-     * Returns the maximum supported texture image units for the current context.
-     * Units can be used to access texture maps from the fragment shader. 
-     * The value must be at least 2.
+     * Returns the maximum supported texture image units for the current
+     * context. Units can be used to access texture maps from the fragment
+     * shader. The value must be at least 2.
      */
     static uint32_t getMaxTextureUnit(SoState *state);
 
-SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes this class for use in scene graphs. This
     // should be called after database initialization and before
     // any instance of this node is constructed.
-    static void    initClass();
+    static void initClass();
 
-SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Implement render action
-    virtual void        doAction(SoAction *action);
-    virtual void        callback(SoCallbackAction *action);
-    virtual void        GLRender(SoGLRenderAction *action);
-    virtual void        pick(SoPickAction *action);
+    virtual void doAction(SoAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void pick(SoPickAction *action);
 
-protected:
+  protected:
     // Destructor. Protected to keep people from trying to delete
     // nodes, rather than using the reference count mechanism.
     virtual ~SoTextureUnit();
 
-private:
+  private:
 };
 
 #endif /* _SO_TEXTURE_UNIT_H_ */

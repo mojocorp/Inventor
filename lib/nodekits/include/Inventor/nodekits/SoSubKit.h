@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -50,14 +50,14 @@
  |	subclassing easier. In all of the macros:
  |      "className" refers to the name of the baseKit subclass.
  |      "partName"  refers to the name of a part in the nodekit catalog.
- |      "partClassName" refers to the class to which a part in the 
- |                      the nodekit catalog belongs. 
+ |      "partClassName" refers to the class to which a part in the
+ |                      the nodekit catalog belongs.
  |
  | NOTE TO DEVELOPERS:
  |     For info about the structure of any nodekit:
  |     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
  |     [2] type:    ivNodeKitStructure nodekitClassName.
- |     [3] The program prints a diagram of the scene graph and a table with 
+ |     [3] The program prints a diagram of the scene graph and a table with
  |         information about each part.
  |
  |
@@ -76,16 +76,15 @@
  |
  |	    Constructor initialization:
  |		SO_KIT_CONSTRUCTOR(className)
- |		SO_KIT_ADD_CATALOG_ENTRY(partName, partClassName, nullByDefault, |                     parentName, rightName, isPublicPart )
- |		SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(partName, partClassName, 
- |                     defaultPartClassName, nullByDefault, 
- |                     parentName,  rightName, isPublicPart )
- |              SO_KIT_ADD_CATALOG_LIST_ENTRY(partName, listContainerClassName, 
- |                     nullByDefault, parentName, rightName, 
- |                     listItemClassName, isPublicPart )
- |              SO_KIT_ADD_LIST_ITEM_TYPE(partName, newListItemClassName )
- |              SO_KIT_CHANGE_ENTRY_TYPE(partName, newPartClassName, 
- |                     newDefaultPartClassName)
+ |		SO_KIT_ADD_CATALOG_ENTRY(partName, partClassName, nullByDefault,
+ |                     parentName, rightName, isPublicPart ) |
+ SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(partName, partClassName, |
+ defaultPartClassName, nullByDefault, |                     parentName,
+ rightName, isPublicPart ) | SO_KIT_ADD_CATALOG_LIST_ENTRY(partName,
+ listContainerClassName, |                     nullByDefault, parentName,
+ rightName, |                     listItemClassName, isPublicPart ) |
+ SO_KIT_ADD_LIST_ITEM_TYPE(partName, newListItemClassName ) |
+ SO_KIT_CHANGE_ENTRY_TYPE(partName, newPartClassName, | newDefaultPartClassName)
  |              SO_KIT_CHANGE_NULL_BY_DEFAULT(partName, newNullByDefault)
  |
  |              SO_KIT_INIT_INSTANCE()
@@ -107,9 +106,8 @@
 // SoBaseKit.h will not compile.
 #include <Inventor/nodekits/SoBaseKit.h>
 
-#ifndef  _SO_SUB_KIT_
-#define  _SO_SUB_KIT_
-
+#ifndef _SO_SUB_KIT_
+#define _SO_SUB_KIT_
 
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/fields/SoSFNode.h>
@@ -124,27 +122,30 @@
 
 ////////////////////////////////////////////
 //
-// This defines a catalog describing the arrangement 
+// This defines a catalog describing the arrangement
 // of the subgraph for instances of this class
 //
 
-#define SO__KIT_CATALOG_HEADER(className)				      \
-  private:								      \
-    static SoNodekitCatalog *nodekitCatalog; /* design of this class */       \
-    static const SoNodekitCatalog **parentNodekitCatalogPtr;/* parent design */\
-  public:								      \
-    static const SoNodekitCatalog *getClassNodekitCatalog()		      \
-	{ return nodekitCatalog; } 					      \
-    /* Returns an SoNodekitCatalog for the node */                            \
-    virtual const SoNodekitCatalog *getNodekitCatalog() const;		      \
-  protected:								      \
-    static const SoNodekitCatalog **getClassNodekitCatalogPtr()		      \
-	{ return (const SoNodekitCatalog **)&nodekitCatalog; }
+#define SO__KIT_CATALOG_HEADER(className)                                      \
+  private:                                                                     \
+    static SoNodekitCatalog *nodekitCatalog; /* design of this class */        \
+    static const SoNodekitCatalog *                                            \
+        *parentNodekitCatalogPtr; /* parent design */                          \
+  public:                                                                      \
+    static const SoNodekitCatalog *getClassNodekitCatalog() {                  \
+        return nodekitCatalog;                                                 \
+    }                                                                          \
+    /* Returns an SoNodekitCatalog for the node */                             \
+    virtual const SoNodekitCatalog *getNodekitCatalog() const;                 \
+                                                                               \
+  protected:                                                                   \
+    static const SoNodekitCatalog **getClassNodekitCatalogPtr() {              \
+        return (const SoNodekitCatalog **)&nodekitCatalog;                     \
+    }
 
-#define SO_KIT_HEADER(className)	                                      \
-    SO_NODE_HEADER(className);	                                              \
+#define SO_KIT_HEADER(className)                                               \
+    SO_NODE_HEADER(className);                                                 \
     SO__KIT_CATALOG_HEADER(className)
-
 
 ////////////////////////////////////////////
 //
@@ -153,10 +154,9 @@
 // It will keep track of which (hidden) child is which part.
 //
 
-#define SO_KIT_CATALOG_ENTRY_HEADER(partName)			              \
-  protected:								      \
+#define SO_KIT_CATALOG_ENTRY_HEADER(partName)                                  \
+  protected:                                                                   \
     SoSFNode partName
-
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -168,21 +168,19 @@
 // This declares the static variables defined in SO__KIT_CATALOG_HEADER.
 //
 
-#define SO__KIT_CATALOG_VARS(className)				               \
-SoNodekitCatalog   *className::nodekitCatalog = NULL;                          \
-const SoNodekitCatalog   **className::parentNodekitCatalogPtr = NULL
+#define SO__KIT_CATALOG_VARS(className)                                        \
+    SoNodekitCatalog *       className::nodekitCatalog = NULL;                 \
+    const SoNodekitCatalog **className::parentNodekitCatalogPtr = NULL
 
 ////////////////////////////////////////////
 //
 // This implements the methods defined in SO__KIT_CATALOG_HEADER.
 //
 
-#define SO__KIT_CATALOG_METHODS(className)			              \
-const SoNodekitCatalog *						      \
-className::getNodekitCatalog() const					      \
-{									      \
-    return nodekitCatalog;					              \
-}
+#define SO__KIT_CATALOG_METHODS(className)                                     \
+    const SoNodekitCatalog *className::getNodekitCatalog() const {             \
+        return nodekitCatalog;                                                 \
+    }
 
 ////////////////////////////////////////////
 //
@@ -190,83 +188,82 @@ className::getNodekitCatalog() const					      \
 // at file scope
 //
 
-#define SO_KIT_SOURCE(className)	                                      \
-    SO_NODE_SOURCE(className);	                                              \
-    SO__KIT_CATALOG_VARS(className);	                                      \
+#define SO_KIT_SOURCE(className)                                               \
+    SO_NODE_SOURCE(className);                                                 \
+    SO__KIT_CATALOG_VARS(className);                                           \
     SO__KIT_CATALOG_METHODS(className)
 
 ////////////////////////////////////////////
 //
 // Internal initialization macros
-// 
-#define SO__KIT_INIT_CLASS(className,classPrintName,parentClass)	      \
-    SO__NODE_INIT_CLASS(className,classPrintName,parentClass);                \
-    do {          							      \
-        parentNodekitCatalogPtr = parentClass::getClassNodekitCatalogPtr();   \
+//
+#define SO__KIT_INIT_CLASS(className, classPrintName, parentClass)             \
+    SO__NODE_INIT_CLASS(className, classPrintName, parentClass);               \
+    do {                                                                       \
+        parentNodekitCatalogPtr = parentClass::getClassNodekitCatalogPtr();    \
     } while (0)
 
 ////////////////////////////////////////////
 //
-// This calls SO_NODE_INIT_CLASS to initialize the type 
+// This calls SO_NODE_INIT_CLASS to initialize the type
 // identifier variables defined in SO_KIT_HEADER.
-// It should be called from within initClass(). 
-// The parentClass argument should be the class that this 
+// It should be called from within initClass().
+// The parentClass argument should be the class that this
 // subclass is derived from.
 // The parentNodekitCatalogPtr is also initialized here.
-// 
+//
 
-#define SO_KIT_INIT_CLASS(className,parentClass,parentPrintClass)	      \
-    SO_NODE_INIT_CLASS(className,parentClass,parentPrintClass);               \
-    do {          							      \
-        parentNodekitCatalogPtr = parentClass::getClassNodekitCatalogPtr();   \
+#define SO_KIT_INIT_CLASS(className, parentClass, parentPrintClass)            \
+    SO_NODE_INIT_CLASS(className, parentClass, parentPrintClass);              \
+    do {                                                                       \
+        parentNodekitCatalogPtr = parentClass::getClassNodekitCatalogPtr();    \
     } while (0)
 
 ////////////////////////////////////////////
 //
 // This is an internal macro.
 // It initializes the SoNodekitCatalog structure defined in
-// SO__KIT_CATALOG_HEADER. This macro is automatically called as 
+// SO__KIT_CATALOG_HEADER. This macro is automatically called as
 // part of SO_KIT_CONSTRUCTOR
 //
 //   This and other macros rely on static member variable "firstInstance"
 //   from SoSubNode.h
 //
 
-#define SO__KIT_INHERIT_CATALOG(className)	          		      \
-    /* get a copy of the catalog from the base class */                       \
-    do { 								      \
-    if (firstInstance) {						      \
-        if (parentNodekitCatalogPtr == NULL)  /* only true in SoBaseKit */\
-		nodekitCatalog = new SoNodekitCatalog;                        \
-        else						      	      \
-		nodekitCatalog						      \
-          =(*parentNodekitCatalogPtr)->clone(SoType::fromName(SO__QUOTE(className)));\
-    } \
-    }									      \
-    while (0)
+#define SO__KIT_INHERIT_CATALOG(className)                                     \
+    /* get a copy of the catalog from the base class */                        \
+    do {                                                                       \
+        if (firstInstance) {                                                   \
+            if (parentNodekitCatalogPtr == NULL) /* only true in SoBaseKit */  \
+                nodekitCatalog = new SoNodekitCatalog;                         \
+            else                                                               \
+                nodekitCatalog =                                               \
+                    (*parentNodekitCatalogPtr)                                 \
+                        ->clone(SoType::fromName(SO__QUOTE(className)));       \
+        }                                                                      \
+    } while (0)
 
 ////////////////////////////////////////////
 //
 // These are here to complete the set of subclassing macros for nodekits.
 // They are just stubs to call the SO_NODE equivalents, really.
 
-#define SO_KIT_CONSTRUCTOR(className)                                         \
-    SO_NODE_CONSTRUCTOR(className);                                           \
+#define SO_KIT_CONSTRUCTOR(className)                                          \
+    SO_NODE_CONSTRUCTOR(className);                                            \
     SO__KIT_INHERIT_CATALOG(className)
 
-#define SO_KIT_IS_FIRST_INSTANCE()                                            \
-    SO_NODE_IS_FIRST_INSTANCE()
+#define SO_KIT_IS_FIRST_INSTANCE() SO_NODE_IS_FIRST_INSTANCE()
 
-#define SO_KIT_ADD_FIELD(fieldName,defValue)                                  \
-    SO_NODE_ADD_FIELD(fieldName,defValue)
+#define SO_KIT_ADD_FIELD(fieldName, defValue)                                  \
+    SO_NODE_ADD_FIELD(fieldName, defValue)
 
-#define SO_KIT_DEFINE_ENUM_VALUE(enumType,enumValue)                          \
-    SO_NODE_DEFINE_ENUM_VALUE(enumType,enumValue)
+#define SO_KIT_DEFINE_ENUM_VALUE(enumType, enumValue)                          \
+    SO_NODE_DEFINE_ENUM_VALUE(enumType, enumValue)
 
-#define SO_KIT_SET_MF_ENUM_TYPE(fieldName, enumType)                          \
+#define SO_KIT_SET_MF_ENUM_TYPE(fieldName, enumType)                           \
     SO_NODE_SET_MF_ENUM_TYPE(fieldName, enumType)
 
-#define SO_KIT_SET_SF_ENUM_TYPE(fieldName, enumType)                          \
+#define SO_KIT_SET_SF_ENUM_TYPE(fieldName, enumType)                           \
     SO_NODE_SET_SF_ENUM_TYPE(fieldName, enumType)
 
 ////////////////////////////////////////////
@@ -281,14 +278,14 @@ className::getNodekitCatalog() const					      \
 //	partClassName: the class of node to which this part belongs.
 //
 //	nullByDefault: If TRUE, the part is not created during the constructor.
-//                     (which is the usual case.) 
-//                     If FALSE, then it will be automatically created by the 
-//                     constructor during the call to the 
+//                     (which is the usual case.)
+//                     If FALSE, then it will be automatically created by the
+//                     constructor during the call to the
 //                     macro SO_KIT_INIT_INSTANCE()
 //
 //	parentName:   the partName of the parent of this part within
 //                    the nodekitCatalog
-//                    NOTE: if this node is to be a direct descendant of 
+//                    NOTE: if this node is to be a direct descendant of
 //                          'this', then parentName should be given as "this"
 //
 //	rightName:    the partName of the right sibling of this part
@@ -297,9 +294,9 @@ className::getNodekitCatalog() const					      \
 //                    the rightName should be given as "" (the empty string).
 //
 //      isPublicPart: can a user receive a pointer to this part through
-//                    getPart?  If a part is not a leaf, this property is 
-//		      irrelevant (non-leaf parts are always private ). But if 
-//                    it is a leaf, the user's access can be stopped through 
+//                    getPart?  If a part is not a leaf, this property is
+//		      irrelevant (non-leaf parts are always private ). But if
+//                    it is a leaf, the user's access can be stopped through
 //                    this field.
 //
 // For example,
@@ -307,10 +304,10 @@ className::getNodekitCatalog() const					      \
 // SO_KIT_ADD_CATALOG_ENTRY(material,SoMaterial,TRUE,this,, TRUE);
 //
 //       adds to the catalog a part named 'material.'  This part will be an
-//       SoMaterial node that is NOT created by default. It will be a direct 
-//       child of the nodekit part 'this.' It will be installed as the 
+//       SoMaterial node that is NOT created by default. It will be a direct
+//       child of the nodekit part 'this.' It will be installed as the
 //       rightmost child below 'this'.
-//       Since it is public, a user will be able to receive a pointer to this 
+//       Since it is public, a user will be able to receive a pointer to this
 //       part by calling getPart().
 //
 // Another example:
@@ -327,19 +324,18 @@ className::getNodekitCatalog() const					      \
 //                    |
 //              -------------
 //              |           |
-//          leftW        rightW 
+//          leftW        rightW
 
-#define SO_KIT_ADD_CATALOG_ENTRY(partName, partClassName, nullByDefault,      \
-		  parentName, rightName, isPublicPart )                       \
-   SO_KIT_ADD_FIELD(partName,(NULL));					      \
-   if (firstInstance && !nodekitCatalog->addEntry(SO__QUOTE(partName),        \
-		    SoType::fromName(SO__QUOTE(partClassName)),               \
-		    SoType::fromName(SO__QUOTE(partClassName)), nullByDefault,\
-		    SO__QUOTE(parentName),   				      \
-	            SO__QUOTE(rightName), FALSE, SoType::badType(),           \
-		    SoType::badType(), isPublicPart  ))    		      \
-	catalogError()
-
+#define SO_KIT_ADD_CATALOG_ENTRY(partName, partClassName, nullByDefault,       \
+                                 parentName, rightName, isPublicPart)          \
+    SO_KIT_ADD_FIELD(partName, (NULL));                                        \
+    if (firstInstance &&                                                       \
+        !nodekitCatalog->addEntry(                                             \
+            SO__QUOTE(partName), SoType::fromName(SO__QUOTE(partClassName)),   \
+            SoType::fromName(SO__QUOTE(partClassName)), nullByDefault,         \
+            SO__QUOTE(parentName), SO__QUOTE(rightName), FALSE,                \
+            SoType::badType(), SoType::badType(), isPublicPart))               \
+    catalogError()
 
 ////////////////////////////////////////////
 //
@@ -365,29 +361,30 @@ className::getNodekitCatalog() const					      \
 //
 // For example,
 //
-// SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(light,SoLight, SoDirectionalLight, 
+// SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(light,SoLight, SoDirectionalLight,
 //					TRUE, this,, TRUE);
 //
 //       makes a part node refered to as "light".
-//       When calling setPart, any node that is a subclass of light can be 
+//       When calling setPart, any node that is a subclass of light can be
 //       used (e.g., SoDirectionalLight, SoSpotLight, SoPointLight )
 //       However, if the user asks for the node and it has not been created yet,
-//          (this happens, for example, in the case where there is currently 
+//          (this happens, for example, in the case where there is currently
 //           no 'light' and the user calls
-//           SO_GET_PART( myKit, "light", SoLight ), 
+//           SO_GET_PART( myKit, "light", SoLight ),
 //       then an SoDirectionalLight will be created and returned.
-// 
+//
 
-#define SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(partName, partClassName,            \
-		  defaultPartClassName, nullByDefault, parentName,            \
-		  rightName, isPublicPart )                                   \
-   SO_KIT_ADD_FIELD(partName,(NULL));					      \
-   if (firstInstance && !nodekitCatalog->addEntry(SO__QUOTE(partName),        \
-		    SoType::fromName(SO__QUOTE(partClassName)),               \
-		    SoType::fromName(SO__QUOTE(defaultPartClassName)), nullByDefault,\
-		    SO__QUOTE(parentName), SO__QUOTE(rightName), FALSE,       \
-		    SoType::badType(), SoType::badType(), isPublicPart  ))    \
-	catalogError()
+#define SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(partName, partClassName,             \
+                                          defaultPartClassName, nullByDefault, \
+                                          parentName, rightName, isPublicPart) \
+    SO_KIT_ADD_FIELD(partName, (NULL));                                        \
+    if (firstInstance &&                                                       \
+        !nodekitCatalog->addEntry(                                             \
+            SO__QUOTE(partName), SoType::fromName(SO__QUOTE(partClassName)),   \
+            SoType::fromName(SO__QUOTE(defaultPartClassName)), nullByDefault,  \
+            SO__QUOTE(parentName), SO__QUOTE(rightName), FALSE,                \
+            SoType::badType(), SoType::badType(), isPublicPart))               \
+    catalogError()
 
 ////////////////////////////////////////////
 //
@@ -395,10 +392,10 @@ className::getNodekitCatalog() const					      \
 // 'partName' refers to a part that is a LIST.
 //
 // Any list in a nodekit will automatically be a node of type SoNodeKitListPart.
-// These nodes act like subclasses of group but enforce type checking when 
-// you add children to them. 
+// These nodes act like subclasses of group but enforce type checking when
+// you add children to them.
 //
-// The parameters you specify will determine 
+// The parameters you specify will determine
 // [a] what kind of group node holds the children (SoGroup, SoSeparator,
 //     SoSwitch, etc).
 // [b] what single class of node will be allowable as children in the list.
@@ -418,7 +415,7 @@ className::getNodekitCatalog() const					      \
 //	parentName:   Same as in SO_KIT_ADD_CATALOG_ENTRY
 //	rightName:    Same as in SO_KIT_ADD_CATALOG_ENTRY
 //
-//	listItemClassName: The name of the class of node that may appear in 
+//	listItemClassName: The name of the class of node that may appear in
 //                         the list. Any node class is legal here.
 //      isPublicPart: Same as in SO_KIT_ADD_CATALOG_ENTRY
 //
@@ -429,16 +426,18 @@ className::getNodekitCatalog() const					      \
 // makes a list that may contain only SoCubes. An SoSeparator will be used to
 // contain this list of cubes.
 
-#define SO_KIT_ADD_CATALOG_LIST_ENTRY(partName, listContainerClassName,       \
-      nullByDefault, parentName, rightName, listItemClassName, isPublicPart ) \
-    SO_KIT_ADD_FIELD(partName,(NULL));					      \
-    if (firstInstance && !nodekitCatalog->addEntry(SO__QUOTE(partName),       \
-		  SoNodeKitListPart::getClassTypeId(),                        \
-		  SoNodeKitListPart::getClassTypeId(), nullByDefault,         \
-		  SO__QUOTE(parentName), SO__QUOTE(rightName), TRUE,          \
-		  SoType::fromName(SO__QUOTE(listContainerClassName)),        \
-		  SoType::fromName(SO__QUOTE(listItemClassName)), isPublicPart)) \
-	catalogError()
+#define SO_KIT_ADD_CATALOG_LIST_ENTRY(partName, listContainerClassName,        \
+                                      nullByDefault, parentName, rightName,    \
+                                      listItemClassName, isPublicPart)         \
+    SO_KIT_ADD_FIELD(partName, (NULL));                                        \
+    if (firstInstance &&                                                       \
+        !nodekitCatalog->addEntry(                                             \
+            SO__QUOTE(partName), SoNodeKitListPart::getClassTypeId(),          \
+            SoNodeKitListPart::getClassTypeId(), nullByDefault,                \
+            SO__QUOTE(parentName), SO__QUOTE(rightName), TRUE,                 \
+            SoType::fromName(SO__QUOTE(listContainerClassName)),               \
+            SoType::fromName(SO__QUOTE(listItemClassName)), isPublicPart))     \
+    catalogError()
 
 ////////////////////////////////////////////
 //
@@ -446,9 +445,9 @@ className::getNodekitCatalog() const					      \
 // using the macro SO_KIT_ADD_CATALOG_LIST_ENTRY(...)
 // this macro will add 'newListItemClassName' to its listItemTypes.
 //
-// This means that nodes of type 'newListItemClassName' will be permitted 
+// This means that nodes of type 'newListItemClassName' will be permitted
 // in the list, as well as any other parts that are already permitted.
-// 
+//
 // Example:
 //    The macro:
 //      SO_KIT_ADD_CATALOG_LIST_ENTRY(myList, SoSeparator, TRUE,
@@ -466,9 +465,11 @@ className::getNodekitCatalog() const					      \
 //  partName:             Name of the part to add the listItemType to
 //  newListItemClassName: Name of the class to add to partName's listItemTypes
 
-#define SO_KIT_ADD_LIST_ITEM_TYPE(partName, newListItemClassName ) 	    \
-    if (firstInstance) nodekitCatalog->addListItemType(SO__QUOTE(partName), \
-	  SoType::fromName(SO__QUOTE(newListItemClassName)) )
+#define SO_KIT_ADD_LIST_ITEM_TYPE(partName, newListItemClassName)              \
+    if (firstInstance)                                                         \
+    nodekitCatalog->addListItemType(                                           \
+        SO__QUOTE(partName),                                                   \
+        SoType::fromName(SO__QUOTE(newListItemClassName)))
 
 ////////////////////////////////////////////
 //
@@ -483,19 +484,19 @@ className::getNodekitCatalog() const					      \
 //
 //	newPartClassName:   The name of the new node class describing this part.
 //
-//	newDefaultPartClassName:   
+//	newDefaultPartClassName:
 //                          The new defaultPartClassName.  If asked to build a
-//                          new node for this part, a node of type 
+//                          new node for this part, a node of type
 //                          newDefaultPartClassName will be built.
 // For example,
 //
-// The part "shape" is entered in the nodekit catalog as a part for 
+// The part "shape" is entered in the nodekit catalog as a part for
 // the SoShapeKit using the following macro call in the constructor:
 //
-// SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(shape, SoShape, SoCube, FALSE, 
+// SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(shape, SoShape, SoCube, FALSE,
 //				     shapeSeparator, , TRUE  );
 //
-// If we created a subclass of SoShape, SoVertexShapeKit, 
+// If we created a subclass of SoShape, SoVertexShapeKit,
 // then the following command might be used in the SoVertexShapeKit constructor:
 //
 // SO_KIT_CHANGE_ENTRY_TYPE( shape, SoVertexShape, SoFaceSet );
@@ -509,32 +510,33 @@ className::getNodekitCatalog() const					      \
 //
 // SO_KIT_CHANGE_ENTRY_TYPE(shape,SoFaceSet, SoFaceSet );
 //
-// This class would allow one and only one type of node for "shape", 
+// This class would allow one and only one type of node for "shape",
 // and that is the type SoFaceSet.
 
-#define SO_KIT_CHANGE_ENTRY_TYPE(partName, newPartClassName,                \
-			         newDefaultPartClassName)                   \
-   if (firstInstance) nodekitCatalog->narrowTypes(SO__QUOTE(partName),      \
-	   SoType::fromName(SO__QUOTE(newPartClassName)),                     \
-	   SoType::fromName(SO__QUOTE(newDefaultPartClassName)))
+#define SO_KIT_CHANGE_ENTRY_TYPE(partName, newPartClassName,                   \
+                                 newDefaultPartClassName)                      \
+    if (firstInstance)                                                         \
+    nodekitCatalog->narrowTypes(                                               \
+        SO__QUOTE(partName), SoType::fromName(SO__QUOTE(newPartClassName)),    \
+        SoType::fromName(SO__QUOTE(newDefaultPartClassName)))
 
 ////////////////////////////////////////////
 //
 // This changes whether or not a part is NULL by default.
 // If TRUE, the part is NULL by default.
 // If FALSE, the part is always created during the constructor for the
-//     nodekit that uses this catalog. In this case, construction occurs 
+//     nodekit that uses this catalog. In this case, construction occurs
 //     during the call to SO_KIT_INIT_INSTANCE().
 //
-#define SO_KIT_CHANGE_NULL_BY_DEFAULT(partName, newNullByDefault)             \
-   if (firstInstance) nodekitCatalog->setNullByDefault(SO__QUOTE(partName),   \
-        newNullByDefault)
+#define SO_KIT_CHANGE_NULL_BY_DEFAULT(partName, newNullByDefault)              \
+    if (firstInstance)                                                         \
+    nodekitCatalog->setNullByDefault(SO__QUOTE(partName), newNullByDefault)
 
 ////////////////////////////////////////////
 //
 // This must be called within the constructor of every class of nodekit.
 // It should be called immediately after the catalog is defined.
-// 
+//
 // It does 2 things:
 // [1] created the nodekitPartsList, which keeps track of which parts
 //     have been created.
@@ -542,9 +544,8 @@ className::getNodekitCatalog() const					      \
 //	cube in SoCubeKit) as specified by the nullByDefault parameter
 //  	in the nodekit catalog
 //
-#define SO_KIT_INIT_INSTANCE()   \
-   createNodekitPartsList(); \
-   createDefaultParts()
-
+#define SO_KIT_INIT_INSTANCE()                                                 \
+    createNodekitPartsList();                                                  \
+    createDefaultParts()
 
 #endif /* _SO_SUB_KIT_ */

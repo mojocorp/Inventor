@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -55,8 +55,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_SELECTONE_
-#define  _SO_SELECTONE_
+#ifndef _SO_SELECTONE_
+#define _SO_SELECTONE_
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFInt32.h>
@@ -70,7 +70,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
 class SoSelectOne : public SoEngine {
 
     SO_ENGINE_HEADER(SoSelectOne);
@@ -81,37 +80,38 @@ class SoSelectOne : public SoEngine {
 
     // Index is used to choose which value of the input is written to
     // output.  Default is -1, meaning don't write anything.
-    SoSFInt32		index;
+    SoSFInt32 index;
 
     // Note that unlike most engines the input field is a pointer.
     // The default value for this field is no values.
-    SoMField		*input;
+    SoMField *input;
 
     // Note that unlike most engines the output is a pointer.  The
     // type of the output is the single-value field corresponding to
     // whatever type the input is.
-    SoEngineOutput	*output;
+    SoEngineOutput *output;
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
-    virtual SoFieldContainer *	copyThroughConnection() const;
-  
+    virtual SoFieldContainer *copyThroughConnection() const;
+
   private:
     SoSelectOne();
     ~SoSelectOne();
 
     // SelectOne engines must write out their input type before writing
     // their fields, so these are overridden:
-    virtual SbBool	readInstance(SoInput *in, unsigned short flags);
-    virtual void	writeInstance(SoOutput *out);
+    virtual SbBool readInstance(SoInput *in, unsigned short flags);
+    virtual void   writeInstance(SoOutput *out);
 
-    void		setup(SoType);
-    virtual void	evaluate();
+    void         setup(SoType);
+    virtual void evaluate();
 
     int conversionCase;
 
-    SoFieldData *myInputData;
+    SoFieldData *       myInputData;
     SoEngineOutputData *myOutputData;
 
     SoSFName typeField; // Used when reading/writing

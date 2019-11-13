@@ -70,12 +70,11 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLPolygonOffsetElement : public SoPolygonOffsetElement
-{
+SoEXTENDER
+class SoGLPolygonOffsetElement : public SoPolygonOffsetElement {
     SO_ELEMENT_HEADER(SoGLPolygonOffsetElement);
 
-public:
-
+  public:
     /// Initializes element
     virtual void init(SoState *state);
 
@@ -86,32 +85,27 @@ public:
     /// Override pop() method so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *childElt);
 
-SoINTERNAL public:
-
+    SoINTERNAL
+  public:
     // Initializes the SoGLPolygonOffsetElement class.
     static void initClass();
 
-protected:
-
+  protected:
     // Sets the polygon offset in an instance. Has GL side effects.
     virtual void setElt(float factor, float units, Style styles, SbBool active);
 
     // Destructor.
     virtual ~SoGLPolygonOffsetElement();
 
-private:
-
+  private:
     // We save the state to figure out if the lastPattern variable was
     // copied from a parent element; if it was, then caches will have
     // to depend on that element because if it changes we have to have
     // a chance to change our decision about what GL calls to make.
     // If this is NULL, then there are no cache dependencies.
-    SoState * copiedFromParent;
+    SoState *copiedFromParent;
 
-    enum masks{
-        VALUE_MASK	= (1<<0),
-        STYLE_MASK	= (1<<1)
-    };
+    enum masks { VALUE_MASK = (1 << 0), STYLE_MASK = (1 << 1) };
 
     uint32_t whatChanged;
 
@@ -119,4 +113,4 @@ private:
     void send();
 };
 
-#endif  /* _SO_GL_POLYGON_OFFSET_ELEMENT */
+#endif /* _SO_GL_POLYGON_OFFSET_ELEMENT */

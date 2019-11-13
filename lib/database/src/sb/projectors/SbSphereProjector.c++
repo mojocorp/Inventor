@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,20 +64,15 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-SbSphereProjector::SbSphereProjector(SbBool orient)
-: SbProjector()
-{
+SbSphereProjector::SbSphereProjector(SbBool orient) : SbProjector() {
     orientToEye = FALSE;
-    setSphere(SbSphere(SbVec3f(0,0,0), 1.0));
+    setSphere(SbSphere(SbVec3f(0, 0, 0), 1.0));
     setOrientToEye(orient);
     setFront(TRUE);
 }
 
-SbSphereProjector::SbSphereProjector(
-    const SbSphere &s,
-    SbBool orient)
-: SbProjector()
-{
+SbSphereProjector::SbSphereProjector(const SbSphere &s, SbBool orient)
+    : SbProjector() {
     orientToEye = FALSE;
     setSphere(s);
     setOrientToEye(orient);
@@ -94,62 +89,55 @@ SbSphereProjector::SbSphereProjector(
 ////////////////////////////////////////////////////////////////////////
 
 void
-SbSphereProjector::setSphere(const SbSphere &s)
-{
+SbSphereProjector::setSphere(const SbSphere &s) {
     sphere = s;
     needSetup = TRUE;
 }
 
 void
-SbSphereProjector::setOrientToEye(SbBool b)
-{
+SbSphereProjector::setOrientToEye(SbBool b) {
     if (orientToEye != b) {
         orientToEye = b;
         needSetup = TRUE;
-    }	
+    }
 }
 
 void
-SbSphereProjector::setFront(SbBool b)
-{
+SbSphereProjector::setFront(SbBool b) {
     intersectFront = b;
     needSetup = TRUE;
 }
 
 SbBool
-SbSphereProjector::isPointInFront(const SbVec3f &point ) const
-{
+SbSphereProjector::isPointInFront(const SbVec3f &point) const {
     SbViewVolume viewVol = getViewVolume();
     SbBool       ptInFront = TRUE;
-    if ( viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE ) {
-	SbVec3f lclProjPt;
-	worldToWorking.multVecMatrix( viewVol.getProjectionPoint(), lclProjPt);
-	SbVec3f cntrToProj = lclProjPt - sphere.getCenter();
-	SbVec3f cntrToInput = point - sphere.getCenter();
-	if ( cntrToInput.dot( cntrToProj ) < 0.0 )
-	    ptInFront = FALSE;
-    }
-    else {
-	SbVec3f lclZDir;
-	worldToWorking.multDirMatrix( viewVol.zVector(), lclZDir );
-	SbVec3f cntrToInput = point - sphere.getCenter();
-	if ( cntrToInput.dot( lclZDir ) < 0.0 )
-	    ptInFront = FALSE;
+    if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE) {
+        SbVec3f lclProjPt;
+        worldToWorking.multVecMatrix(viewVol.getProjectionPoint(), lclProjPt);
+        SbVec3f cntrToProj = lclProjPt - sphere.getCenter();
+        SbVec3f cntrToInput = point - sphere.getCenter();
+        if (cntrToInput.dot(cntrToProj) < 0.0)
+            ptInFront = FALSE;
+    } else {
+        SbVec3f lclZDir;
+        worldToWorking.multDirMatrix(viewVol.zVector(), lclZDir);
+        SbVec3f cntrToInput = point - sphere.getCenter();
+        if (cntrToInput.dot(lclZDir) < 0.0)
+            ptInFront = FALSE;
     }
     return ptInFront;
 }
 
 void
-SbSphereProjector::setWorkingSpace(const SbMatrix &space)
-{
+SbSphereProjector::setWorkingSpace(const SbMatrix &space) {
     SbProjector::setWorkingSpace(space);
     needSetup = TRUE;
 }
 
 SbVec3f
-SbSphereProjector::projectAndGetRotation(
-    const SbVec2f &point, SbRotation &rot)
-{
+SbSphereProjector::projectAndGetRotation(const SbVec2f &point,
+                                         SbRotation &   rot) {
     SbVec3f oldPoint = lastPoint;
     SbVec3f newPoint = project(point);
     rot = getRotation(oldPoint, newPoint);

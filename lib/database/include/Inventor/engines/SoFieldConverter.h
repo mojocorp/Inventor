@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_FIELD_CONVERTER_
-#define  _SO_FIELD_CONVERTER_
+#ifndef _SO_FIELD_CONVERTER_
+#define _SO_FIELD_CONVERTER_
 
 #include <Inventor/SoDB.h>
 #include <Inventor/engines/SoSubEngine.h>
@@ -75,29 +75,30 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
-SoEXTENDER class SoFieldConverter : public SoEngine {
+SoEXTENDER
+class SoFieldConverter : public SoEngine {
 
     SO_ENGINE_ABSTRACT_HEADER(SoFieldConverter);
 
   public:
     // These must be defined in each subclass. They return the input
     // and output connections of the given types.
-    virtual SoField *		getInput(SoType type)  = 0;
-    virtual SoEngineOutput *	getOutput(SoType type) = 0;
+    virtual SoField *       getInput(SoType type) = 0;
+    virtual SoEngineOutput *getOutput(SoType type) = 0;
 
     // Returns the input that is connected.  By default, this searches
     // through the field data for the field that is connected;
     // you can redefine to make more efficient.
-    virtual SoField *		getConnectedInput();
+    virtual SoField *getConnectedInput();
 
-  SoINTERNAL public:
-    static void		initClass();
-    static void		initClasses();	// init all builtin converters
+    SoINTERNAL
+  public:
+    static void initClass();
+    static void initClasses(); // init all builtin converters
 
     // Adds all fields connected from the output of the converter to
     // the given list
-    int			getForwardConnections(SoFieldList &list) const;
+    int getForwardConnections(SoFieldList &list) const;
 
   protected:
     SoFieldConverter();

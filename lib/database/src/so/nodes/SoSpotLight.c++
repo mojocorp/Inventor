@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -87,8 +87,8 @@ SoSpotLight::SoSpotLight()
 {
     SO_NODE_CONSTRUCTOR(SoSpotLight);
 
-    SO_NODE_ADD_FIELD(location,	   (0.0, 0.0, 1.0));
-    SO_NODE_ADD_FIELD(direction,   (0.0, 0.0, -1.0));
+    SO_NODE_ADD_FIELD(location, (0.0, 0.0, 1.0));
+    SO_NODE_ADD_FIELD(direction, (0.0, 0.0, -1.0));
     SO_NODE_ADD_FIELD(dropOffRate, (0.0));
     SO_NODE_ADD_FIELD(cutOffAngle, (M_PI / 4.0));
     isBuiltIn = TRUE;
@@ -104,8 +104,7 @@ SoSpotLight::SoSpotLight()
 SoSpotLight::~SoSpotLight()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -144,7 +143,7 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
     SbVec4f v4(v3[0], v3[1], v3[2], 1.0);
 
     glLightfv(light, GL_AMBIENT, SbVec4f(0.0, 0.0, 0.0, 1.0).getValue());
-    glLightfv(light, GL_DIFFUSE,  v4.getValue());
+    glLightfv(light, GL_DIFFUSE, v4.getValue());
     glLightfv(light, GL_SPECULAR, v4.getValue());
 
     // Set position
@@ -155,12 +154,13 @@ SoSpotLight::GLRender(SoGLRenderAction *action)
     // Set up spotlight stuff. Note that the GL angle must be specified
     // in degrees, though the field is in radians
     glLightfv(light, GL_SPOT_DIRECTION, direction.getValue().getValue());
-    glLightf(light, GL_SPOT_EXPONENT,  (GLfloat)dropOffRate.getValue() * 128.0f);
-    glLightf(light, GL_SPOT_CUTOFF, (GLfloat)(cutOffAngle.getValue()*(180.0/M_PI)));
+    glLightf(light, GL_SPOT_EXPONENT, (GLfloat)dropOffRate.getValue() * 128.0f);
+    glLightf(light, GL_SPOT_CUTOFF,
+             (GLfloat)(cutOffAngle.getValue() * (180.0 / M_PI)));
 
     // Attenuation is accessed from the state
     const SbVec3f &atten = SoLightAttenuationElement::get(action->getState());
-    glLightf(light, GL_CONSTANT_ATTENUATION,  atten[2]);
-    glLightf(light, GL_LINEAR_ATTENUATION,    atten[1]);
+    glLightf(light, GL_CONSTANT_ATTENUATION, atten[2]);
+    glLightf(light, GL_LINEAR_ATTENUATION, atten[1]);
     glLightf(light, GL_QUADRATIC_ATTENUATION, atten[0]);
 }

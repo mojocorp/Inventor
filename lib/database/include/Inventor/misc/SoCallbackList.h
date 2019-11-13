@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -47,7 +47,7 @@
  |   Description:
  |	Callback list - a list of callback functions and associated data,
  |   with member functions to add, remove, and invoke callbacks.
- |	
+ |
  |   Classes:	SoCallbackList
  |
  |   Author(s):	David Mott
@@ -56,8 +56,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_CALLBACK_LIST_
-#define  _SO_CALLBACK_LIST_
+#ifndef _SO_CALLBACK_LIST_
+#define _SO_CALLBACK_LIST_
 
 #include <Inventor/SbBasic.h>
 
@@ -68,34 +68,32 @@
 typedef void SoCallbackListCB(void *userData, void *callbackData);
 
 class SoCallbackList {
-    
-  public:
 
+  public:
     SoCallbackList();
     ~SoCallbackList();
-    
+
     //
     // Managing callback functions
     // At callback time, f will be called with userData as the first
     // parameter, and callback specific data as the second parameter.
     // e.g. (*f)(userData, callbackData);
 
-    void    addCallback(SoCallbackListCB *f, void *userData = NULL);
-    void    removeCallback(SoCallbackListCB *f, void *userData = NULL);
-    
-    void    clearCallbacks()			    { list.clear(); }
-    size_t	    getNumCallbacks() const		    { return list.size(); }
+    void addCallback(SoCallbackListCB *f, void *userData = NULL);
+    void removeCallback(SoCallbackListCB *f, void *userData = NULL);
 
-    void    invokeCallbacks(void *callbackData);
+    void   clearCallbacks() { list.clear(); }
+    size_t getNumCallbacks() const { return list.size(); }
+
+    void invokeCallbacks(void *callbackData);
 
   private:
-  
     // callbackList holds a list of functions and user data
     typedef struct {
         SoCallbackListCB *func;
-        void             *userData;
+        void *            userData;
     } SoCallbackStruct;
-    std::vector<SoCallbackStruct>  list;
+    std::vector<SoCallbackStruct> list;
 };
 
-#endif  /* _SO_CALLBACK_LIST_ */
+#endif /* _SO_CALLBACK_LIST_ */

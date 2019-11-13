@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -65,7 +65,8 @@
 //
 // Use: public
 
-SoBaseList::SoBaseList() : SbPList()
+SoBaseList::SoBaseList()
+    : SbPList()
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -82,7 +83,8 @@ SoBaseList::SoBaseList() : SbPList()
 //
 // Use: public
 
-SoBaseList::SoBaseList(int size) : SbPList(size)
+SoBaseList::SoBaseList(int size)
+    : SbPList(size)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -117,13 +119,13 @@ SoBaseList::SoBaseList(const SoBaseList &l)
 // Use: public
 
 void
-SoBaseList::append(SoBase * ptr)	// pointer to append
+SoBaseList::append(SoBase *ptr) // pointer to append
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbPList::append((void *) ptr);
+    SbPList::append((void *)ptr);
     if (addRefs && ptr)
-	ptr->ref();
+        ptr->ref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -134,14 +136,14 @@ SoBaseList::append(SoBase * ptr)	// pointer to append
 // Use: public
 
 void
-SoBaseList::insert(SoBase *ptr,		// pointer to insert
-		   int addBefore)	// index to add before
+SoBaseList::insert(SoBase *ptr,   // pointer to insert
+                   int     addBefore) // index to add before
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (addRefs && ptr)
-	ptr->ref();
-    SbPList::insert((void *) ptr, addBefore);
+        ptr->ref();
+    SbPList::insert((void *)ptr, addBefore);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -152,12 +154,12 @@ SoBaseList::insert(SoBase *ptr,		// pointer to insert
 // Use: public
 
 void
-SoBaseList::remove(int which)		// index of pointer to remove
+SoBaseList::remove(int which) // index of pointer to remove
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (addRefs && (*this)[which])
-	(*this)[which]->unref();
+        (*this)[which]->unref();
     SbPList::remove(which);
 }
 
@@ -169,18 +171,18 @@ SoBaseList::remove(int which)		// index of pointer to remove
 // Use: public
 
 void
-SoBaseList::truncate(int start)		// first index to remove
+SoBaseList::truncate(int start) // first index to remove
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
+    int i;
 
     if (addRefs) {
-	for ( i = start; i < getLength(); i++) {
-	    if ( (*this)[i] ) {
-		(*this)[i]->unref();
-	    }
-	}
+        for (i = start; i < getLength(); i++) {
+            if ((*this)[i]) {
+                (*this)[i]->unref();
+            }
+        }
     }
 
     SbPList::truncate(start);
@@ -194,20 +196,20 @@ SoBaseList::truncate(int start)		// first index to remove
 // Use: public
 
 void
-SoBaseList::copy(const SoBaseList &bList)	// list to copy from
+SoBaseList::copy(const SoBaseList &bList) // list to copy from
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
+    int i;
 
     truncate(0);
 
     if (addRefs) {
-	for (i = 0; i < bList.getLength(); i++) {
-	    if ( bList[i] ) {
-		bList[i]->ref();
-	    }
-	}
+        for (i = 0; i < bList.getLength(); i++) {
+            if (bList[i]) {
+                bList[i]->ref();
+            }
+        }
     }
 
     SbPList::copy(bList);
@@ -221,20 +223,20 @@ SoBaseList::copy(const SoBaseList &bList)	// list to copy from
 // Use: public
 
 void
-SoBaseList::set(int i,			// index to set
-		SoBase *ptr)		// new pointer value
+SoBaseList::set(int     i,   // index to set
+                SoBase *ptr) // new pointer value
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (addRefs) {
-	if ( ptr ) {
-	    ptr->ref() ;
-	}
-	if ( (*this)[i] ) {
-	    (*this)[i]->unref();
-	}
+        if (ptr) {
+            ptr->ref();
+        }
+        if ((*this)[i]) {
+            (*this)[i]->unref();
+        }
     }
-    (*(const SbPList *) this) [i] = (void *) ptr;
+    (*(const SbPList *)this)[i] = (void *)ptr;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -250,15 +252,15 @@ SoPathList::findPath(const SoPath &path)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-    SoPath	*testPath;
+    int     i;
+    SoPath *testPath;
 
-    for(i = 0; i < getLength(); i++) {
-	testPath = (*this)[i];
-	if (*testPath == path)
-	    return i;
+    for (i = 0; i < getLength(); i++) {
+        testPath = (*this)[i];
+        if (*testPath == path)
+            return i;
     }
-    return -1;	// not found
+    return -1; // not found
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -274,25 +276,25 @@ SoPathList::sort()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoPath	**paths = new SoPath *[getLength()];
-    int		i;
+    SoPath **paths = new SoPath *[getLength()];
+    int      i;
 
     // Use qsort to do the work
     for (i = 0; i < getLength(); i++) {
-	paths[i] = (*this)[i];
-	paths[i]->ref();
+        paths[i] = (*this)[i];
+        paths[i]->ref();
     }
 
     qsort(paths, getLength(), sizeof(SoPath *), comparePaths);
 
     // Move the paths back into this list
     for (i = 0; i < getLength(); i++)
-	set(i, paths[i]);
+        set(i, paths[i]);
 
     // Get rid of the array
     for (i = 0; i < getLength(); i++)
-	paths[i]->unref();
-    delete [] paths;
+        paths[i]->unref();
+    delete[] paths;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -308,26 +310,26 @@ SoPathList::uniquify()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			i, lastSame;
-    const SoPath	*p1;
-    const SoPath	*p2;
+    int           i, lastSame;
+    const SoPath *p1;
+    const SoPath *p2;
 
     // Remove duplicates from the end to minimize array shuffling
     for (i = getLength() - 2; i >= 0; i--) {
 
-	// Use the SoPath::findFork() method to determine the last
-	// node that is on a common chain for both paths. Since the
-	// paths are sorted, we can just check if this node is at the
-	// end of the first path. If it is, the second one is a
-	// duplicate and can be removed.
+        // Use the SoPath::findFork() method to determine the last
+        // node that is on a common chain for both paths. Since the
+        // paths are sorted, we can just check if this node is at the
+        // end of the first path. If it is, the second one is a
+        // duplicate and can be removed.
 
-	p1 = (*this)[i];
-	p2 = (*this)[i + 1];
+        p1 = (*this)[i];
+        p2 = (*this)[i + 1];
 
-	lastSame = p1->findFork(p2);
+        lastSame = p1->findFork(p2);
 
-	if (lastSame == p1->getLength() - 1)
-	    remove(i + 1);
+        if (lastSame == p1->getLength() - 1)
+            remove(i + 1);
     }
 }
 
@@ -343,40 +345,40 @@ SoPathList::comparePaths(const void *p1Ptr, const void *p2Ptr)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoPath	*p1, *p2;
+    const SoPath *p1, *p2;
 
-    p1 = * (const SoPath * const *) p1Ptr;
-    p2 = * (const SoPath * const *) p2Ptr;
+    p1 = *(const SoPath *const *)p1Ptr;
+    p2 = *(const SoPath *const *)p2Ptr;
 
     // Most likely, the head nodes will be the same, so test this first
     if (p1->getHead() == p2->getHead()) {
 
-	// Test indices in order. A missing child comes before an
-	// existing child
+        // Test indices in order. A missing child comes before an
+        // existing child
 
-	int	depth;
-	for (depth = 1; depth < p1->getLength(); depth++) {
-	    if (depth >= p2->getLength())
-		return 1;
-	    if (p1->getIndex(depth) < p2->getIndex(depth))
-		return -1;
-	    if (p1->getIndex(depth) > p2->getIndex(depth))
-		return 1;
-	}
+        int depth;
+        for (depth = 1; depth < p1->getLength(); depth++) {
+            if (depth >= p2->getLength())
+                return 1;
+            if (p1->getIndex(depth) < p2->getIndex(depth))
+                return -1;
+            if (p1->getIndex(depth) > p2->getIndex(depth))
+                return 1;
+        }
 
-	// If we get here, then the paths are the same up to the end
-	// of path 1. If path2 is longer, then it comes after
-	if (p2->getLength() > p1->getLength())
-	    return -1;
+        // If we get here, then the paths are the same up to the end
+        // of path 1. If path2 is longer, then it comes after
+        if (p2->getLength() > p1->getLength())
+            return -1;
 
-	// Exact same paths
-	return 0;
+        // Exact same paths
+        return 0;
     }
 
     else if (p1->getHead() < p2->getHead())
-	return -1;
+        return -1;
     else
-	return  1;
+        return 1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -387,12 +389,12 @@ SoPathList::comparePaths(const void *p1Ptr, const void *p2Ptr)
 // Use: public
 
 void
-SoTypeList::append(SoType typeId)	// typeId to append
+SoTypeList::append(SoType typeId) // typeId to append
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // we have to do some hackage to cast an SoType into a void *...
-    void *hackage = (void*)(unsigned long)(*(int32_t *)&typeId);
+    void *hackage = (void *)(unsigned long)(*(int32_t *)&typeId);
     SbPList::append(hackage);
 }
 
@@ -409,7 +411,7 @@ SoTypeList::find(SoType typeId) const
 ////////////////////////////////////////////////////////////////////////
 {
     // we have to do some hackage to cast an SoType into a void *...
-    void *hackage = (void*)(unsigned long)(*(int32_t *)&typeId);
+    void *hackage = (void *)(unsigned long)(*(int32_t *)&typeId);
     return SbPList::find(hackage);
 }
 
@@ -421,16 +423,15 @@ SoTypeList::find(SoType typeId) const
 // Use: public
 
 void
-SoTypeList::insert(SoType typeId,	// typeId to insert
-		   int addBefore)	// index to add before
+SoTypeList::insert(SoType typeId, // typeId to insert
+                   int    addBefore) // index to add before
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // we have to do some hackage to cast an SoType into a void *...
-    void *hackage = (void*)(unsigned long)(*(int32_t *)&typeId);
+    void *hackage = (void *)(unsigned long)(*(int32_t *)&typeId);
     SbPList::insert(hackage, addBefore);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -439,14 +440,13 @@ SoTypeList::insert(SoType typeId,	// typeId to insert
 //
 // Use: public
 
-SoType
-SoTypeList::operator [](int i) const
+SoType SoTypeList::operator[](int i) const
 //
 ////////////////////////////////////////////////////////////////////////
-{ 
+{
     // we have to do some hackage to cast our void * back to an SoType...
-    int32_t hackage = (long)(* (const SbPList *) this)[i];
-    return *(SoType*)&hackage;
+    int32_t hackage = (long)(*(const SbPList *)this)[i];
+    return *(SoType *)&hackage;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -457,14 +457,14 @@ SoTypeList::operator [](int i) const
 // Use: public
 
 void
-SoTypeList::set(int i,			// index to set
-		SoType typeId)		// new typeId value
+SoTypeList::set(int    i,      // index to set
+                SoType typeId) // new typeId value
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // we have to do some hackage to cast an SoType into a void *...
-    void *hackage = (void*)(unsigned long)(*(int32_t *)&typeId);
-    (*(const SbPList *) this) [i] = hackage;
+    void *hackage = (void *)(unsigned long)(*(int32_t *)&typeId);
+    (*(const SbPList *)this)[i] = hackage;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -474,12 +474,11 @@ SoTypeList::set(int i,			// index to set
 //
 // Use: public
 
-SoDetailList::SoDetailList(const SoDetailList &l) : SbPList(l)
-{
+SoDetailList::SoDetailList(const SoDetailList &l) : SbPList(l) {
     // We need to copy the details, since we delete them when we
     // truncate the list
     for (int i = 0; i < getLength(); i++)
-	(* (const SbPList *) this)[i] = (void *) (*this)[i]->copy();
+        (*(const SbPList *)this)[i] = (void *)(*this)[i]->copy();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -495,11 +494,11 @@ SoDetailList::truncate(int start)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
+    int i;
 
-    for ( i = start; i < getLength(); i++) {
-        if ( (*this)[i] ) {
-	    delete (*this)[i];
+    for (i = start; i < getLength(); i++) {
+        if ((*this)[i]) {
+            delete (*this)[i];
         }
     }
 
@@ -521,10 +520,10 @@ SoDetailList::copy(const SoDetailList &l)
     truncate(0);
 
     int num = l.getLength();
-    for (int i = 0; i < num; i ++) {
-	SoDetail* detail = l[i];
-	if (detail)
-	    append(detail->copy());
+    for (int i = 0; i < num; i++) {
+        SoDetail *detail = l[i];
+        if (detail)
+            append(detail->copy());
     }
 }
 
@@ -541,9 +540,9 @@ SoDetailList::set(int i, SoDetail *detail)
 ////////////////////////////////////////////////////////////////////////
 {
     if ((*this)[i] != NULL)
-	delete (*this)[i];
+        delete (*this)[i];
 
-    (* (const SbPList *) this)[i] = (void *) detail;
+    (*(const SbPList *)this)[i] = (void *)detail;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -553,12 +552,11 @@ SoDetailList::set(int i, SoDetail *detail)
 //
 // Use: public
 
-SoPickedPointList::SoPickedPointList(const SoPickedPointList &l) : SbPList(l)
-{
+SoPickedPointList::SoPickedPointList(const SoPickedPointList &l) : SbPList(l) {
     // We need to copy the pickedPoints, since we delete them when we
     // truncate the list
     for (int i = 0; i < getLength(); i++)
-	(* (const SbPList *) this)[i] = (void *) (*this)[i]->copy();
+        (*(const SbPList *)this)[i] = (void *)(*this)[i]->copy();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -574,11 +572,11 @@ SoPickedPointList::truncate(int start)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
+    int i;
 
     for (i = start; i < getLength(); i++)
         if ((*this)[i] != NULL)
-	    delete (*this)[i];
+            delete (*this)[i];
 
     SbPList::truncate(start);
 }
@@ -596,8 +594,7 @@ SoPickedPointList::set(int i, SoPickedPoint *pickedPoint)
 ////////////////////////////////////////////////////////////////////////
 {
     if ((*this)[i] != NULL)
-	delete (*this)[i];
+        delete (*this)[i];
 
-    (* (const SbPList *) this)[i] = (void *) pickedPoint;
+    (*(const SbPList *)this)[i] = (void *)pickedPoint;
 }
-

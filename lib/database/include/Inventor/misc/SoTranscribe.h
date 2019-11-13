@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -59,8 +59,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TRANSCRIBE_
-#define  _SO_TRANSCRIBE_
+#ifndef _SO_TRANSCRIBE_
+#define _SO_TRANSCRIBE_
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbString.h>
@@ -108,39 +108,38 @@ class SoOutput;
 
 class SoTranSender {
   public:
-
     // Constructor: takes pointer to SoOutput instance
     SoTranSender(SoOutput *output);
 
     // Destructor
-    ~SoTranSender()				{}
+    ~SoTranSender() {}
 
     // Returns pointer to SoOutput
-    SoOutput *		getOutput() const	{ return out; }
+    SoOutput *getOutput() const { return out; }
 
     // Database change routines
-    void		insert(SoNode *node);
-    void		insert(SoNode *node, SoNode *parent, int n);
-    void		remove(SoNode *parent, int n);
-    void		replace(SoNode *parent, int n, SoNode *newNode);
-    void		modify(SoNode *node);
+    void insert(SoNode *node);
+    void insert(SoNode *node, SoNode *parent, int n);
+    void remove(SoNode *parent, int n);
+    void replace(SoNode *parent, int n, SoNode *newNode);
+    void modify(SoNode *node);
 
     // This is called to make sure the data is ready to send
-    void		prepareToSend();
+    void prepareToSend();
 
   private:
-    SoOutput		*out;
+    SoOutput *out;
 
     // Adding items to send
-    void		addBytes(const void *bytes, size_t nBytes);
-    void		addCommand(int command);
-    void		addInt(int n);
-    void		addNode(SoNode *node, SbBool addNames = TRUE);
-    void		addNodeNames(const SoNode *root);
-    void		addNodeRef(const SoNode *node);
-    void		addString(const char *cmdString);
+    void addBytes(const void *bytes, size_t nBytes);
+    void addCommand(int command);
+    void addInt(int n);
+    void addNode(SoNode *node, SbBool addNames = TRUE);
+    void addNodeNames(const SoNode *root);
+    void addNodeRef(const SoNode *node);
+    void addString(const char *cmdString);
 
-friend class SoTranReceiver;
+    friend class SoTranReceiver;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -157,7 +156,6 @@ friend class SoTranReceiver;
 class SoTranReceiver {
 
   public:
-
     // Constructor takes default root node
     SoTranReceiver(SoGroup *rootNode);
 
@@ -165,43 +163,41 @@ class SoTranReceiver {
     ~SoTranReceiver();
 
     // Interprets data from SoInput
-    SbBool	interpret(SoInput *in);
+    SbBool interpret(SoInput *in);
 
   private:
-    SoGroup	*root;
-    SbDict	nameToEntryDict;	// Maps node keyname to SoTranDictEntry
-    SbDict	nodeToNameDict;		// Maps node pointer to node keyname
+    SoGroup *root;
+    SbDict   nameToEntryDict; // Maps node keyname to SoTranDictEntry
+    SbDict   nodeToNameDict;  // Maps node pointer to node keyname
 
     // Interprets one database change command (with given code) from stream.
     // Sets done to TRUE if end command was found. Returns T/F error status.
-    SbBool	interpretCommand(int commandCode, SoInput *in, SbBool &done);
+    SbBool interpretCommand(int commandCode, SoInput *in, SbBool &done);
 
     // Gets a node and node names from the input
-    SbBool	getNodeAndNames(SoInput *in, SoNode *&node);
+    SbBool getNodeAndNames(SoInput *in, SoNode *&node);
 
     // Gets node from input
-    SbBool	getNode(SoInput *in, SoNode *&root);
+    SbBool getNode(SoInput *in, SoNode *&root);
 
     // Recursively gets node names and sets up dictionaries.
-    SbBool	getNodeNames(SoInput *in, SoNode *root,
-			     SbBool lookForNode, SoNode *&oldRoot);
+    SbBool getNodeNames(SoInput *in, SoNode *root, SbBool lookForNode,
+                        SoNode *&oldRoot);
 
     // Gets reference to a node, looks it up in dictionary, returns
     // node pointer.
-    SbBool	getNodeReference(SoInput *in, SoNode *&node);
+    SbBool getNodeReference(SoInput *in, SoNode *&node);
 
     // Removes reference to node in dictionaries, recursively.
-    void	removeNodeReferences(SoNode *node);
+    void removeNodeReferences(SoNode *node);
 
     // Adds an entry to the dictionaries
-    void	addEntry(SoNode *node, SbName &name);
+    void addEntry(SoNode *node, SbName &name);
 
     // Deletes (frees up) an entry from the nodeDict
-    static void	deleteDictEntry(unsigned long key, void *value);
+    static void deleteDictEntry(unsigned long key, void *value);
 
-    // Returns 
-
+    // Returns
 };
 
 #endif /* _SO_TRANSCRIBE_ */
-

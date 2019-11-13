@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,16 +63,14 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // construct a sphere given a center and radius
-SbSphere::SbSphere(const SbVec3f &c, float r)
-{
+SbSphere::SbSphere(const SbVec3f &c, float r) {
     center = c;
     radius = r;
 }
 
 // Change the center and radius
 void
-SbSphere::setValue(const SbVec3f &c, float r)
-{
+SbSphere::setValue(const SbVec3f &c, float r) {
     center = c;
     radius = r;
 }
@@ -122,7 +120,7 @@ SbSphere::circumscribe(const SbBox3f &box)
 // Sphere line intersection - this sets the parameter intersection,
 // and returns TRUE if the line and sphere really do intersect.
 //
-// line-sphere intersection algorithm lifted from Eric Haines chapter in 
+// line-sphere intersection algorithm lifted from Eric Haines chapter in
 // Glassner's "Introduction to Ray Tracing", pp. 35-7
 //
 SbBool
@@ -130,10 +128,10 @@ SbSphere::intersect(const SbLine &l, SbVec3f &intersection) const
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    float   B,C;	// At^2 + Bt + C = 0, but A is 1 since we normalize Rd
-    float   discr;	// discriminant (B^2 - 4AC)
+    float   B, C;  // At^2 + Bt + C = 0, but A is 1 since we normalize Rd
+    float   discr; // discriminant (B^2 - 4AC)
     SbVec3f v;
-    float   t,sqroot;
+    float   t, sqroot;
     SbBool  doesIntersect = TRUE;
 
     // setup B,C
@@ -143,28 +141,26 @@ SbSphere::intersect(const SbLine &l, SbVec3f &intersection) const
 
     // compute discriminant
     // if negative, there is no intersection
-    discr = B*B - 4.0*C;
+    discr = B * B - 4.0 * C;
     if (discr < 0.0) {
-	// line and sphere do not intersect
-	doesIntersect = FALSE;
-    }
-    else {
-	// compute t0: (-B - sqrt(B^2 - 4AC)) / 2A  (A = 1)
-    sqroot = std::sqrt(discr);
-	t = (-B - sqroot) * 0.5;
-	if (t < 0.0) {
-	    // no intersection, try t1: (-B + sqrt(B^2 - 4AC)) / 2A  (A = 1)
-	    t = (-B + sqroot) * 0.5;
-	}
+        // line and sphere do not intersect
+        doesIntersect = FALSE;
+    } else {
+        // compute t0: (-B - sqrt(B^2 - 4AC)) / 2A  (A = 1)
+        sqroot = std::sqrt(discr);
+        t = (-B - sqroot) * 0.5;
+        if (t < 0.0) {
+            // no intersection, try t1: (-B + sqrt(B^2 - 4AC)) / 2A  (A = 1)
+            t = (-B + sqroot) * 0.5;
+        }
 
-	if (t < 0.0) {
-	    // line and sphere do not intersect
-	    doesIntersect = FALSE;
-	}
-	else {
-	    // intersection! point is (point + (dir * t))
-	    intersection = l.getPosition() + (l.getDirection() * t);
-	}
+        if (t < 0.0) {
+            // line and sphere do not intersect
+            doesIntersect = FALSE;
+        } else {
+            // intersection! point is (point + (dir * t))
+            intersection = l.getPosition() + (l.getDirection() * t);
+        }
     }
 
     return doesIntersect;
@@ -175,7 +171,7 @@ SbSphere::intersect(const SbLine &l, SbVec3f &intersection) const
 // Sphere line intersection - this sets the parameter intersection,
 // and returns TRUE if the line and sphere really do intersect.
 //
-// line-sphere intersection algorithm lifted from Eric Haines chapter in 
+// line-sphere intersection algorithm lifted from Eric Haines chapter in
 // Glassner's "Introduction to Ray Tracing", pp. 35-7
 //
 SbBool
@@ -183,8 +179,8 @@ SbSphere::intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    float   B,C;	// At^2 + Bt + C = 0, but A is 1 since we normalize Rd
-    float   discr;	// discriminant (B^2 - 4AC)
+    float   B, C;  // At^2 + Bt + C = 0, but A is 1 since we normalize Rd
+    float   discr; // discriminant (B^2 - 4AC)
     SbVec3f v;
     float   sqroot;
     SbBool  doesIntersect = TRUE;
@@ -196,20 +192,19 @@ SbSphere::intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const
 
     // compute discriminant
     // if negative, there is no intersection
-    discr = B*B - 4.0*C;
+    discr = B * B - 4.0 * C;
 
     if (discr < 0.0) {
-	// line and sphere do not intersect
-	doesIntersect = FALSE;
-    }
-    else {
-    sqroot = std::sqrt(discr);
-	    
-	float t0 = (-B - sqroot) * 0.5;
-	enter = l.getPosition() + (l.getDirection() * t0);
-	
-	float t1 = (-B + sqroot) * 0.5;
-	exit = l.getPosition() + (l.getDirection() * t1);
+        // line and sphere do not intersect
+        doesIntersect = FALSE;
+    } else {
+        sqroot = std::sqrt(discr);
+
+        float t0 = (-B - sqroot) * 0.5;
+        enter = l.getPosition() + (l.getDirection() * t0);
+
+        float t1 = (-B + sqroot) * 0.5;
+        exit = l.getPosition() + (l.getDirection() * t1);
     }
 
     return doesIntersect;

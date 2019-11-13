@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -88,20 +88,20 @@ SoMFVec3f::initClass()
 // Use: public
 
 void
-SoMFVec3f::setValues(int start,			// Starting index
-		     int num,			// Number of values to set
-		     const float xyz[][3])	// Array of vector values
+SoMFVec3f::setValues(int         start,    // Starting index
+                     int         num,      // Number of values to set
+                     const float xyz[][3]) // Array of vector values
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	newNum = start + num;
-    int	i;
+    int newNum = start + num;
+    int i;
 
     if (newNum > getNum())
-	makeRoom(newNum);
+        makeRoom(newNum);
 
     for (i = 0; i < num; i++)
-	values[start + i].setValue(xyz[i]);
+        values[start + i].setValue(xyz[i]);
 
     valueChanged();
 }
@@ -178,9 +178,8 @@ SoMFVec3f::read1Value(SoInput *in, int index)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (in->read(values[index][0]) &&
-	    in->read(values[index][1]) &&
-	    in->read(values[index][2]));
+    return (in->read(values[index][0]) && in->read(values[index][1]) &&
+            in->read(values[index][2]));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -197,13 +196,13 @@ SoMFVec3f::write1Value(SoOutput *out, int index) const
 {
     out->write(values[index][0]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(values[index][1]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(values[index][2]);
 }
@@ -221,9 +220,8 @@ SoMFVec3f::writeBinaryValues(SoOutput *out) const // Defines writing action
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    out->writeBinaryArray((float *)values, 3*num);
+    out->writeBinaryArray((float *)values, 3 * num);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -233,13 +231,10 @@ SoMFVec3f::writeBinaryValues(SoOutput *out) const // Defines writing action
 // Use: private
 
 SbBool
-SoMFVec3f::readBinaryValues(SoInput *in,    // Reading specification
-                      	    int numToRead)  // Number of values to read
+SoMFVec3f::readBinaryValues(SoInput *in,   // Reading specification
+                            int      numToRead) // Number of values to read
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (in->readBinaryArray((float *)values, 3*numToRead));
+    return (in->readBinaryArray((float *)values, 3 * numToRead));
 }
-
-
-

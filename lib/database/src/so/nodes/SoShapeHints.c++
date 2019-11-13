@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -100,31 +100,28 @@ SoShapeHints::SoShapeHints()
     SO_NODE_CONSTRUCTOR(SoShapeHints);
 
     SO_NODE_ADD_FIELD(vertexOrdering,
-		      (SoShapeHintsElement::getDefaultVertexOrdering()));
-    SO_NODE_ADD_FIELD(shapeType,
-		      (SoShapeHintsElement::getDefaultShapeType()));
-    SO_NODE_ADD_FIELD(faceType,
-		      (SoShapeHintsElement::getDefaultFaceType()));
-    SO_NODE_ADD_FIELD(creaseAngle,
-		      (SoCreaseAngleElement::getDefault()));
+                      (SoShapeHintsElement::getDefaultVertexOrdering()));
+    SO_NODE_ADD_FIELD(shapeType, (SoShapeHintsElement::getDefaultShapeType()));
+    SO_NODE_ADD_FIELD(faceType, (SoShapeHintsElement::getDefaultFaceType()));
+    SO_NODE_ADD_FIELD(creaseAngle, (SoCreaseAngleElement::getDefault()));
 
     //
     // Set up static info for enumerated type fields
     //
 
-    SO_NODE_DEFINE_ENUM_VALUE(VertexOrdering,	UNKNOWN_ORDERING);
-    SO_NODE_DEFINE_ENUM_VALUE(VertexOrdering,	CLOCKWISE);
-    SO_NODE_DEFINE_ENUM_VALUE(VertexOrdering,	COUNTERCLOCKWISE);
+    SO_NODE_DEFINE_ENUM_VALUE(VertexOrdering, UNKNOWN_ORDERING);
+    SO_NODE_DEFINE_ENUM_VALUE(VertexOrdering, CLOCKWISE);
+    SO_NODE_DEFINE_ENUM_VALUE(VertexOrdering, COUNTERCLOCKWISE);
 
-    SO_NODE_DEFINE_ENUM_VALUE(ShapeType,	UNKNOWN_SHAPE_TYPE);
-    SO_NODE_DEFINE_ENUM_VALUE(ShapeType,	SOLID);
+    SO_NODE_DEFINE_ENUM_VALUE(ShapeType, UNKNOWN_SHAPE_TYPE);
+    SO_NODE_DEFINE_ENUM_VALUE(ShapeType, SOLID);
 
-    SO_NODE_DEFINE_ENUM_VALUE(FaceType,		UNKNOWN_FACE_TYPE);
-    SO_NODE_DEFINE_ENUM_VALUE(FaceType,		CONVEX);
+    SO_NODE_DEFINE_ENUM_VALUE(FaceType, UNKNOWN_FACE_TYPE);
+    SO_NODE_DEFINE_ENUM_VALUE(FaceType, CONVEX);
 
-    SO_NODE_SET_SF_ENUM_TYPE(vertexOrdering,	VertexOrdering);
-    SO_NODE_SET_SF_ENUM_TYPE(shapeType,		ShapeType);
-    SO_NODE_SET_SF_ENUM_TYPE(faceType,		FaceType);
+    SO_NODE_SET_SF_ENUM_TYPE(vertexOrdering, VertexOrdering);
+    SO_NODE_SET_SF_ENUM_TYPE(shapeType, ShapeType);
+    SO_NODE_SET_SF_ENUM_TYPE(faceType, FaceType);
 
     isBuiltIn = TRUE;
 }
@@ -139,8 +136,7 @@ SoShapeHints::SoShapeHints()
 SoShapeHints::~SoShapeHints()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -156,12 +152,12 @@ SoShapeHints::doAction(SoAction *action)
 {
     SoState *state = action->getState();
 
-    if (! creaseAngle.isIgnored()
-	&& ! SoOverrideElement::getCreaseAngleOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setCreaseAngleOverride(state, this, TRUE);
-	}
-	SoCreaseAngleElement::set(state, creaseAngle.getValue());
+    if (!creaseAngle.isIgnored() &&
+        !SoOverrideElement::getCreaseAngleOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setCreaseAngleOverride(state, this, TRUE);
+        }
+        SoCreaseAngleElement::set(state, creaseAngle.getValue());
     }
 }
 
@@ -181,32 +177,33 @@ SoShapeHints::doAction2(SoAction *action)
     SoState *state = action->getState();
 
     if (SoOverrideElement::getShapeHintsOverride(state)) {
-	return;
+        return;
     }
 
     if (isOverride()) {
-	SoOverrideElement::setShapeHintsOverride(state, this, TRUE);
+        SoOverrideElement::setShapeHintsOverride(state, this, TRUE);
     }
 
     //
     // Determine which hints to set. If any are ignored, leave them AS_IS
     //
 
-    SoShapeHintsElement::VertexOrdering	order;
-    SoShapeHintsElement::ShapeType		shape;
-    SoShapeHintsElement::FaceType		face;
+    SoShapeHintsElement::VertexOrdering order;
+    SoShapeHintsElement::ShapeType      shape;
+    SoShapeHintsElement::FaceType       face;
 
-    order = (vertexOrdering.isIgnored() ?
-	     SoShapeHintsElement::ORDERING_AS_IS :
-	     (SoShapeHintsElement::VertexOrdering)vertexOrdering.getValue());
+    order =
+        (vertexOrdering.isIgnored()
+             ? SoShapeHintsElement::ORDERING_AS_IS
+             : (SoShapeHintsElement::VertexOrdering)vertexOrdering.getValue());
 
-    shape  = (shapeType.isIgnored() ?
-	     SoShapeHintsElement::SHAPE_TYPE_AS_IS :
-	     (SoShapeHintsElement::ShapeType) shapeType.getValue());
+    shape = (shapeType.isIgnored()
+                 ? SoShapeHintsElement::SHAPE_TYPE_AS_IS
+                 : (SoShapeHintsElement::ShapeType)shapeType.getValue());
 
-    face  = (faceType.isIgnored() ?
-	     SoShapeHintsElement::FACE_TYPE_AS_IS :
-	     (SoShapeHintsElement::FaceType) faceType.getValue());
+    face = (faceType.isIgnored()
+                ? SoShapeHintsElement::FACE_TYPE_AS_IS
+                : (SoShapeHintsElement::FaceType)faceType.getValue());
 
     SoShapeHintsElement::set(state, order, shape, face);
 }

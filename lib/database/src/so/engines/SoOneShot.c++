@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -89,7 +89,7 @@ SoOneShot::SoOneShot()
     SO_ENGINE_ADD_INPUT(trigger, ());
     SO_ENGINE_ADD_INPUT(flags, (0));
     SO_ENGINE_ADD_INPUT(disable, (0));
-    SO_ENGINE_ADD_INPUT(timeIn,	  (SbTime::zero()));
+    SO_ENGINE_ADD_INPUT(timeIn, (SbTime::zero()));
     SO_ENGINE_ADD_OUTPUT(timeOut, SoSFTime);
     SO_ENGINE_ADD_OUTPUT(isActive, SoSFBool);
     SO_ENGINE_ADD_OUTPUT(ramp, SoSFFloat);
@@ -99,11 +99,11 @@ SoOneShot::SoOneShot()
 
     SO_ENGINE_SET_SF_ENUM_TYPE(flags, Flags);
 
-    state	= OFF;
-    rampVal	= 0.0;
-    timeVal	= 0.0;
+    state = OFF;
+    rampVal = 0.0;
+    timeVal = 0.0;
     outputPending = FALSE;
-    isBuiltIn   = TRUE;
+    isBuiltIn = TRUE;
 
     // default time source connection
     timeIn.connectFrom(SoDB::getGlobalField("realTime"));
@@ -123,8 +123,7 @@ SoOneShot::SoOneShot()
 SoOneShot::~SoOneShot()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -142,13 +141,13 @@ SoOneShot::writeInstance(SoOutput *out)
     // If connected to realTime, disable connection to prevent
     // connection from being written and mark timeIn as default to
     // prevent value from being written
-    SbBool timeInWasDefault = timeIn.isDefault();
-    SbBool timeInConnectionEnabled = timeIn.isConnectionEnabled();
+    SbBool   timeInWasDefault = timeIn.isDefault();
+    SbBool   timeInConnectionEnabled = timeIn.isConnectionEnabled();
     SoField *timeInConnection = NULL;
     timeIn.getConnectedField(timeInConnection);
     if (timeInConnection == SoDB::getGlobalField("realTime")) {
-	timeIn.enableConnection(FALSE);
-	timeIn.setDefault(TRUE);
+        timeIn.enableConnection(FALSE);
+        timeIn.setDefault(TRUE);
     }
     SoEngine::writeInstance(out);
 
@@ -175,8 +174,8 @@ SoOneShot::readInstance(SoInput *in, unsigned short flags)
     SoField *timeInConnection = NULL;
     timeIn.getConnectedField(timeInConnection);
     if (timeInConnection == SoDB::getGlobalField("realTime")) {
-	timeIn.disconnect();
-	timeIn.connectFrom(timeInConnection);
+        timeIn.disconnect();
+        timeIn.connectFrom(timeInConnection);
     }
 
     return result;
@@ -196,45 +195,45 @@ SoOneShot::inputChanged(SoField *whichInput)
 {
     const enum State oldstate = state;
     if (whichInput == &disable) {
-	if (disable.getValue())
-	    state = DISABLED;
-	else if (state == DISABLED)
-	    state = OFF;
+        if (disable.getValue())
+            state = DISABLED;
+        else if (state == DISABLED)
+            state = OFF;
+    } else if (whichInput == &trigger) {
+        switch (state) {
+        case DISABLED:
+        case TRIGGERED:
+            break;
+        case OFF:
+            state = TRIGGERED;
+            break;
+        case ON:
+            if (flags.getValue() & RETRIGGERABLE)
+                state = TRIGGERED;
+            break;
+        case PEAKED:
+            state = TRIGGERED;
+            break;
+        }
     }
-    else if (whichInput == &trigger) {
-	switch (state)  {
-	    case DISABLED:
-	    case TRIGGERED:
-		break;
-	    case OFF:
-		state = TRIGGERED;
-		break;
-	    case ON:
-		if (flags.getValue()&RETRIGGERABLE)
-		    state = TRIGGERED;
-		break;
-	    case PEAKED:
-		state = TRIGGERED;
-		break;
-	}
-    }
-    if (oldstate != state) outputPending = TRUE;
-    int enable = outputPending ||
-	state==ON || state==TRIGGERED || state == PEAKED;
+    if (oldstate != state)
+        outputPending = TRUE;
+    int enable =
+        outputPending || state == ON || state == TRIGGERED || state == PEAKED;
     timeOut.enable(enable);
     isActive.enable(enable);
     ramp.enable(enable);
 #ifdef DEVELOP
-    static char *enames[] = { "DISABLED", "OFF", "TRIGGERED", "ON", "PEAKED" };
-    printf("OneShot::inputChanged %s oldstate=%s state=%s disable=%d pending=%d enable=%d\n",
-	   whichInput==&disable ? "disable" :
-	   whichInput==&trigger ? "trigger" :
-	   whichInput==&timeIn  ? "----   " :
-	   "  ...  ",
-	   enames[oldstate], enames[state],
-	   disable.getValue(),
-	   outputPending,
-	   enable);
+    static char *enames[] = {"DISABLED", "OFF", "TRIGGERED", "ON", "PEAKED"};
+    printf("OneShot::inputChanged %s oldstate=%s state=%s disable=%d "
+           "pending=%d enable=%d\n",
+           whichInput == &disable
+               ? "disable"
+               : whichInput == &trigger
+                     ? "trigger"
+                     : whichInput == &timeIn ? "----   " : "  ...  ",
+           enames[oldstate], enames[state], disable.getValue(), outputPending,
+           enable);
     fflush(stdout);
 #endif
 }
@@ -257,50 +256,51 @@ SoOneShot::evaluate()
     SbBool activeVal;
 
     switch (state) {
-	case DISABLED:
-	    activeVal = FALSE;
-	    rampVal = 0.0;
-	    timeVal = 0.0;
-	    break;
+    case DISABLED:
+        activeVal = FALSE;
+        rampVal = 0.0;
+        timeVal = 0.0;
+        break;
 
-	case OFF:
-	    activeVal = FALSE;
-	    break;
+    case OFF:
+        activeVal = FALSE;
+        break;
 
-	case TRIGGERED:
-	    trigger.getValue();
-	    baseTime = timeIn.getValue();
-	    activeVal = TRUE;
-	    rampVal = 0.0;
-	    timeVal = 0.0;
-	    state = ON;
-	    break;
+    case TRIGGERED:
+        trigger.getValue();
+        baseTime = timeIn.getValue();
+        activeVal = TRUE;
+        rampVal = 0.0;
+        timeVal = 0.0;
+        state = ON;
+        break;
 
-	case ON:
-	    timeVal = timeIn.getValue() - baseTime;
-	    rampVal = timeVal/duration.getValue();
-	    if (rampVal >= 1.0) {
-		rampVal = 1.0;
-		timeVal = duration.getValue();
-		state = PEAKED;
-	    }
-	    activeVal = TRUE;
-	    break;
+    case ON:
+        timeVal = timeIn.getValue() - baseTime;
+        rampVal = timeVal / duration.getValue();
+        if (rampVal >= 1.0) {
+            rampVal = 1.0;
+            timeVal = duration.getValue();
+            state = PEAKED;
+        }
+        activeVal = TRUE;
+        break;
 
-	case PEAKED:	// gone past the end, waiting to reset.
-	    if (!(flags.getValue()&HOLD_FINAL)) {
-		rampVal = 0.0;
-		timeVal = 0.0;
-	    }
-	    activeVal = FALSE;
-	    state = OFF;
-	    break;
+    case PEAKED: // gone past the end, waiting to reset.
+        if (!(flags.getValue() & HOLD_FINAL)) {
+            rampVal = 0.0;
+            timeVal = 0.0;
+        }
+        activeVal = FALSE;
+        state = OFF;
+        break;
     }
 #ifdef DEVELOP
-    static char *enames[] = { "DISABLED", "OFF", "TRIGGERED", "ON", "PEAKED" };
-    printf("OneShot::evaluate state=%s oldstate=%s active=%d ramp=%f time=%s pending=%d\n",
-	   enames[state], enames[oldstate], activeVal, rampVal, timeVal.format("%M:%s.%u").getString(),
-	   outputPending);
+    static char *enames[] = {"DISABLED", "OFF", "TRIGGERED", "ON", "PEAKED"};
+    printf("OneShot::evaluate state=%s oldstate=%s active=%d ramp=%f time=%s "
+           "pending=%d\n",
+           enames[state], enames[oldstate], activeVal, rampVal,
+           timeVal.format("%M:%s.%u").getString(), outputPending);
     fflush(stdout);
 #endif
     SO_ENGINE_OUTPUT(timeOut, SoSFTime, setValue(timeVal));

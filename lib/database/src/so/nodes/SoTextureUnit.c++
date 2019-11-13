@@ -65,23 +65,22 @@ SO_NODE_SOURCE(SoTextureUnit);
 //
 // Constructor
 //
-SoTextureUnit::SoTextureUnit()
-{
-  // Do standard constructor stuff
-  SO_NODE_CONSTRUCTOR(SoTextureUnit);
+SoTextureUnit::SoTextureUnit() {
+    // Do standard constructor stuff
+    SO_NODE_CONSTRUCTOR(SoTextureUnit);
 
-  // Setup fields
-  SO_NODE_ADD_FIELD(unit,     (0) );
+    // Setup fields
+    SO_NODE_ADD_FIELD(unit, (0));
 
-  isBuiltIn = TRUE;
+    isBuiltIn = TRUE;
 }
 
 /////////////////////////////////////////////////////////////////
 //
 // This initializes the SoDecal class.
 //
-void SoTextureUnit::initClass()
-{
+void
+SoTextureUnit::initClass() {
     // Initialize type id variables
     SO__NODE_INIT_CLASS(SoTextureUnit, "TextureUnit", SoNode);
 
@@ -94,13 +93,10 @@ void SoTextureUnit::initClass()
 //
 // Destructor
 //
-SoTextureUnit::~SoTextureUnit()
-{
-}
+SoTextureUnit::~SoTextureUnit() {}
 
-uint32_t 
-SoTextureUnit::getMaxTextureUnit(SoState *state)
-{
+uint32_t
+SoTextureUnit::getMaxTextureUnit(SoState *state) {
     return SoTextureUnitElement::getMaxTextureUnit(state);
 }
 

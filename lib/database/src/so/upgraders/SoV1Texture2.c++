@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -61,11 +61,11 @@
 
 SO_NODE_SOURCE(SoV1Texture2);
 
-// 
+//
 // List of textures that we've created so we can share textures with
 // the same filename, just like Inventor 1
 //
-std::vector<SoTexture2*> SoV1Texture2::textureList;
+std::vector<SoTexture2 *> SoV1Texture2::textureList;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -87,7 +87,7 @@ SoV1Texture2::SoV1Texture2()
     SO_NODE_ADD_FIELD(wrapS, (REPEAT));
     SO_NODE_ADD_FIELD(wrapT, (REPEAT));
     SO_NODE_ADD_FIELD(model, (MODULATE));
-    SO_NODE_ADD_FIELD(blendColor, (SbColor(1,1,1)));
+    SO_NODE_ADD_FIELD(blendColor, (SbColor(1, 1, 1)));
     SO_NODE_ADD_FIELD(translation, (SbVec2f(0., 0.)));
     SO_NODE_ADD_FIELD(scaleFactor, (SbVec2f(1., 1.)));
     SO_NODE_ADD_FIELD(rotation, (0.0));
@@ -139,8 +139,7 @@ SoV1Texture2::SoV1Texture2()
 SoV1Texture2::~SoV1Texture2()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 void
 SoV1Texture2::initClass()
@@ -162,7 +161,7 @@ SoV1Texture2::finishClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (size_t i=0; i<textureList.size(); i++) {
+    for (size_t i = 0; i < textureList.size(); i++) {
         textureList[i]->unref();
     }
     textureList.clear();
@@ -180,92 +179,94 @@ SoV1Texture2::createNewNode()
 ////////////////////////////////////////////////////////////////////////
 {
     SoTexture2 *tex;
-    SbBool alreadyExists = findTexture2(tex);
+    SbBool      alreadyExists = findTexture2(tex);
 
     tex->ref();
 
     if (!alreadyExists) {
-	// Convert from old enums to new fields:
+        // Convert from old enums to new fields:
 
-	// Easy ones first:
-	SO_UPGRADER_COPY_FIELD(blendColor, tex);
+        // Easy ones first:
+        SO_UPGRADER_COPY_FIELD(blendColor, tex);
 
-	// Enum values for model changed between 1.0/2.0:
-	if (!model.isDefault()) {
-	    switch (model.getValue()) {
-	      case MODULATE:
-		tex->model = SoTexture2::MODULATE;
-		break;
-	      case DECAL:
-		tex->model = SoTexture2::DECAL;
-		break;
-	      case BLEND:
-		tex->model = SoTexture2::BLEND;
-		break;
-	    }
-	}
-	if (model.isIgnored()) tex->model.setIgnored(TRUE);
-    
-	// Enum values for wrapS changed between 1.0/2.0:
-	if (!wrapS.isDefault()) {
-	    switch (wrapS.getValue()) {
-	      case REPEAT:
-		tex->wrapS = SoTexture2::REPEAT;
-		break;
-	      case CLAMP:
-		tex->wrapS = SoTexture2::CLAMP;
-		break;
-	    }
-	}
-	if (wrapS.isIgnored()) tex->wrapS.setIgnored(TRUE);
+        // Enum values for model changed between 1.0/2.0:
+        if (!model.isDefault()) {
+            switch (model.getValue()) {
+            case MODULATE:
+                tex->model = SoTexture2::MODULATE;
+                break;
+            case DECAL:
+                tex->model = SoTexture2::DECAL;
+                break;
+            case BLEND:
+                tex->model = SoTexture2::BLEND;
+                break;
+            }
+        }
+        if (model.isIgnored())
+            tex->model.setIgnored(TRUE);
 
-	// Enum values for wrapT changed between 1.0/2.0:
-	if (!wrapT.isDefault()) {
-	    switch (wrapT.getValue()) {
-	      case REPEAT:
-		tex->wrapT = SoTexture2::REPEAT;
-		break;
-	      case CLAMP:
-		tex->wrapT = SoTexture2::CLAMP;
-		break;
-	    }
-	}
-	if (wrapT.isIgnored()) tex->wrapT.setIgnored(TRUE);
+        // Enum values for wrapS changed between 1.0/2.0:
+        if (!wrapS.isDefault()) {
+            switch (wrapS.getValue()) {
+            case REPEAT:
+                tex->wrapS = SoTexture2::REPEAT;
+                break;
+            case CLAMP:
+                tex->wrapS = SoTexture2::CLAMP;
+                break;
+            }
+        }
+        if (wrapS.isIgnored())
+            tex->wrapS.setIgnored(TRUE);
 
+        // Enum values for wrapT changed between 1.0/2.0:
+        if (!wrapT.isDefault()) {
+            switch (wrapT.getValue()) {
+            case REPEAT:
+                tex->wrapT = SoTexture2::REPEAT;
+                break;
+            case CLAMP:
+                tex->wrapT = SoTexture2::CLAMP;
+                break;
+            }
+        }
+        if (wrapT.isIgnored())
+            tex->wrapT.setIgnored(TRUE);
 
-	// Convert name to string in filename field
-	if (! filename.isDefault())
-	    tex->filename = filename.getValue().getString();
-	if (filename.isIgnored())
-	    tex->filename.setIgnored(TRUE);
+        // Convert name to string in filename field
+        if (!filename.isDefault())
+            tex->filename = filename.getValue().getString();
+        if (filename.isIgnored())
+            tex->filename.setIgnored(TRUE);
 
-	// Ignore component field
+        // Ignore component field
 
-	// And ignore min/magFilters; I could create a Complexity node
-	// with textureQuality set and value/type ignored, but I don't
-	// think it is worth the effort...
+        // And ignore min/magFilters; I could create a Complexity node
+        // with textureQuality set and value/type ignored, but I don't
+        // think it is worth the effort...
     }
 
     // These require us to create a Texture2Transform also:
     if (!translation.isDefault() || !scaleFactor.isDefault() ||
-	!rotation.isDefault()) {
+        !rotation.isDefault()) {
 
-	SoGroup *g = SO_UPGRADER_CREATE_NEW(SoGroup);
-	g->ref();
+        SoGroup *g = SO_UPGRADER_CREATE_NEW(SoGroup);
+        g->ref();
 
-	SoTexture2Transform *xf = SO_UPGRADER_CREATE_NEW(SoTexture2Transform);
-	g->addChild(xf);
-	SO_UPGRADER_COPY_FIELD(translation, xf);
-	SO_UPGRADER_COPY_FIELD(scaleFactor, xf);
-	SO_UPGRADER_COPY_FIELD(rotation, xf);
-	SO_UPGRADER_COPY_FIELD(center, xf);
+        SoTexture2Transform *xf = SO_UPGRADER_CREATE_NEW(SoTexture2Transform);
+        g->addChild(xf);
+        SO_UPGRADER_COPY_FIELD(translation, xf);
+        SO_UPGRADER_COPY_FIELD(scaleFactor, xf);
+        SO_UPGRADER_COPY_FIELD(rotation, xf);
+        SO_UPGRADER_COPY_FIELD(center, xf);
 
-	g->addChild(tex);
-	tex->unref();
-	g->unrefNoDelete();
+        g->addChild(tex);
+        tex->unref();
+        g->unrefNoDelete();
 
-	return g;
-    }	
+        return g;
+    }
     tex->unrefNoDelete();
 
     return tex;
@@ -289,8 +290,8 @@ SoV1Texture2::findTexture2(SoTexture2 *&tex)
 {
     for (size_t i = 0; i < textureList.size(); i++) {
         tex = textureList[i];
-	if (matches(tex))
-	    return TRUE;
+        if (matches(tex))
+            return TRUE;
     }
     // Not found, create a new one and add to list:
     tex = SO_UPGRADER_CREATE_NEW(SoTexture2);
@@ -318,38 +319,45 @@ SoV1Texture2::matches(SoTexture2 *compare)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (compare->filename.getValue() !=
-	filename.getValue().getString()) return FALSE;
-    
+    if (compare->filename.getValue() != filename.getValue().getString())
+        return FALSE;
+
     int compareModel = compare->model.getValue();
     switch (model.getValue()) {
-      case MODULATE:
-	if (compareModel != SoTexture2::MODULATE) return FALSE;
-	break;
-      case DECAL:
-	if (compareModel != SoTexture2::DECAL) return FALSE;
-	break;
-      case BLEND:
-	if (compareModel != SoTexture2::BLEND) return FALSE;
-	break;
+    case MODULATE:
+        if (compareModel != SoTexture2::MODULATE)
+            return FALSE;
+        break;
+    case DECAL:
+        if (compareModel != SoTexture2::DECAL)
+            return FALSE;
+        break;
+    case BLEND:
+        if (compareModel != SoTexture2::BLEND)
+            return FALSE;
+        break;
     }
     int compareWrap = compare->wrapS.getValue();
     switch (wrapS.getValue()) {
-      case REPEAT:
-	if (compareWrap != SoTexture2::REPEAT) return FALSE;
-	break;
-      case CLAMP:
-	if (compareWrap != SoTexture2::CLAMP) return FALSE;
-	break;
+    case REPEAT:
+        if (compareWrap != SoTexture2::REPEAT)
+            return FALSE;
+        break;
+    case CLAMP:
+        if (compareWrap != SoTexture2::CLAMP)
+            return FALSE;
+        break;
     }
     compareWrap = compare->wrapT.getValue();
     switch (wrapT.getValue()) {
-      case REPEAT:
-	if (compareWrap != SoTexture2::REPEAT) return FALSE;
-	break;
-      case CLAMP:
-	if (compareWrap != SoTexture2::CLAMP) return FALSE;
-	break;
+    case REPEAT:
+        if (compareWrap != SoTexture2::REPEAT)
+            return FALSE;
+        break;
+    case CLAMP:
+        if (compareWrap != SoTexture2::CLAMP)
+            return FALSE;
+        break;
     }
     return TRUE;
 }
@@ -367,7 +375,8 @@ SoV1Texture2::nodeDeletedCB(void *node, SoSensor *sensor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    std::vector<SoTexture2*>::iterator it = std::find(textureList.begin(), textureList.end(), node);
+    std::vector<SoTexture2 *>::iterator it =
+        std::find(textureList.begin(), textureList.end(), node);
     textureList.erase(it);
     delete sensor;
 }

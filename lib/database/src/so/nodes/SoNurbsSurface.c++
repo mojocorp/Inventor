@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -129,8 +129,7 @@ SoNurbsSurface::SoNurbsSurface()
 SoNurbsSurface::~SoNurbsSurface()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -145,10 +144,11 @@ SoNurbsSurface::GLRender(SoGLRenderAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // First see if the object is visible and should be rendered now
-    if (! shouldGLRender(action))
+    if (!shouldGLRender(action))
         return;
 
-    const SoCoordinateElement *ce = SoCoordinateElement::getInstance(action->getState());
+    const SoCoordinateElement *ce =
+        SoCoordinateElement::getInstance(action->getState());
 
     // Check for 0 control points
     const int32_t nCoords = ce->getNum();
@@ -159,7 +159,8 @@ SoNurbsSurface::GLRender(SoGLRenderAction *action)
     SoMaterialBundle mb(action);
     mb.sendFirst();
 
-    if (SoDrawStyleElement::get(action->getState()) == SoDrawStyleElement::POINTS) {
+    if (SoDrawStyleElement::get(action->getState()) ==
+        SoDrawStyleElement::POINTS) {
         //
         // Render the control points of the surface.  Rendering the points
         // of the surface would be very slow, as the Software NURBS library
@@ -168,20 +169,14 @@ SoNurbsSurface::GLRender(SoGLRenderAction *action)
         //
         glBegin(GL_POINTS);
         if (ce->is3D()) {
-            for (int i=0; i<nCoords; i++) {
-                const SbVec3f & coords3 = ce->get3(i);
-                glVertex3f (coords3[0],
-                            coords3[1],
-                            coords3[2]);
+            for (int i = 0; i < nCoords; i++) {
+                const SbVec3f &coords3 = ce->get3(i);
+                glVertex3f(coords3[0], coords3[1], coords3[2]);
             }
-        }
-        else {
-            for (int i=0; i<nCoords; i++) {
-                const SbVec4f & coords4 = ce->get4(i);
-                glVertex4f (coords4[0],
-                            coords4[1],
-                            coords4[2],
-                            coords4[3]);
+        } else {
+            for (int i = 0; i < nCoords; i++) {
+                const SbVec4f &coords4 = ce->get4(i);
+                glVertex4f(coords4[0], coords4[1], coords4[2], coords4[3]);
             }
         }
         glEnd();
@@ -195,27 +190,30 @@ SoNurbsSurface::GLRender(SoGLRenderAction *action)
 
     switch (SoDrawStyleElement::get(action->getState())) {
     case SoDrawStyleElement::FILLED:
-        gluNurbsProperty (nurbsObj, (GLenum)GLU_DISPLAY_MODE, GLU_FILL);
+        gluNurbsProperty(nurbsObj, (GLenum)GLU_DISPLAY_MODE, GLU_FILL);
         break;
     case SoDrawStyleElement::LINES:
-        gluNurbsProperty (nurbsObj, (GLenum)GLU_DISPLAY_MODE, GLU_OUTLINE_POLYGON);
+        gluNurbsProperty(nurbsObj, (GLenum)GLU_DISPLAY_MODE,
+                         GLU_OUTLINE_POLYGON);
         break;
-    default: break;
+    default:
+        break;
     }
 
-    const SbBool doTextures = SoGLTextureEnabledElement::get(action->getState());
+    const SbBool doTextures =
+        SoGLTextureEnabledElement::get(action->getState());
 
     gluNurbsProperty(nurbsObj, GLU_NURBS_MODE, GLU_NURBS_TESSELLATOR);
     gluNurbsCallback(nurbsObj, GLU_NURBS_BEGIN, (void (*)())glBegin);
     gluNurbsCallback(nurbsObj, GLU_NURBS_END, (void (*)())glEnd);
     gluNurbsCallback(nurbsObj, GLU_NURBS_VERTEX, (void (*)())glVertex3fv);
     gluNurbsCallback(nurbsObj, GLU_NURBS_NORMAL, (void (*)())glNormal3fv);
-    gluNurbsCallback(nurbsObj, GLU_NURBS_TEXTURE_COORD, (void (*)())glTexCoord2fv);
+    gluNurbsCallback(nurbsObj, GLU_NURBS_TEXTURE_COORD,
+                     (void (*)())glTexCoord2fv);
 
-    drawNURBS (nurbsObj, action, doTextures);
+    drawNURBS(nurbsObj, action, doTextures);
 
-    gluDeleteNurbsRenderer( nurbsObj );
-
+    gluDeleteNurbsRenderer(nurbsObj);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -241,37 +239,40 @@ SoNurbsSurface::generatePrimitives(SoAction *action)
         std::vector<SbVec3f> normals;
         std::vector<SbVec4f> texCoord;
 
-        static void vertexCallback(float *vertex, glu_cb_data * userData)
-        {
-            userData->vertices.push_back(SbVec3f(vertex[0], vertex[1], vertex[2]));
+        static void vertexCallback(float *vertex, glu_cb_data *userData) {
+            userData->vertices.push_back(
+                SbVec3f(vertex[0], vertex[1], vertex[2]));
         }
 
-        static void normalCallback(float *normal, glu_cb_data * userData)
-        {
-            userData->normals.push_back(SbVec3f(normal[0], normal[1], normal[2]));
+        static void normalCallback(float *normal, glu_cb_data *userData) {
+            userData->normals.push_back(
+                SbVec3f(normal[0], normal[1], normal[2]));
         }
 
-        static void texCoordCallback(float *texCoord, glu_cb_data * userData)
-        {
-            userData->texCoord.push_back(SbVec4f(texCoord[0], texCoord[1], texCoord[2], texCoord[3]));
+        static void texCoordCallback(float *texCoord, glu_cb_data *userData) {
+            userData->texCoord.push_back(
+                SbVec4f(texCoord[0], texCoord[1], texCoord[2], texCoord[3]));
         }
     } data;
 
     gluNurbsProperty(nurbsObj, GLU_NURBS_MODE, GLU_NURBS_TESSELLATOR);
     gluNurbsCallbackData(nurbsObj, &data);
-    gluNurbsCallback(nurbsObj, GLU_NURBS_VERTEX_DATA, (void (GLAPIENTRY*)())glu_cb_data::vertexCallback);
-    gluNurbsCallback(nurbsObj, GLU_NURBS_NORMAL_DATA, (void (GLAPIENTRY*)())glu_cb_data::normalCallback);
-    gluNurbsCallback(nurbsObj, GLU_NURBS_TEXTURE_COORD_DATA, (void (GLAPIENTRY*)())glu_cb_data::texCoordCallback);
+    gluNurbsCallback(nurbsObj, GLU_NURBS_VERTEX_DATA,
+                     (void(GLAPIENTRY *)())glu_cb_data::vertexCallback);
+    gluNurbsCallback(nurbsObj, GLU_NURBS_NORMAL_DATA,
+                     (void(GLAPIENTRY *)())glu_cb_data::normalCallback);
+    gluNurbsCallback(nurbsObj, GLU_NURBS_TEXTURE_COORD_DATA,
+                     (void(GLAPIENTRY *)())glu_cb_data::texCoordCallback);
     drawNURBS(nurbsObj, action, true);
 
-    gluDeleteNurbsRenderer( nurbsObj );
+    gluDeleteNurbsRenderer(nurbsObj);
 
-    for (size_t i=0; i<data.vertices.size()-2; i+=3) {
+    for (size_t i = 0; i < data.vertices.size() - 2; i += 3) {
         SoPrimitiveVertex pv[3];
-        for (int j=0; j<3; j++) {
-            pv[j].setPoint(data.vertices[i+j]);
-            pv[j].setNormal(data.normals[i+j]);
-            pv[j].setTextureCoords(data.texCoord[i+j]);
+        for (int j = 0; j < 3; j++) {
+            pv[j].setPoint(data.vertices[i + j]);
+            pv[j].setNormal(data.normals[i + j]);
+            pv[j].setTextureCoords(data.texCoord[i + j]);
         }
         invokeTriangleCallbacks(action, &pv[0], &pv[1], &pv[2]);
     }
@@ -287,14 +288,15 @@ SoNurbsSurface::generatePrimitives(SoAction *action)
 // Use: extender
 
 void
-SoNurbsSurface::computeBBox(SoAction *action,
-                            SbBox3f &box, SbVec3f &center)
+SoNurbsSurface::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoCoordinateElement *ce = SoCoordinateElement::getInstance(action->getState());
-    const int32_t numSurfCoords = numUControlPoints.getValue() * numVControlPoints.getValue();
+    const SoCoordinateElement *ce =
+        SoCoordinateElement::getInstance(action->getState());
+    const int32_t numSurfCoords =
+        numUControlPoints.getValue() * numVControlPoints.getValue();
     const int32_t nCoords = ce->getNum();
 
     // Check for a degenerate surface
@@ -320,8 +322,7 @@ SoNurbsSurface::computeBBox(SoAction *action,
             center += coord;
             curCoord++;
         }
-    }
-    else {
+    } else {
         for (int j = 0; j < numSurfCoords; j++) {
             //
             // Wrap around if necessary
@@ -329,15 +330,15 @@ SoNurbsSurface::computeBBox(SoAction *action,
             if (curCoord >= nCoords)
                 curCoord = 0;
             const SbVec4f &coord = ce->get4(curCoord);
-            SbVec3f	tmpCoord;
-            coord.getReal (tmpCoord);
-            box.extendBy (tmpCoord);
+            SbVec3f        tmpCoord;
+            coord.getReal(tmpCoord);
+            box.extendBy(tmpCoord);
             center += tmpCoord;
             curCoord++;
         }
     }
 
-    center /= (float) numSurfCoords;
+    center /= (float)numSurfCoords;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -358,18 +359,22 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
     // the pixel tolerance used for screen space tessellation.
     //
     float val = SoComplexityElement::get(action->getState());
-    if (val < 0.0) val = 0.0;
-    if (val > 1.0) val = 1.0;
+    if (val < 0.0)
+        val = 0.0;
+    if (val > 1.0)
+        val = 1.0;
 
-    if (SoComplexityTypeElement::get(action->getState()) == SoComplexityTypeElement::OBJECT_SPACE) {
+    if (SoComplexityTypeElement::get(action->getState()) ==
+        SoComplexityTypeElement::OBJECT_SPACE) {
         gluNurbsProperty(nurbsObj, GLU_SAMPLING_METHOD, GLU_DOMAIN_DISTANCE);
-        gluNurbsProperty(nurbsObj, GLU_U_STEP, 400*val);
-        gluNurbsProperty(nurbsObj, GLU_V_STEP, 400*val);
+        gluNurbsProperty(nurbsObj, GLU_U_STEP, 400 * val);
+        gluNurbsProperty(nurbsObj, GLU_V_STEP, 400 * val);
     } else {
-        float pixTolerance = 104.0f*val*val - 252.0f*val + 150;
+        float pixTolerance = 104.0f * val * val - 252.0f * val + 150;
 
         gluNurbsProperty(nurbsObj, GLU_SAMPLING_METHOD, GLU_OBJECT_PATH_LENGTH);
-        gluNurbsProperty(nurbsObj, (GLenum)GLU_SAMPLING_TOLERANCE, (GLfloat)pixTolerance);
+        gluNurbsProperty(nurbsObj, (GLenum)GLU_SAMPLING_TOLERANCE,
+                         (GLfloat)pixTolerance);
     }
 
     //
@@ -378,10 +383,12 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
     // converted to double precision so that they can be passed to the
     // GL NURBS routines.
     //
-    const SoCoordinateElement *ce = SoCoordinateElement::getInstance(action->getState());
+    const SoCoordinateElement *ce =
+        SoCoordinateElement::getInstance(action->getState());
     const int32_t nCoords = ce->getNum();
 
-    const float *dCoords = ce->is3D() ? ce->get3(0).getValue() : ce->get4(0).getValue();
+    const float *dCoords =
+        ce->is3D() ? ce->get3(0).getValue() : ce->get4(0).getValue();
     const int32_t uOffset = ce->is3D() ? 3 : 4;
     const int32_t vOffset = uOffset * numUControlPoints.getValue();
 
@@ -397,51 +404,49 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
     // create a texture nurb surface with the same number of points and
     // knots as the original surface, and call the texture coordinate function
     // at each vertex.
-    int32_t sOffset, tOffset;
-    int32_t nsKnots, ntKnots, nsCoords, ntCoords;
-    GLfloat *sKnots, *tKnots;
+    int32_t              sOffset, tOffset;
+    int32_t              nsKnots, ntKnots, nsCoords, ntCoords;
+    GLfloat *            sKnots, *tKnots;
     std::vector<GLfloat> dstCoords;
 
-    if(doTextures) {
+    if (doTextures) {
 
         switch (SoTextureCoordinateElement::getType(action->getState())) {
 
         // software texture functions
-        case SoTextureCoordinateElement::FUNCTION:
-        {
+        case SoTextureCoordinateElement::FUNCTION: {
             // generate S and T coords from U and V coords
-            SbVec3f	coord;
-            SbVec2f	stCoord;
+            SbVec3f                   coord;
+            SbVec2f                   stCoord;
             SoTextureCoordinateBundle tb(action, TRUE);
 
             nsCoords = numUControlPoints.getValue();
             ntCoords = numVControlPoints.getValue();
 
-            sKnots = (float*)duKnots;
-            tKnots = (float*)dvKnots;
+            sKnots = (float *)duKnots;
+            tKnots = (float *)dvKnots;
             nsKnots = uKnotVector.getNum();
             ntKnots = vKnotVector.getNum();
 
             const size_t nDstCoords = nsCoords * ntCoords;
             dstCoords.resize(nDstCoords * 2);
 
-            for(int v = 0; v < ntCoords; v++) {
-                for(int u = 0; u < nsCoords; u++) {
+            for (int v = 0; v < ntCoords; v++) {
+                for (int u = 0; u < nsCoords; u++) {
                     if (ce->is3D()) {
                         int offset = 3 * (v * (int)nsCoords + u);
                         coord[0] = dCoords[offset + 0];
                         coord[1] = dCoords[offset + 1];
                         coord[2] = dCoords[offset + 2];
-                    }
-                    else {
+                    } else {
                         int offset = 4 * (v * (int)nsCoords + u);
                         coord[0] = dCoords[offset + 0] / dCoords[offset + 3];
                         coord[1] = dCoords[offset + 1] / dCoords[offset + 3];
                         coord[2] = dCoords[offset + 2] / dCoords[offset + 3];
                     }
                     const SbVec4f &tc = tb.get(coord, SbVec3f(0.0, 1.0, 0.0));
-                    dstCoords[(v * (int)nsCoords  + u) * 2 + 0] = tc[0];
-                    dstCoords[(v * (int)nsCoords  + u) * 2 + 1] = tc[1];
+                    dstCoords[(v * (int)nsCoords + u) * 2 + 0] = tc[0];
+                    dstCoords[(v * (int)nsCoords + u) * 2 + 1] = tc[1];
                 }
             }
             break;
@@ -451,8 +456,8 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
         case SoTextureCoordinateElement::EXPLICIT:
             // get texture coordinates from texture node
             const SoTextureCoordinateElement *te =
-                    SoTextureCoordinateElement::getInstance(action->getState());
-            int32_t		nstCoords = te->getNum();
+                SoTextureCoordinateElement::getInstance(action->getState());
+            int32_t nstCoords = te->getNum();
             if (nstCoords < 1) {
                 // Default texture coordinates are computed by defining
                 // a bezier surface that is defined in the same valid
@@ -464,22 +469,24 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
                 // input data.
                 GLfloat sKnotVal1, sKnotVal2, tKnotVal1, tKnotVal2;
 
-                int uOrder = uKnotVector.getNum() - numUControlPoints.getValue();
-                int vOrder = vKnotVector.getNum() - numVControlPoints.getValue();
+                int uOrder =
+                    uKnotVector.getNum() - numUControlPoints.getValue();
+                int vOrder =
+                    vKnotVector.getNum() - numVControlPoints.getValue();
                 if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
-                    sKnotVal1 = duKnots[uOrder-1];
+                    sKnotVal1 = duKnots[uOrder - 1];
                 else
                     sKnotVal1 = 0;
                 if ((uOrder > 0) && (uOrder < uKnotVector.getNum()))
-                    sKnotVal2 = duKnots[uKnotVector.getNum()-uOrder];
+                    sKnotVal2 = duKnots[uKnotVector.getNum() - uOrder];
                 else
                     sKnotVal2 = 1;
                 if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
-                    tKnotVal1 = dvKnots[vOrder-1];
+                    tKnotVal1 = dvKnots[vOrder - 1];
                 else
                     tKnotVal1 = 0;
                 if ((vOrder > 0) && (vOrder < vKnotVector.getNum()))
-                    tKnotVal2 = dvKnots[vKnotVector.getNum()-vOrder];
+                    tKnotVal2 = dvKnots[vKnotVector.getNum() - vOrder];
                 else
                     tKnotVal2 = 1;
 
@@ -500,8 +507,8 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
                 ntCoords = 2;
                 const size_t nDstCoords = nsCoords * ntCoords * 2;
                 dstCoords.resize(nDstCoords);
-                for(int i = 0; i < 2; i++) {
-                    for(int j = 0; j < 2; j++) {
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < 2; j++) {
                         dstCoords[(i * 2 + j) * 2 + 0] = (GLfloat)j;
                         dstCoords[(i * 2 + j) * 2 + 1] = (GLfloat)i;
                     }
@@ -519,10 +526,10 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
 
                 const size_t nDstCoords = 2 * nstCoords;
                 dstCoords.resize(nDstCoords);
-                for(int i = 0; i < nstCoords; i++) {
+                for (int i = 0; i < nstCoords; i++) {
                     const SbVec2f &tc2 = te->get2(i);
-                    dstCoords[2*i+0] = tc2[0];
-                    dstCoords[2*i+1] = tc2[1];
+                    dstCoords[2 * i + 0] = tc2[0];
+                    dstCoords[2 * i + 1] = tc2[1];
                 }
             }
             break;
@@ -530,7 +537,6 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
         sOffset = 2;
         tOffset = sOffset * nsCoords;
     }
-
 
     //
     // Draw the NURBS surface.  Begin the surface.  Then load the texture
@@ -542,37 +548,36 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
     // with the cache.  If the camera changes, this element will cause
     // the cache to be blown for this node and the nurbs surface will be
     // regenerated.
-    SoViewingMatrixElement::get (action->getState());
-    SoModelMatrixElement::get (action->getState());
+    SoViewingMatrixElement::get(action->getState());
+    SoModelMatrixElement::get(action->getState());
 
     // Begin the surface.
     gluBeginSurface(nurbsObj);
 
     // Draw the texture surface
-    if(doTextures) {
+    if (doTextures) {
         // send down nurbs surface, then free memory
-        gluNurbsSurface(nurbsObj, (GLint)nsKnots, sKnots,
-                        (GLint)ntKnots, tKnots,
-                        (GLint)sOffset, (GLint)tOffset, dstCoords.data(),
-                        (GLint)(nsKnots - nsCoords),
-                        (GLint)(ntKnots - ntCoords),
-                        GL_MAP2_TEXTURE_COORD_2);
+        gluNurbsSurface(nurbsObj, (GLint)nsKnots, sKnots, (GLint)ntKnots,
+                        tKnots, (GLint)sOffset, (GLint)tOffset,
+                        dstCoords.data(), (GLint)(nsKnots - nsCoords),
+                        (GLint)(ntKnots - ntCoords), GL_MAP2_TEXTURE_COORD_2);
 
         // delete knots if not sharing them with the surface description
         // (in the case of software texture coordinates only)
-        if(sKnots != duKnots) {
-            delete [] sKnots;
-            delete [] tKnots;
+        if (sKnots != duKnots) {
+            delete[] sKnots;
+            delete[] tKnots;
         }
     }
 
     // Draw the geometric surface
-    gluNurbsSurface (nurbsObj, (GLint)(uKnotVector.getNum()), (GLfloat*)duKnots,
-                     (GLint)(vKnotVector.getNum()), (GLfloat*)dvKnots,
-                     (GLint)uOffset, (GLint)vOffset, (GLfloat*)dCoords,
-                     (GLint)(uKnotVector.getNum() - numUControlPoints.getValue()),
-                     (GLint)(vKnotVector.getNum() - numVControlPoints.getValue()),
-                     ce->is3D() ? GL_MAP2_VERTEX_3 : GL_MAP2_VERTEX_4);
+    gluNurbsSurface(
+        nurbsObj, (GLint)(uKnotVector.getNum()), (GLfloat *)duKnots,
+        (GLint)(vKnotVector.getNum()), (GLfloat *)dvKnots, (GLint)uOffset,
+        (GLint)vOffset, (GLfloat *)dCoords,
+        (GLint)(uKnotVector.getNum() - numUControlPoints.getValue()),
+        (GLint)(vKnotVector.getNum() - numVControlPoints.getValue()),
+        ce->is3D() ? GL_MAP2_VERTEX_3 : GL_MAP2_VERTEX_4);
 
     //
     // Get all of the trim curves and use them to trim the surface.
@@ -586,16 +591,15 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
     // continued on to the previous trim curve or if it should begin a
     // new trim curve.  Then, send the trim to the NURBS library.
     //
-    for (int i=0; i<numTrims; i++) {
-        int floatsPerVec;
-        float *trimCoords, *trimKnots;
+    for (int i = 0; i < numTrims; i++) {
+        int     floatsPerVec;
+        float * trimCoords, *trimKnots;
         int32_t numTrimCoords, numKnots;
 
         // Get the trim curve.
         SoProfile *profile = (SoProfile *)trimNodes[i];
-        profile->getTrimCurve (action->getState(), numTrimCoords,
-                               trimCoords, floatsPerVec,
-                               numKnots, trimKnots);
+        profile->getTrimCurve(action->getState(), numTrimCoords, trimCoords,
+                              floatsPerVec, numKnots, trimKnots);
 
         // Check for degenerate trim curves
         if (numTrimCoords == 0)
@@ -603,7 +607,7 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
 
         // Check the linkage.
         if ((profile->linkage.getValue() == SoProfileElement::START_FIRST) ||
-                (profile->linkage.getValue() == SoProfileElement::START_NEW)) {
+            (profile->linkage.getValue() == SoProfileElement::START_NEW)) {
             if (haveTrim)
                 gluEndTrim(nurbsObj);
             gluBeginTrim(nurbsObj);
@@ -615,13 +619,13 @@ SoNurbsSurface::drawNURBS(GLUnurbs *nurbsObj, SoAction *action, bool doTextures)
 
         if (numKnots == 0) {
             // Send down a Piecewise Linear Trim Curve
-            gluPwlCurve (nurbsObj, (GLint)numTrimCoords, trimCoords,
-                         (GLint)floatsPerVec, type);
+            gluPwlCurve(nurbsObj, (GLint)numTrimCoords, trimCoords,
+                        (GLint)floatsPerVec, type);
         } else {
             // Send down a NURBS Trim Curve
-            gluNurbsCurve (nurbsObj, (GLint)numKnots, trimKnots,
-                           (GLint)floatsPerVec, trimCoords,
-                           (GLint)(numKnots - numTrimCoords), type);
+            gluNurbsCurve(nurbsObj, (GLint)numKnots, trimKnots,
+                          (GLint)floatsPerVec, trimCoords,
+                          (GLint)(numKnots - numTrimCoords), type);
             delete[] trimKnots;
         }
         delete[] trimCoords;

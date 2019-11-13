@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -69,9 +69,9 @@ SoV1DrawStyle::SoV1DrawStyle()
 {
     SO_NODE_CONSTRUCTOR(SoV1DrawStyle);
 
-    SO_NODE_ADD_FIELD(style,		(FILLED));
-    SO_NODE_ADD_FIELD(lineWidth,	(1));
-    SO_NODE_ADD_FIELD(linePattern,	(0xffff));
+    SO_NODE_ADD_FIELD(style, (FILLED));
+    SO_NODE_ADD_FIELD(lineWidth, (1));
+    SO_NODE_ADD_FIELD(linePattern, (0xffff));
 
     // Set up static info for enumerated type field
     SO_NODE_DEFINE_ENUM_VALUE(Style, FILLED);
@@ -93,8 +93,7 @@ SoV1DrawStyle::SoV1DrawStyle()
 SoV1DrawStyle::~SoV1DrawStyle()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -116,14 +115,13 @@ SoV1DrawStyle::createNewNode()
     // the same length as a binary float).
 
     // Let the C++ compiler convert from short to float for us...
-    if (! lineWidth.isDefault())
-	result->lineWidth.setValue(lineWidth.getValue());
+    if (!lineWidth.isDefault())
+        result->lineWidth.setValue(lineWidth.getValue());
     if (lineWidth.isIgnored())
-	result->lineWidth.setIgnored(TRUE);
+        result->lineWidth.setIgnored(TRUE);
 
     SO_UPGRADER_COPY_FIELD(style, result);
     SO_UPGRADER_COPY_FIELD(linePattern, result);
 
     return result;
 }
-

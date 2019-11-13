@@ -73,8 +73,8 @@
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 
-SbBool SoOutlineFontCache::tesselationError = FALSE;
-std::vector<SoOutlineFontCache*> SoOutlineFontCache::fonts;
+SbBool                            SoOutlineFontCache::tesselationError = FALSE;
+std::vector<SoOutlineFontCache *> SoOutlineFontCache::fonts;
 
 // First, a more convenient structure for outlines:
 class SoFontOutline {
@@ -87,24 +87,25 @@ class SoFontOutline {
     ~SoFontOutline();
 
     // Query routines:
-    size_t	    getNumOutlines() const { return verts.size(); }
-    size_t	    getNumVerts(size_t i) const { return verts[i].size(); }
-    const SbVec2f & getVertex(size_t i, size_t j) const { return verts[i][j]; }
-    const SbVec2f & getCharAdvance() const { return charAdvance; }
-    const SbBox2f & getBoundingBox() const { return bbox;}
+    size_t         getNumOutlines() const { return verts.size(); }
+    size_t         getNumVerts(size_t i) const { return verts[i].size(); }
+    const SbVec2f &getVertex(size_t i, size_t j) const { return verts[i][j]; }
+    const SbVec2f &getCharAdvance() const { return charAdvance; }
+    const SbBox2f &getBoundingBox() const { return bbox; }
 
   private:
-    static int moveTo(FT_Vector *to, SoFontOutline* fo);
-    static int lineTo(FT_Vector *to, SoFontOutline* fo);
-    static int conicTo(FT_Vector *control, FT_Vector *to, SoFontOutline* fo);
-    static int cubicTo(FT_Vector *control1, FT_Vector *control2, FT_Vector *to, SoFontOutline* fo);
+    static int moveTo(FT_Vector *to, SoFontOutline *fo);
+    static int lineTo(FT_Vector *to, SoFontOutline *fo);
+    static int conicTo(FT_Vector *control, FT_Vector *to, SoFontOutline *fo);
+    static int cubicTo(FT_Vector *control1, FT_Vector *control2, FT_Vector *to,
+                       SoFontOutline *fo);
 
     // This basically mimics the FLoutline structure, with the
     // exception that the font size is part of the outline:
-    float scale;
-    std::vector< std::vector<SbVec2f> > verts;
-    SbVec2f charAdvance;
-    SbBox2f bbox;
+    float                              scale;
+    std::vector<std::vector<SbVec2f> > verts;
+    SbVec2f                            charAdvance;
+    SbBox2f                            bbox;
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -178,8 +179,8 @@ SoOutlineFontCache::isRenderValid(SoState *state) const
 //
 // Use: private
 
-SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
-    SoFontCache(state), context(-1)
+SoOutlineFontCache::SoOutlineFontCache(SoState *state)
+    : SoFontCache(state), context(-1)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -195,7 +196,8 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
     // Get profile info:
     const SoNodeList &profiles = SoProfileElement::get(state);
     addElement(state->getConstElement(SoProfileElement::getClassStackIndex()));
-    addElement(state->getConstElement(SoProfileCoordinateElement::getClassStackIndex()));
+    addElement(state->getConstElement(
+        SoProfileCoordinateElement::getClassStackIndex()));
     nProfileVerts = 0;
     if (profiles.getLength() > 0) {
         SoProfile *profileNode = (SoProfile *)profiles[0];
@@ -214,29 +216,30 @@ SoOutlineFontCache::SoOutlineFontCache(SoState *state) :
 
     if (nProfileVerts > 1) {
         cosCreaseAngle = cos(SoCreaseAngleElement::get(state));
-        addElement(state->getConstElement(SoCreaseAngleElement::getClassStackIndex()));
-        int nSegments = (int) nProfileVerts - 1;
+        addElement(
+            state->getConstElement(SoCreaseAngleElement::getClassStackIndex()));
+        int nSegments = (int)nProfileVerts - 1;
 
         // Figure out normals for profiles; there are twice as many
         // normals as segments.  The two normals for each segment endpoint
         // may be averaged with the normal for the next segment, depending
         // on whether or not the angle between the segments is greater
         // than the creaseAngle.
-        profileNorms.resize(nSegments*2);
-        figureSegmentNorms(profileNorms, (int) nProfileVerts, profileVerts,
+        profileNorms.resize(nSegments * 2);
+        figureSegmentNorms(profileNorms, (int)nProfileVerts, profileVerts,
                            cosCreaseAngle, FALSE);
         // Need to flip all the normals because of the way the profiles
         // are defined:
-        for (int i = 0; i < nSegments*2; i++) {
+        for (int i = 0; i < nSegments * 2; i++) {
             profileNorms[i] *= -1.0;
         }
 
         // Figure out S texture coordinates, which run along the profile:
         sTexCoords.resize(nProfileVerts);
-        figureSegmentTexCoords(sTexCoords, (int) nProfileVerts,
-                               profileVerts, FALSE);
+        figureSegmentTexCoords(sTexCoords, (int)nProfileVerts, profileVerts,
+                               FALSE);
         // And reverse them, so 0 is at the back of the profile:
-        float max = sTexCoords[nProfileVerts-1];
+        float max = sTexCoords[nProfileVerts - 1];
         for (int i = 0; i < nProfileVerts; i++) {
             sTexCoords[i] = max - sTexCoords[i];
         }
@@ -259,18 +262,18 @@ SoOutlineFontCache::~SoOutlineFontCache()
     if (face) {
         // Free up cached outlines
         {
-            std::map<wchar_t, SoFontOutline*>::iterator it;
-            for (it=outlines.begin(); it!=outlines.end(); ++it) {
+            std::map<wchar_t, SoFontOutline *>::iterator it;
+            for (it = outlines.begin(); it != outlines.end(); ++it) {
                 delete it->second;
             }
             outlines.clear();
         }
 
-        std::map<wchar_t, SoGLDisplayList*>::iterator it;
-        for (it=frontList.begin(); it!=frontList.end(); ++it) {
+        std::map<wchar_t, SoGLDisplayList *>::iterator it;
+        for (it = frontList.begin(); it != frontList.end(); ++it) {
             it->second->unref(NULL);
         }
-        for (it=sideList.begin(); it!=sideList.end(); ++it) {
+        for (it = sideList.begin(); it != sideList.end(); ++it) {
             it->second->unref(NULL);
         }
 
@@ -283,7 +286,8 @@ SoOutlineFontCache::~SoOutlineFontCache()
         SbBool otherUsing = FALSE;
         for (size_t i = 0; i < fonts.size(); ++i) {
             SoOutlineFontCache *t = fonts[i];
-            if (t != this && t->face == face) otherUsing = TRUE;
+            if (t != this && t->face == face)
+                otherUsing = TRUE;
         }
         if (!otherUsing) {
             FT_Done_Face(face);
@@ -363,7 +367,7 @@ SoOutlineFontCache::getCharOffset(const wchar_t c)
 ////////////////////////////////////////////////////////////////////////
 {
     if (!face)
-        return SbVec2f(0,0);
+        return SbVec2f(0, 0);
 
     return getOutline(c)->getCharAdvance();
 }
@@ -378,24 +382,24 @@ SoOutlineFontCache::getCharOffset(const wchar_t c)
 // Use: public, internal
 
 void
-SoOutlineFontCache::generateFrontChar(const wchar_t c,
-                                      GLUtesselator *tobj)
+SoOutlineFontCache::generateFrontChar(const wchar_t c, GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!face) return;
+    if (!face)
+        return;
 
     GLdouble v[3];
 
     tesselationError = FALSE;
-    gluTessBeginPolygon( tobj, NULL );
+    gluTessBeginPolygon(tobj, NULL);
 
     // Get outline for character
     SoFontOutline *outline = getOutline(c);
     for (size_t i = 0; i < outline->getNumOutlines(); i++) {
-        gluTessBeginContour( tobj );
+        gluTessBeginContour(tobj);
         for (size_t j = 0; j < outline->getNumVerts(i); j++) {
-            const SbVec2f &t = outline->getVertex(i,j);
+            const SbVec2f &t = outline->getVertex(i, j);
             v[0] = t[0];
             v[1] = t[1];
             v[2] = 0.0;
@@ -403,11 +407,11 @@ SoOutlineFontCache::generateFrontChar(const wchar_t c,
             // Note: The third argument MUST NOT BE a local variable,
             // since glu just stores the pointer and only calls us
             // back at the gluEndPolygon call.
-            gluTessVertex(tobj, v, (GLvoid*)&t);
+            gluTessVertex(tobj, v, (GLvoid *)&t);
         }
-        gluTessEndContour( tobj );
+        gluTessEndContour(tobj);
     }
-    gluTessEndPolygon( tobj );
+    gluTessEndPolygon(tobj);
 
     // If there was an error tesselating the character, just generate
     // a bounding box for the character:
@@ -419,16 +423,16 @@ SoOutlineFontCache::generateFrontChar(const wchar_t c,
             boxVerts[1].setValue(boxVerts[2][0], boxVerts[0][1]);
             boxVerts[3].setValue(boxVerts[0][0], boxVerts[2][1]);
 
-            gluTessBeginPolygon( tobj, NULL );
-            gluTessBeginContour( tobj );
+            gluTessBeginPolygon(tobj, NULL);
+            gluTessBeginContour(tobj);
             for (int i = 0; i < 4; i++) {
                 v[0] = boxVerts[i][0];
                 v[1] = boxVerts[i][1];
                 v[2] = 0.0;
                 gluTessVertex(tobj, v, &boxVerts[i]);
             }
-            gluTessEndContour( tobj );
-            gluTessEndPolygon( tobj );
+            gluTessEndContour(tobj);
+            gluTessEndPolygon(tobj);
         }
     }
 }
@@ -442,7 +446,8 @@ SoOutlineFontCache::generateFrontChar(const wchar_t c,
 // Use: internal
 
 SbBool
-SoOutlineFontCache::hasFrontDisplayList(SoState *state, const wchar_t c, GLUtesselator *tobj)
+SoOutlineFontCache::hasFrontDisplayList(SoState *state, const wchar_t c,
+                                        GLUtesselator *tobj)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -457,14 +462,15 @@ SoOutlineFontCache::hasFrontDisplayList(SoState *state, const wchar_t c, GLUtess
     context = SoGLCacheContextElement::get(state);
 
     // Build one:
-    SoGLDisplayList *displaylist = new SoGLDisplayList(state, SoGLDisplayList::DISPLAY_LIST);
+    SoGLDisplayList *displaylist =
+        new SoGLDisplayList(state, SoGLDisplayList::DISPLAY_LIST);
     frontList[c] = displaylist;
     displaylist->ref();
     displaylist->addDependency(state);
     glNewList(displaylist->getFirstIndex(), GL_COMPILE);
 
     generateFrontChar(c, tobj);
-    const SbVec2f & t = getOutline(c)->getCharAdvance();
+    const SbVec2f &t = getOutline(c)->getCharAdvance();
     glTranslatef(t[0], t[1], 0.0);
     displaylist->close(state);
 
@@ -479,7 +485,8 @@ SoOutlineFontCache::hasFrontDisplayList(SoState *state, const wchar_t c, GLUtess
 // Use: internal
 
 SbBool
-SoOutlineFontCache::hasSideDisplayList(SoState *state, const wchar_t c, SideCB callbackFunc)
+SoOutlineFontCache::hasSideDisplayList(SoState *state, const wchar_t c,
+                                       SideCB callbackFunc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -494,17 +501,18 @@ SoOutlineFontCache::hasSideDisplayList(SoState *state, const wchar_t c, SideCB c
     sidesHaveTexCoords = SoGLTextureEnabledElement::get(state);
 
     // Build one:
-    SoGLDisplayList *displaylist = new SoGLDisplayList(state, SoGLDisplayList::DISPLAY_LIST);
+    SoGLDisplayList *displaylist =
+        new SoGLDisplayList(state, SoGLDisplayList::DISPLAY_LIST);
     sideList[c] = displaylist;
     displaylist->ref();
     displaylist->addDependency(state);
     glNewList(displaylist->getFirstIndex(), GL_COMPILE);
 
-    glBegin(GL_QUADS);    // Render as independent quads:
+    glBegin(GL_QUADS); // Render as independent quads:
     generateSideChar(c, callbackFunc);
     glEnd();
 
-    const SbVec2f & t = getOutline(c)->getCharAdvance();
+    const SbVec2f &t = getOutline(c)->getCharAdvance();
     glTranslatef(t[0], t[1], 0.0);
     displaylist->close(state);
 
@@ -530,7 +538,8 @@ SoOutlineFontCache::renderFront(SoState *state, const SbString &string)
         gluTessCallback(tobj, (GLenum)GLU_TESS_BEGIN, (void (*)())glBegin);
         gluTessCallback(tobj, (GLenum)GLU_TESS_END, (void (*)())glEnd);
         gluTessCallback(tobj, (GLenum)GLU_TESS_VERTEX, (void (*)())glVertex2fv);
-        gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR, (void (*)())SoOutlineFontCache::errorCB);
+        gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR,
+                        (void (*)())SoOutlineFontCache::errorCB);
     }
 
     const std::wstring str = string.toStdWString();
@@ -539,7 +548,7 @@ SoOutlineFontCache::renderFront(SoState *state, const SbString &string)
             frontList[str[i]]->call(state);
         } else {
             generateFrontChar(str[i], tobj);
-            const SbVec2f & t = getOutline(str[i])->getCharAdvance();
+            const SbVec2f &t = getOutline(str[i])->getCharAdvance();
             glTranslatef(t[0], t[1], 0.0);
         }
     }
@@ -554,7 +563,8 @@ SoOutlineFontCache::renderFront(SoState *state, const SbString &string)
 // Use: internal
 
 void
-SoOutlineFontCache::renderSide(SoState *state, const SbString &string, SideCB callbackFunc)
+SoOutlineFontCache::renderSide(SoState *state, const SbString &string,
+                               SideCB callbackFunc)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -562,13 +572,12 @@ SoOutlineFontCache::renderSide(SoState *state, const SbString &string, SideCB ca
     for (size_t i = 0; i < str.size(); i++) {
         if (hasSideDisplayList(state, str[i], callbackFunc)) {
             sideList[str[i]]->call(state);
-        }
-        else {
+        } else {
             glBegin(GL_QUADS);
             generateSideChar(str[i], callbackFunc);
             glEnd();
 
-            const SbVec2f & t = getOutline(str[i])->getCharAdvance();
+            const SbVec2f &t = getOutline(str[i])->getCharAdvance();
             glTranslatef(t[0], t[1], 0.0);
         }
     }
@@ -585,10 +594,10 @@ SoFontOutline::SoFontOutline(wchar_t ch, FT_Face face, float size)
 ////////////////////////////////////////////////////////////////////////
 {
     FT_UInt index = FT_Get_Char_Index(face, ch);
-    if(FT_Load_Glyph(face, index, FT_LOAD_IGNORE_TRANSFORM | FT_LOAD_NO_SCALE)) {
+    if (FT_Load_Glyph(face, index,
+                      FT_LOAD_IGNORE_TRANSFORM | FT_LOAD_NO_SCALE)) {
 #ifdef DEBUG
-        SoDebugError::post("SoFontOutline",
-                           "FT_Load_Glyph failed");
+        SoDebugError::post("SoFontOutline", "FT_Load_Glyph failed");
 #endif
     }
 
@@ -596,10 +605,10 @@ SoFontOutline::SoFontOutline(wchar_t ch, FT_Face face, float size)
 
     if (index == 0) {
         verts.resize(1);
-        verts[0].push_back(SbVec2f(0.0f, 0.0f)*size);
-        verts[0].push_back(SbVec2f(1.0f, 0.0f)*size);
-        verts[0].push_back(SbVec2f(1.0f, 1.0f)*size);
-        verts[0].push_back(SbVec2f(0.0f, 1.0f)*size);
+        verts[0].push_back(SbVec2f(0.0f, 0.0f) * size);
+        verts[0].push_back(SbVec2f(1.0f, 0.0f) * size);
+        verts[0].push_back(SbVec2f(1.0f, 1.0f) * size);
+        verts[0].push_back(SbVec2f(0.0f, 1.0f) * size);
 
         charAdvance = SbVec2f(1.0f, 0.0f);
     } else {
@@ -608,25 +617,25 @@ SoFontOutline::SoFontOutline(wchar_t ch, FT_Face face, float size)
             (FT_Outline_LineTo_Func)lineTo,
             (FT_Outline_ConicTo_Func)conicTo,
             (FT_Outline_CubicTo_Func)cubicTo,
-            0,0
-        };
+            0,
+            0};
 
         FT_Outline *outline = &face->glyph->outline;
 
         verts.reserve(outline->n_contours);
 
-        charAdvance = SbVec2f(face->glyph->advance.x,
-                              face->glyph->advance.y)*scale;
+        charAdvance =
+            SbVec2f(face->glyph->advance.x, face->glyph->advance.y) * scale;
 
-        FT_Outline_Decompose (outline, &ft2_outline_funcs, this);
+        FT_Outline_Decompose(outline, &ft2_outline_funcs, this);
 
         // reverse the contours if necessary
         if (!(outline->flags & FT_OUTLINE_REVERSE_FILL)) {
-            for (size_t ctr=0; ctr<verts.size(); ctr++) {
+            for (size_t ctr = 0; ctr < verts.size(); ctr++) {
                 std::reverse(verts[ctr].begin(), verts[ctr].end());
             }
         }
-        for (size_t ctr=0; ctr<verts.size(); ctr++) {
+        for (size_t ctr = 0; ctr < verts.size(); ctr++) {
             if (verts[ctr].front().equals(verts[ctr].back(), 10E-6)) {
                 verts[ctr].pop_back();
             }
@@ -634,8 +643,8 @@ SoFontOutline::SoFontOutline(wchar_t ch, FT_Face face, float size)
     }
 
     bbox.makeEmpty();
-    for (size_t ctr=0; ctr<verts.size(); ctr++) {
-        for (size_t v=0; v<verts[ctr].size(); v++) {
+    for (size_t ctr = 0; ctr < verts.size(); ctr++) {
+        for (size_t v = 0; v < verts[ctr].size(); v++) {
             bbox.extendBy(verts[ctr][v]);
         }
     }
@@ -651,18 +660,15 @@ SoFontOutline::SoFontOutline(wchar_t ch, FT_Face face, float size)
 SoFontOutline::~SoFontOutline()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-
-}
+{}
 
 /*
  * This function injects a new contour in the render pool.
  */
 int
-SoFontOutline::moveTo (FT_Vector *to, SoFontOutline* fo)
-{
+SoFontOutline::moveTo(FT_Vector *to, SoFontOutline *fo) {
     fo->verts.push_back(std::vector<SbVec2f>());
-    fo->verts.back().push_back(SbVec2f(to->x, to->y)*fo->scale);
+    fo->verts.back().push_back(SbVec2f(to->x, to->y) * fo->scale);
 
     return 0;
 }
@@ -672,11 +678,10 @@ SoFontOutline::moveTo (FT_Vector *to, SoFontOutline* fo)
  * adjusts the faces list accordingly.
  */
 int
-SoFontOutline::lineTo (FT_Vector *to, SoFontOutline* fo)
-{
-    std::vector<SbVec2f> & ctr = fo->verts.back();
+SoFontOutline::lineTo(FT_Vector *to, SoFontOutline *fo) {
+    std::vector<SbVec2f> &ctr = fo->verts.back();
 
-    ctr.push_back(SbVec2f(to->x, to->y)*fo->scale);
+    ctr.push_back(SbVec2f(to->x, to->y) * fo->scale);
 
     return 0;
 }
@@ -686,22 +691,21 @@ SoFontOutline::lineTo (FT_Vector *to, SoFontOutline* fo)
 // accordingly.
 //
 int
-SoFontOutline::conicTo (FT_Vector *control, FT_Vector *to, SoFontOutline* fo)
-{
-    std::vector<SbVec2f> & ctr = fo->verts.back();
+SoFontOutline::conicTo(FT_Vector *control, FT_Vector *to, SoFontOutline *fo) {
+    std::vector<SbVec2f> &ctr = fo->verts.back();
 
     SbVec2f p1 = ctr.back();
-    SbVec2f p2 = SbVec2f(control->x, control->y)*fo->scale;
-    SbVec2f p3 = SbVec2f(to->x, to->y)*fo->scale;
+    SbVec2f p2 = SbVec2f(control->x, control->y) * fo->scale;
+    SbVec2f p3 = SbVec2f(to->x, to->y) * fo->scale;
 
     int num_steps = 15;
-    for(int i=1; i<num_steps; i++) {
-        float mu = i/(float)num_steps;
+    for (int i = 1; i < num_steps; i++) {
+        float mu = i / (float)num_steps;
         float mu2 = mu * mu;
         float mum1 = 1 - mu;
         float mum12 = mum1 * mum1;
 
-        ctr.push_back(mum12 * p1 + 2*mu*mum1 * p2 + mu2 * p3);
+        ctr.push_back(mum12 * p1 + 2 * mu * mum1 * p2 + mu2 * p3);
     }
     return 0;
 }
@@ -711,25 +715,23 @@ SoFontOutline::conicTo (FT_Vector *control, FT_Vector *to, SoFontOutline* fo)
  * accordingly.
  */
 int
-SoFontOutline::cubicTo (FT_Vector *control1,
-                         FT_Vector *control2,
-                         FT_Vector *to,
-                         SoFontOutline* fo)
-{
-    std::vector<SbVec2f> & ctr = fo->verts.back();
+SoFontOutline::cubicTo(FT_Vector *control1, FT_Vector *control2, FT_Vector *to,
+                       SoFontOutline *fo) {
+    std::vector<SbVec2f> &ctr = fo->verts.back();
 
     SbVec2f p1 = ctr.back();
-    SbVec2f p2 = SbVec2f(control1->x, control1->y)*fo->scale;
-    SbVec2f p3 = SbVec2f(control2->x, control2->y)*fo->scale;
-    SbVec2f p4 = SbVec2f(to->x, to->y)*fo->scale;
+    SbVec2f p2 = SbVec2f(control1->x, control1->y) * fo->scale;
+    SbVec2f p3 = SbVec2f(control2->x, control2->y) * fo->scale;
+    SbVec2f p4 = SbVec2f(to->x, to->y) * fo->scale;
 
     int num_steps = 15;
-    for (int i=1; i<num_steps; i++) {
-        float mu = i/(float)num_steps;
+    for (int i = 1; i < num_steps; i++) {
+        float mu = i / (float)num_steps;
         float mum1 = 1 - mu;
         float mum13 = mum1 * mum1 * mum1;
         float mu3 = mu * mu * mu;
-        ctr.push_back(mum13*p1 + 3*mu*mum1*mum1*p2 + 3*mu*mu*mum1*p3 + mu3*p4);
+        ctr.push_back(mum13 * p1 + 3 * mu * mum1 * mum1 * p2 +
+                      3 * mu * mu * mum1 * p3 + mu3 * p4);
     }
 
     return 0;
@@ -750,7 +752,7 @@ SoOutlineFontCache::getProfileBounds(float &firstZ, float &lastZ)
 {
     if (hasProfile()) {
         firstZ = -profileVerts[0][0];
-        lastZ = -profileVerts[nProfileVerts-1][0];
+        lastZ = -profileVerts[nProfileVerts - 1][0];
     } else {
         firstZ = lastZ = 0;
     }
@@ -787,13 +789,14 @@ SoOutlineFontCache::generateSideChar(const wchar_t c, SideCB callbackFunc)
         }
 
         // First, figure out a set of normals for the outline:
-        std::vector<SbVec2f> oNorms(nOutline*2);
-        figureSegmentNorms(oNorms, nOutline, oVerts.data(), cosCreaseAngle, TRUE);
+        std::vector<SbVec2f> oNorms(nOutline * 2);
+        figureSegmentNorms(oNorms, nOutline, oVerts.data(), cosCreaseAngle,
+                           TRUE);
 
         // And appropriate texture coordinates:
         // Figure out T texture coordinates, which run along the
         // outline:
-        std::vector<float> tTexCoords(nOutline+1);
+        std::vector<float> tTexCoords(nOutline + 1);
         figureSegmentTexCoords(tTexCoords, nOutline, oVerts.data(), TRUE);
 
         // Now, generate a set of triangles for each segment in the
@@ -807,14 +810,14 @@ SoOutlineFontCache::generateSideChar(const wchar_t c, SideCB callbackFunc)
         // rotated the appropriate amount.
 
         std::vector<SbVec3f> bevel1(nProfileVerts);
-        std::vector<SbVec3f> bevelN1((nProfileVerts-1)*2);
+        std::vector<SbVec3f> bevelN1((nProfileVerts - 1) * 2);
         std::vector<SbVec3f> bevel2(nProfileVerts);
-        std::vector<SbVec3f> bevelN2((nProfileVerts-1)*2);
+        std::vector<SbVec3f> bevelN2((nProfileVerts - 1) * 2);
 
         // fill out first bevel:
-        fillBevel(bevel1.data(), (int) nProfileVerts, profileVerts,
-                  outline->getVertex(i,0),
-                  oNorms[(nOutline-1)*2+1], oNorms[0*2]);
+        fillBevel(bevel1.data(), (int)nProfileVerts, profileVerts,
+                  outline->getVertex(i, 0), oNorms[(nOutline - 1) * 2 + 1],
+                  oNorms[0 * 2]);
 
         SbVec3f *s1 = bevel1.data();
         SbVec3f *s2 = bevel2.data();
@@ -823,22 +826,24 @@ SoOutlineFontCache::generateSideChar(const wchar_t c, SideCB callbackFunc)
             // New normals are calculated for both ends of this
             // segment, since the normals may or may not be shared
             // with the previous segment.
-            fillBevelN(bevelN1.data(), profileNorms, oNorms[j*2]);
+            fillBevelN(bevelN1.data(), profileNorms, oNorms[j * 2]);
 
-            int j2 = (j+1)%nOutline;
+            int j2 = (j + 1) % nOutline;
             // fill out second bevel:
-            fillBevel(s2, (int) nProfileVerts, profileVerts,
-                      outline->getVertex(i,j2),
-                      oNorms[j*2+1], oNorms[j2*2]);
-            fillBevelN(bevelN2.data(), profileNorms, oNorms[j*2+1]);
+            fillBevel(s2, (int)nProfileVerts, profileVerts,
+                      outline->getVertex(i, j2), oNorms[j * 2 + 1],
+                      oNorms[j2 * 2]);
+            fillBevelN(bevelN2.data(), profileNorms, oNorms[j * 2 + 1]);
 
             // And generate triangles between the two bevels:
-            (*callbackFunc)((int) nProfileVerts, s1, bevelN1.data(), s2, bevelN2.data(),
-                            &sTexCoords[0], &tTexCoords[j]);
+            (*callbackFunc)((int)nProfileVerts, s1, bevelN1.data(), s2,
+                            bevelN2.data(), &sTexCoords[0], &tTexCoords[j]);
 
             // Swap bevel1/2 (avoids some recomputation)
             SbVec3f *t;
-            t = s1; s1 = s2; s2 = t;
+            t = s1;
+            s1 = s2;
+            s2 = t;
         }
     }
 }
@@ -856,13 +861,13 @@ SoOutlineFontCache::generateSideChar(const wchar_t c, SideCB callbackFunc)
 // Use: private
 
 void
-SoOutlineFontCache::figureSegmentNorms(std::vector<SbVec2f> & norms, int nPoints,
-                            const SbVec2f *points,  float cosCreaseAngle,
-                            SbBool isClosed)
+SoOutlineFontCache::figureSegmentNorms(std::vector<SbVec2f> &norms, int nPoints,
+                                       const SbVec2f *points,
+                                       float cosCreaseAngle, SbBool isClosed)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const int nSegments = isClosed ? nPoints : nPoints-1;
+    const int nSegments = isClosed ? nPoints : nPoints - 1;
 
     // First, we'll just make all the normals perpendicular to their
     // segments:
@@ -873,31 +878,31 @@ SoOutlineFontCache::figureSegmentNorms(std::vector<SbVec2f> & norms, int nPoints
         // it...) (note: if a profile isn't increasing in X, the
         // character will be inside-out, with the front face drawn
         // behind the back face, etc).
-        SbVec2f v = points[(i+1)%nPoints] - points[i];
-        n[0] =  v[1];
+        SbVec2f v = points[(i + 1) % nPoints] - points[i];
+        n[0] = v[1];
         n[1] = -v[0];
         n.normalize();
 
-        norms[i*2+0] = n;
-        norms[i*2+1] = n;
+        norms[i * 2 + 0] = n;
+        norms[i * 2 + 1] = n;
     }
 
     // Now, figure out if the angle between any two segments is small
     // enough to average two of their normals.
-    for (int i = 0; i < (isClosed ? nSegments : nSegments-1); i++) {
-        SbVec2f seg1 = points[(i+1)%nPoints] - points[i];
+    for (int i = 0; i < (isClosed ? nSegments : nSegments - 1); i++) {
+        SbVec2f seg1 = points[(i + 1) % nPoints] - points[i];
         seg1.normalize();
-        SbVec2f seg2 = points[(i+2)%nPoints] - points[(i+1)%nPoints];
+        SbVec2f seg2 = points[(i + 2) % nPoints] - points[(i + 1) % nPoints];
         seg2.normalize();
 
         float dp = seg2.dot(seg1);
         if (dp > cosCreaseAngle) {
             // Average the second normal for this segment, and the
             // first normal for the next segment:
-            SbVec2f average = norms[i*2+1] + norms[((i+1)%nPoints)*2];
+            SbVec2f average = norms[i * 2 + 1] + norms[((i + 1) % nPoints) * 2];
             average.normalize();
-            norms[i*2+1] = average;
-            norms[((i+1)%nPoints)*2] = average;
+            norms[i * 2 + 1] = average;
+            norms[((i + 1) % nPoints) * 2] = average;
         }
     }
 }
@@ -913,8 +918,9 @@ SoOutlineFontCache::figureSegmentNorms(std::vector<SbVec2f> & norms, int nPoints
 // Use: private
 
 void
-SoOutlineFontCache::figureSegmentTexCoords(std::vector<float> & texCoords, int nPoints,
-                            const SbVec2f *points, SbBool isClosed)
+SoOutlineFontCache::figureSegmentTexCoords(std::vector<float> &texCoords,
+                                           int nPoints, const SbVec2f *points,
+                                           SbBool isClosed)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -924,14 +930,14 @@ SoOutlineFontCache::figureSegmentTexCoords(std::vector<float> & texCoords, int n
         for (int i = nPoints; i >= 0; i--) {
             texCoords[i] = total / getHeight();
             if (i > 0) {
-                total += (points[i%nPoints] - points[i-1]).length();
+                total += (points[i % nPoints] - points[i - 1]).length();
             }
         }
     } else {
         for (int i = 0; i < nPoints; i++) {
             texCoords[i] = total / getHeight();
-            if (i+1 < nPoints) {
-                total += (points[i+1] - points[i]).length();
+            if (i + 1 < nPoints) {
+                total += (points[i + 1] - points[i]).length();
             }
         }
     }
@@ -952,14 +958,13 @@ SoOutlineFontCache::figureSegmentTexCoords(std::vector<float> & texCoords, int n
 
 void
 SoOutlineFontCache::fillBevel(SbVec3f *result, int nPoints,
-      const SbVec2f *points,
-      const SbVec2f &translation,
-      const SbVec2f &n1, const SbVec2f &n2)
+                              const SbVec2f *points, const SbVec2f &translation,
+                              const SbVec2f &n1, const SbVec2f &n2)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // First, figure out a rotation for this bevel:
-    SbVec2f n = n1+n2;
+    SbVec2f n = n1 + n2;
     n.normalize();
 
     // Now, for each point:
@@ -986,9 +991,9 @@ SoOutlineFontCache::fillBevel(SbVec3f *result, int nPoints,
 //    outline's segments.
 
 void
-SoOutlineFontCache::fillBevelN(SbVec3f *result,
-          const std::vector<SbVec2f> & norms,
-      const SbVec2f &n)
+SoOutlineFontCache::fillBevelN(SbVec3f *                   result,
+                               const std::vector<SbVec2f> &norms,
+                               const SbVec2f &             n)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1017,15 +1022,13 @@ SoOutlineFontCache::fillBevelN(SbVec3f *result,
 
 #ifdef DEBUG
 void
-SoOutlineFontCache::errorCB(GLenum whichErr)
-{
+SoOutlineFontCache::errorCB(GLenum whichErr) {
     SoDebugError::post("SoText3::errorCB", "%s", gluErrorString(whichErr));
     tesselationError = TRUE;
 }
 #else  /* DEBUG */
 void
-SoOutlineFontCache::errorCB(GLenum)
-{
+SoOutlineFontCache::errorCB(GLenum) {
     tesselationError = TRUE;
 }
 #endif /* DEBUG */

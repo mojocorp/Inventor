@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -111,11 +111,11 @@ SoRotor::SoRotor()
     // set by the rotation sensor callback.
     calc->expression.setValue("oa = fmod(a*b*2*M_PI + c, 2*M_PI)");
 
-    // initial value 
+    // initial value
     compose->angle.connectFrom(&calc->oa);
 
     SbVec3f axis;
-    float angle;
+    float   angle;
     rotation.getValue(axis, angle);
     compose->axis.setValue(axis);
     rotation.connectFrom(&compose->rotation);
@@ -162,15 +162,14 @@ SoRotor::write(SoWriteAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool 		save = rotation.isConnectionEnabled();
-    SoEngineOutput	*rotationSource;
+    SbBool          save = rotation.isConnectionEnabled();
+    SoEngineOutput *rotationSource;
 
     // if the connection is to the internal engine, disable it
-    if (rotation.isConnected() &&
-	rotation.getConnectedEngine(rotationSource) &&
-	rotationSource == internalConnection) {
+    if (rotation.isConnected() && rotation.getConnectedEngine(rotationSource) &&
+        rotationSource == internalConnection) {
 
-	rotation.enableConnection(FALSE);
+        rotation.enableConnection(FALSE);
     }
 
     SoRotation::write(action);
@@ -195,12 +194,11 @@ SoRotor::notify(SoNotList *list)
     SoNotRec *rec = list->getFirstRec();
 
     // only interested in a field-to-container notification
-    if (rec->getType() == SoNotRec::CONTAINER &&
-	rec->getBase() == this &&
-	list->getLastField() == &rotation) {
+    if (rec->getType() == SoNotRec::CONTAINER && rec->getBase() == this &&
+        list->getLastField() == &rotation) {
 
-	if (rotationSensor)
-	    rotationSensor->schedule();
+        if (rotationSensor)
+            rotationSensor->schedule();
     }
 
     SoRotation::notify(list);
@@ -218,26 +216,26 @@ SoRotor::rotationSensorCB(void *data, SoSensor *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoRotor *rotor = (SoRotor *) data;
-    SbVec3f	axis;
-    float	angle;
+    SoRotor *rotor = (SoRotor *)data;
+    SbVec3f  axis;
+    float    angle;
     rotor->rotation.getValue(axis, angle);
 
     if (angle != 0.0) {
 
-	float a, b;
-	a = rotor->calc->a[0];
-	b = rotor->calc->b[0];
-	// invert the expression: angle = a*b*2*pi + c    (mod 2 pi)
-	rotor->calc->c.setValue(angle - (a*b*2*M_PI));
+        float a, b;
+        a = rotor->calc->a[0];
+        b = rotor->calc->b[0];
+        // invert the expression: angle = a*b*2*pi + c    (mod 2 pi)
+        rotor->calc->c.setValue(angle - (a * b * 2 * M_PI));
 
-	rotor->compose->axis.setValue(axis);
+        rotor->compose->axis.setValue(axis);
     }
 #ifdef DEBUG
     else {
-	SoDebugError::post("SoRotor::rotation.setValue", 
-			   "You should specify a non-zero angle"
-			   " for initial rotation.");
+        SoDebugError::post("SoRotor::rotation.setValue",
+                           "You should specify a non-zero angle"
+                           " for initial rotation.");
     }
 #endif
 }

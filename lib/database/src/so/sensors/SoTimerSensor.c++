@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,7 +68,7 @@ SoTimerSensor::SoTimerSensor()
 ////////////////////////////////////////////////////////////////////////
 {
     baseTimeSet = FALSE;
-    interval    = SbTime(1.0 / 30.0);
+    interval = SbTime(1.0 / 30.0);
     triggering = FALSE;
 }
 
@@ -79,13 +79,13 @@ SoTimerSensor::SoTimerSensor()
 //
 // Use: public
 
-SoTimerSensor::SoTimerSensor(SoSensorCB *func, void *data) :
-	SoTimerQueueSensor(func, data)
+SoTimerSensor::SoTimerSensor(SoSensorCB *func, void *data)
+    : SoTimerQueueSensor(func, data)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     baseTimeSet = FALSE;
-    interval    = SbTime(1.0 / 30.0);
+    interval = SbTime(1.0 / 30.0);
     triggering = FALSE;
 }
 
@@ -148,11 +148,11 @@ SoTimerSensor::schedule()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbTime	now = SbTime::getTimeOfDay();
+    SbTime now = SbTime::getTimeOfDay();
 
     // Set base time to current time if it was not set explicitly
-    if (! baseTimeSet)
-	baseTime = now;
+    if (!baseTimeSet)
+        baseTime = now;
 
     // If we are in the middle of the triggering this sensor, don't
     // bother setting the trigger time or adding it to the timer
@@ -162,19 +162,19 @@ SoTimerSensor::schedule()
     // called inside the trigger() callback; in this case, we should
     // add this sensor back onto the to-be-rescheduled queue.
     if (triggering) {
-	if (!scheduled) {
-	    SoDB::getSensorManager()->rescheduleTimer(this);
-	}
-	// In any case, wait for the sensor to be scheduled after it
-	// has been triggered.
-	return;
+        if (!scheduled) {
+            SoDB::getSensorManager()->rescheduleTimer(this);
+        }
+        // In any case, wait for the sensor to be scheduled after it
+        // has been triggered.
+        return;
     }
 
     // Set the timer to trigger at the base time. If the base time is
     // before the current time, add sufficient whole intervals to get
     // it past the current time.
-    setTriggerTime(baseTime +
-           interval * std::ceil((now - baseTime) / interval + 0.0000001));
+    setTriggerTime(baseTime + interval * std::ceil((now - baseTime) / interval +
+                                                   0.0000001));
 
     // Do standard scheduling stuff
     SoTimerQueueSensor::schedule();
@@ -195,11 +195,11 @@ SoTimerSensor::unschedule()
 ////////////////////////////////////////////////////////////////////////
 {
     if (triggering) {
-	SoDB::getSensorManager()->removeRescheduledTimer(this);
-	scheduled = FALSE;
-	triggering = FALSE;
-    }
-    else SoTimerQueueSensor::unschedule();
+        SoDB::getSensorManager()->removeRescheduledTimer(this);
+        scheduled = FALSE;
+        triggering = FALSE;
+    } else
+        SoTimerQueueSensor::unschedule();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -221,22 +221,21 @@ SoTimerSensor::reschedule(const SbTime &now)
     triggering = FALSE;
 
     // Set base time to current time if it was not set explicitly
-    if (! baseTimeSet) {
-	baseTime = now;
+    if (!baseTimeSet) {
+        baseTime = now;
 
-	setTriggerTime(now+interval+0.0000001);
-    }
-    else {
-	// Reschedule to trigger again after the next interval. If we
-	// missed some triggers because it took too long to trigger the
-	// sensor, they are lost forever. The next trigger will take place
-	// at the end of the next interval from now. Otherwise, this
-	// sensor would just saturate the queue.
-	SbTime triggerTime = baseTime 
-        + interval * std::ceil((now - baseTime) / interval
-			  + 0.0000001);
+        setTriggerTime(now + interval + 0.0000001);
+    } else {
+        // Reschedule to trigger again after the next interval. If we
+        // missed some triggers because it took too long to trigger the
+        // sensor, they are lost forever. The next trigger will take place
+        // at the end of the next interval from now. Otherwise, this
+        // sensor would just saturate the queue.
+        SbTime triggerTime =
+            baseTime +
+            interval * std::ceil((now - baseTime) / interval + 0.0000001);
 
-	setTriggerTime(triggerTime);
+        setTriggerTime(triggerTime);
     }
 
     SoTimerQueueSensor::schedule();

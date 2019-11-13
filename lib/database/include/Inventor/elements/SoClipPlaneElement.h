@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_CLIP_PLANE_ELEMENT
-#define  _SO_CLIP_PLANE_ELEMENT
+#ifndef _SO_CLIP_PLANE_ELEMENT
+#define _SO_CLIP_PLANE_ELEMENT
 
 #include <Inventor/SbPlane.h>
 #include <Inventor/elements/SoAccumulatedElement.h>
@@ -77,50 +77,50 @@ struct So_ClipPlane;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoClipPlaneElement : public SoAccumulatedElement {
+SoEXTENDER
+class SoClipPlaneElement : public SoAccumulatedElement {
 
     SO_ELEMENT_HEADER(SoClipPlaneElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Adds a clip plane to the current set in the state
-    static void		add(SoState *state, SoNode *node,
-			    const SbPlane &plane);
+    static void add(SoState *state, SoNode *node, const SbPlane &plane);
 
     // Overrides push() method to copy values from next instance in the stack
-    virtual void	push(SoState *state);
+    virtual void push(SoState *state);
 
     // Overrides pop() method to free up planes that were added
-    virtual void	pop(SoState *state, const SoElement *prevTopElement);
+    virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     // Returns the top (current) instance of the element in the state
-    static const SoClipPlaneElement * getInstance(SoState *state);
+    static const SoClipPlaneElement *getInstance(SoState *state);
 
     // Returns the number of planes in an instance
-    int			getNum() const;
+    int getNum() const;
 
     // Returns the indexed plane an element as an SbPlane. The plane
     // can be returned in object or world space.
-    const SbPlane &	get(int index, SbBool inWorldSpace = TRUE) const;
+    const SbPlane &get(int index, SbBool inWorldSpace = TRUE) const;
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoClipPlaneElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
-    std::vector<So_ClipPlane*>  planes;  // List of plane structures
-    int			startIndex;	// Index of 1st plane created
-					// in this instance
+    std::vector<So_ClipPlane *> planes;     // List of plane structures
+    int                         startIndex; // Index of 1st plane created
+                                            // in this instance
 
     // Adds the clipping plane to an instance. Takes the new plane and
     // the current model matrix
-    virtual void	addToElt(const SbPlane &plane,
-				 const SbMatrix &modelMatrix);
+    virtual void addToElt(const SbPlane &plane, const SbMatrix &modelMatrix);
 
     virtual ~SoClipPlaneElement();
 };

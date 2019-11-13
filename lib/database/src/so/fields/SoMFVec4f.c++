@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -88,20 +88,20 @@ SoMFVec4f::initClass()
 // Use: public
 
 void
-SoMFVec4f::setValues(int start,			// Starting index
-		     int num,			// Number of values to set
-		     const float xyzw[][4])	// Array of vector values
+SoMFVec4f::setValues(int         start,     // Starting index
+                     int         num,       // Number of values to set
+                     const float xyzw[][4]) // Array of vector values
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	newNum = start + num;
-    int	i;
+    int newNum = start + num;
+    int i;
 
     if (newNum > getNum())
-	makeRoom(newNum);
+        makeRoom(newNum);
 
     for (i = 0; i < num; i++)
-	values[start + i].setValue(xyzw[i]);
+        values[start + i].setValue(xyzw[i]);
 
     valueChanged();
 }
@@ -178,10 +178,8 @@ SoMFVec4f::read1Value(SoInput *in, int index)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (in->read(values[index][0]) &&
-	    in->read(values[index][1]) &&
-	    in->read(values[index][2]) &&
-	    in->read(values[index][3]));
+    return (in->read(values[index][0]) && in->read(values[index][1]) &&
+            in->read(values[index][2]) && in->read(values[index][3]));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -198,18 +196,18 @@ SoMFVec4f::write1Value(SoOutput *out, int index) const
 {
     out->write(values[index][0]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(values[index][1]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(values[index][2]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(values[index][3]);
 }
@@ -227,9 +225,8 @@ SoMFVec4f::writeBinaryValues(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    out->writeBinaryArray((float *) values, 4 * num);
+    out->writeBinaryArray((float *)values, 4 * num);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -243,5 +240,5 @@ SoMFVec4f::readBinaryValues(SoInput *in, int numToRead)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (in->readBinaryArray((float *) values, 4 * numToRead));
+    return (in->readBinaryArray((float *)values, 4 * numToRead));
 }

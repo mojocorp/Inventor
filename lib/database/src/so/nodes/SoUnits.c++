@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,21 +63,9 @@
 SO_NODE_SOURCE(SoUnits);
 
 const float SoUnits::factor[14] = {
-    1,
-    1e2,
-    1e3,
-    1e6,
-    1e6,
-    1e9,
-    1e10,
-    1e-3,
-    3.280840,
-    3.937008e01,
-    2.834646e03,
-    1.093613,
-    6.213712e-04,
-    5.399568e-04
-};
+    1,           1e2,      1e3,          1e6,         1e6,
+    1e9,         1e10,     1e-3,         3.280840,    3.937008e01,
+    2.834646e03, 1.093613, 6.213712e-04, 5.399568e-04};
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -93,11 +81,11 @@ SoUnits::initClass()
 {
     SO__NODE_INIT_CLASS(SoUnits, "Units", SoTransformation);
 
-    SO_ENABLE(SoCallbackAction,		SoUnitsElement);
-    SO_ENABLE(SoGLRenderAction,		SoUnitsElement);
-    SO_ENABLE(SoGetBoundingBoxAction,	SoUnitsElement);
-    SO_ENABLE(SoGetMatrixAction,	SoUnitsElement);
-    SO_ENABLE(SoPickAction,		SoUnitsElement);
+    SO_ENABLE(SoCallbackAction, SoUnitsElement);
+    SO_ENABLE(SoGLRenderAction, SoUnitsElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoUnitsElement);
+    SO_ENABLE(SoGetMatrixAction, SoUnitsElement);
+    SO_ENABLE(SoPickAction, SoUnitsElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -144,8 +132,7 @@ SoUnits::SoUnits()
 SoUnits::~SoUnits()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -160,18 +147,17 @@ SoUnits::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoState			*state = action->getState();
+    SoState *state = action->getState();
 
-    if (! units.isIgnored()) {
-	float 	oldFactor = SoUnits::factor[(int) SoUnitsElement::get(state)];
-	float	newFactor = SoUnits::factor[(int) units.getValue()];
-	float	ratio	  = oldFactor / newFactor;
+    if (!units.isIgnored()) {
+        float oldFactor = SoUnits::factor[(int)SoUnitsElement::get(state)];
+        float newFactor = SoUnits::factor[(int)units.getValue()];
+        float ratio = oldFactor / newFactor;
 
-	SbVec3f	sc(ratio, ratio, ratio);
+        SbVec3f sc(ratio, ratio, ratio);
 
-	SoModelMatrixElement::scaleBy(state, this, sc);
-	SoUnitsElement::set(state,
-			    (SoUnitsElement::Units) units.getValue());
+        SoModelMatrixElement::scaleBy(state, this, sc);
+        SoUnitsElement::set(state, (SoUnitsElement::Units)units.getValue());
     }
 }
 
@@ -234,24 +220,23 @@ SoUnits::getMatrix(SoGetMatrixAction *action)
 {
     SoState *state = action->getState();
 
-    if (! units.isIgnored()) {
-	float 	oldFactor = SoUnits::factor[(int) SoUnitsElement::get(state)];
-	float	newFactor = SoUnits::factor[(int) units.getValue()];
-	float	ratio	  = oldFactor / newFactor;
+    if (!units.isIgnored()) {
+        float oldFactor = SoUnits::factor[(int)SoUnitsElement::get(state)];
+        float newFactor = SoUnits::factor[(int)units.getValue()];
+        float ratio = oldFactor / newFactor;
 
-	SbVec3f		sc(ratio, ratio, ratio);
-	SbVec3f		si(1.0/ratio, 1.0/ratio, 1.0/ratio);
-	SbMatrix	&ctm = action->getMatrix();
-	SbMatrix	&inv = action->getInverse();
-	SbMatrix	m;
+        SbVec3f   sc(ratio, ratio, ratio);
+        SbVec3f   si(1.0 / ratio, 1.0 / ratio, 1.0 / ratio);
+        SbMatrix &ctm = action->getMatrix();
+        SbMatrix &inv = action->getInverse();
+        SbMatrix  m;
 
-	m.setScale(sc);
-	ctm.multLeft(m);
-	m.setScale(si);
-	inv.multRight(m);
+        m.setScale(sc);
+        ctm.multLeft(m);
+        m.setScale(si);
+        inv.multRight(m);
 
-	SoUnitsElement::set(state,
-			    (SoUnitsElement::Units) units.getValue());
+        SoUnitsElement::set(state, (SoUnitsElement::Units)units.getValue());
     }
 }
 

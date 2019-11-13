@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -85,8 +85,8 @@ SoWriteAction::SoWriteAction()
     SO_ACTION_CONSTRUCTOR(SoWriteAction);
     output = new SoOutput;
     createdOutput = TRUE;
-    continuing    = FALSE;
-    doOneStage    = FALSE;
+    continuing = FALSE;
+    doOneStage = FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -103,8 +103,8 @@ SoWriteAction::SoWriteAction(SoOutput *out)
     traversalMethods = methods;
     output = out;
     createdOutput = FALSE;
-    continuing    = FALSE;
-    doOneStage    = FALSE;
+    continuing = FALSE;
+    doOneStage = FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -120,7 +120,7 @@ SoWriteAction::~SoWriteAction()
 {
     // Get rid of the SoOutput if we created it in the constructor
     if (createdOutput)
-	delete output;
+        delete output;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -138,7 +138,7 @@ SoWriteAction::continueToApply(SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool	saveContinuing = continuing;
+    SbBool saveContinuing = continuing;
 
     continuing = TRUE;
     apply(node);
@@ -159,7 +159,7 @@ SoWriteAction::continueToApply(SoPath *path)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool	saveContinuing = continuing;
+    SbBool saveContinuing = continuing;
 
     continuing = TRUE;
     apply(path);
@@ -180,65 +180,65 @@ SoWriteAction::beginTraversal(SoNode *node)
 {
     // If we are beginning a traversal, increment the current write
     // counter in SoBase
-    if (! continuing)
-	SoBase::incrementCurrentWriteCounter();
+    if (!continuing)
+        SoBase::incrementCurrentWriteCounter();
 
     // Handle path lists specially
     if (getWhatAppliedTo() == PATH_LIST)
-	traversePathList(node);
+        traversePathList(node);
 
     // If applying to a path from a path list and the doOneStage flag
     // is set, we must be writing the path. Just do that.
     else if (doOneStage)
-	getPathAppliedTo()->write(this);
+        getPathAppliedTo()->write(this);
 
     // Otherwise, we are applying the action normally to a node or path
     else {
 
-	if (getWhatAppliedTo() == PATH) {
+        if (getWhatAppliedTo() == PATH) {
 
-	    // When continuing to apply the action to a path, it
-	    // should just continue with the current stage
-	    if (continuing) {
+            // When continuing to apply the action to a path, it
+            // should just continue with the current stage
+            if (continuing) {
 
-		// In the counting stage, add a reference to the path
-		// and then traverse the nodes in it
-		if (output->getStage() == SoOutput::COUNT_REFS) {
-		    getPathAppliedTo()->addWriteReference(output);
-		    traverse(node);
-		}
+                // In the counting stage, add a reference to the path
+                // and then traverse the nodes in it
+                if (output->getStage() == SoOutput::COUNT_REFS) {
+                    getPathAppliedTo()->addWriteReference(output);
+                    traverse(node);
+                }
 
-		// In the writing stage, write the path
-		else
-		    getPathAppliedTo()->write(this);
-	    }
+                // In the writing stage, write the path
+                else
+                    getPathAppliedTo()->write(this);
+            }
 
-	    // If applying for the first time, do it all
-	    else {
-		getPathAppliedTo()->addWriteReference(output);
-		output->setStage(SoOutput::COUNT_REFS);
-		traverse(node);
-		output->setStage(SoOutput::WRITE);
-		getPathAppliedTo()->write(this);
-	    }
-	}
+            // If applying for the first time, do it all
+            else {
+                getPathAppliedTo()->addWriteReference(output);
+                output->setStage(SoOutput::COUNT_REFS);
+                traverse(node);
+                output->setStage(SoOutput::WRITE);
+                getPathAppliedTo()->write(this);
+            }
+        }
 
-	else {
-	    // When continuing to apply the action to a node, it MUST
-	    // be in the write phase, so there's no need to count first
+        else {
+            // When continuing to apply the action to a node, it MUST
+            // be in the write phase, so there's no need to count first
 
-	    if (! continuing) {
-		output->setStage(SoOutput::COUNT_REFS);
-		traverse(node);
-		output->setStage(SoOutput::WRITE);
-	    }
+            if (!continuing) {
+                output->setStage(SoOutput::COUNT_REFS);
+                traverse(node);
+                output->setStage(SoOutput::WRITE);
+            }
 
-	    traverse(node);
-	}
+            traverse(node);
+        }
 
-	// Clean up
-        if (! continuing)
-	    output->reset();
+        // Clean up
+        if (!continuing)
+            output->reset();
     }
 }
 
@@ -284,63 +284,62 @@ SoWriteAction::traversePathList(SoNode *node)
     // applied during the count stage once we have all the path lists.
     // In this case, just do normal traversal on the compact path list
     if (doOneStage) {
-	const SoPathList *list = getPathListAppliedTo();
+        const SoPathList *list = getPathListAppliedTo();
 
-	// First, make sure each path in the list is counted
-    for (int i = 0; i < list->getLength(); i++)
-	    (*list)[i]->addWriteReference(output);
+        // First, make sure each path in the list is counted
+        for (int i = 0; i < list->getLength(); i++)
+            (*list)[i]->addWriteReference(output);
 
-	// Do traversal
-	traverse(node);
+        // Do traversal
+        traverse(node);
 
-	// When incrementing counts, we want to make sure the head
-	// node is referenced more than once, since it will be used
-	// for each path. Do this by hand AFTER we do the regular
-	// traversal, or else we might miss some nodes below it.
-	if (output->getStage() == SoOutput::COUNT_REFS &&
-	    list->getLength() > 1)
-	    (*list)[0]->getHead()->addWriteReference(output);
+        // When incrementing counts, we want to make sure the head
+        // node is referenced more than once, since it will be used
+        // for each path. Do this by hand AFTER we do the regular
+        // traversal, or else we might miss some nodes below it.
+        if (output->getStage() == SoOutput::COUNT_REFS && list->getLength() > 1)
+            (*list)[0]->getHead()->addWriteReference(output);
     }
 
     // If this is not the last list, save it for later and do nothing else
-    else if (! isLastPathListAppliedTo()) {
-	SoPathList	*copy = new SoPathList(*getPathListAppliedTo());
+    else if (!isLastPathListAppliedTo()) {
+        SoPathList *copy = new SoPathList(*getPathListAppliedTo());
         savedLists.push_back(copy);
     }
 
     // Otherwise, process all the lists
     else {
-	// First set the doOneStage flag to TRUE so that when we apply
-	// the action to each path list, we know that we're supposed
-	// to do only that one stage.
-	doOneStage = TRUE;
+        // First set the doOneStage flag to TRUE so that when we apply
+        // the action to each path list, we know that we're supposed
+        // to do only that one stage.
+        doOneStage = TRUE;
 
-	// Mark this action as continuing so we don't increment the
-	// write-ref counter extra times
-	SbBool saveContinuing = continuing;
-	continuing = TRUE;
+        // Mark this action as continuing so we don't increment the
+        // write-ref counter extra times
+        SbBool saveContinuing = continuing;
+        continuing = TRUE;
 
-	// Count first; do all saved lists first, then the last one.
-	// Apply the action to each path list.
-	output->setStage(SoOutput::COUNT_REFS);
-    for (size_t i = 0; i < savedLists.size(); i++)
-	    apply(* (const SoPathList *) savedLists[i], TRUE);
-	apply(*getPathListAppliedTo(), TRUE);
+        // Count first; do all saved lists first, then the last one.
+        // Apply the action to each path list.
+        output->setStage(SoOutput::COUNT_REFS);
+        for (size_t i = 0; i < savedLists.size(); i++)
+            apply(*(const SoPathList *)savedLists[i], TRUE);
+        apply(*getPathListAppliedTo(), TRUE);
 
-	// Then write each path from original list by applying the
-	// action to the path
-	output->setStage(SoOutput::WRITE);
-    for (int i = 0; i < getOriginalPathListAppliedTo()->getLength(); i++)
-	    apply((*getOriginalPathListAppliedTo())[i]);
+        // Then write each path from original list by applying the
+        // action to the path
+        output->setStage(SoOutput::WRITE);
+        for (int i = 0; i < getOriginalPathListAppliedTo()->getLength(); i++)
+            apply((*getOriginalPathListAppliedTo())[i]);
 
-	doOneStage = FALSE;
+        doOneStage = FALSE;
 
-	// Free up saved lists and clear out list
-    for (size_t i = 0; i < savedLists.size(); i++)
-	    delete (SoPathList *) savedLists[i];
-    savedLists.clear();
+        // Free up saved lists and clear out list
+        for (size_t i = 0; i < savedLists.size(); i++)
+            delete (SoPathList *)savedLists[i];
+        savedLists.clear();
 
-	// Restore the state of the continuing flag
-	continuing = saveContinuing;
+        // Restore the state of the continuing flag
+        continuing = saveContinuing;
     }
 }

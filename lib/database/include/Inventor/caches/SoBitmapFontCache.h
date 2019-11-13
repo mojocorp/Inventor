@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_BITMAP_FONT_CACHE_
-#define  _SO_BITMAP_FONT_CACHE_
+#ifndef _SO_BITMAP_FONT_CACHE_
+#define _SO_BITMAP_FONT_CACHE_
 
 #include <string>
 #include <vector>
@@ -65,7 +65,6 @@
 
 class SoGLDisplayList;
 
-
 // An internal class that makes life easier:
 
 // This very specialized cache class is used to cache bitmaps and GL
@@ -73,12 +72,11 @@ class SoGLDisplayList;
 // use the normal list of elements used to determine validity, etc,
 // and knows exactly which elements it depends on.
 
-class SoBitmapFontCache : public SoFontCache
-{
+class SoBitmapFontCache : public SoFontCache {
   public:
     // Return a font (either a new one or an old one) that is valid
     // for the given state.
-    static SoBitmapFontCache *	getFont(SoState *state, SbBool forRender);
+    static SoBitmapFontCache *getFont(SoState *state, SbBool forRender);
 
     // Use this when rendering to decide if this cache is valid (it
     // checks the GL cache context in addition to other elements)
@@ -95,23 +93,23 @@ class SoBitmapFontCache : public SoFontCache
     SbVec2s getSize(const std::wstring &str);
 
     // Draws the given string
-    void drawString(SoState *state, const std::wstring &string, const SbVec3f &origin);
+    void drawString(SoState *state, const std::wstring &string,
+                    const SbVec3f &origin);
 
-
-protected:
+  protected:
     // Free up display lists before being deleted
     virtual void destroy(SoState *state);
 
-private:
+  private:
     typedef struct FLbitmap {
-         int width;
-         int height;
-         float xorig;
-         float yorig;
-         float xmove;
-         float ymove;
-         std::vector<unsigned char> bitmap;
-     } FLbitmap;
+        int                        width;
+        int                        height;
+        float                      xorig;
+        float                      yorig;
+        float                      xmove;
+        float                      ymove;
+        std::vector<unsigned char> bitmap;
+    } FLbitmap;
 
     // Constructor.
     SoBitmapFontCache(SoState *state);
@@ -127,11 +125,10 @@ private:
     // Static list of all fonts.  OPTIMIZATION:  If there turn out to
     // be applications that use lots of fonts, we could change this
     // list into a dictionary keyed off the font name.
-    static std::vector<SoBitmapFontCache*> fonts;
+    static std::vector<SoBitmapFontCache *> fonts;
 
-    int context;
-    std::map<wchar_t, SoGLDisplayList*> list;
-    std::map<wchar_t, FLbitmap*> bitmaps; // Cached bitmaps for each character.
-
+    int                                  context;
+    std::map<wchar_t, SoGLDisplayList *> list;
+    std::map<wchar_t, FLbitmap *> bitmaps; // Cached bitmaps for each character.
 };
 #endif /* _SO_BITMAP_FONT_CACHE_ */

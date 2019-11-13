@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_PICK_RAY_ELEMENT
-#define  _SO_PICK_RAY_ELEMENT
+#ifndef _SO_PICK_RAY_ELEMENT
+#define _SO_PICK_RAY_ELEMENT
 
 #include <Inventor/SbViewVolume.h>
 #include <Inventor/elements/SoSubElement.h>
@@ -73,36 +73,38 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoPickRayElement : public SoElement {
+SoEXTENDER
+class SoPickRayElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoPickRayElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Always returns FALSE, since this element should never be a
     // criterion for cache invalidation.
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
     // Create and return a copy of this element
-    virtual SoElement	*copyMatchInfo() const;
+    virtual SoElement *copyMatchInfo() const;
 
     // Sets the picking ray
-    static void		set(SoState *state, const SbViewVolume &volume);
+    static void set(SoState *state, const SbViewVolume &volume);
 
     // Returns the current picking ray view volume from the state
-    static const SbViewVolume &	get(SoState *state);
+    static const SbViewVolume &get(SoState *state);
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoPickRayElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
-    SbViewVolume	volume;		// Ray as view volume
+    SbViewVolume volume; // Ray as view volume
 
     virtual ~SoPickRayElement();
 };

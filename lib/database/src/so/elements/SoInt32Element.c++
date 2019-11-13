@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,8 +63,7 @@ SO_ELEMENT_ABSTRACT_SOURCE(SoInt32Element);
 // Use: internal
 
 void
-SoInt32Element::initClass()
-{
+SoInt32Element::initClass() {
     SO_ELEMENT_INIT_ABSTRACT_CLASS(SoInt32Element, SoElement);
 }
 
@@ -78,8 +77,7 @@ SoInt32Element::initClass()
 SoInt32Element::~SoInt32Element()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -94,7 +92,7 @@ SoInt32Element::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (data == ((const SoInt32Element *) elt)->data);
+    return (data == ((const SoInt32Element *)elt)->data);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -109,13 +107,13 @@ SoInt32Element::set(int stackIndex, SoState *state, int32_t value)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoInt32Element	*elt;
+    SoInt32Element *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoInt32Element *) getElement(state, stackIndex);
+    elt = (SoInt32Element *)getElement(state, stackIndex);
 
     if (elt != NULL)
-	elt->setElt(value);
+        elt->setElt(value);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -133,7 +131,6 @@ SoInt32Element::setElt(int32_t value)
     data = value;
 }
 
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -147,8 +144,7 @@ SoInt32Element::copyMatchInfo() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoInt32Element *result =
-	(SoInt32Element *)getTypeId().createInstance();
+    SoInt32Element *result = (SoInt32Element *)getTypeId().createInstance();
 
     result->data = data;
 
@@ -166,16 +162,12 @@ SoInt32Element::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoInt32Element::print(FILE *fp) const
-{
+SoInt32Element::print(FILE *fp) const {
     SoElement::print(fp);
 
-    fprintf(fp, "%s = %d\n", getTypeId().getName().getString(),
-	    data);
+    fprintf(fp, "%s = %d\n", getTypeId().getName().getString(), data);
 }
 #else  /* DEBUG */
 void
-SoInt32Element::print(FILE *) const
-{
-}
+SoInt32Element::print(FILE *) const {}
 #endif /* DEBUG */

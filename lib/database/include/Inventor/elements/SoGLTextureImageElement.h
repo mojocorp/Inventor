@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_GL_TEXTURE_IMAGE_ELEMENT
-#define  _SO_GL_TEXTURE_IMAGE_ELEMENT
+#ifndef _SO_GL_TEXTURE_IMAGE_ELEMENT
+#define _SO_GL_TEXTURE_IMAGE_ELEMENT
 
 class SoGLDisplayList;
 class SbImage;
@@ -74,13 +74,14 @@ class SbImage;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLTextureImageElement : public SoTextureImageElement {
+SoEXTENDER
+class SoGLTextureImageElement : public SoTextureImageElement {
 
     SO_ELEMENT_HEADER(SoGLTextureImageElement);
-    
+
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the current image, wrap modes and model.
     // This will try to build or use a GL
@@ -89,39 +90,38 @@ SoEXTENDER class SoGLTextureImageElement : public SoTextureImageElement {
     // the element is set.  The node calling this routine is
     // responsible for calling glDeleteLists to free up the display
     // list at the right time.
-    static SoGLDisplayList *
-	set(SoState *state, SoNode *node,
-        const SbImage &image,
-	    float texQuality,
-	    int wrapS, int wrapT, int model, 
-	    const SbColor &blendColor, SoGLDisplayList *list);
+    static SoGLDisplayList *set(SoState *state, SoNode *node,
+                                const SbImage &image, float texQuality,
+                                int wrapS, int wrapT, int model,
+                                const SbColor &  blendColor,
+                                SoGLDisplayList *list);
 
     // Override pop() method so side effects can occur in GL
-    virtual void	pop(SoState *state, const SoElement *prevTopElement);
+    virtual void pop(SoState *state, const SoElement *prevTopElement);
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoGLTextureImageElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     // Catch setElt; if this setElt is called, it is an error...
-    virtual void	setElt(const SbImage &image,
-			       int wrapS, int wrapT, int model,
-			       const SbColor &blendColor);
+    virtual void setElt(const SbImage &image, int wrapS, int wrapT, int model,
+                        const SbColor &blendColor);
 
     virtual ~SoGLTextureImageElement();
 
   private:
     // Send texture environment information
-    void		sendTexEnv(SoState *state);
+    void sendTexEnv(SoState *state);
 
     // Sends image in element to GL. The state is needed to determine
     // whether or not OpenGL extensions are available.  This will
     // build or use a texture object or display list, if possible.
-    void		sendTex(SoState *state);
+    void sendTex(SoState *state);
 
-    SoGLDisplayList	*list;
-    float		quality;
+    SoGLDisplayList *list;
+    float            quality;
 };
 
 #endif /* _SO_GL_TEXTURE_IMAGE_ELEMENT */

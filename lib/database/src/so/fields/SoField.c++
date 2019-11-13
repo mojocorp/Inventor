@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,7 +53,6 @@
  _______________________________________________________________________
  */
 
-
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/misc/SoNotification.h>
@@ -73,20 +72,20 @@
 #include <cstring>
 
 // Special characters in files
-#define OPEN_BRACE_CHAR		'['
-#define CLOSE_BRACE_CHAR	']'
-#define VALUE_SEPARATOR_CHAR	','
-#define IGNORE_CHAR		'~'
-#define CONNECTION_CHAR		'='
-#define FIELD_SEP_CHAR		'.'
+#define OPEN_BRACE_CHAR '['
+#define CLOSE_BRACE_CHAR ']'
+#define VALUE_SEPARATOR_CHAR ','
+#define IGNORE_CHAR '~'
+#define CONNECTION_CHAR '='
+#define FIELD_SEP_CHAR '.'
 
 // Bit flags in flags token in binary files
-#define FIELD_IGNORED		0x01
-#define FIELD_CONNECTED		0x02
-#define FIELD_DEFAULT		0x04
+#define FIELD_IGNORED 0x01
+#define FIELD_CONNECTED 0x02
+#define FIELD_DEFAULT 0x04
 
 // Amount of values to allocate at a time when reading in multiple values.
-#define VALUE_CHUNK_SIZE	32
+#define VALUE_CHUNK_SIZE 32
 
 // If the field is connected or there are any FieldSensors attached to
 // this field, flags.hasAuditors will be TRUE, and this structure is
@@ -94,19 +93,17 @@
 // save space in the common case.
 struct SoFieldAuditorInfo {
     SoFieldContainer *container;
-    
+
     // List of auditors: objects to pass notification to.
-    SoAuditorList	auditors;
+    SoAuditorList auditors;
 
     // The "connection" field points to either an engine output or
     // another field:
     union {
-	SoEngineOutput		*engineOutput;
-	SoField			*field;
+        SoEngineOutput *engineOutput;
+        SoField *       field;
     } connection;
-
 };
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -116,8 +113,8 @@ struct SoFieldAuditorInfo {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoType	SoField::classTypeId;		// Type identifier
-std::vector<char> SoField::fieldBuf;		// Used by SoField::get()
+SoType            SoField::classTypeId; // Type identifier
+std::vector<char> SoField::fieldBuf;    // Used by SoField::get()
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -149,11 +146,11 @@ SoField::createAuditorInfo()
 ////////////////////////////////////////////////////////////////////////
 {
     if (!flags.hasAuditors) {
-	SoFieldContainer *myContainer = container;
-	auditorInfo = new SoFieldAuditorInfo;
-	auditorInfo->container = myContainer;
-	auditorInfo->connection.field = NULL;
-	flags.hasAuditors = TRUE;
+        SoFieldContainer *myContainer = container;
+        auditorInfo = new SoFieldAuditorInfo;
+        auditorInfo->container = myContainer;
+        auditorInfo->connection.field = NULL;
+        flags.hasAuditors = TRUE;
     }
 }
 
@@ -169,16 +166,17 @@ SoField::SoField()
 ////////////////////////////////////////////////////////////////////////
 {
     container = NULL;
-    flags.hasDefault		= TRUE;
-    flags.ignored		= FALSE;
-    flags.connected		= FALSE;
-    flags.converted		= FALSE;
-    flags.connectionEnabled	= TRUE;
-    flags.notifyEnabled		= FALSE;
-    flags.hasAuditors		= FALSE;
-    flags.isEngineModifying	= FALSE;
-    flags.readOnly		= FALSE;;
-    flags.dirty			= FALSE;
+    flags.hasDefault = TRUE;
+    flags.ignored = FALSE;
+    flags.connected = FALSE;
+    flags.converted = FALSE;
+    flags.connectionEnabled = TRUE;
+    flags.notifyEnabled = FALSE;
+    flags.hasAuditors = FALSE;
+    flags.isEngineModifying = FALSE;
+    flags.readOnly = FALSE;
+    ;
+    flags.dirty = FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -193,7 +191,7 @@ SoField::~SoField()
 ////////////////////////////////////////////////////////////////////////
 {
     if (flags.connected)
-	reallyDisconnect();
+        reallyDisconnect();
 
     // Make sure any auditors are notified of the impending doom of
     // this field. We don't have to notify the container, since we
@@ -204,55 +202,51 @@ SoField::~SoField()
     // detach/disconnect themselves.
 
     if (flags.hasAuditors) {
-	SoAuditorList &auditors = auditorInfo->auditors;
-	for (int i = auditors.getLength() - 1; i >= 0; i--) {
-	    switch (auditors.getType(i)) {
-	      case SoNotRec::SENSOR:
-		// Tell sensor that we are going away. (This must be a
-		// field sensor, but cast it to a data sensor for ease.)
-		((SoDataSensor *) auditors.getObject(i))->dyingReference();
+        SoAuditorList &auditors = auditorInfo->auditors;
+        for (int i = auditors.getLength() - 1; i >= 0; i--) {
+            switch (auditors.getType(i)) {
+            case SoNotRec::SENSOR:
+                // Tell sensor that we are going away. (This must be a
+                // field sensor, but cast it to a data sensor for ease.)
+                ((SoDataSensor *)auditors.getObject(i))->dyingReference();
 
-		// The call to dyingReference() might remove auditors,
-		// shortening the auditors list; make sure we're not
-		// trying to access past the end.
-		if (i > auditors.getLength())
-		    i = auditors.getLength();
-		break;
+                // The call to dyingReference() might remove auditors,
+                // shortening the auditors list; make sure we're not
+                // trying to access past the end.
+                if (i > auditors.getLength())
+                    i = auditors.getLength();
+                break;
 
-	      case SoNotRec::FIELD:
-		{
-		// Disconnect other field from this one
-		SoField *f = (SoField *)auditors.getObject(i);
-		SoFieldContainer *fc = f->getContainer();
+            case SoNotRec::FIELD: {
+                // Disconnect other field from this one
+                SoField *         f = (SoField *)auditors.getObject(i);
+                SoFieldContainer *fc = f->getContainer();
 
-		// If connected to a converter, must remove the other
-		// side of the connection:
-		if (fc->isOfType(SoFieldConverter::getClassTypeId())) {
-		    SoFieldConverter *converter =
-			(SoFieldConverter *)fc;
-		    SoFieldList fieldList;
-		    converter->getForwardConnections(fieldList);
-		    for (int j = 0; j < fieldList.getLength(); j++) {
-			fieldList[0]->disconnect();
-		    }
-		    // The converter will be deleted and will
-		    // disconnect itself from us when all of its
-		    // forward connections go away.
-		}
-		else {
-		    f->disconnect();
-		}
-		}
-		break;
+                // If connected to a converter, must remove the other
+                // side of the connection:
+                if (fc->isOfType(SoFieldConverter::getClassTypeId())) {
+                    SoFieldConverter *converter = (SoFieldConverter *)fc;
+                    SoFieldList       fieldList;
+                    converter->getForwardConnections(fieldList);
+                    for (int j = 0; j < fieldList.getLength(); j++) {
+                        fieldList[0]->disconnect();
+                    }
+                    // The converter will be deleted and will
+                    // disconnect itself from us when all of its
+                    // forward connections go away.
+                } else {
+                    f->disconnect();
+                }
+            } break;
 
-	      default:
-		SoDebugError::post("(internal) SoField::~SoField",
-				   "Got an auditor of type %d",
-				   (int) auditors.getType(i));
-		break;
-	    }
-	}
-	delete auditorInfo;
+            default:
+                SoDebugError::post("(internal) SoField::~SoField",
+                                   "Got an auditor of type %d",
+                                   (int)auditors.getType(i));
+                break;
+            }
+        }
+        delete auditorInfo;
     }
 }
 
@@ -286,33 +280,32 @@ SoField::enableConnection(SbBool flag)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (flags.connectionEnabled == flag) return;
+    if (flags.connectionEnabled == flag)
+        return;
 
     // Before disabling, pull value through if out-of-date:
     if (!flag) {
-	evaluate();
-	flags.connectionEnabled = FALSE;
-	flags.readOnly = TRUE;
+        evaluate();
+        flags.connectionEnabled = FALSE;
+        flags.readOnly = TRUE;
 
-	if (isConnectedFromField() && !flags.converted)
-	    auditorInfo->connection.field->connectionStatusChanged(-1);
-    }
-    else {
-	// Mark the field dirty when re-enabling so it will get
-	// evaluated.
-	flags.readOnly = FALSE;
-	flags.connectionEnabled = TRUE;
-	flags.dirty = TRUE;
+        if (isConnectedFromField() && !flags.converted)
+            auditorInfo->connection.field->connectionStatusChanged(-1);
+    } else {
+        // Mark the field dirty when re-enabling so it will get
+        // evaluated.
+        flags.readOnly = FALSE;
+        flags.connectionEnabled = TRUE;
+        flags.dirty = TRUE;
 
-	if (isConnectedFromEngine() || flags.converted) {
-	    // Mark engine as needing evaluation to force it to write
-	    // value (just as if we added a connection):
-	    auditorInfo->connection.engineOutput->addConnection(NULL);
-	}
-	else if (isConnectedFromField()) {
-	    auditorInfo->connection.field->connectionStatusChanged(1);
-	}
-	evaluate(); // Pull value through
+        if (isConnectedFromEngine() || flags.converted) {
+            // Mark engine as needing evaluation to force it to write
+            // value (just as if we added a connection):
+            auditorInfo->connection.engineOutput->addConnection(NULL);
+        } else if (isConnectedFromField()) {
+            auditorInfo->connection.field->connectionStatusChanged(1);
+        }
+        evaluate(); // Pull value through
     }
 }
 
@@ -329,15 +322,15 @@ SoField::connectFrom(SoEngineOutput *engineOutput)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoFieldContainer	*engineCont = engineOutput->getContainer();
+    SoFieldContainer *engineCont = engineOutput->getContainer();
 
 #ifdef DEBUG
     // Make sure everything is contained, or this won't work at all
     if (engineCont == NULL) {
-	SoDebugError::post("SoField::connectFrom",
-			   "Can't connect to an engine output "
-			   "that is not contained in an engine");
-	return FALSE;
+        SoDebugError::post("SoField::connectFrom",
+                           "Can't connect to an engine output "
+                           "that is not contained in an engine");
+        return FALSE;
     }
 #endif
 
@@ -352,58 +345,57 @@ SoField::connectFrom(SoEngineOutput *engineOutput)
     SoType outputType = engineOutput->getConnectionType();
     if (getTypeId() != outputType) {
 
-	SbBool			ret;
-	SoFieldConverter	*converter;
+        SbBool            ret;
+        SoFieldConverter *converter;
 
-	converter = createConverter(outputType);
+        converter = createConverter(outputType);
 
-	// Check for error
-	if (converter == NULL)
-	    ret = FALSE;
-	else {
-	    converter->ref();
+        // Check for error
+        if (converter == NULL)
+            ret = FALSE;
+        else {
+            converter->ref();
 
-	    // Hook the converter up to the other field first, then
-	    // hook this up to the converter, to avoid multiple
-	    // notifications or evaluations if something downstream is
-	    // pulling values during notification:
-	    // converter:
-	    SoField *c_input = converter->getInput(outputType);
-	    SoEngineOutput *c_output =
-		converter->getOutput(getTypeId());
+            // Hook the converter up to the other field first, then
+            // hook this up to the converter, to avoid multiple
+            // notifications or evaluations if something downstream is
+            // pulling values during notification:
+            // converter:
+            SoField *       c_input = converter->getInput(outputType);
+            SoEngineOutput *c_output = converter->getOutput(getTypeId());
 #ifdef DEBUG
-	    if (c_input == NULL || c_output == NULL) {
-		SoDebugError::post("SoField::connectFrom",
-				   "Created converter, but converter"
-				   "input or output is NULL");
-		return FALSE;
-	    }
+            if (c_input == NULL || c_output == NULL) {
+                SoDebugError::post("SoField::connectFrom",
+                                   "Created converter, but converter"
+                                   "input or output is NULL");
+                return FALSE;
+            }
 #endif
-	    // Making the connection may result in downstream engines
-	    // requesting evaluation, so this must be set before the
-	    // connection is made:
-	    flags.converted = TRUE;
-	    flags.fromEngine = TRUE;
+            // Making the connection may result in downstream engines
+            // requesting evaluation, so this must be set before the
+            // connection is made:
+            flags.converted = TRUE;
+            flags.fromEngine = TRUE;
 
-	    c_input->connectFrom(engineOutput);
-	    connectFrom(c_output);
+            c_input->connectFrom(engineOutput);
+            connectFrom(c_output);
 
-	    converter->unref();
-	    ret = TRUE;
-	}
-	// See comment below
-	engineCont->unrefNoDelete();
+            converter->unref();
+            ret = TRUE;
+        }
+        // See comment below
+        engineCont->unrefNoDelete();
 
-	return ret;
+        return ret;
     }
 
     createAuditorInfo();
 
-    flags.connected       = TRUE;
+    flags.connected = TRUE;
 
     // If converted, this flag was set when the converter was created:
     if (!flags.converted)
-	flags.fromEngine      = TRUE;
+        flags.fromEngine = TRUE;
 
     auditorInfo->connection.engineOutput = engineOutput;
 
@@ -411,12 +403,12 @@ SoField::connectFrom(SoEngineOutput *engineOutput)
     engineOutput->addConnection(this);
 
     if (isConnectionEnabled() && engineOutput->isEnabled()) {
-	// A connection means that the field no longer contains the
-	// default value
-	setDefault(FALSE);
+        // A connection means that the field no longer contains the
+        // default value
+        setDefault(FALSE);
 
-	// Notify
-	startNotify();
+        // Notify
+        startNotify();
     }
 
     // Get rid of the extra reference.  Note that if the container was
@@ -448,69 +440,68 @@ SoField::connectFrom(SoField *field)
     SoType fieldType = field->getTypeId();
     if (getTypeId() != fieldType) {
 
-	SbBool			ret;
-	SoFieldConverter	*converter;
+        SbBool            ret;
+        SoFieldConverter *converter;
 
-	converter = createConverter(fieldType);
+        converter = createConverter(fieldType);
 
-	// Check for error
-	if (converter == NULL)
-	    ret = FALSE;
-	else {
-	    converter->ref();
+        // Check for error
+        if (converter == NULL)
+            ret = FALSE;
+        else {
+            converter->ref();
 
-	    // Hook the converter up to the other field first, then
-	    // hook this up to the converter, to avoid multiple
-	    // notifications or evaluations if something downstream is
-	    // pulling values during notification:
-	    // converter:
-	    SoField *c_input = converter->getInput(fieldType);
-	    SoEngineOutput *c_output =
-		converter->getOutput(getTypeId());
+            // Hook the converter up to the other field first, then
+            // hook this up to the converter, to avoid multiple
+            // notifications or evaluations if something downstream is
+            // pulling values during notification:
+            // converter:
+            SoField *       c_input = converter->getInput(fieldType);
+            SoEngineOutput *c_output = converter->getOutput(getTypeId());
 #ifdef DEBUG
-	    if (c_input == NULL || c_output == NULL) {
-		SoDebugError::post("SoField::connectFrom",
-				   "Created converter, but converter"
-				   "input or output is NULL");
-		return FALSE;
-	    }
+            if (c_input == NULL || c_output == NULL) {
+                SoDebugError::post("SoField::connectFrom",
+                                   "Created converter, but converter"
+                                   "input or output is NULL");
+                return FALSE;
+            }
 #endif
-	    // Making the connection may result in downstream engines
-	    // requesting evaluation, so this must be set before the
-	    // connection is made:
-	    flags.converted = TRUE;
-	    flags.fromEngine = FALSE;
+            // Making the connection may result in downstream engines
+            // requesting evaluation, so this must be set before the
+            // connection is made:
+            flags.converted = TRUE;
+            flags.fromEngine = FALSE;
 
-	    c_input->connectFrom(field);
-	    connectFrom(c_output);
+            c_input->connectFrom(field);
+            connectFrom(c_output);
 
-	    converter->unref();
-	    ret = TRUE;
-	}
-	return ret;
+            converter->unref();
+            ret = TRUE;
+        }
+        return ret;
     }
 
     createAuditorInfo();
 
-    flags.connected       = TRUE;
+    flags.connected = TRUE;
 
     // If converted, this flag was set when the converter was created:
     if (!flags.converted)
-	flags.fromEngine      = FALSE;
+        flags.fromEngine = FALSE;
 
     auditorInfo->connection.field = field;
 
     // Make sure this field gets notified when the connected field
-    // changes 
+    // changes
     field->addAuditor(this, SoNotRec::FIELD);
 
     if (isConnectionEnabled()) {
-	// A connection means that the field no longer contains the
-	// default value
-	setDefault(FALSE);
+        // A connection means that the field no longer contains the
+        // default value
+        setDefault(FALSE);
 
-	// Notify
-	startNotify();
+        // Notify
+        startNotify();
     }
 
     return TRUE;
@@ -531,12 +522,12 @@ SoField::disconnect()
 {
     if (flags.connected) {
 
-	// Make sure the field is evaluated first. (There may have
-	// been a notification of the field but no corresponding
-	// evaluation before the field was disconnected.)
-	evaluate();
+        // Make sure the field is evaluated first. (There may have
+        // been a notification of the field but no corresponding
+        // evaluation before the field was disconnected.)
+        evaluate();
 
-	reallyDisconnect();
+        reallyDisconnect();
     }
 }
 
@@ -553,12 +544,12 @@ SoField::getConnectedEngine(SoEngineOutput *&engineOut) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! isConnectedFromEngine())
-	return FALSE;
+    if (!isConnectedFromEngine())
+        return FALSE;
 
     // Skip over field converter, if any
     const SoField *connectedField =
-	(! flags.converted ? this : getConverter()->getConnectedInput());
+        (!flags.converted ? this : getConverter()->getConnectedInput());
 
     engineOut = connectedField->auditorInfo->connection.engineOutput;
 
@@ -578,12 +569,12 @@ SoField::getConnectedField(SoField *&field) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! isConnectedFromField())
-	return FALSE;
+    if (!isConnectedFromField())
+        return FALSE;
 
     // Skip over field converter, if any
     const SoField *connectedField =
-	(! flags.converted ? this : getConverter()->getConnectedInput());
+        (!flags.converted ? this : getConverter()->getConnectedInput());
 
     field = connectedField->auditorInfo->connection.field;
 
@@ -603,30 +594,31 @@ SoField::getForwardConnections(SoFieldList &list) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!flags.hasAuditors) return 0;
+    if (!flags.hasAuditors)
+        return 0;
 
-    int	numAuditors, numConnections = 0, i;
+    int numAuditors, numConnections = 0, i;
 
     // Loop through our auditor list, finding fields we are connected
     // to.
     SoAuditorList &auditors = auditorInfo->auditors;
     numAuditors = auditors.getLength();
     for (i = 0; i < numAuditors; i++) {
-	if (auditors.getType(i) == SoNotRec::FIELD) {
+        if (auditors.getType(i) == SoNotRec::FIELD) {
 
-	    SoField	*field = (SoField *) auditors.getObject(i);
+            SoField *field = (SoField *)auditors.getObject(i);
 
-	    // Skip over converter, if any
-	    SoFieldContainer *container = field->getContainer();
-	    if (container->isOfType(SoFieldConverter::getClassTypeId()))
-		numConnections += ((SoFieldConverter *) container)->
-		    getForwardConnections(list);
+            // Skip over converter, if any
+            SoFieldContainer *container = field->getContainer();
+            if (container->isOfType(SoFieldConverter::getClassTypeId()))
+                numConnections += ((SoFieldConverter *)container)
+                                      ->getForwardConnections(list);
 
-	    else {
-		list.append(field);
-		numConnections++;
-	    }
-	}
+            else {
+                list.append(field);
+                numConnections++;
+            }
+        }
     }
 
     return numConnections;
@@ -645,9 +637,9 @@ SoField::getContainer() const
 ////////////////////////////////////////////////////////////////////////
 {
     if (flags.hasAuditors)
-	return auditorInfo->container;
+        return auditorInfo->container;
     else
-	return container;
+        return container;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -664,8 +656,8 @@ SoField::set(const char *valueString)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoInput	in;
-    in.setBuffer((void *) valueString, strlen(valueString));
+    SoInput in;
+    in.setBuffer((void *)valueString, strlen(valueString));
     return read(&in, "<field passed to SoField::set>");
 }
 
@@ -683,12 +675,12 @@ SoField::get(SbString &valueString)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoOutput	out;
+    SoOutput out;
 
-    SbBool	wasDefault = isDefault();
+    SbBool wasDefault = isDefault();
 
     if (wasDefault)
-	setDefault(FALSE);
+        setDefault(FALSE);
 
     // Make sure the field value is up to date
     evaluate();
@@ -699,13 +691,14 @@ SoField::get(SbString &valueString)
     }
 
     // Set up output into a string buffer
-    out.setBuffer((void *) fieldBuf.data(), fieldBuf.size(), &SoField::reallocFieldBuf);
+    out.setBuffer((void *)fieldBuf.data(), fieldBuf.size(),
+                  &SoField::reallocFieldBuf);
 
     // Make sure that the file header and lots of white space will NOT
     // be written into the string
     out.setCompact(TRUE);
 
-    // Prepare to begin writing by incrementing the 
+    // Prepare to begin writing by incrementing the
     // current write counter in SoBase
     SoBase::incrementCurrentWriteCounter();
 
@@ -720,7 +713,7 @@ SoField::get(SbString &valueString)
     // SoField::get() is used by field converters that convert to
     // strings when evaluating. Because this can happen in the middle
     // of writing a scene graph, we have to restore things to the way
-    // they were before the get(). 
+    // they were before the get().
     SoBase::decrementCurrentWriteCounter();
     out.setStage(SoOutput::COUNT_REFS);
     countWriteRefs(&out);
@@ -763,10 +756,10 @@ SoField::setIgnored(SbBool ig)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flags.ignored != ig) {
-	flags.ignored = ig;
+        flags.ignored = ig;
 
-	// Indicate that the value changed, but leave the default flag as is
-	valueChanged(FALSE);
+        // Indicate that the value changed, but leave the default flag as is
+        valueChanged(FALSE);
     }
 }
 
@@ -783,12 +776,12 @@ SoField::startNotify()
 ////////////////////////////////////////////////////////////////////////
 {
     if (!flags.notifyEnabled || flags.isEngineModifying)
-	return;
+        return;
 
     SoDB::startNotify();
 
     // Create a new notification list:
-    SoNotList	list;
+    SoNotList list;
 
     // Use notify() method to do all the work:
     notify(&list);
@@ -811,16 +804,16 @@ SoField::notify(SoNotList *list)
 ////////////////////////////////////////////////////////////////////////
 {
     // If notification is disabled, don't do anything.
-    if (flags.dirty || ! flags.notifyEnabled || flags.isEngineModifying)
-	return;
+    if (flags.dirty || !flags.notifyEnabled || flags.isEngineModifying)
+        return;
 
     // If being notified through a connection and the connection is
     // disabled, don't notify:
     if (!flags.connectionEnabled && (list->getLastRec() != NULL)) {
 
-	SoNotRec::Type t = list->getLastRec()->getType();
-	if (t == SoNotRec::ENGINE || t == SoNotRec::FIELD)
-	    return;
+        SoNotRec::Type t = list->getLastRec()->getType();
+        if (t == SoNotRec::ENGINE || t == SoNotRec::FIELD)
+            return;
     }
 
     // Indicate that we are notifying, to break future cycles.
@@ -834,27 +827,27 @@ SoField::notify(SoNotList *list)
     // NOTE: SFTrigger fields set their container to NULL temporarily
     // when being read in to prevent notification propogating when
     // they're read.
-    SoFieldContainer	*cont = getContainer();
+    SoFieldContainer *cont = getContainer();
 
     if (cont != NULL) {
 
-	// First create and append a new record to indicate we passed
-	// through this field.
-	SoNotRec	rec(cont);
-	list->append(&rec, this);
-	list->setLastType(SoNotRec::CONTAINER);
+        // First create and append a new record to indicate we passed
+        // through this field.
+        SoNotRec rec(cont);
+        list->append(&rec, this);
+        list->setLastType(SoNotRec::CONTAINER);
 
-	// If no auditors, just notify container
-	if (! flags.hasAuditors)
-	    cont->notify(list);
+        // If no auditors, just notify container
+        if (!flags.hasAuditors)
+            cont->notify(list);
 
-	// Otherwise, notify container and auditors. We have to make
-	// sure to copy the list before notifying anyone.
-	else {
-	    SoNotList listCopy(*list);
-	    cont->notify(list);
-	    auditorInfo->auditors.notify(&listCopy);
-	}
+        // Otherwise, notify container and auditors. We have to make
+        // sure to copy the list before notifying anyone.
+        else {
+            SoNotList listCopy(*list);
+            cont->notify(list);
+            auditorInfo->auditors.notify(&listCopy);
+        }
     }
 }
 
@@ -873,9 +866,9 @@ SoField::setContainer(SoFieldContainer *cont)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flags.hasAuditors)
-	auditorInfo->container = cont;
+        auditorInfo->container = cont;
     else
-	container = cont;
+        container = cont;
     setDefault(TRUE);
     enableNotify(TRUE);
 }
@@ -893,22 +886,24 @@ SoField::shouldWrite() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!isDefault() || isConnected() || isIgnored()) return TRUE;
+    if (!isDefault() || isConnected() || isIgnored())
+        return TRUE;
 
     // The hard case; if we have any forward connections, should also
     // write ourselves out (actually, that's only strictly necessary
     // if the field is part of a non-builtin node...).
 
-    if (!flags.hasAuditors) return FALSE;
+    if (!flags.hasAuditors)
+        return FALSE;
 
     // Loop through our auditor list, finding fields we are connected
     // to.
     SoAuditorList &auditors = auditorInfo->auditors;
-    int numAuditors = auditors.getLength();
+    int            numAuditors = auditors.getLength();
     for (int i = 0; i < numAuditors; i++) {
-	if (auditors.getType(i) == SoNotRec::FIELD) {
-	    return TRUE;
-	}
+        if (auditors.getType(i) == SoNotRec::FIELD) {
+            return TRUE;
+        }
     }
     return FALSE;
 }
@@ -927,9 +922,9 @@ SoField::addAuditor(void *auditor, SoNotRec::Type type)
 {
 #ifdef DEBUG
     if (auditor == NULL) {
-	SoDebugError::post("SoField::addAuditor", 
-			   "ACK! Trying to add a NULL auditor");
-	return;
+        SoDebugError::post("SoField::addAuditor",
+                           "ACK! Trying to add a NULL auditor");
+        return;
     }
 #endif
     createAuditorInfo();
@@ -952,15 +947,15 @@ SoField::removeAuditor(void *auditor, SoNotRec::Type type)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	audIndex = -1;
+    int audIndex = -1;
     if (flags.hasAuditors)
-	audIndex = auditorInfo->auditors.find(auditor, type);
+        audIndex = auditorInfo->auditors.find(auditor, type);
 
 #ifdef DEBUG
     if (audIndex < 0) {
-	SoDebugError::post("SoField::removeAuditor",
-			   "can't find auditor %#x\n", auditor);
-	return;
+        SoDebugError::post("SoField::removeAuditor", "can't find auditor %#x\n",
+                           auditor);
+        return;
     }
 #endif /* DEBUG */
 
@@ -982,12 +977,14 @@ SoField::enableNotify(SbBool flag)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (flags.notifyEnabled == flag) return flag;
+    if (flags.notifyEnabled == flag)
+        return flag;
 
-    if (flag) evaluate();
+    if (flag)
+        evaluate();
 
     flags.notifyEnabled = flag;
-    return !flag;  // Previous state of flag is returned
+    return !flag; // Previous state of flag is returned
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1005,8 +1002,7 @@ void
 SoField::connectionStatusChanged(int)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1022,8 +1018,7 @@ void
 SoField::fixCopy(SbBool)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1042,30 +1037,29 @@ SoField::referencesCopy() const
 ////////////////////////////////////////////////////////////////////////
 {
     // If this field is not connected, it doesn't reference anything
-    if (! isConnected())
-	return FALSE;
+    if (!isConnected())
+        return FALSE;
 
     // Find the container of the connected field or engine
     // output, and determine if it is an engine
     SoFieldContainer *container;
-    SbBool	     containerKnownToBeEngine = FALSE;
+    SbBool            containerKnownToBeEngine = FALSE;
 
     if (isConnectedFromField()) {
-	SoField	*connectedField;
-	getConnectedField(connectedField);
-	container = connectedField->getContainer();
-	containerKnownToBeEngine = FALSE;
-    }
-    else {
-	SoEngineOutput *connectedOutput;
-	getConnectedEngine(connectedOutput);
-	container = (SoEngine *) connectedOutput->getContainer();
-	containerKnownToBeEngine = TRUE;
+        SoField *connectedField;
+        getConnectedField(connectedField);
+        container = connectedField->getContainer();
+        containerKnownToBeEngine = FALSE;
+    } else {
+        SoEngineOutput *connectedOutput;
+        getConnectedEngine(connectedOutput);
+        container = (SoEngine *)connectedOutput->getContainer();
+        containerKnownToBeEngine = TRUE;
     }
 
     // If a copy of the container exists, this field references a copy
     if (SoFieldContainer::checkCopy(container) != NULL)
-	return TRUE;
+        return TRUE;
 
     // If the container is an engine, see if that engine should be
     // copied, recursively.
@@ -1077,9 +1071,9 @@ SoField::referencesCopy() const
     // ??? probably not worth the effort, since people won't copy
     // ??? complicated engine networks often.
     if ((containerKnownToBeEngine ||
-	container->isOfType(SoEngine::getClassTypeId())) &&
-	((SoEngine *) container)->shouldCopy())
-	return TRUE;
+         container->isOfType(SoEngine::getClassTypeId())) &&
+        ((SoEngine *)container)->shouldCopy())
+        return TRUE;
 
     return FALSE;
 }
@@ -1100,49 +1094,49 @@ SoField::copyConnection(const SoField *fromField)
 {
     // Connected from another field:
     if (fromField->isConnectedFromField()) {
-	SoField	*connectedField;
-	fromField->getConnectedField(connectedField);
+        SoField *connectedField;
+        fromField->getConnectedField(connectedField);
 
-	// Find the index of the connected field in its container
-	SoFieldContainer *connectedFC = connectedField->getContainer();
-	const SoFieldData *fieldData = connectedFC->getFieldData();
-	int index = fieldData->getIndex(connectedFC, connectedField);
+        // Find the index of the connected field in its container
+        SoFieldContainer * connectedFC = connectedField->getContainer();
+        const SoFieldData *fieldData = connectedFC->getFieldData();
+        int index = fieldData->getIndex(connectedFC, connectedField);
 
-	// We may need to copy the field's container
-	SoFieldContainer *FCCopy = connectedFC->copyThroughConnection();
+        // We may need to copy the field's container
+        SoFieldContainer *FCCopy = connectedFC->copyThroughConnection();
 
-	// Get the other field data in case it is different
-	const SoFieldData *otherFieldData = FCCopy->getFieldData();
+        // Get the other field data in case it is different
+        const SoFieldData *otherFieldData = FCCopy->getFieldData();
 
-	// Connect from the corresponding field in the container
-	connectFrom(otherFieldData->getField(FCCopy, index));
+        // Connect from the corresponding field in the container
+        connectFrom(otherFieldData->getField(FCCopy, index));
     }
 
     // Connected from engine:
     else {
-	SoEngineOutput *connectedOutput;
-	fromField->getConnectedEngine(connectedOutput);
+        SoEngineOutput *connectedOutput;
+        fromField->getConnectedEngine(connectedOutput);
 
-	// Find the index of this output in the containing engine
-	SoEngine *connectedEngine = connectedOutput->getContainer();
-	const SoEngineOutputData *outputData =connectedEngine->getOutputData();
-	int outputIndex = outputData->getIndex(connectedEngine,
-					       connectedOutput);
+        // Find the index of this output in the containing engine
+        SoEngine *connectedEngine = connectedOutput->getContainer();
+        const SoEngineOutputData *outputData = connectedEngine->getOutputData();
+        int                       outputIndex =
+            outputData->getIndex(connectedEngine, connectedOutput);
 
-	// We may need to copy the engine itself
-	SoEngine *engineCopy =
-	    (SoEngine *) connectedEngine->copyThroughConnection();
+        // We may need to copy the engine itself
+        SoEngine *engineCopy =
+            (SoEngine *)connectedEngine->copyThroughConnection();
 
-	// Get the other output data in case it is different
-	const SoEngineOutputData *outputDataCopy = engineCopy->getOutputData();
+        // Get the other output data in case it is different
+        const SoEngineOutputData *outputDataCopy = engineCopy->getOutputData();
 
-	// Connect from the corresponding output in the engine copy
-	connectFrom(outputDataCopy->getOutput(engineCopy, outputIndex));
+        // Connect from the corresponding output in the engine copy
+        connectFrom(outputDataCopy->getOutput(engineCopy, outputIndex));
     }
 
     // Make sure state of connection is identical
-    if (! fromField->isConnectionEnabled())
-	enableConnection(FALSE);
+    if (!fromField->isConnectionEnabled())
+        enableConnection(FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1157,16 +1151,16 @@ SoField::copyConnection(const SoField *fromField)
 // Use: protected
 
 void
-SoField::valueChanged(SbBool resetDefault)	// Default is TRUE
+SoField::valueChanged(SbBool resetDefault) // Default is TRUE
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (resetDefault)
-	setDefault(FALSE);
-    
+        setDefault(FALSE);
+
     flags.readOnly = TRUE;
     flags.dirty = FALSE; // So notification WILL happen, at least as
-			 // far as sensors/field container
+                         // far as sensors/field container
     startNotify();
     evaluate();
     flags.readOnly = !flags.connectionEnabled;
@@ -1185,14 +1179,13 @@ SoField::reallyDisconnect()
 ////////////////////////////////////////////////////////////////////////
 {
     if (flags.fromEngine || flags.converted) {
-	SoEngineOutput *out = auditorInfo->connection.engineOutput;
-	out->removeConnection(this);
-	auditorInfo->connection.engineOutput = NULL;
-    }
-    else {
-	SoField *field = auditorInfo->connection.field;
-	field->removeAuditor(this, SoNotRec::FIELD);
-	auditorInfo->connection.field = NULL;
+        SoEngineOutput *out = auditorInfo->connection.engineOutput;
+        out->removeConnection(this);
+        auditorInfo->connection.engineOutput = NULL;
+    } else {
+        SoField *field = auditorInfo->connection.field;
+        field->removeAuditor(this, SoNotRec::FIELD);
+        auditorInfo->connection.field = NULL;
     }
     flags.connected = FALSE;
     flags.converted = FALSE;
@@ -1212,35 +1205,34 @@ SoField::evaluateConnection() const
 ////////////////////////////////////////////////////////////////////////
 {
     // Cast away the nasty const...
-    SoField	*f = (SoField *) this;
+    SoField *f = (SoField *)this;
     f->flags.dirty = FALSE; // This must be done before upstream
-			    // evaluation to break evaluation cycles.
+                            // evaluation to break evaluation cycles.
 
-    if (flags.isEngineModifying ||
-	!flags.connected  || !flags.connectionEnabled) return;
+    if (flags.isEngineModifying || !flags.connected || !flags.connectionEnabled)
+        return;
 
     // If connected to an engine, evaluate that engine. This will
     // cause the value to be written into the field by the engine.
     if (flags.fromEngine || flags.converted) {
 
-	SoEngine *e =
-	    auditorInfo->connection.engineOutput->getContainer();
-	e->evaluateWrapper();
+        SoEngine *e = auditorInfo->connection.engineOutput->getContainer();
+        e->evaluateWrapper();
     }
 
     // If connected to a field, just copy the value from that field
     // UNLESS the readOnly bit is set.
     // This uses the virtual "=" operator, which should do the right thing.
     else if (!f->isReadOnly()) {
-	// Disable notification since we already did it
-	SbBool notifySave = f->flags.notifyEnabled;
-	f->flags.notifyEnabled = FALSE;
+        // Disable notification since we already did it
+        SbBool notifySave = f->flags.notifyEnabled;
+        f->flags.notifyEnabled = FALSE;
 
-	// Copy value
-	f->copyFrom(*auditorInfo->connection.field);
+        // Copy value
+        f->copyFrom(*auditorInfo->connection.field);
 
-	// Reenable notification
-	f->flags.notifyEnabled = notifySave;
+        // Reenable notification
+        f->flags.notifyEnabled = notifySave;
     }
 }
 
@@ -1257,7 +1249,7 @@ SoField::createConverter(const SoType &fromFieldType) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoFieldConverter	*converter;
+    SoFieldConverter *converter;
 
     // Find the type of the conversion engine (if any)
     SoType converterType = SoDB::getConverter(fromFieldType, getTypeId());
@@ -1266,25 +1258,25 @@ SoField::createConverter(const SoType &fromFieldType) const
     if (converterType.isBad()) {
 
 #ifdef DEBUG
-	const char *fromName = fromFieldType.getName().getString();
-	SoDebugError::post("SoField::connectFrom",
-			   "Connection failed - no conversion supported "
-			   "for types (%s --> %s)",
-			   fromName, getTypeId().getName().getString());
+        const char *fromName = fromFieldType.getName().getString();
+        SoDebugError::post("SoField::connectFrom",
+                           "Connection failed - no conversion supported "
+                           "for types (%s --> %s)",
+                           fromName, getTypeId().getName().getString());
 #endif /* DEBUG */
-	return NULL;
+        return NULL;
     }
 
     // If there is a converter, instantiate it and link it in
-    converter = (SoFieldConverter *) converterType.createInstance();
+    converter = (SoFieldConverter *)converterType.createInstance();
 
 #ifdef DEBUG
     // If it's an abstract class, error. This should never happen.
     if (converter == NULL)
-	SoDebugError::post("SoField::connectFrom",
-			   "Connection failed - unable to create an "
-			   "instance of \"%s\" converter",
-			   converterType.getName().getString());
+        SoDebugError::post("SoField::connectFrom",
+                           "Connection failed - unable to create an "
+                           "instance of \"%s\" converter",
+                           converterType.getName().getString());
 #endif /* DEBUG */
 
     return converter;
@@ -1304,9 +1296,9 @@ SoField::read(SoInput *in, const SbName &name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char	c;
-    SbBool	shouldReadConnection = FALSE;
-    SbBool	gotValue = FALSE;
+    char   c;
+    SbBool shouldReadConnection = FALSE;
+    SbBool gotValue = FALSE;
 
     // Turn off notification during reading process.  It is turned
     // back on and notification is started below:
@@ -1314,95 +1306,93 @@ SoField::read(SoInput *in, const SbName &name)
     flags.notifyEnabled = FALSE;
 
     if (in->isBinary()) {
-	short	readFlags;
+        short readFlags;
 
-	if (! readValue(in)) {
-	    SoReadError::post(in,
-			      "Couldn't read binary value for field \"%s\"",
-			      name.getString());
-	    flags.notifyEnabled = wasNotifyEnabled;
-	    return FALSE;
-	}
+        if (!readValue(in)) {
+            SoReadError::post(in, "Couldn't read binary value for field \"%s\"",
+                              name.getString());
+            flags.notifyEnabled = wasNotifyEnabled;
+            return FALSE;
+        }
 
-	// Read flags
-	if (! in->read(readFlags)) {
-	    SoReadError::post(in,
-			      "Couldn't read binary flags for field \"%s\"",
-			      name.getString());
-	    flags.notifyEnabled = wasNotifyEnabled;
-	    return FALSE;
-	}
+        // Read flags
+        if (!in->read(readFlags)) {
+            SoReadError::post(in, "Couldn't read binary flags for field \"%s\"",
+                              name.getString());
+            flags.notifyEnabled = wasNotifyEnabled;
+            return FALSE;
+        }
 
-	// (Don't use setIgnored() to set this, since it would cause
-	// notification, which we don't want to have happen for trigger
-	// fields.)
-	flags.ignored = (readFlags & FIELD_IGNORED) != 0;
-	shouldReadConnection = (readFlags & FIELD_CONNECTED) != 0;
-	setDefault((readFlags & FIELD_DEFAULT) != 0);
-	gotValue      = TRUE;
+        // (Don't use setIgnored() to set this, since it would cause
+        // notification, which we don't want to have happen for trigger
+        // fields.)
+        flags.ignored = (readFlags & FIELD_IGNORED) != 0;
+        shouldReadConnection = (readFlags & FIELD_CONNECTED) != 0;
+        setDefault((readFlags & FIELD_DEFAULT) != 0);
+        gotValue = TRUE;
     }
 
     // ASCII version...
     else {
-	// Check for ignore flag with no value
-	if (in->read(c) && c == IGNORE_CHAR) {
-	    setDefault(TRUE);
-	    setIgnored(TRUE);
+        // Check for ignore flag with no value
+        if (in->read(c) && c == IGNORE_CHAR) {
+            setDefault(TRUE);
+            setIgnored(TRUE);
 
-	    // Check for connection to engine/field
-	    if (in->read(c) && c == CONNECTION_CHAR)
-		shouldReadConnection = TRUE;
-	    else
-		in->putBack(c);
-	    gotValue = FALSE;
-	}
+            // Check for connection to engine/field
+            if (in->read(c) && c == CONNECTION_CHAR)
+                shouldReadConnection = TRUE;
+            else
+                in->putBack(c);
+            gotValue = FALSE;
+        }
 
-	else {
-	    setIgnored(FALSE);
+        else {
+            setIgnored(FALSE);
 
-	    // If character is connection character, we just use the
-	    // default value and skip the reading-value stuff
-	    if (c != CONNECTION_CHAR) {
-		in->putBack(c);
+            // If character is connection character, we just use the
+            // default value and skip the reading-value stuff
+            if (c != CONNECTION_CHAR) {
+                in->putBack(c);
 
-		if (! readValue(in)) {
-		    SoReadError::post(in,
-				      "Couldn't read value for field \"%s\"",
-				      name.getString());
-		    flags.notifyEnabled = wasNotifyEnabled;
-		    return FALSE;
-		}
+                if (!readValue(in)) {
+                    SoReadError::post(in,
+                                      "Couldn't read value for field \"%s\"",
+                                      name.getString());
+                    flags.notifyEnabled = wasNotifyEnabled;
+                    return FALSE;
+                }
 
-		gotValue = TRUE;
-		setDefault(FALSE);
+                gotValue = TRUE;
+                setDefault(FALSE);
 
-		// Check for ignore flag after value
-		if (in->read(c) && c == IGNORE_CHAR) {
-		    // (Don't use setIgnored() to set this, since it
-		    // would cause notification, which we don't want
-		    // to have happen for trigger fields.)
-		    flags.ignored = TRUE;
+                // Check for ignore flag after value
+                if (in->read(c) && c == IGNORE_CHAR) {
+                    // (Don't use setIgnored() to set this, since it
+                    // would cause notification, which we don't want
+                    // to have happen for trigger fields.)
+                    flags.ignored = TRUE;
 
-		    // Get character to check for connection to
-		    // engine/field below.
-		    in->read(c);
-		}
-	    } else {
-		gotValue = FALSE;
-	    }
+                    // Get character to check for connection to
+                    // engine/field below.
+                    in->read(c);
+                }
+            } else {
+                gotValue = FALSE;
+            }
 
-	    // Check for connection to engine/field
-	    if (c == CONNECTION_CHAR)
-		shouldReadConnection = TRUE;
-	    else
-		in->putBack(c);
-	}
+            // Check for connection to engine/field
+            if (c == CONNECTION_CHAR)
+                shouldReadConnection = TRUE;
+            else
+                in->putBack(c);
+        }
     }
 
     // Read connection info if necessary.
-    if (shouldReadConnection  && !readConnection(in)) {
-	flags.notifyEnabled = wasNotifyEnabled;
-	return FALSE;
+    if (shouldReadConnection && !readConnection(in)) {
+        flags.notifyEnabled = wasNotifyEnabled;
+        return FALSE;
     }
 
     // Turn notification back the way it was:
@@ -1411,9 +1401,9 @@ SoField::read(SoInput *in, const SbName &name)
     // If a value was read (even if there's a connection), call
     // valueChanged. Otherwise, just notify.
     if (gotValue) {
-	valueChanged(FALSE);
+        valueChanged(FALSE);
     } else {
-	startNotify();
+        startNotify();
     }
 
     return TRUE;
@@ -1435,135 +1425,134 @@ SoField::readConnection(SoInput *in)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoFieldContainer	*connContainer;
-    SbName		fieldName;
-    SbBool		gotChar;
-    char		c;
+    SoFieldContainer *connContainer;
+    SbName            fieldName;
+    SbBool            gotChar;
+    char              c;
 
     // The field is connected to either an engine output or to a field
     // of an engine or node. First, read the node or engine as a base.
     SoBase *baseTemp;
-    if (! SoBase::read(in, baseTemp, SoFieldContainer::getClassTypeId()))
-	return FALSE;
+    if (!SoBase::read(in, baseTemp, SoFieldContainer::getClassTypeId()))
+        return FALSE;
 
     if (baseTemp == NULL) {
-	SoReadError::post(in, "Missing node or engine name in "
-			  "connection specification");
-	return FALSE;
+        SoReadError::post(in, "Missing node or engine name in "
+                              "connection specification");
+        return FALSE;
     }
 
-    connContainer = (SoFieldContainer *) baseTemp;
+    connContainer = (SoFieldContainer *)baseTemp;
 
     // Read the field separator character (ASCII only)
-    if (! in->isBinary() &&
-	(! (gotChar = in->read(c)) || c != FIELD_SEP_CHAR)) {
+    if (!in->isBinary() && (!(gotChar = in->read(c)) || c != FIELD_SEP_CHAR)) {
 
-	if (gotChar)
-	    SoReadError::post(in, "Expected '%c'; got '%c'",
-			      FIELD_SEP_CHAR, c);
-	else
-	    SoReadError::post(in, "Expected '%c'; got EOF", FIELD_SEP_CHAR);
+        if (gotChar)
+            SoReadError::post(in, "Expected '%c'; got '%c'", FIELD_SEP_CHAR, c);
+        else
+            SoReadError::post(in, "Expected '%c'; got EOF", FIELD_SEP_CHAR);
 
-	return FALSE;
+        return FALSE;
     }
 
     // Read the field name or output name
-    if (! in->read(fieldName, TRUE)) {
-	SoReadError::post(in,
-			  "Premature end of file before connection was read");
-	return FALSE;
+    if (!in->read(fieldName, TRUE)) {
+        SoReadError::post(in,
+                          "Premature end of file before connection was read");
+        return FALSE;
     }
 
     // If the base is a node, make sure the field name is valid and
     // then connect to it.
     if (connContainer->isOfType(SoNode::getClassTypeId())) {
-	SoNode	*node = (SoNode *) connContainer;
-	SoField	*connField;
+        SoNode * node = (SoNode *)connContainer;
+        SoField *connField;
 
-	connField = node->getField(fieldName);
+        connField = node->getField(fieldName);
 
-	if (connField == NULL) {
-	    const char *nodeName = node->getTypeId().getName().getString();
-	    SoReadError::post(in, "No such field \"%s\" in node %s",
-			      fieldName.getString(), nodeName);
-	    return FALSE;
-	}
+        if (connField == NULL) {
+            const char *nodeName = node->getTypeId().getName().getString();
+            SoReadError::post(in, "No such field \"%s\" in node %s",
+                              fieldName.getString(), nodeName);
+            return FALSE;
+        }
 
-	if (! connectFrom(connField)) {
-	    const char *nodeName = node->getTypeId().getName().getString();
-	    SoReadError::post(in, "Can't connect to field \"%s.%s\"",
-			      nodeName, fieldName.getString());
-	    return FALSE;
-	}
+        if (!connectFrom(connField)) {
+            const char *nodeName = node->getTypeId().getName().getString();
+            SoReadError::post(in, "Can't connect to field \"%s.%s\"", nodeName,
+                              fieldName.getString());
+            return FALSE;
+        }
     }
 
     // If the base is an engine, make sure the name is a valid field
     // or output and then connect to it
     else if (connContainer->isOfType(SoEngine::getClassTypeId())) {
-	SoEngine	*engine = (SoEngine *) connContainer;
-	SoField		*connField;
-	SoEngineOutput	*connOutput;
+        SoEngine *      engine = (SoEngine *)connContainer;
+        SoField *       connField;
+        SoEngineOutput *connOutput;
 
-	connField = engine->getField(fieldName);
+        connField = engine->getField(fieldName);
 
-	if (connField == NULL) {
+        if (connField == NULL) {
 
-	    // See if it's an output
-	    connOutput = engine->getOutput(fieldName);
+            // See if it's an output
+            connOutput = engine->getOutput(fieldName);
 
-	    if (connOutput == NULL) {
-		const char *eName = engine->getTypeId().getName().getString();
-		SoReadError::post(in, "No such field or output \"%s\" "
-				  "in engine %s",
-				  fieldName.getString(), eName);
-		return FALSE;
-	    }
+            if (connOutput == NULL) {
+                const char *eName = engine->getTypeId().getName().getString();
+                SoReadError::post(in,
+                                  "No such field or output \"%s\" "
+                                  "in engine %s",
+                                  fieldName.getString(), eName);
+                return FALSE;
+            }
 
-	    if (! connectFrom(connOutput)) {
-		const char *eName = engine->getTypeId().getName().getString();
-		SoReadError::post(in,
-				  "Can't connect to engine output \"%s.%s\"",
-				  eName, fieldName.getString());
-		return FALSE;
-	    }
-	}
-	else {
-	    if (! connectFrom(connField)) {
-		const char *eName = engine->getTypeId().getName().getString();
-		SoReadError::post(in, "Can't connect to field \"%s.%s\"",
-				  eName, fieldName.getString());
-		return FALSE;
-	    }
-	}
+            if (!connectFrom(connOutput)) {
+                const char *eName = engine->getTypeId().getName().getString();
+                SoReadError::post(in,
+                                  "Can't connect to engine output \"%s.%s\"",
+                                  eName, fieldName.getString());
+                return FALSE;
+            }
+        } else {
+            if (!connectFrom(connField)) {
+                const char *eName = engine->getTypeId().getName().getString();
+                SoReadError::post(in, "Can't connect to field \"%s.%s\"", eName,
+                                  fieldName.getString());
+                return FALSE;
+            }
+        }
     }
 
     // If it is a global field...
     else if (connContainer->isOfType(SoGlobalField::getClassTypeId())) {
 
-	SoGlobalField *gf = (SoGlobalField *) connContainer;
-	SoField *connField = gf->getMyField();
+        SoGlobalField *gf = (SoGlobalField *)connContainer;
+        SoField *      connField = gf->getMyField();
 
-	// Make sure the name in the input is the name of the global field
-	if (fieldName != gf->getName()) {
-	    const char *globalName = gf->getName().getString();
-	    SoReadError::post(in, "Wrong field name (\"%s\") for global "
-			      "field \"%s\"",
-			      fieldName.getString(), globalName);
-	    return FALSE;
-	}
+        // Make sure the name in the input is the name of the global field
+        if (fieldName != gf->getName()) {
+            const char *globalName = gf->getName().getString();
+            SoReadError::post(in,
+                              "Wrong field name (\"%s\") for global "
+                              "field \"%s\"",
+                              fieldName.getString(), globalName);
+            return FALSE;
+        }
 
-	if (! connectFrom(connField)) {
-	    SoReadError::post(in, "Can't connect to global field \"%s\"",
-			      gf->getName().getString());
-	    return FALSE;
-	}
+        if (!connectFrom(connField)) {
+            SoReadError::post(in, "Can't connect to global field \"%s\"",
+                              gf->getName().getString());
+            return FALSE;
+        }
     }
 
     // If it's not a node, engine or global field, problem
     else {
-	SoReadError::post(in, "Trying to connect to a %s",
-			  connContainer->getTypeId().getName().getString());
-	return FALSE;
+        SoReadError::post(in, "Trying to connect to a %s",
+                          connContainer->getTypeId().getName().getString());
+        return FALSE;
     }
 
     return TRUE;
@@ -1583,71 +1572,71 @@ SoField::write(SoOutput *out, const SbName &name) const
 ////////////////////////////////////////////////////////////////////////
 {
     if (out->getStage() == SoOutput::COUNT_REFS)
-	countWriteRefs(out);
+        countWriteRefs(out);
 
     else {
-	// Actually write the field
-	evaluate();
+        // Actually write the field
+        evaluate();
 
-	SbBool writeConn = isConnected() && isConnectionEnabled();
+        SbBool writeConn = isConnected() && isConnectionEnabled();
 
-	// We should write a field-to-field connection if one exists
-	// and the container at the other end should be written
-	if (writeConn && isConnectedFromField()) {
-	    SoField	*field;
-	    getConnectedField(field);
-	    SoFieldContainer *container = field->getContainer();
-	    if (container == NULL || ! container->shouldWrite())
-		writeConn = FALSE;
-	}
+        // We should write a field-to-field connection if one exists
+        // and the container at the other end should be written
+        if (writeConn && isConnectedFromField()) {
+            SoField *field;
+            getConnectedField(field);
+            SoFieldContainer *container = field->getContainer();
+            if (container == NULL || !container->shouldWrite())
+                writeConn = FALSE;
+        }
 
-	if (out->isBinary()) {
-	    short	flags = 0;
+        if (out->isBinary()) {
+            short flags = 0;
 
-	    out->write(name.getString());
-	    writeValue(out);
+            out->write(name.getString());
+            writeValue(out);
 
-	    if (isIgnored())
-		flags |= FIELD_IGNORED;
-	    if (writeConn)
-		flags |= FIELD_CONNECTED;
-	    if (isDefault())
-		flags |= FIELD_DEFAULT;
+            if (isIgnored())
+                flags |= FIELD_IGNORED;
+            if (writeConn)
+                flags |= FIELD_CONNECTED;
+            if (isDefault())
+                flags |= FIELD_DEFAULT;
 
-	    out->write(flags);
+            out->write(flags);
 
-	    // Recurse on connected stuff if necessary
-	    if (writeConn)
-		writeConnection(out);
-	}
+            // Recurse on connected stuff if necessary
+            if (writeConn)
+                writeConnection(out);
+        }
 
-	// Only write out IF connected, not default, or ignored:
-	else if (writeConn || !isDefault() || isIgnored()) {
-	    out->indent();
-	    out->write(name.getString());
-	    out->write(out->isCompact() ? ' ' : '\t');
+        // Only write out IF connected, not default, or ignored:
+        else if (writeConn || !isDefault() || isIgnored()) {
+            out->indent();
+            out->write(name.getString());
+            out->write(out->isCompact() ? ' ' : '\t');
 
-	    if (! isDefault())
-		writeValue(out);
+            if (!isDefault())
+                writeValue(out);
 
-	    if (isIgnored()) {
-		if (! isDefault())
-		    out->write(' ');
-		out->write(IGNORE_CHAR);
-	    }
+            if (isIgnored()) {
+                if (!isDefault())
+                    out->write(' ');
+                out->write(IGNORE_CHAR);
+            }
 
-	    // Recurse on connected stuff if necessary
-	    if (writeConn)
-		writeConnection(out);
+            // Recurse on connected stuff if necessary
+            if (writeConn)
+                writeConnection(out);
 
-	    // Annotate if necessary
-	    if (out->getAnnotation() & SoOutput::ADDRESSES) {
-		char buf[100];
-		sprintf(buf, " # %p", this);
-		out->write(buf);
-	    }
-	    out->write(out->isCompact() ? ' ' : '\n');
-	}
+            // Annotate if necessary
+            if (out->getAnnotation() & SoOutput::ADDRESSES) {
+                char buf[100];
+                sprintf(buf, " # %p", this);
+                out->write(buf);
+            }
+            out->write(out->isCompact() ? ' ' : '\n');
+        }
     }
 }
 
@@ -1663,29 +1652,29 @@ SoField::countWriteRefs(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! isConnected())
-	return;
+    if (!isConnected())
+        return;
 
     // If we are connected from an engine output, add a reference
     // to that engine
     if (flags.fromEngine || flags.converted) {
-	// We can't use getConnectedEngine() here because we want to
-	// make sure we get the field converter if we're connected to one
-	SoEngine *container = 
-	    auditorInfo->connection.engineOutput->getContainer();
-	if (container != NULL)
-	    container->addWriteReference(out);
+        // We can't use getConnectedEngine() here because we want to
+        // make sure we get the field converter if we're connected to one
+        SoEngine *container =
+            auditorInfo->connection.engineOutput->getContainer();
+        if (container != NULL)
+            container->addWriteReference(out);
     }
 
     // If we are connected from another field, add a reference to
     // the field's container, but mark it as having come from a
     // field-to-field connection
     else {
-	SoField	*field;
-	getConnectedField(field);
-	SoFieldContainer *container = field->getContainer();
-	if (container != NULL)
-	    container->addWriteReference(out, TRUE);
+        SoField *field;
+        getConnectedField(field);
+        SoFieldContainer *container = field->getContainer();
+        if (container != NULL)
+            container->addWriteReference(out, TRUE);
     }
 }
 
@@ -1702,19 +1691,19 @@ SoField::writeConnection(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoFieldContainer	*container;
-    SbName		fieldName;
+    SoFieldContainer *container;
+    SbName            fieldName;
 
     // Write out connection character (ASCII only)
-    if (! out->isBinary()) {
-	out->write(' ');
-	out->write(CONNECTION_CHAR);
-	if (out->getAnnotation()&SoOutput::ADDRESSES) {
-	    char buf[100];
-	    sprintf(buf, " # %p", this);
-	    out->write(buf);
-	}
-	out->write('\n');
+    if (!out->isBinary()) {
+        out->write(' ');
+        out->write(CONNECTION_CHAR);
+        if (out->getAnnotation() & SoOutput::ADDRESSES) {
+            char buf[100];
+            sprintf(buf, " # %p", this);
+            out->write(buf);
+        }
+        out->write('\n');
     }
 
     // Base will be indented a little more
@@ -1726,34 +1715,33 @@ SoField::writeConnection(SoOutput *out) const
     container->writeInstance(out);
 
     // Write out separator character (ASCII only)
-    if (! out->isBinary()) {
-	out->indent();
-	out->write(FIELD_SEP_CHAR);
-	out->write(' ');
+    if (!out->isBinary()) {
+        out->indent();
+        out->write(FIELD_SEP_CHAR);
+        out->write(' ');
     }
 
     out->write(fieldName.getString());
 
-    if (out->getAnnotation()&SoOutput::ADDRESSES) {
-	char	buf[100];
-	void	*ptr;
+    if (out->getAnnotation() & SoOutput::ADDRESSES) {
+        char  buf[100];
+        void *ptr;
 
-	if (flags.fromEngine) {
-	    SoEngineOutput *eo;
-	    getConnectedEngine(eo);
-	    ptr = eo;
-	}
-	else {
-	    SoField *f;
-	    getConnectedField(f);
-	    ptr = f;
-	}
-	sprintf(buf, " # %p", ptr);
-	out->write(buf);
+        if (flags.fromEngine) {
+            SoEngineOutput *eo;
+            getConnectedEngine(eo);
+            ptr = eo;
+        } else {
+            SoField *f;
+            getConnectedField(f);
+            ptr = f;
+        }
+        sprintf(buf, " # %p", ptr);
+        out->write(buf);
     }
 
-    if (! out->isBinary())
-	out->write('\n');
+    if (!out->isBinary())
+        out->write('\n');
 
     // Base was indented
     out->decrementIndent();
@@ -1768,10 +1756,9 @@ SoField::writeConnection(SoOutput *out) const
 // Use: private
 
 SoFieldConverter *
-SoField::getConverter() const
-{
+SoField::getConverter() const {
     return (SoFieldConverter *)
-	auditorInfo->connection.engineOutput->getContainer();
+        auditorInfo->connection.engineOutput->getContainer();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1785,25 +1772,24 @@ SoField::getConverter() const
 
 void
 SoField::getConnectionInfo(SoFieldContainer *&container,
-			   SbName &fieldName) const
-{
+                           SbName &           fieldName) const {
     // If it's connected through a converter, recurse
     if (flags.converted)
-	getConverter()->getConnectedInput()->getConnectionInfo(container,
-							       fieldName);
+        getConverter()->getConnectedInput()->getConnectionInfo(container,
+                                                               fieldName);
 
     // Field-to-field connection?
-    else if (! flags.fromEngine) {
-	container = auditorInfo->connection.field->getContainer();
-	container->getFieldName(auditorInfo->connection.field, fieldName);
-	return;
+    else if (!flags.fromEngine) {
+        container = auditorInfo->connection.field->getContainer();
+        container->getFieldName(auditorInfo->connection.field, fieldName);
+        return;
     }
 
     // It's an engine.
     else {
-	container = auditorInfo->connection.engineOutput->getContainer();
-	((SoEngine *) container)->getOutputName(
-	    auditorInfo->connection.engineOutput, fieldName);
+        container = auditorInfo->connection.engineOutput->getContainer();
+        ((SoEngine *)container)
+            ->getOutputName(auditorInfo->connection.engineOutput, fieldName);
     }
 }
 
@@ -1836,7 +1822,7 @@ SoField::reallocFieldBuf(void *ptr, size_t newSize)
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoType	SoSField::classTypeId;
+SoType SoSField::classTypeId;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1863,8 +1849,7 @@ SoSField::initClass()
 SoSField::~SoSField()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1893,8 +1878,7 @@ SoSField::createInstance()
 SoSField::SoSField()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1904,8 +1888,8 @@ SoSField::SoSField()
 //
 //////////////////////////////////////////////////////////////////////////////
 
-std::vector<char> SoMField::fieldBuf;		// Used by SoMField::get1()
-SoType	SoMField::classTypeId;
+std::vector<char> SoMField::fieldBuf; // Used by SoMField::get1()
+SoType            SoMField::classTypeId;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1932,8 +1916,7 @@ SoMField::initClass()
 SoMField::~SoMField()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1973,14 +1956,12 @@ SoMField::SoMField()
 // Use: public
 
 void
-SoMField::setNum(int n)
-{
+SoMField::setNum(int n) {
     if (n > num)
-	insertSpace(num, n-num);
+        insertSpace(num, n - num);
     else if (n < num)
-	deleteValues(n);
+        deleteValues(n);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1991,28 +1972,28 @@ SoMField::setNum(int n)
 // Use: public
 
 void
-SoMField::deleteValues(int start,	// Starting index
-		       int numToDelete)	// Number of values to delete
+SoMField::deleteValues(int start,       // Starting index
+                       int numToDelete) // Number of values to delete
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	lastToCopy, i;
+    int lastToCopy, i;
 
     if (numToDelete < 0)
-	numToDelete = getNum() - start;
+        numToDelete = getNum() - start;
 
     // Special case of deleting all values
     if (numToDelete == getNum())
-	deleteAllValues();
+        deleteAllValues();
 
     else {
-	// Copy from the end of the array to the middle
-	lastToCopy = (getNum() - 1) - numToDelete;
-	for (i = start; i <= lastToCopy; i++)
-	    copyValue(i, i + numToDelete);
+        // Copy from the end of the array to the middle
+        lastToCopy = (getNum() - 1) - numToDelete;
+        for (i = start; i <= lastToCopy; i++)
+            copyValue(i, i + numToDelete);
 
-	// Truncate the array
-	makeRoom(getNum() - numToDelete);
+        // Truncate the array
+        makeRoom(getNum() - numToDelete);
     }
 
     // The field value has changed...
@@ -2028,8 +2009,8 @@ SoMField::deleteValues(int start,	// Starting index
 // Use: public
 
 void
-SoMField::insertSpace(int start,	// Starting index
-		      int numToInsert)		// Number of spaces to insert
+SoMField::insertSpace(int start,       // Starting index
+                      int numToInsert) // Number of spaces to insert
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -2038,7 +2019,7 @@ SoMField::insertSpace(int start,	// Starting index
 
     // Copy stuff out of the inserted area to later in the array
     for (int i = num - 1; i >= start + numToInsert; --i)
-	copyValue(i, i - numToInsert);
+        copyValue(i, i - numToInsert);
 
     // The field value has changed...
     valueChanged();
@@ -2057,17 +2038,17 @@ SoMField::set1(int index, const char *valueString)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoInput	in;
-    in.setBuffer((void *) valueString, strlen(valueString));
+    SoInput in;
+    in.setBuffer((void *)valueString, strlen(valueString));
 
     if (read1Value(&in, index)) {
 
-	// We have to do this here because read1Value() doesn't
-	// indicate that values have changed, since it's usually used
-	// in a larger reading context.
-	valueChanged();
+        // We have to do this here because read1Value() doesn't
+        // indicate that values have changed, since it's usually used
+        // in a larger reading context.
+        valueChanged();
 
-	return TRUE;
+        return TRUE;
     }
     return FALSE;
 }
@@ -2085,7 +2066,7 @@ SoMField::get1(int index, SbString &valueString)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoOutput	out;
+    SoOutput out;
 
     // Make sure the field value is up to date
     evaluate();
@@ -2096,7 +2077,8 @@ SoMField::get1(int index, SbString &valueString)
     }
 
     // Set up output into a string buffer
-    out.setBuffer((void *) fieldBuf.data(), fieldBuf.size(), &SoMField::reallocFieldBuf);
+    out.setBuffer((void *)fieldBuf.data(), fieldBuf.size(),
+                  &SoMField::reallocFieldBuf);
 
     // Make sure that the file header and lots of white space will NOT
     // be written into the string
@@ -2121,13 +2103,13 @@ SoMField::get1(int index, SbString &valueString)
 // Use: protected
 
 void
-SoMField::makeRoom(int newNum)		// New number of values
+SoMField::makeRoom(int newNum) // New number of values
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Allocate room to hold all values if necessary
     if (newNum != num) {
-	allocValues(newNum);
+        allocValues(newNum);
     }
 }
 
@@ -2145,90 +2127,88 @@ SoMField::readValue(SoInput *in)
 ////////////////////////////////////////////////////////////////////////
 {
     if (in->isBinary()) {
-	int	numToRead;
+        int numToRead;
 
-	// Read number of values
-	if (! in->read(numToRead)) {
-	    SoReadError::post(in, "Couldn't read number of binary values "
-			      "in multiple-value field");
-	    return FALSE;
-	}
+        // Read number of values
+        if (!in->read(numToRead)) {
+            SoReadError::post(in, "Couldn't read number of binary values "
+                                  "in multiple-value field");
+            return FALSE;
+        }
 
-	// Make space for values; also sets number of values
-	makeRoom(numToRead);
+        // Make space for values; also sets number of values
+        makeRoom(numToRead);
 
-	// Read values
-        if (! readBinaryValues(in, numToRead))
+        // Read values
+        if (!readBinaryValues(in, numToRead))
             return FALSE;
     }
 
     else {
-	char	c;
-	int	curIndex = 0;
+        char c;
+        int  curIndex = 0;
 
-	// Check for multiple field values
-	if (in->read(c) && c == OPEN_BRACE_CHAR) {
+        // Check for multiple field values
+        if (in->read(c) && c == OPEN_BRACE_CHAR) {
 
-	    // Check for no values: just an open and close brace
-	    if (in->read(c) && c == CLOSE_BRACE_CHAR)
-		;					// Do nothing now
+            // Check for no values: just an open and close brace
+            if (in->read(c) && c == CLOSE_BRACE_CHAR)
+                ; // Do nothing now
 
-	    else {
-		in->putBack(c);
+            else {
+                in->putBack(c);
 
-		while (TRUE) {
+                while (TRUE) {
 
-		    // Make some room at end if necessary
-		    if (curIndex >= getNum())
-			makeRoom(getNum() + VALUE_CHUNK_SIZE);
+                    // Make some room at end if necessary
+                    if (curIndex >= getNum())
+                        makeRoom(getNum() + VALUE_CHUNK_SIZE);
 
-		    if (! read1Value(in, curIndex++) || ! in->read(c)) {
-			SoReadError::post(in,
-					  "Couldn't read value %d of field",
-					  curIndex);
-			return FALSE;
-		    }
+                    if (!read1Value(in, curIndex++) || !in->read(c)) {
+                        SoReadError::post(in, "Couldn't read value %d of field",
+                                          curIndex);
+                        return FALSE;
+                    }
 
-		    if (c == VALUE_SEPARATOR_CHAR) {
+                    if (c == VALUE_SEPARATOR_CHAR) {
 
-			// See if this is a trailing separator (right before 
-			// the closing brace). This is legal, but ignored.
+                        // See if this is a trailing separator (right before
+                        // the closing brace). This is legal, but ignored.
 
-			if (in->read(c)) {
-			    if (c == CLOSE_BRACE_CHAR)
-				break;
-			    else
-				in->putBack(c);
-			}
-		    }
+                        if (in->read(c)) {
+                            if (c == CLOSE_BRACE_CHAR)
+                                break;
+                            else
+                                in->putBack(c);
+                        }
+                    }
 
-		    else if (c == CLOSE_BRACE_CHAR)
-			break;
+                    else if (c == CLOSE_BRACE_CHAR)
+                        break;
 
-		    else {
-			SoReadError::post(in,
-					  "Expected '%c' or '%c' but got "
-					  "'%c' while reading value %d",
-					  VALUE_SEPARATOR_CHAR,
-					  CLOSE_BRACE_CHAR, c,
-					  curIndex);
-			return FALSE;
-		    }
-		}
-	    }
+                    else {
+                        SoReadError::post(in,
+                                          "Expected '%c' or '%c' but got "
+                                          "'%c' while reading value %d",
+                                          VALUE_SEPARATOR_CHAR,
+                                          CLOSE_BRACE_CHAR, c, curIndex);
+                        return FALSE;
+                    }
+                }
+            }
 
-	    // If extra space left over, nuke it
-	    if (curIndex < getNum())
-		makeRoom(curIndex);
-	}
+            // If extra space left over, nuke it
+            if (curIndex < getNum())
+                makeRoom(curIndex);
+        }
 
-	else {
-	    // Try reading 1 value
-	    in->putBack(c);
-	    makeRoom(1);
-	    if (! read1Value(in, 0))
-		return FALSE;
-	}
+        else {
+            // Try reading 1 value
+            in->putBack(c);
+            makeRoom(1);
+            if (!read1Value(in, 0))
+                return FALSE;
+        }
     }
 
     return TRUE;
@@ -2248,48 +2228,47 @@ SoMField::writeValue(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     if (out->isBinary()) {
-	out->write(num);
+        out->write(num);
         writeBinaryValues(out);
     }
 
     else {
-	if (num == 1)
-	    write1Value(out, 0);
+        if (num == 1)
+            write1Value(out, 0);
 
-	else {
-	    int	numOnLine = 0, maxOnLine = getNumValuesPerLine();
+        else {
+            int numOnLine = 0, maxOnLine = getNumValuesPerLine();
 
-	    out->write(OPEN_BRACE_CHAR);
-	    out->write(' ');
+            out->write(OPEN_BRACE_CHAR);
+            out->write(' ');
 
-	    out->incrementIndent(4);
+            out->incrementIndent(4);
 
-	    for (i = 0; i < num; i++) {
+            for (i = 0; i < num; i++) {
 
-		write1Value(out, i);
+                write1Value(out, i);
 
-		if (i < num - 1) {
-		    out->write(VALUE_SEPARATOR_CHAR);
-		    if (++numOnLine == maxOnLine && ! out->isCompact()) {
-			out->write('\n');
-			out->indent();
-			out->write(' ');
-			out->write(' ');
-			numOnLine = 0;
-		    }
-		    else
-			out->write(' ');
-		}
-	    }
+                if (i < num - 1) {
+                    out->write(VALUE_SEPARATOR_CHAR);
+                    if (++numOnLine == maxOnLine && !out->isCompact()) {
+                        out->write('\n');
+                        out->indent();
+                        out->write(' ');
+                        out->write(' ');
+                        numOnLine = 0;
+                    } else
+                        out->write(' ');
+                }
+            }
 
-	    out->write(' ');
-	    out->write(CLOSE_BRACE_CHAR);
+            out->write(' ');
+            out->write(CLOSE_BRACE_CHAR);
 
-	    out->decrementIndent(4);
-	}
+            out->decrementIndent(4);
+        }
     }
 }
 
@@ -2306,7 +2285,7 @@ SoMField::writeBinaryValues(SoOutput *out) const // Defines writing action
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     for (i = 0; i < num; i++)
         write1Value(out, i);
@@ -2320,15 +2299,15 @@ SoMField::writeBinaryValues(SoOutput *out) const // Defines writing action
 // Use: private
 
 SbBool
-SoMField::readBinaryValues(SoInput *in,    // Reading specification
-                    	   int numToRead)  // Number of values to read
+SoMField::readBinaryValues(SoInput *in,   // Reading specification
+                           int      numToRead) // Number of values to read
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     for (i = 0; i < numToRead; i++)
-        if (! read1Value(in, i))
+        if (!read1Value(in, i))
             return FALSE;
 
     return TRUE;
@@ -2370,6 +2349,3 @@ SoMField::reallocFieldBuf(void *ptr, size_t newSize)
 
     return fieldBuf.data();
 }
-
-
-

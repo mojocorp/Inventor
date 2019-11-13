@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_UNITS_
-#define  _SO_UNITS_
+#ifndef _SO_UNITS_
+#define _SO_UNITS_
 
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoTransformation.h>
@@ -74,44 +74,46 @@ class SoUnits : public SoTransformation {
 
   public:
     enum Units {
-	METERS,
-	CENTIMETERS,
-	MILLIMETERS,
-	MICROMETERS,
-	MICRONS,
-	NANOMETERS,
-	ANGSTROMS,
-	KILOMETERS,
-	FEET,
-	INCHES,
-	POINTS,
-	YARDS,
-	MILES,
-	NAUTICAL_MILES
+        METERS,
+        CENTIMETERS,
+        MILLIMETERS,
+        MICROMETERS,
+        MICRONS,
+        NANOMETERS,
+        ANGSTROMS,
+        KILOMETERS,
+        FEET,
+        INCHES,
+        POINTS,
+        YARDS,
+        MILES,
+        NAUTICAL_MILES
     };
 
     // Fields
-    SoSFEnum		units;		// Current unit
+    SoSFEnum units; // Current unit
 
     // Constructor
     SoUnits();
 
-  SoEXTENDER public:
-    virtual void	doAction(SoAction *action);
-    virtual void	callback(SoCallbackAction *action);
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
-    virtual void	getMatrix(SoGetMatrixAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	pick(SoPickAction *action);
+    SoEXTENDER
+  public:
+    virtual void doAction(SoAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void getMatrix(SoGetMatrixAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void pick(SoPickAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     virtual ~SoUnits();
 
   private:
-    static const float	factor[14];
+    static const float factor[14];
 };
 
 #endif /* _SO_UNITS_ */

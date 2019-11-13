@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,8 +64,7 @@ SO_ELEMENT_SOURCE(SoTextureMatrixElement);
 // Use: internal
 
 void
-SoTextureMatrixElement::initClass()
-{
+SoTextureMatrixElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoTextureMatrixElement, SoAccumulatedElement);
 }
 
@@ -79,8 +78,7 @@ SoTextureMatrixElement::initClass()
 SoTextureMatrixElement::~SoTextureMatrixElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -109,7 +107,7 @@ SoTextureMatrixElement::push(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureMatrixElement *elt = (SoTextureMatrixElement*)getNextInStack();
+    SoTextureMatrixElement *elt = (SoTextureMatrixElement *)getNextInStack();
     textureMatrix = elt->textureMatrix;
     nodeIds = elt->nodeIds;
 }
@@ -126,16 +124,16 @@ SoTextureMatrixElement::makeIdentity(SoState *state, SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureMatrixElement	*elt;
+    SoTextureMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoTextureMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoTextureMatrixElement *)getElement(state, classStackIndex);
 
     if (elt != NULL) {
-	elt->makeEltIdentity();
+        elt->makeEltIdentity();
 
-	// Update node id list in element
-	elt->setNodeId(node);
+        // Update node id list in element
+        elt->setNodeId(node);
     }
 }
 
@@ -148,20 +146,20 @@ SoTextureMatrixElement::makeIdentity(SoState *state, SoNode *node)
 
 void
 SoTextureMatrixElement::mult(SoState *state, SoNode *node,
-			   const SbMatrix &matrix)
+                             const SbMatrix &matrix)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureMatrixElement	*elt;
+    SoTextureMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoTextureMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoTextureMatrixElement *)getElement(state, classStackIndex);
 
     if (elt != NULL) {
-	elt->multElt(matrix);
+        elt->multElt(matrix);
 
-	// Update node id list in element
-	elt->addNodeId(node);
+        // Update node id list in element
+        elt->addNodeId(node);
     }
 }
 
@@ -174,20 +172,20 @@ SoTextureMatrixElement::mult(SoState *state, SoNode *node,
 
 void
 SoTextureMatrixElement::translateBy(SoState *state, SoNode *node,
-				  const SbVec3f &translation)
+                                    const SbVec3f &translation)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureMatrixElement	*elt;
+    SoTextureMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoTextureMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoTextureMatrixElement *)getElement(state, classStackIndex);
 
     if (elt != NULL) {
-	elt->translateEltBy(translation);
+        elt->translateEltBy(translation);
 
-	// Update node id list in element
-	elt->addNodeId(node);
+        // Update node id list in element
+        elt->addNodeId(node);
     }
 }
 
@@ -200,20 +198,20 @@ SoTextureMatrixElement::translateBy(SoState *state, SoNode *node,
 
 void
 SoTextureMatrixElement::rotateBy(SoState *state, SoNode *node,
-			       const SbRotation &rotation)
+                                 const SbRotation &rotation)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureMatrixElement	*elt;
+    SoTextureMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoTextureMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoTextureMatrixElement *)getElement(state, classStackIndex);
 
     if (elt != NULL) {
-	elt->rotateEltBy(rotation);
+        elt->rotateEltBy(rotation);
 
-	// Update node id list in element
-	elt->addNodeId(node);
+        // Update node id list in element
+        elt->addNodeId(node);
     }
 }
 
@@ -226,20 +224,20 @@ SoTextureMatrixElement::rotateBy(SoState *state, SoNode *node,
 
 void
 SoTextureMatrixElement::scaleBy(SoState *state, SoNode *node,
-			      const SbVec3f &scaleFactor)
+                                const SbVec3f &scaleFactor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureMatrixElement	*elt;
+    SoTextureMatrixElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoTextureMatrixElement *) getElement(state, classStackIndex);
+    elt = (SoTextureMatrixElement *)getElement(state, classStackIndex);
 
     if (elt != NULL) {
-	elt->scaleEltBy(scaleFactor);
+        elt->scaleEltBy(scaleFactor);
 
-	// Update node id list in element
-	elt->addNodeId(node);
+        // Update node id list in element
+        elt->addNodeId(node);
     }
 }
 
@@ -257,8 +255,8 @@ SoTextureMatrixElement::get(SoState *state)
 {
     const SoTextureMatrixElement *elt;
 
-    elt = (const SoTextureMatrixElement *)
-	getConstElement(state, classStackIndex);
+    elt =
+        (const SoTextureMatrixElement *)getConstElement(state, classStackIndex);
 
     return elt->getElt();
 }
@@ -274,15 +272,12 @@ SoTextureMatrixElement::get(SoState *state)
 
 #ifdef DEBUG
 void
-SoTextureMatrixElement::print(FILE *fp) const
-{
+SoTextureMatrixElement::print(FILE *fp) const {
     SoAccumulatedElement::print(fp);
 }
 #else  /* DEBUG */
 void
-SoTextureMatrixElement::print(FILE *) const
-{
-}
+SoTextureMatrixElement::print(FILE *) const {}
 #endif /* DEBUG */
 
 ////////////////////////////////////////////////////////////////////////
@@ -333,9 +328,9 @@ SoTextureMatrixElement::translateEltBy(const SbVec3f &translation)
     // matrix than to multiply two matrices...
 
     for (i = 0; i < 3; i++)
-	textureMatrix[3][i] += (textureMatrix[0][i] * translation[0] +
-			      textureMatrix[1][i] * translation[1] +
-			      textureMatrix[2][i] * translation[2]);
+        textureMatrix[3][i] += (textureMatrix[0][i] * translation[0] +
+                                textureMatrix[1][i] * translation[1] +
+                                textureMatrix[2][i] * translation[2]);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -350,7 +345,7 @@ SoTextureMatrixElement::rotateEltBy(const SbRotation &rotation)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	m;
+    SbMatrix m;
 
     rotation.getValue(m);
     textureMatrix.multLeft(m);
@@ -374,9 +369,9 @@ SoTextureMatrixElement::scaleEltBy(const SbVec3f &scaleFactor)
     // matrix than to multiply two matrices...
 
     for (i = 0; i < 4; i++) {
-	textureMatrix[0][i] *= scaleFactor[0];
-	textureMatrix[1][i] *= scaleFactor[1];
-	textureMatrix[2][i] *= scaleFactor[2];
+        textureMatrix[0][i] *= scaleFactor[0];
+        textureMatrix[1][i] *= scaleFactor[1];
+        textureMatrix[2][i] *= scaleFactor[2];
     }
 }
 

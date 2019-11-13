@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_NON_INDEXED_SHAPE_
-#define  _SO_NON_INDEXED_SHAPE_
+#ifndef _SO_NON_INDEXED_SHAPE_
+#define _SO_NON_INDEXED_SHAPE_
 
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoVertexShape.h>
@@ -78,10 +78,11 @@ class SoNonIndexedShape : public SoVertexShape {
 
   public:
     // Fields inherited by all subclasses:
-    SoSFInt32		startIndex;	// Index of 1st coordinate of shape
+    SoSFInt32 startIndex; // Index of 1st coordinate of shape
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Constructor - makes this abstract
@@ -95,8 +96,8 @@ class SoNonIndexedShape : public SoVertexShape {
     // startIndex. (If numVertices is negative, it uses all
     // coordinates from startIndex on.) It also sets the center to the
     // average of the vertices' coordinates.
-    void		computeCoordBBox(SoAction *action, int numVertices,
-					 SbBox3f &box, SbVec3f &center);
+    void computeCoordBBox(SoAction *action, int numVertices, SbBox3f &box,
+                          SbVec3f &center);
 
     virtual ~SoNonIndexedShape();
 };

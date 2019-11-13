@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -44,7 +44,7 @@
  |
  |   Description:
  |	Internal routines used for debugging
- | 
+ |
  |   Author(s)		: Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
@@ -62,7 +62,7 @@
 #include <string>
 #include <map>
 
-static std::map<void*, std::string> ptrNameDict;
+static std::map<void *, std::string> ptrNameDict;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -71,14 +71,14 @@ static std::map<void*, std::string> ptrNameDict;
 //    map for fast lookup (the standard getenv() does a linear
 //    search through your whole environment).
 //
-// Use: public 
+// Use: public
 
 const char *
 SoDebug::GetEnv(const char *envVar)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    static std::map<std::string, const char*> envDict;
+    static std::map<std::string, const char *> envDict;
 
     // Try looking in the dictionary first...
     if (envDict.find(envVar) == envDict.end()) {
@@ -90,8 +90,8 @@ SoDebug::GetEnv(const char *envVar)
 
 #define MAXLEN 200
 static char *debugStrings = NULL;
-static int currentString = 0;
-static int numBufferStrings = 0;
+static int   currentString = 0;
+static int   numBufferStrings = 0;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -103,24 +103,24 @@ static int numBufferStrings = 0;
 //    stderr; a blank line is inserted every N lines, if N > 1.
 //    Set the IV_DEBUG_BUFLEN variable to make N something other than 1.
 //
-// Use: public 
+// Use: public
 
 void
-SoDebug::RTPrintf(const char *formatString ...)
+SoDebug::RTPrintf(const char *formatString...)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    va_list	ap;
+    va_list ap;
 
     if (debugStrings == NULL) {
-	const char *s = GetEnv("IV_DEBUG_BUFLEN");
-	if (s != NULL)
-	    numBufferStrings = atoi(s);
+        const char *s = GetEnv("IV_DEBUG_BUFLEN");
+        if (s != NULL)
+            numBufferStrings = atoi(s);
 
-	if (numBufferStrings <= 0)
-	    numBufferStrings = 1;
+        if (numBufferStrings <= 0)
+            numBufferStrings = 1;
 
-	debugStrings = new char [numBufferStrings * MAXLEN];
+        debugStrings = new char[numBufferStrings * MAXLEN];
     }
 
     va_start(ap, formatString);
@@ -128,13 +128,13 @@ SoDebug::RTPrintf(const char *formatString ...)
     va_end(ap);
 
     if (++currentString == numBufferStrings) {
-	// Dump strings to stderr
-	for (int i = 0 ; i < currentString; i++)
-	    fputs(&debugStrings[i * MAXLEN], stderr);
-	// Blank line between dumps...
-	if (numBufferStrings > 1)
-	    fputc('\n', stderr);
-	currentString = 0;
+        // Dump strings to stderr
+        for (int i = 0; i < currentString; i++)
+            fputs(&debugStrings[i * MAXLEN], stderr);
+        // Blank line between dumps...
+        if (numBufferStrings > 1)
+            fputc('\n', stderr);
+        currentString = 0;
     }
 }
 
@@ -145,7 +145,7 @@ SoDebug::RTPrintf(const char *formatString ...)
 //    to track objects through queues, etc...  Uses a map so this
 //    is fast...
 //
-// Use: public 
+// Use: public
 
 void
 SoDebug::NamePtr(const char *name, void *ptr)
@@ -160,7 +160,7 @@ SoDebug::NamePtr(const char *name, void *ptr)
 // Description:
 //    Return the name of a pointer named with NamePtr.
 //
-// Use: public 
+// Use: public
 
 const char *
 SoDebug::PtrName(void *ptr)
@@ -169,7 +169,7 @@ SoDebug::PtrName(void *ptr)
 {
     static const char *defaultName = "<noName>";
 
-    std::map<void*, std::string>::const_iterator it = ptrNameDict.find(ptr);
+    std::map<void *, std::string>::const_iterator it = ptrNameDict.find(ptr);
     if (it != ptrNameDict.end())
         return it->second.c_str();
 
@@ -182,7 +182,7 @@ SoDebug::PtrName(void *ptr)
 //    Applies an SoWriteAction to the graph rooted by the given node.
 //    The results go to stdout
 //
-// Use: public 
+// Use: public
 
 void
 SoDebug::write(SoNode *node)
@@ -191,7 +191,7 @@ SoDebug::write(SoNode *node)
 {
     node->ref();
 
-    SoWriteAction	wa;
+    SoWriteAction wa;
     wa.apply(node);
 
     node->unrefNoDelete();
@@ -203,7 +203,7 @@ SoDebug::write(SoNode *node)
 //    Applies an SoWriteAction to the graph rooted by the given node.
 //    The results go to given file (/tmp/debug.iv if NULL)
 //
-// Use: public 
+// Use: public
 
 void
 SoDebug::writeFile(SoNode *node, const char *filename)
@@ -212,9 +212,10 @@ SoDebug::writeFile(SoNode *node, const char *filename)
 {
     node->ref();
 
-    if (filename == NULL) filename = "/tmp/debug.iv";
+    if (filename == NULL)
+        filename = "/tmp/debug.iv";
 
-    SoWriteAction	wa;
+    SoWriteAction wa;
     wa.getOutput()->openFile(filename);
     wa.apply(node);
 
@@ -227,7 +228,7 @@ SoDebug::writeFile(SoNode *node, const char *filename)
 //    Applies an SoWriteAction to the given field.
 //    The results go to stdout
 //
-// Use: public 
+// Use: public
 
 void
 SoDebug::writeField(SoField *field)
@@ -240,15 +241,15 @@ SoDebug::writeField(SoField *field)
     fc->getFieldName(field, fieldName);
     printf("Field name is: %s\n", fieldName.getString());
     if (fc->isOfType(SoNode::getClassTypeId())) {
-	printf("Field is part of node:\n");
+        printf("Field is part of node:\n");
 
-	SoNode *node = (SoNode *)fc;
-	node->ref();
+        SoNode *node = (SoNode *)fc;
+        node->ref();
 
-	SoWriteAction	wa;
-	wa.apply(node);
+        SoWriteAction wa;
+        wa.apply(node);
 
-	node->unrefNoDelete();
+        node->unrefNoDelete();
     }
 }
 
@@ -257,7 +258,7 @@ SoDebug::writeField(SoField *field)
 // Description:
 //    Prints out name of a node.
 //
-// Use: public 
+// Use: public
 
 void
 SoDebug::printName(SoBase *base)
@@ -267,7 +268,7 @@ SoDebug::printName(SoBase *base)
     const char *name = base->getName().getString();
 
     if (name)
-	puts(name);
+        puts(name);
     else
-	puts(" not named ");
+        puts(" not named ");
 }

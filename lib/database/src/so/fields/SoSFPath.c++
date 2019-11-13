@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -96,7 +96,7 @@ SoSFPath::SoSFPath()
 {
     // This will prevent treating random memory as an SoPath
     value = NULL;
-    head  = NULL;
+    head = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -111,10 +111,10 @@ SoSFPath::~SoSFPath()
 ////////////////////////////////////////////////////////////////////////
 {
     if (value != NULL) {
-	if (value->getHead() != NULL)
-	    value->getHead()->removeAuditor(this, SoNotRec::FIELD);
-	value->removeAuditor(this, SoNotRec::FIELD);
-	value->unref();
+        if (value->getHead() != NULL)
+            value->getHead()->removeAuditor(this, SoNotRec::FIELD);
+        value->removeAuditor(this, SoNotRec::FIELD);
+        value->unref();
     }
 }
 
@@ -142,7 +142,7 @@ SoSFPath::setValue(SoPath *newValue)
 // Use: public
 
 int
-SoSFPath::operator ==(const SoSFPath &f) const
+SoSFPath::operator==(const SoSFPath &f) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -178,27 +178,27 @@ SoSFPath::notify(SoNotList *list)
 
     // If the path started notification:
     if (list->getFirstRec()->getBase() == value)
-	doNotify = TRUE;
+        doNotify = TRUE;
 
     // If the notification came through the head node
     else
-	doNotify = value->isRelevantNotification(list);
+        doNotify = value->isRelevantNotification(list);
 
     // If the head node of the path changed, detach from old head and
     // attach to new:
     if (value->getHead() != head) {
-	// Detach from old:
-	if (head != NULL)
-	    head->removeAuditor(this, SoNotRec::FIELD);
-	head = value->getHead();
-	// Attach to new:
-	if (head != NULL)
-	    head->addAuditor(this, SoNotRec::FIELD);
+        // Detach from old:
+        if (head != NULL)
+            head->removeAuditor(this, SoNotRec::FIELD);
+        head = value->getHead();
+        // Attach to new:
+        if (head != NULL)
+            head->addAuditor(this, SoNotRec::FIELD);
     }
 
     // Notify if we're supposed to...
     if (doNotify)
-	SoSField::notify(list);
+        SoSField::notify(list);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -213,26 +213,25 @@ SoSFPath::readValue(SoInput *in)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbName	name;
-    SoBase	*base;
+    SbName  name;
+    SoBase *base;
 
     // See if it's a null pointer
     if (in->read(name)) {
-	if (name == "NULL") {
-	    setVal(NULL);
-	    return TRUE;
-	}
-	else
-	    in->putBack(name.getString());
+        if (name == "NULL") {
+            setVal(NULL);
+            return TRUE;
+        } else
+            in->putBack(name.getString());
     }
 
     // Read path
-    if (! SoBase::read(in, base, SoPath::getClassTypeId())) {
-	setVal(NULL);
-	return FALSE;
+    if (!SoBase::read(in, base, SoPath::getClassTypeId())) {
+        setVal(NULL);
+        return FALSE;
     }
 
-    setVal((SoPath *) base);
+    setVal((SoPath *)base);
 
     return TRUE;
 }
@@ -255,8 +254,8 @@ SoSFPath::countWriteRefs(SoOutput *out) const
 
     // Count path
     if (value != NULL) {
-	SoWriteAction	wa(out);
-	wa.continueToApply(value);
+        SoWriteAction wa(out);
+        wa.continueToApply(value);
     }
 }
 
@@ -273,11 +272,10 @@ SoSFPath::writeValue(SoOutput *out) const
 ////////////////////////////////////////////////////////////////////////
 {
     if (value != NULL) {
-	SoWriteAction	wa(out);
-	wa.continueToApply(value);
-    }
-    else
-	out->write("NULL");
+        SoWriteAction wa(out);
+        wa.continueToApply(value);
+    } else
+        out->write("NULL");
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -295,41 +293,41 @@ SoSFPath::setVal(SoPath *newValue)
 {
     // Play it safe if we are replacing one pointer with the same pointer
     if (newValue != NULL)
-	newValue->ref();
+        newValue->ref();
 
     // Get rid of old path, if any
     if (value != NULL) {
 
-	// Remove auditor on head node
-	if (head != NULL)
-	    head->removeAuditor(this, SoNotRec::FIELD);
+        // Remove auditor on head node
+        if (head != NULL)
+            head->removeAuditor(this, SoNotRec::FIELD);
 
-	// Remove auditor on path itself
-	value->removeAuditor(this, SoNotRec::FIELD);
+        // Remove auditor on path itself
+        value->removeAuditor(this, SoNotRec::FIELD);
 
-	value->unref();
+        value->unref();
     }
 
     value = newValue;
 
     if (value != NULL) {
 
-	value->ref();
+        value->ref();
 
-	// Add auditor on path
-	value->addAuditor(this, SoNotRec::FIELD);
+        // Add auditor on path
+        value->addAuditor(this, SoNotRec::FIELD);
 
-	// Add auditor on head node. (For efficiency, a path does not
-	// audit its head node directly. Things that rely on this
-	// notification - e.g., this field and path sensors - have to
-	// do it themselves.)
-	head = value->getHead();
-	if (head != NULL)
-	    head->addAuditor(this, SoNotRec::FIELD);
+        // Add auditor on head node. (For efficiency, a path does not
+        // audit its head node directly. Things that rely on this
+        // notification - e.g., this field and path sensors - have to
+        // do it themselves.)
+        head = value->getHead();
+        if (head != NULL)
+            head->addAuditor(this, SoNotRec::FIELD);
     }
 
     if (newValue != NULL)
-	newValue->unref();
+        newValue->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -347,25 +345,25 @@ SoSFPath::fixCopy(SbBool copyConnections)
 {
     if (value != NULL) {
 
-	// If the head of the path has been copied, then each of the
-	// other nodes in the path must have been copied as
-	// well. Change the copied path to start at the copy and go
-	// through the copied nodes.
+        // If the head of the path has been copied, then each of the
+        // other nodes in the path must have been copied as
+        // well. Change the copied path to start at the copy and go
+        // through the copied nodes.
 
-	SoNode *headCopy = (SoNode *)
-	    SoFieldContainer::findCopy(value->getHead(), copyConnections);
+        SoNode *headCopy = (SoNode *)SoFieldContainer::findCopy(
+            value->getHead(), copyConnections);
 
-	if (headCopy != NULL) {
+        if (headCopy != NULL) {
 
-	    // Create a new path through the copied nodes
-	    SoPath *pathCopy = new SoPath(headCopy);
-	    pathCopy->ref();
-	    for (int i = 1; i < ((SoFullPath *) value)->getLength(); i++)
-		pathCopy->append(value->getIndex(i));
+            // Create a new path through the copied nodes
+            SoPath *pathCopy = new SoPath(headCopy);
+            pathCopy->ref();
+            for (int i = 1; i < ((SoFullPath *)value)->getLength(); i++)
+                pathCopy->append(value->getIndex(i));
 
-	    setVal(pathCopy);
-	    pathCopy->unref();
-	}
+            setVal(pathCopy);
+            pathCopy->unref();
+        }
     }
 }
 
@@ -384,6 +382,6 @@ SoSFPath::referencesCopy() const
     // Do the normal test, and also see if the head of the stored path
     // is a copy
     return (SoSField::referencesCopy() ||
-	    (value != NULL &&
-	     SoFieldContainer::checkCopy(value->getHead()) != NULL));
+            (value != NULL &&
+             SoFieldContainer::checkCopy(value->getHead()) != NULL));
 }

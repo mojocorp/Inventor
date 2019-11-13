@@ -52,8 +52,8 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#ifndef  _SO_POLYGON_OFFSET_ELEMENT_
-#define  _SO_POLYGON_OFFSET_ELEMENT_
+#ifndef _SO_POLYGON_OFFSET_ELEMENT_
+#define _SO_POLYGON_OFFSET_ELEMENT_
 
 #include <Inventor/elements/SoReplacedElement.h>
 
@@ -69,47 +69,44 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoPolygonOffsetElement : public SoReplacedElement
-{
-   SO_ELEMENT_HEADER(SoPolygonOffsetElement);
+SoEXTENDER
+class SoPolygonOffsetElement : public SoReplacedElement {
+    SO_ELEMENT_HEADER(SoPolygonOffsetElement);
 
-   public:
+  public:
+    /// Polygon mode
+    enum Style { FILLED = 0x01, LINES = 0x02, POINTS = 0x04 };
 
-      /// Polygon mode
-      enum Style {
-         FILLED = 0x01,
-         LINES  = 0x02,
-         POINTS = 0x04
-      };
+    /// Initializes element
+    virtual void init(SoState *state);
 
-      /// Initializes element
-      virtual void	init(SoState * state);
+    /// Sets the current polygon offset
+    static void set(SoState *state, SoNode *node, float factor, float units,
+                    Style styles, SbBool on);
 
-      /// Sets the current polygon offset
-      static void	set(SoState *state, SoNode *node, float factor, float units, Style styles, SbBool on);
-     
-      /// Returns the polygon offset from an element
-      static void	get(SoState *state, float &factor, float &units, Style &styles, SbBool &on);
-      
-      /// Returns the default polygon offset.
-      static void	getDefault(float &factor, float &units, Style &styles, SbBool &on);
+    /// Returns the polygon offset from an element
+    static void get(SoState *state, float &factor, float &units, Style &styles,
+                    SbBool &on);
 
-   protected:
+    /// Returns the default polygon offset.
+    static void getDefault(float &factor, float &units, Style &styles,
+                           SbBool &on);
 
-      Style  style;
-      SbBool active;
-      float  offsetfactor;
-      float  offsetunits;
+  protected:
+    Style  style;
+    SbBool active;
+    float  offsetfactor;
+    float  offsetunits;
 
-      // Destructor.
-      virtual		~SoPolygonOffsetElement();
+    // Destructor.
+    virtual ~SoPolygonOffsetElement();
 
-      virtual void	setElt(float factor, float units, Style styles, SbBool on);
+    virtual void setElt(float factor, float units, Style styles, SbBool on);
 
-   SoINTERNAL public:
-
-      // Initializes the SoPolygonOffsetElement class.
-      static void       initClass();
+    SoINTERNAL
+  public:
+    // Initializes the SoPolygonOffsetElement class.
+    static void initClass();
 };
 
-#endif  // _SO_POLYGON_OFFSET_ELEMENT_
+#endif // _SO_POLYGON_OFFSET_ELEMENT_

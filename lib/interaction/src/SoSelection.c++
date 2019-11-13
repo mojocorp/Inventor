@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-
 #include <X11/Xlib.h>
 
 #include <Inventor/SoDB.h>
@@ -71,7 +70,6 @@
 #include <Inventor/misc/SoCallbackList.h>
 #include <Inventor/nodes/SoSelection.h>
 #include <Inventor/nodes/SoSubNode.h>
-
 
 SO_NODE_SOURCE(SoSelection);
 
@@ -121,12 +119,12 @@ SoSelection::constructorCommon()
     selCBList = NULL;
     deselCBList = NULL;
     startCBList = NULL;
-    finishCBList = NULL;  
+    finishCBList = NULL;
     changeCBList = NULL;
-    
+
     pickCBFunc = NULL;
     pickCBData = NULL;
-    
+
     mouseDownPickPath = NULL;
     pickMatching = TRUE;
 }
@@ -138,14 +136,9 @@ SoSelection::constructorCommon()
 //
 // Use: public
 //
-SoSelection::SoSelection()
-{
-    constructorCommon();
-}
+SoSelection::SoSelection() { constructorCommon(); }
 
-SoSelection::SoSelection(int numChildren)
- : SoSeparator(numChildren)
-{
+SoSelection::SoSelection(int numChildren) : SoSeparator(numChildren) {
     constructorCommon();
 }
 
@@ -163,11 +156,11 @@ SoSelection::~SoSelection()
     delete selCBList;
     delete deselCBList;
     delete startCBList;
-    delete finishCBList;  
+    delete finishCBList;
     delete changeCBList;
-    
+
     if (mouseDownPickPath != NULL)
-	mouseDownPickPath->unref();
+        mouseDownPickPath->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -184,7 +177,7 @@ void
 SoSelection::handleEvent(SoHandleEventAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
-{    
+{
     // let SoSeparator traverse the children
     SoSeparator::handleEvent(action);
 
@@ -194,110 +187,109 @@ SoSelection::handleEvent(SoHandleEventAction *action)
     // then select the object that got picked.
     //??? this event should be programmer configurable! translation tables?
     const SoEvent *event = action->getEvent();
-    if (! event->isOfType(SoMouseButtonEvent::getClassTypeId()))
-	return;
+    if (!event->isOfType(SoMouseButtonEvent::getClassTypeId()))
+        return;
 
-    const SoMouseButtonEvent *be = (const SoMouseButtonEvent *) event;
-    if (be->getButton()	!= SoMouseButtonEvent::BUTTON1)
-	return;
+    const SoMouseButtonEvent *be = (const SoMouseButtonEvent *)event;
+    if (be->getButton() != SoMouseButtonEvent::BUTTON1)
+        return;
 
     if ((pickMatching && (be->getState() == SoButtonEvent::DOWN)) ||
-	(be->getState() == SoButtonEvent::UP)) {	
-	//??? change the action so we only pick the FIRST thing, not a list?
-	const SoPickedPoint *pickedPoint = action->getPickedPoint();
-	SoPath *pickPath = NULL;
-	
-	// Get the pick path
-	if (pickedPoint != NULL) {
-	    // If the pick callback exists, let it tell us what path to pick
-	    if (pickCBFunc != NULL) {
-		if (callPickCBOnlyIfSelectable) {
-		    // Make sure pick passes through this
-		    if (pickedPoint->getPath()->containsNode(this))
-			pickPath = (*pickCBFunc)(pickCBData, pickedPoint);
-		}
-		else pickPath = (*pickCBFunc)(pickCBData, pickedPoint);
-	    }
-	    // Else no pick CB - use the picked path as is.
-	    else pickPath = pickedPoint->getPath();
-	}
-	
-	// For button press, save the pick path whether a child
-	// handled the event or not - we may get a crack at the
-	// button release event later.
-	if (be->getState() == SoButtonEvent::DOWN) {
-	    if (mouseDownPickPath != NULL)
-		mouseDownPickPath->unref(); // out with the old...
-		
-	    mouseDownPickPath = copyFromThis(pickPath);
-	    
-	    if (mouseDownPickPath != NULL) {
-		mouseDownPickPath->ref();	// ...in with the new
-		action->setHandled();
-	    }
-	}
-	// Else button release.
-	// If no children handled the event during SoSeparator::handleEvent()
-	// traversal, handle it here.
-	else if (! action->isHandled()) {
-	    // For button release, get the pick path and see if it matches
-	    // the button press pick path.
-	    //
-	    // If they match, invoke the selection policy.
-	    // If they do NOT match, do nothing.
-	    
-	    if (pickPath == NULL) {
-		// If nothing was picked, pass NULL to invokeSelectionPolicy.
-		if ((! pickMatching) || (mouseDownPickPath == NULL)) {
-		    invokeSelectionPolicy(NULL, be->wasShiftDown());
-		    action->setHandled();
-		}
-		// else paths do not match - ignore event
-	    }
-	    else {
-		pickPath->ref();
-		
-		if ((! pickMatching) || (mouseDownPickPath != NULL)) {
-		    // Mouse down pick hit something.
-		    // Was it same as mouse up pick?
-		    // See if the pick path passes through this node
-		    SoPath *mouseUpPickPath = copyFromThis(pickPath);
-		    if (mouseUpPickPath != NULL) {
-			mouseUpPickPath->ref();
-		    
-			// If paths match, invoke the selection policy. 
-			if ((! pickMatching) ||
-			    (*mouseDownPickPath == *mouseUpPickPath)) {
-			    if (mouseUpPickPath->getLength() == 1) {
-				// Path is to ONLY the selection node.
-				// Act as if nothing were picked, but
-				// allow traversal to continue.
-				invokeSelectionPolicy(NULL, be->wasShiftDown());
-			    }
-			    else {
-				// Alter selection and halt traversal.
-				invokeSelectionPolicy(mouseUpPickPath,
-				    be->wasShiftDown());
-				action->setHandled();
-			    }
-			}
-			// else paths do not match - ignore event
-			
-			mouseUpPickPath->unref();
-		    }
-		    // else path does not pass through this node - ignore event
-		}
-		// else paths do not match - ignore event
-		
-		pickPath->unref();
-	    }
-	    
-	    // All done with mouse down pick path
-	    if (mouseDownPickPath != NULL) {
-		mouseDownPickPath->unref();
-		mouseDownPickPath = NULL;
-	    }
-	}
+        (be->getState() == SoButtonEvent::UP)) {
+        //??? change the action so we only pick the FIRST thing, not a list?
+        const SoPickedPoint *pickedPoint = action->getPickedPoint();
+        SoPath *             pickPath = NULL;
+
+        // Get the pick path
+        if (pickedPoint != NULL) {
+            // If the pick callback exists, let it tell us what path to pick
+            if (pickCBFunc != NULL) {
+                if (callPickCBOnlyIfSelectable) {
+                    // Make sure pick passes through this
+                    if (pickedPoint->getPath()->containsNode(this))
+                        pickPath = (*pickCBFunc)(pickCBData, pickedPoint);
+                } else
+                    pickPath = (*pickCBFunc)(pickCBData, pickedPoint);
+            }
+            // Else no pick CB - use the picked path as is.
+            else
+                pickPath = pickedPoint->getPath();
+        }
+
+        // For button press, save the pick path whether a child
+        // handled the event or not - we may get a crack at the
+        // button release event later.
+        if (be->getState() == SoButtonEvent::DOWN) {
+            if (mouseDownPickPath != NULL)
+                mouseDownPickPath->unref(); // out with the old...
+
+            mouseDownPickPath = copyFromThis(pickPath);
+
+            if (mouseDownPickPath != NULL) {
+                mouseDownPickPath->ref(); // ...in with the new
+                action->setHandled();
+            }
+        }
+        // Else button release.
+        // If no children handled the event during SoSeparator::handleEvent()
+        // traversal, handle it here.
+        else if (!action->isHandled()) {
+            // For button release, get the pick path and see if it matches
+            // the button press pick path.
+            //
+            // If they match, invoke the selection policy.
+            // If they do NOT match, do nothing.
+
+            if (pickPath == NULL) {
+                // If nothing was picked, pass NULL to invokeSelectionPolicy.
+                if ((!pickMatching) || (mouseDownPickPath == NULL)) {
+                    invokeSelectionPolicy(NULL, be->wasShiftDown());
+                    action->setHandled();
+                }
+                // else paths do not match - ignore event
+            } else {
+                pickPath->ref();
+
+                if ((!pickMatching) || (mouseDownPickPath != NULL)) {
+                    // Mouse down pick hit something.
+                    // Was it same as mouse up pick?
+                    // See if the pick path passes through this node
+                    SoPath *mouseUpPickPath = copyFromThis(pickPath);
+                    if (mouseUpPickPath != NULL) {
+                        mouseUpPickPath->ref();
+
+                        // If paths match, invoke the selection policy.
+                        if ((!pickMatching) ||
+                            (*mouseDownPickPath == *mouseUpPickPath)) {
+                            if (mouseUpPickPath->getLength() == 1) {
+                                // Path is to ONLY the selection node.
+                                // Act as if nothing were picked, but
+                                // allow traversal to continue.
+                                invokeSelectionPolicy(NULL, be->wasShiftDown());
+                            } else {
+                                // Alter selection and halt traversal.
+                                invokeSelectionPolicy(mouseUpPickPath,
+                                                      be->wasShiftDown());
+                                action->setHandled();
+                            }
+                        }
+                        // else paths do not match - ignore event
+
+                        mouseUpPickPath->unref();
+                    }
+                    // else path does not pass through this node - ignore event
+                }
+                // else paths do not match - ignore event
+
+                pickPath->unref();
+            }
+
+            // All done with mouse down pick path
+            if (mouseDownPickPath != NULL) {
+                mouseDownPickPath->unref();
+                mouseDownPickPath = NULL;
+            }
+        }
     }
 }
 
@@ -305,7 +297,7 @@ SoSelection::handleEvent(SoHandleEventAction *action)
 //
 // Description:
 //   invoke the appropriate routine which implements the current
-// selection policy. 
+// selection policy.
 //
 // Use: protected
 //
@@ -316,23 +308,24 @@ SoSelection::invokeSelectionPolicy(SoPath *path, SbBool shiftDown)
 {
     // employ the current selection policy
     switch (policy.getValue()) {
-	case SINGLE:
-	    performSingleSelection(path);
-	    break;
-	case TOGGLE:
-	    performToggleSelection(path);
-	    break;
-	case SHIFT:
-	    if (shiftDown)
-	    	 performToggleSelection(path); // SHIFT DOWN
-	    else performSingleSelection(path); // NO SHIFT
-	    break;
-	default:
+    case SINGLE:
+        performSingleSelection(path);
+        break;
+    case TOGGLE:
+        performToggleSelection(path);
+        break;
+    case SHIFT:
+        if (shiftDown)
+            performToggleSelection(path); // SHIFT DOWN
+        else
+            performSingleSelection(path); // NO SHIFT
+        break;
+    default:
 #ifdef DEBUG
-	    SoDebugError::post("SoSelection::invokeSelectionPolicy",
-	    "Unknown selection policy %d", policy.getValue());
+        SoDebugError::post("SoSelection::invokeSelectionPolicy",
+                           "Unknown selection policy %d", policy.getValue());
 #endif
-	    break;
+        break;
     }
 }
 
@@ -352,39 +345,37 @@ SoSelection::performSingleSelection(SoPath *path)
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool needFinishCB = FALSE;
-    
+
     // let app know (if and only if) user is changing the selection
     if ((getNumSelected() > 0) || (path != NULL)) {
-	if (startCBList != NULL)
-	    startCBList->invokeCallbacks(this);
-	needFinishCB = TRUE;
+        if (startCBList != NULL)
+            startCBList->invokeCallbacks(this);
+        needFinishCB = TRUE;
     }
 
     if (path == NULL) {
-	deselectAll();
+        deselectAll();
+    } else {
+        if (isSelected(path)) {
+            // Deselect everything except the given path.
+            // This avoids deselecting and then selecting the same thing.
+            int which = selectionList.findPath(*path);
+            if (which != -1) {
+                for (int i = selectionList.getLength() - 1; i >= 0; i--) {
+                    if (i != which)
+                        removePath(i);
+                }
+            }
+        } else {
+            deselectAll();
+            addPath(path);
+        }
     }
-    else {
-	if (isSelected(path)) {
-	    // Deselect everything except the given path.
-	    // This avoids deselecting and then selecting the same thing.
-	    int which = selectionList.findPath(*path);
-	    if (which != -1) {
-		for (int i = selectionList.getLength() - 1; i >= 0; i--) {
-		    if (i != which)
-			removePath(i);
-		}
-	    }
-	}
-	else {
-	    deselectAll();
-	    addPath(path);
-	}
-    }
-    
+
     // let app know user is done changing the selection
     if (needFinishCB) {
-	if (finishCBList != NULL)
-	    finishCBList->invokeCallbacks(this);
+        if (finishCBList != NULL)
+            finishCBList->invokeCallbacks(this);
     }
 }
 
@@ -403,19 +394,20 @@ SoSelection::performToggleSelection(SoPath *path)
 ////////////////////////////////////////////////////////////////////////
 {
     if (path != NULL) {
-	// let app know user is changing the selection
-	if (startCBList != NULL)
-	    startCBList->invokeCallbacks(this);
-	
-	// toggle the picked object
-	int which = findPath(path);
-	if (which == -1)
-	     addPath(path);	// path not in list, add it
-	else removePath(which);	// path in list, remove it
+        // let app know user is changing the selection
+        if (startCBList != NULL)
+            startCBList->invokeCallbacks(this);
 
-	// let app know user is done changing the selection
-	if (finishCBList != NULL)
-	    finishCBList->invokeCallbacks(this);
+        // toggle the picked object
+        int which = findPath(path);
+        if (which == -1)
+            addPath(path); // path not in list, add it
+        else
+            removePath(which); // path in list, remove it
+
+        // let app know user is done changing the selection
+        if (finishCBList != NULL)
+            finishCBList->invokeCallbacks(this);
     }
 }
 
@@ -428,29 +420,28 @@ SoSelection::performToggleSelection(SoPath *path)
 // Use: private
 //
 SoPath *
-SoSelection::copyFromThis(const SoPath *path) const
-{
+SoSelection::copyFromThis(const SoPath *path) const {
     if (path == NULL)
-	return NULL;
-	
+        return NULL;
+
     SoNode *node;
-    int i, indexToThis = -1;
+    int     i, indexToThis = -1;
     SoPath *p = NULL;
 
-    SoFullPath *fullInPath = (SoFullPath *) path;
+    SoFullPath *fullInPath = (SoFullPath *)path;
 
     for (i = 0; i < fullInPath->getLength(); i++) {
-	node = fullInPath->getNode(i);
-	if (node == (SoNode *) this) {
-	    indexToThis = i;
-	    break;
-	}
+        node = fullInPath->getNode(i);
+        if (node == (SoNode *)this) {
+            indexToThis = i;
+            break;
+        }
     }
-    
+
     if (indexToThis != -1) {
         p = fullInPath->copy(indexToThis);
     }
-    
+
     return p;
 }
 
@@ -471,14 +462,14 @@ SoSelection::addPath(SoPath *path)
     // Add the path to the selection list,
     // and notify the app that this path has been selected
     if (selectionList.findPath(*path) == -1) {
-    	path->ref();
-	selectionList.append(path);
-	if (selCBList != NULL)
-	    selCBList->invokeCallbacks(path);
-	path->unref();
-	
-	if (changeCBList != NULL)
-	    changeCBList->invokeCallbacks(this);
+        path->ref();
+        selectionList.append(path);
+        if (selCBList != NULL)
+            selCBList->invokeCallbacks(path);
+        path->unref();
+
+        if (changeCBList != NULL)
+            changeCBList->invokeCallbacks(this);
     }
 }
 
@@ -498,15 +489,15 @@ SoSelection::removePath(int which)
     // Remove the path from the selection list,
     // and notify the app that this path has been deselected.
     if (which >= 0) {
-	SoPath *p = (SoPath *) selectionList[which];
-	p->ref();
-	selectionList.remove(which);
-	if (deselCBList != NULL)
-	    deselCBList->invokeCallbacks(p);
-	p->unref();	
-	
-	if (changeCBList != NULL)
-	    changeCBList->invokeCallbacks(this);
+        SoPath *p = (SoPath *)selectionList[which];
+        p->ref();
+        selectionList.remove(which);
+        if (deselCBList != NULL)
+            deselCBList->invokeCallbacks(p);
+        p->unref();
+
+        if (changeCBList != NULL)
+            changeCBList->invokeCallbacks(this);
     }
 }
 
@@ -526,15 +517,15 @@ SoSelection::select(const SoPath *path)
     // get a path whose head is this selection node
     SoPath *selPath = copyFromThis(path);
     if ((selPath != NULL) && (selPath->getLength() > 1)) {
-	selPath->ref();
-    	addPath(selPath);
-	selPath->unref();
+        selPath->ref();
+        addPath(selPath);
+        selPath->unref();
     }
 #ifdef DEBUG
     else {
-	SoDebugError::post("SoSelection::select",
-	"Path does not pass through this selection node.");
-	return;
+        SoDebugError::post("SoSelection::select",
+                           "Path does not pass through this selection node.");
+        return;
     }
 #endif
 }
@@ -552,29 +543,30 @@ SoSelection::select(SoNode *node)
 ////////////////////////////////////////////////////////////////////////
 {
     if (node != NULL) {
-	node->ref();
-	
-	if (searchAction == NULL)
-	    searchAction = new SoSearchAction;
-	else
-	    searchAction->reset();
-	searchAction->setInterest(SoSearchAction::FIRST);
-	searchAction->setFind(SoSearchAction::NODE);
-	searchAction->setNode(node);
-	searchAction->apply(this);
-	
-	SoPath *p = searchAction->getPath();
-	if ((p != NULL) && (p->getLength() > 1))
-	    addPath(p);
+        node->ref();
+
+        if (searchAction == NULL)
+            searchAction = new SoSearchAction;
+        else
+            searchAction->reset();
+        searchAction->setInterest(SoSearchAction::FIRST);
+        searchAction->setFind(SoSearchAction::NODE);
+        searchAction->setNode(node);
+        searchAction->apply(this);
+
+        SoPath *p = searchAction->getPath();
+        if ((p != NULL) && (p->getLength() > 1))
+            addPath(p);
 #ifdef DEBUG
-	else {
-	    SoDebugError::post("SoSelection::select",
-	    "Node does not pass through this selection node.");
-	    return;
-	}
+        else {
+            SoDebugError::post(
+                "SoSelection::select",
+                "Node does not pass through this selection node.");
+            return;
+        }
 #endif
-	
-	node->unref();
+
+        node->unref();
     }
 }
 
@@ -605,22 +597,23 @@ SoSelection::deselect(const SoPath *path)
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-//??? should we copyFromThis() as a convenience to the caller?
+    //??? should we copyFromThis() as a convenience to the caller?
     if (path != NULL) {
-	int which;
-	if ((which = findPath(path)) != -1)
-	    removePath(which);
-	
+        int which;
+        if ((which = findPath(path)) != -1)
+            removePath(which);
+
 #ifdef DEBUG
-	else
-	    SoDebugError::post("SoSelection::deselect", "Path not already selected");
+        else
+            SoDebugError::post("SoSelection::deselect",
+                               "Path not already selected");
 #endif
 
     }
 
 #ifdef DEBUG
     else {
-	SoDebugError::post("SoSelection::deselect", "Passed path is NULL");
+        SoDebugError::post("SoSelection::deselect", "Passed path is NULL");
     }
 #endif
 }
@@ -638,23 +631,22 @@ SoSelection::deselect(SoNode *node)
 ////////////////////////////////////////////////////////////////////////
 {
     if (node != NULL) {
-	node->ref();
-	
-	if (searchAction == NULL)
-	    searchAction = new SoSearchAction;
-	else
-	    searchAction->reset();
-	searchAction->setInterest(SoSearchAction::FIRST);
-	searchAction->setFind(SoSearchAction::NODE);
-	searchAction->setNode(node);
-	searchAction->apply(this);
-	if (searchAction->getPath() != NULL)
-	    deselect(searchAction->getPath());
-	
-	node->unref();
+        node->ref();
+
+        if (searchAction == NULL)
+            searchAction = new SoSearchAction;
+        else
+            searchAction->reset();
+        searchAction->setInterest(SoSearchAction::FIRST);
+        searchAction->setFind(SoSearchAction::NODE);
+        searchAction->setNode(node);
+        searchAction->apply(this);
+        if (searchAction->getPath() != NULL)
+            deselect(searchAction->getPath());
+
+        node->unref();
     }
 }
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -669,19 +661,20 @@ SoSelection::findPath(const SoPath *path) const
 {
     int index = -1;
     if (path != NULL) {
-	SoPath *selPath = NULL;
-	if (path->getHead() != (SoNode *) this)
-	     selPath = copyFromThis(path);
-	else selPath = (SoPath *) path; // const cast away
-	
-	// selPath still not NULL? (copyFromThis() might have returned NULL)
-	if (selPath != NULL) {
-	    selPath->ref();
-	    index = ((SoPathList)selectionList).findPath(*selPath);
-	    selPath->unref();
-	}
+        SoPath *selPath = NULL;
+        if (path->getHead() != (SoNode *)this)
+            selPath = copyFromThis(path);
+        else
+            selPath = (SoPath *)path; // const cast away
+
+        // selPath still not NULL? (copyFromThis() might have returned NULL)
+        if (selPath != NULL) {
+            selPath->ref();
+            index = ((SoPathList)selectionList).findPath(*selPath);
+            selPath->unref();
+        }
     }
-    
+
     return index;
 }
 
@@ -696,7 +689,7 @@ SoSelection::isSelected(const SoPath *path) const
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-//??? should we copyFromThis() as a convenience?
+    //??? should we copyFromThis() as a convenience?
     return (findPath(path) != -1);
 }
 ////////////////////////////////////////////////////////////////////////
@@ -713,24 +706,24 @@ SoSelection::isSelected(SoNode *node) const
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool itIs = FALSE;
-    
+
     if (node != NULL) {
-	node->ref();
-	
-	if (searchAction == NULL)
-	    searchAction = new SoSearchAction;
-	else
-	    searchAction->reset();
-	searchAction->setInterest(SoSearchAction::FIRST);
-	searchAction->setFind(SoSearchAction::NODE);
-	searchAction->setNode(node);
-	searchAction->apply((SoSelection *) this); // const cast away
-	if (searchAction->getPath() != NULL)
-	    itIs = isSelected(searchAction->getPath());
-	
-	node->unref();
+        node->ref();
+
+        if (searchAction == NULL)
+            searchAction = new SoSearchAction;
+        else
+            searchAction->reset();
+        searchAction->setInterest(SoSearchAction::FIRST);
+        searchAction->setFind(SoSearchAction::NODE);
+        searchAction->setNode(node);
+        searchAction->apply((SoSelection *)this); // const cast away
+        if (searchAction->getPath() != NULL)
+            itIs = isSelected(searchAction->getPath());
+
+        node->unref();
     }
-    
+
     return itIs;
 }
 
@@ -748,17 +741,18 @@ SoSelection::toggle(const SoPath *path)
     // get a path whose head is this selection node
     SoPath *selPath = copyFromThis(path);
     if ((selPath != NULL) && (selPath->getLength() > 1)) {
-	selPath->ref();
-	int which = findPath(selPath);
-	if (which == -1)
-	     addPath(selPath);	// path not in list, add it
-	else removePath(which);	// path in list, remove it
-	selPath->unref();
+        selPath->ref();
+        int which = findPath(selPath);
+        if (which == -1)
+            addPath(selPath); // path not in list, add it
+        else
+            removePath(which); // path in list, remove it
+        selPath->unref();
     }
 #ifdef DEBUG
     else {
-	SoDebugError::post("SoSelection::toggle",
-	"Path does not pass through this selection node.");
+        SoDebugError::post("SoSelection::toggle",
+                           "Path does not pass through this selection node.");
     }
 #endif
 }
@@ -775,20 +769,20 @@ SoSelection::toggle(SoNode *node)
 ////////////////////////////////////////////////////////////////////////
 {
     if (node != NULL) {
-	node->ref();
-	
-	if (searchAction == NULL)
-	    searchAction = new SoSearchAction;
-	else
-	    searchAction->reset();
-	searchAction->setInterest(SoSearchAction::FIRST);
-	searchAction->setFind(SoSearchAction::NODE);
-	searchAction->setNode(node);
-	searchAction->apply(this);
-	if (searchAction->getPath() != NULL)
-	    toggle(searchAction->getPath());
-	
-	node->unref();
+        node->ref();
+
+        if (searchAction == NULL)
+            searchAction = new SoSearchAction;
+        else
+            searchAction->reset();
+        searchAction->setInterest(SoSearchAction::FIRST);
+        searchAction->setFind(SoSearchAction::NODE);
+        searchAction->setNode(node);
+        searchAction->apply(this);
+        if (searchAction->getPath() != NULL)
+            toggle(searchAction->getPath());
+
+        node->unref();
     }
 }
 
@@ -803,10 +797,9 @@ SoSelection::deselectAll()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for(int i = selectionList.getLength() - 1; i >= 0; i--)
-	deselect(i);
+    for (int i = selectionList.getLength() - 1; i >= 0; i--)
+        deselect(i);
 }
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -821,20 +814,19 @@ SoSelection::getPath(int index) const
 //////////////////////////////////////////////////////////////////////////////
 {
     SoPath *p;
-    
+
 #ifdef DEBUG
     if ((index >= selectionList.getLength()) || (index < 0)) {
-	SoDebugError::post("SoSelection::getPath", "Index out of range.  Index = %d, numSelected = %d",
-	    index, selectionList.getLength());
-	p = NULL;
-    }
-    else
+        SoDebugError::post("SoSelection::getPath",
+                           "Index out of range.  Index = %d, numSelected = %d",
+                           index, selectionList.getLength());
+        p = NULL;
+    } else
 #endif
-	p = selectionList[index];
-	
+        p = selectionList[index];
+
     return p;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -847,81 +839,68 @@ SoSelection::getPath(int index) const
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoSelection::addSelectionCallback(SoSelectionPathCB *f, void *userData)
-{
+SoSelection::addSelectionCallback(SoSelectionPathCB *f, void *userData) {
     if (selCBList == NULL)
-	selCBList = new SoCallbackList;
-    selCBList->addCallback((SoCallbackListCB *) f, userData);
+        selCBList = new SoCallbackList;
+    selCBList->addCallback((SoCallbackListCB *)f, userData);
 }
 void
-SoSelection::removeSelectionCallback(SoSelectionPathCB *f, void *userData)
-{
+SoSelection::removeSelectionCallback(SoSelectionPathCB *f, void *userData) {
     if (selCBList != NULL)
-	selCBList->removeCallback((SoCallbackListCB *) f, userData);
+        selCBList->removeCallback((SoCallbackListCB *)f, userData);
 }
 
 void
-SoSelection::addDeselectionCallback(SoSelectionPathCB *f, void *userData)
-{
+SoSelection::addDeselectionCallback(SoSelectionPathCB *f, void *userData) {
     if (deselCBList == NULL)
-	deselCBList = new SoCallbackList;
-    deselCBList->addCallback((SoCallbackListCB *) f, userData);
+        deselCBList = new SoCallbackList;
+    deselCBList->addCallback((SoCallbackListCB *)f, userData);
 }
 void
-SoSelection::removeDeselectionCallback(SoSelectionPathCB *f, void *userData)
-{
+SoSelection::removeDeselectionCallback(SoSelectionPathCB *f, void *userData) {
     if (deselCBList != NULL)
-	deselCBList->removeCallback((SoCallbackListCB *) f, userData);
+        deselCBList->removeCallback((SoCallbackListCB *)f, userData);
 }
 
 void
-SoSelection::addStartCallback(SoSelectionClassCB *f, void *userData)
-{
+SoSelection::addStartCallback(SoSelectionClassCB *f, void *userData) {
     if (startCBList == NULL)
-	startCBList = new SoCallbackList;
-    startCBList->addCallback((SoCallbackListCB *) f, userData);
+        startCBList = new SoCallbackList;
+    startCBList->addCallback((SoCallbackListCB *)f, userData);
 }
 void
-SoSelection::removeStartCallback(SoSelectionClassCB *f, void *userData)
-{
+SoSelection::removeStartCallback(SoSelectionClassCB *f, void *userData) {
     if (startCBList != NULL)
-	startCBList->removeCallback((SoCallbackListCB *) f, userData);
+        startCBList->removeCallback((SoCallbackListCB *)f, userData);
 }
 
 void
-SoSelection::addFinishCallback(SoSelectionClassCB *f, void *userData)
-{
+SoSelection::addFinishCallback(SoSelectionClassCB *f, void *userData) {
     if (finishCBList == NULL)
-	finishCBList = new SoCallbackList;
-    finishCBList->addCallback((SoCallbackListCB *) f, userData);
+        finishCBList = new SoCallbackList;
+    finishCBList->addCallback((SoCallbackListCB *)f, userData);
 }
 void
-SoSelection::removeFinishCallback(SoSelectionClassCB *f, void *userData)
-{
+SoSelection::removeFinishCallback(SoSelectionClassCB *f, void *userData) {
     if (finishCBList != NULL)
-	finishCBList->removeCallback((SoCallbackListCB *) f, userData);
+        finishCBList->removeCallback((SoCallbackListCB *)f, userData);
 }
 
 void
-SoSelection::addChangeCallback(SoSelectionClassCB *f, void *userData)
-{
+SoSelection::addChangeCallback(SoSelectionClassCB *f, void *userData) {
     if (changeCBList == NULL)
-	changeCBList = new SoCallbackList;
-    changeCBList->addCallback((SoCallbackListCB *) f, userData);
+        changeCBList = new SoCallbackList;
+    changeCBList->addCallback((SoCallbackListCB *)f, userData);
 }
 void
-SoSelection::removeChangeCallback(SoSelectionClassCB *f, void *userData)
-{
+SoSelection::removeChangeCallback(SoSelectionClassCB *f, void *userData) {
     if (changeCBList != NULL)
-	changeCBList->removeCallback((SoCallbackListCB *) f, userData);
+        changeCBList->removeCallback((SoCallbackListCB *)f, userData);
 }
 
 void
-SoSelection::setPickFilterCallback(
-    SoSelectionPickCB *f,
-    void *userData, 
-    SbBool callOnlyIfSelectable)
-{
+SoSelection::setPickFilterCallback(SoSelectionPickCB *f, void *userData,
+                                   SbBool callOnlyIfSelectable) {
     pickCBFunc = f;
     pickCBData = userData;
     callPickCBOnlyIfSelectable = callOnlyIfSelectable;
