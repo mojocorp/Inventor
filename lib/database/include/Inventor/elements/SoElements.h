@@ -96,6 +96,7 @@
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
 #include <Inventor/elements/SoGLTextureImageElement.h>
 #include <Inventor/elements/SoGLTextureMatrixElement.h>
+#include <Inventor/elements/SoGLTextureUnitElement.h>
 #include <Inventor/elements/SoGLUpdateAreaElement.h>
 #include <Inventor/elements/SoGLViewingMatrixElement.h>
 #include <Inventor/elements/SoGLViewportRegionElement.h>
@@ -125,6 +126,7 @@
 #include <Inventor/elements/SoTextureImageElement.h>
 #include <Inventor/elements/SoTextureMatrixElement.h>
 #include <Inventor/elements/SoTextureQualityElement.h>
+#include <Inventor/elements/SoTextureUnitElement.h>
 #include <Inventor/elements/SoTransparencyTypeElement.h>
 #include <Inventor/elements/SoUnitsElement.h>
 #include <Inventor/elements/SoViewVolumeElement.h>
