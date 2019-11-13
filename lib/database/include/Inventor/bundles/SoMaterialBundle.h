@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,13 +53,12 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_MATERIAL_BUNDLE
-#define  _SO_MATERIAL_BUNDLE
+#ifndef _SO_MATERIAL_BUNDLE
+#define _SO_MATERIAL_BUNDLE
 
 #include <Inventor/bundles/SoBundle.h>
 
 class SoGLLazyElement;
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -70,11 +69,12 @@ class SoGLLazyElement;
 //  bundle hides a lot of this work from shapes.
 //
 //  Much of the functionality of this bundle has been replaced by the
-//  SoLazyElement. 
+//  SoLazyElement.
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoMaterialBundle : public SoBundle {
+SoEXTENDER
+class SoMaterialBundle : public SoBundle {
 
   public:
     // Constructor - takes the action the bundle is used for
@@ -89,49 +89,48 @@ SoEXTENDER class SoMaterialBundle : public SoBundle {
     // set up some optimizations that are not possible to do later on.
     // This should never be called between calls to glBegin() and
     // glEnd().
-    void		setUpMultiple()	   
-	    { accessElements(FALSE, FALSE);
-	      sendMultiple = TRUE; }
+    void setUpMultiple() {
+        accessElements(FALSE, FALSE);
+        sendMultiple = TRUE;
+    }
 
     // Makes sure the first defined material in the state is sent to
     // GL. This should never be called between calls to glBegin() and
     // glEnd().
-    void		sendFirst()		{ send(0, FALSE); }
+    void sendFirst() { send(0, FALSE); }
 
     // Sends indexed material to the GL if it's not already there.
     // The second paramater should be TRUE if this send is between a
     // glBegin() and glEnd() call, in which case the stipple pattern
     // commands for screen-door transparency won't be sent.
-    void		send(int index, SbBool isBetweenBeginEnd)
-	{  reallySend(index, isBetweenBeginEnd, FALSE);  }
-	    
+    void send(int index, SbBool isBetweenBeginEnd) {
+        reallySend(index, isBetweenBeginEnd, FALSE);
+    }
+
     // Sends indexed material to the GL even if it's already there.
     // This method can be used by SoMaterial and related nodes to send
     // the base material to the GL to avoid cache dependencies on materials.
-    void		forceSend(int index)
-	{ reallySend(index, FALSE, TRUE); }
+    void forceSend(int index) { reallySend(index, FALSE, TRUE); }
 
     // Returns TRUE if only base color part of material is used
-    SbBool		isColorOnly() const	{ return colorOnly; }
+    SbBool isColorOnly() const { return colorOnly; }
 
   private:
-    SbBool		firstTime;	// TRUE if nothing sent yet
-    int			lastIndex;	// Last index reallySend()ed
-    SbBool		colorOnly;	// TRUE if only base color sent
-    SbBool		fastColor;	// TRUE if can send color for diffColor
-    int			numMaterials;	// Number of materials 
-    SbBool		sendMultiple;	// indicates multiple diffuse are sent.
+    SbBool firstTime;    // TRUE if nothing sent yet
+    int    lastIndex;    // Last index reallySend()ed
+    SbBool colorOnly;    // TRUE if only base color sent
+    SbBool fastColor;    // TRUE if can send color for diffColor
+    int    numMaterials; // Number of materials
+    SbBool sendMultiple; // indicates multiple diffuse are sent.
 
     // Material component elements:
-    const SoGLLazyElement		*lazyElt;
+    const SoGLLazyElement *lazyElt;
 
     // Really sends stuff to GL
-    void		reallySend(int index, SbBool isBetweenBeginEnd,
-				   SbBool avoidFastColor);
+    void reallySend(int index, SbBool isBetweenBeginEnd, SbBool avoidFastColor);
 
     // Accesses and stores pointers to necessary elements
-    void		accessElements(SbBool isBetweenBeginEnd,
-				       SbBool avoidFastColor);
+    void accessElements(SbBool isBetweenBeginEnd, SbBool avoidFastColor);
 };
 
 #endif /* _SO_MATERIAL_BUNDLE */

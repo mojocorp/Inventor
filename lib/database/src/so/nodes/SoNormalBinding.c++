@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -103,8 +103,8 @@ SoNormalBinding::SoNormalBinding()
 
     // And obsolete bindings:
     if (firstInstance) {
-	fieldData->addEnumValue("Binding", "DEFAULT", 0);
-	fieldData->addEnumValue("Binding", "NONE", 1);
+        fieldData->addEnumValue("Binding", "DEFAULT", 0);
+        fieldData->addEnumValue("Binding", "NONE", 1);
     }
 
     // Set up info in enumerated type field
@@ -123,8 +123,7 @@ SoNormalBinding::SoNormalBinding()
 SoNormalBinding::~SoNormalBinding()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -139,9 +138,10 @@ SoNormalBinding::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! value.isIgnored()) {
-	SoNormalBindingElement::set(action->getState(),
-		(SoNormalBindingElement::Binding)value.getValue());
+    if (!value.isIgnored()) {
+        SoNormalBindingElement::set(
+            action->getState(),
+            (SoNormalBindingElement::Binding)value.getValue());
     }
 }
 
@@ -161,7 +161,8 @@ SoNormalBinding::readInstance(SoInput *in, unsigned short flags)
 
     // Deal with obsolete bindings:
     int b = value.getValue();
-    if (b == 0 || b == 1) value = PER_VERTEX_INDEXED;
+    if (b == 0 || b == 1)
+        value = PER_VERTEX_INDEXED;
 
     return result;
 }

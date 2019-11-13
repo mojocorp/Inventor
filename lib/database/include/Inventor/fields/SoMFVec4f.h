@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_MF_VEC4F_
-#define  _SO_MF_VEC4F_
+#ifndef _SO_MF_VEC4F_
+#define _SO_MF_VEC4F_
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec.h>
@@ -75,26 +75,27 @@ class SoMFVec4f : public SoMField {
     //
 
     // Set values from array of arrays of 4 floats
-    void	setValues(int start, int num, const float xyzw[][4]);
+    void setValues(int start, int num, const float xyzw[][4]);
 
     // Set one value from 4 floats
-    void	set1Value(int index, float x, float y, float z, float w);
+    void set1Value(int index, float x, float y, float z, float w);
 
     // Set one value from 4 floats in array
-    void	set1Value(int index, const float xyzw[4]);
+    void set1Value(int index, const float xyzw[4]);
 
     // Set to one value from 4 floats
-    void	setValue(float x, float y, float z, float w);
+    void setValue(float x, float y, float z, float w);
 
     // Set to one value from 4 floats in array
-    void	setValue(const float xyzw[4]);
+    void setValue(const float xyzw[4]);
 
-  SoINTERNAL public:
-    static void	initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   private:
-    virtual void	writeBinaryValues(SoOutput *out) const;
-    virtual SbBool	readBinaryValues(SoInput *in, int numToRead);
+    virtual void   writeBinaryValues(SoOutput *out) const;
+    virtual SbBool readBinaryValues(SoInput *in, int numToRead);
 };
 
 #endif /* _SO_MF_VEC4F_ */

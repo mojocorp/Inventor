@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -60,15 +60,15 @@
 #include <Inventor/SbDict.h>
 #include <Inventor/errors/SoDebugError.h>
 
-#include <machine.h>		// Inventor data goo lib
+#include <machine.h> // Inventor data goo lib
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SoOutput.h>
 
-static const char *defaultASCIIHeader =  "#Inventor V2.1 ascii";
-static const char *defaultUTF8Header =   "#Inventor V2.1 utf8";
+static const char *defaultASCIIHeader = "#Inventor V2.1 ascii";
+static const char *defaultUTF8Header = "#Inventor V2.1 utf8";
 static const char *defaultBinaryHeader = "#Inventor V2.1 binary";
-    
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -81,16 +81,16 @@ SoOutput::SoOutput()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    buffer	= NULL;
-    toBuffer	= FALSE;
-    anyRef	= FALSE;
-    compact	= FALSE;
-    wroteHeader	= FALSE;
-    refDict	= new SbDict;
-    borrowedDict= FALSE;
-    annotation	= 0;
+    buffer = NULL;
+    toBuffer = FALSE;
+    anyRef = FALSE;
+    compact = FALSE;
+    wroteHeader = FALSE;
+    refDict = new SbDict;
+    borrowedDict = FALSE;
+    annotation = 0;
     headerString = SbString("");
-    fmtString	= SbString("%g");
+    fmtString = SbString("%g");
     format = ASCII;
 
     reset();
@@ -108,21 +108,20 @@ SoOutput::SoOutput(SoOutput *dictOut)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    buffer	= NULL;
-    toBuffer	= FALSE;
-    anyRef	= FALSE;
-    compact	= FALSE;
-    wroteHeader	= FALSE;
-    annotation	= 0;
-    fmtString	= SbString("%g");
+    buffer = NULL;
+    toBuffer = FALSE;
+    anyRef = FALSE;
+    compact = FALSE;
+    wroteHeader = FALSE;
+    annotation = 0;
+    fmtString = SbString("%g");
 
     if (dictOut == NULL) {
-	borrowedDict = FALSE;
-	refDict = new SbDict;
-    }
-    else {
-	borrowedDict = TRUE;
-	refDict	= dictOut->refDict;
+        borrowedDict = FALSE;
+        refDict = new SbDict;
+    } else {
+        borrowedDict = TRUE;
+        refDict = dictOut->refDict;
     }
     format = ASCII;
 
@@ -142,7 +141,7 @@ SoOutput::~SoOutput()
 {
     closeFile();
 
-    if (! borrowedDict)
+    if (!borrowedDict)
         delete refDict;
 }
 
@@ -154,15 +153,15 @@ SoOutput::~SoOutput()
 // Use: public
 
 void
-SoOutput::setFilePointer(FILE *newFP)		// New file pointer
+SoOutput::setFilePointer(FILE *newFP) // New file pointer
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     if (newFP == NULL)
-	SoDebugError::postWarning("SoOutput::setFilePointer",
-				  "Setting file pointer to NULL - "
-				  "may cause problems");
+        SoDebugError::postWarning("SoOutput::setFilePointer",
+                                  "Setting file pointer to NULL - "
+                                  "may cause problems");
 #endif /* DEBUG */
 
     // Close open file, if any
@@ -170,7 +169,7 @@ SoOutput::setFilePointer(FILE *newFP)		// New file pointer
 
     fp.setFilePointer(newFP);
     wroteHeader = FALSE;
-    toBuffer	= FALSE;
+    toBuffer = FALSE;
 
     if (isBinary() && tmpBuffer.empty()) {
         tmpBuffer.resize(8);
@@ -204,7 +203,7 @@ SoOutput::getFilePointer() const
 // Use: public
 
 SbBool
-SoOutput::openFile(const SbString &fileName)	// Name of file
+SoOutput::openFile(const SbString &fileName) // Name of file
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -214,13 +213,14 @@ SoOutput::openFile(const SbString &fileName)	// Name of file
 
     fp.open(fileName, "w");
     if (!fp.isOpen()) {
-	SoDebugError::post("SoOutput::openFile",
-               "Can't open file \"%s\" for writing", fileName.getString());
-	return FALSE;
+        SoDebugError::post("SoOutput::openFile",
+                           "Can't open file \"%s\" for writing",
+                           fileName.getString());
+        return FALSE;
     }
 
     wroteHeader = FALSE;
-    toBuffer	= FALSE;
+    toBuffer = FALSE;
 
     reset();
 
@@ -256,22 +256,22 @@ SoOutput::closeFile()
 // Use: public
 
 void
-SoOutput::setBuffer(void *bufPointer, size_t initSize,
-		    SoOutputReallocCB *f, int32_t offset)
+SoOutput::setBuffer(void *bufPointer, size_t initSize, SoOutputReallocCB *f,
+                    int32_t offset)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    buffer  = bufPointer;
-    curBuf  = (char *) bufPointer;
+    buffer = bufPointer;
+    curBuf = (char *)bufPointer;
     bufSize = initSize;
     reallocFunc = f;
-    
+
     // make sure there are enough bytes in buffer to start writing at offset
     if (offset > 0) {
-	makeRoomInBuf((int) (offset + 1));
-	curBuf = (char *) buffer + (int) offset;
+        makeRoomInBuf((int)(offset + 1));
+        curBuf = (char *)buffer + (int)offset;
     }
-    
+
     tmpBuffer.clear();
 
     wroteHeader = FALSE;
@@ -293,10 +293,10 @@ SoOutput::getBuffer(void *&bufPointer, size_t &nBytes) const
 ////////////////////////////////////////////////////////////////////////
 {
     if (isToBuffer()) {
-	bufPointer = buffer;
-	nBytes     = bytesInBuf();
+        bufPointer = buffer;
+        nBytes = bytesInBuf();
 
-	return TRUE;
+        return TRUE;
     }
 
     return FALSE;
@@ -314,7 +314,7 @@ SoOutput::resetBuffer()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    curBuf = (char *) buffer;
+    curBuf = (char *)buffer;
 
     wroteHeader = FALSE;
 }
@@ -350,8 +350,7 @@ SoOutput::setFormat(Format fmt)
 
     // If writing to file, initialize the temporary output for buffering
     // data before writing.
-    if (!isToBuffer())
-    {
+    if (!isToBuffer()) {
         tmpBuffer.resize(8);
     }
 }
@@ -370,29 +369,28 @@ SoOutput::setFloatPrecision(int precision)
 {
 
     // Invalid precision specified; use default format string
-    if (precision < 0 || precision > 8)
-    {
+    if (precision < 0 || precision > 8) {
 #ifdef DEBUG
-	SoDebugError::postWarning("SoOutput::setFloatPrecision",
-		"Precision (significant digits) must be between 0 "
-		"and 8 for %.xg format");
+        SoDebugError::postWarning(
+            "SoOutput::setFloatPrecision",
+            "Precision (significant digits) must be between 0 "
+            "and 8 for %.xg format");
 #endif /* DEBUG */
-	fmtString = SbString("%g");
+        fmtString = SbString("%g");
     }
 
     // Build the output format string from the input parameters
-    else
-    {
+    else {
         char tmp[8];
-	sprintf(tmp, "%%.%dg", precision);
-	fmtString = SbString(tmp);
+        sprintf(tmp, "%%.%dg", precision);
+        fmtString = SbString(tmp);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Sets the header to be used for writing the file to be a 
+//    Sets the header to be used for writing the file to be a
 //    user-specified string.
 //
 // Use: public
@@ -436,7 +434,7 @@ SoOutput::getHeaderString() const
     if (headerString != "")
         return headerString;
 
-    switch(format) {
+    switch (format) {
     case BINARY:
         return defaultBinaryHeader;
     case ASCII:
@@ -510,11 +508,11 @@ SoOutput::padHeader(const SbString &str)
 ////////////////////////////////////////////////////////////////////////
 {
     SbString paddedStr(str);
-    
-    int pad = 3 - (str.getLength()%4);    
+
+    int pad = 3 - (str.getLength() % 4);
     for (int i = 0; i < pad; i++)
-	paddedStr += " ";
-	
+        paddedStr += " ";
+
     return (paddedStr);
 }
 
@@ -530,20 +528,19 @@ SoOutput::write(char c)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! wroteHeader)
-	writeHeader();
+    if (!wroteHeader)
+        writeHeader();
 
-    if (isToBuffer() && ! makeRoomInBuf(4))
-	return;
+    if (isToBuffer() && !makeRoomInBuf(4))
+        return;
 
     if (isBinary()) {
         if (isToBuffer()) {
-   	    *curBuf++ = c;
+            *curBuf++ = c;
             *curBuf++ = 0;
             *curBuf++ = 0;
             *curBuf++ = 0;
-        }
-        else {
+        } else {
             *tmpBuffer.data() = c;
             tmpBuffer[1] = 0;
             tmpBuffer[2] = 0;
@@ -553,11 +550,11 @@ SoOutput::write(char c)
         }
     }
 
-    else if (! isToBuffer())
+    else if (!isToBuffer())
         fp.write(&c, sizeof(char), 1);
 
     else
-	*curBuf++ = c;
+        *curBuf++ = c;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -575,15 +572,13 @@ SoOutput::write(const char *s)
     size_t n = strlen(s);
     size_t nsize = (n + 3) & ~0003;
 
-    if (! wroteHeader)
-	writeHeader();
+    if (!wroteHeader)
+        writeHeader();
 
+    if (isToBuffer() && !makeRoomInBuf(nsize)) // Leave room for end NUL char
+        return;
 
-    if (isToBuffer() && ! makeRoomInBuf(nsize))	// Leave room for end NUL char
-	return;
-
-    if (isBinary())
-    {
+    if (isBinary()) {
         //
         // Writing a binary string consists of writing a word representing
         // the string length without the NULL character, followed by the
@@ -594,30 +589,28 @@ SoOutput::write(const char *s)
             DGL_HTON_INT32(m, n);
             *((int *)curBuf) = m;
             curBuf += 4;
-	    memcpy((void *)curBuf, (const void *)s, n);
-	    curBuf += n;
-            for (size_t i=0; i<(nsize-n); i++)
+            memcpy((void *)curBuf, (const void *)s, n);
+            curBuf += n;
+            for (size_t i = 0; i < (nsize - n); i++)
                 *curBuf++ = 0;
-        }
-        else {
+        } else {
             tmpBuffer.resize(nsize);
             int m;
             DGL_HTON_INT32(m, n);
             fp.write(&m, sizeof(int), 1);
-        memcpy(tmpBuffer.data(), (const void *)s, n);
-            for (size_t i=0; i<(nsize-n); i++)
-                tmpBuffer[n+i] = 0;
+            memcpy(tmpBuffer.data(), (const void *)s, n);
+            for (size_t i = 0; i < (nsize - n); i++)
+                tmpBuffer[n + i] = 0;
             fp.write(tmpBuffer.data(), sizeof(char), nsize);
             fp.flush();
         }
     }
 
-    else if (! isToBuffer()) {
+    else if (!isToBuffer()) {
         fp.write(s, sizeof(char), strlen(s));
-    }
-    else {
-	strcpy(curBuf, s);
-	curBuf += n;		// Don't increment over NUL char
+    } else {
+        strcpy(curBuf, s);
+        curBuf += n; // Don't increment over NUL char
     }
 }
 
@@ -636,19 +629,19 @@ SoOutput::write(const SbString &s)
 ////////////////////////////////////////////////////////////////////////
 {
     if (isBinary()) {
-	write(s.getString());
+        write(s.getString());
     } else {
-	const char *c;
+        const char *c;
 
-	write('\"');
+        write('\"');
 
-	for (c = s.getString(); *c != '\0'; c++) {
-	    if (*c == '\"')
-		write('\\');
-	    write(*c);
-	}
+        for (c = s.getString(); *c != '\0'; c++) {
+            if (*c == '\"')
+                write('\\');
+            write(*c);
+        }
 
-	write('\"');
+        write('\"');
     }
 }
 
@@ -667,20 +660,19 @@ SoOutput::write(const SbName &s)
 ////////////////////////////////////////////////////////////////////////
 {
     if (isBinary()) {
-	write(s.getString());
-    }
-    else {
-	const char *c;
+        write(s.getString());
+    } else {
+        const char *c;
 
-	write('\"');
+        write('\"');
 
-	for (c = s.getString(); *c != '\0'; c++) {
-	    if (*c == '\"')
-		write('\\');
-	    write(*c);
-	}
+        for (c = s.getString(); *c != '\0'; c++) {
+            if (*c == '\"')
+                write('\\');
+            write(*c);
+        }
 
-	write('\"');
+        write('\"');
     }
 }
 
@@ -690,47 +682,43 @@ SoOutput::write(const SbName &s)
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define WRITE_NUM(num, formatString, dglFunc, dglType)   		      \
-    if (! wroteHeader)							      \
-	writeHeader();							      \
-    if (isBinary()) {							      \
-    if (isToBuffer() && ! makeRoomInBuf(sizeof(dglType)))		      \
-	    return;							      \
-        if (isToBuffer()) {                                                   \
-            dglFunc(num, curBuf);	  				      \
-            curBuf += sizeof(dglType);                                      \
-        }                                                                     \
-        else { \
-            tmpBuffer.resize(sizeof(dglType));     \
-            dglFunc(num, tmpBuffer.data());                                          \
-            fp.write(tmpBuffer.data(), sizeof(dglType), 1);                          \
-            fp.flush();                                                       \
-        }                                                                     \
-    }									      \
-    else if (! isToBuffer())						      \
-        fprintf(fp.getFilePointer(), formatString, num);					  \
-    else {								      \
-	char	str[20];						      \
-	sprintf(str, formatString, num);				      \
-	write(str);							      \
+#define WRITE_NUM(num, formatString, dglFunc, dglType)                         \
+    if (!wroteHeader)                                                          \
+        writeHeader();                                                         \
+    if (isBinary()) {                                                          \
+        if (isToBuffer() && !makeRoomInBuf(sizeof(dglType)))                   \
+            return;                                                            \
+        if (isToBuffer()) {                                                    \
+            dglFunc(num, curBuf);                                              \
+            curBuf += sizeof(dglType);                                         \
+        } else {                                                               \
+            tmpBuffer.resize(sizeof(dglType));                                 \
+            dglFunc(num, tmpBuffer.data());                                    \
+            fp.write(tmpBuffer.data(), sizeof(dglType), 1);                    \
+            fp.flush();                                                        \
+        }                                                                      \
+    } else if (!isToBuffer())                                                  \
+        fprintf(fp.getFilePointer(), formatString, num);                       \
+    else {                                                                     \
+        char str[20];                                                          \
+        sprintf(str, formatString, num);                                       \
+        write(str);                                                            \
     }
 
-#define WRITE_BIN_ARRAY(type, array, length, dglFunc)  			      \
-    if (! wroteHeader)							      \
-	writeHeader();							      \
-    if (isToBuffer() && ! makeRoomInBuf(length*sizeof(type)))	              \
-        return;							              \
-    if (isToBuffer()) {                                                       \
-        dglFunc(array, curBuf, length);                                       \
-        curBuf += length * sizeof(type);                                    \
-    }									      \
-    else { \
-        tmpBuffer.resize(length*sizeof(type)); \
-        dglFunc(array, tmpBuffer.data(), length);                                    \
-        fp.write(tmpBuffer.data(), sizeof(type), length);                            \
-        fp.flush();                                                           \
-    }                                                                         \
-
+#define WRITE_BIN_ARRAY(type, array, length, dglFunc)                          \
+    if (!wroteHeader)                                                          \
+        writeHeader();                                                         \
+    if (isToBuffer() && !makeRoomInBuf(length * sizeof(type)))                 \
+        return;                                                                \
+    if (isToBuffer()) {                                                        \
+        dglFunc(array, curBuf, length);                                        \
+        curBuf += length * sizeof(type);                                       \
+    } else {                                                                   \
+        tmpBuffer.resize(length * sizeof(type));                               \
+        dglFunc(array, tmpBuffer.data(), length);                              \
+        fp.write(tmpBuffer.data(), sizeof(type), length);                      \
+        fp.flush();                                                            \
+    }
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -836,15 +824,14 @@ SoOutput::writeBinaryArray(const unsigned char *c, int length)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! wroteHeader)
-	writeHeader();
-    if (isToBuffer() && ! makeRoomInBuf(length*sizeof(unsigned char)))
-	return;
+    if (!wroteHeader)
+        writeHeader();
+    if (isToBuffer() && !makeRoomInBuf(length * sizeof(unsigned char)))
+        return;
     if (isToBuffer()) {
-	memcpy(curBuf, c, length);
-    curBuf += length * sizeof(unsigned char);
-    }
-    else {
+        memcpy(curBuf, c, length);
+        curBuf += length * sizeof(unsigned char);
+    } else {
         fp.write(c, sizeof(unsigned char), length);
         fp.flush();
     }
@@ -907,7 +894,7 @@ SoOutput::convertShort(short s, char *to)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    DGL_HTON_SHORT( SHORT(to), s );
+    DGL_HTON_SHORT(SHORT(to), s);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -922,7 +909,7 @@ SoOutput::convertInt32(int32_t l, char *to)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    DGL_HTON_INT32( INT32(to), l );
+    DGL_HTON_INT32(INT32(to), l);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -937,7 +924,7 @@ SoOutput::convertFloat(float f, char *to)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    DGL_HTON_FLOAT( FLOAT(to), f );
+    DGL_HTON_FLOAT(FLOAT(to), f);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -952,9 +939,8 @@ SoOutput::convertDouble(double d, char *to)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    DGL_HTON_DOUBLE( DOUBLE(to), d );
+    DGL_HTON_DOUBLE(DOUBLE(to), d);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -964,20 +950,17 @@ SoOutput::convertDouble(double d, char *to)
 // Use: private
 
 void
-SoOutput::convertShortArray( short *from,
-                             char *to,
-                             int len)
+SoOutput::convertShortArray(short *from, char *to, int len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    short *b = (short*)to;
+    short *b = (short *)to;
     while (len-- > 0) {
         DGL_HTON_SHORT(*b, *from);
         b++;
         from++;
     }
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -987,20 +970,17 @@ SoOutput::convertShortArray( short *from,
 // Use: private
 
 void
-SoOutput::convertInt32Array( int32_t *from,
-                            char *to,
-                            int len)
+SoOutput::convertInt32Array(int32_t *from, char *to, int len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int32_t *b = (int32_t*)to;
+    int32_t *b = (int32_t *)to;
     while (len-- > 0) {
         DGL_HTON_INT32(*b, *from);
         b++;
         from++;
     }
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1010,20 +990,17 @@ SoOutput::convertInt32Array( int32_t *from,
 // Use: private
 
 void
-SoOutput::convertFloatArray( float *from,
-                             char *to,
-                             int len)
+SoOutput::convertFloatArray(float *from, char *to, int len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float *b = (float*)to;
+    float *b = (float *)to;
     while (len-- > 0) {
         DGL_HTON_FLOAT(*b, *from);
         b++;
         from++;
     }
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1033,13 +1010,11 @@ SoOutput::convertFloatArray( float *from,
 // Use: private
 
 void
-SoOutput::convertDoubleArray( double *from,
-                              char *to,
-                              int len )
+SoOutput::convertDoubleArray(double *from, char *to, int len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    double *b = (double*)to;
+    double *b = (double *)to;
     while (len-- > 0) {
         DGL_HTON_DOUBLE(*b, *from);
         b++;
@@ -1060,13 +1035,13 @@ SoOutput::indent()
 ////////////////////////////////////////////////////////////////////////
 {
     for (int i = indentLevel / 2; i > 0; --i)
-	write('\t');
+        write('\t');
 
     if (indentLevel & 1) {
-	write(' ');
-	write(' ');
-	write(' ');
-	write(' ');
+        write(' ');
+        write(' ');
+        write(' ');
+        write(' ');
     }
 }
 
@@ -1084,23 +1059,23 @@ SoOutput::reset()
 {
     // If writing ASCII into buffer in memory, make sure it's
     // NULL-byte-terminated
-    if (isToBuffer() && ! isBinary()) {
-	write('\0');
+    if (isToBuffer() && !isBinary()) {
+        write('\0');
 
-	// However, subsequent writes (if any) should overwrite it
-	curBuf--;
+        // However, subsequent writes (if any) should overwrite it
+        curBuf--;
     }
 
-    indentLevel  = 0;
+    indentLevel = 0;
     refIdCount = 0;
 
     if (anyRef) {
 
-	// Clear dictionary
-	refDict->clear();
+        // Clear dictionary
+        refDict->clear();
 
-	anyRef = FALSE;
-	refIdCount = 0;
+        anyRef = FALSE;
+        refIdCount = 0;
     }
 }
 
@@ -1123,7 +1098,7 @@ SoOutput::writeHeader()
 
     // Don't write header if writing in compact form
     if (compact)
-	return;
+        return;
 
     if (isBinary()) {
         // Make sure the string is padded for correct alignment, in case
@@ -1154,29 +1129,29 @@ SoOutput::makeRoomInBuf(size_t nBytes)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    size_t	bytesUsed  = bytesInBuf();
-    size_t	roomNeeded = bytesUsed + nBytes;
+    size_t bytesUsed = bytesInBuf();
+    size_t roomNeeded = bytesUsed + nBytes;
 
     // If already had problems with buffer, stop
     if (buffer == NULL)
-	return FALSE;
+        return FALSE;
 
     // If not enough room in buffer for nBytes more, realloc
     if (roomNeeded >= bufSize) {
-	// While not enough room, double size of buffer
-	while (roomNeeded >= bufSize)
-	    bufSize *= 2;
-    
-	// Now realloc a new buffer that is big enough
-	buffer = (*reallocFunc)(buffer, bufSize);
+        // While not enough room, double size of buffer
+        while (roomNeeded >= bufSize)
+            bufSize *= 2;
+
+        // Now realloc a new buffer that is big enough
+        buffer = (*reallocFunc)(buffer, bufSize);
     }
-    
+
     // Test for bad reallocation
     if (buffer == NULL)
-	return FALSE;
-	    
+        return FALSE;
+
     // Readjust current buffer pointer
-    curBuf = (char *) buffer + bytesUsed;
+    curBuf = (char *)buffer + bytesUsed;
 
     return TRUE;
 }
@@ -1189,15 +1164,15 @@ SoOutput::makeRoomInBuf(size_t nBytes)
 //
 // Use: private
 
-int					// Returns reference id
-SoOutput::addReference(const SoBase *base)	// Thing to enter
+int                                        // Returns reference id
+SoOutput::addReference(const SoBase *base) // Thing to enter
 //
 ////////////////////////////////////////////////////////////////////////
 {
     int referenceId = refIdCount++;
 
     // Enter in dictionary : generates a CC warning...
-    refDict->enter((unsigned long) base, (void *) (unsigned long) referenceId);
+    refDict->enter((unsigned long)base, (void *)(unsigned long)referenceId);
 
     // Dictionary is now "dirty"
     anyRef = TRUE;
@@ -1213,17 +1188,17 @@ SoOutput::addReference(const SoBase *base)	// Thing to enter
 //
 // Use: private
 
-int					// Returns reference ID
-SoOutput::findReference(const SoBase *base	// Thing to look for
-			) const
+int                                        // Returns reference ID
+SoOutput::findReference(const SoBase *base // Thing to look for
+) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int referenceId = -1;
+    int   referenceId = -1;
     void *ref;
 
     // Generates a CC warning. Ho hum.
-    if (refDict->find((unsigned long) base, ref))
+    if (refDict->find((unsigned long)base, ref))
         referenceId = (intptr_t)ref;
 
     return referenceId;

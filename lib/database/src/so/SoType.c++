@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -58,14 +58,15 @@
 #include <stdlib.h>
 #include <algorithm>
 
-SoINTERNAL struct SoTypeData {
-    SoType		type;
-    SoType		parent;
-    SbName		name;
-    void		*(*createMethod)();
+SoINTERNAL
+struct SoTypeData {
+    SoType type;
+    SoType parent;
+    SbName name;
+    void *(*createMethod)();
 };
 
-std::vector<SoTypeData>	SoType::typeData;
+std::vector<SoTypeData> SoType::typeData;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -86,7 +87,7 @@ SoType::init()
     SoTypeData td;
     td.type.storage.index = 0;
     td.type.storage.isPublic = 1;
-    td.type.storage.data  = 0;
+    td.type.storage.data = 0;
     typeData.push_back(td);
 }
 
@@ -124,7 +125,7 @@ SoType::fromKey(short key)
 //
 // Description:
 //    Returns the "bad type" - used for type errors
-//    
+//
 //
 // Use: public, static
 
@@ -156,11 +157,11 @@ SoType::isDerivedFrom(SoType t) const
 {
     SoType thisType = *this;
 
-    while (! thisType.isBad())
-	if (thisType == t)
-	    return TRUE;
-	else
-	    thisType = thisType.getParent();
+    while (!thisType.isBad())
+        if (thisType == t)
+            return TRUE;
+        else
+            thisType = thisType.getParent();
 
     return FALSE;
 }
@@ -183,12 +184,12 @@ SoType::getAllDerivedFrom(SoType type, SoTypeList &typeList)
     for (size_t i = 1; i < typeData.size(); i++) {
         SoType curType = typeData[i].type;
 
-	// See if the type corresponds to a non-abstract node class 
-	if (! curType.isBad() && curType.isDerivedFrom(type) &&
-	    (curType.storage.isPublic == 1)) {
-	    typeList.append(curType);
-	    ++numAdded;
-	}
+        // See if the type corresponds to a non-abstract node class
+        if (!curType.isBad() && curType.isDerivedFrom(type) &&
+            (curType.storage.isPublic == 1)) {
+            typeList.append(curType);
+            ++numAdded;
+        }
     }
 
     return numAdded;
@@ -202,50 +203,50 @@ SoType::getAllDerivedFrom(SoType type, SoTypeList &typeList)
 // Use: public, static
 
 SoType
-SoType::fromName(const SbName & name)
+SoType::fromName(const SbName &name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const char *nameChars = name.getString();
-    SbString nameString(nameChars);  // For easier manipulation...
+    SbString    nameString(nameChars); // For easier manipulation...
 
     // Look for an existing type; if the type begins with "So", then
     // look at a type matching the stuff after the "So", also.  If not
     // found, we'll try the DSO thing:
-    int b = find(name);
+    int    b = find(name);
     SbBool notFound = (b == -1);
-    if (notFound && (name.getLength() > 2)  && (nameString.getSubString(0,1) == "So")) {
-        b = find(SbName(nameChars+2));
+    if (notFound && (name.getLength() > 2) &&
+        (nameString.getSubString(0, 1) == "So")) {
+        b = find(SbName(nameChars + 2));
         notFound = (b == -1);
     }
     if (notFound) {
 
-         if (!dsoInitClass(nameString))
-             return SoType::badType();
+        if (!dsoInitClass(nameString))
+            return SoType::badType();
 
-	    // Now, try to find the type again.
-         b = find(name);
-         if (b == -1) {
+        // Now, try to find the type again.
+        b = find(name);
+        if (b == -1) {
 #ifdef DEBUG
-		SoDebugError::post("SoType::fromName",
-			"%s::initClass did not initialize SoType!",
-			nameChars);
-#endif	    
-             b = 0;
-	}
+            SoDebugError::post("SoType::fromName",
+                               "%s::initClass did not initialize SoType!",
+                               nameChars);
+#endif
+            b = 0;
+        }
     }
 
     if (b <= 0)
-	return SoType::badType();
+        return SoType::badType();
 
     SoType result = typeData[b].type;
 
     if (result.storage.isPublic == 0) {
 #ifdef DEBUG
-	SoDebugError::post("SoType::fromName", "%s is internal",
-			   nameChars);
+        SoDebugError::post("SoType::fromName", "%s is internal", nameChars);
 #endif
-	return SoType::badType();
+        return SoType::badType();
     }
 
     return result;
@@ -261,22 +262,21 @@ SoType::fromName(const SbName & name)
 // Use: extender, static
 
 SoType
-SoType::createType(SoType parent, SbName name,
-		   void * (*createMethod)(),
-		   short data)
+SoType::createType(SoType parent, SbName name, void *(*createMethod)(),
+                   short data)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SoType t;
     t.storage.index = typeData.size();
     t.storage.isPublic = 1;
-    t.storage.data	= data;
+    t.storage.data = data;
 
     SoTypeData td;
-    td.type	= t;
+    td.type = t;
     td.parent = parent;
-    td.name	= name;
-    td.createMethod	= createMethod;
+    td.name = name;
+    td.createMethod = createMethod;
 
     typeData.push_back(td);
 
@@ -299,15 +299,15 @@ SoType::createType(SoType parent, SbName name,
 // Use: extender, static
 
 SoType
-SoType::overrideType(SoType oldType, void * (*createMethod)())
+SoType::overrideType(SoType oldType, void *(*createMethod)())
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (oldType.isBad() || ! oldType.canCreateInstance())
-	SoDebugError::post("SoType::overrideType",
-			   "Type to override (%s) is bad: %s",
-			   oldType.getName().getString());
+    if (oldType.isBad() || !oldType.canCreateInstance())
+        SoDebugError::post("SoType::overrideType",
+                           "Type to override (%s) is bad: %s",
+                           oldType.getName().getString());
 #endif
 
     typeData[oldType.storage.index].createMethod = createMethod;
@@ -360,11 +360,11 @@ SoType::getNumTypes()
 // Use: private, static
 
 int
-SoType::find(const SbName & name)
+SoType::find(const SbName &name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (size_t i=0; i<typeData.size(); i++) {
+    for (size_t i = 0; i < typeData.size(); i++) {
         if (typeData[i].name == name)
             return i;
     }
@@ -437,15 +437,15 @@ SoType::createInstance() const
     return NULL;
 }
 #ifdef SB_OS_WIN
-#   include <windows.h>
-#   define SB_DLOPEN(a,b)   LoadLibraryA(a)
-#   define SB_DLSYM(a,b)    GetProcAddress(a, b)
-#   define SB_DLHANDLE      HINSTANCE
+#include <windows.h>
+#define SB_DLOPEN(a, b) LoadLibraryA(a)
+#define SB_DLSYM(a, b) GetProcAddress(a, b)
+#define SB_DLHANDLE HINSTANCE
 #else
-#   include <dlfcn.h>
-#   define SB_DLOPEN(a,b)   dlopen(a,b)
-#   define SB_DLSYM(a,b)    dlsym(a, b)
-#   define SB_DLHANDLE      void*
+#include <dlfcn.h>
+#define SB_DLOPEN(a, b) dlopen(a, b)
+#define SB_DLSYM(a, b) dlsym(a, b)
+#define SB_DLHANDLE void *
 #endif
 
 ////////////////////////////////////////////////////////////////////////
@@ -455,7 +455,7 @@ SoType::createInstance() const
 //
 // Use: internal, static
 bool
-SoType::dsoInitClass(const SbString & name)
+SoType::dsoInitClass(const SbString &name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -466,28 +466,31 @@ SoType::dsoInitClass(const SbString & name)
 #else
     SbString dsoFilename = "lib" + name + ".so";
 #endif
-    SB_DLHANDLE handle = SB_DLOPEN(dsoFilename.getString(), RTLD_LAZY | RTLD_GLOBAL);
-    if (handle==NULL)
+    SB_DLHANDLE handle =
+        SB_DLOPEN(dsoFilename.getString(), RTLD_LAZY | RTLD_GLOBAL);
+    if (handle == NULL)
         return false;
     char dsoSymbol[101];
 #ifdef SB_OS_WIN
     sprintf(dsoSymbol, "?initClass@%s@@SAXXZ", name.getString());
 #else
 #if defined(__GNUC__) && __GNUC__ >= 3
-    sprintf(dsoSymbol, "_ZN%d%s9initClassEv", (int)name.getLength(), name.getString());
-#   else
-    sprintf(dsoSymbol, "initClass__%d%s", (int)name.getLength(), name.getString());
-#   endif
+    sprintf(dsoSymbol, "_ZN%d%s9initClassEv", (int)name.getLength(),
+            name.getString());
+#else
+    sprintf(dsoSymbol, "initClass__%d%s", (int)name.getLength(),
+            name.getString());
+#endif
 #endif
     void (*dsoFunc)() = (void (*)())SB_DLSYM(handle, dsoSymbol);
-    if (dsoFunc==NULL) {
+    if (dsoFunc == NULL) {
 #ifdef DEBUG
-            SoDebugError::post("SoType::fromName",
-                               "Could not find %s::initClass in %s.",
-                               name.getString(), dsoFilename.getString());
+        SoDebugError::post("SoType::fromName",
+                           "Could not find %s::initClass in %s.",
+                           name.getString(), dsoFilename.getString());
 #endif
         return false;
     }
-    (*dsoFunc)();  // Call initClass
+    (*dsoFunc)(); // Call initClass
     return true;
 }

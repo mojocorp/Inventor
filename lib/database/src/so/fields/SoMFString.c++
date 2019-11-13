@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -86,16 +86,15 @@ SoMFString::initClass()
 // Use: public
 
 void
-SoMFString::setValues(int start, int num, const char *strings[])
-{
-    int	newNum = start + num;
-    int	i;
+SoMFString::setValues(int start, int num, const char *strings[]) {
+    int newNum = start + num;
+    int i;
 
     if (newNum > getNum())
-	makeRoom(newNum);
+        makeRoom(newNum);
 
     for (i = 0; i < num; i++)
-	values[start + i] = strings[i];
+        values[start + i] = strings[i];
 
     valueChanged();
 }
@@ -133,39 +132,39 @@ SoMFString::deleteText(int fromLine, int fromChar, int toLine, int toChar)
 {
 #ifdef DEBUG
     if (fromLine > toLine) {
-	SoDebugError::post("SoMFString::deleteText",
-			   "fromLine (%d) > toLine (%d)", fromLine, toLine);
-	return;
+        SoDebugError::post("SoMFString::deleteText",
+                           "fromLine (%d) > toLine (%d)", fromLine, toLine);
+        return;
     }
     if (fromLine == toLine && fromChar > toChar) {
-	SoDebugError::post("SoMFString::deleteText",
-			   "fromChar (%d) > toChar (%d) on same line",
-			   fromChar, toChar);
-	return;
+        SoDebugError::post("SoMFString::deleteText",
+                           "fromChar (%d) > toChar (%d) on same line", fromChar,
+                           toChar);
+        return;
     }
 #endif
 
     // If operation is all within one line
     if (fromLine == toLine) {
-	values[fromLine].deleteSubString(fromChar, toChar);
+        values[fromLine].deleteSubString(fromChar, toChar);
 
-	// Make sure notification occurs
-	valueChanged();
+        // Make sure notification occurs
+        valueChanged();
     }
 
     else {
-	// Remove end characters from first line and beginning chars
-	// from last line
-	values[fromLine].deleteSubString(fromChar);
-	values[toLine].deleteSubString(0, toChar);
+        // Remove end characters from first line and beginning chars
+        // from last line
+        values[fromLine].deleteSubString(fromChar);
+        values[toLine].deleteSubString(0, toChar);
 
-	// Merge the two lines into 1 string and store in field
-	SbString mergeString = values[fromLine];
-	mergeString += values[toLine];
-	values[fromLine] = mergeString;
+        // Merge the two lines into 1 string and store in field
+        SbString mergeString = values[fromLine];
+        mergeString += values[toLine];
+        values[fromLine] = mergeString;
 
-	// Remove intervening lines (this also causes notify to occur)
-	deleteValues(fromLine + 1, toLine - fromLine);
+        // Remove intervening lines (this also causes notify to occur)
+        deleteValues(fromLine + 1, toLine - fromLine);
     }
 }
 

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |      Defines the SoShapeKit class. 
+ |      Defines the SoShapeKit class.
  |      Subclassed off of SoSeparatorKit, this adds all the nodes potentially
  |      used to describe a shape. Not all of these nodes are needed for any
  |      one type of shape. For example, if you set the 'shape' part to be
@@ -59,8 +59,8 @@
  _______________________________________________________________________
 */
 
-#ifndef  _SO_SHAPE_KIT_
-#define  _SO_SHAPE_KIT_
+#ifndef _SO_SHAPE_KIT_
+#define _SO_SHAPE_KIT_
 
 #include <Inventor/nodekits/SoSeparatorKit.h>
 
@@ -71,14 +71,14 @@
 //     For info about the structure of SoShapeKit:
 //     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
 //     [2] type:    ivNodeKitStructure SoShapeKit.
-//     [3] The program prints a diagram of the scene graph and a table with 
+//     [3] The program prints a diagram of the scene graph and a table with
 //         information about each part.
 //
 //    New nodes in this subclass are:
-//         materialBinding, normalBinding,                 
+//         materialBinding, normalBinding,
 //         and textureCoordinateBinding
 //
-//      A parent node that manages a collection of child nodes 
+//      A parent node that manages a collection of child nodes
 //      into a unit with the following structure:
 //
 //                            this
@@ -87,7 +87,7 @@
 //         "callbackList"       |
 //      ---------------------------------------------------------------
 //      |       |           |     |         |    |   |               |
-//  "pickStyle" |    "transform"  |         |    |   |               | 
+//  "pickStyle" |    "transform"  |         |    |   |               |
 //     "appearance"  "texture2Transform"    |    |   |               |
 //                                          |    |  "localTransform" |
 //                                          |    |                   |
@@ -95,14 +95,14 @@
 //                                          |    |                   |
 //                                          |    |                "shape"
 //                                          |  "childList"
-//          ---------------------------------                   
-//          |        
-// "materialBinding" "normalBinding"  
+//          ---------------------------------
+//          |
+// "materialBinding" "normalBinding"
 //  "textureCoordinateBinding" "shapeHints"
 //  "coordinate3" "coordinate4" "normal"
 //  "textureCoordinate2" "textureCoordinateFunction"
 // "profileCoordinate2" "profileCoordinate3"
-// "profileList" 
+// "profileList"
 //
 
 ////////////////////////////////////////////////////////////////////
@@ -140,11 +140,11 @@ class SoShapeKit : public SoSeparatorKit {
     // constructor
     SoShapeKit();
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
   protected:
-
     // Called by the SoBaseKit::write() method. Calls setDefault(TRUE)
     // on the shapeSeparator. Note that this may be overriden later by basekit
     // if, for example, topSeparator lies on a path that is being written out.
@@ -152,4 +152,4 @@ class SoShapeKit : public SoSeparatorKit {
 
     virtual ~SoShapeKit();
 };
-#endif  /* _SO_SHAPE_KIT_ */
+#endif /* _SO_SHAPE_KIT_ */

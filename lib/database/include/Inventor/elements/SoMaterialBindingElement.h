@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_MATERIAL_BINDING_ELEMENT
-#define  _SO_MATERIAL_BINDING_ELEMENT
+#ifndef _SO_MATERIAL_BINDING_ELEMENT
+#define _SO_MATERIAL_BINDING_ELEMENT
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -66,7 +66,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoMaterialBindingElement : public SoInt32Element {
+SoEXTENDER
+class SoMaterialBindingElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoMaterialBindingElement);
 
@@ -74,35 +75,38 @@ SoEXTENDER class SoMaterialBindingElement : public SoInt32Element {
     // The (seemingly random) choice of values is for compatibility
     // with Inventor 2.0 binary format files:
     enum Binding {
-	OVERALL = 2,		// Whole object has same material
-	PER_PART = 3,		// One material for each part of object
-	PER_PART_INDEXED = 4,	// One material for each part, indexed
-	PER_FACE = 5,		// One material for each face of object
-	PER_FACE_INDEXED = 6,	// One material for each face, indexed
-	PER_VERTEX = 7,		// One material for each vertex
-	PER_VERTEX_INDEXED = 8	// One material for each vertex, indexed
+        OVERALL = 2,           // Whole object has same material
+        PER_PART = 3,          // One material for each part of object
+        PER_PART_INDEXED = 4,  // One material for each part, indexed
+        PER_FACE = 5,          // One material for each face of object
+        PER_FACE_INDEXED = 6,  // One material for each face, indexed
+        PER_VERTEX = 7,        // One material for each vertex
+        PER_VERTEX_INDEXED = 8 // One material for each vertex, indexed
     };
 
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the current material binding in the state
-    static void		set(SoState *state, Binding binding)
-	{ SoInt32Element::set(classStackIndex, state, (int32_t)binding); }
+    static void set(SoState *state, Binding binding) {
+        SoInt32Element::set(classStackIndex, state, (int32_t)binding);
+    }
 
     // Returns current material binding from the state
-    static Binding	get(SoState *state)
-	{ return (Binding)SoInt32Element::get(classStackIndex, state); }
+    static Binding get(SoState *state) {
+        return (Binding)SoInt32Element::get(classStackIndex, state);
+    }
 
     // Returns the default material binding
-    static Binding	getDefault()		{ return OVERALL; }
+    static Binding getDefault() { return OVERALL; }
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoMaterialBindingElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     virtual ~SoMaterialBindingElement();

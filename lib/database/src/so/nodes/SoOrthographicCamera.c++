@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -83,7 +83,7 @@ SoOrthographicCamera::SoOrthographicCamera()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_NODE_CONSTRUCTOR(SoOrthographicCamera);
-    SO_NODE_ADD_FIELD(height,	 (2.0));
+    SO_NODE_ADD_FIELD(height, (2.0));
     isBuiltIn = TRUE;
 }
 
@@ -97,8 +97,7 @@ SoOrthographicCamera::SoOrthographicCamera()
 SoOrthographicCamera::~SoOrthographicCamera()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -113,7 +112,7 @@ SoOrthographicCamera::scaleHeight(float scaleFactor)
 ////////////////////////////////////////////////////////////////////////
 {
     if (scaleFactor == 0.0)
-	return;
+        return;
 
     height.setValue(scaleFactor * height.getValue());
 }
@@ -128,21 +127,21 @@ SoOrthographicCamera::scaleHeight(float scaleFactor)
 // Use: public
 
 SbViewVolume
-SoOrthographicCamera::getViewVolume( float useAspectRatio) const
+SoOrthographicCamera::getViewVolume(float useAspectRatio) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbViewVolume view;
 
-    float	camAspect = (useAspectRatio != 0.0 ? useAspectRatio :
-			     aspectRatio.getValue());
+    float camAspect =
+        (useAspectRatio != 0.0 ? useAspectRatio : aspectRatio.getValue());
 
     float xRadius = 0.5 * height.getValue() * camAspect;
     float yRadius = 0.5 * height.getValue();
 
     // Set up the orthographic camera.
-    view.ortho(- xRadius, xRadius, - yRadius, yRadius, 
-	       nearDistance.getValue(), farDistance.getValue());
+    view.ortho(-xRadius, xRadius, -yRadius, yRadius, nearDistance.getValue(),
+               farDistance.getValue());
 
     // Note that these move the camera rather than moving objects
     // relative to the camera.
@@ -158,25 +157,25 @@ SoOrthographicCamera::getViewVolume( float useAspectRatio) const
 //    positions the camera without changing its height so that the
 //    entire sphere is visible. The aspect ratio to use for the camera
 //    is passed in.
-// 
+//
 // Use: protected
 
 void
-SoOrthographicCamera::viewBoundingBox(const SbBox3f &box,
-				     float aspect, float slack)
+SoOrthographicCamera::viewBoundingBox(const SbBox3f &box, float aspect,
+                                      float slack)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbSphere	bSphere;
-    SbMatrix	rotation;
-    SbVec3f	pos;
+    SbSphere bSphere;
+    SbMatrix rotation;
+    SbVec3f  pos;
 
     // if the bounding box is not empty, create the bounding sphere
-    if (! box.isEmpty())
-	bSphere.circumscribe(box);
+    if (!box.isEmpty())
+        bSphere.circumscribe(box);
     else {
-	pos.setValue(0., 0., 0.);
-	bSphere.setValue(pos, 1.0);
+        pos.setValue(0., 0., 0.);
+        bSphere.setValue(pos, 1.0);
     }
 
     // The position will be such that the "camera" touches the
@@ -187,15 +186,15 @@ SoOrthographicCamera::viewBoundingBox(const SbBox3f &box,
 
     // Set the clipping planes to the bounds of the sphere and the
     // focal distance to the center of the sphere.
-    nearDistance = - (slack -1) * bSphere.getRadius();
-    farDistance  = (slack + 1) * bSphere.getRadius();
+    nearDistance = -(slack - 1) * bSphere.getRadius();
+    farDistance = (slack + 1) * bSphere.getRadius();
     focalDistance = bSphere.getRadius();
 
     // Find the height necessary to fit the object completely in the
     // window.  We don't need any slack, because the bounding sphere
     // is already bigger than the bounding box.
     if (aspect < 1.0)
-	height = 2.0 * bSphere.getRadius() / aspect;
+        height = 2.0 * bSphere.getRadius() / aspect;
     else
-	height = 2.0 * bSphere.getRadius();
+        height = 2.0 * bSphere.getRadius();
 }

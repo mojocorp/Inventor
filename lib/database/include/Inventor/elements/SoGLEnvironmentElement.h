@@ -70,12 +70,11 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLEnvironmentElement : public SoEnvironmentElement
-{
+SoEXTENDER
+class SoGLEnvironmentElement : public SoEnvironmentElement {
     SO_ELEMENT_HEADER(SoGLEnvironmentElement);
 
-public:
-
+  public:
     /// Initializes element
     virtual void init(SoState *state);
 
@@ -86,28 +85,23 @@ public:
     /// Override pop() method so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *childElt);
 
-SoINTERNAL public:
-
+    SoINTERNAL
+  public:
     // Initializes the SoGLEnvironmentElement class.
     static void initClass();
 
-protected:
-
+  protected:
     // Sets the environment in an instance. Has GL side effects.
-    virtual void setElt(float ambientIntensity,
-                        const SbColor &ambientColor,
-                        const SbVec3f &attenuation,
-                        const int32_t fogType,
-                        const SbColor &fogColor,
-                        float fogVisibility);
+    virtual void setElt(float ambientIntensity, const SbColor &ambientColor,
+                        const SbVec3f &attenuation, const int32_t fogType,
+                        const SbColor &fogColor, float fogVisibility);
 
     // Destructor.
     virtual ~SoGLEnvironmentElement();
 
-private:
-
+  private:
     // Sends environment in element to GL
     void send();
 };
 
-#endif  /* _SO_GL_ENVIRONMENT_ELEMENT */
+#endif /* _SO_GL_ENVIRONMENT_ELEMENT */

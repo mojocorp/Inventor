@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,8 +64,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TIMER_SENSOR_
-#define  _SO_TIMER_SENSOR_
+#ifndef _SO_TIMER_SENSOR_
+#define _SO_TIMER_SENSOR_
 
 #include <Inventor/sensors/SoTimerQueueSensor.h>
 
@@ -82,37 +82,39 @@ class SoTimerSensor : public SoTimerQueueSensor {
     // Sets/returns the base time and interval length. The base time
     // is undefined unless it has been specified by the user or the
     // sensor is currently scheduled.
-    void		setBaseTime(const SbTime &base)  { baseTime = base;
-						           baseTimeSet = TRUE;}
-    void		setInterval(const SbTime &intvl) { interval = intvl; }
-    const SbTime &	getBaseTime() const		 { return baseTime;  }
-    const SbTime &	getInterval() const		 { return interval;  }
+    void setBaseTime(const SbTime &base) {
+        baseTime = base;
+        baseTimeSet = TRUE;
+    }
+    void          setInterval(const SbTime &intvl) { interval = intvl; }
+    const SbTime &getBaseTime() const { return baseTime; }
+    const SbTime &getInterval() const { return interval; }
 
     // Overrides the regular schedule() method because we have to set
     // up the trigger time first.
-    virtual void	schedule();
+    virtual void schedule();
 
     // Overrides the regular unschedule() because the timer could be
     // in either the timer queue or the waiting-to-be-rescheduled
     // queue, depending on the state of the 'triggering' flag.
-    virtual void	unschedule();
+    virtual void unschedule();
 
-  SoINTERNAL public:
-
+    SoINTERNAL
+  public:
     // Reschedule this timer relative to the given time
-    void		reschedule(const SbTime &);
+    void reschedule(const SbTime &);
 
   private:
-    SbTime		baseTime;	// Base time for scheduling triggering
-    SbTime		interval;	// Interval between triggering
-    SbBool		baseTimeSet;	// Whether base time was set by user
+    SbTime baseTime;    // Base time for scheduling triggering
+    SbTime interval;    // Interval between triggering
+    SbBool baseTimeSet; // Whether base time was set by user
 
-    SbBool		triggering;	// True if in trigger() code
+    SbBool triggering; // True if in trigger() code
 
     // Triggers the sensor, calling its callback function. This
     // overrides the method in SoSensor because it has to reschedule
     // itself for the next interval after triggering.
-    virtual void	trigger();
+    virtual void trigger();
 };
 
-#endif  /* _SO_TIMER_SENSOR_ */
+#endif /* _SO_TIMER_SENSOR_ */

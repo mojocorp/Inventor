@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -92,8 +92,8 @@ SoAntiSquish::SoAntiSquish()
     SO_NODE_CONSTRUCTOR(SoAntiSquish);
     isBuiltIn = TRUE;
 
-    SO_NODE_ADD_FIELD(sizing,     (AVERAGE_DIMENSION) );
-    SO_NODE_ADD_FIELD(recalcAlways,         (TRUE) );
+    SO_NODE_ADD_FIELD(sizing, (AVERAGE_DIMENSION));
+    SO_NODE_ADD_FIELD(recalcAlways, (TRUE));
 
     // Set up static info for enumerated type field
     SO_NODE_DEFINE_ENUM_VALUE(Sizing, X);
@@ -106,7 +106,7 @@ SoAntiSquish::SoAntiSquish()
 
     SO_NODE_SET_SF_ENUM_TYPE(sizing, Sizing);
 
-    savedAnswer        = SbMatrix::identity();
+    savedAnswer = SbMatrix::identity();
     savedInverseAnswer = SbMatrix::identity();
 
     recalcNextTime = FALSE;
@@ -122,8 +122,7 @@ SoAntiSquish::SoAntiSquish()
 SoAntiSquish::~SoAntiSquish()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -133,38 +132,38 @@ SoAntiSquish::~SoAntiSquish()
 //
 // Use: private
 SbMatrix
-SoAntiSquish::getUnsquishingMatrix( SbMatrix squishedMatrix,
-				    SbBool /* doInverse */,
-				    SbMatrix &inverseAnswer )
+SoAntiSquish::getUnsquishingMatrix(SbMatrix squishedMatrix,
+                                   SbBool /* doInverse */,
+                                   SbMatrix &inverseAnswer)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Think of the squishedMatrix as the following chain of matrices, given the
     // results of SbMatrix::factor()
-    // [T]  = translation 
-    // [R]  = rotation 
+    // [T]  = translation
+    // [R]  = rotation
     // [S]  = scale
     // [SO] = scaleOrientation
     // squishedMatrix = [SO-Inv][S][SO][R][T]
 
     SbVec3f  scaleV, translV;
-    SbMatrix scaleOrientM, rotM, projM; 
-    if (!squishedMatrix.factor(scaleOrientM,scaleV,rotM,translV,projM)) {
-	// If the matrix was singular, then we can not unsquish it.
-	// Return identity.
-	SbMatrix answer = SbMatrix::identity();
-	// Bug 323082: no longer a check for the doInverse flag. We
-	// always set this
-	inverseAnswer = SbMatrix::identity();
-	savedAnswer = answer;
-	savedInverseAnswer = inverseAnswer;
-	return answer;
+    SbMatrix scaleOrientM, rotM, projM;
+    if (!squishedMatrix.factor(scaleOrientM, scaleV, rotM, translV, projM)) {
+        // If the matrix was singular, then we can not unsquish it.
+        // Return identity.
+        SbMatrix answer = SbMatrix::identity();
+        // Bug 323082: no longer a check for the doInverse flag. We
+        // always set this
+        inverseAnswer = SbMatrix::identity();
+        savedAnswer = answer;
+        savedInverseAnswer = inverseAnswer;
+        return answer;
     }
 
 #define TINY .00001
-    for (int i = 0; i < 2; i++ ) {
-	if (scaleV[i] < .00001)
-	    scaleV[i] = TINY;
+    for (int i = 0; i < 2; i++) {
+        if (scaleV[i] < .00001)
+            scaleV[i] = TINY;
     }
 #undef TINY
 
@@ -173,66 +172,64 @@ SoAntiSquish::getUnsquishingMatrix( SbMatrix squishedMatrix,
     // where NEWSCALE is a uniform scale based on [S] and the sizing field
     float scl;
 
-    Sizing whichSizing = (Sizing ) sizing.getValue();
-    if ( whichSizing == X )
-	scl = scaleV[0];
-    else if ( whichSizing == Y )
-	scl = scaleV[1];
-    else if ( whichSizing == Z )
-	scl = scaleV[2];
-    else if ( whichSizing == AVERAGE_DIMENSION )
-	scl = (scaleV[0] + scaleV[1] + scaleV[2]) / 3.0 ;
-    else if ( whichSizing == BIGGEST_DIMENSION ) {
-	scl =   (scaleV[0] >= scaleV[1] && scaleV[0] >= scaleV[2] ) ? scaleV[0]
-	      : (scaleV[1] >= scaleV[2] )                           ? scaleV[1] 
-	      :  scaleV[2];
-    }
-    else if ( whichSizing == SMALLEST_DIMENSION ) {
-	scl =   (scaleV[0] <= scaleV[1] && scaleV[0] <= scaleV[2] ) ? scaleV[0]
-	      : (scaleV[1] <= scaleV[2] )                           ? scaleV[1] 
-	      :  scaleV[2];
-    }
-    else if ( whichSizing == LONGEST_DIAGONAL ) {
-	// Determine the aggregate scaleOrientation-scale matrix
-	SbMatrix aggregate;
-	aggregate.setScale(scaleV);
-	aggregate.multLeft( scaleOrientM );
-	// Multiply each of 4 Diagonals (symmetry says we don't need all 8)
-	// by this matrix.
-	SbVec3f v1(1,1,1), v2(-1,1,1), v3(-1,-1,1), v4(1,-1,1);
-	aggregate.multVecMatrix(v1,v1);
-	aggregate.multVecMatrix(v2,v2);
-	aggregate.multVecMatrix(v3,v3);
-	aggregate.multVecMatrix(v4,v4);
-	float ls[4];
-	ls[0] = v1.length();
-	ls[1] = v2.length();
-	ls[2] = v3.length();
-	ls[3] = v4.length();
-	// Use the length of the biggest.
-	scl = ls[0];
-	for (int i = 0; i < 4; i++ )
-	    if ( ls[i] > scl )
-		scl = ls[i];
+    Sizing whichSizing = (Sizing)sizing.getValue();
+    if (whichSizing == X)
+        scl = scaleV[0];
+    else if (whichSizing == Y)
+        scl = scaleV[1];
+    else if (whichSizing == Z)
+        scl = scaleV[2];
+    else if (whichSizing == AVERAGE_DIMENSION)
+        scl = (scaleV[0] + scaleV[1] + scaleV[2]) / 3.0;
+    else if (whichSizing == BIGGEST_DIMENSION) {
+        scl = (scaleV[0] >= scaleV[1] && scaleV[0] >= scaleV[2])
+                  ? scaleV[0]
+                  : (scaleV[1] >= scaleV[2]) ? scaleV[1] : scaleV[2];
+    } else if (whichSizing == SMALLEST_DIMENSION) {
+        scl = (scaleV[0] <= scaleV[1] && scaleV[0] <= scaleV[2])
+                  ? scaleV[0]
+                  : (scaleV[1] <= scaleV[2]) ? scaleV[1] : scaleV[2];
+    } else if (whichSizing == LONGEST_DIAGONAL) {
+        // Determine the aggregate scaleOrientation-scale matrix
+        SbMatrix aggregate;
+        aggregate.setScale(scaleV);
+        aggregate.multLeft(scaleOrientM);
+        // Multiply each of 4 Diagonals (symmetry says we don't need all 8)
+        // by this matrix.
+        SbVec3f v1(1, 1, 1), v2(-1, 1, 1), v3(-1, -1, 1), v4(1, -1, 1);
+        aggregate.multVecMatrix(v1, v1);
+        aggregate.multVecMatrix(v2, v2);
+        aggregate.multVecMatrix(v3, v3);
+        aggregate.multVecMatrix(v4, v4);
+        float ls[4];
+        ls[0] = v1.length();
+        ls[1] = v2.length();
+        ls[2] = v3.length();
+        ls[3] = v4.length();
+        // Use the length of the biggest.
+        scl = ls[0];
+        for (int i = 0; i < 4; i++)
+            if (ls[i] > scl)
+                scl = ls[i];
     }
 
     float invScl;
     invScl = 1.0 / scl;
 
-    SbVec3f newScale( scl, scl, scl), newScaleInv( invScl, invScl, invScl );
+    SbVec3f newScale(scl, scl, scl), newScaleInv(invScl, invScl, invScl);
 
     SbMatrix desiredM, tempM;
 
-    desiredM.setTranslate(  translV );
+    desiredM.setTranslate(translV);
     desiredM.multLeft(rotM);
-    tempM.setScale( newScale );
+    tempM.setScale(newScale);
     desiredM.multLeft(tempM);
 
     // Now find our answer, which does the following:
     // [answerM][squishMatrix] = [desiredM]
     // [answerM] = [desiredM][squishMatrixInverse]
     SbMatrix answerM = desiredM;
-    answerM.multRight( squishedMatrix.inverse() );
+    answerM.multRight(squishedMatrix.inverse());
 
     inverseAnswer = answerM.inverse();
 
@@ -243,20 +240,17 @@ SoAntiSquish::getUnsquishingMatrix( SbMatrix squishedMatrix,
 }
 
 void
-SoAntiSquish::callback( SoCallbackAction *action )
-{
-    SoAntiSquish::doAction( action );
+SoAntiSquish::callback(SoCallbackAction *action) {
+    SoAntiSquish::doAction(action);
 }
 
 void
-SoAntiSquish::GLRender( SoGLRenderAction *action )
-{
-    SoAntiSquish::doAction( action );
+SoAntiSquish::GLRender(SoGLRenderAction *action) {
+    SoAntiSquish::doAction(action);
 }
 
 void
-SoAntiSquish::getBoundingBox( SoGetBoundingBoxAction *action )
-{
+SoAntiSquish::getBoundingBox(SoGetBoundingBoxAction *action) {
     //??? HACK!!!
     //    The recalc'ing action of these nodes behaves poorly because
     //    often, the first traversal after recalc() is called is
@@ -268,23 +262,23 @@ SoAntiSquish::getBoundingBox( SoGetBoundingBoxAction *action )
     //    [2] the surround scale does not participate, so it lacks the scale
     //        usually issued by the surround scale.
     //
-    //    To get around this, we do not undo our recalcNextTime flag in this 
-    //    case.  We can identify the case by testing if we are below the 
-    //    resetpath of the action.  If we are mistaken, it still can't hurt 
+    //    To get around this, we do not undo our recalcNextTime flag in this
+    //    case.  We can identify the case by testing if we are below the
+    //    resetpath of the action.  If we are mistaken, it still can't hurt
     //    to wait:
     //    since we're under the reset path it won't make a difference what
     //    we do here.
-    if ( recalcAlways.getValue() == FALSE && recalcNextTime == TRUE ) {
+    if (recalcAlways.getValue() == FALSE && recalcNextTime == TRUE) {
 
-	// return if we're below the reset path. I.E., if current traversal
-	// path contains the reset path.
-	const SoPath *cp = action->getCurPath();
-	const SoPath *rp = action->getResetPath();
-	if ( ! action->isResetBefore() && cp && rp && cp->containsPath(rp) )
-	    return;
+        // return if we're below the reset path. I.E., if current traversal
+        // path contains the reset path.
+        const SoPath *cp = action->getCurPath();
+        const SoPath *rp = action->getResetPath();
+        if (!action->isResetBefore() && cp && rp && cp->containsPath(rp))
+            return;
     }
 
-    SoAntiSquish::doAction( action );
+    SoAntiSquish::doAction(action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -299,28 +293,25 @@ SoAntiSquish::getMatrix(SoGetMatrixAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	&ctm = action->getMatrix();
-    SbMatrix	&inv = action->getInverse();
+    SbMatrix &ctm = action->getMatrix();
+    SbMatrix &inv = action->getInverse();
 
-    if ( recalcAlways.getValue() == TRUE || recalcNextTime == TRUE ) {
-	SbMatrix answer, invAnswer;
-	answer = getUnsquishingMatrix( ctm, TRUE, invAnswer );
+    if (recalcAlways.getValue() == TRUE || recalcNextTime == TRUE) {
+        SbMatrix answer, invAnswer;
+        answer = getUnsquishingMatrix(ctm, TRUE, invAnswer);
 
-	ctm.multLeft( answer );
-	inv.multRight( invAnswer );
-    }
-    else {
-	ctm.multLeft( savedAnswer );
-	inv.multRight( savedInverseAnswer );
+        ctm.multLeft(answer);
+        inv.multRight(invAnswer);
+    } else {
+        ctm.multLeft(savedAnswer);
+        inv.multRight(savedInverseAnswer);
     }
 }
 
 void
-SoAntiSquish::pick( SoPickAction *action )
-{
-    SoAntiSquish::doAction( action );
+SoAntiSquish::pick(SoPickAction *action) {
+    SoAntiSquish::doAction(action);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -334,18 +325,17 @@ SoAntiSquish::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ( recalcAlways.getValue() == TRUE || recalcNextTime == TRUE ) {
+    if (recalcAlways.getValue() == TRUE || recalcNextTime == TRUE) {
 
-	SbMatrix oldCtm = SoModelMatrixElement::get(action->getState());
+        SbMatrix oldCtm = SoModelMatrixElement::get(action->getState());
 
         SbMatrix answer, dummyM;
-	answer = getUnsquishingMatrix( oldCtm, FALSE, dummyM );
+        answer = getUnsquishingMatrix(oldCtm, FALSE, dummyM);
 
-	recalcNextTime = FALSE;
-        SoModelMatrixElement::mult(action->getState(), this, answer );
-    }
-    else
-        SoModelMatrixElement::mult(action->getState(), this, savedAnswer );
+        recalcNextTime = FALSE;
+        SoModelMatrixElement::mult(action->getState(), this, answer);
+    } else
+        SoModelMatrixElement::mult(action->getState(), this, savedAnswer);
 }
 
 ////////////////////////////////////////////////////////////////////////

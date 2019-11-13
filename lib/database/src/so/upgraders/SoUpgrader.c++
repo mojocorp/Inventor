@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -87,8 +87,7 @@ SoUpgrader::SoUpgrader()
 SoUpgrader::~SoUpgrader()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -147,7 +146,7 @@ SoUpgrader::getUpgradeDict(float version)
 
 void
 SoUpgrader::registerUpgrader(const SoType &type, const SbName &className,
-			     float version)
+                             float version)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -155,20 +154,23 @@ SoUpgrader::registerUpgrader(const SoType &type, const SbName &className,
 #ifdef DEBUG
     // There are 1.0 and 2.0 upgraders right now...
     if (version != 1.0 && version != 2.0) {
-	SoDebugError::post("SoUpgrader::register", "Cannot handle "
-			   "converters from version %f, can only "
-			   "handle converters from version 1.0 or 2.0",
-			   version);
+        SoDebugError::post("SoUpgrader::register",
+                           "Cannot handle "
+                           "converters from version %f, can only "
+                           "handle converters from version 1.0 or 2.0",
+                           version);
     }
 #endif
 
-    std::map<SbName, SoType> & upgradeDict = getUpgradeDict(version);
-    	
+    std::map<SbName, SoType> &upgradeDict = getUpgradeDict(version);
+
 #ifdef DEBUG
     std::map<SbName, SoType>::const_iterator it = upgradeDict.find(className);
     if (it != upgradeDict.end()) {
-	SoDebugError::post("SoUpgrader::register", "Upgrader already "
-                           "registered for class %s", className.getString());
+        SoDebugError::post("SoUpgrader::register",
+                           "Upgrader already "
+                           "registered for class %s",
+                           className.getString());
     }
 #endif
 
@@ -188,14 +190,15 @@ SoUpgrader::getUpgrader(const SbName &className, float version)
 ////////////////////////////////////////////////////////////////////////
 {
     // There are 1.0 and 2.0 upgraders right now...
-    if (version != 1.0 && version != 2.0) return NULL;
-    
+    if (version != 1.0 && version != 2.0)
+        return NULL;
+
     // Look in dictionary for converter type:
-    const std::map<SbName, SoType> & upgradeDict = getUpgradeDict(version);
+    const std::map<SbName, SoType> &upgradeDict = getUpgradeDict(version);
     std::map<SbName, SoType>::const_iterator it = upgradeDict.find(className);
     if (it == upgradeDict.end())
-	return NULL;
-    
+        return NULL;
+
     return (SoUpgrader *)it->second.createInstance();
 }
 
@@ -217,41 +220,42 @@ SoUpgrader::upgrade(SoInput *in, const SbName &refName, SoBase *&result)
     SbBool returnValue = TRUE;
 
     // Read in fields:
-    const SoFieldData	*fieldData = getFieldData();
-    SbBool notBuiltIn; // Not used
-    if (! fieldData->read(in, this, FALSE, notBuiltIn))
-	return FALSE;
+    const SoFieldData *fieldData = getFieldData();
+    SbBool             notBuiltIn; // Not used
+    if (!fieldData->read(in, this, FALSE, notBuiltIn))
+        return FALSE;
 
     // Create instance:
     result = createNewNode();
-    
+
     // Oops, something wrong...
-    if (result == NULL) return FALSE;
+    if (result == NULL)
+        return FALSE;
 
     // Add to name dictionary:
-    if (! (!refName))
-	in->addReference(refName, result);
-    
+    if (!(!refName))
+        in->addReference(refName, result);
+
     // And read children, if node being upgraded is derived from group:
     if (isGroup && result->isOfType(SoGroup::getClassTypeId())) {
-	returnValue = readChildren(in);
-	if (returnValue) {
+        returnValue = readChildren(in);
+        if (returnValue) {
 
-	    SoGroup *g = (SoGroup *)result;
+            SoGroup *g = (SoGroup *)result;
 
-	    // Turn off notification on result while we set it up:
-	    SbBool notifySave = g->enableNotify(FALSE);
+            // Turn off notification on result while we set it up:
+            SbBool notifySave = g->enableNotify(FALSE);
 
-	    for (int i = 0; i < getNumChildren(); i++) {
-		g->addChild(getChild(i));
-	    }
+            for (int i = 0; i < getNumChildren(); i++) {
+                g->addChild(getChild(i));
+            }
 
-	    // Re-enable notification.
-	    g->enableNotify(notifySave);
-	}
-	// No need to remove children, we're about to be unreffed
-	// anyway (by SoBase::readBaseInstance).
+            // Re-enable notification.
+            g->enableNotify(notifySave);
+        }
+        // No need to remove children, we're about to be unreffed
+        // anyway (by SoBase::readBaseInstance).
     }
-    
+
     return returnValue;
 }

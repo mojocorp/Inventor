@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -145,11 +145,11 @@ SbViewportRegion::setWindowSize(const SbVec2s &winSize)
 {
     windowSize = winSize;
 
-    if (! vpSet)
-	setFullViewport();
+    if (!vpSet)
+        setFullViewport();
 
     else
-	adjustViewport();
+        adjustViewport();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -166,7 +166,7 @@ SbViewportRegion::setViewport(const SbVec2f &origin, const SbVec2f &size)
 ////////////////////////////////////////////////////////////////////////
 {
     vpOrigin = origin;
-    vpSize   = size;
+    vpSize = size;
 
     adjustViewport();
 
@@ -187,13 +187,13 @@ SbViewportRegion::setViewportPixels(const SbVec2s &origin, const SbVec2s &size)
 ////////////////////////////////////////////////////////////////////////
 {
     vpOriginPix = origin;
-    vpSizePix   = size;
+    vpSizePix = size;
 
     // Compute normalized coordinates for viewport origin and size
-    vpOrigin.setValue((float) vpOriginPix[0] / (float) windowSize[0],
-		      (float) vpOriginPix[1] / (float) windowSize[1]);
-    vpSize.setValue((float) vpSizePix[0] / (float) windowSize[0],
-		    (float) vpSizePix[1] / (float) windowSize[1]);
+    vpOrigin.setValue((float)vpOriginPix[0] / (float)windowSize[0],
+                      (float)vpOriginPix[1] / (float)windowSize[1]);
+    vpSize.setValue((float)vpSizePix[0] / (float)windowSize[0],
+                    (float)vpSizePix[1] / (float)windowSize[1]);
 
     vpSet = TRUE;
 }
@@ -212,17 +212,17 @@ SbViewportRegion::scaleWidth(float ratio)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	halfWidth   = vpSize[0] / 2.0;
-    float	widthCenter = vpOrigin[0] + halfWidth;
+    float halfWidth = vpSize[0] / 2.0;
+    float widthCenter = vpOrigin[0] + halfWidth;
 
     vpOrigin[0] = widthCenter - ratio * halfWidth;
-    vpSize[0]  *= ratio;
+    vpSize[0] *= ratio;
 
     // Make sure the viewport remains in the window
     if (vpOrigin[0] < 0.0)
-	vpOrigin[0] = 0.0;
+        vpOrigin[0] = 0.0;
     if (vpSize[0] > 1.0)
-	vpSize[0] = 1.0;
+        vpSize[0] = 1.0;
 
     adjustViewport();
 }
@@ -241,17 +241,17 @@ SbViewportRegion::scaleHeight(float ratio)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	halfHeight   = vpSize[1] / 2.0;
-    float	heightCenter = vpOrigin[1] + halfHeight;
+    float halfHeight = vpSize[1] / 2.0;
+    float heightCenter = vpOrigin[1] + halfHeight;
 
     vpOrigin[1] = heightCenter - ratio * halfHeight;
-    vpSize[1]  *= ratio;
+    vpSize[1] *= ratio;
 
     // Make sure the viewport remains in the window
     if (vpOrigin[1] < 0.0)
-	vpOrigin[1] = 0.0;
+        vpOrigin[1] = 0.0;
     if (vpSize[1] > 1.0)
-	vpSize[1] = 1.0;
+        vpSize[1] = 1.0;
 
     adjustViewport();
 }
@@ -264,11 +264,9 @@ SbViewportRegion::scaleHeight(float ratio)
 // Use: public
 
 int
-operator ==(const SbViewportRegion &reg1, const SbViewportRegion &reg2)
-{
+operator==(const SbViewportRegion &reg1, const SbViewportRegion &reg2) {
     return (reg1.windowSize == reg2.windowSize &&
-	    reg1.vpOrigin   == reg2.vpOrigin   &&
-	    reg1.vpSize     == reg2.vpSize);
+            reg1.vpOrigin == reg2.vpOrigin && reg1.vpSize == reg2.vpSize);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -303,8 +301,8 @@ SbViewportRegion::adjustViewport()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    vpOriginPix.setValue((short) (vpOrigin[0] * windowSize[0]),
-			 (short) (vpOrigin[1] * windowSize[1]));
-    vpSizePix.setValue((short) (vpSize[0] * windowSize[0]),
-		       (short) (vpSize[1] * windowSize[1]));
+    vpOriginPix.setValue((short)(vpOrigin[0] * windowSize[0]),
+                         (short)(vpOrigin[1] * windowSize[1]));
+    vpSizePix.setValue((short)(vpSize[0] * windowSize[0]),
+                       (short)(vpSize[1] * windowSize[1]));
 }

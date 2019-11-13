@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -88,20 +88,20 @@ SoMFRotation::initClass()
 // Use: public
 
 void
-SoMFRotation::setValues(int start,			// Starting index
-		     int num,			// Number of values to set
-		     const float q[][4])	// Array of quaternion values
+SoMFRotation::setValues(int         start,  // Starting index
+                        int         num,    // Number of values to set
+                        const float q[][4]) // Array of quaternion values
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	newNum = start + num;
-    int	i;
+    int newNum = start + num;
+    int i;
 
     if (newNum > getNum())
-	makeRoom(newNum);
+        makeRoom(newNum);
 
     for (i = 0; i < num; i++)
-	values[start + i].setValue(q[i]);
+        values[start + i].setValue(q[i]);
 
     valueChanged();
 }
@@ -124,7 +124,8 @@ SoMFRotation::set1Value(int index, float q0, float q1, float q2, float q3)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Sets one quaternion value from an array of 4 floats. (Convenience function)
+//    Sets one quaternion value from an array of 4 floats. (Convenience
+//    function)
 //
 // Use: public
 
@@ -154,7 +155,8 @@ SoMFRotation::set1Value(int index, const SbVec3f &axis, float angle)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Sets to one quaternion value from 4 separate floats. (Convenience function)
+//    Sets to one quaternion value from 4 separate floats. (Convenience
+//    function)
 //
 // Use: public
 
@@ -169,7 +171,8 @@ SoMFRotation::setValue(float q0, float q1, float q2, float q3)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Sets to one quaternion value from an array of 4 floats. (Convenience function)
+//    Sets to one quaternion value from an array of 4 floats. (Convenience
+//    function)
 //
 // Use: public
 
@@ -208,14 +211,12 @@ SoMFRotation::read1Value(SoInput *in, int index)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	axis;
-    float	angle;
+    SbVec3f axis;
+    float   angle;
 
-    if (! (in->read(axis[0]) &&
-	   in->read(axis[1]) &&
-	   in->read(axis[2]) &&
-	   in->read(angle)))
-	return FALSE;
+    if (!(in->read(axis[0]) && in->read(axis[1]) && in->read(axis[2]) &&
+          in->read(angle)))
+        return FALSE;
 
     set1Value(index, axis, angle);
 
@@ -234,26 +235,26 @@ SoMFRotation::write1Value(SoOutput *out, int index) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	axis;
-    float	angle;
+    SbVec3f axis;
+    float   angle;
 
     values[index].getValue(axis, angle);
 
     out->write(axis[0]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(axis[1]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(axis[2]);
 
-    if (! out->isBinary()) {
-	out->write(' ');
-	out->write(' ');
+    if (!out->isBinary()) {
+        out->write(' ');
+        out->write(' ');
     }
 
     out->write(angle);

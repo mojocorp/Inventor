@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_BYTE_STREAM_
-#define  _SO_BYTE_STREAM_
+#ifndef _SO_BYTE_STREAM_
+#define _SO_BYTE_STREAM_
 
 #include <Inventor/SbBasic.h>
 
@@ -75,42 +75,43 @@ class SoPathList;
 class SoByteStream {
   public:
     SoByteStream();
-   ~SoByteStream();
+    ~SoByteStream();
 
     // Convert the passed node, path, or path list into a byte stream.
     // Caller may specify whether the byte stream is written in binary
     // (TRUE) or ascii (FALSE) format. The converted data can be accessed
     // through getData() and getNumBytes().
-    
-    void	        convert(SoNode *node, SbBool binaryFormat = TRUE);
-    
-    void	        convert(SoPath *path, SbBool binaryFormat = TRUE);
-    
-    void	        convert(SoPathList *pathList, SbBool binaryFormat = TRUE);
+
+    void convert(SoNode *node, SbBool binaryFormat = TRUE);
+
+    void convert(SoPath *path, SbBool binaryFormat = TRUE);
+
+    void convert(SoPathList *pathList, SbBool binaryFormat = TRUE);
 
     // Access the byte stream data
-    void *    	    	getData()   	{ return data; }
-    size_t   		getNumBytes()	{ return numBytes; }
-    
+    void * getData() { return data; }
+    size_t getNumBytes() { return numBytes; }
+
     // Unconvert a byte stream back to a path list.
     // This static routine performs an SoDB::read on the data,
     // and returns a path list of the paths read in.
-    
-    static SoPathList *	unconvert(SoByteStream *byteStream);
-    
-    static SoPathList *	unconvert(void *data, size_t numBytes);
-  
-  SoEXTENDER public:
-    // This allows apps to store raw data here without converting 
+
+    static SoPathList *unconvert(SoByteStream *byteStream);
+
+    static SoPathList *unconvert(void *data, size_t numBytes);
+
+    SoEXTENDER
+  public:
+    // This allows apps to store raw data here without converting
     // an Inventor node, path, or path list. This sets isRaw to TRUE,
     // and that data cannot be unconverted.
-    void		copy(void *d, size_t len);
-    SbBool		isRawData() const { return isRaw; }
-     
+    void   copy(void *d, size_t len);
+    SbBool isRawData() const { return isRaw; }
+
   private:
-    void		*data;
-    size_t      numBytes;
-    SbBool		isRaw;
+    void * data;
+    size_t numBytes;
+    SbBool isRaw;
 };
 
 #endif // _SO_BYTE_STREAM_

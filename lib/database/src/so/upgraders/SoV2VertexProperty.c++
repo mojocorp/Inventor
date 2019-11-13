@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -79,11 +79,11 @@ SoV2VertexProperty::SoV2VertexProperty()
 
     // Initialize with dummy values using standard macro, then delete
     // all values:
-    SO_NODE_ADD_FIELD(vertex, (SbVec3f(0,0,0)));
+    SO_NODE_ADD_FIELD(vertex, (SbVec3f(0, 0, 0)));
     vertex.deleteValues(0);
-    SO_NODE_ADD_FIELD(normal, (SbVec3f(0,0,0)));
+    SO_NODE_ADD_FIELD(normal, (SbVec3f(0, 0, 0)));
     normal.deleteValues(0);
-    SO_NODE_ADD_FIELD(texCoord, (SbVec2f(0,0)));
+    SO_NODE_ADD_FIELD(texCoord, (SbVec2f(0, 0)));
     texCoord.deleteValues(0);
     SO_NODE_ADD_FIELD(orderedRGBA, (0));
     orderedRGBA.deleteValues(0);
@@ -107,7 +107,6 @@ SoV2VertexProperty::SoV2VertexProperty()
     // Set up info in enumerated type field
     SO_NODE_SET_SF_ENUM_TYPE(materialBinding, Binding);
     SO_NODE_SET_SF_ENUM_TYPE(normalBinding, Binding);
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -120,8 +119,7 @@ SoV2VertexProperty::SoV2VertexProperty()
 SoV2VertexProperty::~SoV2VertexProperty()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -138,38 +136,42 @@ SoV2VertexProperty::createNewNode()
     SoVertexProperty *result = SO_UPGRADER_CREATE_NEW(SoVertexProperty);
 
     //
-    // Inventor 2.0 did not have VertexProperty. When we convert 2.1 to 2.0 files,
-    // the VertexProperty puts all its field info into an alternateRep, then
-    // sets its fields to default values.
-    // We simply run through the nodes in the alternateRep and recreate the fields.
+    // Inventor 2.0 did not have VertexProperty. When we convert 2.1 to 2.0
+    // files, the VertexProperty puts all its field info into an alternateRep,
+    // then sets its fields to default values. We simply run through the nodes
+    // in the alternateRep and recreate the fields.
     //
 
-    if (! alternateRep.isDefault()) {
-	SoGroup *group = (SoGroup *) alternateRep.getValue();
-	if (group->isOfType(SoGroup::getClassTypeId())) {
-	    for (int i = 0; i < group->getNumChildren(); i++) {
-		SoNode *node = group->getChild(i);
-		
-		// Set the fields in our node
-		if (node->isOfType(SoCoordinate3::getClassTypeId()))
-		    result->vertex.copyFrom(((SoCoordinate3 *)node)->point);
-		    
-		else if (node->isOfType(SoNormal::getClassTypeId()))
-		    result->normal.copyFrom(((SoNormal *)node)->vector);
-		    
-		else if (node->isOfType(SoPackedColor::getClassTypeId()))
-		    result->orderedRGBA.copyFrom(((SoPackedColor *)node)->orderedRGBA);
-		    
-		else if (node->isOfType(SoTextureCoordinate2::getClassTypeId()))
-		    result->texCoord.copyFrom(((SoTextureCoordinate2 *)node)->point);
-		    
-		else if (node->isOfType(SoNormalBinding::getClassTypeId()))
-		    result->normalBinding.copyFrom(((SoNormalBinding *)node)->value);
-		    
-		else if (node->isOfType(SoMaterialBinding::getClassTypeId()))
-		    result->materialBinding.copyFrom(((SoMaterialBinding *)node)->value);
-	    }
-	}
+    if (!alternateRep.isDefault()) {
+        SoGroup *group = (SoGroup *)alternateRep.getValue();
+        if (group->isOfType(SoGroup::getClassTypeId())) {
+            for (int i = 0; i < group->getNumChildren(); i++) {
+                SoNode *node = group->getChild(i);
+
+                // Set the fields in our node
+                if (node->isOfType(SoCoordinate3::getClassTypeId()))
+                    result->vertex.copyFrom(((SoCoordinate3 *)node)->point);
+
+                else if (node->isOfType(SoNormal::getClassTypeId()))
+                    result->normal.copyFrom(((SoNormal *)node)->vector);
+
+                else if (node->isOfType(SoPackedColor::getClassTypeId()))
+                    result->orderedRGBA.copyFrom(
+                        ((SoPackedColor *)node)->orderedRGBA);
+
+                else if (node->isOfType(SoTextureCoordinate2::getClassTypeId()))
+                    result->texCoord.copyFrom(
+                        ((SoTextureCoordinate2 *)node)->point);
+
+                else if (node->isOfType(SoNormalBinding::getClassTypeId()))
+                    result->normalBinding.copyFrom(
+                        ((SoNormalBinding *)node)->value);
+
+                else if (node->isOfType(SoMaterialBinding::getClassTypeId()))
+                    result->materialBinding.copyFrom(
+                        ((SoMaterialBinding *)node)->value);
+            }
+        }
     }
 
     return result;
@@ -180,27 +182,27 @@ SoV2VertexProperty::createNewNode()
 //   special upgrade method to read field description
 //
 // Use: public, internal, virtual
-SbBool 
+SbBool
 SoV2VertexProperty::upgrade(SoInput *in, const SbName &refName, SoBase *&result)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool isBinary = in->isBinary();
-    if (in->isBinary()){
-	SbString unknownString;
-	SbBool  readOK = in->read(unknownString);
-	if (!readOK || (unknownString != "fields" )) {
-	    SoReadError::post(in, "Problem upgrading vertex property ") ;
-	    return FALSE;
-	}
+    if (in->isBinary()) {
+        SbString unknownString;
+        SbBool   readOK = in->read(unknownString);
+        if (!readOK || (unknownString != "fields")) {
+            SoReadError::post(in, "Problem upgrading vertex property ");
+            return FALSE;
+        }
     }
     SbBool ret = SoUpgrader::upgrade(in, refName, result);
-    
-    if (in->isBinary()){
-	// Read a zero, which represents the number of children here
-	int dummy;
-	in->read(dummy);
+
+    if (in->isBinary()) {
+        // Read a zero, which represents the number of children here
+        int dummy;
+        in->read(dummy);
     }
-    
+
     return ret;
 }

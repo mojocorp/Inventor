@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,8 +63,7 @@ SO_ELEMENT_ABSTRACT_SOURCE(SoFloatElement);
 // Use: internal
 
 void
-SoFloatElement::initClass()
-{
+SoFloatElement::initClass() {
     SO_ELEMENT_INIT_ABSTRACT_CLASS(SoFloatElement, SoElement);
 }
 
@@ -78,8 +77,7 @@ SoFloatElement::initClass()
 SoFloatElement::~SoFloatElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -94,7 +92,7 @@ SoFloatElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (data == ((const SoFloatElement *) elt)->data);
+    return (data == ((const SoFloatElement *)elt)->data);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -109,13 +107,13 @@ SoFloatElement::set(int stackIndex, SoState *state, float value)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoFloatElement	*elt;
+    SoFloatElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoFloatElement *) getElement(state, stackIndex);
+    elt = (SoFloatElement *)getElement(state, stackIndex);
 
     if (elt != NULL)
-	elt->setElt(value);
+        elt->setElt(value);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -133,7 +131,6 @@ SoFloatElement::setElt(float value)
     data = value;
 }
 
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -147,8 +144,7 @@ SoFloatElement::copyMatchInfo() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoFloatElement *result =
-	(SoFloatElement *)getTypeId().createInstance();
+    SoFloatElement *result = (SoFloatElement *)getTypeId().createInstance();
 
     result->data = data;
 
@@ -166,16 +162,12 @@ SoFloatElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoFloatElement::print(FILE *fp) const
-{
+SoFloatElement::print(FILE *fp) const {
     SoElement::print(fp);
 
-    fprintf(fp, "%s = %g\n", getTypeId().getName().getString(),
-	    data);
+    fprintf(fp, "%s = %g\n", getTypeId().getName().getString(), data);
 }
 #else  /* DEBUG */
 void
-SoFloatElement::print(FILE *) const
-{
-}
+SoFloatElement::print(FILE *) const {}
 #endif /* DEBUG */

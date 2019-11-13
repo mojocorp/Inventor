@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,7 +68,7 @@
 #include "SoGlobalField.h"
 
 // SbName to SoGlobalField* dictionary.  Keyed by the name.
-std::map<SbName, SoGlobalField*> SoGlobalField::nameDict;
+std::map<SbName, SoGlobalField *> SoGlobalField::nameDict;
 
 // The GlobalFieldContainer type (the name is simply GlobalField)
 SoType SoGlobalField::classTypeId;
@@ -86,7 +86,7 @@ SoGlobalField::initClass()
 //////////////////////////////////////////////////////////////////////////////
 {
     classTypeId = SoType::createType(SoFieldContainer::getClassTypeId(),
-				     "GlobalField", NULL);
+                                     "GlobalField", NULL);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -108,42 +108,41 @@ SoGlobalField::create(const SbName &name, SoType type, SbBool &alreadyExists)
     // Look for an existing field of the same name/type:
     SoGlobalField *result = SoGlobalField::find(name);
     if (result != NULL) {
-	if (! result->getType().isDerivedFrom(type)) {
-	    const char *resName = result->getName().getString();
-	    const char *resTypeName = result->getType().getName().getString();
-	    SoDebugError::post("SoGlobalField::create",
-			       "Global field %s has two types (%s, %s)", 
-			       resName, resTypeName,
-			       type.getName().getString());
-	    return NULL;
-	}
-	else {
-	    alreadyExists = TRUE;
-	    return result;
-	}
+        if (!result->getType().isDerivedFrom(type)) {
+            const char *resName = result->getName().getString();
+            const char *resTypeName = result->getType().getName().getString();
+            SoDebugError::post("SoGlobalField::create",
+                               "Global field %s has two types (%s, %s)",
+                               resName, resTypeName,
+                               type.getName().getString());
+            return NULL;
+        } else {
+            alreadyExists = TRUE;
+            return result;
+        }
     }
 
     alreadyExists = FALSE;
 
     // Make sure field is a proper field type
 
-    if (! type.isDerivedFrom(SoField::getClassTypeId())) {
-	const char *resName = result->getName().getString();
-	SoDebugError::post("SoGlobalField::create",
-			   "(field %s) Type %s is not a field type",
-			   resName, type.getName().getString());
-	return NULL;
+    if (!type.isDerivedFrom(SoField::getClassTypeId())) {
+        const char *resName = result->getName().getString();
+        SoDebugError::post("SoGlobalField::create",
+                           "(field %s) Type %s is not a field type", resName,
+                           type.getName().getString());
+        return NULL;
     }
     SoField *field = (SoField *)type.createInstance();
 
     // Make sure it isn't an abstract field type...
 
     if (field == NULL) {
-	const char *typeName = type.getName().getString();
-	SoDebugError::post("SoGlobalField::create",
-			   "Cannot create field %s of type %s",
-			   name.getString(), typeName);
-	return NULL;
+        const char *typeName = type.getName().getString();
+        SoDebugError::post("SoGlobalField::create",
+                           "Cannot create field %s of type %s",
+                           name.getString(), typeName);
+        return NULL;
     }
 
     return new SoGlobalField(name, field);
@@ -168,8 +167,8 @@ SoGlobalField::SoGlobalField(const SbName &name, SoField *field)
     value = field;
 #ifdef DEBUG
     if (field->getContainer())
-	SoDebugError::post("SoGlobalField::SoGlobalField",
-			   "Field already has container!");
+        SoDebugError::post("SoGlobalField::SoGlobalField",
+                           "Field already has container!");
 
 #endif /* DEBUG */
     field->setContainer(this);
@@ -177,10 +176,10 @@ SoGlobalField::SoGlobalField(const SbName &name, SoField *field)
 
 #ifdef DEBUG
     if (find(name))
-	SoDebugError::post("SoGlobalField::SoGlobalField",
-			   "There is already a global field named %s",
-			   name.getString());
-#endif		
+        SoDebugError::post("SoGlobalField::SoGlobalField",
+                           "There is already a global field named %s",
+                           name.getString());
+#endif
     nameDict[name] = this;
 
     fieldData = new SoFieldData;
@@ -206,7 +205,7 @@ SoGlobalField::~SoGlobalField()
     // for the "dummy" instance that is created to read in a real
     // instance of a global field.
     if (fieldData == NULL)
-	return;
+        return;
 
     nameDict.erase(getName());
 
@@ -226,7 +225,7 @@ SoGlobalField::find(const SbName &name)
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    std::map<SbName, SoGlobalField*>::const_iterator it = nameDict.find(name);
+    std::map<SbName, SoGlobalField *>::const_iterator it = nameDict.find(name);
     if (it == nameDict.end())
         return NULL;
 
@@ -258,7 +257,7 @@ SoGlobalField::changeName(const SbName &newName)
     // If there is already an entry with the new name...
     SoGlobalField *oldGlobalField = find(getName());
     if (oldGlobalField) {
-	// Delete the old one
+        // Delete the old one
         oldGlobalField->unref();
         nameDict.erase(getName());
     }
@@ -312,10 +311,10 @@ SoGlobalField::writeInstance(SoOutput *out)
 //
 //////////////////////////////////////////////////////////////////////////////
 {
-    if (! writeHeader(out, FALSE, FALSE)) {
-	typeField.write(out, "type");
-	value->write(out, getName());
-	writeFooter(out);
+    if (!writeHeader(out, FALSE, FALSE)) {
+        typeField.write(out, "type");
+        value->write(out, getName());
+        writeFooter(out);
     }
 }
 
@@ -339,61 +338,60 @@ SoGlobalField::read(SoInput *in)
     // Read in "type SFFloat":
     SbName typeName;
     if (!in->read(typeName, TRUE) || typeName != SbName("type"))
-	return NULL;
+        return NULL;
 
     // Read the value of this private "type" field, which is the name
     // of this globalField. It has to be read as a field, since that's
     // how it's written. (The binary version depends on this!)
     SoSFName typeField;
-    if (! typeField.read(in, "type"))
-	return FALSE;
+    if (!typeField.read(in, "type"))
+        return FALSE;
     typeName = typeField.getValue();
 
     SoType type = SoType::fromName(typeName);
-    if (! type.isDerivedFrom(SoField::getClassTypeId())) {
-	SoReadError::post(in, "\"%s\" is not a type of field",
-			  typeName.getString());
-	return FALSE;
+    if (!type.isDerivedFrom(SoField::getClassTypeId())) {
+        SoReadError::post(in, "\"%s\" is not a type of field",
+                          typeName.getString());
+        return FALSE;
     }
 
     // Now, get the name of the next field, which is the name of this
     // globalField:
     SbName myName;
-    if (! in->read(myName))
-	return FALSE;
-    
+    if (!in->read(myName))
+        return FALSE;
+
     // Try to create/get an appropriate global field:
-    SbBool	alreadyExists;
+    SbBool         alreadyExists;
     SoGlobalField *result = create(myName, type, alreadyExists);
 
     // If there already was one with the same name and a different type
     if (result == NULL)
-	return NULL;
+        return NULL;
 
     if (alreadyExists) {
-	// We need to read and throw away the value...
-	SoField *t = (SoField *)type.createInstance();
-	// If the field has connections, it needs to have a non-NULL
-	// container...
-	t->setContainer(result);
-	t->enableNotify(FALSE);
-	if (!t->read(in, myName)) {
-	    delete result;
-	    delete t;
-	    return NULL;
-	}
-	// Get rid of any connections that may have been established--
-	// this gets rid of any extraneous auditors.
-	t->disconnect();
-	delete t;
-    }
-    else {
-	// Read into newly-created global field.
-	if (!result->value->read(in, myName)) {
-	    // Problem reading value field
-	    delete result;
-	    return NULL;
-	}
+        // We need to read and throw away the value...
+        SoField *t = (SoField *)type.createInstance();
+        // If the field has connections, it needs to have a non-NULL
+        // container...
+        t->setContainer(result);
+        t->enableNotify(FALSE);
+        if (!t->read(in, myName)) {
+            delete result;
+            delete t;
+            return NULL;
+        }
+        // Get rid of any connections that may have been established--
+        // this gets rid of any extraneous auditors.
+        t->disconnect();
+        delete t;
+    } else {
+        // Read into newly-created global field.
+        if (!result->value->read(in, myName)) {
+            // Problem reading value field
+            delete result;
+            return NULL;
+        }
     }
     return result;
 }

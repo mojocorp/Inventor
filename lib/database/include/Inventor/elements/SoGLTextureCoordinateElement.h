@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -57,8 +57,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_GL_TEXTURE_COORDINATE_ELEMENT
-#define  _SO_GL_TEXTURE_COORDINATE_ELEMENT
+#ifndef _SO_GL_TEXTURE_COORDINATE_ELEMENT
+#define _SO_GL_TEXTURE_COORDINATE_ELEMENT
 
 #include <Inventor/elements/SoTextureCoordinateElement.h>
 
@@ -81,14 +81,14 @@
 //
 typedef void SoTexCoordTexgenCB(void *userdata);
 
-SoEXTENDER class SoGLTextureCoordinateElement :
-				public SoTextureCoordinateElement {
+SoEXTENDER
+class SoGLTextureCoordinateElement : public SoTextureCoordinateElement {
 
     SO_ELEMENT_HEADER(SoGLTextureCoordinateElement);
 
   public:
     // Initializes element.
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // TextureCoordinateFunction nodes that use texgen must define and
     // register a callback that makes the appropriate GL calls.
@@ -99,44 +99,45 @@ SoEXTENDER class SoGLTextureCoordinateElement :
     // function that will return the results of the texgen function
     // (needed because some nodes render by using their
     // generatePrimitives method).
-    static void		setTexGen(SoState *state, SoNode *node, 
-	    SoTexCoordTexgenCB *texGenFunc, void *texGenData = NULL,
-	    SoTextureCoordinateFunctionCB *func = NULL,
-	    void *funcData = NULL);
+    static void setTexGen(SoState *state, SoNode *node,
+                          SoTexCoordTexgenCB *           texGenFunc,
+                          void *                         texGenData = NULL,
+                          SoTextureCoordinateFunctionCB *func = NULL,
+                          void *                         funcData = NULL);
 
     // Returns code indicating what has been set in state/element
-    virtual CoordType	getType() const;
+    virtual CoordType getType() const;
 
     // Returns the top (current) instance of the element in the state.
     // The send routines are called on an instance
     // because it is more efficient than calling a static method that
     // looks up the element in the state for every coordinate.
-    static const SoGLTextureCoordinateElement * getInstance(SoState *state);
+    static const SoGLTextureCoordinateElement *getInstance(SoState *state);
 
     // Send routine for EXPLICIT case:
 
-    void		send(int index) const;
+    void send(int index) const;
 
     // Override push() method to set up new instance
-    virtual void	push(SoState *state);
+    virtual void push(SoState *state);
 
     // Override pop() method to maintain GL state
-    virtual void	pop(SoState *state, const SoElement *prevTopElement);
+    virtual void pop(SoState *state, const SoElement *prevTopElement);
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoGLTextureCoordinateElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
-    void	setElt(SoTexCoordTexgenCB *function,
-		       void *userData = NULL);
+    void setElt(SoTexCoordTexgenCB *function, void *userData = NULL);
 
     virtual ~SoGLTextureCoordinateElement();
 
   private:
-    SoTexCoordTexgenCB	*texgenCB;
-    void		*texgenCBData;
-    SoState 		*copiedFromParent;
+    SoTexCoordTexgenCB *texgenCB;
+    void *              texgenCBData;
+    SoState *           copiedFromParent;
 };
 
 #endif /* _SO_GL_TEXTURE_COORDINATE_ELEMENT */

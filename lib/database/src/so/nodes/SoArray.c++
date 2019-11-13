@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -95,13 +95,13 @@ SoArray::SoArray()
 {
     SO_NODE_CONSTRUCTOR(SoArray);
 
-    SO_NODE_ADD_FIELD(numElements1,	(1));
-    SO_NODE_ADD_FIELD(numElements2,	(1));
-    SO_NODE_ADD_FIELD(numElements3,	(1));
-    SO_NODE_ADD_FIELD(separation1,	(SbVec3f(1.0, 0.0, 0.0)));
-    SO_NODE_ADD_FIELD(separation2,	(SbVec3f(0.0, 1.0, 0.0)));
-    SO_NODE_ADD_FIELD(separation3,	(SbVec3f(0.0, 0.0, 1.0)));
-    SO_NODE_ADD_FIELD(origin,		(FIRST));
+    SO_NODE_ADD_FIELD(numElements1, (1));
+    SO_NODE_ADD_FIELD(numElements2, (1));
+    SO_NODE_ADD_FIELD(numElements3, (1));
+    SO_NODE_ADD_FIELD(separation1, (SbVec3f(1.0, 0.0, 0.0)));
+    SO_NODE_ADD_FIELD(separation2, (SbVec3f(0.0, 1.0, 0.0)));
+    SO_NODE_ADD_FIELD(separation3, (SbVec3f(0.0, 0.0, 1.0)));
+    SO_NODE_ADD_FIELD(origin, (FIRST));
 
     // Set up static info for enumerated type field
     SO_NODE_DEFINE_ENUM_VALUE(Origin, FIRST);
@@ -124,8 +124,7 @@ SoArray::SoArray()
 SoArray::~SoArray()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -142,7 +141,6 @@ SoArray::affectsState() const
     return FALSE;
 }
 
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -155,117 +153,117 @@ SoArray::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numIndices;
-    const int	*indices;
-    int		lastChild;
-    int		n1, n2, n3, i1, i2, i3, curIndex;
-    SbVec3f	sepVec1, sepVec2, sepVec3;
-    SbBool	translateArray, gettingBBox;
+    int        numIndices;
+    const int *indices;
+    int        lastChild;
+    int        n1, n2, n3, i1, i2, i3, curIndex;
+    SbVec3f    sepVec1, sepVec2, sepVec3;
+    SbBool     translateArray, gettingBBox;
 
-    SbVec3f	totalCenter(0,0,0);		// For bbox
-    int		numCenters = 0, i;		// For bbox
+    SbVec3f totalCenter(0, 0, 0); // For bbox
+    int     numCenters = 0, i;    // For bbox
 
     // We have to do some extra stuff here for computing bboxes
     gettingBBox = action->isOfType(SoGetBoundingBoxAction::getClassTypeId());
 
     // Determine which children to traverse, if any
     switch (action->getPathCode(numIndices, indices)) {
-      case SoAction::NO_PATH:
-      case SoAction::BELOW_PATH:
-	lastChild = getNumChildren() - 1;
-	break;
+    case SoAction::NO_PATH:
+    case SoAction::BELOW_PATH:
+        lastChild = getNumChildren() - 1;
+        break;
 
-      case SoAction::IN_PATH:
-	// If this node is in a path, that means the path goes to one
-	// of its children. There's no need to traverse this path more
-	// than once in this case.
-	lastChild = indices[numIndices - 1];
-	action->getState()->push();
-	children->traverse(action, 0, lastChild);
-	action->getState()->pop();
-	return;
+    case SoAction::IN_PATH:
+        // If this node is in a path, that means the path goes to one
+        // of its children. There's no need to traverse this path more
+        // than once in this case.
+        lastChild = indices[numIndices - 1];
+        action->getState()->push();
+        children->traverse(action, 0, lastChild);
+        action->getState()->pop();
+        return;
 
-      case SoAction::OFF_PATH:
-	// This differs from SoGroup: if the array is not on the
-	// path, don't bother traversing its children. Effectively the
-	// same as a separator to the rest of the graph.
-	return;
+    case SoAction::OFF_PATH:
+        // This differs from SoGroup: if the array is not on the
+        // path, don't bother traversing its children. Effectively the
+        // same as a separator to the rest of the graph.
+        return;
     }
 
     n1 = numElements1.getValue();
     n2 = numElements2.getValue();
     n3 = numElements3.getValue();
 
-    translateArray = (! origin.isIgnored() && origin.getValue() != FIRST);
+    translateArray = (!origin.isIgnored() && origin.getValue() != FIRST);
 
     if (translateArray) {
-	SbVec3f vecToCenter = -(separation1.getValue() * (n1 - 1) +
-				separation2.getValue() * (n2 - 1) +
-				separation3.getValue() * (n3 - 1));
+        SbVec3f vecToCenter = -(separation1.getValue() * (n1 - 1) +
+                                separation2.getValue() * (n2 - 1) +
+                                separation3.getValue() * (n3 - 1));
 
-	if (origin.getValue() == CENTER)
-	    vecToCenter *= 0.5;
+        if (origin.getValue() == CENTER)
+            vecToCenter *= 0.5;
 
-	action->getState()->push();
+        action->getState()->push();
 
-	// Use model matrix to translate the array to the correct place
-	SoModelMatrixElement::translateBy(action->getState(),
-					  this, vecToCenter);
+        // Use model matrix to translate the array to the correct place
+        SoModelMatrixElement::translateBy(action->getState(), this,
+                                          vecToCenter);
     }
 
     curIndex = 0;
     sepVec3.setValue(0.0, 0.0, 0.0);
     for (i3 = 0; i3 < n3; i3++) {
 
-	sepVec2 = sepVec3;
-	for (i2 = 0; i2 < n2; i2++) {
+        sepVec2 = sepVec3;
+        for (i2 = 0; i2 < n2; i2++) {
 
-	    sepVec1 = sepVec2;
-	    for (i1 = 0; i1 < n1; i1++) {
+            sepVec1 = sepVec2;
+            for (i1 = 0; i1 < n1; i1++) {
 
-		action->getState()->push();
+                action->getState()->push();
 
-		// Set value in switch element to current index
-		SoSwitchElement::set(action->getState(), curIndex++);
+                // Set value in switch element to current index
+                SoSwitchElement::set(action->getState(), curIndex++);
 
-		// Translate element to correct place
-		SoModelMatrixElement::translateBy(action->getState(),
-						  this, sepVec1);
+                // Translate element to correct place
+                SoModelMatrixElement::translateBy(action->getState(), this,
+                                                  sepVec1);
 
-		// Set the center correctly after each child
-		if (gettingBBox) {
-		    SoGetBoundingBoxAction *bba =
-			(SoGetBoundingBoxAction *) action;
+                // Set the center correctly after each child
+                if (gettingBBox) {
+                    SoGetBoundingBoxAction *bba =
+                        (SoGetBoundingBoxAction *)action;
 
-		    for (i = 0; i <= lastChild; i++) {
-			children->traverse(action, i, i);
-			if (bba->isCenterSet()) {
-			    totalCenter += bba->getCenter();
-			    numCenters++;
-			    bba->resetCenter();
-			}
-		    }
-		}
+                    for (i = 0; i <= lastChild; i++) {
+                        children->traverse(action, i, i);
+                        if (bba->isCenterSet()) {
+                            totalCenter += bba->getCenter();
+                            numCenters++;
+                            bba->resetCenter();
+                        }
+                    }
+                }
 
-		else
-		    children->traverse(action, 0, lastChild);
+                else
+                    children->traverse(action, 0, lastChild);
 
-		action->getState()->pop();
+                action->getState()->pop();
 
-		sepVec1 += separation1.getValue();
-	    }
-	    sepVec2 += separation2.getValue();
-	}
-	sepVec3 += separation3.getValue();
+                sepVec1 += separation1.getValue();
+            }
+            sepVec2 += separation2.getValue();
+        }
+        sepVec3 += separation3.getValue();
     }
 
     // Restore state if it was pushed because of centering translation
     if (translateArray)
-	action->getState()->pop();
+        action->getState()->pop();
 
     if (gettingBBox && numCenters > 0)
-	((SoGetBoundingBoxAction *) action)->setCenter(totalCenter/numCenters,
-						       FALSE);
+        ((SoGetBoundingBoxAction *)action)
+            ->setCenter(totalCenter / numCenters, FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -365,24 +363,24 @@ SoArray::handleEvent(SoHandleEventAction *action)
     // all of our children multiple times. But the matrix elements are
     // not enabled for this action, so we don't want to do any translation.
 
-    int		numIndices;
-    const int	*indices;
-    int		lastChild;
-    int		n1, n2, n3, i1, i2, i3, curIndex;
+    int        numIndices;
+    const int *indices;
+    int        lastChild;
+    int        n1, n2, n3, i1, i2, i3, curIndex;
 
     // Determine which children to traverse, if any
     switch (action->getPathCode(numIndices, indices)) {
-      case SoAction::NO_PATH:
-      case SoAction::BELOW_PATH:
-	lastChild = getNumChildren() - 1;
-	break;
+    case SoAction::NO_PATH:
+    case SoAction::BELOW_PATH:
+        lastChild = getNumChildren() - 1;
+        break;
 
-      case SoAction::IN_PATH:
-	lastChild = indices[numIndices - 1];
-	break;
+    case SoAction::IN_PATH:
+        lastChild = indices[numIndices - 1];
+        break;
 
-      case SoAction::OFF_PATH:
-	return;
+    case SoAction::OFF_PATH:
+        return;
     }
 
     n1 = numElements1.getValue();
@@ -392,14 +390,14 @@ SoArray::handleEvent(SoHandleEventAction *action)
     curIndex = 0;
 
     for (i3 = 0; i3 < n3; i3++) {
-	for (i2 = 0; i2 < n2; i2++) {
-	    for (i1 = 0; i1 < n1; i1++) {
-		action->getState()->push();
-		SoSwitchElement::set(action->getState(), curIndex++);
-		children->traverse(action, 0, lastChild);
-		action->getState()->pop();
-	    }
-	}
+        for (i2 = 0; i2 < n2; i2++) {
+            for (i1 = 0; i1 < n1; i1++) {
+                action->getState()->push();
+                SoSwitchElement::set(action->getState(), curIndex++);
+                children->traverse(action, 0, lastChild);
+                action->getState()->pop();
+            }
+        }
     }
 }
 
@@ -415,8 +413,8 @@ SoArray::getMatrix(SoGetMatrixAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numIndices;
-    const int	*indices;
+    int        numIndices;
+    const int *indices;
 
     // Only need to compute matrix if array is a node in middle of
     // current path chain. We don't need to push or pop the state,
@@ -425,29 +423,29 @@ SoArray::getMatrix(SoGetMatrixAction *action)
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH) {
 
-	// Translate entire array if necessary
-	if (! origin.isIgnored() && origin.getValue() != FIRST) {
+        // Translate entire array if necessary
+        if (!origin.isIgnored() && origin.getValue() != FIRST) {
 
-	    int	n1 = numElements1.getValue();
-	    int	n2 = numElements2.getValue();
-	    int	n3 = numElements3.getValue();
+            int n1 = numElements1.getValue();
+            int n2 = numElements2.getValue();
+            int n3 = numElements3.getValue();
 
-	    SbVec3f vecToCenter = -(separation1.getValue() * (n1 - 1) +
-				    separation2.getValue() * (n2 - 1) +
-				    separation3.getValue() * (n3 - 1));
+            SbVec3f vecToCenter = -(separation1.getValue() * (n1 - 1) +
+                                    separation2.getValue() * (n2 - 1) +
+                                    separation3.getValue() * (n3 - 1));
 
-	    if (origin.getValue() == CENTER)
-		vecToCenter *= 0.5;
+            if (origin.getValue() == CENTER)
+                vecToCenter *= 0.5;
 
-	    // Translate the matrices in the action
-	    SbMatrix m;
-	    m.setTranslate(vecToCenter);
-	    action->getMatrix().multLeft(m);
-	    m.setTranslate(-vecToCenter);
-	    action->getInverse().multRight(m);
-	}
+            // Translate the matrices in the action
+            SbMatrix m;
+            m.setTranslate(vecToCenter);
+            action->getMatrix().multLeft(m);
+            m.setTranslate(-vecToCenter);
+            action->getInverse().multRight(m);
+        }
 
-	children->traverse(action, 0, indices[numIndices - 1]);
+        children->traverse(action, 0, indices[numIndices - 1]);
     }
 }
 
@@ -467,35 +465,35 @@ SoArray::search(SoSearchAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		numIndices;
-    const int	*indices;
-    int		lastChild;
+    int        numIndices;
+    const int *indices;
+    int        lastChild;
 
     // First see if the caller is searching for this node
     SoNode::search(action);
 
     if (action->isFound())
-	return;
+        return;
 
     // See if we're supposed to search only if the stuff under the
     // array is relevant to the search path
 
     switch (action->getPathCode(numIndices, indices)) {
 
-      case SoAction::NO_PATH:
-      case SoAction::BELOW_PATH:
-	lastChild = getNumChildren() - 1;
-	break;
+    case SoAction::NO_PATH:
+    case SoAction::BELOW_PATH:
+        lastChild = getNumChildren() - 1;
+        break;
 
-      case SoAction::IN_PATH:
-	lastChild = indices[numIndices - 1];
-	break;
+    case SoAction::IN_PATH:
+        lastChild = indices[numIndices - 1];
+        break;
 
-      case SoAction::OFF_PATH:
-	if (! action->isSearchingAll())
-	    return;
-	lastChild = getNumChildren() - 1;
-	break;
+    case SoAction::OFF_PATH:
+        if (!action->isSearchingAll())
+            return;
+        lastChild = getNumChildren() - 1;
+        break;
     }
 
     action->getState()->push();

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -61,8 +61,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_ASCIITEXT_
-#define  _SO_ASCIITEXT_
+#ifndef _SO_ASCIITEXT_
+#define _SO_ASCIITEXT_
 
 #include <Inventor/SbBox.h>
 #include <Inventor/fields/SoMFString.h>
@@ -89,37 +89,37 @@ class SoAsciiText : public SoShape {
     SO_NODE_HEADER(SoAsciiText);
 
   public:
-    enum Justification {		// Justification types
-	LEFT	= 0x01,
-	RIGHT	= 0x02,
-	CENTER	= 0x03
+    enum Justification { // Justification types
+        LEFT = 0x01,
+        RIGHT = 0x02,
+        CENTER = 0x03
     };
 
     // Fields
-    SoMFString		string;		// the strings to display
-    SoSFFloat		spacing;	// interval between strings
-    SoSFEnum		justification;
-    SoMFFloat		width;		// width of each string
+    SoMFString string;  // the strings to display
+    SoSFFloat  spacing; // interval between strings
+    SoSFEnum   justification;
+    SoMFFloat  width; // width of each string
 
     // Constructor
     SoAsciiText();
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void rayPick(SoRayPickAction *action);
 
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
-
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Computes bounding box of text
-    virtual void	computeBBox(SoAction *action, SbBox3f &box,
-				    SbVec3f &center);
+    virtual void computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center);
 
     // Generates primitives
-    virtual void	generatePrimitives(SoAction *);
-    
+    virtual void generatePrimitives(SoAction *);
+
     virtual ~SoAsciiText();
 
   private:
@@ -129,28 +129,26 @@ class SoAsciiText : public SoShape {
     // Return bounding box of the fronts of all characters.
     void getFrontBBox(SbBox2f &result);
 
-    // Extend a 
+    // Extend a
 
     // Figure out how much each line of text is offset (based on width
     // of characters and justification)
     SbVec2f getStringOffset(int line, float width);
-    
+
     // Creates a text detail when picking:
-    SoDetail * createTriangleDetail(SoRayPickAction *,
-				    const SoPrimitiveVertex *,
-				    const SoPrimitiveVertex *,
-				    const SoPrimitiveVertex *,
-				    SoPickedPoint *);
+    SoDetail *createTriangleDetail(SoRayPickAction *, const SoPrimitiveVertex *,
+                                   const SoPrimitiveVertex *,
+                                   const SoPrimitiveVertex *, SoPickedPoint *);
 
     // Generates the fronts of the characters, by getting the outlines
     // and calling the glu tesselation code:
     void generateFront(const SbString &string, float width);
-    
+
     // Static callbacks invoked by the glu tesselation code:
     static void beginCB(unsigned int primType);
     static void endCB();
     static void vtxCB(void *vertex);
-    
+
     // Private data:
     // SoOutlineFontCache is an internal, opaque class used to
     // maintain gl display lists and other information for each
@@ -158,14 +156,14 @@ class SoAsciiText : public SoShape {
     SoOutlineFontCache *fontCache;
 
     // All this stuff is used while generating primitives:
-    static SoAsciiText *currentGeneratingNode;
-    static SoPrimitiveVertex *genPrimVerts[3];
-    static SbVec3f genTranslate;
-    static int genWhichVertex;
-    static uint32_t genPrimType;
-    static SoAction *genAction;
-    static SbBool genBack;
-    static SbBool genTexCoord;
+    static SoAsciiText *                     currentGeneratingNode;
+    static SoPrimitiveVertex *               genPrimVerts[3];
+    static SbVec3f                           genTranslate;
+    static int                               genWhichVertex;
+    static uint32_t                          genPrimType;
+    static SoAction *                        genAction;
+    static SbBool                            genBack;
+    static SbBool                            genTexCoord;
     static const SoTextureCoordinateElement *tce;
 };
 

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_UPDATE_AREA_ELEMENT
-#define  _SO_UPDATE_AREA_ELEMENT
+#ifndef _SO_UPDATE_AREA_ELEMENT
+#define _SO_UPDATE_AREA_ELEMENT
 
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoSubElement.h>
@@ -69,7 +69,7 @@
 //  only a portion of the objects need to be rerendered. Cameras can
 //  use the info in this element to set up a view volume against which
 //  culling can be performed. This element also sets up the GL scissor
-//  box to limit drawing. 
+//  box to limit drawing.
 //
 //  The update area is specified in normalized viewport coordinates,
 //  where (0,0) is the lower left corner of the viewport and (1,1) is
@@ -77,45 +77,46 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLUpdateAreaElement : public SoElement {
+SoEXTENDER
+class SoGLUpdateAreaElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoGLUpdateAreaElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the current update area in the state. May have GL side effects.
-    static void		set(SoState *state,
-			    const SbVec2f &origin, const SbVec2f &size);
+    static void set(SoState *state, const SbVec2f &origin, const SbVec2f &size);
 
     // Returns current update area from the state. Returns TRUE if the
     // update area is the default, namely, the entire viewport.
-    static SbBool	get(SoState *state, SbVec2f &origin, SbVec2f &size);
+    static SbBool get(SoState *state, SbVec2f &origin, SbVec2f &size);
 
     // Returns the default update area origin and size
-    static SbVec2f	getDefaultOrigin()	{ return SbVec2f(0.0, 0.0); }
-    static SbVec2f	getDefaultSize()	{ return SbVec2f(1.0, 1.0); }
+    static SbVec2f getDefaultOrigin() { return SbVec2f(0.0, 0.0); }
+    static SbVec2f getDefaultSize() { return SbVec2f(1.0, 1.0); }
 
     // Override push() and pop() methods to keep GL up to date
-    virtual void	push(SoState *state);
-    virtual void	pop(SoState *state, const SoElement *prevTopElement);
+    virtual void push(SoState *state);
+    virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     // Returns TRUE if the update areas match in both elements
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
     // Create and return a copy of this element
-    virtual SoElement	*copyMatchInfo() const;
+    virtual SoElement *copyMatchInfo() const;
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoGLUpdateAreaElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
-    SbVec2f		origin, size;
+    SbVec2f origin, size;
 
     virtual ~SoGLUpdateAreaElement();
 
@@ -123,10 +124,10 @@ SoEXTENDER class SoGLUpdateAreaElement : public SoElement {
     // This flag lets us know if the element is set to its initial
     // default value, which is not sent to GL. This is so we can tell
     // whether the GL value is up to date.
-    SbBool		isDefault;
+    SbBool isDefault;
 
     // Sends region in element to GL
-    void		send(SoState *state);
+    void send(SoState *state);
 };
 
 #endif /* _SO_UPDATE_AREA_ELEMENT */

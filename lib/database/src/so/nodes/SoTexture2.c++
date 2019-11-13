@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -109,7 +109,7 @@ SoTexture2::SoTexture2()
     SO_NODE_ADD_FIELD(wrapS, (REPEAT));
     SO_NODE_ADD_FIELD(wrapT, (REPEAT));
     SO_NODE_ADD_FIELD(model, (MODULATE));
-    SO_NODE_ADD_FIELD(blendColor, (SbColor(0,0,0)));
+    SO_NODE_ADD_FIELD(blendColor, (SbColor(0, 0, 0)));
 
     // Set up enumerations for texture model
     SO_NODE_DEFINE_ENUM_VALUE(Model, MODULATE);
@@ -118,7 +118,7 @@ SoTexture2::SoTexture2()
 
     SO_NODE_DEFINE_ENUM_VALUE(Wrap, REPEAT);
     SO_NODE_DEFINE_ENUM_VALUE(Wrap, CLAMP);
-    
+
     // Set up info in enumerated type field
     SO_NODE_SET_SF_ENUM_TYPE(model, Model);
     SO_NODE_SET_SF_ENUM_TYPE(wrapS, Wrap);
@@ -135,7 +135,7 @@ SoTexture2::SoTexture2()
     filenameSensor->setPriority(0);
     filenameSensor->attach(&filename);
 
-    renderList = NULL;  // Display list used for rendering
+    renderList = NULL; // Display list used for rendering
 
     isBuiltIn = TRUE;
 }
@@ -152,13 +152,12 @@ SoTexture2::~SoTexture2()
 ////////////////////////////////////////////////////////////////////////
 {
     if (renderList) {
-	renderList->unref();
-	renderList = NULL;
+        renderList->unref();
+        renderList = NULL;
     }
     delete imageSensor;
     delete filenameSensor;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -179,17 +178,17 @@ SoTexture2::readInstance(SoInput *in, unsigned short flags)
     SbBool readOK = SoNode::readInstance(in, flags);
 
     if (readOK && !filename.isDefault()) {
-	// See the comment in SoFile::readInstance for why we do this
-	// and don't just let the FieldSensor take care of reading in
-	// the image.
-	setReadStatus(readOK);
-	(*(filenameSensor->getFunction()))(filenameSensor->getData(), NULL);
+        // See the comment in SoFile::readInstance for why we do this
+        // and don't just let the FieldSensor take care of reading in
+        // the image.
+        setReadStatus(readOK);
+        (*(filenameSensor->getFunction()))(filenameSensor->getData(), NULL);
 
-	// Don't set readOK, because not being able to read the image
-	// isn't a fatal error.  But do issue a read error:
-	if (getReadStatus() == FALSE)
-	    SoReadError::post(in, "Could not read texture file %s",
-			      filename.getValue().getString());
+        // Don't set readOK, because not being able to read the image
+        // isn't a fatal error.  But do issue a read error:
+        if (getReadStatus() == FALSE)
+            SoReadError::post(in, "Could not read texture file %s",
+                              filename.getValue().getString());
     }
 
     // Reattach sensor
@@ -213,7 +212,8 @@ SoTexture2::imageChangedCB(void *data, SoSensor *)
 {
     SoTexture2 *tex = (SoTexture2 *)data;
 
-    if (tex->image.isIgnored()) return;
+    if (tex->image.isIgnored())
+        return;
 
     tex->filenameSensor->detach();
     tex->filename.setValue("");
@@ -221,8 +221,8 @@ SoTexture2::imageChangedCB(void *data, SoSensor *)
     tex->filenameSensor->attach(&tex->filename);
 
     if (tex->renderList) {
-	tex->renderList->unref();
-	tex->renderList = NULL;
+        tex->renderList->unref();
+        tex->renderList = NULL;
     }
 }
 
@@ -242,8 +242,8 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
     SoTexture2 *tex = (SoTexture2 *)data;
 
     if (tex->filename.isIgnored()) {
-	tex->setReadStatus(FALSE);
-	return;
+        tex->setReadStatus(FALSE);
+        return;
     }
 
     // Read in image file right away...
@@ -251,8 +251,8 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
 
 #ifdef DEBUG
     SoDebugError::postInfo("SoTexture2::filenameChangedCB",
-               "Reading texture image %s",
-               tex->filename.getValue().getString());
+                           "Reading texture image %s",
+                           tex->filename.getValue().getString());
 #endif
 
     // Detach the image sensor temporarily...
@@ -265,8 +265,8 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
     tex->image.setDefault(TRUE);
 
     if (tex->renderList) {
-	tex->renderList->unref();
-	tex->renderList = NULL;
+        tex->renderList->unref();
+        tex->renderList = NULL;
     }
     tex->imageSensor->attach(&tex->image);
 
@@ -285,19 +285,17 @@ SoTexture2::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoState *	state = action->getState();
+    SoState *state = action->getState();
 
-    if (image.isIgnored() ||
-	SoTextureOverrideElement::getImageOverride(state))
-	return; // Texture being overriden or this node ignored
+    if (image.isIgnored() || SoTextureOverrideElement::getImageOverride(state))
+        return; // Texture being overriden or this node ignored
     if (isOverride()) {
-	SoTextureOverrideElement::setImageOverride(state, TRUE);
+        SoTextureOverrideElement::setImageOverride(state, TRUE);
     }
 
-
-    SoTextureImageElement::set(state, this, image.getValue(),
-			       wrapS.getValue(), wrapT.getValue(),
-			       model.getValue(), blendColor.getValue());
+    SoTextureImageElement::set(state, this, image.getValue(), wrapS.getValue(),
+                               wrapT.getValue(), model.getValue(),
+                               blendColor.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -327,79 +325,76 @@ SoTexture2::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoState *	state = action->getState();
+    SoState *state = action->getState();
 
-    if (image.isIgnored() ||
-	SoTextureOverrideElement::getImageOverride(state))
-	return; // Texture being overriden or this node ignored
+    if (image.isIgnored() || SoTextureOverrideElement::getImageOverride(state))
+        return; // Texture being overriden or this node ignored
     if (isOverride()) {
-	SoTextureOverrideElement::setImageOverride(state, TRUE);
+        SoTextureOverrideElement::setImageOverride(state, TRUE);
     }
 
     float texQuality = SoTextureQualityElement::get(state);
     if (texQuality == 0 || image.getValue().isNull() || image.isIgnored()) {
-	SoGLTextureEnabledElement::set(state, FALSE);
-	return;
+        SoGLTextureEnabledElement::set(state, FALSE);
+        return;
+    } else {
+        SoGLTextureEnabledElement::set(state, TRUE);
     }
-    else {
-	SoGLTextureEnabledElement::set(state, TRUE);
-    }	
 
     // Check for special cases of 1/2 component texture and model
     // DECAL or 3/4 component texture and model BLEND; print out
     // errors in these cases:
-	
+
     int nc = image.getValue().getNumComponents();
     int m = model.getValue();
     if (nc < 3 && m == DECAL) {
 #ifdef DEBUG
-	SoDebugError::post("SoTexture2::GLRender",
-			   "Texture model is DECAL, but texture image"
-			   " has only %d components (must be 3 or 4).  "
-			   "Use imgcopy to convert the image.", nc);
-#endif	    
-	SoGLTextureEnabledElement::set(state, FALSE);
-    }
-    else if (nc > 2 && m == BLEND) {
+        SoDebugError::post("SoTexture2::GLRender",
+                           "Texture model is DECAL, but texture image"
+                           " has only %d components (must be 3 or 4).  "
+                           "Use imgcopy to convert the image.",
+                           nc);
+#endif
+        SoGLTextureEnabledElement::set(state, FALSE);
+    } else if (nc > 2 && m == BLEND) {
 #ifdef DEBUG
-	SoDebugError::post("SoTexture2::GLRender",
-			   "Texture model is BLEND, but texture image"
-			   " has %d components (must be 1 or 2).  "
-			   "Use imgcopy to convert the image.", nc);
-#endif	    
-	SoGLTextureEnabledElement::set(state, FALSE);
+        SoDebugError::post("SoTexture2::GLRender",
+                           "Texture model is BLEND, but texture image"
+                           " has %d components (must be 1 or 2).  "
+                           "Use imgcopy to convert the image.",
+                           nc);
+#endif
+        SoGLTextureEnabledElement::set(state, FALSE);
     } else {
-	// This is kind of weird-- the element builds and uses the
-	// display list (which is why we pass it in and assign
-	// it) because it sends the GL calls, and needs to know
-	// the list if the state is popped.  But this node must
-	// manage storage and deletion of the display list, since
-	// the list must go away if the node is deleted or the
-	// image is changed.
+        // This is kind of weird-- the element builds and uses the
+        // display list (which is why we pass it in and assign
+        // it) because it sends the GL calls, and needs to know
+        // the list if the state is popped.  But this node must
+        // manage storage and deletion of the display list, since
+        // the list must go away if the node is deleted or the
+        // image is changed.
 
-	// See if renderList is valid (in the right context, with
-	// the right texture quality):
-	int context = SoGLCacheContextElement::get(state);
-	if (renderList && renderList->getContext() == context &&
-	    texQuality == renderListQuality) {
-	    SoGLTextureImageElement::set(
-		state, this, image.getValue(), texQuality,
-		wrapS.getValue(), wrapT.getValue(),
-		m, blendColor.getValue(), renderList);
-	}  // Not valid, try to build
-	else {
-	    // Free up old list, if necessary:
-	    if (renderList) {
-		renderList->unref(state);
-		renderList = NULL;
-	    }
-	    renderList = SoGLTextureImageElement::set(
-		state, this, image.getValue(), texQuality,
-		wrapS.getValue(), wrapT.getValue(),
-		m, blendColor.getValue(), NULL);
-	    if (renderList)
-		renderList->ref();
-	    renderListQuality = texQuality;
-	}
+        // See if renderList is valid (in the right context, with
+        // the right texture quality):
+        int context = SoGLCacheContextElement::get(state);
+        if (renderList && renderList->getContext() == context &&
+            texQuality == renderListQuality) {
+            SoGLTextureImageElement::set(
+                state, this, image.getValue(), texQuality, wrapS.getValue(),
+                wrapT.getValue(), m, blendColor.getValue(), renderList);
+        } // Not valid, try to build
+        else {
+            // Free up old list, if necessary:
+            if (renderList) {
+                renderList->unref(state);
+                renderList = NULL;
+            }
+            renderList = SoGLTextureImageElement::set(
+                state, this, image.getValue(), texQuality, wrapS.getValue(),
+                wrapT.getValue(), m, blendColor.getValue(), NULL);
+            if (renderList)
+                renderList->ref();
+            renderListQuality = texQuality;
+        }
     }
 }

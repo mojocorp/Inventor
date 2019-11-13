@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -80,38 +80,38 @@ class SoDebug {
   public:
     // Returns value of environment variable; faster than getenv()
     // because the environment variables are stored in a dictionary.
-    static const char *	GetEnv(const char *envVar);
+    static const char *GetEnv(const char *envVar);
 
     // Prints into an internal buffer that is emptied every once in a
     // while.  Useful when doing the print right away screws up the
     // timing of the thing you're trying to debug.
-    static void		RTPrintf(const char *formatString ...);
+    static void RTPrintf(const char *formatString...);
 
     // Assign the given pointer a name.  The passed name string isn't
     // copied; if it changes, the name of the pointer changes.
-    static void		NamePtr(const char *name, void *ptr);
+    static void NamePtr(const char *name, void *ptr);
 
     // Return the name of the given pointer (returns "<noName>" if not
     // named previously with NamePtr).
-    static const char *	PtrName(void *ptr);
+    static const char *PtrName(void *ptr);
 
     // Applies an SoWriteAction to the graph rooted by the given node.
     // The results go to stdout.  Very useful when called from within
     // a debugger!
-    static void		write(SoNode *node);
+    static void write(SoNode *node);
 
     // Applies an SoWriteAction to the graph rooted by the given node,
     // writing to given file, or /tmp/debug.iv if filename is NULL.
-    static void		writeFile(SoNode *node, const char *filename);
+    static void writeFile(SoNode *node, const char *filename);
 
     // Applies an SoWriteAction to the container of the given field.
     // The results go to stdout.  Very useful when called from within
     // a debugger!
-    static void		writeField(SoField *node);
+    static void writeField(SoField *node);
 
     // Writes the name of the given object to stdout.  Very useful
     // when called from within a debugger!
-    static void		printName(SoBase *base);
+    static void printName(SoBase *base);
 };
 
 #endif /* _SO_DEBUG_ */

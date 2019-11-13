@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TRANSFORM_
-#define  _SO_TRANSFORM_
+#ifndef _SO_TRANSFORM_
+#define _SO_TRANSFORM_
 
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -74,11 +74,11 @@ class SoTransform : public SoTransformation {
 
   public:
     // Fields
-    SoSFVec3f		translation;	 // Translation vector
-    SoSFRotation	rotation;	 // Rotation
-    SoSFVec3f		scaleFactor;	 // Scale factors
-    SoSFRotation	scaleOrientation;// Defines rotational space for scale
-    SoSFVec3f		center;	         // Center point for scale and rotate
+    SoSFVec3f    translation;      // Translation vector
+    SoSFRotation rotation;         // Rotation
+    SoSFVec3f    scaleFactor;      // Scale factors
+    SoSFRotation scaleOrientation; // Defines rotational space for scale
+    SoSFVec3f    center;           // Center point for scale and rotate
 
     // Constructor
     SoTransform();
@@ -88,48 +88,47 @@ class SoTransform : public SoTransformation {
     // fromPoint to toPoint. This always tries to keep the "up"
     // direction the positive y-axis, unless that is impossible.
     // All current info in the node is wiped out.
-    void		pointAt(const SbVec3f &fromPoint,
-				const SbVec3f &toPoint);
+    void pointAt(const SbVec3f &fromPoint, const SbVec3f &toPoint);
 
     // returns composite matrices that take you from object space to each
     // of scale/rotation/translation spaces
-    void		getScaleSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const;
-    void		getRotationSpaceMatrix(SbMatrix &mat,
-                                               SbMatrix &inv) const;
-    void		getTranslationSpaceMatrix(SbMatrix &mat,
-                                                  SbMatrix &inv) const;
+    void getScaleSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const;
+    void getRotationSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const;
+    void getTranslationSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const;
 
     // Convenience functions that combine the effects of a matrix
     // transformation into the transformation stored in this node. The
     // first method premultiplies the transformation and the second
     // postmultiplies it.
-    void		multLeft(const SbMatrix &mat);
-    void		multRight(const SbMatrix &mat);
+    void multLeft(const SbMatrix &mat);
+    void multRight(const SbMatrix &mat);
 
     // These are the same as multLeft() and multRight(), except that
     // the transformation to multiply into this node comes from
     // another transformation node.
-    void		combineLeft(SoTransformation *nodeOnLeft);
-    void		combineRight(SoTransformation *nodeOnRight);
+    void combineLeft(SoTransformation *nodeOnLeft);
+    void combineRight(SoTransformation *nodeOnRight);
 
     // Sets the fields in the node to implement the transformation
     // represented by the given matrix
-    void		setMatrix(const SbMatrix &mat);
+    void setMatrix(const SbMatrix &mat);
 
     // Changes the center of the transformation to the given point
     // without affecting the overall effect of the transformation
-    void		recenter(const SbVec3f &newCenter);
+    void recenter(const SbVec3f &newCenter);
 
-  SoEXTENDER public:
-    virtual void	doAction(SoAction *action);
-    virtual void	callback(SoCallbackAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
-    virtual void	getMatrix(SoGetMatrixAction *action);
-    virtual void	pick(SoPickAction *action);
+    SoEXTENDER
+  public:
+    virtual void doAction(SoAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void getMatrix(SoGetMatrixAction *action);
+    virtual void pick(SoPickAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     virtual ~SoTransform();

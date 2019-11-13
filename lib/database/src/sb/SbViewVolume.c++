@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -73,8 +73,7 @@
 SbViewVolume::SbViewVolume()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -91,7 +90,7 @@ SbViewVolume::getMatrix() const
     SbMatrix affine, proj;
     getMatrices(affine, proj);
 
-    return affine.multRight( proj );
+    return affine.multRight(proj);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -100,7 +99,7 @@ SbViewVolume::getMatrix() const
 //    Returns two matrices corresponding to the view volume.  The
 //    first is a viewing matrix, which is guaranteed to be an affine
 //    transformation.  The second is suitable for use as a projection
-//    matrix in GL. This part about finding the projection matrix 
+//    matrix in GL. This part about finding the projection matrix
 //    is taken from the old GT Graphics Library User's Guide, page B-3.
 //
 // Use: public
@@ -120,17 +119,17 @@ SbViewVolume::getMatrices(SbMatrix &affine, SbMatrix &proj) const
 
     //
     // skewMat is the matrix that would take a nice orthogonal view volume
-    // that is aligned with x,y and neg-z and skew it to this view volume, 
+    // that is aligned with x,y and neg-z and skew it to this view volume,
     // based on llfO being at the origin.
     //
-    skewMat[0][0] = right[0]/width;
-    skewMat[0][1] = right[1]/width;
-    skewMat[0][2] = right[2]/width;
+    skewMat[0][0] = right[0] / width;
+    skewMat[0][1] = right[1] / width;
+    skewMat[0][2] = right[2] / width;
     skewMat[0][3] = 0;
 
-    skewMat[1][0] = up[0]/height;
-    skewMat[1][1] = up[1]/height;
-    skewMat[1][2] = up[2]/height;
+    skewMat[1][0] = up[0] / height;
+    skewMat[1][1] = up[1] / height;
+    skewMat[1][2] = up[2] / height;
     skewMat[1][3] = 0;
 
     skewMat[2][0] = -projDir[0];
@@ -138,9 +137,9 @@ SbViewVolume::getMatrices(SbMatrix &affine, SbMatrix &proj) const
     skewMat[2][2] = -projDir[2];
     skewMat[2][3] = 0;
 
-    skewMat[3][0] = 0;    
-    skewMat[3][1] = 0;    
-    skewMat[3][2] = 0;    
+    skewMat[3][0] = 0;
+    skewMat[3][1] = 0;
+    skewMat[3][2] = 0;
     skewMat[3][3] = 1;
 
     // Therefore, its inverse takes our probably rotated and potentially
@@ -148,15 +147,15 @@ SbViewVolume::getMatrices(SbMatrix &affine, SbMatrix &proj) const
     // with neg-z axis
     SbMatrix skewMatInv = skewMat.inverse();
 
-    affine.setTranslate(-(llfO+projPoint));
-    affine.multRight( skewMatInv );
+    affine.setTranslate(-(llfO + projPoint));
+    affine.multRight(skewMatInv);
 
     SbVec3f eye;
     affine.multVecMatrix(projPoint, eye);
 
     SbMatrix moveToEye;
-    moveToEye.setTranslate(- eye);
-    affine.multRight( moveToEye );
+    moveToEye.setTranslate(-eye);
+    affine.multRight(moveToEye);
 
     SbVec3f llfEye, lrfEye, ulfEye;
     skewMatInv.multVecMatrix(llfO, llfEye);
@@ -172,35 +171,33 @@ SbViewVolume::getMatrices(SbMatrix &affine, SbMatrix &proj) const
     float topMinusBottom = ulfEye[1] - llfEye[1];
     float topPlusBottom = ulfEye[1] + llfEye[1];
 
-    const float & farMinusNear = nearToFar;
-    float far = nearDist + nearToFar;
-    float farPlusNear = far + nearDist;
+    const float &farMinusNear = nearToFar;
+    float        far = nearDist + nearToFar;
+    float        farPlusNear = far + nearDist;
 
     if (type == ORTHOGRAPHIC) {
-	proj[0][0] =   2.0 / rightMinusLeft;
-	proj[1][1] =   2.0 / topMinusBottom;
-	proj[2][2] =  -2.0 / farMinusNear;
+        proj[0][0] = 2.0 / rightMinusLeft;
+        proj[1][1] = 2.0 / topMinusBottom;
+        proj[2][2] = -2.0 / farMinusNear;
 
-	proj[3][0] = - rightPlusLeft / rightMinusLeft;
-	proj[3][1] = - topPlusBottom / topMinusBottom;
-	proj[3][2] = - farPlusNear / farMinusNear;
-    }
-    else {			// type == PERSPECTIVE
+        proj[3][0] = -rightPlusLeft / rightMinusLeft;
+        proj[3][1] = -topPlusBottom / topMinusBottom;
+        proj[3][2] = -farPlusNear / farMinusNear;
+    } else { // type == PERSPECTIVE
 
-	proj[0][0] = 2.0 * nearDist / rightMinusLeft;
+        proj[0][0] = 2.0 * nearDist / rightMinusLeft;
 
-	proj[1][1] = 2.0 * nearDist / topMinusBottom;
+        proj[1][1] = 2.0 * nearDist / topMinusBottom;
 
-	proj[2][0] = rightPlusLeft / rightMinusLeft;
-	proj[2][1] = topPlusBottom / topMinusBottom;
-	proj[2][2] = - farPlusNear / farMinusNear;
-	proj[2][3] = - 1.0;
+        proj[2][0] = rightPlusLeft / rightMinusLeft;
+        proj[2][1] = topPlusBottom / topMinusBottom;
+        proj[2][2] = -farPlusNear / farMinusNear;
+        proj[2][3] = -1.0;
 
-	proj[3][2] = - 2.0 * nearDist * far / farMinusNear;
-	proj[3][3] = 0.0;
+        proj[3][2] = -2.0 * nearDist * far / farMinusNear;
+        proj[3][3] = 0.0;
     }
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -217,10 +214,10 @@ SbViewVolume::getCameraSpaceMatrix() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	m, m2;
+    SbMatrix m, m2;
 
     // Translate projPoint to (0,0,0)
-    m.setTranslate(- projPoint);
+    m.setTranslate(-projPoint);
 
     // Rotate projDir into negative z axis
     m2.setRotate(SbRotation(projDir, SbVec3f(0.0, 0.0, -1.0)));
@@ -236,33 +233,33 @@ SbViewVolume::getCameraSpaceMatrix() const
 // Use: public
 
 void
-SbViewVolume::projectPointToLine(const SbVec2f &pt,
-				 SbVec3f &line0, SbVec3f &line1) const
+SbViewVolume::projectPointToLine(const SbVec2f &pt, SbVec3f &line0,
+                                 SbVec3f &line1) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float ptx = 2.0 * pt[0] - 1.0;
-    float pty = 2.0 * pt[1] - 1.0;
+    float    ptx = 2.0 * pt[0] - 1.0;
+    float    pty = 2.0 * pt[1] - 1.0;
     SbMatrix mat = getMatrix().inverse();
-    float x, y, z, w;
+    float    x, y, z, w;
 
     /* ptz = -1 */
-    x = ptx*mat[0][0] + pty*mat[1][0] - mat[2][0] + mat[3][0];
-    y = ptx*mat[0][1] + pty*mat[1][1] - mat[2][1] + mat[3][1];
-    z = ptx*mat[0][2] + pty*mat[1][2] - mat[2][2] + mat[3][2];
-    w = ptx*mat[0][3] + pty*mat[1][3] - mat[2][3] + mat[3][3];
-    line0[0] = x/w;
-    line0[1] = y/w;
-    line0[2] = z/w;
+    x = ptx * mat[0][0] + pty * mat[1][0] - mat[2][0] + mat[3][0];
+    y = ptx * mat[0][1] + pty * mat[1][1] - mat[2][1] + mat[3][1];
+    z = ptx * mat[0][2] + pty * mat[1][2] - mat[2][2] + mat[3][2];
+    w = ptx * mat[0][3] + pty * mat[1][3] - mat[2][3] + mat[3][3];
+    line0[0] = x / w;
+    line0[1] = y / w;
+    line0[2] = z / w;
 
     /* ptz = +1 */
     x += 2.0 * mat[2][0];
     y += 2.0 * mat[2][1];
     z += 2.0 * mat[2][2];
     w += 2.0 * mat[2][3];
-    line1[0] = x/w;
-    line1[1] = y/w;
-    line1[2] = z/w;
+    line1[0] = x / w;
+    line1[1] = y / w;
+    line1[2] = z / w;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -285,7 +282,7 @@ SbViewVolume::projectPointToLine(const SbVec2f &pt, SbLine &line) const
 //
 // Description:
 //  Projects a point in world coordinates to normalized screen
-//  coordinates. 
+//  coordinates.
 //
 // Use: public
 
@@ -351,9 +348,9 @@ SbViewVolume::getPlanePoint(float distFromEye, const SbVec2f &normPoint) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbLine	line;
-    SbVec3f	point;
-    SbPlane	plane = getPlane(distFromEye);
+    SbLine  line;
+    SbVec3f point;
+    SbPlane plane = getPlane(distFromEye);
 
     // Project screen point to line through view volume
     projectPointToLine(normPoint, line);
@@ -381,71 +378,70 @@ SbViewVolume::getAlignRotation(SbBool rightAngleOnly) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	yAxis(0.0, 1.0, 0.0);
-    SbVec3f	up    = ulfO - llfO;
-    SbVec3f	right = lrfO - llfO;
-    SbVec3f	newRight;
-    SbMatrix	rotMat;
-    SbRotation	result;
+    SbVec3f    yAxis(0.0, 1.0, 0.0);
+    SbVec3f    up = ulfO - llfO;
+    SbVec3f    right = lrfO - llfO;
+    SbVec3f    newRight;
+    SbMatrix   rotMat;
+    SbRotation result;
 
     up.normalize();
     right.normalize();
 
-    if (! rightAngleOnly) {
+    if (!rightAngleOnly) {
 
-	// First rotate so that y-axis becomes "up".
-	result.setValue(yAxis, up);
+        // First rotate so that y-axis becomes "up".
+        result.setValue(yAxis, up);
 
-	// Then rotate about "up" so the x-axis becomes "right".
-	rotMat.setRotate(result);
-	rotMat.multDirMatrix(SbVec3f(1.0, 0.0, 0.0), newRight);
+        // Then rotate about "up" so the x-axis becomes "right".
+        rotMat.setRotate(result);
+        rotMat.multDirMatrix(SbVec3f(1.0, 0.0, 0.0), newRight);
 
-	// Need to make certain that the rotation is phrased as a rot
-	// about the y axis.  If we just use
-	// SbRotation(newRight,right), in the case where 'newRight' is
-	// opposite direction of 'right' the algorithm gives us a 180
-	// degree rot about z, not y, which screws things up.
-	float thetaCos = newRight.dot(right);
-	if (thetaCos < -0.99999) {
-	    result *= SbRotation( SbVec3f(0,1,0), 3.14159 );
-	}
-	else {
-	    result *= SbRotation(newRight, right);
-	}
+        // Need to make certain that the rotation is phrased as a rot
+        // about the y axis.  If we just use
+        // SbRotation(newRight,right), in the case where 'newRight' is
+        // opposite direction of 'right' the algorithm gives us a 180
+        // degree rot about z, not y, which screws things up.
+        float thetaCos = newRight.dot(right);
+        if (thetaCos < -0.99999) {
+            result *= SbRotation(SbVec3f(0, 1, 0), 3.14159);
+        } else {
+            result *= SbRotation(newRight, right);
+        }
     }
 
     else {
-	SbRotation	rotToUp, rot1, rot2;
-	SbVec3f		vec;
-	float		d, max;
-	int		i;
+        SbRotation rotToUp, rot1, rot2;
+        SbVec3f    vec;
+        float      d, max;
+        int        i;
 
-	// Rotate to get the best possible rotation to put Y close to "up"
-	rotToUp.setValue(yAxis, up.getClosestAxis());
+        // Rotate to get the best possible rotation to put Y close to "up"
+        rotToUp.setValue(yAxis, up.getClosestAxis());
 
-	// Rotate to get the best possible rotation to put X close to "right".
-	rotMat.setRotate(rotToUp);
-	rotMat.multDirMatrix(SbVec3f(1.0, 0.0, 0.0), newRight);
+        // Rotate to get the best possible rotation to put X close to "right".
+        rotMat.setRotate(rotToUp);
+        rotMat.multDirMatrix(SbVec3f(1.0, 0.0, 0.0), newRight);
 
-	// Find which of the 4 rotations that are multiples of 90
-	// degrees about the y-axis brings X closest to right
+        // Find which of the 4 rotations that are multiples of 90
+        // degrees about the y-axis brings X closest to right
 
-	max = -237.4;
+        max = -237.4;
 
-	for (i = 0; i < 4; i++) {
+        for (i = 0; i < 4; i++) {
 
-	    // Rotate by -90, 0, 90, 180 degrees
-	    rot1.setValue(yAxis, (i-1) * M_PI_2);
+            // Rotate by -90, 0, 90, 180 degrees
+            rot1.setValue(yAxis, (i - 1) * M_PI_2);
 
-	    rot2 = rot1 * rotToUp;
-	    rotMat.setRotate(rot2);
-	    rotMat.multDirMatrix(newRight, vec);
-	    d = vec.dot(right);
-	    if (d > max) {
-		result = rot2;
-		max = d;
-	    }
-	}
+            rot2 = rot1 * rotToUp;
+            rotMat.setRotate(rot2);
+            rotMat.multDirMatrix(newRight, vec);
+            d = vec.dot(right);
+            if (d > max) {
+                result = rot2;
+                max = d;
+            }
+        }
     }
 
     return result;
@@ -463,35 +459,34 @@ SbViewVolume::getAlignRotation(SbBool rightAngleOnly) const
 
 float
 SbViewVolume::getWorldToScreenScale(const SbVec3f &worldCenter,
-				    float normRadius) const
+                                    float          normRadius) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Project worldCenter into normalized coordinates
     SbVec3f normCenter3;
     projectToScreen(worldCenter, normCenter3);
-    SbVec2f normCenter( normCenter3[0], normCenter3[1] );
-
+    SbVec2f normCenter(normCenter3[0], normCenter3[1]);
 
     // This method really behaves best if you keep the normalized
     // points within the (0,0) (1,1) range.  So we shift the
     // normCenter if necessary
     SbBool centerShifted = FALSE;
-    if ( normCenter[0] < 0.0 ) {
-	 normCenter[0] = 0.0;
-         centerShifted = TRUE;
+    if (normCenter[0] < 0.0) {
+        normCenter[0] = 0.0;
+        centerShifted = TRUE;
     }
-    if ( normCenter[0] > 1.0 ) {
-	 normCenter[0] = 1.0;
-         centerShifted = TRUE;
+    if (normCenter[0] > 1.0) {
+        normCenter[0] = 1.0;
+        centerShifted = TRUE;
     }
-    if ( normCenter[1] < 0.0 ) {
-	 normCenter[1] = 0.0;
-         centerShifted = TRUE;
+    if (normCenter[1] < 0.0) {
+        normCenter[1] = 0.0;
+        centerShifted = TRUE;
     }
-    if ( normCenter[1] > 1.0 ) {
-	 normCenter[1] = 1.0;
-         centerShifted = TRUE;
+    if (normCenter[1] > 1.0) {
+        normCenter[1] = 1.0;
+        centerShifted = TRUE;
     }
 
     // We'll either take the distance between a point that's offset
@@ -510,20 +505,19 @@ SbViewVolume::getWorldToScreenScale(const SbVec3f &worldCenter,
     // Should we use a vertical or horizontal offset?
     SbBool goVertical = (getWidth() > getHeight());
 
-    // Pick a point that is normRadius away from normCenter in the 
+    // Pick a point that is normRadius away from normCenter in the
     // desired direction.,
-    SbVec2f     offsetPoint = normCenter;
-    if ( goVertical ) {
-	if (offsetPoint[1] < 0.5)
-	    offsetPoint[1] += normRadius;
-	else
-	    offsetPoint[1] -= normRadius;
-    }
-    else {
-	if (offsetPoint[0] < 0.5)
-	    offsetPoint[0] += normRadius;
-	else
-	    offsetPoint[0] -= normRadius;
+    SbVec2f offsetPoint = normCenter;
+    if (goVertical) {
+        if (offsetPoint[1] < 0.5)
+            offsetPoint[1] += normRadius;
+        else
+            offsetPoint[1] -= normRadius;
+    } else {
+        if (offsetPoint[0] < 0.5)
+            offsetPoint[0] += normRadius;
+        else
+            offsetPoint[0] -= normRadius;
     }
 
     // The original method only works for perspective projections. The
@@ -533,12 +527,12 @@ SbViewVolume::getWorldToScreenScale(const SbVec3f &worldCenter,
 
     // Find centerLine, the line you get when you project normCenter into
     // the scene.
-    SbLine	centerLine;
+    SbLine centerLine;
     projectPointToLine(normCenter, centerLine);
 
     // Find the plane that passes through worldCenter and is
     // perpendicular to the centerLine
-    SbVec3f	norm = centerLine.getDirection();
+    SbVec3f norm = centerLine.getDirection();
     norm.normalize();
     SbPlane plane(norm, worldCenter);
 
@@ -548,29 +542,29 @@ SbViewVolume::getWorldToScreenScale(const SbVec3f &worldCenter,
     projectPointToLine(offsetPoint, offsetLine);
 
     // Intersect centerLine with the plane to get the location of normCenter
-    // projected onto that plane.  If we didn't need to shift the normCenter 
+    // projected onto that plane.  If we didn't need to shift the normCenter
     // then this is just the same as worldCenter
     SbVec3f worldSeedPoint = worldCenter;
 
-    if ( centerShifted == TRUE ) {
-	SbBool isOk = plane.intersect(centerLine, worldSeedPoint);
+    if (centerShifted == TRUE) {
+        SbBool isOk = plane.intersect(centerLine, worldSeedPoint);
 
-	if ( !isOk ) {
-	    // intersection did not succeeded, just return a value of 1
-	    return 1.0;
-	}
+        if (!isOk) {
+            // intersection did not succeeded, just return a value of 1
+            return 1.0;
+        }
     }
 
     // Fix uninitialized memory read.  We need to check if the plane
     // intersection is successful, and if not we must not use results
     // to calculate an answer.  Instead, if the plane intersection
     // fails, we return 1.0
-    SbVec3f	worldOffsetPoint;
-    SbBool isOk = plane.intersect(offsetLine, worldOffsetPoint);
+    SbVec3f worldOffsetPoint;
+    SbBool  isOk = plane.intersect(offsetLine, worldOffsetPoint);
 
-    if ( !isOk ) {
-	// intersection did not succeeded, just return a value of 1
-	return 1.0;
+    if (!isOk) {
+        // intersection did not succeeded, just return a value of 1
+        return 1.0;
     }
 
     // intersection succeeded. return dist from worldCenter
@@ -593,7 +587,7 @@ SbViewVolume::projectBox(const SbBox3f &box) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	min, max, screenPoint[8];
+    SbVec3f min, max, screenPoint[8];
 
     box.getBounds(min, max);
 
@@ -608,9 +602,9 @@ SbViewVolume::projectBox(const SbBox3f &box) const
     projectToScreen(SbVec3f(max[0], max[1], max[2]), screenPoint[7]);
 
     // Find the encompassing 2d box (-1 <= x,y <= 1)
-    SbBox2f	fBox;
+    SbBox2f fBox;
     for (int i = 0; i < 8; i++)
-	fBox.extendBy(SbVec2f(screenPoint[i][0], screenPoint[i][1]));
+        fBox.extendBy(SbVec2f(screenPoint[i][0], screenPoint[i][1]));
 
     // Return size of box
     return fBox.getSize();
@@ -636,13 +630,13 @@ SbViewVolume::narrow(float left, float bottom, float right, float top) const
     vv.type = type;
     vv.projPoint = projPoint;
     vv.projDir = projDir;
-    vv.llfO = (lrfO - llfO) * left  + (ulfO - llfO) * bottom + llfO;
+    vv.llfO = (lrfO - llfO) * left + (ulfO - llfO) * bottom + llfO;
     vv.lrfO = (lrfO - llfO) * right + (ulfO - llfO) * bottom + llfO;
-    vv.ulfO = (lrfO - llfO) * left  + (ulfO - llfO) * top    + llfO;
-    vv.llf = vv.llfO + vv.projPoint;  // For compatibility
+    vv.ulfO = (lrfO - llfO) * left + (ulfO - llfO) * top + llfO;
+    vv.llf = vv.llfO + vv.projPoint; // For compatibility
     vv.lrf = vv.lrfO + vv.projPoint;
     vv.ulf = vv.ulfO + vv.projPoint;
-    vv.nearDist  = nearDist;
+    vv.nearDist = nearDist;
     vv.nearToFar = nearToFar;
 
     return vv;
@@ -657,23 +651,22 @@ SbViewVolume::narrow(float left, float bottom, float right, float top) const
 // Use: public
 
 void
-SbViewVolume::ortho(float left, float right,
-		    float bottom, float top,
-		    float near, float far)
+SbViewVolume::ortho(float left, float right, float bottom, float top,
+                    float near, float far)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     type = ORTHOGRAPHIC;
-    projPoint	= SbVec3f(0.0, 0.0, 0.0);
-    projDir	= SbVec3f(0.0, 0.0, -1.0);
-    llfO	= SbVec3f(left,  bottom, -near);
-    lrfO	= SbVec3f(right, bottom, -near);
-    ulfO	= SbVec3f(left,  top,    -near);
-    llf		= llfO + projPoint;  // For compatibility
-    lrf		= lrfO + projPoint;
-    ulf		= ulfO + projPoint;
-    nearDist	= near;
-    nearToFar	= far - near;
+    projPoint = SbVec3f(0.0, 0.0, 0.0);
+    projDir = SbVec3f(0.0, 0.0, -1.0);
+    llfO = SbVec3f(left, bottom, -near);
+    lrfO = SbVec3f(right, bottom, -near);
+    ulfO = SbVec3f(left, top, -near);
+    llf = llfO + projPoint; // For compatibility
+    lrf = lrfO + projPoint;
+    ulf = ulfO + projPoint;
+    nearDist = near;
+    nearToFar = far - near;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -687,8 +680,7 @@ SbViewVolume::ortho(float left, float right,
 // Use: public
 
 void
-SbViewVolume::perspective(float fovy, float aspect,
-			  float near, float far)
+SbViewVolume::perspective(float fovy, float aspect, float near, float far)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -698,18 +690,18 @@ SbViewVolume::perspective(float fovy, float aspect,
 
     projPoint.setValue(0.0, 0.0, 0.0);
     projDir.setValue(0.0, 0.0, -1.0);
-    llfO[2] = lrfO[2] = ulfO[2] = - near;
+    llfO[2] = lrfO[2] = ulfO[2] = -near;
 
     ulfO[1] = near * tanfov;
-    llfO[1] = lrfO[1] = - ulfO[1];
+    llfO[1] = lrfO[1] = -ulfO[1];
     ulfO[0] = llfO[0] = aspect * llfO[1];
-    lrfO[0] = - llfO[0];
+    lrfO[0] = -llfO[0];
 
-    llf		= llfO + projPoint; // For compatibility
-    lrf		= lrfO + projPoint;
-    ulf		= ulfO + projPoint;
+    llf = llfO + projPoint; // For compatibility
+    lrf = lrfO + projPoint;
+    ulf = ulfO + projPoint;
 
-    nearDist  = near;
+    nearDist = near;
     nearToFar = far - near;
 }
 
@@ -717,13 +709,12 @@ SbViewVolume::perspective(float fovy, float aspect,
 //
 // Description:
 // Set up the frustum for perspective projection.
-// It has the same arguments and functionality as the corresponding 
-// OpenGL glFrustum() function. 
+// It has the same arguments and functionality as the corresponding
+// OpenGL glFrustum() function.
 //
 // Use: public
-void 
-SbViewVolume::frustum(float left, float right,
-                      float bottom, float top,
+void
+SbViewVolume::frustum(float left, float right, float bottom, float top,
                       float nearval, float farval)
 //
 ////////////////////////////////////////////////////////////////////////
@@ -739,9 +730,9 @@ SbViewVolume::frustum(float left, float right,
     lrfO.setValue(right, bottom, -nearval);
     ulfO.setValue(left, top, -nearval);
 
-    llf		= llfO + projPoint; // For compatibility
-    lrf		= lrfO + projPoint;
-    ulf		= ulfO + projPoint;
+    llf = llfO + projPoint; // For compatibility
+    lrf = lrfO + projPoint;
+    ulf = ulfO + projPoint;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -758,10 +749,10 @@ SbViewVolume::translateCamera(const SbVec3f &v)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    projPoint	+= v;
-    llf		+= v;
-    lrf		+= v;
-    ulf		+= v;
+    projPoint += v;
+    llf += v;
+    lrf += v;
+    ulf += v;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -778,7 +769,7 @@ SbViewVolume::rotateCamera(const SbRotation &r)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	m;
+    SbMatrix m;
     m.setRotate(r);
 
     m.multDirMatrix(projDir, projDir);
@@ -787,9 +778,9 @@ SbViewVolume::rotateCamera(const SbRotation &r)
     m.multDirMatrix(lrfO, lrfO);
     m.multDirMatrix(ulfO, ulfO);
 
-    llf		= llfO + projPoint; // For compatibility
-    lrf		= lrfO + projPoint;
-    ulf		= ulfO + projPoint;
+    llf = llfO + projPoint; // For compatibility
+    lrf = lrfO + projPoint;
+    ulf = ulfO + projPoint;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -807,7 +798,7 @@ SbViewVolume::zVector() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbPlane	plane;
+    SbPlane plane;
 
     // note dependency on how the plane is calculated: we want the
     // returned vector to point away from the projDir
@@ -815,7 +806,7 @@ SbViewVolume::zVector() const
 
     // If we wanted a world-space plane, would also have to translate
     // it to projPoint.  But all we're interested in here is the normal:
-    return - plane.getNormal();
+    return -plane.getNormal();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -836,24 +827,24 @@ SbViewVolume::zNarrow(float near, float far) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbPlane		plane;
-    SbViewVolume	narrowed;
-    SbVec3f		zVec = zVector();
+    SbPlane      plane;
+    SbViewVolume narrowed;
+    SbVec3f      zVec = zVector();
 
     // make sure we aren't expanding the volume
     if (near > 1.0)
-	near = 1.0;
+        near = 1.0;
     if (far < 0.0)
-	far = 0.0;
+        far = 0.0;
 
-    narrowed.type	= type;
-    narrowed.projPoint	= projPoint;
-    narrowed.projDir	= projDir;
+    narrowed.type = type;
+    narrowed.projPoint = projPoint;
+    narrowed.projDir = projDir;
 
     // the near-to-far distance can be calculated from the new near
     // and far values
-    narrowed.nearDist	= near;
-    narrowed.nearToFar	= (near - far) * nearToFar;
+    narrowed.nearDist = near;
+    narrowed.nearToFar = (near - far) * nearToFar;
 
     // the new near plane
     // find the old near plane
@@ -864,20 +855,19 @@ SbViewVolume::zNarrow(float near, float far) const
     // intersect various lines with the new near plane to find the new
     // info for the view volume
     if (type == ORTHOGRAPHIC) {
-	plane.intersect(SbLine(llfO, llfO + projDir), narrowed.llfO);
-	plane.intersect(SbLine(lrfO, lrfO + projDir), narrowed.lrfO );
-	plane.intersect(SbLine(ulfO, ulfO + projDir), narrowed.ulfO );
-    }
-    else {				// type == PERSPECTIVE
-	SbVec3f origin(0,0,0);
-	plane.intersect(SbLine(origin, llfO), narrowed.llfO );
-	plane.intersect(SbLine(origin, lrfO), narrowed.lrfO );
-	plane.intersect(SbLine(origin, ulfO), narrowed.ulfO );
+        plane.intersect(SbLine(llfO, llfO + projDir), narrowed.llfO);
+        plane.intersect(SbLine(lrfO, lrfO + projDir), narrowed.lrfO);
+        plane.intersect(SbLine(ulfO, ulfO + projDir), narrowed.ulfO);
+    } else { // type == PERSPECTIVE
+        SbVec3f origin(0, 0, 0);
+        plane.intersect(SbLine(origin, llfO), narrowed.llfO);
+        plane.intersect(SbLine(origin, lrfO), narrowed.lrfO);
+        plane.intersect(SbLine(origin, ulfO), narrowed.ulfO);
     }
 
-    narrowed.llf = narrowed.llfO+narrowed.projPoint;  // For compatibility
-    narrowed.lrf = narrowed.lrfO+narrowed.projPoint;
-    narrowed.ulf = narrowed.ulfO+narrowed.projPoint;
+    narrowed.llf = narrowed.llfO + narrowed.projPoint; // For compatibility
+    narrowed.lrf = narrowed.lrfO + narrowed.projPoint;
+    narrowed.ulf = narrowed.ulfO + narrowed.projPoint;
 
     return narrowed;
 }
@@ -895,24 +885,25 @@ SbViewVolume::scale(float factor)
 ////////////////////////////////////////////////////////////////////////
 {
     // Don't like negative factors:
-    if (factor < 0) factor = -factor;
+    if (factor < 0)
+        factor = -factor;
 
     // Compute amount to move corners
-    float	diff = (1.0 - factor) / 2.0;
+    float diff = (1.0 - factor) / 2.0;
 
     // Find vectors from lower left corner to lower right corner and
     // to upper left corner and scale them
-    SbVec3f	widthVec  = diff * (lrfO - llfO);
-    SbVec3f	heightVec = diff * (ulfO - llfO);
+    SbVec3f widthVec = diff * (lrfO - llfO);
+    SbVec3f heightVec = diff * (ulfO - llfO);
 
     // Move all corners in correct direction
-    llfO += ( heightVec + widthVec);
-    lrfO += ( heightVec - widthVec);
+    llfO += (heightVec + widthVec);
+    lrfO += (heightVec - widthVec);
     ulfO += (-heightVec + widthVec);
 
-    llf		= llfO + projPoint;  // For compatibility
-    lrf		= lrfO + projPoint;
-    ulf		= ulfO + projPoint;
+    llf = llfO + projPoint; // For compatibility
+    lrf = lrfO + projPoint;
+    ulf = ulfO + projPoint;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -930,10 +921,11 @@ SbViewVolume::scaleWidth(float ratio)
 ////////////////////////////////////////////////////////////////////////
 {
     // Don't like negative ratios:
-    if (ratio < 0) ratio = -ratio;
+    if (ratio < 0)
+        ratio = -ratio;
 
     // Find vector from lower left corner to lower right corner
-    SbVec3f	widthVec = lrfO - llfO;
+    SbVec3f widthVec = lrfO - llfO;
 
     // Compute amount to move corners left or right and scale vector
     widthVec *= (1.0 - ratio) / 2.0;
@@ -943,9 +935,9 @@ SbViewVolume::scaleWidth(float ratio)
     ulfO += widthVec;
     lrfO -= widthVec;
 
-    llf		= llfO + projPoint;  // For compatibility
-    lrf		= lrfO + projPoint;
-    ulf		= ulfO + projPoint;
+    llf = llfO + projPoint; // For compatibility
+    lrf = lrfO + projPoint;
+    ulf = ulfO + projPoint;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -963,10 +955,11 @@ SbViewVolume::scaleHeight(float ratio)
 ////////////////////////////////////////////////////////////////////////
 {
     // Don't like negative ratios:
-    if (ratio < 0) ratio = -ratio;
+    if (ratio < 0)
+        ratio = -ratio;
 
     // Find vector from lower left corner to upper left corner
-    SbVec3f	heightVec = ulfO - llfO;
+    SbVec3f heightVec = ulfO - llfO;
 
     // Compute amount to move corners up or down and scale vector
     heightVec *= (1.0 - ratio) / 2.0;
@@ -976,9 +969,9 @@ SbViewVolume::scaleHeight(float ratio)
     lrfO += heightVec;
     ulfO -= heightVec;
 
-    llf		= llfO + projPoint;  // For compatibility
-    lrf		= lrfO + projPoint;
-    ulf		= ulfO + projPoint;
+    llf = llfO + projPoint; // For compatibility
+    lrf = lrfO + projPoint;
+    ulf = ulfO + projPoint;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -992,8 +985,8 @@ SbViewVolume::narrow(const SbBox3f &box) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbViewVolume	view;
-    const SbVec3f	&max = box.getMax(), &min = box.getMin();
+    SbViewVolume   view;
+    const SbVec3f &max = box.getMax(), &min = box.getMin();
 
     view = narrow(min[0], min[1], max[0], max[1]);
 
@@ -1016,7 +1009,7 @@ SbViewVolume::transform(const SbMatrix &matrix)
 ////////////////////////////////////////////////////////////////////////
 {
     SbViewVolume xfVol;
-    SbVec3f nearPt, farPt;
+    SbVec3f      nearPt, farPt;
 
     xfVol.type = type;
     matrix.multVecMatrix(projPoint, xfVol.projPoint);
@@ -1027,36 +1020,36 @@ SbViewVolume::transform(const SbMatrix &matrix)
     // We want to find llf', and we know that:
     // llf'+projPoint' = matrix*(llf+projPoint)
 
-    matrix.multVecMatrix((llfO+projPoint), xfVol.llfO);
+    matrix.multVecMatrix((llfO + projPoint), xfVol.llfO);
     xfVol.llfO -= xfVol.projPoint;
-    matrix.multVecMatrix((lrfO+projPoint), xfVol.lrfO);
+    matrix.multVecMatrix((lrfO + projPoint), xfVol.lrfO);
     xfVol.lrfO -= xfVol.projPoint;
-    matrix.multVecMatrix((ulfO+projPoint), xfVol.ulfO);
+    matrix.multVecMatrix((ulfO + projPoint), xfVol.ulfO);
     xfVol.ulfO -= xfVol.projPoint;
 
     matrix.multVecMatrix(projPoint + nearDist * projDir, nearPt);
     matrix.multVecMatrix(projPoint + (nearDist + nearToFar) * projDir, farPt);
     xfVol.nearDist = (nearPt - xfVol.projPoint).length();
     if (nearDist < 0)
-	xfVol.nearDist = -xfVol.nearDist;
+        xfVol.nearDist = -xfVol.nearDist;
     xfVol.nearToFar = (farPt - xfVol.projPoint).length() - xfVol.nearDist;
 
     *this = xfVol;
 
     // Check for inside-out view volume:
-    SbVec3f wVec = lrfO-llfO;
-    SbVec3f hVec = ulfO-llfO;
+    SbVec3f wVec = lrfO - llfO;
+    SbVec3f hVec = ulfO - llfO;
     if ((hVec.cross(wVec)).dot(projDir) <= 0.0) {
-	// Swap left and right:
-	SbVec3f temp = llfO;
-	llfO = lrfO;
-	lrfO = temp;
-	ulfO = llfO+hVec;
+        // Swap left and right:
+        SbVec3f temp = llfO;
+        llfO = lrfO;
+        lrfO = temp;
+        ulfO = llfO + hVec;
     }
 
-    llf		= llfO + projPoint;  // For compatibility
-    lrf		= lrfO + projPoint;
-    ulf		= ulfO + projPoint;
+    llf = llfO + projPoint; // For compatibility
+    lrf = lrfO + projPoint;
+    ulf = ulfO + projPoint;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1075,76 +1068,76 @@ SbViewVolume::intersect(const SbVec3f &point) const
     SbVec3f pt = point - projPoint;
 
     // Compare the point with all 6 planes of the view volume
-    SbVec3f origin(0,0,0);
+    SbVec3f origin(0, 0, 0);
 
     if (type == PERSPECTIVE) {
-	// Left plane is formed from origin, llfO, ulfO
-	SbPlane leftPlane(origin, llfO, ulfO);
-	if (! leftPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Left plane is formed from origin, llfO, ulfO
+        SbPlane leftPlane(origin, llfO, ulfO);
+        if (!leftPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Figure out urf point:
-	SbVec3f urfO = lrfO + (ulfO - llfO);
-	// Right is origin, urfO, lrfO
-	SbPlane rightPlane(origin, urfO, lrfO);
-	if (! rightPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Figure out urf point:
+        SbVec3f urfO = lrfO + (ulfO - llfO);
+        // Right is origin, urfO, lrfO
+        SbPlane rightPlane(origin, urfO, lrfO);
+        if (!rightPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Near is lrfO, llfO, ulfO:
-	SbPlane nearPlane(lrfO, llfO, ulfO);
-	if (! nearPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Near is lrfO, llfO, ulfO:
+        SbPlane nearPlane(lrfO, llfO, ulfO);
+        if (!nearPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Far is near points in opposite order, translated to far plane:
-	SbVec3f farOffset = nearToFar * projDir;
-	SbPlane farPlane(ulfO+farOffset, llfO+farOffset, lrfO+farOffset);
-	if (! farPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Far is near points in opposite order, translated to far plane:
+        SbVec3f farOffset = nearToFar * projDir;
+        SbPlane farPlane(ulfO + farOffset, llfO + farOffset, lrfO + farOffset);
+        if (!farPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Bottom is origin, lrfO, llfO
-	SbPlane bottomPlane(origin, lrfO, llfO);
-	if (! bottomPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Bottom is origin, lrfO, llfO
+        SbPlane bottomPlane(origin, lrfO, llfO);
+        if (!bottomPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Finally, top is origin, ulfO, urfO
-	SbPlane topPlane(origin, ulfO, urfO);
-	if (! topPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Finally, top is origin, ulfO, urfO
+        SbPlane topPlane(origin, ulfO, urfO);
+        if (!topPlane.isInHalfSpace(pt))
+            return FALSE;
     }
 
-    else {			// type == ORTHOGRAPHIC
-	// Left plane is formed from llfO, lff+projDir, ulfO
-	SbPlane leftPlane(llfO, llfO+projDir, ulfO);
-	if (! leftPlane.isInHalfSpace(pt))
-	    return FALSE;
+    else { // type == ORTHOGRAPHIC
+        // Left plane is formed from llfO, lff+projDir, ulfO
+        SbPlane leftPlane(llfO, llfO + projDir, ulfO);
+        if (!leftPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Figure out urfO point:
-	SbVec3f urfO = lrfO + (ulfO - llfO);
-	// Right is urfO+projDir, lrfO, urfO
-	SbPlane rightPlane(urfO+projDir, lrfO, urfO);
-	if (! rightPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Figure out urfO point:
+        SbVec3f urfO = lrfO + (ulfO - llfO);
+        // Right is urfO+projDir, lrfO, urfO
+        SbPlane rightPlane(urfO + projDir, lrfO, urfO);
+        if (!rightPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Near is lrfO, llfO, ulfO:
-	SbPlane nearPlane(lrfO, llfO, ulfO);
-	if (! nearPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Near is lrfO, llfO, ulfO:
+        SbPlane nearPlane(lrfO, llfO, ulfO);
+        if (!nearPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Far is near points in opposite order, translated to far plane:
-	SbVec3f farOffset = nearToFar * projDir;
-	SbPlane farPlane(ulfO+farOffset, llfO+farOffset, lrfO+farOffset);
-	if (! farPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Far is near points in opposite order, translated to far plane:
+        SbVec3f farOffset = nearToFar * projDir;
+        SbPlane farPlane(ulfO + farOffset, llfO + farOffset, lrfO + farOffset);
+        if (!farPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Bottom is lrfO, lrfO+projDir, lrfO, llfO
-	SbPlane bottomPlane(lrfO, lrfO+projDir, llfO);
-	if (! bottomPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Bottom is lrfO, lrfO+projDir, lrfO, llfO
+        SbPlane bottomPlane(lrfO, lrfO + projDir, llfO);
+        if (!bottomPlane.isInHalfSpace(pt))
+            return FALSE;
 
-	// Finally, top is urfO, ulfO, ulfO+projDir
-	SbPlane topPlane(urfO, ulfO, ulfO+projDir);
-	if (! topPlane.isInHalfSpace(pt))
-	    return FALSE;
+        // Finally, top is urfO, ulfO, ulfO+projDir
+        SbPlane topPlane(urfO, ulfO, ulfO + projDir);
+        if (!topPlane.isInHalfSpace(pt))
+            return FALSE;
     }
 
     return TRUE;
@@ -1159,36 +1152,36 @@ SbViewVolume::intersect(const SbVec3f &point) const
 
 SbBool
 SbViewVolume::intersect(const SbVec3f &p0, const SbVec3f &p1,
-			SbVec3f &closestPoint) const
+                        SbVec3f &closestPoint) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbLine	line(p0, p1);
-    SbLine	projLine;
-    SbVec3f	centerPt, ptOnProjLine;
+    SbLine  line(p0, p1);
+    SbLine  projLine;
+    SbVec3f centerPt, ptOnProjLine;
 
     // Use line from projection point through center of near rectangle
-    centerPt = llfO+projPoint + 0.5 * ((ulfO - llfO) + (lrfO - llfO));
+    centerPt = llfO + projPoint + 0.5 * ((ulfO - llfO) + (lrfO - llfO));
     if (type == ORTHOGRAPHIC)
-	// projDir is normalized, so it might not be in the same
-	// ballpark as centerPt. To fix this, use the vector from the
-	// near plane to the far plane.
-	projLine.setValue(centerPt - nearToFar * projDir, centerPt);
+        // projDir is normalized, so it might not be in the same
+        // ballpark as centerPt. To fix this, use the vector from the
+        // near plane to the far plane.
+        projLine.setValue(centerPt - nearToFar * projDir, centerPt);
     else
-	projLine.setValue(projPoint, centerPt);
+        projLine.setValue(projPoint, centerPt);
 
     SbBool validIntersection =
 
-	// Find point on segment that's closest to projection line.
-	// (If they are parallel, no intersection.)
-	(line.getClosestPoints(projLine, closestPoint, ptOnProjLine) &&
+        // Find point on segment that's closest to projection line.
+        // (If they are parallel, no intersection.)
+        (line.getClosestPoints(projLine, closestPoint, ptOnProjLine) &&
 
-	 // Make sure this point is within the ends of the segment
-	 ((closestPoint - p0).dot(p1 - p0) >= 0.0 &&
-	  (closestPoint - p1).dot(p0 - p1) >= 0.0) &&
+         // Make sure this point is within the ends of the segment
+         ((closestPoint - p0).dot(p1 - p0) >= 0.0 &&
+          (closestPoint - p1).dot(p0 - p1) >= 0.0) &&
 
-	 // Also make sure that the intersection is within the view volume
-	 intersect(closestPoint));
+         // Also make sure that the intersection is within the view volume
+         intersect(closestPoint));
 
     return validIntersection;
 }
@@ -1206,7 +1199,8 @@ SbViewVolume::intersect(const SbBox3f &box) const
 ////////////////////////////////////////////////////////////////////////
 {
     // Empty bboxes can cause problems:
-    if (box.isEmpty()) return FALSE;
+    if (box.isEmpty())
+        return FALSE;
 
     //
     // The bounding box is the set of all points between its bounds;
@@ -1249,76 +1243,76 @@ SbViewVolume::intersect(const SbBox3f &box) const
     // OPPORTUNITY FOR OPTIMIZATION HERE:  We could precompute planes
     // and save some work.
 
-    SbVec3f origin(0,0,0);
+    SbVec3f origin(0, 0, 0);
 
     if (type == PERSPECTIVE) {
-	// Left plane is formed from origin, llfO, ulfO
-	SbPlane leftPlane(origin, llfO, ulfO);
-	if (outsideTest(leftPlane, min, max))
-	    return FALSE;
+        // Left plane is formed from origin, llfO, ulfO
+        SbPlane leftPlane(origin, llfO, ulfO);
+        if (outsideTest(leftPlane, min, max))
+            return FALSE;
 
-	// Figure out urf point:
-	SbVec3f urfO = lrfO + (ulfO - llfO);
-	// Right is origin, urfO, lrfO
-	SbPlane rightPlane(origin, urfO, lrfO);
-	if (outsideTest(rightPlane, min, max))
-	    return FALSE;
+        // Figure out urf point:
+        SbVec3f urfO = lrfO + (ulfO - llfO);
+        // Right is origin, urfO, lrfO
+        SbPlane rightPlane(origin, urfO, lrfO);
+        if (outsideTest(rightPlane, min, max))
+            return FALSE;
 
-	// Near is lrfO, llfO, ulfO:
-	SbPlane nearPlane(lrfO, llfO, ulfO);
-	if (outsideTest(nearPlane, min, max))
-	    return FALSE;
+        // Near is lrfO, llfO, ulfO:
+        SbPlane nearPlane(lrfO, llfO, ulfO);
+        if (outsideTest(nearPlane, min, max))
+            return FALSE;
 
-	// Far is near points in opposite order, translated to far plane:
-	SbVec3f farOffset = nearToFar * projDir;
-	SbPlane farPlane(ulfO+farOffset, llfO+farOffset, lrfO+farOffset);
-	if (outsideTest(farPlane, min, max))
-	    return FALSE;
+        // Far is near points in opposite order, translated to far plane:
+        SbVec3f farOffset = nearToFar * projDir;
+        SbPlane farPlane(ulfO + farOffset, llfO + farOffset, lrfO + farOffset);
+        if (outsideTest(farPlane, min, max))
+            return FALSE;
 
-	// Bottom is origin, lrfO, llfO
-	SbPlane bottomPlane(origin, lrfO, llfO);
-	if (outsideTest(bottomPlane, min, max))
-	    return FALSE;
+        // Bottom is origin, lrfO, llfO
+        SbPlane bottomPlane(origin, lrfO, llfO);
+        if (outsideTest(bottomPlane, min, max))
+            return FALSE;
 
-	// Finally, top is origin, ulfO, urfO
-	SbPlane topPlane(origin, ulfO, urfO);
-	if (outsideTest(topPlane, min, max))
-	    return FALSE;
+        // Finally, top is origin, ulfO, urfO
+        SbPlane topPlane(origin, ulfO, urfO);
+        if (outsideTest(topPlane, min, max))
+            return FALSE;
     }
 
-    else {			// type == ORTHOGRAPHIC
-	// Left plane is formed from llfO, lff+projDir, ulfO
-	SbPlane leftPlane(llfO, llfO+projDir, ulfO);
-	if (outsideTest(leftPlane, min, max))
-	    return FALSE;
+    else { // type == ORTHOGRAPHIC
+        // Left plane is formed from llfO, lff+projDir, ulfO
+        SbPlane leftPlane(llfO, llfO + projDir, ulfO);
+        if (outsideTest(leftPlane, min, max))
+            return FALSE;
 
-	// Figure out urfO point:
-	SbVec3f urfO = lrfO + (ulfO - llfO);
-	// Right is urfO+projDir, lrfO, urfO
-	SbPlane rightPlane(urfO+projDir, lrfO, urfO);
-	if (outsideTest(rightPlane, min, max))
-	    return FALSE;
+        // Figure out urfO point:
+        SbVec3f urfO = lrfO + (ulfO - llfO);
+        // Right is urfO+projDir, lrfO, urfO
+        SbPlane rightPlane(urfO + projDir, lrfO, urfO);
+        if (outsideTest(rightPlane, min, max))
+            return FALSE;
 
-	// Near is lrfO, llfO, ulfO:
-	SbPlane nearPlane(lrfO, llfO, ulfO);
-	if (outsideTest(nearPlane, min, max))
-	    return FALSE;
+        // Near is lrfO, llfO, ulfO:
+        SbPlane nearPlane(lrfO, llfO, ulfO);
+        if (outsideTest(nearPlane, min, max))
+            return FALSE;
 
-	// Far is near points in opposite order, translated to far plane:
-	SbVec3f farOffset = nearToFar * projDir;
-	SbPlane farPlane(ulfO+farOffset, llfO+farOffset, lrfO+farOffset);
-	if (outsideTest(farPlane, min, max))
-	    return FALSE;
+        // Far is near points in opposite order, translated to far plane:
+        SbVec3f farOffset = nearToFar * projDir;
+        SbPlane farPlane(ulfO + farOffset, llfO + farOffset, lrfO + farOffset);
+        if (outsideTest(farPlane, min, max))
+            return FALSE;
 
-	// Bottom is lrfO, lrfO+projDir, lrfO, llfO
-	SbPlane bottomPlane(lrfO, lrfO+projDir, llfO);
-	if (outsideTest(bottomPlane, min, max))
-	    return FALSE;
+        // Bottom is lrfO, lrfO+projDir, lrfO, llfO
+        SbPlane bottomPlane(lrfO, lrfO + projDir, llfO);
+        if (outsideTest(bottomPlane, min, max))
+            return FALSE;
 
-	// Finally, top is urfO, ulfO, ulfO+projDir
-	SbPlane topPlane(urfO, ulfO, ulfO+projDir);
-	if (outsideTest(topPlane, min, max))
-	    return FALSE;
+        // Finally, top is urfO, ulfO, ulfO+projDir
+        SbPlane topPlane(urfO, ulfO, ulfO + projDir);
+        if (outsideTest(topPlane, min, max))
+            return FALSE;
     }
 
     return TRUE;
@@ -1334,19 +1328,19 @@ SbViewVolume::intersect(const SbBox3f &box) const
 // Use: internal
 
 SbBool
-SbViewVolume::outsideTest(const SbPlane &p,
-			  const SbVec3f &min, const SbVec3f &max) const
+SbViewVolume::outsideTest(const SbPlane &p, const SbVec3f &min,
+                          const SbVec3f &max) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbVec3f	&abc = p.getNormal();
-    float		sum;
+    const SbVec3f &abc = p.getNormal();
+    float          sum;
 
     // Compute the greatest value of Ax+By+Cz-D
-    sum = -p.getDistanceFromOrigin();				// -D
-    sum += abc[0] > 0.0 ? max[0] * abc[0] : min[0] * abc[0];	// Ax
-    sum += abc[1] > 0.0 ? max[1] * abc[1] : min[1] * abc[1];	// By
-    sum += abc[2] > 0.0 ? max[2] * abc[2] : min[2] * abc[2];	// Cz
+    sum = -p.getDistanceFromOrigin();                        // -D
+    sum += abc[0] > 0.0 ? max[0] * abc[0] : min[0] * abc[0]; // Ax
+    sum += abc[1] > 0.0 ? max[1] * abc[1] : min[1] * abc[1]; // By
+    sum += abc[2] > 0.0 ? max[2] * abc[2] : min[2] * abc[2]; // Cz
 
     // Box is outside only if largest value is negative
     return (sum < 0.0 ? TRUE : FALSE);

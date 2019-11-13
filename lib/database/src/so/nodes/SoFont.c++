@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -80,15 +80,15 @@ SoFont::initClass()
     SO__NODE_INIT_CLASS(SoFont, "Font", SoNode);
 
     // Enable elements for appropriate actions:
-    SO_ENABLE(SoGLRenderAction,		SoFontNameElement);
-    SO_ENABLE(SoGLRenderAction,		SoFontSizeElement);
-    SO_ENABLE(SoPickAction,		SoFontNameElement);
-    SO_ENABLE(SoPickAction,		SoFontSizeElement);
-    SO_ENABLE(SoGetBoundingBoxAction,	SoFontNameElement);
-    SO_ENABLE(SoGetBoundingBoxAction,	SoFontSizeElement);
-    SO_ENABLE(SoCallbackAction,		SoFontNameElement);
-    SO_ENABLE(SoCallbackAction,		SoFontSizeElement);
-    
+    SO_ENABLE(SoGLRenderAction, SoFontNameElement);
+    SO_ENABLE(SoGLRenderAction, SoFontSizeElement);
+    SO_ENABLE(SoPickAction, SoFontNameElement);
+    SO_ENABLE(SoPickAction, SoFontSizeElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoFontNameElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoFontSizeElement);
+    SO_ENABLE(SoCallbackAction, SoFontNameElement);
+    SO_ENABLE(SoCallbackAction, SoFontSizeElement);
+
     // In PDF, the following 14 fonts are defined:
     // Courier (Regular, Oblique, Bold, Bold Oblique)
     // Helvetica (Regular, Oblique, Bold, Bold Oblique)
@@ -107,7 +107,8 @@ SoFont::initClass()
     s_font_path_map["Helvetica-Regular"] = "c:\\Windows\\Fonts\\arial.ttf";
     s_font_path_map["Helvetica-Bold"] = "c:\\Windows\\Fonts\\arialbd.ttf";
     s_font_path_map["Helvetica-Oblique"] = "c:\\Windows\\Fonts\\ariali.ttf";
-    s_font_path_map["Helvetica-Bold Oblique"] = "c:\\Windows\\Fonts\\arialbi.ttf";
+    s_font_path_map["Helvetica-Bold Oblique"] =
+        "c:\\Windows\\Fonts\\arialbi.ttf";
 
     s_font_path_map["Symbol"] = "c:\\Windows\\Fonts\\symbol.ttf";
 
@@ -121,46 +122,67 @@ SoFont::initClass()
 #elif defined(SB_OS_MACX)
     s_font_path_map["Courier"] = "/Library/Fonts/Courier New.ttf";
     s_font_path_map["Courier-Regular"] = "/Library/Fonts/Courier New.ttf";
-    s_font_path_map["Courier-Oblique"] = "/Library/Fonts/Courier New Italic.ttf";
+    s_font_path_map["Courier-Oblique"] =
+        "/Library/Fonts/Courier New Italic.ttf";
     s_font_path_map["Courier-Bold"] = "/Library/Fonts/Courier New Bold.ttf";
-    s_font_path_map["Courier-Bold Oblique"] = "/Library/Fonts/Courier New Bold Italic.ttf";
+    s_font_path_map["Courier-Bold Oblique"] =
+        "/Library/Fonts/Courier New Bold Italic.ttf";
 
     s_font_path_map["Helvetica"] = "/Library/Fonts/Arial.ttf";
     s_font_path_map["Helvetica-Regular"] = "/Library/Fonts/Arial.ttf";
     s_font_path_map["Helvetica-Oblique"] = "/Library/Fonts/Arial Italic.ttf";
     s_font_path_map["Helvetica-Bold"] = "/Library/Fonts/Arial Bold.ttf";
-    s_font_path_map["Helvetica-Bold Oblique"] = "/Library/Fonts/Arial Bold Italic.ttf";
+    s_font_path_map["Helvetica-Bold Oblique"] =
+        "/Library/Fonts/Arial Bold Italic.ttf";
 
     s_font_path_map["Symbol"] = "/System/Library/Fonts/Symbol.ttf";
 
     s_font_path_map["Times-Roman"] = "/Library/Fonts/Times New Roman.ttf";
-    s_font_path_map["Times-Oblique"] = "/Library/Fonts/Times New Roman Italic.ttf";
+    s_font_path_map["Times-Oblique"] =
+        "/Library/Fonts/Times New Roman Italic.ttf";
     s_font_path_map["Times-Bold"] = "/Library/Fonts/Times New Roman Bold.ttf";
-    s_font_path_map["Times-Bold Oblique"] = "/Library/Fonts/Times New Roman Bold Italic.ttf";
+    s_font_path_map["Times-Bold Oblique"] =
+        "/Library/Fonts/Times New Roman Bold Italic.ttf";
 
     s_font_path_map["Arial Unicode"] = "/Library/Fonts/Arial Unicode.ttf";
 
 #else
     s_font_path_map["Courier"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
-    s_font_path_map["Courier-Regular"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
-    s_font_path_map["Courier-Oblique"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
+    s_font_path_map["Courier-Regular"] =
+        "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
+    s_font_path_map["Courier-Oblique"] =
+        "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
     s_font_path_map["Courier-Bold"] = "/usr/share/fonts/X11/Type1/c0583bt_.pfb";
-    s_font_path_map["Courier-Bold Oblique"] = "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
+    s_font_path_map["Courier-Bold Oblique"] =
+        "/usr/share/fonts/X11/Type1/c0419bt_.pfb";
 
-    s_font_path_map["Helvetica"] = "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf";
-    s_font_path_map["Helvetica-Regular"] = "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf";
-    s_font_path_map["Helvetica-Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Arial_Italic.ttf";
-    s_font_path_map["Helvetica-Bold"] = "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold.ttf";
-    s_font_path_map["Helvetica-Bold Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold_Italic.ttf";
+    s_font_path_map["Helvetica"] =
+        "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf";
+    s_font_path_map["Helvetica-Regular"] =
+        "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf";
+    s_font_path_map["Helvetica-Oblique"] =
+        "/usr/share/fonts/truetype/msttcorefonts/Arial_Italic.ttf";
+    s_font_path_map["Helvetica-Bold"] =
+        "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold.ttf";
+    s_font_path_map["Helvetica-Bold Oblique"] =
+        "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold_Italic.ttf";
 
-    s_font_path_map["Symbol"] = "/usr/share/fonts/truetype/?ttf-symbol-replacement/?symbol-replacement.ttf/?symbol.ttf";
+    s_font_path_map["Symbol"] =
+        "/usr/share/fonts/truetype/?ttf-symbol-replacement/"
+        "?symbol-replacement.ttf/?symbol.ttf";
 
-    s_font_path_map["Times-Roman"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf";
-    s_font_path_map["Times-Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Italic.ttf";
-    s_font_path_map["Times-Bold"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold.ttf";
-    s_font_path_map["Times-Bold Oblique"] = "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold_Italic.ttf";
+    s_font_path_map["Times-Roman"] =
+        "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman.ttf";
+    s_font_path_map["Times-Oblique"] =
+        "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Italic.ttf";
+    s_font_path_map["Times-Bold"] =
+        "/usr/share/fonts/truetype/msttcorefonts/Times_New_Roman_Bold.ttf";
+    s_font_path_map["Times-Bold Oblique"] =
+        "/usr/share/fonts/truetype/msttcorefonts/"
+        "Times_New_Roman_Bold_Italic.ttf";
 
-    s_font_path_map["Arial Unicode"] = "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf";
+    s_font_path_map["Arial Unicode"] =
+        "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf";
 #endif
 }
 
@@ -191,8 +213,7 @@ SoFont::SoFont()
 SoFont::~SoFont()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -222,14 +243,14 @@ SoFont::doAction(SoAction *action)
 {
     SoState *state = action->getState();
 
-    if (! name.isIgnored() && ! SoOverrideElement::getFontNameOverride(state)) {
+    if (!name.isIgnored() && !SoOverrideElement::getFontNameOverride(state)) {
         if (isOverride()) {
             SoOverrideElement::setFontNameOverride(state, this, TRUE);
         }
         SoFontNameElement::set(state, this, name.getValue().getString());
     }
 
-    if (! size.isIgnored() && ! SoOverrideElement::getFontSizeOverride(state)) {
+    if (!size.isIgnored() && !SoOverrideElement::getFontSizeOverride(state)) {
         if (isOverride()) {
             SoOverrideElement::setFontSizeOverride(state, this, TRUE);
         }
@@ -304,7 +325,7 @@ SoFont::getBoundingBox(SoGetBoundingBoxAction *action)
 //
 // Use: public
 SbString
-SoFont::getFontFileName(const SbName & fontName)
+SoFont::getFontFileName(const SbName &fontName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -313,7 +334,9 @@ SoFont::getFontFileName(const SbName & fontName)
     }
 #ifdef DEBUG
     SoDebugError::post("SoFontNameElement::getFontFileName",
-                       "Couldn't find font %s, replacing with %s", fontName.getString(), SoFontNameElement::getDefault().getString());
+                       "Couldn't find font %s, replacing with %s",
+                       fontName.getString(),
+                       SoFontNameElement::getDefault().getString());
 #endif
     return SoFontNameElement::getDefault().getString();
 }
@@ -324,7 +347,7 @@ SoFont::getFontFileName(const SbName & fontName)
 //
 // Use: public
 void
-SoFont::addFontFileName(const SbName & fontName, const SbString & fontPath)
+SoFont::addFontFileName(const SbName &fontName, const SbString &fontPath)
 //
 ////////////////////////////////////////////////////////////////////////
 {

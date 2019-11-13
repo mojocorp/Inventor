@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -79,11 +79,11 @@ SoEvent::SoEvent()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    timestamp	= SbTime(0, 0);
-    position	= SbVec2s(0, 0);
-    shiftDown	= FALSE;
-    ctrlDown	= FALSE;
-    altDown	= FALSE;
+    timestamp = SbTime(0, 0);
+    position = SbVec2s(0, 0);
+    shiftDown = FALSE;
+    ctrlDown = FALSE;
+    altDown = FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -93,8 +93,7 @@ SoEvent::SoEvent()
 SoEvent::~SoEvent()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -134,8 +133,8 @@ SoEvent::getPosition(const SbViewportRegion &vpRgn) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoEvent		*ev = (SoEvent *)this;
-    const SbVec2s	&pixSize = vpRgn.getViewportOriginPixels();
+    SoEvent *      ev = (SoEvent *)this;
+    const SbVec2s &pixSize = vpRgn.getViewportOriginPixels();
 
     ev->viewportPos[0] = position[0] - pixSize[0];
     ev->viewportPos[1] = position[1] - pixSize[1];
@@ -153,22 +152,22 @@ SoEvent::getNormalizedPosition(const SbViewportRegion &vpRgn) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoEvent		*ev = (SoEvent *)this;
-    const SbVec2s	&pixSize = vpRgn.getViewportSizePixels();
+    SoEvent *      ev = (SoEvent *)this;
+    const SbVec2s &pixSize = vpRgn.getViewportSizePixels();
 
-    SbVec2f vpSize((float) pixSize[0], (float) pixSize[1]);
+    SbVec2f vpSize((float)pixSize[0], (float)pixSize[1]);
 
-    SbVec2s vpPos = getPosition( vpRgn );
+    SbVec2s vpPos = getPosition(vpRgn);
 
-    if ( vpSize[0] == 0.0 )
-	ev->normalizedPos[0] = 0.0;
+    if (vpSize[0] == 0.0)
+        ev->normalizedPos[0] = 0.0;
     else
-	ev->normalizedPos[0] = ((float) vpPos[0]) / vpSize[0];
+        ev->normalizedPos[0] = ((float)vpPos[0]) / vpSize[0];
 
-    if ( vpSize[1] == 0.0 )
-	ev->normalizedPos[1] = 0.0;
+    if (vpSize[1] == 0.0)
+        ev->normalizedPos[1] = 0.0;
     else
-	ev->normalizedPos[1] = ((float) vpPos[1]) / vpSize[1];
+        ev->normalizedPos[1] = ((float)vpPos[1]) / vpSize[1];
 
     return normalizedPos;
 }

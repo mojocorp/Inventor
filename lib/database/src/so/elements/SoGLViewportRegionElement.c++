@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,8 +64,7 @@ SO_ELEMENT_SOURCE(SoGLViewportRegionElement);
 // Use: internal
 
 void
-SoGLViewportRegionElement::initClass()
-{
+SoGLViewportRegionElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLViewportRegionElement, SoViewportRegionElement);
 }
 
@@ -79,8 +78,7 @@ SoGLViewportRegionElement::initClass()
 SoGLViewportRegionElement::~SoGLViewportRegionElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -114,10 +112,10 @@ SoGLViewportRegionElement::push(SoState *)
 ////////////////////////////////////////////////////////////////////////
 {
     const SoGLViewportRegionElement *nextElt =
-	(const SoGLViewportRegionElement *) getNextInStack();
+        (const SoGLViewportRegionElement *)getNextInStack();
 
     viewportRegion = nextElt->viewportRegion;
-    isDefault      = nextElt->isDefault;
+    isDefault = nextElt->isDefault;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -135,20 +133,20 @@ SoGLViewportRegionElement::pop(SoState *state, const SoElement *prevTopElement)
     // If the new top element had a default value, set it to the
     // current value, which will remain in effect in GL
     if (isDefault) {
-	const SoGLViewportRegionElement *prevElt =
-	    (const SoGLViewportRegionElement *) prevTopElement;
-	viewportRegion = prevElt->viewportRegion;
-	isDefault = FALSE;
+        const SoGLViewportRegionElement *prevElt =
+            (const SoGLViewportRegionElement *)prevTopElement;
+        viewportRegion = prevElt->viewportRegion;
+        isDefault = FALSE;
     }
 
     // Otherwise, restore the previous viewport
     else {
-	// Since popping this element has GL side effects, make sure any
-	// open caches capture it
-	capture(state);
+        // Since popping this element has GL side effects, make sure any
+        // open caches capture it
+        capture(state);
 
-	// Restore previous viewport region
-	send();
+        // Restore previous viewport region
+        send();
     }
 }
 
@@ -169,12 +167,12 @@ SoGLViewportRegionElement::setElt(const SbViewportRegion &vpReg)
     // NOTE: since we know that no nodes set this element, we don't	???
     // have to worry about making open caches depend on it. This may	???
     // change later.							???
-    if (! isDefault && viewportRegion == vpReg)
-	return;
+    if (!isDefault && viewportRegion == vpReg)
+        return;
 
     // Set region in element and send to GL
     viewportRegion = vpReg;
-    isDefault      = FALSE;
+    isDefault = FALSE;
     send();
 }
 
@@ -190,8 +188,8 @@ SoGLViewportRegionElement::send()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbVec2s	&vpOrig  = viewportRegion.getViewportOriginPixels();
-    const SbVec2s	&vpSize  = viewportRegion.getViewportSizePixels();
+    const SbVec2s &vpOrig = viewportRegion.getViewportOriginPixels();
+    const SbVec2s &vpSize = viewportRegion.getViewportSizePixels();
 
     glViewport(vpOrig[0], vpOrig[1], vpSize[0], vpSize[1]);
 }

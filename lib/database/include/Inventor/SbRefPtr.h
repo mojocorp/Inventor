@@ -1,45 +1,36 @@
 #ifndef _SB_REF_PTR_
 #define _SB_REF_PTR_
 
-template<typename T>
-class SbRefPtr {
-public:
-    SbRefPtr() : p(0)
-    {
+template <typename T> class SbRefPtr {
+  public:
+    SbRefPtr() : p(0) {}
 
-    }
-
-    SbRefPtr(T *other) : p(other)
-    {
+    SbRefPtr(T *other) : p(other) {
         if (p)
             p->ref();
     }
 
-    SbRefPtr(const SbRefPtr<T> &other) : p(other.p)
-    {
+    SbRefPtr(const SbRefPtr<T> &other) : p(other.p) {
         if (p)
             p->ref();
     }
 
-    ~SbRefPtr()
-    {
+    ~SbRefPtr() {
         if (p) {
-            T* backup = p;
+            T *backup = p;
             p = 0;
             backup->unref();
         }
     }
 
-    SbRefPtr<T> &operator=(const SbRefPtr<T> &other)
-    {
-        *this=other.p;
+    SbRefPtr<T> &operator=(const SbRefPtr<T> &other) {
+        *this = other.p;
         return *this;
     }
 
-    SbRefPtr<T> &operator=(T *other)
-    {
-        if(p!=other) {
-            T* backup = p;
+    SbRefPtr<T> &operator=(T *other) {
+        if (p != other) {
+            T *backup = p;
             p = other;
             if (p)
                 p->ref();
@@ -49,24 +40,21 @@ public:
         return *this;
     }
 
-    operator bool() const { return p!=0; }
+       operator bool() const { return p != 0; }
     T *operator->() const { return p; }
     T &operator*() const { return *p; }
-    T* get() const { return p; }
+    T *get() const { return p; }
 
-private:
+  private:
     T *p;
 };
 
-class SbRefCounted
-{
-public:
-    void ref() {
-        refcount++;
-    }
+class SbRefCounted {
+  public:
+    void ref() { refcount++; }
 
     void unref() {
-        if (--refcount<=0) {
+        if (--refcount <= 0) {
             destroy();
         }
     }
@@ -77,24 +65,20 @@ public:
         an object to a zero-reference-count state, like it was when it was
         created.
     */
-    void unrefNoDelete() {
-        refcount--;
-    }
+    void unrefNoDelete() { refcount--; }
 
-    int getRefCount() const {
-        return refcount;
-    }
-protected:
-    virtual ~SbRefCounted() { }
+    int getRefCount() const { return refcount; }
 
-    virtual void destroy() {
-        delete this;
-    }
+  protected:
+    virtual ~SbRefCounted() {}
 
-    SbRefCounted() : refcount(0) { }
-    SbRefCounted(const SbRefCounted &) : refcount(0) { }
-    SbRefCounted & operator=(const SbRefCounted &) { return *this;}
-private:
+    virtual void destroy() { delete this; }
+
+    SbRefCounted() : refcount(0) {}
+    SbRefCounted(const SbRefCounted &) : refcount(0) {}
+    SbRefCounted &operator=(const SbRefCounted &) { return *this; }
+
+  private:
     int refcount;
 };
 

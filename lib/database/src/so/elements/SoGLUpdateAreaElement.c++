@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -65,8 +65,7 @@ SO_ELEMENT_SOURCE(SoGLUpdateAreaElement);
 // Use: internal
 
 void
-SoGLUpdateAreaElement::initClass()
-{
+SoGLUpdateAreaElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLUpdateAreaElement, SoElement);
 }
 
@@ -80,8 +79,7 @@ SoGLUpdateAreaElement::initClass()
 SoGLUpdateAreaElement::~SoGLUpdateAreaElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -96,7 +94,7 @@ SoGLUpdateAreaElement::init(SoState *)
 ////////////////////////////////////////////////////////////////////////
 {
     origin = getDefaultOrigin();
-    size   = getDefaultSize();
+    size = getDefaultSize();
 
     // Set flag to indicate we are using the default value
     isDefault = TRUE;
@@ -110,30 +108,30 @@ SoGLUpdateAreaElement::init(SoState *)
 // Use: public, static
 
 void
-SoGLUpdateAreaElement::set(SoState *state,
-			   const SbVec2f &origin, const SbVec2f &size)
+SoGLUpdateAreaElement::set(SoState *state, const SbVec2f &origin,
+                           const SbVec2f &size)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoGLUpdateAreaElement	*elt;
+    SoGLUpdateAreaElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoGLUpdateAreaElement *) getElement(state, classStackIndex);
+    elt = (SoGLUpdateAreaElement *)getElement(state, classStackIndex);
 
     if (elt != NULL) {
-	// If we already have a non-default value and it's the same as the
-	// new one, do nothing
-	// NOTE: since we know that no nodes set this element, we don't	???
-	// have to worry about making open caches depend on it. This may???
-	// change later.						???
-	if (! elt->isDefault && elt->origin == origin && elt->size == size)
-	    return;
+        // If we already have a non-default value and it's the same as the
+        // new one, do nothing
+        // NOTE: since we know that no nodes set this element, we don't	???
+        // have to worry about making open caches depend on it. This may???
+        // change later.						???
+        if (!elt->isDefault && elt->origin == origin && elt->size == size)
+            return;
 
-	// Set area in element and send to GL
-	elt->origin = origin;
-	elt->size   = size;
-	elt->isDefault = FALSE;
-	elt->send(state);
+        // Set area in element and send to GL
+        elt->origin = origin;
+        elt->size = size;
+        elt->isDefault = FALSE;
+        elt->send(state);
     }
 }
 
@@ -152,11 +150,11 @@ SoGLUpdateAreaElement::get(SoState *state, SbVec2f &origin, SbVec2f &size)
 {
     const SoGLUpdateAreaElement *elt;
 
-    elt = (const SoGLUpdateAreaElement *)
-	getConstElement(state, classStackIndex);
+    elt =
+        (const SoGLUpdateAreaElement *)getConstElement(state, classStackIndex);
 
     origin = elt->origin;
-    size   = elt->size;
+    size = elt->size;
 
     return (origin == getDefaultOrigin() && size == getDefaultSize());
 }
@@ -174,11 +172,11 @@ SoGLUpdateAreaElement::push(SoState *)
 ////////////////////////////////////////////////////////////////////////
 {
     const SoGLUpdateAreaElement *nextElt =
-	(const SoGLUpdateAreaElement *) getNextInStack();
+        (const SoGLUpdateAreaElement *)getNextInStack();
 
-    origin	= nextElt->origin;
-    size	= nextElt->size;
-    isDefault	= nextElt->isDefault;
+    origin = nextElt->origin;
+    size = nextElt->size;
+    isDefault = nextElt->isDefault;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -196,21 +194,21 @@ SoGLUpdateAreaElement::pop(SoState *state, const SoElement *prevTopElement)
     // If the new top element had a default value, set it to the
     // current value, which will remain in effect in GL
     if (isDefault) {
-	const SoGLUpdateAreaElement *prevElt =
-	    (const SoGLUpdateAreaElement *) prevTopElement;
-	origin	  = prevElt->origin;
-	size	  = prevElt->size;
-	isDefault = FALSE;
+        const SoGLUpdateAreaElement *prevElt =
+            (const SoGLUpdateAreaElement *)prevTopElement;
+        origin = prevElt->origin;
+        size = prevElt->size;
+        isDefault = FALSE;
     }
 
     // Otherwise, restore the previous update area
     else {
-	// Since popping this element has GL side effects, make sure any
-	// open caches capture it
-	capture(state);
+        // Since popping this element has GL side effects, make sure any
+        // open caches capture it
+        capture(state);
 
-	// Restore previous update area
-	send(state);
+        // Restore previous update area
+        send(state);
     }
 }
 
@@ -226,7 +224,7 @@ SoGLUpdateAreaElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLUpdateAreaElement *uaElt = (const SoGLUpdateAreaElement *) elt;
+    const SoGLUpdateAreaElement *uaElt = (const SoGLUpdateAreaElement *)elt;
 
     return (origin == uaElt->origin && size == uaElt->size);
 }
@@ -245,11 +243,11 @@ SoGLUpdateAreaElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoGLUpdateAreaElement *result =
-	(SoGLUpdateAreaElement *)getTypeId().createInstance();
+        (SoGLUpdateAreaElement *)getTypeId().createInstance();
 
     result->origin = origin;
-    result->size   = size;
-    
+    result->size = size;
+
     return result;
 }
 
@@ -264,18 +262,15 @@ SoGLUpdateAreaElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoGLUpdateAreaElement::print(FILE *fp) const
-{
+SoGLUpdateAreaElement::print(FILE *fp) const {
     SoElement::print(fp);
 
     fprintf(fp, "\tUpdate Area: origin = (%g, %g), size = (%g, %g)\n",
-	    origin[0], origin[1], size[0], size[1]);
+            origin[0], origin[1], size[0], size[1]);
 }
 #else  /* DEBUG */
 void
-SoGLUpdateAreaElement::print(FILE *) const
-{
-}
+SoGLUpdateAreaElement::print(FILE *) const {}
 #endif /* DEBUG */
 
 ////////////////////////////////////////////////////////////////////////
@@ -293,11 +288,9 @@ SoGLUpdateAreaElement::send(SoState *state)
     // We need to know the current window size. This could
     // potentially be wrong if the window size changes during
     // rendering, but that's just not possible.
-    const SbViewportRegion	&vpReg = SoViewportRegionElement::get(state);
-    const SbVec2s		&winSize = vpReg.getWindowSize();
+    const SbViewportRegion &vpReg = SoViewportRegionElement::get(state);
+    const SbVec2s &         winSize = vpReg.getWindowSize();
 
-    glScissor((GLint) (origin[0] * winSize[0]),
-	      (GLint) (origin[1] * winSize[1]),
-	      (GLsizei) (size[0] * winSize[0]),
-	      (GLsizei) (size[1] * winSize[1]));
+    glScissor((GLint)(origin[0] * winSize[0]), (GLint)(origin[1] * winSize[1]),
+              (GLsizei)(size[0] * winSize[0]), (GLsizei)(size[1] * winSize[1]));
 }

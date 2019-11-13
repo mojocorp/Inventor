@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,73 +54,71 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TRANSFORM_MANIP_
-#define  _SO_TRANSFORM_MANIP_
+#ifndef _SO_TRANSFORM_MANIP_
+#define _SO_TRANSFORM_MANIP_
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 
-class SoTransformManip : public SoTransform
-{
+class SoTransformManip : public SoTransform {
     SO_NODE_HEADER(SoTransformManip);
 
   public:
-
     // Constructor
     SoTransformManip();
 
     SoDragger *getDragger();
 
-    SbBool replaceNode( SoPath *p );
-    SbBool replaceManip(SoPath *p, SoTransform *newOne ) const;
+    SbBool replaceNode(SoPath *p);
+    SbBool replaceManip(SoPath *p, SoTransform *newOne) const;
 
-  SoEXTENDER public:
-
+    SoEXTENDER
+  public:
     // These functions implement all actions for nodekits.
     // They first traverse the children, then use the SoTransform
     // version of the actions. They traverse first so that the transform
     // will affect objects which follow it in the tree, but not the
     // dragger-child.
-    virtual void doAction( SoAction *action );
-    virtual void callback( SoCallbackAction *action );
-    virtual void GLRender( SoGLRenderAction *action );
-    virtual void getBoundingBox( SoGetBoundingBoxAction *action );
-    virtual void getMatrix(SoGetMatrixAction *action );
-    virtual void handleEvent( SoHandleEventAction *action );
-    virtual void pick( SoPickAction *action );
-    virtual void search( SoSearchAction *action );
+    virtual void doAction(SoAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void getMatrix(SoGetMatrixAction *action);
+    virtual void handleEvent(SoHandleEventAction *action);
+    virtual void pick(SoPickAction *action);
+    virtual void search(SoSearchAction *action);
 
-  SoINTERNAL public:
-    static void initClass();  // initialize the class
+    SoINTERNAL
+  public:
+    static void initClass(); // initialize the class
 
     virtual SoChildList *getChildren() const;
 
   protected:
-
     // Redefines this to also copy the dragger
-    virtual void	copyContents(const SoFieldContainer *fromFC,
-				     SbBool copyConnections);
+    virtual void copyContents(const SoFieldContainer *fromFC,
+                              SbBool                  copyConnections);
 
-   static void transferFieldValues( const SoTransform *from, SoTransform *to);
+    static void transferFieldValues(const SoTransform *from, SoTransform *to);
 
-   static void valueChangedCB(void *,SoDragger *);
+    static void valueChangedCB(void *, SoDragger *);
 
-   SoFieldSensor *rotateFieldSensor;
-   SoFieldSensor *translFieldSensor;
-   SoFieldSensor *scaleFieldSensor;
-   SoFieldSensor *centerFieldSensor;
-   SoFieldSensor *scaleOrientFieldSensor;
-   static void fieldSensorCB(void *, SoSensor *);
+    SoFieldSensor *rotateFieldSensor;
+    SoFieldSensor *translFieldSensor;
+    SoFieldSensor *scaleFieldSensor;
+    SoFieldSensor *centerFieldSensor;
+    SoFieldSensor *scaleOrientFieldSensor;
+    static void    fieldSensorCB(void *, SoSensor *);
 
-   virtual void setDragger( SoDragger *newDragger );
+    virtual void setDragger(SoDragger *newDragger);
 
-   SoChildList *children;
+    SoChildList *children;
 
-   virtual ~SoTransformManip();
+    virtual ~SoTransformManip();
 
   private:
     int getNumChildren() const { return (children->getLength()); }
-};    
+};
 
-#endif  /* _SO_TRANSFORM_MANIP_ */
+#endif /* _SO_TRANSFORM_MANIP_ */

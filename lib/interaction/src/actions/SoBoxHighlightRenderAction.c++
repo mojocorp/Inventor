@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -102,16 +102,14 @@ void
 SoBoxHighlightRenderAction::finishClass()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-
-}
+{}
 
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Constructor which takes no params
 //
 SoBoxHighlightRenderAction::SoBoxHighlightRenderAction()
-	: SoGLRenderAction(SbVec2s(1, 1)) // pass a dummy viewport region
+    : SoGLRenderAction(SbVec2s(1, 1)) // pass a dummy viewport region
 //
 //////////////////////////////////////////////////////////////////////////////
 {
@@ -124,7 +122,7 @@ SoBoxHighlightRenderAction::SoBoxHighlightRenderAction()
 //
 SoBoxHighlightRenderAction::SoBoxHighlightRenderAction(
     const SbViewportRegion &viewportRegion)
-	: SoGLRenderAction(viewportRegion)
+    : SoGLRenderAction(viewportRegion)
 //
 //////////////////////////////////////////////////////////////////////////////
 {
@@ -143,22 +141,22 @@ SoBoxHighlightRenderAction::constructorCommon()
     SO_ACTION_CONSTRUCTOR(SoBoxHighlightRenderAction);
 
     // Set up our highlight graph
-    localRoot   = new SoSeparator;
-    lightModel	= new SoLightModel;
-    baseColor	= new SoBaseColor;
-    drawStyle	= new SoDrawStyle;
-    texture	= new SoTexture2;
-    xform	= new SoMatrixTransform;
-    xlate	= new SoTranslation;
-    cube	= new SoCube;
+    localRoot = new SoSeparator;
+    lightModel = new SoLightModel;
+    baseColor = new SoBaseColor;
+    drawStyle = new SoDrawStyle;
+    texture = new SoTexture2;
+    xform = new SoMatrixTransform;
+    xlate = new SoTranslation;
+    cube = new SoCube;
     SoMaterialBinding *mb = new SoMaterialBinding;
-    
-    SoComplexity *complexity = new SoComplexity;    
+
+    SoComplexity *complexity = new SoComplexity;
     complexity->value = 0.0;
     complexity->setOverride(TRUE);
 
     localRoot->ref();
-    
+
     lightModel->model = SoLightModel::BASE_COLOR;
     lightModel->setOverride(TRUE);
 
@@ -169,13 +167,13 @@ SoBoxHighlightRenderAction::constructorCommon()
     drawStyle->lineWidth = 3;
     drawStyle->linePattern = 0xffff;
     drawStyle->setOverride(TRUE);
-    
+
     // turn off texturing
     texture->setOverride(TRUE);
-    
+
     // set material binding to OVERALL:
     mb->setOverride(TRUE);
-    
+
     // now set up the highlight graph
     localRoot->addChild(lightModel);
     localRoot->addChild(baseColor);
@@ -186,10 +184,10 @@ SoBoxHighlightRenderAction::constructorCommon()
     localRoot->addChild(xlate);
     localRoot->addChild(cube);
     localRoot->addChild(mb);
-    
+
     hlVisible = TRUE;
     selPath = NULL;
-}    
+}
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -201,8 +199,8 @@ SoBoxHighlightRenderAction::~SoBoxHighlightRenderAction()
 {
     localRoot->unref();
     if (selPath != NULL)
-	selPath->unref();
-}    
+        selPath->unref();
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -218,26 +216,25 @@ SoBoxHighlightRenderAction::updateBbox(SoPath *p)
 {
     static SoGetBoundingBoxAction *bba = NULL;
     if (bba == NULL)
-        bba = new SoGetBoundingBoxAction(getViewportRegion());    
+        bba = new SoGetBoundingBoxAction(getViewportRegion());
     else
-        bba->setViewportRegion( getViewportRegion());    
-    bba->apply(p);    
+        bba->setViewportRegion(getViewportRegion());
+    bba->apply(p);
     SbXfBox3f &box = bba->getXfBoundingBox();
-    
+
     // Scale the cube to the correct size
     if (box.isEmpty()) {
-	cube->width  = 0;
-	cube->height = 0;
-	cube->depth  = 0;
+        cube->width = 0;
+        cube->height = 0;
+        cube->depth = 0;
+    } else {
+        float x, y, z;
+        box.getSize(x, y, z);
+        cube->width = x;
+        cube->height = y;
+        cube->depth = z;
     }
-    else {
-	float x, y, z;
-	box.getSize(x, y, z);
-	cube->width  = x;
-	cube->height = y;
-	cube->depth  = z;
-    }
-    
+
     // Setup the matrix transform
     xform->matrix = box.getTransform();
 
@@ -245,21 +242,18 @@ SoBoxHighlightRenderAction::updateBbox(SoPath *p)
     // move the cube to the correct place. (To make the check, treat
     // the box as an SbBox3f, since we don't want the transformed
     // center.)
-    const SbVec3f &min = ((SbBox3f &) box).getMin();
-    const SbVec3f &max = ((SbBox3f &) box).getMax();
+    const SbVec3f &min = ((SbBox3f &)box).getMin();
+    const SbVec3f &max = ((SbBox3f &)box).getMax();
     if (min[0] != -max[0] || min[1] != -max[1] || min[2] != -max[2]) {
-	xlate->translation.setValue(
-	    (min[0] + max[0]) * .5, 
-	    (min[1] + max[1]) * .5, 
-	    (min[2] + max[2]) * .5);
-	xlate->translation.setIgnored(FALSE);
+        xlate->translation.setValue((min[0] + max[0]) * .5,
+                                    (min[1] + max[1]) * .5,
+                                    (min[2] + max[2]) * .5);
+        xlate->translation.setIgnored(FALSE);
+    } else {
+        // Translation field is not needed - data is centered about 0,0,0
+        // and so is the cube.
+        xlate->translation.setIgnored(TRUE);
     }
-    else {
-	// Translation field is not needed - data is centered about 0,0,0
-	// and so is the cube.
-	xlate->translation.setIgnored(TRUE);
-    }
-    
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -274,148 +268,157 @@ SoBoxHighlightRenderAction::apply(SoNode *renderRoot)
 {
     // Render the scene
     SoGLRenderAction::apply(renderRoot);
-    
+
     // Render the highlight?
-    if (! hlVisible) return;
-    
+    if (!hlVisible)
+        return;
+
     // Is our cached path still valid?
-    if ((selPath == NULL) ||
-	(selPath->getHead() != renderRoot) ||
-	(! selPath->getTail()->isOfType(SoSelection::getClassTypeId()))) {
+    if ((selPath == NULL) || (selPath->getHead() != renderRoot) ||
+        (!selPath->getTail()->isOfType(SoSelection::getClassTypeId()))) {
 
-	// Find the selection node under the render root
-	static SoSearchAction *sa1 = NULL;
-	if (sa1 == NULL)
-	    sa1 = new SoSearchAction;
-	else
-	    sa1->reset();
-	sa1->setFind(SoSearchAction::TYPE);
-	sa1->setInterest(SoSearchAction::FIRST);
-	sa1->setType(SoSelection::getClassTypeId());
-	sa1->apply(renderRoot);
-	
-	// Cache this path
-	if (selPath != NULL)
-	    selPath->unref();
-	selPath = sa1->getPath();
-	if (selPath != NULL) {
-	    selPath = selPath->copy();
-	    selPath->ref();
-	}
+        // Find the selection node under the render root
+        static SoSearchAction *sa1 = NULL;
+        if (sa1 == NULL)
+            sa1 = new SoSearchAction;
+        else
+            sa1->reset();
+        sa1->setFind(SoSearchAction::TYPE);
+        sa1->setInterest(SoSearchAction::FIRST);
+        sa1->setType(SoSelection::getClassTypeId());
+        sa1->apply(renderRoot);
+
+        // Cache this path
+        if (selPath != NULL)
+            selPath->unref();
+        selPath = sa1->getPath();
+        if (selPath != NULL) {
+            selPath = selPath->copy();
+            selPath->ref();
+        }
     }
-    
+
     if (selPath != NULL) {
-	// Make sure something is selected
-	SoSelection *sel = (SoSelection *) selPath->getTail();
-	if (sel->getNumSelected() == 0) return;
-	
-	// Keep the length from the root to the selection
-	// as an optimization so we can reuse this data
-	int reusablePathLength = selPath->getLength();
+        // Make sure something is selected
+        SoSelection *sel = (SoSelection *)selPath->getTail();
+        if (sel->getNumSelected() == 0)
+            return;
 
-	// For each selection path, create a new path rooted under our
-	// localRoot
-	for (int j = 0; j < sel->getNumSelected(); j++) {
-	    // Continue the path down to the selected object.
-	    // No need to deal with p[0] since that is the sel node.
-	    SoFullPath *p = (SoFullPath *) sel->getPath(j);	    
-	    SoNode *pathTail = p->getTail();
+        // Keep the length from the root to the selection
+        // as an optimization so we can reuse this data
+        int reusablePathLength = selPath->getLength();
 
-	    if ( pathTail->isOfType(SoBaseKit::getClassTypeId())) {
-		// Find the last nodekit on the path.
-		SoNode *kitTail = ((SoNodeKitPath *)p)->getTail();
+        // For each selection path, create a new path rooted under our
+        // localRoot
+        for (int j = 0; j < sel->getNumSelected(); j++) {
+            // Continue the path down to the selected object.
+            // No need to deal with p[0] since that is the sel node.
+            SoFullPath *p = (SoFullPath *)sel->getPath(j);
+            SoNode *    pathTail = p->getTail();
 
-		// Extend the selectionPath until it reaches this last kit.
-		SoFullPath *fp = (SoFullPath *) p;
-		int k = 0;
-		do {
-		    selPath->append(fp->getIndex(++k));
-		} 
-		while ( fp->getNode(k) != kitTail );
-	    }
-	    else {
-		for (int k = 1; k < p->getLength(); k++)
-		    selPath->append(p->getIndex(k));
-	    }
-    
-	    // Find the camera used to render the selected object and
-	    // insert it into the highlight graph as the first child
-	    SoNode *camera;
+            if (pathTail->isOfType(SoBaseKit::getClassTypeId())) {
+                // Find the last nodekit on the path.
+                SoNode *kitTail = ((SoNodeKitPath *)p)->getTail();
 
-	    static SoSearchAction *sa2 = NULL;
-	    if (sa2 == NULL)
-		sa2 = new SoSearchAction;
-	    else
-		sa2->reset();
+                // Extend the selectionPath until it reaches this last kit.
+                SoFullPath *fp = (SoFullPath *)p;
+                int         k = 0;
+                do {
+                    selPath->append(fp->getIndex(++k));
+                } while (fp->getNode(k) != kitTail);
+            } else {
+                for (int k = 1; k < p->getLength(); k++)
+                    selPath->append(p->getIndex(k));
+            }
 
-	    sa2->setFind(SoSearchAction::TYPE);
-	    sa2->setInterest(SoSearchAction::LAST);
-	    sa2->setType(SoCamera::getClassTypeId());
-	    sa2->apply(selPath);
-	    camera =(sa2->getPath() == NULL ? NULL : sa2->getPath()->getTail());
-	    if (camera != NULL)
-		localRoot->insertChild(camera, 0);
-	    
-	    // Get the bounding box of the object and update the
-	    // local highlight graph
-	    updateBbox(selPath);
-	    
-	    // Make sure the box has some size
-	    if ((cube->width.getValue() == 0) &&
-		(cube->height.getValue() == 0) &&
-		(cube->depth.getValue() == 0)) {
+            // Find the camera used to render the selected object and
+            // insert it into the highlight graph as the first child
+            SoNode *camera;
+
+            static SoSearchAction *sa2 = NULL;
+            if (sa2 == NULL)
+                sa2 = new SoSearchAction;
+            else
+                sa2->reset();
+
+            sa2->setFind(SoSearchAction::TYPE);
+            sa2->setInterest(SoSearchAction::LAST);
+            sa2->setType(SoCamera::getClassTypeId());
+            sa2->apply(selPath);
+            camera =
+                (sa2->getPath() == NULL ? NULL : sa2->getPath()->getTail());
+            if (camera != NULL)
+                localRoot->insertChild(camera, 0);
+
+            // Get the bounding box of the object and update the
+            // local highlight graph
+            updateBbox(selPath);
+
+            // Make sure the box has some size
+            if ((cube->width.getValue() == 0) &&
+                (cube->height.getValue() == 0) &&
+                (cube->depth.getValue() == 0)) {
 #ifdef DEBUG
-		SoDebugError::postWarning("SoBoxHighlightRenderAction::apply",
-			"selected object has no bounding box - no highlight rendered");
-#endif		    
-	    }
-	    else {
-		// Render the highlight
-		SoGLRenderAction::apply(localRoot);
-	    }
-	    	    
-	    // Restore selPath for reuse
-	    selPath->truncate(reusablePathLength);
+                SoDebugError::postWarning("SoBoxHighlightRenderAction::apply",
+                                          "selected object has no bounding box "
+                                          "- no highlight rendered");
+#endif
+            } else {
+                // Render the highlight
+                SoGLRenderAction::apply(localRoot);
+            }
 
-	    // Remove the camera for the next path
-	    if (camera != NULL)
-		localRoot->removeChild(0);
-	}
+            // Restore selPath for reuse
+            selPath->truncate(reusablePathLength);
+
+            // Remove the camera for the next path
+            if (camera != NULL)
+                localRoot->removeChild(0);
+        }
     }
-}    
+}
 
 // Methods which affect highlight appearance
 void
-SoBoxHighlightRenderAction::setColor( const SbColor &c )
-{ baseColor->rgb.setValue(c); }
+SoBoxHighlightRenderAction::setColor(const SbColor &c) {
+    baseColor->rgb.setValue(c);
+}
 
 const SbColor &
-SoBoxHighlightRenderAction::getColor()
-{ return baseColor->rgb[0]; }
+SoBoxHighlightRenderAction::getColor() {
+    return baseColor->rgb[0];
+}
 
 void
-SoBoxHighlightRenderAction::setLinePattern( unsigned short pattern )
-{ drawStyle->linePattern = pattern; }
+SoBoxHighlightRenderAction::setLinePattern(unsigned short pattern) {
+    drawStyle->linePattern = pattern;
+}
 
 unsigned short
-SoBoxHighlightRenderAction::getLinePattern()
-{ return drawStyle->linePattern.getValue(); }
+SoBoxHighlightRenderAction::getLinePattern() {
+    return drawStyle->linePattern.getValue();
+}
 
 void
-SoBoxHighlightRenderAction::setLineWidth( float width )
-{ drawStyle->lineWidth = width; }
+SoBoxHighlightRenderAction::setLineWidth(float width) {
+    drawStyle->lineWidth = width;
+}
 
 float
-SoBoxHighlightRenderAction::getLineWidth()
-{ return drawStyle->lineWidth.getValue(); }
+SoBoxHighlightRenderAction::getLineWidth() {
+    return drawStyle->lineWidth.getValue();
+}
 
 //
 // These are here to quiet the compiler.
 //
 void
-SoBoxHighlightRenderAction::apply(SoPath *path)
-{ SoGLRenderAction::apply(path); }
+SoBoxHighlightRenderAction::apply(SoPath *path) {
+    SoGLRenderAction::apply(path);
+}
 
 void
-SoBoxHighlightRenderAction::apply(const SoPathList &pathList, SbBool obeysRules)
-{ SoGLRenderAction::apply(pathList, obeysRules); }
+SoBoxHighlightRenderAction::apply(const SoPathList &pathList,
+                                  SbBool            obeysRules) {
+    SoGLRenderAction::apply(pathList, obeysRules);
+}

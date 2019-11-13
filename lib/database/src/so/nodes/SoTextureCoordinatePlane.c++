@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -74,8 +74,8 @@ SoTextureCoordinatePlane::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SO__NODE_INIT_CLASS(SoTextureCoordinatePlane,
-              "TextureCoordinatePlane", SoTextureCoordinateFunction);
+    SO__NODE_INIT_CLASS(SoTextureCoordinatePlane, "TextureCoordinatePlane",
+                        SoTextureCoordinateFunction);
 
     // Elements are enabled by SoTextureCoordinate nodes.
 }
@@ -92,8 +92,8 @@ SoTextureCoordinatePlane::SoTextureCoordinatePlane()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_NODE_CONSTRUCTOR(SoTextureCoordinatePlane);
-    SO_NODE_ADD_FIELD(directionS,   (SbVec3f(1, 0, 0)));
-    SO_NODE_ADD_FIELD(directionT,   (SbVec3f(0, 1, 0)));
+    SO_NODE_ADD_FIELD(directionS, (SbVec3f(1, 0, 0)));
+    SO_NODE_ADD_FIELD(directionT, (SbVec3f(0, 1, 0)));
     isBuiltIn = TRUE;
 }
 
@@ -107,8 +107,7 @@ SoTextureCoordinatePlane::SoTextureCoordinatePlane()
 SoTextureCoordinatePlane::~SoTextureCoordinatePlane()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -118,14 +117,12 @@ SoTextureCoordinatePlane::~SoTextureCoordinatePlane()
 // Use: public
 
 const SbVec4f &
-SoTextureCoordinatePlane::valueCallback(void *instance,
-    const SbVec3f &position,
-    const SbVec3f & /* normal - not used */)
+SoTextureCoordinatePlane::valueCallback(void *instance, const SbVec3f &position,
+                                        const SbVec3f & /* normal - not used */)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureCoordinatePlane *tc = 
-	(SoTextureCoordinatePlane *)instance;
+    SoTextureCoordinatePlane *tc = (SoTextureCoordinatePlane *)instance;
 
     static SbVec4f result;
 
@@ -151,9 +148,8 @@ SoTextureCoordinatePlane::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoGLTextureCoordinateElement::setTexGen(action->getState(), this,
-					    doTexgen, this,
-					    valueCallback, this);
+    SoGLTextureCoordinateElement::setTexGen(action->getState(), this, doTexgen,
+                                            this, valueCallback, this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -169,8 +165,7 @@ SoTextureCoordinatePlane::doTexgen(void *me)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoTextureCoordinatePlane *p =
-	(const SoTextureCoordinatePlane *)me;
+    const SoTextureCoordinatePlane *p = (const SoTextureCoordinatePlane *)me;
 
     SbVec4f t;
 
@@ -178,7 +173,7 @@ SoTextureCoordinatePlane::doTexgen(void *me)
     t.setValue(ds[0], ds[1], ds[2], 0.0);
     glTexGenf(GL_S, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
     glTexGenfv(GL_S, GL_OBJECT_PLANE, t.getValue());
-    
+
     const SbVec3f &dt = p->directionT.getValue();
     t.setValue(dt[0], dt[1], dt[2], 0.0);
     glTexGenf(GL_T, GL_TEXTURE_GEN_MODE, GL_OBJECT_LINEAR);
@@ -229,6 +224,5 @@ SoTextureCoordinatePlane::doAction(SoAction *action)
 {
     SoState *state = action->getState();
 
-    SoTextureCoordinateElement::setFunction(state, this,
-					    valueCallback, this);
+    SoTextureCoordinateElement::setFunction(state, this, valueCallback, this);
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -73,8 +73,7 @@ SoIndexedShape::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SO__NODE_INIT_ABSTRACT_CLASS(SoIndexedShape, "IndexedShape",
-                 SoVertexShape);
+    SO__NODE_INIT_ABSTRACT_CLASS(SoIndexedShape, "IndexedShape", SoVertexShape);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -90,9 +89,9 @@ SoIndexedShape::SoIndexedShape()
 {
     SO_NODE_CONSTRUCTOR(SoIndexedShape);
 
-    SO_NODE_ADD_FIELD(coordIndex,	  (0));
-    SO_NODE_ADD_FIELD(materialIndex,	 (-1));
-    SO_NODE_ADD_FIELD(normalIndex,	 (-1));
+    SO_NODE_ADD_FIELD(coordIndex, (0));
+    SO_NODE_ADD_FIELD(materialIndex, (-1));
+    SO_NODE_ADD_FIELD(normalIndex, (-1));
     SO_NODE_ADD_FIELD(textureCoordIndex, (-1));
     colorI = normalI = texCoordI = NULL;
     // force reevaluation of binding:
@@ -109,8 +108,7 @@ SoIndexedShape::SoIndexedShape()
 SoIndexedShape::~SoIndexedShape()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -125,14 +123,14 @@ SoIndexedShape::notify(SoNotList *list)
 ////////////////////////////////////////////////////////////////////////
 {
     if (list->getLastRec()->getType() == SoNotRec::CONTAINER) {
-	if (list->getLastField() == &coordIndex ||
-	    list->getLastField() == &materialIndex ||
-	    list->getLastField() == &normalIndex ||
-	    list->getLastField() == &textureCoordIndex) {
+        if (list->getLastField() == &coordIndex ||
+            list->getLastField() == &materialIndex ||
+            list->getLastField() == &normalIndex ||
+            list->getLastField() == &textureCoordIndex) {
 
-	    // Force re-evaluation:
-	    materialBinding = normalBinding = texCoordBinding = 0;
-	}
+            // Force re-evaluation:
+            materialBinding = normalBinding = texCoordBinding = 0;
+        }
     }
 
     SoVertexShape::notify(list);
@@ -155,16 +153,16 @@ SoIndexedShape::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int32_t			i, numIndices, numUsed;
-    const int32_t			*indices;
-    const SoCoordinateElement	*ce = NULL;
-    const SbVec3f 		*vpCoords = NULL;
+    int32_t                    i, numIndices, numUsed;
+    const int32_t *            indices;
+    const SoCoordinateElement *ce = NULL;
+    const SbVec3f *            vpCoords = NULL;
 
     SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
     if (vp && vp->vertex.getNum() > 0) {
-	vpCoords = vp->vertex.getValues(0);
+        vpCoords = vp->vertex.getValues(0);
     } else {
-	ce = SoCoordinateElement::getInstance(action->getState());
+        ce = SoCoordinateElement::getInstance(action->getState());
     }
 
     // Start with an empty box and zero sum
@@ -173,22 +171,22 @@ SoIndexedShape::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
     // Loop through coordinates, keeping bounding box and sum of coords
     numIndices = coordIndex.getNum();
-    indices    = coordIndex.getValues(0);
-    numUsed    = 0;
+    indices = coordIndex.getValues(0);
+    numUsed = 0;
     for (i = 0; i < numIndices; i++) {
 
-	// Look only at non-negative index values
-	if (indices[i] >= 0) {
-	    const SbVec3f &v = (ce ? ce->get3((int) indices[i]) :
-				vpCoords[indices[i]]);
-	    box.extendBy(v);
-	    center += v;
-	    numUsed++;
-	}
+        // Look only at non-negative index values
+        if (indices[i] >= 0) {
+            const SbVec3f &v =
+                (ce ? ce->get3((int)indices[i]) : vpCoords[indices[i]]);
+            box.extendBy(v);
+            center += v;
+            numUsed++;
+        }
     }
 
     // Center is average of all coordinates
-    center /= (float) numUsed;
+    center /= (float)numUsed;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -203,8 +201,8 @@ SoIndexedShape::areTexCoordsIndexed(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return SoTextureCoordinateBindingElement::get(action->getState()) 
-	    == SoTextureCoordinateBindingElement::PER_VERTEX_INDEXED;
+    return SoTextureCoordinateBindingElement::get(action->getState()) ==
+           SoTextureCoordinateBindingElement::PER_VERTEX_INDEXED;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -223,10 +221,10 @@ SoIndexedShape::getNumVerts(int startCoord)
 {
     int result = 0;
     int numIndices = coordIndex.getNum();
-    
-    while (startCoord+result < numIndices &&
-	   coordIndex[startCoord+result] >= 0) {
-	result++;
+
+    while (startCoord + result < numIndices &&
+           coordIndex[startCoord + result] >= 0) {
+        result++;
     }
 
     return result;
@@ -245,386 +243,390 @@ SoIndexedShape::getNumVerts(int startCoord)
 // Use: protected
 
 void
-SoIndexedShape::setupIndices(int numParts, int numFaces,
-			     SbBool needNormals, SbBool needTexCoords)
+SoIndexedShape::setupIndices(int numParts, int numFaces, SbBool needNormals,
+                             SbBool needTexCoords)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     if (vpCache.vertexPtr == NULL) {
-	SoDebugError::post("SoIndexedShape::setupIndices",
-		   "vpCache.fillInCache must be called first!\n");
+        SoDebugError::post("SoIndexedShape::setupIndices",
+                           "vpCache.fillInCache must be called first!\n");
     }
-    //Check for valid indices:
+    // Check for valid indices:
     int j;
-    for (j = 0; j < coordIndex.getNum(); j++){	
-    	if (coordIndex[j] != -1) {
-	    if (coordIndex[j] >= vpCache.getNumVertices() ||
-		coordIndex[j] < 0 ){
-		SoDebugError::post("SoIndexedShape",
-			"vertex index %d is out of range 0 - %d", 
-			coordIndex[j], vpCache.getNumVertices());
-	    }
-	}
+    for (j = 0; j < coordIndex.getNum(); j++) {
+        if (coordIndex[j] != -1) {
+            if (coordIndex[j] >= vpCache.getNumVertices() ||
+                coordIndex[j] < 0) {
+                SoDebugError::post("SoIndexedShape",
+                                   "vertex index %d is out of range 0 - %d",
+                                   coordIndex[j], vpCache.getNumVertices());
+            }
+        }
     }
-    for (j = 0; j < materialIndex.getNum(); j++){	
-    	if (materialIndex[j] != -1) {
-	    if (materialIndex[j] >= vpCache.getNumColors() ||
-		materialIndex[j] < 0 ){
-		SoDebugError::post("SoIndexedShape",
-			"material index %d is out of range 0 - %d", 
-			materialIndex[j], vpCache.getNumColors());
-	    }
-	}
+    for (j = 0; j < materialIndex.getNum(); j++) {
+        if (materialIndex[j] != -1) {
+            if (materialIndex[j] >= vpCache.getNumColors() ||
+                materialIndex[j] < 0) {
+                SoDebugError::post("SoIndexedShape",
+                                   "material index %d is out of range 0 - %d",
+                                   materialIndex[j], vpCache.getNumColors());
+            }
+        }
     }
     if (needNormals) {
-	for (j = 0; j < normalIndex.getNum(); j++){	
-    	    if (normalIndex[j] != -1) {
-		if (normalIndex[j] >= vpCache.getNumNormals() ||
-		    normalIndex[j] < 0 ){
-		    SoDebugError::post("SoIndexedShape",
-			"normal index %d is out of range 0 - %d", 
-			normalIndex[j], vpCache.getNumNormals());
-		}
-	    }
-	}
+        for (j = 0; j < normalIndex.getNum(); j++) {
+            if (normalIndex[j] != -1) {
+                if (normalIndex[j] >= vpCache.getNumNormals() ||
+                    normalIndex[j] < 0) {
+                    SoDebugError::post("SoIndexedShape",
+                                       "normal index %d is out of range 0 - %d",
+                                       normalIndex[j], vpCache.getNumNormals());
+                }
+            }
+        }
     }
-    if (needTexCoords){
-	for (j = 0; j < textureCoordIndex.getNum(); j++){	
-    	    if (textureCoordIndex[j] != -1) {
-		if (textureCoordIndex[j] >= vpCache.getNumTexCoords() ||
-		    textureCoordIndex[j] < 0 ){
-		    SoDebugError::post("SoIndexedShape",
-			"texture coordinate index %d is out of range 0 - %d", 
-			textureCoordIndex[j], vpCache.getNumTexCoords());
-		}
-	    }
-	}
+    if (needTexCoords) {
+        for (j = 0; j < textureCoordIndex.getNum(); j++) {
+            if (textureCoordIndex[j] != -1) {
+                if (textureCoordIndex[j] >= vpCache.getNumTexCoords() ||
+                    textureCoordIndex[j] < 0) {
+                    SoDebugError::post(
+                        "SoIndexedShape",
+                        "texture coordinate index %d is out of range 0 - %d",
+                        textureCoordIndex[j], vpCache.getNumTexCoords());
+                }
+            }
+        }
     }
-#endif /*DEBUG*/ 
+#endif /*DEBUG*/
 
     if (materialBinding != vpCache.getMaterialBinding()) {
-	// Free if old binding was PER_VERTEX:
-	if (materialBinding == SoMaterialBindingElement::PER_VERTEX) {
-        consecutiveIndicesWithHoles.clear();
-	    colorI = NULL;
-	}
-	materialBinding = vpCache.getMaterialBinding();
+        // Free if old binding was PER_VERTEX:
+        if (materialBinding == SoMaterialBindingElement::PER_VERTEX) {
+            consecutiveIndicesWithHoles.clear();
+            colorI = NULL;
+        }
+        materialBinding = vpCache.getMaterialBinding();
 
 #ifdef DEBUG
-	int numIndices = 0;
-	int numIndicesNeeded = 0;
-	SbBool useCoordIndexOK = TRUE;
-	int numColorsNeeded = 0;
-	const char *bindingString = NULL;
+        int         numIndices = 0;
+        int         numIndicesNeeded = 0;
+        SbBool      useCoordIndexOK = TRUE;
+        int         numColorsNeeded = 0;
+        const char *bindingString = NULL;
 #endif
 
-	switch (vpCache.getMaterialBinding()) {
-	  case SoMaterialBindingElement::OVERALL:
-	    break;
-	  case SoMaterialBindingElement::PER_PART:
-	    allocateSequential(numParts);
-	    colorI = NULL;
+        switch (vpCache.getMaterialBinding()) {
+        case SoMaterialBindingElement::OVERALL:
+            break;
+        case SoMaterialBindingElement::PER_PART:
+            allocateSequential(numParts);
+            colorI = NULL;
 #ifdef DEBUG
-	    numColorsNeeded = numParts;
-	    bindingString = "PER_PART";
+            numColorsNeeded = numParts;
+            bindingString = "PER_PART";
 #endif
-	    break;
-	  case SoMaterialBindingElement::PER_FACE:
-	    allocateSequential(numFaces);
-	    colorI = NULL;
+            break;
+        case SoMaterialBindingElement::PER_FACE:
+            allocateSequential(numFaces);
+            colorI = NULL;
 #ifdef DEBUG
-	    numColorsNeeded = numFaces;
-	    bindingString = "PER_FACE";
+            numColorsNeeded = numFaces;
+            bindingString = "PER_FACE";
 #endif
-	    break;
+            break;
 
-	  case SoMaterialBindingElement::PER_VERTEX:
-	    // The annoying case:
-	    colorI = allocateSequentialWithHoles();
+        case SoMaterialBindingElement::PER_VERTEX:
+            // The annoying case:
+            colorI = allocateSequentialWithHoles();
 #ifdef DEBUG
-	    for (int i = 0; i < coordIndex.getNum(); i++) {
-		if (coordIndex[i] >= 0) ++numColorsNeeded;
-	    }
-	    bindingString = "PER_VERTEX";
+            for (int i = 0; i < coordIndex.getNum(); i++) {
+                if (coordIndex[i] >= 0)
+                    ++numColorsNeeded;
+            }
+            bindingString = "PER_VERTEX";
 #endif
-	    break;
+            break;
 
-	  case SoMaterialBindingElement::PER_PART_INDEXED:
-	    if (materialIndex[0] < 0)
-		colorI = coordIndex.getValues(0);
-	    else
-		colorI = materialIndex.getValues(0);
+        case SoMaterialBindingElement::PER_PART_INDEXED:
+            if (materialIndex[0] < 0)
+                colorI = coordIndex.getValues(0);
+            else
+                colorI = materialIndex.getValues(0);
 #ifdef DEBUG
-	    useCoordIndexOK = FALSE;
-	    numIndicesNeeded = numParts;
-	    bindingString = "PER_PART_INDEXED";
-	    if (colorI == coordIndex.getValues(0)) {
-		numIndices = coordIndex.getNum();
-	    } else {
-		numIndices = materialIndex.getNum();
-	    }
+            useCoordIndexOK = FALSE;
+            numIndicesNeeded = numParts;
+            bindingString = "PER_PART_INDEXED";
+            if (colorI == coordIndex.getValues(0)) {
+                numIndices = coordIndex.getNum();
+            } else {
+                numIndices = materialIndex.getNum();
+            }
 #endif
-	    break;
-	  case SoMaterialBindingElement::PER_FACE_INDEXED:
-	    if (materialIndex[0] < 0)
-		colorI = coordIndex.getValues(0);
-	    else
-		colorI = materialIndex.getValues(0);
+            break;
+        case SoMaterialBindingElement::PER_FACE_INDEXED:
+            if (materialIndex[0] < 0)
+                colorI = coordIndex.getValues(0);
+            else
+                colorI = materialIndex.getValues(0);
 #ifdef DEBUG
-	    useCoordIndexOK = FALSE;
-	    numIndicesNeeded = numFaces;
-	    bindingString = "PER_FACE_INDEXED";
-	    if (colorI == coordIndex.getValues(0)) {
-		numIndices = coordIndex.getNum();
-	    } else {
-		numIndices = materialIndex.getNum();
-	    }
+            useCoordIndexOK = FALSE;
+            numIndicesNeeded = numFaces;
+            bindingString = "PER_FACE_INDEXED";
+            if (colorI == coordIndex.getValues(0)) {
+                numIndices = coordIndex.getNum();
+            } else {
+                numIndices = materialIndex.getNum();
+            }
 #endif
-	    break;
-	  case SoMaterialBindingElement::PER_VERTEX_INDEXED:
-	    if (materialIndex[0] < 0)
-		colorI = coordIndex.getValues(0);
-	    else
-		colorI = materialIndex.getValues(0);
+            break;
+        case SoMaterialBindingElement::PER_VERTEX_INDEXED:
+            if (materialIndex[0] < 0)
+                colorI = coordIndex.getValues(0);
+            else
+                colorI = materialIndex.getValues(0);
 #ifdef DEBUG
-	    useCoordIndexOK = TRUE;
-	    numIndicesNeeded = coordIndex.getNum();
-	    bindingString = "PER_VERTEX_INDEXED";
-	    if (colorI == coordIndex.getValues(0)) {
-		numIndices = coordIndex.getNum();
-	    } else {
-		numIndices = materialIndex.getNum();
-	    }
+            useCoordIndexOK = TRUE;
+            numIndicesNeeded = coordIndex.getNum();
+            bindingString = "PER_VERTEX_INDEXED";
+            if (colorI == coordIndex.getValues(0)) {
+                numIndices = coordIndex.getNum();
+            } else {
+                numIndices = materialIndex.getNum();
+            }
 #endif
-	    break;
-	}
+            break;
+        }
 
 #ifdef DEBUG
-	// Check for mis-use of default materialIndex field
-	if (useCoordIndexOK == FALSE && 
-	    colorI == coordIndex.getValues(0)) {
-	    SoDebugError::post("SoIndexedShape",
-		"Material binding is %s"
-		" but materialIndex[0] < 0; coordIndex"
-		" will be used, which is probably not what"
-		" you want", bindingString);
-	}
-	// Check for enough indices:
-	if (numIndices < numIndicesNeeded) {
-	    SoDebugError::post("SoIndexedShape",
-		"Need %d indices for %s "
-		" material binding, have only %d",
-		numIndicesNeeded, bindingString, numIndices);
-	}
-	else if (numIndices > 0) {
-	    // Find greatest index:
-	    for (int i = 0; i < numIndices; i++) {
-		if (colorI[i] > numColorsNeeded)
-		    numColorsNeeded = colorI[i];
-	    }
-	}
-	if (vpCache.getNumColors() < numColorsNeeded) {
-	    SoDebugError::post("SoIndexedShape",
-		"Material binding is %s, but only %d"
-		" colors given (%d needed)",
-		bindingString, vpCache.getNumColors(), numColorsNeeded);
-	}
+        // Check for mis-use of default materialIndex field
+        if (useCoordIndexOK == FALSE && colorI == coordIndex.getValues(0)) {
+            SoDebugError::post("SoIndexedShape",
+                               "Material binding is %s"
+                               " but materialIndex[0] < 0; coordIndex"
+                               " will be used, which is probably not what"
+                               " you want",
+                               bindingString);
+        }
+        // Check for enough indices:
+        if (numIndices < numIndicesNeeded) {
+            SoDebugError::post("SoIndexedShape",
+                               "Need %d indices for %s "
+                               " material binding, have only %d",
+                               numIndicesNeeded, bindingString, numIndices);
+        } else if (numIndices > 0) {
+            // Find greatest index:
+            for (int i = 0; i < numIndices; i++) {
+                if (colorI[i] > numColorsNeeded)
+                    numColorsNeeded = colorI[i];
+            }
+        }
+        if (vpCache.getNumColors() < numColorsNeeded) {
+            SoDebugError::post("SoIndexedShape",
+                               "Material binding is %s, but only %d"
+                               " colors given (%d needed)",
+                               bindingString, vpCache.getNumColors(),
+                               numColorsNeeded);
+        }
 #endif
     }
     if (needNormals && (normalBinding != vpCache.getNormalBinding())) {
-	// Free if old binding was PER_VERTEX:
-	if (normalBinding == SoNormalBindingElement::PER_VERTEX) {
-        consecutiveIndicesWithHoles.clear();
-	    normalI = NULL;
-	}
-	normalBinding = vpCache.getNormalBinding();
+        // Free if old binding was PER_VERTEX:
+        if (normalBinding == SoNormalBindingElement::PER_VERTEX) {
+            consecutiveIndicesWithHoles.clear();
+            normalI = NULL;
+        }
+        normalBinding = vpCache.getNormalBinding();
 
 #ifdef DEBUG
-	int numIndices = 0;
-	int numIndicesNeeded = 0;
-	SbBool useCoordIndexOK = TRUE;
-	int numNormalsNeeded = 0;
-	const char *bindingString = NULL;
+        int         numIndices = 0;
+        int         numIndicesNeeded = 0;
+        SbBool      useCoordIndexOK = TRUE;
+        int         numNormalsNeeded = 0;
+        const char *bindingString = NULL;
 #endif
 
-	switch (vpCache.getNormalBinding()) {
-	  case SoNormalBindingElement::OVERALL:
-	    break;
-	  case SoNormalBindingElement::PER_PART:
-	    allocateSequential(numParts);
-	    normalI = NULL;
+        switch (vpCache.getNormalBinding()) {
+        case SoNormalBindingElement::OVERALL:
+            break;
+        case SoNormalBindingElement::PER_PART:
+            allocateSequential(numParts);
+            normalI = NULL;
 #ifdef DEBUG
-	    numNormalsNeeded = numParts;
-	    bindingString = "PER_PART";
+            numNormalsNeeded = numParts;
+            bindingString = "PER_PART";
 #endif
-	    break;
-	  case SoNormalBindingElement::PER_FACE:
-	    allocateSequential(numFaces);
-	    normalI = NULL;
+            break;
+        case SoNormalBindingElement::PER_FACE:
+            allocateSequential(numFaces);
+            normalI = NULL;
 #ifdef DEBUG
-	    numNormalsNeeded = numFaces;
-	    bindingString = "PER_FACE";
+            numNormalsNeeded = numFaces;
+            bindingString = "PER_FACE";
 #endif
-	    break;
+            break;
 
-	  case SoNormalBindingElement::PER_VERTEX:
-	    // The annoying case:
-	    normalI = allocateSequentialWithHoles();
+        case SoNormalBindingElement::PER_VERTEX:
+            // The annoying case:
+            normalI = allocateSequentialWithHoles();
 #ifdef DEBUG
-	    for (int i = 0; i < coordIndex.getNum(); i++) {
-		if (coordIndex[i] >= 0) ++numNormalsNeeded;
-	    }
-	    bindingString = "PER_VERTEX";
+            for (int i = 0; i < coordIndex.getNum(); i++) {
+                if (coordIndex[i] >= 0)
+                    ++numNormalsNeeded;
+            }
+            bindingString = "PER_VERTEX";
 #endif
-	    break;
+            break;
 
-	  case SoNormalBindingElement::PER_PART_INDEXED:
-	    if (normalIndex[0] < 0)
-		normalI = coordIndex.getValues(0);
-	    else
-		normalI = normalIndex.getValues(0);
+        case SoNormalBindingElement::PER_PART_INDEXED:
+            if (normalIndex[0] < 0)
+                normalI = coordIndex.getValues(0);
+            else
+                normalI = normalIndex.getValues(0);
 #ifdef DEBUG
-	    useCoordIndexOK = FALSE;
-	    numIndicesNeeded = numParts;
-	    bindingString = "PER_PART_INDEXED";
-	    if (normalI == coordIndex.getValues(0)) {
-		numIndices = coordIndex.getNum();
-	    } else {
-		numIndices = normalIndex.getNum();
-	    }
+            useCoordIndexOK = FALSE;
+            numIndicesNeeded = numParts;
+            bindingString = "PER_PART_INDEXED";
+            if (normalI == coordIndex.getValues(0)) {
+                numIndices = coordIndex.getNum();
+            } else {
+                numIndices = normalIndex.getNum();
+            }
 #endif
-	    break;
-	  case SoNormalBindingElement::PER_FACE_INDEXED:
-	    if (normalIndex[0] < 0)
-		normalI = coordIndex.getValues(0);
-	    else
-		normalI = normalIndex.getValues(0);
+            break;
+        case SoNormalBindingElement::PER_FACE_INDEXED:
+            if (normalIndex[0] < 0)
+                normalI = coordIndex.getValues(0);
+            else
+                normalI = normalIndex.getValues(0);
 #ifdef DEBUG
-	    useCoordIndexOK = FALSE;
-	    numIndicesNeeded = numFaces;
-	    bindingString = "PER_FACE_INDEXED";
-	    if (normalI == coordIndex.getValues(0)) {
-		numIndices = coordIndex.getNum();
-	    } else {
-		numIndices = normalIndex.getNum();
-	    }
+            useCoordIndexOK = FALSE;
+            numIndicesNeeded = numFaces;
+            bindingString = "PER_FACE_INDEXED";
+            if (normalI == coordIndex.getValues(0)) {
+                numIndices = coordIndex.getNum();
+            } else {
+                numIndices = normalIndex.getNum();
+            }
 #endif
-	    break;
-	  case SoNormalBindingElement::PER_VERTEX_INDEXED:
-	    if (normalIndex[0] < 0)
-		normalI = coordIndex.getValues(0);
-	    else
-		normalI = normalIndex.getValues(0);
+            break;
+        case SoNormalBindingElement::PER_VERTEX_INDEXED:
+            if (normalIndex[0] < 0)
+                normalI = coordIndex.getValues(0);
+            else
+                normalI = normalIndex.getValues(0);
 #ifdef DEBUG
-	    useCoordIndexOK = TRUE;
-	    numIndicesNeeded = coordIndex.getNum();
-	    bindingString = "PER_VERTEX_INDEXED";
-	    if (normalI == coordIndex.getValues(0)) {
-		numIndices = coordIndex.getNum();
-	    } else {
-		numIndices = normalIndex.getNum();
-	    }
+            useCoordIndexOK = TRUE;
+            numIndicesNeeded = coordIndex.getNum();
+            bindingString = "PER_VERTEX_INDEXED";
+            if (normalI == coordIndex.getValues(0)) {
+                numIndices = coordIndex.getNum();
+            } else {
+                numIndices = normalIndex.getNum();
+            }
 #endif
-	    break;
-	}
+            break;
+        }
 
 #ifdef DEBUG
-	// Check for mis-use of default normalIndex field
-	if (useCoordIndexOK == FALSE && 
-	    normalI == coordIndex.getValues(0)) {
-	    SoDebugError::post("SoIndexedShape",
-		"Normal binding is %s"
-		" but normalIndex[0] < 0; coordIndex"
-		" will be used, which is probably not what"
-		" you want", bindingString);
-	}
-	// Check for enough indices:
-	if (numIndices < numIndicesNeeded) {
-	    SoDebugError::post("SoIndexedShape",
-		"Need %d indices for %s "
-		" normal binding, have only %d",
-		numIndicesNeeded, bindingString, numIndices);
-	}
-	else if (numIndices > 0) {
-	    // Find greatest index:
-	    for (int i = 0; i < numIndices; i++) {
-		if (normalI[i] > numNormalsNeeded)
-		    numNormalsNeeded = normalI[i];
-	    }
-	}
-	if (vpCache.getNumNormals() < numNormalsNeeded) {
-	    SoDebugError::post("SoIndexedShape",
-		"Normal binding is %s, but only %d"
-		" normals given (%d needed)",
-		bindingString, vpCache.getNumNormals(), numNormalsNeeded);
-	}
+        // Check for mis-use of default normalIndex field
+        if (useCoordIndexOK == FALSE && normalI == coordIndex.getValues(0)) {
+            SoDebugError::post("SoIndexedShape",
+                               "Normal binding is %s"
+                               " but normalIndex[0] < 0; coordIndex"
+                               " will be used, which is probably not what"
+                               " you want",
+                               bindingString);
+        }
+        // Check for enough indices:
+        if (numIndices < numIndicesNeeded) {
+            SoDebugError::post("SoIndexedShape",
+                               "Need %d indices for %s "
+                               " normal binding, have only %d",
+                               numIndicesNeeded, bindingString, numIndices);
+        } else if (numIndices > 0) {
+            // Find greatest index:
+            for (int i = 0; i < numIndices; i++) {
+                if (normalI[i] > numNormalsNeeded)
+                    numNormalsNeeded = normalI[i];
+            }
+        }
+        if (vpCache.getNumNormals() < numNormalsNeeded) {
+            SoDebugError::post("SoIndexedShape",
+                               "Normal binding is %s, but only %d"
+                               " normals given (%d needed)",
+                               bindingString, vpCache.getNumNormals(),
+                               numNormalsNeeded);
+        }
 #endif
     }
 
     if (needTexCoords && (texCoordBinding != vpCache.getTexCoordBinding())) {
-	// Free if old binding was PER_VERTEX:
-	if (texCoordBinding == SoTextureCoordinateBindingElement::PER_VERTEX) {
-        consecutiveIndicesWithHoles.clear();
-	    texCoordI = NULL;
-	}
-	texCoordBinding = vpCache.getTexCoordBinding();
+        // Free if old binding was PER_VERTEX:
+        if (texCoordBinding == SoTextureCoordinateBindingElement::PER_VERTEX) {
+            consecutiveIndicesWithHoles.clear();
+            texCoordI = NULL;
+        }
+        texCoordBinding = vpCache.getTexCoordBinding();
 
 #ifdef DEBUG
-	int numIndices = 0;
-	int numIndicesNeeded = 0;
-	int numTexCoordsNeeded = 0;
-	const char *bindingString = NULL;
+        int         numIndices = 0;
+        int         numIndicesNeeded = 0;
+        int         numTexCoordsNeeded = 0;
+        const char *bindingString = NULL;
 #endif
-	switch (vpCache.getTexCoordBinding()) {
-	  case SoTextureCoordinateBindingElement::PER_VERTEX:
-	    // The annoying case:
-	    texCoordI = allocateSequentialWithHoles();
+        switch (vpCache.getTexCoordBinding()) {
+        case SoTextureCoordinateBindingElement::PER_VERTEX:
+            // The annoying case:
+            texCoordI = allocateSequentialWithHoles();
 #ifdef DEBUG
-	    for (int i = 0; i < coordIndex.getNum(); i++) {
-		if (coordIndex[i] >= 0) ++numTexCoordsNeeded;
-	    }
-	    bindingString = "PER_VERTEX";
+            for (int i = 0; i < coordIndex.getNum(); i++) {
+                if (coordIndex[i] >= 0)
+                    ++numTexCoordsNeeded;
+            }
+            bindingString = "PER_VERTEX";
 #endif
-	    break;
+            break;
 
-	  case SoTextureCoordinateBindingElement::PER_VERTEX_INDEXED:
-	    if (textureCoordIndex[0] < 0)
-		texCoordI = coordIndex.getValues(0);
-	    else
-		texCoordI = textureCoordIndex.getValues(0);
+        case SoTextureCoordinateBindingElement::PER_VERTEX_INDEXED:
+            if (textureCoordIndex[0] < 0)
+                texCoordI = coordIndex.getValues(0);
+            else
+                texCoordI = textureCoordIndex.getValues(0);
 #ifdef DEBUG
-	    numIndicesNeeded = numFaces;
-	    bindingString = "PER_VERTEX_INDEXED";
-	    if (texCoordI == coordIndex.getValues(0)) {
-		numIndices = coordIndex.getNum();
-	    } else {
-		numIndices = textureCoordIndex.getNum();
-	    }
+            numIndicesNeeded = numFaces;
+            bindingString = "PER_VERTEX_INDEXED";
+            if (texCoordI == coordIndex.getValues(0)) {
+                numIndices = coordIndex.getNum();
+            } else {
+                numIndices = textureCoordIndex.getNum();
+            }
 #endif
-	    break;
-	}
+            break;
+        }
 #ifdef DEBUG
-	// Check for enough indices:
-	if (numIndices < numIndicesNeeded) {
-	    SoDebugError::post("SoIndexedShape",
-		"Need %d indices for %s "
-		" texCoord binding, have only %d",
-		bindingString, numFaces, numIndices);
-	}
-	else if (numIndices > 0) {
-	    // Find greatest index:
-	    for (int i = 0; i < numIndices; i++) {
-		if (texCoordI[i] > numTexCoordsNeeded)
-		    numTexCoordsNeeded = texCoordI[i];
-	    }
-	}
-	if (vpCache.getNumTexCoords() < numTexCoordsNeeded) {
-	    SoDebugError::post("SoIndexedShape",
-		"TexCoord binding is %s, but only %d"
-		" texCoords given (%d needed)",
-		bindingString, vpCache.getNumTexCoords(), numTexCoordsNeeded);
-	}
+        // Check for enough indices:
+        if (numIndices < numIndicesNeeded) {
+            SoDebugError::post("SoIndexedShape",
+                               "Need %d indices for %s "
+                               " texCoord binding, have only %d",
+                               bindingString, numFaces, numIndices);
+        } else if (numIndices > 0) {
+            // Find greatest index:
+            for (int i = 0; i < numIndices; i++) {
+                if (texCoordI[i] > numTexCoordsNeeded)
+                    numTexCoordsNeeded = texCoordI[i];
+            }
+        }
+        if (vpCache.getNumTexCoords() < numTexCoordsNeeded) {
+            SoDebugError::post("SoIndexedShape",
+                               "TexCoord binding is %s, but only %d"
+                               " texCoords given (%d needed)",
+                               bindingString, vpCache.getNumTexCoords(),
+                               numTexCoordsNeeded);
+        }
 #endif
     }
 }
@@ -663,16 +665,16 @@ SoIndexedShape::allocateSequentialWithHoles()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int count = 0;
+    int       count = 0;
     const int num = coordIndex.getNum();
     consecutiveIndicesWithHoles.resize(num);
     for (int i = 0; i < num; i++) {
         if (coordIndex[i] >= 0) {
             consecutiveIndicesWithHoles[i] = count;
             count++;
-        }
-        else
-            consecutiveIndicesWithHoles[i] = coordIndex[i]; // Just copy-over negatives
+        } else
+            consecutiveIndicesWithHoles[i] =
+                coordIndex[i]; // Just copy-over negatives
     }
     return consecutiveIndicesWithHoles.data();
 }

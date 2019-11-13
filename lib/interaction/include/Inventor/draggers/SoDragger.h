@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -52,7 +52,7 @@
  |     For info about the structure of SoDragger:
  |     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
  |     [2] type:    ivNodeKitStructure SoDragger.
- |     [3] The program prints a diagram of the scene graph and a table with 
+ |     [3] The program prints a diagram of the scene graph and a table with
  |         information about each part.
  |
  |   Author(s): Paul Isaacs, David Mott, Howard Look
@@ -61,8 +61,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_DRAGGER_
-#define  _SO_DRAGGER_
+#ifndef _SO_DRAGGER_
+#define _SO_DRAGGER_
 
 #include <vector>
 #include <Inventor/SbBox.h>
@@ -74,7 +74,6 @@
 #include <Inventor/nodes/SoMatrixTransform.h>
 #include <Inventor/nodes/SoScale.h>
 
-
 class SoPickedPoint;
 class SoAction;
 class SoHandleEventAction;
@@ -84,10 +83,10 @@ class SoPath;
 class SoTempPath;
 class SbPList;
 
-class SoDragger;  // forward reference
+class SoDragger; // forward reference
 
 // The following typedef is used in defining the callback function lists.
-typedef void SoDraggerCB(void *userData, SoDragger *dragger );
+typedef void SoDraggerCB(void *userData, SoDragger *dragger);
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -105,47 +104,46 @@ class SoDragger : public SoInteractionKit {
     SO_KIT_CATALOG_ENTRY_HEADER(motionMatrix);
 
   public:
-
     // This field is a boolean that is TRUE when the mouse is down and
     // we are dragging, FALSE otherwise.
-    SoSFBool  isActive;
+    SoSFBool isActive;
 
     // Dragger Callbacks
-    // In all cases, the callback data will be a pointer to the dragger 
-    // that caused the callback. Each type of callback maintains a list of 
+    // In all cases, the callback data will be a pointer to the dragger
+    // that caused the callback. Each type of callback maintains a list of
     // callbacks, so many callback functions may be registered, if desired.
 
     // Start callbacks are made after mouse button 1 goes down.
-    void    addStartCallback(SoDraggerCB *f, void *userData = NULL);
+    void addStartCallback(SoDraggerCB *f, void *userData = NULL);
     void removeStartCallback(SoDraggerCB *f, void *userData = NULL);
 
     // Motion callbacks are called before each movement of the mouse
     // during dragging.
-    void    addMotionCallback(SoDraggerCB *f, void *userData = NULL);
+    void addMotionCallback(SoDraggerCB *f, void *userData = NULL);
     void removeMotionCallback(SoDraggerCB *f, void *userData = NULL);
 
     // Finish callbacks are made just after dragging ends.
-    void    addFinishCallback(SoDraggerCB *f, void *userData = NULL);
+    void addFinishCallback(SoDraggerCB *f, void *userData = NULL);
     void removeFinishCallback(SoDraggerCB *f, void *userData = NULL);
 
     // Value changed callbacks are made after the dragger edits
     // the motion matrix.
-    void    addValueChangedCallback(SoDraggerCB *f, void *userData = NULL);
+    void addValueChangedCallback(SoDraggerCB *f, void *userData = NULL);
     void removeValueChangedCallback(SoDraggerCB *f, void *userData = NULL);
 
     // Set/get number of pixels of movement required to
     // initiate a constraint gesture. Default is 8.
-    void    setMinGesture(int pixels)	    { minGesture = pixels; }
-    int	    getMinGesture() const	    { return minGesture; }
+    void setMinGesture(int pixels) { minGesture = pixels; }
+    int  getMinGesture() const { return minGesture; }
 
     // The smallest scale that any dragger will write. If the user attempts
     // to go below this amount, the dragger will set it to this minimum.
     // Default is .001
-    static void  setMinScale( float newMinScale ) { minScale = newMinScale; }
+    static void  setMinScale(float newMinScale) { minScale = newMinScale; }
     static float getMinScale() { return minScale; }
 
     // You can temporarily disable a dragger's valueChangedCallbacks.
-    // The method returns a value that tells you if callbacks were already 
+    // The method returns a value that tells you if callbacks were already
     // enabled.  Use this method if you write a valueChanged callback of your
     // own and you change one of the dragger's fields within the callback.
     // (For example, when writing a callback to constrain your dragger).
@@ -153,13 +151,13 @@ class SoDragger : public SoInteractionKit {
     // with.
     // All this prevents you from entering an infinite loop of changing values,
     // calling callbacks which change values, etc.
-    SbBool enableValueChangedCallbacks( SbBool newVal );
+    SbBool enableValueChangedCallbacks(SbBool newVal);
 
-  SoEXTENDER public:
-
+    SoEXTENDER
+  public:
     // Get the motion matrix.  The motion matrix places the dragger
     // relative to its parent space.  (Generally, it is better to look
-    // in a dragger's fields to find out about its state. For example, 
+    // in a dragger's fields to find out about its state. For example,
     // looking at the 'translation' field of an SoTranslate1Dragger is
     // easier than extracting the translation from its motion matrix.
     const SbMatrix &getMotionMatrix();
@@ -172,32 +170,32 @@ class SoDragger : public SoInteractionKit {
     // the standard button1Down, mouseMotion, and button1Up events.
     // They are only called if the dragger has grabbed (which occurs
     // only when button1 goes down and picks the dragger).
-    void    addOtherEventCallback(SoDraggerCB *f, void *userData = NULL);
+    void addOtherEventCallback(SoDraggerCB *f, void *userData = NULL);
     void removeOtherEventCallback(SoDraggerCB *f, void *userData = NULL);
 
     // Compound draggers should call this for each child dragger
     // so that user callbacks (valueChanged, start, motion, finish, other event)
-    // registered with the parent dragger will be invoked based on the child 
-    // dragger.  Also, this will add the 'transferMotion' callback as a 
+    // registered with the parent dragger will be invoked based on the child
+    // dragger.  Also, this will add the 'transferMotion' callback as a
     // valueChanged callback on the child.
     void registerChildDragger(SoDragger *child);
     void unregisterChildDragger(SoDragger *child);
     // These two routines tie the child to the parent, but WITHOUT the
-    // transferMotion callback. It is good 
-    // for child draggers that need to move independently of their parents, 
-    // but which should still call the parents (valueChanged, start, motion, 
+    // transferMotion callback. It is good
+    // for child draggers that need to move independently of their parents,
+    // but which should still call the parents (valueChanged, start, motion,
     // end, and otherEvent) callbacks when they are dragged.
     void registerChildDraggerMovingIndependently(SoDragger *child);
     void unregisterChildDraggerMovingIndependently(SoDragger *child);
-				  
+
     // Get the matrix which converts from one dragger space to another.
     SbMatrix getLocalToWorldMatrix();
     SbMatrix getWorldToLocalMatrix();
 
-    // Returns the starting point in local coordinates. 
-    SbVec3f     getLocalStartingPoint();
-    // Returns the starting point in world coordinates. 
-    SbVec3f     getWorldStartingPoint();
+    // Returns the starting point in local coordinates.
+    SbVec3f getLocalStartingPoint();
+    // Returns the starting point in world coordinates.
+    SbVec3f getWorldStartingPoint();
 
     // Get the matrix which converts from the space of one part into
     // local space. Good to use if transforms occur between 'motionMatrix'
@@ -205,24 +203,25 @@ class SoDragger : public SoInteractionKit {
     // Note: This routine will try not to create parts that don't exist.
     //       Instead it finds the existing part that precedes it in traversal.
     //       But this only works if the partName is in this nodekit's catalog.
-    //       If the part is nested within another kit below this one or 
-    //       sitting inside a list part, the part will be created when it 
+    //       If the part is nested within another kit below this one or
+    //       sitting inside a list part, the part will be created when it
     //       doesn't exist.
-    void getPartToLocalMatrix( const SbName &partName, 
-		   	       SbMatrix &partToLocalMatrix, 
-			       SbMatrix &localToPartMatrix);
+    void getPartToLocalMatrix(const SbName &partName,
+                              SbMatrix &    partToLocalMatrix,
+                              SbMatrix &    localToPartMatrix);
 
     // Transforms a given matrix from one space into another space
-    void  transformMatrixLocalToWorld( const SbMatrix &fromMatrix, 
-				       SbMatrix &toMatrix);
-    void  transformMatrixWorldToLocal( const SbMatrix &fromMatrix, 
-				       SbMatrix &toMatrix);
-    void  transformMatrixToLocalSpace( const SbMatrix &fromMatrix,
-	    SbMatrix &toMatrix, const SbName &fromSpacePartName);
+    void transformMatrixLocalToWorld(const SbMatrix &fromMatrix,
+                                     SbMatrix &      toMatrix);
+    void transformMatrixWorldToLocal(const SbMatrix &fromMatrix,
+                                     SbMatrix &      toMatrix);
+    void transformMatrixToLocalSpace(const SbMatrix &fromMatrix,
+                                     SbMatrix &      toMatrix,
+                                     const SbName &  fromSpacePartName);
 
     // Set the motion matrix.  Triggers value changed callbacks, but only
     // if (newMatrix != the current motionMatrix)
-    void            setMotionMatrix( const SbMatrix &newMatrix );
+    void setMotionMatrix(const SbMatrix &newMatrix);
 
     // Invokes the valueChangedCallbacks.
     // These are invoked whenever setMotionMatrix() changes the motion matrix.
@@ -236,46 +235,49 @@ class SoDragger : public SoInteractionKit {
     // beginning of the dragging.
     const SbMatrix &getStartMotionMatrix() { return startMotionMatrix; }
     // By default, saves the motionMatrix as the startMotionMatrix.
-    // Subclasses may want to save additional info. For example, the 
+    // Subclasses may want to save additional info. For example, the
     // centerballDragger also saves the matrix that moves the center relative
     // to the motionMatrix.
     virtual void saveStartParameters();
 
     // Information that's good to have during a valueChanged callback
-    const SoPath   	      *getPickPath() 	   const;
-    const SoEvent	      *getEvent() const;
-    // Creates a new path leading to this dragger, if the last path given by 
+    const SoPath * getPickPath() const;
+    const SoEvent *getEvent() const;
+    // Creates a new path leading to this dragger, if the last path given by
     // setTempPathToThis()  is still valid.  Will return NULL if not possible.
-    // You must ref() and unref() this new path if you 
+    // You must ref() and unref() this new path if you
     // don't want it (and all the nodes along it) to stay around forever.
-    SoPath   	              *createPathToThis();
+    SoPath *createPathToThis();
 
     // Surrogate Pick Information. This is relevant if the we are dragging
     // based on the pick of a surrogate part. This happens when you call
-    // SoInteractionKit::setPartAsPath() and thus specify a 'stand-in' path 
+    // SoInteractionKit::setPartAsPath() and thus specify a 'stand-in' path
     // to pick when initiating a drag.
-    // Owner: 
+    // Owner:
     //       Path to the InteractionKit that owns the surrogate part.
-	    const SoPath *getSurrogatePartPickedOwner() const 
-		  { return pathToSurrogatePickOwner;}
-    // Name:  
+    const SoPath *getSurrogatePartPickedOwner() const {
+        return pathToSurrogatePickOwner;
+    }
+    // Name:
     //       Name of the surrogate part within the owners list.
-	    const SbName &getSurrogatePartPickedName() const 
-		{ return surrogateNameInPickOwner; }
-    // SurrogatePath: 
-    //        The owner's surrogate path for this name. This path may 
-    //        differ from the actual pickPath, but it is guaranteed to 
+    const SbName &getSurrogatePartPickedName() const {
+        return surrogateNameInPickOwner;
+    }
+    // SurrogatePath:
+    //        The owner's surrogate path for this name. This path may
+    //        differ from the actual pickPath, but it is guaranteed to
     //        be contained within the pickPath.
-	    const SoPath *getSurrogatePartPickedPath() const 
-		{ return surrogatePathInPickOwner;}
+    const SoPath *getSurrogatePartPickedPath() const {
+        return surrogatePathInPickOwner;
+    }
 
     // Set the point where the drag begins.
     // The pickedPoint version would usually be the result of a pick.
-    void setStartingPoint( const SoPickedPoint *newPoint );
+    void setStartingPoint(const SoPickedPoint *newPoint);
     // The SbVec3f version would usually be a point saved from the end of
     // another gesture. For example, when a modifier key goes down, we might
     // save the current position and use it to begin another connected gesture.
-    void setStartingPoint( const SbVec3f &newPoint );
+    void setStartingPoint(const SbVec3f &newPoint);
 
     // Information about the window an event occurred in.
     // Upon construction, the values are defaults.
@@ -283,21 +285,22 @@ class SoDragger : public SoInteractionKit {
     // and used for the duration of the drag.
     // When drag ends, new values are taken from the final handleEventAction.
     //
-    const SbViewVolume      &getViewVolume() { return viewVolume; }
-    void  setViewVolume(const SbViewVolume &vol) { viewVolume = vol; }
+    const SbViewVolume &getViewVolume() { return viewVolume; }
+    void setViewVolume(const SbViewVolume &vol) { viewVolume = vol; }
 
-    const SbViewportRegion  &getViewportRegion() { return vpRegion; }
-    void  setViewportRegion(const  SbViewportRegion &reg) { vpRegion = reg; }
+    const SbViewportRegion &getViewportRegion() { return vpRegion; }
+    void setViewportRegion(const SbViewportRegion &reg) { vpRegion = reg; }
 
     // Get the most recent handleEventAction.
-    SoHandleEventAction *getHandleEventAction() const 
-	{ return handleEventAction; }
-    void setHandleEventAction( SoHandleEventAction *newAction );
+    SoHandleEventAction *getHandleEventAction() const {
+        return handleEventAction;
+    }
+    void setHandleEventAction(SoHandleEventAction *newAction);
 
     // A path leading to 'this.' It is used to calculate the
     // motionMatrix. It is set when a dragger first grabs event, through the
     // handleEvent action, or by setCameraInfo() if NULL at the time.
-    void                setTempPathToThis(const SoPath *somethingClose);
+    void setTempPathToThis(const SoPath *somethingClose);
 
     // Called when the dragger gains or loses status as "grabber" of events.
     virtual void grabEventsSetup();
@@ -316,63 +319,63 @@ class SoDragger : public SoInteractionKit {
     //     Values for which no fields are found remain unchanged.
     //   Build a new matrix using the new values. Some may be the originals
     //     and some may have been replaced.
-    void workFieldsIntoTransform( SbMatrix &mtx );
+    void workFieldsIntoTransform(SbMatrix &mtx);
     // Same as above, but values are given explicitly as pointers.
     // If the pointers are NULL, the values in the matrix are not changed.
-    static void workValuesIntoTransform( SbMatrix &mtx, 
-					const SbVec3f *translationPtr,
-					const SbRotation *rotationPtr, 
-					const SbVec3f *scaleFactorPtr, 
-					const SbRotation *scaleOrientationPtr, 
-					const SbVec3f *centerPtr);
+    static void workValuesIntoTransform(SbMatrix &        mtx,
+                                        const SbVec3f *   translationPtr,
+                                        const SbRotation *rotationPtr,
+                                        const SbVec3f *   scaleFactorPtr,
+                                        const SbRotation *scaleOrientationPtr,
+                                        const SbVec3f *   centerPtr);
 
-    // Faster versions of getTransform() and factor() that take advantage of 
+    // Faster versions of getTransform() and factor() that take advantage of
     // the case where there is no scaleOrientation. Reverts to slow method
     // if it needs to.
     // This method will not work if the matrix given contains any scales
     // less than zero, and it does not check for that case.
-    static void getTransformFast( SbMatrix &mtx, SbVec3f &translation,
-			    SbRotation &rotation, SbVec3f &scaleFactor, 
-			    SbRotation &scaleOrientation, 
-			    const SbVec3f &center);
-    static void getTransformFast( SbMatrix &mtx, SbVec3f &translation,
-			    SbRotation &rotation, SbVec3f &scaleFactor, 
-			    SbRotation &scaleOrientation);
+    static void getTransformFast(SbMatrix &mtx, SbVec3f &translation,
+                                 SbRotation &rotation, SbVec3f &scaleFactor,
+                                 SbRotation &   scaleOrientation,
+                                 const SbVec3f &center);
+    static void getTransformFast(SbMatrix &mtx, SbVec3f &translation,
+                                 SbRotation &rotation, SbVec3f &scaleFactor,
+                                 SbRotation &scaleOrientation);
 
     // Appends the given motion to the end of 'mtx'.
     // 'conversion' transforms from the space the motion is defined in
-    // to the space 'mtx'.  
-    static SbMatrix appendTranslation( const SbMatrix &mtx, 
-		const SbVec3f &translation,
-		const SbMatrix *conversion = NULL );
-    static SbMatrix appendScale( const SbMatrix &mtx, 
-		const SbVec3f &scale, const SbVec3f &scaleCenter,
-		const SbMatrix *conversion = NULL );
-    static SbMatrix appendRotation( const SbMatrix &mtx, 
-		const SbRotation &rot, const SbVec3f &rotCenter,
-		const SbMatrix *conversion = NULL );
+    // to the space 'mtx'.
+    static SbMatrix appendTranslation(const SbMatrix &mtx,
+                                      const SbVec3f & translation,
+                                      const SbMatrix *conversion = NULL);
+    static SbMatrix appendScale(const SbMatrix &mtx, const SbVec3f &scale,
+                                const SbVec3f & scaleCenter,
+                                const SbMatrix *conversion = NULL);
+    static SbMatrix appendRotation(const SbMatrix &mtx, const SbRotation &rot,
+                                   const SbVec3f & rotCenter,
+                                   const SbMatrix *conversion = NULL);
 
-  SoINTERNAL public:
-    static void	initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
     // Initialize ALL Inventor detail classes
-    static void	initClasses();
+    static void initClasses();
 
-    // These control behavior of the rotational parts. If FRONT, no matter 
-    // where you hit the dragger relative to its center, it will behave as if 
+    // These control behavior of the rotational parts. If FRONT, no matter
+    // where you hit the dragger relative to its center, it will behave as if
     // you are dragging from the front. If BACK, the rear. If USE_PICK,
     // then it depends on the relationship between the picked point and the
-    // center of the dragger. 
-    enum ProjectorFrontSetting {
-	FRONT, BACK, USE_PICK
-    };
-    void setFrontOnProjector( ProjectorFrontSetting newVal )
-	{ projectorFrontSetting = newVal; }
-    ProjectorFrontSetting getFrontOnProjector() const 
-	{ return projectorFrontSetting;}
+    // center of the dragger.
+    enum ProjectorFrontSetting { FRONT, BACK, USE_PICK };
+    void setFrontOnProjector(ProjectorFrontSetting newVal) {
+        projectorFrontSetting = newVal;
+    }
+    ProjectorFrontSetting getFrontOnProjector() const {
+        return projectorFrontSetting;
+    }
 
   protected:
-
     // Constructor
     SoDragger();
 
@@ -381,20 +384,20 @@ class SoDragger : public SoInteractionKit {
     // relative to the viewport.
     // Normalized positions go from 0.0 to 1.0.
     // Regular positions go from 0 to (vpSize - 1)
-    SbVec2f	getNormalizedLocaterPosition();
-    SbVec2s	getLocaterPosition();
+    SbVec2f getNormalizedLocaterPosition();
+    SbVec2s getLocaterPosition();
 
     // Get the position of the locater when dragging started.
-    SbVec2s	getStartLocaterPosition() const	    { return startLocater; }
+    SbVec2s getStartLocaterPosition() const { return startLocater; }
 
     // The start locater position is automatically set when button 1
     // goes down over the dragger. Subclasses may wish to reset it, such
     // as when a constraint key goes down during dragging.
-    void	setStartLocaterPosition(SbVec2s p)   { startLocater = p; }
+    void setStartLocaterPosition(SbVec2s p) { startLocater = p; }
 
-    // Has the locater moved far enough from where it started to 
+    // Has the locater moved far enough from where it started to
     // choose a constraint gesture.
-    SbBool	isAdequateConstraintMotion();
+    SbBool isAdequateConstraintMotion();
 
     // Given a pickPath and a surrogatePath, decides whether it should
     // grab based on the surrogate. First, the pickPath must
@@ -404,36 +407,36 @@ class SoDragger : public SoInteractionKit {
     // If this bottom section contains other draggers, then we will pass it up.
     // This is because the other draggers will want to grab when they find out
     // they've been picked.
-    virtual SbBool shouldGrabBasedOnSurrogate( const SoPath *pickPath,
-				               const SoPath *surrogatePath );
+    virtual SbBool shouldGrabBasedOnSurrogate(const SoPath *pickPath,
+                                              const SoPath *surrogatePath);
 
     //
     // The dragger looks in this action to get information about the camera
     // and the viewport.  Usually the action used is just the handleEventAction.
-    void setCameraInfo( SoAction *action );
+    void setCameraInfo(SoAction *action);
 
     // This is called during traversal by a HandleEventAction. It
     // calls ha->setHandled() if the event is handled.
-    virtual void	       handleEvent(SoHandleEventAction *ha);
+    virtual void handleEvent(SoHandleEventAction *ha);
 
     // This should be called by every child dragger of a compound dragger
     // as a result of compoundDragger->registerChildDragger( childDragger );
     // Called on the compoundDragger when childDragger's value changes.
-    // Gets the motionMatrix from a the child dragger. Appends that change 
-    // to the parent dragger's savedStartMatrix, and sets the result as the 
+    // Gets the motionMatrix from a the child dragger. Appends that change
+    // to the parent dragger's savedStartMatrix, and sets the result as the
     // parent's motionMatrix.
     // Then, it zeros out the motionMatrix of the child dragger.
     void transferMotion(SoDragger *child);
 
     // Set/get whether the dragger should be ignored during bounding
-    // box calculations. 
-    void    setIgnoreInBbox( SbBool newVal ) { ignoreInBbox = newVal; }
-    SbBool  isIgnoreInBbox() { return ignoreInBbox; }
-    
+    // box calculations.
+    void   setIgnoreInBbox(SbBool newVal) { ignoreInBbox = newVal; }
+    SbBool isIgnoreInBbox() { return ignoreInBbox; }
+
     // Implements getBoundingBox action. Differs from separator as follows:
     // If the 'ignoreInBbox' flag is set to TRUE, then it will return without
     // traversing children.
-    virtual void        getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
 
     // Stubs used by compound draggers to get user callbacks from
     // the child dragger
@@ -447,16 +450,16 @@ class SoDragger : public SoInteractionKit {
     // Called by the above child callbacks. Establishes which child dragger
     // is currently active. Set at beginning of child callback, returned to
     // original value at end. Returns current value at time method is called.
-    void       setActiveChildDragger( SoDragger *newChildDragger );
+    void       setActiveChildDragger(SoDragger *newChildDragger);
     SoDragger *getActiveChildDragger() const { return activeChildDragger; }
 
-    // Called by the SoBaseKit::write() method. 
+    // Called by the SoBaseKit::write() method.
     //
     // Draggers don't want to write out fields if they have default vals.
     //
     // sets isActive to default if default and not connected.
     //
-    // Looks for fields named: 
+    // Looks for fields named:
     //    'rotation'    with value SbRotation::identity()
     //    'translation' with value (0,0,0)
     //    'center'      with value (0,0,0)
@@ -466,51 +469,49 @@ class SoDragger : public SoInteractionKit {
     //
     // Then calls the method for SoInteractionKit.
     //
-    // NOTE: Parts which are set to default may still wind up writing to file 
+    // NOTE: Parts which are set to default may still wind up writing to file
     //       if, for example, they lie on a path.
     virtual void setDefaultOnNonWritingFields();
 
     virtual ~SoDragger();
 
   private:
-
     // lists of callback functions
-    SoCallbackList	*startCallbacks;
-    SoCallbackList	*motionCallbacks;
-    SoCallbackList	*finishCallbacks;
-    SoCallbackList	*valueChangedCallbacks;
-    
-    SoCallbackList	*otherEventCallbacks;
+    SoCallbackList *startCallbacks;
+    SoCallbackList *motionCallbacks;
+    SoCallbackList *finishCallbacks;
+    SoCallbackList *valueChangedCallbacks;
 
-    SbBool    valueChangedCallbacksEnabled;
+    SoCallbackList *otherEventCallbacks;
+
+    SbBool     valueChangedCallbacksEnabled;
     SoDragger *activeChildDragger;
 
-    SoHandleEventAction	*handleEventAction; // current event action
+    SoHandleEventAction *handleEventAction; // current event action
 
     // A record of the world space point which initiated the dragging.
     // This might be set from a pickedPoint of a handleEventAction,
-    // or explicitly from a given point when a meta-key callback 
+    // or explicitly from a given point when a meta-key callback
     // changes gestures mid-stream and wants to select its own transitional
     // starting point.
-    SbVec3f	        startingWorldPoint;	  
+    SbVec3f startingWorldPoint;
 
-    // Used by parent draggers to save initial matrix when motion begins. 
+    // Used by parent draggers to save initial matrix when motion begins.
     SbMatrix startMotionMatrix;
 
     // Where the locater was when dragging was initiated
-    SbVec2s	startLocater;
-
+    SbVec2s startLocater;
 
     // sets pick path and tempPathToThis
-    void                setPickPath(SoPath *newPickPath);
-    SoPath		*pickPath;	    // pick path to the dragger
+    void    setPickPath(SoPath *newPickPath);
+    SoPath *pickPath; // pick path to the dragger
 
     // sets surrogate part picks.
     void setNoPickedSurrogate();
-    void setPickedSurrogate( SoPath *pathToOwner, SbName &nameUsedByOwner,
-			     SoPath *pathUsedByOwner );
+    void setPickedSurrogate(SoPath *pathToOwner, SbName &nameUsedByOwner,
+                            SoPath *pathUsedByOwner);
 
-    SbName surrogateNameInPickOwner;
+    SbName  surrogateNameInPickOwner;
     SoPath *pathToSurrogatePickOwner;
     SoPath *surrogatePathInPickOwner;
 
@@ -522,26 +523,26 @@ class SoDragger : public SoInteractionKit {
     // very careful before using it, since some nodes my get deleted out from
     // under us. The variable tempPathNumKidsHack helps us fix up paths
     // that have changed since the path was set.
-    SoTempPath		*tempPathToThis;
+    SoTempPath *     tempPathToThis;
     std::vector<int> tempPathNumKidsHack;
-    // Determines if this path can actually be used. Since a temp path 
+    // Determines if this path can actually be used. Since a temp path
     // does not ref the nodes, some nodes my get deleted out from
     // under us. This routine makes sure that everythings all right.
-    SbBool              isTempPathToThisOk();
+    SbBool isTempPathToThisOk();
     // Creates a temp path copy of the full path.
-    SoTempPath      *createTempPathFromFullPath( const SoFullPath *fp ) const;
+    SoTempPath *createTempPathFromFullPath(const SoFullPath *fp) const;
 
     // Minimum number of pixels to move before choosing a constraint
     // based on the gesture.
-    int		minGesture;
+    int minGesture;
 
     // The smallest scale that any dragger will write. If the user attempts
     // to go below this amount, the dragger will set it to this minimum.
     // Default is .0001
-    static float	minScale;
+    static float minScale;
 
-    SbViewVolume	viewVolume;	    // view volume for xsection tests
-    SbViewportRegion	vpRegion;	    // view volume for xsection tests
+    SbViewVolume     viewVolume; // view volume for xsection tests
+    SbViewportRegion vpRegion;   // view volume for xsection tests
 
     // We keep these matrices and their inverses around
     // to use when converting between spaces. The four
@@ -550,7 +551,7 @@ class SoDragger : public SoInteractionKit {
 
     // Called to make sure these matrixes are up to date.
     void validateMatrices();
-    
+
     // These matrices are ones that are commonly queried by
     // subclasses. So, we cache them.
     // Two things determine the localToWorld matrix. The pathToThis and
@@ -560,11 +561,11 @@ class SoDragger : public SoInteractionKit {
     SbBool   cachedPathToThisValid;
     SbBool   cachedMotionMatrixValid;
     SbMatrix cachedMotionMatrix;
-    // PostMotion is the matrix space just AFTER the motion matrix. 
+    // PostMotion is the matrix space just AFTER the motion matrix.
     SbMatrix postMotionToWorldMatrix;
     SbMatrix worldToPostMotionMatrix;
-    // PreMotion is the matrix space just BEFORE the motion matrix. 
-    SbMatrix preMotionToWorldMatrix;  
+    // PreMotion is the matrix space just BEFORE the motion matrix.
+    SbMatrix preMotionToWorldMatrix;
     SbMatrix worldToPreMotionMatrix;
 
     // Used so that draggers don't try to include themselves

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |      Defines the SoSceneKit class. 
+ |      Defines the SoSceneKit class.
  |      Organizes four lists into a scene:
  |         cameraList       -- a list of SoCameraKits and its subclasses.
  |         lightList        -- a list of SoLightKits and its subclasses.
@@ -57,8 +57,8 @@
  _______________________________________________________________________
 */
 
-#ifndef  _SO_SCENE_KIT_
-#define  _SO_SCENE_KIT_
+#ifndef _SO_SCENE_KIT_
+#define _SO_SCENE_KIT_
 
 #include <Inventor/nodekits/SoBaseKit.h>
 
@@ -69,13 +69,13 @@
 //     For info about the structure of SoSceneKit:
 //     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
 //     [2] type:    ivNodeKitStructure SoSceneKit.
-//     [3] The program prints a diagram of the scene graph and a table with 
+//     [3] The program prints a diagram of the scene graph and a table with
 //         information about each part.
 //
 //    New nodes in this subclass are:
 //         cameraList, lightList, and childList
 //
-//      A parent node that manages a collection of child nodes 
+//      A parent node that manages a collection of child nodes
 //      into a unit with the following structure:
 //
 //                            this
@@ -85,8 +85,8 @@
 //           "callbackList" "topSeparator"
 //                              |
 //           --------------------------------
-//           |               |              |        
-//      "cameraList"    "lightList"   "childList"     
+//           |               |              |
+//      "cameraList"    "lightList"   "childList"
 //
 ////////////////////////////////////////////////////////////////////
 class SoSceneKit : public SoBaseKit {
@@ -105,15 +105,16 @@ class SoSceneKit : public SoBaseKit {
 
     // sets the switch node in 'cameraList' to be the number given
     int  getCameraNumber();
-    void setCameraNumber(int camNum );
+    void setCameraNumber(int camNum);
 
     // Overrides default method on SoNode
     virtual SbBool affectsState() const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
   protected:
     virtual ~SoSceneKit();
 };
-#endif  /* _SO_SCENE_KIT_ */
+#endif /* _SO_SCENE_KIT_ */

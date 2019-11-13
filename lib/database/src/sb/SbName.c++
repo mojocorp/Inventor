@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -80,13 +80,9 @@ SbName::SbName()
     entry = &(*entries.insert("").first);
 }
 
-SbName::SbName(const char *s)
-{
-    entry = &(*entries.insert(s).first);
-}
+SbName::SbName(const char *s) { entry = &(*entries.insert(s).first); }
 
-SbName::SbName(const SbString &s)
-{
+SbName::SbName(const SbString &s) {
     entry = &(*entries.insert(s.getString()).first);
 }
 
@@ -101,9 +97,7 @@ void
 SbName::init()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -135,7 +129,7 @@ SbName::find(const char c) const
 {
     size_t index = entry->find(c);
 
-    return (index!=std::string::npos) ? (int)index : -1;
+    return (index != std::string::npos) ? (int)index : -1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -153,7 +147,7 @@ SbName::rfind(char c) const
 {
     size_t index = entry->rfind(c);
 
-    return (index!=std::string::npos) ? (int)index : -1;
+    return (index != std::string::npos) ? (int)index : -1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -170,7 +164,8 @@ SbName::isIdentStartChar(char c)
 ////////////////////////////////////////////////////////////////////////
 {
     // Digits are illegal as first character:
-    if (isdigit(c)) return FALSE;
+    if (isdigit(c))
+        return FALSE;
 
     return isIdentChar(c);
 }
@@ -189,7 +184,8 @@ SbName::isIdentChar(char c)
 ////////////////////////////////////////////////////////////////////////
 {
     // Only 0-9, a-z, A-Z and _ are legal:
-    if (isalnum(c) || c == '_') return TRUE;
+    if (isalnum(c) || c == '_')
+        return TRUE;
 
     return FALSE;
 }
@@ -208,7 +204,8 @@ SbName::isBaseNameStartChar(char c)
 ////////////////////////////////////////////////////////////////////////
 {
     // Digits are illegal as first character:
-    if (isdigit(c)) return FALSE;
+    if (isdigit(c))
+        return FALSE;
 
     return isIdentChar(c);
 }
@@ -216,8 +213,7 @@ SbName::isBaseNameStartChar(char c)
 //
 // Characters that are illegal in identifiers:
 //   . + ' " \ { }
-static const char
-badCharacters[] = ".+\'\"\\{}";
+static const char badCharacters[] = ".+\'\"\\{}";
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -233,11 +229,12 @@ SbName::isBaseNameChar(char c)
 ////////////////////////////////////////////////////////////////////////
 {
     // First, quick check for common case:
-    if (isalnum(c)) return TRUE;
+    if (isalnum(c))
+        return TRUE;
 
     // Now, look for bad characters:
-    if ((strchr(badCharacters, c) != NULL) ||
-	isspace(c) || iscntrl(c)) return FALSE;
+    if ((strchr(badCharacters, c) != NULL) || isspace(c) || iscntrl(c))
+        return FALSE;
 
     // Anything left must be OK
     return TRUE;

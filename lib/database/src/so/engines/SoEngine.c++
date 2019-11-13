@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,12 +63,12 @@
 #include <Inventor/fields/SoFieldData.h>
 #include <Inventor/misc/SoNotification.h>
 
-SoType	SoEngine::classTypeId;				// Type identifier
+SoType SoEngine::classTypeId; // Type identifier
 
 // Syntax for reading/writing type information to files
-#define OPEN_BRACE_CHAR		'['
-#define CLOSE_BRACE_CHAR	']'
-#define VALUE_SEPARATOR_CHAR	','
+#define OPEN_BRACE_CHAR '['
+#define CLOSE_BRACE_CHAR ']'
+#define VALUE_SEPARATOR_CHAR ','
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -92,7 +92,7 @@ SoEngine::initClass()
     // Allocate a new engine type id
     // No real parent id
     classTypeId = SoType::createType(SoFieldContainer::getClassTypeId(),
-    SbName("Engine"), 0, 0);
+                                     SbName("Engine"), 0, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -112,10 +112,10 @@ SoEngine::SoEngine()
     needsEvaluation = TRUE;
     notifying = FALSE;
 #ifdef DEBUG
-    if (! SoDB::isInitialized())
-	SoDebugError::post("SoEngine::SoEngine",
-			   "Cannot construct engines before "
-			   "calling SoDB::init()");
+    if (!SoDB::isInitialized())
+        SoDebugError::post("SoEngine::SoEngine",
+                           "Cannot construct engines before "
+                           "calling SoDB::init()");
 #endif /* DEBUG */
 }
 
@@ -157,14 +157,14 @@ SoEngine::getOutputs(SoEngineOutputList &list) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int				i;
-    const SoEngineOutputData	*od = getOutputData();
+    int                       i;
+    const SoEngineOutputData *od = getOutputData();
 
     if (od == NULL)
-	return 0;
+        return 0;
 
     for (i = 0; i < od->getNumOutputs(); i++) {
-	list.append(od->getOutput(this, i));
+        list.append(od->getOutput(this, i));
     }
     return od->getNumOutputs();
 }
@@ -182,16 +182,16 @@ SoEngine::getOutput(const SbName &outputName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int				i;
-    const SoEngineOutputData	*od = getOutputData();
+    int                       i;
+    const SoEngineOutputData *od = getOutputData();
 
     if (od == NULL)
-	return NULL;
+        return NULL;
 
     // Search outputs for one with given name
     for (i = 0; i < od->getNumOutputs(); i++)
-	if (od->getOutputName(i) == outputName)
-	    return od->getOutput(this, i);
+        if (od->getOutputName(i) == outputName)
+            return od->getOutput(this, i);
 
     // Not found...
     return NULL;
@@ -207,23 +207,22 @@ SoEngine::getOutput(const SbName &outputName) const
 // Use: public
 
 SbBool
-SoEngine::getOutputName(const SoEngineOutput *output,
-			  SbName &outputName) const
+SoEngine::getOutputName(const SoEngineOutput *output, SbName &outputName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int				i;
-    const SoEngineOutputData	*od = getOutputData();
+    int                       i;
+    const SoEngineOutputData *od = getOutputData();
 
     if (od == NULL)
-	return FALSE;
+        return FALSE;
 
     // Search outputs for one with given pointer
     for (i = 0; i < od->getNumOutputs(); i++) {
-	if (od->getOutput(this, i) == output) {
-	    outputName = od->getOutputName(i);
-	    return TRUE;
-	}
+        if (od->getOutput(this, i) == output) {
+            outputName = od->getOutputName(i);
+            return TRUE;
+        }
     }
 
     // Not found...
@@ -249,7 +248,7 @@ SoEngine::copy() const
     initCopyDict();
 
     // Create a copy of this engine
-    SoEngine *newEngine = (SoEngine *) getTypeId().createInstance();
+    SoEngine *newEngine = (SoEngine *)getTypeId().createInstance();
     newEngine->ref();
 
     // Copy the contents
@@ -309,31 +308,32 @@ SoEngine::evaluateWrapper()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!needsEvaluation) return;
+    if (!needsEvaluation)
+        return;
 
     // Break cycles:
     needsEvaluation = FALSE;
 
-    int i;
+    int                       i;
     const SoEngineOutputData *od = getOutputData();
     for (i = 0; i < od->getNumOutputs(); i++) {
-	SoEngineOutput *out = od->getOutput(this, i);
-	out->prepareToWrite();
+        SoEngineOutput *out = od->getOutput(this, i);
+        out->prepareToWrite();
     }
     // Evaluate all our inputs:
     // (this works around some problems with engines that
     // don't always get their inputs during evaluation):
     const SoFieldData *fieldData = getFieldData();
     for (i = 0; i < fieldData->getNumFields(); i++) {
-	SoField *inputField = fieldData->getField(this, i);
-	inputField->evaluate();
+        SoField *inputField = fieldData->getField(this, i);
+        inputField->evaluate();
     }
 
     evaluate();
 
     for (i = 0; i < od->getNumOutputs(); i++) {
-	SoEngineOutput *out = od->getOutput(this, i);
-	out->doneWriting();
+        SoEngineOutput *out = od->getOutput(this, i);
+        out->doneWriting();
     }
 }
 
@@ -349,7 +349,8 @@ SoEngine::notify(SoNotList *list)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (notifying) return; // Avoid potential loops
+    if (notifying)
+        return; // Avoid potential loops
 
     // There's an annoying bug with engines that enable and disable
     // their outputs in their inputChanged method that requires this
@@ -359,14 +360,14 @@ SoEngine::notify(SoNotList *list)
     needsEvaluation = TRUE;
 
     SoNotRec *lastRec = list->getLastRec();
-    SbBool notifiedFromContainer = 
-	(lastRec && lastRec->getType() == SoNotRec::CONTAINER);
+    SbBool    notifiedFromContainer =
+        (lastRec && lastRec->getType() == SoNotRec::CONTAINER);
 
     // If we are being notified by a change to one of our fields
     // (notification type is CONTAINER), pass that info on to any
     // subclass that cares.
     if (notifiedFromContainer) {
-	inputChanged(list->getLastField());
+        inputChanged(list->getLastField());
     }
 
     // We may have auditors (fields that point to this engine), so
@@ -374,30 +375,30 @@ SoEngine::notify(SoNotList *list)
     SoFieldContainer::notify(list);
 
     // Append a record of type ENGINE with the base set to this
-    SoNotRec	rec(this);
+    SoNotRec rec(this);
     rec.setType(SoNotRec::ENGINE);
     list->append(&rec);
 
     // Now notify our outputs' connected fields
-    SoNotList	workingList(list);
-    SbBool	firstConnection = TRUE;
+    SoNotList workingList(list);
+    SbBool    firstConnection = TRUE;
 
     const SoEngineOutputData *od = getOutputData();
     for (int i = 0; i < od->getNumOutputs(); i++) {
-	SoEngineOutput *out = od->getOutput(this, i);
-	if (out->isEnabled()) {
-	    for (int j = 0; j < out->getNumConnections(); j++) {
+        SoEngineOutput *out = od->getOutput(this, i);
+        if (out->isEnabled()) {
+            for (int j = 0; j < out->getNumConnections(); j++) {
 
-		// Make sure we save the original list for use each
-		// time through the loop
-		if (firstConnection)
-		    firstConnection = FALSE;
-		else
-		    workingList = *list;
+                // Make sure we save the original list for use each
+                // time through the loop
+                if (firstConnection)
+                    firstConnection = FALSE;
+                else
+                    workingList = *list;
 
-		(*out)[j]->notify(&workingList);
-	    }
-	}
+                (*out)[j]->notify(&workingList);
+            }
+        }
     }
     notifying = FALSE;
 }
@@ -415,8 +416,7 @@ void
 SoEngine::inputChanged(SoField *)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -430,14 +430,15 @@ SoEngine::writeInstance(SoOutput *out)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! writeHeader(out, FALSE, TRUE)) {
+    if (!writeHeader(out, FALSE, TRUE)) {
 
-	const SoFieldData *fieldData = getFieldData();
+        const SoFieldData *fieldData = getFieldData();
 
-	fieldData->write(out, this);
-	if (! isBuiltIn) getOutputData()->writeDescriptions(out, this);
+        fieldData->write(out, this);
+        if (!isBuiltIn)
+            getOutputData()->writeDescriptions(out, this);
 
-	writeFooter(out);
+        writeFooter(out);
     }
 }
 
@@ -455,25 +456,26 @@ SoEngine::readInstance(SoInput *in, unsigned short /* flags not used */)
 ////////////////////////////////////////////////////////////////////////
 {
     if (in->isBinary()) {
-	SbBool notBuiltIn;
-	SbBool readOK = getFieldData()->read(in, this, TRUE, notBuiltIn);
+        SbBool notBuiltIn;
+        SbBool readOK = getFieldData()->read(in, this, TRUE, notBuiltIn);
 
-	if (readOK && notBuiltIn) 
-	    readOK = getOutputData()->readDescriptions(in, this);
+        if (readOK && notBuiltIn)
+            readOK = getOutputData()->readDescriptions(in, this);
 
-	return readOK;
+        return readOK;
     } else {
-	SbBool notBuiltIn; // Not used
-	SbBool readOK = getFieldData()->read(in, this, FALSE, notBuiltIn);
-	if (!readOK) return readOK;
+        SbBool notBuiltIn; // Not used
+        SbBool readOK = getFieldData()->read(in, this, FALSE, notBuiltIn);
+        if (!readOK)
+            return readOK;
 
-	// See if "outputs" keyword is there:
-	SbName outputs;
-	if (!in->read(outputs, TRUE) || outputs != "outputs") {
-	    return readOK;
-	}
-	// If it is, read outputs:
-	return getOutputData()->readDescriptions(in, this);
+        // See if "outputs" keyword is there:
+        SbName outputs;
+        if (!in->read(outputs, TRUE) || outputs != "outputs") {
+            return readOK;
+        }
+        // If it is, read outputs:
+        return getOutputData()->readDescriptions(in, this);
     }
 }
 
@@ -492,45 +494,45 @@ SoEngine::writeOutputTypes(SoOutput *out)
     SbName             outName;
     SoEngineOutputList outList;
 
-    (void)getOutputs( outList );
+    (void)getOutputs(outList);
 
     // Write the output keyword
     if (!out->isBinary())
         out->indent();
-    out->write( "outputs" );
+    out->write("outputs");
 
-    if (out->isBinary()) 
+    if (out->isBinary())
         out->write(outList.getLength());
     else {
-        out->write( ' ' );
-        out->write( OPEN_BRACE_CHAR );
-        out->write( ' ' );
+        out->write(' ');
+        out->write(OPEN_BRACE_CHAR);
+        out->write(' ');
         out->incrementIndent(2);
     }
 
     // For each output, write out the output type and name
-    for( int i=0; i<outList.getLength(); i++ ) {
+    for (int i = 0; i < outList.getLength(); i++) {
 
         const SoType outType = outList[i]->getConnectionType();
-        getOutputName( outList[i], outName );
+        getOutputName(outList[i], outName);
 
-        out->write( outType.getName().getString() );
+        out->write(outType.getName().getString());
         if (!out->isBinary())
-            out->write( ' ' );
-        out->write( outName.getString() );
+            out->write(' ');
+        out->write(outName.getString());
 
         if (!out->isBinary()) {
-            if( i != outList.getLength()-1 ) {
-                out->write( VALUE_SEPARATOR_CHAR );
-                out->write( '\n' );
+            if (i != outList.getLength() - 1) {
+                out->write(VALUE_SEPARATOR_CHAR);
+                out->write('\n');
                 out->indent();
             }
         }
     }
     if (!out->isBinary()) {
-        out->write( ' ' );
-        out->write( CLOSE_BRACE_CHAR );
-        out->write( '\n' );
+        out->write(' ');
+        out->write(CLOSE_BRACE_CHAR);
+        out->write('\n');
         out->decrementIndent(2);
     }
 }
@@ -551,7 +553,7 @@ SoEngine::copyThroughConnection() const
     // If there is already a copy of this engine, use it
     SoFieldContainer *copy = findCopy(this, TRUE);
     if (copy != NULL)
-	return copy;
+        return copy;
 
     // Otherwise, we need to figure out whether to create a copy of
     // this engine or to just return "this". We should return a copy
@@ -563,20 +565,20 @@ SoEngine::copyThroughConnection() const
 
     if (shouldCopy()) {
 
-	// Create and add a new instance to the dictionary
-	SoEngine *newEngine = (SoEngine *) getTypeId().createInstance();
-	newEngine->ref();
-	addCopy(this, newEngine);		// Adds a ref()
-	newEngine->unrefNoDelete();
+        // Create and add a new instance to the dictionary
+        SoEngine *newEngine = (SoEngine *)getTypeId().createInstance();
+        newEngine->ref();
+        addCopy(this, newEngine); // Adds a ref()
+        newEngine->unrefNoDelete();
 
-	// Find the copy and return it; this has the side effect of
-	// copying the contents and letting the dictionary know it has
-	// been copied once.
-	return findCopy(this, TRUE);
+        // Find the copy and return it; this has the side effect of
+        // copying the contents and letting the dictionary know it has
+        // been copied once.
+        return findCopy(this, TRUE);
     }
 
     // Otherwise, just return this
-    return (SoFieldContainer *) this;
+    return (SoFieldContainer *)this;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -597,12 +599,12 @@ SoEngine::shouldCopy() const
 
     const SoFieldData *fieldData = getFieldData();
     if (fieldData != NULL) {
-	int numFields = fieldData->getNumFields();
-	for (int i = 0; i < numFields; i++) {
-	    SoField *inputField = fieldData->getField(this, i);
-	    if (inputField->referencesCopy())
-		return TRUE;
-	}
+        int numFields = fieldData->getNumFields();
+        for (int i = 0; i < numFields; i++) {
+            SoField *inputField = fieldData->getField(this, i);
+            if (inputField->referencesCopy())
+                return TRUE;
+        }
     }
 
     // If we get here, we didn't find any inside connections
@@ -648,9 +650,9 @@ SoEngineOutput::~SoEngineOutput()
     // are no more connections, and complain if there are.
 #ifdef DEBUG
     if (getNumConnections() != 0)
-	SoDebugError::post("SoEngineOutput::~SoEngineOutput",
-			   "Engine with output connections deleted.\n"
-			   "Did you unref() an engine that you didn't ref()?");
+        SoDebugError::post("SoEngineOutput::~SoEngineOutput",
+                           "Engine with output connections deleted.\n"
+                           "Did you unref() an engine that you didn't ref()?");
 #endif /* DEBUG */
 }
 
@@ -671,9 +673,9 @@ SoEngineOutput::getConnectionType() const
     // all engine instances).
 #ifdef DEBUG
     if (container == NULL) {
-	SoDebugError::post("SoEngineOutput::getConnectionType",
-			   "container is NULL!");
-	return SoType::badType();
+        SoDebugError::post("SoEngineOutput::getConnectionType",
+                           "container is NULL!");
+        return SoType::badType();
     }
 #endif /* DEBUG */
 
@@ -681,9 +683,9 @@ SoEngineOutput::getConnectionType() const
 
 #ifdef DEBUG
     if (od == NULL) {
-	SoDebugError::post("SoEngineOutput::getConnectionType",
-			   "container has no output data!");
-	return SoType::badType();
+        SoDebugError::post("SoEngineOutput::getConnectionType",
+                           "container has no output data!");
+        return SoType::badType();
     }
 #endif /* DEBUG */
 
@@ -706,13 +708,13 @@ SoEngineOutput::getForwardConnections(SoFieldList &list) const
     int numConnections = 0;
 
     for (int i = 0; i < connections.size(); i++) {
-        SoField	*field = connections[i];
+        SoField *field = connections[i];
 
         // Skip over converter, if any
         SoFieldContainer *container = field->getContainer();
         if (container->isOfType(SoFieldConverter::getClassTypeId()))
-            numConnections += ((SoFieldConverter *) container)->
-            getForwardConnections(list);
+            numConnections +=
+                ((SoFieldConverter *)container)->getForwardConnections(list);
 
         else {
             list.append(field);
@@ -739,26 +741,27 @@ SoEngineOutput::enable(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (enabled != flag) {
-	enabled = flag;
+        enabled = flag;
 
-	// Notify if re-enabling connections
-	if (flag) {
+        // Notify if re-enabling connections
+        if (flag) {
 
-	    // A very annoying double notification occurs with engines
-	    // that enable their outputs during inputChanged that we
-	    // prevent by not bothering to start notification if we're
-	    // already in the middle of notification:
-	    SoEngine *e = getContainer();
-	    if (e && e->isNotifying()) return;
+            // A very annoying double notification occurs with engines
+            // that enable their outputs during inputChanged that we
+            // prevent by not bothering to start notification if we're
+            // already in the middle of notification:
+            SoEngine *e = getContainer();
+            if (e && e->isNotifying())
+                return;
 
-	    for (int j = 0; j < getNumConnections(); j++) {
-		SoField *f = (*this)[j];
+            for (int j = 0; j < getNumConnections(); j++) {
+                SoField *f = (*this)[j];
 
-		if (!f->flags.isEngineModifying) {
-		    f->startNotify();
-		}
-	    }
-	}
+                if (!f->flags.isEngineModifying) {
+                    f->startNotify();
+                }
+            }
+        }
     }
 }
 
@@ -799,12 +802,13 @@ SoEngineOutput::removeConnection(SoField *field)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    std::vector<SoField*>::iterator it = std::find(connections.begin(), connections.end(), field);
+    std::vector<SoField *>::iterator it =
+        std::find(connections.begin(), connections.end(), field);
 
 #ifdef DEBUG
     if (it == connections.end())
-	SoDebugError::post("SoEngineOutput::removeConnection",
-			   "Field is not connected!");
+        SoDebugError::post("SoEngineOutput::removeConnection",
+                           "Field is not connected!");
 #endif /* DEBUG */
 
     connections.erase(it);
@@ -825,14 +829,14 @@ SoEngineOutput::prepareToWrite() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = connections.size()-1; i >= 0; i--) {
+    for (int i = connections.size() - 1; i >= 0; i--) {
         SoField *f = connections[i];
 #ifdef DEBUG
         if (f->flags.isEngineModifying) {
             SoDebugError::post("SoEngineOutput::prepareToWrite",
-                       "Internal field flags are wrong; "
-                       "did you call engine->evaluate() "
-                       "instead of engine->evaluateWrapper?");
+                               "Internal field flags are wrong; "
+                               "did you call engine->evaluate() "
+                               "instead of engine->evaluateWrapper?");
         }
 #endif
         f->flags.isEngineModifying = TRUE;
@@ -851,7 +855,7 @@ SoEngineOutput::doneWriting() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = connections.size()-1; i >= 0; i--) {
+    for (int i = connections.size() - 1; i >= 0; i--) {
         SoField *f = connections[i];
         f->flags.isEngineModifying = FALSE;
     }

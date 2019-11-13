@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_PROJECTION_MATRIX_ELEMENT
-#define  _SO_PROJECTION_MATRIX_ELEMENT
+#ifndef _SO_PROJECTION_MATRIX_ELEMENT
+#define _SO_PROJECTION_MATRIX_ELEMENT
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -70,33 +70,34 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoProjectionMatrixElement : public SoReplacedElement {
+SoEXTENDER
+class SoProjectionMatrixElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoProjectionMatrixElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the projection matrix to the given matrix
-    static void		set(SoState *state, SoNode *node,
-			    const SbMatrix &matrix);
+    static void set(SoState *state, SoNode *node, const SbMatrix &matrix);
 
     // Returns current matrix from the state
-    static const SbMatrix &	get(SoState *state);
+    static const SbMatrix &get(SoState *state);
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoProjectionMatrixElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
-    SbMatrix		projectionMatrix;
+    SbMatrix projectionMatrix;
 
     // Sets the matrix in an instance
-    virtual void	setElt(const SbMatrix &matrix);
+    virtual void setElt(const SbMatrix &matrix);
 
     virtual ~SoProjectionMatrixElement();
 };

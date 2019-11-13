@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -59,9 +59,9 @@
 #include <Inventor/errors/SoDebugError.h>
 
 // Syntax for reading/writing type information to files
-#define OPEN_BRACE_CHAR		'['
-#define CLOSE_BRACE_CHAR	']'
-#define VALUE_SEPARATOR_CHAR	','
+#define OPEN_BRACE_CHAR '['
+#define CLOSE_BRACE_CHAR ']'
+#define VALUE_SEPARATOR_CHAR ','
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -71,9 +71,9 @@
 //////////////////////////////////////////////////////////////////////////////
 
 struct SoOutputEntry {
-    SbName		name;		// Name of output
-    std::ptrdiff_t      offset; // Offset of output within object
-    SoType type;			// Type of output
+    SbName         name;   // Name of output
+    std::ptrdiff_t offset; // Offset of output within object
+    SoType         type;   // Type of output
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -86,7 +86,7 @@ SoEngineOutputData::SoEngineOutputData(const SoEngineOutputData *from)
 ////////////////////////////////////////////////////////////////////////
 {
     if (from == NULL)
-	return;
+        return;
 
     for (size_t i = 0; i < from->outputs.size(); i++) {
 
@@ -123,17 +123,17 @@ SoEngineOutputData::~SoEngineOutputData()
 
 void
 SoEngineOutputData::addOutput(
-  const SoEngine *defEngine,    // pointer to container
-  const char *outputName,	// Name of output
-  const SoEngineOutput *output, // Pointer to output in container
-  SoType type)			// Type of output
+    const SoEngine *      defEngine,  // pointer to container
+    const char *          outputName, // Name of output
+    const SoEngineOutput *output,     // Pointer to output in container
+    SoType                type)                      // Type of output
 //
 ////////////////////////////////////////////////////////////////////////
 {
     struct SoOutputEntry *newOutput = new struct SoOutputEntry;
 
-    newOutput->name   = outputName;
-    newOutput->offset = (const char *) output - (const char *) defEngine;
+    newOutput->name = outputName;
+    newOutput->offset = (const char *)output - (const char *)defEngine;
     newOutput->type = type;
 
     outputs.push_back(newOutput);
@@ -167,7 +167,7 @@ SoEngineOutputData::getOutput(const SoEngine *func, int index) const
 ////////////////////////////////////////////////////////////////////////
 {
     // This generates a CC warning; there's not much we can do about it...
-    return (SoEngineOutput *) ((char *) func + outputs[index]->offset);
+    return (SoEngineOutput *)((char *)func + outputs[index]->offset);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -178,12 +178,12 @@ SoEngineOutputData::getOutput(const SoEngine *func, int index) const
 // Use: internal
 
 int
-SoEngineOutputData::getIndex(const SoEngine *func, 
-			       const SoEngineOutput *output) const
+SoEngineOutputData::getIndex(const SoEngine *      func,
+                             const SoEngineOutput *output) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    std::ptrdiff_t offset = (const char *) output - (const char *) func;
+    std::ptrdiff_t offset = (const char *)output - (const char *)func;
 
     // Loop through the list looking for the correct offset:
     // (we'll assume this won't be very slow, since the list will
@@ -196,7 +196,7 @@ SoEngineOutputData::getIndex(const SoEngine *func,
 
     // This should never happen.
     SoDebugError::post("(internal) SoEngineOutputData::getIndex",
-		       "Did not find engineOutput");
+                       "Did not find engineOutput");
     return 0;
 }
 
@@ -214,9 +214,10 @@ SoEngineOutputData::getType(int index) const
 {
 #ifdef DEBUG
     if (index >= outputs.size())
-	SoDebugError::post("SoEngineOutputData::getType",
-			   "Trying to get type of output %d, but engine has "
-               "only %d outputs", index, outputs.size());
+        SoDebugError::post("SoEngineOutputData::getType",
+                           "Trying to get type of output %d, but engine has "
+                           "only %d outputs",
+                           index, outputs.size());
 #endif /* DEBUG */
     return ((SoOutputEntry *)(outputs[index]))->type;
 }
@@ -239,98 +240,102 @@ SoEngineOutputData::readDescriptions(SoInput *in, SoEngine *object) const
     char   c;
 
     // TRUE if reading an Inventor file pre-Inventor 2.1:
-    SbBool	oldFileFormat = (in->getIVVersion() < 2.1f);
+    SbBool oldFileFormat = (in->getIVVersion() < 2.1f);
 
     // TRUE if reading binary file format:
-    SbBool	isBinary = in->isBinary();
+    SbBool isBinary = in->isBinary();
 
-    unsigned short numDescriptions = 1<<15;  // Any huge number will work
+    unsigned short numDescriptions = 1 << 15; // Any huge number will work
     if (isBinary) {
-	if (oldFileFormat) {
-	    // Read and ignore "outputs" string:
-	    SbString junk;
-	    if (!in->read(junk) || junk != "outputs") return FALSE;
+        if (oldFileFormat) {
+            // Read and ignore "outputs" string:
+            SbString junk;
+            if (!in->read(junk) || junk != "outputs")
+                return FALSE;
 
-	    int num;  // NumDescriptions written as integer in old
-		      // file format
-	    if (!in->read(num)) return FALSE;
-	    numDescriptions = (short) num;
-	} else {
-	    if (!in->read(numDescriptions))
-		return FALSE;
-	}
+            int num; // NumDescriptions written as integer in old
+                     // file format
+            if (!in->read(num))
+                return FALSE;
+            numDescriptions = (short)num;
+        } else {
+            if (!in->read(numDescriptions))
+                return FALSE;
+        }
     }
 
     SbBool hadOutputsDefined = outputs.size() > 0;
 
     if (!isBinary) {
-	if (! ((gotChar = in->read(c)) || c != OPEN_BRACE_CHAR))
-	    return FALSE;
+        if (!((gotChar = in->read(c)) || c != OPEN_BRACE_CHAR))
+            return FALSE;
     }
 
     for (int i = 0; i < numDescriptions; i++) {
 
-	// Check for closing brace:
-	if (!isBinary) {
-	    // Check for closing brace:
-	    if (in->read(c) && c == CLOSE_BRACE_CHAR)
-		return TRUE;
-	    else in->putBack(c);
-	}
+        // Check for closing brace:
+        if (!isBinary) {
+            // Check for closing brace:
+            if (in->read(c) && c == CLOSE_BRACE_CHAR)
+                return TRUE;
+            else
+                in->putBack(c);
+        }
 
-	SbName type, outputName;
-	if (!in->read(type, TRUE)) return FALSE;
-	if (!in->read(outputName, TRUE)) return FALSE;
+        SbName type, outputName;
+        if (!in->read(type, TRUE))
+            return FALSE;
+        if (!in->read(outputName, TRUE))
+            return FALSE;
 
-	SoType outputType = SoType::fromName(type);
+        SoType outputType = SoType::fromName(type);
 
-	if (!hadOutputsDefined) {
-	    // Only create outputs if none defined yet.
+        if (!hadOutputsDefined) {
+            // Only create outputs if none defined yet.
 
-	    if (outputType.isBad())
-		return FALSE;
+            if (outputType.isBad())
+                return FALSE;
 
-	    // Create and initialize an instance of the output.
-	    // Add it to the field data.
-	    SoEngineOutput *output = new SoEngineOutput;
-	    output->setContainer(object);
+            // Create and initialize an instance of the output.
+            // Add it to the field data.
+            SoEngineOutput *output = new SoEngineOutput;
+            output->setContainer(object);
 
-	    // Cast const away to add info:
-	    SoEngineOutputData *This = (SoEngineOutputData *)this;
-	    This->addOutput(object, outputName.getString(),
-			    output, outputType);
-	}
+            // Cast const away to add info:
+            SoEngineOutputData *This = (SoEngineOutputData *)this;
+            This->addOutput(object, outputName.getString(), output, outputType);
+        }
 #ifdef DEBUG
-	else {
-	    // Check to make sure specification matches reality:
-	    SoEngineOutput *o = object->getOutput(outputName);
-	    if (o == NULL) {
-		SoDebugError::post("SoEngineOutputData::readDescriptions",
-				   "%s does not have a field named %s",
-				   object->getTypeId().getName().getString(),
-				   outputName.getString());
-	    }
-	    else if (!outputType.isDerivedFrom(o->getConnectionType())) {
-		SoDebugError::post("SoFieldData::readFieldDescriptions",
-			   "%s.%s is type %s, NOT type %s",
-			   object->getTypeId().getName().getString(),
-			   outputName.getString(),
-			   o->getConnectionType().getName().getString(),
-			   type.getString());
-	    }
-	}
+        else {
+            // Check to make sure specification matches reality:
+            SoEngineOutput *o = object->getOutput(outputName);
+            if (o == NULL) {
+                SoDebugError::post("SoEngineOutputData::readDescriptions",
+                                   "%s does not have a field named %s",
+                                   object->getTypeId().getName().getString(),
+                                   outputName.getString());
+            } else if (!outputType.isDerivedFrom(o->getConnectionType())) {
+                SoDebugError::post("SoFieldData::readFieldDescriptions",
+                                   "%s.%s is type %s, NOT type %s",
+                                   object->getTypeId().getName().getString(),
+                                   outputName.getString(),
+                                   o->getConnectionType().getName().getString(),
+                                   type.getString());
+            }
+        }
 #endif
-	if (!isBinary) {
-	    // Better get a ',' or a ']' at this point:
-            if (! in->read(c))
+        if (!isBinary) {
+            // Better get a ',' or a ']' at this point:
+            if (!in->read(c))
                 return FALSE;
             if (c != VALUE_SEPARATOR_CHAR) {
-		if (c == CLOSE_BRACE_CHAR)
-		    return TRUE;
-		else return FALSE;
-	    }
-	    // Got a ',', continue reading
-	}
+                if (c == CLOSE_BRACE_CHAR)
+                    return TRUE;
+                else
+                    return FALSE;
+            }
+            // Got a ',', continue reading
+        }
     }
 
     return TRUE;
@@ -353,14 +358,14 @@ SoEngineOutputData::writeDescriptions(SoOutput *out, SoEngine *object) const
 
     if (!isBinary) {
         out->indent();
-	out->write("outputs");
+        out->write("outputs");
         out->write(' ');
         out->write(OPEN_BRACE_CHAR);
         out->write(' ');
         out->incrementIndent(2);
     } else {
-	unsigned short numDescriptions = getNumOutputs();
-	out->write(numDescriptions);
+        unsigned short numDescriptions = getNumOutputs();
+        out->write(numDescriptions);
     }
 
     // For each output, write out the output type name and output name.
@@ -368,34 +373,34 @@ SoEngineOutputData::writeDescriptions(SoOutput *out, SoEngine *object) const
     int numWritten = 0;
     for (i = 0; i < getNumOutputs(); i++) {
 
-	SoEngineOutput *output = getOutput(object, i);
+        SoEngineOutput *output = getOutput(object, i);
 
-        SoType  type = output->getConnectionType();
+        SoType type = output->getConnectionType();
 
         out->write(type.getName().getString());
-        if (! isBinary)
+        if (!isBinary)
             out->write(' ');
         out->write(getOutputName(i).getString());
 
         // Format nice and pretty for ascii
-        if (! isBinary) {
+        if (!isBinary) {
             if (i != getNumOutputs() - 1) {
                 out->write(VALUE_SEPARATOR_CHAR);
-		++numWritten;
-		if ((numWritten%4) == 0) { // 4 pairs per line
-		    out->write('\n');
-		    out->indent();
-		} else out->write(' ');
+                ++numWritten;
+                if ((numWritten % 4) == 0) { // 4 pairs per line
+                    out->write('\n');
+                    out->indent();
+                } else
+                    out->write(' ');
             }
         }
     }
 
     // Write out the closing brace of the field type information.
-    if (! out->isBinary()) {
+    if (!out->isBinary()) {
         out->write(' ');
         out->write(CLOSE_BRACE_CHAR);
         out->write('\n');
         out->decrementIndent(2);
     }
 }
-

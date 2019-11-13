@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -72,15 +72,15 @@ SoGetMatrixAction *SoPickedPoint::matrixAction = NULL;
 // Use: internal
 
 SoPickedPoint::SoPickedPoint(const SoPath *_path, SoState *_state,
-			     const SbVec3f &objSpacePoint)
+                             const SbVec3f &objSpacePoint)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i, n;
+    int i, n;
 
     // Make a copy of the path since it most likely comes from the
     // current traversal path in an action, which will be changed soon.
-    path =  _path->copy();
+    path = _path->copy();
     path->ref();
 
     // Save state so we can get matrices when we need them later
@@ -92,17 +92,17 @@ SoPickedPoint::SoPickedPoint(const SoPath *_path, SoState *_state,
 
     // Make room in the detail list for one detail per node in the
     // path. Set all the detail pointers to NULL.
-    n = ((const SoFullPath *) path)->getLength();
-    details.set(n - 1, NULL);		// Allocates space
+    n = ((const SoFullPath *)path)->getLength();
+    details.set(n - 1, NULL); // Allocates space
     for (i = n - 2; i >= 0; --i)
-	details.set(i, NULL);
+        details.set(i, NULL);
 
     // Initialize material index to 0, the most common value
     materialIndex = 0;
 
     // Set on-geometry flag based on current pick style
-    onGeometry = (SoPickStyleElement::get(state) !=
-		  SoPickStyleElement::BOUNDING_BOX);
+    onGeometry =
+        (SoPickStyleElement::get(state) != SoPickStyleElement::BOUNDING_BOX);
 
     // Save the viewportRegion, we'll need it later:
     vpRegion = SoViewportRegionElement::get(state);
@@ -119,13 +119,13 @@ SoPickedPoint::SoPickedPoint(const SoPickedPoint &pp)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    worldPoint	   = pp.worldPoint;
-    worldNormal    = pp.worldNormal;
+    worldPoint = pp.worldPoint;
+    worldNormal = pp.worldNormal;
     imageTexCoords = pp.imageTexCoords;
-    materialIndex  = pp.materialIndex;
-    path	   = pp.path;
-    onGeometry	   = pp.onGeometry;
-    vpRegion	   = pp.vpRegion;
+    materialIndex = pp.materialIndex;
+    path = pp.path;
+    onGeometry = pp.onGeometry;
+    vpRegion = pp.vpRegion;
 
     // Copy the details - note that the copy() method for SoDetailList
     // makes copies of the detail instances. This has to be done
@@ -183,14 +183,14 @@ SoPickedPoint::getDetail(const SoNode *node) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	index;
+    int index;
 
     // Test for default case, corresponding to tail of path
     if (node == NULL)
-	index = ((const SoFullPath *) path)->getLength() - 1;
+        index = ((const SoFullPath *)path)->getLength() - 1;
 
     else
-	index = getNodeIndex(node);
+        index = getNodeIndex(node);
 
     return details[index];
 }
@@ -276,7 +276,7 @@ SoPickedPoint::getObjectPoint(const SoNode *node) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	v;
+    SbVec3f v;
 
     getWorldToObject(node).multVecMatrix(worldPoint, v);
 
@@ -296,7 +296,7 @@ SoPickedPoint::getObjectNormal(const SoNode *node) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	v;
+    SbVec3f v;
 
     getWorldToObject(node).multDirMatrix(worldNormal, v);
     v.normalize();
@@ -336,7 +336,7 @@ SoPickedPoint::setObjectNormal(const SbVec3f &normal)
     // matrix o get the world space normal. Use the inverse transpose
     // of the odel matrix so that normals are not scaled incorrectly.
     SbMatrix normalMatrix =
-	SoModelMatrixElement::get(state).inverse().transpose();
+        SoModelMatrixElement::get(state).inverse().transpose();
 
     normalMatrix.multDirMatrix(normal, worldNormal);
     worldNormal.normalize();
@@ -356,8 +356,8 @@ SoPickedPoint::setObjectTextureCoords(const SbVec4f &texCoords)
 {
     // Transform the object space coords by the current texture matrix
     // to get the image space texture coords
-    imageTexCoords = multVecMatrix4(SoTextureMatrixElement::get(state),
-				    texCoords);
+    imageTexCoords =
+        multVecMatrix4(SoTextureMatrixElement::get(state), texCoords);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -373,15 +373,15 @@ SoPickedPoint::setDetail(SoDetail *detail, SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     // Find node in path
     i = getNodeIndex(node);
 
 #ifdef DEBUG
     if (i < 0)
-	SoDebugError::post("SoPickedPoint::setDetail",
-			   "Node %#x is not found in path", node);
+        SoDebugError::post("SoPickedPoint::setDetail",
+                           "Node %#x is not found in path", node);
 #endif /* DEBUG */
 
     details.set(i, detail);
@@ -399,17 +399,17 @@ SoPickedPoint::getNodeIndex(const SoNode *node) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     // Search from bottom up for node in path, since details are
     // usually examined near the bottom
-    for (i = ((const SoFullPath *) path)->getLength() - 1; i >= 0; i--)
-	if (path->getNode(i) == node)
-	    return i;
+    for (i = ((const SoFullPath *)path)->getLength() - 1; i >= 0; i--)
+        if (path->getNode(i) == node)
+            return i;
 
 #ifdef DEBUG
     SoDebugError::post("SoPickedPoint::getNodeIndex",
-		       "Node %#x is not found in path", node);
+                       "Node %#x is not found in path", node);
 #endif /* DEBUG */
 
     return -1;
@@ -432,21 +432,21 @@ SoPickedPoint::getMatrix(const SoNode *node) const
     // Construct a path from the root down to this node. Use the given
     // path if it's the same
     if (node == NULL || node == ((SoFullPath *)path)->getTail())
-	xfPath = path;
+        xfPath = path;
 
     else {
-	int	index = getNodeIndex(node);
-	xfPath = path->copy(0, index + 1);
-	xfPath->ref();
+        int index = getNodeIndex(node);
+        xfPath = path->copy(0, index + 1);
+        xfPath->ref();
     }
 
     // Create an action instance if necessary, then apply it to the path
     if (matrixAction == NULL)
-	matrixAction = new SoGetMatrixAction(vpRegion);
+        matrixAction = new SoGetMatrixAction(vpRegion);
     matrixAction->apply(xfPath);
 
     if (xfPath != path)
-	xfPath->unref();
+        xfPath->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -461,14 +461,12 @@ SoPickedPoint::multVecMatrix4(const SbMatrix &m, const SbVec4f &v)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
-    SbVec4f	v2;
+    int     i;
+    SbVec4f v2;
 
     for (i = 0; i < 4; i++)
-	v2[i] = (v[0] * m[0][i] +
-		 v[1] * m[1][i] +
-		 v[2] * m[2][i] +
-		 v[3] * m[3][i]);
+        v2[i] =
+            (v[0] * m[0][i] + v[1] * m[1][i] + v[2] * m[2][i] + v[3] * m[3][i]);
 
     return v2;
 }

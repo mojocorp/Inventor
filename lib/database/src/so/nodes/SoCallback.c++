@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -92,7 +92,7 @@ SoCallback::SoCallback()
 {
     SO_NODE_CONSTRUCTOR(SoCallback);
 
-    isBuiltIn    = TRUE;
+    isBuiltIn = TRUE;
     callbackFunc = NULL;
     callbackData = NULL;
 }
@@ -105,8 +105,7 @@ SoCallback::SoCallback()
 // Use: protected, virtual
 
 void
-SoCallback::copyContents(const SoFieldContainer *fromFC,
-			 SbBool copyConnections)
+SoCallback::copyContents(const SoFieldContainer *fromFC, SbBool copyConnections)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -114,7 +113,7 @@ SoCallback::copyContents(const SoFieldContainer *fromFC,
     SoNode::copyContents(fromFC, copyConnections);
 
     // Copy the callback function and data
-    const SoCallback *fromCB = (const SoCallback *) fromFC;
+    const SoCallback *fromCB = (const SoCallback *)fromFC;
     setCallback(fromCB->callbackFunc, fromCB->callbackData);
 }
 
@@ -128,8 +127,7 @@ SoCallback::copyContents(const SoFieldContainer *fromFC,
 SoCallback::~SoCallback()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -144,7 +142,7 @@ SoCallback::doAction(SoAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     if (this->callbackFunc != NULL)
-	(*this->callbackFunc)(this->callbackData, action);
+        (*this->callbackFunc)(this->callbackData, action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -175,8 +173,9 @@ SoCallback::GLRender(SoGLRenderAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // Ask to be cached, to match Inventor 2.0 default:
-    SoGLCacheContextElement::shouldAutoCache(action->getState(), SoGLCacheContextElement::DO_AUTO_CACHE);
-    
+    SoGLCacheContextElement::shouldAutoCache(
+        action->getState(), SoGLCacheContextElement::DO_AUTO_CACHE);
+
     SoCallback::doAction(action);
 }
 

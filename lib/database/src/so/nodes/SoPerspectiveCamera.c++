@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -55,8 +55,8 @@
 #include <Inventor/SbSphere.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
 
-#define MINIMUM_NEAR_PLANE 0.01	    /* minimum near clipping distance */
-				    /* (from center) */
+#define MINIMUM_NEAR_PLANE 0.01 /* minimum near clipping distance */
+                                /* (from center) */
 
 SO_NODE_SOURCE(SoPerspectiveCamera);
 
@@ -87,7 +87,7 @@ SoPerspectiveCamera::SoPerspectiveCamera()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_NODE_CONSTRUCTOR(SoPerspectiveCamera);
-    SO_NODE_ADD_FIELD(heightAngle,    (M_PI_4));	// 45 degrees
+    SO_NODE_ADD_FIELD(heightAngle, (M_PI_4)); // 45 degrees
     isBuiltIn = TRUE;
 }
 
@@ -101,8 +101,7 @@ SoPerspectiveCamera::SoPerspectiveCamera()
 SoPerspectiveCamera::~SoPerspectiveCamera()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -117,7 +116,7 @@ SoPerspectiveCamera::scaleHeight(float scaleFactor)
 ////////////////////////////////////////////////////////////////////////
 {
     if (scaleFactor == 0.0)
-	return;
+        return;
 
     heightAngle.setValue(scaleFactor * heightAngle.getValue());
 }
@@ -132,18 +131,18 @@ SoPerspectiveCamera::scaleHeight(float scaleFactor)
 // Use: public
 
 SbViewVolume
-SoPerspectiveCamera::getViewVolume( float useAspectRatio) const
+SoPerspectiveCamera::getViewVolume(float useAspectRatio) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbViewVolume view;
 
-    float	camAspect = (useAspectRatio != 0.0 ? useAspectRatio :
-			     aspectRatio.getValue());
+    float camAspect =
+        (useAspectRatio != 0.0 ? useAspectRatio : aspectRatio.getValue());
 
     // Set up the perspective camera.
-    view.perspective(heightAngle.getValue(), camAspect,
-		     nearDistance.getValue(), farDistance.getValue());
+    view.perspective(heightAngle.getValue(), camAspect, nearDistance.getValue(),
+                     farDistance.getValue());
 
     // Note that these move the camera rather than moving objects
     // relative to the camera.
@@ -159,26 +158,26 @@ SoPerspectiveCamera::getViewVolume( float useAspectRatio) const
 //    positions the camera without changing its height angle so that
 //    the entire sphere is visible. The aspect ratio to use for the
 //    camera is passed in.
-// 
+//
 // Use: protected
 
 void
-SoPerspectiveCamera::viewBoundingBox(const SbBox3f &box,
-				     float aspect, float slack)
+SoPerspectiveCamera::viewBoundingBox(const SbBox3f &box, float aspect,
+                                     float slack)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbSphere	bSphere;
-    float	distToCenter;
-    SbMatrix	rotation;
-    SbVec3f	pos;
+    SbSphere bSphere;
+    float    distToCenter;
+    SbMatrix rotation;
+    SbVec3f  pos;
 
     // if the bounding box is not empty, create the bounding sphere
-    if (! box.isEmpty())
-	bSphere.circumscribe(box);
+    if (!box.isEmpty())
+        bSphere.circumscribe(box);
     else {
-	pos.setValue(0., 0., 0.);
-	bSphere.setValue(pos, 1.0);
+        pos.setValue(0., 0., 0.);
+        bSphere.setValue(pos, 1.0);
     }
 
     // Find the angle necessary to fit the object completely in the
@@ -187,20 +186,20 @@ SoPerspectiveCamera::viewBoundingBox(const SbBox3f &box,
     //	    h = height (radius of sphere)
     //	    d = distance to eye
     //	    tan(alpha) gives us h/d
-    float hOverD = std::tan(heightAngle.getValue()  / 2.0);
+    float hOverD = std::tan(heightAngle.getValue() / 2.0);
     if (aspect < 1.0)
-	hOverD *= aspect;
+        hOverD *= aspect;
 
-    distToCenter = bSphere.getRadius() / hOverD;  //   h / (h/d) gives us d
+    distToCenter = bSphere.getRadius() / hOverD; //   h / (h/d) gives us d
 
     rotation = orientation.getValue();
     rotation.multVecMatrix(SbVec3f(0.0, 0.0, distToCenter), pos);
 
-    position      = pos + bSphere.getCenter();
-    nearDistance  = distToCenter - slack * bSphere.getRadius();
-    if (nearDistance.getValue() < 0.0 || 
-    	nearDistance.getValue() < (MINIMUM_NEAR_PLANE * distToCenter))
-    	nearDistance = MINIMUM_NEAR_PLANE * distToCenter;
-    farDistance   = distToCenter + slack * bSphere.getRadius();
+    position = pos + bSphere.getCenter();
+    nearDistance = distToCenter - slack * bSphere.getRadius();
+    if (nearDistance.getValue() < 0.0 ||
+        nearDistance.getValue() < (MINIMUM_NEAR_PLANE * distToCenter))
+        nearDistance = MINIMUM_NEAR_PLANE * distToCenter;
+    farDistance = distToCenter + slack * bSphere.getRadius();
     focalDistance = distToCenter;
 }

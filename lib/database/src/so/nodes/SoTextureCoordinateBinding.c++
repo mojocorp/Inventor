@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -71,7 +71,7 @@ SoTextureCoordinateBinding::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO__NODE_INIT_CLASS(SoTextureCoordinateBinding, "TextureCoordinateBinding",
-               SoNode);
+                        SoNode);
 
     // Enable elements for appropriate actions:
     SO_ENABLE(SoCallbackAction, SoTextureCoordinateBindingElement);
@@ -91,8 +91,7 @@ SoTextureCoordinateBinding::SoTextureCoordinateBinding()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_NODE_CONSTRUCTOR(SoTextureCoordinateBinding);
-    SO_NODE_ADD_FIELD(value,
-			 (SoTextureCoordinateBindingElement::getDefault()));
+    SO_NODE_ADD_FIELD(value, (SoTextureCoordinateBindingElement::getDefault()));
 
     // Set up static info for enumerated type field
     SO_NODE_DEFINE_ENUM_VALUE(Binding, PER_VERTEX);
@@ -100,7 +99,7 @@ SoTextureCoordinateBinding::SoTextureCoordinateBinding()
 
     // And obsolete bindings:
     if (firstInstance) {
-	fieldData->addEnumValue("Binding", "DEFAULT", 0);
+        fieldData->addEnumValue("Binding", "DEFAULT", 0);
     }
 
     // Set up info in enumerated type field
@@ -119,8 +118,7 @@ SoTextureCoordinateBinding::SoTextureCoordinateBinding()
 SoTextureCoordinateBinding::~SoTextureCoordinateBinding()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -134,9 +132,10 @@ SoTextureCoordinateBinding::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! value.isIgnored()) {
-	SoTextureCoordinateBindingElement::set(action->getState(),
-	     (SoTextureCoordinateBindingElement::Binding)value.getValue());
+    if (!value.isIgnored()) {
+        SoTextureCoordinateBindingElement::set(
+            action->getState(),
+            (SoTextureCoordinateBindingElement::Binding)value.getValue());
     }
 }
 
@@ -156,7 +155,8 @@ SoTextureCoordinateBinding::readInstance(SoInput *in, unsigned short flags)
 
     // Deal with obsolete bindings:
     int b = value.getValue();
-    if (b == 0 || b == 1) value = PER_VERTEX_INDEXED;
+    if (b == 0 || b == 1)
+        value = PER_VERTEX_INDEXED;
 
     return result;
 }
@@ -205,4 +205,3 @@ SoTextureCoordinateBinding::pick(SoPickAction *action)
 {
     SoTextureCoordinateBinding::doAction(action);
 }
-

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,8 +67,8 @@ SoKeyboardEvent::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     // Allocate a new event type id
-    classTypeId = SoType::createType(
-    SoButtonEvent::getClassTypeId(), "KeyboardEvent");
+    classTypeId =
+        SoType::createType(SoButtonEvent::getClassTypeId(), "KeyboardEvent");
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -89,8 +89,7 @@ SoKeyboardEvent::SoKeyboardEvent()
 SoKeyboardEvent::~SoKeyboardEvent()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -100,27 +99,27 @@ SoKeyboardEvent::~SoKeyboardEvent()
 // static public
 //
 SbBool
-SoKeyboardEvent::isKeyPressEvent(const SoEvent *e,
-				 SoKeyboardEvent::Key whichKey)
+SoKeyboardEvent::isKeyPressEvent(const SoEvent *      e,
+                                 SoKeyboardEvent::Key whichKey)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool isMatch = FALSE;
-    
+
     // is it a keyboard event?
     if (e->isOfType(SoKeyboardEvent::getClassTypeId())) {
-	const SoKeyboardEvent *ke = (const SoKeyboardEvent *) e;
-	
-	// is it a press event?
-	if (ke->getState() == SoButtonEvent::DOWN) {
-	
-	    // did the caller want any key press? or do they match?
-	    if ((whichKey == SoKeyboardEvent::ANY) ||
-	        (ke->getKey() == whichKey))
-		isMatch = TRUE;
-	}
+        const SoKeyboardEvent *ke = (const SoKeyboardEvent *)e;
+
+        // is it a press event?
+        if (ke->getState() == SoButtonEvent::DOWN) {
+
+            // did the caller want any key press? or do they match?
+            if ((whichKey == SoKeyboardEvent::ANY) ||
+                (ke->getKey() == whichKey))
+                isMatch = TRUE;
+        }
     }
-    
+
     return isMatch;
 }
 
@@ -132,30 +131,29 @@ SoKeyboardEvent::isKeyPressEvent(const SoEvent *e,
 // static public
 //
 SbBool
-SoKeyboardEvent::isKeyReleaseEvent(const SoEvent *e,
-				   SoKeyboardEvent::Key whichKey)
+SoKeyboardEvent::isKeyReleaseEvent(const SoEvent *      e,
+                                   SoKeyboardEvent::Key whichKey)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool isMatch = FALSE;
-    
+
     // is it a keyboard event?
     if (e->isOfType(SoKeyboardEvent::getClassTypeId())) {
-	const SoKeyboardEvent *ke = (const SoKeyboardEvent *) e;
-	
-	// is it a release event?
-	if (ke->getState() == SoButtonEvent::UP) {
-	
-	    // did the caller want any key release? or do they match?
-	    if ((whichKey == SoKeyboardEvent::ANY) ||
-	        (ke->getKey() == whichKey))
-		isMatch = TRUE;
-	}
+        const SoKeyboardEvent *ke = (const SoKeyboardEvent *)e;
+
+        // is it a release event?
+        if (ke->getState() == SoButtonEvent::UP) {
+
+            // did the caller want any key release? or do they match?
+            if ((whichKey == SoKeyboardEvent::ANY) ||
+                (ke->getKey() == whichKey))
+                isMatch = TRUE;
+        }
     }
-    
+
     return isMatch;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -170,79 +168,79 @@ SoKeyboardEvent::getPrintableCharacter() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		offset;
+    int offset;
 
     // These store characters corresponding to shifted numeric keys,
     // symbol keys, and shifted symbol keys:
-    static char	shiftNumberChars[]	= ")!@#$%^&*(";
-    static char	symbolChars[]		= " ',-./;=[\\]`";
-    static char	shiftSymbolChars[]	= " \"<_>?:+{|}~";
+    static char shiftNumberChars[] = ")!@#$%^&*(";
+    static char symbolChars[] = " ',-./;=[\\]`";
+    static char shiftSymbolChars[] = " \"<_>?:+{|}~";
 
     switch (getKey()) {
 
-      case SoKeyboardEvent::A:
-      case SoKeyboardEvent::B:
-      case SoKeyboardEvent::C:
-      case SoKeyboardEvent::D:
-      case SoKeyboardEvent::E:
-      case SoKeyboardEvent::F:
-      case SoKeyboardEvent::G:
-      case SoKeyboardEvent::H:
-      case SoKeyboardEvent::I:
-      case SoKeyboardEvent::J:
-      case SoKeyboardEvent::K:
-      case SoKeyboardEvent::L:
-      case SoKeyboardEvent::M:
-      case SoKeyboardEvent::N:
-      case SoKeyboardEvent::O:
-      case SoKeyboardEvent::P:
-      case SoKeyboardEvent::Q:
-      case SoKeyboardEvent::R:
-      case SoKeyboardEvent::S:
-      case SoKeyboardEvent::T:
-      case SoKeyboardEvent::U:
-      case SoKeyboardEvent::V:
-      case SoKeyboardEvent::W:
-      case SoKeyboardEvent::X:
-      case SoKeyboardEvent::Y:
-      case SoKeyboardEvent::Z:
+    case SoKeyboardEvent::A:
+    case SoKeyboardEvent::B:
+    case SoKeyboardEvent::C:
+    case SoKeyboardEvent::D:
+    case SoKeyboardEvent::E:
+    case SoKeyboardEvent::F:
+    case SoKeyboardEvent::G:
+    case SoKeyboardEvent::H:
+    case SoKeyboardEvent::I:
+    case SoKeyboardEvent::J:
+    case SoKeyboardEvent::K:
+    case SoKeyboardEvent::L:
+    case SoKeyboardEvent::M:
+    case SoKeyboardEvent::N:
+    case SoKeyboardEvent::O:
+    case SoKeyboardEvent::P:
+    case SoKeyboardEvent::Q:
+    case SoKeyboardEvent::R:
+    case SoKeyboardEvent::S:
+    case SoKeyboardEvent::T:
+    case SoKeyboardEvent::U:
+    case SoKeyboardEvent::V:
+    case SoKeyboardEvent::W:
+    case SoKeyboardEvent::X:
+    case SoKeyboardEvent::Y:
+    case SoKeyboardEvent::Z:
 
-	// This relies on the letter codes being consecutive:
-	offset = getKey() - SoKeyboardEvent::A;
-	return offset + (wasShiftDown() ? 'A' : 'a');
+        // This relies on the letter codes being consecutive:
+        offset = getKey() - SoKeyboardEvent::A;
+        return offset + (wasShiftDown() ? 'A' : 'a');
 
-      case SoKeyboardEvent::NUMBER_0:
-      case SoKeyboardEvent::NUMBER_1:
-      case SoKeyboardEvent::NUMBER_2:
-      case SoKeyboardEvent::NUMBER_3:
-      case SoKeyboardEvent::NUMBER_4:
-      case SoKeyboardEvent::NUMBER_5:
-      case SoKeyboardEvent::NUMBER_6:
-      case SoKeyboardEvent::NUMBER_7:
-      case SoKeyboardEvent::NUMBER_8:
-      case SoKeyboardEvent::NUMBER_9:
+    case SoKeyboardEvent::NUMBER_0:
+    case SoKeyboardEvent::NUMBER_1:
+    case SoKeyboardEvent::NUMBER_2:
+    case SoKeyboardEvent::NUMBER_3:
+    case SoKeyboardEvent::NUMBER_4:
+    case SoKeyboardEvent::NUMBER_5:
+    case SoKeyboardEvent::NUMBER_6:
+    case SoKeyboardEvent::NUMBER_7:
+    case SoKeyboardEvent::NUMBER_8:
+    case SoKeyboardEvent::NUMBER_9:
 
-	// This relies on the number codes being consecutive:
-	offset = getKey() - SoKeyboardEvent::NUMBER_0;
-	return wasShiftDown() ? shiftNumberChars[offset] : ('0' + offset);
+        // This relies on the number codes being consecutive:
+        offset = getKey() - SoKeyboardEvent::NUMBER_0;
+        return wasShiftDown() ? shiftNumberChars[offset] : ('0' + offset);
 
-      case SoKeyboardEvent::SPACE:
-      case SoKeyboardEvent::APOSTROPHE:
-      case SoKeyboardEvent::COMMA:
-      case SoKeyboardEvent::MINUS:
-      case SoKeyboardEvent::PERIOD:
-      case SoKeyboardEvent::SLASH:
-      case SoKeyboardEvent::SEMICOLON:
-      case SoKeyboardEvent::EQUAL:
-      case SoKeyboardEvent::BRACKETLEFT:
-      case SoKeyboardEvent::BACKSLASH:
-      case SoKeyboardEvent::BRACKETRIGHT:
-      case SoKeyboardEvent::GRAVE:
-	// This relies on these codes being consecutive:
-	offset = getKey() - SoKeyboardEvent::SPACE;
-	return wasShiftDown() ? shiftSymbolChars[offset] : symbolChars[offset];
+    case SoKeyboardEvent::SPACE:
+    case SoKeyboardEvent::APOSTROPHE:
+    case SoKeyboardEvent::COMMA:
+    case SoKeyboardEvent::MINUS:
+    case SoKeyboardEvent::PERIOD:
+    case SoKeyboardEvent::SLASH:
+    case SoKeyboardEvent::SEMICOLON:
+    case SoKeyboardEvent::EQUAL:
+    case SoKeyboardEvent::BRACKETLEFT:
+    case SoKeyboardEvent::BACKSLASH:
+    case SoKeyboardEvent::BRACKETRIGHT:
+    case SoKeyboardEvent::GRAVE:
+        // This relies on these codes being consecutive:
+        offset = getKey() - SoKeyboardEvent::SPACE;
+        return wasShiftDown() ? shiftSymbolChars[offset] : symbolChars[offset];
 
-      default:
-	return '\0';
+    default:
+        return '\0';
     }
 }

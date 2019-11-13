@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -78,36 +78,38 @@ class SoLineDetail : public SoDetail {
     virtual ~SoLineDetail();
 
     // These return the point details for the two ends of the line segment
-    const SoPointDetail *	getPoint0() const	{ return &point[0]; }
-    const SoPointDetail *	getPoint1() const	{ return &point[1]; }
+    const SoPointDetail *getPoint0() const { return &point[0]; }
+    const SoPointDetail *getPoint1() const { return &point[1]; }
 
     // Returns the index of the line the segment is part of within a
     // shape (e.g., the third line within an SoLineSet)
-    int32_t			getLineIndex() const	{ return lineIndex; }
+    int32_t getLineIndex() const { return lineIndex; }
 
     // Returns the index of the part (usually part = segment) within a
     // shape (e.g., the fifth segment overall within an SoLineSet)
-    int32_t			getPartIndex() const	{ return partIndex; }
+    int32_t getPartIndex() const { return partIndex; }
 
     // Returns an instance that is a copy of this instance. The caller
     // is responsible for deleting the copy when done.
-    virtual SoDetail *		copy() const;
+    virtual SoDetail *copy() const;
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Copies a point detail from the given detail
-    void			setPoint0(const SoPointDetail *pd);
-    void			setPoint1(const SoPointDetail *pd);
+    void setPoint0(const SoPointDetail *pd);
+    void setPoint1(const SoPointDetail *pd);
 
     // Sets the line index and part index
-    void			setLineIndex(int32_t i)	{ lineIndex = i; }
-    void			setPartIndex(int32_t i)	{ partIndex = i; }
+    void setLineIndex(int32_t i) { lineIndex = i; }
+    void setPartIndex(int32_t i) { partIndex = i; }
 
-  SoINTERNAL public:
-    static void			initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   private:
-    SoPointDetail		point[2];
-    int32_t			lineIndex, partIndex;
+    SoPointDetail point[2];
+    int32_t       lineIndex, partIndex;
 };
 
 #endif /* _SO_LINE_DETAIL_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -108,8 +108,7 @@ SoNurbsProfile::SoNurbsProfile()
 SoNurbsProfile::~SoNurbsProfile()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -122,12 +121,13 @@ SoNurbsProfile::~SoNurbsProfile()
 
 void
 SoNurbsProfile::getTrimCurve(SoState *state, int32_t &numPoints, float *&points,
-			     int &floatsPerVec,
-			     int32_t &numKnots, float *&knots)
+                             int &floatsPerVec, int32_t &numKnots,
+                             float *&knots)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoProfileCoordinateElement *pce = SoProfileCoordinateElement::getInstance(state);
+    const SoProfileCoordinateElement *pce =
+        SoProfileCoordinateElement::getInstance(state);
 
     numPoints = index.getNum();
 
@@ -137,8 +137,8 @@ SoNurbsProfile::getTrimCurve(SoState *state, int32_t &numPoints, float *&points,
 
         for (int i = 0; i < numPoints; i++) {
             const SbVec2f &t = pce->get2(index[i]);
-            points[i*2+0] = t[0];
-            points[i*2+1] = t[1];
+            points[i * 2 + 0] = t[0];
+            points[i * 2 + 1] = t[1];
         }
     } else {
         floatsPerVec = 3;
@@ -146,17 +146,16 @@ SoNurbsProfile::getTrimCurve(SoState *state, int32_t &numPoints, float *&points,
 
         for (int i = 0; i < numPoints; i++) {
             const SbVec3f &t = pce->get3(index[i]);
-            points[i*3+0] = t[0];
-            points[i*3+1] = t[1];
-            points[i*3+2] = t[2];
+            points[i * 3 + 0] = t[0];
+            points[i * 3 + 1] = t[1];
+            points[i * 3 + 2] = t[2];
         }
     }
 
-    numKnots = (int32_t) (knotVector.getNum());
-    knots    = new float[numKnots];
-    const float *tknots   = knotVector.getValues(0);
-    memcpy((void *) knots, (const void *) tknots,
-	  (int) numKnots * sizeof(float));
+    numKnots = (int32_t)(knotVector.getNum());
+    knots = new float[numKnots];
+    const float *tknots = knotVector.getValues(0);
+    memcpy((void *)knots, (const void *)tknots, (int)numKnots * sizeof(float));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -169,12 +168,13 @@ SoNurbsProfile::getTrimCurve(SoState *state, int32_t &numPoints, float *&points,
 // Use: extender
 
 void
-SoNurbsProfile::getVertices(SoState *state,
-			    int32_t &nVertices, SbVec2f *&vertices)
+SoNurbsProfile::getVertices(SoState *state, int32_t &nVertices,
+                            SbVec2f *&vertices)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoProfileCoordinateElement *pce = SoProfileCoordinateElement::getInstance(state);
+    const SoProfileCoordinateElement *pce =
+        SoProfileCoordinateElement::getInstance(state);
 
     const int32_t numPoints = index.getNum();
 
@@ -190,25 +190,23 @@ SoNurbsProfile::getVertices(SoState *state,
     //    Gets details back from the NURBS library and sends them to the
     //    generate primitive callbacks.
     //
-    struct glu_cb_data{
-        size_t numVertices;
-        size_t numAllocVertices;
+    struct glu_cb_data {
+        size_t   numVertices;
+        size_t   numAllocVertices;
         SbVec2f *vertices;
 
-        static void vertexCallback(float *vertex, glu_cb_data * userData)
-        {
+        static void vertexCallback(float *vertex, glu_cb_data *userData) {
             //
             // Add the vertex to the list of vertices.  The 3rd component of the
             // vertex is 0.0 and is ignored.  Allocate more vertices if there is
             // not enough space.
             //
-            if (userData->numVertices == userData->numAllocVertices)
-            {
+            if (userData->numVertices == userData->numAllocVertices) {
                 userData->numAllocVertices += 20;
                 SbVec2f *tmpBlock = new SbVec2f[userData->numAllocVertices];
-                memcpy ((void *)tmpBlock, (void *)userData->vertices,
-                        (int) userData->numVertices*sizeof(SbVec2f));
-                delete [] userData->vertices;
+                memcpy((void *)tmpBlock, (void *)userData->vertices,
+                       (int)userData->numVertices * sizeof(SbVec2f));
+                delete[] userData->vertices;
                 userData->vertices = tmpBlock;
             }
 
@@ -220,7 +218,8 @@ SoNurbsProfile::getVertices(SoState *state,
     GLUnurbs *theNurb = gluNewNurbsRenderer();
     gluNurbsProperty(theNurb, GLU_NURBS_MODE, GLU_NURBS_TESSELLATOR);
     gluNurbsCallbackData(theNurb, &data);
-    gluNurbsCallback(theNurb, GLU_NURBS_VERTEX_DATA,    (void (SB_CALLBACK*)())glu_cb_data::vertexCallback);
+    gluNurbsCallback(theNurb, GLU_NURBS_VERTEX_DATA,
+                     (void(SB_CALLBACK *)())glu_cb_data::vertexCallback);
     float complexity = SoComplexityElement::get(state);
 
     if (complexity < 0.0)
@@ -228,7 +227,8 @@ SoNurbsProfile::getVertices(SoState *state,
     if (complexity > 1.0)
         complexity = 1.0;
 
-    if (SoComplexityTypeElement::get(state) == SoComplexityTypeElement::OBJECT_SPACE) {
+    if (SoComplexityTypeElement::get(state) ==
+        SoComplexityTypeElement::OBJECT_SPACE) {
         int steps;
         if (complexity < 0.10)
             steps = 2;
@@ -239,34 +239,31 @@ SoNurbsProfile::getVertices(SoState *state,
         else if (complexity < 0.55)
             steps = 5;
         else
-            steps = (int) (powf(complexity, 3.32f) * 28) + 2;
+            steps = (int)(powf(complexity, 3.32f) * 28) + 2;
 
         gluNurbsProperty(theNurb, GLU_SAMPLING_METHOD, GLU_DOMAIN_DISTANCE);
         gluNurbsProperty(theNurb, GLU_U_STEP, (GLfloat)steps);
         gluNurbsProperty(theNurb, GLU_V_STEP, (GLfloat)steps);
     } else {
-        const float pixTolerance = 104.0f * complexity * complexity - 252.0f * complexity + 150;
+        const float pixTolerance =
+            104.0f * complexity * complexity - 252.0f * complexity + 150;
 
         gluNurbsProperty(theNurb, GLU_SAMPLING_METHOD, GLU_OBJECT_PATH_LENGTH);
         gluNurbsProperty(theNurb, GLU_SAMPLING_TOLERANCE, pixTolerance);
 
-        const SbMatrix matModelView = SoModelMatrixElement::get(state) * SoViewingMatrixElement::get(state);
-        const SbMatrix & matProjection = SoProjectionMatrixElement::get(state);
+        const SbMatrix matModelView = SoModelMatrixElement::get(state) *
+                                      SoViewingMatrixElement::get(state);
+        const SbMatrix &matProjection = SoProjectionMatrixElement::get(state);
 
-        const SbViewportRegion & vpRegion = SoViewportRegionElement::get(state);
-        const SbVec2s & vpOrig = vpRegion.getViewportOriginPixels();
-        const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
+        const SbViewportRegion &vpRegion = SoViewportRegionElement::get(state);
+        const SbVec2s &         vpOrig = vpRegion.getViewportOriginPixels();
+        const SbVec2s &         vpSize = vpRegion.getViewportSizePixels();
 
-        GLint viewport[4] = {vpOrig[0],
-                             vpOrig[1],
-                             vpSize[0],
-                             vpSize[1]};
+        GLint viewport[4] = {vpOrig[0], vpOrig[1], vpSize[0], vpSize[1]};
 
         gluNurbsProperty(theNurb, GLU_AUTO_LOAD_MATRIX, GL_FALSE);
-        gluLoadSamplingMatrices(theNurb,
-                                (float*)matModelView.getValue(),
-                                (float*)matProjection.getValue(),
-                                viewport);
+        gluLoadSamplingMatrices(theNurb, (float *)matModelView.getValue(),
+                                (float *)matProjection.getValue(), viewport);
     }
 
     //
@@ -278,31 +275,30 @@ SoNurbsProfile::getVertices(SoState *state,
 
         for (int i = 0; i < numPoints; i++) {
             const SbVec2f &t = pce->get2((int)(index[i]));
-            points[i*3+0] = t[0];
-            points[i*3+1] = t[1];
-            points[i*3+2] = 0.0;
+            points[i * 3 + 0] = t[0];
+            points[i * 3 + 1] = t[1];
+            points[i * 3 + 2] = 0.0;
         }
-    }
-    else {
+    } else {
         points.resize(numPoints * 4);
 
         for (int i = 0; i < numPoints; i++) {
             const SbVec3f &t = pce->get3((int)(index[i]));
-            points[i*4+0] = t[0];
-            points[i*4+1] = t[1];
-            points[i*4+2] = t[2];
-            points[i*4+3] = 0.0;
+            points[i * 4 + 0] = t[0];
+            points[i * 4 + 1] = t[1];
+            points[i * 4 + 2] = t[2];
+            points[i * 4 + 3] = 0.0;
         }
     }
 
     gluBeginCurve(theNurb);
-    gluNurbsCurve(theNurb,
-            knotVector.getNum(), (float*)knotVector.getValues(0),
-            pce->is2D() ? 3 : 4, points.data(), knotVector.getNum() - numPoints,
-            pce->is2D() ? GL_MAP1_VERTEX_3 : GL_MAP1_VERTEX_4);
+    gluNurbsCurve(theNurb, knotVector.getNum(),
+                  (float *)knotVector.getValues(0), pce->is2D() ? 3 : 4,
+                  points.data(), knotVector.getNum() - numPoints,
+                  pce->is2D() ? GL_MAP1_VERTEX_3 : GL_MAP1_VERTEX_4);
     gluEndCurve(theNurb);
 
-    gluDeleteNurbsRenderer( theNurb );
+    gluDeleteNurbsRenderer(theNurb);
 
     //
     // The render now contains the list of vertices.  Return them to
@@ -311,4 +307,3 @@ SoNurbsProfile::getVertices(SoState *state,
     nVertices = data.numVertices;
     vertices = data.vertices;
 }
-

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_MATERIAL_BINDING_
-#define  _SO_MATERIAL_BINDING_
+#ifndef _SO_MATERIAL_BINDING_
+#define _SO_MATERIAL_BINDING_
 
 #include <Inventor/elements/SoMaterialBindingElement.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -75,42 +75,44 @@ class SoMaterialBinding : public SoNode {
 
   public:
     enum Binding {
-	// Whole object has same material
-	OVERALL		  = SoMaterialBindingElement::OVERALL,
-	// One material for each part of object
-	PER_PART	  = SoMaterialBindingElement::PER_PART,
-	// One material for each part of object, indexed
-	PER_PART_INDEXED  = SoMaterialBindingElement::PER_PART_INDEXED,
-	// One material for each face of object
-	PER_FACE	  = SoMaterialBindingElement::PER_FACE,
-	// One material for each face, indexed
-	PER_FACE_INDEXED  = SoMaterialBindingElement::PER_FACE_INDEXED,
-	// One material for each vertex of object
-	PER_VERTEX	  = SoMaterialBindingElement::PER_VERTEX,
-	// One material for each vertex, indexed
-	PER_VERTEX_INDEXED= SoMaterialBindingElement::PER_VERTEX_INDEXED,
+        // Whole object has same material
+        OVERALL = SoMaterialBindingElement::OVERALL,
+        // One material for each part of object
+        PER_PART = SoMaterialBindingElement::PER_PART,
+        // One material for each part of object, indexed
+        PER_PART_INDEXED = SoMaterialBindingElement::PER_PART_INDEXED,
+        // One material for each face of object
+        PER_FACE = SoMaterialBindingElement::PER_FACE,
+        // One material for each face, indexed
+        PER_FACE_INDEXED = SoMaterialBindingElement::PER_FACE_INDEXED,
+        // One material for each vertex of object
+        PER_VERTEX = SoMaterialBindingElement::PER_VERTEX,
+        // One material for each vertex, indexed
+        PER_VERTEX_INDEXED = SoMaterialBindingElement::PER_VERTEX_INDEXED,
     };
 
     // Fields
-    SoSFEnum		value;		// Material binding value
+    SoSFEnum value; // Material binding value
 
     // Constructor
     SoMaterialBinding();
 
-  SoEXTENDER public:
-    virtual void	doAction(SoAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	callback(SoCallbackAction *action);
-    virtual void	pick(SoPickAction *action);
+    SoEXTENDER
+  public:
+    virtual void doAction(SoAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void pick(SoPickAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     virtual ~SoMaterialBinding();
 
     // Reads stuff into instance. Upgrades old bindings.
-    virtual SbBool	readInstance(SoInput *in, unsigned short flags);
+    virtual SbBool readInstance(SoInput *in, unsigned short flags);
 };
 
 #endif /* _SO_MATERIAL_BINDING_ */

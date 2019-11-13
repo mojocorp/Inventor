@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -86,7 +86,7 @@ SoSFRotation::initClass()
 // Use: public
 
 void
-SoSFRotation::setValue(float q0, float q1, float q2, float q3)	// The 4 floats
+SoSFRotation::setValue(float q0, float q1, float q2, float q3) // The 4 floats
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -102,7 +102,7 @@ SoSFRotation::setValue(float q0, float q1, float q2, float q3)	// The 4 floats
 // Use: public
 
 void
-SoSFRotation::setValue(const float q[4])	// Array of values
+SoSFRotation::setValue(const float q[4]) // Array of values
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -117,8 +117,8 @@ SoSFRotation::setValue(const float q[4])	// Array of values
 // Use: public
 
 void
-SoSFRotation::setValue(const SbVec3f &axis,	// The axis
-		       float angle)		// The angle (in radians)
+SoSFRotation::setValue(const SbVec3f &axis, // The axis
+                       float          angle)         // The angle (in radians)
 {
     setValue(SbRotation(axis, angle));
 }
@@ -135,14 +135,12 @@ SoSFRotation::readValue(SoInput *in)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	axis;
-    float	angle;
+    SbVec3f axis;
+    float   angle;
 
-    if (! (in->read(axis[0]) &&
-	   in->read(axis[1]) &&
-	   in->read(axis[2]) &&
-	   in->read(angle)))
-	return FALSE;
+    if (!(in->read(axis[0]) && in->read(axis[1]) && in->read(axis[2]) &&
+          in->read(angle)))
+        return FALSE;
 
     setValue(axis, angle);
 
@@ -161,26 +159,26 @@ SoSFRotation::writeValue(SoOutput *out) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	axis;
-    float	angle;
+    SbVec3f axis;
+    float   angle;
 
     value.getValue(axis, angle);
 
     out->write(axis[0]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(axis[1]);
 
-    if (! out->isBinary())
-	out->write(' ');
+    if (!out->isBinary())
+        out->write(' ');
 
     out->write(axis[2]);
 
-    if (! out->isBinary()) {
-	out->write(' ');
-	out->write(' ');
+    if (!out->isBinary()) {
+        out->write(' ');
+        out->write(' ');
     }
 
     out->write(angle);

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,9 +54,8 @@
  _______________________________________________________________________
  */
 
-
-#ifndef  _SO_FIELD_DATA_
-#define  _SO_FIELD_DATA_
+#ifndef _SO_FIELD_DATA_
+#define _SO_FIELD_DATA_
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbName.h>
@@ -87,7 +86,8 @@ struct SoEnumEntry;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SoFieldData {
+SoINTERNAL
+class SoFieldData {
   public:
     // Constructor
     SoFieldData() {}
@@ -105,47 +105,41 @@ SoINTERNAL class SoFieldData {
     // Adds a field to current data, given default value object, name of
     // field and pointer to field within default value object. This is
     // used to define fields of a FieldContainer (node or engine) class.
-    void		addField(SoFieldContainer *defObject,
-				 const char *fieldName,
-				 const SoField *field);
+    void addField(SoFieldContainer *defObject, const char *fieldName,
+                  const SoField *field);
 
     // Copy values and flags of fields from one object to another (of
     // the same type). If copyConnections is TRUE, any connections to
     // the fields are copied as well
-    void		overlay(SoFieldContainer *to,
-				const SoFieldContainer *from,
-				SbBool copyConnections) const;
+    void overlay(SoFieldContainer *to, const SoFieldContainer *from,
+                 SbBool copyConnections) const;
 
     // Returns number of fields
-    int			getNumFields() const	{ return fields.size(); }
+    int getNumFields() const { return fields.size(); }
 
     // Returns name of field with given index
-    const SbName &	getFieldName(int index) const;
+    const SbName &getFieldName(int index) const;
 
     // Returns pointer to field with given index within given object instance
-    SoField *		getField(const SoFieldContainer *object,
-				 int index) const;
+    SoField *getField(const SoFieldContainer *object, int index) const;
 
     // Returns index of field, given the field and the instance it is in
-    int			getIndex(const SoFieldContainer *fc,
-				 const SoField *field) const;
+    int getIndex(const SoFieldContainer *fc, const SoField *field) const;
 
     // Enum name/value mechanism
-    void		addEnumValue(const char *typeName,
-				     const char *valName, int val);
-    void		getEnumData(const char *typeName, int &num,
-				    int *&vals, SbName *&names);
+    void addEnumValue(const char *typeName, const char *valName, int val);
+    void getEnumData(const char *typeName, int &num, int *&vals,
+                     SbName *&names);
 
-  SoINTERNAL public:
-
+    SoINTERNAL
+  public:
     // Reads into fields according to SoInput. The third
     // parameter indicates whether an unknown field should be reported
     // as an error; this can be FALSE for nodes that have children.
     // The last argument will be set to TRUE if a description of the
     // fields (using the "inputs" or "fields" keywords) was read.
-    SbBool		read(SoInput *in, SoFieldContainer *object,
-			     SbBool errorOnUnknownField,
-			     SbBool &notBuiltIn) const;
+    SbBool read(SoInput *in, SoFieldContainer *object,
+                SbBool errorOnUnknownField, SbBool &notBuiltIn) const;
 
     // This function is used when the field name has already been
     // read, and just the value needs to be read in.  It is used by
@@ -153,41 +147,35 @@ SoINTERNAL class SoFieldData {
     // returns TRUE if there were no problems reading, and will return
     // FALSE in 'foundName' if the given name is not the name of one
     // of the fields in the fieldData.
-    SbBool		read(SoInput *in, SoFieldContainer *object,
-			     const SbName &fieldName,
-			     SbBool &foundName) const;
+    SbBool read(SoInput *in, SoFieldContainer *object, const SbName &fieldName,
+                SbBool &foundName) const;
 
     // Writes all fields of object according to SoOutput
-    void		write(SoOutput *out,
-			      const SoFieldContainer *object) const;
+    void write(SoOutput *out, const SoFieldContainer *object) const;
 
     // Copies all fields from given field data into this one, creating
     // new fields for them
-    void		copy(const SoFieldData *from);
+    void copy(const SoFieldData *from);
 
     // Returns TRUE if the values in the fields of one container are
     // the same as those in another (of the same type)
-    SbBool		isSame(const SoFieldContainer *c1,
-			       const SoFieldContainer *c2) const;
+    SbBool isSame(const SoFieldContainer *c1, const SoFieldContainer *c2) const;
 
     // Read field type information
-    SbBool		readFieldDescriptions(
-				SoInput *in, SoFieldContainer *object,
-				int numDescriptionsExpected) const;
+    SbBool readFieldDescriptions(SoInput *in, SoFieldContainer *object,
+                                 int numDescriptionsExpected) const;
 
     // Write field type information
-    void		writeFieldDescriptions(
-				SoOutput *out,
-				const SoFieldContainer *object) const;
+    void writeFieldDescriptions(SoOutput *              out,
+                                const SoFieldContainer *object) const;
 
   private:
     // Used by binary reading to read in all the fields:
-    SbBool		readFields(
-				SoInput *in, SoFieldContainer *object,
-				int numFieldsWritten) const;
+    SbBool readFields(SoInput *in, SoFieldContainer *object,
+                      int numFieldsWritten) const;
 
-    std::vector<SoFieldEntry*> fields;		// List of fields (SoFieldEntry)
-    std::vector<SoEnumEntry*>  enums;		// List of enums (SoEnumEntry)
-};    
+    std::vector<SoFieldEntry *> fields; // List of fields (SoFieldEntry)
+    std::vector<SoEnumEntry *>  enums;  // List of enums (SoEnumEntry)
+};
 
 #endif /* _SO_FIELD_DATA_ */

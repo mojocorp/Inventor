@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_CALLBACK_ACTION_
-#define  _SO_CALLBACK_ACTION_
+#ifndef _SO_CALLBACK_ACTION_
+#define _SO_CALLBACK_ACTION_
 
 #include <Inventor/SbBox.h>
 #include <Inventor/SbViewVolume.h>
@@ -87,18 +87,17 @@ struct pointCallback;
 // generating primitives.
 //
 
-typedef void SoTriangleCB(void *userData,
-			  SoCallbackAction *action,
-			  const SoPrimitiveVertex *v1,
-			  const SoPrimitiveVertex *v2,
-			  const SoPrimitiveVertex *v3);
+typedef void SoTriangleCB(void *userData, SoCallbackAction *action,
+                          const SoPrimitiveVertex *v1,
+                          const SoPrimitiveVertex *v2,
+                          const SoPrimitiveVertex *v3);
 
 typedef void SoLineSegmentCB(void *userData, SoCallbackAction *action,
-			     const SoPrimitiveVertex *v1,
-			     const SoPrimitiveVertex *v2);
+                             const SoPrimitiveVertex *v1,
+                             const SoPrimitiveVertex *v2);
 
 typedef void SoPointCB(void *userData, SoCallbackAction *action,
-		       const SoPrimitiveVertex *v);
+                       const SoPrimitiveVertex *v);
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -115,12 +114,11 @@ class SoCallbackAction : public SoAction {
     SO_ACTION_HEADER(SoCallbackAction);
 
   public:
-
     // Possible responses from a pre or post callback
     enum Response {
-	CONTINUE,		// Continue as usual
-	ABORT,			// Stop traversing the rest of the graph
-	PRUNE			// Do not traverse children of this node
+        CONTINUE, // Continue as usual
+        ABORT,    // Stop traversing the rest of the graph
+        PRUNE     // Do not traverse children of this node
     };
 
     // The SoCallbackActionCB typedef is defined within the class, since
@@ -128,10 +126,10 @@ class SoCallbackAction : public SoAction {
     // The first argument is the data pointer that the user supplied
     // when the callback was registered. The second argument is the
     // action, from which the state can be extracted. The third
-    // argument is the node that the callback is called from.  
-    typedef Response SoCallbackActionCB(void *userData,
-					SoCallbackAction *action,
-					const SoNode *node);
+    // argument is the node that the callback is called from.
+    typedef Response SoCallbackActionCB(void *            userData,
+                                        SoCallbackAction *action,
+                                        const SoNode *    node);
 
     SoCallbackAction();
 
@@ -163,7 +161,6 @@ class SoCallbackAction : public SoAction {
     void addTriangleCallback(SoType type, SoTriangleCB *cb, void *data);
     void addLineSegmentCallback(SoType type, SoLineSegmentCB *cb, void *data);
     void addPointCallback(SoType type, SoPointCB *cb, void *data);
-    
 
     //////////////////////////////////////////////////////////////////
     //
@@ -173,149 +170,145 @@ class SoCallbackAction : public SoAction {
 
     //////////////////////// Complexity:
 
-    float			getComplexity() const;
-    SoComplexity::Type		getComplexityType() const;
+    float              getComplexity() const;
+    SoComplexity::Type getComplexityType() const;
 
     //////////////////////// Coordinates:
 
-    int32_t			getNumCoordinates() const;
-    const SbVec3f &		getCoordinate3(int index) const;
-    const SbVec4f &		getCoordinate4(int index) const;
+    int32_t        getNumCoordinates() const;
+    const SbVec3f &getCoordinate3(int index) const;
+    const SbVec4f &getCoordinate4(int index) const;
 
     //////////////////////// DrawStyle:
 
-    SoDrawStyle::Style		getDrawStyle() const;
-    u_short			getLinePattern() const;
-    float			getLineWidth() const;
-    float			getPointSize() const;
+    SoDrawStyle::Style getDrawStyle() const;
+    u_short            getLinePattern() const;
+    float              getLineWidth() const;
+    float              getPointSize() const;
 
     //////////////////////// Font:
 
-    const SbName &		getFontName() const;
-    float			getFontSize() const;
+    const SbName &getFontName() const;
+    float         getFontSize() const;
 
     //////////////////////// Lighting:
 
-    SoLightModel::Model		getLightModel() const;
-    const SbVec3f &		getLightAttenuation() const;
+    SoLightModel::Model getLightModel() const;
+    const SbVec3f &     getLightAttenuation() const;
 
     //////////////////////// Material:
 
     // Returns material with given index
-    void			getMaterial(SbColor &ambient,
-					    SbColor &diffuse,
-					    SbColor &specular,
-					    SbColor &emission,
-					    float   &shininess,
-					    float   &transparency,
-					    int     mtlIndex = 0) const;
-    SoMaterialBinding::Binding	getMaterialBinding() const;
+    void getMaterial(SbColor &ambient, SbColor &diffuse, SbColor &specular,
+                     SbColor &emission, float &shininess, float &transparency,
+                     int mtlIndex = 0) const;
+    SoMaterialBinding::Binding getMaterialBinding() const;
 
     //////////////////////// Normals:
 
-    int32_t			getNumNormals() const;
-    const SbVec3f &		getNormal(int index) const;
-    SoNormalBinding::Binding	getNormalBinding() const;
+    int32_t                  getNumNormals() const;
+    const SbVec3f &          getNormal(int index) const;
+    SoNormalBinding::Binding getNormalBinding() const;
 
     //////////////////////// Profiles:
 
-    int32_t			getNumProfileCoordinates() const;
-    const SbVec2f &		getProfileCoordinate2(int index) const;
-    const SbVec3f &		getProfileCoordinate3(int index) const;
-    const SoNodeList &		getProfile() const;
+    int32_t           getNumProfileCoordinates() const;
+    const SbVec2f &   getProfileCoordinate2(int index) const;
+    const SbVec3f &   getProfileCoordinate3(int index) const;
+    const SoNodeList &getProfile() const;
 
     //////////////////////// Shape Hints:
 
-    SoShapeHints::VertexOrdering	getVertexOrdering() const;
-    SoShapeHints::ShapeType		getShapeType() const;
-    SoShapeHints::FaceType		getFaceType() const;
-    float				getCreaseAngle() const;
+    SoShapeHints::VertexOrdering getVertexOrdering() const;
+    SoShapeHints::ShapeType      getShapeType() const;
+    SoShapeHints::FaceType       getFaceType() const;
+    float                        getCreaseAngle() const;
 
     //////////////////////// Textures:
 
     // Returns 0 if texture coordinates are generated by a function
-    int32_t				getNumTextureCoordinates() const;
-    const SbVec2f &			getTextureCoordinate2(int index) const;
-    const SbVec4f &			getTextureCoordinate4(int index) const;
-    SoTextureCoordinateBinding::Binding	getTextureCoordinateBinding() const;
-    const SbColor &			getTextureBlendColor() const;
+    int32_t                             getNumTextureCoordinates() const;
+    const SbVec2f &                     getTextureCoordinate2(int index) const;
+    const SbVec4f &                     getTextureCoordinate4(int index) const;
+    SoTextureCoordinateBinding::Binding getTextureCoordinateBinding() const;
+    const SbColor &                     getTextureBlendColor() const;
     // Returns NULL if no texture is enabled
-    SbImage	getTextureImage() const;
-    const SbMatrix &			getTextureMatrix() const;
-    SoTexture2::Model	getTextureModel() const;
-    SoTexture2::Wrap			getTextureWrapS() const;
-    SoTexture2::Wrap			getTextureWrapT() const;
+    SbImage           getTextureImage() const;
+    const SbMatrix &  getTextureMatrix() const;
+    SoTexture2::Model getTextureModel() const;
+    SoTexture2::Wrap  getTextureWrapS() const;
+    SoTexture2::Wrap  getTextureWrapT() const;
 
     //////////////////////// Transformations:
 
-    const SbMatrix &		getModelMatrix() const;
-    SoUnits::Units		getUnits() const;
+    const SbMatrix &getModelMatrix() const;
+    SoUnits::Units  getUnits() const;
 
     //////////////////////// Viewing:
-    
-    float			getFocalDistance() const;
-    const SbMatrix &		getProjectionMatrix() const;
-    const SbMatrix &		getViewingMatrix() const;
-    const SbViewVolume &	getViewVolume() const;
+
+    float               getFocalDistance() const;
+    const SbMatrix &    getProjectionMatrix() const;
+    const SbMatrix &    getViewingMatrix() const;
+    const SbViewVolume &getViewVolume() const;
 
     //////////////////////// Miscellaneous:
 
-    SoPickStyle::Style		getPickStyle() const;
-    int32_t			getSwitch() const;
+    SoPickStyle::Style getPickStyle() const;
+    int32_t            getSwitch() const;
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Returns the current response
-    Response		getCurrentResponse() const { return response; }
+    Response getCurrentResponse() const { return response; }
 
     // Call the pre-callbacks and post-callbacks
-    void		invokePreCallbacks(const SoNode *node);
-    void		invokePostCallbacks(const SoNode *node);
+    void invokePreCallbacks(const SoNode *node);
+    void invokePostCallbacks(const SoNode *node);
 
     // Call the primitive callbacks
-    void	invokeTriangleCallbacks(const SoShape *shape,
-					const SoPrimitiveVertex *v1,
-					const SoPrimitiveVertex *v2,
-					const SoPrimitiveVertex *v3);
-    void	invokeLineSegmentCallbacks(const SoShape *shape,
-					   const SoPrimitiveVertex *v1,
-					   const SoPrimitiveVertex *v2);
-    void	invokePointCallbacks(const SoShape *shape,
-				     const SoPrimitiveVertex *v);
+    void invokeTriangleCallbacks(const SoShape *          shape,
+                                 const SoPrimitiveVertex *v1,
+                                 const SoPrimitiveVertex *v2,
+                                 const SoPrimitiveVertex *v3);
+    void invokeLineSegmentCallbacks(const SoShape *          shape,
+                                    const SoPrimitiveVertex *v1,
+                                    const SoPrimitiveVertex *v2);
+    void invokePointCallbacks(const SoShape *shape, const SoPrimitiveVertex *v);
 
     // Should primitives be generated for this shape?
-    SbBool	shouldGeneratePrimitives(const SoShape *shape) const;    
- 
-  SoINTERNAL public:
-    static void		initClass();
-    
+    SbBool shouldGeneratePrimitives(const SoShape *shape) const;
+
+    SoINTERNAL
+  public:
+    static void initClass();
+
     // Returns the node that caused the callback:
-    virtual SoNode *	getCurPathTail();
-    
+    virtual SoNode *getCurPathTail();
+
     // Set the current node during traversal:
-    void		setCurrentNode(SoNode *node)
-	{ currentNode = node;} 
+    void setCurrentNode(SoNode *node) { currentNode = node; }
 
   protected:
     // Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
   private:
     // Callback lists
-    std::vector<nodeTypeCallback*>    preCallbackList;
-    std::vector<nodeTypeCallback*>    postCallbackList;
+    std::vector<nodeTypeCallback *> preCallbackList;
+    std::vector<nodeTypeCallback *> postCallbackList;
 
-    std::vector<tailCallback*>        preTailCallbackList;
-    std::vector<tailCallback*>        postTailCallbackList;
+    std::vector<tailCallback *> preTailCallbackList;
+    std::vector<tailCallback *> postTailCallbackList;
 
-    std::vector<triangleCallback*>    triangleCallbackList;
-    std::vector<lineSegmentCallback*> lineSegmentCallbackList;
-    std::vector<pointCallback*>       pointCallbackList;
+    std::vector<triangleCallback *>    triangleCallbackList;
+    std::vector<lineSegmentCallback *> lineSegmentCallbackList;
+    std::vector<pointCallback *>       pointCallbackList;
 
     // Response from last callback
-    Response		response;
-    
+    Response response;
+
     // Node where the callback occurs:
-    SoNode *		currentNode;
+    SoNode *currentNode;
 };
 
 #endif /* _SO_CALLBACK_ACTION_ */

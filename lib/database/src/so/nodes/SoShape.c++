@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -85,23 +85,23 @@ SO_NODE_ABSTRACT_SOURCE(SoShape);
 
 // This is used as a surrogate object when rendering or picking a
 // shape whose complexity is set to BOUNDING_BOX.
-SoCube			*SoShape::bboxCube = NULL;
+SoCube *SoShape::bboxCube = NULL;
 
 // Used during generatePrimitives:
-SbBool			SoShape::sendTexCoords = 0;
-SoMaterialBundle	*SoShape::matlBundle = NULL;
+SbBool            SoShape::sendTexCoords = 0;
+SoMaterialBundle *SoShape::matlBundle = NULL;
 
 // Used while tesellating non-convex polygons
-SoShape::TriangleShape	SoShape::primShapeType;
-SoFaceDetail		*SoShape::faceDetail = NULL;
-int			SoShape::nestLevel = 0;
-SoAction		*SoShape::primAction = NULL;
-int			SoShape::primVertNum = 0;
-std::vector<SoPrimitiveVertex>	SoShape::primVerts;
-std::vector<SoPointDetail>		SoShape::vertDetails;
-std::vector<SoPrimitiveVertex>	SoShape::polyVerts;
-std::vector<SoPointDetail>		SoShape::polyDetails;
-GLUtesselator		*SoShape::tobj = NULL;
+SoShape::TriangleShape         SoShape::primShapeType;
+SoFaceDetail *                 SoShape::faceDetail = NULL;
+int                            SoShape::nestLevel = 0;
+SoAction *                     SoShape::primAction = NULL;
+int                            SoShape::primVertNum = 0;
+std::vector<SoPrimitiveVertex> SoShape::primVerts;
+std::vector<SoPointDetail>     SoShape::vertDetails;
+std::vector<SoPrimitiveVertex> SoShape::polyVerts;
+std::vector<SoPointDetail>     SoShape::polyDetails;
+GLUtesselator *                SoShape::tobj = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -157,8 +157,7 @@ SoShape::SoShape()
 SoShape::~SoShape()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -173,12 +172,12 @@ SoShape::getBoundingBox(SoGetBoundingBoxAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBox3f	bbox;
-    SbVec3f	center;
+    SbBox3f bbox;
+    SbVec3f center;
 
     computeBBox(action, bbox, center);
 
-    if(bbox.isEmpty())
+    if (bbox.isEmpty())
         return;
 
     action->extendBy(bbox);
@@ -204,24 +203,24 @@ SoShape::GLRender(SoGLRenderAction *action)
     // First see if the object is visible and should be rendered now
     if (shouldGLRender(action)) {
 
-	SoState *state = action->getState();
+        SoState *state = action->getState();
 
-	//
-	// Set up some info in instance that will be used during
-	// rendering of generated primitives
-	//
+        //
+        // Set up some info in instance that will be used during
+        // rendering of generated primitives
+        //
 
-	// Send the first material and remember it was sent
-	SoMaterialBundle	mb(action);
-	matlBundle = &mb;
-	matlBundle->sendFirst();
+        // Send the first material and remember it was sent
+        SoMaterialBundle mb(action);
+        matlBundle = &mb;
+        matlBundle->sendFirst();
 
-	// See if textures are enabled and we need to send texture coordinates
-	sendTexCoords = (SoGLTextureEnabledElement::get(state));
+        // See if textures are enabled and we need to send texture coordinates
+        sendTexCoords = (SoGLTextureEnabledElement::get(state));
 
-	// Generate primitives to approximate the shape. Each
-	// primitive will be rendered separately (through callbacks).
-	generatePrimitives(action);
+        // Generate primitives to approximate the shape. Each
+        // primitive will be rendered separately (through callbacks).
+        generatePrimitives(action);
     }
 }
 
@@ -241,13 +240,13 @@ SoShape::rayPick(SoRayPickAction *action)
     // First see if the object is pickable
     if (shouldRayPick(action)) {
 
-	// Compute the picking ray in the space of the shape
-	computeObjectSpaceRay(action);
+        // Compute the picking ray in the space of the shape
+        computeObjectSpaceRay(action);
 
-	// Generate primitives to approximate the shape. Each
-	// primitive will be intersected (through callbacks) with the
-	// ray.
-	generatePrimitives(action);
+        // Generate primitives to approximate the shape. Each
+        // primitive will be intersected (through callbacks) with the
+        // ray.
+        generatePrimitives(action);
     }
 }
 
@@ -266,9 +265,9 @@ SoShape::callback(SoCallbackAction *action)
     // First see if the object should have primitives generated for it.
     if (action->shouldGeneratePrimitives(this)) {
 
-	// Generate primitives to approximate the shape. Each primitive
+        // Generate primitives to approximate the shape. Each primitive
         // will be sent back to the application through callbacks.
-	generatePrimitives(action);
+        generatePrimitives(action);
     }
 }
 
@@ -284,20 +283,20 @@ SoShape::callback(SoCallbackAction *action)
 
 void
 SoShape::getScreenSize(SoState *state, const SbBox3f &boundingBox,
-		       SbVec2s &rectSize)
+                       SbVec2s &rectSize)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	objToScreen;
-    SbVec2s	winSize;
-    SbVec3f	min, max, screenPoint[8];
-    SbBox2f	screenBox;
-    int		i;
+    SbMatrix objToScreen;
+    SbVec2s  winSize;
+    SbVec3f  min, max, screenPoint[8];
+    SbBox2f  screenBox;
+    int      i;
 
     // Get the matrices from the state to convert from object to screen space
-    objToScreen = (SoModelMatrixElement::get(state) *
-		   SoViewingMatrixElement::get(state) *
-		   SoProjectionMatrixElement::get(state));
+    objToScreen =
+        (SoModelMatrixElement::get(state) * SoViewingMatrixElement::get(state) *
+         SoProjectionMatrixElement::get(state));
 
     // Get the size of the window from the state
     winSize = SoViewportRegionElement::get(state).getWindowSize();
@@ -316,8 +315,8 @@ SoShape::getScreenSize(SoState *state, const SbBox3f &boundingBox,
     objToScreen.multVecMatrix(SbVec3f(max[0], max[1], max[2]), screenPoint[7]);
 
     for (i = 0; i < 8; i++)
-	screenBox.extendBy(SbVec2f((screenPoint[i][0] * winSize[0]),
-				   (screenPoint[i][1] * winSize[1])));
+        screenBox.extendBy(SbVec2f((screenPoint[i][0] * winSize[0]),
+                                   (screenPoint[i][1] * winSize[1])));
 
     // Get the size of the resulting box
     SbVec2f boxSize = screenBox.getSize();
@@ -327,18 +326,18 @@ SoShape::getScreenSize(SoState *state, const SbBox3f &boundingBox,
     boxSize /= 2.0;
 
     if (boxSize[0] > SHRT_MAX)
-	rectSize[0] = SHRT_MAX;
+        rectSize[0] = SHRT_MAX;
     else if (boxSize[0] < SHRT_MIN)
-	rectSize[0] = SHRT_MIN;
+        rectSize[0] = SHRT_MIN;
     else
-	rectSize[0] = (short) boxSize[0];
+        rectSize[0] = (short)boxSize[0];
 
     if (boxSize[1] > SHRT_MAX)
-	rectSize[1] = SHRT_MAX;
+        rectSize[1] = SHRT_MAX;
     else if (boxSize[1] < SHRT_MIN)
-	rectSize[1] = SHRT_MIN;
+        rectSize[1] = SHRT_MIN;
     else
-	rectSize[1] = (short) boxSize[1];
+        rectSize[1] = (short)boxSize[1];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -346,7 +345,7 @@ SoShape::getScreenSize(SoState *state, const SbBox3f &boundingBox,
 // Description:
 //    Returns TRUE if the shape should be rendered now.
 //
-// Use: protected 
+// Use: protected
 
 SbBool
 SoShape::shouldGLRender(SoGLRenderAction *action)
@@ -358,20 +357,20 @@ SoShape::shouldGLRender(SoGLRenderAction *action)
 
     // Check if the shape is invisible
     if (SoDrawStyleElement::get(action->getState()) ==
-	SoDrawStyleElement::INVISIBLE)
-	return FALSE;
+        SoDrawStyleElement::INVISIBLE)
+        return FALSE;
 
     // If the shape is transparent and transparent objects are being
     // delayed, don't render now
     if (action->handleTransparency())
-	return FALSE;
+        return FALSE;
 
     // If the current complexity is BOUNDING_BOX, just render the
     // cuboid surrounding the shape and tell the shape to stop
     if (SoComplexityTypeElement::get(action->getState()) ==
-	SoComplexityTypeElement::BOUNDING_BOX) {
-	GLRenderBoundingBox(action);
-	return FALSE;
+        SoComplexityTypeElement::BOUNDING_BOX) {
+        GLRenderBoundingBox(action);
+        return FALSE;
     }
 
     // Otherwise, go ahead and render the object
@@ -390,23 +389,23 @@ SoShape::shouldRayPick(SoRayPickAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool	shapeShouldPick;
+    SbBool shapeShouldPick;
 
     switch (SoPickStyleElement::get(action->getState())) {
 
-      case SoPickStyleElement::SHAPE:
-	shapeShouldPick = TRUE;
-	break;
+    case SoPickStyleElement::SHAPE:
+        shapeShouldPick = TRUE;
+        break;
 
-      case SoPickStyleElement::BOUNDING_BOX:
-	// Just pick the cuboid surrounding the shape
-	rayPickBoundingBox(action);
-	shapeShouldPick = FALSE;
-	break;
+    case SoPickStyleElement::BOUNDING_BOX:
+        // Just pick the cuboid surrounding the shape
+        rayPickBoundingBox(action);
+        shapeShouldPick = FALSE;
+        break;
 
-      case SoPickStyleElement::UNPICKABLE:
-	shapeShouldPick = FALSE;
-	break;
+    case SoPickStyleElement::UNPICKABLE:
+        shapeShouldPick = FALSE;
+        break;
     }
 
     return shapeShouldPick;
@@ -432,24 +431,23 @@ SoShape::beginSolidShape(SoGLRenderAction *action)
     // on backface culling. (It may already be on, but that's up to
     // the application to decide.)
     if (SoDrawStyleElement::get(action->getState()) !=
-	SoDrawStyleElement::FILLED) {
-	return;
+        SoDrawStyleElement::FILLED) {
+        return;
     }
 
     // Turn on backface culling, using shape hints element, unless it
     // is already set up ok. Save state first if changing things
-    SoShapeHintsElement::VertexOrdering	oldOrder;
-    SoShapeHintsElement::ShapeType		oldShape;
-    SoShapeHintsElement::FaceType		oldFace;
+    SoShapeHintsElement::VertexOrdering oldOrder;
+    SoShapeHintsElement::ShapeType      oldShape;
+    SoShapeHintsElement::FaceType       oldFace;
 
     SoShapeHintsElement::get(state, oldOrder, oldShape, oldFace);
 
     if (oldOrder != SoShapeHintsElement::COUNTERCLOCKWISE ||
-	oldShape != SoShapeHintsElement::SOLID) {
-	SoShapeHintsElement::set(state,
-				 SoShapeHintsElement::COUNTERCLOCKWISE,
-				 SoShapeHintsElement::SOLID,
-				 SoShapeHintsElement::FACE_TYPE_AS_IS);
+        oldShape != SoShapeHintsElement::SOLID) {
+        SoShapeHintsElement::set(state, SoShapeHintsElement::COUNTERCLOCKWISE,
+                                 SoShapeHintsElement::SOLID,
+                                 SoShapeHintsElement::FACE_TYPE_AS_IS);
     }
 }
 
@@ -512,11 +510,9 @@ SoShape::computeObjectSpaceRay(SoRayPickAction *action, const SbMatrix &matrix)
 // Use: protected, virtual
 
 SoDetail *
-SoShape::createTriangleDetail(SoRayPickAction *,
-			      const SoPrimitiveVertex *,
-			      const SoPrimitiveVertex *,
-			      const SoPrimitiveVertex *,
-			      SoPickedPoint *)
+SoShape::createTriangleDetail(SoRayPickAction *, const SoPrimitiveVertex *,
+                              const SoPrimitiveVertex *,
+                              const SoPrimitiveVertex *, SoPickedPoint *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -533,10 +529,8 @@ SoShape::createTriangleDetail(SoRayPickAction *,
 // Use: protected, virtual
 
 SoDetail *
-SoShape::createLineSegmentDetail(SoRayPickAction *,
-				 const SoPrimitiveVertex *,
-				 const SoPrimitiveVertex *,
-				 SoPickedPoint *)
+SoShape::createLineSegmentDetail(SoRayPickAction *, const SoPrimitiveVertex *,
+                                 const SoPrimitiveVertex *, SoPickedPoint *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -554,7 +548,7 @@ SoShape::createLineSegmentDetail(SoRayPickAction *,
 
 SoDetail *
 SoShape::createPointDetail(SoRayPickAction *, const SoPrimitiveVertex *,
-			   SoPickedPoint *)
+                           SoPickedPoint *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -569,10 +563,9 @@ SoShape::createPointDetail(SoRayPickAction *, const SoPrimitiveVertex *,
 // Use: protected
 
 void
-SoShape::invokeTriangleCallbacks(SoAction *action,
-				 const SoPrimitiveVertex *v1,
-				 const SoPrimitiveVertex *v2,
-				 const SoPrimitiveVertex *v3)
+SoShape::invokeTriangleCallbacks(SoAction *action, const SoPrimitiveVertex *v1,
+                                 const SoPrimitiveVertex *v2,
+                                 const SoPrimitiveVertex *v3)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -580,15 +573,15 @@ SoShape::invokeTriangleCallbacks(SoAction *action,
 
     // Treat rendering and picking cases specially
     if (actionType.isDerivedFrom(SoRayPickAction::getClassTypeId()))
-	rayPickTriangle((SoRayPickAction *) action, v1, v2, v3);
+        rayPickTriangle((SoRayPickAction *)action, v1, v2, v3);
 
     else if (actionType.isDerivedFrom(SoGLRenderAction::getClassTypeId()))
-	GLRenderTriangle((SoGLRenderAction *) action, v1, v2, v3);
+        GLRenderTriangle((SoGLRenderAction *)action, v1, v2, v3);
 
     // Otherwise, this is invoked through the callback action, so
     // invoke the triangle callbacks.
     else {
-        SoCallbackAction *cbAct = (SoCallbackAction *) action;
+        SoCallbackAction *cbAct = (SoCallbackAction *)action;
         cbAct->invokeTriangleCallbacks(this, v1, v2, v3);
     }
 }
@@ -601,9 +594,9 @@ SoShape::invokeTriangleCallbacks(SoAction *action,
 // Use: protected
 
 void
-SoShape::invokeLineSegmentCallbacks(SoAction *action,
-				    const SoPrimitiveVertex *v1,
-				    const SoPrimitiveVertex *v2)
+SoShape::invokeLineSegmentCallbacks(SoAction *               action,
+                                    const SoPrimitiveVertex *v1,
+                                    const SoPrimitiveVertex *v2)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -611,15 +604,15 @@ SoShape::invokeLineSegmentCallbacks(SoAction *action,
 
     // Treat rendering and picking cases specially
     if (actionType.isDerivedFrom(SoRayPickAction::getClassTypeId()))
-	rayPickLineSegment((SoRayPickAction *) action, v1, v2);
+        rayPickLineSegment((SoRayPickAction *)action, v1, v2);
 
     else if (actionType.isDerivedFrom(SoGLRenderAction::getClassTypeId()))
-	GLRenderLineSegment((SoGLRenderAction *) action, v1, v2);
+        GLRenderLineSegment((SoGLRenderAction *)action, v1, v2);
 
     // Otherwise, this is invoked through the callback action, so
     // invoke the triangle callbacks.
     else {
-        SoCallbackAction *cbAct = (SoCallbackAction *) action;
+        SoCallbackAction *cbAct = (SoCallbackAction *)action;
         cbAct->invokeLineSegmentCallbacks(this, v1, v2);
     }
 }
@@ -640,15 +633,15 @@ SoShape::invokePointCallbacks(SoAction *action, const SoPrimitiveVertex *v)
 
     // Treat rendering and picking cases specially
     if (actionType.isDerivedFrom(SoRayPickAction::getClassTypeId()))
-	rayPickPoint((SoRayPickAction *) action, v);
+        rayPickPoint((SoRayPickAction *)action, v);
 
     else if (actionType.isDerivedFrom(SoGLRenderAction::getClassTypeId()))
-	GLRenderPoint((SoGLRenderAction *) action, v);
+        GLRenderPoint((SoGLRenderAction *)action, v);
 
     // Otherwise, this is invoked through the callback action, so
     // invoke the triangle callbacks.
     else {
-        SoCallbackAction *cbAct = (SoCallbackAction *) action;
+        SoCallbackAction *cbAct = (SoCallbackAction *)action;
         cbAct->invokePointCallbacks(this, v);
     }
 }
@@ -662,7 +655,7 @@ SoShape::invokePointCallbacks(SoAction *action, const SoPrimitiveVertex *v)
 
 void
 SoShape::beginShape(SoAction *action, TriangleShape shapeType,
-		    SoFaceDetail *_faceDetail)
+                    SoFaceDetail *_faceDetail)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -672,43 +665,41 @@ SoShape::beginShape(SoAction *action, TriangleShape shapeType,
     }
 
     primShapeType = shapeType;
-    primVertNum   = 0;
-    primAction    = action;
+    primVertNum = 0;
+    primAction = action;
 
     // Save face detail unless we are called recursively
     if (nestLevel++ == 0)
-	faceDetail = _faceDetail;
+        faceDetail = _faceDetail;
 
     switch (shapeType) {
 
-      case TRIANGLE_STRIP:
-      case TRIANGLE_FAN:
-      case TRIANGLES:
-	// If the face detail is not NULL, get it ready to store the 3
-	// point details for each triangle
-	if (faceDetail != NULL)
-	    faceDetail->setNumPoints(3);
-	break;
+    case TRIANGLE_STRIP:
+    case TRIANGLE_FAN:
+    case TRIANGLES:
+        // If the face detail is not NULL, get it ready to store the 3
+        // point details for each triangle
+        if (faceDetail != NULL)
+            faceDetail->setNumPoints(3);
+        break;
 
-      case POLYGON:
-	{
-	    SoShapeHintsElement::VertexOrdering vo;
-	    SoShapeHintsElement::ShapeType st;
-	    SoShapeHintsElement::FaceType ft;
-	    SoShapeHintsElement::get(action->getState(), vo, st, ft);
+    case POLYGON: {
+        SoShapeHintsElement::VertexOrdering vo;
+        SoShapeHintsElement::ShapeType      st;
+        SoShapeHintsElement::FaceType       ft;
+        SoShapeHintsElement::get(action->getState(), vo, st, ft);
 
-	    if (ft == SoShapeHintsElement::CONVEX) {
-		// Convex polygons can be drawn as triangle fans
-		primShapeType = TRIANGLE_FAN;
-		// Do the same stuff needed for TRIANGLE_FAN:
-		if (faceDetail != NULL)
-		    faceDetail->setNumPoints(3);
+        if (ft == SoShapeHintsElement::CONVEX) {
+            // Convex polygons can be drawn as triangle fans
+            primShapeType = TRIANGLE_FAN;
+            // Do the same stuff needed for TRIANGLE_FAN:
+            if (faceDetail != NULL)
+                faceDetail->setNumPoints(3);
         } else {
             polyVerts.clear();
             polyDetails.clear();
         }
-	}
-	break;
+    } break;
     }
 }
 
@@ -727,34 +718,34 @@ SoShape::shapeVertex(const SoPrimitiveVertex *v)
 {
     switch (primShapeType) {
 
-      case TRIANGLE_STRIP:
-	triangleVertex(v, primVertNum & 1);
-	break;
+    case TRIANGLE_STRIP:
+        triangleVertex(v, primVertNum & 1);
+        break;
 
-      case TRIANGLE_FAN:
-	triangleVertex(v, primVertNum == 0 ? 0 : 1);
-	break;
+    case TRIANGLE_FAN:
+        triangleVertex(v, primVertNum == 0 ? 0 : 1);
+        break;
 
-      case TRIANGLES:
-	triangleVertex(v, primVertNum == 2 ? -1 : primVertNum);
-	// Reset for next triangle if processed 3 vertices
-	if (primVertNum == 3)
-	    primVertNum = 0;
-	break;
+    case TRIANGLES:
+        triangleVertex(v, primVertNum == 2 ? -1 : primVertNum);
+        // Reset for next triangle if processed 3 vertices
+        if (primVertNum == 3)
+            primVertNum = 0;
+        break;
 
-      case POLYGON:
+    case POLYGON:
 
-    polyVerts.push_back(*v);
+        polyVerts.push_back(*v);
 
-	if (faceDetail != NULL) {
+        if (faceDetail != NULL) {
 
-	    // Save point detail for given vertex in array
-        polyDetails.push_back(* (const SoPointDetail *) v->getDetail());
+            // Save point detail for given vertex in array
+            polyDetails.push_back(*(const SoPointDetail *)v->getDetail());
 
-	    // Store pointer to point detail in saved polygon vertex
-        polyVerts.back().setDetail(&polyDetails.back());
-	}
-	break;
+            // Store pointer to point detail in saved polygon vertex
+            polyVerts.back().setDetail(&polyDetails.back());
+        }
+        break;
     }
 }
 
@@ -771,39 +762,39 @@ SoShape::triangleVertex(const SoPrimitiveVertex *v, int vertToReplace)
 ////////////////////////////////////////////////////////////////////////
 {
     if (faceDetail == NULL) {
-	// Generate a triangle if we have 3 vertices
-	if (primVertNum >= 2)
-	    invokeTriangleCallbacks(primAction,
-				    &primVerts[0], &primVerts[1], v);
-	
-	// Save vertex in one of the two slots
-	if (vertToReplace >= 0)
-	    primVerts[vertToReplace] = *v;
+        // Generate a triangle if we have 3 vertices
+        if (primVertNum >= 2)
+            invokeTriangleCallbacks(primAction, &primVerts[0], &primVerts[1],
+                                    v);
+
+        // Save vertex in one of the two slots
+        if (vertToReplace >= 0)
+            primVerts[vertToReplace] = *v;
     }
-    
+
     // If face detail was supplied, set it to contain the 3 point
     // details. Make sure the primitive vertices all point to the
     // face detail.
     else {
-	const SoPointDetail	*pd = (const SoPointDetail *) v->getDetail();
-	SoPrimitiveVertex	pv = *v;
-	
-	pv.setDetail(faceDetail);
-	
-	// Generate a triangle if we have 3 vertices
-	if (primVertNum >= 2) {
-	    faceDetail->setPoint(0, &vertDetails[0]);
-	    faceDetail->setPoint(1, &vertDetails[1]);
-	    faceDetail->setPoint(2, pd);
-	    invokeTriangleCallbacks(primAction,
-				    &primVerts[0], &primVerts[1], &pv);
-	}
-	
-	// Save vertex and details in one of the two slots
-	if (vertToReplace >= 0) {
-	    primVerts[vertToReplace] = pv;
-	    vertDetails[vertToReplace] = *pd;
-	}
+        const SoPointDetail *pd = (const SoPointDetail *)v->getDetail();
+        SoPrimitiveVertex    pv = *v;
+
+        pv.setDetail(faceDetail);
+
+        // Generate a triangle if we have 3 vertices
+        if (primVertNum >= 2) {
+            faceDetail->setPoint(0, &vertDetails[0]);
+            faceDetail->setPoint(1, &vertDetails[1]);
+            faceDetail->setPoint(2, pd);
+            invokeTriangleCallbacks(primAction, &primVerts[0], &primVerts[1],
+                                    &pv);
+        }
+
+        // Save vertex and details in one of the two slots
+        if (vertToReplace >= 0) {
+            primVerts[vertToReplace] = pv;
+            vertDetails[vertToReplace] = *pd;
+        }
     }
 
     primVertNum++;
@@ -825,25 +816,25 @@ SoShape::endShape()
     struct glu_callbacks {
         // Called by the GLU tesselator when we are beginning a triangle
         // strip, fan, or set of independent triangles.
-        static void beginCB(GLenum primType, SoShape *primShape)
-        {
-            switch(primType) {
-                case GL_TRIANGLE_STRIP:
-                    primShape->beginShape(primShape->primAction, TRIANGLE_STRIP);
+        static void beginCB(GLenum primType, SoShape *primShape) {
+            switch (primType) {
+            case GL_TRIANGLE_STRIP:
+                primShape->beginShape(primShape->primAction, TRIANGLE_STRIP);
                 break;
-                case GL_TRIANGLE_FAN:
-                    primShape->beginShape(primShape->primAction, TRIANGLE_FAN);
+            case GL_TRIANGLE_FAN:
+                primShape->beginShape(primShape->primAction, TRIANGLE_FAN);
                 break;
-                case GL_TRIANGLES:
-                    primShape->beginShape(primShape->primAction, TRIANGLES);
+            case GL_TRIANGLES:
+                primShape->beginShape(primShape->primAction, TRIANGLES);
                 break;
             }
         }
 
         // Called by the GLU tesselator when we are generating primitives.
-        //static void vtxCB(SoPrimitiveVertex *vertex_data, SoShape *primShape) { primShape->shapeVertex(vertex_data); }
-        static void vtxCB(float  *vertex_data, SoShape *primShape) {
-            SoPointDetail pd;
+        // static void vtxCB(SoPrimitiveVertex *vertex_data, SoShape *primShape)
+        // { primShape->shapeVertex(vertex_data); }
+        static void vtxCB(float *vertex_data, SoShape *primShape) {
+            SoPointDetail     pd;
             SoPrimitiveVertex vd;
             vd.setDetail(&pd);
             vd.setPoint(SbVec3f(vertex_data));
@@ -853,70 +844,75 @@ SoShape::endShape()
         // Called by the GLU tesselator when we are done with the
         static void endCB(SoShape *primShape) { primShape->endShape(); }
 
-        // Called by the GLU tesselator if there is an error (typically because the polygons self-intersects).
-        static void errorCB(GLenum err) { SoDebugError::post("SoShape::errorCB", "GLU error: %s", gluErrorString(err)); }
+        // Called by the GLU tesselator if there is an error (typically because
+        // the polygons self-intersects).
+        static void errorCB(GLenum err) {
+            SoDebugError::post("SoShape::errorCB", "GLU error: %s",
+                               gluErrorString(err));
+        }
     };
 
     switch (primShapeType) {
-        case TRIANGLE_STRIP:
-        case TRIANGLE_FAN:
-        case TRIANGLES:
-            primVertNum = 0;
+    case TRIANGLE_STRIP:
+    case TRIANGLE_FAN:
+    case TRIANGLES:
+        primVertNum = 0;
         break;
 
-        case POLYGON:
-            // Don't bother with degenerate polygons
-            if (polyVerts.size() < 3) {
-                polyVerts.clear();
-                polyDetails.clear();
-                break;
-            }
-
-            // Concave polygons need to be tesselated; we'll use the
-            // GLU routines to do this:
-            if (tobj == NULL) {
-                tobj = gluNewTess();
-                gluTessCallback(tobj, (GLenum)GLU_TESS_BEGIN_DATA,
-                        (void (*)())glu_callbacks::beginCB);
-                gluTessCallback(tobj, (GLenum)GLU_TESS_END_DATA,
-                        (void (*)())glu_callbacks::endCB);
-                gluTessCallback(tobj, (GLenum)GLU_TESS_VERTEX_DATA,
-                        (void (*)())glu_callbacks::vtxCB);
-                gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR,
-                        (void (*)())glu_callbacks::errorCB);
-            }
-            gluTessBeginPolygon(tobj, this);
-            gluTessBeginContour(tobj);
-
-            for (int i = 0; i < polyVerts.size(); i++) {
-                const SbVec3f &t = polyVerts[i].getPoint();
-
-                GLdouble dv[3];  // glu requires double...
-                dv[0] = t[0]; dv[1] = t[1]; dv[2] = t[2];
-                gluTessVertex(tobj, dv, (void *)&polyVerts[i]);
-            }
-            gluTessEndContour(tobj);
-            gluTessEndPolygon(tobj);
-
+    case POLYGON:
+        // Don't bother with degenerate polygons
+        if (polyVerts.size() < 3) {
             polyVerts.clear();
             polyDetails.clear();
+            break;
+        }
+
+        // Concave polygons need to be tesselated; we'll use the
+        // GLU routines to do this:
+        if (tobj == NULL) {
+            tobj = gluNewTess();
+            gluTessCallback(tobj, (GLenum)GLU_TESS_BEGIN_DATA,
+                            (void (*)())glu_callbacks::beginCB);
+            gluTessCallback(tobj, (GLenum)GLU_TESS_END_DATA,
+                            (void (*)())glu_callbacks::endCB);
+            gluTessCallback(tobj, (GLenum)GLU_TESS_VERTEX_DATA,
+                            (void (*)())glu_callbacks::vtxCB);
+            gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR,
+                            (void (*)())glu_callbacks::errorCB);
+        }
+        gluTessBeginPolygon(tobj, this);
+        gluTessBeginContour(tobj);
+
+        for (int i = 0; i < polyVerts.size(); i++) {
+            const SbVec3f &t = polyVerts[i].getPoint();
+
+            GLdouble dv[3]; // glu requires double...
+            dv[0] = t[0];
+            dv[1] = t[1];
+            dv[2] = t[2];
+            gluTessVertex(tobj, dv, (void *)&polyVerts[i]);
+        }
+        gluTessEndContour(tobj);
+        gluTessEndPolygon(tobj);
+
+        polyVerts.clear();
+        polyDetails.clear();
         break;
     }
 
     nestLevel--;
 }
 
-
 //
 // This macro is used by the rendering methods to follow:
 //
 
-#define RENDER_VERTEX(pv)						      \
-    if (sendTexCoords)							      \
-	glTexCoord4fv(pv->getTextureCoords().getValue());		      \
-    matlBundle->send(pv->getMaterialIndex(), TRUE);			      \
-    if (! matlBundle->isColorOnly())					      \
-	glNormal3fv(pv->getNormal().getValue());			      \
+#define RENDER_VERTEX(pv)                                                      \
+    if (sendTexCoords)                                                         \
+        glTexCoord4fv(pv->getTextureCoords().getValue());                      \
+    matlBundle->send(pv->getMaterialIndex(), TRUE);                            \
+    if (!matlBundle->isColorOnly())                                            \
+        glNormal3fv(pv->getNormal().getValue());                               \
     glVertex3fv(pv->getPoint().getValue())
 
 ////////////////////////////////////////////////////////////////////////
@@ -927,10 +923,9 @@ SoShape::endShape()
 // Use: private
 
 void
-SoShape::GLRenderTriangle(SoGLRenderAction *,
-			  const SoPrimitiveVertex *v1,
-			  const SoPrimitiveVertex *v2,
-			  const SoPrimitiveVertex *v3)
+SoShape::GLRenderTriangle(SoGLRenderAction *, const SoPrimitiveVertex *v1,
+                          const SoPrimitiveVertex *v2,
+                          const SoPrimitiveVertex *v3)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -951,9 +946,8 @@ SoShape::GLRenderTriangle(SoGLRenderAction *,
 // Use: private
 
 void
-SoShape::GLRenderLineSegment(SoGLRenderAction *,
-			     const SoPrimitiveVertex *v1,
-			     const SoPrimitiveVertex *v2)
+SoShape::GLRenderLineSegment(SoGLRenderAction *, const SoPrimitiveVertex *v1,
+                             const SoPrimitiveVertex *v2)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -994,53 +988,52 @@ SoShape::GLRenderPoint(SoGLRenderAction *, const SoPrimitiveVertex *v)
 // Use: private
 
 void
-SoShape::rayPickTriangle(SoRayPickAction *action,
-			 const SoPrimitiveVertex *v1,
-			 const SoPrimitiveVertex *v2,
-			 const SoPrimitiveVertex *v3)
+SoShape::rayPickTriangle(SoRayPickAction *action, const SoPrimitiveVertex *v1,
+                         const SoPrimitiveVertex *v2,
+                         const SoPrimitiveVertex *v3)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f		point;
-    SbVec3f		barycentric;
-    SbBool		onFrontSide;
-    SoPickedPoint	*pp;
+    SbVec3f        point;
+    SbVec3f        barycentric;
+    SbBool         onFrontSide;
+    SoPickedPoint *pp;
 
-    if (action->intersect(v1->getPoint(), v2->getPoint(), v3->getPoint(),
-			  point, barycentric, onFrontSide) &&
-	(pp = action->addIntersection(point)) != NULL) {
+    if (action->intersect(v1->getPoint(), v2->getPoint(), v3->getPoint(), point,
+                          barycentric, onFrontSide) &&
+        (pp = action->addIntersection(point)) != NULL) {
 
-	SbVec3f		norm;
-	SbVec4f		texCoord;
-	SoDetail	*detail;
+        SbVec3f   norm;
+        SbVec4f   texCoord;
+        SoDetail *detail;
 
-	// Compute normal by interpolating vertex normals using
-	// barycentric coordinates
-	norm = (v1->getNormal() * barycentric[0] +
-		v2->getNormal() * barycentric[1] +
-		v3->getNormal() * barycentric[2]);
-	norm.normalize();
-	pp->setObjectNormal(norm);
+        // Compute normal by interpolating vertex normals using
+        // barycentric coordinates
+        norm = (v1->getNormal() * barycentric[0] +
+                v2->getNormal() * barycentric[1] +
+                v3->getNormal() * barycentric[2]);
+        norm.normalize();
+        pp->setObjectNormal(norm);
 
-	// Compute texture coordinates the same way
-	texCoord = (v1->getTextureCoords() * barycentric[0] +
-		    v2->getTextureCoords() * barycentric[1] +
-		    v3->getTextureCoords() * barycentric[2]);
-	pp->setObjectTextureCoords(texCoord);
+        // Compute texture coordinates the same way
+        texCoord = (v1->getTextureCoords() * barycentric[0] +
+                    v2->getTextureCoords() * barycentric[1] +
+                    v3->getTextureCoords() * barycentric[2]);
+        pp->setObjectTextureCoords(texCoord);
 
-	// Copy material index from closest detail, since it can't
-	// be interpolated
-	if (barycentric[0] < barycentric[1] && barycentric[0] < barycentric[2])
-	    pp->setMaterialIndex(v1->getMaterialIndex());
-	else if (barycentric[1] < barycentric[2])
-	    pp->setMaterialIndex(v2->getMaterialIndex());
-	else
-	    pp->setMaterialIndex(v3->getMaterialIndex());
+        // Copy material index from closest detail, since it can't
+        // be interpolated
+        if (barycentric[0] < barycentric[1] && barycentric[0] < barycentric[2])
+            pp->setMaterialIndex(v1->getMaterialIndex());
+        else if (barycentric[1] < barycentric[2])
+            pp->setMaterialIndex(v2->getMaterialIndex());
+        else
+            pp->setMaterialIndex(v3->getMaterialIndex());
 
-	// Create a detail for the specific shape
-	detail = createTriangleDetail(action, v1, v2, v3, pp);
-	if (detail != NULL)
-	    pp->setDetail(detail, this);
+        // Create a detail for the specific shape
+        detail = createTriangleDetail(action, v1, v2, v3, pp);
+        if (detail != NULL)
+            pp->setDetail(detail, this);
     }
 }
 
@@ -1052,47 +1045,47 @@ SoShape::rayPickTriangle(SoRayPickAction *action,
 // Use: private
 
 void
-SoShape::rayPickLineSegment(SoRayPickAction *action,
-			    const SoPrimitiveVertex *v1,
-			    const SoPrimitiveVertex *v2)
+SoShape::rayPickLineSegment(SoRayPickAction *        action,
+                            const SoPrimitiveVertex *v1,
+                            const SoPrimitiveVertex *v2)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f		point;
-    SoPickedPoint	*pp;
+    SbVec3f        point;
+    SoPickedPoint *pp;
 
     if (action->intersect(v1->getPoint(), v2->getPoint(), point) &&
-	(pp = action->addIntersection(point)) != NULL) {
+        (pp = action->addIntersection(point)) != NULL) {
 
-	float		ratioFromV1;
-	SbVec3f		norm;
-	SbVec4f		texCoord;
-	SoDetail	*detail;
+        float     ratioFromV1;
+        SbVec3f   norm;
+        SbVec4f   texCoord;
+        SoDetail *detail;
 
-	// Compute normal by interpolating vertex normals
-	ratioFromV1 = ((point - v1->getPoint()).length() /
-		       (v2->getPoint() - v1->getPoint()).length());
-	norm = (v1->getNormal() * (1.0 - ratioFromV1) +
-		v2->getNormal() * ratioFromV1);
-	norm.normalize();
-	pp->setObjectNormal(norm);
+        // Compute normal by interpolating vertex normals
+        ratioFromV1 = ((point - v1->getPoint()).length() /
+                       (v2->getPoint() - v1->getPoint()).length());
+        norm = (v1->getNormal() * (1.0 - ratioFromV1) +
+                v2->getNormal() * ratioFromV1);
+        norm.normalize();
+        pp->setObjectNormal(norm);
 
-	// Compute texture coordinates the same way
-	texCoord = (v1->getTextureCoords() * (1.0 - ratioFromV1) +
-		    v2->getTextureCoords() * ratioFromV1);
-	pp->setObjectTextureCoords(texCoord);
+        // Compute texture coordinates the same way
+        texCoord = (v1->getTextureCoords() * (1.0 - ratioFromV1) +
+                    v2->getTextureCoords() * ratioFromV1);
+        pp->setObjectTextureCoords(texCoord);
 
-	// Copy material index from closer detail, since it can't be
-	// interpolated
-	if (ratioFromV1 < 0.5)
-	    pp->setMaterialIndex(v1->getMaterialIndex());
-	else
-	    pp->setMaterialIndex(v2->getMaterialIndex());
+        // Copy material index from closer detail, since it can't be
+        // interpolated
+        if (ratioFromV1 < 0.5)
+            pp->setMaterialIndex(v1->getMaterialIndex());
+        else
+            pp->setMaterialIndex(v2->getMaterialIndex());
 
-	// Create a detail for the specific shape
-	detail = createLineSegmentDetail(action, v1, v2, pp);
-	if (detail != NULL)
-	    pp->setDetail(detail, this);
+        // Create a detail for the specific shape
+        detail = createLineSegmentDetail(action, v1, v2, pp);
+        if (detail != NULL)
+            pp->setDetail(detail, this);
     }
 }
 
@@ -1108,21 +1101,21 @@ SoShape::rayPickPoint(SoRayPickAction *action, const SoPrimitiveVertex *v)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoPickedPoint	*pp;
+    SoPickedPoint *pp;
 
     if (action->intersect(v->getPoint()) &&
-	(pp = action->addIntersection(v->getPoint())) != NULL) {
+        (pp = action->addIntersection(v->getPoint())) != NULL) {
 
-	SoDetail	*detail;
+        SoDetail *detail;
 
-	pp->setObjectNormal(v->getNormal());
-	pp->setObjectTextureCoords(v->getTextureCoords());
-	pp->setMaterialIndex(v->getMaterialIndex());
+        pp->setObjectNormal(v->getNormal());
+        pp->setObjectTextureCoords(v->getTextureCoords());
+        pp->setMaterialIndex(v->getMaterialIndex());
 
-	// Create a detail for the specific shape
-	detail = createPointDetail(action, v, pp);
-	if (detail != NULL)
-	    pp->setDetail(detail, this);
+        // Create a detail for the specific shape
+        detail = createPointDetail(action, v, pp);
+        if (detail != NULL)
+            pp->setDetail(detail, this);
     }
 }
 
@@ -1141,8 +1134,8 @@ SoShape::GLRenderBoundingBox(SoGLRenderAction *action)
 {
     // Create a surrogate cube to render, if not already done
     if (bboxCube == NULL) {
-	bboxCube = new SoCube;
-	bboxCube->ref();
+        bboxCube = new SoCube;
+        bboxCube->ref();
     }
 
     // Compute the bounding box of the shape, using the virtual
@@ -1152,8 +1145,8 @@ SoShape::GLRenderBoundingBox(SoGLRenderAction *action)
     // currently open caches in the render action. Otherwise, objects
     // (such as 2D text) that use extra elements to compute bounding
     // boxes would not be rendered correctly when cached.
-    SbBox3f	box;
-    SbVec3f	center;
+    SbBox3f box;
+    SbVec3f center;
     computeBBox(action, box, center);
 
     // Render the cube using a special method that is designed for
@@ -1177,14 +1170,14 @@ SoShape::rayPickBoundingBox(SoRayPickAction *action)
 {
     // Create a surrogate cube to pick if not already done
     if (bboxCube == NULL) {
-	bboxCube = new SoCube;
-	bboxCube->ref();
+        bboxCube = new SoCube;
+        bboxCube->ref();
     }
 
     // Compute the bounding box of the shape, using the virtual
     // computeBBox() method
-    SbBox3f	box;
-    SbVec3f	center;
+    SbBox3f box;
+    SbVec3f center;
     computeBBox(action, box, center);
 
     // Pick the cube using a special method that is designed for

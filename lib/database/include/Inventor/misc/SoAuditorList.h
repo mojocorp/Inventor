@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -85,40 +85,41 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SoAuditorList : private SbPList {
+SoINTERNAL
+class SoAuditorList : private SbPList {
   public:
-
     // Constructor and destructor.
     SoAuditorList();
     ~SoAuditorList();
 
     // Adds an auditor of the given type to the list
-    void		append(void *auditor, SoNotRec::Type type);
+    void append(void *auditor, SoNotRec::Type type);
 
     // Sets auditor and type for given index
-    void		set(int index, void *auditor, SoNotRec::Type type);
+    void set(int index, void *auditor, SoNotRec::Type type);
 
     // Finds an auditor in the list, returning the index or -1 if not found
-    int			find(void *auditor, SoNotRec::Type type) const;
+    int find(void *auditor, SoNotRec::Type type) const;
 
     // Returns object or type for given index
-    void *		getObject(int index) const;
-    SoNotRec::Type	getType(int index) const;
+    void *         getObject(int index) const;
+    SoNotRec::Type getType(int index) const;
 
     // Removes an auditor from the list
-    void		remove(int index);
-    void		remove(void *auditor, SoNotRec::Type type)
-	{ remove(find(auditor, type)); }
+    void remove(int index);
+    void remove(void *auditor, SoNotRec::Type type) {
+        remove(find(auditor, type));
+    }
 
     // Returns number of auditors in list
-    int			getLength() const;
+    int getLength() const;
 
     // Propagates notification to all auditors in list
-    void		notify(SoNotList *list);
+    void notify(SoNotList *list);
 
   private:
     // Propagates notification to indexed auditor
-    void		notify1(SoNotList *list, int index);
+    void notify1(SoNotList *list, int index);
 };
 
 #endif /* _SO_AUDITOR_LIST_ */

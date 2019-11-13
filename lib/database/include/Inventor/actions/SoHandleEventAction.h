@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_HANDLE_EVENT_ACTION_
-#define  _SO_HANDLE_EVENT_ACTION_
+#ifndef _SO_HANDLE_EVENT_ACTION_
+#define _SO_HANDLE_EVENT_ACTION_
 
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/actions/SoSubAction.h>
@@ -83,36 +83,35 @@ class SoHandleEventAction : public SoAction {
     virtual ~SoHandleEventAction();
 
     // Sets current viewport region to use for the event processing
-    void		setViewportRegion(const SbViewportRegion &newRegion);
-
+    void setViewportRegion(const SbViewportRegion &newRegion);
 
     // Returns current viewport region
-    const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
-
+    const SbViewportRegion &getViewportRegion() const { return vpRegion; }
 
     // Sets/returns the event to handle
-    void		setEvent(const SoEvent *ev)	{ event = ev; }
-    const SoEvent *	getEvent() const		{ return event; }
+    void           setEvent(const SoEvent *ev) { event = ev; }
+    const SoEvent *getEvent() const { return event; }
 
     // Sets/returns whether any node has yet handled the event
-    void		setHandled()		{ setTerminated(TRUE); }
-    SbBool		isHandled() const	{ return hasTerminated(); }
+    void   setHandled() { setTerminated(TRUE); }
+    SbBool isHandled() const { return hasTerminated(); }
 
     // grab() - node will receive all events until release() is called.
     // grabber() returns which node is currently grabbing events.
-    void    	    	setGrabber(SoNode *node);
-    void    	    	releaseGrabber()	    { setGrabber(NULL); }
-    SoNode *	    	getGrabber() const	    { return eventGrabber; }
+    void    setGrabber(SoNode *node);
+    void    releaseGrabber() { setGrabber(NULL); }
+    SoNode *getGrabber() const { return eventGrabber; }
 
     // Sets/returns the root node used for initiating a pick action
     // for those nodes that want to know who is under the cursor
-    void		setPickRoot(SoNode *node);
-    SoNode *		getPickRoot() const		{ return pickRoot; }
+    void    setPickRoot(SoNode *node);
+    SoNode *getPickRoot() const { return pickRoot; }
 
     // Set the radius (in pixels) around the point. This is used when
     // testing the ray against lines and points.
-    void		setPickRadius(float radiusInPixels) 
-			    { pickAct->setRadius(radiusInPixels); }
+    void setPickRadius(float radiusInPixels) {
+        pickAct->setRadius(radiusInPixels);
+    }
 
     // Returns the object hit (as an SoPickedPoint) by performing a
     // pick based on the current mouse location as specified in the
@@ -125,22 +124,23 @@ class SoHandleEventAction : public SoAction {
     // Return a list of objects hit, sorted from front to back
     const SoPickedPointList &getPickedPointList();
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
   private:
-    const SoEvent	*event;		// Event being handled
-    SoNode		*pickRoot;	// Root node for initiating picking
-    SoPickedPoint	*pickedPoint;	// PickedPoint from last pick
-    SbBool		pickValid;	// Whether last pick is still valid
-    SbBool		usedPickAll;	// TRUE if last pick used pickAll=TRUE
-    SoRayPickAction	*pickAct;	// Pick action
-    SoNode  	    	*eventGrabber;  // Event grabber - gets all events
-    SbViewportRegion	vpRegion;	// Current viewport region
+    const SoEvent *  event;        // Event being handled
+    SoNode *         pickRoot;     // Root node for initiating picking
+    SoPickedPoint *  pickedPoint;  // PickedPoint from last pick
+    SbBool           pickValid;    // Whether last pick is still valid
+    SbBool           usedPickAll;  // TRUE if last pick used pickAll=TRUE
+    SoRayPickAction *pickAct;      // Pick action
+    SoNode *         eventGrabber; // Event grabber - gets all events
+    SbViewportRegion vpRegion;     // Current viewport region
 };
 
 #endif /* _SO_HANDLE_EVENT_ACTION_ */

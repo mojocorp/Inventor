@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -72,7 +72,7 @@ SoFieldConverter::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO__ENGINE_INIT_ABSTRACT_CLASS(SoFieldConverter, "FieldConverter",
-                       SoEngine);
+                                   SoEngine);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -99,8 +99,7 @@ SoFieldConverter::SoFieldConverter()
 SoFieldConverter::~SoFieldConverter()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -117,9 +116,9 @@ SoFieldConverter::getConnectedInput()
 {
     const SoFieldData *fd = getFieldData();
     for (int i = 0; i < fd->getNumFields(); i++) {
-	SoField *f = fd->getField(this, i);
-	if (f->isConnected())
-	    return f;
+        SoField *f = fd->getField(this, i);
+        if (f->isConnected())
+            return f;
     }
     return 0;
 }
@@ -137,15 +136,15 @@ SoFieldConverter::getForwardConnections(SoFieldList &list) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoEngineOutputList	outputs;
-    int			numConnections = 0;
+    SoEngineOutputList outputs;
+    int                numConnections = 0;
 
     // Get all of the outputs into a list
     getOutputs(outputs);
 
     // For each output, add all connections to the given list
     for (int i = 0; i < outputs.getLength(); i++)
-	numConnections += outputs[i]->getForwardConnections(list);
+        numConnections += outputs[i]->getForwardConnections(list);
 
     return numConnections;
 }

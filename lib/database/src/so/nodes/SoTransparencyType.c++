@@ -62,8 +62,7 @@
 
 SO_NODE_SOURCE(SoTransparencyType);
 
-SoTransparencyType::SoTransparencyType(void)
-{
+SoTransparencyType::SoTransparencyType(void) {
     SO_NODE_CONSTRUCTOR(SoTransparencyType);
 
     SO_NODE_ADD_FIELD(type, (SCREEN_DOOR));
@@ -81,13 +80,10 @@ SoTransparencyType::SoTransparencyType(void)
     isBuiltIn = TRUE;
 }
 
-SoTransparencyType::~SoTransparencyType()
-{
-}
+SoTransparencyType::~SoTransparencyType() {}
 
 void
-SoTransparencyType::initClass(void)
-{
+SoTransparencyType::initClass(void) {
     SO__NODE_INIT_CLASS(SoTransparencyType, "TransparencyType", SoNode);
 
     SO_ENABLE(SoCallbackAction, SoTransparencyTypeElement);
@@ -96,30 +92,28 @@ SoTransparencyType::initClass(void)
 }
 
 void
-SoTransparencyType::doAction(SoAction * action)
-{
-    SoState	*state = action->getState();
+SoTransparencyType::doAction(SoAction *action) {
+    SoState *state = action->getState();
 
-    if (! type.isIgnored()
-        && ! SoOverrideElement::getTransparencyTypeOverride(state)) {
+    if (!type.isIgnored() &&
+        !SoOverrideElement::getTransparencyTypeOverride(state)) {
         if (isOverride()) {
             SoOverrideElement::setTransparencyTypeOverride(state, this, TRUE);
         }
-        SoTransparencyTypeElement::set(state, (SoTransparencyTypeElement::TransparencyType)type.getValue());
+        SoTransparencyTypeElement::set(
+            state,
+            (SoTransparencyTypeElement::TransparencyType)type.getValue());
         SoShapeStyleElement::setTransparencyType(state, type.getValue());
         SoLazyElement::setTransparencyType(state, type.getValue());
     }
 }
 
 void
-SoTransparencyType::callback(SoCallbackAction * action)
-{
+SoTransparencyType::callback(SoCallbackAction *action) {
     SoTransparencyType::doAction((SoAction *)action);
 }
 
 void
-SoTransparencyType::GLRender(SoGLRenderAction * action)
-{
+SoTransparencyType::GLRender(SoGLRenderAction *action) {
     SoTransparencyType::doAction(action);
 }
-

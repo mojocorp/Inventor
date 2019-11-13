@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -116,7 +116,7 @@ SoGetBoundingBoxAction::~SoGetBoundingBoxAction()
 ////////////////////////////////////////////////////////////////////////
 {
     if (resetPath != NULL)
-	resetPath->unref();
+        resetPath->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -142,19 +142,18 @@ SoGetBoundingBoxAction::setViewportRegion(const SbViewportRegion &newRegion)
 // Use: public
 
 void
-SoGetBoundingBoxAction::setResetPath(const SoPath *path,
-				     SbBool _resetBefore,
-				     ResetType _what )
+SoGetBoundingBoxAction::setResetPath(const SoPath *path, SbBool _resetBefore,
+                                     ResetType _what)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (resetPath != NULL)
-	resetPath->unref();
+        resetPath->unref();
 
     resetPath = path;
 
     if (resetPath != NULL)
-	resetPath->ref();
+        resetPath->ref();
 
     resetBefore = _resetBefore;
     resetWhat = _what;
@@ -203,24 +202,24 @@ SoGetBoundingBoxAction::checkReset(SbBool _resetBefore)
 ////////////////////////////////////////////////////////////////////////
 {
     if (resetPath == NULL || _resetBefore != resetBefore)
-	return;
+        return;
 
     const SoPath *curPath = getCurPath();
 
     if (*curPath == *resetPath) {
 
-	// Reset the transform if necessary. This has the side effect
-	// of clearing out (to identity) all currently open local
-	// matrices (instances of SoLocalBBoxMatrixElement). This is
-	// necessary because separators above the current node should
-	// NOT apply their local matrices to whatever we calculate
-	// here, since we reset the transformation.
-	if (resetWhat & TRANSFORM)
-	    SoBBoxModelMatrixElement::reset(state, curPath->getTail());
+        // Reset the transform if necessary. This has the side effect
+        // of clearing out (to identity) all currently open local
+        // matrices (instances of SoLocalBBoxMatrixElement). This is
+        // necessary because separators above the current node should
+        // NOT apply their local matrices to whatever we calculate
+        // here, since we reset the transformation.
+        if (resetWhat & TRANSFORM)
+            SoBBoxModelMatrixElement::reset(state, curPath->getTail());
 
-	// empty the bounding box if necessary
-	if (resetWhat & BBOX)
-	    box.makeEmpty();
+        // empty the bounding box if necessary
+        if (resetWhat & BBOX)
+            box.makeEmpty();
     }
 }
 
@@ -256,21 +255,20 @@ SoGetBoundingBoxAction::setCenter(const SbVec3f &c, SbBool transformCenter)
 {
 #ifdef DEBUG
     if (centerSet)
-	SoDebugError::postWarning("SoGetBoundingBoxAction::setCenter",
-				  "overriding a previously set center; some "
-				  "group class is not doing its job!");
+        SoDebugError::postWarning("SoGetBoundingBoxAction::setCenter",
+                                  "overriding a previously set center; some "
+                                  "group class is not doing its job!");
 #endif
 
     if (transformCenter) {
-	SbMatrix m = SoLocalBBoxMatrixElement::get(getState());
+        SbMatrix m = SoLocalBBoxMatrixElement::get(getState());
 
-	if (isInCameraSpace())
-	    m.multRight(SoViewingMatrixElement::get(getState()));
+        if (isInCameraSpace())
+            m.multRight(SoViewingMatrixElement::get(getState()));
 
-	m.multVecMatrix(c, center);
-    }
-    else
-	center = c;
+        m.multVecMatrix(c, center);
+    } else
+        center = c;
 
     centerSet = TRUE;
 }
@@ -321,11 +319,11 @@ SoGetBoundingBoxAction::extendBy(const SbBox3f &b)
 //
 ///////////////////////////////////////////////////////////////////////
 {
-    SbXfBox3f	xfb = b;
-    SbMatrix	m = SoLocalBBoxMatrixElement::get(getState());
+    SbXfBox3f xfb = b;
+    SbMatrix  m = SoLocalBBoxMatrixElement::get(getState());
 
     if (isInCameraSpace())
-	m.multRight(SoViewingMatrixElement::get(getState()));
+        m.multRight(SoViewingMatrixElement::get(getState()));
 
     xfb.transform(m);
 
@@ -344,11 +342,11 @@ SoGetBoundingBoxAction::extendBy(const SbXfBox3f &b)
 //
 ///////////////////////////////////////////////////////////////////////
 {
-    SbXfBox3f	xfb = b;
-    SbMatrix	m = SoLocalBBoxMatrixElement::get(getState());
+    SbXfBox3f xfb = b;
+    SbMatrix  m = SoLocalBBoxMatrixElement::get(getState());
 
     if (isInCameraSpace())
-	m.multRight(SoViewingMatrixElement::get(getState()));
+        m.multRight(SoViewingMatrixElement::get(getState()));
 
     xfb.transform(m);
 

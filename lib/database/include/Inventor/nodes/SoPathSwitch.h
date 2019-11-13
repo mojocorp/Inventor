@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_PATH_SWITCH_
-#define  _SO_PATH_SWITCH_
+#ifndef _SO_PATH_SWITCH_
+#define _SO_PATH_SWITCH_
 
 #include <Inventor/fields/SoSFPath.h>
 #include <Inventor/nodes/SoGroup.h>
@@ -78,7 +78,7 @@ class SoPathSwitch : public SoGroup {
 
   public:
     // Fields
-    SoSFPath		path;		// Path to match
+    SoSFPath path; // Path to match
 
     // Default constructor
     SoPathSwitch();
@@ -86,27 +86,28 @@ class SoPathSwitch : public SoGroup {
     // Constructor that takes approximate number of children
     SoPathSwitch(int nChildren);
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Implement actions
-    virtual void	doAction(SoAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	pick(SoPickAction *action);
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
-    virtual void	handleEvent(SoHandleEventAction *action);
-    virtual void	getMatrix(SoGetMatrixAction *action);
-    virtual void	search(SoSearchAction *action);
+    virtual void doAction(SoAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void pick(SoPickAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void handleEvent(SoHandleEventAction *action);
+    virtual void getMatrix(SoGetMatrixAction *action);
+    virtual void search(SoSearchAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     virtual ~SoPathSwitch();
 
   private:
-
     // Checks for match of path with current path
-    SbBool		matchesPath(const SoPath *switchPath,
-				    const SoPath *currentPath) const;
+    SbBool matchesPath(const SoPath *switchPath,
+                       const SoPath *currentPath) const;
 };
 
 #endif /* _SO_PATH_SWITCH_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_GET_MATRIX_ACTION_
-#define  _SO_GET_MATRIX_ACTION_
+#ifndef _SO_GET_MATRIX_ACTION_
+#define _SO_GET_MATRIX_ACTION_
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/actions/SoSubAction.h>
@@ -96,38 +96,39 @@ class SoGetMatrixAction : public SoAction {
     virtual ~SoGetMatrixAction();
 
     // Sets current viewport region to use for action
-    void		setViewportRegion(const SbViewportRegion &newRegion);
+    void setViewportRegion(const SbViewportRegion &newRegion);
 
     // Returns current viewport region
-    const SbViewportRegion &getViewportRegion() const	{ return vpRegion; }
+    const SbViewportRegion &getViewportRegion() const { return vpRegion; }
 
     // Returns cumulative transformation matrix and inverse matrix
     // Extenders:  your transformation nodes should get these and
     // directly modify them.  Users:  you should treat these as
     // constants.
-    SbMatrix &		getMatrix() 		{ return ctm; }
-    SbMatrix &		getInverse()		{ return inv; }
+    SbMatrix &getMatrix() { return ctm; }
+    SbMatrix &getInverse() { return inv; }
 
     // Returns cumulative texture transformation matrix and inverse matrix
     // Extenders:  your textureTransformation nodes should get these
     // and directly modify them.  Users:  you should treat these as
     // constants.
-    SbMatrix &		getTextureMatrix() 	{ return texCtm; }
-    SbMatrix &		getTextureInverse()	{ return texInv; }
+    SbMatrix &getTextureMatrix() { return texCtm; }
+    SbMatrix &getTextureInverse() { return texInv; }
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
   private:
-    SbMatrix		ctm;		// Cumulative transformation matrix
-    SbMatrix		inv;		// Inverse transformation matrix
-    SbMatrix		texCtm;		// Cumulative texture transf matrix
-    SbMatrix		texInv;		// Inverse texture transf matrix
-    SbViewportRegion	vpRegion;	// Current viewport region
+    SbMatrix         ctm;      // Cumulative transformation matrix
+    SbMatrix         inv;      // Inverse transformation matrix
+    SbMatrix         texCtm;   // Cumulative texture transf matrix
+    SbMatrix         texInv;   // Inverse texture transf matrix
+    SbViewportRegion vpRegion; // Current viewport region
 };
 
 #endif /* _SO_GET_MATRIX_ACTION_ */

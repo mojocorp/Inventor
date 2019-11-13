@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_INDEXED_NURBS_CURVE_
-#define  _SO_INDEXED_NURBS_CURVE_
+#ifndef _SO_INDEXED_NURBS_CURVE_
+#define _SO_INDEXED_NURBS_CURVE_
 
 #include <Inventor/SbBox.h>
 #include <Inventor/fields/SoSFInt32.h>
@@ -78,31 +78,31 @@ class SoIndexedNurbsCurve : public SoShape {
     SO_NODE_HEADER(SoIndexedNurbsCurve);
 
   public:
-
     // Fields
-    SoSFInt32		numControlPoints;  // Number of control points in
-    SoMFInt32		coordIndex;	   // Coordinate indices
-    SoMFFloat		knotVector;        // The knot vectors in the U and
+    SoSFInt32 numControlPoints; // Number of control points in
+    SoMFInt32 coordIndex;       // Coordinate indices
+    SoMFFloat knotVector;       // The knot vectors in the U and
 
     // Constructor
     SoIndexedNurbsCurve();
 
-  SoEXTENDER public:
-    virtual void	GLRender(SoGLRenderAction *action);
+    SoEXTENDER
+  public:
+    virtual void GLRender(SoGLRenderAction *action);
 
     // Redefine this to tell open caches that they contain lines
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
-protected:
+  protected:
     // Generates triangles representing curve
-    virtual void	generatePrimitives(SoAction *action);
+    virtual void generatePrimitives(SoAction *action);
 
     // Computes bounding box of curve
-    virtual void	computeBBox(SoAction *action, SbBox3f &box,
-				    SbVec3f &center);
+    virtual void computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center);
 
     ~SoIndexedNurbsCurve();
 

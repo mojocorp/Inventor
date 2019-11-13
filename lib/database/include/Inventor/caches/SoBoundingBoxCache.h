@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,9 +54,8 @@
  _______________________________________________________________________
  */
 
-
-#ifndef  _SO_BOUNDING_BOX_CACHE
-#define  _SO_BOUNDING_BOX_CACHE
+#ifndef _SO_BOUNDING_BOX_CACHE
+#define _SO_BOUNDING_BOX_CACHE
 
 #include <Inventor/SbBox.h>
 #include <Inventor/caches/SoCache.h>
@@ -72,43 +71,42 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoBoundingBoxCache : public SoCache {
+SoEXTENDER
+class SoBoundingBoxCache : public SoCache {
 
   public:
     // Constructor and destructor
     SoBoundingBoxCache(SoState *state);
 
     // Stores a bounding box and center point in the cache
-    void		set(const SbXfBox3f &boundingBox,
-			    SbBool centerSet,
-			    const SbVec3f &centerPoint);
+    void set(const SbXfBox3f &boundingBox, SbBool centerSet,
+             const SbVec3f &centerPoint);
 
-    const SbXfBox3f &	getBox() const		{ return box; }
+    const SbXfBox3f &getBox() const { return box; }
 
-    const SbBox3f &	getProjectedBox() const	{ return projectedBox; }
+    const SbBox3f &getProjectedBox() const { return projectedBox; }
 
     // Returns TRUE if the center is valid.
-    SbBool		isCenterSet() const	{ return centerSet; }
-	
+    SbBool isCenterSet() const { return centerSet; }
 
     // Returns the center (in object space)
-    const SbVec3f &	getCenter() const	{ return center; }
+    const SbVec3f &getCenter() const { return center; }
 
     // Sets the hasLinesOrPoints flag to TRUE in all open bounding box
     // caches in the given state. (The flag is FALSE by default.)
-    static void		setHasLinesOrPoints(SoState *state);
+    static void setHasLinesOrPoints(SoState *state);
 
     // Returns the hasLinesOrPoints flag
-    SbBool		hasLinesOrPoints() const	 { return hasLOrP; }
+    SbBool hasLinesOrPoints() const { return hasLOrP; }
 
   private:
     ~SoBoundingBoxCache();
 
-    SbXfBox3f		box;		// Bounding box
-    SbBox3f		projectedBox;	// Box in local space
-    SbBool		centerSet;	// If the center was set
-    SbVec3f		center;		// Center point
-    SbBool		hasLOrP;	// TRUE if contains lines or points
+    SbXfBox3f box;          // Bounding box
+    SbBox3f   projectedBox; // Box in local space
+    SbBool    centerSet;    // If the center was set
+    SbVec3f   center;       // Center point
+    SbBool    hasLOrP;      // TRUE if contains lines or points
 };
 
 #endif /* _SO_BOUNDING_BOX_CACHE */

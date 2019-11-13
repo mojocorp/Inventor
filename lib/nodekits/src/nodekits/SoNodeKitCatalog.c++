@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodekits/SoNodekitCatalog.h>
 #include <Inventor/nodekits/SoNodeKitListPart.h>
@@ -62,9 +61,9 @@
 
 // Static variables for the nodekit catalog class...
 
-const SbName  *SoNodekitCatalog::emptyName = NULL;
+const SbName *    SoNodekitCatalog::emptyName = NULL;
 const SoTypeList *SoNodekitCatalog::emptyList = NULL;
-SoType  *SoNodekitCatalog::badType   = NULL;
+SoType *          SoNodekitCatalog::badType = NULL;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -87,7 +86,7 @@ SoNodekitCatalog::initClass()
 {
     emptyName = new SbName("");
     emptyList = new SoTypeList;
-    badType   = new SoType();
+    badType = new SoType();
     *badType = SoType::badType();
 }
 
@@ -114,28 +113,26 @@ SoNodekitCatalog::finishClass()
 //
 // Use: internal
 
-SoNodekitCatalogEntry::SoNodekitCatalogEntry( const SbName &theName, 
-			      SoType  theType , SoType theDefaultType,
-			      SbBool   theNullByDefault,
-			const SbName  &theParentName, 
-			const SbName  &theRightSiblingName, SbBool theListPart, 
-			      SoType  theListContainerType,
-			const SoTypeList &theListItemTypes,
-			      SbBool thePublicPart )
+SoNodekitCatalogEntry::SoNodekitCatalogEntry(
+    const SbName &theName, SoType theType, SoType theDefaultType,
+    SbBool theNullByDefault, const SbName &theParentName,
+    const SbName &theRightSiblingName, SbBool theListPart,
+    SoType theListContainerType, const SoTypeList &theListItemTypes,
+    SbBool thePublicPart)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    name                   = theName;
-    type                   = theType;
-    defaultType            = theDefaultType;
-    nullByDefault   	   = theNullByDefault;
-    leafPart               = TRUE;    // everything is a leaf 'til given a child
-    parentName             = theParentName;
-    rightSiblingName       = theRightSiblingName;
-    listPart               = theListPart;
-    listContainerType      = theListContainerType;
-    listItemTypes.copy( theListItemTypes );
-    publicPart             = thePublicPart;
+    name = theName;
+    type = theType;
+    defaultType = theDefaultType;
+    nullByDefault = theNullByDefault;
+    leafPart = TRUE; // everything is a leaf 'til given a child
+    parentName = theParentName;
+    rightSiblingName = theRightSiblingName;
+    listPart = theListPart;
+    listContainerType = theListContainerType;
+    listItemTypes.copy(theListItemTypes);
+    publicPart = thePublicPart;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -151,7 +148,7 @@ SoNodekitCatalogEntry::clone() const
 ////////////////////////////////////////////////////////////////////////
 {
     // make a clone with the current type and defaultType...
-    return clone( type, defaultType );
+    return clone(type, defaultType);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -162,16 +159,16 @@ SoNodekitCatalogEntry::clone() const
 // Use: private
 
 SoNodekitCatalogEntry *
-SoNodekitCatalogEntry::clone( SoType newType, 
-			      SoType newDefaultType ) const
+SoNodekitCatalogEntry::clone(SoType newType, SoType newDefaultType) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SoNodekitCatalogEntry *theClone;
 
-    theClone = new SoNodekitCatalogEntry( name, newType, newDefaultType,
-	 nullByDefault, parentName, rightSiblingName, listPart, 
-	 listContainerType, listItemTypes, publicPart );
+    theClone =
+        new SoNodekitCatalogEntry(name, newType, newDefaultType, nullByDefault,
+                                  parentName, rightSiblingName, listPart,
+                                  listContainerType, listItemTypes, publicPart);
     theClone->leafPart = leafPart;
 
     return theClone;
@@ -185,60 +182,61 @@ SoNodekitCatalogEntry::clone( SoType newType,
 // Use: public
 
 void
-SoNodekitCatalogEntry::addListItemType( SoType typeToAdd )
+SoNodekitCatalogEntry::addListItemType(SoType typeToAdd)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    listItemTypes.append( typeToAdd );
+    listItemTypes.append(typeToAdd);
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
 //    Looks for the given part.
-//    Checks this part, then recursively checks all entries in the 
+//    Checks this part, then recursively checks all entries in the
 //    catalog of this part (it gets its own catalog by looking
 //    at the catalog for the 'dummy' for this type, which is accessed
 //    through: type.getInstance()->getNodekitCatalog()
-//    or, if type is an abstract type, 
+//    or, if type is an abstract type,
 //    uses defaultType.getInstance()->getNodekitCatalog()
 //
 // Use: public
 
 SbBool
-SoNodekitCatalogEntry::recursiveSearch( const SbName    &nameToFind, 
-					  SoTypeList   *typesChecked ) const
+SoNodekitCatalogEntry::recursiveSearch(const SbName &nameToFind,
+                                       SoTypeList *  typesChecked) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const SoNodekitCatalog *subCat;
 
     // is this the part of my dreams?
-    if ( name == nameToFind )
-	return TRUE;
+    if (name == nameToFind)
+        return TRUE;
 
     // make sure the part isn't a list
-    if ( listPart == TRUE )
-	return FALSE;
+    if (listPart == TRUE)
+        return FALSE;
     // make sure the part is subclassed off of SoBaseKit
-    if ( !type.isDerivedFrom( SoBaseKit::getClassTypeId() ))
-	return FALSE;
+    if (!type.isDerivedFrom(SoBaseKit::getClassTypeId()))
+        return FALSE;
 
     // avoid an infinite search loop by seeing if this type has already been
     // checked...
-    if ( typesChecked->find( type ) != -1 )
-	return FALSE;
+    if (typesChecked->find(type) != -1)
+        return FALSE;
 
     // if it's still ok, then search within the catalog of this part
     // first check each name:
-    const SoBaseKit *inst = (const SoBaseKit *) type.createInstance();
-    if ( inst == NULL )
-	inst = (const SoBaseKit *) defaultType.createInstance();
-    if ( inst == NULL ) {
+    const SoBaseKit *inst = (const SoBaseKit *)type.createInstance();
+    if (inst == NULL)
+        inst = (const SoBaseKit *)defaultType.createInstance();
+    if (inst == NULL) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalogEntry::recursiveSearch",
-	"part type and defaultType are both abstract classes");
-	abort();
+        SoDebugError::post(
+            "SoNodekitCatalogEntry::recursiveSearch",
+            "part type and defaultType are both abstract classes");
+        abort();
 #endif
     }
 
@@ -247,21 +245,21 @@ SoNodekitCatalogEntry::recursiveSearch( const SbName    &nameToFind,
     inst->unref();
 
     int i;
-    for( i = 0; i < subCat->getNumEntries(); i++ ) {
-	if ( subCat->getName( i ) == nameToFind ) 
-		return TRUE;
+    for (i = 0; i < subCat->getNumEntries(); i++) {
+        if (subCat->getName(i) == nameToFind)
+            return TRUE;
     }
-    // at these point, we've checked all the names in this class, so 
+    // at these point, we've checked all the names in this class, so
     // we can add it to typesChecked
-    typesChecked->append( type );
+    typesChecked->append(type);
 
     // then, recursively check each part
-    for( i = 0; i < subCat->getNumEntries(); i++ ) {
-	if ( subCat->recursiveSearch( i, nameToFind, typesChecked ) )
-		return TRUE;
+    for (i = 0; i < subCat->getNumEntries(); i++) {
+        if (subCat->recursiveSearch(i, nameToFind, typesChecked))
+            return TRUE;
     }
 
-    return FALSE;  // couldn't find it ANYwhere!
+    return FALSE; // couldn't find it ANYwhere!
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -271,25 +269,27 @@ SoNodekitCatalogEntry::recursiveSearch( const SbName    &nameToFind,
 //
 // Use: internal
 
-void 
+void
 SoNodekitCatalogEntry::printCheck() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fprintf( stdout,"    name = %s, type = %s, defaultType = %s\n",
-	    name.getString(), type.getName().getString(), defaultType.getName().getString() );
-    fprintf( stdout,"    nullByDefault = %d\n", nullByDefault);
-    fprintf( stdout,"    parentName = %s\n", parentName.getString() );
-    fprintf( stdout,"    sibling = %s, listPart = %d\n",
-	    rightSiblingName.getString(), listPart );
-    if ( listPart ) {
-	fprintf( stdout, "listItemTypes = " );
-	for ( int i = 0; i < listItemTypes.getLength(); i++ ) {
-	    fprintf( stdout,"  %ld  ", (long)listItemTypes[i].getName().getString() );
-	}
-	fprintf( stdout, "\n" );
+    fprintf(stdout, "    name = %s, type = %s, defaultType = %s\n",
+            name.getString(), type.getName().getString(),
+            defaultType.getName().getString());
+    fprintf(stdout, "    nullByDefault = %d\n", nullByDefault);
+    fprintf(stdout, "    parentName = %s\n", parentName.getString());
+    fprintf(stdout, "    sibling = %s, listPart = %d\n",
+            rightSiblingName.getString(), listPart);
+    if (listPart) {
+        fprintf(stdout, "listItemTypes = ");
+        for (int i = 0; i < listItemTypes.getLength(); i++) {
+            fprintf(stdout, "  %ld  ",
+                    (long)listItemTypes[i].getName().getString());
+        }
+        fprintf(stdout, "\n");
     }
-    fprintf( stdout,"    publicPart = %d\n", publicPart );
+    fprintf(stdout, "    publicPart = %d\n", publicPart);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -298,7 +298,6 @@ SoNodekitCatalogEntry::printCheck() const
 //    SoNodekitCatalog
 //
 ////////////////////////////////////////////////////////////////////////
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -310,9 +309,7 @@ SoNodekitCatalogEntry::printCheck() const
 SoNodekitCatalog::SoNodekitCatalog()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -326,7 +323,7 @@ SoNodekitCatalog::~SoNodekitCatalog()
 ////////////////////////////////////////////////////////////////////////
 {
     // delete all the members of the entries array
-    for ( size_t i = 0; i < entries.size(); i++ )
+    for (size_t i = 0; i < entries.size(); i++)
         delete entries[i];
 }
 
@@ -342,9 +339,10 @@ SoNodekitCatalog::printCheck() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fprintf( stdout, "catalog printout: number of entries = %lu\n", entries.size() );
-    for( size_t i = 0; i < entries.size(); i++ ) {
-        fprintf( stdout, "#%lu\n", i );
+    fprintf(stdout, "catalog printout: number of entries = %lu\n",
+            entries.size());
+    for (size_t i = 0; i < entries.size(); i++) {
+        fprintf(stdout, "#%lu\n", i);
         entries[i]->printCheck();
     }
 }
@@ -357,15 +355,15 @@ SoNodekitCatalog::printCheck() const
 // Use: internal
 
 int
-SoNodekitCatalog::getPartNumber( const SbName &theName ) const
+SoNodekitCatalog::getPartNumber(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     std::map<SbName, int>::const_iterator it = partNameDict.find(theName);
-    if ( it != partNameDict.end() )
+    if (it != partNameDict.end())
         return it->second;
 
-	return SO_CATALOG_NAME_NOT_FOUND;
+    return SO_CATALOG_NAME_NOT_FOUND;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -376,12 +374,12 @@ SoNodekitCatalog::getPartNumber( const SbName &theName ) const
 // Use: internal
 
 const SbName &
-SoNodekitCatalog::getName( int thePartNumber ) const
+SoNodekitCatalog::getName(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the name of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->getName();
     else
         return *emptyName;
@@ -395,12 +393,12 @@ SoNodekitCatalog::getName( int thePartNumber ) const
 // Use: internal
 
 SoType
-SoNodekitCatalog::getType( int thePartNumber ) const
+SoNodekitCatalog::getType(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the type of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->getType();
     else
         return *badType;
@@ -414,11 +412,11 @@ SoNodekitCatalog::getType( int thePartNumber ) const
 // Use: internal
 
 SoType
-SoNodekitCatalog::getType( const SbName &theName ) const
+SoNodekitCatalog::getType(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( getType( getPartNumber( theName ) ));
+    return (getType(getPartNumber(theName)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -429,12 +427,12 @@ SoNodekitCatalog::getType( const SbName &theName ) const
 // Use: internal
 
 SoType
-SoNodekitCatalog::getDefaultType( int thePartNumber ) const
+SoNodekitCatalog::getDefaultType(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the defaultType of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->getDefaultType();
     else
         return *badType;
@@ -448,11 +446,11 @@ SoNodekitCatalog::getDefaultType( int thePartNumber ) const
 // Use: internal
 
 SoType
-SoNodekitCatalog::getDefaultType( const SbName &theName ) const
+SoNodekitCatalog::getDefaultType(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( getDefaultType( getPartNumber( theName ) ));
+    return (getDefaultType(getPartNumber(theName)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -463,12 +461,12 @@ SoNodekitCatalog::getDefaultType( const SbName &theName ) const
 // Use: internal
 
 SbBool
-SoNodekitCatalog::isNullByDefault( int thePartNumber ) const
+SoNodekitCatalog::isNullByDefault(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the value for this entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->isNullByDefault();
     else
         return TRUE;
@@ -482,11 +480,11 @@ SoNodekitCatalog::isNullByDefault( int thePartNumber ) const
 // Use: internal
 
 SbBool
-SoNodekitCatalog::isNullByDefault( const SbName &theName ) const
+SoNodekitCatalog::isNullByDefault(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( isNullByDefault( getPartNumber( theName ) ));
+    return (isNullByDefault(getPartNumber(theName)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -497,12 +495,12 @@ SoNodekitCatalog::isNullByDefault( const SbName &theName ) const
 // Use: internal
 
 SbBool
-SoNodekitCatalog::isLeaf( int thePartNumber ) const
+SoNodekitCatalog::isLeaf(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the type of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->isLeaf();
     else
         return TRUE;
@@ -516,11 +514,11 @@ SoNodekitCatalog::isLeaf( int thePartNumber ) const
 // Use: internal
 
 SbBool
-SoNodekitCatalog::isLeaf( const SbName &theName ) const
+SoNodekitCatalog::isLeaf(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( isLeaf( getPartNumber( theName ) ));
+    return (isLeaf(getPartNumber(theName)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -531,12 +529,12 @@ SoNodekitCatalog::isLeaf( const SbName &theName ) const
 // Use: internal
 
 const SbName &
-SoNodekitCatalog::getParentName( int thePartNumber ) const
+SoNodekitCatalog::getParentName(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->getParentName();
     else
         return *emptyName;
@@ -550,11 +548,11 @@ SoNodekitCatalog::getParentName( int thePartNumber ) const
 // Use: internal
 
 const SbName &
-SoNodekitCatalog::getParentName( const SbName &theName ) const
+SoNodekitCatalog::getParentName(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( getParentName( getPartNumber( theName ) ));
+    return (getParentName(getPartNumber(theName)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -565,12 +563,12 @@ SoNodekitCatalog::getParentName( const SbName &theName ) const
 // Use: internal
 
 int
-SoNodekitCatalog::getParentPartNumber( int thePartNumber ) const
+SoNodekitCatalog::getParentPartNumber(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbName pName = getParentName( thePartNumber );
-    return( getPartNumber( pName ) );
+    const SbName pName = getParentName(thePartNumber);
+    return (getPartNumber(pName));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -581,12 +579,12 @@ SoNodekitCatalog::getParentPartNumber( int thePartNumber ) const
 // Use: internal
 
 int
-SoNodekitCatalog::getParentPartNumber( const SbName &theName ) const
+SoNodekitCatalog::getParentPartNumber(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbName pName = getParentName( theName );
-    return( getPartNumber( pName ) );
+    const SbName pName = getParentName(theName);
+    return (getPartNumber(pName));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -597,12 +595,12 @@ SoNodekitCatalog::getParentPartNumber( const SbName &theName ) const
 // Use: internal
 
 const SbName &
-SoNodekitCatalog::getRightSiblingName( int thePartNumber ) const
+SoNodekitCatalog::getRightSiblingName(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->getRightSiblingName();
     else
         return *emptyName;
@@ -616,11 +614,11 @@ SoNodekitCatalog::getRightSiblingName( int thePartNumber ) const
 // Use: internal
 
 const SbName &
-SoNodekitCatalog::getRightSiblingName( const SbName &theName ) const
+SoNodekitCatalog::getRightSiblingName(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( getRightSiblingName( getPartNumber( theName ) ));
+    return (getRightSiblingName(getPartNumber(theName)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -631,12 +629,12 @@ SoNodekitCatalog::getRightSiblingName( const SbName &theName ) const
 // Use: internal
 
 int
-SoNodekitCatalog::getRightSiblingPartNumber( int thePartNumber ) const
+SoNodekitCatalog::getRightSiblingPartNumber(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbName sName = getRightSiblingName( thePartNumber );
-    return( getPartNumber( sName ) );
+    const SbName sName = getRightSiblingName(thePartNumber);
+    return (getPartNumber(sName));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -647,12 +645,12 @@ SoNodekitCatalog::getRightSiblingPartNumber( int thePartNumber ) const
 // Use: internal
 
 int
-SoNodekitCatalog::getRightSiblingPartNumber( const SbName &theName ) const
+SoNodekitCatalog::getRightSiblingPartNumber(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbName sName = getRightSiblingName( theName );
-    return( getPartNumber( sName ) );
+    const SbName sName = getRightSiblingName(theName);
+    return (getPartNumber(sName));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -663,12 +661,12 @@ SoNodekitCatalog::getRightSiblingPartNumber( const SbName &theName ) const
 // Use: internal
 
 SbBool
-SoNodekitCatalog::isList( int thePartNumber ) const
+SoNodekitCatalog::isList(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the type of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->isList();
     else
         return FALSE;
@@ -682,11 +680,11 @@ SoNodekitCatalog::isList( int thePartNumber ) const
 // Use: internal
 
 SbBool
-SoNodekitCatalog::isList( const SbName &theName ) const
+SoNodekitCatalog::isList(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( isList( getPartNumber( theName ) ));
+    return (isList(getPartNumber(theName)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -697,12 +695,12 @@ SoNodekitCatalog::isList( const SbName &theName ) const
 // Use: internal
 
 SoType
-SoNodekitCatalog::getListContainerType( int thePartNumber ) const
+SoNodekitCatalog::getListContainerType(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the defaultType of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->getListContainerType();
     else
         return *badType;
@@ -716,11 +714,11 @@ SoNodekitCatalog::getListContainerType( int thePartNumber ) const
 // Use: internal
 
 SoType
-SoNodekitCatalog::getListContainerType( const SbName &theName ) const
+SoNodekitCatalog::getListContainerType(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( getListContainerType( getPartNumber( theName ) ));
+    return (getListContainerType(getPartNumber(theName)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -731,15 +729,15 @@ SoNodekitCatalog::getListContainerType( const SbName &theName ) const
 // Use: internal
 
 const SoTypeList &
-SoNodekitCatalog::getListItemTypes( int thePartNumber ) const
+SoNodekitCatalog::getListItemTypes(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return the type of the entry, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->getListItemTypes();
     else
-        return ( *emptyList );
+        return (*emptyList);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -750,11 +748,11 @@ SoNodekitCatalog::getListItemTypes( int thePartNumber ) const
 // Use: internal
 
 const SoTypeList &
-SoNodekitCatalog::getListItemTypes( const SbName &theName ) const
+SoNodekitCatalog::getListItemTypes(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( getListItemTypes( getPartNumber( theName ) ));
+    return (getListItemTypes(getPartNumber(theName)));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -765,12 +763,12 @@ SoNodekitCatalog::getListItemTypes( const SbName &theName ) const
 // Use: internal
 
 SbBool
-SoNodekitCatalog::isPublic( int thePartNumber ) const
+SoNodekitCatalog::isPublic(int thePartNumber) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // return whether the part is public, if you can find it.
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
         return entries[thePartNumber]->isPublic();
     else
         return TRUE;
@@ -784,13 +782,12 @@ SoNodekitCatalog::isPublic( int thePartNumber ) const
 // Use: internal
 
 SbBool
-SoNodekitCatalog::isPublic( const SbName &theName ) const
+SoNodekitCatalog::isPublic(const SbName &theName) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return( isPublic( getPartNumber( theName ) ));
+    return (isPublic(getPartNumber(theName)));
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -801,15 +798,14 @@ SoNodekitCatalog::isPublic( const SbName &theName ) const
 // Use: public
 
 void
-SoNodekitCatalog::addListItemType( int thePartNumber,
-					SoType typeToAdd )
+SoNodekitCatalog::addListItemType(int thePartNumber, SoType typeToAdd)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // add typeToAdd to the entry's listItemTypes, if you can find
     // the entry...
-    if ( thePartNumber >= 0 && thePartNumber < entries.size() )
-        entries[thePartNumber]->addListItemType( typeToAdd );
+    if (thePartNumber >= 0 && thePartNumber < entries.size())
+        entries[thePartNumber]->addListItemType(typeToAdd);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -821,12 +817,11 @@ SoNodekitCatalog::addListItemType( int thePartNumber,
 // Use: public
 
 void
-SoNodekitCatalog::addListItemType( const SbName &theName,
-					SoType typeToAdd )
+SoNodekitCatalog::addListItemType(const SbName &theName, SoType typeToAdd)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    addListItemType( getPartNumber( theName ), typeToAdd );
+    addListItemType(getPartNumber(theName), typeToAdd);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -837,7 +832,7 @@ SoNodekitCatalog::addListItemType( const SbName &theName,
 // The new types must be subclasses of the types already existing in the
 // entry.
 // For example, in SoShapeKit, the part "shape" has type SoShape and
-// default type SoSphere.  Any shape node is acceptable, but be default a 
+// default type SoSphere.  Any shape node is acceptable, but be default a
 // sphere will be built.
 // Well, when creating the SoVertexShapeKit class, a call of:
 //    narrowTypes( "shape", SoVertexShape::getClassTypeId(),
@@ -849,42 +844,43 @@ SoNodekitCatalog::addListItemType( const SbName &theName,
 // Use: public
 
 void
-SoNodekitCatalog::narrowTypes( const SbName &theName,
-			SoType newType, SoType newDefaultType )
+SoNodekitCatalog::narrowTypes(const SbName &theName, SoType newType,
+                              SoType newDefaultType)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int thePartNumber = getPartNumber( theName );
+    int thePartNumber = getPartNumber(theName);
 
-    if ( thePartNumber < 0 || thePartNumber >= entries.size() )
+    if (thePartNumber < 0 || thePartNumber >= entries.size())
         return;
 
     SoNodekitCatalogEntry *theEntry = entries[thePartNumber];
 
-    // Checks that [1] newDefaultType is not an abstract type, and 
+    // Checks that [1] newDefaultType is not an abstract type, and
     //             [2] newDefaultType is a subclass of newType
-    if ( !checkNewTypes( newType, newDefaultType ) )
-	return;
+    if (!checkNewTypes(newType, newDefaultType))
+        return;
 
-    SoType oldType        = theEntry->getType();
+    SoType oldType = theEntry->getType();
 
     // Make sure that the new types is derived from the old type.
     // Parts in derived classes must be subclasses of the types they
     // belong to when cast to the parent classes.
-    if ( !newType.isDerivedFrom( oldType ) ) {
+    if (!newType.isDerivedFrom(oldType)) {
 #ifdef DEBUG
-	const char *newName = newType.getName().getString();
-	const char *oldName = oldType.getName().getString();
-	SoDebugError::post("SoNodekitCatalog::narrowTypes",
-		   "The newType %s is not a subclass of the oldType %s. "
-		   "Cannot narrow the  type from %s to %s",
-			   newName, oldName, oldName, newName);
+        const char *newName = newType.getName().getString();
+        const char *oldName = oldType.getName().getString();
+        SoDebugError::post(
+            "SoNodekitCatalog::narrowTypes",
+            "The newType %s is not a subclass of the oldType %s. "
+            "Cannot narrow the  type from %s to %s",
+            newName, oldName, oldName, newName);
 #endif
-  	return;
+        return;
     }
 
     // passed all the tests!
-    theEntry->setTypes( newType, newDefaultType );
+    theEntry->setTypes(newType, newDefaultType);
 }
 ////////////////////////////////////////////////////////////////////////
 //
@@ -896,20 +892,18 @@ SoNodekitCatalog::narrowTypes( const SbName &theName,
 // Use: EXTENDER public
 
 void
-SoNodekitCatalog::setNullByDefault( const SbName &theName, 
-				    SbBool newNullByDefault )
+SoNodekitCatalog::setNullByDefault(const SbName &theName,
+                                   SbBool        newNullByDefault)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int thePartNumber = getPartNumber( theName );
+    int thePartNumber = getPartNumber(theName);
 
-    if ( thePartNumber < 0 || thePartNumber >= entries.size() )
+    if (thePartNumber < 0 || thePartNumber >= entries.size())
         return;
 
-    entries[thePartNumber]->setNullByDefault( newNullByDefault );
+    entries[thePartNumber]->setNullByDefault(newNullByDefault);
 }
-
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -919,21 +913,21 @@ SoNodekitCatalog::setNullByDefault( const SbName &theName,
 // Use: public
 
 SoNodekitCatalog *
-SoNodekitCatalog::clone( SoType typeOfThis ) const
+SoNodekitCatalog::clone(SoType typeOfThis) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNodekitCatalog      *theClone;
+    SoNodekitCatalog *theClone;
 
     theClone = new SoNodekitCatalog;
     theClone->entries.resize(entries.size());
     for (size_t i = 0; i < entries.size(); i++) {
-	    if ( i == SO_CATALOG_THIS_PART_NUM )
-            theClone->entries[i] = entries[i]->clone( typeOfThis, typeOfThis );
-	    else
+        if (i == SO_CATALOG_THIS_PART_NUM)
+            theClone->entries[i] = entries[i]->clone(typeOfThis, typeOfThis);
+        else
             theClone->entries[i] = entries[i]->clone();
         theClone->partNameDict[entries[i]->getName()] = i;
-	}
+    }
 
     return theClone;
 }
@@ -947,26 +941,25 @@ SoNodekitCatalog::clone( SoType typeOfThis ) const
 // Use: private
 
 SbBool
-SoNodekitCatalog::checkName( const SbName &theName )  // proposed name
+SoNodekitCatalog::checkName(const SbName &theName) // proposed name
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // CHECK IF IT'S NULL
-    if ( theName.getString() == NULL ) {
+    if (theName.getString() == NULL) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkName",
-			    "given name is NULL" );
+        SoDebugError::post("SoNodekitCatalog::checkName", "given name is NULL");
 #endif
-  	return FALSE;
+        return FALSE;
     }
 
     // CHECK IF IT'S EMPTY
-    if ( theName == "" ) {
+    if (theName == "") {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkName",
-			    "given name is the empty string" );
+        SoDebugError::post("SoNodekitCatalog::checkName",
+                           "given name is the empty string");
 #endif
-  	return FALSE;
+        return FALSE;
     }
 
     return TRUE;
@@ -981,24 +974,23 @@ SoNodekitCatalog::checkName( const SbName &theName )  // proposed name
 // Use: private
 
 SbBool
-SoNodekitCatalog::checkNewName( const SbName &theName )  // proposed name
+SoNodekitCatalog::checkNewName(const SbName &theName) // proposed name
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ( !checkName( theName ) )
-	return FALSE;
+    if (!checkName(theName))
+        return FALSE;
 
     // CHECK IF IT'S UNIQUE FOR THIS CATALOG
-    if ( getPartNumber( theName ) == SO_CATALOG_NAME_NOT_FOUND ) {
-	return TRUE;
-    }
-    else {
+    if (getPartNumber(theName) == SO_CATALOG_NAME_NOT_FOUND) {
+        return TRUE;
+    } else {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkNewName",
-			    "the name %s is already in this catalog",
-			theName.getString() );
+        SoDebugError::post("SoNodekitCatalog::checkNewName",
+                           "the name %s is already in this catalog",
+                           theName.getString());
 #endif
-  	return FALSE;
+        return FALSE;
     }
 }
 
@@ -1011,32 +1003,32 @@ SoNodekitCatalog::checkNewName( const SbName &theName )  // proposed name
 // Use: private
 
 SbBool
-SoNodekitCatalog::checkNewTypes( SoType theType,  // proposed type
-				 SoType theDefaultType ) // and default
+SoNodekitCatalog::checkNewTypes(SoType theType,        // proposed type
+                                SoType theDefaultType) // and default
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ( !theDefaultType.canCreateInstance()) {
+    if (!theDefaultType.canCreateInstance()) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkNewTypes",
-	"the defaultType %s is an abstract class, and cannot be part of a nodekits structure",
-				theDefaultType.getName().getString() );
+        SoDebugError::post("SoNodekitCatalog::checkNewTypes",
+                           "the defaultType %s is an abstract class, and "
+                           "cannot be part of a nodekits structure",
+                           theDefaultType.getName().getString());
 #endif
-  	return FALSE;
+        return FALSE;
     }
 
-    if ( !theDefaultType.isDerivedFrom( theType ) ) {
+    if (!theDefaultType.isDerivedFrom(theType)) {
 #ifdef DEBUG
-	const char *defName = theDefaultType.getName().getString();
-	SoDebugError::post("SoNodekitCatalog::checkNewTypes",
-			   "the defaultType %s is not a subclass of the type "
-			   "%s. It can not be part of a nodekits structure",
-			   defName, theType.getName().getString());
+        const char *defName = theDefaultType.getName().getString();
+        SoDebugError::post("SoNodekitCatalog::checkNewTypes",
+                           "the defaultType %s is not a subclass of the type "
+                           "%s. It can not be part of a nodekits structure",
+                           defName, theType.getName().getString());
 #endif
-  	return FALSE;
-    }
-    else
-	return TRUE;
+        return FALSE;
+    } else
+        return TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1048,84 +1040,93 @@ SoNodekitCatalog::checkNewTypes( SoType theType,  // proposed type
 // Use: private
 
 SbBool
-SoNodekitCatalog::checkAndGetParent( 
-	const SbName                &theName,          // the child's name
-	const SbName                &theParentName,    // proposed parent name
-	SoNodekitCatalogEntry *& parentEntry ) // corresponding entry filled 
-					        // in this method
+SoNodekitCatalog::checkAndGetParent(
+    const SbName &          theName,       // the child's name
+    const SbName &          theParentName, // proposed parent name
+    SoNodekitCatalogEntry *&parentEntry)   // corresponding entry filled
+                                           // in this method
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // CHECK FOR "THIS"
-    // The string "this" means that a node is to be the nodekit node itself 
+    // The string "this" means that a node is to be the nodekit node itself
     // In this case, return NULL as the parentEntry, and a status of TRUE!
-    if ( theName == "this" ) {
-	// 'this' has no parent
-	parentEntry = NULL;
-	return TRUE;
-    }
-    else {
-	// only 'this' can have no parent
-	if ( !checkName( theParentName ) )
-	    return FALSE;
+    if (theName == "this") {
+        // 'this' has no parent
+        parentEntry = NULL;
+        return TRUE;
+    } else {
+        // only 'this' can have no parent
+        if (!checkName(theParentName))
+            return FALSE;
     }
 
     // CHECK THAT THE PARENT IS IN THE CATALOG
-    int parentPartNumber = getPartNumber( theParentName );
-    if ( parentPartNumber == SO_CATALOG_NAME_NOT_FOUND ) {
+    int parentPartNumber = getPartNumber(theParentName);
+    if (parentPartNumber == SO_CATALOG_NAME_NOT_FOUND) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkAndGetParent",
-        "requested parent >> %s << is not in this catalog",
-	    			theParentName.getString() );
+        SoDebugError::post("SoNodekitCatalog::checkAndGetParent",
+                           "requested parent >> %s << is not in this catalog",
+                           theParentName.getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
-    parentEntry = entries[ parentPartNumber ];
+    parentEntry = entries[parentPartNumber];
 
     // CHECK THE NODE TYPE OF THE PARENT
 
-    // [1] Unless it's "this", it must be a subclass of SoGroup, 
+    // [1] Unless it's "this", it must be a subclass of SoGroup,
     //     or you can't add children to it.
-    if ( parentPartNumber !=  SO_CATALOG_THIS_PART_NUM &&
-	 !parentEntry->getType().isDerivedFrom( SoGroup::getClassTypeId() )) {
+    if (parentPartNumber != SO_CATALOG_THIS_PART_NUM &&
+        !parentEntry->getType().isDerivedFrom(SoGroup::getClassTypeId())) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkAndGetParent",
-        "requested parent >> %s << is a node that is not subclassed from SoGroup, so it can\'t have children",
-	    			theParentName.getString() );
+        SoDebugError::post(
+            "SoNodekitCatalog::checkAndGetParent",
+            "requested parent >> %s << is a node that is not subclassed from "
+            "SoGroup, so it can\'t have children",
+            theParentName.getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
     // [2] If they didn't call 'initClass', then 'theParentName' will == 'this',
     //     but parentEntry->getType() will not yet be something derived from
     //     SoBaseKit. Check for this.
-    if ( parentPartNumber ==  SO_CATALOG_THIS_PART_NUM &&
-	 !parentEntry->getType().isDerivedFrom( SoBaseKit::getClassTypeId() )) {
+    if (parentPartNumber == SO_CATALOG_THIS_PART_NUM &&
+        !parentEntry->getType().isDerivedFrom(SoBaseKit::getClassTypeId())) {
 #ifdef DEBUG
-	SoDebugError::post( "SoNodekitCatalog::checkAndGetParent",
-	 "  It looks like you forgot to call initClass for one of your nodekit classes! Expect a core dump!");
+        SoDebugError::post("SoNodekitCatalog::checkAndGetParent",
+                           "  It looks like you forgot to call initClass for "
+                           "one of your nodekit classes! Expect a core dump!");
 #endif
     }
     // [3] Unless it is 'this', the parent can NOT be subclass of SoBaseKit.
-    //     This is because you can only add child nodes to an nodekit through 
+    //     This is because you can only add child nodes to an nodekit through
     //     its own class's nodekitCatalog
-    if ( parentPartNumber !=  SO_CATALOG_THIS_PART_NUM &&
-	 parentEntry->getType().isDerivedFrom( SoBaseKit::getClassTypeId()) ) {
+    if (parentPartNumber != SO_CATALOG_THIS_PART_NUM &&
+        parentEntry->getType().isDerivedFrom(SoBaseKit::getClassTypeId())) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkAndGetParent",
-        " Requested parent >> %s << is a node that is subclassed from SoBaseKit, so it can\'t children except through its own class\'s nodekitCatalog",
-	    			theParentName.getString() );
+        SoDebugError::post("SoNodekitCatalog::checkAndGetParent",
+                           " Requested parent >> %s << is a node that is "
+                           "subclassed from SoBaseKit, so it can\'t children "
+                           "except through its own class\'s nodekitCatalog",
+                           theParentName.getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     // MAKE SURE THAT THE NODE HAS NOT BEEN DESIGNATED AS A LIST
-    if ( parentEntry->isList() == TRUE ) {
+    if (parentEntry->isList() == TRUE) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkAndGetParent",
-        " Requested parent >> %s << is a node that has been designated as a list.  \n It can not have explicit children in the catalog although nodes \n can be added to the list for a given instance by using the special list editting \n methods on the nodekit node.",
-	    			theParentName.getString() );
+        SoDebugError::post(
+            "SoNodekitCatalog::checkAndGetParent",
+            " Requested parent >> %s << is a node that has been designated as "
+            "a list.  \n It can not have explicit children in the catalog "
+            "although nodes \n can be added to the list for a given instance "
+            "by using the special list editting \n methods on the nodekit "
+            "node.",
+            theParentName.getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     return TRUE;
@@ -1142,34 +1143,35 @@ SoNodekitCatalog::checkAndGetParent(
 // Use: private
 
 SbBool
-SoNodekitCatalog::checkAndGetSiblings( 
-	const SbName            &theParentName,       // parent name
-	const SbName            &theRightSiblingName, // proposed sibling name
-	SoNodekitCatalogEntry *& leftEntry,      // new left (to be filled in)
-	SoNodekitCatalogEntry *& rightEntry )    // new right (to be filled )
+SoNodekitCatalog::checkAndGetSiblings(
+    const SbName &          theParentName,       // parent name
+    const SbName &          theRightSiblingName, // proposed sibling name
+    SoNodekitCatalogEntry *&leftEntry,           // new left (to be filled in)
+    SoNodekitCatalogEntry *&rightEntry)          // new right (to be filled )
 //
 ////////////////////////////////////////////////////////////////////////
 {
     leftEntry = NULL;
     rightEntry = NULL;
 
-    for ( int i = 0; i < entries.size(); i++ ) {
-	if ( entries[i]->getParentName() == theParentName ) {
-	    // is it the left sibling?
-	    if ( entries[i]->getRightSiblingName() == theRightSiblingName )
-		 leftEntry = entries[i];
-	    // is it the right sibling?
-	    else if ( theRightSiblingName == entries[i]->getName() )
-	         rightEntry = entries[i];
-	}
+    for (int i = 0; i < entries.size(); i++) {
+        if (entries[i]->getParentName() == theParentName) {
+            // is it the left sibling?
+            if (entries[i]->getRightSiblingName() == theRightSiblingName)
+                leftEntry = entries[i];
+            // is it the right sibling?
+            else if (theRightSiblingName == entries[i]->getName())
+                rightEntry = entries[i];
+        }
     }
-    if ( ( rightEntry == NULL ) && ( theRightSiblingName != "" ) ) {
+    if ((rightEntry == NULL) && (theRightSiblingName != "")) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkAndGetSiblings",
-	"Requested right sibling >> %s << can not be found in the nodekitCatalog",
-				theRightSiblingName.getString() );
+        SoDebugError::post("SoNodekitCatalog::checkAndGetSiblings",
+                           "Requested right sibling >> %s << can not be found "
+                           "in the nodekitCatalog",
+                           theRightSiblingName.getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     return TRUE;
@@ -1185,33 +1187,35 @@ SoNodekitCatalog::checkAndGetSiblings(
 // Use: private
 
 SbBool
-SoNodekitCatalog::checkCanTypesBeList(   SoType theType,
-				         SoType theDefaultType,
-					 SoType theListContainerType )
+SoNodekitCatalog::checkCanTypesBeList(SoType theType, SoType theDefaultType,
+                                      SoType theListContainerType)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // CHECK IF IT'S A GROUP OR SEPARATOR
-    if ( !theType.isDerivedFrom( SoNodeKitListPart::getClassTypeId() ) ) {
+    if (!theType.isDerivedFrom(SoNodeKitListPart::getClassTypeId())) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkCanTypesBeList",
-        "requested node type can not be a list. It is not derived from SoNodeKitListPart");
+        SoDebugError::post("SoNodekitCatalog::checkCanTypesBeList",
+                           "requested node type can not be a list. It is not "
+                           "derived from SoNodeKitListPart");
 #endif
-	return FALSE;
+        return FALSE;
     }
-    if ( !theDefaultType.isDerivedFrom( theType ) ) {
+    if (!theDefaultType.isDerivedFrom(theType)) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkCanTypesBeList",
-        "requested default type is not derived from requested type.");
+        SoDebugError::post(
+            "SoNodekitCatalog::checkCanTypesBeList",
+            "requested default type is not derived from requested type.");
 #endif
-	return FALSE;
+        return FALSE;
     }
-    if ( !theListContainerType.isDerivedFrom( SoGroup::getClassTypeId() ) ) {
+    if (!theListContainerType.isDerivedFrom(SoGroup::getClassTypeId())) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::checkCanTypesBeList",
-        " requested list container node type can not be used. It is not derived from SoGroup");
+        SoDebugError::post("SoNodekitCatalog::checkCanTypesBeList",
+                           " requested list container node type can not be "
+                           "used. It is not derived from SoGroup");
 #endif
-	return FALSE;
+        return FALSE;
     }
     return TRUE;
 }
@@ -1224,66 +1228,64 @@ SoNodekitCatalog::checkCanTypesBeList(   SoType theType,
 // Use: internal
 
 SbBool
-SoNodekitCatalog::addEntry( const SbName &theName, 
-			          SoType theType,
-			          SoType theDefaultType,
-				  SbBool  theNullByDefault,
-			    const SbName &theParentName, 
-			    const SbName &theRightSiblingName, 
-			          SbBool theListPart, 
-			          SoType theListContainerType,
-			          SoType theListItemType,
-			    SbBool thePublicPart )
+SoNodekitCatalog::addEntry(const SbName &theName, SoType theType,
+                           SoType theDefaultType, SbBool theNullByDefault,
+                           const SbName &theParentName,
+                           const SbName &theRightSiblingName,
+                           SbBool theListPart, SoType theListContainerType,
+                           SoType theListItemType, SbBool thePublicPart)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNodekitCatalogEntry *parentEntry, *rightEntry, *leftEntry;
-    SoNodekitCatalogEntry *newEntry;
+    SoNodekitCatalogEntry * parentEntry, *rightEntry, *leftEntry;
+    SoNodekitCatalogEntry * newEntry;
     SoNodekitCatalogEntry **newArray;
 
     // CHECK IF THE NEW ENTRY IS OK
 
-    if ( !checkNewName( theName ) )
-	return FALSE;
+    if (!checkNewName(theName))
+        return FALSE;
 
-    if ( !checkNewTypes( theType, theDefaultType ) ) {
+    if (!checkNewTypes(theType, theDefaultType)) {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::addEntry",
-		" Error creating catalog entry %s", theName.getString());
+        SoDebugError::post("SoNodekitCatalog::addEntry",
+                           " Error creating catalog entry %s",
+                           theName.getString());
 #endif
-	return FALSE;
+        return FALSE;
     }
 
-    if ( !checkAndGetParent( theName, theParentName, parentEntry ) )
-	return FALSE;
+    if (!checkAndGetParent(theName, theParentName, parentEntry))
+        return FALSE;
 
-    if ( !checkAndGetSiblings( theParentName, theRightSiblingName, 
-			       leftEntry, rightEntry ) )
-	return FALSE;
+    if (!checkAndGetSiblings(theParentName, theRightSiblingName, leftEntry,
+                             rightEntry))
+        return FALSE;
 
-    if ( theListPart && !checkCanTypesBeList( theType, theDefaultType, 
-					      theListContainerType ) )
-	return FALSE;
+    if (theListPart &&
+        !checkCanTypesBeList(theType, theDefaultType, theListContainerType))
+        return FALSE;
 
-    if ( entries.size() == SO_CATALOG_THIS_PART_NUM  && theName != "this" ) {
+    if (entries.size() == SO_CATALOG_THIS_PART_NUM && theName != "this") {
 #ifdef DEBUG
-	SoDebugError::post("SoNodekitCatalog::addEntry",
-		" Entry number %d must be named \"this\" ",
-		SO_CATALOG_THIS_PART_NUM );
+        SoDebugError::post("SoNodekitCatalog::addEntry",
+                           " Entry number %d must be named \"this\" ",
+                           SO_CATALOG_THIS_PART_NUM);
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     // IF ALL TESTS WERE PASSED...
 
     // make a list containing only the given list item type.
     SoTypeList listItemTypeList(0);
-    listItemTypeList.append( theListItemType );
+    listItemTypeList.append(theListItemType);
 
     // create the new entry
-    newEntry = new SoNodekitCatalogEntry( theName, theType, theDefaultType,
-	    theNullByDefault, theParentName, theRightSiblingName,
-	    theListPart,theListContainerType, listItemTypeList, thePublicPart);
+    newEntry = new SoNodekitCatalogEntry(
+        theName, theType, theDefaultType, theNullByDefault, theParentName,
+        theRightSiblingName, theListPart, theListContainerType,
+        listItemTypeList, thePublicPart);
     // enter the new entry in the array
     entries.push_back(newEntry);
 
@@ -1291,14 +1293,14 @@ SoNodekitCatalog::addEntry( const SbName &theName,
     partNameDict[theName] = entries.size() - 1;
 
     // parent is no longer a leaf node in the nodekit structure
-    if ( parentEntry != NULL ) {
-        parentEntry->setLeaf( FALSE );
-        parentEntry->setPublic( FALSE );
+    if (parentEntry != NULL) {
+        parentEntry->setLeaf(FALSE);
+        parentEntry->setPublic(FALSE);
     }
 
     // stitch up sibling names.
-    if ( leftEntry != NULL )
-	leftEntry->setRightSiblingName( theName );
+    if (leftEntry != NULL)
+        leftEntry->setRightSiblingName(theName);
     return TRUE;
 }
 
@@ -1312,12 +1314,11 @@ SoNodekitCatalog::addEntry( const SbName &theName,
 //
 // Use: public
 SbBool
-SoNodekitCatalog::recursiveSearch( int partNumber,
-				     const SbName    &nameToFind, 
-				     SoTypeList   *typesChecked ) const
+SoNodekitCatalog::recursiveSearch(int partNumber, const SbName &nameToFind,
+                                  SoTypeList *typesChecked) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // just call the recursive search method on the given entry...
-    return( entries[partNumber]->recursiveSearch( nameToFind, typesChecked ));
+    return (entries[partNumber]->recursiveSearch(nameToFind, typesChecked));
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,19 +54,17 @@
  _______________________________________________________________________
  */
 
-
 #include <Inventor/SbPList.h>
 #include <Inventor/errors/SoDebugError.h>
 
-#define DEFAULT_INITIAL_SIZE	4
+#define DEFAULT_INITIAL_SIZE 4
 
 //
 // Constructor
 //
 
-SbPList::SbPList()
-{
-    ptrs  = NULL;
+SbPList::SbPList() {
+    ptrs = NULL;
     nPtrs = ptrsSize = 0;
 
     setSize(0);
@@ -76,21 +74,19 @@ SbPList::SbPList()
 // Constructor allocates enough room for the given number of pointers.
 //
 
-SbPList::SbPList(int initSize)
-{
-    ptrs  = NULL;
+SbPList::SbPList(int initSize) {
+    ptrs = NULL;
     nPtrs = ptrsSize = 0;
 
-    setSize(initSize);		// Makes enough room for initSize entries
-    setSize(0);			// Sets nPtrs back to 0
+    setSize(initSize); // Makes enough room for initSize entries
+    setSize(0);        // Sets nPtrs back to 0
 }
 
 //
 // Initialize one PList from another
 //
 
-SbPList::SbPList(const SbPList &pl)
-{
+SbPList::SbPList(const SbPList &pl) {
     int i;
 
     nPtrs = pl.nPtrs;
@@ -98,17 +94,16 @@ SbPList::SbPList(const SbPList &pl)
     ptrs = new void *[ptrsSize];
 
     for (i = 0; i < nPtrs; i++)
-	ptrs[i] = pl.ptrs[i];
+        ptrs[i] = pl.ptrs[i];
 }
 
 //
 // Destructor
 //
 
-SbPList::~SbPList()
-{
+SbPList::~SbPList() {
     if (ptrs != NULL)
-	delete [] ptrs;
+        delete[] ptrs;
 }
 
 //
@@ -116,15 +111,14 @@ SbPList::~SbPList()
 //
 
 int
-SbPList::find(const void *ptr) const
-{
+SbPList::find(const void *ptr) const {
     int i;
 
     for (i = 0; i < nPtrs; i++)
-	if (ptrs[i] == ptr)
-	    return(i);
+        if (ptrs[i] == ptr)
+            return (i);
 
-    return -1;	// Not found
+    return -1; // Not found
 }
 
 //
@@ -132,20 +126,20 @@ SbPList::find(const void *ptr) const
 //
 
 void
-SbPList::insert(void *ptr, int addBefore)
-{
-    int	i;
+SbPList::insert(void *ptr, int addBefore) {
+    int i;
 
     // If addBefore is off the end of the list, grow the list (and
     // initialize any new elements to NULL)
-    if (addBefore > nPtrs) grow(addBefore);
+    if (addBefore > nPtrs)
+        grow(addBefore);
 
     // Make room for one more
     setSize(nPtrs + 1);
 
     // Move pointers forward to make room
     for (i = nPtrs - 1; i > addBefore; --i)
-	ptrs[i] = ptrs[i - 1];
+        ptrs[i] = ptrs[i - 1];
 
     // Insert the new one
     ptrs[addBefore] = ptr;
@@ -156,13 +150,12 @@ SbPList::insert(void *ptr, int addBefore)
 //
 
 void
-SbPList::remove(int which)
-{
+SbPList::remove(int which) {
     int i;
 
     // Move all pointers after the ith one backward
     for (i = which; i < nPtrs - 1; i++)
-	ptrs[i] = ptrs[i + 1];
+        ptrs[i] = ptrs[i + 1];
 
     // Shrink the list
     setSize(nPtrs - 1);
@@ -173,14 +166,13 @@ SbPList::remove(int which)
 //
 
 void
-SbPList::copy(const SbPList &pl)
-{
+SbPList::copy(const SbPList &pl) {
     int i;
 
     setSize(pl.nPtrs);
 
     for (i = 0; i < nPtrs; i++)
-	ptrs[i] = pl.ptrs[i];
+        ptrs[i] = pl.ptrs[i];
 }
 
 //
@@ -189,26 +181,24 @@ SbPList::copy(const SbPList &pl)
 //
 
 void
-SbPList::grow(int max) const
-{
-    int newSize = max+1;
+SbPList::grow(int max) const {
+    int newSize = max + 1;
     int oldSize = nPtrs;
 
 #ifdef DEBUG
     if (newSize <= oldSize)
-	SoDebugError::post("(internal) SbPList::grow", "newSize <= oldSize!");
+        SoDebugError::post("(internal) SbPList::grow", "newSize <= oldSize!");
 #endif /* DEBUG */
 
     // Get around the const thing:
     SbPList *me = (SbPList *)this;
 
     me->setSize(newSize);
-    
+
     for (int i = oldSize; i < newSize; i++) {
-	me->ptrs[i] = NULL;
+        me->ptrs[i] = NULL;
     }
 }
-
 
 //
 // Changes size of list to be new size. If the new size is larger than
@@ -216,34 +206,33 @@ SbPList::grow(int max) const
 //
 
 void
-SbPList::expand(int size)
-{
-    void	**newPtrs;
-    int	i;
+SbPList::expand(int size) {
+    void **newPtrs;
+    int    i;
 
     if (ptrsSize == 0)
-	ptrsSize = DEFAULT_INITIAL_SIZE;
+        ptrsSize = DEFAULT_INITIAL_SIZE;
 
     while (size > ptrsSize) {
 #ifdef DEBUG
-	// check for overflow
-	int	oldPtrsSize = ptrsSize;
-	ptrsSize *= 2;
-	if (ptrsSize < oldPtrsSize)
-	    SoDebugError::post("SbPList::expand",
-			       "Attempt to expand list beyond capacity;\n"
-			       "A core dump is likely");
+        // check for overflow
+        int oldPtrsSize = ptrsSize;
+        ptrsSize *= 2;
+        if (ptrsSize < oldPtrsSize)
+            SoDebugError::post("SbPList::expand",
+                               "Attempt to expand list beyond capacity;\n"
+                               "A core dump is likely");
 #else
-	ptrsSize *= 2;
+        ptrsSize *= 2;
 #endif
     }
 
     newPtrs = new void *[ptrsSize];
 
     if (ptrs != NULL) {
-	for (i = 0; i < nPtrs; i++)
-	    newPtrs[i] = ptrs[i];
-	delete [] ptrs;
+        for (i = 0; i < nPtrs; i++)
+            newPtrs[i] = ptrs[i];
+        delete[] ptrs;
     }
 
     ptrs = newPtrs;
@@ -253,14 +242,11 @@ SbPList::expand(int size)
 // lists is the same, otherwise badness could result
 
 int
-SbPList::compare(const SbPList &pl) const
-{
+SbPList::compare(const SbPList &pl) const {
     int i;
     for (i = 0; i < nPtrs; i++)
-	if ((*this)[i] != pl[i])
-	    return FALSE;
+        if ((*this)[i] != pl[i])
+            return FALSE;
 
     return TRUE;
 }
-
-

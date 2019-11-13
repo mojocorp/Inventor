@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -47,11 +47,11 @@
  |   Description:
  |	This file defines classes for describing or extracting
  |	detail information about a node kit.
- | 
  |
- |   The details contains a pointer to the node, a pointer to the 
+ |
+ |   The details contains a pointer to the node, a pointer to the
  |   child part within the node, and the name of the child part.
- |   
+ |
  |   Classes:
  |	SoNodeKitDetail
  |
@@ -78,7 +78,7 @@ class SoBaseKit;
 //////////////////////////////////////////////////////////////////////////////
 
 class SoNodeKitDetail : public SoDetail {
-    
+
     SO_DETAIL_HEADER(SoNodeKitDetail);
 
   public:
@@ -89,7 +89,7 @@ class SoNodeKitDetail : public SoDetail {
     // Returns a pointer to the nodekit that created this detail
     SoBaseKit *getNodeKit() const { return myNodeKit; }
 
-    // Returns a pointer to the part selected within the nodekit that 
+    // Returns a pointer to the part selected within the nodekit that
     // created this detail.
     SoNode *getPart() const { return myPart; }
 
@@ -99,23 +99,23 @@ class SoNodeKitDetail : public SoDetail {
 
     // Returns an instance that is a copy of this instance. The caller
     // is responsible for deleting the copy when done.
-    virtual SoDetail *	copy() const;
+    virtual SoDetail *copy() const;
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
+    void setNodeKit(SoBaseKit *theNodeKit);
+    void setPart(SoNode *thePart);
+    void setPartName(const SbName &theName) { myPartName = theName; }
 
-    void setNodeKit( SoBaseKit *theNodeKit );
-    void setPart( SoNode *thePart );
-    void setPartName( const SbName &theName )      { myPartName = theName; }
-
-  SoINTERNAL public:
-    static void		initClass();
-    static void	finishClass();
+    SoINTERNAL
+  public:
+    static void initClass();
+    static void finishClass();
 
   protected:
-    SoBaseKit       *myNodeKit;
-    SoNode          *myPart;
-    SbName          myPartName;
+    SoBaseKit *myNodeKit;
+    SoNode *   myPart;
+    SbName     myPartName;
 };
 
 #endif /* _SO_NODE_KIT_DETAIL_ */
-

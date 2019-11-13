@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -57,7 +57,6 @@
  _______________________________________________________________________
  */
 
-
 #ifndef _SO_LINE_HIGHLIGHT_RENDER_ACTION_
 #define _SO_LINE_HIGHLIGHT_RENDER_ACTION_
 
@@ -78,62 +77,61 @@ class SoTexture2;
 //////////////////////////////////////////////////////////////////////////////
 
 class SoLineHighlightRenderAction : public SoGLRenderAction {
-      SO_ACTION_HEADER(SoLineHighlightRenderAction);
- public:
+    SO_ACTION_HEADER(SoLineHighlightRenderAction);
+
+  public:
     // Constructor which takes no parameters. This sets up a dummy
     // viewport region. If passed to a render area, the render area
     // will correctly set the region. Otherwise, setViewportRegion()
     // should be called before applying this action.
     SoLineHighlightRenderAction();
-    
+
     // Constructor which takes the normal SoGLRenderAction parameters.
     SoLineHighlightRenderAction(const SbViewportRegion &viewportRegion);
-		   
-    
+
     virtual ~SoLineHighlightRenderAction();
-    
+
     // Applies action to the graph rooted by a node
-    virtual void    apply(SoNode *node);
-    
+    virtual void apply(SoNode *node);
+
     // Applies action to the graph defined by a path or path list.
     // These simply invoke the parent class apply() methods.
     // These do NOT highlight the path, whether selected or not.
-    virtual void    apply(SoPath *path);
-    virtual void    apply(const SoPathList &pathList,
-			      SbBool obeysRules = FALSE);
-    
+    virtual void apply(SoPath *path);
+    virtual void apply(const SoPathList &pathList, SbBool obeysRules = FALSE);
+
     // Simple switch to turn highlighting on (TRUE) or off (FALSE).
     // App is responsible for redrawing after this state changes.
-    void		    setVisible(SbBool b) { hlVisible = b; }
-    SbBool	    isVisible() const { return hlVisible; }
- 
+    void   setVisible(SbBool b) { hlVisible = b; }
+    SbBool isVisible() const { return hlVisible; }
+
     // Set the appearance of the highlight.
     // Application is responsible for redrawing the scene
     // after making changes here.
-    void	    setColor( const SbColor &c );
-    const SbColor & getColor();
-    void            setLinePattern( unsigned short pattern );
-    unsigned short  getLinePattern();
-    void            setLineWidth( float width );
-    float           getLineWidth();
-   
- SoINTERNAL public: 
-   static void initClass();
-   static void finishClass();
+    void           setColor(const SbColor &c);
+    const SbColor &getColor();
+    void           setLinePattern(unsigned short pattern);
+    unsigned short getLinePattern();
+    void           setLineWidth(float width);
+    float          getLineWidth();
+
+    SoINTERNAL
+  public:
+    static void initClass();
+    static void finishClass();
 
   protected:
     // Nodes which comprise the local highlight graph
-    SoSeparator	    *localRoot;
-    SoLightModel    *lightModel;
-    SoBaseColor	    *baseColor;
-    SoDrawStyle	    *drawStyle;
-    SoTexture2	    *texture;
-    
-    SbBool	    hlVisible;
-    
+    SoSeparator * localRoot;
+    SoLightModel *lightModel;
+    SoBaseColor * baseColor;
+    SoDrawStyle * drawStyle;
+    SoTexture2 *  texture;
+
+    SbBool hlVisible;
+
   private:
-    void	    constructorCommon();
+    void constructorCommon();
 };
 
 #endif /* _SO_LINE_HIGHLIGHT_RENDER_ACTION_ */
-

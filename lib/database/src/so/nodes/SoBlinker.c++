@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -167,15 +167,15 @@ SoBlinker::write(SoWriteAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool 		save = whichChild.isConnectionEnabled();
-    SoEngineOutput	*whichChildSource;
+    SbBool          save = whichChild.isConnectionEnabled();
+    SoEngineOutput *whichChildSource;
 
     // if the connection is to the internal engine, disable it
     if (whichChild.isConnected() &&
-	whichChild.getConnectedEngine(whichChildSource) &&
-	whichChildSource == internalConnection) {
+        whichChild.getConnectedEngine(whichChildSource) &&
+        whichChildSource == internalConnection) {
 
-	whichChild.enableConnection(FALSE);
+        whichChild.enableConnection(FALSE);
     }
 
     SoSwitch::write(action);
@@ -199,23 +199,21 @@ SoBlinker::notify(SoNotList *list)
 ////////////////////////////////////////////////////////////////////////
 {
     if (getNumChildren() != nchildren) {
-	nchildren = getNumChildren();
-	childrenSensor->schedule();
+        nchildren = getNumChildren();
+        childrenSensor->schedule();
     }
 
     SoNotRec *rec = list->getFirstRec();
 
     // only interested in a field-to-container notification
-    if (rec->getType() == SoNotRec::CONTAINER &&
-	rec->getBase() == this &&
-	list->getLastField() == &whichChild) {
+    if (rec->getType() == SoNotRec::CONTAINER && rec->getBase() == this &&
+        list->getLastField() == &whichChild) {
 
-	whichChildSensor->schedule();
+        whichChildSensor->schedule();
     }
 
     SoSwitch::notify(list);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -230,24 +228,24 @@ SoBlinker::childrenSensorCB(void *data, SoSensor *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoBlinker *blinker = (SoBlinker *) data;
+    SoBlinker *blinker = (SoBlinker *)data;
     switch (blinker->getNumChildren()) {
-	case 0:
-	    blinker->count->min = SO_SWITCH_NONE;
-	    blinker->count->max = SO_SWITCH_NONE;
-	    blinker->count->step = 0;
-	    break;
+    case 0:
+        blinker->count->min = SO_SWITCH_NONE;
+        blinker->count->max = SO_SWITCH_NONE;
+        blinker->count->step = 0;
+        break;
 
-	case 1:
-	    blinker->count->min = SO_SWITCH_NONE;
-	    blinker->count->max = 0;
-	    blinker->count->step = -(SO_SWITCH_NONE);
-	    break;
+    case 1:
+        blinker->count->min = SO_SWITCH_NONE;
+        blinker->count->max = 0;
+        blinker->count->step = -(SO_SWITCH_NONE);
+        break;
 
-	default:
-	    blinker->count->min = 0;
-	    blinker->count->max = blinker->getNumChildren()-1;
-	    blinker->count->step = 1;
+    default:
+        blinker->count->min = 0;
+        blinker->count->max = blinker->getNumChildren() - 1;
+        blinker->count->step = 1;
     }
 }
 
@@ -264,8 +262,8 @@ SoBlinker::whichChildSensorCB(void *data, SoSensor *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoBlinker *blinker = (SoBlinker *) data;
-    blinker->count->reset.setValue((short) blinker->whichChild.getValue());
+    SoBlinker *blinker = (SoBlinker *)data;
+    blinker->count->reset.setValue((short)blinker->whichChild.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -280,22 +278,22 @@ SoBlinker::onSensorCB(void *data, SoSensor *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoBlinker *blinker = (SoBlinker *) data;
+    SoBlinker *blinker = (SoBlinker *)data;
 
     if (blinker->on.getValue()) {
 
-	// Do this only if the blinker was off and is now on
-	if (! blinker->wasOn) {
-	    // if turned on, force the internal connection to be made
-	    // and enabled, no matter what sort of mucking has
-	    // happened to it.
-	    blinker->whichChild.enableConnection(TRUE);
-	    blinker->whichChild.connectFrom(&blinker->count->output);
-	    blinker->whichChild.getConnectedEngine(blinker->internalConnection);
-	    blinker->wasOn = TRUE;
-	}
+        // Do this only if the blinker was off and is now on
+        if (!blinker->wasOn) {
+            // if turned on, force the internal connection to be made
+            // and enabled, no matter what sort of mucking has
+            // happened to it.
+            blinker->whichChild.enableConnection(TRUE);
+            blinker->whichChild.connectFrom(&blinker->count->output);
+            blinker->whichChild.getConnectedEngine(blinker->internalConnection);
+            blinker->wasOn = TRUE;
+        }
     }
 
     else
-	blinker->wasOn = FALSE;
+        blinker->wasOn = FALSE;
 }

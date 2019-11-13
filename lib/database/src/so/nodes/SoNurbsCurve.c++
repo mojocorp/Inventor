@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -106,7 +106,7 @@ SoNurbsCurve::SoNurbsCurve()
     SO_NODE_CONSTRUCTOR(SoNurbsCurve);
 
     SO_NODE_ADD_FIELD(numControlPoints, (0));
-    SO_NODE_ADD_FIELD(knotVector,       (0.0));
+    SO_NODE_ADD_FIELD(knotVector, (0.0));
 
     isBuiltIn = TRUE;
 }
@@ -121,8 +121,7 @@ SoNurbsCurve::SoNurbsCurve()
 SoNurbsCurve::~SoNurbsCurve()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -137,7 +136,7 @@ SoNurbsCurve::GLRender(SoGLRenderAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // First see if the object is visible and should be rendered now
-    if (! shouldGLRender(action))
+    if (!shouldGLRender(action))
         return;
 
     SoState *state = action->getState();
@@ -151,10 +150,10 @@ SoNurbsCurve::GLRender(SoGLRenderAction *action)
     // has not been implemented.
     if (SoGLTextureEnabledElement::get(state)) {
         SoGLTextureEnabledElement::set(state, FALSE);
-    }        
+    }
 
     // Make sure the first current material is sent to GL
-    SoMaterialBundle	mb(action);
+    SoMaterialBundle mb(action);
     mb.sendFirst();
 
     //
@@ -170,9 +169,9 @@ SoNurbsCurve::GLRender(SoGLRenderAction *action)
     gluNurbsCallback(nurbsObj, GLU_NURBS_VERTEX, (void (*)())glVertex3fv);
     gluNurbsCallback(nurbsObj, GLU_NURBS_NORMAL, (void (*)())glNormal3fv);
 
-    drawNURBS (nurbsObj, action);
+    drawNURBS(nurbsObj, action);
 
-    gluDeleteNurbsRenderer( nurbsObj );
+    gluDeleteNurbsRenderer(nurbsObj);
 
     // Restore state
     state->pop();
@@ -201,24 +200,25 @@ SoNurbsCurve::generatePrimitives(SoAction *action)
     struct glu_cb_data {
         std::vector<SbVec3f> vertices;
 
-        static void vertexCallback(float *vertex, glu_cb_data * userData)
-        {
-            userData->vertices.push_back(SbVec3f(vertex[0], vertex[1], vertex[2]));
+        static void vertexCallback(float *vertex, glu_cb_data *userData) {
+            userData->vertices.push_back(
+                SbVec3f(vertex[0], vertex[1], vertex[2]));
         }
     } data;
 
     gluNurbsProperty(theNurb, GLU_NURBS_MODE, GLU_NURBS_TESSELLATOR);
     gluNurbsCallbackData(theNurb, &data);
-    gluNurbsCallback(theNurb, GLU_NURBS_VERTEX_DATA,    (void (SB_CALLBACK*)())glu_cb_data::vertexCallback);
+    gluNurbsCallback(theNurb, GLU_NURBS_VERTEX_DATA,
+                     (void(SB_CALLBACK *)())glu_cb_data::vertexCallback);
 
     drawNURBS(theNurb, action);
 
-    gluDeleteNurbsRenderer( theNurb );
+    gluDeleteNurbsRenderer(theNurb);
 
-    for (size_t i=0; i<data.vertices.size()-1; i+=2) {
+    for (size_t i = 0; i < data.vertices.size() - 1; i += 2) {
         SoPrimitiveVertex pv[2];
         pv[0].setPoint(data.vertices[i]);
-        pv[1].setPoint(data.vertices[i+1]);
+        pv[1].setPoint(data.vertices[i + 1]);
 
         invokeLineSegmentCallbacks(action, &pv[0], &pv[1]);
     }
@@ -256,7 +256,8 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoCoordinateElement *ce = SoCoordinateElement::getInstance(action->getState());
+    const SoCoordinateElement *ce =
+        SoCoordinateElement::getInstance(action->getState());
 
     //
     // Loop through coordinates, keeping max bounding box and sum of coords
@@ -291,7 +292,7 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
             if (curCoord >= nCoords)
                 curCoord = 0;
             const SbVec4f &coord = ce->get4(curCoord);
-            SbVec3f	tmpCoord;
+            SbVec3f        tmpCoord;
             coord.getReal(tmpCoord);
             box.extendBy(tmpCoord);
             center += tmpCoord;
@@ -299,7 +300,7 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
         }
     }
 
-    center /= (float) (numControlPoints.getValue());
+    center /= (float)(numControlPoints.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -310,9 +311,7 @@ SoNurbsCurve::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 // Use: protected
 
 void
-SoNurbsCurve::drawNURBS(
-        GLUnurbs *nurbsObj,
-        SoAction *action)
+SoNurbsCurve::drawNURBS(GLUnurbs *nurbsObj, SoAction *action)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -328,16 +327,19 @@ SoNurbsCurve::drawNURBS(
         return;
 
     float val = SoComplexityElement::get(state);
-    if (val < 0.0) val = 0.0f;
-    if (val > 1.0) val = 1.0f;
+    if (val < 0.0)
+        val = 0.0f;
+    if (val > 1.0)
+        val = 1.0f;
 
-    if (SoComplexityTypeElement::get(state) == SoComplexityTypeElement::OBJECT_SPACE) {
+    if (SoComplexityTypeElement::get(state) ==
+        SoComplexityTypeElement::OBJECT_SPACE) {
         //
         // Set the nurbs properties to render the curve with uniform
         // tessellation over the whole curve.
         //
         gluNurbsProperty(nurbsObj, GLU_SAMPLING_METHOD, GLU_DOMAIN_DISTANCE);
-        gluNurbsProperty(nurbsObj, GLU_U_STEP, 200*val);
+        gluNurbsProperty(nurbsObj, GLU_U_STEP, 200 * val);
     } else {
         //
         // Set the nurbs properties to render the curve with a view
@@ -345,37 +347,42 @@ SoNurbsCurve::drawNURBS(
         //
         float pixTolerance;
 
-        if      (val < 0.10f) pixTolerance = 10.f;
-        else if (val < 0.20f) pixTolerance = 8.f;
-        else if (val < 0.30f) pixTolerance = 6.f;
-        else if (val < 0.40f) pixTolerance = 4.f;
-        else if (val < 0.50f) pixTolerance = 2.f;
-        else if (val < 0.70f) pixTolerance = 1.f;
-        else if (val < 0.80f) pixTolerance = .5f;
-        else if (val < 0.90f) pixTolerance = .25f;
-        else                 pixTolerance = .125f;
+        if (val < 0.10f)
+            pixTolerance = 10.f;
+        else if (val < 0.20f)
+            pixTolerance = 8.f;
+        else if (val < 0.30f)
+            pixTolerance = 6.f;
+        else if (val < 0.40f)
+            pixTolerance = 4.f;
+        else if (val < 0.50f)
+            pixTolerance = 2.f;
+        else if (val < 0.70f)
+            pixTolerance = 1.f;
+        else if (val < 0.80f)
+            pixTolerance = .5f;
+        else if (val < 0.90f)
+            pixTolerance = .25f;
+        else
+            pixTolerance = .125f;
 
         gluNurbsProperty(nurbsObj, GLU_SAMPLING_METHOD, GLU_OBJECT_PATH_LENGTH);
         gluNurbsProperty(nurbsObj, GLU_SAMPLING_TOLERANCE, pixTolerance);
     }
 
     if (!action->isOfType(SoGLRenderAction::getClassTypeId())) {
-        const SbMatrix matModelView = SoModelMatrixElement::get(state) * SoViewingMatrixElement::get(state);
-        const SbMatrix & matProjection = SoProjectionMatrixElement::get(state);
+        const SbMatrix matModelView = SoModelMatrixElement::get(state) *
+                                      SoViewingMatrixElement::get(state);
+        const SbMatrix &matProjection = SoProjectionMatrixElement::get(state);
 
-        const SbViewportRegion & vpRegion = SoViewportRegionElement::get(state);
-        const SbVec2s & vpOrig = vpRegion.getViewportOriginPixels();
-        const SbVec2s & vpSize = vpRegion.getViewportSizePixels();
+        const SbViewportRegion &vpRegion = SoViewportRegionElement::get(state);
+        const SbVec2s &         vpOrig = vpRegion.getViewportOriginPixels();
+        const SbVec2s &         vpSize = vpRegion.getViewportSizePixels();
 
-        GLint viewport[4]={vpOrig[0],
-                           vpOrig[1],
-                           vpSize[0],
-                           vpSize[1]};
+        GLint viewport[4] = {vpOrig[0], vpOrig[1], vpSize[0], vpSize[1]};
         gluNurbsProperty(nurbsObj, GLU_AUTO_LOAD_MATRIX, GL_FALSE);
-        gluLoadSamplingMatrices(nurbsObj,
-                                (float*)matModelView.getValue(),
-                                (float*)matProjection.getValue(),
-                                viewport);
+        gluLoadSamplingMatrices(nurbsObj, (float *)matModelView.getValue(),
+                                (float *)matProjection.getValue(), viewport);
     }
 
     //
@@ -384,11 +391,13 @@ SoNurbsCurve::drawNURBS(
     // software NURBS library.
     //
 
-    const float* pdata = ce->is3D() ? ce->get3(0).getValue() : ce->get4(0).getValue();
+    const float *pdata =
+        ce->is3D() ? ce->get3(0).getValue() : ce->get4(0).getValue();
     gluBeginCurve(nurbsObj);
-    gluNurbsCurve(nurbsObj,
-            knotVector.getNum(), (float*)knotVector.getValues(0),
-            ce->is3D() ? 3 : 4, (float*)pdata, knotVector.getNum() - numControlPoints.getValue(),
-            ce->is3D() ? GL_MAP1_VERTEX_3 : GL_MAP1_VERTEX_4);
+    gluNurbsCurve(nurbsObj, knotVector.getNum(),
+                  (float *)knotVector.getValues(0), ce->is3D() ? 3 : 4,
+                  (float *)pdata,
+                  knotVector.getNum() - numControlPoints.getValue(),
+                  ce->is3D() ? GL_MAP1_VERTEX_3 : GL_MAP1_VERTEX_4);
     gluEndCurve(nurbsObj);
 }

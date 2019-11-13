@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -62,23 +62,20 @@
 //////////////////////////////////////////////////////////////////////////////
 
 // construct a default cylinder
-SbCylinder::SbCylinder()
-{
+SbCylinder::SbCylinder() {
     axis.setValue(SbVec3f(0.0, 0.0, 0.0), SbVec3f(0.0, 1.0, 0.0));
     radius = 1.0;
 }
 
 // construct a cylinder given an axis and radius
-SbCylinder::SbCylinder(const SbLine &a, float r)
-{
+SbCylinder::SbCylinder(const SbLine &a, float r) {
     axis = a;
     radius = r;
 }
 
 // Change the axis and radius
 void
-SbCylinder::setValue(const SbLine &a, float r)
-{
+SbCylinder::setValue(const SbLine &a, float r) {
     axis = a;
     radius = r;
 }
@@ -125,7 +122,7 @@ SbCylinder::intersect(const SbLine &line, SbVec3f &result) const
 {
     SbVec3f whoCares;
     return intersect(line, result, whoCares);
-}    
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -146,13 +143,13 @@ SbCylinder::intersect(const SbLine &line, SbVec3f &enter, SbVec3f &exit) const
     // space, then intersect, then transform the results back.
 
     // rotation to y axis
-    SbRotation	rotToYAxis(axis.getDirection(), SbVec3f(0,1,0));
-    SbMatrix	mtxToYAxis;
+    SbRotation rotToYAxis(axis.getDirection(), SbVec3f(0, 1, 0));
+    SbMatrix   mtxToYAxis;
     mtxToYAxis.setRotate(rotToYAxis);
 
     // scale to unit space
-    float	scaleFactor = 1.0/radius;
-    SbMatrix	toUnitCylSpace;
+    float    scaleFactor = 1.0 / radius;
+    SbMatrix toUnitCylSpace;
     toUnitCylSpace.setScale(SbVec3f(scaleFactor, scaleFactor, scaleFactor));
     toUnitCylSpace.multLeft(mtxToYAxis);
 
@@ -167,21 +164,21 @@ SbCylinder::intersect(const SbLine &line, SbVec3f &enter, SbVec3f &exit) const
 
     // find the intersection on the unit cylinder
     SbVec3f cylEnter, cylExit;
-    SbBool intersected = unitCylinderIntersect(cylLine, cylEnter, cylExit);
+    SbBool  intersected = unitCylinderIntersect(cylLine, cylEnter, cylExit);
 
     if (intersected) {
-	// transform back to original space
-	SbMatrix fromUnitCylSpace = toUnitCylSpace.inverse();
+        // transform back to original space
+        SbMatrix fromUnitCylSpace = toUnitCylSpace.inverse();
 
-	fromUnitCylSpace.multVecMatrix(cylEnter, enter);
-	enter += axis.getPosition();
+        fromUnitCylSpace.multVecMatrix(cylEnter, enter);
+        enter += axis.getPosition();
 
-	fromUnitCylSpace.multVecMatrix(cylExit, exit);
-	exit += axis.getPosition();
-    }    
+        fromUnitCylSpace.multVecMatrix(cylExit, exit);
+        exit += axis.getPosition();
+    }
 
     return intersected;
-}    
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -200,14 +197,14 @@ SbCylinder::intersect(const SbLine &line, SbVec3f &enter, SbVec3f &exit) const
 // Use: private, static
 
 SbBool
-SbCylinder::unitCylinderIntersect(const SbLine &l,
-				  SbVec3f &enter, SbVec3f &exit)
+SbCylinder::unitCylinderIntersect(const SbLine &l, SbVec3f &enter,
+                                  SbVec3f &exit)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float		A, B, C, discr, sqroot, t0, t1;
-    const SbVec3f	&pos = l.getPosition(), &dir = l.getDirection();
-    SbBool		doesIntersect = TRUE;
+    float          A, B, C, discr, sqroot, t0, t1;
+    const SbVec3f &pos = l.getPosition(), &dir = l.getDirection();
+    SbBool         doesIntersect = TRUE;
 
     A = dir[0] * dir[0] + dir[2] * dir[2];
 
@@ -216,27 +213,25 @@ SbCylinder::unitCylinderIntersect(const SbLine &l,
     C = pos[0] * pos[0] + pos[2] * pos[2] - 1;
 
     // discriminant = B^2 - 4AC
-    discr = B*B - 4.0*A*C;
+    discr = B * B - 4.0 * A * C;
 
     // if discriminant is negative, no intersection
     if (discr < 0.0) {
-	doesIntersect = FALSE;
-    }
-    else {
-    sqroot = std::sqrt(discr);
+        doesIntersect = FALSE;
+    } else {
+        sqroot = std::sqrt(discr);
 
-	// magic to stabilize the answer
-	if (B > 0.0) {
-	    t0 = -(2.0 * C) / (sqroot + B);
-	    t1 = -(sqroot + B) / (2.0 * A);
-	}
-	else {
-	    t0 = (2.0 * C) / (sqroot - B);
-	    t1 = (sqroot - B) / (2.0 * A);
-	}	    
+        // magic to stabilize the answer
+        if (B > 0.0) {
+            t0 = -(2.0 * C) / (sqroot + B);
+            t1 = -(sqroot + B) / (2.0 * A);
+        } else {
+            t0 = (2.0 * C) / (sqroot - B);
+            t1 = (sqroot - B) / (2.0 * A);
+        }
 
-	enter = pos + (dir * t0);
-	exit = pos + (dir * t1);
+        enter = pos + (dir * t0);
+        exit = pos + (dir * t1);
     }
 
     return doesIntersect;

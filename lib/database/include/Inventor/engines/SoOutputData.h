@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -55,9 +55,8 @@
  _______________________________________________________________________
  */
 
-
-#ifndef  _SO_OUTPUT_DATA_
-#define  _SO_OUTPUT_DATA_
+#ifndef _SO_OUTPUT_DATA_
+#define _SO_OUTPUT_DATA_
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbString.h>
@@ -86,52 +85,47 @@ struct SoOutputEntry;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SoEngineOutputData {
+SoINTERNAL
+class SoEngineOutputData {
   public:
     // Default constructor
-    SoEngineOutputData() { }
+    SoEngineOutputData() {}
 
     SoEngineOutputData(const SoEngineOutputData *);
 
     // Constructor that takes number of fields as a hint
-    SoEngineOutputData(int numOutputs) : outputs(numOutputs)
-	{ }
+    SoEngineOutputData(int numOutputs) : outputs(numOutputs) {}
 
     // Destructor
     ~SoEngineOutputData();
 
     // Adds an output to current data, given name of output,
     // a pointer to field within the engine, and the type of output.
-    void		addOutput(const SoEngine *defEngine,
-				  const char *outputName,
-				  const SoEngineOutput *output,
-				  SoType type);
+    void addOutput(const SoEngine *defEngine, const char *outputName,
+                   const SoEngineOutput *output, SoType type);
 
     // Returns number of outputs
-    size_t			getNumOutputs() const	{ return outputs.size(); }
+    size_t getNumOutputs() const { return outputs.size(); }
 
     // Returns name of output with given index
-    const SbName &	getOutputName(int index) const;
+    const SbName &getOutputName(int index) const;
 
     // Returns pointer to output with given index within given object instance
-    SoEngineOutput *	getOutput(const SoEngine *engine,
-				  int index) const;
+    SoEngineOutput *getOutput(const SoEngine *engine, int index) const;
 
     // Returns index of output, given the output and the engine it
     // is in.
-    int			getIndex(const SoEngine *engine,
-				 const SoEngineOutput *output) const;
+    int getIndex(const SoEngine *engine, const SoEngineOutput *output) const;
 
     // Returns type of output with given index
-    const SoType &	getType(int index) const;
+    const SoType &getType(int index) const;
 
     // Methods to read and write the output descriptions
-    SbBool		readDescriptions(SoInput *in,
-					 SoEngine *engine) const;
-    void		writeDescriptions(SoOutput *out,
-					 SoEngine *engine) const;
+    SbBool readDescriptions(SoInput *in, SoEngine *engine) const;
+    void   writeDescriptions(SoOutput *out, SoEngine *engine) const;
+
   private:
-    std::vector<SoOutputEntry*>  outputs; // List of outputs (SoOutputEntry)
-};    
+    std::vector<SoOutputEntry *> outputs; // List of outputs (SoOutputEntry)
+};
 
 #endif /* _SO_OUTPUT_DATA_ */

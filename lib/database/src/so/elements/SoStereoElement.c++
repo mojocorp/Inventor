@@ -12,8 +12,7 @@ SO_ELEMENT_SOURCE(SoStereoElement);
 SoStereoElement::~SoStereoElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -42,8 +41,8 @@ SoStereoElement::init(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    mode	= getDefaultMode();
-    offset	= getDefaultOffset();
+    mode = getDefaultMode();
+    offset = getDefaultOffset();
     balance = getDefaultBalace();
 }
 
@@ -55,12 +54,14 @@ SoStereoElement::init(SoState *)
 // Use: public, static
 
 void
-SoStereoElement::set(SoState * state, StereoMode mode, float offset, float balance)
+SoStereoElement::set(SoState *state, StereoMode mode, float offset,
+                     float balance)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Get an instance we can change (pushing if necessary)
-    SoStereoElement *elt = (SoStereoElement *) getElement(state, classStackIndex);
+    SoStereoElement *elt =
+        (SoStereoElement *)getElement(state, classStackIndex);
 
     if (elt != NULL) {
         elt->mode = mode;
@@ -82,11 +83,10 @@ SoStereoElement::push(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoStereoElement	*prevElt =
-        (const SoStereoElement *)getNextInStack();
+    const SoStereoElement *prevElt = (const SoStereoElement *)getNextInStack();
 
-    mode    = prevElt->mode;
-    offset  = prevElt->offset;
+    mode = prevElt->mode;
+    offset = prevElt->offset;
     balance = prevElt->balance;
 }
 
@@ -98,17 +98,17 @@ SoStereoElement::push(SoState *)
 // Use: public, static
 
 void
-SoStereoElement::get(SoState * state, StereoMode &mode_out, float &offset_out, float &balance_out)
+SoStereoElement::get(SoState *state, StereoMode &mode_out, float &offset_out,
+                     float &balance_out)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const SoStereoElement *elt;
 
-    elt = (const SoStereoElement *)
-        getConstElement(state, classStackIndex);
+    elt = (const SoStereoElement *)getConstElement(state, classStackIndex);
 
-    mode_out    = elt->mode;
-    offset_out  = elt->offset;
+    mode_out = elt->mode;
+    offset_out = elt->offset;
     balance_out = elt->balance;
 }
 
@@ -124,10 +124,9 @@ SoStereoElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoStereoElement *shElt = (const SoStereoElement *) elt;
+    const SoStereoElement *shElt = (const SoStereoElement *)elt;
 
-    return (mode    == shElt->mode   &&
-            offset  == shElt->offset &&
+    return (mode == shElt->mode && offset == shElt->offset &&
             balance == shElt->balance);
 }
 
@@ -144,11 +143,10 @@ SoStereoElement::copyMatchInfo() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoStereoElement *result =
-        (SoStereoElement *)getTypeId().createInstance();
+    SoStereoElement *result = (SoStereoElement *)getTypeId().createInstance();
 
-    result->mode	= mode;
-    result->offset	= offset;
+    result->mode = mode;
+    result->offset = offset;
     result->balance = balance;
 
     return result;
@@ -165,23 +163,29 @@ SoStereoElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoStereoElement::print(FILE *fp) const
-{
+SoStereoElement::print(FILE *fp) const {
     SoElement::print(fp);
 
     const char *modeName = NULL;
-    switch(mode) {
-    case MONOSCOPIC: modeName = "MONOSCOPIC"; break;
-    case LEFT_VIEW: modeName = "LEFT_VIEW"; break;
-    case RIGHT_VIEW: modeName = "RIGHT_VIEW"; break;
-    default: modeName = "UNKNOWN"; break;
+    switch (mode) {
+    case MONOSCOPIC:
+        modeName = "MONOSCOPIC";
+        break;
+    case LEFT_VIEW:
+        modeName = "LEFT_VIEW";
+        break;
+    case RIGHT_VIEW:
+        modeName = "RIGHT_VIEW";
+        break;
+    default:
+        modeName = "UNKNOWN";
+        break;
     }
 
-    fprintf(fp,"\tStereo: mode = %s, offset = %f, balance = %f\n", modeName, offset, balance);
+    fprintf(fp, "\tStereo: mode = %s, offset = %f, balance = %f\n", modeName,
+            offset, balance);
 }
 #else  /* DEBUG */
 void
-SoStereoElement::print(FILE *) const
-{
-}
+SoStereoElement::print(FILE *) const {}
 #endif /* DEBUG */

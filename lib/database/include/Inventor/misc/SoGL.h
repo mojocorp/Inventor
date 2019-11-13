@@ -4,10 +4,10 @@
 #include <machine.h>
 
 #ifdef SB_OS_MACX
-#   define GL_SILENCE_DEPRECATION
-#   include <OpenGL/gl.h>
+#define GL_SILENCE_DEPRECATION
+#include <OpenGL/gl.h>
 #else
-#   include <GL/gl.h>
+#include <GL/gl.h>
 #endif
 
 #endif /* _SO_GL_ */

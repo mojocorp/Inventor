@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -90,13 +90,12 @@ SoWrapperKit::SoWrapperKit()
 
     // Initialize children catalog and add entries to it
     // These are the macros you use to make a catalog.
-    // Use combinations of ...ADD_CATALOG_ENTRY 
+    // Use combinations of ...ADD_CATALOG_ENTRY
     // and ...ADD_CATALOG_LIST_ENTRY.  See SoSubKit.h for more info
     // on syntax of these macros.
-    SO_KIT_ADD_CATALOG_ENTRY(localTransform, SoTransform, TRUE,
-				    topSeparator, , TRUE );
-    SO_KIT_ADD_CATALOG_ENTRY(contents, SoSeparator, TRUE,
-				    topSeparator, , TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(localTransform, SoTransform, TRUE, topSeparator, ,
+                             TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(contents, SoSeparator, TRUE, topSeparator, , TRUE);
 
     SO_KIT_INIT_INSTANCE();
 }
@@ -111,5 +110,4 @@ SoWrapperKit::SoWrapperKit()
 SoWrapperKit::~SoWrapperKit()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}

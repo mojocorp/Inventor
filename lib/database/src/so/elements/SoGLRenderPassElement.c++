@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,8 +63,7 @@ SO_ELEMENT_SOURCE(SoGLRenderPassElement);
 // Use: internal
 
 void
-SoGLRenderPassElement::initClass()
-{
+SoGLRenderPassElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLRenderPassElement, SoElement);
 }
 
@@ -78,8 +77,7 @@ SoGLRenderPassElement::initClass()
 SoGLRenderPassElement::~SoGLRenderPassElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -108,13 +106,13 @@ SoGLRenderPassElement::set(SoState *state, int pass)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoGLRenderPassElement	*elt;
+    SoGLRenderPassElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoGLRenderPassElement *) getElement(state, classStackIndex);
+    elt = (SoGLRenderPassElement *)getElement(state, classStackIndex);
 
     if (elt != NULL)
-	elt->GLRenderPass = pass;
+        elt->GLRenderPass = pass;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -131,8 +129,8 @@ SoGLRenderPassElement::get(SoState *state)
 {
     const SoGLRenderPassElement *elt;
 
-    elt = (const SoGLRenderPassElement *)
-	getConstElement(state, classStackIndex);
+    elt =
+        (const SoGLRenderPassElement *)getConstElement(state, classStackIndex);
 
     return elt->GLRenderPass;
 }
@@ -149,8 +147,7 @@ SoGLRenderPassElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (GLRenderPass ==
-	    ((const SoGLRenderPassElement *) elt)->GLRenderPass);
+    return (GLRenderPass == ((const SoGLRenderPassElement *)elt)->GLRenderPass);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -167,7 +164,7 @@ SoGLRenderPassElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoGLRenderPassElement *result =
-	(SoGLRenderPassElement *)getTypeId().createInstance();
+        (SoGLRenderPassElement *)getTypeId().createInstance();
 
     result->GLRenderPass = GLRenderPass;
 
@@ -185,15 +182,12 @@ SoGLRenderPassElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoGLRenderPassElement::print(FILE *fp) const
-{
+SoGLRenderPassElement::print(FILE *fp) const {
     SoElement::print(fp);
 
     fprintf(fp, "\tRendering Pass = %d\n", GLRenderPass);
 }
 #else  /* DEBUG */
 void
-SoGLRenderPassElement::print(FILE *) const
-{
-}
+SoGLRenderPassElement::print(FILE *) const {}
 #endif /* DEBUG */

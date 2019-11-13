@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,8 +54,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_PROFILE_ELEMENT
-#define  _SO_PROFILE_ELEMENT
+#ifndef _SO_PROFILE_ELEMENT
+#define _SO_PROFILE_ELEMENT
 
 #include <Inventor/SoLists.h>
 #include <Inventor/elements/SoAccumulatedElement.h>
@@ -70,39 +70,36 @@ class SoProfile;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoProfileElement : public SoAccumulatedElement {
+SoEXTENDER
+class SoProfileElement : public SoAccumulatedElement {
 
     SO_ELEMENT_HEADER(SoProfileElement);
 
   public:
-    enum Profile {
-	START_FIRST,
-	START_NEW,
-	ADD_TO_CURRENT
-    };
+    enum Profile { START_FIRST, START_NEW, ADD_TO_CURRENT };
 
     // Initializes element.
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Add to the current profile list
-    static void		add(SoState *state, SoProfile *profile);
+    static void add(SoState *state, SoProfile *profile);
 
     // Overrides push() method to copy values from next instance in the stack
-    virtual void	push(SoState *state);
+    virtual void push(SoState *state);
 
     // Returns the current list of profile nodes from the state
-    static const SoNodeList &	get(SoState *state);
+    static const SoNodeList &get(SoState *state);
 
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
-
+    SoINTERNAL
+  public:
     // Initializes the SoCoordinateElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     // list of profile nodes
-    SoNodeList	        profiles;
+    SoNodeList profiles;
 
     virtual ~SoProfileElement();
 };

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_POINT_SET_
-#define  _SO_POINT_SET_
+#ifndef _SO_POINT_SET_
+#define _SO_POINT_SET_
 
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoNonIndexedShape.h>
@@ -71,7 +71,7 @@
 
 // This value, when used in the numPoints field, means use the rest of
 // the coordinates as points
-#define SO_POINT_SET_USE_REST_OF_POINTS	(-1)
+#define SO_POINT_SET_USE_REST_OF_POINTS (-1)
 
 class SoPointSet : public SoNonIndexedShape {
 
@@ -79,41 +79,42 @@ class SoPointSet : public SoNonIndexedShape {
 
   public:
     // Fields
-    SoSFInt32		numPoints;	// Number of points to draw
+    SoSFInt32 numPoints; // Number of points to draw
 
     // Constructor
     SoPointSet();
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Implements actions
-    virtual void	GLRender(SoGLRenderAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
 
     // Redefine this to tell open caches that they contain points
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Generates points representing point set
-    virtual void	generatePrimitives(SoAction *action);
+    virtual void generatePrimitives(SoAction *action);
 
     // Computes bounding box of point set
-    virtual void	computeBBox(SoAction *action, SbBox3f &box,
-				    SbVec3f &center);
+    virtual void computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center);
 
     // Overrides standard method to create an SoPointDetail instance
-    virtual SoDetail *	createPointDetail(SoRayPickAction *action,
-					  const SoPrimitiveVertex *v,
-					  SoPickedPoint *pp);
+    virtual SoDetail *createPointDetail(SoRayPickAction *        action,
+                                        const SoPrimitiveVertex *v,
+                                        SoPickedPoint *          pp);
 
   protected:
     virtual ~SoPointSet();
 
   private:
     // Returns TRUE if materials/normals are bound to individual points
-    SbBool		areMaterialsPerPoint(SoAction *action) const;
-    SbBool		areNormalsPerPoint(SoAction *action) const;
+    SbBool areMaterialsPerPoint(SoAction *action) const;
+    SbBool areNormalsPerPoint(SoAction *action) const;
 };
 
 #endif /* _SO_POINT_SET_ */

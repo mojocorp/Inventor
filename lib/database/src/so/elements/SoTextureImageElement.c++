@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,8 +63,7 @@ SO_ELEMENT_SOURCE(SoTextureImageElement);
 // Use: internal
 
 void
-SoTextureImageElement::initClass()
-{
+SoTextureImageElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoTextureImageElement, SoReplacedElement);
 }
 
@@ -78,8 +77,7 @@ SoTextureImageElement::initClass()
 SoTextureImageElement::~SoTextureImageElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -104,22 +102,20 @@ SoTextureImageElement::init(SoState *state)
 // Use: public, static
 
 void
-SoTextureImageElement::set(SoState *state, SoNode *node,
-			   const SbImage &img,
-			   int wrapS, int wrapT, int model,
-			   const SbColor &blendColor)
+SoTextureImageElement::set(SoState *state, SoNode *node, const SbImage &img,
+                           int wrapS, int wrapT, int model,
+                           const SbColor &blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTextureImageElement	*elt;
+    SoTextureImageElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoTextureImageElement *) getElement(state, classStackIndex, node);
+    elt = (SoTextureImageElement *)getElement(state, classStackIndex, node);
 
     elt->setElt(img, wrapS, wrapT, model, blendColor);
 }
 
-	
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -129,9 +125,8 @@ SoTextureImageElement::set(SoState *state, SoNode *node,
 // Use: protected, virtual
 
 void
-SoTextureImageElement::setElt(const SbImage &_image,
-			      int _wrapS, int _wrapT, int _model,
-			      const SbColor &_blendColor)
+SoTextureImageElement::setElt(const SbImage &_image, int _wrapS, int _wrapT,
+                              int _model, const SbColor &_blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -150,16 +145,15 @@ SoTextureImageElement::setElt(const SbImage &_image,
 // Use: public, static
 
 const SbImage &
-SoTextureImageElement::get(SoState *state, 
-			   int &_wrapS, int &_wrapT,
-			   int &_model, SbColor &_blendColor)
+SoTextureImageElement::get(SoState *state, int &_wrapS, int &_wrapT,
+                           int &_model, SbColor &_blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const SoTextureImageElement *elt;
 
-    elt = (const SoTextureImageElement *)
-	getConstElement(state, classStackIndex);
+    elt =
+        (const SoTextureImageElement *)getConstElement(state, classStackIndex);
 
     _wrapS = elt->wrapS;
     _wrapT = elt->wrapT;
@@ -171,15 +165,13 @@ SoTextureImageElement::get(SoState *state,
 
 // Deprecated
 const unsigned char *
-SoTextureImageElement::get(SoState *state, SbVec2s &_size,
-                int &_numComponents, int &_wrapS,
-                int &_wrapT, int &_model,
-                SbColor &_blendColor)
-{
+SoTextureImageElement::get(SoState *state, SbVec2s &_size, int &_numComponents,
+                           int &_wrapS, int &_wrapT, int &_model,
+                           SbColor &_blendColor) {
     const SoTextureImageElement *elt;
 
-    elt = (const SoTextureImageElement *)
-    getConstElement(state, classStackIndex);
+    elt =
+        (const SoTextureImageElement *)getConstElement(state, classStackIndex);
 
     _size = SbVec2s(elt->image.getSize().getValue());
     _numComponents = elt->image.getNumComponents();
@@ -204,8 +196,8 @@ SoTextureImageElement::containsTransparency(SoState *state)
 {
     const SoTextureImageElement *elt;
 
-    elt = (const SoTextureImageElement *)
-	getConstElement(state, classStackIndex);
+    elt =
+        (const SoTextureImageElement *)getConstElement(state, classStackIndex);
 
     return elt->image.hasAlphaChannel();
 }
@@ -239,13 +231,10 @@ SoTextureImageElement::getDefault(SbVec2s &s, int &nc)
 
 #ifdef DEBUG
 void
-SoTextureImageElement::print(FILE *fp) const
-{
+SoTextureImageElement::print(FILE *fp) const {
     SoReplacedElement::print(fp);
 }
 #else  /* DEBUG */
 void
-SoTextureImageElement::print(FILE *) const
-{
-}
+SoTextureImageElement::print(FILE *) const {}
 #endif /* DEBUG */

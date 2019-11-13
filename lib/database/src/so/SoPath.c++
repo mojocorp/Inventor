@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -50,7 +50,6 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-
 
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
@@ -87,7 +86,7 @@ SoPath::initClass()
 {
     // Create SoType type
     classTypeId = SoType::createType(SoBase::getClassTypeId(), "Path",
-				     SoPath::createInstance);
+                                     SoPath::createInstance);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -100,9 +99,7 @@ void
 SoPath::finishClass()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -116,15 +113,14 @@ SoPath::SoPath()
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (! SoDB::isInitialized())
-	SoDebugError::post("SoPath::SoPath",
-			   "Cannot construct paths before "
-			   "calling SoDB::init()");
+    if (!SoDB::isInitialized())
+        SoDebugError::post("SoPath::SoPath", "Cannot construct paths before "
+                                             "calling SoDB::init()");
 #endif /* DEBUG */
 
     doAuditors = TRUE;
     minNumPublic = 0;
-    numPublic  = 0;
+    numPublic = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -134,20 +130,20 @@ SoPath::SoPath()
 //
 // Use: public
 
-SoPath::SoPath(int approxLength) : nodes(approxLength)
+SoPath::SoPath(int approxLength)
+    : nodes(approxLength)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (! SoDB::isInitialized())
-	SoDebugError::post("SoPath::SoPath",
-			   "Cannot construct paths before "
-			   "calling SoDB::init()");
+    if (!SoDB::isInitialized())
+        SoDebugError::post("SoPath::SoPath", "Cannot construct paths before "
+                                             "calling SoDB::init()");
 #endif /* DEBUG */
     indices.reserve(approxLength);
     doAuditors = TRUE;
-    numPublic  = 0;
-    minNumPublic  = 0;
+    numPublic = 0;
+    minNumPublic = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -162,15 +158,14 @@ SoPath::SoPath(SoNode *node)
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (! SoDB::isInitialized())
-	SoDebugError::post("SoPath::SoPath",
-			   "Cannot construct paths before "
-			   "calling SoDB::init()");
+    if (!SoDB::isInitialized())
+        SoDebugError::post("SoPath::SoPath", "Cannot construct paths before "
+                                             "calling SoDB::init()");
 #endif /* DEBUG */
 
     doAuditors = TRUE;
-    numPublic  = 0;
-    minNumPublic  = 0;
+    numPublic = 0;
+    minNumPublic = 0;
     setHead(node);
 }
 
@@ -208,7 +203,7 @@ SoPath::setHead(SoNode *node)
     append(node, -1);
 
     if (doAuditors)
-	startNotify();
+        startNotify();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -225,13 +220,13 @@ SoPath::append(int childIndex)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNode	*tail;
+    SoNode *tail;
 
 #ifdef DEBUG
     // Make sure there is already a node in the path
     if (getFullLength() == 0) {
-	SoDebugError::post("SoPath::append", "No head node to append to");
-	return;
+        SoDebugError::post("SoPath::append", "No head node to append to");
+        return;
     }
 #endif /* DEBUG */
 
@@ -240,18 +235,18 @@ SoPath::append(int childIndex)
 
 #ifdef DEBUG
     // If there is one, make sure it can have children
-    SoChildList	*children = tail->getChildren();
+    SoChildList *children = tail->getChildren();
     if (children == NULL) {
-	SoDebugError::post("SoPath::append",
-			   "Tail node does not allow children to be added");
-	return;
+        SoDebugError::post("SoPath::append",
+                           "Tail node does not allow children to be added");
+        return;
     }
 
     // And make sure index is valid
     if (childIndex < 0 || childIndex >= children->getLength()) {
-	SoDebugError::post("SoPath::append",
-			   "Invalid child index %d", childIndex);
-	return;
+        SoDebugError::post("SoPath::append", "Invalid child index %d",
+                           childIndex);
+        return;
     }
 #endif
 
@@ -274,13 +269,13 @@ SoPath::append(SoNode *childNode)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNode	*tail;
-    int		childIndex;
+    SoNode *tail;
+    int     childIndex;
 
     // If the path is empty, this is a setHead() operation
     if (getFullLength() == 0) {
-	setHead(childNode);
-	return;
+        setHead(childNode);
+        return;
     }
 
     // Get real tail node of path
@@ -289,9 +284,9 @@ SoPath::append(SoNode *childNode)
 #ifdef DEBUG
     // Make sure tail node can have children
     if (tail->getChildren() == NULL) {
-	SoDebugError::post("SoPath::append",
-			   "Tail node does not allow children to be added");
-	return;
+        SoDebugError::post("SoPath::append",
+                           "Tail node does not allow children to be added");
+        return;
     }
 #endif
 
@@ -301,9 +296,9 @@ SoPath::append(SoNode *childNode)
 #ifdef DEBUG
     // Make sure index is valid
     if (childIndex < 0) {
-	SoDebugError::post("SoPath::append",
-			   "Node to append is not a child of path tail");
-	return;
+        SoDebugError::post("SoPath::append",
+                           "Node to append is not a child of path tail");
+        return;
     }
 #endif
 
@@ -323,19 +318,19 @@ SoPath::append(const SoPath *fromPath)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNode	*tailNode;
-    SoChildList	*children;
-    SbBool	headIsTail;
-    int		firstIndex, i;
+    SoNode *     tailNode;
+    SoChildList *children;
+    SbBool       headIsTail;
+    int          firstIndex, i;
 
     if (fromPath->getFullLength() == 0)
-	return;
+        return;
 
 #ifdef DEBUG
     // Make sure there is already a node in the path
     if (getFullLength() == 0) {
-	SoDebugError::post("SoPath::append", "No head node to append to");
-	return;
+        SoDebugError::post("SoPath::append", "No head node to append to");
+        return;
     }
 #endif
 
@@ -348,35 +343,35 @@ SoPath::append(const SoPath *fromPath)
 #ifdef DEBUG
     // Make sure tail node can have children
     if (children == NULL) {
-	SoDebugError::post("SoPath::append",
-			   "Tail node does not allow children to be added");
-	return;
+        SoDebugError::post("SoPath::append",
+                           "Tail node does not allow children to be added");
+        return;
     }
 #endif
 
     // See if the head node of fromPath is the same as the tail node
     // or if it is a child of it
     headIsTail = (tailNode == fromPath->getHead());
-    if (! headIsTail)
-	firstIndex = children->find(fromPath->getHead());
+    if (!headIsTail)
+        firstIndex = children->find(fromPath->getHead());
 
 #ifdef DEBUG
     // Make sure head node of fromPath is same as tail node or a child
     // of the tail node
-    if (! headIsTail && firstIndex < 0) {
-	SoDebugError::post("SoPath::append",
-			   "Head of path to append is not the same as or a "
-			   "child of the path tail");
-	return;
+    if (!headIsTail && firstIndex < 0) {
+        SoDebugError::post("SoPath::append",
+                           "Head of path to append is not the same as or a "
+                           "child of the path tail");
+        return;
     }
 #endif
 
     // Append each node in fromPath to end of path. Skip the first
     // node if it's already in the path.
-    if (! headIsTail)
-	append(fromPath->getHead(), firstIndex);
+    if (!headIsTail)
+        append(fromPath->getHead(), firstIndex);
     for (i = 1; i < fromPath->getFullLength(); i++)
-	append(fromPath->getNode(i), fromPath->getIndex(i));
+        append(fromPath->getNode(i), fromPath->getIndex(i));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -397,20 +392,20 @@ SoPath::getLength() const
     // If we aren't sure how many are public, figure it out:
     if (numPublic == -1) {
 
-	int lastPublicIndex = 0;
-	if (minNumPublic > 1)
-	    lastPublicIndex = minNumPublic - 1;
+        int lastPublicIndex = 0;
+        if (minNumPublic > 1)
+            lastPublicIndex = minNumPublic - 1;
 
-	// Last test is for the second to last node.
-	// If it passes, then lastPublicIndex will be incremented to be the
-	// final node, which we don't need to test.
+        // Last test is for the second to last node.
+        // If it passes, then lastPublicIndex will be incremented to be the
+        // final node, which we don't need to test.
 
-	for (  ; lastPublicIndex < (getFullLength() - 1) ; lastPublicIndex++) {
-	    // Children of this node will be private, so stop.
-	    if ( ! nodes[lastPublicIndex]->isOfType(SoGroup::getClassTypeId()))
-		break;
-	}
-	This->numPublic = This->minNumPublic = lastPublicIndex + 1;
+        for (; lastPublicIndex < (getFullLength() - 1); lastPublicIndex++) {
+            // Children of this node will be private, so stop.
+            if (!nodes[lastPublicIndex]->isOfType(SoGroup::getClassTypeId()))
+                break;
+        }
+        This->numPublic = This->minNumPublic = lastPublicIndex + 1;
     }
     return numPublic;
 }
@@ -444,8 +439,8 @@ SoPath::containsNode(const SoNode *node) const
 ////////////////////////////////////////////////////////////////////////
 {
     for (int i = 0; i < getFullLength(); i++)
-    	if (nodes[i] == node)
-	    return TRUE;
+        if (nodes[i] == node)
+            return TRUE;
 
     return FALSE;
 }
@@ -467,22 +462,22 @@ SoPath::containsPath(const SoPath *path) const
 
     // First find the head of the target path in this path
     for (i = 0; i < getFullLength(); i++)
-	if (getNode(i) == path->getHead())
-	    break;
+        if (getNode(i) == path->getHead())
+            break;
 
     // Head node is not there
     if (i == getFullLength())
-	return FALSE;
+        return FALSE;
 
     // If there aren't enough nodes left in this path, then no match
     if (getFullLength() - i < path->getFullLength())
-	return FALSE;
+        return FALSE;
 
     // Otherwise, start comparing indices in the two paths to see if the
     // paths match. Skip the head node, which we already know is a match.
     for (j = 1; j < path->getFullLength(); j++)
-	if (path->getIndex(j) != getIndex(i + j))
-	    return FALSE;
+        if (path->getIndex(j) != getIndex(i + j))
+            return FALSE;
 
     return TRUE;
 }
@@ -505,17 +500,17 @@ SoPath::findFork(const SoPath *path) const
 
     // Return -1 if heads are different nodes
     if (path->getHead() != getHead())
-	return -1;
+        return -1;
 
     // Find length of shorter path
     shorterLength = path->getFullLength();
     if (getFullLength() < shorterLength)
-	shorterLength = getFullLength();
+        shorterLength = getFullLength();
 
     // Return the index of the last pair of nodes that match
     for (i = 1; i < shorterLength; i++)
-	if (getIndex(i) != path->getIndex(i))
-	    return i - 1;
+        if (getIndex(i) != path->getIndex(i))
+            return i - 1;
 
     // All the nodes matched - return the index of the tail
     return shorterLength - 1;
@@ -536,31 +531,29 @@ SoPath::copy(int startFromNodeIndex, int numNodes) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoPath	*newPath;
-    int		lastNodeIndex, i;
+    SoPath *newPath;
+    int     lastNodeIndex, i;
 
 #ifdef DEBUG
-    if (startFromNodeIndex < 0 ||
-	startFromNodeIndex >= getFullLength()) {
-	SoDebugError::post("SoPath::copy", "Starting index is invalid");
-	return NULL;
+    if (startFromNodeIndex < 0 || startFromNodeIndex >= getFullLength()) {
+        SoDebugError::post("SoPath::copy", "Starting index is invalid");
+        return NULL;
     }
 #endif /* DEBUG */
 
     if (numNodes == 0)
-	lastNodeIndex = getFullLength() - 1;
+        lastNodeIndex = getFullLength() - 1;
 
     else {
-	lastNodeIndex = startFromNodeIndex + numNodes - 1;
+        lastNodeIndex = startFromNodeIndex + numNodes - 1;
 
 #ifdef DEBUG
-	if (lastNodeIndex >= getFullLength()) {
-	    lastNodeIndex  = getFullLength() - 1;
-	    SoDebugError::postWarning("SoPath::copy",
-				      "Copying only %d nodes (asked for %d)",
-				      lastNodeIndex - startFromNodeIndex + 1,
-				      numNodes);
-	}
+        if (lastNodeIndex >= getFullLength()) {
+            lastNodeIndex = getFullLength() - 1;
+            SoDebugError::postWarning(
+                "SoPath::copy", "Copying only %d nodes (asked for %d)",
+                lastNodeIndex - startFromNodeIndex + 1, numNodes);
+        }
 #endif /* DEBUG */
     }
 
@@ -569,7 +562,7 @@ SoPath::copy(int startFromNodeIndex, int numNodes) const
 
     newPath->setHead(getNode(startFromNodeIndex));
     for (i = startFromNodeIndex + 1; i <= lastNodeIndex; i++)
-	newPath->append(indices[i]);
+        newPath->append(indices[i]);
 
     return newPath;
 }
@@ -584,22 +577,22 @@ SoPath::copy(int startFromNodeIndex, int numNodes) const
 // Use: public
 
 int
-operator ==(const SoPath &p1, const SoPath &p2)
+operator==(const SoPath &p1, const SoPath &p2)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     if (p1.getFullLength() != p2.getFullLength())
-	return FALSE;
+        return FALSE;
 
     // Compare path nodes from bottom up since there is more
     // likelihood that they differ at the bottom. That means that
     // unequal paths will exit this loop sooner.
 
     for (i = p1.getFullLength() - 1; i >= 0; --i)
-	if (p1.nodes[i] != p2.nodes[i] || p1.indices[i] != p2.indices[i])
-	    return FALSE;
+        if (p1.nodes[i] != p2.nodes[i] || p1.indices[i] != p2.indices[i])
+            return FALSE;
 
     return TRUE;
 }
@@ -665,24 +658,24 @@ SoPath::insertIndex(SoNode *parent, int newIndex)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     // Find index of parent node in path
     for (i = 0; i < getFullLength(); i++)
-	if (nodes[i] == parent)
-	    break;
+        if (nodes[i] == parent)
+            break;
 
 #ifdef DEBUG
     if (i == getFullLength()) {
-	SoDebugError::post("(internal) SoPath::insertIndex",
-			   "Can't find parent node");
-	return;
+        SoDebugError::post("(internal) SoPath::insertIndex",
+                           "Can't find parent node");
+        return;
     }
 #endif /* DEBUG */
 
     // Increment index of next node if there is one and if necessary
     if (++i < getFullLength() && indices[i] >= newIndex)
-	++indices[i];
+        ++indices[i];
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -699,31 +692,31 @@ SoPath::removeIndex(SoNode *parent, int oldIndex)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     // Find index of parent node in path
     for (i = 0; i < getFullLength(); i++)
-	if (nodes[i] == parent)
-	    break;
+        if (nodes[i] == parent)
+            break;
 
 #ifdef DEBUG
     if (i == getFullLength()) {
-	SoDebugError::post("(internal) SoPath::removeIndex",
-			   "Can't find parent node");
-	return;
+        SoDebugError::post("(internal) SoPath::removeIndex",
+                           "Can't find parent node");
+        return;
     }
 #endif /* DEBUG */
 
     // If there is a next node
     if (++i < getFullLength()) {
 
-	// If the next node is the one being removed, truncate the path
-	if (indices[i] == oldIndex)
-	    truncate(i, FALSE);
+        // If the next node is the one being removed, truncate the path
+        if (indices[i] == oldIndex)
+            truncate(i, FALSE);
 
-	// Decrement index of next node if it is after the removed one
-	else if (indices[i] > oldIndex)
-	    --indices[i];
+        // Decrement index of next node if it is after the removed one
+        else if (indices[i] > oldIndex)
+            --indices[i];
     }
 }
 
@@ -741,32 +734,32 @@ SoPath::replaceIndex(SoNode *parent, int index, SoNode *newChild)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     // Find index of parent node in path
     for (i = 0; i < getFullLength(); i++)
-	if (nodes[i] == parent)
-	    break;
+        if (nodes[i] == parent)
+            break;
 
 #ifdef DEBUG
     if (i == getFullLength()) {
-	SoDebugError::post("(internal) SoPath::replaceIndex",
-			   "Can't find parent node");
-	return;
+        SoDebugError::post("(internal) SoPath::replaceIndex",
+                           "Can't find parent node");
+        return;
     }
 #endif /* DEBUG */
 
     // If there is a next node and it is the one being replaced, change it
     if (++i < getFullLength() && indices[i] == index) {
 
-	// The children of the new node are most likely different from
-	// those in the old one. So if the path continued below the
-	// old node, truncate it so the path won't believe that the
-	// old children are under the new node.
-	truncate(i, FALSE);
+        // The children of the new node are most likely different from
+        // those in the old one. So if the path continued below the
+        // old node, truncate it so the path won't believe that the
+        // old children are under the new node.
+        truncate(i, FALSE);
 
-	// Add the new node and same old index
-	append(newChild, index);
+        // Add the new node and same old index
+        append(newChild, index);
     }
 }
 
@@ -782,41 +775,41 @@ SoPath::write(SoWriteAction *writeAction) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i, j, index;
-    SoOutput	*out = writeAction->getOutput();
-    SoChildList	*children;
+    int          i, j, index;
+    SoOutput *   out = writeAction->getOutput();
+    SoChildList *children;
 
     if (writeHeader(out, FALSE, FALSE))
-	return;
+        return;
 
     if (getHead() != NULL) {
 
-	// Write out the head node
-	writeAction->traverse(getHead());
+        // Write out the head node
+        writeAction->traverse(getHead());
 
-	// Write number of indices (after head) first
-	if (! out->isBinary())
-	    out->indent();
-	out->write(getFullLength() - 1);
-	if (! out->isBinary())
-	    out->write('\n');
+        // Write number of indices (after head) first
+        if (!out->isBinary())
+            out->indent();
+        out->write(getFullLength() - 1);
+        if (!out->isBinary())
+            out->write('\n');
 
-	for (i = 1; i < getFullLength(); i++) {
+        for (i = 1; i < getFullLength(); i++) {
 
-	    // Adjust index if necessary by checking if nodes will be
-	    // written or not
-	    index = indices[i];
-	    children = nodes[i-1]->getChildren();
-	    for (j = 0; j < indices[i]; j++)
-		if (! (*children)[j]->shouldWrite())
-		    --index;
+            // Adjust index if necessary by checking if nodes will be
+            // written or not
+            index = indices[i];
+            children = nodes[i - 1]->getChildren();
+            for (j = 0; j < indices[i]; j++)
+                if (!(*children)[j]->shouldWrite())
+                    --index;
 
-	    if (! out->isBinary())
-		out->indent();
-	    out->write(index);
-	    if (! out->isBinary())
-		out->write('\n');
-	}
+            if (!out->isBinary())
+                out->indent();
+            out->write(index);
+            if (!out->isBinary())
+                out->write('\n');
+        }
     }
 
     writeFooter(out);
@@ -840,65 +833,65 @@ SoPath::isRelevantNotification(SoNotList *list) const
     // any) that is not on the path. Stop when we reach the first
     // (in time) record that was at a node in the graph.
 
-    const SoNotRec	*rec = list->getLastRec();
-    const SoNotRec	*prevRec = NULL;
-    int			curIndex = 0;
-    SbBool		offPath  = FALSE;
+    const SoNotRec *rec = list->getLastRec();
+    const SoNotRec *prevRec = NULL;
+    int             curIndex = 0;
+    SbBool          offPath = FALSE;
 
     while (rec != NULL && curIndex < getLength()) {
 
-	// Stop if the node in the current record is not the next node
-	// in the path
-	if (rec->getBase() != getNode(curIndex)) {
-	    offPath = TRUE;
-	    break;
-	}
+        // Stop if the node in the current record is not the next node
+        // in the path
+        if (rec->getBase() != getNode(curIndex)) {
+            offPath = TRUE;
+            break;
+        }
 
-	// Go to the next record and path node, IF we're following a
-	// PARENT notification
-	if (rec->getPrevious() != NULL &&
-	    rec->getPrevious()->getType() != SoNotRec::PARENT) {
-	    break;
-	}
-	prevRec = rec;
-	rec = rec->getPrevious();
+        // Go to the next record and path node, IF we're following a
+        // PARENT notification
+        if (rec->getPrevious() != NULL &&
+            rec->getPrevious()->getType() != SoNotRec::PARENT) {
+            break;
+        }
+        prevRec = rec;
+        rec = rec->getPrevious();
 
-	curIndex++;
+        curIndex++;
     }
 
     // If not all notified nodes are on the path, we have to do some
     // extra testing
     if (offPath) {
 
-	const SoNode	*node;
-	int		index;
+        const SoNode *node;
+        int           index;
 
-	// The "rec" record points to a node that is off the path.
-	// Find out the index of this node in the parent node, which
-	// is pointed to by the previous record (which is guaranteed
-	// to exist and be on the path).
-	node = (const SoNode *) rec->getBase();
-	index= ((const SoNode *)prevRec->getBase())->getChildren()->find(node);
+        // The "rec" record points to a node that is off the path.
+        // Find out the index of this node in the parent node, which
+        // is pointed to by the previous record (which is guaranteed
+        // to exist and be on the path).
+        node = (const SoNode *)rec->getBase();
+        index = ((const SoNode *)prevRec->getBase())->getChildren()->find(node);
 
-	// If the node is to the right of the path, the change does
-	// not affect the path
-	if (index > getIndex(curIndex))
-	    return FALSE;
+        // If the node is to the right of the path, the change does
+        // not affect the path
+        if (index > getIndex(curIndex))
+            return FALSE;
 
-	// If it is to the left, it doesn't affect the path if any of
-	// the notification records go through a separator-type object:
-	else {
-	    while (TRUE) {
-		if (! node->affectsState())
-		    return FALSE;
+        // If it is to the left, it doesn't affect the path if any of
+        // the notification records go through a separator-type object:
+        else {
+            while (TRUE) {
+                if (!node->affectsState())
+                    return FALSE;
 
-		rec = rec->getPrevious();
-		if (rec == NULL || rec->getType() != SoNotRec::PARENT)
-		    break;
+                rec = rec->getPrevious();
+                if (rec == NULL || rec->getType() != SoNotRec::PARENT)
+                    break;
 
-		node = (const SoNode *) rec->getBase();
-	    }
-	}
+                node = (const SoNode *)rec->getBase();
+            }
+        }
     }
 
     // If we made it this far, it's a relevant notification
@@ -928,10 +921,10 @@ SoPath::append(SoNode *node, int index)
 
     // Tell the childlist of the node that the path cares about it
     if (doAuditors) {
-	SoChildList *childList = node->getChildren();
-	if (childList != NULL) {
-	    childList->addPathAuditor(this);
-	}
+        SoChildList *childList = node->getChildren();
+        if (childList != NULL) {
+            childList->addPathAuditor(this);
+        }
     }
 }
 
@@ -964,34 +957,34 @@ SoPath::readInstance(SoInput *in, unsigned short /* flags not used */)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool	ok;
-    SoBase	*rootBase;
+    SbBool  ok;
+    SoBase *rootBase;
 
     // Read head node
     ok = SoBase::read(in, rootBase, SoNode::getClassTypeId());
 
     if (ok && rootBase != NULL) {
-	int	numIndices, index, i;
+        int numIndices, index, i;
 
-	setHead((SoNode *) rootBase);
+        setHead((SoNode *)rootBase);
 
-	// Read indices of rest of nodes in path
-	if (! in->read(numIndices)) {
-	    SoReadError::post(in, "Couldn't read number of indices in path");
-	    ok = FALSE;
-	}
+        // Read indices of rest of nodes in path
+        if (!in->read(numIndices)) {
+            SoReadError::post(in, "Couldn't read number of indices in path");
+            ok = FALSE;
+        }
 
-	else
-	    for (i = 0; i < numIndices; i++) {
+        else
+            for (i = 0; i < numIndices; i++) {
 
-		if (! in->read(index)) {
-		    SoReadError::post(in, "Couldn't read indices of path");
-		    ok = FALSE;
-		    break;
-		}
+                if (!in->read(index)) {
+                    SoReadError::post(in, "Couldn't read indices of path");
+                    ok = FALSE;
+                    break;
+                }
 
-		append(index);
-	    }
+                append(index);
+            }
     }
 
     return ok;
@@ -1010,34 +1003,34 @@ SoPath::truncate(int start, SbBool doNotify)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
 #ifdef DEBUG
     if (start < 0 || (start > 0 && start >= getFullLength())) {
-	SoDebugError::post("SoPath::truncate", "Starting index is invalid");
-	return;
+        SoDebugError::post("SoPath::truncate", "Starting index is invalid");
+        return;
     }
 #endif /* DEBUG */
 
     // Remove path from all affected nodes' auditors lists
     if (doAuditors)
-	for (i = start; i < getFullLength(); i++) {
-	    SoChildList *childList = nodes[i]->getChildren();
-	    if (childList != NULL) {
-		childList->removePathAuditor(this);
-	    }
-	}
+        for (i = start; i < getFullLength(); i++) {
+            SoChildList *childList = nodes[i]->getChildren();
+            if (childList != NULL) {
+                childList->removePathAuditor(this);
+            }
+        }
 
     // Truncate both lists
     nodes.truncate(start);
     indices.resize(start);
 
     if (start < minNumPublic) {
-	minNumPublic = numPublic = start;
+        minNumPublic = numPublic = start;
     }
 
     if (doAuditors && doNotify)
-	startNotify();
+        startNotify();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1056,11 +1049,8 @@ SoPath::truncate(int start, SbBool doNotify)
 SoFullPath::~SoFullPath()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 //////////////////////////////////////////////////////////////////////
-
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1070,8 +1060,6 @@ SoFullPath::~SoFullPath()
 //
 ////////////////////////////////////////////////////////////////////////
 
-
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -1079,11 +1067,11 @@ SoFullPath::~SoFullPath()
 //
 // Use: public
 
-SoLightPath::SoLightPath(int approxLength) : indices(approxLength)
+SoLightPath::SoLightPath(int approxLength)
+    : indices(approxLength)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1115,17 +1103,16 @@ SoLightPath::setHead(SoNode *node)
     // Clear out existing nodes
     truncate(0);
 
-    // The head index value is set to -1, it should never be referenced. 
+    // The head index value is set to -1, it should never be referenced.
     indices.push_back(-1);
     headNode = node;
-
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
 //    fills in values for a full (Temp) path that is a copy of
-//    all of this LightPath. The temp path should already be constructed. 
+//    all of this LightPath. The temp path should already be constructed.
 //
 // Use: public
 
@@ -1134,26 +1121,25 @@ SoLightPath::makeTempPath(SoTempPath *tmpPath) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		i;
+    int i;
 
-    if (tmpPath == NULL){
+    if (tmpPath == NULL) {
         SoDebugError::post("SoLightPath::makeTempPath",
-			 "Error, NULL SoTempPath");
-	return;
-	}
+                           "Error, NULL SoTempPath");
+        return;
+    }
 
     tmpPath->setHead(headNode);
-    for (i = 1; i < getFullLength(); i++)
-	{
+    for (i = 1; i < getFullLength(); i++) {
 #ifdef DEBUG
-	if (indices[i] < 0 ) {
+        if (indices[i] < 0) {
             SoDebugError::post("SoLightPath::makeTempPath",
-			 "Error, invalid indices of child");
-	    return;
-	    }
+                               "Error, invalid indices of child");
+            return;
+        }
 #endif
-	tmpPath->append(indices[i]);
-	}
+        tmpPath->append(indices[i]);
+    }
     return;
 }
 
@@ -1170,19 +1156,19 @@ SoLightPath::getNode(int i) const
 //
 /////////////////////////////////////////////////////////////
 {
-    SoNode * curNode = headNode;
+    SoNode *     curNode = headNode;
     SoChildList *children;
-    for(int j=0; j<i; j++){
-	//traverse all (even hidden) children
+    for (int j = 0; j < i; j++) {
+        // traverse all (even hidden) children
         children = curNode->getChildren();
 #ifdef DEBUG
         // Make sure it's valid:
-	if(children == NULL || j>= getFullLength()) {
+        if (children == NULL || j >= getFullLength()) {
             SoDebugError::post("SoLightPath::getNode",
-			 "Error, no child at level");
-	}
+                               "Error, no child at level");
+        }
 #endif
-	curNode = (*children)[indices[j+1]]; 
+        curNode = (*children)[indices[j + 1]];
     }
     return curNode;
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -89,8 +89,8 @@ SoPendulum::SoPendulum()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_NODE_CONSTRUCTOR(SoPendulum);
-    SO_NODE_ADD_FIELD(rotation0, (SbRotation(0,0,0,1)));
-    SO_NODE_ADD_FIELD(rotation1, (SbRotation(0,0,0,1)));
+    SO_NODE_ADD_FIELD(rotation0, (SbRotation(0, 0, 0, 1)));
+    SO_NODE_ADD_FIELD(rotation1, (SbRotation(0, 0, 0, 1)));
     SO_NODE_ADD_FIELD(speed, (1));
     SO_NODE_ADD_FIELD(on, (TRUE));
 
@@ -169,15 +169,14 @@ SoPendulum::write(SoWriteAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool 		save = rotation.isConnectionEnabled();
-    SoEngineOutput	*rotationSource;
+    SbBool          save = rotation.isConnectionEnabled();
+    SoEngineOutput *rotationSource;
 
     // if the connection is to the internal engine, disable it
-    if (rotation.isConnected() &&
-	rotation.getConnectedEngine(rotationSource) &&
-	rotationSource == internalConnection) {
+    if (rotation.isConnected() && rotation.getConnectedEngine(rotationSource) &&
+        rotationSource == internalConnection) {
 
-	rotation.enableConnection(FALSE);
+        rotation.enableConnection(FALSE);
     }
 
     SoRotation::write(action);
@@ -202,11 +201,10 @@ SoPendulum::notify(SoNotList *list)
     SoNotRec *rec = list->getFirstRec();
 
     // only interested in a field-to-container notification
-    if (rec->getType() == SoNotRec::CONTAINER &&
-	rec->getBase() == this &&
-	list->getLastField() == &rotation) {
+    if (rec->getType() == SoNotRec::CONTAINER && rec->getBase() == this &&
+        list->getLastField() == &rotation) {
 
-	rotationSensor->schedule();
+        rotationSensor->schedule();
     }
 
     SoRotation::notify(list);
@@ -224,31 +222,31 @@ SoPendulum::rotationSensorCB(void *data, SoSensor *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoPendulum *pendulum = (SoPendulum *) data;
-    SbVec4f	q, q1, q0;
-    pendulum->rotation.getValue().getValue(q[0],q[1],q[2],q[3]);
-    pendulum->rotation0.getValue().getValue(q0[0],q0[1],q0[2],q0[3]);
-    pendulum->rotation1.getValue().getValue(q1[0],q1[1],q1[2],q1[3]);
+    SoPendulum *pendulum = (SoPendulum *)data;
+    SbVec4f     q, q1, q0;
+    pendulum->rotation.getValue().getValue(q[0], q[1], q[2], q[3]);
+    pendulum->rotation0.getValue().getValue(q0[0], q0[1], q0[2], q0[3]);
+    pendulum->rotation1.getValue().getValue(q1[0], q1[1], q1[2], q1[3]);
 
     // find the value of the interpolant that would
     // line up with q.  See where q projects onto the line
     // from q0 to q1
-    SbVec4f	diff = q1 - q0;
-    float	len = diff.length(), alpha;
+    SbVec4f diff = q1 - q0;
+    float   len = diff.length(), alpha;
     if (len == 0)
-	alpha = 0;
+        alpha = 0;
     else {
-	alpha = (q - q0).dot(diff)/(len*len);
-	if (alpha > 1)
-	    alpha = 1;
-	if (alpha < 0)
-	    alpha = 0;
+        alpha = (q - q0).dot(diff) / (len * len);
+        if (alpha > 1)
+            alpha = 1;
+        if (alpha < 0)
+            alpha = 0;
     }
 
     float a = pendulum->calc->a[0];
     float b = pendulum->calc->b[0];
     // invert the expression: alpha = .5 + .5 sin(a*b*2*PI + c)
-    pendulum->calc->c.setValue(std::asin(2*alpha-1) - a*b*2*M_PI);
+    pendulum->calc->c.setValue(std::asin(2 * alpha - 1) - a * b * 2 * M_PI);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -263,13 +261,13 @@ SoPendulum::onSensorCB(void *data, SoSensor *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoPendulum *pendulum = (SoPendulum *) data;
+    SoPendulum *pendulum = (SoPendulum *)data;
 
     if (pendulum->on.getValue()) {
-	// if turned on, force the internal connection to be made and enabled,
-	// no matter what sort of mucking has happened to it.
-	pendulum->rotation.enableConnection(TRUE);
-	pendulum->rotation.connectFrom(&pendulum->interp->output);
-	pendulum->rotation.getConnectedEngine(pendulum->internalConnection);
+        // if turned on, force the internal connection to be made and enabled,
+        // no matter what sort of mucking has happened to it.
+        pendulum->rotation.enableConnection(TRUE);
+        pendulum->rotation.connectFrom(&pendulum->interp->output);
+        pendulum->rotation.getConnectedEngine(pendulum->internalConnection);
     }
 }

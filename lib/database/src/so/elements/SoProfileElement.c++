@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -69,8 +69,7 @@ SO_ELEMENT_SOURCE(SoProfileElement);
 // Use: internal
 
 void
-SoProfileElement::initClass()
-{
+SoProfileElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoProfileElement, SoAccumulatedElement);
 }
 
@@ -84,8 +83,7 @@ SoProfileElement::initClass()
 SoProfileElement::~SoProfileElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -114,9 +112,9 @@ SoProfileElement::add(SoState *state, SoProfile *profile)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoProfileElement	*elt;
+    SoProfileElement *elt;
 
-    elt = (SoProfileElement *) getElement(state, classStackIndex);
+    elt = (SoProfileElement *)getElement(state, classStackIndex);
 
     if (elt != NULL && profile != NULL) {
 
@@ -125,10 +123,10 @@ SoProfileElement::add(SoState *state, SoProfile *profile)
         // truncate the profile list before adding this one.
         if (profile->linkage.getValue() == START_FIRST) {
             elt->profiles.truncate(0);
-	    elt->clearNodeIds();
-	}
-	elt->profiles.append(profile);
-	elt->addNodeId(profile);
+            elt->clearNodeIds();
+        }
+        elt->profiles.append(profile);
+        elt->addNodeId(profile);
     }
 }
 
@@ -145,8 +143,7 @@ SoProfileElement::get(SoState *state)
 ////////////////////////////////////////////////////////////////////////
 {
     const SoProfileElement *elt;
-    elt = (const SoProfileElement *)
-	getConstElement(state, classStackIndex);
+    elt = (const SoProfileElement *)getConstElement(state, classStackIndex);
 
     return elt->profiles;
 }
@@ -165,8 +162,8 @@ SoProfileElement::push(SoState *)
 ////////////////////////////////////////////////////////////////////////
 {
     SoProfileElement *elt;
-    elt = (SoProfileElement *) getNextInStack();
-    
+    elt = (SoProfileElement *)getNextInStack();
+
     // Rely on SoNodeList::operator = to do the right thing...
     profiles = elt->profiles;
     nodeIds = elt->nodeIds;
@@ -183,13 +180,10 @@ SoProfileElement::push(SoState *)
 
 #ifdef DEBUG
 void
-SoProfileElement::print(FILE *fp) const
-{
+SoProfileElement::print(FILE *fp) const {
     SoAccumulatedElement::print(fp);
 }
 #else  /* DEBUG */
 void
-SoProfileElement::print(FILE *) const
-{
-}
+SoProfileElement::print(FILE *) const {}
 #endif /* DEBUG */

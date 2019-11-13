@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,10 +64,10 @@ SO_ELEMENT_SOURCE(SoClipPlaneElement);
 //
 
 struct So_ClipPlane {
-    SbPlane	objPlane;	// World-space clipping plane
-    SbPlane	worldPlane;	// World-space clipping plane
-    SbMatrix	objToWorld;	// Converts object space to world space
-    SbBool	worldPlaneValid;// TRUE if worldPlane was computed
+    SbPlane  objPlane;        // World-space clipping plane
+    SbPlane  worldPlane;      // World-space clipping plane
+    SbMatrix objToWorld;      // Converts object space to world space
+    SbBool   worldPlaneValid; // TRUE if worldPlane was computed
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -78,8 +78,7 @@ struct So_ClipPlane {
 // Use: internal
 
 void
-SoClipPlaneElement::initClass()
-{
+SoClipPlaneElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoClipPlaneElement, SoAccumulatedElement);
 }
 
@@ -93,8 +92,7 @@ SoClipPlaneElement::initClass()
 SoClipPlaneElement::~SoClipPlaneElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -124,16 +122,16 @@ SoClipPlaneElement::add(SoState *state, SoNode *node, const SbPlane &plane)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoClipPlaneElement	*elt;
+    SoClipPlaneElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoClipPlaneElement *) getElement(state, classStackIndex);
+    elt = (SoClipPlaneElement *)getElement(state, classStackIndex);
 
     if (elt != NULL) {
-	elt->addToElt(plane, SoModelMatrixElement::get(state));
+        elt->addToElt(plane, SoModelMatrixElement::get(state));
 
-	// Update node id list in element
-	elt->addNodeId(node);
+        // Update node id list in element
+        elt->addNodeId(node);
     }
 }
 
@@ -151,7 +149,7 @@ SoClipPlaneElement::push(SoState *)
 ////////////////////////////////////////////////////////////////////////
 {
     const SoClipPlaneElement *elt =
-	(const SoClipPlaneElement *) getNextInStack();
+        (const SoClipPlaneElement *)getNextInStack();
 
     // Use SbPList::operator = to copy the pointers to the existing
     // planes. Since the previous element can't be destroyed before
@@ -178,7 +176,7 @@ SoClipPlaneElement::pop(SoState *, const SoElement *prevTopElement)
 ////////////////////////////////////////////////////////////////////////
 {
     const SoClipPlaneElement *prevElt =
-	(const SoClipPlaneElement *) prevTopElement;
+        (const SoClipPlaneElement *)prevTopElement;
 
     // Free up any plane structures that were created by prevElt
     for (size_t i = prevElt->startIndex; i < prevElt->planes.size(); i++) {
@@ -198,8 +196,7 @@ SoClipPlaneElement::getInstance(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (const SoClipPlaneElement *)
-	getConstElement(state, classStackIndex);
+    return (const SoClipPlaneElement *)getConstElement(state, classStackIndex);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -232,20 +229,20 @@ SoClipPlaneElement::get(int index, SbBool inWorldSpace) const
 {
 #ifdef DEBUG
     if (index < 0 || index >= planes.size())
-	SoDebugError::post("SoClipPlaneElement::get",
-			   "Index (%d) is out of range 0 - %d",
-               index, planes.size() - 1);
+        SoDebugError::post("SoClipPlaneElement::get",
+                           "Index (%d) is out of range 0 - %d", index,
+                           planes.size() - 1);
 #endif /* DEBUG */
 
     So_ClipPlane *plane = planes[index];
 
-    if (! inWorldSpace)
-	return plane->objPlane;
+    if (!inWorldSpace)
+        return plane->objPlane;
 
     // Transform plane into world space if necessary
-    if (! plane->worldPlaneValid) {
-	plane->worldPlane = plane->objPlane;
-	plane->worldPlane.transform(plane->objToWorld);
+    if (!plane->worldPlaneValid) {
+        plane->worldPlane = plane->objPlane;
+        plane->worldPlane.transform(plane->objToWorld);
     }
     return plane->worldPlane;
 }
@@ -261,15 +258,12 @@ SoClipPlaneElement::get(int index, SbBool inWorldSpace) const
 
 #ifdef DEBUG
 void
-SoClipPlaneElement::print(FILE *fp) const
-{
+SoClipPlaneElement::print(FILE *fp) const {
     SoAccumulatedElement::print(fp);
 }
 #else  /* DEBUG */
 void
-SoClipPlaneElement::print(FILE *) const
-{
-}
+SoClipPlaneElement::print(FILE *) const {}
 #endif /* DEBUG */
 
 ////////////////////////////////////////////////////////////////////////
@@ -280,16 +274,15 @@ SoClipPlaneElement::print(FILE *) const
 // Use: protected, virtual
 
 void
-SoClipPlaneElement::addToElt(const SbPlane &plane,
-			     const SbMatrix &modelMatrix)
+SoClipPlaneElement::addToElt(const SbPlane &plane, const SbMatrix &modelMatrix)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     So_ClipPlane *newPlane = new So_ClipPlane;
 
-    newPlane->objPlane		= plane;
-    newPlane->objToWorld	= modelMatrix;
-    newPlane->worldPlaneValid	= FALSE;
+    newPlane->objPlane = plane;
+    newPlane->objToWorld = modelMatrix;
+    newPlane->worldPlaneValid = FALSE;
 
     planes.push_back(newPlane);
 }

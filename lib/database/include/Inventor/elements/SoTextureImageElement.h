@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TEXTURE_IMAGE_ELEMENT
-#define  _SO_TEXTURE_IMAGE_ELEMENT
+#ifndef _SO_TEXTURE_IMAGE_ELEMENT
+#define _SO_TEXTURE_IMAGE_ELEMENT
 
 #include <Inventor/SbColor.h>
 #include <Inventor/SbImage.h>
@@ -68,51 +68,48 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoTextureImageElement : public SoReplacedElement {
+SoEXTENDER
+class SoTextureImageElement : public SoReplacedElement {
 
     SO_ELEMENT_HEADER(SoTextureImageElement);
 
   public:
     // Initializes element.
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // sets the current image, wrap, and model:
-    static void		set(SoState *state, SoNode *node,
-                const SbImage &image,
-			    int wrapS, int wrapT, int model,
-			    const SbColor &blendColor);
+    static void set(SoState *state, SoNode *node, const SbImage &image,
+                    int wrapS, int wrapT, int model, const SbColor &blendColor);
 
-    static const SbImage & get(SoState *state,
-                    int &wrapS, int &wrapT, int &model,
-				    SbColor &blendColor);
+    static const SbImage &get(SoState *state, int &wrapS, int &wrapT,
+                              int &model, SbColor &blendColor);
 
     // Deprecated
     static const unsigned char *get(SoState *state, SbVec2s &size,
-                    int &numComponents, int &wrapS,
-                    int &wrapT, int &model,
-                    SbColor &blendColor);
+                                    int &numComponents, int &wrapS, int &wrapT,
+                                    int &model, SbColor &blendColor);
 
     // Returns TRUE if the texture contains transparency info
-    static SbBool	containsTransparency(SoState *state);
+    static SbBool containsTransparency(SoState *state);
 
     // Deprecated - Returns the default texture image
     static const unsigned char *getDefault(SbVec2s &s, int &nc);
 
     // Print info about image for debugging
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the class
-    static void		initClass();
+    static void initClass();
 
   protected:
-    virtual void	setElt(const SbImage &image,
-			       int wrapS, int wrapT, int model,
-			       const SbColor &blendColor);
+    virtual void setElt(const SbImage &image, int wrapS, int wrapT, int model,
+                        const SbColor &blendColor);
 
     SbImage image;
-    int		wrapS, wrapT, model;
-    SbColor	blendColor;
+    int     wrapS, wrapT, model;
+    SbColor blendColor;
 
     virtual ~SoTextureImageElement();
 };

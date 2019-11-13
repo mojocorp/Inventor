@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_SHAPE_HINTS_
-#define  _SO_SHAPE_HINTS_
+#ifndef _SO_SHAPE_HINTS_
+#define _SO_SHAPE_HINTS_
 
 #include <Inventor/elements/SoGLShapeHintsElement.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -85,50 +85,52 @@ class SoShapeHints : public SoNode {
     // vertices of all faces is known to be consistent when viewed
     // from "outside" shape or not.
     enum VertexOrdering {
-	UNKNOWN_ORDERING = SoShapeHintsElement::UNKNOWN_ORDERING,
-	CLOCKWISE	 = SoShapeHintsElement::CLOCKWISE,
-	COUNTERCLOCKWISE = SoShapeHintsElement::COUNTERCLOCKWISE
+        UNKNOWN_ORDERING = SoShapeHintsElement::UNKNOWN_ORDERING,
+        CLOCKWISE = SoShapeHintsElement::CLOCKWISE,
+        COUNTERCLOCKWISE = SoShapeHintsElement::COUNTERCLOCKWISE
     };
 
     // Hints about entire shape: if shape is known to be a solid
     // object, as opposed to a surface.
     enum ShapeType {
-	UNKNOWN_SHAPE_TYPE = SoShapeHintsElement::UNKNOWN_SHAPE_TYPE,
-	SOLID		   = SoShapeHintsElement::SOLID
+        UNKNOWN_SHAPE_TYPE = SoShapeHintsElement::UNKNOWN_SHAPE_TYPE,
+        SOLID = SoShapeHintsElement::SOLID
     };
 
     // Hints about faces of shape: if all faces are known to be convex
     // or not.
     enum FaceType {
-	UNKNOWN_FACE_TYPE = SoShapeHintsElement::UNKNOWN_FACE_TYPE,
-	CONVEX		  = SoShapeHintsElement::CONVEX
+        UNKNOWN_FACE_TYPE = SoShapeHintsElement::UNKNOWN_FACE_TYPE,
+        CONVEX = SoShapeHintsElement::CONVEX
     };
 
     // Fields
-    SoSFEnum		vertexOrdering;	// Ordering of face vertices
-    SoSFEnum		shapeType;	// Info about shape geometry
-    SoSFEnum		faceType;	// Info about face geometry
-    SoSFFloat		creaseAngle;	// Smallest angle for sharp edge
+    SoSFEnum  vertexOrdering; // Ordering of face vertices
+    SoSFEnum  shapeType;      // Info about shape geometry
+    SoSFEnum  faceType;       // Info about face geometry
+    SoSFFloat creaseAngle;    // Smallest angle for sharp edge
 
     // Constructor
     SoShapeHints();
 
-  SoEXTENDER public:
-    virtual void	doAction(SoAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	callback(SoCallbackAction *action);
-    virtual void	pick(SoPickAction *action);
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
+    SoEXTENDER
+  public:
+    virtual void doAction(SoAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void pick(SoPickAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     virtual ~SoShapeHints();
 
   private:
     // Does regular doAction stuff, also sets shapehints element
-    void		doAction2(SoAction *action);
+    void doAction2(SoAction *action);
 };
 
 #endif /* _SO_SHAPE_HINTS_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_SEPARATOR_
-#define  _SO_SEPARATOR_
+#ifndef _SO_SEPARATOR_
+#define _SO_SEPARATOR_
 
 #include <Inventor/nodes/SoGroup.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -78,18 +78,17 @@ class SoSeparator : public SoGroup {
     SO_NODE_HEADER(SoSeparator);
 
   public:
-
-    enum CacheEnabled {		// Possible values for caching
-	OFF,			// Never build or use a cache
-	ON,			// Always try to build a cache
-	AUTO			// Decide based on some heuristic
+    enum CacheEnabled { // Possible values for caching
+        OFF,            // Never build or use a cache
+        ON,             // Always try to build a cache
+        AUTO            // Decide based on some heuristic
     };
 
     // Fields
-    SoSFEnum renderCaching;	// OFF/ON/AUTO
-    SoSFEnum boundingBoxCaching;// OFF/ON/AUTO
-    SoSFEnum renderCulling;	// OFF/ON/AUTO
-    SoSFEnum pickCulling;	// OFF/ON/AUTO
+    SoSFEnum renderCaching;      // OFF/ON/AUTO
+    SoSFEnum boundingBoxCaching; // OFF/ON/AUTO
+    SoSFEnum renderCulling;      // OFF/ON/AUTO
+    SoSFEnum pickCulling;        // OFF/ON/AUTO
 
     // Constructor
     SoSeparator();
@@ -98,7 +97,7 @@ class SoSeparator : public SoGroup {
     SoSeparator(int nChildren);
 
     // Overrides default method on SoNode
-    virtual SbBool	affectsState() const;
+    virtual SbBool affectsState() const;
 
     // Set/get the number of render caches each separator will have
     // (2, by default).  The more render caches each separator is
@@ -106,31 +105,33 @@ class SoSeparator : public SoGroup {
     // affects separators that are created after it is called, not
     // separators that were created before.  Setting zero render
     // caches globally turns off render caching.
-    static void		setNumRenderCaches(int howMany);
-    static int		getNumRenderCaches();
+    static void setNumRenderCaches(int howMany);
+    static int  getNumRenderCaches();
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Implement actions
-    virtual void	doAction(SoAction *action);
-    virtual void	callback(SoCallbackAction *action);
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
-    virtual void	getMatrix(SoGetMatrixAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	handleEvent(SoHandleEventAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
-    virtual void	search(SoSearchAction *action);
+    virtual void doAction(SoAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void getMatrix(SoGetMatrixAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void handleEvent(SoHandleEventAction *action);
+    virtual void rayPick(SoRayPickAction *action);
+    virtual void search(SoSearchAction *action);
 
     // These methods make render traversal faster by implementing
     // different rendering paths corresponding to different action
     // path codes.
-    virtual void	GLRenderBelowPath(SoGLRenderAction *action);
-    virtual void	GLRenderInPath(SoGLRenderAction *action);
-    virtual void	GLRenderOffPath(SoGLRenderAction *action);
+    virtual void GLRenderBelowPath(SoGLRenderAction *action);
+    virtual void GLRenderInPath(SoGLRenderAction *action);
+    virtual void GLRenderOffPath(SoGLRenderAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
-    virtual void	notify(SoNotList *list);
+    virtual void notify(SoNotList *list);
 
   protected:
     // Returns TRUE if this separator can be culled because it is
@@ -138,19 +139,19 @@ class SoSeparator : public SoGroup {
     // GLRenderAction->getCullTestResults() method, and track the
     // results of previous cull tests to save work when we know we're
     // completely inside the view volume.
-    virtual SbBool	cullTest(SoGLRenderAction *action, int &cullResults);
+    virtual SbBool cullTest(SoGLRenderAction *action, int &cullResults);
 
-    virtual SbBool	readInstance(SoInput *in, unsigned short flags);
+    virtual SbBool readInstance(SoInput *in, unsigned short flags);
 
     virtual ~SoSeparator();
 
   private:
     // Each separator that is created will contain up to this many
     // render caches.
-    static int		numRenderCaches;
+    static int numRenderCaches;
 
-    SoBoundingBoxCache	*bboxCache;	// Cache for bounding boxes
-    SoGLCacheList	*cacheList;	// Caches for GL rendering
+    SoBoundingBoxCache *bboxCache; // Cache for bounding boxes
+    SoGLCacheList *     cacheList; // Caches for GL rendering
 };
 
 #endif /* _SO_SEPARATOR_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_RAY_PICK_ACTION_
-#define  _SO_RAY_PICK_ACTION_
+#ifndef _SO_RAY_PICK_ACTION_
+#define _SO_RAY_PICK_ACTION_
 
 #include <Inventor/SbLine.h>
 #include <Inventor/SbViewVolume.h>
@@ -102,15 +102,15 @@ class SoRayPickAction : public SoPickAction {
     // Sets the viewport-space point through which the ray passes.
     // Viewport coordinates range from (0,0) at the lower left to
     // (width-1,height-1) at the upper right
-    void		setPoint(const SbVec2s &viewportPoint);
+    void setPoint(const SbVec2s &viewportPoint);
 
     // Sets the viewport point in normalized coordinates, which range
     // from (0,0) at the lower left to (1,1) at the upper right
-    void		setNormalizedPoint(const SbVec2f &normPoint);
+    void setNormalizedPoint(const SbVec2f &normPoint);
 
     // Set the radius (in pixels) around the point. This is used when
     // testing the ray against lines and points.
-    void		setRadius(float radiusInPixels);
+    void setRadius(float radiusInPixels);
 
     // Set a world-space ray along which to pick, instead of using a
     // viewport point and radius. The ray is defined as a starting
@@ -122,13 +122,12 @@ class SoRayPickAction : public SoPickAction {
     // (start+direction) along the ray. These distances can be used to
     // achieve near and far plane clipping. A negative distance (such
     // as the default values) means disable clipping to that plane.
-    void		setRay(const SbVec3f &start, const SbVec3f &direction,
-			       float nearDistance = -1.0,
-			       float farDistance = -1.0);
+    void setRay(const SbVec3f &start, const SbVec3f &direction,
+                float nearDistance = -1.0, float farDistance = -1.0);
 
     // Set/return whether we are picking all objects, or just the closest one
-    void		setPickAll(SbBool flag)		{ pickAll = flag; }
-    SbBool		isPickAll() const		{ return pickAll;     }
+    void   setPickAll(SbBool flag) { pickAll = flag; }
+    SbBool isPickAll() const { return pickAll; }
 
     //////////////////////////////////////////////////////////////////
     //
@@ -136,23 +135,23 @@ class SoRayPickAction : public SoPickAction {
     //
 
     // Accesses list of picked points
-    const SoPickedPointList &getPickedPointList() const  { return ptList; }
+    const SoPickedPointList &getPickedPointList() const { return ptList; }
 
     // Returns the indexed picked point from the list
-    SoPickedPoint *	getPickedPoint(int index = 0) const;
+    SoPickedPoint *getPickedPoint(int index = 0) const;
 
-  SoEXTENDER public:
-
+    SoEXTENDER
+  public:
     // If a ray was not defined with setRay(), this causes the world
     // space pick ray to be computed from the screen space point and
     // radius, using the current view specification from the state.
     // This is typically done when a camera is encountered during
     // traversal.
-    void		computeWorldSpaceRay();
+    void computeWorldSpaceRay();
 
     // This returns TRUE if the action has had a world space ray set
     // or computed
-    SbBool		hasWorldSpaceRay() const;
+    SbBool hasWorldSpaceRay() const;
 
     // This is called by shapes to set up object space picking. It
     // uses the current state matrices to determine how to map between
@@ -161,8 +160,8 @@ class SoRayPickAction : public SoPickAction {
     // The second form takes a matrix to concatenate with the current
     // objToWorld matrix. It can be used, for example, if a shape has
     // sizing or positioning info built into it.
-    void		setObjectSpace();
-    void		setObjectSpace(const SbMatrix &matrix);
+    void setObjectSpace();
+    void setObjectSpace(const SbMatrix &matrix);
 
     // These intersect the current object-space ray with a variety of
     // primitives: triangle, line, point, bounding-box. Intersection
@@ -174,25 +173,22 @@ class SoRayPickAction : public SoPickAction {
 
     // Triangle: returns intersection point, barycentric coordinates,
     // and whether the front side (defined by right-hand-rule) was hit.
-    SbBool		intersect(const SbVec3f &v0,
-				  const SbVec3f &v1,
-				  const SbVec3f &v2,
-				  SbVec3f &intersection, SbVec3f &barycentric,
-				  SbBool &front) const;
+    SbBool intersect(const SbVec3f &v0, const SbVec3f &v1, const SbVec3f &v2,
+                     SbVec3f &intersection, SbVec3f &barycentric,
+                     SbBool &front) const;
 
     // Line:
-    SbBool              intersect(const SbVec3f &v0, const SbVec3f &v1,
-				  SbVec3f &intersection) const;
+    SbBool intersect(const SbVec3f &v0, const SbVec3f &v1,
+                     SbVec3f &intersection) const;
 
     // Point:
-    SbBool              intersect(const SbVec3f &point) const;
+    SbBool intersect(const SbVec3f &point) const;
 
     // Bounding box: just return whether the ray intersects it. If
     // useFullViewVolume is TRUE, it intersects the picking view
     // volume with the box. Otherwise, it uses just the picking ray,
     // which is faster.
-    SbBool              intersect(const SbBox3f &box,
-				  SbBool useFullViewVolume = TRUE);
+    SbBool intersect(const SbBox3f &box, SbBool useFullViewVolume = TRUE);
 
     // Returns an SbViewVolume that represents the object-space ray to
     // pick along. The projection point of the view volume is the
@@ -201,14 +197,14 @@ class SoRayPickAction : public SoPickAction {
     // same as the distance to the near plane for the ray. The
     // distance to the far plane is the sum of the near distance and
     // the depth of the view volume.
-    const SbViewVolume &getViewVolume() const	{ return objVol; }
+    const SbViewVolume &getViewVolume() const { return objVol; }
 
     // Returns SbLine that can be used for other intersection tests.
     // The line's position is the starting point and the direction is
     // the direction of the ray. Given an intersection with this ray,
     // you can call isBetweenPlanes() to see if the intersection is
     // between the near and far clipping planes.
-    const SbLine &	getLine() const		{ return objLine; }
+    const SbLine &getLine() const { return objLine; }
 
     // Returns TRUE if the given object-space intersection point is
     // between the near and far planes of the object-space view
@@ -216,7 +212,7 @@ class SoRayPickAction : public SoPickAction {
     // This test can be used to determine whether the point of
     // intersection of the ray with an object is valid with respect to
     // the clipping planes.
-    SbBool		isBetweenPlanes(const SbVec3f &intersection) const;
+    SbBool isBetweenPlanes(const SbVec3f &intersection) const;
 
     // Adds an SoPickedPoint instance representing the given object
     // space point to the current list and returns a pointer to it. If
@@ -225,66 +221,65 @@ class SoRayPickAction : public SoPickAction {
     // only if the new one is closer; if the new one is farther away,
     // no instance is created and NULL is returned, meaning that no
     // more work has to be done to set up the SoPickedPoint.
-    SoPickedPoint *	addIntersection(const SbVec3f &objectSpacePoint);
+    SoPickedPoint *addIntersection(const SbVec3f &objectSpacePoint);
 
   protected:
     // Initiates action on graph
-    virtual void	beginTraversal(SoNode *node);
+    virtual void beginTraversal(SoNode *node);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   private:
-    SbBool		lineWasSet;	// TRUE if a world-space line was set
-    SbBool		rayWasComputed;	// TRUE if ray computed by camera
-    SbBool		pickAll;	// Pick all objects or just closest
-    SbVec2s		VPPoint;	// Point in viewport coordinates
-    SbVec2f		normVPPoint;	// Point in normalized vp coordinates
-    SbBool		normPointSet;	// TRUE if setNormalizedPoint called
-    float		VPRadius;	// Radius in viewport space pixels
-    SbMatrix		objToWorld;	// Object-to-world space matrix
-    SbMatrix		worldToObj;	// World-to-object space matrix
-    SoPickedPointList	ptList;		// List of intersections
+    SbBool            lineWasSet;     // TRUE if a world-space line was set
+    SbBool            rayWasComputed; // TRUE if ray computed by camera
+    SbBool            pickAll;        // Pick all objects or just closest
+    SbVec2s           VPPoint;        // Point in viewport coordinates
+    SbVec2f           normVPPoint;    // Point in normalized vp coordinates
+    SbBool            normPointSet;   // TRUE if setNormalizedPoint called
+    float             VPRadius;       // Radius in viewport space pixels
+    SbMatrix          objToWorld;     // Object-to-world space matrix
+    SbMatrix          worldToObj;     // World-to-object space matrix
+    SoPickedPointList ptList;         // List of intersections
 
     // The ray is defined as an SbViewVolume as in the
     // SoPickRayElement, and is usually stored in an instance of the
     // element. This stores the ray if it is set using setRay().
-    SbViewVolume	worldVol;
+    SbViewVolume worldVol;
 
     // Users can specify negative near and far distances to indicate
     // that picks should not be clipped to those planes. These flags
     // store that info, since the distances in the view volume can't
     // be negative.
-    SbBool		clipToNear, clipToFar;
+    SbBool clipToNear, clipToFar;
 
     // These store the object-space ray info as a view volume and a
     // line. See the comments on getViewVolume() and getLine().
-    SbLine		objLine;	// Line representing ray
-    SbViewVolume	objVol;		// View volume representing ray
+    SbLine       objLine; // Line representing ray
+    SbViewVolume objVol;  // View volume representing ray
 
     // If the caller passes a matrix to setObjectSpace(), the inverse
     // of it is stored here so the object-space angle can be computed
     // correctly later. The extraMatrixSet flag is set to TRUE in this
     // case.
-    SbBool		extraMatrixSet;
-    SbMatrix		extraMatrix;
+    SbBool   extraMatrixSet;
+    SbMatrix extraMatrix;
 
     // Computes matrices to go between object and world space
-    void		computeMatrices();
+    void computeMatrices();
 
     // Computes object-space view volume and line
-    void		computeObjVolAndLine();
+    void computeObjVolAndLine();
 
     // Returns TRUE if the first intersection point is closer to the
     // starting point of the ray than the second.
-    SbBool		isCloser(const SoPickedPoint *pp0,
-				 const SoPickedPoint *pp1);
+    SbBool isCloser(const SoPickedPoint *pp0, const SoPickedPoint *pp1);
 
     // Computes distance of point along ray: start * t * direction.
     // The point has to be on the ray for this to work
-    static float	rayDistance(const SbVec3f &start,
-				    const SbVec3f &direction,
-				    const SbVec3f &point);
+    static float rayDistance(const SbVec3f &start, const SbVec3f &direction,
+                             const SbVec3f &point);
 };
 
 #endif /* _SO_RAY_PICK_ACTION_ */

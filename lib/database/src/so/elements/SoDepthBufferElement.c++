@@ -63,8 +63,7 @@ SO_ELEMENT_SOURCE(SoDepthBufferElement);
 SoDepthBufferElement::~SoDepthBufferElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -93,10 +92,10 @@ SoDepthBufferElement::init(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    test	= getDefaultTest();
-    write	= getDefaultWrite();
-    function    = getDefaultFunction();
-    range       = getDefaultRange();
+    test = getDefaultTest();
+    write = getDefaultWrite();
+    function = getDefaultFunction();
+    range = getDefaultRange();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -107,15 +106,15 @@ SoDepthBufferElement::init(SoState *)
 // Use: public, static
 
 void
-SoDepthBufferElement::set(SoState * state, SbBool test, SbBool write,
-                          DepthWriteFunction function, const SbVec2f & range)
+SoDepthBufferElement::set(SoState *state, SbBool test, SbBool write,
+                          DepthWriteFunction function, const SbVec2f &range)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoDepthBufferElement	*elt;
+    SoDepthBufferElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoDepthBufferElement *) getElement(state, classStackIndex);
+    elt = (SoDepthBufferElement *)getElement(state, classStackIndex);
 
     if (elt != NULL)
         elt->setElt(test, write, function, range);
@@ -131,14 +130,15 @@ SoDepthBufferElement::set(SoState * state, SbBool test, SbBool write,
 
 void
 SoDepthBufferElement::setElt(SbBool _test, SbBool _write,
-                             DepthWriteFunction _function, const SbVec2f & _range)
+                             DepthWriteFunction _function,
+                             const SbVec2f &    _range)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    test        = _test;
-    write       = _write;
-    function    = _function;
-    range       = _range;
+    test = _test;
+    write = _write;
+    function = _function;
+    range = _range;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -149,20 +149,19 @@ SoDepthBufferElement::setElt(SbBool _test, SbBool _write,
 // Use: public, static
 
 void
-SoDepthBufferElement::get(SoState * state, SbBool & test_out, SbBool & write_out,
-                          DepthWriteFunction & function_out, SbVec2f & range_out)
+SoDepthBufferElement::get(SoState *state, SbBool &test_out, SbBool &write_out,
+                          DepthWriteFunction &function_out, SbVec2f &range_out)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     const SoDepthBufferElement *elt;
 
-    elt = (const SoDepthBufferElement *)
-        getConstElement(state, classStackIndex);
+    elt = (const SoDepthBufferElement *)getConstElement(state, classStackIndex);
 
-    test_out        = elt->test;
-    write_out       = elt->write;
-    function_out    = elt->function;
-    range_out       = elt->range;
+    test_out = elt->test;
+    write_out = elt->write;
+    function_out = elt->function;
+    range_out = elt->range;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -177,12 +176,10 @@ SoDepthBufferElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoDepthBufferElement *shElt = (const SoDepthBufferElement *) elt;
+    const SoDepthBufferElement *shElt = (const SoDepthBufferElement *)elt;
 
-    return (test        == shElt->test          	&&
-            write       == shElt->write 		&&
-            function    == shElt->function              &&
-            range       == shElt->range);
+    return (test == shElt->test && write == shElt->write &&
+            function == shElt->function && range == shElt->range);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -201,10 +198,10 @@ SoDepthBufferElement::copyMatchInfo() const
     SoDepthBufferElement *result =
         (SoDepthBufferElement *)getTypeId().createInstance();
 
-    result->test	= test;
-    result->write	= write;
-    result->function    = function;
-    result->range	= range;
+    result->test = test;
+    result->write = write;
+    result->function = function;
+    result->range = range;
 
     return result;
 }
@@ -220,35 +217,47 @@ SoDepthBufferElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoDepthBufferElement::print(FILE *fp) const
-{
+SoDepthBufferElement::print(FILE *fp) const {
     const char *functionName;
 
     SoElement::print(fp);
 
     switch (function) {
-    case NEVER:     functionName = "NEVER"; break;
-    case ALWAYS:    functionName = "ALWAYS"; break;
-    case LESS:      functionName = "LESS"; break;
-    case LEQUAL:    functionName = "LEQUAL"; break;
-    case EQUAL:     functionName = "EQUAL"; break;
-    case GEQUAL:    functionName = "GEQUAL"; break;
-    case GREATER:   functionName = "GREATER"; break;
-    case NOTEQUAL:  functionName = "NOTEQUAL"; break;
-    default:	// Just to shut CC up
+    case NEVER:
+        functionName = "NEVER";
+        break;
+    case ALWAYS:
+        functionName = "ALWAYS";
+        break;
+    case LESS:
+        functionName = "LESS";
+        break;
+    case LEQUAL:
+        functionName = "LEQUAL";
+        break;
+    case EQUAL:
+        functionName = "EQUAL";
+        break;
+    case GEQUAL:
+        functionName = "GEQUAL";
+        break;
+    case GREATER:
+        functionName = "GREATER";
+        break;
+    case NOTEQUAL:
+        functionName = "NOTEQUAL";
+        break;
+    default: // Just to shut CC up
         break;
     }
-
-
 
     fprintf(fp,
             "\tDepth Buffer: test = %s, write = %s,\n"
             "\t\t     function = %s, range = [%f-%f]\n",
-            test ? "TRUE" : "FALSE", write ? "TRUE" : "FALSE", functionName, range[0], range[1]);
+            test ? "TRUE" : "FALSE", write ? "TRUE" : "FALSE", functionName,
+            range[0], range[1]);
 }
 #else  /* DEBUG */
 void
-SoDepthBufferElement::print(FILE *) const
-{
-}
+SoDepthBufferElement::print(FILE *) const {}
 #endif /* DEBUG */

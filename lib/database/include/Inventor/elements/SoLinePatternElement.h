@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_LINE_PATTERN_ELEMENT
-#define  _SO_LINE_PATTERN_ELEMENT
+#ifndef _SO_LINE_PATTERN_ELEMENT
+#define _SO_LINE_PATTERN_ELEMENT
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -66,31 +66,35 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoLinePatternElement : public SoInt32Element {
+SoEXTENDER
+class SoLinePatternElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoLinePatternElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the current line pattern in the state
-    static void		set(SoState *state, u_short pattern)
-	{ SoInt32Element::set(classStackIndex, state, (int32_t)pattern); }
+    static void set(SoState *state, u_short pattern) {
+        SoInt32Element::set(classStackIndex, state, (int32_t)pattern);
+    }
 
     // Returns current line pattern from the state
-    static u_short	get(SoState *state)
-	{ return (u_short)SoInt32Element::get(classStackIndex, state); }
+    static u_short get(SoState *state) {
+        return (u_short)SoInt32Element::get(classStackIndex, state);
+    }
 
     // Returns the default line pattern
-    static u_short	getDefault()			{ return 0xffff; }
+    static u_short getDefault() { return 0xffff; }
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoLinePatternElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     virtual ~SoLinePatternElement();

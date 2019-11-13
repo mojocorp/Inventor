@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_CREASE_ANGLE_ELEMENT
-#define  _SO_CREASE_ANGLE_ELEMENT
+#ifndef _SO_CREASE_ANGLE_ELEMENT
+#define _SO_CREASE_ANGLE_ELEMENT
 
 #include <Inventor/elements/SoFloatElement.h>
 
@@ -68,31 +68,35 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoCreaseAngleElement : public SoFloatElement {
+SoEXTENDER
+class SoCreaseAngleElement : public SoFloatElement {
 
     SO_ELEMENT_HEADER(SoCreaseAngleElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the current crease angle in the state
-    static void		set(SoState *state, float angle)
-	{ SoFloatElement::set(classStackIndex, state, angle); }
+    static void set(SoState *state, float angle) {
+        SoFloatElement::set(classStackIndex, state, angle);
+    }
 
     // Returns current crease angle from the state
-    static float	get(SoState *state)
-	{ return SoFloatElement::get(classStackIndex, state); }
+    static float get(SoState *state) {
+        return SoFloatElement::get(classStackIndex, state);
+    }
 
     // Returns the default crease angle
-    static float	getDefault()			{ return 0.0; }
+    static float getDefault() { return 0.0; }
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoCreaseAngleElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     virtual ~SoCreaseAngleElement();

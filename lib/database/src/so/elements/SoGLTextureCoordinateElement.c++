@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -66,10 +66,9 @@ SO_ELEMENT_SOURCE(SoGLTextureCoordinateElement);
 // Use: internal
 
 void
-SoGLTextureCoordinateElement::initClass()
-{
+SoGLTextureCoordinateElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLTextureCoordinateElement,
-              SoTextureCoordinateElement);
+                          SoTextureCoordinateElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -82,8 +81,7 @@ SoGLTextureCoordinateElement::initClass()
 SoGLTextureCoordinateElement::~SoGLTextureCoordinateElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -113,24 +111,24 @@ SoGLTextureCoordinateElement::init(SoState *s)
 
 void
 SoGLTextureCoordinateElement::setTexGen(SoState *state, SoNode *node,
-	SoTexCoordTexgenCB *texGenFunc, void *texGenData,
-	SoTextureCoordinateFunctionCB *func, void *funcData)
+                                        SoTexCoordTexgenCB *texGenFunc,
+                                        void *              texGenData,
+                                        SoTextureCoordinateFunctionCB *func,
+                                        void *                         funcData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Do base-class stuff
-    SoTextureCoordinateElement::setFunction(state, node, func,
-					    funcData);
-    
+    SoTextureCoordinateElement::setFunction(state, node, func, funcData);
+
     // Get an element we can modify:
-    SoGLTextureCoordinateElement	*elt;
-    elt = (SoGLTextureCoordinateElement *)
-	getElement(state, classStackIndex, node);
+    SoGLTextureCoordinateElement *elt;
+    elt = (SoGLTextureCoordinateElement *)getElement(state, classStackIndex,
+                                                     node);
 
     if (elt != NULL) {
 
-	elt->setElt(texGenFunc, texGenData);
-
+        elt->setElt(texGenFunc, texGenData);
     }
 }
 
@@ -142,45 +140,41 @@ SoGLTextureCoordinateElement::setTexGen(SoState *state, SoNode *node,
 // Use: protected
 
 void
-SoGLTextureCoordinateElement::setElt(SoTexCoordTexgenCB *func,
-				     void *userData)
+SoGLTextureCoordinateElement::setElt(SoTexCoordTexgenCB *func, void *userData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Enable or disable texgen as appropriate
     if (func != NULL) {
-	// Only call Enable if not already enabled:
-	if (texgenCB == NULL) {
-	    glEnable(GL_TEXTURE_GEN_S);
-	    glEnable(GL_TEXTURE_GEN_T);
-	    copiedFromParent = NULL;
-	}
-	else if (copiedFromParent) {
-	    SoGLTextureCoordinateElement *parent = 
-		(SoGLTextureCoordinateElement *) getNextInStack();
-	    parent->capture(copiedFromParent);
-	}
+        // Only call Enable if not already enabled:
+        if (texgenCB == NULL) {
+            glEnable(GL_TEXTURE_GEN_S);
+            glEnable(GL_TEXTURE_GEN_T);
+            copiedFromParent = NULL;
+        } else if (copiedFromParent) {
+            SoGLTextureCoordinateElement *parent =
+                (SoGLTextureCoordinateElement *)getNextInStack();
+            parent->capture(copiedFromParent);
+        }
 
-	// Call function to set up texgen parameters
-	(*func)(userData);
+        // Call function to set up texgen parameters
+        (*func)(userData);
 
-	whatKind     = FUNCTION;
-    }
-    else {
-	// Only call Disable if parent element was enabled:
-	if (texgenCB != NULL) {
-	    glDisable(GL_TEXTURE_GEN_S);
-	    glDisable(GL_TEXTURE_GEN_T);
-	    copiedFromParent = NULL;
-	}
-	else if (copiedFromParent) {
-	    SoGLTextureCoordinateElement *parent = 
-		(SoGLTextureCoordinateElement *) getNextInStack();
-	    parent->capture(copiedFromParent);
-	}
+        whatKind = FUNCTION;
+    } else {
+        // Only call Disable if parent element was enabled:
+        if (texgenCB != NULL) {
+            glDisable(GL_TEXTURE_GEN_S);
+            glDisable(GL_TEXTURE_GEN_T);
+            copiedFromParent = NULL;
+        } else if (copiedFromParent) {
+            SoGLTextureCoordinateElement *parent =
+                (SoGLTextureCoordinateElement *)getNextInStack();
+            parent->capture(copiedFromParent);
+        }
     }
 
-    texgenCB     = func;
+    texgenCB = func;
     texgenCBData = userData;
 }
 
@@ -211,8 +205,8 @@ SoGLTextureCoordinateElement::getInstance(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return (const SoGLTextureCoordinateElement *)
-	getConstElement(state, classStackIndex);
+    return (const SoGLTextureCoordinateElement *)getConstElement(
+        state, classStackIndex);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -229,19 +223,19 @@ SoGLTextureCoordinateElement::send(int index) const
 {
 #ifdef DEBUG
     if (whatKind != EXPLICIT)
-	SoDebugError::post("SoGLTextureCoordinateElement::send",
-			   "explicit texture coordinates were not set!");
+        SoDebugError::post("SoGLTextureCoordinateElement::send",
+                           "explicit texture coordinates were not set!");
 
     if (index < 0 || index >= numCoords)
-	SoDebugError::post("SoGLTextureCoordinateElement::send",
-			   "Index (%d) out of range 0 - %d",
-			   index, numCoords - 1);
+        SoDebugError::post("SoGLTextureCoordinateElement::send",
+                           "Index (%d) out of range 0 - %d", index,
+                           numCoords - 1);
 #endif /* DEBUG */
 
     if (coordsAre2D)
-	glTexCoord2fv(coords2[index].getValue());
+        glTexCoord2fv(coords2[index].getValue());
     else
-	glTexCoord4fv(coords4[index].getValue());
+        glTexCoord4fv(coords4[index].getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -258,10 +252,10 @@ SoGLTextureCoordinateElement::push(SoState *state)
 {
     // Copy texgen function and data from previous instance
     const SoGLTextureCoordinateElement *prevElt =
-	(const SoGLTextureCoordinateElement *) getNextInStack();
-    texgenCB     = prevElt->texgenCB;
+        (const SoGLTextureCoordinateElement *)getNextInStack();
+    texgenCB = prevElt->texgenCB;
     texgenCBData = prevElt->texgenCBData;
-    
+
     copiedFromParent = state;
 }
 
@@ -281,7 +275,7 @@ SoGLTextureCoordinateElement::pop(SoState *state, const SoElement *childElt)
 {
     // If the previous element didn't have the same value...
     const SoGLTextureCoordinateElement *child =
-	(const SoGLTextureCoordinateElement *)childElt;
+        (const SoGLTextureCoordinateElement *)childElt;
 
     // Since popping this element may have GL side effects, we must
     // capture the state.  We may not send any GL commands, but
@@ -291,20 +285,19 @@ SoGLTextureCoordinateElement::pop(SoState *state, const SoElement *childElt)
     // put inside the cache).
     capture(state);
     copiedFromParent = NULL;
-    
+
     // Different callbacks, must either disable texgen or resend:
     if (texgenCB != NULL) {
 
-	// Enable if it wasn't enabled before:
-	if (child->texgenCB == NULL) {  
-	    glEnable(GL_TEXTURE_GEN_S);
-	    glEnable(GL_TEXTURE_GEN_T);
-	}
+        // Enable if it wasn't enabled before:
+        if (child->texgenCB == NULL) {
+            glEnable(GL_TEXTURE_GEN_S);
+            glEnable(GL_TEXTURE_GEN_T);
+        }
 
-	(*texgenCB)(texgenCBData);
+        (*texgenCB)(texgenCBData);
+    } else if (child->texgenCB != NULL) {
+        glDisable(GL_TEXTURE_GEN_S);
+        glDisable(GL_TEXTURE_GEN_T);
     }
-    else if (child->texgenCB != NULL) {
-	glDisable(GL_TEXTURE_GEN_S);
-	glDisable(GL_TEXTURE_GEN_T);
-    }	
 }

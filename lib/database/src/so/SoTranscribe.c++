@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoOutput.h>
@@ -62,13 +61,13 @@
 #include <Inventor/nodes/SoGroup.h>
 
 // Internal command codes
-#define TRAN_INSERT	0
-#define TRAN_INSERTP	1
-#define TRAN_REMOVE	2
-#define TRAN_REPLACE	3
-#define TRAN_MODIFY	4
-#define TRAN_END	5
-#define TRAN_NUM	6	/* Number of transcription commands */
+#define TRAN_INSERT 0
+#define TRAN_INSERTP 1
+#define TRAN_REMOVE 2
+#define TRAN_REPLACE 3
+#define TRAN_MODIFY 4
+#define TRAN_END 5
+#define TRAN_NUM 6 /* Number of transcription commands */
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -93,7 +92,7 @@ SoTranSender::SoTranSender(SoOutput *output)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Adds INSERT command to output. 
+//    Adds INSERT command to output.
 //
 // Use: public
 
@@ -111,7 +110,7 @@ SoTranSender::insert(SoNode *node)
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Adds INSERTP command to output. 
+//    Adds INSERTP command to output.
 //
 // Use: public
 
@@ -122,14 +121,14 @@ SoTranSender::insert(SoNode *node, SoNode *parent, int n)
 {
     node->ref();
     if (parent != NULL)
-	parent->ref();
+        parent->ref();
     addCommand(TRAN_INSERTP);
     addNode(node);
     addNodeRef(parent);
     addInt(n);
     node->unref();
     if (parent != NULL)
-	parent->unref();
+        parent->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -145,12 +144,12 @@ SoTranSender::remove(SoNode *parent, int n)
 ////////////////////////////////////////////////////////////////////////
 {
     if (parent != NULL)
-	parent->ref();
+        parent->ref();
     addCommand(TRAN_REMOVE);
     addNodeRef(parent);
     addInt(n);
     if (parent != NULL)
-	parent->unref();
+        parent->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -166,14 +165,14 @@ SoTranSender::replace(SoNode *parent, int n, SoNode *newNode)
 ////////////////////////////////////////////////////////////////////////
 {
     if (parent != NULL)
-	parent->ref();
+        parent->ref();
     newNode->ref();
     addCommand(TRAN_REPLACE);
     addNodeRef(parent);
     addInt(n);
     addNode(newNode);
     if (parent != NULL)
-	parent->unref();
+        parent->unref();
     newNode->unref();
 }
 
@@ -226,8 +225,8 @@ SoTranSender::addCommand(int command)
 {
     out->write(command);
 
-    if (! out->isBinary())
-	out->write('\n');
+    if (!out->isBinary())
+        out->write('\n');
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -243,13 +242,13 @@ SoTranSender::addNode(SoNode *node, SbBool addNames)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoWriteAction	wa(out);
+    SoWriteAction wa(out);
 
     wa.apply(node);
 
     // Add a list of node "names" in order
     if (addNames)
-	addNodeNames(node);
+        addNodeNames(node);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -268,14 +267,14 @@ SoTranSender::addNodeRef(const SoNode *node)
 ////////////////////////////////////////////////////////////////////////
 {
     // Convert the node pointer to a string
-    char	s[16];
+    char s[16];
 
     sprintf(s, "%p", node);
 
     out->write(s);
 
-    if (! out->isBinary())
-	out->write('\n');
+    if (!out->isBinary())
+        out->write('\n');
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -292,8 +291,8 @@ SoTranSender::addInt(int n)
 {
     out->write(n);
 
-    if (! out->isBinary())
-	out->write('\n');
+    if (!out->isBinary())
+        out->write('\n');
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -315,11 +314,11 @@ SoTranSender::addNodeNames(const SoNode *root)
 
     if (root->isOfType(SoGroup::getClassTypeId())) {
 
-	const SoGroup	*group = (const SoGroup *) root;
-	int		i;
+        const SoGroup *group = (const SoGroup *)root;
+        int            i;
 
-	for (i = 0; i < group->getNumChildren(); i++)
-	    addNodeNames(group->getChild(i));
+        for (i = 0; i < group->getNumChildren(); i++)
+            addNodeNames(group->getChild(i));
     }
 }
 
@@ -345,8 +344,8 @@ SoTranSender::addNodeNames(const SoNode *root)
 ///////////////////////////////////////////////////////
 
 struct SoTranDictEntry {
-    SoNode	*node;		// Pointer to node
-    int32_t	refCount;	// Number of times node is added to dict
+    SoNode *node;     // Pointer to node
+    int32_t refCount; // Number of times node is added to dict
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -360,12 +359,12 @@ SoTranReceiver::SoTranReceiver(SoGroup *rootNode)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char	s[16];
+    char s[16];
 
     // Add root to dictionaries with name for NULL, since that is how
     // the root is referred to.
     sprintf(s, "%p", (void *)NULL);
-    SbName	name(s);
+    SbName name(s);
     addEntry(rootNode, name);
 
     root = rootNode;
@@ -399,23 +398,23 @@ SoTranReceiver::interpret(SoInput *in)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		commandCode;
-    SbBool	done = FALSE;
+    int    commandCode;
+    SbBool done = FALSE;
 
     // Run through commands in buffer, changing local DB
     do {
 
-	if (! in->read(commandCode))
-	    return FALSE;
+        if (!in->read(commandCode))
+            return FALSE;
 
-	// Process command
-	if (! interpretCommand(commandCode, in, done)) {
-	    SoDebugError::post("SoTranReceiver::interpret",
-			       "in command \"%d\"", commandCode);
-	    return FALSE;
-	}
+        // Process command
+        if (!interpretCommand(commandCode, in, done)) {
+            SoDebugError::post("SoTranReceiver::interpret", "in command \"%d\"",
+                               commandCode);
+            return FALSE;
+        }
 
-    } while (! done);
+    } while (!done);
 
     return TRUE;
 }
@@ -434,92 +433,92 @@ SoTranReceiver::interpretCommand(int commandCode, SoInput *in, SbBool &done)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNode		*node, *parentNode, *nodeRef;
-    SoGroup		*parent;
-    const SoFieldData	*fd;
-    int			i;
+    SoNode *           node, *parentNode, *nodeRef;
+    SoGroup *          parent;
+    const SoFieldData *fd;
+    int                i;
 
     switch (commandCode) {
 
-      case TRAN_INSERT:
+    case TRAN_INSERT:
 
-	if (! getNodeAndNames(in, node))		// New node and names
-	    return FALSE;
+        if (!getNodeAndNames(in, node)) // New node and names
+            return FALSE;
 
-	root->addChild(node);
-	node->unref();
-	break;
+        root->addChild(node);
+        node->unref();
+        break;
 
-      case TRAN_INSERTP:
+    case TRAN_INSERTP:
 
-	if (! getNodeAndNames(in, node)		||	// New node and names
-	    ! getNodeReference(in, parentNode)	||	// Parent node
-	    ! in->read(i))				// Child index
-	    return FALSE;
+        if (!getNodeAndNames(in, node) ||        // New node and names
+            !getNodeReference(in, parentNode) || // Parent node
+            !in->read(i))                        // Child index
+            return FALSE;
 
-	parent = (SoGroup *) parentNode;
-	parent->insertChild(node, i);
-	node->unref();
-	break;
+        parent = (SoGroup *)parentNode;
+        parent->insertChild(node, i);
+        node->unref();
+        break;
 
-      case TRAN_REMOVE:
+    case TRAN_REMOVE:
 
-	if (! getNodeReference(in, parentNode) ||	// Parent of node
-	    ! in->read(i))				// Child index
-	    return FALSE;
+        if (!getNodeReference(in, parentNode) || // Parent of node
+            !in->read(i))                        // Child index
+            return FALSE;
 
-	parent = (SoGroup *) parentNode;
-	if (i < parent->getNumChildren()) {
-	    // Remove references, recursively
-	    removeNodeReferences(parent->getChild(i));
-	    parent->removeChild(i);
-	}
+        parent = (SoGroup *)parentNode;
+        if (i < parent->getNumChildren()) {
+            // Remove references, recursively
+            removeNodeReferences(parent->getChild(i));
+            parent->removeChild(i);
+        }
 
-	break;
+        break;
 
-      case TRAN_REPLACE:
+    case TRAN_REPLACE:
 
-	if (! getNodeReference(in, parentNode)	||	// Parent of node
-	    ! in->read(i)			||	// Child index
-	    ! getNodeAndNames(in, node))		// New node and names
-	    return FALSE;
+        if (!getNodeReference(in, parentNode) || // Parent of node
+            !in->read(i) ||                      // Child index
+            !getNodeAndNames(in, node))          // New node and names
+            return FALSE;
 
-	// Out with the old, in with the new
-	parent = (SoGroup *) parentNode;
+        // Out with the old, in with the new
+        parent = (SoGroup *)parentNode;
 
-	if (i < parent->getNumChildren()) {
-	    // Remove references, recursively
-	    removeNodeReferences(parent->getChild(i));
+        if (i < parent->getNumChildren()) {
+            // Remove references, recursively
+            removeNodeReferences(parent->getChild(i));
 
-	    parent->removeChild(i);
-	    parent->insertChild(node, i);
-	    node->unref();
-	}
+            parent->removeChild(i);
+            parent->insertChild(node, i);
+            node->unref();
+        }
 
-	break;
+        break;
 
-      case TRAN_MODIFY:
+    case TRAN_MODIFY:
 
-	if (! getNodeReference(in, nodeRef)	||	// Reference to node
-	    ! getNode(in, node))			// New node definition
-	    return FALSE;
+        if (!getNodeReference(in, nodeRef) || // Reference to node
+            !getNode(in, node))               // New node definition
+            return FALSE;
 
-	// Change node fields to new contents
-	fd = nodeRef->getFieldData();
-	if (fd != NULL)
-	    fd->overlay(nodeRef, node, TRUE);
+        // Change node fields to new contents
+        fd = nodeRef->getFieldData();
+        if (fd != NULL)
+            fd->overlay(nodeRef, node, TRUE);
 
-	// Get rid of new definition
-	node->unref();
+        // Get rid of new definition
+        node->unref();
 
-	break;
+        break;
 
-      case TRAN_END:
-	done = TRUE;
-	break;
+    case TRAN_END:
+        done = TRUE;
+        break;
 
-      default:
-	return FALSE;
+    default:
+        return FALSE;
     }
 
     return TRUE;
@@ -539,21 +538,21 @@ SoTranReceiver::getNodeAndNames(SoInput *in, SoNode *&node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoNode	*oldNode;
+    SoNode *oldNode;
 
     // Read node
-    if (! getNode(in, node))
-	return FALSE;
+    if (!getNode(in, node))
+        return FALSE;
 
     // Read node names, looking for existing node with that name
-    if (! getNodeNames(in, node, TRUE, oldNode))
-	return FALSE;
+    if (!getNodeNames(in, node, TRUE, oldNode))
+        return FALSE;
 
     // If node already existed, get rid of new stuff and return old node
     if (oldNode != NULL) {
-	node->unref();
-	node = oldNode;
-	node->ref();
+        node->unref();
+        node = oldNode;
+        node->ref();
     }
     return TRUE;
 }
@@ -571,8 +570,8 @@ SoTranReceiver::getNode(SoInput *in, SoNode *&node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! SoDB::read(in, node))
-	return FALSE;
+    if (!SoDB::read(in, node))
+        return FALSE;
 
     node->ref();
 
@@ -593,61 +592,61 @@ SoTranReceiver::getNode(SoInput *in, SoNode *&node)
 // Use: private
 
 SbBool
-SoTranReceiver::getNodeNames(SoInput *in, SoNode *root,
-			     SbBool lookForNode, SoNode *&oldRoot)
+SoTranReceiver::getNodeNames(SoInput *in, SoNode *root, SbBool lookForNode,
+                             SoNode *&oldRoot)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbName		name;
-    void		*ptr;
-    SoTranDictEntry	*e;
+    SbName           name;
+    void *           ptr;
+    SoTranDictEntry *e;
 
     // Read reference as SbName to get unique pointer
-    if (! in->read(name))
-	return FALSE;
+    if (!in->read(name))
+        return FALSE;
 
     if (lookForNode) {
 
-	// See if the node is already in the dictionary. If so,
-	// increment the reference count and return the old root.
-	if (nameToEntryDict.find((unsigned long) name.getString(), ptr)) {
-	    e = (SoTranDictEntry *) ptr;
-	    e->refCount++;
+        // See if the node is already in the dictionary. If so,
+        // increment the reference count and return the old root.
+        if (nameToEntryDict.find((unsigned long)name.getString(), ptr)) {
+            e = (SoTranDictEntry *)ptr;
+            e->refCount++;
 
-	    oldRoot = e->node;
-	}
+            oldRoot = e->node;
+        }
 
-	// Otherwise, add a new entry
-	else {
-	    addEntry(root, name);
-	    oldRoot = NULL;
-	}
+        // Otherwise, add a new entry
+        else {
+            addEntry(root, name);
+            oldRoot = NULL;
+        }
     }
 
     else
-	oldRoot = NULL;
+        oldRoot = NULL;
 
     if (root->isOfType(SoGroup::getClassTypeId())) {
 
-	SoNode		*child;
-	SoGroup		*group = (SoGroup *) root;
-	int		i;
+        SoNode * child;
+        SoGroup *group = (SoGroup *)root;
+        int      i;
 
-	for (i = 0; i < group->getNumChildren(); i++) {
+        for (i = 0; i < group->getNumChildren(); i++) {
 
-	    // Recurse
-	    if (! getNodeNames(in, group->getChild(i), oldRoot == NULL, child))
-		return FALSE;
+            // Recurse
+            if (!getNodeNames(in, group->getChild(i), oldRoot == NULL, child))
+                return FALSE;
 
-	    // If child node was already in dictionary, replace child
-	    // of group with node from dictionary.
-	    if (child != NULL)
-		group->replaceChild(i, child);
-	}
+            // If child node was already in dictionary, replace child
+            // of group with node from dictionary.
+            if (child != NULL)
+                group->replaceChild(i, child);
+        }
     }
 
     return TRUE;
-}    
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -663,19 +662,19 @@ SoTranReceiver::getNodeReference(SoInput *in, SoNode *&node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbName	name;
-    void	*ptr;
+    SbName name;
+    void * ptr;
 
     // Read reference as SbName to get unique pointer
-    if (! in->read(name))
-	return FALSE;
+    if (!in->read(name))
+        return FALSE;
 
     // Look up pointer in dictionary
-    if (nameToEntryDict.find((unsigned long) name.getString(), ptr))
-	node = ((SoTranDictEntry *) ptr)->node;
+    if (nameToEntryDict.find((unsigned long)name.getString(), ptr))
+        node = ((SoTranDictEntry *)ptr)->node;
     else {
-	node = NULL;
-	return FALSE;
+        node = NULL;
+        return FALSE;
     }
 
     return TRUE;
@@ -697,38 +696,38 @@ SoTranReceiver::removeNodeReferences(SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    void		*ptr;
-    const char		*nameString;
-    SoTranDictEntry	*e;
+    void *           ptr;
+    const char *     nameString;
+    SoTranDictEntry *e;
 
     // Find the name of the node, using the name dictionary
-    nodeToNameDict.find((unsigned long) node, ptr);
-    nameString = (const char *) ptr;
+    nodeToNameDict.find((unsigned long)node, ptr);
+    nameString = (const char *)ptr;
 
     // Find the dictionary entry for the node, using the name
-    SbName		name(nameString);
-    nameToEntryDict.find((unsigned long) name.getString(), ptr);
-    e = (SoTranDictEntry *) ptr;
+    SbName name(nameString);
+    nameToEntryDict.find((unsigned long)name.getString(), ptr);
+    e = (SoTranDictEntry *)ptr;
 
     // Decrement the reference count and check for 0
     if (--e->refCount == 0) {
 
-	// This node is going away. Remove its dictionary entries and
-	// free up the SoTranDictEntry
-	nameToEntryDict.remove((unsigned long) name.getString());
-	nodeToNameDict.remove((unsigned long) node);
-	e->node->unref();
-	delete e;
+        // This node is going away. Remove its dictionary entries and
+        // free up the SoTranDictEntry
+        nameToEntryDict.remove((unsigned long)name.getString());
+        nodeToNameDict.remove((unsigned long)node);
+        e->node->unref();
+        delete e;
 
-	// Recurse on its children, if it has any
-	if (node->isOfType(SoGroup::getClassTypeId())) {
+        // Recurse on its children, if it has any
+        if (node->isOfType(SoGroup::getClassTypeId())) {
 
-	    const SoGroup	*group = (const SoGroup *) node;
-	    int		i;
+            const SoGroup *group = (const SoGroup *)node;
+            int            i;
 
-	    for (i = 0; i < group->getNumChildren(); i++)
-		removeNodeReferences(group->getChild(i));
-	}
+            for (i = 0; i < group->getNumChildren(); i++)
+                removeNodeReferences(group->getChild(i));
+        }
     }
 }
 
@@ -744,14 +743,14 @@ SoTranReceiver::addEntry(SoNode *node, SbName &name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTranDictEntry	*e = new SoTranDictEntry;
+    SoTranDictEntry *e = new SoTranDictEntry;
 
     e->node = node;
     e->node->ref();
     e->refCount = 1;
 
-    nameToEntryDict.enter((unsigned long) name.getString(), (void *) e);
-    nodeToNameDict.enter((unsigned long) node, (void *) name.getString());
+    nameToEntryDict.enter((unsigned long)name.getString(), (void *)e);
+    nodeToNameDict.enter((unsigned long)node, (void *)name.getString());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -766,7 +765,7 @@ SoTranReceiver::deleteDictEntry(unsigned long, void *value)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTranDictEntry	*e = (SoTranDictEntry *) value;
+    SoTranDictEntry *e = (SoTranDictEntry *)value;
 
     e->node->unref();
     delete e;

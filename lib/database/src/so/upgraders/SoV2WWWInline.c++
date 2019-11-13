@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -74,7 +74,6 @@ SoV2WWWInline::SoV2WWWInline()
     SO_NODE_ADD_FIELD(bboxCenter, (0, 0, 0));
     SO_NODE_ADD_FIELD(bboxSize, (0, 0, 0));
     SO_NODE_ADD_FIELD(alternateRep, (NULL));
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -87,8 +86,7 @@ SoV2WWWInline::SoV2WWWInline()
 SoV2WWWInline::~SoV2WWWInline()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -112,7 +110,7 @@ SoV2WWWInline::createNewNode()
     // the alternateRep.
     //
 
-    // Copy all fields as is 
+    // Copy all fields as is
     SO_UPGRADER_COPY_FIELD(bboxCenter, result);
     SO_UPGRADER_COPY_FIELD(bboxSize, result);
     SO_UPGRADER_COPY_FIELD(name, result);
@@ -126,27 +124,27 @@ SoV2WWWInline::createNewNode()
 //   special upgrade method to read field description
 //
 // Use: public, internal, virtual
-SbBool 
+SbBool
 SoV2WWWInline::upgrade(SoInput *in, const SbName &refName, SoBase *&result)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool isBinary = in->isBinary();
-    if (in->isBinary()){
-	SbString unknownString;
-	SbBool  readOK = in->read(unknownString);
-	if (!readOK || (unknownString != "fields" )) {
-	    SoReadError::post(in, "Problem upgrading vertex property ") ;
-	    return FALSE;
-	}
+    if (in->isBinary()) {
+        SbString unknownString;
+        SbBool   readOK = in->read(unknownString);
+        if (!readOK || (unknownString != "fields")) {
+            SoReadError::post(in, "Problem upgrading vertex property ");
+            return FALSE;
+        }
     }
     SbBool ret = SoUpgrader::upgrade(in, refName, result);
-    
-    if (in->isBinary()){
-	// Read a zero, which represents the number of children here
-	int dummy;
-	in->read(dummy);
+
+    if (in->isBinary()) {
+        // Read a zero, which represents the number of children here
+        int dummy;
+        in->read(dummy);
     }
-    
+
     return ret;
 }

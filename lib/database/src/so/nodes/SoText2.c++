@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,7 +68,7 @@
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoText2.h>
-    
+
 SO_NODE_SOURCE(SoText2);
 
 ////////////////////////////////////////////////////////////////////////
@@ -101,9 +101,9 @@ SoText2::SoText2()
 {
     SO_NODE_CONSTRUCTOR(SoText2);
 
-    SO_NODE_ADD_FIELD(string,	(""));
-    SO_NODE_ADD_FIELD(spacing,	(1.));
-    SO_NODE_ADD_FIELD(justification,	(LEFT));
+    SO_NODE_ADD_FIELD(string, (""));
+    SO_NODE_ADD_FIELD(spacing, (1.));
+    SO_NODE_ADD_FIELD(justification, (LEFT));
 
     // Set up static info for enumerated type field
     SO_NODE_DEFINE_ENUM_VALUE(Justification, LEFT);
@@ -145,7 +145,7 @@ SoText2::~SoText2()
 
 static SbVec3f
 fromObjectSpace(const SbVec3f &vector, const SbMatrix &matrix,
-		const SbViewportRegion &vpr)
+                const SbViewportRegion &vpr)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -155,9 +155,9 @@ fromObjectSpace(const SbVec3f &vector, const SbMatrix &matrix,
 
     // And do the viewport transformation:
     const SbVec2s vpSize = vpr.getViewportSizePixels();
-    SbVec3f result;
-    result[0] = (ndc[0]+1.0)*vpSize[0]/2.0;
-    result[1] = (ndc[1]+1.0)*vpSize[1]/2.0;
+    SbVec3f       result;
+    result[0] = (ndc[0] + 1.0) * vpSize[0] / 2.0;
+    result[1] = (ndc[1] + 1.0) * vpSize[1] / 2.0;
     // Leave the z coordinate alone
     result[2] = ndc[2];
 
@@ -176,15 +176,15 @@ fromObjectSpace(const SbVec3f &vector, const SbMatrix &matrix,
 
 static SbVec3f
 toObjectSpace(const SbVec3f &pixel, const SbMatrix &matrix,
-	      const SbViewportRegion &vpr)
+              const SbViewportRegion &vpr)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Viewport transformation, to normalized device coordinates:
     const SbVec2s vpSize = vpr.getViewportSizePixels();
-    SbVec3f ndc;
-    ndc[0] = pixel[0]*2.0/vpSize[0] - 1.0;
-    ndc[1] = pixel[1]*2.0/vpSize[1] - 1.0;
+    SbVec3f       ndc;
+    ndc[0] = pixel[0] * 2.0 / vpSize[0] - 1.0;
+    ndc[1] = pixel[1] * 2.0 / vpSize[1] - 1.0;
     ndc[2] = pixel[2];
 
     SbVec3f result;
@@ -235,27 +235,27 @@ SoText2::GLRender(SoGLRenderAction *action)
     // Send first color
     SoMaterialBundle mb(action);
     mb.sendFirst();
-    
-    const SbColor &	color = SoGLLazyElement::getDiffuse(state, 0);
+
+    const SbColor &color = SoGLLazyElement::getDiffuse(state, 0);
 
     glPushAttrib(GL_PIXEL_MODE_BIT | GL_COLOR_BUFFER_BIT);
 
-    glPixelTransferf(GL_RED_SCALE,   color[0]);
+    glPixelTransferf(GL_RED_SCALE, color[0]);
     glPixelTransferf(GL_GREEN_SCALE, color[1]);
-    glPixelTransferf(GL_BLUE_SCALE,  color[2]);
+    glPixelTransferf(GL_BLUE_SCALE, color[2]);
 
     SbMatrix objToScreen = SoProjectionMatrixElement::get(state);
     objToScreen = objToScreen.multLeft(SoViewingMatrixElement::get(state));
     objToScreen = objToScreen.multLeft(SoModelMatrixElement::get(state));
 
     SbMatrix screenToObj = objToScreen.inverse();
-	
-    const SbViewportRegion & vpr = SoViewportRegionElement::get(state);
+
+    const SbViewportRegion &vpr = SoViewportRegionElement::get(state);
 
     // The origin of the text on the screen is the object-space point
     // 0,0,0:
-    SbVec3f screenOrigin = fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
-    
+    SbVec3f screenOrigin = fromObjectSpace(SbVec3f(0, 0, 0), objToScreen, vpr);
+
     for (int line = 0; line < string.getNum(); line++) {
         // Starting position of string, based on justification:
         const SbVec3f charPosition = getPixelStringOffset(line) + screenOrigin;
@@ -264,12 +264,14 @@ SoText2::GLRender(SoGLRenderAction *action)
         // space, and feed that back to the glRasterPos command (which
         // will turn around and transform it back into screen-space,
         // but oh well).
-        const SbVec3f lineOrigin = toObjectSpace(charPosition, screenToObj, vpr);
+        const SbVec3f lineOrigin =
+            toObjectSpace(charPosition, screenToObj, vpr);
 
         fontCache->drawString(state, string[line].toStdWString(), lineOrigin);
     }
     // Don't auto-cache above, since dependent on camera:
-    SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DONT_AUTO_CACHE);
+    SoGLCacheContextElement::shouldAutoCache(
+        state, SoGLCacheContextElement::DONT_AUTO_CACHE);
 
     glPopAttrib();
     state->pop();
@@ -288,7 +290,7 @@ SoText2::rayPick(SoRayPickAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // First see if the object is pickable
-    if (! shouldRayPick(action))
+    if (!shouldRayPick(action))
         return;
 
     SoState *state = action->getState();
@@ -323,7 +325,8 @@ SoText2::rayPick(SoRayPickAction *action)
 
     // The origin of the text on the screen is the object-space point
     // 0,0,0:
-    const SbVec3f screenOrigin = fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
+    const SbVec3f screenOrigin =
+        fromObjectSpace(SbVec3f(0, 0, 0), objToScreen, vpr);
 
     for (int line = 0; line < string.getNum(); line++) {
 
@@ -369,7 +372,8 @@ SoText2::rayPick(SoRayPickAction *action)
         // intersect the two triangles:
         SbVec3f point;
         // Info we get back from the pick that we don't need:
-        SbVec3f junk1; SbBool junk2;
+        SbVec3f junk1;
+        SbBool  junk2;
         if (action->intersect(p0, p1, p2, point, junk1, junk2) ||
             action->intersect(p2, p1, p3, point, junk1, junk2)) {
 
@@ -380,7 +384,8 @@ SoText2::rayPick(SoRayPickAction *action)
 
                 // Figure out which character was hit:
                 // Transform picked point into screen space:
-                SbVec3f screenPoint = fromObjectSpace(pp->getObjectPoint(), objToScreen, vpr);
+                SbVec3f screenPoint =
+                    fromObjectSpace(pp->getObjectPoint(), objToScreen, vpr);
                 // Figure out which character that corresponds to, by
                 // adding on the x-offset of each character until we
                 // go past the picked point:
@@ -398,9 +403,9 @@ SoText2::rayPick(SoRayPickAction *action)
                 pp->setMaterialIndex(0);
 
                 // We'll define normal to be object-space 0,0,1:
-                pp->setObjectNormal(SbVec3f(0,0,1));
+                pp->setObjectNormal(SbVec3f(0, 0, 1));
                 // And texture coordinates to be zero:
-                pp->setObjectTextureCoords(SbVec4f(0,0,0,0));
+                pp->setObjectTextureCoords(SbVec4f(0, 0, 0, 0));
             }
         }
     }
@@ -418,8 +423,7 @@ void
 SoText2::generatePrimitives(SoAction *)
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -463,7 +467,8 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 
     // The origin of the text on the screen is the object-space point
     // 0,0,0:
-    const SbVec3f screenOrigin = fromObjectSpace(SbVec3f(0,0,0), objToScreen, vpr);
+    const SbVec3f screenOrigin =
+        fromObjectSpace(SbVec3f(0, 0, 0), objToScreen, vpr);
 
     // Figure out the screen-space bounding box of the characters:
     SbBox3f screenBbox;
@@ -490,12 +495,12 @@ SoText2::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
     // Ok, screenBbox now contains the pixel-space extent of the
     // characters.  We'll transform the bounds of that box back into
     // object space and extend the object-space bounding box:
-    
+
     if (!screenBbox.isEmpty()) {
         // Do each of the 4 corners of the screen-space box:
         const SbVec3f &min = screenBbox.getMin();
         const SbVec3f &max = screenBbox.getMax();
-        SbVec3f objectPoint, temp;
+        SbVec3f        objectPoint, temp;
 
         temp.setValue(min[0], min[1], screenOrigin[2]);
         objectPoint = toObjectSpace(temp, screenToObj, vpr);
@@ -534,15 +539,15 @@ SoText2::getPixelStringOffset(int line)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f result(0,0,0);
+    SbVec3f       result(0, 0, 0);
     const SbVec2s size = fontCache->getSize(string[line].toStdWString());
     if (justification.getValue() == RIGHT) {
         result[0] = -size[0];
     }
     if (justification.getValue() == CENTER) {
-        result[0] = -size[0]/2.0f;
+        result[0] = -size[0] / 2.0f;
     }
-    result[1] = -line*size[1]*spacing.getValue()*2;
+    result[1] = -line * size[1] * spacing.getValue() * 2;
 
     return result;
 }

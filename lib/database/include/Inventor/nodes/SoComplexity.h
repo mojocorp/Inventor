@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_COMPLEXITY_
-#define  _SO_COMPLEXITY_
+#ifndef _SO_COMPLEXITY_
+#define _SO_COMPLEXITY_
 
 #include <Inventor/elements/SoComplexityTypeElement.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -75,28 +75,30 @@ class SoComplexity : public SoNode {
 
   public:
     enum Type {
-	OBJECT_SPACE = SoComplexityTypeElement::OBJECT_SPACE,
-	SCREEN_SPACE = SoComplexityTypeElement::SCREEN_SPACE,
-	BOUNDING_BOX = SoComplexityTypeElement::BOUNDING_BOX
+        OBJECT_SPACE = SoComplexityTypeElement::OBJECT_SPACE,
+        SCREEN_SPACE = SoComplexityTypeElement::SCREEN_SPACE,
+        BOUNDING_BOX = SoComplexityTypeElement::BOUNDING_BOX
     };
 
     // Fields
-    SoSFEnum		type;		// How complexity is expressed
-    SoSFFloat		value;		// Complexity value
-    SoSFFloat		textureQuality; // Fast versus nice textures
+    SoSFEnum  type;           // How complexity is expressed
+    SoSFFloat value;          // Complexity value
+    SoSFFloat textureQuality; // Fast versus nice textures
 
     // Constructor
     SoComplexity();
 
-  SoEXTENDER public:
-    virtual void	doAction(SoAction *action);
-    virtual void	callback(SoCallbackAction *action);
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	pick(SoPickAction *action);
+    SoEXTENDER
+  public:
+    virtual void doAction(SoAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void pick(SoPickAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     virtual ~SoComplexity();

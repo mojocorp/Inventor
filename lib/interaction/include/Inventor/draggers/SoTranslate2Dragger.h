@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -61,13 +61,13 @@
  |     For info about the structure of SoTranslate2Dragger:
  |     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
  |     [2] type:    ivNodeKitStructure SoTranslate2Dragger.
- |     [3] The program prints a diagram of the scene graph and a table with 
+ |     [3] The program prints a diagram of the scene graph and a table with
  |         information about each part.
  |
  |  The following parts in this dragger are created at construction time.
  |  'ResourceName' corresponds to the name of the default geometry for the
  |  part. The dragger's constructor gets the scene graph for 'ResourceName'
- |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).  
+ |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).
  |
  |  Resource Name:                           Part Name:
  |
@@ -76,8 +76,8 @@
  |  translate2Feedback                     - feedback
  |  translate2FeedbackActive               - feedbackActive
  |
- |  NOTE: These are only shown if dragger 
- |        is moving and the axis is a 
+ |  NOTE: These are only shown if dragger
+ |        is moving and the axis is a
  |        permissable direction of motion.
  |        When pressing <shift>, motion is
  |        constrained, and only 1 is displayed.
@@ -90,8 +90,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TRANSLATE_2_DRAGGER_
-#define  _SO_TRANSLATE_2_DRAGGER_
+#ifndef _SO_TRANSLATE_2_DRAGGER_
+#define _SO_TRANSLATE_2_DRAGGER_
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -100,8 +100,7 @@
 class SbPlaneProjector;
 class SoFieldSensor;
 
-class SoTranslate2Dragger : public SoDragger
-{
+class SoTranslate2Dragger : public SoDragger {
     SO_KIT_HEADER(SoTranslate2Dragger);
 
     SO_KIT_CATALOG_ENTRY_HEADER(translatorSwitch);
@@ -120,48 +119,45 @@ class SoTranslate2Dragger : public SoDragger
 
     SoSFVec3f translation;
 
-  SoINTERNAL public:
-    static void initClass();  // initialize the class
+    SoINTERNAL
+  public:
+    static void initClass(); // initialize the class
 
   protected:
-
-    SbVec3f         worldRestartPt; // used if SHIFT key goes down to 
-				    // initiate a new gesture.
+    SbVec3f worldRestartPt; // used if SHIFT key goes down to
+                            // initiate a new gesture.
     SbPlaneProjector *planeProj; // projector for planar scaling
 
-    static void startCB( void *, SoDragger * );
-    static void motionCB( void *, SoDragger * );
-    static void finishCB( void *, SoDragger * );
+    static void startCB(void *, SoDragger *);
+    static void motionCB(void *, SoDragger *);
+    static void finishCB(void *, SoDragger *);
 
     SoFieldSensor *fieldSensor;
-    static void fieldSensorCB( void *, SoSensor * );
-    static void valueChangedCB( void *, SoDragger * );
+    static void    fieldSensorCB(void *, SoSensor *);
+    static void    valueChangedCB(void *, SoDragger *);
 
     void dragStart();
     void drag();
     void dragFinish();
 
     // Callback for pressing and releasing the meta keys
-    static void	metaKeyChangeCB( void *, SoDragger *);
+    static void metaKeyChangeCB(void *, SoDragger *);
 
     // detach/attach any sensors, callbacks, and/or field connections.
     // Called by:            start/end of SoBaseKit::readInstance
     // and on new copy by:   start/end of SoBaseKit::copy.
-    // Classes that redefine must call setUpConnections(TRUE,TRUE) 
+    // Classes that redefine must call setUpConnections(TRUE,TRUE)
     // at end of constructor.
     // Returns the state of the node when this was called.
-    virtual SbBool setUpConnections( SbBool onOff, SbBool doItAlways = FALSE );
+    virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
 
     virtual ~SoTranslate2Dragger();
 
   private:
-    int     translateDir;   // Used for 1-D translation,
-    SbBool  shftDown;  // used to keep track of shift modifier key
+    int    translateDir; // Used for 1-D translation,
+    SbBool shftDown;     // used to keep track of shift modifier key
 
     static const unsigned char geomBuffer[];
-};    
+};
 
-#endif  /* _SO_TRANSLATE_2_DRAGGER_ */
-
-
-
+#endif /* _SO_TRANSLATE_2_DRAGGER_ */

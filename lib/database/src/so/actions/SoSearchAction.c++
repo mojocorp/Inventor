@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -103,7 +103,7 @@ SoSearchAction::~SoSearchAction()
 ////////////////////////////////////////////////////////////////////////
 {
     if (retPath != NULL)
-	retPath->unref();
+        retPath->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ SoSearchAction::reset()
 ////////////////////////////////////////////////////////////////////////
 {
     if (retPath)
-	retPath->unref();
+        retPath->unref();
 
     retPath = NULL;
     retPaths.truncate(0);
@@ -146,9 +146,9 @@ SoSearchAction::setNode(SoNode *n)
     node = n;
 
     if (n == NULL)
-	lookingFor &= ~NODE;
+        lookingFor &= ~NODE;
     else
-	lookingFor |= NODE;
+        lookingFor |= NODE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -169,17 +169,17 @@ SoSearchAction::setType(SoType t, SbBool dOk)
     type = t;
 
     if (t.isBad())
-	lookingFor &= ~TYPE;
+        lookingFor &= ~TYPE;
 
     else {
 #ifdef DEBUG
-	if (! t.isDerivedFrom(SoNode::getClassTypeId()))
-	    SoDebugError::postWarning("SoSearchAction::setType",
-				      "Type %s is not derived from SoNode",
-				      t.getName().getString());
+        if (!t.isDerivedFrom(SoNode::getClassTypeId()))
+            SoDebugError::postWarning("SoSearchAction::setType",
+                                      "Type %s is not derived from SoNode",
+                                      t.getName().getString());
 #endif /* DEBUG */
 
-	lookingFor |= TYPE;
+        lookingFor |= TYPE;
     }
 }
 
@@ -213,16 +213,16 @@ SoSearchAction::addPath(SoPath *path)
 ////////////////////////////////////////////////////////////////////////
 {
     if (interest == ALL)
-	retPaths.append(path);
+        retPaths.append(path);
 
     else {
-	if (path != NULL)
-	    path->ref();
+        if (path != NULL)
+            path->ref();
 
-	if (retPath != NULL)
-	    retPath->unref();
+        if (retPath != NULL)
+            retPath->unref();
 
-	retPath = path;
+        retPath = path;
     }
 }
 
@@ -240,18 +240,18 @@ SoSearchAction::beginTraversal(SoNode *node)
 {
 #ifdef DEBUG
     if (getFind() == 0) {
-	SoDebugError::post("SoSearchAction::apply",
-			   "No node type, node instance, or node name "
-			   "specified for search");
-	return;
+        SoDebugError::post("SoSearchAction::apply",
+                           "No node type, node instance, or node name "
+                           "specified for search");
+        return;
     }
 #endif /* DEBUG */
 
     // Empty things so we can tell when we have a match
     if (interest == ALL)
-	retPaths.truncate(0);
+        retPaths.truncate(0);
     else
-	addPath(NULL);
+        addPath(NULL);
 
     // Set duringSearchAll flag (being careful to preserve prev value
     // in case of nested searches) so Switches are traversed properly:

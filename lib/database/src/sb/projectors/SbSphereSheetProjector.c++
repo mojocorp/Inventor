@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,16 +68,10 @@
 ////////////////////////////////////////////////////////////////////////
 
 SbSphereSheetProjector::SbSphereSheetProjector(SbBool orient)
-: SbSphereProjector(orient)
-{
-}
+    : SbSphereProjector(orient) {}
 
-SbSphereSheetProjector::SbSphereSheetProjector(
-    const SbSphere &s,
-    SbBool orient)
-: SbSphereProjector(s, orient)
-{
-}
+SbSphereSheetProjector::SbSphereSheetProjector(const SbSphere &s, SbBool orient)
+    : SbSphereProjector(s, orient) {}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -112,103 +106,99 @@ SbSphereSheetProjector::project(const SbVec2f &point)
 ////////////////////////////////////////////////////////////////////////
 {
     SbVec3f result;
-    SbLine workingLine = getWorkingLine(point);
+    SbLine  workingLine = getWorkingLine(point);
 
     if (needSetup)
-	setupPlane();
+        setupPlane();
 
     SbVec3f planeIntersection;
 
     SbVec3f sphereIntersection, dontCare;
-    SbBool hitSphere;
-    if ( intersectFront == TRUE )
-	hitSphere = sphere.intersect(workingLine, sphereIntersection, dontCare);
+    SbBool  hitSphere;
+    if (intersectFront == TRUE)
+        hitSphere = sphere.intersect(workingLine, sphereIntersection, dontCare);
     else
-	hitSphere = sphere.intersect(workingLine, dontCare, sphereIntersection);
+        hitSphere = sphere.intersect(workingLine, dontCare, sphereIntersection);
 
     if (hitSphere) {
-	// drop the sphere intersection onto the tolerance plane
-	
-	SbLine projectLine(sphereIntersection, sphereIntersection + planeDir);
-	if (! tolPlane.intersect(projectLine, planeIntersection))
+        // drop the sphere intersection onto the tolerance plane
+
+        SbLine projectLine(sphereIntersection, sphereIntersection + planeDir);
+        if (!tolPlane.intersect(projectLine, planeIntersection))
 #ifdef DEBUG
-	    SoDebugError::post("SbSphereSheetProjector::project",
-			       "Couldn't intersect working line with plane");
+            SoDebugError::post("SbSphereSheetProjector::project",
+                               "Couldn't intersect working line with plane");
 #else
-	/* Do nothing */;
+            /* Do nothing */;
 #endif
-    }
-    else if (! tolPlane.intersect(workingLine, planeIntersection))
+    } else if (!tolPlane.intersect(workingLine, planeIntersection))
 #ifdef DEBUG
-	SoDebugError::post("SbSphereSheetProjector::project",
-			   "Couldn't intersect with plane");
+        SoDebugError::post("SbSphereSheetProjector::project",
+                           "Couldn't intersect with plane");
 #else
-	/* Do nothing */;
+        /* Do nothing */;
 #endif
-    
+
     // Two possibilities:
     // (1) Intersection is on the sphere inside where the sheet
     //	    hits it
     // (2) Intersection is off sphere, or on sphere but on the sheet
     float dist = (planeIntersection - planePoint).length();
-	
+
     // distance on the plane from the center
-    // to the projection of the point where 
+    // to the projection of the point where
     // the sphere meets the hyperbolic sheet
     float sphereSheetDist = sphere.getRadius() * M_SQRT1_2;
 
     if (dist < sphereSheetDist) {
-	// project onto sphere
+        // project onto sphere
 #ifdef DEBUG
-	if (! hitSphere)
-	    SoDebugError::post("SbSphereSheetProjector::project",
-			       "Couldn't intersect with sphere");
+        if (!hitSphere)
+            SoDebugError::post("SbSphereSheetProjector::project",
+                               "Couldn't intersect with sphere");
 #endif
-	result = sphereIntersection;
-    }
-    else {
-	// The equation of a hyperbola in the first quadrant with the
-	// axes as its limits is :  y = f * 1/x
-	// At the 45 degree point of both the sphere and the
-	// hyperbola, x and y will be equal, and sqrt(x^2+y^2) will
-	// equal radius.  Therefore, letting x = y:
-	// sqrt(2 * x^2) = r --> r^2 / 2 = x^2
-	// and:
-	// x = f / x --> f = x^2 = r^2 / 2
-	//
-	// Sb, the equation of the hyperbola is just:
-	// y = r^2 / 2 * 1/x
-	//
-	// In terms of a sphere in working space, y
-	// is the offsetDist from the plane,
-	// and x is dist from the planePoint.
-	
-	float f = sphere.getRadius()*sphere.getRadius()/2.0;
-	float offsetDist = f / dist;
-	    
-	SbVec3f offset;
-	if (orientToEye) {
-	    if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE)
-		offset = workingProjPoint - planeIntersection;
-	    else
-		worldToWorking.multDirMatrix(viewVol.zVector(), offset);
-		
-	    offset.normalize();
-	}
-	else {
-	    offset.setValue(0,0,1);
-	}
-	if ( intersectFront == FALSE )
-	    offset *= -1.0;
-	    
-	offset *= offsetDist;
-	result = planeIntersection + offset;
+        result = sphereIntersection;
+    } else {
+        // The equation of a hyperbola in the first quadrant with the
+        // axes as its limits is :  y = f * 1/x
+        // At the 45 degree point of both the sphere and the
+        // hyperbola, x and y will be equal, and sqrt(x^2+y^2) will
+        // equal radius.  Therefore, letting x = y:
+        // sqrt(2 * x^2) = r --> r^2 / 2 = x^2
+        // and:
+        // x = f / x --> f = x^2 = r^2 / 2
+        //
+        // Sb, the equation of the hyperbola is just:
+        // y = r^2 / 2 * 1/x
+        //
+        // In terms of a sphere in working space, y
+        // is the offsetDist from the plane,
+        // and x is dist from the planePoint.
+
+        float f = sphere.getRadius() * sphere.getRadius() / 2.0;
+        float offsetDist = f / dist;
+
+        SbVec3f offset;
+        if (orientToEye) {
+            if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE)
+                offset = workingProjPoint - planeIntersection;
+            else
+                worldToWorking.multDirMatrix(viewVol.zVector(), offset);
+
+            offset.normalize();
+        } else {
+            offset.setValue(0, 0, 1);
+        }
+        if (intersectFront == FALSE)
+            offset *= -1.0;
+
+        offset *= offsetDist;
+        result = planeIntersection + offset;
     }
 
     lastPoint = result;
     return result;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -228,26 +218,24 @@ SbSphereSheetProjector::setupPlane()
 
     // find orientation of the tolerance plane
     if (orientToEye) {
-	if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE) {
-	    // find the projection point in working space coords
-	    worldToWorking.multVecMatrix(
-		viewVol.getProjectionPoint(), workingProjPoint);
-	
-	    planeDir = workingProjPoint - sphere.getCenter();
-	}
-	else {
-	    // Use the projection direction in an orthographic
-	    // view vol
-	    worldToWorking.multDirMatrix(viewVol.zVector(), planeDir);
-	}	 
-	planeDir.normalize();
-    }
-    else {
-	planeDir.setValue(0,0,1);
+        if (viewVol.getProjectionType() == SbViewVolume::PERSPECTIVE) {
+            // find the projection point in working space coords
+            worldToWorking.multVecMatrix(viewVol.getProjectionPoint(),
+                                         workingProjPoint);
+
+            planeDir = workingProjPoint - sphere.getCenter();
+        } else {
+            // Use the projection direction in an orthographic
+            // view vol
+            worldToWorking.multDirMatrix(viewVol.zVector(), planeDir);
+        }
+        planeDir.normalize();
+    } else {
+        planeDir.setValue(0, 0, 1);
     }
 
-    if ( intersectFront == FALSE )
-	planeDir *= -1.0;
+    if (intersectFront == FALSE)
+        planeDir *= -1.0;
 
     // for SphereSheetProjectors, the plane always passed
     // through the origin
@@ -256,10 +244,9 @@ SbSphereSheetProjector::setupPlane()
     // plane given direction and distance to origin
     planePoint = sphere.getCenter();
     tolPlane = SbPlane(planeDir, planePoint);
-    
+
     needSetup = FALSE;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -273,7 +260,7 @@ SbSphereSheetProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // Bad Method - 
+    // Bad Method -
     // Makes the amount of rotation falls off as you travel along
     // the hyperbolic sheet, which makes z-rotations more and more
     // dominant as you get farther away from the center of the window.
@@ -281,7 +268,7 @@ SbSphereSheetProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
     //    p1 - sphere.getCenter(),
     //    p2 - sphere.getCenter());
 
-    // Good Method -	
+    // Good Method -
     // Use the axis defined by the vectors (p1, p2),
     // but use the 2D distance between the points (p1, p2) to generate
     // the angle to rotate through.  The amount to rotate will be
@@ -296,14 +283,14 @@ SbSphereSheetProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
     // for large trackballs.
 
     SbVec3f diff = p2 - p1;
-    float d = diff.length();
-	
+    float   d = diff.length();
+
     // Check for degenerate cases
     float t = d / (2.0 * sphere.getRadius());
-    if (t < 0.000001) 
-	return SbRotation::identity(); // Too close; no rotation
+    if (t < 0.000001)
+        return SbRotation::identity(); // Too close; no rotation
     else if (t > 1.0)
-	return SbRotation::identity(); // Too much; bag it
+        return SbRotation::identity(); // Too much; bag it
 
     float angle = 2.0 * std::asin(t);
 

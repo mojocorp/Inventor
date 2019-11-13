@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,28 +51,28 @@
  |     For info about the structure of SoTrackballDragger:
  |     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
  |     [2] type:    ivNodeKitStructure SoTrackballDragger.
- |     [3] The program prints a diagram of the scene graph and a table with 
+ |     [3] The program prints a diagram of the scene graph and a table with
  |         information about each part.
  |
  |  The following parts in this dragger are created at construction time.
  |  'ResourceName' corresponds to the name of the default geometry for the
  |  part. The dragger's constructor gets the scene graph for 'ResourceName'
- |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).  
+ |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).
  |
  |  Resource Name:                           Part Name:
  |
- |  trackballRotator                       - rotator     
- |  trackballRotatorActive                 - rotatorActive     
- |  trackballXRotator                      - XRotator    
- |  trackballXRotatorActive                - XRotatorActive    
- |  trackballYRotator,                     - YRotator   
- |  trackballYRotatorActive,               - YRotatorActive   
- |  trackballZRotator                      - ZRotator  
- |  trackballZRotatorActive                - ZRotatorActive  
- |  trackballUserAxis                      - userAxis    
- |  trackballUserAxisActive                - userAxisActive    
- |  trackballUserRotator                   - userRotator 
- |  trackballUserRotatorActive             - userRotatorActive 
+ |  trackballRotator                       - rotator
+ |  trackballRotatorActive                 - rotatorActive
+ |  trackballXRotator                      - XRotator
+ |  trackballXRotatorActive                - XRotatorActive
+ |  trackballYRotator,                     - YRotator
+ |  trackballYRotatorActive,               - YRotatorActive
+ |  trackballZRotator                      - ZRotator
+ |  trackballZRotatorActive                - ZRotatorActive
+ |  trackballUserAxis                      - userAxis
+ |  trackballUserAxisActive                - userAxisActive
+ |  trackballUserRotator                   - userRotator
+ |  trackballUserRotatorActive             - userRotatorActive
  |
  |   Author(s): Paul Isaacs, David Mott
  |
@@ -80,8 +80,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_TRACKBALL_DRAGGER_
-#define  _SO_TRACKBALL_DRAGGER_
+#ifndef _SO_TRACKBALL_DRAGGER_
+#define _SO_TRACKBALL_DRAGGER_
 
 #include <vector>
 #include <Inventor/SbTime.h>
@@ -142,102 +142,109 @@ class SoTrackballDragger : public SoDragger {
     SoTrackballDragger();
 
     SoSFRotation rotation;
-    SoSFVec3f scaleFactor;
+    SoSFVec3f    scaleFactor;
 
     SbBool isAnimationEnabled() { return animationEnabled; }
-    void setAnimationEnabled( SbBool newVal );
+    void   setAnimationEnabled(SbBool newVal);
 
-  SoINTERNAL public:
-    static void		initClass();	// initialize the class
+    SoINTERNAL
+  public:
+    static void initClass(); // initialize the class
 
   protected:
-
     // Callbacks for drag start, motion, and finish
     static void startCB(void *, SoDragger *);
     static void motionCB(void *, SoDragger *);
     static void finishCB(void *, SoDragger *);
-    
+
     SoFieldSensor *rotFieldSensor;
     SoFieldSensor *scaleFieldSensor;
-    static void fieldSensorCB( void *, SoSensor * );
-    static void valueChangedCB( void *, SoDragger * );
+    static void    fieldSensorCB(void *, SoSensor *);
+    static void    valueChangedCB(void *, SoDragger *);
 
     // Callback for pressing and releasing the meta keys
     static void metaKeyChangeCB(void *, SoDragger *);
 
     // These really do the work during startCB, motionCB, and finishCB
-    void	dragStart();
-    void	drag();
-    void	dragFinish();
+    void dragStart();
+    void drag();
+    void dragFinish();
 
-    void setAllPartsActive( SbBool onOrOff );
+    void setAllPartsActive(SbBool onOrOff);
 
     // detach/attach any sensors, callbacks, and/or field connections.
     // Called by:            start/end of SoBaseKit::readInstance
     // and on new copy by:   start/end of SoBaseKit::copy.
-    // Classes that redefine must call setUpConnections(TRUE,TRUE) 
+    // Classes that redefine must call setUpConnections(TRUE,TRUE)
     // at end of constructor.
     // Returns the state of the node when this was called.
-    virtual SbBool setUpConnections( SbBool onOff, SbBool doItAlways = FALSE );
+    virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
 
     virtual void setDefaultOnNonWritingFields();
 
     virtual ~SoTrackballDragger();
 
   private:
+    enum State {
+        INACTIVE,
+        FREE_ROTATE,
+        X_ROTATE,
+        Y_ROTATE,
+        Z_ROTATE,
+        SCALE,
+        USER_AXIS_ADJUST,
+        USER_AXIS_ROTATE,
+        SPINNING
+    };
+    State currentState;
 
-    enum State
-	{ INACTIVE, FREE_ROTATE, X_ROTATE, Y_ROTATE, Z_ROTATE,
-	  SCALE, USER_AXIS_ADJUST, USER_AXIS_ROTATE, SPINNING };
-    State		currentState;     
+    SbVec3f constrainedAxis; // if so, about what axis?
+    SbVec3f userAxisVec;     // For storing the user definable
+                             // 'special' rotation axis.
 
-    SbVec3f             constrainedAxis;// if so, about what axis?
-    SbVec3f             userAxisVec;       // For storing the user definable
-					// 'special' rotation axis.
-
-    SbSphereProjector   *sphereProj;
+    SbSphereProjector *  sphereProj;
     SbCylinderProjector *stripeProj;
 
-    SbVec3f             startWorldHitPt; // used during interaction
-    SbBool              ctlDown, shftDown; // keep track of meta keys
-    SbVec3f             prevWorldHitPt; // used during interaction by 
-					 // spherical projector.
-    SbMatrix            prevMotionMatrix; // used during interaction by
-					   // spherical projector.
+    SbVec3f startWorldHitPt;   // used during interaction
+    SbBool  ctlDown, shftDown; // keep track of meta keys
+    SbVec3f prevWorldHitPt;    // used during interaction by
+                               // spherical projector.
+    SbMatrix prevMotionMatrix; // used during interaction by
+                               // spherical projector.
 
     // functions which do all the work
-    void	setHighlights();
+    void setHighlights();
 
-    SbBool	        rotateDrag();
-    SbBool	        scaleDrag();
-    SbBool	        userStripeDrag();
-    
+    SbBool rotateDrag();
+    SbBool scaleDrag();
+    SbBool userStripeDrag();
+
     // character strings from which the shared geometry is read
-    static const unsigned char geomBuffer[];		
+    static const unsigned char geomBuffer[];
 
     // variables used for doing spinning animation
-    SbBool animationEnabled;
-    SbTime          prevTime;
-    SbTime          spinTime;
-    SbTime          scheduleRate;
-    SoTimerSensor   *spinSensor;
+    SbBool                  animationEnabled;
+    SbTime                  prevTime;
+    SbTime                  spinTime;
+    SbTime                  scheduleRate;
+    SoTimerSensor *         spinSensor;
     std::vector<SbRotation> rotBuffer;
-    std::vector<SbTime> timeBuffer;
-    int             firstIndex, lastIndex;
-    SbVec3f         averageAxis;
-    float           angleVelocity;
-    SbBool          computeAverage;
+    std::vector<SbTime>     timeBuffer;
+    int                     firstIndex, lastIndex;
+    SbVec3f                 averageAxis;
+    float                   angleVelocity;
+    SbBool                  computeAverage;
 
     // routtines used for doing spinning animation
-    static  void spinSensorCB(void *, SoSensor *);
-    void    spinAnimate();
-    void    resetSpinStuff();
+    static void spinSensorCB(void *, SoSensor *);
+    void        spinAnimate();
+    void        resetSpinStuff();
 
-    // We record whether ball was spinning at drag start. If so, it will 
-    // call ha->setHandled() in dragFinish().  This way, it won't be 
-    // considered an item selection, which is usually the case when you click 
+    // We record whether ball was spinning at drag start. If so, it will
+    // call ha->setHandled() in dragFinish().  This way, it won't be
+    // considered an item selection, which is usually the case when you click
     // on an object without moving the mouse.
-    SbBool  wasSpinningAtDragStart;
+    SbBool wasSpinningAtDragStart;
 };
 
 #endif /* _SO_TRACKBALL_DRAGGER_ */

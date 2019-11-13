@@ -61,7 +61,8 @@
 
 class SoDepthBuffer : public SoNode {
     SO_NODE_HEADER(SoDepthBuffer);
-public:
+
+  public:
     SoDepthBuffer();
 
     enum DepthWriteFunction {
@@ -75,18 +76,19 @@ public:
         NOTEQUAL = SoDepthBufferElement::NOTEQUAL
     };
 
-    SoSFBool    test;
-    SoSFBool    write;
-    SoSFEnum    function;
-    SoSFVec2f   range;
+    SoSFBool  test;
+    SoSFBool  write;
+    SoSFEnum  function;
+    SoSFVec2f range;
 
-SoINTERNAL public:
-        static void initClass();
-protected:
-    virtual void GLRender(SoGLRenderAction * action);
+    SoINTERNAL
+  public:
+    static void initClass();
+
+  protected:
+    virtual void GLRender(SoGLRenderAction *action);
 
     virtual ~SoDepthBuffer();
 };
 
 #endif /* _SO_DEPTH_BUFFER_ */
-

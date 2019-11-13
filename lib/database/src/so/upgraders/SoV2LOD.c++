@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -71,7 +71,7 @@ SoV2LOD::SoV2LOD()
 {
     SO_NODE_CONSTRUCTOR(SoV2LOD);
 
-    SO_NODE_ADD_FIELD(center, (SbVec3f(0,0,0)));
+    SO_NODE_ADD_FIELD(center, (SbVec3f(0, 0, 0)));
     SO_NODE_ADD_FIELD(range, (0));
     range.deleteValues(0);
 
@@ -88,8 +88,7 @@ SoV2LOD::SoV2LOD()
 SoV2LOD::~SoV2LOD()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -109,21 +108,22 @@ SoV2LOD::createNewNode()
     // Inventor 2.0 did not have LOD, When we convert 2.1 to 2.0 files,
     // the LOD gets written with an alternateRep LevelOfDetail containing
     // all it's children. When we read that 2.0 file back into 2.1, we can
-    // copy the children back here and discard the alternateRep. Programs written 
-    // with 2.0 will gladly use the alternateRep.
+    // copy the children back here and discard the alternateRep. Programs
+    // written with 2.0 will gladly use the alternateRep.
     //
-    
-    if (! alternateRep.isDefault()) {
-	SoLevelOfDetail *levelOfDetail = (SoLevelOfDetail *) alternateRep.getValue();
-	if (levelOfDetail->isOfType(SoLevelOfDetail::getClassTypeId())) {
-	    for (int i = 0; i < levelOfDetail->getNumChildren(); i++)
-		addChild(levelOfDetail->getChild(i));
-	}
+
+    if (!alternateRep.isDefault()) {
+        SoLevelOfDetail *levelOfDetail =
+            (SoLevelOfDetail *)alternateRep.getValue();
+        if (levelOfDetail->isOfType(SoLevelOfDetail::getClassTypeId())) {
+            for (int i = 0; i < levelOfDetail->getNumChildren(); i++)
+                addChild(levelOfDetail->getChild(i));
+        }
     }
-    
+
     // Copy all fields as is (except alternateRep which is ignored)
-    SO_UPGRADER_COPY_FIELD(center,  result);
-    SO_UPGRADER_COPY_FIELD(range,   result);
+    SO_UPGRADER_COPY_FIELD(center, result);
+    SO_UPGRADER_COPY_FIELD(range, result);
 
     return result;
 }
@@ -133,20 +133,19 @@ SoV2LOD::createNewNode()
 //   special upgrade method to read field description
 //
 // Use: public, internal, virtual
-SbBool 
+SbBool
 SoV2LOD::upgrade(SoInput *in, const SbName &refName, SoBase *&result)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool isBinary = in->isBinary();
-    if (in->isBinary()){
-	SbString unknownString;
-	SbBool  readOK = in->read(unknownString);
-	if (!readOK || (unknownString != "fields" )) {
-	    SoReadError::post(in, "Problem upgrading vertex property ") ;
-	    return FALSE;
-	}
+    if (in->isBinary()) {
+        SbString unknownString;
+        SbBool   readOK = in->read(unknownString);
+        if (!readOK || (unknownString != "fields")) {
+            SoReadError::post(in, "Problem upgrading vertex property ");
+            return FALSE;
+        }
     }
     return SoUpgrader::upgrade(in, refName, result);
-    
 }

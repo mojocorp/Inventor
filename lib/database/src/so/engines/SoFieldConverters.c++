@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -60,13 +60,12 @@
 // Maximum number of multi-valued field types, and maximum total
 // number of field types:
 //
-#define MAXMFIELDS	1024
-#define MAXFIELDS	MAXMFIELDS*2
+#define MAXMFIELDS 1024
+#define MAXFIELDS MAXMFIELDS * 2
 
 // Constants for all the field types; used so we can quickly switch()
 // on the field type at evaluate() time.
-enum TypeConst 
-{
+enum TypeConst {
     MFBitMask = 1,
     MFBool,
     MFColor,
@@ -87,7 +86,7 @@ enum TypeConst
     MFVec2f,
     MFVec3f,
     MFVec4f,
-    SFBitMask = MAXMFIELDS+1,
+    SFBitMask = MAXMFIELDS + 1,
     SFBool,
     SFColor,
     SFEnum,
@@ -117,22 +116,21 @@ enum TypeConst
 SO__ENGINE_VARS(SoConvToTrigger);
 
 void
-SoConvToTrigger::initClass()
-{
-    SO__ENGINE_INIT_CLASS(SoConvToTrigger,"SoConvToTrigger",SoFieldConverter);
+SoConvToTrigger::initClass() {
+    SO__ENGINE_INIT_CLASS(SoConvToTrigger, "SoConvToTrigger", SoFieldConverter);
     classTypeId.makeInternal();
     SoType trigType = SoSFTrigger::getClassTypeId();
     SoType conv = SoConvToTrigger::getClassTypeId();
 
     // Any field type can be connected to a trigger, so just register
     // the converter on all field classes
-    SoTypeList	fieldTypes;
-    int		numFieldTypes;
-    numFieldTypes = SoType::getAllDerivedFrom(SoField::getClassTypeId(),
-                          fieldTypes);
+    SoTypeList fieldTypes;
+    int        numFieldTypes;
+    numFieldTypes =
+        SoType::getAllDerivedFrom(SoField::getClassTypeId(), fieldTypes);
     for (int i = 0; i < numFieldTypes; i++)
-    if (fieldTypes[i] != trigType)
-        SoDB::addConverter(fieldTypes[i], trigType, conv);
+        if (fieldTypes[i] != trigType)
+            SoDB::addConverter(fieldTypes[i], trigType, conv);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -165,7 +163,7 @@ SoConvToTrigger::~SoConvToTrigger()
 {
     delete myInputData;
     if (input != NULL) {
-	delete input;
+        delete input;
     }
 }
 
@@ -182,7 +180,7 @@ SoConvToTrigger::getInput(SoType type)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    input = (SoField *) type.createInstance();
+    input = (SoField *)type.createInstance();
     input->setContainer(this);
     myInputData->addField(this, "input", input);
 
@@ -258,7 +256,7 @@ SoConvToTrigger::getTypeId() const
 // Use: internal
 //
 const SoFieldData *
-SoConvToTrigger::getFieldData() const 
+SoConvToTrigger::getFieldData() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -314,21 +312,21 @@ SoBuiltinFieldConverter::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SO__ENGINE_INIT_CLASS(SoBuiltinFieldConverter,
-            "BuiltinFieldConverter", SoFieldConverter);
+    SO__ENGINE_INIT_CLASS(SoBuiltinFieldConverter, "BuiltinFieldConverter",
+                          SoFieldConverter);
     classTypeId.makeInternal();
 
 // Macro for registering the single/multi to multi/single field
 // conversions:
-#define REG1(type) \
-    SoDB::addConverter(SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
-               SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
-               SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
-               getClassTypeId())
+#define REG1(type)                                                             \
+    SoDB::addConverter(SO__CONCAT(SoSF, type)::getClassTypeId(),               \
+                       SO__CONCAT(SoMF, type)::getClassTypeId(),               \
+                       getClassTypeId());                                      \
+    SoDB::addConverter(SO__CONCAT(SoMF, type)::getClassTypeId(),               \
+                       SO__CONCAT(SoSF, type)::getClassTypeId(),               \
+                       getClassTypeId())
 
-// Cases for all the field types:
+    // Cases for all the field types:
     REG1(BitMask);
     REG1(Bool);
     REG1(Color);
@@ -353,33 +351,29 @@ SoBuiltinFieldConverter::initClass()
 
 // Macro for registering all of the to/from single/multi-valued
 // string conversions (eight for each type):
-#define REGSTRING(type) \
-    SoDB::addConverter(SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
-               SoSFString::getClassTypeId(),			    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
-               SoSFString::getClassTypeId(),			    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
-               SoMFString::getClassTypeId(),			    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
-               SoMFString::getClassTypeId(),			    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SoSFString::getClassTypeId(),			    \
-               SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SoSFString::getClassTypeId(),			    \
-               SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SoMFString::getClassTypeId(),			    \
-               SO__CONCAT(SoSF,type)::getClassTypeId(),		    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SoMFString::getClassTypeId(),			    \
-               SO__CONCAT(SoMF,type)::getClassTypeId(),		    \
-               getClassTypeId())
+#define REGSTRING(type)                                                        \
+    SoDB::addConverter(SO__CONCAT(SoSF, type)::getClassTypeId(),               \
+                       SoSFString::getClassTypeId(), getClassTypeId());        \
+    SoDB::addConverter(SO__CONCAT(SoMF, type)::getClassTypeId(),               \
+                       SoSFString::getClassTypeId(), getClassTypeId());        \
+    SoDB::addConverter(SO__CONCAT(SoSF, type)::getClassTypeId(),               \
+                       SoMFString::getClassTypeId(), getClassTypeId());        \
+    SoDB::addConverter(SO__CONCAT(SoMF, type)::getClassTypeId(),               \
+                       SoMFString::getClassTypeId(), getClassTypeId());        \
+    SoDB::addConverter(SoSFString::getClassTypeId(),                           \
+                       SO__CONCAT(SoSF, type)::getClassTypeId(),               \
+                       getClassTypeId());                                      \
+    SoDB::addConverter(SoSFString::getClassTypeId(),                           \
+                       SO__CONCAT(SoMF, type)::getClassTypeId(),               \
+                       getClassTypeId());                                      \
+    SoDB::addConverter(SoMFString::getClassTypeId(),                           \
+                       SO__CONCAT(SoSF, type)::getClassTypeId(),               \
+                       getClassTypeId());                                      \
+    SoDB::addConverter(SoMFString::getClassTypeId(),                           \
+                       SO__CONCAT(SoMF, type)::getClassTypeId(),               \
+                       getClassTypeId())
 
-// All types except string:
+    // All types except string:
     REGSTRING(BitMask);
     REGSTRING(Bool);
     REGSTRING(Color);
@@ -401,47 +395,47 @@ SoBuiltinFieldConverter::initClass()
     REGSTRING(Vec4f);
 #undef REGSTRING
 
-// Macro for other conversions (float to int32_t, etc):
+    // Macro for other conversions (float to int32_t, etc):
 
-#define REGHALF(type1,type2) \
-    SoDB::addConverter(SO__CONCAT(SoSF,type1)::getClassTypeId(),	    \
-               SO__CONCAT(SoSF,type2)::getClassTypeId(),	    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SO__CONCAT(SoMF,type1)::getClassTypeId(),	    \
-               SO__CONCAT(SoSF,type2)::getClassTypeId(),	    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SO__CONCAT(SoSF,type1)::getClassTypeId(),	    \
-               SO__CONCAT(SoMF,type2)::getClassTypeId(),	    \
-               getClassTypeId());				    \
-    SoDB::addConverter(SO__CONCAT(SoMF,type1)::getClassTypeId(),	    \
-               SO__CONCAT(SoMF,type2)::getClassTypeId(),	    \
-               getClassTypeId())
+#define REGHALF(type1, type2)                                                  \
+    SoDB::addConverter(SO__CONCAT(SoSF, type1)::getClassTypeId(),              \
+                       SO__CONCAT(SoSF, type2)::getClassTypeId(),              \
+                       getClassTypeId());                                      \
+    SoDB::addConverter(SO__CONCAT(SoMF, type1)::getClassTypeId(),              \
+                       SO__CONCAT(SoSF, type2)::getClassTypeId(),              \
+                       getClassTypeId());                                      \
+    SoDB::addConverter(SO__CONCAT(SoSF, type1)::getClassTypeId(),              \
+                       SO__CONCAT(SoMF, type2)::getClassTypeId(),              \
+                       getClassTypeId());                                      \
+    SoDB::addConverter(SO__CONCAT(SoMF, type1)::getClassTypeId(),              \
+                       SO__CONCAT(SoMF, type2)::getClassTypeId(),              \
+                       getClassTypeId())
 
-#define REGCONV(type1,type2)						    \
-    REGHALF(type1,type2);						    \
-    REGHALF(type2,type1)
+#define REGCONV(type1, type2)                                                  \
+    REGHALF(type1, type2);                                                     \
+    REGHALF(type2, type1)
 
-    REGCONV(Bool,Float);
-    REGCONV(Bool,Int32);
-    REGCONV(Bool,Short);
-    REGCONV(Bool,UInt32);
-    REGCONV(Bool,UShort);
+    REGCONV(Bool, Float);
+    REGCONV(Bool, Int32);
+    REGCONV(Bool, Short);
+    REGCONV(Bool, UInt32);
+    REGCONV(Bool, UShort);
 
     REGCONV(Color, Vec3f);
 
-    REGCONV(Float,Int32);
-    REGCONV(Float,Short);
-    REGCONV(Float,UInt32);
-    REGCONV(Float,UShort);
+    REGCONV(Float, Int32);
+    REGCONV(Float, Short);
+    REGCONV(Float, UInt32);
+    REGCONV(Float, UShort);
 
-    REGCONV(Int32,Short);
-    REGCONV(Int32,UInt32);
-    REGCONV(Int32,UShort);
+    REGCONV(Int32, Short);
+    REGCONV(Int32, UInt32);
+    REGCONV(Int32, UShort);
 
-    REGCONV(Short,UInt32);
-    REGCONV(Short,UShort);
+    REGCONV(Short, UInt32);
+    REGCONV(Short, UShort);
 
-    REGCONV(UInt32,UShort);
+    REGCONV(UInt32, UShort);
 
     REGCONV(Float, Time);
 
@@ -451,7 +445,7 @@ SoBuiltinFieldConverter::initClass()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//   
+//
 //
 // Use:
 
@@ -467,7 +461,7 @@ SoBuiltinFieldConverter::SoBuiltinFieldConverter()
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//   
+//
 //
 // Use:
 
@@ -479,8 +473,8 @@ SoBuiltinFieldConverter::~SoBuiltinFieldConverter()
     delete myOutputData;
 
     if (input != NULL) {
-	delete input;
-	delete output;
+        delete input;
+        delete output;
     }
 }
 
@@ -502,62 +496,100 @@ SoBuiltinFieldConverter::getOutput(SoType type)
     output = new SoEngineOutput;
     output->setContainer(this);
     myOutputData->addOutput(this, "output", output, type);
-    
-#define DECIDEOUT(class) \
-    (type == SO__CONCAT(So,class)::getClassTypeId()) { \
-	outType = class; \
-    }
-    
-    if DECIDEOUT(MFBitMask)
-    else if DECIDEOUT(MFBool)
-    else if DECIDEOUT(MFColor)
-    else if DECIDEOUT(MFEnum)
-    else if DECIDEOUT(MFFloat)
-    else if DECIDEOUT(MFInt32)
-    else if DECIDEOUT(MFMatrix)
-    else if DECIDEOUT(MFName)
-    else if DECIDEOUT(MFNode)
-    else if DECIDEOUT(MFPath)
-    else if DECIDEOUT(MFPlane)
-    else if DECIDEOUT(MFRotation)
-    else if DECIDEOUT(MFShort)
-    else if DECIDEOUT(MFString)
-    else if DECIDEOUT(MFTime)
-    else if DECIDEOUT(MFUInt32)
-    else if DECIDEOUT(MFUShort)
-    else if DECIDEOUT(MFVec2f)
-    else if DECIDEOUT(MFVec3f)
-    else if DECIDEOUT(MFVec4f)
-    else if DECIDEOUT(SFBitMask)
-    else if DECIDEOUT(SFBool)
-    else if DECIDEOUT(SFColor)
-    else if DECIDEOUT(SFEnum)
-    else if DECIDEOUT(SFFloat)
-    else if DECIDEOUT(SFInt32)
-    else if DECIDEOUT(SFMatrix)
-    else if DECIDEOUT(SFName)
-    else if DECIDEOUT(SFNode)
-    else if DECIDEOUT(SFPath)
-    else if DECIDEOUT(SFPlane)
-    else if DECIDEOUT(SFRotation)
-    else if DECIDEOUT(SFShort)
-    else if DECIDEOUT(SFString)
-    else if DECIDEOUT(SFTime)
-    else if DECIDEOUT(SFUInt32)
-    else if DECIDEOUT(SFUShort)
-    else if DECIDEOUT(SFVec2f)
-    else if DECIDEOUT(SFVec3f)
-    else if DECIDEOUT(SFVec4f)
+
+#define DECIDEOUT(class)                                                       \
+    (type == SO__CONCAT(So, class)::getClassTypeId()) { outType = class; }
+
+    if
+        DECIDEOUT(MFBitMask)
+    else if
+        DECIDEOUT(MFBool)
+    else if
+        DECIDEOUT(MFColor)
+    else if
+        DECIDEOUT(MFEnum)
+    else if
+        DECIDEOUT(MFFloat)
+    else if
+        DECIDEOUT(MFInt32)
+    else if
+        DECIDEOUT(MFMatrix)
+    else if
+        DECIDEOUT(MFName)
+    else if
+        DECIDEOUT(MFNode)
+    else if
+        DECIDEOUT(MFPath)
+    else if
+        DECIDEOUT(MFPlane)
+    else if
+        DECIDEOUT(MFRotation)
+    else if
+        DECIDEOUT(MFShort)
+    else if
+        DECIDEOUT(MFString)
+    else if
+        DECIDEOUT(MFTime)
+    else if
+        DECIDEOUT(MFUInt32)
+    else if
+        DECIDEOUT(MFUShort)
+    else if
+        DECIDEOUT(MFVec2f)
+    else if
+        DECIDEOUT(MFVec3f)
+    else if
+        DECIDEOUT(MFVec4f)
+    else if
+        DECIDEOUT(SFBitMask)
+    else if
+        DECIDEOUT(SFBool)
+    else if
+        DECIDEOUT(SFColor)
+    else if
+        DECIDEOUT(SFEnum)
+    else if
+        DECIDEOUT(SFFloat)
+    else if
+        DECIDEOUT(SFInt32)
+    else if
+        DECIDEOUT(SFMatrix)
+    else if
+        DECIDEOUT(SFName)
+    else if
+        DECIDEOUT(SFNode)
+    else if
+        DECIDEOUT(SFPath)
+    else if
+        DECIDEOUT(SFPlane)
+    else if
+        DECIDEOUT(SFRotation)
+    else if
+        DECIDEOUT(SFShort)
+    else if
+        DECIDEOUT(SFString)
+    else if
+        DECIDEOUT(SFTime)
+    else if
+        DECIDEOUT(SFUInt32)
+    else if
+        DECIDEOUT(SFUShort)
+    else if
+        DECIDEOUT(SFVec2f)
+    else if
+        DECIDEOUT(SFVec3f)
+    else if
+        DECIDEOUT(SFVec4f)
 #undef DECIDEOUT
-#ifdef DEBUG	
+#ifdef DEBUG
     else {
-	SoDebugError::post("(internal) SoBuiltinFieldConverter::getOutput"
-		       "no output for type '%s'", type.getName().getString());
+        SoDebugError::post("(internal) SoBuiltinFieldConverter::getOutput"
+                           "no output for type '%s'",
+                           type.getName().getString());
     }
-#endif    
+#endif
     return output;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -575,60 +607,101 @@ SoBuiltinFieldConverter::getInput(SoType type)
 ////////////////////////////////////////////////////////////////////////
 {
     input = (SoField *)type.createInstance();
-    
-#define DECIDEIN(class,defaultValue) \
-    (type == SO__CONCAT(So,class)::getClassTypeId()) { \
-	inType = class; \
-	((SO__CONCAT(So,class) *)input)->setValue defaultValue ; \
+
+#define DECIDEIN(class, defaultValue)                                          \
+    (type == SO__CONCAT(So, class)::getClassTypeId()) {                        \
+        inType = class;                                                        \
+        ((SO__CONCAT(So, class) *)input)->setValue defaultValue;               \
     }
-    
-    if DECIDEIN(MFBitMask,(0))
-    else if DECIDEIN(MFBool,(FALSE))
-    else if DECIDEIN(MFColor,(0,0,0))
-    else if DECIDEIN(MFEnum,(0))
-    else if DECIDEIN(MFFloat,(0))
-    else if DECIDEIN(MFInt32,(0))
-    else if DECIDEIN(MFMatrix,(SbMatrix::identity()))
-    else if DECIDEIN(MFName,(""))
-    else if DECIDEIN(MFNode,(NULL))
-    else if DECIDEIN(MFPath,(NULL))
-    else if DECIDEIN(MFPlane,(SbPlane(SbVec3f(0,0,0),0)))
-    else if DECIDEIN(MFRotation,(SbRotation()))
-    else if DECIDEIN(MFShort,(0))
-    else if DECIDEIN(MFString,(""))
-    else if DECIDEIN(MFTime,(SbTime::zero()))
-    else if DECIDEIN(MFUInt32,(0))
-    else if DECIDEIN(MFUShort,(0))
-    else if DECIDEIN(MFVec2f,(0,0))
-    else if DECIDEIN(MFVec3f,(0,0,0))
-    else if DECIDEIN(MFVec4f,(0,0,0,0))
-    else if DECIDEIN(SFBitMask,(0))
-    else if DECIDEIN(SFBool,(FALSE))
-    else if DECIDEIN(SFColor,(0,0,0))
-    else if DECIDEIN(SFEnum,(0))
-    else if DECIDEIN(SFFloat,(0))
-    else if DECIDEIN(SFInt32,(0))
-    else if DECIDEIN(SFMatrix,(SbMatrix::identity()))
-    else if DECIDEIN(SFName,(""))
-    else if DECIDEIN(SFNode,(NULL))
-    else if DECIDEIN(SFPath,(NULL))
-    else if DECIDEIN(SFPlane,(SbPlane(SbVec3f(0,0,0),0)))
-    else if DECIDEIN(SFRotation,(SbRotation()))
-    else if DECIDEIN(SFShort,(0))
-    else if DECIDEIN(SFString,(""))
-    else if DECIDEIN(SFTime,(SbTime::zero()))
-    else if DECIDEIN(SFUInt32,(0))
-    else if DECIDEIN(SFUShort,(0))
-    else if DECIDEIN(SFVec2f,(0,0))
-    else if DECIDEIN(SFVec3f,(0,0,0))
-    else if DECIDEIN(SFVec4f,(0,0,0,0))
+
+    if
+        DECIDEIN(MFBitMask, (0))
+    else if
+        DECIDEIN(MFBool, (FALSE))
+    else if
+        DECIDEIN(MFColor, (0, 0, 0))
+    else if
+        DECIDEIN(MFEnum, (0))
+    else if
+        DECIDEIN(MFFloat, (0))
+    else if
+        DECIDEIN(MFInt32, (0))
+    else if
+        DECIDEIN(MFMatrix, (SbMatrix::identity()))
+    else if
+        DECIDEIN(MFName, (""))
+    else if
+        DECIDEIN(MFNode, (NULL))
+    else if
+        DECIDEIN(MFPath, (NULL))
+    else if
+        DECIDEIN(MFPlane, (SbPlane(SbVec3f(0, 0, 0), 0)))
+    else if
+        DECIDEIN(MFRotation, (SbRotation()))
+    else if
+        DECIDEIN(MFShort, (0))
+    else if
+        DECIDEIN(MFString, (""))
+    else if
+        DECIDEIN(MFTime, (SbTime::zero()))
+    else if
+        DECIDEIN(MFUInt32, (0))
+    else if
+        DECIDEIN(MFUShort, (0))
+    else if
+        DECIDEIN(MFVec2f, (0, 0))
+    else if
+        DECIDEIN(MFVec3f, (0, 0, 0))
+    else if
+        DECIDEIN(MFVec4f, (0, 0, 0, 0))
+    else if
+        DECIDEIN(SFBitMask, (0))
+    else if
+        DECIDEIN(SFBool, (FALSE))
+    else if
+        DECIDEIN(SFColor, (0, 0, 0))
+    else if
+        DECIDEIN(SFEnum, (0))
+    else if
+        DECIDEIN(SFFloat, (0))
+    else if
+        DECIDEIN(SFInt32, (0))
+    else if
+        DECIDEIN(SFMatrix, (SbMatrix::identity()))
+    else if
+        DECIDEIN(SFName, (""))
+    else if
+        DECIDEIN(SFNode, (NULL))
+    else if
+        DECIDEIN(SFPath, (NULL))
+    else if
+        DECIDEIN(SFPlane, (SbPlane(SbVec3f(0, 0, 0), 0)))
+    else if
+        DECIDEIN(SFRotation, (SbRotation()))
+    else if
+        DECIDEIN(SFShort, (0))
+    else if
+        DECIDEIN(SFString, (""))
+    else if
+        DECIDEIN(SFTime, (SbTime::zero()))
+    else if
+        DECIDEIN(SFUInt32, (0))
+    else if
+        DECIDEIN(SFUShort, (0))
+    else if
+        DECIDEIN(SFVec2f, (0, 0))
+    else if
+        DECIDEIN(SFVec3f, (0, 0, 0))
+    else if
+        DECIDEIN(SFVec4f, (0, 0, 0, 0))
 #undef DECIDEIN
-#ifdef DEBUG	
+#ifdef DEBUG
     else {
-	SoDebugError::post("(internal) SoBuiltinFieldConverter::getInput",
-		       "no input for type '%s'", type.getName().getString());
+        SoDebugError::post("(internal) SoBuiltinFieldConverter::getInput",
+                           "no input for type '%s'",
+                           type.getName().getString());
     }
-#endif    
+#endif
 
     input->setContainer(this);
     myInputData->addField(this, "input", input);
@@ -654,11 +727,11 @@ SoBuiltinFieldConverter::evaluate()
 
 #ifdef DEBUG
     if (input == NULL) {
-	SoDebugError::post("(internal) SoBuiltinFieldConverter::evaluate",
-			   "NULL input field");
-	return;
+        SoDebugError::post("(internal) SoBuiltinFieldConverter::evaluate",
+                           "NULL input field");
+        return;
     }
-#endif    
+#endif
 
     // We know that our engineOutput cannot be disabled, since nobody
     // but us has access to it. If we are connected from an
@@ -669,9 +742,9 @@ SoBuiltinFieldConverter::evaluate()
     // check for a disabled output here.
 
     for (int i = 0; i < output->getNumConnections(); i++) {
-	SoField *outField = (*output)[i];
-	if (!outField->isReadOnly())
-	    doConversion(outField);
+        SoField *outField = (*output)[i];
+        if (!outField->isReadOnly())
+            doConversion(outField);
     }
 }
 
@@ -690,57 +763,57 @@ SoBuiltinFieldConverter::doConversion(SoField *outField)
 ////////////////////////////////////////////////////////////////////////
 {
     // Various variables needed by the conversion cases:
-    int i;
+    int      i;
     SbMatrix matrix;
     SbString string;
 
     // Combine inType/outType into one integer.
-    switch (inType*MAXFIELDS + outType) {
+    switch (inType * MAXFIELDS + outType) {
 
-#define CASE(typeIn,typeOut) case typeIn*MAXFIELDS+typeOut
+#define CASE(typeIn, typeOut) case typeIn *MAXFIELDS + typeOut
 
-// This macro is for converting the single/multi fields into their
-// corresponding multi/single value fields.
-// In normal code, it looks like:
-// Single to Multi:
-//   SoMField->setValue(SoSField->getValue())
-// Multi so Single:
-//   if (MField->getNum() > 0) SoSField->setValue(SoMField[0])
+        // This macro is for converting the single/multi fields into their
+        // corresponding multi/single value fields.
+        // In normal code, it looks like:
+        // Single to Multi:
+        //   SoMField->setValue(SoSField->getValue())
+        // Multi so Single:
+        //   if (MField->getNum() > 0) SoSField->setValue(SoMField[0])
 
-#define CONV1(type)							    \
-      CASE(SO__CONCAT(SF,type),SO__CONCAT(MF,type)):		    \
-	((SO__CONCAT(SoMF,type) *)outField)->setValue(			    \
-	    ((SO__CONCAT(SoSF,type) *)input)->getValue());		    \
-	break;								    \
-      CASE(SO__CONCAT(MF,type),SO__CONCAT(SF,type)):		    \
-	if (((SoMField *)input)->getNum() > 0)				    \
-	    ((SO__CONCAT(SoSF,type) *)outField)->setValue(		    \
-		(*(SO__CONCAT(SoMF,type) *)input)[0]);			    \
-	break
-	
-// Cases for all the field types:
-	CONV1(BitMask);
-	CONV1(Bool);
-	CONV1(Color);
-	CONV1(Enum);
-	CONV1(Float);
-	CONV1(Int32);
-	CONV1(Matrix);
-	CONV1(Name);
-	CONV1(Node);
-	CONV1(Path);
-	CONV1(Plane);
-	CONV1(Rotation);
-	CONV1(Short);
-	CONV1(String);
-	CONV1(Time);
-	CONV1(UInt32);
-	CONV1(UShort);
-	CONV1(Vec2f);
-	CONV1(Vec3f);
-	CONV1(Vec4f);
+#define CONV1(type)                                                            \
+    CASE(SO__CONCAT(SF, type), SO__CONCAT(MF, type))                           \
+        : ((SO__CONCAT(SoMF, type) *)outField)                                 \
+              ->setValue(((SO__CONCAT(SoSF, type) *)input)->getValue());       \
+    break;                                                                     \
+    CASE(SO__CONCAT(MF, type), SO__CONCAT(SF, type))                           \
+        : if (((SoMField *)input)->getNum() >                                  \
+              0)((SO__CONCAT(SoSF, type) *)outField)                           \
+              ->setValue((*(SO__CONCAT(SoMF, type) *)input)[0]);               \
+    break
+
+        // Cases for all the field types:
+        CONV1(BitMask);
+        CONV1(Bool);
+        CONV1(Color);
+        CONV1(Enum);
+        CONV1(Float);
+        CONV1(Int32);
+        CONV1(Matrix);
+        CONV1(Name);
+        CONV1(Node);
+        CONV1(Path);
+        CONV1(Plane);
+        CONV1(Rotation);
+        CONV1(Short);
+        CONV1(String);
+        CONV1(Time);
+        CONV1(UInt32);
+        CONV1(UShort);
+        CONV1(Vec2f);
+        CONV1(Vec3f);
+        CONV1(Vec4f);
 #undef CONV1
-	
+
 //
 // Conversions to/from a string for all field types.  The eight cases
 // are:
@@ -758,112 +831,111 @@ SoBuiltinFieldConverter::doConversion(SoField *outField)
 // takes file format, and in the file format strings with whitespace
 // must be quoted.
 //
-#define CONVSTR(type)							    \
-      CASE(SO__CONCAT(SF,type),SFString):				    \
-      CASE(SO__CONCAT(MF,type),SFString):				    \
-	input->get(string);						    \
-	((SoSFString *)outField)->setValue(string);			    \
-	break;								    \
-      CASE(SO__CONCAT(SF,type),MFString):				    \
-	input->get(string);						    \
-	((SoMFString *)outField)->set1Value(0,string);			    \
-	break;								    \
-      CASE(SO__CONCAT(MF,type),MFString):				    \
-	for (i = 0; i < ((SoMField *)input)->getNum(); i++) {		    \
-	    ((SoMField *)input)->get1(i, string);			    \
-	    ((SoMFString *)outField)->set1Value(i, string);		    \
-	}								    \
-	break;								    \
-      CASE(SFString,SO__CONCAT(SF,type)):				    \
-      CASE(MFString,SO__CONCAT(SF,type)):				    \
-      CASE(SFString,SO__CONCAT(MF,type)):				    \
-	input->get(string);						    \
-	outField->set(string.getString());				    \
-	break;								    \
-      CASE(MFString,SO__CONCAT(MF,type)):				    \
-	for (i = 0; i < ((SoMField *)input)->getNum(); i++) {		    \
-	    ((SoMField *)input)->get1(i, string);			    \
-	    ((SoMField *)outField)->set1(i, string.getString());	    \
-	}								    \
-	break
-	
-// All types except string:
-	CONVSTR(BitMask);
-	CONVSTR(Bool);
-	CONVSTR(Color);
-	CONVSTR(Enum);
-	CONVSTR(Float);
-	CONVSTR(Int32);
-	CONVSTR(Matrix);
-	CONVSTR(Name);
-	CONVSTR(Node);
-	CONVSTR(Path);
-	CONVSTR(Plane);
-	CONVSTR(Rotation);
-	CONVSTR(Short);
-	CONVSTR(UInt32);
-	CONVSTR(UShort);
-	CONVSTR(Vec2f);
-	CONVSTR(Vec3f);
-	CONVSTR(Vec4f);
+#define CONVSTR(type)                                                          \
+    CASE(SO__CONCAT(SF, type), SFString)                                       \
+        : CASE(SO__CONCAT(MF, type), SFString) : input->get(string);           \
+    ((SoSFString *)outField)->setValue(string);                                \
+    break;                                                                     \
+    CASE(SO__CONCAT(SF, type), MFString) : input->get(string);                 \
+    ((SoMFString *)outField)->set1Value(0, string);                            \
+    break;                                                                     \
+    CASE(SO__CONCAT(MF, type), MFString)                                       \
+        : for (i = 0; i < ((SoMField *)input)->getNum(); i++) {                \
+        ((SoMField *)input)->get1(i, string);                                  \
+        ((SoMFString *)outField)->set1Value(i, string);                        \
+    }                                                                          \
+    break;                                                                     \
+    CASE(SFString, SO__CONCAT(SF, type))                                       \
+        : CASE(MFString, SO__CONCAT(SF, type))                                 \
+        : CASE(SFString, SO__CONCAT(MF, type)) : input->get(string);           \
+    outField->set(string.getString());                                         \
+    break;                                                                     \
+    CASE(MFString, SO__CONCAT(MF, type))                                       \
+        : for (i = 0; i < ((SoMField *)input)->getNum(); i++) {                \
+        ((SoMField *)input)->get1(i, string);                                  \
+        ((SoMField *)outField)->set1(i, string.getString());                   \
+    }                                                                          \
+    break
+
+        // All types except string:
+        CONVSTR(BitMask);
+        CONVSTR(Bool);
+        CONVSTR(Color);
+        CONVSTR(Enum);
+        CONVSTR(Float);
+        CONVSTR(Int32);
+        CONVSTR(Matrix);
+        CONVSTR(Name);
+        CONVSTR(Node);
+        CONVSTR(Path);
+        CONVSTR(Plane);
+        CONVSTR(Rotation);
+        CONVSTR(Short);
+        CONVSTR(UInt32);
+        CONVSTR(UShort);
+        CONVSTR(Vec2f);
+        CONVSTR(Vec3f);
+        CONVSTR(Vec4f);
 #undef CONVSTR
 
-// Special case for time to string; if the time is great enough,
-// format as a date:
-      CASE(SFTime,SFString):
-      {
-	  SbTime t = ((SoSFTime *)input)->getValue();
-	  if (t.getValue() > 3.15e7) string = t.formatDate();
-	  else string = t.format();
-	  ((SoSFString *)outField)->setValue(string);
-      }
-      break;
-      CASE(SFTime,MFString):
-      {
-	  SbTime t = ((SoSFTime *)input)->getValue();
-	  if (t.getValue() > 3.15e7) string = t.formatDate();
-	  else string = t.format();
-	  ((SoMFString *)outField)->set1Value(0, string);
-      }
-      break;
-      CASE(MFTime,SFString):
-      {
-	  SbTime t = (*((SoMFTime *)input))[0];
-	  if (t.getValue() > 3.15e7) string = t.formatDate();
-	  else string = t.format();
-	  ((SoSFString *)outField)->setValue(string);
-      }
-      break;
-      CASE(MFTime,MFString):
-      {
-	  for (i = 0; i < ((SoMField *)input)->getNum(); i++) {
-	      SbTime t = (*((SoMFTime *)input))[i];
-	      if (t.getValue() > 3.15e7) string = t.formatDate();
-	      else string = t.format();
-	      ((SoMFString *)outField)->set1Value(i, string);
-	  }
-      }
-      break;
-      CASE(SFString,SFTime):
-      CASE(MFString,SFTime):
-      CASE(SFString,MFTime):
-	input->get(string);
-	outField->set(string.getString());
-	break;
-      CASE(MFString,MFTime):
-	for (i = 0; i < ((SoMField *)input)->getNum(); i++) {
-	    ((SoMField *)input)->get1(i, string);
-	    ((SoMField *)outField)->set1(i, string.getString());
-	}
-      break;
-      
+        // Special case for time to string; if the time is great enough,
+        // format as a date:
+        CASE(SFTime, SFString) : {
+            SbTime t = ((SoSFTime *)input)->getValue();
+            if (t.getValue() > 3.15e7)
+                string = t.formatDate();
+            else
+                string = t.format();
+            ((SoSFString *)outField)->setValue(string);
+        }
+        break;
+        CASE(SFTime, MFString) : {
+            SbTime t = ((SoSFTime *)input)->getValue();
+            if (t.getValue() > 3.15e7)
+                string = t.formatDate();
+            else
+                string = t.format();
+            ((SoMFString *)outField)->set1Value(0, string);
+        }
+        break;
+        CASE(MFTime, SFString) : {
+            SbTime t = (*((SoMFTime *)input))[0];
+            if (t.getValue() > 3.15e7)
+                string = t.formatDate();
+            else
+                string = t.format();
+            ((SoSFString *)outField)->setValue(string);
+        }
+        break;
+        CASE(MFTime, MFString) : {
+            for (i = 0; i < ((SoMField *)input)->getNum(); i++) {
+                SbTime t = (*((SoMFTime *)input))[i];
+                if (t.getValue() > 3.15e7)
+                    string = t.formatDate();
+                else
+                    string = t.format();
+                ((SoMFString *)outField)->set1Value(i, string);
+            }
+        }
+        break;
+        CASE(SFString, SFTime)
+            : CASE(MFString, SFTime)
+            : CASE(SFString, MFTime) : input->get(string);
+        outField->set(string.getString());
+        break;
+        CASE(MFString, MFTime)
+            : for (i = 0; i < ((SoMField *)input)->getNum(); i++) {
+            ((SoMField *)input)->get1(i, string);
+            ((SoMField *)outField)->set1(i, string.getString());
+        }
+        break;
 
 // This macro will do most of the conversions, relying on the C++
 // built-in type conversions.  It does all eight combinations of
 // single/multi to single/multi conversions for two types that are
 // different.  HALF_CONV does the conversions one-way, CONV does them
 // both ways:
-// Single to single: 
+// Single to single:
 //   SoSField->setValue(SoSField->getValue());
 // Multi to single:
 //   if (SoMField->getNum() > 0) SoSField->setValue(SoMField[0])
@@ -874,125 +946,127 @@ SoBuiltinFieldConverter::doConversion(SoField *outField)
 //      SoMField->set1Value(i, SoMfield[i]);
 //   }
 //
-#define HALF_CONV(typeIn,typeOut,valTypeOut)				      \
-      CASE(SO__CONCAT(SF,typeIn),SO__CONCAT(SF,typeOut)):		      \
-	((SO__CONCAT(SoSF,typeOut) *)outField)->setValue((valTypeOut)	      \
-	    ((SO__CONCAT(SoSF,typeIn) *)input)->getValue());		      \
-	break;								      \
-      CASE(SO__CONCAT(MF,typeIn),SO__CONCAT(SF,typeOut)):		      \
-	if (((SoMField *)input)->getNum() > 0)				      \
-	    ((SO__CONCAT(SoSF,typeOut) *)outField)->setValue((valTypeOut)     \
-		(*(SO__CONCAT(SoMF,typeIn) *)input)[0]);		      \
-	break;								      \
-      CASE(SO__CONCAT(SF,typeIn),SO__CONCAT(MF,typeOut)):		      \
-	((SO__CONCAT(SoMF,typeOut) *)outField)->setValue((valTypeOut)	      \
-	    ((SO__CONCAT(SoSF,typeIn) *)input)->getValue());		      \
-	break;								      \
-      CASE(SO__CONCAT(MF,typeIn),SO__CONCAT(MF,typeOut)):		      \
-	for (i = 0; i < ((SoMField *)input)->getNum(); i++) {		      \
-	    ((SO__CONCAT(SoMF,typeOut) *)outField)->set1Value(i,	      \
-		(valTypeOut) (*(SO__CONCAT(SoMF,typeIn) *)input)[i]);	      \
-	}								      \
-	break
+#define HALF_CONV(typeIn, typeOut, valTypeOut)                                 \
+    CASE(SO__CONCAT(SF, typeIn), SO__CONCAT(SF, typeOut))                      \
+        : ((SO__CONCAT(SoSF, typeOut) *)outField)                              \
+              ->setValue((valTypeOut)((SO__CONCAT(SoSF, typeIn) *)input)       \
+                             ->getValue());                                    \
+    break;                                                                     \
+    CASE(SO__CONCAT(MF, typeIn), SO__CONCAT(SF, typeOut))                      \
+        : if (((SoMField *)input)->getNum() >                                  \
+              0)((SO__CONCAT(SoSF, typeOut) *)outField)                        \
+              ->setValue((valTypeOut)(*(SO__CONCAT(SoMF, typeIn) *)input)[0]); \
+    break;                                                                     \
+    CASE(SO__CONCAT(SF, typeIn), SO__CONCAT(MF, typeOut))                      \
+        : ((SO__CONCAT(SoMF, typeOut) *)outField)                              \
+              ->setValue((valTypeOut)((SO__CONCAT(SoSF, typeIn) *)input)       \
+                             ->getValue());                                    \
+    break;                                                                     \
+    CASE(SO__CONCAT(MF, typeIn), SO__CONCAT(MF, typeOut))                      \
+        : for (i = 0; i < ((SoMField *)input)->getNum(); i++) {                \
+        ((SO__CONCAT(SoMF, typeOut) *)outField)                                \
+            ->set1Value(i,                                                     \
+                        (valTypeOut)(*(SO__CONCAT(SoMF, typeIn) *)input)[i]);  \
+    }                                                                          \
+    break
 
-#define CONV(type1,valType1,type2,valType2)				      \
-    HALF_CONV(type1,type2,valType2);					      \
-    HALF_CONV(type2,type1,valType1)
-	
+#define CONV(type1, valType1, type2, valType2)                                 \
+    HALF_CONV(type1, type2, valType2);                                         \
+    HALF_CONV(type2, type1, valType1)
 
-// Simple conversions for most fields:
+        // Simple conversions for most fields:
 
-	CONV(Bool,SbBool,Float,float);
-	CONV(Bool,SbBool,Int32,int32_t);
-	CONV(Bool,SbBool,Short,short);
-	CONV(Bool,SbBool,UInt32,uint32_t);
-	CONV(Bool,SbBool,UShort,unsigned short);
+        CONV(Bool, SbBool, Float, float);
+        CONV(Bool, SbBool, Int32, int32_t);
+        CONV(Bool, SbBool, Short, short);
+        CONV(Bool, SbBool, UInt32, uint32_t);
+        CONV(Bool, SbBool, UShort, unsigned short);
 
-	CONV(Color,const SbColor &,Vec3f,const SbVec3f &);
+        CONV(Color, const SbColor &, Vec3f, const SbVec3f &);
 
-	CONV(Float,float,Int32,int32_t);
-	CONV(Float,float,Short,short);
-	CONV(Float,float,UInt32,uint32_t);
-	CONV(Float,float,UShort,unsigned short);
+        CONV(Float, float, Int32, int32_t);
+        CONV(Float, float, Short, short);
+        CONV(Float, float, UInt32, uint32_t);
+        CONV(Float, float, UShort, unsigned short);
 
-	CONV(Int32,int32_t,Short,short);
-	CONV(Int32,int32_t,UInt32,uint32_t);
-	CONV(Int32,int32_t,UShort,unsigned short);
+        CONV(Int32, int32_t, Short, short);
+        CONV(Int32, int32_t, UInt32, uint32_t);
+        CONV(Int32, int32_t, UShort, unsigned short);
 
-	CONV(Short,short,UInt32,uint32_t);
-	CONV(Short,short,UShort,unsigned short);
+        CONV(Short, short, UInt32, uint32_t);
+        CONV(Short, short, UShort, unsigned short);
 
-	CONV(UInt32,uint32_t,UShort,unsigned short);
+        CONV(UInt32, uint32_t, UShort, unsigned short);
 
-// Some wacky oddball conversions that we have to special-case:
+        // Some wacky oddball conversions that we have to special-case:
 
-// Float to time can be handled by regular code because SbTime has a
-// constructor that takes a float, but time to float needs to be
-// special-cased:
-      HALF_CONV(Float, Time, float);
+        // Float to time can be handled by regular code because SbTime has a
+        // constructor that takes a float, but time to float needs to be
+        // special-cased:
+        HALF_CONV(Float, Time, float);
 
-      CASE(SFTime, SFFloat):
-	((SoSFFloat *)outField)->setValue(
-	    ((SoSFTime *)input)->getValue().getValue());
-	break;
-      CASE(SFTime, MFFloat):
-	((SoMFFloat *)outField)->setValue(
-	    ((SoSFTime *)input)->getValue().getValue());
-	break;
-      CASE(MFTime, SFFloat):
-	((SoSFFloat *)outField)->setValue(
-	    (*(SoMFTime *)input)[0].getValue());
-	break;
-      CASE(MFTime, MFFloat):
-	for (i = 0; i < ((SoMFTime *)input)->getNum(); i++) {
-	    ((SoMFFloat *)outField)->set1Value(i,
-		(*(SoMFTime *)input)[i].getValue());
-	}
-	break;
-	    
-      CASE(SFMatrix, SFRotation):
-        ((SoSFRotation *) outField)->setValue(
-	    SbRotation(((SoSFMatrix *) input)->getValue()));
-	break;
-      CASE(SFMatrix, MFRotation):
-        ((SoMFRotation *) outField)->setValue(
-	    SbRotation(((SoSFMatrix *) input)->getValue()));
-	break;
-      CASE(MFMatrix, SFRotation):
-        ((SoSFRotation *) outField)->setValue(
-	    SbRotation((* (SoMFMatrix *) input)[0]));
+        CASE(SFTime, SFFloat)
+            : ((SoSFFloat *)outField)
+                  ->setValue(((SoSFTime *)input)->getValue().getValue());
         break;
-      CASE(MFMatrix, MFRotation):
-	for (i = 0; i < ((SoMFMatrix *)input)->getNum(); i++) {
-	    ((SoMFRotation *)outField)->set1Value(i,
-		SbRotation((* (SoMFMatrix *) input)[i]));
-	}
+        CASE(SFTime, MFFloat)
+            : ((SoMFFloat *)outField)
+                  ->setValue(((SoSFTime *)input)->getValue().getValue());
+        break;
+        CASE(MFTime, SFFloat)
+            : ((SoSFFloat *)outField)
+                  ->setValue((*(SoMFTime *)input)[0].getValue());
+        break;
+        CASE(MFTime, MFFloat)
+            : for (i = 0; i < ((SoMFTime *)input)->getNum(); i++) {
+            ((SoMFFloat *)outField)
+                ->set1Value(i, (*(SoMFTime *)input)[i].getValue());
+        }
         break;
 
-      CASE(SFRotation, SFMatrix):
-	matrix.setRotate(((SoSFRotation *)input)->getValue());
-	((SoSFMatrix *)outField)->setValue(matrix);
-	break;
-      CASE(SFRotation, MFMatrix):
-	matrix.setRotate(((SoSFRotation *)input)->getValue());
-	((SoSFMatrix *)outField)->setValue(matrix);
-	break;
-      CASE(MFRotation, SFMatrix):
-	matrix.setRotate((*(SoMFRotation *)input)[0]);
-	((SoSFMatrix *)outField)->setValue(matrix);
-	break;
-      CASE(MFRotation, MFMatrix):
-	for (i = 0; i < ((SoMFRotation *)input)->getNum(); i++) {
-	    matrix.setRotate((*(SoMFRotation *)input)[i]);
-	    ((SoMFMatrix *)outField)->set1Value(i, matrix);
-	}
-	break;
+        CASE(SFMatrix, SFRotation)
+            : ((SoSFRotation *)outField)
+                  ->setValue(SbRotation(((SoSFMatrix *)input)->getValue()));
+        break;
+        CASE(SFMatrix, MFRotation)
+            : ((SoMFRotation *)outField)
+                  ->setValue(SbRotation(((SoSFMatrix *)input)->getValue()));
+        break;
+        CASE(MFMatrix, SFRotation)
+            : ((SoSFRotation *)outField)
+                  ->setValue(SbRotation((*(SoMFMatrix *)input)[0]));
+        break;
+        CASE(MFMatrix, MFRotation)
+            : for (i = 0; i < ((SoMFMatrix *)input)->getNum(); i++) {
+            ((SoMFRotation *)outField)
+                ->set1Value(i, SbRotation((*(SoMFMatrix *)input)[i]));
+        }
+        break;
 
-      default:
+        CASE(SFRotation, SFMatrix)
+            : matrix.setRotate(((SoSFRotation *)input)->getValue());
+        ((SoSFMatrix *)outField)->setValue(matrix);
+        break;
+        CASE(SFRotation, MFMatrix)
+            : matrix.setRotate(((SoSFRotation *)input)->getValue());
+        ((SoSFMatrix *)outField)->setValue(matrix);
+        break;
+        CASE(MFRotation, SFMatrix)
+            : matrix.setRotate((*(SoMFRotation *)input)[0]);
+        ((SoSFMatrix *)outField)->setValue(matrix);
+        break;
+        CASE(MFRotation, MFMatrix)
+            : for (i = 0; i < ((SoMFRotation *)input)->getNum(); i++) {
+            matrix.setRotate((*(SoMFRotation *)input)[i]);
+            ((SoMFMatrix *)outField)->set1Value(i, matrix);
+        }
+        break;
+
+    default:
 #ifdef DEBUG
         SoDebugError::post("SoBuiltinFieldConverter::doConversion",
-			   "Can't convert type %d to type %d\n",
-			   inType, outType);
+                           "Can't convert type %d to type %d\n", inType,
+                           outType);
 #endif
         break;
     }
@@ -1021,7 +1095,7 @@ SoBuiltinFieldConverter::getTypeId() const
 // Use: internal
 //
 const SoFieldData *
-SoBuiltinFieldConverter::getFieldData() const 
+SoBuiltinFieldConverter::getFieldData() const
 //
 ////////////////////////////////////////////////////////////////////////
 {

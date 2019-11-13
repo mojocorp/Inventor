@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -44,7 +44,7 @@
  |
  |   Description:
  |	Definition of the SoDB class
- | 
+ |
  |   Author(s)		: Paul S. Strauss, Nick Thompson, Gavin Bell
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
@@ -76,20 +76,21 @@
 
 #include <SoDebug.h>
 
-#include "upgraders/SoUpgraders.h"	    /* V1 upgraders */
-#include "fields/SoGlobalField.h"	    /* GlobalField routines	*/
+#include "upgraders/SoUpgraders.h" /* V1 upgraders */
+#include "fields/SoGlobalField.h"  /* GlobalField routines	*/
 
 #include <cstring>
 
-// Internal class for storing headers and the corresponding 
+// Internal class for storing headers and the corresponding
 // callback functions.
-SoINTERNAL struct SoDBHeaderData {
-    SbString	    headerString;
-    SbBool	    isBinary;
-    float	    ivVersion;
-    SoDBHeaderCB    *preCB;
-    SoDBHeaderCB    *postCB;
-    void 	    *userData;    
+SoINTERNAL
+struct SoDBHeaderData {
+    SbString      headerString;
+    SbBool        isBinary;
+    float         ivVersion;
+    SoDBHeaderCB *preCB;
+    SoDBHeaderCB *postCB;
+    void *        userData;
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -112,23 +113,17 @@ class SoSFRealTime : public SoSFTime {
     virtual ~SoSFRealTime();
 
   private:
-    virtual void	connectionStatusChanged(int numConnections);
+    virtual void connectionStatusChanged(int numConnections);
 
     int totalNumConnections;
 };
 
-SoSFRealTime::SoSFRealTime()
-{
-    totalNumConnections = 0;
-}
+SoSFRealTime::SoSFRealTime() { totalNumConnections = 0; }
 
-SoSFRealTime::~SoSFRealTime()
-{
-}
+SoSFRealTime::~SoSFRealTime() {}
 
 void
-SoSFRealTime::connectionStatusChanged(int numConnections)
-{
+SoSFRealTime::connectionStatusChanged(int numConnections) {
     // Determine if realTime is connected to anything.
     totalNumConnections += numConnections;
 
@@ -137,26 +132,26 @@ SoSFRealTime::connectionStatusChanged(int numConnections)
 }
 
 // This identifies the current version of Inventor
-const char	*SoDB::versionString = "SGI Open Inventor 2.1 Beta";
+const char *SoDB::versionString = "SGI Open Inventor 2.1 Beta";
 
 // This is the famous global database that you hear so much about
-SoDB		*SoDB::globalDB = NULL;
+SoDB *SoDB::globalDB = NULL;
 
 // This keeps track of the number of current notifications. When this
 // is decremented to 0, all immediate idle queue sensors are triggered.
-int		SoDB::notifyCount = 0;
+int SoDB::notifyCount = 0;
 
 // This list stores information for the registered headers
-std::vector<SoDBHeaderData*> SoDB::headerList;
+std::vector<SoDBHeaderData *> SoDB::headerList;
 
 // This dictionary stores field conversion engine types
 std::map<uint32_t, short> SoDB::conversionDict;
 
 // The global realTime field:
-SoSFRealTime	*SoDB::realTime;
+SoSFRealTime *SoDB::realTime;
 
 // Sensor which touches realTime every once in a while
-SoTimerSensor	*SoDB::realTimeSensor;
+SoTimerSensor *SoDB::realTimeSensor;
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -177,109 +172,100 @@ SoDB::init()
     // Initialize global DB only once.
     if (globalDB == NULL) {
 
-	globalDB = new SoDB;
+        globalDB = new SoDB;
 
         SbName::init();
 
-	// Initialize the runtime type system
-	SoType::init();
+        // Initialize the runtime type system
+        SoType::init();
 
-	// Setup for file reading (initializes list of directories to
-	// search in).
-	SoInput::init();
+        // Setup for file reading (initializes list of directories to
+        // search in).
+        SoInput::init();
 
         SoFontCache::init();
 
-	//
-	// Initialize all standard classes. The significant ordering
-	// rules are:
-	//	actions must be done before nodes
-	//	elements must be done before actions
-	//
-	SoBase::initClass();
-	SoFieldContainer::initClass();
-	SoPath::initClass();
-	SoGlobalField::initClass();
+        //
+        // Initialize all standard classes. The significant ordering
+        // rules are:
+        //	actions must be done before nodes
+        //	elements must be done before actions
+        //
+        SoBase::initClass();
+        SoFieldContainer::initClass();
+        SoPath::initClass();
+        SoGlobalField::initClass();
 
-	SoError::initClasses();
-	SoElement::initElements();
-	SoAction::initClasses();
-	SoNode::initClasses();
-	SoField::initClasses();
-	SoEngine::initClasses();
-	SoEvent::initClasses();
-	SoDetail::initClasses();
+        SoError::initClasses();
+        SoElement::initElements();
+        SoAction::initClasses();
+        SoNode::initClasses();
+        SoField::initClasses();
+        SoEngine::initClasses();
+        SoEvent::initClasses();
+        SoDetail::initClasses();
 
-	SoUpgrader::initClasses();
-	
+        SoUpgrader::initClasses();
+
         // Register valid headers we know about
-	SoDB::registerHeader(SoOutput::getDefaultASCIIHeader(),  
-			    	FALSE, 2.1f,
-				NULL, NULL, NULL);
-	SoDB::registerHeader(SoOutput::getDefaultBinaryHeader(), 
-				TRUE, 2.1f,
-				NULL, NULL, NULL);
-        SoDB::registerHeader("#Inventor V2.1 utf8",
-                                FALSE, 2.1f,
-				NULL, NULL, NULL);
-	SoDB::registerHeader("#Inventor V2.0 ascii",  
-				FALSE, 2.0f,
-				NULL, NULL, NULL);
-	SoDB::registerHeader("#Inventor V2.0 binary", 
-				TRUE, 2.0f,
-				NULL, NULL, NULL);
-	SoDB::registerHeader("#Inventor V1.0 ascii",  
-				FALSE, 1.0f,
-				NULL, NULL, NULL);
-	SoDB::registerHeader("#Inventor V1.0 binary", 
-				TRUE,  1.0f,
-				NULL, NULL, NULL);
-				    
-	// For now, treat VRML files as Inventor 2.1 files.
-	// In the future, we might want to verify that the VRML file
-	// contains strictly VRML nodes, i.e. any Inventor (non-VRML)
-	// nodes in the file generate read warnings.
-	SoDB::registerHeader("#VRML V1.0 ascii",  
-				FALSE, 2.1f,
-				NULL, NULL, NULL);
-	
-	// Create realTime global field. We have to bypass the
-	// standard createGlobalField stuff because there is no
-	// specific typeId info for SoSFRealTime.
-	realTime = new SoSFRealTime;
-	// Construct a global field (to add it to the dictionary); we
-	// don't actually need a pointer to it.
-	(void) new SoGlobalField("realTime", realTime);
-	realTime->setValue(SbTime::getTimeOfDay());
-	realTime->getContainer()->ref();
+        SoDB::registerHeader(SoOutput::getDefaultASCIIHeader(), FALSE, 2.1f,
+                             NULL, NULL, NULL);
+        SoDB::registerHeader(SoOutput::getDefaultBinaryHeader(), TRUE, 2.1f,
+                             NULL, NULL, NULL);
+        SoDB::registerHeader("#Inventor V2.1 utf8", FALSE, 2.1f, NULL, NULL,
+                             NULL);
+        SoDB::registerHeader("#Inventor V2.0 ascii", FALSE, 2.0f, NULL, NULL,
+                             NULL);
+        SoDB::registerHeader("#Inventor V2.0 binary", TRUE, 2.0f, NULL, NULL,
+                             NULL);
+        SoDB::registerHeader("#Inventor V1.0 ascii", FALSE, 1.0f, NULL, NULL,
+                             NULL);
+        SoDB::registerHeader("#Inventor V1.0 binary", TRUE, 1.0f, NULL, NULL,
+                             NULL);
 
-	// And setup the sensor to touch it periodically
-	realTimeSensor = new SoTimerSensor;
-	realTimeSensor->setFunction((SoSensorCB *)
-				     &SoDB::realTimeSensorCallback);
+        // For now, treat VRML files as Inventor 2.1 files.
+        // In the future, we might want to verify that the VRML file
+        // contains strictly VRML nodes, i.e. any Inventor (non-VRML)
+        // nodes in the file generate read warnings.
+        SoDB::registerHeader("#VRML V1.0 ascii", FALSE, 2.1f, NULL, NULL, NULL);
+
+        // Create realTime global field. We have to bypass the
+        // standard createGlobalField stuff because there is no
+        // specific typeId info for SoSFRealTime.
+        realTime = new SoSFRealTime;
+        // Construct a global field (to add it to the dictionary); we
+        // don't actually need a pointer to it.
+        (void)new SoGlobalField("realTime", realTime);
+        realTime->setValue(SbTime::getTimeOfDay());
+        realTime->getContainer()->ref();
+
+        // And setup the sensor to touch it periodically
+        realTimeSensor = new SoTimerSensor;
+        realTimeSensor->setFunction(
+            (SoSensorCB *)&SoDB::realTimeSensorCallback);
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
-	    SoDebug::NamePtr("realTimeSensor", realTimeSensor);
-	}
+        if (SoDebug::GetEnv("IV_DEBUG_SENSORS")) {
+            SoDebug::NamePtr("realTimeSensor", realTimeSensor);
+        }
 #endif
 
-	// This doesn't have to be scheduled very often, because
-	// the SoXt viewers update realTime right after a redraw, so
-	// anything that is continuously animating will constantly
-	// redraw as fast as either swapbuffers() or the redraw (if
-	// single-buffered) can occur.
-	// I chose 1/12 of a second because it is a multiple of the
-	// two most common vide rates-- 60 HZ and 72 HZ
-	realTimeSensor->setInterval(SbTime(1.0/12.0));
+        // This doesn't have to be scheduled very often, because
+        // the SoXt viewers update realTime right after a redraw, so
+        // anything that is continuously animating will constantly
+        // redraw as fast as either swapbuffers() or the redraw (if
+        // single-buffered) can occur.
+        // I chose 1/12 of a second because it is a multiple of the
+        // two most common vide rates-- 60 HZ and 72 HZ
+        realTimeSensor->setInterval(SbTime(1.0 / 12.0));
 
-	// Don't schedule the sensor until something is connected to
-	// realTime. If nothing is connected, there's no sense wasting
-	// time triggering the sensor.
+        // Don't schedule the sensor until something is connected to
+        // realTime. If nothing is connected, there's no sense wasting
+        // time triggering the sensor.
 
-	// Initialize delay queue timeout to 1/12th of a second to
-	// make sure that redraws occur even when event processing is
-	// time-consuming.
-	setDelaySensorTimeout(SbTime(1.0/12.0));
+        // Initialize delay queue timeout to 1/12th of a second to
+        // make sure that redraws occur even when event processing is
+        // time-consuming.
+        setDelaySensorTimeout(SbTime(1.0 / 12.0));
     }
 }
 
@@ -316,7 +302,7 @@ SoDB::finish()
         SoFieldContainer::finishClass();
         SoBase::finishClass();
 
-        //CRASH SoFontCache::finish();
+        // CRASH SoFontCache::finish();
         SoInput::finish();
         SoType::finish();
         SbName::finish();
@@ -356,7 +342,7 @@ SoDB::getVersion()
 
 SbBool
 SoDB::registerHeader(const SbString &header, SbBool isBinary, float ivVersion,
-		    SoDBHeaderCB *preCB, SoDBHeaderCB *postCB, void *userData)
+                     SoDBHeaderCB *preCB, SoDBHeaderCB *postCB, void *userData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -364,32 +350,32 @@ SoDB::registerHeader(const SbString &header, SbBool isBinary, float ivVersion,
     // and must have at least one character beyond the initial comment char.
     size_t headerLength = header.getLength();
     if (headerLength > 80 || headerLength < 2)
-	return (FALSE);
-	
+        return (FALSE);
+
     // The first character must be the comment character
     const char *string = header.getString();
     if (string[0] != '#')
-	return (FALSE);
-	
+        return (FALSE);
+
     // The string must not contain any newline characters.
     for (size_t i = 1; i < header.getLength(); i++)
-	if (string[i] == '\n')
-	    return (FALSE);
-	 
+        if (string[i] == '\n')
+            return (FALSE);
+
     SoDBHeaderData *data = new SoDBHeaderData;
-    
-    // Binary headers *must* be padded for correct alignment, but to make things 
-    // simpler when looking up headers, we'll just pad all headers - including 
+
+    // Binary headers *must* be padded for correct alignment, but to make things
+    // simpler when looking up headers, we'll just pad all headers - including
     // ascii ones.
     data->headerString = SoOutput::padHeader(header);
-    
+
     data->isBinary = isBinary;
     data->ivVersion = ivVersion;
     data->preCB = preCB;
     data->postCB = postCB;
     data->userData = userData;
     headerList.push_back(data);
-     
+
     return (TRUE);
 }
 
@@ -422,92 +408,92 @@ SoDB::getHeaderString(int whichHeader)
 {
     if (whichHeader < 0 || whichHeader >= headerList.size())
         return SbString("");
-	
+
     const SoDBHeaderData *data = headerList[whichHeader];
     if (!data)
         return SbString("");
-	
+
     return data->headerString;
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//    Look up the given header string in our list of registered 
+//    Look up the given header string in our list of registered
 //    headers, and pass back the data associated with that header i.e.
 //    pointers to the pre- and post- callbacks, the user data, and
-//    a boolean indicating whether it's binary or ascii. 
+//    a boolean indicating whether it's binary or ascii.
 //    The return value is true if the string is found in the list of
-//    registered headers. 
+//    registered headers.
 //    If the substringOK flag is TRUE, then we also look for registered
-//    headers that are substrings of the given header string. 
+//    headers that are substrings of the given header string.
 //
 // Use: public, static
 
 SbBool
-SoDB::getHeaderData(const SbString &header, 
-		    SbBool &isBinary, float &ivVersion,
-		    SoDBHeaderCB *&preCB, SoDBHeaderCB *&postCB, 
-		    void *&userData, SbBool substringOK)
+SoDB::getHeaderData(const SbString &header, SbBool &isBinary, float &ivVersion,
+                    SoDBHeaderCB *&preCB, SoDBHeaderCB *&postCB,
+                    void *&userData, SbBool substringOK)
 //
 ////////////////////////////////////////////////////////////////////////
-{    
-    int whichHeader = -1;
+{
+    int             whichHeader = -1;
     SoDBHeaderData *data;
-    SbString paddedHeader = SoOutput::padHeader(header);
-    
+    SbString        paddedHeader = SoOutput::padHeader(header);
+
     // First look for an exact match
-    for (int i = headerList.size()-1; i >= 0 && whichHeader == -1; i--) {
+    for (int i = headerList.size() - 1; i >= 0 && whichHeader == -1; i--) {
         data = headerList[i];
-	SbString registeredString = data->headerString;
-	
-	if (paddedHeader == registeredString) {
-		whichHeader = i;
-	} 
+        SbString registeredString = data->headerString;
+
+        if (paddedHeader == registeredString) {
+            whichHeader = i;
+        }
     }
-    
+
     // If we didn't find an exact match,
     // look for a substring that is a valid registered string
     if (whichHeader == -1 && substringOK) {
-    
-    for (int i = headerList.size()-1; i >= 0 && whichHeader == -1; i--) {
-        data = headerList[i];
-	    SbString registeredString = data->headerString;	
-	
-	    if (paddedHeader.getLength() >= registeredString.getLength()) {
-	    
-		// See how much padding there is in the registered header string
-		const char *registeredStr = data->headerString.getString();
-		size_t lastNonPadChar = registeredString.getLength() - 1;
-		while (registeredStr[lastNonPadChar] == ' ' && lastNonPadChar > 0) 
-		    lastNonPadChar--;
-		
-		// Is the registered header (minus the padding) a substring 
-		// of the the given header string?
-		if (registeredString.getSubString(0, (int)lastNonPadChar) == 
-			paddedHeader.getSubString(0, (int)lastNonPadChar)) {
-		    whichHeader = i;			
-		}
-	    }	    
-	}
+
+        for (int i = headerList.size() - 1; i >= 0 && whichHeader == -1; i--) {
+            data = headerList[i];
+            SbString registeredString = data->headerString;
+
+            if (paddedHeader.getLength() >= registeredString.getLength()) {
+
+                // See how much padding there is in the registered header string
+                const char *registeredStr = data->headerString.getString();
+                size_t      lastNonPadChar = registeredString.getLength() - 1;
+                while (registeredStr[lastNonPadChar] == ' ' &&
+                       lastNonPadChar > 0)
+                    lastNonPadChar--;
+
+                // Is the registered header (minus the padding) a substring
+                // of the the given header string?
+                if (registeredString.getSubString(0, (int)lastNonPadChar) ==
+                    paddedHeader.getSubString(0, (int)lastNonPadChar)) {
+                    whichHeader = i;
+                }
+            }
+        }
     }
-   
+
     if (whichHeader == -1) {
-	isBinary = FALSE;
-	ivVersion = -1;
-	preCB = NULL;
-	postCB = NULL;
-	userData = NULL;
-	return (FALSE);
+        isBinary = FALSE;
+        ivVersion = -1;
+        preCB = NULL;
+        postCB = NULL;
+        userData = NULL;
+        return (FALSE);
     }
-    
+
     data = headerList[whichHeader];
     isBinary = data->isBinary;
     ivVersion = data->ivVersion;
     preCB = data->preCB;
     postCB = data->postCB;
-    userData = data->userData;   
-    return (TRUE);	
+    userData = data->userData;
+    return (TRUE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -537,12 +523,12 @@ SoDB::isValidHeader(const char *testString)
 
     SbString paddedHeader = SoOutput::padHeader(buf);
 
-    for (int i = headerList.size()-1; i >= 0; i--) {
+    for (int i = headerList.size() - 1; i >= 0; i--) {
         const SoDBHeaderData *data = headerList[i];
         if (data->headerString == paddedHeader)
             return TRUE;
     }
-    
+
     // Didn't find this string in the list of valid headers.
     return FALSE;
 }
@@ -561,28 +547,28 @@ SoDB::read(SoInput *in, SoNode *&rootNode)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoBase	*base;
-    SbBool	ret;
+    SoBase *base;
+    SbBool  ret;
 
     ret = read(in, base);
 
     if (base != NULL) {
-	if (base->isOfType(SoNode::getClassTypeId()))
-	    rootNode = (SoNode *) base;
+        if (base->isOfType(SoNode::getClassTypeId()))
+            rootNode = (SoNode *)base;
 
-	else {
-	    SoReadError::post(in, "looking for a node but got %s",
-			      base->getTypeId().getName().getString());
-	    ret = FALSE;
-	    
-	    // Free the scene we just read by refing/unrefing
-	    base->ref();
-	    base->unref();
-	}
+        else {
+            SoReadError::post(in, "looking for a node but got %s",
+                              base->getTypeId().getName().getString());
+            ret = FALSE;
+
+            // Free the scene we just read by refing/unrefing
+            base->ref();
+            base->unref();
+        }
     }
 
     else
-	rootNode = NULL;
+        rootNode = NULL;
 
     return ret;
 }
@@ -601,28 +587,28 @@ SoDB::read(SoInput *in, SoPath *&path)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoBase	*base;
-    SbBool	ret;
+    SoBase *base;
+    SbBool  ret;
 
     ret = read(in, base);
 
     if (base != NULL) {
-	if (base->isOfType(SoPath::getClassTypeId()))
-	    path = (SoPath *) base;
+        if (base->isOfType(SoPath::getClassTypeId()))
+            path = (SoPath *)base;
 
-	else {
-	    SoReadError::post(in, "looking for a path but got %s",
-			      base->getTypeId().getName().getString());
-	    ret = FALSE;
-	    
-	    // Free the scene we just read by refing/unrefing
-	    base->ref();
-	    base->unref();
-	}
+        else {
+            SoReadError::post(in, "looking for a path but got %s",
+                              base->getTypeId().getName().getString());
+            ret = FALSE;
+
+            // Free the scene we just read by refing/unrefing
+            base->ref();
+            base->unref();
+        }
     }
 
     else
-	path = NULL;
+        path = NULL;
 
     return ret;
 }
@@ -634,8 +620,8 @@ SoDB::read(SoInput *in, SoPath *&path)
 //    If there is only one graph in the file and its root is an
 //    SoSeparator, a pointer to the root is returned. Otherwise, this
 //    creates an SoSeparator, adds the root nodes of all graphs read
-//    as children of it, and returns a pointer to it. 
-//    
+//    as children of it, and returns a pointer to it.
+//
 //    If a graph is a path, it will be read and its root returned.
 //
 //    This returns NULL on error.
@@ -647,41 +633,40 @@ SoDB::readAll(SoInput *in)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoBase	*base;
+    SoBase *     base;
     SoSeparator *root = new SoSeparator;
 
     root->ref();
 
     // Keep on reading until there are no more graphs to read
     do {
-	if (! read(in, base)) {
-	    root->unref();
-	    return NULL;
-	}
-	else if (base != NULL) {
-	    // Did we read a node or a path?
-	    if (base->isOfType(SoNode::getClassTypeId()))
-		root->addChild((SoNode *) base);
-	    else if (base->isOfType(SoPath::getClassTypeId())) {
-		SoNode *pathHead = ((SoPath *) base)->getHead();
-		if (pathHead != NULL) {
-		    pathHead->ref();
-		    root->addChild(pathHead);
-		    pathHead->unref();
-		}
-	    }
-	}
+        if (!read(in, base)) {
+            root->unref();
+            return NULL;
+        } else if (base != NULL) {
+            // Did we read a node or a path?
+            if (base->isOfType(SoNode::getClassTypeId()))
+                root->addChild((SoNode *)base);
+            else if (base->isOfType(SoPath::getClassTypeId())) {
+                SoNode *pathHead = ((SoPath *)base)->getHead();
+                if (pathHead != NULL) {
+                    pathHead->ref();
+                    root->addChild(pathHead);
+                    pathHead->unref();
+                }
+            }
+        }
     } while (base != NULL);
 
     // If only one graph was read, and it had a separator for a root,
     // get rid of the one we created
     if (root->getNumChildren() == 1 &&
-	root->getChild(0)->isOfType(SoSeparator::getClassTypeId())) {
+        root->getChild(0)->isOfType(SoSeparator::getClassTypeId())) {
 
-	SoSeparator *graphRoot = (SoSeparator *) root->getChild(0);
-	graphRoot->ref();
-	root->unref();
-	root = graphRoot;
+        SoSeparator *graphRoot = (SoSeparator *)root->getChild(0);
+        graphRoot->ref();
+        root->unref();
+        root = graphRoot;
     }
 
     root->unrefNoDelete();
@@ -697,20 +682,20 @@ SoDB::readAll(SoInput *in)
 // Use: public, static
 
 int
-SoDB::doSelect(int nfds, fd_set *readfds, fd_set *writefds,
-	       fd_set *exceptfds, struct timeval *userTimeOut)
+SoDB::doSelect(int nfds, fd_set *readfds, fd_set *writefds, fd_set *exceptfds,
+               struct timeval *userTimeOut)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     if (globalDB == NULL) {
-	SoDebugError::post("SoDB::doSelect", "SoDB::init() was never called");
-	return 0;
+        SoDebugError::post("SoDB::doSelect", "SoDB::init() was never called");
+        return 0;
     }
 #endif /* DEBUG */
 
-    return globalDB->sensorManager.doSelect(nfds, readfds, writefds,
-					    exceptfds, userTimeOut);
+    return globalDB->sensorManager.doSelect(nfds, readfds, writefds, exceptfds,
+                                            userTimeOut);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -724,20 +709,20 @@ SoDB::doSelect(int nfds, fd_set *readfds, fd_set *writefds,
 // Use: extender, static
 
 void
-SoDB::addConverter(SoType fromField, SoType toField, SoType converterFunc)
-{
+SoDB::addConverter(SoType fromField, SoType toField, SoType converterFunc) {
 
 #ifdef DEBUG
     // Make sure the converter is of the correct type
-    if (! converterFunc.isDerivedFrom(SoFieldConverter::getClassTypeId())) {
-	SoDebugError::post("SoDB::addConverter",
-			   "class \"%s\" is not derived from SoFieldConverter",
-			   converterFunc.getName().getString());
-	return;
+    if (!converterFunc.isDerivedFrom(SoFieldConverter::getClassTypeId())) {
+        SoDebugError::post("SoDB::addConverter",
+                           "class \"%s\" is not derived from SoFieldConverter",
+                           converterFunc.getName().getString());
+        return;
     }
 #endif
 
-    conversionDict[getConversionKey(fromField, toField)] = converterFunc.getKey();
+    conversionDict[getConversionKey(fromField, toField)] =
+        converterFunc.getKey();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -750,8 +735,7 @@ SoDB::addConverter(SoType fromField, SoType toField, SoType converterFunc)
 // Use: extender, static
 
 SoType
-SoDB::getConverter(SoType fromField, SoType toField)
-{
+SoDB::getConverter(SoType fromField, SoType toField) {
     uint32_t key = getConversionKey(fromField, toField);
     if (conversionDict.find(key) != conversionDict.end())
         return SoType::fromKey(conversionDict[key]);
@@ -788,21 +772,20 @@ SoDB::enableRealTimeSensor(SbBool enable)
 {
     if (enable && realTimeSensor->getInterval() != SbTime::zero()) {
 
-	// If we are enabling the sensor now, call the callback once
-	// to set the current time. Since the sensor may become
-	// enabled because of a new connection, the realTime field may
-	// be queried before the sensor callback is called. By calling
-	// it now, the realTime field will contain the current time in
-	// this case. However, we have to disable notification on the
-	// realTime field since we area already in the process of
-	// notifying.
-	SbBool wasEnabled = realTime->enableNotify(FALSE);
-	realTimeSensorCallback();
-	realTime->enableNotify(wasEnabled);
-	realTimeSensor->schedule();
-    }
-    else
-	realTimeSensor->unschedule();
+        // If we are enabling the sensor now, call the callback once
+        // to set the current time. Since the sensor may become
+        // enabled because of a new connection, the realTime field may
+        // be queried before the sensor callback is called. By calling
+        // it now, the realTime field will contain the current time in
+        // this case. However, we have to disable notification on the
+        // realTime field since we area already in the process of
+        // notifying.
+        SbBool wasEnabled = realTime->enableNotify(FALSE);
+        realTimeSensorCallback();
+        realTime->enableNotify(wasEnabled);
+        realTimeSensor->schedule();
+    } else
+        realTimeSensor->unschedule();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -821,8 +804,8 @@ SoDB::read(SoInput *in, SoBase *&base)
 {
 #ifdef DEBUG
     if (globalDB == NULL) {
-	SoDebugError::post("SoDB::read", "SoDB::init() was never called");
-	return FALSE;
+        SoDebugError::post("SoDB::read", "SoDB::init() was never called");
+        return FALSE;
     }
 #endif /* DEBUG */
 
@@ -843,16 +826,16 @@ SoDB::read(SoInput *in, SoBase *&base)
     // If no valid base was read, but we haven't hit EOF, that means
     // that there's extra crap in the input that's not an Inventor
     // thing. If so, report an error.
-    if (ret && base == NULL && ! in->eof()) {
-	char	c;
-	in->get(c);
-	SoReadError::post(in, "Extra characters ('%c') found in input", c);
-	ret = FALSE;
+    if (ret && base == NULL && !in->eof()) {
+        char c;
+        in->get(c);
+        SoReadError::post(in, "Extra characters ('%c') found in input", c);
+        ret = FALSE;
     }
 
     // Clean up directory list if necessary
     if (!searchPath.isEmpty()) {
-	SoInput::removeDirectory(searchPath);
+        SoInput::removeDirectory(searchPath);
     }
 
     return ret;
@@ -870,12 +853,12 @@ SoDB::createGlobalField(const SbName &name, SoType type)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool alreadyExists;
+    SbBool         alreadyExists;
     SoGlobalField *result = SoGlobalField::create(name, type, alreadyExists);
 
     if (result == NULL)
-	return NULL;
-    
+        return NULL;
+
     return result->getMyField();
 }
 
@@ -892,8 +875,9 @@ SoDB::getGlobalField(const SbName &name)
 ////////////////////////////////////////////////////////////////////////
 {
     SoGlobalField *result = SoGlobalField::find(name);
-    if (result == NULL) return NULL;
-    
+    if (result == NULL)
+        return NULL;
+
     return result->getMyField();
 }
 
@@ -909,19 +893,21 @@ SoDB::renameGlobalField(const SbName &oldName, const SbName &newName)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (oldName == newName) return;
-    
+    if (oldName == newName)
+        return;
+
     SoGlobalField *oldGlobalField = SoGlobalField::find(oldName);
-    if (oldGlobalField == NULL) return;
-    
+    if (oldGlobalField == NULL)
+        return;
+
     if (newName == SbName("")) {
-	oldGlobalField->unref();
-	return;
+        oldGlobalField->unref();
+        return;
     }
-    
+
     SoGlobalField *newGlobalField = SoGlobalField::find(newName);
     if (newGlobalField != NULL) {
-	newGlobalField->unref();
+        newGlobalField->unref();
     }
 
     oldGlobalField->changeName(newName);
@@ -940,12 +926,11 @@ SoDB::setRealTimeInterval(const SbTime &deltaT)
 ////////////////////////////////////////////////////////////////////////
 {
     if (deltaT == SbTime::zero()) {
-	realTimeSensor->setInterval(deltaT);
-	realTimeSensor->unschedule();
-    }
-    else {
-	realTimeSensor->setInterval(deltaT);
-	realTimeSensor->schedule();
+        realTimeSensor->setInterval(deltaT);
+        realTimeSensor->unschedule();
+    } else {
+        realTimeSensor->setInterval(deltaT);
+        realTimeSensor->schedule();
     }
 }
 
@@ -1008,4 +993,3 @@ SoDB::realTimeSensorCallback()
 {
     realTime->setValue(SbTime::getTimeOfDay());
 }
-

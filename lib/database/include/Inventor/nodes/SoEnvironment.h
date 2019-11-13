@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_ENVIRONMENT_
-#define  _SO_ENVIRONMENT_
+#ifndef _SO_ENVIRONMENT_
+#define _SO_ENVIRONMENT_
 
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -71,7 +71,7 @@
 //  ambient lighting, light attenuation, and fog.
 //
 //  Ambient lighting is the amount of extra light impinging on each
-//  surface point when computing Phong lighting. 
+//  surface point when computing Phong lighting.
 //
 //  Light attenuation affects all subsequent lights in a scene. It is
 //  a quadratic function of distance from a light source to a surface
@@ -96,43 +96,46 @@ class SoEnvironment : public SoNode {
     SO_NODE_HEADER(SoEnvironment);
 
   public:
-    enum FogType {	// Type of fog:
-        NONE  = SoEnvironmentElement::NONE, ///< No fog
-        HAZE  = SoEnvironmentElement::HAZE, ///< Linear increase in opacity with distance
-        FOG   = SoEnvironmentElement::FOG,  ///< Exponential increase in opacity
-        SMOKE = SoEnvironmentElement::SMOKE ///< Exponential squared increase in opacity
+    enum FogType {                          // Type of fog:
+        NONE = SoEnvironmentElement::NONE,  ///< No fog
+        HAZE = SoEnvironmentElement::HAZE,  ///< Linear increase in opacity with
+                                            ///< distance
+        FOG = SoEnvironmentElement::FOG,    ///< Exponential increase in opacity
+        SMOKE = SoEnvironmentElement::SMOKE ///< Exponential squared increase in
+                                            ///< opacity
     };
 
     // Fields
 
     // Intensity and RGB color of ambient lighting
-    SoSFFloat		ambientIntensity;
-    SoSFColor		ambientColor;
+    SoSFFloat ambientIntensity;
+    SoSFColor ambientColor;
 
     // Squared, linear, and constant light attenuation coefficients
     // (in order) with respect to distance of light from surface (for
     // Phong lighting)
-    SoSFVec3f		attenuation;
+    SoSFVec3f attenuation;
 
-    // Type of fog, color of fog, and visibility factor. 
-    SoSFEnum		fogType;
-    SoSFColor		fogColor;
-    SoSFFloat		fogVisibility;
+    // Type of fog, color of fog, and visibility factor.
+    SoSFEnum  fogType;
+    SoSFColor fogColor;
+    SoSFFloat fogVisibility;
 
     // Constructor
     SoEnvironment();
 
-  SoEXTENDER public:
-    virtual void    doAction(SoAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	callback(SoCallbackAction *action);
+    SoEXTENDER
+  public:
+    virtual void doAction(SoAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void callback(SoCallbackAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     virtual ~SoEnvironment();
-
 };
 
 #endif /* _SO_ENVIRONMENT_ */

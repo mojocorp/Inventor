@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -56,8 +56,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_REPLACED_ELEMENT
-#define  _SO_REPLACED_ELEMENT
+#ifndef _SO_REPLACED_ELEMENT
+#define _SO_REPLACED_ELEMENT
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -79,40 +79,41 @@
 
 #include <Inventor/elements/SoSubElement.h>
 
-SoEXTENDER class SoReplacedElement : public SoElement {
+SoEXTENDER
+class SoReplacedElement : public SoElement {
 
     SO_ELEMENT_ABSTRACT_HEADER(SoReplacedElement);
 
   public:
     // Initializes node id in element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Returns TRUE if the element matches another element, based on node-id
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoReplacedElement class
-    static void		initClass();
+    static void initClass();
 
     // Create and return a copy of this element.  The only operation
     // supported by the copy is matches() (the copy will be
     // unitialized except for the nodeId).
-    virtual SoElement	*copyMatchInfo() const;
+    virtual SoElement *copyMatchInfo() const;
 
     // Return nodeId.  This was added so the SoTransformSeparator
     // class can figure out whether or not it contains a camera:
-    uint32_t		getNodeId() const { return nodeId; }
+    uint32_t getNodeId() const { return nodeId; }
 
   protected:
-    uint32_t		nodeId;
+    uint32_t nodeId;
 
     // Overrides SoElement::getElement() to set the nodeId in the
     // element instance before returning it.
-    static SoElement *	getElement(SoState *state, int stackIndex,
-				   SoNode *node);
+    static SoElement *getElement(SoState *state, int stackIndex, SoNode *node);
 
     // Destructor
     virtual ~SoReplacedElement();

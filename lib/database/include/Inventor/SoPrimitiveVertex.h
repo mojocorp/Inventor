@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -93,45 +93,45 @@ class SoPrimitiveVertex {
 
     // These return the surface point, normal, and texture coordinates
     // in object space:
-    const SbVec3f &	getPoint() const		{ return point; }
-    const SbVec3f &	getNormal() const		{ return normal; }
-    const SbVec4f &	getTextureCoords() const	{ return texCoords; }
+    const SbVec3f &getPoint() const { return point; }
+    const SbVec3f &getNormal() const { return normal; }
+    const SbVec4f &getTextureCoords() const { return texCoords; }
 
     // Returns the index into the current set of materials of the
     // material active at the vertex
-    int			getMaterialIndex() const    { return materialIndex; }
+    int getMaterialIndex() const { return materialIndex; }
 
     // Returns the detail giving more info about the vertex. Note that
     // this pointer may be NULL.
-    const SoDetail *	getDetail() const		{ return detail; }
+    const SoDetail *getDetail() const { return detail; }
 
     // Copy assignment operator. Note that just the pointer to the
     // detail is copied, and not the detail itself.
-    SoPrimitiveVertex &	operator =(const SoPrimitiveVertex &pv);
+    SoPrimitiveVertex &operator=(const SoPrimitiveVertex &pv);
 
-  SoEXTENDER public:
-
+    SoEXTENDER
+  public:
     // These methods are typically called by shape classes during
     // primtiive generation
 
     // These set the object space point, normal, and texture coordinates:
-    void		setPoint(const SbVec3f &pt)	  { point     = pt; }
-    void		setNormal(const SbVec3f &norm)	  { normal    = norm; }
-    void		setTextureCoords(const SbVec4f &t){ texCoords = t; }
+    void setPoint(const SbVec3f &pt) { point = pt; }
+    void setNormal(const SbVec3f &norm) { normal = norm; }
+    void setTextureCoords(const SbVec4f &t) { texCoords = t; }
 
     // Sets the material index. The index is set to 0 during construction.
-    void		setMaterialIndex(int index)  { materialIndex = index; }
+    void setMaterialIndex(int index) { materialIndex = index; }
 
     // Sets the detail corresponding to the vertex. The pointer may be
     // NULL, although it is set to NULL during construction.
-    void		setDetail(SoDetail *d)		  { detail = d; }
+    void setDetail(SoDetail *d) { detail = d; }
 
   private:
-    SbVec3f		point;		// Object-space point
-    SbVec3f		normal;		// Object-space normal
-    SbVec4f		texCoords;	// Object-space texture coordinates
-    int			materialIndex;	// Material index
-    SoDetail		*detail;	// Extra detail info
+    SbVec3f   point;         // Object-space point
+    SbVec3f   normal;        // Object-space normal
+    SbVec4f   texCoords;     // Object-space texture coordinates
+    int       materialIndex; // Material index
+    SoDetail *detail;        // Extra detail info
 };
 
 #endif /* _SO_PRIMITIVE_VERTEX_ */

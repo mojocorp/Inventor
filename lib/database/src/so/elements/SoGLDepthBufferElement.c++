@@ -66,8 +66,7 @@ SO_ELEMENT_SOURCE(SoGLDepthBufferElement);
 SoGLDepthBufferElement::~SoGLDepthBufferElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -77,8 +76,7 @@ SoGLDepthBufferElement::~SoGLDepthBufferElement()
 // Use: internal
 
 void
-SoGLDepthBufferElement::initClass()
-{
+SoGLDepthBufferElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLDepthBufferElement, SoDepthBufferElement);
 }
 
@@ -112,13 +110,13 @@ SoGLDepthBufferElement::push(SoState *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLDepthBufferElement	*prevElt =
+    const SoGLDepthBufferElement *prevElt =
         (const SoGLDepthBufferElement *)getNextInStack();
 
-    test        = prevElt->test;
-    write       = prevElt->write;
-    function    = prevElt->function;
-    range       = prevElt->range;
+    test = prevElt->test;
+    write = prevElt->write;
+    function = prevElt->function;
+    range = prevElt->range;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -142,13 +140,18 @@ SoGLDepthBufferElement::pop(SoState *state, const SoElement *childElt)
     capture(state);
 
     // If the previous element didn't have the same value...
-    const SoGLDepthBufferElement *child = (const SoGLDepthBufferElement *) childElt;
+    const SoGLDepthBufferElement *child =
+        (const SoGLDepthBufferElement *)childElt;
 
     // Restore previous values
-    if (test != child->test)   whatChanged |= TEST_MASK;
-    if (write != child->write) whatChanged |= WRITE_MASK;
-    if (function != child->function) whatChanged |= FUNCT_MASK;
-    if (range != child->range) whatChanged |= RANGE_MASK;
+    if (test != child->test)
+        whatChanged |= TEST_MASK;
+    if (write != child->write)
+        whatChanged |= WRITE_MASK;
+    if (function != child->function)
+        whatChanged |= FUNCT_MASK;
+    if (range != child->range)
+        whatChanged |= RANGE_MASK;
 
     if (whatChanged) {
         send();
@@ -163,16 +166,22 @@ SoGLDepthBufferElement::pop(SoState *state, const SoElement *childElt)
 // Use: protected, virtual
 
 void
-SoGLDepthBufferElement::setElt(SbBool _test, SbBool _write, DepthWriteFunction _function, const SbVec2f & _range)
+SoGLDepthBufferElement::setElt(SbBool _test, SbBool _write,
+                               DepthWriteFunction _function,
+                               const SbVec2f &    _range)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     whatChanged = 0;
 
-    if (test != _test)   whatChanged |= TEST_MASK;
-    if (write != _write) whatChanged |= WRITE_MASK;
-    if (function != _function) whatChanged |= FUNCT_MASK;
-    if (range != _range) whatChanged |= RANGE_MASK;
+    if (test != _test)
+        whatChanged |= TEST_MASK;
+    if (write != _write)
+        whatChanged |= WRITE_MASK;
+    if (function != _function)
+        whatChanged |= FUNCT_MASK;
+    if (range != _range)
+        whatChanged |= RANGE_MASK;
 
     if (whatChanged) {
         SoDepthBufferElement::setElt(_test, _write, _function, _range);
@@ -207,15 +216,31 @@ SoGLDepthBufferElement::send()
 
     if (whatChanged & FUNCT_MASK) {
         switch (function) {
-        case NEVER:     glDepthFunc(GL_NEVER);     break;
-        case ALWAYS:    glDepthFunc(GL_ALWAYS);    break;
-        case LESS:      glDepthFunc(GL_LESS);      break;
-        case LEQUAL:    glDepthFunc(GL_LEQUAL);    break;
-        case EQUAL:     glDepthFunc(GL_EQUAL);     break;
-        case GEQUAL:    glDepthFunc(GL_GEQUAL);    break;
-        case GREATER:   glDepthFunc(GL_GREATER);   break;
-        case NOTEQUAL:  glDepthFunc(GL_NOTEQUAL);  break;
-        default:	// Just to shut CC up
+        case NEVER:
+            glDepthFunc(GL_NEVER);
+            break;
+        case ALWAYS:
+            glDepthFunc(GL_ALWAYS);
+            break;
+        case LESS:
+            glDepthFunc(GL_LESS);
+            break;
+        case LEQUAL:
+            glDepthFunc(GL_LEQUAL);
+            break;
+        case EQUAL:
+            glDepthFunc(GL_EQUAL);
+            break;
+        case GEQUAL:
+            glDepthFunc(GL_GEQUAL);
+            break;
+        case GREATER:
+            glDepthFunc(GL_GREATER);
+            break;
+        case NOTEQUAL:
+            glDepthFunc(GL_NOTEQUAL);
+            break;
+        default: // Just to shut CC up
             break;
         }
     }

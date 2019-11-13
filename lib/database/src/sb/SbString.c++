@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,12 +63,9 @@
 // Constructor that initializes to a substring.
 //
 
-SbString::SbString(const char *str) {
-    *this = fromUtf8(str);
-}
+SbString::SbString(const char *str) { *this = fromUtf8(str); }
 
-SbString::SbString(const char *str, size_t start, size_t end)
-{
+SbString::SbString(const char *str, size_t start, size_t end) {
     string = std::string(str, start, end - start + 1);
 }
 
@@ -77,8 +74,7 @@ SbString::SbString(const char *str, size_t start, size_t end)
 // For example, SbString(1234) gives the string "1234".
 //
 
-SbString::SbString(int digitString)
-{
+SbString::SbString(int digitString) {
     std::ostringstream oss;
     oss << digitString;
     string = oss.str();
@@ -88,28 +84,26 @@ SbString::SbString(int digitString)
 // Destructor
 //
 
-SbString::~SbString()
-{
-}
+SbString::~SbString() {}
 
 // Simple hashing algorithm that will xor all the characters in a string
-//   after shifting to the left 0, 5, 10, 15, 20, 1, 6, 11, 16, 21, 2, ... 
+//   after shifting to the left 0, 5, 10, 15, 20, 1, 6, 11, 16, 21, 2, ...
 //   positions.
 
 uint32_t
-SbString::hash(const char *s)
-{
-    uint32_t	total, shift;
+SbString::hash(const char *s) {
+    uint32_t total, shift;
 
     total = shift = 0;
     while (*s) {
-	total = total ^ ((*s) << shift);
-	shift+=5;
-	if (shift>24) shift -= 24;
-	s++;
+        total = total ^ ((*s) << shift);
+        shift += 5;
+        if (shift > 24)
+            shift -= 24;
+        s++;
     }
 
-    return( total );
+    return (total);
 }
 
 //
@@ -117,12 +111,12 @@ SbString::hash(const char *s)
 //
 
 size_t
-SbString::getLength() const
-{
+SbString::getLength() const {
     // "Counting characters in UTF-8 strings is fast" by Kragen Sitaker
     size_t i = 0, j = 0;
     while (string[i]) {
-        if ((string[i] & 0xc0) != 0x80) j++;
+        if ((string[i] & 0xc0) != 0x80)
+            j++;
         i++;
     }
     return j;
@@ -134,8 +128,7 @@ SbString::getLength() const
 //
 
 void
-SbString::makeEmpty()
-{
+SbString::makeEmpty() {
     string.clear();
 }
 
@@ -144,50 +137,53 @@ SbString::makeEmpty()
 //
 
 std::wstring
-SbString::toStdWString () const
-{
+SbString::toStdWString() const {
     std::wstring wstr;
 #ifdef SB_OS_WIN
-    const int wlen = MultiByteToWideChar(CP_UTF8, 0, &string[0], -1, NULL, 0) - 1;
+    const int wlen =
+        MultiByteToWideChar(CP_UTF8, 0, &string[0], -1, NULL, 0) - 1;
     wstr.resize(wlen);
-    MultiByteToWideChar(CP_UTF8, 0, &string[0], -1, (LPWSTR)wstr.data(), (int)wstr.length());
+    MultiByteToWideChar(CP_UTF8, 0, &string[0], -1, (LPWSTR)wstr.data(),
+                        (int)wstr.length());
 #else
     setlocale(LC_CTYPE, !getenv("LANG") ? "en_US.UTF-8" : "");
     const size_t wlen = mbstowcs(NULL, &string[0], 0);
     wstr.resize(wlen);
-    mbstowcs((wchar_t*)wstr.data(), &string[0], wlen+1);
+    mbstowcs((wchar_t *)wstr.data(), &string[0], wlen + 1);
 #endif
     return wstr;
 }
 
 //
-// Searches the string for the content specified in str, and returns the position of the first occurrence in the string.
-// When pos is specified the search only includes characters on or after position pos, ignoring any possible occurrences in previous locations.
-// If the content is not found, -1 is returned.
-//  
+// Searches the string for the content specified in str, and returns the
+// position of the first occurrence in the string. When pos is specified the
+// search only includes characters on or after position pos, ignoring any
+// possible occurrences in previous locations. If the content is not found, -1
+// is returned.
+//
 
 int
-SbString::find(const SbString & str, int pos) const
-{
+SbString::find(const SbString &str, int pos) const {
     size_t index = string.find(str.getString(), pos);
 
-    return (index!=std::string::npos) ? (int)index : -1;
+    return (index != std::string::npos) ? (int)index : -1;
 }
 
 //
-// Searches the string for the content specified in str, and returns the position of the last occurrence in the string.
-// When pos is specified, the search only includes characters between the beginning of the string and position pos, ignoring any possible occurrences after pos.
-// If the content is not found, -1 is returned.
+// Searches the string for the content specified in str, and returns the
+// position of the last occurrence in the string. When pos is specified, the
+// search only includes characters between the beginning of the string and
+// position pos, ignoring any possible occurrences after pos. If the content is
+// not found, -1 is returned.
 //
-    
+
 int
-SbString::rfind(const SbString & str, int pos) const
-{
-    pos = (pos==-1) ? (int)std::string::npos : pos;
+SbString::rfind(const SbString &str, int pos) const {
+    pos = (pos == -1) ? (int)std::string::npos : pos;
 
     size_t index = string.rfind(str.string, pos);
 
-    return (index!=std::string::npos) ? (int)index : -1;
+    return (index != std::string::npos) ? (int)index : -1;
 }
 
 //
@@ -197,9 +193,8 @@ SbString::rfind(const SbString & str, int pos) const
 //
 
 SbString
-SbString::getSubString(int startChar, int endChar) const
-{
-    size_t size = (endChar!=-1) ? endChar - startChar + 1 : std::string::npos;
+SbString::getSubString(int startChar, int endChar) const {
+    size_t size = (endChar != -1) ? endChar - startChar + 1 : std::string::npos;
 
     SbString str;
     str.string = string.substr(startChar, size);
@@ -213,12 +208,11 @@ SbString::getSubString(int startChar, int endChar) const
 //
 
 void
-SbString::deleteSubString(int startChar, int endChar)
-{
+SbString::deleteSubString(int startChar, int endChar) {
     std::string str = string;
     string = std::string(str, 0, startChar);
     if (endChar != -1)
-        string += std::string(str, endChar+1, std::string::npos);
+        string += std::string(str, endChar + 1, std::string::npos);
 }
 
 //
@@ -226,15 +220,13 @@ SbString::deleteSubString(int startChar, int endChar)
 //
 
 SbString &
-SbString::operator =(const char *str)
-{
+SbString::operator=(const char *str) {
     *this = SbString(str);
     return *this;
 }
 
 SbString &
-SbString::operator =(const SbString &str)
-{
+SbString::operator=(const SbString &str) {
     string = str.string;
     return *this;
 }
@@ -244,8 +236,7 @@ SbString::operator =(const SbString &str)
 //
 
 SbString &
-SbString::operator +=(const char *str)
-{
+SbString::operator+=(const char *str) {
     *this += SbString(str);
     return *this;
 }
@@ -255,8 +246,7 @@ SbString::operator +=(const char *str)
 //
 
 SbString &
-SbString::operator +=(const SbString &str)
-{
+SbString::operator+=(const SbString &str) {
     string += str.string;
     return *this;
 }
@@ -266,8 +256,7 @@ SbString::operator +=(const SbString &str)
 //
 
 bool
-operator ==(const SbString &str, const char *s)
-{
+operator==(const SbString &str, const char *s) {
     return (str.string == s);
 }
 
@@ -276,8 +265,7 @@ operator ==(const SbString &str, const char *s)
 //
 
 bool
-operator !=(const SbString &str, const char *s)
-{
+operator!=(const SbString &str, const char *s) {
     return (str.string != s);
 }
 
@@ -286,15 +274,14 @@ operator !=(const SbString &str, const char *s)
 //
 
 SbString
-SbString::fromLatin1(const char *latin1, int size)
-{
+SbString::fromLatin1(const char *latin1, int size) {
     SbString str;
 
     if (latin1) {
         const size_t len = (size > 0) ? size : strlen(latin1);
-        str.string.reserve(2*len);
+        str.string.reserve(2 * len);
 
-        for (size_t i=0; i<len; i++) {
+        for (size_t i = 0; i < len; i++) {
             const unsigned char c = latin1[i];
             if (c < 0x80) {
                 str.string.push_back(c);
@@ -312,8 +299,7 @@ SbString::fromLatin1(const char *latin1, int size)
 //
 
 SbString
-SbString::fromUtf8(const char *utf8, int size)
-{
+SbString::fromUtf8(const char *utf8, int size) {
     SbString str;
     str.string = utf8 ? utf8 : "";
     return str;
@@ -324,21 +310,23 @@ SbString::fromUtf8(const char *utf8, int size)
 //
 
 SbString
-SbString::fromWideChar(const wchar_t *wcs, int size)
-{
+SbString::fromWideChar(const wchar_t *wcs, int size) {
     SbString str;
 
 #ifdef SB_OS_WIN
-    const size_t len = (size == -1) ? WideCharToMultiByte( CP_UTF8, 0, wcs, -1, NULL, 0,  NULL, NULL) - 1 : size;
+    const size_t len =
+        (size == -1)
+            ? WideCharToMultiByte(CP_UTF8, 0, wcs, -1, NULL, 0, NULL, NULL) - 1
+            : size;
     str.string.resize(len);
-    WideCharToMultiByte(CP_UTF8, 0, wcs, -1, &str.string[0], (int)len+1, NULL, NULL);
+    WideCharToMultiByte(CP_UTF8, 0, wcs, -1, &str.string[0], (int)len + 1, NULL,
+                        NULL);
 #else
     setlocale(LC_CTYPE, "C.UTF-8") || setlocale(LC_CTYPE, "en_US.UTF-8");
     const size_t len = (size == -1) ? wcstombs(NULL, wcs, 0) : size;
     str.string.resize(len);
-    wcstombs(&str.string[0], wcs, len+1);
+    wcstombs(&str.string[0], wcs, len + 1);
 #endif
 
     return str;
 }
-

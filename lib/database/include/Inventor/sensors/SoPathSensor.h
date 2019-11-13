@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -55,8 +55,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_PATH_SENSOR_
-#define  _SO_PATH_SENSOR_
+#ifndef _SO_PATH_SENSOR_
+#define _SO_PATH_SENSOR_
 
 #include <Inventor/SoPath.h>
 #include <Inventor/sensors/SoDataSensor.h>
@@ -72,24 +72,24 @@ class SoPathSensor : public SoDataSensor {
     virtual ~SoPathSensor();
 
     // Attaches the sensor to the given path
-    void		attach(SoPath *path);
+    void attach(SoPath *path);
 
     // Detaches the sensor if it is attached to a path
-    void		detach();
+    void detach();
 
     // Returns the path to which the sensor is attached, or NULL if it
     // is not attached.
-    SoPath *		getAttachedPath() const		{ return path; }
+    SoPath *getAttachedPath() const { return path; }
 
   protected:
-    void		notify(SoNotList *list);
+    void notify(SoNotList *list);
 
   private:
-    SoFullPath *	path;		// Path sensor is attached to
-    SoNode *		head;		// Head of that path
+    SoFullPath *path; // Path sensor is attached to
+    SoNode *    head; // Head of that path
 
     // Called by the attached path when it (the path) is about to be deleted
-    virtual void	dyingReference();
+    virtual void dyingReference();
 };
 
-#endif  /* _SO_PATH_SENSOR_ */
+#endif /* _SO_PATH_SENSOR_ */

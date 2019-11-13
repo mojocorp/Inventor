@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -46,7 +46,7 @@
  |
  |   Description:
  |	This file defines the SoShapeStyleElement class.
- |	It takes values from the following: 
+ |	It takes values from the following:
  |	SoDrawStyleElement
  |	SoComplexityTypeElement
  |	SoGLTextureEnabledElement
@@ -55,7 +55,7 @@
  |	CoordType of SoTextureCoordinateElement
  |	number and value of SoTransparencyElement
  |	isColorIndex from SoGLLazyElement
- |		to determine 
+ |		to determine
  |	    whether to use fast-path rendering, and
  |	    which fast-path rendering code to use
  |
@@ -65,13 +65,11 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_SHAPE_STYLE_ELEMENT
-#define  _SO_SHAPE_STYLE_ELEMENT
+#ifndef _SO_SHAPE_STYLE_ELEMENT
+#define _SO_SHAPE_STYLE_ELEMENT
 
 #include <Inventor/elements/SoInt32Element.h>
 #include <Inventor/elements/SoLazyElement.h>
-
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -91,68 +89,66 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoShapeStyleElement : public SoElement {
+SoEXTENDER
+class SoShapeStyleElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoShapeStyleElement);
 
   public:
-
     //
     // API USED BY SHAPES:
     //
 
     // Get a readable instance:
-    static const SoShapeStyleElement *	get(SoState *state);
+    static const SoShapeStyleElement *get(SoState *state);
 
     // Returns TRUE if shapes may not render for some reason:
-    SbBool		mightNotRender() const { return delayFlags; }
+    SbBool mightNotRender() const { return delayFlags; }
 
     // Returns TRUE if need normals:
-    SbBool		needNormals() const { return needNorms; }
-    
+    SbBool needNormals() const { return needNorms; }
+
     // Returns TRUE if need texture coordinates:
-    SbBool		needTexCoords() const
-	{ return (texEnabled && (!texFunc)); }
+    SbBool needTexCoords() const { return (texEnabled && (!texFunc)); }
 
     // Returns a mask that can be used by the SoVertexPropertyCache
     // class (see SoVertexProperty.h for the SoRenderInfo class) to
     // quickly mask out the normal or texture coordinate cases if
     // normals or texture coordinates aren't needed.
-    int			getRenderCaseMask() const
-	{ return renderCaseMask; }
+    int getRenderCaseMask() const { return renderCaseMask; }
 
     // API USED BY OTHER ELEMENTS:
 
-    static void		setDrawStyle(SoState *state, int32_t value);
-    static void		setComplexityType(SoState *state, int32_t value);
-    static void		setTransparencyType(SoState *state, int32_t value);
-    static void		setTextureEnabled(SoState *state, SbBool value);
-    static void		setTextureFunction(SoState *state, SbBool value);
-    static void		setLightModel(SoState *state, int32_t value);
+    static void setDrawStyle(SoState *state, int32_t value);
+    static void setComplexityType(SoState *state, int32_t value);
+    static void setTransparencyType(SoState *state, int32_t value);
+    static void setTextureEnabled(SoState *state, SbBool value);
+    static void setTextureFunction(SoState *state, SbBool value);
+    static void setLightModel(SoState *state, int32_t value);
     // Set value is TRUE if either diffuse, transparency, or materialbinding
     // are overridden; otherwise FALSE.
-    static void		setOverrides(SoState *state, SbBool value);
-   
-    static SbBool	isScreenDoor(SoState *state);
+    static void setOverrides(SoState *state, SbBool value);
 
-  SoINTERNAL public:
-    SbBool	isTextureFunction() const
-	{return texFunc;}
-    virtual void	init(SoState *state);
-    virtual SbBool	matches(const SoElement *elt) const;
-    virtual void	push(SoState *state);
-    virtual SoElement	*copyMatchInfo() const;
-    static void		initClass();
-    virtual void	print(FILE *fp) const;
+    static SbBool isScreenDoor(SoState *state);
+
+    SoINTERNAL
+  public:
+    SbBool             isTextureFunction() const { return texFunc; }
+    virtual void       init(SoState *state);
+    virtual SbBool     matches(const SoElement *elt) const;
+    virtual void       push(SoState *state);
+    virtual SoElement *copyMatchInfo() const;
+    static void        initClass();
+    virtual void       print(FILE *fp) const;
 
   protected:
-    virtual		~SoShapeStyleElement();
+    virtual ~SoShapeStyleElement();
 
   private:
-    int			delayFlags; // True if rendering might be delayed
-    SbBool		needNorms;
-    SbBool		texEnabled, texFunc;
-    int			renderCaseMask;
+    int    delayFlags; // True if rendering might be delayed
+    SbBool needNorms;
+    SbBool texEnabled, texFunc;
+    int    renderCaseMask;
 };
 
 #endif /* _SO_SHAPE_STYLE_ELEMENT */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_V1TEXTURE2_
-#define  _SO_V1TEXTURE2_
+#ifndef _SO_V1TEXTURE2_
+#define _SO_V1TEXTURE2_
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -86,55 +86,56 @@ class SoV1Texture2 : public SoUpgrader {
     SO_NODE_HEADER(SoV1Texture2);
 
   public:
-    enum Filter {			// Filter types
-	POINT,
-	BILINEAR,
-	MIPMAP_POINT,
-	MIPMAP_LINEAR,
-	MIPMAP_BILINEAR,
-	MIPMAP_TRILINEAR
+    enum Filter { // Filter types
+        POINT,
+        BILINEAR,
+        MIPMAP_POINT,
+        MIPMAP_LINEAR,
+        MIPMAP_BILINEAR,
+        MIPMAP_TRILINEAR
     };
 
-    enum Component {			// Component mask type
-	NULL_COMPONENT,
-	INTENSITY,
-	TRANSPARENCY
+    enum Component { // Component mask type
+        NULL_COMPONENT,
+        INTENSITY,
+        TRANSPARENCY
     };
 
-    enum Model {			// Texture model
-	MODULATE,
-	DECAL,
-	BLEND
+    enum Model { // Texture model
+        MODULATE,
+        DECAL,
+        BLEND
     };
 
-    enum Wrap {				// Texture wrap type
-	REPEAT,
-	CLAMP
+    enum Wrap { // Texture wrap type
+        REPEAT,
+        CLAMP
     };
-    
+
     // Fields.
-    SoSFBitMask		component;	// which components does this
-					// texture define
-    SoSFName		filename;
-    SoSFEnum		minFilter;
-    SoSFEnum		magFilter;
-    SoSFEnum		wrapS;
-    SoSFEnum		wrapT;
-    SoSFEnum		model;
-    SoSFColor		blendColor;
-    SoSFVec2f		translation;
-    SoSFVec2f		scaleFactor;
-    SoSFFloat		rotation;
-    SoSFVec2f		center;
+    SoSFBitMask component; // which components does this
+                           // texture define
+    SoSFName  filename;
+    SoSFEnum  minFilter;
+    SoSFEnum  magFilter;
+    SoSFEnum  wrapS;
+    SoSFEnum  wrapT;
+    SoSFEnum  model;
+    SoSFColor blendColor;
+    SoSFVec2f translation;
+    SoSFVec2f scaleFactor;
+    SoSFFloat rotation;
+    SoSFVec2f center;
 
     // Constructor
     SoV1Texture2();
 
-  SoINTERNAL public:
-    static void		initClass();
-    static void	finishClass();
+    SoINTERNAL
+  public:
+    static void initClass();
+    static void finishClass();
 
-    virtual SoNode	*createNewNode();
+    virtual SoNode *createNewNode();
 
   protected:
     virtual ~SoV1Texture2();
@@ -145,7 +146,7 @@ class SoV1Texture2 : public SoUpgrader {
 
     static void nodeDeletedCB(void *node, SoSensor *sensor);
 
-    static std::vector<SoTexture2*> textureList;
+    static std::vector<SoTexture2 *> textureList;
 };
 
 #endif /* _SO_V1TEXTURE2_ */

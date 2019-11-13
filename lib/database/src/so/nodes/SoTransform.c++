@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,30 +67,30 @@ SO_NODE_SOURCE(SoTransform);
 
 // Shorthand for accumulating a rotation into matrix and inverse using
 // intermediate matrix m. Destructive to "rot".
-#define ROTATE(rot, matrix, inverse, m)					      \
-    rot.getValue(m);							      \
-    matrix.multLeft(m);							      \
-    rot.invert();							      \
-    rot.getValue(m);							      \
+#define ROTATE(rot, matrix, inverse, m)                                        \
+    rot.getValue(m);                                                           \
+    matrix.multLeft(m);                                                        \
+    rot.invert();                                                              \
+    rot.getValue(m);                                                           \
     inverse.multRight(m)
 
 // Shorthand for accumulating a scale vector into matrix and inverse
 // using intermediate matrix m. Destructive to "vec".
-#define SCALE(vec, matrix, inverse, m)					      \
-    m.setScale(vec);							      \
-    matrix.multLeft(m);							      \
-    vec[0] = 1.0 / vec[0];						      \
-    vec[1] = 1.0 / vec[1];						      \
-    vec[2] = 1.0 / vec[2];						      \
-    m.setScale(vec);							      \
+#define SCALE(vec, matrix, inverse, m)                                         \
+    m.setScale(vec);                                                           \
+    matrix.multLeft(m);                                                        \
+    vec[0] = 1.0 / vec[0];                                                     \
+    vec[1] = 1.0 / vec[1];                                                     \
+    vec[2] = 1.0 / vec[2];                                                     \
+    m.setScale(vec);                                                           \
     inverse.multRight(m)
 
 // Shorthand for accumulating a translation vector into matrix and
 // inverse using intermediate matrix m. Non-destructive to "vec".
-#define TRANSLATE(vec, matrix, inverse, m)				      \
-    m.setTranslate(vec);						      \
-    matrix.multLeft(m);							      \
-    m.setTranslate(-vec);						      \
+#define TRANSLATE(vec, matrix, inverse, m)                                     \
+    m.setTranslate(vec);                                                       \
+    matrix.multLeft(m);                                                        \
+    m.setTranslate(-vec);                                                      \
     inverse.multRight(m)
 
 ////////////////////////////////////////////////////////////////////////
@@ -107,11 +107,11 @@ SoTransform::initClass()
 {
     SO__NODE_INIT_CLASS(SoTransform, "Transform", SoTransformation);
 
-    SO_ENABLE(SoCallbackAction,		SoModelMatrixElement);
-    SO_ENABLE(SoGetBoundingBoxAction,	SoBBoxModelMatrixElement);
-    SO_ENABLE(SoGetBoundingBoxAction,	SoLocalBBoxMatrixElement);
-    SO_ENABLE(SoPickAction,		SoModelMatrixElement);
-    SO_ENABLE(SoGLRenderAction,		SoGLModelMatrixElement);
+    SO_ENABLE(SoCallbackAction, SoModelMatrixElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoBBoxModelMatrixElement);
+    SO_ENABLE(SoGetBoundingBoxAction, SoLocalBBoxMatrixElement);
+    SO_ENABLE(SoPickAction, SoModelMatrixElement);
+    SO_ENABLE(SoGLRenderAction, SoGLModelMatrixElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -126,11 +126,11 @@ SoTransform::SoTransform()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_NODE_CONSTRUCTOR(SoTransform);
-    SO_NODE_ADD_FIELD(translation,     (0.0, 0.0, 0.0));
-    SO_NODE_ADD_FIELD(rotation,        (0.0, 0.0, 0.0, 1.0));
-    SO_NODE_ADD_FIELD(scaleFactor,     (1.0, 1.0, 1.0));
-    SO_NODE_ADD_FIELD(scaleOrientation,(0.0, 0.0, 0.0, 1.0));
-    SO_NODE_ADD_FIELD(center,          (0.0, 0.0, 0.0));
+    SO_NODE_ADD_FIELD(translation, (0.0, 0.0, 0.0));
+    SO_NODE_ADD_FIELD(rotation, (0.0, 0.0, 0.0, 1.0));
+    SO_NODE_ADD_FIELD(scaleFactor, (1.0, 1.0, 1.0));
+    SO_NODE_ADD_FIELD(scaleOrientation, (0.0, 0.0, 0.0, 1.0));
+    SO_NODE_ADD_FIELD(center, (0.0, 0.0, 0.0));
     isBuiltIn = TRUE;
 }
 
@@ -144,8 +144,7 @@ SoTransform::SoTransform()
 SoTransform::~SoTransform()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -187,26 +186,25 @@ SoTransform::getScaleSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	m;
+    SbMatrix m;
 
     mat.makeIdentity();
     inv.makeIdentity();
 
-    if (! scaleFactor.isIgnored() && ! scaleFactor.isDefault()) {
-	SbVec3f	s = scaleFactor.getValue();
-	SCALE(s, mat, inv, m);
+    if (!scaleFactor.isIgnored() && !scaleFactor.isDefault()) {
+        SbVec3f s = scaleFactor.getValue();
+        SCALE(s, mat, inv, m);
 
-        if (! scaleOrientation.isIgnored() && ! scaleOrientation.isDefault()) {
-	    SbRotation	r = scaleOrientation.getValue();
-	    r.invert();
-	    ROTATE(r, mat, inv, m);
-	}
-
+        if (!scaleOrientation.isIgnored() && !scaleOrientation.isDefault()) {
+            SbRotation r = scaleOrientation.getValue();
+            r.invert();
+            ROTATE(r, mat, inv, m);
+        }
     }
-    if (! center.isIgnored() && ! center.isDefault()) {
-	SbVec3f c = center.getValue();
-	c.negate();
-	TRANSLATE(c, mat, inv, m);
+    if (!center.isIgnored() && !center.isDefault()) {
+        SbVec3f c = center.getValue();
+        c.negate();
+        TRANSLATE(c, mat, inv, m);
     }
 }
 
@@ -223,25 +221,25 @@ SoTransform::getRotationSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	m, minv;
+    SbMatrix m, minv;
 
     mat.makeIdentity();
     inv.makeIdentity();
 
-    if (! rotation.isIgnored() && ! rotation.isDefault()) {
-	SbRotation	r = rotation.getValue();
-	ROTATE(r, mat, inv, m);
+    if (!rotation.isIgnored() && !rotation.isDefault()) {
+        SbRotation r = rotation.getValue();
+        ROTATE(r, mat, inv, m);
     }
 
-    if ((! scaleFactor.isIgnored() && ! scaleFactor.isDefault()) ||
-	(!      center.isIgnored() && !      center.isDefault())) {
+    if ((!scaleFactor.isIgnored() && !scaleFactor.isDefault()) ||
+        (!center.isIgnored() && !center.isDefault())) {
 
-        if (! scaleOrientation.isIgnored() && ! scaleOrientation.isDefault()) {
-	    SbRotation	r = scaleOrientation.getValue();
-	    ROTATE(r, mat, inv, m);
-	}
+        if (!scaleOrientation.isIgnored() && !scaleOrientation.isDefault()) {
+            SbRotation r = scaleOrientation.getValue();
+            ROTATE(r, mat, inv, m);
+        }
 
-	getScaleSpaceMatrix(m, minv);
+        getScaleSpaceMatrix(m, minv);
         mat.multLeft(m);
         inv.multRight(minv);
     }
@@ -260,19 +258,19 @@ SoTransform::getTranslationSpaceMatrix(SbMatrix &mat, SbMatrix &inv) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	m, minv;
+    SbMatrix m, minv;
 
     mat.makeIdentity();
     inv.makeIdentity();
 
-    if (! translation.isIgnored() && ! translation.isDefault()) {
-	const SbVec3f &v = translation.getValue();
-	TRANSLATE(v, mat, inv, m);
+    if (!translation.isIgnored() && !translation.isDefault()) {
+        const SbVec3f &v = translation.getValue();
+        TRANSLATE(v, mat, inv, m);
     }
 
-    if (! center.isIgnored() && ! center.isDefault()) {
-	const SbVec3f &c = center.getValue();
-	TRANSLATE(c, mat, inv, m);
+    if (!center.isIgnored() && !center.isDefault()) {
+        const SbVec3f &c = center.getValue();
+        TRANSLATE(c, mat, inv, m);
     }
 
     getRotationSpaceMatrix(m, minv);
@@ -294,7 +292,7 @@ SoTransform::multLeft(const SbMatrix &mat)
 ////////////////////////////////////////////////////////////////////////
 {
     // Get the matrix corresponding to this transform
-    SoGetMatrixAction ma(SbVec2s(1,1));
+    SoGetMatrixAction ma(SbVec2s(1, 1));
     ref();
     ma.apply(this);
     unrefNoDelete();
@@ -317,7 +315,7 @@ SoTransform::multRight(const SbMatrix &mat)
 ////////////////////////////////////////////////////////////////////////
 {
     // Get the matrix corresponding to this transform
-    SoGetMatrixAction ma(SbVec2s(1,1));
+    SoGetMatrixAction ma(SbVec2s(1, 1));
     ref();
     ma.apply(this);
     unrefNoDelete();
@@ -341,7 +339,7 @@ SoTransform::combineLeft(SoTransformation *nodeOnLeft)
 ////////////////////////////////////////////////////////////////////////
 {
     // Get the matrix corresponding to the given node and multiply
-    SoGetMatrixAction ma(SbVec2s(1,1));
+    SoGetMatrixAction ma(SbVec2s(1, 1));
     nodeOnLeft->ref();
     ma.apply(nodeOnLeft);
     nodeOnLeft->unrefNoDelete();
@@ -363,7 +361,7 @@ SoTransform::combineRight(SoTransformation *nodeOnRight)
 ////////////////////////////////////////////////////////////////////////
 {
     // Get the matrix corresponding to the given node and multiply
-    SoGetMatrixAction ma(SbVec2s(1,1));
+    SoGetMatrixAction ma(SbVec2s(1, 1));
     nodeOnRight->ref();
     ma.apply(nodeOnRight);
     nodeOnRight->unrefNoDelete();
@@ -397,32 +395,31 @@ SoTransform::setMatrix(const SbMatrix &mat)
     mNoCenter.multLeft(subMat);
 
     // Now, factor mNoCenter and plug it back into the fields
-    SbMatrix	shearRotMat, rotMat, projMat;
-    SbVec3f	sVec, tVec;
+    SbMatrix shearRotMat, rotMat, projMat;
+    SbVec3f  sVec, tVec;
 
     if (mNoCenter.factor(shearRotMat, sVec, rotMat, tVec, projMat)) {
-	SbRotation	rot = rotMat;
+        SbRotation rot = rotMat;
 
-	if (translation.getValue() != tVec)
-	    translation = tVec;
+        if (translation.getValue() != tVec)
+            translation = tVec;
 
-	if (rotation.getValue() != rot)
-	    rotation = rot;
+        if (rotation.getValue() != rot)
+            rotation = rot;
 
-	if (scaleFactor.getValue() != sVec)
-	    scaleFactor = sVec;
-	
-	// Don't change the scale orientation if the scale is unity
-	if (sVec != SbVec3f(1.0, 1.0, 1.0)) {
-	    rot = shearRotMat.transpose();
+        if (scaleFactor.getValue() != sVec)
+            scaleFactor = sVec;
 
-	    if (scaleOrientation.getValue() != rot)
-		scaleOrientation = rot;
-	}
-    }
-    else
-	SoDebugError::post("SoTransform::setMatrix",
-			   "Can't factor given matrix");
+        // Don't change the scale orientation if the scale is unity
+        if (sVec != SbVec3f(1.0, 1.0, 1.0)) {
+            rot = shearRotMat.transpose();
+
+            if (scaleOrientation.getValue() != rot)
+                scaleOrientation = rot;
+        }
+    } else
+        SoDebugError::post("SoTransform::setMatrix",
+                           "Can't factor given matrix");
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -445,11 +442,11 @@ SoTransform::recenter(const SbVec3f &newCenter)
     // the result can be that the object shifts in space.
     // So, we need to do the following:
     // [1] find [xfMat], the SbMatrix we get by applying a getMatrix action
-    SoGetMatrixAction ma(SbVec2s(1,1));
+    SoGetMatrixAction ma(SbVec2s(1, 1));
     ref();
     ma.apply(this);
     unrefNoDelete();
-    const SbMatrix	&xfMat = ma.getMatrix();
+    const SbMatrix &xfMat = ma.getMatrix();
 
     // Factor the resulting matrix into the necessary fields, while
     // making the center field be equal to newCenter. Therefore, we
@@ -458,37 +455,36 @@ SoTransform::recenter(const SbVec3f &newCenter)
     //
     // So, [mNoCenter] = [newCenter][xfMat][newCenterInverse]
 
-    SbMatrix	mNoCenter, subMat;
+    SbMatrix mNoCenter, subMat;
     mNoCenter.setTranslate(-newCenter);
     mNoCenter.multLeft(xfMat);
     subMat.setTranslate(newCenter);
     mNoCenter.multLeft(subMat);
 
     // Now, factor mNoCenter to get remaining fields of node...
-    SbMatrix	shearRotMat, rotMat, projMat;
-    SbVec3f	sVec, tVec;
+    SbMatrix shearRotMat, rotMat, projMat;
+    SbVec3f  sVec, tVec;
     if (mNoCenter.factor(shearRotMat, sVec, rotMat, tVec, projMat)) {
-	SbRotation rot;
+        SbRotation rot;
 
-	if (center.getValue() != newCenter)
-	    center = newCenter;
-	if (translation.getValue() != tVec)
-	    translation = tVec;
-	rot = rotMat;
-	if (rotation.getValue() != rot)
-	     rotation = rot;
-	if (scaleFactor.getValue() != sVec)
-	     scaleFactor = sVec;
-	// don't change the scale orientation if the scale is unity
-	if (sVec != SbVec3f(1.0, 1.0, 1.0)) {
-	    rot = shearRotMat.transpose();
-	    if (scaleOrientation.getValue() != rot)
-		scaleOrientation = rot;
-	}
-    }
-    else
-	SoDebugError::post("SoTransform::recenter",
-			   "Can't factor centering matrix");
+        if (center.getValue() != newCenter)
+            center = newCenter;
+        if (translation.getValue() != tVec)
+            translation = tVec;
+        rot = rotMat;
+        if (rotation.getValue() != rot)
+            rotation = rot;
+        if (scaleFactor.getValue() != sVec)
+            scaleFactor = sVec;
+        // don't change the scale orientation if the scale is unity
+        if (sVec != SbVec3f(1.0, 1.0, 1.0)) {
+            rot = shearRotMat.transpose();
+            if (scaleOrientation.getValue() != rot)
+                scaleOrientation = rot;
+        }
+    } else
+        SoDebugError::post("SoTransform::recenter",
+                           "Can't factor centering matrix");
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -503,40 +499,40 @@ SoTransform::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool	doCenter, doScaleOrient;
-    SoState	*state = action->getState();
+    SbBool   doCenter, doScaleOrient;
+    SoState *state = action->getState();
 
-    doCenter      = (! center.isIgnored() && ! center.isDefault());
-    doScaleOrient = (! scaleOrientation.isIgnored() &&
-		     ! scaleOrientation.isDefault());
+    doCenter = (!center.isIgnored() && !center.isDefault());
+    doScaleOrient =
+        (!scaleOrientation.isIgnored() && !scaleOrientation.isDefault());
 
     // Do these in GL (right-to-left) order
-    if (! translation.isIgnored() && ! translation.isDefault())
-	SoModelMatrixElement::translateBy(state, this, translation.getValue());
+    if (!translation.isIgnored() && !translation.isDefault())
+        SoModelMatrixElement::translateBy(state, this, translation.getValue());
 
     if (doCenter)
-	SoModelMatrixElement::translateBy(state, this, center.getValue());
+        SoModelMatrixElement::translateBy(state, this, center.getValue());
 
-    if (! rotation.isIgnored() && ! rotation.isDefault())
-	SoModelMatrixElement::rotateBy(state, this, rotation.getValue());
+    if (!rotation.isIgnored() && !rotation.isDefault())
+        SoModelMatrixElement::rotateBy(state, this, rotation.getValue());
 
-    if (! scaleFactor.isIgnored() && ! scaleFactor.isDefault()) {
+    if (!scaleFactor.isIgnored() && !scaleFactor.isDefault()) {
 
-	if (doScaleOrient)
-	    SoModelMatrixElement::rotateBy(state, this,
-					   scaleOrientation.getValue());
+        if (doScaleOrient)
+            SoModelMatrixElement::rotateBy(state, this,
+                                           scaleOrientation.getValue());
 
-	SoModelMatrixElement::scaleBy(state, this, scaleFactor.getValue());
+        SoModelMatrixElement::scaleBy(state, this, scaleFactor.getValue());
 
-	if (doScaleOrient) {
-	    SbRotation r = scaleOrientation.getValue();
-	    r.invert();
-	    SoModelMatrixElement::rotateBy(state, this, r);
-	}
+        if (doScaleOrient) {
+            SbRotation r = scaleOrientation.getValue();
+            r.invert();
+            SoModelMatrixElement::rotateBy(state, this, r);
+        }
     }
 
     if (doCenter)
-	SoModelMatrixElement::translateBy(state, this, -center.getValue());
+        SoModelMatrixElement::translateBy(state, this, -center.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -596,52 +592,51 @@ SoTransform::getMatrix(SoGetMatrixAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbMatrix	&ctm = action->getMatrix();
-    SbMatrix	&inv = action->getInverse();
-    SbMatrix	m;
-    SbVec3f	v, centerVec;
-    SbBool	doCenter, doScaleOrient;
+    SbMatrix &ctm = action->getMatrix();
+    SbMatrix &inv = action->getInverse();
+    SbMatrix  m;
+    SbVec3f   v, centerVec;
+    SbBool    doCenter, doScaleOrient;
 
-    doCenter      = (! center.isIgnored() && ! center.isDefault());
-    doScaleOrient = (! scaleOrientation.isIgnored() &&
-		     ! scaleOrientation.isDefault());
+    doCenter = (!center.isIgnored() && !center.isDefault());
+    doScaleOrient =
+        (!scaleOrientation.isIgnored() && !scaleOrientation.isDefault());
 
-    if (! translation.isIgnored() && ! translation.isDefault()) {
-	v = translation.getValue();
-	TRANSLATE(v, ctm, inv, m);
+    if (!translation.isIgnored() && !translation.isDefault()) {
+        v = translation.getValue();
+        TRANSLATE(v, ctm, inv, m);
     }
 
     if (doCenter) {
-	centerVec = center.getValue();
-	TRANSLATE(centerVec, ctm, inv, m);
+        centerVec = center.getValue();
+        TRANSLATE(centerVec, ctm, inv, m);
     }
 
-    if (! rotation.isIgnored() && ! rotation.isDefault()) {
-	SbRotation	r = rotation.getValue();
-	ROTATE(r, ctm, inv, m);
+    if (!rotation.isIgnored() && !rotation.isDefault()) {
+        SbRotation r = rotation.getValue();
+        ROTATE(r, ctm, inv, m);
     }
 
-    if (! scaleFactor.isIgnored() && ! scaleFactor.isDefault()) {
+    if (!scaleFactor.isIgnored() && !scaleFactor.isDefault()) {
 
-	if (doScaleOrient) {
-	    SbRotation	r = scaleOrientation.getValue();
-	    ROTATE(r, ctm, inv, m);
-	}
+        if (doScaleOrient) {
+            SbRotation r = scaleOrientation.getValue();
+            ROTATE(r, ctm, inv, m);
+        }
 
-	SbVec3f	s = scaleFactor.getValue();
-	SCALE(s, ctm, inv, m);
+        SbVec3f s = scaleFactor.getValue();
+        SCALE(s, ctm, inv, m);
 
-	if (doScaleOrient) {
-	    SbRotation	r = scaleOrientation.getValue();
-	    r.invert();
-	    ROTATE(r, ctm, inv, m);
-	}
-
+        if (doScaleOrient) {
+            SbRotation r = scaleOrientation.getValue();
+            r.invert();
+            ROTATE(r, ctm, inv, m);
+        }
     }
 
     if (doCenter) {
-	centerVec.negate();
-	TRANSLATE(centerVec, ctm, inv, m);
+        centerVec.negate();
+        TRANSLATE(centerVec, ctm, inv, m);
     }
 }
 

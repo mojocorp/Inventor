@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,8 +68,7 @@ SoComputeBoundingBox::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SO__ENGINE_INIT_CLASS(SoComputeBoundingBox,
-              "ComputeBoundingBox", SoEngine);
+    SO__ENGINE_INIT_CLASS(SoComputeBoundingBox, "ComputeBoundingBox", SoEngine);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -88,10 +87,10 @@ SoComputeBoundingBox::SoComputeBoundingBox()
     SO_ENGINE_ADD_INPUT(node, (NULL));
     SO_ENGINE_ADD_INPUT(path, (NULL));
 
-    SO_ENGINE_ADD_OUTPUT(min,		SoSFVec3f);
-    SO_ENGINE_ADD_OUTPUT(max,		SoSFVec3f);
-    SO_ENGINE_ADD_OUTPUT(boxCenter,	SoSFVec3f);
-    SO_ENGINE_ADD_OUTPUT(objectCenter,	SoSFVec3f);
+    SO_ENGINE_ADD_OUTPUT(min, SoSFVec3f);
+    SO_ENGINE_ADD_OUTPUT(max, SoSFVec3f);
+    SO_ENGINE_ADD_OUTPUT(boxCenter, SoSFVec3f);
+    SO_ENGINE_ADD_OUTPUT(objectCenter, SoSFVec3f);
 
     isBuiltIn = TRUE;
 
@@ -120,7 +119,7 @@ SoComputeBoundingBox::~SoComputeBoundingBox()
 ////////////////////////////////////////////////////////////////////////
 {
     if (bba != NULL)
-	delete bba;
+        delete bba;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -138,9 +137,9 @@ SoComputeBoundingBox::setViewportRegion(const SbViewportRegion &vpReg)
     // Set the viewport region in the SoGetBoundingBoxAction. If we
     // don't have an action instance yet, create one.
     if (bba == NULL)
-	bba = new SoGetBoundingBoxAction(vpReg);
+        bba = new SoGetBoundingBoxAction(vpReg);
     else
-	bba->setViewportRegion(vpReg);
+        bba->setViewportRegion(vpReg);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -159,8 +158,8 @@ SoComputeBoundingBox::getViewportRegion() const
     // don't have an action instance yet, create one. Cast away const
     // to do this.
     if (bba == NULL) {
-	SoComputeBoundingBox	*cbb = (SoComputeBoundingBox *) this;
-	cbb->bba = new SoGetBoundingBoxAction(SbViewportRegion());
+        SoComputeBoundingBox *cbb = (SoComputeBoundingBox *)this;
+        cbb->bba = new SoGetBoundingBoxAction(SbViewportRegion());
     }
 
     return bba->getViewportRegion();
@@ -181,12 +180,12 @@ SoComputeBoundingBox::inputChanged(SoField *whichInput)
 {
     // See if the changed pointer is NULL
     if (whichInput == &node)
-	gotNode = (node.getValue() != NULL);
+        gotNode = (node.getValue() != NULL);
     else
-	gotPath = (path.getValue() != NULL);
+        gotPath = (path.getValue() != NULL);
 
     // If either input is now non-NULL, enable the outputs
-    SbBool	enable = (gotNode || gotPath);
+    SbBool enable = (gotNode || gotPath);
     min.enable(enable);
     max.enable(enable);
     boxCenter.enable(enable);
@@ -207,21 +206,21 @@ SoComputeBoundingBox::evaluate()
 {
     // Create an action instance if necessary
     if (bba == NULL)
-	bba = new SoGetBoundingBoxAction(SbViewportRegion());
+        bba = new SoGetBoundingBoxAction(SbViewportRegion());
 
     // This should be called only when the outputs are enabled, so we
     // know that we have a non-NULL node or path
     if (gotPath)
-	bba->apply(path.getValue());
+        bba->apply(path.getValue());
     else
-	bba->apply(node.getValue());
+        bba->apply(node.getValue());
 
-    SbBox3f	box = bba->getBoundingBox();
-    SbVec3f	boxCent = box.getCenter();
-    SbVec3f	objCent = bba->getCenter();
+    SbBox3f box = bba->getBoundingBox();
+    SbVec3f boxCent = box.getCenter();
+    SbVec3f objCent = bba->getCenter();
 
-    SO_ENGINE_OUTPUT(min,    	   SoSFVec3f, setValue(box.getMin()));
-    SO_ENGINE_OUTPUT(max,    	   SoSFVec3f, setValue(box.getMax()));
-    SO_ENGINE_OUTPUT(boxCenter,    SoSFVec3f, setValue(boxCent));
+    SO_ENGINE_OUTPUT(min, SoSFVec3f, setValue(box.getMin()));
+    SO_ENGINE_OUTPUT(max, SoSFVec3f, setValue(box.getMax()));
+    SO_ENGINE_OUTPUT(boxCenter, SoSFVec3f, setValue(boxCent));
     SO_ENGINE_OUTPUT(objectCenter, SoSFVec3f, setValue(objCent));
 }

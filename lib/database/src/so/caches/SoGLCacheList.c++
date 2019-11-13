@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -65,12 +65,13 @@
 static const int maxThreshold = 100;
 
 struct SoGLCacheListEntry {
-    SoGLCacheListEntry() { cache = NULL;
-			   prev = next = this;
-		       }
-    SoGLRenderCache *cache;
+    SoGLCacheListEntry() {
+        cache = NULL;
+        prev = next = this;
+    }
+    SoGLRenderCache *   cache;
     SoGLCacheListEntry *prev, *next;
-};    
+};
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -90,9 +91,9 @@ SoGLCacheList::SoGLCacheList(int num)
     openCache = NULL;
 
     threshold = 1;
-    mightBeUsed = 0;  // Wait one frame to build caches, to allow text,
-		      // textures, or separators with renderCaching ON
-		      // to build caches.
+    mightBeUsed = 0; // Wait one frame to build caches, to allow text,
+                     // textures, or separators with renderCaching ON
+                     // to build caches.
     invalidElement = NULL;
 
     saveACacheBits = SoGLCacheContextElement::DO_AUTO_CACHE;
@@ -110,14 +111,15 @@ SoGLCacheList::~SoGLCacheList()
 ////////////////////////////////////////////////////////////////////////
 {
     if (MRU != NULL) {
-	// Break loop:
-	MRU->prev->next = NULL;
-	for (SoGLCacheListEntry *e = MRU; e != NULL;) {
-	    SoGLCacheListEntry *t = e;
-	    e = t->next;
-	    if (t->cache != NULL) t->cache->unref(NULL);
-	    delete t;
-	}
+        // Break loop:
+        MRU->prev->next = NULL;
+        for (SoGLCacheListEntry *e = MRU; e != NULL;) {
+            SoGLCacheListEntry *t = e;
+            e = t->next;
+            if (t->cache != NULL)
+                t->cache->unref(NULL);
+            delete t;
+        }
     }
 }
 
@@ -138,40 +140,41 @@ SoGLCacheList::call(SoGLRenderAction *action)
     SoState *state = action->getState();
 
     for (SoGLCacheListEntry *c = MRU; c != NULL;
-	 c = (c->next == MRU ? NULL : c->next)) {
+         c = (c->next == MRU ? NULL : c->next)) {
 
-	if (c->cache != NULL && c->cache->isValid(state)) {
+        if (c->cache != NULL && c->cache->isValid(state)) {
 
 #ifdef DEBUG
-	    if (SoDebug::GetEnv("IV_DEBUG_CACHELIST")) {
-		SoNode *tail = action->getCurPath()->getTail();
-		const char *tailName = tail->getName().getString();
-		if (!tailName || tailName[0]=='\0') tailName = "<noName>";
-		SoDebug::RTPrintf("GLCacheList: Using cache 0x%x, node %s\n",
-				  c->cache, tailName);
-	    }
+            if (SoDebug::GetEnv("IV_DEBUG_CACHELIST")) {
+                SoNode *    tail = action->getCurPath()->getTail();
+                const char *tailName = tail->getName().getString();
+                if (!tailName || tailName[0] == '\0')
+                    tailName = "<noName>";
+                SoDebug::RTPrintf("GLCacheList: Using cache 0x%x, node %s\n",
+                                  c->cache, tailName);
+            }
 #endif
-	    c->cache->call(state);
+            c->cache->call(state);
 
-	    // Mark this cache as the most-recently used
-	    setMRU(c);
-	    
-	    // Keep track of some stuff used for auto-caching:
-	    // See the big comment below...
-	    mightBeUsed = 0;
-	    if (invalidElement) {
-		delete invalidElement;
-		invalidElement = NULL;
-	    }
-	    // Decrease threshold.  This is kind of wacky--
-	    // threshold is doubled when a cache is blown, and
-	    // 3/4'ed when a cache is used.  So
-	    // we penalize blowing more than using...
-	    threshold = (threshold*3)/4;
-	    if (threshold < 1)
-		threshold = 1;
-	    return TRUE;
-	}
+            // Mark this cache as the most-recently used
+            setMRU(c);
+
+            // Keep track of some stuff used for auto-caching:
+            // See the big comment below...
+            mightBeUsed = 0;
+            if (invalidElement) {
+                delete invalidElement;
+                invalidElement = NULL;
+            }
+            // Decrease threshold.  This is kind of wacky--
+            // threshold is doubled when a cache is blown, and
+            // 3/4'ed when a cache is used.  So
+            // we penalize blowing more than using...
+            threshold = (threshold * 3) / 4;
+            if (threshold < 1)
+                threshold = 1;
+            return TRUE;
+        }
     }
     return FALSE;
 }
@@ -195,121 +198,122 @@ SoGLCacheList::open(SoGLRenderAction *action, SbBool autoCache)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    assert (openCache == NULL);
+    assert(openCache == NULL);
 
     SoState *state = action->getState();
 
     // If there is already an open GLRender cache, bail.
     if (SoCacheElement::anyOpen(state))
-	return;
+        return;
 
     // If no render caches are to be used, do nothing
     if (maxCaches <= 0)
-	return;
+        return;
 
     if (!autoCache) {
-	// Blow the least recently used cache unconditionally.
-	openCache = getLRU();
+        // Blow the least recently used cache unconditionally.
+        openCache = getLRU();
     }
-// The interesting case.  There are several common cases that we are
-// trying to accomodate here:
-// 1. Viewing an unchanging scene.  We want caches to be built the
-//    first frame.
-// 2. Viewing with an 'interactive' drawstyle-- e.g. move low
-//    complexity.  We want two caches to be built immediately, the
-//    first frame they are used.
-// 3. Viewing an animating scene.  There should be no caches built
-//    above things that are changing (notifying).
-// 4. Interactively changing an overridden property at the top of the
-//    scene graph (e.g. changing a Complexity slider).  We want to
-//    avoid building caches while it is changing.
-// 5. Texture and text nodes, and Separators with renderCaching
-//    explicitly turned ON (e.g. so instances share the same cache)
-//    should have a chance to get built so that we don't build display
-//    lists that are bigger than they should be.
-//
-// We compromise in the first and second cases to acommodate nodes
-// that want a chance to build caches; caches are built the second
-// frame by initializing mightBeUsed to 0 and threshold to 1.
-//
-// We rely on animation notification happening before rendering for
-// the third case to be handled correctly, and assume that
-// notification is happening before every render so caches are never
-// built (invalidateAll sets mightBeUsed to zero).
-//
-// For the last case we have to compromise, since the first couple of
-// frames are indistinguishable from the second case.  We remember the
-// first element that caused the most-recently-used cache to be
-// considered invalid, and only increment mightBeUsed if that element
-// stays the same.
-//
-// In any case, the threshold used to determine how many times the
-// cache might be used is increased a lot when a cache is destroyed
-// because elements above changed, and decreased a little whenever a
-// cache is used.  This will give reasonable behavior even in cases
-// where (for example) two elements are interacting, with each staying
-// the same for a couple of frames, but each out of sync with the
-// other (a rare case, but it could happen...).
-//
-// Also, we only do this if there is some node underneath us that has
-// requested auto-caching AND no node underneath use has requested
-// that it NOT be cached:
-//
+    // The interesting case.  There are several common cases that we are
+    // trying to accomodate here:
+    // 1. Viewing an unchanging scene.  We want caches to be built the
+    //    first frame.
+    // 2. Viewing with an 'interactive' drawstyle-- e.g. move low
+    //    complexity.  We want two caches to be built immediately, the
+    //    first frame they are used.
+    // 3. Viewing an animating scene.  There should be no caches built
+    //    above things that are changing (notifying).
+    // 4. Interactively changing an overridden property at the top of the
+    //    scene graph (e.g. changing a Complexity slider).  We want to
+    //    avoid building caches while it is changing.
+    // 5. Texture and text nodes, and Separators with renderCaching
+    //    explicitly turned ON (e.g. so instances share the same cache)
+    //    should have a chance to get built so that we don't build display
+    //    lists that are bigger than they should be.
+    //
+    // We compromise in the first and second cases to acommodate nodes
+    // that want a chance to build caches; caches are built the second
+    // frame by initializing mightBeUsed to 0 and threshold to 1.
+    //
+    // We rely on animation notification happening before rendering for
+    // the third case to be handled correctly, and assume that
+    // notification is happening before every render so caches are never
+    // built (invalidateAll sets mightBeUsed to zero).
+    //
+    // For the last case we have to compromise, since the first couple of
+    // frames are indistinguishable from the second case.  We remember the
+    // first element that caused the most-recently-used cache to be
+    // considered invalid, and only increment mightBeUsed if that element
+    // stays the same.
+    //
+    // In any case, the threshold used to determine how many times the
+    // cache might be used is increased a lot when a cache is destroyed
+    // because elements above changed, and decreased a little whenever a
+    // cache is used.  This will give reasonable behavior even in cases
+    // where (for example) two elements are interacting, with each staying
+    // the same for a couple of frames, but each out of sync with the
+    // other (a rare case, but it could happen...).
+    //
+    // Also, we only do this if there is some node underneath us that has
+    // requested auto-caching AND no node underneath use has requested
+    // that it NOT be cached:
+    //
     else if (saveACacheBits == SoGLCacheContextElement::DO_AUTO_CACHE) {
-	if (invalidElement == NULL) {
-	    if (MRU && MRU->cache) {
-		const SoElement *eltInState =
-		    MRU->cache->getInvalidElement(state);
-		if (eltInState)
-		    invalidElement = eltInState->copyMatchInfo();
-	    }
-	    ++mightBeUsed;
-	} else {
-	    const SoElement *eltInState =
-		state->getConstElement(invalidElement->getStackIndex());
-	    if (invalidElement->matches(eltInState)) {
-		++mightBeUsed;
-	    } else {
-		// update element-last-blown:
-		delete invalidElement;
-		invalidElement = eltInState->copyMatchInfo();
+        if (invalidElement == NULL) {
+            if (MRU && MRU->cache) {
+                const SoElement *eltInState =
+                    MRU->cache->getInvalidElement(state);
+                if (eltInState)
+                    invalidElement = eltInState->copyMatchInfo();
+            }
+            ++mightBeUsed;
+        } else {
+            const SoElement *eltInState =
+                state->getConstElement(invalidElement->getStackIndex());
+            if (invalidElement->matches(eltInState)) {
+                ++mightBeUsed;
+            } else {
+                // update element-last-blown:
+                delete invalidElement;
+                invalidElement = eltInState->copyMatchInfo();
 
-		// Still changing, reset mightBeUsed
-		mightBeUsed = 0;
-	    }
-	}
+                // Still changing, reset mightBeUsed
+                mightBeUsed = 0;
+            }
+        }
 
-	if (mightBeUsed > threshold) {
-	    // Replace the least recently used cache.
-	    openCache = getLRU();
-	}
+        if (mightBeUsed > threshold) {
+            // Replace the least recently used cache.
+            openCache = getLRU();
+        }
     }
 
     // If we've decided to replace a cache...
     if (openCache) {
-	blow(state, openCache);
+        blow(state, openCache);
 
-	openCache->cache = new SoGLRenderCache(state);
-	openCache->cache->ref();
-	openCache->cache->open(state);
+        openCache->cache = new SoGLRenderCache(state);
+        openCache->cache->ref();
+        openCache->cache->open(state);
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_CACHELIST")) {
-	    SoNode *tail = action->getCurPath()->getTail();
-	    const char *tailName = tail->getName().getString();
-	    if (!tailName || tailName[0]=='\0') tailName = "<noName>";
-	    SoDebug::RTPrintf("GLCacheList: New cache 0x%x for node %s:"
-			      "mightBeUsed(%d), threshold(%d)\n",
-			      openCache->cache, tailName, mightBeUsed,
-			      threshold);
-	}
+        if (SoDebug::GetEnv("IV_DEBUG_CACHELIST")) {
+            SoNode *    tail = action->getCurPath()->getTail();
+            const char *tailName = tail->getName().getString();
+            if (!tailName || tailName[0] == '\0')
+                tailName = "<noName>";
+            SoDebug::RTPrintf("GLCacheList: New cache 0x%x for node %s:"
+                              "mightBeUsed(%d), threshold(%d)\n",
+                              openCache->cache, tailName, mightBeUsed,
+                              threshold);
+        }
 #endif
-	mightBeUsed = 0;
+        mightBeUsed = 0;
     } else {
-	// No cache, and no cache already open (the anyOpen() test
-	// takes care of that); save away the cache element's invalid
-	// state (to be restored in ::close()) so we can tell if
-	// anything is invalidating caches:
-	saveInvalid = SoCacheElement::setInvalid(FALSE);
+        // No cache, and no cache already open (the anyOpen() test
+        // takes care of that); save away the cache element's invalid
+        // state (to be restored in ::close()) so we can tell if
+        // anything is invalidating caches:
+        saveInvalid = SoCacheElement::setInvalid(FALSE);
     }
     saveACacheBits = SoGLCacheContextElement::resetAutoCacheBits(state);
 }
@@ -333,30 +337,28 @@ SoGLCacheList::close(SoGLRenderAction *action)
     // cache.
 
     if (openCache) {
-	// Check for NULL case. This can happen if there was notification
-	// during the time the cache was being filled.
-	if (openCache->cache) {
-	    openCache->cache->close();
-	    setMRU(openCache);
-	}
-	openCache = NULL;
-    }
-    else {
-	SbBool wasInvalidated = SoCacheElement::setInvalid(saveInvalid);
-	if (wasInvalidated) {
-	    // Pass info up to parents...
-	    (void)SoCacheElement::setInvalid(TRUE);
-	    mightBeUsed = 0;
-	}
+        // Check for NULL case. This can happen if there was notification
+        // during the time the cache was being filled.
+        if (openCache->cache) {
+            openCache->cache->close();
+            setMRU(openCache);
+        }
+        openCache = NULL;
+    } else {
+        SbBool wasInvalidated = SoCacheElement::setInvalid(saveInvalid);
+        if (wasInvalidated) {
+            // Pass info up to parents...
+            (void)SoCacheElement::setInvalid(TRUE);
+            mightBeUsed = 0;
+        }
     }
 
     // Do some bit gymnastics; saveACacheBits will be the bits as set
     // by traversal of children between open() and close().
     SoState *state = action->getState();
-    int prevBits = saveACacheBits;
+    int      prevBits = saveACacheBits;
     saveACacheBits = SoGLCacheContextElement::resetAutoCacheBits(state);
-    SoGLCacheContextElement::setAutoCacheBits(state,
-		prevBits | saveACacheBits);
+    SoGLCacheContextElement::setAutoCacheBits(state, prevBits | saveACacheBits);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -372,20 +374,20 @@ SoGLCacheList::invalidateAll()
 ////////////////////////////////////////////////////////////////////////
 {
     for (SoGLCacheListEntry *c = MRU; c != NULL;
-	 c = (c->next == MRU ? NULL : c->next)) {
-	if (c->cache) {
+         c = (c->next == MRU ? NULL : c->next)) {
+        if (c->cache) {
 #ifdef DEBUG
-	    if (SoDebug::GetEnv("IV_DEBUG_CACHELIST")) {
-		SoDebug::RTPrintf("GLCacheList: Freeing cache 0x%x\n",
-				  c->cache);
-	    }
+            if (SoDebug::GetEnv("IV_DEBUG_CACHELIST")) {
+                SoDebug::RTPrintf("GLCacheList: Freeing cache 0x%x\n",
+                                  c->cache);
+            }
 #endif
-	    if (threshold < maxThreshold)
-		threshold = (threshold+1)*2;
+            if (threshold < maxThreshold)
+                threshold = (threshold + 1) * 2;
 
-	    c->cache->unref(NULL);
-	    c->cache = NULL;
-	}
+            c->cache->unref(NULL);
+            c->cache = NULL;
+        }
     }
     mightBeUsed = 0;
 }
@@ -404,13 +406,12 @@ SoGLCacheList::getLRU()
 ////////////////////////////////////////////////////////////////////////
 {
     if (MRU == NULL) {
-	MRU = new SoGLCacheListEntry;
-	numCaches = 1;
-    }
-    else if (numCaches != maxCaches) {
-	SoGLCacheListEntry *t = new SoGLCacheListEntry;
-	setLRU(t);
-	++numCaches;
+        MRU = new SoGLCacheListEntry;
+        numCaches = 1;
+    } else if (numCaches != maxCaches) {
+        SoGLCacheListEntry *t = new SoGLCacheListEntry;
+        setLRU(t);
+        ++numCaches;
     }
 
     return MRU->prev;
@@ -428,7 +429,8 @@ SoGLCacheList::setMRU(SoGLCacheListEntry *e)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (e == MRU) return;
+    if (e == MRU)
+        return;
 
     // First, remove e from the list:
     e->prev->next = e->next;
@@ -457,8 +459,8 @@ SoGLCacheList::setLRU(SoGLCacheListEntry *e)
     // Use a little trickery here-- make the entry the MRU, then bump
     // the MRU pointer and e is suddenly the end of the list...
     if (e->next != MRU) {
-	setMRU(e);
-	MRU = e->next;
+        setMRU(e);
+        MRU = e->next;
     }
 }
 
@@ -479,17 +481,16 @@ SoGLCacheList::blow(SoState *state, SoGLCacheListEntry *t)
     if (t->cache) {
 
 #ifdef DEBUG
-	if (SoDebug::GetEnv("IV_DEBUG_CACHELIST")) {
-	    SoDebug::RTPrintf("GLCacheList: Blowing cache 0x%x\n",
-			      t->cache);
-	}
+        if (SoDebug::GetEnv("IV_DEBUG_CACHELIST")) {
+            SoDebug::RTPrintf("GLCacheList: Blowing cache 0x%x\n", t->cache);
+        }
 #endif
 
-    	t->cache->unref(state);
-	t->cache = NULL;
-	setLRU(t);
-	mightBeUsed = 0;
-	if (threshold < maxThreshold)
-	    threshold = (threshold+1)*2;   // Penalize!
+        t->cache->unref(state);
+        t->cache = NULL;
+        setLRU(t);
+        mightBeUsed = 0;
+        if (threshold < maxThreshold)
+            threshold = (threshold + 1) * 2; // Penalize!
     }
 }

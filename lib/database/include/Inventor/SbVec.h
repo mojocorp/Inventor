@@ -83,97 +83,111 @@ class SbPlane;
 class SbVec3f {
   public:
     // Default constructor
-    SbVec3f()						{ }
+    SbVec3f() {}
 
     // Constructor given an array of 3 components
-    SbVec3f(const float v[3])
-     { vec[0] = v[0]; vec[1] = v[1]; vec[2] = v[2]; }
+    SbVec3f(const float v[3]) {
+        vec[0] = v[0];
+        vec[1] = v[1];
+        vec[2] = v[2];
+    }
 
     // Constructor given 3 individual components
-    SbVec3f(float x, float y, float z)
-     { vec[0] = x; vec[1] = y; vec[2] = z; }
+    SbVec3f(float x, float y, float z) {
+        vec[0] = x;
+        vec[1] = y;
+        vec[2] = z;
+    }
 
     // Constructor given 3 planes
     SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2);
 
     // Returns right-handed cross product of vector and another vector
-    SbVec3f	cross(const SbVec3f &v) const;
+    SbVec3f cross(const SbVec3f &v) const;
 
     // Returns dot (inner) product of vector and another vector
-    float	dot(const SbVec3f &v) const;
+    float dot(const SbVec3f &v) const;
 
     // Returns pointer to array of 3 components
-    const float	*getValue() const			{ return vec; }
+    const float *getValue() const { return vec; }
 
     // Returns 3 individual components
-    void	getValue(float &x, float &y, float &z) const;
+    void getValue(float &x, float &y, float &z) const;
 
     // Returns geometric length of vector
-    float	length() const;
+    float length() const;
 
     // Changes vector to be unit length
-    float	normalize();
+    float normalize();
 
     // Negates each component of vector in place
-    void	negate();
+    void negate();
 
     // Sets value of vector from array of 3 components
-    SbVec3f &	setValue(const float v[3])
-     { vec[0] = v[0]; vec[1] = v[1]; vec[2] = v[2]; return *this; }
+    SbVec3f &setValue(const float v[3]) {
+        vec[0] = v[0];
+        vec[1] = v[1];
+        vec[2] = v[2];
+        return *this;
+    }
 
     // Sets value of vector from 3 individual components
-    SbVec3f &	setValue(float x, float y, float z)
-     { vec[0] = x; vec[1] = y; vec[2] = z; return *this; }
+    SbVec3f &setValue(float x, float y, float z) {
+        vec[0] = x;
+        vec[1] = y;
+        vec[2] = z;
+        return *this;
+    }
 
     // Sets value of vector to be convex combination of 3 other
     // vectors, using barycentic coordinates
-    SbVec3f &	setValue(const SbVec3f &barycentic,
-        const SbVec3f &v0, const SbVec3f &v1, const SbVec3f &v2);
+    SbVec3f &setValue(const SbVec3f &barycentic, const SbVec3f &v0,
+                      const SbVec3f &v1, const SbVec3f &v2);
 
     // Accesses indexed component of vector
-    float &	  operator [](int i) 		{ return (vec[i]); }
-    const float & operator [](int i) const	{ return (vec[i]); }
+    float &      operator[](int i) { return (vec[i]); }
+    const float &operator[](int i) const { return (vec[i]); }
 
     // Component-wise scalar multiplication and division operators
-    SbVec3f &	operator *=(float d);
+    SbVec3f &operator*=(float d);
 
-    SbVec3f &	operator /=(float d)
-    { return *this *= (1.0 / d); }
+    SbVec3f &operator/=(float d) { return *this *= (1.0 / d); }
 
     // Component-wise vector addition and subtraction operators
-    SbVec3f &	operator +=(SbVec3f v);
-    SbVec3f &	operator -=(SbVec3f v);
+    SbVec3f &operator+=(SbVec3f v);
+    SbVec3f &operator-=(SbVec3f v);
 
     // Nondestructive unary negation - returns a new vector
-    SbVec3f	operator -() const;
+    SbVec3f operator-() const;
 
     // Component-wise binary scalar multiplication and division operators
-    friend SbVec3f	operator *(const SbVec3f &v, float d);
-    friend SbVec3f	operator *(float d, const SbVec3f &v)
-    { return v * d; }
-    friend SbVec3f	operator /(const SbVec3f &v, float d)
-    { return v * (1.0 / d); }
+    friend SbVec3f operator*(const SbVec3f &v, float d);
+    friend SbVec3f operator*(float d, const SbVec3f &v) { return v * d; }
+    friend SbVec3f operator/(const SbVec3f &v, float d) {
+        return v * (1.0 / d);
+    }
 
     // Component-wise binary vector addition and subtraction operators
-    friend SbVec3f	operator +(const SbVec3f &v1, const SbVec3f &v2);
+    friend SbVec3f operator+(const SbVec3f &v1, const SbVec3f &v2);
 
-    friend SbVec3f	operator -(const SbVec3f &v1, const SbVec3f &v2);
+    friend SbVec3f operator-(const SbVec3f &v1, const SbVec3f &v2);
 
     // Equality comparison operator
-    friend int		operator ==(const SbVec3f &v1, const SbVec3f &v2);
-    friend int		operator !=(const SbVec3f &v1, const SbVec3f &v2)
-    { return !(v1 == v2); }
+    friend int operator==(const SbVec3f &v1, const SbVec3f &v2);
+    friend int operator!=(const SbVec3f &v1, const SbVec3f &v2) {
+        return !(v1 == v2);
+    }
 
     // Equality comparison within given tolerance - the square of the
     // length of the maximum distance between the two vectors
-    SbBool		equals(const SbVec3f v, float tolerance) const;
+    SbBool equals(const SbVec3f v, float tolerance) const;
 
     // Returns principal axis that is closest (based on maximum dot
     // product) to this vector
-    SbVec3f		getClosestAxis() const;
+    SbVec3f getClosestAxis() const;
 
   protected:
-    float	vec[3];		// Storage for vector components
+    float vec[3]; // Storage for vector components
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -189,9 +203,9 @@ class SbVec3f {
 //
 //////////////////////////////////////////////////////////////////////////////
 class SbVec3s {
-public:
+  public:
     // Default constructor
-    SbVec3s() { }
+    SbVec3s() {}
 
     // Constructor given an array of 3 components
     SbVec3s(const short v[3]) {
@@ -214,9 +228,7 @@ public:
     short dot(const SbVec3s &v) const;
 
     // Returns pointer to array of 3 components
-    const short *getValue() const {
-        return vec;
-    }
+    const short *getValue() const { return vec; }
 
     // Returns 3 individual components
     void getValue(short &x, short &y, short &z) const;
@@ -225,7 +237,7 @@ public:
     void negate();
 
     // Sets value of vector from array of 3 components
-    SbVec3s & setValue(const short v[3]) {
+    SbVec3s &setValue(const short v[3]) {
         vec[0] = v[0];
         vec[1] = v[1];
         vec[2] = v[2];
@@ -233,7 +245,7 @@ public:
     }
 
     // Sets value of vector from 3 individual components
-    SbVec3s & setValue(short x, short y, short z) {
+    SbVec3s &setValue(short x, short y, short z) {
         vec[0] = x;
         vec[1] = y;
         vec[2] = z;
@@ -241,20 +253,16 @@ public:
     }
 
     // Accesses indexed component of vector
-    short & operator [](int i) {
-        return (vec[i]);
-    }
+    short &operator[](int i) { return (vec[i]); }
 
     // Accesses indexed component of vector
-    const short & operator [](int i) const {
-        return (vec[i]);
-    }
+    const short &operator[](int i) const { return (vec[i]); }
 
     // Component-wise scalar multiplication operator
-    SbVec3s & operator *=(short d);
+    SbVec3s &operator*=(short d);
 
     // Component-wise scalar division operator
-    SbVec3s & operator /=(short d) {
+    SbVec3s &operator/=(short d) {
         vec[0] /= d;
         vec[1] /= d;
         vec[2] /= d;
@@ -262,43 +270,41 @@ public:
     }
 
     // Component-wise vector addition operator
-    SbVec3s & operator +=(SbVec3s v);
+    SbVec3s &operator+=(SbVec3s v);
 
     // Component-wise vector subtraction operator
-    SbVec3s & operator -=(SbVec3s v);
+    SbVec3s &operator-=(SbVec3s v);
 
     // Nondestructive unary negation - returns a new vector
-    SbVec3s operator -() const;
+    SbVec3s operator-() const;
 
     // Component-wise binary scalar multiplication operator
-    friend SbVec3s operator *(const SbVec3s &v, short d);
+    friend SbVec3s operator*(const SbVec3s &v, short d);
 
     // Component-wise binary scalar multiplication operator
-    friend SbVec3s operator *(short d, const SbVec3s &v) {
-        return v * d;
-    }
+    friend SbVec3s operator*(short d, const SbVec3s &v) { return v * d; }
 
     // Component-wise binary scalar division operator
-    friend SbVec3s operator /(const SbVec3s &v, short d) {
-        return SbVec3s(v[0]/d, v[1]/d, v[2]/d);
+    friend SbVec3s operator/(const SbVec3s &v, short d) {
+        return SbVec3s(v[0] / d, v[1] / d, v[2] / d);
     }
 
     // Component-wise binary vector addition operator
-    friend SbVec3s operator +(const SbVec3s &v1, const SbVec3s &v2);
+    friend SbVec3s operator+(const SbVec3s &v1, const SbVec3s &v2);
 
     // Component-wise binary vector subtraction operator
-    friend SbVec3s operator -(const SbVec3s &v1, const SbVec3s &v2);
+    friend SbVec3s operator-(const SbVec3s &v1, const SbVec3s &v2);
 
     // Equality comparison operator
-    friend int  operator ==(const SbVec3s &v1, const SbVec3s &v2);
+    friend int operator==(const SbVec3s &v1, const SbVec3s &v2);
 
     // Inequality comparison operator
-    friend int  operator !=(const SbVec3s &v1, const SbVec3s &v2) {
+    friend int operator!=(const SbVec3s &v1, const SbVec3s &v2) {
         return !(v1 == v2);
     }
 
-protected:
-    short vec[3];  // Storage for vector components
+  protected:
+    short vec[3]; // Storage for vector components
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -310,84 +316,81 @@ protected:
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
-
 class SbVec2f {
   public:
-
     // Default constructor
-    SbVec2f()						{ }
+    SbVec2f() {}
 
     // Constructor given an array of 2 components
-    SbVec2f(const float v[2])				{ setValue(v); }
+    SbVec2f(const float v[2]) { setValue(v); }
 
     // Constructor given 2 individual components
-    SbVec2f(float x, float y)				{ setValue(x, y); }
+    SbVec2f(float x, float y) { setValue(x, y); }
 
     // Returns dot (inner) product of vector and another vector
-    float	dot(const SbVec2f &v) const;
+    float dot(const SbVec2f &v) const;
 
     // Returns pointer to array of 2 components
-    const float	*getValue() const			{ return vec; }
+    const float *getValue() const { return vec; }
 
     // Returns 2 individual components
-    void	getValue(float &x, float &y) const;
+    void getValue(float &x, float &y) const;
 
     // Returns geometric length of vector
-    float	length() const;
+    float length() const;
 
     // Negates each component of vector in place
-    void	negate();
+    void negate();
 
     // Changes vector to be unit length
-    float	normalize();
+    float normalize();
 
     // Sets value of vector from array of 2 components
-    SbVec2f &	setValue(const float v[2]);
+    SbVec2f &setValue(const float v[2]);
 
     // Sets value of vector from 2 individual components
-    SbVec2f &	setValue(float x, float y);
+    SbVec2f &setValue(float x, float y);
 
     // Accesses indexed component of vector
-    float &	  operator [](int i) 		{ return (vec[i]); }
-    const float & operator [](int i) const 	{ return (vec[i]); }
+    float &      operator[](int i) { return (vec[i]); }
+    const float &operator[](int i) const { return (vec[i]); }
 
     // Component-wise scalar multiplication and division operators
-    SbVec2f &	operator *=(float d);
+    SbVec2f &operator*=(float d);
 
-    SbVec2f &	operator /=(float d)
-    { return *this *= (1.0 / d); }
+    SbVec2f &operator/=(float d) { return *this *= (1.0 / d); }
 
     // Component-wise vector addition and subtraction operators
-    SbVec2f &	operator +=(const SbVec2f &u);
-    SbVec2f &	operator -=(const SbVec2f &u);
+    SbVec2f &operator+=(const SbVec2f &u);
+    SbVec2f &operator-=(const SbVec2f &u);
 
     // Nondestructive unary negation - returns a new vector
-    SbVec2f	operator -() const;
+    SbVec2f operator-() const;
 
     // Component-wise binary scalar multiplication and division operators
-    friend SbVec2f	operator *(const SbVec2f &v, float d);
-    friend SbVec2f	operator *(float d, const SbVec2f &v)
-    { return v * d; }
-    friend SbVec2f	operator /(const SbVec2f &v, float d)
-    { return v * (1.0 / d); }
+    friend SbVec2f operator*(const SbVec2f &v, float d);
+    friend SbVec2f operator*(float d, const SbVec2f &v) { return v * d; }
+    friend SbVec2f operator/(const SbVec2f &v, float d) {
+        return v * (1.0 / d);
+    }
 
     // Component-wise binary vector addition and subtraction operators
-    friend SbVec2f	operator +(const SbVec2f &v1, const SbVec2f &v2);
+    friend SbVec2f operator+(const SbVec2f &v1, const SbVec2f &v2);
 
-    friend SbVec2f	operator -(const SbVec2f &v1, const SbVec2f &v2);
+    friend SbVec2f operator-(const SbVec2f &v1, const SbVec2f &v2);
 
     // Equality comparison operator
-    friend int		operator ==(const SbVec2f &v1, const SbVec2f &v2);
-    friend int		operator !=(const SbVec2f &v1, const SbVec2f &v2)
-    { return !(v1 == v2); }
+    friend int operator==(const SbVec2f &v1, const SbVec2f &v2);
+    friend int operator!=(const SbVec2f &v1, const SbVec2f &v2) {
+        return !(v1 == v2);
+    }
 
     // Equality comparison within given tolerance - the square of the
     // length of the maximum distance between the two vectors
-    SbBool		equals(const SbVec2f v, float tolerance) const;
+    SbBool equals(const SbVec2f v, float tolerance) const;
 
   protected:
-    float	vec[2];		// Storage for vector components
+    float vec[2]; // Storage for vector components
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -399,80 +402,76 @@ class SbVec2f {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
-
 class SbVec2s {
   public:
-
     // Default constructor
-    SbVec2s()						{ }
+    SbVec2s() {}
 
     // Constructor given an array of 2 components
-    SbVec2s(const short v[2])				{ setValue(v); }
+    SbVec2s(const short v[2]) { setValue(v); }
 
     // Constructor given 2 individual components
-    SbVec2s(short x, short y)				{ setValue(x, y); }
+    SbVec2s(short x, short y) { setValue(x, y); }
 
     // Returns dot (inner) product of vector and another vector
-    int32_t	dot(const SbVec2s &v) const;
+    int32_t dot(const SbVec2s &v) const;
 
     // Returns pointer to array of 2 components
-    const short	*getValue() const			{ return vec; }
+    const short *getValue() const { return vec; }
 
     // Returns 2 individual components
-    void	getValue(short &x, short &y) const;
+    void getValue(short &x, short &y) const;
 
     // Negates each component of vector in place
-    void	negate();
+    void negate();
 
     // Sets value of vector from array of 2 components
-    SbVec2s &	setValue(const short v[2]);
+    SbVec2s &setValue(const short v[2]);
 
     // Sets value of vector from 2 individual components
-    SbVec2s &	setValue(short x, short y);
+    SbVec2s &setValue(short x, short y);
 
     // Accesses indexed component of vector
-    short &	  operator [](int i) 		{ return (vec[i]); }
-    const short & operator [](int i) const 	{ return (vec[i]); }
+    short &      operator[](int i) { return (vec[i]); }
+    const short &operator[](int i) const { return (vec[i]); }
 
     // Component-wise scalar multiplication and division operators
-    SbVec2s &	operator *=(int d);
-    SbVec2s &	operator *=(double d);
+    SbVec2s &operator*=(int d);
+    SbVec2s &operator*=(double d);
 
-    SbVec2s &	operator /=(int d);
-    SbVec2s &	operator /=(double d)
-    { return *this *= (1.0 / d); }
+    SbVec2s &operator/=(int d);
+    SbVec2s &operator/=(double d) { return *this *= (1.0 / d); }
 
     // Component-wise vector addition and subtraction operators
-    SbVec2s &	operator +=(const SbVec2s &u);
-    SbVec2s &	operator -=(const SbVec2s &u);
+    SbVec2s &operator+=(const SbVec2s &u);
+    SbVec2s &operator-=(const SbVec2s &u);
 
     // Nondestructive unary negation - returns a new vector
-    SbVec2s	operator -() const;
+    SbVec2s operator-() const;
 
     // Component-wise binary scalar multiplication and division operators
-    friend SbVec2s	operator *(const SbVec2s &v, int d);
-    friend SbVec2s	operator *(const SbVec2s &v, double d);
-    friend SbVec2s	operator *(int d, const SbVec2s &v)
-    { return v * d; }
-    friend SbVec2s	operator *(double d, const SbVec2s &v)
-    { return v * d; }
-    friend SbVec2s	operator /(const SbVec2s &v, int d);
-    friend SbVec2s	operator /(const SbVec2s &v, double d)
-    { return v * (1.0 / d); }
+    friend SbVec2s operator*(const SbVec2s &v, int d);
+    friend SbVec2s operator*(const SbVec2s &v, double d);
+    friend SbVec2s operator*(int d, const SbVec2s &v) { return v * d; }
+    friend SbVec2s operator*(double d, const SbVec2s &v) { return v * d; }
+    friend SbVec2s operator/(const SbVec2s &v, int d);
+    friend SbVec2s operator/(const SbVec2s &v, double d) {
+        return v * (1.0 / d);
+    }
 
     // Component-wise binary vector addition and subtraction operators
-    friend SbVec2s	operator +(const SbVec2s &v1, const SbVec2s &v2);
+    friend SbVec2s operator+(const SbVec2s &v1, const SbVec2s &v2);
 
-    friend SbVec2s	operator -(const SbVec2s &v1, const SbVec2s &v2);
+    friend SbVec2s operator-(const SbVec2s &v1, const SbVec2s &v2);
 
     // Equality comparison operator
-    friend int		operator ==(const SbVec2s &v1, const SbVec2s &v2);
-    friend int		operator !=(const SbVec2s &v1, const SbVec2s &v2)
-    { return !(v1 == v2); }
+    friend int operator==(const SbVec2s &v1, const SbVec2s &v2);
+    friend int operator!=(const SbVec2s &v1, const SbVec2s &v2) {
+        return !(v1 == v2);
+    }
 
   protected:
-    short	vec[2];		// Storage for vector components
+    short vec[2]; // Storage for vector components
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -484,87 +483,84 @@ class SbVec2s {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
-
 class SbVec4f {
   public:
-
     // Default constructor
-    SbVec4f()						{ }
+    SbVec4f() {}
 
     // Constructor given an array of 4 components
-    SbVec4f(const float v[4])				{ setValue(v); }
+    SbVec4f(const float v[4]) { setValue(v); }
 
     // Constructor given 4 individual components
-    SbVec4f(float x, float y, float z, float w)	      { setValue(x, y, z, w); }
+    SbVec4f(float x, float y, float z, float w) { setValue(x, y, z, w); }
 
     // Returns dot (inner) product of vector and another vector
-    float	dot(const SbVec4f &v) const;
+    float dot(const SbVec4f &v) const;
 
     // Returns the real portion of the vector by dividing by the fourth value
-    void	getReal(SbVec3f &v) const;
+    void getReal(SbVec3f &v) const;
 
     // Returns pointer to array of 4 components
-    const float	*getValue() const			{ return vec; }
+    const float *getValue() const { return vec; }
 
     // Returns 4 individual components
-    void	getValue(float &x, float &y, float &z, float &w) const;
+    void getValue(float &x, float &y, float &z, float &w) const;
 
     // Returns geometric length of vector
-    float	length() const;
+    float length() const;
 
     // Negates each component of vector in place
-    void	negate();
+    void negate();
 
     // Changes vector to be unit length
-    float	normalize();
+    float normalize();
 
     // Sets value of vector from array of 4 components
-    SbVec4f &	setValue(const float v[4]);
+    SbVec4f &setValue(const float v[4]);
 
     // Sets value of vector from 4 individual components
-    SbVec4f &	setValue(float x, float y, float z, float w);
+    SbVec4f &setValue(float x, float y, float z, float w);
 
     // Accesses indexed component of vector
-    float &	  operator [](int i) 		{ return (vec[i]); }
-    const float & operator [](int i) const	{ return (vec[i]); }
+    float &      operator[](int i) { return (vec[i]); }
+    const float &operator[](int i) const { return (vec[i]); }
 
     // Component-wise scalar multiplication and division operators
-    SbVec4f &	operator *=(float d);
+    SbVec4f &operator*=(float d);
 
-    SbVec4f &	operator /=(float d)
-    { return *this *= (1.0 / d); }
+    SbVec4f &operator/=(float d) { return *this *= (1.0 / d); }
 
     // Component-wise vector addition and subtraction operators
-    SbVec4f &	operator +=(const SbVec4f &u);
-    SbVec4f &	operator -=(const SbVec4f &u);
+    SbVec4f &operator+=(const SbVec4f &u);
+    SbVec4f &operator-=(const SbVec4f &u);
 
     // Nondestructive unary negation - returns a new vector
-    SbVec4f	operator -() const;
+    SbVec4f operator-() const;
 
     // Component-wise binary scalar multiplication and division operators
-    friend SbVec4f	operator *(const SbVec4f &v, float d);
-    friend SbVec4f	operator *(float d, const SbVec4f &v)
-    { return v * d; }
-    friend SbVec4f	operator /(const SbVec4f &v, float d)
-    { return v * (1.0 / d); }
+    friend SbVec4f operator*(const SbVec4f &v, float d);
+    friend SbVec4f operator*(float d, const SbVec4f &v) { return v * d; }
+    friend SbVec4f operator/(const SbVec4f &v, float d) {
+        return v * (1.0 / d);
+    }
 
     // Component-wise binary vector addition and subtraction operators
-    friend SbVec4f	operator +(const SbVec4f &v1, const SbVec4f &v2);
+    friend SbVec4f operator+(const SbVec4f &v1, const SbVec4f &v2);
 
-    friend SbVec4f	operator -(const SbVec4f &v1, const SbVec4f &v2);
+    friend SbVec4f operator-(const SbVec4f &v1, const SbVec4f &v2);
 
     // Equality comparison operator
-    friend int		operator ==(const SbVec4f &v1, const SbVec4f &v2);
-    friend int		operator !=(const SbVec4f &v1, const SbVec4f &v2)
-    { return !(v1 == v2); }
+    friend int operator==(const SbVec4f &v1, const SbVec4f &v2);
+    friend int operator!=(const SbVec4f &v1, const SbVec4f &v2) {
+        return !(v1 == v2);
+    }
 
     // Equality comparison within given tolerance - the square of the
     // length of the maximum distance between the two vectors
-    SbBool		equals(const SbVec4f v, float tolerance) const;
+    SbBool equals(const SbVec4f v, float tolerance) const;
 
   protected:
-    float	vec[4];		// Storage for vector components
+    float vec[4]; // Storage for vector components
 };
 
 #endif /* _SB_VEC_ */

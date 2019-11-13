@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,8 +64,7 @@ SO_ELEMENT_SOURCE(SoDrawStyleElement);
 // Use: internal
 
 void
-SoDrawStyleElement::initClass()
-{
+SoDrawStyleElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoDrawStyleElement, SoInt32Element);
 }
 
@@ -79,8 +78,7 @@ SoDrawStyleElement::initClass()
 SoDrawStyleElement::~SoDrawStyleElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -102,10 +100,9 @@ SoDrawStyleElement::init(SoState *)
 // set the current draw style in the state
 //
 void
-SoDrawStyleElement::set(SoState *state, Style style)
-{
-    SoInt32Element::set(classStackIndex, state, (int32_t)style); 
-    SoShapeStyleElement::setDrawStyle(state,(int32_t)style);
+SoDrawStyleElement::set(SoState *state, Style style) {
+    SoInt32Element::set(classStackIndex, state, (int32_t)style);
+    SoShapeStyleElement::setDrawStyle(state, (int32_t)style);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -119,36 +116,33 @@ SoDrawStyleElement::set(SoState *state, Style style)
 
 #ifdef DEBUG
 void
-SoDrawStyleElement::print(FILE *fp) const
-{
+SoDrawStyleElement::print(FILE *fp) const {
     const char *styleName;
 
     SoElement::print(fp);
 
     switch ((Style)data) {
 
-      case FILLED:
-	styleName = "FILLED";
-	break;
+    case FILLED:
+        styleName = "FILLED";
+        break;
 
-      case LINES:
-	styleName = "LINES";
-	break;
+    case LINES:
+        styleName = "LINES";
+        break;
 
-      case POINTS:
-	styleName = "POINTS";
-	break;
+    case POINTS:
+        styleName = "POINTS";
+        break;
 
-      case INVISIBLE:
-	styleName = "INVISIBLE";
-	break;
+    case INVISIBLE:
+        styleName = "INVISIBLE";
+        break;
     }
 
     fprintf(fp, "\tDraw Style = %s\n", styleName);
 }
 #else  /* DEBUG */
 void
-SoDrawStyleElement::print(FILE *) const
-{
-}
+SoDrawStyleElement::print(FILE *) const {}
 #endif /* DEBUG */

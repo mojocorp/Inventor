@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -78,23 +78,19 @@ SoUnknownEngine::initClass()
 }
 
 SoType
-SoUnknownEngine::getTypeId() const
-{
+SoUnknownEngine::getTypeId() const {
     return classTypeId;
 }
 const SoFieldData *
-SoUnknownEngine::getFieldData() const
-{
+SoUnknownEngine::getFieldData() const {
     return instanceInputData;
 }
 const SoEngineOutputData *
-SoUnknownEngine::getOutputData() const
-{
+SoUnknownEngine::getOutputData() const {
     return instanceOutputData;
 }
 void *
-SoUnknownEngine::createInstance()
-{
+SoUnknownEngine::createInstance() {
     return new SoUnknownEngine;
 }
 
@@ -136,16 +132,15 @@ SoUnknownEngine::~SoUnknownEngine()
     SoFieldList fieldList;
     int         numFields = getFields(fieldList);
 
-    for (int i=0; i<numFields; i++)
+    for (int i = 0; i < numFields; i++)
         delete fieldList[i];
 
     // Delete the Engine Outputs that have also been allocated.
     SoEngineOutputList outputList;
-    int         numOutputs = getOutputs(outputList);
+    int                numOutputs = getOutputs(outputList);
 
-    for (int j=0; j<numOutputs; j++)
+    for (int j = 0; j < numOutputs; j++)
         delete outputList[j];
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -156,7 +151,7 @@ SoUnknownEngine::~SoUnknownEngine()
 // Use: public
 
 void
-SoUnknownEngine::setClassName( const char *name )
+SoUnknownEngine::setClassName(const char *name)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -175,8 +170,7 @@ void
 SoUnknownEngine::evaluate()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -187,12 +181,12 @@ SoUnknownEngine::evaluate()
 
 void
 SoUnknownEngine::copyContents(const SoFieldContainer *fromFC,
-			      SbBool copyConnections)
+                              SbBool                  copyConnections)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Make sure the copy has the correct class name
-    const SoUnknownEngine *fromUnk = (const SoUnknownEngine *) fromFC;
+    const SoUnknownEngine *fromUnk = (const SoUnknownEngine *)fromFC;
     setClassName(fromUnk->className.getString());
 
     // For each input in the original engine, create a new input and add
@@ -204,14 +198,14 @@ SoUnknownEngine::copyContents(const SoFieldContainer *fromFC,
     // copy the field values ourselves.
 
     const SoFieldData *fromData = fromUnk->getFieldData();
-    SoFieldData  *toData	= (SoFieldData *) getFieldData();
-    int i;
+    SoFieldData *      toData = (SoFieldData *)getFieldData();
+    int                i;
     for (i = 0; i < fromData->getNumFields(); i++) {
 
-	SoField      *fromField	= fromData->getField(fromUnk, i);
-        const SbName fieldName	= fromData->getFieldName(i);
-        SoType       fieldType	= fromField->getTypeId();
-        SoField      *toField	= (SoField *) (fieldType.createInstance());
+        SoField *    fromField = fromData->getField(fromUnk, i);
+        const SbName fieldName = fromData->getFieldName(i);
+        SoType       fieldType = fromField->getTypeId();
+        SoField *    toField = (SoField *)(fieldType.createInstance());
 
         toField->enableNotify(FALSE);
         toField->setContainer(this);
@@ -220,28 +214,28 @@ SoUnknownEngine::copyContents(const SoFieldContainer *fromFC,
 
         toData->addField(this, fieldName.getString(), toField);
 
-	toField->setContainer(this);
-	toField->copyFrom(*fromField);
-	toField->setIgnored(fromField->isIgnored());
-	toField->setDefault(fromField->isDefault());
-	toField->fixCopy(copyConnections);
-	if (fromField->isConnected() && copyConnections)
-	    toField->copyConnection(fromField);
+        toField->setContainer(this);
+        toField->copyFrom(*fromField);
+        toField->setIgnored(fromField->isIgnored());
+        toField->setDefault(fromField->isDefault());
+        toField->fixCopy(copyConnections);
+        if (fromField->isConnected() && copyConnections)
+            toField->copyConnection(fromField);
     }
 
     // Copy the outputs
-    SoEngineOutputData *toOutData = (SoEngineOutputData *) getOutputData();
+    SoEngineOutputData *toOutData = (SoEngineOutputData *)getOutputData();
 
     SoEngineOutputList outList;
     fromUnk->getOutputs(outList);
 
-    for(i = 0; i < outList.getLength(); i++) {
+    for (i = 0; i < outList.getLength(); i++) {
         SoEngineOutput *newOut = new SoEngineOutput;
-        const SoType outType = outList[i]->getConnectionType();
-	SbName outName;
-        getOutputName( outList[i], outName );
-	toOutData->addOutput(this, outName.getString(), newOut, outType);
-	newOut->setContainer(this);
+        const SoType    outType = outList[i]->getConnectionType();
+        SbName          outName;
+        getOutputName(outList[i], outName);
+        toOutData->addOutput(this, outName.getString(), newOut, outType);
+        newOut->setContainer(this);
     }
 }
 

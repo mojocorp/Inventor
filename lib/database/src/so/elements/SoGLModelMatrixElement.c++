@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,8 +68,7 @@ SO_ELEMENT_SOURCE(SoGLModelMatrixElement);
 // Use: internal
 
 void
-SoGLModelMatrixElement::initClass()
-{
+SoGLModelMatrixElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLModelMatrixElement, SoModelMatrixElement);
 }
 
@@ -83,8 +82,7 @@ SoGLModelMatrixElement::initClass()
 SoGLModelMatrixElement::~SoGLModelMatrixElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -127,8 +125,7 @@ SoGLModelMatrixElement::push(SoState *_state)
     glPushMatrix();
 
     // And remember the viewMatrixElement nodeId from our parent:
-    SoGLModelMatrixElement *mtxElt = 
-	(SoGLModelMatrixElement *) getNextInStack();
+    SoGLModelMatrixElement *mtxElt = (SoGLModelMatrixElement *)getNextInStack();
     viewEltNodeId = mtxElt->viewEltNodeId;
 }
 
@@ -176,7 +173,7 @@ SoGLModelMatrixElement::makeEltIdentity()
     SoModelMatrixElement::makeEltIdentity();
 
     // Send the current viewing matrix to GL
-    glLoadMatrixf((float *) viewMat.getValue());
+    glLoadMatrixf((float *)viewMat.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -201,7 +198,7 @@ SoGLModelMatrixElement::setElt(const SbMatrix &matrix)
     SoModelMatrixElement::setElt(matrix);
 
     // Send the product of the viewing matrix and the given matrix to GL
-    glLoadMatrixf((float *) (matrix * viewMat).getValue());
+    glLoadMatrixf((float *)(matrix * viewMat).getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -218,7 +215,7 @@ SoGLModelMatrixElement::multElt(const SbMatrix &matrix)
 {
     SoModelMatrixElement::multElt(matrix);
 
-    glMultMatrixf((float *) matrix.getValue());
+    glMultMatrixf((float *)matrix.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -250,8 +247,8 @@ SoGLModelMatrixElement::rotateEltBy(const SbRotation &rotation)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbVec3f	axis;
-    float	angle;
+    SbVec3f axis;
+    float   angle;
 
     SoModelMatrixElement::rotateEltBy(rotation);
 
@@ -326,8 +323,7 @@ SoGLModelMatrixElement::popMatrixElt(const SbMatrix &matrix)
     uint32_t afterNodeId = SoGLViewingMatrixElement::getNodeId(state);
 
     if (afterNodeId != viewEltNodeId) {
-	// Camera underneth us, must reset:
-	setElt(matrix);
+        // Camera underneth us, must reset:
+        setElt(matrix);
     }
 }
-

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,7 +51,7 @@
  |		T ranges from 1 at the top to 0 at the bottom
  |
  |	Bottom: a circle is cut from the center of the texture square
- | 
+ |
  |   Author(s)          : Paul S. Strauss
  |
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
@@ -79,17 +79,17 @@
 SO_NODE_SOURCE(SoCone);
 
 // Shorthand for testing whether current parts includes PART
-#define HAS_PART(PARTS, PART)	((PARTS & (PART)) != 0)
+#define HAS_PART(PARTS, PART) ((PARTS & (PART)) != 0)
 
 // Returns S or T texture coord for point on bottom of cone, given x
 // or z coord
-#define BOT_TEX_S(x)	((x) * .5 + .5)
-#define BOT_TEX_T(z)	((z) * .5 + .5)
+#define BOT_TEX_S(x) ((x)*.5 + .5)
+#define BOT_TEX_T(z) ((z)*.5 + .5)
 
 // Cone ring geometry (x,z coords of points around 1 cross-section ring)
-SbVec2f		*SoCone::coordsArray;		// Ring x,z coordinates
-SbVec3f		*SoCone::normalsArray;		// Ring normals
-int		 SoCone::maxCoords;		// Current size of arrays
+SbVec2f *SoCone::coordsArray;  // Ring x,z coordinates
+SbVec3f *SoCone::normalsArray; // Ring normals
+int      SoCone::maxCoords;    // Current size of arrays
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -120,9 +120,9 @@ SoCone::SoCone()
     SO_NODE_CONSTRUCTOR(SoCone);
     isBuiltIn = TRUE;
 
-    SO_NODE_ADD_FIELD(parts,		(ALL));
-    SO_NODE_ADD_FIELD(bottomRadius,	(1.0));
-    SO_NODE_ADD_FIELD(height,	(2.0));
+    SO_NODE_ADD_FIELD(parts, (ALL));
+    SO_NODE_ADD_FIELD(bottomRadius, (1.0));
+    SO_NODE_ADD_FIELD(height, (2.0));
 
     // Set up static info for enumerated type field
     SO_NODE_DEFINE_ENUM_VALUE(Part, SIDES);
@@ -134,7 +134,7 @@ SoCone::SoCone()
 
     // Set size of arrays to 0 so they will be allocated first time
     if (SO_NODE_IS_FIRST_INSTANCE())
-	maxCoords = 0;
+        maxCoords = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -147,8 +147,7 @@ SoCone::SoCone()
 SoCone::~SoCone()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -208,16 +207,16 @@ SoCone::GLRender(SoGLRenderAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // First see if the object is visible and should be rendered now
-    if (! shouldGLRender(action))
-	return;
+    if (!shouldGLRender(action))
+        return;
 
     // See if texturing is enabled
     SbBool doTextures = SoGLTextureEnabledElement::get(action->getState());
 
     // Render the cone.
     SbBool sendNormals = (SoLazyElement::getLightModel(action->getState()) !=
-			  SoLazyElement::BASE_COLOR);
-	GLRenderGeneric(action, sendNormals, doTextures);
+                          SoLazyElement::BASE_COLOR);
+    GLRenderGeneric(action, sendNormals, doTextures);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -233,18 +232,18 @@ SoCone::rayPick(SoRayPickAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // First see if the object is pickable
-    if (! shouldRayPick(action))
-	return;
+    if (!shouldRayPick(action))
+        return;
 
-    int			curParts =(parts.isIgnored() ? ALL : parts.getValue());
-    SbMatrix		matrix, matrix2;
-    float		radius, halfHeight;
-    SbVec3f		enterPoint, exitPoint, objectPoint, normal;
-    SbVec4f		texCoord;
-    SoPickedPoint	*pp;
-    SoConeDetail	*detail;
-    SbBool		materialPerPart;
-    int			numHits = 0;
+    int            curParts = (parts.isIgnored() ? ALL : parts.getValue());
+    SbMatrix       matrix, matrix2;
+    float          radius, halfHeight;
+    SbVec3f        enterPoint, exitPoint, objectPoint, normal;
+    SbVec4f        texCoord;
+    SoPickedPoint *pp;
+    SoConeDetail * detail;
+    SbBool         materialPerPart;
+    int            numHits = 0;
 
     // Get size of this cone
     getSize(radius, halfHeight);
@@ -260,133 +259,131 @@ SoCone::rayPick(SoRayPickAction *action)
     computeObjectSpaceRay(action, matrix);
 
     SoMaterialBindingElement::Binding mbe =
-	SoMaterialBindingElement::get(action->getState());
-    materialPerPart =
-	(mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
-	 mbe == SoMaterialBindingElement::PER_PART);
+        SoMaterialBindingElement::get(action->getState());
+    materialPerPart = (mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
+                       mbe == SoMaterialBindingElement::PER_PART);
 
     // See if the line intersects an infinite cone
     if (HAS_PART(curParts, SIDES) &&
-	intersectInfiniteCone(action->getLine(), enterPoint, exitPoint)) {
+        intersectInfiniteCone(action->getLine(), enterPoint, exitPoint)) {
 
-	// Convert the point into object space from "canonical" space
-	matrix.multVecMatrix(enterPoint, objectPoint);
+        // Convert the point into object space from "canonical" space
+        matrix.multVecMatrix(enterPoint, objectPoint);
 
-	// See if the enter point is within the part of the cone we
-	// are interested in: between the apex (at y = 0) and the base
-	// (at y = -1). Also check if the intersection is between the
-	// near and far clipping planes.
+        // See if the enter point is within the part of the cone we
+        // are interested in: between the apex (at y = 0) and the base
+        // (at y = -1). Also check if the intersection is between the
+        // near and far clipping planes.
 
-	if (enterPoint[1] <= 0.0 && enterPoint[1] >= -1.0) {
+        if (enterPoint[1] <= 0.0 && enterPoint[1] >= -1.0) {
 
-	    numHits++;
+            numHits++;
 
-	    if (action->isBetweenPlanes(objectPoint) &&
-		(pp = action->addIntersection(objectPoint)) != NULL) {
+            if (action->isBetweenPlanes(objectPoint) &&
+                (pp = action->addIntersection(objectPoint)) != NULL) {
 
-		// The normal is perpendicular to the vector V from the
-		// apex to the intersection point in the plane containing
-		// both  V and the y-axis. Using a couple of cross
-		// products, we arrive at the following result.
-		// (First, translate the cone point back down as if the
-		// center were at the origin, making the math easier.)
-		objectPoint[1] -= halfHeight;
-		normal.setValue(-objectPoint[0] * objectPoint[1],
-				 objectPoint[0] * objectPoint[0] + 
-				 objectPoint[2] * objectPoint[2],
-				-objectPoint[1] * objectPoint[2]);
-		normal.normalize();
-		pp->setObjectNormal(normal);
+                // The normal is perpendicular to the vector V from the
+                // apex to the intersection point in the plane containing
+                // both  V and the y-axis. Using a couple of cross
+                // products, we arrive at the following result.
+                // (First, translate the cone point back down as if the
+                // center were at the origin, making the math easier.)
+                objectPoint[1] -= halfHeight;
+                normal.setValue(-objectPoint[0] * objectPoint[1],
+                                objectPoint[0] * objectPoint[0] +
+                                    objectPoint[2] * objectPoint[2],
+                                -objectPoint[1] * objectPoint[2]);
+                normal.normalize();
+                pp->setObjectNormal(normal);
 
-		texCoord.setValue(atan2f(enterPoint[0], enterPoint[2])
-				  * (1.0 / (2.0 * M_PI)) + 0.5,
-				  enterPoint[1] + 1.0,
-				  0.0, 1.0);
-		pp->setObjectTextureCoords(texCoord);
+                texCoord.setValue(atan2f(enterPoint[0], enterPoint[2]) *
+                                          (1.0 / (2.0 * M_PI)) +
+                                      0.5,
+                                  enterPoint[1] + 1.0, 0.0, 1.0);
+                pp->setObjectTextureCoords(texCoord);
 
-		detail = new SoConeDetail();
-		detail->setPart(SIDES);
-		pp->setDetail(detail, this);
-	    }
-	}
+                detail = new SoConeDetail();
+                detail->setPart(SIDES);
+                pp->setDetail(detail, this);
+            }
+        }
 
-	// Do same for exit point
+        // Do same for exit point
 
-	// Convert the point into object space from "canonical" space
-	matrix.multVecMatrix(exitPoint, objectPoint);
+        // Convert the point into object space from "canonical" space
+        matrix.multVecMatrix(exitPoint, objectPoint);
 
-	if (exitPoint[1] <= 0.0 && exitPoint[1] >= -1.0) {
+        if (exitPoint[1] <= 0.0 && exitPoint[1] >= -1.0) {
 
-	    numHits++;
+            numHits++;
 
-	    if (action->isBetweenPlanes(objectPoint) &&
-		(pp = action->addIntersection(objectPoint)) != NULL) {
+            if (action->isBetweenPlanes(objectPoint) &&
+                (pp = action->addIntersection(objectPoint)) != NULL) {
 
-		// The normal is perpendicular to the vector V from the
-		// apex to the intersection point in the plane containing
-		// both  V and the y-axis. Using a couple of cross
-		// products, we arrive at the following result.
-		// (First, translate the cone point back down as if the
-		// apex were at the origin, making the math easier.)
-		objectPoint[1] -= halfHeight;
-		normal.setValue(-objectPoint[0] * objectPoint[1],
-				 objectPoint[0] * objectPoint[0] + 
-				 objectPoint[2] * objectPoint[2],
-				-objectPoint[1] * objectPoint[2]);
-		normal.normalize();
-		pp->setObjectNormal(normal);
+                // The normal is perpendicular to the vector V from the
+                // apex to the intersection point in the plane containing
+                // both  V and the y-axis. Using a couple of cross
+                // products, we arrive at the following result.
+                // (First, translate the cone point back down as if the
+                // apex were at the origin, making the math easier.)
+                objectPoint[1] -= halfHeight;
+                normal.setValue(-objectPoint[0] * objectPoint[1],
+                                objectPoint[0] * objectPoint[0] +
+                                    objectPoint[2] * objectPoint[2],
+                                -objectPoint[1] * objectPoint[2]);
+                normal.normalize();
+                pp->setObjectNormal(normal);
 
-		texCoord.setValue(atan2f(exitPoint[0], exitPoint[2])
-				  * (1.0 / (2.0 * M_PI)) + 0.5,
-				  exitPoint[1] + 1.0,
-				  0.0, 1.0);
-		pp->setObjectTextureCoords(texCoord);
+                texCoord.setValue(atan2f(exitPoint[0], exitPoint[2]) *
+                                          (1.0 / (2.0 * M_PI)) +
+                                      0.5,
+                                  exitPoint[1] + 1.0, 0.0, 1.0);
+                pp->setObjectTextureCoords(texCoord);
 
-		detail = new SoConeDetail();
-		detail->setPart(SIDES);
-		pp->setDetail(detail, this);
-	    }
-	}
+                detail = new SoConeDetail();
+                detail->setPart(SIDES);
+                pp->setDetail(detail, this);
+            }
+        }
     }
 
     // If we haven't hit the cone twice already, check for an
     // intersection with the bottom face
     if (numHits < 2 && HAS_PART(curParts, BOTTOM)) {
-	SbVec3f	norm(0.0, -1.0, 0.0);
+        SbVec3f norm(0.0, -1.0, 0.0);
 
-	// Construct a plane containing the bottom face (in canonical space)
-	SbPlane		bottomFacePlane(norm, 1.0);
+        // Construct a plane containing the bottom face (in canonical space)
+        SbPlane bottomFacePlane(norm, 1.0);
 
-	// See if the ray hits this plane
-	if (bottomFacePlane.intersect(action->getLine(), enterPoint)) {
+        // See if the ray hits this plane
+        if (bottomFacePlane.intersect(action->getLine(), enterPoint)) {
 
-	    // Convert the point into object space from "canonical" space
-	    matrix.multVecMatrix(enterPoint, objectPoint);
+            // Convert the point into object space from "canonical" space
+            matrix.multVecMatrix(enterPoint, objectPoint);
 
-	    // See if the intersection is within the correct radius
-	    // and is within the clipping planes
-	    float distFromYAxisSquared = (enterPoint[0] * enterPoint[0] +
-					  enterPoint[2] * enterPoint[2]);
+            // See if the intersection is within the correct radius
+            // and is within the clipping planes
+            float distFromYAxisSquared =
+                (enterPoint[0] * enterPoint[0] + enterPoint[2] * enterPoint[2]);
 
-	    if (distFromYAxisSquared <= 1.0 &&
-		action->isBetweenPlanes(objectPoint) &&
-		(pp = action->addIntersection(objectPoint)) != NULL) {
+            if (distFromYAxisSquared <= 1.0 &&
+                action->isBetweenPlanes(objectPoint) &&
+                (pp = action->addIntersection(objectPoint)) != NULL) {
 
-		pp->setObjectNormal(norm);
+                pp->setObjectNormal(norm);
 
-		texCoord.setValue(0.5 + enterPoint[0] / 2.0,
-				  0.5 + enterPoint[2] / 2.0,
-				  0.0, 1.0);
-		pp->setObjectTextureCoords(texCoord);
+                texCoord.setValue(0.5 + enterPoint[0] / 2.0,
+                                  0.5 + enterPoint[2] / 2.0, 0.0, 1.0);
+                pp->setObjectTextureCoords(texCoord);
 
-		if (materialPerPart)
-		    pp->setMaterialIndex(1);
+                if (materialPerPart)
+                    pp->setMaterialIndex(1);
 
-		detail = new SoConeDetail();
-		detail->setPart(BOTTOM);
-		pp->setDetail(detail, this);
-	    }
-	}
+                detail = new SoConeDetail();
+                detail->setPart(BOTTOM);
+                pp->setDetail(detail, this);
+            }
+        }
     }
 }
 
@@ -402,30 +399,29 @@ SoCone::computeBBox(SoAction *, SbBox3f &box, SbVec3f &center)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		curParts = (parts.isIgnored() ? ALL : parts.getValue());
+    int curParts = (parts.isIgnored() ? ALL : parts.getValue());
 
-    if (curParts == 0)		// No parts at all!
-	box.setBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+    if (curParts == 0) // No parts at all!
+        box.setBounds(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
     else {
-	float	br, h;
-	SbVec3f	min, max;
+        float   br, h;
+        SbVec3f min, max;
 
-	getSize(br, h);
+        getSize(br, h);
 
-	min.setValue(-br, -h, -br);
+        min.setValue(-br, -h, -br);
 
-	if (HAS_PART(curParts, SIDES))
-	    max.setValue(br,  h,  br);
-	else
-	    max.setValue(br, -h,  br);
+        if (HAS_PART(curParts, SIDES))
+            max.setValue(br, h, br);
+        else
+            max.setValue(br, -h, br);
 
-	box.setBounds(min, max);
+        box.setBounds(min, max);
     }
 
     center.setValue(0.0, 0.0, 0.0);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -439,25 +435,24 @@ SoCone::generatePrimitives(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool		materialPerPart;
-    int			curParts, numSides, numSections, side, section;
-    float		yTop, yBot, dy;
-    float		s, ds, tTop, tBot, dt;
-    float		outerRadius, innerRadius, dRadius;
-    SbVec2f		*baseCoords;
-    SbVec3f		*sideNormals, pt, norm;
-    float		radius, halfHeight;
-    SbVec4f		tex;
-    SbBool		genTexCoords;
-    SoPrimitiveVertex	pv;
-    SoConeDetail	detail;
-    const SoTextureCoordinateElement	*tce;
+    SbBool            materialPerPart;
+    int               curParts, numSides, numSections, side, section;
+    float             yTop, yBot, dy;
+    float             s, ds, tTop, tBot, dt;
+    float             outerRadius, innerRadius, dRadius;
+    SbVec2f *         baseCoords;
+    SbVec3f *         sideNormals, pt, norm;
+    float             radius, halfHeight;
+    SbVec4f           tex;
+    SbBool            genTexCoords;
+    SoPrimitiveVertex pv;
+    SoConeDetail      detail;
+    const SoTextureCoordinateElement *tce;
 
     SoMaterialBindingElement::Binding mbe =
-	SoMaterialBindingElement::get(action->getState());
-    materialPerPart =
-	(mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
-	 mbe == SoMaterialBindingElement::PER_PART);
+        SoMaterialBindingElement::get(action->getState());
+    materialPerPart = (mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
+                       mbe == SoMaterialBindingElement::PER_PART);
 
     curParts = (parts.isIgnored() ? ALL : parts.getValue());
 
@@ -470,21 +465,21 @@ SoCone::generatePrimitives(SoAction *action)
 
     // Determine whether we should generate our own texture coordinates
     switch (SoTextureCoordinateElement::getType(action->getState())) {
-      case SoTextureCoordinateElement::EXPLICIT:
-	genTexCoords = TRUE;
-	break;
-      case SoTextureCoordinateElement::FUNCTION:
-	genTexCoords = FALSE;
-	break;
+    case SoTextureCoordinateElement::EXPLICIT:
+        genTexCoords = TRUE;
+        break;
+    case SoTextureCoordinateElement::FUNCTION:
+        genTexCoords = FALSE;
+        break;
     }
 
     // If we're not generating our own coordinates, we'll need the
     // texture coordinate element to get coords based on points/normals.
-    if (! genTexCoords)
-	tce = SoTextureCoordinateElement::getInstance(action->getState());
+    if (!genTexCoords)
+        tce = SoTextureCoordinateElement::getInstance(action->getState());
     else {
-	tex[2] = 0.0;
-	tex[3] = 1.0;
+        tex[2] = 0.0;
+        tex[3] = 1.0;
     }
 
     getSize(radius, halfHeight);
@@ -493,260 +488,251 @@ SoCone::generatePrimitives(SoAction *action)
 
     if (HAS_PART(curParts, SIDES)) {
 
-	// Draw each section of sides as a triangle mesh, from top to bottom
-	yTop = 1.0;
-	dy   = -2.0 / numSections;
-	tTop = 1.0;
-	dt   = -1.0 / numSections;
-	ds   =  1.0 / numSides;
+        // Draw each section of sides as a triangle mesh, from top to bottom
+        yTop = 1.0;
+        dy = -2.0 / numSections;
+        tTop = 1.0;
+        dt = -1.0 / numSections;
+        ds = 1.0 / numSides;
 
-	innerRadius = 0.0;
+        innerRadius = 0.0;
 
-	for (section = 0; section < numSections; section++) {
+        for (section = 0; section < numSections; section++) {
 
-	    outerRadius = innerRadius + dRadius;
-	    yBot = yTop + dy;
+            outerRadius = innerRadius + dRadius;
+            yBot = yTop + dy;
 
-	    tBot = tTop + dt;
-	    s    = 0.0;
+            tBot = tTop + dt;
+            s = 0.0;
 
-	    detail.setPart(SIDES);
+            detail.setPart(SIDES);
 
-	    beginShape(action, TRIANGLE_STRIP);
+            beginShape(action, TRIANGLE_STRIP);
 
-	    for (side = 0; side < numSides; side++) {
-		// Deal with normal
-		pv.setNormal(sideNormals[side]);
+            for (side = 0; side < numSides; side++) {
+                // Deal with normal
+                pv.setNormal(sideNormals[side]);
 
-		// Point at bottom of section
-		pt.setValue(outerRadius * baseCoords[side][0], yBot,
-			    outerRadius * baseCoords[side][1]);
-		pt[0] *= radius;
-		pt[1] *= halfHeight;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = s;
-		    tex[1] = tBot;
-		}
-		else
-		    tex = tce->get(pt, sideNormals[side]);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Point at bottom of section
+                pt.setValue(outerRadius * baseCoords[side][0], yBot,
+                            outerRadius * baseCoords[side][1]);
+                pt[0] *= radius;
+                pt[1] *= halfHeight;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = s;
+                    tex[1] = tBot;
+                } else
+                    tex = tce->get(pt, sideNormals[side]);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		// Point at top of section
-		pt.setValue(innerRadius * baseCoords[side][0], yTop,
-			    innerRadius * baseCoords[side][1]);
-		pt[0] *= radius;
-		pt[1] *= halfHeight;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = s;
-		    tex[1] = tTop;
-		}
-		else
-		    tex = tce->get(pt, sideNormals[side]);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
-		s += ds;
-	    }
+                // Point at top of section
+                pt.setValue(innerRadius * baseCoords[side][0], yTop,
+                            innerRadius * baseCoords[side][1]);
+                pt[0] *= radius;
+                pt[1] *= halfHeight;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = s;
+                    tex[1] = tTop;
+                } else
+                    tex = tce->get(pt, sideNormals[side]);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
+                s += ds;
+            }
 
-	    // Join end of strip back to beginning
-	    side = 0;
-	    s = 1.0;
-	    // Deal with normal
-	    pv.setNormal(sideNormals[side]);
+            // Join end of strip back to beginning
+            side = 0;
+            s = 1.0;
+            // Deal with normal
+            pv.setNormal(sideNormals[side]);
 
-	    // Point at bottom of section
-	    pt.setValue(outerRadius * baseCoords[side][0], yBot,
-			outerRadius * baseCoords[side][1]);
-	    pt[0] *= radius;
-	    pt[1] *= halfHeight;
-	    pt[2] *= radius;
-	    if (genTexCoords) {
-		tex[0] = s;
-		tex[1] = tBot;
-	    }
-	    else
-		tex = tce->get(pt, sideNormals[side]);
-	    pv.setPoint(pt);
-	    pv.setTextureCoords(tex);
-	    shapeVertex(&pv);
+            // Point at bottom of section
+            pt.setValue(outerRadius * baseCoords[side][0], yBot,
+                        outerRadius * baseCoords[side][1]);
+            pt[0] *= radius;
+            pt[1] *= halfHeight;
+            pt[2] *= radius;
+            if (genTexCoords) {
+                tex[0] = s;
+                tex[1] = tBot;
+            } else
+                tex = tce->get(pt, sideNormals[side]);
+            pv.setPoint(pt);
+            pv.setTextureCoords(tex);
+            shapeVertex(&pv);
 
-	    // Point at top of section
-	    pt.setValue(innerRadius * baseCoords[side][0], yTop,
-			innerRadius * baseCoords[side][1]);
-	    pt[0] *= radius;
-	    pt[1] *= halfHeight;
-	    pt[2] *= radius;
-	    if (genTexCoords) {
-		tex[0] = s;
-		tex[1] = tTop;
-	    }
-	    else
-		tex = tce->get(pt, sideNormals[side]);
-	    pv.setPoint(pt);
-	    pv.setTextureCoords(tex);
-	    shapeVertex(&pv);
-	    s += ds;
+            // Point at top of section
+            pt.setValue(innerRadius * baseCoords[side][0], yTop,
+                        innerRadius * baseCoords[side][1]);
+            pt[0] *= radius;
+            pt[1] *= halfHeight;
+            pt[2] *= radius;
+            if (genTexCoords) {
+                tex[0] = s;
+                tex[1] = tTop;
+            } else
+                tex = tce->get(pt, sideNormals[side]);
+            pv.setPoint(pt);
+            pv.setTextureCoords(tex);
+            shapeVertex(&pv);
+            s += ds;
 
-	    endShape();
+            endShape();
 
-	    // Prepare for next section down
-	    innerRadius = outerRadius;
-	    yTop = yBot;
-	    tTop = tBot;
-	}
+            // Prepare for next section down
+            innerRadius = outerRadius;
+            yTop = yBot;
+            tTop = tBot;
+        }
     }
 
     // Draw bottom face as a series of concentric rings. The number of
     // rings is the same as the number of sections of the sides of the
     // cone.
     if (HAS_PART(curParts, BOTTOM)) {
-	norm.setValue(0.0, -1.0, 0.0);
-	pt[1] = -halfHeight;
+        norm.setValue(0.0, -1.0, 0.0);
+        pt[1] = -halfHeight;
 
-	if (materialPerPart)
-	    pv.setMaterialIndex(1);
-	pv.setNormal(norm);
-	detail.setPart(BOTTOM);
+        if (materialPerPart)
+            pv.setMaterialIndex(1);
+        pv.setNormal(norm);
+        detail.setPart(BOTTOM);
 
-	// Start at the outside and work in
-	outerRadius = 1.0;
-	for (section = numSections - 1; section >= 0; --section) {
+        // Start at the outside and work in
+        outerRadius = 1.0;
+        for (section = numSections - 1; section >= 0; --section) {
 
-	    innerRadius = outerRadius - dRadius;
+            innerRadius = outerRadius - dRadius;
 
-	    // Innermost ring is drawn as a triangle fan. This not
-	    // only gets better shading (because the center vertex is
-	    // sent), but also avoids the problem of having a polygon
-	    // with too many vertices.
-	    if (section == 0) {
-		beginShape(action, TRIANGLE_FAN);
+            // Innermost ring is drawn as a triangle fan. This not
+            // only gets better shading (because the center vertex is
+            // sent), but also avoids the problem of having a polygon
+            // with too many vertices.
+            if (section == 0) {
+                beginShape(action, TRIANGLE_FAN);
 
-		// Center point comes first
-		pt[0] = pt[2] = 0.0;
-		if (genTexCoords)
-		    tex[0] = tex[1] = 0.5;
-		else
-		    tex = tce->get(norm, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Center point comes first
+                pt[0] = pt[2] = 0.0;
+                if (genTexCoords)
+                    tex[0] = tex[1] = 0.5;
+                else
+                    tex = tce->get(norm, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		// Send all vertices around ring
-		for (side = 0; side < numSides; side++) {
-		    pt[0] = outerRadius * baseCoords[side][0];
-		    pt[2] = outerRadius * baseCoords[side][1];
-		    pt[0] *= radius;
-		    pt[2] *= radius;
-		    if (genTexCoords) {
-			tex[0] = BOT_TEX_S(pt[0]);
-			tex[1] = BOT_TEX_T(pt[2]);
-		    }
-		    else
-			tex = tce->get(pt, norm);
-		    pv.setPoint(pt);
-		    pv.setTextureCoords(tex);
-		    shapeVertex(&pv);
-		}
-		// Send first vertex again
-		pt[0] = outerRadius * baseCoords[0][0];
-		pt[2] = outerRadius * baseCoords[0][1];
-		pt[0] *= radius;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = BOT_TEX_S(pt[0]);
-		    tex[1] = BOT_TEX_T(pt[2]);
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Send all vertices around ring
+                for (side = 0; side < numSides; side++) {
+                    pt[0] = outerRadius * baseCoords[side][0];
+                    pt[2] = outerRadius * baseCoords[side][1];
+                    pt[0] *= radius;
+                    pt[2] *= radius;
+                    if (genTexCoords) {
+                        tex[0] = BOT_TEX_S(pt[0]);
+                        tex[1] = BOT_TEX_T(pt[2]);
+                    } else
+                        tex = tce->get(pt, norm);
+                    pv.setPoint(pt);
+                    pv.setTextureCoords(tex);
+                    shapeVertex(&pv);
+                }
+                // Send first vertex again
+                pt[0] = outerRadius * baseCoords[0][0];
+                pt[2] = outerRadius * baseCoords[0][1];
+                pt[0] *= radius;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = BOT_TEX_S(pt[0]);
+                    tex[1] = BOT_TEX_T(pt[2]);
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		endShape();
-	    }
+                endShape();
+            }
 
-	    // Other rings are triangle strips
-	    else {
-		beginShape(action, TRIANGLE_STRIP);
+            // Other rings are triangle strips
+            else {
+                beginShape(action, TRIANGLE_STRIP);
 
-		// Go in reverse order so that vertex ordering is correct
-		for (side = numSides - 1; side >= 0; side--) {
-		    // Send points on outer and inner rings
-		    pt[0] = outerRadius * baseCoords[side][0];
-		    pt[2] = outerRadius * baseCoords[side][1];
-		    pt[0] *= radius;
-		    pt[2] *= radius;
-		    if (genTexCoords) {
-			tex[0] = BOT_TEX_S(pt[0]);
-			tex[1] = BOT_TEX_T(pt[2]);
-		    }
-		    else
-			tex = tce->get(pt, norm);
-		    pv.setPoint(pt);
-		    pv.setTextureCoords(tex);
-		    shapeVertex(&pv);
-		    pt[0] = innerRadius * baseCoords[side][0];
-		    pt[2] = innerRadius * baseCoords[side][1];
-		    pt[0] *= radius;
-		    pt[2] *= radius;
-		    if (genTexCoords) {
-			tex[0] = BOT_TEX_S(pt[0]);
-			tex[1] = BOT_TEX_T(pt[2]);
-		    }
-		    else
-			tex = tce->get(pt, norm);
-		    pv.setPoint(pt);
-		    pv.setTextureCoords(tex);
-		    shapeVertex(&pv);
-		}
+                // Go in reverse order so that vertex ordering is correct
+                for (side = numSides - 1; side >= 0; side--) {
+                    // Send points on outer and inner rings
+                    pt[0] = outerRadius * baseCoords[side][0];
+                    pt[2] = outerRadius * baseCoords[side][1];
+                    pt[0] *= radius;
+                    pt[2] *= radius;
+                    if (genTexCoords) {
+                        tex[0] = BOT_TEX_S(pt[0]);
+                        tex[1] = BOT_TEX_T(pt[2]);
+                    } else
+                        tex = tce->get(pt, norm);
+                    pv.setPoint(pt);
+                    pv.setTextureCoords(tex);
+                    shapeVertex(&pv);
+                    pt[0] = innerRadius * baseCoords[side][0];
+                    pt[2] = innerRadius * baseCoords[side][1];
+                    pt[0] *= radius;
+                    pt[2] *= radius;
+                    if (genTexCoords) {
+                        tex[0] = BOT_TEX_S(pt[0]);
+                        tex[1] = BOT_TEX_T(pt[2]);
+                    } else
+                        tex = tce->get(pt, norm);
+                    pv.setPoint(pt);
+                    pv.setTextureCoords(tex);
+                    shapeVertex(&pv);
+                }
 
-		// Join end of strip back to beginning
-		side = numSides - 1;
-		pt[0] = outerRadius * baseCoords[side][0];
-		pt[2] = outerRadius * baseCoords[side][1];
-		pt[0] *= radius;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = BOT_TEX_S(pt[0]);
-		    tex[1] = BOT_TEX_T(pt[2]);
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
-		pt[0] = innerRadius * baseCoords[side][0];
-		pt[2] = innerRadius * baseCoords[side][1];
-		pt[0] *= radius;
-		pt[2] *= radius;
-		if (genTexCoords) {
-		    tex[0] = BOT_TEX_S(pt[0]);
-		    tex[1] = BOT_TEX_T(pt[2]);
-		}
-		else
-		    tex = tce->get(pt, norm);
-		pv.setPoint(pt);
-		pv.setTextureCoords(tex);
-		shapeVertex(&pv);
+                // Join end of strip back to beginning
+                side = numSides - 1;
+                pt[0] = outerRadius * baseCoords[side][0];
+                pt[2] = outerRadius * baseCoords[side][1];
+                pt[0] *= radius;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = BOT_TEX_S(pt[0]);
+                    tex[1] = BOT_TEX_T(pt[2]);
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
+                pt[0] = innerRadius * baseCoords[side][0];
+                pt[2] = innerRadius * baseCoords[side][1];
+                pt[0] *= radius;
+                pt[2] *= radius;
+                if (genTexCoords) {
+                    tex[0] = BOT_TEX_S(pt[0]);
+                    tex[1] = BOT_TEX_T(pt[2]);
+                } else
+                    tex = tce->get(pt, norm);
+                pv.setPoint(pt);
+                pv.setTextureCoords(tex);
+                shapeVertex(&pv);
 
-		endShape();
+                endShape();
 
-		// Prepare for next ring
-		outerRadius = innerRadius;
-	    }
-	}
+                // Prepare for next ring
+                outerRadius = innerRadius;
+            }
+        }
     }
 }
 
 //
 // Macro to multiply out coordinates to avoid extra GL calls:
 //
-#define SCALE(pt) (tmp[0] = (pt)[0]*scale[0], tmp[1] = (pt)[1]*scale[1], \
-		   tmp[2] = (pt)[2]*scale[2], tmp)
+#define SCALE(pt)                                                              \
+    (tmp[0] = (pt)[0] * scale[0], tmp[1] = (pt)[1] * scale[1],                 \
+     tmp[2] = (pt)[2] * scale[2], tmp)
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -757,8 +743,8 @@ SoCone::generatePrimitives(SoAction *action)
 // Use: private
 
 void
-SoCone::GLRenderGeneric(SoGLRenderAction *action,
-			SbBool sendNormals, SbBool doTextures)
+SoCone::GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
+                        SbBool doTextures)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -766,20 +752,19 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action,
     getSize(scale[0], scale[1]);
     scale[2] = scale[0];
 
-    SbBool		materialPerPart;
-    int			curParts, numSides, numSections, side, section;
-    float		yTop, yBot, dy;
-    float		s, ds, tTop, tBot, dt;
-    float		outerRadius, innerRadius, dRadius;
-    SbVec2f		*baseCoords;
-    SbVec3f		*sideNormals, pt, norm;
-    SoMaterialBundle	mb(action);
+    SbBool           materialPerPart;
+    int              curParts, numSides, numSections, side, section;
+    float            yTop, yBot, dy;
+    float            s, ds, tTop, tBot, dt;
+    float            outerRadius, innerRadius, dRadius;
+    SbVec2f *        baseCoords;
+    SbVec3f *        sideNormals, pt, norm;
+    SoMaterialBundle mb(action);
 
     SoMaterialBindingElement::Binding mbe =
-	SoMaterialBindingElement::get(action->getState());
-    materialPerPart =
-	(mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
-	 mbe == SoMaterialBindingElement::PER_PART);
+        SoMaterialBindingElement::get(action->getState());
+    materialPerPart = (mbe == SoMaterialBindingElement::PER_PART_INDEXED ||
+                       mbe == SoMaterialBindingElement::PER_PART);
 
     curParts = (parts.isIgnored() ? ALL : parts.getValue());
 
@@ -795,164 +780,164 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action,
 
     if (HAS_PART(curParts, SIDES)) {
 
-	// Draw each section of sides as a triangle mesh, from top to bottom
-	yTop = 1.0;
-	dy   = -2.0 / numSections;
-	tTop = 1.0;
-	dt   = -1.0 / numSections;
-	ds   =  1.0 / numSides;
+        // Draw each section of sides as a triangle mesh, from top to bottom
+        yTop = 1.0;
+        dy = -2.0 / numSections;
+        tTop = 1.0;
+        dt = -1.0 / numSections;
+        ds = 1.0 / numSides;
 
-	innerRadius = 0.0;
+        innerRadius = 0.0;
 
-	for (section = 0; section < numSections; section++) {
+        for (section = 0; section < numSections; section++) {
 
-	    outerRadius = innerRadius + dRadius;
-	    yBot = yTop + dy;
+            outerRadius = innerRadius + dRadius;
+            yBot = yTop + dy;
 
-	    tBot = tTop + dt;
-	    s    = 0.0;
+            tBot = tTop + dt;
+            s = 0.0;
 
-	    glBegin(GL_TRIANGLE_STRIP);
+            glBegin(GL_TRIANGLE_STRIP);
 
-	    for (side = 0; side < numSides; side++) {
-		// Deal with normal
-		if (sendNormals)
-		    glNormal3fv(sideNormals[side].getValue());
+            for (side = 0; side < numSides; side++) {
+                // Deal with normal
+                if (sendNormals)
+                    glNormal3fv(sideNormals[side].getValue());
 
-		// Point at bottom of section
-		pt.setValue(outerRadius * baseCoords[side][0], yBot,
-			    outerRadius * baseCoords[side][1]);
-		if (doTextures)
-		    glTexCoord2f(s, tBot);
-		glVertex3fv(SCALE(pt).getValue());
+                // Point at bottom of section
+                pt.setValue(outerRadius * baseCoords[side][0], yBot,
+                            outerRadius * baseCoords[side][1]);
+                if (doTextures)
+                    glTexCoord2f(s, tBot);
+                glVertex3fv(SCALE(pt).getValue());
 
-		// Point at top of section
-		pt.setValue(innerRadius * baseCoords[side][0], yTop,
-			    innerRadius * baseCoords[side][1]);
-		if (doTextures)
-		    glTexCoord2f(s, tTop);
-		glVertex3fv(SCALE(pt).getValue());
-		s += ds;
-	    }
+                // Point at top of section
+                pt.setValue(innerRadius * baseCoords[side][0], yTop,
+                            innerRadius * baseCoords[side][1]);
+                if (doTextures)
+                    glTexCoord2f(s, tTop);
+                glVertex3fv(SCALE(pt).getValue());
+                s += ds;
+            }
 
-	    // Join end of strip back to beginning
-	    side = 0;
-	    s = 1.0;
-	    // Deal with normal
-	    if (sendNormals)
-		glNormal3fv(sideNormals[side].getValue());
+            // Join end of strip back to beginning
+            side = 0;
+            s = 1.0;
+            // Deal with normal
+            if (sendNormals)
+                glNormal3fv(sideNormals[side].getValue());
 
-	    // Point at bottom of section
-	    pt.setValue(outerRadius * baseCoords[side][0], yBot,
-			outerRadius * baseCoords[side][1]);
-	    if (doTextures)
-		glTexCoord2f(s, tBot);
-	    glVertex3fv(SCALE(pt).getValue());
+            // Point at bottom of section
+            pt.setValue(outerRadius * baseCoords[side][0], yBot,
+                        outerRadius * baseCoords[side][1]);
+            if (doTextures)
+                glTexCoord2f(s, tBot);
+            glVertex3fv(SCALE(pt).getValue());
 
-	    // Point at top of section
-	    pt.setValue(innerRadius * baseCoords[side][0], yTop,
-			innerRadius * baseCoords[side][1]);
-	    if (doTextures)
-		glTexCoord2f(s, tTop);
-	    glVertex3fv(SCALE(pt).getValue());
-	    s += ds;
+            // Point at top of section
+            pt.setValue(innerRadius * baseCoords[side][0], yTop,
+                        innerRadius * baseCoords[side][1]);
+            if (doTextures)
+                glTexCoord2f(s, tTop);
+            glVertex3fv(SCALE(pt).getValue());
+            s += ds;
 
-	    glEnd();
+            glEnd();
 
-	    // Prepare for next section down
-	    innerRadius = outerRadius;
-	    yTop = yBot;
-	    tTop = tBot;
-	}
+            // Prepare for next section down
+            innerRadius = outerRadius;
+            yTop = yBot;
+            tTop = tBot;
+        }
     }
 
     // Draw bottom face as a series of concentric rings. The number of
     // rings is the same as the number of sections of the sides of the
     // cone.
     if (HAS_PART(curParts, BOTTOM)) {
-	norm.setValue(0.0, -1.0, 0.0);
-	pt[1] = -1.0;
+        norm.setValue(0.0, -1.0, 0.0);
+        pt[1] = -1.0;
 
-	if (materialPerPart)
-	    mb.send(1, FALSE);
-	if (sendNormals)
-	    glNormal3fv(norm.getValue());
+        if (materialPerPart)
+            mb.send(1, FALSE);
+        if (sendNormals)
+            glNormal3fv(norm.getValue());
 
-	// Start at the outside and work in
-	outerRadius = 1.0;
-	for (section = numSections - 1; section >= 0; --section) {
+        // Start at the outside and work in
+        outerRadius = 1.0;
+        for (section = numSections - 1; section >= 0; --section) {
 
-	    innerRadius = outerRadius - dRadius;
+            innerRadius = outerRadius - dRadius;
 
-	    // Innermost ring is drawn as a triangle fan. This not
-	    // only gets better shading (because the center vertex is
-	    // sent), but also avoids the problem of having a polygon
-	    // with too many vertices.
-	    if (section == 0) {
-		glBegin(GL_TRIANGLE_FAN);
+            // Innermost ring is drawn as a triangle fan. This not
+            // only gets better shading (because the center vertex is
+            // sent), but also avoids the problem of having a polygon
+            // with too many vertices.
+            if (section == 0) {
+                glBegin(GL_TRIANGLE_FAN);
 
-		// Center point comes first
-		pt[0] = pt[2] = 0.0;
-		if (doTextures)
-		    glTexCoord2f(0.5, 0.5);
-		glVertex3fv(SCALE(pt).getValue());
+                // Center point comes first
+                pt[0] = pt[2] = 0.0;
+                if (doTextures)
+                    glTexCoord2f(0.5, 0.5);
+                glVertex3fv(SCALE(pt).getValue());
 
-		// Send all vertices around ring
-		for (side = 0; side < numSides; side++) {
-		    pt[0] = outerRadius * baseCoords[side][0];
-		    pt[2] = outerRadius * baseCoords[side][1];
-		    if (doTextures)
-			glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		    glVertex3fv(SCALE(pt).getValue());
-		}
-		// Send first vertex again
-		pt[0] = outerRadius * baseCoords[0][0];
-		pt[2] = outerRadius * baseCoords[0][1];
-		if (doTextures)
-		    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		glVertex3fv(SCALE(pt).getValue());
+                // Send all vertices around ring
+                for (side = 0; side < numSides; side++) {
+                    pt[0] = outerRadius * baseCoords[side][0];
+                    pt[2] = outerRadius * baseCoords[side][1];
+                    if (doTextures)
+                        glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                    glVertex3fv(SCALE(pt).getValue());
+                }
+                // Send first vertex again
+                pt[0] = outerRadius * baseCoords[0][0];
+                pt[2] = outerRadius * baseCoords[0][1];
+                if (doTextures)
+                    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                glVertex3fv(SCALE(pt).getValue());
 
-		glEnd();
-	    }
+                glEnd();
+            }
 
-	    // Other rings are triangle strips
-	    else {
-		glBegin(GL_TRIANGLE_STRIP);
+            // Other rings are triangle strips
+            else {
+                glBegin(GL_TRIANGLE_STRIP);
 
-		// Go in reverse order so that vertex ordering is correct
-		for (side = numSides - 1; side >= 0; side--) {
-		    // Send points on outer and inner rings
-		    pt[0] = outerRadius * baseCoords[side][0];
-		    pt[2] = outerRadius * baseCoords[side][1];
-		    if (doTextures)
-			glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		    glVertex3fv(SCALE(pt).getValue());
-		    pt[0] = innerRadius * baseCoords[side][0];
-		    pt[2] = innerRadius * baseCoords[side][1];
-		    if (doTextures)
-			glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		    glVertex3fv(SCALE(pt).getValue());
-		}
+                // Go in reverse order so that vertex ordering is correct
+                for (side = numSides - 1; side >= 0; side--) {
+                    // Send points on outer and inner rings
+                    pt[0] = outerRadius * baseCoords[side][0];
+                    pt[2] = outerRadius * baseCoords[side][1];
+                    if (doTextures)
+                        glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                    glVertex3fv(SCALE(pt).getValue());
+                    pt[0] = innerRadius * baseCoords[side][0];
+                    pt[2] = innerRadius * baseCoords[side][1];
+                    if (doTextures)
+                        glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                    glVertex3fv(SCALE(pt).getValue());
+                }
 
-		// Join end of strip back to beginning
-		side = numSides - 1;
-		pt[0] = outerRadius * baseCoords[side][0];
-		pt[2] = outerRadius * baseCoords[side][1];
-		if (doTextures)
-		    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		glVertex3fv(SCALE(pt).getValue());
-		pt[0] = innerRadius * baseCoords[side][0];
-		pt[2] = innerRadius * baseCoords[side][1];
-		if (doTextures)
-		    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
-		glVertex3fv(SCALE(pt).getValue());
+                // Join end of strip back to beginning
+                side = numSides - 1;
+                pt[0] = outerRadius * baseCoords[side][0];
+                pt[2] = outerRadius * baseCoords[side][1];
+                if (doTextures)
+                    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                glVertex3fv(SCALE(pt).getValue());
+                pt[0] = innerRadius * baseCoords[side][0];
+                pt[2] = innerRadius * baseCoords[side][1];
+                if (doTextures)
+                    glTexCoord2f(BOT_TEX_S(pt[0]), BOT_TEX_T(pt[2]));
+                glVertex3fv(SCALE(pt).getValue());
 
-		glEnd();
+                glEnd();
 
-		// Prepare for next ring
-		outerRadius = innerRadius;
-	    }
-	}
+                // Prepare for next ring
+                outerRadius = innerRadius;
+            }
+        }
     }
 }
 
@@ -968,88 +953,88 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action,
 
 void
 SoCone::computeBase(SoAction *action, int &numSides, int &numSections,
-		    SbVec2f *&baseCoords, SbVec3f *&sideNormals) const
+                    SbVec2f *&baseCoords, SbVec3f *&sideNormals) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	complexity = SoComplexityElement::get(action->getState());
-    float	theta, dTheta, cosTheta, sinTheta, t1, t2;
-    int		side;
+    float complexity = SoComplexityElement::get(action->getState());
+    float theta, dTheta, cosTheta, sinTheta, t1, t2;
+    int   side;
 
-    float	radius, halfHeight;
+    float radius, halfHeight;
     getSize(radius, halfHeight);
-    float	height = 2*halfHeight;
+    float height = 2 * halfHeight;
 
     // In object space, just base number of divisions on complexity
     if (SoComplexityTypeElement::get(action->getState()) ==
-	SoComplexityTypeElement::OBJECT_SPACE) {
+        SoComplexityTypeElement::OBJECT_SPACE) {
 
-	// If complexity is between 0 and .5 (inclusive), use 1 section
-	// and between 3 and 16 sides:
-	if (complexity <= 0.5) {
-	    numSections = 1;
-	    numSides    = (int) (complexity * 26.0 + 3.0);
-	}
+        // If complexity is between 0 and .5 (inclusive), use 1 section
+        // and between 3 and 16 sides:
+        if (complexity <= 0.5) {
+            numSections = 1;
+            numSides = (int)(complexity * 26.0 + 3.0);
+        }
 
-	// If complexity is between .5 and 1, use between 1 and 8 sections
-	// and between 16 and 64 sides:
-	else {
-	    numSections = (int) (14.0 * complexity - 6.0);
-	    numSides    = (int) (complexity * 96.0 - 32.0);
-	}
+        // If complexity is between .5 and 1, use between 1 and 8 sections
+        // and between 16 and 64 sides:
+        else {
+            numSections = (int)(14.0 * complexity - 6.0);
+            numSides = (int)(complexity * 96.0 - 32.0);
+        }
     }
 
     // In screen space, set the number of sides/sections based on the
     // complexity and the size of the cone when projected onto the screen.
     else {
-	SbVec2s		rectSize;
-	short		maxSize;
+        SbVec2s rectSize;
+        short   maxSize;
 
-	SbVec3f		p(radius, halfHeight, radius);
+        SbVec3f p(radius, halfHeight, radius);
 
-	getScreenSize(action->getState(), SbBox3f(-p, p), rectSize);
+        getScreenSize(action->getState(), SbBox3f(-p, p), rectSize);
 
-	maxSize = (rectSize[0] > rectSize[1] ? rectSize[0] : rectSize[1]);
+        maxSize = (rectSize[0] > rectSize[1] ? rectSize[0] : rectSize[1]);
 
-	numSections = 1 + (int) (0.2  * complexity * maxSize);
-	numSides    = 3 + (int) (0.25 * complexity * maxSize);
+        numSections = 1 + (int)(0.2 * complexity * maxSize);
+        numSides = 3 + (int)(0.25 * complexity * maxSize);
     }
 
     // Make sure the current storage for base coordinates is big enough
     if (numSides > maxCoords) {
 
-	if (maxCoords > 0) {
-	    delete [] coordsArray;
-	    delete [] normalsArray;
-	}
+        if (maxCoords > 0) {
+            delete[] coordsArray;
+            delete[] normalsArray;
+        }
 
-	maxCoords = numSides;
+        maxCoords = numSides;
 
-	coordsArray  = new SbVec2f[maxCoords];
-	normalsArray = new SbVec3f[maxCoords];
+        coordsArray = new SbVec2f[maxCoords];
+        normalsArray = new SbVec3f[maxCoords];
     }
 
-    baseCoords  = coordsArray;
+    baseCoords = coordsArray;
     sideNormals = normalsArray;
 
     // Compute x and z coordinates around base
-    theta  = 0.0;
+    theta = 0.0;
     dTheta = 2.0 * M_PI / numSides;
 
     // Looking at the XY silhouette of the cone, (t1,t2) is the normal
     // in the XY plane.
-    t1 = radius / std::sqrt(radius*radius + height*height);
-    t2 = height / std::sqrt(radius*radius + height*height);
+    t1 = radius / std::sqrt(radius * radius + height * height);
+    t2 = height / std::sqrt(radius * radius + height * height);
 
     for (side = 0; side < numSides; side++) {
-	cosTheta = cos(theta);
-	sinTheta = sin(theta);
+        cosTheta = cos(theta);
+        sinTheta = sin(theta);
 
-	// Theta == 0 generates a point down the -Z axis, which
-	// explains the weird (sinTheta, -cosTheta)...
-	baseCoords[side].setValue(sinTheta, -cosTheta);
-	sideNormals[side].setValue(t2 * sinTheta, t1, -t2 * cosTheta);
-	theta += dTheta;
+        // Theta == 0 generates a point down the -Z axis, which
+        // explains the weird (sinTheta, -cosTheta)...
+        baseCoords[side].setValue(sinTheta, -cosTheta);
+        sideNormals[side].setValue(t2 * sinTheta, t1, -t2 * cosTheta);
+        theta += dTheta;
     }
 }
 
@@ -1065,8 +1050,8 @@ SoCone::getSize(float &botRad, float &hHeight) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    botRad  = (bottomRadius.isIgnored() ? 1.0 : bottomRadius.getValue());
-    hHeight = (      height.isIgnored() ? 1.0 :       height.getValue() / 2.0);
+    botRad = (bottomRadius.isIgnored() ? 1.0 : bottomRadius.getValue());
+    hHeight = (height.isIgnored() ? 1.0 : height.getValue() / 2.0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1082,14 +1067,14 @@ SoCone::getSize(float &botRad, float &hHeight) const
 // Use: private
 
 SbBool
-SoCone::intersectInfiniteCone(const SbLine &ray,
-			      SbVec3f &enterPoint, SbVec3f &exitPoint) const
+SoCone::intersectInfiniteCone(const SbLine &ray, SbVec3f &enterPoint,
+                              SbVec3f &exitPoint) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbVec3f	&pos = ray.getPosition();
-    const SbVec3f	&dir = ray.getDirection();
-    float		a, b, c, discriminant, sqroot, t0, t1;
+    const SbVec3f &pos = ray.getPosition();
+    const SbVec3f &dir = ray.getDirection();
+    float          a, b, c, discriminant, sqroot, t0, t1;
 
     // The equation of the ray is I = pos + t * dir, where "pos" is the
     // starting position and "dir" is the direction.
@@ -1097,30 +1082,29 @@ SoCone::intersectInfiniteCone(const SbLine &ray,
     // Substituting the intersection point "I" into the equation of
     // the cone gives us a quadratic, whose a, b, and c coefficients
     // are as follows
-    a =  dir[0] * dir[0] - dir[1] * dir[1] + dir[2] * dir[2];
+    a = dir[0] * dir[0] - dir[1] * dir[1] + dir[2] * dir[2];
     b = (pos[0] * dir[0] - pos[1] * dir[1] + pos[2] * dir[2]) * 2.0;
-    c =  pos[0] * pos[0] - pos[1] * pos[1] + pos[2] * pos[2];
+    c = pos[0] * pos[0] - pos[1] * pos[1] + pos[2] * pos[2];
 
     // If the discriminant of the quadratic is negative, there's no
     // intersection
     discriminant = b * b - 4.0 * a * c;
     if (discriminant < 0.0)
-	return FALSE;
+        return FALSE;
 
     sqroot = sqrtf(discriminant);
 
     // Some Magic to stabilize the answer
     if (b > 0.0) {
-	t0 = -(2.0 * c) / (sqroot + b);
-	t1 = -(sqroot + b) / (2.0 * a);
+        t0 = -(2.0 * c) / (sqroot + b);
+        t1 = -(sqroot + b) / (2.0 * a);
+    } else {
+        t0 = (2.0 * c) / (sqroot - b);
+        t1 = (sqroot - b) / (2.0 * a);
     }
-    else {
-	t0 = (2.0 * c) / (sqroot - b);
-	t1 = (sqroot - b) / (2.0 * a);
-    }	    
 
     enterPoint = pos + t0 * dir;
-    exitPoint  = pos + t1 * dir;
+    exitPoint = pos + t1 * dir;
 
     return TRUE;
 }

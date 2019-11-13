@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -50,7 +50,6 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-
 
 #include <stdlib.h>
 #include <Inventor/misc/SoByteStream.h>
@@ -91,7 +90,7 @@ SoByteStream::~SoByteStream()
 //////////////////////////////////////////////////////////////////////////////
 {
     if (data != NULL)
-	free(data);
+        free(data);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -110,31 +109,31 @@ SoByteStream::convert(SoPathList *pathList, SbBool binaryFormat)
 {
     // clear out any old data
     if (data != NULL) {
-	free(data);
-	data = NULL;
-	numBytes = 0;
+        free(data);
+        data = NULL;
+        numBytes = 0;
     }
-	
+
     if ((pathList == NULL) || (pathList->getLength() == 0))
-	return;
+        return;
 
     // Write all the paths in the path list into an in-memory buffer
     SoWriteAction wa;
-    SoOutput *out = wa.getOutput();
+    SoOutput *    out = wa.getOutput();
     out->setFormat(binaryFormat ? SoOutput::BINARY : SoOutput::ASCII);
     out->setBuffer(malloc(128), 128, realloc);
 
     for (int i = 0; i < pathList->getLength(); i++) {
-    	wa.apply((*pathList)[i]);
+        wa.apply((*pathList)[i]);
     }
 
     // Point to the byte stream data
-    void *buf;
+    void * buf;
     size_t size;
 
     out->getBuffer(buf, size);
     data = buf;
-    numBytes = (uint32_t) size;
+    numBytes = (uint32_t)size;
     isRaw = FALSE;
 }
 
@@ -190,8 +189,9 @@ SoByteStream::unconvert(SoByteStream *bs)
 //////////////////////////////////////////////////////////////////////////////
 {
     if (bs->isRawData())
-	 return NULL;
-    else return SoByteStream::unconvert(bs->getData(), bs->getNumBytes());
+        return NULL;
+    else
+        return SoByteStream::unconvert(bs->getData(), bs->getNumBytes());
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -208,32 +208,32 @@ SoByteStream::unconvert(void *data, size_t numBytes)
 //////////////////////////////////////////////////////////////////////////////
 {
     if (data == NULL) {
-	SoDebugError::post("SoByteStream::unconvert", "data is NULL");
-	return NULL;
+        SoDebugError::post("SoByteStream::unconvert", "data is NULL");
+        return NULL;
     }
     if (numBytes == 0) {
-	SoDebugError::post("SoByteStream::unconvert", "numBytes is 0");
-	return NULL;
+        SoDebugError::post("SoByteStream::unconvert", "numBytes is 0");
+        return NULL;
     }
 
-    SoInput in;
+    SoInput     in;
     SoPathList *pathList = new SoPathList;
-    SoPath  *path = NULL;
+    SoPath *    path = NULL;
 
-    in.setBuffer((void *) data, (size_t) numBytes);
-    
+    in.setBuffer((void *)data, (size_t)numBytes);
+
     // Try to read paths
     while ((SoDB::read(&in, path) != FALSE) && (path != NULL))
-    	pathList->append(path);
+        pathList->append(path);
 
     // If that failed, try reading the scene as a node
     if (pathList->getLength() == 0) {
-	in.setBuffer((void *) data, (size_t) numBytes); // reset
-	SoSeparator *sep = SoDB::readAll(&in);		// read again
-	if (sep != NULL) {
-	    path = new SoPath(sep);
-	    pathList->append(path);
-	}
+        in.setBuffer((void *)data, (size_t)numBytes); // reset
+        SoSeparator *sep = SoDB::readAll(&in);        // read again
+        if (sep != NULL) {
+            path = new SoPath(sep);
+            pathList->append(path);
+        }
     }
 
     return pathList;
@@ -242,18 +242,18 @@ SoByteStream::unconvert(void *data, size_t numBytes)
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Description:
-//   This allows apps to store raw data here without converting 
+//   This allows apps to store raw data here without converting
 //   an Inventor node, path, or path list. This sets isRaw to TRUE,
 //   and that data cannot be unconverted.
-void		
+void
 SoByteStream::copy(void *d, size_t len)
 //
 //////////////////////////////////////////////////////////////////////////////
 {
     data = malloc(len);
     if (data != NULL) {
-	memcpy(data, d, (int)len);
-	numBytes = len;
-	isRaw = TRUE;
+        memcpy(data, d, (int)len);
+        numBytes = len;
+        isRaw = TRUE;
     }
 }

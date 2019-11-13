@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -56,9 +56,7 @@
 
 #include <errno.h>
 
-
 SO_NODE_SOURCE(SoV2Text2);
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -73,18 +71,18 @@ SoV2Text2::SoV2Text2()
 {
     SO_NODE_CONSTRUCTOR(SoV2Text2);
 
-    SO_NODE_ADD_FIELD(string,	(""));
-    SO_NODE_ADD_FIELD(spacing,	(1.0));
-    SO_NODE_ADD_FIELD(justification,	(LEFT));
+    SO_NODE_ADD_FIELD(string, (""));
+    SO_NODE_ADD_FIELD(spacing, (1.0));
+    SO_NODE_ADD_FIELD(justification, (LEFT));
 
     // Set up static info for enumerated type field
-    SO_NODE_DEFINE_ENUM_VALUE(Justification,	LEFT);
-    SO_NODE_DEFINE_ENUM_VALUE(Justification,	RIGHT);
-    SO_NODE_DEFINE_ENUM_VALUE(Justification,	CENTER);
+    SO_NODE_DEFINE_ENUM_VALUE(Justification, LEFT);
+    SO_NODE_DEFINE_ENUM_VALUE(Justification, RIGHT);
+    SO_NODE_DEFINE_ENUM_VALUE(Justification, CENTER);
 
     // Set up info in enumerated type field
     SO_NODE_SET_SF_ENUM_TYPE(justification, Justification);
-    
+
     isBuiltIn = TRUE;
 }
 
@@ -98,8 +96,7 @@ SoV2Text2::SoV2Text2()
 SoV2Text2::~SoV2Text2()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -117,7 +114,7 @@ SoV2Text2::createNewNode()
 
     // if european characters present they are converted to UTF-8
     for (int i = 0; i < string.getNum(); i++) {
-            result->string.set1Value(i, string[i]);
+        result->string.set1Value(i, string[i]);
     }
     result->spacing.setValue(spacing.getValue());
     result->justification.setValue(justification.getValue());

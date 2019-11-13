@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -88,9 +88,9 @@ SoComplexity::initClass()
     SO_ENABLE(SoGLRenderAction, SoComplexityElement);
     SO_ENABLE(SoGLRenderAction, SoTextureQualityElement);
     SO_ENABLE(SoGLRenderAction, SoTextureOverrideElement);
-    SO_ENABLE(SoPickAction,     SoComplexityTypeElement);
-    SO_ENABLE(SoPickAction,     SoShapeStyleElement);
-    SO_ENABLE(SoPickAction,     SoComplexityElement);
+    SO_ENABLE(SoPickAction, SoComplexityTypeElement);
+    SO_ENABLE(SoPickAction, SoShapeStyleElement);
+    SO_ENABLE(SoPickAction, SoComplexityElement);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -106,10 +106,9 @@ SoComplexity::SoComplexity()
 {
     SO_NODE_CONSTRUCTOR(SoComplexity);
 
-    SO_NODE_ADD_FIELD(type,  (SoComplexityTypeElement::getDefault()));
+    SO_NODE_ADD_FIELD(type, (SoComplexityTypeElement::getDefault()));
     SO_NODE_ADD_FIELD(value, (SoComplexityElement::getDefault()));
-    SO_NODE_ADD_FIELD(textureQuality,
-		      (SoTextureQualityElement::getDefault()));
+    SO_NODE_ADD_FIELD(textureQuality, (SoTextureQualityElement::getDefault()));
 
     // Set up static info for enumerated type field
     SO_NODE_DEFINE_ENUM_VALUE(Type, OBJECT_SPACE);
@@ -132,8 +131,7 @@ SoComplexity::SoComplexity()
 SoComplexity::~SoComplexity()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -149,21 +147,21 @@ SoComplexity::doAction(SoAction *action)
 {
     SoState *state = action->getState();
 
-    if (! type.isIgnored()
-	&& ! SoOverrideElement::getComplexityTypeOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setComplexityTypeOverride(state, this, TRUE);
-	}
-	SoComplexityTypeElement::set(state, (SoComplexityTypeElement::Type)
-				     type.getValue());
+    if (!type.isIgnored() &&
+        !SoOverrideElement::getComplexityTypeOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setComplexityTypeOverride(state, this, TRUE);
+        }
+        SoComplexityTypeElement::set(
+            state, (SoComplexityTypeElement::Type)type.getValue());
     }
 
-    if (! value.isIgnored()
-	&& ! SoOverrideElement::getComplexityOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setComplexityOverride(state, this, TRUE);
-	}
-	SoComplexityElement::set(state, value.getValue());
+    if (!value.isIgnored() &&
+        !SoOverrideElement::getComplexityOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setComplexityOverride(state, this, TRUE);
+        }
+        SoComplexityElement::set(state, value.getValue());
     }
 }
 
@@ -211,12 +209,12 @@ SoComplexity::GLRender(SoGLRenderAction *action)
 {
     SoState *state = action->getState();
 
-    if (! textureQuality.isIgnored()
-	&& ! SoTextureOverrideElement::getQualityOverride(state)) {
-	if (isOverride()) {
-	    SoTextureOverrideElement::setQualityOverride(state, TRUE);
-	}
-	SoTextureQualityElement::set(state, textureQuality.getValue());
+    if (!textureQuality.isIgnored() &&
+        !SoTextureOverrideElement::getQualityOverride(state)) {
+        if (isOverride()) {
+            SoTextureOverrideElement::setQualityOverride(state, TRUE);
+        }
+        SoTextureQualityElement::set(state, textureQuality.getValue());
     }
 
     SoComplexity::doAction(action);

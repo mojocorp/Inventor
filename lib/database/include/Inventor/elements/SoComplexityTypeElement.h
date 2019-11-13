@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_COMPLEXITY_TYPE_ELEMENT
-#define  _SO_COMPLEXITY_TYPE_ELEMENT
+#ifndef _SO_COMPLEXITY_TYPE_ELEMENT
+#define _SO_COMPLEXITY_TYPE_ELEMENT
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -66,37 +66,40 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoComplexityTypeElement : public SoInt32Element {
+SoEXTENDER
+class SoComplexityTypeElement : public SoInt32Element {
 
     SO_ELEMENT_HEADER(SoComplexityTypeElement);
 
   public:
     // These are the available complexity types:
     enum Type {
-	OBJECT_SPACE,		// Complexity computed in object space
-	SCREEN_SPACE,		// Complexity computed in screen space
-	BOUNDING_BOX		// Bounding box used to represent object
+        OBJECT_SPACE, // Complexity computed in object space
+        SCREEN_SPACE, // Complexity computed in screen space
+        BOUNDING_BOX  // Bounding box used to represent object
     };
 
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Sets the current complexity type in the state
-    static void		set(SoState *state, Type type);
+    static void set(SoState *state, Type type);
 
     // Returns current complexity type from the state
-    static Type		get(SoState *state)
-	{ return (Type)SoInt32Element::get(classStackIndex, state); }
+    static Type get(SoState *state) {
+        return (Type)SoInt32Element::get(classStackIndex, state);
+    }
 
     // Returns the default complexity type
-    static Type		getDefault()		{ return OBJECT_SPACE; }
+    static Type getDefault() { return OBJECT_SPACE; }
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoComplexityTypeElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     virtual ~SoComplexityTypeElement();

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -91,13 +91,12 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_SUB_NODE_
-#define  _SO_SUB_NODE_
+#ifndef _SO_SUB_NODE_
+#define _SO_SUB_NODE_
 
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/fields/SoFieldData.h>
 #include <Inventor/nodes/SoNode.h>
-
 
 //  *** note: many of the macros use the "do { ... } while(0)"
 //  ***       hack to define multiline blocks as a single statement
@@ -108,32 +107,32 @@
 //  Debugging macros (used by other macros in this file)
 //
 #ifdef DEBUG
-#define SO__NODE_CHECK_INIT(className)					      \
-do {									      \
-    if (classTypeId == SoType::badType()) {				      \
-	SoDebugError::post("SO_NODE_CONSTRUCTOR",			      \
-			   "Can't construct a node of type "		      \
-			   SO__QUOTE(className)				      \
-			   " until initClass() has been called");	      \
-	return;								      \
-    }									      \
-} while (0)
+#define SO__NODE_CHECK_INIT(className)                                         \
+    do {                                                                       \
+        if (classTypeId == SoType::badType()) {                                \
+            SoDebugError::post(                                                \
+                "SO_NODE_CONSTRUCTOR",                                         \
+                "Can't construct a node of type " SO__QUOTE(                   \
+                    className) " until initClass() has been called");          \
+            return;                                                            \
+        }                                                                      \
+    } while (0)
 
-#define SO__NODE_CHECK_CONSTRUCT(where)					      \
-do {									      \
-    if (fieldData == NULL) {						      \
-	SoDebugError::post(where,					      \
-			   "Instance not properly constructed.\n"	      \
-			   "Did you forget to put SO_NODE_CONSTRUCTOR()"      \
-			   " in the constructor?");			      \
-	fieldData = new							      \
-	    SoFieldData(parentFieldData ? *parentFieldData : NULL);	      \
-    }									      \
-} while(0)
+#define SO__NODE_CHECK_CONSTRUCT(where)                                        \
+    do {                                                                       \
+        if (fieldData == NULL) {                                               \
+            SoDebugError::post(where,                                          \
+                               "Instance not properly constructed.\n"          \
+                               "Did you forget to put SO_NODE_CONSTRUCTOR()"   \
+                               " in the constructor?");                        \
+            fieldData =                                                        \
+                new SoFieldData(parentFieldData ? *parentFieldData : NULL);    \
+        }                                                                      \
+    } while (0)
 
 #else
-#define SO__NODE_CHECK_INIT(className)	while(0)
-#define SO__NODE_CHECK_CONSTRUCT(where)	while(0)
+#define SO__NODE_CHECK_INIT(className) while (0)
+#define SO__NODE_CHECK_CONSTRUCT(where) while (0)
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
@@ -148,27 +147,31 @@ do {									      \
 // all subclasses and abstract subclasses must support.
 //
 
-#define SO_NODE_ABSTRACT_HEADER(className)				      \
-  public:								      \
-    static SoType	getClassTypeId()	/* Returns class type id */   \
-				    { return classTypeId; }		      \
-    virtual SoType	getTypeId() const;	/* Returns type id	*/    \
-  protected:								      \
-    virtual const SoFieldData	*getFieldData() const;			      \
-    static const SoFieldData **getFieldDataPtr()			      \
-	{ return (const SoFieldData **)&fieldData; }			      \
-  private:								      \
-    static SoType	classTypeId;		/* Type id		*/    \
-    static SbBool	firstInstance; /* true until 2nd c'tor call */	      \
-    static SoFieldData		*fieldData;				      \
-    static const SoFieldData	**parentFieldData
+#define SO_NODE_ABSTRACT_HEADER(className)                                     \
+  public:                                                                      \
+    static SoType getClassTypeId() /* Returns class type id */                 \
+    {                                                                          \
+        return classTypeId;                                                    \
+    }                                                                          \
+    virtual SoType getTypeId() const; /* Returns type id	*/                    \
+  protected:                                                                   \
+    virtual const SoFieldData *getFieldData() const;                           \
+    static const SoFieldData **getFieldDataPtr() {                             \
+        return (const SoFieldData **)&fieldData;                               \
+    }                                                                          \
+                                                                               \
+  private:                                                                     \
+    static SoType              classTypeId;   /* Type id		*/                   \
+    static SbBool              firstInstance; /* true until 2nd c'tor call */  \
+    static SoFieldData *       fieldData;                                      \
+    static const SoFieldData **parentFieldData
 
 //
 // Non-abstract classes have everything abstract classes have, plus a way
 // to create an instance
 //
-#define SO_NODE_HEADER(className)					      \
-    SO_NODE_ABSTRACT_HEADER(className);					      \
+#define SO_NODE_HEADER(className)                                              \
+    SO_NODE_ABSTRACT_HEADER(className);                                        \
     static void *createInstance()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -182,36 +185,29 @@ do {									      \
 // or SO_NODE_ABSTRACT_HEADER.
 //
 
-#define SO__NODE_ABSTRACT_VARS(className)				      \
-    SoType		className::classTypeId;				      \
-    SoFieldData	       *className::fieldData;				      \
-    const SoFieldData **className::parentFieldData;			      \
-    SbBool		className::firstInstance = TRUE
+#define SO__NODE_ABSTRACT_VARS(className)                                      \
+    SoType              className::classTypeId;                                \
+    SoFieldData *       className::fieldData;                                  \
+    const SoFieldData **className::parentFieldData;                            \
+    SbBool              className::firstInstance = TRUE
 
 //
 // Non-abstract nodes have all the stuff abstract nodes do
 //
-#define SO__NODE_VARS(className)					      \
-    SO__NODE_ABSTRACT_VARS(className)
+#define SO__NODE_VARS(className) SO__NODE_ABSTRACT_VARS(className)
 
 ////////////////////////////////////////////
 //
 // Methods on the abstract type
 //
 
-#define SO__NODE_ABSTRACT_METHODS(className)				      \
-									      \
-    SoType								      \
-    className::getTypeId() const					      \
-    {									      \
-	return classTypeId;						      \
-    }									      \
-									      \
-    const SoFieldData *							      \
-    className::getFieldData() const					      \
-    {									      \
-	SO__NODE_CHECK_CONSTRUCT(SO__QUOTE(className));			      \
-	return fieldData;						      \
+#define SO__NODE_ABSTRACT_METHODS(className)                                   \
+                                                                               \
+    SoType className::getTypeId() const { return classTypeId; }                \
+                                                                               \
+    const SoFieldData *className::getFieldData() const {                       \
+        SO__NODE_CHECK_CONSTRUCT(SO__QUOTE(className));                        \
+        return fieldData;                                                      \
     }
 
 ////////////////////////////////////////////
@@ -220,16 +216,11 @@ do {									      \
 // SO_NODE_ABSTRACT_HEADER.
 //
 
-#define SO__NODE_METHODS(className)					      \
-									      \
-    SO__NODE_ABSTRACT_METHODS(className)				      \
-									      \
-    void *								      \
-    className::createInstance()						      \
-    {									      \
-	return (void *)(new className);					      \
-    }
-
+#define SO__NODE_METHODS(className)                                            \
+                                                                               \
+    SO__NODE_ABSTRACT_METHODS(className)                                       \
+                                                                               \
+    void *className::createInstance() { return (void *)(new className); }
 
 /////////////////////////////////////////////
 //
@@ -237,39 +228,34 @@ do {									      \
 // at file scope
 //
 
-#define	SO_NODE_SOURCE(className)					      \
-    SO__NODE_VARS(className);						      \
+#define SO_NODE_SOURCE(className)                                              \
+    SO__NODE_VARS(className);                                                  \
     SO__NODE_METHODS(className)
 
-#define	SO_NODE_ABSTRACT_SOURCE(className)				      \
-    SO__NODE_ABSTRACT_VARS(className);					      \
+#define SO_NODE_ABSTRACT_SOURCE(className)                                     \
+    SO__NODE_ABSTRACT_VARS(className);                                         \
     SO__NODE_ABSTRACT_METHODS(className)
-
 
 ///////////////////////////////////////////////////////////
 //
 //  Internal initialization macros
 //
 
-#define SO__NODE_INIT_CLASS(className,classPrintName,parentClass)	      \
-do {									      \
-    classTypeId =							      \
-        SoType::createType(parentClass::getClassTypeId(),		      \
-		   classPrintName,					      \
-		   &className::createInstance,				      \
-		   SoNode::nextActionMethodIndex++);			      \
-    parentFieldData = parentClass::getFieldDataPtr();			      \
-} while (0)
+#define SO__NODE_INIT_CLASS(className, classPrintName, parentClass)            \
+    do {                                                                       \
+        classTypeId = SoType::createType(                                      \
+            parentClass::getClassTypeId(), classPrintName,                     \
+            &className::createInstance, SoNode::nextActionMethodIndex++);      \
+        parentFieldData = parentClass::getFieldDataPtr();                      \
+    } while (0)
 
-#define SO__NODE_INIT_ABSTRACT_CLASS(className,classPrintName,parentClass)    \
-do {									      \
-    classTypeId =							      \
-        SoType::createType(parentClass::getClassTypeId(),		      \
-		   classPrintName,					      \
-		   NULL,						      \
-		   SoNode::nextActionMethodIndex++);			      \
-    parentFieldData = parentClass::getFieldDataPtr();			      \
-} while (0)
+#define SO__NODE_INIT_ABSTRACT_CLASS(className, classPrintName, parentClass)   \
+    do {                                                                       \
+        classTypeId =                                                          \
+            SoType::createType(parentClass::getClassTypeId(), classPrintName,  \
+                               NULL, SoNode::nextActionMethodIndex++);         \
+        parentFieldData = parentClass::getFieldDataPtr();                      \
+    } while (0)
 
 ////////////////////////////////////////////
 //
@@ -279,25 +265,21 @@ do {									      \
 // should be the class that this subclass is derived from.
 //
 
-#define SO_NODE_INIT_CLASS(className,parentClass,parentPrintClass)			      \
-do {									      \
-    classTypeId =							      \
-        SoType::createType(SoType::fromName(parentPrintClass),		      \
-		   SO__QUOTE(className),				      \
-		   &className::createInstance,				      \
-		   SoNode::nextActionMethodIndex++);			      \
-    parentFieldData = parentClass::getFieldDataPtr();			      \
-} while (0)
+#define SO_NODE_INIT_CLASS(className, parentClass, parentPrintClass)           \
+    do {                                                                       \
+        classTypeId = SoType::createType(                                      \
+            SoType::fromName(parentPrintClass), SO__QUOTE(className),          \
+            &className::createInstance, SoNode::nextActionMethodIndex++);      \
+        parentFieldData = parentClass::getFieldDataPtr();                      \
+    } while (0)
 
-#define SO_NODE_INIT_ABSTRACT_CLASS(className, parentClass, parentPrintClass) \
-do {									      \
-    classTypeId =							      \
-        SoType::createType(SoType::fromName(parentPrintClass),		      \
-		   SO__QUOTE(className),				      \
-		   NULL,						      \
-		   SoNode::nextActionMethodIndex++);			      \
-    parentFieldData = parentClass::getFieldDataPtr();			      \
-} while (0)
+#define SO_NODE_INIT_ABSTRACT_CLASS(className, parentClass, parentPrintClass)  \
+    do {                                                                       \
+        classTypeId = SoType::createType(SoType::fromName(parentPrintClass),   \
+                                         SO__QUOTE(className), NULL,           \
+                                         SoNode::nextActionMethodIndex++);     \
+        parentFieldData = parentClass::getFieldDataPtr();                      \
+    } while (0)
 
 ///////////////////////////////////////////////
 //
@@ -305,16 +287,16 @@ do {									      \
 // a constructor, to do required initializations
 //
 
-#define SO_NODE_CONSTRUCTOR(className)					      \
-do {									      \
-    SO__NODE_CHECK_INIT(className);					      \
-    if (fieldData == NULL)						      \
-	fieldData = new SoFieldData(					      \
-	    parentFieldData ? *parentFieldData : NULL);			      \
-    else								      \
-	firstInstance = FALSE;						      \
-    isBuiltIn = FALSE;							      \
-} while(0)
+#define SO_NODE_CONSTRUCTOR(className)                                         \
+    do {                                                                       \
+        SO__NODE_CHECK_INIT(className);                                        \
+        if (fieldData == NULL)                                                 \
+            fieldData =                                                        \
+                new SoFieldData(parentFieldData ? *parentFieldData : NULL);    \
+        else                                                                   \
+            firstInstance = FALSE;                                             \
+        isBuiltIn = FALSE;                                                     \
+    } while (0)
 
 ////////////////////////////////////////////////
 //
@@ -322,9 +304,7 @@ do {									      \
 // in constructors.
 //
 
-#define SO_NODE_IS_FIRST_INSTANCE()					      \
-    (firstInstance == TRUE)
-
+#define SO_NODE_IS_FIRST_INSTANCE() (firstInstance == TRUE)
 
 ////////////////////////////////////////////
 //
@@ -342,14 +322,13 @@ do {									      \
 // given default values.
 //
 
-#define SO_NODE_ADD_FIELD(fieldName,defValue)				      \
-    do {								      \
-	SO__NODE_CHECK_CONSTRUCT(__FILE__);				      \
-	if (firstInstance)						      \
-	    fieldData->addField(this, SO__QUOTE(fieldName),		      \
-				&this->fieldName);			      \
-	this->fieldName.setValue defValue;				      \
-	this->fieldName.setContainer(this);				      \
+#define SO_NODE_ADD_FIELD(fieldName, defValue)                                 \
+    do {                                                                       \
+        SO__NODE_CHECK_CONSTRUCT(__FILE__);                                    \
+        if (firstInstance)                                                     \
+            fieldData->addField(this, SO__QUOTE(fieldName), &this->fieldName); \
+        this->fieldName.setValue defValue;                                     \
+        this->fieldName.setContainer(this);                                    \
     } while (0)
 
 ////////////////////////////////////////////
@@ -367,22 +346,19 @@ do {									      \
 //		enum Chipmunk { ALVIN, SIMON, THEODORE };
 //              ...
 //      }
-//	
+//
 //	[ in constructor MyNode::MyNode(): ]
 //	SO_NODE_DEFINE_ENUM_VALUE(Chipmunk, ALVIN);
 //	SO_NODE_DEFINE_ENUM_VALUE(Chipmunk, SIMON);
 //	SO_NODE_DEFINE_ENUM_VALUE(Chipmunk, THEODORE);
 //
 
-#define SO_NODE_DEFINE_ENUM_VALUE(enumType,enumValue)			      \
-    do {								      \
-	SO__NODE_CHECK_CONSTRUCT(__FILE__);				      \
-	if (firstInstance)						      \
-	    fieldData->addEnumValue(SO__QUOTE(enumType),		      \
-				SO__QUOTE(enumValue),			      \
-				enumValue);				      \
+#define SO_NODE_DEFINE_ENUM_VALUE(enumType, enumValue)                         \
+    do {                                                                       \
+        SO__NODE_CHECK_CONSTRUCT(__FILE__);                                    \
+        if (firstInstance)                                                     \
+            fieldData->addEnumValue(SO__QUOTE(enumType), SO__QUOTE(enumValue), \
+                                    enumValue);                                \
     } while (0)
 
-
 #endif /* _SO_SUB_NODE_ */
-

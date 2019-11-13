@@ -65,8 +65,7 @@ SO_ELEMENT_SOURCE(SoGLTextureUnitElement);
 // Use: internal
 
 void
-SoGLTextureUnitElement::initClass()
-{
+SoGLTextureUnitElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLTextureUnitElement, SoTextureUnitElement);
 }
 
@@ -80,8 +79,7 @@ SoGLTextureUnitElement::initClass()
 SoGLTextureUnitElement::~SoGLTextureUnitElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -108,11 +106,12 @@ SoGLTextureUnitElement::init(SoState *state)
 // Use: public
 
 void
-SoGLTextureUnitElement::push(SoState * state)
+SoGLTextureUnitElement::push(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLTextureUnitElement  *prevElt = (const SoGLTextureUnitElement *) getNextInStack();
+    const SoGLTextureUnitElement *prevElt =
+        (const SoGLTextureUnitElement *)getNextInStack();
 
     data = prevElt->data;
 
@@ -141,8 +140,9 @@ SoGLTextureUnitElement::pop(SoState *state, const SoElement *childElt)
     copiedFromParent = NULL;
 
     // If the previous element didn't have the same value...
-    const SoGLTextureUnitElement *child = (const SoGLTextureUnitElement *) childElt;
-        
+    const SoGLTextureUnitElement *child =
+        (const SoGLTextureUnitElement *)childElt;
+
     // Restore previous texture unit
     if (data != child->data)
         send();
@@ -169,10 +169,9 @@ SoGLTextureUnitElement::setElt(int32_t unit)
         data = unit;
         send();
         copiedFromParent = NULL;
-    }
-    else if (copiedFromParent) {
+    } else if (copiedFromParent) {
         SoGLTextureUnitElement *parent =
-            (SoGLTextureUnitElement *) getNextInStack();
+            (SoGLTextureUnitElement *)getNextInStack();
         parent->capture(copiedFromParent);
     }
 }
@@ -189,5 +188,5 @@ SoGLTextureUnitElement::send()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    glActiveTextureARB((unsigned int) GL_TEXTURE0 + data);
+    glActiveTextureARB((unsigned int)GL_TEXTURE0 + data);
 }

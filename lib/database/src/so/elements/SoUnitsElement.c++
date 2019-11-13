@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,8 +63,7 @@ SO_ELEMENT_SOURCE(SoUnitsElement);
 // Use: internal
 
 void
-SoUnitsElement::initClass()
-{
+SoUnitsElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoUnitsElement, SoInt32Element);
 }
 
@@ -78,8 +77,7 @@ SoUnitsElement::initClass()
 SoUnitsElement::~SoUnitsElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -107,76 +105,73 @@ SoUnitsElement::init(SoState *)
 
 #ifdef DEBUG
 void
-SoUnitsElement::print(FILE *fp) const
-{
+SoUnitsElement::print(FILE *fp) const {
     const char *unitsName;
 
     SoElement::print(fp);
 
     switch ((Units)data) {
 
-      case METERS:
-	unitsName = "METERS";
-	break;
+    case METERS:
+        unitsName = "METERS";
+        break;
 
-      case CENTIMETERS:
-	unitsName = "CENTIMETERS";
-	break;
+    case CENTIMETERS:
+        unitsName = "CENTIMETERS";
+        break;
 
-      case MILLIMETERS:
-	unitsName = "MILLIMETERS";
-	break;
+    case MILLIMETERS:
+        unitsName = "MILLIMETERS";
+        break;
 
-      case MICROMETERS:
-	unitsName = "MICROMETERS";
-	break;
+    case MICROMETERS:
+        unitsName = "MICROMETERS";
+        break;
 
-      case MICRONS:
-	unitsName = "MICRONS";
-	break;
+    case MICRONS:
+        unitsName = "MICRONS";
+        break;
 
-      case NANOMETERS:
-	unitsName = "NANOMETERS";
-	break;
+    case NANOMETERS:
+        unitsName = "NANOMETERS";
+        break;
 
-      case ANGSTROMS:
-	unitsName = "ANGSTROMS";
-	break;
+    case ANGSTROMS:
+        unitsName = "ANGSTROMS";
+        break;
 
-      case KILOMETERS:
-	unitsName = "KILOMETERS";
-	break;
+    case KILOMETERS:
+        unitsName = "KILOMETERS";
+        break;
 
-      case FEET:
-	unitsName = "FEET";
-	break;
+    case FEET:
+        unitsName = "FEET";
+        break;
 
-      case INCHES:
-	unitsName = "INCHES";
-	break;
+    case INCHES:
+        unitsName = "INCHES";
+        break;
 
-      case POINTS:
-	unitsName = "POINTS";
-	break;
+    case POINTS:
+        unitsName = "POINTS";
+        break;
 
-      case YARDS:
-	unitsName = "YARDS";
-	break;
+    case YARDS:
+        unitsName = "YARDS";
+        break;
 
-      case MILES:
-	unitsName = "MILES";
-	break;
+    case MILES:
+        unitsName = "MILES";
+        break;
 
-      case NAUTICAL_MILES:
-	unitsName = "NAUTICAL_MILES";
-	break;
+    case NAUTICAL_MILES:
+        unitsName = "NAUTICAL_MILES";
+        break;
     }
 
     fprintf(fp, "\tUnits = %s\n", unitsName);
 }
 #else  /* DEBUG */
 void
-SoUnitsElement::print(FILE *) const
-{
-}
+SoUnitsElement::print(FILE *) const {}
 #endif /* DEBUG */

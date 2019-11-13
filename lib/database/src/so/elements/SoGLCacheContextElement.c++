@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -66,12 +66,13 @@
 
 SO_ELEMENT_SOURCE(SoGLCacheContextElement);
 
-std::map<int, std::vector<SoGLDisplayList*> > SoGLCacheContextElement::waitingToBeFreed;
+std::map<int, std::vector<SoGLDisplayList *> >
+                            SoGLCacheContextElement::waitingToBeFreed;
 std::vector<struct extInfo> SoGLCacheContextElement::extensionList;
 
 // Internal struct:
 struct extInfo {
-    SbString string;
+    SbString         string;
     std::vector<int> support;
 };
 
@@ -83,8 +84,7 @@ struct extInfo {
 // Use: internal
 
 void
-SoGLCacheContextElement::initClass()
-{
+SoGLCacheContextElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLCacheContextElement, SoElement);
 }
 
@@ -98,8 +98,7 @@ SoGLCacheContextElement::initClass()
 SoGLCacheContextElement::~SoGLCacheContextElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -127,31 +126,32 @@ SoGLCacheContextElement::init(SoState *)
 
 void
 SoGLCacheContextElement::set(SoState *state, int ctx,
-			     SbBool is2PassTransparency,
-			     SbBool remoteRender)
+                             SbBool is2PassTransparency, SbBool remoteRender)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     if (state->getDepth() != 1) {
-	SoDebugError::post("SoGLCacheContextElement::set",
-			   "must not be set during traversal");
+        SoDebugError::post("SoGLCacheContextElement::set",
+                           "must not be set during traversal");
     }
 #endif
 
-    SoGLCacheContextElement *elt = (SoGLCacheContextElement *)
-	state->getElementNoPush(classStackIndex);
+    SoGLCacheContextElement *elt =
+        (SoGLCacheContextElement *)state->getElementNoPush(classStackIndex);
 
     elt->context = ctx;
     elt->is2PassTransp = is2PassTransparency;
     elt->isRemoteRendering = remoteRender;
-    if (remoteRender) elt->autoCacheBits = DO_AUTO_CACHE;
-    else elt->autoCacheBits = 0;
+    if (remoteRender)
+        elt->autoCacheBits = DO_AUTO_CACHE;
+    else
+        elt->autoCacheBits = 0;
 
     // Look through the list of display lists waiting to be freed, and
     // free any that match the context:
-    std::vector<SoGLDisplayList*> & lst = waitingToBeFreed[ctx];
-    for (int i = 0; i<lst.size(); i++) {
+    std::vector<SoGLDisplayList *> &lst = waitingToBeFreed[ctx];
+    for (int i = 0; i < lst.size(); i++) {
         delete lst[i];
     }
     lst.clear();
@@ -170,10 +170,10 @@ SoGLCacheContextElement::get(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLCacheContextElement	*elt;
+    const SoGLCacheContextElement *elt;
 
-    elt = (const SoGLCacheContextElement *)
-	getConstElement(state, classStackIndex);
+    elt = (const SoGLCacheContextElement *)getConstElement(state,
+                                                           classStackIndex);
 
     return elt->context;
 }
@@ -193,12 +193,11 @@ SoGLCacheContextElement::get(SoState *state)
 // Use: public, static
 
 void
-SoGLCacheContextElement::freeList(SoState *state,
-				  SoGLDisplayList *dl)
+SoGLCacheContextElement::freeList(SoState *state, SoGLDisplayList *dl)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (state != NULL  &&  get(state) == dl->getContext()) {
+    if (state != NULL && get(state) == dl->getContext()) {
         delete dl;
     } else {
         waitingToBeFreed[dl->getContext()].push_back(dl);
@@ -226,7 +225,7 @@ SoGLCacheContextElement::getExtID(const char *str)
     extInfo e;
     e.string = str;
     extensionList.push_back(e);
-    return extensionList.size()-1;
+    return extensionList.size() - 1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -242,27 +241,25 @@ SoGLCacheContextElement::extSupported(SoState *state, int ext)
 {
 #ifdef DEBUG
     if (ext >= extensionList.size()) {
-	SoDebugError::post("SoGLCacheContextElement::extSupported",
-			   "Bad extension ID passed; "
-			   "you MUST use SoGLCacheContextElement::getExtID");
+        SoDebugError::post("SoGLCacheContextElement::extSupported",
+                           "Bad extension ID passed; "
+                           "you MUST use SoGLCacheContextElement::getExtID");
     }
 #endif
     extInfo &e = extensionList[ext];
-    int ctx = get(state);
+    int      ctx = get(state);
 
     // The support list is a list of context,flag pairs (flag is TRUE
     // if the render context supports the extension).  This linear
     // search assumes that there will be a small number of render
     // contexts.
-    for (int i = 0; i < e.support.size(); i+=2) {
+    for (int i = 0; i < e.support.size(); i += 2) {
         if (e.support[i] == ctx)
-            return e.support[i+1];
+            return e.support[i + 1];
     }
     // Ask GL if supported:
-    SbBool supported = 
-	strstr((const char *)glGetString(GL_EXTENSIONS),
-           e.string.getString())
-	    != NULL;
+    SbBool supported = strstr((const char *)glGetString(GL_EXTENSIONS),
+                              e.string.getString()) != NULL;
     e.support.push_back(ctx);
     e.support.push_back(supported);
 
@@ -281,13 +278,13 @@ SoGLCacheContextElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    
+
     const SoGLCacheContextElement *cacheElt;
 
-    cacheElt = (const SoGLCacheContextElement *) elt;
+    cacheElt = (const SoGLCacheContextElement *)elt;
 
-    return (context       == cacheElt->context &&
-	    is2PassTransp == cacheElt->is2PassTransp);
+    return (context == cacheElt->context &&
+            is2PassTransp == cacheElt->is2PassTransp);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -304,7 +301,7 @@ SoGLCacheContextElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoGLCacheContextElement *result =
-	(SoGLCacheContextElement *)getTypeId().createInstance();
+        (SoGLCacheContextElement *)getTypeId().createInstance();
 
     result->context = context;
     result->is2PassTransp = is2PassTransp;
@@ -323,24 +320,20 @@ SoGLCacheContextElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoGLCacheContextElement::print(FILE *fp) const
-{
+SoGLCacheContextElement::print(FILE *fp) const {
     SoElement::print(fp);
 
-    fprintf(fp, "\tCache context = %uL, is2PassTransp = %s\n",
-	    context, is2PassTransp ? "TRUE" : "FALSE");
+    fprintf(fp, "\tCache context = %uL, is2PassTransp = %s\n", context,
+            is2PassTransp ? "TRUE" : "FALSE");
 }
 #else  /* DEBUG */
 void
-SoGLCacheContextElement::print(FILE *) const
-{
-}
+SoGLCacheContextElement::print(FILE *) const {}
 #endif /* DEBUG */
 
 int
-SoGLCacheContextElement::getUniqueCacheContext()
-{
+SoGLCacheContextElement::getUniqueCacheContext() {
     static int s_contextIncrement = 1000;
-    
+
     return ++s_contextIncrement;
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,7 +68,8 @@
 //
 // Use: public
 
-SoMaterialBundle::SoMaterialBundle(SoAction *action) : SoBundle(action)
+SoMaterialBundle::SoMaterialBundle(SoAction *action)
+    : SoBundle(action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -76,17 +77,18 @@ SoMaterialBundle::SoMaterialBundle(SoAction *action) : SoBundle(action)
     // Remember that we haven't accessed elements yet
     firstTime = TRUE;
     lastIndex = -1;
-    lazyElt = NULL;  
+    lazyElt = NULL;
 
     // See whether we need to deal with materials or just colors
-    colorOnly = ((SoLazyElement::getLightModel(state)) ==
-		 SoLazyElement::BASE_COLOR);
+    colorOnly =
+        ((SoLazyElement::getLightModel(state)) == SoLazyElement::BASE_COLOR);
     sendMultiple = FALSE;
     fastColor = 0;
 
     // Nodes that use material bundles haven't been optimized, and
     // should be render cached if possible:
-    SoGLCacheContextElement::shouldAutoCache(state, SoGLCacheContextElement::DO_AUTO_CACHE);
+    SoGLCacheContextElement::shouldAutoCache(
+        state, SoGLCacheContextElement::DO_AUTO_CACHE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -99,15 +101,14 @@ SoMaterialBundle::SoMaterialBundle(SoAction *action) : SoBundle(action)
 SoMaterialBundle::~SoMaterialBundle()
 //
 ////////////////////////////////////////////////////////////////////////
-{    
-    //If multiple diffuse colors were sent, we don't know what color
-    // was left in GL.   
-    if (sendMultiple)        
-	lazyElt->reset(state, SoLazyElement::DIFFUSE_MASK);
+{
+    // If multiple diffuse colors were sent, we don't know what color
+    // was left in GL.
+    if (sendMultiple)
+        lazyElt->reset(state, SoLazyElement::DIFFUSE_MASK);
     // turn off ColorMaterial, if it was turned on.
-    if (fastColor)  
-	SoGLLazyElement::setColorMaterial(state, FALSE);
-    
+    if (fastColor)
+        SoGLLazyElement::setColorMaterial(state, FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -119,33 +120,34 @@ SoMaterialBundle::~SoMaterialBundle()
 
 void
 SoMaterialBundle::reallySend(int index, int isBetweenBeginEnd,
-			     SbBool avoidFastColor)
+                             SbBool avoidFastColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Make sure we have accessed all required elements (first time only)
-    if (firstTime){
-	accessElements(isBetweenBeginEnd, avoidFastColor);
-	firstTime = FALSE;
-	// the first color has already been sent--
-	if (index == 0) {
-	    lastIndex = index;
-	    return;
-	}
+    if (firstTime) {
+        accessElements(isBetweenBeginEnd, avoidFastColor);
+        firstTime = FALSE;
+        // the first color has already been sent--
+        if (index == 0) {
+            lastIndex = index;
+            return;
+        }
     }
 
-    if (lastIndex == index) return;
+    if (lastIndex == index)
+        return;
 
-    //Indicate multiple colors are being sent:  This will force reset() after
-    //shape is rendered
+    // Indicate multiple colors are being sent:  This will force reset() after
+    // shape is rendered
     sendMultiple = TRUE;
 
 #ifdef DEBUG
     // Make sure the index is valid
-    if (index >= numMaterials){
-	SoDebugError::post("SoMaterialBundle::reallySend", 
-	    "Not enough colors specified");
-    }    
+    if (index >= numMaterials) {
+        SoDebugError::post("SoMaterialBundle::reallySend",
+                           "Not enough colors specified");
+    }
 #endif
     lazyElt->sendDiffuseByIndex(index);
     lastIndex = index;
@@ -165,11 +167,11 @@ SoMaterialBundle::reallySend(int index, int isBetweenBeginEnd,
 
 void
 SoMaterialBundle::accessElements(SbBool isBetweenBeginEnd,
-				 SbBool avoidFastColor)
+                                 SbBool avoidFastColor)
 //
 ////////////////////////////////////////////////////////////////////////
-{   
-    const SoLazyElement* le = SoLazyElement::getInstance(state);   
+{
+    const SoLazyElement *le = SoLazyElement::getInstance(state);
 
     // Initialize
     numMaterials = le->getNumDiffuse();
@@ -179,23 +181,20 @@ SoMaterialBundle::accessElements(SbBool isBetweenBeginEnd,
     // especially when materials are sent within GL display lists.
     // Note: we can't make the necessary GL calls if we are between a
     // glBegin() and a glEnd(), so that case is considered here.
-    fastColor = (! isBetweenBeginEnd &&
-		 ! colorOnly &&		
-		 numMaterials > 1 );
+    fastColor = (!isBetweenBeginEnd && !colorOnly && numMaterials > 1);
 
     // Set up GL if necessary for fast color mode. When materials are
     // "forced" to send (as by SoMaterial nodes), we don't want to set
-    // up fast colors. So check that case, too. 
-    if (fastColor && !avoidFastColor)  
-	SoGLLazyElement::setColorMaterial(state, TRUE);
-    
-    //Note: it's important to save the lazyElt AFTER the first set(),
-    //so that subsequent lazyElt->send()'s will use top-of-stack.
+    // up fast colors. So check that case, too.
+    if (fastColor && !avoidFastColor)
+        SoGLLazyElement::setColorMaterial(state, TRUE);
+
+    // Note: it's important to save the lazyElt AFTER the first set(),
+    // so that subsequent lazyElt->send()'s will use top-of-stack.
     lazyElt = (const SoGLLazyElement *)SoLazyElement::getInstance(state);
-    if (!colorOnly)   
-	lazyElt->send(state,SoLazyElement::ALL_MASK);
+    if (!colorOnly)
+        lazyElt->send(state, SoLazyElement::ALL_MASK);
     else {
-	lazyElt->send(state,SoLazyElement::DIFFUSE_ONLY_MASK);
+        lazyElt->send(state, SoLazyElement::DIFFUSE_ONLY_MASK);
     }
 }
-

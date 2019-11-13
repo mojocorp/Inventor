@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_LOCAL_BBOX_MATRIX_ELEMENT
-#define  _SO_LOCAL_BBOX_MATRIX_ELEMENT
+#ifndef _SO_LOCAL_BBOX_MATRIX_ELEMENT
+#define _SO_LOCAL_BBOX_MATRIX_ELEMENT
 
 #include <Inventor/elements/SoModelMatrixElement.h>
 
@@ -81,57 +81,59 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoLocalBBoxMatrixElement : public SoElement {
+SoEXTENDER
+class SoLocalBBoxMatrixElement : public SoElement {
 
     SO_ELEMENT_HEADER(SoLocalBBoxMatrixElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Overrides push() method to copy values from next instance in the stack
-    virtual void	push(SoState *state);
+    virtual void push(SoState *state);
 
     // Sets the local matrix to the identity matrix
-    static void		makeIdentity(SoState *state);
+    static void makeIdentity(SoState *state);
 
     // Sets the local matrix to the given matrix
-    static void		set(SoState *state, const SbMatrix &matrix);
+    static void set(SoState *state, const SbMatrix &matrix);
 
     // Multiplies the given matrix into the local matrix
-    static void		mult(SoState *state, const SbMatrix &matrix);
+    static void mult(SoState *state, const SbMatrix &matrix);
 
     // Each of these multiplies a matrix that performs the specified
     // transformation into the local matrix
-    static void		translateBy(SoState *state,const SbVec3f &translation);
-    static void		rotateBy(SoState *state, const SbRotation &rotation);
-    static void		scaleBy(SoState *state, const SbVec3f &scaleFactor);
+    static void translateBy(SoState *state, const SbVec3f &translation);
+    static void rotateBy(SoState *state, const SbRotation &rotation);
+    static void scaleBy(SoState *state, const SbVec3f &scaleFactor);
 
     // These methods are used by the TransformSeparator node.
-    static SbMatrix	pushMatrix(SoState *state);
-    static void		popMatrix(SoState *state, const SbMatrix &m);
+    static SbMatrix pushMatrix(SoState *state);
+    static void     popMatrix(SoState *state, const SbMatrix &m);
 
     // Resets all current instances in the state to identity
-    static void		resetAll(SoState *state);
+    static void resetAll(SoState *state);
 
     // Returns current matrix from the state
-    static const SbMatrix &	get(SoState *state);
+    static const SbMatrix &get(SoState *state);
 
     // Prints error message and returns FALSE (see class header comment)
-    virtual SbBool	matches(const SoElement *elt) const;
+    virtual SbBool matches(const SoElement *elt) const;
 
     // Create and return a copy of this element
-    virtual SoElement	*copyMatchInfo() const;
+    virtual SoElement *copyMatchInfo() const;
 
     // Prints element (for debugging)
-    virtual void	print(FILE *fp) const;
+    virtual void print(FILE *fp) const;
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoLocalBBoxMatrixElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
-    SbMatrix		localMatrix;
+    SbMatrix localMatrix;
 
     virtual ~SoLocalBBoxMatrixElement();
 
@@ -140,7 +142,7 @@ SoEXTENDER class SoLocalBBoxMatrixElement : public SoElement {
     // the element is created. It is needed in case the element is set
     // to contain a new matrix, since we want to factor out the
     // effects of the non-local part of the matrix.
-    SbMatrix		modelInverseMatrix;
+    SbMatrix modelInverseMatrix;
 };
 
 #endif /* _SO_LOCAL_BBOX_MATRIX_ELEMENT */

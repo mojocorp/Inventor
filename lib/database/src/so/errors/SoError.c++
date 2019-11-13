@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -59,10 +59,10 @@
 #include <Inventor/nodes/SoNode.h>
 
 // Static variables declared in SoError.h:
-SoType		 SoError::classTypeId;
-SoErrorCB	*SoError::handlerCB;
-void		*SoError::cbData;
-SbBool		 SoError::wasInitted;
+SoType     SoError::classTypeId;
+SoErrorCB *SoError::handlerCB;
+void *     SoError::cbData;
+SbBool     SoError::wasInitted;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -81,7 +81,7 @@ SoError::initClass()
 
     // Set handler to default handler
     handlerCB = defaultHandlerCB;
-    cbData    = NULL;
+    cbData = NULL;
 
     wasInitted = TRUE;
 }
@@ -126,18 +126,18 @@ SoError::isOfType(SoType type) const
 // Use: extender
 
 void
-SoError::post(const char *formatString ...)
+SoError::post(const char *formatString...)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoError	error;
+    SoError error;
 
     // Set up the debugString. This just passes everything to sprintf,
     // using the variable arguments stuff in stdarg.h. I got this from
     // the C++ Reference Manual, page 148.
 
-    char	buf[10000];
-    va_list	ap;
+    char    buf[10000];
+    va_list ap;
 
     va_start(ap, formatString);
     vsprintf(buf, formatString, ap);
@@ -238,8 +238,8 @@ SoError::handleError()
 ////////////////////////////////////////////////////////////////////////
 {
     // Determine the handler to call and call it
-    void	*data;
-    SoErrorCB	*handler = getHandler(data);
+    void *     data;
+    SoErrorCB *handler = getHandler(data);
 
     // If the handler is NULL, this can mean one of two things. Either
     // the SoError class was never initialized, or someone purposely
@@ -248,18 +248,18 @@ SoError::handleError()
 
     if (handler == NULL) {
 
-	// If the class was initialized, someone set the handler to
-	// NULL. So don't do anything.
-	if (wasInitted)
-	    ;
+        // If the class was initialized, someone set the handler to
+        // NULL. So don't do anything.
+        if (wasInitted)
+            ;
 
-	// The class was never initialized. Use the default handler
-	else
-	    defaultHandlerCB(this, data);
+        // The class was never initialized. Use the default handler
+        else
+            defaultHandlerCB(this, data);
     }
 
     else
-	(*handler)(this, data);
+        (*handler)(this, data);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -274,16 +274,16 @@ SoError::getBaseString(const SoBase *base, const char *what)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SbName	&baseName = base->getName();
-    SbString		str;
-    char		addrBuf[32];
+    const SbName &baseName = base->getName();
+    SbString      str;
+    char          addrBuf[32];
 
-    str  = what;
+    str = what;
 
-    if (! (! baseName)) {
-	str += " named \"";
-	str += baseName.getString();
-	str += "\"";
+    if (!(!baseName)) {
+        str += " named \"";
+        str += baseName.getString();
+        str += "\"";
     }
 
     sprintf(addrBuf, "%p", base);

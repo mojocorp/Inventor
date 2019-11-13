@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_STATE_
-#define  _SO_STATE_
+#ifndef _SO_STATE_
+#define _SO_STATE_
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -72,8 +72,7 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#define SO_STATE_GET_CONST_ELEMENT(stackIndex)\
-	return stack[stackIndex];
+#define SO_STATE_GET_CONST_ELEMENT(stackIndex) return stack[stackIndex];
 
 #include <vector>
 #include <Inventor/SoLists.h>
@@ -81,7 +80,8 @@
 class SoAction;
 class SoElement;
 
-SoEXTENDER class SoState {
+SoEXTENDER
+class SoState {
 
   public:
     // Constructor. Takes pointer to action instance this state is
@@ -92,59 +92,61 @@ SoEXTENDER class SoState {
     ~SoState();
 
     // Returns the action instance the state is part of
-    SoAction *		getAction() const	{ return action; }
+    SoAction *getAction() const { return action; }
 
     // Returns a writable instance of the element on the top of the
     // stack with the given index.
-    SoElement *		getElement(int stackIndex);
+    SoElement *getElement(int stackIndex);
 
     // Returns the top (read-only) instance of the given element stack
-    const SoElement *	getConstElement(int stackIndex) const
-	{ return stack[stackIndex]; }
+    const SoElement *getConstElement(int stackIndex) const {
+        return stack[stackIndex];
+    }
 
     // Pushes (saves) the current state until a pop() restores it. The
     // push is done lazily: this just increments the depth in the
     // state. When an element is accessed with getElement() and its
     // depth is less than the current depth, it is then pushed
     // individually.
-    void		push() 
-			{ depth++; }
+    void push() { depth++; }
 
     // Pops the state, restoring the state to just before the last push().
-    void		pop();
+    void pop();
 
     // Prints state to file (for debugging)
-    void		print(FILE *fp);
+    void print(FILE *fp);
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Returns TRUE if element with given stack index is enabled in state
-    SbBool		isElementEnabled(int stackIndex) const
-	{ return (stack[stackIndex] != NULL); }
+    SbBool isElementEnabled(int stackIndex) const {
+        return (stack[stackIndex] != NULL);
+    }
 
     // Returns current depth of state
-    int			getDepth() const { return depth; }
+    int getDepth() const { return depth; }
 
     // Sets/returns flag that indicates whether a cache is open. This
     // flag lets us optimize element capturing; we don't need to try
     // to capture elements if the flag is FALSE.
-    void		setCacheOpen(SbBool flag)	{ cacheOpen = flag; }
-    SbBool		isCacheOpen() const		{ return cacheOpen; }
+    void   setCacheOpen(SbBool flag) { cacheOpen = flag; }
+    SbBool isCacheOpen() const { return cacheOpen; }
 
     // Internal-only, dangerous method that returns a writeable
     // element without checking for state depth and doing a push.
     // Be very careful and consider the caching implications before
     // using this method!
-    SoElement *		getElementNoPush(int stackIndex) const
-	{ return stack[stackIndex]; }
+    SoElement *getElementNoPush(int stackIndex) const {
+        return stack[stackIndex];
+    }
 
   private:
-    SoAction		*action;	// Action instance state is in
-    int			depth;		// Current depth
-    std::vector<SoElement*>	stack;	// Array of element stacks
-    SoElement *		topElement;	// First element in threaded stack
+    SoAction *               action;     // Action instance state is in
+    int                      depth;      // Current depth
+    std::vector<SoElement *> stack;      // Array of element stacks
+    SoElement *              topElement; // First element in threaded stack
 
-    SbBool		cacheOpen;	// TRUE if a cache is open
+    SbBool cacheOpen; // TRUE if a cache is open
 };
 
-#endif	/* _SO_STATE_ */
-
+#endif /* _SO_STATE_ */

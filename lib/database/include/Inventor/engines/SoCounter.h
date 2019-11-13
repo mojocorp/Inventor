@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -56,8 +56,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_COUNTER_
-#define  _SO_COUNTER_
+#ifndef _SO_COUNTER_
+#define _SO_COUNTER_
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFShort.h>
@@ -70,44 +70,40 @@ class SoCounter : public SoEngine {
 
   public:
     // Inputs
-    SoSFShort		min;		// min value for counter (default 0)
-    SoSFShort		max;		// max value for counter (default 1)
-    SoSFShort		step;		// value to step by (default 1)
-    SoSFTrigger		trigger;	// go to next step
-    SoSFShort		reset;		// reset cycle to value at setValue
+    SoSFShort   min;     // min value for counter (default 0)
+    SoSFShort   max;     // max value for counter (default 1)
+    SoSFShort   step;    // value to step by (default 1)
+    SoSFTrigger trigger; // go to next step
+    SoSFShort   reset;   // reset cycle to value at setValue
 
     // Outputs
-    SoEngineOutput	output;		// (SoSFShort) counts min...max
-    SoEngineOutput	syncOut;	// (SoSFTrigger) triggers at cycle start
+    SoEngineOutput output;  // (SoSFShort) counts min...max
+    SoEngineOutput syncOut; // (SoSFTrigger) triggers at cycle start
 
     // Constructor
     SoCounter();
 
-  SoINTERNAL public:
-
+    SoINTERNAL
+  public:
     static void initClass();
 
   protected:
-    virtual void	inputChanged(SoField *whichInput);
+    virtual void inputChanged(SoField *whichInput);
 
   private:
-    enum Todo {
-	RECALC	= (1<<0),
-	RESET	= (1<<1),
-	STEP	= (1<<2)
-    };
-    unsigned int	todo;
-    int			nStages;
-    int			curStage;
+    enum Todo { RECALC = (1 << 0), RESET = (1 << 1), STEP = (1 << 2) };
+    unsigned int todo;
+    int          nStages;
+    int          curStage;
     struct Stage {
-	int	val;		// counter value for stage
-    }			*stages;
+        int val; // counter value for stage
+    } * stages;
 
     // Destructor
     ~SoCounter();
 
     // Evaluation method
-    virtual void	evaluate();
+    virtual void evaluate();
 };
 
-#endif  /* _SO_COUNTER_ */
+#endif /* _SO_COUNTER_ */

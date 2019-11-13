@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -66,8 +66,8 @@
 //
 // Use: public
 
-SoNormalBundle::SoNormalBundle(SoAction *action, SbBool forRendering) :
-	SoBundle(action)
+SoNormalBundle::SoNormalBundle(SoAction *action, SbBool forRendering)
+    : SoBundle(action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -77,9 +77,9 @@ SoNormalBundle::SoNormalBundle(SoAction *action, SbBool forRendering) :
 
     // If we are using the bundle for GL rendering, access a GL
     // version of the element for sending normals to GL
-    GLNormElt = isRendering ? (const SoGLNormalElement *) normElt : NULL;
+    GLNormElt = isRendering ? (const SoGLNormalElement *)normElt : NULL;
 
-    generator   = NULL;
+    generator = NULL;
     pushedState = FALSE;
 
     // Save a pointer to the node that created the bundle, which is
@@ -100,10 +100,10 @@ SoNormalBundle::~SoNormalBundle()
 {
     // Restore state if we did a push() in generate() or set()
     if (pushedState)
-	state->pop();
+        state->pop();
 
     if (generator != NULL)
-	delete generator;
+        delete generator;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -119,7 +119,8 @@ SoNormalBundle::shouldGenerate(int numNormalsNeeded)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (normElt->getNum() > 0) return FALSE;
+    if (normElt->getNum() > 0)
+        return FALSE;
 
     initGenerator(numNormalsNeeded);
 
@@ -141,14 +142,16 @@ SoNormalBundle::initGenerator(int initialNum)
 {
     // Figure out whether or not polys are clockwise or
     // counter-clockwise
-    SbBool ccw = TRUE;
+    SbBool                              ccw = TRUE;
     SoShapeHintsElement::VertexOrdering vertexOrdering;
-    SoShapeHintsElement::ShapeType shapeType;
-    SoShapeHintsElement::FaceType faceType;
+    SoShapeHintsElement::ShapeType      shapeType;
+    SoShapeHintsElement::FaceType       faceType;
     SoShapeHintsElement::get(state, vertexOrdering, shapeType, faceType);
-    if (vertexOrdering == SoShapeHintsElement::CLOCKWISE) ccw = FALSE;
+    if (vertexOrdering == SoShapeHintsElement::CLOCKWISE)
+        ccw = FALSE;
 
-    if (generator != NULL) delete generator;
+    if (generator != NULL)
+        delete generator;
     generator = new SoNormalGenerator(ccw, initialNum);
 }
 
@@ -173,16 +176,16 @@ SoNormalBundle::generate(int startIndex, SbBool addToState)
 
     // Offset the normals, if necessary:
     if (startIndex > 0) {
-	int numNorms = generator->getNumNormals();
-        for (int i = numNorms-1; i >= 0; i--) {
-	    SbVec3f n = generator->getNormal(i);
-	    generator->setNormal(i+startIndex, n);
-	}
+        int numNorms = generator->getNumNormals();
+        for (int i = numNorms - 1; i >= 0; i--) {
+            SbVec3f n = generator->getNormal(i);
+            generator->setNormal(i + startIndex, n);
+        }
     }
 
     // Set the normals in the state
     if (addToState) {
-	set(generator->getNumNormals(), generator->getNormals());
+        set(generator->getNumNormals(), generator->getNormals());
     }
 }
 
@@ -204,12 +207,11 @@ SoNormalBundle::set(int32_t numNormals, const SbVec3f *normals)
     pushedState = TRUE;
 
     // Set the normals in the normal element
-    SoNormalElement::set(state, currentNode,
-			 numNormals, normals);
+    SoNormalElement::set(state, currentNode, numNormals, normals);
 
     // Get the new instance of the normal element for inquiring or
     // sending normals
     normElt = SoNormalElement::getInstance(state);
     if (isRendering)
-	GLNormElt = (const SoGLNormalElement *) normElt;
+        GLNormElt = (const SoGLNormalElement *)normElt;
 }

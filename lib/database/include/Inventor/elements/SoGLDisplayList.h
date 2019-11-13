@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_GL_DISPLAY_LIST
-#define  _SO_GL_DISPLAY_LIST
+#ifndef _SO_GL_DISPLAY_LIST
+#define _SO_GL_DISPLAY_LIST
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/misc/SoGL.h>
@@ -72,7 +72,8 @@ class SoState;
 //
 ////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLDisplayList {
+SoEXTENDER
+class SoGLDisplayList {
 
   public:
     //
@@ -81,11 +82,8 @@ SoEXTENDER class SoGLDisplayList {
     // create empty objects/display lists.  If texture objects are not
     // supported, the type will revert to DISPLAY_LIST.
     //
-    enum Type {
-    DISPLAY_LIST,
-    TEXTURE_OBJECT
-    };
-    SoGLDisplayList(SoState *state, Type type, int numToAllocate=1);
+    enum Type { DISPLAY_LIST, TEXTURE_OBJECT };
+    SoGLDisplayList(SoState *state, Type type, int numToAllocate = 1);
 
     //
     // Because display lists may contain textures objects or other
@@ -117,20 +115,20 @@ SoEXTENDER class SoGLDisplayList {
     //
     // Get methods
     //
-    Type getType() const { return type; }
-    int getNumAllocated() const { return num; }
+    Type   getType() const { return type; }
+    int    getNumAllocated() const { return num; }
     GLuint getFirstIndex() const { return startIndex; }
-    int getContext() const { return context; }
+    int    getContext() const { return context; }
 
   private:
     ~SoGLDisplayList();
 
-    Type type;
+    Type   type;
     GLuint startIndex;
-    int num;
-    int refCount;
-    int	context;
-	friend class SoGLCacheContextElement;
+    int    num;
+    int    refCount;
+    int    context;
+    friend class SoGLCacheContextElement;
 };
 
 #endif /* _SO_GL_DISPLAY_LIST */

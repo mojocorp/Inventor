@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -57,8 +57,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_COMPUTE_BOUNDING_BOX_
-#define  _SO_COMPUTE_BOUNDING_BOX_
+#ifndef _SO_COMPUTE_BOUNDING_BOX_
+#define _SO_COMPUTE_BOUNDING_BOX_
 
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/engines/SoSubEngine.h>
@@ -100,43 +100,44 @@ class SoComputeBoundingBox : public SoEngine {
 
   public:
     // Inputs:
-    SoSFNode		node;		// Pointer to root node of graph
-    SoSFPath		path;		// Pointer to path defining graph
+    SoSFNode node; // Pointer to root node of graph
+    SoSFPath path; // Pointer to path defining graph
 
     // Outputs:
-    SoEngineOutput	min;		// (SoSFVec3f) Minimum point of bbox
-    SoEngineOutput	max;		// (SoSFVec3f) Maximum point of bbox
-    SoEngineOutput	boxCenter;	// (SoSFVec3f) Center point of bbox
-    SoEngineOutput	objectCenter;	// (SoSFVec3f) Center of object(s)
+    SoEngineOutput min;          // (SoSFVec3f) Minimum point of bbox
+    SoEngineOutput max;          // (SoSFVec3f) Maximum point of bbox
+    SoEngineOutput boxCenter;    // (SoSFVec3f) Center point of bbox
+    SoEngineOutput objectCenter; // (SoSFVec3f) Center of object(s)
 
     // Constructor
     SoComputeBoundingBox();
 
     // Sets/returns viewport region to use for bounding box computation
-    void		   setViewportRegion(const SbViewportRegion &vpReg);
+    void                    setViewportRegion(const SbViewportRegion &vpReg);
     const SbViewportRegion &getViewportRegion() const;
 
-  SoINTERNAL public:
-    static void			initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     // Indicates that an input has changed - we use this to determine
     // whether to use the node or path, or to disable output entirely
-    virtual void		inputChanged(SoField *whichInput);
+    virtual void inputChanged(SoField *whichInput);
 
   private:
     // Pointer to SoGetBoundingBoxAction
-    SoGetBoundingBoxAction	*bba;
+    SoGetBoundingBoxAction *bba;
 
     // Each of these is TRUE if the corresponding input pointer is non-NULL
-    SbBool			gotNode;
-    SbBool			gotPath;
+    SbBool gotNode;
+    SbBool gotPath;
 
     // Destructor
     virtual ~SoComputeBoundingBox();
 
     // Evaluation method
-    virtual void	evaluate();
+    virtual void evaluate();
 };
 
-#endif  /* _SO_COMPUTE_BOUNDING_BOX_ */
+#endif /* _SO_COMPUTE_BOUNDING_BOX_ */

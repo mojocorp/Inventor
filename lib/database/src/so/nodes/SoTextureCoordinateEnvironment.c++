@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -77,7 +77,8 @@ SoTextureCoordinateEnvironment::initClass()
 ////////////////////////////////////////////////////////////////////////
 {
     SO__NODE_INIT_CLASS(SoTextureCoordinateEnvironment,
-          "TextureCoordinateEnvironment", SoTextureCoordinateFunction);
+                        "TextureCoordinateEnvironment",
+                        SoTextureCoordinateFunction);
 
     // Elements are enabled by SoTextureCoordinate nodes.
 }
@@ -107,8 +108,7 @@ SoTextureCoordinateEnvironment::SoTextureCoordinateEnvironment()
 SoTextureCoordinateEnvironment::~SoTextureCoordinateEnvironment()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -118,9 +118,9 @@ SoTextureCoordinateEnvironment::~SoTextureCoordinateEnvironment()
 // Use: public
 
 const SbVec4f &
-SoTextureCoordinateEnvironment::valueCallback(void *action,
-    const SbVec3f &point,
-    const SbVec3f &normal)
+SoTextureCoordinateEnvironment::valueCallback(void *         action,
+                                              const SbVec3f &point,
+                                              const SbVec3f &normal)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -136,7 +136,7 @@ SoTextureCoordinateEnvironment::valueCallback(void *action,
 
     // Compute the matrix that transforms normals from object-space to
     // eye-space; use the inverse transpose to scale correctly
-    SbVec3f normalE;
+    SbVec3f  normalE;
     SbMatrix nm = (vm * mm).inverse().transpose();
     nm.multDirMatrix(normal, normalE);
 
@@ -159,8 +159,7 @@ SoTextureCoordinateEnvironment::valueCallback(void *action,
     // This is static so we can return a reference to it
     static SbVec4f result;
     result.setValue(reflection[0] / magnitude + 0.5,
-		    reflection[1] / magnitude + 0.5,
-		    0.0, 1.0);
+                    reflection[1] / magnitude + 0.5, 0.0, 1.0);
 
     return result;
 }
@@ -179,9 +178,8 @@ SoTextureCoordinateEnvironment::GLRender(SoGLRenderAction *action)
 {
     // Let the state know that the GL is generating texture
     // coordinates.
-    SoGLTextureCoordinateElement::setTexGen(action->getState(), this,
-					    doTexgen, this,
-					    valueCallback, action);
+    SoGLTextureCoordinateElement::setTexGen(action->getState(), this, doTexgen,
+                                            this, valueCallback, action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -245,7 +243,5 @@ SoTextureCoordinateEnvironment::doAction(SoAction *action)
 {
     SoState *state = action->getState();
 
-    SoTextureCoordinateElement::setFunction(state, this,
-					    valueCallback, action);
+    SoTextureCoordinateElement::setFunction(state, this, valueCallback, action);
 }
-

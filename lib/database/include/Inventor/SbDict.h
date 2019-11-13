@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -57,7 +57,6 @@
  _______________________________________________________________________
  */
 
-
 #ifndef _SB_DICT_
 #define _SB_DICT_
 
@@ -75,17 +74,21 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoINTERNAL class SbDictEntry {
+SoINTERNAL
+class SbDictEntry {
   private:
-    unsigned long		key;
-    void *		value;
+    unsigned long key;
+    void *        value;
 
-    SbDictEntry *	next;
+    SbDictEntry *next;
 
     // Constructor
-    SbDictEntry(unsigned long k, void *v)	{ key = k; value = v; };
+    SbDictEntry(unsigned long k, void *v) {
+        key = k;
+        value = v;
+    };
 
-friend class SbDict;
+    friend class SbDict;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -97,49 +100,49 @@ friend class SbDict;
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SbDict {
+SoEXTENDER
+class SbDict {
   public:
-
     // Constructor
-    SbDict( int entries = 251 );
+    SbDict(int entries = 251);
 
     // Destructor
     ~SbDict();
 
     // Calls given routine (passing value) for each entry in dictionary.
     //  The order of entries is not guaranteed to mean anything.
-    void	applyToAll(void (*rtn)(unsigned long key, void *value) );
+    void applyToAll(void (*rtn)(unsigned long key, void *value));
 
     // Calls given routine (passing value,data) for each entry in dictionary.
     //  The order of entries is not guaranteed to mean anything.
-    void	applyToAll(void (*rtn)(unsigned long key, void *value, void *data), 
-			   void *data );
+    void applyToAll(void (*rtn)(unsigned long key, void *value, void *data),
+                    void *data);
 
     // Removes all entries from dictionary.
-    void	clear();
+    void clear();
 
     // Enters a key,value pair into the dictionary. Overwrites entry and
     //  returns FALSE if key already exists.
-    SbBool	enter(unsigned long key, void *value);
+    SbBool enter(unsigned long key, void *value);
 
     // Finds entry with given key, setting value to point to value.
     //  Returns FALSE if no such entry.
-    SbBool	find(unsigned long key, void *&value) const;
+    SbBool find(unsigned long key, void *&value) const;
 
     // Makes two SbPLists, one for keys and the other for values.
     //  The order of entries is not guaranteed to mean anything.
-    void	makePList(SbPList &keys, SbPList &values);
+    void makePList(SbPList &keys, SbPList &values);
 
     // Removes the entry with the given key. Returns FALSE if no such entry.
-    SbBool	remove(unsigned long key);
+    SbBool remove(unsigned long key);
 
   private:
     // Entries are stored as an external hash table of SbDictEntry instances.
-    int			tableSize;			// Entries in table
-    SbDictEntry *	*buckets;			// Hash table
+    int           tableSize; // Entries in table
+    SbDictEntry **buckets;   // Hash table
 
-    SbDictEntry *&	findEntry(unsigned long key) const;
-    static void		addEntryToPLists(unsigned long key, void *value, void *data);
+    SbDictEntry *&findEntry(unsigned long key) const;
+    static void   addEntryToPLists(unsigned long key, void *value, void *data);
 };
 
 #endif /* _SB_DICT_ */

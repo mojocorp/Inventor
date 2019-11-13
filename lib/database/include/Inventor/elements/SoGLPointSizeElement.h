@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,8 +53,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_GL_POINT_SIZE_ELEMENT
-#define  _SO_GL_POINT_SIZE_ELEMENT
+#ifndef _SO_GL_POINT_SIZE_ELEMENT
+#define _SO_GL_POINT_SIZE_ELEMENT
 
 #include <Inventor/elements/SoPointSizeElement.h>
 
@@ -71,29 +71,31 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoGLPointSizeElement : public SoPointSizeElement {
+SoEXTENDER
+class SoGLPointSizeElement : public SoPointSizeElement {
 
     SO_ELEMENT_HEADER(SoGLPointSizeElement);
 
   public:
     // Initializes element
-    virtual void	init(SoState *state);
+    virtual void init(SoState *state);
 
     // Override push() method to copy state pointer and value of
     // previous element, to avoid sending GL commands if the elements
     // are the same.
-    virtual void	push(SoState *state);
+    virtual void push(SoState *state);
 
     // Override pop() method so side effects can occur in GL
-    virtual void	pop(SoState *state, const SoElement *prevTopElement);
+    virtual void pop(SoState *state, const SoElement *prevTopElement);
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     // Initializes the SoGLPointSizeElement class
-    static void		initClass();
+    static void initClass();
 
   protected:
     // Sets the point size in an instance. Has GL side effects.
-    virtual void	setElt(float size);
+    virtual void setElt(float size);
 
     virtual ~SoGLPointSizeElement();
 
@@ -104,13 +106,13 @@ SoEXTENDER class SoGLPointSizeElement : public SoPointSizeElement {
     // exist, and the parent's value is used.  Of course, a cache
     // dependency will have to be added in this case (if the parent
     // changes, the cache is not valid).  Set sets this flag to false.
-    SbBool		copiedFromParent;
+    SbBool copiedFromParent;
 
     // We need to store the state so we can get the viewport region element
-    SoState		*state;
+    SoState *state;
 
     // Sends point size in element to GL
-    void		send();
+    void send();
 };
 
 #endif /* _SO_GL_POINT_SIZE_ELEMENT */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -72,12 +72,12 @@ SoMaterial::SoMaterial()
 {
     SO_NODE_CONSTRUCTOR(SoMaterial);
 
-    SO_NODE_ADD_FIELD(ambientColor,  (SoLazyElement::getDefaultAmbient()));
-    SO_NODE_ADD_FIELD(diffuseColor,  (SoLazyElement::getDefaultDiffuse()));
-    SO_NODE_ADD_FIELD(specularColor,(SoLazyElement::getDefaultSpecular()));
-    SO_NODE_ADD_FIELD(emissiveColor,(SoLazyElement::getDefaultEmissive()));
-    SO_NODE_ADD_FIELD(shininess,        (SoLazyElement::getDefaultShininess()));
-    SO_NODE_ADD_FIELD(transparency,  (SoLazyElement::getDefaultTransparency()));
+    SO_NODE_ADD_FIELD(ambientColor, (SoLazyElement::getDefaultAmbient()));
+    SO_NODE_ADD_FIELD(diffuseColor, (SoLazyElement::getDefaultDiffuse()));
+    SO_NODE_ADD_FIELD(specularColor, (SoLazyElement::getDefaultSpecular()));
+    SO_NODE_ADD_FIELD(emissiveColor, (SoLazyElement::getDefaultEmissive()));
+    SO_NODE_ADD_FIELD(shininess, (SoLazyElement::getDefaultShininess()));
+    SO_NODE_ADD_FIELD(transparency, (SoLazyElement::getDefaultTransparency()));
     isBuiltIn = TRUE;
     colorPacker = new SoColorPacker;
 }
@@ -97,7 +97,7 @@ SoMaterial::initClass()
     SO__NODE_INIT_CLASS(SoMaterial, "Material", SoNode);
 
     // Enable elements:
-    SO_ENABLE(SoCallbackAction, SoLazyElement);       
+    SO_ENABLE(SoCallbackAction, SoLazyElement);
     SO_ENABLE(SoGLRenderAction, SoGLLazyElement);
 }
 ////////////////////////////////////////////////////////////////////////
@@ -126,67 +126,66 @@ SoMaterial::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoState		*state = action->getState();
-    register uint32_t bitmask = 0;    
+    SoState *         state = action->getState();
+    register uint32_t bitmask = 0;
 
     // Set all non-ignored components
 
-    if (! ambientColor.isIgnored() && ambientColor.getNum() > 0
-	&& ! SoOverrideElement::getAmbientColorOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setAmbientColorOverride(state, this, TRUE);
-	}
-	bitmask |= SoLazyElement::AMBIENT_MASK;	
+    if (!ambientColor.isIgnored() && ambientColor.getNum() > 0 &&
+        !SoOverrideElement::getAmbientColorOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setAmbientColorOverride(state, this, TRUE);
+        }
+        bitmask |= SoLazyElement::AMBIENT_MASK;
     }
 
-    if (! diffuseColor.isIgnored() && diffuseColor.getNum() > 0
-	&& ! SoOverrideElement::getDiffuseColorOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setDiffuseColorOverride(state, this, TRUE);
-	    // Diffuse color and transparency share override state
-            if (! transparency.isIgnored() && transparency.getNum() > 0)
+    if (!diffuseColor.isIgnored() && diffuseColor.getNum() > 0 &&
+        !SoOverrideElement::getDiffuseColorOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setDiffuseColorOverride(state, this, TRUE);
+            // Diffuse color and transparency share override state
+            if (!transparency.isIgnored() && transparency.getNum() > 0)
                 bitmask |= SoLazyElement::TRANSPARENCY_MASK;
-	}
-	bitmask |= SoLazyElement::DIFFUSE_MASK;
+        }
+        bitmask |= SoLazyElement::DIFFUSE_MASK;
     }
 
-    if (! transparency.isIgnored() && transparency.getNum() > 0
-	&& ! SoOverrideElement::getTransparencyOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setTransparencyOverride(state, this, TRUE);
-	    // Diffuse color and transparency share override state
-            if (! diffuseColor.isIgnored() && diffuseColor.getNum() > 0)
+    if (!transparency.isIgnored() && transparency.getNum() > 0 &&
+        !SoOverrideElement::getTransparencyOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setTransparencyOverride(state, this, TRUE);
+            // Diffuse color and transparency share override state
+            if (!diffuseColor.isIgnored() && diffuseColor.getNum() > 0)
                 bitmask |= SoLazyElement::DIFFUSE_MASK;
-	}
+        }
         bitmask |= SoLazyElement::TRANSPARENCY_MASK;
     }
-    if (! specularColor.isIgnored() && specularColor.getNum() > 0
-	&& ! SoOverrideElement::getSpecularColorOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setSpecularColorOverride(state, this, TRUE);
-	}
-	bitmask |= SoLazyElement::SPECULAR_MASK;
+    if (!specularColor.isIgnored() && specularColor.getNum() > 0 &&
+        !SoOverrideElement::getSpecularColorOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setSpecularColorOverride(state, this, TRUE);
+        }
+        bitmask |= SoLazyElement::SPECULAR_MASK;
     }
 
-    if (! emissiveColor.isIgnored() && emissiveColor.getNum() > 0
-	&& ! SoOverrideElement::getEmissiveColorOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setEmissiveColorOverride(state, this, TRUE);
-	}
-	bitmask |= SoLazyElement::EMISSIVE_MASK;
+    if (!emissiveColor.isIgnored() && emissiveColor.getNum() > 0 &&
+        !SoOverrideElement::getEmissiveColorOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setEmissiveColorOverride(state, this, TRUE);
+        }
+        bitmask |= SoLazyElement::EMISSIVE_MASK;
     }
 
-    if (! shininess.isIgnored() && shininess.getNum() > 0
-	&& ! SoOverrideElement::getShininessOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setShininessOverride(state, this, TRUE);
-	}
-	bitmask |= SoLazyElement::SHININESS_MASK;
+    if (!shininess.isIgnored() && shininess.getNum() > 0 &&
+        !SoOverrideElement::getShininessOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setShininessOverride(state, this, TRUE);
+        }
+        bitmask |= SoLazyElement::SHININESS_MASK;
     }
-    SoLazyElement::setMaterials(state, this, bitmask, colorPacker,   
-	diffuseColor, transparency, ambientColor, 
-	emissiveColor, specularColor, shininess);
-
+    SoLazyElement::setMaterials(state, this, bitmask, colorPacker, diffuseColor,
+                                transparency, ambientColor, emissiveColor,
+                                specularColor, shininess);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -222,5 +221,5 @@ SoMaterial::GLRender(SoGLRenderAction *action)
     // prevents cache dependencies in some cases that were
     // specifically optimized for Inventor 2.0.
     if (diffuseColor.getNum() == 1 && !diffuseColor.isIgnored())
-	SoGLLazyElement::sendAllMaterial(action->getState());
+        SoGLLazyElement::sendAllMaterial(action->getState());
 }

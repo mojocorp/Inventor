@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -66,8 +66,7 @@ SO_ELEMENT_SOURCE(SoGLLinePatternElement);
 // Use: internal
 
 void
-SoGLLinePatternElement::initClass()
-{
+SoGLLinePatternElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoGLLinePatternElement, SoLinePatternElement);
 }
 
@@ -81,8 +80,7 @@ SoGLLinePatternElement::initClass()
 SoGLLinePatternElement::~SoGLLinePatternElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -99,7 +97,6 @@ SoGLLinePatternElement::init(SoState *state)
     // Initialize base class stuff
     SoLinePatternElement::init(state);
     copiedFromParent = NULL;
-
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -114,8 +111,8 @@ SoGLLinePatternElement::push(SoState *state)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoGLLinePatternElement	*prevElt =
-	(const SoGLLinePatternElement *) getNextInStack();
+    const SoGLLinePatternElement *prevElt =
+        (const SoGLLinePatternElement *)getNextInStack();
 
     data = prevElt->data;
 
@@ -145,11 +142,11 @@ SoGLLinePatternElement::pop(SoState *state, const SoElement *childElt)
 
     // If the previous element didn't have the same value...
     const SoGLLinePatternElement *child =
-	(const SoGLLinePatternElement *)childElt;
-	
+        (const SoGLLinePatternElement *)childElt;
+
     // Restore previous line pattern
     if (data != child->data)
-	send();
+        send();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -170,14 +167,13 @@ SoGLLinePatternElement::setElt(int32_t pattern)
     // previous element.
 
     if (data != pattern) {
-	data = pattern;
-	send();
-	copiedFromParent = NULL;
-    }
-    else if (copiedFromParent) {
-	SoGLLinePatternElement *parent = 
-	    (SoGLLinePatternElement *) getNextInStack();
-	parent->capture(copiedFromParent);
+        data = pattern;
+        send();
+        copiedFromParent = NULL;
+    } else if (copiedFromParent) {
+        SoGLLinePatternElement *parent =
+            (SoGLLinePatternElement *)getNextInStack();
+        parent->capture(copiedFromParent);
     }
 }
 
@@ -196,10 +192,10 @@ SoGLLinePatternElement::send()
     // Special case for solid lines (the default line pattern):
     // disable line stippling for better efficiency
     if (data == getDefault())
-	glDisable(GL_LINE_STIPPLE);
+        glDisable(GL_LINE_STIPPLE);
 
     else {
-	glEnable(GL_LINE_STIPPLE);
-	glLineStipple(1, (GLushort)data);
+        glEnable(GL_LINE_STIPPLE);
+        glLineStipple(1, (GLushort)data);
     }
 }

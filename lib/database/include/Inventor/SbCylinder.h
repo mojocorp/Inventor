@@ -71,7 +71,6 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
 class SbCylinder {
   public:
     // Constructor
@@ -81,27 +80,26 @@ class SbCylinder {
     SbCylinder(const SbLine &a, float r);
 
     // Change the axis and radius
-    void 	setValue(const SbLine &a, float r);
+    void setValue(const SbLine &a, float r);
 
     // Set just the axis or radius
-    void	setAxis(const SbLine &a);
-    void	setRadius(float r);
+    void setAxis(const SbLine &a);
+    void setRadius(float r);
 
     // Return the axis and radius
-    const SbLine & 	getAxis() const			{ return axis; }
-    float		getRadius() const		{ return radius; }
+    const SbLine &getAxis() const { return axis; }
+    float         getRadius() const { return radius; }
 
     // Intersect line and cylinder, returning TRUE if there is an intersection
-    SbBool	intersect(const SbLine &l, SbVec3f &intersection) const;
-    SbBool	intersect(const SbLine &l,
-              SbVec3f &enter, SbVec3f &exit) const;
+    SbBool intersect(const SbLine &l, SbVec3f &intersection) const;
+    SbBool intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
 
   private:
-    SbLine	axis;
-    float	radius;
+    SbLine axis;
+    float  radius;
 
-    static SbBool	unitCylinderIntersect(const SbLine &l,
-                          SbVec3f &in, SbVec3f &out);
+    static SbBool unitCylinderIntersect(const SbLine &l, SbVec3f &in,
+                                        SbVec3f &out);
 };
 
 #endif /* _SB_CYLINDER_ */

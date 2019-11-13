@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -92,7 +92,7 @@ SoLightModel::SoLightModel()
 {
     SO_NODE_CONSTRUCTOR(SoLightModel);
 
-    SO_NODE_ADD_FIELD(model,	   (SoLazyElement::getDefaultLightModel()));
+    SO_NODE_ADD_FIELD(model, (SoLazyElement::getDefaultLightModel()));
 
     // Set up static info for enumerated type field
     SO_NODE_DEFINE_ENUM_VALUE(Model, BASE_COLOR);
@@ -114,8 +114,7 @@ SoLightModel::SoLightModel()
 SoLightModel::~SoLightModel()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -129,18 +128,18 @@ SoLightModel::doAction(SoAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoState	*state = action->getState();
+    SoState *state = action->getState();
 
-    if (! model.isIgnored()
-	&& ! SoOverrideElement::getLightModelOverride(state)) {
-	if (isOverride()) {
-	    SoOverrideElement::setLightModelOverride(state, this, TRUE);
-	}
+    if (!model.isIgnored() &&
+        !SoOverrideElement::getLightModelOverride(state)) {
+        if (isOverride()) {
+            SoOverrideElement::setLightModelOverride(state, this, TRUE);
+        }
 
-	SoLazyElement::LightModel lt =
-	    (SoLazyElement::LightModel) model.getValue();
+        SoLazyElement::LightModel lt =
+            (SoLazyElement::LightModel)model.getValue();
 
-	SoLazyElement::setLightModel(state, lt);
+        SoLazyElement::setLightModel(state, lt);
     }
 }
 

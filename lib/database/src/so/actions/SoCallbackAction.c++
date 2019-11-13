@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -79,36 +79,35 @@
 #include <Inventor/nodes/SoShape.h>
 
 struct nodeTypeCallback {
-    SoType					type;
-    SoCallbackAction::SoCallbackActionCB	*cb;
-    void					*data;
+    SoType                                type;
+    SoCallbackAction::SoCallbackActionCB *cb;
+    void *                                data;
 };
 
 struct tailCallback {
-    SoCallbackAction::SoCallbackActionCB	*cb;
-    void					*data;
+    SoCallbackAction::SoCallbackActionCB *cb;
+    void *                                data;
 };
 
 struct triangleCallback {
-    SoType					type;
-    SoTriangleCB				*cb;
-    void					*data;
+    SoType        type;
+    SoTriangleCB *cb;
+    void *        data;
 };
 
 struct lineSegmentCallback {
-    SoType					type;
-    SoLineSegmentCB				*cb;
-    void					*data;
+    SoType           type;
+    SoLineSegmentCB *cb;
+    void *           data;
 };
 
 struct pointCallback {
-    SoType					type;
-    SoPointCB					*cb;
-    void					*data;
+    SoType     type;
+    SoPointCB *cb;
+    void *     data;
 };
 
 SO_ACTION_SOURCE(SoCallbackAction);
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -184,10 +183,9 @@ SoCallbackAction::~SoCallbackAction()
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoCallbackAction::addPreCallback(SoType type,
-				 SoCallbackAction::SoCallbackActionCB cb,
-				 void *data)
-{
+SoCallbackAction::addPreCallback(SoType                               type,
+                                 SoCallbackAction::SoCallbackActionCB cb,
+                                 void *                               data) {
     nodeTypeCallback *cbStruct = new nodeTypeCallback;
     cbStruct->type = type;
     cbStruct->cb = cb;
@@ -197,10 +195,9 @@ SoCallbackAction::addPreCallback(SoType type,
 }
 
 void
-SoCallbackAction::addPostCallback(SoType type,
-				  SoCallbackAction::SoCallbackActionCB cb,
-				  void *data)
-{
+SoCallbackAction::addPostCallback(SoType                               type,
+                                  SoCallbackAction::SoCallbackActionCB cb,
+                                  void *                               data) {
     nodeTypeCallback *cbStruct = new nodeTypeCallback;
     cbStruct->type = type;
     cbStruct->cb = cb;
@@ -211,8 +208,7 @@ SoCallbackAction::addPostCallback(SoType type,
 
 void
 SoCallbackAction::addPreTailCallback(SoCallbackAction::SoCallbackActionCB cb,
-				     void *data)
-{
+                                     void *data) {
     tailCallback *cbStruct = new tailCallback;
     cbStruct->cb = cb;
     cbStruct->data = data;
@@ -222,8 +218,7 @@ SoCallbackAction::addPreTailCallback(SoCallbackAction::SoCallbackActionCB cb,
 
 void
 SoCallbackAction::addPostTailCallback(SoCallbackAction::SoCallbackActionCB cb,
-				      void *data)
-{
+                                      void *data) {
     tailCallback *cbStruct = new tailCallback;
     cbStruct->cb = cb;
     cbStruct->data = data;
@@ -232,9 +227,8 @@ SoCallbackAction::addPostTailCallback(SoCallbackAction::SoCallbackActionCB cb,
 }
 
 void
-SoCallbackAction::addTriangleCallback(SoType type,
-				      SoTriangleCB cb, void *data)
-{
+SoCallbackAction::addTriangleCallback(SoType type, SoTriangleCB cb,
+                                      void *data) {
     triangleCallback *cbStruct = new triangleCallback;
     cbStruct->type = type;
     cbStruct->cb = cb;
@@ -243,9 +237,9 @@ SoCallbackAction::addTriangleCallback(SoType type,
     triangleCallbackList.push_back(cbStruct);
 }
 
-void SoCallbackAction::addLineSegmentCallback(SoType type,
-					      SoLineSegmentCB cb, void *data)
-{
+void
+SoCallbackAction::addLineSegmentCallback(SoType type, SoLineSegmentCB cb,
+                                         void *data) {
     lineSegmentCallback *cbStruct = new lineSegmentCallback;
     cbStruct->type = type;
     cbStruct->cb = cb;
@@ -255,8 +249,7 @@ void SoCallbackAction::addLineSegmentCallback(SoType type,
 }
 
 void
-SoCallbackAction::addPointCallback(SoType type, SoPointCB cb, void *data)
-{
+SoCallbackAction::addPointCallback(SoType type, SoPointCB cb, void *data) {
     pointCallback *cbStruct = new pointCallback;
     cbStruct->type = type;
     cbStruct->cb = cb;
@@ -274,50 +267,42 @@ SoCallbackAction::addPointCallback(SoType type, SoPointCB cb, void *data)
 // Use: public (all of them)
 
 float
-SoCallbackAction::getComplexity() const
-{
+SoCallbackAction::getComplexity() const {
     return SoComplexityElement::get(state);
 }
 
 SoComplexity::Type
-SoCallbackAction::getComplexityType() const
-{
-    return (SoComplexity::Type) SoComplexityTypeElement::get(state);
+SoCallbackAction::getComplexityType() const {
+    return (SoComplexity::Type)SoComplexityTypeElement::get(state);
 }
 
 int32_t
-SoCallbackAction::getNumCoordinates() const
-{
+SoCallbackAction::getNumCoordinates() const {
     return SoCoordinateElement::getInstance(state)->getNum();
 }
 
 const SbVec3f &
-SoCallbackAction::getCoordinate3(int index) const
-{
+SoCallbackAction::getCoordinate3(int index) const {
     return SoCoordinateElement::getInstance(state)->get3(index);
 }
 
 const SbVec4f &
-SoCallbackAction::getCoordinate4(int index) const
-{
+SoCallbackAction::getCoordinate4(int index) const {
     return SoCoordinateElement::getInstance(state)->get4(index);
 }
 
 SoDrawStyle::Style
-SoCallbackAction::getDrawStyle() const
-{
-    return (SoDrawStyle::Style) SoDrawStyleElement::get(state);
+SoCallbackAction::getDrawStyle() const {
+    return (SoDrawStyle::Style)SoDrawStyleElement::get(state);
 }
 
 u_short
-SoCallbackAction::getLinePattern() const
-{
+SoCallbackAction::getLinePattern() const {
     return SoLinePatternElement::get(state);
 }
 
 float
-SoCallbackAction::getLineWidth() const
-{
+SoCallbackAction::getLineWidth() const {
     return SoLineWidthElement::get(state);
 }
 
@@ -330,49 +315,41 @@ SoCallbackAction::getPointSize() const
 }
 
 const SbName &
-SoCallbackAction::getFontName() const
-{
+SoCallbackAction::getFontName() const {
     return SoFontNameElement::get(state);
 }
 
 float
-SoCallbackAction::getFontSize() const
-{
+SoCallbackAction::getFontSize() const {
     return SoFontSizeElement::get(state);
 }
 
 SoLightModel::Model
-SoCallbackAction::getLightModel() const
-{
-    return (SoLightModel::Model) SoLazyElement::getLightModel(state);
+SoCallbackAction::getLightModel() const {
+    return (SoLightModel::Model)SoLazyElement::getLightModel(state);
 }
 
 const SbVec3f &
-SoCallbackAction::getLightAttenuation() const
-{
+SoCallbackAction::getLightAttenuation() const {
     return SoLightAttenuationElement::get(state);
 }
 
 void
-SoCallbackAction::getMaterial(SbColor &ambient,
-			      SbColor &diffuse,
-			      SbColor &specular,
-			      SbColor &emission,
-			      float   &shininess,
-			      float   &transparency,
-			      int     mtlIndex) const
-{
-    const SoLazyElement* le = SoLazyElement::getInstance(state); 
-    int32_t ind = le->getNumTransparencies() - 1; 
+SoCallbackAction::getMaterial(SbColor &ambient, SbColor &diffuse,
+                              SbColor &specular, SbColor &emission,
+                              float &shininess, float &transparency,
+                              int mtlIndex) const {
+    const SoLazyElement *le = SoLazyElement::getInstance(state);
+    int32_t              ind = le->getNumTransparencies() - 1;
 
 #ifdef DEBUG
-    if ( mtlIndex > le->getNumDiffuse()){
-	SoDebugError::post("SoCallbackAction::getMaterial", 
-	    "not enough diffuse colors");
+    if (mtlIndex > le->getNumDiffuse()) {
+        SoDebugError::post("SoCallbackAction::getMaterial",
+                           "not enough diffuse colors");
     }
-    if (( mtlIndex > ind )&& (ind > 0)){
-	SoDebugError::post("SoCallbackAction::getMaterial", 
-	    "not enough transparencies");
+    if ((mtlIndex > ind) && (ind > 0)) {
+        SoDebugError::post("SoCallbackAction::getMaterial",
+                           "not enough transparencies");
     }
 #endif /*DEBUG*/
     ambient = SoLazyElement::getAmbient(state);
@@ -381,127 +358,112 @@ SoCallbackAction::getMaterial(SbColor &ambient,
     emission = SoLazyElement::getEmissive(state);
     shininess = SoLazyElement::getShininess(state);
 
-    if (ind > 0) ind = mtlIndex;
-	else ind = 0;
+    if (ind > 0)
+        ind = mtlIndex;
+    else
+        ind = 0;
     transparency = SoLazyElement::getTransparency(state, ind);
 }
 
 SoMaterialBinding::Binding
-SoCallbackAction::getMaterialBinding() const
-{
-    return (SoMaterialBinding::Binding) SoMaterialBindingElement::get(state);
+SoCallbackAction::getMaterialBinding() const {
+    return (SoMaterialBinding::Binding)SoMaterialBindingElement::get(state);
 }
 
 int32_t
-SoCallbackAction::getNumNormals() const
-{
+SoCallbackAction::getNumNormals() const {
     return SoNormalElement::getInstance(state)->getNum();
 }
 
 const SbVec3f &
-SoCallbackAction::getNormal(int index) const
-{
+SoCallbackAction::getNormal(int index) const {
     return SoNormalElement::getInstance(state)->get(index);
 }
 
 SoNormalBinding::Binding
-SoCallbackAction::getNormalBinding() const
-{
-    return (SoNormalBinding::Binding) SoNormalBindingElement::get(state);
+SoCallbackAction::getNormalBinding() const {
+    return (SoNormalBinding::Binding)SoNormalBindingElement::get(state);
 }
 
 int32_t
-SoCallbackAction::getNumProfileCoordinates() const
-{
+SoCallbackAction::getNumProfileCoordinates() const {
     return SoProfileCoordinateElement::getInstance(state)->getNum();
 }
 
 const SbVec2f &
-SoCallbackAction::getProfileCoordinate2(int index) const
-{
+SoCallbackAction::getProfileCoordinate2(int index) const {
     return SoProfileCoordinateElement::getInstance(state)->get2(index);
 }
 
 const SbVec3f &
-SoCallbackAction::getProfileCoordinate3(int index) const
-{
+SoCallbackAction::getProfileCoordinate3(int index) const {
     return SoProfileCoordinateElement::getInstance(state)->get3(index);
 }
 
 const SoNodeList &
-SoCallbackAction::getProfile() const
-{
+SoCallbackAction::getProfile() const {
     return SoProfileElement::get(state);
 }
 
 SoShapeHints::VertexOrdering
-SoCallbackAction::getVertexOrdering() const
-{
-    SoShapeHintsElement::VertexOrdering	v;
-    SoShapeHintsElement::ShapeType	s;
-    SoShapeHintsElement::FaceType	f;
+SoCallbackAction::getVertexOrdering() const {
+    SoShapeHintsElement::VertexOrdering v;
+    SoShapeHintsElement::ShapeType      s;
+    SoShapeHintsElement::FaceType       f;
 
     SoShapeHintsElement::get(state, v, s, f);
-    return (SoShapeHints::VertexOrdering) v;
+    return (SoShapeHints::VertexOrdering)v;
 }
 
 SoShapeHints::ShapeType
-SoCallbackAction::getShapeType() const
-{
-    SoShapeHintsElement::VertexOrdering	v;
-    SoShapeHintsElement::ShapeType	s;
-    SoShapeHintsElement::FaceType	f;
+SoCallbackAction::getShapeType() const {
+    SoShapeHintsElement::VertexOrdering v;
+    SoShapeHintsElement::ShapeType      s;
+    SoShapeHintsElement::FaceType       f;
 
     SoShapeHintsElement::get(state, v, s, f);
-    return (SoShapeHints::ShapeType) s;
+    return (SoShapeHints::ShapeType)s;
 }
 
 SoShapeHints::FaceType
-SoCallbackAction::getFaceType() const
-{
-    SoShapeHintsElement::VertexOrdering	v;
-    SoShapeHintsElement::ShapeType	s;
-    SoShapeHintsElement::FaceType	f;
+SoCallbackAction::getFaceType() const {
+    SoShapeHintsElement::VertexOrdering v;
+    SoShapeHintsElement::ShapeType      s;
+    SoShapeHintsElement::FaceType       f;
 
     SoShapeHintsElement::get(state, v, s, f);
-    return (SoShapeHints::FaceType) f;
+    return (SoShapeHints::FaceType)f;
 }
 
 float
-SoCallbackAction::getCreaseAngle() const
-{
+SoCallbackAction::getCreaseAngle() const {
     return SoCreaseAngleElement::get(state);
 }
 
 int32_t
-SoCallbackAction::getNumTextureCoordinates() const
-{
+SoCallbackAction::getNumTextureCoordinates() const {
     return SoTextureCoordinateElement::getInstance(state)->getNum();
 }
 
 const SbVec2f &
-SoCallbackAction::getTextureCoordinate2(int index) const
-{
+SoCallbackAction::getTextureCoordinate2(int index) const {
     return SoTextureCoordinateElement::getInstance(state)->get2(index);
 }
 
 const SbVec4f &
-SoCallbackAction::getTextureCoordinate4(int index) const
-{
+SoCallbackAction::getTextureCoordinate4(int index) const {
     return SoTextureCoordinateElement::getInstance(state)->get4(index);
 }
 
 SoTextureCoordinateBinding::Binding
-SoCallbackAction::getTextureCoordinateBinding() const
-{
+SoCallbackAction::getTextureCoordinateBinding() const {
     return (SoTextureCoordinateBinding::Binding)
-	SoTextureCoordinateBindingElement::get(state);
+        SoTextureCoordinateBindingElement::get(state);
 }
 
 const SbColor &
-SoCallbackAction::getTextureBlendColor() const
-{
-    int wrapS, wrapT, model;
+SoCallbackAction::getTextureBlendColor() const {
+    int            wrapS, wrapT, model;
     static SbColor blendColor;
     SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
 
@@ -509,91 +471,78 @@ SoCallbackAction::getTextureBlendColor() const
 }
 
 SbImage
-SoCallbackAction::getTextureImage() const
-{
-    int wrapS, wrapT, model;
+SoCallbackAction::getTextureImage() const {
+    int     wrapS, wrapT, model;
     SbColor blendColor;
     return SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
 }
 
 const SbMatrix &
-SoCallbackAction::getTextureMatrix() const
-{
+SoCallbackAction::getTextureMatrix() const {
     return SoTextureMatrixElement::get(state);
 }
 
 SoTexture2::Model
-SoCallbackAction::getTextureModel() const
-{
-    int wrapS, wrapT, model;
+SoCallbackAction::getTextureModel() const {
+    int     wrapS, wrapT, model;
     SbColor blendColor;
     SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
     return (SoTexture2::Model)model;
 }
 
 SoTexture2::Wrap
-SoCallbackAction::getTextureWrapS() const
-{
-    int wrapS, wrapT, model;
+SoCallbackAction::getTextureWrapS() const {
+    int     wrapS, wrapT, model;
     SbColor blendColor;
     SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
     return (SoTexture2::Wrap)wrapS;
 }
 
 SoTexture2::Wrap
-SoCallbackAction::getTextureWrapT() const
-{
-    int wrapS, wrapT, model;
+SoCallbackAction::getTextureWrapT() const {
+    int     wrapS, wrapT, model;
     SbColor blendColor;
     SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
     return (SoTexture2::Wrap)wrapT;
 }
 
 const SbMatrix &
-SoCallbackAction::getModelMatrix() const
-{
+SoCallbackAction::getModelMatrix() const {
     return SoModelMatrixElement::get(state);
 }
 
 SoUnits::Units
-SoCallbackAction::getUnits() const
-{
-    return (SoUnits::Units) SoUnitsElement::get(state);
+SoCallbackAction::getUnits() const {
+    return (SoUnits::Units)SoUnitsElement::get(state);
 }
 
 float
-SoCallbackAction::getFocalDistance() const
-{
+SoCallbackAction::getFocalDistance() const {
     return SoFocalDistanceElement::get(state);
 }
 
 const SbMatrix &
-SoCallbackAction::getProjectionMatrix() const
-{
+SoCallbackAction::getProjectionMatrix() const {
     return SoProjectionMatrixElement::get(state);
 }
 
 const SbMatrix &
-SoCallbackAction::getViewingMatrix() const
-{
+SoCallbackAction::getViewingMatrix() const {
     return SoViewingMatrixElement::get(state);
 }
 
 const SbViewVolume &
-SoCallbackAction::getViewVolume() const
-{
+SoCallbackAction::getViewVolume() const {
     return SoViewVolumeElement::get(state);
 }
 
 SoPickStyle::Style
-SoCallbackAction::getPickStyle() const
-{
-    return (SoPickStyle::Style) SoPickStyleElement::get(state);
+SoCallbackAction::getPickStyle() const {
+    return (SoPickStyle::Style)SoPickStyleElement::get(state);
 }
 
 int32_t
-SoCallbackAction::getSwitch() const
-{
+SoCallbackAction::getSwitch() const {
     return SoSwitchElement::get(state);
 }
 
@@ -612,39 +561,38 @@ SoCallbackAction::invokePreCallbacks(const SoNode *node)
     // If we had been pruning, stop. (We know that if this node is
     // traversed, it wasn't pruned.)
     if (response == PRUNE)
-	response = CONTINUE;
+        response = CONTINUE;
 
     for (size_t i = 0; i < preCallbackList.size(); i++) {
         nodeTypeCallback *typeCb = preCallbackList[i];
-	if (node->isOfType(typeCb->type)) {
+        if (node->isOfType(typeCb->type)) {
             Response newResponse = (typeCb->cb)(typeCb->data, this, node);
-	    if (newResponse != CONTINUE) {
-		response = newResponse;
-		if (newResponse == ABORT) {
-		    setTerminated(TRUE);
-		    return;
-		}
-	    }
-	}
+            if (newResponse != CONTINUE) {
+                response = newResponse;
+                if (newResponse == ABORT) {
+                    setTerminated(TRUE);
+                    return;
+                }
+            }
+        }
     }
 
     const SoPath *pathAppliedTo = getPathAppliedTo();
 
-    if (preTailCallbackList.size() > 0 &&
-	pathAppliedTo != NULL &&
-	(*getCurPath()) == (*pathAppliedTo)) {
+    if (preTailCallbackList.size() > 0 && pathAppliedTo != NULL &&
+        (*getCurPath()) == (*pathAppliedTo)) {
 
         for (size_t i = 0; i < preTailCallbackList.size(); i++) {
             tailCallback *tailCb = preTailCallbackList[i];
-            Response newResponse = (tailCb->cb)(tailCb->data, this, node);
-	    if (newResponse != CONTINUE) {
-		response = newResponse;
-		if (newResponse == ABORT) {
-		    setTerminated(TRUE);
-		    return;
-		}
-	    }
-	}
+            Response      newResponse = (tailCb->cb)(tailCb->data, this, node);
+            if (newResponse != CONTINUE) {
+                response = newResponse;
+                if (newResponse == ABORT) {
+                    setTerminated(TRUE);
+                    return;
+                }
+            }
+        }
     }
 }
 
@@ -661,37 +609,36 @@ SoCallbackAction::invokePostCallbacks(const SoNode *node)
 ////////////////////////////////////////////////////////////////////////
 {
     if (response == PRUNE)
-	response = CONTINUE;
+        response = CONTINUE;
 
     for (size_t i = 0; i < postCallbackList.size(); i++) {
         nodeTypeCallback *typeCb = postCallbackList[i];
-	if (node->isOfType(typeCb->type)) {
+        if (node->isOfType(typeCb->type)) {
             Response newResponse = (typeCb->cb)(typeCb->data, this, node);
-	    if (newResponse != CONTINUE)
-		response = newResponse;
-	    if (newResponse == ABORT) {
-		setTerminated(TRUE);
-		return;
-	    }
-	}
+            if (newResponse != CONTINUE)
+                response = newResponse;
+            if (newResponse == ABORT) {
+                setTerminated(TRUE);
+                return;
+            }
+        }
     }
 
     const SoPath *pathAppliedTo = getPathAppliedTo();
 
-    if (postTailCallbackList.size() > 0 &&
-	pathAppliedTo != NULL &&
-	(*getCurPath()) == (*pathAppliedTo)) {
+    if (postTailCallbackList.size() > 0 && pathAppliedTo != NULL &&
+        (*getCurPath()) == (*pathAppliedTo)) {
 
         for (size_t i = 0; i < postTailCallbackList.size(); i++) {
             tailCallback *tailCb = postTailCallbackList[i];
-            Response newResponse = (tailCb->cb)(tailCb->data, this, node);
-	    if (newResponse != CONTINUE)
-		response = newResponse;
-	    if (newResponse == ABORT) {
-		setTerminated(TRUE);
-		return;
-	    }
-	}
+            Response      newResponse = (tailCb->cb)(tailCb->data, this, node);
+            if (newResponse != CONTINUE)
+                response = newResponse;
+            if (newResponse == ABORT) {
+                setTerminated(TRUE);
+                return;
+            }
+        }
     }
 }
 
@@ -703,17 +650,17 @@ SoCallbackAction::invokePostCallbacks(const SoNode *node)
 // Use: internal
 
 void
-SoCallbackAction::invokeTriangleCallbacks(const SoShape *shape,
-					  const SoPrimitiveVertex *v1,
-					  const SoPrimitiveVertex *v2,
-					  const SoPrimitiveVertex *v3)
+SoCallbackAction::invokeTriangleCallbacks(const SoShape *          shape,
+                                          const SoPrimitiveVertex *v1,
+                                          const SoPrimitiveVertex *v2,
+                                          const SoPrimitiveVertex *v3)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     for (size_t i = 0; i < triangleCallbackList.size(); i++) {
         triangleCallback *triCb = triangleCallbackList[i];
-	if (shape->isOfType(triCb->type))
-	    (triCb->cb)(triCb->data, this, v1, v2, v3);
+        if (shape->isOfType(triCb->type))
+            (triCb->cb)(triCb->data, this, v1, v2, v3);
     }
 }
 
@@ -725,16 +672,16 @@ SoCallbackAction::invokeTriangleCallbacks(const SoShape *shape,
 // Use: internal
 
 void
-SoCallbackAction::invokeLineSegmentCallbacks(const SoShape *shape,
-					     const SoPrimitiveVertex *v1,
-					     const SoPrimitiveVertex *v2)
+SoCallbackAction::invokeLineSegmentCallbacks(const SoShape *          shape,
+                                             const SoPrimitiveVertex *v1,
+                                             const SoPrimitiveVertex *v2)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     for (size_t i = 0; i < lineSegmentCallbackList.size(); i++) {
         lineSegmentCallback *lsCb = lineSegmentCallbackList[i];
-	if (shape->isOfType(lsCb->type))
-	    (lsCb->cb)(lsCb->data, this, v1, v2);
+        if (shape->isOfType(lsCb->type))
+            (lsCb->cb)(lsCb->data, this, v1, v2);
     }
 }
 
@@ -746,15 +693,15 @@ SoCallbackAction::invokeLineSegmentCallbacks(const SoShape *shape,
 // Use: internal
 
 void
-SoCallbackAction::invokePointCallbacks(const SoShape *shape,
-				       const SoPrimitiveVertex *v)
+SoCallbackAction::invokePointCallbacks(const SoShape *          shape,
+                                       const SoPrimitiveVertex *v)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     for (size_t i = 0; i < pointCallbackList.size(); i++) {
         pointCallback *pntCb = pointCallbackList[i];
         if (shape->isOfType(pntCb->type))
-	    (pntCb->cb)(pntCb->data, this, v);
+            (pntCb->cb)(pntCb->data, this, v);
     }
 }
 
@@ -786,7 +733,7 @@ SoCallbackAction::shouldGeneratePrimitives(const SoShape *shape) const
     }
     for (size_t i = 0; i < pointCallbackList.size(); i++) {
         pointCallback *pntCb = pointCallbackList[i];
-	if (shape->isOfType(pntCb->type))
+        if (shape->isOfType(pntCb->type))
             return TRUE;
     }
 
@@ -820,14 +767,14 @@ SoCallbackAction::beginTraversal(SoNode *node)
 // Use: public, virtual
 
 SoNode *
-SoCallbackAction::getCurPathTail()
-{
+SoCallbackAction::getCurPathTail() {
 #ifdef DEBUG
-    if ( currentNode != ((SoFullPath*)getCurPath())->getTail()){
-	SoDebugError::post("SoCallbackAction::getCurPathTail\n", 
-	"Path tail inconsistent.  Did you change the scene graph\n"
-	"during a callback action?\n");
+    if (currentNode != ((SoFullPath *)getCurPath())->getTail()) {
+        SoDebugError::post(
+            "SoCallbackAction::getCurPathTail\n",
+            "Path tail inconsistent.  Did you change the scene graph\n"
+            "during a callback action?\n");
     }
 #endif /*DEBUG*/
-    return(currentNode);
+    return (currentNode);
 }

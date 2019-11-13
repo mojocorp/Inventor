@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -83,9 +83,9 @@ SoEventCallback::SoEventCallback()
 {
     SO_NODE_CONSTRUCTOR(SoEventCallback);
 
-    isBuiltIn        = TRUE;
-    pathOfInterest   = NULL;
-    eventAction	     = NULL;
+    isBuiltIn = TRUE;
+    pathOfInterest = NULL;
+    eventAction = NULL;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -97,9 +97,8 @@ SoEventCallback::~SoEventCallback()
 ////////////////////////////////////////////////////////////////////////
 {
     if (pathOfInterest != NULL)
-	pathOfInterest->unref();
+        pathOfInterest->unref();
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -107,10 +106,8 @@ SoEventCallback::~SoEventCallback()
 // and event of the passed type occurs. userData will be passed to f.
 //
 void
-SoEventCallback::addEventCallback(
-    SoType eventType,
-    SoEventCallbackCB *f,
-    void *userData)
+SoEventCallback::addEventCallback(SoType eventType, SoEventCallbackCB *f,
+                                  void *userData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -127,25 +124,22 @@ SoEventCallback::addEventCallback(
 // No longer pay attention to the passed type of event for the function f.
 //
 void
-SoEventCallback::removeEventCallback(
-    SoType eventType,
-    SoEventCallbackCB *f,
-    void *userData)
+SoEventCallback::removeEventCallback(SoType eventType, SoEventCallbackCB *f,
+                                     void *userData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    std::vector<SoEventCallbackData>::iterator it=cblist.begin();
-    while (it!=cblist.end()) {
+    std::vector<SoEventCallbackData>::iterator it = cblist.begin();
+    while (it != cblist.end()) {
         const SoEventCallbackData &data = *it;
-        if ((data.eventType == eventType) &&
-            (data.func == f) &&
+        if ((data.eventType == eventType) && (data.func == f) &&
             (data.userData == userData)) {
-	    
-	    // found the func/event type/data triplet - remove it!
+
+            // found the func/event type/data triplet - remove it!
             it = cblist.erase(it);
         } else {
             ++it;
-	}
+        }
     }
 }
 
@@ -156,27 +150,25 @@ SoEventCallback::removeEventCallback(
 // Use: public
 //
 void
-SoEventCallback::setPath(SoPath *path)
-{
+SoEventCallback::setPath(SoPath *path) {
     // ref the input path
     if (path != NULL)
-	path->ref();
+        path->ref();
 
     // nuke the old path
     if (pathOfInterest != NULL) {
-    	pathOfInterest->unref();
-	pathOfInterest = NULL;
+        pathOfInterest->unref();
+        pathOfInterest = NULL;
     }
     // and copy the new path
     if (path != NULL) {
-    	pathOfInterest = path->copy();
-    	pathOfInterest->ref();
+        pathOfInterest = path->copy();
+        pathOfInterest->ref();
     }
 
     // unref the input path
     if (path != NULL)
-	path->unref();
-
+        path->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -192,11 +184,11 @@ SoEventCallback::invokeCallbacks(const SoEvent *e)
 {
     // Call all callback funcs interested in this event type
     std::vector<SoEventCallbackData>::const_iterator it;
-    for (it=cblist.begin(); it!=cblist.end(); ++it) {
+    for (it = cblist.begin(); it != cblist.end(); ++it) {
         const SoEventCallbackData &cb = *it;
         if (e->isOfType(cb.eventType)) {
-            (*cb.func) (cb.userData, this);
-	}
+            (*cb.func)(cb.userData, this);
+        }
     }
 }
 
@@ -213,17 +205,17 @@ SoEventCallback::handleEvent(SoHandleEventAction *ha)
 {
     // set eventAction so that the app may call setHandled(), grab(), etc
     eventAction = ha;
-    
+
     // Are we monitoring a path?
     if (pathOfInterest == NULL)
-	invokeCallbacks(ha->getEvent());
+        invokeCallbacks(ha->getEvent());
     else {
-	// make sure the path of interest was picked
-	const SoPickedPoint *pp = ha->getPickedPoint();
+        // make sure the path of interest was picked
+        const SoPickedPoint *pp = ha->getPickedPoint();
 
-	if ((pp != NULL) && pp->getPath()->containsPath(pathOfInterest))
-	    invokeCallbacks(ha->getEvent());
+        if ((pp != NULL) && pp->getPath()->containsPath(pathOfInterest))
+            invokeCallbacks(ha->getEvent());
     }
-    
+
     eventAction = NULL;
 }

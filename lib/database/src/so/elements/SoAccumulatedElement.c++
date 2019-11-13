@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,8 +67,7 @@ SO__ELEMENT_ABSTRACT_VARS(SoAccumulatedElement);
 // Use: internal
 
 void
-SoAccumulatedElement::initClass()
-{
+SoAccumulatedElement::initClass() {
     SO_ELEMENT_INIT_ABSTRACT_CLASS(SoAccumulatedElement, SoElement);
 }
 
@@ -96,8 +95,7 @@ SoAccumulatedElement::SoAccumulatedElement()
 SoAccumulatedElement::~SoAccumulatedElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -112,7 +110,7 @@ SoAccumulatedElement::matches(const SoElement *elt) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoAccumulatedElement	*accElt = (const SoAccumulatedElement *) elt;
+    const SoAccumulatedElement *accElt = (const SoAccumulatedElement *)elt;
 
     return (accElt->nodeIds == nodeIds) ? TRUE : FALSE;
 }
@@ -133,7 +131,6 @@ SoAccumulatedElement::clearNodeIds()
     accumulatesWithParentFlag = FALSE;
 }
 
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -150,7 +147,7 @@ SoAccumulatedElement::addNodeId(const SoNode *node)
 #ifdef DEBUG
     if (node == NULL) {
         SoDebugError::post("SoAccumulatedElement::addNodeId",
-                   "NULL node pointer passed");
+                           "NULL node pointer passed");
         return;
     }
 #endif /* DEBUG */
@@ -171,9 +168,9 @@ SoAccumulatedElement::setNodeId(const SoNode *node)
 {
 #ifdef DEBUG
     if (node == NULL) {
-	SoDebugError::post("SoAccumulatedElement::setNodeId",
-			   "NULL node pointer passed");
-	return;
+        SoDebugError::post("SoAccumulatedElement::setNodeId",
+                           "NULL node pointer passed");
+        return;
     }
 #endif /* DEBUG */
 
@@ -196,7 +193,8 @@ SoAccumulatedElement::copyMatchInfo() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoAccumulatedElement *result = (SoAccumulatedElement *)getTypeId().createInstance();
+    SoAccumulatedElement *result =
+        (SoAccumulatedElement *)getTypeId().createInstance();
 
     result->nodeIds = nodeIds;
 
@@ -217,7 +215,7 @@ SoAccumulatedElement::captureThis(SoState *state) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoElement::captureThis(state);  // Capture this...
+    SoElement::captureThis(state); // Capture this...
 
     if (accumulatesWithParentFlag) {
         SoAccumulatedElement *parent = (SoAccumulatedElement *)getNextInStack();
@@ -237,19 +235,17 @@ SoAccumulatedElement::captureThis(SoState *state) const
 
 #ifdef DEBUG
 void
-SoAccumulatedElement::print(FILE *fp) const
-{
+SoAccumulatedElement::print(FILE *fp) const {
     SoElement::print(fp);
 
     fprintf(fp, "NodeIds: [ ");
-    for (std::set<uint32_t>::iterator it=nodeIds.begin(); it!=nodeIds.end(); ++it) {
+    for (std::set<uint32_t>::iterator it = nodeIds.begin(); it != nodeIds.end();
+         ++it) {
         fprintf(fp, "%d, ", *it);
     }
     fprintf(fp, "]\n");
 }
 #else  /* DEBUG */
 void
-SoAccumulatedElement::print(FILE *) const
-{
-}
+SoAccumulatedElement::print(FILE *) const {}
 #endif /* DEBUG */

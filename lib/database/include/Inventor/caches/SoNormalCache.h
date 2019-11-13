@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,9 +54,8 @@
  _______________________________________________________________________
  */
 
-
-#ifndef  _SO_NORMAL_CACHE
-#define  _SO_NORMAL_CACHE
+#ifndef _SO_NORMAL_CACHE
+#define _SO_NORMAL_CACHE
 
 #include <Inventor/SbVec.h>
 #include <Inventor/caches/SoCache.h>
@@ -69,24 +68,26 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-SoEXTENDER class SoNormalCache : public SoCache {
+SoEXTENDER
+class SoNormalCache : public SoCache {
 
   public:
     // Constructor and destructor
     SoNormalCache(SoState *state);
 
     // Stores a list of normals in the cache
-    void		set(int numNormals, const SbVec3f *normals);
+    void set(int numNormals, const SbVec3f *normals);
 
     // Returns the number of normals and list of normals
-    int			getNum() const		{ return numNormals; }
-    const SbVec3f *	getNormals() const	{ return normals;    }
+    int            getNum() const { return numNormals; }
+    const SbVec3f *getNormals() const { return normals; }
 
   protected:
     ~SoNormalCache();
+
   private:
-    int			numNormals;		// Number of normals
-    const SbVec3f	*normals;		// Array of normals
+    int            numNormals; // Number of normals
+    const SbVec3f *normals;    // Array of normals
 };
 
 #endif /* _SO_NORMAL_CACHE */

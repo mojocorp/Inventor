@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,8 +51,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_LOD_
-#define  _SO_LOD_
+#ifndef _SO_LOD_
+#define _SO_LOD_
 
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -92,8 +92,8 @@ class SoLOD : public SoGroup {
 
   public:
     // Fields
-    SoMFFloat		range;	// World-space distances
-    SoSFVec3f		center; // Center for computation
+    SoMFFloat range;  // World-space distances
+    SoSFVec3f center; // Center for computation
 
     // Default constructor
     SoLOD();
@@ -101,28 +101,30 @@ class SoLOD : public SoGroup {
     // Constructor that takes approximate number of children
     SoLOD(int nChildren);
 
-  SoEXTENDER public:
+    SoEXTENDER
+  public:
     // Implement actions:
-    virtual void	doAction(SoAction *action);
-    virtual void	callback(SoCallbackAction *action);
-    virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
-    virtual void	getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void doAction(SoAction *action);
+    virtual void callback(SoCallbackAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void rayPick(SoRayPickAction *action);
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
 
     // These methods make render traversal faster by implementing
     // different rendering paths corresponding to different action
     // path codes.
-    virtual void	GLRenderBelowPath(SoGLRenderAction *action);
-    virtual void	GLRenderInPath(SoGLRenderAction *action);
-    virtual void	GLRenderOffPath(SoGLRenderAction *action);
+    virtual void GLRenderBelowPath(SoGLRenderAction *action);
+    virtual void GLRenderInPath(SoGLRenderAction *action);
+    virtual void GLRenderOffPath(SoGLRenderAction *action);
 
-  SoINTERNAL public:
-    static void		initClass();
+    SoINTERNAL
+  public:
+    static void initClass();
 
   protected:
     virtual ~SoLOD();
 
-    virtual int		whichToTraverse(SoAction *);
+    virtual int whichToTraverse(SoAction *);
 };
 
 #endif /* _SO_LOD_ */

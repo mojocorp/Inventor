@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -50,7 +50,6 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-
 
 #include <stdio.h>
 #include <SoDebug.h>
@@ -96,8 +95,7 @@ SoTransformManip::initClass()
 ////////////////////////////////////////////////////////////////////////
 
 // Default constructor.
-SoTransformManip::SoTransformManip()
-{
+SoTransformManip::SoTransformManip() {
     children = new SoChildList(this);
 
     SO_NODE_CONSTRUCTOR(SoTransformManip);
@@ -105,16 +103,16 @@ SoTransformManip::SoTransformManip()
     isBuiltIn = TRUE;
 
     // Create the field sensors
-    rotateFieldSensor = new SoFieldSensor(&SoTransformManip::fieldSensorCB, 
-					    this);
-    translFieldSensor = new SoFieldSensor(&SoTransformManip::fieldSensorCB,
-					   this);
-    scaleFieldSensor = new SoFieldSensor(&SoTransformManip::fieldSensorCB,
-					   this);
-    centerFieldSensor = new SoFieldSensor(&SoTransformManip::fieldSensorCB,
-					   this);
-    scaleOrientFieldSensor = new SoFieldSensor(&SoTransformManip::fieldSensorCB,
-					   this);
+    rotateFieldSensor =
+        new SoFieldSensor(&SoTransformManip::fieldSensorCB, this);
+    translFieldSensor =
+        new SoFieldSensor(&SoTransformManip::fieldSensorCB, this);
+    scaleFieldSensor =
+        new SoFieldSensor(&SoTransformManip::fieldSensorCB, this);
+    centerFieldSensor =
+        new SoFieldSensor(&SoTransformManip::fieldSensorCB, this);
+    scaleOrientFieldSensor =
+        new SoFieldSensor(&SoTransformManip::fieldSensorCB, this);
 
     rotateFieldSensor->setPriority(0);
     translFieldSensor->setPriority(0);
@@ -161,27 +159,27 @@ SoTransformManip::~SoTransformManip()
 //    Sets the dragger to be the given node...
 //
 void
-SoTransformManip::setDragger( SoDragger *newDragger )
+SoTransformManip::setDragger(SoDragger *newDragger)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SoDragger *oldDragger = getDragger();
-    if ( oldDragger ) {
-	oldDragger->removeValueChangedCallback(
-				&SoTransformManip::valueChangedCB,this);
-	children->remove(0);
+    if (oldDragger) {
+        oldDragger->removeValueChangedCallback(
+            &SoTransformManip::valueChangedCB, this);
+        children->remove(0);
     }
-	
+
     if (newDragger) {
-	if (children->getLength() > 0)
-	    children->set(0, newDragger );
-	else 
-	    children->append( newDragger );
-	// Call the fieldSensorCB to transfer our values into the
-	// new dragger.
-	SoTransformManip::fieldSensorCB( this, NULL );
-	newDragger->addValueChangedCallback(
-				&SoTransformManip::valueChangedCB,this);
+        if (children->getLength() > 0)
+            children->set(0, newDragger);
+        else
+            children->append(newDragger);
+        // Call the fieldSensorCB to transfer our values into the
+        // new dragger.
+        SoTransformManip::fieldSensorCB(this, NULL);
+        newDragger->addValueChangedCallback(&SoTransformManip::valueChangedCB,
+                                            this);
     }
 }
 
@@ -195,15 +193,15 @@ SoTransformManip::getDragger()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if ( children->getLength() > 0 ) {
-	SoNode *n = (*children)[0];
-	if (n->isOfType( SoDragger::getClassTypeId() ))
-	    return ( (SoDragger *) n );
+    if (children->getLength() > 0) {
+        SoNode *n = (*children)[0];
+        if (n->isOfType(SoDragger::getClassTypeId()))
+            return ((SoDragger *)n);
 #ifdef DEBUG
-	else {
-	    SoDebugError::post("SoTransformManip::getDragger",
-	    		    "Child is not a dragger!");
-	}
+        else {
+            SoDebugError::post("SoTransformManip::getDragger",
+                               "Child is not a dragger!");
+        }
 #endif
     }
 
@@ -222,92 +220,91 @@ SoTransformManip::getDragger()
 //    [4] Second to last node must be a group, or we return without replacing.
 //    [5] Copy values from node we are replacing into this manip
 //    [6] Replace this manip as the child.
-//    [7] Do not ref or unref anything. Assume that the user knows what 
+//    [7] Do not ref or unref anything. Assume that the user knows what
 //        they're doing.
 //    [8] Do not fiddle with either node's field connections. Assume that the
 //        user knows what they're doing.
 //
 SbBool
-SoTransformManip::replaceNode( SoPath *p )
+SoTransformManip::replaceNode(SoPath *p)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoFullPath *fullP = (SoFullPath *) p;
+    SoFullPath *fullP = (SoFullPath *)p;
 
-    SoNode     *fullPTail = fullP->getTail();
-    if (fullPTail->isOfType(SoTransform::getClassTypeId()) == FALSE ) {
+    SoNode *fullPTail = fullP->getTail();
+    if (fullPTail->isOfType(SoTransform::getClassTypeId()) == FALSE) {
 #ifdef DEBUG
-	SoDebugError::post("SoTransformManip::replaceNode", 
-	    "End of path is not an SoTransform");
+        SoDebugError::post("SoTransformManip::replaceNode",
+                           "End of path is not an SoTransform");
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     SoNode *pTail = p->getTail();
-    if ( pTail->isOfType(SoBaseKit::getClassTypeId())) {
+    if (pTail->isOfType(SoBaseKit::getClassTypeId())) {
 
-	// Okay, we've got a nodekit here! Let's do this right...
-	// If fullPTail is a part in the kit, then we've got to follow
-	// protocol and let the kit set the part itself.
-	SoBaseKit *lastKit = (SoBaseKit *) ((SoNodeKitPath *)p)->getTail();
-	SbString partName = lastKit->getPartString(p);
-	if ( partName != "" ) {
-	    SoTransform *oldPart 
-		= (SoTransform *) lastKit->getPart(partName, TRUE); 
-	    if (oldPart != NULL) {
-		oldPart->ref();
-		lastKit->setPart(partName, this);
+        // Okay, we've got a nodekit here! Let's do this right...
+        // If fullPTail is a part in the kit, then we've got to follow
+        // protocol and let the kit set the part itself.
+        SoBaseKit *lastKit = (SoBaseKit *)((SoNodeKitPath *)p)->getTail();
+        SbString   partName = lastKit->getPartString(p);
+        if (partName != "") {
+            SoTransform *oldPart =
+                (SoTransform *)lastKit->getPart(partName, TRUE);
+            if (oldPart != NULL) {
+                oldPart->ref();
+                lastKit->setPart(partName, this);
 
-		// If the surroundScale exists, we must update it now.
-		SoSurroundScale *ss = SO_CHECK_PART( this->getDragger(), 
-					     "surroundScale", SoSurroundScale );
-		if ( ss != NULL ) {
-		    // If we have a surround scale node, invalidate it
-		    // and force it to calculate its new matrix 
-		    // by running a getMatrix action.  This must be done
-		    // or 'transferFieldValues' will incorrectly set any
-		    // internal matrices that depend on surroundScale.
-		    // (SoCenterballManip is an example of a manip that
-		    // requires this).
-		    ss->invalidate();
-		    static SoGetBoundingBoxAction *kitBba = NULL;
-		    if (kitBba == NULL)
-			kitBba = new SoGetBoundingBoxAction(SbViewportRegion());
-		    kitBba->apply(p);
-		}
+                // If the surroundScale exists, we must update it now.
+                SoSurroundScale *ss = SO_CHECK_PART(
+                    this->getDragger(), "surroundScale", SoSurroundScale);
+                if (ss != NULL) {
+                    // If we have a surround scale node, invalidate it
+                    // and force it to calculate its new matrix
+                    // by running a getMatrix action.  This must be done
+                    // or 'transferFieldValues' will incorrectly set any
+                    // internal matrices that depend on surroundScale.
+                    // (SoCenterballManip is an example of a manip that
+                    // requires this).
+                    ss->invalidate();
+                    static SoGetBoundingBoxAction *kitBba = NULL;
+                    if (kitBba == NULL)
+                        kitBba = new SoGetBoundingBoxAction(SbViewportRegion());
+                    kitBba->apply(p);
+                }
 
-		transferFieldValues( oldPart, this );
-		oldPart->unref();
+                transferFieldValues(oldPart, this);
+                oldPart->unref();
 
-		return TRUE;
-	    }
-	    else {
-		// Although the part's there, we couldn't get at it.
-		// Some kind of problem going on
-		return FALSE;
-	    }
-	}
-	// If it's not a part, that means it's contained within a subgraph
-	// underneath a part. For example, it's within the 'contents'
-	// separator of an SoWrapperKit. In that case, the nodekit doesn't
-	// care and we just continue into the rest of the method...
+                return TRUE;
+            } else {
+                // Although the part's there, we couldn't get at it.
+                // Some kind of problem going on
+                return FALSE;
+            }
+        }
+        // If it's not a part, that means it's contained within a subgraph
+        // underneath a part. For example, it's within the 'contents'
+        // separator of an SoWrapperKit. In that case, the nodekit doesn't
+        // care and we just continue into the rest of the method...
     }
 
-    if ( fullP->getLength() < 2 ) {
+    if (fullP->getLength() < 2) {
 #ifdef DEBUG
-	SoDebugError::post("SoTransformManip::replaceNode",
-	"Path is too short!");
+        SoDebugError::post("SoTransformManip::replaceNode",
+                           "Path is too short!");
 #endif
-	return FALSE;
+        return FALSE;
     }
 
-    SoNode      *parent = fullP->getNodeFromTail( 1 );
-    if (parent->isOfType( SoGroup::getClassTypeId() ) == FALSE ) {
+    SoNode *parent = fullP->getNodeFromTail(1);
+    if (parent->isOfType(SoGroup::getClassTypeId()) == FALSE) {
 #ifdef DEBUG
-	SoDebugError::post("SoTransformManip::replaceNode",
-	"Parent node is not a group.!");
+        SoDebugError::post("SoTransformManip::replaceNode",
+                           "Parent node is not a group.!");
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     ref();
@@ -316,27 +313,27 @@ SoTransformManip::replaceNode( SoPath *p )
     // We've got to transfer its field values later on.
     fullPTail->ref();
 
-    ((SoGroup *)parent)->replaceChild( fullPTail, this );
+    ((SoGroup *)parent)->replaceChild(fullPTail, this);
 
     // If the surroundScale exists, we must update it now.
-    SoSurroundScale *ss = SO_CHECK_PART( this->getDragger(), 
-					 "surroundScale", SoSurroundScale );
-    if ( ss != NULL ) {
-	// If we have a surround scale node, invalidate it
-	// and force it to calculate its new matrix 
-	// by running a getMatrix action.  This must be done
-	// or 'transferFieldValues' will incorrectly set any
-	// internal matrices that depend on surroundScale.
-	// (SoCenterballManip is an example of a manip that
-	// requires this).
-	ss->invalidate();
-	static SoGetBoundingBoxAction *bba = NULL;
-	if (bba == NULL)
-	    bba = new SoGetBoundingBoxAction(SbViewportRegion());
-	bba->apply(p);
+    SoSurroundScale *ss =
+        SO_CHECK_PART(this->getDragger(), "surroundScale", SoSurroundScale);
+    if (ss != NULL) {
+        // If we have a surround scale node, invalidate it
+        // and force it to calculate its new matrix
+        // by running a getMatrix action.  This must be done
+        // or 'transferFieldValues' will incorrectly set any
+        // internal matrices that depend on surroundScale.
+        // (SoCenterballManip is an example of a manip that
+        // requires this).
+        ss->invalidate();
+        static SoGetBoundingBoxAction *bba = NULL;
+        if (bba == NULL)
+            bba = new SoGetBoundingBoxAction(SbViewportRegion());
+        bba->apply(p);
     }
 
-    transferFieldValues( ((SoTransform *)fullPTail), this );
+    transferFieldValues(((SoTransform *)fullPTail), this);
 
     // Now that we've extracted the values from the fullPTail we
     // can unref it.
@@ -359,77 +356,77 @@ SoTransformManip::replaceNode( SoPath *p )
 //    [4] Second to last node must be a group, or we return without replacing.
 //    [5] Copy values from node we are replacing into this manip
 //    [6] Replace this manip as the child.
-//    [7] Do not ref or unref anything. Assume that the user knows what 
+//    [7] Do not ref or unref anything. Assume that the user knows what
 //        they're doing.
 //    [8] Do not fiddle with either node's field connections. Assume that the
 //        user knows what they're doing.
 //
 SbBool
-SoTransformManip::replaceManip( SoPath *p, SoTransform *newOne ) const
+SoTransformManip::replaceManip(SoPath *p, SoTransform *newOne) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoFullPath *fullP = (SoFullPath *) p;
+    SoFullPath *fullP = (SoFullPath *)p;
 
-    SoNode     *fullPTail = fullP->getTail();
-    if ((SoTransformManip *)fullPTail != this ) {
+    SoNode *fullPTail = fullP->getTail();
+    if ((SoTransformManip *)fullPTail != this) {
 #ifdef DEBUG
-	SoDebugError::post("SoTransformManip::replaceManip",
-	"Child to replace is not this manip!");
+        SoDebugError::post("SoTransformManip::replaceManip",
+                           "Child to replace is not this manip!");
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     SoNode *pTail = p->getTail();
-    if ( pTail->isOfType(SoBaseKit::getClassTypeId())) {
+    if (pTail->isOfType(SoBaseKit::getClassTypeId())) {
 
-	// Okay, we've got a nodekit here! Let's do this right...
-	// If fullPTail is a part in the kit, then we've got to follow
-	// protocol and let the kit set the part itself.
-	SoBaseKit *lastKit = (SoBaseKit *) ((SoNodeKitPath *)p)->getTail();
-	SbString partName = lastKit->getPartString(p);
-	if ( partName != "" ) {
+        // Okay, we've got a nodekit here! Let's do this right...
+        // If fullPTail is a part in the kit, then we've got to follow
+        // protocol and let the kit set the part itself.
+        SoBaseKit *lastKit = (SoBaseKit *)((SoNodeKitPath *)p)->getTail();
+        SbString   partName = lastKit->getPartString(p);
+        if (partName != "") {
 
-	    if (newOne == NULL)
-		newOne = new SoTransform;
-	    newOne->ref();
+            if (newOne == NULL)
+                newOne = new SoTransform;
+            newOne->ref();
 
-	    transferFieldValues( this, newOne );
+            transferFieldValues(this, newOne);
 
-	    lastKit->setPart(partName, newOne);
-	    newOne->unrefNoDelete();
-	    return TRUE;
-	}
-	// If it's not a part, that means it's contained within a subgraph
-	// underneath a part. For example, it's within the 'contents'
-	// separator of an SoWrapperKit. In that case, the nodekit doesn't
-	// care and we just continue on through...
+            lastKit->setPart(partName, newOne);
+            newOne->unrefNoDelete();
+            return TRUE;
+        }
+        // If it's not a part, that means it's contained within a subgraph
+        // underneath a part. For example, it's within the 'contents'
+        // separator of an SoWrapperKit. In that case, the nodekit doesn't
+        // care and we just continue on through...
     }
 
-    if ( fullP->getLength() < 2 ) {
+    if (fullP->getLength() < 2) {
 #ifdef DEBUG
-	SoDebugError::post("SoTransformManip::replaceManip",
-	"Path is too short!");
+        SoDebugError::post("SoTransformManip::replaceManip",
+                           "Path is too short!");
 #endif
-	return FALSE;
+        return FALSE;
     }
 
-    SoNode      *parent = fullP->getNodeFromTail( 1 );
-    if (parent->isOfType( SoGroup::getClassTypeId() ) == FALSE ) {
+    SoNode *parent = fullP->getNodeFromTail(1);
+    if (parent->isOfType(SoGroup::getClassTypeId()) == FALSE) {
 #ifdef DEBUG
-	SoDebugError::post("SoTransformManip::replaceManip",
-	"Parent node is not a group.!");
+        SoDebugError::post("SoTransformManip::replaceManip",
+                           "Parent node is not a group.!");
 #endif
-	return FALSE;
+        return FALSE;
     }
 
     if (newOne == NULL)
-	newOne = new SoTransform;
+        newOne = new SoTransform;
     newOne->ref();
 
-    transferFieldValues( this, newOne );
+    transferFieldValues(this, newOne);
 
-    ((SoGroup *)parent)->replaceChild((SoTransformManip *)this, newOne );
+    ((SoGroup *)parent)->replaceChild((SoTransformManip *)this, newOne);
 
     newOne->unrefNoDelete();
 
@@ -445,7 +442,7 @@ SoTransformManip::replaceManip( SoPath *p, SoTransform *newOne ) const
 
 void
 SoTransformManip::copyContents(const SoFieldContainer *fromFC,
-			       SbBool copyConnections)
+                               SbBool                  copyConnections)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -453,8 +450,8 @@ SoTransformManip::copyContents(const SoFieldContainer *fromFC,
     SoTransform::copyContents(fromFC, copyConnections);
 
     // Copy the dragger
-    SoTransformManip *origManip = (SoTransformManip *) fromFC;
-    setDragger((SoDragger *) origManip->getDragger()->copy(copyConnections));
+    SoTransformManip *origManip = (SoTransformManip *)fromFC;
+    setDragger((SoDragger *)origManip->getDragger()->copy(copyConnections));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -476,72 +473,69 @@ SoTransformManip::getChildren() const
 //    Transfers field values from one node to another...
 //
 void
-SoTransformManip::transferFieldValues( const SoTransform *from,
-					SoTransform *to )
+SoTransformManip::transferFieldValues(const SoTransform *from, SoTransform *to)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SoTransformManip *m = NULL;
-    if (to->isOfType( SoTransformManip::getClassTypeId() ) )
-	m = (SoTransformManip *) to;
+    if (to->isOfType(SoTransformManip::getClassTypeId()))
+        m = (SoTransformManip *)to;
     if (m) {
-	// detach the field sensors.
-	m->rotateFieldSensor->detach();
-	m->translFieldSensor->detach();
-	m->scaleFieldSensor->detach();
-	m->centerFieldSensor->detach();
-	m->scaleOrientFieldSensor->detach();
+        // detach the field sensors.
+        m->rotateFieldSensor->detach();
+        m->translFieldSensor->detach();
+        m->scaleFieldSensor->detach();
+        m->centerFieldSensor->detach();
+        m->scaleOrientFieldSensor->detach();
     }
-    if (to->rotation.getValue()           != from->rotation.getValue())
-	to->rotation                       = from->rotation.getValue();
-    if (to->translation.getValue()        != from->translation.getValue())
-	to->translation                    = from->translation.getValue();
-    if (to->scaleFactor.getValue()        != from->scaleFactor.getValue())
-	to->scaleFactor                    = from->scaleFactor.getValue();
-    if (to->scaleOrientation.getValue()   != from->scaleOrientation.getValue())
-	to->scaleOrientation               = from->scaleOrientation.getValue();
-    if (to->center.getValue()             != from->center.getValue())
-	to->center                         = from->center.getValue();
+    if (to->rotation.getValue() != from->rotation.getValue())
+        to->rotation = from->rotation.getValue();
+    if (to->translation.getValue() != from->translation.getValue())
+        to->translation = from->translation.getValue();
+    if (to->scaleFactor.getValue() != from->scaleFactor.getValue())
+        to->scaleFactor = from->scaleFactor.getValue();
+    if (to->scaleOrientation.getValue() != from->scaleOrientation.getValue())
+        to->scaleOrientation = from->scaleOrientation.getValue();
+    if (to->center.getValue() != from->center.getValue())
+        to->center = from->center.getValue();
     if (m) {
-	// call the callback, then reattach the field sensors.
-	if (SoDebug::GetEnv("IV_DEBUG_TRANSFORM_MANIP_FIELDS")) {
-	    fprintf(stderr,"before:\n");
-	    SbVec3f t = m->translation.getValue();
-	    SbVec3f s = m->scaleFactor.getValue();
-	    SbVec3f c = m->center.getValue();
-	    fprintf(stderr,"translation = %f %f %f\n", t[0], t[1], t[2]);
-	    fprintf(stderr,"scale = %f %f %f\n", s[0], s[1], s[2]);
-	    fprintf(stderr,"center = %f %f %f\n", c[0], c[1], c[2]);
-	}
-	SoTransformManip::fieldSensorCB( m, NULL );
-	if (SoDebug::GetEnv("IV_DEBUG_TRANSFORM_MANIP_FIELDS")) {
-	    fprintf(stderr,"after:\n");
-	    SbVec3f t = m->translation.getValue();
-	    SbVec3f s = m->scaleFactor.getValue();
-	    SbVec3f c = m->center.getValue();
-	    fprintf(stderr,"translation = %f %f %f\n", t[0], t[1], t[2]);
-	    fprintf(stderr,"scale = %f %f %f\n", s[0], s[1], s[2]);
-	    fprintf(stderr,"center = %f %f %f\n", c[0], c[1], c[2]);
-	}
-	m->rotateFieldSensor->attach( &m->rotation);
-	m->translFieldSensor->attach( &m->translation);
-	m->scaleFieldSensor->attach( &m->scaleFactor );
-	m->centerFieldSensor->attach(&m->center);
-	m->scaleOrientFieldSensor->attach( &m->scaleOrientation );
-
+        // call the callback, then reattach the field sensors.
+        if (SoDebug::GetEnv("IV_DEBUG_TRANSFORM_MANIP_FIELDS")) {
+            fprintf(stderr, "before:\n");
+            SbVec3f t = m->translation.getValue();
+            SbVec3f s = m->scaleFactor.getValue();
+            SbVec3f c = m->center.getValue();
+            fprintf(stderr, "translation = %f %f %f\n", t[0], t[1], t[2]);
+            fprintf(stderr, "scale = %f %f %f\n", s[0], s[1], s[2]);
+            fprintf(stderr, "center = %f %f %f\n", c[0], c[1], c[2]);
+        }
+        SoTransformManip::fieldSensorCB(m, NULL);
+        if (SoDebug::GetEnv("IV_DEBUG_TRANSFORM_MANIP_FIELDS")) {
+            fprintf(stderr, "after:\n");
+            SbVec3f t = m->translation.getValue();
+            SbVec3f s = m->scaleFactor.getValue();
+            SbVec3f c = m->center.getValue();
+            fprintf(stderr, "translation = %f %f %f\n", t[0], t[1], t[2]);
+            fprintf(stderr, "scale = %f %f %f\n", s[0], s[1], s[2]);
+            fprintf(stderr, "center = %f %f %f\n", c[0], c[1], c[2]);
+        }
+        m->rotateFieldSensor->attach(&m->rotation);
+        m->translFieldSensor->attach(&m->translation);
+        m->scaleFieldSensor->attach(&m->scaleFactor);
+        m->centerFieldSensor->attach(&m->center);
+        m->scaleOrientFieldSensor->attach(&m->scaleOrientation);
     }
 }
 
-void 
-SoTransformManip::doAction( SoAction *action )
-{
-    int         numIndices;
-    const int   *indices;
+void
+SoTransformManip::doAction(SoAction *action) {
+    int        numIndices;
+    const int *indices;
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH)
-	children->traverse(action, 0, indices[numIndices - 1]);
+        children->traverse(action, 0, indices[numIndices - 1]);
     else
-	children->traverse(action);
+        children->traverse(action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -556,141 +550,133 @@ SoTransformManip::getMatrix(SoGetMatrixAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int         numIndices;
-    const int   *indices;
+    int        numIndices;
+    const int *indices;
 
     // Note: this is most unusual behavior!
-    // 
-    // What we have is a transform node that may sometimes find itself 
+    //
+    // What we have is a transform node that may sometimes find itself
     // on a path. In the cases of NO_PATH and BELOW_PATH, we just return
     // the SoTransform matrix without traversing the kids. This is a cross
-    // between SoGroup, which doesn't traverse, and SoTransform, which 
+    // between SoGroup, which doesn't traverse, and SoTransform, which
     // affects the matrix.
     // In the case of OFF_PATH, traverse the children first, like SoGroup,
     // then add the matrix, like SoTransform
     //
     // For IN_PATH, we do not want to affect the matrix, since its affect
-    // occurs after the children are traversed, (at the 'back half' of 
+    // occurs after the children are traversed, (at the 'back half' of
     // traversal) and does not affect the nodes under the path.
     //
     switch (action->getPathCode(numIndices, indices)) {
 
-	case SoAction::NO_PATH:
-	    SoTransform::getMatrix(action);
-	    break;
+    case SoAction::NO_PATH:
+        SoTransform::getMatrix(action);
+        break;
 
-	case SoAction::IN_PATH:
-	    children->traverse(action, 0, indices[numIndices - 1]);
-	    break;
+    case SoAction::IN_PATH:
+        children->traverse(action, 0, indices[numIndices - 1]);
+        break;
 
-	case SoAction::BELOW_PATH:
-	    SoTransform::getMatrix(action);
-	    break;
+    case SoAction::BELOW_PATH:
+        SoTransform::getMatrix(action);
+        break;
 
-	case SoAction::OFF_PATH:
-	    children->traverse(action);
-	    SoTransform::getMatrix(action);
-	    break;
-
+    case SoAction::OFF_PATH:
+        children->traverse(action);
+        SoTransform::getMatrix(action);
+        break;
     }
 }
 
-
 // These functions implement all actions for nodekits.
-void 
-SoTransformManip::callback( SoCallbackAction *action )
-{ 
-    SoTransformManip::doAction( action );
+void
+SoTransformManip::callback(SoCallbackAction *action) {
+    SoTransformManip::doAction(action);
     SoTransform::callback(action);
 }
 
-void 
-SoTransformManip::getBoundingBox( SoGetBoundingBoxAction *action )
-{ 
-    SbVec3f     totalCenter(0,0,0);
-    int         numCenters = 0;
-    int         numIndices;
-    const int   *indices;
-    int         lastChild;
+void
+SoTransformManip::getBoundingBox(SoGetBoundingBoxAction *action) {
+    SbVec3f    totalCenter(0, 0, 0);
+    int        numCenters = 0;
+    int        numIndices;
+    const int *indices;
+    int        lastChild;
 
     if (action->getPathCode(numIndices, indices) == SoAction::IN_PATH)
-	lastChild = indices[numIndices - 1];
+        lastChild = indices[numIndices - 1];
     else
-	lastChild = getNumChildren() - 1;
+        lastChild = getNumChildren() - 1;
 
     // Traverse the children.
     for (int i = 0; i <= lastChild; i++) {
-	children->traverse(action, i, i);
-	if (action->isCenterSet()) {
-	    totalCenter += action->getCenter();
-	    numCenters++;
-	    action->resetCenter();
-	}
+        children->traverse(action, i, i);
+        if (action->isCenterSet()) {
+            totalCenter += action->getCenter();
+            numCenters++;
+            action->resetCenter();
+        }
     }
 
     // Traverse this as a directional light
     SoTransform::getBoundingBox(action);
     if (action->isCenterSet()) {
-	totalCenter += action->getCenter();
-	numCenters++;
-	action->resetCenter();
+        totalCenter += action->getCenter();
+        numCenters++;
+        action->resetCenter();
     }
 
     // Now, set the center to be the average:
     if (numCenters != 0)
-	action->setCenter(totalCenter / numCenters, FALSE);
-}
-
-void 
-SoTransformManip::GLRender( SoGLRenderAction *action )
-{
-  SoTransformManip::doAction( action ); 
-  SoTransform::GLRender(action);
-}
-
-void 
-SoTransformManip::handleEvent( SoHandleEventAction *action )
-{ 
-  SoTransformManip::doAction( action ); 
-  SoTransform::handleEvent(action);
-}
-
-void 
-SoTransformManip::pick( SoPickAction *action )
-{ 
-  SoTransformManip::doAction( action ); 
-  SoTransform::pick(action);
-}
-
-void 
-SoTransformManip::search( SoSearchAction *action )
-{ 
-    // First see if the caller is searching for this
-    SoTransform::search(action);
-//MANIPS DONT TRAVERSE CHILDREN DURING SEARCH    SoTransformManip::doAction( action );
+        action->setCenter(totalCenter / numCenters, FALSE);
 }
 
 void
-SoTransformManip::valueChangedCB( void *inManip, SoDragger *inDragger )
-{
-    if (inDragger == NULL)
-	return;
+SoTransformManip::GLRender(SoGLRenderAction *action) {
+    SoTransformManip::doAction(action);
+    SoTransform::GLRender(action);
+}
 
-    SoTransformManip *manip = (SoTransformManip *) inManip;
+void
+SoTransformManip::handleEvent(SoHandleEventAction *action) {
+    SoTransformManip::doAction(action);
+    SoTransform::handleEvent(action);
+}
+
+void
+SoTransformManip::pick(SoPickAction *action) {
+    SoTransformManip::doAction(action);
+    SoTransform::pick(action);
+}
+
+void
+SoTransformManip::search(SoSearchAction *action) {
+    // First see if the caller is searching for this
+    SoTransform::search(action);
+    // MANIPS DONT TRAVERSE CHILDREN DURING SEARCH SoTransformManip::doAction(
+    // action );
+}
+
+void
+SoTransformManip::valueChangedCB(void *inManip, SoDragger *inDragger) {
+    if (inDragger == NULL)
+        return;
+
+    SoTransformManip *manip = (SoTransformManip *)inManip;
 
     SbMatrix motMat = inDragger->getMotionMatrix();
 
-    SbVec3f trans, scale;
+    SbVec3f    trans, scale;
     SbRotation rot, scaleOrient;
-    SbVec3f center = manip->center.getValue();
+    SbVec3f    center = manip->center.getValue();
 
     // See if inDragger has a center field...
     SoField *f;
-    SoType fType = SoSFVec3f::getClassTypeId();
-    if ( (f = inDragger->getField("center")) && f->isOfType( fType ) )
-	center = ((SoSFVec3f *)f)->getValue();
+    SoType   fType = SoSFVec3f::getClassTypeId();
+    if ((f = inDragger->getField("center")) && f->isOfType(fType))
+        center = ((SoSFVec3f *)f)->getValue();
 
-    motMat.getTransform( trans, rot, scale, scaleOrient, center );
+    motMat.getTransform(trans, rot, scale, scaleOrient, center);
 
     // Disconnect the field sensors
     manip->rotateFieldSensor->detach();
@@ -699,58 +685,57 @@ SoTransformManip::valueChangedCB( void *inManip, SoDragger *inDragger )
     manip->centerFieldSensor->detach();
     manip->scaleOrientFieldSensor->detach();
 
-    if ( manip->rotation.getValue() != rot )
-	manip->rotation = rot;
-    if ( manip->translation.getValue() != trans )
-	manip->translation = trans;
-    if ( manip->scaleFactor.getValue() != scale )
-	manip->scaleFactor = scale;
-    if ( manip->center.getValue() != center )
-	manip->center = center;
-    if ( manip->scaleOrientation.getValue() != scaleOrient )
-	manip->scaleOrientation = scaleOrient;
+    if (manip->rotation.getValue() != rot)
+        manip->rotation = rot;
+    if (manip->translation.getValue() != trans)
+        manip->translation = trans;
+    if (manip->scaleFactor.getValue() != scale)
+        manip->scaleFactor = scale;
+    if (manip->center.getValue() != center)
+        manip->center = center;
+    if (manip->scaleOrientation.getValue() != scaleOrient)
+        manip->scaleOrientation = scaleOrient;
 
     // Reconnect the field sensors
-    manip->rotateFieldSensor->attach( &(manip->rotation));
-    manip->translFieldSensor->attach( &(manip->translation));
-    manip->scaleFieldSensor->attach( &(manip->scaleFactor));
-    manip->centerFieldSensor->attach( &(manip->center));
-    manip->scaleOrientFieldSensor->attach( &(manip->scaleOrientation));
+    manip->rotateFieldSensor->attach(&(manip->rotation));
+    manip->translFieldSensor->attach(&(manip->translation));
+    manip->scaleFieldSensor->attach(&(manip->scaleFactor));
+    manip->centerFieldSensor->attach(&(manip->center));
+    manip->scaleOrientFieldSensor->attach(&(manip->scaleOrientation));
 }
 
 void
-SoTransformManip::fieldSensorCB( void *inManip, SoSensor *)
-{
-    SoTransformManip *manip = (SoTransformManip *) inManip;
-    SoDragger        *dragger = manip->getDragger();
+SoTransformManip::fieldSensorCB(void *inManip, SoSensor *) {
+    SoTransformManip *manip = (SoTransformManip *)inManip;
+    SoDragger *       dragger = manip->getDragger();
 
     if (dragger == NULL)
-	return;
+        return;
 
-    SbVec3f    trans       = manip->translation.getValue(); 
-    SbVec3f    scale       = manip->scaleFactor.getValue(); 
-    SbRotation rot         = manip->rotation.getValue(); 
-    SbRotation scaleOrient = manip->scaleOrientation.getValue(); 
-    SbVec3f    center      = manip->center.getValue(); 
+    SbVec3f    trans = manip->translation.getValue();
+    SbVec3f    scale = manip->scaleFactor.getValue();
+    SbRotation rot = manip->rotation.getValue();
+    SbRotation scaleOrient = manip->scaleOrientation.getValue();
+    SbVec3f    center = manip->center.getValue();
 
     SbMatrix newMat;
-    newMat.setTransform( trans, rot, scale, scaleOrient, center );
+    newMat.setTransform(trans, rot, scale, scaleOrient, center);
 
-    // We may be setting two different things at once-- a matrix and 
-    // a center field. Temporarily disable valueChangedCBs on dragger, 
+    // We may be setting two different things at once-- a matrix and
+    // a center field. Temporarily disable valueChangedCBs on dragger,
     // and call them when we are all done.
     SbBool saveEnabled = dragger->enableValueChangedCallbacks(FALSE);
 
-	// If dragger has a center field, set it.
-	SoField *f;
-	SoType  fType = SoSFVec3f::getClassTypeId();
-	if ( (f = dragger->getField( "center" )) && f->isOfType( fType ) )
-	    ((SoSFVec3f *)f)->setValue(  manip->center.getValue() );
+    // If dragger has a center field, set it.
+    SoField *f;
+    SoType   fType = SoSFVec3f::getClassTypeId();
+    if ((f = dragger->getField("center")) && f->isOfType(fType))
+        ((SoSFVec3f *)f)->setValue(manip->center.getValue());
 
-	// Set the motionMatrix.
-	dragger->setMotionMatrix(newMat);
+    // Set the motionMatrix.
+    dragger->setMotionMatrix(newMat);
 
     // Re-enable value changed callbacks and call.
-    dragger->enableValueChangedCallbacks( saveEnabled );
+    dragger->enableValueChangedCallbacks(saveEnabled);
     dragger->valueChanged();
 }

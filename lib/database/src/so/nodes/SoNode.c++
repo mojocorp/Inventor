@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -59,11 +59,11 @@
 #include <Inventor/fields/SoFieldData.h>
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/misc/SoNotification.h>
-#include <Inventor/nodes/SoSubNode.h>		/* Has some handy stuff */
+#include <Inventor/nodes/SoSubNode.h> /* Has some handy stuff */
 
-SoType		SoNode::classTypeId;		// Type identifier
-uint32_t	SoNode::nextUniqueId;		// Unique ID counter
-int		SoNode::nextActionMethodIndex;	// Index for action tables
+SoType   SoNode::classTypeId;           // Type identifier
+uint32_t SoNode::nextUniqueId;          // Unique ID counter
+int      SoNode::nextActionMethodIndex; // Index for action tables
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -80,10 +80,9 @@ SoNode::initClass()
     nextActionMethodIndex = 0;
     // Allocate a new node type id
     // No real parent id
-    classTypeId = SoType::createType(SoFieldContainer::getClassTypeId(),
-                     "Node",
-                     NULL,	// Cannot create, abstract
-                     nextActionMethodIndex++);
+    classTypeId = SoType::createType(SoFieldContainer::getClassTypeId(), "Node",
+                                     NULL, // Cannot create, abstract
+                                     nextActionMethodIndex++);
 
     // Start nodeIds at 10--that way values of 0 through 9 can be used
     // for special meanings to attach to nonexistent nodes,
@@ -91,15 +90,15 @@ SoNode::initClass()
     nextUniqueId = 10;
 
     // Add action methods
-    SoCallbackAction::addMethod(classTypeId,		callbackS);
-    SoGLRenderAction::addMethod(classTypeId,		GLRenderS);
-    SoGetBoundingBoxAction::addMethod(classTypeId,	getBoundingBoxS);
-    SoGetMatrixAction::addMethod(classTypeId,		getMatrixS);
-    SoHandleEventAction::addMethod(classTypeId,		handleEventS);
-    SoPickAction::addMethod(classTypeId,		pickS);
-    SoRayPickAction::addMethod(classTypeId,		rayPickS);
-    SoSearchAction::addMethod(classTypeId,		searchS);
-    SoWriteAction::addMethod(classTypeId,		writeS);
+    SoCallbackAction::addMethod(classTypeId, callbackS);
+    SoGLRenderAction::addMethod(classTypeId, GLRenderS);
+    SoGetBoundingBoxAction::addMethod(classTypeId, getBoundingBoxS);
+    SoGetMatrixAction::addMethod(classTypeId, getMatrixS);
+    SoHandleEventAction::addMethod(classTypeId, handleEventS);
+    SoPickAction::addMethod(classTypeId, pickS);
+    SoRayPickAction::addMethod(classTypeId, rayPickS);
+    SoSearchAction::addMethod(classTypeId, searchS);
+    SoWriteAction::addMethod(classTypeId, writeS);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -114,10 +113,9 @@ SoNode::SoNode()
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    if (! SoDB::isInitialized()) {
-	SoDebugError::post("SoNode::SoNode",
-			   "Cannot construct nodes before "
-			   "calling SoDB::init()");
+    if (!SoDB::isInitialized()) {
+        SoDebugError::post("SoNode::SoNode", "Cannot construct nodes before "
+                                             "calling SoDB::init()");
     }
 #endif /* DEBUG */
 
@@ -135,8 +133,7 @@ SoNode::SoNode()
 SoNode::~SoNode()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -231,20 +228,20 @@ SoNode::addToCopyDict() const
 ////////////////////////////////////////////////////////////////////////
 {
     // If this node is already in the dictionary, nothing else to do
-    SoNode *copy = (SoNode *) checkCopy(this);
+    SoNode *copy = (SoNode *)checkCopy(this);
     if (copy == NULL) {
 
-	// Create and add a new instance to the dictionary
-	copy = (SoNode *) getTypeId().createInstance();
-	copy->ref();
-	addCopy(this, copy);		// Adds a ref()
-	copy->unrefNoDelete();
+        // Create and add a new instance to the dictionary
+        copy = (SoNode *)getTypeId().createInstance();
+        copy->ref();
+        addCopy(this, copy); // Adds a ref()
+        copy->unrefNoDelete();
 
-	// Recurse on children, if any
-	SoChildList *kids = getChildren();
-	if (kids != NULL)
-	    for (int i = 0; i < kids->getLength(); i++)
-		(*kids)[i]->addToCopyDict();
+        // Recurse on children, if any
+        SoChildList *kids = getChildren();
+        if (kids != NULL)
+            for (int i = 0; i < kids->getLength(); i++)
+                (*kids)[i]->addToCopyDict();
     }
 
     return copy;
@@ -268,7 +265,7 @@ SoNode::copyContents(const SoFieldContainer *fromFC, SbBool copyConnections)
     SoFieldContainer::copyContents(fromFC, copyConnections);
 
     // Copy the override flag
-    override = ((SoNode *) fromFC)->override;
+    override = ((SoNode *)fromFC)->override;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -289,8 +286,8 @@ SoNode::copyThroughConnection() const
     // this node.
     SoFieldContainer *copy = findCopy(this, TRUE);
     if (copy != NULL)
-	return copy;
-    return (SoFieldContainer *) this;
+        return copy;
+    return (SoFieldContainer *)this;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -354,93 +351,82 @@ SoNode::affectsState() const
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoNode::doAction(SoAction *)
-{
+SoNode::doAction(SoAction *) {
 #ifdef DEBUG_DEFAULT_METHODS
-    SoDebugInfo::post("SoNode::doAction",
-		      "Called for %s", getTypeId().getName().getString());
-#endif /* DEBUG_DEFAULT_METHODS */
-}    
-
-void
-SoNode::callback(SoCallbackAction *)
-{
-#ifdef DEBUG_DEFAULT_METHODS
-    SoDebugInfo::post("SoNode::callback",
-		      "Called for %s", getTypeId().getName().getString());
-#endif /* DEBUG_DEFAULT_METHODS */
-}    
-
-void
-SoNode::GLRender(SoGLRenderAction *)
-{
-#ifdef DEBUG_DEFAULT_METHODS
-    SoDebugInfo::post("SoNode::GLRender",
-		      "Called for %s", getTypeId().getName().getString());
+    SoDebugInfo::post("SoNode::doAction", "Called for %s",
+                      getTypeId().getName().getString());
 #endif /* DEBUG_DEFAULT_METHODS */
 }
 
 void
-SoNode::GLRenderBelowPath(SoGLRenderAction *action)
-{
+SoNode::callback(SoCallbackAction *) {
+#ifdef DEBUG_DEFAULT_METHODS
+    SoDebugInfo::post("SoNode::callback", "Called for %s",
+                      getTypeId().getName().getString());
+#endif /* DEBUG_DEFAULT_METHODS */
+}
+
+void
+SoNode::GLRender(SoGLRenderAction *) {
+#ifdef DEBUG_DEFAULT_METHODS
+    SoDebugInfo::post("SoNode::GLRender", "Called for %s",
+                      getTypeId().getName().getString());
+#endif /* DEBUG_DEFAULT_METHODS */
+}
+
+void
+SoNode::GLRenderBelowPath(SoGLRenderAction *action) {
     GLRender(action);
 }
 
 void
-SoNode::GLRenderInPath(SoGLRenderAction *action)
-{
+SoNode::GLRenderInPath(SoGLRenderAction *action) {
     GLRender(action);
 }
 
 void
-SoNode::GLRenderOffPath(SoGLRenderAction *action)
-{
+SoNode::GLRenderOffPath(SoGLRenderAction *action) {
     GLRender(action);
 }
 
 void
-SoNode::getBoundingBox(SoGetBoundingBoxAction *)
-{
+SoNode::getBoundingBox(SoGetBoundingBoxAction *) {
 #ifdef DEBUG_DEFAULT_METHODS
-    SoDebugInfo::post("SoNode::getBoundingBox",
-		      "Called for %s", getTypeId().getName().getString());
+    SoDebugInfo::post("SoNode::getBoundingBox", "Called for %s",
+                      getTypeId().getName().getString());
 #endif /* DEBUG_DEFAULT_METHODS */
-}    
+}
 
 void
-SoNode::getMatrix(SoGetMatrixAction *)
-{
+SoNode::getMatrix(SoGetMatrixAction *) {
 #ifdef DEBUG_DEFAULT_METHODS
-    SoDebugInfo::post("SoNode::getMatrix",
-		      "Called for %s", getTypeId().getName().getString());
+    SoDebugInfo::post("SoNode::getMatrix", "Called for %s",
+                      getTypeId().getName().getString());
 #endif /* DEBUG_DEFAULT_METHODS */
-}    
+}
 
 void
-SoNode::handleEvent(SoHandleEventAction *)
-{
+SoNode::handleEvent(SoHandleEventAction *) {
 #ifdef DEBUG_DEFAULT_METHODS
-    SoDebugInfo::post("SoNode::handleEvent",
-		      "Called for %s", getTypeId().getName().getString());
+    SoDebugInfo::post("SoNode::handleEvent", "Called for %s",
+                      getTypeId().getName().getString());
 #endif /* DEBUG_DEFAULT_METHODS */
-}    
+}
 
 void
-SoNode::pick(SoPickAction *)
-{
+SoNode::pick(SoPickAction *) {
 #ifdef DEBUG_DEFAULT_METHODS
-    SoDebugInfo::post("SoNode::pick",
-		      "Called for %s", getTypeId().getName().getString());
+    SoDebugInfo::post("SoNode::pick", "Called for %s",
+                      getTypeId().getName().getString());
 #endif /* DEBUG_DEFAULT_METHODS */
-}    
+}
 
 void
-SoNode::rayPick(SoRayPickAction *action)
-{
+SoNode::rayPick(SoRayPickAction *action) {
     // If the node doesn't have a specific rayPick() method, it may
     // have a more general pick() method for any pick action.
     pick(action);
-}    
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -454,38 +440,38 @@ SoNode::search(SoSearchAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int		lookingFor = action->getFind();
-    SbBool	foundMe = TRUE;
+    int    lookingFor = action->getFind();
+    SbBool foundMe = TRUE;
 
     // We have to match everything set by the search action.
     // First, see if node doesn't match:
     if ((lookingFor & SoSearchAction::NODE) && action->getNode() != this)
-	foundMe = FALSE;
+        foundMe = FALSE;
 
     // Next, see if the name doesn't match:
     if ((lookingFor & SoSearchAction::NAME) &&
-	action->getName() != this->getName())
-	foundMe = FALSE;
+        action->getName() != this->getName())
+        foundMe = FALSE;
 
     // Finally, figure out if types match:
     if (lookingFor & SoSearchAction::TYPE) {
-	int	derivedOk;
-	SoType	t = action->getType(derivedOk);
-	if (! (derivedOk ? isOfType(t) : getTypeId() == t))
-	    foundMe = FALSE;
+        int    derivedOk;
+        SoType t = action->getType(derivedOk);
+        if (!(derivedOk ? isOfType(t) : getTypeId() == t))
+            foundMe = FALSE;
     }
 
     if (foundMe) {
-	// We have a match! Add it to the action.
+        // We have a match! Add it to the action.
 
-	if (action->getInterest() == SoSearchAction::ALL)
-	    action->getPaths().append(action->getCurPath()->copy());
+        if (action->getInterest() == SoSearchAction::ALL)
+            action->getPaths().append(action->getCurPath()->copy());
 
-	else {
-	    action->addPath(action->getCurPath()->copy());
-	    if (action->getInterest() == SoSearchAction::FIRST)
-		action->setFound();
-	}
+        else {
+            action->addPath(action->getCurPath()->copy());
+            if (action->getInterest() == SoSearchAction::FIRST)
+                action->setFound();
+        }
     }
 }
 
@@ -502,16 +488,16 @@ SoNode::write(SoWriteAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     if (action->getOutput()->getStage() == SoOutput::COUNT_REFS)
-	addWriteReference(action->getOutput());
+        addWriteReference(action->getOutput());
 
     // We assume this node would not be traversed if is has not been counted
-    else if (! writeHeader(action->getOutput(), FALSE, FALSE)) {
+    else if (!writeHeader(action->getOutput(), FALSE, FALSE)) {
 
-	const SoFieldData *fieldData = getFieldData();
+        const SoFieldData *fieldData = getFieldData();
 
-	fieldData->write(action->getOutput(), this);
+        fieldData->write(action->getOutput(), this);
 
-	writeFooter(action->getOutput());
+        writeFooter(action->getOutput());
     }
 }
 
@@ -526,8 +512,7 @@ void
 SoNode::grabEventsSetup()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -540,8 +525,7 @@ void
 SoNode::grabEventsCleanup()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -577,9 +561,9 @@ SoNode::notify(SoNotList *list)
 {
 #ifdef DEBUG
     if (list == NULL) {
-	SoDebugError::post("SoNode::notify",
-			   "notification list pointer is NULL");
-	return;
+        SoDebugError::post("SoNode::notify",
+                           "notification list pointer is NULL");
+        return;
     }
 #endif /* DEBUG */
 
@@ -587,7 +571,7 @@ SoNode::notify(SoNotList *list)
     // current notification. We can tell this by comparing the
     // notification list's time stamp with the node id.
     if (list->getTimeStamp() <= uniqueId)
-	return;
+        return;
 
     // Update our unique id to indicate that we are a different node
     uniqueId = nextUniqueId++;
@@ -628,7 +612,7 @@ SoNode::writeInstance(SoOutput *out)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoWriteAction	wa(out);
+    SoWriteAction wa(out);
     wa.continueToApply(this);
 }
 
@@ -643,39 +627,33 @@ SoNode::writeInstance(SoOutput *out)
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoNode::getMatrixS(SoAction *action, SoNode *node)
-{
-    node->getMatrix((SoGetMatrixAction *) action);
+SoNode::getMatrixS(SoAction *action, SoNode *node) {
+    node->getMatrix((SoGetMatrixAction *)action);
 }
 
 void
-SoNode::handleEventS(SoAction *action, SoNode *node)
-{
-    node->handleEvent((SoHandleEventAction *) action);
+SoNode::handleEventS(SoAction *action, SoNode *node) {
+    node->handleEvent((SoHandleEventAction *)action);
 }
 
 void
-SoNode::pickS(SoAction *action, SoNode *node)
-{
-    node->pick((SoPickAction *) action);
+SoNode::pickS(SoAction *action, SoNode *node) {
+    node->pick((SoPickAction *)action);
 }
 
 void
-SoNode::rayPickS(SoAction *action, SoNode *node)
-{
-    node->rayPick((SoRayPickAction *) action);
+SoNode::rayPickS(SoAction *action, SoNode *node) {
+    node->rayPick((SoRayPickAction *)action);
 }
 
 void
-SoNode::searchS(SoAction *action, SoNode *node)
-{
-    node->search((SoSearchAction *) action);
+SoNode::searchS(SoAction *action, SoNode *node) {
+    node->search((SoSearchAction *)action);
 }
 
 void
-SoNode::writeS(SoAction *action, SoNode *node)
-{
-    node->write((SoWriteAction *) action);
+SoNode::writeS(SoAction *action, SoNode *node) {
+    node->write((SoWriteAction *)action);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -689,42 +667,39 @@ SoNode::writeS(SoAction *action, SoNode *node)
 ////////////////////////////////////////////////////////////////////////
 
 void
-SoNode::callbackS(SoAction *action, SoNode *node) 
-{
+SoNode::callbackS(SoAction *action, SoNode *node) {
     SoCallbackAction *a = (SoCallbackAction *)action;
 
     // Pre/post callbacks are automatically handled.  If the callbacks
-    // set the 'response' flag to stop traversal, handle that also. 
+    // set the 'response' flag to stop traversal, handle that also.
 
     if (a->hasTerminated())
-	return;
+        return;
 
     a->setCurrentNode(node);
-    
+
     a->invokePreCallbacks(node);
 
-    if (! a->hasTerminated() &&
-	a->getCurrentResponse() != SoCallbackAction::PRUNE)
-	node->callback(a);
+    if (!a->hasTerminated() &&
+        a->getCurrentResponse() != SoCallbackAction::PRUNE)
+        node->callback(a);
 
     a->invokePostCallbacks(node);
 }
 
 void
-SoNode::GLRenderS(SoAction *action, SoNode *node)
-{
-    SoGLRenderAction *a = (SoGLRenderAction *) action;
+SoNode::GLRenderS(SoAction *action, SoNode *node) {
+    SoGLRenderAction *a = (SoGLRenderAction *)action;
 
-    if (! a->abortNow())
-	node->GLRender(a);
+    if (!a->abortNow())
+        node->GLRender(a);
     else {
-	SoCacheElement::invalidate(action->getState());
+        SoCacheElement::invalidate(action->getState());
     }
 }
 
 void
-SoNode::getBoundingBoxS(SoAction *action, SoNode *node) 
-{
+SoNode::getBoundingBoxS(SoAction *action, SoNode *node) {
     SoGetBoundingBoxAction *a = (SoGetBoundingBoxAction *)action;
 
     a->checkResetBefore();

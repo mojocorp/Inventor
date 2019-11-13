@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -63,8 +63,8 @@
 //
 
 struct SbDictListThing {
-    SbPList	*keyList;
-    SbPList	*valueList;
+    SbPList *keyList;
+    SbPList *valueList;
 };
 
 //
@@ -74,22 +74,20 @@ struct SbDictListThing {
 // Constructor - empties all buckets in the hash table
 //
 
-SbDict::SbDict( int entries )
-{
-    tableSize=entries;
-    buckets=new SbDictEntry *[tableSize];
+SbDict::SbDict(int entries) {
+    tableSize = entries;
+    buckets = new SbDictEntry *[tableSize];
     for (int i = 0; i < tableSize; i++)
-	buckets[i] = NULL;
+        buckets[i] = NULL;
 }
 
 //
 // Destructor - clears all buckets, frees up bucket table.
 //
 
-SbDict::~SbDict()
-{
+SbDict::~SbDict() {
     clear();
-    delete [] buckets;
+    delete[] buckets;
 }
 
 //
@@ -97,11 +95,10 @@ SbDict::~SbDict()
 //
 
 void
-SbDict::addEntryToPLists(unsigned long key, void *value, void *data)
-{
-    SbDictListThing	*lists = (SbDictListThing *) data;
+SbDict::addEntryToPLists(unsigned long key, void *value, void *data) {
+    SbDictListThing *lists = (SbDictListThing *)data;
 
-    lists->keyList->append((void *) key);
+    lists->keyList->append((void *)key);
     lists->valueList->append(value);
 }
 
@@ -111,16 +108,15 @@ SbDict::addEntryToPLists(unsigned long key, void *value, void *data)
 //
 
 void
-SbDict::applyToAll(void (*rtn)(unsigned long key, void *value) )
-{
-    int		i;
-    SbDictEntry	*entry;
+SbDict::applyToAll(void (*rtn)(unsigned long key, void *value)) {
+    int          i;
+    SbDictEntry *entry;
 
     // Call rtn for each entry in dict
     for (i = 0; i < tableSize; i++) {
 
-	for (entry = buckets[i]; entry != NULL; entry = entry->next)
-	    (*rtn)(entry->key, entry->value);
+        for (entry = buckets[i]; entry != NULL; entry = entry->next)
+            (*rtn)(entry->key, entry->value);
     }
 }
 
@@ -131,16 +127,15 @@ SbDict::applyToAll(void (*rtn)(unsigned long key, void *value) )
 
 void
 SbDict::applyToAll(void (*rtn)(unsigned long key, void *value, void *data),
-		   void *data )
-{
-    int		i;
-    SbDictEntry	*entry;
+                   void *data) {
+    int          i;
+    SbDictEntry *entry;
 
     // Call rtn for each entry in dict
     for (i = 0; i < tableSize; i++) {
 
-	for (entry = buckets[i]; entry != NULL; entry = entry->next)
-	    (*rtn)(entry->key, entry->value, data);
+        for (entry = buckets[i]; entry != NULL; entry = entry->next)
+            (*rtn)(entry->key, entry->value, data);
     }
 }
 
@@ -149,19 +144,18 @@ SbDict::applyToAll(void (*rtn)(unsigned long key, void *value, void *data),
 //
 
 void
-SbDict::clear()
-{
-    int		i;
-    SbDictEntry	*entry, *nextEntry;
+SbDict::clear() {
+    int          i;
+    SbDictEntry *entry, *nextEntry;
 
     // Free up each entry in dict
     for (i = 0; i < tableSize; i++) {
 
-	for (entry = buckets[i]; entry != NULL; entry = nextEntry) {
-	    nextEntry = entry->next;
-	    delete entry;
-	}
-	buckets[i] = NULL;
+        for (entry = buckets[i]; entry != NULL; entry = nextEntry) {
+            nextEntry = entry->next;
+            delete entry;
+        }
+        buckets[i] = NULL;
     }
 }
 
@@ -171,18 +165,16 @@ SbDict::clear()
 //
 
 SbBool
-SbDict::enter(unsigned long key, void *value)
-{
-    SbDictEntry		*&entry = findEntry(key);
+SbDict::enter(unsigned long key, void *value) {
+    SbDictEntry *&entry = findEntry(key);
 
     if (entry == NULL) {
-	entry = new SbDictEntry(key, value);
-	entry->next = NULL;
-	return TRUE;
-    }
-    else {
-	entry->value = value;	// Overwrites old value
-	return FALSE;
+        entry = new SbDictEntry(key, value);
+        entry->next = NULL;
+        return TRUE;
+    } else {
+        entry->value = value; // Overwrites old value
+        return FALSE;
     }
 }
 
@@ -192,17 +184,15 @@ SbDict::enter(unsigned long key, void *value)
 //
 
 SbBool
-SbDict::find(unsigned long key, void *&value) const
-{
-    SbDictEntry		*&entry = findEntry(key);
+SbDict::find(unsigned long key, void *&value) const {
+    SbDictEntry *&entry = findEntry(key);
 
     if (entry == NULL) {
-	value = NULL;
-	return FALSE;
-    }
-    else {
-	value = entry->value;
-	return TRUE;
+        value = NULL;
+        return FALSE;
+    } else {
+        value = entry->value;
+        return TRUE;
     }
 }
 
@@ -211,16 +201,15 @@ SbDict::find(unsigned long key, void *&value) const
 //
 
 SbDictEntry *&
-SbDict::findEntry(unsigned long key) const
-{
-    SbDictEntry		**entry;
+SbDict::findEntry(unsigned long key) const {
+    SbDictEntry **entry;
 
     entry = &buckets[key % tableSize];
 
     while (*entry != NULL) {
-	if ((*entry)->key == key)
-	    break;
-	entry = &(*entry)->next;
+        if ((*entry)->key == key)
+            break;
+        entry = &(*entry)->next;
     }
     return *entry;
 }
@@ -231,9 +220,8 @@ SbDict::findEntry(unsigned long key) const
 //
 
 void
-SbDict::makePList(SbPList &keys, SbPList &values)
-{
-    SbDictListThing	lists;
+SbDict::makePList(SbPList &keys, SbPList &values) {
+    SbDictListThing lists;
 
     lists.keyList = &keys;
     lists.valueList = &values;
@@ -241,7 +229,7 @@ SbDict::makePList(SbPList &keys, SbPList &values)
     keys.truncate(0);
     values.truncate(0);
 
-    applyToAll(SbDict::addEntryToPLists, (void *) &lists);
+    applyToAll(SbDict::addEntryToPLists, (void *)&lists);
 }
 
 //
@@ -249,17 +237,16 @@ SbDict::makePList(SbPList &keys, SbPList &values)
 //
 
 SbBool
-SbDict::remove(unsigned long key)
-{
-    SbDictEntry		*&entry = findEntry(key);
-    SbDictEntry		*tmp;
+SbDict::remove(unsigned long key) {
+    SbDictEntry *&entry = findEntry(key);
+    SbDictEntry * tmp;
 
     if (entry == NULL)
-	return FALSE;
+        return FALSE;
     else {
-	tmp = entry;
-	entry = entry->next;
-	delete tmp;
-	return TRUE;
+        tmp = entry;
+        entry = entry->next;
+        delete tmp;
+        return TRUE;
     }
 }

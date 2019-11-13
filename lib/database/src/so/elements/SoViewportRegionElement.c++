@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -65,8 +65,7 @@ SO_ELEMENT_SOURCE(SoViewportRegionElement);
 // Use: internal
 
 void
-SoViewportRegionElement::initClass()
-{
+SoViewportRegionElement::initClass() {
     SO_ELEMENT_INIT_CLASS(SoViewportRegionElement, SoElement);
     emptyViewportRegion = new SbViewportRegion(0, 0);
 }
@@ -81,8 +80,7 @@ SoViewportRegionElement::initClass()
 SoViewportRegionElement::~SoViewportRegionElement()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -108,18 +106,17 @@ SoViewportRegionElement::init(SoState *)
 // Use: public, static
 
 void
-SoViewportRegionElement::set(SoState *state,
-			     const SbViewportRegion &vpReg)
+SoViewportRegionElement::set(SoState *state, const SbViewportRegion &vpReg)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoViewportRegionElement	*elt;
+    SoViewportRegionElement *elt;
 
     // Get an instance we can change (pushing if necessary)
-    elt = (SoViewportRegionElement *) getElement(state, classStackIndex);
+    elt = (SoViewportRegionElement *)getElement(state, classStackIndex);
 
     if (elt != NULL)
-	elt->setElt(vpReg);
+        elt->setElt(vpReg);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -136,12 +133,12 @@ SoViewportRegionElement::get(SoState *state)
 {
     const SoViewportRegionElement *elt;
 
-    elt = (const SoViewportRegionElement *)
-	getConstElement(state, classStackIndex);
-    if (elt != NULL )
-	return elt->viewportRegion;
+    elt = (const SoViewportRegionElement *)getConstElement(state,
+                                                           classStackIndex);
+    if (elt != NULL)
+        return elt->viewportRegion;
     else
-	return *emptyViewportRegion;
+        return *emptyViewportRegion;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -158,7 +155,7 @@ SoViewportRegionElement::matches(const SoElement *elt) const
 ////////////////////////////////////////////////////////////////////////
 {
     return (viewportRegion ==
-	    ((const SoViewportRegionElement *) elt)->viewportRegion);
+            ((const SoViewportRegionElement *)elt)->viewportRegion);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -175,10 +172,10 @@ SoViewportRegionElement::copyMatchInfo() const
 ////////////////////////////////////////////////////////////////////////
 {
     SoViewportRegionElement *result =
-	(SoViewportRegionElement *)getTypeId().createInstance();
+        (SoViewportRegionElement *)getTypeId().createInstance();
 
     result->viewportRegion = viewportRegion;
-    
+
     return result;
 }
 
@@ -193,15 +190,14 @@ SoViewportRegionElement::copyMatchInfo() const
 
 #ifdef DEBUG
 void
-SoViewportRegionElement::print(FILE *fp) const
-{
+SoViewportRegionElement::print(FILE *fp) const {
     SoElement::print(fp);
 
     fprintf(fp, "\tViewport Region:\n");
 
-    const SbVec2s	&winSize = viewportRegion.getWindowSize();
-    const SbVec2f	&vpOrig  = viewportRegion.getViewportOrigin();
-    const SbVec2f	&vpSize  = viewportRegion.getViewportSize();
+    const SbVec2s &winSize = viewportRegion.getWindowSize();
+    const SbVec2f &vpOrig = viewportRegion.getViewportOrigin();
+    const SbVec2f &vpSize = viewportRegion.getViewportSize();
 
     fprintf(fp, "\t\tWindow   size   = %d, %d\n", winSize[0], winSize[1]);
     fprintf(fp, "\t\tViewport origin = %g, %g\n", vpOrig[0], vpOrig[1]);
@@ -209,9 +205,7 @@ SoViewportRegionElement::print(FILE *fp) const
 }
 #else  /* DEBUG */
 void
-SoViewportRegionElement::print(FILE *) const
-{
-}
+SoViewportRegionElement::print(FILE *) const {}
 #endif /* DEBUG */
 
 ////////////////////////////////////////////////////////////////////////

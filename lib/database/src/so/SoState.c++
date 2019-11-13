@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -88,7 +88,7 @@ SoState::SoState(SoAction *_action, const SoTypeList &enabledElements)
         if (enabledElements[i].isBad())
             continue;
 
-        SoElement *elt = (SoElement *) enabledElements[i].createInstance();
+        SoElement *elt = (SoElement *)enabledElements[i].createInstance();
         elt->setDepth(depth);
         stack[elt->getStackIndex()] = elt;
         elt->init(this);
@@ -121,9 +121,10 @@ SoState::~SoState()
 
 #ifdef DEBUG
     if (depth != 0) {
-	SoDebugError::post("SoState::~SoState",
-			   "State destroyed with non-zero (%d) "
-			   "depth", depth);
+        SoDebugError::post("SoState::~SoState",
+                           "State destroyed with non-zero (%d) "
+                           "depth",
+                           depth);
     }
 #endif
 
@@ -157,64 +158,65 @@ SoState::getElement(int stackIndex)
     // end up not being sorted by depth).  We'll check and make sure
     // that doesn't happen:
     if (depth < topElement->getDepth()) {
-	SoDebugError::post("SoState::getElement", 
-	    "Elements must not be changed while the state is being "
-	    "popped (element being changed: %s).",
-	    SoElement::getIdFromStackIndex(stackIndex).getName().getString());
+        SoDebugError::post(
+            "SoState::getElement",
+            "Elements must not be changed while the state is being "
+            "popped (element being changed: %s).",
+            SoElement::getIdFromStackIndex(stackIndex).getName().getString());
     }
 #endif
 
     // Get top of element stack with given index
-    SoElement	*elt = stack[stackIndex];
+    SoElement *elt = stack[stackIndex];
 
 #ifdef DEBUG
     if (elt == NULL) {
-	SoDebugError::post("SoState::getElement", "%s is not enabled",
-	    SoElement::getIdFromStackIndex(stackIndex).getName().getString());
-	return NULL;
+        SoDebugError::post(
+            "SoState::getElement", "%s is not enabled",
+            SoElement::getIdFromStackIndex(stackIndex).getName().getString());
+        return NULL;
     }
 #endif /* DEBUG */
 
     // If element is not at current depth, we have to push a new
     // element on the stack
     if (elt->getDepth() < depth) {
-	SoElement *newElt;
+        SoElement *newElt;
 
-	// Each element stack is a doubly-linked list.  The
-	// nextInStack pointer points to the next lowest element, and
-	// the nextFree pointer points to the next hightest element.
-	// The top element's nextFree pointer points to a free element.
-	//
-	// With this scheme we only have to allocate elements for the
-	// stack once; pushing and popping during subsequent
-	// traversals just move the topElement pointer up and down the
-	// list.
-	if (elt->getNextFree()) {
-	    newElt = elt->getNextFree();
-	} else {
-	    newElt = (SoElement *)(elt->getTypeId().createInstance());
-	    elt->setNextFree(newElt);
-	    newElt->setNextInStack(elt);
-	    newElt->setNextFree(NULL);
-	}
+        // Each element stack is a doubly-linked list.  The
+        // nextInStack pointer points to the next lowest element, and
+        // the nextFree pointer points to the next hightest element.
+        // The top element's nextFree pointer points to a free element.
+        //
+        // With this scheme we only have to allocate elements for the
+        // stack once; pushing and popping during subsequent
+        // traversals just move the topElement pointer up and down the
+        // list.
+        if (elt->getNextFree()) {
+            newElt = elt->getNextFree();
+        } else {
+            newElt = (SoElement *)(elt->getTypeId().createInstance());
+            elt->setNextFree(newElt);
+            newElt->setNextInStack(elt);
+            newElt->setNextFree(NULL);
+        }
 
-	newElt->setDepth(depth);
+        newElt->setDepth(depth);
 
-	// Add it to the all-element stack
-	newElt->setNext(topElement);
+        // Add it to the all-element stack
+        newElt->setNext(topElement);
 
-	topElement = stack[stackIndex] = newElt;
+        topElement = stack[stackIndex] = newElt;
 
-	// Call push on new element in case it has side effects
-	newElt->push(this);
+        // Call push on new element in case it has side effects
+        newElt->push(this);
 
-	// Return new element
-	elt = newElt;
+        // Return new element
+        elt = newElt;
     }
 
     return elt;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -241,28 +243,27 @@ SoState::pop()
 
     // Call pop() for all elements that were at previous depth
     for (poppedElt = topElement;
-	 poppedElt != NULL && poppedElt->getDepth() > depth;
-	 poppedElt = poppedElt->getNext()) {
+         poppedElt != NULL && poppedElt->getDepth() > depth;
+         poppedElt = poppedElt->getNext()) {
 
-	// Find next element in same stack as popped element. This
-	// element will become the new top of that stack.
+        // Find next element in same stack as popped element. This
+        // element will become the new top of that stack.
         SoElement *nextInStack = poppedElt->getNextInStack();
 
-	// Give new top element in stack a chance to update things.
-	// Pass old element instance just in case.
+        // Give new top element in stack a chance to update things.
+        // Pass old element instance just in case.
         nextInStack->pop(this, poppedElt);
-
     }
 
     // Actually pop all such elements
     while (topElement != NULL && topElement->getDepth() > depth) {
-	poppedElt = topElement;
+        poppedElt = topElement;
 
-	// Remove from main stack
-	topElement = topElement->getNext();
+        // Remove from main stack
+        topElement = topElement->getNext();
 
-	// Remove from element stack
-	stack[poppedElt->getStackIndex()] = poppedElt->getNextInStack();
+        // Remove from element stack
+        stack[poppedElt->getStackIndex()] = poppedElt->getNextInStack();
     }
 }
 
@@ -284,16 +285,17 @@ SoState::print(FILE *fp)
 
     for (size_t i = 0; i < stack.size(); i++) {
 
-	// Print only enabled element stacks
-	if (stack[i] != NULL) {
+        // Print only enabled element stacks
+        if (stack[i] != NULL) {
 
-        fprintf(fp, "  stack[%02lu]:\n", i);
+            fprintf(fp, "  stack[%02lu]:\n", i);
 
-	    for (const SoElement *elt = stack[i]; elt != NULL; elt = elt->getNextInStack()) {
-            fprintf(fp, "    ");
-            elt->print(fp);
-	    }
-	}
+            for (const SoElement *elt = stack[i]; elt != NULL;
+                 elt = elt->getNextInStack()) {
+                fprintf(fp, "    ");
+                elt->print(fp);
+            }
+        }
     }
 
     fprintf(fp, "_________________________________________________________\n");

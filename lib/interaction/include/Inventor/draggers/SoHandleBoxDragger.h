@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,17 +51,17 @@
  |     For info about the structure of SoHandleBoxDragger:
  |     [1] compile: /usr/share/src/Inventor/samples/ivNodeKitStructure
  |     [2] type:    ivNodeKitStructure SoHandleBoxDragger.
- |     [3] The program prints a diagram of the scene graph and a table with 
+ |     [3] The program prints a diagram of the scene graph and a table with
  |         information about each part.
  |
  |  The following parts in this dragger are created at construction time.
  |  'ResourceName' corresponds to the name of the default geometry for the
  |  part. The dragger's constructor gets the scene graph for 'ResourceName'
- |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).  
+ |  by querying the global dictionary ( SoDB::getByName("ResourceName"); ).
  |
  |  Resource Name:                           Part Name:
  |
- |  NOTE: for the translators and extruders, 
+ |  NOTE: for the translators and extruders,
  |        numbering refers to a cube-face:
  |        1=top,2=bot,3=lft,4=rit,5=fnt,6=bak
  |
@@ -73,11 +73,11 @@
  |      handleBoxExtruder1Active           - extruder1Active
  |      (ditto for extruder2-extruder6)
  |
- |  
- |  NOTE: for the uniform scalers, 
- |        numbers refer to a corner: 
- |        1=+x+y+z,  2=+x+y-z, 3=+x-y+z, 
- |        4=+x-y-z,  5=-x+y+z,  6=-x+y-z, 
+ |
+ |  NOTE: for the uniform scalers,
+ |        numbers refer to a corner:
+ |        1=+x+y+z,  2=+x+y-z, 3=+x-y+z,
+ |        4=+x-y-z,  5=-x+y+z,  6=-x+y-z,
  |        7=-x-y+z, 8=-x-y-z
  |      handleBoxUniform1		   - uniform1
  |      handleBoxUniform1Active            - uniform1Active
@@ -86,7 +86,7 @@
  |  NOTE: for the arrows, numbering refers
  |        to cube-face they point out from:
  |        1=top,2=bot,3=lft,4=rit,5=fnt,6=bak
- |  
+ |
  |      handleBoxArrow1                    - arrow1
  |      (ditto for arrow2-arrow6)
  |
@@ -96,8 +96,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_HANDLEBOX_DRAGGER_
-#define  _SO_HANDLEBOX_DRAGGER_
+#ifndef _SO_HANDLEBOX_DRAGGER_
+#define _SO_HANDLEBOX_DRAGGER_
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -143,7 +143,6 @@ class SoHandleBoxDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(translator6Switch);
     SO_KIT_CATALOG_ENTRY_HEADER(translator6);
     SO_KIT_CATALOG_ENTRY_HEADER(translator6Active);
-
 
     SO_KIT_CATALOG_ENTRY_HEADER(extruder1Switch);
     SO_KIT_CATALOG_ENTRY_HEADER(extruder1);
@@ -207,95 +206,107 @@ class SoHandleBoxDragger : public SoDragger {
   public:
     // Constructor
     SoHandleBoxDragger();
-    
-    SoSFVec3f    translation;
-    SoSFVec3f    scaleFactor;
 
-  SoINTERNAL public:
-    static void		initClass();	// initialize the class
+    SoSFVec3f translation;
+    SoSFVec3f scaleFactor;
+
+    SoINTERNAL
+  public:
+    static void initClass(); // initialize the class
 
   protected:
-
     // Callbacks for drag start, motion, and finish
-    static void startCB( void *, SoDragger * );
-    static void motionCB( void *, SoDragger * );
-    static void finishCB( void *, SoDragger * );
-    
+    static void startCB(void *, SoDragger *);
+    static void motionCB(void *, SoDragger *);
+    static void finishCB(void *, SoDragger *);
+
     SoFieldSensor *translFieldSensor;
     SoFieldSensor *scaleFieldSensor;
-    static void   fieldSensorCB( void *, SoSensor * );
-    static void valueChangedCB( void *, SoDragger * );
+    static void    fieldSensorCB(void *, SoSensor *);
+    static void    valueChangedCB(void *, SoDragger *);
 
     // Callbacks for pressing and releasing the meta keys
-    static void	metaKeyChangeCB( void *, SoDragger *);
+    static void metaKeyChangeCB(void *, SoDragger *);
 
     // These really do the work during startCB, motionCB, and finishCB
-    void	dragStart();
-    void	drag();
-    void	dragFinish();
+    void dragStart();
+    void drag();
+    void dragFinish();
 
-    void setAllPartsActive( SbBool onOrOff );
+    void setAllPartsActive(SbBool onOrOff);
 
     // detach/attach any sensors, callbacks, and/or field connections.
     // Called by:            start/end of SoBaseKit::readInstance
     // and on new copy by:   start/end of SoBaseKit::copy.
-    // Classes that redefine must call setUpConnections(TRUE,TRUE) 
+    // Classes that redefine must call setUpConnections(TRUE,TRUE)
     // at end of constructor.
     // Returns the state of the node when this was called.
-    virtual SbBool setUpConnections( SbBool onOff, SbBool doItAlways = FALSE );
+    virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
 
     virtual void setDefaultOnNonWritingFields();
 
     virtual ~SoHandleBoxDragger();
 
   private:
+    enum WhichAxis { POSX, POSY, POSZ, NEGX, NEGY, NEGZ };
+    void highlightAxisForScale(WhichAxis axis);
 
-    enum WhichAxis 
-        { POSX, POSY, POSZ, NEGX, NEGY, NEGZ };
-    void   highlightAxisForScale( WhichAxis axis );
+    enum State {
+        INACTIVE,
+        SCALE_GEOM_ONLY,
+        RIT_X_SCALE,
+        TOP_Y_SCALE,
+        FNT_Z_SCALE,
+        LFT_X_SCALE,
+        BOT_Y_SCALE,
+        BAK_Z_SCALE,
 
-    enum State
-	{ INACTIVE, 
-	  SCALE_GEOM_ONLY,
-	   RIT_X_SCALE,  TOP_Y_SCALE,  FNT_Z_SCALE, 
-	   LFT_X_SCALE,  BOT_Y_SCALE,  BAK_Z_SCALE, 
+        PX_PY_PZ_3D_SCALE,
+        PX_PY_NZ_3D_SCALE,
+        PX_NY_PZ_3D_SCALE,
+        PX_NY_NZ_3D_SCALE,
+        NX_PY_PZ_3D_SCALE,
+        NX_PY_NZ_3D_SCALE,
+        NX_NY_PZ_3D_SCALE,
+        NX_NY_NZ_3D_SCALE,
 
-	  PX_PY_PZ_3D_SCALE, PX_PY_NZ_3D_SCALE, PX_NY_PZ_3D_SCALE, 
-	  PX_NY_NZ_3D_SCALE, NX_PY_PZ_3D_SCALE, NX_PY_NZ_3D_SCALE, 
-	  NX_NY_PZ_3D_SCALE, NX_NY_NZ_3D_SCALE, 
+        RIT_TRANSLATE,
+        TOP_TRANSLATE,
+        FNT_TRANSLATE,
+        LFT_TRANSLATE,
+        BOT_TRANSLATE,
+        BAK_TRANSLATE
+    };
 
-	  RIT_TRANSLATE,  TOP_TRANSLATE,  FNT_TRANSLATE,
-	  LFT_TRANSLATE,  BOT_TRANSLATE,  BAK_TRANSLATE };
+    State currentState;
+    int   translateDir; // Used for 1-D translation,
+                        // this variable records the current
+                        // axis being used.
 
-    State		currentState;     
-    int                 translateDir;   // Used for 1-D translation,
-				        // this variable records the current
-				        // axis being used.
+    SbPlaneProjector *motionPlaneProj;
+    SbLineProjector * motionLineProj;
 
-    SbPlaneProjector    *motionPlaneProj;
-    SbLineProjector     *motionLineProj;
+    State   restartState;   // used by meta callback.
+    SbVec3f worldRestartPt; // used during interaction
 
-    State	    restartState;     // used by meta callback. 
-    SbVec3f         worldRestartPt; // used during interaction
-
-    SbBool          altDown, ctlDown, shftDown;  // used to keep track of
-						 // which meta keys were down.
+    SbBool altDown, ctlDown, shftDown; // used to keep track of
+                                       // which meta keys were down.
 
     // functions which do all the work
-    void	setHighlights();
-    void	setFeedbackArrows();
+    void setHighlights();
+    void setFeedbackArrows();
 
-    SbBool		translateInit();
-    SbBool		faceScaleInit();
-    SbBool		uniformScaleInit();
-    SbBool		scaleGeomSizeOnlyInit();
+    SbBool translateInit();
+    SbBool faceScaleInit();
+    SbBool uniformScaleInit();
+    SbBool scaleGeomSizeOnlyInit();
 
-    SbBool		translateDrag();
-    SbBool		scaleDrag();
-    SbBool		scaleGeomSizeOnlyDrag();
+    SbBool translateDrag();
+    SbBool scaleDrag();
+    SbBool scaleGeomSizeOnlyDrag();
 
     // character strings from which the shared geometry is read
-    static const unsigned char geomBuffer[];		
+    static const unsigned char geomBuffer[];
 };
 
 #endif /* _SO_HANDLEBOX_DRAGGER_ */
