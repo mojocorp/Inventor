@@ -34,7 +34,41 @@
  *
  */
 
-#ifndef __GLX_MOTIF
-#define __GLX_MOTIF 1
-#endif
-#include "SoGLwDrawAP.h"
+#ifndef _SoGLwDrawAP_h
+#define _SoGLwDrawAP_h
+
+#include "SoGLwMDrawA.h"
+
+typedef struct _SoGLwDrawingAreaClassPart
+{
+    XtPointer extension;
+} SoGLwDrawingAreaClassPart;
+
+typedef struct _SoGLwMDrawingAreaClassRec {
+    CoreClassPart		core_class;
+    XmPrimitiveClassPart	primitive_class;
+    SoGLwDrawingAreaClassPart	SoglwDrawingArea_class;
+} SoGLwMDrawingAreaClassRec;
+
+extern SoGLwMDrawingAreaClassRec SoglwMDrawingAreaClassRec;
+
+typedef struct {
+    /* resources */
+    XVisualInfo *	visualInfo;
+    Boolean		installColormap;
+    Boolean		allocateBackground;
+    Boolean		allocateOtherColors;
+    Boolean		installBackground;
+    XtCallbackList	ginitCallback;
+    XtCallbackList	resizeCallback;
+    XtCallbackList	exposeCallback;
+    XtCallbackList	inputCallback;
+} SoGLwDrawingAreaPart;
+
+typedef struct _SoGLwMDrawingAreaRec {
+    CorePart		core;
+    XmPrimitivePart	primitive;
+    SoGLwDrawingAreaPart	SoglwDrawingArea;
+} SoGLwMDrawingAreaRec;
+
+#endif /* _SoGLwDrawP_h */

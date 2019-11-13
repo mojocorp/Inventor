@@ -34,7 +34,135 @@
  *
  */
 
-#ifndef __GLX_MOTIF
-#define __GLX_MOTIF 1
+#ifndef _SoGLwDrawA_h
+#define _SoGLwDrawA_h
+
+#include <GL/glx.h>
+#include <Inventor/misc/SoGL.h>
+
+/****************************************************************
+ *
+ * SoGLwDrawingArea widgets
+ *
+ ****************************************************************/
+
+/* Resources:
+
+ Name		     Class		RepType		Default Value
+ ----		     -----		-------		-------------
+ attribList	     AttribList		int *		NULL
+ visualInfo	     VisualInfo		VisualInfo	NULL
+ installColormap     InstallColormap	Boolean		TRUE
+ allocateBackground  AllocateColors	Boolean		FALSE
+ allocateOtherColors AllocateColors	Boolean		FALSE
+ installBackground   InstallBackground	Boolean		TRUE
+ exposeCallback      Callback		Pointer		NULL
+ ginitCallback       Callback		Pointer		NULL
+ inputCallback       Callback		Pointer		NULL
+ resizeCallback      Callback		Pointer		NULL
+
+*** The following resources all correspond to the GLX configuration
+*** attributes and are used to create the attribList if it is NULL
+ bufferSize	     BufferSize		int		0
+ level		     Level		int		0
+ rgba		     Rgba		Boolean		FALSE
+ doublebuffer	     Doublebuffer	Boolean		FALSE
+ stereo		     Stereo		Boolean		FALSE
+ auxBuffers	     AuxBuffers		int		0
+ redSize	     ColorSize		int		0
+ greenSize	     ColorSize		int		0
+ blueSize	     ColorSize		int		0
+ alphaSize	     AlphaSize		int		0
+ depthSize	     DepthSize		int		0
+ stencilSize	     StencilSize	int		0
+ accumRedSize	     AccumColorSize	int		0
+ accumGreenSize	     AccumColorSize	int		0
+ accumBlueSize	     AccumColorSize	int		0
+ accumAlphaSize	     AccumAlphaSize	int		0
+*/
+
+#define SoGLwNattribList		"attribList"
+#define SoGLwCAttribList		"AttribList"
+#define SoGLwNvisualInfo		"visualInfo"
+#define SoGLwCVisualInfo		"VisualInfo"
+#define SoGLwRVisualInfo		"VisualInfo"
+
+#define SoGLwNinstallColormap	"installColormap"
+#define SoGLwCInstallColormap	"InstallColormap"
+#define SoGLwNallocateBackground	"allocateBackground"
+#define SoGLwNallocateOtherColors	"allocateOtherColors"
+#define SoGLwCAllocateColors	"AllocateColors"
+#define SoGLwNinstallBackground	"installBackground"
+#define SoGLwCInstallBackground	"InstallBackground"
+
+#define SoGLwCCallback		"Callback"
+#define SoGLwNexposeCallback	"exposeCallback"
+#define SoGLwNginitCallback	"ginitCallback"
+#define SoGLwNresizeCallback	"resizeCallback"
+#define SoGLwNinputCallback	"inputCallback"
+
+#define SoGLwNbufferSize		"bufferSize"
+#define SoGLwCBufferSize		"BufferSize"
+#define SoGLwNlevel		"level"
+#define SoGLwCLevel		"Level"
+#define SoGLwNrgba		"rgba"
+#define SoGLwCRgba		"Rgba"
+#define SoGLwNdoublebuffer	"doublebuffer"
+#define SoGLwCDoublebuffer	"Doublebuffer"
+#define SoGLwNstereo		"stereo"
+#define SoGLwCStereo		"Stereo"
+#define SoGLwNauxBuffers		"auxBuffers"
+#define SoGLwCAuxBuffers		"AuxBuffers"
+#define SoGLwNredSize		"redSize"
+#define SoGLwNgreenSize		"greenSize"
+#define SoGLwNblueSize		"blueSize"
+#define SoGLwCColorSize		"ColorSize"
+#define SoGLwNalphaSize		"alphaSize"
+#define SoGLwCAlphaSize		"AlphaSize"
+#define SoGLwNdepthSize		"depthSize"
+#define SoGLwCDepthSize		"DepthSize"
+#define SoGLwNstencilSize		"stencilSize"
+#define SoGLwCStencilSize		"StencilSize"
+#define SoGLwNaccumRedSize	"accumRedSize"
+#define SoGLwNaccumGreenSize	"accumGreenSize"
+#define SoGLwNaccumBlueSize	"accumBlueSize"
+#define SoGLwCAccumColorSize	"AccumColorSize"
+#define SoGLwNaccumAlphaSize	"accumAlphaSize"
+#define SoGLwCAccumAlphaSize	"AccumAlphaSize"
+
+typedef struct _SoGLwMDrawingAreaClassRec	*SoGLwMDrawingAreaWidgetClass;
+typedef struct _SoGLwMDrawingAreaRec	*SoGLwMDrawingAreaWidget;
+
+extern WidgetClass SoglwMDrawingAreaWidgetClass;
+
+/* Callback reasons */
+#define SoGLwCR_EXPOSE	XmCR_EXPOSE
+#define SoGLwCR_RESIZE	XmCR_RESIZE
+#define SoGLwCR_INPUT	XmCR_INPUT
+
+#define SoGLwCR_GINIT	32136	/* Arbitrary number that should neverr clash*/
+
+typedef struct
+{
+    int     reason;
+    XEvent  *event;
+    Dimension width, height;		/* for resize callback */
+} SoGLwDrawingAreaCallbackStruct;
+
+#if defined(__cplusplus) || defined(c_plusplus)
+extern "C" {
 #endif
-#include "SoGLwDrawA.h"
+
+#ifdef _NO_PROTO
+extern Widget SoGLwCreateMDrawingArea ();
+#else /* _NO_PROTO */
+
+extern Widget SoGLwCreateMDrawingArea (Widget parent, char *name,
+				     ArgList arglist, Cardinal argcount);
+#endif /* _NO_PROTO */
+
+#if defined(__cplusplus) || defined(c_plusplus)
+}
+#endif
+
+#endif /* _SoGLwDrawA_h */

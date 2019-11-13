@@ -45,8 +45,6 @@ set(PUBLIC_HEADERS
     include/Inventor/Xt/viewers/SoXtWalkViewer.h
 )
 set(PRIVATE_HEADERS
-    include/SoGLwDrawA.h
-    include/SoGLwDrawAP.h
     include/SoGLwMDrawA.h
     include/SoGLwMDrawAP.h
     include/SoXtFloatText.h
@@ -74,8 +72,6 @@ set(SOXT_SOURCES
     src/viewers/Sgm/ThumbWheel.h
     src/viewers/Sgm/ThumbWheelP.h
     src/viewers/SoXtBitmapButton.h
-    src/SoGLwDAUtil.c
-    src/SoGLwDrawA.c
     src/SoGLwMDrawA.c
     src/sgi_visual.c
     src/viewers/Sgm/ThumbWheel.c
