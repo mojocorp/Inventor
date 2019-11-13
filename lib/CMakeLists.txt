@@ -289,6 +289,7 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/nodes/SoGroup.h
     database/include/Inventor/nodes/SoIndexedFaceSet.h
     database/include/Inventor/nodes/SoIndexedLineSet.h
+    database/include/Inventor/nodes/SoIndexedPointSet.h
     database/include/Inventor/nodes/SoIndexedNurbsCurve.h
     database/include/Inventor/nodes/SoIndexedNurbsSurface.h
     database/include/Inventor/nodes/SoIndexedShape.h
@@ -678,6 +679,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoGroup.c++
     database/src/so/nodes/SoIndexedNurbsCurve.c++
     database/src/so/nodes/SoIndexedNurbsSurface.c++
+    database/src/so/nodes/SoIndexedPointSet.c++
     database/src/so/nodes/SoIndexedShape.c++
     database/src/so/nodes/SoInfo.c++
     database/src/so/nodes/SoLOD.c++
