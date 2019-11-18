@@ -697,8 +697,8 @@ SoQuadMesh::GLRender(SoGLRenderAction *action)
 #endif
 
         // Call the appropriate render loop:
-        (this->*renderFunc[useTexCoordsAnyway |
-                           vpCache.getRenderCase(shapeStyle)])(action);
+        GLRenderGeneric(action,
+                        useTexCoordsAnyway | vpCache.getRenderCase(shapeStyle));
 
         // If doing multiple colors, turn off ColorMaterial:
         if (vpCache.getNumColors() > 1) {
@@ -742,7 +742,7 @@ SoQuadMesh::GLRender(SoGLRenderAction *action)
             lazyElt->send(state, SoLazyElement::ALL_MASK);
 
         // Call the appropriate render loop:
-        (this->*renderFunc[vpCache.getRenderCase(shapeStyle)])(action);
+        GLRenderGeneric(action, vpCache.getRenderCase(shapeStyle));
 
         // If doing multiple colors, turn off ColorMaterial:
         if (vpCache.getNumColors() > 1) {
@@ -946,4 +946,191 @@ SoQuadMesh::generatePrimitives(SoAction *action)
     }
 
     state->pop();
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//
+//
+// Use: private
+void
+SoQuadMesh::GLRenderGeneric(SoGLRenderAction *action, int rendercase)
+//
+////////////////////////////////////////////////////////////////////////
+{
+
+    // 5 bits used to determine the rendering case are:
+    // 43210  BITS            Routine suffix
+    // -----  ----            --------------
+    // 00...  Overall mtl     (Om)
+    // 01...  Part mtl        (Pm)
+    // 10...  Face mtl        (Fm)
+    // 11...  Vtx mtl         (Vm)
+    // ..00.  Overall/No norm (On)
+    // ..01.  Part norm       (Pn)
+    // ..10.  Face norm       (Fn)
+    // ..11.  Vtx norm        (Vn)
+    // ....0  No texcoord     -none-
+    // ....1  Vtx texcoord    (T)
+    bool Om = ((rendercase >> 3) == 0);
+    bool Pm = ((rendercase >> 3) == 1);
+    bool Fm = ((rendercase >> 3) == 2);
+    bool Vm = ((rendercase >> 3) == 3);
+    bool On = (((rendercase >> 1) & 3) == 0);
+    bool Pn = (((rendercase >> 1) & 3) == 1);
+    bool Fn = (((rendercase >> 1) & 3) == 2);
+    bool Vn = (((rendercase >> 1) & 3) == 3);
+    bool T = ((rendercase & 1) == 1);
+
+    if (On) {
+        // Send one normal, if there are any normals in vpCache:
+        if (vpCache.getNumNormals() > 0)
+            vpCache.sendNormal(vpCache.getNormals(0));
+    }
+    const char *       vertexPtr = vpCache.getVertices(startIndex.getValue());
+    const unsigned int vertexStride = vpCache.getVertexStride();
+    const unsigned int vertexRowStride =
+        vertexStride * verticesPerRow.getValue();
+
+    const char *colorPtr = vpCache.getColors(Vm ? startIndex.getValue() : 0);
+    const unsigned int colorStride = vpCache.getColorStride();
+    const unsigned int colorRowStride = colorStride * verticesPerRow.getValue();
+
+    const char *normalPtr = vpCache.getNormals(Vn ? startIndex.getValue() : 0);
+    const unsigned int normalStride = vpCache.getNormalStride();
+    const unsigned int normalRowStride =
+        normalStride * verticesPerRow.getValue();
+
+    const char *       texCoordPtr = vpCache.getTexCoords(0);
+    const unsigned int texCoordStride = vpCache.getTexCoordStride();
+    const unsigned int texCoordRowStride =
+        texCoordStride * verticesPerRow.getValue();
+
+    const int numRows = verticesPerColumn.getValue() - 1;
+    const int nv =
+        (Fm | Fn) ? verticesPerRow.getValue() - 1 : verticesPerRow.getValue();
+
+    for (int row = 0; row < numRows; row++) {
+        if (Pm) {
+            (*vpCache.colorFunc)(colorPtr);
+            colorPtr += colorStride;
+        }
+        if (Pn) {
+            (*vpCache.normalFunc)(normalPtr);
+            normalPtr += normalStride;
+        }
+        if (Fn | Fm) {
+            glBegin(GL_QUADS);
+            for (int v = 0; v < nv; v++) {
+                if (Fm) {
+                    (*vpCache.colorFunc)(colorPtr);
+                    colorPtr += colorStride;
+                }
+                if (Fn) {
+                    (*vpCache.normalFunc)(normalPtr);
+                    normalPtr += normalStride;
+                }
+                if (Vm) {
+                    (*vpCache.colorFunc)(colorPtr);
+                }
+                if (Vn) {
+                    (*vpCache.normalFunc)(normalPtr);
+                }
+                if (T) {
+                    (*vpCache.texCoordFunc)(texCoordPtr);
+                }
+                (*vpCache.vertexFunc)(vertexPtr);
+                if (Vm) {
+                    (*vpCache.colorFunc)(colorPtr + colorRowStride);
+                }
+                if (Vn) {
+                    (*vpCache.normalFunc)(normalPtr + normalRowStride);
+                }
+                if (T) {
+                    (*vpCache.texCoordFunc)(texCoordPtr + texCoordRowStride);
+                }
+                (*vpCache.vertexFunc)(vertexPtr + vertexRowStride);
+                if (Vm) {
+                    (*vpCache.colorFunc)(colorPtr + colorStride +
+                                         colorRowStride);
+                }
+                if (Vn) {
+                    (*vpCache.normalFunc)(normalPtr + normalStride +
+                                          normalRowStride);
+                }
+                if (T) {
+                    (*vpCache.texCoordFunc)(texCoordPtr + texCoordStride +
+                                            texCoordRowStride);
+                }
+                (*vpCache.vertexFunc)(vertexPtr + vertexStride +
+                                      vertexRowStride);
+                if (Vm) {
+                    (*vpCache.colorFunc)(colorPtr + colorStride);
+                    colorPtr += colorStride;
+                }
+                if (Vn) {
+                    (*vpCache.normalFunc)(normalPtr + normalStride);
+                    normalPtr += normalStride;
+                }
+                if (T) {
+                    (*vpCache.texCoordFunc)(texCoordPtr + texCoordStride);
+                    texCoordPtr += texCoordStride;
+                }
+                (*vpCache.vertexFunc)(vertexPtr + vertexStride);
+                vertexPtr += vertexStride;
+            }
+            glEnd(); // GL_QUADS
+            // At the end of a row skip over last vertex:
+            vertexPtr += vertexStride;
+            if (T) {
+                texCoordPtr += texCoordStride;
+            }
+            if (Vm) {
+                colorPtr += colorStride;
+            }
+            if (Vn) {
+                normalPtr += normalStride;
+            }
+
+        } // end Fn | Fm (Quads)
+
+        // Do Strip rendering if both ~Fn and ~Fm
+        if (Vm | Om | Pm) {
+            if (Vn | On | Pn) {
+                glBegin(GL_TRIANGLE_STRIP);
+                for (int v = 0; v < nv; v++) {
+
+                    if (Vm) {
+                        (*vpCache.colorFunc)(colorPtr);
+                    }
+                    if (Vn) {
+                        (*vpCache.normalFunc)(normalPtr);
+                    }
+                    if (T) {
+                        (*vpCache.texCoordFunc)(texCoordPtr);
+                    }
+                    (*vpCache.vertexFunc)(vertexPtr);
+
+                    if (Vm) {
+                        (*vpCache.colorFunc)(colorPtr + colorRowStride);
+                        colorPtr += colorStride;
+                    }
+                    if (Vn) {
+                        (*vpCache.normalFunc)(normalPtr + normalRowStride);
+                        normalPtr += normalStride;
+                    }
+                    if (T) {
+                        (*vpCache.texCoordFunc)(texCoordPtr +
+                                                texCoordRowStride);
+                        texCoordPtr += texCoordStride;
+                    }
+                    (*vpCache.vertexFunc)(vertexPtr + vertexRowStride);
+                    vertexPtr += vertexStride;
+                }
+
+                glEnd();
+            }
+        } // end Strip rendering
+    }
 }

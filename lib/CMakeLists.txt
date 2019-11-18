@@ -829,7 +829,6 @@ set(DATABASE_SOURCES
 set(PP_SOURCES
     database/src/so/nodes/SoIndexedTriangleStripSet.pp
     database/src/so/nodes/SoFaceSet.pp
-    database/src/so/nodes/SoQuadMesh.pp
     database/src/so/nodes/SoIndexedFaceSet.pp
     database/src/so/nodes/SoTriangleStripSet.pp
 )
