@@ -832,8 +832,6 @@ set(PP_SOURCES
     database/src/so/nodes/SoQuadMesh.pp
     database/src/so/nodes/SoIndexedFaceSet.pp
     database/src/so/nodes/SoTriangleStripSet.pp
-    database/src/so/nodes/SoIndexedLineSet.pp
-    database/src/so/nodes/SoLineSet.pp
 )
 
 # Run ppp on each pp file

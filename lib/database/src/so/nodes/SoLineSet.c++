@@ -90,35 +90,6 @@ const int AUTO_CACHE_LS_MIN_WITHOUT_VP = 20;
 // built (because they'll use too much memory):
 const int AUTO_CACHE_LS_MAX = 1000;
 
-// 32 different rendering loops; the 5 bits used to determine the
-// rendering case are:
-// 43210  BITS            Routine suffix
-// -----  ----            --------------
-// 00...  Overall mtl     (Om)
-// 01...  Part mtl        (Pm)
-// 10...  Face mtl        (Fm)
-// 11...  Vtx mtl         (Vm)
-// ..00.  Overall/No norm (On)
-// ..01.  Part norm       (Pn)
-// ..10.  Face norm       (Fn)
-// ..11.  Vtx norm        (Vn)
-// ....0  No texcoord     -none-
-// ....1  Vtx texcoord    (T)
-
-// Note that with line sets, Parts are line segments,
-// Faces are polylines.
-//
-SoLineSet::PMLS SoLineSet::renderFunc[32] = {
-    &SoLineSet::OmOn, &SoLineSet::OmOnT, &SoLineSet::OmPn, &SoLineSet::OmPnT,
-    &SoLineSet::OmFn, &SoLineSet::OmFnT, &SoLineSet::OmVn, &SoLineSet::OmVnT,
-    &SoLineSet::PmOn, &SoLineSet::PmOnT, &SoLineSet::PmPn, &SoLineSet::PmPnT,
-    &SoLineSet::PmFn, &SoLineSet::PmFnT, &SoLineSet::PmVn, &SoLineSet::PmVnT,
-    &SoLineSet::FmOn, &SoLineSet::FmOnT, &SoLineSet::FmPn, &SoLineSet::FmPnT,
-    &SoLineSet::FmFn, &SoLineSet::FmFnT, &SoLineSet::FmVn, &SoLineSet::FmVnT,
-    &SoLineSet::VmOn, &SoLineSet::VmOnT, &SoLineSet::VmPn, &SoLineSet::VmPnT,
-    &SoLineSet::VmFn, &SoLineSet::VmFnT, &SoLineSet::VmVn, &SoLineSet::VmVnT,
-};
-
 SO_NODE_SOURCE(SoLineSet);
 
 ////////////////////////////////////////////////////////////////////////
@@ -670,8 +641,8 @@ SoLineSet::GLRender(SoGLRenderAction *action)
 #endif
 
         // Call the appropriate render loop:
-        (this->*renderFunc[useTexCoordsAnyway |
-                           vpCache.getRenderCase(shapeStyle)])(action);
+        GLRenderGeneric(action,
+                        useTexCoordsAnyway | vpCache.getRenderCase(shapeStyle));
 
         // If doing multiple colors, turn off ColorMaterial:
         if (vpCache.getNumColors() > 1) {
@@ -719,7 +690,7 @@ SoLineSet::GLRender(SoGLRenderAction *action)
             lazyElt->send(state, SoLazyElement::ALL_MASK);
 
         // Call the appropriate render loop:
-        (this->*renderFunc[vpCache.getRenderCase(shapeStyle)])(action);
+        GLRenderGeneric(action, vpCache.getRenderCase(shapeStyle));
 
         // If doing multiple colors, turn off ColorMaterial:
         if (vpCache.getNumColors() > 1) {
@@ -760,4 +731,155 @@ SoLineSet::notify(SoNotList *list)
     }
 
     SoNonIndexedShape::notify(list);
+}
+
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//
+//
+// Use: private
+void
+SoLineSet::GLRenderGeneric(SoGLRenderAction *action, int rendercase)
+//
+////////////////////////////////////////////////////////////////////////
+{
+    const int      np = numVertices.getNum();
+    const int32_t *numverts = numVertices.getValues(0);
+    SbBool renderAsPoints = (SoDrawStyleElement::get(action->getState()) ==
+                             SoDrawStyleElement::POINTS);
+
+    // 5 bits used to determine the rendering case are:
+    // 43210  BITS            Routine suffix
+    // -----  ----            --------------
+    // 00...  Overall mtl     (Om)
+    // 01...  Part mtl        (Pm)
+    // 10...  Face mtl        (Fm)
+    // 11...  Vtx mtl         (Vm)
+    // ..00.  Overall/No norm (On)
+    // ..01.  Part norm       (Pn)
+    // ..10.  Face norm       (Fn)
+    // ..11.  Vtx norm        (Vn)
+    // ....0  No texcoord     -none-
+    // ....1  Vtx texcoord    (T)
+    bool Om = ((rendercase >> 3) == 0);
+    bool Pm = ((rendercase >> 3) == 1);
+    bool Fm = ((rendercase >> 3) == 2);
+    bool Vm = ((rendercase >> 3) == 3);
+    bool On = (((rendercase >> 1) & 3) == 0);
+    bool Pn = (((rendercase >> 1) & 3) == 1);
+    bool Fn = (((rendercase >> 1) & 3) == 2);
+    bool Vn = (((rendercase >> 1) & 3) == 3);
+    bool T = ((rendercase & 1) == 1);
+
+    if (On) {
+        // Send one normal, if there are any normals in vpCache:
+        if (vpCache.getNumNormals() > 0)
+            vpCache.sendNormal(vpCache.getNormals(0));
+    }
+
+    const char *       vertexPtr = vpCache.getVertices(startIndex.getValue());
+    const unsigned int vertexStride = vpCache.getVertexStride();
+
+    const char *colorPtr = vpCache.getColors(Vm ? startIndex.getValue() : 0);
+    const unsigned int colorStride = vpCache.getColorStride();
+
+    const char *normalPtr = vpCache.getNormals(Vn ? startIndex.getValue() : 0);
+    const unsigned int normalStride = vpCache.getNormalStride();
+
+    const char *texCoordPtr = vpCache.getTexCoords(startIndex.getValue());
+    const unsigned int texCoordStride = vpCache.getTexCoordStride();
+
+    for (int polyline = 0; polyline < np; polyline++) {
+        if (Fm) {
+            (*vpCache.colorFunc)(colorPtr);
+            colorPtr += colorStride;
+        }
+
+        if (Fn) {
+            (*vpCache.normalFunc)(normalPtr);
+            normalPtr += normalStride;
+        }
+
+        if (renderAsPoints) {
+            glBegin(GL_POINTS);
+        } else {
+            if (Pn || Pm) {
+                glBegin(GL_LINES);
+                if (Vm) {
+                    (*vpCache.colorFunc)(colorPtr);
+                    colorPtr += colorStride;
+                }
+                if (Vn) {
+                    (*vpCache.normalFunc)(normalPtr);
+                    normalPtr += normalStride;
+                }
+            } // end Pn|Pm
+
+            if (Fn || Vn || On) {
+                if (Fm || Vm || Om) {
+                    glBegin(GL_LINE_STRIP);
+                }
+            }
+        }
+
+        const int nv = (Pn || Pm) ? (*numverts) - 1 : (*numverts);
+        for (int v = 0; v < nv; v++) {
+            if (Pm || Pn) {
+                if (Pm) {
+                    (*vpCache.colorFunc)(colorPtr);
+                    colorPtr += colorStride;
+                }
+                if (Pn) {
+                    (*vpCache.normalFunc)(normalPtr);
+                    normalPtr += normalStride;
+                }
+                if (T) {
+                    (*vpCache.texCoordFunc)(texCoordPtr);
+                    texCoordPtr += texCoordStride;
+                }
+                (*vpCache.vertexFunc)(vertexPtr);
+                vertexPtr += vertexStride;
+                if (Vn) {
+                    (*vpCache.normalFunc)(normalPtr);
+                    normalPtr += normalStride;
+                }
+                if (Vm) {
+                    (*vpCache.colorFunc)(colorPtr);
+                    colorPtr += colorStride;
+                }
+                if (T) {
+                    (*vpCache.texCoordFunc)(texCoordPtr);
+                }
+                (*vpCache.vertexFunc)(vertexPtr);
+            } // end Pm | Pn
+            if (Fn || Vn || On) {
+                if (Fm || Vm || Om) {
+                    if (Vn) {
+                        (*vpCache.normalFunc)(normalPtr);
+                        normalPtr += normalStride;
+                    }
+                    if (Vm) {
+                        (*vpCache.colorFunc)(colorPtr);
+                        colorPtr += colorStride;
+                    }
+                    if (T) {
+                        (*vpCache.texCoordFunc)(texCoordPtr);
+                        texCoordPtr += texCoordStride;
+                    }
+                    (*vpCache.vertexFunc)(vertexPtr);
+                    vertexPtr += vertexStride;
+                }
+            }
+        }
+        glEnd();
+
+        if (Pn || Pm) {
+            vertexPtr += vertexStride;
+            if (T) {
+                texCoordPtr += texCoordStride;
+            }
+        }
+        ++numverts;
+    }
 }
