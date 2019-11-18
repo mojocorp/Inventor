@@ -713,6 +713,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoPerspectiveCamera.c++
     database/src/so/nodes/SoPickStyle.c++
     database/src/so/nodes/SoPointLight.c++
+    database/src/so/nodes/SoPointSet.c++
     database/src/so/nodes/SoPolygonOffset.c++
     database/src/so/nodes/SoProfile.c++
     database/src/so/nodes/SoProfileCoordinate2.c++
@@ -830,7 +831,6 @@ set(PP_SOURCES
     database/src/so/nodes/SoFaceSet.pp
     database/src/so/nodes/SoQuadMesh.pp
     database/src/so/nodes/SoIndexedFaceSet.pp
-    database/src/so/nodes/SoPointSet.pp
     database/src/so/nodes/SoTriangleStripSet.pp
     database/src/so/nodes/SoIndexedLineSet.pp
     database/src/so/nodes/SoLineSet.pp

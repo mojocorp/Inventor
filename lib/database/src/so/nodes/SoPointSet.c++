@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -44,9 +44,6 @@
  |
  |   Classes:
  |      SoPointSet
- |
-@@ This next line is true for the output file only - ignore it here:
- |   Note: This file was preprocessed from another file. Do not edit it.
  |
  |   Author(s)          : Paul S. Strauss
  |
@@ -102,7 +99,7 @@ SoPointSet::SoPointSet()
 ////////////////////////////////////////////////////////////////////////
 {
     SO_NODE_CONSTRUCTOR(SoPointSet);
-    SO_NODE_ADD_FIELD(numPoints,  (SO_POINT_SET_USE_REST_OF_POINTS));
+    SO_NODE_ADD_FIELD(numPoints, (SO_POINT_SET_USE_REST_OF_POINTS));
     isBuiltIn = TRUE;
 }
 
@@ -116,8 +113,7 @@ SoPointSet::SoPointSet()
 SoPointSet::~SoPointSet()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -131,13 +127,13 @@ SoPointSet::GLRender(SoGLRenderAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool			materialPerPoint, normalPerPoint;
-    int32_t			numPts;
-    int				curCoord, i;
+    SbBool  materialPerPoint, normalPerPoint;
+    int32_t numPts;
+    int     curCoord, i;
 
     // First see if the object is visible and should be rendered now
-    if (! shouldGLRender(action))
-	return;
+    if (!shouldGLRender(action))
+        return;
 
     SoState *state = action->getState();
     // Push state, just in case we decide to turn on BASE_COLOR (when
@@ -145,56 +141,55 @@ SoPointSet::GLRender(SoGLRenderAction *action)
     // ??? temp fix: also, push enables us to put vertex prop in state.
     state->push();
 
-    SoVertexProperty* vp = (SoVertexProperty*)vertexProperty.getValue();
-    if(vp) {
-	vp->doAction(action);
+    SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
+    if (vp) {
+        vp->doAction(action);
     }
 
     // Figure out number of points in set
-    const SoGLCoordinateElement	*ce = (const SoGLCoordinateElement *)
-	SoCoordinateElement::getInstance(action->getState());
-    curCoord = (int) startIndex.getValue();
+    const SoGLCoordinateElement *ce =
+        (const SoGLCoordinateElement *)SoCoordinateElement::getInstance(
+            action->getState());
+    curCoord = (int)startIndex.getValue();
     numPts = numPoints.getValue();
     if (numPts == SO_POINT_SET_USE_REST_OF_POINTS)
-	numPts = ce->getNum() - curCoord;
+        numPts = ce->getNum() - curCoord;
 
-   
     // This extra level of brackets is to make bundle destructors get
     // called before state->pop() is called:
     {
-	materialPerPoint = areMaterialsPerPoint(action);
-	normalPerPoint   = areNormalsPerPoint(action);
+        materialPerPoint = areMaterialsPerPoint(action);
+        normalPerPoint = areNormalsPerPoint(action);
 
-	// Test for auto-normal case; since this modifies an element this
-	// MUST BE DONE BEFORE ANY BUNDLES ARE CREATED!
-	const SoGLNormalElement *ne = (const SoGLNormalElement *)
-	    SoGLNormalElement::getInstance(state);
+        // Test for auto-normal case; since this modifies an element this
+        // MUST BE DONE BEFORE ANY BUNDLES ARE CREATED!
+        const SoGLNormalElement *ne =
+            (const SoGLNormalElement *)SoGLNormalElement::getInstance(state);
 
-	if (ne->getNum() == 0) {
-	    SoLazyElement::setLightModel(state,
-				     SoLazyElement::BASE_COLOR);
-	    normalPerPoint = FALSE;
-	}
+        if (ne->getNum() == 0) {
+            SoLazyElement::setLightModel(state, SoLazyElement::BASE_COLOR);
+            normalPerPoint = FALSE;
+        }
 
-	SoMaterialBundle		mb(action);
-	SoTextureCoordinateBundle	tcb(action, TRUE);
+        SoMaterialBundle          mb(action);
+        SoTextureCoordinateBundle tcb(action, TRUE);
 
-	// Make sure first material and normal are sent if necessary
-	mb.sendFirst();
-	if (mb.isColorOnly())
-	    normalPerPoint = FALSE;
-	if (! mb.isColorOnly() && ! normalPerPoint && ne->getNum() > 0)
-	    ne->send(curCoord);
+        // Make sure first material and normal are sent if necessary
+        mb.sendFirst();
+        if (mb.isColorOnly())
+            normalPerPoint = FALSE;
+        if (!mb.isColorOnly() && !normalPerPoint && ne->getNum() > 0)
+            ne->send(curCoord);
 
         // Get the complexity element and decide how points will be skipped
         // during rendering.
         float cmplxValue = SoComplexityElement::get(state);
         float delta = 1.8 * (0.5 - ((cmplxValue < 0.5) ? cmplxValue : 0.5));
 
-	glBegin(GL_POINTS);
+        glBegin(GL_POINTS);
 
         float fraction = 0.0;
-	for (i = 0; i < numPts; i++, fraction += delta) {
+        for (i = 0; i < numPts; i++, fraction += delta) {
 
             // Check to see if this point should be skipped due to complexity
             if (fraction >= 1.0) {
@@ -203,20 +198,20 @@ SoPointSet::GLRender(SoGLRenderAction *action)
                 continue;
             }
 
-	    // Send next material, normal, and texture coordinate if necessary
-	    if (materialPerPoint && i > 0)
-		mb.send(curCoord, TRUE);
-	    if (normalPerPoint)
-		ne->send(curCoord);
-	    if (tcb.needCoordinates())
-		tcb.send(curCoord);
+            // Send next material, normal, and texture coordinate if necessary
+            if (materialPerPoint && i > 0)
+                mb.send(curCoord, TRUE);
+            if (normalPerPoint)
+                ne->send(curCoord);
+            if (tcb.needCoordinates())
+                tcb.send(curCoord);
 
-	    // Send coordinate
-	    ce->send(curCoord);
+            // Send coordinate
+            ce->send(curCoord);
 
-	    curCoord++;
-	}
-	glEnd();
+            curCoord++;
+        }
+        glEnd();
     }
     // Restore Normal or LightModel element back to what they were.
     state->pop();
@@ -238,71 +233,74 @@ SoPointSet::generatePrimitives(SoAction *action)
     // texture coordinates
     SbBool forPicking = action->isOfType(SoRayPickAction::getClassTypeId());
 
-    SbBool			materialPerPoint, normalPerPoint;
-    int32_t			numPts;
-    int				curCoord, i;
-    SoPrimitiveVertex		pv;
-    SoPointDetail		detail;
+    SbBool            materialPerPoint, normalPerPoint;
+    int32_t           numPts;
+    int               curCoord, i;
+    SoPrimitiveVertex pv;
+    SoPointDetail     detail;
 
     // Push state, just in case we decide to set the NormalElement
     // because we're doing auto-normal generation.
     SoState *state = action->getState();
     state->push();
-  
+
     // Put vertexProperty stuff into state:
-    SoVertexProperty *vp = (SoVertexProperty*)vertexProperty.getValue();
+    SoVertexProperty *vp = (SoVertexProperty *)vertexProperty.getValue();
     if (vp) {
-	vp->doAction(action);
+        vp->doAction(action);
     }
 
     // This extra level of brackets is to make bundle constructors get
     // called before state->pop() is called:
     {
-	const SoGLCoordinateElement	*ce = (const SoGLCoordinateElement *)
-	    SoCoordinateElement::getInstance(action->getState());
+        const SoGLCoordinateElement *ce =
+            (const SoGLCoordinateElement *)SoCoordinateElement::getInstance(
+                action->getState());
 
-	// Figure out number of points in set
-	curCoord = (int) startIndex.getValue();
-	numPts = numPoints.getValue();
-	if (numPts == SO_POINT_SET_USE_REST_OF_POINTS)
-	    numPts = ce->getNum() - curCoord;
+        // Figure out number of points in set
+        curCoord = (int)startIndex.getValue();
+        numPts = numPoints.getValue();
+        if (numPts == SO_POINT_SET_USE_REST_OF_POINTS)
+            numPts = ce->getNum() - curCoord;
 
-	materialPerPoint = areMaterialsPerPoint(action);
-	normalPerPoint   = areNormalsPerPoint(action);
+        materialPerPoint = areMaterialsPerPoint(action);
+        normalPerPoint = areNormalsPerPoint(action);
 
-	// Test for auto-normal case; since this modifies an element this
-	// MUST BE DONE BEFORE ANY BUNDLES ARE CREATED!
-	const SoNormalElement *ne = SoNormalElement::getInstance(state);
-	if (ne->getNum() == 0) {
-	    normalPerPoint = FALSE;
-	}
+        // Test for auto-normal case; since this modifies an element this
+        // MUST BE DONE BEFORE ANY BUNDLES ARE CREATED!
+        const SoNormalElement *ne = SoNormalElement::getInstance(state);
+        if (ne->getNum() == 0) {
+            normalPerPoint = FALSE;
+        }
 
-	if (forPicking)
-	    pv.setTextureCoords(SbVec4f(0.0, 0.0, 0.0, 0.0));
+        if (forPicking)
+            pv.setTextureCoords(SbVec4f(0.0, 0.0, 0.0, 0.0));
 
-	pv.setDetail(&detail);
+        pv.setDetail(&detail);
 
-	SoTextureCoordinateBundle	tcb(action, FALSE, ! forPicking);
+        SoTextureCoordinateBundle tcb(action, FALSE, !forPicking);
 
-	pv.setMaterialIndex(curCoord);
-	detail.setMaterialIndex(curCoord);
+        pv.setMaterialIndex(curCoord);
+        detail.setMaterialIndex(curCoord);
 
-	if (! normalPerPoint) {
-	    if (ne->getNum() == 0) pv.setNormal(SbVec3f(0,0,0));
-	    else pv.setNormal(ne->get(0));
-	    detail.setNormalIndex(0);
-	}
+        if (!normalPerPoint) {
+            if (ne->getNum() == 0)
+                pv.setNormal(SbVec3f(0, 0, 0));
+            else
+                pv.setNormal(ne->get(0));
+            detail.setNormalIndex(0);
+        }
 
         // Get the complexity element and decide how points will be skipped
-	// during processing; note that we don't want to skip anything
-	// when picking.
+        // during processing; note that we don't want to skip anything
+        // when picking.
         float cmplxValue = SoComplexityElement::get(action->getState());
         float delta = 1.8 * (0.5 - ((cmplxValue < 0.5) ? cmplxValue : 0.5));
         float fraction = 0.0;
-	if (forPicking)
-	    delta = 0.0;
+        if (forPicking)
+            delta = 0.0;
 
-	for (i = 0; i < numPts; i++, fraction += delta) {
+        for (i = 0; i < numPts; i++, fraction += delta) {
 
             // Check to see if this point should be skipped due to complexity
             if (fraction >= 1.0) {
@@ -311,38 +309,35 @@ SoPointSet::generatePrimitives(SoAction *action)
                 continue;
             }
 
-	    // Set coordinates, normal, and texture coordinates in
-	    // detail
+            // Set coordinates, normal, and texture coordinates in
+            // detail
 
-	    pv.setPoint(ce->get3(curCoord));
-	    detail.setCoordinateIndex(curCoord);
-	    if (normalPerPoint) {
-		pv.setNormal(ne->get(curCoord));
-		detail.setNormalIndex(curCoord);
-	    }
-	    if (materialPerPoint) {
-		pv.setMaterialIndex(curCoord);
-		detail.setMaterialIndex(curCoord);
-	    }
-	    if (tcb.isFunction()) {
-		if (! forPicking)
-		    pv.setTextureCoords(tcb.get(pv.getPoint(),
-						pv.getNormal()));
-		detail.setTextureCoordIndex(0);
-	    }
-	    else {
-		pv.setTextureCoords(tcb.get(curCoord));
-		detail.setTextureCoordIndex(curCoord);
-	    }
+            pv.setPoint(ce->get3(curCoord));
+            detail.setCoordinateIndex(curCoord);
+            if (normalPerPoint) {
+                pv.setNormal(ne->get(curCoord));
+                detail.setNormalIndex(curCoord);
+            }
+            if (materialPerPoint) {
+                pv.setMaterialIndex(curCoord);
+                detail.setMaterialIndex(curCoord);
+            }
+            if (tcb.isFunction()) {
+                if (!forPicking)
+                    pv.setTextureCoords(tcb.get(pv.getPoint(), pv.getNormal()));
+                detail.setTextureCoordIndex(0);
+            } else {
+                pv.setTextureCoords(tcb.get(curCoord));
+                detail.setTextureCoordIndex(curCoord);
+            }
 
-	    // Generate a point primitive
-	    invokePointCallbacks(action, &pv);
+            // Generate a point primitive
+            invokePointCallbacks(action, &pv);
 
-	    curCoord++;
-	}
-
+            curCoord++;
+        }
     }
-    state->pop();     // Restore NormalElement
+    state->pop(); // Restore NormalElement
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -379,7 +374,7 @@ SoPointSet::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 {
     // Call the method on SoNonIndexedShape that computes the bounding
     // box and center of the given number of coordinates
-    computeCoordBBox(action, (int) numPoints.getValue(), box, center);
+    computeCoordBBox(action, (int)numPoints.getValue(), box, center);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -391,22 +386,21 @@ SoPointSet::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
 // Use: protected, virtual
 
 SoDetail *
-SoPointSet::createPointDetail(SoRayPickAction *action,
-			      const SoPrimitiveVertex *v,
-			      SoPickedPoint *pp)
+SoPointSet::createPointDetail(SoRayPickAction *        action,
+                              const SoPrimitiveVertex *v, SoPickedPoint *pp)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoPointDetail	*detail = new SoPointDetail;
+    SoPointDetail *detail = new SoPointDetail;
 
-    *detail = *((const SoPointDetail *) v->getDetail());
+    *detail = *((const SoPointDetail *)v->getDetail());
 
     // Compute texture coordinates at intersection point and store it
     // in the picked point
-    SoTextureCoordinateBundle	tcb(action, FALSE);
+    SoTextureCoordinateBundle tcb(action, FALSE);
     if (tcb.isFunction())
-	pp->setObjectTextureCoords(tcb.get(pp->getObjectPoint(),
-					   pp->getObjectNormal()));
+        pp->setObjectTextureCoords(
+            tcb.get(pp->getObjectPoint(), pp->getObjectNormal()));
 
     return detail;
 }
@@ -424,8 +418,8 @@ SoPointSet::areMaterialsPerPoint(SoAction *action) const
 ////////////////////////////////////////////////////////////////////////
 {
     if (SoMaterialBindingElement::get(action->getState()) ==
-	SoMaterialBindingElement::OVERALL)
-	return FALSE;
+        SoMaterialBindingElement::OVERALL)
+        return FALSE;
 
     return TRUE;
 }
@@ -442,9 +436,9 @@ SoPointSet::areNormalsPerPoint(SoAction *action) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (SoNormalBindingElement::get(action->getState())
-      == SoNormalBindingElement::OVERALL)
-	return FALSE;
+    if (SoNormalBindingElement::get(action->getState()) ==
+        SoNormalBindingElement::OVERALL)
+        return FALSE;
 
     return TRUE;
 }
