@@ -673,14 +673,18 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoDrawStyle.c++
     database/src/so/nodes/SoEnvironment.c++
     database/src/so/nodes/SoEventCallback.c++
+    database/src/so/nodes/SoFaceSet.c++
     database/src/so/nodes/SoFile.c++
     database/src/so/nodes/SoFont.c++
     database/src/so/nodes/SoFontStyle.c++
     database/src/so/nodes/SoGroup.c++
+    database/src/so/nodes/SoIndexedFaceSet.c++
+    database/src/so/nodes/SoIndexedLineSet.c++
     database/src/so/nodes/SoIndexedNurbsCurve.c++
     database/src/so/nodes/SoIndexedNurbsSurface.c++
     database/src/so/nodes/SoIndexedPointSet.c++
     database/src/so/nodes/SoIndexedShape.c++
+    database/src/so/nodes/SoIndexedTriangleStripSet.c++
     database/src/so/nodes/SoInfo.c++
     database/src/so/nodes/SoLOD.c++
     database/src/so/nodes/SoLabel.c++
@@ -688,6 +692,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoLight.c++
     database/src/so/nodes/SoLightModel.c++
     database/src/so/nodes/SoLinearProfile.c++
+    database/src/so/nodes/SoLineSet.c++
     database/src/so/nodes/SoLocateHighlight.c++
     database/src/so/nodes/SoMaterial.c++
     database/src/so/nodes/SoMaterialBinding.c++
@@ -712,6 +717,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoProfile.c++
     database/src/so/nodes/SoProfileCoordinate2.c++
     database/src/so/nodes/SoProfileCoordinate3.c++
+    database/src/so/nodes/SoQuadMesh.c++
     database/src/so/nodes/SoResetTransform.c++
     database/src/so/nodes/SoRotation.c++
     database/src/so/nodes/SoRotationXYZ.c++
@@ -740,6 +746,7 @@ set(DATABASE_SOURCES
     database/src/so/nodes/SoTransformation.c++
     database/src/so/nodes/SoTranslation.c++
     database/src/so/nodes/SoTransparencyType.c++
+    database/src/so/nodes/SoTriangleStripSet.c++
     database/src/so/nodes/SoUnits.c++
     database/src/so/nodes/SoUnknownNode.c++
     database/src/so/nodes/SoVertexProperty.c++
