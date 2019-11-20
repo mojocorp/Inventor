@@ -62,9 +62,9 @@
 #ifndef _SO_TRANSCRIBE_
 #define _SO_TRANSCRIBE_
 
+#include <string>
+#include <map>
 #include <Inventor/misc/SoBasic.h>
-#include <Inventor/SbString.h>
-#include <Inventor/SbDict.h>
 
 class SoGroup;
 class SoInput;
@@ -167,8 +167,14 @@ class SoTranReceiver {
 
   private:
     SoGroup *root;
-    SbDict   nameToEntryDict; // Maps node keyname to SoTranDictEntry
-    SbDict   nodeToNameDict;  // Maps node pointer to node keyname
+    struct SoTranDictEntry {
+        SoNode *node;     // Pointer to node
+        int32_t refCount; // Number of times node is added to dict
+    };
+    std::map<std::string, SoTranDictEntry>
+        nameToEntryDict; // Maps node keyname to SoTranDictEntry
+    std::map<SoNode *, std::string>
+        nodeToNameDict; // Maps node pointer to node keyname
 
     // Interprets one database change command (with given code) from stream.
     // Sets done to TRUE if end command was found. Returns T/F error status.
@@ -192,12 +198,7 @@ class SoTranReceiver {
     void removeNodeReferences(SoNode *node);
 
     // Adds an entry to the dictionaries
-    void addEntry(SoNode *node, SbName &name);
-
-    // Deletes (frees up) an entry from the nodeDict
-    static void deleteDictEntry(unsigned long key, void *value);
-
-    // Returns
+    void addEntry(SoNode *node, const std::string &name);
 };
 
 #endif /* _SO_TRANSCRIBE_ */
