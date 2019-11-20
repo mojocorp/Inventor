@@ -315,9 +315,8 @@ SoTranSender::addNodeNames(const SoNode *root)
     if (root->isOfType(SoGroup::getClassTypeId())) {
 
         const SoGroup *group = (const SoGroup *)root;
-        int            i;
 
-        for (i = 0; i < group->getNumChildren(); i++)
+        for (int i = 0; i < group->getNumChildren(); i++)
             addNodeNames(group->getChild(i));
     }
 }
@@ -327,26 +326,6 @@ SoTranSender::addNodeNames(const SoNode *root)
 // SoTranReceiver class
 //
 //////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////
-//
-// This structure is added to the nameToEntryDict dictionary that
-// correlates unique node names to node pointers. The unique names are
-// created by printing the pointer to the transcribed node into a
-// string buffer. This structure stores a pointer to the node on the
-// receiving end. It also stores a reference count for that node so we
-// can tell how many times it has been added to the dictionary. When
-// this gets decremented to 0, the dictionary entry is removed, so we
-// can free up some memory. Without this, transcription just uses up
-// memory because new nodes keep getting inserted and none get removed
-// from the dictionary.
-//
-///////////////////////////////////////////////////////
-
-struct SoTranDictEntry {
-    SoNode *node;     // Pointer to node
-    int32_t refCount; // Number of times node is added to dict
-};
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -364,8 +343,7 @@ SoTranReceiver::SoTranReceiver(SoGroup *rootNode)
     // Add root to dictionaries with name for NULL, since that is how
     // the root is referred to.
     sprintf(s, "%p", (void *)NULL);
-    SbName name(s);
-    addEntry(rootNode, name);
+    addEntry(rootNode, s);
 
     root = rootNode;
 }
@@ -382,7 +360,10 @@ SoTranReceiver::~SoTranReceiver()
 ////////////////////////////////////////////////////////////////////////
 {
     // Free up SoTranDictEntry instances stored in dictionary
-    nameToEntryDict.applyToAll(SoTranReceiver::deleteDictEntry);
+    std::map<std::string, SoTranDictEntry>::iterator it;
+    for (it = nameToEntryDict.begin(); it != nameToEntryDict.end(); it++) {
+        it->second.node->unref();
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -597,9 +578,7 @@ SoTranReceiver::getNodeNames(SoInput *in, SoNode *root, SbBool lookForNode,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbName           name;
-    void *           ptr;
-    SoTranDictEntry *e;
+    SbName name;
 
     // Read reference as SbName to get unique pointer
     if (!in->read(name))
@@ -609,16 +588,18 @@ SoTranReceiver::getNodeNames(SoInput *in, SoNode *root, SbBool lookForNode,
 
         // See if the node is already in the dictionary. If so,
         // increment the reference count and return the old root.
-        if (nameToEntryDict.find((unsigned long)name.getString(), ptr)) {
-            e = (SoTranDictEntry *)ptr;
-            e->refCount++;
+        std::map<std::string, SoTranDictEntry>::iterator it =
+            nameToEntryDict.find(name.getString());
+        if (it != nameToEntryDict.end()) {
+            SoTranDictEntry &e = it->second;
+            e.refCount++;
 
-            oldRoot = e->node;
+            oldRoot = e.node;
         }
 
         // Otherwise, add a new entry
         else {
-            addEntry(root, name);
+            addEntry(root, name.getString());
             oldRoot = NULL;
         }
     }
@@ -630,9 +611,8 @@ SoTranReceiver::getNodeNames(SoInput *in, SoNode *root, SbBool lookForNode,
 
         SoNode * child;
         SoGroup *group = (SoGroup *)root;
-        int      i;
 
-        for (i = 0; i < group->getNumChildren(); i++) {
+        for (int i = 0; i < group->getNumChildren(); i++) {
 
             // Recurse
             if (!getNodeNames(in, group->getChild(i), oldRoot == NULL, child))
@@ -663,15 +643,16 @@ SoTranReceiver::getNodeReference(SoInput *in, SoNode *&node)
 ////////////////////////////////////////////////////////////////////////
 {
     SbName name;
-    void * ptr;
 
     // Read reference as SbName to get unique pointer
     if (!in->read(name))
         return FALSE;
 
     // Look up pointer in dictionary
-    if (nameToEntryDict.find((unsigned long)name.getString(), ptr))
-        node = ((SoTranDictEntry *)ptr)->node;
+    std::map<std::string, SoTranDictEntry>::iterator it =
+        nameToEntryDict.find(name.getString());
+    if (it != nameToEntryDict.end())
+        node = it->second.node;
     else {
         node = NULL;
         return FALSE;
@@ -696,36 +677,25 @@ SoTranReceiver::removeNodeReferences(SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    void *           ptr;
-    const char *     nameString;
-    SoTranDictEntry *e;
-
     // Find the name of the node, using the name dictionary
-    nodeToNameDict.find((unsigned long)node, ptr);
-    nameString = (const char *)ptr;
+    const std::string &name = nodeToNameDict[node];
 
     // Find the dictionary entry for the node, using the name
-    SbName name(nameString);
-    nameToEntryDict.find((unsigned long)name.getString(), ptr);
-    e = (SoTranDictEntry *)ptr;
+    SoTranDictEntry &e = nameToEntryDict[name];
 
     // Decrement the reference count and check for 0
-    if (--e->refCount == 0) {
-
-        // This node is going away. Remove its dictionary entries and
-        // free up the SoTranDictEntry
-        nameToEntryDict.remove((unsigned long)name.getString());
-        nodeToNameDict.remove((unsigned long)node);
-        e->node->unref();
-        delete e;
+    if (--e.refCount == 0) {
+        e.node->unref();
+        // This node is going away. Remove its dictionary entries
+        nameToEntryDict.erase(name);
+        nodeToNameDict.erase(node);
 
         // Recurse on its children, if it has any
         if (node->isOfType(SoGroup::getClassTypeId())) {
 
             const SoGroup *group = (const SoGroup *)node;
-            int            i;
 
-            for (i = 0; i < group->getNumChildren(); i++)
+            for (int i = 0; i < group->getNumChildren(); i++)
                 removeNodeReferences(group->getChild(i));
         }
     }
@@ -739,34 +709,15 @@ SoTranReceiver::removeNodeReferences(SoNode *node)
 // Use: private
 
 void
-SoTranReceiver::addEntry(SoNode *node, SbName &name)
+SoTranReceiver::addEntry(SoNode *node, const std::string &name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoTranDictEntry *e = new SoTranDictEntry;
+    SoTranDictEntry &e = nameToEntryDict[name];
 
-    e->node = node;
-    e->node->ref();
-    e->refCount = 1;
+    e.node = node;
+    e.node->ref();
+    e.refCount = 1;
 
-    nameToEntryDict.enter((unsigned long)name.getString(), (void *)e);
-    nodeToNameDict.enter((unsigned long)node, (void *)name.getString());
-}
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Deletes (frees up) an entry from the nameToEntryDict.
-//
-// Use: private
-
-void
-SoTranReceiver::deleteDictEntry(unsigned long, void *value)
-//
-////////////////////////////////////////////////////////////////////////
-{
-    SoTranDictEntry *e = (SoTranDictEntry *)value;
-
-    e->node->unref();
-    delete e;
+    nodeToNameDict[node] = name;
 }
