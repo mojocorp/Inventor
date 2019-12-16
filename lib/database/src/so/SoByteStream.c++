@@ -55,7 +55,7 @@
 #include <Inventor/misc/SoByteStream.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoPathList.h>
 #include <Inventor/SoOutput.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/actions/SoWriteAction.h>

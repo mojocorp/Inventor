@@ -60,7 +60,7 @@
 #include <vector>
 #include <Inventor/misc/SoBase.h>
 #include <Inventor/nodes/SoNode.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoNodeList.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

@@ -59,7 +59,6 @@
 
 #include <vector>
 #include <Inventor/fields/SoFieldContainer.h>
-#include <Inventor/SoLists.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 

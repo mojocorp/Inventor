@@ -41,9 +41,9 @@
 #include <Xm/DragDrop.h>
 #include <Xm/Xm.h>
 
-#include <Inventor/SbPList.h>
 #include <Inventor/SbString.h>
 #include <Inventor/misc/SoByteStream.h>
+#include <Inventor/lists/SbStringList.h>
 
 #include "MyDropSite.h"
 

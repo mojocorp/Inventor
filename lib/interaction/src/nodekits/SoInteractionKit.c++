@@ -67,6 +67,7 @@
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/actions/SoHandleEventAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>
+#include <Inventor/lists/SbStringList.h>
 
 #include <cstring>
 

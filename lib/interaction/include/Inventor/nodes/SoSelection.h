@@ -62,6 +62,7 @@
 #include <Inventor/SbColor.h>
 #include <Inventor/misc/SoCallbackList.h>
 #include <Inventor/nodes/SoSeparator.h>
+#include <Inventor/lists/SoPathList.h>
 
 class SoCallbackList;
 class SoEvent;
@@ -212,7 +213,7 @@ class SoSelection : public SoSeparator {
     //	    Nothing picked - selection policy applied, traversal halts
     //	    Object picked under selection - policy applied, traversal halts
     //	    Object picked not under selection - event ignored, traversal
-    //continues
+    // continues
     //
     // In the case of nothing picked, the pick callback is not invoked.
     // In the other cases, the pick callback is invoked, giving it the chance

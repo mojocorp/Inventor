@@ -57,6 +57,7 @@
 #define _SO_SEARCH_ACTION_
 
 #include <Inventor/actions/SoSubAction.h>
+#include <Inventor/lists/SoPathList.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //

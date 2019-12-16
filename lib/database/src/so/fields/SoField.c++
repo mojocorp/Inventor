@@ -65,6 +65,7 @@
 #include <Inventor/fields/SoFieldContainer.h>
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/nodes/SoNode.h>
+#include <Inventor/lists/SoFieldList.h>
 #include <Inventor/sensors/SoDataSensor.h>
 #include <stdlib.h>
 #include "SoGlobalField.h"

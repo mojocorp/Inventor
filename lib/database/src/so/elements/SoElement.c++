@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoTypeList.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoElement.h>
 #include <Inventor/misc/SoState.h>

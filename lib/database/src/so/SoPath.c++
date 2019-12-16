@@ -58,6 +58,7 @@
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/errors/SoReadError.h>
+#include <Inventor/lists/SoPathList.h>
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/misc/SoNotification.h>
 #include <Inventor/misc/SoTempPath.h>

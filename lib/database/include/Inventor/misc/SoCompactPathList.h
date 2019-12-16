@@ -57,7 +57,7 @@
 #define _SO_COMPACT_PATH_LIST_
 
 #include <vector>
-#include <Inventor/SoLists.h>
+#include <Inventor/SbBasic.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -82,6 +82,7 @@
 //  that traversal has last reached - to support this access.
 //
 //////////////////////////////////////////////////////////////////////////////
+class SoPathList;
 
 SoINTERNAL
 class SoCompactPathList {

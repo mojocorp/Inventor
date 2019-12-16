@@ -54,6 +54,7 @@
 #include <Inventor/misc/SoCompactPathList.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/errors/SoDebugError.h>
+#include <Inventor/lists/SoPathList.h>
 
 ////////////////////////////////////////////////////////////////////////
 //

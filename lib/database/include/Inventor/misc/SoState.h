@@ -75,10 +75,11 @@
 #define SO_STATE_GET_CONST_ELEMENT(stackIndex) return stack[stackIndex];
 
 #include <vector>
-#include <Inventor/SoLists.h>
+#include <Inventor/SbBasic.h>
 
 class SoAction;
 class SoElement;
+class SoTypeList;
 
 SoEXTENDER
 class SoState {

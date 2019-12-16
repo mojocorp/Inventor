@@ -57,13 +57,13 @@
 #define _SO_NODE_
 
 #include <Inventor/fields/SoFieldContainer.h>
-#include <Inventor/SoLists.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
 class SoAction;
 class SoCallbackAction;
 class SoChildList;
+class SoNodeList;
 class SoFieldData;
 class SoGLRenderAction;
 class SoGetBoundingBoxAction;

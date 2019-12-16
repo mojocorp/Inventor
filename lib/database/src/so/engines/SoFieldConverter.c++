@@ -56,6 +56,7 @@
 
 #include <Inventor/fields/SoField.h>
 #include <Inventor/engines/SoFieldConverter.h>
+#include <Inventor/lists/SoEngineOutputList.h>
 
 SO_ENGINE_ABSTRACT_SOURCE(SoFieldConverter);
 

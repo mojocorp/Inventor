@@ -53,6 +53,7 @@
 
 #include <Inventor/SoDB.h>
 #include <Inventor/actions/SoWriteAction.h>
+#include <Inventor/lists/SoPathList.h>
 
 SO_ACTION_SOURCE(SoWriteAction);
 

@@ -59,7 +59,6 @@
 #define _SO_V1_APPEARANCE_KIT_
 
 #include <Inventor/misc/upgraders/SoV1BaseKit.h>
-#include <Inventor/SoLists.h>
 
 ////////////////////////////////////////////////////////////////////
 //    Class: SoV1AppearanceKit
@@ -82,6 +81,7 @@
 //
 //
 ////////////////////////////////////////////////////////////////////
+class SoNodeList;
 
 SoEXTENDER
 class SoV1AppearanceKit : public SoV1BaseKit {

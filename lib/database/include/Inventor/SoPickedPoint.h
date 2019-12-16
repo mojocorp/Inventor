@@ -59,10 +59,11 @@
 #include <Inventor/SbVec.h>
 #include <Inventor/SbMatrix.h>
 #include <Inventor/SbViewportRegion.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoDetailList.h>
 
 class SoDetail;
 class SoGetMatrixAction;
+class SoNode;
 class SoPath;
 class SoState;
 

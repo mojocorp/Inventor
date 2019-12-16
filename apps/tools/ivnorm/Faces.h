@@ -43,6 +43,7 @@
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbPList.h>
+#include <Inventor/SbVec.h>
 
 class EdgeDict;
 class SbVec3f;

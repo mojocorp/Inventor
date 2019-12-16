@@ -135,7 +135,7 @@
 #ifndef _SO_TRANSFORMER_DRAGGER_
 #define _SO_TRANSFORMER_DRAGGER_
 
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoNodeList.h>
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/fields/SoSFRotation.h>

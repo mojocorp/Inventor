@@ -58,7 +58,7 @@
 
 #include <Inventor/SbLine.h>
 #include <Inventor/SbViewVolume.h>
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoPickedPointList.h>
 #include <Inventor/actions/SoPickAction.h>
 
 //////////////////////////////////////////////////////////////////////////////

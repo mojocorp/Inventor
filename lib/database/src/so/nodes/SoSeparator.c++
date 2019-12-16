@@ -68,6 +68,7 @@
 #include <Inventor/elements/SoLocalBBoxMatrixElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
+#include <Inventor/lists/SoFieldList.h>
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoSeparator.h>

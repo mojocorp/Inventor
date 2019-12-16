@@ -59,7 +59,6 @@
 #define _SB_PLIST_
 
 #include <Inventor/SbBasic.h>
-#include <Inventor/SbVec.h>
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -161,35 +160,6 @@ class SbPList {
     // expand is the lowest level routine.  It just reallocates the
     // array and copies over the old values.
     void expand(int size);
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbStringList
-//
-//  A list of strings.  This list is used to list classes associated with
-//  a specific error.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-class SbString;
-
-SoEXTENDER
-class SbStringList : public SbPList {
-  public:
-    void append(SbString *string) { ((SbPList *)this)->append((void *)string); }
-
-    int find(SbString *string) {
-        return ((SbPList *)this)->find((void *)string);
-    }
-
-    void insert(SbString *string, int addBefore) {
-        ((SbPList *)this)->insert((void *)string, addBefore);
-    }
-
-    SbString *&operator[](int i) const {
-        return ((SbString *&)((*(const SbPList *)this)[i]));
-    }
 };
 
 #endif /* _SB_PLIST_ */

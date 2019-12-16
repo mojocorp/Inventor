@@ -248,6 +248,20 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/fields/SoSFVec4f.h
     database/include/Inventor/fields/SoSubField.h
     database/include/Inventor/misc/SoAuditorList.h
+    database/include/Inventor/lists/SbIntList.h
+    database/include/Inventor/lists/SbStringList.h
+    database/include/Inventor/lists/SoActionMethodList.h
+    database/include/Inventor/lists/SoAuditorList.h
+    database/include/Inventor/lists/SoBaseList.h
+    database/include/Inventor/lists/SoDetailList.h
+    database/include/Inventor/lists/SoEnabledElementsList.h
+    database/include/Inventor/lists/SoEngineList.h
+    database/include/Inventor/lists/SoEngineOutputList.h
+    database/include/Inventor/lists/SoFieldList.h
+    database/include/Inventor/lists/SoNodeList.h
+    database/include/Inventor/lists/SoPathList.h
+    database/include/Inventor/lists/SoPickedPointList.h
+    database/include/Inventor/lists/SoTypeList.h
     database/include/Inventor/misc/SoBase.h
     database/include/Inventor/misc/SoBasic.h
     database/include/Inventor/misc/SoByteStream.h
@@ -436,7 +450,6 @@ set(DATABASE_SOURCES
     database/src/sb/projectors/SbSphereProjector.c++
     database/src/sb/projectors/SbSphereSectionProjector.c++
     database/src/sb/projectors/SbSphereSheetProjector.c++
-    database/src/so/SoAuditorList.c++
     database/src/so/SoBase.c++
     database/src/so/SoByteStream.c++
     database/src/so/SoCallbackList.c++
@@ -445,7 +458,6 @@ set(DATABASE_SOURCES
     database/src/so/SoDB.c++
     database/src/so/SoDebug.c++
     database/src/so/SoInput.c++
-    database/src/so/SoLists.c++
     database/src/so/SoNormalGenerator.c++
     database/src/so/SoNotification.c++
     database/src/so/SoOffscreenRenderer.c++
@@ -653,6 +665,14 @@ set(DATABASE_SOURCES
     database/src/so/fields/SoSFVec2f.c++
     database/src/so/fields/SoSFVec3f.c++
     database/src/so/fields/SoSFVec4f.c++
+    database/src/so/lists/SoActionMethodList.c++
+    database/src/so/lists/SoAuditorList.c++
+    database/src/so/lists/SoBaseList.c++
+    database/src/so/lists/SoDetailList.c++
+    database/src/so/lists/SoEnabledElementsList.c++
+    database/src/so/lists/SoPathList.c++
+    database/src/so/lists/SoPickedPointList.c++
+    database/src/so/lists/SoTypeList.c++
     database/src/so/nodes/SoAnnotation.c++
     database/src/so/nodes/SoArray.c++
     database/src/so/nodes/SoAsciiText.c++

@@ -56,6 +56,8 @@
 #include <Inventor/SoOutput.h>
 #include <Inventor/fields/SoField.h>
 #include <Inventor/engines/SoOutputData.h>
+#include <Inventor/lists/SoFieldList.h>
+#include <Inventor/lists/SoEngineOutputList.h>
 #include <SoUnknownEngine.h>
 
 // Can't use regular SO_ENGINE_SOURCE macro because of special

@@ -61,6 +61,9 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/fields/SoField.h>
 #include <Inventor/fields/SoFieldData.h>
+#include <Inventor/lists/SoFieldList.h>
+#include <Inventor/lists/SoEngineList.h>
+#include <Inventor/lists/SoEngineOutputList.h>
 #include <Inventor/misc/SoNotification.h>
 
 SoType SoEngine::classTypeId; // Type identifier

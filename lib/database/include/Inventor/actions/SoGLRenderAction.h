@@ -63,6 +63,7 @@
 #include <Inventor/elements/SoShapeStyleElement.h>
 #include <Inventor/elements/SoTransparencyTypeElement.h>
 #include <Inventor/elements/SoStereoElement.h>
+#include <Inventor/lists/SoPathList.h>
 
 class SoGetBoundingBoxAction;
 

@@ -56,6 +56,8 @@
 #ifndef _SO_ACTION_
 #define _SO_ACTION_
 
+#include <Inventor/lists/SoActionMethodList.h>
+#include <Inventor/lists/SoEnabledElementsList.h>
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SoPath.h>
 
@@ -66,98 +68,6 @@ class SoNode;
 class SoState;
 class SoLightPath;
 class SoTempPath;
-
-typedef void (*SoActionMethod)(SoAction *, SoNode *);
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoActionMethodList
-//
-//  Internal class.  A list of routines to call, one for each node type.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-SoINTERNAL
-class SoActionMethodList : public SbPList {
-
-  public:
-    // Constructor.  Pass in list from parent action.
-    SoActionMethodList(SoActionMethodList *parentList);
-
-    // Operator used to get and set methods.  The list will grow
-    // dynamically as we access items off the end of the list, and
-    // entries will be initialized to NULL.
-    SoActionMethod &operator[](int i) const {
-        return ((SoActionMethod &)((*(const SbPList *)this)[i]));
-    }
-
-    // Add a method to the appropriate place in the list.
-    void addMethod(SoType nodeType, SoActionMethod method);
-
-    // This MUST be called before using the list.  It fills in NULL
-    // entries with their parents' method.
-    void setUp();
-
-  private:
-    SoActionMethod      parentMethod(SoType); // Method from parent node
-    SoActionMethodList *parent;
-    int                 numValidTypes; // Stores the number of types at most
-                                       // recent setup
-
-    // Dummy action used internally
-    static void dummyAction(SoAction *, SoNode *);
-};
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoEnabledElementsList
-//
-//  Internal class.  A list of elements enabled for a given action
-//  class. Lists of elements can be merged, allowing an action class
-//  to inherit enabled elements from its parent class.
-//
-//////////////////////////////////////////////////////////////////////////////
-
-SoINTERNAL
-class SoEnabledElementsList {
-
-  public:
-    // Constructor
-    SoEnabledElementsList(SoEnabledElementsList *parentList);
-
-    // Returns list of elements.  This automatically merges the
-    // elements with elements enabled in the parentList.
-    const SoTypeList &getElements() const;
-
-    // Adds an element to the list if it's not already in it
-    void enable(SoType elementType, int stackIndex);
-
-    // Enables all elements from the given list that are not already
-    // enabled in this one
-    void merge(const SoEnabledElementsList &list);
-
-    // Returns the current setting of the global counter used to
-    // determine when lists are out of date.
-    static int getCounter() { return counter; }
-
-  private:
-    // This maintains a global counter used to determine when lists
-    // are out of date. It is incremented whenever a new element is
-    // added to a list.
-    static int counter;
-
-    // And a per-instance counter so we don't merge enabled elements
-    // with the parent list unnecessarily.
-    int setUpCounter;
-
-    // This list holds type id's of enabled elements, indexed by the
-    // stack index of the elements.
-    SoTypeList elements;
-
-    // Pointer to parent's list of enabled elements (NULL for
-    // SoAction).
-    SoEnabledElementsList *parent;
-};
 
 //////////////////////////////////////////////////////////////////////////////
 //

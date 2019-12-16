@@ -54,6 +54,7 @@
 #include <Inventor/elements/SoElement.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
+#include <Inventor/lists/SoTypeList.h>
 
 ////////////////////////////////////////////////////////////////////////
 //

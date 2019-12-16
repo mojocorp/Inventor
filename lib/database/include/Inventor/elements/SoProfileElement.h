@@ -57,7 +57,7 @@
 #ifndef _SO_PROFILE_ELEMENT
 #define _SO_PROFILE_ELEMENT
 
-#include <Inventor/SoLists.h>
+#include <Inventor/lists/SoNodeList.h>
 #include <Inventor/elements/SoAccumulatedElement.h>
 
 class SoProfile;
