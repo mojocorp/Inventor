@@ -51,6 +51,8 @@
  _______________________________________________________________________
  */
 
+#include <vector>
+
 #include <GL/glu.h>
 #include <Inventor/misc/SoGL.h>
 #include <Inventor/SbImage.h>
@@ -61,7 +63,6 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/misc/SoState.h>
 
-#include <alloca.h>
 #include <float.h>
 
 // Formats for 1-4 component textures
@@ -371,22 +372,22 @@ SoGLTextureImageElement::sendTex(SoState *state)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
 
-    GLubyte *level0 = NULL;
+    std::vector<GLubyte> level0;
     if (newSize != size) {
-        level0 = new unsigned char[newSize[0] * newSize[1] * numComponents];
+        level0.resize(newSize[0] * newSize[1] * numComponents);
 
         // Use gluScaleImage (which does linear interpolation or box
         // filtering) if using a linear interpolation magnification
         // filter:
         gluScaleImage((GLenum)format, size[0], size[1], GL_UNSIGNED_BYTE,
                       image.getBytes(), newSize[0], newSize[1],
-                      GL_UNSIGNED_BYTE, level0);
+                      GL_UNSIGNED_BYTE, level0.data());
     }
 
     // Send level-0 mipmap:
     glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, newSize[0], newSize[1], 0,
                  (GLenum)format, GL_UNSIGNED_BYTE,
-                 level0 == NULL ? image.getBytes() : level0);
+                 level0.empty() ? image.getBytes() : level0.data());
 
     // If necessary, send other mipmaps:
     if (needMipMaps) {
@@ -395,11 +396,11 @@ SoGLTextureImageElement::sendTex(SoState *state)
         // (and the level0 array is used if possible).
 
         const GLubyte *prevLevel = NULL;
-        if (level0 == NULL) {
-            level0 = new unsigned char[newSize[0] * newSize[1] * numComponents];
+        if (level0.empty()) {
+            level0.resize(newSize[0] * newSize[1] * numComponents);
             prevLevel = image.getBytes();
         } else {
-            prevLevel = level0;
+            prevLevel = level0.data();
         }
 
         int     level = 0;
@@ -448,8 +449,8 @@ SoGLTextureImageElement::sendTex(SoState *state)
             // Send level-N mipmap:
             glTexImage2D(GL_TEXTURE_2D, level, internalFormat, curSize[0],
                          curSize[1], 0, (GLenum)format, GL_UNSIGNED_BYTE,
-                         level0);
-            prevLevel = level0;
+                         level0.data());
+            prevLevel = level0.data();
         }
     }
 
@@ -458,6 +459,4 @@ SoGLTextureImageElement::sendTex(SoState *state)
     }
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 4); // Reset to default
-    if (level0 != NULL)
-        delete[] level0;
 }
