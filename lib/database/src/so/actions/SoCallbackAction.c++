@@ -296,7 +296,7 @@ SoCallbackAction::getDrawStyle() const {
     return (SoDrawStyle::Style)SoDrawStyleElement::get(state);
 }
 
-u_short
+uint16_t
 SoCallbackAction::getLinePattern() const {
     return SoLinePatternElement::get(state);
 }
