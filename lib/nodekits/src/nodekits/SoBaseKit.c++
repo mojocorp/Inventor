@@ -828,7 +828,7 @@ SoBaseKit::createDefaultParts()
 // Use: private
 
 void
-SoBaseKit::skipWhiteSpace(char *&string)
+SoBaseKit::skipWhiteSpace(char *&string) const
 //
 ////////////////////////////////////////////////////////////////////////
 {

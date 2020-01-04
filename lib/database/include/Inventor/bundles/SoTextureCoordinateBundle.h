@@ -115,13 +115,13 @@ class SoTextureCoordinateBundle : public SoBundle {
 
     // Returns texture coordinate computed by function during
     // primitive generation or rendering
-    SbVec4f get(const SbVec3f &point, const SbVec3f &normal) const {
+    const SbVec4f &get(const SbVec3f &point, const SbVec3f &normal) const {
         return texCoordElt->get(point, normal);
     }
 
     // Returns indexed texture coordinate during primitive generation
     // or rendering
-    SbVec4f get(int index) const { return texCoordElt->get4(index); }
+    const SbVec4f &get(int index) const { return texCoordElt->get4(index); }
 
     // Sends indexed texture coordinate to GL during rendering
     void send(int index) const { GLTexCoordElt->send(index); }

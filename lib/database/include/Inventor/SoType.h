@@ -108,16 +108,16 @@ class SoType {
     void *createInstance() const;
 
     // test equality / inequality
-    int operator==(const SoType t) const {
+    int operator==(const SoType &t) const {
         return (storage.index == t.storage.index);
     }
-    int operator!=(const SoType t) const {
+    int operator!=(const SoType &t) const {
         return (storage.index != t.storage.index);
     }
 
     // Less-than operator that can be used to sort types. Pretty
     // useless otherwise.
-    int operator<(const SoType t) const {
+    int operator<(const SoType &t) const {
         return (storage.index < t.storage.index);
     }
 

@@ -108,7 +108,7 @@ SbVec3f::SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2) {
         v[2] = p2.getDistanceFromOrigin();
 
         //	printf("v = %10.5f\n    %10.5f\n    %10.5f\n", v[0], v[1],
-        //v[2]);
+        // v[2]);
 
         mi[0][0] = v[0];
         mi[0][1] = mx[0][1];
@@ -121,9 +121,9 @@ SbVec3f::SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2) {
         mi[2][2] = mx[2][2];
 
         //	printf("mi = %10.5f %10.5f %10.5f\n", mi[0][0], mi[0][1],
-        //mi[0][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[1][0], mi[1][1],
-        //mi[1][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[2][0], mi[2][1],
-        //mi[2][2]);
+        // mi[0][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[1][0],
+        // mi[1][1], mi[1][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[2][0],
+        // mi[2][1], mi[2][2]);
 
         vec[0] = DET3(mi) / del;
         mi[0][0] = mx[0][0];
@@ -137,9 +137,9 @@ SbVec3f::SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2) {
         mi[2][2] = mx[2][2];
 
         //	printf("mi = %10.5f %10.5f %10.5f\n", mi[0][0], mi[0][1],
-        //mi[0][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[1][0], mi[1][1],
-        //mi[1][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[2][0], mi[2][1],
-        //mi[2][2]);
+        // mi[0][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[1][0],
+        // mi[1][1], mi[1][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[2][0],
+        // mi[2][1], mi[2][2]);
 
         vec[1] = DET3(mi) / del;
         mi[0][0] = mx[0][0];
@@ -153,9 +153,9 @@ SbVec3f::SbVec3f(SbPlane &p0, SbPlane &p1, SbPlane &p2) {
         mi[2][2] = v[2];
 
         //	printf("mi = %10.5f %10.5f %10.5f\n", mi[0][0], mi[0][1],
-        //mi[0][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[1][0], mi[1][1],
-        //mi[1][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[2][0], mi[2][1],
-        //mi[2][2]);
+        // mi[0][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[1][0],
+        // mi[1][1], mi[1][2]); 	printf("     %10.5f %10.5f %10.5f\n", mi[2][0],
+        // mi[2][1], mi[2][2]);
 
         vec[2] = DET3(mi) / del;
     }
@@ -329,7 +329,7 @@ operator==(const SbVec3f &v1, const SbVec3f &v2) {
 //
 
 SbBool
-SbVec3f::equals(const SbVec3f v, float tolerance) const {
+SbVec3f::equals(const SbVec3f &v, float tolerance) const {
     SbVec3f diff = *this - v;
 
     return diff.dot(diff) <= tolerance;
@@ -841,7 +841,7 @@ operator==(const SbVec2f &v1, const SbVec2f &v2) {
 //
 
 SbBool
-SbVec2f::equals(const SbVec2f v, float tolerance) const {
+SbVec2f::equals(const SbVec2f &v, float tolerance) const {
     SbVec2f diff = *this - v;
 
     return diff.dot(diff) <= tolerance;
@@ -1048,7 +1048,7 @@ operator==(const SbVec4f &v1, const SbVec4f &v2) {
 //
 
 SbBool
-SbVec4f::equals(const SbVec4f v, float tolerance) const {
+SbVec4f::equals(const SbVec4f &v, float tolerance) const {
     SbVec4f diff = *this - v;
 
     return diff.dot(diff) <= tolerance;

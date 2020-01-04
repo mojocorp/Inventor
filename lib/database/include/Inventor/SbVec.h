@@ -180,7 +180,7 @@ class SbVec3f {
 
     // Equality comparison within given tolerance - the square of the
     // length of the maximum distance between the two vectors
-    SbBool equals(const SbVec3f v, float tolerance) const;
+    SbBool equals(const SbVec3f &v, float tolerance) const;
 
     // Returns principal axis that is closest (based on maximum dot
     // product) to this vector
@@ -387,7 +387,7 @@ class SbVec2f {
 
     // Equality comparison within given tolerance - the square of the
     // length of the maximum distance between the two vectors
-    SbBool equals(const SbVec2f v, float tolerance) const;
+    SbBool equals(const SbVec2f &v, float tolerance) const;
 
   protected:
     float vec[2]; // Storage for vector components
@@ -557,7 +557,7 @@ class SbVec4f {
 
     // Equality comparison within given tolerance - the square of the
     // length of the maximum distance between the two vectors
-    SbBool equals(const SbVec4f v, float tolerance) const;
+    SbBool equals(const SbVec4f &v, float tolerance) const;
 
   protected:
     float vec[4]; // Storage for vector components
