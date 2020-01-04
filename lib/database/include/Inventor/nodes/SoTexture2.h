@@ -56,6 +56,7 @@
 #ifndef _SO_TEXTURE_2_
 #define _SO_TEXTURE_2_
 
+#include <Inventor/elements/SoTextureImageElement.h>
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/fields/SoSFImage.h>
@@ -82,14 +83,28 @@ class SoTexture2 : public SoNode {
 
   public:
     enum Model { // Texture model
-        MODULATE = GL_MODULATE,
-        DECAL = GL_DECAL,
-        BLEND = GL_BLEND
+        MODULATE = SoTextureImageElement::MODULATE,
+        DECAL = SoTextureImageElement::DECAL,
+        BLEND = SoTextureImageElement::BLEND,
+        REPLACE = SoTextureImageElement::REPLACE
     };
 
     enum Wrap { // Texture wrap type
-        REPEAT = GL_REPEAT,
-        CLAMP = GL_CLAMP
+        REPEAT = SoTextureImageElement::REPEAT,
+        CLAMP = SoTextureImageElement::CLAMP,
+        CLAMP_TO_BORDER = SoTextureImageElement::CLAMP_TO_BORDER,
+        CLAMP_TO_EDGE = SoTextureImageElement::CLAMP_TO_EDGE,
+        MIRRORED_REPEAT = SoTextureImageElement::MIRRORED_REPEAT
+    };
+
+    enum Filter { // Texture filter
+        AUTO = SoTextureImageElement::AUTO,
+        NEAREST = SoTextureImageElement::NEAREST,
+        LINEAR = SoTextureImageElement::LINEAR,
+        NEAREST_MIPMAP_NEAREST = SoTextureImageElement::NEAREST_MIPMAP_NEAREST,
+        NEAREST_MIPMAP_LINEAR = SoTextureImageElement::NEAREST_MIPMAP_LINEAR,
+        LINEAR_MIPMAP_NEAREST = SoTextureImageElement::LINEAR_MIPMAP_NEAREST,
+        LINEAR_MIPMAP_LINEAR = SoTextureImageElement::LINEAR_MIPMAP_LINEAR
     };
 
     // Fields.
@@ -99,6 +114,10 @@ class SoTexture2 : public SoNode {
     SoSFEnum   wrapT;
     SoSFEnum   model;
     SoSFColor  blendColor;
+
+    SoSFEnum minFilter;
+
+    SoSFEnum magFilter;
 
     // Constructor
     SoTexture2();
@@ -123,6 +142,9 @@ class SoTexture2 : public SoNode {
     void setReadStatus(int s) { readStatus = s; }
 
   private:
+    int getMinFilter(float texQuality) const;
+    int getMagFilter(float texQuality) const;
+
     // These keep the image and filename fields in sync.
     SoFieldSensor *imageSensor;
     static void    imageChangedCB(void *, SoSensor *);

@@ -74,15 +74,46 @@ class SoTextureImageElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoTextureImageElement);
 
   public:
+    /// Texture model
+    enum Model {
+        MODULATE, ///< The texture color is multiplied by the surface color
+        DECAL,    ///< The texture color replaces the surface color
+        BLEND, ///< Blends between the surface color and a specified blend color
+        REPLACE ///< The texture color replaces the surface color (OpenGL
+                ///< >= 1.1)
+    };
+
+    /// Texture wrap type
+    enum Wrap {
+        REPEAT, ///< Repeats texture outside 0-1 texture coordinate range
+        CLAMP,  ///< Clamps texture coordinates to lie within 0-1 range
+        CLAMP_TO_BORDER, ///< (OpenGL >= 1.3)
+        CLAMP_TO_EDGE,   ///< (OpenGL >= 1.2)
+        MIRRORED_REPEAT  ///< (OpenGL >= 1.4)
+    };
+
+    /// Texture filter
+    enum Filter {
+        AUTO, ///< Default. The texture filter depend on
+              ///< SoComplexity::textureQuality.
+        NEAREST,
+        LINEAR,
+        NEAREST_MIPMAP_NEAREST,
+        NEAREST_MIPMAP_LINEAR,
+        LINEAR_MIPMAP_NEAREST,
+        LINEAR_MIPMAP_LINEAR
+    };
     // Initializes element.
     virtual void init(SoState *state);
 
     // sets the current image, wrap, and model:
     static void set(SoState *state, SoNode *node, const SbImage &image,
-                    int wrapS, int wrapT, int model, const SbColor &blendColor);
+                    int wrapS, int wrapT, int model, int minFilter,
+                    int magFilter, const SbColor &blendColor);
 
     static const SbImage &get(SoState *state, int &wrapS, int &wrapT,
-                              int &model, SbColor &blendColor);
+                              int &model, int &minFilter, int &magFilter,
+                              SbColor &blendColor);
 
     // Deprecated
     static const unsigned char *get(SoState *state, SbVec2s &size,
@@ -105,10 +136,11 @@ class SoTextureImageElement : public SoReplacedElement {
 
   protected:
     virtual void setElt(const SbImage &image, int wrapS, int wrapT, int model,
+                        int minFilter, int magFilter,
                         const SbColor &blendColor);
 
     SbImage image;
-    int     wrapS, wrapT, model;
+    int     wrapS, wrapT, model, minFilter, magFilter;
     SbColor blendColor;
 
     virtual ~SoTextureImageElement();

@@ -463,18 +463,20 @@ SoCallbackAction::getTextureCoordinateBinding() const {
 
 const SbColor &
 SoCallbackAction::getTextureBlendColor() const {
-    int            wrapS, wrapT, model;
+    int            wrapS, wrapT, model, minFilter, magFilter;
     static SbColor blendColor;
-    SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
+    SoTextureImageElement::get(state, wrapS, wrapT, model, minFilter, magFilter,
+                               blendColor);
 
     return blendColor;
 }
 
 SbImage
 SoCallbackAction::getTextureImage() const {
-    int     wrapS, wrapT, model;
+    int     wrapS, wrapT, model, minFilter, magFilter;
     SbColor blendColor;
-    return SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
+    return SoTextureImageElement::get(state, wrapS, wrapT, model, minFilter,
+                                      magFilter, blendColor);
 }
 
 const SbMatrix &
@@ -484,25 +486,28 @@ SoCallbackAction::getTextureMatrix() const {
 
 SoTexture2::Model
 SoCallbackAction::getTextureModel() const {
-    int     wrapS, wrapT, model;
+    int     wrapS, wrapT, model, minFilter, magFilter;
     SbColor blendColor;
-    SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
+    SoTextureImageElement::get(state, wrapS, wrapT, model, minFilter, magFilter,
+                               blendColor);
     return (SoTexture2::Model)model;
 }
 
 SoTexture2::Wrap
 SoCallbackAction::getTextureWrapS() const {
-    int     wrapS, wrapT, model;
+    int     wrapS, wrapT, model, minFilter, magFilter;
     SbColor blendColor;
-    SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
+    SoTextureImageElement::get(state, wrapS, wrapT, model, minFilter, magFilter,
+                               blendColor);
     return (SoTexture2::Wrap)wrapS;
 }
 
 SoTexture2::Wrap
 SoCallbackAction::getTextureWrapT() const {
-    int     wrapS, wrapT, model;
+    int     wrapS, wrapT, model, minFilter, magFilter;
     SbColor blendColor;
-    SoTextureImageElement::get(state, wrapS, wrapT, model, blendColor);
+    SoTextureImageElement::get(state, wrapS, wrapT, model, minFilter, magFilter,
+                               blendColor);
     return (SoTexture2::Wrap)wrapT;
 }
 

@@ -64,6 +64,7 @@
 #include <Inventor/nodes/SoTexture2.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 
+#include <float.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -109,20 +110,36 @@ SoTexture2::SoTexture2()
     SO_NODE_ADD_FIELD(wrapS, (REPEAT));
     SO_NODE_ADD_FIELD(wrapT, (REPEAT));
     SO_NODE_ADD_FIELD(model, (MODULATE));
+    SO_NODE_ADD_FIELD(minFilter, (AUTO));
+    SO_NODE_ADD_FIELD(magFilter, (AUTO));
     SO_NODE_ADD_FIELD(blendColor, (SbColor(0, 0, 0)));
 
     // Set up enumerations for texture model
     SO_NODE_DEFINE_ENUM_VALUE(Model, MODULATE);
     SO_NODE_DEFINE_ENUM_VALUE(Model, DECAL);
     SO_NODE_DEFINE_ENUM_VALUE(Model, BLEND);
+    SO_NODE_DEFINE_ENUM_VALUE(Model, REPLACE);
 
     SO_NODE_DEFINE_ENUM_VALUE(Wrap, REPEAT);
     SO_NODE_DEFINE_ENUM_VALUE(Wrap, CLAMP);
+    SO_NODE_DEFINE_ENUM_VALUE(Wrap, CLAMP_TO_BORDER);
+    SO_NODE_DEFINE_ENUM_VALUE(Wrap, CLAMP_TO_EDGE);
+    SO_NODE_DEFINE_ENUM_VALUE(Wrap, MIRRORED_REPEAT);
+
+    SO_NODE_DEFINE_ENUM_VALUE(Filter, AUTO);
+    SO_NODE_DEFINE_ENUM_VALUE(Filter, NEAREST);
+    SO_NODE_DEFINE_ENUM_VALUE(Filter, LINEAR);
+    SO_NODE_DEFINE_ENUM_VALUE(Filter, NEAREST_MIPMAP_NEAREST);
+    SO_NODE_DEFINE_ENUM_VALUE(Filter, NEAREST_MIPMAP_LINEAR);
+    SO_NODE_DEFINE_ENUM_VALUE(Filter, LINEAR_MIPMAP_NEAREST);
+    SO_NODE_DEFINE_ENUM_VALUE(Filter, LINEAR_MIPMAP_LINEAR);
 
     // Set up info in enumerated type field
     SO_NODE_SET_SF_ENUM_TYPE(model, Model);
     SO_NODE_SET_SF_ENUM_TYPE(wrapS, Wrap);
     SO_NODE_SET_SF_ENUM_TYPE(wrapT, Wrap);
+    SO_NODE_SET_SF_ENUM_TYPE(minFilter, Filter);
+    SO_NODE_SET_SF_ENUM_TYPE(magFilter, Filter);
 
     // Set up sensors to keep the image/filename fields agreeing.
     // Sensors are used instead of field to field connections or raw
@@ -273,6 +290,45 @@ SoTexture2::filenameChangedCB(void *data, SoSensor *)
     tex->setReadStatus(!img.isNull());
 }
 
+int
+SoTexture2::getMinFilter(float texQuality) const {
+    //
+    // Helper table; mapping from textureQuality to OpenGL filter type:
+    //
+    struct qualityFilterTable {
+        float  quality;
+        Filter filter;
+    };
+
+    //
+    // Defaults for RealityEngine (mip-mapped by default):
+    //
+    static qualityFilterTable mipmap_minQFTable[] = {
+        {0.1f, NEAREST},
+        {0.5f, LINEAR},
+        {0.7f, NEAREST_MIPMAP_NEAREST},
+        {0.8f, NEAREST_MIPMAP_LINEAR},
+        {0.9f, LINEAR_MIPMAP_NEAREST},
+        {FLT_MAX, LINEAR_MIPMAP_LINEAR},
+    };
+
+    if (minFilter.getValue() != AUTO)
+        return minFilter.getValue();
+
+    int i;
+    for (i = 0; texQuality > mipmap_minQFTable[i].quality; i++) /* Do nothing */
+        ;
+
+    return mipmap_minQFTable[i].filter;
+}
+
+int
+SoTexture2::getMagFilter(float texQuality) const {
+    if (magFilter.getValue() != AUTO)
+        return magFilter.getValue();
+
+    return (texQuality < 0.5 ? NEAREST : LINEAR);
+}
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -293,9 +349,13 @@ SoTexture2::doAction(SoAction *action)
         SoTextureOverrideElement::setImageOverride(state, TRUE);
     }
 
+    const float texQuality = SoTextureQualityElement::get(state);
+    const int   minFilter = getMinFilter(texQuality);
+    const int   magFilter = getMagFilter(texQuality);
+
     SoTextureImageElement::set(state, this, image.getValue(), wrapS.getValue(),
-                               wrapT.getValue(), model.getValue(),
-                               blendColor.getValue());
+                               wrapT.getValue(), model.getValue(), minFilter,
+                               magFilter, blendColor.getValue());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -374,14 +434,18 @@ SoTexture2::GLRender(SoGLRenderAction *action)
         // the list must go away if the node is deleted or the
         // image is changed.
 
+        const int minFilter = getMinFilter(texQuality);
+        const int magFilter = getMagFilter(texQuality);
+
         // See if renderList is valid (in the right context, with
         // the right texture quality):
         int context = SoGLCacheContextElement::get(state);
         if (renderList && renderList->getContext() == context &&
             texQuality == renderListQuality) {
-            SoGLTextureImageElement::set(
-                state, this, image.getValue(), texQuality, wrapS.getValue(),
-                wrapT.getValue(), m, blendColor.getValue(), renderList);
+            SoGLTextureImageElement::set(state, this, image.getValue(),
+                                         wrapS.getValue(), wrapT.getValue(), m,
+                                         minFilter, magFilter,
+                                         blendColor.getValue(), renderList);
         } // Not valid, try to build
         else {
             // Free up old list, if necessary:
@@ -390,8 +454,9 @@ SoTexture2::GLRender(SoGLRenderAction *action)
                 renderList = NULL;
             }
             renderList = SoGLTextureImageElement::set(
-                state, this, image.getValue(), texQuality, wrapS.getValue(),
-                wrapT.getValue(), m, blendColor.getValue(), NULL);
+                state, this, image.getValue(), wrapS.getValue(),
+                wrapT.getValue(), m, minFilter, magFilter,
+                blendColor.getValue(), NULL);
             if (renderList)
                 renderList->ref();
             renderListQuality = texQuality;

@@ -91,8 +91,8 @@ class SoGLTextureImageElement : public SoTextureImageElement {
     // responsible for calling glDeleteLists to free up the display
     // list at the right time.
     static SoGLDisplayList *set(SoState *state, SoNode *node,
-                                const SbImage &image, float texQuality,
-                                int wrapS, int wrapT, int model,
+                                const SbImage &image, int wrapS, int wrapT,
+                                int model, int minFilter, int magFilter,
                                 const SbColor &  blendColor,
                                 SoGLDisplayList *list);
 
@@ -107,6 +107,7 @@ class SoGLTextureImageElement : public SoTextureImageElement {
   protected:
     // Catch setElt; if this setElt is called, it is an error...
     virtual void setElt(const SbImage &image, int wrapS, int wrapT, int model,
+                        int minFilter, int magFilter,
                         const SbColor &blendColor);
 
     virtual ~SoGLTextureImageElement();
@@ -121,7 +122,6 @@ class SoGLTextureImageElement : public SoTextureImageElement {
     void sendTex(SoState *state);
 
     SoGLDisplayList *list;
-    float            quality;
 };
 
 #endif /* _SO_GL_TEXTURE_IMAGE_ELEMENT */

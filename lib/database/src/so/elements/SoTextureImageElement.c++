@@ -103,8 +103,8 @@ SoTextureImageElement::init(SoState *state)
 
 void
 SoTextureImageElement::set(SoState *state, SoNode *node, const SbImage &img,
-                           int wrapS, int wrapT, int model,
-                           const SbColor &blendColor)
+                           int wrapS, int wrapT, int model, int minFilter,
+                           int magFilter, const SbColor &blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -113,7 +113,7 @@ SoTextureImageElement::set(SoState *state, SoNode *node, const SbImage &img,
     // Get an instance we can change (pushing if necessary)
     elt = (SoTextureImageElement *)getElement(state, classStackIndex, node);
 
-    elt->setElt(img, wrapS, wrapT, model, blendColor);
+    elt->setElt(img, wrapS, wrapT, model, minFilter, magFilter, blendColor);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -126,7 +126,8 @@ SoTextureImageElement::set(SoState *state, SoNode *node, const SbImage &img,
 
 void
 SoTextureImageElement::setElt(const SbImage &_image, int _wrapS, int _wrapT,
-                              int _model, const SbColor &_blendColor)
+                              int _model, int _minFilter, int _magFilter,
+                              const SbColor &_blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -134,6 +135,8 @@ SoTextureImageElement::setElt(const SbImage &_image, int _wrapS, int _wrapT,
     wrapS = _wrapS;
     wrapT = _wrapT;
     model = _model;
+    minFilter = _minFilter;
+    magFilter = _magFilter;
     blendColor = _blendColor;
 }
 
@@ -146,7 +149,8 @@ SoTextureImageElement::setElt(const SbImage &_image, int _wrapS, int _wrapT,
 
 const SbImage &
 SoTextureImageElement::get(SoState *state, int &_wrapS, int &_wrapT,
-                           int &_model, SbColor &_blendColor)
+                           int &_model, int &_minFilter, int &_magFilter,
+                           SbColor &_blendColor)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -158,6 +162,8 @@ SoTextureImageElement::get(SoState *state, int &_wrapS, int &_wrapT,
     _wrapS = elt->wrapS;
     _wrapT = elt->wrapT;
     _model = elt->model;
+    _minFilter = elt->minFilter;
+    _magFilter = elt->magFilter;
     _blendColor = elt->blendColor;
 
     return elt->image;

@@ -65,14 +65,6 @@
 
 #include <float.h>
 
-// Formats for 1-4 component textures
-static GLenum formats[] = {GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB, GL_RGBA};
-
-static GLint internalFormatsLow[] = {
-    GL_LUMINANCE8_EXT, GL_LUMINANCE8_ALPHA8_EXT, GL_RGB4_EXT, GL_RGBA4_EXT};
-static GLint internalFormatsHigh[] = {GL_LUMINANCE, GL_LUMINANCE_ALPHA, GL_RGB,
-                                      GL_RGBA};
-
 SO_ELEMENT_SOURCE(SoGLTextureImageElement);
 
 ////////////////////////////////////////////////////////////////////////
@@ -149,7 +141,8 @@ SoGLTextureImageElement::pop(SoState *state, const SoElement *)
 // Use: protected, virtual
 
 void
-SoGLTextureImageElement::setElt(const SbImage &, int, int, int, const SbColor &)
+SoGLTextureImageElement::setElt(const SbImage &, int, int, int, int, int,
+                                const SbColor &)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -173,8 +166,9 @@ SoGLTextureImageElement::setElt(const SbImage &, int, int, int, const SbColor &)
 
 SoGLDisplayList *
 SoGLTextureImageElement::set(SoState *state, SoNode *node, const SbImage &image,
-                             float _quality, int _wrapS, int _wrapT, int _model,
-                             const SbColor &_blendColor, SoGLDisplayList *_list)
+                             int _wrapS, int _wrapT, int _model, int _minFilter,
+                             int _magFilter, const SbColor &_blendColor,
+                             SoGLDisplayList *_list)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -185,10 +179,9 @@ SoGLTextureImageElement::set(SoState *state, SoNode *node, const SbImage &image,
 
     if (elt != NULL) {
         elt->SoTextureImageElement::setElt(image, _wrapS, _wrapT, _model,
-                                           _blendColor);
+                                           _minFilter, _magFilter, _blendColor);
 
         elt->list = _list;
-        elt->quality = _quality;
         elt->sendTexEnv(state);
         elt->sendTex(state);
         return elt->list;
@@ -196,6 +189,7 @@ SoGLTextureImageElement::set(SoState *state, SoNode *node, const SbImage &image,
     return NULL;
 }
 
+namespace {
 // Helper table; for integers 1-15, returns the high-bit (0-3):
 static signed char powTable[0x10] = {-1, 0, 1, 1, 2, 2, 2, 2,
                                      3,  3, 3, 3, 3, 3, 3, 3};
@@ -205,7 +199,7 @@ static signed char powTable[0x10] = {-1, 0, 1, 1, 2, 2, 2, 2,
 // This is convoluted, but pretty fast (about 1.6 times faster than
 // a naive bit-shifting algorithm).
 //
-static inline int
+inline int
 nextPowerOf2(int num) {
 #ifdef DEBUG
     if (num <= 0) {
@@ -231,7 +225,7 @@ nextPowerOf2(int num) {
 // Compute the nearest power of 2 number.  This algorithm is a little
 // strange, but it works quite well.
 //
-static int
+int
 nearestPowerOf2(GLuint value) {
     int i = 0;
 
@@ -254,27 +248,76 @@ nearestPowerOf2(GLuint value) {
     }
 }
 
-//
-// Helper table; mapping from textureQuality to OpenGL filter type:
-//
-struct qualityFilterTable {
-    float  quality;
-    GLint  filter;
-    SbBool needMipMaps;
-};
+GLint
+getGLModel(int model) {
+    switch (model) {
+    case SoTextureImageElement::MODULATE:
+        return GL_MODULATE;
+    case SoTextureImageElement::DECAL:
+        return GL_DECAL;
+    case SoTextureImageElement::BLEND:
+        return GL_BLEND;
+    case SoTextureImageElement::REPLACE:
+        return GL_REPLACE;
+    default:
+        break;
+    }
+#ifdef DEBUG
+    SoDebugError::post("SoGLTextureImageElement::getGLModel",
+                       "Invalid Texture Model");
+#endif
+    return GL_INVALID_VALUE;
+}
 
-//
-// Defaults for RealityEngine (mip-mapped by default):
-//
-static qualityFilterTable mipmap_minQFTable[] = {
-    {0.1, GL_NEAREST, FALSE},
-    {0.5, GL_LINEAR, FALSE},
-    {0.7, GL_NEAREST_MIPMAP_NEAREST, TRUE},
-    {0.8, GL_NEAREST_MIPMAP_LINEAR, TRUE},
-    {0.9, GL_LINEAR_MIPMAP_NEAREST, TRUE},
-    {FLT_MAX, GL_LINEAR_MIPMAP_LINEAR, TRUE},
-};
+GLint
+getGLWrap(int wrap) {
+    switch (wrap) {
+    case SoTextureImageElement::REPEAT:
+        return GL_REPEAT;
+    case SoTextureImageElement::CLAMP:
+        return GL_CLAMP;
+    case SoTextureImageElement::CLAMP_TO_BORDER:
+        return GL_CLAMP_TO_BORDER;
+    case SoTextureImageElement::CLAMP_TO_EDGE:
+        return GL_CLAMP_TO_EDGE;
+    case SoTextureImageElement::MIRRORED_REPEAT:
+        return GL_MIRRORED_REPEAT;
+    default:
+        break;
+    }
+#ifdef DEBUG
+    SoDebugError::post("SoGLTextureImageElement::getGLWrap",
+                       "Invalid Texture Wrap");
+#endif
+    return GL_INVALID_VALUE;
+}
 
+GLint
+getGLFilter(int filter) {
+    switch (filter) {
+    case SoTextureImageElement::NEAREST:
+        return GL_NEAREST;
+    case SoTextureImageElement::LINEAR:
+        return GL_LINEAR;
+    case SoTextureImageElement::NEAREST_MIPMAP_NEAREST:
+        return GL_NEAREST_MIPMAP_NEAREST;
+    case SoTextureImageElement::NEAREST_MIPMAP_LINEAR:
+        return GL_NEAREST_MIPMAP_LINEAR;
+    case SoTextureImageElement::LINEAR_MIPMAP_NEAREST:
+        return GL_LINEAR_MIPMAP_NEAREST;
+    case SoTextureImageElement::LINEAR_MIPMAP_LINEAR:
+        return GL_LINEAR_MIPMAP_LINEAR;
+    default:
+        break;
+    }
+#ifdef DEBUG
+    SoDebugError::post("SoGLTextureImageElement::getGLFilter",
+                       "Invalid Texture Filter");
+#endif
+    return GL_INVALID_VALUE;
+}
+
+} // namespace
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -290,8 +333,8 @@ SoGLTextureImageElement::sendTexEnv(SoState *)
 ////////////////////////////////////////////////////////////////////////
 {
     // This state isn't stored in a texture object:
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, model);
-    if (model == GL_BLEND) {
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, getGLModel(model));
+    if (getGLModel(model) == GL_BLEND) {
         glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, blendColor.getValue());
     }
 }
@@ -315,18 +358,21 @@ SoGLTextureImageElement::sendTex(SoState *state)
         return;
     }
 
+    image.setActiveMipmap(0);
+    if (image.isNull())
+        return;
+
     // Scale the image to closest power of 2 smaller than maximum
     // texture size:
     GLint maxsize = 0;
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxsize);
     SbVec3s newSize;
-    int     i;
     // Use nearest power of 2 for big textures, use next higher
     // power of 2 for small textures:
     const SbVec3s &size = image.getSize();
     const int      numComponents = image.getNumComponents();
 
-    for (i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         if (size[i] > 8) {
             newSize[i] =
                 size[i] > maxsize ? maxsize : 1 << nearestPowerOf2(size[i]);
@@ -335,25 +381,46 @@ SoGLTextureImageElement::sendTex(SoState *state)
         }
     }
 
-    qualityFilterTable *tbl = mipmap_minQFTable;
-    for (i = 0; quality > tbl[i].quality; i++) /* Do nothing */
-        ;
-    int    minFilter = tbl[i].filter;
-    SbBool needMipMaps = tbl[i].needMipMaps;
-    int    magFilter = (quality < 0.5 ? GL_NEAREST : GL_LINEAR);
+    const bool needMipMaps =
+        (getGLFilter(minFilter) >= GL_NEAREST_MIPMAP_NEAREST) &&
+        (getGLFilter(minFilter) <= GL_LINEAR_MIPMAP_LINEAR);
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Not default
 
     // Format in memory
-    int format = formats[numComponents - 1];
+    GLenum format = GL_INVALID_VALUE;
+    switch (image.getFormat()) {
+    case SbImage::Format_Luminance:
+        format = GL_LUMINANCE;
+        break;
+    case SbImage::Format_Luminance_Alpha:
+        format = GL_LUMINANCE_ALPHA;
+        break;
+    case SbImage::Format_RGB24:
+        format = GL_RGB;
+        break;
+    case SbImage::Format_RGBA32:
+        format = GL_RGBA;
+        break;
+    case SbImage::Format_RGB_S3TC_DXT1:
+        format = GL_COMPRESSED_RGB_S3TC_DXT1_EXT;
+        break;
+    case SbImage::Format_RGBA_S3TC_DXT1:
+        format = GL_COMPRESSED_RGBA_S3TC_DXT1_EXT;
+        break;
+    case SbImage::Format_RGBA_S3TC_DXT3:
+        format = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT;
+        break;
+    case SbImage::Format_RGBA_S3TC_DXT5:
+        format = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT;
+        break;
+    default:
+        SoDebugError::post("SoGLTextureImageElement::sendTex",
+                           "Invalid image format");
+        break;
+    }
 
-    // Internal format is just numComponents unless GL_EXT_texture is
-    // supported:
-    int internalFormat = numComponents;
-    if (quality >= 0.8)
-        internalFormat = internalFormatsHigh[numComponents - 1];
-    else
-        internalFormat = internalFormatsLow[numComponents - 1];
+    int internalFormat = format;
 
     SbBool buildList = !SoCacheElement::anyOpen(state);
     if (buildList) {
@@ -367,10 +434,12 @@ SoGLTextureImageElement::sendTex(SoState *state)
         glBindTexture(GL_TEXTURE_2D, 0);
 
     // These need to go inside the display list or texture object
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                    getGLFilter(minFilter));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+                    getGLFilter(magFilter));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, getGLWrap(wrapS));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, getGLWrap(wrapT));
 
     std::vector<GLubyte> level0;
     if (newSize != size) {
