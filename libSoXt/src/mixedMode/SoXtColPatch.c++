@@ -58,7 +58,7 @@
 #include "_SoXtUIRegion.h"
 #include "_SoXtColorPatch.h"
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 
 /*

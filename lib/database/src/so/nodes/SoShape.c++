@@ -52,7 +52,7 @@
  */
 
 #include <climits>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <GL/glu.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/SoDB.h>

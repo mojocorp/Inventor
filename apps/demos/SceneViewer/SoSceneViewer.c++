@@ -136,7 +136,7 @@
 #include "../../samples/widgets/MyDropSite.h"
 #include "../../samples/common/InventorLogo.h"
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #ifdef DEBUG
 #include <assert.h>
 #endif

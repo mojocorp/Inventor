@@ -66,7 +66,7 @@
 #include <X11/Intrinsic.h>
 #include <Xm/Text.h>
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 ////////////////////////////////////////////////////////////////////////
 //

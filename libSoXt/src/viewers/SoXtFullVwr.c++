@@ -82,7 +82,7 @@
 #include <Inventor/Xt/SoXtIcons.h>
 #include <Inventor/nodes/SoOrthographicCamera.h>
 #include <Inventor/nodes/SoPerspectiveCamera.h>
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include "SoXtBitmapButton.h"
 #include <Inventor/errors/SoDebugError.h>
 

@@ -50,7 +50,7 @@
  */
 
 #include "_SoXtUIRegion.h"
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 
 // ??? doing a GL_LINE_LOOP seems to be missing the top right
 // ??? pixel due to subpixel == TRUE in openGL.

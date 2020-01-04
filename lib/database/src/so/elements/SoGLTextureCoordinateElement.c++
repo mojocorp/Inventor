@@ -52,7 +52,7 @@
  _______________________________________________________________________
  */
 
-#include <GL/gl.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/elements/SoGLTextureCoordinateElement.h>
 #include <Inventor/errors/SoDebugError.h>
 
