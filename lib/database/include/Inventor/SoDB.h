@@ -169,11 +169,6 @@ class SoDB {
     static void          setDelaySensorTimeout(const SbTime &t);
     static const SbTime &getDelaySensorTimeout();
 
-    // Just like UNIX select() call, but does our tasks while waiting.
-    // Can be used in applications with their own event loops.
-    static int doSelect(int nfds, fd_set *readfds, fd_set *writefds,
-                        fd_set *exceptfds, struct timeval *userTimeOut);
-
     SoEXTENDER
   public:
     // Registers a field conversion engine that can be used to
