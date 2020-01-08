@@ -80,22 +80,63 @@
 
 class SoMField;
 
+/// Joins separate fields into a single multiple-value field.
+/// \ingroup Engines
+/// This engine joins up to 10 separate fields of a type into
+/// a single multiple-valued field of the same type.
+/// The type of the input fields can be any subclass of
+/// <tt>SoMField</tt> The type is specified when an instance of
+/// the class is created.
+/// For example,
+/// <tt>SoConcatenate(SoMFFloat::getClassTypeId())</tt>
+/// creates an engine that concatenates floating-point values.
+///
+///
+/// The #input field is a 10-element array, where each element can
+/// be connected to single- or multiple-valued fields.
+/// All the values in the input are concatenated
+/// together to form one multiple-value field.  For example, if
+/// #input[0] contains 10 values and #input[1] contains 3 values,
+/// the output will contain 13 values.
+///
+///
+/// Note that, unlike the output of most engines, #output is a pointer.
+/// Note also that by default #input does not contain any values,
+/// and no value is output from the engine.
+///
+/// \par File format/defaults:
+/// \code
+/// SoConcatenate {
+///    type <inputType>
+///    input0 []
+///    input1 []
+///    input2 []
+///    input3 []
+///    input4 []
+///    input5 []
+///    input6 []
+///    input7 []
+///    input8 []
+///    input9 []
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoGate, SoSelectOne
 class SoConcatenate : public SoEngine {
 
     SO_ENGINE_HEADER(SoConcatenate);
 
   public:
-    // Constructor, takes a subclass of SoMField.
+    /// Constructor, takes a subclass of SoMField.
     SoConcatenate(SoType mfInputType);
 
-    // Inputs; connect them like this:
-    //    concatenate->input[0]->connectFrom(...)
-    // The names of these inputs is input0 ... input9.
-    // The default value for these fields is no values.
+    /// Inputs; connect them like this:
+    ///    concatenate->input[0]->connectFrom(...)
+    /// The names of these inputs is input0 ... input9.
+    /// The default value for these fields is no values.
     SoMField *input[10];
 
-    // Output.  Is of the same type as the inputs (note that it is a
-    // pointer, unlike most engine outputs).
+    /// Output.  Is of the same type as the inputs (note that it is a
+    /// pointer, unlike most engine outputs).
     SoEngineOutput *output;
 
     SoINTERNAL

@@ -60,27 +60,71 @@
 #include <Inventor/nodes/SoVertexProperty.h>
 #include <Inventor/fields/SoSFNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoVertexShape
-//
-//  Abstract vertex-based shape node class. All nodes derived from
-//  this class are shapes that are constructed from vertices at some
-//  or all of the current coordinates.  They all have vertexProperty nodes,
-//  and vpCaches.
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoNormalBundle;
 class SoNormalCache;
 class SoState;
 
+/// Abstract base class for all vertex-based shape nodes.
+/// \ingroup Nodes
+/// This node is the abstract base class for all vertex-based shape
+/// (geometry) nodes. It is used as a
+/// repository for convenience functions for subclasses and to provide a
+/// type identifier to make it easy to determine whether a shape is
+/// vertex-based.
+/// It contains one public field, the <tt>SoVertexProperty</tt>
+/// field.
+///
+/// All subclasses of this node draw objects constructed from
+/// vertices.  If the vertexProperty field is non-null and there are
+/// coordinates in the associated vertex property node, then those
+/// coordinates are used.  Otherwise the objects are drawn using the
+/// current coordinates in the state. The coordinates of the shape
+/// are transformed by the current transformation matrix and are drawn
+/// with the current light model and drawing style.
+///
+/// Subclasses that construct polygons from vertices may not render or
+/// pick correctly if any of their polygons are self-intersecting or
+/// non-planar.
+///
+/// All vertex shape subclasses use the bounding box of the shape to
+/// determine default texture coordinates. The longest dimension of the
+/// bounding box defines the S coordinates, and the next longest defines
+/// the T coordinates. The value of the S coordinate ranges from 0 to 1,
+/// from one end of the bounding box to the other. The T coordinate ranges
+/// between 0 and the ratio of the second greatest dimension of the
+/// bounding box to the greatest dimension.
+///
+/// When a vertex-based shape is picked with an <tt>SoRayPickAction</tt>, a
+/// detail is always returned. If the shape is composed of faces (such as
+/// <tt>SoFaceSet</tt> or <tt>SoTriangleStripSet</tt>), an <tt>SoFaceDetail</tt>
+/// is returned. If the shape is composed of line segments (such as
+/// <tt>SoLineSet</tt>), an <tt>SoLineDetail</tt> is returned. If the shape is
+/// composed of points (such as <tt>SoPointSet</tt>), an <tt>SoPointDetail</tt>
+/// is returned. Note that the type of detail returned is not affected by the
+/// current drawing style.
+///
+/// Similarly, each class of vertex-based shape invokes appropriate
+/// callbacks if those callbacks are registered with the
+/// <tt>SoCallbackAction</tt>. Shapes made of faces invoke triangle callbacks
+/// for each generated triangle. (Faces may be triangulated to create
+/// these triangles.) Shapes made of line segments invoke line segment
+/// callbacks for each segment, and shapes made of points invoke point
+/// callbacks.
+///
+/// The subclass <tt>SoIndexedShape</tt> is a base class for vertex-based
+/// shapes that index into the current set of coordinates.
+/// The subclass <tt>SoNonIndexedShape</tt> is a base class for vertex-based
+/// shapes that use the current coordinates in order.
+/// \par File format/defaults:
+/// This is an abstract class. See the reference page of a derived class for the
+/// format and default values. \sa SoIndexedShape, SoNonIndexedShape,
+/// SoVertexProperty
 class SoVertexShape : public SoShape {
 
     SO_NODE_ABSTRACT_HEADER(SoVertexShape);
 
   public:
-    SoSFNode vertexProperty;
+    SoSFNode vertexProperty; ///< vertex property node.
 
     SoEXTENDER
   public:

@@ -58,12 +58,19 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFBool subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of boolean values.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of boolean values.
+///
+/// <tt>SoMFBools</tt> are written to file as one or more boolean values, which
+/// are written as "0" (representing a false value), "1", "TRUE", or
+/// "FALSE".
+///
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ 0, FALSE, 1, TRUE ]
 class SoMFBool : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFBool, SbBool, SbBool);

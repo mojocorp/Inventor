@@ -59,23 +59,43 @@
 #include <Inventor/fields/SoMFVec4f.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCoordinate4
-//
-//  4-vector coordinate point node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Rational coordinate point node.
+/// \ingroup Nodes
+/// This node defines a set of 3D coordinates to be used by subsequent
+/// vertex-based shape nodes (those derived from <tt>SoVertexShape</tt>) or
+/// shape nodes that use them as control points (such as NURBS curves and
+/// surfaces).  Coordinates are specifed as rational 4-vectors; the
+/// corresponding 3D point is computed by dividing the first three
+/// components by the fourth.  This node does not produce a visible result
+/// during rendering; it simply replaces the current coordinates in the
+/// rendering state for subsequent nodes to use.
+///
+///
+/// This node exists primarily for use with NURBS curves and surfaces.
+/// However, it can be used to define coordinates for any vertex-based
+/// shape.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Sets coordinates in current traversal state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoCoordinate4 {
+///    point	0 0 0 1
+/// }
+/// \endcode
+/// \sa
+/// SoCoordinate4,SoIndexedNurbsCurve,SoIndexedNurbsSurface,SoNurbsCurve,SoNurbsProfile,SoNurbsSurface,SoVertexShape
 class SoCoordinate4 : public SoNode {
 
     SO_NODE_HEADER(SoCoordinate4);
 
   public:
     // Fields
-    SoMFVec4f point; // Coordinate point(s)
+    SoMFVec4f point; ///< Coordinate point(s)
 
-    // Constructor
+    /// Constructor
     SoCoordinate4();
 
     SoEXTENDER

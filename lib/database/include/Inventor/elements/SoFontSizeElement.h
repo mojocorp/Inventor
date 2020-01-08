@@ -73,21 +73,21 @@ class SoFontSizeElement : public SoFloatElement {
     SO_ELEMENT_HEADER(SoFontSizeElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // set the current font size
+    /// set the current font size
     static void set(SoState *state, float size) {
         SoFloatElement::set(classStackIndex, state, size);
     }
 
-    // return the current font name from the state
+    /// return the current font name from the state
     static float get(SoState *state) {
         return SoFloatElement::get(classStackIndex, state);
     }
 
-    // Returns the default font size
-    static float getDefault() { return 10.0; }
+    /// Returns the default font size
+    static float getDefault() { return 10.0f; }
 
     SoINTERNAL
   public:

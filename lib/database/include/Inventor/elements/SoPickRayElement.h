@@ -79,23 +79,23 @@ class SoPickRayElement : public SoElement {
     SO_ELEMENT_HEADER(SoPickRayElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Always returns FALSE, since this element should never be a
-    // criterion for cache invalidation.
+    /// Always returns FALSE, since this element should never be a
+    /// criterion for cache invalidation.
     virtual SbBool matches(const SoElement *elt) const;
 
-    // Create and return a copy of this element
+    /// Create and return a copy of this element
     virtual SoElement *copyMatchInfo() const;
 
-    // Sets the picking ray
+    /// Sets the picking ray
     static void set(SoState *state, const SbViewVolume &volume);
 
-    // Returns the current picking ray view volume from the state
+    /// Returns the current picking ray view volume from the state
     static const SbViewVolume &get(SoState *state);
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

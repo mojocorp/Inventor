@@ -94,8 +94,37 @@ class SoXtBitmapButton;
 //
 //////////////////////////////////////////////////////////////////////////////
 
+/// Viewer component which uses a virtual trackball to view the data
+/// \ingroup Viewers
+/// The Examiner viewer component allows you to rotate the view
+/// around a point of interest using a virtual trackball.
+/// The viewer uses the camera <b>focalDistance</b>
+/// field to figure out the point of rotation, which is usually set
+/// to be at the center of the scene. In addition to allowing you to rotate the
+/// camera around the point of interest, this viewer also allows you to
+/// translate the camera in the viewer plane, as well as dolly (move forward
+/// and backward) to get closer to or further away from the point of interest.
+/// The viewer also supports seek to quickly move the camera to a desired object or point.
+///
+/// <b>USAGE</b>
+///
+/// <b>Left Mouse:</b> Rotate the virtual trackball.
+///
+/// <b>Middle Mouse:</b>
+/// <b>Ctrl + Left Mouse:</b> Translate up, down, left and right.
+///
+/// <b>Ctrl + Middle Mouse:</b>
+/// <b>Left + Middle Mouse:</b> Dolly in and out (gets closer to and further away from the object).
+///
+/// <b>\<s\> + click:</b> Alternative to the Seek button. Press (but do not hold down) the \<s\> key, then click on a target object.
+///
+/// <b>Right Mouse:</b> Open the popup menu.
+/// \sa SoXtFullViewer, SoXtViewer, SoXtComponent, SoXtRenderArea, SoXtWalkViewer, SoXtFlyViewer, SoXtPlaneViewer
 class SoXtExaminerViewer : public SoXtFullViewer {
   public:
+    /// Constructor which specifies the viewer type.
+    /// Please refer to the SoXtViewer
+    /// reference page for a description of the viewer types.
     SoXtExaminerViewer(
 	Widget parent = NULL,
 	const char *name = NULL, 
@@ -104,30 +133,22 @@ class SoXtExaminerViewer : public SoXtFullViewer {
 	SoXtViewer::Type type = BROWSER);
     ~SoXtExaminerViewer();
     
-    //
-    // Show/hide the point of rotation feedback, which only appears while
-    // in Viewing mode. (default OFF)
-    //
+    /// Show/Hide the point of rotation feedback, which only appears while in
+    /// viewing mode (default in off).
     void	setFeedbackVisibility(SbBool onOrOff);
     SbBool	isFeedbackVisible() const	{ return feedbackFlag; }
     
-    //
-    // Set/get the point of rotation feeedback size in pixels (default 20). 
-    //
+    /// Set/get the point of rotation feedback size in pixels (default 20 pix).
     void	setFeedbackSize(int newSize);
     int		getFeedbackSize() const		{ return (int) feedbackSize; }
     
-    //
-    // Enable/disable the animation feature of the viewer. 
-    // (enabled by default)
-    //
+    /// Enable/disable the spinning animation feature of the viewer
+    /// (enabled by default).
     void    	setAnimationEnabled(SbBool onOrOff);
     SbBool  	isAnimationEnabled()		{ return animationEnabled; }
     
-    //
-    // Stop animation, if it is occurring, and queuery if the viewer is 
-    // currently animating.
-    //
+    /// Stop animation, if it is occurring, and query if the viewer is
+    /// currently animating.
     void    	stopAnimating();
     SbBool  	isAnimating()  			{ return animatingFlag; }
     

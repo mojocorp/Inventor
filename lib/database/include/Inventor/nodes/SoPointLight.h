@@ -59,24 +59,38 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoLight.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPointLight
-//
-//  Point light source node. A point light illuminates in all
-//  directions from a given point in space.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node representing a point light source.
+/// \ingroup Nodes
+/// This node defines a point light source at a fixed 3D location.  A
+/// point source illuminates equally in all directions; that is, it is
+/// omni-directional.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Activates this light (if so specified) during traversal. All shape
+/// nodes that come after this light in the scene graph are illuminated by
+/// this light. The light's location is affected by the current
+/// transformation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoPointLight {
+///    on           TRUE
+///    intensity    1
+///    color        1 1 1
+///    location     0 0 1
+/// }
+/// \endcode
+/// \sa SoDirectionalLight, SoSpotLight
 class SoPointLight : public SoLight {
 
     SO_NODE_HEADER(SoPointLight);
 
   public:
     // Fields (in addition to those in SoLight):
-    SoSFVec3f location; // Source location
+    SoSFVec3f location; ///< Location of the source.
 
-    // Constructor
+    /// Creates a point light source node with default settings.
     SoPointLight();
 
     SoEXTENDER

@@ -60,30 +60,50 @@
 #include <Inventor/fields/SoSFName.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoFont
-//
-//  Specify a font.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that defines font type and size for text.
+/// \ingroup Nodes
+/// This node defines the current font type and point size for all
+/// subsequent text shapes in the scene graph.  Fonts are specified with
+/// PostScript names, except for the default font. The default font is
+/// called <b>"defaultFont"</b> and is the standard SGI graphics font for 2D
+/// text. <b>"Utopia"</b> is the standard Inventor font for 3D text.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Sets the font name and size in the current traversal
+/// state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoFont {
+///    name	"defaultFont"
+///    size	10
+/// }
+/// \endcode
+/// \sa SoText2, SoText3
 class SoFont : public SoNode {
 
     SO_NODE_HEADER(SoFont);
 
   public:
-    // Fields
-    SoSFName  name;
+    /// This field defines the font name as a PostScript name. For example,
+    /// Times Roman would be specified as <b>Times-Roman</b>.  Multiple fonts
+    /// can be specified by separating the font names with semicolons.  When
+    /// multiple fonts are specified, the first font in the list that contains a
+    /// given character is used to render that character.
+    SoSFName name;
+
+    /// This field defines the font size. The value is in points for
+    /// 2D text and is in the current units for 3D text.
     SoSFFloat size;
 
-    // Constructor
+    /// Creates a font node with default settings.
     SoFont();
 
-    // Returns the full font path
+    /// Returns the full font path
     static SbString getFontFileName(const SbName &fontName);
 
-    // Register a font with corresponding path.
+    /// Register a font with corresponding path.
     static void addFontFileName(const SbName &  fontName,
                                 const SbString &fontPath);
 

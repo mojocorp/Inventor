@@ -58,37 +58,32 @@
 
 #include <Inventor/SoType.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoDetail
-//
-//  Base class for all detail classes. A detail represents extra
-//  information about a point on a surface, such as an intersection
-//  returned from picking along a ray (SoPickedPoint) or as a vertex
-//  of a generated primitive (SoPrimitiveVertex).
-//
-//  The base class does not contain any useful information. It is here
-//  only as an abstract class. Subclasses can add useful detail
-//  information, such as a part index or nearest vertex.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Base class for describing detail information about a shape node.
+/// \ingroup Details
+/// <tt>SoDetail</tt> is the abstract base class for all detail classes. A
+/// detail contains shape-specific information about a particular shape
+/// during picking and primitive generation. Subclasses store information
+/// based on the particular type of shape.
+/// \sa
+/// SoConeDetail,SoCubeDetail,SoCylinderDetail,SoDetailList,SoFaceDetail,SoLineDetail,
+/// \sa
+/// SoNodeKitDetail,SoPickedPoint,SoPointDetail,SoPrimitiveVertex,SoTextDetail
 class SoDetail {
   public:
-    // Destructor
+    /// Destructor
     virtual ~SoDetail();
 
-    // Returns type identifier for SoDetail class
+    /// Returns type identifier for SoDetail class
     static SoType getClassTypeId() { return classTypeId; }
 
-    // Returns type identifier for detail
+    /// Returns type identifier for detail
     virtual SoType getTypeId() const = 0;
 
-    // Returns TRUE if detail is of given type or is derived from it
+    /// Returns TRUE if detail is of given type or is derived from it
     SbBool isOfType(SoType type) const;
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SoDetail *copy() const = 0;
 
     SoINTERNAL

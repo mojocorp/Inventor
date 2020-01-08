@@ -88,39 +88,39 @@ struct SoOutputEntry;
 SoINTERNAL
 class SoEngineOutputData {
   public:
-    // Default constructor
+    /// Default constructor
     SoEngineOutputData() {}
 
     SoEngineOutputData(const SoEngineOutputData *);
 
-    // Constructor that takes number of fields as a hint
+    /// Constructor that takes number of fields as a hint
     SoEngineOutputData(int numOutputs) : outputs(numOutputs) {}
 
-    // Destructor
+    /// Destructor
     ~SoEngineOutputData();
 
-    // Adds an output to current data, given name of output,
-    // a pointer to field within the engine, and the type of output.
+    /// Adds an output to current data, given name of output,
+    /// a pointer to field within the engine, and the type of output.
     void addOutput(const SoEngine *defEngine, const char *outputName,
                    const SoEngineOutput *output, SoType type);
 
-    // Returns number of outputs
+    /// Returns number of outputs
     size_t getNumOutputs() const { return outputs.size(); }
 
-    // Returns name of output with given index
+    /// Returns name of output with given index
     const SbName &getOutputName(int index) const;
 
-    // Returns pointer to output with given index within given object instance
+    /// Returns pointer to output with given index within given object instance
     SoEngineOutput *getOutput(const SoEngine *engine, int index) const;
 
-    // Returns index of output, given the output and the engine it
-    // is in.
+    /// Returns index of output, given the output and the engine it
+    /// is in.
     int getIndex(const SoEngine *engine, const SoEngineOutput *output) const;
 
-    // Returns type of output with given index
+    /// Returns type of output with given index
     const SoType &getType(int index) const;
 
-    // Methods to read and write the output descriptions
+    /// Methods to read and write the output descriptions
     SbBool readDescriptions(SoInput *in, SoEngine *engine) const;
     void   writeDescriptions(SoOutput *out, SoEngine *engine) const;
 

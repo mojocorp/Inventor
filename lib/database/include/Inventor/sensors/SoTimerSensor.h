@@ -69,34 +69,64 @@
 
 #include <Inventor/sensors/SoTimerQueueSensor.h>
 
+/// Sensor that triggers callback repeatedly at regular intervals.
+/// \ingroup Sensors
+/// Timer sensors trigger their callback function at regular intervals.
+/// For example, a timer might be setup to call its callback function
+/// every second on the second by setting the base time to #SbTime(0.0)
+/// and the interval to #SbTime(1.0).  Timers are guaranteed to be
+/// triggered only once when the timer queue is processed, so if the
+/// application only processes the timer queue once every 5 seconds
+/// (because it is busy doing something else) the once-a-second sensor's
+/// callback will be called only once every 5 seconds.
+///
+///
+/// Note also that <tt>SoTimer</tt>s always schedule themselves to be triggered
+/// the next even multiple of the interval time after the base time; so, for
+/// example, if the once-a-second sensor is triggered at time 2.9 (because
+/// the application way busy doing something at time 2.0 and didn't get
+/// around to processing the sensor queue for a while) it will reschedule
+/// itself to go off at time 3.0, not at time 3.9.  If the base time was
+/// never set, the sensor would be scheduled for time 3.9.
+/// \sa SoOneShotSensor, SoAlarmSensor, SoTimerQueueSensor, SbTime
 class SoTimerSensor : public SoTimerQueueSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoTimerSensor();
+
+    /// Constructor that takes the callback function and
+    /// data to be called when the sensor is triggered.
     SoTimerSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destroys the sensor, freeing up any memory associated with it after
+    /// unscheduling it.
     virtual ~SoTimerSensor();
 
-    // Sets/returns the base time and interval length. The base time
-    // is undefined unless it has been specified by the user or the
-    // sensor is currently scheduled.
+    /// Sets the base time. The base time
+    /// is undefined unless it has been specified by the user or the
+    /// sensor is currently scheduled.
     void setBaseTime(const SbTime &base) {
         baseTime = base;
         baseTimeSet = TRUE;
     }
-    void          setInterval(const SbTime &intvl) { interval = intvl; }
+    /// Sets the interval length.
+    void setInterval(const SbTime &intvl) { interval = intvl; }
+
+    /// Returns the base time. The default base time is the time when the sensor
+    /// is scheduled or rescheduled.
     const SbTime &getBaseTime() const { return baseTime; }
+
+    /// Return the interval. The default interval is 1/30th of a second.
     const SbTime &getInterval() const { return interval; }
 
-    // Overrides the regular schedule() method because we have to set
-    // up the trigger time first.
+    /// Overrides the regular schedule() method because we have to set
+    /// up the trigger time first.
     virtual void schedule();
 
-    // Overrides the regular unschedule() because the timer could be
-    // in either the timer queue or the waiting-to-be-rescheduled
-    // queue, depending on the state of the 'triggering' flag.
+    /// Overrides the regular unschedule() because the timer could be
+    /// in either the timer queue or the waiting-to-be-rescheduled
+    /// queue, depending on the state of the 'triggering' flag.
     virtual void unschedule();
 
     SoINTERNAL

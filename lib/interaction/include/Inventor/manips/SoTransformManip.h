@@ -61,16 +61,158 @@
 #include <Inventor/nodes/SoTransform.h>
 #include <Inventor/sensors/SoFieldSensor.h>
 
+/// Base class for all transform Nodes with built-in 3D user interfaces.
+/// \ingroup Manips
+/// <tt>SoTransformManip</tt>
+/// is the base class for all <tt>SoTransform</tt> nodes that have a built-in
+/// 3D user interface.
+/// Since it is derived from <tt>SoTransform</tt>, any changes to its
+/// fields result in the rotation, scaling, and/or translation of nodes that
+/// follow it in the scene graph.
+///
+/// Typically, you will want to replace a regular <tt>SoTransform</tt> with an
+/// <tt>SoTransformManip</tt> (as when the user selects an object to be moved),
+/// or vice versa (as when the object is deselected, and the motion interface
+/// should go away).
+/// Use the
+/// #replaceNode() method to insert a manipulator into a scene graph, and the
+/// #replaceManip() method to remove it when done.
+///
+/// Every subclass of <tt>SoTransformManip</tt> utilizes a dragger of some sort
+/// to provide a 3D interface. (This class does not have dragger; but all the
+/// subclasses do.)
+/// However a manipulator differs from a dragger; it
+/// influences other objects in the scene because, as an <tt>SoTransform</tt>,
+/// it alters the state.
+/// The fields values and movement of a dragger, on the other hand, affect only
+/// the dragger itself.
+///
+/// Each <tt>SoTransformManip</tt> subclass utilizes its dragger by adding it
+/// as a hidden child.  When an action is applied to the manipulator,
+/// such as rendering or handling events, the manipulator first traverses the
+/// dragger, and then the manipulator adds its transformation matrix to the
+/// state. When you click-drag-release over the manipulator, it passes these
+/// events down to the dragger, which moves as a result ("I can't <em>help</em>
+/// it, I'm a dragger!").
+///
+/// The manipulator maintains consistency between the fields
+/// of the dragger and its own fields. Let's say you use the mouse to rotate
+/// the <em>dragger</em>. Callbacks insure that the
+/// #rotation field of the <em>manipulator</em> will change by the same
+/// amount, resulting in the rotation of nodes which follow in the scene graph.
+/// Similarly, if you set any of the <tt>SoTransformManip</tt> fields
+/// the manipulator will
+/// move the dragger accordingly. You can use this feature
+/// to impose contraints on a manipulator:  If the user moves the manipulator so
+/// that a field value becomes too large, you can set
+/// the field back to your desired maximum, and the whole thing will move back
+/// to where you specified.
+///
+/// Since each <tt>SoTransformManip</tt> uses a dragger to provide its
+/// interface, you will generally be told to look at the dragger's reference
+/// page for details of how it moves and what the different parts are for. The
+/// interface for the dragger and the manipulator will always be exactly the
+/// same.
+/// Usually, a <tt>SoTransformManip</tt> will surround the
+/// objects that it influences (i.e., those that move along with it).
+/// This is because the manipulator
+/// turns on the <em>surroundScale</em> part of its dragger; so the
+/// dragger geometry expands to envelope the other objects (see the reference
+/// page for <tt>SoSurroundScale</tt>).
+///
+/// Because the dragger is a <em>hidden</em> child, you can see the dragger on
+/// screen and interact with it, but the dragger does not show up when you write
+/// the manipulator to file. Also, any <tt>SoPath</tt> will end at the
+/// manipulator. (See the Actions section of this reference page for a complete
+/// description of when the dragger is traversed).
+///
+/// If you want to get a pointer to the dragger
+/// you can get it from the manipulator using the
+/// #getDragger() method.  You will need to
+/// do this if you want to change the geometry of a manipulator, since the
+/// geometry actually belongs to the dragger.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoGetMatrixAction, SoHandleEventAction, SoRayPickAction</b> First, traverses
+/// the dragger the way an <tt>SoGroup</tt> would. All draggers place themselves
+/// in space, but leave the current transformation unchanged when finished. Then
+/// the <tt>SoTransformManip</tt> accumulates a transformation into the current
+/// transformation just like its base class, <tt>SoTransform</tt>.
+/// <b>SoSearchAction</b>
+/// Searches just like an <tt>SoTransform</tt>.  Does not search the dragger,
+/// which is a hidden child.
+/// <b>SoWriteAction</b>
+/// Writes out just like an <tt>SoTransform</tt>. Does not write the dragger,
+/// which is a hidden child.   If you really need to write valuable information
+/// about the dragger, such as customized geometry, you
+/// can retrieve the dragger with the
+/// #getDragger() method and then write
+/// it out separately.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTransformManip {
+///    translation      0 0 0
+///    rotation         0 0 1  0
+///    scaleFactor      1 1 1
+///    scaleOrientation 0 0 1  0
+///    center           0 0 0
+/// }
+/// \endcode
+/// \sa
+/// SoDragger,SoTransform,SoCenterballManip,SoHandleBoxManip,SoJackManip,SoSurroundScale,SoTabBoxManip,SoTrackballManip,SoTransformBoxManip,SoTransformerManip
 class SoTransformManip : public SoTransform {
     SO_NODE_HEADER(SoTransformManip);
 
   public:
-    // Constructor
+    /// Constructor
     SoTransformManip();
 
+    /// Returns a pointer to the dragger being used by this manipulator.
+    /// Given this pointer, you can customize the dragger just like you would
+    /// any other dragger.  You can change geometry using
+    /// the SoBaseKit::setPart() method, or add callbacks using
+    /// the methods found in the SoDragger reference page.
     SoDragger *getDragger();
 
+    /// Replaces the tail of the path with this manipulator.
+    /// The tail of the path must be an SoTransform node (or subclass
+    /// thereof). If the path has a nodekit, this will try to use
+    /// SoBaseKit::setPart() to insert the manipulator. Otherwise, the
+    /// manipulator requires that the next to last node in the path chain be a
+    /// group.
+    ///
+    /// The field values from the transform node will be copied to
+    /// this manipulator, and the transform will be replaced.
+    ///
+    /// The manipulator will not call
+    /// #ref() on the node it is replacing.
+    /// The old node will disappear if
+    /// it has no references other than from the input path \a p and its parent,
+    /// since this manipulator will be replacing it in both of those places.
+    /// Nor will the manipulator make any
+    /// changes to field connections of the old node.
+    /// The calling process is thus responsible for keeping
+    /// track of its own nodes and field connections.
     SbBool replaceNode(SoPath *p);
+
+    /// Replaces the tail of the path, which must be this manipulator,
+    /// with the given SoTransform node.
+    /// If the path has a nodekit, this will try to use
+    /// SoBaseKit::setPart() to insert the new node.
+    /// Otherwise, the manipulator requires that the
+    /// next to last node in the path chain be a group.
+    ///
+    /// The field values from the manipulator will be copied
+    /// to the transform node, and the manipulator will be replaced.
+    ///
+    /// The manipulator will not call
+    /// #ref() or #unref()
+    /// on the node which is replacing it, nor will it make any
+    /// changes to field connections.
+    /// The calling process is thus responsible for keeping
+    /// track of its own nodes and field connections.
     SbBool replaceManip(SoPath *p, SoTransform *newOne) const;
 
     SoEXTENDER

@@ -59,23 +59,32 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoTransformation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTranslation
-//
-//  Node that translates by a 3D vector.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node representing a 3D translation.
+/// \ingroup Nodes
+/// This node defines a translation by a 3D vector.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Accumulates translation into the current transformation.
+/// <b>SoGetMatrixAction</b>
+/// Returns the matrix corresponding to the translation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTranslation {
+///    translation	0 0 0
+/// }
+/// \endcode
+/// \sa SoTransform
 class SoTranslation : public SoTransformation {
 
     SO_NODE_HEADER(SoTranslation);
 
   public:
     // Fields
-    SoSFVec3f translation; // Translation vector
+    SoSFVec3f translation; ///< Translation vector.
 
-    // Constructor
+    /// Creates a translation node with default settings.
     SoTranslation();
 
     SoEXTENDER

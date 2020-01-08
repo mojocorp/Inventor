@@ -60,38 +60,54 @@
 #include <Inventor/nodes/SoFont.h>
 #include <Inventor/actions/SoCallbackAction.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoFontStyle
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Simple 3D text shape node.
+/// \ingroup Nodes
+/// This node defines the current font family and style for all
+/// subsequent text shapes in the scene graph.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Sets the font family and style in the current traversal
+/// state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoFontStyle {
+///    name	"defaultFont"
+///    size	10
+///    family	SERIF
+///    style	NONE
+/// }
+/// \endcode
+/// \sa SoAsciiText,SoFont,SoText2,SoText3
 class SoFontStyle : public SoFont {
 
     SO_NODE_HEADER(SoFontStyle);
 
   public:
-    // Constructor
+    /// Creates a font style node with default settings.
     SoFontStyle();
 
     enum Family {
-        SERIF,     // Use Serif style (such as Times-Roman)
-        SANS,      // Use Sans Serif style (such as Helvetica)
-        TYPEWRITER // Use fixed pitch style (such as Courier)
+        SERIF,     ///< Use Serif style (such as Times-Roman)
+        SANS,      ///< Use Sans Serif style (such as Helvetica)
+        TYPEWRITER ///< Use fixed pitch style (such as Courier)
     };
 
     enum Style {
-        NONE = 0,    // No modification to Family
-        BOLD = 0x1,  // Embolden Family
-        ITALIC = 0x2 // Italicize or Slant Family
+        NONE = 0,    ///< No modification to Family
+        BOLD = 0x1,  ///< Embolden Family
+        ITALIC = 0x2 ///< Italicize or Slant Family
     };
 
-    // Fields
-    SoSFEnum    family;
+    /// Defines the family of font to use.
+    SoSFEnum family;
+    /// Defines style modifications to the chosen font, either bold or italic or
+    /// no change.
     SoSFBitMask style;
 
-    // Return the font name used by this node based on the settings of family
-    // and style
+    /// Returns the font name used by this node based on the settings of family
+    /// and style.
     SbString getFontName();
 
     SoEXTENDER

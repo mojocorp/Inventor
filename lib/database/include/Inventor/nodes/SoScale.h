@@ -59,23 +59,37 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoTransformation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoScale
-//
-//  Node that scales by arbitrary x, y, and z scale factors.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node representing a 3D geometric scaling.
+/// \ingroup Nodes
+/// This node defines a 3D scaling about the origin.
+/// If the components of the scaling vector are not all the same, this produces
+/// a non-uniform scale.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Accumulates scaling transformation into the current
+/// transformation. <b>SoGetMatrixAction</b> Returns the matrix corresponding to
+/// the scaling.
+///
+/// \par File format/defaults:
+/// \code
+/// SoScale {
+///    scaleFactor	1 1 1
+/// }
+/// \endcode
+/// \sa SoTransform, SoUnits
 class SoScale : public SoTransformation {
 
     SO_NODE_HEADER(SoScale);
 
   public:
     // Fields
-    SoSFVec3f scaleFactor; // Scale factors in x, y, and z
 
-    // Constructor
+    /// The scaling factors in the x, y, and z dimensions.
+    /// Non-positive values may cause undesirable results.
+    SoSFVec3f scaleFactor;
+
+    /// Creates a scale node with default settings.
     SoScale();
 
     SoEXTENDER

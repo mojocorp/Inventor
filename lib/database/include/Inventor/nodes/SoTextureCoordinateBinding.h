@@ -60,36 +60,45 @@
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTextureCoordinateBinding
-//
-//  Texture coordinate binding node. This indicates how multiple texture
-//  coordinates are to be distributed over an object.
-//
-//  If there is a texture function defined, then neither a texture coordinate
-//  nor a texture coordinate binding node is needed
-//
-//  Unlike normal bindings, only a few of the typical bindings make sense:
-//  PER_VERTEX, and PER_VERTTEX_INDEXED
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that specifies how texture coordinates are bound to shapes.
+/// \ingroup Nodes
+/// This node specifies how the current texture coordinates are bound to
+/// vertex-based shapes that follow in the scene graph. The <b>DEFAULT</b>
+/// binding causes each shape to define its own default coordinates.
+/// These default coordinates typically cause a texture to be mapped
+/// across the whole surface of a shape.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction</b>
+/// Sets the current texture coordinate binding type.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTextureCoordinateBinding {
+///    value	PER_VERTEX_INDEXED
+/// }
+/// \endcode
+/// \sa
+/// SoMaterialBinding,SoNormalBinding,SoTexture2,SoTexture2Transform,SoTextureCoordinate2,SoTextureCoordinateFunction,SoVertexShape
 class SoTextureCoordinateBinding : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinateBinding);
 
   public:
-    enum Binding { // Binding value
+    /// Binding value
+    enum Binding {
+        /// Current texture coordinates are applied sequentially to vertices of
+        /// shape
         PER_VERTEX = SoTextureCoordinateBindingElement::PER_VERTEX,
+        /// Current texture coordinates are indexed per vertex
         PER_VERTEX_INDEXED =
             SoTextureCoordinateBindingElement::PER_VERTEX_INDEXED,
     };
 
     // Fields
-    SoSFEnum value; // Normal binding value
+    SoSFEnum value; ///< Specifies how to bind texture coordinates to shapes.
 
-    // Constructor
+    /// Creates a texture coordinate binding node with default settings.
     SoTextureCoordinateBinding();
 
     SoEXTENDER

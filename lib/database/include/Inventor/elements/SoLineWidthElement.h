@@ -72,20 +72,20 @@ class SoLineWidthElement : public SoFloatElement {
     SO_ELEMENT_HEADER(SoLineWidthElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current line width in the state
+    /// Sets the current line width in the state
     static void set(SoState *state, float width) {
         SoFloatElement::set(classStackIndex, state, width);
     }
 
-    // Returns current line width from the state
+    /// Returns current line width from the state
     static float get(SoState *state) {
         return SoFloatElement::get(classStackIndex, state);
     }
 
-    // Returns the default line width
+    /// Returns the default line width
     static float getDefault() { return 0; }
 
     SoINTERNAL

@@ -59,27 +59,37 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoLight.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoDirectionalLight
-//
-//  Directional light source node. A directional light illuminates in
-//  rays parallel to a given direction vector. It is equivalent to the
-//  GL's "infinite" light source, so named because it is like a point
-//  source at an infinite distance (which seems to me to be a pretty
-//  bizarre way of naming things.)
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node representing a directional light source.
+/// \ingroup Nodes
+/// This node defines a directional light source that illuminates along
+/// rays parallel to a given 3-dimensional vector.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Activates this light (if so specified) during traversal. All shape
+/// nodes that come after this light in the scene graph are illuminated by
+/// this light. The light's direction is affected by the current
+/// transformation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoDirectionalLight {
+///    on           TRUE
+///    intensity    1
+///    color        1 1 1
+///    direction    0 0 -1
+/// }
+/// \endcode
+/// \sa SoPointLight, SoSpotLight
 class SoDirectionalLight : public SoLight {
 
     SO_NODE_HEADER(SoDirectionalLight);
 
   public:
     // Fields (in addition to those in SoLight):
-    SoSFVec3f direction; // Illumination direction vector
+    SoSFVec3f direction; ///< Illumination direction vector
 
-    // Constructor
+    /// Constructor
     SoDirectionalLight();
 
     SoEXTENDER

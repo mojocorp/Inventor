@@ -68,52 +68,55 @@
 
 class SoGetBoundingBoxAction;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Class: SoComputeBoundingBox
-//
-//  This engine has two input fields: "node" (SoSFNode) and "path"
-//  (SoSFPath). By default, these fields contain NULL pointers. If the
-//  "path" field is not NULL, this engine computes the bounding box
-//  and center of the graph defined by the path, using an
-//  SoGetBoundingBoxAction, and outputs the results. If the "path"
-//  field is NULL but the "node" field isn't, it computes the bounding
-//  box and center of the graph rooted by the node.
-//
-//  If both the node and the path are NULL, the outputs are disabled.
-//
-//  The "boxCenter" output is the center of the computed bounding box,
-//  and the "objectCenter" output is the center defined by the objects
-//  themselves, as returned by SoGetBoundingBoxAction::getCenter().
-//
-//  The engine uses a default viewport region when constructing the
-//  SoGetBoundingBoxAction, so screen-based objects (such as 2D text)
-//  may not be dealt with correctly. If this feature is needed, you
-//  can call setViewportRegion() on an engine instance to set up the
-//  correct viewport region to use.
-//
-/////////////////////////////////////////////////////////////////////////////
-
+/// Computes the bounding box and center of a scene graph.
+/// \ingroup Engines
+/// This engine computes the bounding box and center of a scene graph.
+/// The scene graph can be defined by a path or by a root node.
+///
+///
+/// If the #path input is not NULL, the
+/// bounding box of the graph defined by the path will be computed.
+/// If #path is NULL, but the #node input is not NULL, the bounding
+/// box is computed on the graph rooted by the node.
+/// By default, the two inputs are NULL.
+/// If both the inputs are NULL, the outputs are disabled.
+///
+///
+/// The engine uses a default viewport region.  If the graph includes
+/// screen-based objects (such as <tt>SoText2</tt>) you can call
+/// #setViewportRegion() on the engine instance to set up the correct viewport
+/// region to use.
+///
+/// \par File format/defaults:
+/// \code
+/// SoComputeBoundingBox {
+///    node NULL
+///    path NULL
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoGetBoundingBoxAction, SbBox3f
 class SoComputeBoundingBox : public SoEngine {
 
     SO_ENGINE_HEADER(SoComputeBoundingBox);
 
   public:
     // Inputs:
-    SoSFNode node; // Pointer to root node of graph
-    SoSFPath path; // Pointer to path defining graph
+    SoSFNode node; ///< Pointer to root node of graph
+    SoSFPath path; ///< Pointer to path defining graph
 
     // Outputs:
-    SoEngineOutput min;          // (SoSFVec3f) Minimum point of bbox
-    SoEngineOutput max;          // (SoSFVec3f) Maximum point of bbox
-    SoEngineOutput boxCenter;    // (SoSFVec3f) Center point of bbox
-    SoEngineOutput objectCenter; // (SoSFVec3f) Center of object(s)
+    SoEngineOutput min;          ///< (SoSFVec3f) Minimum point of bbox
+    SoEngineOutput max;          ///< (SoSFVec3f) Maximum point of bbox
+    SoEngineOutput boxCenter;    ///< (SoSFVec3f) Center point of bbox
+    SoEngineOutput objectCenter; ///< (SoSFVec3f) Center of object(s)
 
-    // Constructor
+    /// Constructor
     SoComputeBoundingBox();
 
-    // Sets/returns viewport region to use for bounding box computation
-    void                    setViewportRegion(const SbViewportRegion &vpReg);
+    /// Sets viewport region to use for bounding box computation
+    void setViewportRegion(const SbViewportRegion &vpReg);
+
+    /// Returns viewport region used for bounding box computation
     const SbViewportRegion &getViewportRegion() const;
 
     SoINTERNAL

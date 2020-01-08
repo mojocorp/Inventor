@@ -58,31 +58,55 @@
 
 #include <Inventor/nodes/SoCamera.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoOrthographicCamera
-//
-//  Orthographic camera node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Orthographic camera node.
+/// \ingroup Nodes
+/// An orthographic camera defines a parallel projection from a viewpoint.
+/// This camera does not diminish objects with distance, as an
+/// <tt>SoPerspectiveCamera</tt> does. The viewing volume for an orthographic
+/// camera is a rectangular parallelepiped (a box).
+///
+/// By default, the camera is located at (0,0,1) and looks along the
+/// negative z-axis; the #position and #orientation fields can be
+/// used to change these values. The #height field defines the total
+/// height of the viewing volume; this and the <tt>aspectRatio</tt> field
+/// determine its width.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoHandleEventAction, SoRayPickAction</b> Sets the viewport and camera
+/// information in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoOrthographicCamera {
+///    viewportMapping  ADJUST_CAMERA
+///    position         0 0 1
+///    orientation      0 0 1  0
+///    aspectRatio      1
+///    nearDistance     1
+///    farDistance      10
+///    focalDistance    5
+///    height           2
+/// }
+/// \endcode
+/// \sa SbViewVolume, SoPerspectiveCamera
 class SoOrthographicCamera : public SoCamera {
 
     SO_NODE_HEADER(SoOrthographicCamera);
 
   public:
     // Fields (some are inherited from SoCamera)
-    SoSFFloat height;
+    SoSFFloat height; ///< Height of the viewing volume.
 
-    // Constructor
+    /// Creates an orthographic camera node with default settings.
     SoOrthographicCamera();
 
-    // Scales the height of the camera, in this case, the 'height' field.
+    /// Scales the height of the camera, in this case, the 'height' field.
     virtual void scaleHeight(float scaleFactor);
 
-    // Fills in a view volume structure, based on the camera. If the
-    // useAspectRatio field is not 0.0 (the default), the camera uses
-    // that ratio instead of the one it has.
+    /// Fills in a view volume structure, based on the camera. If the
+    /// useAspectRatio field is not 0.0 (the default), the camera uses
+    /// that ratio instead of the one it has.
     virtual SbViewVolume getViewVolume(float useAspectRatio = 0.0) const;
 
     SoINTERNAL

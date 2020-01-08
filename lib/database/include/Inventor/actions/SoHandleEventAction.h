@@ -62,66 +62,94 @@
 
 class SoEvent;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoHandleEventAction
-//
-//  Event handling action. This traverses a graph looking for a node
-//  or nodes interested in a particular event.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Allows nodes in a graph to receive input events.
+/// \ingroup Actions
+/// This class is used to allow nodes in a scene graph to handle input events.
+/// It is usually invoked from a
+/// component derived from <tt>SoXtRenderArea</tt> when the component receives a
+/// window system event.
+///
+///
+/// Manipulator, dragger and selection nodes respond to and process
+/// events. Most other group nodes just pass the event to their children,
+/// while most other nodes simply ignore the action entirely. Once a node
+/// has indicated to the action that it has handled the event, traversal
+/// stops.
+///
+///
+/// A node that handles an event can also grab future events. Once it has
+/// done so, all events will be sent directly to that node, with no
+/// traversal taking place, until the node releases the grab.
+/// \sa SoEvent, SoPickedPoint, SoRayPickAction
 class SoHandleEventAction : public SoAction {
 
     SO_ACTION_HEADER(SoHandleEventAction);
 
   public:
-    // Constructor takes viewport region to use for handling events.
+    /// Constructor takes viewport region to use; this is needed to perform
+    /// a pick operation when requested.
     SoHandleEventAction(const SbViewportRegion &viewportRegion);
 
-    // Destructor
+    /// Destructor
     virtual ~SoHandleEventAction();
 
-    // Sets current viewport region to use for the event processing
+    /// Sets current viewport region to use for action.
     void setViewportRegion(const SbViewportRegion &newRegion);
 
-    // Returns current viewport region
+    /// Returns current viewport region to use for action.
     const SbViewportRegion &getViewportRegion() const { return vpRegion; }
 
-    // Sets/returns the event to handle
-    void           setEvent(const SoEvent *ev) { event = ev; }
+    /// Sets the event being handled.
+    void setEvent(const SoEvent *ev) { event = ev; }
+
+    /// Returns the event being handled.
     const SoEvent *getEvent() const { return event; }
 
-    // Sets/returns whether any node has yet handled the event
-    void   setHandled() { setTerminated(TRUE); }
+    /// Sets whether any node has yet handled the event.
+    void setHandled() { setTerminated(TRUE); }
+
+    /// Returns whether any node has yet handled the event.
     SbBool isHandled() const { return hasTerminated(); }
 
-    // grab() - node will receive all events until release() is called.
-    // grabber() returns which node is currently grabbing events.
-    void    setGrabber(SoNode *node);
-    void    releaseGrabber() { setGrabber(NULL); }
+    /// Initiates grabbing of future events. All events will be sent to the
+    /// given node until the grab is released.
+    void setGrabber(SoNode *node);
+
+    /// Releases the grab.
+    void releaseGrabber() { setGrabber(NULL); }
+
+    /// Returns the node that is currently grabbing events, or NULL if there is
+    /// none.
     SoNode *getGrabber() const { return eventGrabber; }
 
-    // Sets/returns the root node used for initiating a pick action
-    // for those nodes that want to know who is under the cursor
-    void    setPickRoot(SoNode *node);
+    /// Sets the root node used for initiating a pick action for those
+    /// nodes that want to know what is under the cursor.
+    void setPickRoot(SoNode *node);
+
+    /// Returns the root node used for initiating a pick action for those
+    /// nodes that want to know what is under the cursor.
     SoNode *getPickRoot() const { return pickRoot; }
 
-    // Set the radius (in pixels) around the point. This is used when
-    // testing the ray against lines and points.
+    /// Set the radius (in pixels) around the viewport-space point
+    /// through which the ray passes when doing ray picking. Ray picking
+    /// is performed when getPickedPoint()
+    /// is called. The pick radius set here is used when
+    /// testing the ray against lines and points.
     void setPickRadius(float radiusInPixels) {
         pickAct->setRadius(radiusInPixels);
     }
 
-    // Returns the object hit (as an SoPickedPoint) by performing a
-    // pick based on the current mouse location as specified in the
-    // event the action is being applied for. This initiates a pick
-    // action if necessary to find this object. The storage for the
-    // pickedPoint remains valid as long as the SoHandleEventAction is
-    // not re-used or deleted.
+    /// Returns the frontmost object hit (as an SoPickedPoint) by
+    /// performing a pick based on the mouse location specified in the event
+    /// for which the action is being applied. The first time this is called
+    /// for a particular event, a SoRayPickAction is applied to find this
+    /// object; subsequent calls for the same event return the same
+    /// information. The storage for the picked point remains valid as long as
+    /// the action is not re-applied or deleted.
     const SoPickedPoint *getPickedPoint();
 
-    // Return a list of objects hit, sorted from front to back
+    /// Returns a list of objects intersected by a picking operation, sorted
+    /// from nearest to farthest.
     const SoPickedPointList &getPickedPointList();
 
     SoINTERNAL

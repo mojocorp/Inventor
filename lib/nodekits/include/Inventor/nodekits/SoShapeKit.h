@@ -106,6 +106,102 @@
 //
 
 ////////////////////////////////////////////////////////////////////
+/// Shape nodekit class.
+/// \ingroup Nodekits
+/// A nodekit that is used for creating a shape (i.e. geometry).
+/// <tt>SoShapeKit</tt> is derived from <tt>SoSeparatorKit</tt> and
+/// <tt>SoBaseKit</tt>, and thus inherits all the parts defined by these
+/// classes.
+///
+///
+/// Furthermore, <tt>SoShapeKit</tt> adds numerous parts that can be used
+/// to define a variety of <em>shape</em> objects, a <em>localTransform</em>
+/// part, and of course a <em>shape</em> part.
+///
+///
+/// All of the property nodes requires to define any of the Inventor shapes
+/// are included as parts in this class.
+/// Not all of these parts (nodes) are needed for any
+/// one type of shape. For example, if you set the <em>shape</em> part to be
+/// an <tt>SoSphere</tt> node, then it is not necessary to create a
+/// <em>profileCoordinate3</em> part since it will be ignored in drawing the
+/// sphere.  (And the unneeded parts will not be created, so there is
+/// no performance penalty for using this class of node.
+///
+///
+/// This class contains two private parts. They are both <tt>SoSeparator</tt>
+/// nodes.  One of them sits just below the nodekit itself, and serves to
+/// contain all properties within this nodekit from affecting nodes that
+/// come after this nodekit. The second separator sits above the <em>shape</em>
+/// part, and serves to cache the shape even when the <em>transform</em>,
+/// <em>localTransform</em>, or <em>appearance</em> parts are changing.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoShapeKit
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "pickStyle"
+///          "appearance"
+///          "units"
+///          "transform"
+///          "texture2Transform"
+/// -->      "materialBinding"
+/// -->      "normalBinding"
+/// -->      "textureCoordinateBinding"
+/// -->      "shapeHints"
+/// -->      "coordinate3"
+/// -->      "coordinate4"
+/// -->      "normal"
+/// -->      "textureCoordinate2"
+/// -->      "profileCoordinate2"
+/// -->      "profileCoordinate3"
+/// -->      "profileList"
+///          "childList"
+/// -->      "textureCoordinateFunction"
+/// -->      "localTransform"
+/// -->      "shapeSeparator"
+/// -->         "shape"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoShapeKit {
+///     renderCaching               AUTO
+///     boundingBoxCaching          AUTO
+///     renderCulling               AUTO
+///     pickCulling                 AUTO
+///     callbackList                NULL
+///     pickStyle                   NULL
+///     appearance                  NULL
+///     units                       NULL
+///     transform                   NULL
+///     texture2Transform           NULL
+///     childList                   NULL
+///     materialBinding             NULL
+///     normalBinding               NULL
+///     textureCoordinateBinding    NULL
+///     shapeHints                  NULL
+///     coordinate3                 NULL
+///     coordinate4                 NULL
+///     normal                      NULL
+///     textureCoordinate2          NULL
+///     textureCoordinateFunction   NULL
+///     profileCoordinate2          NULL
+///     profileCoordinate3          NULL
+///     profileList                 NULL
+///     localTransform              NULL
+///     shape                       Cube {}
+/// }
+/// \endcode
+/// \sa
+/// SoAppearanceKit,SoBaseKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,
+/// \sa
+/// SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,
+/// \sa
+/// SoWrapperKit,SoCone,SoCube,SoCylinder,SoIndexedNurbsCurve,SoIndexedNurbsSurface,
+/// \sa
+/// SoNurbsCurve,SoNurbsSurface,SoShapeHints,SoSphere,SoText2,SoText3,SoVertexShape
 class SoShapeKit : public SoSeparatorKit {
 
     SO_KIT_HEADER(SoShapeKit);
@@ -137,7 +233,7 @@ class SoShapeKit : public SoSeparatorKit {
     SO_KIT_CATALOG_ENTRY_HEADER(shape);
 
   public:
-    // constructor
+    /// Default constructor
     SoShapeKit();
 
     SoINTERNAL

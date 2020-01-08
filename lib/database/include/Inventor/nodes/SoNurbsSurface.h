@@ -62,36 +62,91 @@
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoShape.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNurbsSurface
-//
-//  NURBS surface. The surface consists of two knot vectors and orders for
-//  the U and V parametric directions.  The control points for the surface
-//  are obtained from the current coordinates.  There are also orders and
-//  knot vectors for the S and T (texture) coordinates
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoState;
 class SoPrimitiveVertex;
 class GLUnurbs;
+
+/// NURBS surface shape node.
+/// \ingroup Nodes
+/// This shape node represents a NURBS surface based on the node's knot
+/// vectors and on control points constructed from the current
+/// coordinates. The current coordinates are used in row-major order (the
+/// V direction corresponds to the rows). The number of coordinates used
+/// is determined by the #numUControlPoints and #numVControlPoints
+/// fields. The #uKnotVector and #vKnotVector fields contain
+/// floating point arrays of non-decreasing values.
+///
+/// The order of the surface in the U and V directions is defined as the
+/// number of knots minus the number of control points in the particular
+/// direction. The largest order allowed for a NURBS surface is 8.
+///
+/// The control points of the NURBS surface are transformed by the current
+/// cumulative transformation. The surface is drawn with the current light
+/// model and drawing style. The coordinates, normals, and texture
+/// coordinates of a surface are generated, so you cannot bind explicit
+/// normals or texture coordinates to a NURBS surface. The first material
+/// in the state is applied to the entire surface.
+///
+/// The surface is trimmed according to the currently defined profile's curves.
+///
+/// When default texture coordinates are applied to a NURBS surface, the
+/// edges of the texture square are stretched to fit the surface. The axes
+/// of the texture are called S and T; S is horizontal and T is vertical.
+/// The axes of the NURBS surface are called U and V; U is horizontal and
+/// V is vertical. You can also define texture coordinates explicitly with
+/// the S,T location point, the knot vectors, and the current texture
+/// coordinates.
+///
+/// The approximation of the surface by polygons is affected by the
+/// current complexity value.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws the surface based on the current coordinates, material, and so on.
+/// <b>SoRayPickAction</b>
+/// Picks the surface based on the current coordinates and transformation.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses all control points of the
+/// surface with the current transformation applied to them. Sets the
+/// center to the average of the control points.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will be
+/// invoked for each successive triangle approximating the surface.
+///
+/// \par File format/defaults:
+/// \code
+/// SoNurbsSurface {
+///    numUControlPoints	0
+///    numVControlPoints	0
+///    numSControlPoints	0
+///    numTControlPoints	0
+///    uKnotVector	0
+///    vKnotVector	0
+///    sKnotVector	0
+///    tKnotVector	0
+/// }
+/// \endcode
+/// \sa SoIndexedNurbsSurface,SoNurbsCurve,SoProfile
 class SoNurbsSurface : public SoShape {
 
     SO_NODE_HEADER(SoNurbsSurface);
 
   public:
     // Fields
-    SoSFInt32 numUControlPoints; // Number of control points in
-    SoSFInt32 numVControlPoints; // the U and V directions.
-    SoSFInt32 numSControlPoints; // Number of control points in
-    SoSFInt32 numTControlPoints; // the S and T directions
-    SoMFFloat uKnotVector;       // The knot vectors in the U and
-    SoMFFloat vKnotVector;       // V directions.
-    SoMFFloat sKnotVector;       // The knot vectors in the S and
-    SoMFFloat tKnotVector;       // T directions.
+    SoSFInt32
+        numUControlPoints; ///< Number of control points in the U direction.
+    SoSFInt32
+        numVControlPoints; ///< Number of control points in the V direction.
+    SoSFInt32
+        numSControlPoints; ///< Number of control points in the S direction.
+    SoSFInt32
+              numTControlPoints; ///< Number of control points in the T direction.
+    SoMFFloat uKnotVector;       ///< The knot vectors in the U direction.
+    SoMFFloat vKnotVector;       ///< The knot vectors in the V direction.
+    SoMFFloat sKnotVector;       ///< The knot vectors in the S direction.
+    SoMFFloat tKnotVector;       ///< The knot vectors in the T direction.
 
-    // Constructor
+    /// Creates a NURBS surface node with default settings.
     SoNurbsSurface();
 
     SoEXTENDER

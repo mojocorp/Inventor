@@ -59,53 +59,80 @@
 class SoChildList;
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoGroup
-//
-//  Base group node: all children are traversed.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Base class for all group nodes.
+/// \ingroup Nodes
+/// This node defines the base class for all group nodes. <tt>SoGroup</tt> is a
+/// node that contains an ordered list of child nodes. The ordering of the
+/// child nodes represents the traversal order for all operations (for
+/// example, rendering, picking, and so on). This node is simply a
+/// container for the child nodes and does not alter the traversal state
+/// in any way. During traversal, state accumulated for a child is passed
+/// on to each successive child and then to the parents of the group
+/// (<tt>SoGroup</tt> does not push or pop traversal state as
+/// <tt>SoSeparator</tt> does).
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoHandleEventAction, SoRayPickAction</b> Traverses each child in order.
+/// <b>SoGetMatrixAction</b>
+/// Does nothing unless the group is in the middle of the path chain the
+/// action is being applied to. If so, the children up to and including
+/// the next node in the chain are traversed.
+/// <b>SoSearchAction</b>
+/// If searching for group nodes, compares with this group. Otherwise,
+/// continues to search children.
+/// <b>SoWriteAction</b>
+/// Writes out the group node. This method also deals with any field data
+/// associated with the group node. As a result, this method is used for
+/// most subclasses of <tt>SoGroup</tt> as well.
+///
+/// \par File format/defaults:
+/// \code
+/// SoGroup {
+/// }
+/// \endcode
+/// \sa SoArray,SoLevelOfDetail,SoMultipleCopy,SoPathSwitch,SoSeparator,SoSwitch
 class SoGroup : public SoNode {
 
     SO_NODE_HEADER(SoGroup);
 
   public:
-    // Default constructor
+    /// Creates an empty group node.
     SoGroup();
 
-    // Constructor that takes approximate number of children
+    /// Constructor that takes approximate number of children. Space is
+    /// allocated for pointers to the children, but the group does not contain
+    /// any actual child nodes.
     SoGroup(int nChildren);
 
-    // Adds a child as last one in group
+    /// Adds a child as last one in group.
     void addChild(SoNode *child);
 
-    // Adds a child so that it becomes the one with the given index
+    /// Adds a child so that it becomes the one with the given index.
     void insertChild(SoNode *child, int newChildIndex);
 
-    // Returns pointer to nth child node
+    /// Returns pointer to child node with the given index.
     SoNode *getChild(int index) const;
 
-    // Finds index of given child within group
+    /// Finds index of given child within group. Returns -1 if not found.
     int findChild(const SoNode *child) const;
 
-    // Returns number of children
+    /// Returns number of children.
     int getNumChildren() const;
 
-    // Removes child with given index from group
+    /// Removes child with given index from group.
     void removeChild(int index);
 
-    // Removes first instance of given child from group
+    /// Removes first instance of given child from group.
     void removeChild(SoNode *child) { removeChild(findChild(child)); }
 
-    // Removes all children from group
+    /// Removes all children from group.
     void removeAllChildren();
 
-    // Replaces child with given index with new child
+    /// Replaces child with given index with new child.
     void replaceChild(int index, SoNode *newChild);
 
-    // Replaces first instance of given child with new child
+    /// Replaces first instance of given child with new child.
     void replaceChild(SoNode *oldChild, SoNode *newChild) {
         replaceChild(findChild(oldChild), newChild);
     }

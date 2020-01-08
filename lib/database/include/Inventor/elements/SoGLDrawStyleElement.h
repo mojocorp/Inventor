@@ -81,15 +81,15 @@ class SoGLDrawStyleElement : public SoDrawStyleElement {
     SO_ELEMENT_HEADER(SoGLDrawStyleElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Override push() so we can remember the previous element's draw
-    // style, and perhaps avoid sending unnecessary GL calls if this
-    // element is the same.
+    /// Override push() so we can remember the previous element's draw
+    /// style, and perhaps avoid sending unnecessary GL calls if this
+    /// element is the same.
     virtual void push(SoState *state);
 
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     SoINTERNAL

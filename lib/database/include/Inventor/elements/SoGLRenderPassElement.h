@@ -74,22 +74,22 @@ class SoGLRenderPassElement : public SoElement {
     SO_ELEMENT_HEADER(SoGLRenderPassElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current rendering pass in the state
+    /// Sets the current rendering pass in the state
     static void set(SoState *state, int pass);
 
-    // Returns current rendering pass from the state
+    /// Returns current rendering pass from the state
     static int get(SoState *state);
 
-    // Returns TRUE if the passes match in both elements
+    /// Returns TRUE if the passes match in both elements
     virtual SbBool matches(const SoElement *elt) const;
 
-    // Create and return a copy of this element
+    /// Create and return a copy of this element
     virtual SoElement *copyMatchInfo() const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

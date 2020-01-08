@@ -67,7 +67,7 @@
 
 class SoPickedPoint;
 
-/// Maintains a list of pointers to \c SoPickedPoint instances.
+/// Maintains a list of pointers to SoPickedPoint instances.
 /// \ingroup General
 /// This subclass of <tt>SbPList</tt> holds lists of pointers to
 /// instances of classes derived from <tt>SoPickedPoint</tt>. It is used

@@ -120,7 +120,97 @@
 #include <Inventor/sensors/SoSensor.h>
 
 class SoFieldSensor;
-
+/// Jack-shaped object you rotate, translate, or scale by dragging with the
+/// mouse.
+/// \ingroup Draggers
+/// <tt>SoJackDragger</tt> is a composite dragger in
+/// the shape of a jack from the children's game jacks.  Three lines along the
+/// x, y, and z axes form the central star shape, which you can drag with the
+/// mouse to rotate the jack. Dragging any of the small cubes mounted at the end
+/// of the axes will scale the jack uniformly in all 3 dimensions. At the core
+/// of the jack is an <tt>SoDragPointDragger</tt> for translating the jack.
+///
+///
+/// Each of these shapes is a different dragger with the default geometry
+/// changed.  All of them are parts of the
+/// jack dragger, which keeps them moving together.
+/// The star is an <tt>SoRotateSphericalDragger</tt>, and dragging it updates
+/// the #rotation field of the jack dragger.  The small cubes are  an
+/// <tt>SoScaleUniformDragger</tt>, tied to the  #scaleFactor field.
+/// The position of the <tt>SoDragPointDragger</tt> is given by the #translation
+/// field.  As with all draggers, if you change the fields the dragger will
+/// move to match the new settings.
+///
+///
+/// <em>Remember:</em> This is <em>not</em> an <tt>SoTransform!</tt>.
+/// If you want to move other objects with this dragger, you can either:
+///
+///
+/// [a] Use an <tt>SoJackManip</tt>, which is subclassed from
+/// <tt>SoTransform</tt>. It creates one of these draggers and uses it as the
+/// interface to change its fields. (see the <tt>SoJackManip</tt> man page).
+///
+///
+/// [b] Use field-to-field connections to connect the fields of this dragger to
+/// those of any <tt>SoTransformation</tt> node.
+///
+///
+/// You can change the parts in any instance of this dragger using
+/// #setPart().
+/// The default part geometries are defined as resources for this
+/// <tt>SoJackDragger</tt> class.  They are detailed in the
+/// Dragger Resources section of the online reference page for this class.
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// <tt>/usr/share/data/draggerDefaults/jackDragger.iv</tt>
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that
+/// directory.
+/// \par Nodekit structure:
+/// \code CLASS SoJackDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "surroundScale"
+/// -->      "antiSquish"
+/// -->      "scaler"
+/// -->      "rotator"
+/// -->      "translator"
+///          "geomSeparator"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoJackDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     rotation            0 0 1  0
+///     translation         0 0 0
+///     scaleFactor         1 1 1
+///     callbackList        NULL
+///     surroundScale       NULL
+///     antiSquish          AntiSquish {
+///                             sizing BIGGEST_DIMENSION
+///                         }
+///     scaler              ScaleUniformDragger {}
+///     rotator             RotateSphericalDragger {}
+///     translator          DragPointDragger {}
+/// }
+/// \endcode
+/// \sa
+/// SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa
+/// SoDragPointDragger,SoHandleBoxDragger,SoPointLightDragger,SoRotateCylindricalDragger,
+/// \sa
+/// SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,
+/// \sa
+/// SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,
+/// \sa
+/// SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class SoJackDragger : public SoDragger {
     SO_KIT_HEADER(SoJackDragger);
 
@@ -134,12 +224,12 @@ class SoJackDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(translator);
 
   public:
-    // Constructors
+    /// Constructor.
     SoJackDragger();
 
-    SoSFRotation rotation;
-    SoSFVec3f    translation;
-    SoSFVec3f    scaleFactor;
+    SoSFRotation rotation;    ///< Orientation of the dragger.
+    SoSFVec3f    translation; ///< Position of the dragger.
+    SoSFVec3f    scaleFactor; ///< Scale of the dragger.
 
     SoINTERNAL
   public:

@@ -99,21 +99,21 @@ SoEXTENDER
 class SoNormalGenerator {
 
   public:
-    // Constructors and destructor
+    /// Constructors and destructor
     SoNormalGenerator(SbBool isCCW);
     SoNormalGenerator(SbBool isCCW, int approxNumVertices);
     ~SoNormalGenerator();
 
-    // Send a polygon's worth of vertices. Begin a polygon, send as
-    // many vertices as you want, and then end the polygon.
+    /// Send a polygon's worth of vertices. Begin a polygon, send as
+    /// many vertices as you want, and then end the polygon.
     void beginPolygon();
     void polygonVertex(const SbVec3f &point);
     void endPolygon();
 
-    // Send a triangle
+    /// Send a triangle
     void triangle(const SbVec3f &p1, const SbVec3f &p2, const SbVec3f &p3);
 
-    // Calculate the normals once all vertices have been sent
+    /// Calculate the normals once all vertices have been sent
     void generate(float creaseAngle);
 
     //
@@ -121,23 +121,23 @@ class SoNormalGenerator {
     // been called:
     //
 
-    // Returns number of normals generated. This will be equal to the
-    // number of points sent.
+    /// Returns number of normals generated. This will be equal to the
+    /// number of points sent.
     int getNumNormals() const { return numVertNormals; }
 
-    // Truncate the array so there are only the given number of normals
+    /// Truncate the array so there are only the given number of normals
     void setNumNormals(int newNum);
 
-    // Returns a pointer to the array of normals
+    /// Returns a pointer to the array of normals
     const SbVec3f *getNormals() const { return vertNormals; }
 
-    // Returns the i'th normal in the array
+    /// Returns the i'th normal in the array
     const SbVec3f &getNormal(int32_t i) const { return vertNormals[i]; }
 
-    // Some shapes may need to adjust or reorder normals after
-    // generation. This method can be used to change a normal. It will
-    // insert room in the array if necessary to accommodate the new
-    // normal.
+    /// Some shapes may need to adjust or reorder normals after
+    /// generation. This method can be used to change a normal. It will
+    /// insert room in the array if necessary to accommodate the new
+    /// normal.
     void setNormal(int32_t index, const SbVec3f &newNormal);
 
   private:

@@ -58,12 +58,19 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFShort subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of short integers.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of short (16-bit)
+/// integers.
+///
+/// <tt>SoMFShorts</tt> are written to file as one or more short integer
+/// values, represented as decimal, hexadecimal (beginning with '0x') or
+/// octal (beginning with '0') values.
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ -7, 0xFF, -033 ]
 class SoMFShort : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFShort, short, short);

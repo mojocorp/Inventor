@@ -78,33 +78,41 @@ class SoProfileCoordinateElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoProfileCoordinateElement);
 
   public:
-    // Initializes element.
+    /// Initializes element.
     virtual void init(SoState *state);
 
-    // Sets the current profile coordinates
+    /// Sets the current profile coordinates
     static void set2(SoState *state, SoNode *node, int32_t numCoords,
                      const SbVec2f *coords);
+
+    /// Sets the current profile coordinates
     static void set3(SoState *state, SoNode *node, int32_t numCoords,
                      const SbVec3f *coords);
 
-    // Returns the top (current) instance of the element in the state
+    /// Returns the top (current) instance of the element in the state
     static const SoProfileCoordinateElement *getInstance(SoState *state);
 
-    // Returns the number of coordinate points in an instance
+    /// Returns the number of coordinate points in an instance
     int32_t getNum() const { return numCoords; }
 
-    // Returns the indexed coordinate from an element as a 2- or
-    // 3-vector, converting if necessary.
+    /// Returns the indexed coordinate from an element as a 2-vector, converting
+    /// if necessary.
     const SbVec2f &get2(int index) const;
+
+    /// Returns the indexed coordinate from an element as a 3-vector, converting
+    /// if necessary.
     const SbVec3f &get3(int index) const;
 
-    // TRUE if set2() was called.
+    /// TRUE if set2() was called.
     SbBool is2D() const { return coordsAre2D; }
 
-    // Returns the default profile coordinate
+    /// Returns the default profile coordinate
     static SbVec2f getDefault2() { return SbVec2f(0.0, 0.0); }
+
+    /// Returns the default profile coordinate
     static SbVec3f getDefault3() { return SbVec3f(0.0, 0.0, 1.0); }
 
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

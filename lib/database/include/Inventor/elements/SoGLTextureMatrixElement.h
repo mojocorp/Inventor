@@ -74,7 +74,7 @@ class SoGLTextureMatrixElement : public SoTextureMatrixElement {
     SO_ELEMENT_HEADER(SoGLTextureMatrixElement);
 
   public:
-    // Override pop() methods so side effects can occur in GL
+    /// Override pop() methods so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     SoINTERNAL

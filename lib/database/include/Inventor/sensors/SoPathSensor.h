@@ -61,24 +61,37 @@
 #include <Inventor/SoPath.h>
 #include <Inventor/sensors/SoDataSensor.h>
 
+/// Sensor class that can be attached to Inventor paths.
+/// \ingroup Sensors
+/// Path sensors detect changes to paths, calling a callback function
+/// whenever the path or any node in the path changes.  The definition of
+/// "in the path" is the same as the definition used when applying an
+/// action to the path \(em any node that can possibly affect the node at the
+/// end of the path chain is considered in the path.  See the <tt>SoPath</tt>
+/// manual page for more information on paths.
+/// \sa SoNodeSensor, SoPathSensor, SoDataSensor
 class SoPathSensor : public SoDataSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoPathSensor();
+
+    /// Constructor that takes the callback function and
+    /// data to be called when the sensor is triggered.
     SoPathSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destroys the sensor, freeing up any memory associated with it after
+    /// unscheduling it.
     virtual ~SoPathSensor();
 
-    // Attaches the sensor to the given path
+    /// Attaches the sensor to the given path
     void attach(SoPath *path);
 
-    // Detaches the sensor if it is attached to a path
+    /// Detaches the sensor if it is attached to a path
     void detach();
 
-    // Returns the path to which the sensor is attached, or NULL if it
-    // is not attached.
+    /// Returns the path to which the sensor is attached, or NULL if it
+    /// is not attached.
     SoPath *getAttachedPath() const { return path; }
 
   protected:

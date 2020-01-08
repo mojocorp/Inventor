@@ -72,44 +72,73 @@ class SoWriteAction;
 typedef void SoWWWInlineFetchURLCB(const SbString &url, void *userData,
                                    SoWWWInline *node);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoWWWInline
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that refers to children through a URL.
+/// \ingroup Nodes
+/// This node refers to children through a URL (Universal Resource Locator).
+/// The application is responsible for actually fetching data from the URL
+/// for an SoWWWInline node to display.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// This renders the child data if it has been set by the application.
+/// It will render a wireframe bounding box as specified by the
+/// <b>bboxCenter</b> and <b>bboxSize</b> fields, and the setting passed to
+/// <b>setBoundingBoxVisibility()</b>. If no fetch URL callback is set and the
+/// <b>alternateRep</b> is not NULL, the <b>alternateRep</b> will be rendered
+/// until child data has been set.
+///
+/// \par File format/defaults:
+/// \code
+/// SoWWWInline {
+///    name         	"<Undefined file>"
+///    bboxCenter	0 0 0
+///    bboxSize         	0 0 0
+///    alternateRep	NULL
+/// }
+/// \endcode
+/// \sa SoWWWAnchor, SoFile
 class SoWWWInline : public SoNode {
 
     SO_NODE_HEADER(SoWWWInline);
 
   public:
-    // Constructor
+    /// Creates an inline node with default settings.
     SoWWWInline();
 
     enum BboxVisibility {
-        NEVER,        // Do not show bounding box
-        UNTIL_LOADED, // Show bounding box (if specified) until data is loaded
-        ALWAYS        // Show bounding box along with data
+        NEVER,        ///< Do not show bounding box
+        UNTIL_LOADED, ///< Show bounding box (if specified) until data is loaded
+        ALWAYS        ///< Show bounding box along with data
     };
 
-    SoSFVec3f  bboxCenter;   // Bounding box center
-    SoSFVec3f  bboxSize;     // Bounding box size
-    SoSFString name;         // URL specifying children (might be relative)
-    SoSFNode   alternateRep; // Child data if app cannot fetch URL
+    /// Defines the center of the bounding box surrounding the URL child data.
+    SoSFVec3f bboxCenter;
 
-    // If the name field contains a relative URL (e.g. "foo.wrl"
-    // instead of "http://bogus.com/foo.wrl"), the anchor cannot
-    // resolve the URL reference. This method allows the application
-    // to tell the anchor what it's full URL should be.
-    // getFullURLName returns the fullURL set here, or if not set, returns
-    // the contents of the name field.
+    /// Defines the size of the bounding box surrounding the URL child data.
+    SoSFVec3f bboxSize;
+    /// Specifies the URL which the application should fetch as child data to
+    /// this node (e.g. "http://bogus.com/homeWorld.wrl.gz").
+    SoSFString name;
+
+    /// Specifies child data that can be used instead of fetching data from the
+    /// URL. On read, if this field is set and there is no fetch URL callback
+    /// registered, the alternateRep will be used as the child data. Otherwise,
+    /// it is the applications responsibility to set the child data (see
+    /// #setChildData()).
+    SoSFNode alternateRep;
+    /// If the name field contains a relative URL (e.g. "foo.wrl"
+    /// instead of "http://bogus.com/foo.wrl"), the anchor cannot
+    /// resolve the URL reference. This method allows the application
+    /// to tell the anchor what it's full URL should be.
+    /// getFullURLName returns the fullURL set here, or if not set, returns
+    /// the contents of the name field.
     void            setFullURLName(const SbString &url) { fullURL = url; }
     const SbString &getFullURLName();
 
-    // Return (hidden) children as Group
+    /// Return (hidden) children as Group
     SoGroup *copyChildren() const;
 
-    // Request that URL data be fetched, and tell whether the URL data is here
+    /// Request that URL data be fetched, and tell whether the URL data is here
     void requestURLData() {
         if (!kidsRequested)
             requestChildrenFromURL();
@@ -121,21 +150,21 @@ class SoWWWInline : public SoNode {
             kidsRequested = FALSE;
     }
 
-    // Set/get the child data the inline should display. Application should call
-    // this after it has fetched data for the inline node.
+    /// Set/get the child data the inline should display. Application should
+    /// call this after it has fetched data for the inline node.
     void    setChildData(SoNode *urlData);
     SoNode *getChildData() const;
 
-    // Allow the viewer to fetch URLs when needed.
+    /// Allow the viewer to fetch URLs when needed.
     static void setFetchURLCallBack(SoWWWInlineFetchURLCB *f, void *userData);
 
-    // Allow the user to specify how bounding boxes are displayed
+    /// Allow the user to specify how bounding boxes are displayed
     static void setBoundingBoxVisibility(BboxVisibility b) {
         bboxVisibility = b;
     }
     static BboxVisibility getBoundingBoxVisibility() { return bboxVisibility; }
 
-    // Allow the user to specify the bounding box color
+    /// Allow the user to specify the bounding box color
     static void           setBoundingBoxColor(SbColor &c) { bboxColor = c; }
     static const SbColor &getBoundingBoxColor() { return bboxColor; }
 

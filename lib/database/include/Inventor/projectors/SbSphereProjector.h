@@ -61,43 +61,69 @@
 #include <Inventor/SbSphere.h>
 #include <Inventor/projectors/SbProjector.h>
 
+/// Sphere projector.
+/// \ingroup Projectors
+/// <tt>SbSphereProjector</tt>
+/// is an abstract base class for projectors that use a sphere in
+/// their projection.
+/// Sphere projectors are typically used to write
+/// interactive 3D manipulators and viewers.
+/// \sa SbCylinderProjector,
+/// SbCylinderPlaneProjector,SbCylinderSectionProjector,SbCylinderSheetProjector,
+/// \sa SbLineProjector, SbPlaneProjector,
+/// SbSpherePlaneProjector,SbSphereSectionProjector, SbSphereSheetProjector
 class SbSphereProjector : public SbProjector {
   public:
-    // Apply the projector using the given point, returning the
-    // point in three dimensions that it projects to.
-    // The point should be normalized from 0-1, with (0,0) at the lower-left.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// The point should be normalized from 0-1, with (0,0) at the lower-left.
     virtual SbVec3f project(const SbVec2f &point) = 0;
 
-    // Same as above, but also get a rotation from the last
-    // projected point to this one.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// This also returns in \a rot a rotation on the surface of the sphere
+    /// from the last projected point to this one.
+    /// The passed \a point should be normalized (i.e. lie in the range
+    /// [0.0,1.0]), with (0,0) at the lower-left.
     SbVec3f projectAndGetRotation(const SbVec2f &point, SbRotation &rot);
 
-    // Get a rotation given two points on this sphere projector.
+    /// Get a rotation given two points on this sphere projector.
+    /// The rotation will be on the surface of the sphere.
     virtual SbRotation getRotation(const SbVec3f &point1,
                                    const SbVec3f &point2) = 0;
 
-    // Set/get the sphere to use.
+    /// Set the sphere on which to project points.
+    /// The default sphere has radius 1.0.
     void setSphere(const SbSphere &sph);
 
+    /// Get the sphere on which to project points.
+    /// The default sphere has radius 1.0.
     const SbSphere &getSphere() const { return sphere; }
 
-    // Set/get whether the projector should always be oriented towards the eye.
-    // Set to FALSE if the tolerance should be evaluated in working space.
-    void   setOrientToEye(SbBool orientToEye);
+    /// Set whether the projector should always be oriented towards the eye.
+    /// Set to FALSE if the tolerance should be evaluated in working space.
+    void setOrientToEye(SbBool orientToEye);
+
+    /// Get whether the projector should always be oriented towards the eye.
     SbBool isOrientToEye() const { return orientToEye; }
 
-    // Set/get whether the projector should intersect the half of the
-    // sphere that faces the eye.
-    // Set to FALSE if the projector should intersect with the rear half.
-    void   setFront(SbBool inFront);
+    /// Set whether the projector should intersect the half of the
+    /// sphere that faces the eye.
+    /// Set to FALSE if the projector should intersect with the rear half.
+    void setFront(SbBool inFront);
+
+    /// Get whether the projector should intersect the half of the
+    /// sphere that faces the eye.
     SbBool isFront() const { return intersectFront; }
+
+    /// Check if point is on the frontside or the backside of the half sphere.
     SbBool isPointInFront(const SbVec3f &point) const;
 
     // Set the transform space to work in.
     virtual void setWorkingSpace(const SbMatrix &space);
 
     // Destructor
-    ~SbSphereProjector(){};
+    virtual ~SbSphereProjector(){};
 
   protected:
     // Constructors

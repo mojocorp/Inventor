@@ -65,29 +65,66 @@
 #include <Inventor/fields/SoSFTime.h>
 #include <Inventor/fields/SoSFBitMask.h>
 
+/// Timer that runs for a pre-set amount of time.
+/// \ingroup Engines
+/// This engine is a timer that runs for a pre-set amount of time and then
+/// stops. By default, the #timeIn input is connected to the <b>realTime</b>
+/// global field. It can, however, by connected to any other time source.
+///
+///
+/// The timer is started when the #trigger input is touched.
+/// It then runs for the specified #duration, and updates the #timeOut
+/// output with the time that has elapsed.
+/// During that time, the #ramp output is also updated.  The #ramp output
+/// starts at 0.0 at the beginning of the cycle, and linearly increases
+/// until it reaches 1.0 at the end of the cycle.
+///
+///
+/// You can disable the timer by setting the #disable input to TRUE.
+/// The output value remains 0.0 while the timer is disabled.
+/// If the timer is disabled in the middle of a cycle the output values
+/// will be set to 0.0.
+///
+///
+/// The #flags input contains control flags. Using the flags
+/// you can set the timer to be retriggerable in the middle of a cycle,
+/// and set the output values to stay high after the cycle has
+/// been completed.  By default, these flags are not set.
+///
+/// \par File format/defaults:
+/// \code
+/// SoOneShot {
+///    duration 1
+///    trigger
+///    flags ()
+///    disable FALSE
+///    timeIn <current time>
+/// }
+/// \endcode
+/// \sa SoElapsedTime, SoEngineOutput
 class SoOneShot : public SoEngine {
 
     SO_ENGINE_HEADER(SoOneShot);
 
   public:
     enum Flags {
-        RETRIGGERABLE = (1 << 0), // can start over during cycle?
-        HOLD_FINAL = (1 << 1)     // ramp & timeOut stay high after cycle?
+        RETRIGGERABLE = (1 << 0), ///< can start over during cycle?
+        HOLD_FINAL = (1 << 1)     ///< ramp & timeOut stay high after cycle?
     };
 
     // Inputs
-    SoSFTime    duration; // duration of active cycle
-    SoSFTrigger trigger;  // start the cycle
+    SoSFTime    duration; ///< duration of active cycle
+    SoSFTrigger trigger;  ///< start the cycle
     SoSFBitMask flags;
-    SoSFBool    disable; // if TRUE, timer is disabled, output=0
+    SoSFBool    disable; ///< if TRUE, timer is disabled, output=0
     SoSFTime    timeIn;
 
     // Outputs
-    SoEngineOutput timeOut;  // (SoSFTime) time counts from trigger
-    SoEngineOutput isActive; // (SoSFBool)
-    SoEngineOutput ramp;     // (SoSFFloat) ramps linearly 0 to 1
+    SoEngineOutput timeOut;  ///< (SoSFTime) time counts from trigger
+    SoEngineOutput isActive; ///< (SoSFBool)
+    SoEngineOutput ramp;     ///< (SoSFFloat) ramps linearly 0 to 1
 
-    // Constructor
+    /// Constructor
     SoOneShot();
 
     SoINTERNAL

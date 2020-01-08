@@ -59,13 +59,23 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoSubEvent.h>
 
+/// 2D location events.
+/// \ingroup Events
+/// <tt>SoLocation2Event</tt> represents 2D location events in the Inventor
+/// event model.
+/// \sa SoEvent, SoButtonEvent, SoKeyboardEvent,
+/// SoMotion3Event,SoMouseButtonEvent, \sa
+/// SoSpaceballButtonEvent,SoHandleEventAction, SoEventCallback, SoSelection,
+/// SoInteraction,SoXtDevice
 class SoLocation2Event : public SoEvent {
 
     SO_EVENT_HEADER();
 
   public:
-    // constructor
+    /// constructor
     SoLocation2Event();
+
+    /// Destructor
     virtual ~SoLocation2Event();
 
     SoINTERNAL

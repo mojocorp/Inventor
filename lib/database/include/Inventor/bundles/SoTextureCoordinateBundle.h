@@ -93,37 +93,37 @@ SoEXTENDER
 class SoTextureCoordinateBundle : public SoBundle {
 
   public:
-    // Constructor - takes the action the bundle is used for and a
-    // flag to indicate whether the bundle is being used for
-    // rendering. If this is TRUE, the bundle can be used to send
-    // texture coordinates to GL. If it is FALSE, the setUpDefault
-    // flag (default TRUE) indicates whether to set up a texture
-    // coordinate function if the binding is DEFAULT. Shapes can pass
-    // FALSE here if they are picking and want to delay computation of
-    // the texture coordinates until an intersection is found.
+    /// Constructor - takes the action the bundle is used for and a
+    /// flag to indicate whether the bundle is being used for
+    /// rendering. If this is TRUE, the bundle can be used to send
+    /// texture coordinates to GL. If it is FALSE, the setUpDefault
+    /// flag (default TRUE) indicates whether to set up a texture
+    /// coordinate function if the binding is DEFAULT. Shapes can pass
+    /// FALSE here if they are picking and want to delay computation of
+    /// the texture coordinates until an intersection is found.
     SoTextureCoordinateBundle(SoAction *action, SbBool forRendering,
                               SbBool setUpDefault = TRUE);
 
-    // Destructor
+    /// Destructor
     ~SoTextureCoordinateBundle();
 
-    // Returns TRUE if texture coordinates are needed at all
+    /// Returns TRUE if texture coordinates are needed at all
     SbBool needCoordinates() const { return needCoords; }
 
-    // return value to determine which get() to use.
+    /// return value to determine which get() to use.
     SbBool isFunction() const { return isFunc; }
 
-    // Returns texture coordinate computed by function during
-    // primitive generation or rendering
+    /// Returns texture coordinate computed by function during
+    /// primitive generation or rendering
     const SbVec4f &get(const SbVec3f &point, const SbVec3f &normal) const {
         return texCoordElt->get(point, normal);
     }
 
-    // Returns indexed texture coordinate during primitive generation
-    // or rendering
+    /// Returns indexed texture coordinate during primitive generation
+    /// or rendering
     const SbVec4f &get(int index) const { return texCoordElt->get4(index); }
 
-    // Sends indexed texture coordinate to GL during rendering
+    /// Sends indexed texture coordinate to GL during rendering
     void send(int index) const { GLTexCoordElt->send(index); }
 
   private:

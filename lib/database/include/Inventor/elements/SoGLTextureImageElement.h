@@ -80,23 +80,23 @@ class SoGLTextureImageElement : public SoTextureImageElement {
     SO_ELEMENT_HEADER(SoGLTextureImageElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current image, wrap modes and model.
-    // This will try to build or use a GL
-    // display list, if it can; the display list ID is returned (-1 if
-    // there is none), and should be saved and passed in the next time
-    // the element is set.  The node calling this routine is
-    // responsible for calling glDeleteLists to free up the display
-    // list at the right time.
+    /// Sets the current image, wrap modes and model.
+    /// This will try to build or use a GL
+    /// display list, if it can; the display list ID is returned (-1 if
+    /// there is none), and should be saved and passed in the next time
+    /// the element is set.  The node calling this routine is
+    /// responsible for calling glDeleteLists to free up the display
+    /// list at the right time.
     static SoGLDisplayList *set(SoState *state, SoNode *node,
                                 const SbImage &image, int wrapS, int wrapT,
                                 int model, int minFilter, int magFilter,
                                 const SbColor &  blendColor,
                                 SoGLDisplayList *list);
 
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     SoINTERNAL

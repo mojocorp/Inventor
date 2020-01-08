@@ -84,6 +84,43 @@
 //
 ////////////////////////////////////////////////////////////////////
 
+/// Camera nodekit class.
+/// \ingroup Nodekits
+/// This nodekit class is used to create camera nodes that have
+/// a local transformation.
+/// <tt>SoCameraKit</tt> adds two public parts to the basic nodekit:
+/// <em>transform</em> and <em>camera</em>.
+///
+///
+/// The <em>camera</em> part is created by default as an
+/// <tt>SoPerspectiveCamera</tt> node, but may later be changed to any subclass
+/// of <tt>SoCamera</tt>.
+///
+///
+/// You can move the camera relative to the rest of the scene by creating
+/// and editing the <em>transform</em> part.
+///
+///
+/// <tt>SoCameraKit</tt> also adds a private part, <em>transformGroup</em>,
+/// which is of type <tt>SoTransformSeparator</tt>. The kit uses this part to
+/// contain the effect of <em>transform</em> to move only the <em>camera</em>,
+/// while allowing the <em>camera</em> to affect the rest of the scene.
+///
+///
+/// <tt>SoCameraKit</tt> is derived from <tt>SoBaseKit</tt>
+/// and thus also includes a <em>callbackList</em> part for adding callback
+/// nodes.
+///
+/// \par File format/defaults:
+/// \code
+/// CameraKit {
+///     callbackList    NULL
+///     transform       NULL
+///     camera          PerspectiveCamera {}
+/// }
+/// \endcode
+/// \sa
+/// SoAppearanceKit,SoBaseKit,SoLightKit,SoNodeKit,SoNodeKitDetail,SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit
 class SoCameraKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoCameraKit);
@@ -94,7 +131,7 @@ class SoCameraKit : public SoBaseKit {
     SO_KIT_CATALOG_ENTRY_HEADER(camera);
 
   public:
-    // constructor
+    /// Default constructor
     SoCameraKit();
 
     SoINTERNAL

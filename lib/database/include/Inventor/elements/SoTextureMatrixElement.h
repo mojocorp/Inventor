@@ -79,20 +79,20 @@ class SoTextureMatrixElement : public SoAccumulatedElement {
     SO_ELEMENT_HEADER(SoTextureMatrixElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Overrides push() method to copy values from next instance in the stack
+    /// Overrides push() method to copy values from next instance in the stack
     virtual void push(SoState *state);
 
-    // Sets the texture matrix to the identity matrix
+    /// Sets the texture matrix to the identity matrix
     static void makeIdentity(SoState *state, SoNode *node);
 
-    // Multiplies the given matrix into the texture matrix
+    /// Multiplies the given matrix into the texture matrix
     static void mult(SoState *state, SoNode *node, const SbMatrix &matrix);
 
-    // Each of these multiplies a matrix that performs the specified
-    // transformation into the texture matrix
+    /// Each of these multiplies a matrix that performs the specified
+    /// transformation into the texture matrix
     static void translateBy(SoState *state, SoNode *node,
                             const SbVec3f &translation);
     static void rotateBy(SoState *state, SoNode *node,
@@ -100,10 +100,10 @@ class SoTextureMatrixElement : public SoAccumulatedElement {
     static void scaleBy(SoState *state, SoNode *node,
                         const SbVec3f &scaleFactor);
 
-    // Returns current matrix from the state
+    /// Returns current matrix from the state
     static const SbMatrix &get(SoState *state);
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

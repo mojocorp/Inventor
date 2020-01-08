@@ -80,6 +80,51 @@ class SoPathList;
 //
 //////////////////////////////////////////////////////////////////////////////
 
+/// Base class for all interaction nodekit classes.
+/// \ingroup Nodekits
+/// This is the base class for all classes of interaction nodekits.  Currently,
+/// the only subclass is <tt>SoDragger</tt>,  which reacts to click-drag-release
+/// events from the mouse.
+///
+///
+/// This node has four fields corresponding to those of an
+/// <tt>SoSeparator</tt>:  They are #renderCaching, #boundingBoxCaching,
+/// #renderCulling, and #pickCulling.  They behave the same here as they
+/// do for an <tt>SoSeparator</tt>
+///
+///
+/// The #setPartAsPath() method
+/// provides support for creating "stand-in" objects for parts in the
+/// interaction kit.  The "stand-in", or "surrogate" part, is a path to an
+/// object that lies somewhere else in the scene graph. \par Nodekit structure:
+/// \code
+/// CLASS SoInteractionKit
+/// -->"this"
+///       "callbackList"
+/// -->   "topSeparator"
+/// -->      "geomSeparator"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoInteractionKit {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     callbackList        NULL
+/// }
+/// \endcode
+/// \sa SoBaseKit,SoInteraction,SoNodeKitDetail,SoNodeKitPath,SoNodekitCatalog,
+/// SoDragger, \sa
+/// SoCenterballDragger,SoDirectionalLightDragger,SoDragPointDragger,SoHandleBoxDragger,
+/// \sa
+/// SoJackDragger,SoPointLightDragger,SoRotateCylindricalDragger,SoRotateDiscDragger,
+/// \sa
+/// SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,
+/// \sa
+/// SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,
+/// \sa SoTransformBoxDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class SoInteractionKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoInteractionKit);
@@ -88,41 +133,58 @@ class SoInteractionKit : public SoBaseKit {
     SO_KIT_CATALOG_ENTRY_HEADER(geomSeparator);
 
   public:
-    // This allows you to set any public leaf part in the nodekit as a
-    // surrogate path.(children of listParts may also be set, e.g. childList[2])
-    // Instead of the usual setPart(), which replaces 'partName' in the subgraph
-    // with a new node, this routine empties out 'partName' and remembers the
-    // surrogatePath you give it.  Later, any pick on 'surrogatePath' will
-    // be regarded as a pick on 'partName'
-    //
-    // Note: The node corresponding to 'partName' will become empty.
-    //       If the node above it is not an SoSwitch, then it will be set to
-    //       NULL.   If it IS a switch, and the old part was a group or
-    //       separator, we'll replace that node with a new empty group or
-    //       separator.   This will keep the switch numbering the same.
-    //       If the old part is not a group or separator, we'll decrement
-    //       the switches 'whichChild' field if necessary:
-    //       if(whichChild > partIndex) whichChild -= 1;
-    //       else if (whichChild == partIndex) whichChild = SO_SWITCH_NONE
-    //       else { // leave it
-    //       }
-    //
+    /// Sets any public part in the interaction kit as a
+    /// "surrogate" path instead.  The object at the end of the path serves as
+    /// a stand-in when a pick occurs, and can thus initiate interaction.
+    ///
+    /// Instead of the usual #setPart(), which
+    /// replaces \a partName with a new node, this will
+    /// remove the node being used for \a partName from the scene and remember
+    /// the \a surrogatePath you give it.  Later, any pick on \a surrogatePath
+    /// will be regarded as a pick on \a partName.
+    ///
+    /// For example, set the \e XRotator part of an SoTrackballDragger
+    /// to be the path to an object in the scene.  The rest of the
+    /// trackball will look the same, but the \e XRotator stripe will disappear.
+    /// However, click the mouse on the object at the end of \a surrogatePath
+    /// and the ball will start to drag in rotation around its X axis.
+    ///
+    /// Note that this is different from setting the part to be the node at the
+    /// end of the path. When you set the part as a node, a second instance will
+    /// be drawn in the local space of the interaction kit.  When you set it as
+    /// a path, the object itself is used, not a copy.
+    ///
+    /// The \a partName may be any part name that follows the nodekit syntax for
+    /// parts, such as \a childList[0].shape or \a rotator.rotatorActive.
+    /// (See the #getPart() method in the
+    /// SoBaseKit reference page for a complete description.)
     virtual SbBool setPartAsPath(const SbName &partName, SoPath *surrogatePath);
 
-    // Override the default behavior of SoNode
+    /// Override the default behavior of SoNode
     virtual SbBool affectsState() const;
 
-    enum CacheEnabled { // Possible values for caching
-        OFF,            // Never build or use a cache
-        ON,             // Always try to build a cache
-        AUTO            // Decide based on some heuristic
+    /// Possible values for caching
+    enum CacheEnabled {
+        OFF, ///< Never build or use a cache
+        ON,  ///< Always try to build a cache
+        AUTO ///< Automatic caching
     };
 
-    // Fields
-    SoSFEnum renderCaching;      // OFF/ON/AUTO (see above)
-    SoSFEnum boundingBoxCaching; // OFF/ON (AUTO is not implemented)
-    SoSFEnum renderCulling;      // OFF/ON (AUTO is not implemented)
-    SoSFEnum pickCulling;        // OFF/ON (AUTO is not implemented)
+    /// Set render caching mode.  Default is <b>AUTO</b>.
+    SoSFEnum renderCaching;
+
+    /// Set bounding box caching mode.
+    /// Default is <b>ON</b>.  Setting this value to <b>AUTO</b> is equivalent
+    /// to <b>ON</b> - automatic culling is not implemented.
+    SoSFEnum boundingBoxCaching;
+
+    /// Set render culling mode.  Default is <b>OFF</b>.
+    /// Setting this value to <b>AUTO</b> is equivalent to <b>ON</b> -
+    /// automatic culling is not implemented.
+    SoSFEnum renderCulling;
+
+    /// Set pick caching mode.  Default is <b>AUTO</b>.
+    SoSFEnum pickCulling;
 
     SoEXTENDER
   public:

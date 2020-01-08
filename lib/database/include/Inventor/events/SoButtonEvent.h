@@ -59,19 +59,40 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoSubEvent.h>
 
+/// Base class for all button events.
+/// \ingroup Events
+/// <tt>SoButtonEvent</tt> represents generic button press
+/// and release events in the Inventor event model. It is the base class
+/// for device-specific button events, namely
+/// <tt>SoKeyboardEvent</tt>, <tt>SoMouseButtonEvent</tt>, and
+/// <tt>SoSpaceballButtonEvent</tt>.
+/// This class stores the down/up state of the button
+/// when the event occurred.
+/// \sa SoEvent, SoKeyboardEvent, SoLocation2Event,
+/// SoMotion3Event,SoMouseButtonEvent, \sa
+/// SoSpaceballButtonEvent,SoHandleEventAction, SoEventCallback, SoSelection,
+/// SoInteraction,SoXtDevice
 class SoButtonEvent : public SoEvent {
 
     SO_EVENT_HEADER();
 
   public:
-    // Constructor and destructor
+    /// Constructor and destructor
     SoButtonEvent();
+
+    /// Destructor
     virtual ~SoButtonEvent();
 
-    enum State { UP, DOWN, UNKNOWN };
+    enum State {
+        UP,     ///< Button up event
+        DOWN,   ///< Button down event
+        UNKNOWN ///< Button in unknown state
+    };
 
-    // get state of the button
-    void                 setState(SoButtonEvent::State s) { state = s; }
+    /// Set state of the button
+    void setState(SoButtonEvent::State s) { state = s; }
+
+    /// Get state of the button
     SoButtonEvent::State getState() const { return state; }
 
     SoINTERNAL

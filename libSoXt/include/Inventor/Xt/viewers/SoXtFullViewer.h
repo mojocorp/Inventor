@@ -74,37 +74,42 @@ class	SoXtBitmapButton;
 //
 //////////////////////////////////////////////////////////////////////////////
 
+/// Base viewer class which adds a decoration around the rendering area
+/// \ingroup Viewers
+/// This is a base class used by all viewer components. The class adds a
+/// decoration around the rendering area which includes thumb wheels, a zoom
+/// slider and push buttons. This base class also includes a viewer popup menu
+/// and a preference sheet with generic viewing functions. The constructors for
+/// the various subclasses of SoXtFullViewer provide a flag for specifying
+/// whether the decoration and popup menus should be built.
+/// \sa SoXtViewer, SoXtComponent, SoXtRenderArea, SoXtExaminerViewer, SoXtWalkViewer, SoXtFlyViewer, SoXtPlaneViewer
 class SoXtFullViewer : public SoXtViewer {
   public:
     // This specifies what should be build by default in the constructor
     enum BuildFlag {
-	BUILD_NONE	    = 0x00, 
-	BUILD_DECORATION    = 0x01, 
-	BUILD_POPUP	    = 0x02, 
-	BUILD_ALL	    = 0xff
+        BUILD_NONE	    = 0x00, ///< doesn't build anything extra
+        BUILD_DECORATION    = 0x01, ///< build the decoration only
+        BUILD_POPUP	    = 0x02, ///< build the popup menu only
+        BUILD_ALL	    = 0xff  ///< build everything by default
     };
     
-    //
-    // Show/hide the viewer component trims (default ON)
-    //
+    /// Show/hide the viewer component trim (default on). See the viewer
+    /// constructor to prevent the decoration from being built.
     void    	    setDecoration(SbBool onOrOff);
     SbBool  	    isDecoration()	    { return decorationFlag; }
     
-    //
-    // Enable/disable the popup menu (default enabled)
-    //
+    /// Enable/disable the viewer popup menu (default enabled). See the viewer
+    /// constructor to prevent the popup menu from being built.
     void    	    setPopupMenuEnabled(SbBool trueOrFalse);
     SbBool  	    isPopupMenuEnabled()    { return popupEnabled; }
     
-    //
-    // Add/remove push buttons for the application, which will be placed 
-    // in the left hand side decoration trim.
-    // The add() method appends the button to the end of the list, while 
-    // insert() places the button at the specified index (starting at 0).
-    //
-    // returns the parent widget, which is needed when creating new buttons
-    // NOTE that this will be NULL if the decoration is NOT created in the
-    // constructor (see the BuildFlag) until it is shown.
+    /// Add/remove push buttons for the application, which will be
+    /// placed in the left hand side decoration trim. Adding buttons
+    /// appends them to the end of the list, while inserting them places
+    /// them at the desired index.
+    ///
+    /// Note: the button pixmaps should be 24-by-24 pixels size to nicely fit
+    /// into the decoration trim like the other viewer buttons.
     Widget	    getAppPushButtonParent() const { return appButtonForm; }
     void	    addAppPushButton(Widget newButton);
     void	    insertAppPushButton(Widget newButton, int index);
@@ -113,7 +118,8 @@ class SoXtFullViewer : public SoXtViewer {
 				{ return appButtonList->find(oldButton); }
     int		    lengthAppPushButton()
 				{ return appButtonList->getLength(); }
-    
+
+    /// Returns the render area widget.
     Widget	    getRenderAreaWidget()   { return raWidget; }
     
     // redefine these from the base class

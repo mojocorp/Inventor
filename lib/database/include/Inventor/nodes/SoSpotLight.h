@@ -59,34 +59,53 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoLight.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoSpotLight
-//
-//  Spot light source node. A spot light illuminates from a point in
-//  space along a primary direction. The illumination is within a cone
-//  whose angle is given by the cutOffAngle field. The intensity of
-//  the source may vary as the illumination direction diverges from
-//  the primary direction, as specified in the dropOffRate field.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node representing a spotlight source.
+/// \ingroup Nodes
+/// This node defines a spotlight style light source.
+/// A spotlight is placed at a
+/// fixed location in 3-space and illuminates in a cone along a particular
+/// direction. The intensity of the illumination drops off exponentially
+/// as a ray of light diverges from this direction toward the edges of the
+/// cone. The rate of drop-off and the angle of the cone are controlled by
+/// the #dropOffRate and #cutOffAngle fields.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Activates this light (if so specified) during traversal. All shape
+/// nodes that come after this light in the scene graph are illuminated by
+/// this light. The light's location is affected by the current
+/// transformation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoSpotLight {
+///    on           TRUE
+///    intensity    1
+///    color        1 1 1
+///    location     0 0 1
+///    direction    0 0 -1
+///    dropOffRate  0
+///    cutOffAngle  0.785398
+/// }
+/// \endcode
+/// \sa SoDirectionalLight, SoPointLight
 class SoSpotLight : public SoLight {
 
     SO_NODE_HEADER(SoSpotLight);
 
   public:
     // Fields (in addition to those in SoLight):
-    SoSFVec3f location;    // Source location
-    SoSFVec3f direction;   // Primary direction of illumination
-    SoSFFloat dropOffRate; // Rate of intensity drop-off from primary
-                           // direction: 0 = constant intensity,
-                           // 1 = sharp drop-off
-    SoSFFloat cutOffAngle; // Angle (in radians) outside of which
-                           // intensity is zero, measured from
-                           // edge of cone to other edge
+    SoSFVec3f location;    ///< Location of the source.
+    SoSFVec3f direction;   ///< Principal direction of illumination (center axis
+                           ///< of cone).
+    SoSFFloat dropOffRate; ///< Rate of intensity drop-off per change in angle
+                           ///< from primary direction: 0 = constant intensity,
+                           ///< 1 = very sharp drop-off
+    SoSFFloat
+        cutOffAngle; ///< Angle (in radians) outside of which intensity is zero,
+                     ///< measured from the center axis of the cone to an edge.
 
-    // Constructor
+    /// Creates a spotlight source node with default settings.
     SoSpotLight();
 
     SoEXTENDER

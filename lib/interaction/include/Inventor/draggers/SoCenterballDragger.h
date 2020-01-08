@@ -112,14 +112,127 @@ class SoInput;
 class SoGetBoundingBoxAction;
 class SoGetMatrixAction;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCenterballDragger
-//
-//  CenterballDragger - allows user to rotate objects.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Striped ball you rotate and re-center by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoCenterballDragger</tt>
+/// is a composite dragger. Its shape is a sphere defined by three intersecting
+/// circles. Where the circles intersect (at the ends of the x, y and z axes)
+/// there are sets of small green crosshairs.
+/// Dragging a pair of crosshairs translates the entire centerball within the
+/// plane of the crosshairs. The interface of the sphere and circles is just
+/// like <tt>SoTrackballDragger</tt>. Dragging a circle rotates about a
+/// constrained axis and dragging the areas between them rotates the sphere
+/// freely about the center. An invisible but pickable sphere initiates the
+/// free-rotation dragging.
+///
+///
+/// When you drag the crosshairs, the
+/// #center field is updated; there is no <b>translation</b> field.
+/// Dragging other parts of the centerball updates the
+/// #rotation field.  As with all draggers, if you change the
+/// fields the dragger moves in response.
+///
+///
+/// The draggers used for the crosshair parts are <tt>SoTranslate2Draggers</tt>,
+/// so pressing the <b>\<Shift\></b> key allows you to constrain motion to slide
+/// along either the local <b>x axis</b> or <b>y axis</b> of that crosshair..
+/// The direction is determined by your initial mouse gesture after pressing the
+/// key. Releasing the key removes the constraint.
+///
+///
+/// <em>Remember:</em> This is <em>not</em> an <tt>SoTransform</tt>!
+/// If you want to move other objects with this dragger, you can either:
+///
+///
+/// [a] Use an <tt>SoCenterballManip</tt>, which is subclassed from
+/// <tt>SoTransform</tt>. The manipulator creates one of these draggers and uses
+/// it as the interface to edit the manipulator's fields. (See the
+/// <tt>SoCenterballManip</tt> man page.)
+///
+///
+/// [b] Use field-to-field connections to connect the fields of this dragger to
+/// those of any <tt>SoTransformation</tt> node.
+///
+///
+/// You can change the parts in any instance of this dragger using
+/// #setPart().
+/// The default part geometries are defined as resources for this
+/// <tt>SoCenterballDragger</tt> class.  They are detailed in the
+/// Dragger Resources section of the online reference page for this
+/// class.
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/centerballDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that
+/// directory.
+/// \par Nodekit structure:
+/// \code CLASS SoCenterballDragger
+///    "this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "translateToCenter"
+/// -->      "surroundScale"
+/// -->      "antiSquish"
+/// -->      "lightModel"
+///          "geomSeparator"
+/// -->         "XAxisSwitch"
+/// -->            "XAxis"
+/// -->         "YAxisSwitch"
+/// -->            "YAxis"
+/// -->         "ZAxisSwitch"
+/// -->            "ZAxis"
+/// -->      "rotator"
+/// -->      "YRotator"
+/// -->      "ZCenterChanger"
+/// -->      "rotX90"
+/// -->      "ZRotator"
+/// -->      "YCenterChanger"
+/// -->      "rotY90"
+/// -->      "XCenterChanger"
+/// -->      "rot2X90"
+/// -->      "XRotator"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoCenterballDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     rotation            0 0 1  0
+///     center              0 0 0
+///     callbackList        NULL
+///     translateToCenter   MatrixTransform {
+///                             matrix 1 0 0 0
+///                                    0 1 0 0
+///                                    0 0 1 0
+///                                    0 0 0 1
+///                         }
+///     surroundScale       NULL
+///     antiSquish          AntiSquish {
+///                             sizing LONGEST_DIAGONAL
+///                         }
+///     lightModel          LightModel {
+///                             model PHONG
+///                         }
+///     XAxis               <centerballXAxis resource>
+///     YAxis               <centerballYAxis resource>
+///     ZAxis               <centerballZAxis resource>
+///     rotator             RotateSphericalDragger {}
+///     YRotator            RotateCylindricalDragger {}
+///     ZCenterChanger      Translate2Dragger {}
+///     ZRotator            RotateCylindricalDragger {}
+///     YCenterChanger      Translate2Dragger {}
+///     XCenterChanger      Translate2Dragger {}
+///     XRotator            RotateCylindricalDragger {}
+/// }
+/// \endcode
+/// \sa
+/// SoInteractionKit,SoDragger,SoDirectionalLightDragger,SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class SoCenterballDragger : public SoDragger {
 
     SO_KIT_HEADER(SoCenterballDragger);
@@ -159,10 +272,12 @@ class SoCenterballDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(XAxis);
 
   public:
+    /// Constructor.
     SoCenterballDragger();
 
-    SoSFRotation rotation;
-    SoSFVec3f    center;
+    SoSFRotation rotation; ///< Orientation of the centerball dragger.
+    SoSFVec3f
+        center; ///< Center of rotation and scale of the centerball dragger.
 
     SoEXTENDER
   public:

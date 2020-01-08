@@ -100,6 +100,100 @@
 
 class SoFieldSensor;
 
+/// Sun-shaped icon you can translate in 3D by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoPointLightDragger</tt>
+/// is a dragger that looks like a point light source, can be translated in
+/// three directions, and has a #translation field that always reflects its
+/// position in local space. The point light dragger also has a special \a
+/// material part which can be used to make it take on the color of a light
+/// source.
+///
+///
+/// <em>Remember:</em> This is <em>not</em> a light source! It just looks like
+/// one. If you want to move a light with this dragger, you can either:
+///
+///
+/// [a] Use an <tt>SoPointLightManip</tt>, which is subclassed from
+/// <tt>SoLight</tt>. It creates one of these draggers and uses it as the
+/// interface to change the <b>location</b> of its light source (see the
+/// <tt>SoPointLightManip</tt> reference page). The manipulator also edits the
+/// <b>material</b> part of this dragger to match the color of light the
+/// manipulator is producing.
+///
+///
+/// [b] Use a field-to-field connection to connect the <b>location</b> of a
+/// light source from this dragger's <b>translation</b> field.
+///
+///
+/// This dragger contains an <tt>SoDragPointDragger</tt>, which you drag through
+/// 3-space using an integrated set of linear and planar draggers.  (For
+/// detailed information on how to use <tt>SoDragPointDragger</tt>, see its
+/// reference page.)  The point light dragger sets the planar translation
+/// parts of this dragPoint dragger with a new default that looks like a
+/// shining sun emanating rays of light (okay, so use your imagination).
+///
+///
+/// By changing the <b>material</b> part you can change the color of the sun
+/// shape, because the default part contains no <tt>SoMaterial</tt> nodes. This
+/// fact enables the <tt>SoPointLightManip</tt> (not the dragger, the
+/// manipulator) to color its dragger to match the color of the light it is
+/// emanating. Recall that a point light <em>manip</em> is derived from
+/// <tt>SoLight</tt> and creates a point light <em>dragger</em> to provide an
+/// interface and geometrical presence on screen. The manipulator also has a
+/// <b>color</b> field; when the light color changes, it changes the
+/// <b>material</b> part of its dragger so that they match.
+///
+///
+/// You can change the parts in any instance of this dragger using
+/// #setPart().
+///
+///
+/// The default part geometries are defined as resources for this
+/// <tt>SoPointLightDragger</tt> class.  They are detailed in the
+/// Dragger Resources section of the online reference page for this class.
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/pointLightDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that
+/// directory.
+/// \par Nodekit structure:
+/// \code CLASS SoPointLightDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "material"
+/// -->      "translator"
+///          "geomSeparator"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoPointLightDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     translation         0 0 0
+///     callbackList        NULL
+///     material            <pointLightOverallMaterial resource>
+///     translator          DragPointDragger {}
+/// }
+/// \endcode
+/// \sa
+/// SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa
+/// SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoRotateCylindricalDragger,
+/// \sa
+/// SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,
+/// \sa
+/// SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,
+/// \sa
+/// SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,
+/// \sa SoTranslate1Dragger,SoTranslate2Dragger
 class SoPointLightDragger : public SoDragger {
     SO_KIT_HEADER(SoPointLightDragger);
 
@@ -111,9 +205,10 @@ class SoPointLightDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(translator);
 
   public:
+    /// Constructor.
     SoPointLightDragger();
 
-    SoSFVec3f translation;
+    SoSFVec3f translation; ///< Position of the dragger.
 
     SoINTERNAL
   public:

@@ -72,7 +72,7 @@ class SoUnitsElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoUnitsElement);
 
   public:
-    // These are the available types of units:
+    /// These are the available types of units:
     enum Units {
         METERS,
         CENTIMETERS,
@@ -90,23 +90,23 @@ class SoUnitsElement : public SoInt32Element {
         NAUTICAL_MILES
     };
 
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current units in the state
+    /// Sets the current units in the state
     static void set(SoState *state, Units units) {
         SoInt32Element::set(classStackIndex, state, (int32_t)units);
     }
 
-    // Returns current units from the state
+    /// Returns current units from the state
     static Units get(SoState *state) {
         return (Units)SoInt32Element::get(classStackIndex, state);
     }
 
-    // Returns the default units
+    /// Returns the default units
     static Units getDefault() { return METERS; }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

@@ -75,10 +75,10 @@ SoEXTENDER
 class SoBoundingBoxCache : public SoCache {
 
   public:
-    // Constructor and destructor
+    /// Constructor and destructor
     SoBoundingBoxCache(SoState *state);
 
-    // Stores a bounding box and center point in the cache
+    /// Stores a bounding box and center point in the cache
     void set(const SbXfBox3f &boundingBox, SbBool centerSet,
              const SbVec3f &centerPoint);
 
@@ -86,17 +86,17 @@ class SoBoundingBoxCache : public SoCache {
 
     const SbBox3f &getProjectedBox() const { return projectedBox; }
 
-    // Returns TRUE if the center is valid.
+    /// Returns TRUE if the center is valid.
     SbBool isCenterSet() const { return centerSet; }
 
-    // Returns the center (in object space)
+    /// Returns the center (in object space)
     const SbVec3f &getCenter() const { return center; }
 
-    // Sets the hasLinesOrPoints flag to TRUE in all open bounding box
-    // caches in the given state. (The flag is FALSE by default.)
+    /// Sets the hasLinesOrPoints flag to TRUE in all open bounding box
+    /// caches in the given state. (The flag is FALSE by default.)
     static void setHasLinesOrPoints(SoState *state);
 
-    // Returns the hasLinesOrPoints flag
+    /// Returns the hasLinesOrPoints flag
     SbBool hasLinesOrPoints() const { return hasLOrP; }
 
   private:

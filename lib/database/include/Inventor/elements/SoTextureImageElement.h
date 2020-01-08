@@ -103,10 +103,10 @@ class SoTextureImageElement : public SoReplacedElement {
         LINEAR_MIPMAP_NEAREST,
         LINEAR_MIPMAP_LINEAR
     };
-    // Initializes element.
+    /// Initializes element.
     virtual void init(SoState *state);
 
-    // sets the current image, wrap, and model:
+    /// sets the current image, wrap, and model:
     static void set(SoState *state, SoNode *node, const SbImage &image,
                     int wrapS, int wrapT, int model, int minFilter,
                     int magFilter, const SbColor &blendColor);
@@ -115,18 +115,18 @@ class SoTextureImageElement : public SoReplacedElement {
                               int &model, int &minFilter, int &magFilter,
                               SbColor &blendColor);
 
-    // Deprecated
+    /// Deprecated
     static const unsigned char *get(SoState *state, SbVec2s &size,
                                     int &numComponents, int &wrapS, int &wrapT,
                                     int &model, SbColor &blendColor);
 
-    // Returns TRUE if the texture contains transparency info
+    /// Returns TRUE if the texture contains transparency info
     static SbBool containsTransparency(SoState *state);
 
-    // Deprecated - Returns the default texture image
+    /// Deprecated - Returns the default texture image
     static const unsigned char *getDefault(SbVec2s &s, int &nc);
 
-    // Print info about image for debugging
+    /// Print info about image for debugging
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

@@ -82,34 +82,34 @@ class SoGLLightIdElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoGLLightIdElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Increments the current light id. This should be called when a
-    // light source becomes active. This returns the new id, or -1 if
-    // the maximum number of GL light sources has been exceeded.
-    // Otherwise, enables light source.
+    /// Increments the current light id. This should be called when a
+    /// light source becomes active. This returns the new id, or -1 if
+    /// the maximum number of GL light sources has been exceeded.
+    /// Otherwise, enables light source.
     static int increment(SoState *state);
 
-    // Returns current light id from the state
+    /// Returns current light id from the state
     static int get(SoState *state) {
         return (int)SoInt32Element::get(classStackIndex, state);
     }
 
-    // Returns the default light id
+    /// Returns the default light id
     static int getDefault() { return -1; }
 
-    // Returns the maximum number of concurrent light sources
-    // supported by GL implementation
+    /// Returns the maximum number of concurrent light sources
+    /// supported by GL implementation
     static int getMaxGLSources();
 
-    // Overrides push() method to copy values from next instance in the stack
+    /// Overrides push() method to copy values from next instance in the stack
     virtual void push(SoState *state);
 
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

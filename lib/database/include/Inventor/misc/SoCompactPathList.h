@@ -88,29 +88,31 @@ SoINTERNAL
 class SoCompactPathList {
 
   public:
-    // Constructor given path list
+    /// Constructor given path list
     SoCompactPathList(const SoPathList &list);
+
+    /// Destructor
     ~SoCompactPathList();
 
-    // Resets traversal to the beginning. This allows an instance to
-    // be traversed more than once.
+    /// Resets traversal to the beginning. This allows an instance to
+    /// be traversed more than once.
     void reset();
 
-    // Returns the indices of the current node that are in paths in
-    // the list. The number of indices is returned in "numIndices",
-    // and the indices are returned in "indices". numIndices will be 0
-    // if the current node has no children in any path.
+    /// Returns the indices of the current node that are in paths in
+    /// the list. The number of indices is returned in "numIndices",
+    /// and the indices are returned in "indices". numIndices will be 0
+    /// if the current node has no children in any path.
     void getChildren(int &numIndices, const int *&indices);
 
-    // Traverses the child with given index of the current node. The
-    // child becomes the new current node. If the child is on a path
-    // in the list, then getChildren() can be called to get the next
-    // set of children. Otherwise, it will always return no children.
-    // This method returns TRUE if the given childIndex is in one of
-    // the paths in the list, and FALSE otherwise.
+    /// Traverses the child with given index of the current node. The
+    /// child becomes the new current node. If the child is on a path
+    /// in the list, then getChildren() can be called to get the next
+    /// set of children. Otherwise, it will always return no children.
+    /// This method returns TRUE if the given childIndex is in one of
+    /// the paths in the list, and FALSE otherwise.
     SbBool push(int childIndex);
 
-    // Restores current node to what it was before the most recent push()
+    /// Restores current node to what it was before the most recent push()
     void pop();
 
   private:
@@ -120,13 +122,15 @@ class SoCompactPathList {
     int              stackDepth; // Depth of stack
 
     // Returns number of path child indices of current node
-    int getNumIndices() { return array[curNode]; }
+    int getNumIndices() const { return array[curNode]; }
 
     // Returns index in array of first child index of current node
-    int getStartIndex() { return curNode + 1; }
+    int getStartIndex() const { return curNode + 1; }
 
     // Returns index in array of i'th on-path child of current node
-    int getChild(int i) { return array[getStartIndex() + getNumIndices() + i]; }
+    int getChild(int i) const {
+        return array[getStartIndex() + getNumIndices() + i];
+    }
 
     // Pushes curNode on stack
     void pushCurNode() { stack[stackDepth++] = curNode; }

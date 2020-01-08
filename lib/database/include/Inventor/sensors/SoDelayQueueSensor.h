@@ -64,42 +64,90 @@
 #ifndef _SO_DELAY_QUEUE_SENSOR_
 #define _SO_DELAY_QUEUE_SENSOR_
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoDelayQueueSensor
-//
-//
-//////////////////////////////////////////////////////////////////////////////
-
 #include <Inventor/sensors/SoSensor.h>
 
+/// Abstract base class for sensors not dependent on time.
+/// \ingroup Sensors
+/// Delay queue sensors are separate from timer queue sensors (see
+/// <tt>SoTimerQueueSensor</tt>) and provide methods for setting the relative
+/// priorities of the sensors in the delay queue (sensors with higher
+/// priorities will be triggered first).
+///
+///
+/// Sensors with non-zero priorities are added to the delay queue when
+/// scheduled, and are all processed once, in order, when the delay queue
+/// is processed, which normally happens as part of your program's main
+/// loop (see SoXt::mainLoop()). Typically, the delay
+/// queue is processed whenever there are no events waiting to be
+/// distributed and there are no timer queue sensors waiting to be
+/// triggered.  The delay queue also has a timeout to ensure that delay
+/// queue sensors are triggered even if there are always events or timer
+/// sensors waiting; see
+/// #SoDB::setDelaySensorTimeout().
+///
+///
+/// Sensors with priority 0 are treated specially.  Priority 0 sensors are
+/// triggered almost immediately after they are scheduled, before the
+/// program returns to the main loop.  Priority 0 sensors are not
+/// necessarily triggered immediately when they are scheduled, however; if
+/// they are scheduled as part of the evaluation of a field connection
+/// network they may not be triggered until the evaluation of the network
+/// is complete.  Also, if a priority 0 sensor is scheduled within the
+/// callback method of another priority 0 sensor, it will not be triggered
+/// until the callback method is complete (also note that if more than one
+/// priority 0 sensor is scheduled, the order in which they fire is
+/// undefined).
+/// \sa SoTimerQueueSensor, SoDataSensor, SoFieldSensor,
+/// SoIdleSensor,SoOneShotSensor, SoNodeSensor, SoPathSensor, SoSensorManager
 class SoDelayQueueSensor : public SoSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoDelayQueueSensor();
+
+    /// Constructor that takes standard callback function and data.
     SoDelayQueueSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destructor
     virtual ~SoDelayQueueSensor();
 
-    // Sets/returns the priority for the sensor. If the priority is
-    // changed to 0 (immediate) and it is already scheduled, the
-    // sensor is unscheduled and triggered.
-    void     setPriority(uint32_t pri);
+    /// Sets the priority of the sensor.  Priorities can be changed at
+    /// any time; if the priority is changed to zero and it is already
+    /// scheduled, the sensor is immediately triggered and removed from the
+    /// queue.
+    void setPriority(uint32_t pri);
+
+    /// Gets the priority of the sensor.
     uint32_t getPriority() const { return priority; }
 
-    // Returns default sensor priority
+    /// Returns the default delay queue sensor priority, which is 100.
     static uint32_t getDefaultPriority() { return 100; }
 
-    // Scheduling methods
-    virtual void   schedule();
-    virtual void   unschedule();
+    /// If this sensor's priority is non-zero, adds this sensor to the list of
+    /// delay queue sensors ready to be triggered.
+    /// This is a way of making a sensor fire without changing the thing it is
+    /// sensing.
+    ///
+    /// Calling #schedule() within the callback function
+    /// causes the sensor to be called repeatedly.  Because sensors are
+    /// processed only once every time the delay queue is processed (even if
+    /// they reschedule themselves), timers and events will still be
+    /// processed.  This should not be done with a priority zero sensor
+    /// because an infinite loop will result.
+    virtual void schedule();
+
+    /// If this sensor is scheduled, removes it from the delay queue so that
+    /// it will not be triggered.
+    virtual void unschedule();
+
+    /// Returns TRUE if this sensor has been scheduled and is waiting in the
+    /// delay queue to be triggered.  Sensors are removed from the queue
+    /// before their callback function is triggered.
     virtual SbBool isScheduled() const;
 
-    // This method is overriden by IdleSensors to tell sensor manager
-    // that they should only be processed when there really is idle
-    // time (and not when the delay queue timeout expires).
+    /// This method is overriden by IdleSensors to tell sensor manager
+    /// that they should only be processed when there really is idle
+    /// time (and not when the delay queue timeout expires).
     virtual SbBool isIdleOnly() const;
     SoINTERNAL
   public:

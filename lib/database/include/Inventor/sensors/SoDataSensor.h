@@ -66,55 +66,75 @@ class SoNotList;
 
 #include <Inventor/sensors/SoDelayQueueSensor.h>
 
+/// Abstract base class for sensors attached to parts of a scene.
+/// \ingroup Sensors
+/// Data sensors detect changes to scene graph objects (paths, nodes, or
+/// fields) and trigger their callback function when the object changes.
+///
+///
+/// Data sensors provide a delete callback that is called just before the
+/// object the data sensor is attached to is deleted; note that the
+/// callback should not attempt to modify the object in any way, or core
+/// dumps may result.
+///
+///
+/// Priority zero data sensors also provide methods that can be called in
+/// the callback function to determine exactly which node, field, or path
+/// caused the sensor to be triggered.
+/// \sa SoNodeSensor, SoPathSensor, SoFieldSensor, SoDelayQueueSensor
 class SoDataSensor : public SoDelayQueueSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoDataSensor();
+
+    /// Constructor that takes standard callback function and data.
     SoDataSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destructor
     virtual ~SoDataSensor();
 
-    // Sets a callback to call when the item (SoBase) to which the
-    // sensor is attached is about to be deleted. Set this to NULL to
-    // remove the callback.
+    /// Sets a callback that will be called when the object the sensor is
+    /// sensing is deleted.
     void setDeleteCallback(SoSensorCB *func, void *data = NULL) {
         deleteFunc = func;
         deleteData = data;
     }
 
-    // This may be called from the callback function of immediate
-    // (priority 0) sensors. It returns the node in the scene graph
-    // that caused the sensor to be scheduled and triggered, if
-    // there was such a node.  If there wasn't such a node, or if the
-    // sensor is not an immediate sensor, NULL is returned.
-    // This is only valid for immediate sensors because if the sensor
-    // isn't immediate then the sensor may be scheduled several times,
-    // and there isn't one particular node that can be said to have
-    // caused the trigger.
+    /// If this is a priority 0 data sensor,
+    /// returns the node/field that was modified that caused this sensor to
+    /// trigger. Returns NULL if the sensor was not triggered because a
+    /// node/field changed (for example, if #schedule() is called on the
+    /// sensor) or if this sensor is not a priority 0 sensor.  Note that
+    /// because one change to the scene
+    /// graph may cause multiple nodes or fields to be modified (because of
+    /// field-to-field connections), the node or field returned may not be the
+    /// only one that changed.
     SoNode *getTriggerNode() const;
 
-    // Like getTriggerNode(), but returns the field that started
-    // notification (NULL if the sensor isn't priority 0 or if
-    // notification didn't start at a field).
+    /// Like getTriggerNode(), but returns the field that started
+    /// notification (NULL if the sensor isn't priority 0 or if
+    /// notification didn't start at a field).
     SoField *getTriggerField() const;
 
-    // Returns the path from the node to which this sensor is attached
-    // down to the child node that changed.  setTriggerPathFlag(TRUE)
-    // must be called before the sensor is scheduled, or this will
-    // return NULL.  It will also return NULL if the sensor is not
-    // immediate or if the notification doesn't go through a node
+    /// Returns the path from the node to which this sensor is attached
+    /// down to the child node that changed.  setTriggerPathFlag(TRUE)
+    /// must be called before the sensor is scheduled, or this will
+    /// return NULL.  It will also return NULL if the sensor is not
+    /// immediate or if the notification doesn't go through a node
     SoPath *getTriggerPath() const;
 
-    // Sets/returns the flag that indicates whether the trigger path
-    // (see getTriggerPath()) is available to callback methods. This
-    // is FALSE by default. Note that setting this to TRUE will add a
-    // little overhead when the sensor is notified.
+    /// If this is a priority 0 data sensor,
+    /// returns a path to the node that caused this sensor to trigger.
+    /// Because recreating the path to the node that changed is relatively
+    /// expensive, <b>setTriggerPathFlag(TRUE)</b> must be called before the
+    /// sensor is scheduled.  If it is not called, or if the sensor wasn't
+    /// triggered because a node changed, this returns NULL.  NULL is also
+    /// returned if this is not a priority 0 sensor.
     void   setTriggerPathFlag(SbBool flag) { doTrigPath = flag; }
     SbBool getTriggerPathFlag() const { return doTrigPath; }
 
-    // Override unschedule() to reset trigNode and trigPath.
+    /// Override unschedule() to reset trigNode and trigPath.
     virtual void unschedule();
 
     SoINTERNAL

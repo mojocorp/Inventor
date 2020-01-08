@@ -62,32 +62,28 @@
 
 #include <vector>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoWriteAction
-//
-//  For writing scene graphs to files. There are two stages in this
-//  action. First it has to count references to nodes and paths, since
-//  multiply-referenced nodes and paths need to have temporary names
-//  defined for them. The second stage is writing the stuff out.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Writes a scene graph to a file.
+/// \ingroup Actions
+/// This class is used for writing scene graphs to files. It contains an
+/// <tt>SoOutput</tt> instance that by default writes to the standard output.
+/// Methods on the <tt>SoOutput</tt> can be called to specify what file or
+/// memory buffer to write to.
+/// \sa SoOutput
 class SoWriteAction : public SoAction {
 
     SO_ACTION_HEADER(SoWriteAction);
 
   public:
-    // Constructor (default action writes to stdout)
+    /// Constructor (default action writes to stdout)
     SoWriteAction();
 
-    // Constructor that takes SoOutput to write to
+    /// Constructor that takes an SoOutput to use for output.
     SoWriteAction(SoOutput *out);
 
-    // Destructor
+    /// Destructor
     virtual ~SoWriteAction();
 
-    // Returns SoOutput
+    /// Returns pointer to SoOutput instance in action.
     SoOutput *getOutput() const { return output; }
 
     SoINTERNAL

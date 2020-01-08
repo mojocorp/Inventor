@@ -55,11 +55,55 @@
 
 #include <Inventor/manips/SoTransformManip.h>
 
+/// Transform node with 3D interface for editing rotation and center.
+/// \ingroup Manips
+/// <tt>SoCenterballManip</tt>
+/// is derived from <tt>SoTransform</tt> (by way of <tt>SoTransformManip</tt>).
+/// When its fields
+/// change, nodes following it in the scene graph rotate, scale, and/or
+/// translate.
+///
+///
+/// As a subclass of <tt>SoTransformManip</tt>, this manipulator
+/// also has a 3D interface to edit some of its fields.
+/// In this case, the interface edits the #rotation and #center fields.
+///
+///
+/// A manipulator differs from a dragger. When you move a dragger,
+/// no other nodes are affected.  When you move an <tt>SoTransformManip</tt>,
+/// other nodes move along with it.
+/// (See the reference page for <tt>SoTransformManip</tt>.)
+///
+///
+/// The interface for an <tt>SoCenterballManip</tt> is exactly the same as that
+/// of the <tt>SoCenterballDragger</tt>.
+/// To find out more about the interface, see the reference page
+/// for <tt>SoCenterballDragger</tt>.  To find out how the manipulator uses a
+/// dragger to provide its interface, see the reference page for
+/// <tt>SoTransformManip</tt>.
+///
+///
+/// On screen, this manipulator will surround the objects influenced by its
+/// motion. This is because it turns on the <em>surroundScale</em> part of the
+/// dragger. (See the reference page for <tt>SoSurroundScale</tt>.)
+///
+/// \par File format/defaults:
+/// \code
+/// SoCenterballManip {
+///    translation      0 0 0
+///    rotation         0 0 1  0
+///    scaleFactor      1 1 1
+///    scaleOrientation 0 0 1  0
+///    center           0 0 0
+/// }
+/// \endcode
+/// \sa
+/// SoCenterballDragger,SoHandleBoxManip,SoJackManip,SoTabBoxManip,SoTrackballManip,SoTransformBoxManip,SoTransformerManip,SoTransform,SoTransformManip
 class SoCenterballManip : public SoTransformManip {
     SO_NODE_HEADER(SoCenterballManip);
 
   public:
-    // Constructors
+    /// Constructors
     SoCenterballManip();
 
     SoINTERNAL

@@ -76,10 +76,10 @@ class SoGLNormalElement : public SoNormalElement {
     SO_ELEMENT_HEADER(SoGLNormalElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sends indexed normal to GL
+    /// Sends indexed normal to GL
     void send(int index) const;
 
     SoINTERNAL

@@ -75,97 +75,90 @@ struct SoInputFile;
 
 /// Used to read Inventor data files.
 /// \ingroup General
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoInput
-//
-//  This file contains the definition of the SoInput (input stream)
-//  class. This class is used for reading Inventor data files; it
-//  supports both ASCII (default) and binary formats. It skips over
-//  Inventor comments (from '#' to end of line) and can stack input
-//  files when file inclusion is encountered; when EOF is reached, the
-//  stack is popped.
-//
-//  Another feature is file opening. This will open a named file,
-//  looking for it in any of several user-specified directories.
-//  Alternatively, the caller can specify a buffer in memory (and its
-//  size) to read from.
-//
-//  SoInput also contains a dictionary that correlates node and path
-//  pointers to temporary names written to files. This is so
-//  references to previously defined nodes and paths are written
-//  correctly.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// This class is used by the <tt>SoDB</tt> reading routines when reading
+/// Inventor data files.  It supports both ASCII (default) and binary
+/// Inventor formats.  Users can also register additional
+/// valid file headers.
+/// When reading, <tt>SoInput</tt> skips over Inventor comments
+/// (from '#' to end of
+/// line) and can stack input files. When EOF is reached, the stack is
+/// popped.  This class can also be used to read from a buffer in memory.
+/// \sa SoDB, SoOutput, SoTranReceiver
 class SoInput {
   public:
-    // Constructor (default SoInput reads from stdin)
+    /// Constructor (default SoInput reads from stdin)
     SoInput();
 
-    // Destructor closes file if SoInput opened it.
+    /// Destructor closes file if SoInput opened it.
     ~SoInput();
 
-    // Adds a directory to list of directories to search to find named
-    // files to open. Directories searched in order. By default, the list
-    // contains just the current directory.
+    /// Adds a directory to list of directories to search to find named
+    /// files to open. Directories searched in order. By default, the list
+    /// contains just the current directory.
     static void addDirectoryFirst(const SbString &dirName);
     static void addDirectoryLast(const SbString &dirName);
 
-    // Adds directories that are named in the value of the given
-    // environment variable. Directories may be separated by colons
-    // or whitespace in the value.
+    /// The SoInput class maintains a global list of directories that is
+    /// searched to find files when opening them. Directories are searched in
+    /// order. Each of these routines adds directories to the list, either at
+    /// the beginning ("First") or the end ("Last"). The last two routines add
+    /// directories named in the value of the given environment variable.
+    /// Directories may be separated by colons or whitespace in the variable's
+    /// value.
     static void addEnvDirectoriesFirst(const SbString &envVarName);
     static void addEnvDirectoriesLast(const SbString &envVarName);
 
-    // Removes given directory from list.
+    /// Removes named directory from the list.
     static void removeDirectory(const SbString &dirName);
 
-    // Clears list of directories, including the current directory.
+    /// Clears the list of directories (including the current directory).
     static void clearDirectories();
 
-    // Returns the current list of directories.
+    /// Returns the list of directories as an SbStringList.
     static const SbStringList &getDirectories();
 
-    // Sets initial file pointer to read from. Clears stack if necessary.
+    /// Sets file pointer to read from. Clears the stack of input files if
+    /// necessary.
     void setFilePointer(FILE *newFP);
 
-    // Opens named file, sets file pointer to result. Clears stack if
-    // necessary. Returns FALSE on error. If okIfNotFound is FALSE
-    // (the default), it prints an error message if the file could not
-    // be found.
+    /// Opens named file, sets file pointer to result. Clears the stack of
+    /// input files if necessary. This returns FALSE on error; if
+    /// \a okIfNotFound is FALSE (the default), this prints an error message
+    /// if the file could not be found.
     SbBool openFile(const SbString &fileName, SbBool okIfNotFound = FALSE);
 
-    // Opens named file, pushes resulting file pointer onto stack.
-    // Returns FALSE on error
+    /// Opens named file, pushing the resulting file pointer onto the stack.
+    /// Returns FALSE on error.
     SbBool pushFile(const SbString &fileName);
 
-    // Closes all files on stack opened with openFile or pushFile
+    /// Closes all files on stack opened with #openFile() or #pushFile()
     void closeFile();
 
-    // Returns TRUE if currently open file is a valid file;
-    // that is, it begins with a header that has been registered
-    // with SoDB::registerHeader.
+    /// Returns TRUE if the currently open file is a valid Inventor file; that
+    /// is, it begins with a valid Inventor header, or one that has been
+    /// registered with SoDB::registerHeader.
     SbBool isValidFile();
 
-    // Returns pointer to current file, or NULL if reading from buffer
+    /// Returns a pointer to the current file, or NULL if reading from a buffer.
     FILE *getCurFile() const;
 
-    // Returns full name of current file, or NULL if reading from buffer
+    /// Returns full name (including directory path) of current file, or empty
+    /// string if reading from a buffer.
     const SbString &getCurFileName() const;
 
-    // Sets up buffer to read from and its size
+    /// Sets an in-memory buffer to read from, along with its size.
     void setBuffer(void *bufPointer, size_t bufSize);
 
-    // Returns number of bytes read from buffer. Returns 0 if not
-    // reading from a buffer.
+    /// Returns number of bytes read from buffer. Returns 0 if not
+    /// reading from a buffer.
     size_t getNumBytesRead() const;
 
-    // Returns the header of the file being read
+    /// Returns the header of the file being read.
     SbString getHeader();
 
-    // Returns the Inventor version of the file being read.
+    /// Returns the Inventor file version of the file being read (e.g. 2.1).
+    /// If the file has a header registered through SoDB::registerHeader(),
+    /// the returned version is the Inventor version registered with the header.
     float getIVVersion() const;
 
     SoEXTENDER

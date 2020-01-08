@@ -78,7 +78,7 @@ class SoGLCoordinateElement : public SoCoordinateElement {
     SO_ELEMENT_HEADER(SoGLCoordinateElement);
 
   public:
-    // Sends indexed coordinate to GL
+    /// Sends indexed coordinate to GL
     void send(int index) const;
 
     SoINTERNAL

@@ -85,30 +85,29 @@ SoEXTENDER
 class SoGLRenderCache : public SoCache {
 
   public:
-    // Constructor and destructor
+    /// Constructor
     SoGLRenderCache(SoState *state);
-    ~SoGLRenderCache();
 
-    // Maintain list of cache dependencies.  If one cache calls
-    // another inside of it, we have to make sure that the inner cache
-    // isn't deleted before the outer one.
+    /// Maintain list of cache dependencies.  If one cache calls
+    /// another inside of it, we have to make sure that the inner cache
+    /// isn't deleted before the outer one.
     virtual void addNestedCache(SoGLDisplayList *child);
 
-    // Opens/closes the cache. All GL commands made between an open()
-    // and a close() will be part of the the display list cache.
-    // Calling open automatically sets SoCacheElement.
+    /// Opens/closes the cache. All GL commands made between an open()
+    /// and a close() will be part of the the display list cache.
+    /// Calling open automatically sets SoCacheElement.
     void open(SoState *state);
     void close();
 
-    // Calls the cache. The display list will be sent to GL.  This
-    // automatically calls addCacheDependency on any open cache.
+    /// Calls the cache. The display list will be sent to GL.  This
+    /// automatically calls addCacheDependency on any open cache.
     void call(SoState *state);
 
-    // Returns TRUE if cache is valid with respect to the given state
-    // The GL version tests for GL Enable flags, first.
+    /// Returns TRUE if cache is valid with respect to the given state
+    /// The GL version tests for GL Enable flags, first.
     virtual SbBool isValid(const SoState *state) const;
 
-    // method for the lazy element to set flags:
+    /// method for the lazy element to set flags:
     void setLazyBits(uint32_t ivFlag, uint32_t glFlag, uint32_t sendFlag) {
         checkGLFlag |= glFlag;
         checkIVFlag |= ivFlag;
@@ -124,6 +123,9 @@ class SoGLRenderCache : public SoCache {
     virtual void destroy(SoState *state);
 
   private:
+    /// Destructor
+    ~SoGLRenderCache();
+
     SoGLDisplayList *              list;         // Display list structure
     SbBool                         listOpen;     // Whether display list is open
     std::vector<SoGLDisplayList *> nestedCaches; // List of nested caches

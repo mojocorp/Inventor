@@ -83,29 +83,29 @@ class SoClipPlaneElement : public SoAccumulatedElement {
     SO_ELEMENT_HEADER(SoClipPlaneElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Adds a clip plane to the current set in the state
+    /// Adds a clip plane to the current set in the state
     static void add(SoState *state, SoNode *node, const SbPlane &plane);
 
-    // Overrides push() method to copy values from next instance in the stack
+    /// Overrides push() method to copy values from next instance in the stack
     virtual void push(SoState *state);
 
-    // Overrides pop() method to free up planes that were added
+    /// Overrides pop() method to free up planes that were added
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
-    // Returns the top (current) instance of the element in the state
+    /// Returns the top (current) instance of the element in the state
     static const SoClipPlaneElement *getInstance(SoState *state);
 
-    // Returns the number of planes in an instance
+    /// Returns the number of planes in an instance
     int getNum() const;
 
-    // Returns the indexed plane an element as an SbPlane. The plane
-    // can be returned in object or world space.
+    /// Returns the indexed plane an element as an SbPlane. The plane
+    /// can be returned in object or world space.
     const SbPlane &get(int index, SbBool inWorldSpace = TRUE) const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

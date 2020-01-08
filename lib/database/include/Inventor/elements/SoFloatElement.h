@@ -78,13 +78,13 @@ class SoFloatElement : public SoElement {
     SO_ELEMENT_ABSTRACT_HEADER(SoFloatElement);
 
   public:
-    // Comparison based on value of floats
+    /// Comparison based on value of floats
     virtual SbBool matches(const SoElement *elt) const;
 
-    // Copy method, takes care copying the data.
+    /// Copy method, takes care copying the data.
     virtual SoElement *copyMatchInfo() const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

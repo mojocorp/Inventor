@@ -59,31 +59,41 @@
 #include <Inventor/fields/SoSFPath.h>
 #include <Inventor/nodes/SoGroup.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPathSwitch
-//
-//  PathSwitch group node: traverses all children only if the path
-//  traversed so far matches the one stored in the "path" field. A
-//  successful match means that the N nodes in the stored path chain
-//  are the same as the last N nodes in the current path, not
-//  including the path switch node itself. A NULL path (the default)
-//  means don't traverse the children.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Group node that traverses only when traversed along a given path.
+/// \ingroup Nodes
+/// <tt>SoPathSwitch</tt> is a group node that traverses its children only if
+/// the current traversal path matches the <tt>SoPath</tt> in the #path
+/// field. This can be used, for example, to affect only one instance of a
+/// subgraph. The #path field contains the path up to (but not
+/// including) the <tt>SoPathSwitch</tt>. The path need not go all the way back
+/// to the root; if it does not, then only the number of ancestors that
+/// are in the path are compared to see if the children should be
+/// traversed. A NULL path means that the children are never traversed.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction, SoHandleEventAction</b> Traverses the children if the paths
+/// match.
+///
+/// \par File format/defaults:
+/// \code
+/// SoPathSwitch {
+///    path	NULL
+/// }
+/// \endcode
+/// \sa SoPath, SoSwitch
 class SoPathSwitch : public SoGroup {
 
     SO_NODE_HEADER(SoPathSwitch);
 
   public:
     // Fields
-    SoSFPath path; // Path to match
+    SoSFPath path; ///< The path that must match the current traversal path.
 
-    // Default constructor
+    /// Creates a path switch node with default settings.
     SoPathSwitch();
 
-    // Constructor that takes approximate number of children
+    /// Constructor that takes approximate number of children.
     SoPathSwitch(int nChildren);
 
     SoEXTENDER

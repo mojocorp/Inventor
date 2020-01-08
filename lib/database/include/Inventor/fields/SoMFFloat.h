@@ -58,12 +58,19 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFFloat subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of floating point values.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of floating point
+/// values.
+///
+/// <tt>SoMFFloat</tt>s are written to file as one or more values in standard
+/// scientific notation.  When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ 1.0, 2.3, 5, 6.2e4, -100, ]
+///
+/// The last comma is optional.
 class SoMFFloat : public SoMField {
 
     // Use standard field stuff

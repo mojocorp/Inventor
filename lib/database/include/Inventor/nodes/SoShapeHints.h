@@ -61,56 +61,115 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoShapeHints
-//
-//  This node is used to give hints about subsequent shapes defined in
-//  a scene graph. It allows Inventor to provide or optimize certain
-//  features (such as back-face culling and two-sided lighting) based
-//  on information about shapes. The vertexOrdering, faceType, and
-//  shapeType fields hold this information. There is also a crease
-//  angle field, which is used when default normals are generated for
-//  a polyhedral shape. It defines the smallest edge angle that will
-//  be shaded as a crease (faceted), rather than as smooth.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that provides hints about shapes.
+/// \ingroup Nodes
+/// By default, Inventor assumes very little about the shapes it renders.
+/// You can use the <tt>SoShapeHints</tt> node to indicate that vertex-based
+/// shapes (those derived from <tt>SoVertexShape</tt>) are solid, contain
+/// ordered vertices, or contain convex faces.  For fastest rendering,
+/// specify SOLID, COUNTERCLOCKWISE, CONVEX shapes.
+///
+/// These hints allow Inventor to optimize certain rendering features.
+/// Optimizations that may be performed include enabling back-face culling
+/// and disabling two-sided lighting. For example, if an object is solid
+/// and has ordered vertices, Inventor turns on backface culling and turns
+/// off two-sided lighting. If the object is not solid but has ordered
+/// vertices, it turns off backface culling and turns on two-sided
+/// lighting. In all other cases, both backface culling and two-sided
+/// lighting are off.
+///
+/// The <tt>SoShapeHints</tt> node also affects how default normals are
+/// generated.  When a node derived from <tt>SoVertexShape</tt> has to generate
+/// default normals, it uses the #creaseAngle field to determine which
+/// edges should be smooth-shaded and which ones should have a sharp
+/// crease.  The crease angle is the angle between surface normals on
+/// adjacent polygons. For example, a crease angle of .5 radians
+/// means that an edge between two adjacent polygonal faces
+/// will be smooth shaded if the normals to the two faces form an angle
+/// that is less than .5 radians (about 30 degrees). Otherwise, it will
+/// be faceted.  Normal generation is fastest when the creaseAngle is 0
+/// (the default), producing one normal per facet.  A creaseAngle of pi
+/// produces one averaged normal per vertex.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoRayPickAction,
+/// SoGetBoundingBoxAction</b> Sets the state to contain the hints; sets up
+/// optimizations based on the hints.
+///
+/// \par File format/defaults:
+/// \code
+/// SoShapeHints {
+///    vertexOrdering   UNKNOWN_ORDERING
+///    shapeType        UNKNOWN_SHAPE_TYPE
+///    faceType         CONVEX
+///    creaseAngle      0
+/// }
+/// \endcode
+/// \sa SoVertexShape
 class SoShapeHints : public SoNode {
 
     SO_NODE_HEADER(SoShapeHints);
 
   public:
-    // Hints about ordering of face vertices: if ordering of all
-    // vertices of all faces is known to be consistent when viewed
-    // from "outside" shape or not.
+    /// Hints about ordering of face vertices: if ordering of all
+    /// vertices of all faces is known to be consistent when viewed
+    /// from "outside" shape or not.
     enum VertexOrdering {
-        UNKNOWN_ORDERING = SoShapeHintsElement::UNKNOWN_ORDERING,
-        CLOCKWISE = SoShapeHintsElement::CLOCKWISE,
-        COUNTERCLOCKWISE = SoShapeHintsElement::COUNTERCLOCKWISE
+        UNKNOWN_ORDERING =
+            SoShapeHintsElement::UNKNOWN_ORDERING, ///< Ordering of vertices is
+                                                   ///< unknown
+        CLOCKWISE =
+            SoShapeHintsElement::CLOCKWISE, ///< Face vertices are ordered
+                                            ///< clockwise (from the outside)
+        COUNTERCLOCKWISE =
+            SoShapeHintsElement::COUNTERCLOCKWISE ///< Face vertices are ordered
+                                                  ///< counterclockwise (from
+                                                  ///< the outside)
     };
 
-    // Hints about entire shape: if shape is known to be a solid
-    // object, as opposed to a surface.
+    /// Hints about entire shape: if shape is known to be a solid
+    /// object, as opposed to a surface.
     enum ShapeType {
-        UNKNOWN_SHAPE_TYPE = SoShapeHintsElement::UNKNOWN_SHAPE_TYPE,
-        SOLID = SoShapeHintsElement::SOLID
+        UNKNOWN_SHAPE_TYPE =
+            SoShapeHintsElement::UNKNOWN_SHAPE_TYPE, ///< Nothing is known about
+                                                     ///< the shape
+        SOLID = SoShapeHintsElement::SOLID ///< The shape encloses a volume
     };
 
-    // Hints about faces of shape: if all faces are known to be convex
-    // or not.
+    /// Hints about faces of shape: if all faces are known to be convex
+    /// or not.
     enum FaceType {
-        UNKNOWN_FACE_TYPE = SoShapeHintsElement::UNKNOWN_FACE_TYPE,
-        CONVEX = SoShapeHintsElement::CONVEX
+        UNKNOWN_FACE_TYPE =
+            SoShapeHintsElement::UNKNOWN_FACE_TYPE, ///< Nothing is known about
+                                                    ///< faces
+        CONVEX = SoShapeHintsElement::CONVEX        ///< All faces are convex
     };
 
     // Fields
-    SoSFEnum  vertexOrdering; // Ordering of face vertices
-    SoSFEnum  shapeType;      // Info about shape geometry
-    SoSFEnum  faceType;       // Info about face geometry
-    SoSFFloat creaseAngle;    // Smallest angle for sharp edge
+    /// Indicates how the vertices of faces are ordered. <b>CLOCKWISE</b>
+    /// ordering means that the vertices of each face form a clockwise loop
+    /// around the face, when viewed from the outside (the side toward which
+    /// the normal points).
+    SoSFEnum vertexOrdering;
 
-    // Constructor
+    /// Indicates whether the shape is known to enclose a volume (<b>SOLID</b>)
+    /// or not. If the inside (the side away from the surface normal) of any
+    /// part of the shape is visible, the shape is not solid.
+    SoSFEnum shapeType;
+
+    /// Indicates whether each face is convex. Because the penalty for
+    /// non-convex faces is very steep (faces must be triangulated
+    /// expensively), the default assumes all faces are convex. Therefore,
+    /// shapes with concave faces may not be displayed correctly unless this
+    /// hint is set to <b>UNKNOWN_FACE_TYPE</b>.
+    SoSFEnum faceType;
+
+    /// Indicates the minimum angle (in radians) between two adjacent face
+    /// normals required to form a sharp crease at the edge when default
+    /// normals are computed and used.
+    SoSFFloat creaseAngle;
+
+    /// Creates a shape hints node with default settings.
     SoShapeHints();
 
     SoEXTENDER

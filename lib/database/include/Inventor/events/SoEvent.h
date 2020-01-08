@@ -62,45 +62,76 @@
 #include <Inventor/SbTime.h>
 #include <Inventor/SoType.h>
 
+/// Base class for all events.
+/// \ingroup Events
+/// <tt>SoEvent</tt> is the base class for events in the Inventor
+/// event model. An event typically represents a user action, such as
+/// a mouse button being pressed or a keyboard key being released.
+/// <tt>SoEvent</tt> contains general information found in all Inventor
+/// events, including the time the event occurred, the position of the
+/// locater when the event occurred, and the state of the modifier
+/// keys when the event occurred.
+/// \sa SoButtonEvent, SoKeyboardEvent, SoLocation2Event, SoMotion3Event,
+/// \sa SoMouseButtonEvent, SoSpaceballButtonEvent,SoHandleEventAction,
+/// \sa SoEventCallback, SoSelection, SoInteraction,SoXtDevice, SoXtRenderArea
 class SoEvent {
   public:
-    // Constructor and destructor
+    /// Constructor and destructor
     SoEvent();
+
+    /// Destructor
     virtual ~SoEvent();
 
-    // returns typeId of this event
+    /// Return the type id for this event instance.
     virtual SoType getTypeId() const;
 
-    // typeId of the class
+    /// Return the type id for the SoEvent class.
     static SoType getClassTypeId() { return classTypeId; }
 
-    // returns TRUE if event is of given type or is derived from it
+    /// returns TRUE if event is of given type or is derived from it
     SbBool isOfType(SoType type) const;
 
-    // returns the time stamp specifying when this event occurred
-    void   setTime(SbTime t) { timestamp = t; }
+    /// Set the time at which the event occurred.
+    void setTime(SbTime t) { timestamp = t; }
+
+    /// Get the time at which the event occurred.
     SbTime getTime() const { return timestamp; }
 
-    // set/get window pixel position of the locator when the event occurred.
-    // position is relative to the lower left corner of the viewport
-    void           setPosition(const SbVec2s &p) { position = p; }
+    /// Set the window pixel location of the cursor when the event occurred.
+    /// The position is relative to the lower left corner of the window
+    /// in which the event occurred.
+    void setPosition(const SbVec2s &p) { position = p; }
+
+    /// Get the window pixel location of the cursor when the event occurred.
+    /// The position is relative to the lower left corner of the window
+    /// in which the event occurred.
     const SbVec2s &getPosition() const { return position; }
 
-    // get position reletive to the specified viewport bounds
+    /// Get the viewport pixel location of the cursor when the event occurred,
+    /// relative to the specified viewport region.
     const SbVec2s &getPosition(const SbViewportRegion &vpRgn) const;
 
-    // get position reletive to the specified viewport bounds
-    // and normalize this value between 0.0 and 1.0
+    /// Get the normalized location of the cursor when the event occurred,
+    /// relative to the specified viewport region. The returned value will
+    /// lie between 0.0 and 1.0.
     const SbVec2f &getNormalizedPosition(const SbViewportRegion &vpRgn) const;
 
-    // set the state of the modifier keys when the event occurred
+    /// Set whether the modifier key was down when the event occurred.
     void setShiftDown(SbBool isDown) { shiftDown = isDown; }
+
+    /// Set whether the modifier key was down when the event occurred.
     void setCtrlDown(SbBool isDown) { ctrlDown = isDown; }
+
+    /// Set whether the modifier key was down when the event occurred.
     void setAltDown(SbBool isDown) { altDown = isDown; }
 
-    // return the state of the modifier keys when the event occurred
+    /// Get whether the modifier key was down when the event occurred.
     SbBool wasShiftDown() const { return shiftDown; }
+
+    /// Get whether the modifier key was down when the event occurred.
     SbBool wasCtrlDown() const { return ctrlDown; }
+
+    /// Get whether the modifier key was down when the event occurred.
     SbBool wasAltDown() const { return altDown; }
 
     SoINTERNAL

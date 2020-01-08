@@ -58,12 +58,13 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFBool subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a single boolean value.
+/// \ingroup Fields
+/// A field containing a single boolean (true or false) value.
+///
+/// <tt>SoSFBools</tt> may be written to file as "0" (representing FALSE), "1",
+/// "TRUE", or "FALSE".
+/// \sa SoField, SoSField, SoMFBool
 class SoSFBool : public SoSField {
 
     // Use standard field stuff

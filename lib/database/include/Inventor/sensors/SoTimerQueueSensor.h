@@ -64,23 +64,43 @@
 #include <Inventor/sensors/SoSensor.h>
 #include <Inventor/SbTime.h>
 
+/// Abstract base class for sensors dependent on time.
+/// \ingroup Sensors
+/// Timer queue sensors are sensors that trigger themselves at specific
+/// times.  The timer queue is normally processed as part of a programs
+/// main loop when the program is not busy doing something else.  Note
+/// that processing the timer queue is not asynchronous \(em the program must
+/// re-enter its main loop for timers to be triggered.  When the timer
+/// queue is processed, all timers scheduled to go off at or before the
+/// current time are triggered once, in order from earliest to latest.
+/// \sa SoTimerSensor, SoAlarmSensor, SoIdleSensor, SoOneShotSensor,
+/// SoDataSensor
 class SoTimerQueueSensor : public SoSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoTimerQueueSensor();
+
+    /// Constructor that takes standard callback function and data
     SoTimerQueueSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destructor
     virtual ~SoTimerQueueSensor();
 
-    // Returns the time at which the sensor is scheduled to be
-    // triggered. Results are undefined if the sensor is not scheduled.
+    /// Returns the time at which this sensor is scheduled to be triggered.
+    /// If the sensor is not scheduled the results are undefined.
     const SbTime &getTriggerTime() const { return trigTime; }
 
-    // Scheduling methods
-    virtual void   schedule();
-    virtual void   unschedule();
+    /// Adds this sensor to the timer queue.  Subclasses provide methods for
+    /// setting when the sensor will be triggered.
+    virtual void schedule();
+
+    /// If this sensor is scheduled, removes it from the timer queue so that
+    /// it will not be triggered.
+    virtual void unschedule();
+
+    /// Returns TRUE if this sensor has been scheduled and is waiting in the
+    /// timer queue to be triggered.
     virtual SbBool isScheduled() const;
 
   protected:

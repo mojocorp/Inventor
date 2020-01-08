@@ -89,6 +89,67 @@
 //      "cameraList"    "lightList"   "childList"
 //
 ////////////////////////////////////////////////////////////////////
+/// Scene nodekit class.
+/// \ingroup Nodekits
+/// This nodekit is used to organize camera, (<tt>SoCameraKit</tt>),
+/// light, (<tt>SoLightKit</tt>), and object, (<tt>SoShapeKit</tt>,
+/// <tt>SoSeparatorKit</tt>, and <tt>SoWrapperKit</tt>) nodekits into a scene.
+/// A scene is composed of a list of cameras, a list of lights, and a list of
+/// children. There are three parts created by this nodekit:
+/// <em>cameraList</em>, <em>lightList</em>, and <em>childList</em>.
+///
+///
+/// The <em>cameraList</em> part is a <em>list part</em> of <tt>SoCameraKit</tt>
+/// nodes. The list itself is an <tt>SoNodeKitListPart</tt>, and since only one
+/// camera can be active at a time, the <em>container</em> of the <em>list
+/// part</em> is an <tt>SoSwitch</tt> node. Use #setCameraNumber(), and the
+/// scene kit will set the switch to make that camera active.
+///
+///
+/// The <em>lightList</em> part is a list of <tt>SoLightKit</tt> nodes.
+/// The <em>lightList</em> is used to illuminate the objects
+/// contained in the <em>childList</em> part.
+///
+///
+/// The <em>childList</em> part contains a set of <tt>SoSeparatorKit</tt> nodes.
+/// You can add any kind of <tt>SoSeparatorKit</tt> to this list,
+/// including <tt>SoShapeKit</tt> and <tt>SoWrapperKit</tt>.  Since each
+/// <tt>SoSeparatorKit</tt> in turn contains a <em>childList</em>, this part is
+/// used to describe a hierarchical scene. (See the reference page for
+/// <tt>SoSeparatorKit</tt>). All members of <em>childList</em> are lit by the
+/// lights in <em>lightList</em> and rendered by the active camera in
+/// <em>cameraList</em>.
+/// \par Nodekit structure:
+/// \code CLASS SoSceneKit
+/// -->"this"
+///       "callbackList"
+/// -->   "topSeparator"
+/// -->      "cameraList"
+/// -->      "lightList"
+/// -->      "childList"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoSceneKit {
+///     callbackList    NULL
+///     cameraList      NodeKitListPart {
+///                         containerTypeName   "Switch"
+///                         childTypeNames      "CameraKit"
+///                         containerNode       Switch {
+///                                                 whichChild 0
+///                                                 CameraKit {
+///                                                     camera PerspectiveCamera
+///                                                     { }
+///                                                 }
+///                                             }
+///                     }
+///     lightList       NULL
+///     childList       NULL
+/// }
+/// \endcode
+/// \sa
+/// SoAppearanceKit,SoBaseKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSeparatorKit,SoShapeKit,SoWrapperKit
 class SoSceneKit : public SoBaseKit {
 
     SO_KIT_HEADER(SoSceneKit);
@@ -100,14 +161,14 @@ class SoSceneKit : public SoBaseKit {
     SO_KIT_CATALOG_ENTRY_HEADER(childList);
 
   public:
-    // constructor
+    /// Default constructor
     SoSceneKit();
 
-    // sets the switch node in 'cameraList' to be the number given
+    /// Sets the switch node in 'cameraList' to be the number given
     int  getCameraNumber();
     void setCameraNumber(int camNum);
 
-    // Overrides default method on SoNode
+    /// Overrides default method on SoNode
     virtual SbBool affectsState() const;
 
     SoINTERNAL

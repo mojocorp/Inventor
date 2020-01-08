@@ -69,11 +69,18 @@
 #include <sys/types.h>
 #include <stdio.h>
 
+/// @cond INTERNAL
 #ifndef FALSE
 #define FALSE 0
 #define TRUE 1
 #endif
 
+/// A Boolean type.
+/// \ingroup Basics
+/// This typedef is used to represent the Boolean
+/// values TRUE and FALSE.
+/// <tt>SbBool</tt> is not a class and does not have any methods
+/// or variables.
 typedef int SbBool;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -106,4 +113,5 @@ typedef int SbBool;
 #define SoEXTENDER
 #define SoINTERNAL
 
+/// @endcond
 #endif /* _SB_BASIC_ */

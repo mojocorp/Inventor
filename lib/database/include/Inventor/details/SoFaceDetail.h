@@ -59,38 +59,46 @@
 #include <vector>
 #include <Inventor/details/SoPointDetail.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoFaceDetail
-//
-//  Detail information about vertex-based shapes made of faces. It
-//  adds indices of various items that vary among faces and vertices.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Stores detail information about vertex-based shapes made of faces.
+/// \ingroup Details
+/// This class contains detail information about a point on a face in a
+/// vertex-based shape made of faces.  The information includes the number
+/// of points in the face, the points forming the vertices of the face,
+/// and the index of the face within the shape.
+///
+/// Note that when an <tt>SoFaceDetail</tt> is returned from picking (in an
+/// <tt>SoPickedPoint</tt>), it will contain details for all points defining
+/// the face that was intersected. However, when an <tt>SoFaceDetail</tt> is
+/// created for a triangle produced during primitive generation (in an
+/// <tt>SoPrimitiveVertex</tt>), it will contain details for only the three
+/// vertices of the triangle.
+/// \sa SoDetail, SoPickedPoint, SoPrimitiveVertex, SoVertexShape
 class SoFaceDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoFaceDetail);
 
   public:
-    // Constructor and destructor.
+    /// Constructor and destructor.
     SoFaceDetail();
+
+    /// Destructor
     virtual ~SoFaceDetail();
 
-    // Returns the number of points in the face
+    /// Returns the number of points in the face
     int32_t getNumPoints() const { return point.size(); }
 
-    // Returns the point detail for the indexed point of the face
+    /// Returns information about the point forming the \a i'th vertex of the
+    /// face, represented as an \a SoPointDetail.
     const SoPointDetail *getPoint(int i) const { return &point[i]; }
 
-    // Returns the index of the face within a shape
+    /// Returns the index of the face within a shape
     int32_t getFaceIndex() const { return faceIndex; }
 
-    // Returns the index of the part within a shape
+    /// Returns the index of the part within a shape
     int32_t getPartIndex() const { return partIndex; }
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SoDetail *copy() const;
 
     SoEXTENDER

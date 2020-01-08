@@ -61,28 +61,62 @@
 #include <Inventor/nodes/SoSubNode.h>
 class SoColorPacker;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoMaterial
-//
-//  Surface material node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Surface material definition node.
+/// \ingroup Nodes
+/// This node defines the current surface material properties for all
+/// subsequent shapes. <tt>SoMaterial</tt> sets several components of the
+/// current material during traversal.
+///
+/// Multiple values can be specified for
+/// the #diffuseColor and #transparency.
+/// Different shapes interpret
+/// materials with multiple values differently. To bind materials to
+/// shapes, use an <tt>SoMaterialBinding</tt> node.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction</b>
+/// Sets the ambient color, the diffuse color, the specular color, the
+/// emissive color, the shininess, and the transparency of the current
+/// material.
+///
+/// \par File format/defaults:
+/// \code
+/// SoMaterial {
+///    ambientColor     0.2 0.2 0.2
+///    diffuseColor     0.8 0.8 0.8
+///    specularColor    0 0 0
+///    emissiveColor    0 0 0
+///    shininess        0.2
+///    transparency     0
+/// }
+/// \endcode
+/// \sa SoBaseColor,SoLightModel,SoMaterialBinding,SoPackedColor
 class SoMaterial : public SoNode {
 
     SO_NODE_HEADER(SoMaterial);
 
   public:
     // Fields
-    SoMFColor ambientColor;  // Ambient color
-    SoMFColor diffuseColor;  // Diffuse color
-    SoMFColor specularColor; // Specular color
-    SoMFColor emissiveColor; // Emissive color
-    SoMFFloat shininess;     // Shininess
-    SoMFFloat transparency;  // Transparency
+    SoMFColor ambientColor;  ///< Ambient color of the surface.
+    SoMFColor diffuseColor;  ///< Diffuse color(s) of the surface.
+    SoMFColor specularColor; ///< Specular color of the surface.
+    SoMFColor emissiveColor; ///< Emissive color of the surface.
+    /// Shininess coefficient of the surface. Values can range from 0.0 for
+    /// no shininess (a diffuse surface) to 1.0 for maximum shininess (a
+    /// highly polished surface).
+    SoMFFloat shininess;
 
-    // Constructor
+    /// Transparency value(s) of the surface. Values can range from 0.0 for
+    /// opaque surfaces to 1.0 for completely transparent surfaces.  If the
+    /// transparency type is <tt>SoGLRenderAction::SCREEN_DOOR</tt> then only
+    /// the first transparency value will be used.  With other transparency
+    /// types, multiple transparencies will be used, if the <tt>SoMaterial</tt>
+    /// node contains as many transparencies as diffuse colors.  If there are
+    /// not as many transparencies as diffuse colors, only the first
+    /// transparency will be used.
+    SoMFFloat transparency;
+
+    /// Creates a material node with default settings.
     SoMaterial();
 
     SoEXTENDER

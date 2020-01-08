@@ -59,12 +59,13 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFVec4f subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a homogeneous three-dimensional vector.
+/// \ingroup Fields
+/// Field containing a homogeneous three-dimensional vector.
+///
+/// <tt>SoSFVec4fs</tt> are written to file as four floating
+/// point values separated by whitespace.
+/// \sa SoField, SoSField, SoMFVec4f
 class SoSFVec4f : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFVec4f, SbVec4f, const SbVec4f &);
@@ -74,10 +75,10 @@ class SoSFVec4f : public SoSField {
     // Some additional convenience functions:
     //
 
-    // Set value from 4 floats
+    /// Set value from 4 floats
     void setValue(float x, float y, float z, float w);
 
-    // Set value from array of 4 floats
+    /// Set value from array of 4 floats
     void setValue(const float xyzw[4]);
 
     SoINTERNAL

@@ -72,21 +72,21 @@ class SoComplexityElement : public SoFloatElement {
     SO_ELEMENT_HEADER(SoComplexityElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current complexity in the state
+    /// Sets the current complexity in the state
     static void set(SoState *state, float comp) {
         SoFloatElement::set(classStackIndex, state, comp);
     }
 
-    // Returns current complexity from the state
+    /// Returns current complexity from the state
     static float get(SoState *state) {
         return SoFloatElement::get(classStackIndex, state);
     }
 
-    // Returns the default complexity
-    static float getDefault() { return 0.5; }
+    /// Returns the default complexity
+    static float getDefault() { return 0.5f; }
 
     SoINTERNAL
   public:

@@ -64,64 +64,102 @@
 
 class SoFullPath;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoSurroundScale
-//
-//  Appends a transform to the localMatrix so that a default size  cube will
-//  surround the objects specified by its fields.
-//
-//  To determine what to surround, the node looks at the current path in
-//  the action.  An SoGetBoundingBoxAction is applied to the node that is
-//  'numNodesUpToContainer' nodes above this node in the path.
-//  The action will be told to reset the bounding box upon traversal of the
-//  node that is 'numNodesUpToReset' nodes above this node in the path.
-//
-//  For example, when a trackballManip wants to surround the objects it
-//  is going to move, the scene graph will look something like this:
-//
-//               Separator
-//                |
-//     -------------------------
-//     |                       |
-//   trackballManip       subGraphOfObjectsThatWilMove
-//     |
-//    trackballDragger
-//     |
-//    topSeparator(top part within of the dragger)
-//     |
-//    -----------------------------------
-//    |            |                    |
-//  motionMatrix  surroundScale     parts of the dragger.
-//
-//   The manip will set the fields on the surround scale node to be:
-//   numNodesUpToContainer = 4;
-//   numNodesUpToReset = 3;
-//
-//  The action will therefore be applied to the Separator, and will be
-//  reset after traversing the trackballManip.
-//  So the surroundScale will surround the objects below 'separator' and
-//  not including 'trackballManip,' producing the desired effect.
-//
-//  Note that, therefore, designers of draggers and manipulators which use
-//  this node should base their models on default size cubes (2 by 2 by 2).
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Transformation node that adjusts the current matrix so a default cube will
+/// surround other objects.
+/// \ingroup Nodes
+/// When traversed by an action, this
+/// node appends a transformation to the current transformation matrix so that a
+/// default size  cube will surround the objects specified by its fields.
+/// Transform manipulators, such as <tt>SoHandleBoxManip</tt>, use these nodes
+/// to make themselves surround other objects.
+///
+/// This node only recalculates after the
+/// #invalidate() method has been
+/// called. Otherwise it uses a saved scale and translation.
+///
+/// When calculating what to surround, the <tt>SoSurroundScale</tt>
+/// looks at the current path in
+/// the action and at its own field values.
+/// Then <tt>SoSurroundScale</tt> applies an <tt>SoGetBoundingBoxAction</tt>
+/// to the node that is
+/// #numNodesUpToContainer nodes above it on the path.
+/// <tt>SoSurroundScale</tt> also tells the action to reset
+/// the bounding box upon traversal of the
+/// node located #numNodesUpToReset nodes above it in the path.
+/// The <tt>SoSurroundScale</tt> then appends a translation and scale
+/// to the current transformation
+/// so that a default size <tt>SoCube</tt> will translate and scale to fit this
+/// bounding box.
+///
+/// For example, when an <tt>SoHandleBoxManip</tt> wants to surround the objects
+/// it is going to move, the scene graph will look something like this: \code
+///                  RootNode
+///        -------------------------
+///        |                        |
+///      handleBoxManip        movingStuff
+///        |
+///      handleBoxDragger
+///        |
+///      separator
+///       -----------------------------------
+///       |            |                     |
+///     motionMatrix  surroundScale      cubeGeom
+/// \endcode
+/// The <tt>SoHandleBoxDragger</tt> wants to transform the <em>cubeGeom</em> so
+/// that it surrounds the <em>movingStuff</em>. So it sets the
+/// <em>surroundScale</em> fields to: \code
+///      #numNodesUpToContainer = 4;
+///      #numNodesUpToReset = 3;
+/// \endcode
+/// The <tt>SoBoundingBoxAction</tt> will then be applied to <em>RootNode</em>,
+/// with a reset after traversing the <tt>SoHandleBoxManip</tt>.
+/// So the <tt>SoSurroundScale</tt> will surround the objects below
+/// <em>separator</em>, and to the right of <em>handleBoxManip</em>, producing
+/// the desired effect.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Accumulates scaling and translation transformations into
+/// the current transformation.
+/// <b>SoGetMatrixAction</b>
+/// Returns the matrix corresponding to the scaling and translation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoSurroundScale {
+///    numNodesUpToContainer	0
+///    numNodesUpToReset	0
+/// }
+/// \endcode
+/// \sa SoTransformation, SoTransformManip,SoCenterballDragger,
+/// SoCenterballManip,SoHandleBoxDragger, \sa SoHandleBoxManip,SoJackDragger,
+/// SoJackManip,SoTabBoxDragger, SoTabBoxManip,SoTrackballDragger, \sa
+/// SoTrackballManip,SoTransformBoxDragger, SoTransformBoxManip
 class SoSurroundScale : public SoTransformation {
 
     SO_NODE_HEADER(SoSurroundScale);
 
   public:
-    // Constructor
+    /// Creates a surround scale node with default settings.
     SoSurroundScale();
 
-    // Fields
+    /// When traversed by an action, if surroundScale needs to
+    /// calculate a new box, surroundScale
+    /// looks at the current path in
+    /// the action. It travels up this path a distance of
+    /// #numNodesUpToContainer and  applies an SoGetBoundingBoxAction to the
+    /// node that it finds there.
     SoSFInt32 numNodesUpToContainer;
+
+    /// Before applying the SoGetBoundingBoxAction (see the
+    /// #numNodesUpToContainer field aove) the surroundScale node
+    /// travels up the path a distance of #numNodesUpToReset
+    /// and tells the action to reset
+    /// the bounding box upon traversal of that node.
     SoSFInt32 numNodesUpToReset;
 
-    // If you call this, then next time through the node will re-calculate
-    // it's cached matrix, translation and scale values.
+    /// If you call this, then next time an action is applied the node will
+    /// re-calculate it's cached translation and scale values.
     void invalidate();
 
     SoEXTENDER

@@ -60,41 +60,60 @@
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNormalBinding
-//
-//  Normal binding node. This indicates how multiple surface normals are
-//  to be distributed over an object.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that specifies how multiple surface normals are bound to shapes.
+/// \ingroup Nodes
+/// This node specifies how the current normals are bound to shapes that
+/// follow in the scene graph. Each shape node may interpret bindings
+/// differently.
+///
+/// The bindings for faces and vertices are meaningful only for shapes
+/// that are made from faces and vertices. Similarly, the indexed bindings
+/// are only used by the shapes that allow indexing. For bindings that
+/// require multiple normals, be sure to have at least as many normals
+/// defined as are necessary; otherwise, errors will occur.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoRayPickAction</b>
+/// Sets the current normal binding type.
+///
+/// \par File format/defaults:
+/// \code
+/// SoNormalBinding {
+///    value	PER_VERTEX_INDEXED
+/// }
+/// \endcode
+/// \sa SoMaterialBinding,SoNormal,SoTextureCoordinateBinding,SoVertexShape
 class SoNormalBinding : public SoNode {
 
     SO_NODE_HEADER(SoNormalBinding);
 
   public:
     enum Binding {
-        // Whole object has same normal
-        OVERALL = SoNormalBindingElement::OVERALL,
-        // One normal for each part of object
-        PER_PART = SoNormalBindingElement::PER_PART,
-        // One normal for each part of object, indexed
-        PER_PART_INDEXED = SoNormalBindingElement::PER_PART_INDEXED,
-        // One normal for each face of object
-        PER_FACE = SoNormalBindingElement::PER_FACE,
-        // One normal for each face, indexed
-        PER_FACE_INDEXED = SoNormalBindingElement::PER_FACE_INDEXED,
-        // One normal for each vertex of object
-        PER_VERTEX = SoNormalBindingElement::PER_VERTEX,
-        // One normal for each vertex, indexed
-        PER_VERTEX_INDEXED = SoNormalBindingElement::PER_VERTEX_INDEXED,
+        OVERALL =
+            SoNormalBindingElement::OVERALL, ///< Whole object has same normal
+        PER_PART = SoNormalBindingElement::PER_PART, ///< One normal for each
+                                                     ///< part of object
+        PER_PART_INDEXED =
+            SoNormalBindingElement::PER_PART_INDEXED, ///< One normal for each
+                                                      ///< part of object,
+                                                      ///< indexed
+        PER_FACE = SoNormalBindingElement::PER_FACE,  ///< One normal for each
+                                                      ///< face of object
+        PER_FACE_INDEXED =
+            SoNormalBindingElement::PER_FACE_INDEXED, ///< One normal for each
+                                                      ///< face, indexed
+        PER_VERTEX =
+            SoNormalBindingElement::PER_VERTEX, ///< One normal for each
+                                                ///< vertex of object
+        PER_VERTEX_INDEXED =
+            SoNormalBindingElement::PER_VERTEX_INDEXED, ///< One normal for each
+                                                        ///< vertex, indexed
     };
 
     // Fields
-    SoSFEnum value; // Normal binding value
+    SoSFEnum value; ///< Specifies how to bind normals to shapes.
 
-    // Constructor
+    /// Creates a normal binding node with default settings.
     SoNormalBinding();
 
     SoEXTENDER

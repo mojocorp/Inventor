@@ -61,14 +61,34 @@
 
 #include <Inventor/sensors/SoDelayQueueSensor.h>
 
+/// Sensor for one-time only callbacks when the application is idle.
+/// \ingroup Sensors
+/// An idle sensor is almost exactly like an <tt>SoOneShotSensor</tt>, except
+/// that it is only triggered when there are no timer queue sensors
+/// waiting to be triggered and there are no events waiting to be
+/// processed; that is, idle sensors will not be triggered if the delay
+/// queue is processed because the delay queue timeout expires.  If the
+/// delay queue timeout is disabled (see #SoDB::setDelaySensorTimeout(),
+/// idle and one-shot sensors are exactly the same.
+///
+/// Note that idle sensors do not reschedule themselves.  Inventor 1 idle
+/// sensors were always scheduled; call #schedule() in the callback
+/// function to duplicate that behavior.
+///
+/// See the SoOneShotSensor manual page for more information.
+/// \sa SoOneShotSensor, SoDelayQueueSensor
 class SoIdleSensor : public SoDelayQueueSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoIdleSensor();
+
+    /// Constructor that takes the callback function and
+    /// data to be called when the sensor is triggered.
     SoIdleSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destroys the sensor, freeing up any memory associated with it after
+    /// unscheduling it.
     virtual ~SoIdleSensor();
 
   private:

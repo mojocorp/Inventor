@@ -78,18 +78,19 @@ class SoProfileElement : public SoAccumulatedElement {
   public:
     enum Profile { START_FIRST, START_NEW, ADD_TO_CURRENT };
 
-    // Initializes element.
+    /// Initializes element.
     virtual void init(SoState *state);
 
-    // Add to the current profile list
+    /// Add to the current profile list
     static void add(SoState *state, SoProfile *profile);
 
-    // Overrides push() method to copy values from next instance in the stack
+    /// Overrides push() method to copy values from next instance in the stack
     virtual void push(SoState *state);
 
-    // Returns the current list of profile nodes from the state
+    /// Returns the current list of profile nodes from the state
     static const SoNodeList &get(SoState *state);
 
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

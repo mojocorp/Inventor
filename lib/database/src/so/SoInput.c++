@@ -694,7 +694,7 @@ SoInput::getHeader()
 //
 // Description:
 //    Returns the Inventor file version of the file being read (e.g. 2.1).
-//    If the file has a header registered through \c SoDB::registerHeader(),
+//    If the file has a header registered through SoDB::registerHeader(),
 //    the returned version is the Inventor version registered with the header.
 //
 // Use: public

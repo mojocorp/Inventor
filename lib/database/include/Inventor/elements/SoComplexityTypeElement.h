@@ -72,28 +72,28 @@ class SoComplexityTypeElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoComplexityTypeElement);
 
   public:
-    // These are the available complexity types:
+    /// These are the available complexity types:
     enum Type {
-        OBJECT_SPACE, // Complexity computed in object space
-        SCREEN_SPACE, // Complexity computed in screen space
-        BOUNDING_BOX  // Bounding box used to represent object
+        OBJECT_SPACE, ///< Complexity computed in object space
+        SCREEN_SPACE, ///< Complexity computed in screen space
+        BOUNDING_BOX  ///< Bounding box used to represent object
     };
 
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current complexity type in the state
+    /// Sets the current complexity type in the state
     static void set(SoState *state, Type type);
 
-    // Returns current complexity type from the state
+    /// Returns current complexity type from the state
     static Type get(SoState *state) {
         return (Type)SoInt32Element::get(classStackIndex, state);
     }
 
-    // Returns the default complexity type
+    /// Returns the default complexity type
     static Type getDefault() { return OBJECT_SPACE; }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

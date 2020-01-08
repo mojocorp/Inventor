@@ -59,14 +59,15 @@
 #include <vector>
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFPath subclass of SoMField. Each field value is a pointer to an
-//  SoPath. The field automatically maintains references to the paths
-//  it points to and propagates notification from the paths.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of pointers to paths.
+/// \ingroup Fields
+/// This field maintains a set of pointers to <tt>SoPath</tt> instances,
+/// correctly maintaining their reference counts.
+///
+/// <tt>SoMFPaths</tt> are written to file as one or more paths (see the
+/// <tt>SoPath</tt> manual page for a description of the file format for a
+/// path).  When more than one value is present, all of the values are
+/// enclosed in square brackets and separated by commas.
 class SoMFPath : public SoMField {
 
     // Use standard field stuff

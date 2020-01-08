@@ -64,43 +64,70 @@
 #include <Inventor/SbCylinder.h>
 #include <Inventor/projectors/SbProjector.h>
 
+/// Cylinder projector.
+/// \ingroup Projectors
+/// <tt>SbCylinderProjector</tt>
+/// is an abstract base class for projectors that use a cylinder in
+/// their projection. The #getRotation() method
+/// for an SbCylinderProjector will always
+/// return a rotation that is about the axis of the cylinder.
+/// Cylinder projectors are typically used to write
+/// interactive 3D manipulators and viewers.
+/// \sa
+/// SbCylinderPlaneProjector,SbCylinderSectionProjector,SbCylinderSheetProjector,
+/// \sa SbLineProjector, SbPlaneProjector,
+/// SbSpherePlaneProjector,SbSphereProjector, SbSphereSectionProjector,
+/// SbSphereSheetProjector
 class SbCylinderProjector : public SbProjector {
   public:
-    // Destructor
+    /// Destructor
     virtual ~SbCylinderProjector(){};
 
-    // Apply the projector using the given point, returning the
-    // point in three dimensions that it projects to.
-    // The point should be normalized from 0-1, with (0,0) at the lower-left.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// The point should be normalized from 0-1, with (0,0) at the lower-left.
     virtual SbVec3f project(const SbVec2f &point) = 0;
 
-    // Same as above, but also get a rotation from the last
-    // projected point to this one.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// This also returns in \a rot. a rotation about the axis of the cylinder
+    /// from the last projected point to this one.
+    /// The passed \a point should be normalized (i.e. lie in the range
+    /// [0.0,1.0]), with (0,0) at the lower-left.
     SbVec3f projectAndGetRotation(const SbVec2f &point, SbRotation &rot);
 
-    // Get a rotation given two points on this cylinder projector.
+    /// Get a rotation given two points on this cylinder proajector.
+    /// The rotation will be about the axis of the cylinder.
     virtual SbRotation getRotation(const SbVec3f &point1,
                                    const SbVec3f &point2) = 0;
 
-    // Set/get the cylinder to use.
-    // Default cylinder is centered about Y axis and has radius 1.0.
+    /// Set the cylinder on which to project points.
     void setCylinder(const SbCylinder &cyl);
 
+    /// Get the cylinder on which to project points.
+    /// The default cylinder is aligned with the Y axis and has radius 1.0.
     const SbCylinder &getCylinder() const { return cylinder; }
 
-    // Set/get whether the projector should always be oriented towards the eye.
-    // Set to FALSE if the tolerance should be evaluated in working space.
-    void   setOrientToEye(SbBool orientToEye);
+    /// Set whether the projector should always be oriented towards the eye.
+    /// Set to FALSE if the tolerance should be evaluated in working space.
+    void setOrientToEye(SbBool orientToEye);
+
+    /// Get whether the projector should always be oriented towards the eye.
     SbBool isOrientToEye() const { return orientToEye; }
 
-    // Set/get whether the projector should intersect the half of the
-    // cylinder that faces the eye.
-    // Set to FALSE if the projector should intersect with the rear half.
-    void   setFront(SbBool isFront);
+    /// Set whether the projector should intersect the half of the
+    /// cylinder that faces the eye.
+    /// Set to FALSE if the projector should intersect with the rear half.
+    void setFront(SbBool isFront);
+
+    /// Get whether the projector should intersect the half of the
+    /// cylinder that faces the eye.
     SbBool isFront() const { return intersectFront; }
+
+    /// Check if point is on the frontside or the backside of the cylinder.
     SbBool isPointInFront(const SbVec3f &point) const;
 
-    // Set the transform space to work in.
+    /// Set the transform space to work in.
     virtual void setWorkingSpace(const SbMatrix &space);
 
   protected:

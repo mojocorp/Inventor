@@ -68,27 +68,48 @@
     (SoMouseButtonEvent::isButtonReleaseEvent(EVENT,                           \
                                               SoMouseButtonEvent::BUTTON))
 
+/// Mouse button press and release events.
+/// \ingroup Events
+/// <tt>SoMouseButtonEvent</tt> represents mouse button press and release events
+/// in the Inventor event model.
+/// \sa SoEvent, SoButtonEvent, SoKeyboardEvent, SoLocation2Event,
+/// SoMotion3Event, \sa SoSpaceballButtonEvent,SoHandleEventAction,
+/// SoEventCallback, SoSelection, SoInteraction,SoXtDevice
 class SoMouseButtonEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
 
   public:
-    enum Button { ANY = 0, BUTTON1 = 1, BUTTON2 = 2, BUTTON3 = 3 };
+    enum Button {
+        ANY = 0,     ///< Any button
+        BUTTON1 = 1, ///< First mouse button
+        BUTTON2 = 2, ///< Second mouse button
+        BUTTON3 = 3  ///< Third mouse button
+    };
 
-    // constructor
+    /// Default constructor
     SoMouseButtonEvent();
+
+    /// Destructor
     virtual ~SoMouseButtonEvent();
 
-    // set/get which button generated the event, either SO_MOUSE_BUTTON1,
-    // SO_MOUSE_BUTTON2, or SO_MOUSE_BUTTON3
+    /// Set which mouse button generated the event.
     void setButton(SoMouseButtonEvent::Button b) { button = b; }
+
+    /// Get which mouse button generated the event.
     SoMouseButtonEvent::Button getButton() const { return button; }
 
-    // convenience routines to see if an SoEvent is a press or release
-    // of the passed mouse button
+    /// Returns whether the passed event is a mouse button press event
+    /// of the passed button. When SoMouseButtonEvent::ANY is passed,
+    /// this returns TRUE if the event represents a button press
+    /// or release of any mouse button.
     static SbBool isButtonPressEvent(const SoEvent *            e,
                                      SoMouseButtonEvent::Button whichButton);
 
+    /// Returns whether the passed event is a mouse button release event
+    /// of the passed button. When SoMouseButtonEvent::ANY is passed,
+    /// this returns TRUE if the event represents a button press
+    /// or release of any mouse button.
     static SbBool isButtonReleaseEvent(const SoEvent *            e,
                                        SoMouseButtonEvent::Button whichButton);
 

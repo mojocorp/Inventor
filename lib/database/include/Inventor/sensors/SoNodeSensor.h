@@ -60,24 +60,34 @@
 
 #include <Inventor/sensors/SoDataSensor.h>
 
+/// Sensor class that can be attached to Inventor nodes.
+/// \ingroup Sensors
+/// Node sensors detect changes to nodes, calling a callback function
+/// whenever any field of the node or, if the node is a group node, any
+/// children of the node change.
+/// \sa SoFieldSensor, SoPathSensor, SoDataSensor
 class SoNodeSensor : public SoDataSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoNodeSensor();
+
+    /// Constructor that takes the callback function and
+    /// data to be called when the sensor is triggered.
     SoNodeSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destroys the sensor, freeing up any memory associated with it after
+    /// unscheduling it.
     virtual ~SoNodeSensor();
 
-    // Attaches the sensor to the given node
+    /// Attaches the sensor to the given node
     void attach(SoNode *node);
 
-    // Detaches the sensor if it is attached to a node
+    /// Detaches the sensor if it is attached to a node
     void detach();
 
-    // Returns the node to which the sensor is attached, or NULL if it
-    // is not attached.
+    /// Returns the node to which the sensor is attached, or NULL if it
+    /// is not attached.
     SoNode *getAttachedNode() const { return node; }
 
   private:

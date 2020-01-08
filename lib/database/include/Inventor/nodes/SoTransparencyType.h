@@ -68,12 +68,16 @@ class SoTransparencyType : public SoNode {
   public:
     /// Various levels of transparency rendering quality
     enum TransparencyType {
-        SCREEN_DOOR = SoTransparencyTypeElement::
-            SCREEN_DOOR, ///< Use stipple patterns for screen-door transparency
+        SCREEN_DOOR =
+            SoTransparencyTypeElement::SCREEN_DOOR, ///< Use stipple patterns
+                                                    ///< for screen-door
+                                                    ///< transparency
         ADD = SoTransparencyTypeElement::ADD, ///< Use additive alpha blending
-        DELAYED_ADD = SoTransparencyTypeElement::
-            DELAYED_ADD, ///< Uses additive blending, rendering all transparent
-                         ///< objects after opaque ones
+        DELAYED_ADD =
+            SoTransparencyTypeElement::DELAYED_ADD, ///< Uses additive blending,
+                                                    ///< rendering all
+                                                    ///< transparent objects
+                                                    ///< after opaque ones
         SORTED_OBJECT_ADD = SoTransparencyTypeElement::
             SORTED_OBJECT_ADD, ///< Same as DELAYED_ADD, but sorts transparent
                                ///< objects by distances of bounding boxes from

@@ -84,26 +84,26 @@ class SoModelMatrixElement : public SoAccumulatedElement {
     SO_ELEMENT_HEADER(SoModelMatrixElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Override standard matches to invalidate on cull-test
+    /// Override standard matches to invalidate on cull-test
     virtual SbBool matches(const SoElement *elt) const;
 
-    // Overrides push() method to copy values from next instance in the stack
+    /// Overrides push() method to copy values from next instance in the stack
     virtual void push(SoState *state);
 
-    // Sets the model matrix to the identity matrix
+    /// Sets the model matrix to the identity matrix
     static void makeIdentity(SoState *state, SoNode *node);
 
-    // Sets the model matrix to the given matrix
+    /// Sets the model matrix to the given matrix
     static void set(SoState *state, SoNode *node, const SbMatrix &matrix);
 
-    // Multiplies the given matrix into the model matrix
+    /// Multiplies the given matrix into the model matrix
     static void mult(SoState *state, SoNode *node, const SbMatrix &matrix);
 
-    // Each of these multiplies a matrix that performs the specified
-    // transformation into the model matrix
+    /// Each of these multiplies a matrix that performs the specified
+    /// transformation into the model matrix
     static void translateBy(SoState *state, SoNode *node,
                             const SbVec3f &translation);
     static void rotateBy(SoState *state, SoNode *node,
@@ -111,32 +111,32 @@ class SoModelMatrixElement : public SoAccumulatedElement {
     static void scaleBy(SoState *state, SoNode *node,
                         const SbVec3f &scaleFactor);
 
-    // These methods are used by the TransformSeparator node.
-    // WARNING!  For proper caching behavior, the matrix returned by
-    // ::pushMatrix() must be used ONLY as a later argument to
-    // ::popMatrix(), and you must NOT modify the matrix between the
-    // push and the pop.  If you need the matrix for any other reason,
-    // you MUST use the ::get() routine.
+    /// These methods are used by the TransformSeparator node.
+    /// WARNING!  For proper caching behavior, the matrix returned by
+    /// pushMatrix() must be used ONLY as a later argument to
+    /// popMatrix(), and you must NOT modify the matrix between the
+    /// push and the pop.  If you need the matrix for any other reason,
+    /// you MUST use the get() routine.
     static SbMatrix pushMatrix(SoState *state);
     static void     popMatrix(SoState *state, const SbMatrix &m);
 
-    // Sets the transformation that defines the volume that
-    // view-volume culling should be tested against.
+    /// Sets the transformation that defines the volume that
+    /// view-volume culling should be tested against.
     static void setCullMatrix(SoState *state, SoNode *node,
                               const SbMatrix &matrix);
 
-    // This method gets the model*cullMatrix combined matrix (which is
-    // cached by this element).
+    /// This method gets the model*cullMatrix combined matrix (which is
+    /// cached by this element).
     static const SbMatrix &getCombinedCullMatrix(SoState *state);
 
-    // Returns current model matrix from the state
+    /// Returns current model matrix from the state
     static const SbMatrix &get(SoState *state);
 
-    // Returns current model matrix from the state, sets given flag to TRUE
-    // if matrix is known to be identity
+    /// Returns current model matrix from the state, sets given flag to TRUE
+    /// if matrix is known to be identity
     static const SbMatrix &get(SoState *state, SbBool &isIdent);
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

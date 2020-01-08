@@ -60,14 +60,24 @@ class SoNode;
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFNode subclass of SoSField. The field value is a pointer to an
-//  SoNode. The field automatically maintains a reference to the node
-//  it points to and propagates notification from the node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a pointer to a node.
+/// \ingroup Fields
+/// This field maintains a pointer to an <tt>SoNode</tt> instance,
+/// correctly maintaining its reference count.
+///
+/// <tt>SoSFNodes</tt> are written to file as the node they are pointing to.
+/// For example:
+///
+/// mySoSFNodeField Cube {}
+///
+/// is an SoSFNode field named 'mySoSFNodeField', pointing to an SoCube node. If
+/// the node is used elsewhere, the regular DEF/USE instancing mechanism
+/// applies:
+///
+/// anotherSoSFNodeField USE topSeparator
+///
+/// is an SoSFNode field that points to a node named 'topSeparator' that was
+/// DEF'ed earlier in the scene. \sa SoField, SoSField, SoMFNode, SoNode
 class SoSFNode : public SoSField {
 
     // Use standard field stuff

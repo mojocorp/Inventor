@@ -74,20 +74,20 @@ class SoSwitchElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoSwitchElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current switch index in the state
+    /// Sets the current switch index in the state
     static void set(SoState *state, int32_t index) {
         SoInt32Element::set(classStackIndex, state, index);
     }
 
-    // Returns current switch index from the state
+    /// Returns current switch index from the state
     static int32_t get(SoState *state) {
         return SoInt32Element::get(classStackIndex, state);
     }
 
-    // Returns the default switch index
+    /// Returns the default switch index
     static int32_t getDefault() { return -1; }
 
     SoINTERNAL

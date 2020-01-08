@@ -63,6 +63,26 @@
 #include <Inventor/fields/SoMFEnum.h>
 #include <Inventor/fields/SoMFBool.h>
 
+/// Performs Boolean operations.
+/// \ingroup Engines
+/// This engine performs a Boolean operation on two inputs,
+/// and returns both the result of the operation and its inverse.
+///
+///
+/// The input fields can have multiple values, allowing the engine to
+/// perform several Boolean operations in parallel.
+/// One input may have more values than the other.  In that case,
+/// the last value of the shorter input will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoBoolOperation {
+///    a            FALSE
+///    b            FALSE
+///    operation    A
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoCalculator
 class SoBoolOperation : public SoEngine {
 
     SO_ENGINE_HEADER(SoBoolOperation);
@@ -96,7 +116,7 @@ class SoBoolOperation : public SoEngine {
     SoEngineOutput output;  // (SoMFBool)
     SoEngineOutput inverse; // (SoMFBool)
 
-    // Constructor
+    /// Constructor
     SoBoolOperation();
 
     SoINTERNAL

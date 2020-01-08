@@ -62,30 +62,58 @@
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoProfile
-//
-//  Abstract base class of 2D profiles.  These profiles are used as trim
-//  curves for nurbs and bevels for 3D text.  The two (so far) subclasses
-//  are SoLinearProfile and SoNurbsProfile
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for all profile nodes.
+/// \ingroup Nodes
+/// This node is the abstract base class for all profile nodes, which
+/// define 2D curves. A profile is not itself geometry, but is used to
+/// change or delimit the geometry of something else. For an <tt>SoText3</tt>
+/// node, the profile determines the cross-section of the side of each
+/// text character. For an <tt>SoNurbsSurface</tt> node, the profile is used to
+/// specify trim curves for the surface.
+///
+/// The current profile state can consist of one or more profiles, each of
+/// which can be made up of one or more instances of <tt>SoProfile</tt>
+/// subclass nodes. Each profile node specifies (in the #index field) a
+/// set of indices that refer to the current set of profile coordinates,
+/// specified using either an <tt>SoProfileCoordinate2</tt> or an
+/// <tt>SoProfileCoordinate3</tt> node. No profile curve should intersect
+/// itself or another profile curve.
+///
+/// Profiles are part of the state, just like all other properties. The
+/// state contains a current list of profiles.  Depending on the
+/// #linkage field, a profile can clear the list and begin a new
+/// profile, begin a new profile at the end of those already in the list,
+/// or append to the last profile in the current list. Note that when
+/// appending profile B to the end of profile A, B must begin at the same
+/// 2D point at which A ends.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Adds profile to current traversal state. \par File
+/// format/defaults: This is an abstract class. See the reference page of a
+/// derived class for the format and default values. \sa
+/// SoLinearProfile,SoNurbsProfile,SoNurbsSurface,SoProfileCoordinate2,SoProfileCoordinate3,SoText3
 class SoProfile : public SoNode {
 
     SO_NODE_ABSTRACT_HEADER(SoProfile);
 
   public:
     enum Profile {
-        START_FIRST = SoProfileElement::START_FIRST,
-        START_NEW = SoProfileElement::START_NEW,
-        ADD_TO_CURRENT = SoProfileElement::ADD_TO_CURRENT
+        START_FIRST =
+            SoProfileElement::START_FIRST, ///< Start a new profile and remove
+                                           ///< any existing profiles from the
+                                           ///< current list
+        START_NEW = SoProfileElement::START_NEW, ///< Start a new profile and
+                                                 ///< add it to the current list
+        ADD_TO_CURRENT =
+            SoProfileElement::ADD_TO_CURRENT ///< Add to end of the last profile
+                                             ///< in the current list
     };
 
     // Fields
-    SoMFInt32 index;   // Number of vertices per profile
-    SoSFEnum  linkage; // connectivity of this curve and others
+    SoMFInt32 index;   ///< Indices into profile coordinates.
+    SoSFEnum  linkage; ///< Specifies connectivity of profile curve with respect
+                       ///< to profiles in current list in state.
 
     SoEXTENDER
   public:

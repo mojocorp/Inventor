@@ -69,36 +69,52 @@
 class SoNode;
 class SoBaseKit;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNodeKitDetail
-//
-//  Base class for all detail classes.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Stores detail information about a nodekit.
+/// \ingroup Details
+/// This class contains detail information about a nodekit.
+/// This consists of a pointer to the nodekit, a pointer to the
+/// child part within the nodekit, and the name of the child part.
+///
+///
+/// During a pick action, each nodekit along the picked path creates its own
+/// <tt>SoNodeKitDetail</tt>.   Together, the full set of details gives you
+/// complete picture of the pickpath.
+///
+///
+/// Since nodekits have hidden children (See the reference page for
+/// <tt>SoBaseKit</tt>), a regular <tt>SoPath</tt> ends at the topmost nodekit
+/// in the path. If you cast the pickpath from an <tt>SoPath</tt> pointer to an
+/// <tt>SoNodeKitPath</tt> pointer, you can then retrieve all nodekits along the
+/// path and examine their corresponding details.
+///
+/// \par Action behavior:
+/// <b>section</b>
+/// SoBaseKit, SoNodeKitPath, SoDetail, SoPickedPoint
+/// \sa SoBaseKit, SoNodeKitPath, SoDetail, SoPickedPoint
 class SoNodeKitDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoNodeKitDetail);
 
   public:
-    // Default constructor and destructor.
+    /// Default constructor and destructor.
     SoNodeKitDetail();
+    /// Destrutor
     virtual ~SoNodeKitDetail();
 
-    // Returns a pointer to the nodekit that created this detail
+    /// Returns a pointer to the nodekit that created this detail
     SoBaseKit *getNodeKit() const { return myNodeKit; }
 
-    // Returns a pointer to the part selected within the nodekit that
-    // created this detail.
+    /// Returns a pointer to the part selected within the nodekit that
+    /// created this detail.
     SoNode *getPart() const { return myPart; }
 
-    // Returns the name of the part selected within the nodekit that
-    // created this detail
+    /// Returns the name of the part selected within the nodekit that
+    /// created this detail (See \a SoRayPickAction in the ACTIONS section of
+    /// the \a SoBaseKit reference page for more information).
     const SbName &getPartName() const { return myPartName; }
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SoDetail *copy() const;
 
     SoEXTENDER

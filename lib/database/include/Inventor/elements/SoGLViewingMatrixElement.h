@@ -77,11 +77,13 @@ class SoGLViewingMatrixElement : public SoViewingMatrixElement {
     SO_ELEMENT_HEADER(SoGLViewingMatrixElement);
 
   public:
-    // Override init() and push() to copy state pointer
+    /// Override init() to copy state pointer
     virtual void init(SoState *state);
+
+    /// Override push() to copy state pointer
     virtual void push(SoState *state);
 
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     SoINTERNAL

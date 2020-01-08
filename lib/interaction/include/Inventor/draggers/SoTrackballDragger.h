@@ -97,14 +97,139 @@ class SbCylinderProjector;
 class SoFieldSensor;
 class SoTimerSensor;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTrackballDragger
-//
-//  Trackball dragger - allows user to rotate objects.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Striped ball you can rotate or scale uniformly by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoTrackballDragger</tt>
+/// is a ball wrapped in three circular stripes.  The stripes are oriented
+/// like wheels that spin around the x, y, and z axes.  Drag the stripes
+/// to rotate the trackball around those axes.  You do not have to hit the
+/// lines; pick anywhere within the stripe's outline.  To rotate the trackball
+/// freely in 3 dimensions, click the area
+/// between the stripes and then drag.  An invisible but
+/// pickable sphere initiates this dragging.  If the mouse is still moving when
+/// you release it,  the trackball will continue to  spin.
+///
+///
+/// Press the <b>\<Control\></b> key to scale the trackball uniformly instead of
+/// rotating.
+///
+///
+/// Press the <b>\<Shift\></b> key and the <em>user axis</em> appears; this is a
+/// draggable axis with an extra stripe around it.
+/// Moving the mouse along the surface of the sphere drags the
+/// 'pole' of the axis.
+/// Release the <b>\<Shift\></b> key and the user axis remains; drag the
+/// new stripe for constrained rotation around the user axis.
+/// To make the user axis disappear, press <b>\<Shift\></b> and drag the pole to
+/// where two of other stripes intersect. This aligns the user axis with
+/// a primary axis, at which point the user axis disappears.
+///
+///
+/// As you drag the trackball, it updates its
+/// #rotation field, or its #scaleFactor field if
+/// the <b>\<Control\></b> key is down. As with all draggers, if you change the
+/// fields the dragger moves in response.
+///
+///
+/// \a Remember: This is <em>not</em> an <tt>SoTransform!</tt>.
+/// If you want to move other objects with this dragger, you can either:
+///
+///
+/// [a] Use an <tt>SoTrackballManip</tt>, which is subclassed from
+/// <tt>SoTransform</tt>. The manipulator creates one of these draggers and uses
+/// it as the interface to edit the manipulator's fields. (see the
+/// <tt>SoTrackballManip</tt> reference page).
+///
+///
+/// [b] Use field-to-field connections to connect the fields of this dragger to
+/// those of any <tt>SoTransformation</tt> node.
+///
+///
+/// You can change the parts in any instance of this dragger using
+/// #setPart().
+/// The default part geometries are defined as resources for this
+/// <tt>SoTrackballDragger</tt> class.  They are detailed in the
+/// Dragger Resources section of the online reference page for this class.
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/trackballDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that
+/// directory. \par Notes: Unlike most multi-function draggers,
+/// <tt>SoTrackballDragger</tt> is not a compound dragger made up of other
+/// draggers that perform its smaller tasks.  This is not because it was
+/// inappropriate, but because the trackball was written before implementation
+/// of the methods that take care of synchronizing multiple child draggers. The
+/// younger <tt>SoCenterballDragger</tt> is similar in form to the trackball,
+/// but the centerball <em>is</em> a compound dragger. \par Nodekit structure:
+/// \code
+/// CLASS SoTrackballDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "surroundScale"
+/// -->      "antiSquish"
+///          "geomSeparator"
+/// -->         "rotatorSwitch"
+/// -->            "rotator"
+/// -->            "rotatorActive"
+/// -->         "XRotatorSwitch"
+/// -->            "XRotator"
+/// -->            "XRotatorActive"
+/// -->         "YRotatorSwitch"
+/// -->            "YRotator"
+/// -->            "YRotatorActive"
+/// -->         "ZRotatorSwitch"
+/// -->            "ZRotator"
+/// -->            "ZRotatorActive"
+/// -->         "userAxisRotation"
+/// -->         "userAxisSwitch"
+/// -->            "userAxis"
+/// -->            "userAxisActive"
+/// -->         "userRotatorSwitch"
+/// -->            "userRotator"
+/// -->            "userRotatorActive"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoTrackballDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     rotation            0 0 1  0
+///     scaleFactor         1 1 1
+///     callbackList        NULL
+///     surroundScale       NULL
+///     antiSquish          AntiSquish {
+///                             sizing LONGEST_DIAGONAL
+///                         }
+///     rotator             <trackballRotator resource>
+///     rotatorActive       <trackballRotatorActive resource>
+///     XRotator            <trackballXRotator resource>
+///     XRotatorActive      <trackballXRotatorActive resource>
+///     YRotator            <trackballYRotator resource>
+///     YRotatorActive      <trackballYRotatorActive resource>
+///     ZRotator            <trackballZRotator resource>
+///     ZRotatorActive      <trackballZRotatorActive resource>
+///     userAxis            <trackballUserAxis resource>
+///     userAxisActive      <trackballUserAxisActive resource>
+///     userRotator         <trackballUserRotator resource>
+///     userRotatorActive   <trackballUserRotatorActive resource>
+/// }
+/// \endcode
+/// \sa
+/// SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,
+/// \sa
+/// SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,
+/// \sa
+/// SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTransformBoxDragger,
+/// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class SoTrackballDragger : public SoDragger {
 
     SO_KIT_HEADER(SoTrackballDragger);
@@ -138,12 +263,17 @@ class SoTrackballDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(userRotatorActive);
 
   public:
-    // Constructor
+    /// Constructor.
     SoTrackballDragger();
 
-    SoSFRotation rotation;
-    SoSFVec3f    scaleFactor;
+    SoSFRotation rotation;    ///< Orientation of the dragger.
+    SoSFVec3f    scaleFactor; ///< Scale of the dragger.
 
+    /// If the mouse is moving while you release it, the
+    /// trackball will continue to spin afterwards.
+    /// These two methods will query and set whether this
+    /// feature is turned on or off.  By default, the animation feature is
+    /// turned on.
     SbBool isAnimationEnabled() { return animationEnabled; }
     void   setAnimationEnabled(SbBool newVal);
 

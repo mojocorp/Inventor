@@ -66,38 +66,44 @@
 class SbLine;
 class SbBox3f;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbSphere
-//
-//  Represents a sphere in 3D space.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Class for representing a sphere.
+/// \ingroup Basics
+/// Represents a sphere in 3D. This is a lightweight datatype that
+/// is used for arguments or return values in the Inventor toolkit. See
+/// <tt>SoSphere</tt> for a database sphere (used for rendering, picking, etc.).
+/// \sa SbVec3f, SbLine, SoSphere
 class SbSphere {
   public:
-    // Boring default constructor
+    /// Default constructor
     SbSphere() {}
 
-    // Construct a sphere given center and radius
+    /// Construct a sphere given center and radius
     SbSphere(const SbVec3f &c, float r);
 
-    // Change the center and radius
+    /// Change the center and radius
     void setValue(const SbVec3f &c, float r);
 
-    // Set just the center or radius
+    /// Set just the center
     void setCenter(const SbVec3f &c);
+
+    /// Set just the radius
     void setRadius(float r);
 
-    // Return the center and radius
+    /// Return the center
     const SbVec3f &getCenter() const { return center; }
-    float          getRadius() const { return radius; }
 
-    // Return a sphere containing a given box
+    /// Return the radius
+    float getRadius() const { return radius; }
+
+    /// Return a sphere containing a given box
     void circumscribe(const SbBox3f &box);
 
-    // Intersect line and sphere, returning TRUE if there is an intersection
+    /// Intersect line and sphere, returning TRUE if there is an intersection
+    /// The line is treated as a ray.
     SbBool intersect(const SbLine &l, SbVec3f &intersection) const;
+
+    /// Intersect line and sphere, returning TRUE if there is an intersection
+    /// The line is treated as a ray.
     SbBool intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
 
   private:

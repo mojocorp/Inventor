@@ -81,23 +81,29 @@
 #include <Inventor/fields/SoMFVec3f.h>
 #include <Inventor/fields/SoMFVec4f.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoInterpolate
-//
-//  Abstract base class for all interpolater engines. An interpolater
-//  engine interpolates linearly between two values, based on "alpha"
-//  between 0 and 1.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Base class for all interpolator engines.
+/// \ingroup Engines
+/// <tt>SoInterpolate</tt> is the abstract base class for all interpolator
+/// engines. An interpolator engine linearly interpolates between two values,
+/// based on the #alpha input value.  The #alpha value should be between 0.0
+/// and 1.0. The interpolator engines derived from this class define the input
+/// fields that are to be interpolated.
+/// \par File format/defaults:
+/// This is an abstract class. See the reference page of a derived class for the
+/// format and default values. \sa SoEngineOutput, SoInterpolateFloat,
+/// SoInterpolateRotation,SoInterpolateVec2f, SoInterpolateVec3f,
+/// SoInterpolateVec4f
 class SoInterpolate : public SoEngine {
 
     SO_ENGINE_ABSTRACT_HEADER(SoInterpolate);
 
   public:
     // derived classes will define "input0" and "input1" fields
-    SoSFFloat      alpha;
+    /// Interpolation control value.
+    SoSFFloat alpha;
+    /// Interpolated value. The type of the output value is
+    /// the same as the type of the input values, which is specified by the
+    /// derived classes.
     SoEngineOutput output;
 
     SoINTERNAL
@@ -195,34 +201,149 @@ class SoInterpolate : public SoEngine {
 //
 /////////////////////////////////////////////////////////////////////////////
 
+/// Interpolates floating-point values.
+/// \ingroup Engines
+/// This engine linearly interpolates between two floating-point values, based
+/// on the #alpha input value.  The #alpha value should be between
+/// 0.0 and 1.0.
+///
+///
+/// The input fields can have multiple values, allowing the engine to
+/// interpolate several objects in parallel. One of the inputs may have more
+/// values than the other.  In that case, the last value of the shorter input
+/// will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoInterpolateFloat {
+///    alpha 0
+///    input0 0
+///    input1 1
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoInterpolateRotation,SoInterpolateVec2f,
+/// SoInterpolateVec3f, SoInterpolateVec4f
 class SoInterpolateFloat : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateFloat);
     SoMFFloat input0;
-    SoMFFloat input1;
+    SoMFFloat
+        input1; ///< The engine linearly interpolates from #input0 to #input1.
 };
 
+/// Interpolates rotation values.
+/// \ingroup Engines
+/// This engine linearly interpolates between two rotation values, based
+/// on the #alpha input value.  The #alpha value should be
+/// between 0.0 and 1.0.
+///
+///
+/// The input fields can have multiple rotations, allowing the engine to
+/// interpolate several objects in parallel.
+/// One of the inputs may have more values than the other.  In that case,
+/// the last value of the shorter input will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoInterpolateRotation {
+///    alpha 0
+///    input0 0 0 1  0
+///    input1 0 0 1  0
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoInterpolateFloat, SoInterpolateVec2f,
+/// SoInterpolateVec3f, SoInterpolateVec4f
 class SoInterpolateRotation : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateRotation);
     SoMFRotation input0;
-    SoMFRotation input1;
+    SoMFRotation
+        input1; ///< The engine linearly interpolates from #input0 to #input1.
 };
 
+/// Interpolates 2D floating-point vectors.
+/// \ingroup Engines
+/// This engine linearly interpolates between two 2D vectors,
+/// based on the #alpha input value.  The #alpha value should be
+/// between 0.0 and 1.0.
+///
+///
+/// The input fields can have multiple vectors, allowing the engine to
+/// interpolate several objects in parallel.
+/// One of the inputs may have more values than the other.  In that case,
+/// the last value of the shorter input will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoInterpolateVec2f {
+///    alpha 0
+///    input0 0 0
+///    input1 0 0
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoInterpolateFloat,
+/// SoInterpolateRotation,SoInterpolateVec3f, SoInterpolateVec4f
 class SoInterpolateVec2f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec2f);
     SoMFVec2f input0;
-    SoMFVec2f input1;
+    SoMFVec2f
+        input1; ///< The engine linearly interpolates from #input0 to #input1.
 };
 
+/// Interpolates 3D floating-point vectors.
+/// \ingroup Engines
+/// This engine linearly interpolates between two 3D vectors,
+/// based on the #alpha input value.  The #alpha value should be
+/// between 0.0 and 1.0.
+///
+///
+/// The input fields can have multiple vectors, allowing the engine to
+/// interpolate several objects in parallel.
+/// One of the inputs may have more values than the other.  In that case,
+/// the last value of the shorter input will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoInterpolateVec3f {
+///    alpha 0
+///    input0 0 0 0
+///    input1 0 0 0
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoInterpolateFloat,
+/// SoInterpolateRotation,SoInterpolateVec2f, SoInterpolateVec4f
 class SoInterpolateVec3f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec3f);
     SoMFVec3f input0;
-    SoMFVec3f input1;
+    SoMFVec3f
+        input1; ///< The engine linearly interpolates from #input0 to #input1.
 };
 
+/// Interpolates 4D floating-point vectors.
+/// \ingroup Engines
+/// This engine linearly interpolates between two 4D vectors, based
+/// on the #alpha input value.  The #alpha value should be
+/// between 0.0 and 1.0.
+///
+///
+/// The input fields can have multiple vectors, allowing the engine to
+/// interpolate several objects in parallel.
+/// One of the inputs may have more values than the other.  In that case,
+/// the last value of the shorter input will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoInterpolateVec4f {
+///    alpha 0
+///    input0 0 0 0 0
+///    input1 0 0 0 0
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoInterpolateFloat,
+/// SoInterpolateRotation,SoInterpolateVec2f, SoInterpolateVec3f
 class SoInterpolateVec4f : public SoInterpolate {
     SO_INTERPOLATE_HEADER(SoInterpolateVec4f);
     SoMFVec4f input0;
-    SoMFVec4f input1;
+    SoMFVec4f
+        input1; ///< The engine linearly interpolates from #input0 to #input1.
 };
 
 #endif /* _SO_INTERPOLATE_ */

@@ -67,7 +67,7 @@
 
 class SoBase;
 
-/// Maintains a list of pointers to instances of the \c SoBase classes.
+/// Maintains a list of pointers to instances of the SoBase classes.
 /// \ingroup General
 /// This subclass of <tt>SbPList</tt> holds lists of pointers to
 /// instances of classes derived from <tt>SoBase</tt> (an abstract class). A

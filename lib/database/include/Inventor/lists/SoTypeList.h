@@ -66,7 +66,7 @@
 #include <Inventor/SbPList.h>
 #include <Inventor/SoType.h>
 
-/// Maintains a list of \c SoTypes
+/// Maintains a list of SoTypes
 /// \ingroup General
 /// This subclass of <tt>SbPList</tt> holds lists of <tt>SoType</tt> type
 /// identifiers. \sa SoType

@@ -60,29 +60,71 @@
 #include <Inventor/SbVec.h>
 #include <Inventor/SbImage.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFImage subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a 2D image.
+/// \ingroup Fields
+/// A field containing a two-dimensional image.  Images can be greyscale
+/// (intensity), greyscale with transparency information, RGB, or RGB with
+/// transparency.  Each component of the image (intensity, red, green,
+/// blue or transparency (alpha)) can have an unsigned one-byte value from
+/// 0 to 255.
+///
+/// Values are returned as arrays of unsigned chars.  The image is stored
+/// in this array starting at the bottom left corner of the image with the
+/// intensity or red component of that pixel, followed by either the alpha,
+/// the green and blue, or the green, blue and alpha components (depending
+/// on the number of components in the image).  The next value is the
+/// first component of the next pixel to the right.
+///
+/// <tt>SoSFImages</tt> are written to file as three integers representing the
+/// width, height and number of components in the image, followed by
+/// width*height hexadecimal values representing the pixels in the
+/// image, separated by whitespace.  A one-component image will have
+/// one-byte hexadecimal values representing the intensity of the image.
+/// For example, 0xFF is full intensity, 0x00 is no intensity.  A two-component
+/// image puts the intensity in the first (high) byte and the transparency
+/// in the second (low) byte.  Pixels in a three-component image have the red
+/// component in the first (high) byte, followed by the green and blue
+/// components (so 0xFF0000 is red).  Four-component images put the
+/// transparency byte after red/green/blue (so 0x0000FF80 is
+/// semi-transparent blue).  Note:  each pixel is actually read as a single
+/// unsigned number, so a 3-component pixel with value "0x0000FF" can also
+/// be written as "0xFF" or "255" (decimal).
+///
+/// For example,
+///
+/// 1 2 1 0xFF 0x00
+///
+/// is a 1 pixel wide by 2 pixel high greyscale image, with the bottom pixel
+/// white and the top pixel black.  And:
+///
+/// 2 4 3 0xFF0000 0xFF00   0 0   0 0   0xFFFFFF 0xFFFF00
+///
+/// is a 2 pixel wide by 4 pixel high RGB image, with the bottom left pixel red,
+/// the bottom right pixel green, the two middle rows of pixels black, the top
+/// left pixel white, and the top right pixel yellow.
+/// \sa SoField, SoSField
 class SoSFImage : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFImage, SbImage, const SbImage &);
 
   public:
-    // Deprecated - getValue returns the size, number of components and a
-    // constant pointer to the image.
+    /// Deprecated - Returns the pixels in the image as an array of unsigned
+    /// chars.  The \a size and \a nc arguments are filled in with the
+    /// dimensions of the image and the number of components in the image; the
+    /// number of bytes in the array returned will be \a size[0]* \a size[1]* \a
+    /// nc.
     const unsigned char *getValue(SbVec2s &size, int &nc) const;
 
-    // Deprecated - setValue copies the image given to it into internal storage.
-    // See startEditing() for a way of avoiding the copy if you are
-    // doing a getValue() followed immediately by a setValue().
+    /// Deprecated - Sets the value of this field to be an image of the given
+    /// size, with the given number of components, and with the given pixel
+    /// values. \a size[0]* \a size[1]* \a nc bytes from the given array will be
+    /// copied into internal storage maintained by the <tt>SoSFImage</tt> field.
     void setValue(const SbVec2s &size, int nc, const unsigned char *bytes);
 
-    // Deprecated - Avoid copying the values in/out, if you are just changing
-    // the bytes and not changing the dimensions of the image.  This is
-    // equivalent to getValue, but returns a pointer you can change.
+    /// Deprecated - These methods can be used to efficiently edit the values in
+    /// an image field.  #startEditing() returns the size of the image in the \a
+    /// size and \a nc  arguments; writing past the end of the array returned is
+    /// a good way to cause hard-to-find core dumps.
     unsigned char *startEditing(SbVec2s &size, int &nc);
     void           finishEditing();
 

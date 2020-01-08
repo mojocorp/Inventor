@@ -58,30 +58,28 @@
 
 #include <Inventor/details/SoSubDetail.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoConeDetail
-//
-//  Detail about an SoCone node. It contains a bitmask indicating
-//  the part of the cone.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Stores detail information about the SoCone node.
+/// \ingroup Details
+/// This class contains detail information about a point on a cone.
+/// It contains the part of the cone that was hit (sides or bottom).
+/// \sa SoCone, SoDetail, SoPickedPoint, SoPrimitiveVertex
 class SoConeDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoConeDetail);
 
   public:
-    // Constructor and destructor
+    /// Constructor and destructor
     SoConeDetail();
+
+    /// Destructor
     virtual ~SoConeDetail();
 
-    // Returns the part of detail for this shape, as one of the part masks
-    // of SoCone.
+    /// Returns the part of detail for this shape, as one of the part masks
+    /// of SoCone.
     int getPart() const { return part; }
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SoDetail *copy() const;
 
     SoEXTENDER

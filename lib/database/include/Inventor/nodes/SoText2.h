@@ -63,34 +63,79 @@
 
 class SoBitmapFontCache;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoText2
-//
-//  2D, screen-aligned text.  The origin of the text is always 0,0,0
-//  in object space, but the text is always the same size (based on
-//  the fontSize from the SoFont node) and is always aligned with the
-//  screen.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Screen-aligned 2D text shape node.
+/// \ingroup Nodes
+/// This node defines one or more strings of 2D text. The text is always
+/// aligned horizontally with the screen and does not change size with
+/// distance in a perspective projection. The text origin is at (0,0,0)
+/// after applying the current transformation. Rotations and scales have
+/// no effect on the orientation or size of 2D text, just the location.
+///
+/// <tt>SoText2</tt> uses the current font to determine the typeface and size.
+/// The text is always drawn with the diffuse color of the current
+/// material; it is not lit, regardless of the lighting model.
+/// Furthermore, 2D text can not be textured, and it ignores the current
+/// drawing style and complexity.
+///
+/// Because 2D text is screen-aligned, it has some unusual
+/// characteristics.  For example, the 3D bounding box surrounding a 2D
+/// text string depends on the current camera and the current viewport
+/// size, since changing the field of view or the mapping onto the window
+/// changes the relative size of the text with respect to the rest of the
+/// scene. This has implications for caching as well, since a render cache
+/// in an <tt>SoSeparator</tt> that contains an <tt>SoText2</tt> node depends on
+/// the current camera.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws text based on the current font, at a location based on the current
+/// transformation.
+/// <b>SoRayPickAction</b>
+/// Performs a pick on the text. Text will be picked if the picking ray
+/// intersects the bounding box of the strings. The string index and
+/// character position are available from the <tt>SoTextDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses the text.
+///
+/// \par File format/defaults:
+/// \code
+/// SoText2 {
+///    string           ""
+///    spacing          1
+///    justification    LEFT
+/// }
+/// \endcode
+/// \sa SoFont, SoText3, SoTextDetail
 class SoText2 : public SoShape {
 
     SO_NODE_HEADER(SoText2);
 
   public:
-    enum Justification { // Justification types
-        LEFT = 0x01,
-        RIGHT = 0x02,
-        CENTER = 0x03
+    /// Justification types
+    enum Justification {
+        LEFT = 0x01,  ///< Left edges of all strings are aligned
+        RIGHT = 0x02, ///< Right edges of all strings are aligned
+        CENTER = 0x03 ///< Centers of all strings are aligned
     };
 
     // Fields
-    SoMFString string;  // the strings to display
-    SoSFFloat  spacing; // interval between strings
-    SoSFEnum   justification;
+    /// The text string(s) to display. Each string will appear on its own line.
+    SoMFString string;
 
-    // Constructor
+    /// Defines the distance (in the negative y direction) between the base
+    /// points of successive strings, measured with respect to the current
+    /// font height. A value of 1 indicates single spacing, a value of 2
+    /// indicates double spacing, and so on.
+    SoSFFloat spacing;
+    /// Indicates placement and alignment of strings. With <b>LEFT</b>
+    /// justification, the left edge of the first line is at the (transformed)
+    /// origin, and all left edges are aligned. <b>RIGHT</b> justification is
+    /// similar. <b>CENTER</b> justification places the center of the first
+    /// string at the (transformed) origin, with the centers of all remaining
+    /// strings aligned under it.
+    SoSFEnum justification;
+
+    /// Creates a 2D text node with default settings.
     SoText2();
 
     SoEXTENDER

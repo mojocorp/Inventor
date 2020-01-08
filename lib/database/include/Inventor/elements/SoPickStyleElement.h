@@ -72,30 +72,30 @@ class SoPickStyleElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoPickStyleElement);
 
   public:
-    // These are the available pick styles:
+    /// These are the available pick styles:
     enum Style {
-        SHAPE,        // Points on surface of shape may be picked
-        BOUNDING_BOX, // Points on bounding boxes may be picked
-        UNPICKABLE    // Picks go through objects
+        SHAPE,        ///< Points on surface of shape may be picked
+        BOUNDING_BOX, ///< Points on bounding boxes may be picked
+        UNPICKABLE    ///< Picks go through objects
     };
 
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current pick style in the state
+    /// Sets the current pick style in the state
     static void set(SoState *state, Style style) {
         SoInt32Element::set(classStackIndex, state, (int32_t)style);
     }
 
-    // Returns current pick style from the state
+    /// Returns current pick style from the state
     static Style get(SoState *state) {
         return (Style)SoInt32Element::get(classStackIndex, state);
     }
 
-    // Returns the default pick style
+    /// Returns the default pick style
     static Style getDefault() { return SHAPE; }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

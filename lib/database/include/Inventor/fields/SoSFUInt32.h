@@ -58,12 +58,14 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFUInt32 subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing an unsinged int32_t integer.
+/// \ingroup Fields
+/// A single-value field containg an unsigned 32-bit integer, representing
+/// a number from 0 to 4,294,967,295.
+///
+/// <tt>SoSFUInt32s</tt> are written to file as a single uint32_t (32-bit)
+/// integer in decimal, hexadecimal or octal format.
+/// \sa SoField, SoSField, SoMFUInt32
 class SoSFUInt32 : public SoSField {
 
     // Use standard field stuff

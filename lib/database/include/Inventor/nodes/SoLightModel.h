@@ -60,28 +60,40 @@
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoLightModel
-//
-//  Light model node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that defines the lighting model to use when rendering.
+/// \ingroup Nodes
+/// This node defines the lighting model to be used when rendering
+/// subsequent shapes. The lighting model is specified in the #model
+/// field. When the default model (Phong lighting) is used, light sources
+/// are required in a scene for objects to be easily visible.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction</b>
+/// Sets the current lighting model in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoLightModel {
+///    model	PHONG
+/// }
+/// \endcode
+/// \sa SoBaseColor,SoEnvironment,SoLight,SoMaterial
 class SoLightModel : public SoNode {
 
     SO_NODE_HEADER(SoLightModel);
 
   public:
-    enum Model {                                // Lighting model:
-        BASE_COLOR = SoLazyElement::BASE_COLOR, // Just use base color
-        PHONG = SoLazyElement::PHONG            // Phong lighting
+    /// Lighting model:
+    enum Model {
+        BASE_COLOR = SoLazyElement::BASE_COLOR, ///< Use only the base (diffuse)
+                                                ///< object color
+        PHONG = SoLazyElement::PHONG            ///< Use Phong lighting model
     };
 
     // Fields
-    SoSFEnum model; // Lighting model
+    SoSFEnum model; ///< Lighting model to use
 
-    // Constructor
+    /// Creates a light model node with default settings.
     SoLightModel();
 
     SoEXTENDER

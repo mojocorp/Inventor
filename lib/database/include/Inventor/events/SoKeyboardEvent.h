@@ -59,20 +59,28 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoButtonEvent.h>
 
-// some convenience macros for determining if an event matches
-
+/// Convenience macro for determining if an event matches
 #define SO_KEY_PRESS_EVENT(EVENT, KEY)                                         \
     (SoKeyboardEvent::isKeyPressEvent(EVENT, SoKeyboardEvent::KEY))
 
+/// Convenience macro for determining if an event matches
 #define SO_KEY_RELEASE_EVENT(EVENT, KEY)                                       \
     (SoKeyboardEvent::isKeyReleaseEvent(EVENT, SoKeyboardEvent::KEY))
 
+/// Keyboard key press and release events.
+/// \ingroup Events
+/// <tt>SoKeyboardEvent</tt> represents keyboard key press and release events
+/// in the Inventor event model.
+/// \sa SoEvent, SoButtonEvent, SoLocation2Event,
+/// SoMotion3Event,SoMouseButtonEvent,
+/// SoSpaceballButtonEvent,SoHandleEventAction, SoEventCallback, SoSelection,
+/// SoInteraction, SoXtDevice
 class SoKeyboardEvent : public SoButtonEvent {
 
     SO_EVENT_HEADER();
 
   public:
-    // the keyboard keys...
+    /// the keyboard keys...
     enum Key {
         // Special constant for any key
         ANY = 0,
@@ -218,24 +226,34 @@ class SoKeyboardEvent : public SoButtonEvent {
         GRAVE = 0x060
     };
 
-    // constructor
+    /// Constructor
     SoKeyboardEvent();
+
+    /// Destructor
     virtual ~SoKeyboardEvent();
 
-    // set/get which key generated the event (e.g. SoKeyboardEvent::A)
+    /// Set which key generated the event (e.g. SoKeyboardEvent::A)
     void setKey(SoKeyboardEvent::Key whichKey) { key = whichKey; }
+
+    /// Get which key generated the event (e.g. SoKeyboardEvent::A)
     SoKeyboardEvent::Key getKey() const { return key; }
 
-    // convenience routines to see if an SoEvent is a press or release
-    // of the passed keyboard key
+    /// Returns whether the passed event is a keyboard press event
+    /// of the passed key. When SoKeyboardEvent::ANY is passed,
+    /// this returns TRUE if the event represents a keyboard press
+    /// or release of any key.
     static SbBool isKeyPressEvent(const SoEvent *      e,
                                   SoKeyboardEvent::Key whichKey);
 
+    /// Returns whether the passed event is a keyboard release event
+    /// of the passed key. When SoKeyboardEvent::ANY is passed,
+    /// this returns TRUE if the event represents a keyboard press
+    /// or release of any key.
     static SbBool isKeyReleaseEvent(const SoEvent *      e,
                                     SoKeyboardEvent::Key whichKey);
 
-    // Convenience routine that returns the character representing the
-    // key, if it's printable. If not, this returns NUL ('\0').
+    /// Convenience routine that returns the character representing the
+    /// key, if it's printable. If not, this returns NULL ('\0').
     char getPrintableCharacter() const;
 
     SoINTERNAL

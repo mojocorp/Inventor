@@ -76,16 +76,16 @@ class SoViewingMatrixElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoViewingMatrixElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the view matrix to the given matrix
+    /// Sets the view matrix to the given matrix
     static void set(SoState *state, SoNode *node, const SbMatrix &matrix);
 
-    // Returns current matrix from the state
+    /// Returns current matrix from the state
     static const SbMatrix &get(SoState *state);
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

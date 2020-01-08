@@ -62,33 +62,50 @@
 #include <Inventor/fields/SoSFName.h>
 #include <Inventor/fields/SoSFTrigger.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoGate
-//
-//  Gate engine class. A gate engine copies its input to its output,
-//  when the "enable" field is true.  It will also do a one-time copy
-//  when the trigger field is touched.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Selectively copies its input to its output.
+/// \ingroup Engines
+/// This engine selectively copies its input to its output.
+/// The type of the input field can be any subclass of <tt>SoMField</tt>.
+/// The type is specified when an instance of the class is created.
+/// For example, <tt>SoGate(SoMFFloat::getClassTypeId())</tt>
+/// creates an engine that copies floating-point values.
+///
+///
+/// The #enable input controls continous flow-through of values.
+/// While #enable is TRUE, the input will be copied to the output.
+/// Alternatively, by touching the #trigger input, you can
+/// copy a single value from the input to the output.
+///
+///
+/// Note that unlike most other engine fields, #input and
+/// #output are pointers.
+/// Note also that by default #input does not contain any values.
+///
+/// \par File format/defaults:
+/// \code
+/// SoGate {
+///    type <inputType>
+///    input []
+///    enable FALSE
+///    trigger
+/// }
+/// \endcode
+/// \sa SoEngineOutput, SoConcatenate, SoSelectOne
 class SoGate : public SoEngine {
 
     SO_ENGINE_HEADER(SoGate);
 
   public:
-    // Constructor takes a subclass of SoMField.
+    /// Constructor.  The argument specifies the type of the input field.
     SoGate(SoType mfInputType);
 
-    SoSFBool    enable;  // enable continuous flow-through
-    SoSFTrigger trigger; // copy a single value
+    SoSFBool    enable;  ///< Enable continous flow-through.
+    SoSFTrigger trigger; ///< Copy a single value.
 
-    // Note that unlike most engines the input field is a pointer.
-    // The default value for this field is no values.
+    /// The value that is copied to the output when the gate is open.
     SoMField *input;
 
-    // Note that unlike most engines the output is a pointer.  The
-    // type of the output is the same as the input.
+    /// Contains a copy of the input value if the gate is open.
     SoEngineOutput *output;
 
     SoINTERNAL

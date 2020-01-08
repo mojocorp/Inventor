@@ -59,12 +59,18 @@
 #include <Inventor/SbString.h>
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFName subclass of SoSField. It contains an SbName.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containg a name.
+/// \ingroup Fields
+/// A field containing a name.  Names are short series of characters
+/// generally used for labels or names, and are stored in a special table
+/// designed to allow fast lookup and comparison.  For most purposes, an
+/// <tt>SoSFString</tt> field is probably more appropriate.
+///
+/// <tt>SoSFNames</tt> are written to file as a string of
+/// characters.  Names must begin with an underscore or alphabetic
+/// character, and must consist entirely of underscores, alphabetic
+/// characters, or numbers.
+/// \sa SoField, SoSField, SoMFName
 class SoSFName : public SoSField {
 
     // Use standard field stuff
@@ -75,7 +81,7 @@ class SoSFName : public SoSField {
     // Some additional convenience functions:
     //
 
-    // Set value from character string
+    /// Set this field to the name equivalent to the given string.
     void setValue(const char *string);
 
     SoINTERNAL

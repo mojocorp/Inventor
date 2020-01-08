@@ -72,35 +72,35 @@ class SoMaterialBindingElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoMaterialBindingElement);
 
   public:
-    // The (seemingly random) choice of values is for compatibility
-    // with Inventor 2.0 binary format files:
+    /// The (seemingly random) choice of values is for compatibility
+    /// with Inventor 2.0 binary format files:
     enum Binding {
-        OVERALL = 2,           // Whole object has same material
-        PER_PART = 3,          // One material for each part of object
-        PER_PART_INDEXED = 4,  // One material for each part, indexed
-        PER_FACE = 5,          // One material for each face of object
-        PER_FACE_INDEXED = 6,  // One material for each face, indexed
-        PER_VERTEX = 7,        // One material for each vertex
-        PER_VERTEX_INDEXED = 8 // One material for each vertex, indexed
+        OVERALL = 2,           ///< Whole object has same material
+        PER_PART = 3,          ///< One material for each part of object
+        PER_PART_INDEXED = 4,  ///< One material for each part, indexed
+        PER_FACE = 5,          ///< One material for each face of object
+        PER_FACE_INDEXED = 6,  ///< One material for each face, indexed
+        PER_VERTEX = 7,        ///< One material for each vertex
+        PER_VERTEX_INDEXED = 8 ///< One material for each vertex, indexed
     };
 
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current material binding in the state
+    /// Sets the current material binding in the state
     static void set(SoState *state, Binding binding) {
         SoInt32Element::set(classStackIndex, state, (int32_t)binding);
     }
 
-    // Returns current material binding from the state
+    /// Returns current material binding from the state
     static Binding get(SoState *state) {
         return (Binding)SoInt32Element::get(classStackIndex, state);
     }
 
-    // Returns the default material binding
+    /// Returns the default material binding
     static Binding getDefault() { return OVERALL; }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

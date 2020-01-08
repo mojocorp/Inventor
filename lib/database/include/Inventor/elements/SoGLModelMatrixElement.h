@@ -83,10 +83,10 @@ class SoGLModelMatrixElement : public SoModelMatrixElement {
     SO_ELEMENT_HEADER(SoGLModelMatrixElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Override push()/pop() methods so side effects can occur in GL
+    /// Override push()/pop() methods so side effects can occur in GL
     virtual void push(SoState *state);
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 

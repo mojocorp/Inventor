@@ -103,37 +103,37 @@ class SbDictEntry {
 SoEXTENDER
 class SbDict {
   public:
-    // Constructor
+    /// Constructor
     SbDict(int entries = 251);
 
-    // Destructor
+    /// Destructor
     ~SbDict();
 
-    // Calls given routine (passing value) for each entry in dictionary.
-    //  The order of entries is not guaranteed to mean anything.
+    /// Calls given routine (passing value) for each entry in dictionary.
+    ///  The order of entries is not guaranteed to mean anything.
     void applyToAll(void (*rtn)(unsigned long key, void *value));
 
-    // Calls given routine (passing value,data) for each entry in dictionary.
-    //  The order of entries is not guaranteed to mean anything.
+    /// Calls given routine (passing value,data) for each entry in dictionary.
+    ///  The order of entries is not guaranteed to mean anything.
     void applyToAll(void (*rtn)(unsigned long key, void *value, void *data),
                     void *data);
 
-    // Removes all entries from dictionary.
+    /// Removes all entries from dictionary.
     void clear();
 
-    // Enters a key,value pair into the dictionary. Overwrites entry and
-    //  returns FALSE if key already exists.
+    /// Enters a key,value pair into the dictionary. Overwrites entry and
+    ///  returns FALSE if key already exists.
     SbBool enter(unsigned long key, void *value);
 
-    // Finds entry with given key, setting value to point to value.
-    //  Returns FALSE if no such entry.
+    /// Finds entry with given key, setting value to point to value.
+    ///  Returns FALSE if no such entry.
     SbBool find(unsigned long key, void *&value) const;
 
-    // Makes two SbPLists, one for keys and the other for values.
-    //  The order of entries is not guaranteed to mean anything.
+    /// Makes two SbPLists, one for keys and the other for values.
+    ///  The order of entries is not guaranteed to mean anything.
     void makePList(SbPList &keys, SbPList &values);
 
-    // Removes the entry with the given key. Returns FALSE if no such entry.
+    /// Removes the entry with the given key. Returns FALSE if no such entry.
     SbBool remove(unsigned long key);
 
   private:

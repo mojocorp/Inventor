@@ -76,67 +76,114 @@
 class SoFieldData;
 class SoFieldList;
 
+/// Abstract base class for objects that contain fields.
+/// \ingroup Fields
+/// <tt>SoFieldContainer</tt> is the abstract base class for engines and nodes.
+/// It contains methods for finding out what fields an object has,
+/// controlling notification, and for dealing with all of the fields of an
+/// object at once.
+///
+/// The fields of an engine are its inputs.  Note that even though an
+/// engine's output corresponds to a specific type of field, an engine
+/// output is not a field.
+/// \sa SoSField, SoMField, SoNode, SoDB
 class SoFieldContainer : public SoBase {
 
   public:
-    // Returns type identifier for SoFieldContainer class
+    /// Returns type identifier for SoFieldContainer class
     static SoType getClassTypeId() { return classTypeId; }
 
-    // Sets all fields to default values
+    /// Sets all fields in this object to their default values.
     void setToDefaults();
 
-    // Returns TRUE if all fields have their default values (even if
-    // the isDefault() flags are not all set)
+    /// Returns TRUE if all of the object's fields have their default values.
+    /// This will return TRUE even if a field's <b>isDefault()</b> method
+    /// returns FALSE \(em for example, if a field's default value is 0.0 and
+    /// you <b>setValue(0.0)</b> that field, the default flag will be set to
+    /// FALSE (because it would be too slow to compare the field against its
+    /// default value every time <b>setValue()</b> is called). However,
+    /// #hasDefaultValues() would return TRUE in this case.
     SbBool hasDefaultValues() const;
 
-    // Returns TRUE if the field values match those of the passed
-    // instance, which is assumed to be of the same type as this
+    /// Returns TRUE if this object's fields are exactly equal to \a fc 's
+    /// fields. If \a fc is not exactly same type as this object, FALSE is
+    /// returned.
     SbBool fieldsAreEqual(const SoFieldContainer *fc) const;
 
-    // Copies field values from the passed instance, which is assumed
-    // to be of the same type as this. If the copyConnections flag is
-    // TRUE (it is FALSE by default), any connections to (but not
-    // from) fields of the instance are copied, as well.
+    /// Copies the contents of \a fc 's fields into this object's fields.  \a fc
+    /// must be the same type as this object.  If \a copyConnections is TRUE,
+    /// then if any of \a fc 's fields are connected then this object's fields
+    /// will also be connected to the same source.
     void copyFieldValues(const SoFieldContainer *fc,
                          SbBool                  copyConnections = FALSE);
 
-    // Set one or more fields of from the Inventor data file format
-    // information in the fieldData string.  Returns TRUE if successful,
-    // FALSE otherwise
+    /// Sets one or more fields in this object to the values specified in the
+    /// given string, which should be a string in the Inventor file format.
+    /// TRUE is returned if the string was valid Inventor file format.  For
+    /// example, you could set the fields of an <tt>SoCube</tt> by doing:
+    /// \code
+    /// SoCube *cube = ....
+    /// cube->set("width 1.0 height 2.0 depth 3.2");
+    /// \endcode
     SbBool set(const char *fieldDataString) {
         return set(fieldDataString, NULL);
     }
 
-    // Stores field data (in the same format expected by the set()
-    // method) in the given SbString
+    /// Returns the values of the fields of this object in the Inventor ASCII
+    /// file format in the given string.  Fields whose
+    /// <b>isDefault()</b> bit is set will not be part of the string.  You can
+    /// use the field->get() method to get a field's value as a string even if
+    /// has its default value.
     void get(SbString &fieldDataString) { get(fieldDataString, NULL); }
 
-    // Returns a list of fields in this node/engine.  This is virtual
-    // so private fields can be hidden.  Use getFieldName to get the
-    // names of the fields, and use SoField::getType() to figure out
-    // their types.  The number of fields added to the list is
-    // returned.
+    /// Appends pointers to all of this object's fields to resultList, and
+    /// returns the number of fields appended.  The types of the fields can be
+    /// determined using SoField#isOfType() and SoField#getTypeId(), and their
+    /// names can be determined by passing the field pointers to the
+    /// #getFieldName() method (see below).
     virtual int getFields(SoFieldList &list) const;
 
-    // Returns a pointer to the field with the given name. If no such
-    // field exists, NULL is returned.
+    /// Returns a pointer to the field of this object whose name is \a
+    /// fieldName. Returns NULL if there is no field with the given name.
     virtual SoField *getField(const SbName &fieldName) const;
 
-    // Returns (in fieldName) the name of the field pointed to.
-    // Returns FALSE if the field is not contained within the field
-    // container instance.
+    /// Returns the name of the given field in the \a fieldName argument.
+    /// Returns FALSE if field is not a member of this object.
     SbBool getFieldName(const SoField *field, SbName &fieldName) const;
 
-    // Indicates whether notification will propagate as the result of
-    // setting the value of any of the contained fields. This is on by
-    // default. Turning this off should be done with caution, since it
-    // may prevent data sensors from being triggered.
+    /// Notification at this Field Container is enabled (if flag == TRUE) or
+    /// disabled (if flag == FALSE).  The returned boolean value indicates
+    /// whether notification was enabled immediately prior to applying this
+    /// method.
     SbBool enableNotify(SbBool flag) // returns old value
     {
         SbBool e = notifyEnabled;
         notifyEnabled = flag;
         return e;
     }
+
+    /// Notification is the process of telling interested objects that this
+    /// object has changed.  Notification is needed to make engines and
+    /// sensors function, is used to keep <tt>SoPaths</tt> up to date when the
+    /// scene graph's topology changes, and is also used to invalidate
+    /// rendering or bounding box caches.
+    ///
+    /// Notification is normally enabled, but can be disabled on a node by
+    /// node (or engine by engine) basis.  If you are making extensive changes
+    /// to a large part of the scene graph then disabling notification can
+    /// increase performance, at the expense of increased
+    /// responsibility for making sure that any interested engines, sensors or
+    /// paths are kept up to date.
+    ///
+    /// For example, if you will be making a lot of changes to a small part of
+    /// your scene graph and you know that there are no engines or sensors
+    /// attached to nodes in that part of the scene graph, you might disable
+    /// notification on the nodes you are changing, modify them, re-enable
+    /// notification, and then touch() one of the nodes to cause a redraw.
+    ///
+    /// However, you should profile your application and make sure that
+    /// notification is taking a significant amount of time before going to
+    /// the trouble of manually controlling notification.
     SbBool isNotifyEnabled() const { return notifyEnabled; }
 
     SoINTERNAL

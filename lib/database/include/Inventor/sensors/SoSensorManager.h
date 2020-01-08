@@ -73,12 +73,14 @@ class SoAlarmSensor;
 SoINTERNAL
 class SoSensorManager {
   public:
-    // Constructor, destructor
+    /// Constructor
     SoSensorManager();
+
+    /// Destructor
     ~SoSensorManager();
 
-    // Set up a function to call when either queue has a sensor added
-    // or removed
+    /// Set up a function to call when either queue has a sensor added
+    /// or removed
     void setChangedCallback(void (*func)(void *), void *data) {
         changedFunc = func;
         changedFuncData = data;

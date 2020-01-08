@@ -59,12 +59,15 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbPlane.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFPlane subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a plane equation.
+/// \ingroup Fields
+/// A field containing a plane equation (an SbPlane).
+///
+/// <tt>SoSFPlanes</tt> are written to file as four floating point values
+/// separated by whitespace.  The first three are the normal direction of
+/// the plane, the fourth is the distance of the plane from the origin
+/// (in the direction of the normal).
+/// \sa SbPlane, SoField, SoSField, SoMFPlane
 class SoSFPlane : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFPlane, SbPlane, const SbPlane &);

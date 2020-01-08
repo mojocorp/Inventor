@@ -73,20 +73,20 @@ class SoTextureQualityElement : public SoFloatElement {
     SO_ELEMENT_HEADER(SoTextureQualityElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current TextureQuality in the state
+    /// Sets the current TextureQuality in the state
     static void set(SoState *state, float qual) {
         SoFloatElement::set(classStackIndex, state, qual);
     }
 
-    // Returns current TextureQuality from the state
+    /// Returns current TextureQuality from the state
     static float get(SoState *state) {
         return SoFloatElement::get(classStackIndex, state);
     }
 
-    // Returns the default TextureQuality
+    /// Returns the default TextureQuality
     static float getDefault() { return 0.5; }
 
     SoINTERNAL
@@ -117,37 +117,37 @@ class SoTextureOverrideElement : public SoElement {
     enum { TEXTURE_QUALITY = 0x1, TEXTURE_IMAGE = 0x2 };
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Comparison based on value of int32_ts
+    /// Comparison based on value of int32_ts
     virtual SbBool matches(const SoElement *elt) const;
 
-    // Overrides push() method to copy values from next instance in
-    // the stack, and set up cache dependencies correctly
+    /// Overrides push() method to copy values from next instance in
+    /// the stack, and set up cache dependencies correctly
     virtual void push(SoState *state);
 
     //
     // "get" methods for each element which can be overridden.
     //
 
-    // Returns TRUE iff SoTextureQualityElement is overridden.
+    /// Returns TRUE iff SoTextureQualityElement is overridden.
     static SbBool getQualityOverride(SoState *state);
 
-    // Returns TRUE iff SoTextureImageElement is overridden.
+    /// Returns TRUE iff SoTextureImageElement is overridden.
     static SbBool getImageOverride(SoState *state);
 
     //
     // "set" methods for each element which can be overridden.
     //
 
-    // set override flag for SoTextureQualityElement.
+    /// set override flag for SoTextureQualityElement.
     static void setQualityOverride(SoState *state, SbBool override);
 
-    // set override flag for SoTextureImageElement.
+    /// set override flag for SoTextureImageElement.
     static void setImageOverride(SoState *state, SbBool override);
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

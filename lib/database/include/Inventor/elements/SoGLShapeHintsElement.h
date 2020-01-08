@@ -74,14 +74,14 @@ class SoGLShapeHintsElement : public SoShapeHintsElement {
     SO_ELEMENT_HEADER(SoGLShapeHintsElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Override push() method to remember previous element's state so
-    // we can sometimes generate more efficient GL calls
+    /// Override push() method to remember previous element's state so
+    /// we can sometimes generate more efficient GL calls
     virtual void push(SoState *state);
 
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     SoINTERNAL

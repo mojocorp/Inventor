@@ -62,30 +62,32 @@
 #include <set>
 #include <string>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbName
-//
-//  An SbName is a character string that is stored in a special table.
-//  When a string is stored in this table, a pointer to the storage is
-//  returned. Two identical strings will return the same pointer. This
-//  means that comparison of two SbNames for equality can be
-//  accomplished by comparing their pointers!
-//
-//////////////////////////////////////////////////////////////////////////////
+/// Character string stored in a hash table.
+/// \ingroup Basics
+/// This class of strings stores the string in a hash table. It is
+/// used by the Inventor toolkit for keywords and other unique names.
+/// It is not recommended for general use (only in the context of Inventor
+/// objects). When a string is stored in this table, a pointer to the
+/// storage is returned. Two identical strings will return the same pointer.
+/// This means that comparison of two <tt>SbName</tt>s
+/// for equality can be accomplished by comparing their identifiers.
+/// <tt>SbName</tt>s
+/// are used for strings which are expected to show up frequently, such as
+/// node names.
+/// \sa SbString
 
 class SbName {
   public:
-    // Default constructor
+    /// Default constructor
     SbName();
 
-    // Constructor that initializes to given character string
+    /// Constructor that initializes to given character string
     SbName(const char *s);
 
-    // Constructor that initializes to given SbString
+    /// Constructor that initializes to given SbString
     SbName(const SbString &s);
 
-    // Constructor that initializes to another SbName
+    /// Constructor that initializes to another SbName
     SbName(const SbName &n) { entry = n.entry; }
 
     ~SbName() {}
@@ -94,10 +96,10 @@ class SbName {
     static void init();
     static void finish();
 
-    // Returns pointer to the character string
+    /// Returns pointer to the character string
     const char *getString() const { return entry->data(); }
 
-    // Returns length of string
+    /// Returns length of string
     size_t getLength() const { return entry->length(); }
 
     /// Return the position of the first occurrence in the char of the searched
@@ -108,23 +110,23 @@ class SbName {
     /// content, -1 if not found.
     int rfind(char c) const;
 
-    // Returns TRUE if given character is a legal starting character
-    // for an identifier
+    /// Returns TRUE if given character is a legal starting character
+    /// for an identifier
     static SbBool isIdentStartChar(char c);
 
-    // Returns TRUE if given character is a legal nonstarting
-    // character for an identifier
+    /// Returns TRUE if given character is a legal nonstarting
+    /// character for an identifier
     static SbBool isIdentChar(char c);
 
-    // Returns TRUE if given character is a legal starting character
-    // for an SoBase's name
+    /// Returns TRUE if given character is a legal starting character
+    /// for an SoBase's name
     static SbBool isBaseNameStartChar(char c);
 
-    // Returns TRUE if given character is a legal nonstarting
-    // character for an SoBase's name
+    /// Returns TRUE if given character is a legal nonstarting
+    /// character for an SoBase's name
     static SbBool isBaseNameChar(char c);
 
-    // Unary "not" operator; returns TRUE if string is empty ("")
+    /// Unary "not" operator; returns TRUE if string is empty ("")
     int operator!() const { return entry->empty(); }
 
     /// Less than operator (using alphabetical order).
@@ -132,28 +134,32 @@ class SbName {
         return (*entry) < (*other.entry);
     }
 
-    // Equality operator for SbName/char* and SbName/SbName comparison
+    /// Equality operator for SbName/char* comparison
     friend bool operator==(const SbName &n, const char *s) {
         return (*n.entry) == s;
     }
 
+    /// Equality operator for SbName/char* comparison
     friend bool operator==(const char *s, const SbName &n) {
         return (*n.entry) == s;
     }
 
+    /// Equality operator for SbName/SbName comparison
     friend bool operator==(const SbName &n1, const SbName &n2) {
         return n1.entry == n2.entry;
     }
 
-    // Inequality operator for SbName/char* and SbName/SbName comparison
+    /// Inequality operator for SbName/char* comparison
     friend bool operator!=(const SbName &n, const char *s) {
         return (*n.entry) != s;
     }
 
-    friend int operator!=(const char *s, const SbName &n) {
+    /// Inequality operator for SbName/char* comparison
+    friend bool operator!=(const char *s, const SbName &n) {
         return (*n.entry) != s;
     }
 
+    /// Inequality operator for SbName/SbName comparison
     friend bool operator!=(const SbName &n1, const SbName &n2) {
         return n1.entry != n2.entry;
     }

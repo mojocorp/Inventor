@@ -58,22 +58,23 @@
 #include <Inventor/Xt/viewers/SoXtFullViewer.h>
 #include <Inventor/SbBox.h>
 
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoXtConstrainedViewer
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Base viewer class which adds camera constraints given a world up direction
+/// \ingroup Viewers
+/// This is a base class for the SoXtWalkViewer and SoXtFlyViewer
+/// component viewers.
+/// This class adds methods and convenience routines available to
+/// subclasses to constrain the camera given a world up direction.
+/// This prevents the camera from looking upside down.By default the +
+/// Y direction is used.
+/// \sa SoXtFullViewer, SoXtViewer, SoXtComponent, SoXtRenderArea,
+/// SoXtWalkViewer, SoXtFlyViewer
 class SoXtConstrainedViewer : public SoXtFullViewer {
  public:
-    
-    // 
-    // Specifies the upward direction of the viewer. This up direction is
-    // used by the viewers to constrain the camera when tilting up/down, and
-    // also used when rotating the camera right/left.
-    // The default is the +Y (0,1,0) direction.
-    //
+
+    /// Specifies the upward direction of the viewer. This up direction is
+    /// used by the viewers to constrain the camera when tilting up/down, and
+    /// also used when rotating the camera right/left.
+    /// The default is the +Y (0,1,0) direction.
     void	    setUpDirection(const SbVec3f &newUpDirection);
     SbVec3f	    getUpDirection()		    { return upDirection; }
     

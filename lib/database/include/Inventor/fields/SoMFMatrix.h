@@ -58,20 +58,26 @@
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbMatrix.h>
-
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFMatrix subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of 4x4 matrices.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of 4x4 matrices.
+///
+/// <tt>SoMFMatrices</tt> are written to file as sets of 16 floating point
+/// numbers separated by whitespace.  When more than one value is present,
+/// all of the values are enclosed in square brackets and separated by
+/// commas; for example, two identity matrices might be written as:
+/// \code
+/// [ 1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1,
+///   1 0 0 0  0 1 0 0  0 0 1 0  0 0 0 1 ]
+/// \endcode
 class SoMFMatrix : public SoMField {
 
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFMatrix, SbMatrix, const SbMatrix &);
 
   public:
-    // Set one value from 16 floats
+    /// Makes this field contain one and only one value, which is the matrix
+    /// given by the 16 values.
     void setValue(float a11, float a12, float a13, float a14, float a21,
                   float a22, float a23, float a24, float a31, float a32,
                   float a33, float a34, float a41, float a42, float a43,

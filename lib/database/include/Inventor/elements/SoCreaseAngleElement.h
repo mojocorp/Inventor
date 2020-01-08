@@ -74,23 +74,23 @@ class SoCreaseAngleElement : public SoFloatElement {
     SO_ELEMENT_HEADER(SoCreaseAngleElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current crease angle in the state
+    /// Sets the current crease angle in the state
     static void set(SoState *state, float angle) {
         SoFloatElement::set(classStackIndex, state, angle);
     }
 
-    // Returns current crease angle from the state
+    /// Returns current crease angle from the state
     static float get(SoState *state) {
         return SoFloatElement::get(classStackIndex, state);
     }
 
-    // Returns the default crease angle
-    static float getDefault() { return 0.0; }
+    /// Returns the default crease angle
+    static float getDefault() { return 0.0f; }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

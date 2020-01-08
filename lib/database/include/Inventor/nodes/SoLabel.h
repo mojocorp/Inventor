@@ -59,23 +59,29 @@
 #include <Inventor/fields/SoSFName.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoLabel
-//
-//  Node that holds labels for application-specific purposes.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node containing label text string.
+/// \ingroup Nodes
+/// This class defines a label node in the scene graph. This node has no effect
+/// during traversal. It is used to store text labels in the scene graph,
+/// typically for application-specific identification of subgraphs when
+/// node naming is not appropriate.
+///
+/// \par File format/defaults:
+/// \code
+/// SoLabel {
+///    label	"<Undefined label>"
+/// }
+/// \endcode
+/// \sa SbName, SoInfo
 class SoLabel : public SoNode {
 
     SO_NODE_HEADER(SoLabel);
 
   public:
     // Fields
-    SoSFName label; // Label string
+    SoSFName label; ///< Defines the label string value as an <tt>SbName</tt>.
 
-    // Constructor
+    /// Creates a label node with default settings.
     SoLabel();
 
     SoINTERNAL

@@ -60,14 +60,24 @@ class SoEngine;
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFEngine subclass of SoSField. The field value is a pointer to an
-//  SoEngine. The field automatically maintains a reference to the engine
-//  it points to and propagates notification from the engine.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a pointer to a engine.
+/// \ingroup Fields
+/// This field maintains a pointer to an <tt>SoEngine</tt> instance,
+/// correctly maintaining its reference count.
+///
+/// <tt>SoSFEngines</tt> are written to file as the engine they are pointing to.
+/// For example:
+///
+/// mySoSFEngineField ElapsedTime {}
+///
+/// is an SoSFEngine field named 'mySoSFEngineField', pointing to an
+/// SoElapsedTime engine. If the engine is used elsewhere, the regular DEF/USE
+/// instancing mechanism applies:
+///
+/// anotherSoSFEngineField USE calculator
+///
+/// is an SoSFEngine field that points to a engine named 'calculator' that was
+/// DEF'ed earlier in the scene. \sa SoField, SoSField, SoMFEngine, SoEngine
 class SoSFEngine : public SoSField {
 
     // Use standard field stuff

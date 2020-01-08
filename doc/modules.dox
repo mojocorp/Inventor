@@ -1,0 +1,44 @@
+/*! @defgroup Actions Actions
+ */
+
+/*! @defgroup Basics Basics
+ */
+    
+/*! @defgroup Details Details
+ */
+ 
+/*! @defgroup Draggers Draggers
+ */
+   
+/*! @defgroup Engines Engines
+ */
+     
+/*! @defgroup Events Events
+ */
+
+/*! @defgroup Fields Fields
+ */
+
+/*! @defgroup General General
+ */
+     
+/*! @defgroup Interaction Interaction
+ */
+
+/*! @defgroup Manips Manips
+ */
+ 
+/*! @defgroup Nodekits Nodekits
+ */
+   
+/*! @defgroup Nodes Nodes
+ */
+ 
+/*! @defgroup Projectors Projectors
+ */
+ 
+/*! @defgroup Sensors Sensors
+ */
+
+/*! @defgroup Viewers Viewers
+ */

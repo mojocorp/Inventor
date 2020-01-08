@@ -95,9 +95,42 @@ class	SoFieldSensor;
 //  
 //////////////////////////////////////////////////////////////////////////////
 
+/// Viewer component which moves the camera in a plane
+/// \ingroup Viewers
+/// The paradigm for this viewer is a walkthrough of an architectural model.
+/// Its primary behavior is forward, backward, and left/right turning motion
+/// while maintaining a constant "eye level". It is also possible to stop and
+/// look around at the scene. The eye level plane can be disabled, allowing the
+/// viewer to proceed in the "look at" direction, as if on an escalator. The
+/// eye level plane can also be translated up and down \(em similar to an
+/// elevator.
+///
+/// <b>USAGE</b>
+///
+/// <b>Left Mouse:</b> walk mode. Click down and move up/down for fowards/backwards
+/// motion.  Move right and left for turning. Speed increases exponentially
+/// with the distance from the mouse-down origin.
+///
+/// <b>Middle Mouse</b> - or
+/// <b>Ctrl + Left Mouse:</b> Translate up, down, left and right.
+///
+/// <b>Ctrl + Middle Mouse:</b> tilt the camera up/down and right/left. This
+/// allows you to look around while stopped.
+///
+/// <b>\<s\> + click:</b> Alternative to the Seek button. Press (but do not
+/// hold down) the \<s\> key, then click on a target object.
+///
+/// <b>\<u\> + click:</b> Press (but do not hold down) the \<u\> key, then
+/// click on a target object to set the "up" direction to the surface normal.
+/// By default +y is the "up" direction.
+///
+/// <b>Right Mouse:</b> Open the popup menu.
+/// \sa SoXtFullViewer, SoXtViewer, SoXtComponent, SoXtRenderArea, SoXtPlaneViewer, SoXtExaminerViewer, SoXtFlyViewer
 class SoXtWalkViewer : public SoXtConstrainedViewer {
  public:
-    
+    /// Constructor which specifies the viewer type.
+    /// Please refer to the SoXtViewer
+    /// man pages for a description of the viewer types.
     SoXtWalkViewer(
 	Widget parent = NULL,
 	const char *name = NULL, 

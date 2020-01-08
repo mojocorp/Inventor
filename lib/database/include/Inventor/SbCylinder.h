@@ -63,35 +63,38 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbLine.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbCylinder
-//
-//  Represents a cylinder in 3D space.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Class for representing a cylinder.
+/// \ingroup Basics
+/// This class defines a simple cylinder datatype.  It is used by
+/// the Inventor toolkit for arguments or return values.
+/// \sa SbVec3f, SbLine, SbPlane, SbSphere, SoCylinder
 class SbCylinder {
   public:
-    // Constructor
+    /// Constructor
     SbCylinder();
 
-    // Construct a cylinder given its axis and radius
+    /// Construct a cylinder given its axis and radius
     SbCylinder(const SbLine &a, float r);
 
-    // Change the axis and radius
+    /// Change the axis and radius
     void setValue(const SbLine &a, float r);
 
-    // Set just the axis or radius
+    /// Set just the axis
     void setAxis(const SbLine &a);
+
+    /// Set just the radius
     void setRadius(float r);
 
-    // Return the axis and radius
+    /// Return the axis
     const SbLine &getAxis() const { return axis; }
-    float         getRadius() const { return radius; }
 
-    // Intersect line and cylinder, returning TRUE if there is an intersection
+    /// Return the radius
+    float getRadius() const { return radius; }
+
+    /// Intersect line and cylinder, returning TRUE if there is an intersection
     SbBool intersect(const SbLine &l, SbVec3f &intersection) const;
+
+    /// Intersect line and cylinder, returning TRUE if there is an intersection
     SbBool intersect(const SbLine &l, SbVec3f &enter, SbVec3f &exit) const;
 
   private:

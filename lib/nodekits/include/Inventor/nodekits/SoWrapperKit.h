@@ -97,6 +97,63 @@
 //                                        "childList"
 //
 ////////////////////////////////////////////////////////////
+/// Wrapper nodekit class.
+/// \ingroup Nodekits
+/// <tt>SoWrapperKit</tt> is derived from <tt>SoSeparatorKit</tt>.
+/// It adds the capability to wrap an arbitrary scene graph, (non-nodekit),
+/// within an <tt>SoSeparatorKit</tt>, so that it may be used along with other
+/// shape kits in a hierarchy. There are two additional parts
+/// included in <tt>SoWrapperKit</tt>: <em>localTransform</em> and
+/// <em>contents</em>.
+///
+///
+/// The part <em>contents</em> is an <tt>SoSeparator</tt> node beneath which
+/// any arbitrary scene graph can be added. This is especially useful
+/// for importing scene graphs of unknown structure (non-nodekits)
+/// into nodekit format.
+///
+///
+/// Since an <tt>SoWrapperKit</tt> is a class descended from
+/// <tt>SoSeparatorKit</tt>, it may be put into another
+/// <tt>SoSeparatorKit</tt>'s <em>childList</em>.
+/// \par Nodekit structure:
+/// \code
+/// CLASS SoWrapperKit
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "pickStyle"
+///          "appearance"
+///          "units"
+///          "transform"
+///          "texture2Transform"
+///          "childList"
+/// -->      "localTransform"
+/// -->      "contents"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoWrapperKit {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     callbackList        NULL
+///     pickStyle           NULL
+///     appearance          NULL
+///     units               NULL
+///     transform           NULL
+///     texture2Transform   NULL
+///     childList           NULL
+///     localTransform      NULL
+///     contents            NULL
+/// }
+/// \endcode
+/// \sa
+/// SoAppearanceKit,SoBaseKit,SoCameraKit,SoLightKit,SoNodeKit,SoNodeKitDetail,
+/// \sa
+/// SoNodeKitListPart,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit
 class SoWrapperKit : public SoSeparatorKit {
 
     SO_KIT_HEADER(SoWrapperKit);
@@ -106,7 +163,7 @@ class SoWrapperKit : public SoSeparatorKit {
     SO_KIT_CATALOG_ENTRY_HEADER(contents);
 
   public:
-    // constructor
+    /// Default constructor
     SoWrapperKit();
 
     SoINTERNAL

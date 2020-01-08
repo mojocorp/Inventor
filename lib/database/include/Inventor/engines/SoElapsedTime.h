@@ -65,17 +65,49 @@
 #include <Inventor/fields/SoSFTime.h>
 #include <Inventor/fields/SoSFTrigger.h>
 
+/// Basic controllable time source.
+/// \ingroup Engines
+/// This engine functions as a stopwatch; it outputs the time that has
+/// elapsed since it started running.
+/// By default, the #timeIn input is connected to the <b>realTime</b> global
+/// field. It can, however, be connected to any other time source.
+///
+///
+/// The ouput from the engine is the time that has elapsed since it
+/// started running, or since the #reset input was last triggered.
+/// You can affect the speed of the output time by setting the
+/// #speed scale factor.  A value greater than 1.0 will speed up
+/// the output, and a value less than 1.0 will slow it down.
+///
+///
+/// If you pause the engine, by setting the #pause input to TRUE, it stops
+/// updating the #timeOut output.  When you turn off the pause, it jumps
+/// to its current position without losing time.
+/// Alternatively, if you want to stop the engine for a while, and then restart
+/// it from where it left off, use the #on input field.
+///
+/// \par File format/defaults:
+/// \code
+/// SoElapsedTime {
+///    timeIn <current time>
+///    speed 1
+///    on TRUE
+///    pause FALSE
+///    reset
+/// }
+/// \endcode
+/// \sa SoTimeCounter, SoOneShot, SoEngineOutput
 class SoElapsedTime : public SoEngine {
 
     SO_ENGINE_HEADER(SoElapsedTime);
 
   public:
     // Inputs
-    SoSFTime    timeIn; // Running (clock) time
-    SoSFFloat   speed;  // Scale factor for time
-    SoSFBool    on;     // TRUE to run, FALSE to stop
-    SoSFBool    pause;  // TRUE to freeze, FALSE to run
-    SoSFTrigger reset;
+    SoSFTime    timeIn; //< Running (clock) time
+    SoSFFloat   speed;  //< Scale factor for time.
+    SoSFBool    on;     //< TRUE to start running, FALSE to stop.
+    SoSFBool    pause;  //< TRUE to freeze, FALSE to continue running.
+    SoSFTrigger reset;  //< Reset the base time.
 
     // Output:
     //
@@ -94,9 +126,9 @@ class SoElapsedTime : public SoEngine {
     // to TRUE) and both timeOut and 'clock' will continue from where
     // they were at the time the engine was stopped.
     //
-    SoEngineOutput timeOut;
+    SoEngineOutput timeOut; //< Time elapsed, modified by the speed factor.
 
-    // Constructor
+    /// Constructor
     SoElapsedTime();
 
     SoINTERNAL

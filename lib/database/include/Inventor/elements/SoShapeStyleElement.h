@@ -99,22 +99,22 @@ class SoShapeStyleElement : public SoElement {
     // API USED BY SHAPES:
     //
 
-    // Get a readable instance:
+    /// Get a readable instance:
     static const SoShapeStyleElement *get(SoState *state);
 
-    // Returns TRUE if shapes may not render for some reason:
+    /// Returns TRUE if shapes may not render for some reason:
     SbBool mightNotRender() const { return delayFlags; }
 
-    // Returns TRUE if need normals:
+    /// Returns TRUE if need normals:
     SbBool needNormals() const { return needNorms; }
 
-    // Returns TRUE if need texture coordinates:
+    /// Returns TRUE if need texture coordinates:
     SbBool needTexCoords() const { return (texEnabled && (!texFunc)); }
 
-    // Returns a mask that can be used by the SoVertexPropertyCache
-    // class (see SoVertexProperty.h for the SoRenderInfo class) to
-    // quickly mask out the normal or texture coordinate cases if
-    // normals or texture coordinates aren't needed.
+    /// Returns a mask that can be used by the SoVertexPropertyCache
+    /// class (see SoVertexProperty.h for the SoRenderInfo class) to
+    /// quickly mask out the normal or texture coordinate cases if
+    /// normals or texture coordinates aren't needed.
     int getRenderCaseMask() const { return renderCaseMask; }
 
     // API USED BY OTHER ELEMENTS:
@@ -125,8 +125,8 @@ class SoShapeStyleElement : public SoElement {
     static void setTextureEnabled(SoState *state, SbBool value);
     static void setTextureFunction(SoState *state, SbBool value);
     static void setLightModel(SoState *state, int32_t value);
-    // Set value is TRUE if either diffuse, transparency, or materialbinding
-    // are overridden; otherwise FALSE.
+    /// Set value is TRUE if either diffuse, transparency, or materialbinding
+    /// are overridden; otherwise FALSE.
     static void setOverrides(SoState *state, SbBool value);
 
     static SbBool isScreenDoor(SoState *state);

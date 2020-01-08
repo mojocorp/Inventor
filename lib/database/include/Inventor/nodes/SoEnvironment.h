@@ -63,40 +63,54 @@
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/elements/SoEnvironmentElement.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoEnvironment
-//
-//  Node that describes global environmental attributes such as
-//  ambient lighting, light attenuation, and fog.
-//
-//  Ambient lighting is the amount of extra light impinging on each
-//  surface point when computing Phong lighting.
-//
-//  Light attenuation affects all subsequent lights in a scene. It is
-//  a quadratic function of distance from a light source to a surface
-//  point. The three coefficients are specified in the attenuation
-//  field. Attenuation works only for light sources with a fixed
-//  location, such as point and spot lights.
-//
-//  Fog has one of four types, each of which blends each surface point
-//  with the specified fog color. Each type interprets the visibility
-//  field to be the distance at which fog totally obscures objects. A
-//  visibility value of 0 (the default) causes the SoEnvironment node
-//  to set up fog so that the visibility is the distance to the far
-//  clipping plane of the current camera.
-//
-//  Note that this node has effect only during rendering, and that it
-//  does not inherit field values from other SoEnvironment nodes.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Global environment node.
+/// \ingroup Nodes
+/// This node describes global environmental attributes such as ambient
+/// lighting, light attenuation, and fog.
+///
+/// Ambient lighting is the amount of extra light impinging on each
+/// surface point when the lighting model is Phong (see <tt>SoLightModel</tt>).
+///
+/// Light attenuation affects all subsequent lights in a scene (see
+/// <tt>SoLight</tt>). It is a quadratic function of distance from a light
+/// source to a surface point.  The three coefficients are specified in
+/// the #attenuation field.  Attenuation works only for light sources
+/// with a fixed location, such as point and spot lights.
+///
+/// Fog has one of four types, each of which blends each surface point
+/// with the specified fog color. Each type interprets the <b>visibility</b>
+/// field to be the distance at which fog totally obscures objects. A
+/// <b>visibility</b> value of 0 (the default) causes the <tt>SoEnvironment</tt>
+/// node to set up fog so that the visibility is the distance to the far
+/// clipping plane of the current camera.
+///
+/// Note that this node has effect only during rendering, and that it
+/// does not inherit field values from other <tt>SoEnvironment</tt> nodes.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Sets the current environment parameters to those specified with this node.
+/// Successive geometries will be rendered using this environment.
+///
+/// \par File format/defaults:
+/// \code
+/// SoEnvironment {
+///    ambientIntensity 0.2
+///    ambientColor     1 1 1
+///    attenuation      0 0 1
+///    fogType          NONE
+///    fogColor         1 1 1
+///    fogVisibility    0
+/// }
+/// \endcode
+/// \sa SoLight, SoLightModel
 class SoEnvironment : public SoNode {
 
     SO_NODE_HEADER(SoEnvironment);
 
   public:
-    enum FogType {                          // Type of fog:
+    /// Type of fog:
+    enum FogType {
         NONE = SoEnvironmentElement::NONE,  ///< No fog
         HAZE = SoEnvironmentElement::HAZE,  ///< Linear increase in opacity with
                                             ///< distance
@@ -107,21 +121,21 @@ class SoEnvironment : public SoNode {
 
     // Fields
 
-    // Intensity and RGB color of ambient lighting
+    /// Intensity and RGB color of ambient lighting
     SoSFFloat ambientIntensity;
     SoSFColor ambientColor;
 
-    // Squared, linear, and constant light attenuation coefficients
-    // (in order) with respect to distance of light from surface (for
-    // Phong lighting)
+    /// Squared, linear, and constant light attenuation coefficients
+    /// (in order) with respect to distance of light from surface (for
+    /// Phong lighting)
     SoSFVec3f attenuation;
 
-    // Type of fog, color of fog, and visibility factor.
+    /// Type of fog, color of fog, and visibility factor.
     SoSFEnum  fogType;
     SoSFColor fogColor;
     SoSFFloat fogVisibility;
 
-    // Constructor
+    /// Constructor
     SoEnvironment();
 
     SoEXTENDER

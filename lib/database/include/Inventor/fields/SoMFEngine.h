@@ -60,14 +60,17 @@ class SoEngine;
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFEngine subclass of SoMField. Each field value is a pointer to an
-//  SoEngine. The field automatically maintains references to the engines
-//  it points to and propagates notification from the engines.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of pointers to engines.
+/// \ingroup Fields
+/// This field maintains a set of pointers to <tt>SoEngine</tt> instances,
+/// correctly maintaining their reference counts.
+///
+/// <tt>SoMFEngines</tt> are written to file as one or more engines.
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ ElapsedTime { }, OneShot { duration 2.0 }, USE myCalculator ]
 class SoMFEngine : public SoMField {
 
     // Use standard field stuff

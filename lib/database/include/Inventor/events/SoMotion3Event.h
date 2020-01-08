@@ -61,21 +61,35 @@
 #include <Inventor/SbRotation.h>
 #include <Inventor/events/SoSubEvent.h>
 
+/// 3D motion events.
+/// \ingroup Events
+/// <tt>SoMotion3Event</tt> represents 3D relative motion events in the Inventor
+/// event model.
+/// \sa SoEvent, SoButtonEvent, SoKeyboardEvent,
+/// SoLocation2Event,SoMouseButtonEvent, \sa
+/// SoSpaceballButtonEvent,SoHandleEventAction, SoEventCallback, SoSelection,
+/// SoInteraction,SoXtDevice
 class SoMotion3Event : public SoEvent {
 
     SO_EVENT_HEADER();
 
   public:
-    // constructor
+    /// constructor
     SoMotion3Event();
+
+    /// Destructor
     virtual ~SoMotion3Event();
 
-    // set/get the change in translation
-    void           setTranslation(const SbVec3f &t) { translation = t; }
+    /// Set the relative change in translation since the last translation event.
+    void setTranslation(const SbVec3f &t) { translation = t; }
+
+    /// Get the relative change in translation since the last translation event.
     const SbVec3f &getTranslation() const { return translation; }
 
-    // set/get the change in rotation
-    void              setRotation(const SbRotation &r) { rotation = r; }
+    /// Set the relative change in rotation since the last rotation event.
+    void setRotation(const SbRotation &r) { rotation = r; }
+
+    /// Get the relative change in rotation since the last rotation event.
     const SbRotation &getRotation() const { return rotation; }
 
     SoINTERNAL

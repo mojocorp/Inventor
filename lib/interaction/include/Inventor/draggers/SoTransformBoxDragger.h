@@ -95,7 +95,130 @@
 #include <Inventor/sensors/SoSensor.h>
 
 class SoFieldSensor;
-
+/// Box-like object you scale, rotate, and translate by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoTransformBoxDragger</tt>
+/// is a composite dragger shaped like a box with small cubes at the corners.
+/// Click and drag any of these cubes to scale the box uniformly.
+/// Drag any edge of the box to rotate the whole dragger about
+/// its center, along an axis parallel to that edge.  Pick any  face of the
+/// box for 2D translation in the plane of that face.
+///
+///
+/// Although the box looks just about like a wireframe cube,
+/// it is composed of many different simple draggers arranged in a composite
+/// assembly.  When one part is dragged, the transformBox makes sure they all
+/// move together.
+/// Each of the parts of the box  is a different dragger with the default
+/// geometry changed. The faces of the box are <tt>SoTranslate2Draggers</tt>,
+/// the edges are <tt>SoRotateCylindricalDraggers</tt>, and the cubes are an
+/// <tt>SoScaleUniformDragger</tt>.  Drag them and the dragger will update
+/// its #translation, #rotation and #scaleFactor fields
+/// to reflect the changes.
+/// As with all draggers, if you change the fields the dragger will
+/// move to match the new settings.
+///
+///
+/// \a Remember: This is <em>not</em> an <tt>SoTransform!</tt>.
+/// If you want to move other objects with this dragger, you can either:
+///
+///
+/// [a] Use an <tt>SoTransformBoxManip</tt>, which is subclassed from
+/// <tt>SoTransform</tt>. It creates one of these draggers and uses it as the
+/// interface to change its fields. (see the <tt>SoTransformBoxManip</tt> man
+/// page).
+///
+///
+/// [b] Use field-to-field connections to connect the fields of this dragger to
+/// those of any <tt>SoTransformation</tt> node.
+///
+///
+/// You can change the parts in any instance of this dragger using
+/// #setPart().
+/// The default part geometries are defined as resources for this
+/// <tt>SoTransformBoxDragger</tt> class.  They are detailed in the
+/// Dragger Resources section of the online reference page for this class.
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/transformBoxDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that
+/// directory.
+/// \par Nodekit structure:
+/// \code CLASS SoTransformBoxDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "surroundScale"
+/// -->      "antiSquish"
+/// -->      "scaler"
+/// -->      "rotator1Sep"
+/// -->         "rotator1Rot"
+/// -->         "rotator1"
+/// -->      "rotator2Sep"
+/// -->         "rotator2Rot"
+/// -->         "rotator2"
+/// -->      "rotator3Sep"
+/// -->         "rotator3Rot"
+/// -->         "rotator3"
+/// -->      "translator1Sep"
+/// -->         "translator1Rot"
+/// -->         "translator1"
+/// -->      "translator2Sep"
+/// -->         "translator2Rot"
+/// -->         "translator2"
+/// -->      "translator3Sep"
+/// -->         "translator3Rot"
+/// -->         "translator3"
+/// -->      "translator4Sep"
+/// -->         "translator4Rot"
+/// -->         "translator4"
+/// -->      "translator5Sep"
+/// -->         "translator5Rot"
+/// -->         "translator5"
+/// -->      "translator6Sep"
+/// -->         "translator6Rot"
+/// -->         "translator6"
+///          "geomSeparator"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoTransformBoxDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     rotation            0 0 1  0
+///     translation         0 0 0
+///     scaleFactor         1 1 1
+///     callbackList        NULL
+///     surroundScale       NULL
+///     antiSquish          AntiSquish {
+///                             sizing BIGGEST_DIMENSION
+///                         }
+///     scaler              ScaleUniformDragger {}
+///     rotator1            RotateCylindricalDragger {}
+///     rotator2            RotateCylindricalDragger {}
+///     rotator3            RotateCylindricalDragger {}
+///     translator1         Translate2Dragger {}
+///     translator2         Translate2Dragger {}
+///     translator3         Translate2Dragger {}
+///     translator4         Translate2Dragger {}
+///     translator5         Translate2Dragger {}
+///     translator6         Translate2Dragger {}
+/// }
+/// \endcode
+/// \sa
+/// SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,
+/// \sa
+/// SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,
+/// \sa SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,
+/// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class SoTransformBoxDragger : public SoDragger {
     SO_KIT_HEADER(SoTransformBoxDragger);
 
@@ -134,12 +257,12 @@ class SoTransformBoxDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(translator6);
 
   public:
-    // Constructors
+    /// Constructor.
     SoTransformBoxDragger();
 
-    SoSFRotation rotation;
-    SoSFVec3f    translation;
-    SoSFVec3f    scaleFactor;
+    SoSFRotation rotation;    ///< Orientation of the dragger.
+    SoSFVec3f    translation; ///< Position of the dragger.
+    SoSFVec3f    scaleFactor; ///< Scale of the dragger.
 
     SoINTERNAL
   public:

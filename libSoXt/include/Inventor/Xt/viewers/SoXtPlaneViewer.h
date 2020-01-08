@@ -87,8 +87,37 @@ class SoXtBitmapButton;
 //  
 //////////////////////////////////////////////////////////////////////////////
 
+/// Viewer component which moves the camera in a plane
+/// \ingroup Viewers
+/// The Plane viewer component allows the user to translate the camera
+/// in the viewing plane, as well as dolly (move foward/backward) and zoom
+/// in and out. The viewer also allows the user to roll the camera (rotate
+/// around the forward direction) and seek to objects which will specify
+/// a new viewing plane. This viewer could be used for modeling, in drafting,
+/// and architectural work. The camera can be aligned to the X, Y or Z axes.
+///
+/// <b>USAGE</b>
+///
+/// <b>Left Mouse:</b>
+/// <b>Left + Middle Mouse:</b> Dolly in and out (gets closer to and further
+/// away from the object).
+///
+/// <b>Middle Mouse:</b>
+/// <b>Ctrl + Left Mouse:</b> Translate up, down, left and right.
+///
+/// <b>Ctrl + Middle Mouse:</b> Used for roll action (rotates around the viewer
+/// forward direction).
+///
+/// <b>\<s\> + click:</b> Alternative to the Seek button. Press (but do not
+/// hold down) the \<s\> key, then click on a target object.
+///
+/// <b>Right Mouse:</b> Open the popup menu.
+/// \sa SoXtFullViewer, SoXtViewer, SoXtComponent, SoXtRenderArea, SoXtWalkViewer, SoXtExaminerViewer, SoXtFlyViewer
 class SoXtPlaneViewer : public SoXtFullViewer {
  public:
+    /// Constructor which specifies the viewer type.
+    /// Please refer to the SoXtViewer
+    /// man pages for a description of the viewer types.
     SoXtPlaneViewer(
 	Widget parent = NULL,
 	const char *name = NULL, 

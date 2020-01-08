@@ -76,22 +76,22 @@ class SoViewportRegionElement : public SoElement {
     SO_ELEMENT_HEADER(SoViewportRegionElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the viewport region
+    /// Sets the viewport region
     static void set(SoState *state, const SbViewportRegion &vpReg);
 
-    // Returns current viewport region from the state
+    /// Returns current viewport region from the state
     static const SbViewportRegion &get(SoState *state);
 
-    // Returns TRUE if the viewports match
+    /// Returns TRUE if the viewports match
     virtual SbBool matches(const SoElement *elt) const;
 
-    // Create and return a copy of this element
+    /// Create and return a copy of this element
     virtual SoElement *copyMatchInfo() const;
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

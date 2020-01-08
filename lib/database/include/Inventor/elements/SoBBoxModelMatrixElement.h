@@ -78,23 +78,23 @@ class SoBBoxModelMatrixElement : public SoModelMatrixElement {
     SO_ELEMENT_HEADER(SoBBoxModelMatrixElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Overrides push() method to copy values from next instance in the stack
+    /// Overrides push() method to copy values from next instance in the stack
     virtual void push(SoState *state);
 
-    // Allows the SoGetBoundingBoxAction to reset the current model
-    // matrix to identity and all currently-open local matrices to
-    // identity
+    /// Allows the SoGetBoundingBoxAction to reset the current model
+    /// matrix to identity and all currently-open local matrices to
+    /// identity
     static void reset(SoState *state, SoNode *node);
 
-    // Because two model matrices are kept track of during the
-    // getBoundingBoxAction (the local model matrix, used by
-    // Separators to calculate their bbox caches, and the real model
-    // matrix), replacement routines for pushMatrix/popMatrix must be
-    // given; TransformSeparator::getBoundingBox uses these methods to
-    // correctly keep both matrices up-to-date.
+    /// Because two model matrices are kept track of during the
+    /// getBoundingBoxAction (the local model matrix, used by
+    /// Separators to calculate their bbox caches, and the real model
+    /// matrix), replacement routines for pushMatrix/popMatrix must be
+    /// given; TransformSeparator::getBoundingBox uses these methods to
+    /// correctly keep both matrices up-to-date.
     static void pushMatrix(SoState *state, SbMatrix &matrix,
                            SbMatrix &localmatrix);
     static void popMatrix(SoState *state, const SbMatrix &matrix,

@@ -61,32 +61,85 @@
 #include <Inventor/nodes/SoNonIndexedShape.h>
 #include <Inventor/nodes/SoVertexProperty.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTriangleStripSet
-//
-//  Triangle strip set node. Each strip in the set consists of n
-//  vertices located at consecutive entries in the current
-//  coordinates. The startIndex field gives the starting coordinate
-//  index for the first strip. If materials or normals are bound to
-//  vertices, they will begin at that index, as well; otherwise, they
-//  will start at index 0.  The number of vertices in each strip is
-//  determined by successive entries in the numVertices field.
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoNormalGenerator;
 class SoCoordinateElement;
 
+/// Triangle strip set shape node.
+/// \ingroup Nodes
+/// This shape node constructs triangle strips out of vertices.
+/// The vertices may be specified in
+/// the #vertexProperty field (from <tt>SoVertexShape</tt>),
+/// or by the current inherited coordinates.
+/// For optimal performance, the #vertexProperty field is recommended.
+///
+/// <tt>SoTriangleStripSet</tt> is one of the fastest ways of drawing
+/// polygonal objects in Inventor. It uses the current
+/// coordinates, in order, starting with the first one.
+/// The values in the #numVertices field indicate
+/// the number of vertices to use for each triangle strip in the set. The
+/// number of values in this field determines the number of strips.
+///
+/// For example, if #numVertices has the values [3,5], coordinates 1, 2, and
+/// 3 would be used for the first triangle strip and coordinates 4, 5, 6, 7,
+/// and 8 would be used for the second strip. This would result in 1 triangle in
+/// the first strip and 3 in the second.
+///
+/// The coordinates of the strips are transformed by the current
+/// cumulative transformation. The strips are drawn with the current light
+/// model and drawing style.
+///
+///
+/// Treatment of the current material and normal binding is as follows:
+/// The <b>PER_PART</b> binding specifies a material or normal for each strip
+/// of the set. The <b>PER_FACE</b> binding specifies a material or normal
+/// for each triangle. The <b>_INDEXED</b> bindings are equivalent to
+/// their non-indexed counterparts. The default normal binding is
+/// <b>PER_VERTEX</b>. The default material binding is
+/// <b>OVERALL</b>.
+///
+/// If any normals (or materials) are specified, Inventor assumes
+/// you provide the correct number of them, as indicated by the binding.
+/// You will see unexpected results
+/// if you specify fewer normals (or materials) than the shape requires.
+/// If no normals are specified, they will be generated automatically.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws a strip set based on the current coordinates, normals,
+/// materials, drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Picks on the strip set based on the current coordinates and
+/// transformation.  Details about the intersection are returned in an
+/// <tt>SoFaceDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses all vertices of the strip set
+/// with the current transformation applied to them. Sets the center to
+/// the average of the coordinates of all vertices.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will be
+/// invoked for each successive triangle forming the strips of the set.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTriangleStripSet {
+///    vertexProperty	NULL
+///    startIndex	0
+///    numVertices	-1
+/// }
+/// \endcode
+/// \sa
+/// SoCoordinate3,SoDrawStyle,SoFaceDetail,SoFaceSet,SoIndexedTriangleStripSet,SoQuadMesh,SoVertexProperty
 class SoTriangleStripSet : public SoNonIndexedShape {
 
     SO_NODE_HEADER(SoTriangleStripSet);
 
   public:
     // Fields
-    SoMFInt32 numVertices; // Number of vertices per strip
+    /// Number of vertices in each triangle strip. The number of strips is
+    /// equal to the number of values in this field.
+    SoMFInt32 numVertices;
 
-    // Constructor
+    /// Creates a triangle strip set node with default settings.
     SoTriangleStripSet();
 
     SoEXTENDER

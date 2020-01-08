@@ -64,25 +64,22 @@
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbTime
-//
-//  Representation of a time.  Some parts are not adequately debugged:
-//  for example, it is not clear when it is legal to have negative
-//  values.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Class for representation of a time.
+/// \ingroup Basics
+/// This class represents and performs operations on time. Operations may be
+/// done in seconds, seconds and microseconds, or using a
+/// <b>struct timeval</b>
+/// (defined in <em>/usr/include/sys/time.h</em>).
+/// \sa cftime
 class SbTime {
   public:
-    // Default constructor
+    /// Default constructor
     SbTime() {}
 
-    // Constructor taking a double (in seconds)
+    /// Constructor taking a double (in seconds)
     SbTime(double sec);
 
-    // Constructor taking seconds + microseconds
+    /// Constructor taking seconds + microseconds
     SbTime(time_t sec, long usec); // System long from <sys/time.h>
 
   private:
@@ -104,101 +101,127 @@ class SbTime {
     SbTime(uint32_t msec);
 
   public:
-    // Constructor taking struct timeval
+    /// Constructor taking struct timeval
     SbTime(const struct timeval *tv);
 
-    // Get the current time (seconds since Jan 1, 1970)
+    /// Get the current time (seconds since Jan 1, 1970)
     static SbTime getTimeOfDay();
 
-    // Set to the current time (seconds since Jan 1, 1970)
+    /// Set to the current time (seconds since Jan 1, 1970)
     void setToTimeOfDay();
 
-    // Get a zero time
+    /// Get a zero time
     static SbTime zero() { return SbTime(0, 0); }
 
-    // Get a time far, far into the future
+    /// Get a time far, far into the future
     static SbTime maxTime();
 
-    // Set time from a double (in seconds)
+    /// Set time from a double (in seconds)
     void setValue(double sec);
 
-    // Set time from seconds + microseconds
+    /// Set time from seconds + microseconds
     void setValue(time_t sec, long usec); // System long
 
-    // Set time from a struct timeval
+    /// Set time from a struct timeval
     void setValue(const struct timeval *tv);
 
-    // Set time from milliseconds
+    /// Set time from milliseconds
     void setMsecValue(unsigned long msec); // System long
 
-    // Get time in seconds as a double
+    /// Get time in seconds as a double
     double getValue() const;
 
-    // Get time in seconds & microseconds
+    /// Get time in seconds & microseconds
     void getValue(time_t &sec, long &usec) const; // System long
 
-    // Get time in a struct timeval
+    /// Get time in a struct timeval
     void getValue(struct timeval *tv) const;
 
-    // Get time in milliseconds (for Xt)
+    /// Get time in milliseconds (for Xt)
     unsigned long getMsecValue() const; // System long
 
-    // Convert to a string.  The default format is seconds with
-    // 3 digits of fraction precision.  See the SbTime man page for
-    // explanation of the format string.
+    /// Convert to a string.  The default format is seconds with
+    /// 3 digits of fraction precision.  \a fmt is a character string that
+    /// consists of field descriptors and text characters, in a manner analogous
+    /// to cftime (3C) and printf (3S). Each field descriptor consists of
+    /// a % character followed by another character which specifies the
+    /// replacement for the field descriptor.  All other characters are copied
+    /// from \a fmt into the result.  The following field descriptors are
+    /// supported:
+    ///
+    /// %   the `%' character
+    /// D   total number of days
+    /// H   total number of hours
+    /// M   total number of minutes
+    /// S   total number of seconds
+    /// I   total number of milliseconds
+    /// U   total number of microseconds
+    /// h   hours remaining after the days (00-23)
+    /// m   minutes remaining after the hours (00-59)
+    /// s   seconds remaining after the minutes (00-59)
+    /// i   milliseconds remaining after the seconds (000-999)
+    /// u   microseconds remaining after the seconds (000000-999999)
+    ///
+    /// The uppercase descriptors are formatted with a leading `\(em' for
+    /// negative times; the lowercase descriptors are formatted fixed width,
+    /// with leading zeros.  For example, a reasonable format string might be
+    /// "elapsed\ time:\ %M\ minutes,\ %s\ seconds". The default value of \a
+    /// fmt,
+    /// "%S.%i", formats the time as seconds with 3 digits of fractional
+    /// precision.
     SbString format(const char *fmt = "%S.%i") const;
 
-    // Convert to a date string, interpreting the time as seconds since
-    // Jan 1, 1970.  The default format gives "Tuesday, 01/26/93 11:23:41 AM".
-    // See the 'cftime()' man page for explanation of the format string.
+    /// Convert to a date string, interpreting the time as seconds since
+    /// Jan 1, 1970.  The default format gives "Tuesday, 01/26/93 11:23:41 AM".
+    /// See the 'cftime()' man page for explanation of the format string.
     SbString formatDate(const char *fmt = "%A, %D %r") const;
 
-    // Addition
+    /// Addition of two times.
     friend SbTime operator+(const SbTime &t0, const SbTime &t1);
 
-    // Subtraction
+    /// Subtraction of two times.
     friend SbTime operator-(const SbTime &t0, const SbTime &t1);
 
-    // Destructive addition
+    /// Destructive addition
     SbTime &operator+=(const SbTime &tm) { return (*this = *this + tm); }
 
-    // Destructive subtraction
+    /// Destructive subtraction
     SbTime &operator-=(const SbTime &tm) { return (*this = *this - tm); }
 
-    // Unary negation
+    /// Unary negation
     SbTime operator-() const;
 
-    // multiplication by scalar
+    /// multiplication by scalar
     friend SbTime operator*(const SbTime &tm, double s);
 
     friend SbTime operator*(double s, const SbTime &tm) { return tm * s; }
 
-    // destructive multiplication by scalar
+    /// destructive multiplication by scalar
     SbTime &operator*=(double s) {
         *this = *this * s;
         return *this;
     }
 
-    // division by scalar
+    /// division by scalar
     friend SbTime operator/(const SbTime &tm, double s);
 
-    // destructive division by scalar
+    /// destructive division by scalar
     SbTime &operator/=(double s) { return (*this = *this / s); }
 
-    // division by another time
+    /// division by another time
     double operator/(const SbTime &tm) const {
         return getValue() / tm.getValue();
     }
 
-    // modulus for two times
+    /// modulus for two times
     SbTime operator%(const SbTime &tm) const;
 
-    // equality operators
+    /// equality operators
     int operator==(const SbTime &tm) const;
 
     int operator!=(const SbTime &tm) const;
 
-    // relational operators
+    /// relational operators
     SbBool operator<(const SbTime &tm) const;
     SbBool operator>(const SbTime &tm) const;
     SbBool operator<=(const SbTime &tm) const;

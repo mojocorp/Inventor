@@ -106,25 +106,60 @@ class SoOutput;
 //
 //////////////////////////////////////////////////////////////////////////////
 
+/// Sends database changes for transcription.
+/// \ingroup General
+/// This class is used for transcribing Inventor data.  Transcription is
+/// the process of packaging changes to a database and sending them over a
+/// "wire" to another database.
+///
+///
+/// The <tt>SoTranSender</tt> class is used on the sending side of
+/// transcription.  It packages up changes to a Inventor database into a
+/// file or memory area defined by an <tt>SoOutput</tt> instance. It supports a
+/// limited set of changes to a database; each change is stored as a
+/// command in the transcription area.  The <tt>SoTranReceiver</tt> class can
+/// be used at the other end to interpret the transcribed commands.
+/// \sa SoOutput, SoTranReceiver
 class SoTranSender {
   public:
-    // Constructor: takes pointer to SoOutput instance
+    /// The constructor takes a pointer to an SoOutput instance that
+    /// determines what the transcription area is (file or memory).
     SoTranSender(SoOutput *output);
 
-    // Destructor
+    /// Destructor
     ~SoTranSender() {}
 
-    // Returns pointer to SoOutput
+    /// Returns pointer to current SoOutput instance.
     SoOutput *getOutput() const { return out; }
 
-    // Database change routines
+    /// Adds an INSERT command to the transcription area. The given node will
+    /// be added as the last child of the root node on the receiving end.
     void insert(SoNode *node);
+
+    /// Adds an INSERT command to the transcription area. The given node will
+    /// be added as the \a n th child of the given parent node on the
+    /// receiving end. A NULL parent node causes the node to be added to the
+    /// receiving end's root node.
     void insert(SoNode *node, SoNode *parent, int n);
+
+    /// Adds a REMOVE command to the transcription area. The \a n th child of
+    /// the given (non-NULL) parent node on the receiving end will be removed.
     void remove(SoNode *parent, int n);
+
+    /// Adds a REPLACE command to the transcription area. The \a n th child of
+    /// the given (non-NULL) parent node on the receiving end will be replaced
+    /// with \a newNode.
     void replace(SoNode *parent, int n, SoNode *newNode);
+
+    /// Adds a MODIFY command to the transcription area. Updates the field
+    /// data for the given node to the new contents. Note that this changes
+    /// only field data; children of groups are not affected, nor is any
+    /// non-field instance data.
     void modify(SoNode *node);
 
-    // This is called to make sure the data is ready to send
+    /// Prepares a SoTranSender instance for transcription, making sure
+    /// the transcription area is complete and all packaged to go. This must
+    /// be called before the transcription can be performed.
     void prepareToSend();
 
   private:
@@ -142,27 +177,32 @@ class SoTranSender {
     friend class SoTranReceiver;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTranReceiver
-//
-// An SoTranReceiver is used on the receiving end to interpret the
-// data packaged up by an SoTranSender. It is given a root node that
-// is the default place to add incoming nodes. The input for the
-// receiver comes from an SoInput.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Interprets database changes for transcription.
+/// \ingroup General
+/// This class is used for transcribing Inventor data. Transcription is
+/// the process of packaging changes to a database and sending them over a
+/// "wire" to another database.
+///
+///
+/// The <tt>SoTranReceiver</tt> class is used on the receiving side of
+/// transcription. It interprets changes to a Inventor database packaged
+/// up by an <tt>SoTranSender</tt>.
+/// \sa SoInput, SoTranSender
 class SoTranReceiver {
 
   public:
-    // Constructor takes default root node
+    /// The constructor takes a pointer to an SoGroup instance that is the
+    /// root node of the scene graph on the receiving end. All changes to the
+    /// database are made relative to this root.
     SoTranReceiver(SoGroup *rootNode);
 
-    // Destructor
+    /// Destructor
     ~SoTranReceiver();
 
-    // Interprets data from SoInput
+    /// Interprets the transcription commands found in the given input stream.
+    /// Returns FALSE on any error. Note: some errors (such as invalid node
+    /// references) are recoverable, while others (such as syntax errors) are
+    /// not.
     SbBool interpret(SoInput *in);
 
   private:

@@ -87,46 +87,89 @@ class SoSearchAction;
 class SoSearchAction;
 class SoCallbackAction;
 
-////////////////////////////////////////////////////////////////////
-//    Class: SoNodeKitListPart
-//
-////////////////////////////////////////////////////////////////////
-
+/// Group node with restricted children.
+/// \ingroup Nodekits
+/// This node class is very similar to <tt>SoGroup</tt> with the exception
+/// that it specifies restrictions on the type of children that
+/// it allows.  It is used by nodekits to restrict child types
+/// within <em>list parts</em> (see the reference page for <tt>SoBaseKit</tt>).
+///
+///
+/// By default, any kind of child may be added. Methods of this class
+/// allow you to restrict the type of allowable children, and to lock
+/// down the types so that this type list may no longer be altered.
+///
+///
+/// Inside the <tt>SoNodeKitListPart</tt> is a <em>container</em> node, which in
+/// turn contains the <em>children</em>. The <em>container</em> node is a hidden
+/// child, and the type of node used may be set with
+/// #setContainerType().
+/// In this way, you can make the nodekitlist behave like a group, a
+/// separator, or any other subclass of group. The <em>container</em> is not
+/// accessible so that the nodekitlist may retain control over what kinds
+/// of children are added.
+///
+/// \par File format/defaults:
+/// \code
+/// SoNodeKitListPart {
+///    containerTypeName    "Group"
+///    childTypeNames       ""
+///    containerNode        NULL
+/// }
+/// \endcode
+/// \sa
+/// SoBaseKit,SoNodeKit,SoNodeKitDetail,SoNodeKitPath,SoNodekitCatalog,SoSceneKit,SoSeparatorKit,SoShapeKit,SoWrapperKit
 class SoNodeKitListPart : public SoNode {
 
     SO_NODE_HEADER(SoNodeKitListPart);
 
   public:
-    // Constructor
+    /// Deafult constructor
     SoNodeKitListPart();
 
-    // Returns the type of the contaner node. Default containerType is SoGroup.
+    /// Gets the type of node used as the \e container.
     SoType getContainerType() const;
-    void   setContainerType(SoType newContainerType);
+    /// Sets the type of node used as the \e container.
+    void setContainerType(SoType newContainerType);
 
-    // By default, any type of node is allowed to be a child.
-    // Once addChildType() is called, all children must belong to
-    // at least one of the types in the list.
+    /// Returns the permitted child node types. By default, any type of
+    /// node is permitted, so the list contains one entry of
+    /// type SoNode.
     const SoTypeList &getChildTypes() const;
-    void              addChildType(SoType typeToAdd);
+    /// Permits the node type \a typeToAdd as a child.
+    /// The first time the #addChildType() method is called,
+    /// the default of SoNode is overridden and only the
+    /// new \a typeToAdd is permitted.  In subsequent calls to
+    /// #addChildType(), the \a typeToAdd is added to the existing types.
+    void addChildType(SoType typeToAdd);
 
+    /// Returns whether a node of type \a typeToCheck may be added as a child.
     SbBool isTypePermitted(SoType typeToCheck) const;
+    /// Returns whether the node \a child may be added to this list.
+    /// This will return TRUE if the type of \a child is one of the permissible
+    /// child types.
     SbBool isChildPermitted(const SoNode *child) const;
 
-    // Sends a string to the 'set' method on the container node.
-    // This is how you can set the value of a switch node if the container
-    // node is an SoSwitch, for example.
+    /// Sends a string to the SoGroup::set() method on the
+    /// container node.
+    /// This is how you can set the value of a switch node if the container
+    /// node is an SoSwitch, for example.
     void containerSet(const char *fieldDataString);
 
-    // After this method is called, the types are locked in place.
-    // Once called, the methods setContainerType() and addChildType()
-    // will have no effect.
-    // The types can not be unlocked. This gives the original creator of the
-    // node a chance to "set it and forget it"
-    void   lockTypes();
+    /// This function permanently locks the permitted child types and
+    /// the container type permanently.
+    /// Calls to #setContainerType() and #addChildType()
+    /// will have no effect after this function is called.
+    void lockTypes();
+    /// Returns whether the permitted child types and the container type
+    /// are locked (i.e. cannot be changed).  See #lockTypes()
     SbBool isTypeLocked() const { return areTypesLocked; }
 
-    // Child operations
+    /// \name These are the functions used to edit the children.
+    /// They parallel those of SoGroup, except that they always check
+    /// the child types against those which are permissible.
+    /// See SoGroup for details.
+    /// @{
     void    addChild(SoNode *child);
     void    insertChild(SoNode *child, int childIndex);
     SoNode *getChild(int index) const;
@@ -138,9 +181,10 @@ class SoNodeKitListPart : public SoNode {
     void    replaceChild(SoNode *oldChild, SoNode *newChild) {
         replaceChild(findChild(oldChild), newChild);
     }
+    /// @}
 
-    // Depending on the type of the container, this may
-    // or may not affect the state.
+    /// Depending on the type of the container, this may
+    /// or may not affect the state.
     virtual SbBool affectsState() const;
 
     SoEXTENDER

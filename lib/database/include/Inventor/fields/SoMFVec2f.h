@@ -59,12 +59,19 @@
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFVec2f subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of two-dimensional vectors.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of two-dimensional
+/// vectors.
+///
+/// <tt>SoMFVec2f</tt>s are written to file as one or more pairs of floating
+/// point values separated by whitespace.
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ 0 0, 1.2 3.4, 98.6 -4e1 ]
+///
 class SoMFVec2f : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFVec2f, SbVec2f, const SbVec2f &);
@@ -74,19 +81,22 @@ class SoMFVec2f : public SoMField {
     // Some additional convenience functions:
     //
 
-    // Set values from array of arrays of 2 floats
+    /// Sets \a num values starting at index \a start to the given floating
+    /// point values.  There must be \a num *2 values in the passed array.
     void setValues(int start, int num, const float xy[][2]);
 
-    // Set one value from 2 floats
+    /// Set the \a index 'th value to the given floating point values.
     void set1Value(int index, float x, float y);
 
-    // Set one value from 2 floats in array
+    /// Set the \a index 'th value to the given floating point values.
     void set1Value(int index, const float xy[2]);
 
-    // Set to one value from 2 floats
+    /// Sets the field to contain the given value and only the given value (if
+    /// the array had multiple values before, they are deleted).
     void setValue(float x, float y);
 
-    // Set to one value from 2 floats in array
+    /// Sets the field to contain the given value and only the given value (if
+    /// the array had multiple values before, they are deleted).
     void setValue(const float xy[2]);
 
     SoINTERNAL

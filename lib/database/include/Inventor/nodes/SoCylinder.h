@@ -61,42 +61,82 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCylinder
-//
-//  Simple cylinder, aligned with y-axis. Default size is -1 to +1 in
-//  all 3 dimensions, but the radius and height fields can be used to
-//  change that. There are essentially three parts to the cylinder:
-//  the sides, the top face, and the bottom face (in that order).
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Cylinder shape node.
+/// \ingroup Nodes
+/// This node represents a simple capped cylinder centered around the
+/// y-axis. By default, the cylinder is centered at (0,0,0) and has a
+/// default size of -1 to +1 in all three dimensions.  You can use the
+/// <tt>radius</tt> and <tt>height</tt> fields to create a cylinder with a
+/// different size.
+///
+/// The cylinder is transformed by the current cumulative transformation
+/// and is drawn with the current lighting model, drawing style, material,
+/// and geometric complexity.
+///
+/// If the current material binding is <b>PER_PART</b> or
+/// <b>PER_PART_INDEXED</b>, the first current material is used for the sides
+/// of the cylinder, the second is used for the top, and the third is used
+/// for the bottom. Otherwise, the first material is used for the entire
+/// cylinder.
+///
+/// When a texture is applied to a cylinder, it is applied differently to
+/// the sides, top, and bottom. On the sides, the texture wraps
+/// counterclockwise (from above) starting at the back of the
+/// cylinder. The texture has a vertical seam at the back, intersecting
+/// the yz-plane. For the top and bottom, a circle is cut out of the
+/// texture square and applied to the top or bottom circle. The top
+/// texture appears right side up when the top of the cylinder is tilted
+/// toward the camera, and the bottom texture appears right side up when
+/// the top of the cylinder is tilted away from the camera.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws cylinder based on the current coordinates, materials,
+/// drawing style, and so on.
+/// <b>SoRayPickAction</b>
+/// Intersects the ray with the cylinder. The part of the cylinder that
+/// was picked is available from the <tt>SoCylinderDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses the cylinder.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will
+/// be invoked for each successive triangle that approximates the cylinder.
+///
+/// \par File format/defaults:
+/// \code
+/// SoCylinder {
+///    parts	ALL
+///    radius	1
+///    height	2
+/// }
+/// \endcode
+/// \sa SoCone,SoCube,SoCylinderDetail,SoSphere
 class SoCylinder : public SoShape {
 
     SO_NODE_HEADER(SoCylinder);
 
   public:
-    enum Part {        // Cylinder parts
-        SIDES = 0x01,  // The tubular part
-        TOP = 0x02,    // The top circular face
-        BOTTOM = 0x04, // The bottom circular face
-        ALL = 0x07     // All parts
+    /// Cylinder parts
+    enum Part {
+        SIDES = 0x01,  ///< The tubular part
+        TOP = 0x02,    ///< The top circular face
+        BOTTOM = 0x04, ///< The bottom circular face
+        ALL = 0x07     ///< All parts
     };
 
     // Fields
-    SoSFBitMask parts;  // Visible parts of cylinder
-    SoSFFloat   radius; // Radius in x and z dimensions
-    SoSFFloat   height; // Size in y dimension
+    SoSFBitMask parts;  ///< Visible parts of cylinder
+    SoSFFloat   radius; ///< Radius in x and z dimensions
+    SoSFFloat   height; ///< Size in y dimension
 
-    // Constructor
+    /// Constructor
     SoCylinder();
 
-    // Turns on/off a part of the cylinder. (Convenience functions)
+    /// Turns on/off a part of the cylinder. (Convenience functions)
     void addPart(SoCylinder::Part part);
     void removePart(SoCylinder::Part part);
 
-    // Returns whether a given part is on or off. (Convenience function)
+    /// Returns whether a given part is on or off. (Convenience function)
     SbBool hasPart(SoCylinder::Part part) const;
 
     SoEXTENDER

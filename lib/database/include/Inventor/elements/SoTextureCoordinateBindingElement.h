@@ -72,30 +72,30 @@ class SoTextureCoordinateBindingElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoTextureCoordinateBindingElement);
 
   public:
-    // The (seemingly random) choice of values is for compatibility
-    // with Inventor 2.0 binary format files:
+    /// The (seemingly random) choice of values is for compatibility
+    /// with Inventor 2.0 binary format files:
     enum Binding {
-        PER_VERTEX = 2,        // per vertex texture coordinates
-        PER_VERTEX_INDEXED = 3 // per vertex, indexed, texture coordinates
+        PER_VERTEX = 2,        ///< per vertex texture coordinates
+        PER_VERTEX_INDEXED = 3 ///< per vertex, indexed, texture coordinates
     };
 
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current texture binding in the state
+    /// Sets the current texture binding in the state
     static void set(SoState *state, Binding binding) {
         SoInt32Element::set(classStackIndex, state, (int32_t)binding);
     }
 
-    // Returns current texture binding from the state
+    /// Returns current texture binding from the state
     static Binding get(SoState *state) {
         return (Binding)SoInt32Element::get(classStackIndex, state);
     }
 
-    // Returns the default texture binding
+    /// Returns the default texture binding
     static Binding getDefault() { return PER_VERTEX_INDEXED; }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

@@ -58,12 +58,20 @@
 
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTextureCoordinateFunction
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for texture coordinate function nodes.
+/// \ingroup Nodes
+/// This is an abstract base class for texture coordinate functions. The
+/// subclasses of this node enable texture coordinates to be created by
+/// mapping object-space points on the surfaces of shapes into texture
+/// space, according to some function.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTextureCoordinateFunction {
+/// }
+/// \endcode
+/// \sa
+/// SoTexture2,SoTexture2TransformSoTextureCoordinate2,SoTextureCoordinateBinding,SoTextureCoordinateDefault,SoTextureCoordinateEnvironment,SoTextureCoordinatePlane,
 class SoTextureCoordinateFunction : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinateFunction);
@@ -71,7 +79,7 @@ class SoTextureCoordinateFunction : public SoNode {
   public:
     // No fields.
 
-    // Constructor
+    /// Constructor
     SoTextureCoordinateFunction();
 
     SoINTERNAL

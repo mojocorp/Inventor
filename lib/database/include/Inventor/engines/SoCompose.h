@@ -91,68 +91,209 @@
     Name();                                                                    \
     static void initClass()
 
-///////////////////////////////////////////////////////////
-//
-//  Vector composition engines
-//
+/// Composes 2D vectors from floating-point values.
+/// \ingroup Engines
+/// This engine takes two floating-point inputs and composes a
+/// 2D floating-point vector.
+///
+///
+/// The input fields can have multiple values, allowing the engine to
+/// compose several vectors in parallel.
+/// One of the inputs may have more values than others.  In such cases,
+/// the last value of the shorter input will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoComposeVec2f {
+///    x    0
+///    y    0
+/// }
+/// \endcode
+/// \sa SoDecomposeVec2f, SoEngineOutput
 class SoComposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec2f);
-    SoMFFloat      x;      // Input
-    SoMFFloat      y;      // Input
-    SoEngineOutput vector; // Output (SoMFVec2f)
+    SoMFFloat      x;      ///< Input
+    SoMFFloat      y;      ///< Input
+    SoEngineOutput vector; ///< Output (SoMFVec2f)
 };
+
+/// Composes 2D vectors from floating-point values.
+/// \ingroup Engines
+/// This engine takes two floating-point inputs and composes a
+/// 2D floating-point vector.
+///
+///
+/// The input fields can have multiple values, allowing the engine to
+/// compose several vectors in parallel.
+/// One of the inputs may have more values than others.  In such cases,
+/// the last value of the shorter input will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoComposeVec2f {
+///    x    0
+///    y    0
+/// }
+/// \endcode
+/// \sa SoDecomposeVec2f, SoEngineOutput
 class SoComposeVec3f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec3f);
-    SoMFFloat      x;      // Input
-    SoMFFloat      y;      // Input
-    SoMFFloat      z;      // Input
-    SoEngineOutput vector; // Output (SoMFVec3f)
+    SoMFFloat      x;      ///< Input
+    SoMFFloat      y;      ///< Input
+    SoMFFloat      z;      ///< Input
+    SoEngineOutput vector; ///< Output (SoMFVec3f)
 };
+
+/// Composes 4D vectors from floating-point values.
+/// \ingroup Engines
+/// This engine takes four floating-point inputs and composes a
+/// 4D vector.
+///
+///
+/// The input fields can have multiple values, allowing the engine to
+/// compose several vectors in parallel.
+/// Some inputs may have more values than others.  In such cases,
+/// the last value of the shorter inputs will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoComposeVec4f {
+///    x    0
+///    y    0
+///    z    0
+///    w    0
+/// }
+/// \endcode
+/// \sa SoDecomposeVec4f, SoEngineOutput
 class SoComposeVec4f : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeVec4f);
-    SoMFFloat      x;      // Input
-    SoMFFloat      y;      // Input
-    SoMFFloat      z;      // Input
-    SoMFFloat      w;      // Input
-    SoEngineOutput vector; // Output (SoMFVec4f)
+    SoMFFloat      x;      ///< Input
+    SoMFFloat      y;      ///< Input
+    SoMFFloat      z;      ///< Input
+    SoMFFloat      w;      ///< Input
+    SoEngineOutput vector; ///< Output (SoMFVec4f)
 };
 
-///////////////////////////////////////////////////////////
-//
-//  Vector decomposition engines
-//
+/// Decomposes 2D vectors into floating-point values.
+/// \ingroup Engines
+/// This engine takes as input a 2D vector,
+/// and decomposes it into two single floating-point values.
+///
+///
+/// The input can have multiple values, allowing the engine to decompose
+/// several vectors in parallel.
+///
+/// \par File format/defaults:
+/// \code
+/// SoDecomposeVec2f {
+///    vector 0 0
+/// }
+/// \endcode
+/// \sa SoComposeVec2f, SoEngineOutput
 class SoDecomposeVec2f : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeVec2f);
-    SoMFVec2f      vector; // Input
-    SoEngineOutput x;      // Output (SoMFFloat)
-    SoEngineOutput y;      // Output (SoMFFloat)
-};
-class SoDecomposeVec3f : public SoEngine {
-    SO_COMPOSE__HEADER(SoDecomposeVec3f);
-    SoMFVec3f      vector; // Input
-    SoEngineOutput x;      // Output (SoMFFloat)
-    SoEngineOutput y;      // Output (SoMFFloat)
-    SoEngineOutput z;      // Output (SoMFFloat)
-};
-class SoDecomposeVec4f : public SoEngine {
-    SO_COMPOSE__HEADER(SoDecomposeVec4f);
-    SoMFVec4f      vector; // Input
-    SoEngineOutput x;      // Output (SoMFFloat)
-    SoEngineOutput y;      // Output (SoMFFloat)
-    SoEngineOutput z;      // Output (SoMFFloat)
-    SoEngineOutput w;      // Output (SoMFFloat)
+    SoMFVec2f      vector; //< Input
+    SoEngineOutput x;      //< Output (SoMFFloat)
+    SoEngineOutput y;      //< Output (SoMFFloat)
 };
 
-///////////////////////////////////////////////////////////
-//
-//  Rotation composition engines
-//
+/// Decomposes 3D vectors into floating-point values.
+/// \ingroup Engines
+/// This engine takes as input a 3D vector,
+/// and decomposes it into three single floating-point values.
+///
+///
+/// The input can have multiple values, allowing the engine to decompose
+/// several vectors in parallel.
+///
+/// \par File format/defaults:
+/// \code
+/// SoDecomposeVec3f {
+///    vector 0 0 0
+/// }
+/// \endcode
+/// \sa SoComposeVec3f, SoEngineOutput
+class SoDecomposeVec3f : public SoEngine {
+    SO_COMPOSE__HEADER(SoDecomposeVec3f);
+    SoMFVec3f      vector; //< Input
+    SoEngineOutput x;      //< Output (SoMFFloat)
+    SoEngineOutput y;      //< Output (SoMFFloat)
+    SoEngineOutput z;      //< Output (SoMFFloat)
+};
+
+/// Decomposes 4D vectors into floating-point values.
+/// \ingroup Engines
+/// This engine takes as input a 4D vector,
+/// and decomposes it into four single floating-point values.
+///
+///
+/// The input can have multiple values, allowing the engine to decompose
+/// several vectors in parallel.
+///
+/// \par File format/defaults:
+/// \code
+/// SoDecomposeVec4f {
+///    vector 0 0 0 0
+/// }
+/// \endcode
+/// \sa SoComposeVec4f, SoEngineOutput
+class SoDecomposeVec4f : public SoEngine {
+    SO_COMPOSE__HEADER(SoDecomposeVec4f);
+    SoMFVec4f      vector; //< Input
+    SoEngineOutput x;      //< Output (SoMFFloat)
+    SoEngineOutput y;      //< Output (SoMFFloat)
+    SoEngineOutput z;      //< Output (SoMFFloat)
+    SoEngineOutput w;      //< Output (SoMFFloat)
+};
+
+/// Composes a rotation from axis and angle values.
+/// \ingroup Engines
+/// This engine has two inputs, representing an #axis of rotation
+/// and a rotation #angle in radians.  As output, the engine composes the
+/// inputs into a rotation field.
+///
+///
+/// The input fields can have multiple values, allowing the engine to
+/// compose several rotations in parallel.
+/// Some inputs may have more values than others.  In such cases,
+/// the last value of the shorter inputs will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoComposeRotation {
+///    axis     0 0 1
+///    angle    0
+/// }
+/// \endcode
+/// \sa SoComposeRotationFromTo, SoDecomposeRotation, SoEngineOutput
 class SoComposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotation);
     SoMFVec3f      axis;     // Input
     SoMFFloat      angle;    // Input
     SoEngineOutput rotation; // Output (SoMFRotation)
 };
+
+/// Composes a rotation that rotates from one vector into another.
+/// \ingroup Engines
+/// This engine takes two inputs, representing a vector before
+/// and after a rotation has been applied.
+/// As output, it produces the rotation value that would cause the first
+/// vector to transform into the other.
+///
+///
+/// The input fields can have multiple values, allowing the engine to
+/// compose several rotations in parallel.
+/// Some inputs may have more values than others.  In such cases,
+/// the last value of the shorter inputs will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoComposeRotationFromTo {
+///    from     0 0 1
+///    to       0 0 1
+/// }
+/// \endcode
+/// \sa SoComposeRotation, SoDecomposeRotationFromTo, SoEngineOutput
 class SoComposeRotationFromTo : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeRotationFromTo);
     SoMFVec3f      from;     // Input
@@ -160,10 +301,22 @@ class SoComposeRotationFromTo : public SoEngine {
     SoEngineOutput rotation; // Output (SoMFRotation)
 };
 
-///////////////////////////////////////////////////////////
-//
-//  Rotation decomposition engine
-//
+/// Decomposes rotation values.
+/// \ingroup Engines
+/// This engine takes as input a rotation, and
+/// decomposes it into an axis value and a rotation angle (in radians).
+///
+///
+/// The input can have multiple values, allowing the engine to decompose
+/// several rotations in parallel.
+///
+/// \par File format/defaults:
+/// \code
+/// SoDecomposeRotation {
+///    rotation 0 0 1  0
+/// }
+/// \endcode
+/// \sa SoDecomposeRotationFromTo, SoComposeRotation, SoEngineOutput
 class SoDecomposeRotation : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeRotation);
     SoMFRotation   rotation; // Input
@@ -171,10 +324,31 @@ class SoDecomposeRotation : public SoEngine {
     SoEngineOutput angle;    // Output (SoMFFloat)
 };
 
-///////////////////////////////////////////////////////////
-//
-//  Matrix composition engine
-//
+/// Composes a transformation matrix.
+/// \ingroup Engines
+/// This engine has inputs that specify values for translation, rotation,
+/// scale, and center of transformation.
+/// As output, it produces a transformation matrix that
+/// transforms objects into the space specified by the scale, rotation,
+/// and translation inputs (in that order).
+///
+///
+/// The input fields can have multiple values, allowing the engine to
+/// compose several matrices in parallel.
+/// Some inputs may have more values than others.  In such cases,
+/// the last value of the shorter inputs will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoComposeMatrix {
+///    translation      0 0 0
+///    rotation         0 0 1  0
+///    scaleFactor      1 1 1
+///    scaleOrientation 0 0 1  0
+///    center           0 0 0
+/// }
+/// \endcode
+/// \sa SoDecomposeMatrix, SoEngineOutput
 class SoComposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoComposeMatrix);
     SoMFVec3f      translation;      // Input
@@ -185,14 +359,30 @@ class SoComposeMatrix : public SoEngine {
     SoEngineOutput matrix;           // Output (SoMFMatrix)
 };
 
-///////////////////////////////////////////////////////////
-//
-//  Matrix decomposition engine
-//
-//  Note: a matrix decomposition depends on the choice of
-//  center. So a "center" input is provided (with default
-//  value 0,0,0) and there is no "center" output.
-//
+/// Decomposes transformation matrices into values for translation, rotation,
+/// and scale.
+/// \ingroup Engines
+/// This engine takes as input a transformation
+/// matrix and a center of transformation. As output the engine produces the
+/// translation, rotation and scale values derived from the matrix.
+///
+///
+/// The input fields can have multiple values, allowing the engine to
+/// decompose several matrices in parallel.
+/// One of the inputs may have more values than the other.  In that case,
+/// the last value of the shorter input will be repeated as necessary.
+///
+/// \par File format/defaults:
+/// \code
+/// SoDecomposeMatrix {
+///    matrix   1 0 0 0
+///             0 1 0 0
+///             0 0 1 0
+///             0 0 0 1
+///    center   0 0 0
+/// }
+/// \endcode
+/// \sa SoComposeMatrix, SoEngineOutput
 class SoDecomposeMatrix : public SoEngine {
     SO_COMPOSE__HEADER(SoDecomposeMatrix);
     SoMFMatrix     matrix;           // Input

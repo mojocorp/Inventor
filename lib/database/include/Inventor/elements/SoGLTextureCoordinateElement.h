@@ -87,41 +87,40 @@ class SoGLTextureCoordinateElement : public SoTextureCoordinateElement {
     SO_ELEMENT_HEADER(SoGLTextureCoordinateElement);
 
   public:
-    // Initializes element.
+    /// Initializes element.
     virtual void init(SoState *state);
 
-    // TextureCoordinateFunction nodes that use texgen must define and
-    // register a callback that makes the appropriate GL calls.
-    // TextureCoordinateFunction nodes that don't use texgen must
-    // register a NULL callback to turn off texgen.
-    // The texGen arguments point to a function that will issue GL
-    // TexGen calls; the func arguments must point to a static
-    // function that will return the results of the texgen function
-    // (needed because some nodes render by using their
-    // generatePrimitives method).
+    /// TextureCoordinateFunction nodes that use texgen must define and
+    /// register a callback that makes the appropriate GL calls.
+    /// TextureCoordinateFunction nodes that don't use texgen must
+    /// register a NULL callback to turn off texgen.
+    /// The texGen arguments point to a function that will issue GL
+    /// TexGen calls; the func arguments must point to a static
+    /// function that will return the results of the texgen function
+    /// (needed because some nodes render by using their
+    /// generatePrimitives method).
     static void setTexGen(SoState *state, SoNode *node,
                           SoTexCoordTexgenCB *           texGenFunc,
                           void *                         texGenData = NULL,
                           SoTextureCoordinateFunctionCB *func = NULL,
                           void *                         funcData = NULL);
 
-    // Returns code indicating what has been set in state/element
+    /// Returns code indicating what has been set in state/element
     virtual CoordType getType() const;
 
-    // Returns the top (current) instance of the element in the state.
-    // The send routines are called on an instance
-    // because it is more efficient than calling a static method that
-    // looks up the element in the state for every coordinate.
+    /// Returns the top (current) instance of the element in the state.
+    /// The send routines are called on an instance
+    /// because it is more efficient than calling a static method that
+    /// looks up the element in the state for every coordinate.
     static const SoGLTextureCoordinateElement *getInstance(SoState *state);
 
-    // Send routine for EXPLICIT case:
-
+    /// Send routine for EXPLICIT case:
     void send(int index) const;
 
-    // Override push() method to set up new instance
+    /// Override push() method to set up new instance
     virtual void push(SoState *state);
 
-    // Override pop() method to maintain GL state
+    /// Override pop() method to maintain GL state
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     SoINTERNAL

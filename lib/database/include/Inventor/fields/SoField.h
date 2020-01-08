@@ -70,93 +70,243 @@ class SoInput;
 class SoNotList;
 class SoOutput;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoField
-//
-//  Base class for all kinds of fields.  SoField maintains the state
-//  (ignored, modified, default, ...) of the field.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Base class for all fields.
+/// \ingroup Fields
+/// <tt>SoField</tt> is the abstract base class for all fields. Fields
+/// are the data elements contained within nodes and are the input values
+/// for engines.
+/// Each node or engine class specifies a set of fields and associates a
+/// name with each.
+/// These names define the semantics of the field (e.g., the <tt>SoCube</tt>
+/// node contains three float fields named width, height, and depth).
+/// Field classes provide the access methods that indirectly allow editing
+/// and querying of data within nodes.
+///
+/// There are two abstract subclasses of <tt>SoField</tt>: <tt>SoSField</tt>
+/// is the base class for all single-valued field classes and
+/// <tt>SoMField</tt> is the base class for all multiple-valued fields, which
+/// contain dynamic arrays of values. Subclasses of <tt>SoSField</tt> have an
+/// <tt>SoSF</tt> prefix, and subclasses of <tt>SoMField</tt> have an
+/// <tt>SoMF</tt> prefix.  See the reference pages for <tt>SoSField</tt> and
+/// <tt>SoMField</tt> for additional methods.
+///
+/// Fields are typically constructed only within node or engine
+/// instances; if you need a field that is not part of a node or engine,
+/// you can create a <tt>GlobalField</tt>; see the methods on <tt>SoDB</tt> for
+/// creating global fields.
+///
+/// Fields can be connected either directly to another field, or can be
+/// connected to the output of an engine.  The value of a field with a
+/// connection will change when the thing it is connected to changes.  For
+/// example, consider a field "A" that is connected from "B" (by
+/// A->connectFrom(B)).
+/// When B's value is changed, A's value will also
+/// change.  Note that A and B may have different values, even if they are
+/// connected: if A's value is set after B's value, A's value will be
+/// different from B's until B's value is set.
+///
+/// A field can be connected to several other fields, but can be connected
+/// from only one source.
+///
+/// It is possible (and often useful) to create loops of field
+/// connections (for example, A connected from B and B connected from A).
+/// If there are loops, then the rule is that the last
+/// <b>setValue()</b> done
+/// overrides any connections in to that value.  You can think of setting
+/// the value of a field as immediately propagating that value forward
+/// into all the fields it is connected to, with the propagation stopping
+/// at the place where the original <b>setValue()</b> occurred if there is a
+/// connection loop.  (Actually, a more efficient mechanism than this is
+/// used, but the semantics are the same.)
+///
+/// If you try to connect two fields of differing types, Inventor will
+/// automatically try to insert a field converter engine between them to
+/// convert values from one type into the other.  Inventor has most
+/// reasonable conversions built-in (multiple-valued field to single-valued
+/// and vice versa, anything to SoSFString, anything to
+/// SoSFTrigger, float/short/unsigned short/int32_t/uint32_t/etc
+/// numeric conversions, etc). You can add field converters using
+/// <tt>SoDB</tt>'s extender method <b>addConverter()</b>; see the SoDB.h header
+/// file for details.  You can also find out if a converter is available with
+/// the #SoDB::getConverter() method.
+///
+/// Fields each define their own file format for reading and being written
+/// to files, but all fields follow the same conventions:
+///
+/// Fields in a node or engine are written as the name of the field
+/// followed by the field's value; fields are not written if they have not
+/// been modified since they were created (if they have their default
+/// value).
+///
+/// The ignored flag is written as a "~" character after the field's
+/// value (if the field's value is its default value, just the "~" is
+/// written).
+///
+/// Field connections are written as an "=" followed by the container of
+/// the field or engine output that the field is connected to, followed by
+/// a "." and the name of the field or engine output.  For example:
+///
+/// DEF node1 Transform { translation 1 1 1 }
+/// DEF node2 Scale { scaleFactor 1 1 1 = USE node1.translation }
+///
+/// Global fields are written as part of an internal <tt>SoFieldContainer</tt>
+/// class called <b>GlobalField</b>, which writes out an SoSFName field named
+/// <b>type</b> whose value is the type of the global field, followed by
+/// a field of that type whose name is the name of the global field.  For
+/// example, a global uint32_t field called "FrameCounter" whose
+/// value is 494 would be written as:
+/// \code
+/// GlobalField {
+///     type SoSFUInt32
+///     FrameCounter 494
+/// }
+/// \endcode
+/// \sa SoSField, SoMField, SoNode, SoDB
 class SoField {
   public:
-    // Destructor
+    /// Destructor
     virtual ~SoField();
 
-    // Sets/returns ignored flag
-    void   setIgnored(SbBool ig);
+    /// Sets the ignore flag for this field. When a field's ignore flag
+    /// is set to TRUE, the field is not used during traversal for rendering
+    /// and other actions. The default value for this flag is FALSE.
+    void setIgnored(SbBool ig);
+
+    /// Gets the ignore flag for this field.
     SbBool isIgnored() const { return flags.ignored; }
 
-    // Returns default flag
+    /// Gets the state of default flag of the field. This flag will be TRUE
+    /// for any field whose value is not modified after construction and will
+    /// be FALSE for those that have changed (each node or engine determines
+    /// what the default values for its fields are).  Note: the state of this
+    /// flag should not be set explicitly from within applications.
     SbBool isDefault() const { return flags.hasDefault; }
 
-    // Returns type identifier for SoField class
+    /// Return the type identifier for this field class.
     static SoType getClassTypeId() { return classTypeId; }
 
-    // Returns type identifier for field
+    /// Return the type identifier for this field instance (SoField *).
     virtual SoType getTypeId() const = 0;
 
-    // Returns TRUE if field is of given type or is derived from it
+    /// Returns TRUE if this field is the given type or derived from that
+    /// type. This is typically used
+    /// with the getClassTypeId() method to determine the type of an SoField *
+    /// at run-time:
+    /// \code
+    /// SoField *field = ....;
+    /// if (field->isOfType(SoSFFloat::getClassTypeId())) {
+    ///    SoSFFloat *floatField = (SoSFFloat *)field);
+    ///    floatField->setValue(4.5);
+    /// }
+    /// \endcode
     SbBool isOfType(SoType type) const;
 
-    // Sets/returns whether connection to field or engine is
-    // enabled. This flag may be set even if no connection is
-    // currently established. The flag will remain in effect until
-    // changed again.
-    void   enableConnection(SbBool flag);
+    /// Field connections may be enabled and disabled.  Disabling a field's
+    /// connection is almost exactly like disconnecting it; the only
+    /// difference is that you can later re-enable the connection by calling
+    /// <b>enableConnection(TRUE)</b>.  Note that disconnecting an engine output
+    /// can cause the engine's reference count to be decremented and the engine
+    /// to be deleted, but disabling the connection does not decrement its
+    /// reference count.
+    ///
+    /// Re-enabling a connection will cause the value of the field to be
+    /// changed to the engine output or field to which it is connected.
+    ///
+    /// A field's connection-enabled status is maintained even if the field is
+    /// disconnected or reconnected.  By default, connections are enabled.
+    void enableConnection(SbBool flag);
+    /// Returns FALSE if connections to this field are disabled.  Note that this
+    /// may return FALSE even if the field is not connected to anything.
     SbBool isConnectionEnabled() const { return flags.connectionEnabled; }
 
-    // Connects the field to the given output of an engine or to
-    // another field. Returns FALSE if the connection could not be made.
+    /// Connects this field to an engine output.
+    /// If the field was connected to something before, it will be
+    /// automatically disconnected (a field may have only one connection
+    /// writing into it at a time).  Unless connections to the field are
+    /// disabled (see #enableConnection(), the field's value will be
+    /// set to the value of the thing it is connected to.
     SbBool connectFrom(SoEngineOutput *engineOutput);
+    /// Connects this field to another field.
+    /// If the field was connected to something before, it will be
+    /// automatically disconnected (a field may have only one connection
+    /// writing into it at a time).  Unless connections to the field are
+    /// disabled (see #enableConnection(), the field's value will be
+    /// set to the value of the thing it is connected to.
     SbBool connectFrom(SoField *field);
 
-    // Disconnects the field from whatever it's connected to. Harmless
-    // if not already connected.
+    /// Disconnect the field from whatever it was connected to. This does
+    /// nothing if the field was not connected.
     void disconnect();
 
-    // Returns TRUE if the field is connected. The last two return
-    // TRUE if the field is connected specifically to an engine
-    // output or field.
+    /// Returns TRUE if the field is connected to anything.
     SbBool isConnected() const { return flags.connected; }
+
+    /// Returns TRUE if the field is connected to an engine's output.
     SbBool isConnectedFromEngine() const {
         return (flags.connected && flags.fromEngine);
     }
+
+    /// Returns TRUE if the field is connected to another field.
     SbBool isConnectedFromField() const {
         return (flags.connected && !flags.fromEngine);
     }
 
-    // Returns the engine output or field the field is connected to.
-    // Returns FALSE if there is no connection of the appropriate type.
+    /// Returns TRUE if this field is being written into by an engine, and
+    /// returns the engine output it is connected to in \a engineOutput. Returns
+    /// FALSE and does not modify \a engineOutput if it is not connected to an
+    /// engine.
     SbBool getConnectedEngine(SoEngineOutput *&engineOutput) const;
+
+    /// Returns TRUE if this field is being written into by another field, and
+    /// returns the field it is connected to in \a writingField.  Returns
+    /// FALSE and does not modify \a writingField if it is not connected to a
+    /// field.
     SbBool getConnectedField(SoField *&field) const;
 
-    // Returns the number of fields (in Engines or Nodes) that this
-    // field is writing to, and adds pointers to those fields to the
-    // given field list.
+    /// Adds pointers to all of the fields that this field is writing into
+    /// (either fields in nodes, global fields or engine inputs) to the given
+    /// field list, and returns the number of forward connections.
     int getForwardConnections(SoFieldList &list) const;
 
-    // Returns the containing node or engine
+    /// Returns the object that contains this field.  The type of the
+    /// object will be either <tt>SoNode</tt>, <tt>SoEngine</tt>, or will be a
+    /// global field container (note that the global field container
+    /// class is internal to Inventor; see the methods for creating and
+    /// accessing global fields on <tt>SoDB</tt>).  For example: \code
+    /// SoFieldContainer *f = field->getContainer();
+    /// if (f->isOfType(SoNode::getClassTypeId())) {
+    ///     ... do something ...
+    /// } else if (f->isOfType(SoEngine::getClassTypeId())) {
+    ///     ... do someting else ...
+    /// } else {
+    ///     ... it must be a global field.  We can figure out its name, but that
+    ///     is about it: const SbName &globalFieldName = f->getName();
+    /// }
+    /// \endcode
     SoFieldContainer *getContainer() const;
 
-    // Sets value of field from the Inventor data file format
-    // information in the value string.  Returns TRUE if successful,
-    // FALSE otherwise.
+    /// Sets the field to the given value, which is an ASCII string in the
+    /// Inventor file format.  Each field subclass defines its own file
+    /// format; see their reference pages for information on their file format.
+    /// The string should contain only the field's value, <em>not</em> the
+    /// field's name (e.g., "1.0", <em>not</em> "width 1.0"). This method
+    /// returns TRUE if the string is valid, FALSE if it is not.
     SbBool set(const char *valueString);
 
-    // Stores field value (in the same format expected by the set()
-    // method) in the given SbString
+    /// Returns the value of the field in the Inventor file format, even if
+    /// the field has its default value.
     void get(SbString &valueString);
 
-    // Simulates a change to the field data, causing attached sensors
-    // to fire, connected engines to be marked as needing evaluation, etc.
-    // Equivalent to performing setValue(getValue()) on a derived class
-    // instance, except that the isDefault() status is unchanged.
+    /// Simulates a change to the field, causing attached sensors to fire,
+    /// connected fields and engines to be marked as needing evaluation, and so
+    /// forth. Calling #touch() on an instance of a derived field class is
+    /// equivalent to calling <b>setValue(getValue())</b> using the derived
+    /// class's methods, except that the field's #isDefault() status remains
+    /// unchanged.
     virtual void touch();
 
-    // Returns TRUE/FALSE if the given field is of the same type and
-    // has the same value(s) as this
+    /// Returns TRUE/FALSE if the given field is of the same type and
+    /// has the same value(s) as this
     int operator==(const SoField &f) const { return isSame(f); }
     int operator!=(const SoField &f) const { return !isSame(f); }
 
@@ -337,20 +487,32 @@ class SoField {
     friend class SoEngineOutput;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoSField
-//
-//  Field that always has only one value.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for all single-value fields.
+/// \ingroup Fields
+/// Each class derived from <tt>SoSField</tt> begins with an
+/// <tt>SoSF</tt> prefix and contains one value of a particular type. Each has
+/// <b>setValue()</b> and <b>getValue()</b> methods
+/// that are used to change or
+/// access this value. In addition, some field classes have extra
+/// convenience routines that allow values to be set or retrieved in other
+/// related formats (see below).
+///
+/// In addition to <b>setValue()</b>, all single-value fields overload the "="
+/// assignment operator to set the field value from the correct datatype
+/// or from another field instance of the same type.
+/// The value of a single-value field is written to file in a format
+/// dependent on the field type; see the subclass man pages for details.
+///
+/// A field that is ignored has a tilde (~)
+/// either in place of the value (if the actual value is the default)
+/// or after it (otherwise).
+/// \sa SoField, SoMField
 class SoSField : public SoField {
   public:
-    // Destructor
+    /// Destructor
     virtual ~SoSField();
 
-    // Returns type identifier for SoSField class
+    /// Return the type identifier for this field class.
     static SoType getClassTypeId() { return classTypeId; }
 
   protected:
@@ -373,45 +535,88 @@ class SoSField : public SoField {
     virtual void writeValue(SoOutput *out) const = 0;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoMField
-//
-//  Field that can have multiple values.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Base class for all multiple-valued fields.
+/// \ingroup Fields
+/// Each class derived from <tt>SoMField</tt> begins with an <tt>SoMF</tt>
+/// prefix and contains a dynamic array of values of a particular type.  Each
+/// has a <b>setValues()</b> method that is passed a pointer to a const array of
+/// values of the correct type; these values are copied into the array in the
+/// field, making extra room in the array if necessary. The start and num
+/// parameters to this method indicate the starting array index to copy into and
+/// the number of values to copy.
+///
+/// The <b>getValues()</b> method
+/// for a multiple-value field returns a const pointer to the array of
+/// values in the field. (Because this pointer is const, it cannot be used
+/// to change values in this array.)
+///
+/// In addition, the indexing operator "[]" is overloaded to return the
+/// \a i'th value in the array; because it returns a const reference, it can
+/// be used only to get values, not to set them.
+///
+/// Methods are provided for getting the number of values in the field,
+/// inserting space for new values in the middle, and deleting values.
+///
+/// There are other methods that allow you to set only one value of
+/// several in the field and to set the field to contain one and only one
+/// value.
+///
+/// Two other methods can be used to make several changes to a
+/// multiple-value field without the overhead of copying values into and
+/// out of the fields. The <b>startEditing()</b> method
+/// returns a non-const pointer to the array of values in the field; this
+/// pointer can then be used to change (but not add or remove) any values
+/// in the array. The <b>finishEditing()</b> method
+/// indicates that the editing is done and notifies any sensors or engines
+/// that may be connected to the field.
+///
+/// <tt>SoMFields</tt> are written to file as a series of values separated by
+/// commas, all enclosed in square brackets.  If the field has no values
+/// (#getNum() returns zero), then only the square brackets ("[]") are
+/// written.  The last value may optionally be followed by a comma.  Each
+/// field subtype defines how the values are written; for example, a field
+/// whose values are integers might be written as:
+/// [ 1, 2, 3, 4 ]
+///    or:
+/// [ 1, 2, 3, 4, ]
+/// \sa SoNode, SoEngine
 class SoMField : public SoField {
 
   public:
-    // Destructor
+    /// Destructor
     virtual ~SoMField();
 
-    // Returns number of values
+    /// Returns the number of values currently in the field.
     int getNum() const {
         evaluate();
         return num;
     }
 
-    // Adjust the number of values to be num, adding or deleting
-    // values at the end as needed.  If adding, the initial values
-    // in the new space are undefined.
+    /// Forces this field to have exactly num values, inserting or deleting
+    /// values as necessary.
     void setNum(int num);
 
-    // Delete num values, starting at start. A num of -1 (the default)
-    // means delete all values after start, inclusive
+    /// Deletes \a num values beginning at index \a start (index \a start
+    /// through \a start + \a num -1 will be deleted, and any leftover values
+    /// will be moved down to fill in the gap created).  A \a num of -1 means
+    /// delete all values from \a start to the last value in the field;
+    /// #getNum() will return \a start as the number of values in the field
+    /// after this operation
+    /// (#deleteValues(0, -1) empties the field).
     virtual void deleteValues(int start, int num = -1);
 
-    // Insert space for num values starting at start.  The initial
-    // values in the new space are undefined.
+    /// Inserts space for \a num values at index \a start.  Index \a start
+    /// through \a start + \a num -1 will be moved up to make room.  For
+    /// example, to make room for 7 new values at the beginning of the field
+    /// call <b>insertSpace(0, 10)</b>.
     virtual void insertSpace(int start, int num);
 
-    // These are equivalent to the SoField::set() and SoField::get()
-    // methods, but operate on only the value given by the index.
+    /// These are equivalent to the SoField::set() and SoField::get()
+    /// methods, but operate on only the value given by the index.
     SbBool set1(int index, const char *valueString);
     void   get1(int index, SbString &valueString);
 
-    // Returns type identifier for SoMField class
+    /// Return the type identifier for this field class.
     static SoType getClassTypeId() { return classTypeId; }
 
     SoINTERNAL

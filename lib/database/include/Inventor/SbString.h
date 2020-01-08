@@ -62,52 +62,52 @@
 
 #include <string>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbString
-//
-//  "Smart" character strings, which allow things like concatenation
-//  with the "+=" operator and automatic storage management.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Class for smart character strings.
+/// \ingroup Basics
+/// Strings which have many convenience methods to make
+/// string manipulation easier.
+/// \sa SbName
 class SbString {
   public:
-    // Default constructor
+    /// Default constructor
     SbString() {}
 
-    // Constructor that initializes to given character string
+    /// Constructor that initializes to given character string.
+    /// The given const char pointer is converted to Unicode using the
+    /// fromUtf8() function.
     SbString(const char *str);
 
-    // Constructor that initializes to given character string
+    /// Constructors take a character string, the subset of a character string
+    /// from start to end (inclusive) The given const char pointer is converted
+    /// to Unicode using the fromUtf8() function.
     SbString(const char *str, size_t start, size_t end);
 
-    // Constructor that initializes to given SbString
+    /// Constructor that initializes to given SbString
     SbString(const SbString &str) { string = str.string; }
 
-    // Constructor that initializes to string formed from given integer.
-    // For example, SbString(1234) gives the string "1234".
+    /// Constructor that initializes to string formed from given integer.
+    /// For example, SbString(1234) gives the string "1234".
     SbString(int digitString);
 
-    // Destructor
+    /// Destructor
     ~SbString();
 
-    // Returns a reasonable hash key for string
+    /// Returns a reasonable hash key for string
     uint32_t hash() { return SbString::hash(string.data()); }
 
-    // Returns length of string
+    /// Returns the number of characters in this string.
     size_t getLength() const;
 
     /// Returns true if the string has no characters; otherwise returns false.
     bool isEmpty() const { return string.empty(); }
 
-    // Sets string to be the empty string ("").
+    /// Sets string to be the empty string ("").
     void makeEmpty();
 
-    // Returns pointer to the character string
+    /// Returns pointer to the UTF-8 character string
     const char *getString() const { return string.c_str(); }
 
-    // Returns an std::wstring encoded in utf16.
+    /// Returns an std::wstring encoded in utf16.
     std::wstring toStdWString() const;
 
     /// Searches the string for the content specified in str, and returns the
@@ -124,46 +124,57 @@ class SbString {
     /// content is not found, -1 is returned.
     int rfind(const SbString &str, int pos = -1) const;
 
-    // Returns new string representing sub-string from startChar to
-    // endChar, inclusive. If endChar is -1 (the default), the
-    // sub-string from startChar until the end is returned.
+    /// Returns new string representing sub-string from startChar to
+    /// endChar, inclusive. If endChar is -1 (the default), the
+    /// sub-string from startChar until the end is returned.
     SbString getSubString(int startChar, int endChar = -1) const;
 
-    // Deletes the characters from startChar to endChar, inclusive,
-    // from the string. If endChar is -1 (the default), all characters
-    // from startChar until the end are deleted.
+    /// Deletes the characters from startChar to endChar, inclusive,
+    /// from the string. If endChar is -1 (the default), all characters
+    /// from startChar until the end are deleted.
     void deleteSubString(int startChar, int endChar = -1);
 
-    // Assignment operator for character string, SbString
+    /// Assigns str to this string and returns a reference to this string.
     SbString &operator=(const char *str);
+
+    /// Assigns str to this string and returns a reference to this string.
     SbString &operator=(const SbString &str);
 
-    // Concatenation operator "+=" for string, SbString
+    /// Appends the string str onto the end of this string and returns a
+    /// reference to this string.
     SbString &operator+=(const char *str);
 
+    /// Appends the string str onto the end of this string and returns a
+    /// reference to this string.
     SbString &operator+=(const SbString &str);
 
-    // Unary "not" operator; returns TRUE if string is empty ("")
+    /// Unary "not" operator; returns TRUE if string is empty ("")
     bool operator!() const { return string.empty(); }
 
-    // Equality operator for SbString/char* and SbString/SbString comparison
+    /// Equality operator for SbString/char* and SbString/SbString comparison
     friend bool operator==(const SbString &str, const char *s);
 
+    /// Returns true if str1 is equal to str2; otherwise returns false.
     friend bool operator==(const char *s, const SbString &str) {
         return (str.string == s);
     }
 
+    /// Returns true if str1 is equal to str2; otherwise returns false.
     friend bool operator==(const SbString &str1, const SbString &str2) {
         return (str1.string == str2.string);
     }
 
-    // Inequality operator for SbString/char* and SbString/SbString comparison
+    /// Returns true if this string str1 is not equal to string str2; otherwise
+    /// returns false.
     friend bool operator!=(const SbString &str, const char *s);
 
+    /// Returns true if this string str1 is not equal to string str2; otherwise
+    /// returns false.
     friend bool operator!=(const char *s, const SbString &str) {
         return (str.string != s);
     }
 
+    /// Returns a string which is the result of concatenating s1 and s2.
     friend const SbString operator+(const SbString &s1, const SbString &s2) {
         SbString t(s1);
         t += s2;
@@ -174,13 +185,13 @@ class SbString {
         return (str1.string != str2.string);
     }
 
-    // Creates a string from ISO-8859-1.
+    /// Creates a string from ISO-8859-1.
     static SbString fromLatin1(const char *latin, int size = -1);
 
-    // Creates a string from UTF-8.
+    /// Creates a string from UTF-8.
     static SbString fromUtf8(const char *utf8, int size = -1);
 
-    // Creates a string from UTF-16 (wide character).
+    /// Creates a string from UTF-16 (wide character).
     static SbString fromWideChar(const wchar_t *wcs, int size = -1);
 
     SoINTERNAL

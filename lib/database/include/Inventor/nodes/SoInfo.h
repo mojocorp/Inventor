@@ -59,23 +59,34 @@
 #include <Inventor/fields/SoSFString.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoInfo
-//
-//  Node that holds application-specific information as a text string.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node containing information text string.
+/// \ingroup Nodes
+/// This class defines a information node in the scene graph. This node
+/// has no effect during traversal. It is used to store information in the
+/// scene graph, typically for application-specific purposes, copyright
+/// messages, or other strings. This node differs from the <tt>SoLabel</tt>
+/// node in that it stores its information in an <tt>SbString</tt> instead of
+/// an <tt>SbName</tt>; the <tt>SbString</tt> is more efficient for storing long
+/// strings that don't have to be accessed very often. Use an <tt>SoLabel</tt>
+/// node for short strings that have to be accessed more often.
+///
+/// \par File format/defaults:
+/// \code
+/// SoInfo {
+///    string	"<Undefined info>"
+/// }
+/// \endcode
+/// \sa SbString, SoLabel
 class SoInfo : public SoNode {
 
     SO_NODE_HEADER(SoInfo);
 
   public:
     // Fields
-    SoSFString string; // Info string
+    SoSFString
+        string; ///< Defines the info string value as an <tt>SbString</tt>.
 
-    // Constructor
+    /// Creates an info node with default settings.
     SoInfo();
 
     SoINTERNAL

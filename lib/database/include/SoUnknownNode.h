@@ -84,7 +84,7 @@ class SoUnknownNode : public SoGroup {
     SO_NODE_HEADER(SoUnknownNode);
 
   public:
-    // Constructor
+    /// Constructor
     SoUnknownNode();
 
     SoEXTENDER
@@ -97,20 +97,20 @@ class SoUnknownNode : public SoGroup {
     void        setClassName(const char *name);
 
   protected:
-    // Reads field type information, fields, and children.
+    /// Reads field type information, fields, and children.
     virtual SbBool readInstance(SoInput *in, unsigned short flags);
 
-    // Override search so we don't search alternateRep
+    /// Override search so we don't search alternateRep
     virtual void search(SoSearchAction *action);
 
-    // Returns file format name
+    /// Returns file format name
     virtual const char *getFileFormatName() const;
 
-    // Recursively adds this node and all nodes under it to the copy
-    // dictionary. Returns the copy of this node.
+    /// Recursively adds this node and all nodes under it to the copy
+    /// dictionary. Returns the copy of this node.
     virtual SoNode *addToCopyDict() const;
 
-    // Copies the contents of the given node into this instance
+    /// Copies the contents of the given node into this instance
     virtual void copyContents(const SoFieldContainer *fromFC,
                               SbBool                  copyConnections);
 

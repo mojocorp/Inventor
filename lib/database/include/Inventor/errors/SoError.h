@@ -59,42 +59,6 @@
 #ifndef _SO_ERROR
 #define _SO_ERROR
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoError
-//
-//  This is the base class for all error classes, which provide error
-//  handling for applications.
-//
-//  There are two facets to errors: posting and handling. An error is
-//  posted when some bad condition occurs. Posting is done primarily
-//  by the Inventor library itself, but extenders can post their own
-//  errors. Posting an error creates an instance of the appropriate
-//  error class (or subclass) and then passes it to the active error
-//  handler. The default handler just prints an appropriate message to
-//  stderr. Applications can override this behavior by supplying a
-//  different handler (by specifying a callback function).
-//
-//  Each subclass of SoError supports the setHandlerCallback() method,
-//  which is used to set the callback function to handle errors. The
-//  callback for the most derived class of a specific error instance
-//  is used to handle an event.
-//
-//  The error instance passed to a callback is deleted immediately
-//  after the callback is called; an application that wishes to save
-//  info from the instance has to copy it out first.
-//
-//  Each error class contains a run-time class type id (SoType) that
-//  can be used to determine the type of an instance. The base class
-//  defines a character string that represents a detailed error
-//  message that is printed by the default handler.
-//
-//  All handlers are called by the SoError::handleError() method. When
-//  debugging, you can set a breakpoint on this method to stop right
-//  before an error is handled.
-//
-//////////////////////////////////////////////////////////////////////////////
-
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
@@ -105,36 +69,69 @@ class SoEngine;
 class SoNode;
 class SoPath;
 
-// Error handling callbacks are of this type:
+/// Error handling callbacks are of this type:
 typedef void SoErrorCB(const SoError *error, void *data);
 
+/// Error handling base class.
+/// \ingroup Errors
+/// <tt>SoError</tt> is the base class for all error classes,
+/// which provide error handling for applications.
+/// There are two facets to errors: posting and handling. An error is
+/// posted when some bad condition occurs. Posting is done primarily
+/// by the Inventor library itself, but extenders can post their own
+/// errors. Posting an error creates an instance of the appropriate
+/// error class (or subclass) and then passes it to the active error
+/// handler. The default handler just prints an appropriate message to
+/// stderr. Applications can override this behavior by supplying a
+/// different handler (by specifying a callback function).
+///
+/// Each subclass of SoError supports the #setHandlerCallback() method,
+/// which is used to set the callback function to handle errors.
+/// The callback function for a specfic error class is always used in preference
+/// to that of any base classes when handling errors.
+/// The error instance passed to a callback is deleted immediately
+/// after the callback is called; an application that wishes to save
+/// information from the instance has to copy it out first.
+///
+/// Each error class contains a run-time class type id (<tt>SoType</tt>) that
+/// can be used to determine the type of an instance. The base class
+/// defines a character string that represents a detailed error
+/// message that is printed by the default handler.
+/// All handlers are called by the #SoError::handleError() method. When
+/// debugging, you can set a breakpoint on this method to stop right
+/// before an error is handled.
+/// \sa SoDebugError,SoMemoryError,SoReadError
 class SoError {
 
   public:
-    // Sets/returns handler callback for SoError class
+    /// Sets handler callback for SoError class
     static void setHandlerCallback(SoErrorCB *cb, void *data) {
         handlerCB = cb;
         cbData = data;
     }
-    static SoErrorCB *getHandlerCallback() { return handlerCB; }
-    static void *     getHandlerData() { return cbData; }
 
-    // Returns debug string containing full error info from instance
+    /// Returns handler callback for SoError class
+    static SoErrorCB *getHandlerCallback() { return handlerCB; }
+
+    /// Returns handler data for SoError class
+    static void *getHandlerData() { return cbData; }
+
+    /// Returns debug string containing full error info from instance
     const SbString &getDebugString() const { return debugString; }
 
-    // Returns type identifier for SoError class
+    /// Returns type identifier for SoError class
     static SoType getClassTypeId() { return classTypeId; }
 
-    // Returns type identifier for error instance
+    /// Returns type identifier for error instance
     virtual SoType getTypeId() const;
 
-    // Returns TRUE if instance is of given type or is derived from it
+    /// Returns TRUE if instance is of given type or is derived from it
     SbBool isOfType(SoType type) const;
 
     SoEXTENDER
   public:
-    // Posts an error. The debugString will be created from the given
-    // arguments, which are in printf() format
+    /// Posts an error. The debugString will be created from the given
+    /// arguments, which are in printf() format
     static void post(const char *formatString...);
 
     // These are convenience functions that return a printable string

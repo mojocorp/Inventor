@@ -61,60 +61,85 @@
 class SoBaseKit;
 class SoSearchAction;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNodeKitPath
-//
-//  A SoNodeKitPath represents a scene graph or subgraph. It contains
-//  pointers to a chain of nodeKitss, each of which is a child of the
-//  previous.
-//
-//  Intermediary nodes between nodeKits are not included in the nodeKit path.
-//
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Path that points to a list of hierarchical nodekits.
+/// \ingroup General
+/// <tt>SoNodeKitPath</tt> is a subclass of <tt>SoPath</tt> that lets you
+/// look at nodekits below the top nodekit in the path. Since nodekits have
+/// hidden children, when you call #getTail() on
+/// a regular path, it returns the top-most
+/// nodekit on the path.  This occurs even though the path might contain extra
+/// internal information leading to a node far deeper in the scene graph.
+/// For example, when picking an object inside an <tt>SoSceneKit</tt>, the
+/// <em>regular</em> path would end at the scenekit. But a <em>nodekit</em>
+/// path would
+/// continue further down listing the other nodekits below it in the path.
+///
+///
+/// Intermediary (private) nodes between nodekits are not included in the
+/// nodekit path.
+///
+///
+/// Note that there is no constructor for an <tt>SoNodeKitPath</tt>,  so
+/// you can not create one. Rather, you cast an <tt>(SoPath *)</tt> into
+/// an <tt>(SoNodeKitPath *)</tt>,  which returns nodekit-style values from all
+/// the same questions as <tt>SoPath</tt>.
+///
+///
+/// Also, some methods of <tt>SoPath</tt> may not be called on an
+/// <tt>SoNodeKitPath</tt>. Any methods which take a regular <tt>SoNode</tt> as
+/// an argument (except for #setHead()) are not accessible, and replaced by
+/// methods that take an <tt>SoBaseKit</tt> as an argument instead.  Methods
+/// which allow the programmer to refer to the child index of a node beneath its
+/// parent are also inaccessible; since a <tt>SoNodeKitPath</tt> only shows
+/// nodekits and hides any private parts, successive nodekits in the path may
+/// not actually be parent and child. \sa SoBaseKit, SoPath, SoRayPickAction,
+/// SoSearchAction
 class SoNodeKitPath : public SoPath {
 
   public:
-    // Returns length of path chain (number of nodes)
+    /// Returns length of path chain (number of nodekits).
     int getLength() const;
 
-    // Returns the last nodeKit in a path chain.
+    /// Return the last nodekit in a path chain. Note that
+    /// #getHead() is not redefined from SoPath,
+    /// since an SoNodeKitPath need not begin with a nodekit; the restriction
+    /// is placed only on successive nodes on the path.
     SoNode *getTail() const;
 
-    // Returns pointer to ith nodeKit in chain
+    /// Returns a pointer to the \a i 'th node in the nodekit path.
     SoNode *getNode(int i) const;
 
-    // Returns pointer to ith node from the tail in chain
-    // i.e. index 0 == tail, index 1 == 1 before tail, 2 == 2 before tail
+    /// Returns a pointer to the \a i 'th nodekit
+    /// in the chain, counting backward from
+    /// the tail nodekit. Passing 0 for \a i returns the tail nodekit.
     SoNode *getNodeFromTail(int i) const;
 
-    // Removes all nodes from indexed nodeKit on
+    /// Truncates the path chain, removing all nodes from index \a start on.
+    /// Calling <b>truncate(0)</b> empties the path entirely.
     void truncate(int start);
 
-    // Allows path to be treated as a stack: pop the last nodeKit
+    /// Pops the last nodekit off the end of the path.
     void pop();
 
-    // Adds nodeKit to end of chain; uses first occurrance of nodeKit as
-    // part of current last nodekit. If path is empty, this is
-    // equivalent to setHead().
+    /// Adds \a childKit to end of chain; uses first occurrence of \a childKit
+    /// as a part within current last nodekit. If the path is empty, this is
+    /// equivalent to <b>setHead(childKit)</b>.
     void append(SoBaseKit *childKit);
 
-    // Adds all nodeKits in path to end of chain; head node of fromPath must
-    // be a part of current last node
+    /// Adds all nodekits in \a fromPath's chain to end of chain; the head node
+    /// of \a fromPath must be the same as or a child of the current tail node.
     void append(const SoNodeKitPath *fromPath);
 
-    // Returns TRUE if the passed nodeKit is in the path chain
+    /// Returns TRUE if the passed nodekit is found anywhere in the path chain.
     SbBool containsNode(SoBaseKit *node) const;
 
-    // If the paths have different head nodes, this returns -1.
-    // Otherwise, it returns the index into the chain of the last nodeKit
-    // (starting at the head) that is the same for both paths.
+    /// If the two paths have different head nodes, this returns -1.
+    /// Otherwise, it returns the path chain index of the last nodekit (starting
+    /// at the head) that is the same for both paths.
     int findFork(const SoNodeKitPath *path) const;
 
-    // Comparison operator: returns TRUE if all nodes on the nodekit path
-    // are equal
+    /// Returns TRUE if all node pointers in the two nodekit path chains are
+    /// equal.
     friend int operator==(const SoNodeKitPath &p1, const SoNodeKitPath &p2);
 
   protected:

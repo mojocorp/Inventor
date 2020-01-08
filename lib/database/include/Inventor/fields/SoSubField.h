@@ -141,17 +141,17 @@
     virtual SoType getTypeId() const;                                          \
     static SoType  getClassTypeId() { return classTypeId; }                    \
                                                                                \
-    /* Copy from another field of same type */                                 \
+    /** Copy from another field of same type */                                \
     const className &operator=(const className &f);                            \
                                                                                \
     SoINTERNAL                                                                 \
-  public:                                                                      \
-    /* Copy from another field of unknown type (assumed to be same type) */    \
+  public: /** Copy from another field of unknown type (assumed to              \
+             be same type) */                                                  \
     virtual void copyFrom(const SoField &f);                                   \
                                                                                \
-    static void *createInstance(); /* for SoType	   */                         \
+    static void *createInstance(); /* for SoType  */                           \
                                                                                \
-    /* Returns TRUE if fields are same type and have same values */            \
+    /** Returns TRUE if fields are same type and have same values */           \
     virtual SbBool isSame(const SoField &f) const;                             \
                                                                                \
   private:                                                                     \
@@ -159,18 +159,18 @@
 
 #define SO__SFIELD_RW_HEADER(className)                                        \
   private:                                                                     \
-    /* Reads value of field from file */                                       \
+    /** Reads value of field from file. */                                     \
     virtual SbBool readValue(SoInput *in);                                     \
                                                                                \
-    /* Writes value of field to file */                                        \
+    /** Writes value of field to file. */                                      \
     virtual void writeValue(SoOutput *out) const
 
 #define SO__MFIELD_RW_HEADER(className)                                        \
   private:                                                                     \
-    /* Reads indexed value of field from file */                               \
+    /** Reads indexed value of field from file. */                             \
     virtual SbBool read1Value(SoInput *in, int index);                         \
                                                                                \
-    /* Writes one (indexed) value to file */                                   \
+    /** Writes one (indexed) value to file. */                                 \
     virtual void write1Value(SoOutput *out, int index) const
 
 #define SO__FIELD_INIT_CLASS(className, classPrintName, parentClass)           \
@@ -183,7 +183,7 @@
     SoType className::classTypeId;                                             \
                                                                                \
     SoType className::getTypeId() const { return classTypeId; }                \
-    void * className::createInstance() { return (void *)(new className); }
+    void * className::createInstance() { return new className; }
 
 #define SO__FIELD_EQ_SAME_SOURCE(className)                                    \
                                                                                \
@@ -219,7 +219,9 @@
 
 #define SO_SFIELD_CONSTRUCTOR_HEADER(className)                                \
   public:                                                                      \
+    /** Constructor. */                                                        \
     className();                                                               \
+    /** Destructor. */                                                         \
     virtual ~className()
 
 ////////////////////////////////////////////////////////////////////////////
@@ -233,21 +235,23 @@
     SO__SFIELD_RW_HEADER(className);                                           \
                                                                                \
   public:                                                                      \
-    /* Get the value */                                                        \
+    /** Returns this field's value. */                                         \
     valueRef getValue() const {                                                \
         evaluate();                                                            \
         return value;                                                          \
     }                                                                          \
                                                                                \
-    /* Set value from a value of the appropriate type */                       \
-    void     setValue(valueRef newValue);                                      \
+    /** Sets this field to \a newValue. */                                     \
+    void setValue(valueRef newValue);                                          \
+    /** Sets this field to \a newValue. */                                     \
     valueRef operator=(valueRef newValue) {                                    \
         setValue(newValue);                                                    \
         return value;                                                          \
     }                                                                          \
                                                                                \
-    /* Equality/inequality test for fields of same type */                     \
+    /** Equality test for fields of same type */                               \
     int operator==(const className &f) const;                                  \
+    /** Inequality test for fields of same type */                             \
     int operator!=(const className &f) const { return !((*this) == f); }       \
                                                                                \
   protected:                                                                   \
@@ -319,7 +323,9 @@
 
 #define SO_MFIELD_CONSTRUCTOR_HEADER(className)                                \
   public:                                                                      \
+    /** Constructor. */                                                        \
     className();                                                               \
+    /** Destructor */                                                          \
     virtual ~className()
 
 ////////////////////////////////////////////////////////////////////////////
@@ -333,59 +339,102 @@
     SO__MFIELD_RW_HEADER(className);                                           \
                                                                                \
   public:                                                                      \
-    /* Get indexed value */                                                    \
+    /** Returns the \a i 'th value of the field.  Indexing past the end of the \
+     */                                                                        \
+    /** field (passing in \a i greater than #getNum()) will return garbage. */ \
     valueRef operator[](int i) const {                                         \
         evaluate();                                                            \
         return values[i];                                                      \
     }                                                                          \
                                                                                \
-    /* Get pointer into array of values */                                     \
+    /** Returns a pointer into the array of values in the field, starting at   \
+     * index \a start.            */                                           \
+    /** The values are read-only; see the #startEditing() and #finishEditing() \
+     * methods for a way of     */                                             \
+    /** modifying values in-place. */                                          \
     const valueType *getValues(int start) const {                              \
         evaluate();                                                            \
         return (const valueType *)(values + start);                            \
     }                                                                          \
                                                                                \
-    /* Finds index of value that is equal to given one, or -1 if not	*/        \
-    /* found. If not found and addIfNotFound is TRUE, the new value is	*/      \
-    /* appended to the field. 						*/                                         \
+    /** Finds the given value in the array and returns the index of that value \
+     * in the array.            */                                             \
+    /** If the value is not found, -1 is returned. */                          \
+    /** If \a addIfNotFound is set, then targetValue will be added to the end  \
+     * of the array              */                                            \
+    /** (but -1 is still returned). */                                         \
     int find(valueRef targetValue, SbBool addIfNotFound = FALSE);              \
                                                                                \
-    /* Set num values starting at index start from info in newValues */        \
+    /** Sets \a num values starting at index \a start to the values in \a      \
+     * newValues.                    */                                        \
+    /** The array will be automatically be made larger to accomodate the new   \
+     * values, if necessary.      */                                           \
     void setValues(int start, int num, const valueType *newValues);            \
                                                                                \
-    /* Set 1 value at given index */                                           \
+    /** Sets the \a index 'th value in the array to \a newValue. */            \
+    /** The array will be automatically expanded, if necessary. */             \
     void set1Value(int index, valueRef newValue);                              \
                                                                                \
-    /* Set field to have one value */                                          \
-    void     setValue(valueRef newValue);                                      \
+    /** Sets the first value in the array to \a newValue, and deletes the      \
+     * second and subsequent values. */                                        \
+    void setValue(valueRef newValue);                                          \
+    /** Sets the first value in the array to \a newValue, and deletes the      \
+     * second and subsequent values. */                                        \
     valueRef operator=(valueRef newValue) {                                    \
         setValue(newValue);                                                    \
         return newValue;                                                       \
     }                                                                          \
                                                                                \
-    /* Equality/inequality test for fields of same type */                     \
+    /** Returns TRUE if all of the values of this field equal (do not equal)   \
+     * those of the given field.  */                                           \
+    /** If the fields are different types FALSE will always be returned (even  \
+     * if one field is an        */                                            \
+    /** <tt>SoMFFloat</tt> with one value of 1.0 and the other is an           \
+     * <tt>SoMFInt</tt> with a value of 1,*/                                   \
+    /** for example). */                                                       \
     int operator==(const className &f) const;                                  \
+    /** Inequality test for fields of same type */                             \
     int operator!=(const className &f) const { return !((*this) == f); }       \
                                                                                \
-    /* Get non-const pointer into array of values for batch edits */           \
+    /** Returns a pointer to the internally-maintained array that can be       \
+     * modified.                      */                                       \
+    /** The values in the array may be changed, but values cannot be added or  \
+     * removed.                  */                                            \
+    /** It is illegal to call any other editing methods between                \
+     * #startEditing()                                                         \
+     */                                                                        \
+    /** and #finishEditing() (e.g. #set1Value(), #setValue(), etc) */          \
+    /** */                                                                     \
+    /** Fields, engines or sensors connected to this field and sensors are not \
+     */                                                                        \
+    /** notified that this field has changed until #finishEditing() is called. \
+     */                                                                        \
+    /** Calling #finishEditing() always sets the #isDefault() flag to FALSE    \
+     * and                                                                     \
+     */                                                                        \
+    /** informs engines and sensors that the field changed, even if none of    \
+     * the                                                                     \
+     */                                                                        \
+    /** values actually were changed. */                                       \
     valueType *startEditing() {                                                \
         evaluate();                                                            \
         return values;                                                         \
     }                                                                          \
                                                                                \
-    /* Indicate that batch edits have finished */                              \
+    /** Indicate that batch edits have finished \sa #startEditing() */         \
     void finishEditing() { valueChanged(); }                                   \
                                                                                \
   protected:                                                                   \
-    /* Allocates room for num values. Copies old values (if any) into    */    \
-    /* new area.  Deletes old area, if any.  Will reduce room if needed, */    \
-    /* so a value of newNum==0 will delete all values.                   */    \
+    /** Allocates room for num values. */                                      \
+    /** Copies old values (if any) into new area.  Deletes old area, if any.   \
+     * Will reduce room if       */                                            \
+    /** needed, so a value of newNum==0 will delete all values. */             \
     virtual void allocValues(int newNum);                                      \
                                                                                \
-    /* Deletes all current values, resets number of values */                  \
+    /** Deletes all current values, resets number of values */                 \
     virtual void deleteAllValues();                                            \
                                                                                \
-    /* Copies value indexed by "from" to value indexed by "to" */              \
+    /** Copies value indexed by "from" to value indexed by "to" */             \
     virtual void copyValue(int to, int from);                                  \
                                                                                \
     valueType *values

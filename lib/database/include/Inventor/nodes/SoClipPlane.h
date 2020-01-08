@@ -60,29 +60,42 @@
 #include <Inventor/fields/SoSFPlane.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoClipPlane
-//
-//  Clipping plane node. All subsequent shapes in the scene graph will
-//  be clipped to the half-space defined by the "plane" field. The
-//  half-space is the side of the plane in the direction of the plane
-//  normal. Any number of clipping planes may be active
-//  simultaneously, although the graphics library may place a limit on
-//  this number during rendering.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Clipping plane node.
+/// \ingroup Nodes
+/// This node clips all subsequent shapes in the scene graph to the
+/// half-space defined by the <tt>plane</tt> field. The half-space is the side
+/// of the plane in the direction of the plane normal.
+/// For example, if the plane is positioned at the origin
+/// and the normal is pointing down the positive X axis,
+/// everything in the negative X space will be clipped away.
+///
+///
+/// Any number of
+/// clipping planes may be active simultaneously, although the graphics
+/// library may place a limit on this number during rendering.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoRayPickAction</b>
+/// Adds the plane to the current list of clipping planes in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoClipPlane {
+///    plane	1 0 0  0
+///    on	TRUE
+/// }
+/// \endcode
+/// \sa SoCamera, SoShapeHints
 class SoClipPlane : public SoNode {
 
     SO_NODE_HEADER(SoClipPlane);
 
   public:
     // Fields
-    SoSFPlane plane; // Plane that defines half-space
-    SoSFBool  on;    // Whether clipping plane is active
+    SoSFPlane plane; ///< Plane that defines half-space
+    SoSFBool  on;    ///< Whether clipping plane is active
 
-    // Constructor
+    /// Constructor
     SoClipPlane();
 
     SoEXTENDER

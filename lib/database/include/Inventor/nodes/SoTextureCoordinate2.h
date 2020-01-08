@@ -59,23 +59,44 @@
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/fields/SoMFVec2f.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTextureCoordinate2
-//
-//  TextureCoordinate2 point node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// 2D texture coordinate node.
+/// \ingroup Nodes
+/// This node defines a set of 2D coordinates to be used to map textures
+/// to subsequent vertex-based shapes (those derived from
+/// <tt>SoVertexShape</tt>). It replaces the current texture coordinates in the
+/// rendering state for the shapes to use.
+///
+/// The current texture coordinate binding (see
+/// <tt>SoTextureCoordinateBinding</tt>) determines how texture coordinates are
+/// mapped to vertices of shapes. An alternative to using explicit texture
+/// coordinates is to generate them using a function; see
+/// <tt>SoTextureCoordinateFunction</tt>.
+///
+/// Texture coordinates range from 0 to 1 across the texture. The
+/// horizontal coordinate, called <b>S</b>, is specified first, followed by
+/// the vertical coordinate, <b>T</b>.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction</b>
+/// Sets the current texture coordinates in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTextureCoordinate2 {
+///    point	[  ]
+/// }
+/// \endcode
+/// \sa
+/// SoTexture2,SoTextureCoordinateBinding,SoTextureCoordinateFunction,SoVertexShape
 class SoTextureCoordinate2 : public SoNode {
 
     SO_NODE_HEADER(SoTextureCoordinate2);
 
   public:
     // Fields
-    SoMFVec2f point; // TextureCoordinate point(s)
+    SoMFVec2f point; ///< Texture coordinate points.
 
-    // Constructor
+    /// Creates a texture coordinate node with default settings.
     SoTextureCoordinate2();
 
     SoEXTENDER

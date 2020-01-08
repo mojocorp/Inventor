@@ -59,12 +59,20 @@
 #include <Inventor/SbPlane.h>
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFPlane subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing several plane equations.
+/// \ingroup Fields
+/// A field containing one or more plane equations.
+///
+/// <tt>SoMFPlanes</tt> are written to file as groups of four floating point
+/// values separated by whitespace.  In each set of four values, the first
+/// three are the normal direction of the plane, the fourth is the
+/// distance of the plane from the origin (in the direction of the normal).
+///
+/// When more than one value is present, all of the
+/// values are enclosed in square brackets and separated by commas; for
+/// example:
+///
+/// [ 1 0 0 0, .707 .707 0 100, ]
 class SoMFPlane : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFPlane, SbPlane, SbPlane);

@@ -72,20 +72,22 @@ SoEXTENDER
 class SoNormalCache : public SoCache {
 
   public:
-    // Constructor and destructor
+    /// Constructor and destructor
     SoNormalCache(SoState *state);
 
-    // Stores a list of normals in the cache
+    /// Stores a list of normals in the cache
     void set(int numNormals, const SbVec3f *normals);
 
-    // Returns the number of normals and list of normals
-    int            getNum() const { return numNormals; }
+    /// Returns the number of normals
+    int getNum() const { return numNormals; }
+
+    /// Returns the number list of normals
     const SbVec3f *getNormals() const { return normals; }
 
-  protected:
+  private:
+    /// Destructor
     ~SoNormalCache();
 
-  private:
     int            numNormals; // Number of normals
     const SbVec3f *normals;    // Array of normals
 };

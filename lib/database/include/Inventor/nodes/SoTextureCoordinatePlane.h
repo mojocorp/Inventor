@@ -63,22 +63,49 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/fields/SoSFRotation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoTextureCoordinatePlane
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that specifies texture coordinates by projection from a plane.
+/// \ingroup Nodes
+/// This node creates texture coordinates for points on an object's
+/// surface by projecting them onto a plane.
+/// The #directionS and #directionT fields define the plane.
+/// The S coordinate is computed as the distance from the object-space
+/// origin along the vector specified in the #directionS field.
+/// The T coordinate is computed similarly,
+/// using the #directionT field.
+///
+/// The length of the direction vector is also taken into account.
+/// For example, assume #directionS is (0.5, 0, 0) and #directionT is
+/// (0, 1, 0).  The square defined by the (x, y, z) vertices:
+///
+/// (-1, -1, 0) (1, -1, 0) (1, 1, 0) (-1, 1, 0)
+///
+/// will be assigned the (s, t) texture coordinates:
+///
+/// (-2, -1) (2, -1) (2, 1) (-2, 1)
+///
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoRayPickAction</b>
+/// Sets the current texture function in the state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoTextureCoordinatePlane {
+///    directionS	1 0 0
+///    directionT	0 1 0
+/// }
+/// \endcode
+/// \sa
 class SoTextureCoordinatePlane : public SoTextureCoordinateFunction {
 
     SO_NODE_HEADER(SoTextureCoordinatePlane);
 
   public:
     // Fields
-    SoSFVec3f directionS; // S coordinates projection direction
-    SoSFVec3f directionT; // T coordinates projection direction
+    SoSFVec3f directionS; ///< S coordinates projection direction
+    SoSFVec3f directionT; ///< T coordinates projection direction
 
-    // Constructor
+    /// Creates a texture function node with default settings.
     SoTextureCoordinatePlane();
 
     SoEXTENDER

@@ -63,25 +63,35 @@
 
 class SoFieldContainer;
 
+/// Sensor class that can be attached to Inventor fields.
+/// \ingroup Sensors
+/// Field sensors detect changes to fields, calling a callback function
+/// whenever the field changes.  The field may be part of a node, an input
+/// of an engine, or a global field.
+/// \sa SoNodeSensor, SoPathSensor, SoDataSensor
 class SoFieldSensor : public SoDataSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoFieldSensor();
+
+    /// Constructor that takes the callback function and data to be called when
+    /// the sensor is triggered.
     SoFieldSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destroys the sensor, freeing up any memory associated with it after
+    /// unscheduling it.
     virtual ~SoFieldSensor();
 
-    // Attaches the sensor to the given field. Will not attach if the
-    // field is not contained in a node or function.
+    /// Attaches the sensor to the given field. Will not attach if the
+    /// field is not contained in a node or function.
     void attach(SoField *field);
 
-    // Detaches the sensor if it is attached to a field
+    /// Detaches the sensor if it is attached to a field
     void detach();
 
-    // Returns the field to which the sensor is attached, or NULL if it
-    // is not attached.
+    /// Returns the field that this sensor is
+    /// sensing, or NULL if it is not attached to any field.
     SoField *getAttachedField() const { return field; }
 
     SoINTERNAL

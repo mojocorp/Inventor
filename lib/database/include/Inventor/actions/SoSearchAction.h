@@ -59,83 +59,108 @@
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/lists/SoPathList.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoSearchAction
-//
-//  For searching for specific nodes in scene graphs. Nodes can be
-//  searched for by pointer, by type (exact or derived), by name, or
-//  by a combination of these. You can also specify whether you are
-//  interested in only the first match, only the last match, or all
-//  matches. You can also control whether normal traversal rules are
-//  followed (switching, separators, etc.) or whether every single
-//  node is to be searched.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Searches for nodes in a scene graph.
+/// \ingroup Actions
+/// This class is used to search scene graphs for specific nodes, nodes of
+/// a specific type, nodes with a specific name, or any combination of
+/// these. It can search for just the first or last node satisfying the
+/// criteria or for all such nodes. The actions return paths to each node
+/// found.
+///
+///
+/// Note that by default nodekits do not search their children when a search
+/// action is applied.  The man page for <tt>SoBaseKit</tt> discusses the
+/// methods #SoBaseKit::isSearchingChildren() and
+/// #SoBaseKit::setSearchingChildren(),
+/// which allow you to query and control this behavior.
+/// \sa SoPath, SoBaseKit
 class SoSearchAction : public SoAction {
 
     SO_ACTION_HEADER(SoSearchAction);
 
   public:
-    // Enum that defines the search criterion:
+    /// Enum that defines the search criterion:
     enum LookFor {
-        NODE = 0x01, // Looking for a particular node
-        TYPE = 0x02, // Looking for a particualr type of node
-        NAME = 0x04  // Looking for a node with a particular name
+        NODE = 0x01, ///< Search for a particular node (by pointer)
+        TYPE = 0x02, ///< Search for a particular type of node
+        NAME = 0x04  ///< Search for a node with a particular name
     };
 
-    // Enum that defines which paths to return:
+    /// Enum that defines which paths to return:
     enum Interest {
-        FIRST, // Return only the first path found
-        LAST,  // Return only the last path found
-        ALL    // Return all paths found
+        FIRST, ///< Return only the first path found
+        LAST,  ///< Return only the last path found
+        ALL    ///< Return all paths found
     };
 
-    // Constructor (default action searches for first node of or
-    // derived from given type, using regular traversal rules)
+    /// Constructor (default action searches for first node of or
+    /// derived from given type, using regular traversal rules)
     SoSearchAction();
 
-    // Destructor
+    /// Destructor
     virtual ~SoSearchAction();
 
-    // Reset options back to default values, clears list of returned paths
+    /// Resets options back to default values; clears list of returned paths.
+    /// This can be used to apply the action again with a different set of
+    /// search criteria.
     void reset();
 
-    // Set what to look for; this is a bitmask of the LookFor enum
-    // values. Default is no flags at all.
+    /// Sets what to look for; \a what is a bitmask of \a LookFor
+    /// enum values. Default is no flags at all. Note that setting a node,
+    /// type, and/or name to search for activates the relevant flag, so you
+    /// may never need to call this method directly.
     void setFind(int what) { lookingFor = what; }
-    int  getFind() { return lookingFor; }
 
-    // Returns/sets the node to search for
+    /// Returns what to look for.
+    int getFind() { return lookingFor; }
+
+    /// Returns the node to search for.
     SoNode *getNode() const { return node; }
-    void    setNode(SoNode *n);
 
-    // Returns/sets the node type searching for, and whether the type
-    // must match exactly
+    /// Sets the node to search for.
+    void setNode(SoNode *n);
+
+    /// Returns the node type to search for. If \a derivedIsOk is TRUE,
+    /// a node that is of a type that is derived from \a t will pass this
+    /// search criterion.
     SoType getType(SbBool &derivedIsOk) const {
         derivedIsOk = derivedOk;
         return type;
     }
+
+    /// Sets the node type to search for. If \a derivedIsOk is TRUE,
+    /// a node that is of a type that is derived from \a t will pass this
+    /// search criterion.
     void setType(SoType t, SbBool derivedIsOk = TRUE);
 
-    // Returns/sets the name of the node to search for
+    /// Returns the name of the node to search for
     const SbName &getName() const { return name; }
-    void          setName(const SbName &n);
 
-    // Returns/sets which paths to return. Default is FIRST.
+    /// Sets the name of the node to search for
+    void setName(const SbName &n);
+
+    /// Returns which paths to return. Default is FIRST.
     Interest getInterest() const { return interest; }
-    void     setInterest(Interest i) { interest = i; }
 
-    // Returns/sets whether searching uses normal traversal (switches, etc.)
-    // or whether it traverses every single node. Default is FALSE;
+    /// Sets which paths to return.
+    void setInterest(Interest i) { interest = i; }
+
+    /// Returns whether searching uses regular traversal or whether it
+    /// traverses every single node.
     SbBool isSearchingAll() const { return searchingAll; }
-    void   setSearchingAll(SbBool flag) { searchingAll = flag; }
 
-    // Returns resulting path (if interest is not ALL)
+    /// Sets whether searching uses regular traversal or whether it
+    /// traverses every single node. For example, if this flag is FALSE, an
+    /// SoSwitch node will traverse only the child or children it would
+    /// normally traverse for an action. If the flag is TRUE, the switch would
+    /// always traverse all of its children. The default is FALSE.
+    void setSearchingAll(SbBool flag) { searchingAll = flag; }
+
+    /// Returns resulting path, or NULL if no path was found. This should be
+    /// used if the interest is FIRST or LAST.
     SoPath *getPath() const { return retPath; }
 
-    // Returns resulting path list (if interest is ALL)
+    /// Returns resulting path list. This should be used if the interest is ALL.
     SoPathList &getPaths() { return retPaths; }
 
     SoEXTENDER

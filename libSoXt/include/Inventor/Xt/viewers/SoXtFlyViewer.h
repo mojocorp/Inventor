@@ -88,9 +88,40 @@ class	SoFieldSensor;
 //  
 //////////////////////////////////////////////////////////////////////////////
 
+/// Viewer component for flying through space, with a constant world up
+/// \ingroup Viewers
+/// Fly Viewer - this viewer is intended to simulate flight through space, with
+/// a constant world up direction. The viewer only constrains the camera to
+/// keep the user from flying upside down. No mouse buttons need to be pressed
+/// in order to fly. The mouse position is used only for steering, while mouse
+/// clicks are used to increase or decrease the viewer speed.
+///
+/// The viewer allows you to tilt your head up/down/right/left and move in the
+/// direction you are looking (forward or backward). The viewer also supports
+/// seek to quickly move the camera to a desired object or point.
+///
+/// <b>USAGE</b>
+///
+/// <b>Left Mouse:</b> Click to increase speed.
+///
+/// <b>\<s\> + Left Mouse:</b> Alternative to the Seek button. Press (but do not hold down) the \<s\> key, then click on a target object.
+///
+/// <b>\<u\> + Left Mouse:</b> Press (but do not hold down) the \<u\> key, then
+/// click on a target object to set the "up" direction to the surface normal.
+/// By default +y is the "up" direction.
+///
+/// <b>Middle Mouse:</b> Click to decrease speed.
+///
+/// <b>Left and Middle Mouse:</b> Click boths simultaneously to stop.
+///
+/// <b>Ctrl:</b> Hold the key down to temporary stop and rotate the viewpoint.
+///
+/// <b>Right Mouse:</b> Open the popup menu.
+/// \sa SoXtFullViewer, SoXtViewer, SoXtComponent, SoXtRenderArea, SoXtWalkViewer, SoXtExaminerViewer, SoXtPlaneViewer
 class SoXtFlyViewer : public SoXtConstrainedViewer {
  public:
-    
+    /// Constructor and destructor which specifies the viewer type.
+    /// Please refer to the SoXtViewer reference page for a description of the viewer types.
     SoXtFlyViewer(
 	Widget parent = NULL,
 	const char *name = NULL, 

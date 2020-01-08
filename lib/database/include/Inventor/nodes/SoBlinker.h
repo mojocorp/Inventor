@@ -60,25 +60,39 @@
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/fields/SoSFBool.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoBlinker
-//
-//  SoSwitch node cycles between all its children.
-//  with only one child, cycles that child on and off.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Animated cycling switch node.
+/// \ingroup Nodes
+/// The <tt>SoBlinker</tt> class is derived from <tt>SoSwitch</tt>, so it
+/// selects one of its children to traverse. Using engines connected to the
+/// <b>realTime</b> global field, the #whichChild field is animated over
+/// time. If the node has only one child, #whichChild toggles between
+/// <b>SO_SWITCH_NONE</b> and 0, causing the child to be switched on and off
+/// repeatedly. If the node has more than one child, they are cycled
+/// through continuously.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoGetMatrixAction, SoHandleEventAction, SoRayPickAction, SoSearchAction</b>
+/// Same as for <tt>SoSwitch</tt>.
+///
+/// \par File format/defaults:
+/// \code
+/// SoBlinker {
+///    whichChild  -1
+///    speed        1
+///    on           TRUE
+/// }
+/// \endcode
 class SoBlinker : public SoSwitch {
 
     SO_NODE_HEADER(SoBlinker);
 
   public:
     // Fields
-    SoSFFloat speed; // cycles per second
-    SoSFBool  on;    // FALSE to stop blinking
+    SoSFFloat speed; ///< cycles per second
+    SoSFBool  on;    ///< FALSE to stop blinking
 
-    // Constructor
+    /// Constructor
     SoBlinker();
 
     SoEXTENDER

@@ -62,14 +62,6 @@
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoEngine
-//
-//  Base SoEngine class (abstract).
-//
-//////////////////////////////////////////////////////////////////////////////
-
 class SoFieldData;
 class SoEngineList;
 class SoEngineOutput;
@@ -79,39 +71,66 @@ class SoField;
 class SoOutput;
 class SoInput;
 
+/// Base class for all engines.
+/// \ingroup Engines
+/// <tt>SoEngine</tt> is the abstract base class for all engines.
+/// Engines are objects used for animation and behavior.
+/// They are lightweight objects that are connected between
+/// nodes, the clock, and other engines to form interesting
+/// behaviorial objects (e.g., a spinning windmill).
+///
+///
+/// Engines are used to animate parts of a scene and/or to constrain
+/// one part of a scene in relation to some other part of the scene.
+/// An engine receives a number of input values, performs some operation
+/// on them, and then copies the results into one or more
+/// output fields.  Both the inputs and the outputs can be connected
+/// to other fields or engines in the scene graph.  When an engine's
+/// output values change, those new values are sent to any fields or
+/// engines connected to them.
+/// \par File format/defaults:
+/// This is an abstract class. See the reference page of a derived class for the
+/// format and default values. \sa SoBoolOperation, SoCalculator,
+/// SoComposeMatrix, SoComposeRotation, SoComposeRotationFromTo,SoComposeVec2f,
+/// \sa SoComposeVec3f, SoComposeVec4f, SoComputeBoundingBox, SoConcatenate,
+/// SoCounter, SoDecomposeMatrix, \sa SoDecomposeRotation, SoDecomposeVec2f,
+/// SoDecomposeVec3f,SoDecomposeVec4f, SoElapsedTime, SoGate, \sa SoInterpolate,
+/// SoOnOff, SoOneShot, SoSelectOne,SoTimeCounter, SoTransformVec3f,
+/// SoTriggerAny
 class SoEngine : public SoFieldContainer {
 
   public:
-    // Returns type identifier for SoEngine class
+    /// Returns the type identifier for the SoEngine class.
     static SoType getClassTypeId() { return classTypeId; }
 
-    // Returns a list of outputs in this engine.  This is virtual
-    // so private outputs can be hidden.  Use getOutputName() to get the
-    // names of the fields, and use getConnectionType() to figure out
-    // their types.  Returns the number of outputs added to the list.
+    /// Returns a list of outputs in this engine.
+    /// Use #getOutputName() to get the names of the outputs,
+    /// and use #SoEngineOutput::getConnectionType() to determine their types.
     virtual int getOutputs(SoEngineOutputList &list) const;
 
-    // Returns a pointer to the engine output with the given name.
-    // If no such output exists, NULL is returned.
+    /// Returns a pointer to the engine output with the given name.
+    /// If no such output exists, NULL is returned.
     SoEngineOutput *getOutput(const SbName &outputName) const;
 
-    // Returns (in outputName) the name of the output pointed to.
-    // Returns FALSE if the output is not contained within the
-    // engine instance.
+    /// Returns (in \a outputName) the name of the engine
+    /// output (\a output).  Returns FALSE if the engine output is
+    /// not contained within the engine instance.
     SbBool getOutputName(const SoEngineOutput *output,
                          SbName &              outputName) const;
 
-    // Creates and returns a copy of the engine. All connections to
-    // inputs are copied as is (without copying what's at the other
-    // end).
+    /// Creates and returns an exact copy of the engine.
+    /// All connections to inputs are copied as is (without
+    /// copying what's at the other end).
     SoEngine *copy() const;
 
-    // A engine can be given a name using setName() (which is a
-    // method on SoBase).  These methods allow enginess to be looked
-    // up by name.
+    /// \name Look up engine(s) by name.
+    /// A engine can be given a name using setName() (which is a
+    /// method on SoBase).  These methods allow enginess to be looked
+    /// up by name.
+    /// @{
     static SoEngine *getByName(const SbName &name);
     static int       getByName(const SbName &name, SoEngineList &list);
-
+    /// @}
   protected:
     // User-written evaluation engine.
     virtual void evaluate() = 0;
@@ -178,33 +197,41 @@ class SoEngine : public SoFieldContainer {
     friend class SoEngineOutput;
 };
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoEngineOutput
-//
-//  Engine outputs.  They are lists of fields to be written into,
-//  and a pointer back to the containing engine.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Class for all engine outputs.
+/// \ingroup Engines
+/// <tt>SoEngineOuput</tt> is the class for all engine output fields.
+/// There is no public constructor routine for this class.
+/// Only the engine classes create instances of <tt>SoEngineOutput</tt>
+///
+///
+/// Each engine creates one or more engine outputs.
+/// The type of the output is documented in the engine reference pages.
+/// There is also an <tt>SoEngineOutput</tt>  method for querying
+/// the connection type.
+///
+///
+/// The application can at any time enable or disable the engine outputs.
+/// By default the engine outputs are enabled.
+/// \sa SoEngine
 class SoEngineOutput {
 
   public:
-    // type of field this output can connect to
+    /// Returns the type of field this output can connect to.
     SoType getConnectionType() const;
 
-    // Returns the number of fields this output is writing to, and
-    // adds pointers to those fields to the given list:
+    /// Returns the number of fields this output is writing to,
+    /// and adds pointers to those fields to the given list.
     int getForwardConnections(SoFieldList &list) const;
 
-    // Enables or disables all connections from this output. If the
-    // connections are disabled, notification will not propagate
-    // through them and values will not be output along them. The
-    // default state is enabled.
-    void   enable(SbBool flag);
+    /// Enables or disables all connections from this ouptut. If the
+    /// connections are disabled, values will not be output along them.
+    /// By default, outputs are enabled.
+    void enable(SbBool flag);
+
+    /// Returns TRUE if this output is currently enabled.
     SbBool isEnabled() const { return enabled; }
 
-    // Returns containing engine
+    /// Returns containing engine.
     SoEngine *getContainer() const { return container; }
 
     SoINTERNAL

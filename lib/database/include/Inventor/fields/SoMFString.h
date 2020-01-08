@@ -58,12 +58,16 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoMFString subclass of SoMField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Multiple-value field containing any number of strings.
+/// \ingroup Fields
+/// A multiple-value field that contains any number of strings.
+///
+/// <tt>SoMFStrings</tt> are written to file as one or more strings within
+/// double quotes.  Any characters (including newlines) may appear within
+/// the quotes. To include a double quote character within the string,
+/// precede it with a backslash.  For example:
+///
+/// [ cowEnizer , "Scene Boy" , "He said, \\"I did not!\\"" ]
 class SoMFString : public SoMField {
     // Use standard field stuff
     SO_MFIELD_HEADER(SoMFString, SbString, const SbString &);
@@ -73,17 +77,19 @@ class SoMFString : public SoMField {
     // Some additional convenience functions:
     //
 
-    // Set values from array of character strings
+    /// Sets \a num values, starting at index \a start, to the strings in the
+    /// given character arrays.
     void setValues(int start, int num, const char *strings[]);
 
-    // Set one value from character string
+    /// Deletes all values currently in this field and sets this field to
+    /// contain only the given string.
     void setValue(const char *string);
 
-    // Convenience function to delete text from consecutive strings.
-    // All text from the given character of one line (fromChar in
-    // fromLine) to the given character of another line (toChar in
-    // toLine), inclusive, is deleted. Any leftover text on fromLine
-    // and toLine is merged into one line.
+    /// Convenience function to delete text from consecutive strings.
+    /// All text from the given character of one line (fromChar in
+    /// fromLine) to the given character of another line (toChar in
+    /// toLine), inclusive, is deleted. Any leftover text on fromLine
+    /// and toLine is merged into one line.
     void deleteText(int fromLine, int fromChar, int toLine, int toChar);
 
     SoINTERNAL

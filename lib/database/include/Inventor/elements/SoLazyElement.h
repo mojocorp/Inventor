@@ -124,10 +124,10 @@ class SoLazyElement : public SoElement {
         ALL_MASK = (1 << SO_LAZY_NUM_COMPONENTS) - 1
     };
 
-    // Enum values to be used in setting/getting light model:
+    /// Enum values to be used in setting/getting light model:
     enum LightModel { BASE_COLOR = 0, PHONG = 1 };
 
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
     // static set methods:

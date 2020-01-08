@@ -67,48 +67,49 @@ class SoNode;
 class SoPath;
 class SoState;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoPickedPoint
-//
-//  An SoPickedPoint represents a point on the surface of an object
-//  that was picked by applying an SoRayPickAction to a scene. It
-//  contains the point of intersection, the surface normal and texture
-//  coordinates at that point, and other items.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Represents point on surface of picked object.
+/// \ingroup General
+/// An <tt>SoPickedPoint</tt> represents a point on the surface of an object
+/// that was picked by applying an <tt>SoRayPickAction</tt> to a scene. It
+/// contains a path to the picked shape, the point of intersection, the
+/// surface normal and texture coordinates at that point, and other
+/// information.
+///
+///
+/// Each node in the picked path may have a corresponding instance of a detail
+/// subclass. These detail instances are stored in the <tt>SoPickedPoint</tt>.
+/// \sa SoRayPickAction, SoPickStyle, SoDetail, SoPath
 class SoPickedPoint {
 
   public:
-    // Copy constructor
+    /// Copy constructor
     SoPickedPoint(const SoPickedPoint &pp);
 
-    // Destructor
+    /// Destructor
     ~SoPickedPoint();
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     SoPickedPoint *copy() const;
 
-    // These return the intersection point and surface normal in world
-    // space, and the texture coordinates in image space:
+    /// These return the intersection point and surface normal in world
+    /// space, and the texture coordinates in image space:
     const SbVec3f &getPoint() const { return worldPoint; }
     const SbVec3f &getNormal() const { return worldNormal; }
     const SbVec4f &getTextureCoords() const { return imageTexCoords; }
 
-    // Returns the index into the current set of materials of the
-    // material active at the intersection point. Note that if the
-    // materials are interpolated between vertices, the index will
-    // correspond to the material at one of the vertices.
+    /// Returns the index into the current set of materials of the material
+    /// active at the intersection point. Note that if the materials are
+    /// interpolated between vertices, the index will correspond to the
+    /// material at one of the vertices.
     int getMaterialIndex() const { return materialIndex; }
 
-    // Returns the path to the object that was intersected
+    /// Returns the path to the object that was intersected.
     SoPath *getPath() const { return path; }
 
-    // Returns whether the intersection is actually on the geometry of
-    // the character that was hit, as opposed to being on the bounding
-    // box. The pick style affects this decision.
+    /// Returns whether the intersection is actually on the geometry of the
+    /// character that was hit, as opposed to being on the bounding box. The
+    /// pick style (see SoPickStyle) affects this decision.
     SbBool isOnGeometry() const { return onGeometry; }
 
     //////////////////////
@@ -118,23 +119,30 @@ class SoPickedPoint {
     // information corresponding to the tail of the path is returned.
     //
 
-    // Returns the detail that corresponds to the given node in the path
+    /// Returns the detail that corresponds to the given node in the path
+    /// returned by #getPath().
+    /// If the node pointer is NULL (the default), the detail corresponding to
+    /// the tail of the (full) path is returned.
     const SoDetail *getDetail(const SoNode *node = NULL) const;
 
-    // These return the transformation matrices between world space
-    // and the object space corresponding to the given node in the path
+    /// These return the transformation matrices between world space and the
+    /// object space corresponding to the given node in the path.  If the node
+    /// pointer is NULL (the default), the matrix corresponding to the tail of
+    /// the (full) path is returned.
     SbMatrix getObjectToWorld(const SoNode *node = NULL) const;
     SbMatrix getWorldToObject(const SoNode *node = NULL) const;
 
-    // These return the texture transformation matrices between image
-    // space and the object space corresponding to the given node in
-    // the path
+    /// These return the texture transformation matrices between image space
+    /// and the object space corresponding to the given node in the path.
+    /// If the node pointer is NULL (the default), the matrix corresponding to
+    /// the tail of the (full) path is returned.
     SbMatrix getObjectToImage(const SoNode *node = NULL) const;
     SbMatrix getImageToObject(const SoNode *node = NULL) const;
 
-    // These return the intersection point, surface normal, and
-    // texture coordinates in the object space corresponding to the
-    // given node in the path
+    /// These return the intersection point, surface normal, and texture
+    /// coordinates in the object space corresponding to the given node in the
+    /// path.  If the node pointer is NULL (the default), the information
+    /// corresponding to the tail of the (full) path is returned.
     SbVec3f getObjectPoint(const SoNode *node = NULL) const;
     SbVec3f getObjectNormal(const SoNode *node = NULL) const;
     SbVec4f getObjectTextureCoords(const SoNode *node = NULL) const;

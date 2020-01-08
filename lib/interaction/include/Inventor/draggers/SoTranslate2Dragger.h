@@ -99,7 +99,96 @@
 
 class SbPlaneProjector;
 class SoFieldSensor;
-
+/// Object you can translate within a plane by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoTranslate2Dragger</tt>
+/// is a simple dragger that translates
+/// in two dimensions when dragged with the mouse.
+/// It moves within the x-y plane of its local space, determined by its
+/// location in the scene graph.
+/// Transformation nodes placed before it will
+/// affect both the dragger and the direction of motion.
+///
+///
+/// Pressing the <b>\<Shift\></b> key allows you to constrain motion to either
+/// the x axis or the y axis.  The direction is determined by your initial mouse
+/// gesture after pressing the key.  Releasing the key removes the constraint.
+///
+///
+/// This node has a #translation field
+/// which always reflects
+/// its position in local space.
+/// If you set the field, the dragger will move accordingly.
+/// You can also connect fields of other nodes or engines from
+/// this one
+/// to make them follow the dragger's motion.
+///
+///
+/// This dragger contains six parts, <em>translator</em>,
+/// <em>translatorActive</em>, <em>feedback</em>, <em>feedbackActive</em>,
+/// <em>xAxisFeedback</em>, and <em>yAxisFeedback</em>. The last two parts are
+/// only displayed during motion, and only when their direction of motion is
+/// enabled.  (Pressing the <b>\<Shift\></b> key and then dragging disables one
+/// of the two directions.)
+///
+///
+/// Each of these is set by default from
+/// a resource described in the <b>Dragger Resources</b> section of the online
+/// reference page for this class.  You
+/// can change the parts in any instance of this dragger using
+/// #setPart().
+///
+///
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/translate2Dragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that
+/// directory.
+/// \par Nodekit structure:
+/// \code CLASS SoTranslate2Dragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+///          "geomSeparator"
+/// -->         "translatorSwitch"
+/// -->            "translator"
+/// -->            "translatorActive"
+/// -->         "feedbackSwitch"
+/// -->            "feedback"
+/// -->            "feedbackActive"
+/// -->         "axisFeedbackSwitch"
+/// -->            "xAxisFeedback"
+/// -->            "yAxisFeedback"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoTranslate2Dragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     translation         0 0 0
+///     callbackList        NULL
+///     translator          <translate2Translator resource>
+///     translatorActive    <translate2TranslatorActive resource>
+///     feedback            <translate2Feedback resource>
+///     feedbackActive      <translate2FeedbackActive resource>
+///     xAxisFeedback       <translate2XAxisFeedback resource>
+///     yAxisFeedback       <translate2YAxisFeedback resource>
+/// }
+/// \endcode
+/// \sa
+/// SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,
+/// \sa
+/// SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,
+/// \sa SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,
+/// \sa SoTransformBoxDragger,SoTransformerDragger,SoTranslate1Dragger
 class SoTranslate2Dragger : public SoDragger {
     SO_KIT_HEADER(SoTranslate2Dragger);
 
@@ -114,18 +203,18 @@ class SoTranslate2Dragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(yAxisFeedback);
 
   public:
-    // Constructors
+    /// Constructor.
     SoTranslate2Dragger();
 
-    SoSFVec3f translation;
+    SoSFVec3f translation; ///< Position of the dragger.
 
     SoINTERNAL
   public:
     static void initClass(); // initialize the class
 
   protected:
-    SbVec3f worldRestartPt; // used if SHIFT key goes down to
-                            // initiate a new gesture.
+    SbVec3f worldRestartPt;      // used if SHIFT key goes down to
+                                 // initiate a new gesture.
     SbPlaneProjector *planeProj; // projector for planar scaling
 
     static void startCB(void *, SoDragger *);

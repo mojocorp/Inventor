@@ -108,14 +108,217 @@ class SbPlaneProjector;
 class SbLineProjector;
 class SoFieldSensor;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoHandleBoxDragger
-//
-//  HandleBox dragger - allows user to transform objects.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Box you can scale, stretch and translate by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoHandleBoxDragger</tt>
+/// is a dragger shaped like a wireframe box with small <em>corner cubes</em>
+/// mounted on each corner.
+/// Click and drag any of these cubes to scale the box uniformly.
+/// Six other <em>center cubes</em> are centered on the sides of the box; white
+/// lines connect them to the center of the dragger.
+/// Drag one of the center cubes along its line to stretch the box
+/// in that direction.
+/// Dragging a face of the box translates the dragger within that plane.
+///
+///
+/// While you drag a face of the box, purple <em>feedback arrows</em> display
+/// the possible directions of motion.  Press the <b>\<Shift\></b> key to
+/// <em>constrain</em> the motion to one of the two major directions in the
+/// plane. The constraint direction is chosen based on the next user
+/// gesture.  Press the <b>\<Control\></b> key and the dragger will translate
+/// <em>perpendicular</em> to that plane.  The #translation field is modified
+/// as the face is dragged.
+///
+///
+/// By default, dragging any of the small cubes scales  about the center of
+/// the object.  Pressing the <b>\<Control\></b> key changes this:  A corner
+/// cube will scale about its opposite corner.  A center cube will scale about
+/// the center of its opposite face.  Dragging one of the small cubes will
+/// usually result in changes to both the #scaleFactor and
+/// #translation fields. This is because any scale about a point other
+/// than the origin has a translation element.
+///
+///
+/// As with all draggers, if you change the fields the dragger will
+/// move to match the new settings.
+///
+///
+/// <em>Remember:</em> This is <em>not</em> an <tt>SoTransform!</tt>.
+/// If you want to move other objects with this dragger, you can either:
+///
+///
+/// [a] Use an <tt>SoHandleBoxManip</tt>, which is subclassed from
+/// <tt>SoTransform</tt>. It creates one of these draggers and uses it as the
+/// interface to change its fields. (see the <tt>SoHandleBoxManip</tt> reference
+/// page).
+///
+///
+/// [b] Use field-to-field connections to connect the fields of this dragger to
+/// those of any <tt>SoTransformation</tt> node.
+///
+///
+/// You can change the parts in any instance of this dragger using
+/// #setPart().
+/// The default part geometries are defined as resources for this
+/// <tt>SoHandleBoxDragger</tt> class.  They are detailed in the
+/// Dragger Resources section of the online reference page for this class.
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/handleBoxDragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that
+/// directory. \par Notes: Unlike most multi-function draggers,
+/// <tt>SoHandleBoxDragger</tt> is not a compound dragger made up of other
+/// draggers that perform its smaller tasks.  This is not because it was
+/// inappropriate, but because was written before implementation of the methods
+/// that synchronize multiple child draggers. The younger
+/// <tt>SoTransformBoxDragger</tt> has similarities to the handle box dragger,
+/// but the transform box dragger <em>is</em> a compound dragger. \par Nodekit
+/// structure: \code CLASS SoHandleBoxDragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+/// -->      "surroundScale"
+///          "geomSeparator"
+/// -->         "drawStyle"
+/// -->         "translator1Switch"
+/// -->            "translator1"
+/// -->            "translator1Active"
+/// -->         "translator2Switch"
+/// -->            "translator2"
+/// -->            "translator2Active"
+/// -->         "translator3Switch"
+/// -->            "translator3"
+/// -->            "translator3Active"
+/// -->         "translator4Switch"
+/// -->            "translator4"
+/// -->            "translator4Active"
+/// -->         "translator5Switch"
+/// -->            "translator5"
+/// -->            "translator5Active"
+/// -->         "translator6Switch"
+/// -->            "translator6"
+/// -->            "translator6Active"
+/// -->         "extruder1Switch"
+/// -->            "extruder1"
+/// -->            "extruder1Active"
+/// -->         "extruder2Switch"
+/// -->            "extruder2"
+/// -->            "extruder2Active"
+/// -->         "extruder3Switch"
+/// -->            "extruder3"
+/// -->            "extruder3Active"
+/// -->         "extruder4Switch"
+/// -->            "extruder4"
+/// -->            "extruder4Active"
+/// -->         "extruder5Switch"
+/// -->            "extruder5"
+/// -->            "extruder5Active"
+/// -->         "extruder6Switch"
+/// -->            "extruder6"
+/// -->            "extruder6Active"
+/// -->         "uniform1Switch"
+/// -->            "uniform1"
+/// -->            "uniform1Active"
+/// -->         "uniform2Switch"
+/// -->            "uniform2"
+/// -->            "uniform2Active"
+/// -->         "uniform3Switch"
+/// -->            "uniform3"
+/// -->            "uniform3Active"
+/// -->         "uniform4Switch"
+/// -->            "uniform4"
+/// -->            "uniform4Active"
+/// -->         "uniform5Switch"
+/// -->            "uniform5"
+/// -->            "uniform5Active"
+/// -->         "uniform6Switch"
+/// -->            "uniform6"
+/// -->            "uniform6Active"
+/// -->         "uniform7Switch"
+/// -->            "uniform7"
+/// -->            "uniform7Active"
+/// -->         "uniform8Switch"
+/// -->            "uniform8"
+/// -->            "uniform8Active"
+/// -->         "arrowTranslation"
+/// -->         "arrow1Switch"
+/// -->            "arrow1"
+/// -->         "arrow2Switch"
+/// -->            "arrow2"
+/// -->         "arrow3Switch"
+/// -->            "arrow3"
+/// -->         "arrow4Switch"
+/// -->            "arrow4"
+/// -->         "arrow5Switch"
+/// -->            "arrow5"
+/// -->         "arrow6Switch"
+/// -->            "arrow6"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoHandleBoxDragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     translation         0 0 0
+///     scaleFactor         1 1 1
+///     callbackList        NULL
+///     surroundScale       NULL
+///     translator1         <handleBoxTranslator1 resource>
+///     translator1Active   <handleBoxTranslator1Active resource>
+///     translator2         <handleBoxTranslator2 resource>
+///     translator2Active   <handleBoxTranslator2Active resource>
+///     translator3         <handleBoxTranslator3 resource>
+///     translator3Active   <handleBoxTranslator3Active resource>
+///     translator4         <handleBoxTranslator4 resource>
+///     translator4Active   <handleBoxTranslator4Active resource>
+///     translator5         <handleBoxTranslator5 resource>
+///     translator5Active   <handleBoxTranslator5Active resource>
+///     translator6         <handleBoxTranslator6 resource>
+///     translator6Active   <handleBoxTranslator6Active resource>
+///     extruder1           <handleBoxExtruder1 resource>
+///     extruder1Active     <handleBoxExtruder1Active resource>
+///     extruder2           <handleBoxExtruder2 resource>
+///     extruder2Active     <handleBoxExtruder2Active resource>
+///     extruder3           <handleBoxExtruder3 resource>
+///     extruder3Active     <handleBoxExtruder3Active resource>
+///     extruder4           <handleBoxExtruder4 resource>
+///     extruder4Active     <handleBoxExtruder4Active resource>
+///     extruder5           <handleBoxExtruder5 resource>
+///     extruder5Active     <handleBoxExtruder5Active resource>
+///     extruder6           <handleBoxExtruder6 resource>
+///     extruder6Active     <handleBoxExtruder6Active resource>
+///     uniform1            <handleBoxUniform1 resource>
+///     uniform1Active      <handleBoxUniform1Active resource>
+///     uniform2            <handleBoxUniform2 resource>
+///     uniform2Active      <handleBoxUniform2Active resource>
+///     uniform3            <handleBoxUniform3 resource>
+///     uniform3Active      <handleBoxUniform3Active resource>
+///     uniform4            <handleBoxUniform4 resource>
+///     uniform4Active      <handleBoxUniform4Active resource>
+///     uniform5            <handleBoxUniform5 resource>
+///     uniform5Active      <handleBoxUniform5Active resource>
+///     uniform6            <handleBoxUniform6 resource>
+///     uniform6Active      <handleBoxUniform6Active resource>
+///     uniform7            <handleBoxUniform7 resource>
+///     uniform7Active      <handleBoxUniform7Active resource>
+///     uniform8            <handleBoxUniform8 resource>
+///     uniform8Active      <handleBoxUniform8Active resource>
+///     arrow1              <handleBoxArrow1 resource>
+///     arrow2              <handleBoxArrow2 resource>
+///     arrow3              <handleBoxArrow3 resource>
+///     arrow4              <handleBoxArrow4 resource>
+///     arrow5              <handleBoxArrow5 resource>
+///     arrow6              <handleBoxArrow6 resource>
+/// }
+/// \endcode
+/// \sa
+/// SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,SoDragPointDragger,SoJackDragger,SoPointLightDragger,SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class SoHandleBoxDragger : public SoDragger {
 
     SO_KIT_HEADER(SoHandleBoxDragger);
@@ -204,11 +407,11 @@ class SoHandleBoxDragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(arrow6);
 
   public:
-    // Constructor
+    /// Constructor.
     SoHandleBoxDragger();
 
-    SoSFVec3f translation;
-    SoSFVec3f scaleFactor;
+    SoSFVec3f translation; ///< Scale of the dragger.
+    SoSFVec3f scaleFactor; ///< Position of the dragger.
 
     SoINTERNAL
   public:

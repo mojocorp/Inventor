@@ -78,7 +78,7 @@ class SoInt32Element : public SoElement {
     SO_ELEMENT_ABSTRACT_HEADER(SoInt32Element);
 
   public:
-    // Comparison based on value of int32_ts
+    /// Comparison based on value of int32_ts
     virtual SbBool matches(const SoElement *elt) const;
 
     SoINTERNAL

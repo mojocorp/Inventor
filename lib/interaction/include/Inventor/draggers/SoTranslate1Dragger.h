@@ -88,7 +88,82 @@
 
 class SbLineProjector;
 class SoFieldSensor;
-
+/// Object you can translate along a line by dragging With the mouse.
+/// \ingroup Draggers
+/// <tt>SoTranslate1Dragger</tt>
+/// is a simple dragger that translates
+/// in one dimension when dragged with the mouse.
+/// It moves along the x axis of its local space, determined by its
+/// location in the scene graph.
+/// Transformation nodes placed before it will
+/// affect both the dragger and the direction of motion.
+///
+///
+/// This node has a #translation field
+/// which always reflects
+/// its position in local space.
+/// If you set the field, the dragger will move accordingly.
+/// You can also connect fields of other nodes or engines from
+/// this one
+/// to make them follow the dragger's motion.
+///
+///
+/// This dragger contains four parts, <em>translator</em>,
+/// <em>translatorActive</em>, <em>feedback</em>, and <em>feedbackActive</em>.
+///
+///
+/// Each of these is set by default from
+/// a resource described in the <b>Dragger Resources</b> section of the online
+/// reference page for this class.  You
+/// can change the parts in any instance of this dragger using
+/// #setPart().
+///
+///
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/translate1Dragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that
+/// directory.
+/// \par Nodekit structure:
+/// \code CLASS SoTranslate1Dragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+///          "geomSeparator"
+/// -->         "translatorSwitch"
+/// -->            "translator"
+/// -->            "translatorActive"
+/// -->         "feedbackSwitch"
+/// -->            "feedback"
+/// -->            "feedbackActive"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoTranslate1Dragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     translation         0 0 0
+///     callbackList        NULL
+///     translator          <translate1Translator resource>
+///     translatorActive    <translate1TranslatorActive resource>
+///     feedback            <translate1Feedback resource>
+///     feedbackActive      <translate1FeedbackActive resource>
+/// }
+/// \endcode
+/// \sa
+/// SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,
+/// \sa
+/// SoScale1Dragger,SoScale2Dragger,SoScale2UniformDragger,SoScaleUniformDragger,
+/// \sa SoSpotLightDragger,SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,
+/// \sa SoTransformBoxDragger,SoTransformerDragger,SoTranslate2Dragger
 class SoTranslate1Dragger : public SoDragger {
     SO_KIT_HEADER(SoTranslate1Dragger);
 
@@ -100,10 +175,10 @@ class SoTranslate1Dragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(feedbackActive);
 
   public:
-    // Constructors
+    /// Constructor.
     SoTranslate1Dragger();
 
-    SoSFVec3f translation;
+    SoSFVec3f translation; ///< Position of the dragger.
 
     SoINTERNAL
   public:

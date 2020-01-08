@@ -89,44 +89,45 @@ struct SoEnumEntry;
 SoINTERNAL
 class SoFieldData {
   public:
-    // Constructor
+    /// Constructor
     SoFieldData() {}
 
-    // Copy constructors
+    /// Copy constructor
     SoFieldData(const SoFieldData &);
+    /// Copy constructor
     SoFieldData(const SoFieldData *);
 
-    // Constructor that takes number of fields as a hint
+    /// Constructor that takes number of fields as a hint
     SoFieldData(int numFields) : fields(numFields) {}
 
-    // Destructor
+    /// Destructor
     ~SoFieldData();
 
-    // Adds a field to current data, given default value object, name of
-    // field and pointer to field within default value object. This is
-    // used to define fields of a FieldContainer (node or engine) class.
+    /// Adds a field to current data, given default value object, name of
+    /// field and pointer to field within default value object. This is
+    /// used to define fields of a FieldContainer (node or engine) class.
     void addField(SoFieldContainer *defObject, const char *fieldName,
                   const SoField *field);
 
-    // Copy values and flags of fields from one object to another (of
-    // the same type). If copyConnections is TRUE, any connections to
-    // the fields are copied as well
+    /// Copy values and flags of fields from one object to another (of
+    /// the same type). If copyConnections is TRUE, any connections to
+    /// the fields are copied as well
     void overlay(SoFieldContainer *to, const SoFieldContainer *from,
                  SbBool copyConnections) const;
 
-    // Returns number of fields
+    /// Returns number of fields
     int getNumFields() const { return fields.size(); }
 
-    // Returns name of field with given index
+    /// Returns name of field with given index
     const SbName &getFieldName(int index) const;
 
-    // Returns pointer to field with given index within given object instance
+    /// Returns pointer to field with given index within given object instance
     SoField *getField(const SoFieldContainer *object, int index) const;
 
-    // Returns index of field, given the field and the instance it is in
+    /// Returns index of field, given the field and the instance it is in
     int getIndex(const SoFieldContainer *fc, const SoField *field) const;
 
-    // Enum name/value mechanism
+    /// Enum name/value mechanism
     void addEnumValue(const char *typeName, const char *valName, int val);
     void getEnumData(const char *typeName, int &num, int *&vals,
                      SbName *&names);

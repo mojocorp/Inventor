@@ -66,21 +66,27 @@
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFEnum subclass of SoSField. This field holds enumerated types.
-//  Each instance of the field must define enumeration mnemonics and
-//  character strings. This stores the enumeration values as integers
-//  (as allowed by C++).
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing an enumerated value.
+/// \ingroup Fields
+/// A single-value field that contains an enumerated type
+/// value, stored as an integer. Nodes that use this field class define
+/// mnemonic names for the values. These names should be used when setting
+/// or testing the values of the field, even though the values are treated
+/// as integers in the methods.
+///
+/// <tt>SoSFEnums</tt> are written to file as a
+/// mnemonic enumerated type name.  The name differs among uses of this
+/// field in various node or engine classes.  See the man pages for
+/// specific nodes or engines
+/// for the names (e.g. <tt>SoDrawStyle</tt>).
+/// \sa SoField, SoSField, SoMFEnum
 class SoSFEnum : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFEnum, int, int);
 
   public:
-    // Set value from SbName or character string. Convenience functions.
+    /// Sets this field to contain the given mnemonic name, passed in as a
+    /// name or string.
     void setValue(const SbName &name);
 
     SoEXTENDER

@@ -90,6 +90,82 @@
 class SbPlaneProjector;
 class SoFieldSensor;
 
+/// Object you can scale in two dimensions by dragging with the mouse.
+/// \ingroup Draggers
+/// <tt>SoScale2Dragger</tt>
+/// is a simple dragger that scales
+/// freely and independently in two dimensions when dragged with the mouse.
+/// It moves within the x-y plane of its local space, as determined by its
+/// location in the scene graph.
+/// Transformation nodes placed before it will
+/// affect both the dragger and the plane of motion.
+///
+///
+/// This node has a #scaleFactor field
+/// which always reflects
+/// its size in local space.
+/// If you set the field, the dragger will change accordingly.
+/// You can also connect fields of other nodes or engines from
+/// this one
+/// to make them follow the dragger's motion.
+///
+///
+/// This dragger contains four parts, <em>scaler</em>, <em>scalerActive</em>,
+/// <em>feedback</em>, and <em>feedbackActive</em>.
+///
+///
+/// Each of these is set by default from a resource described in the
+/// Dragger Resources section of the online reference page for this
+/// class.  You can change the parts in any instance of this
+/// dragger using #setPart().
+///
+///
+/// You can make your program use different default resources for the parts
+/// by copying the file
+/// #/usr/share/data/draggerDefaults/scale2Dragger.iv
+/// into your own directory, editing the file, and then
+/// setting the environment variable <b>SO_DRAGGER_DIR</b> to be a path to that
+/// directory.
+/// \par Nodekit structure:
+/// \code CLASS SoScale2Dragger
+/// -->"this"
+///       "callbackList"
+///       "topSeparator"
+///          "motionMatrix"
+///          "geomSeparator"
+/// -->         "scalerSwitch"
+/// -->            "scaler"
+/// -->            "scalerActive"
+/// -->         "feedbackSwitch"
+/// -->            "feedback"
+/// -->            "feedbackActive"
+/// \endcode
+///
+/// \par File format/defaults:
+/// \code
+/// SoScale2Dragger {
+///     renderCaching       AUTO
+///     boundingBoxCaching  AUTO
+///     renderCulling       AUTO
+///     pickCulling         AUTO
+///     isActive            FALSE
+///     scaleFactor         1 1 1
+///     callbackList        NULL
+///     scaler              <scale2Scaler resource>
+///     scalerActive        <scale2ScalerActive resource>
+///     feedback            <scale2Feedback resource>
+///     feedbackActive      <scale2FeedbackActive resource>
+/// }
+/// \endcode
+/// \sa
+/// SoInteractionKit,SoDragger,SoCenterballDragger,SoDirectionalLightDragger,
+/// \sa SoDragPointDragger,SoHandleBoxDragger,SoJackDragger,SoPointLightDragger,
+/// \sa SoRotateCylindricalDragger,SoRotateDiscDragger,SoRotateSphericalDragger,
+/// \sa
+/// SoScale1Dragger,SoScale2UniformDragger,SoScaleUniformDragger,SoSpotLightDragger,
+/// \sa
+/// SoTabBoxDragger,SoTabPlaneDragger,SoTrackballDragger,SoTransformBoxDragger,
+/// \sa SoTransformerDragger,SoTranslate1Dragger,SoTranslate2Dragger
 class SoScale2Dragger : public SoDragger {
     SO_KIT_HEADER(SoScale2Dragger);
 
@@ -101,10 +177,10 @@ class SoScale2Dragger : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(feedbackActive);
 
   public:
-    // Constructors
+    /// Constructor.
     SoScale2Dragger();
 
-    SoSFVec3f scaleFactor;
+    SoSFVec3f scaleFactor; ///< Scale factor affecting the dragger.
 
     SoINTERNAL
   public:

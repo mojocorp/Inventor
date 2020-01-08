@@ -79,39 +79,41 @@ class SoCoordinateElement : public SoReplacedElement {
     SO_ELEMENT_HEADER(SoCoordinateElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current coordinates in the state as 3-vectors or 4-vectors
+    /// Sets the current coordinates in the state as 3-vectors or 4-vectors
     static void set3(SoState *state, SoNode *node, int32_t numCoords,
                      const SbVec3f *coords);
     static void set4(SoState *state, SoNode *node, int32_t numCoords,
                      const SbVec4f *coords);
 
-    // Returns the top (current) instance of the element in the state
+    /// Returns the top (current) instance of the element in the state
     static const SoCoordinateElement *getInstance(SoState *state) {
         return (const SoCoordinateElement *)getConstElement(state,
                                                             classStackIndex);
     }
 
-    // Returns the number of coordinate points in an instance
+    /// Returns the number of coordinate points in an instance
     int32_t getNum() const { return numCoords; }
 
-    // Returns TRUE if the coordinates were specified as 3-vectors,
-    // FALSE if 4-vectors
+    /// Returns TRUE if the coordinates were specified as 3-vectors,
+    /// FALSE if 4-vectors
     SbBool is3D() const { return coordsAre3D; }
 
-    // Returns the indexed coordinate from an element as a 3- or
-    // 4-vector, converting if necessary. A returned reference may be
-    // invalid after the next call to either of these methods.
+    /// Returns the indexed coordinate from an element as a 3- or
+    /// 4-vector, converting if necessary. A returned reference may be
+    /// invalid after the next call to either of these methods.
     const SbVec3f &get3(int index) const;
     const SbVec4f &get4(int index) const;
 
-    // Returns the default 3-D or 4-D coordinate
+    /// Returns the default 3-D coordinate
     static SbVec3f getDefault3() { return SbVec3f(0, 0, 0); }
+
+    /// Returns the default 4-D coordinate
     static SbVec4f getDefault4() { return SbVec4f(0, 0, 0, 1); }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

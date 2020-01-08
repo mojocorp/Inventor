@@ -72,23 +72,23 @@ class SoLinePatternElement : public SoInt32Element {
     SO_ELEMENT_HEADER(SoLinePatternElement);
 
   public:
-    // Initializes element
+    /// Initializes element
     virtual void init(SoState *state);
 
-    // Sets the current line pattern in the state
+    /// Sets the current line pattern in the state
     static void set(SoState *state, uint16_t pattern) {
         SoInt32Element::set(classStackIndex, state, (int32_t)pattern);
     }
 
-    // Returns current line pattern from the state
+    /// Returns current line pattern from the state
     static uint16_t get(SoState *state) {
         return (uint16_t)SoInt32Element::get(classStackIndex, state);
     }
 
-    // Returns the default line pattern
+    /// Returns the default line pattern
     static uint16_t getDefault() { return 0xffff; }
 
-    // Prints element (for debugging)
+    /// Prints element (for debugging)
     virtual void print(FILE *fp) const;
 
     SoINTERNAL

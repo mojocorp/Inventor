@@ -59,23 +59,40 @@
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/fields/SoMFVec3f.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoNormal
-//
-//  Normal vector node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node that defines surface normals for shapes.
+/// \ingroup Nodes
+/// This node defines a set of 3D surface normal vectors to be used by
+/// vertex-based shape nodes that follow it in the scene graph. This node
+/// does not produce a visible result during rendering; it simply replaces
+/// the current normals in the rendering state for subsequent nodes to
+/// use.  This node contains one multiple-valued field that contains the
+/// normal vectors.
+///
+/// Surface normals are needed to compute lighting when the Phong lighting
+/// model is used. Most vertex-based shapes that use normals can compute
+/// default normals if none are specified, depending on the current normal
+/// binding.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoRayPickAction</b>
+/// Sets the current normals in the traversal state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoNormal {
+///    vector	[  ]
+/// }
+/// \endcode
+/// \sa SoCoordinate3, SoLightModel, SoNormalBinding, SoVertexShape
 class SoNormal : public SoNode {
 
     SO_NODE_HEADER(SoNormal);
 
   public:
     // Fields
-    SoMFVec3f vector; // Normal vector(s)
+    SoMFVec3f vector; ///< Surface normal vectors.
 
-    // Constructor
+    /// Creates a surface normal node with default settings.
     SoNormal();
 
     SoEXTENDER

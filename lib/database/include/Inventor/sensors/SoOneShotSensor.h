@@ -59,14 +59,41 @@
 
 #include <Inventor/sensors/SoDelayQueueSensor.h>
 
+/// Sensor for one-time only callbacks.
+/// \ingroup Sensors
+/// A one-shot sensor is triggered once after it is scheduled, when the
+/// delay queue is processed.  Like all delay queue sensors, one-shot
+/// sensors with a non-zero priority are just added to the delay queue
+/// when scheduled; if they are scheduled again before the delay queue is
+/// processed nothing happens, and they are guaranteed to be called only
+/// once when the delay queue is processed.  For example, a one-shot
+/// sensor whose callback function redraws the scene might be scheduled
+/// whenever the scene graph changes and whenever a window-system event
+/// reporting that the window changed size occurs.  By using a one-shot,
+/// the scene will only be redrawn once even if a window-changed-size
+/// event occurs just after the scene graph is modified (or if several
+/// window-changed-size events occur in a row).
+///
+///
+/// Calling #schedule() in the callback function is a useful way of
+/// getting something to happen repeatedly as often as possible, while
+/// still handling events and timeouts.
+///
+/// A priority 0 one-shot sensor isn't very useful, since scheduling it is
+/// exactly the same as directly calling its callback function.
+/// \sa SoIdleSensor, SoDelayQueueSensor
 class SoOneShotSensor : public SoDelayQueueSensor {
 
   public:
-    // Constructors. The second form takes standard callback function and data
+    /// Constructor.
     SoOneShotSensor();
+
+    /// Constructor that takes the callback function and
+    /// data to be called when the sensor is triggered.
     SoOneShotSensor(SoSensorCB *func, void *data);
 
-    // Destructor
+    /// Destroys the sensor, freeing up any memory associated with it after
+    /// unscheduling it.
     virtual ~SoOneShotSensor();
 };
 

@@ -58,30 +58,29 @@
 
 #include <Inventor/details/SoSubDetail.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoCylinderDetail
-//
-//  Detail about an SoCylinder node. It contains a bitmask indicating
-//  the part of the cylinder.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Stores detail information about the SoCylinder node.
+/// \ingroup Details
+/// This class contains detail information about a point on a cylinder.
+/// It contains the part of the cylinder that was hit (sides, top, or
+/// bottom).
+/// \sa SoCylinder, SoDetail, SoPickedPoint, SoPrimitiveVertex
 class SoCylinderDetail : public SoDetail {
 
     SO_DETAIL_HEADER(SoCylinderDetail);
 
   public:
-    // Constructor and destructor
+    /// Constructor and destructor
     SoCylinderDetail();
+
+    /// Destructor
     virtual ~SoCylinderDetail();
 
-    // Returns the part of detail for this shape, as one of the part masks
-    // of SoCylinder.
+    /// Returns the part of detail for this shape, as one of the part masks
+    /// of SoCylinder.
     int getPart() const { return part; }
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SoDetail *copy() const;
 
     SoEXTENDER

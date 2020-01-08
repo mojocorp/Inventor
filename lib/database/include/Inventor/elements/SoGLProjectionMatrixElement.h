@@ -77,7 +77,7 @@ class SoGLProjectionMatrixElement : public SoProjectionMatrixElement {
     SO_ELEMENT_HEADER(SoGLProjectionMatrixElement);
 
   public:
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
     SoINTERNAL

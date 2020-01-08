@@ -76,22 +76,22 @@
 SoINTERNAL
 class SoV1NodekitCatalogEntry {
   private:
-    SbName name; // Reference name of this entry
-    SoType type; // Type of node allowable for setting
-                 // this entry. 'type' may be an
-                 // abstract node type
-    SoType defaultType; // Type of node to create if the nodekit
-                        // is asked to build this part itself.
-                        // May not be an abstract node type.
-    SbBool leafPart; // Is this entry a leaf node in the
-                     // nodekit's structure?
+    SbName name;              // Reference name of this entry
+    SoType type;              // Type of node allowable for setting
+                              // this entry. 'type' may be an
+                              // abstract node type
+    SoType defaultType;       // Type of node to create if the nodekit
+                              // is asked to build this part itself.
+                              // May not be an abstract node type.
+    SbBool leafPart;          // Is this entry a leaf node in the
+                              // nodekit's structure?
     SbName  parentName;       // Reference name of this entry's parent
     SbName  rightSiblingName; // Name of right sibling of the entry
     SbBool  listPart;         // Is this entry a list of nodes?
     SbPList listItemTypes;    // If so, what types of nodes may
-                           // it contain?
-    SbBool publicPart; // Can a user be given a pointer to
-                       // this part?
+                              // it contain?
+    SbBool publicPart;        // Can a user be given a pointer to
+                              // this part?
     SoINTERNAL
   public:
     // constructor

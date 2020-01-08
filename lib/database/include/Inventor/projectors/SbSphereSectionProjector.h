@@ -69,63 +69,104 @@
 #include <Inventor/SbPlane.h>
 #include <Inventor/projectors/SbSphereProjector.h>
 
+/// Sphere-section projector.
+/// \ingroup Projectors
+/// <tt>SbSphereSectionProjector</tt>
+/// projects a window space point (usually based on the mouse location)
+/// onto the section of a sphere that has been sliced by a plane.
+/// Two projected points can produce a rotation
+/// about the sphere's center.
+/// The tolerance slice can be specified as a fraction of the radius
+/// of the sphere. The projection point will not extend beyond the
+/// sliced portion of the sphere.
+///
+/// Incremental changes (delta rotation) can be computed during
+/// interactive sessions. Sphere projectors are typically used to write
+/// interactive 3D manipulators and viewers.
+/// \sa
+/// SbCylinderProjector,SbCylinderSectionProjector,SbCylinderPlaneProjector,SbCylinderSheetProjector,
+/// \sa
+/// SbLineProjector,SbPlaneProjector,SbSpherePlaneProjector,SbSphereSheetProjector
 class SbSphereSectionProjector : public SbSphereProjector {
   public:
-    // Default constructor.
-    // The default view volume is undefined.
-    // The default working space is identity (world space).
-    // The default sphere to use has a radius of 1.0 and is centered at (0,0,0).
-    // The default edge tolerance is .9.
-    // The default eye orientation is TRUE.
+    /// Default constructor.
+    /// The default view volume is undefined.
+    /// The default working space is identity (world space).
+    /// The default sphere to use has a radius of 1.0 and is centered at
+    /// (0,0,0). The default edge tolerance is .9. The default eye orientation
+    /// is TRUE.
     SbSphereSectionProjector(float edgeTol = .9, SbBool orientToEye = TRUE);
 
-    // Constructor taking the sphere.
+    /// Constructor taking the sphere.
+    /// The position of the plane which slices the sphere into
+    /// a section is specified as a fraction of the sphere radius
+    /// with the parameter \a edgeTol.
+    /// A tolerance value of 1.0 positions the plane
+    /// down the center of the sphere. A tolerance value of 0.5 defines
+    /// the longitudinal plane halfway between the center and the outside
+    /// edge of the sphere.  The default value is .9, so that almost
+    /// half the sphere is in front of the plane.
+    /// The \a orientToEye
+    /// parameter determines whether the plane is perpendicular to the
+    /// eye, or perpendicular to the sphere's Z axis.  Setting that parameter to
+    /// TRUE (the default) specifies that the plane be perpendicular to the eye,
+    /// which is most often the desired behavior.
+    ///
+    /// The default view volume is undefined, and the working space is identity.
     SbSphereSectionProjector(const SbSphere &sph, float edgeTol = .9,
                              SbBool orientToEye = TRUE);
 
-    // Destructor
+    /// Destructor
     ~SbSphereSectionProjector() {}
 
-    // Returns an instance that is a copy of this instance. The caller
-    // is responsible for deleting the copy when done.
+    /// Returns an instance that is a copy of this instance. The caller
+    /// is responsible for deleting the copy when done.
     virtual SbProjector *copy() const;
 
-    // Apply the projector using the given point, returning the
-    // point in three dimensions that it projects to.
-    // The point should be normalized from 0-1, with (0,0) at the lower-left.
+    /// Apply the projector using the given point, returning the
+    /// point in three dimensions that it projects to.
+    /// The point should be normalized from 0-1, with (0,0) at the lower-left.
     virtual SbVec3f project(const SbVec2f &point);
 
-    // Computes a rotation based on two points on this projector.
+    /// Computes a rotation based on two points on this projector.
     virtual SbRotation getRotation(const SbVec3f &point1,
                                    const SbVec3f &point2);
 
-    // Set/get the edge tolerance as a fraction of the
-    // radius of the sphere. If this is 1.0, the projector is a
-    // hemisphere. If this is .1, the projector is a slice of
-    // the sphere with radius .1*radius.  Default is .9.
+    /// Set the edge tolerance as a fraction of the
+    /// radius of the sphere. If this is 1.0, the projector is a
+    /// hemisphere. If this is .1, the projector is a slice of
+    /// the sphere with radius .1*radius.  Default is .9.
     void setTolerance(float edgeTol);
 
+    /// Get the edge tolerance as a fraction of the
+    /// radius of the sphere. If this is 1.0, the projector is a
+    /// hemisphere. If this is .1, the projector is a slice of
+    /// the sphere with radius .1*radius.  Default is .9.
     float getTolerance() const { return tolerance; }
 
-    // Set/get the radial rotation factor.
-    // When the mouse is dragged off of the edge of the sphere, the mouse
-    // motion can be classified as either tangential (moving in a circle
-    // around the sphere) or radial (moving toward or away from the center).
-    // The tangential motion will always map to a rotation around the center,
-    // (like the hands of a clock).
-    // The radial motion, by default, has no effect. But if you set the
-    // radialFactor to be > 0.0, this motion will make the sphere rotate
-    // as if the mouse is pulling the top of the sphere out toward the
-    // mouse.
-    // If radialFactor = 1.0, then pulling has a 'normal' feel. (that is, the
-    // mouse motion causes the same amount of rotation as if you had rotated
-    // by hitting the actual surface of the sphere, instead of moving off the
-    // Default is 0.0
-    void  setRadialFactor(float rad = 0.0) { radialFactor = rad; }
+    /// Set the radial rotation factor.
+    /// When the mouse is dragged off of the edge of the sphere, the mouse
+    /// motion can be classified as either tangential (moving in a circle
+    /// around the sphere) or radial (moving toward or away from the center).
+    /// The tangential motion will always map to a rotation around the center,
+    /// (like the hands of a clock).
+    /// The radial motion, by default, has no effect. But if you set the
+    /// radialFactor to be > 0.0, this motion will make the sphere rotate
+    /// as if the mouse is pulling the top of the sphere out toward the
+    /// mouse.
+    /// If radialFactor = 1.0, then pulling has a 'normal' feel. (that is, the
+    /// mouse motion causes the same amount of rotation as if you had rotated
+    /// by hitting the actual surface of the sphere, instead of moving off the
+    /// Default is 0.0
+    void setRadialFactor(float rad = 0.0f) { radialFactor = rad; }
+
+    /// Get the radial rotation factor.
+    /// Default is 0.0
+    /// \sa setRadialFactor
     float getRadialFactor() const { return radialFactor; }
 
-    // Find whether this point on the sphere or tolerance
-    // plane is within tolerance.
+    /// Find whether this point on the sphere or tolerance
+    /// plane is within tolerance.
     SbBool isWithinTolerance(const SbVec3f &point);
 
   protected:

@@ -59,24 +59,35 @@
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/nodes/SoTransformation.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoRotation
-//
-//  Node that rotates by an arbitrary angle around an arbitrary 3D
-//  axis.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Node representing a 3D rotation about an arbitrary axis.
+/// \ingroup Nodes
+/// This node defines a 3D rotation about an arbitrary axis through the
+/// origin. The rotation is accumulated into the current transformation,
+/// which is applied to subsequent shapes.  The #rotation field
+/// provides a variety of methods for specifying the rotation.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Accumulates rotation transformation into the current
+/// transformation. <b>SoGetMatrixAction</b> Returns the matrix corresponding to
+/// the rotation.
+///
+/// \par File format/defaults:
+/// \code
+/// SoRotation {
+///    rotation	0 0 1  0
+/// }
+/// \endcode
+/// \sa SoRotationXYZ, SoTransform
 class SoRotation : public SoTransformation {
 
     SO_NODE_HEADER(SoRotation);
 
   public:
     // Fields
-    SoSFRotation rotation; // Rotation
+    SoSFRotation rotation; ///< Rotation specification.
 
-    // Constructor
+    /// Creates a rotation node with default settings.
     SoRotation();
 
     SoEXTENDER

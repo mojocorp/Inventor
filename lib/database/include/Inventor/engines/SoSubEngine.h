@@ -207,7 +207,7 @@
                                                                                \
     SO__ENGINE_ABSTRACT_METHODS(className)                                     \
                                                                                \
-    void *className::createInstance() { return (void *)(new className); }
+    void *className::createInstance() { return new className; }
 
 /////////////////////////////////////////////////////////////////////////////
 //

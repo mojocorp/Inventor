@@ -77,11 +77,11 @@ class SoGLClipPlaneElement : public SoClipPlaneElement {
     SO_ELEMENT_HEADER(SoGLClipPlaneElement);
 
   public:
-    // Override pop() method so side effects can occur in GL
+    /// Override pop() method so side effects can occur in GL
     virtual void pop(SoState *state, const SoElement *prevTopElement);
 
-    // Returns the maximum number of concurrent clipping planes
-    // supported by GL implementation
+    /// Returns the maximum number of concurrent clipping planes
+    /// supported by GL implementation
     static int getMaxGLPlanes();
 
     SoINTERNAL

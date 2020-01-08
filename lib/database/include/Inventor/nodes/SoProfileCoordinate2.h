@@ -59,23 +59,33 @@
 #include <Inventor/fields/SoMFVec2f.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoProfileCoordinate2
-//
-//  2-vector profile coordinate node.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Profile coordinate node.
+/// \ingroup Nodes
+/// This node defines a set of 2D coordinates to be used by subsequent
+/// <tt>SoProfile</tt> nodes. This node does not produce a visible result
+/// during rendering; it simply replaces the current profile coordinates
+/// in the traversal state for subsequent nodes to use.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Sets profile coordinates in current traversal state.
+///
+/// \par File format/defaults:
+/// \code
+/// SoProfileCoordinate2 {
+///    point	0 0
+/// }
+/// \endcode
+/// \sa SoProfile, SoProfileCoordinate3
 class SoProfileCoordinate2 : public SoNode {
 
     SO_NODE_HEADER(SoProfileCoordinate2);
 
   public:
     // Fields
-    SoMFVec2f point; // Coordinate point(s)
+    SoMFVec2f point; ///< 2D profile coordinate points.
 
-    // Constructor
+    /// Creates a profile coordinate node with default settings.
     SoProfileCoordinate2();
 
     SoEXTENDER

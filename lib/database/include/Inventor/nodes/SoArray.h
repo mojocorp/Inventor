@@ -61,50 +61,78 @@
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoGroup.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoArray
-//
-//  Array group node: creates an IxJxK array. Each element in the
-//  array is drawn by traversing all of the children of this node,
-//  saving and restoring state before and after each element. I, J,
-//  and K are given by the numElements1, numElements2, and
-//  numElements3 fields. The 3D vector separating the centers of
-//  adjacent elements in each of the three directions is given by
-//  separation1, separation2, and separation3. The origin field
-//  indicates whether the array is positioned with the current
-//  object-space origin at the center of the first element, the last
-//  element, or at the center of all elements.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Group node that creates a regular IxJxK array of copies of its children.
+/// \ingroup Nodes
+/// This group node traverses its children, in order, several times,
+/// creating a regular 3D array of copies of them. The number of copies
+/// in each of the three directions is specified by fields, as are the
+/// vectors used to separate the copies in each of the three dimensions.
+///
+///
+/// For example, an <tt>SoArray</tt> node can be used to create a 2x3x4 array
+/// of copies of its children, where the separation vectors between
+/// adjacent copies in the three array dimensions are (1,2,3), (-4,-5,-6),
+/// and (7,8,9), respectively. The base point of the array can be set to
+/// one of several values, as described in the <tt>origin</tt> field.
+///
+///
+/// Copies are traversed so that the first dimension cycles most quickly,
+/// followed by the second, and then the third. This order is important
+/// because <tt>SoArray</tt> sets the current switch value to N before
+/// traversing the children for the Nth time (for use with inherited
+/// switch values - see <tt>SoSwitch</tt>).
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction, SoCallbackAction, SoGetBoundingBoxAction,
+/// SoRayPickAction</b> Traverses all children for each array element, saving
+/// and restoring state before and after each traversal. <b>SoSearchAction</b>
+/// Traverses all children once, setting the inherited switch value to
+/// <tt>SO_SWITCH_ALL</tt> first.
+///
+/// \par File format/defaults:
+/// \code
+/// SoArray {
+///    numElements1     1
+///    numElements2     1
+///    numElements3     1
+///    separation1      1 0 0
+///    separation2      0 1 0
+///    separation3      0 0 1
+///    origin           FIRST
+/// }
+/// \endcode
+/// \sa SoMultipleCopy, SoSwitch
 class SoArray : public SoGroup {
 
     SO_NODE_HEADER(SoArray);
 
   public:
     // Fields
-    SoSFShort numElements1; // Number of elements in 1st direction
-    SoSFShort numElements2; // Number of elements in 2nd direction
-    SoSFShort numElements3; // Number of elements in 3rd direction
+    SoSFShort numElements1; ///< Number of elements in 1st direction
+    SoSFShort numElements2; ///< Number of elements in 2nd direction
+    SoSFShort numElements3; ///< Number of elements in 3rd direction
 
-    SoSFVec3f separation1; // Separation vector in 1st direction
-    SoSFVec3f separation2; // Separation vector in 2nd direction
-    SoSFVec3f separation3; // Separation vector in 3rd direction
+    SoSFVec3f separation1; ///< Separation vector in 1st direction
+    SoSFVec3f separation2; ///< Separation vector in 2nd direction
+    SoSFVec3f separation3; ///< Separation vector in 3rd direction
 
-    enum Origin { // Array origin:
-        FIRST,    // Origin at first element
-        CENTER,   // Origin at center of elements
-        LAST      // Origin at last element
+    /// Array origin:
+    enum Origin {
+        FIRST, ///< First copy is rendered at the current local origin;all other
+               ///< copies are distributed relative to it"
+        CENTER, ///< Copies are distributed relative to the center of the array
+        LAST    ///< Last copy is rendered at the current local origin;all other
+                ///< copies are distributed relative to it
     };
 
-    SoSFEnum origin; // Base point
+    SoSFEnum
+        origin; ///< Defines the base point from which copies are distributed.
 
-    // Constructor and destructor
+    /// Creates an array node with default settings.
     SoArray();
 
-    // Overrides default method on SoNode to return FALSE since arrays
-    // are effectively separators
+    /// Overrides default method on SoNode to return FALSE since arrays
+    /// are effectively separators
     virtual SbBool affectsState() const;
 
     SoEXTENDER

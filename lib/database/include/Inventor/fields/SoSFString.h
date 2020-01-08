@@ -58,12 +58,24 @@
 
 #include <Inventor/fields/SoSubField.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  SoSFString subclass of SoSField.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Field containing a string.
+/// \ingroup Fields
+/// A field containing an ASCII string (sequence of characters).  Inventor
+/// does not support non-ASCII strings.
+///
+/// <tt>SoSFStrings</tt> are written to file as a sequence of ASCII characters
+/// in double quotes (optional if the string doesn't contain any
+/// whitespace).  Any characters (including newlines) may appear within
+/// the quotes. To include a double quote character within the string,
+/// precede it with a backslash.  For example:
+///
+/// Testing
+/// \code
+/// "One, Two, Three"
+/// "He said, \\"Immel did it!\\""
+/// \endcode
+/// are all valid strings.
+/// \sa SbString, SoField, SoSField, SoMFString
 class SoSFString : public SoSField {
     // Use standard field stuff
     SO_SFIELD_HEADER(SoSFString, SbString, const SbString &);
@@ -73,7 +85,7 @@ class SoSFString : public SoSField {
     // Some additional convenience functions:
     //
 
-    // Set value from character string
+    /// Convenience method to set the field's value given a character array.
     void setValue(const char *string);
 
     SoINTERNAL

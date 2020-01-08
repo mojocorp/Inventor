@@ -69,49 +69,55 @@ class SoState;
 class SoLightPath;
 class SoTempPath;
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoAction
-//
-//  This is the parent class for all traversal methods.  When
-//  traversing, lookup is done based on the node type and the action
-//  type.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Abstract base class for all actions.
+/// \ingroup Actions
+/// <tt>SoAction</tt> is the abstract base class for all actions. Classes
+/// derived from <tt>SoAction</tt> define operations to be applied at each node
+/// encountered during traversal of a scene graph. The function that gets
+/// called to implement the action for a particular node type is
+/// determined by a lookup table in the global database.
+/// \sa
+/// SoNode,SoPath,SoPathList,SoCallbackAction,SoGLRenderAction,SoGetBoundingBoxAction,
+/// \sa
+/// SoGetMatrixAction,SoHandleEventAction,SoPickAction,SoRayPickAction,SoSearchAction,SoWriteAction
 class SoAction {
 
   public:
-    // Destructor
+    /// Destructor
     virtual ~SoAction();
 
-    // Returns type identifier for SoAction class
+    /// Returns type identifier for SoAction class
     static SoType getClassTypeId() { return classTypeId; }
 
-    // Returns type identifier for action
+    /// Returns type identifier for action
     virtual SoType getTypeId() const = 0;
 
-    // Returns TRUE if action is of given type or is derived from it
+    /// Returns TRUE if action is of given type or is derived from it
     SbBool isOfType(SoType type) const;
 
-    // Applies action to the graph rooted by a node
+    /// Applies action to the graph rooted by a node
     virtual void apply(SoNode *node);
 
-    // Applies action to the graph defined by a path
+    /// Applies action to the graph defined by a path
     virtual void apply(SoPath *path);
 
-    // Applies action to the graphs defined by a path list. The
-    // "obeysRules" flag can be set to TRUE if the given path list has
-    // the following 4 properties:
-    //    1 - All paths have the same head node
-    //    2 - Paths are sorted in traversal order
-    //    3 - If one path ends at node A, no other path continues through A
-    //	  4 - No two paths are the same
-    // These rules will be obeyed by path lists returned by searches
-    // for non-group nodes.
+    /// Initiates an action on the graph defined either by a node, path, or
+    /// list of paths. TRUE can be passed for the \a obeysRules flag if the
+    /// given path list has the following 4 properties:
+    ///
+    /// 1 - All paths have the same head node
+    /// 2 - Paths are sorted in traversal order
+    /// 3 - If one path ends at node \e A, no other path
+    ///     continues through \e A
+    /// 4 - No two paths are the same
+    ///
+    /// These rules will be obeyed by path lists returned by picking and by
+    /// searches for non-group nodes.
     virtual void apply(const SoPathList &pathList, SbBool obeysRules = FALSE);
 
-    // Invalidate the state, forcing it to be recreated at the next apply
+    /// Invalidates the current traversal state in the action, forcing it to
+    /// be recreated when the action is next applied. This is typically
+    /// unnecessary in most applications.
     virtual void invalidateState();
 
     SoEXTENDER

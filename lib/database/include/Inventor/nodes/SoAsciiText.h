@@ -84,24 +84,67 @@ class SoOutlineFontCache;
 class SoPrimitiveVertex;
 class SoTextureCoordinateElement;
 
+/// Simple 3D text shape node.
+/// \ingroup Nodes
+/// This node defines one or more strings of 3D text. In contrast with
+/// <tt>SoText2</tt>, 3D text can be rotated, scaled, lighted, and textured,
+/// just like all other 3D shapes. In constrast with
+/// <tt>SoText3</tt>, this 3D ascii text cannot be extruded.
+///
+///
+/// The text origin is at (0,0,0) after applying the current
+/// transformation. The scale of the text is affected by the <b>size</b>
+/// field of the current <tt>SoFont</tt> as well as the current transformation.
+///
+///
+/// <tt>SoAsciiText</tt> uses the current material when rendering.
+/// Textures are applied to ascii text as follows.  On the front
+/// face of the text, the texture origin is at the base point of the
+/// first string; the base point is at the lower left for justification
+/// <b>LEFT</b>, at the lower right for <b>RIGHT</b>, and at the lower center
+/// for <b>CENTER</b>. The texture is scaled equally in both S and T
+/// dimensions, with the font height representing 1 unit. S increases to
+/// the right on the front face.
+///
+/// \par Action behavior:
+/// <b>SoGLRenderAction</b>
+/// Draws text based on the current font, transformation,
+/// drawing style, material, texture, complexity, and so on.
+/// <b>SoRayPickAction</b>
+/// Performs a pick on the text. The string index and character position
+/// are available from the <tt>SoTextDetail</tt>.
+/// <b>SoGetBoundingBoxAction</b>
+/// Computes the bounding box that encloses the text.
+/// <b>SoCallbackAction</b>
+/// If any triangle callbacks are registered with the action, they will be
+/// invoked for each successive triangle used to approximate the text
+/// geometry.
+///
+/// \par File format/defaults:
+/// \code
+/// SoAsciiText {
+///    string           ""
+///    spacing          1
+///    justification    LEFT
+///    width            0
+/// }
+/// \endcode
+/// \sa SoFont,SoFontStyle,SoText2,SoText3,SoTextDetail
 class SoAsciiText : public SoShape {
 
     SO_NODE_HEADER(SoAsciiText);
 
   public:
-    enum Justification { // Justification types
-        LEFT = 0x01,
-        RIGHT = 0x02,
-        CENTER = 0x03
-    };
+    /// Justification types
+    enum Justification { LEFT = 0x01, RIGHT = 0x02, CENTER = 0x03 };
 
     // Fields
-    SoMFString string;  // the strings to display
-    SoSFFloat  spacing; // interval between strings
+    SoMFString string;  ///< the strings to display
+    SoSFFloat  spacing; ///< interval between strings
     SoSFEnum   justification;
-    SoMFFloat  width; // width of each string
+    SoMFFloat  width; ///< width of each string
 
-    // Constructor
+    /// Constructor
     SoAsciiText();
 
     SoEXTENDER

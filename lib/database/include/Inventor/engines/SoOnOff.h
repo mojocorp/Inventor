@@ -62,20 +62,38 @@
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFTrigger.h>
 
+/// Engine that functions as an on/off switch.
+/// \ingroup Engines
+/// This engine has three triggers as input and two Boolean values as output.
+/// The #isOn output is a switch that can be turned #on or #off by
+/// triggering the corresponding input.
+/// You can toggle the value by triggering the #toggle input.
+/// By default #isOn is FALSE.
+/// The #isOff output value is the inverse of #isOn
+///
+/// \par File format/defaults:
+/// \code
+/// SoOnOff {
+///    on
+///    off
+///    toggle
+/// }
+/// \endcode
+/// \sa SoEngineOutput
 class SoOnOff : public SoEngine {
 
     SO_ENGINE_HEADER(SoOnOff);
 
   public:
     // Inputs
-    SoSFTrigger on;     // turns on
-    SoSFTrigger off;    // turns off
-    SoSFTrigger toggle; // changes state
+    SoSFTrigger on;     ///< Turn the #isOn switch on.
+    SoSFTrigger off;    ///< Turn the #isOn switch off.
+    SoSFTrigger toggle; ///< Toggle the switch value.
 
-    SoEngineOutput isOn;  // (SoSFBool)
-    SoEngineOutput isOff; // (SoSFBool)
+    SoEngineOutput isOn;  ///< Switch value.
+    SoEngineOutput isOff; ///< The inverse of #isOn.
 
-    // Constructor
+    /// Constructor
     SoOnOff();
 
     SoINTERNAL

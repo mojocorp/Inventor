@@ -60,59 +60,61 @@
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/SbViewportRegion.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SoGetMatrixAction
-//
-//  For computing a cumulative transformation matrix and its inverse,
-//  along with a cumulative texture transformation matrix and its inverse.
-//
-//  This action is unlike most others in that it does not traverse
-//  downwards. When called on a node, it computes the matrix for just
-//  that node. (This makes sense for transformation nodes, but not for
-//  others, really.) When called on a path, it gathers the
-//  transformation info for all nodes in the path and those that
-//  affect nodes in the path, but it stops when it hits the last node
-//  in the path; it does not traverse downwards from it as other
-//  actions (such as rendering) do. This behavior makes the most sense
-//  for this action.
-//
-//  EXTENDERS:  The model and texture matrix elements are not enabled
-//  for this action.  Your transformation nodes must use the
-//  getMatrix/getInverse calls and directly modify the matrices stored
-//  in the action.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// Computes transformation matrix for subgraph.
+/// \ingroup Actions
+/// This action computes transformation matrices for a given subgraph.  It
+/// computes the cumulative transformation matrix and its inverse, along
+/// with a cumulative texture transformation matrix and its inverse.
+///
+///
+/// This action is unlike most others in that it does not traverse
+/// downwards from groups. When applied to a node, it computes the matrix
+/// for just that node. (This makes sense for transformation nodes, but
+/// not for others, really.) It is much more useful when applied to a
+/// path. When applied to a path, it gathers the transformation info for
+/// all nodes in the path and those that affect nodes in the path, but it
+/// stops when it hits the last node in the path; it does not traverse
+/// downwards from it as other actions (such as rendering) do. This
+/// behavior makes the most sense for this action.
+/// \sa SoGetBoundingBoxAction
 class SoGetMatrixAction : public SoAction {
 
     SO_ACTION_HEADER(SoGetMatrixAction);
 
   public:
-    // Constructor
+    /// Constructor takes viewport region to use for picking. Even
+    /// though the matrix computation may not involve a window
+    /// per se, some nodes need this information to determine their
+    /// placement.
     SoGetMatrixAction(const SbViewportRegion &newRegion);
 
-    // Destructor
+    /// Destructor
     virtual ~SoGetMatrixAction();
 
-    // Sets current viewport region to use for action
+    /// Sets current viewport region to use for action
     void setViewportRegion(const SbViewportRegion &newRegion);
 
-    // Returns current viewport region
+    /// Returns current viewport region
     const SbViewportRegion &getViewportRegion() const { return vpRegion; }
 
-    // Returns cumulative transformation matrix and inverse matrix
-    // Extenders:  your transformation nodes should get these and
-    // directly modify them.  Users:  you should treat these as
-    // constants.
+    /// Returns cumulative transformation matrix.
+    /// Warning: the matrices returned by these routines should not be changed
+    /// (unless you are implementing your own transformation nodes).
     SbMatrix &getMatrix() { return ctm; }
+
+    /// Returns cumulative inverse transformation matrix.
+    /// Warning: the matrices returned by these routines should not be changed
+    /// (unless you are implementing your own transformation nodes).
     SbMatrix &getInverse() { return inv; }
 
-    // Returns cumulative texture transformation matrix and inverse matrix
-    // Extenders:  your textureTransformation nodes should get these
-    // and directly modify them.  Users:  you should treat these as
-    // constants.
+    /// Returns cumulative texture transformation matrix.
+    /// Warning: the matrices returned by these routines should not be changed
+    /// (unless you are implementing your own transformation nodes).
     SbMatrix &getTextureMatrix() { return texCtm; }
+
+    /// Returns cumulative texture inverse transformation matrix.
+    /// Warning: the matrices returned by these routines should not be changed
+    /// (unless you are implementing your own transformation nodes).
     SbMatrix &getTextureInverse() { return texInv; }
 
     SoINTERNAL

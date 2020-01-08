@@ -99,34 +99,34 @@ SoINTERNAL
 class SoNotRec {
 
   public:
-    // Notification types (what receives notification). Note that
-    // these are also used for maintaining lists of auditors in
-    // SoBase instances. Each auditor uses one of these types to
-    // indicate how it is auditing the instance. This is then
-    // propagated to the auditors in the notification records.
+    /// Notification types (what receives notification). Note that
+    /// these are also used for maintaining lists of auditors in
+    /// SoBase instances. Each auditor uses one of these types to
+    /// indicate how it is auditing the instance. This is then
+    /// propagated to the auditors in the notification records.
     enum Type {
-        CONTAINER, // Field notifying container
-        PARENT,    // Child node notifying parent
-        SENSOR,    // Some base notifying sensor
-        FIELD,     // Field notifying connected field
-        ENGINE     // Engine notifying connected field
+        CONTAINER, ///< Field notifying container
+        PARENT,    ///< Child node notifying parent
+        SENSOR,    ///< Some base notifying sensor
+        FIELD,     ///< Field notifying connected field
+        ENGINE     ///< Engine notifying connected field
     };
 
-    // Constructor - passed the base pointer
+    /// Constructor - passed the base pointer
     SoNotRec(SoBase *b) { base = b; }
 
-    // Sets notification type
+    /// Sets notification type
     void setType(SoNotRec::Type t) { type = t; }
 
-    // Returns base pointer, type, or previous record in list
+    /// Returns base pointer, type, or previous record in list
     SoBase *        getBase() const { return base; }
     SoNotRec::Type  getType() const { return type; }
     const SoNotRec *getPrevious() const { return previous; }
 
-    // Sets previous record pointer
+    /// Sets previous record pointer
     void setPrevious(SoNotRec *prev) { previous = prev; }
 
-    // Prints a notification record for debugging
+    /// Prints a notification record for debugging
     void print(FILE *fp) const;
 
   private:
@@ -154,20 +154,20 @@ SoINTERNAL
 class SoNotList {
 
   public:
-    // Constructor
+    /// Constructor
     SoNotList();
 
-    // Copy constructor
+    /// Copy constructor
     SoNotList(const SoNotList *copyFrom) { *this = *copyFrom; }
 
-    // Appends given non-field record to end of list.
+    /// Appends given non-field record to end of list.
     void append(SoNotRec *rec);
 
-    // Appends given (container) field record to end of list. We
-    // assume the base in the record is a node.
+    /// Appends given (container) field record to end of list. We
+    /// assume the base in the record is a node.
     void append(SoNotRec *rec, SoField *field);
 
-    // Sets the type of the last (current) record in the list
+    /// Sets the type of the last (current) record in the list
     void setLastType(SoNotRec::Type t) {
         last->setType(t);
         // Reset firstAtNode pointer if we're going through
@@ -176,25 +176,25 @@ class SoNotList {
             firstAtNode = NULL;
     }
 
-    // Returns first and last records in list
+    /// Returns first and last records in list
     SoNotRec *getFirstRec() const { return first; }
     SoNotRec *getLastRec() const { return last; }
 
-    // Returns first record in list that has a node base in the
-    // current chain of node-to-node notification. This information is
-    // passed to sensor callbacks to indicate which node initiated
-    // notification in the graph.
+    /// Returns first record in list that has a node base in the
+    /// current chain of node-to-node notification. This information is
+    /// passed to sensor callbacks to indicate which node initiated
+    /// notification in the graph.
     SoNotRec *getFirstRecAtNode() const { return firstAtNode; }
 
-    // Returns last field set by notification (or NULL if notification
-    // did not originate at or propagate through a field)
+    /// Returns last field set by notification (or NULL if notification
+    /// did not originate at or propagate through a field)
     SoField *getLastField() const { return lastField; }
 
-    // Returns the time stamp so nodes can check if notification has
-    // already been handled
+    /// Returns the time stamp so nodes can check if notification has
+    /// already been handled
     uint32_t getTimeStamp() const { return timeStamp; }
 
-    // Prints a notification list for debugging
+    /// Prints a notification list for debugging
     void print(FILE *fp) const;
 
   private:

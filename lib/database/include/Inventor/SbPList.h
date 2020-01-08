@@ -60,71 +60,68 @@
 
 #include <Inventor/SbBasic.h>
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Class: SbPList
-//
-//  List of generic (void *) pointers. SbPList allows random access,
-//  insertion, and removal.
-//
-//////////////////////////////////////////////////////////////////////////////
-
+/// List of generic (void *) pointers.
+/// \ingroup Basics
+/// This class manages a dynamic list of generic <b>void *</b> pointers.
+/// This class allows random access, insertion, and removal.
 class SbPList {
   public:
-    // Constructor
+    /// Constructor
     SbPList();
 
-    // Constructor allocates enough room for the given number of pointers
+    /// Constructor allocates enough room for the given number of pointers
     SbPList(int initSize);
 
-    // Constructor for copying
+    /// Constructor for copying
     SbPList(const SbPList &pl);
 
-    // Destructor
+    /// Destructor
     ~SbPList();
 
-    // Adds given pointer to end of list
+    /// Adds given pointer to end of list
     void append(void *ptr) {
         if (nPtrs + 1 > ptrsSize)
             expand(nPtrs + 1);
         ptrs[nPtrs++] = ptr;
     }
 
-    // Returns index of given pointer in list, or -1 if not found
+    /// Returns index of given pointer in list, or -1 if not found
     int find(const void *ptr) const;
 
-    // Inserts given pointer in list before pointer with given index
+    /// Inserts given pointer in list before pointer with given index
     void insert(void *ptr, int addBefore);
 
-    // Removes pointer with given index
+    /// Removes pointer with given index
     void remove(int which);
 
-    // Returns number of pointers in list
+    /// Returns number of pointers in list
     int getLength() const { return (int)nPtrs; }
 
-    // Removes all pointers after one with given index, inclusive
-    // ??? should really be an error check in here
+    /// Removes all pointers after one with given index, inclusive
     void truncate(int start) { nPtrs = start; }
 
-    // Copy a PList
+    /// Copy a PList
     void copy(const SbPList &pl);
 
+    /// Assignment operator; copies list into this list.
     SbPList &operator=(const SbPList &pl) {
         copy(pl);
         return *this;
     }
 
-    // Returns pointer with given index
+    /// Returns pointer with given index
     void *&operator[](int i) const {
         if (i >= nPtrs)
             grow(i);
         return ptrs[i];
     }
 
-    // equality tests
+    /// Equality operators.
     int operator==(const SbPList &pl) const {
         return pl.nPtrs == nPtrs ? compare(pl) : FALSE;
     }
+
+    /// Inequality operators.
     int operator!=(const SbPList &pl) const {
         return pl.nPtrs == nPtrs ? !compare(pl) : TRUE;
     }
