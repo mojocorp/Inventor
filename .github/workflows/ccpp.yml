@@ -1,0 +1,40 @@
+name: C/C++ CI
+
+on: [push]
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macOS-latest, windows-latest, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Installing system libs (linux)
+      if: matrix.os == 'ubuntu-latest'
+      shell: bash
+      run: sudo apt-get install libgl1-mesa-dev libfreetype6-dev bison libjpeg-dev libmotif-dev libxi-dev doxygen
+    - name: Installing system libs (macOS)
+      if: matrix.os == 'macOS-latest'
+      shell: bash
+      run: |
+          brew cask install xquartz
+          brew install openmotif doxygen
+    - name: Installing system libs (windows)
+      if: matrix.os == 'windows-latest'
+      shell: bash
+      run: choco install winflexbison doxygen.install
+    - name: Configure
+      working-directory: build
+      shell: bash
+      run: cmake -DCMAKE_BUILD_TYPE=Release ..
+    - name: Build
+      working-directory: build
+      shell: bash
+      run: cmake --build . --config Release
+
+
+
+
