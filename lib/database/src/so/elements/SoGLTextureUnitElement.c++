@@ -188,5 +188,5 @@ SoGLTextureUnitElement::send()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    glActiveTextureARB((unsigned int)GL_TEXTURE0 + data);
+    glActiveTexture((unsigned int)GL_TEXTURE0 + data);
 }
