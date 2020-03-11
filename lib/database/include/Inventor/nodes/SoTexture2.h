@@ -63,8 +63,6 @@
 #include <Inventor/fields/SoSFString.h>
 #include <Inventor/nodes/SoSubNode.h>
 
-#include <Inventor/misc/SoGL.h>
-
 class SoSensor;
 class SoFieldSensor;
 class SoGLDisplayList;

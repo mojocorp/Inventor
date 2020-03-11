@@ -530,8 +530,6 @@ SoAsciiText::generateFront(const SbString &string, float width)
                         (void (*)())SoAsciiText::endCB);
         gluTessCallback(tobj, (GLenum)GLU_TESS_VERTEX,
                         (void (*)())SoAsciiText::vtxCB);
-        gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR,
-                        (void (*)())SoOutlineFontCache::errorCB);
     }
 
     genWhichVertex = 0;

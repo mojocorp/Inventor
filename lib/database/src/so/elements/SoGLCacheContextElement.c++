@@ -57,6 +57,7 @@
 #include <Inventor/elements/SoGLDisplayList.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/errors/SoDebugError.h>
+#include <Inventor/misc/SoGL.h>
 #include <Inventor/misc/SoState.h>
 #include <Inventor/SbString.h>
 #include <Inventor/SbPList.h>

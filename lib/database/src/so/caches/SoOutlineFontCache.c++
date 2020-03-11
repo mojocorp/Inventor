@@ -73,7 +73,6 @@
 #include FT_FREETYPE_H
 #include FT_OUTLINE_H
 
-SbBool                            SoOutlineFontCache::tesselationError = FALSE;
 std::vector<SoOutlineFontCache *> SoOutlineFontCache::fonts;
 
 // First, a more convenient structure for outlines:
@@ -107,6 +106,30 @@ class SoFontOutline {
     SbVec2f                            charAdvance;
     SbBox2f                            bbox;
 };
+
+namespace {
+////////////////////////////////////////////////////////////////////////
+//
+// Description:
+//    Called by the GLU tesselator when there is an error
+//
+// Use: static, private
+//
+////////////////////////////////////////////////////////////////////////
+
+#ifdef DEBUG
+void
+errorCB(GLenum whichErr, SbBool *tesselationError) {
+    SoDebugError::post("SoText3::errorCB", "%s", gluErrorString(whichErr));
+    *tesselationError = TRUE;
+}
+#else  /* DEBUG */
+void
+errorCB(GLenum, SbBool *tesselationError) {
+    *tesselationError = TRUE;
+}
+#endif /* DEBUG */
+} // namespace
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -391,8 +414,8 @@ SoOutlineFontCache::generateFrontChar(const wchar_t c, GLUtesselator *tobj)
 
     GLdouble v[3];
 
-    tesselationError = FALSE;
-    gluTessBeginPolygon(tobj, NULL);
+    SbBool tesselationError = FALSE;
+    gluTessBeginPolygon(tobj, &tesselationError);
 
     // Get outline for character
     SoFontOutline *outline = getOutline(c);
@@ -423,7 +446,7 @@ SoOutlineFontCache::generateFrontChar(const wchar_t c, GLUtesselator *tobj)
             boxVerts[1].setValue(boxVerts[2][0], boxVerts[0][1]);
             boxVerts[3].setValue(boxVerts[0][0], boxVerts[2][1]);
 
-            gluTessBeginPolygon(tobj, NULL);
+            gluTessBeginPolygon(tobj, &tesselationError);
             gluTessBeginContour(tobj);
             for (int i = 0; i < 4; i++) {
                 v[0] = boxVerts[i][0];
@@ -538,8 +561,7 @@ SoOutlineFontCache::renderFront(SoState *state, const SbString &string)
         gluTessCallback(tobj, (GLenum)GLU_TESS_BEGIN, (void (*)())glBegin);
         gluTessCallback(tobj, (GLenum)GLU_TESS_END, (void (*)())glEnd);
         gluTessCallback(tobj, (GLenum)GLU_TESS_VERTEX, (void (*)())glVertex2fv);
-        gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR,
-                        (void (*)())SoOutlineFontCache::errorCB);
+        gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR, (void (*)())errorCB);
     }
 
     const std::wstring str = string.toStdWString();
@@ -1010,25 +1032,3 @@ SoOutlineFontCache::fillBevelN(SbVec3f *                   result,
         result[i][2] = -norms[i][0];
     }
 }
-
-////////////////////////////////////////////////////////////////////////
-//
-// Description:
-//    Called by the GLU tesselator when there is an error
-//
-// Use: static, private
-//
-////////////////////////////////////////////////////////////////////////
-
-#ifdef DEBUG
-void
-SoOutlineFontCache::errorCB(GLenum whichErr) {
-    SoDebugError::post("SoText3::errorCB", "%s", gluErrorString(whichErr));
-    tesselationError = TRUE;
-}
-#else  /* DEBUG */
-void
-SoOutlineFontCache::errorCB(GLenum) {
-    tesselationError = TRUE;
-}
-#endif /* DEBUG */

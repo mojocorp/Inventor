@@ -57,7 +57,6 @@
 #define _SO_GL_DISPLAY_LIST
 
 #include <Inventor/SbBasic.h>
-#include <Inventor/misc/SoGL.h>
 
 class SoState;
 
@@ -115,19 +114,19 @@ class SoGLDisplayList {
     //
     // Get methods
     //
-    Type   getType() const { return type; }
-    int    getNumAllocated() const { return num; }
-    GLuint getFirstIndex() const { return startIndex; }
-    int    getContext() const { return context; }
+    Type     getType() const { return type; }
+    int      getNumAllocated() const { return num; }
+    uint32_t getFirstIndex() const { return startIndex; }
+    int      getContext() const { return context; }
 
   private:
     ~SoGLDisplayList();
 
-    Type   type;
-    GLuint startIndex;
-    int    num;
-    int    refCount;
-    int    context;
+    Type     type;
+    uint32_t startIndex;
+    int      num;
+    int      refCount;
+    int      context;
     friend class SoGLCacheContextElement;
 };
 

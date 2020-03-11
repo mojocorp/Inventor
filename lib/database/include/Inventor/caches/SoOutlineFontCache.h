@@ -60,7 +60,6 @@
 #include <vector>
 #include <map>
 
-#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SbString.h>
 #include <Inventor/caches/SoFontCache.h>
@@ -123,9 +122,6 @@ class SoOutlineFontCache : public SoFontCache {
     void renderSide(SoState *state, const SbString &string,
                     SideCB callbackFunc);
 
-    // Callback registered with GLU used to detect tesselation errors.
-    static void errorCB(GLenum whichErr);
-
   private:
     // Constructor
     SoOutlineFontCache(SoState *);
@@ -178,9 +174,6 @@ class SoOutlineFontCache : public SoFontCache {
 
     // Font size
     float fontSize;
-
-    // Flag used to detect tesselation errors:
-    static SbBool tesselationError;
 
     // Global list of available fonts; a 'font' in this case is a
     // unique set of font name, font size, complexity value/type, and

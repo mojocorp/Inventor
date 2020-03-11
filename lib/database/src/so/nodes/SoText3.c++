@@ -797,8 +797,6 @@ SoText3::generateFront(int line)
         gluTessCallback(tobj, (GLenum)GLU_TESS_END, (void (*)())SoText3::endCB);
         gluTessCallback(tobj, (GLenum)GLU_TESS_VERTEX,
                         (void (*)())SoText3::vtxCB);
-        gluTessCallback(tobj, (GLenum)GLU_TESS_ERROR,
-                        (void (*)())SoOutlineFontCache::errorCB);
     }
 
     genWhichVertex = 0;
