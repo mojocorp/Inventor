@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoGLDrawStyleElement.h>
 #include <Inventor/misc/SoState.h>

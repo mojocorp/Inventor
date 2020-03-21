@@ -60,7 +60,7 @@
 #include <Inventor/elements/SoViewingMatrixElement.h>
 #include <Inventor/nodes/SoTextureCoordinateEnvironment.h>
 
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 
 SO_NODE_SOURCE(SoTextureCoordinateEnvironment);
 

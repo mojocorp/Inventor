@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -37,8 +37,8 @@
 #ifndef _SoGLwDrawA_h
 #define _SoGLwDrawA_h
 
+#include <GL/gl.h>
 #include <GL/glx.h>
-#include <Inventor/misc/SoGL.h>
 
 /****************************************************************
  *
@@ -81,72 +81,71 @@
  accumAlphaSize	     AccumAlphaSize	int		0
 */
 
-#define SoGLwNattribList		"attribList"
-#define SoGLwCAttribList		"AttribList"
-#define SoGLwNvisualInfo		"visualInfo"
-#define SoGLwCVisualInfo		"VisualInfo"
-#define SoGLwRVisualInfo		"VisualInfo"
+#define SoGLwNattribList "attribList"
+#define SoGLwCAttribList "AttribList"
+#define SoGLwNvisualInfo "visualInfo"
+#define SoGLwCVisualInfo "VisualInfo"
+#define SoGLwRVisualInfo "VisualInfo"
 
-#define SoGLwNinstallColormap	"installColormap"
-#define SoGLwCInstallColormap	"InstallColormap"
-#define SoGLwNallocateBackground	"allocateBackground"
-#define SoGLwNallocateOtherColors	"allocateOtherColors"
-#define SoGLwCAllocateColors	"AllocateColors"
-#define SoGLwNinstallBackground	"installBackground"
-#define SoGLwCInstallBackground	"InstallBackground"
+#define SoGLwNinstallColormap "installColormap"
+#define SoGLwCInstallColormap "InstallColormap"
+#define SoGLwNallocateBackground "allocateBackground"
+#define SoGLwNallocateOtherColors "allocateOtherColors"
+#define SoGLwCAllocateColors "AllocateColors"
+#define SoGLwNinstallBackground "installBackground"
+#define SoGLwCInstallBackground "InstallBackground"
 
-#define SoGLwCCallback		"Callback"
-#define SoGLwNexposeCallback	"exposeCallback"
-#define SoGLwNginitCallback	"ginitCallback"
-#define SoGLwNresizeCallback	"resizeCallback"
-#define SoGLwNinputCallback	"inputCallback"
+#define SoGLwCCallback "Callback"
+#define SoGLwNexposeCallback "exposeCallback"
+#define SoGLwNginitCallback "ginitCallback"
+#define SoGLwNresizeCallback "resizeCallback"
+#define SoGLwNinputCallback "inputCallback"
 
-#define SoGLwNbufferSize		"bufferSize"
-#define SoGLwCBufferSize		"BufferSize"
-#define SoGLwNlevel		"level"
-#define SoGLwCLevel		"Level"
-#define SoGLwNrgba		"rgba"
-#define SoGLwCRgba		"Rgba"
-#define SoGLwNdoublebuffer	"doublebuffer"
-#define SoGLwCDoublebuffer	"Doublebuffer"
-#define SoGLwNstereo		"stereo"
-#define SoGLwCStereo		"Stereo"
-#define SoGLwNauxBuffers		"auxBuffers"
-#define SoGLwCAuxBuffers		"AuxBuffers"
-#define SoGLwNredSize		"redSize"
-#define SoGLwNgreenSize		"greenSize"
-#define SoGLwNblueSize		"blueSize"
-#define SoGLwCColorSize		"ColorSize"
-#define SoGLwNalphaSize		"alphaSize"
-#define SoGLwCAlphaSize		"AlphaSize"
-#define SoGLwNdepthSize		"depthSize"
-#define SoGLwCDepthSize		"DepthSize"
-#define SoGLwNstencilSize		"stencilSize"
-#define SoGLwCStencilSize		"StencilSize"
-#define SoGLwNaccumRedSize	"accumRedSize"
-#define SoGLwNaccumGreenSize	"accumGreenSize"
-#define SoGLwNaccumBlueSize	"accumBlueSize"
-#define SoGLwCAccumColorSize	"AccumColorSize"
-#define SoGLwNaccumAlphaSize	"accumAlphaSize"
-#define SoGLwCAccumAlphaSize	"AccumAlphaSize"
+#define SoGLwNbufferSize "bufferSize"
+#define SoGLwCBufferSize "BufferSize"
+#define SoGLwNlevel "level"
+#define SoGLwCLevel "Level"
+#define SoGLwNrgba "rgba"
+#define SoGLwCRgba "Rgba"
+#define SoGLwNdoublebuffer "doublebuffer"
+#define SoGLwCDoublebuffer "Doublebuffer"
+#define SoGLwNstereo "stereo"
+#define SoGLwCStereo "Stereo"
+#define SoGLwNauxBuffers "auxBuffers"
+#define SoGLwCAuxBuffers "AuxBuffers"
+#define SoGLwNredSize "redSize"
+#define SoGLwNgreenSize "greenSize"
+#define SoGLwNblueSize "blueSize"
+#define SoGLwCColorSize "ColorSize"
+#define SoGLwNalphaSize "alphaSize"
+#define SoGLwCAlphaSize "AlphaSize"
+#define SoGLwNdepthSize "depthSize"
+#define SoGLwCDepthSize "DepthSize"
+#define SoGLwNstencilSize "stencilSize"
+#define SoGLwCStencilSize "StencilSize"
+#define SoGLwNaccumRedSize "accumRedSize"
+#define SoGLwNaccumGreenSize "accumGreenSize"
+#define SoGLwNaccumBlueSize "accumBlueSize"
+#define SoGLwCAccumColorSize "AccumColorSize"
+#define SoGLwNaccumAlphaSize "accumAlphaSize"
+#define SoGLwCAccumAlphaSize "AccumAlphaSize"
 
-typedef struct _SoGLwMDrawingAreaClassRec	*SoGLwMDrawingAreaWidgetClass;
-typedef struct _SoGLwMDrawingAreaRec	*SoGLwMDrawingAreaWidget;
+typedef struct _SoGLwMDrawingAreaClassRec *SoGLwMDrawingAreaWidgetClass;
+typedef struct _SoGLwMDrawingAreaRec *     SoGLwMDrawingAreaWidget;
 
 extern WidgetClass SoglwMDrawingAreaWidgetClass;
 
 /* Callback reasons */
-#define SoGLwCR_EXPOSE	XmCR_EXPOSE
-#define SoGLwCR_RESIZE	XmCR_RESIZE
-#define SoGLwCR_INPUT	XmCR_INPUT
+#define SoGLwCR_EXPOSE XmCR_EXPOSE
+#define SoGLwCR_RESIZE XmCR_RESIZE
+#define SoGLwCR_INPUT XmCR_INPUT
 
-#define SoGLwCR_GINIT	32136	/* Arbitrary number that should neverr clash*/
+#define SoGLwCR_GINIT 32136 /* Arbitrary number that should neverr clash*/
 
-typedef struct
-{
-    int     reason;
-    XEvent  *event;
-    Dimension width, height;		/* for resize callback */
+typedef struct {
+    int       reason;
+    XEvent *  event;
+    Dimension width, height; /* for resize callback */
 } SoGLwDrawingAreaCallbackStruct;
 
 #if defined(__cplusplus) || defined(c_plusplus)
@@ -154,11 +153,11 @@ extern "C" {
 #endif
 
 #ifdef _NO_PROTO
-extern Widget SoGLwCreateMDrawingArea ();
-#else /* _NO_PROTO */
+extern Widget SoGLwCreateMDrawingArea();
+#else  /* _NO_PROTO */
 
-extern Widget SoGLwCreateMDrawingArea (Widget parent, char *name,
-				     ArgList arglist, Cardinal argcount);
+extern Widget SoGLwCreateMDrawingArea(Widget parent, char *name,
+                                      ArgList arglist, Cardinal argcount);
 #endif /* _NO_PROTO */
 
 #if defined(__cplusplus) || defined(c_plusplus)

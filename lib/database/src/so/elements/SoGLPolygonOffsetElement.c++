@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 #include <Inventor/elements/SoGLPolygonOffsetElement.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 
 SO_ELEMENT_SOURCE(SoGLPolygonOffsetElement);
 

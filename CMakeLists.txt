@@ -30,6 +30,7 @@ if (NOT WIN32 AND NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_definitions(-DINVENTOR_VERSION="${INVENTOR_VERSION}")
+add_definitions(-DGL_SILENCE_DEPRECATION)
 
 add_subdirectory(3rdparty)
 add_subdirectory(tools)

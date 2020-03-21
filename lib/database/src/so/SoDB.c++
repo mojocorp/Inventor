@@ -50,8 +50,10 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
+#include <machine.h>
 
-#include <stdlib.h>
+extern void SoGlInit();
+
 #include <Inventor/SbString.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
@@ -173,6 +175,8 @@ SoDB::init()
     if (globalDB == NULL) {
 
         globalDB = new SoDB;
+
+        SoGlInit();
 
         SbName::init();
 

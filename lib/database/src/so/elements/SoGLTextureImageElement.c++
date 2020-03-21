@@ -53,8 +53,8 @@
 
 #include <vector>
 
+#include <glad/gl.h>
 #include <GL/glu.h>
-#include <Inventor/misc/SoGL.h>
 #include <Inventor/SbImage.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoGLDisplayList.h>

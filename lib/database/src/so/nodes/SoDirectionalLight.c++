@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoGLLightIdElement.h>
 #include <Inventor/nodes/SoDirectionalLight.h>

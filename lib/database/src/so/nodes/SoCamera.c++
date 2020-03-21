@@ -52,7 +52,7 @@
  */
 
 #include <cmath>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>

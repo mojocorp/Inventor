@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/elements/SoGLViewingMatrixElement.h>
 #include <Inventor/elements/SoModelMatrixElement.h>
 

@@ -52,7 +52,7 @@
  */
 #include <Inventor/elements/SoGLEnvironmentElement.h>
 #include <Inventor/elements/SoViewVolumeElement.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/SbVec.h>
 
 SO_ELEMENT_SOURCE(SoGLEnvironmentElement);

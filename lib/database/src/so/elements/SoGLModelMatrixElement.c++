@@ -52,7 +52,7 @@
  */
 
 #include <Inventor/SbRotation.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/elements/SoGLModelMatrixElement.h>
 #include <Inventor/elements/SoGLViewingMatrixElement.h>
 #include <Inventor/errors/SoDebugError.h>

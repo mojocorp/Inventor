@@ -58,7 +58,7 @@
 #include <Inventor/elements/SoTextureQualityElement.h>
 #include <Inventor/nodes/SoTextureCoordinatePlane.h>
 
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 
 SO_NODE_SOURCE(SoTextureCoordinatePlane);
 

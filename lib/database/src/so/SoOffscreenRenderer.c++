@@ -52,7 +52,7 @@
  */
 #include <stdio.h>
 #include <assert.h>
-#include <GL/glx.h>
+#include <glad/glx.h>
 #include <Inventor/SoOffscreenRenderer.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/actions/SoGLRenderAction.h>

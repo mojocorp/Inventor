@@ -68,7 +68,7 @@
 #include <Inventor/nodes/SoSwitch.h>
 #include <Inventor/nodes/SoTranslation.h>
 #include <Inventor/nodes/SoTransform.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 
 #include "geom/SoHandleBoxDraggerGeom.h"
 

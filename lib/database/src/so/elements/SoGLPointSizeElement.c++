@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoGLPointSizeElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>

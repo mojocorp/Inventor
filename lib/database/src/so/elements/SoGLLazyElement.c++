@@ -52,7 +52,7 @@
  */
 
 #include <cmath>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoGLLazyElement.h>
 #include <Inventor/errors/SoDebugError.h>

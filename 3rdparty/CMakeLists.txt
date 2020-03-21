@@ -1,3 +1,4 @@
+add_subdirectory(glad)
 add_subdirectory(glu)
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "disable shared libs" FORCE)

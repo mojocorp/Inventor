@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 
 #include <Inventor/SoPath.h>
 #include <Inventor/SoPickedPoint.h>

@@ -61,7 +61,7 @@
 #include <Inventor/elements/SoViewportRegionElement.h>
 #include <Inventor/elements/SoFontSizeElement.h>
 #include <Inventor/errors/SoDebugError.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H

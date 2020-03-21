@@ -65,7 +65,7 @@
 #include <Inventor/elements/SoNormalBindingElement.h>
 #include <Inventor/nodes/SoTextureCoordinate2.h>
 #include <Inventor/elements/SoGLLazyElement.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <machine.h>
 
 SO_NODE_SOURCE(SoVertexProperty);

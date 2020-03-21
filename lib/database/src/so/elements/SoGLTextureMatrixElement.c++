@@ -53,7 +53,7 @@
 
 #include <cmath>
 #include <Inventor/SbRotation.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/elements/SoGLTextureMatrixElement.h>
 
 SO_ELEMENT_SOURCE(SoGLTextureMatrixElement);

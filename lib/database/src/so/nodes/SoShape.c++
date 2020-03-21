@@ -52,7 +52,7 @@
  */
 
 #include <climits>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <GL/glu.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPickedPoint.h>

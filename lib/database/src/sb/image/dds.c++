@@ -29,7 +29,7 @@
 
 #include <Inventor/SbVec.h>
 #include <Inventor/SbImage.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include "dds.h"
 
 #include <stdio.h>

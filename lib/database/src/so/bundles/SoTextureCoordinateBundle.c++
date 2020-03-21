@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/misc/SoState.h>
 #include <Inventor/bundles/SoTextureCoordinateBundle.h>

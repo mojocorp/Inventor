@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -49,14 +49,17 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-	       
-#include <Inventor/misc/SoGL.h>
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#else
+#include <GL/gl.h>
+#endif
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/elements/SoGLCacheContextElement.h>
 #include <Inventor/misc/SoChildList.h>
 
 #include "Decal.h"
-
 
 SO_NODE_SOURCE(Decal);
 
@@ -65,7 +68,6 @@ SO_NODE_SOURCE(Decal);
 //      Decal class: Draws coplanar polygons correctly ordered
 //
 //////////////////////////////////////////////////////////////////////
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -81,7 +83,6 @@ Decal::initClass()
 {
     SO_NODE_INIT_CLASS(Decal, SoSeparator, "Separator");
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -107,8 +108,7 @@ Decal::Decal()
 Decal::~Decal()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 //////////////////////////////////////////////////////////////////
 //
@@ -135,7 +135,8 @@ Decal::GLRenderBelowPath(SoGLRenderAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     SoChildList *childList = getChildren();
-    if (! getNumChildren()) return;
+    if (!getNumChildren())
+        return;
 
     SoState *state = action->getState();
     state->push();
@@ -147,75 +148,74 @@ Decal::GLRenderBelowPath(SoGLRenderAction *action)
     // not an OpenGL extension is available:
     static int offsetExtInt = -1;
     if (offsetExtInt == -1) {
-	offsetExtInt = 
-	    SoGLCacheContextElement::getExtID("GL_EXT_polygon_offset");
+        offsetExtInt =
+            SoGLCacheContextElement::getExtID("GL_EXT_polygon_offset");
     }
     if (SoGLCacheContextElement::extSupported(state, offsetExtInt)) {
 
-	glEnable(GL_POLYGON_OFFSET_FILL);
-	glEnable(GL_POLYGON_OFFSET_LINE);
-	glEnable(GL_POLYGON_OFFSET_POINT);
+        glEnable(GL_POLYGON_OFFSET_FILL);
+        glEnable(GL_POLYGON_OFFSET_LINE);
+        glEnable(GL_POLYGON_OFFSET_POINT);
 
-	float offset = 0;
+        float offset = 0;
 
-	for (int i=0; i < childList->getLength(); i++) {
-	    glPolygonOffset(offset, 0);
+        for (int i = 0; i < childList->getLength(); i++) {
+            glPolygonOffset(offset, 0);
 
-        childList->traverse(action, i);
+            childList->traverse(action, i);
 
-	    offset -= 0.1;
-	}
+            offset -= 0.1;
+        }
 
-	glDisable(GL_POLYGON_OFFSET_FILL);
-	glDisable(GL_POLYGON_OFFSET_LINE);
-	glDisable(GL_POLYGON_OFFSET_POINT);
+        glDisable(GL_POLYGON_OFFSET_FILL);
+        glDisable(GL_POLYGON_OFFSET_LINE);
+        glDisable(GL_POLYGON_OFFSET_POINT);
 
     } else {
 
 #endif
-	// Extension not supported at compile time or at run-time:
+        // Extension not supported at compile time or at run-time:
 
-	// first pass
-	// turn off depth update, leaving color update on
-	GLboolean oldDepthMask;
-	glGetBooleanv(GL_DEPTH_WRITEMASK, &oldDepthMask);
-	if (oldDepthMask) 
-	    glDepthMask(GL_FALSE);
-	// render base followed by layers in order
-	childList->traverse(action);
-	if (oldDepthMask)
-	    glDepthMask(oldDepthMask);
+        // first pass
+        // turn off depth update, leaving color update on
+        GLboolean oldDepthMask;
+        glGetBooleanv(GL_DEPTH_WRITEMASK, &oldDepthMask);
+        if (oldDepthMask)
+            glDepthMask(GL_FALSE);
+        // render base followed by layers in order
+        childList->traverse(action);
+        if (oldDepthMask)
+            glDepthMask(oldDepthMask);
 
-	state->pop();  // Pop and push state between passes to avoid
-	state->push(); // problems with non-Separator children
+        state->pop();  // Pop and push state between passes to avoid
+        state->push(); // problems with non-Separator children
 
-	// second pass
-	// turn off color update leaving depth update on
-	GLboolean colorMode;
-	glGetBooleanv(GL_RGBA_MODE, &colorMode);
-	if (colorMode) { 	// RGBA mode
-	    GLboolean oldColorMask[4];
-	    glGetBooleanv(GL_COLOR_WRITEMASK, oldColorMask);
-	    GLboolean anyMask = (oldColorMask[0] || oldColorMask[1] ||
-				 oldColorMask[2] || oldColorMask[3]);
-	    if (anyMask) 
-		glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
-	    // only render base
-	    childList->traverse(action, 0);
-	    if (anyMask)
-		glColorMask(oldColorMask[0], oldColorMask[1],
-			    oldColorMask[2], oldColorMask[3]);
-	}
-	else {	// color index mode
-	    GLint	oldMask;
-	    glGetIntegerv(GL_INDEX_WRITEMASK, &oldMask);
-	    if (oldMask)
-		glIndexMask(0x0);
-	    // only render base
-	    childList->traverse(action, 0);
-	    if (oldMask)
-		glIndexMask(oldMask);
-	}
+        // second pass
+        // turn off color update leaving depth update on
+        GLboolean colorMode;
+        glGetBooleanv(GL_RGBA_MODE, &colorMode);
+        if (colorMode) { // RGBA mode
+            GLboolean oldColorMask[4];
+            glGetBooleanv(GL_COLOR_WRITEMASK, oldColorMask);
+            GLboolean anyMask = (oldColorMask[0] || oldColorMask[1] ||
+                                 oldColorMask[2] || oldColorMask[3]);
+            if (anyMask)
+                glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+            // only render base
+            childList->traverse(action, 0);
+            if (anyMask)
+                glColorMask(oldColorMask[0], oldColorMask[1], oldColorMask[2],
+                            oldColorMask[3]);
+        } else { // color index mode
+            GLint oldMask;
+            glGetIntegerv(GL_INDEX_WRITEMASK, &oldMask);
+            if (oldMask)
+                glIndexMask(0x0);
+            // only render base
+            childList->traverse(action, 0);
+            if (oldMask)
+                glIndexMask(oldMask);
+        }
 #ifdef GL_EXT_polygon_offset
     }
 #endif

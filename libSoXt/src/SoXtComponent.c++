@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -71,8 +71,7 @@
 #include <Xm/MessageB.h>
 #include <Xm/Protocols.h>
 
-#include <Inventor/misc/SoGL.h>
-
+#include <GL/gl.h>
 
 static char *helpDialogTitle = "Help Card Error Dialog";
 static char *helpCardError = "Inventor Help Cards not installed.";
@@ -81,69 +80,68 @@ static char *thisClassName = "SoXtComponent";
 
 // static members
 SbDict *SoXtComponent::widgetDictionary = NULL;
-    
+
 ////////////////////////////////////////////////////////////////////////
 //
 // Constructor
 //
-SoXtComponent::SoXtComponent(
-    Widget parent,
-    const char *name, 
-    SbBool buildInsideParent)
+SoXtComponent::SoXtComponent(Widget parent, const char *name,
+                             SbBool buildInsideParent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
     // make sure Display is valid
     if (SoXt::getDisplay() == NULL) {
-	SoDebugError::post("SoXtComponent::SoXtComponent",
-	"SoXt::getDisplay() returned a NULL Display. Be sure to call SoXt::init() first.");
-	return;
+        SoDebugError::post("SoXtComponent::SoXtComponent",
+                           "SoXt::getDisplay() returned a NULL Display. Be "
+                           "sure to call SoXt::init() first.");
+        return;
     }
 #endif
-    
+
     if (widgetDictionary == NULL)
-    	widgetDictionary = new SbDict;
-    
+        widgetDictionary = new SbDict;
+
     setClassName(thisClassName);
     if (name != NULL)
-	 _name = strdup(name);
-    else _name = NULL;
-    
-    firstRealize    = TRUE; // set to FALSE after we are realized once
-    title   	    = NULL;
-    iconTitle	    = NULL;
+        _name = strdup(name);
+    else
+        _name = NULL;
+
+    firstRealize = TRUE; // set to FALSE after we are realized once
+    title = NULL;
+    iconTitle = NULL;
     size.setValue(0, 0);
-    
+
     // This is set by subclasses through setBaseWidget()
     _baseWidget = NULL;
-    
+
     // create a shell window if necessary
     createdShell = (parent == NULL || !buildInsideParent);
     topLevelShell = (createdShell || (parent != NULL && XtIsShell(parent)));
     if (createdShell) {
-	Widget parentShell = (parent != NULL) ? parent : SoXt::getTopLevelWidget();
-	parentWidget = XtCreatePopupShell(
-		    getWidgetName(),
-		    topLevelShellWidgetClass, 
-		    parentShell,
-		    NULL, 0);
-    }
-    else parentWidget = parent;
-    
+        Widget parentShell =
+            (parent != NULL) ? parent : SoXt::getTopLevelWidget();
+        parentWidget = XtCreatePopupShell(
+            getWidgetName(), topLevelShellWidgetClass, parentShell, NULL, 0);
+    } else
+        parentWidget = parent;
+
     // don't make the close action destroy the widget, instead
     // register a custom close action which will default to
     // hide() the component (as opposed to destroy which is the
     // default shell behavior)
     if (topLevelShell) {
-	XtVaSetValues(parentWidget, XmNdeleteResponse, XmDO_NOTHING, NULL);
-        Atom wmDeleteAtom = XmInternAtom(XtDisplay(parentWidget),
-                "WM_DELETE_WINDOW", False);
-        XmAddWMProtocolCallback(parentWidget, wmDeleteAtom, 
-                (XtCallbackProc) SoXtComponent::windowCloseActionCB,
-		(XtPointer) this);
+        XtVaSetValues(parentWidget, XmNdeleteResponse, XmDO_NOTHING, NULL);
+        Atom wmDeleteAtom =
+            XmInternAtom(XtDisplay(parentWidget), "WM_DELETE_WINDOW", False);
+        XmAddWMProtocolCallback(
+            parentWidget, wmDeleteAtom,
+            (XtCallbackProc)SoXtComponent::windowCloseActionCB,
+            (XtPointer)this);
     }
-    
+
     // visibility stuff (check to see if shell is already mapped)
     widgetMapped = FALSE;
     visibleState = FALSE;
@@ -163,38 +161,44 @@ SoXtComponent::~SoXtComponent()
     // Remove the destroy callback before we destroy the widget.
     // Also, remove stuff we added to the shell or to our parent widget.
     if (_baseWidget != NULL) {
-	XtRemoveCallback(_baseWidget, XmNdestroyCallback,
-	    SoXtComponent::widgetDestroyedCB, (XtPointer) this);
+        XtRemoveCallback(_baseWidget, XmNdestroyCallback,
+                         SoXtComponent::widgetDestroyedCB, (XtPointer)this);
 
-	XtRemoveEventHandler(_baseWidget, StructureNotifyMask, FALSE,
-	    (XtEventHandler) SoXtComponent::widgetStructureNotifyCB,
-	    (XtPointer) this);
-	
-	Widget shellWidget = SoXt::getShellWidget(_baseWidget);
-	if ((shellWidget != NULL) && (shellWidget != _baseWidget))
-	    XtRemoveEventHandler(shellWidget, StructureNotifyMask, FALSE,
-		(XtEventHandler) SoXtComponent::shellStructureNotifyCB,
-		(XtPointer) this);
-	
-	if (topLevelShell && (parentWidget != NULL)) {
-	    Atom wmDeleteAtom = XmInternAtom(XtDisplay(parentWidget),
-		    "WM_DELETE_WINDOW", False);
-	    XmRemoveWMProtocolCallback(parentWidget, wmDeleteAtom, 
-		    (XtCallbackProc) SoXtComponent::windowCloseActionCB,
-		    (XtPointer) this);
-	}
+        XtRemoveEventHandler(
+            _baseWidget, StructureNotifyMask, FALSE,
+            (XtEventHandler)SoXtComponent::widgetStructureNotifyCB,
+            (XtPointer)this);
+
+        Widget shellWidget = SoXt::getShellWidget(_baseWidget);
+        if ((shellWidget != NULL) && (shellWidget != _baseWidget))
+            XtRemoveEventHandler(
+                shellWidget, StructureNotifyMask, FALSE,
+                (XtEventHandler)SoXtComponent::shellStructureNotifyCB,
+                (XtPointer)this);
+
+        if (topLevelShell && (parentWidget != NULL)) {
+            Atom wmDeleteAtom = XmInternAtom(XtDisplay(parentWidget),
+                                             "WM_DELETE_WINDOW", False);
+            XmRemoveWMProtocolCallback(
+                parentWidget, wmDeleteAtom,
+                (XtCallbackProc)SoXtComponent::windowCloseActionCB,
+                (XtPointer)this);
+        }
     }
-    
+
     // Destroy the topmost widget.
     if (getShellWidget() != NULL && createdShell)
-	XtDestroyWidget(parentWidget);
+        XtDestroyWidget(parentWidget);
     else if (_baseWidget != NULL)
-	XtDestroyWidget(_baseWidget);
-    
-    if (_name != NULL)	    free(_name);
-    if (title != NULL)	    free(title);
-    if (iconTitle != NULL)  free(iconTitle);
-    
+        XtDestroyWidget(_baseWidget);
+
+    if (_name != NULL)
+        free(_name);
+    if (title != NULL)
+        free(title);
+    if (iconTitle != NULL)
+        free(iconTitle);
+
     delete visibiltyCBList;
 }
 
@@ -208,7 +212,7 @@ SoXtComponent::isVisible()
 ////////////////////////////////////////////////////////////////////////
 {
     checkForVisibilityChange();
-    
+
     return visibleState;
 }
 
@@ -223,15 +227,15 @@ SoXtComponent::checkForVisibilityChange()
 ////////////////////////////////////////////////////////////////////////
 {
     SbBool prevState = visibleState;
-    
+
     // make sure to check if the window exists (since we DON'T receive
     // unmaps events when calling XtUnrealizeWidget(shell) - see
     // the hide() method for comments.
-    visibleState = (ShellMapped && widgetMapped && _baseWidget 
-	&& XtWindow(_baseWidget));
-    
+    visibleState =
+        (ShellMapped && widgetMapped && _baseWidget && XtWindow(_baseWidget));
+
     if (visibleState != prevState && visibiltyCBList)
-	    visibiltyCBList->invokeCallbacks((void *)(unsigned long)visibleState);    
+        visibiltyCBList->invokeCallbacks((void *)(unsigned long)visibleState);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -239,15 +243,15 @@ SoXtComponent::checkForVisibilityChange()
 // adds a callback to be called when visibility of this comp changes
 //
 void
-SoXtComponent::addVisibilityChangeCallback(
-    SoXtComponentVisibilityCB *f, void *userData)
+SoXtComponent::addVisibilityChangeCallback(SoXtComponentVisibilityCB *f,
+                                           void *                     userData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (visibiltyCBList == NULL)
-	visibiltyCBList = new SoCallbackList;
-    
-    visibiltyCBList->addCallback((SoCallbackListCB *) f, userData);
+        visibiltyCBList = new SoCallbackList;
+
+    visibiltyCBList->addCallback((SoCallbackListCB *)f, userData);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -255,15 +259,15 @@ SoXtComponent::addVisibilityChangeCallback(
 // removes a callback to be called when visibility of this comp changes
 //
 void
-SoXtComponent::removeVisibilityChangeCallback(
-    SoXtComponentVisibilityCB *f, void *userData)
+SoXtComponent::removeVisibilityChangeCallback(SoXtComponentVisibilityCB *f,
+                                              void *userData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (visibiltyCBList == NULL)
-	return;
-    
-    visibiltyCBList->removeCallback((SoCallbackListCB *) f, userData);
+        return;
+
+    visibiltyCBList->removeCallback((SoCallbackListCB *)f, userData);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -274,24 +278,24 @@ void
 SoXtComponent::setBaseWidget(Widget w)
 //
 ////////////////////////////////////////////////////////////////////////
-{ 
+{
     _baseWidget = w;
-    
+
     // Set callback so we know when the widget is destroyed
-    XtAddCallback (_baseWidget, XmNdestroyCallback,
-		   SoXtComponent::widgetDestroyedCB, (XtPointer) this );
-    
+    XtAddCallback(_baseWidget, XmNdestroyCallback,
+                  SoXtComponent::widgetDestroyedCB, (XtPointer)this);
+
     // now add event handlers to receive map/unmap events
     // for visibility test.
     XtAddEventHandler(_baseWidget, StructureNotifyMask, FALSE,
-	(XtEventHandler) SoXtComponent::widgetStructureNotifyCB,
-	(XtPointer) this);
-    
+                      (XtEventHandler)SoXtComponent::widgetStructureNotifyCB,
+                      (XtPointer)this);
+
     Widget shellWidget = SoXt::getShellWidget(_baseWidget);
     if ((shellWidget != NULL) && (shellWidget != _baseWidget))
-	XtAddEventHandler(shellWidget, StructureNotifyMask, FALSE,
-	    (XtEventHandler) SoXtComponent::shellStructureNotifyCB,
-	    (XtPointer) this);
+        XtAddEventHandler(shellWidget, StructureNotifyMask, FALSE,
+                          (XtEventHandler)SoXtComponent::shellStructureNotifyCB,
+                          (XtPointer)this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -301,16 +305,19 @@ SoXtComponent::setBaseWidget(Widget w)
 ////////////////////////////////////////////////////////////////////////
 
 const char *
-SoXtComponent::getDefaultWidgetName() const
-{ return thisClassName; }  // return name of this class
+SoXtComponent::getDefaultWidgetName() const {
+    return thisClassName;
+} // return name of this class
 
 const char *
-SoXtComponent::getDefaultTitle() const
-{ return "Xt Component"; }
+SoXtComponent::getDefaultTitle() const {
+    return "Xt Component";
+}
 
 const char *
-SoXtComponent::getDefaultIconTitle() const
-{ return "Xt Comp"; }
+SoXtComponent::getDefaultIconTitle() const {
+    return "Xt Comp";
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -324,14 +331,14 @@ SoXtComponent::afterRealizeHook()
 ////////////////////////////////////////////////////////////////////////
 {
     if (topLevelShell) {
-	
-	// set the title of the window if widget is directly under a shell
-	if (title == NULL)
-	    title = strdup(getDefaultTitle());
-	if (iconTitle == NULL)
-	    iconTitle = strdup(getDefaultIconTitle());
-	XtVaSetValues(parentWidget,
-	    XtNtitle, title, XmNiconName, iconTitle, NULL);
+
+        // set the title of the window if widget is directly under a shell
+        if (title == NULL)
+            title = strdup(getDefaultTitle());
+        if (iconTitle == NULL)
+            iconTitle = strdup(getDefaultIconTitle());
+        XtVaSetValues(parentWidget, XtNtitle, title, XmNiconName, iconTitle,
+                      NULL);
     }
 }
 
@@ -346,10 +353,10 @@ SoXtComponent::setSize(const SbVec2s &newSize)
 ////////////////////////////////////////////////////////////////////////
 {
     if (getShellWidget() != NULL)
-	SoXt::setWidgetSize(parentWidget, newSize);
+        SoXt::setWidgetSize(parentWidget, newSize);
     else if (_baseWidget != NULL)
-	SoXt::setWidgetSize(_baseWidget, newSize);
-    
+        SoXt::setWidgetSize(_baseWidget, newSize);
+
     // cache value for later builds
     size = newSize;
 }
@@ -367,10 +374,10 @@ SoXtComponent::getSize()
     // The real values are stored in the widget, so get and cache the
     // widget size.
     if (getShellWidget() != NULL)
-	size = SoXt::getWidgetSize(parentWidget);
+        size = SoXt::getWidgetSize(parentWidget);
     else if (_baseWidget != NULL)
-	size = SoXt::getWidgetSize(_baseWidget);
-    
+        size = SoXt::getWidgetSize(_baseWidget);
+
     return size;
 }
 
@@ -383,11 +390,13 @@ SoXtComponent::setTitle(const char *newTitle)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (title != NULL) free(title);
+    if (title != NULL)
+        free(title);
     title = (newTitle != NULL) ? strdup(newTitle) : NULL;
-    
-    if (title != NULL && _baseWidget != NULL && XtIsShell(XtParent(_baseWidget)))
-	XtVaSetValues(XtParent(_baseWidget), XtNtitle, title, NULL);
+
+    if (title != NULL && _baseWidget != NULL &&
+        XtIsShell(XtParent(_baseWidget)))
+        XtVaSetValues(XtParent(_baseWidget), XtNtitle, title, NULL);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -399,11 +408,13 @@ SoXtComponent::setIconTitle(const char *newTitle)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (iconTitle != NULL) free(iconTitle);
+    if (iconTitle != NULL)
+        free(iconTitle);
     iconTitle = (newTitle != NULL) ? strdup(newTitle) : NULL;
-    
-    if (iconTitle != NULL && _baseWidget != NULL && XtIsShell(XtParent(_baseWidget)))
-	XtVaSetValues(XtParent(_baseWidget), XmNiconName, iconTitle, NULL);
+
+    if (iconTitle != NULL && _baseWidget != NULL &&
+        XtIsShell(XtParent(_baseWidget)))
+        XtVaSetValues(XtParent(_baseWidget), XmNiconName, iconTitle, NULL);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -417,10 +428,10 @@ SoXtComponent::show()
 {
     // Display that widget!
     SoXt::show(_baseWidget);
-    
+
     // Show the shell if we created it.
     if (topLevelShell && createdShell)
-	 SoXt::show(parentWidget);
+        SoXt::show(parentWidget);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -442,24 +453,25 @@ SoXtComponent::hide()
     if (! isVisible())
 	return;
 #endif
-    
+
     if (topLevelShell) {
-	// save the window position to enable the component to
-	// come back at the same place next time around.
-	if (XtWindow(parentWidget)) {
-	    short px, py;
-	    XtVaGetValues(parentWidget, XmNx, &px, XmNy, &py, NULL);
-	    XSizeHints hints;
-	    hints.flags = USPosition;
-	    hints.x = px;
-	    hints.y = py;
-	    XSetNormalHints(XtDisplay(parentWidget), XtWindow(parentWidget), &hints);
-	}
-	
-	SoXt::hide(parentWidget); // this calls XUnmapWindow() (generate unmap)
-    }
-    else
-	SoXt::hide(getWidget()); // this calls XtUnmanageChild() (generate unmap)
+        // save the window position to enable the component to
+        // come back at the same place next time around.
+        if (XtWindow(parentWidget)) {
+            short px, py;
+            XtVaGetValues(parentWidget, XmNx, &px, XmNy, &py, NULL);
+            XSizeHints hints;
+            hints.flags = USPosition;
+            hints.x = px;
+            hints.y = py;
+            XSetNormalHints(XtDisplay(parentWidget), XtWindow(parentWidget),
+                            &hints);
+        }
+
+        SoXt::hide(parentWidget); // this calls XUnmapWindow() (generate unmap)
+    } else
+        SoXt::hide(
+            getWidget()); // this calls XtUnmanageChild() (generate unmap)
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -476,9 +488,9 @@ SoXtComponent::windowCloseAction()
 ////////////////////////////////////////////////////////////////////////
 {
     if (parentWidget == SoXt::getTopLevelWidget())
-	exit(0);
+        exit(0);
     else
-	hide();
+        hide();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -493,16 +505,15 @@ SoXtComponent::getComponent(Widget w)
 ////////////////////////////////////////////////////////////////////////
 {
     if (w == NULL)
-    	return NULL;
+        return NULL;
 
     // find the component in the dictionary of widgets
     // key is 'widget', data is 'component'.
     void *data = NULL;
-    SoXtComponent::widgetDictionary->find((unsigned long) w, data);
-    
-    return (SoXtComponent *) data;
-}
+    SoXtComponent::widgetDictionary->find((unsigned long)w, data);
 
+    return (SoXtComponent *)data;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -519,22 +530,23 @@ SoXtComponent::registerWidget(Widget w)
 {
     // make sure this widget isn't already registered
     void *data = NULL;
-    if (SoXtComponent::widgetDictionary->find((unsigned long) w, data)) {
+    if (SoXtComponent::widgetDictionary->find((unsigned long)w, data)) {
 #ifdef DEBUG
-    	// the widget IS registered.
-	// if it's not for this component, complain.
-	// otherwise remove it from the registry, and enter it again
-	// (probably a subclass registering after its parent class did).
-    	SoXtComponent *comp = (SoXtComponent *) data;
-	if (comp != this) {
-	    SoDebugError::post("SoXtComponent::registerWidget",
-		"widget registered for 2 different components! old class: %s, new class: %s", comp->getClassName(), getClassName());
-	}
+        // the widget IS registered.
+        // if it's not for this component, complain.
+        // otherwise remove it from the registry, and enter it again
+        // (probably a subclass registering after its parent class did).
+        SoXtComponent *comp = (SoXtComponent *)data;
+        if (comp != this) {
+            SoDebugError::post("SoXtComponent::registerWidget",
+                               "widget registered for 2 different components! "
+                               "old class: %s, new class: %s",
+                               comp->getClassName(), getClassName());
+        }
 #endif
-    }
-    else {
-	// Register the widget with this component
-	SoXtComponent::widgetDictionary->enter((unsigned long) w, this);
+    } else {
+        // Register the widget with this component
+        SoXtComponent::widgetDictionary->enter((unsigned long)w, this);
     }
 }
 
@@ -551,7 +563,7 @@ SoXtComponent::unregisterWidget(Widget w)
 ////////////////////////////////////////////////////////////////////////
 {
     if (widgetDictionary != NULL)
-	widgetDictionary->remove((unsigned long) w);
+        widgetDictionary->remove((unsigned long)w);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -574,7 +586,7 @@ SoXtComponent::openHelpCard(const char *cardName)
     char pgrCmd[100];
     char cardPath[100];
     strcpy(pgrCmd, "acroread ");
-    
+
 #if 0
     // ??? make showcase come up single buffered on the Indigo. This should
     // ??? be the default behavior for showcase in view only mode. (bug 107547)
@@ -593,51 +605,54 @@ SoXtComponent::openHelpCard(const char *cardName)
     char command[100];
     sprintf(command, "which acroread > /dev/null");
     if (system(command) != 0) {
-	SoXt::createSimpleErrorDialog(_baseWidget, helpDialogTitle, helpPrgError);
-	return;
+        SoXt::createSimpleErrorDialog(_baseWidget, helpDialogTitle,
+                                      helpPrgError);
+        return;
     }
-    
+
     // check if the file is located in current directory
-    if ( access(cardName, R_OK) == 0 ) {
-	strcat(pgrCmd, cardName);
-	strcat(pgrCmd, " &");
-	if (system(pgrCmd) != 0)
-	    SoXt::createSimpleErrorDialog(_baseWidget, helpDialogTitle, helpPrgError);
-	return;
+    if (access(cardName, R_OK) == 0) {
+        strcat(pgrCmd, cardName);
+        strcat(pgrCmd, " &");
+        if (system(pgrCmd) != 0)
+            SoXt::createSimpleErrorDialog(_baseWidget, helpDialogTitle,
+                                          helpPrgError);
+        return;
     }
-    
-    // else check for the env variable 
+
+    // else check for the env variable
     char *envPath = getenv("SO_HELP_DIR");
     if (envPath != NULL) {
-	strcpy(cardPath, envPath);
-	strcat(cardPath, "/");
-	strcat(cardPath, cardName);
-	if ( access(cardPath, R_OK) == 0 ) {
-	    strcat(pgrCmd, cardPath);
-	    strcat(pgrCmd, " &");
-	    if (system(pgrCmd) != 0)
-		SoXt::createSimpleErrorDialog(_baseWidget, helpDialogTitle, helpPrgError);
-	    return;
-	}
+        strcpy(cardPath, envPath);
+        strcat(cardPath, "/");
+        strcat(cardPath, cardName);
+        if (access(cardPath, R_OK) == 0) {
+            strcat(pgrCmd, cardPath);
+            strcat(pgrCmd, " &");
+            if (system(pgrCmd) != 0)
+                SoXt::createSimpleErrorDialog(_baseWidget, helpDialogTitle,
+                                              helpPrgError);
+            return;
+        }
     }
-    
+
     // else check for the default location
     strcpy(cardPath, IVPREFIX "/share/help/Inventor/");
     strcat(cardPath, cardName);
-    if ( access(cardPath, R_OK) == 0 ) {
-	strcat(pgrCmd, cardPath);
-	strcat(pgrCmd, " &");
-	if (system(pgrCmd) != 0)
-	    SoXt::createSimpleErrorDialog(_baseWidget, helpDialogTitle, helpPrgError);
-	return;
+    if (access(cardPath, R_OK) == 0) {
+        strcat(pgrCmd, cardPath);
+        strcat(pgrCmd, " &");
+        if (system(pgrCmd) != 0)
+            SoXt::createSimpleErrorDialog(_baseWidget, helpDialogTitle,
+                                          helpPrgError);
+        return;
     }
-    
+
     //
     // else bring an error message using a motif dialog box
     //
     SoXt::createSimpleErrorDialog(_baseWidget, helpDialogTitle, helpCardError);
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -651,9 +666,10 @@ SoXtComponent::widgetDestroyed()
 ////////////////////////////////////////////////////////////////////////
 {
 #ifdef DEBUG
-    SoDebugError::post("SoXtComponent::widgetDestroyed",
-	"widget was destroyed, but there is no way to build it again.", 
-	"Instead, the component should be deleted.");
+    SoDebugError::post(
+        "SoXtComponent::widgetDestroyed",
+        "widget was destroyed, but there is no way to build it again.",
+        "Instead, the component should be deleted.");
 #endif
     _baseWidget = NULL;
 }
@@ -666,12 +682,8 @@ SoXtComponent::widgetDestroyed()
 
 // Called if _baseWidget gets destroyed.
 void
-SoXtComponent::widgetDestroyedCB(
-    Widget, 
-    XtPointer clientData, 
-    XtPointer)
-{
-    SoXtComponent *c = (SoXtComponent *) clientData;
+SoXtComponent::widgetDestroyedCB(Widget, XtPointer clientData, XtPointer) {
+    SoXtComponent *c = (SoXtComponent *)clientData;
     c->widgetDestroyed();
 }
 
@@ -680,12 +692,11 @@ SoXtComponent::widgetDestroyedCB(
 // (close action from menu)
 //
 void
-SoXtComponent::windowCloseActionCB(Widget, SoXtComponent *p, void *)
-{
+SoXtComponent::windowCloseActionCB(Widget, SoXtComponent *p, void *) {
     if (p->windowCloseFunc != NULL)
-	(*p->windowCloseFunc) (p->windowCloseData, p);
+        (*p->windowCloseFunc)(p->windowCloseData, p);
     else
-	p->windowCloseAction();
+        p->windowCloseAction();
 }
 
 //
@@ -693,21 +704,20 @@ SoXtComponent::windowCloseActionCB(Widget, SoXtComponent *p, void *)
 // stuctureNotify type of events which we don't care about)
 //
 void
-SoXtComponent::widgetStructureNotifyCB(Widget, SoXtComponent *p, XEvent *xe, Boolean *)
-{
+SoXtComponent::widgetStructureNotifyCB(Widget, SoXtComponent *p, XEvent *xe,
+                                       Boolean *) {
     if (xe->type == MapNotify) {
-	// Call the after-realize hook the first time we are realized
-	if (p->firstRealize) {
-	    p->afterRealizeHook();
-	    p->firstRealize = FALSE;
-	}
-	
-	p->widgetMapped = TRUE;
-	p->checkForVisibilityChange();
-    }
-    else if (xe->type == UnmapNotify) {
-	p->widgetMapped = FALSE;
-	p->checkForVisibilityChange();
+        // Call the after-realize hook the first time we are realized
+        if (p->firstRealize) {
+            p->afterRealizeHook();
+            p->firstRealize = FALSE;
+        }
+
+        p->widgetMapped = TRUE;
+        p->checkForVisibilityChange();
+    } else if (xe->type == UnmapNotify) {
+        p->widgetMapped = FALSE;
+        p->checkForVisibilityChange();
     }
 }
 
@@ -716,14 +726,13 @@ SoXtComponent::widgetStructureNotifyCB(Widget, SoXtComponent *p, XEvent *xe, Boo
 // stuctureNotify type of events which we don't care about)
 //
 void
-SoXtComponent::shellStructureNotifyCB(Widget, SoXtComponent *p, XEvent *xe, Boolean *)
-{
+SoXtComponent::shellStructureNotifyCB(Widget, SoXtComponent *p, XEvent *xe,
+                                      Boolean *) {
     if (xe->type == MapNotify) {
-	p->ShellMapped = TRUE;
-	p->checkForVisibilityChange();
-    }
-    else if (xe->type == UnmapNotify) {
-	p->ShellMapped = FALSE;
-	p->checkForVisibilityChange();
+        p->ShellMapped = TRUE;
+        p->checkForVisibilityChange();
+    } else if (xe->type == UnmapNotify) {
+        p->ShellMapped = FALSE;
+        p->checkForVisibilityChange();
     }
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -50,13 +50,13 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
- 
+
 #include <Inventor/SbPList.h>
 #include <Inventor/SoOffscreenRenderer.h>
 #include <Inventor/SoOutput.h>
 #include <Inventor/SoPath.h>
-#include <Inventor/Xt/SoXt.h>	
-#include <Inventor/Xt/SoXtPrintDialog.h>	
+#include <Inventor/Xt/SoXt.h>
+#include <Inventor/Xt/SoXtPrintDialog.h>
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -86,95 +86,89 @@
 #include <Xm/SeparatoG.h>
 #include <Xm/Text.h>
 #include <Xm/ToggleB.h>
-#include <Inventor/misc/SoGL.h>
-
+#include <GL/gl.h>
 
 // Definitions for PostScript Output
-#define INITIALXRES      288
-#define INITIALYRES      378
-#define FULLPAGEXSIZE	(8.5)
-#define FULLPAGEYSIZE	(11.0)
-#define PNTS		(72.27)
-#define PAGEXSIZE	(8.0)
-#define PAGEYSIZE	(10.5)
-#define PAGEMARGIN	(0.25)
-#define SO_PRINTER_STRLEN   32
-#define INCHES_PER_MM       3.937008e-02
-#define POINTS_PER_INCH     72.27
+#define INITIALXRES 288
+#define INITIALYRES 378
+#define FULLPAGEXSIZE (8.5)
+#define FULLPAGEYSIZE (11.0)
+#define PNTS (72.27)
+#define PAGEXSIZE (8.0)
+#define PAGEYSIZE (10.5)
+#define PAGEMARGIN (0.25)
+#define SO_PRINTER_STRLEN 32
+#define INCHES_PER_MM 3.937008e-02
+#define POINTS_PER_INCH 72.27
 
-
-#define PRINTER_MENU_HEIGHT         330
-#define RGB_FILE_MENU_HEIGHT        220
+#define PRINTER_MENU_HEIGHT 330
+#define RGB_FILE_MENU_HEIGHT 220
 #define POSTSCRIPT_FILE_MENU_HEIGHT 275
 
-#define PRINTER_NAME(INDEX) ((char *) ((*printers)[INDEX]))
+#define PRINTER_NAME(INDEX) ((char *)((*printers)[INDEX]))
 #if 0
-#define ADD_STYLE_BUTTON(KONST) \
-    sButtons[KONST] = XmCreatePushButtonGadget (stylePopup, \
-                    styleLabels[KONST], wargs, 1); \
-    XtAddCallback (sButtons[KONST], XmNactivateCallback, \
-                   (XtCallbackProc) SoXtPrintDialog::stylePopupCB, \
-                   (XtPointer)(KONST));
+#define ADD_STYLE_BUTTON(KONST)                                                \
+    sButtons[KONST] =                                                          \
+        XmCreatePushButtonGadget(stylePopup, styleLabels[KONST], wargs, 1);    \
+    XtAddCallback(sButtons[KONST], XmNactivateCallback,                        \
+                  (XtCallbackProc)SoXtPrintDialog::stylePopupCB,               \
+                  (XtPointer)(KONST));
 #endif
-
 
 // Resources for labels. +++
 typedef struct {
-	char *pageOutput;
-	char *toPrinter;
-	char *toFile;
-	char *fileFormat;
-	char *postScript;
-	char *rgb;
-	char *resolution;
-	char *fileName;
-	char *printQuality;
-	char *high;
-	char *draft;
-	char *pageFormat;   
-	char *portrait;	
-	char *landscape;
-	char *printSize;
-	char *printer;
-	char *dpi;
-	char *message;
-	char *quitB;
-	char *printB;
-	char *holzn1;
-	char *holzn2;
-	char *vertc1;
-	char *by;
+    char *pageOutput;
+    char *toPrinter;
+    char *toFile;
+    char *fileFormat;
+    char *postScript;
+    char *rgb;
+    char *resolution;
+    char *fileName;
+    char *printQuality;
+    char *high;
+    char *draft;
+    char *pageFormat;
+    char *portrait;
+    char *landscape;
+    char *printSize;
+    char *printer;
+    char *dpi;
+    char *message;
+    char *quitB;
+    char *printB;
+    char *holzn1;
+    char *holzn2;
+    char *vertc1;
+    char *by;
 } RES_LABELS;
 static RES_LABELS rl;
-static char *defaults[]={ 
-	"Page Output:",
-	"To Printer",
-	"To File",
-	"File Format:",
-	"PostScript",
-	"RGB",
-	"Resolution:",
-	"File Name:",
-	"Print Quality:",
-	"High",
-	"Draft",
-        "Page Format:",
-	"Portrait",
-	"Landscape",
-	"Print Size (inches):",
-	"Printer:",
-	"DPI:",
-	"Message:",
-	"Quit",
-	"Print",
-	"7",
-	"5",
-	"7",
-	"by"
-};
+static char *     defaults[] = {"Page Output:",
+                           "To Printer",
+                           "To File",
+                           "File Format:",
+                           "PostScript",
+                           "RGB",
+                           "Resolution:",
+                           "File Name:",
+                           "Print Quality:",
+                           "High",
+                           "Draft",
+                           "Page Format:",
+                           "Portrait",
+                           "Landscape",
+                           "Print Size (inches):",
+                           "Printer:",
+                           "DPI:",
+                           "Message:",
+                           "Quit",
+                           "Print",
+                           "7",
+                           "5",
+                           "7",
+                           "by"};
 
-
-// ??? COMPAT 2.0 
+// ??? COMPAT 2.0
 //
 // This addition is being made to enable the programmer to pass in an
 // SoGLRenderAction to be used when rendering.  To insure binary
@@ -185,10 +179,12 @@ static char *defaults[]={
 
 class _SoPrintDialogItem {
   public:
-    _SoPrintDialogItem(SoGLRenderAction *glAct, SoXtPrintDialog *p)
-        { act = glAct; printDialog = p;}
-    SoGLRenderAction *act;       // The render action used with this instance
-    SoXtPrintDialog *printDialog;// The instance of the print dialog
+    _SoPrintDialogItem(SoGLRenderAction *glAct, SoXtPrintDialog *p) {
+        act = glAct;
+        printDialog = p;
+    }
+    SoGLRenderAction *act;         // The render action used with this instance
+    SoXtPrintDialog * printDialog; // The instance of the print dialog
 };
 
 // The list of print dialogs and their render actions
@@ -203,7 +199,8 @@ static SbPList *printDialogList = NULL;
 //
 // Use: internal
 
-static _SoPrintDialogItem *_SoFindPrintDialog(const SoXtPrintDialog *dialog)
+static _SoPrintDialogItem *
+_SoFindPrintDialog(const SoXtPrintDialog *dialog)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -212,7 +209,7 @@ static _SoPrintDialogItem *_SoFindPrintDialog(const SoXtPrintDialog *dialog)
     if (printDialogList == NULL)
         return NULL;
 
-    for (int i=0; i<printDialogList->getLength(); i++) {
+    for (int i = 0; i < printDialogList->getLength(); i++) {
 
         _SoPrintDialogItem *item = (_SoPrintDialogItem *)(*printDialogList)[i];
         if (item->printDialog == dialog)
@@ -227,14 +224,9 @@ static _SoPrintDialogItem *_SoFindPrintDialog(const SoXtPrintDialog *dialog)
 //
 // Public constructor - build the widget right now
 //
-SoXtPrintDialog::SoXtPrintDialog(
-    Widget parent,
-    const char *name, 
-    SbBool buildInsideParent)
-	: SoXtComponent(
-	    parent,
-	    name, 
-	    buildInsideParent)
+SoXtPrintDialog::SoXtPrintDialog(Widget parent, const char *name,
+                                 SbBool buildInsideParent)
+    : SoXtComponent(parent, name, buildInsideParent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -246,19 +238,13 @@ SoXtPrintDialog::SoXtPrintDialog(
 //
 // SoEXTENDER constructor - the subclass tells us whether to build or not
 //
-SoXtPrintDialog::SoXtPrintDialog(
-    Widget parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SbBool buildNow)
-	: SoXtComponent(
-	    parent,
-	    name, 
-	    buildInsideParent)
+SoXtPrintDialog::SoXtPrintDialog(Widget parent, const char *name,
+                                 SbBool buildInsideParent, SbBool buildNow)
+    : SoXtComponent(parent, name, buildInsideParent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // In this case, print dialog may be what the app wants, 
+    // In this case, print dialog may be what the app wants,
     // or it may want a subclass of print dialog. Pass along buildNow
     // as it was passed to us.
     constructorCommon(buildNow);
@@ -275,36 +261,37 @@ SoXtPrintDialog::constructorCommon(SbBool buildNow)
 //
 //////////////////////////////////////////////////////////////////////
 {
-    printDone      = TRUE;
-    highQuality    = TRUE;
+    printDone = TRUE;
+    highQuality = TRUE;
     portraitFormat = TRUE;
-    printerOutput  = TRUE;
-    postScriptOutput    = TRUE;
+    printerOutput = TRUE;
+    postScriptOutput = TRUE;
     nodeMostRecent = TRUE;
-    rootNode       = NULL;
-    rootPath       = NULL;
+    rootNode = NULL;
+    rootPath = NULL;
     defaultPrinter = NULL;
-    printerHorizSize    = NULL;
-    printerVertSize     = NULL;
+    printerHorizSize = NULL;
+    printerVertSize = NULL;
     postScriptHorizSize = NULL;
-    postScriptVertSize  = NULL;
-    rgbHorizSize   = NULL;
-    rgbVertSize    = NULL;
+    postScriptVertSize = NULL;
+    rgbHorizSize = NULL;
+    rgbVertSize = NULL;
     alreadyUpdated = FALSE;
-    printers       = new SbPList;
+    printers = new SbPList;
     printRes.setValue(INITIALXRES, INITIALYRES);
-    printSize.setValue(printRes[0]/SoOffscreenRenderer::getScreenPixelsPerInch(),
-                       printRes[1]/SoOffscreenRenderer::getScreenPixelsPerInch());
+    printSize.setValue(
+        printRes[0] / SoOffscreenRenderer::getScreenPixelsPerInch(),
+        printRes[1] / SoOffscreenRenderer::getScreenPixelsPerInch());
 
     //
     // Create the list of available printers.
     //
     getPrinterList();
-    
+
     // Build the widget tree, and let SoXtComponent know about our base widget.
     if (buildNow) {
-	Widget w = buildWidget(getParentWidget());
-	setBaseWidget(w);
+        Widget w = buildWidget(getParentWidget());
+        setBaseWidget(w);
     }
 }
 
@@ -333,13 +320,15 @@ SoXtPrintDialog::~SoXtPrintDialog()
     }
 
     for (int i = 0; i < printers->getLength(); i++) {
-	if (PRINTER_NAME(i) != NULL) free(PRINTER_NAME(i));
+        if (PRINTER_NAME(i) != NULL)
+            free(PRINTER_NAME(i));
     }
     delete printers;
-    if (defaultPrinter != NULL) free(defaultPrinter);
-    
+    if (defaultPrinter != NULL)
+        free(defaultPrinter);
+
     if (rootNode != NULL)
-    	rootNode->unref();
+        rootNode->unref();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -352,7 +341,6 @@ SoXtPrintDialog::~SoXtPrintDialog()
 SoGLRenderAction *
 SoXtPrintDialog::getGLRenderAction()
 
-
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -364,7 +352,7 @@ SoXtPrintDialog::getGLRenderAction()
     //
     _SoPrintDialogItem *printItem = _SoFindPrintDialog(this);
     if (printItem == NULL) {
-        SbViewportRegion tmpRegion(100, 100);
+        SbViewportRegion  tmpRegion(100, 100);
         SoGLRenderAction *tmpAct = new SoGLRenderAction(tmpRegion);
         printItem = new _SoPrintDialogItem(tmpAct, this);
 
@@ -387,9 +375,7 @@ SoXtPrintDialog::getGLRenderAction()
 // Use: public
 
 void
-SoXtPrintDialog::setGLRenderAction(
-    const SoGLRenderAction *act )
-
+SoXtPrintDialog::setGLRenderAction(const SoGLRenderAction *act)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -424,18 +410,18 @@ SoXtPrintDialog::setGLRenderAction(
 // Use: public
 //
 void
-SoXtPrintDialog::setSceneGraph( SoNode *root )
+SoXtPrintDialog::setSceneGraph(SoNode *root)
 //
 //////////////////////////////////////////////////////////////////////
 {
-    if ( root != NULL )
-	root->ref();
+    if (root != NULL)
+        root->ref();
 
     if (rootNode != NULL)
-    	rootNode->unref();
-	
+        rootNode->unref();
+
     rootNode = root;
-    
+
     if (rootNode != NULL)
         nodeMostRecent = TRUE;
 }
@@ -448,18 +434,18 @@ SoXtPrintDialog::setSceneGraph( SoNode *root )
 // Use: public
 //
 void
-SoXtPrintDialog::setSceneGraph( SoPath *root )
+SoXtPrintDialog::setSceneGraph(SoPath *root)
 //
 //////////////////////////////////////////////////////////////////////
 {
-    if ( root != NULL )
-	root->ref();
+    if (root != NULL)
+        root->ref();
 
     if (rootPath != NULL)
-    	rootPath->unref();
-	
+        rootPath->unref();
+
     rootPath = root;
-    
+
     if (rootPath != NULL)
         nodeMostRecent = FALSE;
 }
@@ -472,14 +458,14 @@ SoXtPrintDialog::setSceneGraph( SoPath *root )
 // Use: public
 //
 void
-SoXtPrintDialog::setPrintSize( const SbVec2f &psize )
+SoXtPrintDialog::setPrintSize(const SbVec2f &psize)
 //
 //////////////////////////////////////////////////////////////////////
 {
     printSize = psize;
     printRes.setValue(
-            (short)(printSize[0]*SoOffscreenRenderer::getScreenPixelsPerInch()),
-            (short)(printSize[1]*SoOffscreenRenderer::getScreenPixelsPerInch()));
+        (short)(printSize[0] * SoOffscreenRenderer::getScreenPixelsPerInch()),
+        (short)(printSize[1] * SoOffscreenRenderer::getScreenPixelsPerInch()));
 
     updateTextports();
 }
@@ -492,14 +478,14 @@ SoXtPrintDialog::setPrintSize( const SbVec2f &psize )
 // Use: public
 //
 void
-SoXtPrintDialog::setPrintSize( const SbVec2s &psize )
+SoXtPrintDialog::setPrintSize(const SbVec2s &psize)
 //
 //////////////////////////////////////////////////////////////////////
 {
     printRes = psize;
     printSize.setValue(
-            printRes[0]/SoOffscreenRenderer::getScreenPixelsPerInch(),
-            printRes[1]/SoOffscreenRenderer::getScreenPixelsPerInch());
+        printRes[0] / SoOffscreenRenderer::getScreenPixelsPerInch(),
+        printRes[1] / SoOffscreenRenderer::getScreenPixelsPerInch());
 
     updateTextports();
 }
@@ -528,161 +514,179 @@ SoXtPrintDialog::buildWidget(Widget parent)
     // print buttons, and a message text widget.
     //
     n = 0;
-    Widget widget = XtCreateWidget(getWidgetName(), xmBulletinBoardWidgetClass, 
-                                        parent, NULL, 0);
-    XtSetArg( wargs[n], XmNmarginWidth,  10 ); n++;
-    XtSetValues( widget, wargs, n );
-
+    Widget widget = XtCreateWidget(getWidgetName(), xmBulletinBoardWidgetClass,
+                                   parent, NULL, 0);
+    XtSetArg(wargs[n], XmNmarginWidth, 10);
+    n++;
+    XtSetValues(widget, wargs, n);
 
     // get resources...
-       SoXtResource xr(widget);
-       if (!xr.getResource( "pageOutput", "PageOutput", rl.pageOutput ))
-	   rl.pageOutput = defaults[0];
-       if (!xr.getResource( "toPrinter", "ToPrinter", rl.toPrinter ))
-	   rl.toPrinter = defaults[1];
-       if (!xr.getResource( "toFile", "ToFile", rl.toFile ))
-	   rl.toFile = defaults[2];
-       if (!xr.getResource( "fileFormat", "FileFormat", rl.fileFormat ))
-	   rl.fileFormat = defaults[3];
-       if (!xr.getResource( "postScript", "PostScript", rl.postScript ))
-	   rl.postScript = defaults[4];
-       if (!xr.getResource( "rgb", "RGB", rl.rgb ))
-	   rl.rgb = defaults[5];
-       if (!xr.getResource( "resolution", "Resolution", rl.resolution ))
-	   rl.resolution = defaults[6];
-       if (!xr.getResource( "fileName", "FileName", rl.fileName ))
-	   rl.fileName = defaults[7];
-       if (!xr.getResource( "printQuality", "PrintQuality", rl.printQuality ))
-	   rl.printQuality = defaults[8];
-       if (!xr.getResource( "high", "High", rl.high ))
-	   rl.high = defaults[9];
-       if (!xr.getResource( "draft", "Draft", rl.draft ))
-	   rl.draft = defaults[10];
-       if (!xr.getResource( "pageFormat", "PageFormat", rl.pageFormat ))
-	   rl.pageFormat = defaults[11];
-       if (!xr.getResource( "portrait", "Portrait", rl.portrait ))
-	   rl.portrait = defaults[12];
-       if (!xr.getResource( "landscape", "Landscape", rl.landscape ))
-	   rl.landscape = defaults[13];
-       if (!xr.getResource( "printSize", "PrintSize", rl.printSize ))
-	   rl.printSize = defaults[14];
-       if (!xr.getResource( "printer", "Printer", rl.printer ))
-	   rl.printer = defaults[15];
-       if (!xr.getResource( "dpi", "DPI", rl.dpi ))
-	   rl.dpi = defaults[16];
-       if (!xr.getResource( "message", "Message", rl.message ))
-	   rl.message = defaults[17];
-       if (!xr.getResource( "quitB", "QuitB", rl.quitB ))
-	   rl.quitB = defaults[18];
-       if (!xr.getResource( "printB", "PrintB", rl.printB ))
-	   rl.printB = defaults[19];
-       if (!xr.getResource( "holznColumn1", "HolznColumn1", rl.holzn1 ))
-	   rl.holzn1 = defaults[20];
-       if (!xr.getResource( "holznColumn2", "HolznColumn2", rl.holzn2 ))
-	   rl.holzn2 = defaults[21];
-       if (!xr.getResource( "vertcColumn1", "VertcColumn1", rl.vertc1 ))
-	   rl.vertc1 = defaults[22];
-       if (!xr.getResource( "byLabel", "ByLabel", rl.by ))
-	   rl.by = defaults[23];
-
-
+    SoXtResource xr(widget);
+    if (!xr.getResource("pageOutput", "PageOutput", rl.pageOutput))
+        rl.pageOutput = defaults[0];
+    if (!xr.getResource("toPrinter", "ToPrinter", rl.toPrinter))
+        rl.toPrinter = defaults[1];
+    if (!xr.getResource("toFile", "ToFile", rl.toFile))
+        rl.toFile = defaults[2];
+    if (!xr.getResource("fileFormat", "FileFormat", rl.fileFormat))
+        rl.fileFormat = defaults[3];
+    if (!xr.getResource("postScript", "PostScript", rl.postScript))
+        rl.postScript = defaults[4];
+    if (!xr.getResource("rgb", "RGB", rl.rgb))
+        rl.rgb = defaults[5];
+    if (!xr.getResource("resolution", "Resolution", rl.resolution))
+        rl.resolution = defaults[6];
+    if (!xr.getResource("fileName", "FileName", rl.fileName))
+        rl.fileName = defaults[7];
+    if (!xr.getResource("printQuality", "PrintQuality", rl.printQuality))
+        rl.printQuality = defaults[8];
+    if (!xr.getResource("high", "High", rl.high))
+        rl.high = defaults[9];
+    if (!xr.getResource("draft", "Draft", rl.draft))
+        rl.draft = defaults[10];
+    if (!xr.getResource("pageFormat", "PageFormat", rl.pageFormat))
+        rl.pageFormat = defaults[11];
+    if (!xr.getResource("portrait", "Portrait", rl.portrait))
+        rl.portrait = defaults[12];
+    if (!xr.getResource("landscape", "Landscape", rl.landscape))
+        rl.landscape = defaults[13];
+    if (!xr.getResource("printSize", "PrintSize", rl.printSize))
+        rl.printSize = defaults[14];
+    if (!xr.getResource("printer", "Printer", rl.printer))
+        rl.printer = defaults[15];
+    if (!xr.getResource("dpi", "DPI", rl.dpi))
+        rl.dpi = defaults[16];
+    if (!xr.getResource("message", "Message", rl.message))
+        rl.message = defaults[17];
+    if (!xr.getResource("quitB", "QuitB", rl.quitB))
+        rl.quitB = defaults[18];
+    if (!xr.getResource("printB", "PrintB", rl.printB))
+        rl.printB = defaults[19];
+    if (!xr.getResource("holznColumn1", "HolznColumn1", rl.holzn1))
+        rl.holzn1 = defaults[20];
+    if (!xr.getResource("holznColumn2", "HolznColumn2", rl.holzn2))
+        rl.holzn2 = defaults[21];
+    if (!xr.getResource("vertcColumn1", "VertcColumn1", rl.vertc1))
+        rl.vertc1 = defaults[22];
+    if (!xr.getResource("byLabel", "ByLabel", rl.by))
+        rl.by = defaults[23];
 
     // Build the radio button for the Page Output.
-    buildRadioButton( rl.pageOutput, rl.toPrinter, rl.toFile, 120, 5,
-            widget, (XtCallbackProc) SoXtPrintDialog::outputCB);
+    buildRadioButton(rl.pageOutput, rl.toPrinter, rl.toFile, 120, 5, widget,
+                     (XtCallbackProc)SoXtPrintDialog::outputCB);
 
     //
     // Create the Quit and Print buttons, and the message textport.  These
     // will change position as the menu changes.
     //
     n = 0;
-    printMsg = XmStringCreate ( rl.quitB, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNx,            180 ); n++;
-    XtSetArg( wargs[n], XmNy,            170 ); n++;
-    XtSetArg( wargs[n], XmNwidth,        70 ); n++;
-    XtSetArg( wargs[n], XmNheight,       30 ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 0 ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  printMsg ); n++;
-    quitButton = XtCreateManagedWidget (NULL, xmPushButtonWidgetClass,
-                                        widget, wargs, n);
-    XtAddCallback (quitButton, XmNactivateCallback, 
-        (XtCallbackProc) SoXtPrintDialog::quitCB, (XtPointer)(this));
+    printMsg = XmStringCreate(rl.quitB, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNx, 180);
+    n++;
+    XtSetArg(wargs[n], XmNy, 170);
+    n++;
+    XtSetArg(wargs[n], XmNwidth, 70);
+    n++;
+    XtSetArg(wargs[n], XmNheight, 30);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 0);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, printMsg);
+    n++;
+    quitButton =
+        XtCreateManagedWidget(NULL, xmPushButtonWidgetClass, widget, wargs, n);
+    XtAddCallback(quitButton, XmNactivateCallback,
+                  (XtCallbackProc)SoXtPrintDialog::quitCB, (XtPointer)(this));
     XmStringFree(printMsg);
 
     n = 0;
-    printMsg = XmStringCreate (rl.printB, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNx,            270 ); n++;
-    XtSetArg( wargs[n], XmNy,            170 ); n++;
-    XtSetArg( wargs[n], XmNwidth,        70 ); n++;
-    XtSetArg( wargs[n], XmNheight,       30 ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 0 ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  printMsg ); n++;
-    printButton = XtCreateManagedWidget (NULL, xmPushButtonWidgetClass,
-                                         widget, wargs, n);
-    XtAddCallback (printButton, XmNactivateCallback, 
-        (XtCallbackProc) SoXtPrintDialog::printCB, (XtPointer)(this));
+    printMsg = XmStringCreate(rl.printB, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNx, 270);
+    n++;
+    XtSetArg(wargs[n], XmNy, 170);
+    n++;
+    XtSetArg(wargs[n], XmNwidth, 70);
+    n++;
+    XtSetArg(wargs[n], XmNheight, 30);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 0);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, printMsg);
+    n++;
+    printButton =
+        XtCreateManagedWidget(NULL, xmPushButtonWidgetClass, widget, wargs, n);
+    XtAddCallback(printButton, XmNactivateCallback,
+                  (XtCallbackProc)SoXtPrintDialog::printCB, (XtPointer)(this));
     XmStringFree(printMsg);
 
     n = 0;
-    printMsg = XmStringCreate( rl.message, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNy,            180 ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  printMsg ); n++;
-    messageLabelWidget  = XtCreateManagedWidget (NULL, xmLabelWidgetClass,
-                                        widget, wargs, n);
+    printMsg = XmStringCreate(rl.message, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNy, 180);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, printMsg);
+    n++;
+    messageLabelWidget =
+        XtCreateManagedWidget(NULL, xmLabelWidgetClass, widget, wargs, n);
     n = 0;
-    XtSetArg( wargs[n], XmNy,            210 ); n++;
-    XtSetArg( wargs[n], XmNwidth,        330 ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 0 ); n++;
-    XtSetArg( wargs[n], XmNeditable,     FALSE ); n++;
-    messageWidget = XtCreateManagedWidget (NULL, xmTextWidgetClass,
-                                        widget, wargs, n);
+    XtSetArg(wargs[n], XmNy, 210);
+    n++;
+    XtSetArg(wargs[n], XmNwidth, 330);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 0);
+    n++;
+    XtSetArg(wargs[n], XmNeditable, FALSE);
+    n++;
+    messageWidget =
+        XtCreateManagedWidget(NULL, xmTextWidgetClass, widget, wargs, n);
     XmStringFree(printMsg);
 
     // Create the widget storing the file format radio buttons
     n = 0;
-    fileFormatWidget = XtCreateWidget (NULL, xmBulletinBoardWidgetClass, 
-                                   widget, NULL, 0);
-    XtSetArg( wargs[n], XmNmarginHeight, 0 ); n++;
-    XtSetArg( wargs[n], XmNmarginWidth,  0 ); n++;
-    XtSetArg( wargs[n], XmNx, 0 ); n++;
-    XtSetArg( wargs[n], XmNy, 40 ); n++;
-    XtSetValues( fileFormatWidget, wargs, n );
-    buildRadioButton( rl.fileFormat, rl.postScript, rl.rgb,
-            110, 0, fileFormatWidget,
-            (XtCallbackProc) SoXtPrintDialog::fileFormatCB);
+    fileFormatWidget =
+        XtCreateWidget(NULL, xmBulletinBoardWidgetClass, widget, NULL, 0);
+    XtSetArg(wargs[n], XmNmarginHeight, 0);
+    n++;
+    XtSetArg(wargs[n], XmNmarginWidth, 0);
+    n++;
+    XtSetArg(wargs[n], XmNx, 0);
+    n++;
+    XtSetArg(wargs[n], XmNy, 40);
+    n++;
+    XtSetValues(fileFormatWidget, wargs, n);
+    buildRadioButton(rl.fileFormat, rl.postScript, rl.rgb, 110, 0,
+                     fileFormatWidget,
+                     (XtCallbackProc)SoXtPrintDialog::fileFormatCB);
 
     //
     //  Three subwidgets will contain file specific and printer specific UI.
     //  Each will be managed and unmanaged depending on the printerMenu flag.
     //
-    buildToPrinterWidget( widget );
-    buildToPostScriptFileWidget( widget );
-    buildToRGBFileWidget( widget );
+    buildToPrinterWidget(widget);
+    buildToPostScriptFileWidget(widget);
+    buildToRGBFileWidget(widget);
     setPrintSize(printSize);
     setPrintSize(printRes);
-    XtSetArg( wargs[0], XmNx, 0 );
-    XtSetArg( wargs[1], XmNy, 40 );
-    XtSetValues( toPrinterWidget, wargs, 2 );
-    XtSetArg( wargs[0], XmNx, 0 );
-    XtSetArg( wargs[1], XmNy, 40 );
-    XtSetValues( toPostScriptFileWidget, wargs, 2 );
-    XtSetValues( toRGBFileWidget, wargs, 2 );
+    XtSetArg(wargs[0], XmNx, 0);
+    XtSetArg(wargs[1], XmNy, 40);
+    XtSetValues(toPrinterWidget, wargs, 2);
+    XtSetArg(wargs[0], XmNx, 0);
+    XtSetArg(wargs[1], XmNy, 40);
+    XtSetValues(toPostScriptFileWidget, wargs, 2);
+    XtSetValues(toRGBFileWidget, wargs, 2);
     if (printerOutput)
-        XtManageChild( toPrinterWidget );
+        XtManageChild(toPrinterWidget);
     else if (postScriptOutput)
-        XtManageChild( toPostScriptFileWidget );
+        XtManageChild(toPostScriptFileWidget);
     else
-        XtManageChild( toRGBFileWidget );
+        XtManageChild(toRGBFileWidget);
 
     //
     // Place the quit, print, and message textports
     //
-    placeBottomOfDialog( this );
+    placeBottomOfDialog(this);
 
     return widget;
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -692,7 +696,7 @@ SoXtPrintDialog::buildWidget(Widget parent)
 // Use: protected
 
 void
-SoXtPrintDialog::buildToPrinterWidget( Widget parent )
+SoXtPrintDialog::buildToPrinterWidget(Widget parent)
 
 //
 //////////////////////////////////////////////////////////////////////
@@ -702,72 +706,79 @@ SoXtPrintDialog::buildToPrinterWidget( Widget parent )
     Arg      wargs[16];
     int      i, n;
 
-    toPrinterWidget = XtCreateManagedWidget (getWidgetName(),
-            xmBulletinBoardWidgetClass, parent, NULL, 0);
+    toPrinterWidget = XtCreateManagedWidget(
+        getWidgetName(), xmBulletinBoardWidgetClass, parent, NULL, 0);
     n = 0;
-    XtSetArg( wargs[n], XmNmarginHeight, 0 ); n++;
-    XtSetArg( wargs[n], XmNmarginWidth,  0 ); n++;
-    XtSetValues( toPrinterWidget, wargs, n );
+    XtSetArg(wargs[n], XmNmarginHeight, 0);
+    n++;
+    XtSetArg(wargs[n], XmNmarginWidth, 0);
+    n++;
+    XtSetValues(toPrinterWidget, wargs, n);
 
     // Build radio buttons for the Print Quality and Page Format
-    buildRadioButton( rl.printQuality, rl.high, rl.draft, 110, 0,
-            toPrinterWidget, (XtCallbackProc) SoXtPrintDialog::qualityCB);
-    buildRadioButton( rl.pageFormat, rl.portrait, rl.landscape, 110, 30,
-            toPrinterWidget, (XtCallbackProc) SoXtPrintDialog::pageFormatCB);
+    buildRadioButton(rl.printQuality, rl.high, rl.draft, 110, 0,
+                     toPrinterWidget,
+                     (XtCallbackProc)SoXtPrintDialog::qualityCB);
+    buildRadioButton(rl.pageFormat, rl.portrait, rl.landscape, 110, 30,
+                     toPrinterWidget,
+                     (XtCallbackProc)SoXtPrintDialog::pageFormatCB);
 
     // Build the fields for entering the Print Size
-    buildSizeFields( rl.printSize, 60, toPrinterWidget,
-            printerHorizSize, printerVertSize,
-            (XtCallbackProc) SoXtPrintDialog::printerHorizSizeCB,
-            (XtCallbackProc) SoXtPrintDialog::printerVertSizeCB );
+    buildSizeFields(rl.printSize, 60, toPrinterWidget, printerHorizSize,
+                    printerVertSize,
+                    (XtCallbackProc)SoXtPrintDialog::printerHorizSizeCB,
+                    (XtCallbackProc)SoXtPrintDialog::printerVertSizeCB);
 
     //
     // Create the list of printer names
     //
     n = 0;
-    labelMsg = XmStringCreate ( rl.printer, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNy,            90 ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  labelMsg ); n++;
-    label  = XtCreateManagedWidget (NULL, xmLabelWidgetClass,
-                                 toPrinterWidget, wargs, n);
+    labelMsg = XmStringCreate(rl.printer, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNy, 90);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, labelMsg);
+    n++;
+    label = XtCreateManagedWidget(NULL, xmLabelWidgetClass, toPrinterWidget,
+                                  wargs, n);
     XmStringFree(labelMsg);
-    
+
     n = 0;
-    XtSetArg( wargs[n], XmNx,            110 ); n++;
-    XtSetArg( wargs[n], XmNy,            90 ); n++;
-    XtSetArg( wargs[n], XmNwidth,        220 ); n++;
-    XtSetArg( wargs[n], XmNheight,       100 ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 0 ); n++;
-    XtSetArg( wargs[n], XmNselectionPolicy, XmSINGLE_SELECT); n++;
+    XtSetArg(wargs[n], XmNx, 110);
+    n++;
+    XtSetArg(wargs[n], XmNy, 90);
+    n++;
+    XtSetArg(wargs[n], XmNwidth, 220);
+    n++;
+    XtSetArg(wargs[n], XmNheight, 100);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 0);
+    n++;
+    XtSetArg(wargs[n], XmNselectionPolicy, XmSINGLE_SELECT);
+    n++;
     list = XmCreateScrolledList(toPrinterWidget, "printerList", wargs, n);
-    XtAddCallback(list,
-    	XmNsingleSelectionCallback,
-	(XtCallbackProc) SoXtPrintDialog::listPick,
-	(XtPointer) this);
-    XtManageChild (list);
-    
+    XtAddCallback(list, XmNsingleSelectionCallback,
+                  (XtCallbackProc)SoXtPrintDialog::listPick, (XtPointer)this);
+    XtManageChild(list);
+
     // fill the list with printer names
     whichPrinter = -1;
-    for (i = 0; i < printers->getLength(); i++)
-    {
-        XmString listItem = XmStringCreate (PRINTER_NAME(i),
-                                            XmSTRING_DEFAULT_CHARSET);
-        XmListAddItemUnselected (list, listItem, 0);
-	XmStringFree(listItem); // XmList made a copy
-	
-	// if this is the default, then select it. (list count starts at 1)
+    for (i = 0; i < printers->getLength(); i++) {
+        XmString listItem =
+            XmStringCreate(PRINTER_NAME(i), XmSTRING_DEFAULT_CHARSET);
+        XmListAddItemUnselected(list, listItem, 0);
+        XmStringFree(listItem); // XmList made a copy
+
+        // if this is the default, then select it. (list count starts at 1)
         if (strcmp(PRINTER_NAME(i), defaultPrinter) == 0) {
-            XmListSelectPos (list, i+1, FALSE);
-	    whichPrinter = i;
-	}
+            XmListSelectPos(list, i + 1, FALSE);
+            whichPrinter = i;
+        }
     }
 
     // Build the field for entering the DPI
-    buildDPIField( 120, toPrinterWidget, printerDPIField,
-            (XtCallbackProc) SoXtPrintDialog::printerDPICB );
+    buildDPIField(120, toPrinterWidget, printerDPIField,
+                  (XtCallbackProc)SoXtPrintDialog::printerDPICB);
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -777,7 +788,7 @@ SoXtPrintDialog::buildToPrinterWidget( Widget parent )
 // Use: protected
 
 void
-SoXtPrintDialog::buildToPostScriptFileWidget( Widget parent )
+SoXtPrintDialog::buildToPostScriptFileWidget(Widget parent)
 
 //
 //////////////////////////////////////////////////////////////////////
@@ -788,47 +799,53 @@ SoXtPrintDialog::buildToPostScriptFileWidget( Widget parent )
     int      n;
 
     n = 0;
-    toPostScriptFileWidget = XtCreateWidget (NULL, xmBulletinBoardWidgetClass, 
-                                   parent, NULL, 0);
-    XtSetArg( wargs[n], XmNmarginHeight, 0 ); n++;
-    XtSetArg( wargs[n], XmNmarginWidth,  0 ); n++;
-    XtSetValues( toPostScriptFileWidget, wargs, n );
+    toPostScriptFileWidget =
+        XtCreateWidget(NULL, xmBulletinBoardWidgetClass, parent, NULL, 0);
+    XtSetArg(wargs[n], XmNmarginHeight, 0);
+    n++;
+    XtSetArg(wargs[n], XmNmarginWidth, 0);
+    n++;
+    XtSetValues(toPostScriptFileWidget, wargs, n);
 
     // Build radio buttons for the Print Quality
-    buildRadioButton( rl.printQuality, rl.high, rl.draft, 110, 30,
-            toPostScriptFileWidget,
-            (XtCallbackProc) SoXtPrintDialog::qualityCB);
+    buildRadioButton(rl.printQuality, rl.high, rl.draft, 110, 30,
+                     toPostScriptFileWidget,
+                     (XtCallbackProc)SoXtPrintDialog::qualityCB);
 
     // Build the fields for entering the Print Size
-    buildSizeFields( rl.printSize, 60, toPostScriptFileWidget,
-            postScriptHorizSize, postScriptVertSize,
-            (XtCallbackProc) SoXtPrintDialog::postScriptHorizSizeCB,
-            (XtCallbackProc) SoXtPrintDialog::postScriptVertSizeCB );
+    buildSizeFields(rl.printSize, 60, toPostScriptFileWidget,
+                    postScriptHorizSize, postScriptVertSize,
+                    (XtCallbackProc)SoXtPrintDialog::postScriptHorizSizeCB,
+                    (XtCallbackProc)SoXtPrintDialog::postScriptVertSizeCB);
 
     //
     // Create the FileName label and textport.
     //
     n = 0;
-    labelMsg = XmStringCreate (rl.fileName, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNy,            90 ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  labelMsg ); n++;
-    label  = XtCreateManagedWidget (NULL, xmLabelWidgetClass,
-                                        toPostScriptFileWidget, wargs, n);
+    labelMsg = XmStringCreate(rl.fileName, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNy, 90);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, labelMsg);
+    n++;
+    label = XtCreateManagedWidget(NULL, xmLabelWidgetClass,
+                                  toPostScriptFileWidget, wargs, n);
     XmStringFree(labelMsg);
 
     n = 0;
-    XtSetArg( wargs[n], XmNx,            100 ); n++;
-    XtSetArg( wargs[n], XmNy,            90 ); n++;
-    XtSetArg( wargs[n], XmNwidth,        230 ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 0 ); n++;
-    postScriptFilenameWidget = XtCreateManagedWidget (NULL, xmTextWidgetClass,
-                                        toPostScriptFileWidget, wargs, n);
+    XtSetArg(wargs[n], XmNx, 100);
+    n++;
+    XtSetArg(wargs[n], XmNy, 90);
+    n++;
+    XtSetArg(wargs[n], XmNwidth, 230);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 0);
+    n++;
+    postScriptFilenameWidget = XtCreateManagedWidget(
+        NULL, xmTextWidgetClass, toPostScriptFileWidget, wargs, n);
     // Build the field for entering the DPI
-    buildDPIField( 130, toPostScriptFileWidget, postScriptDPIField,
-            (XtCallbackProc) SoXtPrintDialog::postScriptDPICB );
+    buildDPIField(130, toPostScriptFileWidget, postScriptDPIField,
+                  (XtCallbackProc)SoXtPrintDialog::postScriptDPICB);
 }
-
-
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -838,7 +855,7 @@ SoXtPrintDialog::buildToPostScriptFileWidget( Widget parent )
 // Use: protected
 
 void
-SoXtPrintDialog::buildToRGBFileWidget( Widget parent )
+SoXtPrintDialog::buildToRGBFileWidget(Widget parent)
 
 //
 //////////////////////////////////////////////////////////////////////
@@ -849,46 +866,54 @@ SoXtPrintDialog::buildToRGBFileWidget( Widget parent )
     int      n;
 
     n = 0;
-    toRGBFileWidget = XtCreateWidget (NULL, xmBulletinBoardWidgetClass, 
-                                   parent, NULL, 0);
-    XtSetArg( wargs[n], XmNmarginHeight, 0 ); n++;
-    XtSetArg( wargs[n], XmNmarginWidth,  0 ); n++;
-    XtSetValues( toRGBFileWidget, wargs, n );
+    toRGBFileWidget =
+        XtCreateWidget(NULL, xmBulletinBoardWidgetClass, parent, NULL, 0);
+    XtSetArg(wargs[n], XmNmarginHeight, 0);
+    n++;
+    XtSetArg(wargs[n], XmNmarginWidth, 0);
+    n++;
+    XtSetValues(toRGBFileWidget, wargs, n);
 
     // Build radio buttons for the Print Quality
-    buildRadioButton( rl.fileFormat, rl.postScript, rl.rgb, 110, 0,
-            toRGBFileWidget,
-            (XtCallbackProc) SoXtPrintDialog::fileFormatCB);
+    buildRadioButton(rl.fileFormat, rl.postScript, rl.rgb, 110, 0,
+                     toRGBFileWidget,
+                     (XtCallbackProc)SoXtPrintDialog::fileFormatCB);
 
     // Build the fields for entering the Print Size
-    buildSizeFields( rl.resolution, 30, toRGBFileWidget,
-            rgbHorizSize, rgbVertSize,
-            (XtCallbackProc) SoXtPrintDialog::rgbHorizSizeCB,
-            (XtCallbackProc) SoXtPrintDialog::rgbVertSizeCB );
+    buildSizeFields(rl.resolution, 30, toRGBFileWidget, rgbHorizSize,
+                    rgbVertSize,
+                    (XtCallbackProc)SoXtPrintDialog::rgbHorizSizeCB,
+                    (XtCallbackProc)SoXtPrintDialog::rgbVertSizeCB);
 
     // Initialize the horizontal and vertical size textports
     char tc[8];
     sprintf(tc, "%d", printRes[0]);
-    XmTextSetString (rgbHorizSize, tc);
+    XmTextSetString(rgbHorizSize, tc);
     sprintf(tc, "%d", printRes[1]);
-    XmTextSetString (rgbVertSize, tc);
+    XmTextSetString(rgbVertSize, tc);
 
     // Create the FileName label and textport.
     n = 0;
-    labelMsg = XmStringCreate (rl.fileName, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNy,            60 ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  labelMsg ); n++;
-    label  = XtCreateManagedWidget (NULL, xmLabelWidgetClass,
-                                        toRGBFileWidget, wargs, n);
+    labelMsg = XmStringCreate(rl.fileName, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNy, 60);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, labelMsg);
+    n++;
+    label = XtCreateManagedWidget(NULL, xmLabelWidgetClass, toRGBFileWidget,
+                                  wargs, n);
     XmStringFree(labelMsg);
 
     n = 0;
-    XtSetArg( wargs[n], XmNx,            100 ); n++;
-    XtSetArg( wargs[n], XmNy,            60 ); n++;
-    XtSetArg( wargs[n], XmNwidth,        230 ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 0 ); n++;
-    rgbFilenameWidget = XtCreateManagedWidget (NULL, xmTextWidgetClass,
-                                        toRGBFileWidget, wargs, n);
+    XtSetArg(wargs[n], XmNx, 100);
+    n++;
+    XtSetArg(wargs[n], XmNy, 60);
+    n++;
+    XtSetArg(wargs[n], XmNwidth, 230);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 0);
+    n++;
+    rgbFilenameWidget = XtCreateManagedWidget(NULL, xmTextWidgetClass,
+                                              toRGBFileWidget, wargs, n);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -899,14 +924,10 @@ SoXtPrintDialog::buildToRGBFileWidget( Widget parent )
 // Use: protected
 
 void
-SoXtPrintDialog::buildRadioButton(
-    char *title, 
-    char *label1,
-    char *label2,
-    int  horizontalPlacement,
-    int  verticalPlacement,
-    Widget parent,
-    XtCallbackProc cb )
+SoXtPrintDialog::buildRadioButton(char *title, char *label1, char *label2,
+                                  int horizontalPlacement,
+                                  int verticalPlacement, Widget parent,
+                                  XtCallbackProc cb)
 
 //
 //////////////////////////////////////////////////////////////////////
@@ -921,43 +942,56 @@ SoXtPrintDialog::buildRadioButton(
     // composed of a label widget and a RadioBox widget.
     //
     n = 0;
-    labelMsg = XmStringCreate( title, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNx,            0 ); n++;
-    XtSetArg( wargs[n], XmNy,            verticalPlacement ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  labelMsg ); n++;
-    label  = XtCreateManagedWidget (NULL, xmLabelWidgetClass,
-                                        parent, wargs, n);
+    labelMsg = XmStringCreate(title, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNx, 0);
+    n++;
+    XtSetArg(wargs[n], XmNy, verticalPlacement);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, labelMsg);
+    n++;
+    label = XtCreateManagedWidget(NULL, xmLabelWidgetClass, parent, wargs, n);
     XmStringFree(labelMsg);
 
     n = 0;
-    XtSetArg( wargs[n], XmNx,            horizontalPlacement ); n++;
-    XtSetArg( wargs[n], XmNy,            verticalPlacement ); n++;
-    XtSetArg( wargs[n], XmNorientation,  XmHORIZONTAL ); n++;
-    XtSetArg( wargs[n], XmNpacking,      XmPACK_NONE ); n++;
+    XtSetArg(wargs[n], XmNx, horizontalPlacement);
+    n++;
+    XtSetArg(wargs[n], XmNy, verticalPlacement);
+    n++;
+    XtSetArg(wargs[n], XmNorientation, XmHORIZONTAL);
+    n++;
+    XtSetArg(wargs[n], XmNpacking, XmPACK_NONE);
+    n++;
     buttons = XmCreateRadioBox(parent, "radioToggles", wargs, n);
-    XtManageChild (buttons);
+    XtManageChild(buttons);
 
     n = 0;
-    labelMsg = XmStringCreate (label1, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNset,  TRUE ); n++;
-    XtSetArg( wargs[n], XmNx,            10 ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  labelMsg ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 0 ); n++;
+    labelMsg = XmStringCreate(label1, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNset, TRUE);
+    n++;
+    XtSetArg(wargs[n], XmNx, 10);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, labelMsg);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 0);
+    n++;
     b = XtCreateManagedWidget("radioButton1", xmToggleButtonWidgetClass,
                               buttons, wargs, n);
-    XtAddCallback (b, XmNvalueChangedCallback, cb, (XtPointer)(this));
+    XtAddCallback(b, XmNvalueChangedCallback, cb, (XtPointer)(this));
     XmStringFree(labelMsg);
 
     n = 0;
-    labelMsg = XmStringCreate (label2, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNx,            100 ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  labelMsg ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 0 ); n++;
+    labelMsg = XmStringCreate(label2, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNx, 100);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, labelMsg);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 0);
+    n++;
     b = XtCreateManagedWidget("radioButton2", xmToggleButtonWidgetClass,
-                       buttons, wargs, n);
+                              buttons, wargs, n);
     XmStringFree(labelMsg);
 }
- 
+
 ///////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -967,14 +1001,10 @@ SoXtPrintDialog::buildRadioButton(
 // Use: protected
 
 void
-SoXtPrintDialog::buildSizeFields(
-    char *title, 
-    int  verticalPlacement,
-    Widget parent,
-    Widget &horizField,
-    Widget &vertField,
-    XtCallbackProc cb1,
-    XtCallbackProc cb2 )
+SoXtPrintDialog::buildSizeFields(char *title, int verticalPlacement,
+                                 Widget parent, Widget &horizField,
+                                 Widget &vertField, XtCallbackProc cb1,
+                                 XtCallbackProc cb2)
 
 //
 //////////////////////////////////////////////////////////////////////
@@ -989,43 +1019,54 @@ SoXtPrintDialog::buildSizeFields(
     // for the horizontal and vertical sizes of the print.
     //
     n = 0;
-    labelMsg = XmStringCreate (title, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNy,            verticalPlacement ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  labelMsg ); n++;
-    label  = XtCreateManagedWidget (NULL, xmLabelWidgetClass,
-            parent, wargs, n);
+    labelMsg = XmStringCreate(title, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNy, verticalPlacement);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, labelMsg);
+    n++;
+    label = XtCreateManagedWidget(NULL, xmLabelWidgetClass, parent, wargs, n);
     XmStringFree(labelMsg);
 
     n = 0;
-    XtSetArg( wargs[n], XmNx,            150 ); n++;
-    XtSetArg( wargs[n], XmNy,            verticalPlacement-3 ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 1); n++;
-    XtSetArg( wargs[n], XmNcolumns, atoi(rl.holzn1)); n++;
+    XtSetArg(wargs[n], XmNx, 150);
+    n++;
+    XtSetArg(wargs[n], XmNy, verticalPlacement - 3);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 1);
+    n++;
+    XtSetArg(wargs[n], XmNcolumns, atoi(rl.holzn1));
+    n++;
     horizField = XtCreateManagedWidget("horizontalSize", xmTextWidgetClass,
-            parent, wargs, n);
+                                       parent, wargs, n);
     if (cb1 != NULL)
-        XtAddCallback(horizField, XmNactivateCallback, cb1, (XtPointer) this);
+        XtAddCallback(horizField, XmNactivateCallback, cb1, (XtPointer)this);
 
     n = 0;
-    labelMsg = XmStringCreate (rl.by, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNx,            226 ); n++;
-    XtSetArg( wargs[n], XmNy,            verticalPlacement ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  labelMsg ); n++;
-    label  = XtCreateManagedWidget (NULL, xmLabelWidgetClass,
-                                 parent, wargs, n);
+    labelMsg = XmStringCreate(rl.by, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNx, 226);
+    n++;
+    XtSetArg(wargs[n], XmNy, verticalPlacement);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, labelMsg);
+    n++;
+    label = XtCreateManagedWidget(NULL, xmLabelWidgetClass, parent, wargs, n);
     XmStringFree(labelMsg);
 
     n = 0;
-    XtSetArg( wargs[n], XmNx,            258 ); n++;
-    XtSetArg( wargs[n], XmNy,            verticalPlacement-3 ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 1); n++;
-    XtSetArg( wargs[n], XmNcolumns, atoi(rl.vertc1)); n++;
-    vertField = XtCreateManagedWidget("verticalSize", xmTextWidgetClass,
-            parent, wargs, n);
+    XtSetArg(wargs[n], XmNx, 258);
+    n++;
+    XtSetArg(wargs[n], XmNy, verticalPlacement - 3);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 1);
+    n++;
+    XtSetArg(wargs[n], XmNcolumns, atoi(rl.vertc1));
+    n++;
+    vertField = XtCreateManagedWidget("verticalSize", xmTextWidgetClass, parent,
+                                      wargs, n);
     if (cb2 != NULL)
-        XtAddCallback(vertField, XmNactivateCallback, cb2, (XtPointer) this);
-}    
- 
+        XtAddCallback(vertField, XmNactivateCallback, cb2, (XtPointer)this);
+}
+
 ///////////////////////////////////////////////////////////////////////
 //
 // Description:
@@ -1034,11 +1075,8 @@ SoXtPrintDialog::buildSizeFields(
 // Use: protected
 
 void
-SoXtPrintDialog::buildDPIField(
-    int  verticalPlacement,
-    Widget parent,
-    Widget &dpiField,
-    XtCallbackProc cb )
+SoXtPrintDialog::buildDPIField(int verticalPlacement, Widget parent,
+                               Widget &dpiField, XtCallbackProc cb)
 
 //
 ///////////////////////////////////////////////////////////////////////
@@ -1049,22 +1087,27 @@ SoXtPrintDialog::buildDPIField(
     int      n;
 
     n = 0;
-    labelMsg = XmStringCreate ( rl.dpi, XmSTRING_DEFAULT_CHARSET);
-    XtSetArg( wargs[n], XmNy,            verticalPlacement ); n++;
-    XtSetArg( wargs[n], XmNlabelString,  labelMsg ); n++;
-    label  = XtCreateManagedWidget (NULL, xmLabelWidgetClass,
-            parent, wargs, n);
+    labelMsg = XmStringCreate(rl.dpi, XmSTRING_DEFAULT_CHARSET);
+    XtSetArg(wargs[n], XmNy, verticalPlacement);
+    n++;
+    XtSetArg(wargs[n], XmNlabelString, labelMsg);
+    n++;
+    label = XtCreateManagedWidget(NULL, xmLabelWidgetClass, parent, wargs, n);
     XmStringFree(labelMsg);
 
     n = 0;
-    XtSetArg( wargs[n], XmNx,            40 ); n++;
-    XtSetArg( wargs[n], XmNy,            verticalPlacement-3 ); n++;
-    XtSetArg( wargs[n], XmNhighlightThickness, 1); n++;
-    XtSetArg( wargs[n], XmNcolumns, atoi(rl.holzn2)); n++;
+    XtSetArg(wargs[n], XmNx, 40);
+    n++;
+    XtSetArg(wargs[n], XmNy, verticalPlacement - 3);
+    n++;
+    XtSetArg(wargs[n], XmNhighlightThickness, 1);
+    n++;
+    XtSetArg(wargs[n], XmNcolumns, atoi(rl.holzn2));
+    n++;
     dpiField = XtCreateManagedWidget("horizontalSize", xmTextWidgetClass,
-            parent, wargs, n);
-    XtAddCallback(dpiField, XmNactivateCallback, cb, (XtPointer) this);
-    XmTextSetString (dpiField, "100");
+                                     parent, wargs, n);
+    XtAddCallback(dpiField, XmNactivateCallback, cb, (XtPointer)this);
+    XmTextSetString(dpiField, "100");
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1077,44 +1120,38 @@ SoXtPrintDialog::buildDPIField(
 // Use: protected
 
 void
-SoXtPrintDialog::placeBottomOfDialog(
-    SoXtPrintDialog *ptr )
+SoXtPrintDialog::placeBottomOfDialog(SoXtPrintDialog *ptr)
 
 //
 //////////////////////////////////////////////////////////////////////
 {
-    Arg      wargs[1];
+    Arg wargs[1];
 
-    if (ptr->printerOutput)
-    {
-        XtSetArg( wargs[0], XmNy,        240 );
-        XtSetValues( ptr->quitButton, wargs, 1 );
-        XtSetValues( ptr->printButton, wargs, 1 );
+    if (ptr->printerOutput) {
+        XtSetArg(wargs[0], XmNy, 240);
+        XtSetValues(ptr->quitButton, wargs, 1);
+        XtSetValues(ptr->printButton, wargs, 1);
 
-        XtSetArg( wargs[0], XmNy,        260 );
-        XtSetValues( ptr->messageLabelWidget, wargs, 1 );
-        XtSetArg( wargs[0], XmNy,        280 );
-        XtSetValues( ptr->messageWidget, wargs, 1 );
-    }
-    else if (ptr->postScriptOutput)
-    {
-        XtSetArg( wargs[0], XmNy,        205 );
-        XtSetValues( ptr->messageLabelWidget, wargs, 1 );
-        XtSetArg( wargs[0], XmNy,        225 );
-        XtSetValues( ptr->messageWidget, wargs, 1 );
-        XtSetArg( wargs[0], XmNy,        175 );
-        XtSetValues( ptr->quitButton, wargs, 1 );
-        XtSetValues( ptr->printButton, wargs, 1 );
-    }
-    else
-    {
-        XtSetArg( wargs[0], XmNy,        150 );
-        XtSetValues( ptr->messageLabelWidget, wargs, 1 );
-        XtSetArg( wargs[0], XmNy,        170 );
-        XtSetValues( ptr->messageWidget, wargs, 1 );
-        XtSetArg( wargs[0], XmNy,        135 );
-        XtSetValues( ptr->quitButton, wargs, 1 );
-        XtSetValues( ptr->printButton, wargs, 1 );
+        XtSetArg(wargs[0], XmNy, 260);
+        XtSetValues(ptr->messageLabelWidget, wargs, 1);
+        XtSetArg(wargs[0], XmNy, 280);
+        XtSetValues(ptr->messageWidget, wargs, 1);
+    } else if (ptr->postScriptOutput) {
+        XtSetArg(wargs[0], XmNy, 205);
+        XtSetValues(ptr->messageLabelWidget, wargs, 1);
+        XtSetArg(wargs[0], XmNy, 225);
+        XtSetValues(ptr->messageWidget, wargs, 1);
+        XtSetArg(wargs[0], XmNy, 175);
+        XtSetValues(ptr->quitButton, wargs, 1);
+        XtSetValues(ptr->printButton, wargs, 1);
+    } else {
+        XtSetArg(wargs[0], XmNy, 150);
+        XtSetValues(ptr->messageLabelWidget, wargs, 1);
+        XtSetArg(wargs[0], XmNy, 170);
+        XtSetValues(ptr->messageWidget, wargs, 1);
+        XtSetArg(wargs[0], XmNy, 135);
+        XtSetValues(ptr->quitButton, wargs, 1);
+        XtSetValues(ptr->printButton, wargs, 1);
     }
 }
 
@@ -1126,10 +1163,7 @@ SoXtPrintDialog::placeBottomOfDialog(
 // Use: private
 
 void
-SoXtPrintDialog::qualityCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::qualityCB(Widget, SoXtPrintDialog *ptr, XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
@@ -1144,10 +1178,8 @@ SoXtPrintDialog::qualityCB(
 // Use: private
 
 void
-SoXtPrintDialog::pageFormatCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::pageFormatCB(Widget, SoXtPrintDialog *ptr,
+                              XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
@@ -1163,27 +1195,25 @@ SoXtPrintDialog::pageFormatCB(
 // Use: private
 
 void
-SoXtPrintDialog::rgbHorizSizeCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::rgbHorizSizeCB(Widget, SoXtPrintDialog *ptr,
+                                XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
     if (ptr->alreadyUpdated)
         return;
 
-    char *text = XmTextGetString (ptr->rgbHorizSize);
+    char *text = XmTextGetString(ptr->rgbHorizSize);
     short x = (short)atoi(text);
     XtFree(text);
-    text = XmTextGetString (ptr->rgbVertSize);
+    text = XmTextGetString(ptr->rgbVertSize);
     short y = (short)atoi(text);
     XtFree(text);
     ptr->setPrintSize(SbVec2s(x, y));
 
     // make the text field loose the focus
     XmProcessTraversal(SoXt::getShellWidget(ptr->getWidget()),
-            XmTRAVERSE_CURRENT);
+                       XmTRAVERSE_CURRENT);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1195,27 +1225,25 @@ SoXtPrintDialog::rgbHorizSizeCB(
 // Use: private
 
 void
-SoXtPrintDialog::rgbVertSizeCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::rgbVertSizeCB(Widget, SoXtPrintDialog *ptr,
+                               XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
     if (ptr->alreadyUpdated)
         return;
 
-    char *text = XmTextGetString (ptr->rgbHorizSize);
+    char *text = XmTextGetString(ptr->rgbHorizSize);
     short x = (short)atoi(text);
     XtFree(text);
-    text = XmTextGetString (ptr->rgbVertSize);
+    text = XmTextGetString(ptr->rgbVertSize);
     short y = (short)atoi(text);
     XtFree(text);
     ptr->setPrintSize(SbVec2s(x, y));
 
     // make the text field loose the focus
     XmProcessTraversal(SoXt::getShellWidget(ptr->getWidget()),
-            XmTRAVERSE_CURRENT);
+                       XmTRAVERSE_CURRENT);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1227,27 +1255,25 @@ SoXtPrintDialog::rgbVertSizeCB(
 // Use: private
 
 void
-SoXtPrintDialog::printerHorizSizeCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::printerHorizSizeCB(Widget, SoXtPrintDialog *ptr,
+                                    XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
     if (ptr->alreadyUpdated)
         return;
 
-    char *text = XmTextGetString (ptr->printerHorizSize);
+    char *text = XmTextGetString(ptr->printerHorizSize);
     float x = atof(text);
     XtFree(text);
-    text = XmTextGetString (ptr->printerVertSize);
+    text = XmTextGetString(ptr->printerVertSize);
     float y = atof(text);
     XtFree(text);
     ptr->setPrintSize(SbVec2f(x, y));
 
     // make the text field loose the focus
     XmProcessTraversal(SoXt::getShellWidget(ptr->getWidget()),
-            XmTRAVERSE_CURRENT);
+                       XmTRAVERSE_CURRENT);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1259,27 +1285,25 @@ SoXtPrintDialog::printerHorizSizeCB(
 // Use: private
 
 void
-SoXtPrintDialog::printerVertSizeCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::printerVertSizeCB(Widget, SoXtPrintDialog *ptr,
+                                   XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
     if (ptr->alreadyUpdated)
         return;
 
-    char *text = XmTextGetString (ptr->printerHorizSize);
+    char *text = XmTextGetString(ptr->printerHorizSize);
     float x = atof(text);
     XtFree(text);
-    text = XmTextGetString (ptr->printerVertSize);
+    text = XmTextGetString(ptr->printerVertSize);
     float y = atof(text);
     XtFree(text);
     ptr->setPrintSize(SbVec2f(x, y));
 
     // make the text field loose the focus
     XmProcessTraversal(SoXt::getShellWidget(ptr->getWidget()),
-            XmTRAVERSE_CURRENT);
+                       XmTRAVERSE_CURRENT);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1291,27 +1315,25 @@ SoXtPrintDialog::printerVertSizeCB(
 // Use: private
 
 void
-SoXtPrintDialog::postScriptHorizSizeCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::postScriptHorizSizeCB(Widget, SoXtPrintDialog *ptr,
+                                       XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
     if (ptr->alreadyUpdated)
         return;
 
-    char *text = XmTextGetString (ptr->postScriptHorizSize);
+    char *text = XmTextGetString(ptr->postScriptHorizSize);
     float x = atof(text);
     XtFree(text);
-    text = XmTextGetString (ptr->postScriptVertSize);
+    text = XmTextGetString(ptr->postScriptVertSize);
     float y = atof(text);
     XtFree(text);
     ptr->setPrintSize(SbVec2f(x, y));
 
     // make the text field loose the focus
     XmProcessTraversal(SoXt::getShellWidget(ptr->getWidget()),
-            XmTRAVERSE_CURRENT);
+                       XmTRAVERSE_CURRENT);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1323,27 +1345,25 @@ SoXtPrintDialog::postScriptHorizSizeCB(
 // Use: private
 
 void
-SoXtPrintDialog::postScriptVertSizeCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::postScriptVertSizeCB(Widget, SoXtPrintDialog *ptr,
+                                      XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
     if (ptr->alreadyUpdated)
         return;
 
-    char *text = XmTextGetString (ptr->postScriptHorizSize);
+    char *text = XmTextGetString(ptr->postScriptHorizSize);
     float x = atof(text);
     XtFree(text);
-    text = XmTextGetString (ptr->postScriptVertSize);
+    text = XmTextGetString(ptr->postScriptVertSize);
     float y = atof(text);
     XtFree(text);
     ptr->setPrintSize(SbVec2f(x, y));
 
     // make the text field loose the focus
     XmProcessTraversal(SoXt::getShellWidget(ptr->getWidget()),
-            XmTRAVERSE_CURRENT);
+                       XmTRAVERSE_CURRENT);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1355,10 +1375,8 @@ SoXtPrintDialog::postScriptVertSizeCB(
 // Use: private
 
 void
-SoXtPrintDialog::printerDPICB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::printerDPICB(Widget, SoXtPrintDialog *ptr,
+                              XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
@@ -1367,13 +1385,13 @@ SoXtPrintDialog::printerDPICB(
         return;
     }
     ptr->alreadyUpdated = TRUE;
-    char *text = XmTextGetString (ptr->printerDPIField);
-    XmTextSetString (ptr->postScriptDPIField, text);
+    char *text = XmTextGetString(ptr->printerDPIField);
+    XmTextSetString(ptr->postScriptDPIField, text);
     XtFree(text);
 
     // make the text field loose the focus
     XmProcessTraversal(SoXt::getShellWidget(ptr->getWidget()),
-            XmTRAVERSE_CURRENT);
+                       XmTRAVERSE_CURRENT);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1385,10 +1403,8 @@ SoXtPrintDialog::printerDPICB(
 // Use: private
 
 void
-SoXtPrintDialog::postScriptDPICB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::postScriptDPICB(Widget, SoXtPrintDialog *ptr,
+                                 XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
@@ -1397,13 +1413,13 @@ SoXtPrintDialog::postScriptDPICB(
         return;
     }
     ptr->alreadyUpdated = TRUE;
-    char *text = XmTextGetString (ptr->postScriptDPIField);
-    XmTextSetString (ptr->printerDPIField, text);
+    char *text = XmTextGetString(ptr->postScriptDPIField);
+    XmTextSetString(ptr->printerDPIField, text);
     XtFree(text);
 
     // make the text field loose the focus
     XmProcessTraversal(SoXt::getShellWidget(ptr->getWidget()),
-            XmTRAVERSE_CURRENT);
+                       XmTRAVERSE_CURRENT);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1414,10 +1430,7 @@ SoXtPrintDialog::postScriptDPICB(
 // Use: private
 
 void
-SoXtPrintDialog::outputCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::outputCB(Widget, SoXtPrintDialog *ptr, XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
@@ -1429,28 +1442,23 @@ SoXtPrintDialog::outputCB(
     // Display the correct portion of the dialog and adjust the bottom
     // of the dialog.
     //
-    if (ptr->printerOutput)
-    {
-        XtUnmanageChild( ptr->fileFormatWidget );
+    if (ptr->printerOutput) {
+        XtUnmanageChild(ptr->fileFormatWidget);
         if (ptr->postScriptOutput)
-            XtUnmanageChild( ptr->toRGBFileWidget );
+            XtUnmanageChild(ptr->toRGBFileWidget);
         else
-            XtUnmanageChild( ptr->toPostScriptFileWidget );
-        XtManageChild( ptr->toPrinterWidget );
+            XtUnmanageChild(ptr->toPostScriptFileWidget);
+        XtManageChild(ptr->toPrinterWidget);
         height = PRINTER_MENU_HEIGHT;
-    }
-    else if (ptr->postScriptOutput)
-    {
-        XtUnmanageChild( ptr->toPrinterWidget );
-        XtManageChild( ptr->fileFormatWidget );
-        XtManageChild( ptr->toPostScriptFileWidget );
+    } else if (ptr->postScriptOutput) {
+        XtUnmanageChild(ptr->toPrinterWidget);
+        XtManageChild(ptr->fileFormatWidget);
+        XtManageChild(ptr->toPostScriptFileWidget);
         height = POSTSCRIPT_FILE_MENU_HEIGHT;
-    }
-    else
-    {
-        XtUnmanageChild( ptr->toPrinterWidget );
-        XtManageChild( ptr->fileFormatWidget );
-        XtManageChild( ptr->toRGBFileWidget );
+    } else {
+        XtUnmanageChild(ptr->toPrinterWidget);
+        XtManageChild(ptr->fileFormatWidget);
+        XtManageChild(ptr->toRGBFileWidget);
         height = RGB_FILE_MENU_HEIGHT;
     }
 
@@ -1465,7 +1473,7 @@ SoXtPrintDialog::outputCB(
         ptr->setSize(size);
     }
 
-    ptr->placeBottomOfDialog( ptr );
+    ptr->placeBottomOfDialog(ptr);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1476,10 +1484,8 @@ SoXtPrintDialog::outputCB(
 // Use: private
 
 void
-SoXtPrintDialog::fileFormatCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::fileFormatCB(Widget, SoXtPrintDialog *ptr,
+                              XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
@@ -1491,16 +1497,13 @@ SoXtPrintDialog::fileFormatCB(
     // Display the correct portion of the dialog and adjust the bottom
     // of the dialog.
     //
-    if (ptr->postScriptOutput)
-    {
-        XtUnmanageChild( ptr->toRGBFileWidget );
-        XtManageChild( ptr->toPostScriptFileWidget );
+    if (ptr->postScriptOutput) {
+        XtUnmanageChild(ptr->toRGBFileWidget);
+        XtManageChild(ptr->toPostScriptFileWidget);
         height = POSTSCRIPT_FILE_MENU_HEIGHT;
-    }
-    else
-    {
-        XtUnmanageChild( ptr->toPostScriptFileWidget );
-        XtManageChild( ptr->toRGBFileWidget );
+    } else {
+        XtUnmanageChild(ptr->toPostScriptFileWidget);
+        XtManageChild(ptr->toRGBFileWidget);
         height = RGB_FILE_MENU_HEIGHT;
     }
 
@@ -1515,7 +1518,7 @@ SoXtPrintDialog::fileFormatCB(
         ptr->setSize(size);
     }
 
-    ptr->placeBottomOfDialog( ptr );
+    ptr->placeBottomOfDialog(ptr);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -1526,10 +1529,7 @@ SoXtPrintDialog::fileFormatCB(
 // Use: private
 
 void
-SoXtPrintDialog::quitCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::quitCB(Widget, SoXtPrintDialog *ptr, XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
@@ -1543,22 +1543,20 @@ SoXtPrintDialog::quitCB(
 //  Use: static private
 //
 void
-SoXtPrintDialog::listPick(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *list)
+SoXtPrintDialog::listPick(Widget, SoXtPrintDialog *ptr,
+                          XmAnyCallbackStruct *list)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // our array is indexed from 0, the list is indexed from 1
-    ptr->whichPrinter = ((XmListCallbackStruct *) list)->item_position - 1;
+    ptr->whichPrinter = ((XmListCallbackStruct *)list)->item_position - 1;
 }
 
 ///////////////////////////////////////////////////////////////////////
 //
 // Description:
-//	This routine is called when the Print button of the SoXtPrintDialog 
-//      widget is pressed.  It gets the current text string from the 
+//	This routine is called when the Print button of the SoXtPrintDialog
+//      widget is pressed.  It gets the current text string from the
 //      textWidget and uses it as the filename into which to write
 //      the PostScript output data. (This is called by the printCallback())
 //
@@ -1569,64 +1567,60 @@ SoXtPrintDialog::print()
 //
 //////////////////////////////////////////////////////////////////////
 {
-    SoOutput      outFile;
-    FILE          *fileP = NULL;
-    char          *printerName;
-    char          tempPSFileName[64];
-    char	  *text;
-    char          *fileName = NULL;
-    SbColor       bgColor(0.0, 0.0, 0.0);
+    SoOutput             outFile;
+    FILE *               fileP = NULL;
+    char *               printerName;
+    char                 tempPSFileName[64];
+    char *               text;
+    char *               fileName = NULL;
+    SbColor              bgColor(0.0, 0.0, 0.0);
     SoOffscreenRenderer *renderer;
 
-    XmTextSetString (messageWidget, "Printing in progress...");
+    XmTextSetString(messageWidget, "Printing in progress...");
     XmUpdateDisplay(messageWidget);
 
     //
     // Invoke the beforeList callbacks
     //
-    beforeList.invokeCallbacks ((void *)this);
+    beforeList.invokeCallbacks((void *)this);
 
     // Get Xt Strings.  Update the print size.
     char *dpiString = XmTextGetString(printerDPIField);
     if (postScriptOutput) {
         float fx, fy;
         if (printerOutput) {
-	    text = XmTextGetString (printerHorizSize);
+            text = XmTextGetString(printerHorizSize);
             fx = atof(text);
-	    XtFree(text);
-	    text = XmTextGetString (printerVertSize);
+            XtFree(text);
+            text = XmTextGetString(printerVertSize);
             fy = atof(text);
-	    XtFree(text);
+            XtFree(text);
+            setPrintSize(SbVec2f(fx, fy));
+        } else {
+            text = XmTextGetString(postScriptHorizSize);
+            fx = atof(text);
+            XtFree(text);
+            text = XmTextGetString(postScriptVertSize);
+            fy = atof(text);
+            XtFree(text);
             setPrintSize(SbVec2f(fx, fy));
         }
-        else {
-	    text = XmTextGetString (postScriptHorizSize);
-            fx = atof(text);
-	    XtFree(text);
-	    text = XmTextGetString (postScriptVertSize);
-            fy = atof(text);
-	    XtFree(text);
-            setPrintSize(SbVec2f(fx, fy));
-        }
-    }
-    else {
-	text = XmTextGetString (rgbHorizSize);
+    } else {
+        text = XmTextGetString(rgbHorizSize);
         short sx = (short)atoi(text);
-	XtFree(text);
-	text = XmTextGetString (rgbVertSize);
+        XtFree(text);
+        text = XmTextGetString(rgbVertSize);
         short sy = (short)atoi(text);
-	XtFree(text);
+        XtFree(text);
         setPrintSize(SbVec2s(sx, sy));
     }
     // make the text fields loose focus
-    XmProcessTraversal(SoXt::getShellWidget(getWidget()),
-            XmTRAVERSE_CURRENT);
- 
-    if (rootNode == NULL)
-    {
-        XmTextSetString (messageWidget, "ERROR:  Empty database.");
+    XmProcessTraversal(SoXt::getShellWidget(getWidget()), XmTRAVERSE_CURRENT);
+
+    if (rootNode == NULL) {
+        XmTextSetString(messageWidget, "ERROR:  Empty database.");
         XmUpdateDisplay(messageWidget);
-        afterList.invokeCallbacks ((void *)this);
+        afterList.invokeCallbacks((void *)this);
         return;
     }
 
@@ -1638,9 +1632,9 @@ SoXtPrintDialog::print()
     // If rendering to PostScript, adjust the rendering resolution to account
     // for the specified DPI.
     if (printerOutput || postScriptOutput) {
-        float   renderDPI = atof(dpiString);
-        renderRes *= 
-                (renderDPI / SoOffscreenRenderer::getScreenPixelsPerInch());
+        float renderDPI = atof(dpiString);
+        renderRes *=
+            (renderDPI / SoOffscreenRenderer::getScreenPixelsPerInch());
 
         // For postScript Printing, set the backgroundColor to white.  This
         // should probably be changed to get the color from a color editor.
@@ -1654,11 +1648,10 @@ SoXtPrintDialog::print()
     if ((renderRes[0] > maxRes[0]) || (renderRes[1] > maxRes[1])) {
         char tmpStr[64];
 
-        sprintf(tmpStr, "ERROR:  Exceeds %d by %d.",
-            maxRes[0], maxRes[1] );
-        XmTextSetString (messageWidget, tmpStr);
+        sprintf(tmpStr, "ERROR:  Exceeds %d by %d.", maxRes[0], maxRes[1]);
+        XmTextSetString(messageWidget, tmpStr);
         XmUpdateDisplay(messageWidget);
-        afterList.invokeCallbacks ((void *)this);
+        afterList.invokeCallbacks((void *)this);
         return;
     }
 
@@ -1667,11 +1660,11 @@ SoXtPrintDialog::print()
 
     // ??? COMPAT 2.0
     //
-    // Create a render action and fill it in with the viewport region 
-    // defined by the dialog, and other attributes from the stored 
+    // Create a render action and fill it in with the viewport region
+    // defined by the dialog, and other attributes from the stored
     // render action.  Use this new render action with the offscreen
     // renderer.
-    SoGLRenderAction act(vpRegion);
+    SoGLRenderAction    act(vpRegion);
     _SoPrintDialogItem *item = _SoFindPrintDialog(this);
 
     if (item != NULL) {
@@ -1688,20 +1681,18 @@ SoXtPrintDialog::print()
     //
     if (nodeMostRecent) {
         if (!renderer->render(rootNode)) {
-            XmTextSetString (messageWidget, "ERROR:  Could not execute print.");
+            XmTextSetString(messageWidget, "ERROR:  Could not execute print.");
             XmUpdateDisplay(messageWidget);
-            afterList.invokeCallbacks ((void *)this);
-            delete renderer;   
+            afterList.invokeCallbacks((void *)this);
+            delete renderer;
             return;
         }
-    }
-    else
-    {
+    } else {
         if (!renderer->render(rootPath)) {
-            XmTextSetString (messageWidget, "ERROR:  Could not execute print.");
+            XmTextSetString(messageWidget, "ERROR:  Could not execute print.");
             XmUpdateDisplay(messageWidget);
-            afterList.invokeCallbacks ((void *)this);
-            delete renderer;   
+            afterList.invokeCallbacks((void *)this);
+            delete renderer;
             return;
         }
     }
@@ -1710,12 +1701,11 @@ SoXtPrintDialog::print()
     // Are we printing to a printer or a file?
     //
     if (printerOutput) {
-        if (whichPrinter < 0)
-        {
-            XmTextSetString (messageWidget, "ERROR:  No printer.");
+        if (whichPrinter < 0) {
+            XmTextSetString(messageWidget, "ERROR:  No printer.");
             XmUpdateDisplay(messageWidget);
-            afterList.invokeCallbacks ((void *)this);
-            delete renderer;   
+            afterList.invokeCallbacks((void *)this);
+            delete renderer;
             return;
         }
 
@@ -1728,17 +1718,16 @@ SoXtPrintDialog::print()
         char *tmpdir = getenv("TMPDIR");
 
         if (tmpdir == NULL)
-            (void)sprintf (tempPSFileName, "/tmp/.sop%d.ps", getpid());
+            (void)sprintf(tempPSFileName, "/tmp/.sop%d.ps", getpid());
         else
-            (void)sprintf (tempPSFileName, "%s/.sop%d.ps", tmpdir, getpid());
-        if ((fileP = fopen (tempPSFileName, "w")) == NULL)
-        {
+            (void)sprintf(tempPSFileName, "%s/.sop%d.ps", tmpdir, getpid());
+        if ((fileP = fopen(tempPSFileName, "w")) == NULL) {
             char str[64];
             sprintf(str, "ERROR:  Couldn't open %s", tempPSFileName);
-            XmTextSetString (messageWidget, str);
+            XmTextSetString(messageWidget, str);
             XmUpdateDisplay(messageWidget);
-            afterList.invokeCallbacks ((void *)this);
-            delete renderer;   
+            afterList.invokeCallbacks((void *)this);
+            delete renderer;
             return;
         }
 
@@ -1748,40 +1737,35 @@ SoXtPrintDialog::print()
         // PostScript commands to the temporary PostScript file.
         //
         fprintf(fileP, "%%!PS-Adobe-2.0\n");
-        if (!portraitFormat)
-        {
-            fprintf(fileP, "%f %f translate\n",
-                    PNTS*(PAGEMARGIN),
-                    PNTS*(FULLPAGEYSIZE-PAGEMARGIN));
-            fprintf(fileP,"-90.0 rotate\n");
+        if (!portraitFormat) {
+            fprintf(fileP, "%f %f translate\n", PNTS * (PAGEMARGIN),
+                    PNTS * (FULLPAGEYSIZE - PAGEMARGIN));
+            fprintf(fileP, "-90.0 rotate\n");
+        } else {
+            fprintf(fileP, "%f %f translate\n", PNTS * (PAGEMARGIN),
+                    PNTS * (PAGEMARGIN));
         }
-        else
-        {
-            fprintf(fileP, "%f %f translate\n",
-                    PNTS*(PAGEMARGIN),
-                    PNTS*(PAGEMARGIN));
-        }
-        
-        renderer->writeToPostScript( fileP, printSize );
-        fflush (fileP);
-        fclose (fileP);
+
+        renderer->writeToPostScript(fileP, printSize);
+        fflush(fileP);
+        fclose(fileP);
 
         // Send the file to the printer
 
 #ifdef SB_OS_IRIX
         union wait waitStatus;
 #else
-	int waitStatus;
+        int waitStatus;
         typedef void (*SIG_PF)(int);
 #endif // SB_OS_IRIX
-        SIG_PF     childstat;
-        pid_t      wpid;
+        SIG_PF childstat;
+        pid_t  wpid;
 
         //
         // Save old function and restore default behavior.
         //
-        childstat = signal (SIGCHLD, SIG_DFL);
-        if (!(wpid=fork())) {
+        childstat = signal(SIGCHLD, SIG_DFL);
+        if (!(wpid = fork())) {
             if (*printerName == 0)
                 execlp("lp", "lp", "-c", "-s", tempPSFileName, 0);
             else {
@@ -1794,97 +1778,87 @@ SoXtPrintDialog::print()
         //
         // Restore catching dead babies.
         //
-        (void) signal(SIGCHLD, childstat);
+        (void)signal(SIGCHLD, childstat);
 #ifdef SB_OS_IRIX
         if (!(WIFEXITED(waitStatus) && waitStatus.w_retcode == 0))
 #else
-	if (!(WIFEXITED(waitStatus) && WEXITSTATUS(waitStatus) == 0))
+        if (!(WIFEXITED(waitStatus) && WEXITSTATUS(waitStatus) == 0))
 #endif // SB_OS_IRIX
             SoDebugError::post("SoXtPrintDialog::print",
-                    "Print Error. Diagnose with Print Manager.");
+                               "Print Error. Diagnose with Print Manager.");
         unlink(tempPSFileName);
-    }
-    else
-    {
-	//
-        // Send to file.  Get the file name from the textWidget and open 
+    } else {
+        //
+        // Send to file.  Get the file name from the textWidget and open
         // the file.
         //
         if (postScriptOutput)
-	    fileName = XmTextGetString (postScriptFilenameWidget);
+            fileName = XmTextGetString(postScriptFilenameWidget);
         else
-	    fileName = XmTextGetString (rgbFilenameWidget);
-	if (strlen(fileName) == 0)
-        {
-            XmTextSetString (messageWidget, "ERROR:  No file name.");
+            fileName = XmTextGetString(rgbFilenameWidget);
+        if (strlen(fileName) == 0) {
+            XmTextSetString(messageWidget, "ERROR:  No file name.");
             XmUpdateDisplay(messageWidget);
-            afterList.invokeCallbacks ((void *)this);
-            XtFree (fileName);
-            delete renderer;   
-	    return;
-	}
+            afterList.invokeCallbacks((void *)this);
+            XtFree(fileName);
+            delete renderer;
+            return;
+        }
 
-        if (!outFile.openFile (fileName))
-        {
-            XmTextSetString (messageWidget, "ERROR:  Could not open file.");
+        if (!outFile.openFile(fileName)) {
+            XmTextSetString(messageWidget, "ERROR:  Could not open file.");
             XmUpdateDisplay(messageWidget);
-            afterList.invokeCallbacks ((void *)this);
-            XtFree (fileName);
-            delete renderer;   
-	    return;
-	}
+            afterList.invokeCallbacks((void *)this);
+            XtFree(fileName);
+            delete renderer;
+            return;
+        }
         if (postScriptOutput) {
-            if (!renderer->writeToPostScript( outFile.getFilePointer(),
-                    printSize ))
-            {
-                XmTextSetString (messageWidget, "ERROR:  Could not get data.");
+            if (!renderer->writeToPostScript(outFile.getFilePointer(),
+                                             printSize)) {
+                XmTextSetString(messageWidget, "ERROR:  Could not get data.");
                 XmUpdateDisplay(messageWidget);
                 outFile.closeFile();
-                afterList.invokeCallbacks ((void *)this);
-                XtFree (fileName);
-                delete renderer;   
-	        return;
-	    }
-        }
-        else if (!renderer->writeToRGB( outFile.getFilePointer() ))
-        {
-            XmTextSetString (messageWidget, "ERROR:  Could not get data.");
+                afterList.invokeCallbacks((void *)this);
+                XtFree(fileName);
+                delete renderer;
+                return;
+            }
+        } else if (!renderer->writeToRGB(outFile.getFilePointer())) {
+            XmTextSetString(messageWidget, "ERROR:  Could not get data.");
             XmUpdateDisplay(messageWidget);
             outFile.closeFile();
-            XtFree (fileName);
-            afterList.invokeCallbacks ((void *)this);
-            delete renderer;   
-	    return;
+            XtFree(fileName);
+            afterList.invokeCallbacks((void *)this);
+            delete renderer;
+            return;
         }
-        
+
         outFile.closeFile();
-        XtFree (fileName);
+        XtFree(fileName);
     }
 
     //
     // Invoke the afterList callbacks
     //
-    afterList.invokeCallbacks ((void *)this);
+    afterList.invokeCallbacks((void *)this);
 
-    XmTextSetString (messageWidget, "Printing completed.");
+    XmTextSetString(messageWidget, "Printing completed.");
     XmUpdateDisplay(messageWidget);
-    delete renderer; 
-    XtFree (dpiString);
+    delete renderer;
+    XtFree(dpiString);
 }
 
 ///////////////////////////////////////////////////////////////////////
 //
 // Description:
-//	This routine is called when the Print button of the SoXtPrintDialog 
+//	This routine is called when the Print button of the SoXtPrintDialog
 //      widget is pressed.  It calls print().
 //
 // Use: private
 
 void
-SoXtPrintDialog::printCB(
-    Widget,
-    SoXtPrintDialog *ptr,
-    XmAnyCallbackStruct *)
+SoXtPrintDialog::printCB(Widget, SoXtPrintDialog *ptr, XmAnyCallbackStruct *)
 //
 //////////////////////////////////////////////////////////////////////
 {
@@ -1907,22 +1881,21 @@ SoXtPrintDialog::updateTextports()
     // Send the new size to the widgets
     char tc[12];
     sprintf(tc, "%.3f", printSize[0]);
-    XmTextSetString (printerHorizSize, tc);
-    XmTextSetString (postScriptHorizSize, tc);
+    XmTextSetString(printerHorizSize, tc);
+    XmTextSetString(postScriptHorizSize, tc);
     sprintf(tc, "%.3f", printSize[1]);
-    XmTextSetString (printerVertSize, tc);
-    XmTextSetString (postScriptVertSize, tc);
+    XmTextSetString(printerVertSize, tc);
+    XmTextSetString(postScriptVertSize, tc);
     sprintf(tc, "%d", printRes[0]);
-    XmTextSetString (rgbHorizSize, tc);
+    XmTextSetString(rgbHorizSize, tc);
     sprintf(tc, "%d", printRes[1]);
-    XmTextSetString (rgbVertSize, tc);
+    XmTextSetString(rgbVertSize, tc);
 
     // If the textports are currently managed, update them
     if (XtIsManaged(printerHorizSize)) {
         XmUpdateDisplay(printerHorizSize);
         XmUpdateDisplay(printerVertSize);
-    }
-    else if (XtIsManaged(postScriptHorizSize)) {
+    } else if (XtIsManaged(postScriptHorizSize)) {
         XmUpdateDisplay(postScriptHorizSize);
         XmUpdateDisplay(postScriptVertSize);
     }
@@ -1932,7 +1905,6 @@ SoXtPrintDialog::updateTextports()
     }
     alreadyUpdated = FALSE;
 }
-
 
 ///////////////////////////////////////////////////////////////////////
 //
@@ -1947,18 +1919,21 @@ SoXtPrintDialog::getPrinterList()
 //
 //////////////////////////////////////////////////////////////////////
 {
-    FILE        *fp;
-    char        line[80];
-    SbBool  	firstTime = TRUE;
+    FILE * fp;
+    char   line[80];
+    SbBool firstTime = TRUE;
 
-    fp = popen("lpstat -d -a | awk '/accepting/ {if ($2 != \"not\") print $1}; /^system default destination:/ { print $4 }; /^no system default destination/ { print \"none\"} '", "r");
+    fp = popen("lpstat -d -a | awk '/accepting/ {if ($2 != \"not\") print $1}; "
+               "/^system default destination:/ { print $4 }; /^no system "
+               "default destination/ { print \"none\"} '",
+               "r");
     while (fgets(line, 80, fp) != NULL) {
-        line[strlen(line)-1] = 0;
+        line[strlen(line) - 1] = 0;
         if (firstTime) {
             defaultPrinter = strdup(line);
-	    firstTime = FALSE;
-	}
-        else printers->append(strdup(line));
+            firstTime = FALSE;
+        } else
+            printers->append(strdup(line));
     }
     pclose(fp);
 }
@@ -1967,14 +1942,16 @@ SoXtPrintDialog::getPrinterList()
 // redefine those generic virtual functions
 //
 const char *
-SoXtPrintDialog::getDefaultWidgetName() const
-{ return "SoXtPrintDialog"; }
+SoXtPrintDialog::getDefaultWidgetName() const {
+    return "SoXtPrintDialog";
+}
 
 const char *
-SoXtPrintDialog::getDefaultTitle() const
-{ return "Print Dialog"; }
+SoXtPrintDialog::getDefaultTitle() const {
+    return "Print Dialog";
+}
 
 const char *
-SoXtPrintDialog::getDefaultIconTitle() const
-{ return "Print Dialog"; }
-
+SoXtPrintDialog::getDefaultIconTitle() const {
+    return "Print Dialog";
+}

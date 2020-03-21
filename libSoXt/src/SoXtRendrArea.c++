@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 
-
+#include <GL/glx.h>
 #include <Inventor/SoDB.h>
 #include <Inventor/SbLinear.h>
 #include <Inventor/errors/SoDebugError.h>
@@ -63,8 +63,7 @@
 #include <Inventor/Xt/SoXtRenderArea.h>
 #include <Inventor/Xt/devices/SoXtKeyboard.h>
 #include <Inventor/Xt/devices/SoXtMouse.h>
-#include <Inventor/misc/SoGL.h>
-#include <GL/glx.h>
+
 #include <stdlib.h>
 
 #include <X11/Intrinsic.h>
@@ -74,23 +73,16 @@
 
 static char *thisClassName = "SoXtRenderArea";
 
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Public constructor - build the widget right now
 //
-SoXtRenderArea::SoXtRenderArea(
-    Widget parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SbBool getMouseInput,
-    SbBool getKeyboardInput)
-	: SoXtGLWidget(
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    SO_GLX_RGB | SO_GLX_DOUBLE | SO_GLX_ZBUFFER | SO_GLX_OVERLAY, 
-	    FALSE) // tell GLWidget not to build just yet 
+SoXtRenderArea::SoXtRenderArea(Widget parent, const char *name,
+                               SbBool buildInsideParent, SbBool getMouseInput,
+                               SbBool getKeyboardInput)
+    : SoXtGLWidget(parent, name, buildInsideParent,
+                   SO_GLX_RGB | SO_GLX_DOUBLE | SO_GLX_ZBUFFER | SO_GLX_OVERLAY,
+                   FALSE) // tell GLWidget not to build just yet
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -102,23 +94,16 @@ SoXtRenderArea::SoXtRenderArea(
 //
 // SoEXTENDER constructor - the subclass tells us whether to build or not
 //
-SoXtRenderArea::SoXtRenderArea(
-    Widget parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SbBool getMouseInput,
-    SbBool getKeyboardInput, 
-    SbBool buildNow)
-	: SoXtGLWidget(
-	    parent,
-	    name, 
-	    buildInsideParent, 
-	    SO_GLX_RGB | SO_GLX_DOUBLE | SO_GLX_ZBUFFER | SO_GLX_OVERLAY, 
-	    FALSE) // tell GLWidget not to build just yet 
+SoXtRenderArea::SoXtRenderArea(Widget parent, const char *name,
+                               SbBool buildInsideParent, SbBool getMouseInput,
+                               SbBool getKeyboardInput, SbBool buildNow)
+    : SoXtGLWidget(parent, name, buildInsideParent,
+                   SO_GLX_RGB | SO_GLX_DOUBLE | SO_GLX_ZBUFFER | SO_GLX_OVERLAY,
+                   FALSE) // tell GLWidget not to build just yet
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // In this case, render area may be what the app wants, 
+    // In this case, render area may be what the app wants,
     // or it may want a subclass of render area. Pass along buildNow
     // as it was passed to us.
     constructorCommon(getMouseInput, getKeyboardInput, buildNow);
@@ -131,61 +116,59 @@ SoXtRenderArea::SoXtRenderArea(
 // private
 //
 void
-SoXtRenderArea::constructorCommon(
-    SbBool getMouseInput,
-    SbBool getKeyboardInput, 
-    SbBool buildNow)
+SoXtRenderArea::constructorCommon(SbBool getMouseInput, SbBool getKeyboardInput,
+                                  SbBool buildNow)
 //
 ////////////////////////////////////////////////////////////////////////
-{    
+{
     addVisibilityChangeCallback(visibilityChangeCB, this);
     setClassName(thisClassName);
-    
+
     // set up the device list
     deviceList = new SbPList;
-    
+
     // default devices
     if (getMouseInput) {
-	mouseDevice = new SoXtMouse();
-	deviceList->append(mouseDevice);
-    }
-    else mouseDevice = NULL;
-    
+        mouseDevice = new SoXtMouse();
+        deviceList->append(mouseDevice);
+    } else
+        mouseDevice = NULL;
+
     if (getKeyboardInput) {
-	keybdDevice = new SoXtKeyboard();
-	deviceList->append(keybdDevice);
-    }
-    else keybdDevice = NULL;
-    
+        keybdDevice = new SoXtKeyboard();
+        deviceList->append(keybdDevice);
+    } else
+        keybdDevice = NULL;
+
     // local vars
     clearFirst = TRUE;
     clearOverlayFirst = TRUE;
     autoRedraw = TRUE;
     selection = overlaySelection = NULL;
     deviceWidget = NULL;
-    
-    setSize(SbVec2s(400, 400));  // default size
+
+    setSize(SbVec2s(400, 400)); // default size
     setBorder(TRUE);
-    
+
     // inventor specific variables
     appEventHandler = NULL;
-    
+
     // the scene manager can be supplied by a subclass.,
-    sceneMgr = new SoSceneManager(); 
+    sceneMgr = new SoSceneManager();
     sceneMgr->setRenderCallback(renderCB, this);
-    
+
     // the overlay scene manager is supplied right here.
-   
-    overlaySceneMgr = new SoSceneManager(); 
+
+    overlaySceneMgr = new SoSceneManager();
     overlaySceneMgr->setRenderCallback(renderOverlayCB, this);
-    
+
     // color map variables
     mapColors = overlayMapColors = NULL;
     mapColorNum = overlayMapColorNum = 0;
-    
+
     // Build the widget tree, and let SoXtComponent know about our base widget.
     if (buildNow)
-	setBaseWidget(buildWidget(getParentWidget()));
+        setBaseWidget(buildWidget(getParentWidget()));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -198,21 +181,24 @@ SoXtRenderArea::~SoXtRenderArea()
 {
     // Remove our callback from old selection node
     if (selection != NULL) {
-	selection->removeChangeCallback(SoXtRenderArea::selectionChangeCB, this);
-	
-	// Unref the old selection node
-	selection->unref(); 
+        selection->removeChangeCallback(SoXtRenderArea::selectionChangeCB,
+                                        this);
+
+        // Unref the old selection node
+        selection->unref();
     }
 
     unregisterWidget(getGlxMgrWidget());
-    
-    if (mapColors != NULL)
-	free(mapColors);
-    if (overlayMapColors != NULL)
-	free(overlayMapColors);
 
-    if (mouseDevice != NULL) delete mouseDevice;
-    if (keybdDevice != NULL) delete keybdDevice;
+    if (mapColors != NULL)
+        free(mapColors);
+    if (overlayMapColors != NULL)
+        free(overlayMapColors);
+
+    if (mouseDevice != NULL)
+        delete mouseDevice;
+    if (keybdDevice != NULL)
+        delete keybdDevice;
     delete sceneMgr;
     delete overlaySceneMgr;
     delete deviceList;
@@ -234,21 +220,21 @@ SoXtRenderArea::setSceneGraph(SoNode *newScene)
     // Deactivate while we change the scene so that our sensors
     // get unhooked before the data changes beneath us.
     sceneMgr->deactivate();
-    
+
     sceneMgr->setSceneGraph(newScene);
-    
+
     // draw new scene graphs to the front buffer by default since
     // the scene will be different (we might has well see something
     // happening for the first redraw).
     if (isDrawToFrontBufferEnable())
-	drawToFrontBuffer = TRUE;
-    
+        drawToFrontBuffer = TRUE;
+
     // we activate only if we are visible.
     // after all, if we're not on screen, the visibility change
     // callback will invoke activate() once we are on screen.
     if (isVisible() && autoRedraw) {
-	sceneMgr->activate();
-	sceneMgr->scheduleRedraw();
+        sceneMgr->activate();
+        sceneMgr->scheduleRedraw();
     }
 }
 
@@ -264,21 +250,21 @@ SoXtRenderArea::setOverlaySceneGraph(SoNode *newScene)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! getOverlayWidget())
-	return;
+    if (!getOverlayWidget())
+        return;
 
     // Deactivate while we change the scene so that our sensors
     // get unhooked before the data changes beneath us.
     overlaySceneMgr->deactivate();
-    
+
     overlaySceneMgr->setSceneGraph(newScene);
-    
+
     // we activate only if we are visible.
     // after all, if we're not on screen, the visibility change
     // callback will invoke activate() once we are on screen.
     if (isVisible() && autoRedraw) {
-	overlaySceneMgr->activate();
-	overlaySceneMgr->scheduleRedraw();
+        overlaySceneMgr->activate();
+        overlaySceneMgr->scheduleRedraw();
     }
 }
 
@@ -312,21 +298,21 @@ SoXtRenderArea::setColorMap(int startIndex, int num, const SbColor *colors)
     // save those colors for future uses (if the widget hasn't been
     // built yet, or next time it gets built)
     if (mapColors != NULL)
-	free(mapColors);
-    mapColors = (XColor *) malloc(sizeof(XColor) * num);
+        free(mapColors);
+    mapColors = (XColor *)malloc(sizeof(XColor) * num);
     mapColorNum = num;
     XColor *xcol = mapColors;
-    for (int i=0; i<num; i++, xcol++) {
-	xcol->red   = (unsigned short) (colors[i][0] * 65535);
-	xcol->green = (unsigned short) (colors[i][1] * 65535);
-	xcol->blue  = (unsigned short) (colors[i][2] * 65535);
-	xcol->flags = DoRed|DoGreen|DoBlue;
-	xcol->pixel = startIndex + i;
+    for (int i = 0; i < num; i++, xcol++) {
+        xcol->red = (unsigned short)(colors[i][0] * 65535);
+        xcol->green = (unsigned short)(colors[i][1] * 65535);
+        xcol->blue = (unsigned short)(colors[i][2] * 65535);
+        xcol->flags = DoRed | DoGreen | DoBlue;
+        xcol->pixel = startIndex + i;
     }
 
     // now load those colors into the color map
     if (colorMap != 0)
-	XStoreColors(getDisplay(), colorMap, mapColors, mapColorNum);
+        XStoreColors(getDisplay(), colorMap, mapColors, mapColorNum);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -337,31 +323,33 @@ SoXtRenderArea::setColorMap(int startIndex, int num, const SbColor *colors)
 // use: public
 //
 void
-SoXtRenderArea::setOverlayColorMap(int startIndex, int num, const SbColor *colors)
+SoXtRenderArea::setOverlayColorMap(int startIndex, int num,
+                                   const SbColor *colors)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! getOverlayWidget())
-	return;
+    if (!getOverlayWidget())
+        return;
 
     // save those colors for future uses (if the widget hasn't been
     // built yet, or next time it gets built)
     if (overlayMapColors != NULL)
-	free(overlayMapColors);
-    overlayMapColors = (XColor *) malloc(sizeof(XColor) * num);
+        free(overlayMapColors);
+    overlayMapColors = (XColor *)malloc(sizeof(XColor) * num);
     overlayMapColorNum = num;
     XColor *xcol = overlayMapColors;
-    for (int i=0; i<num; i++, xcol++) {
-	xcol->red   = (unsigned short) (colors[i][0] * 65535);
-	xcol->green = (unsigned short) (colors[i][1] * 65535);
-	xcol->blue  = (unsigned short) (colors[i][2] * 65535);
-	xcol->flags = DoRed|DoGreen|DoBlue;
-	xcol->pixel = startIndex + i;
+    for (int i = 0; i < num; i++, xcol++) {
+        xcol->red = (unsigned short)(colors[i][0] * 65535);
+        xcol->green = (unsigned short)(colors[i][1] * 65535);
+        xcol->blue = (unsigned short)(colors[i][2] * 65535);
+        xcol->flags = DoRed | DoGreen | DoBlue;
+        xcol->pixel = startIndex + i;
     }
 
     // now load those colors into the color map
     if (overlayColorMap != 0)
-	XStoreColors(getDisplay(), overlayColorMap, overlayMapColors, overlayMapColorNum);
+        XStoreColors(getDisplay(), overlayColorMap, overlayMapColors,
+                     overlayMapColorNum);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -399,18 +387,18 @@ SoXtRenderArea::buildWidget(Widget parent)
 
     // get the resources for this component
     SoXtResource xr(getGlxMgrWidget());
-    SbColor c;
+    SbColor      c;
     if (xr.getResource("backgroundColor", "BackgroundColor", c))
-	 setBackgroundColor(c);
+        setBackgroundColor(c);
 
-    // get the transparent color index
+        // get the transparent color index
 #ifdef GLX_TRANSPARENT_INDEX_VALUE_EXT
     XVisualInfo *vis = getOverlayVisual();
     if (vis != NULL) {
-	int index;
-	glXGetConfig(XtDisplay(parent), vis, GLX_TRANSPARENT_INDEX_VALUE_EXT,
-	    &index);
-	overlaySceneMgr->setBackgroundIndex(index);
+        int index;
+        glXGetConfig(XtDisplay(parent), vis, GLX_TRANSPARENT_INDEX_VALUE_EXT,
+                     &index);
+        overlaySceneMgr->setBackgroundIndex(index);
     }
 #endif
 
@@ -431,15 +419,15 @@ SoXtRenderArea::widgetChanged(Widget newWidget)
 {
     // init the render actions whenever we change windows
     if (newWidget)
-	sceneMgr->reinitialize();
-    
+        sceneMgr->reinitialize();
+
     //
     // Work around bug #164424
     // if we don't use the overlay window, register the devices/handler
     // on the new normal widget.
     //
-    if (! getOverlayWidget())
-	reinstallDevices(newWidget);
+    if (!getOverlayWidget())
+        reinstallDevices(newWidget);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -458,19 +446,16 @@ SoXtRenderArea::registerDevice(SoXtDevice *device)
     int index = deviceList->find(device);
     // ??? mott, shouldn't we return if the device is found ?
     if (index == -1)
-	deviceList->append(device);
+        deviceList->append(device);
 
     // tell the device the window size
     device->setWindowSize(getGlxSize());
 
     // Tell the device to register event interest for our widget
     Widget w = getOverlayWidget() ? getOverlayWidget() : getNormalWidget();
-    if ((w != NULL) && (XtWindow(w) != (Window) NULL))
-	device->enable(
-	    w,
-	    (XtEventHandler) SoXtGLWidget::eventHandler,
-	    (XtPointer) this,
-	    XtWindow(w));
+    if ((w != NULL) && (XtWindow(w) != (Window)NULL))
+        device->enable(w, (XtEventHandler)SoXtGLWidget::eventHandler,
+                       (XtPointer)this, XtWindow(w));
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -487,7 +472,7 @@ SoXtRenderArea::unregisterDevice(SoXtDevice *device)
     // Find the device in our device list
     int index = deviceList->find(device);
     if (index == -1)
-	return;
+        return;
 
     // Remove the device from the list of devices
     deviceList->remove(index);
@@ -495,10 +480,8 @@ SoXtRenderArea::unregisterDevice(SoXtDevice *device)
     // Tell the device to register event interest for our widget
     Widget w = getOverlayWidget() ? getOverlayWidget() : getNormalWidget();
     if (w)
-	device->disable(
-	    w,
-	    (XtEventHandler) SoXtGLWidget::eventHandler,
-	    (XtPointer) this);
+        device->disable(w, (XtEventHandler)SoXtGLWidget::eventHandler,
+                        (XtPointer)this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -513,26 +496,23 @@ SoXtRenderArea::reinstallDevices(Widget newWidget)
 ////////////////////////////////////////////////////////////////////////
 {
     for (int i = 0; i < deviceList->getLength(); i++) {
-	SoXtDevice *device = (SoXtDevice *) (*deviceList)[i];
-	
-	// disable on the old widget...
-	if (deviceWidget)
-	    device->disable(
-		deviceWidget, 
-		(XtEventHandler) SoXtGLWidget::eventHandler,
-		(XtPointer) this);
-	
-	// enable on the new widget....
-	if (newWidget) {
-	    device->setWindowSize(getGlxSize());
-	    device->enable(
-		newWidget, 
-		(XtEventHandler) SoXtGLWidget::eventHandler,
-		(XtPointer) this,
-		XtWindow(newWidget));
-	}
+        SoXtDevice *device = (SoXtDevice *)(*deviceList)[i];
+
+        // disable on the old widget...
+        if (deviceWidget)
+            device->disable(deviceWidget,
+                            (XtEventHandler)SoXtGLWidget::eventHandler,
+                            (XtPointer)this);
+
+        // enable on the new widget....
+        if (newWidget) {
+            device->setWindowSize(getGlxSize());
+            device->enable(newWidget,
+                           (XtEventHandler)SoXtGLWidget::eventHandler,
+                           (XtPointer)this, XtWindow(newWidget));
+        }
     }
-    
+
     // ??? add an event handler to receive EnterNotify events to make
     // ??? sure the render area has the current keyboard focus, otherwise
     // ??? keyboard events will go to whichever text field has focus (black
@@ -544,14 +524,14 @@ SoXtRenderArea::reinstallDevices(Widget newWidget)
     // stuff for SoLocateHighlight (keep track of current window).
     //
     if (deviceWidget)
-	XtRemoveEventHandler(deviceWidget, (EnterWindowMask | LeaveWindowMask), FALSE,
-	    (XtEventHandler) SoXtRenderArea::windowEventCB, 
-	    (XtPointer) this);
+        XtRemoveEventHandler(
+            deviceWidget, (EnterWindowMask | LeaveWindowMask), FALSE,
+            (XtEventHandler)SoXtRenderArea::windowEventCB, (XtPointer)this);
     if (newWidget)
-	XtAddEventHandler(newWidget, (EnterWindowMask | LeaveWindowMask), FALSE,
-	    (XtEventHandler) SoXtRenderArea::windowEventCB, 
-	    (XtPointer) this);
-    
+        XtAddEventHandler(newWidget, (EnterWindowMask | LeaveWindowMask), FALSE,
+                          (XtEventHandler)SoXtRenderArea::windowEventCB,
+                          (XtPointer)this);
+
     deviceWidget = newWidget;
 }
 
@@ -569,9 +549,9 @@ SoXtRenderArea::invokeAppCB(XAnyEvent *anyevent)
 {
     // if app wants event, send event to application
     if (appEventHandler != NULL)
-	return (*appEventHandler)(appEventHandlerData, anyevent);
+        return (*appEventHandler)(appEventHandlerData, anyevent);
     else
-	return FALSE;
+        return FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -588,28 +568,27 @@ SoXtRenderArea::processEvent(XAnyEvent *anyevent)
 {
     // check if app wants the event...
     if (invokeAppCB(anyevent))
-	return;
-    
+        return;
+
     // ...else send it to the scene
-    
+
     // to do this, translate the X event to an SoEvent
-    // by finding a device to perform the translation 
+    // by finding a device to perform the translation
     const SoEvent *soevent = NULL;
     for (int i = 0; (soevent == NULL) && (i < deviceList->getLength()); i++) {
-	SoXtDevice *device = (SoXtDevice *) (*deviceList)[i];
-	soevent = device->translateEvent(anyevent);
+        SoXtDevice *device = (SoXtDevice *)(*deviceList)[i];
+        soevent = device->translateEvent(anyevent);
     }
-    
+
     // no device found, so return...
-    if (! soevent)
-	return;
-    
+    if (!soevent)
+        return;
+
     // now send the event first to the overlay scene graph, elses to
     // the regular scene graph.
     SbBool handled = overlaySceneMgr->processEvent(soevent);
-    if (! handled) {
-	sceneMgr->processEvent(soevent);
-
+    if (!handled) {
+        sceneMgr->processEvent(soevent);
     }
 }
 
@@ -627,14 +606,14 @@ SoXtRenderArea::initGraphic()
 {
     sceneMgr->reinitialize();
     sceneMgr->setRGBMode(isRGBMode());
-    
+
     SoGLRenderAction *ra = sceneMgr->getGLRenderAction();
     ra->setCacheContext(getDisplayListShareGroup(getNormalContext()));
     ra->setRenderingIsRemote(!glXIsDirect(getDisplay(), getNormalContext()));
 
     // load the color map
-    if (! isRGBMode() && colorMap != 0 && mapColorNum != 0)
-	XStoreColors(getDisplay(), colorMap, mapColors, mapColorNum);
+    if (!isRGBMode() && colorMap != 0 && mapColorNum != 0)
+        XStoreColors(getDisplay(), colorMap, mapColors, mapColorNum);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -651,15 +630,16 @@ SoXtRenderArea::initOverlayGraphic()
 {
     overlaySceneMgr->reinitialize();
     overlaySceneMgr->setRGBMode(FALSE);
-    
+
     SoGLRenderAction *ra = overlaySceneMgr->getGLRenderAction();
     ra->setCacheContext(getDisplayListShareGroup(getOverlayContext()));
     ra->setRenderingIsRemote(!glXIsDirect(getDisplay(), getOverlayContext()));
 
     // load the color map
     if (overlayColorMap != 0 && overlayMapColorNum != 0)
-	XStoreColors(getDisplay(), overlayColorMap, overlayMapColors, overlayMapColorNum);
-    
+        XStoreColors(getDisplay(), overlayColorMap, overlayMapColors,
+                     overlayMapColorNum);
+
     // enable the devices on the overlay window
     reinstallDevices(getOverlayWidget());
 }
@@ -677,11 +657,11 @@ SoXtRenderArea::sizeChanged(const SbVec2s &newSize)
 {
     sceneMgr->setWindowSize(newSize);
     overlaySceneMgr->setWindowSize(newSize);
-    
+
     // tell each device the new window size
     for (int i = 0; i < deviceList->getLength(); i++) {
-	SoXtDevice *device = (SoXtDevice *) (*deviceList)[i];
-	device->setWindowSize(newSize);
+        SoXtDevice *device = (SoXtDevice *)(*deviceList)[i];
+        device->setWindowSize(newSize);
     }
 }
 
@@ -697,9 +677,9 @@ SoXtRenderArea::activate()
 ////////////////////////////////////////////////////////////////////////
 {
     // if autoRedraw is off, then don't attach the scene sensor
-    if (! autoRedraw)
-	return;
-    
+    if (!autoRedraw)
+        return;
+
     // Activate the scene manager
     sceneMgr->activate();
     overlaySceneMgr->activate();
@@ -734,16 +714,15 @@ SoXtRenderArea::setAutoRedraw(SbBool flag)
 ////////////////////////////////////////////////////////////////////////
 {
     if (flag == autoRedraw)
-	return;
+        return;
 
     autoRedraw = flag;
 
     if (autoRedraw) {
-	if (isVisible())
-	    activate();
-    }
-    else
-	deactivate();
+        if (isVisible())
+            activate();
+    } else
+        deactivate();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -771,7 +750,7 @@ SoXtRenderArea::actualOverlayRedraw()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    overlaySceneMgr->render(clearOverlayFirst);    
+    overlaySceneMgr->render(clearOverlayFirst);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -790,54 +769,52 @@ SoXtRenderArea::redraw()
     // event (case when the sensor triggers but we know that an expose
     // event will come along and we don't want 2 redraws).
     if (!isVisible() || waitForExpose)
-	return;
-    
+        return;
+
     // set the window
     glXMakeCurrent(getDisplay(), getNormalWindow(), getNormalContext());
-    
+
     // see if we need to temporary draw to the front buffer (which
     // is set when we display a new scene or get an expose event)
     if (drawToFrontBuffer && isDrawToFrontBufferEnable() && isDoubleBuffer()) {
-	
-	// ??? workaround bug 301010 - it seems that redrawing to the front
-	// ??? of a window that might not be on the screen ( isVisible() might
-	// ??? be incorect in a few cases) will confuse the GFX hardware
-	// ??? of some machine (Xtrem and Indy24).
-	// 
-	// ??? Note: this also fixes 298058 (redrawing to the front window
-	// ??? on indigo starter gfx, which happened all the time).
-	//
-	if (isRGBMode()) {
-	    SbColor color = getBackgroundColor();
-	    glClearColor(color[0], color[1], color[2], 0);
-	} else
-	    glClearIndex(getBackgroundIndex());
-	glClear(GL_COLOR_BUFFER_BIT);
-	glXSwapBuffers(getDisplay(), getNormalWindow());
-	// ??? end of BUG workaround
-	
-	glReadBuffer(GL_FRONT); // Needed for acbuf antialiasing
-	glDrawBuffer(GL_FRONT);
+
+        // ??? workaround bug 301010 - it seems that redrawing to the front
+        // ??? of a window that might not be on the screen ( isVisible() might
+        // ??? be incorect in a few cases) will confuse the GFX hardware
+        // ??? of some machine (Xtrem and Indy24).
+        //
+        // ??? Note: this also fixes 298058 (redrawing to the front window
+        // ??? on indigo starter gfx, which happened all the time).
+        //
+        if (isRGBMode()) {
+            SbColor color = getBackgroundColor();
+            glClearColor(color[0], color[1], color[2], 0);
+        } else
+            glClearIndex(getBackgroundIndex());
+        glClear(GL_COLOR_BUFFER_BIT);
+        glXSwapBuffers(getDisplay(), getNormalWindow());
+        // ??? end of BUG workaround
+
+        glReadBuffer(GL_FRONT); // Needed for acbuf antialiasing
+        glDrawBuffer(GL_FRONT);
     }
-    
+
     // draw that scene! (subclasses may redefine...)
     actualRedraw();
-    
+
     // swap those buffers!
     if (isDoubleBuffer()) {
-	if (drawToFrontBuffer && isDrawToFrontBufferEnable()) {
-	    // no need to swap here - instead restore the buffer and 
-	    // clear the flag now that we have drawn to the front buffer
-	    glReadBuffer(GL_BACK); // Needed for acbuf antialiasing
-	    glDrawBuffer(GL_BACK);
-	    glFlush();
-	}
-	else
-	    glXSwapBuffers(getDisplay(), getNormalWindow());
-    }
-    else
-	glFlush();
-    
+        if (drawToFrontBuffer && isDrawToFrontBufferEnable()) {
+            // no need to swap here - instead restore the buffer and
+            // clear the flag now that we have drawn to the front buffer
+            glReadBuffer(GL_BACK); // Needed for acbuf antialiasing
+            glDrawBuffer(GL_BACK);
+            glFlush();
+        } else
+            glXSwapBuffers(getDisplay(), getNormalWindow());
+    } else
+        glFlush();
+
     // clear this flag now that we have drawn
     drawToFrontBuffer = FALSE;
 }
@@ -857,12 +834,12 @@ SoXtRenderArea::setAntialiasing(SbBool smoothing, int numPasses)
     SoGLRenderAction *ra = getGLRenderAction();
 
     if (smoothing == ra->isSmoothing() && numPasses == ra->getNumPasses())
-	return;
-    
+        return;
+
     // The visual needs to change if we are now enabling or disabling
     // the accumulation buffer
-    SbBool needToChangeVisual = ((numPasses >  1 && ra->getNumPasses() == 1) ||
-				 (numPasses == 1 && ra->getNumPasses() >  1));
+    SbBool needToChangeVisual = ((numPasses > 1 && ra->getNumPasses() == 1) ||
+                                 (numPasses == 1 && ra->getNumPasses() > 1));
 
     //
     // now create a visual with the right info - this tries to
@@ -870,70 +847,69 @@ SoXtRenderArea::setAntialiasing(SbBool smoothing, int numPasses)
     // the antialiasing changed.
     //
     if (needToChangeVisual) {
-	
-	int n = 0;
-	int attribList[20];
-	
-	if (isRGBMode()) {
-	    attribList[n++] = GLX_RGBA;
-	    attribList[n++] = GLX_RED_SIZE;
-	    attribList[n++] = 1;
-	    attribList[n++] = GLX_GREEN_SIZE;
-	    attribList[n++] = 1;
-	    attribList[n++] = GLX_BLUE_SIZE;
-	    attribList[n++] = 1;
-	}
-	// there is always zbuffer...
-	attribList[n++] = GLX_DEPTH_SIZE;
-	attribList[n++] = 1;
-	if (isDoubleBuffer())
-	    attribList[n++] = GLX_DOUBLEBUFFER;
-	
-	// now add the antialiasing stuff
-	if (numPasses > 1) {
-	    attribList[n++] = GLX_ACCUM_RED_SIZE;
-	    attribList[n++] = 1;
-	    attribList[n++] = GLX_ACCUM_GREEN_SIZE;
-	    attribList[n++] = 1;
-	    attribList[n++] = GLX_ACCUM_BLUE_SIZE;
-	    attribList[n++] = 1;
-	}
 
-	// check for stencil buffer
-	Widget w = getWidget();
-	XVisualInfo *normalVis = getNormalVisual();
-	if (normalVis) {
-	    int val;
-	    glXGetConfig(XtDisplay(w), normalVis, GLX_STENCIL_SIZE, &val);
-	    if (val) {
-		attribList[n++] = GLX_STENCIL_SIZE;
-		attribList[n++] = val;
-	    }
-	}
+        int n = 0;
+        int attribList[20];
 
-	attribList[n++] = (int) None;
-	
-	// create the visual
-	XVisualInfo *vis = glXChooseVisual(XtDisplay(w), 
-	    XScreenNumberOfScreen(XtScreen(w)), attribList);
-	
-	if (! vis) {
+        if (isRGBMode()) {
+            attribList[n++] = GLX_RGBA;
+            attribList[n++] = GLX_RED_SIZE;
+            attribList[n++] = 1;
+            attribList[n++] = GLX_GREEN_SIZE;
+            attribList[n++] = 1;
+            attribList[n++] = GLX_BLUE_SIZE;
+            attribList[n++] = 1;
+        }
+        // there is always zbuffer...
+        attribList[n++] = GLX_DEPTH_SIZE;
+        attribList[n++] = 1;
+        if (isDoubleBuffer())
+            attribList[n++] = GLX_DOUBLEBUFFER;
+
+        // now add the antialiasing stuff
+        if (numPasses > 1) {
+            attribList[n++] = GLX_ACCUM_RED_SIZE;
+            attribList[n++] = 1;
+            attribList[n++] = GLX_ACCUM_GREEN_SIZE;
+            attribList[n++] = 1;
+            attribList[n++] = GLX_ACCUM_BLUE_SIZE;
+            attribList[n++] = 1;
+        }
+
+        // check for stencil buffer
+        Widget       w = getWidget();
+        XVisualInfo *normalVis = getNormalVisual();
+        if (normalVis) {
+            int val;
+            glXGetConfig(XtDisplay(w), normalVis, GLX_STENCIL_SIZE, &val);
+            if (val) {
+                attribList[n++] = GLX_STENCIL_SIZE;
+                attribList[n++] = val;
+            }
+        }
+
+        attribList[n++] = (int)None;
+
+        // create the visual
+        XVisualInfo *vis = glXChooseVisual(
+            XtDisplay(w), XScreenNumberOfScreen(XtScreen(w)), attribList);
+
+        if (!vis) {
 #ifdef DEBUG
-	    SoDebugError::post("SoXtRenderArea::setAntialiasing",
-			     "could not create ACCUM visual");
+            SoDebugError::post("SoXtRenderArea::setAntialiasing",
+                               "could not create ACCUM visual");
 #endif
-	    return;
-	}
-	
-	// now set this as the current visual
-	setNormalVisual(vis);
-	
-	// GL widget made a copy - we can free this
-	XFree(vis);
-    }
-    else // only the number of passes changed, so just redraw
-	sceneMgr->scheduleRedraw();
-    
+            return;
+        }
+
+        // now set this as the current visual
+        setNormalVisual(vis);
+
+        // GL widget made a copy - we can free this
+        XFree(vis);
+    } else // only the number of passes changed, so just redraw
+        sceneMgr->scheduleRedraw();
+
     // finally set the stuff on the render action
     sceneMgr->setAntialiasing(smoothing, numPasses);
 }
@@ -950,15 +926,15 @@ SoXtRenderArea::redrawOverlay()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (!isVisible() || getOverlayWindow() == (Window) NULL)
-	return;
-    
+    if (!isVisible() || getOverlayWindow() == (Window)NULL)
+        return;
+
     // set the window
     glXMakeCurrent(getDisplay(), getOverlayWindow(), getOverlayContext());
-    
+
     // draw that scene! (subclasses may redefine...)
     actualOverlayRedraw();
-    
+
     glFlush();
 }
 
@@ -974,9 +950,9 @@ SoXtRenderArea::scheduleRedraw()
 ////////////////////////////////////////////////////////////////////////
 {
     if (isAutoRedraw())
-	sceneMgr->scheduleRedraw();
+        sceneMgr->scheduleRedraw();
     else
-	redraw(); 
+        redraw();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -991,9 +967,9 @@ SoXtRenderArea::scheduleOverlayRedraw()
 ////////////////////////////////////////////////////////////////////////
 {
     if (isAutoRedraw())
-	overlaySceneMgr->scheduleRedraw();
+        overlaySceneMgr->scheduleRedraw();
     else
-	redrawOverlay(); 
+        redrawOverlay();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1010,21 +986,23 @@ SoXtRenderArea::redrawOnSelectionChange(SoSelection *s)
 {
     // Ref the new selection node
     if (s != NULL)
-	s->ref();
-	
+        s->ref();
+
     // Remove our callback from old selection node
     if (selection != NULL) {
-	selection->removeChangeCallback(SoXtRenderArea::selectionChangeCB, this);
-	
-	// Unref the old selection node
-	selection->unref(); 
+        selection->removeChangeCallback(SoXtRenderArea::selectionChangeCB,
+                                        this);
+
+        // Unref the old selection node
+        selection->unref();
     }
 
     selection = s;
-    
-    // Add our callback to this selection node. (We've already ref'd this new sel node)
+
+    // Add our callback to this selection node. (We've already ref'd this new
+    // sel node)
     if (selection != NULL)
-	selection->addChangeCallback(SoXtRenderArea::selectionChangeCB, this);
+        selection->addChangeCallback(SoXtRenderArea::selectionChangeCB, this);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1041,41 +1019,40 @@ SoXtRenderArea::redrawOverlayOnSelectionChange(SoSelection *s)
 {
     // Remove our callback from old selection node
     if (overlaySelection != NULL)
-	overlaySelection->removeChangeCallback(SoXtRenderArea::overlaySelectionChangeCB, this);
+        overlaySelection->removeChangeCallback(
+            SoXtRenderArea::overlaySelectionChangeCB, this);
 
     overlaySelection = s;
-    
+
     // Add our callback to this selection node
     if (overlaySelection != NULL)
-	overlaySelection->addChangeCallback(SoXtRenderArea::overlaySelectionChangeCB, this);
+        overlaySelection->addChangeCallback(
+            SoXtRenderArea::overlaySelectionChangeCB, this);
 }
-
-
 
 //
 // redefine those generic virtual functions
 //
 const char *
-SoXtRenderArea::getDefaultWidgetName() const
-{ return thisClassName; }
+SoXtRenderArea::getDefaultWidgetName() const {
+    return thisClassName;
+}
 
 const char *
-SoXtRenderArea::getDefaultTitle() const
-{ return "Xt RenderArea"; }
+SoXtRenderArea::getDefaultTitle() const {
+    return "Xt RenderArea";
+}
 
 const char *
-SoXtRenderArea::getDefaultIconTitle() const
-{ return "Xt RenderArea"; }
-
+SoXtRenderArea::getDefaultIconTitle() const {
+    return "Xt RenderArea";
+}
 
 //
 ////////////////////////////////////////////////////////////////////////
 // static callbacks stubs
 ////////////////////////////////////////////////////////////////////////
 //
-
-
-
 
 #include <Inventor/Xt/SoXt.h>
 //
@@ -1088,24 +1065,23 @@ SoXtRenderArea::getDefaultIconTitle() const
 // stuff for SoLocateHighlight (keep track of current window).
 //
 void
-SoXtRenderArea::windowEventCB(Widget w, SoXtRenderArea *p, XAnyEvent *xe, Boolean *)
-{
+SoXtRenderArea::windowEventCB(Widget w, SoXtRenderArea *p, XAnyEvent *xe,
+                              Boolean *) {
     if (xe->type == EnterNotify) {
-	// get keyboard focus....
-	if (p->getOverlayWidget())
-	    XmProcessTraversal(p->getOverlayWidget(), XmTRAVERSE_CURRENT);
-	else
-	    XmProcessTraversal(p->getNormalWidget(), XmTRAVERSE_CURRENT);
-	
-    } else if (xe->type == LeaveNotify) {
-	// loose keyboard focus...
-	XmProcessTraversal(SoXt::getShellWidget(w), XmTRAVERSE_CURRENT);
-	
-	// but first clear any currently highlighted object
-	SoGLRenderAction *glAct = p->sceneMgr->getGLRenderAction();
-	if (glAct)
-	    SoLocateHighlight::turnOffCurrentHighlight(glAct);
+        // get keyboard focus....
+        if (p->getOverlayWidget())
+            XmProcessTraversal(p->getOverlayWidget(), XmTRAVERSE_CURRENT);
+        else
+            XmProcessTraversal(p->getNormalWidget(), XmTRAVERSE_CURRENT);
 
+    } else if (xe->type == LeaveNotify) {
+        // loose keyboard focus...
+        XmProcessTraversal(SoXt::getShellWidget(w), XmTRAVERSE_CURRENT);
+
+        // but first clear any currently highlighted object
+        SoGLRenderAction *glAct = p->sceneMgr->getGLRenderAction();
+        if (glAct)
+            SoLocateHighlight::turnOffCurrentHighlight(glAct);
     }
 }
 
@@ -1113,43 +1089,37 @@ SoXtRenderArea::windowEventCB(Widget w, SoXtRenderArea *p, XAnyEvent *xe, Boolea
 // called whenever the component becomes visible or not
 //
 void
-SoXtRenderArea::visibilityChangeCB(void *pt, SbBool visible)
-{
+SoXtRenderArea::visibilityChangeCB(void *pt, SbBool visible) {
     SoXtRenderArea *p = (SoXtRenderArea *)pt;
-    
+
     if (visible)
-	p->activate();
+        p->activate();
     else {
-	// we are becoming hidden - so wait for an expose event
-	// (which we now will come later) before enabling a redraw to
-	// prevent too many redraws (scene graph changes + expose)
-	p->waitForExpose = TRUE;
-	
-	p->deactivate();
+        // we are becoming hidden - so wait for an expose event
+        // (which we now will come later) before enabling a redraw to
+        // prevent too many redraws (scene graph changes + expose)
+        p->waitForExpose = TRUE;
+
+        p->deactivate();
     }
 }
 
-
 void
-SoXtRenderArea::selectionChangeCB(void *p, SoSelection *)
-{
+SoXtRenderArea::selectionChangeCB(void *p, SoSelection *) {
     ((SoXtRenderArea *)p)->scheduleRedraw();
 }
 
 void
-SoXtRenderArea::overlaySelectionChangeCB(void *p, SoSelection *)
-{
+SoXtRenderArea::overlaySelectionChangeCB(void *p, SoSelection *) {
     ((SoXtRenderArea *)p)->scheduleOverlayRedraw();
 }
 
 void
-SoXtRenderArea::renderCB(void *p, SoSceneManager *)
-{
+SoXtRenderArea::renderCB(void *p, SoSceneManager *) {
     ((SoXtRenderArea *)p)->redraw();
 }
 
 void
-SoXtRenderArea::renderOverlayCB(void *p, SoSceneManager *)
-{
+SoXtRenderArea::renderOverlayCB(void *p, SoSceneManager *) {
     ((SoXtRenderArea *)p)->redrawOverlay();
 }

@@ -51,7 +51,7 @@
  _______________________________________________________________________
  */
 #include <machine.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/actions/SoGLRenderAction.h>

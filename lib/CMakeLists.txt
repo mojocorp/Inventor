@@ -6,16 +6,13 @@ find_package(BISON REQUIRED)
 # from the standard OpenGL framework which provides support for GLUT and native
 # Mac OS X applications.
 if (APPLE)
-    find_path (X11_GL_INCLUDE_PATH GL/glx.h ${X11_INC_SEARCH_PATH})
-    if (NOT X11_GL_INCLUDE_PATH)
-        message (ERROR "Could not find GL/glx.h")
-    endif (NOT X11_GL_INCLUDE_PATH)
-    include_directories (${X11_INCLUDE_DIR} ${X11_GL_INCLUDE_PATH})
+    include_directories (${X11_INCLUDE_DIR})
 
     find_library (X11_GL_LIB GL ${X11_LIB_SEARCH_PATH})
     if (NOT X11_GL_LIB)
         message (ERROR "Could not find libGL.dylib")
     endif (NOT X11_GL_LIB)
+    set(X11_LIBRARIES ${X11_LIBRARIES} ${X11_GL_LIB})
 endif ()
 
 
@@ -268,7 +265,6 @@ set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/misc/SoCallbackList.h
     database/include/Inventor/misc/SoChildList.h
     database/include/Inventor/misc/SoCompactPathList.h
-    database/include/Inventor/misc/SoGL.h
     database/include/Inventor/misc/SoNormalGenerator.h
     database/include/Inventor/misc/SoNotification.h
     database/include/Inventor/misc/SoState.h
@@ -457,6 +453,7 @@ set(DATABASE_SOURCES
     database/src/so/SoCompactPathList.c++
     database/src/so/SoDB.c++
     database/src/so/SoDebug.c++
+    database/src/so/SoGL.c++
     database/src/so/SoInput.c++
     database/src/so/SoNormalGenerator.c++
     database/src/so/SoNotification.c++
@@ -1096,7 +1093,7 @@ set(SOURCES ${DATABASE_SOURCES} ${NODEKIT_SOURCES} ${INTERACTION_SOURCES})
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 add_library (Inventor SHARED ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOURCES})
-target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} ${X11_GL_LIB} PRIVATE GLU freetype)
+target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} PRIVATE glad GLU freetype)
 target_include_directories (Inventor
                             PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/database/include ${CMAKE_CURRENT_SOURCE_DIR}/nodekits/include ${CMAKE_CURRENT_SOURCE_DIR}/interaction/include
                             PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/database/src/sb ${CMAKE_CURRENT_SOURCE_DIR}/database/src/so)

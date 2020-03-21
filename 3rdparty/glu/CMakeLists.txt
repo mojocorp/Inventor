@@ -1,3 +1,5 @@
+project(GLU)
+
 find_package(OpenGL REQUIRED)
 
 set(GLU_HEADERS

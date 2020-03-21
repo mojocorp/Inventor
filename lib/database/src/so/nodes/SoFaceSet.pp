@@ -56,7 +56,7 @@
 
 
 ///////////////////////////////////////////////////////////////////////////
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 #include <Inventor/SoPickedPoint.h>
 #include <Inventor/SoPrimitiveVertex.h>
 #include <Inventor/actions/SoGLRenderAction.h>

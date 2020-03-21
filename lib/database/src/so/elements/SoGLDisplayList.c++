@@ -56,7 +56,7 @@
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/caches/SoGLRenderCache.h>
 #include <Inventor/errors/SoDebugError.h>
-#include <Inventor/misc/SoGL.h>
+#include <glad/gl.h>
 
 ////////////////////////////////////////////////////////////////////////
 //
