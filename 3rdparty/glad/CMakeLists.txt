@@ -16,7 +16,7 @@ if(WIN32)
     set(GLAD_SOURCES ${GLAD_SOURCES} src/wgl.c)
 endif()
 
-if(UNIX)
+if(UNIX AND NOT APPLE)
     find_package(X11 REQUIRED)
     set(GLAD_HEADERS ${GLAD_HEADERS} include/glad/glx.h)
     set(GLAD_SOURCES ${GLAD_SOURCES} src/glx.c)

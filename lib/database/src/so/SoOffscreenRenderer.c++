@@ -50,9 +50,8 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#include <stdio.h>
-#include <assert.h>
-#include <glad/glx.h>
+#include <machine.h>
+#include <glad/gl.h>
 #include <Inventor/SoOffscreenRenderer.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -62,114 +61,223 @@
 #include <image/image-sgi.h>
 #include <image/image-eps.h>
 
-struct SbGLXContext {
-    SbGLXContext() : display(NULL), visual(NULL), context(NULL), pixmap(0) {
-        // Create an X Display
-        display = XOpenDisplay(NULL);
+#if defined(SB_OS_WIN)
+#include <windows.h>
+#elif defined(SB_OS_MACX)
+#include <OpenGL/OpenGL.h>
+#include <CoreGraphics/CGDisplayConfiguration.h>
+#elif defined(SB_OS_LINUX)
+#include <glad/glx.h>
+#else
+#error "SoOffscreenRenderer has not been ported to this OS"
+#endif
 
-        if (!display)
-            return;
+class SbGLContext {
+  public:
+    SbGLContext() {
+#if defined(SB_OS_WIN)
+        m_canvasWindow = 0;
+        m_canvasDC = 0;
+        m_contextObj = 0;
 
-        // Create a GLX Visual
-        // Offscreen renderings will always be rendered as RGB images
-        // Currently the OpenGL does not support storing alpha channel
-        // information in the offscreen pixmap.
-        static int attributeList[] = {
-            GLX_RGBA, GLX_RED_SIZE,  1, GLX_GREEN_SIZE,
-            1,        GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE,
-            1,        None};
-        visual =
-            glXChooseVisual(display, DefaultScreen(display), attributeList);
-        if (!visual) {
-            XCloseDisplay(display);
-            display = NULL;
-            return;
-        }
+        WNDCLASS wc;
+        if (!GetClassInfo(GetModuleHandle(0), "CANVASGL", &wc)) {
+            ZeroMemory(&wc, sizeof(WNDCLASS));
+            wc.style = CS_OWNDC;
+            wc.hInstance = GetModuleHandle(0);
+            wc.lpfnWndProc = DefWindowProc;
+            wc.lpszClassName = "CANVASGL";
 
-        // Create a GLX Context
-        context = glXCreateContext(display, visual, NULL, TRUE);
-        if (!context) {
-            XCloseDisplay(display);
-            display = NULL;
-            return;
-        }
-    }
-    ~SbGLXContext() {
-        if (display) {
-            glXMakeCurrent(display, 0, 0);
-            glXDestroyContext(display, context);
-            glXDestroyGLXPixmap(display, pixmap);
-            XFreePixmap(display, pmap);
-            XCloseDisplay(display);
-        }
-    }
-
-    bool resize(const SbVec2s &sz) {
-        if (!display) {
-            return false;
-        }
-
-        if (size != sz) {
-            // The pixmap is not the right size.  Destroy it.
-            if (pixmap) {
-                glXMakeCurrent(display, 0, 0);
-                glXDestroyGLXPixmap(display, pixmap);
-                XFreePixmap(display, pmap);
+            if (!RegisterClass(&wc)) {
+                SoDebugError::post("SbGLContext", "RegisterClass failed\n");
+                return;
             }
-
-            // Create X and GLX Pixmap
-            pmap = XCreatePixmap(display, DefaultRootWindow(display),
-                                 (unsigned int)sz[0], (unsigned int)sz[1],
-                                 visual->depth);
-            pixmap = glXCreateGLXPixmap(display, visual, pmap);
-            size = sz;
         }
 
-        // Set the graphics context to point to the offscreen pixmap
-        if (glXMakeCurrent(display, pixmap, context) == 0)
-            return false;
-
-        // Store the pixels as byte aligned rows in the Pixmap
-        glPixelStorei(GL_PACK_ALIGNMENT, 1);
-
-        return true;
-    }
-
-    SbImage getImage(SoOffscreenRenderer::Components comps) {
-        GLenum format;
-        int    allocSize;
-        switch (comps) {
-        case SoOffscreenRenderer::LUMINANCE:
-            format = GL_LUMINANCE;
-            allocSize = size[0] * size[1] * 1;
-            break;
-        case SoOffscreenRenderer::LUMINANCE_TRANSPARENCY:
-            format = GL_LUMINANCE_ALPHA;
-            allocSize = size[0] * size[1] * 2;
-            break;
-        case SoOffscreenRenderer::RGB:
-            format = GL_RGB;
-            allocSize = size[0] * size[1] * 3;
-            break;
-        case SoOffscreenRenderer::RGB_TRANSPARENCY:
-            format = GL_RGBA;
-            allocSize = size[0] * size[1] * 4;
-            break;
+        m_canvasWindow = CreateWindow(
+            "CANVASGL", "CANVASGL", WS_CAPTION, CW_USEDEFAULT, CW_USEDEFAULT,
+            CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, GetModuleHandle(0), 0);
+        if (!m_canvasWindow) {
+            SoDebugError::post("SbGLContext", "CreateWindow failed\n");
+            return;
         }
 
-        SbImage buffer = SbImage(size, SbImage::Format(comps), allocSize, NULL);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glReadPixels(0, 0, size[0], size[1], format, GL_UNSIGNED_BYTE,
-                     (GLvoid *)buffer.getBytes());
-        return buffer;
+        // get the device context
+        m_canvasDC = GetDC(m_canvasWindow);
+        if (!m_canvasDC) {
+            SoDebugError::post("SbGLContext", "GetDC failed\n");
+            return;
+        }
+
+        // find default pixel format
+        PIXELFORMATDESCRIPTOR pfd;
+        ZeroMemory(&pfd, sizeof(PIXELFORMATDESCRIPTOR));
+        pfd.nSize = sizeof(PIXELFORMATDESCRIPTOR);
+        pfd.nVersion = 1;
+        pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL;
+
+        int pixelformat = ChoosePixelFormat(m_canvasDC, &pfd);
+
+        // set the pixel format for the dc
+        if (!SetPixelFormat(m_canvasDC, pixelformat, &pfd)) {
+            SoDebugError::post("SbGLContext", "SetPixelFormat failed\n");
+            return;
+        }
+
+        // create rendering context
+        m_contextObj = wglCreateContext(m_canvasDC);
+        if (!m_contextObj) {
+            SoDebugError::post("SbGLContext", "wglCreateContext failed\n");
+            return;
+        }
+
+        if (!wglMakeCurrent(m_canvasDC, m_contextObj)) {
+            SoDebugError::post("SbGLContext", "wglMakeCurrent failed\n");
+            return;
+        }
+#elif defined(SB_OS_MACX)
+        m_contextObj = 0;
+        // Create a 1x1 pbuffer and associated context to bootstrap things
+        CGLPixelFormatAttribute attribs[] = {
+            (CGLPixelFormatAttribute)kCGLPFAPBuffer,
+            (CGLPixelFormatAttribute)0};
+        CGLPixelFormatObj pixelFormat;
+        GLint             numPixelFormats;
+        if (CGLChoosePixelFormat(attribs, &pixelFormat, &numPixelFormats) !=
+            kCGLNoError) {
+            SoDebugError::post("SbGLContext", "error choosing pixel format");
+            return;
+        }
+        if (!pixelFormat) {
+            SoDebugError::post("SbGLContext", "no pixel format selected");
+            return;
+        }
+        CGLContextObj context;
+        CGLError      res = CGLCreateContext(pixelFormat, 0, &context);
+        CGLDestroyPixelFormat(pixelFormat);
+        if (res != kCGLNoError) {
+            SoDebugError::post("SbGLContext", "error creating context\n");
+            return;
+        }
+        if (CGLSetCurrentContext(context) != kCGLNoError) {
+            CGLDestroyContext(context);
+            // CGLDestroyPBuffer(pbuffer);
+            SoDebugError::post("SbGLContext", "error making context current\n");
+            return;
+        }
+        m_contextObj = context;
+#elif defined(SB_OS_LINUX)
+        m_contextObj = 0;
+        m_pbuffer = 0;
+        m_display = XOpenDisplay(0);
+        if (!m_display) {
+            SoDebugError::post("SbGLContext", "error opening X display\n");
+            return;
+        }
+
+        int          configAttrs[] = {GLX_DRAWABLE_TYPE,
+                             GLX_PBUFFER_BIT,
+                             GLX_RENDER_TYPE,
+                             GLX_RGBA_BIT,
+                             GLX_DOUBLEBUFFER,
+                             0,
+                             0};
+        int          nelements = 0;
+        GLXFBConfig *config =
+            glXChooseFBConfig(m_display, 0, configAttrs, &nelements);
+        if (!config) {
+            SoDebugError::post("SbGLContext", "glXChooseFBConfig failed\n");
+            return;
+        }
+        if (!nelements) {
+            SoDebugError::post("SbGLContext",
+                               "glXChooseFBConfig returned 0 elements\n");
+            XFree(config);
+            return;
+        }
+        GLXContext context =
+            glXCreateNewContext(m_display, config[0], GLX_RGBA_TYPE, 0, True);
+        if (!context) {
+            SoDebugError::post("SbGLContext", "glXCreateNewContext failed\n");
+            XFree(config);
+            return;
+        }
+        int pbufferAttrs[] = {GLX_PBUFFER_WIDTH, 1, GLX_PBUFFER_HEIGHT, 1, 0};
+        GLXPbuffer pbuffer =
+            glXCreatePbuffer(m_display, config[0], pbufferAttrs);
+        XFree(config);
+        if (!pbuffer) {
+            SoDebugError::post("SbGLContext", "glxCreatePbuffer failed\n");
+            return;
+        }
+        if (!glXMakeCurrent(m_display, pbuffer, context)) {
+            SoDebugError::post("SbGLContext", "glXMakeCurrent failed\n");
+            return;
+        }
+        m_contextObj = context;
+        m_pbuffer = pbuffer;
+#else
+#error "SbGLContext has not been ported to this OS"
+#endif
     }
 
-    SbVec2s      size;
-    Display *    display;
-    XVisualInfo *visual;
-    GLXContext   context;
-    GLXPixmap    pixmap;
-    Pixmap       pmap;
+    ~SbGLContext() {
+#if defined(SB_OS_WIN)
+        wglMakeCurrent(0, 0);
+        wglDeleteContext(m_contextObj);
+        ReleaseDC(m_canvasWindow, m_canvasDC);
+        DestroyWindow(m_canvasWindow);
+#elif defined(SB_OS_MACX)
+        CGLSetCurrentContext(0);
+        CGLDestroyContext(m_contextObj);
+#elif defined(SB_OS_LINUX)
+        glXMakeCurrent(m_display, 0, 0);
+        glXDestroyContext(m_display, m_contextObj);
+        glXDestroyPbuffer(m_display, m_pbuffer);
+        XCloseDisplay(m_display);
+#else
+#error "SbGLContext has not been ported to this OS"
+#endif
+    }
+
+    bool makeContextCurrent() {
+#if defined(SB_OS_WIN)
+        if (wglGetCurrentContext() == m_contextObj)
+            return true;
+
+        return (wglMakeCurrent(m_canvasDC, m_contextObj) == TRUE);
+
+#elif defined(SB_OS_MACX)
+        if (CGLGetCurrentContext() == m_contextObj)
+            return true;
+
+        return (CGLSetCurrentContext(m_contextObj) == kCGLNoError);
+
+#elif defined(SB_OS_LINUX)
+        if (glXGetCurrentContext() == m_contextObj)
+            return true;
+
+        return glXMakeCurrent(m_display, m_pbuffer, m_contextObj);
+
+#else
+#error "SbGLContext has not been ported to this OS"
+#endif
+    }
+
+  private:
+#if defined(SB_OS_WIN)
+    HWND  m_canvasWindow;
+    HDC   m_canvasDC;
+    HGLRC m_contextObj;
+#elif defined(SB_OS_MACX)
+    CGLContextObj m_contextObj;
+#elif defined(SB_OS_LINUX)
+    Display *m_display;
+    GLXContext m_contextObj;
+    GLXPbuffer m_pbuffer;
+#else
+#error "SbGLContext has not been ported to this OS"
+#endif
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -189,7 +297,7 @@ SoOffscreenRenderer::SoOffscreenRenderer(const SbViewportRegion &viewportRegion)
     userAction = NULL;
     comps = SoOffscreenRenderer::RGB;
     backgroundColor.setValue(0.0, 0.0, 0.0);
-    ctx = new SbGLXContext;
+    ctx = new SbGLContext;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -209,7 +317,7 @@ SoOffscreenRenderer::SoOffscreenRenderer(SoGLRenderAction *act)
     userAction = act;
     comps = SoOffscreenRenderer::RGB;
     backgroundColor.setValue(0.0, 0.0, 0.0);
-    ctx = new SbGLXContext;
+    ctx = new SbGLContext;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -242,19 +350,44 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Display *tmpDisplay = XOpenDisplay(NULL);
+#if defined(SB_OS_WIN)
 
-    // Create an X Display
-    if (tmpDisplay == NULL)
+    HDC hdc = GetDC(NULL);
+    if (hdc == NULL)
         return 75.0;
 
     // Get the dimensions of the screen
-    const float pix = DisplayWidth(tmpDisplay, 0) * 25.4 /
-                      (float)DisplayWidthMM(tmpDisplay, 0);
+    float pix = (float)GetDeviceCaps(hdc, LOGPIXELSX);
+
+    ReleaseDC(NULL, hdc);
+
+    return pix;
+
+#elif defined(SB_OS_MACX)
+
+    CGDirectDisplayID display = CGMainDisplayID();
+
+    // Get the dimensions of the screen (25.4mm = 1 inch)
+    return CGDisplayPixelsWide(display) * 25.4f /
+           (float)CGDisplayScreenSize(display).width;
+#elif defined(SB_OS_LINUX)
+
+    // Create an X Display
+    Display *tmpDisplay = XOpenDisplay(NULL);
+
+    if (tmpDisplay == NULL)
+        return 75.0;
+
+    // Get the dimensions of the screen (25.4mm = 1 inch)
+    float pix = DisplayWidth(tmpDisplay, 0) * 25.4f /
+                (float)DisplayWidthMM(tmpDisplay, 0);
 
     XCloseDisplay(tmpDisplay);
 
     return pix;
+#else
+#error "SoOffscreenRenderer has not been ported to this OS"
+#endif
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -271,15 +404,8 @@ SoOffscreenRenderer::getMaximumResolution()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbGLXContext context;
-
-    if (!context.resize(SbVec2s(2, 2))) {
-#ifdef DEBUG
-        SoDebugError::post("SoOffscreenRenderer::getMaximumResolution",
-                           "Could not initialize Pixmap");
-#endif
-        return SbVec2s(-1, -1);
-    }
+    SbGLContext context;
+    context.makeContextCurrent();
 
     GLint params[2];
     glGetIntegerv(GL_MAX_VIEWPORT_DIMS, params);
@@ -395,6 +521,14 @@ SoOffscreenRenderer::renderGeneric(SoBase *base)
 //
 ////////////////////////////////////////////////////////////////////////
 {
+    if (!ctx->makeContextCurrent()) {
+#ifdef DEBUG
+        SoDebugError::post("SoOffscreenRenderer::renderGeneric",
+                           "Could not setup context");
+#endif
+        return false;
+    }
+
     // Delete the pixel buffer if it has been previously used.
     pixelBuffer = SbImage();
 
@@ -406,14 +540,55 @@ SoOffscreenRenderer::renderGeneric(SoBase *base)
     // Get the offscreen pixmap ready for rendering
     const SbVec2s &vpSize = renderedViewport.getViewportSizePixels();
 
-    if (!ctx->resize(vpSize)) {
+    GLenum format = GL_INVALID_VALUE;
+    size_t numBytes = 0;
+    switch (comps) {
+    case SoOffscreenRenderer::LUMINANCE:
+        format = GL_LUMINANCE;
+        numBytes = vpSize[0] * vpSize[1];
+        break;
+    case SoOffscreenRenderer::LUMINANCE_TRANSPARENCY:
+        format = GL_LUMINANCE_ALPHA;
+        numBytes = vpSize[0] * vpSize[1] * 2;
+        break;
+    case SoOffscreenRenderer::RGB:
+        format = GL_RGB;
+        numBytes = vpSize[0] * vpSize[1] * 3;
+        break;
+    case SoOffscreenRenderer::RGB_TRANSPARENCY:
+        format = GL_RGBA;
+        numBytes = vpSize[0] * vpSize[1] * 4;
+        break;
+    }
+
+    // Generate the framebuffer object
+    GLuint framebuffer;
+    glGenFramebuffers(1, &framebuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+    // Generate the render buffers
+    GLuint colorbuffer;
+    glGenRenderbuffers(1, &colorbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, colorbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+                              GL_RENDERBUFFER, colorbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, format, vpSize[0], vpSize[1]);
+
+    GLuint depthbuffer;
+    glGenRenderbuffers(1, &depthbuffer);
+    glBindRenderbuffer(GL_RENDERBUFFER, depthbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT,
+                              GL_RENDERBUFFER, depthbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT32, vpSize[0],
+                          vpSize[1]);
+    glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
 #ifdef DEBUG
         SoDebugError::post("SoOffscreenRenderer::renderGeneric",
-                           "Could not setup Pixmap");
+                           "Framebuffer status is incomplete");
 #endif
         return false;
     }
-
     // Clear the pixmap to the backgroundColor
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
@@ -433,7 +608,20 @@ SoOffscreenRenderer::renderGeneric(SoBase *base)
         act->apply((SoPath *)base);
     act->setCacheContext(oldContext);
 
-    pixelBuffer = ctx->getImage(comps);
+    pixelBuffer = SbImage(vpSize, SbImage::Format(comps), numBytes, NULL);
+
+    glPushAttrib(GL_PIXEL_MODE_BIT);
+    glReadBuffer(GL_COLOR_ATTACHMENT0);
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    glReadPixels(0, 0, vpSize[0], vpSize[1], format, GL_UNSIGNED_BYTE,
+                 (GLvoid *)pixelBuffer.getBytes());
+    glPopAttrib();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    glDeleteRenderbuffers(1, &colorbuffer);
+    glDeleteRenderbuffers(1, &depthbuffer);
+    glDeleteFramebuffers(1, &framebuffer);
 
     return !pixelBuffer.isNull();
 }

@@ -54,7 +54,7 @@ int writeEps(FILE * fp, int w, int h, int nc, const unsigned char * bytes, float
     int numValues     = w*nc;
     int hexpos        = 0;
 
-    for (int row=h-1; row>=0; row--) {
+    for (int row=0; row<h; row++) {
         
         const unsigned char * ptr = bytes + row*w*nc;
 

@@ -5,9 +5,13 @@
 #if defined(SB_OS_WIN)
 #include <windows.h>
 #include <glad/wgl.h>
-#else
+#elif defined(SB_OS_MACX)
+#include <dlfcn.h>
+#elif defined(SB_OS_LINUX)
 #include <glad/glx.h>
 #include <dlfcn.h>
+#else
+#error "SoGL has not been ported to this OS"
 #endif
 
 namespace {
@@ -32,7 +36,7 @@ SoGlInit() {
 #if defined(SB_OS_WIN)
     gladSetWGLOnDemandLoader((GLADloadfunc)SoGlGetProcAddress);
 #endif
-#if defined(SB_OS_MACX) || defined(SB_OS_LINUX)
+#if defined(SB_OS_LINUX)
     gladSetGLXOnDemandLoader((GLADloadfunc)SoGlGetProcAddress);
 #endif
 }

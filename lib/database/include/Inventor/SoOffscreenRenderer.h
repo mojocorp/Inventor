@@ -169,7 +169,7 @@ class SoOffscreenRenderer {
     SbViewportRegion  renderedViewport;
 
     // These are used for rendering to the offscreen pixmap
-    struct SbGLXContext *ctx;
+    class SbGLContext *ctx;
 
     bool renderGeneric(class SoBase *base);
 };

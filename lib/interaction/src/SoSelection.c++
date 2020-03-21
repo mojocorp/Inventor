@@ -51,8 +51,6 @@
  _______________________________________________________________________
  */
 
-#include <X11/Xlib.h>
-
 #include <Inventor/SoDB.h>
 #include <Inventor/SoInput.h>
 #include <Inventor/SoInteraction.h>

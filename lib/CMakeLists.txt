@@ -1,18 +1,19 @@
 find_package(OpenGL REQUIRED)
-find_package(X11 REQUIRED)
 find_package(BISON REQUIRED)
 
-# On Mac OS X, GLX is provided as a separate OpenGL implementation, different
-# from the standard OpenGL framework which provides support for GLUT and native
-# Mac OS X applications.
-if (APPLE)
-    include_directories (${X11_INCLUDE_DIR})
+if(UNIX AND NOT APPLE)
+    find_package(X11 REQUIRED)
+endif()
 
-    find_library (X11_GL_LIB GL ${X11_LIB_SEARCH_PATH})
-    if (NOT X11_GL_LIB)
-        message (ERROR "Could not find libGL.dylib")
-    endif (NOT X11_GL_LIB)
-    set(X11_LIBRARIES ${X11_LIBRARIES} ${X11_GL_LIB})
+
+list(APPEND THIRD_PARTY_LIBS glad GLU freetype)
+
+if (APPLE)
+    find_library(COREGRAPHICS CoreGraphics)
+    if (COREGRAPHICS)
+        list(APPEND THIRD_PARTY_LIBS ${COREGRAPHICS})
+    endif ()
+    mark_as_advanced(COREGRAPHICS)
 endif ()
 
 
@@ -1093,7 +1094,7 @@ set(SOURCES ${DATABASE_SOURCES} ${NODEKIT_SOURCES} ${INTERACTION_SOURCES})
 #set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 add_library (Inventor SHARED ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOURCES})
-target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} PRIVATE glad GLU freetype)
+target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} PRIVATE ${THIRD_PARTY_LIBS})
 target_include_directories (Inventor
                             PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/database/include ${CMAKE_CURRENT_SOURCE_DIR}/nodekits/include ${CMAKE_CURRENT_SOURCE_DIR}/interaction/include
                             PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/database/src/sb ${CMAKE_CURRENT_SOURCE_DIR}/database/src/so)
