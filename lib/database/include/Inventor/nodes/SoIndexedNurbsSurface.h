@@ -73,8 +73,7 @@
 class SoState;
 class SoProfileBundle;
 class SoShapeBundle;
-class _SoNurbsNurbsTessellator;
-
+class GLUnurbs;
 class SoIndexedNurbsSurface : public SoShape {
 
     SO_NODE_HEADER(SoIndexedNurbsSurface);
@@ -99,12 +98,9 @@ class SoIndexedNurbsSurface : public SoShape {
 
   SoEXTENDER public:
     virtual void	GLRender(SoGLRenderAction *action);
-    virtual void	rayPick(SoRayPickAction *action);
 
   SoINTERNAL public:
-    static void		initClass();
-
-    void                sendPrimitive(SoAction *, SoPrimitiveVertex *);
+    static void initClass();
 
   protected:
     // Generates triangles representing surface
@@ -118,16 +114,7 @@ class SoIndexedNurbsSurface : public SoShape {
 
   private:
     // Renders the surface
-    void                drawNURBS(_SoNurbsNurbsTessellator *render, SoState *state,
-				SbBool doTextures);
-
-    // Matrix operations for level of detail and culling
-    void                calcTotalMatrix( SoState *state, SbMatrix &totalMat );
-    void                multMatrix4d( SbMatrix &n, SbMatrix left,
-                              SbMatrix right );
-
-    // This callback gets details from the NURBS library
-    static void         primCB(SoAction *, SoPrimitiveVertex *, void *);
+    void drawNURBS(GLUnurbs *render, SoAction *action, bool doTextures);
 };
 
 #endif /* _SO_INDEXED_NURBS_SURFACE_ */
