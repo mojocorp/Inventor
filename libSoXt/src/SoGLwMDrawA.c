@@ -145,9 +145,6 @@ static XtResource initializeResources[] = {
 /* The background is obtained only if the allocateBackground resource is TRUE*/
 static XtResource backgroundResources[] = {
 
-#ifdef SB_OS_IRIX
-#define USE_SGI_COLOR_RESOURCES
-#endif /* SB_OS_IRIX */
 
 #ifdef USE_SGI_COLOR_RESOURCES
    {

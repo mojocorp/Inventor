@@ -1,4 +1,4 @@
-project(GLU)
+project(GLU C)
 
 find_package(OpenGL REQUIRED)
 

@@ -66,45 +66,11 @@
 #elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 #define SB_OS_WIN32
 #define SB_OS_WIN
-#elif defined(__sun) || defined(sun)
-#define SB_OS_SOLARIS
 #elif defined(__linux__) || defined(__linux)
 #define SB_OS_LINUX
-#elif defined(__sgi)
-#define SB_OS_IRIX
 #else
 #error "Inventor has not been ported to this OS"
 #endif
-
-/*
- * SGI machine dependent setup
- */
-
-#ifdef SB_OS_IRIX
-
-#define SB_BYTE_ORDER SB_BIG_ENDIAN
-#if m68000 /* on 3K, times() returns 60'ths regardless */
-#undef HZ
-#define HZ 60
-#define double                                                                 \
-    long float /* System long,                                                 \
-                  make m68020 behave like everyone */
-#endif         /* m68000 */
-
-#endif /* SB_OS_IRIX */
-
-/*
- * SUN Solaris machine dependent setup
- */
-
-#ifdef SB_OS_SOLARIS
-
-#define SB_BYTE_ORDER SB_BIG_ENDIAN
-#define signed               /* SUN default is signed chars		*/
-#define h_errno errno        /* BSD has these merged???		*/
-typedef unsigned long ulong; /* System long missing from types.h	*/
-
-#endif /* SB_OS_SOLARIS */
 
 /*
  * Windows machine dependent setup

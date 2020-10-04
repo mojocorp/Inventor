@@ -644,10 +644,7 @@ _SoXtColorEditor::buildControls(Widget parent)
 	buttonsForm, NULL, 0);
     n = 0;
     XtSetArg(args[n], XmNhighlightThickness, 0); n++;
-    // ??? bug 228368 prevents the pixmap from also highlighting
-#ifdef SB_OS_IRIX
-    XtSetArg(args[n], SgNpixmapLocateHighlight, True); n++;
-#endif // SB_OS_IRIX
+
     for (i=0; i<3; i++) {
 	buttonw[i] = XtCreateWidget(button_names[i], xmPushButtonGadgetClass,
 	    patchButForm, args, n);
@@ -666,11 +663,8 @@ _SoXtColorEditor::buildControls(Widget parent)
     
     // get the color of the push buttons
     XtVaGetValues(XtParent(buttonw[0]), XmNforeground, &fg, XmNbackground, &bg, NULL);
-#ifdef SB_OS_IRIX
-    hbg = SgGetLocatePixel(XtParent(buttonw[0]), bg);
-#else
+
 #define hbg bg
-#endif // SB_OS_IRIX
     
     // create the pixmaps from the bitmap data (depth 1).
     // Two sets of pixmaps are created for when the button is
@@ -694,12 +688,7 @@ _SoXtColorEditor::buildControls(Widget parent)
     XtSetArg(args[0], XmNlabelType, XmPIXMAP);
     for (i=0; i<3; i++) {
 	XtSetArg(args[1], XmNlabelPixmap, pixmaps[i][0]);
-#ifdef SB_OS_IRIX
-	XtSetArg(args[2], SgNlocatePixmap, pixmaps[i][1]);
-	XtSetValues(buttonw[i], args, 3);
-#else
 	XtSetValues(buttonw[i], args, 2);
-#endif // SB_OS_IRIX
     }
     
     //

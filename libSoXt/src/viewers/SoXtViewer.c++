@@ -59,10 +59,6 @@
 #include <X11/Xlib.h>
 #include <X11/keysym.h>
 
-#ifdef SB_OS_IRIX
-#include <X11/extensions/SGIStereo.h>
-#endif
-
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <Inventor/SbBox.h>
@@ -133,9 +129,6 @@ SoXtViewer::SoXtViewer(Widget parent, const char *name,
     stereoType = MONOSCOPIC;
     stereoOffset = 1.0;
     stereoBalance = 0.5;
-#ifdef SB_OS_IRIX
-    useSGIStereoExt = FALSE;
-#endif
     sceneSize = 0.0;   // not computed yet.
     viewerSpeed = 1.0; // default. SoXtFullViewer add UI to increase/decrease
 

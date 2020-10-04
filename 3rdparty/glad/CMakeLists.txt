@@ -1,4 +1,4 @@
-project(Glad)
+project(glad C)
 
 find_package(OpenGL REQUIRED)
 

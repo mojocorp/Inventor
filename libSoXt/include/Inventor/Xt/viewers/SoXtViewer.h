@@ -553,16 +553,6 @@ class SoXtViewer : public SoXtRenderArea {
     float   	    	origFocalDistance;
     float	    	origHeight;
     
-#ifdef SB_OS_IRIX
-    // set to TRUE when we are using the SGI specific stereo extensions
-    // which enables us to emulate OpenGL stereo on most machines.
-    // We also save the camera original aspect ratio and viewport mapping
-    // since we need to temporary strech the camera aspect ratio.
-    SbBool		useSGIStereoExt;
-    float		camStereoOrigAspect;
-    int			camStereoOrigVPMapping;
-#endif
-    
     // seek animation vars
     SbBool		seekModeFlag; // TRUE when seek turned on externally
     SoFieldSensor	*seekAnimationSensor;

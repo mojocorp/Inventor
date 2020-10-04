@@ -80,9 +80,7 @@ SoXtBitmapButton::SoXtBitmapButton(Widget parent, SbBool canSelect)
     XtSetArg(args[n], XmNmarginWidth, 0); n++;
     XtSetArg(args[n], XmNshadowThickness, 2); n++;
     XtSetArg(args[n], XmNhighlightThickness, 0); n++;
-#ifndef SB_OS_IRIX
     XtSetArg(args[n], XmNtraversalOn, False); n++;
-#endif // !SB_OS_IRIX
     widget = XmCreatePushButtonGadget(parent, NULL, args, n);
 }
 

@@ -48,9 +48,6 @@
 
 typedef struct {
   int make_compiler_happy;
-#ifdef SB_OS_IRIX
-  caddr_t _SG_vendorExtension;
-#endif /* SB_OS_IRIX */
 } SgThumbWheelClassPart;
 
 
@@ -105,9 +102,6 @@ typedef struct {
   Boolean button_hilite;
 
   GC foreground_GC;
-#ifdef SB_OS_IRIX
-  shaderptr shader;
-#endif /* SB_OS_IRIX */
 
   int wheel_x;
   int wheel_y;
@@ -116,9 +110,6 @@ typedef struct {
 
   Boolean home_button_armed;
 
-#ifdef SB_OS_IRIX
-  caddr_t _SG_vendorExtension;
-#endif /* SB_OS_IRIX */
 } SgThumbWheelPart;
 
 
