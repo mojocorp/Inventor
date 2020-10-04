@@ -863,6 +863,8 @@ set(PP_SOURCES
     database/src/so/nodes/SoLineSet.pp
 )
 
+SOURCE_GROUP("database" FILES ${DATABASE_SOURCES} ${DATABASE_PRIVATE_HEADERS} ${DATABASE_PUBLIC_HEADERS})
+
 # Run ppp on each pp file
 foreach(file ${PP_SOURCES})
     get_filename_component(basename ${file} NAME_WE)
@@ -990,6 +992,8 @@ set(INTERACTION_SOURCES
     interaction/src/nodes/SoSurroundScale.c++
 )
 
+SOURCE_GROUP("interaction" FILES ${INTERACTION_SOURCES} ${INTERACTION_PUBLIC_HEADERS})
+
 set(NODEKIT_PUBLIC_HEADERS
     nodekits/include/Inventor/SoNodeKitPath.h
     nodekits/include/Inventor/details/SoNodeKitDetail.h
@@ -1095,6 +1099,8 @@ set(NODEKIT_SOURCES
     nodekits/src/upgraders/SoV1VtxShapeKit.c++
     nodekits/src/upgraders/SoV1WrapperKit.c++
 )
+
+SOURCE_GROUP("nodekits" FILES ${NODEKIT_SOURCES} ${NODEKIT_PUBLIC_HEADERS})
 
 set(PUBLIC_HEADERS ${DATABASE_PUBLIC_HEADERS} ${NODEKIT_PUBLIC_HEADERS} ${INTERACTION_PUBLIC_HEADERS})
 set(PRIVATE_HEADERS ${DATABASE_PRIVATE_HEADERS})
