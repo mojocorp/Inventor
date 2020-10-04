@@ -1,3 +1,21 @@
+set(HEADERS
+    SoAsciiTextV2.h
+    SoEnvironmentV1.h
+    SoFontStyleV2.h
+    SoIndexedTriangleMeshV1.h
+    SoLODV2.h
+    SoPackedColorV2.h
+    SoPickStyleV1.h
+    SoShapeHintsV1.h
+    SoText2V2.h
+    SoText3V2.h
+    SoTextureCoordinatePlaneV1.h
+    SoVertexPropertyV2.h
+    SoWWWAnchorV2.h
+    SoWWWInlineV2.h
+    Util.h
+)
+
 set(SOURCES
     main.c++
     downgradeToV1.c++
@@ -18,7 +36,7 @@ set(SOURCES
     SoText3V2.c++
 )
 
-add_executable(ivdowngrade ${SOURCES})
+add_executable(ivdowngrade ${HEADERS} ${SOURCES})
 target_link_libraries(ivdowngrade Inventor)
 
 install(TARGETS ivdowngrade DESTINATION bin)

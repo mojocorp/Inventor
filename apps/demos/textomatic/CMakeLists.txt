@@ -1,6 +1,7 @@
 find_package(Iconv REQUIRED)
 
 set(HEADERS
+    labels.h
     TextGraph.h
     TextWrapper.h
 )
@@ -10,7 +11,7 @@ set(SOURCES
     TextWrapper.c++
 )
 
-add_executable(textomatic ${SOURCES})
+add_executable(textomatic ${HEADERS} ${SOURCES})
 target_link_libraries(textomatic Inventor InventorXt common ${Iconv_LIBRARIES})
 
 # necessary for locale_charset()

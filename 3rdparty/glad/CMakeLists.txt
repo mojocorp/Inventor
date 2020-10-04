@@ -4,6 +4,8 @@ find_package(OpenGL REQUIRED)
 
 set(GLAD_HEADERS
     include/glad/gl.h
+    include/glad/glx.h
+    include/glad/wgl.h
     include/KHR/khrplatform.h
 )
 

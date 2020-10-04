@@ -1,6 +1,7 @@
 set(HEADERS
     Useful.h
     LineManip.h
+    InventorLogo.h
 )
 
 set(SOURCES

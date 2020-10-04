@@ -8,5 +8,5 @@ set(SOURCES
     SFDouble.c++
 )
 
-add_library(fields_objects OBJECT ${SOURCES})
+add_library(fields_objects OBJECT ${HEADERS} ${SOURCES})
 target_link_libraries(fields_objects Inventor )

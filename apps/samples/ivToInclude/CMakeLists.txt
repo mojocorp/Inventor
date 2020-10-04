@@ -1,4 +1,4 @@
-add_executable(ivToIncludeFile ivToIncludeFile.c++)
+add_executable(ivToIncludeFile foo.h ivToIncludeFile.c++)
 target_link_libraries(ivToIncludeFile Inventor)
 
 if (X11_FOUND)

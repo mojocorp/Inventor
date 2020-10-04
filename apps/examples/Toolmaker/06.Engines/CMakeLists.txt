@@ -4,7 +4,7 @@ set(HEADERS
     MultFloatVec3f.h
     SoComposeVec2f.h
     SoDecomposeVec2f.h
-    Ticker.c++
+    Ticker.h
 )
 
 set(SOURCES
@@ -16,5 +16,5 @@ set(SOURCES
     Ticker.c++
 )
 
-add_library(engines_objects OBJECT ${SOURCES})
+add_library(engines_objects OBJECT ${HEADERS} ${SOURCES})
 target_link_libraries(engines_objects Inventor)

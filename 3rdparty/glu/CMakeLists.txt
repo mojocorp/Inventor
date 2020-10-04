@@ -3,6 +3,8 @@ project(GLU C)
 find_package(OpenGL REQUIRED)
 
 set(GLU_HEADERS
+    include/GL/gl.h
+    include/GL/glext.h
     include/GL/glu.h					
     include/GL/glu_mangle.h
     src/libtess/render.h

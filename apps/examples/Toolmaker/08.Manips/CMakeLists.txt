@@ -1,6 +1,7 @@
 set(HEADERS
     Coordinate3Manip.h
     RotTransDragger.h
+    RotTransDraggerGeom.h
     RotTransManip.h
     TranslateRadialDragger.h
     TranslateRadialManip.h

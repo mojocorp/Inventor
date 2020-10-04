@@ -1,3 +1,12 @@
+set(HEADERS
+    MotifHelp.h
+    TsBlock.h
+    TsField.h
+    TsPiece.h
+    TsPieces.h
+    TsViewer.h
+)
+
 set(SOURCES
     TsBlock.c++
     TsPiece.c++
@@ -10,5 +19,5 @@ set(SOURCES
     drop.c++
 )
 
-add_executable(drop ${SOURCES})
+add_executable(drop ${HEADERS} ${SOURCES})
 target_link_libraries(drop Inventor InventorXt)

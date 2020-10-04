@@ -1,3 +1,15 @@
+set(HEADERS
+    Actions.h
+    DisplayGraph.h
+    Error.h
+    FieldEditor.h
+    GraphIcon.h
+    GraphViewer.h
+    Menu.h
+    MotifHelp.h
+    NodeCreator.h
+)
+
 set(SOURCES
     gview.c++
     DisplayGraph.c++
@@ -16,5 +28,5 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gviewIcons.iv.h
       COMMENT "Creating gviewIcons.iv.h"
       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(gview ${SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/gviewIcons.iv.h)
+add_executable(gview ${HEADERS} ${SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/gviewIcons.iv.h)
 target_link_libraries(gview Inventor InventorXt)
