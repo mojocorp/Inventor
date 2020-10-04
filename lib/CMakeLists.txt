@@ -16,6 +16,15 @@ if (APPLE)
     mark_as_advanced(COREGRAPHICS)
 endif ()
 
+if(APPLE)
+    add_definitions(-DSB_OS_MACOS)
+elseif(WIN32)
+    add_definitions(-DSB_OS_WIN)
+elseif(UNIX)
+    add_definitions(-DSB_OS_LINUX)
+else()
+    message( FATAL_ERROR "Inventor has not been ported to this OS." )
+endif()
 
 set(DATABASE_PUBLIC_HEADERS
     database/include/Inventor/Sb.h

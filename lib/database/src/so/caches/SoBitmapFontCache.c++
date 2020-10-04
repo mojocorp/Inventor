@@ -52,7 +52,6 @@
  */
 #include <cstring>
 #include <algorithm>
-#include <machine.h>
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/caches/SoBitmapFontCache.h>
 #include <Inventor/elements/SoCacheElement.h>

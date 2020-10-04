@@ -56,7 +56,6 @@
 #include <cstring>
 #include <cmath>
 #include <algorithm>
-#include <machine.h>
 #include <Inventor/caches/SoOutlineFontCache.h>
 #include <Inventor/elements/SoCacheElement.h>
 #include <Inventor/elements/SoCreaseAngleElement.h>

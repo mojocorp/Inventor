@@ -1,4 +1,3 @@
-#include <machine.h>
 #include <Inventor/SbFile.h>
 
 #include <algorithm>

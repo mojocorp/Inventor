@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-#include <machine.h>
 #include <Inventor/SoType.h>
 #include <Inventor/lists/SoTypeList.h>
 #include <Inventor/errors/SoDebugError.h>
@@ -461,7 +460,7 @@ SoType::dsoInitClass(const SbString &name)
 {
 #if defined(SB_OS_WIN)
     SbString dsoFilename = name + ".dll";
-#elif defined(SB_OS_MACX)
+#elif defined(SB_OS_MACOS)
     SbString dsoFilename = "lib" + name + ".dylib";
 #else
     SbString dsoFilename = "lib" + name + ".so";

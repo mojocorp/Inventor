@@ -1,11 +1,10 @@
 #include <glad/gl.h>
-#include <machine.h>
 #include <cstddef>
 
 #if defined(SB_OS_WIN)
 #include <windows.h>
 #include <glad/wgl.h>
-#elif defined(SB_OS_MACX)
+#elif defined(SB_OS_MACOS)
 #include <dlfcn.h>
 #elif defined(SB_OS_LINUX)
 #include <glad/glx.h>

@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-#include <machine.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
 #include <Inventor/actions/SoGetBoundingBoxAction.h>
@@ -119,7 +118,7 @@ SoFont::initClass()
 
     s_font_path_map["Arial Unicode"] = "c:\\Windows\\Fonts\\ARIALUNI.TTF";
 
-#elif defined(SB_OS_MACX)
+#elif defined(SB_OS_MACOS)
     s_font_path_map["Courier"] = "/Library/Fonts/Courier New.ttf";
     s_font_path_map["Courier-Regular"] = "/Library/Fonts/Courier New.ttf";
     s_font_path_map["Courier-Oblique"] =

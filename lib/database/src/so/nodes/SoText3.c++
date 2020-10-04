@@ -54,7 +54,6 @@
 
 #include <cmath>
 #include <algorithm>
-#include <machine.h>
 #include <glad/gl.h>
 #include <GL/glu.h>
 #include <Inventor/SbBox.h>

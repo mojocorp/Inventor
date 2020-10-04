@@ -50,7 +50,6 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#include <machine.h>
 #include <glad/gl.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SoPickedPoint.h>

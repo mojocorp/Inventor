@@ -50,7 +50,6 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#include <machine.h>
 #include <glad/gl.h>
 #include <Inventor/SoOffscreenRenderer.h>
 #include <Inventor/SoPath.h>
@@ -63,7 +62,7 @@
 
 #if defined(SB_OS_WIN)
 #include <windows.h>
-#elif defined(SB_OS_MACX)
+#elif defined(SB_OS_MACOS)
 #include <OpenGL/OpenGL.h>
 #include <CoreGraphics/CGDisplayConfiguration.h>
 #elif defined(SB_OS_LINUX)
@@ -135,7 +134,7 @@ class SbGLContext {
             SoDebugError::post("SbGLContext", "wglMakeCurrent failed\n");
             return;
         }
-#elif defined(SB_OS_MACX)
+#elif defined(SB_OS_MACOS)
         m_contextObj = 0;
         // Create a 1x1 pbuffer and associated context to bootstrap things
         CGLPixelFormatAttribute attribs[] = {
@@ -227,7 +226,7 @@ class SbGLContext {
         wglDeleteContext(m_contextObj);
         ReleaseDC(m_canvasWindow, m_canvasDC);
         DestroyWindow(m_canvasWindow);
-#elif defined(SB_OS_MACX)
+#elif defined(SB_OS_MACOS)
         CGLSetCurrentContext(0);
         CGLDestroyContext(m_contextObj);
 #elif defined(SB_OS_LINUX)
@@ -247,7 +246,7 @@ class SbGLContext {
 
         return (wglMakeCurrent(m_canvasDC, m_contextObj) == TRUE);
 
-#elif defined(SB_OS_MACX)
+#elif defined(SB_OS_MACOS)
         if (CGLGetCurrentContext() == m_contextObj)
             return true;
 
@@ -269,7 +268,7 @@ class SbGLContext {
     HWND  m_canvasWindow;
     HDC   m_canvasDC;
     HGLRC m_contextObj;
-#elif defined(SB_OS_MACX)
+#elif defined(SB_OS_MACOS)
     CGLContextObj m_contextObj;
 #elif defined(SB_OS_LINUX)
     Display *m_display;
@@ -363,7 +362,7 @@ SoOffscreenRenderer::getScreenPixelsPerInch()
 
     return pix;
 
-#elif defined(SB_OS_MACX)
+#elif defined(SB_OS_MACOS)
 
     CGDirectDisplayID display = CGMainDisplayID();
 

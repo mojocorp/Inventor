@@ -57,36 +57,28 @@
  _______________________________________________________________________
  */
 
-#if defined(__APPLE__)
-#define SB_OS_MACX
-#elif defined(WIN64) || defined(_WIN64) || defined(__WIN64__)
-#define SB_OS_WIN32
-#define SB_OS_WIN64
-#define SB_OS_WIN
-#elif defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-#define SB_OS_WIN32
-#define SB_OS_WIN
-#elif defined(__linux__) || defined(__linux)
-#define SB_OS_LINUX
-#else
-#error "Inventor has not been ported to this OS"
-#endif
+/*
+ * Apple Darwin (Mac OS X) machine dependent setup
+ */
+#if defined(SB_OS_MACOS)
+
+#ifdef __LITTLE_ENDIAN__
+#define SB_BYTE_ORDER SB_LITTLE_ENDIAN
+#else /* __LITTLE_ENDIAN */
+#define SB_BYTE_ORDER SB_BIG_ENDIAN
+#endif /* __LITTLE_ENDIAN */
 
 /*
  * Windows machine dependent setup
  */
-
-#ifdef SB_OS_WIN
+#elif defined(SB_OS_WIN)
 
 #define SB_BYTE_ORDER SB_LITTLE_ENDIAN
-
-#endif /* SB_OS_WIN */
 
 /*
  * Linux i386/ia64 machine dependent setup
  */
-
-#ifdef SB_OS_LINUX
+#elif defined(SB_OS_LINUX)
 
 #include <endian.h>
 
@@ -96,21 +88,9 @@
 #define SB_BYTE_ORDER SB_LITTLE_ENDIAN
 #endif
 
-#endif /* SB_OS_LINUX */
-
-/*
- * Apple Darwin (Mac OS X) machine dependent setup
- */
-
-#ifdef SB_OS_MACX
-
-#ifdef __LITTLE_ENDIAN__
-#define SB_BYTE_ORDER SB_LITTLE_ENDIAN
-#else /* __LITTLE_ENDIAN */
-#define SB_BYTE_ORDER SB_BIG_ENDIAN
-#endif /* __LITTLE_ENDIAN */
-
-#endif /* SB_OS_MACX */
+#else
+#error "Inventor has not been ported to this OS"
+#endif
 
 /*
  * Platform sanity check.
@@ -143,14 +123,9 @@
 
 #if SB_BYTE_ORDER == SB_BIG_ENDIAN
 #define DGL_HTON_SHORT(t, f) t = f
-#define DGL_NTOH_SHORT DGL_HTON_SHORT
 #define DGL_HTON_INT32(t, f) t = f
-#define DGL_NTOH_INT32 DGL_HTON_INT32
-
 #define DGL_HTON_FLOAT(t, f) t = f
-#define DGL_NTOH_FLOAT DGL_HTON_FLOAT
 #define DGL_HTON_DOUBLE(t, f) t = f
-#define DGL_NTOH_DOUBLE DGL_HTON_DOUBLE
 #endif
 
 /*
@@ -185,11 +160,12 @@
 #define DGL_HTON_FLOAT(t, f) (*(int32_t *)&t = swap32(*(int32_t *)&f))
 #define DGL_HTON_DOUBLE(t, f) (*(int64_t *)&t = swap64(*(int64_t *)&f))
 
+#endif
+
 #define DGL_NTOH_SHORT DGL_HTON_SHORT
 #define DGL_NTOH_INT32 DGL_HTON_INT32
 #define DGL_NTOH_FLOAT DGL_HTON_FLOAT
 #define DGL_NTOH_DOUBLE DGL_HTON_DOUBLE
-#endif
 
 /*
  * get/set a data item located at address p regardless what it really is

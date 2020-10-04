@@ -51,7 +51,6 @@
  _______________________________________________________________________
  */
 
-#include <machine.h>
 #include <clocale>
 #include <cstdlib>
 #include <cstring>
