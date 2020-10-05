@@ -24,7 +24,7 @@
 #include <math.h>
 #include <ctype.h>
 #include <strings.h>
-#include <stdlib.h>
+#include <cstdlib>
 #include <cstring>
 
 void yyerror(const char *);
@@ -82,7 +82,7 @@ static const struct {
 #define NOUTPUTS (sizeof(Outputs)/sizeof(Outputs[0]))
 #define NVARS (sizeof(Vars)/sizeof(Vars[0]))
 
-static double rand(double max) { return max * drand48(); }
+static double rand(double max) { return max * (std::rand() / (RAND_MAX + 1.0)); }
 static SbVec3f cross(const SbVec3f &a, const SbVec3f &b) { return a.cross(b); }
 static double dot(const SbVec3f &a, const SbVec3f &b) { return a.dot(b); }
 static double length(const SbVec3f &a) { return a.length(); }

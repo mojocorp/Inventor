@@ -71,7 +71,7 @@
 #include <Inventor/elements/SoViewVolumeElement.h>
 #include <Inventor/elements/SoStereoElement.h>
 #include <Inventor/nodes/SoCamera.h>
-#include <stdlib.h>
+#include <cstdlib>
 
 SO_NODE_ABSTRACT_SOURCE(SoCamera);
 
@@ -568,7 +568,8 @@ SoCamera::getJitterSample(int numPasses, int curPass, SbVec2f &samplePoint)
 
                 // Set 2 coords of sample to random number between -1 and +1.
                 for (int i = 0; i < 2 * numExtraNeeded; i++)
-                    extraSamples[i] = 2.0 * drand48() - 1.0;
+                    extraSamples[i] =
+                        2.0 * (std::rand() / (RAND_MAX + 1.0)) - 1.0;
             }
         }
 

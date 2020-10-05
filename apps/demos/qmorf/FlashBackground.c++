@@ -41,7 +41,8 @@
 
 #include <math.h>
 #include <unistd.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <ctime>
 
 #include <Inventor/SbLinear.h>
 #include <Inventor/nodes/SoGroup.h>
@@ -63,6 +64,10 @@
 static const int HASH_SIZE=751; // two of my favorite prime numbers
 static const int HASH_VALUE=911;
 
+static double
+drand(double max) {
+    return max * (std::rand() / (RAND_MAX + 1.0));
+}
 static const int32_t BIG_NOISE=100000; // noise repeats this often
 
 //
@@ -76,10 +81,10 @@ FlashBackground::FlashBackground(int size)
     //
     hash_table = new double[HASH_SIZE];
 
-    srand48(getpid());
+    std::srand(std::time(NULL));
     int i;
     for (i = 0; i < HASH_SIZE; i++)
-	hash_table[i] = drand48();
+        hash_table[i] = drand(1.0);
 
     //
     // And must create the scene graph
@@ -148,17 +153,17 @@ FlashBackground::FlashBackground(int size)
     schemeTable = new SbColor*[NUM_SHAPES];
     for (i = 0; i < NUM_SCHEMES; i++)
     {
-	schemeTable[i] = new SbColor[nverts];
-	calculateColor((Shade)(lrand48()%NUM_SHADES), (Scheme)i,
+        schemeTable[i] = new SbColor[nverts];
+        calculateColor((Shade)(std::rand()%NUM_SHADES), (Scheme)i,
 		       schemeTable[i]);
     }
     //
     // Start out with a random shape and color
     //
-    currentShape = (Shape)(lrand48()%NUM_SHAPES);
-    currentScheme = (Scheme)(lrand48()%NUM_SCHEMES);
-    nextShape = (Shape)(lrand48()%NUM_SHAPES);
-    nextScheme = (Scheme)(lrand48()%NUM_SCHEMES);
+    currentShape = (Shape)(std::rand() % NUM_SHAPES);
+    currentScheme = (Scheme)(std::rand() % NUM_SCHEMES);
+    nextShape = (Shape)(std::rand() % NUM_SHAPES);
+    nextScheme = (Scheme)(std::rand() % NUM_SCHEMES);
     //
     // And start at time 0.0
     //
@@ -382,7 +387,7 @@ FlashBackground::shadeFunction(Shade shade, double i, double j)
 	break;
       case SHADE_STATIC :
 	v.setValue(i*20.0, j*20.0, 0.0);
-	result = drand48()*0.5 + 0.25;
+        result = drand(0.5) + 0.25;
 	result *= (1.0 - j)*0.8;
 	break;
       case SHADE_FOG :
@@ -418,9 +423,9 @@ FlashBackground::colorFunction(Scheme cscheme, SbColor &c, double y)
       case COLOR_GRAY :
 	break;
       case COLOR_NOISE :
-	c[0] += (drand48()*2.0 - 1.0)*0.03;
-	c[1] += (drand48()*2.0 - 1.0)*0.03;
-	c[2] += (drand48()*2.0 - 1.0)*0.03;
+        c[0] += (drand(2.0) - 1.0)*0.03;
+        c[1] += (drand(2.0) - 1.0)*0.03;
+        c[2] += (drand(2.0) - 1.0)*0.03;
 	break;
       case COLOR_PURPLE :
 	c[0] = c[0];
@@ -464,7 +469,7 @@ FlashBackground::calculateShape(Shape shape,
 	    shapeFunction(shape, coords[index]);
 
 	    if (j > 0 && j < meshSize)
-		coords[index][1] += drand48()*x*0.015;
+                coords[index][1] += drand(x)*0.015;
 	}
     }
 }
@@ -559,8 +564,8 @@ FlashBackground::animateShape(double time)
     while (t > 1.0)
     {
 	// Choose a new next shape
-	currentShape = nextShape;
-	nextShape = (Shape)(lrand48()%NUM_SHAPES);
+        currentShape = nextShape;
+        nextShape = (Shape)(std::rand()%NUM_SHAPES);
 
 	t -= 1.0;
 	lastTime += 1.0;
@@ -582,8 +587,8 @@ FlashBackground::animateColor(double time)
     while (t > 1.0)
     {
 	// Choose a new next color scheme
-	currentScheme = nextScheme;
-	nextScheme = (Scheme)(lrand48()%NUM_SCHEMES);
+        currentScheme = nextScheme;
+        nextScheme = (Scheme)(std::rand()%NUM_SCHEMES);
 
 	t -= 1.0;
 	lastTime += 1.0;

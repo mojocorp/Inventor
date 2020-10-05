@@ -49,7 +49,7 @@
  */
 
 //--------------------------- Include ----------------------------------
-#include <stdlib.h>
+#include <cstdlib>
 #include <stdio.h>
 #include <math.h>
 #include <sys/types.h>
@@ -753,14 +753,11 @@ TsField::addPiece()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    double rnum;
     int    pieceNum, pieceOrientation;
     int    i;
 
-    rnum  = drand48();
-    pieceNum = (int)(rnum * (float)numPieceTypes);
-    rnum  = drand48();
-    pieceOrientation = (int)(rnum*24.0);
+    pieceNum = (int)(numPieceTypes * std::rand() / (RAND_MAX + 1.0));
+    pieceOrientation = (int)(24.0 * std::rand() / (RAND_MAX + 1.0));
 
     currentPiece = (TsPiece *)pieceList[pieceNum];
 

@@ -50,9 +50,9 @@
  _______________________________________________________________________
  */
 
-#include <stdlib.h>
+#include <cstdlib>
+#include <ctime>
 #include <math.h>
-#include <time.h>
 #include <Inventor/Xt/SoXt.h>
 #include "TsField.h"
 
@@ -80,9 +80,7 @@ main( int, char **argv )
     // Initialize a random number generator to be used in selecting the
     // next piece and orientation.
     //
-    time_t tvec;
-    time (&tvec);
-    srand48 ((long) tvec);
+    std::srand(std::time(NULL));
 
     // Build the layout of the game.
     TsField  *field  = new TsField( FIELD_RESOLUTION, appWindow );
