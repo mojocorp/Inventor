@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DETAILS_
-#define _SO_DETAILS_
+#pragma once
 
 #include <Inventor/details/SoConeDetail.h>
 #include <Inventor/details/SoCubeDetail.h>
@@ -69,4 +68,3 @@
 #include <Inventor/details/SoPointDetail.h>
 #include <Inventor/details/SoTextDetail.h>
 
-#endif /* _SO_DETAILS_ */

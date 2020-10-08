@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_VIEW_VOLUME_
-#define _SB_VIEW_VOLUME_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbVec.h>
@@ -283,4 +282,3 @@ class SbViewVolume {
     SbVec3f ulfO; // x = -w, y =  w, z = -w
 };
 
-#endif /* _SB_VIEW_VOLUME_ */

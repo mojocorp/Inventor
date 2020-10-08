@@ -49,8 +49,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_DEPTH_BUFFER_ELEMENT_
-#define _SO_GL_DEPTH_BUFFER_ELEMENT_
+#pragma once
 
 #include <Inventor/elements/SoDepthBufferElement.h>
 
@@ -91,4 +90,3 @@ class SoGLDepthBufferElement : public SoDepthBufferElement {
     void send();
 };
 
-#endif /* _SO_GL_DEPTH_BUFFER_ELEMENT_ */

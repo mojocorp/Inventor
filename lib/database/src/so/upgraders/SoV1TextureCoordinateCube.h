@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1TEXTURECOORDINATECUBE_
-#define _SO_V1TEXTURECOORDINATECUBE_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -99,4 +98,3 @@ class SoV1TextureCoordinateCube : public SoUpgrader {
     virtual ~SoV1TextureCoordinateCube();
 };
 
-#endif /* _SO_V1TEXTURECOORDINATECUBE_ */

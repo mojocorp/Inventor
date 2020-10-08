@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_UNKNOWN_NODE_
-#define _SO_UNKNOWN_NODE_
+#pragma once
 
 #include <string>
 #include <Inventor/fields/SoFieldData.h>
@@ -135,4 +134,3 @@ class SoUnknownNode : public SoGroup {
     SbBool hasChildren;
 };
 
-#endif /* _SO_UNKNOWN_NODE_ */

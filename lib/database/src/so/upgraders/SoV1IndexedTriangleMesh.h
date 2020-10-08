@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1INDEXEDTRIANGLEMESH_
-#define _SO_V1INDEXEDTRIANGLEMESH_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoMFInt32.h>
@@ -106,4 +105,3 @@ class SoV1IndexedTriangleMesh : public SoUpgrader {
     SbBool itex;
 };
 
-#endif /* _SO_V1INDEXEDTRIANGLEMESH_ */

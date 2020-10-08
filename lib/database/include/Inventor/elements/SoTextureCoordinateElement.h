@@ -65,8 +65,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_COORDINATE_ELEMENT
-#define _SO_TEXTURE_COORDINATE_ELEMENT
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -177,4 +176,3 @@ class SoTextureCoordinateElement : public SoReplacedElement {
     SbVec4f convert4; // To convert from 2-D to 4-D
 };
 
-#endif /* _SO_TEXTURE_COORDINATE_ELEMENT */

@@ -59,8 +59,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_SHAPE_KIT_
-#define _SO_SHAPE_KIT_
+#pragma once
 
 #include <Inventor/nodekits/SoSeparatorKit.h>
 
@@ -248,4 +247,3 @@ class SoShapeKit : public SoSeparatorKit {
 
     virtual ~SoShapeKit();
 };
-#endif /* _SO_SHAPE_KIT_ */

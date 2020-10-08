@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1TEXTURECOORDINATEPLANE_
-#define _SO_V1TEXTURECOORDINATEPLANE_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -103,4 +102,3 @@ class SoV1TextureCoordinatePlane : public SoUpgrader {
     static SbVec3f sDir, tDir;
 };
 
-#endif /* _SO_V1TEXTURECOORDINATEPLANE_ */

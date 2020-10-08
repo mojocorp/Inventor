@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_
-#define _SO_
+#pragma once
 
 #include <Inventor/misc/SoBasic.h>
 
@@ -81,4 +80,3 @@
 #include <Inventor/fields/SoFields.h>
 #include <Inventor/nodes/SoNodes.h>
 
-#endif /* _SO_ */

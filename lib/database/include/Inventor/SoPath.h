@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PATH_
-#define _SO_PATH_
+#pragma once
 
 #include <vector>
 #include <Inventor/misc/SoBase.h>
@@ -365,4 +364,3 @@ class SoLightPath {
     friend class SoAction;
 };
 
-#endif /* _SO_PATH_ */

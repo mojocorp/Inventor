@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_DIRECTIONAL_LIGHT_KIT_
-#define _SO_V1_DIRECTIONAL_LIGHT_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1LightKit.h>
 
@@ -100,4 +99,3 @@ class SoV1DirectionalLightKit : public SoV1LightKit {
   protected:
     virtual ~SoV1DirectionalLightKit();
 };
-#endif /* _SO_V1_DIRECTIONAL_LIGHT_KIT_ */

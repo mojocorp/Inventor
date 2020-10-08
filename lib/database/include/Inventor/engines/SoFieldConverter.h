@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FIELD_CONVERTER_
-#define _SO_FIELD_CONVERTER_
+#pragma once
 
 #include <Inventor/SoDB.h>
 #include <Inventor/engines/SoSubEngine.h>
@@ -106,4 +105,3 @@ class SoFieldConverter : public SoEngine {
     ~SoFieldConverter();
 };
 
-#endif /* _SO_FIELD_CONVERTER_ */

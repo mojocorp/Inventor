@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ENGINE_LISTS_
-#define _SO_ENGINE_LISTS_
+#pragma once
 
 #include <Inventor/lists/SoBaseList.h>
 
@@ -102,4 +101,3 @@ class SoEngineList : public SoBaseList {
     }
 };
 
-#endif /* _SO_ENGINE_LISTS_ */

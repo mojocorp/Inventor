@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LIGHT_ATTENUATION_ELEMENT
-#define _SO_LIGHT_ATTENUATION_ELEMENT
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -109,4 +108,3 @@ class SoLightAttenuationElement : public SoReplacedElement {
     virtual ~SoLightAttenuationElement();
 };
 
-#endif /* _SO_LIGHT_ATTENUATION_ELEMENT */

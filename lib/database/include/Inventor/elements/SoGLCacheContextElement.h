@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CACHE_CONTEXT_ELEMENT
-#define _SO_CACHE_CONTEXT_ELEMENT
+#pragma once
 
 #include <vector>
 #include <map>
@@ -221,4 +220,3 @@ class SoGLCacheContextElement : public SoElement {
     friend class SoGLDisplayList;
 };
 
-#endif /* _SO_CACHE_CONTEXT_ELEMENT */

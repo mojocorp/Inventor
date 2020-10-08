@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_DICT_
-#define _SB_DICT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
@@ -145,4 +144,3 @@ class SbDict {
     static void   addEntryToPLists(unsigned long key, void *value, void *data);
 };
 
-#endif /* _SB_DICT_ */

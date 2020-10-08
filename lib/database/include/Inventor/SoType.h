@@ -62,8 +62,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TYPE_
-#define _SO_TYPE_
+#pragma once
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbName.h>
@@ -199,4 +198,3 @@ class SoType {
     static std::vector<SoTypeData> typeData;
 };
 
-#endif /* _SO_TYPE_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COMPLEXITY_TYPE_ELEMENT
-#define _SO_COMPLEXITY_TYPE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -105,4 +104,3 @@ class SoComplexityTypeElement : public SoInt32Element {
     virtual ~SoComplexityTypeElement();
 };
 
-#endif /* _SO_COMPLEXITY_TYPE_ELEMENT */

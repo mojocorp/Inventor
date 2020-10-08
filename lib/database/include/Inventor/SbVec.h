@@ -60,8 +60,7 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#ifndef _SB_VEC_
-#define _SB_VEC_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -609,4 +608,3 @@ class SbVec4f {
     float vec[4]; // Storage for vector components
 };
 
-#endif /* _SB_VEC_ */

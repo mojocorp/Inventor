@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BASIC_
-#define _SO_BASIC_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -69,4 +68,3 @@
 // This uses the preprocessor to concatenate two strings
 #define SO__CONCAT(str1, str2) str1##str2
 
-#endif /* _SO_BASIC_ */

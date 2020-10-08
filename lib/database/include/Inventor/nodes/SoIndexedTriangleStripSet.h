@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INDEXED_TRIANGLE_SET_
-#define _SO_INDEXED_TRIANGLE_SET_
+#pragma once
 
 #include <Inventor/nodes/SoIndexedShape.h>
 #include <Inventor/fields/SoSFNode.h>
@@ -242,4 +241,3 @@ class SoIndexedTriangleStripSet : public SoIndexedShape {
     static PMTSS renderFunc[32];
 };
 
-#endif /* _SO_INDEXED_TRIANGLE_SET_ */

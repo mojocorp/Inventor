@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_LINE_PROJECTOR_
-#define _SB_LINE_PROJECTOR_
+#pragma once
 
 #include <Inventor/SbLine.h>
 #include <Inventor/projectors/SbProjector.h>
@@ -118,4 +117,3 @@ class SbLineProjector : public SbProjector {
     SbVec3f lastPoint;
 };
 
-#endif /* _SB_LINE_PROJECTOR_ */

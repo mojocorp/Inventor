@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1_NODE_KIT_
-#define _SO_V1_NODE_KIT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -75,4 +74,3 @@ class SoV1NodeKit {
     static void finish();
 };
 
-#endif /* _SO_V1_NODE_KIT_ */

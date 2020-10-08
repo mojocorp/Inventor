@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CALCULATOR_
-#define _SO_CALCULATOR_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoMFFloat.h>
@@ -249,4 +248,3 @@ class SoCalculator : public SoEngine {
     static SbVec3f *lookupVec3f(void *, const char *);
 };
 
-#endif /* _SO_CALCULATOR_ */

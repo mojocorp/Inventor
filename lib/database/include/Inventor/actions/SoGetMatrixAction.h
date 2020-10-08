@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GET_MATRIX_ACTION_
-#define _SO_GET_MATRIX_ACTION_
+#pragma once
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/actions/SoSubAction.h>
@@ -133,4 +132,3 @@ class SoGetMatrixAction : public SoAction {
     SbViewportRegion vpRegion; // Current viewport region
 };
 
-#endif /* _SO_GET_MATRIX_ACTION_ */

@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_GROUP_KIT_
-#define _SO_V1_GROUP_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1BaseKit.h>
 #include <Inventor/misc/upgraders/SoV1AppearanceKit.h>
@@ -116,4 +115,3 @@ class SoV1GroupKit : public SoV1BaseKit {
   protected:
     virtual ~SoV1GroupKit();
 };
-#endif /* _SO_V1_GROUP_KIT_ */

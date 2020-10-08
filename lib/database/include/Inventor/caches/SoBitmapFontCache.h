@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BITMAP_FONT_CACHE_
-#define _SO_BITMAP_FONT_CACHE_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -131,4 +130,3 @@ class SoBitmapFontCache : public SoFontCache {
     std::map<wchar_t, SoGLDisplayList *> list;
     std::map<wchar_t, FLbitmap *> bitmaps; // Cached bitmaps for each character.
 };
-#endif /* _SO_BITMAP_FONT_CACHE_ */

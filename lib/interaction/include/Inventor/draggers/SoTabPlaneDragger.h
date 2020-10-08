@@ -74,8 +74,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TAB_PLANE_DRAGGER_
-#define _SO_TAB_PLANE_DRAGGER_
+#pragma once
 
 #include <Inventor/sensors/SoSensor.h>
 #include <Inventor/projectors/SbLineProjector.h>
@@ -312,4 +311,3 @@ class SoTabPlaneDragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_TAB_PLANE_DRAGGER_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ROTATION_
-#define _SO_ROTATION_
+#pragma once
 
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/nodes/SoTransformation.h>
@@ -107,4 +106,3 @@ class SoRotation : public SoTransformation {
     virtual ~SoRotation();
 };
 
-#endif /* _SO_ROTATION_ */

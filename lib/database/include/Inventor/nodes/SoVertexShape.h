@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_VERTEX_SHAPE_
-#define _SO_VERTEX_SHAPE_
+#pragma once
 
 #include <Inventor/nodes/SoShape.h>
 #include <Inventor/nodes/SoVertexProperty.h>
@@ -168,4 +167,3 @@ class SoVertexShape : public SoShape {
     SoNormalCache *normalCache;
 };
 
-#endif /* _SO_VERTEX_SHAPE_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NODE_KIT_PATH_
-#define _SO_NODE_KIT_PATH_
+#pragma once
 
 #include <Inventor/SoPath.h>
 
@@ -167,4 +166,3 @@ class SoNodeKitPath : public SoPath {
     void replaceIndex(SoNode *parent, int index, SoNode *newChild);
 };
 
-#endif /* _SO_NODE_KIT_PATH_ */

@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FIELDS_
-#define _SO_FIELDS_
+#pragma once
 
 #include <Inventor/fields/SoSFBitMask.h>
 #include <Inventor/fields/SoSFBool.h>
@@ -107,4 +106,3 @@
 #include <Inventor/fields/SoMFVec3f.h>
 #include <Inventor/fields/SoMFVec4f.h>
 
-#endif /* _SO_FIELDS_ */

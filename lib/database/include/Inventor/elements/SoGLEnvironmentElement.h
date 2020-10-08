@@ -52,8 +52,7 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#ifndef _SO_GL_ENVIRONMENT_ELEMENT
-#define _SO_GL_ENVIRONMENT_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoEnvironmentElement.h>
 
@@ -104,4 +103,3 @@ class SoGLEnvironmentElement : public SoEnvironmentElement {
     void send();
 };
 
-#endif /* _SO_GL_ENVIRONMENT_ELEMENT */

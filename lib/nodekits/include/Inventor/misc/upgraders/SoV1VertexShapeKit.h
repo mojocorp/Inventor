@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_VERTEX_SHAPE_KIT_
-#define _SO_V1_VERTEX_SHAPE_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1ShapeKit.h>
 
@@ -114,4 +113,3 @@ class SoV1VertexShapeKit : public SoV1ShapeKit {
   protected:
     virtual ~SoV1VertexShapeKit();
 };
-#endif /* _SO_V1_VERTEX_SHAPE_KIT_ */

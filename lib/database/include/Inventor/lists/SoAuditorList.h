@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_AUDITOR_LIST_
-#define _SO_AUDITOR_LIST_
+#pragma once
 
 #include <Inventor/SbPList.h>
 #include <Inventor/misc/SoNotification.h>
@@ -124,4 +123,3 @@ class SoAuditorList : private SbPList {
     void notify1(SoNotList *list, int index);
 };
 
-#endif /* _SO_AUDITOR_LIST_ */

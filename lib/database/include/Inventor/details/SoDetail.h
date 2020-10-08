@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DETAIL_
-#define _SO_DETAIL_
+#pragma once
 
 #include <Inventor/SoType.h>
 
@@ -102,4 +101,3 @@ class SoDetail {
     static SoType classTypeId; // Type identifier
 };
 
-#endif /* _SO_DETAIL_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V2FONTSTYLE_
-#define _SO_V2FONTSTYLE_
+#pragma once
 
 #include <Inventor/fields/SoSFBitMask.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -116,4 +115,3 @@ class SoV2FontStyle : public SoUpgrader {
     virtual ~SoV2FontStyle();
 };
 
-#endif /* _SO_V2FONTSTYLE_ */

@@ -61,8 +61,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DRAGGER_
-#define _SO_DRAGGER_
+#pragma once
 
 #include <vector>
 #include <Inventor/SbBox.h>
@@ -731,4 +730,3 @@ class SoDragger : public SoInteractionKit {
     ProjectorFrontSetting projectorFrontSetting;
 };
 
-#endif /* _SO_DRAGGER_ */

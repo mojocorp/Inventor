@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SHAPE_
-#define _SO_SHAPE_
+#pragma once
 
 #include <vector>
 #include <Inventor/SbVec.h>
@@ -287,4 +286,3 @@ class SoShape : public SoNode {
     void triangleVertex(const SoPrimitiveVertex *v, int vertToReplace);
 };
 
-#endif /* _SO_SHAPE_ */

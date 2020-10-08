@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FIELD_SENSOR_
-#define _SO_FIELD_SENSOR_
+#pragma once
 
 #include <Inventor/sensors/SoDataSensor.h>
 
@@ -112,4 +111,3 @@ class SoFieldSensor : public SoDataSensor {
     virtual void dyingReference();
 };
 
-#endif /* _SO_FIELD_SENSOR_ */

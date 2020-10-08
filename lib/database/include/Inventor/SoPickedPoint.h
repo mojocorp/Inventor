@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PICKED_POINT_
-#define _SO_PICKED_POINT_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/SbMatrix.h>
@@ -220,4 +219,3 @@ class SoPickedPoint {
     static SbVec4f multVecMatrix4(const SbMatrix &m, const SbVec4f &v);
 };
 
-#endif /* _SO_PICKED_POINT_ */

@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ENGINES_
-#define _SO_ENGINES_
+#pragma once
 
 #include <Inventor/engines/SoBoolOperation.h>
 #include <Inventor/engines/SoCalculator.h>
@@ -78,4 +77,3 @@
 #include <Inventor/engines/SoTransformVec3f.h>
 #include <Inventor/engines/SoTriggerAny.h>
 
-#endif /* _SO_ENGINES_ */

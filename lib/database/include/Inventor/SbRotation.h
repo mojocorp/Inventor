@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_ROTATION_
-#define _SB_ROTATION_
+#pragma once
 
 #include <Inventor/SbVec.h>
 
@@ -179,4 +178,3 @@ class SbRotation {
     void normalize();
 };
 
-#endif /* _SB_ROTATION_ */

@@ -1,5 +1,4 @@
-#ifndef _EPS_H
-#define _EPS_H
+#pragma once
 
 #include <stdio.h>
 
@@ -14,4 +13,3 @@ int writeEps(FILE *fp, int w, int h, int nc, const unsigned char *bytes,
 }
 #endif
 
-#endif /* _EPS_H */

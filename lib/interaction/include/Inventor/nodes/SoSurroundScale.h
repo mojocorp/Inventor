@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SURROUND_SCALE_
-#define _SO_SURROUND_SCALE_
+#pragma once
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/fields/SoFieldData.h>
@@ -199,4 +198,3 @@ class SoSurroundScale : public SoTransformation {
     SbBool ignoreInBbox;
 };
 
-#endif /* _SO_SURROUND_SCALE_ */

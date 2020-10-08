@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_SPOT_LIGHT_KIT_
-#define _SO_V1_SPOT_LIGHT_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1LightKit.h>
 
@@ -101,4 +100,3 @@ class SoV1SpotLightKit : public SoV1LightKit {
   protected:
     virtual ~SoV1SpotLightKit();
 };
-#endif /* _SO_V1_SPOT_LIGHT_KIT_ */

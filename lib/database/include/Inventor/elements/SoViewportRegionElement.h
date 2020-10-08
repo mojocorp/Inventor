@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_VIEWPORT_REGION_ELEMENT
-#define _SO_VIEWPORT_REGION_ELEMENT
+#pragma once
 
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/elements/SoSubElement.h>
@@ -111,4 +110,3 @@ class SoViewportRegionElement : public SoElement {
     static SbViewportRegion *emptyViewportRegion;
 };
 
-#endif /* _SO_VIEWPORT_REGION_ELEMENT */

@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_BOX_
-#define _SB_BOX_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/SbPlane.h>
@@ -607,4 +606,3 @@ class SbBox2s {
     SbVec2s min, max;
 };
 
-#endif /* _SB_BOX_ */

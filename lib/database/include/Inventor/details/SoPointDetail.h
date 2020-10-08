@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_POINT_DETAIL_
-#define _SO_POINT_DETAIL_
+#pragma once
 
 #include <Inventor/details/SoSubDetail.h>
 
@@ -116,4 +115,3 @@ class SoPointDetail : public SoDetail {
     int32_t coordIndex, materialIndex, normalIndex, texCoordIndex;
 };
 
-#endif /* _SO_POINT_DETAIL_ */

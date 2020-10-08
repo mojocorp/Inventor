@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SEARCH_ACTION_
-#define _SO_SEARCH_ACTION_
+#pragma once
 
 #include <Inventor/actions/SoSubAction.h>
 #include <Inventor/lists/SoPathList.h>
@@ -198,4 +197,3 @@ class SoSearchAction : public SoAction {
     SoPathList retPaths;   // Found nodes (if interest == ALL)
 };
 
-#endif /* _SO_SEARCH_ACTION_ */

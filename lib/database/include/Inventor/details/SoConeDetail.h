@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CONE_DETAIL_
-#define _SO_CONE_DETAIL_
+#pragma once
 
 #include <Inventor/details/SoSubDetail.h>
 
@@ -95,4 +94,3 @@ class SoConeDetail : public SoDetail {
     int part;
 };
 
-#endif /* _SO_CONE_DETAIL_ */

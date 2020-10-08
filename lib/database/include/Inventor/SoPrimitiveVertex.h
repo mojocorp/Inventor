@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PRIMITIVE_VERTEX_
-#define _SO_PRIMITIVE_VERTEX_
+#pragma once
 
 #include <Inventor/SbVec.h>
 
@@ -133,4 +132,3 @@ class SoPrimitiveVertex {
     SoDetail *detail;        // Extra detail info
 };
 
-#endif /* _SO_PRIMITIVE_VERTEX_ */

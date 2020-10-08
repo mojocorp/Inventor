@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_VEC2F_
-#define _SO_MF_VEC2F_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec.h>
@@ -108,4 +107,3 @@ class SoMFVec2f : public SoMField {
     virtual SbBool readBinaryValues(SoInput *in, int numToRead);
 };
 
-#endif /* _SO_MF_VEC2F_ */

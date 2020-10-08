@@ -52,8 +52,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_WWWINLINE_
-#define _SO_WWWINLINE_
+#pragma once
 
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -217,4 +216,3 @@ class SoWWWInline : public SoNode {
     static void *                 fetchURLdata;
 };
 
-#endif /* _SO_WWWINLINE_ */

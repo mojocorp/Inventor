@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FACE_DETAIL_
-#define _SO_FACE_DETAIL_
+#pragma once
 
 #include <vector>
 #include <Inventor/details/SoPointDetail.h>
@@ -125,4 +124,3 @@ class SoFaceDetail : public SoDetail {
     int32_t                    faceIndex, partIndex;
 };
 
-#endif /* _SO_FACE_DETAIL_ */

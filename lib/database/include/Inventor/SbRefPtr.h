@@ -1,5 +1,4 @@
-#ifndef _SB_REF_PTR_
-#define _SB_REF_PTR_
+#pragma once
 
 template <typename T> class SbRefPtr {
   public:
@@ -82,4 +81,3 @@ class SbRefCounted {
     int refcount;
 };
 
-#endif /* _SB_REF_PTR_ */

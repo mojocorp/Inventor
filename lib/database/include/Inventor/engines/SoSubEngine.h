@@ -91,8 +91,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SUB_ENGINE_
-#define _SO_SUB_ENGINE_
+#pragma once
 
 #include <Inventor/engines/SoEngine.h>
 #include <Inventor/engines/SoOutputData.h>
@@ -395,4 +394,3 @@
         }                                                                      \
     } while (0)
 
-#endif /* _SO_SUB_ENGINE_ */

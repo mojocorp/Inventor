@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ONE_SHOT_
-#define _SO_ONE_SHOT_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFBool.h>
@@ -163,4 +162,3 @@ class SoOneShot : public SoEngine {
     virtual void evaluate();
 };
 
-#endif /* _SO_ONE_SHOT_ */

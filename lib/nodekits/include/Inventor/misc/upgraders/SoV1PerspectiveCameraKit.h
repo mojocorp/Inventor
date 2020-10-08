@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_PERSPECTIVE_CAMERA_KIT_
-#define _SO_V1_PERSPECTIVE_CAMERA_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1CameraKit.h>
 
@@ -101,4 +100,3 @@ class SoV1PerspectiveCameraKit : public SoV1CameraKit {
   protected:
     virtual ~SoV1PerspectiveCameraKit();
 };
-#endif /* _SO_V1_PERSPECTIVE_CAMERA_KIT_ */

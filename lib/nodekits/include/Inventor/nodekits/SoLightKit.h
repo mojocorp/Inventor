@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_LIGHT_KIT_
-#define _SO_LIGHT_KIT_
+#pragma once
 
 #include <Inventor/nodekits/SoBaseKit.h>
 
@@ -162,4 +161,3 @@ class SoLightKit : public SoBaseKit {
   protected:
     virtual ~SoLightKit();
 };
-#endif /* _SO_LIGHT_KIT_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FOCAL_DISTANCE_ELEMENT
-#define _SO_FOCAL_DISTANCE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoFloatElement.h>
 
@@ -98,4 +97,3 @@ class SoFocalDistanceElement : public SoFloatElement {
     virtual ~SoFocalDistanceElement();
 };
 
-#endif /* _SO_FOCAL_DISTANCE_ELEMENT */

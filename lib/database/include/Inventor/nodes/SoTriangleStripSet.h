@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRIANGLE_STRIP_SET_
-#define _SO_TRIANGLE_STRIP_SET_
+#pragma once
 
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/fields/SoSFNode.h>
@@ -229,4 +228,3 @@ class SoTriangleStripSet : public SoNonIndexedShape {
     static PMTSS renderFunc[32];
 };
 
-#endif /* _SO_TRIANGLE_STRIP_SET_ */

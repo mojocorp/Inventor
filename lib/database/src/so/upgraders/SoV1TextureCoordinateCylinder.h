@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1TEXTURECOORDINATECYLINDER_
-#define _SO_V1TEXTURECOORDINATECYLINDER_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -101,4 +100,3 @@ class SoV1TextureCoordinateCylinder : public SoUpgrader {
     virtual ~SoV1TextureCoordinateCylinder();
 };
 
-#endif /* _SO_V1TEXTURECOORDINATECYLINDER_ */

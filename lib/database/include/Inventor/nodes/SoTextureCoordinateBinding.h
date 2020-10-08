@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_COORDINATE_BINDING_
-#define _SO_TEXTURE_COORDINATE_BINDING_
+#pragma once
 
 #include <Inventor/elements/SoTextureCoordinateBindingElement.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -119,4 +118,3 @@ class SoTextureCoordinateBinding : public SoNode {
     virtual SbBool readInstance(SoInput *in, unsigned short flags);
 };
 
-#endif /* _SO_TEXTURE_COORDINATE_BINDING_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COLOR_INDEX_
-#define _SO_COLOR_INDEX_
+#pragma once
 
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -105,4 +104,3 @@ class SoColorIndex : public SoNode {
     virtual ~SoColorIndex();
 };
 
-#endif /* _SO_COLOR_INDEX_ */

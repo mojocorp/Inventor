@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LINE_PATTERN_ELEMENT
-#define _SO_LINE_PATTERN_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -100,4 +99,3 @@ class SoLinePatternElement : public SoInt32Element {
     virtual ~SoLinePatternElement();
 };
 
-#endif /* _SO_LINE_PATTERN_ELEMENT */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_NODE_
-#define _SO_SF_NODE_
+#pragma once
 
 class SoNode;
 
@@ -102,4 +101,3 @@ class SoSFNode : public SoSField {
     void setVal(SoNode *newValue);
 };
 
-#endif /* _SO_SF_NODE_ */

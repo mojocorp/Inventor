@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BBOX_MODEL_MATRIX_ELEMENT
-#define _SO_BBOX_MODEL_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoModelMatrixElement.h>
 
@@ -130,4 +129,3 @@ class SoBBoxModelMatrixElement : public SoModelMatrixElement {
     static SbBool pushPopCallOK;
 };
 
-#endif /* _SO_BBOX_MODEL_MATRIX_ELEMENT */

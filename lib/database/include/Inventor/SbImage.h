@@ -1,5 +1,4 @@
-#ifndef _SB_IMAGE_
-#define _SB_IMAGE_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
@@ -98,4 +97,3 @@ class SbImage {
     SbRefPtr<class SbImageRef> d;
 };
 
-#endif /* _SB_IMAGE_ */

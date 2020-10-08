@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_USHORT_
-#define _SO_MF_USHORT_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -84,4 +83,3 @@ class SoMFUShort : public SoMField {
     virtual int getNumValuesPerLine() const;
 };
 
-#endif /* _SO_MF_USHORT_ */

@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FIELD_LISTS_
-#define _SO_FIELD_LISTS_
+#pragma once
 
 #include <Inventor/SbPList.h>
 
@@ -123,4 +122,3 @@ class SoFieldList : public SbPList {
     SoField *get(int i) const { return (SoField *)SbPList::get(i); }
 };
 
-#endif /* _SO_FIELD_LISTS_ */

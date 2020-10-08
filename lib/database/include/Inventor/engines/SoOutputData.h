@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_OUTPUT_DATA_
-#define _SO_OUTPUT_DATA_
+#pragma once
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbString.h>
@@ -128,4 +127,3 @@ class SoEngineOutputData {
     std::vector<SoOutputEntry *> outputs; // List of outputs (SoOutputEntry)
 };
 
-#endif /* _SO_OUTPUT_DATA_ */

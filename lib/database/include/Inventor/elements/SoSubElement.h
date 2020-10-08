@@ -76,8 +76,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SUB_ELEMENT_
-#define _SO_SUB_ELEMENT_
+#pragma once
 
 #include <Inventor/elements/SoElement.h>
 
@@ -193,4 +192,3 @@
             classStackIndex = parentClass::classStackIndex;                    \
     } while (0)
 
-#endif /* _SO_SUB_ELEMENT_ */

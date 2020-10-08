@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSFORM_VEC3F_
-#define _SO_TRANSFORM_VEC3F_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoMFMatrix.h>
@@ -116,4 +115,3 @@ class SoTransformVec3f : public SoEngine {
     virtual void evaluate();
 };
 
-#endif /* _SO_TRANSFORM_VEC3F_ */

@@ -61,8 +61,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NODE_KIT_DETAIL_
-#define _SO_NODE_KIT_DETAIL_
+#pragma once
 
 #include <Inventor/details/SoSubDetail.h>
 
@@ -134,4 +133,3 @@ class SoNodeKitDetail : public SoDetail {
     SbName     myPartName;
 };
 
-#endif /* _SO_NODE_KIT_DETAIL_ */

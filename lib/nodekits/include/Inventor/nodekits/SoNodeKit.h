@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NODE_KIT_
-#define _SO_NODE_KIT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -80,4 +79,3 @@ class SoNodeKit {
     static SbBool initialized; // has nodekit been initialized
 };
 
-#endif /* _SO_NODE_KIT_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_STATE_
-#define _SO_STATE_
+#pragma once
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -150,4 +149,3 @@ class SoState {
     SbBool cacheOpen; // TRUE if a cache is open
 };
 
-#endif /* _SO_STATE_ */

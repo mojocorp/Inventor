@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ONE_SHOT_SENSOR_
-#define _SO_ONE_SHOT_SENSOR_
+#pragma once
 
 #include <Inventor/sensors/SoDelayQueueSensor.h>
 
@@ -97,4 +96,3 @@ class SoOneShotSensor : public SoDelayQueueSensor {
     virtual ~SoOneShotSensor();
 };
 
-#endif /* _SO_ONE_SHOT_SENSOR_ */

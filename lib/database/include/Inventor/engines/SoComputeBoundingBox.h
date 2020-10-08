@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COMPUTE_BOUNDING_BOX_
-#define _SO_COMPUTE_BOUNDING_BOX_
+#pragma once
 
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/engines/SoSubEngine.h>
@@ -143,4 +142,3 @@ class SoComputeBoundingBox : public SoEngine {
     virtual void evaluate();
 };
 
-#endif /* _SO_COMPUTE_BOUNDING_BOX_ */

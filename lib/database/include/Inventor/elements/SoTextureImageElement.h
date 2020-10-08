@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_IMAGE_ELEMENT
-#define _SO_TEXTURE_IMAGE_ELEMENT
+#pragma once
 
 #include <Inventor/SbColor.h>
 #include <Inventor/SbImage.h>
@@ -146,4 +145,3 @@ class SoTextureImageElement : public SoReplacedElement {
     virtual ~SoTextureImageElement();
 };
 
-#endif /* _SO_TEXTURE_IMAGE_ELEMENT */

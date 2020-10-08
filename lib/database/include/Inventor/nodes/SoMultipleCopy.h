@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MULTIPLE_COPY_
-#define _SO_MULTIPLE_COPY_
+#pragma once
 
 #include <Inventor/fields/SoMFMatrix.h>
 #include <Inventor/nodes/SoGroup.h>
@@ -123,4 +122,3 @@ class SoMultipleCopy : public SoGroup {
     virtual ~SoMultipleCopy();
 };
 
-#endif /* _SO_MULTIPLE_COPY_ */

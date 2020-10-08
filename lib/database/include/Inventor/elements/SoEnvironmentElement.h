@@ -52,8 +52,7 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#ifndef _SO_ENVIRONMENT_ELEMENT_
-#define _SO_ENVIRONMENT_ELEMENT_
+#pragma once
 
 #include <Inventor/elements/SoReplacedElement.h>
 #include <Inventor/SbColor.h>
@@ -122,4 +121,3 @@ class SoEnvironmentElement : public SoReplacedElement {
     static void initClass();
 };
 
-#endif // _SO_ENVIRONMENT_ELEMENT_

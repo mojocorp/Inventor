@@ -65,8 +65,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_NODE_KIT_LIST_PART_
-#define _SO_NODE_KIT_LIST_PART_
+#pragma once
 
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/fields/SoSFName.h>
@@ -233,4 +232,3 @@ class SoNodeKitListPart : public SoNode {
     friend class SoBaseKit;
 };
 
-#endif /* _SO_NODE_KIT_LIST_PART_ */

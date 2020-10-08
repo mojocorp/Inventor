@@ -54,8 +54,7 @@
 //______________________________________________________________________
 //
 
-#ifndef _SO_SCENE_MANAGER_
-#define _SO_SCENE_MANAGER_
+#pragma once
 
 #include <Inventor/SbColor.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -287,4 +286,3 @@ class SoSceneManager {
     static void             realTimeSensorCB();
 };
 
-#endif // _SO_SCENE_MANAGER_

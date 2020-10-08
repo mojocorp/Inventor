@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PROFILE_ELEMENT
-#define _SO_PROFILE_ELEMENT
+#pragma once
 
 #include <Inventor/lists/SoNodeList.h>
 #include <Inventor/elements/SoAccumulatedElement.h>
@@ -105,4 +104,3 @@ class SoProfileElement : public SoAccumulatedElement {
     virtual ~SoProfileElement();
 };
 
-#endif /* _SO_PROFILE_ELEMENT */

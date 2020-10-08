@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INDEXED_NURBS_CURVE_
-#define _SO_INDEXED_NURBS_CURVE_
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/fields/SoSFInt32.h>
@@ -157,4 +156,3 @@ class SoIndexedNurbsCurve : public SoShape {
     void drawNURBS(GLUnurbs *render, SoAction *action);
 };
 
-#endif /* _SO_INDEXED_NURBS_CURVE_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SCALE_
-#define _SO_SCALE_
+#pragma once
 
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoTransformation.h>
@@ -109,4 +108,3 @@ class SoScale : public SoTransformation {
     virtual ~SoScale();
 };
 
-#endif /* _SO_SCALE_ */

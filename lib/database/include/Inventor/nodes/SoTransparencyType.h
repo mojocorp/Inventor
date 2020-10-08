@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSPARENCY_TYPE_
-#define _SO_TRANSPARENCY_TYPE_
+#pragma once
 
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -113,4 +112,3 @@ class SoTransparencyType : public SoNode {
     virtual ~SoTransparencyType();
 };
 
-#endif // _SO_TRANSPARENCY_TYPE_

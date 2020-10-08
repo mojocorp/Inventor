@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SWITCH_ELEMENT
-#define _SO_SWITCH_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -99,4 +98,3 @@ class SoSwitchElement : public SoInt32Element {
     virtual ~SoSwitchElement();
 };
 
-#endif /* _SO_SWITCH_ELEMENT */

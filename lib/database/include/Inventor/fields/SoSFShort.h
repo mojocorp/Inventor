@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_SHORT_
-#define _SO_SF_SHORT_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -76,4 +75,3 @@ class SoSFShort : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_SHORT_ */

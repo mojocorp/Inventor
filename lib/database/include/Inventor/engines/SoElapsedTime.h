@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ELAPSED_TIME_
-#define _SO_ELAPSED_TIME_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFBool.h>
@@ -172,4 +171,3 @@ class SoElapsedTime : public SoEngine {
     virtual void evaluate();
 };
 
-#endif /* _SO_ELAPSED_TIME_ */

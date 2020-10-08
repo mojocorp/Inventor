@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CALLBACK_LIST_
-#define _SO_CALLBACK_LIST_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -109,4 +108,3 @@ class SoCallbackList {
     std::vector<SoCallbackStruct> list;
 };
 
-#endif /* _SO_CALLBACK_LIST_ */

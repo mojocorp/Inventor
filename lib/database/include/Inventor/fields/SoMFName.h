@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_NAME_
-#define _SO_MF_NAME_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -92,4 +91,3 @@ class SoMFName : public SoMField {
     static void initClass();
 };
 
-#endif /* _SO_MF_NAME_ */

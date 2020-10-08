@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_BIT_MASK_
-#define _SO_MF_BIT_MASK_
+#pragma once
 
 #include <Inventor/fields/SoMFEnum.h>
 
@@ -95,4 +94,3 @@ class SoMFBitMask : public SoMFEnum {
     static void initClass();
 };
 
-#endif /* _SO_MF_BIT_MASK_ */

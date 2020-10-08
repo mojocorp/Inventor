@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CREASE_ANGLE_ELEMENT
-#define _SO_CREASE_ANGLE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoFloatElement.h>
 
@@ -102,4 +101,3 @@ class SoCreaseAngleElement : public SoFloatElement {
     virtual ~SoCreaseAngleElement();
 };
 
-#endif /* _SO_CREASE_ANGLE_ELEMENT */

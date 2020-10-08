@@ -91,8 +91,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_POINT_LIGHT_DRAGGER_
-#define _SO_POINT_LIGHT_DRAGGER_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -237,4 +236,3 @@ class SoPointLightDragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_POINT_LIGHT_DRAGGER_ */

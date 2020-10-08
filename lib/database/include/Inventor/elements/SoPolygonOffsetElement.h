@@ -52,8 +52,7 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#ifndef _SO_POLYGON_OFFSET_ELEMENT_
-#define _SO_POLYGON_OFFSET_ELEMENT_
+#pragma once
 
 #include <Inventor/elements/SoReplacedElement.h>
 
@@ -109,4 +108,3 @@ class SoPolygonOffsetElement : public SoReplacedElement {
     static void initClass();
 };
 
-#endif // _SO_POLYGON_OFFSET_ELEMENT_

@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SENSORS_
-#define _SO_SENSORS_
+#pragma once
 
 #include <Inventor/sensors/SoAlarmSensor.h>
 #include <Inventor/sensors/SoDataSensor.h>
@@ -71,4 +70,3 @@
 #include <Inventor/sensors/SoTimerQueueSensor.h>
 #include <Inventor/sensors/SoTimerSensor.h>
 
-#endif /* _SO_SENSORS_ */

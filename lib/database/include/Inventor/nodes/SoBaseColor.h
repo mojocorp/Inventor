@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BASE_COLOR_
-#define _SO_BASE_COLOR_
+#pragma once
 
 #include <Inventor/fields/SoMFColor.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -104,4 +103,3 @@ class SoBaseColor : public SoNode {
     SoColorPacker *colorPacker;
 };
 
-#endif /* _SO_BASE_COLOR_ */

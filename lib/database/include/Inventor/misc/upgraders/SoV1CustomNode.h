@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1CUSTOMNODE_
-#define _SO_V1CUSTOMNODE_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoMFName.h>
@@ -124,4 +123,3 @@ class SoV1CustomNode : public SoUpgrader {
 // Note: use the generic SO_NODE_HEADER/etc macros instead of the
 // SO_CUSTOM macros.
 
-#endif /* _SO_V1CUSTOMNODE_ */

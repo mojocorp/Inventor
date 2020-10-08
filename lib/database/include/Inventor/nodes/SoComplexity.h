@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COMPLEXITY_
-#define _SO_COMPLEXITY_
+#pragma once
 
 #include <Inventor/elements/SoComplexityTypeElement.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -143,4 +142,3 @@ class SoComplexity : public SoNode {
     virtual ~SoComplexity();
 };
 
-#endif /* _SO_COMPLEXITY_ */

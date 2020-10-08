@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PICK_STYLE_ELEMENT
-#define _SO_PICK_STYLE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -107,4 +106,3 @@ class SoPickStyleElement : public SoInt32Element {
     virtual ~SoPickStyleElement();
 };
 
-#endif /* _SO_PICK_STYLE_ELEMENT */

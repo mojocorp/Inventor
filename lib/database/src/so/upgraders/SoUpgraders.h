@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_UPGRADERS_
-#define _SO_UPGRADERS_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/misc/upgraders/SoV1CustomNode.h>
@@ -88,4 +87,3 @@
 #include "SoV2VertexProperty.h"
 #include "SoV2LOD.h"
 
-#endif /* _SO_UPGRADERS_ */

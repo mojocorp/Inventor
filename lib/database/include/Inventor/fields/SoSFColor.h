@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_COLOR_
-#define _SO_SF_COLOR_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbColor.h>
@@ -99,4 +98,3 @@ class SoSFColor : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_COLOR_ */

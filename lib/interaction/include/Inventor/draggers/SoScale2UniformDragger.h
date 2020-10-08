@@ -81,8 +81,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SCALE_2_UNIFORM_DRAGGER_
-#define _SO_SCALE_2_UNIFORM_DRAGGER_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -213,4 +212,3 @@ class SoScale2UniformDragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_SCALE_2_UNIFORM_DRAGGER_ */

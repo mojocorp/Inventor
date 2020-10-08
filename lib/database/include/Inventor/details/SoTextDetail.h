@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXT_DETAIL_
-#define _SO_TEXT_DETAIL_
+#pragma once
 
 #include <Inventor/details/SoSubDetail.h>
 #include <Inventor/nodes/SoText3.h>
@@ -110,4 +109,3 @@ class SoTextDetail : public SoDetail {
     SoText3::Part part;
 };
 
-#endif /* _SO_TEXT_DETAIL_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NURBS_CURVE_
-#define _SO_NURBS_CURVE_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/fields/SoMFFloat.h>
@@ -147,4 +146,3 @@ class SoNurbsCurve : public SoShape {
     void drawNURBS(GLUnurbs *nurbsObj, SoAction *action);
 };
 
-#endif /* _SO_NURBS_CURVE_ */

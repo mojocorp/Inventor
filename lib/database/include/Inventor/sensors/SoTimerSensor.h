@@ -64,8 +64,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TIMER_SENSOR_
-#define _SO_TIMER_SENSOR_
+#pragma once
 
 #include <Inventor/sensors/SoTimerQueueSensor.h>
 
@@ -147,4 +146,3 @@ class SoTimerSensor : public SoTimerQueueSensor {
     virtual void trigger();
 };
 
-#endif /* _SO_TIMER_SENSOR_ */

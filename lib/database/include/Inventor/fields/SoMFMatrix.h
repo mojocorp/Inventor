@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_MATRIX_
-#define _SO_MF_MATRIX_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbMatrix.h>
@@ -88,4 +87,3 @@ class SoMFMatrix : public SoMField {
     static void initClass();
 };
 
-#endif /* _SO_MF_MATRIX_ */

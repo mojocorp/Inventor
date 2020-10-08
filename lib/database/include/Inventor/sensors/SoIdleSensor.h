@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_IDLE_SENSOR_
-#define _SO_IDLE_SENSOR_
+#pragma once
 
 #include <Inventor/sensors/SoDelayQueueSensor.h>
 
@@ -97,4 +96,3 @@ class SoIdleSensor : public SoDelayQueueSensor {
     virtual SbBool isIdleOnly() const;
 };
 
-#endif /* _SO_IDLE_SENSOR_ */

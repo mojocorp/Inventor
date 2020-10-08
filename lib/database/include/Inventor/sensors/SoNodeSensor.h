@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NODE_SENSOR_
-#define _SO_NODE_SENSOR_
+#pragma once
 
 #include <Inventor/sensors/SoDataSensor.h>
 
@@ -97,4 +96,3 @@ class SoNodeSensor : public SoDataSensor {
     virtual void dyingReference();
 };
 
-#endif /* _SO_NODE_SENSOR_ */

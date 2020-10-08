@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NORMAL_GENERATOR_
-#define _SO_NORMAL_GENERATOR_
+#pragma once
 
 #include <Inventor/SbVec.h>
 
@@ -160,4 +159,3 @@ class SoNormalGenerator {
     static SbBool equal(const SbVec3f &a, const SbVec3f &b, float tol);
 };
 
-#endif /* _SO_NORMAL_GENERATOR_ */

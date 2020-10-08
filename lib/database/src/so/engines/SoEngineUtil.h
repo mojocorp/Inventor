@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ENGINE_UTIL_
-#define _SO_ENGINE_UTIL_
+#pragma once
 
 static inline int
 max(int a, int b) {
@@ -81,4 +80,3 @@ clamp(int i, int n) {
     return (i < n) ? i : n - 1;
 }
 
-#endif /* _SO_ENGINE_UTIL_ */

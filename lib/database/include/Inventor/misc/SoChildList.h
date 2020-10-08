@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CHILD_LIST_
-#define _SO_CHILD_LIST_
+#pragma once
 
 #include <Inventor/lists/SoNodeList.h>
 
@@ -136,4 +135,3 @@ class SoChildList : public SoNodeList {
     std::vector<SoPath *> auditors;
 };
 
-#endif /* _SO_CHILD_LIST_ */

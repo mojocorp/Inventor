@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_CUBE_KIT_
-#define _SO_V1_CUBE_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1ShapeKit.h>
 
@@ -108,4 +107,3 @@ class SoV1CubeKit : public SoV1ShapeKit {
   protected:
     virtual ~SoV1CubeKit();
 };
-#endif /* _SO_V1_CUBE_KIT_ */

@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_CYLINDER_SHEET_PROJECTOR_
-#define _SB_CYLINDER_SHEET_PROJECTOR_
+#pragma once
 
 #include <Inventor/projectors/SbCylinderProjector.h>
 
@@ -127,4 +126,3 @@ class SbCylinderSheetProjector : public SbCylinderProjector {
     SbPlane tolPlane; // the plane itself
 };
 
-#endif /* _SB_CYLINDER_SHEET_PROJECTOR_ */

@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_PLANE_
-#define _SB_PLANE_
+#pragma once
 
 #include <Inventor/SbVec.h>
 
@@ -126,4 +125,3 @@ class SbPlane {
     float distance;
 };
 
-#endif /* _SB_PLANE_ */

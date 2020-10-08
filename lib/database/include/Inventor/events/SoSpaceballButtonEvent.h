@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SPACEBALL_BUTTON_EVENT_
-#define _SO_SPACEBALL_BUTTON_EVENT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoButtonEvent.h>
@@ -130,4 +129,3 @@ class SoSpaceballButtonEvent : public SoButtonEvent {
     Button button; // which button
 };
 
-#endif /* _SO_SPACEBALL_BUTTON_EVENT_ */

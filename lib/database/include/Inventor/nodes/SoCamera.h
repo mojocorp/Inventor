@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CAMERA_
-#define _SO_CAMERA_
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/SbViewVolume.h>
@@ -220,4 +219,3 @@ class SoCamera : public SoNode {
 #define SO_ASPECT_35mm 1.5           /* 35mm still camera (.666666)  */
 #define SO_ASPECT_VISTAVISION 2.301  /* Vistavision (.434593654)     */
 
-#endif /* _SO_CAMERA_ */

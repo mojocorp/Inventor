@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_SPHERE_
-#define _SB_SPHERE_
+#pragma once
 
 #include <Inventor/SbVec.h>
 
@@ -111,4 +110,3 @@ class SbSphere {
     float   radius;
 };
 
-#endif /* _SB_SPHERE_ */

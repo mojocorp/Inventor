@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SHUTTLE_
-#define _SO_SHUTTLE_
+#pragma once
 
 #include <Inventor/nodes/SoTranslation.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -137,4 +136,3 @@ class SoShuttle : public SoTranslation {
     static void onSensorCB(void *data, class SoSensor *sensor);
 };
 
-#endif /* _SO_SHUTTLE_ */

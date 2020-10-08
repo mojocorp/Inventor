@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_INDEXED_LINE_SET_KIT_
-#define _SO_V1_INDEXED_LINE_SET_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1VertexShapeKit.h>
 
@@ -113,4 +112,3 @@ class SoV1IndexedLineSetKit : public SoV1VertexShapeKit {
   protected:
     virtual ~SoV1IndexedLineSetKit();
 };
-#endif /* _SO_V1_INDEXED_LINE_SET_KIT_ */

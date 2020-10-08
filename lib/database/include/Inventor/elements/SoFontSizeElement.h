@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FONT_SIZE_ELEMENT
-#define _SO_FONT_SIZE_ELEMENT
+#pragma once
 
 #include <Inventor/SbString.h>
 #include <Inventor/elements/SoFloatElement.h>
@@ -98,4 +97,3 @@ class SoFontSizeElement : public SoFloatElement {
     virtual ~SoFontSizeElement();
 };
 
-#endif /* _SO_FONT_SIZE_ELEMENT */

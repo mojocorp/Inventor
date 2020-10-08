@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DB_
-#define _SO_DB_
+#pragma once
 
 #include <Inventor/sensors/SoSensorManager.h>
 #include <Inventor/SoType.h>
@@ -336,4 +335,3 @@ class SoDB {
     static void iv1_0PostCallback(void *userData, SoInput *in);
 };
 
-#endif /* _SO_DB_ */

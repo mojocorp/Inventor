@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_MATRIX_ELEMENT
-#define _SO_TEXTURE_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/SbMatrix.h>
@@ -132,4 +131,3 @@ class SoTextureMatrixElement : public SoAccumulatedElement {
     virtual ~SoTextureMatrixElement();
 };
 
-#endif /* _SO_TEXTURE_MATRIX_ELEMENT */

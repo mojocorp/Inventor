@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SHAPE_HINTS_
-#define _SO_SHAPE_HINTS_
+#pragma once
 
 #include <Inventor/elements/SoGLShapeHintsElement.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -192,4 +191,3 @@ class SoShapeHints : public SoNode {
     void doAction2(SoAction *action);
 };
 
-#endif /* _SO_SHAPE_HINTS_ */

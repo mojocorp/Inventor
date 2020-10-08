@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_VIEWING_MATRIX_ELEMENT
-#define _SO_GL_VIEWING_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoViewingMatrixElement.h>
 
@@ -110,4 +109,3 @@ class SoGLViewingMatrixElement : public SoViewingMatrixElement {
     void send();
 };
 
-#endif /* _SO_GL_VIEWING_MATRIX_ELEMENT */

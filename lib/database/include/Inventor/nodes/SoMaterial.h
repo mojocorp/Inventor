@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MATERIAL_
-#define _SO_MATERIAL_
+#pragma once
 
 #include <Inventor/fields/SoMFColor.h>
 #include <Inventor/fields/SoMFFloat.h>
@@ -134,4 +133,3 @@ class SoMaterial : public SoNode {
     SoColorPacker *colorPacker;
 };
 
-#endif /* _SO_MATERIAL_ */

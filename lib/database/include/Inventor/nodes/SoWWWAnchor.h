@@ -52,8 +52,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_WWWANCHOR_
-#define _SO_WWWANCHOR_
+#pragma once
 
 #include <Inventor/fields/SoSFString.h>
 #include <Inventor/nodes/SoLocateHighlight.h>
@@ -173,4 +172,3 @@ class SoWWWAnchor : public SoLocateHighlight {
     SbString fullURL;
 };
 
-#endif /* _SO_WWWANCHOR_ */

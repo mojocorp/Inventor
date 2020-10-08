@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BOX_HIGHLIGHT_RENDER_ACTION_
-#define _SO_BOX_HIGHLIGHT_RENDER_ACTION_
+#pragma once
 
 #include <Inventor/actions/SoGLRenderAction.h>
 
@@ -183,4 +182,3 @@ class SoBoxHighlightRenderAction : public SoGLRenderAction {
     void constructorCommon();
 };
 
-#endif /* _SO_BOX_HIGHLIGHT_RENDER_ACTION_ */

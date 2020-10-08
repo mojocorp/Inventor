@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NURBS_SURFACE_
-#define _SO_NURBS_SURFACE_
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/fields/SoMFFloat.h>
@@ -171,4 +170,3 @@ class SoNurbsSurface : public SoShape {
     void drawNURBS(GLUnurbs *render, SoAction *action, bool doTextures);
 };
 
-#endif /* _SO_NURBS_SURFACE_ */

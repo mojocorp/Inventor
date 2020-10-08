@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_LINE_PATTERN_ELEMENT
-#define _SO_GL_LINE_PATTERN_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoLinePatternElement.h>
 
@@ -110,4 +109,3 @@ class SoGLLinePatternElement : public SoLinePatternElement {
     void send();
 };
 
-#endif /* _SO_GL_LINE_PATTERN_ELEMENT */

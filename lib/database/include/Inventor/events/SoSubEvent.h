@@ -73,8 +73,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SUB_EVENT_
-#define _SO_SUB_EVENT_
+#pragma once
 
 #include <Inventor/events/SoEvent.h>
 
@@ -147,4 +146,3 @@
     classTypeId = SoType::createType(parentClass::getClassTypeId(),            \
                                      SO__QUOTE(className))
 
-#endif /* _SO_SUB_EVENT_ */

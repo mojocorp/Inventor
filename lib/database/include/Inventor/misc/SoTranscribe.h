@@ -59,8 +59,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSCRIBE_
-#define _SO_TRANSCRIBE_
+#pragma once
 
 #include <string>
 #include <map>
@@ -241,4 +240,3 @@ class SoTranReceiver {
     void addEntry(SoNode *node, const std::string &name);
 };
 
-#endif /* _SO_TRANSCRIBE_ */

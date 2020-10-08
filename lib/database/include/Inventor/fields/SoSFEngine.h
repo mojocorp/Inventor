@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_ENGINE_
-#define _SO_SF_ENGINE_
+#pragma once
 
 class SoEngine;
 
@@ -102,4 +101,3 @@ class SoSFEngine : public SoSField {
     void setVal(SoEngine *newValue);
 };
 
-#endif /* _SO_SF_ENGINE_ */

@@ -98,8 +98,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CENTERBALL_DRAGGER_
-#define _SO_CENTERBALL_DRAGGER_
+#pragma once
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/sensors/SoSensor.h>
@@ -334,4 +333,3 @@ class SoCenterballDragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_CENTERBALL_DRAGGER_ */

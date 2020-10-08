@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ANNOTATION_
-#define _SO_ANNOTATION_
+#pragma once
 
 #include <Inventor/nodes/SoSeparator.h>
 
@@ -122,4 +121,3 @@ class SoAnnotation : public SoSeparator {
     virtual ~SoAnnotation();
 };
 
-#endif /* _SO_ANNOTATION_ */

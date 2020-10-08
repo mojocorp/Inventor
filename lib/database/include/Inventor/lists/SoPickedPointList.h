@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PICKED_POINT_LISTS_
-#define _SO_PICKED_POINT_LISTS_
+#pragma once
 
 #include <Inventor/SbPList.h>
 
@@ -110,4 +109,3 @@ class SoPickedPointList : public SbPList {
     void set(int i, SoPickedPoint *pickedPoint);
 };
 
-#endif /* _SO_PICKED_POINT_LISTS_ */

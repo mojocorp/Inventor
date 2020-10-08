@@ -34,8 +34,7 @@
  *
  */
 
-#ifndef _SO_CALC_EXPR_
-#define _SO_CALC_EXPR_
+#pragma once
 
 #include <string>
 #include <Inventor/SbVec.h>
@@ -487,4 +486,3 @@ class Parser {
     ExprList *elist;
 };
 
-#endif

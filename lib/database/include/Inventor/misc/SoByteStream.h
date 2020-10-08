@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BYTE_STREAM_
-#define _SO_BYTE_STREAM_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -113,4 +112,3 @@ class SoByteStream {
     SbBool isRaw;
 };
 
-#endif // _SO_BYTE_STREAM_

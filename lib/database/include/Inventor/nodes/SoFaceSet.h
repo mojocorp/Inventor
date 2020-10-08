@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FACE_SET_
-#define _SO_FACE_SET_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/fields/SoMFInt32.h>
@@ -281,4 +280,3 @@ class SoFaceSet : public SoNonIndexedShape {
     static PMFS GenRenderFunc[32];
 };
 
-#endif /* _SO_FACE_SET_ */

@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_NODEKIT_CATALOG
-#define _SO_NODEKIT_CATALOG
+#pragma once
 
 #include <vector>
 #include <map>
@@ -299,4 +298,3 @@ class SoNodekitCatalog {
                                SoType theListContainerType);
 };
 
-#endif /* _SO_NODEKIT_CATALOG */

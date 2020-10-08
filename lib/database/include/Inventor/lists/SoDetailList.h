@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DETAIL_LISTS_
-#define _SO_DETAIL_LISTS_
+#pragma once
 
 #include <Inventor/SbPList.h>
 
@@ -116,4 +115,3 @@ class SoDetailList : public SbPList {
     void set(int i, SoDetail *detail);
 };
 
-#endif /* _SO_DETAIL_LISTS_ */

@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_STRING_
-#define _SB_STRING_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -202,4 +201,3 @@ class SbString {
     std::string string; // String storage
 };
 
-#endif /* _SB_STRING_ */

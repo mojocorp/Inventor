@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PROJECTION_MATRIX_ELEMENT
-#define _SO_PROJECTION_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -102,4 +101,3 @@ class SoProjectionMatrixElement : public SoReplacedElement {
     virtual ~SoProjectionMatrixElement();
 };
 
-#endif /* _SO_PROJECTION_MATRIX_ELEMENT */

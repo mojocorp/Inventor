@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_TEXT3_KIT_
-#define _SO_V1_TEXT3_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1ShapeKit.h>
 
@@ -107,4 +106,3 @@ class SoV1Text3Kit : public SoV1ShapeKit {
   protected:
     virtual ~SoV1Text3Kit();
 };
-#endif /* _SO_V1_TEXT3_KIT_ */

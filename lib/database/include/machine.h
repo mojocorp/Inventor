@@ -34,8 +34,7 @@
  *
  */
 
-#ifndef __MACHINE_H__
-#define __MACHINE_H__
+#pragma once
 
 /*
  * Copyright (C) 1990,91,92,93   Silicon Graphics, Inc.
@@ -176,4 +175,3 @@
 #define DOUBLE(p) (*(double *)(p))
 #define SHORT(p) (*(short *)(p))
 
-#endif /* __MACHINE_H__ */

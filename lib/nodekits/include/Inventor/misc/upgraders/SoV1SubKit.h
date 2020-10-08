@@ -71,8 +71,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1_SUB_KIT_
-#define _SO_V1_SUB_KIT_
+#pragma once
 
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/misc/upgraders/SoV1NodekitCatalog.h>
@@ -340,4 +339,3 @@
     nodekitCatalog->narrowTypes(name, newClassName::getClassTypeId(),          \
                                 newDefaultClassName::getClassTypeId())
 
-#endif /* _SO_V1_SUB_KIT_ */

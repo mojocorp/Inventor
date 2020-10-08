@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_UNIT_ELEMENT_
-#define _SO_TEXTURE_UNIT_ELEMENT_
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -96,4 +95,3 @@ class SoTextureUnitElement : public SoInt32Element {
     virtual ~SoTextureUnitElement();
 };
 
-#endif /* _SO_TEXTURE_UNIT_ELEMENT_ */

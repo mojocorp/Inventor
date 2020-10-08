@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PATH_SENSOR_
-#define _SO_PATH_SENSOR_
+#pragma once
 
 #include <Inventor/SoPath.h>
 #include <Inventor/sensors/SoDataSensor.h>
@@ -105,4 +104,3 @@ class SoPathSensor : public SoDataSensor {
     virtual void dyingReference();
 };
 
-#endif /* _SO_PATH_SENSOR_ */

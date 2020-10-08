@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MATERIAL_BUNDLE
-#define _SO_MATERIAL_BUNDLE
+#pragma once
 
 #include <Inventor/bundles/SoBundle.h>
 
@@ -133,4 +132,3 @@ class SoMaterialBundle : public SoBundle {
     void accessElements(SbBool isBetweenBeginEnd, SbBool avoidFastColor);
 };
 
-#endif /* _SO_MATERIAL_BUNDLE */

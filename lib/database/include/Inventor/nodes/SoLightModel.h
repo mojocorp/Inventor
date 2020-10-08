@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LIGHT_MODEL_
-#define _SO_LIGHT_MODEL_
+#pragma once
 
 #include <Inventor/elements/SoLazyElement.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -110,4 +109,3 @@ class SoLightModel : public SoNode {
     virtual ~SoLightModel();
 };
 
-#endif /* _SO_LIGHT_MODEL_ */

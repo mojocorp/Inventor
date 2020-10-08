@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_CYLINDER_PROJECTOR_
-#define _SB_CYLINDER_PROJECTOR_
+#pragma once
 
 #include <Inventor/SbCylinder.h>
 #include <Inventor/projectors/SbProjector.h>
@@ -155,4 +154,3 @@ class SbCylinderProjector : public SbProjector {
     SbVec3f lastPoint;
 };
 
-#endif /* _SB_CYLINDER_PROJECTOR_ */

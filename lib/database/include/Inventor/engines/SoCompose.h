@@ -65,8 +65,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COMPOSE_
-#define _SO_COMPOSE_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoMFFloat.h>
@@ -393,4 +392,3 @@ class SoDecomposeMatrix : public SoEngine {
     SoEngineOutput scaleOrientation; // Output (SoMFRotation)
 };
 
-#endif /* _SO_COMPOSE_ */

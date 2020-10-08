@@ -80,8 +80,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRACKBALL_DRAGGER_
-#define _SO_TRACKBALL_DRAGGER_
+#pragma once
 
 #include <vector>
 #include <Inventor/SbTime.h>
@@ -377,4 +376,3 @@ class SoTrackballDragger : public SoDragger {
     SbBool wasSpinningAtDragStart;
 };
 
-#endif /* _SO_TRACKBALL_DRAGGER_ */

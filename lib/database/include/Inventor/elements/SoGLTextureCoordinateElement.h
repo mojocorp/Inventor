@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_TEXTURE_COORDINATE_ELEMENT
-#define _SO_GL_TEXTURE_COORDINATE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoTextureCoordinateElement.h>
 
@@ -139,4 +138,3 @@ class SoGLTextureCoordinateElement : public SoTextureCoordinateElement {
     SoState *           copiedFromParent;
 };
 
-#endif /* _SO_GL_TEXTURE_COORDINATE_ELEMENT */

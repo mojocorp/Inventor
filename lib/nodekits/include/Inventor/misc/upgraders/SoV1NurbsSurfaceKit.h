@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_NURB_SURFACE_KIT_
-#define _SO_V1_NURB_SURFACE_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1ShapeKit.h>
 
@@ -125,4 +124,3 @@ class SoV1NurbsSurfaceKit : public SoV1ShapeKit {
   protected:
     virtual ~SoV1NurbsSurfaceKit();
 };
-#endif /* _SO_V1_NURB_SURFACE_KIT_ */

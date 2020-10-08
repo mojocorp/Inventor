@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXT_3_
-#define _SO_TEXT_3_
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/fields/SoMFString.h>
@@ -259,4 +258,3 @@ class SoText3 : public SoShape {
     static const SoTextureCoordinateElement *tce;
 };
 
-#endif /* _SO_TEXT_3_ */

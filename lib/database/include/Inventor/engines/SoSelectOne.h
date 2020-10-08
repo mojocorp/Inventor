@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SELECTONE_
-#define _SO_SELECTONE_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFInt32.h>
@@ -136,4 +135,3 @@ class SoSelectOne : public SoEngine {
     SoSFName typeField; // Used when reading/writing
 };
 
-#endif /* _SO_SELECTONE_ */

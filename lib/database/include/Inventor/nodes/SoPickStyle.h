@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PICK_STYLE_
-#define _SO_PICK_STYLE_
+#pragma once
 
 #include <Inventor/SbString.h>
 #include <Inventor/elements/SoPickStyleElement.h>
@@ -118,4 +117,3 @@ class SoPickStyle : public SoNode {
     virtual ~SoPickStyle();
 };
 
-#endif /* _SO_PICK_STYLE_ */

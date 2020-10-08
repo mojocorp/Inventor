@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NORMAL_BINDING_
-#define _SO_NORMAL_BINDING_
+#pragma once
 
 #include <Inventor/elements/SoNormalBindingElement.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -134,4 +133,3 @@ class SoNormalBinding : public SoNode {
     virtual SbBool readInstance(SoInput *in, unsigned short flags);
 };
 
-#endif /* _SO_NORMAL_BINDING_ */

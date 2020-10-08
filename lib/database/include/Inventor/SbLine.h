@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_LINE_
-#define _SB_LINE_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbVec.h>
@@ -117,4 +116,3 @@ class SbLine {
     SbVec3f dir;
 };
 
-#endif /* _SB_LINE_ */

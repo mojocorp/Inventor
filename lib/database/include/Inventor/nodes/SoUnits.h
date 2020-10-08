@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_UNITS_
-#define _SO_UNITS_
+#pragma once
 
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/nodes/SoTransformation.h>
@@ -133,4 +132,3 @@ class SoUnits : public SoTransformation {
     static const float factor[14];
 };
 
-#endif /* _SO_UNITS_ */

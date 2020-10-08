@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FIELD_CONTAINER_
-#define _SO_FIELD_CONTAINER_
+#pragma once
 
 #include <stack>
 #include <Inventor/misc/SoBase.h>
@@ -290,4 +289,3 @@ class SoFieldContainer : public SoBase {
     static void *reallocFieldBuf(void *ptr, size_t newSize);
 };
 
-#endif /* _SO_FIELD_CONTAINER_ */

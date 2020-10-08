@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MATERIAL_BINDING_ELEMENT
-#define _SO_MATERIAL_BINDING_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -112,4 +111,3 @@ class SoMaterialBindingElement : public SoInt32Element {
     virtual ~SoMaterialBindingElement();
 };
 
-#endif /* _SO_MATERIAL_BINDING_ELEMENT */

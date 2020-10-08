@@ -132,8 +132,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSFORMER_DRAGGER_
-#define _SO_TRANSFORMER_DRAGGER_
+#pragma once
 
 #include <Inventor/lists/SoNodeList.h>
 #include <Inventor/draggers/SoDragger.h>
@@ -858,4 +857,3 @@ class SoTransformerDragger : public SoDragger {
     void makeCircleFeedbackCatalogParts();
 };
 
-#endif /* _SO_TRANSFORMER_DRAGGER_ */

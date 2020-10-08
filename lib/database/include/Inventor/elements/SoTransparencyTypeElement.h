@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSPARENCY_TYPE_ELEMENT
-#define _SO_TRANSPARENCY_TYPE_ELEMENT
+#pragma once
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -117,4 +116,3 @@ class SoTransparencyTypeElement : public SoInt32Element {
     virtual ~SoTransparencyTypeElement();
 };
 
-#endif /* _SO_TRANSPARENCY_TYPE_ELEMENT */

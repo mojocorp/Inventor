@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LOCATION2_EVENT_
-#define _SO_LOCATION2_EVENT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoSubEvent.h>
@@ -83,4 +82,3 @@ class SoLocation2Event : public SoEvent {
     static void initClass();
 };
 
-#endif /* _SO_LOCATION2_EVENT_ */

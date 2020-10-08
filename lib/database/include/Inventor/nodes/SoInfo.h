@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INFO_
-#define _SO_INFO_
+#pragma once
 
 #include <Inventor/fields/SoSFString.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -99,4 +98,3 @@ class SoInfo : public SoNode {
     // NOTE: No actions for this node. It's pretty passive.
 };
 
-#endif /* _SO_INFO_ */

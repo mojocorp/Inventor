@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1TEXTURECOORDINATEENVIRONMENT_
-#define _SO_V1TEXTURECOORDINATEENVIRONMENT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -97,4 +96,3 @@ class SoV1TextureCoordinateEnvironment : public SoUpgrader {
     virtual ~SoV1TextureCoordinateEnvironment();
 };
 
-#endif /* _SO_V1TEXTURECOORDINATEENVIRONMENT_ */

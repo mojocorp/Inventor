@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NORMAL_BUNDLE
-#define _SO_NORMAL_BUNDLE
+#pragma once
 
 #include <Inventor/bundles/SoBundle.h>
 #include <Inventor/elements/SoGLNormalElement.h>
@@ -167,4 +166,3 @@ class SoNormalBundle : public SoBundle {
     SoNode *currentNode; // Node that created the bundle
 };
 
-#endif /* _SO_NORMAL_BUNDLE */

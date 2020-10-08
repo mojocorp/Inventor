@@ -76,8 +76,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TAB_BOX_DRAGGER_
-#define _SO_TAB_BOX_DRAGGER_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -261,4 +260,3 @@ class SoTabBoxDragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_TAB_BOX_DRAGGER_ */

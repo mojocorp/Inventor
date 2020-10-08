@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ROTOR_
-#define _SO_ROTOR_
+#pragma once
 
 #include <Inventor/nodes/SoRotation.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -140,4 +139,3 @@ class SoRotor : public SoRotation {
     static void onSensorCB(void *data, class SoSensor *sensor);
 };
 
-#endif /* _SO_ROTOR_ */

@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SELECTION_
-#define _SO_SELECTION_
+#pragma once
 
 #include <Inventor/SbColor.h>
 #include <Inventor/misc/SoCallbackList.h>
@@ -395,4 +394,3 @@ class SoSelection : public SoSeparator {
     void constructorCommon();
 };
 
-#endif /* _SO_SELECTION_ */

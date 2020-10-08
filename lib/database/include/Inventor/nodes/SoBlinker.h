@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BLINKER_
-#define _SO_BLINKER_
+#pragma once
 
 #include <Inventor/nodes/SoSwitch.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -131,4 +130,3 @@ class SoBlinker : public SoSwitch {
     static void onSensorCB(void *data, class SoSensor *sensor);
 };
 
-#endif /* _SO_BLINKER_ */

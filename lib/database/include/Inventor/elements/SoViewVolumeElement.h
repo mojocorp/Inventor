@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_VIEW_VOLUME_ELEMENT
-#define _SO_VIEW_VOLUME_ELEMENT
+#pragma once
 
 #include <Inventor/SbViewVolume.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -98,4 +97,3 @@ class SoViewVolumeElement : public SoReplacedElement {
     virtual ~SoViewVolumeElement();
 };
 
-#endif /* _SO_VIEW_VOLUME_ELEMENT */

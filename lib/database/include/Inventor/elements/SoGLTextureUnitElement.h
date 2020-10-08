@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_TEXTURE_UNIT_ELEMENT_
-#define _SO_GL_TEXTURE_UNIT_ELEMENT_
+#pragma once
 
 #include <Inventor/elements/SoTextureUnitElement.h>
 
@@ -90,4 +89,3 @@ class SoGLTextureUnitElement : public SoTextureUnitElement {
     void send();
 };
 
-#endif /* _SO_GL_TEXTURE_UNIT_ELEMENT_ */

@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_MATRIX_
-#define _SB_MATRIX_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbVec.h>
@@ -257,4 +256,3 @@ class SbMatrix {
     SbBool affine_inverse(const SbMatrix &in, SbMatrix &out) const;
 };
 
-#endif /* _SB_MATRIX_ */

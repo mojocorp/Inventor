@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COMPLEXITY_ELEMENT
-#define _SO_COMPLEXITY_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoFloatElement.h>
 
@@ -97,4 +96,3 @@ class SoComplexityElement : public SoFloatElement {
     virtual ~SoComplexityElement();
 };
 
-#endif /* _SO_COMPLEXITY_ELEMENT */

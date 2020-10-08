@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TYPE_LISTS_
-#define _SO_TYPE_LISTS_
+#pragma once
 
 #include <Inventor/SbPList.h>
 #include <Inventor/SoType.h>
@@ -100,4 +99,3 @@ class SoTypeList : public SbPList {
     void set(int i, SoType typeId);
 };
 
-#endif /* _SO_TYPE_LISTS_ */

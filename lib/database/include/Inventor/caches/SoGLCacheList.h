@@ -67,8 +67,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_CACHE_LIST
-#define _SO_GL_CACHE_LIST
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -148,4 +147,3 @@ class SoGLCacheList {
                         // cache->close() time.
 };
 
-#endif /* _SO_GL_CACHE_LIST */

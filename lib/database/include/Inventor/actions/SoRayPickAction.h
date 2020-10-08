@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_RAY_PICK_ACTION_
-#define _SO_RAY_PICK_ACTION_
+#pragma once
 
 #include <Inventor/SbLine.h>
 #include <Inventor/SbViewVolume.h>
@@ -285,4 +284,3 @@ class SoRayPickAction : public SoPickAction {
                              const SbVec3f &point);
 };
 
-#endif /* _SO_RAY_PICK_ACTION_ */

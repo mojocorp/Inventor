@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ALARM_SENSOR_
-#define _SO_ALARM_SENSOR_
+#pragma once
 
 #include <Inventor/sensors/SoTimerQueueSensor.h>
 
@@ -110,4 +109,3 @@ class SoAlarmSensor : public SoTimerQueueSensor {
     SbBool timeSet; // Whether time value was set
 };
 
-#endif /* _SO_ALARM_SENSOR_ */

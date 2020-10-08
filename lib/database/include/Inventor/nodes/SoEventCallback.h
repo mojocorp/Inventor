@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_EVENT_CALLBACK_
-#define _SO_EVENT_CALLBACK_
+#pragma once
 
 #include <Inventor/SoPath.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -221,4 +220,3 @@ class SoEventCallback : public SoNode {
     void invokeCallbacks(const SoEvent *e);
 };
 
-#endif /* _SO_EVENT_CALLBACK_ */

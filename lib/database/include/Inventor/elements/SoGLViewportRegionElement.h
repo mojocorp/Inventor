@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_VIEWPORT_REGION_ELEMENT
-#define _SO_GL_VIEWPORT_REGION_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoViewportRegionElement.h>
 
@@ -107,4 +106,3 @@ class SoGLViewportRegionElement : public SoViewportRegionElement {
     void send();
 };
 
-#endif /* _SO_GL_VIEWPORT_REGION_ELEMENT */

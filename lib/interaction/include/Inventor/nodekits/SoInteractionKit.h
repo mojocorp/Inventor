@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INTERACTION_KIT_
-#define _SO_INTERACTION_KIT_
+#pragma once
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodekits/SoBaseKit.h>
@@ -341,4 +340,3 @@ class SoInteractionKit : public SoBaseKit {
                                    int                 defBufSize);
 };
 
-#endif /* _SO_INTERACTION_KIT_ */

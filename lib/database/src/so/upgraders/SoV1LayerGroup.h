@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1LAYERGROUP_
-#define _SO_V1LAYERGROUP_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 
@@ -84,4 +83,3 @@ class SoV1LayerGroup : public SoUpgrader {
     virtual ~SoV1LayerGroup();
 };
 
-#endif /* _SO_V1LAYERGROUP_ */

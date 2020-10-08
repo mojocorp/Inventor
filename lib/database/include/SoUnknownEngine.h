@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_UNKNOWN_ENGINE_
-#define _SO_UNKNOWN_ENGINE_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 
@@ -98,4 +97,3 @@ class SoUnknownEngine : public SoEngine {
     virtual void evaluate();
 };
 
-#endif /* _SO_UNKNOWN_ENGINE_ */

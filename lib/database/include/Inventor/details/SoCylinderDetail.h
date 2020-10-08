@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CYLINDER_DETAIL_
-#define _SO_CYLINDER_DETAIL_
+#pragma once
 
 #include <Inventor/details/SoSubDetail.h>
 
@@ -96,4 +95,3 @@ class SoCylinderDetail : public SoDetail {
     int part;
 };
 
-#endif /* _SO_CYLINDER_DETAIL_ */

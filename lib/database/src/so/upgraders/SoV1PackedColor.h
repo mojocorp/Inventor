@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1PACKEDCOLOR_
-#define _SO_V1PACKEDCOLOR_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoMFUInt32.h>
@@ -88,4 +87,3 @@ class SoV1PackedColor : public SoUpgrader {
     virtual ~SoV1PackedColor();
 };
 
-#endif /* _SO_V1PACKEDCOLOR_ */

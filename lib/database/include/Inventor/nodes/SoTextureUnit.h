@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_UNIT_H_
-#define _SO_TEXTURE_UNIT_H_
+#pragma once
 
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/fields/SoSFInt32.h>
@@ -105,4 +104,3 @@ class SoTextureUnit : public SoNode {
   private:
 };
 
-#endif /* _SO_TEXTURE_UNIT_H_ */

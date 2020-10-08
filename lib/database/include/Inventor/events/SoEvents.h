@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_EVENTS_
-#define _SO_EVENTS_
+#pragma once
 
 #include <Inventor/events/SoEvent.h>
 
@@ -70,4 +69,3 @@
 #include <Inventor/events/SoLocation2Event.h>
 #include <Inventor/events/SoMotion3Event.h>
 
-#endif /* _SO_EVENTS_ */

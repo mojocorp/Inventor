@@ -52,8 +52,7 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#ifndef _SO_GL_POLYGON_OFFSET_ELEMENT
-#define _SO_GL_POLYGON_OFFSET_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoPolygonOffsetElement.h>
 
@@ -113,4 +112,3 @@ class SoGLPolygonOffsetElement : public SoPolygonOffsetElement {
     void send();
 };
 
-#endif /* _SO_GL_POLYGON_OFFSET_ELEMENT */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_WRITE_ACTION_
-#define _SO_WRITE_ACTION_
+#pragma once
 
 #include <Inventor/actions/SoAction.h>
 #include <Inventor/actions/SoSubAction.h>
@@ -115,4 +114,3 @@ class SoWriteAction : public SoAction {
     void traversePathList(SoNode *node);
 };
 
-#endif /* _SO_WRITE_ACTION_ */

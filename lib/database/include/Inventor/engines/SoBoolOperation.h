@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BOOL_OPERATION_
-#define _SO_BOOL_OPERATION_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoMFEnum.h>
@@ -131,4 +130,3 @@ class SoBoolOperation : public SoEngine {
     virtual void evaluate();
 };
 
-#endif /* _SO_BOOL_OPERATION_ */

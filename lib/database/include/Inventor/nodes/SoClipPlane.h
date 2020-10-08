@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CLIP_PLANE_
-#define _SO_CLIP_PLANE_
+#pragma once
 
 #include <Inventor/fields/SoSFBool.h>
 #include <Inventor/fields/SoSFPlane.h>
@@ -113,4 +112,3 @@ class SoClipPlane : public SoNode {
     virtual ~SoClipPlane();
 };
 
-#endif /* _SO_CLIP_PLANE_ */

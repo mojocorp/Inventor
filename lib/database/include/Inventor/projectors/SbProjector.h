@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_PROJECTOR_
-#define _SB_PROJECTOR_
+#pragma once
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/SbViewVolume.h>
@@ -126,4 +125,3 @@ class SbProjector {
     SbMatrix     workingToWorld;
 };
 
-#endif /* _SB_PROJECTOR_ */

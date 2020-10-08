@@ -61,8 +61,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ASCIITEXT_
-#define _SO_ASCIITEXT_
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/fields/SoMFString.h>
@@ -210,4 +209,3 @@ class SoAsciiText : public SoShape {
     static const SoTextureCoordinateElement *tce;
 };
 
-#endif /* _SO_ASCIITEXT_ */

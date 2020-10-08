@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ANTI_SQUISH_
-#define _SO_ANTI_SQUISH_
+#pragma once
 
 #include <Inventor/fields/SoFieldData.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -151,4 +150,3 @@ class SoAntiSquish : public SoTransformation {
     SbBool recalcNextTime;
 };
 
-#endif /* _SO_ANTI_SQUISH_ */

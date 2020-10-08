@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_2_TRANSFORM_
-#define _SO_TEXTURE_2_TRANSFORM_
+#pragma once
 
 #include <Inventor/fields/SoSFVec2f.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -120,4 +119,3 @@ class SoTexture2Transform : public SoNode {
     virtual ~SoTexture2Transform();
 };
 
-#endif /* _SO_TEXTURE_2_TRANSFORM_ */

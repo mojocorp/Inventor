@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CACHE_ELEMENT_
-#define _SO_CACHE_ELEMENT_
+#pragma once
 
 #include <Inventor/elements/SoSubElement.h>
 
@@ -140,4 +139,3 @@ class SoCacheElement : public SoElement {
     friend class SoElement;
 };
 
-#endif /* _SO_CACHE_ELEMENT_ */

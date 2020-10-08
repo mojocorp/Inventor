@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_2_
-#define _SO_TEXTURE_2_
+#pragma once
 
 #include <Inventor/elements/SoTextureImageElement.h>
 #include <Inventor/fields/SoSFColor.h>
@@ -239,4 +238,3 @@ class SoTexture2 : public SoNode {
     float            renderListQuality;
 };
 
-#endif /* _SO_TEXTURE_2_ */

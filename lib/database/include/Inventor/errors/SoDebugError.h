@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DEBUG_ERROR
-#define _SO_DEBUG_ERROR
+#pragma once
 
 #include <Inventor/errors/SoError.h>
 
@@ -132,4 +131,3 @@ class SoDebugError : public SoError {
     Severity severity; // Severity of error
 };
 
-#endif /* _SO_DEBUG_ERROR */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1MATERIAL_
-#define _SO_V1MATERIAL_
+#pragma once
 
 #include <Inventor/fields/SoMFColor.h>
 #include <Inventor/fields/SoMFFloat.h>
@@ -94,4 +93,3 @@ class SoV1Material : public SoUpgrader {
     virtual ~SoV1Material();
 };
 
-#endif /* _SO_V1MATERIAL_ */

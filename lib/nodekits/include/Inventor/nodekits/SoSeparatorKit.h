@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_SEPARATOR_KIT_
-#define _SO_SEPARATOR_KIT_
+#pragma once
 
 #include <Inventor/nodes/SoSeparator.h>
 #include <Inventor/nodekits/SoBaseKit.h>
@@ -232,4 +231,3 @@ class SoSeparatorKit : public SoBaseKit {
   protected:
     virtual ~SoSeparatorKit();
 };
-#endif /* _SO_SEPARATOR_KIT_ */

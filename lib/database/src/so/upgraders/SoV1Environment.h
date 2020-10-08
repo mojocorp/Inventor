@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1ENVIRONMENT_
-#define _SO_V1ENVIRONMENT_
+#pragma once
 
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -103,4 +102,3 @@ class SoV1Environment : public SoUpgrader {
     virtual ~SoV1Environment();
 };
 
-#endif /* _SO_V1ENVIRONMENT_ */

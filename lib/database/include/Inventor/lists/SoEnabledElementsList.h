@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ENABLEDELEMENTSLIST_
-#define _SO_ENABLEDELEMENTSLIST_
+#pragma once
 
 #include <Inventor/lists/SoTypeList.h>
 #include <Inventor/misc/SoBasic.h>
@@ -110,4 +109,3 @@ class SoEnabledElementsList {
     SoEnabledElementsList *parent;
 };
 
-#endif /* _SO_ENABLEDELEMENTSLIST_ */

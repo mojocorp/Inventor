@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MATERIAL_BINDING_
-#define _SO_MATERIAL_BINDING_
+#pragma once
 
 #include <Inventor/elements/SoMaterialBindingElement.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -148,4 +147,3 @@ class SoMaterialBinding : public SoNode {
     virtual SbBool readInstance(SoInput *in, unsigned short flags);
 };
 
-#endif /* _SO_MATERIAL_BINDING_ */

@@ -61,8 +61,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_NODEKIT_PARTS
-#define _SO_NODEKIT_PARTS
+#pragma once
 
 #include <vector>
 #include <Inventor/nodekits/SoNodekitCatalog.h>
@@ -168,4 +167,3 @@ class SoNodekitParts {
                          const SoFullPath *pathB) const;
 };
 
-#endif /* _SO_NODEKIT_PARTS */

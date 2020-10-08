@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COMPACT_PATH_LIST_
-#define _SO_COMPACT_PATH_LIST_
+#pragma once
 
 #include <vector>
 #include <Inventor/SbBasic.h>
@@ -146,4 +145,3 @@ class SoCompactPathList {
                      int firstPath, int numPaths);
 };
 
-#endif /* _SO_COMPACT_PATH_LIST_ */

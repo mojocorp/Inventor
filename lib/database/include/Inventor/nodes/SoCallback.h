@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CALLBACK_
-#define _SO_CALLBACK_
+#pragma once
 
 #include <Inventor/nodes/SoSubNode.h>
 
@@ -159,4 +158,3 @@ class SoCallback : public SoNode {
     void *        callbackData; // User data to pass it
 };
 
-#endif /* _SO_CALLBACK_ */

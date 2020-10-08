@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LINEAR_PROFILE_
-#define _SO_LINEAR_PROFILE_
+#pragma once
 
 #include <Inventor/nodes/SoProfile.h>
 
@@ -131,4 +130,3 @@ class SoLinearProfile : public SoProfile {
     virtual ~SoLinearProfile();
 };
 
-#endif /* _SO_LINEAR_PROFILE_ */

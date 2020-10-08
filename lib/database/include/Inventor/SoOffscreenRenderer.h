@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_OFFSCREEN_RENDERER_
-#define _SO_OFFSCREEN_RENDERER_
+#pragma once
 
 #include <stdio.h>
 #include <Inventor/SbColor.h>
@@ -174,4 +173,3 @@ class SoOffscreenRenderer {
     bool renderGeneric(class SoBase *base);
 };
 
-#endif /* _SO_OFFSCREEN_RENDERER_ */

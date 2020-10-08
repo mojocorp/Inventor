@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NORMAL_BINDING_ELEMENT
-#define _SO_NORMAL_BINDING_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -112,4 +111,3 @@ class SoNormalBindingElement : public SoInt32Element {
     virtual ~SoNormalBindingElement();
 };
 
-#endif /* _SO_NORMAL_BINDING_ELEMENT */

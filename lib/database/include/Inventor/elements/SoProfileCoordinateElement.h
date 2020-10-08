@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PROFILE_COORDINATE_ELEMENT
-#define _SO_PROFILE_COORDINATE_ELEMENT
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -135,4 +134,3 @@ class SoProfileCoordinateElement : public SoReplacedElement {
     SbVec3f convert3; // To convert from 2-D to 3-D
 };
 
-#endif /* _SO_PROFILE_COORDINATE_ELEMENT */

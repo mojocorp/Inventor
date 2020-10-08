@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_WRAPPER_KIT_
-#define _SO_V1_WRAPPER_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1GroupKit.h>
 
@@ -113,4 +112,3 @@ class SoV1WrapperKit : public SoV1GroupKit {
     virtual ~SoV1WrapperKit();
 };
 
-#endif /* _SO_V1_WRAPPER_KIT_ */

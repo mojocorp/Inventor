@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSFORM_SEPARATOR_
-#define _SO_TRANSFORM_SEPARATOR_
+#pragma once
 
 #include <Inventor/nodes/SoGroup.h>
 
@@ -112,4 +111,3 @@ class SoTransformSeparator : public SoGroup {
     virtual ~SoTransformSeparator();
 };
 
-#endif /* _SO_TRANSFORM_SEPARATOR_ */

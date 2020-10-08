@@ -50,8 +50,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CENTERBALL_MANIP_
-#define _SO_CENTERBALL_MANIP_
+#pragma once
 
 #include <Inventor/manips/SoTransformManip.h>
 
@@ -119,4 +118,3 @@ class SoCenterballManip : public SoTransformManip {
     virtual ~SoCenterballManip();
 };
 
-#endif /* _SO_CENTERBALL_MANIP_ */

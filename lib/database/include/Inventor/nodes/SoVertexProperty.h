@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_VERTEX_PROPERTY
-#define _SO_VERTEX_PROPERTY
+#pragma once
 
 #include <Inventor/fields/SoMFUInt32.h>
 #include <Inventor/fields/SoMFVec3f.h>
@@ -401,4 +400,3 @@ class SoVertexPropertyCache {
     unsigned char transpIsInVP;
 };
 
-#endif /* _SO_VERTEX_PROPERTY */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_PROJECTION_MATRIX_ELEMENT
-#define _SO_GL_PROJECTION_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoProjectionMatrixElement.h>
 
@@ -96,4 +95,3 @@ class SoGLProjectionMatrixElement : public SoProjectionMatrixElement {
     void send();
 };
 
-#endif /* _SO_GL_PROJECTION_MATRIX_ELEMENT */

@@ -123,8 +123,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SUB_FIELD_
-#define _SO_SUB_FIELD_
+#pragma once
 
 #include <Inventor/fields/SoField.h>
 #include <Inventor/SoInput.h>
@@ -799,4 +798,3 @@
     SO_MFIELD_REQUIRED_SOURCE(className);                                      \
     SO_MFIELD_DERIVED_CONSTRUCTOR_SOURCE(className)
 
-#endif /* _SO_SUB_FIELD_ */

@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_POINT_LIGHT_MANIP_
-#define _SO_POINT_LIGHT_MANIP_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/nodes/SoPointLight.h>
@@ -241,4 +240,3 @@ class SoPointLightManip : public SoPointLight {
     int getNumChildren() const { return (children->getLength()); }
 };
 
-#endif /* _SO_POINT_LIGHT_MANIP_ */

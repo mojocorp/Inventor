@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SENSOR_MANAGER_
-#define _SO_SENSOR_MANAGER_
+#pragma once
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbTime.h>
@@ -155,4 +154,3 @@ class SoSensorManager {
     void notifyChanged();
 };
 
-#endif /* _SO_SENSOR_MANAGER_ */

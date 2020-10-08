@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DEBUG_
-#define _SO_DEBUG_
+#pragma once
 
 class SoBase;
 class SoNode;
@@ -112,4 +111,3 @@ class SoDebug {
     static void printName(SoBase *base);
 };
 
-#endif /* _SO_DEBUG_ */

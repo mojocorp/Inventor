@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TIMER_QUEUE_SENSOR_
-#define _SO_TIMER_QUEUE_SENSOR_
+#pragma once
 
 #include <Inventor/sensors/SoSensor.h>
 #include <Inventor/SbTime.h>
@@ -123,4 +122,3 @@ class SoTimerQueueSensor : public SoSensor {
     virtual SbBool isBefore(const SoSensor *s) const;
 };
 
-#endif /* _SO_TIMER_SENSOR_ */

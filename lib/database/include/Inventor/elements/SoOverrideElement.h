@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_OVERRIDE_ELEMENT
-#define _SO_OVERRIDE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoSubElement.h>
 
@@ -393,4 +392,3 @@ class SoOverrideElement : public SoElement {
     uint32_t flags;
 };
 
-#endif /* _SO_OVERRIDE_ELEMENT */

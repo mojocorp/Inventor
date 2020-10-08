@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LINE_WIDTH_ELEMENT
-#define _SO_LINE_WIDTH_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoFloatElement.h>
 
@@ -97,4 +96,3 @@ class SoLineWidthElement : public SoFloatElement {
     virtual ~SoLineWidthElement();
 };
 
-#endif /* _SO_LINE_WIDTH_ELEMENT */

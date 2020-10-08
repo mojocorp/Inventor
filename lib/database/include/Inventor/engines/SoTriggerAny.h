@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRIGGER_ANY_
-#define _SO_TRIGGER_ANY_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFTrigger.h>
@@ -111,4 +110,3 @@ class SoTriggerAny : public SoEngine {
     virtual void evaluate();
 };
 
-#endif /* _SO_TRIGGER_ANY_ */

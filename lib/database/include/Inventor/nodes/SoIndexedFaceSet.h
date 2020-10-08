@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INDEXED_FACE_SET_
-#define _SO_INDEXED_FACE_SET_
+#pragma once
 
 #include <Inventor/nodes/SoIndexedShape.h>
 
@@ -280,4 +279,3 @@ class SoIndexedFaceSet : public SoIndexedShape {
     static PMFS GenRenderFunc[32];
 };
 
-#endif /* _SO_INDEXED_FACE_SET_ */

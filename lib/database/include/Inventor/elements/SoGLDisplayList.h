@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_DISPLAY_LIST
-#define _SO_GL_DISPLAY_LIST
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -130,4 +129,3 @@ class SoGLDisplayList {
     friend class SoGLCacheContextElement;
 };
 
-#endif /* _SO_GL_DISPLAY_LIST */

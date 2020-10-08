@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_COORDINATE_ELEMENT
-#define _SO_GL_COORDINATE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoCoordinateElement.h>
 
@@ -90,4 +89,3 @@ class SoGLCoordinateElement : public SoCoordinateElement {
     virtual ~SoGLCoordinateElement();
 };
 
-#endif /* _SO_GL_COORDINATE_ELEMENT */

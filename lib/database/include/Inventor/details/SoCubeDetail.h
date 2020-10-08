@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CUBE_DETAIL_
-#define _SO_CUBE_DETAIL_
+#pragma once
 
 #include <Inventor/details/SoSubDetail.h>
 
@@ -105,4 +104,3 @@ class SoCubeDetail : public SoDetail {
     int part;
 };
 
-#endif /* _SO_CUBE_DETAIL_ */

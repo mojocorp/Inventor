@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_BASIC_
-#define _SB_BASIC_
+#pragma once
 
 //
 // These symbols can be used to determine what version of Inventor
@@ -114,4 +113,3 @@ typedef int SbBool;
 #define SoINTERNAL
 
 /// @endcond
-#endif /* _SB_BASIC_ */

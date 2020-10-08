@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PATH_SWITCH_
-#define _SO_PATH_SWITCH_
+#pragma once
 
 #include <Inventor/fields/SoSFPath.h>
 #include <Inventor/nodes/SoGroup.h>
@@ -120,4 +119,3 @@ class SoPathSwitch : public SoGroup {
                        const SoPath *currentPath) const;
 };
 
-#endif /* _SO_PATH_SWITCH_ */

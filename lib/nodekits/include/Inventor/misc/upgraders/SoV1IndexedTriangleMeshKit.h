@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_INDEXED_TRIANGLE_MESH_SET_KIT_
-#define _SO_V1_INDEXED_TRIANGLE_MESH_SET_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1VertexShapeKit.h>
 
@@ -113,4 +112,3 @@ class SoV1IndexedTriangleMeshKit : public SoV1VertexShapeKit {
   protected:
     virtual ~SoV1IndexedTriangleMeshKit();
 };
-#endif /* _SO_V1_INDEXED_TRIANGLE_MESH_SET_KIT_ */

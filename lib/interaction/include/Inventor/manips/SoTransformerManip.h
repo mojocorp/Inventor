@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSFORMER_MANIP_
-#define _SO_TRANSFORMER_MANIP_
+#pragma once
 
 #include <Inventor/manips/SoTransformManip.h>
 
@@ -136,4 +135,3 @@ class SoTransformerManip : public SoTransformManip {
     virtual ~SoTransformerManip();
 };
 
-#endif /* _SO_TRANSFORMER_MANIP_ */

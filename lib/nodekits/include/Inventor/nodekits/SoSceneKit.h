@@ -57,8 +57,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_SCENE_KIT_
-#define _SO_SCENE_KIT_
+#pragma once
 
 #include <Inventor/nodekits/SoBaseKit.h>
 
@@ -178,4 +177,3 @@ class SoSceneKit : public SoBaseKit {
   protected:
     virtual ~SoSceneKit();
 };
-#endif /* _SO_SCENE_KIT_ */

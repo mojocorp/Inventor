@@ -15,8 +15,7 @@
  *   This file is subject to the Apple OS-Developed Software exception.
  */
 
-#ifndef _SGI_H_
-#define _SGI_H_
+#pragma once
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -75,7 +74,6 @@ extern int    sgiPutRow(sgi_t *sgip, unsigned short *row, int y, int z);
 #ifdef __cplusplus
 }
 #endif
-#endif /* !_SGI_H_ */
 
 /*
  * End of "$Id: image-sgi.h 9771 2011-05-12 05:21:56Z mike $".

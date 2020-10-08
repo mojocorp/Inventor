@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LOCAL_BBOX_MATRIX_ELEMENT
-#define _SO_LOCAL_BBOX_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoModelMatrixElement.h>
 
@@ -145,4 +144,3 @@ class SoLocalBBoxMatrixElement : public SoElement {
     SbMatrix modelInverseMatrix;
 };
 
-#endif /* _SO_LOCAL_BBOX_MATRIX_ELEMENT */

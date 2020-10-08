@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_COORDINATE_BINDING_ELEMENT
-#define _SO_TEXTURE_COORDINATE_BINDING_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -107,4 +106,3 @@ class SoTextureCoordinateBindingElement : public SoInt32Element {
     virtual ~SoTextureCoordinateBindingElement();
 };
 
-#endif /* _SO_TEXTURE_COORDINATE_BINDING_ELEMENT */

@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_CYLINDER_KIT_
-#define _SO_V1_CYLINDER_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1ShapeKit.h>
 
@@ -109,4 +108,3 @@ class SoV1CylinderKit : public SoV1ShapeKit {
   protected:
     virtual ~SoV1CylinderKit();
 };
-#endif /* _SO_V1_CYLINDER_KIT_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_NAME_
-#define _SB_NAME_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
@@ -170,4 +169,3 @@ class SbName {
     static std::set<std::string> entries;
 };
 
-#endif /* _SB_NAME_ */

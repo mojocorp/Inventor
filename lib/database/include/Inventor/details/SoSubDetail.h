@@ -65,8 +65,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SUB_DETAIL_
-#define _SO_SUB_DETAIL_
+#pragma once
 
 #include <Inventor/details/SoDetail.h>
 
@@ -130,4 +129,3 @@
     classTypeId = SoType::createType(parentClass::getClassTypeId(),            \
                                      SO__QUOTE(className), NULL)
 
-#endif /* _SO_SUB_DETAIL_ */

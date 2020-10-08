@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_FLOAT_
-#define _SO_MF_FLOAT_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -89,4 +88,3 @@ class SoMFFloat : public SoMField {
     virtual SbBool readBinaryValues(SoInput *in, int numToRead);
 };
 
-#endif /* _SO_MF_FLOAT_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ACTION_
-#define _SO_ACTION_
+#pragma once
 
 #include <Inventor/lists/SoActionMethodList.h>
 #include <Inventor/lists/SoEnabledElementsList.h>
@@ -333,4 +332,3 @@ class SoAction {
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#endif /* _SO_ACTION_ */

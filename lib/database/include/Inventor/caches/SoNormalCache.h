@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NORMAL_CACHE
-#define _SO_NORMAL_CACHE
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/caches/SoCache.h>
@@ -92,4 +91,3 @@ class SoNormalCache : public SoCache {
     const SbVec3f *normals;    // Array of normals
 };
 
-#endif /* _SO_NORMAL_CACHE */

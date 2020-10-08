@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NON_INDEXED_SHAPE_
-#define _SO_NON_INDEXED_SHAPE_
+#pragma once
 
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoVertexShape.h>
@@ -121,4 +120,3 @@ class SoNonIndexedShape : public SoVertexShape {
     virtual ~SoNonIndexedShape();
 };
 
-#endif /* _SO_NON_INDEXED_SHAPE_ */

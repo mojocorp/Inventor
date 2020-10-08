@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_VIEWPORT_REGION_
-#define _SB_VIEWPORT_REGION_
+#pragma once
 
 #include <Inventor/SbVec.h>
 
@@ -177,4 +176,3 @@ class SbViewportRegion {
     void adjustViewport();
 };
 
-#endif /* _SB_VIEWPORT_REGION_ */

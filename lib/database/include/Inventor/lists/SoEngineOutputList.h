@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ENGINE_OUTPUT_LISTS_
-#define _SO_ENGINE_OUTPUT_LISTS_
+#pragma once
 
 #include <Inventor/SbPList.h>
 
@@ -108,4 +107,3 @@ class SoEngineOutputList : public SbPList {
     }
 };
 
-#endif /* _SO_ENGINE_OUTPUT_LISTS_ */

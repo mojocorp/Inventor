@@ -69,8 +69,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INTERPOLATE_
-#define _SO_INTERPOLATE_
+#pragma once
 
 #include <Inventor/SoDB.h>
 #include <Inventor/engines/SoSubEngine.h>
@@ -346,4 +345,3 @@ class SoInterpolateVec4f : public SoInterpolate {
         input1; ///< The engine linearly interpolates from #input0 to #input1.
 };
 
-#endif /* _SO_INTERPOLATE_ */

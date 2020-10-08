@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_COLOR_H_
-#define _SB_COLOR_H_
+#pragma once
 
 #include <Inventor/SbVec.h>
 
@@ -121,4 +120,3 @@ class SbColor : public SbVec3f {
     uint32_t getPackedValue(float transparency = 0.0) const;
 };
 
-#endif /* _SB_COLOR_H_ */

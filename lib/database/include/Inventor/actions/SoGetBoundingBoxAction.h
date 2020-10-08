@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GET_BOUNDING_BOX_ACTION_
-#define _SO_GET_BOUNDING_BOX_ACTION_
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/SbViewportRegion.h>
@@ -206,4 +205,3 @@ class SoGetBoundingBoxAction : public SoAction {
     void checkReset(SbBool resetBefore);
 };
 
-#endif /* _SO_GET_BOUNDING_BOX_ACTION_ */

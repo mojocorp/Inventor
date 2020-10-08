@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1PICKSTYLE_
-#define _SO_V1PICKSTYLE_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -93,4 +92,3 @@ class SoV1PickStyle : public SoUpgrader {
     virtual ~SoV1PickStyle();
 };
 
-#endif /* _SO_V1PICKSTYLE_ */

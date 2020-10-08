@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1SHAPEHINTS_
-#define _SO_V1SHAPEHINTS_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoSFBitMask.h>
@@ -104,4 +103,3 @@ class SoV1ShapeHints : public SoUpgrader {
     virtual ~SoV1ShapeHints();
 };
 
-#endif /* _SO_V1SHAPEHINTS_ */

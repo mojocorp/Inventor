@@ -51,8 +51,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LOD_
-#define _SO_LOD_
+#pragma once
 
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -144,4 +143,3 @@ class SoLOD : public SoGroup {
     virtual int whichToTraverse(SoAction *);
 };
 
-#endif /* _SO_LOD_ */

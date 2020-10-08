@@ -96,8 +96,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_HANDLEBOX_DRAGGER_
-#define _SO_HANDLEBOX_DRAGGER_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -512,4 +511,3 @@ class SoHandleBoxDragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_HANDLEBOX_DRAGGER_ */

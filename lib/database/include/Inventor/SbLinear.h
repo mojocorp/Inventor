@@ -68,8 +68,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_LINEAR_
-#define _SB_LINEAR_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/SbMatrix.h>
@@ -80,4 +79,3 @@
 #include <Inventor/SbCylinder.h>
 #include <Inventor/SbViewVolume.h>
 
-#endif /* _SB_LINEAR_ */

@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_APPEARANCE_KIT_
-#define _SO_APPEARANCE_KIT_
+#pragma once
 
 #include <Inventor/nodekits/SoBaseKit.h>
 
@@ -155,4 +154,3 @@ class SoAppearanceKit : public SoBaseKit {
     virtual ~SoAppearanceKit();
 };
 
-#endif /* _SO_APPEARANCE_KIT_ */

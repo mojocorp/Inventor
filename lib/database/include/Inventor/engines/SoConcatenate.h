@@ -64,8 +64,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CONCATENATE_
-#define _SO_CONCATENATE_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFName.h>
@@ -169,4 +168,3 @@ class SoConcatenate : public SoEngine {
     SoSFName typeField; // Used when reading/writing
 };
 
-#endif /* _SO_CONCATENATE_ */

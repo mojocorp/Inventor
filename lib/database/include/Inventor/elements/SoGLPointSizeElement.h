@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_POINT_SIZE_ELEMENT
-#define _SO_GL_POINT_SIZE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoPointSizeElement.h>
 
@@ -115,4 +114,3 @@ class SoGLPointSizeElement : public SoPointSizeElement {
     void send();
 };
 
-#endif /* _SO_GL_POINT_SIZE_ELEMENT */

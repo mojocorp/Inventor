@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_UPDATE_AREA_ELEMENT
-#define _SO_UPDATE_AREA_ELEMENT
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoSubElement.h>
@@ -134,4 +133,3 @@ class SoGLUpdateAreaElement : public SoElement {
     void send(SoState *state);
 };
 
-#endif /* _SO_UPDATE_AREA_ELEMENT */

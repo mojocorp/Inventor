@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ACTIONS_
-#define _SO_ACTIONS_
+#pragma once
 
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -71,4 +70,3 @@
 #include <Inventor/actions/SoSearchAction.h>
 #include <Inventor/actions/SoWriteAction.h>
 
-#endif /* _SO_ACTIONS_ */

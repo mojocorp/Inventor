@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FIELD_
-#define _SO_FIELD_
+#pragma once
 
 #include <vector>
 #include <Inventor/SbString.h>
@@ -677,4 +676,3 @@ class SoMField : public SoField {
     static void *reallocFieldBuf(void *ptr, size_t newSize);
 };
 
-#endif /* _SO_FIELD_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_TEXTURE_MATRIX_ELEMENT
-#define _SO_GL_TEXTURE_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoTextureMatrixElement.h>
 
@@ -98,4 +97,3 @@ class SoGLTextureMatrixElement : public SoTextureMatrixElement {
     virtual ~SoGLTextureMatrixElement();
 };
 
-#endif /* _SO_GL_TEXTURE_MATRIX_ELEMENT */

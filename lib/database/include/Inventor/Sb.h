@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_
-#define _SB_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -70,4 +69,3 @@
 
 #include <Inventor/projectors/SbProjectors.h>
 
-#endif /* _SB_ */

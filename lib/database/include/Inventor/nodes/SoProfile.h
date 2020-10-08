@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PROFILE_
-#define _SO_PROFILE_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoProfileElement.h>
@@ -146,4 +145,3 @@ class SoProfile : public SoNode {
     virtual ~SoProfile();
 };
 
-#endif /* _SO_PROFILE_ */

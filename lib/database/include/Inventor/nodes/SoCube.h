@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CUBE_
-#define _SO_CUBE_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -178,4 +177,3 @@ class SoCube : public SoShape {
     friend class SoShape;
 };
 
-#endif /* _SO_CUBE_ */

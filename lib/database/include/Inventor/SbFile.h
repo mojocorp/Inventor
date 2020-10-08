@@ -1,5 +1,4 @@
-#ifndef _SB_FILE_
-#define _SB_FILE_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbString.h>
@@ -88,4 +87,3 @@ class SbFile {
     FILE *mFilePointer;
 };
 
-#endif /* _SB_FILE_ */

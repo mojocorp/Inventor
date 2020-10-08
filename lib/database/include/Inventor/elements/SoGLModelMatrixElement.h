@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_MODEL_MATRIX_ELEMENT
-#define _SO_GL_MODEL_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoModelMatrixElement.h>
 
@@ -128,4 +127,3 @@ class SoGLModelMatrixElement : public SoModelMatrixElement {
     uint32_t viewEltNodeId;
 };
 
-#endif /* _SO_GL_MODEL_MATRIX_ELEMENT */

@@ -52,8 +52,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FONTSTYLE_
-#define _SO_FONTSTYLE_
+#pragma once
 
 #include <Inventor/fields/SoSFBitMask.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -129,4 +128,3 @@ class SoFontStyle : public SoFont {
     static const char *fontList[][4];
 };
 
-#endif /* _SO_FONTSTYLE_ */

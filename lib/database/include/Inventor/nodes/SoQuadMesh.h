@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_QUAD_MESH_
-#define _SO_QUAD_MESH_
+#pragma once
 
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoNonIndexedShape.h>
@@ -240,4 +239,3 @@ class SoQuadMesh : public SoNonIndexedShape {
     static PMQM renderFunc[32];
 };
 
-#endif /* _SO_QUAD_MESH_ */

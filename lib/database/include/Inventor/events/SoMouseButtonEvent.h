@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MOUSE_BUTTON_EVENT_
-#define _SO_MOUSE_BUTTON_EVENT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoButtonEvent.h>
@@ -121,4 +120,3 @@ class SoMouseButtonEvent : public SoButtonEvent {
     Button button; // which button
 };
 
-#endif /* _SO_MOUSE_BUTTON_EVENT_ */

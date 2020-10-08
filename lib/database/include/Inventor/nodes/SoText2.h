@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXT_2_
-#define _SO_TEXT_2_
+#pragma once
 
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -167,4 +166,3 @@ class SoText2 : public SoShape {
     SoBitmapFontCache *fontCache;
 };
 
-#endif /* _SO_TEXT_2_ */

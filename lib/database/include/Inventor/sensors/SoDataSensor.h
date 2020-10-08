@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DATA_SENSOR_
-#define _SO_DATA_SENSOR_
+#pragma once
 
 class SoBase;
 class SoNode;
@@ -167,4 +166,3 @@ class SoDataSensor : public SoDelayQueueSensor {
     SbBool      doTrigPath; // Whether to compute trigger path
 };
 
-#endif /* _SO_DATA_SENSOR_ */

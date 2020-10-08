@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_PROJECTORS_
-#define _SB_PROJECTORS_
+#pragma once
 
 #include <Inventor/projectors/SbSphereSectionProjector.h>
 #include <Inventor/projectors/SbSphereSheetProjector.h>
@@ -70,4 +69,3 @@
 #include <Inventor/projectors/SbPlaneProjector.h>
 #include <Inventor/projectors/SbLineProjector.h>
 
-#endif /* _SB_PROJECTORS_ */

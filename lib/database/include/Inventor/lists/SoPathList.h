@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PATH_LISTS_
-#define _SO_PATH_LISTS_
+#pragma once
 
 #include <Inventor/lists/SoBaseList.h>
 
@@ -117,4 +116,3 @@ class SoPathList : public SoBaseList {
     static int comparePaths(const void *p1Ptr, const void *p2Ptr);
 };
 
-#endif /* _SO_PATH_LISTS_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ROTATION_XYZ_
-#define _SO_ROTATION_XYZ_
+#pragma once
 
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -120,4 +119,3 @@ class SoRotationXYZ : public SoTransformation {
     virtual ~SoRotationXYZ();
 };
 
-#endif /* _SO_ROTATION_XYZ_ */

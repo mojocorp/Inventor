@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FLOAT_ELEMENT
-#define _SO_FLOAT_ELEMENT
+#pragma once
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -118,4 +117,3 @@ class SoFloatElement : public SoElement {
     virtual ~SoFloatElement();
 };
 
-#endif /* _SO_FLOAT_ELEMENT */

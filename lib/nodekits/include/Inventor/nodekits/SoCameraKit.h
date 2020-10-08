@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_CAMERA_KIT_
-#define _SO_CAMERA_KIT_
+#pragma once
 
 #include <Inventor/nodekits/SoBaseKit.h>
 
@@ -141,4 +140,3 @@ class SoCameraKit : public SoBaseKit {
   protected:
     virtual ~SoCameraKit();
 };
-#endif /* _SO_CAMERA_KIT_ */

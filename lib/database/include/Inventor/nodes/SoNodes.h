@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NODES_
-#define _SO_NODES_
+#pragma once
 
 #include <Inventor/nodes/SoAnnotation.h>
 #include <Inventor/nodes/SoArray.h>
@@ -160,4 +159,3 @@
 #include <Inventor/nodes/SoWWWAnchor.h>
 #include <Inventor/nodes/SoWWWInline.h>
 
-#endif /* _SO_NODES_ */

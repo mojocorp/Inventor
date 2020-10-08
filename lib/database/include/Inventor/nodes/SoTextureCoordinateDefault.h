@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_COORDINATE_DEFAULT_
-#define _SO_TEXTURE_COORDINATE_DEFAULT_
+#pragma once
 
 #include <Inventor/nodes/SoTextureCoordinateFunction.h>
 
@@ -108,4 +107,3 @@ class SoTextureCoordinateDefault : public SoTextureCoordinateFunction {
     virtual ~SoTextureCoordinateDefault();
 };
 
-#endif /* _SO_TEXTURE_COORDINATE_DEFAULT_ */

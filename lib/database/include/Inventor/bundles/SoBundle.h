@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BUNDLE
-#define _SO_BUNDLE
+#pragma once
 
 #include <Inventor/actions/SoAction.h>
 
@@ -82,4 +81,3 @@ class SoBundle {
     ~SoBundle() {}
 };
 
-#endif /* _SO_BUNDLE */

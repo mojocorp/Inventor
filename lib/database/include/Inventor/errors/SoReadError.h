@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_READ_ERROR
-#define _SO_READ_ERROR
+#pragma once
 
 #include <Inventor/errors/SoError.h>
 
@@ -111,4 +110,3 @@ class SoReadError : public SoError {
     static void *     cbData;      // User data for callback
 };
 
-#endif /* _SO_READ_ERROR */

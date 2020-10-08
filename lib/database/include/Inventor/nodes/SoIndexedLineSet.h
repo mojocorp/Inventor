@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INDEXED_LINE_SET_
-#define _SO_INDEXED_LINE_SET_
+#pragma once
 
 #include <Inventor/nodes/SoIndexedShape.h>
 
@@ -248,4 +247,3 @@ class SoIndexedLineSet : public SoIndexedShape {
     static PMILS renderFunc[32];
 };
 
-#endif /* _SO_INDEXED_LINE_SET_ */

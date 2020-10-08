@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_COLOR_
-#define _SO_MF_COLOR_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbColor.h>
@@ -121,4 +120,3 @@ class SoMFColor : public SoMField {
     virtual SbBool readBinaryValues(SoInput *in, int numToRead);
 };
 
-#endif /* _SO_MF_COLOR_ */

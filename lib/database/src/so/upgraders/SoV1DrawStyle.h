@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1DRAWSTYLE_
-#define _SO_V1DRAWSTYLE_
+#pragma once
 
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/fields/SoSFShort.h>
@@ -94,4 +93,3 @@ class SoV1DrawStyle : public SoUpgrader {
     virtual ~SoV1DrawStyle();
 };
 
-#endif /* _SO_V1DRAWSTYLE_ */

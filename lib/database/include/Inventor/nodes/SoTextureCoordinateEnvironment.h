@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_COORDINATE_ENVIRONMENT_
-#define _SO_TEXTURE_COORDINATE_ENVIRONMENT_
+#pragma once
 
 #include <Inventor/nodes/SoTextureCoordinateFunction.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -115,4 +114,3 @@ class SoTextureCoordinateEnvironment : public SoTextureCoordinateFunction {
     static void doTexgen(void *);
 };
 
-#endif /* _SO_TEXTURE_COORDINATE_ENVIRONMENT_ */

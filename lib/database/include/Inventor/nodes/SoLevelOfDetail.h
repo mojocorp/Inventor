@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LEVEL_OF_DETAIL_
-#define _SO_LEVEL_OF_DETAIL_
+#pragma once
 
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/nodes/SoGroup.h>
@@ -138,4 +137,3 @@ class SoLevelOfDetail : public SoGroup {
     static SoGetBoundingBoxAction *bboxAction;
 };
 
-#endif /* _SO_LEVEL_OF_DETAIL_ */

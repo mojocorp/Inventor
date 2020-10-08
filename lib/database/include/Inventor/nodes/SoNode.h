@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NODE_
-#define _SO_NODE_
+#pragma once
 
 #include <Inventor/fields/SoFieldContainer.h>
 #include <Inventor/SbString.h>
@@ -240,4 +239,3 @@ class SoNode : public SoFieldContainer {
     static void writeS(SoAction *, SoNode *);
 };
 
-#endif /* _SO_NODE_ */

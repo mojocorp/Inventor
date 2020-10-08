@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V2TEXT_3_
-#define _SO_V2TEXT_3_
+#pragma once
 
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -99,4 +98,3 @@ class SoV2Text3 : public SoUpgrader {
     virtual ~SoV2Text3();
 };
 
-#endif /* _SO_V2TEXT_3_ */

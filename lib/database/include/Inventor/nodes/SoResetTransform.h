@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_RESET_TRANSFORM_
-#define _SO_RESET_TRANSFORM_
+#pragma once
 
 #include <Inventor/fields/SoSFBitMask.h>
 #include <Inventor/nodes/SoTransformation.h>
@@ -125,4 +124,3 @@ class SoResetTransform : public SoTransformation {
     virtual ~SoResetTransform();
 };
 
-#endif /* _SO_RESET_TRANSFORM_ */

@@ -1,5 +1,4 @@
-#ifndef _SO_STEREO_ELEMENT_
-#define _SO_STEREO_ELEMENT_
+#pragma once
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -60,4 +59,3 @@ class SoStereoElement : public SoElement {
     float      balance;
 };
 
-#endif /* _SO_STEREO_ELEMENT_ */

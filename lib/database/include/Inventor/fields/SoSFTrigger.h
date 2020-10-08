@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_TRIGGER_
-#define _SO_SF_TRIGGER_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -118,4 +117,3 @@ class SoSFTrigger : public SoSField {
     virtual void   writeValue(SoOutput *out) const;
 };
 
-#endif /* _SO_SF_TRIGGER_ */

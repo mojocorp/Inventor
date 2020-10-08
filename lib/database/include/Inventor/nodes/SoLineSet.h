@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LINE_SET_
-#define _SO_LINE_SET_
+#pragma once
 
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/nodes/SoNonIndexedShape.h>
@@ -228,4 +227,3 @@ class SoLineSet : public SoNonIndexedShape {
     static PMLS renderFunc[32];
 };
 
-#endif /* _SO_LINE_SET_ */

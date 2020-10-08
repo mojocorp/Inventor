@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NORMAL_ELEMENT
-#define _SO_NORMAL_ELEMENT
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -124,4 +123,3 @@ class SoNormalElement : public SoReplacedElement {
     static SbVec3f *defaultNormal;
 };
 
-#endif /* _SO_NORMAL_ELEMENT */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_POINT_LIGHT_
-#define _SO_POINT_LIGHT_
+#pragma once
 
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoLight.h>
@@ -106,4 +105,3 @@ class SoPointLight : public SoLight {
     virtual ~SoPointLight();
 };
 
-#endif /* _SO_POINT_LIGHT_ */

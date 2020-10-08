@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PICK_ACTION_
-#define _SO_PICK_ACTION_
+#pragma once
 
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/actions/SoSubAction.h>
@@ -110,4 +109,3 @@ class SoPickAction : public SoAction {
     SbBool culling; // Pick culling enabled?
 };
 
-#endif /* _SO_PICK_ACTION_ */

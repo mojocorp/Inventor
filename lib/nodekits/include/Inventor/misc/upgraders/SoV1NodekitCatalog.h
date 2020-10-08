@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_NODEKIT_CATALOG
-#define _SO_V1_NODEKIT_CATALOG
+#pragma once
 
 #include <Inventor/SbString.h>
 #include <Inventor/SbPList.h>
@@ -252,4 +251,3 @@ class SoV1NodekitCatalog {
                                const SoType &theDefaultType);
 };
 
-#endif /* _SO_V1_NODEKIT_CATALOG */

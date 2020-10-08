@@ -78,8 +78,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ROTATE_SPHERICAL_DRAGGER_
-#define _SO_ROTATE_SPHERICAL_DRAGGER_
+#pragma once
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/draggers/SoDragger.h>
@@ -235,4 +234,3 @@ class SoRotateSphericalDragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_ROTATE_SPHERICAL_DRAGGER_ */

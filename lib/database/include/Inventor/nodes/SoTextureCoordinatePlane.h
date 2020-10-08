@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_COORDINATE_PLANE_
-#define _SO_TEXTURE_COORDINATE_PLANE_
+#pragma once
 
 #include <Inventor/nodes/SoTextureCoordinateFunction.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -132,4 +131,3 @@ class SoTextureCoordinatePlane : public SoTextureCoordinateFunction {
     static void doTexgen(void *);
 };
 
-#endif /* _SO_TEXTURE_COORDINATE_PLANE_ */

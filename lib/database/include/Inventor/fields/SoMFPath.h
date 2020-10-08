@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_PATH_
-#define _SO_MF_PATH_
+#pragma once
 
 #include <vector>
 #include <Inventor/fields/SoSubField.h>
@@ -99,4 +98,3 @@ class SoMFPath : public SoMField {
     void setVal(int index, SoPath *newValue);
 };
 
-#endif /* _SO_MF_PATH_ */

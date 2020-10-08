@@ -58,8 +58,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_SCENE_KIT_
-#define _SO_V1_SCENE_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1BaseKit.h>
 
@@ -116,4 +115,3 @@ class SoV1SceneKit : public SoV1BaseKit {
   protected:
     virtual ~SoV1SceneKit();
 };
-#endif /* _SO_V1_SCENE_KIT_ */

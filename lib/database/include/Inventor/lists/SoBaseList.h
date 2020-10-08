@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BASE_LISTS_
-#define _SO_BASE_LISTS_
+#pragma once
 
 #include <Inventor/SbPList.h>
 
@@ -128,4 +127,3 @@ class SoBaseList : public SbPList {
     SbBool addRefs;
 };
 
-#endif /* _SO_BASE_LISTS_ */

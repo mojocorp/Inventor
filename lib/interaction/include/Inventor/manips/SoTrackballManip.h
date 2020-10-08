@@ -52,8 +52,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRACKBALL_MANIP_
-#define _SO_TRACKBALL_MANIP_
+#pragma once
 
 #include <Inventor/manips/SoTransformManip.h>
 
@@ -113,4 +112,3 @@ class SoTrackballManip : public SoTransformManip {
     virtual ~SoTrackballManip();
 };
 
-#endif /* _SO_TRACKBALL_MANIP_ */

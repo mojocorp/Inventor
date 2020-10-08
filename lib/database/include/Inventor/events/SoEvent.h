@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_EVENT_
-#define _SO_EVENT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbViewportRegion.h>
@@ -157,4 +156,3 @@ class SoEvent {
     static SoType classTypeId; // base typeId for all events
 };
 
-#endif /* _SO_EVENT_ */

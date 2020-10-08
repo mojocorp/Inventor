@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEMP_PATH_
-#define _SO_TEMP_PATH_
+#pragma once
 
 #include <Inventor/SoPath.h>
 
@@ -81,4 +80,3 @@ class SoTempPath : public SoFullPath {
     virtual ~SoTempPath();
 };
 
-#endif /* _SO_TEMP_PATH_ */

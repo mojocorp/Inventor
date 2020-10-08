@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_NODE_
-#define _SO_MF_NODE_
+#pragma once
 
 class SoNode;
 
@@ -95,4 +94,3 @@ class SoMFNode : public SoMField {
     void setVal(int index, SoNode *newValue);
 };
 
-#endif /* _SO_MF_NODE_ */

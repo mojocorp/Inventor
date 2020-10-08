@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_QUALITY_ELEMENT
-#define _SO_TEXTURE_QUALITY_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoFloatElement.h>
 
@@ -165,4 +164,3 @@ class SoTextureOverrideElement : public SoElement {
     uint32_t flags;
 };
 
-#endif /* _SO_TEXTURE_QUALITY_ELEMENT */

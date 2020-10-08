@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1SEPARATOR_
-#define _SO_V1SEPARATOR_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 
@@ -84,4 +83,3 @@ class SoV1Separator : public SoUpgrader {
     virtual ~SoV1Separator();
 };
 
-#endif /* _SO_V1SEPARATOR_ */

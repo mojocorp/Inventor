@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DIRECTIONAL_LIGHT_MANIP_
-#define _SO_DIRECTIONAL_LIGHT_MANIP_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/nodes/SoDirectionalLight.h>
@@ -255,4 +254,3 @@ class SoDirectionalLightManip : public SoDirectionalLight {
     int getNumChildren() const { return (children->getLength()); }
 };
 
-#endif /* _SO_DIRECTIONAL_LIGHT_MANIP_ */

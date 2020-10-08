@@ -50,8 +50,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSFORM_BOX_MANIP_
-#define _SO_TRANSFORM_BOX_MANIP_
+#pragma once
 
 #include <Inventor/manips/SoTransformManip.h>
 
@@ -110,4 +109,3 @@ class SoTransformBoxManip : public SoTransformManip {
     virtual ~SoTransformBoxManip();
 };
 
-#endif /* _SO_TRANSFORM_BOX_MANIP_ */

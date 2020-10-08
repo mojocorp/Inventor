@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LINE_HIGHLIGHT_RENDER_ACTION_
-#define _SO_LINE_HIGHLIGHT_RENDER_ACTION_
+#pragma once
 
 #include <Inventor/actions/SoGLRenderAction.h>
 
@@ -172,4 +171,3 @@ class SoLineHighlightRenderAction : public SoGLRenderAction {
     void constructorCommon();
 };
 
-#endif /* _SO_LINE_HIGHLIGHT_RENDER_ACTION_ */

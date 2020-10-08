@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_VEC4F_
-#define _SO_SF_VEC4F_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec.h>
@@ -86,4 +85,3 @@ class SoSFVec4f : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_VEC4F_ */

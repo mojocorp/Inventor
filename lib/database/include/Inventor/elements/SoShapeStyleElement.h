@@ -65,8 +65,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SHAPE_STYLE_ELEMENT
-#define _SO_SHAPE_STYLE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 #include <Inventor/elements/SoLazyElement.h>
@@ -151,4 +150,3 @@ class SoShapeStyleElement : public SoElement {
     int    renderCaseMask;
 };
 
-#endif /* _SO_SHAPE_STYLE_ELEMENT */

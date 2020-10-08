@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MATRIX_TRANSFORM_
-#define _SO_MATRIX_TRANSFORM_
+#pragma once
 
 #include <Inventor/fields/SoSFMatrix.h>
 #include <Inventor/nodes/SoTransformation.h>
@@ -109,4 +108,3 @@ class SoMatrixTransform : public SoTransformation {
     virtual ~SoMatrixTransform();
 };
 
-#endif /* _SO_MATRIX_TRANSFORM_ */

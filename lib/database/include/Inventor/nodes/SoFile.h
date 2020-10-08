@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FILE_
-#define _SO_FILE_
+#pragma once
 
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -157,4 +156,3 @@ class SoFile : public SoNode {
     SbBool readOK; // FALSE on read error.
 };
 
-#endif /* _SO_FILE_ */

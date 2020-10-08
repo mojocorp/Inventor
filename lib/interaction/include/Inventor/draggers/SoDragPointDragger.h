@@ -89,8 +89,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DRAGPOINT_DRAGGER_
-#define _SO_DRAGPOINT_DRAGGER_
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/draggers/SoDragger.h>
@@ -383,4 +382,3 @@ class SoDragPointDragger : public SoDragger {
     SoNode *oldZAxisNode;
 };
 
-#endif /* _SO_DRAGPOINT_DRAGGER_ */

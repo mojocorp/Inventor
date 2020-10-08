@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DIRECTIONAL_LIGHT_
-#define _SO_DIRECTIONAL_LIGHT_
+#pragma once
 
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoLight.h>
@@ -105,4 +104,3 @@ class SoDirectionalLight : public SoLight {
     virtual ~SoDirectionalLight();
 };
 
-#endif /* _SO_DIRECTIONAL_LIGHT_ */

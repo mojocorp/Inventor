@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COORDINATE4_
-#define _SO_COORDINATE4_
+#pragma once
 
 #include <Inventor/fields/SoMFVec4f.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -114,4 +113,3 @@ class SoCoordinate4 : public SoNode {
     virtual ~SoCoordinate4();
 };
 
-#endif /* _SO_COORDINATE4_ */

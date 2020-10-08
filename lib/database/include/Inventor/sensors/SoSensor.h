@@ -72,8 +72,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SENSOR_
-#define _SO_SENSOR_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -161,4 +160,3 @@ class SoSensor {
     SoSensor *nextInQueue; // Next sensor in queue
 };
 
-#endif /* _SO_SENSOR_ */

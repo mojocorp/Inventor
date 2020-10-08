@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ENVIRONMENT_
-#define _SO_ENVIRONMENT_
+#pragma once
 
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -152,4 +151,3 @@ class SoEnvironment : public SoNode {
     virtual ~SoEnvironment();
 };
 
-#endif /* _SO_ENVIRONMENT_ */

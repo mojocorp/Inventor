@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LOCATE_HIGHLIGHT_
-#define _SO_LOCATE_HIGHLIGHT_
+#pragma once
 
 #include <Inventor/fields/SoSFColor.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -170,4 +169,3 @@ class SoLocateHighlight : public SoSeparator {
     SoColorPacker *    colorPacker;
 };
 
-#endif /* _SO_LOCATE_HIGHLIGHT_ */

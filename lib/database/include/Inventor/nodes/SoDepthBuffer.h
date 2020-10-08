@@ -49,8 +49,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DEPTH_BUFFER_
-#define _SO_DEPTH_BUFFER_
+#pragma once
 
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/nodes/SoNode.h>
@@ -91,4 +90,3 @@ class SoDepthBuffer : public SoNode {
     virtual ~SoDepthBuffer();
 };
 
-#endif /* _SO_DEPTH_BUFFER_ */

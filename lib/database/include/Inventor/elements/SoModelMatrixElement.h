@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MODEL_MATRIX_ELEMENT
-#define _SO_MODEL_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/SbMatrix.h>
@@ -179,4 +178,3 @@ class SoModelMatrixElement : public SoAccumulatedElement {
     friend class SoLocalBBoxMatrixElement;
 };
 
-#endif /* _SO_MODEL_MATRIX_ELEMENT */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CLIP_PLANE_ELEMENT
-#define _SO_CLIP_PLANE_ELEMENT
+#pragma once
 
 #include <Inventor/SbPlane.h>
 #include <Inventor/elements/SoAccumulatedElement.h>
@@ -125,4 +124,3 @@ class SoClipPlaneElement : public SoAccumulatedElement {
     virtual ~SoClipPlaneElement();
 };
 
-#endif /* _SO_CLIP_PLANE_ELEMENT */

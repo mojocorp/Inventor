@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ELEMENT
-#define _SO_ELEMENT
+#pragma once
 
 #include <Inventor/SoType.h>
 #include <Inventor/misc/SoState.h>
@@ -243,4 +242,3 @@ SoElement::getConstElement(SoState *state, int stackIndex)
     return elt;
 }
 
-#endif /* _SO_ELEMENT */

@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_LIGHT_KIT_
-#define _SO_V1_LIGHT_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1BaseKit.h>
 
@@ -108,4 +107,3 @@ class SoV1LightKit : public SoV1BaseKit {
   protected:
     virtual ~SoV1LightKit();
 };
-#endif /* _SO_V1_LIGHT_KIT_ */

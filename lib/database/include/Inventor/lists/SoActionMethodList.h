@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ACTIONMETHODLIST_
-#define _SO_ACTIONMETHODLIST_
+#pragma once
 
 #include <Inventor/SbPList.h>
 #include <Inventor/SoType.h>
@@ -103,4 +102,3 @@ class SoActionMethodList : public SbPList {
     static void dummyAction(SoAction *, SoNode *);
 };
 
-#endif /* _SO_ACTIONMETHODLIST_ */

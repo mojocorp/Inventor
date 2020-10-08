@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V2VERTEX_PROPERTY_
-#define _SO_V2VERTEX_PROPERTY_
+#pragma once
 
 #include <Inventor/fields/SoMFUInt32.h>
 #include <Inventor/fields/SoMFVec3f.h>
@@ -118,4 +117,3 @@ class SoV2VertexProperty : public SoUpgrader {
     virtual ~SoV2VertexProperty();
 };
 
-#endif /* _SO_V2VERTEX_PROPERTY_ */

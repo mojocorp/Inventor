@@ -67,8 +67,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SUB_ACTION_
-#define _SO_SUB_ACTION_
+#pragma once
 
 #include <Inventor/actions/SoAction.h>
 #include <Inventor/SbString.h>
@@ -173,4 +172,3 @@
 #define SO_ACTION_ADD_METHOD(nodeClass, method)                                \
     addMethod(nodeClass::getClassTypeId(), method)
 
-#endif /* _SO_SUB_ACTION_ */

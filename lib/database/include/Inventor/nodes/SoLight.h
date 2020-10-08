@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LIGHT_
-#define _SO_LIGHT_
+#pragma once
 
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/fields/SoSFBool.h>
@@ -107,4 +106,3 @@ class SoLight : public SoNode {
     virtual ~SoLight();
 };
 
-#endif /* _SO_LIGHT_ */

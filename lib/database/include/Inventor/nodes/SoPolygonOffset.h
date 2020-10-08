@@ -52,8 +52,7 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#ifndef _SO_POLYGON_OFFSET_
-#define _SO_POLYGON_OFFSET_
+#pragma once
 
 #include <Inventor/elements/SoPolygonOffsetElement.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -98,4 +97,3 @@ class SoPolygonOffset : public SoNode {
     virtual ~SoPolygonOffset();
 };
 
-#endif // _SO_POLYGON_OFFSET_

@@ -63,8 +63,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_SPHERE_SECTION_PROJECTOR_
-#define _SB_SPHERE_SECTION_PROJECTOR_
+#pragma once
 
 #include <Inventor/SbPlane.h>
 #include <Inventor/projectors/SbSphereProjector.h>
@@ -186,4 +185,3 @@ class SbSphereSectionProjector : public SbSphereProjector {
     SbPlane tolPlane;   // the plane itself
 };
 
-#endif /* _SB_SPHERE_SECTION_PROJECTOR_ */

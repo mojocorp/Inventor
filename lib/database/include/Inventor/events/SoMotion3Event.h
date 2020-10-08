@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MOTION3_EVENT_
-#define _SO_MOTION3_EVENT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbVec.h>
@@ -101,4 +100,3 @@ class SoMotion3Event : public SoEvent {
     SbRotation rotation;    // rotation value
 };
 
-#endif /* _SO_MOTION3_EVENT_ */

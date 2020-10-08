@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_HANDLE_EVENT_ACTION_
-#define _SO_HANDLE_EVENT_ACTION_
+#pragma once
 
 #include <Inventor/SbViewportRegion.h>
 #include <Inventor/actions/SoSubAction.h>
@@ -171,4 +170,3 @@ class SoHandleEventAction : public SoAction {
     SbViewportRegion vpRegion;     // Current viewport region
 };
 
-#endif /* _SO_HANDLE_EVENT_ACTION_ */

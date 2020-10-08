@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_TIME_
-#define _SB_TIME_
+#pragma once
 
 #include <time.h>
 
@@ -232,4 +231,3 @@ class SbTime {
     long tv_usec;
 };
 
-#endif /* _SB_TIME_ */

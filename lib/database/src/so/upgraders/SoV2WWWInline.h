@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V2WWWINLINE_
-#define _SO_V2WWWINLINE_
+#pragma once
 
 #include <Inventor/fields/SoSFString.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -96,4 +95,3 @@ class SoV2WWWInline : public SoUpgrader {
     virtual ~SoV2WWWInline();
 };
 
-#endif /* _SO_V2WWWINLINE_ */

@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NOTIFICATION_
-#define _SO_NOTIFICATION_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -204,4 +203,3 @@ class SoNotList {
     uint32_t  timeStamp;    // Time stamp of notification
 };
 
-#endif /* _SO_NOTIFICATION_ */

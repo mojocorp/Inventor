@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_LINE_WIDTH_ELEMENT
-#define _SO_GL_LINE_WIDTH_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoLineWidthElement.h>
 
@@ -115,4 +114,3 @@ class SoGLLineWidthElement : public SoLineWidthElement {
     void send();
 };
 
-#endif /* _SO_GL_LINE_WIDTH_ELEMENT */

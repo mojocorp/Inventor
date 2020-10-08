@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BASE_
-#define _SO_BASE_
+#pragma once
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/misc/SoAuditorList.h>
@@ -312,4 +311,3 @@ class SoBase {
     static std::map<const SoBase *, SbName> objNameDict;
 };
 
-#endif /* _SO_BASE_ */

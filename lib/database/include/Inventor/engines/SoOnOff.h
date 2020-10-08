@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ON_OFF_
-#define _SO_ON_OFF_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFTrigger.h>
@@ -113,4 +112,3 @@ class SoOnOff : public SoEngine {
     SbBool state;
 };
 
-#endif /* _SO_ON_OFF_ */

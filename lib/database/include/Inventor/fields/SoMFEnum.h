@@ -59,8 +59,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_ENUM_
-#define _SO_MF_ENUM_
+#pragma once
 
 #include <Inventor/SbString.h>
 #include <Inventor/errors/SoDebugError.h>
@@ -167,4 +166,3 @@ class SoMFEnum : public SoMField {
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#endif /* _SO_MF_ENUM_ */

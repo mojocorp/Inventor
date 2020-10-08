@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ELEMENTS_
-#define _SO_ELEMENTS_
+#pragma once
 
 #include <Inventor/elements/SoBBoxModelMatrixElement.h>
 #include <Inventor/elements/SoCacheElement.h>
@@ -133,4 +132,3 @@
 #include <Inventor/elements/SoViewingMatrixElement.h>
 #include <Inventor/elements/SoViewportRegionElement.h>
 
-#endif /* _SO_ELEMENTS_ */

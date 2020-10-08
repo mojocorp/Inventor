@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_RENDER_PASS_ELEMENT
-#define _SO_GL_RENDER_PASS_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoSubElement.h>
 
@@ -103,4 +102,3 @@ class SoGLRenderPassElement : public SoElement {
     virtual ~SoGLRenderPassElement();
 };
 
-#endif /* _SO_GL_RENDER_PASS_ELEMENT */

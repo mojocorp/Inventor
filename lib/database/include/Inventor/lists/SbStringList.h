@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_STRING_LIST_
-#define _SB_STRING_LIST_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbPList.h>
@@ -92,4 +91,3 @@ class SbStringList : public SbPList {
     }
 };
 
-#endif /* _SB_STRING_LIST_ */

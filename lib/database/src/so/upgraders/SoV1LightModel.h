@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1LIGHTMODEL_
-#define _SO_V1LIGHTMODEL_
+#pragma once
 
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -94,4 +93,3 @@ class SoV1LightModel : public SoUpgrader {
     virtual ~SoV1LightModel();
 };
 
-#endif /* _SO_V1LIGHTMODEL_ */

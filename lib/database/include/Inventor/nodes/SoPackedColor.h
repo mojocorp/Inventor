@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PACKED_COLOR_
-#define _SO_PACKED_COLOR_
+#pragma once
 
 #include <Inventor/fields/SoMFUInt32.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -123,4 +122,3 @@ class SoPackedColor : public SoNode {
     SbBool transparent;
 };
 
-#endif /* _SO_PACKED_COLOR_ */

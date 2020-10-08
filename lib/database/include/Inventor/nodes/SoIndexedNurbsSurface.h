@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INDEXED_NURBS_SURFACE_
-#define _SO_INDEXED_NURBS_SURFACE_
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/fields/SoSFInt32.h>
@@ -180,4 +179,3 @@ class SoIndexedNurbsSurface : public SoShape {
     void drawNURBS(GLUnurbs *render, SoAction *action, bool doTextures);
 };
 
-#endif /* _SO_INDEXED_NURBS_SURFACE_ */

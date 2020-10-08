@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_APPEARANCE_KIT_
-#define _SO_V1_APPEARANCE_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1BaseKit.h>
 
@@ -129,4 +128,3 @@ class SoV1AppearanceKit : public SoV1BaseKit {
     virtual ~SoV1AppearanceKit();
 };
 
-#endif /* _SO_V1_APPEARANCE_KIT_ */

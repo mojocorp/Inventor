@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ERROR
-#define _SO_ERROR
+#pragma once
 
 #include <Inventor/SbString.h>
 #include <Inventor/SoType.h>
@@ -180,4 +179,3 @@ class SoError {
     static SbString getBaseString(const SoBase *base, const char *what);
 };
 
-#endif /* _SO_ERROR */

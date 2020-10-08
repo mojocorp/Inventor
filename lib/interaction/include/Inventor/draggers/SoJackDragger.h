@@ -111,8 +111,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_JACK_DRAGGER_
-#define _SO_JACK_DRAGGER_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -262,4 +261,3 @@ class SoJackDragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_JACK_DRAGGER_ */

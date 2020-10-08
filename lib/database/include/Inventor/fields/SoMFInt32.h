@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_INT32_
-#define _SO_MF_INT32_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -87,4 +86,3 @@ class SoMFInt32 : public SoMField {
     virtual SbBool readBinaryValues(SoInput *in, int numToRead);
 };
 
-#endif /* _SO_MF_INT32_ */

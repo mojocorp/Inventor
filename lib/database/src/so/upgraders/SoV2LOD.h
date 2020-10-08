@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V2LOD_
-#define _SO_V2LOD_
+#pragma once
 
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -97,4 +96,3 @@ class SoV2LOD : public SoUpgrader {
     virtual ~SoV2LOD();
 };
 
-#endif /* _SO_V2LOD_ */

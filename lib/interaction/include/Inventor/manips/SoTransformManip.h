@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSFORM_MANIP_
-#define _SO_TRANSFORM_MANIP_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/nodes/SoTransform.h>
@@ -263,4 +262,3 @@ class SoTransformManip : public SoTransform {
     int getNumChildren() const { return (children->getLength()); }
 };
 
-#endif /* _SO_TRANSFORM_MANIP_ */

@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_SPHERE_KIT_
-#define _SO_V1_SPHERE_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1ShapeKit.h>
 
@@ -108,4 +107,3 @@ class SoV1SphereKit : public SoV1ShapeKit {
   protected:
     virtual ~SoV1SphereKit();
 };
-#endif /* _SO_V1_SPHERE_KIT_ */

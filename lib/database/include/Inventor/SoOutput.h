@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_OUTPUT_
-#define _SO_OUTPUT_
+#pragma once
 
 #include <vector>
 #include <Inventor/misc/SoBasic.h>
@@ -316,4 +315,3 @@ class SoOutput {
     friend class SoDB;
 };
 
-#endif /* _SO_OUTPUT_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_IMAGE_
-#define _SO_SF_IMAGE_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbVec.h>
@@ -133,4 +132,3 @@ class SoSFImage : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_IMAGE_ */

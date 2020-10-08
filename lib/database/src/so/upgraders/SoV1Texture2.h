@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V1TEXTURE2_
-#define _SO_V1TEXTURE2_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoUpgrader.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -149,4 +148,3 @@ class SoV1Texture2 : public SoUpgrader {
     static std::vector<SoTexture2 *> textureList;
 };
 
-#endif /* _SO_V1TEXTURE2_ */

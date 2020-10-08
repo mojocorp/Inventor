@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FONT_
-#define _SO_FONT_
+#pragma once
 
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/fields/SoSFName.h>
@@ -124,4 +123,3 @@ class SoFont : public SoNode {
     virtual ~SoFont();
 };
 
-#endif /* _SO_FONT_ */

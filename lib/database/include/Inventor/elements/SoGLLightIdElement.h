@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_LIGHT_ID_ELEMENT
-#define _SO_GL_LIGHT_ID_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -124,4 +123,3 @@ class SoGLLightIdElement : public SoInt32Element {
     static int maxGLSources; // Holds max number of GL sources
 };
 
-#endif /* _SO_GL_LIGHT_ID_ELEMENT */

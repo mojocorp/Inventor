@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_HANDLEBOX_MANIP_
-#define _SO_HANDLEBOX_MANIP_
+#pragma once
 
 #include <Inventor/manips/SoTransformManip.h>
 
@@ -117,4 +116,3 @@ class SoHandleBoxManip : public SoTransformManip {
     virtual ~SoHandleBoxManip();
 };
 
-#endif /* _SO_HANDLEBOX_MANIP_ */

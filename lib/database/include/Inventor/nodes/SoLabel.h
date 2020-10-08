@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LABEL_
-#define _SO_LABEL_
+#pragma once
 
 #include <Inventor/fields/SoSFName.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -94,4 +93,3 @@ class SoLabel : public SoNode {
     // NOTE: No actions for this node. It's pretty passive.
 };
 
-#endif /* _SO_LABEL_ */

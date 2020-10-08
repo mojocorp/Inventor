@@ -1,5 +1,4 @@
-#ifndef _SO_FONT_CACHE_
-#define _SO_FONT_CACHE_
+#pragma once
 
 #include <Inventor/caches/SoCache.h>
 
@@ -29,4 +28,3 @@ class SoFontCache : public SoCache {
     std::vector<unsigned char> face_buffer;
 };
 
-#endif /* _SO_FONT_CACHE_ */

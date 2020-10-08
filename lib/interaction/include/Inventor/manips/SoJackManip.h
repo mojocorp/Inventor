@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_JACK_MANIP_
-#define _SO_JACK_MANIP_
+#pragma once
 
 #include <Inventor/manips/SoTransformManip.h>
 
@@ -119,4 +118,3 @@ class SoJackManip : public SoTransformManip {
     virtual ~SoJackManip();
 };
 
-#endif /* _SO_JACK_MANIP_ */

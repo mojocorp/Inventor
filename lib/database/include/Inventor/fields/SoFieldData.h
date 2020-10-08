@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FIELD_DATA_
-#define _SO_FIELD_DATA_
+#pragma once
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbName.h>
@@ -179,4 +178,3 @@ class SoFieldData {
     std::vector<SoEnumEntry *>  enums;  // List of enums (SoEnumEntry)
 };
 
-#endif /* _SO_FIELD_DATA_ */

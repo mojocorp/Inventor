@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_LAZY_ELEMENT
-#define _SO_GL_LAZY_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoLazyElement.h>
 #include <Inventor/actions/SoGLRenderAction.h>
@@ -292,4 +291,3 @@ class SoGLLazyElement : public SoLazyElement {
     static void createPatterns();
 };
 
-#endif /* _SO_GL_LAZY_ELEMENT */

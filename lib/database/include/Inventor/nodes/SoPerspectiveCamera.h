@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PERSPECTIVE_CAMERA_
-#define _SO_PERSPECTIVE_CAMERA_
+#pragma once
 
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoCamera.h>
@@ -121,4 +120,3 @@ class SoPerspectiveCamera : public SoCamera {
     virtual ~SoPerspectiveCamera();
 };
 
-#endif /* _SO_PERSPECTIVE_CAMERA_ */

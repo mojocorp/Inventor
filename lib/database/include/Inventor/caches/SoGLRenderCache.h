@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_RENDER_CACHE
-#define _SO_GL_RENDER_CACHE
+#pragma once
 
 #include <Inventor/caches/SoCache.h>
 #include <Inventor/elements/SoGLLazyElement.h>
@@ -150,4 +149,3 @@ class SoGLRenderCache : public SoCache {
     uint32_t doSendFlag;
 };
 
-#endif /* _SO_GL_RENDER_CACHE */

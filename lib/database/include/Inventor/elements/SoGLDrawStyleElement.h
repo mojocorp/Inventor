@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_DRAW_STYLE_ELEMENT
-#define _SO_GL_DRAW_STYLE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoDrawStyleElement.h>
 
@@ -115,4 +114,3 @@ class SoGLDrawStyleElement : public SoDrawStyleElement {
     void send();
 };
 
-#endif /* _SO_GL_DRAW_STYLE_ELEMENT */

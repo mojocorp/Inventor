@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BOUNDING_BOX_CACHE
-#define _SO_BOUNDING_BOX_CACHE
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/caches/SoCache.h>
@@ -109,4 +108,3 @@ class SoBoundingBoxCache : public SoCache {
     SbBool    hasLOrP;      // TRUE if contains lines or points
 };
 
-#endif /* _SO_BOUNDING_BOX_CACHE */

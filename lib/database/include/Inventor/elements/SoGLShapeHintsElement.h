@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_SHAPE_HINTS_ELEMENT
-#define _SO_GL_SHAPE_HINTS_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoShapeHintsElement.h>
 
@@ -108,4 +107,3 @@ class SoGLShapeHintsElement : public SoShapeHintsElement {
     void send();
 };
 
-#endif /* _SO_GL_SHAPE_HINTS_ELEMENT */

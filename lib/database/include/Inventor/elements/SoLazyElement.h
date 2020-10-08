@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LAZY_ELEMENT
-#define _SO_LAZY_ELEMENT
+#pragma once
 
 #include <vector>
 #include <Inventor/SbColor.h>
@@ -417,4 +416,3 @@ class SoColorPacker {
     std::vector<uint32_t> packedColors;
 };
 
-#endif /* _SO_LAZY_ELEMENT */

@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_FACE_SET_KIT_
-#define _SO_V1_FACE_SET_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1VertexShapeKit.h>
 
@@ -113,4 +112,3 @@ class SoV1FaceSetKit : public SoV1VertexShapeKit {
   protected:
     virtual ~SoV1FaceSetKit();
 };
-#endif /* _SO_V1_FACE_SET_KIT_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SHAPE_HINTS_ELEMENT
-#define _SO_SHAPE_HINTS_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoReplacedElement.h>
 
@@ -145,4 +144,3 @@ class SoShapeHintsElement : public SoElement {
     virtual ~SoShapeHintsElement();
 };
 
-#endif /* _SO_SHAPE_HINTS_ELEMENT */

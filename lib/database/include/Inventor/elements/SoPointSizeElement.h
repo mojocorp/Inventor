@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_POINT_SIZE_ELEMENT
-#define _SO_POINT_SIZE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoFloatElement.h>
 
@@ -97,4 +96,3 @@ class SoPointSizeElement : public SoFloatElement {
     virtual ~SoPointSizeElement();
 };
 
-#endif /* _SO_POINT_SIZE_ELEMENT */

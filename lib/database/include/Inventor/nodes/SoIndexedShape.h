@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INDEXED_SHAPE_
-#define _SO_INDEXED_SHAPE_
+#pragma once
 
 #include <vector>
 #include <Inventor/fields/SoMFInt32.h>
@@ -213,4 +212,3 @@ class SoIndexedShape : public SoVertexShape {
     unsigned char texCoordBinding;
 };
 
-#endif /* _SO_INDEXED_SHAPE_ */

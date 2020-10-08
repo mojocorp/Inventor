@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_PATH_
-#define _SO_SF_PATH_
+#pragma once
 
 class SoPath;
 
@@ -100,4 +99,3 @@ class SoSFPath : public SoSField {
     void setVal(SoPath *newValue);
 };
 
-#endif /* _SO_SF_PATH_ */

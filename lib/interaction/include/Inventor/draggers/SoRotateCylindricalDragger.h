@@ -78,8 +78,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ROTATE_CYLINDRICAL_DRAGGER_
-#define _SO_ROTATE_CYLINDRICAL_DRAGGER_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFRotation.h>
@@ -230,4 +229,3 @@ class SoRotateCylindricalDragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_ROTATE_CYLINDRICAL_DRAGGER_ */

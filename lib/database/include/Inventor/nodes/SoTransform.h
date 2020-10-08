@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSFORM_
-#define _SO_TRANSFORM_
+#pragma once
 
 #include <Inventor/fields/SoSFRotation.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -156,4 +155,3 @@ class SoTransform : public SoTransformation {
     virtual ~SoTransform();
 };
 
-#endif /* _SO_TRANSFORM_ */

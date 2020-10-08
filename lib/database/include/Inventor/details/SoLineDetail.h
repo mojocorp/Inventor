@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LINE_DETAIL_
-#define _SO_LINE_DETAIL_
+#pragma once
 
 #include <Inventor/details/SoPointDetail.h>
 
@@ -116,4 +115,3 @@ class SoLineDetail : public SoDetail {
     int32_t       lineIndex, partIndex;
 };
 
-#endif /* _SO_LINE_DETAIL_ */

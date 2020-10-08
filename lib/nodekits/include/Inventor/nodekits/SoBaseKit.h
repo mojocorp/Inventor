@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_BASE_KIT_
-#define _SO_BASE_KIT_
+#pragma once
 
 #include <Inventor/misc/SoChildList.h>
 #include <Inventor/fields/SoFieldData.h>
@@ -710,4 +709,3 @@ class SoBaseKit : public SoNode {
                                                     FALSE))
 #endif
 
-#endif /* _SO_BASE_KIT_ */

@@ -49,8 +49,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DEPTH_BUFFER_ELEMENT_
-#define _SO_DEPTH_BUFFER_ELEMENT_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoSubElement.h>
@@ -114,4 +113,3 @@ class SoDepthBufferElement : public SoElement {
     SbVec2f            range;
 };
 
-#endif /* _SO_DEPTH_BUFFER_ELEMENT_ */

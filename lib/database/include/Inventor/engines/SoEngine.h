@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ENGINE_
-#define _SO_ENGINE_
+#pragma once
 
 #include <vector>
 #include <Inventor/fields/SoFieldContainer.h>
@@ -264,4 +263,3 @@ class SoEngineOutput {
     SoEngine *             container;
 };
 
-#endif /* _SO_ENGINE_ */

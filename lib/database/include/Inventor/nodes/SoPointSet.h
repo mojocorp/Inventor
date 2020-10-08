@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_POINT_SET_
-#define _SO_POINT_SET_
+#pragma once
 
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoNonIndexedShape.h>
@@ -153,4 +152,3 @@ class SoPointSet : public SoNonIndexedShape {
     SbBool areNormalsPerPoint(SoAction *action) const;
 };
 
-#endif /* _SO_POINT_SET_ */

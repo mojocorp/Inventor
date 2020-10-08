@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_COORDINATE_2_
-#define _SO_TEXTURE_COORDINATE_2_
+#pragma once
 
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/fields/SoMFVec2f.h>
@@ -114,4 +113,3 @@ class SoTextureCoordinate2 : public SoNode {
     virtual ~SoTextureCoordinate2();
 };
 
-#endif /* _SO_TEXTURE_COORDINATE_2_ */

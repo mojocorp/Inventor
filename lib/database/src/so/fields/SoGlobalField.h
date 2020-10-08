@@ -59,8 +59,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GLOBALFIELD_
-#define _SO_GLOBALFIELD_
+#pragma once
 
 #include <Inventor/fields/SoSFName.h>
 #include <Inventor/fields/SoFieldContainer.h>
@@ -122,4 +121,3 @@ class SoGlobalField : public SoFieldContainer {
     friend class SoDB;
 };
 
-#endif /* _SO_GLOBALFIELD_ */

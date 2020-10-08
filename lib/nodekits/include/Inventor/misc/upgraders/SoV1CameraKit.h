@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_CAMERA_KIT_
-#define _SO_V1_CAMERA_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1BaseKit.h>
 
@@ -107,4 +106,3 @@ class SoV1CameraKit : public SoV1BaseKit {
   protected:
     virtual ~SoV1CameraKit();
 };
-#endif /* _SO_V1_CAMERA_KIT_ */

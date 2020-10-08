@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V2MATERIALINDEX_
-#define _SO_V2MATERIALINDEX_
+#pragma once
 
 #include <Inventor/fields/SoMFInt32.h>
 #include <Inventor/fields/SoMFFloat.h>
@@ -93,4 +92,3 @@ class SoV2MaterialIndex : public SoUpgrader {
     virtual ~SoV2MaterialIndex();
 };
 
-#endif /* _SO_V2MATERIALINDEX_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_BOOL_
-#define _SO_SF_BOOL_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -75,4 +74,3 @@ class SoSFBool : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_BOOL_ */

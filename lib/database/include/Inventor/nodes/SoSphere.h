@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SPHERE_
-#define _SO_SPHERE_
+#pragma once
 
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoShape.h>
@@ -131,4 +130,3 @@ class SoSphere : public SoShape {
     int computeDepth(SoAction *action);
 };
 
-#endif /* _SO_SPHERE_ */

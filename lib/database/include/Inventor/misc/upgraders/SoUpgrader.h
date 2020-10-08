@@ -54,8 +54,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_UPGRADER_
-#define _SO_UPGRADER_
+#pragma once
 
 #include <Inventor/nodes/SoGroup.h>
 
@@ -160,4 +159,3 @@ class SoUpgrader : public SoGroup {
 #define SO_UPGRADER_CREATE_NEW(className)                                      \
     ((className *)className::getClassTypeId().createInstance())
 
-#endif /* _SO_UPGRADER_ */

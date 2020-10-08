@@ -68,8 +68,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_LISTS_
-#define _SO_LISTS_
+#pragma once
 
 #include <Inventor/lists/SoBaseList.h>
 #include <Inventor/lists/SoDetailList.h>
@@ -81,4 +80,3 @@
 #include <Inventor/lists/SoPickedPointList.h>
 #include <Inventor/lists/SoTypeList.h>
 
-#endif /* _SO_LISTS_ */

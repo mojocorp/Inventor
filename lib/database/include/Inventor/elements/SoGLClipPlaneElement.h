@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_CLIP_PLANE_ELEMENT
-#define _SO_GL_CLIP_PLANE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoClipPlaneElement.h>
 
@@ -102,4 +101,3 @@ class SoGLClipPlaneElement : public SoClipPlaneElement {
     void send();
 };
 
-#endif /* _SO_GL_CLIP_PLANE_ELEMENT */

@@ -57,8 +57,7 @@
  ______________  S I L I C O N   G R A P H I C S   I N C .  ____________
  _______________________________________________________________________
  */
-#ifndef _SB_CYLINDER_
-#define _SB_CYLINDER_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/SbLine.h>
@@ -105,4 +104,3 @@ class SbCylinder {
                                         SbVec3f &out);
 };
 
-#endif /* _SB_CYLINDER_ */

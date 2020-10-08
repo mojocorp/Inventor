@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NORMAL_
-#define _SO_NORMAL_
+#pragma once
 
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/fields/SoMFVec3f.h>
@@ -110,4 +109,3 @@ class SoNormal : public SoNode {
     virtual ~SoNormal();
 };
 
-#endif /* _SO_NORMAL_ */

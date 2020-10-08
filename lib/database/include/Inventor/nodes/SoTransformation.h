@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSFORMATION_
-#define _SO_TRANSFORMATION_
+#pragma once
 
 #include <Inventor/fields/SoSFVec3f.h>
 #include <Inventor/nodes/SoSubNode.h>
@@ -86,4 +85,3 @@ class SoTransformation : public SoNode {
     virtual ~SoTransformation();
 };
 
-#endif /* _SO_TRANSFORMATION_ */

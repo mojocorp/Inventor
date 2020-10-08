@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_UNITS_ELEMENT
-#define _SO_UNITS_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -118,4 +117,3 @@ class SoUnitsElement : public SoInt32Element {
     virtual ~SoUnitsElement();
 };
 
-#endif /* _SO_UNITS_ELEMENT */

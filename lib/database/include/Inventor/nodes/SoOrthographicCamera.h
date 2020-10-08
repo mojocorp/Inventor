@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ORTHOGRAPHIC_CAMERA_
-#define _SO_ORTHOGRAPHIC_CAMERA_
+#pragma once
 
 #include <Inventor/nodes/SoCamera.h>
 
@@ -122,4 +121,3 @@ class SoOrthographicCamera : public SoCamera {
     virtual ~SoOrthographicCamera();
 };
 
-#endif /* _SO_ORTHOGRAPHIC_CAMERA_ */

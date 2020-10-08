@@ -106,8 +106,7 @@
 // SoBaseKit.h will not compile.
 #include <Inventor/nodekits/SoBaseKit.h>
 
-#ifndef _SO_SUB_KIT_
-#define _SO_SUB_KIT_
+#pragma once
 
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/fields/SoSFNode.h>
@@ -548,4 +547,3 @@
     createNodekitPartsList();                                                  \
     createDefaultParts()
 
-#endif /* _SO_SUB_KIT_ */

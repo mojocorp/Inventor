@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_PLIST_
-#define _SB_PLIST_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -159,4 +158,3 @@ class SbPList {
     void expand(int size);
 };
 
-#endif /* _SB_PLIST_ */

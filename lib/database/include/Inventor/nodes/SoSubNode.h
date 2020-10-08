@@ -91,8 +91,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SUB_NODE_
-#define _SO_SUB_NODE_
+#pragma once
 
 #include <Inventor/errors/SoDebugError.h>
 #include <Inventor/fields/SoFieldData.h>
@@ -361,4 +360,3 @@
                                     enumValue);                                \
     } while (0)
 
-#endif /* _SO_SUB_NODE_ */

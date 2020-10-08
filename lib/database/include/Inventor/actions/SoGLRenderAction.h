@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_RENDER_ACTION_
-#define _SO_GL_RENDER_ACTION_
+#pragma once
 
 #include <vector>
 
@@ -357,4 +356,3 @@ class SoGLRenderAction : public SoAction {
     float      stereoBalance;
 };
 
-#endif /* _SO_GL_RENDER_ACTION_ */

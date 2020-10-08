@@ -66,8 +66,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_SPHERE_SHEET_PROJECTOR_
-#define _SB_SPHERE_SHEET_PROJECTOR_
+#pragma once
 
 #include <Inventor/SbPlane.h>
 #include <Inventor/projectors/SbSphereProjector.h>
@@ -139,4 +138,3 @@ class SbSphereSheetProjector : public SbSphereProjector {
     SbPlane tolPlane;   // the plane itself
 };
 
-#endif /* _SB_SPHERE_SHEET_PROJECTOR_ */

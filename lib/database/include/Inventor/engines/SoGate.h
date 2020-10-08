@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GATE_
-#define _SO_GATE_
+#pragma once
 
 #include <Inventor/SoDB.h>
 #include <Inventor/engines/SoSubEngine.h>
@@ -138,4 +137,3 @@ class SoGate : public SoEngine {
     SoSFName typeField; // Used when reading/writing
 };
 
-#endif /* _SO_GATE_ */

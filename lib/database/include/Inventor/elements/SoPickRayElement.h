@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PICK_RAY_ELEMENT
-#define _SO_PICK_RAY_ELEMENT
+#pragma once
 
 #include <Inventor/SbViewVolume.h>
 #include <Inventor/elements/SoSubElement.h>
@@ -109,4 +108,3 @@ class SoPickRayElement : public SoElement {
     virtual ~SoPickRayElement();
 };
 
-#endif /* _SO_PICK_RAY_ELEMENT */

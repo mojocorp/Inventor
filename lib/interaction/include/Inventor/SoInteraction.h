@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INTERACTION_
-#define _SO_INTERACTION_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 
@@ -77,4 +76,3 @@ class SoInteraction {
     static SbBool initialized; // has interaction been initialized
 };
 
-#endif /* _SO_INTERACTION_ */

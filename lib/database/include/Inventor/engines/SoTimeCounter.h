@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TIME_COUNTER_
-#define _SO_TIME_COUNTER_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFShort.h>
@@ -207,4 +206,3 @@ class SoTimeCounter : public SoEngine {
     virtual void evaluate();
 };
 
-#endif /* _SO_TIME_COUNTER_ */

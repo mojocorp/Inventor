@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GROUP_
-#define _SO_GROUP_
+#pragma once
 
 class SoChildList;
 #include <Inventor/nodes/SoSubNode.h>
@@ -173,4 +172,3 @@ class SoGroup : public SoNode {
                               SbBool                  copyConnections);
 };
 
-#endif /* _SO_GROUP_ */

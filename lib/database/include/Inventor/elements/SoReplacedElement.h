@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_REPLACED_ELEMENT
-#define _SO_REPLACED_ELEMENT
+#pragma once
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -119,4 +118,3 @@ class SoReplacedElement : public SoElement {
     virtual ~SoReplacedElement();
 };
 
-#endif /* _SO_REPLACED_ELEMENT */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V2WWWANCHOR_
-#define _SO_V2WWWANCHOR_
+#pragma once
 
 #include <Inventor/fields/SoSFString.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -102,4 +101,3 @@ class SoV2WWWAnchor : public SoUpgrader {
     virtual ~SoV2WWWAnchor();
 };
 
-#endif /* _SO_V2WWWANCHOR_ */

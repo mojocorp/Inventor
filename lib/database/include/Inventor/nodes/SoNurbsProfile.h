@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NURBS_PROFILE_
-#define _SO_NURBS_PROFILE_
+#pragma once
 
 #include <Inventor/fields/SoMFFloat.h>
 #include <Inventor/nodes/SoProfile.h>
@@ -113,4 +112,3 @@ class SoNurbsProfile : public SoProfile {
     virtual ~SoNurbsProfile();
 };
 
-#endif /* _SO_NURBS_PROFILE_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_ROTATION_
-#define _SO_MF_ROTATION_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbRotation.h>
@@ -109,4 +108,3 @@ class SoMFRotation : public SoMField {
     static void initClass();
 };
 
-#endif /* _SO_MF_ROTATION_ */

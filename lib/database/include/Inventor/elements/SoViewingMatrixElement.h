@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_VIEWING_MATRIX_ELEMENT
-#define _SO_VIEWING_MATRIX_ELEMENT
+#pragma once
 
 #include <Inventor/SbMatrix.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -102,4 +101,3 @@ class SoViewingMatrixElement : public SoReplacedElement {
     virtual ~SoViewingMatrixElement();
 };
 
-#endif /* _SO_VIEWING_MATRIX_ELEMENT */

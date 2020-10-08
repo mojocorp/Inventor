@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_OUTLINE_FONT_CACHE_
-#define _SO_OUTLINE_FONT_CACHE_
+#pragma once
 
 #include <string>
 #include <vector>
@@ -183,4 +182,3 @@ class SoOutlineFontCache : public SoFontCache {
     static std::vector<SoOutlineFontCache *> fonts;
 };
 
-#endif /* _SO_OUTLINE_FONT_CACHE_ */

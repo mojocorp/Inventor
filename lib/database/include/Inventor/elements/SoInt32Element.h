@@ -58,8 +58,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INT32_ELEMENT
-#define _SO_INT32_ELEMENT
+#pragma once
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -116,4 +115,3 @@ class SoInt32Element : public SoElement {
     virtual ~SoInt32Element();
 };
 
-#endif /* _SO_INT32_ELEMENT */

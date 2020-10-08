@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_PLANE_
-#define _SO_SF_PLANE_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbPlane.h>
@@ -77,4 +76,3 @@ class SoSFPlane : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_PLANE_ */

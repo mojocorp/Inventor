@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_NORMAL_ELEMENT
-#define _SO_GL_NORMAL_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoNormalElement.h>
 
@@ -91,4 +90,3 @@ class SoGLNormalElement : public SoNormalElement {
     virtual ~SoGLNormalElement();
 };
 
-#endif /* _SO_GL_NORMAL_ELEMENT */

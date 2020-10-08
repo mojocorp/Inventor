@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DRAW_STYLE_ELEMENT
-#define _SO_DRAW_STYLE_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -106,4 +105,3 @@ class SoDrawStyleElement : public SoInt32Element {
     virtual ~SoDrawStyleElement();
 };
 
-#endif /* _SO_DRAW_STYLE_ELEMENT */

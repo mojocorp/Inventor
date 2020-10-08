@@ -55,8 +55,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SB_PLANE_PROJECTOR_
-#define _SB_PLANE_PROJECTOR_
+#pragma once
 
 #include <Inventor/SbPlane.h>
 #include <Inventor/projectors/SbProjector.h>
@@ -145,4 +144,3 @@ class SbPlaneProjector : public SbProjector {
     void setupPlane(); // Sets up plane orientation, if necessary.
 };
 
-#endif /* _SB_PLANE_PROJECTOR_ */

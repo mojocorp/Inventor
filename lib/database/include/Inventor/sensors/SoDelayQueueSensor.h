@@ -61,8 +61,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DELAY_QUEUE_SENSOR_
-#define _SO_DELAY_QUEUE_SENSOR_
+#pragma once
 
 #include <Inventor/sensors/SoSensor.h>
 
@@ -174,4 +173,3 @@ class SoDelayQueueSensor : public SoSensor {
     virtual SbBool isBefore(const SoSensor *s) const;
 };
 
-#endif /* _SO_DELAY_QUEUE_SENSOR_ */

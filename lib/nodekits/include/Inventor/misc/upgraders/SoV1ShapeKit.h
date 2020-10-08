@@ -56,8 +56,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_SHAPE_KIT_
-#define _SO_V1_SHAPE_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1GroupKit.h>
 
@@ -123,4 +122,3 @@ class SoV1ShapeKit : public SoV1GroupKit {
   protected:
     virtual ~SoV1ShapeKit();
 };
-#endif /* _SO_V1_SHAPE_KIT_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CYLINDER_
-#define _SO_CYLINDER_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/fields/SoSFBitMask.h>
@@ -176,4 +175,3 @@ class SoCylinder : public SoShape {
                          SbBool doTextures);
 };
 
-#endif /* _SO_CYLINDER_ */

@@ -57,8 +57,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_ACCUMULATED_ELEMENT
-#define _SO_ACCUMULATED_ELEMENT
+#pragma once
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -133,4 +132,3 @@ class SoAccumulatedElement : public SoElement {
     SbBool accumulatesWithParentFlag;
 };
 
-#endif /* _SO_ACCUMULATED_ELEMENT */

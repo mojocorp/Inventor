@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_UINT32_
-#define _SO_SF_UINT32_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -76,4 +75,3 @@ class SoSFUInt32 : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_UINT32_ */

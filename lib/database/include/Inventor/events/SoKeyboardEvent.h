@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_KEYBOARD_EVENT_
-#define _SO_KEYBOARD_EVENT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoButtonEvent.h>
@@ -264,4 +263,3 @@ class SoKeyboardEvent : public SoButtonEvent {
     Key key; // which key
 };
 
-#endif /* _SO_KEYBOARD_EVENT_ */

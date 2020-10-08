@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_INPUT_
-#define _SO_INPUT_
+#pragma once
 
 #include <Inventor/misc/SoBasic.h>
 #include <Inventor/SbString.h>
@@ -303,4 +302,3 @@ class SoInput {
     void convertDoubleArray(char *from, double *to, size_t len);
 };
 
-#endif /* _SO_INPUT_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_TEXTURE_IMAGE_ELEMENT
-#define _SO_GL_TEXTURE_IMAGE_ELEMENT
+#pragma once
 
 class SoGLDisplayList;
 class SbImage;
@@ -124,4 +123,3 @@ class SoGLTextureImageElement : public SoTextureImageElement {
     SoGLDisplayList *list;
 };
 
-#endif /* _SO_GL_TEXTURE_IMAGE_ELEMENT */

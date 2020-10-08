@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_BOOL_
-#define _SO_MF_BOOL_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -84,4 +83,3 @@ class SoMFBool : public SoMField {
     virtual int getNumValuesPerLine() const;
 };
 
-#endif /* _SO_MF_BOOL_ */

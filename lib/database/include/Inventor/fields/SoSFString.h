@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_STRING_
-#define _SO_SF_STRING_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -93,4 +92,3 @@ class SoSFString : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_STRING_ */

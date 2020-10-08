@@ -54,8 +54,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_BASE_KIT_
-#define _SO_V1_BASE_KIT_
+#pragma once
 
 #include <Inventor/misc/upgraders/SoV1CustomNode.h>
 #include <Inventor/misc/upgraders/SoV1NodekitParts.h>
@@ -186,4 +185,3 @@ class SoV1BaseKit : public SoV1CustomNode {
     virtual void interpretCustomData(SoV1CustomNode *inst, int index) const;
 };
 
-#endif /* _SO_V1_BASE_KIT_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_GL_TEXTURE_ENABLED_ELEMENT
-#define _SO_GL_TEXTURE_ENABLED_ELEMENT
+#pragma once
 
 #include <Inventor/elements/SoInt32Element.h>
 
@@ -133,4 +132,3 @@ class SoGLTextureEnabledElement : public SoInt32Element {
     void send();
 };
 
-#endif /* _SO_GL_TEXTURE_ENABLED_ELEMENT */

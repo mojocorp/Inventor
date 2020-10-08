@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_BUTTON_EVENT_
-#define _SO_BUTTON_EVENT_
+#pragma once
 
 #include <Inventor/SbBasic.h>
 #include <Inventor/events/SoSubEvent.h>
@@ -103,4 +102,3 @@ class SoButtonEvent : public SoEvent {
     State state; // up, down, or unknown
 };
 
-#endif /* _SO_BUTTON_EVENT_ */

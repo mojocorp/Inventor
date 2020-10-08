@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MF_PLANE_
-#define _SO_MF_PLANE_
+#pragma once
 
 #include <Inventor/SbPlane.h>
 #include <Inventor/fields/SoSubField.h>
@@ -86,4 +85,3 @@ class SoMFPlane : public SoMField {
     virtual int getNumValuesPerLine() const;
 };
 
-#endif /* _SO_MF_PLANE_ */

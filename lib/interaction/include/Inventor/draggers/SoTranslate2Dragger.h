@@ -90,8 +90,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TRANSLATE_2_DRAGGER_
-#define _SO_TRANSLATE_2_DRAGGER_
+#pragma once
 
 #include <Inventor/draggers/SoDragger.h>
 #include <Inventor/fields/SoSFVec3f.h>
@@ -249,4 +248,3 @@ class SoTranslate2Dragger : public SoDragger {
     static const unsigned char geomBuffer[];
 };
 
-#endif /* _SO_TRANSLATE_2_DRAGGER_ */

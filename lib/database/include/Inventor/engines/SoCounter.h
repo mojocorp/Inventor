@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COUNTER_
-#define _SO_COUNTER_
+#pragma once
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFShort.h>
@@ -144,4 +143,3 @@ class SoCounter : public SoEngine {
     virtual void evaluate();
 };
 
-#endif /* _SO_COUNTER_ */

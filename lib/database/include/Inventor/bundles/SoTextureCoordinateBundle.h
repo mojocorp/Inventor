@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_TEXTURE_COORDINATE_BUNDLE
-#define _SO_TEXTURE_COORDINATE_BUNDLE
+#pragma once
 
 #include <Inventor/bundles/SoBundle.h>
 #include <Inventor/elements/SoGLTextureCoordinateElement.h>
@@ -161,4 +160,3 @@ class SoTextureCoordinateBundle : public SoBundle {
     static void setUpTexGen(void *userData);
 };
 
-#endif /* _SO_TEXTURE_COORDINATE_BUNDLE */

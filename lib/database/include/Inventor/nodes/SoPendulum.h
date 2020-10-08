@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_PENDULUM_
-#define _SO_PENDULUM_
+#pragma once
 
 #include <Inventor/nodes/SoRotation.h>
 #include <Inventor/fields/SoSFFloat.h>
@@ -136,4 +135,3 @@ class SoPendulum : public SoRotation {
     static void onSensorCB(void *data, class SoSensor *sensor);
 };
 
-#endif /* _SO_PENDULUM_ */

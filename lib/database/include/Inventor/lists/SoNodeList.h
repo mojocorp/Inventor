@@ -60,8 +60,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_NODE_LISTS_
-#define _SO_NODE_LISTS_
+#pragma once
 
 #include <Inventor/lists/SoBaseList.h>
 
@@ -102,4 +101,3 @@ class SoNodeList : public SoBaseList {
     }
 };
 
-#endif /* _SO_NODE_LISTS_ */

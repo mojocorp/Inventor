@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SEPARATOR_
-#define _SO_SEPARATOR_
+#pragma once
 
 #include <Inventor/nodes/SoGroup.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -190,4 +189,3 @@ class SoSeparator : public SoGroup {
     SoGLCacheList *     cacheList; // Caches for GL rendering
 };
 
-#endif /* _SO_SEPARATOR_ */

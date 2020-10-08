@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_V2ASCIITEXT_
-#define _SO_V2ASCIITEXT_
+#pragma once
 
 #include <Inventor/fields/SoMFString.h>
 #include <Inventor/fields/SoSFEnum.h>
@@ -107,4 +106,3 @@ class SoV2AsciiText : public SoUpgrader {
     virtual ~SoV2AsciiText();
 };
 
-#endif /* _SO_V2ASCIITEXT_ */

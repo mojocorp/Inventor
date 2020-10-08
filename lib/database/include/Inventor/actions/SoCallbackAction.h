@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CALLBACK_ACTION_
-#define _SO_CALLBACK_ACTION_
+#pragma once
 
 #include <Inventor/SbBox.h>
 #include <Inventor/SbViewVolume.h>
@@ -349,4 +348,3 @@ class SoCallbackAction : public SoAction {
     SoNode *currentNode;
 };
 
-#endif /* _SO_CALLBACK_ACTION_ */

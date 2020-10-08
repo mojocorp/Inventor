@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_TIME_
-#define _SO_SF_TIME_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 #include <Inventor/SbTime.h>
@@ -76,4 +75,3 @@ class SoSFTime : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_TIME_ */

@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_CONE_
-#define _SO_CONE_
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/fields/SoSFBitMask.h>
@@ -180,4 +179,3 @@ class SoCone : public SoShape {
                                  SbVec3f &exitPoint) const;
 };
 
-#endif /* _SO_CONE_ */

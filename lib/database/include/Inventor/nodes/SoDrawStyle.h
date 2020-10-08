@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_DRAW_STYLE_
-#define _SO_DRAW_STYLE_
+#pragma once
 
 #include <Inventor/SbString.h>
 #include <Inventor/elements/SoDrawStyleElement.h>
@@ -130,4 +129,3 @@ class SoDrawStyle : public SoNode {
     virtual ~SoDrawStyle();
 };
 
-#endif /* _SO_DRAW_STYLE_ */

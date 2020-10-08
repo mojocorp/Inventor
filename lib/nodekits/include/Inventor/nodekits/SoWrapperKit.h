@@ -55,8 +55,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_WRAPPER_KIT_
-#define _SO_WRAPPER_KIT_
+#pragma once
 
 #include <Inventor/nodekits/SoSeparatorKit.h>
 
@@ -174,4 +173,3 @@ class SoWrapperKit : public SoSeparatorKit {
     virtual ~SoWrapperKit();
 };
 
-#endif /* _SO_WRAPPER_KIT_ */

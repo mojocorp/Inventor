@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_COORDINATE_ELEMENT
-#define _SO_COORDINATE_ELEMENT
+#pragma once
 
 #include <Inventor/SbVec.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -138,4 +137,3 @@ class SoCoordinateElement : public SoReplacedElement {
     SbVec4f convert4; // To convert from 3-D to 4-D
 };
 
-#endif /* _SO_COORDINATE_ELEMENT */

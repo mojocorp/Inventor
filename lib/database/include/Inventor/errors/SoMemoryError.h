@@ -56,8 +56,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_MEMORY_ERROR
-#define _SO_MEMORY_ERROR
+#pragma once
 
 #include <Inventor/errors/SoError.h>
 
@@ -108,4 +107,3 @@ class SoMemoryError : public SoError {
     static void *     cbData;      // User data for callback
 };
 
-#endif /* _SO_MEMORY_ERROR */

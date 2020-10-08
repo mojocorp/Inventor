@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SWITCH_
-#define _SO_SWITCH_
+#pragma once
 
 #include <Inventor/fields/SoSFInt32.h>
 #include <Inventor/nodes/SoGroup.h>
@@ -144,4 +143,3 @@ class SoSwitch : public SoGroup {
     void doChild(SoAction *action, int matchIndex = -1);
 };
 
-#endif /* _SO_SWITCH_ */

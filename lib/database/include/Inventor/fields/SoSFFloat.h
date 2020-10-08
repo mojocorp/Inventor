@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_SF_FLOAT_
-#define _SO_SF_FLOAT_
+#pragma once
 
 #include <Inventor/fields/SoSubField.h>
 
@@ -74,4 +73,3 @@ class SoSFFloat : public SoSField {
     static void initClass();
 };
 
-#endif /* _SO_SF_FLOAT_ */

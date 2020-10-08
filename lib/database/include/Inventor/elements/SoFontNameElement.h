@@ -53,8 +53,7 @@
  _______________________________________________________________________
  */
 
-#ifndef _SO_FONT_NAME_ELEMENT
-#define _SO_FONT_NAME_ELEMENT
+#pragma once
 
 #include <Inventor/SbString.h>
 #include <Inventor/elements/SoReplacedElement.h>
@@ -104,4 +103,3 @@ class SoFontNameElement : public SoReplacedElement {
     virtual ~SoFontNameElement();
 };
 
-#endif /* _SO_FONT_NAME_ELEMENT */

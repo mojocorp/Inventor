@@ -61,8 +61,7 @@
  _______________________________________________________________________
 */
 
-#ifndef _SO_V1_NODEKIT_PARTS
-#define _SO_V1_NODEKIT_PARTS
+#pragma once
 
 #include <vector>
 #include <Inventor/misc/upgraders/SoV1NodekitCatalog.h>
@@ -124,4 +123,3 @@ class SoV1NodekitParts {
     SbBool verifyPartExistence(int partNum);
 };
 
-#endif /* _SO_V1_NODEKIT_PARTS */
