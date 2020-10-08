@@ -4,9 +4,7 @@ elseif(UNIX)
   add_definitions(-DIVPREFIX="/usr")
 endif()
 
-if (CMAKE_BUILD_TYPE MATCHES DEBUG)
-    add_definitions(-DDEBUG)
-endif ()
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 if(BUILD_APPS)
     add_subdirectory(converters)

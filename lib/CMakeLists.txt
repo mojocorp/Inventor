@@ -1,10 +1,11 @@
 find_package(OpenGL REQUIRED)
 find_package(BISON REQUIRED)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 if(UNIX AND NOT APPLE)
     find_package(X11 REQUIRED)
 endif()
-
 
 list(APPEND THIRD_PARTY_LIBS glad GLU freetype)
 
@@ -19,7 +20,7 @@ endif ()
 if(APPLE)
     add_definitions(-DSB_OS_MACOS)
 elseif(WIN32)
-    add_definitions(-DSB_OS_WIN)
+    add_definitions(-DSB_OS_WIN -DWIN32_LEAN_AND_MEAN -DNOMINMAX -D_USE_MATH_DEFINES)
 elseif(UNIX)
     add_definitions(-DSB_OS_LINUX)
 else()
@@ -587,6 +588,7 @@ set(DATABASE_SOURCES
     database/src/so/engines/SoBoolOperation.c++
     database/src/so/engines/SoCalcExpr.c++
     database/src/so/engines/SoCalcExpr.h
+    database/src/so/engines/SoCalcParse.y
     database/src/so/engines/SoCalculator.c++
     database/src/so/engines/SoCompose.c++
     database/src/so/engines/SoComputeBoundingBox.c++
@@ -1106,7 +1108,7 @@ set(PUBLIC_HEADERS ${DATABASE_PUBLIC_HEADERS} ${NODEKIT_PUBLIC_HEADERS} ${INTERA
 set(PRIVATE_HEADERS ${DATABASE_PRIVATE_HEADERS})
 set(SOURCES ${DATABASE_SOURCES} ${NODEKIT_SOURCES} ${INTERACTION_SOURCES})
 
-#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 add_library (Inventor SHARED ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOURCES})
 target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} PRIVATE ${THIRD_PARTY_LIBS})

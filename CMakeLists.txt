@@ -4,8 +4,10 @@ project(Inventor)
 find_package(X11)
 
 option(BUILD_DOC "Build documentation" ON)
-option(BUILD_APPS "Build applications" ON)
-option(BUILD_EXAMPLES "Build examples" ON)
+if(NOT WIN32)
+    option(BUILD_APPS "Build applications" ON)
+    option(BUILD_EXAMPLES "Build examples" ON)
+endif()
 
 set(CMAKE_CXX_STANDARD 98)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -22,12 +24,7 @@ execute_process(
   ERROR_QUIET
   OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-message( STATUS "VERSION: ${INVENTOR_VERSION}")
-
-if (NOT WIN32 AND NOT CMAKE_BUILD_TYPE)
-  message(STATUS "No build type selected, default to Release")
-  set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel." FORCE)
-endif()
+message(STATUS "VERSION: ${INVENTOR_VERSION}")
 
 add_definitions(-DINVENTOR_VERSION="${INVENTOR_VERSION}")
 add_definitions(-DGL_SILENCE_DEPRECATION)

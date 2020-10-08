@@ -52,6 +52,7 @@
  */
 
 #include <cmath>
+#include <algorithm>
 #include <glad/gl.h>
 #include <Inventor/actions/SoCallbackAction.h>
 #include <Inventor/actions/SoGLRenderAction.h>

@@ -58,6 +58,10 @@
 #include <Inventor/SbString.h>
 #include <Inventor/errors/SoDebugError.h>
 
+#ifdef SB_OS_WIN
+#include <windows.h>
+#endif
+
 //
 // Constructor that initializes to a substring.
 //
