@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	Component which displays a palette of materials. 
+ |	Component which displays a palette of materials.
  |
  |   Classes: 	MyMaterialPalette
  |
@@ -90,116 +90,109 @@ typedef void MyMaterialPaletteCB(void *userData, const SoMaterial *mtl);
 class MyMaterialPalette : public SoXtComponent {
   public:
     // pass the home directory of the material palettes as dir
-    MyMaterialPalette(
-	Widget parent = NULL,
-	const char *name = NULL, 
-	SbBool buildInsideParent = TRUE, 
-	const char *dir = NULL);
-   ~MyMaterialPalette();
+    MyMaterialPalette(Widget parent = NULL, const char *name = NULL,
+                      SbBool buildInsideParent = TRUE, const char *dir = NULL);
+    ~MyMaterialPalette();
 
     // deselect the currently selected item in the palette, if something
     // is selected. This should be called when the thing the palette
     // is affecting doesn't match any of the palette's choices (because
     // the palette is read only and not an editor).
-    void    deselectCurrentItem();
-    
+    void deselectCurrentItem();
+
     // Callbacks - register functions that will be called whenever the user
     // chooses a new material from the palette.
     // (This component cannot be attached to a database - it is read only)
-    void    addCallback(
-    	    	MyMaterialPaletteCB *f,
-		void *userData = NULL)
-	{ callbackList.addCallback((SoCallbackListCB *) f, userData);}
+    void addCallback(MyMaterialPaletteCB *f, void *userData = NULL) {
+        callbackList.addCallback((SoCallbackListCB *)f, userData);
+    }
 
-    void    removeCallback(
-    	    	MyMaterialPaletteCB *f,
-		void *userData = NULL)
-	{ callbackList.removeCallback((SoCallbackListCB *) f, userData); }
-    
+    void removeCallback(MyMaterialPaletteCB *f, void *userData = NULL) {
+        callbackList.removeCallback((SoCallbackListCB *)f, userData);
+    }
+
     // redefine these to also show/hide material editor
-    virtual void    show();
-    virtual void    hide();
-    
-  protected:
+    virtual void show();
+    virtual void hide();
 
+  protected:
     // This constructor takes a boolean whether to build the widget now.
     // Subclasses can pass FALSE, then call MyMaterialPalette::buildWidget()
     // when they are ready for it to be built.
     SoEXTENDER
-    MyMaterialPalette(
-	Widget parent,
-	const char *name, 
-	SbBool buildInsideParent, 
-	const char *dir, 
-	SbBool buildNow);
-    
-    // redefine these
-    virtual const char *    getDefaultWidgetName() const;
-    virtual const char *    getDefaultTitle() const;
-    virtual const char *    getDefaultIconTitle() const;
-    
-  private:
-    char    	    *paletteDir;
-    SoCallbackList  callbackList;
-    SoXtRenderArea  *ra;
-    Widget	    *widgetList;
-    SbPList 	    paletteList;
-    MaterialNameStruct *mtlNames;
-    int	    	    curPalette;
-    SoSwitch	    *itemSwitch;
-    int		    selectedItem, currentItem;
-    MySimpleMaterialEditor *matEditor;
-    SoXtInputFocus  *focus;
-    Time	    prevTime;
-    SoTranslation   *overlayTrans1, *overlayTrans2;
-    
-    void	    createSceneGraph();
-    void	    getPaletteNamesAndLoad();
-    void	    loadPaletteItems();
-    SoNode	    *getMaterialFromFile(char *file);
-    SbBool	    handleEvent(XAnyEvent *);
-    void	    updateMaterialName();
-    void	    updateFileMenu();
-    void	    updateEditMenu();
-    void	    findCurrentItem(int x, int y);
-    void	    updateOverlayFeedback();
-    void	    updateWindowTitle();
-    void	    createNewPalette(char *name);
-    void	    savePalette();
-    void	    savePaletteAs(char *name);
-    void	    switchPalette();
-    
-    // dialog routines and vars
-    SbBool	    paletteChanged;
-    int		    whatToDoNext, nextPalette;
-    void	    createSaveDialog();
-    void	    createDeleteDialog(char *title, char *str1, char *str2);
-    void	    createPromptDialog(char *title, char *str);
-    static void	    saveDialogCB(Widget, MyMaterialPalette *, XmAnyCallbackStruct *);
-    static void	    promptDialogCB(Widget, MyMaterialPalette *, XmAnyCallbackStruct *);
-    static void	    deleteDialogCB(Widget, MyMaterialPalette *, XmAnyCallbackStruct *);
-    
-    // component callbacks
-    static SbBool   raEventCB(void *, XAnyEvent *);
-    static void	    matEditorCB(void *pt, MySimpleMaterialEditor *ed);
-    
-    // motif static callbacks
-    static void	    menuCB(Widget, int, XmAnyCallbackStruct *);
-    static void	    paletteMenuCB(Widget, int, void *);
+    MyMaterialPalette(Widget parent, const char *name, SbBool buildInsideParent,
+                      const char *dir, SbBool buildNow);
 
-  protected:   
+    // redefine these
+    virtual const char *getDefaultWidgetName() const;
+    virtual const char *getDefaultTitle() const;
+    virtual const char *getDefaultIconTitle() const;
+
+  private:
+    char *                  paletteDir;
+    SoCallbackList          callbackList;
+    SoXtRenderArea *        ra;
+    Widget *                widgetList;
+    SbPList                 paletteList;
+    MaterialNameStruct *    mtlNames;
+    int                     curPalette;
+    SoSwitch *              itemSwitch;
+    int                     selectedItem, currentItem;
+    MySimpleMaterialEditor *matEditor;
+    SoXtInputFocus *        focus;
+    Time                    prevTime;
+    SoTranslation *         overlayTrans1, *overlayTrans2;
+
+    void    createSceneGraph();
+    void    getPaletteNamesAndLoad();
+    void    loadPaletteItems();
+    SoNode *getMaterialFromFile(char *file);
+    SbBool  handleEvent(XAnyEvent *);
+    void    updateMaterialName();
+    void    updateFileMenu();
+    void    updateEditMenu();
+    void    findCurrentItem(int x, int y);
+    void    updateOverlayFeedback();
+    void    updateWindowTitle();
+    void    createNewPalette(char *name);
+    void    savePalette();
+    void    savePaletteAs(char *name);
+    void    switchPalette();
+
+    // dialog routines and vars
+    SbBool      paletteChanged;
+    int         whatToDoNext, nextPalette;
+    void        createSaveDialog();
+    void        createDeleteDialog(char *title, char *str1, char *str2);
+    void        createPromptDialog(char *title, char *str);
+    static void saveDialogCB(Widget, MyMaterialPalette *,
+                             XmAnyCallbackStruct *);
+    static void promptDialogCB(Widget, MyMaterialPalette *,
+                               XmAnyCallbackStruct *);
+    static void deleteDialogCB(Widget, MyMaterialPalette *,
+                               XmAnyCallbackStruct *);
+
+    // component callbacks
+    static SbBool raEventCB(void *, XAnyEvent *);
+    static void   matEditorCB(void *pt, MySimpleMaterialEditor *ed);
+
+    // motif static callbacks
+    static void menuCB(Widget, int, XmAnyCallbackStruct *);
+    static void paletteMenuCB(Widget, int, void *);
+
+  protected:
     // Build routines
-    Widget	    buildWidget(Widget parent);
-    Widget	    buildMenu(Widget parent);
-    void	    buildPaletteSubMenu();
-    Widget	    buildPaletteMenuEntry(int id);
- 
-  private:   
+    Widget buildWidget(Widget parent);
+    Widget buildMenu(Widget parent);
+    void   buildPaletteSubMenu();
+    Widget buildPaletteMenuEntry(int id);
+
+  private:
     // cut/copy/paste/delete vars and functions
-    SoXtClipboard   *clipboard;
-    void	    deleteCurrentMaterial();
-    static void	    pasteDone(void *, SoPathList *);
-  
+    SoXtClipboard *clipboard;
+    void           deleteCurrentMaterial();
+    static void    pasteDone(void *, SoPathList *);
+
     // this is called by both constructors
     void constructorCommon(const char *dir, SbBool buildNow);
 };

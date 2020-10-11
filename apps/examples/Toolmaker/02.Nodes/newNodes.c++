@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -57,53 +57,53 @@
 #include "Pyramid.h"
 #include "Alternate.h"
 
-int main(int, char **argv)
-{
-   SoInput      myInput;
-   SoSeparator  *root;
+int
+main(int, char **argv) {
+    SoInput      myInput;
+    SoSeparator *root;
 
-   // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);
-   if (myWindow == NULL) exit(1);
+    // Initialize Inventor and Xt
+    Widget myWindow = SoXt::init(argv[0]);
+    if (myWindow == NULL)
+        exit(1);
 
-   // Initialize the new node classes
-   Glow::initClass();
-   Pyramid::initClass();
-   Alternate::initClass();
+    // Initialize the new node classes
+    Glow::initClass();
+    Pyramid::initClass();
+    Alternate::initClass();
 
-   if (! myInput.openFile("newNodes.iv")) {
-      fprintf(stderr, "Can't open \"newNodes.iv\"\n");
-      return 1;
-   }
+    if (!myInput.openFile("newNodes.iv")) {
+        fprintf(stderr, "Can't open \"newNodes.iv\"\n");
+        return 1;
+    }
 
-   root = SoDB::readAll(&myInput);
-   if (root == NULL) {
-      printf("File \"newNodes.iv\" contains bad data\n");
-      return 2;
-   }
+    root = SoDB::readAll(&myInput);
+    if (root == NULL) {
+        printf("File \"newNodes.iv\" contains bad data\n");
+        return 2;
+    }
 
-   root->ref();
+    root->ref();
 
-   // Write the graph to stdout
-   SoWriteAction wa;
-   wa.apply(root);
+    // Write the graph to stdout
+    SoWriteAction wa;
+    wa.apply(root);
 
-   // Render it
-   SoXtExaminerViewer *myViewer =
-      new SoXtExaminerViewer(myWindow);
-   myViewer->setSceneGraph(root);
-   
-   //The following results in high quality transparency and will permit
-   //PER_PART material binding to vary transparency.  Delete it and
-   //the pyramid will be rendered with the same SCREEN_DOOR transparency
-   //overall.
-   myViewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
-   myViewer->setTitle("NewNodes");
-   myViewer->show();
-   myViewer->viewAll();
+    // Render it
+    SoXtExaminerViewer *myViewer = new SoXtExaminerViewer(myWindow);
+    myViewer->setSceneGraph(root);
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+    // The following results in high quality transparency and will permit
+    // PER_PART material binding to vary transparency.  Delete it and
+    // the pyramid will be rendered with the same SCREEN_DOOR transparency
+    // overall.
+    myViewer->setTransparencyType(SoGLRenderAction::SORTED_OBJECT_BLEND);
+    myViewer->setTitle("NewNodes");
+    myViewer->show();
+    myViewer->viewAll();
 
-   return 0;
+    SoXt::show(myWindow);
+    SoXt::mainLoop();
+
+    return 0;
 }

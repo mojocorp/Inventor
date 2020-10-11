@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -94,11 +94,11 @@ printUsage(const char *progName)
 
 static SoXtPlaneViewer *
 createPlaneViewer(Widget parent, const char *name, SoNode *sceneRoot,
-		  const SbVec3f &viewDirection)
+                  const SbVec3f &viewDirection)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoXtPlaneViewer	*viewer;
+    SoXtPlaneViewer *viewer;
 
     viewer = new SoXtPlaneViewer(parent, name);
 
@@ -110,7 +110,7 @@ createPlaneViewer(Widget parent, const char *name, SoNode *sceneRoot,
     // looking along the negative z axis to look along the given
     // direction
     viewer->getCamera()->orientation =
-		    SbRotation(SbVec3f(0.0, 0.0, -1.0), viewDirection);
+        SbRotation(SbVec3f(0.0, 0.0, -1.0), viewDirection);
 
     // Make sure all is in view in this direction
     viewer->viewAll();
@@ -124,35 +124,36 @@ createPlaneViewer(Widget parent, const char *name, SoNode *sceneRoot,
 //    Mainline
 //
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoInput		in;
-    SoNode		*root;
-    SoXtPlaneViewer	*topViewer, *frontViewer, *rightViewer;
-    SoXtExaminerViewer	*perspViewer;
-    Widget		form, topWidget, frontWidget, rightWidget, perspWidget;
-    int			argN;
-    Arg			args[20];
+    SoInput             in;
+    SoNode *            root;
+    SoXtPlaneViewer *   topViewer, *frontViewer, *rightViewer;
+    SoXtExaminerViewer *perspViewer;
+    Widget              form, topWidget, frontWidget, rightWidget, perspWidget;
+    int                 argN;
+    Arg                 args[20];
 
     if (argc != 2) {
-	printUsage(argv[0]);
-	return 1;
+        printUsage(argv[0]);
+        return 1;
     }
 
     // Init Inventor
     Widget mainWindow = SoXt::init(argv[0]);
 
     // Open and read input scene graph
-    if (! in.openFile(argv[1])) {
-	fprintf(stderr, "%s: Cannot open %s\n", argv[0], argv[1]);
-	return 1;
+    if (!in.openFile(argv[1])) {
+        fprintf(stderr, "%s: Cannot open %s\n", argv[0], argv[1]);
+        return 1;
     }
     root = SoDB::readAll(&in);
     if (root == NULL) {
-	fprintf(stderr, "%s: Problem reading data\n", argv[0]);
-	return 1;
+        fprintf(stderr, "%s: Problem reading data\n", argv[0]);
+        return 1;
     }
 
     root->ref();
@@ -161,12 +162,11 @@ int main(int argc, char **argv)
     form = XmCreateForm(mainWindow, "form", NULL, 0);
 
     // Build each of the four viewers
-    topViewer   = createPlaneViewer(form, "Top View",   root,
-				    SbVec3f(0., -1.,  0.));
-    frontViewer = createPlaneViewer(form, "Front View", root,
-				    SbVec3f(0.,  0., -1.));
-    rightViewer = createPlaneViewer(form, "Right View", root,
-				    SbVec3f(-1., 0.,  0.));
+    topViewer = createPlaneViewer(form, "Top View", root, SbVec3f(0., -1., 0.));
+    frontViewer =
+        createPlaneViewer(form, "Front View", root, SbVec3f(0., 0., -1.));
+    rightViewer =
+        createPlaneViewer(form, "Right View", root, SbVec3f(-1., 0., 0.));
     perspViewer = new SoXtExaminerViewer(form);
     perspViewer->setSceneGraph(root);
 
@@ -174,55 +174,86 @@ int main(int argc, char **argv)
     root->unref();
 
     // Get the widgets for the viewers
-    topWidget   = topViewer->getWidget();
+    topWidget = topViewer->getWidget();
     frontWidget = frontViewer->getWidget();
     rightWidget = rightViewer->getWidget();
     perspWidget = perspViewer->getWidget();
 
-
     // Arrange the viewer's widgets in the form
     argN = 0;
-    XtSetArg(args[argN], XmNtopAttachment,	XmATTACH_FORM);		argN++;
-    XtSetArg(args[argN], XmNtopOffset,		0);			argN++;
-    XtSetArg(args[argN], XmNleftAttachment,	XmATTACH_FORM);		argN++;
-    XtSetArg(args[argN], XmNleftOffset,		0);			argN++;
-    XtSetArg(args[argN], XmNrightAttachment,	XmATTACH_POSITION);	argN++;
-    XtSetArg(args[argN], XmNrightPosition,	50);			argN++;
-    XtSetArg(args[argN], XmNbottomAttachment,	XmATTACH_POSITION);	argN++;
-    XtSetArg(args[argN], XmNbottomPosition,	50);			argN++;
+    XtSetArg(args[argN], XmNtopAttachment, XmATTACH_FORM);
+    argN++;
+    XtSetArg(args[argN], XmNtopOffset, 0);
+    argN++;
+    XtSetArg(args[argN], XmNleftAttachment, XmATTACH_FORM);
+    argN++;
+    XtSetArg(args[argN], XmNleftOffset, 0);
+    argN++;
+    XtSetArg(args[argN], XmNrightAttachment, XmATTACH_POSITION);
+    argN++;
+    XtSetArg(args[argN], XmNrightPosition, 50);
+    argN++;
+    XtSetArg(args[argN], XmNbottomAttachment, XmATTACH_POSITION);
+    argN++;
+    XtSetArg(args[argN], XmNbottomPosition, 50);
+    argN++;
     XtSetValues(topWidget, args, argN);
 
     argN = 0;
-    XtSetArg(args[argN], XmNbottomAttachment,	XmATTACH_FORM);		argN++;
-    XtSetArg(args[argN], XmNbottomOffset,	0);			argN++;
-    XtSetArg(args[argN], XmNleftAttachment,	XmATTACH_FORM);		argN++;
-    XtSetArg(args[argN], XmNleftOffset,		0);			argN++;
-    XtSetArg(args[argN], XmNrightAttachment,	XmATTACH_POSITION);	argN++;
-    XtSetArg(args[argN], XmNrightPosition,	50);			argN++;
-    XtSetArg(args[argN], XmNtopAttachment,	XmATTACH_WIDGET);	argN++;
-    XtSetArg(args[argN], XmNtopWidget,		topWidget);		argN++;
+    XtSetArg(args[argN], XmNbottomAttachment, XmATTACH_FORM);
+    argN++;
+    XtSetArg(args[argN], XmNbottomOffset, 0);
+    argN++;
+    XtSetArg(args[argN], XmNleftAttachment, XmATTACH_FORM);
+    argN++;
+    XtSetArg(args[argN], XmNleftOffset, 0);
+    argN++;
+    XtSetArg(args[argN], XmNrightAttachment, XmATTACH_POSITION);
+    argN++;
+    XtSetArg(args[argN], XmNrightPosition, 50);
+    argN++;
+    XtSetArg(args[argN], XmNtopAttachment, XmATTACH_WIDGET);
+    argN++;
+    XtSetArg(args[argN], XmNtopWidget, topWidget);
+    argN++;
     XtSetValues(frontWidget, args, argN);
-    
+
     argN = 0;
-    XtSetArg(args[argN], XmNtopAttachment,	XmATTACH_FORM);		argN++;
-    XtSetArg(args[argN], XmNtopOffset,		0);			argN++;
-    XtSetArg(args[argN], XmNrightAttachment,	XmATTACH_FORM);		argN++;
-    XtSetArg(args[argN], XmNrightOffset,	0);			argN++;
-    XtSetArg(args[argN], XmNleftAttachment,	XmATTACH_WIDGET);	argN++;
-    XtSetArg(args[argN], XmNleftWidget,		topWidget);		argN++;
-    XtSetArg(args[argN], XmNbottomAttachment,	XmATTACH_POSITION);	argN++;
-    XtSetArg(args[argN], XmNbottomPosition,	50);			argN++;
+    XtSetArg(args[argN], XmNtopAttachment, XmATTACH_FORM);
+    argN++;
+    XtSetArg(args[argN], XmNtopOffset, 0);
+    argN++;
+    XtSetArg(args[argN], XmNrightAttachment, XmATTACH_FORM);
+    argN++;
+    XtSetArg(args[argN], XmNrightOffset, 0);
+    argN++;
+    XtSetArg(args[argN], XmNleftAttachment, XmATTACH_WIDGET);
+    argN++;
+    XtSetArg(args[argN], XmNleftWidget, topWidget);
+    argN++;
+    XtSetArg(args[argN], XmNbottomAttachment, XmATTACH_POSITION);
+    argN++;
+    XtSetArg(args[argN], XmNbottomPosition, 50);
+    argN++;
     XtSetValues(rightWidget, args, argN);
 
     argN = 0;
-    XtSetArg(args[argN], XmNbottomAttachment,	XmATTACH_FORM);		argN++;
-    XtSetArg(args[argN], XmNbottomOffset,	0);			argN++;
-    XtSetArg(args[argN], XmNrightAttachment,	XmATTACH_FORM);		argN++;
-    XtSetArg(args[argN], XmNrightOffset,	0);			argN++;
-    XtSetArg(args[argN], XmNleftAttachment,	XmATTACH_WIDGET);	argN++;
-    XtSetArg(args[argN], XmNleftWidget,		frontWidget);		argN++;
-    XtSetArg(args[argN], XmNtopAttachment,	XmATTACH_WIDGET);	argN++;
-    XtSetArg(args[argN], XmNtopWidget,		rightWidget);		argN++;
+    XtSetArg(args[argN], XmNbottomAttachment, XmATTACH_FORM);
+    argN++;
+    XtSetArg(args[argN], XmNbottomOffset, 0);
+    argN++;
+    XtSetArg(args[argN], XmNrightAttachment, XmATTACH_FORM);
+    argN++;
+    XtSetArg(args[argN], XmNrightOffset, 0);
+    argN++;
+    XtSetArg(args[argN], XmNleftAttachment, XmATTACH_WIDGET);
+    argN++;
+    XtSetArg(args[argN], XmNleftWidget, frontWidget);
+    argN++;
+    XtSetArg(args[argN], XmNtopAttachment, XmATTACH_WIDGET);
+    argN++;
+    XtSetArg(args[argN], XmNtopWidget, rightWidget);
+    argN++;
     XtSetValues(perspWidget, args, argN);
 
     // Show the widgets

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,54 +53,50 @@
 // CODE FOR The Inventor Mentor STARTS HERE
 
 static void
-raiseFlagCallback(void *data, SoSensor *)
-{
-   // We know data is really a SoTransform node:
-   SoTransform *flagAngleXform = (SoTransform *)data;
+raiseFlagCallback(void *data, SoSensor *) {
+    // We know data is really a SoTransform node:
+    SoTransform *flagAngleXform = (SoTransform *)data;
 
-   // Rotate flag by 90 degrees about the Z axis:
-   flagAngleXform->rotation.setValue(SbVec3f(0,0,1), M_PI/2);
+    // Rotate flag by 90 degrees about the Z axis:
+    flagAngleXform->rotation.setValue(SbVec3f(0, 0, 1), M_PI / 2);
 }
 
 // CODE FOR The Inventor Mentor ENDS HERE
 ///////////////////////////////////////////////////////////
 
 int
-main(int , char **argv)
-{
-   Widget myWindow = SoXt::init(argv[0]); // pass the app name
-   if (myWindow == NULL) exit(1);
+main(int, char **argv) {
+    Widget myWindow = SoXt::init(argv[0]); // pass the app name
+    if (myWindow == NULL)
+        exit(1);
 
-   ///////////////////////////////////////////////////////////
-   // CODE FOR The Inventor Mentor STARTS HERE
+    ///////////////////////////////////////////////////////////
+    // CODE FOR The Inventor Mentor STARTS HERE
 
-   SoTransform *flagXform = new SoTransform;
+    SoTransform *flagXform = new SoTransform;
 
-   // Create an alarm that will call the flag-raising callback:
-   SoAlarmSensor *myAlarm =
-       new SoAlarmSensor(raiseFlagCallback, flagXform);
-   myAlarm->setTimeFromNow(12.0);  // 12 seconds
-   myAlarm->schedule();
+    // Create an alarm that will call the flag-raising callback:
+    SoAlarmSensor *myAlarm = new SoAlarmSensor(raiseFlagCallback, flagXform);
+    myAlarm->setTimeFromNow(12.0); // 12 seconds
+    myAlarm->schedule();
 
-   // CODE FOR The Inventor Mentor ENDS HERE
-   ///////////////////////////////////////////////////////////
+    // CODE FOR The Inventor Mentor ENDS HERE
+    ///////////////////////////////////////////////////////////
 
-   SoSeparator *root = new SoSeparator;
-   root->ref();
-   root->addChild(flagXform);
-   SoCone *myCone = new SoCone;
-   myCone->bottomRadius = 0.1;
-   root->addChild(myCone);
+    SoSeparator *root = new SoSeparator;
+    root->ref();
+    root->addChild(flagXform);
+    SoCone *myCone = new SoCone;
+    myCone->bottomRadius = 0.1;
+    root->addChild(myCone);
 
-   SoXtExaminerViewer *myViewer = new
-      SoXtExaminerViewer(myWindow);
+    SoXtExaminerViewer *myViewer = new SoXtExaminerViewer(myWindow);
 
-   // Put our scene in myViewer, change the title
-   myViewer->setSceneGraph(root);
-   myViewer->setTitle("Raise The Cone");
-   myViewer->show();
+    // Put our scene in myViewer, change the title
+    myViewer->setSceneGraph(root);
+    myViewer->setTitle("Raise The Cone");
+    myViewer->show();
 
-   SoXt::show(myWindow);  // Display main window
-   SoXt::mainLoop();      // Main Inventor event loop
+    SoXt::show(myWindow); // Display main window
+    SoXt::mainLoop();     // Main Inventor event loop
 }
-

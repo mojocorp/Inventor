@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -49,28 +49,28 @@
 class SoPath;
 
 class ShowSelectionRenderAction : public SoGLRenderAction {
-   SO_ACTION_HEADER(ShowSelectionRenderAction);
+    SO_ACTION_HEADER(ShowSelectionRenderAction);
+
   public:
-   ShowSelectionRenderAction();
-   virtual ~ShowSelectionRenderAction();
+    ShowSelectionRenderAction();
+    virtual ~ShowSelectionRenderAction();
 
-   // Applies action to the graph rooted by a node,
-   // only drawing selected objects.
-   virtual void    apply(SoNode *node);
-   
-   // Applies action to the graph defined by a path or path list.
-   // These simply invoke the parent class apply() methods.
-   // These do NOT highlight the path, whether selected or not.
-   // They are implemented to keep the compiler happy.
-   virtual void    apply(SoPath *path);
-   virtual void    apply(const SoPathList &pathList,
-			 SbBool obeysRules = FALSE);
+    // Applies action to the graph rooted by a node,
+    // only drawing selected objects.
+    virtual void apply(SoNode *node);
 
-   static void initClass();
-   
+    // Applies action to the graph defined by a path or path list.
+    // These simply invoke the parent class apply() methods.
+    // These do NOT highlight the path, whether selected or not.
+    // They are implemented to keep the compiler happy.
+    virtual void apply(SoPath *path);
+    virtual void apply(const SoPathList &pathList, SbBool obeysRules = FALSE);
+
+    static void initClass();
+
   protected:
-   // We will cache the path to the first selection node
-   SoPath	    *selPath;
+    // We will cache the path to the first selection node
+    SoPath *selPath;
 };
 
 #endif /* _SHOW_SELECTION_RENDER_ACTION_ */

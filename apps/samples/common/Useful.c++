@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -50,14 +50,13 @@
 // of the stuff in the file.
 //
 SoSeparator *
-Useful::readFile(const char *filename)
-{
+Useful::readFile(const char *filename) {
     SoInput in;
     if (filename != NULL) {
-	if (in.openFile(filename) == FALSE) {
-	    fprintf(stderr, "Could not open file %s\n", filename);
-	    return NULL;
-	}
+        if (in.openFile(filename) == FALSE) {
+            fprintf(stderr, "Could not open file %s\n", filename);
+            return NULL;
+        }
     }
     return readFile(in);
 }
@@ -65,8 +64,7 @@ Useful::readFile(const char *filename)
 // Read a file given a file pointer...
 //
 SoSeparator *
-Useful::readFile(FILE *fp)
-{
+Useful::readFile(FILE *fp) {
     SoInput in;
     in.setFilePointer(fp);
     return readFile(in);
@@ -76,8 +74,7 @@ Useful::readFile(FILE *fp)
 // readFile routines.
 //
 SoSeparator *
-Useful::readFile(SoInput &in)
-{
+Useful::readFile(SoInput &in) {
     SoSeparator *graph = new SoSeparator;
     graph->ref();
 
@@ -86,14 +83,14 @@ Useful::readFile(SoInput &in)
     //
     SoNode *root;
     do {
-	int read_ok = SoDB::read(&in, root);
+        int read_ok = SoDB::read(&in, root);
 
-	if (!read_ok) {
-	    fprintf(stderr, "Error reading file\n");
-	    graph->unref();
-	    return NULL;
-	}
-	else if (root != NULL) graph->addChild(root);
+        if (!read_ok) {
+            fprintf(stderr, "Error reading file\n");
+            graph->unref();
+            return NULL;
+        } else if (root != NULL)
+            graph->addChild(root);
 
     } while (root != NULL);
     in.closeFile();
@@ -105,15 +102,14 @@ Useful::readFile(SoInput &in)
     // would otherwise occur if we automatically created a new
     // separator every time a scene graph was read.
     //
-    if (graph->getNumChildren() == 1 && 
-		graph->getChild(0)->isOfType(
-		SoSeparator::getClassTypeId())) {
-	SoSeparator *result = (SoSeparator *)graph->getChild(0);
-	result->ref();	// Note the order here!
-	graph->unref();
+    if (graph->getNumChildren() == 1 &&
+        graph->getChild(0)->isOfType(SoSeparator::getClassTypeId())) {
+        SoSeparator *result = (SoSeparator *)graph->getChild(0);
+        result->ref(); // Note the order here!
+        graph->unref();
 
-	result->unrefNoDelete();
-	return result;
+        result->unrefNoDelete();
+        return result;
     }
 
     graph->unrefNoDelete();
@@ -128,8 +124,7 @@ Useful::readFile(SoInput &in)
 // that material's fields.
 //
 SoNode *
-Useful::searchLastType(SoPath *p, SoType t)
-{
+Useful::searchLastType(SoPath *p, SoType t) {
     SoSearchAction sa;
     sa.setType(t);
     sa.setInterest(SoSearchAction::LAST);
@@ -137,9 +132,8 @@ Useful::searchLastType(SoPath *p, SoType t)
     SoPath *outPath = sa.getPath();
 
     SoNode *result = NULL;
-    if (outPath != NULL && (outPath->getLength() > 0) )
+    if (outPath != NULL && (outPath->getLength() > 0))
         result = outPath->getTail();
 
-    return result; 
+    return result;
 }
-

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -52,7 +52,7 @@
 #include "IfStripper.h"
 
 // All roots at Level 5 have this name so we can find them easily:
-#define LEVEL_5_ROOT_NAME	"__level5Root"
+#define LEVEL_5_ROOT_NAME "__level5Root"
 
 #if DEBUG_WRITE
 #include <Inventor/actions/SoWriteAction.h>
@@ -64,9 +64,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfBuilder::IfBuilder()
-{
-}
+IfBuilder::IfBuilder() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -74,9 +72,7 @@ IfBuilder::IfBuilder()
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfBuilder::~IfBuilder()
-{
-}
+IfBuilder::~IfBuilder() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -87,11 +83,10 @@ IfBuilder::~IfBuilder()
 
 SoNode *
 IfBuilder::build(const IfShapeList &shapeList, SbBool _doStrips, SbBool _doVP,
-		 SbBool _doAnyNormals, SbBool _doAnyTexCoords)
-{
-    doStrips       = _doStrips;
-    doVP           = _doVP;
-    doAnyNormals   = _doAnyNormals;
+                 SbBool _doAnyNormals, SbBool _doAnyTexCoords) {
+    doStrips = _doStrips;
+    doVP = _doVP;
+    doAnyNormals = _doAnyNormals;
     doAnyTexCoords = _doAnyTexCoords;
 
     //////////////////////////////////////////////////////////////////
@@ -121,32 +116,32 @@ IfBuilder::build(const IfShapeList &shapeList, SbBool _doStrips, SbBool _doVP,
 
     for (int i = 1; i < shapeList.getLength(); i++) {
 
-	IfShape *shape = shapeList[i];
+        IfShape *shape = shapeList[i];
 
-	// Skip over a shape that is the same as the previous one (as
-	// a result of merging)
-	if (shape == shapeList[i - 1])
-	    continue;
+        // Skip over a shape that is the same as the previous one (as
+        // a result of merging)
+        if (shape == shapeList[i - 1])
+            continue;
 
-	ASSERT(shape->differenceLevel >= 0 && shape->differenceLevel <= 5);
+        ASSERT(shape->differenceLevel >= 0 && shape->differenceLevel <= 5);
 
-	if (shape->differenceLevel > 0)
-	    buildRoots(shape->differenceLevel, shape);
+        if (shape->differenceLevel > 0)
+            buildRoots(shape->differenceLevel, shape);
 
-	// Always add the appropriate nodes for Level 5
-	else
-	    shape->addNodesForLevel(roots[5], 5);
+        // Always add the appropriate nodes for Level 5
+        else
+            shape->addNodesForLevel(roots[5], 5);
 
-	// We are done with the nodes in this shape, so unref them to
-	// see if we can free up some memory
-	shape->clearNodes();
+        // We are done with the nodes in this shape, so unref them to
+        // see if we can free up some memory
+        shape->clearNodes();
     }
 
 #if DEBUG_WRITE
     {
-	SoWriteAction wa;
-	wa.getOutput()->openFile("PREFLATTEN.iv");
-	wa.apply(roots[0]);
+        SoWriteAction wa;
+        wa.getOutput()->openFile("PREFLATTEN.iv");
+        wa.apply(roots[0]);
     }
 #endif
 
@@ -156,9 +151,9 @@ IfBuilder::build(const IfShapeList &shapeList, SbBool _doStrips, SbBool _doVP,
 
 #if DEBUG_WRITE
     {
-	SoWriteAction wa;
-	wa.getOutput()->openFile("PREREMOVE.iv");
-	wa.apply(roots[0]);
+        SoWriteAction wa;
+        wa.getOutput()->openFile("PREREMOVE.iv");
+        wa.apply(roots[0]);
     }
 #endif
 
@@ -167,22 +162,22 @@ IfBuilder::build(const IfShapeList &shapeList, SbBool _doStrips, SbBool _doVP,
 
     // Get rid of the top separator if it has only one child
     while (roots[0]->getNumChildren() == 1) {
-	SoSeparator *newRoot = (SoSeparator *) roots[0]->getChild(0);
-	newRoot->ref();
-	roots[0]->unref();
-	roots[0] = newRoot;
+        SoSeparator *newRoot = (SoSeparator *)roots[0]->getChild(0);
+        newRoot->ref();
+        roots[0]->unref();
+        roots[0] = newRoot;
 
-	// If the new top root isn't really a separator, stop. (It
-	// might be a derived class.)
-	if (roots[0]->getTypeId() != SoSeparator::getClassTypeId())
-	    break;
+        // If the new top root isn't really a separator, stop. (It
+        // might be a derived class.)
+        if (roots[0]->getTypeId() != SoSeparator::getClassTypeId())
+            break;
     }
 
 #if DEBUG_WRITE
     {
-	SoWriteAction wa;
-	wa.getOutput()->openFile("POSTREMOVE.iv");
-	wa.apply(roots[0]);
+        SoWriteAction wa;
+        wa.getOutput()->openFile("POSTREMOVE.iv");
+        wa.apply(roots[0]);
     }
 #endif
 
@@ -197,24 +192,23 @@ IfBuilder::build(const IfShapeList &shapeList, SbBool _doStrips, SbBool _doVP,
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfBuilder::buildRoots(int startLevel, IfShape *shape)
-{
+IfBuilder::buildRoots(int startLevel, IfShape *shape) {
     ASSERT(startLevel > 0 && startLevel <= 5);
 
     for (int level = startLevel; level <= 5; level++) {
 
-	roots[level] = new SoSeparator;
-	roots[level-1]->addChild(roots[level]);
+        roots[level] = new SoSeparator;
+        roots[level - 1]->addChild(roots[level]);
 
-	// Add the appropriate nodes for the level
-	shape->addNodesForLevel(roots[level], level);
+        // Add the appropriate nodes for the level
+        shape->addNodesForLevel(roots[level], level);
     }
 
     // Every time this is called, a new Level 5 root is built. Name it
     // so we can find all of them easily later on, unless we really
     // don't want to flatten it because the IfShape says so.
-    if (! shape->dontFlatten)
-	roots[5]->setName(LEVEL_5_ROOT_NAME);
+    if (!shape->dontFlatten)
+        roots[5]->setName(LEVEL_5_ROOT_NAME);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -224,8 +218,7 @@ IfBuilder::buildRoots(int startLevel, IfShape *shape)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfBuilder::replaceLevel5()
-{
+IfBuilder::replaceLevel5() {
     // Find all paths to the roots with the Level 5 name
     SoSearchAction sa;
     sa.setName(LEVEL_5_ROOT_NAME);
@@ -237,26 +230,25 @@ IfBuilder::replaceLevel5()
 
     for (int i = 0; i < numSubGraphs; i++) {
 
-	IfReporter::reportIndex("Doing subgraph", i, numSubGraphs);
+        IfReporter::reportIndex("Doing subgraph", i, numSubGraphs);
 
-	const SoPath *path = sa.getPaths()[i];
-	SoNode *level5Root = path->getTail();
-	ASSERT(path->getLength() > 1);
-	ASSERT(level5Root->getTypeId() == SoSeparator::getClassTypeId());
+        const SoPath *path = sa.getPaths()[i];
+        SoNode *      level5Root = path->getTail();
+        ASSERT(path->getLength() > 1);
+        ASSERT(level5Root->getTypeId() == SoSeparator::getClassTypeId());
 
-	// Traverse the path with a callback action to determine if
-	// normals and texture coordinates are required
-	SbBool doNormals, doTexCoords;
-	getFlags((SoPath *) path, doNormals, doTexCoords);
+        // Traverse the path with a callback action to determine if
+        // normals and texture coordinates are required
+        SbBool doNormals, doTexCoords;
+        getFlags((SoPath *)path, doNormals, doTexCoords);
 
-	// Replace the level 5 root with the result of flattening its
-	// subgraph
-	SoNode *flatRoot = flatten(path,
-				   doAnyNormals && doNormals,
-				   doAnyTexCoords && doTexCoords);
-	SoSeparator *parent = (SoSeparator *) path->getNodeFromTail(1);
-	ASSERT(parent->getTypeId() == SoSeparator::getClassTypeId());
-	parent->replaceChild(level5Root, flatRoot);
+        // Replace the level 5 root with the result of flattening its
+        // subgraph
+        SoNode *     flatRoot = flatten(path, doAnyNormals && doNormals,
+                                   doAnyTexCoords && doTexCoords);
+        SoSeparator *parent = (SoSeparator *)path->getNodeFromTail(1);
+        ASSERT(parent->getTypeId() == SoSeparator::getClassTypeId());
+        parent->replaceChild(level5Root, flatRoot);
     }
 }
 
@@ -268,8 +260,7 @@ IfBuilder::replaceLevel5()
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfBuilder::getFlags(SoPath *path, SbBool &doNormals, SbBool &doTexCoords)
-{
+IfBuilder::getFlags(SoPath *path, SbBool &doNormals, SbBool &doTexCoords) {
     // The callback will store the flag values in this array, which we
     // pass in as user data
     SbBool flags[2];
@@ -279,7 +270,7 @@ IfBuilder::getFlags(SoPath *path, SbBool &doNormals, SbBool &doTexCoords)
     ca.apply(path);
 
     // Access the stored flags
-    doNormals   = flags[0];
+    doNormals = flags[0];
     doTexCoords = flags[1];
 }
 
@@ -290,19 +281,17 @@ IfBuilder::getFlags(SoPath *path, SbBool &doNormals, SbBool &doTexCoords)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfBuilder::setFlags(SoCallbackAction *cba, SbBool *flags)
-{
+IfBuilder::setFlags(SoCallbackAction *cba, SbBool *flags) {
     // Do normals only if lighting is on
-    flags[0] = (SoLazyElement::getLightModel(cba->getState()) ==
-		SoLazyElement::PHONG);
+    flags[0] =
+        (SoLazyElement::getLightModel(cba->getState()) == SoLazyElement::PHONG);
 
     // Do texture coordinates only if there is a texture
     SbVec2s s;
-    int nc, wrapS, wrapT, model;
+    int     nc, wrapS, wrapT, model;
     SbColor blendColor;
-    flags[1] = (SoTextureImageElement::get(cba->getState(), s, nc,
-					   wrapS, wrapT,
-					   model, blendColor) != NULL);
+    flags[1] = (SoTextureImageElement::get(cba->getState(), s, nc, wrapS, wrapT,
+                                           model, blendColor) != NULL);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -313,8 +302,7 @@ IfBuilder::setFlags(SoCallbackAction *cba, SbBool *flags)
 /////////////////////////////////////////////////////////////////////////////
 
 SoNode *
-IfBuilder::flatten(const SoPath *path, SbBool doNormals, SbBool doTexCoords)
-{
+IfBuilder::flatten(const SoPath *path, SbBool doNormals, SbBool doTexCoords) {
     // Copy all properties from higher in the path to this root, just
     // in case the subgraph at the tail needs them. Specifically,
     // SoShapeHints nodes that are higher up will affect the triangle
@@ -346,25 +334,25 @@ IfBuilder::flatten(const SoPath *path, SbBool doNormals, SbBool doTexCoords)
     IfReporter::reportHolder("    After condensing", holder);
 
     if (doStrips) {
-	// Produce better triangle strips
-	IfReporter::startReport("  Stripping ", TRUE);
-	IfStripper *stripper = new IfStripper;
-	stripper->strip(holder);
-	delete stripper;
-	IfReporter::finishReport(TRUE);
+        // Produce better triangle strips
+        IfReporter::startReport("  Stripping ", TRUE);
+        IfStripper *stripper = new IfStripper;
+        stripper->strip(holder);
+        delete stripper;
+        IfReporter::finishReport(TRUE);
 
-	IfReporter::reportHolder("    After stripping ", holder);
+        IfReporter::reportHolder("    After stripping ", holder);
     }
 
     if (doVP) {
-	// Find the last material in the object
-	int i;
-	for (i = root->getNumChildren() - 1; i >= 0; i--) {
-	    if (root->getChild(i)->isOfType(SoMaterial::getClassTypeId()))
-		break;
-	}
-	SoMaterial *mtl = (i >= 0 ? (SoMaterial *) root->getChild(i) : NULL);
-	holder->convertToVertexProperty(mtl);
+        // Find the last material in the object
+        int i;
+        for (i = root->getNumChildren() - 1; i >= 0; i--) {
+            if (root->getChild(i)->isOfType(SoMaterial::getClassTypeId()))
+                break;
+        }
+        SoMaterial *mtl = (i >= 0 ? (SoMaterial *)root->getChild(i) : NULL);
+        holder->convertToVertexProperty(mtl);
     }
 
     SoNode *result = holder->root;
@@ -384,8 +372,7 @@ IfBuilder::flatten(const SoPath *path, SbBool doNormals, SbBool doTexCoords)
 /////////////////////////////////////////////////////////////////////////////
 
 SoSeparator *
-IfBuilder::collectObject(const SoPath *path)
-{
+IfBuilder::collectObject(const SoPath *path) {
     // Create a separator to hold everything
     SoSeparator *root = new SoSeparator;
     root->ref();
@@ -393,17 +380,17 @@ IfBuilder::collectObject(const SoPath *path)
     // Traverse all nodes along the path. They should all be separators.
     int numAboveTail = path->getLength() - 1;
     for (int i = 0; i < numAboveTail; i++) {
-	ASSERT(path->getNode(i)->isOfType(SoSeparator::getClassTypeId()));
+        ASSERT(path->getNode(i)->isOfType(SoSeparator::getClassTypeId()));
 
-	SoSeparator *sep = (SoSeparator *) path->getNode(i);
+        SoSeparator *sep = (SoSeparator *)path->getNode(i);
 
-	int nextIndexInPath = path->getIndex(i+1);
+        int nextIndexInPath = path->getIndex(i + 1);
 
-	for (int j = 0; j < nextIndexInPath; j++) {
-	    SoNode *node = sep->getChild(j);
-	    if (node->affectsState())
-		root->addChild(node);
-	}
+        for (int j = 0; j < nextIndexInPath; j++) {
+            SoNode *node = sep->getChild(j);
+            if (node->affectsState())
+                root->addChild(node);
+        }
     }
 
     root->addChild(path->getTail());
@@ -420,46 +407,44 @@ IfBuilder::collectObject(const SoPath *path)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfBuilder::removeUnnecessarySeparators(SoSeparator *root, int level)
-{
+IfBuilder::removeUnnecessarySeparators(SoSeparator *root, int level) {
     // If the last child is a separator, move its children here and
     // remove it.
 
     int curLevel = level;
     while (TRUE) {
 
-	SoNode *lastKid = root->getChild(root->getNumChildren() - 1);
+        SoNode *lastKid = root->getChild(root->getNumChildren() - 1);
 
-	if (lastKid->getTypeId() == SoSeparator::getClassTypeId()) {
+        if (lastKid->getTypeId() == SoSeparator::getClassTypeId()) {
 
-	    // A Level 2 separator should NOT be removed unless there
-	    // is no camera under its Level 1 separator. This keeps
-	    // caching ok under the camera.
-	    if (curLevel == 1 && root->getNumChildren() > 1)
-		break;
+            // A Level 2 separator should NOT be removed unless there
+            // is no camera under its Level 1 separator. This keeps
+            // caching ok under the camera.
+            if (curLevel == 1 && root->getNumChildren() > 1)
+                break;
 
-	    SoSeparator *kidSep = (SoSeparator *) lastKid;
+            SoSeparator *kidSep = (SoSeparator *)lastKid;
 
-	    // Remove the kid from the root
-	    kidSep->ref();
-	    root->removeChild(root->getNumChildren() - 1);
+            // Remove the kid from the root
+            kidSep->ref();
+            root->removeChild(root->getNumChildren() - 1);
 
-	    // Move the children
-	    for (int i = 0; i < kidSep->getNumChildren(); i++)
-		root->addChild(kidSep->getChild(i));
+            // Move the children
+            for (int i = 0; i < kidSep->getNumChildren(); i++)
+                root->addChild(kidSep->getChild(i));
 
-	    kidSep->unref();
-	}
-	else
-	    break;
+            kidSep->unref();
+        } else
+            break;
 
-	curLevel++;
+        curLevel++;
     }
 
     // Recurse on the children
     for (int i = 0; i < root->getNumChildren(); i++) {
-	SoNode *kid = root->getChild(i);
-	if (kid->getTypeId() == SoSeparator::getClassTypeId())
-	    removeUnnecessarySeparators((SoSeparator *) kid, level + 1);
+        SoNode *kid = root->getChild(i);
+        if (kid->getTypeId() == SoSeparator::getClassTypeId())
+            removeUnnecessarySeparators((SoSeparator *)kid, level + 1);
     }
 }

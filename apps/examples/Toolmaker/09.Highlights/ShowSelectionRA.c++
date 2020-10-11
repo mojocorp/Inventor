@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -40,7 +40,6 @@
  *
  *  Source file for "ShowSelection" highlight.
  *------------------------------------------------------------*/
-
 
 #include <Inventor/SoPath.h>
 #include <Inventor/actions/SoSearchAction.h>
@@ -54,7 +53,6 @@
 
 #include "ShowSelectionRA.h"
 
-
 SO_ACTION_SOURCE(ShowSelectionRenderAction);
 
 ////////////////////////////////////////////////////////////////////////
@@ -67,7 +65,7 @@ ShowSelectionRenderAction::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SO_ACTION_INIT_CLASS(ShowSelectionRenderAction, SoGLRenderAction);
+    SO_ACTION_INIT_CLASS(ShowSelectionRenderAction, SoGLRenderAction);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -75,12 +73,12 @@ ShowSelectionRenderAction::initClass()
 //  Constructor
 //
 ShowSelectionRenderAction::ShowSelectionRenderAction()
-	: SoGLRenderAction(SbVec2s(1, 1)) // pass a dummy viewport region
+    : SoGLRenderAction(SbVec2s(1, 1)) // pass a dummy viewport region
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   selPath = NULL;
-}    
+    selPath = NULL;
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -90,9 +88,9 @@ ShowSelectionRenderAction::~ShowSelectionRenderAction()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   if (selPath != NULL)
-      selPath->unref();
-}    
+    if (selPath != NULL)
+        selPath->unref();
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -104,71 +102,72 @@ ShowSelectionRenderAction::apply(SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   node->ref();
-   
-   // Do we have to search for the selection node?
-   // Only if our cached path is NULL, 
-   // or the action is being applied to a different scene,
-   // or the tail of our existing path is no longer a selection
-   // node (for instance if that node was removed from the scene).
-   if ((selPath == NULL) ||
-       (selPath->getHead() != node) ||
-       (! selPath->getTail()->isOfType(
-              SoSelection::getClassTypeId()))) {
-   
-      // Find the first selection node under the passed root
-      SoSearchAction sa;
-      sa.setFind(SoSearchAction::TYPE);
-      sa.setInterest(SoSearchAction::FIRST);
-      sa.setType(SoSelection::getClassTypeId());
-      sa.apply(node);
-   
-      // Cache this new path
-      if (selPath != NULL)
-         selPath->unref();
-      selPath = sa.getPath();
-      if (selPath != NULL) {
-         selPath = selPath->copy();
-         selPath->ref();
-      }
-   }
-   
-   // Render the selected paths!
-   if (selPath != NULL) {	
-      SoSelection *sel = (SoSelection *) selPath->getTail();
-      if (sel->getNumSelected() > 0) {
-         // Keep the length from the root to the selection
-         // as an optimization so we can reuse this data
-         int reusablePathLength = selPath->getLength();
+    node->ref();
 
-         // For each selection path, we need the full path from
-	 // the passed root to render, else we may not have a camera.
-         for (int j = 0; j < sel->getNumSelected(); j++) {
-            // Continue the path down to the selected object.
-            // No need to deal with p[0] since that is the sel node.
-            SoPath *p = sel->getPath(j);
-            for (int k = 1; k < p->getLength(); k++)
-               selPath->append(p->getIndex(k));
+    // Do we have to search for the selection node?
+    // Only if our cached path is NULL,
+    // or the action is being applied to a different scene,
+    // or the tail of our existing path is no longer a selection
+    // node (for instance if that node was removed from the scene).
+    if ((selPath == NULL) || (selPath->getHead() != node) ||
+        (!selPath->getTail()->isOfType(SoSelection::getClassTypeId()))) {
 
-            // Render the selected shape
-            SoGLRenderAction::apply(selPath);
-	
-            // Restore selPath for reuse
-            selPath->truncate(reusablePathLength);
-         }
-      }
-   }
-   
-   node->unref();
-}    
+        // Find the first selection node under the passed root
+        SoSearchAction sa;
+        sa.setFind(SoSearchAction::TYPE);
+        sa.setInterest(SoSearchAction::FIRST);
+        sa.setType(SoSelection::getClassTypeId());
+        sa.apply(node);
+
+        // Cache this new path
+        if (selPath != NULL)
+            selPath->unref();
+        selPath = sa.getPath();
+        if (selPath != NULL) {
+            selPath = selPath->copy();
+            selPath->ref();
+        }
+    }
+
+    // Render the selected paths!
+    if (selPath != NULL) {
+        SoSelection *sel = (SoSelection *)selPath->getTail();
+        if (sel->getNumSelected() > 0) {
+            // Keep the length from the root to the selection
+            // as an optimization so we can reuse this data
+            int reusablePathLength = selPath->getLength();
+
+            // For each selection path, we need the full path from
+            // the passed root to render, else we may not have a camera.
+            for (int j = 0; j < sel->getNumSelected(); j++) {
+                // Continue the path down to the selected object.
+                // No need to deal with p[0] since that is the sel node.
+                SoPath *p = sel->getPath(j);
+                for (int k = 1; k < p->getLength(); k++)
+                    selPath->append(p->getIndex(k));
+
+                // Render the selected shape
+                SoGLRenderAction::apply(selPath);
+
+                // Restore selPath for reuse
+                selPath->truncate(reusablePathLength);
+            }
+        }
+    }
+
+    node->unref();
+}
 
 //
 // Function stubs: we do not highlight paths and pathLists.
 //
 void
-ShowSelectionRenderAction::apply(SoPath *path)
-{ SoGLRenderAction::apply(path); }
+ShowSelectionRenderAction::apply(SoPath *path) {
+    SoGLRenderAction::apply(path);
+}
 
 void
-ShowSelectionRenderAction::apply(const SoPathList &pathList, SbBool obeysRules)
-{ SoGLRenderAction::apply(pathList, obeysRules); }
+ShowSelectionRenderAction::apply(const SoPathList &pathList,
+                                 SbBool            obeysRules) {
+    SoGLRenderAction::apply(pathList, obeysRules);
+}

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,7 +45,7 @@
  |   $Revision: 1.1 $
  |
  |   Description:
- |	This file contains the declaration of the engines used by 
+ |	This file contains the declaration of the engines used by
  |      linkages
  |
  |   Classes:
@@ -64,8 +64,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_LINK_ENGINES_
-#define  _SO_LINK_ENGINES_
+#ifndef _SO_LINK_ENGINES_
+#define _SO_LINK_ENGINES_
 
 #include <Inventor/engines/SoSubEngine.h>
 #include <Inventor/fields/SoSFBool.h>
@@ -80,27 +80,25 @@
 class EndPointFromParamsEngine : public SoEngine {
 
     SO_ENGINE_HEADER(EndPointFromParamsEngine);
-    
-  public:
 
+  public:
     // Inputs
-    SoSFVec3f	inOrigin;
-    SoSFFloat	inSize;
-    SoSFFloat	inAngle;
-    
+    SoSFVec3f inOrigin;
+    SoSFFloat inSize;
+    SoSFFloat inAngle;
+
     // Output
     // The endPoint of a link given origin, size, and angle.
-    SoEngineOutput outEndPoint;	     // (SoSFVec3f) 
-    
+    SoEngineOutput outEndPoint; // (SoSFVec3f)
+
     // Constructor
     EndPointFromParamsEngine();
-    
-  SoINTERNAL public:
 
+    SoINTERNAL
+  public:
     static void initClass();
 
   private:
-
     // Destructor
     virtual ~EndPointFromParamsEngine();
 
@@ -115,27 +113,25 @@ class EndPointFromParamsEngine : public SoEngine {
 class LinkEngine : public SoEngine {
 
     SO_ENGINE_HEADER(LinkEngine);
-    
-  public:
 
+  public:
     // Inputs
-    SoSFVec3f	inOrigin;
-    SoSFVec3f	inEndPoint;
-    
+    SoSFVec3f inOrigin;
+    SoSFVec3f inEndPoint;
+
     // Output
     // The endPoint of a link given origin, size, and angle.
-    SoEngineOutput outSize;	     // (SoSFFloat) 
-    SoEngineOutput outAngle;	     // (SoSFFloat) 
-    
+    SoEngineOutput outSize;  // (SoSFFloat)
+    SoEngineOutput outAngle; // (SoSFFloat)
+
     // Constructor
     LinkEngine();
-    
-  SoINTERNAL public:
 
+    SoINTERNAL
+  public:
     static void initClass();
 
   private:
-
     // Destructor
     virtual ~LinkEngine();
 
@@ -150,28 +146,26 @@ class LinkEngine : public SoEngine {
 class RivetHingeEngine : public SoEngine {
 
     SO_ENGINE_HEADER(RivetHingeEngine);
-    
-  public:
 
+  public:
     // Inputs
-    SoSFVec3f	inOrigin;
-    SoSFFloat	inSize;
-    SoSFVec3f	inHingePoint;
-    
+    SoSFVec3f inOrigin;
+    SoSFFloat inSize;
+    SoSFVec3f inHingePoint;
+
     // Outputs
     // outError is TRUE if size is too short to reach the hinge point.
-    SoEngineOutput outAngle;	     // (SoSFFloat) 
-    SoEngineOutput outError;	     // (SoSFBool) 
-    
+    SoEngineOutput outAngle; // (SoSFFloat)
+    SoEngineOutput outError; // (SoSFBool)
+
     // Constructor
     RivetHingeEngine();
-    
-  SoINTERNAL public:
 
+    SoINTERNAL
+  public:
     static void initClass();
 
   private:
-
     // Destructor
     virtual ~RivetHingeEngine();
 
@@ -186,30 +180,28 @@ class RivetHingeEngine : public SoEngine {
 class DoubleLinkMoveOriginEngine : public SoEngine {
 
     SO_ENGINE_HEADER(DoubleLinkMoveOriginEngine);
-    
-  public:
 
+  public:
     // Inputs
-    SoSFVec3f	inOrigin1;
-    SoSFVec3f	inOrigin2;
-    SoSFFloat	inSize1;
-    SoSFFloat	inSize2;
-    SoSFVec3f	inSharedPoint;
-    
+    SoSFVec3f inOrigin1;
+    SoSFVec3f inOrigin2;
+    SoSFFloat inSize1;
+    SoSFFloat inSize2;
+    SoSFVec3f inSharedPoint;
+
     // Outputs
     // outError is TRUE if size is too short to reach the hinge point.
-    SoEngineOutput outSharedPoint;   // (SoSFVec3f) 
-    SoEngineOutput outError;	     // (SoSFBool) 
-    
+    SoEngineOutput outSharedPoint; // (SoSFVec3f)
+    SoEngineOutput outError;       // (SoSFBool)
+
     // Constructor
     DoubleLinkMoveOriginEngine();
-    
-  SoINTERNAL public:
 
+    SoINTERNAL
+  public:
     static void initClass();
 
   private:
-
     // Destructor
     virtual ~DoubleLinkMoveOriginEngine();
 
@@ -224,29 +216,27 @@ class DoubleLinkMoveOriginEngine : public SoEngine {
 class DoubleLinkMoveSharedPtEngine : public SoEngine {
 
     SO_ENGINE_HEADER(DoubleLinkMoveSharedPtEngine);
-    
-  public:
 
+  public:
     // Inputs
-    SoSFVec3f	inOrigin1;
-    SoSFVec3f	inOrigin2;
-    SoSFVec3f	inSharedPoint;
-    
+    SoSFVec3f inOrigin1;
+    SoSFVec3f inOrigin2;
+    SoSFVec3f inSharedPoint;
+
     // Outputs
     // outError is TRUE if size is too short to reach the hinge point.
-    SoEngineOutput outSize1;         // (SoSFFloat) 
-    SoEngineOutput outSize2;         // (SoSFFloat) 
-    SoEngineOutput outError;	     // (SoSFBool) 
-    
+    SoEngineOutput outSize1; // (SoSFFloat)
+    SoEngineOutput outSize2; // (SoSFFloat)
+    SoEngineOutput outError; // (SoSFBool)
+
     // Constructor
     DoubleLinkMoveSharedPtEngine();
-    
-  SoINTERNAL public:
 
+    SoINTERNAL
+  public:
     static void initClass();
 
   private:
-
     // Destructor
     virtual ~DoubleLinkMoveSharedPtEngine();
 
@@ -261,28 +251,26 @@ class DoubleLinkMoveSharedPtEngine : public SoEngine {
 class PistonErrorEngine : public SoEngine {
 
     SO_ENGINE_HEADER(PistonErrorEngine);
-    
-  public:
 
+  public:
     // Inputs
-    SoSFVec3f	inOrigin1;
-    SoSFVec3f	inOrigin2;
-    SoSFFloat	inSize1;
-    SoSFFloat	inSize2;
-    
+    SoSFVec3f inOrigin1;
+    SoSFVec3f inOrigin2;
+    SoSFFloat inSize1;
+    SoSFFloat inSize2;
+
     // Outputs
     // outError is TRUE if origins are too far or too close to each other.
-    SoEngineOutput outError;	     // (SoSFBool) 
-    
+    SoEngineOutput outError; // (SoSFBool)
+
     // Constructor
     PistonErrorEngine();
-    
-  SoINTERNAL public:
 
+    SoINTERNAL
+  public:
     static void initClass();
 
   private:
-
     // Destructor
     virtual ~PistonErrorEngine();
 
@@ -297,24 +285,22 @@ class PistonErrorEngine : public SoEngine {
 class ZAngleFromRotationEngine : public SoEngine {
 
     SO_ENGINE_HEADER(ZAngleFromRotationEngine);
-    
-  public:
 
+  public:
     // Inputs
-    SoSFRotation   inRotation;
-    
+    SoSFRotation inRotation;
+
     // Outputs
-    SoEngineOutput outAngle;      // (SoSFFloat)
-    
+    SoEngineOutput outAngle; // (SoSFFloat)
+
     // Constructor
     ZAngleFromRotationEngine();
-    
-  SoINTERNAL public:
 
+    SoINTERNAL
+  public:
     static void initClass();
 
   private:
-
     // Destructor
     virtual ~ZAngleFromRotationEngine();
 
@@ -322,4 +308,4 @@ class ZAngleFromRotationEngine : public SoEngine {
     virtual void evaluate();
 };
 
-#endif  /* _SO_LINK_ENGINES_ */
+#endif /* _SO_LINK_ENGINES_ */

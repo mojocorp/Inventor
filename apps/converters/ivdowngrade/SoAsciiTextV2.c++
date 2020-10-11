@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -70,8 +70,8 @@ SoAsciiTextV2::initClass()
 
     // Tell the type system whenever it wants to create something
     // of type SoAsciiText to create a SoAsciiTextV2
-    SoType::overrideType(
-		 SoAsciiText::getClassTypeId(), &SoAsciiTextV2::createInstance);
+    SoType::overrideType(SoAsciiText::getClassTypeId(),
+                         &SoAsciiTextV2::createInstance);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -95,9 +95,7 @@ SoAsciiTextV2::SoAsciiTextV2()
 SoAsciiTextV2::~SoAsciiTextV2()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-    
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -112,25 +110,32 @@ SoAsciiTextV2::convert(SoAsciiTextV2 *asciiText)
 ////////////////////////////////////////////////////////////////////////
 {
     SoText3 *text3 = new SoText3;
-    
+
     // Copy field values from AsciiText to the alternate rep Text3
-    COPY_FIELD(text3, asciiText, string);  // text3->string = asciiText->string
-    COPY_FIELD(text3, asciiText, spacing); // text3->spacing = asciiText->spacing
-	
-    if (! asciiText->justification.isDefault()) {
-	SoText3::Justification just;
-	switch (asciiText->justification.getValue()) {
-	    case SoAsciiText::LEFT:	just = SoText3::LEFT;   break;
-	    case SoAsciiText::RIGHT:    just = SoText3::RIGHT;  break;
-	    case SoAsciiText::CENTER:   just = SoText3::CENTER; break;
-	}
-	text3->justification = just;
+    COPY_FIELD(text3, asciiText, string); // text3->string = asciiText->string
+    COPY_FIELD(text3, asciiText,
+               spacing); // text3->spacing = asciiText->spacing
+
+    if (!asciiText->justification.isDefault()) {
+        SoText3::Justification just;
+        switch (asciiText->justification.getValue()) {
+        case SoAsciiText::LEFT:
+            just = SoText3::LEFT;
+            break;
+        case SoAsciiText::RIGHT:
+            just = SoText3::RIGHT;
+            break;
+        case SoAsciiText::CENTER:
+            just = SoText3::CENTER;
+            break;
+        }
+        text3->justification = just;
     }
-	
+
     text3->parts = SoText3::FRONT;
-    
+
     //??? what do we do with SoAsciiText::width field?
-    
+
     return text3;
 }
 
@@ -147,25 +152,32 @@ SoAsciiTextV2::convert(SoAsciiText *asciiText)
 ////////////////////////////////////////////////////////////////////////
 {
     SoText3 *text3 = new SoText3;
-    
+
     // Copy field values from AsciiText to the alternate rep Text3
-    COPY_FIELD(text3, asciiText, string);  // text3->string = asciiText->string
-    COPY_FIELD(text3, asciiText, spacing); // text3->spacing = asciiText->spacing
-	
-    if (! asciiText->justification.isDefault()) {
-	SoText3::Justification just;
-	switch (asciiText->justification.getValue()) {
-	    case SoAsciiText::LEFT:	just = SoText3::LEFT;   break;
-	    case SoAsciiText::RIGHT:    just = SoText3::RIGHT;  break;
-	    case SoAsciiText::CENTER:   just = SoText3::CENTER; break;
-	}
-	text3->justification = just;
+    COPY_FIELD(text3, asciiText, string); // text3->string = asciiText->string
+    COPY_FIELD(text3, asciiText,
+               spacing); // text3->spacing = asciiText->spacing
+
+    if (!asciiText->justification.isDefault()) {
+        SoText3::Justification just;
+        switch (asciiText->justification.getValue()) {
+        case SoAsciiText::LEFT:
+            just = SoText3::LEFT;
+            break;
+        case SoAsciiText::RIGHT:
+            just = SoText3::RIGHT;
+            break;
+        case SoAsciiText::CENTER:
+            just = SoText3::CENTER;
+            break;
+        }
+        text3->justification = just;
     }
-	
+
     text3->parts = SoText3::FRONT;
-    
+
     //??? what do we do with SoAsciiText::width field?
-    
+
     return text3;
 }
 
@@ -179,24 +191,24 @@ SoAsciiTextV2::write(SoWriteAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoOutput	*out = action->getOutput();
+    SoOutput *out = action->getOutput();
 
     // In write-reference counting phase
     if (out->getStage() == SoOutput::COUNT_REFS) {
-	// Only do this once!
-	if (alternateRep.isDefault()) {
-	    alternateRep = SoAsciiTextV2::convert(this);
-	    
-	    // Inventor V2.0 cannot read unknown nodes with SoSFEnum fields.
-	    // Don't let any enums get written out.
-	    // NOTE: a better solution might be to write the enum as a string,
-	    // and have the upgrader for this node convert that string back
-	    // to an enum value. But this bug was found too close to the 2.1 MR date
-	    // to do that more complicated fix. Instead, just don't write the enum.
-	    justification.setDefault(TRUE);
-	}
+        // Only do this once!
+        if (alternateRep.isDefault()) {
+            alternateRep = SoAsciiTextV2::convert(this);
+
+            // Inventor V2.0 cannot read unknown nodes with SoSFEnum fields.
+            // Don't let any enums get written out.
+            // NOTE: a better solution might be to write the enum as a string,
+            // and have the upgrader for this node convert that string back
+            // to an enum value. But this bug was found too close to the 2.1 MR
+            // date to do that more complicated fix. Instead, just don't write
+            // the enum.
+            justification.setDefault(TRUE);
+        }
     }
-    
+
     SoAsciiText::write(action);
 }
-

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -47,8 +47,8 @@
 #include "_SoXtColorEditor.h"
 #include "MyThumbWheel.h"
 
-void usage(char *name)
-{
+void
+usage(char *name) {
     printf("Usage:  %s whichComp\n", name);
     printf(" whichComp : m = simple material Editor\n");
     printf("             M = material Editor\n");
@@ -60,29 +60,42 @@ void usage(char *name)
 }
 
 int
-main( int argc , char *argv[])
-{
+main(int argc, char *argv[]) {
     if (argc != 2)
-	usage(argv[0]);
-    
+        usage(argv[0]);
+
     // Initialize Inventor and Xt
     Widget mainWindow = SoXt::init(argv[0]);
-    
+
     //
     // Create the right component
     //
     SoXtComponent *comp;
-    switch(*argv[1]) {
-	case 'm': comp = new MySimpleMaterialEditor(mainWindow); break;
-	case 'M': comp = new SoXtMaterialEditor(mainWindow); break;
-    case 'c': comp = new _SoXtColorEditor(mainWindow); break;
-	case 't': comp = new MyThumbWheel(mainWindow); break;
-	case 'p': comp = new MyMaterialPalette(mainWindow); break;
-	case 'T': comp = new MyTextureEditor(mainWindow); break;
-	default: usage(argv[0]); break;
+    switch (*argv[1]) {
+    case 'm':
+        comp = new MySimpleMaterialEditor(mainWindow);
+        break;
+    case 'M':
+        comp = new SoXtMaterialEditor(mainWindow);
+        break;
+    case 'c':
+        comp = new _SoXtColorEditor(mainWindow);
+        break;
+    case 't':
+        comp = new MyThumbWheel(mainWindow);
+        break;
+    case 'p':
+        comp = new MyMaterialPalette(mainWindow);
+        break;
+    case 'T':
+        comp = new MyTextureEditor(mainWindow);
+        break;
+    default:
+        usage(argv[0]);
+        break;
     }
     comp->show();
     XtRealizeWidget(mainWindow);
-    
+
     SoXt::mainLoop();
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,9 +53,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfWeeder::IfWeeder()
-{
-}
+IfWeeder::IfWeeder() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -63,9 +61,7 @@ IfWeeder::IfWeeder()
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfWeeder::~IfWeeder()
-{
-}
+IfWeeder::~IfWeeder() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -74,8 +70,7 @@ IfWeeder::~IfWeeder()
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfWeeder::weed(SoNode *root)
-{
+IfWeeder::weed(SoNode *root) {
     // Weed out duplicate and unused materials from all SoMaterial
     // nodes in the graph
     weedMaterials(root);
@@ -89,9 +84,9 @@ IfWeeder::weed(SoNode *root)
 /////////////////////////////////////////////////////////////////////////////
 
 struct IfWeederMaterialEntry {
-    SoMaterial		*material;	// Pointer to material
-    SoNodeList		shapes;		// IfShapes that use material
-    SbBool		canWeed;	// TRUE if material can be weeded
+    SoMaterial *material; // Pointer to material
+    SoNodeList  shapes;   // IfShapes that use material
+    SbBool      canWeed;  // TRUE if material can be weeded
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -102,8 +97,7 @@ struct IfWeederMaterialEntry {
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfWeeder::weedMaterials(SoNode *root)
-{
+IfWeeder::weedMaterials(SoNode *root) {
     // Find all SoMaterial nodes in the scene graph and determine
     // which shape nodes are affected by each one. Note that because
     // materials may be multiply instanced, this is a little more
@@ -116,16 +110,16 @@ IfWeeder::weedMaterials(SoNode *root)
     // Weed each material in the resulting list
     int i;
     for (i = 0; i < materialList->getLength(); i++) {
-	IfWeederMaterialEntry *entry = (IfWeederMaterialEntry *)
-	    (*materialList)[i];
+        IfWeederMaterialEntry *entry =
+            (IfWeederMaterialEntry *)(*materialList)[i];
 
-	if (entry->canWeed)
-	    weedMaterial(root, entry);
+        if (entry->canWeed)
+            weedMaterial(root, entry);
     }
 
     // Clean up
     for (i = 0; i < materialList->getLength(); i++)
-	delete (IfWeederMaterialEntry *) (*materialList)[i];
+        delete (IfWeederMaterialEntry *)(*materialList)[i];
     delete materialList;
 }
 
@@ -137,8 +131,7 @@ IfWeeder::weedMaterials(SoNode *root)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfWeeder::findMaterialsAndShapes(SoNode *root)
-{
+IfWeeder::findMaterialsAndShapes(SoNode *root) {
     // Since we know the structure of the given scene graph (which is
     // after fixing has occurred), we can be efficient here. Just
     // search for all materials in the scene. For each material, the
@@ -171,96 +164,95 @@ IfWeeder::findMaterialsAndShapes(SoNode *root)
     materialList = new SbPList;
     for (int i = 0; i < sa.getPaths().getLength(); i++) {
 
-	const SoPath *path = (const SoPath *) sa.getPaths()[i];
+        const SoPath *path = (const SoPath *)sa.getPaths()[i];
 
-	ASSERT(path->getLength() > 1);
-	ASSERT(path->getTail()->getTypeId() == SoMaterial::getClassTypeId());
+        ASSERT(path->getLength() > 1);
+        ASSERT(path->getTail()->getTypeId() == SoMaterial::getClassTypeId());
 
-	SoMaterial  *material = (SoMaterial *) path->getTail();
+        SoMaterial *material = (SoMaterial *)path->getTail();
 
-	// Add to the dictionary if necessary, or use the existing
-	// entry
-	void *entryPtr;
-	IfWeederMaterialEntry *entry;
-	if (materialDict.find((unsigned long) material, entryPtr)) {
-	    entry = (IfWeederMaterialEntry *) entryPtr;
-	    if (! entry->canWeed)
-		continue;
-	}
-	else {
-	    entry = new IfWeederMaterialEntry;
-	    entry->material = material;
-	    entry->canWeed  = TRUE;
-	    materialDict.enter((unsigned long) material, entry);
-	    materialList->append(entry);
-	}
+        // Add to the dictionary if necessary, or use the existing
+        // entry
+        void *                 entryPtr;
+        IfWeederMaterialEntry *entry;
+        if (materialDict.find((unsigned long)material, entryPtr)) {
+            entry = (IfWeederMaterialEntry *)entryPtr;
+            if (!entry->canWeed)
+                continue;
+        } else {
+            entry = new IfWeederMaterialEntry;
+            entry->material = material;
+            entry->canWeed = TRUE;
+            materialDict.enter((unsigned long)material, entry);
+            materialList->append(entry);
+        }
 
-	// If any node above the material in the path is an opaque
-	// group, we can't really weed this material
-	int j;
-	for (j = path->getLength() - 2; j >= 0; j--) {
-	    if (IfTypes::isOpaqueGroupType(path->getNode(j)->getTypeId())) {
-		entry->canWeed = FALSE;
-		break;
-	    }
-	}
-	if (! entry->canWeed)
-	    continue;
+        // If any node above the material in the path is an opaque
+        // group, we can't really weed this material
+        int j;
+        for (j = path->getLength() - 2; j >= 0; j--) {
+            if (IfTypes::isOpaqueGroupType(path->getNode(j)->getTypeId())) {
+                entry->canWeed = FALSE;
+                break;
+            }
+        }
+        if (!entry->canWeed)
+            continue;
 
-	ASSERT(path->getNodeFromTail(1)->
-	       isOfType(SoSeparator::getClassTypeId()));
+        ASSERT(
+            path->getNodeFromTail(1)->isOfType(SoSeparator::getClassTypeId()));
 
-	SoSeparator *parent = (SoSeparator *) path->getNodeFromTail(1);
-	int materialIndex = path->getIndexFromTail(0);
+        SoSeparator *parent = (SoSeparator *)path->getNodeFromTail(1);
+        int          materialIndex = path->getIndexFromTail(0);
 
-	// Find all shapes using the material, adding them to the list
-	// of shapes in the material's entry. Store all the paths to
-	// them in this list
-	SoPathList pathsToShapes;
-	for (int type = 0; type < shapeTypes.getLength(); type++) {
-	    sa2.setType(shapeTypes[type]);
-	    sa2.apply(parent);
-	    for (j = 0; j < sa2.getPaths().getLength(); j++)
-		pathsToShapes.append(sa2.getPaths()[j]);
-	}
+        // Find all shapes using the material, adding them to the list
+        // of shapes in the material's entry. Store all the paths to
+        // them in this list
+        SoPathList pathsToShapes;
+        for (int type = 0; type < shapeTypes.getLength(); type++) {
+            sa2.setType(shapeTypes[type]);
+            sa2.apply(parent);
+            for (j = 0; j < sa2.getPaths().getLength(); j++)
+                pathsToShapes.append(sa2.getPaths()[j]);
+        }
 
-	for (j = 0; j < pathsToShapes.getLength(); j++) {
+        for (j = 0; j < pathsToShapes.getLength(); j++) {
 
-	    const SoPath *shapePath = (const SoPath *) pathsToShapes[j];
+            const SoPath *shapePath = (const SoPath *)pathsToShapes[j];
 
-	    // We can't weed the material at all if a shape other than
-	    // the one we created is found
-	    SoType tailType = shapePath->getTail()->getTypeId();
-	    if (tailType != SoIndexedTriangleStripSet::getClassTypeId() &&
-		tailType != SoIndexedFaceSet::getClassTypeId()) {
-		entry->canWeed = FALSE;
-		break;
-	    }
+            // We can't weed the material at all if a shape other than
+            // the one we created is found
+            SoType tailType = shapePath->getTail()->getTypeId();
+            if (tailType != SoIndexedTriangleStripSet::getClassTypeId() &&
+                tailType != SoIndexedFaceSet::getClassTypeId()) {
+                entry->canWeed = FALSE;
+                break;
+            }
 
-	    // Make sure the shape comes after the material and does
-	    // not get its materials from a vertex property
-	    // node.
-	    else if (shapePath->getIndex(1) > materialIndex) {
-		SoIndexedShape *is = (SoIndexedShape *) shapePath->getTail();
+            // Make sure the shape comes after the material and does
+            // not get its materials from a vertex property
+            // node.
+            else if (shapePath->getIndex(1) > materialIndex) {
+                SoIndexedShape *is = (SoIndexedShape *)shapePath->getTail();
 
-		// ??? If the shape's materialIndex field has the
-		// ??? default value, we assume that it might have to
-		// ??? access all the material values. To check, we would
-		// ??? have to look at the coordIndex values if the
-		// ??? material binding is not OVERALL. This change could
-		// ??? not be done in time for the release. See bug 311071.
-		if (is->materialIndex.getNum() == 1 &&
-		    is->materialIndex[0] < 0) {
-		    entry->canWeed = FALSE;
-		    break;
-		}
+                // ??? If the shape's materialIndex field has the
+                // ??? default value, we assume that it might have to
+                // ??? access all the material values. To check, we would
+                // ??? have to look at the coordIndex values if the
+                // ??? material binding is not OVERALL. This change could
+                // ??? not be done in time for the release. See bug 311071.
+                if (is->materialIndex.getNum() == 1 &&
+                    is->materialIndex[0] < 0) {
+                    entry->canWeed = FALSE;
+                    break;
+                }
 
-		SoVertexProperty *vp =
-		    (SoVertexProperty *) is->vertexProperty.getValue();
-		if (vp == NULL || vp->orderedRGBA.getNum() == 0)
-		    entry->shapes.append(shapePath->getTail());
-	    }
-	}
+                SoVertexProperty *vp =
+                    (SoVertexProperty *)is->vertexProperty.getValue();
+                if (vp == NULL || vp->orderedRGBA.getNum() == 0)
+                    entry->shapes.append(shapePath->getTail());
+            }
+        }
     }
 }
 
@@ -271,23 +263,22 @@ IfWeeder::findMaterialsAndShapes(SoNode *root)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfWeeder::weedMaterial(SoNode *root, IfWeederMaterialEntry *entry)
-{
+IfWeeder::weedMaterial(SoNode *root, IfWeederMaterialEntry *entry) {
     // If the material affects no shapes at all, get rid of it. This
     // can happen when vertex property nodes are used.
     if (entry->shapes.getLength() == 0) {
-	SoSearchAction sa;
-	sa.setNode(entry->material);
-	sa.setInterest(SoSearchAction::ALL);
-	sa.apply(root);
-	for (int i = 0; i < sa.getPaths().getLength(); i++) {
-	    SoPath *path = sa.getPaths()[i];
-	    SoSeparator *parent = (SoSeparator *) path->getNodeFromTail(1);
-	    int index = path->getIndexFromTail(0);
-	    ASSERT(parent->isOfType(SoSeparator::getClassTypeId()));
-	    ASSERT(parent->getChild(index) == entry->material);
-	    parent->removeChild(index);
-	}
+        SoSearchAction sa;
+        sa.setNode(entry->material);
+        sa.setInterest(SoSearchAction::ALL);
+        sa.apply(root);
+        for (int i = 0; i < sa.getPaths().getLength(); i++) {
+            SoPath *     path = sa.getPaths()[i];
+            SoSeparator *parent = (SoSeparator *)path->getNodeFromTail(1);
+            int          index = path->getIndexFromTail(0);
+            ASSERT(parent->isOfType(SoSeparator::getClassTypeId()));
+            ASSERT(parent->getChild(index) == entry->material);
+            parent->removeChild(index);
+        }
     }
 
     // Remove all material values from the material node that are
@@ -309,8 +300,7 @@ IfWeeder::weedMaterial(SoNode *root, IfWeederMaterialEntry *entry)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfWeeder::removeDuplicateMaterials(IfWeederMaterialEntry *entry)
-{
+IfWeeder::removeDuplicateMaterials(IfWeederMaterialEntry *entry) {
     ////////////////////////////////////////////
     //
     // To find duplicate materials, we create a hash table of material
@@ -328,8 +318,8 @@ IfWeeder::removeDuplicateMaterials(IfWeederMaterialEntry *entry)
 
     // Instances of this structure is stored in the hash table.
     struct IfWeederMaterialInfo {
-	int			index;	// Index of material value
-	IfWeederMaterialInfo	*next;	// For making lists in the hash table
+        int                   index; // Index of material value
+        IfWeederMaterialInfo *next;  // For making lists in the hash table
     };
 
     // Access the fields of the material node for faster referencing
@@ -347,7 +337,7 @@ IfWeeder::removeDuplicateMaterials(IfWeederMaterialEntry *entry)
     IfWeederMaterialInfo *infos = new IfWeederMaterialInfo[numMaterials];
 
     // Create an array to hold the duplicate info
-    int *duplicates = new int [numMaterials];
+    int *duplicates = new int[numMaterials];
 
     // Create a hash table of a reasonable size
     SbDict *hashTable = new SbDict(1 + numMaterials / 4);
@@ -358,80 +348,80 @@ IfWeeder::removeDuplicateMaterials(IfWeederMaterialEntry *entry)
 
     for (i = 0; i < numMaterials; i++) {
 
-	// Assume that there is no duplicate. We'll overwrite this if
-	// we find one below
-	duplicates[i] = -1;
+        // Assume that there is no duplicate. We'll overwrite this if
+        // we find one below
+        duplicates[i] = -1;
 
-	// Prepare an info instance to insert
-	infos[i].index = i;
-	infos[i].next  = NULL;
+        // Prepare an info instance to insert
+        infos[i].index = i;
+        infos[i].next = NULL;
 
-	// Compute a hash value for the material based on the material
-	// values
-	uint32_t hashKey = computeMaterialHashKey(i);
+        // Compute a hash value for the material based on the material
+        // values
+        uint32_t hashKey = computeMaterialHashKey(i);
 
-	// See if there is anything in the hash table with that key
-	void *entry;
-	if (hashTable->find(hashKey, entry)) {
-	    // Look for an exact match
-	    IfWeederMaterialInfo *info, *prevInfo = NULL;
-	    for (info = (IfWeederMaterialInfo *) entry;
-		 info != NULL; info = info->next) {
+        // See if there is anything in the hash table with that key
+        void *entry;
+        if (hashTable->find(hashKey, entry)) {
+            // Look for an exact match
+            IfWeederMaterialInfo *info, *prevInfo = NULL;
+            for (info = (IfWeederMaterialInfo *)entry; info != NULL;
+                 info = info->next) {
 
-		// If there's a match, record the duplicate
-		if (isSameMaterial(info->index, i)) {
-		    duplicates[i] = info->index;
-		    numMatches++;
-		    break;
-		}
+                // If there's a match, record the duplicate
+                if (isSameMaterial(info->index, i)) {
+                    duplicates[i] = info->index;
+                    numMatches++;
+                    break;
+                }
 
-		prevInfo = info;
-	    }
+                prevInfo = info;
+            }
 
-	    // If we didn't find a duplicate, add a new entry to the
-	    // end of the list
-	    if (duplicates[i] == -1) {
-		ASSERT(prevInfo != NULL);
-		prevInfo->next = &infos[i];
-	    }
-	}
+            // If we didn't find a duplicate, add a new entry to the
+            // end of the list
+            if (duplicates[i] == -1) {
+                ASSERT(prevInfo != NULL);
+                prevInfo->next = &infos[i];
+            }
+        }
 
-	// If there was nothing in the table for this key, add a new entry
-	else
-	    hashTable->enter(hashKey, &infos[i]);
+        // If there was nothing in the table for this key, add a new entry
+        else
+            hashTable->enter(hashKey, &infos[i]);
     }
 
     // We're done with the hash table
     delete hashTable;
-    delete [] infos;
+    delete[] infos;
 
     // Now we can adjust the material indices in the shapes affected
     // by the material. Don't bother doing this unless we weeded at
     // least one material.
     if (numMatches > 0) {
 
-	for (i = 0; i < entry->shapes.getLength(); i++) { 
+        for (i = 0; i < entry->shapes.getLength(); i++) {
 
-	    // Adjust material indices to use only original materials,
-	    // not duplicates
-	    SoIndexedShape *iShape = (SoIndexedShape *) entry->shapes[i];
-	    int num = iShape->materialIndex.getNum();
-	    int32_t *m = iShape->materialIndex.startEditing();
-	    for (int i = 0; i < num; i++) {
+            // Adjust material indices to use only original materials,
+            // not duplicates
+            SoIndexedShape *iShape = (SoIndexedShape *)entry->shapes[i];
+            int             num = iShape->materialIndex.getNum();
+            int32_t *       m = iShape->materialIndex.startEditing();
+            for (int i = 0; i < num; i++) {
 
-		// If the material index is off the end, cycle it
-		if (m[i] >= numMaterials)
-		    m[i] %= numMaterials;
+                // If the material index is off the end, cycle it
+                if (m[i] >= numMaterials)
+                    m[i] %= numMaterials;
 
-		// Now check for duplicates
-		if (m[i] >= 0 && duplicates[m[i]] != -1)
-		    m[i] = duplicates[m[i]];
-	    }
-	    iShape->materialIndex.finishEditing();
-	}
+                // Now check for duplicates
+                if (m[i] >= 0 && duplicates[m[i]] != -1)
+                    m[i] = duplicates[m[i]];
+            }
+            iShape->materialIndex.finishEditing();
+        }
     }
 
-    delete [] duplicates;
+    delete[] duplicates;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -441,8 +431,7 @@ IfWeeder::removeDuplicateMaterials(IfWeederMaterialEntry *entry)
 /////////////////////////////////////////////////////////////////////////////
 
 uint32_t
-IfWeeder::computeMaterialHashKey(int index)
-{
+IfWeeder::computeMaterialHashKey(int index) {
     // Just use the diffuse color to compute a key, since it's most
     // likely to vary between materials
 
@@ -451,9 +440,8 @@ IfWeeder::computeMaterialHashKey(int index)
     // materials in the range 0-10000. We can do this because we know
     // the color values range from 0 to 1.
 
-    return (uint32_t) (diff[index][0] * 8871 +
-		       diff[index][1] * 1104 +
-		       diff[index][2] *   25);
+    return (uint32_t)(diff[index][0] * 8871 + diff[index][1] * 1104 +
+                      diff[index][2] * 25);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -464,26 +452,25 @@ IfWeeder::computeMaterialHashKey(int index)
 /////////////////////////////////////////////////////////////////////////////
 
 SbBool
-IfWeeder::isSameMaterial(int i1, int i2)
-{
+IfWeeder::isSameMaterial(int i1, int i2) {
     // Trivial case of same indices
     if (i1 == i2)
-	return TRUE;
+        return TRUE;
 
     // Diffuse colors always have to be the same
     if (diff[i1] != diff[i2])
-	return FALSE;
+        return FALSE;
 
-#define TEST_FIELD(FIELD,VAR)						      \
-    if (curMaterial->FIELD.getNum() > 1 && VAR[i1] != VAR[i2])		      \
-	return FALSE
+#define TEST_FIELD(FIELD, VAR)                                                 \
+    if (curMaterial->FIELD.getNum() > 1 && VAR[i1] != VAR[i2])                 \
+    return FALSE
 
     // The rest depends on what varies
-    TEST_FIELD(ambientColor,  ambi);
+    TEST_FIELD(ambientColor, ambi);
     TEST_FIELD(specularColor, spec);
     TEST_FIELD(emissiveColor, emis);
-    TEST_FIELD(shininess,     shin);
-    TEST_FIELD(transparency,  tran);
+    TEST_FIELD(shininess, shin);
+    TEST_FIELD(transparency, tran);
 
 #undef TEST_FIELD
 
@@ -499,12 +486,11 @@ IfWeeder::isSameMaterial(int i1, int i2)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfWeeder::removeUnusedMaterials(IfWeederMaterialEntry *entry)
-{
+IfWeeder::removeUnusedMaterials(IfWeederMaterialEntry *entry) {
     SoMaterial *material = entry->material;
-    int numMaterials = material->diffuseColor.getNum();
+    int         numMaterials = material->diffuseColor.getNum();
     if (numMaterials == 0)
-	return;
+        return;
 
     ////////////////////////////////////////////
     //
@@ -512,45 +498,45 @@ IfWeeder::removeUnusedMaterials(IfWeederMaterialEntry *entry)
     // (and how many) materials are used. Store the results in an
     // array of flags and a counter.
 
-    int i, numUsed = 0;
+    int     i, numUsed = 0;
     SbBool *materialUsed = new SbBool[numMaterials];
     for (i = 0; i < numMaterials; i++)
-	materialUsed[i] = FALSE;
-    for (i = 0; i < entry->shapes.getLength(); i++) { 
-	SoIndexedShape *iShape = (SoIndexedShape *) entry->shapes[i];
-	int numIndices = iShape->materialIndex.getNum();
-	const int32_t *oldIndices = iShape->materialIndex.getValues(0);
-	if (numIndices == 1) {
+        materialUsed[i] = FALSE;
+    for (i = 0; i < entry->shapes.getLength(); i++) {
+        SoIndexedShape *iShape = (SoIndexedShape *)entry->shapes[i];
+        int             numIndices = iShape->materialIndex.getNum();
+        const int32_t * oldIndices = iShape->materialIndex.getValues(0);
+        if (numIndices == 1) {
 
-	    // If there is only one material index, that means the
-	    // shape uses overall material binding, so we can set the
-	    // materialIndex field to the default value and skip the
-	    // shape.
-	    if (! materialUsed[0]) {
-		materialUsed[0] = TRUE;
-		numUsed++;
-	    }
-	    iShape->materialIndex = -1;
-	    iShape->materialIndex.setDefault(TRUE);
-	    continue;
-	}
-	for (int j = 0; j < numIndices; j++) {
-	    int mi = oldIndices[j];
-	    // The material index should have already been brought
-	    // into the correct range
-	    ASSERT(mi < numMaterials);
-	    if (mi >= 0 && ! materialUsed[mi]) {
-		materialUsed[mi] = TRUE;
-		numUsed++;
-	    }
-	}
+            // If there is only one material index, that means the
+            // shape uses overall material binding, so we can set the
+            // materialIndex field to the default value and skip the
+            // shape.
+            if (!materialUsed[0]) {
+                materialUsed[0] = TRUE;
+                numUsed++;
+            }
+            iShape->materialIndex = -1;
+            iShape->materialIndex.setDefault(TRUE);
+            continue;
+        }
+        for (int j = 0; j < numIndices; j++) {
+            int mi = oldIndices[j];
+            // The material index should have already been brought
+            // into the correct range
+            ASSERT(mi < numMaterials);
+            if (mi >= 0 && !materialUsed[mi]) {
+                materialUsed[mi] = TRUE;
+                numUsed++;
+            }
+        }
     }
 
     // If all materials are used, stop
     ASSERT(numUsed <= numMaterials);
     if (numUsed == numMaterials) {
-	delete [] materialUsed;
-	return;
+        delete[] materialUsed;
+        return;
     }
 
     ////////////////////////////////////////////
@@ -559,12 +545,12 @@ IfWeeder::removeUnusedMaterials(IfWeederMaterialEntry *entry)
     // to new ones. Store -1 for those materials that are not used.
 
     int *materialIndex = new int[numMaterials];
-    int curNewIndex = 0;
+    int  curNewIndex = 0;
     for (i = 0; i < numMaterials; i++) {
-	if (materialUsed[i])
-	    materialIndex[i] = curNewIndex++;
-	else
-	    materialIndex[i] = -1;
+        if (materialUsed[i])
+            materialIndex[i] = curNewIndex++;
+        else
+            materialIndex[i] = -1;
     }
     ASSERT(curNewIndex == numUsed);
 
@@ -572,34 +558,34 @@ IfWeeder::removeUnusedMaterials(IfWeederMaterialEntry *entry)
     //
     // Update the material indices in the shapes
 
-    for (i = 0; i < entry->shapes.getLength(); i++) { 
-	SoIndexedShape *iShape = (SoIndexedShape *) entry->shapes[i];
-	int numIndices = iShape->materialIndex.getNum();
-	if (numIndices == 1) {
+    for (i = 0; i < entry->shapes.getLength(); i++) {
+        SoIndexedShape *iShape = (SoIndexedShape *)entry->shapes[i];
+        int             numIndices = iShape->materialIndex.getNum();
+        if (numIndices == 1) {
 
-	    // If there is only one material index and its value is 0
-	    // or default, that means the shape uses overall material
-	    // binding, so we can skip the shape.
-	    if (iShape->materialIndex.isDefault() ||
-		iShape->materialIndex[0] == 0)
-		continue;
+            // If there is only one material index and its value is 0
+            // or default, that means the shape uses overall material
+            // binding, so we can skip the shape.
+            if (iShape->materialIndex.isDefault() ||
+                iShape->materialIndex[0] == 0)
+                continue;
 
-	    numIndices = iShape->coordIndex.getNum();
-	    iShape->materialIndex.setValues(0, numIndices,
-					    iShape->coordIndex.getValues(0));
-	}
-	int32_t *newIndices = iShape->materialIndex.startEditing();
-	for (i = 0; i < numIndices; i++) {
-	    int mi = newIndices[i];
-	    if (mi >= 0) {
-		// The material index should have already been brought
-		// into the correct range
-		ASSERT(mi < numMaterials);
-		newIndices[i] = materialIndex[mi];
-		ASSERT(newIndices[i] >= 0);
-	    }
-	}
-	iShape->materialIndex.finishEditing();
+            numIndices = iShape->coordIndex.getNum();
+            iShape->materialIndex.setValues(0, numIndices,
+                                            iShape->coordIndex.getValues(0));
+        }
+        int32_t *newIndices = iShape->materialIndex.startEditing();
+        for (i = 0; i < numIndices; i++) {
+            int mi = newIndices[i];
+            if (mi >= 0) {
+                // The material index should have already been brought
+                // into the correct range
+                ASSERT(mi < numMaterials);
+                newIndices[i] = materialIndex[mi];
+                ASSERT(newIndices[i] >= 0);
+            }
+        }
+        iShape->materialIndex.finishEditing();
     }
 
     ////////////////////////////////////////////
@@ -614,30 +600,30 @@ IfWeeder::removeUnusedMaterials(IfWeederMaterialEntry *entry)
     saveColors.setContainer(NULL);
     saveFloats.setContainer(NULL);
 
-#define COMPRESS_COLOR(FIELD)						      \
-    if (material->FIELD.getNum() > 1) {					      \
-	saveColors = material->FIELD;					      \
-	material->FIELD.setNum(numUsed);				      \
-	const SbColor *oldColors = saveColors.getValues(0);		      \
-	SbColor *newColors = material->FIELD.startEditing();		      \
-	curNewIndex = 0;						      \
-	for (i = 0; i < numMaterials; i++)				      \
-	    if (materialUsed[i])					      \
-		newColors[curNewIndex++] = oldColors[i];		      \
-	material->FIELD.finishEditing();				      \
+#define COMPRESS_COLOR(FIELD)                                                  \
+    if (material->FIELD.getNum() > 1) {                                        \
+        saveColors = material->FIELD;                                          \
+        material->FIELD.setNum(numUsed);                                       \
+        const SbColor *oldColors = saveColors.getValues(0);                    \
+        SbColor *      newColors = material->FIELD.startEditing();             \
+        curNewIndex = 0;                                                       \
+        for (i = 0; i < numMaterials; i++)                                     \
+            if (materialUsed[i])                                               \
+                newColors[curNewIndex++] = oldColors[i];                       \
+        material->FIELD.finishEditing();                                       \
     }
 
-#define COMPRESS_FLOAT(FIELD)						      \
-    if (material->FIELD.getNum() > 1) {					      \
-	saveFloats = material->FIELD;					      \
-	material->FIELD.setNum(numUsed);				      \
-	const float *oldFloats = saveFloats.getValues(0);		      \
-	float *newFloats = material->FIELD.startEditing();		      \
-	curNewIndex = 0;						      \
-	for (i = 0; i < numMaterials; i++)				      \
-	    if (materialUsed[i])					      \
-		newFloats[curNewIndex++] = oldFloats[i];		      \
-	material->FIELD.finishEditing();				      \
+#define COMPRESS_FLOAT(FIELD)                                                  \
+    if (material->FIELD.getNum() > 1) {                                        \
+        saveFloats = material->FIELD;                                          \
+        material->FIELD.setNum(numUsed);                                       \
+        const float *oldFloats = saveFloats.getValues(0);                      \
+        float *      newFloats = material->FIELD.startEditing();               \
+        curNewIndex = 0;                                                       \
+        for (i = 0; i < numMaterials; i++)                                     \
+            if (materialUsed[i])                                               \
+                newFloats[curNewIndex++] = oldFloats[i];                       \
+        material->FIELD.finishEditing();                                       \
     }
 
     COMPRESS_COLOR(ambientColor);
@@ -648,8 +634,8 @@ IfWeeder::removeUnusedMaterials(IfWeederMaterialEntry *entry)
     COMPRESS_FLOAT(transparency);
 
     // Clean up
-    delete [] materialUsed;
-    delete [] materialIndex;
+    delete[] materialUsed;
+    delete[] materialIndex;
 
 #undef COMPRESS_COLOR
 #undef COMPRESS_FLOAT

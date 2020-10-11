@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -82,9 +82,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfCollector::IfCollector()
-{
-}
+IfCollector::IfCollector() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -92,9 +90,7 @@ IfCollector::IfCollector()
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfCollector::~IfCollector()
-{
-}
+IfCollector::~IfCollector() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -105,8 +101,7 @@ IfCollector::~IfCollector()
 
 int
 IfCollector::collect(SoNode *sceneRoot, IfShape *&shapeList,
-		     SbBool doTexCoords)
-{
+                     SbBool doTexCoords) {
     doingTexCoords = doTexCoords;
 
     // These are all the types that we consider to be "shapes"; in
@@ -124,16 +119,16 @@ IfCollector::collect(SoNode *sceneRoot, IfShape *&shapeList,
     // merge the returned lists of paths.
 
     SoCallbackAction cba;
-    int i;
+    int              i;
     for (i = 0; i < shapeTypes.getLength(); i++)
-	cba.addPreCallback(shapeTypes[i], storePathCB, this);
+        cba.addPreCallback(shapeTypes[i], storePathCB, this);
     cba.apply(sceneRoot);
 
     // Determine the number of shapes
     int numShapes = pathsToShapes.getLength();
     if (numShapes == 0) {
-	shapeList = NULL;
-	return 0;
+        shapeList = NULL;
+        return 0;
     }
 
     // Allocate an array of IfShape instances of the correct size
@@ -141,7 +136,7 @@ IfCollector::collect(SoNode *sceneRoot, IfShape *&shapeList,
 
     // For each shape, fill in the corresponding IfShape instance
     for (i = 0; i < numShapes; i++)
-	collectShape(pathsToShapes[i], &shapeList[i]);
+        collectShape(pathsToShapes[i], &shapeList[i]);
 
     return numShapes;
 }
@@ -153,8 +148,7 @@ IfCollector::collect(SoNode *sceneRoot, IfShape *&shapeList,
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfCollector::storePath(SoCallbackAction *cba)
-{
+IfCollector::storePath(SoCallbackAction *cba) {
     pathsToShapes.append(cba->getCurPath()->copy());
 }
 
@@ -165,38 +159,37 @@ IfCollector::storePath(SoCallbackAction *cba)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfCollector::collectShape(const SoPath *pathToShape, IfShape *shape)
-{
+IfCollector::collectShape(const SoPath *pathToShape, IfShape *shape) {
     // Find and remember the shape we're looking for. Note that if
     // there is a special group (such as an Array or MultipleCopy) node
     // in the path, we have to consider that to be the shape, since we
     // don't want to ignore its special properties
     currentShape = shape;
 
-    const SoFullPath *fullPath = (const SoFullPath *) pathToShape;
+    const SoFullPath *fullPath = (const SoFullPath *)pathToShape;
     for (int i = 0; i < fullPath->getLength(); i++) {
-	SoNode *node = fullPath->getNode(i);
-	SoType type  = node->getTypeId();
+        SoNode *node = fullPath->getNode(i);
+        SoType  type = node->getTypeId();
 
-	// File, LOD, line- and point-based shape nodes, and some others
-	// are handled specially, since we want to make sure they are
-	// never flattened
-	if (IfTypes::isOpaqueGroupType(type) ||
-	    IfTypes::isUnflattenableShape(type)) {
-	    ASSERT(currentShape->shape == NULL);
-	    currentShape->shape = node;
-	    currentShape->shape->ref();
-	    currentShape->dontFlatten = TRUE;
-	    break;
-	}
+        // File, LOD, line- and point-based shape nodes, and some others
+        // are handled specially, since we want to make sure they are
+        // never flattened
+        if (IfTypes::isOpaqueGroupType(type) ||
+            IfTypes::isUnflattenableShape(type)) {
+            ASSERT(currentShape->shape == NULL);
+            currentShape->shape = node;
+            currentShape->shape->ref();
+            currentShape->dontFlatten = TRUE;
+            break;
+        }
 
-	// Handle nodes that should be considered shapes:
-	if (IfTypes::isShape(type)) {
-	    ASSERT(currentShape->shape == NULL);
-	    currentShape->shape = node;
-	    currentShape->shape->ref();
-	    break;
-	}
+        // Handle nodes that should be considered shapes:
+        if (IfTypes::isShape(type)) {
+            ASSERT(currentShape->shape == NULL);
+            currentShape->shape = node;
+            currentShape->shape->ref();
+            break;
+        }
     }
 
     // Set up a callback to invoke at each node encountered
@@ -204,30 +197,30 @@ IfCollector::collectShape(const SoPath *pathToShape, IfShape *shape)
     ca.addPreCallback(SoNode::getClassTypeId(), storeNodeCB, this);
 
     // Examine each node that affects the shape
-    ca.apply((SoPath *) pathToShape);
+    ca.apply((SoPath *)pathToShape);
 
     // If the shape is derived from SoVertexShape and has a non-NULL
     // vertexProperty field, this has to be handled specially
     if (shape->shape->isOfType(SoVertexShape::getClassTypeId())) {
-	SoVertexShape *vs = (SoVertexShape *) shape->shape;
-	SoVertexProperty *vp =
-	    (SoVertexProperty *) vs->vertexProperty.getValue();
-	if (vp != NULL) {
-	    // Copy the properties from the SoVertexProperty node
-	    // into separate property nodes
-	    handleVertexProperty(shape, vp);
+        SoVertexShape *   vs = (SoVertexShape *)shape->shape;
+        SoVertexProperty *vp =
+            (SoVertexProperty *)vs->vertexProperty.getValue();
+        if (vp != NULL) {
+            // Copy the properties from the SoVertexProperty node
+            // into separate property nodes
+            handleVertexProperty(shape, vp);
 
-	    // Create a copy of the shape that does not have an
-	    // SoVertexProperty node in it. Otherwise, the primitive
-	    // generation code for the shape can get confused.
-	    SoNode *shapeCopy = shape->shape->copy();
-	    shapeCopy->ref();
-	    ASSERT(shapeCopy->isOfType(SoVertexShape::getClassTypeId()));
-	    SoVertexShape *vsCopy = (SoVertexShape *) shapeCopy;
-	    vsCopy->vertexProperty = NULL;
-	    shape->shape->unref();
-	    shape->shape = shapeCopy;
-	}
+            // Create a copy of the shape that does not have an
+            // SoVertexProperty node in it. Otherwise, the primitive
+            // generation code for the shape can get confused.
+            SoNode *shapeCopy = shape->shape->copy();
+            shapeCopy->ref();
+            ASSERT(shapeCopy->isOfType(SoVertexShape::getClassTypeId()));
+            SoVertexShape *vsCopy = (SoVertexShape *)shapeCopy;
+            vsCopy->vertexProperty = NULL;
+            shape->shape->unref();
+            shape->shape = shapeCopy;
+        }
     }
 }
 
@@ -238,8 +231,7 @@ IfCollector::collectShape(const SoPath *pathToShape, IfShape *shape)
 /////////////////////////////////////////////////////////////////////////////
 
 SoCallbackAction::Response
-IfCollector::storeNode(SoCallbackAction *cba, SoNode *node)
-{
+IfCollector::storeNode(SoCallbackAction *cba, SoNode *node) {
     //////////////////////////////////////////////////////////////////
     //
     // Make sure we stop when we hit the shape we are collecting. If
@@ -248,8 +240,8 @@ IfCollector::storeNode(SoCallbackAction *cba, SoNode *node)
     //
 
     if (node == currentShape->shape) {
-	currentShape->transform = SoModelMatrixElement::get(cba->getState());
-	return SoCallbackAction::PRUNE;
+        currentShape->transform = SoModelMatrixElement::get(cba->getState());
+        return SoCallbackAction::PRUNE;
     }
 
     // Get the type of the node
@@ -258,33 +250,33 @@ IfCollector::storeNode(SoCallbackAction *cba, SoNode *node)
     // Based on the type of the node, store the appropriate pointer to
     // it in the IfShape instance
 
-#define IS_OF_TYPE(classname)						      \
+#define IS_OF_TYPE(classname)                                                  \
     nodeType.isDerivedFrom(classname::getClassTypeId())
 
-#define SET_TO_NULL(field)						      \
-    if (currentShape->field != NULL)					      \
-	currentShape->field->unref();					      \
+#define SET_TO_NULL(field)                                                     \
+    if (currentShape->field != NULL)                                           \
+        currentShape->field->unref();                                          \
     currentShape->field = NULL
 
-#define SET_TO_NODE(field, classname)					      \
-    if (currentShape->field != NULL)					      \
-	currentShape->field->unref();					      \
-    currentShape->field = (classname *) node;				      \
+#define SET_TO_NODE(field, classname)                                          \
+    if (currentShape->field != NULL)                                           \
+        currentShape->field->unref();                                          \
+    currentShape->field = (classname *)node;                                   \
     currentShape->field->ref()
 
-#define ADD_TO_LIST(field)						      \
-    if (currentShape->field == NULL)					      \
-	currentShape->field = new SoNodeList;				      \
+#define ADD_TO_LIST(field)                                                     \
+    if (currentShape->field == NULL)                                           \
+        currentShape->field = new SoNodeList;                                  \
     currentShape->field->append(node)
 
-#define DO_TYPE(classname, field)					      \
-    else if (IS_OF_TYPE(classname)) {					      \
-	SET_TO_NODE(field, classname);					      \
+#define DO_TYPE(classname, field)                                              \
+    else if (IS_OF_TYPE(classname)) {                                          \
+        SET_TO_NODE(field, classname);                                         \
     }
 
-#define DO_LIST(classname, field)					      \
-    else if (IS_OF_TYPE(classname)) {					      \
-	ADD_TO_LIST(field);						      \
+#define DO_LIST(classname, field)                                              \
+    else if (IS_OF_TYPE(classname)) {                                          \
+        ADD_TO_LIST(field);                                                    \
     }
 
     //////////////////////////////////////////////////////////////////
@@ -294,35 +286,30 @@ IfCollector::storeNode(SoCallbackAction *cba, SoNode *node)
 
     // Skip over any shapes, groups, node kits, labels, info, and
     // transformations
-    if (IS_OF_TYPE(SoShape)   ||
-	IS_OF_TYPE(SoGroup)   ||
-	IS_OF_TYPE(SoBaseKit) ||
-	IS_OF_TYPE(SoNodeKitListPart) ||
-	IS_OF_TYPE(SoLabel)   ||
-	IS_OF_TYPE(SoInfo)    ||
-	IS_OF_TYPE(SoTransformation))
-	;	// Do nothing
+    if (IS_OF_TYPE(SoShape) || IS_OF_TYPE(SoGroup) || IS_OF_TYPE(SoBaseKit) ||
+        IS_OF_TYPE(SoNodeKitListPart) || IS_OF_TYPE(SoLabel) ||
+        IS_OF_TYPE(SoInfo) || IS_OF_TYPE(SoTransformation))
+        ; // Do nothing
 
     // These node types are kept in lists:
-    DO_LIST(SoClipPlane, 		clipPlanes)
-    DO_LIST(SoLight,     		lights)
-    DO_LIST(SoProfile,   		profiles)
+    DO_LIST(SoClipPlane, clipPlanes)
+    DO_LIST(SoLight, lights)
+    DO_LIST(SoProfile, profiles)
 
     // Special handling of texture transform nodes. If we are NOT
     // producing texture coordinates, we need to save and output these
     // transforms, so they are added to the "other" list.
     else if (IS_OF_TYPE(SoTexture2Transform)) {
-	if (doingTexCoords) {
-	    ADD_TO_LIST(textureTransforms);
-	}
-	else {
-	    ADD_TO_LIST(other);
+        if (doingTexCoords) {
+            ADD_TO_LIST(textureTransforms);
+        } else {
+            ADD_TO_LIST(other);
         }
     }
 
     // Vertex property nodes are handled specially
     else if (IS_OF_TYPE(SoVertexProperty))
-	handleVertexProperty(currentShape, (SoVertexProperty *) node);
+        handleVertexProperty(currentShape, (SoVertexProperty *)node);
 
     // Materials have to be copied. We may be playing around with
     // their values later on, so we want to make sure that changing a
@@ -330,10 +317,10 @@ IfCollector::storeNode(SoCallbackAction *cba, SoNode *node)
     // important if fixing is done on several objects in the same
     // scene graph.)
     else if (IS_OF_TYPE(SoMaterial)) {
-	if (currentShape->material != NULL)
-	    currentShape->material->unref();
-	currentShape->material = (SoMaterial *) node->copy();
-	currentShape->material->ref();
+        if (currentShape->material != NULL)
+            currentShape->material->unref();
+        currentShape->material = (SoMaterial *)node->copy();
+        currentShape->material->ref();
     }
 
     //////////////////////////////////////////////////////////////////
@@ -341,21 +328,21 @@ IfCollector::storeNode(SoCallbackAction *cba, SoNode *node)
     // Typical cases:
     //
 
-    DO_TYPE(SoCamera,			camera)
-    DO_TYPE(SoComplexity,		complexity)
-    DO_TYPE(SoCoordinate3,		coords)
-    DO_TYPE(SoDrawStyle,		drawStyle)
-    DO_TYPE(SoEnvironment,		environment)
-    DO_TYPE(SoFont,			font)
-    DO_TYPE(SoLightModel,		lightModel)
-    DO_TYPE(SoMaterialBinding,		materialBinding)
-    DO_TYPE(SoNormal,			normals)
-    DO_TYPE(SoNormalBinding,		normalBinding)
-    DO_TYPE(SoProfileCoordinate2,	profileCoords)
-    DO_TYPE(SoShapeHints,		shapeHints)
-    DO_TYPE(SoTexture2,			texture)
-    DO_TYPE(SoTextureCoordinate2,	texCoords)
-    DO_TYPE(SoTextureCoordinateBinding,	texCoordBinding)
+    DO_TYPE(SoCamera, camera)
+    DO_TYPE(SoComplexity, complexity)
+    DO_TYPE(SoCoordinate3, coords)
+    DO_TYPE(SoDrawStyle, drawStyle)
+    DO_TYPE(SoEnvironment, environment)
+    DO_TYPE(SoFont, font)
+    DO_TYPE(SoLightModel, lightModel)
+    DO_TYPE(SoMaterialBinding, materialBinding)
+    DO_TYPE(SoNormal, normals)
+    DO_TYPE(SoNormalBinding, normalBinding)
+    DO_TYPE(SoProfileCoordinate2, profileCoords)
+    DO_TYPE(SoShapeHints, shapeHints)
+    DO_TYPE(SoTexture2, texture)
+    DO_TYPE(SoTextureCoordinate2, texCoords)
+    DO_TYPE(SoTextureCoordinateBinding, texCoordBinding)
 
     //////////////////////////////////////////////////////////////////
     //
@@ -363,7 +350,7 @@ IfCollector::storeNode(SoCallbackAction *cba, SoNode *node)
     //
 
     else {
-	ADD_TO_LIST(other);
+        ADD_TO_LIST(other);
     }
 
     return SoCallbackAction::CONTINUE;
@@ -383,73 +370,71 @@ IfCollector::storeNode(SoCallbackAction *cba, SoNode *node)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfCollector::handleVertexProperty(IfShape *shape, SoVertexProperty *vp)
-{
+IfCollector::handleVertexProperty(IfShape *shape, SoVertexProperty *vp) {
     int num;
 
     // Coordinates
     num = vp->vertex.getNum();
     if (num > 0) {
-	if (shape->coords != NULL)
-	    shape->coords->unref();
-	shape->coords = new SoCoordinate3;
-	shape->coords->ref();
-	shape->coords->point.setValues(0, num, vp->vertex.getValues(0));
+        if (shape->coords != NULL)
+            shape->coords->unref();
+        shape->coords = new SoCoordinate3;
+        shape->coords->ref();
+        shape->coords->point.setValues(0, num, vp->vertex.getValues(0));
     }
 
     // Normals
     num = vp->normal.getNum();
     if (num > 0) {
-	if (shape->normals != NULL) 
-	    shape->normals->unref();
-	shape->normals = new SoNormal;
-	shape->normals->ref();
-	shape->normals->vector.setValues(0, num, vp->normal.getValues(0));
+        if (shape->normals != NULL)
+            shape->normals->unref();
+        shape->normals = new SoNormal;
+        shape->normals->ref();
+        shape->normals->vector.setValues(0, num, vp->normal.getValues(0));
 
-	// Steal normal binding
-	shape->normalBinding = new SoNormalBinding;
-	shape->normalBinding->ref();
-	shape->normalBinding->value = vp->normalBinding.getValue();
+        // Steal normal binding
+        shape->normalBinding = new SoNormalBinding;
+        shape->normalBinding->ref();
+        shape->normalBinding->value = vp->normalBinding.getValue();
     }
 
     // Colors
     num = vp->orderedRGBA.getNum();
     if (num > 0) {
-	SoMaterial *oldMaterial = shape->material;
-	if (oldMaterial != NULL) {
-	    shape->material = (SoMaterial *) oldMaterial->copy();
-	    oldMaterial->unref();
-	}
-	else
-	    shape->material = new SoMaterial;
-	shape->material->ref();
+        SoMaterial *oldMaterial = shape->material;
+        if (oldMaterial != NULL) {
+            shape->material = (SoMaterial *)oldMaterial->copy();
+            oldMaterial->unref();
+        } else
+            shape->material = new SoMaterial;
+        shape->material->ref();
 
-	// Unpack the colors
-	shape->material->diffuseColor.setNum(num);
-	shape->material->transparency.setNum(num);
-	SbColor *dc = shape->material->diffuseColor.startEditing();
-	float   *tr = shape->material->transparency.startEditing();
-	const uint32_t *pc = vp->orderedRGBA.getValues(0);
+        // Unpack the colors
+        shape->material->diffuseColor.setNum(num);
+        shape->material->transparency.setNum(num);
+        SbColor *       dc = shape->material->diffuseColor.startEditing();
+        float *         tr = shape->material->transparency.startEditing();
+        const uint32_t *pc = vp->orderedRGBA.getValues(0);
 
-	for (int i = 0; i < num; i++)
-	    dc[i].setPackedValue(pc[i], tr[i]);
+        for (int i = 0; i < num; i++)
+            dc[i].setPackedValue(pc[i], tr[i]);
 
-	shape->material->diffuseColor.finishEditing();
-	shape->material->transparency.finishEditing();
+        shape->material->diffuseColor.finishEditing();
+        shape->material->transparency.finishEditing();
 
-	// Steal material binding
-	shape->materialBinding = new SoMaterialBinding;
-	shape->materialBinding->ref();
-	shape->materialBinding->value = vp->materialBinding.getValue();
+        // Steal material binding
+        shape->materialBinding = new SoMaterialBinding;
+        shape->materialBinding->ref();
+        shape->materialBinding->value = vp->materialBinding.getValue();
     }
 
     // Texture coordinates
     num = vp->texCoord.getNum();
     if (num > 0) {
-	if (shape->texCoords != NULL) 
-	    shape->texCoords->unref();
-	shape->texCoords = new SoTextureCoordinate2;
-	shape->texCoords->ref();
-	shape->texCoords->point.setValues(0, num, vp->texCoord.getValues(0));
+        if (shape->texCoords != NULL)
+            shape->texCoords->unref();
+        shape->texCoords = new SoTextureCoordinate2;
+        shape->texCoords->ref();
+        shape->texCoords->point.setValues(0, num, vp->texCoord.getValues(0));
     }
 }

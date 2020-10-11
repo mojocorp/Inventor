@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -48,27 +48,24 @@
 #include <Inventor/actions/SoWriteAction.h>
 
 QuadThing *
-createQuadSphere(int sizex, int sizey)
-{
-    SbVec3f *points = new SbVec3f[sizex*sizey];
+createQuadSphere(int sizex, int sizey) {
+    SbVec3f *points = new SbVec3f[sizex * sizey];
 
     int row, column;
 
-    for (row = 0; row < sizey; row++)
-    {
-	float yAngle = M_PI*row/(sizey-1);
-	float y = cos(yAngle);
+    for (row = 0; row < sizey; row++) {
+        float yAngle = M_PI * row / (sizey - 1);
+        float y = cos(yAngle);
 
-	float radius = sqrt(1.0 - y*y);
+        float radius = sqrt(1.0 - y * y);
 
-	for (column = 0; column < sizex; column++)
-	{
-	    float angle = (2.0*M_PI*column)/(sizex-1);
-	    float x = -radius * sin(angle);
-	    float z = -radius * cos(angle);
+        for (column = 0; column < sizex; column++) {
+            float angle = (2.0 * M_PI * column) / (sizex - 1);
+            float x = -radius * sin(angle);
+            float z = -radius * cos(angle);
 
-	    points[row*sizex+column].setValue(x*.1, y*.1, z*.1);
-	}
+            points[row * sizex + column].setValue(x * .1, y * .1, z * .1);
+        }
     }
 
     QuadThing *result = new QuadThing(sizex, sizey, points);
@@ -76,8 +73,8 @@ createQuadSphere(int sizex, int sizey)
     return result;
 }
 
-int main(int argc, char **argv)
-{
+int
+main(int argc, char **argv) {
     SoDB::init();
 
     QuadThing *result = createQuadSphere(40, 40);

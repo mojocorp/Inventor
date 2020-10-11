@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -41,8 +41,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef  _IF_FIXER_
-#define  _IF_FIXER_
+#ifndef _IF_FIXER_
+#define _IF_FIXER_
 
 #include "IfShapeList.h"
 
@@ -54,9 +54,9 @@ class IfFixer {
   public:
     // Possible reporting levels
     enum ReportLevel {
-	NONE,			// No reporting
-	LOW,			// Minimal reporting
-	HIGH			// Lots of reporting
+        NONE, // No reporting
+        LOW,  // Minimal reporting
+        HIGH  // Lots of reporting
     };
 
     IfFixer();
@@ -64,32 +64,32 @@ class IfFixer {
 
     // Sets the status reporting level and file. By default, no status
     // report is made
-    void		setReportLevel(ReportLevel level, FILE *fp);
+    void setReportLevel(ReportLevel level, FILE *fp);
 
     // Sets flag indicating whether to output triangle strips (the
     // default) or independent faces
-    void		setStripFlag(SbBool flag)	{ doStrips = flag; }
+    void setStripFlag(SbBool flag) { doStrips = flag; }
 
     // Sets flag indicating whether to output shape properties as
     // SoVertexProperty nodes (the default) or regular property nodes
-    void		setVertexPropertyFlag(SbBool flag) { doVP = flag; }
+    void setVertexPropertyFlag(SbBool flag) { doVP = flag; }
 
     // Sets flags indicating whether to output normals or texture
     // coordinates. The default is TRUE in both cases, meaning that
     // normals and texture coordinates will be output when necessary.
-    void		setNormalFlag(SbBool flag)	 { doNormals  = flag; }
-    void		setTextureCoordFlag(SbBool flag) { doTexCoords= flag; }
+    void setNormalFlag(SbBool flag) { doNormals = flag; }
+    void setTextureCoordFlag(SbBool flag) { doTexCoords = flag; }
 
     // Fixes a scene graph, returning the root of the result, or NULL
     // on error. If the passed root is not ref'ed, its memory will be
     // freed up before this finishes.
-    SoNode *		fix(SoNode *root);
+    SoNode *fix(SoNode *root);
 
   private:
-    SbBool		doStrips;
-    SbBool		doVP;
-    SbBool		doNormals;
-    SbBool		doTexCoords;
+    SbBool doStrips;
+    SbBool doVP;
+    SbBool doNormals;
+    SbBool doTexCoords;
 };
 
 #endif /* _IF_FIXER_ */

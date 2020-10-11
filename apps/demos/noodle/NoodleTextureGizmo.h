@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -42,7 +42,6 @@
 |
 */
 
-
 #ifndef _NOODLE_TEXTURE_GIZMO_
 #define _NOODLE_TEXTURE_GIZMO_
 
@@ -54,34 +53,32 @@ class NoodleSlider;
 
 class NoodleTextureGizmo : public SoXtComponent {
   public:
-    NoodleTextureGizmo( 
-	Widget parent = NULL,
-	const char *name = NULL, 
-	SbBool buildInsideParent = TRUE);
+    NoodleTextureGizmo(Widget parent = NULL, const char *name = NULL,
+                       SbBool buildInsideParent = TRUE);
     ~NoodleTextureGizmo();
 
-     void setNoodle( GeneralizedCylinder *newNoodle );
+    void setNoodle(GeneralizedCylinder *newNoodle);
 
-  // internal:
-      Widget buildWidget( Widget parent );
+    // internal:
+    Widget buildWidget(Widget parent);
 
   private:
-      Widget         _rowCol;
-      Widget         textureToggle;
-      NoodleSlider  *xRepeatSlider;
-      NoodleSlider  *yRepeatSlider;
-      NoodleSlider  *xTranslSlider;
-      NoodleSlider  *yTranslSlider;
-      NoodleSlider  *texRotationSlider;
+    Widget        _rowCol;
+    Widget        textureToggle;
+    NoodleSlider *xRepeatSlider;
+    NoodleSlider *yRepeatSlider;
+    NoodleSlider *xTranslSlider;
+    NoodleSlider *yTranslSlider;
+    NoodleSlider *texRotationSlider;
 
-      GeneralizedCylinder *myNoodle;
+    GeneralizedCylinder *myNoodle;
 
-      static void textureToggleCallback( Widget, XtPointer, XtPointer);
-      static void xTranslCallback( void *, void *);
-      static void yTranslCallback( void *, void *);
-      static void xRepeatCallback( void *, void *);
-      static void yRepeatCallback( void *, void *);
-      static void texRotationCallback( void *, void *);
+    static void textureToggleCallback(Widget, XtPointer, XtPointer);
+    static void xTranslCallback(void *, void *);
+    static void yTranslCallback(void *, void *);
+    static void xRepeatCallback(void *, void *);
+    static void yRepeatCallback(void *, void *);
+    static void texRotationCallback(void *, void *);
 };
 
 #endif /* _NOODLE_TEXTURE_GIZMO_ */

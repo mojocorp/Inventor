@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -41,8 +41,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef  _IF_SHAPE_
-#define  _IF_SHAPE_
+#ifndef _IF_SHAPE_
+#define _IF_SHAPE_
 
 #include <Inventor/SbColor.h>
 #include <Inventor/SbLinear.h>
@@ -80,41 +80,41 @@ class IfShape {
     //
 
     enum DifferenceCode {
-	// No difference:
-	NONE,
+        // No difference:
+        NONE,
 
-	// Level 1:
-	CAMERA,
+        // Level 1:
+        CAMERA,
 
-	// Level 2:
-	LIGHTS,
-	CLIP_PLANES,
-	ENVIRONMENT,
-	LIGHT_MODEL,
+        // Level 2:
+        LIGHTS,
+        CLIP_PLANES,
+        ENVIRONMENT,
+        LIGHT_MODEL,
 
-	// Level 3:
-	TEXTURE,
+        // Level 3:
+        TEXTURE,
 
-	// Level 4:
-	DRAW_STYLE,
-	SHAPE_HINTS,
-	OTHER,
-	MATERIAL,
+        // Level 4:
+        DRAW_STYLE,
+        SHAPE_HINTS,
+        OTHER,
+        MATERIAL,
 
-	// Level 5:
-	COMPLEXITY,
-	COORDS,
-	FONT,
-	MATERIAL_BINDING,
-	NORMALS,
-	NORMAL_BINDING,
-	PROFILE_COORDS,
-	PROFILES,
-	TEX_COORDS,
-	TEX_COORD_BINDING,
+        // Level 5:
+        COMPLEXITY,
+        COORDS,
+        FONT,
+        MATERIAL_BINDING,
+        NORMALS,
+        NORMAL_BINDING,
+        PROFILE_COORDS,
+        PROFILES,
+        TEX_COORDS,
+        TEX_COORD_BINDING,
 
-	// IfShape:
-	SHAPE
+        // IfShape:
+        SHAPE
     };
 
     //////////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ class IfShape {
     // from SoShape.)
     //
 
-    SoNode		*shape;
+    SoNode *shape;
 
     //////////////////////////////////////////////////////////////////
     //
@@ -134,7 +134,7 @@ class IfShape {
     // global properties allows caching to be more efficient.
     //
 
-    SoCamera		*camera;
+    SoCamera *camera;
 
     //////////////////////////////////////////////////////////////////
     //
@@ -145,10 +145,10 @@ class IfShape {
     // them as a partition basis is not too expensive.
     //
 
-    SoNodeList		*lights;	// List of pointers to SoLights
-    SoNodeList		*clipPlanes;	// List of pointers to SoClipPlane
-    SoEnvironment	*environment;
-    SoLightModel	*lightModel;
+    SoNodeList *   lights;     // List of pointers to SoLights
+    SoNodeList *   clipPlanes; // List of pointers to SoClipPlane
+    SoEnvironment *environment;
+    SoLightModel * lightModel;
 
     //////////////////////////////////////////////////////////////////
     //
@@ -157,7 +157,7 @@ class IfShape {
     // between them during rendering.
     //
 
-    SoTexture2		*texture;
+    SoTexture2 *texture;
 
     //////////////////////////////////////////////////////////////////
     //
@@ -169,10 +169,10 @@ class IfShape {
     // factors that affect the partitioning.
     //
 
-    SoDrawStyle		*drawStyle;
-    SoShapeHints	*shapeHints;
-    SoMaterial		*material;
-    SoNodeList		*other;		// Any other nodes go here
+    SoDrawStyle * drawStyle;
+    SoShapeHints *shapeHints;
+    SoMaterial *  material;
+    SoNodeList *  other; // Any other nodes go here
 
     //////////////////////////////////////////////////////////////////
     //
@@ -181,16 +181,16 @@ class IfShape {
     // own version of them or they are no longer relevant afterwards.
     //
 
-    SoComplexity		*complexity;
-    SoCoordinate3		*coords;
-    SoFont			*font;
-    SoMaterialBinding		*materialBinding;
-    SoNormal			*normals;
-    SoNormalBinding		*normalBinding;
-    SoProfileCoordinate2	*profileCoords;
-    SoNodeList			*profiles;	// List of ptrs to SoProfiles
-    SoTextureCoordinate2	*texCoords;
-    SoTextureCoordinateBinding	*texCoordBinding;
+    SoComplexity *              complexity;
+    SoCoordinate3 *             coords;
+    SoFont *                    font;
+    SoMaterialBinding *         materialBinding;
+    SoNormal *                  normals;
+    SoNormalBinding *           normalBinding;
+    SoProfileCoordinate2 *      profileCoords;
+    SoNodeList *                profiles; // List of ptrs to SoProfiles
+    SoTextureCoordinate2 *      texCoords;
+    SoTextureCoordinateBinding *texCoordBinding;
 
     //////////////////////////////////////////////////////////////////
     //
@@ -205,8 +205,8 @@ class IfShape {
     // that case.
     //
 
-    SbMatrix		transform;
-    SoNodeList		*textureTransforms;
+    SbMatrix    transform;
+    SoNodeList *textureTransforms;
 
     //////////////////////////////////////////////////////////////////
     //
@@ -215,38 +215,37 @@ class IfShape {
     // differ (or 0 if there are no significant differences) and a
     // specific difference code.
 
-    int			differenceLevel;
-    DifferenceCode	differenceCode;
+    int            differenceLevel;
+    DifferenceCode differenceCode;
 
     // This is used to indicate that the shape should not be flattened
     // because it really is an SoFile or SoLevelOfDetail or something
     // like that
-    SbBool		dontFlatten;
+    SbBool dontFlatten;
 
     //////////////////////////////////////////////////////////////////
 
     // This compares two IfShape instances and returns the first level
     // (1-5) at which they differ and a comparison code (-1, 0, or +1)
     // to indicate the result, and a more specific difference code.
-    static int		compare(const IfShape *s1, const IfShape *s2,
-				int &level, DifferenceCode &diffCode);
+    static int compare(const IfShape *s1, const IfShape *s2, int &level,
+                       DifferenceCode &diffCode);
 
     // Compares two node lists for equality
-    static int		compareLists(const SoNodeList *l1,
-				     const SoNodeList *l2);
+    static int compareLists(const SoNodeList *l1, const SoNodeList *l2);
 
     // Compares two floating point numbers for equality
-    static int		compareFloats(float f1, float f2);
+    static int compareFloats(float f1, float f2);
 
     // Compares two colors for equality
-    static int		compareColors(const SbColor &c1, const SbColor &c2);
+    static int compareColors(const SbColor &c1, const SbColor &c2);
 
     // Adds the appropriate nodes for the given level to the given
     // group node
-    void		addNodesForLevel(SoGroup *group, int level);
+    void addNodesForLevel(SoGroup *group, int level);
 
     // Unref's non-NULL node pointers and sets them all to NULL
-    void		clearNodes();
+    void clearNodes();
 };
 
 #endif /* _IF_SHAPE_ */

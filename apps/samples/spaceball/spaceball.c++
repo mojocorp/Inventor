@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,83 +51,78 @@
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
 
 static void
-eventCB(void *userData, SoEventCallback *cb)
-{
+eventCB(void *userData, SoEventCallback *cb) {
     const SoEvent *event = cb->getEvent();
-    SoTransform *xform = (SoTransform *) userData;
-    
+    SoTransform *  xform = (SoTransform *)userData;
+
     if (event->isOfType(SoMotion3Event::getClassTypeId())) {
-	const SoMotion3Event *motion = (const SoMotion3Event *) event;
-	
-	xform->translation.setValue(
-	    xform->translation.getValue() + motion->getTranslation().getValue());
-	
-	xform->rotation.setValue(
-	    xform->rotation.getValue() * motion->getRotation().getValue());
+        const SoMotion3Event *motion = (const SoMotion3Event *)event;
+
+        xform->translation.setValue(xform->translation.getValue() +
+                                    motion->getTranslation().getValue());
+
+        xform->rotation.setValue(xform->rotation.getValue() *
+                                 motion->getRotation().getValue());
     }
-    
+
     else if (SO_SPACEBALL_PRESS_EVENT(event, PICK)) {
-	// reset!
-	xform->rotation.setValue(0, 0, 0, 1);
-	xform->translation.setValue(0, 0, 0);
+        // reset!
+        xform->rotation.setValue(0, 0, 0, 1);
+        xform->translation.setValue(0, 0, 0);
     }
 }
 
 static SoNode *
-setupTest()
-{
-    SoSeparator *root = new SoSeparator;
-    SoTransform *xform = new SoTransform;
+setupTest() {
+    SoSeparator *    root = new SoSeparator;
+    SoTransform *    xform = new SoTransform;
     SoEventCallback *cbNode = new SoEventCallback;
-    
+
     // camera and lights will be created by viewer
     root->ref();
     root->addChild(xform);
     root->addChild(new SoCube);
     root->addChild(cbNode);
-    
-    cbNode->addEventCallback(SoMotion3Event::getClassTypeId(), eventCB, xform);  
-    cbNode->addEventCallback(SoSpaceballButtonEvent::getClassTypeId(),
-			     eventCB, xform);  
-    
+
+    cbNode->addEventCallback(SoMotion3Event::getClassTypeId(), eventCB, xform);
+    cbNode->addEventCallback(SoSpaceballButtonEvent::getClassTypeId(), eventCB,
+                             xform);
+
     return root;
 }
 
 void
-usage()
-{
+usage() {
     printf("The spaceball can be used to translate and rotate the cube.\n");
     printf("Hit the spaceball pick button (located on the ball itself)\n");
     printf("to reset the transform affecting the cube.\n");
 }
 
 int
-main(int, char *argv[])
-{
+main(int, char *argv[]) {
     Widget mainWindow = SoXt::init(argv[0]);
 
-    if (! SoXtSpaceball::exists()) {
-	printf("Could not find a spaceball device connected to this display\n");
-	exit(1);
+    if (!SoXtSpaceball::exists()) {
+        printf("Could not find a spaceball device connected to this display\n");
+        exit(1);
     }
-    
-    usage();    
-    
+
+    usage();
+
     // build and initialize the viewer
     SoXtExaminerViewer *viewer = new SoXtExaminerViewer(mainWindow);
     viewer->setSceneGraph(setupTest());
     viewer->setViewing(FALSE); // so events will pass through to us!
-    
+
     // add spaceball device
     SoXtSpaceball *spaceball = new SoXtSpaceball;
     viewer->registerDevice(spaceball);
-    
+
     // display the main window
     viewer->show();
     SoXt::show(mainWindow);
-    
+
     // loop forever
     SoXt::mainLoop();
     return 0;
 }
-

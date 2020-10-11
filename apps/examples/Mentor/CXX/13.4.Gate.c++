@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -65,97 +65,96 @@
 void myMousePressCB(void *, SoEventCallback *);
 
 int
-main(int , char **argv)
-{
-   // Print out usage message
-   printf("Click the left mouse button to enable/disable the duck motion\n");
+main(int, char **argv) {
+    // Print out usage message
+    printf("Click the left mouse button to enable/disable the duck motion\n");
 
-   // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);  
-   if (myWindow == NULL) exit(1);     
+    // Initialize Inventor and Xt
+    Widget myWindow = SoXt::init(argv[0]);
+    if (myWindow == NULL)
+        exit(1);
 
-   SoSeparator *root = new SoSeparator;
-   root->ref();
+    SoSeparator *root = new SoSeparator;
+    root->ref();
 
-   // Add a camera and light
-   SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
-   myCamera->position.setValue(0., -4., 8.0);
-   myCamera->heightAngle = M_PI/2.5; 
-   myCamera->nearDistance = 1.0;
-   myCamera->farDistance = 15.0;
-   root->addChild(myCamera);
-   root->addChild(new SoDirectionalLight);
+    // Add a camera and light
+    SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
+    myCamera->position.setValue(0., -4., 8.0);
+    myCamera->heightAngle = M_PI / 2.5;
+    myCamera->nearDistance = 1.0;
+    myCamera->farDistance = 15.0;
+    root->addChild(myCamera);
+    root->addChild(new SoDirectionalLight);
 
-   // Rotate scene slightly to get better view
-   SoRotationXYZ *globalRotXYZ = new SoRotationXYZ;
-   globalRotXYZ->axis = SoRotationXYZ::X;
-   globalRotXYZ->angle = M_PI/9;
-   root->addChild(globalRotXYZ);
+    // Rotate scene slightly to get better view
+    SoRotationXYZ *globalRotXYZ = new SoRotationXYZ;
+    globalRotXYZ->axis = SoRotationXYZ::X;
+    globalRotXYZ->angle = M_PI / 9;
+    root->addChild(globalRotXYZ);
 
-   // Pond group
-   SoSeparator *pond = new SoSeparator; 
-   root->addChild(pond);
-   SoMaterial *cylMaterial = new SoMaterial;
-   cylMaterial->diffuseColor.setValue(0., 0.3, 0.8);
-   pond->addChild(cylMaterial);
-   SoTranslation *cylTranslation = new SoTranslation;
-   cylTranslation->translation.setValue(0., -6.725, 0.);
-   pond->addChild(cylTranslation);
-   SoCylinder *myCylinder = new SoCylinder;
-   myCylinder->radius.setValue(4.0);
-   myCylinder->height.setValue(0.5);
-   pond->addChild(myCylinder);
+    // Pond group
+    SoSeparator *pond = new SoSeparator;
+    root->addChild(pond);
+    SoMaterial *cylMaterial = new SoMaterial;
+    cylMaterial->diffuseColor.setValue(0., 0.3, 0.8);
+    pond->addChild(cylMaterial);
+    SoTranslation *cylTranslation = new SoTranslation;
+    cylTranslation->translation.setValue(0., -6.725, 0.);
+    pond->addChild(cylTranslation);
+    SoCylinder *myCylinder = new SoCylinder;
+    myCylinder->radius.setValue(4.0);
+    myCylinder->height.setValue(0.5);
+    pond->addChild(myCylinder);
 
-/////////////////////////////////////////////////////////////
-// CODE FOR The Inventor Mentor STARTS HERE  (part 1)
+    /////////////////////////////////////////////////////////////
+    // CODE FOR The Inventor Mentor STARTS HERE  (part 1)
 
-   // Duck group
-   SoSeparator *duck = new SoSeparator;
-   root->addChild(duck);
+    // Duck group
+    SoSeparator *duck = new SoSeparator;
+    root->addChild(duck);
 
-   // Read the duck object from a file and add to the group
-   SoInput myInput;
-   if (!myInput.openFile("/usr/share/src/Inventor/examples/data/duck.iv")) 
-      exit (1);
-   SoSeparator *duckObject = SoDB::readAll(&myInput);
-   if (duckObject == NULL) 
-      exit (1);
+    // Read the duck object from a file and add to the group
+    SoInput myInput;
+    if (!myInput.openFile("/usr/share/src/Inventor/examples/data/duck.iv"))
+        exit(1);
+    SoSeparator *duckObject = SoDB::readAll(&myInput);
+    if (duckObject == NULL)
+        exit(1);
 
-   // Set up the duck transformations
-   SoRotationXYZ *duckRotXYZ = new SoRotationXYZ;
-   duck->addChild(duckRotXYZ);
-   SoTransform *initialTransform = new SoTransform;
-   initialTransform->translation.setValue(0., 0., 3.);
-   initialTransform->scaleFactor.setValue(6., 6., 6.);
-   duck->addChild(initialTransform);
+    // Set up the duck transformations
+    SoRotationXYZ *duckRotXYZ = new SoRotationXYZ;
+    duck->addChild(duckRotXYZ);
+    SoTransform *initialTransform = new SoTransform;
+    initialTransform->translation.setValue(0., 0., 3.);
+    initialTransform->scaleFactor.setValue(6., 6., 6.);
+    duck->addChild(initialTransform);
 
-   duck->addChild(duckObject);
+    duck->addChild(duckObject);
 
-   // Update the rotation value if the gate is enabled.
-   SoGate *myGate = new SoGate(SoMFFloat::getClassTypeId());
-   SoElapsedTime *myCounter = new SoElapsedTime;
-   myGate->input->connectFrom(&myCounter->timeOut); 
-   duckRotXYZ->axis = SoRotationXYZ::Y;  // rotate about Y axis
-   duckRotXYZ->angle.connectFrom(myGate->output);
+    // Update the rotation value if the gate is enabled.
+    SoGate *       myGate = new SoGate(SoMFFloat::getClassTypeId());
+    SoElapsedTime *myCounter = new SoElapsedTime;
+    myGate->input->connectFrom(&myCounter->timeOut);
+    duckRotXYZ->axis = SoRotationXYZ::Y; // rotate about Y axis
+    duckRotXYZ->angle.connectFrom(myGate->output);
 
-   // Add an event callback to catch mouse button presses.
-   // Each button press will enable or disable the duck motion.
-   SoEventCallback *myEventCB = new SoEventCallback;
-   myEventCB->addEventCallback(
-            SoMouseButtonEvent::getClassTypeId(),
-            myMousePressCB, myGate);
-   root->addChild(myEventCB);
+    // Add an event callback to catch mouse button presses.
+    // Each button press will enable or disable the duck motion.
+    SoEventCallback *myEventCB = new SoEventCallback;
+    myEventCB->addEventCallback(SoMouseButtonEvent::getClassTypeId(),
+                                myMousePressCB, myGate);
+    root->addChild(myEventCB);
 
-// CODE FOR The Inventor Mentor ENDS HERE
-/////////////////////////////////////////////////////////////
+    // CODE FOR The Inventor Mentor ENDS HERE
+    /////////////////////////////////////////////////////////////
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
-   myRenderArea->setSceneGraph(root);
-   myRenderArea->setTitle("Duck Pond");
-   myRenderArea->show();
+    SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+    myRenderArea->setSceneGraph(root);
+    myRenderArea->setTitle("Duck Pond");
+    myRenderArea->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+    SoXt::show(myWindow);
+    SoXt::mainLoop();
 }
 
 /////////////////////////////////////////////////////////////
@@ -163,22 +162,21 @@ main(int , char **argv)
 
 // This routine is called for every mouse button event.
 void
-myMousePressCB(void *userData, SoEventCallback *eventCB)
-{
-   SoGate *gate = (SoGate *) userData;
-   const SoEvent *event = eventCB->getEvent();
+myMousePressCB(void *userData, SoEventCallback *eventCB) {
+    SoGate *       gate = (SoGate *)userData;
+    const SoEvent *event = eventCB->getEvent();
 
-   // Check for mouse button being pressed
-   if (SO_MOUSE_PRESS_EVENT(event, ANY)) {
+    // Check for mouse button being pressed
+    if (SO_MOUSE_PRESS_EVENT(event, ANY)) {
 
-      // Toggle the gate that controls the duck motion
-      if (gate->enable.getValue()) 
-         gate->enable.setValue(FALSE);
-      else 
-         gate->enable.setValue(TRUE);
+        // Toggle the gate that controls the duck motion
+        if (gate->enable.getValue())
+            gate->enable.setValue(FALSE);
+        else
+            gate->enable.setValue(TRUE);
 
-      eventCB->setHandled();
-   } 
+        eventCB->setHandled();
+    }
 }
 
 // CODE FOR The Inventor Mentor ENDS HERE

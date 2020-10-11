@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -52,7 +52,7 @@
 #include <Inventor/actions/SoWriteAction.h>
 #include "SoText2V2.h"
 
-char* convToAscii(const SbString& str);
+char *convToAscii(const SbString &str);
 
 SO_NODE_SOURCE(SoText2V2);
 
@@ -70,8 +70,7 @@ SoText2V2::initClass()
 
     // Tell the type system whenever it wants to create something
     // of type SoText2 to create a SoText2V2
-    SoType::overrideType(
-		 SoText2::getClassTypeId(), &SoText2V2::createInstance);
+    SoType::overrideType(SoText2::getClassTypeId(), &SoText2V2::createInstance);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -82,7 +81,7 @@ SoText2V2::initClass()
 SoText2V2::SoText2V2()
 //
 ////////////////////////////////////////////////////////////////////////
-{    
+{
     SO_NODE_CONSTRUCTOR(SoText2V2);
 
     // This is a built in node in all versions of Inventor
@@ -97,9 +96,7 @@ SoText2V2::SoText2V2()
 SoText2V2::~SoText2V2()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-    
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -113,19 +110,19 @@ SoText2V2::write(SoWriteAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // We don't to trigger notification during writing. 
+    // We don't to trigger notification during writing.
     enableNotify(FALSE);
-    
-    SoOutput	*out = action->getOutput();
+
+    SoOutput *out = action->getOutput();
 
     // Not in write-reference counting phase
     if (out->getStage() != SoOutput::COUNT_REFS) {
-	if (! string.isDefault()) {
-	    // go through every string in the field, make sure it's ascii	  
-	    for (int i= 0; i< string.getNum(); i++)
-		string.set1Value(i, convToAscii( string[i]));        	    
-	}
+        if (!string.isDefault()) {
+            // go through every string in the field, make sure it's ascii
+            for (int i = 0; i < string.getNum(); i++)
+                string.set1Value(i, convToAscii(string[i]));
+        }
     }
-    
+
     SoText2::write(action);
 }

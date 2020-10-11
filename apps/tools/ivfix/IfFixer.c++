@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,12 +51,11 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfFixer::IfFixer()
-{
-    doStrips	= TRUE;
-    doVP	= TRUE;
-    doNormals	= TRUE;
-    doTexCoords	= TRUE;
+IfFixer::IfFixer() {
+    doStrips = TRUE;
+    doVP = TRUE;
+    doNormals = TRUE;
+    doTexCoords = TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -65,9 +64,7 @@ IfFixer::IfFixer()
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfFixer::~IfFixer()
-{
-}
+IfFixer::~IfFixer() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -77,23 +74,22 @@ IfFixer::~IfFixer()
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFixer::setReportLevel(ReportLevel level, FILE *fp)
-{
+IfFixer::setReportLevel(ReportLevel level, FILE *fp) {
     IfReporter::setFile(fp);
 
     SbBool verbose, details;
 
     switch (level) {
-      case NONE:
-	verbose = details = FALSE;
-	break;
-      case LOW:
-	verbose = TRUE;
-	details = FALSE;
-	break;
-      case HIGH:
-	verbose = details = TRUE;
-	break;
+    case NONE:
+        verbose = details = FALSE;
+        break;
+    case LOW:
+        verbose = TRUE;
+        details = FALSE;
+        break;
+    case HIGH:
+        verbose = details = TRUE;
+        break;
     }
 
     IfReporter::setVerbose(verbose);
@@ -109,8 +105,7 @@ IfFixer::setReportLevel(ReportLevel level, FILE *fp)
 /////////////////////////////////////////////////////////////////////////////
 
 SoNode *
-IfFixer::fix(SoNode *root)
-{
+IfFixer::fix(SoNode *root) {
     root->ref();
 
     IfReporter::reportNodeCount("Original graph", root);
@@ -124,9 +119,9 @@ IfFixer::fix(SoNode *root)
 
     // Collect all shapes
     IfReporter::startReport("Collecting shapes");
-    IfShape *shapes;
+    IfShape *    shapes;
     IfCollector *collector = new IfCollector;
-    int numShapes = collector->collect(root, shapes, doTexCoords);
+    int          numShapes = collector->collect(root, shapes, doTexCoords);
     delete collector;
     IfReporter::finishReport();
 
@@ -136,7 +131,7 @@ IfFixer::fix(SoNode *root)
 
     // Make sure we have at least 1
     if (numShapes == 0)
-	return NULL;
+        return NULL;
 
     // Create a list of the shapes
     IfShapeList shapeList(numShapes, shapes);
@@ -160,8 +155,8 @@ IfFixer::fix(SoNode *root)
 
     // Build a scene graph from the sorted list of shapes
     IfBuilder *builder = new IfBuilder;
-    SoNode *resultRoot = builder->build(shapeList, doStrips, doVP,
-					doNormals, doTexCoords);
+    SoNode *   resultRoot =
+        builder->build(shapeList, doStrips, doVP, doNormals, doTexCoords);
     resultRoot->ref();
     delete builder;
     IfReporter::finishReport();
@@ -175,7 +170,7 @@ IfFixer::fix(SoNode *root)
 
     IfReporter::reportNodeCount("Final graph", resultRoot);
 
-    delete [] shapes;
+    delete[] shapes;
 
     resultRoot->unrefNoDelete();
     return resultRoot;

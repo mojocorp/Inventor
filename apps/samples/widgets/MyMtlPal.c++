@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -91,14 +91,13 @@
 #include "MySimpleMaterialEditor.h"
 #include "MyMaterialPalette.h"
 
-
 /*
  * Defines
  */
 
-#define SCREEN(w) XScreenNumberOfScreen( XtScreen(w) )
+#define SCREEN(w) XScreenNumberOfScreen(XtScreen(w))
 
-// time in msec between consecutive clicks to consider 
+// time in msec between consecutive clicks to consider
 // the second click being a double click.
 #define DOUBLE_CLICK_TIME 300
 
@@ -111,33 +110,33 @@
 // those are used to set a flag which will tell use what needs to
 // be done in a futur time (like once a dialog disapears).
 enum ThingsToDo {
-    SWITCH_PALETTE, 
-    BRING_NEW_DIALOG, 
-    CREATE_NEW_PALETTE, 
-    SAVE_AS_PALETTE, 
+    SWITCH_PALETTE,
+    BRING_NEW_DIALOG,
+    CREATE_NEW_PALETTE,
+    SAVE_AS_PALETTE,
 };
 
 enum MenuEntryID {
-    FILE_MENU  = 0,   // start at 0 since we use an array
-    FILE_NEW, 
-    FILE_SAVE, 
-    FILE_SAVE_AS, 
-    FILE_RESET, 
-    FILE_DELETE, 
-    
-    EDIT_MENU, 
-    EDIT_CUT, 
-    EDIT_COPY, 
-    EDIT_PASTE, 
-    EDIT_DELETE, 
-    
+    FILE_MENU = 0, // start at 0 since we use an array
+    FILE_NEW,
+    FILE_SAVE,
+    FILE_SAVE_AS,
+    FILE_RESET,
+    FILE_DELETE,
+
+    EDIT_MENU,
+    EDIT_CUT,
+    EDIT_COPY,
+    EDIT_PASTE,
+    EDIT_DELETE,
+
     // list of needed widget to build the palette menu on the fly
-    MENU_BAR, 
-    PALETTE_BUTTON, 
-    PALETTE_MENU, 
-    
-    MAT_LABEL, 
-    MENU_LENGTH,    // this must be the last entry
+    MENU_BAR,
+    PALETTE_BUTTON,
+    PALETTE_MENU,
+
+    MAT_LABEL,
+    MENU_LENGTH, // this must be the last entry
 };
 
 struct MaterialNameStruct {
@@ -146,55 +145,52 @@ struct MaterialNameStruct {
 };
 
 struct PaletteStruct {
-    char    *name;
-    SbBool  user;
-    SbBool  system;
+    char * name;
+    SbBool user;
+    SbBool system;
 };
 
 struct MenuButtonItemStruct {
-    char    *name;
-    int	    id;
-    char    *accelerator; // e.g. "Alt <Key> p" or "Ctrl <Key> u"
-    char    *accelText;   // text that appears in the menu item
+    char *name;
+    int   id;
+    char *accelerator; // e.g. "Alt <Key> p" or "Ctrl <Key> u"
+    char *accelText;   // text that appears in the menu item
 };
 
 struct MenuStruct {
-    char    *name;
-    int	    id;
+    char *                       name;
+    int                          id;
     struct MenuButtonItemStruct *subMenu;
-    int	    subItemCount;
+    int                          subItemCount;
 };
-
 
 /*
  * static vars
  */
 
-
 static MenuButtonItemStruct fileData[] = {
-    {"New...",	    FILE_NEW,	    "Alt <Key> n", "Alt+n" }, 
-    {"Save",	    FILE_SAVE,	    "Alt <Key> s", "Alt+s" }, 
-    {"Save As...",  FILE_SAVE_AS,   "Alt Shift <Key> s", "Alt+S" }, 
-    {"Reset",	    FILE_RESET,	    "Alt <Key> r", "Alt+r" }, 
-    {"Delete",	    FILE_DELETE,    "Alt <Key> d", "Alt+d" }, 
+    {"New...", FILE_NEW, "Alt <Key> n", "Alt+n"},
+    {"Save", FILE_SAVE, "Alt <Key> s", "Alt+s"},
+    {"Save As...", FILE_SAVE_AS, "Alt Shift <Key> s", "Alt+S"},
+    {"Reset", FILE_RESET, "Alt <Key> r", "Alt+r"},
+    {"Delete", FILE_DELETE, "Alt <Key> d", "Alt+d"},
 };
 
 static MenuButtonItemStruct editData[] = {
-    {"Cut",	    EDIT_CUT,	    "Alt <Key> x", "Alt+x" },
-    {"Copy",	    EDIT_COPY,	    "Alt <Key> c", "Alt+c" },
-    {"Paste",	    EDIT_PASTE,	    "Alt <Key> v", "Alt+v" },
-    {"Delete",	    EDIT_DELETE,    "<Key> BackSpace", "BckSp" },
+    {"Cut", EDIT_CUT, "Alt <Key> x", "Alt+x"},
+    {"Copy", EDIT_COPY, "Alt <Key> c", "Alt+c"},
+    {"Paste", EDIT_PASTE, "Alt <Key> v", "Alt+v"},
+    {"Delete", EDIT_DELETE, "<Key> BackSpace", "BckSp"},
 };
 
 static MenuStruct pulldownData[] = {
-//  {name, 	    id,	    	    subMenu,    subItemCount}
-    {"File",	    FILE_MENU,	    fileData,	XtNumber(fileData)}, 
-    {"Edit",	    EDIT_MENU,	    editData,	XtNumber(editData)}, 
+    //  {name, 	    id,	    	    subMenu,    subItemCount}
+    {"File", FILE_MENU, fileData, XtNumber(fileData)},
+    {"Edit", EDIT_MENU, editData, XtNumber(editData)},
 };
 
 static char *editorTitle = "Material Palette";
 static char *defaultDir = IVPREFIX "/share/data/materials";
-
 
 static char *geometryBuffer = "\
 #Inventor V2.0 ascii\n\
@@ -254,22 +250,18 @@ Separator { \
     LineSet { numVertices 5 } \
 } ";
 
-
-
-
 //
 //  returns true if the passed file is a subdirectory in the current directory.
 //  (call chdir() before calling this).
 //
 static SbBool
-isDirectory(char *file)
-{
+isDirectory(char *file) {
     struct stat buf;
-    
+
     if (stat(file, &buf) == 0)
-	if ((buf.st_mode & S_IFMT) == S_IFDIR)
-	    return TRUE;
-    
+        if ((buf.st_mode & S_IFMT) == S_IFDIR)
+            return TRUE;
+
     return FALSE;
 }
 
@@ -278,34 +270,26 @@ isDirectory(char *file)
 // in the given PbPlist of structs.
 //
 static PaletteStruct *
-findPalette(char *str, SbPList *list)
-{
+findPalette(char *str, SbPList *list) {
     PaletteStruct *pal = NULL;
-    
-    for (int i=0; i<list->getLength(); i++) {
-	pal = (PaletteStruct *) (*list)[i];
-	if (strcmp(str, pal->name) == 0)
-	    return pal;
-	else
-	    pal = NULL;
+
+    for (int i = 0; i < list->getLength(); i++) {
+        pal = (PaletteStruct *)(*list)[i];
+        if (strcmp(str, pal->name) == 0)
+            return pal;
+        else
+            pal = NULL;
     }
     return pal;
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Public constructor - build the widget right now
 //
-MyMaterialPalette::MyMaterialPalette(
-    Widget parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    const char *dir)
-	: SoXtComponent(
-	    parent,
-	    name, 
-	    buildInsideParent)
+MyMaterialPalette::MyMaterialPalette(Widget parent, const char *name,
+                                     SbBool buildInsideParent, const char *dir)
+    : SoXtComponent(parent, name, buildInsideParent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -317,20 +301,14 @@ MyMaterialPalette::MyMaterialPalette(
 //
 // SoEXTENDER constructor - the subclass tells us whether to build or not
 //
-MyMaterialPalette::MyMaterialPalette(
-    Widget parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    const char *dir,
-    SbBool buildNow)
-	: SoXtComponent(
-	    parent,
-	    name, 
-	    buildInsideParent)
+MyMaterialPalette::MyMaterialPalette(Widget parent, const char *name,
+                                     SbBool buildInsideParent, const char *dir,
+                                     SbBool buildNow)
+    : SoXtComponent(parent, name, buildInsideParent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // In this case, this component may be what the app wants, 
+    // In this case, this component may be what the app wants,
     // or it may want a subclass of this component. Pass along buildNow
     // as it was passed to us.
     constructorCommon(dir, buildNow);
@@ -348,7 +326,7 @@ MyMaterialPalette::constructorCommon(const char *dir, SbBool buildNow)
 //////////////////////////////////////////////////////////////////////
 {
     int i;
-    
+
     setClassName("MyMaterialPalette");
     paletteDir = (dir != NULL) ? strdup(dir) : strdup(defaultDir);
     paletteChanged = FALSE;
@@ -356,25 +334,24 @@ MyMaterialPalette::constructorCommon(const char *dir, SbBool buildNow)
     curPalette = -1;
     prevTime = 0;
     clipboard = NULL;
-    
+
     // widget vars
     widgetList = new Widget[MENU_LENGTH];
-    for (i=0; i<MENU_LENGTH; i++)
-	widgetList[i] = NULL;
-    
+    for (i = 0; i < MENU_LENGTH; i++)
+        widgetList[i] = NULL;
+
     // alocate needed stuff
     matEditor = NULL;
-    
-    
+
     // allocate the material name list
     mtlNames = new MaterialNameStruct[36];
-    for (i=0; i<36; i++)
-	mtlNames[i].name = mtlNames[i].oldName = NULL;
-        
+    for (i = 0; i < 36; i++)
+        mtlNames[i].name = mtlNames[i].oldName = NULL;
+
     // Build the widget tree, and let SoXtComponent know about our base widget.
     if (buildNow) {
-	Widget w = buildWidget(getParentWidget());
-	setBaseWidget(w);
+        Widget w = buildWidget(getParentWidget());
+        setBaseWidget(w);
     }
 }
 
@@ -387,32 +364,34 @@ MyMaterialPalette::~MyMaterialPalette()
 ////////////////////////////////////////////////////////////////////////
 {
     int i;
-    
+
     // delete allocated stuff
     delete focus;
     delete ra;
     delete matEditor;
     delete paletteDir;
     delete clipboard;
-    
+
     // delete palette names
     PaletteStruct *pal;
-    for (i=0; i<paletteList.getLength(); i++) {
-	pal = (PaletteStruct *) paletteList[i];
-	free(pal->name);
-	delete pal;
+    for (i = 0; i < paletteList.getLength(); i++) {
+        pal = (PaletteStruct *)paletteList[i];
+        free(pal->name);
+        delete pal;
     }
     paletteList.truncate(0);
-    
+
     // delete material names
-    for (i=0; i<36; i++) {
-	if (mtlNames[i].name != NULL) free(mtlNames[i].name);
-	if (mtlNames[i].oldName != NULL) free(mtlNames[i].oldName);
+    for (i = 0; i < 36; i++) {
+        if (mtlNames[i].name != NULL)
+            free(mtlNames[i].name);
+        if (mtlNames[i].oldName != NULL)
+            free(mtlNames[i].oldName);
     }
-    delete [] mtlNames;
-    
+    delete[] mtlNames;
+
     // delete widget stuff
-    delete [] widgetList;
+    delete[] widgetList;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -427,8 +406,8 @@ MyMaterialPalette::deselectCurrentItem()
 ////////////////////////////////////////////////////////////////////////
 {
     if (selectedItem == -1)
-	return;
-    
+        return;
+
     // deselect the current item and update things that depend on it
     selectedItem = -1;
     updateOverlayFeedback();
@@ -448,9 +427,10 @@ MyMaterialPalette::updateWindowTitle()
 ////////////////////////////////////////////////////////////////////////
 {
     char str[150];
-    sprintf(str, "%s: %s", editorTitle, ((PaletteStruct *)paletteList[curPalette])->name);
+    sprintf(str, "%s: %s", editorTitle,
+            ((PaletteStruct *)paletteList[curPalette])->name);
     if (paletteChanged)
-	strcat(str, "*");
+        strcat(str, "*");
     setTitle(str);
 }
 
@@ -472,39 +452,33 @@ MyMaterialPalette::buildWidget(Widget parent)
     // ??? this is necessary for the fast window/region picking
     // ??? we are doing during mouse motion.
     //
-    if ( XtIsShell(parent) )
-	XtVaSetValues(parent, 
-	    XmNbaseWidth, 210, 
-	    XmNbaseHeight, 263, 
-	    XmNminAspectX, 1, 
-	    XmNmaxAspectX, 1, 
-	    XmNminAspectY, 1, 
-	    XmNmaxAspectY, 1, 
-	    NULL);
-    
-    int	n;
-    Arg	args[12];
-    
+    if (XtIsShell(parent))
+        XtVaSetValues(parent, XmNbaseWidth, 210, XmNbaseHeight, 263,
+                      XmNminAspectX, 1, XmNmaxAspectX, 1, XmNminAspectY, 1,
+                      XmNmaxAspectY, 1, NULL);
+
+    int n;
+    Arg args[12];
+
     // create a top level form to hold everything together
     Widget form = XmCreateForm(parent, "matPalForm", NULL, 0);
-    
-    
+
     //
     // create all the parts
     //
-    
+
     // Render area
     ra = new SoXtRenderArea(form);
     ra->setSize(SbVec2s(250, 250));
     ra->setTransparencyType(SoGLRenderAction::BLEND); // spheres are last
     ra->setEventCallback(MyMaterialPalette::raEventCB, this);
-//    ra->setBackgroundColor(SbColor(.6, .6, .6));
+    //    ra->setBackgroundColor(SbColor(.6, .6, .6));
     SbColor col(.9, .2, .2);
     ra->setOverlayColorMap(1, 1, &col);
-    
+
     Widget raWidget = ra->getWidget();
     createSceneGraph();
-    
+
 #if 0
     // make renderArea single buffered on Starter graphics (less than 24 bits)
     // which is ok since the scene is mostly static.
@@ -513,17 +487,17 @@ MyMaterialPalette::buildWidget(Widget parent)
     if (bitnum < 12)
 	ra->setDoubleBuffer(FALSE);
 #endif
-    
+
     // add leave window events
     focus = new SoXtInputFocus(LeaveWindowMask);
     ra->registerDevice(focus);
-    
+
     // build the menu
     getPaletteNamesAndLoad();
     Widget menu = buildMenu(form);
 
     widgetList[MAT_LABEL] = XmCreateLabelGadget(form, "matLabel", NULL, 0);
-    
+
     //
     // make sure things are updated
     //
@@ -531,42 +505,60 @@ MyMaterialPalette::buildWidget(Widget parent)
     updateWindowTitle();
     updateFileMenu();
     updateEditMenu();
-    
+
     //
     // layout !
     //
     n = 0;
-    XtSetArg(args[n], XmNtopAttachment,     	XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNleftAttachment,     	XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNrightAttachment,     	XmATTACH_FORM); n++;
+    XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);
+    n++;
     XtSetValues(menu, args, n);
-    
+
     n = 0;
-    XtSetArg(args[n], XmNleftAttachment,     	XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNrightAttachment,     	XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNbottomAttachment,     	XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNbottomOffset,     	7); n++;
-    XtSetArg(args[n], XmNalignment,     	XmALIGNMENT_CENTER); n++;
+    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNbottomOffset, 7);
+    n++;
+    XtSetArg(args[n], XmNalignment, XmALIGNMENT_CENTER);
+    n++;
     XtSetValues(widgetList[MAT_LABEL], args, n);
-    
+
     n = 0;
-    XtSetArg(args[n], XmNtopAttachment,     	XmATTACH_WIDGET); n++;
-    XtSetArg(args[n], XmNtopWidget,     	menu); n++;
-    XtSetArg(args[n], XmNtopOffset,     	5); n++;
-    XtSetArg(args[n], XmNleftAttachment,     	XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNleftOffset,     	5); n++;
-    XtSetArg(args[n], XmNrightAttachment,     	XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNrightOffset,     	5); n++;
-    XtSetArg(args[n], XmNbottomAttachment,     	XmATTACH_WIDGET); n++;
-    XtSetArg(args[n], XmNbottomWidget,     	widgetList[MAT_LABEL]); n++;
-    XtSetArg(args[n], XmNbottomOffset,     	5); n++;
+    XtSetArg(args[n], XmNtopAttachment, XmATTACH_WIDGET);
+    n++;
+    XtSetArg(args[n], XmNtopWidget, menu);
+    n++;
+    XtSetArg(args[n], XmNtopOffset, 5);
+    n++;
+    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNleftOffset, 5);
+    n++;
+    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNrightOffset, 5);
+    n++;
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_WIDGET);
+    n++;
+    XtSetArg(args[n], XmNbottomWidget, widgetList[MAT_LABEL]);
+    n++;
+    XtSetArg(args[n], XmNbottomOffset, 5);
+    n++;
     XtSetValues(raWidget, args, n);
-    
+
     // manage children
     XtManageChild(menu);
     XtManageChild(widgetList[MAT_LABEL]);
     XtManageChild(raWidget);
-    
+
     return form;
 }
 
@@ -581,86 +573,90 @@ MyMaterialPalette::buildMenu(Widget parent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	    n, id;
-    Arg	    args[8];
-    
+    int n, id;
+    Arg args[8];
+
     // create top bar menu
     Widget menu = XmCreateMenuBar(parent, "menuBar", NULL, 0);
     widgetList[MENU_BAR] = menu;
-    
+
     Arg popupargs[4];
     int popupn = 0;
 #ifdef MENUS_IN_POPUP
     Widget shell = SoXt::getShellWidget(parent);
     SoXt::getPopupArgs(XtDisplay(menu), SCREEN(menu), popupargs, &popupn);
 #endif
-    
-    int itemCount = XtNumber(pulldownData);
-    Widget *buttons = new Widget[itemCount+1]; // for palette
-    
+
+    int     itemCount = XtNumber(pulldownData);
+    Widget *buttons = new Widget[itemCount + 1]; // for palette
+
     int i;
-    for (i=0; i < itemCount; i++) {
-	// Make Topbar menu button
-	Widget subMenu = XmCreatePulldownMenu(menu, "subMenu", popupargs, popupn);
-	widgetList[pulldownData[i].id] = subMenu;
-	
+    for (i = 0; i < itemCount; i++) {
+        // Make Topbar menu button
+        Widget subMenu =
+            XmCreatePulldownMenu(menu, "subMenu", popupargs, popupn);
+        widgetList[pulldownData[i].id] = subMenu;
+
 #ifdef MENUS_IN_POPUP
-	// register callbacks to load/unload the pulldown colormap when the
-	// pulldown menu is posted.
-	SoXt::registerColormapLoad(subMenu, shell);
+        // register callbacks to load/unload the pulldown colormap when the
+        // pulldown menu is posted.
+        SoXt::registerColormapLoad(subMenu, shell);
 #endif
-	
-    	XtSetArg(args[0], XmNsubMenuId, subMenu);
-	buttons[i] = XmCreateCascadeButtonGadget(menu, 
-	    pulldownData[i].name, args, 1);
-	
-	// make submenu buttons
-	int subItemCount = pulldownData[i].subItemCount;
-	Widget *subButtons = new Widget[subItemCount];
-	
-	for (int j=0; j<subItemCount; j++) {
-	    
-	    n = 0;
-	    XtSetArg(args[n], XmNuserData, this); n++;
-	    
-	    // check for keyboard accelerator
-	    XmString xmstr = NULL;
-	    char *accel = pulldownData[i].subMenu[j].accelerator;
-	    char *accelText = pulldownData[i].subMenu[j].accelText;
-	    if (accel != NULL) {
-		XtSetArg(args[n], XmNaccelerator, accel); n++;
-		
-		if (accelText != NULL) {
-		    xmstr = XmStringCreateSimple(accelText);
-		    XtSetArg(args[n], XmNacceleratorText, xmstr); n++;
-		}
-	    }
-	    
-	    id = pulldownData[i].subMenu[j].id;
-	    widgetList[id] = subButtons[j] = XmCreatePushButtonGadget(subMenu, 
-		pulldownData[i].subMenu[j].name, args, n);
-	    
-	    if (xmstr != NULL)
-		XmStringFree(xmstr);
-	    
-	    XtAddCallback(subButtons[j], XmNactivateCallback,
-		(XtCallbackProc) MyMaterialPalette::menuCB,
-		(XtPointer) (unsigned long) id);
-	}
-	XtManageChildren(subButtons, subItemCount);
-	delete [] subButtons;
+
+        XtSetArg(args[0], XmNsubMenuId, subMenu);
+        buttons[i] =
+            XmCreateCascadeButtonGadget(menu, pulldownData[i].name, args, 1);
+
+        // make submenu buttons
+        int     subItemCount = pulldownData[i].subItemCount;
+        Widget *subButtons = new Widget[subItemCount];
+
+        for (int j = 0; j < subItemCount; j++) {
+
+            n = 0;
+            XtSetArg(args[n], XmNuserData, this);
+            n++;
+
+            // check for keyboard accelerator
+            XmString xmstr = NULL;
+            char *   accel = pulldownData[i].subMenu[j].accelerator;
+            char *   accelText = pulldownData[i].subMenu[j].accelText;
+            if (accel != NULL) {
+                XtSetArg(args[n], XmNaccelerator, accel);
+                n++;
+
+                if (accelText != NULL) {
+                    xmstr = XmStringCreateSimple(accelText);
+                    XtSetArg(args[n], XmNacceleratorText, xmstr);
+                    n++;
+                }
+            }
+
+            id = pulldownData[i].subMenu[j].id;
+            widgetList[id] = subButtons[j] = XmCreatePushButtonGadget(
+                subMenu, pulldownData[i].subMenu[j].name, args, n);
+
+            if (xmstr != NULL)
+                XmStringFree(xmstr);
+
+            XtAddCallback(subButtons[j], XmNactivateCallback,
+                          (XtCallbackProc)MyMaterialPalette::menuCB,
+                          (XtPointer)(unsigned long)id);
+        }
+        XtManageChildren(subButtons, subItemCount);
+        delete[] subButtons;
     }
-    
+
     // create palette menu (the palette popup menu gets created and deleted
     // on the fly so do it separately).
-    widgetList[PALETTE_BUTTON] = buttons[i] = XmCreateCascadeButtonGadget(menu,
-	"Palettes", NULL, 0);
+    widgetList[PALETTE_BUTTON] = buttons[i] =
+        XmCreateCascadeButtonGadget(menu, "Palettes", NULL, 0);
     widgetList[PALETTE_MENU] = NULL;
     buildPaletteSubMenu();
-    
-    XtManageChildren(buttons, itemCount+1); // because of palette
-    delete [] buttons;
-    
+
+    XtManageChildren(buttons, itemCount + 1); // because of palette
+    delete[] buttons;
+
     return menu;
 }
 
@@ -675,31 +671,35 @@ MyMaterialPalette::buildPaletteMenuEntry(int id)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    PaletteStruct *pal = (PaletteStruct *) paletteList[id];
-    char accel[20];
-    char accelText[20];
-    XmString xmstr = NULL;
-    Arg	args[4];
-    int n = 0;
-    
-    XtSetArg(args[n], XmNuserData, this); n++;
+    PaletteStruct *pal = (PaletteStruct *)paletteList[id];
+    char           accel[20];
+    char           accelText[20];
+    XmString       xmstr = NULL;
+    Arg            args[4];
+    int            n = 0;
+
+    XtSetArg(args[n], XmNuserData, this);
+    n++;
     if (id < 10) {
-	sprintf(accel, "Alt <Key> %d", id);
-	sprintf(accelText, "Alt+%d", id);
-	xmstr = XmStringCreateSimple(accelText);
-	
-	XtSetArg(args[n], XmNaccelerator, accel); n++;
-	XtSetArg(args[n], XmNacceleratorText, xmstr); n++;
+        sprintf(accel, "Alt <Key> %d", id);
+        sprintf(accelText, "Alt+%d", id);
+        xmstr = XmStringCreateSimple(accelText);
+
+        XtSetArg(args[n], XmNaccelerator, accel);
+        n++;
+        XtSetArg(args[n], XmNacceleratorText, xmstr);
+        n++;
     }
-    
-    Widget w = XmCreatePushButtonGadget(widgetList[PALETTE_MENU], pal->name, args, n);
+
+    Widget w =
+        XmCreatePushButtonGadget(widgetList[PALETTE_MENU], pal->name, args, n);
     XtAddCallback(w, XmNactivateCallback,
-	(XtCallbackProc) MyMaterialPalette::paletteMenuCB,
-	(XtPointer) (unsigned long) id);
-    
+                  (XtCallbackProc)MyMaterialPalette::paletteMenuCB,
+                  (XtPointer)(unsigned long)id);
+
     if (xmstr != NULL)
-	XmStringFree(xmstr);
-    
+        XmStringFree(xmstr);
+
     return w;
 }
 
@@ -715,32 +715,34 @@ MyMaterialPalette::buildPaletteSubMenu()
 ////////////////////////////////////////////////////////////////////////
 {
     // rebuild the palette popup
-    // ??? we cannot delete the old popup menu or things will brake. 
+    // ??? we cannot delete the old popup menu or things will brake.
     // ??? Is it automatically deleted for us ?
     Arg args[8];
     int argnum = 0;
 #ifdef MENUS_IN_POPUP
-    SoXt::getPopupArgs(XtDisplay(widgetList[MENU_BAR]), SCREEN(widgetList[MENU_BAR]), args, &argnum);
+    SoXt::getPopupArgs(XtDisplay(widgetList[MENU_BAR]),
+                       SCREEN(widgetList[MENU_BAR]), args, &argnum);
 #endif
-    Widget subMenu = widgetList[PALETTE_MENU] = 
-	XmCreatePulldownMenu(widgetList[MENU_BAR], "subMenu", args, argnum);
-    
+    Widget subMenu = widgetList[PALETTE_MENU] =
+        XmCreatePulldownMenu(widgetList[MENU_BAR], "subMenu", args, argnum);
+
 #ifdef MENUS_IN_POPUP
     // register callbacks to load/unload the pulldown colormap when the
     // pulldown menu is posted.
-    SoXt::registerColormapLoad(subMenu, SoXt::getShellWidget(widgetList[MENU_BAR]));
+    SoXt::registerColormapLoad(subMenu,
+                               SoXt::getShellWidget(widgetList[MENU_BAR]));
 #endif
-    
+
     XtSetArg(args[0], XmNsubMenuId, widgetList[PALETTE_MENU]);
     XtSetValues(widgetList[PALETTE_BUTTON], args, 1);
-    
+
     // build all of the entries
     Widget *entries = new Widget[paletteList.getLength()];
-    for (int i=0; i<paletteList.getLength(); i++)
-	entries[i] = buildPaletteMenuEntry(i);
-    
+    for (int i = 0; i < paletteList.getLength(); i++)
+        entries[i] = buildPaletteMenuEntry(i);
+
     XtManageChildren(entries, paletteList.getLength());
-    delete [] entries;
+    delete[] entries;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -755,63 +757,64 @@ MyMaterialPalette::menuCB(Widget w, int id, XmAnyCallbackStruct *cb)
 ////////////////////////////////////////////////////////////////////////
 {
     Time eventTime = cb->event->xbutton.time;
-    
+
     // get the class pointer
     MyMaterialPalette *p;
     XtVaGetValues(w, XmNuserData, &p, NULL);
-    
-    switch(id) {
+
+    switch (id) {
     case FILE_NEW:
-	if (p->paletteChanged) {
-	    p->whatToDoNext = BRING_NEW_DIALOG;
-	    p->createSaveDialog();
-	}
-	else {
-	    p->whatToDoNext = CREATE_NEW_PALETTE;
-	    p->createPromptDialog("New Palette Dialog", "New Palette Name:");
-	}
-	break;
-	
+        if (p->paletteChanged) {
+            p->whatToDoNext = BRING_NEW_DIALOG;
+            p->createSaveDialog();
+        } else {
+            p->whatToDoNext = CREATE_NEW_PALETTE;
+            p->createPromptDialog("New Palette Dialog", "New Palette Name:");
+        }
+        break;
+
     case FILE_SAVE:
-	p->savePalette();
-	break;
-	
+        p->savePalette();
+        break;
+
     case FILE_SAVE_AS:
-	p->whatToDoNext = SAVE_AS_PALETTE;
-	p->createPromptDialog("Save As Dialog", "Save As:");
-	break;
-	
+        p->whatToDoNext = SAVE_AS_PALETTE;
+        p->createPromptDialog("Save As Dialog", "Save As:");
+        break;
+
     case FILE_RESET:
-	p->createDeleteDialog("Reset Palette Dialog", 
-	    "Reset to default palette ?", "(all changes will be lost)");
-	break;
-	
+        p->createDeleteDialog("Reset Palette Dialog",
+                              "Reset to default palette ?",
+                              "(all changes will be lost)");
+        break;
+
     case FILE_DELETE:
-	p->createDeleteDialog("Delete Palette Dialog", 
-	    "Delete current palette ?", "(all materials will be lost)");
-	break;
-    
+        p->createDeleteDialog("Delete Palette Dialog",
+                              "Delete current palette ?",
+                              "(all materials will be lost)");
+        break;
+
     case EDIT_CUT:
     case EDIT_COPY:
-	// copy material
-	if (p->clipboard == NULL)
-	    p->clipboard = new SoXtClipboard(p->getWidget());
-	p->clipboard->copy(p->itemSwitch->getChild(p->selectedItem), eventTime);
-	
-	// now delete material
-	if (id == EDIT_CUT)
-	    p->deleteCurrentMaterial();
-	break;
-	
+        // copy material
+        if (p->clipboard == NULL)
+            p->clipboard = new SoXtClipboard(p->getWidget());
+        p->clipboard->copy(p->itemSwitch->getChild(p->selectedItem), eventTime);
+
+        // now delete material
+        if (id == EDIT_CUT)
+            p->deleteCurrentMaterial();
+        break;
+
     case EDIT_PASTE:
-	if (p->clipboard == NULL)
-	    p->clipboard = new SoXtClipboard(p->getWidget());
-	p->clipboard->paste(eventTime, MyMaterialPalette::pasteDone, p);
-	break;
-	
+        if (p->clipboard == NULL)
+            p->clipboard = new SoXtClipboard(p->getWidget());
+        p->clipboard->paste(eventTime, MyMaterialPalette::pasteDone, p);
+        break;
+
     case EDIT_DELETE:
-	p->deleteCurrentMaterial();
-	break;
+        p->deleteCurrentMaterial();
+        break;
     }
 }
 
@@ -827,83 +830,85 @@ MyMaterialPalette::createSceneGraph()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoInput in;
-    SoNode *node;
-    SbBool ok;
+    SoInput        in;
+    SoNode *       node;
+    SbBool         ok;
     SoSearchAction sa;
-    SoFullPath *fullPath;
-    
+    SoFullPath *   fullPath;
+
     //
     // create the regular scene graph
     //
-    
+
     // read the geometry buffer in
-    in.setBuffer((void *)geometryBuffer, (size_t) strlen(geometryBuffer));
+    in.setBuffer((void *)geometryBuffer, (size_t)strlen(geometryBuffer));
     ok = SoDB::read(&in, node);
     if (!ok || node == NULL) {
 #ifdef DEBUG
-	SoDebugError::post("MyMaterialPalette::createSceneGraph",
-			    "couldn't read geometry");
-	exit(1);
+        SoDebugError::post("MyMaterialPalette::createSceneGraph",
+                           "couldn't read geometry");
+        exit(1);
 #endif
     }
     ra->setSceneGraph(node);
-    
+
     // search for the switch node which contains all the materials
     sa.setType(SoSwitch::getClassTypeId(), FALSE);
     sa.apply(node);
     if ((fullPath = (SoFullPath *)sa.getPath()) == NULL) {
 #ifdef DEBUG
-	SoDebugError::post("MyMaterialPalette::createSceneGraph",
-			    "couldn't find switch node");
-	exit(1);
+        SoDebugError::post("MyMaterialPalette::createSceneGraph",
+                           "couldn't find switch node");
+        exit(1);
 #endif
     }
-    itemSwitch = (SoSwitch *) fullPath->getTail();
-    
-    
+    itemSwitch = (SoSwitch *)fullPath->getTail();
+
     //
     // now create the overlay scene graph
     //
-    
+
     // read the overlay geometry buffer
-    in.setBuffer((void *)overlayGeometryBuffer, (size_t) strlen(overlayGeometryBuffer));
+    in.setBuffer((void *)overlayGeometryBuffer,
+                 (size_t)strlen(overlayGeometryBuffer));
     ok = SoDB::read(&in, node);
     if (!ok || node == NULL) {
 #ifdef DEBUG
-	SoDebugError::post("MyMaterialPalette::createSceneGraph",
-			    "couldn't read overlay geometry");
-	exit(1);
+        SoDebugError::post("MyMaterialPalette::createSceneGraph",
+                           "couldn't read overlay geometry");
+        exit(1);
 #endif
     }
     ra->setOverlaySceneGraph(node);
-    
+
     // search for the camera in the regular scene to also use it for the overlay
     sa.setType(SoOrthographicCamera::getClassTypeId(), FALSE);
     sa.apply(ra->getSceneGraph());
-    if ((fullPath = (SoFullPath *) sa.getPath()) == NULL) {
+    if ((fullPath = (SoFullPath *)sa.getPath()) == NULL) {
 #ifdef DEBUG
-	SoDebugError::post("MyMaterialPalette::createSceneGraph",
-			    "couldn't find camera");
-	exit(1);
+        SoDebugError::post("MyMaterialPalette::createSceneGraph",
+                           "couldn't find camera");
+        exit(1);
 #endif
     }
-    ((SoGroup *) ra->getOverlaySceneGraph())->insertChild(fullPath->getTail(), 
-							  0);
-    
+    ((SoGroup *)ra->getOverlaySceneGraph())
+        ->insertChild(fullPath->getTail(), 0);
+
     // search for the 2 translation nodes for the lineSet feedback
     sa.setInterest(SoSearchAction::ALL);
     sa.setType(SoTranslation::getClassTypeId(), FALSE);
     sa.apply(ra->getOverlaySceneGraph());
     if (sa.getPaths().getLength() != 2) {
 #ifdef DEBUG
-	SoDebugError::post("MyMaterialPalette::createSceneGraph",
-			    "couldn't find 2 translations");
-	exit(1);
+        SoDebugError::post("MyMaterialPalette::createSceneGraph",
+                           "couldn't find 2 translations");
+        exit(1);
 #endif
     }
-    overlayTrans1 =(SoTranslation *)((SoFullPath *)sa.getPaths()[0])->getTail();
-    overlayTrans2 =(SoTranslation *)((SoFullPath *)sa.getPaths()[1])->getTail();
+    overlayTrans1 =
+        (SoTranslation *)((SoFullPath *)sa.getPaths()[0])->getTail();
+    overlayTrans2 =
+        (SoTranslation *)((SoFullPath *)sa.getPaths()[1])->getTail();
     updateOverlayFeedback();
 }
 
@@ -922,76 +927,76 @@ MyMaterialPalette::getPaletteNamesAndLoad()
 ////////////////////////////////////////////////////////////////////////
 {
     struct dirent *direntry;
-    DIR  *dirp;
-    char *f;
-    char currentDir[MAXPATHLEN];
-    
+    DIR *          dirp;
+    char *         f;
+    char           currentDir[MAXPATHLEN];
+
     // ??? this is only called once at startup, so it doesn't
     // ??? need to free the old paletteList.
-    
+
     //
     // look for palettes under the default installed place
     //
-    
+
     // see if SO_MATERIAL_DIR is set, if so use it...
     char *envDir = getenv("SO_MATERIAL_DIR");
     if (envDir != NULL) {
-	delete paletteDir;
+        delete paletteDir;
         paletteDir = strdup(envDir);
     }
-    
+
     if (dirp = opendir(paletteDir)) {
-	getcwd(currentDir, MAXPATHLEN-1);
+        getcwd(currentDir, MAXPATHLEN - 1);
         chdir(paletteDir);
         while (direntry = readdir(dirp)) {
-	    f = direntry->d_name;
-	    // hide '.' files
-	    if (f[0] != '.' && isDirectory(f)) {
-		 PaletteStruct *pal = new PaletteStruct;
-		 pal->name = strdup(f);
-		 pal->system = TRUE;
-		 pal->user = FALSE;
-		 paletteList.append(pal);
-	    }
+            f = direntry->d_name;
+            // hide '.' files
+            if (f[0] != '.' && isDirectory(f)) {
+                PaletteStruct *pal = new PaletteStruct;
+                pal->name = strdup(f);
+                pal->system = TRUE;
+                pal->user = FALSE;
+                paletteList.append(pal);
+            }
         }
         closedir(dirp);
-	chdir(currentDir); // back to our working directory
+        chdir(currentDir); // back to our working directory
     }
-    
+
     //
     // Now look for palettes under the user's home directory, which
     // would overide the installed palettes.
     //
-    
+
     char customDir[MAXPATHLEN];
     sprintf(customDir, "%s/%s", getenv("HOME"), customPalDir);
     if (dirp = opendir(customDir)) {
-	getcwd(currentDir, MAXPATHLEN-1);
-	chdir(customDir);
-	while (direntry = readdir(dirp)) {
-	    f = direntry->d_name;
-	    // hide '.' files
-	    if (f[0] != '.' && isDirectory(f)) {
-		
-		// check if palette name is already in the list
-		// (user overide case), else create a new entry
-		//
-		PaletteStruct *pal = findPalette(f, &paletteList);
-		if (pal != NULL)
-		    pal->user = TRUE;
-		else {
-		     pal = new PaletteStruct;
-		     pal->name = strdup(f);
-		     pal->user = TRUE;
-		     pal->system = FALSE;
-		     paletteList.append(pal);
-		}
-	    }
-	}
-	closedir(dirp);
-	chdir(currentDir); // back to our working directory
+        getcwd(currentDir, MAXPATHLEN - 1);
+        chdir(customDir);
+        while (direntry = readdir(dirp)) {
+            f = direntry->d_name;
+            // hide '.' files
+            if (f[0] != '.' && isDirectory(f)) {
+
+                // check if palette name is already in the list
+                // (user overide case), else create a new entry
+                //
+                PaletteStruct *pal = findPalette(f, &paletteList);
+                if (pal != NULL)
+                    pal->user = TRUE;
+                else {
+                    pal = new PaletteStruct;
+                    pal->name = strdup(f);
+                    pal->user = TRUE;
+                    pal->system = FALSE;
+                    paletteList.append(pal);
+                }
+            }
+        }
+        closedir(dirp);
+        chdir(currentDir); // back to our working directory
     }
-    
+
     //
     // make sure we have at least one palette, else create and empty default
     // palette for things to work.
@@ -999,29 +1004,32 @@ MyMaterialPalette::getPaletteNamesAndLoad()
     curPalette = 0;
     if (paletteList.getLength() == 0) {
 #ifdef DEBUG
-	SoDebugError::post("MyMaterialPalette::getPaletteNamesAndLoad",
-	"cannot find palettes in directory %s or home directory.  Try setting the environment variable SO_MATERIAL_DIR to a directory which has material files in it.", paletteDir);
+        SoDebugError::post(
+            "MyMaterialPalette::getPaletteNamesAndLoad",
+            "cannot find palettes in directory %s or home directory.  Try "
+            "setting the environment variable SO_MATERIAL_DIR to a directory "
+            "which has material files in it.",
+            paletteDir);
 #endif
-	
-	// create an empty default palette, withough loading anything
-	// since we started with a blank palette.
-	PaletteStruct *pal = new PaletteStruct;
-	pal->name = strdup("default");
-	pal->user = TRUE;
-	pal->system = FALSE;
-	paletteList.append(pal);
-	
-	// set the material empty name, since we are not loading any
-	// palette and this is only done once.
-	for (int i=0; i< 36; i++) {
-	    char str[50];
-	    sprintf(str, "no_name_%d", i);
-	    mtlNames[i].name = strdup(str);
-	}
-    }
-    else
-	// load the first palette
-	loadPaletteItems();
+
+        // create an empty default palette, withough loading anything
+        // since we started with a blank palette.
+        PaletteStruct *pal = new PaletteStruct;
+        pal->name = strdup("default");
+        pal->user = TRUE;
+        pal->system = FALSE;
+        paletteList.append(pal);
+
+        // set the material empty name, since we are not loading any
+        // palette and this is only done once.
+        for (int i = 0; i < 36; i++) {
+            char str[50];
+            sprintf(str, "no_name_%d", i);
+            mtlNames[i].name = strdup(str);
+        }
+    } else
+        // load the first palette
+        loadPaletteItems();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1038,65 +1046,65 @@ MyMaterialPalette::loadPaletteItems()
 {
     char palDir[MAXPATHLEN];
     char currentDir[MAXPATHLEN];
-    DIR  *dirp;
-    int	 i, num = 0;
-    
+    DIR *dirp;
+    int  i, num = 0;
+
     // delete the existing name strings of materials
-    for (i=0; i<36; i++) {
-	if (mtlNames[i].name != NULL) {
-	    free(mtlNames[i].name);
-	    mtlNames[i].name = NULL;
-	}
-	if (mtlNames[i].oldName != NULL) {
-	    free(mtlNames[i].oldName);
-	    mtlNames[i].oldName = NULL;
-	}
+    for (i = 0; i < 36; i++) {
+        if (mtlNames[i].name != NULL) {
+            free(mtlNames[i].name);
+            mtlNames[i].name = NULL;
+        }
+        if (mtlNames[i].oldName != NULL) {
+            free(mtlNames[i].oldName);
+            mtlNames[i].oldName = NULL;
+        }
     }
-    
+
     // go to the palette directory (user saved palettes overide system
     // installed palettes).
-    PaletteStruct *pal = (PaletteStruct *) paletteList[curPalette];
+    PaletteStruct *pal = (PaletteStruct *)paletteList[curPalette];
     if (pal->user)
-	sprintf(palDir, "%s/%s/%s", getenv("HOME"), customPalDir, pal->name);
+        sprintf(palDir, "%s/%s/%s", getenv("HOME"), customPalDir, pal->name);
     else
-	sprintf(palDir, "%s/%s", paletteDir, pal->name);
-    
+        sprintf(palDir, "%s/%s", paletteDir, pal->name);
+
     if ((dirp = opendir(palDir)) != NULL) {
-	// cd to palette directory
-	getcwd(currentDir, MAXPATHLEN-1);
-	chdir(palDir);
-	
-	// loop throught the files, and open any material files
-	char *f;
-	struct dirent *direntry;
-	SoNode *mat;
-	
-	while ((direntry = readdir(dirp)) && num < 35) {
-	    f = direntry->d_name;
-	    if (mat = getMaterialFromFile(f)) {
-		itemSwitch->replaceChild(num, mat);
-		mtlNames[num].name = strdup(f);
-		num++;
-	    }
-	}
-	
-	closedir(dirp);
-	chdir(currentDir); // back to our working directory
+        // cd to palette directory
+        getcwd(currentDir, MAXPATHLEN - 1);
+        chdir(palDir);
+
+        // loop throught the files, and open any material files
+        char *         f;
+        struct dirent *direntry;
+        SoNode *       mat;
+
+        while ((direntry = readdir(dirp)) && num < 35) {
+            f = direntry->d_name;
+            if (mat = getMaterialFromFile(f)) {
+                itemSwitch->replaceChild(num, mat);
+                mtlNames[num].name = strdup(f);
+                num++;
+            }
+        }
+
+        closedir(dirp);
+        chdir(currentDir); // back to our working directory
     }
-    
+
     // now clear the reminder materials in the palette (if any)
-    for (i=num; i< 36; i++) {
-	char str[50];
-	sprintf(str, "no_name_%d", i);
-	itemSwitch->replaceChild(i, new SoMaterial);
-	mtlNames[i].name = strdup(str);
+    for (i = num; i < 36; i++) {
+        char str[50];
+        sprintf(str, "no_name_%d", i);
+        itemSwitch->replaceChild(i, new SoMaterial);
+        mtlNames[i].name = strdup(str);
     }
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//	returns a material from the given file name (or NULL if the file 
+//	returns a material from the given file name (or NULL if the file
 //  isn't valid or contain a material). The file will be opened from the cwd
 //  (call chdir() before calling this).
 //
@@ -1108,27 +1116,27 @@ MyMaterialPalette::getMaterialFromFile(char *file)
 {
     // ignore '.' files
     if (file[0] == '.')
-	return NULL;
-    
+        return NULL;
+
     // ignore directories
     if (isDirectory(file))
-	return NULL;
-    
+        return NULL;
+
     // open the file and read the material in (assume 1 material per file)
     SoNode *node;
     SoInput in;
-    if ( ! in.openFile(file))
-	return NULL;
-    if (! SoDB::read(&in, node) || node == NULL)
-	return NULL;
-    
+    if (!in.openFile(file))
+        return NULL;
+    if (!SoDB::read(&in, node) || node == NULL)
+        return NULL;
+
     // now check to make sure node is a material
     if (node->isOfType(SoMaterial::getClassTypeId()))
-	return node;
+        return node;
     else {
-	// nuke that node...
-	node->ref();
-	node->unref();
+        // nuke that node...
+        node->ref();
+        node->unref();
     }
     return NULL;
 }
@@ -1144,82 +1152,79 @@ MyMaterialPalette::handleEvent(XAnyEvent *xe)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    switch(xe->type) {
-	case ButtonPress:
-	{
-	    XButtonEvent *be = (XButtonEvent *)xe;
-	    if (be->button != Button1)
-		break;
-	    
-	    // it is possible to get a mouse down event withought
-	    // previously receiving a mouse motion event (when the 
-	    // editor window is closed on top of the palette and the 
-	    // mouse doesn't move at all). In that case, find which
-	    // item we are clicking on...
-	    if (currentItem == -1)
-		findCurrentItem(be->x, be->y);
-	    
-	    //
-	    // check for double click. If the time difference between
-	    // successive mouse down is less than 3/10th sec, then 
-	    // consider it a double click.
-	    // ??? do we need to worry about time warping ?
-	    //
-	    if ((be->time - prevTime) < DOUBLE_CLICK_TIME) {
-		// allocate the editor on the fly....
-		if (matEditor == NULL) {
-		    matEditor = new MySimpleMaterialEditor(
-			    SoXt::getShellWidget(getWidget()),
-			    NULL, FALSE, TRUE);
-		    matEditor->addCallback(MyMaterialPalette::matEditorCB, this);
-		    matEditor->setTitle("Material Palette Editor");
-		    matEditor->setIconTitle("Mat Pal Editor");
-		}
-		
-		// update the editor if it wasn't already on the screen
-		// (would have otherwise been updated by the first click)
-		if (! matEditor->isVisible()) {
-		    matEditor->setMaterial((SoMaterial *) itemSwitch->getChild(selectedItem));
-		    matEditor->setMaterialName(mtlNames[selectedItem].name);
-		}
-		matEditor->show();
-	    }
-	    else {	// single click (or first click of the double click)
-		// select the current material
-		if (selectedItem != currentItem) {
-		    
-		    int oldVal = selectedItem;
-		    selectedItem = currentItem;
-		    if (oldVal == -1)
-			updateEditMenu();
-		    updateOverlayFeedback();
-		    
-		    callbackList.invokeCallbacks(itemSwitch->getChild(selectedItem));
-		}
-		
-		// update the material editor if it is on the screen
-		if (matEditor != NULL && matEditor->isVisible()) {
-		    matEditor->setMaterial((SoMaterial *) itemSwitch->getChild(selectedItem));
-		    matEditor->setMaterialName(mtlNames[selectedItem].name);
-		}
-	    }
-	    
-	    prevTime = be->time;
-	}
-	break;
-	
-	case MotionNotify:
-	{
-	    XMotionEvent *me = (XMotionEvent *)xe;
-	    findCurrentItem(me->x, me->y);
-	}
-	break;
-	
-	case LeaveNotify:
-	    currentItem = -1;
-	    updateMaterialName();
-	    updateOverlayFeedback();
-	    break;
+    switch (xe->type) {
+    case ButtonPress: {
+        XButtonEvent *be = (XButtonEvent *)xe;
+        if (be->button != Button1)
+            break;
+
+        // it is possible to get a mouse down event withought
+        // previously receiving a mouse motion event (when the
+        // editor window is closed on top of the palette and the
+        // mouse doesn't move at all). In that case, find which
+        // item we are clicking on...
+        if (currentItem == -1)
+            findCurrentItem(be->x, be->y);
+
+        //
+        // check for double click. If the time difference between
+        // successive mouse down is less than 3/10th sec, then
+        // consider it a double click.
+        // ??? do we need to worry about time warping ?
+        //
+        if ((be->time - prevTime) < DOUBLE_CLICK_TIME) {
+            // allocate the editor on the fly....
+            if (matEditor == NULL) {
+                matEditor = new MySimpleMaterialEditor(
+                    SoXt::getShellWidget(getWidget()), NULL, FALSE, TRUE);
+                matEditor->addCallback(MyMaterialPalette::matEditorCB, this);
+                matEditor->setTitle("Material Palette Editor");
+                matEditor->setIconTitle("Mat Pal Editor");
+            }
+
+            // update the editor if it wasn't already on the screen
+            // (would have otherwise been updated by the first click)
+            if (!matEditor->isVisible()) {
+                matEditor->setMaterial(
+                    (SoMaterial *)itemSwitch->getChild(selectedItem));
+                matEditor->setMaterialName(mtlNames[selectedItem].name);
+            }
+            matEditor->show();
+        } else { // single click (or first click of the double click)
+            // select the current material
+            if (selectedItem != currentItem) {
+
+                int oldVal = selectedItem;
+                selectedItem = currentItem;
+                if (oldVal == -1)
+                    updateEditMenu();
+                updateOverlayFeedback();
+
+                callbackList.invokeCallbacks(
+                    itemSwitch->getChild(selectedItem));
+            }
+
+            // update the material editor if it is on the screen
+            if (matEditor != NULL && matEditor->isVisible()) {
+                matEditor->setMaterial(
+                    (SoMaterial *)itemSwitch->getChild(selectedItem));
+                matEditor->setMaterialName(mtlNames[selectedItem].name);
+            }
+        }
+
+        prevTime = be->time;
+    } break;
+
+    case MotionNotify: {
+        XMotionEvent *me = (XMotionEvent *)xe;
+        findCurrentItem(me->x, me->y);
+    } break;
+
+    case LeaveNotify:
+        currentItem = -1;
+        updateMaterialName();
+        updateOverlayFeedback();
+        break;
 #if 0
 	case KeyPress:
 	    if (XLookupKeysym((XKeyEvent *)xe, 0) == XK_Escape)
@@ -1247,22 +1252,22 @@ MyMaterialPalette::findCurrentItem(int x, int y)
     // note: this picking by region will only work
     // if the RA widget is square (which it is since
     // we are forcing the window to resize in even increments).
-    
+
     SbVec2s raSize = ra->getSize();
-    int xpos = int (floorf( 6 * x / float(raSize[0]) ));
-    int ypos = int (floorf( 6 * y / float(raSize[1]) ));
-    int whichItem = xpos + 6 * ypos;
+    int     xpos = int(floorf(6 * x / float(raSize[0])));
+    int     ypos = int(floorf(6 * y / float(raSize[1])));
+    int     whichItem = xpos + 6 * ypos;
     if (whichItem != currentItem) {
-	currentItem = whichItem;
-	updateMaterialName();
-	updateOverlayFeedback();
+        currentItem = whichItem;
+        updateMaterialName();
+        updateOverlayFeedback();
     }
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//	changes the overlay feedback based on current state (what mat 
+//	changes the overlay feedback based on current state (what mat
 //  is selected and what mat the mouse is over).
 //
 // Use: private
@@ -1272,22 +1277,20 @@ MyMaterialPalette::updateOverlayFeedback()
 ////////////////////////////////////////////////////////////////////////
 {
     int row, col;
-    
+
     if (selectedItem != -1) {
-	row = (int) (selectedItem / 6);
-	col = selectedItem - 6 * row;
-	overlayTrans1->translation.setValue(col+1, 6-row, 0);
-    }
-    else
-	overlayTrans1->translation.setValue(-10, -10, 0);
-    
+        row = (int)(selectedItem / 6);
+        col = selectedItem - 6 * row;
+        overlayTrans1->translation.setValue(col + 1, 6 - row, 0);
+    } else
+        overlayTrans1->translation.setValue(-10, -10, 0);
+
     if (currentItem != -1 && currentItem != selectedItem) {
-	row = (int) (currentItem / 6);
-	col = currentItem - 6 * row;
-	overlayTrans2->translation.setValue(col+1, 6-row, 0);
-    }
-    else
-	overlayTrans2->translation.setValue(-10, -10, 0);
+        row = (int)(currentItem / 6);
+        col = currentItem - 6 * row;
+        overlayTrans2->translation.setValue(col + 1, 6 - row, 0);
+    } else
+        overlayTrans2->translation.setValue(-10, -10, 0);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1302,8 +1305,10 @@ MyMaterialPalette::updateMaterialName()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char *str = (currentItem < 0) ? ((selectedItem < 0) ? (char *) " " : 
-	mtlNames[selectedItem].name) : mtlNames[currentItem].name;
+    char *str =
+        (currentItem < 0)
+            ? ((selectedItem < 0) ? (char *)" " : mtlNames[selectedItem].name)
+            : mtlNames[currentItem].name;
     XmString xmstr = XmStringCreateSimple(str);
     XtVaSetValues(widgetList[MAT_LABEL], XmNlabelString, xmstr, NULL);
     XmStringFree(xmstr);
@@ -1321,8 +1326,8 @@ MyMaterialPalette::updateEditMenu()
 ////////////////////////////////////////////////////////////////////////
 {
     if (widgetList[EDIT_MENU] == NULL)
-	return;
-    
+        return;
+
     Arg args[1];
     XtSetArg(args[0], XmNsensitive, selectedItem >= 0);
     XtSetValues(widgetList[EDIT_CUT], args, 1);
@@ -1343,14 +1348,14 @@ MyMaterialPalette::updateFileMenu()
 ////////////////////////////////////////////////////////////////////////
 {
     if (widgetList[FILE_MENU] == NULL)
-	return;
-    
-    PaletteStruct *pal = (PaletteStruct *) paletteList[curPalette];
-    
-    XtVaSetValues(widgetList[FILE_RESET], XmNsensitive, 
-	pal->user && pal->system, NULL);
-    XtVaSetValues(widgetList[FILE_DELETE], XmNsensitive, 
-	pal->user && !pal->system, NULL);
+        return;
+
+    PaletteStruct *pal = (PaletteStruct *)paletteList[curPalette];
+
+    XtVaSetValues(widgetList[FILE_RESET], XmNsensitive,
+                  pal->user && pal->system, NULL);
+    XtVaSetValues(widgetList[FILE_DELETE], XmNsensitive,
+                  pal->user && !pal->system, NULL);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1365,10 +1370,10 @@ MyMaterialPalette::show()
 ////////////////////////////////////////////////////////////////////////
 {
     SoXtComponent::show();
-    
+
     // now also show the material editor (if it was shown)
     if (matEditor != NULL && matEditor->getWidget() != NULL)
-	matEditor->show();
+        matEditor->show();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1383,10 +1388,10 @@ MyMaterialPalette::hide()
 ////////////////////////////////////////////////////////////////////////
 {
     SoXtComponent::hide();
-    
+
     // now also hide the material editor
     if (matEditor != NULL)
-	matEditor->hide();
+        matEditor->hide();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1405,20 +1410,20 @@ MyMaterialPalette::createNewPalette(char *palName)
     // create that empty palette directory (under the user's home
     // directory).
     //
-    char dirName[MAXPATHLEN];
+    char        dirName[MAXPATHLEN];
     struct stat buf;
     sprintf(dirName, "%s/%s/", getenv("HOME"), customPalDir);
     if (stat(dirName, &buf) != 0)
-	mkdir(dirName, 0x1ff);
+        mkdir(dirName, 0x1ff);
     strcat(dirName, palName);
     if (mkdir(dirName, 0x1ff) != 0) {
 #ifdef DEBUG
-	SoDebugError::post("MyMaterialPalette::createNewPalette",
-			    "couldn't create directory %s", dirName);
+        SoDebugError::post("MyMaterialPalette::createNewPalette",
+                           "couldn't create directory %s", dirName);
 #endif
-	return;
+        return;
     }
-    
+
     //
     // add the palette to the popup menu
     //
@@ -1427,10 +1432,10 @@ MyMaterialPalette::createNewPalette(char *palName)
     pal->user = TRUE;
     pal->system = FALSE;
     paletteList.append(pal);
-    int id = paletteList.getLength() - 1;
+    int    id = paletteList.getLength() - 1;
     Widget entry = buildPaletteMenuEntry(id);
     XtManageChild(entry);
-    
+
     //
     // now make this the current palette (by making it like the
     // user picked it from the popup menu).
@@ -1451,27 +1456,33 @@ MyMaterialPalette::createSaveDialog()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Arg args[5];
-    XmString xmstr = XmStringCreateSimple("Warning: current palette was modified.");
+    Arg      args[5];
+    XmString xmstr =
+        XmStringCreateSimple("Warning: current palette was modified.");
     xmstr = XmStringConcat(xmstr, XmStringSeparatorCreate());
     xmstr = XmStringConcat(xmstr, XmStringCreateSimple("Save changes ?"));
-    
+
     int n = 0;
-    XtSetArg(args[n], XmNautoUnmanage, FALSE); n++;
-    XtSetArg(args[n], XtNtitle, "Save Palette Dialog"); n++;
-    XtSetArg(args[n], XmNmessageString, xmstr); n++;
+    XtSetArg(args[n], XmNautoUnmanage, FALSE);
+    n++;
+    XtSetArg(args[n], XtNtitle, "Save Palette Dialog");
+    n++;
+    XtSetArg(args[n], XmNmessageString, xmstr);
+    n++;
     Widget dialog = XmCreateWarningDialog(getWidget(), "SaveDialog", args, n);
     XmStringFree(xmstr);
-    
+
     XtUnmanageChild(XmMessageBoxGetChild(dialog, XmDIALOG_HELP_BUTTON));
     XtUnmanageChild(XmMessageBoxGetChild(dialog, XmDIALOG_SEPARATOR));
-    
+
     // register callback to destroy (and not just unmap) the dialog
-    XtAddCallback(dialog, XmNokCallback, 
-	(XtCallbackProc) MyMaterialPalette::saveDialogCB, (XtPointer) this);
-    XtAddCallback(dialog, XmNcancelCallback, 
-	(XtCallbackProc) MyMaterialPalette::saveDialogCB, (XtPointer) this);
-    
+    XtAddCallback(dialog, XmNokCallback,
+                  (XtCallbackProc)MyMaterialPalette::saveDialogCB,
+                  (XtPointer)this);
+    XtAddCallback(dialog, XmNcancelCallback,
+                  (XtCallbackProc)MyMaterialPalette::saveDialogCB,
+                  (XtPointer)this);
+
     XtManageChild(dialog);
 }
 
@@ -1486,26 +1497,31 @@ MyMaterialPalette::createPromptDialog(char *title, char *str)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Arg args[5];
+    Arg      args[5];
     XmString xmstr = XmStringCreateSimple(str);
-    
+
     int n = 0;
-    XtSetArg(args[n], XmNautoUnmanage, FALSE); n++;
-    XtSetArg(args[n], XtNtitle, title); n++;
-    XtSetArg(args[n], XmNselectionLabelString, xmstr); n++;
+    XtSetArg(args[n], XmNautoUnmanage, FALSE);
+    n++;
+    XtSetArg(args[n], XtNtitle, title);
+    n++;
+    XtSetArg(args[n], XmNselectionLabelString, xmstr);
+    n++;
     Widget dialog = XmCreatePromptDialog(getWidget(), "promptDialog", args, n);
     XmStringFree(xmstr);
-    
+
     XtUnmanageChild(XmSelectionBoxGetChild(dialog, XmDIALOG_HELP_BUTTON));
     XtUnmanageChild(XmSelectionBoxGetChild(dialog, XmDIALOG_SEPARATOR));
-    
+
     // register callback to destroy (and not just unmap) the dialog
     // and retreive the text (ok push button case).
-    XtAddCallback(dialog, XmNokCallback, 
-	(XtCallbackProc) MyMaterialPalette::promptDialogCB, (XtPointer) this);
-    XtAddCallback(dialog, XmNcancelCallback, 
-	(XtCallbackProc) MyMaterialPalette::promptDialogCB, (XtPointer) this);
-    
+    XtAddCallback(dialog, XmNokCallback,
+                  (XtCallbackProc)MyMaterialPalette::promptDialogCB,
+                  (XtPointer)this);
+    XtAddCallback(dialog, XmNcancelCallback,
+                  (XtCallbackProc)MyMaterialPalette::promptDialogCB,
+                  (XtPointer)this);
+
     XtManageChild(dialog);
 }
 
@@ -1521,27 +1537,32 @@ MyMaterialPalette::createDeleteDialog(char *title, char *str1, char *str2)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Arg args[5];
+    Arg      args[5];
     XmString xmstr = XmStringCreateSimple(str1);
     xmstr = XmStringConcat(xmstr, XmStringSeparatorCreate());
     xmstr = XmStringConcat(xmstr, XmStringCreateSimple(str2));
-    
+
     int n = 0;
-    XtSetArg(args[n], XmNautoUnmanage, FALSE); n++;
-    XtSetArg(args[n], XtNtitle, title); n++;
-    XtSetArg(args[n], XmNmessageString, xmstr); n++;
+    XtSetArg(args[n], XmNautoUnmanage, FALSE);
+    n++;
+    XtSetArg(args[n], XtNtitle, title);
+    n++;
+    XtSetArg(args[n], XmNmessageString, xmstr);
+    n++;
     Widget dialog = XmCreateWarningDialog(getWidget(), "DeleteDialog", args, n);
     XmStringFree(xmstr);
-    
+
     XtUnmanageChild(XmMessageBoxGetChild(dialog, XmDIALOG_HELP_BUTTON));
     XtUnmanageChild(XmMessageBoxGetChild(dialog, XmDIALOG_SEPARATOR));
-    
+
     // register callback to destroy (and not just unmap) the dialog
-    XtAddCallback(dialog, XmNokCallback, 
-	(XtCallbackProc) MyMaterialPalette::deleteDialogCB, (XtPointer) this);
-    XtAddCallback(dialog, XmNcancelCallback, 
-	(XtCallbackProc) MyMaterialPalette::deleteDialogCB, (XtPointer) this);
-    
+    XtAddCallback(dialog, XmNokCallback,
+                  (XtCallbackProc)MyMaterialPalette::deleteDialogCB,
+                  (XtPointer)this);
+    XtAddCallback(dialog, XmNcancelCallback,
+                  (XtCallbackProc)MyMaterialPalette::deleteDialogCB,
+                  (XtPointer)this);
+
     XtManageChild(dialog);
 }
 
@@ -1568,7 +1589,7 @@ MyMaterialPalette::savePaletteAs(char *palName)
     paletteList.append(pal);
     int id = paletteList.getLength() - 1;
     XtManageChild(buildPaletteMenuEntry(id));
-    
+
     //
     // make this the current palette and save it out
     //
@@ -1589,53 +1610,53 @@ MyMaterialPalette::savePalette()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i;
+    int  i;
     char currentDir[MAXPATHLEN];
-    getcwd(currentDir, MAXPATHLEN-1);
-    
+    getcwd(currentDir, MAXPATHLEN - 1);
+
     // go to the materials directory
     chdir(getenv("HOME"));
     if (chdir(customPalDir) != 0) {
-	// create that directory and cd to it
-	mkdir(customPalDir, 0x1ff);
-	chdir(customPalDir);
+        // create that directory and cd to it
+        mkdir(customPalDir, 0x1ff);
+        chdir(customPalDir);
     }
-    
+
     // now go to the palette directory (or create it)
-    char *palName = ((PaletteStruct *) paletteList[curPalette])->name;
+    char *palName = ((PaletteStruct *)paletteList[curPalette])->name;
     if (chdir(palName) != 0) {
-	mkdir(palName, 0x1ff);
-	chdir(palName);
+        mkdir(palName, 0x1ff);
+        chdir(palName);
     }
-    
-    // delete any of the old material files if any 
+
+    // delete any of the old material files if any
     // (material that changed name since last time)
-    for (i=0; i<36; i++) {
-	if (mtlNames[i].oldName != NULL) {
-	    unlink(mtlNames[i].oldName);
-	    free(mtlNames[i].oldName);
-	    mtlNames[i].oldName = NULL;
-	}
+    for (i = 0; i < 36; i++) {
+        if (mtlNames[i].oldName != NULL) {
+            unlink(mtlNames[i].oldName);
+            free(mtlNames[i].oldName);
+            mtlNames[i].oldName = NULL;
+        }
     }
-    
-    // now save all of the materials 
+
+    // now save all of the materials
     // (even the empty one, this way we remember the order the palette has)
     SoWriteAction writeAct;
-    SoOutput *out = writeAct.getOutput();
-    for (i=0; i < 36; i++) {
-	out->openFile( mtlNames[i].name );
-	writeAct.apply( itemSwitch->getChild(i) );
-	out->closeFile();
+    SoOutput *    out = writeAct.getOutput();
+    for (i = 0; i < 36; i++) {
+        out->openFile(mtlNames[i].name);
+        writeAct.apply(itemSwitch->getChild(i));
+        out->closeFile();
     }
-    
+
     chdir(currentDir); // back to our working directory
-    
+
     // clear the changed flag
     if (paletteChanged) {
-	paletteChanged = FALSE;
-	updateWindowTitle();
+        paletteChanged = FALSE;
+        updateWindowTitle();
     }
-    ((PaletteStruct *) paletteList[curPalette])->user = TRUE;
+    ((PaletteStruct *)paletteList[curPalette])->user = TRUE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1653,11 +1674,11 @@ MyMaterialPalette::switchPalette()
 {
     // assign new palette id
     curPalette = nextPalette;
-    
+
     // get the new materials
     loadPaletteItems();
     paletteChanged = FALSE;
-    
+
     // update the material name (nothing selected)
     deselectCurrentItem();
     updateWindowTitle();
@@ -1677,28 +1698,29 @@ MyMaterialPalette::deleteCurrentMaterial()
 {
     // replace material with default empty one
     itemSwitch->replaceChild(selectedItem, new SoMaterial);
-    
+
     // save original name for file removal and assign new default name
     if (mtlNames[selectedItem].oldName == NULL)
-	mtlNames[selectedItem].oldName = mtlNames[selectedItem].name;
+        mtlNames[selectedItem].oldName = mtlNames[selectedItem].name;
     else
-	free(mtlNames[selectedItem].name);
+        free(mtlNames[selectedItem].name);
     char str[50];
     sprintf(str, "no_name_%d", selectedItem);
     mtlNames[selectedItem].name = strdup(str);
-    
+
     // update label and editor
     updateMaterialName();
     if (matEditor != NULL && matEditor->isVisible()) {
-	matEditor->setMaterial((SoMaterial *) itemSwitch->getChild(selectedItem));
-	matEditor->setMaterialName(mtlNames[selectedItem].name);
+        matEditor->setMaterial(
+            (SoMaterial *)itemSwitch->getChild(selectedItem));
+        matEditor->setMaterialName(mtlNames[selectedItem].name);
     }
-    
+
     if (!paletteChanged) {
-	paletteChanged = TRUE;
-	updateWindowTitle();
+        paletteChanged = TRUE;
+        updateWindowTitle();
     }
-    
+
     callbackList.invokeCallbacks(itemSwitch->getChild(selectedItem));
 }
 
@@ -1706,19 +1728,19 @@ MyMaterialPalette::deleteCurrentMaterial()
 // redefine those generic virtual functions
 //
 const char *
-MyMaterialPalette::getDefaultWidgetName() const
-{ return "MyMaterialPalette"; }
+MyMaterialPalette::getDefaultWidgetName() const {
+    return "MyMaterialPalette";
+}
 
 const char *
-MyMaterialPalette::getDefaultTitle() const
-{ return "Material Palette Gizmo"; }
+MyMaterialPalette::getDefaultTitle() const {
+    return "Material Palette Gizmo";
+}
 
 const char *
-MyMaterialPalette::getDefaultIconTitle() const
-{ return "Mat Palette"; }
-
-
-
+MyMaterialPalette::getDefaultIconTitle() const {
+    return "Mat Palette";
+}
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -1726,37 +1748,33 @@ MyMaterialPalette::getDefaultIconTitle() const
 ////////////////////////////////////////////////////////////////////////
 //
 
-
-
-
-
 SbBool
-MyMaterialPalette::raEventCB(void *p, XAnyEvent *xe)
-{ return (((MyMaterialPalette *)p)->handleEvent(xe)); }
+MyMaterialPalette::raEventCB(void *p, XAnyEvent *xe) {
+    return (((MyMaterialPalette *)p)->handleEvent(xe));
+}
 
 //
 // called when the save dialog "ok"/"Cancel" buttons gets pressed.
 //
 void
-MyMaterialPalette::saveDialogCB(Widget dialog, MyMaterialPalette *p, 
-				    XmAnyCallbackStruct *cb)
-{
+MyMaterialPalette::saveDialogCB(Widget dialog, MyMaterialPalette *p,
+                                XmAnyCallbackStruct *cb) {
     // save the palette and destroy the dialog
     if (cb->reason == XmCR_OK)
-	p->savePalette();
-    
+        p->savePalette();
+
     XtDestroyWidget(dialog);
-    
+
     // now check what needs to be done, now that the dialog is gone
-    switch(p->whatToDoNext) {
-	case BRING_NEW_DIALOG:
-	    p->whatToDoNext = CREATE_NEW_PALETTE;
-	    p->createPromptDialog("New Palette Dialog", "New Palette Name:");
-	    break;
-	    
-	case SWITCH_PALETTE:
-	    p->switchPalette();
-	    break;
+    switch (p->whatToDoNext) {
+    case BRING_NEW_DIALOG:
+        p->whatToDoNext = CREATE_NEW_PALETTE;
+        p->createPromptDialog("New Palette Dialog", "New Palette Name:");
+        break;
+
+    case SWITCH_PALETTE:
+        p->switchPalette();
+        break;
     }
 }
 
@@ -1765,49 +1783,47 @@ MyMaterialPalette::saveDialogCB(Widget dialog, MyMaterialPalette *p,
 // will delete the palette in the user's home directory.
 //
 void
-MyMaterialPalette::deleteDialogCB(Widget dialog, MyMaterialPalette *p, 
-				    XmAnyCallbackStruct *cb)
-{
+MyMaterialPalette::deleteDialogCB(Widget dialog, MyMaterialPalette *p,
+                                  XmAnyCallbackStruct *cb) {
     // remove the user's palette
     if (cb->reason == XmCR_OK) {
-	
-	PaletteStruct *pal = (PaletteStruct *) p->paletteList[p->curPalette];
-	
-	// remove the palette directory in user's home
-	char palDir[MAXPATHLEN];
-	sprintf(palDir, "%s/%s/%s", getenv("HOME"), customPalDir, pal->name);
-	unlink(palDir);
-	
-	// check if palette was also in the installed place (reset vs delete)
-	if (pal->system)
-	    pal->user = FALSE;
-	else {
-	    // remove the palette from the list, making sure we have
-	    // at least one palette entry
-	    free(pal->name);
-	    if (p->paletteList.getLength() == 1) {
-		// create an empty default palette
-		pal->name = strdup("default");
-	    }
-	    else {
-		delete pal;
-		p->paletteList.remove( p->curPalette );
-		
-		// check what palette will be next
-		if (p->curPalette == p->paletteList.getLength())
-		    p->curPalette--;
-	    }
-	    
-	    // rebuild the new menu ( ??? have to rebuild, since we can't
-	    // remove entries)
-	    p->buildPaletteSubMenu();
-	}
-	
-	// finaly load the new palette
-	p->nextPalette = p->curPalette;
-	p->switchPalette();
+
+        PaletteStruct *pal = (PaletteStruct *)p->paletteList[p->curPalette];
+
+        // remove the palette directory in user's home
+        char palDir[MAXPATHLEN];
+        sprintf(palDir, "%s/%s/%s", getenv("HOME"), customPalDir, pal->name);
+        unlink(palDir);
+
+        // check if palette was also in the installed place (reset vs delete)
+        if (pal->system)
+            pal->user = FALSE;
+        else {
+            // remove the palette from the list, making sure we have
+            // at least one palette entry
+            free(pal->name);
+            if (p->paletteList.getLength() == 1) {
+                // create an empty default palette
+                pal->name = strdup("default");
+            } else {
+                delete pal;
+                p->paletteList.remove(p->curPalette);
+
+                // check what palette will be next
+                if (p->curPalette == p->paletteList.getLength())
+                    p->curPalette--;
+            }
+
+            // rebuild the new menu ( ??? have to rebuild, since we can't
+            // remove entries)
+            p->buildPaletteSubMenu();
+        }
+
+        // finaly load the new palette
+        p->nextPalette = p->curPalette;
+        p->switchPalette();
     }
-    
+
     XtDestroyWidget(dialog);
 }
 
@@ -1816,31 +1832,30 @@ MyMaterialPalette::deleteDialogCB(Widget dialog, MyMaterialPalette *p,
 // dialog get pressed.
 //
 void
-MyMaterialPalette::promptDialogCB(Widget dialog, MyMaterialPalette *p, 
-				    XmAnyCallbackStruct *cb)
-{   
+MyMaterialPalette::promptDialogCB(Widget dialog, MyMaterialPalette *p,
+                                  XmAnyCallbackStruct *cb) {
     if (cb->reason == XmCR_OK) {
-	
-	// retreive text
-	Widget field = XmSelectionBoxGetChild(dialog, XmDIALOG_TEXT);
-	char *str = XmTextGetString(field);
-	
-	// do the right thing
-	if (str[0] != '\0') {
-	    switch(p->whatToDoNext) {
-		case CREATE_NEW_PALETTE:
-		    p->createNewPalette(str);
-		    break;
-		
-		case SAVE_AS_PALETTE:
-		    p->savePaletteAs(str);
-		    break;
-	    }
-	}
-	
-	XtFree(str);
+
+        // retreive text
+        Widget field = XmSelectionBoxGetChild(dialog, XmDIALOG_TEXT);
+        char * str = XmTextGetString(field);
+
+        // do the right thing
+        if (str[0] != '\0') {
+            switch (p->whatToDoNext) {
+            case CREATE_NEW_PALETTE:
+                p->createNewPalette(str);
+                break;
+
+            case SAVE_AS_PALETTE:
+                p->savePaletteAs(str);
+                break;
+            }
+        }
+
+        XtFree(str);
     }
-    
+
     XtDestroyWidget(dialog);
 }
 
@@ -1850,16 +1865,15 @@ MyMaterialPalette::promptDialogCB(Widget dialog, MyMaterialPalette *p,
 // callbaks.
 //
 void
-MyMaterialPalette::matEditorCB(void *pt, MySimpleMaterialEditor *ed)
-{
+MyMaterialPalette::matEditorCB(void *pt, MySimpleMaterialEditor *ed) {
     MyMaterialPalette *p = (MyMaterialPalette *)pt;
-    
+
     // no material currently selected
     if (p->selectedItem < 0)
-	return;
-    
+        return;
+
     // copy the material over
-    SoMaterial *mat1 = (SoMaterial *) p->itemSwitch->getChild(p->selectedItem);
+    SoMaterial *mat1 = (SoMaterial *)p->itemSwitch->getChild(p->selectedItem);
     const SoMaterial *mat2 = ed->getMaterial();
     mat1->ambientColor = mat2->ambientColor[0];
     mat1->diffuseColor = mat2->diffuseColor[0];
@@ -1867,28 +1881,29 @@ MyMaterialPalette::matEditorCB(void *pt, MySimpleMaterialEditor *ed)
     mat1->emissiveColor = mat2->emissiveColor[0];
     mat1->shininess = mat2->shininess[0];
     mat1->transparency = mat2->transparency[0];
-    
+
     // copy the material name over and update label (if name has changed)
     const char *str = ed->getMaterialName();
     if (str != NULL && strcmp(str, p->mtlNames[p->selectedItem].name) != 0) {
-	
-	// save the old material name file for later removal
-	if (p->mtlNames[p->selectedItem].oldName == NULL)
-	    p->mtlNames[p->selectedItem].oldName = p->mtlNames[p->selectedItem].name;
-	else
-	    free(p->mtlNames[p->selectedItem].name);
-	
-	p->mtlNames[p->selectedItem].name = strdup(str);
-	p->updateMaterialName();
+
+        // save the old material name file for later removal
+        if (p->mtlNames[p->selectedItem].oldName == NULL)
+            p->mtlNames[p->selectedItem].oldName =
+                p->mtlNames[p->selectedItem].name;
+        else
+            free(p->mtlNames[p->selectedItem].name);
+
+        p->mtlNames[p->selectedItem].name = strdup(str);
+        p->updateMaterialName();
     }
-    
-    if (! p->paletteChanged) {
-	p->paletteChanged = TRUE;
-	p->updateWindowTitle();
+
+    if (!p->paletteChanged) {
+        p->paletteChanged = TRUE;
+        p->updateWindowTitle();
     }
-    
+
     // finally invoke the callbacks
-    p->callbackList.invokeCallbacks((void *) mat1);
+    p->callbackList.invokeCallbacks((void *)mat1);
 }
 
 //
@@ -1896,64 +1911,61 @@ MyMaterialPalette::matEditorCB(void *pt, MySimpleMaterialEditor *ed)
 //  popup menu.
 //
 void
-MyMaterialPalette::paletteMenuCB(Widget w, int num, void *)
-{
+MyMaterialPalette::paletteMenuCB(Widget w, int num, void *) {
     // get the class pointer
     MyMaterialPalette *p;
     XtVaGetValues(w, XmNuserData, &p, NULL);
-    
+
     // return if the same palette is choosen
     if (p->curPalette == num)
-	return;
-    
+        return;
+
     // save the new palette id for later uses
     p->nextPalette = num;
-    
+
     // check to make sure the old palette hasn't changed withought
     // being saved.
     if (p->paletteChanged) {
-	p->createSaveDialog();
-	// this will call switchPalette() once the dialog disapears
-	p->whatToDoNext = SWITCH_PALETTE;
-    }
-    else
-	p->switchPalette();
+        p->createSaveDialog();
+        // this will call switchPalette() once the dialog disapears
+        p->whatToDoNext = SWITCH_PALETTE;
+    } else
+        p->switchPalette();
 }
 
 //
 // called whenever the X server is done doing the paste
 //
 void
-MyMaterialPalette::pasteDone(void *pt, SoPathList *pathList)
-{
+MyMaterialPalette::pasteDone(void *pt, SoPathList *pathList) {
     MyMaterialPalette *p = (MyMaterialPalette *)pt;
-    
+
     SoSearchAction sa;
-    SoFullPath *fullPath = NULL;
-    
+    SoFullPath *   fullPath = NULL;
+
     //
     // search for first material in that pasted scene
     //
     sa.setType(SoMaterial::getClassTypeId());
-    for (int i=0; i < pathList->getLength(); i++) {
-	sa.apply( (*pathList)[i] );
-	if ( (fullPath = (SoFullPath *) sa.getPath()) != NULL) {
-	    
-	    // assign new material, update editor and invoke callback
-	    SoMaterial *newMat = (SoMaterial *) fullPath->getTail();
-	    p->itemSwitch->replaceChild(p->selectedItem, newMat);
-	    if (p->matEditor != NULL && p->matEditor->isVisible())
-		p->matEditor->setMaterial(newMat);
-	    if (! p->paletteChanged) {
-		p->paletteChanged = TRUE;
-		p->updateWindowTitle();
-	    }
-	    p->callbackList.invokeCallbacks(newMat);
-	    
-	    break;
-	}
+    for (int i = 0; i < pathList->getLength(); i++) {
+        sa.apply((*pathList)[i]);
+        if ((fullPath = (SoFullPath *)sa.getPath()) != NULL) {
+
+            // assign new material, update editor and invoke callback
+            SoMaterial *newMat = (SoMaterial *)fullPath->getTail();
+            p->itemSwitch->replaceChild(p->selectedItem, newMat);
+            if (p->matEditor != NULL && p->matEditor->isVisible())
+                p->matEditor->setMaterial(newMat);
+            if (!p->paletteChanged) {
+                p->paletteChanged = TRUE;
+                p->updateWindowTitle();
+            }
+            p->callbackList.invokeCallbacks(newMat);
+
+            break;
+        }
     }
-    
+
     // ??? We delete the callback data when done with it.
     delete pathList;
 }

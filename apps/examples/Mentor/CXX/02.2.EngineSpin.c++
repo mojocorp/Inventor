@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -53,40 +53,40 @@
 #include <Inventor/nodes/SoSeparator.h>
 
 int
-main(int , char **argv)
-{
-   // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);  
-   if (myWindow == NULL) exit(1);     
+main(int, char **argv) {
+    // Initialize Inventor and Xt
+    Widget myWindow = SoXt::init(argv[0]);
+    if (myWindow == NULL)
+        exit(1);
 
-   SoSeparator *root = new SoSeparator;
-   root->ref();
-   SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
-   root->addChild(myCamera);
-   root->addChild(new SoDirectionalLight);
+    SoSeparator *root = new SoSeparator;
+    root->ref();
+    SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
+    root->addChild(myCamera);
+    root->addChild(new SoDirectionalLight);
 
-   // This transformation is modified to rotate the cone
-   SoRotationXYZ *myRotXYZ = new SoRotationXYZ;
-   root->addChild(myRotXYZ);
+    // This transformation is modified to rotate the cone
+    SoRotationXYZ *myRotXYZ = new SoRotationXYZ;
+    root->addChild(myRotXYZ);
 
-   SoMaterial *myMaterial = new SoMaterial;
-   myMaterial->diffuseColor.setValue(1.0, 0.0, 0.0);   // Red
-   root->addChild(myMaterial);
-   root->addChild(new SoCone);
+    SoMaterial *myMaterial = new SoMaterial;
+    myMaterial->diffuseColor.setValue(1.0, 0.0, 0.0); // Red
+    root->addChild(myMaterial);
+    root->addChild(new SoCone);
 
-   // An engine rotates the object. The output of myCounter 
-   // is the time in seconds since the program started.
-   // Connect this output to the angle field of myRotXYZ
-   myRotXYZ->axis = SoRotationXYZ::X;     // rotate about X axis
-   SoElapsedTime *myCounter = new SoElapsedTime;
-   myRotXYZ->angle.connectFrom(&myCounter->timeOut);
+    // An engine rotates the object. The output of myCounter
+    // is the time in seconds since the program started.
+    // Connect this output to the angle field of myRotXYZ
+    myRotXYZ->axis = SoRotationXYZ::X; // rotate about X axis
+    SoElapsedTime *myCounter = new SoElapsedTime;
+    myRotXYZ->angle.connectFrom(&myCounter->timeOut);
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
-   myCamera->viewAll(root, myRenderArea->getViewportRegion());
-   myRenderArea->setSceneGraph(root);
-   myRenderArea->setTitle("Engine Spin");
-   myRenderArea->show();
+    SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+    myCamera->viewAll(root, myRenderArea->getViewportRegion());
+    myRenderArea->setSceneGraph(root);
+    myRenderArea->setTitle("Engine Spin");
+    myRenderArea->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+    SoXt::show(myWindow);
+    SoXt::mainLoop();
 }

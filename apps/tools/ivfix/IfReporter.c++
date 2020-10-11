@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -42,9 +42,9 @@
 #include "IfShape.h"
 #include "IfShapeList.h"
 
-FILE   *IfReporter::fp = stderr;
-SbBool	IfReporter::verbose = FALSE;
-SbBool	IfReporter::details = FALSE;
+FILE * IfReporter::fp = stderr;
+SbBool IfReporter::verbose = FALSE;
+SbBool IfReporter::details = FALSE;
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -54,20 +54,18 @@ SbBool	IfReporter::details = FALSE;
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfReporter::startReport(const char *msg, SbBool isDetail)
-{
-    if (! verbose || (isDetail && ! details))
-	return;
+IfReporter::startReport(const char *msg, SbBool isDetail) {
+    if (!verbose || (isDetail && !details))
+        return;
 
     fprintf(fp, "%s ... ", msg);
     fflush(fp);
 }
 
 void
-IfReporter::finishReport(SbBool isDetail)
-{
-    if (! verbose || (isDetail && ! details))
-	return;
+IfReporter::finishReport(SbBool isDetail) {
+    if (!verbose || (isDetail && !details))
+        return;
 
     fprintf(fp, "Done\n");
 }
@@ -79,18 +77,14 @@ IfReporter::finishReport(SbBool isDetail)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfReporter::reportIndex(const char *msg, int index, int total)
-{
-    if (! verbose)
-	return;
+IfReporter::reportIndex(const char *msg, int index, int total) {
+    if (!verbose)
+        return;
 
     // Report only sporadically unless all details are on
-    if (details ||
-	index == total ||
-	total < 20 ||
-	(index % (total / 20)) == 0)
+    if (details || index == total || total < 20 || (index % (total / 20)) == 0)
 
-	fprintf(fp, "%s %5d (of %d) \n", msg, index + 1, total);
+        fprintf(fp, "%s %5d (of %d) \n", msg, index + 1, total);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -100,13 +94,12 @@ IfReporter::reportIndex(const char *msg, int index, int total)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfReporter::reportHolder(const char *msg, IfHolder *holder)
-{
-    if (! details)
-	return;
+IfReporter::reportHolder(const char *msg, IfHolder *holder) {
+    if (!details)
+        return;
 
-    int nc = holder->coords->point.getNum();
-    int ntc = holder->triSet->coordIndex.getNum();
+    int            nc = holder->coords->point.getNum();
+    int            ntc = holder->triSet->coordIndex.getNum();
     const int32_t *ind = holder->triSet->coordIndex.getValues(0);
 
     // Count strips, triangles, and vertices
@@ -116,22 +109,21 @@ IfReporter::reportHolder(const char *msg, IfHolder *holder)
 
     for (int i = 0; i < ntc; i++) {
 
-	if (ind[i] < 0) {
-	    if (vertsInStrip > 2)
-		ns++;
-	    vertsInStrip = 0;
-	}
+        if (ind[i] < 0) {
+            if (vertsInStrip > 2)
+                ns++;
+            vertsInStrip = 0;
+        }
 
-	else {
-	    nv++;
-	    if (++vertsInStrip > 2)
-		nt++;
-	}
+        else {
+            nv++;
+            if (++vertsInStrip > 2)
+                nt++;
+        }
     }
 
-    fprintf(fp,
-	    "   %s: %5d strips, %5d tris, %5d verts, %5d coords\n",
-	    msg, ns, nt, nv, nc);
+    fprintf(fp, "   %s: %5d strips, %5d tris, %5d verts, %5d coords\n", msg, ns,
+            nt, nv, nc);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -142,22 +134,20 @@ IfReporter::reportHolder(const char *msg, IfHolder *holder)
 
 void
 IfReporter::reportShapeList(const char *msg, IfShapeList *shapeList,
-			    SbBool checkDiff)
-{
-    if (! verbose)
-	return;
+                            SbBool checkDiff) {
+    if (!verbose)
+        return;
 
     fprintf(fp, "%s: %d shapes", msg, shapeList->getLength());
 
     if (checkDiff) {
-	int numDiff = 1;
-	for (int i = 1; i < shapeList->getLength(); i++)
-	    if ((*shapeList)[i]->differenceLevel > 0)
-		numDiff++;
-	fprintf(fp, " (%d different property sets)\n", numDiff);
-    }
-    else
-	fprintf(fp, "\n");
+        int numDiff = 1;
+        for (int i = 1; i < shapeList->getLength(); i++)
+            if ((*shapeList)[i]->differenceLevel > 0)
+                numDiff++;
+        fprintf(fp, " (%d different property sets)\n", numDiff);
+    } else
+        fprintf(fp, "\n");
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -167,10 +157,9 @@ IfReporter::reportShapeList(const char *msg, IfShapeList *shapeList,
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfReporter::reportNodeCount(const char *msg, SoNode *root)
-{
-    if (! verbose)
-	return;
+IfReporter::reportNodeCount(const char *msg, SoNode *root) {
+    if (!verbose)
+        return;
 
     int nodeCount = 0;
 

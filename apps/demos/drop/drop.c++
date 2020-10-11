@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -56,7 +56,7 @@
 #include <Inventor/Xt/SoXt.h>
 #include "TsField.h"
 
-#define  FIELD_RESOLUTION   4
+#define FIELD_RESOLUTION 4
 
 /*
  _______________________________________________________________________
@@ -70,11 +70,11 @@
  _______________________________________________________________________
  */
 int
-main( int, char **argv )
-{
+main(int, char **argv) {
     // Initialize Inventor and Xt
     Widget appWindow = SoXt::init(argv[0]);
-    if ( appWindow == NULL ) exit( 1 );
+    if (appWindow == NULL)
+        exit(1);
 
     //
     // Initialize a random number generator to be used in selecting the
@@ -83,14 +83,12 @@ main( int, char **argv )
     std::srand(std::time(NULL));
 
     // Build the layout of the game.
-    TsField  *field  = new TsField( FIELD_RESOLUTION, appWindow );
-    field->setTitle( "Drop" );
+    TsField *field = new TsField(FIELD_RESOLUTION, appWindow);
+    field->setTitle("Drop");
     field->initGame();
     field->show();
 
     // Enter the Xt event loop
-    SoXt::show( appWindow );
+    SoXt::show(appWindow);
     SoXt::mainLoop();
 }
-
-

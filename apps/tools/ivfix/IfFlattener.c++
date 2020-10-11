@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,11 +54,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfFlattener::IfFlattener()
-{
+IfFlattener::IfFlattener() {
     holder = NULL;
 
-    numVerts      = 0;
+    numVerts = 0;
     numMtlIndices = 0;
 }
 
@@ -68,9 +67,7 @@ IfFlattener::IfFlattener()
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfFlattener::~IfFlattener()
-{
-}
+IfFlattener::~IfFlattener() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -82,16 +79,15 @@ IfFlattener::~IfFlattener()
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::flatten(IfHolder *_holder)
-{
+IfFlattener::flatten(IfHolder *_holder) {
     holder = _holder;
 
     // Assume that we will find lots of triangles. We'll clean up
     // later if there are fewer. Fields will start out with this many
     // entries. We double this size whenever we run out of space. When
     // we're done, we shrink the fields down to the amount used.
-    coordVals    = NULL;
-    normalVals   = NULL;
+    coordVals = NULL;
+    normalVals = NULL;
     texCoordVals = NULL;
     mtlIndexVals = NULL;
     fieldSize = 20000;
@@ -114,9 +110,9 @@ IfFlattener::flatten(IfHolder *_holder)
     holder->coords->point.finishEditing();
     holder->triSet->materialIndex.finishEditing();
     if (holder->doNormals)
-	holder->normals->vector.finishEditing();
+        holder->normals->vector.finishEditing();
     if (holder->doTexCoords)
-	holder->texCoords->point.finishEditing();
+        holder->texCoords->point.finishEditing();
 
     // Process the resulting structures to produce a graph
     createGraph();
@@ -129,24 +125,23 @@ IfFlattener::flatten(IfHolder *_holder)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::expandFields()
-{
+IfFlattener::expandFields() {
     // If already editing the fields, stop!
     if (coordVals != NULL) {
-	holder->coords->point.finishEditing();
-	holder->triSet->materialIndex.finishEditing();
-	if (holder->doNormals)
-	    holder->normals->vector.finishEditing();
-	if (holder->doTexCoords)
-	    holder->texCoords->point.finishEditing();
+        holder->coords->point.finishEditing();
+        holder->triSet->materialIndex.finishEditing();
+        if (holder->doNormals)
+            holder->normals->vector.finishEditing();
+        if (holder->doTexCoords)
+            holder->texCoords->point.finishEditing();
     }
 
     // Increase the size
     holder->coords->point.setNum(fieldSize);
     if (holder->doNormals)
-	holder->normals->vector.setNum(fieldSize);
+        holder->normals->vector.setNum(fieldSize);
     if (holder->doTexCoords)
-	holder->texCoords->point.setNum(fieldSize);
+        holder->texCoords->point.setNum(fieldSize);
     holder->triSet->coordIndex.setNum(fieldSize);
     holder->triSet->materialIndex.setNum(fieldSize);
 
@@ -154,9 +149,9 @@ IfFlattener::expandFields()
     coordVals = holder->coords->point.startEditing();
     mtlIndexVals = holder->triSet->materialIndex.startEditing();
     if (holder->doNormals)
-	normalVals = holder->normals->vector.startEditing();
+        normalVals = holder->normals->vector.startEditing();
     if (holder->doTexCoords)
-	texCoordVals = holder->texCoords->point.startEditing();
+        texCoordVals = holder->texCoords->point.startEditing();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -166,15 +161,14 @@ IfFlattener::expandFields()
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::prepareForShape(SoCallbackAction *cba, const SoShape *)
-{
+IfFlattener::prepareForShape(SoCallbackAction *cba, const SoShape *) {
     // Get the current model matrix so we can transform the
     // coordinates and normals
-    pointMatrix  = cba->getModelMatrix();
+    pointMatrix = cba->getModelMatrix();
     if (holder->doNormals)
-	normalMatrix = pointMatrix.inverse().transpose();
+        normalMatrix = pointMatrix.inverse().transpose();
     if (holder->doTexCoords)
-	textureMatrix = cba->getTextureMatrix();
+        textureMatrix = cba->getTextureMatrix();
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -184,29 +178,29 @@ IfFlattener::prepareForShape(SoCallbackAction *cba, const SoShape *)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::addTriangle(SoCallbackAction *, const SoPrimitiveVertex *verts[3])
-{
+IfFlattener::addTriangle(SoCallbackAction *,
+                         const SoPrimitiveVertex *verts[3]) {
     // Make sure there's enough room in the fields
     if (numMtlIndices + 4 >= fieldSize) {
-	fieldSize *= 2;
-	expandFields();
+        fieldSize *= 2;
+        expandFields();
     }
 
     // For each of the three vertices
     for (int i = 0; i < 3; i++) {
 
-	addCoordinate(verts[i]->getPoint());
+        addCoordinate(verts[i]->getPoint());
 
-	if (holder->doNormals)
-	    addNormal(verts[i]->getNormal());
+        if (holder->doNormals)
+            addNormal(verts[i]->getNormal());
 
-	if (holder->doTexCoords)
-	    addTextureCoordinate(verts[i]->getTextureCoords());
+        if (holder->doTexCoords)
+            addTextureCoordinate(verts[i]->getTextureCoords());
 
-	addMaterialIndex(verts[i]->getMaterialIndex());
+        addMaterialIndex(verts[i]->getMaterialIndex());
 
-	numVerts++;
-	numMtlIndices++;
+        numVerts++;
+        numMtlIndices++;
     }
 
     // Add a material index to skip (for the end-of-triangle marker)
@@ -221,9 +215,7 @@ IfFlattener::addTriangle(SoCallbackAction *, const SoPrimitiveVertex *verts[3])
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::finishShape(SoCallbackAction *, const SoShape *)
-{
-}
+IfFlattener::finishShape(SoCallbackAction *, const SoShape *) {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -232,8 +224,7 @@ IfFlattener::finishShape(SoCallbackAction *, const SoShape *)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::addCoordinate(const SbVec3f &point)
-{
+IfFlattener::addCoordinate(const SbVec3f &point) {
     SbVec3f transformedPoint;
     pointMatrix.multVecMatrix(point, transformedPoint);
     coordVals[numVerts] = transformedPoint;
@@ -246,8 +237,7 @@ IfFlattener::addCoordinate(const SbVec3f &point)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::addNormal(const SbVec3f &normal)
-{
+IfFlattener::addNormal(const SbVec3f &normal) {
     SbVec3f transformedNormal;
     normalMatrix.multDirMatrix(normal, transformedNormal);
     transformedNormal.normalize();
@@ -261,8 +251,7 @@ IfFlattener::addNormal(const SbVec3f &normal)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::addMaterialIndex(int materialIndex)
-{
+IfFlattener::addMaterialIndex(int materialIndex) {
     mtlIndexVals[numMtlIndices] = materialIndex;
 }
 
@@ -273,8 +262,7 @@ IfFlattener::addMaterialIndex(int materialIndex)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::addTextureCoordinate(const SbVec4f &texCoord)
-{
+IfFlattener::addTextureCoordinate(const SbVec4f &texCoord) {
     // Ignore everything except S and T
     SbVec3f stTexCoord(texCoord[0], texCoord[1], 0.0);
 
@@ -292,47 +280,46 @@ IfFlattener::addTextureCoordinate(const SbVec4f &texCoord)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfFlattener::createGraph()
-{
+IfFlattener::createGraph() {
     // The coordinates, normals, and texture coordinates should
     // already be set. All we need to do here is set up the
     // indices in the SoIndexedShape.
     int numTris = numVerts / 3;
     holder->triSet->coordIndex.setNum(numTris * 4);
     int32_t *cindex = holder->triSet->coordIndex.startEditing();
-    int ci = 0, v = 0;
+    int      ci = 0, v = 0;
     for (int t = 0; t < numTris; t++) {
-	cindex[ci++] = v++;
-	cindex[ci++] = v++;
-	cindex[ci++] = v++;
-	cindex[ci++] = -1;
+        cindex[ci++] = v++;
+        cindex[ci++] = v++;
+        cindex[ci++] = v++;
+        cindex[ci++] = -1;
     }
     holder->triSet->coordIndex.finishEditing();
 
     // The normal and texture coordinate indices start out the same as
     // the coordinate indices
     if (holder->doNormals)
-	holder->triSet->normalIndex = holder->triSet->coordIndex;
+        holder->triSet->normalIndex = holder->triSet->coordIndex;
     if (holder->doTexCoords)
-	holder->triSet->textureCoordIndex = holder->triSet->coordIndex;
+        holder->triSet->textureCoordIndex = holder->triSet->coordIndex;
 
     // Decrease the sizes of the fields if there is any extra space
     if (numVerts < fieldSize) {
-	holder->coords->point.setNum(numVerts);
-	if (holder->doNormals)
-	    holder->normals->vector.setNum(numVerts);
-	if (holder->doTexCoords)
-	    holder->texCoords->point.setNum(numVerts);
+        holder->coords->point.setNum(numVerts);
+        if (holder->doNormals)
+            holder->normals->vector.setNum(numVerts);
+        if (holder->doTexCoords)
+            holder->texCoords->point.setNum(numVerts);
     }
     if (numMtlIndices < fieldSize)
-	holder->triSet->materialIndex.setNum(numMtlIndices);
+        holder->triSet->materialIndex.setNum(numMtlIndices);
 
     // Assume that the normals, materials, and texture coordinates are
     // bound per vertex, using the indices
     if (holder->doNormals)
-	holder->normalBinding->value = SoNormalBinding::PER_VERTEX_INDEXED;
+        holder->normalBinding->value = SoNormalBinding::PER_VERTEX_INDEXED;
     holder->materialBinding->value = SoMaterialBinding::PER_VERTEX_INDEXED;
     if (holder->doTexCoords)
-	holder->texCoordBinding->value =
-	    SoTextureCoordinateBinding::PER_VERTEX_INDEXED;
+        holder->texCoordBinding->value =
+            SoTextureCoordinateBinding::PER_VERTEX_INDEXED;
 }

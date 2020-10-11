@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -41,8 +41,8 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef  _IF_HOLDER_
-#define  _IF_HOLDER_
+#ifndef _IF_HOLDER_
+#define _IF_HOLDER_
 
 #include <Inventor/SbBasic.h>
 
@@ -62,42 +62,42 @@ class SoTextureCoordinateBinding;
 class IfHolder {
 
   public:
-    IfHolder(SoNode *graphRoot, SbBool doStrips,
-	     SbBool doNormals, SbBool doTexCoords);
+    IfHolder(SoNode *graphRoot, SbBool doStrips, SbBool doNormals,
+             SbBool doTexCoords);
     ~IfHolder();
 
     // This is the root of the graph being fixed
-    SoNode			*origRoot;
+    SoNode *origRoot;
 
     // This flag specifies whether to create triangle strips or
     // independent triangular faces
-    SbBool			doStrips;
+    SbBool doStrips;
 
     // These flags specify whether to create normals and texture
     // coordinates
-    SbBool			doNormals;
-    SbBool			doTexCoords;
+    SbBool doNormals;
+    SbBool doTexCoords;
 
     // These nodes form the graph resulting from fixing a scene graph:
-    SoSeparator			*root;
-    SoCoordinate3		*coords;
-    SoNormal			*normals;
-    SoNormalBinding		*normalBinding;
-    SoMaterialBinding		*materialBinding;
-    SoTextureCoordinate2	*texCoords;
-    SoTextureCoordinateBinding	*texCoordBinding;
+    SoSeparator *               root;
+    SoCoordinate3 *             coords;
+    SoNormal *                  normals;
+    SoNormalBinding *           normalBinding;
+    SoMaterialBinding *         materialBinding;
+    SoTextureCoordinate2 *      texCoords;
+    SoTextureCoordinateBinding *texCoordBinding;
 
     // One of these is used to hold the resulting triangles:
-    SoIndexedFaceSet		*faceSet;
-    SoIndexedTriangleStripSet	*stripSet;
+    SoIndexedFaceSet *         faceSet;
+    SoIndexedTriangleStripSet *stripSet;
 
     // This holds whichever of the above shapes is actually used:
-    SoIndexedShape		*triSet;
+    SoIndexedShape *triSet;
 
     // Converts the scene graph to use an SoVertexProperty node for
     // the properties. The given material is used in case the
     // materials need to be copied into the SoVertexProperty node.
-    void			convertToVertexProperty(SoMaterial *mtl);
+    void convertToVertexProperty(SoMaterial *mtl);
 };
 
 #endif /* _IF_HOLDER_ */

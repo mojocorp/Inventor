@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,46 +67,45 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfShape::IfShape()
-{
+IfShape::IfShape() {
     // Level 1:
-    camera		= NULL;
+    camera = NULL;
 
     // Level 2:
-    lights		= NULL;
-    clipPlanes		= NULL;
-    environment		= NULL;
-    lightModel		= NULL;
+    lights = NULL;
+    clipPlanes = NULL;
+    environment = NULL;
+    lightModel = NULL;
 
     // Level 3:
-    texture		= NULL;
+    texture = NULL;
 
     // Level 4:
-    drawStyle		= NULL;
-    shapeHints		= NULL;
-    material		= NULL;
-    other		= NULL;
+    drawStyle = NULL;
+    shapeHints = NULL;
+    material = NULL;
+    other = NULL;
 
     // Level 5:
-    complexity		= NULL;
-    coords		= NULL;
-    font		= NULL;
-    materialBinding	= NULL;
-    normals		= NULL;
-    normalBinding	= NULL;
-    profileCoords	= NULL;
-    profiles		= NULL;
-    texCoords		= NULL;
-    texCoordBinding	= NULL;
+    complexity = NULL;
+    coords = NULL;
+    font = NULL;
+    materialBinding = NULL;
+    normals = NULL;
+    normalBinding = NULL;
+    profileCoords = NULL;
+    profiles = NULL;
+    texCoords = NULL;
+    texCoordBinding = NULL;
 
     // IfShape:
-    shape		= NULL;
+    shape = NULL;
 
     transform.makeIdentity();
-    textureTransforms   = NULL;
+    textureTransforms = NULL;
 
-    differenceLevel	= -1;
-    differenceCode	= NONE;
+    differenceLevel = -1;
+    differenceCode = NONE;
 
     dontFlatten = FALSE;
 }
@@ -117,10 +116,7 @@ IfShape::IfShape()
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfShape::~IfShape()
-{
-    clearNodes();
-}
+IfShape::~IfShape() { clearNodes(); }
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -131,9 +127,8 @@ IfShape::~IfShape()
 /////////////////////////////////////////////////////////////////////////////
 
 int
-IfShape::compare(const IfShape *s1, const IfShape *s2,
-		 int &level, DifferenceCode &diffCode)
-{
+IfShape::compare(const IfShape *s1, const IfShape *s2, int &level,
+                 DifferenceCode &diffCode) {
     //////////////////////////////////////////////////////////////////
     //
     // The first two macros are used to make quick comparisons between
@@ -143,76 +138,74 @@ IfShape::compare(const IfShape *s1, const IfShape *s2,
     // specially, using the other macros.
     //
 
-#define COMPARE_NODES(node, code)					      \
-    if (s1->node != s2->node) {						      \
-	diffCode = code;						      \
-	return s2->node - s1->node;					      \
+#define COMPARE_NODES(node, code)                                              \
+    if (s1->node != s2->node) {                                                \
+        diffCode = code;                                                       \
+        return s2->node - s1->node;                                            \
     }
 
-#define COMPARE_LISTS(list, code)					      \
-    if (s1->list != s2->list) {						      \
-	int c = compareLists(s1->list, s2->list);			      \
-	if (c != 0) {							      \
-	    diffCode = code;						      \
-	    return c;							      \
-	}								      \
+#define COMPARE_LISTS(list, code)                                              \
+    if (s1->list != s2->list) {                                                \
+        int c = compareLists(s1->list, s2->list);                              \
+        if (c != 0) {                                                          \
+            diffCode = code;                                                   \
+            return c;                                                          \
+        }                                                                      \
     }
 
-#define COMPARE_NULL_NODE_POINTERS(node, code)				      \
-	if (s1->node == NULL) {						      \
-	    diffCode = code;						      \
-	    return -1;							      \
-	}								      \
-	if (s2->node == NULL) {						      \
-	    diffCode = code;						      \
-	    return 1;							      \
-	}
-
-#define COMPARE_INT_FIELDS(node, field, code)				      \
-    if (s1->node->field.getValue() != s2->node->field.getValue()) {	      \
-	diffCode = code;						      \
-	return ((int) s2->node->field.getValue() -			      \
-		(int) s1->node->field.getValue());			      \
+#define COMPARE_NULL_NODE_POINTERS(node, code)                                 \
+    if (s1->node == NULL) {                                                    \
+        diffCode = code;                                                       \
+        return -1;                                                             \
+    }                                                                          \
+    if (s2->node == NULL) {                                                    \
+        diffCode = code;                                                       \
+        return 1;                                                              \
     }
 
-#define COMPARE_FLOAT_FIELDS(node, field, code)				      \
-    if (s1->node->field.getValue() != s2->node->field.getValue()) {	      \
-	int c = compareFloats(s1->node->field.getValue(),		      \
-			      s2->node->field.getValue());		      \
-	if (c != 0) {							      \
-	    diffCode = code;						      \
-	    return c;							      \
-	}								      \
+#define COMPARE_INT_FIELDS(node, field, code)                                  \
+    if (s1->node->field.getValue() != s2->node->field.getValue()) {            \
+        diffCode = code;                                                       \
+        return ((int)s2->node->field.getValue() -                              \
+                (int)s1->node->field.getValue());                              \
     }
 
-#define COMPARE_MFLOAT_FIELDS(node, field, code)			      \
-    if (s1->node->field.getNum() != s2->node->field.getNum())		      \
-	return s2->node->field.getNum() - s1->node->field.getNum();	      \
-    if (s1->node->field.getNum() == 1) {				      \
-	int c = compareFloats(s1->node->field[0], s2->node->field[0]);	      \
-	if (c != 0) {							      \
-	    diffCode = code;						      \
-	    return c;							      \
-	}								      \
-    }									      \
-    else {								      \
-	diffCode = code;						      \
-	return s2->node - s1->node;					      \
+#define COMPARE_FLOAT_FIELDS(node, field, code)                                \
+    if (s1->node->field.getValue() != s2->node->field.getValue()) {            \
+        int c = compareFloats(s1->node->field.getValue(),                      \
+                              s2->node->field.getValue());                     \
+        if (c != 0) {                                                          \
+            diffCode = code;                                                   \
+            return c;                                                          \
+        }                                                                      \
     }
 
-#define COMPARE_MCOLOR_FIELDS(node, field, code)			      \
-    if (s1->node->field.getNum() != s2->node->field.getNum())		      \
-	return s2->node->field.getNum() - s1->node->field.getNum();	      \
-    if (s1->node->field.getNum() == 1) {				      \
-	int c = compareColors(s1->node->field[0], s2->node->field[0]);	      \
-	if (c != 0) {							      \
-	    diffCode = code;						      \
-	    return c;							      \
-	}								      \
-    }									      \
-    else {								      \
-	diffCode = code;						      \
-	return s2->node - s1->node;					      \
+#define COMPARE_MFLOAT_FIELDS(node, field, code)                               \
+    if (s1->node->field.getNum() != s2->node->field.getNum())                  \
+        return s2->node->field.getNum() - s1->node->field.getNum();            \
+    if (s1->node->field.getNum() == 1) {                                       \
+        int c = compareFloats(s1->node->field[0], s2->node->field[0]);         \
+        if (c != 0) {                                                          \
+            diffCode = code;                                                   \
+            return c;                                                          \
+        }                                                                      \
+    } else {                                                                   \
+        diffCode = code;                                                       \
+        return s2->node - s1->node;                                            \
+    }
+
+#define COMPARE_MCOLOR_FIELDS(node, field, code)                               \
+    if (s1->node->field.getNum() != s2->node->field.getNum())                  \
+        return s2->node->field.getNum() - s1->node->field.getNum();            \
+    if (s1->node->field.getNum() == 1) {                                       \
+        int c = compareColors(s1->node->field[0], s2->node->field[0]);         \
+        if (c != 0) {                                                          \
+            diffCode = code;                                                   \
+            return c;                                                          \
+        }                                                                      \
+    } else {                                                                   \
+        diffCode = code;                                                       \
+        return s2->node - s1->node;                                            \
     }
 
     //////////////////////////////////////////////////////////////////
@@ -229,33 +222,33 @@ IfShape::compare(const IfShape *s1, const IfShape *s2,
     level = 3;
     // Comparing textures uses the file names if they are set
     if (s1->texture != s2->texture) {
-	COMPARE_NULL_NODE_POINTERS(texture, TEXTURE);
-	const SbString &name1 = s1->texture->filename.getValue();
-	const SbString &name2 = s2->texture->filename.getValue();
-	// If no names, use the texture nodes themselves
-	if (! name1)
-	    return s2->texture - s1->texture;
-	int c = strcmp(name1.getString(), name2.getString());
-	if (c != 0)
-	    return c;
+        COMPARE_NULL_NODE_POINTERS(texture, TEXTURE);
+        const SbString &name1 = s1->texture->filename.getValue();
+        const SbString &name2 = s2->texture->filename.getValue();
+        // If no names, use the texture nodes themselves
+        if (!name1)
+            return s2->texture - s1->texture;
+        int c = strcmp(name1.getString(), name2.getString());
+        if (c != 0)
+            return c;
     }
-    
+
     level = 4;
     // Comparing draw style tests the values in the nodes
     if (s1->drawStyle != s2->drawStyle) {
-	COMPARE_NULL_NODE_POINTERS(drawStyle, DRAW_STYLE);
-	COMPARE_INT_FIELDS(drawStyle,   style,		DRAW_STYLE);
-	COMPARE_FLOAT_FIELDS(drawStyle, pointSize,	DRAW_STYLE);
-	COMPARE_FLOAT_FIELDS(drawStyle, lineWidth,	DRAW_STYLE);
-	COMPARE_INT_FIELDS(drawStyle,   linePattern,	DRAW_STYLE);
+        COMPARE_NULL_NODE_POINTERS(drawStyle, DRAW_STYLE);
+        COMPARE_INT_FIELDS(drawStyle, style, DRAW_STYLE);
+        COMPARE_FLOAT_FIELDS(drawStyle, pointSize, DRAW_STYLE);
+        COMPARE_FLOAT_FIELDS(drawStyle, lineWidth, DRAW_STYLE);
+        COMPARE_INT_FIELDS(drawStyle, linePattern, DRAW_STYLE);
     }
     // Comparing shape hints tests the values in the nodes
     if (s1->shapeHints != s2->shapeHints) {
-	COMPARE_NULL_NODE_POINTERS(shapeHints, SHAPE_HINTS);
-	COMPARE_INT_FIELDS(shapeHints, vertexOrdering,	SHAPE_HINTS);
-	COMPARE_INT_FIELDS(shapeHints, shapeType,	SHAPE_HINTS);
-	COMPARE_INT_FIELDS(shapeHints, faceType,	SHAPE_HINTS);
-	COMPARE_FLOAT_FIELDS(shapeHints, creaseAngle,	SHAPE_HINTS);
+        COMPARE_NULL_NODE_POINTERS(shapeHints, SHAPE_HINTS);
+        COMPARE_INT_FIELDS(shapeHints, vertexOrdering, SHAPE_HINTS);
+        COMPARE_INT_FIELDS(shapeHints, shapeType, SHAPE_HINTS);
+        COMPARE_INT_FIELDS(shapeHints, faceType, SHAPE_HINTS);
+        COMPARE_FLOAT_FIELDS(shapeHints, creaseAngle, SHAPE_HINTS);
     }
     COMPARE_LISTS(other, OTHER);
 
@@ -264,13 +257,13 @@ IfShape::compare(const IfShape *s1, const IfShape *s2,
     // NOTE: the material comparison has to come last within this
     // level so that the IfMerger stuff works properly.
     if (s1->material != s2->material) {
-	COMPARE_NULL_NODE_POINTERS(material, MATERIAL);
-	COMPARE_MCOLOR_FIELDS(material,  ambientColor, MATERIAL);
-	COMPARE_MCOLOR_FIELDS(material,  diffuseColor, MATERIAL);
-	COMPARE_MCOLOR_FIELDS(material, specularColor, MATERIAL);
-	COMPARE_MCOLOR_FIELDS(material, emissiveColor, MATERIAL);
-	COMPARE_MFLOAT_FIELDS(material,     shininess, MATERIAL);
-	COMPARE_MFLOAT_FIELDS(material,  transparency, MATERIAL);
+        COMPARE_NULL_NODE_POINTERS(material, MATERIAL);
+        COMPARE_MCOLOR_FIELDS(material, ambientColor, MATERIAL);
+        COMPARE_MCOLOR_FIELDS(material, diffuseColor, MATERIAL);
+        COMPARE_MCOLOR_FIELDS(material, specularColor, MATERIAL);
+        COMPARE_MCOLOR_FIELDS(material, emissiveColor, MATERIAL);
+        COMPARE_MFLOAT_FIELDS(material, shininess, MATERIAL);
+        COMPARE_MFLOAT_FIELDS(material, transparency, MATERIAL);
     }
 
     // If nothing else differs, the shape must. We usually consider
@@ -281,8 +274,8 @@ IfShape::compare(const IfShape *s1, const IfShape *s2,
     // the same, since the difference matters only after they have
     // been sorted, when the levels are computed for real.)
     if (s1->dontFlatten || s2->dontFlatten) {
-	level = 5;
-	return 0;
+        level = 5;
+        return 0;
     }
 
     // If we got here, they're the same, except for the
@@ -290,7 +283,7 @@ IfShape::compare(const IfShape *s1, const IfShape *s2,
     // differ at Level 5.
     level = 0;
     return 0;
-    
+
 #undef COMPARE_NODES
 #undef COMPARE_LISTS
 }
@@ -302,20 +295,19 @@ IfShape::compare(const IfShape *s1, const IfShape *s2,
 /////////////////////////////////////////////////////////////////////////////
 
 int
-IfShape::compareLists(const SoNodeList *l1, const SoNodeList *l2)
-{
+IfShape::compareLists(const SoNodeList *l1, const SoNodeList *l2) {
     if (l1 == NULL)
-	return -1;
+        return -1;
 
     if (l2 == NULL)
-	return 1;
+        return 1;
 
     if (l1->getLength() != l2->getLength())
-	return l2->getLength() - l1->getLength();
+        return l2->getLength() - l1->getLength();
 
     for (int i = 0; i < l1->getLength(); i++)
-	if ((*l1)[i] != (*l2)[i])
-	    return (*l2)[i] - (*l2)[i];
+        if ((*l1)[i] != (*l2)[i])
+            return (*l2)[i] - (*l2)[i];
 
     return 0;
 }
@@ -327,14 +319,13 @@ IfShape::compareLists(const SoNodeList *l1, const SoNodeList *l2)
 /////////////////////////////////////////////////////////////////////////////
 
 int
-IfShape::compareFloats(float f1, float f2)
-{
+IfShape::compareFloats(float f1, float f2) {
     if (f1 < f2)
-	return -1;
+        return -1;
     else if (f1 > f2)
-	return 1;
+        return 1;
     else
-	return 0;
+        return 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -344,13 +335,12 @@ IfShape::compareFloats(float f1, float f2)
 /////////////////////////////////////////////////////////////////////////////
 
 int
-IfShape::compareColors(const SbColor &c1, const SbColor &c2)
-{
+IfShape::compareColors(const SbColor &c1, const SbColor &c2) {
     for (int i = 0; i < 3; i++) {
-	if (c1[i] < c2[i])
-	    return -1;
-	else if (c1[i] > c2[i])
-	    return 1;
+        if (c1[i] < c2[i])
+            return -1;
+        else if (c1[i] > c2[i])
+            return 1;
     }
     return 0;
 }
@@ -363,73 +353,76 @@ IfShape::compareColors(const SbColor &c1, const SbColor &c2)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfShape::addNodesForLevel(SoGroup *group, int level)
-{
+IfShape::addNodesForLevel(SoGroup *group, int level) {
 
-#define ADD_NODE(n)	if (n != NULL) group->addChild(n)
+#define ADD_NODE(n)                                                            \
+    if (n != NULL)                                                             \
+    group->addChild(n)
 
-#define ADD_LIST(l)	if (l != NULL) {				      \
-			    for (i = 0; i < (*l).getLength(); i++)	      \
-				group->addChild((*l)[i]);		      \
-			}
+#define ADD_LIST(l)                                                            \
+    if (l != NULL) {                                                           \
+        for (i = 0; i < (*l).getLength(); i++)                                 \
+            group->addChild((*l)[i]);                                          \
+    }
 
     int i;
     ASSERT(level > 0 && level <= 5);
 
     switch (level) {
 
-      case 1:
-	ADD_NODE(camera);
-	break;
+    case 1:
+        ADD_NODE(camera);
+        break;
 
-      case 2:
-	ADD_LIST(lights);
-	ADD_LIST(clipPlanes);
-	ADD_NODE(environment);
-	ADD_NODE(lightModel);
-	break;
+    case 2:
+        ADD_LIST(lights);
+        ADD_LIST(clipPlanes);
+        ADD_NODE(environment);
+        ADD_NODE(lightModel);
+        break;
 
-      case 3:
-	ADD_NODE(texture);
-	break;
+    case 3:
+        ADD_NODE(texture);
+        break;
 
-      case 4:
-	ADD_NODE(drawStyle);
-	ADD_NODE(shapeHints);
-	ADD_NODE(material);
-	ADD_LIST(other);
-	break;
+    case 4:
+        ADD_NODE(drawStyle);
+        ADD_NODE(shapeHints);
+        ADD_NODE(material);
+        ADD_LIST(other);
+        break;
 
-      case 5:
-	// For level 5, we add each set of nodes under its own
-	// separator
-	{
-	    SoSeparator *sep = new SoSeparator;
-	    group->addChild(sep);
-	    group = sep;
-	}
-	ADD_NODE(complexity);
-	ADD_NODE(coords);
-	ADD_NODE(font);
-	ADD_NODE(materialBinding);
-	ADD_NODE(normals);
-	ADD_NODE(normalBinding);
-	ADD_NODE(profileCoords);
-	ADD_LIST(profiles);
-	ADD_NODE(texCoords);
-	ADD_NODE(texCoordBinding);
-	// Handle matrices specially
-	if (transform != SbMatrix::identity()) {
-	    SoMatrixTransform *xf = new SoMatrixTransform;
-	    group->addChild(xf);
-	    xf->matrix = transform;
-	}
-	ADD_LIST(textureTransforms);
-	ADD_NODE(shape);
-	break;
+    case 5:
+        // For level 5, we add each set of nodes under its own
+        // separator
+        {
+            SoSeparator *sep = new SoSeparator;
+            group->addChild(sep);
+            group = sep;
+        }
+        ADD_NODE(complexity);
+        ADD_NODE(coords);
+        ADD_NODE(font);
+        ADD_NODE(materialBinding);
+        ADD_NODE(normals);
+        ADD_NODE(normalBinding);
+        ADD_NODE(profileCoords);
+        ADD_LIST(profiles);
+        ADD_NODE(texCoords);
+        ADD_NODE(texCoordBinding);
+        // Handle matrices specially
+        if (transform != SbMatrix::identity()) {
+            SoMatrixTransform *xf = new SoMatrixTransform;
+            group->addChild(xf);
+            xf->matrix = transform;
+        }
+        ADD_LIST(textureTransforms);
+        ADD_NODE(shape);
+        break;
 
-      default:
-	fprintf(stderr, "Error in IfShape::addNodesForLevel(level %d)\n", level);
+    default:
+        fprintf(stderr, "Error in IfShape::addNodesForLevel(level %d)\n",
+                level);
     }
 
 #undef ADD_NODE
@@ -443,11 +436,18 @@ IfShape::addNodesForLevel(SoGroup *group, int level)
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfShape::clearNodes()
-{
+IfShape::clearNodes() {
 
-#define CLEAR_NODE(name) if (name != NULL) { name->unref(); name = NULL; }
-#define CLEAR_LIST(name) if (name != NULL) { delete name;   name = NULL; }
+#define CLEAR_NODE(name)                                                       \
+    if (name != NULL) {                                                        \
+        name->unref();                                                         \
+        name = NULL;                                                           \
+    }
+#define CLEAR_LIST(name)                                                       \
+    if (name != NULL) {                                                        \
+        delete name;                                                           \
+        name = NULL;                                                           \
+    }
 
     CLEAR_NODE(camera);
     CLEAR_NODE(environment);

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -75,8 +75,7 @@ SO_NODE_SOURCE(LineManip2);
 //
 // Constructor; sets up scene graph
 //
-LineManip2::LineManip2()
-{
+LineManip2::LineManip2() {
     SO_NODE_CONSTRUCTOR(LineManip2);
 
     coord = new SoCoordinate3();
@@ -97,9 +96,9 @@ LineManip2::LineManip2()
 
     current_coord = -1;
     planeProj = new SbPlaneProjector(FALSE);
-    planeProj->setPlane( SbPlane( SbVec3f(0,0,1), 0 ) );
+    planeProj->setPlane(SbPlane(SbVec3f(0, 0, 1), 0));
     lineProj = new SbLineProjector();
-    lineProj->setLine( SbLine(  SbVec3f(0,0,0),SbVec3f(0,0,1) ) );
+    lineProj->setLine(SbLine(SbVec3f(0, 0, 0), SbVec3f(0, 0, 1)));
 
     hilightSize = 0.05;
 
@@ -110,14 +109,13 @@ LineManip2::LineManip2()
     // This sensor will insure that the pset and lset nodes will have
     // the correct number of points.
     coordFieldSensor = new SoFieldSensor(&LineManip2::coordFieldSensorCB, this);
-    coordFieldSensor->attach( &coord->point );
+    coordFieldSensor->attach(&coord->point);
     coordFieldSensor->setPriority(0);
 }
 
 //
 // Destructor.  This will be called when this is unref'ed.
-LineManip2::~LineManip2()
-{
+LineManip2::~LineManip2() {
     //
     // Don't need to delete children; they will have already been
     // unref'ed and deleted (since this is derived from SoGroup).
@@ -132,8 +130,7 @@ LineManip2::~LineManip2()
 // Magic stuff to register this node with the database
 //
 void
-LineManip2::initClass()
-{
+LineManip2::initClass() {
     SO_NODE_INIT_CLASS(LineManip2, SoSeparator, "Separator");
 }
 
@@ -143,8 +140,7 @@ LineManip2::initClass()
 // returned.
 //
 SoCoordinate3 *
-LineManip2::getCoordinate3()
-{
+LineManip2::getCoordinate3() {
     return coord;
 }
 
@@ -154,35 +150,34 @@ LineManip2::getCoordinate3()
 // returned.
 //
 void
-LineManip2::setCoordinate3( SoCoordinate3 *newNode )
-{
-    if ( newNode == coord)
-	return;
+LineManip2::setCoordinate3(SoCoordinate3 *newNode) {
+    if (newNode == coord)
+        return;
 
-    if ( coord != NULL ) {
-	removeChild( coord );
+    if (coord != NULL) {
+        removeChild(coord);
         coordFieldSensor->detach();
     }
-    if ( newNode != NULL ) {
-	insertChild(newNode,0);
-        coordFieldSensor->attach( &newNode->point );
+    if (newNode != NULL) {
+        insertChild(newNode, 0);
+        coordFieldSensor->attach(&newNode->point);
     }
     coord = newNode;
 
-    coordFieldSensorCB( this, NULL);
+    coordFieldSensorCB(this, NULL);
 }
 
 //
 // For setting the plane that the manip works in. You pass it a normal.
 //
 void
-LineManip2::setPlaneNormal( const SbVec3f &newNormal )
-{
-    SbVec3f zeroVec(0,0,0);
+LineManip2::setPlaneNormal(const SbVec3f &newNormal) {
+    SbVec3f zeroVec(0, 0, 0);
     planeNormal = newNormal;
-    planeProj->setPlane( SbPlane( planeNormal, zeroVec ) );
-    lineProj->setLine( SbLine( zeroVec, zeroVec + planeNormal ) );
-    hilightTransform->rotation.setValue( SbRotation(SbVec3f(0,0,1), SbVec3f(planeNormal)));
+    planeProj->setPlane(SbPlane(planeNormal, zeroVec));
+    lineProj->setLine(SbLine(zeroVec, zeroVec + planeNormal));
+    hilightTransform->rotation.setValue(
+        SbRotation(SbVec3f(0, 0, 1), SbVec3f(planeNormal)));
 }
 
 //
@@ -192,40 +187,34 @@ LineManip2::setPlaneNormal( const SbVec3f &newNormal )
 // backspace/delete events, even if the mouse isn't on top of it.
 //
 void
-LineManip2::handleEvent(SoHandleEventAction *ha)
-{
+LineManip2::handleEvent(SoHandleEventAction *ha) {
     myHandleEventAction = ha;
 
     const SoEvent *e = ha->getEvent();
 
     if (SO_MOUSE_PRESS_EVENT(e, BUTTON1)) {
-	if (dragStart())
-	    ha->setHandled();
-    }
-    else if (e->isOfType(SoLocation2Event::getClassTypeId())) {
-	// If not dragging, locate hilight
-	if (ha->getGrabber() != this) {
-	    if (locateHilight())
-	        ha->setHandled();
-	}
-	else {	// Are dragging, move coordinate:
-	    moveCoord();
-	    ha->setHandled();
-	}
-    }
-    else if (SO_MOUSE_RELEASE_EVENT(e, BUTTON1) &&
-	     ha->getGrabber() == this) {
-	ha->releaseGrabber();
-	ha->setHandled();
-    }
-    else if (SO_KEY_PRESS_EVENT(e, BACKSPACE) ||
-	     SO_KEY_PRESS_EVENT(e, DELETE)) {
-	if (remove())
-	    ha->setHandled();
-	// If we are in mid-motion and we remove the point, 
-	// we better stop grabber, cause we got nothin to grab anymore.
-	if (ha->getGrabber() == this)
-	    ha->releaseGrabber();
+        if (dragStart())
+            ha->setHandled();
+    } else if (e->isOfType(SoLocation2Event::getClassTypeId())) {
+        // If not dragging, locate hilight
+        if (ha->getGrabber() != this) {
+            if (locateHilight())
+                ha->setHandled();
+        } else { // Are dragging, move coordinate:
+            moveCoord();
+            ha->setHandled();
+        }
+    } else if (SO_MOUSE_RELEASE_EVENT(e, BUTTON1) && ha->getGrabber() == this) {
+        ha->releaseGrabber();
+        ha->setHandled();
+    } else if (SO_KEY_PRESS_EVENT(e, BACKSPACE) ||
+               SO_KEY_PRESS_EVENT(e, DELETE)) {
+        if (remove())
+            ha->setHandled();
+        // If we are in mid-motion and we remove the point,
+        // we better stop grabber, cause we got nothin to grab anymore.
+        if (ha->getGrabber() == this)
+            ha->releaseGrabber();
         current_coord = -1;
     }
 }
@@ -236,22 +225,21 @@ static SbColor pickColor(0.9, 0.9, 0.9);
 //
 // Figures out which part of the line manipulator is picked by the
 // given detail.  This will also set current_position and
-// current_coord. 
+// current_coord.
 //
 #ifdef __C_PLUS_PLUS_2
 LineManipPart
 #else
 LineManip2::Part
 #endif
-LineManip2::whichPart()
-{
+LineManip2::whichPart() {
     // Can't pick if we don't have an action, now can we?
     if (myHandleEventAction == NULL)
-	return NOTHING;
+        return NOTHING;
 
     // We're also out of luck if there's no coord node.
     if (coord == NULL)
-	return NOTHING;
+        return NOTHING;
 
     const SoPickedPoint *picked_point = myHandleEventAction->getPickedPoint();
 
@@ -260,41 +248,37 @@ LineManip2::whichPart()
     int numCoords = coord->point.getNum();
 
     if (numCoords == 0 || picked_point == NULL) {
-	//
-	// Endpoints
-	// Pick the endPoint that's closer to where the mouse is now.
-	if (numCoords == 0) {
-	    current_coord = -1;
-	}
-	else {
-	    SbVec3f v1, v2;
-	    v1 = current_position - coord->point[0];
-	    v2 = current_position - coord->point[numCoords-1];
-	    //
-	    // Choose the endPoint closer to the current position.
-	    //
-	    if (v1.dot(v1) < v2.dot(v2)) {
-		current_coord = 0;
-	    }
-	    else {
-		current_coord = numCoords;
-	    }
-	}
-	return ENDPOINTS;
+        //
+        // Endpoints
+        // Pick the endPoint that's closer to where the mouse is now.
+        if (numCoords == 0) {
+            current_coord = -1;
+        } else {
+            SbVec3f v1, v2;
+            v1 = current_position - coord->point[0];
+            v2 = current_position - coord->point[numCoords - 1];
+            //
+            // Choose the endPoint closer to the current position.
+            //
+            if (v1.dot(v1) < v2.dot(v2)) {
+                current_coord = 0;
+            } else {
+                current_coord = numCoords;
+            }
+        }
+        return ENDPOINTS;
     }
 
-    const SoPath *dpath = picked_point->getPath();
+    const SoPath *  dpath = picked_point->getPath();
     const SoDetail *detail = picked_point->getDetail();
 
     if (dpath->containsNode(pset)) {
-	current_coord =
-	    ((SoPointDetail *)detail)->getCoordinateIndex();
-	return POINTS;
+        current_coord = ((SoPointDetail *)detail)->getCoordinateIndex();
+        return POINTS;
     }
     if (dpath->containsNode(lset)) {
-	current_coord =
-	    ((SoLineDetail *)detail)->getPartIndex();
-	return LINES;
+        current_coord = ((SoLineDetail *)detail)->getPartIndex();
+        return LINES;
     }
     return NOTHING;
 }
@@ -303,51 +287,50 @@ LineManip2::whichPart()
 // Called when the mouse goes down to figure out what is being picked.
 //
 SbBool
-LineManip2::dragStart()
-{
-    if ( coord == NULL)
-	return FALSE;
+LineManip2::dragStart() {
+    if (coord == NULL)
+        return FALSE;
 
     SbBool gotSomething = TRUE;
 
-    switch(whichPart()) {
-      case POINTS:
-	myHandleEventAction->setGrabber(this);
-	hilightVertex(coord->point[current_coord], pickColor);
-	break;
+    switch (whichPart()) {
+    case POINTS:
+        myHandleEventAction->setGrabber(this);
+        hilightVertex(coord->point[current_coord], pickColor);
+        break;
 
-      case LINES:
-	// Create a new vertex
-	coord->point.insertSpace(current_coord+1, 1);
-	coord->point.set1Value(current_coord+1, current_position);
-	myHandleEventAction->setGrabber(this);
-	++current_coord;
-	hilightVertex(coord->point[current_coord], pickColor);
-	break;
+    case LINES:
+        // Create a new vertex
+        coord->point.insertSpace(current_coord + 1, 1);
+        coord->point.set1Value(current_coord + 1, current_position);
+        myHandleEventAction->setGrabber(this);
+        ++current_coord;
+        hilightVertex(coord->point[current_coord], pickColor);
+        break;
 
-      case ENDPOINTS:
-	// Create a new vertex
-	if (current_coord != -1) {
-	    coord->point.insertSpace(current_coord, 1);
-	}
-	else current_coord = 0;
-	coord->point.set1Value(current_coord, current_position);
-	myHandleEventAction->setGrabber(this);
-	hilightVertex(coord->point[current_coord], pickColor);
-	break;
+    case ENDPOINTS:
+        // Create a new vertex
+        if (current_coord != -1) {
+            coord->point.insertSpace(current_coord, 1);
+        } else
+            current_coord = 0;
+        coord->point.set1Value(current_coord, current_position);
+        myHandleEventAction->setGrabber(this);
+        hilightVertex(coord->point[current_coord], pickColor);
+        break;
 
-      case NOTHING:
-	current_coord = -1;
-	removeHilights();
-	gotSomething = FALSE;
-	break;
+    case NOTHING:
+        current_coord = -1;
+        removeHilights();
+        gotSomething = FALSE;
+        break;
     }
 
     return gotSomething;
 }
 
 //
-// Called by SoHandleEventAction when we grab events 
+// Called by SoHandleEventAction when we grab events
 // using myHandleEventAction->setGrabber( this );
 //
 // We will record the viewport and viewvolume.
@@ -358,37 +341,31 @@ LineManip2::dragStart()
 //
 
 void
-LineManip2::grabEventsSetup()
-{
+LineManip2::grabEventsSetup() {
     extractViewingParams(myHandleEventAction);
-    savedRenderCachingVal 
-	= (SoSeparator::CacheEnabled) renderCaching.getValue();
+    savedRenderCachingVal = (SoSeparator::CacheEnabled)renderCaching.getValue();
     renderCaching = OFF;
 }
 
-
 void
-LineManip2::grabEventsCleanup()
-{
+LineManip2::grabEventsCleanup() {
     removeHilights();
     current_coord = -1;
 
     renderCaching = savedRenderCachingVal;
 }
 
-void 
-LineManip2::extractViewingParams( SoHandleEventAction *ha )
-{
+void
+LineManip2::extractViewingParams(SoHandleEventAction *ha) {
     if (ha == NULL) {
         // If the action is NULL, use default values for view info.
-	myViewVolume.ortho(-1,1,-1,1,1,10);
-	myVpRegion = SbViewportRegion(1,1);
-    }
-    else {
-	// Get the view info from the action.
-	SoState *state = ha->getState();
-	myViewVolume = SoViewVolumeElement::get( state );
-	myVpRegion = SoViewportRegionElement::get( state );
+        myViewVolume.ortho(-1, 1, -1, 1, 1, 10);
+        myVpRegion = SbViewportRegion(1, 1);
+    } else {
+        // Get the view info from the action.
+        SoState *state = ha->getState();
+        myViewVolume = SoViewVolumeElement::get(state);
+        myVpRegion = SoViewportRegionElement::get(state);
     }
 }
 
@@ -400,42 +377,40 @@ LineManip2::extractViewingParams( SoHandleEventAction *ha )
 // interface for creating disconnected line segments, though...
 //
 SbBool
-LineManip2::remove()
-{
+LineManip2::remove() {
     if (coord == NULL)
-	return FALSE;
+        return FALSE;
 
     SbBool removedSomething = TRUE;
 
-    if ( myHandleEventAction->getGrabber() == this ) {
-	// Remove whatever we're working on.
-	if (current_coord != -1)
-	    coord->point.deleteValues(current_coord, 1);
-    }
-    else {
-	// Remove whatever the cursor indicates should be gone.
-	switch (whichPart()) {
-	  case POINTS:
-	    coord->point.deleteValues(current_coord, 1);
-	    break;
+    if (myHandleEventAction->getGrabber() == this) {
+        // Remove whatever we're working on.
+        if (current_coord != -1)
+            coord->point.deleteValues(current_coord, 1);
+    } else {
+        // Remove whatever the cursor indicates should be gone.
+        switch (whichPart()) {
+        case POINTS:
+            coord->point.deleteValues(current_coord, 1);
+            break;
 
-	  case LINES:
-	    // Do nothing.
-	    break;
+        case LINES:
+            // Do nothing.
+            break;
 
-	  case ENDPOINTS:
-	    if (current_coord != -1) {
-		if (current_coord != coord->point.getNum())
-		    coord->point.deleteValues(current_coord, 1);
-		else 
-		    coord->point.deleteValues(current_coord-1, 1);
-	    }
-	    break;
+        case ENDPOINTS:
+            if (current_coord != -1) {
+                if (current_coord != coord->point.getNum())
+                    coord->point.deleteValues(current_coord, 1);
+                else
+                    coord->point.deleteValues(current_coord - 1, 1);
+            }
+            break;
 
-	  case NOTHING:
-	    removedSomething = FALSE;
-	    break;
-	}
+        case NOTHING:
+            removedSomething = FALSE;
+            break;
+        }
     }
 
     removeHilights();
@@ -448,37 +423,35 @@ LineManip2::remove()
 // is up.
 //
 SbBool
-LineManip2::locateHilight()
-{
-    if (coord == NULL )
-	return FALSE;
+LineManip2::locateHilight() {
+    if (coord == NULL)
+        return FALSE;
 
     SbBool hilitSomething = TRUE;
 
     switch (whichPart()) {
-      case POINTS:
-	hilightVertex(coord->point[current_coord], locateColor);
-	break;
+    case POINTS:
+        hilightVertex(coord->point[current_coord], locateColor);
+        break;
 
-      case LINES:
-	hilightLine(current_coord, current_position, locateColor);
-	break;
+    case LINES:
+        hilightLine(current_coord, current_position, locateColor);
+        break;
 
-      case ENDPOINTS:
-	if (current_coord == -1) {
-	    // There are no coordinates at all. We can't perform a
-	    // hilight.
-	    hilitSomething = FALSE;
-	}
-	else if (current_coord == 0)
-	    hilightLine(-1, current_position, locateColor);
-	else
-	    hilightLine(current_coord-1, current_position, locateColor);
-	break;
+    case ENDPOINTS:
+        if (current_coord == -1) {
+            // There are no coordinates at all. We can't perform a
+            // hilight.
+            hilitSomething = FALSE;
+        } else if (current_coord == 0)
+            hilightLine(-1, current_position, locateColor);
+        else
+            hilightLine(current_coord - 1, current_position, locateColor);
+        break;
 
-      case NOTHING:
+    case NOTHING:
         hilitSomething = FALSE;
-	break;
+        break;
     }
 
     return hilitSomething;
@@ -489,14 +462,13 @@ LineManip2::locateHilight()
 // left mouse button is pressed.
 //
 void
-LineManip2::moveCoord()
-{
+LineManip2::moveCoord() {
     if (coord == NULL)
-	return;
+        return;
 
     assert(current_coord > -1 && current_coord < coord->point.getNum());
-    updateProjectors( coord->point[current_coord] );
-    SbVec3f t; 
+    updateProjectors(coord->point[current_coord]);
+    SbVec3f t;
     projectMouse(t);
     coord->point.set1Value(current_coord, t);
 
@@ -504,13 +476,12 @@ LineManip2::moveCoord()
 }
 
 void
-LineManip2::updateProjectors( const SbVec3f &curPt )
-{
-    SbVec3f  dir = lineProj->getLine().getDirection();
-    lineProj->setLine( SbLine( curPt, curPt + dir ) );
+LineManip2::updateProjectors(const SbVec3f &curPt) {
+    SbVec3f dir = lineProj->getLine().getDirection();
+    lineProj->setLine(SbLine(curPt, curPt + dir));
 
     dir = planeProj->getPlane().getNormal();
-    planeProj->setPlane( SbPlane( dir, curPt ) );
+    planeProj->setPlane(SbPlane(dir, curPt));
 }
 
 //
@@ -518,8 +489,7 @@ LineManip2::updateProjectors( const SbVec3f &curPt )
 // containing the line manipulator.
 //
 void
-LineManip2::projectMouse(SbVec3f &result)
-{
+LineManip2::projectMouse(SbVec3f &result) {
     const SoEvent *e = myHandleEventAction->getEvent();
 
     // If we're grabbing, we've already got our view parameters.
@@ -527,33 +497,31 @@ LineManip2::projectMouse(SbVec3f &result)
     // NOTE: If you're grabbing and you try to get view parameters, you'll
     //       get a bad answer. Grabbing causes you to skip over camera
     //       nodes directly to this one. So the state has no valid view info.
-    if ( myHandleEventAction->getGrabber() != this )
-	extractViewingParams(myHandleEventAction);
+    if (myHandleEventAction->getGrabber() != this)
+        extractViewingParams(myHandleEventAction);
 
     // If alt key is down, then we move in line perpendicular to plane
-    if ( e->wasAltDown() == FALSE ) {
-	planeProj->setViewVolume(myViewVolume);
-	result = planeProj->project(e->getNormalizedPosition(myVpRegion));
-    }
-    else {
-	lineProj->setViewVolume(myViewVolume);
-	result = lineProj->project(e->getNormalizedPosition(myVpRegion));
+    if (e->wasAltDown() == FALSE) {
+        planeProj->setViewVolume(myViewVolume);
+        result = planeProj->project(e->getNormalizedPosition(myVpRegion));
+    } else {
+        lineProj->setViewVolume(myViewVolume);
+        result = lineProj->project(e->getNormalizedPosition(myVpRegion));
     }
 }
 
 // This sensor will insure that the pset and lset nodes will have
 // the correct number of points.
-void    
-LineManip2::coordFieldSensorCB( void *myPtr, SoSensor *)
-{
+void
+LineManip2::coordFieldSensorCB(void *myPtr, SoSensor *) {
     LineManip2 *myself = (LineManip2 *)myPtr;
 
     int numPoints = 0;
     if (myself->coord)
-	numPoints = myself->coord->point.getNum();
+        numPoints = myself->coord->point.getNum();
 
     if (myself->pset)
-	myself->pset->numPoints.setValue(numPoints);
+        myself->pset->numPoints.setValue(numPoints);
     if (myself->lset)
-	myself->lset->numVertices.setValue(numPoints);
+        myself->lset->numVertices.setValue(numPoints);
 }

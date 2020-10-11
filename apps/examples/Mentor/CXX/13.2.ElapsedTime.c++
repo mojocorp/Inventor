@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -59,55 +59,54 @@
 #include <Inventor/nodes/SoTranslation.h>
 
 int
-main(int , char **argv)
-{
-   // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);  
-   if (myWindow == NULL) exit(1);     
+main(int, char **argv) {
+    // Initialize Inventor and Xt
+    Widget myWindow = SoXt::init(argv[0]);
+    if (myWindow == NULL)
+        exit(1);
 
-   SoSeparator *root = new SoSeparator;
-   root->ref();
+    SoSeparator *root = new SoSeparator;
+    root->ref();
 
-   // Add a camera and light
-   SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
-   myCamera->position.setValue(-2.0, -2.0, 5.0);
-   myCamera->heightAngle = M_PI/2.5; 
-   myCamera->nearDistance = 2.0;
-   myCamera->farDistance = 7.0;
-   root->addChild(myCamera);
-   root->addChild(new SoDirectionalLight);
+    // Add a camera and light
+    SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
+    myCamera->position.setValue(-2.0, -2.0, 5.0);
+    myCamera->heightAngle = M_PI / 2.5;
+    myCamera->nearDistance = 2.0;
+    myCamera->farDistance = 7.0;
+    root->addChild(myCamera);
+    root->addChild(new SoDirectionalLight);
 
-   // Set up transformations
-   SoTranslation *slideTranslation = new SoTranslation;
-   root->addChild(slideTranslation);
-   SoTransform *initialTransform = new SoTransform;
-   initialTransform->translation.setValue(-5., 0., 0.);
-   initialTransform->scaleFactor.setValue(10., 10., 10.);
-   initialTransform->rotation.setValue(SbVec3f(1,0,0), M_PI/2.);
-   root->addChild(initialTransform);
+    // Set up transformations
+    SoTranslation *slideTranslation = new SoTranslation;
+    root->addChild(slideTranslation);
+    SoTransform *initialTransform = new SoTransform;
+    initialTransform->translation.setValue(-5., 0., 0.);
+    initialTransform->scaleFactor.setValue(10., 10., 10.);
+    initialTransform->rotation.setValue(SbVec3f(1, 0, 0), M_PI / 2.);
+    root->addChild(initialTransform);
 
-   // Read the figure object from a file and add to the scene
-   SoInput myInput;
-   if (!myInput.openFile("/usr/share/src/Inventor/examples/data/jumpyMan.iv")) 
-      exit (1);
-   SoSeparator *figureObject = SoDB::readAll(&myInput);
-   if (figureObject == NULL) 
-      exit (1);
-   root->addChild(figureObject);
+    // Read the figure object from a file and add to the scene
+    SoInput myInput;
+    if (!myInput.openFile("/usr/share/src/Inventor/examples/data/jumpyMan.iv"))
+        exit(1);
+    SoSeparator *figureObject = SoDB::readAll(&myInput);
+    if (figureObject == NULL)
+        exit(1);
+    root->addChild(figureObject);
 
-   // Make the X translation value change over time.
-   SoElapsedTime *myCounter = new SoElapsedTime;
-   SoComposeVec3f *slideDistance = new SoComposeVec3f;
-   slideDistance->x.connectFrom(&myCounter->timeOut);
-   slideTranslation->translation.connectFrom(
-            &slideDistance->vector);
+    // Make the X translation value change over time.
+    SoElapsedTime * myCounter = new SoElapsedTime;
+    SoComposeVec3f *slideDistance = new SoComposeVec3f;
+    slideDistance->x.connectFrom(&myCounter->timeOut);
+    slideTranslation->translation.connectFrom(&slideDistance->vector);
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
-   SbViewportRegion myRegion(myRenderArea->getSize()); 
-   myRenderArea->setSceneGraph(root);
-   myRenderArea->setTitle("Sliding Man");
-   myRenderArea->show();
+    SoXtRenderArea * myRenderArea = new SoXtRenderArea(myWindow);
+    SbViewportRegion myRegion(myRenderArea->getSize());
+    myRenderArea->setSceneGraph(root);
+    myRenderArea->setTitle("Sliding Man");
+    myRenderArea->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+    SoXt::show(myWindow);
+    SoXt::mainLoop();
 }

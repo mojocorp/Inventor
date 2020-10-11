@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -82,11 +82,10 @@
 // Global variables.  Evil, but I'm in a hurry.
 //
 SoProfileCoordinate2 *profileCoords;
-SoLinearProfile *profile;
+SoLinearProfile *     profile;
 
 // Global for resources...
 extern Labels labels;
-
 
 //
 // Variables local to this file.  Also evil (not as evil as globals),
@@ -97,19 +96,19 @@ extern Labels labels;
 static SoSeparator *root;
 
 struct TextThing {
-    SoSeparator *top;
+    SoSeparator *  top;
     SoTranslation *translation;
-    SoSeparator *cache;
-    SoText3 *text;
+    SoSeparator *  cache;
+    SoText3 *      text;
 };
-    
-static TextThing *paragraphs;
-static SoFont *TheFont;
+
+static TextThing *    paragraphs;
+static SoFont *       TheFont;
 static SoTranslation *TheTranslation;
-static SoMaterial *TheMaterial;
-static int numParagraphs = 0;
-static const float spacing = 1.0;	// Space between lines
-static const float paraSpacing = 0.5;	// Extra space between paragraphs
+static SoMaterial *   TheMaterial;
+static int            numParagraphs = 0;
+static const float    spacing = 1.0;     // Space between lines
+static const float    paraSpacing = 0.5; // Extra space between paragraphs
 
 // Which parts material editor is editing
 static int whichMatEditing = SoText3::ALL;
@@ -127,23 +126,20 @@ static int whichPartsOn = SoText3::FRONT;
 // button) that the user would have to use.
 //
 void
-delayCB(void *textwidget, SoSensor *)
-{
+delayCB(void *textwidget, SoSensor *) {
     updateText(NULL, (XtPointer)textwidget, NULL);
 }
 void
-delayUpdateText(Widget, XtPointer textwidget, XtPointer)
-{
+delayUpdateText(Widget, XtPointer textwidget, XtPointer) {
     static SoAlarmSensor *alarmSensor = NULL;
     if (alarmSensor == NULL) {
-	alarmSensor = new SoAlarmSensor;
-	alarmSensor->setFunction(delayCB);
-    }
-    else {
-	alarmSensor->unschedule();
+        alarmSensor = new SoAlarmSensor;
+        alarmSensor->setFunction(delayCB);
+    } else {
+        alarmSensor->unschedule();
     }
     alarmSensor->setData(textwidget);
-    alarmSensor->setTimeFromNow(SbTime(1.0));	// Wait a second...
+    alarmSensor->setTimeFromNow(SbTime(1.0)); // Wait a second...
     alarmSensor->schedule();
 }
 //
@@ -151,8 +147,7 @@ delayUpdateText(Widget, XtPointer textwidget, XtPointer)
 // Motif text widget
 //
 void
-updateText(Widget, XtPointer textwidget, XtPointer)
-{
+updateText(Widget, XtPointer textwidget, XtPointer) {
     char *str = XmTextGetString((Widget)textwidget);
     //
     // The TextWrapper word-wraps the text string.  Here, we tell it
@@ -166,85 +161,81 @@ updateText(Widget, XtPointer textwidget, XtPointer)
     // (with appropriate translation to move the text apart)
     //
     int i;
-    for (i = numParagraphs-1; i >= 0; i--) {
-	root->removeChild(paragraphs[i].top);
+    for (i = numParagraphs - 1; i >= 0; i--) {
+        root->removeChild(paragraphs[i].top);
     }
     if (numParagraphs != 0) {
-	delete[] paragraphs;
+        delete[] paragraphs;
     }
 
     numParagraphs = twrap.numParagraphs();
 
     if (numParagraphs != 0) {
-	paragraphs = new TextThing[numParagraphs];
+        paragraphs = new TextThing[numParagraphs];
     }
     float currentY = 0.0;
     for (i = 0; i < numParagraphs; i++) {
-	SoSeparator *top = new SoSeparator;
-	paragraphs[i].top = top;
-	root->addChild(top);
-	
-	paragraphs[i].translation = new SoTranslation;
-	top->addChild(paragraphs[i].translation);
-	paragraphs[i].translation->
-	    translation.setValue(0.0, currentY, 0.0);
+        SoSeparator *top = new SoSeparator;
+        paragraphs[i].top = top;
+        root->addChild(top);
 
-	paragraphs[i].cache = new SoSeparator;
-	top->addChild(paragraphs[i].cache);
+        paragraphs[i].translation = new SoTranslation;
+        top->addChild(paragraphs[i].translation);
+        paragraphs[i].translation->translation.setValue(0.0, currentY, 0.0);
+
+        paragraphs[i].cache = new SoSeparator;
+        top->addChild(paragraphs[i].cache);
         paragraphs[i].cache->renderCaching = SoSeparator::ON;
         paragraphs[i].cache->boundingBoxCaching = SoSeparator::ON;
 
-	SoText3 *tnode = new SoText3;
-	paragraphs[i].text = tnode;
-	paragraphs[i].cache->addChild(tnode);
-	tnode->justification = SoText3::CENTER;
-	tnode->parts = whichPartsOn;
+        SoText3 *tnode = new SoText3;
+        paragraphs[i].text = tnode;
+        paragraphs[i].cache->addChild(tnode);
+        tnode->justification = SoText3::CENTER;
+        tnode->parts = whichPartsOn;
 
-	for (int j = 0; j < twrap.numLines(i); j++) {
-	    tnode->string.set1Value(j, twrap.getLine(i, j));
-	    currentY -= spacing;
-	}
-	currentY -= paraSpacing;
+        for (int j = 0; j < twrap.numLines(i); j++) {
+            tnode->string.set1Value(j, twrap.getLine(i, j));
+            currentY -= spacing;
+        }
+        currentY -= paraSpacing;
     }
     //
     // This centers the entire text vertically
     //
     float total_d = (-currentY - paraSpacing - spacing);
-    TheTranslation->translation.setValue(0.0, total_d/2.0, 0.0);
+    TheTranslation->translation.setValue(0.0, total_d / 2.0, 0.0);
 }
 
 //
 // Copy the text scene graph to the clipboard
 //
 void
-copyText(Widget, XtPointer w, XtPointer cbstruct)
-{
+copyText(Widget, XtPointer w, XtPointer cbstruct) {
     static SoXtClipboard *theClipboard = NULL;
 
     if (theClipboard == NULL) {
-	theClipboard = new SoXtClipboard((Widget)w);
+        theClipboard = new SoXtClipboard((Widget)w);
     }
     theClipboard->copy(root,
-	((XmAnyCallbackStruct *)cbstruct)->event->xbutton.time);
+                       ((XmAnyCallbackStruct *)cbstruct)->event->xbutton.time);
 }
 
 //
 // Turn the given part on or off.
 //
 static void
-togglePart(Widget, XtPointer mydata, XtPointer cbstruct)
-{
+togglePart(Widget, XtPointer mydata, XtPointer cbstruct) {
     int flag = ((XmToggleButtonCallbackStruct *)cbstruct)->set;
     int whichPart = (long)mydata;
 
-    if (flag) {	// Turn part on
-	whichPartsOn |= whichPart;
-    }
-    else {
-	whichPartsOn &= ~whichPart;
+    if (flag) { // Turn part on
+        whichPartsOn |= whichPart;
+    } else {
+        whichPartsOn &= ~whichPart;
     }
     for (int i = 0; i < numParagraphs; i++) {
-	paragraphs[i].text->parts.setValue(whichPartsOn);
+        paragraphs[i].text->parts.setValue(whichPartsOn);
     }
 }
 
@@ -252,16 +243,14 @@ togglePart(Widget, XtPointer mydata, XtPointer cbstruct)
 // And cause the material editor to edit/not edit the given part.
 //
 static void
-editToggle(Widget, XtPointer mydata, XtPointer cbstruct)
-{
+editToggle(Widget, XtPointer mydata, XtPointer cbstruct) {
     int flag = ((XmToggleButtonCallbackStruct *)cbstruct)->set;
     int whichPart = (long)mydata;
 
-    if (flag) {	// Edit the part
-	whichMatEditing |= whichPart;
-    }
-    else {	// Don't edit it
-	whichMatEditing &= (~whichPart);
+    if (flag) { // Edit the part
+        whichMatEditing |= whichPart;
+    } else { // Don't edit it
+        whichMatEditing &= (~whichPart);
     }
 }
 
@@ -271,31 +260,30 @@ editToggle(Widget, XtPointer mydata, XtPointer cbstruct)
 // scene graph.
 //
 static void
-matEditCB(void *, const SoMaterial *mtl)
-{
+matEditCB(void *, const SoMaterial *mtl) {
     if (whichMatEditing & SoText3::FRONT) {
-	TheMaterial->ambientColor.set1Value(0, mtl->ambientColor[0]);
-	TheMaterial->diffuseColor.set1Value(0, mtl->diffuseColor[0]);
-	TheMaterial->specularColor.set1Value(0, mtl->specularColor[0]);
-	TheMaterial->emissiveColor.set1Value(0, mtl->emissiveColor[0]);
-	TheMaterial->shininess.set1Value(0, mtl->shininess[0]);
-	TheMaterial->transparency.set1Value(0, mtl->transparency[0]);
+        TheMaterial->ambientColor.set1Value(0, mtl->ambientColor[0]);
+        TheMaterial->diffuseColor.set1Value(0, mtl->diffuseColor[0]);
+        TheMaterial->specularColor.set1Value(0, mtl->specularColor[0]);
+        TheMaterial->emissiveColor.set1Value(0, mtl->emissiveColor[0]);
+        TheMaterial->shininess.set1Value(0, mtl->shininess[0]);
+        TheMaterial->transparency.set1Value(0, mtl->transparency[0]);
     }
     if (whichMatEditing & SoText3::SIDES) {
-	TheMaterial->ambientColor.set1Value(1, mtl->ambientColor[0]);
-	TheMaterial->diffuseColor.set1Value(1, mtl->diffuseColor[0]);
-	TheMaterial->specularColor.set1Value(1, mtl->specularColor[0]);
-	TheMaterial->emissiveColor.set1Value(1, mtl->emissiveColor[0]);
-	TheMaterial->shininess.set1Value(1, mtl->shininess[0]);
-	TheMaterial->transparency.set1Value(1, mtl->transparency[0]);
+        TheMaterial->ambientColor.set1Value(1, mtl->ambientColor[0]);
+        TheMaterial->diffuseColor.set1Value(1, mtl->diffuseColor[0]);
+        TheMaterial->specularColor.set1Value(1, mtl->specularColor[0]);
+        TheMaterial->emissiveColor.set1Value(1, mtl->emissiveColor[0]);
+        TheMaterial->shininess.set1Value(1, mtl->shininess[0]);
+        TheMaterial->transparency.set1Value(1, mtl->transparency[0]);
     }
     if (whichMatEditing & SoText3::BACK) {
-	TheMaterial->ambientColor.set1Value(2, mtl->ambientColor[0]);
-	TheMaterial->diffuseColor.set1Value(2, mtl->diffuseColor[0]);
-	TheMaterial->specularColor.set1Value(2, mtl->specularColor[0]);
-	TheMaterial->emissiveColor.set1Value(2, mtl->emissiveColor[0]);
-	TheMaterial->shininess.set1Value(2, mtl->shininess[0]);
-	TheMaterial->transparency.set1Value(2, mtl->transparency[0]);
+        TheMaterial->ambientColor.set1Value(2, mtl->ambientColor[0]);
+        TheMaterial->diffuseColor.set1Value(2, mtl->diffuseColor[0]);
+        TheMaterial->specularColor.set1Value(2, mtl->specularColor[0]);
+        TheMaterial->emissiveColor.set1Value(2, mtl->emissiveColor[0]);
+        TheMaterial->shininess.set1Value(2, mtl->shininess[0]);
+        TheMaterial->transparency.set1Value(2, mtl->transparency[0]);
     }
 }
 
@@ -304,133 +292,171 @@ matEditCB(void *, const SoMaterial *mtl)
 // creates the parts editor (if necessary) and then manages it.
 //
 void
-createPartEditor(Widget w, XtPointer, XtPointer)
-{
+createPartEditor(Widget w, XtPointer, XtPointer) {
     static Widget shell = NULL;
 
     if (shell == NULL) {
-	// Create 3 labels and 6 togglebuttons, and one material
-	// editor
-	Arg resources[20];
-	int n;
-	
-	// change the XmNdeleteResponse (when use closes the window) from
-	// XmDESTROY to XmUNMAP since we don't want to delete the material
-	// editor widgets (we would also have to delete the material editor
-	// class since we can rebuild them independently). We could use
-	// XmCreateFormDialog() but some some strange reason the material
-	// editor has problems building inside one of them.
-	n = 0;
-	XtSetArg(resources[n], XmNdeleteResponse, XmUNMAP); ++n;
-	shell = XtCreatePopupShell("editParts", topLevelShellWidgetClass, 
-	    SoXt::getShellWidget(w), resources, n);
-	
-	Widget form = XmCreateForm(shell, NULL, NULL, 0);
+        // Create 3 labels and 6 togglebuttons, and one material
+        // editor
+        Arg resources[20];
+        int n;
 
-	SoXtMaterialEditor *medit = new SoXtMaterialEditor(form);
-	medit->addMaterialChangedCallback(matEditCB, NULL);
-	XtSetArg(resources[n], XmNtopAttachment, XmATTACH_FORM); ++n;
-	XtSetArg(resources[n], XmNleftAttachment, XmATTACH_FORM); ++n;
-	XtSetArg(resources[n], XmNrightAttachment, XmATTACH_FORM); ++n;
-	XtSetValues(medit->getWidget(), resources, n);
+        // change the XmNdeleteResponse (when use closes the window) from
+        // XmDESTROY to XmUNMAP since we don't want to delete the material
+        // editor widgets (we would also have to delete the material editor
+        // class since we can rebuild them independently). We could use
+        // XmCreateFormDialog() but some some strange reason the material
+        // editor has problems building inside one of them.
+        n = 0;
+        XtSetArg(resources[n], XmNdeleteResponse, XmUNMAP);
+        ++n;
+        shell = XtCreatePopupShell("editParts", topLevelShellWidgetClass,
+                                   SoXt::getShellWidget(w), resources, n);
 
-	// Create three columns (row/column widgets) containing 3
-	// buttons each, for a total of 12 widgets/gadgets.
-	Widget w[12]; // Used for XtManageChildren() call
-	
-	n = 0;
-	XtSetArg(resources[n], XmNnumColumns, 1); ++n;
-	XtSetArg(resources[n], XmNorientation, XmVERTICAL); ++n;
-	XtSetArg(resources[n], XmNpacking, XmPACK_COLUMN); ++n;
-	XtSetArg(resources[n], XmNisAligned, TRUE); ++n;
-	XtSetArg(resources[n], XmNentryAlignment, XmALIGNMENT_END); ++n;
-	XtSetArg(resources[n], XmNadjustLast, FALSE); ++n;
-	XtSetArg(resources[n], XmNtopAttachment, XmATTACH_WIDGET); ++n;
-	XtSetArg(resources[n], XmNtopWidget, medit->getWidget()); ++n;
-	XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_FORM); ++n;
+        Widget form = XmCreateForm(shell, NULL, NULL, 0);
 
-	// All the previous resources are the same for the three
-	// column widgets...
-	int nn = n;
-	XtSetArg(resources[n], XmNleftAttachment, XmATTACH_FORM); ++n;
-	XtSetArg(resources[n], XmNrightAttachment, XmATTACH_POSITION); ++n;
-	XtSetArg(resources[n], XmNrightPosition, 32); ++n;
-	w[0] = XmCreateRowColumn(form, "PartsLabels", resources, n);
+        SoXtMaterialEditor *medit = new SoXtMaterialEditor(form);
+        medit->addMaterialChangedCallback(matEditCB, NULL);
+        XtSetArg(resources[n], XmNtopAttachment, XmATTACH_FORM);
+        ++n;
+        XtSetArg(resources[n], XmNleftAttachment, XmATTACH_FORM);
+        ++n;
+        XtSetArg(resources[n], XmNrightAttachment, XmATTACH_FORM);
+        ++n;
+        XtSetValues(medit->getWidget(), resources, n);
 
-	n = nn;
-	XtSetArg(resources[n], XmNleftAttachment, XmATTACH_POSITION); ++n;
-	XtSetArg(resources[n], XmNleftPosition, 34); ++n;
-	XtSetArg(resources[n], XmNrightAttachment, XmATTACH_POSITION); ++n;
-	XtSetArg(resources[n], XmNrightPosition, 66); ++n;
-	w[1] = XmCreateRowColumn(form, "PartsOnOff", resources, n);
+        // Create three columns (row/column widgets) containing 3
+        // buttons each, for a total of 12 widgets/gadgets.
+        Widget w[12]; // Used for XtManageChildren() call
 
-	n = nn;
-	XtSetArg(resources[n], XmNleftAttachment, XmATTACH_POSITION); ++n;
-	XtSetArg(resources[n], XmNleftPosition, 67); ++n;
-	XtSetArg(resources[n], XmNrightAttachment, XmATTACH_FORM); ++n;
-	w[2] = XmCreateRowColumn(form, "PartsEdit", resources, n);
-	n = 0;
+        n = 0;
+        XtSetArg(resources[n], XmNnumColumns, 1);
+        ++n;
+        XtSetArg(resources[n], XmNorientation, XmVERTICAL);
+        ++n;
+        XtSetArg(resources[n], XmNpacking, XmPACK_COLUMN);
+        ++n;
+        XtSetArg(resources[n], XmNisAligned, TRUE);
+        ++n;
+        XtSetArg(resources[n], XmNentryAlignment, XmALIGNMENT_END);
+        ++n;
+        XtSetArg(resources[n], XmNadjustLast, FALSE);
+        ++n;
+        XtSetArg(resources[n], XmNtopAttachment, XmATTACH_WIDGET);
+        ++n;
+        XtSetArg(resources[n], XmNtopWidget, medit->getWidget());
+        ++n;
+        XtSetArg(resources[n], XmNbottomAttachment, XmATTACH_FORM);
+        ++n;
+
+        // All the previous resources are the same for the three
+        // column widgets...
+        int nn = n;
+        XtSetArg(resources[n], XmNleftAttachment, XmATTACH_FORM);
+        ++n;
+        XtSetArg(resources[n], XmNrightAttachment, XmATTACH_POSITION);
+        ++n;
+        XtSetArg(resources[n], XmNrightPosition, 32);
+        ++n;
+        w[0] = XmCreateRowColumn(form, "PartsLabels", resources, n);
+
+        n = nn;
+        XtSetArg(resources[n], XmNleftAttachment, XmATTACH_POSITION);
+        ++n;
+        XtSetArg(resources[n], XmNleftPosition, 34);
+        ++n;
+        XtSetArg(resources[n], XmNrightAttachment, XmATTACH_POSITION);
+        ++n;
+        XtSetArg(resources[n], XmNrightPosition, 66);
+        ++n;
+        w[1] = XmCreateRowColumn(form, "PartsOnOff", resources, n);
+
+        n = nn;
+        XtSetArg(resources[n], XmNleftAttachment, XmATTACH_POSITION);
+        ++n;
+        XtSetArg(resources[n], XmNleftPosition, 67);
+        ++n;
+        XtSetArg(resources[n], XmNrightAttachment, XmATTACH_FORM);
+        ++n;
+        w[2] = XmCreateRowColumn(form, "PartsEdit", resources, n);
+        n = 0;
 
 #define STRING(a) XmStringCreateLocalized(a)
 
-	XtSetArg(resources[n], XmNlabelString, STRING(labels.front)); ++n;
-	w[3] = XmCreateLabelGadget(w[0], "frontLabel", resources, n); n = 0;
-	XtSetArg(resources[n], XmNlabelString, STRING(labels.sides)); ++n;
-	w[4] = XmCreateLabelGadget(w[0], "sidesLabel", resources, n); n = 0;
-	XtSetArg(resources[n], XmNlabelString, STRING(labels.back)); ++n;
-	w[5] = XmCreateLabelGadget(w[0], "backLabel",  resources, n); n = 0;
+        XtSetArg(resources[n], XmNlabelString, STRING(labels.front));
+        ++n;
+        w[3] = XmCreateLabelGadget(w[0], "frontLabel", resources, n);
+        n = 0;
+        XtSetArg(resources[n], XmNlabelString, STRING(labels.sides));
+        ++n;
+        w[4] = XmCreateLabelGadget(w[0], "sidesLabel", resources, n);
+        n = 0;
+        XtSetArg(resources[n], XmNlabelString, STRING(labels.back));
+        ++n;
+        w[5] = XmCreateLabelGadget(w[0], "backLabel", resources, n);
+        n = 0;
 
-	// The three parts toggles
-	XtSetArg(resources[n], XmNlabelString, STRING(labels.on)); ++n;
-	XtSetArg(resources[n], XmNset, 1); ++n;
-	w[6] = XmCreateToggleButtonGadget(w[1], "frontOnOff", resources, n);
-	XtAddCallback(w[6], XmNvalueChangedCallback,
-		      togglePart, (XtPointer)SoText3::FRONT);
-	n = 0;
-	
-	XtSetArg(resources[n], XmNlabelString, STRING(labels.on)); ++n;
-	if (whichPartsOn & SoText3::SIDES) {
-	    XtSetArg(resources[n], XmNset, 1); ++n;
-	} else {
-	    XtSetArg(resources[n], XmNset, 0); ++n;
-	}
-	w[7] = XmCreateToggleButtonGadget(w[1], "sidesOnOff", resources, n);
-	XtAddCallback(w[7], XmNvalueChangedCallback,
-		      togglePart, (XtPointer)SoText3::SIDES);
-	n = 0;
-	
-	XtSetArg(resources[n], XmNlabelString, STRING(labels.on)); ++n;
-	if (whichPartsOn & SoText3::BACK) {
-	    XtSetArg(resources[n], XmNset, 1); ++n;
-	} else {
-	    XtSetArg(resources[n], XmNset, 0); ++n;
-	}
-	w[8] = XmCreateToggleButtonGadget(w[1], "backOnOff", resources, n);
-	XtAddCallback(w[8], XmNvalueChangedCallback,
-		      togglePart, (XtPointer)SoText3::BACK);
-	n = 0;
+        // The three parts toggles
+        XtSetArg(resources[n], XmNlabelString, STRING(labels.on));
+        ++n;
+        XtSetArg(resources[n], XmNset, 1);
+        ++n;
+        w[6] = XmCreateToggleButtonGadget(w[1], "frontOnOff", resources, n);
+        XtAddCallback(w[6], XmNvalueChangedCallback, togglePart,
+                      (XtPointer)SoText3::FRONT);
+        n = 0;
 
-	// And the three material toggles
-	XtSetArg(resources[n], XmNlabelString, STRING(labels.edit)); ++n;
-	XtSetArg(resources[n], XmNset, 1); ++n;
-	w[9] = XmCreateToggleButtonGadget(w[2], "frontEdit", resources, n);
-	XtAddCallback(w[9], XmNvalueChangedCallback,
-		      editToggle, (XtPointer)SoText3::FRONT);
-	
-	w[10] = XmCreateToggleButtonGadget(w[2], "sidesEdit", resources, n);
-	XtAddCallback(w[10], XmNvalueChangedCallback,
-		      editToggle, (XtPointer)SoText3::SIDES);
-		      
-	w[11] = XmCreateToggleButtonGadget(w[2], "backEdit",  resources, n);
-	XtAddCallback(w[11], XmNvalueChangedCallback,
-		      editToggle, (XtPointer)SoText3::BACK);
-	
-	XtManageChildren(w+3, 3); // labels/buttons
-	XtManageChildren(w+6, 3);
-	XtManageChildren(w+9, 3);
-	medit->show();
-	XtManageChildren(w, 3);	// row-columns..
-	XtManageChild(form);
+        XtSetArg(resources[n], XmNlabelString, STRING(labels.on));
+        ++n;
+        if (whichPartsOn & SoText3::SIDES) {
+            XtSetArg(resources[n], XmNset, 1);
+            ++n;
+        } else {
+            XtSetArg(resources[n], XmNset, 0);
+            ++n;
+        }
+        w[7] = XmCreateToggleButtonGadget(w[1], "sidesOnOff", resources, n);
+        XtAddCallback(w[7], XmNvalueChangedCallback, togglePart,
+                      (XtPointer)SoText3::SIDES);
+        n = 0;
+
+        XtSetArg(resources[n], XmNlabelString, STRING(labels.on));
+        ++n;
+        if (whichPartsOn & SoText3::BACK) {
+            XtSetArg(resources[n], XmNset, 1);
+            ++n;
+        } else {
+            XtSetArg(resources[n], XmNset, 0);
+            ++n;
+        }
+        w[8] = XmCreateToggleButtonGadget(w[1], "backOnOff", resources, n);
+        XtAddCallback(w[8], XmNvalueChangedCallback, togglePart,
+                      (XtPointer)SoText3::BACK);
+        n = 0;
+
+        // And the three material toggles
+        XtSetArg(resources[n], XmNlabelString, STRING(labels.edit));
+        ++n;
+        XtSetArg(resources[n], XmNset, 1);
+        ++n;
+        w[9] = XmCreateToggleButtonGadget(w[2], "frontEdit", resources, n);
+        XtAddCallback(w[9], XmNvalueChangedCallback, editToggle,
+                      (XtPointer)SoText3::FRONT);
+
+        w[10] = XmCreateToggleButtonGadget(w[2], "sidesEdit", resources, n);
+        XtAddCallback(w[10], XmNvalueChangedCallback, editToggle,
+                      (XtPointer)SoText3::SIDES);
+
+        w[11] = XmCreateToggleButtonGadget(w[2], "backEdit", resources, n);
+        XtAddCallback(w[11], XmNvalueChangedCallback, editToggle,
+                      (XtPointer)SoText3::BACK);
+
+        XtManageChildren(w + 3, 3); // labels/buttons
+        XtManageChildren(w + 6, 3);
+        XtManageChildren(w + 9, 3);
+        medit->show();
+        XtManageChildren(w, 3); // row-columns..
+        XtManageChild(form);
     }
     SoXt::show(shell);
 }
@@ -444,13 +470,11 @@ createPartEditor(Widget w, XtPointer, XtPointer)
 // by moving the mouse between windows while the text spins.
 //
 void
-setTextCaching(int flag)
-{
+setTextCaching(int flag) {
     for (int i = 0; i < numParagraphs; i++) {
-	if (flag) {
+        if (flag) {
             paragraphs[i].cache->renderCaching = SoSeparator::ON;
-	}
-	else {        
+        } else {
             paragraphs[i].cache->renderCaching = SoSeparator::OFF;
         }
     }
@@ -461,14 +485,13 @@ setTextCaching(int flag)
 // Examiner).
 //
 SoSeparator *
-createTextSceneGraph()
-{
+createTextSceneGraph() {
     SoSeparator *veryTop = new SoSeparator;
     veryTop->ref();
 
     SoPerspectiveCamera *camera = new SoPerspectiveCamera;
     veryTop->addChild(camera);
-    camera->heightAngle = 28.0 * M_PI/180.0;
+    camera->heightAngle = 28.0 * M_PI / 180.0;
     camera->aspectRatio = 1.0;
     camera->position.setValue(0.0, 0.0, 25.0);
     camera->nearDistance = 8.0;
@@ -503,4 +526,3 @@ createTextSceneGraph()
 
     return veryTop;
 }
-

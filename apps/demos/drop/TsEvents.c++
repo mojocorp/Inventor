@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -64,12 +64,12 @@
 // Use: private, static
 
 void
-TsField::handleKeyboard( void *data, SoEventCallback *node )
+TsField::handleKeyboard(void *data, SoEventCallback *node)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    TsField       *field = (TsField *)data;
+    TsField *field = (TsField *)data;
 
     if (SO_KEY_PRESS_EVENT(node->getEvent(), RETURN)) {
         field->gameStarted = TRUE;
@@ -84,25 +84,25 @@ TsField::handleKeyboard( void *data, SoEventCallback *node )
         node->setHandled();
         return;
     }
-    
+
     if (SO_KEY_PRESS_EVENT(node->getEvent(), LEFT_ARROW))
-        field->translation (TS_X_AXIS, -1);
+        field->translation(TS_X_AXIS, -1);
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), RIGHT_ARROW))
-        field->translation (TS_X_AXIS,  1);
+        field->translation(TS_X_AXIS, 1);
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), UP_ARROW))
-        field->translation (TS_Z_AXIS,  1);
+        field->translation(TS_Z_AXIS, 1);
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), DOWN_ARROW))
-        field->translation (TS_Z_AXIS, -1);
+        field->translation(TS_Z_AXIS, -1);
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), F))
-        field->rotation (TS_Z_AXIS,   1);
+        field->rotation(TS_Z_AXIS, 1);
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), S))
-        field->rotation (TS_Z_AXIS,  -1);
+        field->rotation(TS_Z_AXIS, -1);
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), D))
-        field->rotation (TS_Y_AXIS,  1);
+        field->rotation(TS_Y_AXIS, 1);
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), C))
-        field->rotation (TS_X_AXIS,  -1);
+        field->rotation(TS_X_AXIS, -1);
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), E))
-        field->rotation (TS_X_AXIS,   1);
+        field->rotation(TS_X_AXIS, 1);
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), SPACE))
         field->dropPiece();
     else if (SO_KEY_PRESS_EVENT(node->getEvent(), H)) {
@@ -129,13 +129,12 @@ TsField::handleReturnKey()
     // or resume a game in progress.
     if (helpDisplayed) {
         helpDisplayed = FALSE;
-        helpRoot->removeChild(helpGroup); //old:overRoot->removeChild(helpRoot)
-        if (isGameOver) 
+        helpRoot->removeChild(helpGroup); // old:overRoot->removeChild(helpRoot)
+        if (isGameOver)
             startNewGame();
         else
             resumeGame();
-    }
-    else {
+    } else {
         // Start a new game
         startNewGame();
     }
@@ -157,7 +156,7 @@ TsField::handleHelpKey()
     // If the help message is not displayed, add the help message geometry
     // to the scene graph and pause the game.
     if (!helpDisplayed) {
-        helpRoot->addChild(helpGroup); //old: overRoot->addChild(helpRoot);
+        helpRoot->addChild(helpGroup); // old: overRoot->addChild(helpRoot);
         helpDisplayed = TRUE;
         pauseGame();
     }

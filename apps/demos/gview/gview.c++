@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,11 +67,11 @@
 
 #define SCREEN(w) XScreenNumberOfScreen(XtScreen(w))
 
-static SoSelection		*selector;
-static SoXtExaminerViewer	*examViewer;
-static GraphViewer		*graphViewer;
+static SoSelection *       selector;
+static SoXtExaminerViewer *examViewer;
+static GraphViewer *       graphViewer;
 
-static SoSeparator		*root;
+static SoSeparator *root;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -88,28 +88,28 @@ parseArgs(int argc, char *argv[], SoInput *in)
 
     // Check for filename
     if (argc == 2)
-	ok = in->openFile(argv[1]);
+        ok = in->openFile(argv[1]);
 
     // Otherwise, we are reading from stdin. Make sure the user knows this!
     else if (argc == 1) {
-	if (isatty(fileno(stdin)))
-	    fprintf(stderr, "Reading from standard input.\n\n");
+        if (isatty(fileno(stdin)))
+            fprintf(stderr, "Reading from standard input.\n\n");
     }
 
     // Too many args!
     else
-	ok = FALSE;
+        ok = FALSE;
 
-    if (! ok) {
-	fprintf(stderr, "Usage: %s [filename]\n", argv[0]);
-	fprintf(stderr, "Reads from standard input if no filename is given\n");
-	exit(1);
+    if (!ok) {
+        fprintf(stderr, "Usage: %s [filename]\n", argv[0]);
+        fprintf(stderr, "Reads from standard input if no filename is given\n");
+        exit(1);
     }
 }
 
 // Forward references
-static void	graphSelectionCB(void *, SoPath *);
-static void	graphDeselectionCB(void *, SoPath *);
+static void graphSelectionCB(void *, SoPath *);
+static void graphDeselectionCB(void *, SoPath *);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -162,7 +162,7 @@ sceneDeselectionCB(void *, SoPath *)
 //    Selection callback invoked when an icon in the display graph is
 //    selected. The path is in the scene graph. We need to add the
 //    SoSelection node at the top of this path and select the result
-//    in the scene graph. 
+//    in the scene graph.
 //
 
 static void
@@ -171,8 +171,8 @@ graphSelectionCB(void *, SoPath *path)
 ////////////////////////////////////////////////////////////////////////
 {
     // Create a copy of the path that starts at the SoSelection node
-    SoPath	*newPath = new SoPath(selector);
-    int		length = path->getLength(), i;
+    SoPath *newPath = new SoPath(selector);
+    int     length = path->getLength(), i;
 
     newPath->ref();
 
@@ -182,13 +182,13 @@ graphSelectionCB(void *, SoPath *path)
     // We want a path that ends in either a shape or a group, since
     // these are the only things that can be highlighted correctly.
     // Truncate the path if it does not end in a shape or group.
-    if (! path->getTail()->isOfType(SoGroup::getClassTypeId()) &&
-	! path->getTail()->isOfType(SoShape::getClassTypeId()))
-	length--;
+    if (!path->getTail()->isOfType(SoGroup::getClassTypeId()) &&
+        !path->getTail()->isOfType(SoShape::getClassTypeId()))
+        length--;
 
     // Add all other nodes in the path, named by index
     for (i = 1; i < length; i++)
-	newPath->append(path->getIndex(i));
+        newPath->append(path->getIndex(i));
 
     // Disable the callbacks so we don't loop
     selector->removeSelectionCallback(sceneSelectionCB, NULL);
@@ -201,11 +201,11 @@ graphSelectionCB(void *, SoPath *path)
     // bounding box of the path.
     SoGetBoundingBoxAction bba(examViewer->getViewportRegion());
     bba.apply(newPath);
-    if (! bba.getBoundingBox().isEmpty())
-	selector->select(newPath);
+    if (!bba.getBoundingBox().isEmpty())
+        selector->select(newPath);
 
     // Re-enable the callbacks
-    selector->addSelectionCallback(sceneSelectionCB,     NULL);
+    selector->addSelectionCallback(sceneSelectionCB, NULL);
     selector->addDeselectionCallback(sceneDeselectionCB, NULL);
 
     newPath->unref();
@@ -243,10 +243,10 @@ saveCB(Widget, XtPointer, XtPointer)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoWriteAction	wa;
+    SoWriteAction wa;
 
-    if (! wa.getOutput()->openFile("gview.iv"))
-	return;
+    if (!wa.getOutput()->openFile("gview.iv"))
+        return;
 
     wa.apply(root);
 
@@ -264,10 +264,10 @@ saveDispCB(Widget, XtPointer, XtPointer)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoWriteAction	wa;
+    SoWriteAction wa;
 
-    if (! wa.getOutput()->openFile("disp.iv"))
-	return;
+    if (!wa.getOutput()->openFile("disp.iv"))
+        return;
 
     wa.apply(graphViewer->getDisplayGraph());
 
@@ -299,7 +299,7 @@ buildMenu(Widget parent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Widget	menu, pulldown, cascade, but;
+    Widget menu, pulldown, cascade, but;
     ARG_VARS(20);
 
     RESET_ARGS();
@@ -316,11 +316,11 @@ buildMenu(Widget parent)
     // register callbacks to load/unload the pulldown colormap when the
     // pulldown menu is posted.
     SoXt::registerColormapLoad(pulldown, SoXt::getShellWidget(parent));
-    
+
     // Create a cascade button in the pulldown
     RESET_ARGS();
-    ADD_ARG(XmNsubMenuId,	pulldown);
-    ADD_ARG(XmNlabelString,	STRING("gview"));
+    ADD_ARG(XmNsubMenuId, pulldown);
+    ADD_ARG(XmNlabelString, STRING("gview"));
     cascade = XmCreateCascadeButtonGadget(menu, "cascade", ARGS);
     XtManageChild(cascade);
 
@@ -328,20 +328,20 @@ buildMenu(Widget parent)
     RESET_ARGS();
     ADD_ARG(XmNlabelString, STRING("Save in gview.iv"));
     but = XmCreatePushButtonGadget(pulldown, "Save in gview.iv", ARGS);
-    XtAddCallback(but, XmNactivateCallback, saveCB, (XtPointer) NULL);
+    XtAddCallback(but, XmNactivateCallback, saveCB, (XtPointer)NULL);
     XtManageChild(but);
 
     RESET_ARGS();
     ADD_ARG(XmNlabelString, STRING("Save display graph in disp.iv"));
-    but = XmCreatePushButtonGadget(pulldown,
-				   "Save display graph in disp.iv", ARGS);
-    XtAddCallback(but, XmNactivateCallback, saveDispCB, (XtPointer) NULL);
+    but = XmCreatePushButtonGadget(pulldown, "Save display graph in disp.iv",
+                                   ARGS);
+    XtAddCallback(but, XmNactivateCallback, saveDispCB, (XtPointer)NULL);
     XtManageChild(but);
 
     RESET_ARGS();
     ADD_ARG(XmNlabelString, STRING("Quit"));
     but = XmCreatePushButtonGadget(pulldown, "Quit", ARGS);
-    XtAddCallback(but, XmNactivateCallback, quitCB, (XtPointer) NULL);
+    XtAddCallback(but, XmNactivateCallback, quitCB, (XtPointer)NULL);
     XtManageChild(but);
 
     return menu;
@@ -354,8 +354,7 @@ buildMenu(Widget parent)
 //
 
 static void
-logoCB(void *, SoAction *action)
-{
+logoCB(void *, SoAction *action) {
     if (action->isOfType(SoGLRenderAction::getClassTypeId()))
         glViewport(0, 0, 80, 80);
 }
@@ -372,7 +371,7 @@ setOverlayLogo(SoXtRenderArea *ra)
 ////////////////////////////////////////////////////////////////////////
 {
     SoInput in;
-    in.setBuffer((void *) ivLogo, ivLogoSize);
+    in.setBuffer((void *)ivLogo, ivLogoSize);
     SoSeparator *logo = SoDB::readAll(&in);
     logo->ref();
 
@@ -397,21 +396,21 @@ main(int argc, char **argv)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoInput		in;
-    Widget		formWidget, menu, examWidget, graphWidget, sepWidget;
+    SoInput in;
+    Widget  formWidget, menu, examWidget, graphWidget, sepWidget;
     ARG_VARS(10);
 
     Widget appWindow = SoXt::init(argv[0]);
     if (appWindow == NULL)
-	exit(1);
+        exit(1);
 
     parseArgs(argc, argv, &in);
 
     root = SoDB::readAll(&in);
 
     if (root == NULL) {
-	fprintf(stderr, "Bad data. Bye!\n");
-	exit(1);
+        fprintf(stderr, "Bad data. Bye!\n");
+        exit(1);
     }
 
     in.closeFile();
@@ -444,7 +443,7 @@ main(int argc, char **argv)
 
     graphViewer = new GraphViewer(formWidget);
     graphViewer->setSceneGraph(root);
-    graphViewer->addSelectionCallback(graphSelectionCB,     NULL);
+    graphViewer->addSelectionCallback(graphSelectionCB, NULL);
     graphViewer->addDeselectionCallback(graphDeselectionCB, NULL);
     graphWidget = graphViewer->getWidget();
 
@@ -460,12 +459,12 @@ main(int argc, char **argv)
     ADD_TOP_WIDGET(menu, 6);
     ADD_BOTTOM_FORM(0);
     ADD_LEFT_FORM(0);
-    ADD_ARG(XmNrightAttachment,	XmATTACH_POSITION);
-    ADD_ARG(XmNrightPosition,	50);
+    ADD_ARG(XmNrightAttachment, XmATTACH_POSITION);
+    ADD_ARG(XmNrightPosition, 50);
     XtSetValues(examWidget, ARGS);
 
     RESET_ARGS();
-    ADD_ARG(XmNorientation,	XmVERTICAL);
+    ADD_ARG(XmNorientation, XmVERTICAL);
     ADD_TOP_WIDGET(menu, 6);
     ADD_BOTTOM_FORM(0);
     ADD_LEFT_WIDGET(examWidget, 10);

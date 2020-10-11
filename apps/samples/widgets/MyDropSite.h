@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -56,7 +56,6 @@
 #ifndef _MY_DROP_SITE_
 #define _MY_DROP_SITE_
 
-
 #include <X11/Intrinsic.h>
 
 class SbStringList;
@@ -65,13 +64,11 @@ class SbStringList;
 // The x,y value is the position of the cursor when the drop occured.
 
 // Typedef for callback invoked for each dropped file.
-typedef SbBool	MyIconDropCB(void *userData, const char *filename);
+typedef SbBool MyIconDropCB(void *userData, const char *filename);
 
 // Typedef for callback invoked for each dropped object
-typedef SbBool	MyObjectDropCB(
-		    void *userData, 
-		    Atom dataType,
-		    void *data, uint32_t numBytes);
+typedef SbBool MyObjectDropCB(void *userData, Atom dataType, void *data,
+                              uint32_t numBytes);
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -83,42 +80,35 @@ typedef SbBool	MyObjectDropCB(
 class MyDropSite {
   public:
     // Registers a callback to invoke for each dropped file
-    static void	registerCallback(
-		    Widget site,
-		    MyIconDropCB *iconDropCB,
-		    MyObjectDropCB *objDropCB,
-		    void *data = NULL);
+    static void registerCallback(Widget site, MyIconDropCB *iconDropCB,
+                                 MyObjectDropCB *objDropCB, void *data = NULL);
 
   private:
-    static Widget	    siteWidget;
-    static MyIconDropCB	    *iconDropCB;
-    static MyObjectDropCB   *objDropCB;
-    static void		    *dropCBData;
-    
-    static Atom		    importList[10];
-    static int		    numImportTargets;
+    static Widget          siteWidget;
+    static MyIconDropCB *  iconDropCB;
+    static MyObjectDropCB *objDropCB;
+    static void *          dropCBData;
 
+    static Atom importList[10];
+    static int  numImportTargets;
 
     // This callback is invoked when the drop occurs
-    static void handleDrop(Widget w, 
-			   XtPointer client_data, XtPointer call_data,
-			   XtPointer proc);
+    static void handleDrop(Widget w, XtPointer client_data, XtPointer call_data,
+                           XtPointer proc);
 
     // Reads the files/objects that were dropped
     static void transferIconProc(Widget, XtPointer, Atom *, Atom *type,
-			     XtPointer value, unsigned long *length, int);
+                                 XtPointer value, unsigned long *length, int);
     static void transferObjectProc(Widget, XtPointer, Atom *, Atom *type,
-			     XtPointer value, unsigned long *length, int);
+                                   XtPointer value, unsigned long *length, int);
 
     // Find a match between the senders export list and our import list.
-    static Atom chooseTarget(
-			    Atom *exportList,
-			    int numExportTargets);
+    static Atom chooseTarget(Atom *exportList, int numExportTargets);
 
     // Parses the icon information from the drop action and
     // extracts a list of file names to open.
     static void parseIcon(Atom *type, XtPointer value, unsigned long *length,
-			  SbStringList *fileList);
+                          SbStringList *fileList);
 };
 
 #endif /* _MY_DROP_SITE_ */

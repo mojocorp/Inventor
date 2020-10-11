@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -87,46 +87,46 @@
 #endif
 
 #define GRAVITATIONAL_CONSTANT 50.0
-#define WALL_THICKNESS         0.08
-#define WALL_HEIGHT            0.6
-#define BALL_RADIUS            0.32
-#define HOLE_RADIUS            0.38
-#define GAME_WIDTH             11.0
-#define GRID_RESOLUTION        11
-#define GRID_RES2              5.5
-#define EDGE_RESOLUTION        12
-#define WALL_DAMPENING         10.0
-#define HOLE_SEGMENTS          8
-#define ROTATION_LIMIT         0.2
-#define MAX_ELAPSED_TIME       0.06
+#define WALL_THICKNESS 0.08
+#define WALL_HEIGHT 0.6
+#define BALL_RADIUS 0.32
+#define HOLE_RADIUS 0.38
+#define GAME_WIDTH 11.0
+#define GRID_RESOLUTION 11
+#define GRID_RES2 5.5
+#define EDGE_RESOLUTION 12
+#define WALL_DAMPENING 10.0
+#define HOLE_SEGMENTS 8
+#define ROTATION_LIMIT 0.2
+#define MAX_ELAPSED_TIME 0.06
 
 // #define NO_HOLES
 
-static float stdDist = WALL_THICKNESS + BALL_RADIUS;
-static int   startGridRow = 0;
-static int   startGridCol = 7;
-static int   currentGridRow = 0;
-static int   currentGridCol = 7;
+static float  stdDist = WALL_THICKNESS + BALL_RADIUS;
+static int    startGridRow = 0;
+static int    startGridCol = 7;
+static int    currentGridRow = 0;
+static int    currentGridCol = 7;
 static SbBool isBallFalling = FALSE;
 
-short   mazeRows[12][12];
-short   mazeColumns[12][12];
-short   mazeHoles[11][11];
-SbBool  isMouseDown = FALSE;
-SbVec2f mouseRotation;
-SbVec2s mouseLocation;
-SbVec2s startLocation, finishLocation;
+short          mazeRows[12][12];
+short          mazeColumns[12][12];
+short          mazeHoles[11][11];
+SbBool         isMouseDown = FALSE;
+SbVec2f        mouseRotation;
+SbVec2s        mouseLocation;
+SbVec2s        startLocation, finishLocation;
 SoRotationXYZ *rotationX, *rotationZ;
 SoTranslation *startTrans, *finishTrans;
 SoTranslation *ballTranslation;
-SbTime  animationTime;
-SbVec2f ballPosition;
-SbVec2f lastBallPosition;
-SbVec2f ballVelocity;
-SbVec2f ballAcceleration;
-float   ballHeight = 0.0;
-float   dropVelocity = 0.0;
-SbVec2f oneVector;
+SbTime         animationTime;
+SbVec2f        ballPosition;
+SbVec2f        lastBallPosition;
+SbVec2f        ballVelocity;
+SbVec2f        ballAcceleration;
+float          ballHeight = 0.0;
+float          dropVelocity = 0.0;
+SbVec2f        oneVector;
 
 #ifndef NO_AUDIO
 PlayClass *victory;
@@ -134,23 +134,24 @@ PlayClass *ballSound;
 
 // Audio files have moved between IRIX 5.3 and IRIX 6.2
 #if defined(LIBAUDIOFILE_VERSION) && LIBAUDIOFILE_VERSION == 2
-static char *myVictorySound = IVPREFIX "/share/data/sounds/prosonus/musictags/tag3.aiff";
-static char *myBallSound    = IVPREFIX "/share/data/sounds/prosonus/sfx/glass_break.aiff";
+static char *myVictorySound =
+    IVPREFIX "/share/data/sounds/prosonus/musictags/tag3.aiff";
+static char *myBallSound =
+    IVPREFIX "/share/data/sounds/prosonus/sfx/glass_break.aiff";
 #else
 static char *myVictorySound = "/usr/lib/sounds/prosonus/musictags/tag3.aiff";
-static char *myballSound    = "/usr/lib/sounds/prosonus/sfx/glass_break.aiff";
+static char *myballSound = "/usr/lib/sounds/prosonus/sfx/glass_break.aiff";
 #endif
 
 #endif
 
-SbBool  doneGame = FALSE;
-SoCoordinate3 *mazeCoords;
-SoIndexedFaceSet *mazeFaces;
-SoCoordinate3 *holeCoords;
+SbBool              doneGame = FALSE;
+SoCoordinate3 *     mazeCoords;
+SoIndexedFaceSet *  mazeFaces;
+SoCoordinate3 *     holeCoords;
 SoTriangleStripSet *holeStrips;
-SoTimerSensor *timer;
-SoAlarmSensor *resetTimer;
-
+SoTimerSensor *     timer;
+SoAlarmSensor *     resetTimer;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -161,51 +162,53 @@ SoAlarmSensor *resetTimer;
 // Use: private
 
 static void
-readMazeFile(
-    const char *filename)
+readMazeFile(const char *filename)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Read the maze file and fill up the row and column arrays.
     FILE *fp;
-    int i, j;
+    int   i, j;
 
     if ((fp = fopen(filename, "r")) == NULL) {
         fprintf(stderr, "ERROR:  Could not initialize maze %s.\n", filename);
         exit(-1);
     }
 
-    for (i=0; i<EDGE_RESOLUTION; i++)
-        fscanf(fp, "%hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd", 
-          &mazeRows[i][0], &mazeRows[i][1], &mazeRows[i][2], &mazeRows[i][3], 
-          &mazeRows[i][4], &mazeRows[i][5], &mazeRows[i][6], &mazeRows[i][7], 
-          &mazeRows[i][8], &mazeRows[i][9], &mazeRows[i][10], &mazeRows[i][11]);
- 
-    for (i=0; i<EDGE_RESOLUTION; i++) 
-        fscanf(fp, "%hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd", 
-          &mazeColumns[i][0], &mazeColumns[i][1], &mazeColumns[i][2], &mazeColumns[i][3], 
-          &mazeColumns[i][4], &mazeColumns[i][5], &mazeColumns[i][6], &mazeColumns[i][7], 
-          &mazeColumns[i][8], &mazeColumns[i][9], &mazeColumns[i][10], &mazeColumns[i][11]); 
+    for (i = 0; i < EDGE_RESOLUTION; i++)
+        fscanf(fp, "%hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd",
+               &mazeRows[i][0], &mazeRows[i][1], &mazeRows[i][2],
+               &mazeRows[i][3], &mazeRows[i][4], &mazeRows[i][5],
+               &mazeRows[i][6], &mazeRows[i][7], &mazeRows[i][8],
+               &mazeRows[i][9], &mazeRows[i][10], &mazeRows[i][11]);
 
-    for (i=0; i<GRID_RESOLUTION; i++) 
-        fscanf(fp, "%hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd", 
-          &mazeHoles[i][0], &mazeHoles[i][1], &mazeHoles[i][2], &mazeHoles[i][3], 
-          &mazeHoles[i][4], &mazeHoles[i][5], &mazeHoles[i][6], &mazeHoles[i][7], 
-          &mazeHoles[i][8], &mazeHoles[i][9], &mazeHoles[i][10]); 
+    for (i = 0; i < EDGE_RESOLUTION; i++)
+        fscanf(fp, "%hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd",
+               &mazeColumns[i][0], &mazeColumns[i][1], &mazeColumns[i][2],
+               &mazeColumns[i][3], &mazeColumns[i][4], &mazeColumns[i][5],
+               &mazeColumns[i][6], &mazeColumns[i][7], &mazeColumns[i][8],
+               &mazeColumns[i][9], &mazeColumns[i][10], &mazeColumns[i][11]);
+
+    for (i = 0; i < GRID_RESOLUTION; i++)
+        fscanf(fp, "%hd %hd %hd %hd %hd %hd %hd %hd %hd %hd %hd",
+               &mazeHoles[i][0], &mazeHoles[i][1], &mazeHoles[i][2],
+               &mazeHoles[i][3], &mazeHoles[i][4], &mazeHoles[i][5],
+               &mazeHoles[i][6], &mazeHoles[i][7], &mazeHoles[i][8],
+               &mazeHoles[i][9], &mazeHoles[i][10]);
 
     // Find the starting and ending locations
-    for (i=0; i<GRID_RESOLUTION; i++) {
-        for (j=0; j<GRID_RESOLUTION; j++) {
+    for (i = 0; i < GRID_RESOLUTION; i++) {
+        for (j = 0; j < GRID_RESOLUTION; j++) {
             if (mazeHoles[i][j] == 2) {
-                
+
                 // This is the starting location.  Store the grid location
                 // away and replace the 2 with a 0 to put floor there.
                 startGridRow = i;
                 startGridCol = j;
                 mazeHoles[i][j] = 0;
             } else if (mazeHoles[i][j] == 3) {
-                
+
                 // This is the finishing location.  Store the grid location
                 // away and replace the 3 with a 0 to put floor there.
                 finishLocation[0] = i;
@@ -229,54 +232,53 @@ readMazeFile(
 // Use: private
 
 static void
-setStandardMaze(
-    int mazeNum )
+setStandardMaze(int mazeNum)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int i, j;
+    int    i, j;
     short *r, *c, *h;
 
     // Select the correct maze to build
     switch (mazeNum) {
-        case 1:
-            r = maze1Rows[0];
-            c = maze1Columns[0];
-            h = maze1Holes[0];
-            break;
-        case 2:
-            r = maze2Rows[0];
-            c = maze2Columns[0];
-            h = maze2Holes[0];
-            break;
-        case 3:
-            r = maze3Rows[0];
-            c = maze3Columns[0];
-            h = maze3Holes[0];
-            break;
+    case 1:
+        r = maze1Rows[0];
+        c = maze1Columns[0];
+        h = maze1Holes[0];
+        break;
+    case 2:
+        r = maze2Rows[0];
+        c = maze2Columns[0];
+        h = maze2Holes[0];
+        break;
+    case 3:
+        r = maze3Rows[0];
+        c = maze3Columns[0];
+        h = maze3Holes[0];
+        break;
     }
 
     // Load the maze into the row, column, and hole arrays
-    for (i=0; i<EDGE_RESOLUTION; i++)
-        for (j=0; j<EDGE_RESOLUTION; j++)
+    for (i = 0; i < EDGE_RESOLUTION; i++)
+        for (j = 0; j < EDGE_RESOLUTION; j++)
             mazeRows[i][j] = *r++;
 
-    for (i=0; i<EDGE_RESOLUTION; i++)
-        for (j=0; j<EDGE_RESOLUTION; j++)
+    for (i = 0; i < EDGE_RESOLUTION; i++)
+        for (j = 0; j < EDGE_RESOLUTION; j++)
             mazeColumns[i][j] = *c++;
 
-    for (i=0; i<GRID_RESOLUTION; i++) {
-        for (j=0; j<GRID_RESOLUTION; j++, h++) {
+    for (i = 0; i < GRID_RESOLUTION; i++) {
+        for (j = 0; j < GRID_RESOLUTION; j++, h++) {
             if (*h == 2) {
-                
+
                 // This is the starting location.  Store the grid location
                 // away and replace the 2 with a 0 to put floor there.
                 startGridRow = i;
                 startGridCol = j;
                 mazeHoles[i][j] = 0;
             } else if (*h == 3) {
-                
+
                 // This is the finishing location.  Store the grid location
                 // away and replace the 3 with a 0 to put floor there.
                 finishLocation[0] = i;
@@ -301,44 +303,40 @@ setStandardMaze(
 // Use: private
 
 static void
-generateWall(
-    const SbVec2f    &startCoord,
-    const SbVec2f    &endCoord,
-    SoCoordinate3    *coords,
-    SoIndexedFaceSet *fset )
+generateWall(const SbVec2f &startCoord, const SbVec2f &endCoord,
+             SoCoordinate3 *coords, SoIndexedFaceSet *fset)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
     // Generate coordinates and add them to the coordinate node
-    SbVec3f c;
+    SbVec3f  c;
     SbVec2f &start = (SbVec2f &)startCoord, &end = (SbVec2f &)endCoord;
-    float   xwidth, zwidth;
-    int     coordStartNum = coords->point.getNum();
-    int     faceStartNum  = fset->coordIndex.getNum();
-    int     normNum       = fset->normalIndex.getNum();
-    int     cNum = coordStartNum;
-    int     fNum = faceStartNum;
-    int     cIndex;
-    int     normShift;
+    float    xwidth, zwidth;
+    int      coordStartNum = coords->point.getNum();
+    int      faceStartNum = fset->coordIndex.getNum();
+    int      normNum = fset->normalIndex.getNum();
+    int      cNum = coordStartNum;
+    int      fNum = faceStartNum;
+    int      cIndex;
+    int      normShift;
 
     if (startCoord[1] == endCoord[1]) {
 
         // Wall is horizontal
         if (startCoord[0] > endCoord[0]) {
             start = (SbVec2f &)endCoord;
-            end   = (SbVec2f &)startCoord;
+            end = (SbVec2f &)startCoord;
         }
         xwidth = WALL_THICKNESS;
         zwidth = 0.0;
         normShift = 0;
-    }
-    else {
+    } else {
 
         // Wall is vertical
         if (startCoord[1] > endCoord[1]) {
             start = (SbVec2f &)endCoord;
-            end   = (SbVec2f &)startCoord;
+            end = (SbVec2f &)startCoord;
         }
         xwidth = 0.0;
         zwidth = WALL_THICKNESS;
@@ -346,40 +344,26 @@ generateWall(
     }
 
     // Generate the Coordinates
-    c.setValue(start[0] - xwidth - zwidth,
-               0.0,
-               start[1] + xwidth -zwidth);
+    c.setValue(start[0] - xwidth - zwidth, 0.0, start[1] + xwidth - zwidth);
     coords->point.set1Value(cNum++, c);
-    c.setValue(end[0] + xwidth - zwidth,
-               0.0,
-               end[1] + xwidth + zwidth);
+    c.setValue(end[0] + xwidth - zwidth, 0.0, end[1] + xwidth + zwidth);
     coords->point.set1Value(cNum++, c);
-    c.setValue(end[0] + xwidth + zwidth,
-               0.0,
-               end[1] - xwidth + zwidth);
+    c.setValue(end[0] + xwidth + zwidth, 0.0, end[1] - xwidth + zwidth);
     coords->point.set1Value(cNum++, c);
-    c.setValue(start[0] - xwidth + zwidth,
-               0.0,
-               start[1] - xwidth - zwidth);
+    c.setValue(start[0] - xwidth + zwidth, 0.0, start[1] - xwidth - zwidth);
     coords->point.set1Value(cNum++, c);
-    c.setValue(start[0] - xwidth - zwidth,
-               WALL_HEIGHT,
+    c.setValue(start[0] - xwidth - zwidth, WALL_HEIGHT,
                start[1] + xwidth - zwidth);
     coords->point.set1Value(cNum++, c);
-    c.setValue(end[0] + xwidth - zwidth,
-               WALL_HEIGHT,
-               end[1] + xwidth + zwidth);
+    c.setValue(end[0] + xwidth - zwidth, WALL_HEIGHT, end[1] + xwidth + zwidth);
     coords->point.set1Value(cNum++, c);
-    c.setValue(end[0] + xwidth + zwidth,
-               WALL_HEIGHT,
-               end[1] - xwidth + zwidth);
+    c.setValue(end[0] + xwidth + zwidth, WALL_HEIGHT, end[1] - xwidth + zwidth);
     coords->point.set1Value(cNum++, c);
-    c.setValue(start[0] - xwidth + zwidth,
-               WALL_HEIGHT,
+    c.setValue(start[0] - xwidth + zwidth, WALL_HEIGHT,
                start[1] - xwidth - zwidth);
     coords->point.set1Value(cNum++, c);
 
-    // Generate the faces  
+    // Generate the faces
     cIndex = coordStartNum + 3;
     fset->coordIndex.set1Value(fNum++, cIndex);
     cIndex = coordStartNum + 2;
@@ -401,7 +385,7 @@ generateWall(
     fset->coordIndex.set1Value(fNum++, cIndex);
     fset->coordIndex.set1Value(fNum++, SO_END_FACE_INDEX);
     fset->normalIndex.set1Value(normNum++, 1);
- 
+
     cIndex = coordStartNum + 0;
     fset->coordIndex.set1Value(fNum++, cIndex);
     cIndex = coordStartNum + 1;
@@ -423,7 +407,7 @@ generateWall(
     fset->coordIndex.set1Value(fNum++, cIndex);
     fset->coordIndex.set1Value(fNum++, SO_END_FACE_INDEX);
     fset->normalIndex.set1Value(normNum++, 3 + normShift);
-        
+
     cIndex = coordStartNum + 2;
     fset->coordIndex.set1Value(fNum++, cIndex);
     cIndex = coordStartNum + 3;
@@ -456,31 +440,29 @@ generateWall(
 // Use: private
 
 static void
-generateHole(
-    const SbVec2f      &location,
-    SoCoordinate3      *coords,
-    SoTriangleStripSet *sset )
+generateHole(const SbVec2f &location, SoCoordinate3 *coords,
+             SoTriangleStripSet *sset)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
     SbVec3f pt(location[0], 0.04, location[1] + HOLE_RADIUS);
-    float incr = M_PI / HOLE_SEGMENTS;
-    int cNum = coords->point.getNum();
- 
+    float   incr = M_PI / HOLE_SEGMENTS;
+    int     cNum = coords->point.getNum();
+
     coords->point.set1Value(cNum++, pt);
-    for (int i=1; i<HOLE_SEGMENTS; i++) {
-        pt[0] = location[0] + sinf(i*incr) * HOLE_RADIUS;
-        pt[2] = location[1] + cosf(i*incr) * HOLE_RADIUS;
+    for (int i = 1; i < HOLE_SEGMENTS; i++) {
+        pt[0] = location[0] + sinf(i * incr) * HOLE_RADIUS;
+        pt[2] = location[1] + cosf(i * incr) * HOLE_RADIUS;
         coords->point.set1Value(cNum++, pt);
-        pt[0] = location[0] - sinf(i*incr) * HOLE_RADIUS;
+        pt[0] = location[0] - sinf(i * incr) * HOLE_RADIUS;
         coords->point.set1Value(cNum++, pt);
     }
     pt[0] = location[0] + 0.0;
     pt[2] = location[1] - HOLE_RADIUS;
     coords->point.set1Value(cNum++, pt);
     sset->numVertices.set1Value(sset->numVertices.getNum(),
-            (HOLE_SEGMENTS-1)*2+2);
+                                (HOLE_SEGMENTS - 1) * 2 + 2);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -493,11 +475,8 @@ generateHole(
 // Use: private
 
 static void
-buildMaze(
-    SoCoordinate3    *fcoords,
-    SoCoordinate3    *scoords,
-    SoIndexedFaceSet *fset,
-    SoTriangleStripSet *sset )
+buildMaze(SoCoordinate3 *fcoords, SoCoordinate3 *scoords,
+          SoIndexedFaceSet *fset, SoTriangleStripSet *sset)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -508,34 +487,36 @@ buildMaze(
     // stretches of ON bits.  Form walls from the bits.
     SbVec2f startCoord, endCoord;
 
-    for (i=0; i<EDGE_RESOLUTION; i++) {
-        for (j=0; j<EDGE_RESOLUTION; j++) {
+    for (i = 0; i < EDGE_RESOLUTION; i++) {
+        for (j = 0; j < EDGE_RESOLUTION; j++) {
             if (mazeRows[i][j]) {
-                startCoord.setValue(-GRID_RES2+(float)j, -GRID_RES2+(float)i);
-                for (k=j+1; k<EDGE_RESOLUTION; k++) {
+                startCoord.setValue(-GRID_RES2 + (float)j,
+                                    -GRID_RES2 + (float)i);
+                for (k = j + 1; k < EDGE_RESOLUTION; k++) {
                     if (mazeRows[i][k] == 0)
-                        break;                  
+                        break;
                 }
                 if (k == EDGE_RESOLUTION)
                     k--;
-                endCoord.setValue(-GRID_RES2+(float)k, -GRID_RES2+(float)i);
+                endCoord.setValue(-GRID_RES2 + (float)k, -GRID_RES2 + (float)i);
                 generateWall(startCoord, endCoord, fcoords, fset);
                 j = k;
             }
         }
     }
 
-    for (i=0; i<EDGE_RESOLUTION; i++) {
-        for (j=0; j<EDGE_RESOLUTION; j++) {
+    for (i = 0; i < EDGE_RESOLUTION; i++) {
+        for (j = 0; j < EDGE_RESOLUTION; j++) {
             if (mazeColumns[j][i]) {
-                startCoord.setValue(-GRID_RES2+(float)i, -GRID_RES2+(float)j);
-                for (k=j+1; k<EDGE_RESOLUTION; k++) {
+                startCoord.setValue(-GRID_RES2 + (float)i,
+                                    -GRID_RES2 + (float)j);
+                for (k = j + 1; k < EDGE_RESOLUTION; k++) {
                     if (!mazeColumns[k][i])
-                        break;                  
+                        break;
                 }
                 if (k == EDGE_RESOLUTION)
                     k--;
-                endCoord.setValue(-GRID_RES2+(float)i, -GRID_RES2+(float)k);
+                endCoord.setValue(-GRID_RES2 + (float)i, -GRID_RES2 + (float)k);
                 j = k;
                 generateWall(startCoord, endCoord, fcoords, fset);
             }
@@ -544,29 +525,27 @@ buildMaze(
 
 #ifdef NO_HOLES
     // Loop through the array of holes, building holes for the maze
-    for (i=0; i<GRID_RESOLUTION; i++)
-        for (j=0; j<GRID_RESOLUTION; j++)
+    for (i = 0; i < GRID_RESOLUTION; i++)
+        for (j = 0; j < GRID_RESOLUTION; j++)
             mazeHoles[i][j] = 0;
 #else
     // Loop through the array of holes, building holes for the maze
     SbVec3f st, ft;
-    for (i=0; i<GRID_RESOLUTION; i++) {
-        for (j=0; j<GRID_RESOLUTION; j++) {
+    for (i = 0; i < GRID_RESOLUTION; i++) {
+        for (j = 0; j < GRID_RESOLUTION; j++) {
             if (mazeHoles[i][j] == 1) {
-                startCoord.setValue( -GRID_RES2 + (float)j + 0.5,
-                                     -GRID_RES2 + (float)i + 0.5 );
-                generateHole( startCoord, scoords, sset );
-            }
-            else if (mazeHoles[i][j] == 2) {
-                st.setValue(-GRID_RES2 + j + 0.5, -GRID_RES2 + i + 0.5, 0.04 );
-            }
-            else if (mazeHoles[i][j] == 3) {
-                ft.setValue(-GRID_RES2 + j + 0.5, -GRID_RES2 + i + 0.5, 0.04 );
+                startCoord.setValue(-GRID_RES2 + (float)j + 0.5,
+                                    -GRID_RES2 + (float)i + 0.5);
+                generateHole(startCoord, scoords, sset);
+            } else if (mazeHoles[i][j] == 2) {
+                st.setValue(-GRID_RES2 + j + 0.5, -GRID_RES2 + i + 0.5, 0.04);
+            } else if (mazeHoles[i][j] == 3) {
+                ft.setValue(-GRID_RES2 + j + 0.5, -GRID_RES2 + i + 0.5, 0.04);
             }
         }
     }
     startTrans->translation.setValue(st);
-    finishTrans->translation.setValue(ft-st);
+    finishTrans->translation.setValue(ft - st);
 #endif
 }
 
@@ -579,7 +558,7 @@ buildMaze(
 // Use: private
 
 static void
-saveMouseLocation( void *, SoEventCallback *cb )
+saveMouseLocation(void *, SoEventCallback *cb)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -590,14 +569,13 @@ saveMouseLocation( void *, SoEventCallback *cb )
         mouseLocation.setValue(pos[0], pos[1]);
 
         if (!timer->isScheduled()) {
-            animationTime.setValue( SbTime::getTimeOfDay().getValue() );
+            animationTime.setValue(SbTime::getTimeOfDay().getValue());
             timer->schedule();
         }
 
         isMouseDown = TRUE;
         cb->setHandled();
-    }
-    else if (SO_MOUSE_RELEASE_EVENT(cb->getEvent(), BUTTON1)) {
+    } else if (SO_MOUSE_RELEASE_EVENT(cb->getEvent(), BUTTON1)) {
 
         isMouseDown = FALSE;
         cb->setHandled();
@@ -612,7 +590,7 @@ saveMouseLocation( void *, SoEventCallback *cb )
 // Use: private
 
 static void
-computeFloorTilt( void *, SoEventCallback *cb )
+computeFloorTilt(void *, SoEventCallback *cb)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -621,9 +599,9 @@ computeFloorTilt( void *, SoEventCallback *cb )
         return;
 
     const SbVec2s &pos = cb->getEvent()->getPosition();
-    SbVec2s mouseMotion;
-    short x = mouseLocation[0];
-    short y = mouseLocation[1];
+    SbVec2s        mouseMotion;
+    short          x = mouseLocation[0];
+    short          y = mouseLocation[1];
 
     mouseMotion[0] = x - pos[0];
     mouseMotion[1] = y - pos[1];
@@ -674,13 +652,12 @@ resetGame()
     currentGridCol = startGridCol;
     currentGridRow = startGridRow;
     ballTranslation->translation.setValue(
-        ballPosition[0] - GRID_RES2, BALL_RADIUS,
-        ballPosition[1] - GRID_RES2);
+        ballPosition[0] - GRID_RES2, BALL_RADIUS, ballPosition[1] - GRID_RES2);
     rotationX->angle = mouseRotation[0];
     rotationZ->angle = mouseRotation[1];
     isBallFalling = FALSE;
     doneGame = FALSE;
-} 
+}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -690,19 +667,19 @@ resetGame()
 // Use: private
 
 static void
-processKeyEvents( void *, SoEventCallback *cb )
+processKeyEvents(void *, SoEventCallback *cb)
 
 //
 ////////////////////////////////////////////////////////////////////////
 {
     if (SO_KEY_PRESS_EVENT(cb->getEvent(), R)) {
-    
+
         resetGame();
-        cb->setHandled(); 
-        return;    
-    } 
+        cb->setHandled();
+        return;
+    }
     if (SO_KEY_PRESS_EVENT(cb->getEvent(), NUMBER_1)) {
-    
+
         // Reset the game with standard maze 1
         mazeCoords->point.deleteValues(0);
         mazeFaces->coordIndex.deleteValues(0);
@@ -710,14 +687,14 @@ processKeyEvents( void *, SoEventCallback *cb )
         holeCoords->point.deleteValues(0);
         holeStrips->numVertices.deleteValues(0);
         setStandardMaze(1);
-        buildMaze( mazeCoords, holeCoords, mazeFaces, holeStrips );
+        buildMaze(mazeCoords, holeCoords, mazeFaces, holeStrips);
 
         resetGame();
-        cb->setHandled(); 
-        return;    
-    } 
+        cb->setHandled();
+        return;
+    }
     if (SO_KEY_PRESS_EVENT(cb->getEvent(), NUMBER_2)) {
-    
+
         // Reset the game with standard maze 2
         mazeCoords->point.deleteValues(0);
         mazeFaces->coordIndex.deleteValues(0);
@@ -725,14 +702,14 @@ processKeyEvents( void *, SoEventCallback *cb )
         holeCoords->point.deleteValues(0);
         holeStrips->numVertices.deleteValues(0);
         setStandardMaze(2);
-        buildMaze( mazeCoords, holeCoords, mazeFaces, holeStrips );
+        buildMaze(mazeCoords, holeCoords, mazeFaces, holeStrips);
 
         resetGame();
-        cb->setHandled(); 
-        return;    
-    } 
+        cb->setHandled();
+        return;
+    }
     if (SO_KEY_PRESS_EVENT(cb->getEvent(), NUMBER_3)) {
-    
+
         // Reset the game with standard maze 3
         mazeCoords->point.deleteValues(0);
         mazeFaces->coordIndex.deleteValues(0);
@@ -740,12 +717,12 @@ processKeyEvents( void *, SoEventCallback *cb )
         holeCoords->point.deleteValues(0);
         holeStrips->numVertices.deleteValues(0);
         setStandardMaze(3);
-        buildMaze( mazeCoords, holeCoords, mazeFaces, holeStrips );
+        buildMaze(mazeCoords, holeCoords, mazeFaces, holeStrips);
 
         resetGame();
-        cb->setHandled(); 
-        return;    
-    } 
+        cb->setHandled();
+        return;
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -756,7 +733,7 @@ processKeyEvents( void *, SoEventCallback *cb )
 // Use: private
 
 void
-dropBall( float et )
+dropBall(float et)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -764,8 +741,8 @@ dropBall( float et )
     // When the ball has dropped far enough we don't need to drop the
     // ball any further.  We can also unschedule the timer sensor.
     if (ballHeight <= -2.0) {
-	if (!isMouseDown)
-	    timer->unschedule();
+        if (!isMouseDown)
+            timer->unschedule();
 
         // Schedule a timer to wait for a bit then reset the game back to
         // its initial position
@@ -773,37 +750,38 @@ dropBall( float et )
         resetTimer->schedule();
         return;
     }
-    
+
     // Calculate a new position for the ball
     SbVec2f newPosition;
 
-    newPosition[0] = et * (ballVelocity[0] + 
-            et * GRAVITATIONAL_CONSTANT * sinf(-rotationZ->angle.getValue()));
-    newPosition[1] = et * (ballVelocity[1] + 
-            et * GRAVITATIONAL_CONSTANT * sinf(rotationX->angle.getValue()));
-    ballHeight     += et * (dropVelocity -  et * GRAVITATIONAL_CONSTANT);
-    dropVelocity    = ballHeight / et;
-    ballPosition   += newPosition;
+    newPosition[0] =
+        et * (ballVelocity[0] +
+              et * GRAVITATIONAL_CONSTANT * sinf(-rotationZ->angle.getValue()));
+    newPosition[1] =
+        et * (ballVelocity[1] +
+              et * GRAVITATIONAL_CONSTANT * sinf(rotationX->angle.getValue()));
+    ballHeight += et * (dropVelocity - et * GRAVITATIONAL_CONSTANT);
+    dropVelocity = ballHeight / et;
+    ballPosition += newPosition;
     ballVelocity[0] = newPosition[0] / et;
     ballVelocity[1] = newPosition[1] / et;
 
-    if (ballPosition[0] < (GRID_RES2-5.75+BALL_RADIUS))
-        ballPosition[0] = GRID_RES2-5.75+BALL_RADIUS;
-    if (ballPosition[0] > (GRID_RES2+5.75-BALL_RADIUS))
-        ballPosition[0] =  GRID_RES2+5.75-BALL_RADIUS;
-    if (ballPosition[1] < (GRID_RES2-5.75+BALL_RADIUS))
-        ballPosition[1] = GRID_RES2-5.75+BALL_RADIUS;
-    if (ballPosition[1] > (GRID_RES2+5.75-BALL_RADIUS))
-        ballPosition[1] =  GRID_RES2+5.75-BALL_RADIUS;
+    if (ballPosition[0] < (GRID_RES2 - 5.75 + BALL_RADIUS))
+        ballPosition[0] = GRID_RES2 - 5.75 + BALL_RADIUS;
+    if (ballPosition[0] > (GRID_RES2 + 5.75 - BALL_RADIUS))
+        ballPosition[0] = GRID_RES2 + 5.75 - BALL_RADIUS;
+    if (ballPosition[1] < (GRID_RES2 - 5.75 + BALL_RADIUS))
+        ballPosition[1] = GRID_RES2 - 5.75 + BALL_RADIUS;
+    if (ballPosition[1] > (GRID_RES2 + 5.75 - BALL_RADIUS))
+        ballPosition[1] = GRID_RES2 + 5.75 - BALL_RADIUS;
 
-    ballTranslation->translation.setValue(
-            ballPosition[0] - GRID_RES2,
-            BALL_RADIUS + ballHeight,
-            ballPosition[1] - GRID_RES2);
+    ballTranslation->translation.setValue(ballPosition[0] - GRID_RES2,
+                                          BALL_RADIUS + ballHeight,
+                                          ballPosition[1] - GRID_RES2);
 
 #ifndef NO_AUDIO
-    // play the drop sound 
-    if (ballHeight <=-2.5) {
+    // play the drop sound
+    if (ballHeight <= -2.5) {
         sginap(20);
         ballSound->start();
     }
@@ -819,7 +797,7 @@ dropBall( float et )
 // Use: private
 
 static void
-resetCB( void *, SoSensor * )
+resetCB(void *, SoSensor *)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -836,7 +814,7 @@ resetCB( void *, SoSensor * )
 // Use: private
 
 static void
-animateBall( void *, SoSensor * )
+animateBall(void *, SoSensor *)
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -845,11 +823,11 @@ animateBall( void *, SoSensor * )
     SbTime newTime;
     SbTime elapsedTime;
 
-    newTime.setValue( SbTime::getTimeOfDay().getValue() );
-    elapsedTime.setValue( (newTime - animationTime).getValue() );
-    animationTime.setValue( (newTime).getValue() );
+    newTime.setValue(SbTime::getTimeOfDay().getValue());
+    elapsedTime.setValue((newTime - animationTime).getValue());
+    animationTime.setValue((newTime).getValue());
     float et = elapsedTime.getValue();
-    
+
     // Check to see if elapsed time is too long due to a slow machine
     if (et > MAX_ELAPSED_TIME)
         et = MAX_ELAPSED_TIME;
@@ -863,10 +841,12 @@ animateBall( void *, SoSensor * )
     // Calculate a new position for the ball
     SbVec2f newPosition, tmpPosition;
 
-    newPosition[0] = et * (ballVelocity[0] + 
-            et * GRAVITATIONAL_CONSTANT * sinf(-rotationZ->angle.getValue()));
-    newPosition[1] = et * (ballVelocity[1] + 
-            et * GRAVITATIONAL_CONSTANT * sinf(rotationX->angle.getValue()));
+    newPosition[0] =
+        et * (ballVelocity[0] +
+              et * GRAVITATIONAL_CONSTANT * sinf(-rotationZ->angle.getValue()));
+    newPosition[1] =
+        et * (ballVelocity[1] +
+              et * GRAVITATIONAL_CONSTANT * sinf(rotationX->angle.getValue()));
 
     ballVelocity[0] = newPosition[0] / et;
     ballVelocity[1] = newPosition[1] / et;
@@ -874,42 +854,40 @@ animateBall( void *, SoSensor * )
     tmpPosition[0] = 1.0 + ballPosition[0] + newPosition[0];
     tmpPosition[1] = 1.0 + ballPosition[1] + newPosition[1];
 
-    // Check the edges of the current grid cell to see if there are any 
+    // Check the edges of the current grid cell to see if there are any
     // walls present.  For each present wall, test the ball for intersection
     // and modify the ball position accordingly.
-    
+
     int row, col;
 
-    row  = currentGridRow;
-    col  = currentGridCol;
+    row = currentGridRow;
+    col = currentGridCol;
 
     // Check for intersections against left and right grid boundaries
-    if (((currentGridCol+1) != (int)(tmpPosition[0]-stdDist)) &&
+    if (((currentGridCol + 1) != (int)(tmpPosition[0] - stdDist)) &&
         (ballVelocity[0] < 0.0)) {
         if (mazeColumns[row][col]) {
             tmpPosition[0] = 1.0 + col + stdDist;
             ballVelocity[0] /= -WALL_DAMPENING;
         }
-    } else if (((currentGridCol+1) !=
-                (int)(tmpPosition[0]+stdDist)) &&
-                        (ballVelocity[0] > 0.0)) {
-        if (mazeColumns[row][col+1]) {
+    } else if (((currentGridCol + 1) != (int)(tmpPosition[0] + stdDist)) &&
+               (ballVelocity[0] > 0.0)) {
+        if (mazeColumns[row][col + 1]) {
             tmpPosition[0] = 1.0 + col + 1 - stdDist;
             ballVelocity[0] /= -WALL_DAMPENING;
         }
     }
 
     // Check for intersections against top and bottom grid boundaries
-    if (((currentGridRow+1) != (int)(tmpPosition[1]-stdDist)) &&
+    if (((currentGridRow + 1) != (int)(tmpPosition[1] - stdDist)) &&
         (ballVelocity[1] < 0.0)) {
         if (mazeRows[row][col]) {
             tmpPosition[1] = 1.0 + row + stdDist;
             ballVelocity[1] /= -WALL_DAMPENING;
         }
-    } else if (((currentGridRow+1) !=
-                (int)(tmpPosition[1]+stdDist)) &&
-                        (ballVelocity[1] > 0.0)) {
-        if (mazeRows[row+1][col]) {
+    } else if (((currentGridRow + 1) != (int)(tmpPosition[1] + stdDist)) &&
+               (ballVelocity[1] > 0.0)) {
+        if (mazeRows[row + 1][col]) {
             tmpPosition[1] = 1.0 + row + 1 - stdDist;
             ballVelocity[1] /= -WALL_DAMPENING;
         }
@@ -919,138 +897,134 @@ animateBall( void *, SoSensor * )
     SbVec2f cornerPoint;
     SbVec2f cornerVector;
 
-   // Check the top right corner of the grid cell for corners
-    if ((mazeRows[currentGridRow][currentGridCol+1] ||
-        mazeColumns[currentGridRow-1][currentGridCol+1]) &&
+    // Check the top right corner of the grid cell for corners
+    if ((mazeRows[currentGridRow][currentGridCol + 1] ||
+         mazeColumns[currentGridRow - 1][currentGridCol + 1]) &&
         !mazeRows[currentGridRow][currentGridCol] &&
-        !mazeColumns[currentGridRow][currentGridCol+1]) {
+        !mazeColumns[currentGridRow][currentGridCol + 1]) {
 
         // Check the corner.
-        SbVec2f center(currentGridCol+0.5, currentGridRow+0.5);
+        SbVec2f center(currentGridCol + 0.5, currentGridRow + 0.5);
         cornerPoint[0] = currentGridCol + 1.0 - WALL_THICKNESS;
         cornerPoint[1] = currentGridRow + WALL_THICKNESS;
-        cornerVector  = tmpPosition - oneVector - cornerPoint;
+        cornerVector = tmpPosition - oneVector - cornerPoint;
 
-        // Check to see if the intersection is on the edge 
+        // Check to see if the intersection is on the edge
         // of the wall rather than the corner
-        if ((cornerVector[1] <= 0.0) &&
-            (cornerVector[0] >= -BALL_RADIUS)) {
+        if ((cornerVector[1] <= 0.0) && (cornerVector[0] >= -BALL_RADIUS)) {
             tmpPosition[0] = 1.0 + currentGridCol + 1 - stdDist;
             ballVelocity[0] /= -WALL_DAMPENING;
-        }
-        else if ((cornerVector[0] >= 0.0) && (cornerVector[1] <= BALL_RADIUS)){    
+        } else if ((cornerVector[0] >= 0.0) &&
+                   (cornerVector[1] <= BALL_RADIUS)) {
             tmpPosition[1] = 1.0 + currentGridRow + stdDist;
             ballVelocity[1] /= -WALL_DAMPENING;
-        }
-        else {
+        } else {
             float distFromCorner = fabs(cornerVector.normalize());
             float reflectionMagnitude;
             if (distFromCorner <= BALL_RADIUS) {
                 reflectionMagnitude = -1.1 * cornerVector.dot(ballVelocity);
                 ballVelocity += reflectionMagnitude * cornerVector;
-                tmpPosition = oneVector+cornerPoint + BALL_RADIUS*cornerVector;
+                tmpPosition =
+                    oneVector + cornerPoint + BALL_RADIUS * cornerVector;
             }
         }
     }
 
     // Check the top left corner of the grid cell for corners
-    if ((mazeRows[currentGridRow][currentGridCol-1] ||
-        mazeColumns[currentGridRow-1][currentGridCol]) &&
+    if ((mazeRows[currentGridRow][currentGridCol - 1] ||
+         mazeColumns[currentGridRow - 1][currentGridCol]) &&
         !mazeRows[currentGridRow][currentGridCol] &&
         !mazeColumns[currentGridRow][currentGridCol]) {
 
         // Check the corner.
-        SbVec2f center(currentGridCol+0.5, currentGridRow+0.5);
+        SbVec2f center(currentGridCol + 0.5, currentGridRow + 0.5);
         cornerPoint[0] = currentGridCol + WALL_THICKNESS;
         cornerPoint[1] = currentGridRow + WALL_THICKNESS;
-        cornerVector  = tmpPosition - oneVector - cornerPoint;
+        cornerVector = tmpPosition - oneVector - cornerPoint;
 
-        // Check to see if the intersection is on the edge 
+        // Check to see if the intersection is on the edge
         // of the wall rather than the corner
-        if ((cornerVector[1] <= 0.0) &&
-            (cornerVector[0] <= BALL_RADIUS)) {
+        if ((cornerVector[1] <= 0.0) && (cornerVector[0] <= BALL_RADIUS)) {
             tmpPosition[0] = 1.0 + currentGridCol + stdDist;
             ballVelocity[0] /= -WALL_DAMPENING;
-        }
-        else if ((cornerVector[0] <= 0.0) && (cornerVector[1] <= BALL_RADIUS)){    
+        } else if ((cornerVector[0] <= 0.0) &&
+                   (cornerVector[1] <= BALL_RADIUS)) {
             tmpPosition[1] = 1.0 + currentGridRow + stdDist;
             ballVelocity[1] /= -WALL_DAMPENING;
-        }
-        else {
+        } else {
             float distFromCorner = fabs(cornerVector.normalize());
             float reflectionMagnitude;
             if (distFromCorner <= BALL_RADIUS) {
                 reflectionMagnitude = -1.1 * cornerVector.dot(ballVelocity);
                 ballVelocity += reflectionMagnitude * cornerVector;
-                tmpPosition = oneVector+cornerPoint + BALL_RADIUS*cornerVector;
+                tmpPosition =
+                    oneVector + cornerPoint + BALL_RADIUS * cornerVector;
             }
         }
     }
 
-     // Check the bottom right corner of the grid cell for corners
-    if ((mazeRows[currentGridRow+1][currentGridCol+1] ||
-        mazeColumns[currentGridRow+1][currentGridCol+1]) &&
-        !mazeRows[currentGridRow+1][currentGridCol] &&
-        !mazeColumns[currentGridRow][currentGridCol+1]) {
+    // Check the bottom right corner of the grid cell for corners
+    if ((mazeRows[currentGridRow + 1][currentGridCol + 1] ||
+         mazeColumns[currentGridRow + 1][currentGridCol + 1]) &&
+        !mazeRows[currentGridRow + 1][currentGridCol] &&
+        !mazeColumns[currentGridRow][currentGridCol + 1]) {
 
         // Check the corner.
-        SbVec2f center(currentGridCol+0.5, currentGridRow+0.5);
+        SbVec2f center(currentGridCol + 0.5, currentGridRow + 0.5);
         cornerPoint[0] = currentGridCol + 1.0 - WALL_THICKNESS;
         cornerPoint[1] = currentGridRow + 1.0 - WALL_THICKNESS;
-        cornerVector  = tmpPosition - oneVector - cornerPoint;
+        cornerVector = tmpPosition - oneVector - cornerPoint;
 
-        // Check to see if the intersection is on the edge 
+        // Check to see if the intersection is on the edge
         // of the wall rather than the corner
-        if ((cornerVector[1] >= 0.0) &&
-            (cornerVector[0] >= -BALL_RADIUS)) {
+        if ((cornerVector[1] >= 0.0) && (cornerVector[0] >= -BALL_RADIUS)) {
             tmpPosition[0] = 1.0 + currentGridCol + 1 - stdDist;
             ballVelocity[0] /= -WALL_DAMPENING;
-        }
-        else if ((cornerVector[0] >= 0.0) && (cornerVector[1] >= -BALL_RADIUS)){    
+        } else if ((cornerVector[0] >= 0.0) &&
+                   (cornerVector[1] >= -BALL_RADIUS)) {
             tmpPosition[1] = 1.0 + currentGridRow + 1 - stdDist;
             ballVelocity[1] /= -WALL_DAMPENING;
-        }
-        else {
+        } else {
             float distFromCorner = fabs(cornerVector.normalize());
             float reflectionMagnitude;
             if (distFromCorner <= BALL_RADIUS) {
                 reflectionMagnitude = -1.1 * cornerVector.dot(ballVelocity);
                 ballVelocity += reflectionMagnitude * cornerVector;
-                tmpPosition = oneVector+cornerPoint + BALL_RADIUS*cornerVector;
+                tmpPosition =
+                    oneVector + cornerPoint + BALL_RADIUS * cornerVector;
             }
         }
     }
 
     // Check the bottom left corner of the grid cell for corners
-    if ((mazeRows[currentGridRow+1][currentGridCol-1] ||
-        mazeColumns[currentGridRow+1][currentGridCol]) &&
-        !mazeRows[currentGridRow+1][currentGridCol] &&
+    if ((mazeRows[currentGridRow + 1][currentGridCol - 1] ||
+         mazeColumns[currentGridRow + 1][currentGridCol]) &&
+        !mazeRows[currentGridRow + 1][currentGridCol] &&
         !mazeColumns[currentGridRow][currentGridCol]) {
 
         // Check the corner.
-        SbVec2f center(currentGridCol+0.5, currentGridRow+0.5);
+        SbVec2f center(currentGridCol + 0.5, currentGridRow + 0.5);
         cornerPoint[0] = currentGridCol + WALL_THICKNESS;
         cornerPoint[1] = currentGridRow + 1.0 - WALL_THICKNESS;
-        cornerVector  = tmpPosition - oneVector - cornerPoint;
+        cornerVector = tmpPosition - oneVector - cornerPoint;
 
-        // Check to see if the intersection is on the edge 
+        // Check to see if the intersection is on the edge
         // of the wall rather than the corner
-        if ((cornerVector[1] >= 0.0) &&
-            (cornerVector[0] <= BALL_RADIUS)) {
+        if ((cornerVector[1] >= 0.0) && (cornerVector[0] <= BALL_RADIUS)) {
             tmpPosition[0] = 1.0 + currentGridCol + stdDist;
             ballVelocity[0] /= -WALL_DAMPENING;
-        }
-        else if ((cornerVector[0] <= 0.0) && (cornerVector[1] >= -BALL_RADIUS)){    
+        } else if ((cornerVector[0] <= 0.0) &&
+                   (cornerVector[1] >= -BALL_RADIUS)) {
             tmpPosition[1] = 1.0 + currentGridRow + 1 - stdDist;
             ballVelocity[1] /= -WALL_DAMPENING;
-        }
-        else {
+        } else {
             float distFromCorner = fabs(cornerVector.normalize());
             float reflectionMagnitude;
             if (distFromCorner <= BALL_RADIUS) {
                 reflectionMagnitude = -1.1 * cornerVector.dot(ballVelocity);
                 ballVelocity += reflectionMagnitude * cornerVector;
-                tmpPosition = oneVector+cornerPoint + BALL_RADIUS*cornerVector;
+                tmpPosition =
+                    oneVector + cornerPoint + BALL_RADIUS * cornerVector;
             }
         }
     }
@@ -1062,7 +1036,7 @@ animateBall( void *, SoSensor * )
     // If it's still in the same place and the mouse button is up
     // then we can unschedule the timer sensor.
     if (ballPosition == lastBallPosition && !isMouseDown) {
-        timer->unschedule(); 
+        timer->unschedule();
     }
 
     currentGridRow = (int)(ballPosition[1]);
@@ -1072,8 +1046,8 @@ animateBall( void *, SoSensor * )
         if ((currentGridRow == finishLocation[1]) &&
             (currentGridCol == finishLocation[0])) {
 
-            // Play the Victory Audio 
-#ifndef NO_AUDIO   
+            // Play the Victory Audio
+#ifndef NO_AUDIO
             victory->start();
 #endif
             doneGame = TRUE;
@@ -1082,30 +1056,27 @@ animateBall( void *, SoSensor * )
     // Check to see if the ball has run into a hole
     if (mazeHoles[currentGridRow][currentGridCol] != 0) {
 
-        SbVec2f center(currentGridCol+0.5,
-                       currentGridRow+0.5);
+        SbVec2f center(currentGridCol + 0.5, currentGridRow + 0.5);
         SbVec2f fallVector = center - ballPosition;
-        float distFromHoleCenter = fabs(fallVector.length());
+        float   distFromHoleCenter = fabs(fallVector.length());
         if (distFromHoleCenter <= HOLE_RADIUS) {
             isBallFalling = TRUE;
 
             // Adjust the ball velocity to have it start dropping
-            SbVec2f changeVelocity = (fallVector - ballVelocity); 
-            ballHeight    = - sinf(HOLE_RADIUS-distFromHoleCenter);
-            dropVelocity  = ballHeight / et;
-            ballVelocity += changeVelocity * 0.5;                
+            SbVec2f changeVelocity = (fallVector - ballVelocity);
+            ballHeight = -sinf(HOLE_RADIUS - distFromHoleCenter);
+            dropVelocity = ballHeight / et;
+            ballVelocity += changeVelocity * 0.5;
         }
     }
 
-    ballTranslation->translation.setValue(
-            ballPosition[0] - GRID_RES2,
-            .35 + ballHeight,
-            ballPosition[1] - GRID_RES2);
- 
+    ballTranslation->translation.setValue(ballPosition[0] - GRID_RES2,
+                                          .35 + ballHeight,
+                                          ballPosition[1] - GRID_RES2);
+
     lastBallPosition[0] = ballPosition[0];
     lastBallPosition[1] = ballPosition[1];
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -1114,16 +1085,14 @@ animateBall( void *, SoSensor * )
 ////////////////////////////////////////////////////////////////////////
 
 static void
-logoCB(void *, SoAction *action)
-{
+logoCB(void *, SoAction *action) {
     if (action->isOfType(SoGLRenderAction::getClassTypeId())) {
         glViewport(0, 0, 80, 80);
     }
 }
 
 static void
-setOverlayLogo(SoXtRenderArea *ra)
-{
+setOverlayLogo(SoXtRenderArea *ra) {
     static SoSeparator *logo = NULL;
 
     if (logo == NULL) {
@@ -1144,9 +1113,8 @@ setOverlayLogo(SoXtRenderArea *ra)
 }
 
 int
-main(int argc, char *argv[])
-{
-    Widget              mainWindow;
+main(int argc, char *argv[]) {
+    Widget mainWindow;
 
     // Initialize Inventor
     mainWindow = SoXt::init("Inventor Maze");
@@ -1163,10 +1131,10 @@ main(int argc, char *argv[])
     oneVector.setValue(1.0, 1.0);
 
     // Setup the scene graph for the rolling ball
-    SoSeparator   *ballRoot        = new SoSeparator;
-    SoSeparator   *ballCache       = new SoSeparator;
-    SoMaterial    *ballMaterial    = new SoMaterial;
-    SoSphere      *ball            = new SoSphere;
+    SoSeparator *ballRoot = new SoSeparator;
+    SoSeparator *ballCache = new SoSeparator;
+    SoMaterial * ballMaterial = new SoMaterial;
+    SoSphere *   ball = new SoSphere;
 
     ballTranslation = new SoTranslation;
     ball->radius = BALL_RADIUS;
@@ -1186,38 +1154,38 @@ main(int argc, char *argv[])
     resetTimer = new SoAlarmSensor(resetCB, NULL);
 
     // Generate a scene graph representing the maze specified by the array
-    SoSeparator *mazeRoot          = new SoSeparator;
-    SoSeparator *mazeCache         = new SoSeparator;
-    SoSeparator *holeCache         = new SoSeparator;
-    SoMaterial  *floorMaterial     = new SoMaterial;
-    SoCube      *floor             = new SoCube;
-    SoMaterial  *mazeMaterial      = new SoMaterial;
+    SoSeparator *      mazeRoot = new SoSeparator;
+    SoSeparator *      mazeCache = new SoSeparator;
+    SoSeparator *      holeCache = new SoSeparator;
+    SoMaterial *       floorMaterial = new SoMaterial;
+    SoCube *           floor = new SoCube;
+    SoMaterial *       mazeMaterial = new SoMaterial;
     SoMaterialBinding *mazeMtlBind = new SoMaterialBinding;
-    SoNormal    *mazeNorms         = new SoNormal;
-    SoNormalBinding *mazeNormBind  = new SoNormalBinding;
-    SoLightModel *holeModel        = new SoLightModel;
-    SoBaseColor  *holeColor        = new SoBaseColor;
-    SoFont  *textFont              = new SoFont;
-    SoText3 *startText             = new SoText3;
-    SoText3 *finishText            = new SoText3;
-    SoRotationXYZ *textRotation    = new SoRotationXYZ;
-    SoBaseColor *textColor         = new SoBaseColor;
+    SoNormal *         mazeNorms = new SoNormal;
+    SoNormalBinding *  mazeNormBind = new SoNormalBinding;
+    SoLightModel *     holeModel = new SoLightModel;
+    SoBaseColor *      holeColor = new SoBaseColor;
+    SoFont *           textFont = new SoFont;
+    SoText3 *          startText = new SoText3;
+    SoText3 *          finishText = new SoText3;
+    SoRotationXYZ *    textRotation = new SoRotationXYZ;
+    SoBaseColor *      textColor = new SoBaseColor;
 
-    mazeCoords      = new SoCoordinate3;
-    mazeFaces       = new SoIndexedFaceSet;
-    holeCoords      = new SoCoordinate3;
-    holeStrips      = new SoTriangleStripSet;
-    startTrans      = new SoTranslation;
-    finishTrans     = new SoTranslation;
+    mazeCoords = new SoCoordinate3;
+    mazeFaces = new SoIndexedFaceSet;
+    holeCoords = new SoCoordinate3;
+    holeStrips = new SoTriangleStripSet;
+    startTrans = new SoTranslation;
+    finishTrans = new SoTranslation;
     finishLocation.setValue(10, 10);
 
     // Create walls for the boundary of the maze
-    mazeNorms->vector.set1Value(0, SbVec3f( 0.0, -1.0,  0.0));    
-    mazeNorms->vector.set1Value(1, SbVec3f( 0.0,  1.0,  0.0));    
-    mazeNorms->vector.set1Value(2, SbVec3f( 0.0,  0.0,  1.0));    
-    mazeNorms->vector.set1Value(3, SbVec3f( 1.0,  0.0,  0.0));    
-    mazeNorms->vector.set1Value(4, SbVec3f( 0.0,  0.0, -1.0));    
-    mazeNorms->vector.set1Value(5, SbVec3f(-1.0,  0.0,  0.0));
+    mazeNorms->vector.set1Value(0, SbVec3f(0.0, -1.0, 0.0));
+    mazeNorms->vector.set1Value(1, SbVec3f(0.0, 1.0, 0.0));
+    mazeNorms->vector.set1Value(2, SbVec3f(0.0, 0.0, 1.0));
+    mazeNorms->vector.set1Value(3, SbVec3f(1.0, 0.0, 0.0));
+    mazeNorms->vector.set1Value(4, SbVec3f(0.0, 0.0, -1.0));
+    mazeNorms->vector.set1Value(5, SbVec3f(-1.0, 0.0, 0.0));
     mazeMaterial->diffuseColor.setValue(SbColor(.8, .6, .1));
     mazeMtlBind->value = SoMaterialBinding::OVERALL;
     mazeNormBind->value = SoNormalBinding::PER_FACE_INDEXED;
@@ -1237,7 +1205,7 @@ main(int argc, char *argv[])
     holeCache->addChild(holeCoords);
     holeCache->addChild(holeStrips);
 #endif
- 
+
     // Parse the command line to find the maze filename
     if (argc < 2)
         setStandardMaze(1);
@@ -1245,18 +1213,18 @@ main(int argc, char *argv[])
         readMazeFile(argv[1]);
 
     // Build the initial maze
-    buildMaze( mazeCoords, holeCoords, mazeFaces, holeStrips );
+    buildMaze(mazeCoords, holeCoords, mazeFaces, holeStrips);
 
     rotationX = new SoRotationXYZ;
     rotationZ = new SoRotationXYZ;
 
     // Read the geometry for the game box and add it to the maze
-    SoInput in;
-    SoNode *n = NULL;
+    SoInput  in;
+    SoNode * n = NULL;
     SoGroup *gameBox = NULL;
-    in.setBuffer( (void *)box, 1032 );
+    in.setBuffer((void *)box, 1032);
     SoDB::read(&in, n);
-    gameBox = (SoGroup *) n;
+    gameBox = (SoGroup *)n;
 
     floorMaterial->diffuseColor.setValue(SbColor(.95, .8, .1));
     floorMaterial->shininess = 0.2;
@@ -1281,28 +1249,28 @@ main(int argc, char *argv[])
     mazeRoot->addChild(ballRoot);
     mazeRoot->addChild(mazeCache);
     mazeRoot->addChild(holeCache);
-    
+
     // Create a viewer and begin the game
-    SoSeparator *mainRoot = new SoSeparator;
-    SoEventCallback *eventCB = new SoEventCallback;
-    SoXtExaminerViewer *vwr = new SoXtExaminerViewer(mainWindow);
+    SoSeparator *        mainRoot = new SoSeparator;
+    SoEventCallback *    eventCB = new SoEventCallback;
+    SoXtExaminerViewer * vwr = new SoXtExaminerViewer(mainWindow);
     SoPerspectiveCamera *cam = new SoPerspectiveCamera;
 
     // Setup event callbacks
     eventCB->addEventCallback(SoMouseButtonEvent::getClassTypeId(),
-            saveMouseLocation, (void *)&mouseLocation);
+                              saveMouseLocation, (void *)&mouseLocation);
     eventCB->addEventCallback(SoLocation2Event::getClassTypeId(),
-            computeFloorTilt, (void *)&mouseLocation);
+                              computeFloorTilt, (void *)&mouseLocation);
     eventCB->addEventCallback(SoKeyboardEvent::getClassTypeId(),
-            processKeyEvents, NULL);
+                              processKeyEvents, NULL);
 
     // Setup the camera so the game is comfortably viewed
     SbVec3f pos(0.0, 15.0, 9.0);
     SbVec3f lookto(0.0, -1.7, 0.0);
     cam->position.setValue(pos);
-    cam->orientation.setValue(SbRotation(SbVec3f(0.0, 0.0, -1.0),
-                                         lookto-pos));
-    cam->focalDistance = (lookto-pos).length();
+    cam->orientation.setValue(
+        SbRotation(SbVec3f(0.0, 0.0, -1.0), lookto - pos));
+    cam->focalDistance = (lookto - pos).length();
 
     mainRoot->ref();
     mainRoot->addChild(eventCB);
@@ -1317,8 +1285,8 @@ main(int argc, char *argv[])
     ballPosition[1] = (float)currentGridRow + stdDist;
     lastBallPosition[0] = ballPosition[0];
     lastBallPosition[1] = ballPosition[1];
-    ballTranslation->translation.setValue(
-            ballPosition[0] - GRID_RES2, .35, ballPosition[1] - GRID_RES2);
+    ballTranslation->translation.setValue(ballPosition[0] - GRID_RES2, .35,
+                                          ballPosition[1] - GRID_RES2);
 
     vwr->setSize(SbVec2s(900, 700));
     vwr->setSceneGraph(mainRoot);
@@ -1333,4 +1301,3 @@ main(int argc, char *argv[])
     SoXt::show(mainWindow);
     SoXt::mainLoop();
 }
-

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -38,16 +38,15 @@
 // Routines and stuff for keeping the 3D Text stuff up to date
 //
 
-extern void delayUpdateText(Widget, XtPointer, XtPointer);
-extern void updateText(Widget, XtPointer, XtPointer);
-extern void copyText(Widget, XtPointer, XtPointer);
-extern void createPartEditor(Widget, XtPointer, XtPointer);
+extern void         delayUpdateText(Widget, XtPointer, XtPointer);
+extern void         updateText(Widget, XtPointer, XtPointer);
+extern void         copyText(Widget, XtPointer, XtPointer);
+extern void         createPartEditor(Widget, XtPointer, XtPointer);
 extern SoSeparator *createTextSceneGraph();
-extern void setTextCaching(int);
+extern void         setTextCaching(int);
 
 //
 // Evil global variables; oh well, I'm in a hurry.
 //
 extern SoProfileCoordinate2 *profileCoords;
-extern SoLinearProfile *profile;
-
+extern SoLinearProfile *     profile;

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -60,8 +60,8 @@
  |
  */
 
-#ifndef  _SO_WORLD_INFO_
-#define  _SO_WORLD_INFO_
+#ifndef _SO_WORLD_INFO_
+#define _SO_WORLD_INFO_
 
 #include <Inventor/SbLinear.h>
 #include <Inventor/SoLists.h>
@@ -77,59 +77,55 @@ class SoSeparator;
 //////////////////////////////////////////////////////////////////////////////
 
 class WorldInfo {
-    
-  public:
 
+  public:
     WorldInfo();
     ~WorldInfo();
 
     SoSeparator *getWorldRoot() { return worldRoot; }
 
     // An argument of NULL will create an empty separator for the scene.
-    void setScene( SoSeparator *newScene );
+    void         setScene(SoSeparator *newScene);
     SoSeparator *getScene() { return sceneRoot; }
-    SbBool isSceneEmpty();
+    SbBool       isSceneEmpty();
 
     char *getFileName() { return fileName; }
-    void    setFileName( char *newFileName );
-
-
+    void  setFileName(char *newFileName);
 
     // Noodles may be added or deleted.
-    void addNoodle( GeneralizedCylinder *newNoodle );
-    void deleteNoodle( GeneralizedCylinder *noodleToRemove );
+    void addNoodle(GeneralizedCylinder *newNoodle);
+    void deleteNoodle(GeneralizedCylinder *noodleToRemove);
 
     void deleteCurrentNoodle();
     // Returns tghe new selection.
-    GeneralizedCylinder * undeleteNoodle();
+    GeneralizedCylinder *undeleteNoodle();
 
     GeneralizedCylinder *setFirstNoodleCurrent();
     GeneralizedCylinder *addNewNoodle();
 
-    void setCurrentNoodle( GeneralizedCylinder *newNoodle );
+    void                 setCurrentNoodle(GeneralizedCylinder *newNoodle);
     GeneralizedCylinder *getCurrentNoodle() { return currentNoodle; }
 
-    SoType  getManipType() { return manipType; }
-    void    setManipType( SoType newType );
- 
+    SoType getManipType() { return manipType; }
+    void   setManipType(SoType newType);
+
     SoSeparator *getVanillaSceneCopy();
 
     SoSelection *getSelectorNode() { return selector; }
 
   protected:
+    SoSeparator *worldRoot;
+    SoSelection *selector;
+    SoSeparator *sceneRoot;
 
-    SoSeparator  *worldRoot;
-    SoSelection  *selector;
-    SoSeparator  *sceneRoot;
-
-    static void selectionCB( void *, SoPath *);
-    static void deselectionCB( void *, SoPath *);
-    static SoPath *pickFilterCB( void *, const SoPickedPoint *);
+    static void    selectionCB(void *, SoPath *);
+    static void    deselectionCB(void *, SoPath *);
+    static SoPath *pickFilterCB(void *, const SoPickedPoint *);
 
   private:
     GeneralizedCylinder *currentNoodle;
-    char                *fileName;
-    SoType              manipType;
+    char *               fileName;
+    SoType               manipType;
 
     // Stores deleted pieces, most recently deleted added to end.
     // When undelete() is called, last entry is removed and put into scene.

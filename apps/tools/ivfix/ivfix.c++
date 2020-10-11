@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,14 +54,14 @@
 /////////////////////////////////////////////////////////////////////////////
 
 typedef struct {
-    IfFixer::ReportLevel	reportLevel;
-    SbBool			writeAscii;
-    SbBool			doAnyNormals;
-    SbBool			doAnyTexCoords;
-    SbBool			writeStrips;
-    SbBool			writeVertexProperty;
-    SoInput			inFile;
-    SoOutput			outFile;
+    IfFixer::ReportLevel reportLevel;
+    SbBool               writeAscii;
+    SbBool               doAnyNormals;
+    SbBool               doAnyTexCoords;
+    SbBool               writeStrips;
+    SbBool               writeVertexProperty;
+    SoInput              inFile;
+    SoOutput             outFile;
 } OptionInfo;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -70,9 +70,9 @@ typedef struct {
 //
 /////////////////////////////////////////////////////////////////////////////
 
-static void	printUsage(const char *progname);
-static void	parseArgs(int argc, char **argv, OptionInfo &options);
-static void	initOptions(OptionInfo &options);
+static void printUsage(const char *progname);
+static void parseArgs(int argc, char **argv, OptionInfo &options);
+static void initOptions(OptionInfo &options);
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -80,8 +80,8 @@ static void	initOptions(OptionInfo &options);
 //
 /////////////////////////////////////////////////////////////////////////////
 
-int main(int argc, char **argv)
-{
+int
+main(int argc, char **argv) {
     OptionInfo options;
 
     initOptions(options);
@@ -102,8 +102,8 @@ int main(int argc, char **argv)
     IfReporter::startReport("Reading file");
     SoSeparator *root = SoDB::readAll(&options.inFile);
     if (root == NULL) {
-	fprintf(stderr, "\n%s: Problem reading data from file\n", argv[0]);
-	printUsage(argv[0]);
+        fprintf(stderr, "\n%s: Problem reading data from file\n", argv[0]);
+        printUsage(argv[0]);
     }
     IfReporter::finishReport();
 
@@ -111,8 +111,8 @@ int main(int argc, char **argv)
     // rid of the scene graph when it's done with it
     SoNode *resultRoot = fixer.fix(root);
     if (resultRoot == NULL) {
-	fprintf(stderr, "%s: No shapes found in data\n", argv[0]);
-	return 1;
+        fprintf(stderr, "%s: No shapes found in data\n", argv[0]);
+        return 1;
     }
 
     resultRoot->ref();
@@ -120,8 +120,8 @@ int main(int argc, char **argv)
     // Write out the results
     IfReporter::startReport("Writing result");
     SoWriteAction wa(&options.outFile);
-    if (! options.writeAscii)
-	wa.getOutput()->setBinary(TRUE);
+    if (!options.writeAscii)
+        wa.getOutput()->setBinary(TRUE);
     wa.apply(resultRoot);
     IfReporter::finishReport();
 
@@ -138,20 +138,18 @@ int main(int argc, char **argv)
 /////////////////////////////////////////////////////////////////////////////
 
 static void
-printUsage(const char *progname)
-{
+printUsage(const char *progname) {
     fprintf(stderr, "Usage: %s [options] [infile] [outfile]\n", progname);
     fprintf(stderr,
-	    "\t-a     : Write out an ascii file.  Default is binary\n"
-	    "\t-d dir : Add 'dir' to the list of directories to search\n"
-	    "\t-f     : Produce independent faces rather than tri strips\n"
-	    "\t-h     : Print this message (help)\n"
-	    "\t-n     : Do not generate any normals\n"
-	    "\t-p     : Do not produce SoVertexProperty nodes for properties\n"
-	    "\t-t     : Do not generate any texture coordinates\n"
-	    "\t-v     : (Verbose) Display status info during processing\n"
-	    "\t-V     : (Very verbose) Display more detailed status info\n"
-	    );
+            "\t-a     : Write out an ascii file.  Default is binary\n"
+            "\t-d dir : Add 'dir' to the list of directories to search\n"
+            "\t-f     : Produce independent faces rather than tri strips\n"
+            "\t-h     : Print this message (help)\n"
+            "\t-n     : Do not generate any normals\n"
+            "\t-p     : Do not produce SoVertexProperty nodes for properties\n"
+            "\t-t     : Do not generate any texture coordinates\n"
+            "\t-v     : (Verbose) Display status info during processing\n"
+            "\t-V     : (Very verbose) Display more detailed status info\n");
 
     exit(99);
 }
@@ -163,83 +161,82 @@ printUsage(const char *progname)
 /////////////////////////////////////////////////////////////////////////////
 
 static void
-parseArgs(int argc, char **argv, OptionInfo &options)
-{
+parseArgs(int argc, char **argv, OptionInfo &options) {
     SbBool uhoh = FALSE;
-    int c;
-    
+    int    c;
+
     while ((c = getopt(argc, argv, "ad:fhnptvV")) != -1) {
-	switch(c) {
-	  case 'a':
-	    options.writeAscii = TRUE;
-	    break;
-	  case 'd':
-	    options.inFile.addDirectoryLast(optarg);
-	    break;
-	  case 'f':
-	    options.writeStrips = FALSE;
-	    break;
-	  case 'n':
-	    options.doAnyNormals = FALSE;
-	    break;
-	  case 'p':
-	    options.writeVertexProperty = FALSE;
-	    break;
-	  case 't':
-	    options.doAnyTexCoords = FALSE;
-	    break;
-	  case 'v':
-	    options.reportLevel = IfFixer::LOW;
-	    break;
-	  case 'V':
-	    options.reportLevel = IfFixer::HIGH;
-	    break;
-	  case 'h':	// Help
-	  default:
-	    uhoh = TRUE;
-	    break;
-	}
+        switch (c) {
+        case 'a':
+            options.writeAscii = TRUE;
+            break;
+        case 'd':
+            options.inFile.addDirectoryLast(optarg);
+            break;
+        case 'f':
+            options.writeStrips = FALSE;
+            break;
+        case 'n':
+            options.doAnyNormals = FALSE;
+            break;
+        case 'p':
+            options.writeVertexProperty = FALSE;
+            break;
+        case 't':
+            options.doAnyTexCoords = FALSE;
+            break;
+        case 'v':
+            options.reportLevel = IfFixer::LOW;
+            break;
+        case 'V':
+            options.reportLevel = IfFixer::HIGH;
+            break;
+        case 'h': // Help
+        default:
+            uhoh = TRUE;
+            break;
+        }
     }
 
     // Handle optional input file name
     if (optind < argc) {
-	char *inFileName = argv[optind++];
-	if (! options.inFile.openFile(inFileName)) {
-	    fprintf(stderr, "%s: Could not open file %s", argv[0], inFileName);
-	    printUsage(argv[0]);
-	}
+        char *inFileName = argv[optind++];
+        if (!options.inFile.openFile(inFileName)) {
+            fprintf(stderr, "%s: Could not open file %s", argv[0], inFileName);
+            printUsage(argv[0]);
+        }
 
         // If the filename includes a directory path, add the directory name
         // to the list of directories where to look for input files
         const char *slashPtr;
-        char *searchPath = NULL;
+        char *      searchPath = NULL;
         if ((slashPtr = strrchr(inFileName, '/')) != NULL) {
             searchPath = strdup(inFileName);
             searchPath[slashPtr - inFileName] = '\0';
             SoInput::addDirectoryFirst(searchPath);
-	    free(searchPath);
+            free(searchPath);
         }
     }
 
     // Trying to read stdin from a tty is a no-no
     else if (isatty(fileno(stdin)))
-	uhoh = TRUE;
+        uhoh = TRUE;
 
     // Handle optional output file name
     if (optind < argc) {
-	char *outFileName = argv[optind++];
-	if (! options.outFile.openFile(outFileName)) {
-	    fprintf(stderr, "%s: Could not open file %s", argv[0],outFileName);
-	    printUsage(argv[0]);
-	}
+        char *outFileName = argv[optind++];
+        if (!options.outFile.openFile(outFileName)) {
+            fprintf(stderr, "%s: Could not open file %s", argv[0], outFileName);
+            printUsage(argv[0]);
+        }
     }
 
     // Too many arguments?
     if (optind < argc)
-	uhoh = TRUE;
+        uhoh = TRUE;
 
     if (uhoh)
-	printUsage(argv[0]);
+        printUsage(argv[0]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -249,12 +246,11 @@ parseArgs(int argc, char **argv, OptionInfo &options)
 /////////////////////////////////////////////////////////////////////////////
 
 static void
-initOptions(OptionInfo &options)
-{
-    options.reportLevel		= IfFixer::NONE;
-    options.writeAscii		= FALSE;
-    options.doAnyNormals	= TRUE;
-    options.doAnyTexCoords	= TRUE;
-    options.writeStrips		= TRUE;
-    options.writeVertexProperty	= TRUE;
+initOptions(OptionInfo &options) {
+    options.reportLevel = IfFixer::NONE;
+    options.writeAscii = FALSE;
+    options.doAnyNormals = TRUE;
+    options.doAnyTexCoords = TRUE;
+    options.writeStrips = TRUE;
+    options.writeVertexProperty = TRUE;
 }

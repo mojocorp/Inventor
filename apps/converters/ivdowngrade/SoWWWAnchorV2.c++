@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,8 +68,8 @@ SoWWWAnchorV2::initClass()
 
     // Tell the type system whenever it wants to create something
     // of type SoWWWAnchor to create a SoWWWAnchorV2
-    SoType::overrideType(
-		 SoWWWAnchor::getClassTypeId(), &SoWWWAnchorV2::createInstance);
+    SoType::overrideType(SoWWWAnchor::getClassTypeId(),
+                         &SoWWWAnchorV2::createInstance);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -94,9 +94,7 @@ SoWWWAnchorV2::SoWWWAnchorV2()
 SoWWWAnchorV2::~SoWWWAnchorV2()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-    
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -109,39 +107,38 @@ SoWWWAnchorV2::write(SoWriteAction *action)
 ////////////////////////////////////////////////////////////////////////
 {
     // We don't want all this alternate rep stuff to trigger
-    // notification during writing. 
+    // notification during writing.
     alternateRep.getValue()->enableNotify(FALSE);
-    
-    SoOutput	*out = action->getOutput();
+
+    SoOutput *out = action->getOutput();
 
     // In write-reference counting phase
     if (out->getStage() == SoOutput::COUNT_REFS) {
-	// add the children to the alternateRep so they can be written
-	// there and USE'd in the real node.
+        // add the children to the alternateRep so they can be written
+        // there and USE'd in the real node.
 
-	// NOTE: may be referenced more than once.  ONLY BUILD
-	// alternateRep ONCE, THOUGH!
-	
-	// Even if we have only one child, we put it under a separator.
-	// since SoWWWAnchor is derived from SoSeparator, we don't want
-	// any properties in the children to "leak out".
-	if (((SoSeparator *) alternateRep.getValue())->getNumChildren() == 0) {
-	    for (int i = 0; i < getNumChildren(); ++i)
-		((SoSeparator *) alternateRep.getValue())->
-		    addChild(getChild(i));
+        // NOTE: may be referenced more than once.  ONLY BUILD
+        // alternateRep ONCE, THOUGH!
 
-	    // Inventor V2.0 cannot read unknown nodes with SoSFEnum fields.
-	    // Don't let any enums get written out.
-	    // NOTE: a better solution might be to write the enum as a string,
-	    // and have the upgrader for this node convert that string back
-	    // to an enum value. But this bug was found too close to the 2.1 MR date
-	    // to do that more complicated fix. Instead, just don't write the enum.
-	    map.setDefault(TRUE);
-	    style.setDefault(TRUE);
-	    mode.setDefault(TRUE);
-	}
+        // Even if we have only one child, we put it under a separator.
+        // since SoWWWAnchor is derived from SoSeparator, we don't want
+        // any properties in the children to "leak out".
+        if (((SoSeparator *)alternateRep.getValue())->getNumChildren() == 0) {
+            for (int i = 0; i < getNumChildren(); ++i)
+                ((SoSeparator *)alternateRep.getValue())->addChild(getChild(i));
+
+            // Inventor V2.0 cannot read unknown nodes with SoSFEnum fields.
+            // Don't let any enums get written out.
+            // NOTE: a better solution might be to write the enum as a string,
+            // and have the upgrader for this node convert that string back
+            // to an enum value. But this bug was found too close to the 2.1 MR
+            // date to do that more complicated fix. Instead, just don't write
+            // the enum.
+            map.setDefault(TRUE);
+            style.setDefault(TRUE);
+            mode.setDefault(TRUE);
+        }
     }
-    
+
     SoWWWAnchor::write(action);
 }
-

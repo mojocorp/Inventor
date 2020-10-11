@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -46,32 +46,32 @@
 
 class Alternate : public SoGroup {
 
-   SO_NODE_HEADER(Alternate);
+    SO_NODE_HEADER(Alternate);
 
- public:
-   // Initializes this class
-   static void   initClass();
+  public:
+    // Initializes this class
+    static void initClass();
 
-   // Default constructor
-   Alternate();
+    // Default constructor
+    Alternate();
 
-   // Constructor that takes approximate number of children as
-   // a hint
-   Alternate(int numChildren);
+    // Constructor that takes approximate number of children as
+    // a hint
+    Alternate(int numChildren);
 
- protected:
-   // Generic traversal of children for any action
-   virtual void  doAction(SoAction *action);
+  protected:
+    // Generic traversal of children for any action
+    virtual void doAction(SoAction *action);
 
-   // These implement supported actions
-   virtual void  getBoundingBox(SoGetBoundingBoxAction *action);
-   virtual void  GLRender(SoGLRenderAction *action);
-   virtual void  handleEvent(SoHandleEventAction *action);
-   virtual void  pick(SoPickAction *action);
-   virtual void  getMatrix(SoGetMatrixAction *action);
-   virtual void  search(SoSearchAction *action);
+    // These implement supported actions
+    virtual void getBoundingBox(SoGetBoundingBoxAction *action);
+    virtual void GLRender(SoGLRenderAction *action);
+    virtual void handleEvent(SoHandleEventAction *action);
+    virtual void pick(SoPickAction *action);
+    virtual void getMatrix(SoGetMatrixAction *action);
+    virtual void search(SoSearchAction *action);
 
- private:
-   // Destructor
-   virtual ~Alternate();
+  private:
+    // Destructor
+    virtual ~Alternate();
 };

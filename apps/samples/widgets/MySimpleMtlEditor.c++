@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -79,7 +79,6 @@
 #include "_SoXtColorSlider.h"
 #include "MySimpleMaterialEditor.h"
 
-
 /*
  * static vars
  */
@@ -111,20 +110,14 @@ Separator { \
     Sphere { radius .85 } \
 } ";
 
-
 ////////////////////////////////////////////////////////////////////////
 //
 // Public constructor - build the widget right now
 //
-MySimpleMaterialEditor::MySimpleMaterialEditor(
-    Widget parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SbBool showName)
-	: SoXtComponent(
-	    parent,
-	    name, 
-	    buildInsideParent)
+MySimpleMaterialEditor::MySimpleMaterialEditor(Widget parent, const char *name,
+                                               SbBool buildInsideParent,
+                                               SbBool showName)
+    : SoXtComponent(parent, name, buildInsideParent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -136,20 +129,14 @@ MySimpleMaterialEditor::MySimpleMaterialEditor(
 //
 // SoEXTENDER constructor - the subclass tells us whether to build or not
 //
-MySimpleMaterialEditor::MySimpleMaterialEditor(
-    Widget parent,
-    const char *name, 
-    SbBool buildInsideParent, 
-    SbBool showName, 
-    SbBool buildNow)
-	: SoXtComponent(
-	    parent,
-	    name, 
-	    buildInsideParent)
+MySimpleMaterialEditor::MySimpleMaterialEditor(Widget parent, const char *name,
+                                               SbBool buildInsideParent,
+                                               SbBool showName, SbBool buildNow)
+    : SoXtComponent(parent, name, buildInsideParent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // In this case, this component may be what the app wants, 
+    // In this case, this component may be what the app wants,
     // or it may want a subclass of this component. Pass along buildNow
     // as it was passed to us.
     constructorCommon(showName, buildNow);
@@ -175,20 +162,20 @@ MySimpleMaterialEditor::constructorCommon(SbBool showName, SbBool buildNow)
     ignoreCallback = FALSE;
     clipboard = NULL;
     nameVisible = showName;
-    
+
     // init widget vars
     nameField = NULL;
-    for (int i=0; i<3; i++)
-	sldWidgets[i] = NULL;
-    
+    for (int i = 0; i < 3; i++)
+        sldWidgets[i] = NULL;
+
     renderArea = NULL;
     colWheel = NULL;
     colSlider = NULL;
-        
+
     // Build the widget tree, and let SoXtComponent know about our base widget.
     if (buildNow) {
-	Widget w = buildWidget(getParentWidget());
-	setBaseWidget(w);
+        Widget w = buildWidget(getParentWidget());
+        setBaseWidget(w);
     }
 }
 
@@ -206,9 +193,9 @@ MySimpleMaterialEditor::~MySimpleMaterialEditor()
     delete clipboard;
     savedMaterial->unref();
     if (materialName != NULL)
-	free(materialName);
+        free(materialName);
     if (savedMaterialName != NULL)
-	free(savedMaterialName);
+        free(savedMaterialName);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -224,7 +211,7 @@ MySimpleMaterialEditor::setMaterial(const SoMaterial *mtl)
 {
     // out with the old...
     copyMaterial(material, mtl);
-    
+
     // update the screen and save the values
     calculateMaterialFactors();
     updateMaterialUI();
@@ -242,23 +229,23 @@ MySimpleMaterialEditor::setMaterialName(const char *name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    if (! nameVisible)
-	return;
-    
+    if (!nameVisible)
+        return;
+
     // out with the old...
     if (materialName != NULL)
-	free(materialName);
+        free(materialName);
     materialName = (name != NULL) ? strdup(name) : NULL;
-    
+
     // save the name
     if (savedMaterialName != NULL)
-	free(savedMaterialName);
+        free(savedMaterialName);
     savedMaterialName = (materialName != NULL) ? strdup(materialName) : NULL;
-    
+
     // update text field
     if (nameField != NULL) {
-	char *str = (materialName != NULL) ? materialName : (char *) "";
-	XmTextSetString(nameField, str);
+        char *str = (materialName != NULL) ? materialName : (char *)"";
+        XmTextSetString(nameField, str);
     }
 }
 
@@ -288,64 +275,68 @@ MySimpleMaterialEditor::buildWidget(Widget parent)
 	    XmNmaxAspectY, 1, 
 	    NULL);
 #endif
-    
-    int	n, i;
-    Arg	args[12];
-    
+
+    int n, i;
+    Arg args[12];
+
     // create a top level form to hold everything together
     n = 0;
-    XtSetArg(args[n], XmNfractionBase, 100); n++;
+    XtSetArg(args[n], XmNfractionBase, 100);
+    n++;
     Widget form = XmCreateForm(parent, "", args, n);
-    
+
     // create all the parts
     renderArea = new SoXtRenderArea(form);
     renderArea->setSize(SbVec2s(1, 1)); // col wheel will set the window size
-    renderArea->setTransparencyType(SoGLRenderAction::BLEND); // spheres are last
+    renderArea->setTransparencyType(
+        SoGLRenderAction::BLEND); // spheres are last
     Widget raWidget = renderArea->getWidget();
-    
+
     colWheel = new _SoXtColorWheel(form);
     colWheel->setSize(SbVec2s(126, 120));
     colWheel->addValueChangedCallback(MySimpleMaterialEditor::colWheelCB, this);
     colWheel->setWYSIWYG(TRUE);
     Widget colWheelWidget = colWheel->getWidget();
-    
-    colSlider = new _SoXtColorSlider(form, NULL, TRUE, _SoXtColorSlider::VALUE_SLIDER);
+
+    colSlider =
+        new _SoXtColorSlider(form, NULL, TRUE, _SoXtColorSlider::VALUE_SLIDER);
     colSlider->setNumericFieldVisible(FALSE);
     colSlider->setSize(SbVec2s(126, 24));
-    colSlider->addValueChangedCallback(MySimpleMaterialEditor::colSliderCB, this);
-    colSlider->setWYSIWYG(TRUE);    
+    colSlider->addValueChangedCallback(MySimpleMaterialEditor::colSliderCB,
+                                       this);
+    colSlider->setWYSIWYG(TRUE);
     Widget colSliderWidget = colSlider->getWidget();
 
     //
     // read scene graph in
     //
     SoInput in;
-    in.setBuffer((void *)geometryBuffer, (size_t) strlen(geometryBuffer));
+    in.setBuffer((void *)geometryBuffer, (size_t)strlen(geometryBuffer));
     SoNode *node;
-    SbBool ok = SoDB::read(&in, node);
+    SbBool  ok = SoDB::read(&in, node);
     if (!ok || node == NULL) {
 #ifdef DEBUG
-	SoDebugError::post("MySimpleMaterialEditor::buildWidget",
-		"couldn't read geometry");
+        SoDebugError::post("MySimpleMaterialEditor::buildWidget",
+                           "couldn't read geometry");
 #endif
-	exit(1);
+        exit(1);
     }
     renderArea->setSceneGraph(node);
-    
+
     // search for the material node
     SoSearchAction sa;
     sa.setType(SoMaterial::getClassTypeId());
     sa.apply(node);
-    SoFullPath *fullPath = (SoFullPath *) sa.getPath();
+    SoFullPath *fullPath = (SoFullPath *)sa.getPath();
     if (fullPath == NULL) {
 #ifdef DEBUG
-	SoDebugError::post("MySimpleMaterialEditor::buildWidget",
-		"couldn't find material node");
+        SoDebugError::post("MySimpleMaterialEditor::buildWidget",
+                           "couldn't find material node");
 #endif
-	exit(1);
+        exit(1);
     }
-    material = (SoMaterial *) fullPath->getTail();
-    
+    material = (SoMaterial *)fullPath->getTail();
+
     // create the slider labels
     Widget sldLabels[6];
     sldLabels[0] = XmCreateLabelGadget(form, "opaque", NULL, 0);
@@ -354,188 +345,256 @@ MySimpleMaterialEditor::buildWidget(Widget parent)
     sldLabels[3] = XmCreateLabelGadget(form, "smooth", NULL, 0);
     sldLabels[4] = XmCreateLabelGadget(form, "plastic", NULL, 0);
     sldLabels[5] = XmCreateLabelGadget(form, "metal", NULL, 0);
-    
+
     // create the sliders
     n = 0;
-    XtSetArg(args[n], XmNminimum, 0); n++;
-    XtSetArg(args[n], XmNmaximum, 1000); n++;
-    XtSetArg(args[n], XmNhighlightThickness, 0); n++;
-    XtSetArg(args[n], XmNorientation, XmHORIZONTAL); n++;
-    for (i=0; i<3; i++) {
-	sldWidgets[i] = XmCreateScale(form, "sld", args, n);
-	XtAddCallback(sldWidgets[i], XmNvalueChangedCallback, 
-	    (XtCallbackProc) MySimpleMaterialEditor::sldWidgetsCB, (XtPointer) this);
-	XtAddCallback(sldWidgets[i], XmNdragCallback, 
-	    (XtCallbackProc) MySimpleMaterialEditor::sldWidgetsCB, (XtPointer) this);
+    XtSetArg(args[n], XmNminimum, 0);
+    n++;
+    XtSetArg(args[n], XmNmaximum, 1000);
+    n++;
+    XtSetArg(args[n], XmNhighlightThickness, 0);
+    n++;
+    XtSetArg(args[n], XmNorientation, XmHORIZONTAL);
+    n++;
+    for (i = 0; i < 3; i++) {
+        sldWidgets[i] = XmCreateScale(form, "sld", args, n);
+        XtAddCallback(sldWidgets[i], XmNvalueChangedCallback,
+                      (XtCallbackProc)MySimpleMaterialEditor::sldWidgetsCB,
+                      (XtPointer)this);
+        XtAddCallback(sldWidgets[i], XmNdragCallback,
+                      (XtCallbackProc)MySimpleMaterialEditor::sldWidgetsCB,
+                      (XtPointer)this);
     }
-    
+
     // create the text field and label
     Widget fieldLabel;
     if (nameVisible) {
-	fieldLabel = XmCreateLabelGadget(form, "Name:", NULL, 0);
-	char *str = (materialName != NULL) ? materialName : (char *) "";
-	n = 0;
-	XtSetArg(args[n], XmNvalue, str); n++;
-	XtSetArg(args[n], XmNhighlightThickness, 1); n++;
-	nameField = XmCreateText(form, "text", args, n);
-	
-	fieldChanged = FALSE;
-	XtAddCallback(nameField, XmNvalueChangedCallback, 
-	    (XtCallbackProc) MySimpleMaterialEditor::fieldChangedCB, (XtPointer) this);
-	XtAddCallback(nameField, XmNactivateCallback, 
-	    (XtCallbackProc) MySimpleMaterialEditor::nameFieldCB, (XtPointer) this);
-	XtAddCallback(nameField, XmNlosingFocusCallback, 
-	    (XtCallbackProc) MySimpleMaterialEditor::nameFieldCB, (XtPointer) this);
+        fieldLabel = XmCreateLabelGadget(form, "Name:", NULL, 0);
+        char *str = (materialName != NULL) ? materialName : (char *)"";
+        n = 0;
+        XtSetArg(args[n], XmNvalue, str);
+        n++;
+        XtSetArg(args[n], XmNhighlightThickness, 1);
+        n++;
+        nameField = XmCreateText(form, "text", args, n);
+
+        fieldChanged = FALSE;
+        XtAddCallback(nameField, XmNvalueChangedCallback,
+                      (XtCallbackProc)MySimpleMaterialEditor::fieldChangedCB,
+                      (XtPointer)this);
+        XtAddCallback(nameField, XmNactivateCallback,
+                      (XtCallbackProc)MySimpleMaterialEditor::nameFieldCB,
+                      (XtPointer)this);
+        XtAddCallback(nameField, XmNlosingFocusCallback,
+                      (XtCallbackProc)MySimpleMaterialEditor::nameFieldCB,
+                      (XtPointer)this);
     }
-    
+
     // create the push buttons
     Widget buttons[4];
     n = 0;
-    XtSetArg(args[n], XmNhighlightThickness, 0); n++;
+    XtSetArg(args[n], XmNhighlightThickness, 0);
+    n++;
     buttons[0] = XmCreatePushButtonGadget(form, "Apply", args, n);
     buttons[1] = XmCreatePushButtonGadget(form, "Reset", args, n);
     buttons[2] = XmCreatePushButtonGadget(form, "Copy", args, n);
     buttons[3] = XmCreatePushButtonGadget(form, "Paste", args, n);
     XtAddCallback(buttons[0], XmNactivateCallback,
-	(XtCallbackProc) MySimpleMaterialEditor::applyCB, (XtPointer) this);
+                  (XtCallbackProc)MySimpleMaterialEditor::applyCB,
+                  (XtPointer)this);
     XtAddCallback(buttons[1], XmNactivateCallback,
-	(XtCallbackProc) MySimpleMaterialEditor::resetCB, (XtPointer) this);
+                  (XtCallbackProc)MySimpleMaterialEditor::resetCB,
+                  (XtPointer)this);
     XtAddCallback(buttons[2], XmNactivateCallback,
-	(XtCallbackProc) MySimpleMaterialEditor::copyCB, (XtPointer) this);
+                  (XtCallbackProc)MySimpleMaterialEditor::copyCB,
+                  (XtPointer)this);
     XtAddCallback(buttons[3], XmNactivateCallback,
-	(XtCallbackProc) MySimpleMaterialEditor::pasteCB, (XtPointer) this);
-    
+                  (XtCallbackProc)MySimpleMaterialEditor::pasteCB,
+                  (XtPointer)this);
+
     // makes sure things are up to date
     setMaterial(material);
-    
+
     //
     // Layout
     //
 #define SX 3
 #define DX 1
     n = 0;
-    XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNbottomOffset,	    7); n++;
-    XtSetArg(args[n], XmNleftAttachment,    XmATTACH_POSITION); n++;
-    XtSetArg(args[n], XmNrightAttachment,   XmATTACH_POSITION); n++;
-    
-    XtSetArg(args[n], XmNleftPosition,	    SX);
-    XtSetArg(args[n+1], XmNrightPosition,   25-DX);
-    XtSetValues(buttons[0], args, n+2);
-    XtSetArg(args[n], XmNleftPosition,	    25+DX);
-    XtSetArg(args[n+1], XmNrightPosition,   50-DX);
-    XtSetValues(buttons[1], args, n+2);
-    XtSetArg(args[n], XmNleftPosition,	    50+DX);
-    XtSetArg(args[n+1], XmNrightPosition,   75-DX);
-    XtSetValues(buttons[2], args, n+2);
-    XtSetArg(args[n], XmNleftPosition,	    75+DX);
-    XtSetArg(args[n+1], XmNrightPosition,   100-SX);
-    XtSetValues(buttons[3], args, n+2);
-    
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNbottomOffset, 7);
+    n++;
+    XtSetArg(args[n], XmNleftAttachment, XmATTACH_POSITION);
+    n++;
+    XtSetArg(args[n], XmNrightAttachment, XmATTACH_POSITION);
+    n++;
+
+    XtSetArg(args[n], XmNleftPosition, SX);
+    XtSetArg(args[n + 1], XmNrightPosition, 25 - DX);
+    XtSetValues(buttons[0], args, n + 2);
+    XtSetArg(args[n], XmNleftPosition, 25 + DX);
+    XtSetArg(args[n + 1], XmNrightPosition, 50 - DX);
+    XtSetValues(buttons[1], args, n + 2);
+    XtSetArg(args[n], XmNleftPosition, 50 + DX);
+    XtSetArg(args[n + 1], XmNrightPosition, 75 - DX);
+    XtSetValues(buttons[2], args, n + 2);
+    XtSetArg(args[n], XmNleftPosition, 75 + DX);
+    XtSetArg(args[n + 1], XmNrightPosition, 100 - SX);
+    XtSetValues(buttons[3], args, n + 2);
+
     if (nameVisible) {
-	n = 0;
-	XtSetArg(args[n], XmNleftAttachment,    XmATTACH_FORM); n++;
-	XtSetArg(args[n], XmNleftOffset,	    5); n++;
-	XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_WIDGET); n++;
-	XtSetArg(args[n], XmNbottomWidget,	    buttons[0]); n++;
-	XtSetArg(args[n], XmNbottomOffset,	    12); n++;
-	XtSetValues(fieldLabel, args, n);
-	
-	n = 0;
-	XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
-	XtSetArg(args[n], XmNbottomWidget,	    fieldLabel); n++;
-	XtSetArg(args[n], XmNbottomOffset,	    -4); n++;
-	XtSetArg(args[n], XmNleftAttachment,    XmATTACH_WIDGET); n++;
-	XtSetArg(args[n], XmNleftWidget,	    fieldLabel); n++;
-	XtSetArg(args[n], XmNleftOffset,	    4); n++;
-	XtSetArg(args[n], XmNrightAttachment,   XmATTACH_FORM); n++;
-	XtSetArg(args[n], XmNrightOffset,	    5); n++;
-	XtSetValues(nameField, args, n);
+        n = 0;
+        XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);
+        n++;
+        XtSetArg(args[n], XmNleftOffset, 5);
+        n++;
+        XtSetArg(args[n], XmNbottomAttachment, XmATTACH_WIDGET);
+        n++;
+        XtSetArg(args[n], XmNbottomWidget, buttons[0]);
+        n++;
+        XtSetArg(args[n], XmNbottomOffset, 12);
+        n++;
+        XtSetValues(fieldLabel, args, n);
+
+        n = 0;
+        XtSetArg(args[n], XmNbottomAttachment, XmATTACH_OPPOSITE_WIDGET);
+        n++;
+        XtSetArg(args[n], XmNbottomWidget, fieldLabel);
+        n++;
+        XtSetArg(args[n], XmNbottomOffset, -4);
+        n++;
+        XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);
+        n++;
+        XtSetArg(args[n], XmNleftWidget, fieldLabel);
+        n++;
+        XtSetArg(args[n], XmNleftOffset, 4);
+        n++;
+        XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);
+        n++;
+        XtSetArg(args[n], XmNrightOffset, 5);
+        n++;
+        XtSetValues(nameField, args, n);
     }
-    
+
     n = 0;
-    XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_WIDGET); n++;
-    XtSetArg(args[n], XmNleftAttachment,    XmATTACH_POSITION); n++;
-    XtSetArg(args[n], XmNleftPosition,	    30); n++;
-    XtSetArg(args[n], XmNrightAttachment,   XmATTACH_POSITION); n++;
-    XtSetArg(args[n], XmNrightPosition,	    70); n++;
-    
-    XtSetArg(args[n], XmNbottomWidget,	    nameVisible ? nameField : buttons[0]);
-    XtSetArg(args[n+1], XmNbottomOffset,    10);
-    XtSetValues(sldWidgets[0], args, n+2);
-    XtSetArg(args[n], XmNbottomWidget,	    sldWidgets[0]);
-    XtSetArg(args[n+1], XmNbottomOffset,    6);
-    XtSetValues(sldWidgets[1], args, n+2);
-    XtSetArg(args[n], XmNbottomWidget,	    sldWidgets[1]);
-    XtSetValues(sldWidgets[2], args, n+2);
-    
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_WIDGET);
+    n++;
+    XtSetArg(args[n], XmNleftAttachment, XmATTACH_POSITION);
+    n++;
+    XtSetArg(args[n], XmNleftPosition, 30);
+    n++;
+    XtSetArg(args[n], XmNrightAttachment, XmATTACH_POSITION);
+    n++;
+    XtSetArg(args[n], XmNrightPosition, 70);
+    n++;
+
+    XtSetArg(args[n], XmNbottomWidget, nameVisible ? nameField : buttons[0]);
+    XtSetArg(args[n + 1], XmNbottomOffset, 10);
+    XtSetValues(sldWidgets[0], args, n + 2);
+    XtSetArg(args[n], XmNbottomWidget, sldWidgets[0]);
+    XtSetArg(args[n + 1], XmNbottomOffset, 6);
+    XtSetValues(sldWidgets[1], args, n + 2);
+    XtSetArg(args[n], XmNbottomWidget, sldWidgets[1]);
+    XtSetValues(sldWidgets[2], args, n + 2);
+
     n = 0;
-    XtSetArg(args[n], XmNrightAttachment,   XmATTACH_WIDGET); n++;
-    XtSetArg(args[n], XmNrightOffset,	    5); n++;
-    XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
-    for (i=0; i<3; i++) {
-	XtSetArg(args[n], XmNrightWidget,   sldWidgets[i]);
-	XtSetArg(args[n+1], XmNbottomWidget, sldWidgets[i]);
-	XtSetValues(sldLabels[i*2], args, n+2);
+    XtSetArg(args[n], XmNrightAttachment, XmATTACH_WIDGET);
+    n++;
+    XtSetArg(args[n], XmNrightOffset, 5);
+    n++;
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_OPPOSITE_WIDGET);
+    n++;
+    for (i = 0; i < 3; i++) {
+        XtSetArg(args[n], XmNrightWidget, sldWidgets[i]);
+        XtSetArg(args[n + 1], XmNbottomWidget, sldWidgets[i]);
+        XtSetValues(sldLabels[i * 2], args, n + 2);
     }
-    
+
     n = 0;
-    XtSetArg(args[n], XmNleftAttachment,    XmATTACH_WIDGET); n++;
-    XtSetArg(args[n], XmNleftOffset,	    5); n++;
-    XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
-    for (i=0; i<3; i++) {
-	XtSetArg(args[n], XmNleftWidget,    sldWidgets[i]);
-	XtSetArg(args[n+1], XmNbottomWidget, sldWidgets[i]);
-	XtSetValues(sldLabels[i*2 + 1], args, n+2);
+    XtSetArg(args[n], XmNleftAttachment, XmATTACH_WIDGET);
+    n++;
+    XtSetArg(args[n], XmNleftOffset, 5);
+    n++;
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_OPPOSITE_WIDGET);
+    n++;
+    for (i = 0; i < 3; i++) {
+        XtSetArg(args[n], XmNleftWidget, sldWidgets[i]);
+        XtSetArg(args[n + 1], XmNbottomWidget, sldWidgets[i]);
+        XtSetValues(sldLabels[i * 2 + 1], args, n + 2);
     }
-    
+
     n = 0;
-    XtSetArg(args[n], XmNleftAttachment,    XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNleftOffset,	    5); n++;
-    XtSetArg(args[n], XmNtopAttachment,	    XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNtopOffset,	    5); n++;
-    XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_WIDGET); n++;
-    XtSetArg(args[n], XmNbottomWidget,	    sldWidgets[2]); n++;
-    XtSetArg(args[n], XmNbottomOffset,	    10); n++;
-    XtSetArg(args[n], XmNrightAttachment,   XmATTACH_POSITION); n++;
-    XtSetArg(args[n], XmNrightPosition,	    50); n++;
+    XtSetArg(args[n], XmNleftAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNleftOffset, 5);
+    n++;
+    XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNtopOffset, 5);
+    n++;
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_WIDGET);
+    n++;
+    XtSetArg(args[n], XmNbottomWidget, sldWidgets[2]);
+    n++;
+    XtSetArg(args[n], XmNbottomOffset, 10);
+    n++;
+    XtSetArg(args[n], XmNrightAttachment, XmATTACH_POSITION);
+    n++;
+    XtSetArg(args[n], XmNrightPosition, 50);
+    n++;
     XtSetValues(raWidget, args, n);
-    
+
     n = 0;
-    XtSetArg(args[n], XmNleftAttachment,    XmATTACH_POSITION); n++;
-    XtSetArg(args[n], XmNleftPosition,	    50); n++;
-    XtSetArg(args[n], XmNleftOffset,	    4); n++;
-    XtSetArg(args[n], XmNrightAttachment,   XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNrightOffset,	    5); n++;
-    XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_OPPOSITE_WIDGET); n++;
-    XtSetArg(args[n], XmNbottomWidget,	    raWidget); n++;
+    XtSetArg(args[n], XmNleftAttachment, XmATTACH_POSITION);
+    n++;
+    XtSetArg(args[n], XmNleftPosition, 50);
+    n++;
+    XtSetArg(args[n], XmNleftOffset, 4);
+    n++;
+    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNrightOffset, 5);
+    n++;
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_OPPOSITE_WIDGET);
+    n++;
+    XtSetArg(args[n], XmNbottomWidget, raWidget);
+    n++;
     XtSetValues(colSliderWidget, args, n);
-    
+
     n = 0;
-    XtSetArg(args[n], XmNleftAttachment,    XmATTACH_POSITION); n++;
-    XtSetArg(args[n], XmNleftPosition,	    50); n++;
-    XtSetArg(args[n], XmNleftOffset,	    4); n++;
-    XtSetArg(args[n], XmNbottomAttachment,  XmATTACH_WIDGET); n++;
-    XtSetArg(args[n], XmNbottomWidget,	    colSliderWidget); n++;
-    XtSetArg(args[n], XmNrightAttachment,   XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNrightOffset,	    5); n++;
-    XtSetArg(args[n], XmNtopAttachment,	    XmATTACH_FORM); n++;
-    XtSetArg(args[n], XmNtopOffset,	    5); n++;
+    XtSetArg(args[n], XmNleftAttachment, XmATTACH_POSITION);
+    n++;
+    XtSetArg(args[n], XmNleftPosition, 50);
+    n++;
+    XtSetArg(args[n], XmNleftOffset, 4);
+    n++;
+    XtSetArg(args[n], XmNbottomAttachment, XmATTACH_WIDGET);
+    n++;
+    XtSetArg(args[n], XmNbottomWidget, colSliderWidget);
+    n++;
+    XtSetArg(args[n], XmNrightAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNrightOffset, 5);
+    n++;
+    XtSetArg(args[n], XmNtopAttachment, XmATTACH_FORM);
+    n++;
+    XtSetArg(args[n], XmNtopOffset, 5);
+    n++;
     XtSetValues(colWheelWidget, args, n);
-    
-    
+
     // manage those children
     XtManageChildren(buttons, 4);
     if (nameVisible) {
-	XtManageChild(fieldLabel);
-	XtManageChild(nameField);
+        XtManageChild(fieldLabel);
+        XtManageChild(nameField);
     }
     XtManageChildren(sldWidgets, 3);
     XtManageChildren(sldLabels, 6);
     XtManageChild(raWidget);
     XtManageChild(colSliderWidget);
     XtManageChild(colWheelWidget);
-    
+
     return form;
 }
 
@@ -589,22 +648,23 @@ MySimpleMaterialEditor::updateMaterial()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float trnsp = material->transparency[0];
-    float smooth = smoothness * 0.8;
-    float rd = (1.0 - smooth) * (1.0 - trnsp);
+    float   trnsp = material->transparency[0];
+    float   smooth = smoothness * 0.8;
+    float   rd = (1.0 - smooth) * (1.0 - trnsp);
     SbVec3f vecOne(1, 1, 1);
-    
-    material->diffuseColor = (baseColor * rd * (1.0 - metalness * smooth)).getValue();
+
+    material->diffuseColor =
+        (baseColor * rd * (1.0 - metalness * smooth)).getValue();
     material->ambientColor = AMB_FACT * material->diffuseColor[0];
-    material->specularColor = (1.0 - trnsp - rd) * (vecOne + metalness * 
-	(baseColor - vecOne));
+    material->specularColor =
+        (1.0 - trnsp - rd) * (vecOne + metalness * (baseColor - vecOne));
     material->shininess = powf(smoothness, SHIN_FACT);
 }
 
 ////////////////////////////////////////////////////////////////////////
 //
 // Description:
-//  	given the current material, figure the best metalness and 
+//  	given the current material, figure the best metalness and
 //  smoothness factors which represent it.
 //
 // Use: private
@@ -613,19 +673,19 @@ MySimpleMaterialEditor::calculateMaterialFactors()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    // given that 
+    // given that
     //	    shin = smooth ^ SHIN_FACT;
     //
     smoothness = powf(material->shininess[0], 1.0 / SHIN_FACT);
-    
+
     // make a best guess at what the baseColor could be
     // based on the diffuse color.
     baseColor = material->diffuseColor[0];
     float hsv[3];
     baseColor.getHSVValue(hsv);
-    hsv[2] = 1;   // scale intensity all the way
+    hsv[2] = 1; // scale intensity all the way
     baseColor.setHSVValue(hsv);
-    
+
     // now find the metalness based on the object specular
     // color, given that
     //	    spec = (1 - trnsp - rd) * (1 + met * (color -1))
@@ -635,27 +695,26 @@ MySimpleMaterialEditor::calculateMaterialFactors()
     float rd = (1 - smooth) * (1 - trnsp);
     float A = (1 - trnsp - rd);
     if (A != 0) {
-	// get the metalness by averaging the values found for r,g and b
-	int num = 0;
-	float met = 0.0;
-	SbColor spec = material->specularColor[0];
-	for (int i=0; i<3; i++)
-	    if (baseColor[i] != 1 && spec[0] != A) {
-		met += (spec[0] - A) / (A * (baseColor[i] - 1)) ;
-		num++;
-	    }
-	if (num != 0)
-	    metalness = met / num;
-	else
-	    metalness = 0;
-    }
-    else
-	metalness = 0;
-    
+        // get the metalness by averaging the values found for r,g and b
+        int     num = 0;
+        float   met = 0.0;
+        SbColor spec = material->specularColor[0];
+        for (int i = 0; i < 3; i++)
+            if (baseColor[i] != 1 && spec[0] != A) {
+                met += (spec[0] - A) / (A * (baseColor[i] - 1));
+                num++;
+            }
+        if (num != 0)
+            metalness = met / num;
+        else
+            metalness = 0;
+    } else
+        metalness = 0;
+
     if (metalness < 0)
-	metalness = 0;
+        metalness = 0;
     else if (metalness > 1)
-	metalness = 1;
+        metalness = 1;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -672,16 +731,16 @@ MySimpleMaterialEditor::updateMaterialUI()
 {
     // if nothing built, return (they will be updated when built)
     if (sldWidgets[0] == NULL)
-	return;
-    
+        return;
+
     // update the metal/smooth/transp sliders
-    int val = (int) (metalness * 1000);
+    int val = (int)(metalness * 1000);
     XmScaleSetValue(sldWidgets[2], val);
-    val = (int) (smoothness * 1000);
+    val = (int)(smoothness * 1000);
     XmScaleSetValue(sldWidgets[1], val);
-    val = (int) (material->transparency[0] * 1000);
+    val = (int)(material->transparency[0] * 1000);
     XmScaleSetValue(sldWidgets[0], val);
-    
+
     // update color slider and color wheel
     float hsv[3];
     baseColor.getHSVValue(hsv);
@@ -695,19 +754,19 @@ MySimpleMaterialEditor::updateMaterialUI()
 // redefine those generic virtual functions
 //
 const char *
-MySimpleMaterialEditor::getDefaultWidgetName() const
-{ return "MySimpleMaterialEditor"; }
+MySimpleMaterialEditor::getDefaultWidgetName() const {
+    return "MySimpleMaterialEditor";
+}
 
 const char *
-MySimpleMaterialEditor::getDefaultTitle() const
-{ return "Simple Material Editor"; }
+MySimpleMaterialEditor::getDefaultTitle() const {
+    return "Simple Material Editor";
+}
 
 const char *
-MySimpleMaterialEditor::getDefaultIconTitle() const
-{ return "Mat Editor"; }
-
-
-
+MySimpleMaterialEditor::getDefaultIconTitle() const {
+    return "Mat Editor";
+}
 
 //
 ////////////////////////////////////////////////////////////////////////
@@ -715,24 +774,22 @@ MySimpleMaterialEditor::getDefaultIconTitle() const
 ////////////////////////////////////////////////////////////////////////
 //
 
-
 //
 // called by the color wheel when the color changes
 //
 void
-MySimpleMaterialEditor::colWheelCB(void *pt, const float hsv[3])
-{
+MySimpleMaterialEditor::colWheelCB(void *pt, const float hsv[3]) {
     MySimpleMaterialEditor *p = (MySimpleMaterialEditor *)pt;
     if (p->ignoreCallback)
-	return;
-    
+        return;
+
     // convert to rgb and update slider and material
     p->baseColor.setHSVValue(hsv);
-    
+
     p->ignoreCallback = TRUE;
     p->colSlider->setBaseColor(hsv);
     p->ignoreCallback = FALSE;
-    
+
     p->updateMaterial();
 }
 
@@ -740,20 +797,19 @@ MySimpleMaterialEditor::colWheelCB(void *pt, const float hsv[3])
 // called by color slider when the color changes
 //
 void
-MySimpleMaterialEditor::colSliderCB(void *pt, float)
-{
+MySimpleMaterialEditor::colSliderCB(void *pt, float) {
     MySimpleMaterialEditor *p = (MySimpleMaterialEditor *)pt;
     if (p->ignoreCallback)
-	return;
-    
+        return;
+
     // assign new color, update color wheel and material
     const float *hsv = p->colSlider->getBaseColor();
     p->baseColor.setHSVValue(hsv);
-    
+
     p->ignoreCallback = TRUE;
     p->colWheel->setBaseColor(hsv);
     p->ignoreCallback = FALSE;
-    
+
     p->updateMaterial();
 }
 
@@ -761,8 +817,8 @@ MySimpleMaterialEditor::colSliderCB(void *pt, float)
 // called by the XmNvalueChangedCallback. This sets a flag for later use
 //
 void
-MySimpleMaterialEditor::fieldChangedCB(Widget, MySimpleMaterialEditor *p, void *)
-{
+MySimpleMaterialEditor::fieldChangedCB(Widget, MySimpleMaterialEditor *p,
+                                       void *) {
     p->fieldChanged = TRUE;
 }
 
@@ -770,19 +826,19 @@ MySimpleMaterialEditor::fieldChangedCB(Widget, MySimpleMaterialEditor *p, void *
 // called whenever the use types a new material name
 //
 void
-MySimpleMaterialEditor::nameFieldCB(Widget w, MySimpleMaterialEditor *p, void *)
-{
-    if (! p->fieldChanged)
-	return;
+MySimpleMaterialEditor::nameFieldCB(Widget w, MySimpleMaterialEditor *p,
+                                    void *) {
+    if (!p->fieldChanged)
+        return;
     p->fieldChanged = FALSE;
-    
+
     // get the new material name
     char *str = XmTextGetString(w);
     if (p->materialName != NULL)
-	free(p->materialName);
+        free(p->materialName);
     p->materialName = (str[0] != '\0') ? strdup(str) : NULL;
     XtFree(str);
-    
+
     // make the text field loose the focus
     XmProcessTraversal(XtParent(w), XmTRAVERSE_CURRENT);
 }
@@ -792,30 +848,28 @@ MySimpleMaterialEditor::nameFieldCB(Widget w, MySimpleMaterialEditor *p, void *)
 // changes values.
 //
 void
-MySimpleMaterialEditor::sldWidgetsCB(Widget sld, MySimpleMaterialEditor *p, void *)
-{
+MySimpleMaterialEditor::sldWidgetsCB(Widget sld, MySimpleMaterialEditor *p,
+                                     void *) {
     // get the slider new value
     int v;
     XmScaleGetValue(sld, &v);
     float val = v / 1000.0;
-    
+
     //
     // now update the material based on which slider changed
     //
-    
+
     if (sld == p->sldWidgets[2]) {
-	// metalness has changed
-	p->metalness = val;
-	p->updateMaterial();
-    }
-    else if (sld == p->sldWidgets[1]) {
-	// smothness has changed
-	p->smoothness = val;
-	p->updateMaterial();
-    }
-    else {
-	// transparency has changed
-	p->material->transparency = val;
+        // metalness has changed
+        p->metalness = val;
+        p->updateMaterial();
+    } else if (sld == p->sldWidgets[1]) {
+        // smothness has changed
+        p->smoothness = val;
+        p->updateMaterial();
+    } else {
+        // transparency has changed
+        p->material->transparency = val;
     }
 }
 
@@ -823,24 +877,23 @@ MySimpleMaterialEditor::sldWidgetsCB(Widget sld, MySimpleMaterialEditor *p, void
 // called whenever the apply push button gets pressed
 //
 void
-MySimpleMaterialEditor::applyCB(Widget, MySimpleMaterialEditor *p, void *)
-{
+MySimpleMaterialEditor::applyCB(Widget, MySimpleMaterialEditor *p, void *) {
     p->callbackList.invokeCallbacks((void *)p);
-    
+
     p->saveMaterialFactors();
-    
+
     // save material name
     if (p->savedMaterialName != NULL)
-	free(p->savedMaterialName);
-    p->savedMaterialName = (p->materialName != NULL) ? strdup(p->materialName) : NULL;
+        free(p->savedMaterialName);
+    p->savedMaterialName =
+        (p->materialName != NULL) ? strdup(p->materialName) : NULL;
 }
 
 //
 // called whenever the reset push button gets pressed
 //
 void
-MySimpleMaterialEditor::resetCB(Widget, MySimpleMaterialEditor *p, void *)
-{
+MySimpleMaterialEditor::resetCB(Widget, MySimpleMaterialEditor *p, void *) {
     //
     // reset the material factors
     //
@@ -848,19 +901,20 @@ MySimpleMaterialEditor::resetCB(Widget, MySimpleMaterialEditor *p, void *)
     p->metalness = p->savedMetalness;
     p->smoothness = p->savedSmoothness;
     p->baseColor = p->savedBaseColor;
-    
+
     p->updateMaterialUI();
-    
+
     //
     // reset the material name
     //
     if (p->materialName != NULL)
-	free(p->materialName);
-    p->materialName = (p->savedMaterialName != NULL) ? strdup(p->savedMaterialName) : NULL;
+        free(p->materialName);
+    p->materialName =
+        (p->savedMaterialName != NULL) ? strdup(p->savedMaterialName) : NULL;
     // update text field
     if (p->nameField != NULL) {
-	char *str = (p->materialName != NULL) ? p->materialName : (char *) "";
-	XmTextSetString(p->nameField, str);
+        char *str = (p->materialName != NULL) ? p->materialName : (char *)"";
+        XmTextSetString(p->nameField, str);
     }
 }
 
@@ -868,30 +922,30 @@ MySimpleMaterialEditor::resetCB(Widget, MySimpleMaterialEditor *p, void *)
 // called whenever the copy push button gets pressed
 //
 void
-MySimpleMaterialEditor::copyCB(Widget, MySimpleMaterialEditor *p, XmAnyCallbackStruct *cb)
-{
+MySimpleMaterialEditor::copyCB(Widget, MySimpleMaterialEditor *p,
+                               XmAnyCallbackStruct *cb) {
     if (p->clipboard == NULL)
-	p->clipboard = new SoXtClipboard(p->getWidget());
-    
+        p->clipboard = new SoXtClipboard(p->getWidget());
+
     //
     // copy the material and also copy the current color (from the
     // wheel) to enable pasting into the color editor.
     //
-    
+
     // construct a path list which has the Material and BaseColor nodes
     SoBaseColor *color = new SoBaseColor;
     color->rgb.setValue(p->baseColor);
     SoPathList *pathList = new SoPathList(2);
-    SoPath *path1 = new SoPath(p->material);
-    SoPath *path2 = new SoPath(color);
+    SoPath *    path1 = new SoPath(p->material);
+    SoPath *    path2 = new SoPath(color);
     path1->ref();
     path2->ref();
     pathList->append(path1);
     pathList->append(path2);
-    
+
     Time eventTime = cb->event->xbutton.time;
     p->clipboard->copy(pathList, eventTime);
-    
+
     // delete the paths and the list    color->unref();
     path1->unref();
     path2->unref();
@@ -902,11 +956,11 @@ MySimpleMaterialEditor::copyCB(Widget, MySimpleMaterialEditor *p, XmAnyCallbackS
 // called whenever the paste push button gets pressed
 //
 void
-MySimpleMaterialEditor::pasteCB(Widget, MySimpleMaterialEditor *p, XmAnyCallbackStruct *cb)
-{
+MySimpleMaterialEditor::pasteCB(Widget, MySimpleMaterialEditor *p,
+                                XmAnyCallbackStruct *cb) {
     if (p->clipboard == NULL)
-	p->clipboard = new SoXtClipboard(p->getWidget());
-    
+        p->clipboard = new SoXtClipboard(p->getWidget());
+
     Time eventTime = cb->event->xbutton.time;
     p->clipboard->paste(eventTime, MySimpleMaterialEditor::pasteDone, p);
 }
@@ -915,59 +969,57 @@ MySimpleMaterialEditor::pasteCB(Widget, MySimpleMaterialEditor *p, XmAnyCallback
 // called whenever the X server is done doing the paste
 //
 void
-MySimpleMaterialEditor::pasteDone(void *pt, SoPathList *pathList)
-{
+MySimpleMaterialEditor::pasteDone(void *pt, SoPathList *pathList) {
     MySimpleMaterialEditor *p = (MySimpleMaterialEditor *)pt;
-    
+
     SoSearchAction sa;
-    SoFullPath *fullPath = NULL;
-    
+    SoFullPath *   fullPath = NULL;
+
     //
     // search for first material in that pasted scene
     //
     sa.setType(SoMaterial::getClassTypeId());
-    for (int i=0; i < pathList->getLength(); i++) {
-	sa.apply( (*pathList)[i] );
-	if ( (fullPath = (SoFullPath *) sa.getPath()) != NULL) {
-	    
-	    // assign new material
-	    p->copyMaterial(p->material, (SoMaterial *) fullPath->getTail());
-	    p->calculateMaterialFactors();
-	    p->updateMaterialUI();
-	    
-	    break;
-	}
+    for (int i = 0; i < pathList->getLength(); i++) {
+        sa.apply((*pathList)[i]);
+        if ((fullPath = (SoFullPath *)sa.getPath()) != NULL) {
+
+            // assign new material
+            p->copyMaterial(p->material, (SoMaterial *)fullPath->getTail());
+            p->calculateMaterialFactors();
+            p->updateMaterialUI();
+
+            break;
+        }
     }
-    
+
     //
     // else search for the first base color in the scene, which will
     // be used for the color wheel.
     //
     if (fullPath == NULL) {
-	sa.setType(SoBaseColor::getClassTypeId());
-	for (int i=0; i < pathList->getLength(); i++) {
-	    sa.apply( (*pathList)[i] );
-	    if ( (fullPath = (SoFullPath *) sa.getPath()) != NULL) {
-		
-		// assign new color, update color UI + material
-		float hsv[3];
-		SoBaseColor *node = (SoBaseColor *) fullPath->getTail();
-		p->baseColor = node->rgb[0];
-		p->baseColor.getHSVValue(hsv);
-		
-		p->ignoreCallback = TRUE;
-		p->colSlider->setBaseColor(hsv);
-		p->colWheel->setBaseColor(hsv);
-		p->ignoreCallback = FALSE;
-		
-		p->updateMaterial();
-		
-		break;
-	    }
-	}
+        sa.setType(SoBaseColor::getClassTypeId());
+        for (int i = 0; i < pathList->getLength(); i++) {
+            sa.apply((*pathList)[i]);
+            if ((fullPath = (SoFullPath *)sa.getPath()) != NULL) {
+
+                // assign new color, update color UI + material
+                float        hsv[3];
+                SoBaseColor *node = (SoBaseColor *)fullPath->getTail();
+                p->baseColor = node->rgb[0];
+                p->baseColor.getHSVValue(hsv);
+
+                p->ignoreCallback = TRUE;
+                p->colSlider->setBaseColor(hsv);
+                p->colWheel->setBaseColor(hsv);
+                p->ignoreCallback = FALSE;
+
+                p->updateMaterial();
+
+                break;
+            }
+        }
     }
-    
+
     // ??? We delete the callback data when done with it.
     delete pathList;
 }
-

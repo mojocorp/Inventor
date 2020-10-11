@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -51,34 +51,34 @@
 // Header file for new action class
 #include "GetVolumeAction.h"
 
-int main()
-{
-   // Initialize Inventor
-   SoInteraction::init();
+int
+main() {
+    // Initialize Inventor
+    SoInteraction::init();
 
-   // Initialize the new action class
-   GetVolumeAction::initClass();
+    // Initialize the new action class
+    GetVolumeAction::initClass();
 
-   // Open the file and read the scene
-   SoInput      myInput;
-   SoSeparator  *root;
-   if (! myInput.openFile("volume.iv")) {
-      fprintf(stderr, "Can't open \"volume.iv\" for reading\n");
-      return 1;
-   }
-   root = SoDB::readAll(&myInput);
-   if (root == NULL) {
-      printf("Couldn't read scene from \"volume.iv\"\n");
-      return 2;
-   }
-   root->ref();
+    // Open the file and read the scene
+    SoInput      myInput;
+    SoSeparator *root;
+    if (!myInput.openFile("volume.iv")) {
+        fprintf(stderr, "Can't open \"volume.iv\" for reading\n");
+        return 1;
+    }
+    root = SoDB::readAll(&myInput);
+    if (root == NULL) {
+        printf("Couldn't read scene from \"volume.iv\"\n");
+        return 2;
+    }
+    root->ref();
 
-   // Compute the volume: apply a GetVolumeAction to the root
-   GetVolumeAction va;
-   va.apply(root);
+    // Compute the volume: apply a GetVolumeAction to the root
+    GetVolumeAction va;
+    va.apply(root);
 
-   // Print the result
-   printf("Total volume = %g\n", va.getVolume());
+    // Print the result
+    printf("Total volume = %g\n", va.getVolume());
 
-   return 0;
+    return 0;
 }

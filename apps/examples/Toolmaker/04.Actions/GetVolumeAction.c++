@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -78,86 +78,80 @@ SO_ACTION_SOURCE(GetVolumeAction);
 //
 
 void
-GetVolumeAction::initClass()
-{
-   // Initialize the run-time type variables
-   SO_ACTION_INIT_CLASS(GetVolumeAction, SoAction);
+GetVolumeAction::initClass() {
+    // Initialize the run-time type variables
+    SO_ACTION_INIT_CLASS(GetVolumeAction, SoAction);
 
-   // Enable elements that are involved in volume computation.
-   // Most of these deal with geometrix properties
-   // (coordinates, profiles) or transformations (model matrix,
-   // units). Some are needed for certain groups (switches,
-   // level-of-detail) to function correctly.
-   SO_ENABLE(GetVolumeAction, SoModelMatrixElement);
-   SO_ENABLE(GetVolumeAction, SoComplexityElement);
-   SO_ENABLE(GetVolumeAction, SoComplexityTypeElement);
-   SO_ENABLE(GetVolumeAction, SoCoordinateElement);
-   SO_ENABLE(GetVolumeAction, SoFontNameElement);
-   SO_ENABLE(GetVolumeAction, SoFontSizeElement);
-   SO_ENABLE(GetVolumeAction, SoProfileCoordinateElement);
-   SO_ENABLE(GetVolumeAction, SoProfileElement);
-   SO_ENABLE(GetVolumeAction, SoSwitchElement);
-   SO_ENABLE(GetVolumeAction, SoUnitsElement);
-   SO_ENABLE(GetVolumeAction, SoViewVolumeElement);
-   SO_ENABLE(GetVolumeAction, SoViewingMatrixElement);
-   SO_ENABLE(GetVolumeAction, SoViewportRegionElement);
+    // Enable elements that are involved in volume computation.
+    // Most of these deal with geometrix properties
+    // (coordinates, profiles) or transformations (model matrix,
+    // units). Some are needed for certain groups (switches,
+    // level-of-detail) to function correctly.
+    SO_ENABLE(GetVolumeAction, SoModelMatrixElement);
+    SO_ENABLE(GetVolumeAction, SoComplexityElement);
+    SO_ENABLE(GetVolumeAction, SoComplexityTypeElement);
+    SO_ENABLE(GetVolumeAction, SoCoordinateElement);
+    SO_ENABLE(GetVolumeAction, SoFontNameElement);
+    SO_ENABLE(GetVolumeAction, SoFontSizeElement);
+    SO_ENABLE(GetVolumeAction, SoProfileCoordinateElement);
+    SO_ENABLE(GetVolumeAction, SoProfileElement);
+    SO_ENABLE(GetVolumeAction, SoSwitchElement);
+    SO_ENABLE(GetVolumeAction, SoUnitsElement);
+    SO_ENABLE(GetVolumeAction, SoViewVolumeElement);
+    SO_ENABLE(GetVolumeAction, SoViewingMatrixElement);
+    SO_ENABLE(GetVolumeAction, SoViewportRegionElement);
 
-   // Now we need to register methods to implement this action
-   // for various node classes. We have created implementations
-   // for two specific shape nodes, SoCube and SoSphere, so we
-   // can register specific methods for those two classes. We
-   // also want to make sure that group classes traverse their
-   // children correctly for this action, so we will use a
-   // method that calls doAction() to handle groups. Finally,
-   // we need to make sure that relevant property nodes set up
-   // the state correctly; we can use the same method that
-   // calls doAction() for these classes, as well. We will use
-   // the SO_ACTION_ADD_METHOD() macro to make this easier.
+    // Now we need to register methods to implement this action
+    // for various node classes. We have created implementations
+    // for two specific shape nodes, SoCube and SoSphere, so we
+    // can register specific methods for those two classes. We
+    // also want to make sure that group classes traverse their
+    // children correctly for this action, so we will use a
+    // method that calls doAction() to handle groups. Finally,
+    // we need to make sure that relevant property nodes set up
+    // the state correctly; we can use the same method that
+    // calls doAction() for these classes, as well. We will use
+    // the SO_ACTION_ADD_METHOD() macro to make this easier.
 
-   // This registers a method to call for SoNode, so it will be
-   // used for any node class that does not have a more
-   // specific method registered for it. This makes sure that
-   // there is always a method to call for any node. The
-   // "nullAction" method is defined on SoAction for use in
-   // cases like this.
-   SO_ACTION_ADD_METHOD(SoNode,               nullAction);
+    // This registers a method to call for SoNode, so it will be
+    // used for any node class that does not have a more
+    // specific method registered for it. This makes sure that
+    // there is always a method to call for any node. The
+    // "nullAction" method is defined on SoAction for use in
+    // cases like this.
+    SO_ACTION_ADD_METHOD(SoNode, nullAction);
 
-   // These register methods for the two shapes that can
-   // really handle the action
-   SO_ACTION_ADD_METHOD(SoCube,               cubeVolume);
-   SO_ACTION_ADD_METHOD(SoSphere,             sphereVolume);
+    // These register methods for the two shapes that can
+    // really handle the action
+    SO_ACTION_ADD_METHOD(SoCube, cubeVolume);
+    SO_ACTION_ADD_METHOD(SoSphere, sphereVolume);
 
-   // Register the method that calls doAction() for all group
-   // classes and for relevant properties (transformations,
-   // coordinates, profiles, and so on).
-   SO_ACTION_ADD_METHOD(SoCamera,             callDoAction);
-   SO_ACTION_ADD_METHOD(SoComplexity,         callDoAction);
-   SO_ACTION_ADD_METHOD(SoCoordinate3,        callDoAction);
-   SO_ACTION_ADD_METHOD(SoCoordinate4,        callDoAction);
-   SO_ACTION_ADD_METHOD(SoFont,               callDoAction);
-   SO_ACTION_ADD_METHOD(SoGroup,              callDoAction);
-   SO_ACTION_ADD_METHOD(SoProfile,            callDoAction);
-   SO_ACTION_ADD_METHOD(SoProfileCoordinate2, callDoAction);
-   SO_ACTION_ADD_METHOD(SoProfileCoordinate3, callDoAction);
-   SO_ACTION_ADD_METHOD(SoTransformation,     callDoAction);
+    // Register the method that calls doAction() for all group
+    // classes and for relevant properties (transformations,
+    // coordinates, profiles, and so on).
+    SO_ACTION_ADD_METHOD(SoCamera, callDoAction);
+    SO_ACTION_ADD_METHOD(SoComplexity, callDoAction);
+    SO_ACTION_ADD_METHOD(SoCoordinate3, callDoAction);
+    SO_ACTION_ADD_METHOD(SoCoordinate4, callDoAction);
+    SO_ACTION_ADD_METHOD(SoFont, callDoAction);
+    SO_ACTION_ADD_METHOD(SoGroup, callDoAction);
+    SO_ACTION_ADD_METHOD(SoProfile, callDoAction);
+    SO_ACTION_ADD_METHOD(SoProfileCoordinate2, callDoAction);
+    SO_ACTION_ADD_METHOD(SoProfileCoordinate3, callDoAction);
+    SO_ACTION_ADD_METHOD(SoTransformation, callDoAction);
 }
 
 //
 // Constructor
 //
 
-GetVolumeAction::GetVolumeAction()
-{
-   SO_ACTION_CONSTRUCTOR(GetVolumeAction);
-}
+GetVolumeAction::GetVolumeAction() { SO_ACTION_CONSTRUCTOR(GetVolumeAction); }
 
 //
 // Destructor. Does nothing.
 //
 
-GetVolumeAction::~GetVolumeAction()
-{
-}
+GetVolumeAction::~GetVolumeAction() {}
 
 //
 // Initiates action on a graph. This is called when the action
@@ -166,13 +160,12 @@ GetVolumeAction::~GetVolumeAction()
 //
 
 void
-GetVolumeAction::beginTraversal(SoNode *node)
-{
-   // Initialize volume to 0
-   volume = 0.0;
+GetVolumeAction::beginTraversal(SoNode *node) {
+    // Initialize volume to 0
+    volume = 0.0;
 
-   // Begin traversal at the given root node.
-   traverse(node);
+    // Begin traversal at the given root node.
+    traverse(node);
 }
 
 //
@@ -180,27 +173,23 @@ GetVolumeAction::beginTraversal(SoNode *node)
 //
 
 void
-GetVolumeAction::cubeVolume(SoAction *action, SoNode *node)
-{
-   // The action is really an instance of GetVolumeAction
-   GetVolumeAction *volumeAct = (GetVolumeAction *) action;
+GetVolumeAction::cubeVolume(SoAction *action, SoNode *node) {
+    // The action is really an instance of GetVolumeAction
+    GetVolumeAction *volumeAct = (GetVolumeAction *)action;
 
-   // And the node pointer is really a cube:
-   const SoCube    *cube = (const SoCube *) node;
+    // And the node pointer is really a cube:
+    const SoCube *cube = (const SoCube *)node;
 
-   // Find the dimensions of the cube
-   float width    = (cube->width.isIgnored()  ? 2.0 :
-                     cube->width.getValue());
-   float height   = (cube->height.isIgnored() ? 2.0 :
-                     cube->height.getValue());
-   float depth    = (cube->depth.isIgnored()  ? 2.0 :
-                     cube->depth.getValue());
+    // Find the dimensions of the cube
+    float width = (cube->width.isIgnored() ? 2.0 : cube->width.getValue());
+    float height = (cube->height.isIgnored() ? 2.0 : cube->height.getValue());
+    float depth = (cube->depth.isIgnored() ? 2.0 : cube->depth.getValue());
 
-   // ...and the volume
-   float cubeVol = width * height * depth;
+    // ...and the volume
+    float cubeVol = width * height * depth;
 
-   // Add the volume to the accumulated volume in the action
-   volumeAct->addVolume(cubeVol);
+    // Add the volume to the accumulated volume in the action
+    volumeAct->addVolume(cubeVol);
 }
 
 //
@@ -208,24 +197,23 @@ GetVolumeAction::cubeVolume(SoAction *action, SoNode *node)
 //
 
 void
-GetVolumeAction::sphereVolume(SoAction *action, SoNode *node)
-{
-   // The action is really an instance of GetVolumeAction
-   GetVolumeAction *volumeAct = (GetVolumeAction *) action;
+GetVolumeAction::sphereVolume(SoAction *action, SoNode *node) {
+    // The action is really an instance of GetVolumeAction
+    GetVolumeAction *volumeAct = (GetVolumeAction *)action;
 
-   // And the node pointer is really a sphere:
-   const SoSphere  *sphere = (const SoSphere *) node;
+    // And the node pointer is really a sphere:
+    const SoSphere *sphere = (const SoSphere *)node;
 
-   // Find the radius of the sphere
-   float radius = (sphere->radius.isIgnored() ? 1.0 :
-                   sphere->radius.getValue());
+    // Find the radius of the sphere
+    float radius =
+        (sphere->radius.isIgnored() ? 1.0 : sphere->radius.getValue());
 
-   // Compute the volume using our favorite formula that we all
-   // remember from our math classes, right?
-   float sphereVol = 4./3. * M_PI * radius * radius * radius;
+    // Compute the volume using our favorite formula that we all
+    // remember from our math classes, right?
+    float sphereVol = 4. / 3. * M_PI * radius * radius * radius;
 
-   // Add the volume to the accumulated volume in the action
-   volumeAct->addVolume(sphereVol);
+    // Add the volume to the accumulated volume in the action
+    volumeAct->addVolume(sphereVol);
 }
 
 //
@@ -234,9 +222,8 @@ GetVolumeAction::sphereVolume(SoAction *action, SoNode *node)
 //
 
 void
-GetVolumeAction::callDoAction(SoAction *action, SoNode *node)
-{
-   node->doAction(action);
+GetVolumeAction::callDoAction(SoAction *action, SoNode *node) {
+    node->doAction(action);
 }
 
 //
@@ -245,17 +232,15 @@ GetVolumeAction::callDoAction(SoAction *action, SoNode *node)
 //
 
 void
-GetVolumeAction::addVolume(float objectSpaceVolume)
-{
-   // Find the current modeling matrix
-   const SbMatrix &modelMatrix =
-      SoModelMatrixElement::get(state);
+GetVolumeAction::addVolume(float objectSpaceVolume) {
+    // Find the current modeling matrix
+    const SbMatrix &modelMatrix = SoModelMatrixElement::get(state);
 
-   // The determinant of the upper-left 3x3 of this matrix is
-   // the conversion factor we need to go from object-space
-   // volume to world space. Pretty cool, indeed.
-   float objectToWorldFactor = modelMatrix.det3();
+    // The determinant of the upper-left 3x3 of this matrix is
+    // the conversion factor we need to go from object-space
+    // volume to world space. Pretty cool, indeed.
+    float objectToWorldFactor = modelMatrix.det3();
 
-   // Add in the converted volume to our current volume
-   volume += objectToWorldFactor * objectSpaceVolume;
+    // Add in the converted volume to our current volume
+    volume += objectToWorldFactor * objectSpaceVolume;
 }

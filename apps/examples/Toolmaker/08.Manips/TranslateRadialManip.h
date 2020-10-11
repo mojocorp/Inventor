@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -42,37 +42,33 @@
  *
  *  An example of how create an SoTransformManip
  *  that uses a new kind of dragger.
- *  This is an SoTransformManip that employs a 
- *  TranslateRadialDragger.  The dragger provides a user 
+ *  This is an SoTransformManip that employs a
+ *  TranslateRadialDragger.  The dragger provides a user
  *  interface for editting the fields of the manip (which
  *  are inherited from SoTransform)
  *
  *----------------------------------------------------------*/
 
-#ifndef  _TRANSLATE_RADIAL_MANIP
-#define  _TRANSLATE_RADIAL_MANIP_
+#ifndef _TRANSLATE_RADIAL_MANIP
+#define _TRANSLATE_RADIAL_MANIP_
 
 #include <Inventor/manips/SoTransformManip.h>
 
-
-class TranslateRadialManip : public SoTransformManip
-{
-   SO_NODE_HEADER(TranslateRadialManip);
+class TranslateRadialManip : public SoTransformManip {
+    SO_NODE_HEADER(TranslateRadialManip);
 
   public:
-  
-   // Constructor
-   TranslateRadialManip();
+    // Constructor
+    TranslateRadialManip();
 
-   // Initialize the class. This should be called once
-   // after SoInteraction::init() and after 
-   // TranslateRadialDragger::init().
-   static void initClass();
+    // Initialize the class. This should be called once
+    // after SoInteraction::init() and after
+    // TranslateRadialDragger::init().
+    static void initClass();
 
   private:
+    // Destructor.
+    ~TranslateRadialManip();
+};
 
-   // Destructor.
-   ~TranslateRadialManip();
-};    
-
-#endif  /* _TRANSLATE_RADIAL_MANIP_ */
+#endif /* _TRANSLATE_RADIAL_MANIP_ */

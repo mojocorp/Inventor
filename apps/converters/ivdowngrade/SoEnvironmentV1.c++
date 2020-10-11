@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -70,15 +70,15 @@ SoEnvironmentV1::SoEnvironmentV1()
 {
     SO_NODE_CONSTRUCTOR(SoEnvironmentV1);
 
-    SO_NODE_ADD_FIELD(ambientIntensity,	(0.2));
-    SO_NODE_ADD_FIELD(ambientColor,	(1.0, 1.0, 1.0));
-    SO_NODE_ADD_FIELD(attenuation,	(0.0, 0.0, 1.0));
-    SO_NODE_ADD_FIELD(fogType,		(NONE));
-    SO_NODE_ADD_FIELD(fogComputed,	(PER_VERTEX));
-    SO_NODE_ADD_FIELD(fogColor,		(1.0, 1.0, 1.0));
-    SO_NODE_ADD_FIELD(fogDensity,	(0.0));
-    SO_NODE_ADD_FIELD(fogNearDistance,	(1.0));
-    SO_NODE_ADD_FIELD(fogFarDistance,	(10.0));
+    SO_NODE_ADD_FIELD(ambientIntensity, (0.2));
+    SO_NODE_ADD_FIELD(ambientColor, (1.0, 1.0, 1.0));
+    SO_NODE_ADD_FIELD(attenuation, (0.0, 0.0, 1.0));
+    SO_NODE_ADD_FIELD(fogType, (NONE));
+    SO_NODE_ADD_FIELD(fogComputed, (PER_VERTEX));
+    SO_NODE_ADD_FIELD(fogColor, (1.0, 1.0, 1.0));
+    SO_NODE_ADD_FIELD(fogDensity, (0.0));
+    SO_NODE_ADD_FIELD(fogNearDistance, (1.0));
+    SO_NODE_ADD_FIELD(fogFarDistance, (10.0));
 
     // Set up static info for enumerated type fields
     SO_NODE_DEFINE_ENUM_VALUE(Type, NONE);
@@ -123,23 +123,23 @@ SoEnvironmentV1::downgrade(SoEnvironment *env2)
 ////////////////////////////////////////////////////////////////////////
 {
     SoEnvironmentV1 *env1 = new SoEnvironmentV1;
-    
+
     // Convert from 2.0 enum to 1.0 enum
-    if (! env2->fogType.isDefault()) {
-	switch ((Type) env2->fogType.getValue()) {
-	  case SoEnvironment::NONE:
-	    env1->fogType = NONE;
-	    break;
-	  case SoEnvironment::HAZE:
-	    env1->fogType = LINEAR;
-	    break;
-	  case SoEnvironment::SMOKE:
-	    env1->fogType = EXPONENTIAL;
-	    break;
-	  case SoEnvironment::FOG:
-	    env1->fogType = EXPONENTIAL_SQUARED;
-	    break;
-	}
+    if (!env2->fogType.isDefault()) {
+        switch ((Type)env2->fogType.getValue()) {
+        case SoEnvironment::NONE:
+            env1->fogType = NONE;
+            break;
+        case SoEnvironment::HAZE:
+            env1->fogType = LINEAR;
+            break;
+        case SoEnvironment::SMOKE:
+            env1->fogType = EXPONENTIAL;
+            break;
+        case SoEnvironment::FOG:
+            env1->fogType = EXPONENTIAL_SQUARED;
+            break;
+        }
     }
 
     // fogComputed is ignored totally in 2.0
@@ -151,18 +151,18 @@ SoEnvironmentV1::downgrade(SoEnvironment *env2)
     COPY_FIELD(env1, env2, fogColor);
 
     // Convert visibility to density
-    if (! env2->fogVisibility.isDefault()) {
-	if (env2->fogType.getValue() == SoEnvironment::SMOKE)
-	    env1->fogDensity = 2.0 / env2->fogVisibility.getValue();
-	else
-	    env1->fogDensity = 4.0 / env2->fogVisibility.getValue();
-	
-	if (env2->fogVisibility.isIgnored())
-	    env1->fogDensity.setIgnored(TRUE);
+    if (!env2->fogVisibility.isDefault()) {
+        if (env2->fogType.getValue() == SoEnvironment::SMOKE)
+            env1->fogDensity = 2.0 / env2->fogVisibility.getValue();
+        else
+            env1->fogDensity = 4.0 / env2->fogVisibility.getValue();
+
+        if (env2->fogVisibility.isIgnored())
+            env1->fogDensity.setIgnored(TRUE);
     }
-    
+
     // Near and far distances are ignored, since they now (typically)
     // use the camera planes
-    
+
     return env1;
 }

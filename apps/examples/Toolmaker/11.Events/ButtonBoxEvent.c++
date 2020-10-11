@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -43,9 +43,7 @@
 
 #include "ButtonBoxEvent.h"
 
-
 SO_EVENT_SOURCE(ButtonBoxEvent);
-
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -58,7 +56,7 @@ ButtonBoxEvent::initClass()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SO_EVENT_INIT_CLASS(ButtonBoxEvent, SoButtonEvent);
+    SO_EVENT_INIT_CLASS(ButtonBoxEvent, SoButtonEvent);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -69,7 +67,7 @@ ButtonBoxEvent::ButtonBoxEvent()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   button = 0;
+    button = 0;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -84,23 +82,22 @@ ButtonBoxEvent::isButtonPressEvent(const SoEvent *e, int whichButton)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SbBool isMatch = FALSE;
-   
-   // is it a button box event?
-   if (e->isOfType(ButtonBoxEvent::getClassTypeId())) {
-      const ButtonBoxEvent *be = (const ButtonBoxEvent *) e;
-   
-      // is it a press event?
-      if (be->getState() == SoButtonEvent::DOWN) {
-   
-         // did the caller want any button press? or do they match?
-         if ((whichButton == -1) ||
-             (be->getButton() == whichButton))
-            isMatch = TRUE;
-      }
-   }
-   
-   return isMatch;
+    SbBool isMatch = FALSE;
+
+    // is it a button box event?
+    if (e->isOfType(ButtonBoxEvent::getClassTypeId())) {
+        const ButtonBoxEvent *be = (const ButtonBoxEvent *)e;
+
+        // is it a press event?
+        if (be->getState() == SoButtonEvent::DOWN) {
+
+            // did the caller want any button press? or do they match?
+            if ((whichButton == -1) || (be->getButton() == whichButton))
+                isMatch = TRUE;
+        }
+    }
+
+    return isMatch;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -115,22 +112,20 @@ ButtonBoxEvent::isButtonReleaseEvent(const SoEvent *e, int whichButton)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-   SbBool isMatch = FALSE;
-   
-   // is it a button box event?
-   if (e->isOfType(ButtonBoxEvent::getClassTypeId())) {
-      const ButtonBoxEvent *be = (const ButtonBoxEvent *) e;
-   
-      // is it a release event?
-      if (be->getState() == SoButtonEvent::UP) {
-      
-         // did the caller want any button release? or do they match?
-         if ((whichButton == -1) ||
-             (be->getButton() == whichButton))
-            isMatch = TRUE;
-      }
-   }
-   
-   return isMatch;
-}
+    SbBool isMatch = FALSE;
 
+    // is it a button box event?
+    if (e->isOfType(ButtonBoxEvent::getClassTypeId())) {
+        const ButtonBoxEvent *be = (const ButtonBoxEvent *)e;
+
+        // is it a release event?
+        if (be->getState() == SoButtonEvent::UP) {
+
+            // did the caller want any button release? or do they match?
+            if ((whichButton == -1) || (be->getButton() == whichButton))
+                isMatch = TRUE;
+        }
+    }
+
+    return isMatch;
+}

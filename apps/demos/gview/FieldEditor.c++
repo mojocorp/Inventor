@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -56,8 +56,8 @@
 #include "FieldEditor.h"
 #include "MotifHelp.h"
 
-char	*FieldEditor::fieldBuf;		// Buffer for writing field values
-int	FieldEditor::fieldBufSize = 0;	// Size of buffer in bytes
+char *FieldEditor::fieldBuf;         // Buffer for writing field values
+int   FieldEditor::fieldBufSize = 0; // Size of buffer in bytes
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -71,24 +71,24 @@ struct FieldInfo {
 
     // These are set in initInfo():
 
-    FieldEditor	*editor;	// Pointer to FieldEditor this is part of
-    SoField	*field;		// Field being edited
-    int		index;		// Index of field in node
-    SbName	fieldName;	// Name of field
-    SbBool	setToDefault;	// TRUE if user set value to default
-    SbBool	isMultiple;	// TRUE if field is multiple value
+    FieldEditor *editor;       // Pointer to FieldEditor this is part of
+    SoField *    field;        // Field being edited
+    int          index;        // Index of field in node
+    SbName       fieldName;    // Name of field
+    SbBool       setToDefault; // TRUE if user set value to default
+    SbBool       isMultiple;   // TRUE if field is multiple value
 
     // These are set in buildFieldWidget():
 
-    Widget	widget;		// Top-level field editing widget
-    Widget	textWidget;	// Text editing widget
-    Widget	ignoreButton;	// Ignore button widget
-    Widget	defaultButton;	// Set-default button widget
+    Widget widget;        // Top-level field editing widget
+    Widget textWidget;    // Text editing widget
+    Widget ignoreButton;  // Ignore button widget
+    Widget defaultButton; // Set-default button widget
 
     // These are used only for multiple-value fields:
 
-    Widget	numberWidget;	// Text widget showing current scale value
-    Widget	scrollWidget;	// Text widget scrollbar widget
+    Widget numberWidget; // Text widget showing current scale value
+    Widget scrollWidget; // Text widget scrollbar widget
 };
 
 ////////////////////////////////////////////////////////////////////////
@@ -98,19 +98,19 @@ struct FieldInfo {
 //
 
 FieldEditor::FieldEditor(SoNode *node, Widget parent, const char *name)
-		: SoXtComponent(parent, name)
+    : SoXtComponent(parent, name)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	i;
+    int i;
 
     nodeToEdit = node;
     nodeToEdit->ref();
 
-    defNode = (SoNode *) node->getTypeId().createInstance();
+    defNode = (SoNode *)node->getTypeId().createInstance();
     defNode->ref();
 
-    finishCB   = NULL;
+    finishCB = NULL;
     finishData = NULL;
 
     errorString = NULL;
@@ -118,20 +118,20 @@ FieldEditor::FieldEditor(SoNode *node, Widget parent, const char *name)
     // Set up sensor. Make it priority 0 so we can be called
     // immediately when a field changes. This way we can update only
     // the fields that change in the sensor callback.
-    nodeSensor = new SoNodeSensor(&FieldEditor::nodeSensorCB, (void *) this);
+    nodeSensor = new SoNodeSensor(&FieldEditor::nodeSensorCB, (void *)this);
     nodeSensor->setPriority(0);
     nodeSensor->attach(node);
 
     // Allocate buffer to write field values into. We have to use
     // malloc, since we may use realloc on it later
     if (fieldBufSize == 0)
-	fieldBuf = (char *) malloc((unsigned) (fieldBufSize = 1028));
+        fieldBuf = (char *)malloc((unsigned)(fieldBufSize = 1028));
 
     // Allocate and initialize field info structures
-    numFields  = getNumFields(nodeToEdit);
+    numFields = getNumFields(nodeToEdit);
     fieldInfos = new FieldInfo[numFields];
     for (i = 0; i < numFields; i++)
-	initInfo(&fieldInfos[i], i);
+        initInfo(&fieldInfos[i], i);
 
     // Set up the class name
     setClassName("FieldEditor");
@@ -156,7 +156,7 @@ FieldEditor::~FieldEditor()
     defNode->unref();
     delete nodeSensor;
 
-    delete [] fieldInfos;
+    delete[] fieldInfos;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -171,10 +171,10 @@ FieldEditor::getNumFields(SoNode *node)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const SoFieldData	*fdata = node->getFieldData();
+    const SoFieldData *fdata = node->getFieldData();
 
     if (fdata == NULL)
-	return 0;
+        return 0;
 
     return fdata->getNumFields();
 }
@@ -190,8 +190,8 @@ FieldEditor::setFinishCallback(FieldEditorCB *cb, const void *userData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    finishCB   = cb;
-    finishData = (void *) userData;
+    finishCB = cb;
+    finishData = (void *)userData;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -205,19 +205,19 @@ FieldEditor::buildWidget(Widget parent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Widget	topWidget, fieldForm, sep, buttonForm;
+    Widget topWidget, fieldForm, sep, buttonForm;
     ARG_VARS(20);
 
     // If no fields to edit, go away
     if (numFields == 0)
-	return NULL;
+        return NULL;
 
     // The title is the class of the node whose fields we are editing
     setTitle(nodeToEdit->getTypeId().getName().getString());
 
     // Create the top level form widget and register it with a class name
     RESET_ARGS();
-    topWidget = XmCreateForm(parent, (char *) getWidgetName(), ARGS);
+    topWidget = XmCreateForm(parent, (char *)getWidgetName(), ARGS);
     registerWidget(topWidget);
 
     // Create buttons at bottom
@@ -264,9 +264,9 @@ FieldEditor::buildFieldForm(Widget parent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Widget	form, sep;
-    FieldInfo	*info;
-    int		i;
+    Widget     form, sep;
+    FieldInfo *info;
+    int        i;
     ARG_VARS(20);
 
     // Create form to hold all field widgets
@@ -276,37 +276,36 @@ FieldEditor::buildFieldForm(Widget parent)
     // Create widget for each field and add them to form
     for (i = 0, info = fieldInfos; i < numFields; i++, info++) {
 
-	// Build separator if necessary
-	if (i > 0) {
-	    RESET_ARGS();
-	    ADD_ARG(XmNorientation,	XmHORIZONTAL);
-	    ADD_LEFT_FORM(0);
-	    ADD_RIGHT_FORM(0);
-	    ADD_TOP_WIDGET((info - 1)->widget, 1);
-	    sep = XmCreateSeparatorGadget(form, "Separator", ARGS);
-	    XtManageChild(sep);
-	}
+        // Build separator if necessary
+        if (i > 0) {
+            RESET_ARGS();
+            ADD_ARG(XmNorientation, XmHORIZONTAL);
+            ADD_LEFT_FORM(0);
+            ADD_RIGHT_FORM(0);
+            ADD_TOP_WIDGET((info - 1)->widget, 1);
+            sep = XmCreateSeparatorGadget(form, "Separator", ARGS);
+            XtManageChild(sep);
+        }
 
-	// Build field editor widget; sets widget field in info
-	buildFieldWidget(form, info);
+        // Build field editor widget; sets widget field in info
+        buildFieldWidget(form, info);
 
-	// Set up widget contents from node
-	updateInfo(info);
+        // Set up widget contents from node
+        updateInfo(info);
 
-	RESET_ARGS();
-	ADD_LEFT_FORM(0);
-	ADD_RIGHT_FORM(0);
-	if (i == 0) {
-	    ADD_TOP_FORM(0);
-	}
-	else {
-	    ADD_TOP_WIDGET(sep, 0);
-	}
-	if (i == numFields - 1) {
-	    ADD_BOTTOM_FORM(0);
-	}
-	XtSetValues(info->widget, ARGS);
-	XtManageChild(info->widget);
+        RESET_ARGS();
+        ADD_LEFT_FORM(0);
+        ADD_RIGHT_FORM(0);
+        if (i == 0) {
+            ADD_TOP_FORM(0);
+        } else {
+            ADD_TOP_WIDGET(sep, 0);
+        }
+        if (i == numFields - 1) {
+            ADD_BOTTOM_FORM(0);
+        }
+        XtSetValues(info->widget, ARGS);
+        XtManageChild(info->widget);
     }
 
     return form;
@@ -323,7 +322,7 @@ FieldEditor::buildFieldWidget(Widget parent, FieldInfo *info)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Widget	form, label, sep1, valueWidget, sep2, butForm, ign, def;
+    Widget form, label, sep1, valueWidget, sep2, butForm, ign, def;
     ARG_VARS(20);
 
     // Create a form widget
@@ -332,8 +331,8 @@ FieldEditor::buildFieldWidget(Widget parent, FieldInfo *info)
 
     // Create a label widget with the name of the field
     RESET_ARGS();
-    ADD_ARG(XmNlabelString,	STRING((char *) info->fieldName.getString()));
-    ADD_ARG(XmNwidth,			140);
+    ADD_ARG(XmNlabelString, STRING((char *)info->fieldName.getString()));
+    ADD_ARG(XmNwidth, 140);
     ADD_LEFT_FORM(4);
     ADD_TOP_FORM(4);
     ADD_BOTTOM_FORM(4);
@@ -341,7 +340,7 @@ FieldEditor::buildFieldWidget(Widget parent, FieldInfo *info)
 
     // Create a separator widget
     RESET_ARGS();
-    ADD_ARG(XmNorientation,		XmVERTICAL);
+    ADD_ARG(XmNorientation, XmVERTICAL);
     ADD_LEFT_WIDGET(label, 4);
     ADD_TOP_FORM(0);
     ADD_BOTTOM_FORM(0);
@@ -356,9 +355,9 @@ FieldEditor::buildFieldWidget(Widget parent, FieldInfo *info)
     // Create a push button to set the field to default value.
     // (Disable it if the field is already the default value)
     RESET_ARGS();
-    ADD_ARG(XmNlabelString,		STRING("Set To Default"));
-    ADD_ARG(XmNheight,			28);
-    ADD_ARG(XmNhighlightThickness,	0);
+    ADD_ARG(XmNlabelString, STRING("Set To Default"));
+    ADD_ARG(XmNheight, 28);
+    ADD_ARG(XmNhighlightThickness, 0);
     ADD_RIGHT_FORM(0);
     ADD_TOP_FORM(0);
     ADD_BOTTOM_FORM(0);
@@ -367,8 +366,8 @@ FieldEditor::buildFieldWidget(Widget parent, FieldInfo *info)
 
     // Create a toggle button to set the ignore flag
     RESET_ARGS();
-    ADD_ARG(XmNlabelString,		STRING("Ignore"));
-    ADD_ARG(XmNhighlightThickness,	0);
+    ADD_ARG(XmNlabelString, STRING("Ignore"));
+    ADD_ARG(XmNhighlightThickness, 0);
     ADD_TOP_FORM(0);
     ADD_BOTTOM_FORM(0);
     ADD_LEFT_FORM(0);
@@ -377,7 +376,7 @@ FieldEditor::buildFieldWidget(Widget parent, FieldInfo *info)
 
     // Create a separator widget
     RESET_ARGS();
-    ADD_ARG(XmNorientation,		XmVERTICAL);
+    ADD_ARG(XmNorientation, XmVERTICAL);
     ADD_RIGHT_WIDGET(butForm, 4);
     ADD_TOP_FORM(0);
     ADD_BOTTOM_FORM(0);
@@ -385,9 +384,9 @@ FieldEditor::buildFieldWidget(Widget parent, FieldInfo *info)
 
     // Field value editor widget
     if (info->isMultiple)
-	valueWidget = buildMultipleValueWidget(form, info);
+        valueWidget = buildMultipleValueWidget(form, info);
     else
-	valueWidget = buildSingleValueWidget(form, info);
+        valueWidget = buildSingleValueWidget(form, info);
     RESET_ARGS();
     ADD_LEFT_WIDGET(sep1, 4);
     ADD_RIGHT_WIDGET(sep2, 4);
@@ -404,9 +403,9 @@ FieldEditor::buildFieldWidget(Widget parent, FieldInfo *info)
     XtManageChild(def);
     XtManageChild(butForm);
 
-    info->widget	= form;
-    info->ignoreButton	= ign;
-    info->defaultButton	= def;
+    info->widget = form;
+    info->ignoreButton = ign;
+    info->defaultButton = def;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -421,8 +420,8 @@ FieldEditor::buildMultipleValueWidget(Widget parent, FieldInfo *info)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Widget	form, text, number, scroll;
-    char	buf[20];
+    Widget form, text, number, scroll;
+    char   buf[20];
     ARG_VARS(20);
 
     //////////////////////////////////////////////////////////////////
@@ -439,9 +438,9 @@ FieldEditor::buildMultipleValueWidget(Widget parent, FieldInfo *info)
     //
 
     RESET_ARGS();
-    ADD_ARG(XmNeditMode,		XmMULTI_LINE_EDIT);
-    ADD_ARG(XmNcolumns,			30);
-    ADD_ARG(XmNrows,			5);
+    ADD_ARG(XmNeditMode, XmMULTI_LINE_EDIT);
+    ADD_ARG(XmNcolumns, 30);
+    ADD_ARG(XmNrows, 5);
     ADD_RIGHT_FORM(4);
     ADD_TOP_FORM(4);
     ADD_BOTTOM_FORM(4);
@@ -458,14 +457,14 @@ FieldEditor::buildMultipleValueWidget(Widget parent, FieldInfo *info)
     // widget scrolls with the other text. Note that we have to add
     // this to all of the scroll bar callbacks since they are already
     // set up for the scrolled window.
-    ADD_CB(scroll, XmNvalueChangedCallback,	&FieldEditor::scrollCB, info);
-    ADD_CB(scroll, XmNincrementCallback,	&FieldEditor::scrollCB, info);
-    ADD_CB(scroll, XmNdecrementCallback,	&FieldEditor::scrollCB, info);
-    ADD_CB(scroll, XmNpageIncrementCallback,	&FieldEditor::scrollCB, info);
-    ADD_CB(scroll, XmNpageDecrementCallback,	&FieldEditor::scrollCB, info);
-    ADD_CB(scroll, XmNtoTopCallback,		&FieldEditor::scrollCB, info);
-    ADD_CB(scroll, XmNtoBottomCallback,		&FieldEditor::scrollCB, info);
-    ADD_CB(scroll, XmNdragCallback,		&FieldEditor::scrollCB, info);
+    ADD_CB(scroll, XmNvalueChangedCallback, &FieldEditor::scrollCB, info);
+    ADD_CB(scroll, XmNincrementCallback, &FieldEditor::scrollCB, info);
+    ADD_CB(scroll, XmNdecrementCallback, &FieldEditor::scrollCB, info);
+    ADD_CB(scroll, XmNpageIncrementCallback, &FieldEditor::scrollCB, info);
+    ADD_CB(scroll, XmNpageDecrementCallback, &FieldEditor::scrollCB, info);
+    ADD_CB(scroll, XmNtoTopCallback, &FieldEditor::scrollCB, info);
+    ADD_CB(scroll, XmNtoBottomCallback, &FieldEditor::scrollCB, info);
+    ADD_CB(scroll, XmNdragCallback, &FieldEditor::scrollCB, info);
 
     //////////////////////////////////////////////////////////////////
     //
@@ -473,18 +472,18 @@ FieldEditor::buildMultipleValueWidget(Widget parent, FieldInfo *info)
     //
 
     RESET_ARGS();
-    ADD_ARG(XmNeditable,		False);
-    ADD_ARG(XmNeditMode,		XmMULTI_LINE_EDIT);
-    ADD_ARG(XmNvalue,			buf);
-    ADD_ARG(XmNcolumns,			5);
-    ADD_ARG(XmNrows,			5);
-    ADD_ARG(XmNhighlightThickness,	0);
+    ADD_ARG(XmNeditable, False);
+    ADD_ARG(XmNeditMode, XmMULTI_LINE_EDIT);
+    ADD_ARG(XmNvalue, buf);
+    ADD_ARG(XmNcolumns, 5);
+    ADD_ARG(XmNrows, 5);
+    ADD_ARG(XmNhighlightThickness, 0);
     ADD_RIGHT_WIDGET(text, 0);
     ADD_TOP_FORM(6);
     ADD_LEFT_FORM(4);
     ADD_BOTTOM_FORM(4);
     number = XmCreateText(form, "numbers", ARGS);
-    XmTextSetString(number, "?");	// Bogus value
+    XmTextSetString(number, "?"); // Bogus value
 
     // Set up a callback on the line number widget so that users
     // cannot scroll the text in there by moving the cursor
@@ -493,9 +492,9 @@ FieldEditor::buildMultipleValueWidget(Widget parent, FieldInfo *info)
     XtManageChild(text);
     XtManageChild(number);
 
-    info->textWidget	= text;
-    info->numberWidget	= number;
-    info->scrollWidget	= scroll;
+    info->textWidget = text;
+    info->numberWidget = number;
+    info->scrollWidget = scroll;
 
     return form;
 }
@@ -512,15 +511,15 @@ FieldEditor::buildSingleValueWidget(Widget parent, FieldInfo *info)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Widget	form, text;
+    Widget form, text;
     ARG_VARS(20);
 
     RESET_ARGS();
     form = XmCreateForm(parent, "Form", ARGS);
 
     RESET_ARGS();
-    ADD_ARG(XmNcolumns,		30);
-    ADD_ARG(XmNeditMode,	XmSINGLE_LINE_EDIT);
+    ADD_ARG(XmNcolumns, 30);
+    ADD_ARG(XmNeditMode, XmSINGLE_LINE_EDIT);
     ADD_LEFT_FORM(4);
     ADD_RIGHT_FORM(4);
     ADD_TOP_FORM(4);
@@ -547,7 +546,7 @@ FieldEditor::buildButtonWidget(Widget parent)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    Widget	form, acceptButton, revertButton, cancelButton;
+    Widget form, acceptButton, revertButton, cancelButton;
     ARG_VARS(20);
 
     // Create a form widget to hold it all
@@ -556,51 +555,50 @@ FieldEditor::buildButtonWidget(Widget parent)
 
     // Create "Apply", "Accept", "Revert", and "Cancel" buttons
     RESET_ARGS();
-    ADD_ARG(XmNlabelString,	STRING("Accept"));
-    ADD_ARG(XmNhighlightThickness,	0);
+    ADD_ARG(XmNlabelString, STRING("Accept"));
+    ADD_ARG(XmNhighlightThickness, 0);
     ADD_LEFT_FORM(0);
     ADD_TOP_FORM(0);
     ADD_BOTTOM_FORM(0);
     acceptButton = XmCreatePushButton(form, "acceptButton", ARGS);
-    ADD_CB(acceptButton, XmNactivateCallback,
-	   &FieldEditor::acceptButtonCB, this);
+    ADD_CB(acceptButton, XmNactivateCallback, &FieldEditor::acceptButtonCB,
+           this);
 
     RESET_ARGS();
-    ADD_ARG(XmNlabelString,	STRING("Apply"));
-    ADD_ARG(XmNhighlightThickness,	0);
+    ADD_ARG(XmNlabelString, STRING("Apply"));
+    ADD_ARG(XmNhighlightThickness, 0);
     ADD_TOP_FORM(0);
     ADD_BOTTOM_FORM(0);
     ADD_LEFT_WIDGET(acceptButton, 4);
     applyButton = XmCreatePushButton(form, "applyButton", ARGS);
-    ADD_CB(applyButton, XmNactivateCallback,
-	   &FieldEditor::applyButtonCB, this);
+    ADD_CB(applyButton, XmNactivateCallback, &FieldEditor::applyButtonCB, this);
 
     RESET_ARGS();
-    ADD_ARG(XmNlabelString,	STRING("Revert"));
-    ADD_ARG(XmNhighlightThickness,	0);
+    ADD_ARG(XmNlabelString, STRING("Revert"));
+    ADD_ARG(XmNhighlightThickness, 0);
     ADD_TOP_FORM(0);
     ADD_BOTTOM_FORM(0);
     ADD_LEFT_WIDGET(applyButton, 4);
     revertButton = XmCreatePushButton(form, "revertButton", ARGS);
-    ADD_CB(revertButton, XmNactivateCallback,
-	   &FieldEditor::revertButtonCB, this);
+    ADD_CB(revertButton, XmNactivateCallback, &FieldEditor::revertButtonCB,
+           this);
 
     RESET_ARGS();
-    ADD_ARG(XmNlabelString,	STRING("Cancel"));
-    ADD_ARG(XmNhighlightThickness,	0);
+    ADD_ARG(XmNlabelString, STRING("Cancel"));
+    ADD_ARG(XmNhighlightThickness, 0);
     ADD_TOP_FORM(0);
     ADD_BOTTOM_FORM(0);
     ADD_LEFT_WIDGET(revertButton, 4);
     cancelButton = XmCreatePushButton(form, "cancelButton", ARGS);
-    ADD_CB(cancelButton, XmNactivateCallback,
-	   &FieldEditor::cancelButtonCB, this);
+    ADD_CB(cancelButton, XmNactivateCallback, &FieldEditor::cancelButtonCB,
+           this);
 
     // Create an "Override" toggle button to allow user to change
     // override flag for node
     RESET_ARGS();
-    ADD_ARG(XmNset,			nodeToEdit->isOverride());
-    ADD_ARG(XmNlabelString,		STRING("Override"));
-    ADD_ARG(XmNhighlightThickness,	0);
+    ADD_ARG(XmNset, nodeToEdit->isOverride());
+    ADD_ARG(XmNlabelString, STRING("Override"));
+    ADD_ARG(XmNhighlightThickness, 0);
     ADD_TOP_FORM(0);
     ADD_BOTTOM_FORM(0);
     ADD_RIGHT_FORM(0);
@@ -614,7 +612,7 @@ FieldEditor::buildButtonWidget(Widget parent)
 
     // Hitting a carriage-return activates the "Apply" button
     RESET_ARGS();
-    ADD_ARG(XmNdefaultButton,		applyButton);
+    ADD_ARG(XmNdefaultButton, applyButton);
     XtSetValues(parent, ARGS);
 
     return form;
@@ -631,21 +629,21 @@ FieldEditor::apply()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FieldInfo	*info;
-    int		i;
-    SbBool	override;
+    FieldInfo *info;
+    int        i;
+    SbBool     override;
 
     // Turn off sensor for a minute...
     nodeSensor->detach();
 
     // Get all field values and flags and store them back into the node
     for (i = 0, info = fieldInfos; i < numFields; i++, info++)
-	updateNode(info);
+        updateNode(info);
 
     // Set the override flag if it has changed
     override = XmToggleButtonGadgetGetState(overrideButton);
     if (nodeToEdit->isOverride() != override)
-	nodeToEdit->setOverride(override);
+        nodeToEdit->setOverride(override);
 
     // Make sure the text window reflects the exact state
     revert();
@@ -667,20 +665,20 @@ FieldEditor::revert(int fieldIndex)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FieldInfo	*info;
-    int		i;
+    FieldInfo *info;
+    int        i;
 
     if (fieldIndex >= 0)
-	updateInfo(&fieldInfos[fieldIndex]);
+        updateInfo(&fieldInfos[fieldIndex]);
 
     // Update all field info from node
     else
-	for (i = 0, info = fieldInfos; i < numFields; i++, info++)
-	    updateInfo(info);
+        for (i = 0, info = fieldInfos; i < numFields; i++, info++)
+            updateInfo(info);
 
     // Set the override button
-    XmToggleButtonGadgetSetState(overrideButton,
-				 nodeToEdit->isOverride(), FALSE);
+    XmToggleButtonGadgetSetState(overrideButton, nodeToEdit->isOverride(),
+                                 FALSE);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -694,16 +692,16 @@ FieldEditor::initInfo(FieldInfo *info, int i)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    info->editor	= this;
-    info->index		= i;
-    info->setToDefault	= FALSE;
+    info->editor = this;
+    info->index = i;
+    info->setToDefault = FALSE;
 
     // Set the field name and pointer and determine whether it is a
     // single or multiple value field.
-    const SoFieldData	*fdata = nodeToEdit->getFieldData();
+    const SoFieldData *fdata = nodeToEdit->getFieldData();
 
-    info->field      = fdata->getField(nodeToEdit, i);
-    info->fieldName  = fdata->getFieldName(i);
+    info->field = fdata->getField(nodeToEdit, i);
+    info->fieldName = fdata->getFieldName(i);
     info->isMultiple = info->field->isOfType(SoMField::getClassTypeId());
 }
 
@@ -718,7 +716,7 @@ FieldEditor::updateInfo(FieldInfo *info)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbString	fieldString;
+    SbString fieldString;
     ARG_VARS(10);
 
     // Set text field from current field value(s)
@@ -732,7 +730,7 @@ FieldEditor::updateInfo(FieldInfo *info)
     // Turn set-default button on or off
     info->setToDefault = info->field->isDefault();
     RESET_ARGS();
-    ADD_ARG(XmNsensitive, ! info->setToDefault);
+    ADD_ARG(XmNsensitive, !info->setToDefault);
     XtSetValues(info->defaultButton, ARGS);
 }
 
@@ -748,7 +746,7 @@ FieldEditor::showDefaultValue(FieldInfo *info)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoField		*defField, *saveField;
+    SoField *defField, *saveField;
     ARG_VARS(10);
 
     // Make sure we know that this was done
@@ -784,24 +782,24 @@ FieldEditor::showFieldString(FieldInfo *info) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbString	valueString;
+    SbString valueString;
 
     REM_CB(info->textWidget, XmNmodifyVerifyCallback,
-	   &FieldEditor::textChangedCB, info);
+           &FieldEditor::textChangedCB, info);
 
     // Get the field value(s) as a string
     getFieldString(info, valueString);
 
     // Set the text widget to show the string
-    XmTextSetString(info->textWidget, (char *) valueString.getString());
+    XmTextSetString(info->textWidget, (char *)valueString.getString());
 
     // Set up the line number widget for multiple-value fields
     if (info->isMultiple)
-	updateLineNumbers(info, TRUE);
+        updateLineNumbers(info, TRUE);
 
     // Reconnect the callback
     ADD_CB(info->textWidget, XmNmodifyVerifyCallback,
-	   &FieldEditor::textChangedCB, info);
+           &FieldEditor::textChangedCB, info);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -815,8 +813,8 @@ FieldEditor::updateNode(FieldInfo *info)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbString	string;
-    SbBool	ignore;
+    SbString string;
+    SbBool   ignore;
 
     getEditorString(info, string);
 
@@ -825,17 +823,17 @@ FieldEditor::updateNode(FieldInfo *info)
     // in an error dialog box
     SoReadError::setHandlerCallback(&FieldEditor::readErrorCB, info);
 
-    if (! nodeToEdit->set(string.getString()))
-	displayReadError();
+    if (!nodeToEdit->set(string.getString()))
+        displayReadError();
 
     // If value was set to default, set flag in the field
     if (info->setToDefault)
-	info->field->setDefault(TRUE);
+        info->field->setDefault(TRUE);
 
     // Make sure ignore flag is correct
     ignore = XmToggleButtonGadgetGetState(info->ignoreButton);
     if (info->field->isIgnored() != ignore)
-	info->field->setIgnored(ignore);
+        info->field->setIgnored(ignore);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -856,61 +854,61 @@ FieldEditor::getFieldString(FieldInfo *info, SbString &string) const
     // If it's a multiple-value string, we have to some extra work
     if (info->isMultiple) {
 
-	const char *s = string.getString();
+        const char *s = string.getString();
 
-	// If first character is an open bracket, we have work to do
-	if (*s == '[') {
+        // If first character is an open bracket, we have work to do
+        if (*s == '[') {
 
-	    // Skip over the open brace
-	    s++;
+            // Skip over the open brace
+            s++;
 
-	    // Allocate working space for the string
-	    char *buf = new char [strlen(s) + 1];
+            // Allocate working space for the string
+            char *buf = new char[strlen(s) + 1];
 
-	    char	*b = buf;
-	    SbBool	atNewline = TRUE;
+            char * b = buf;
+            SbBool atNewline = TRUE;
 
-	    while (*s != '\0') {
+            while (*s != '\0') {
 
-		// Skip over quoted strings - this will have a problem
-		// with quotes nested inside quotes ???
-		if (*s == '\"') {
-		    *b++ = *s++;
-		    while (*s != '\"')
-			*b++ = *s++;
-		    *b++ = *s++;	// Closing quote
-		}
+                // Skip over quoted strings - this will have a problem
+                // with quotes nested inside quotes ???
+                if (*s == '\"') {
+                    *b++ = *s++;
+                    while (*s != '\"')
+                        *b++ = *s++;
+                    *b++ = *s++; // Closing quote
+                }
 
-		// Change commas into newlines
-		if (*s == ',') {
-		    *b++ = '\n';
-		    atNewline = TRUE;
-		    s++;
-		}
+                // Change commas into newlines
+                if (*s == ',') {
+                    *b++ = '\n';
+                    atNewline = TRUE;
+                    s++;
+                }
 
-		// Skip over spaces (including extra newlines) after newlines
-		else if (atNewline && isspace(*s))
-		    s++;
+                // Skip over spaces (including extra newlines) after newlines
+                else if (atNewline && isspace(*s))
+                    s++;
 
-		else {
-		    *b++ = *s++;
-		    atNewline = FALSE;
-		}
-	    }
+                else {
+                    *b++ = *s++;
+                    atNewline = FALSE;
+                }
+            }
 
-	    // Remove closing brace and space before it
-	    while (*b != ']')
-		b--;
-	    while (isspace(*(b - 1)))
-		b--;
+            // Remove closing brace and space before it
+            while (*b != ']')
+                b--;
+            while (isspace(*(b - 1)))
+                b--;
 
-	    // Terminate string
-	    *b = '\0';
+            // Terminate string
+            *b = '\0';
 
-	    string = buf;
+            string = buf;
 
-	    delete [] buf;
-	}
+            delete[] buf;
+        }
     }
 }
 
@@ -926,40 +924,40 @@ FieldEditor::getEditorString(FieldInfo *info, SbString &string) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char 	*str = XmTextGetString(info->textWidget);
+    char *str = XmTextGetString(info->textWidget);
 
     // Store name of string and a space
     string = info->fieldName.getString();
     string += " ";
 
     // If a single-value field, just append text string from widget
-    if (! info->isMultiple)
-	string += str;
+    if (!info->isMultiple)
+        string += str;
 
     // If this is a multiple-value field, add extra characters
     else {
-	char	*c;
+        char *c;
 
-	string += "[";
+        string += "[";
 
-	for (c = str; *c != '\0'; c++) {
+        for (c = str; *c != '\0'; c++) {
 
-	    // Change all newlines to commas in string first
-	    if (*c == '\n') {
-		*c = ',';
+            // Change all newlines to commas in string first
+            if (*c == '\n') {
+                *c = ',';
 
-		// Remove all whitespace after commas. This also gets
-		// rid of blank lines.
-		c++;
-		while (isspace(*c))
-		    c++;
+                // Remove all whitespace after commas. This also gets
+                // rid of blank lines.
+                c++;
+                while (isspace(*c))
+                    c++;
 
-		c--;
-	    }
-	}
-	string += str;
+                c--;
+            }
+        }
+        string += str;
 
-	string += "]";
+        string += "]";
     }
 
     XtFree(str);
@@ -978,7 +976,7 @@ FieldEditor::windowCloseAction()
 {
     // Alert caller if necessary
     if (finishCB != NULL)
-	finishCB(finishData, this);
+        finishCB(finishData, this);
 
     delete this;
 }
@@ -998,51 +996,51 @@ FieldEditor::updateLineNumbers(FieldInfo *info, SbBool textChanged) const
 {
     if (textChanged) {
 
-	// See if the number of lines in the text area has changed. If
-	// so, insert or remove line numbers from the widget.
-	
-	// Count newlines in the text string
-	char	*textString = XmTextGetString(info->textWidget);
-	int	numLines = 0;
-	char	*b;
-	for (b = textString; *b != '\0'; b++)
-	    if (*b == '\n')
-		numLines++;
-	// Last line may not end in a newline?
-	if (b > textString && *(b-1) != '\n')
-	    numLines++;
-	XtFree(textString);
-	
-	// Make sure line number widget has the correct info
-	char	*numberString = XmTextGetString(info->numberWidget);
-	int	numNumbers = strlen(numberString) / 6;
-	XtFree(numberString);
-	
-	// Too many line numbers? Remove some.
-	if (numNumbers > numLines)
-	    XmTextReplace(info->numberWidget,
-			  numLines * 6, numNumbers * 6, NULL);
-	
-	// Too few line numbers? Add some.
-	else if (numNumbers < numLines) {
-	    int		numNeeded = numLines - numNumbers, i;
-	    char	*buf = new char [numNeeded * 6 + 1], *b = buf;
-	    for (i = 0; i < numNeeded; i++) {
-		sprintf(b, "%5d\n", numNumbers + i);
-		b += strlen(b);
-	    }
-	    if (numNumbers == 0)
-		XmTextReplace(info->numberWidget, 0, 1, buf);
-	    else
-		XmTextInsert(info->numberWidget, numLines * 6, buf);
-	    delete [] buf;
-	}
+        // See if the number of lines in the text area has changed. If
+        // so, insert or remove line numbers from the widget.
+
+        // Count newlines in the text string
+        char *textString = XmTextGetString(info->textWidget);
+        int   numLines = 0;
+        char *b;
+        for (b = textString; *b != '\0'; b++)
+            if (*b == '\n')
+                numLines++;
+        // Last line may not end in a newline?
+        if (b > textString && *(b - 1) != '\n')
+            numLines++;
+        XtFree(textString);
+
+        // Make sure line number widget has the correct info
+        char *numberString = XmTextGetString(info->numberWidget);
+        int   numNumbers = strlen(numberString) / 6;
+        XtFree(numberString);
+
+        // Too many line numbers? Remove some.
+        if (numNumbers > numLines)
+            XmTextReplace(info->numberWidget, numLines * 6, numNumbers * 6,
+                          NULL);
+
+        // Too few line numbers? Add some.
+        else if (numNumbers < numLines) {
+            int   numNeeded = numLines - numNumbers, i;
+            char *buf = new char[numNeeded * 6 + 1], *b = buf;
+            for (i = 0; i < numNeeded; i++) {
+                sprintf(b, "%5d\n", numNumbers + i);
+                b += strlen(b);
+            }
+            if (numNumbers == 0)
+                XmTextReplace(info->numberWidget, 0, 1, buf);
+            else
+                XmTextInsert(info->numberWidget, numLines * 6, buf);
+            delete[] buf;
+        }
     }
 
     // Find out the scroll bar value and set the line number position
     // based on it
     ARG_VARS(1);
-    int	topLine;
+    int topLine;
 
     RESET_ARGS();
     ADD_ARG(XmNvalue, &topLine);
@@ -1067,20 +1065,20 @@ FieldEditor::nodeSensorCB(void *data, SoSensor *sensor)
 {
     // Try to update only the field that changed, if there is one
 
-    FieldEditor		*editor     = (FieldEditor *) data;
-    SoNodeSensor	*nodeSensor = (SoNodeSensor *) sensor;
-    const SoField	*trigField  = nodeSensor->getTriggerField();
-    int			fieldIndex = -1;
+    FieldEditor *  editor = (FieldEditor *)data;
+    SoNodeSensor * nodeSensor = (SoNodeSensor *)sensor;
+    const SoField *trigField = nodeSensor->getTriggerField();
+    int            fieldIndex = -1;
 
     if (trigField != NULL) {
-	int	i;
+        int i;
 
-	for (i = 0; i < editor->numFields; i++) {
-	    if (editor->fieldInfos[i].field == trigField) {
-		fieldIndex = i;
-		break;
-	    }
-	}
+        for (i = 0; i < editor->numFields; i++) {
+            if (editor->fieldInfos[i].field == trigField) {
+                fieldIndex = i;
+                break;
+            }
+        }
     }
 
     editor->revert(fieldIndex);
@@ -1098,7 +1096,7 @@ FieldEditor::acceptButtonCB(Widget, XtPointer clientData, XtPointer)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FieldEditor	*editor = (FieldEditor *) clientData;
+    FieldEditor *editor = (FieldEditor *)clientData;
 
     // Make sure latest changes were applied
     editor->apply();
@@ -1119,7 +1117,7 @@ FieldEditor::applyButtonCB(Widget, XtPointer clientData, XtPointer)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    ((FieldEditor *) clientData)->apply();
+    ((FieldEditor *)clientData)->apply();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1134,7 +1132,7 @@ FieldEditor::revertButtonCB(Widget, XtPointer clientData, XtPointer)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    ((FieldEditor *) clientData)->revert();
+    ((FieldEditor *)clientData)->revert();
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1149,7 +1147,7 @@ FieldEditor::cancelButtonCB(Widget, XtPointer clientData, XtPointer)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FieldEditor	*editor = (FieldEditor *) clientData;
+    FieldEditor *editor = (FieldEditor *)clientData;
 
     // Get rid of window
     editor->windowCloseAction();
@@ -1168,7 +1166,7 @@ FieldEditor::defaultButtonCB(Widget, XtPointer clientData, XtPointer)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FieldInfo	*info = (FieldInfo *) clientData;
+    FieldInfo *info = (FieldInfo *)clientData;
 
     // Make sure the correct value is displayed in the text widget
     info->editor->showDefaultValue(info);
@@ -1187,31 +1185,31 @@ FieldEditor::textChangedCB(Widget, XtPointer clientData, XtPointer callData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FieldInfo		*info = (FieldInfo *) clientData;
-    XmTextVerifyPtr	tvp = (XmTextVerifyPtr) callData;
+    FieldInfo *     info = (FieldInfo *)clientData;
+    XmTextVerifyPtr tvp = (XmTextVerifyPtr)callData;
 
     // If we are inserting a text character, see if it is a carriage return
     if (tvp->text->length > 0 && *tvp->text->ptr == '\n') {
 
-	// We don't want the text to be inserted if it's a
-	// single-value field - just act as if we hit the "Apply"
-	// button
-	if (! info->isMultiple) {
-	    tvp->doit = FALSE;
-	    XtCallActionProc(info->editor->applyButton, "ArmAndActivate",
-			     tvp->event, NULL, 0);
-	}
+        // We don't want the text to be inserted if it's a
+        // single-value field - just act as if we hit the "Apply"
+        // button
+        if (!info->isMultiple) {
+            tvp->doit = FALSE;
+            XtCallActionProc(info->editor->applyButton, "ArmAndActivate",
+                             tvp->event, NULL, 0);
+        }
     }
 
     // Multiple-value fields need to scroll correctly when the text
     // changes
     if (info->isMultiple)
-	info->editor->updateLineNumbers(info, TRUE);
+        info->editor->updateLineNumbers(info, TRUE);
 
     // Reset the setToDefault flag to FALSE if necessary
     if (info->setToDefault && tvp->doit) {
-	XtSetSensitive(info->defaultButton, TRUE);
-	info->setToDefault = FALSE;
+        XtSetSensitive(info->defaultButton, TRUE);
+        info->setToDefault = FALSE;
     }
 }
 
@@ -1228,7 +1226,7 @@ FieldEditor::scrollCB(Widget, XtPointer clientData, XtPointer)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FieldInfo	*info = (FieldInfo *) clientData;
+    FieldInfo *info = (FieldInfo *)clientData;
 
     // Determine the new top line number from the scroll bar
     info->editor->updateLineNumbers(info, FALSE);
@@ -1247,8 +1245,7 @@ FieldEditor::lineCB(Widget, XtPointer, XtPointer callData)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    XmTextVerifyCallbackStruct *cbInfo =
-	(XmTextVerifyCallbackStruct *) callData;
+    XmTextVerifyCallbackStruct *cbInfo = (XmTextVerifyCallbackStruct *)callData;
 
     // Indicate that no cursor motion should occur
     cbInfo->doit = False;
@@ -1267,7 +1264,7 @@ FieldEditor::reallocBuf(void *ptr, size_t newSize)
 {
     fieldBufSize = newSize;
 
-    fieldBuf = (char *) realloc(ptr, newSize);
+    fieldBuf = (char *)realloc(ptr, newSize);
 
     return fieldBuf;
 }
@@ -1284,19 +1281,19 @@ FieldEditor::readErrorCB(const SoError *error, void *data)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    FieldInfo	*info = (FieldInfo *) data;
+    FieldInfo *info = (FieldInfo *)data;
 
     // Save only the first error that is found
     if (info->editor->errorString == NULL) {
 
-	SbString *err = new SbString;
+        SbString *err = new SbString;
 
-	(*err) = "There was an error reading the values for the field named ";
-	(*err) += info->fieldName.getString();
-	(*err) += ":\n\n";
-	(*err) += error->getDebugString();
+        (*err) = "There was an error reading the values for the field named ";
+        (*err) += info->fieldName.getString();
+        (*err) += ":\n\n";
+        (*err) += error->getDebugString();
 
-	info->editor->errorString = err;
+        info->editor->errorString = err;
     }
 }
 
@@ -1312,10 +1309,9 @@ FieldEditor::displayReadError()
 ////////////////////////////////////////////////////////////////////////
 {
     if (errorString != NULL) {
-	Error *err = new Error(XtParent(getWidget()),
-			       errorString->getString());
-	delete errorString;
+        Error *err = new Error(XtParent(getWidget()), errorString->getString());
+        delete errorString;
 
-	errorString = NULL;
+        errorString = NULL;
     }
 }

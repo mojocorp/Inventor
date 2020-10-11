@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,8 +68,7 @@ class SoTimerSensor;
 //
 // Base class; this also functions as a blank background.
 //
-class Background
-{
+class Background {
   public:
     Background();
     virtual ~Background();
@@ -84,52 +83,64 @@ class Background
 //
 // Class derived from code written by Drew Olbrich
 //
-class FlashBackground : public Background
-{
+class FlashBackground : public Background {
   public:
     FlashBackground(int size = 12);
     ~FlashBackground();
-    
+
     void animateShape(double t);
     void animateColor(double t);
 
     enum Shape {
-	SHAPE_CLOUDS, SHAPE_FLAT, SHAPE_SWIRL, SHAPE_PINCH,
-	SHAPE_WAVY, SHAPE_SCRUNCH, SHAPE_WALLS, SHAPE_PULL,
-	NUM_SHAPES
+        SHAPE_CLOUDS,
+        SHAPE_FLAT,
+        SHAPE_SWIRL,
+        SHAPE_PINCH,
+        SHAPE_WAVY,
+        SHAPE_SCRUNCH,
+        SHAPE_WALLS,
+        SHAPE_PULL,
+        NUM_SHAPES
     };
 
     enum Shade {
-	SHADE_HAZY, SHADE_BARS, SHADE_STATIC, SHADE_FOG, SHADE_MARBLE,
-	NUM_SHADES
+        SHADE_HAZY,
+        SHADE_BARS,
+        SHADE_STATIC,
+        SHADE_FOG,
+        SHADE_MARBLE,
+        NUM_SHADES
     };
 
     enum Scheme {
-	COLOR_GRAY, COLOR_NOISE, COLOR_PURPLE, COLOR_SUNSET, COLOR_ABYSS,
-	NUM_SCHEMES
+        COLOR_GRAY,
+        COLOR_NOISE,
+        COLOR_PURPLE,
+        COLOR_SUNSET,
+        COLOR_ABYSS,
+        NUM_SCHEMES
     };
 
   private:
-    int meshSize;
-    double *hash_table;
+    int            meshSize;
+    double *       hash_table;
     SoCoordinate3 *coordinates;
-    SoBaseColor *colors;
-    SbVec3f **shapeTable;
-    SbColor **schemeTable;
-    Shape currentShape;
-    Scheme currentScheme;
-    Shape nextShape;
-    Scheme nextScheme;
+    SoBaseColor *  colors;
+    SbVec3f **     shapeTable;
+    SbColor **     schemeTable;
+    Shape          currentShape;
+    Scheme         currentScheme;
+    Shape          nextShape;
+    Scheme         nextScheme;
 
     double Noise(uint32_t, uint32_t, uint32_t);
     double Noise(SbVec3f &);
     double Turbulence(SbVec3f &, int);
-    void shapeFunction(Shape, SbVec3f &);
+    void   shapeFunction(Shape, SbVec3f &);
     double shadeFunction(Shade, double, double);
-    void colorFunction(Scheme, SbColor &, double);
-    void calculateShape(Shape, SbVec3f *);
-    void calculateColor(Shade, Scheme, SbColor *);
-    void updateSceneShape(double);
-    void updateSceneColor(double);
+    void   colorFunction(Scheme, SbColor &, double);
+    void   calculateShape(Shape, SbVec3f *);
+    void   calculateColor(Shade, Scheme, SbColor *);
+    void   updateSceneShape(double);
+    void   updateSceneColor(double);
 };
-

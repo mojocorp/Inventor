@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,34 +54,34 @@
 #include <Inventor/nodes/SoText3.h>
 
 int
-main(int , char **argv)
-{
-   // Initialize Inventor and Xt
-   Widget myWindow = SoXt::init(argv[0]);  
-   if (myWindow == NULL) exit(1);     
+main(int, char **argv) {
+    // Initialize Inventor and Xt
+    Widget myWindow = SoXt::init(argv[0]);
+    if (myWindow == NULL)
+        exit(1);
 
-   SoSeparator *root = new SoSeparator;
-   root->ref();
-   
-   // Add a camera, light, and material
-   SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
-   root->addChild(myCamera);
-   root->addChild(new SoDirectionalLight);
-   SoMaterial *myMaterial = new SoMaterial;
-   myMaterial->diffuseColor.setValue(1.0, 0.0, 0.0);   
-   root->addChild(myMaterial);
+    SoSeparator *root = new SoSeparator;
+    root->ref();
 
-   // Create a Text3 object, and connect to the realTime field
-   SoText3 *myText = new SoText3;
-   root->addChild(myText);
-   myText->string.connectFrom(SoDB::getGlobalField("realTime"));
+    // Add a camera, light, and material
+    SoPerspectiveCamera *myCamera = new SoPerspectiveCamera;
+    root->addChild(myCamera);
+    root->addChild(new SoDirectionalLight);
+    SoMaterial *myMaterial = new SoMaterial;
+    myMaterial->diffuseColor.setValue(1.0, 0.0, 0.0);
+    root->addChild(myMaterial);
 
-   SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
-   myCamera->viewAll(root, myRenderArea->getSize());
-   myRenderArea->setSceneGraph(root);
-   myRenderArea->setTitle("Date & Time");
-   myRenderArea->show();
+    // Create a Text3 object, and connect to the realTime field
+    SoText3 *myText = new SoText3;
+    root->addChild(myText);
+    myText->string.connectFrom(SoDB::getGlobalField("realTime"));
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+    SoXtRenderArea *myRenderArea = new SoXtRenderArea(myWindow);
+    myCamera->viewAll(root, myRenderArea->getSize());
+    myRenderArea->setSceneGraph(root);
+    myRenderArea->setTitle("Date & Time");
+    myRenderArea->show();
+
+    SoXt::show(myWindow);
+    SoXt::mainLoop();
 }

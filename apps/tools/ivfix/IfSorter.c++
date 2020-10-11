@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -39,7 +39,7 @@
 #include "IfShape.h"
 #include "IfSorter.h"
 
-IfSorter	*IfSorter::curSorter;	// Saves "this" during qsort
+IfSorter *IfSorter::curSorter; // Saves "this" during qsort
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -47,9 +47,7 @@ IfSorter	*IfSorter::curSorter;	// Saves "this" during qsort
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfSorter::IfSorter()
-{
-}
+IfSorter::IfSorter() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -57,9 +55,7 @@ IfSorter::IfSorter()
 //
 /////////////////////////////////////////////////////////////////////////////
 
-IfSorter::~IfSorter()
-{
-}
+IfSorter::~IfSorter() {}
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -69,8 +65,7 @@ IfSorter::~IfSorter()
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfSorter::sort(IfShapeList &shapeList)
-{
+IfSorter::sort(IfShapeList &shapeList) {
     curSorter = this;
     curShapeList = &shapeList;
 
@@ -83,9 +78,9 @@ IfSorter::sort(IfShapeList &shapeList)
     // determine the level at which they differ
     shapeList[0]->differenceLevel = 0;
     for (int i = 1; i < shapeList.getLength(); i++)
-	IfShape::compare(shapeList[i-1], shapeList[i],
-		       shapeList[i]->differenceLevel,
-		       shapeList[i]->differenceCode);
+        IfShape::compare(shapeList[i - 1], shapeList[i],
+                         shapeList[i]->differenceLevel,
+                         shapeList[i]->differenceCode);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -95,9 +90,8 @@ IfSorter::sort(IfShapeList &shapeList)
 /////////////////////////////////////////////////////////////////////////////
 
 int
-IfSorter::compare(const IfShape *shape1, const IfShape *shape2)
-{
-    int level;
+IfSorter::compare(const IfShape *shape1, const IfShape *shape2) {
+    int                     level;
     IfShape::DifferenceCode dCode;
     return IfShape::compare(shape1, shape2, level, dCode);
 }

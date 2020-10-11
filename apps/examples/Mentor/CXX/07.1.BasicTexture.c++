@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -38,7 +38,7 @@
  *  This is an example from the Inventor Mentor,
  *  chapter 7, example 1.
  *
- *  This example displays a textured cube (default 
+ *  This example displays a textured cube (default
  *  texture coords).
  *------------------------------------------------------------*/
 
@@ -50,33 +50,33 @@
 #include <Inventor/nodes/SoTexture2.h>
 
 int
-main(int , char **argv)
-{
-   Widget myWindow = SoXt::init(argv[0]);
-   if(myWindow == NULL) exit(1);
+main(int, char **argv) {
+    Widget myWindow = SoXt::init(argv[0]);
+    if (myWindow == NULL)
+        exit(1);
 
-   SoSeparator *root = new SoSeparator;
-   root->ref();
+    SoSeparator *root = new SoSeparator;
+    root->ref();
 
-   // Choose a texture 
-   SoTexture2 *rock = new SoTexture2;
-   root->addChild(rock);
-   rock->filename.setValue("/usr/share/src/Inventor/examples/data/brick.1.rgb");
+    // Choose a texture
+    SoTexture2 *rock = new SoTexture2;
+    root->addChild(rock);
+    rock->filename.setValue(
+        "/usr/share/src/Inventor/examples/data/brick.1.rgb");
 
-   // Make a cube
-   root->addChild(new SoCube);
+    // Make a cube
+    root->addChild(new SoCube);
 
-   SoXtExaminerViewer *myViewer = 
-            new SoXtExaminerViewer(myWindow);
-   myViewer->setSceneGraph(root);
-   myViewer->setTitle("Default Texture Coords");
+    SoXtExaminerViewer *myViewer = new SoXtExaminerViewer(myWindow);
+    myViewer->setSceneGraph(root);
+    myViewer->setTitle("Default Texture Coords");
 
-   // In Inventor 2.1, if the machine does not have hardware texture
-   // mapping, we must override the default drawStyle to display textures.
-   myViewer->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_AS_IS);
+    // In Inventor 2.1, if the machine does not have hardware texture
+    // mapping, we must override the default drawStyle to display textures.
+    myViewer->setDrawStyle(SoXtViewer::STILL, SoXtViewer::VIEW_AS_IS);
 
-   myViewer->show();
+    myViewer->show();
 
-   SoXt::show(myWindow);
-   SoXt::mainLoop();
+    SoXt::show(myWindow);
+    SoXt::mainLoop();
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -60,15 +60,15 @@
 #include "GraphIcon.h"
 #include "DisplayGraph.h"
 
-SbBool	 DisplayGraph::initialized = FALSE;
-SoNode	*DisplayGraph::instanceIcon;
-SoNode	*DisplayGraph::closedIcon;
-SoNode	*DisplayGraph::otherIcon;
-SbDict	*DisplayGraph::iconDict;
+SbBool  DisplayGraph::initialized = FALSE;
+SoNode *DisplayGraph::instanceIcon;
+SoNode *DisplayGraph::closedIcon;
+SoNode *DisplayGraph::otherIcon;
+SbDict *DisplayGraph::iconDict;
 
-#define ICON_FILE	"gviewIcons.iv"
-#define ICON_INST_DIR	IVPREFIX "/demos/data/Inventor"
-#define ICON_ENV_VAR	"IV_GRAPH_DIR"
+#define ICON_FILE "gviewIcons.iv"
+#define ICON_INST_DIR IVPREFIX "/demos/data/Inventor"
+#define ICON_ENV_VAR "IV_GRAPH_DIR"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -82,11 +82,11 @@ DisplayGraph::DisplayGraph(SoNode *sceneGraph)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	firstChildIndex;
+    int firstChildIndex;
 
     // Make sure icon stuff is initialized
-    if (! initialized)
-	init();
+    if (!initialized)
+        init();
 
     // Count nodes in scene. nodeDict is used to detect instances
     numIcons = countNodes(sceneGraph);
@@ -121,7 +121,7 @@ DisplayGraph::~DisplayGraph()
 ////////////////////////////////////////////////////////////////////////
 {
     if (numIcons > 0)
-	delete [] icons;
+        delete[] icons;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -135,17 +135,17 @@ DisplayGraph::init()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoSeparator		*sep   = new SoSeparator;
-    SoBaseColor		*color = new SoBaseColor;
-    SoInput		in;
-    SoNode		*inRoot, *parent;
-    SoSearchAction	sa;
-    const SoLabel	*label;
-    SoType		type;
-    int			i;
+    SoSeparator *  sep = new SoSeparator;
+    SoBaseColor *  color = new SoBaseColor;
+    SoInput        in;
+    SoNode *       inRoot, *parent;
+    SoSearchAction sa;
+    const SoLabel *label;
+    SoType         type;
+    int            i;
 
     // Build default closed icon graph
-    sep   = new SoSeparator;
+    sep = new SoSeparator;
     color = new SoBaseColor;
     color->rgb.setValue(0.7, 0.2, 0.3);
     sep->addChild(color);
@@ -153,7 +153,7 @@ DisplayGraph::init()
     closedIcon = sep;
 
     // Build default instance icon graph
-    sep   = new SoSeparator;
+    sep = new SoSeparator;
     color = new SoBaseColor;
     color->rgb.setValue(0.6, 0.6, 0.1);
     sep->addChild(color);
@@ -173,7 +173,7 @@ DisplayGraph::init()
     // Insert icon for unspecific nodes. The casting is because C++
     // thinks the SoType is more than just an integer
     type = SoNode::getClassTypeId();
-    iconDict->enter((unsigned long) * (int *) &type, (void *) otherIcon);
+    iconDict->enter((unsigned long)*(int *)&type, (void *)otherIcon);
 
 #if 0
     // Tell input to look for icon file based on environment variable
@@ -194,12 +194,12 @@ DisplayGraph::init()
 #include "gviewIcons.iv.h"
 
     // Set to read from included char array
-    in.setBuffer((void *) gviewIcons, sizeof(gviewIcons));
+    in.setBuffer((void *)gviewIcons, sizeof(gviewIcons));
 
     // Read graph from file
-    if (! SoDB::read(&in, inRoot)) {
-	fprintf(stderr, "Error reading %s\n", ICON_FILE);
-	exit(1);
+    if (!SoDB::read(&in, inRoot)) {
+        fprintf(stderr, "Error reading %s\n", ICON_FILE);
+        exit(1);
     }
     inRoot->ref();
 
@@ -211,29 +211,28 @@ DisplayGraph::init()
     // For each label, store its parent node as the root of the icon
     // graph for the named node class
     for (i = 0; i < sa.getPaths().getLength(); i++) {
-	label  = (const SoLabel *) sa.getPaths()[i]->getTail();
-	parent = sa.getPaths()[i]->getNodeFromTail(1);
+        label = (const SoLabel *)sa.getPaths()[i]->getTail();
+        parent = sa.getPaths()[i]->getNodeFromTail(1);
 
-	// Find the type id for the named class
-	type = SoType::fromName(label->label.getValue());
+        // Find the type id for the named class
+        type = SoType::fromName(label->label.getValue());
 
-	// If such a type exists, add the parent to the dictionary
-	if (! type.isBad()) {
-	    iconDict->enter((unsigned long) * (int *) &type, (void *) parent);
-	    parent->ref();
-	}
+        // If such a type exists, add the parent to the dictionary
+        if (!type.isBad()) {
+            iconDict->enter((unsigned long)*(int *)&type, (void *)parent);
+            parent->ref();
+        }
 
-	// Otherwise, it might be the icon for instances or closed groups
-	else if (label->label.getValue() == "Instance") {
-	    instanceIcon->unref();
-	    instanceIcon = parent;
-	    instanceIcon->ref();
-	}
-	else if (label->label.getValue() == "Closed") {
-	    closedIcon->unref();
-	    closedIcon = parent;
-	    closedIcon->ref();
-	}
+        // Otherwise, it might be the icon for instances or closed groups
+        else if (label->label.getValue() == "Instance") {
+            instanceIcon->unref();
+            instanceIcon = parent;
+            instanceIcon->ref();
+        } else if (label->label.getValue() == "Closed") {
+            closedIcon->unref();
+            closedIcon = parent;
+            closedIcon->ref();
+        }
     }
 
     inRoot->unref();
@@ -253,13 +252,13 @@ DisplayGraph::init()
 //
 
 void
-DisplayGraph::setNode(SoNode *node, GraphIcon *parentIcon,
-		      int iconIndex, int &firstChildIndex, int childIndex)
+DisplayGraph::setNode(SoNode *node, GraphIcon *parentIcon, int iconIndex,
+                      int &firstChildIndex, int childIndex)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    GraphIcon	*icon = &icons[iconIndex];
-    void	*oldIconPtr;
+    GraphIcon *icon = &icons[iconIndex];
+    void *     oldIconPtr;
 
     icon->setNode(node);
     icon->setParent(parentIcon);
@@ -267,25 +266,25 @@ DisplayGraph::setNode(SoNode *node, GraphIcon *parentIcon,
     icon->setGraph(findIconGraph(node));
 
     // See if node was already counted - if so, it's an instance
-    if (nodeDict.find((unsigned long) node, oldIconPtr))
-	icon->setInstance((GraphIcon *) oldIconPtr);
+    if (nodeDict.find((unsigned long)node, oldIconPtr))
+        icon->setInstance((GraphIcon *)oldIconPtr);
 
     else {
-	nodeDict.enter((unsigned long) node, (void *) icon);
+        nodeDict.enter((unsigned long)node, (void *)icon);
 
-	// If it's a group, recurse on children
-	if (node->isOfType(SoGroup::getClassTypeId())) {
-	    const SoGroup	*g = (const SoGroup *) node;
-	    int			childIndex = firstChildIndex, i;
+        // If it's a group, recurse on children
+        if (node->isOfType(SoGroup::getClassTypeId())) {
+            const SoGroup *g = (const SoGroup *)node;
+            int            childIndex = firstChildIndex, i;
 
-	    icon->setGroup(g->getNumChildren(), &icons[firstChildIndex]);
+            icon->setGroup(g->getNumChildren(), &icons[firstChildIndex]);
 
-	    firstChildIndex += g->getNumChildren();
+            firstChildIndex += g->getNumChildren();
 
-	    for (i = 0; i < g->getNumChildren(); i++)
-		setNode(g->getChild(i), icon, childIndex + i,
-			firstChildIndex, i);
-	}
+            for (i = 0; i < g->getNumChildren(); i++)
+                setNode(g->getChild(i), icon, childIndex + i, firstChildIndex,
+                        i);
+        }
     }
 }
 
@@ -302,15 +301,15 @@ DisplayGraph::build(DisplayGraph *oldDisplayGraph)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoSeparator		*rootSep;	// Root for the display graph
-    SoPickStyle		*pickStyle;	// Makes lines unpickable
-    SoLightModel	*lightModel;	// To turn off lighting for lines
-    SoDrawStyle		*drawStyle;	// To make lines wider
-    SoLineSet		*instLine;	// Line to show instance connection
-    SoBaseColor		*instColor;	// Color of instance connection line
-    SoSeparator		*instSep;	// Sub-root for instance stuff
-    SoNode		*iconGraph;
-    int			i;
+    SoSeparator * rootSep;    // Root for the display graph
+    SoPickStyle * pickStyle;  // Makes lines unpickable
+    SoLightModel *lightModel; // To turn off lighting for lines
+    SoDrawStyle * drawStyle;  // To make lines wider
+    SoLineSet *   instLine;   // Line to show instance connection
+    SoBaseColor * instColor;  // Color of instance connection line
+    SoSeparator * instSep;    // Sub-root for instance stuff
+    SoNode *      iconGraph;
+    int           i;
 
     rootSep = new SoSeparator(3 + numIcons);
     rootSep->ref();
@@ -320,45 +319,45 @@ DisplayGraph::build(DisplayGraph *oldDisplayGraph)
     // dictionary. This lets us find the GraphIcon from a picked
     // geometry.
     for (i = 0; i < numIcons; i++) {
-	iconGraph = icons[i].buildGraph();
-	rootSep->addChild(iconGraph);
-	shapeDict.enter((unsigned long) iconGraph, (void *) &icons[i]);
+        iconGraph = icons[i].buildGraph();
+        rootSep->addChild(iconGraph);
+        shapeDict.enter((unsigned long)iconGraph, (void *)&icons[i]);
     }
 
     // Start out with just the first level of children visible
     if (icons[0].isGroup())
-	icons[0].openGroup(FALSE);
+        icons[0].openGroup(FALSE);
     else
-	icons[0].show();
+        icons[0].show();
 
     // If we are to copy visibility info from an old display graph, do so
     if (oldDisplayGraph != NULL) {
-	int		i;
-	GraphIcon	*newIcon, *oldIcon;
-	void		*iconPtr;
+        int        i;
+        GraphIcon *newIcon, *oldIcon;
+        void *     iconPtr;
 
-	// Run through all icons in new display graph
-	for (i = 0, newIcon = icons; i < numIcons; i++, newIcon++) {
+        // Run through all icons in new display graph
+        for (i = 0, newIcon = icons; i < numIcons; i++, newIcon++) {
 
-	    // If there was an old icon for the node that this icon represents
-	    if (oldDisplayGraph->nodeDict.find((unsigned long) newIcon->getNode(),
-					       iconPtr)) {
+            // If there was an old icon for the node that this icon represents
+            if (oldDisplayGraph->nodeDict.find(
+                    (unsigned long)newIcon->getNode(), iconPtr)) {
 
-		oldIcon = (GraphIcon *) iconPtr;
+                oldIcon = (GraphIcon *)iconPtr;
 
-		// Change state of icon if necessary
-		if (oldIcon->isGroup()) {
-		    if (oldIcon->isOpen() && ! newIcon->isOpen())
-			newIcon->openGroup(FALSE);
-		    else if (oldIcon->isClosed() && ! newIcon->isClosed())
-			newIcon->closeGroup();
-		}
-	    }
-	}
+                // Change state of icon if necessary
+                if (oldIcon->isGroup()) {
+                    if (oldIcon->isOpen() && !newIcon->isOpen())
+                        newIcon->openGroup(FALSE);
+                    else if (oldIcon->isClosed() && !newIcon->isClosed())
+                        newIcon->closeGroup();
+                }
+            }
+        }
 
-	// If nodes had been deleted from the old display graph, the
-	// state of the graph can be inconsistent. Clean it up.
-	checkIconState(&icons[0], FALSE);
+        // If nodes had been deleted from the old display graph, the
+        // state of the graph can be inconsistent. Clean it up.
+        checkIconState(&icons[0], FALSE);
     }
 
     // Compute sizes and positions of icons
@@ -377,18 +376,18 @@ DisplayGraph::build(DisplayGraph *oldDisplayGraph)
     rootSep->addChild(lightModel);
 
     // Build the stuff to represent the lines connecting icons
-    coords  = new SoCoordinate3;
+    coords = new SoCoordinate3;
     lineSet = new SoIndexedLineSet;
     buildLines();
     rootSep->addChild(coords);
     rootSep->addChild(lineSet);
 
     // Build a line set to display instance connection
-    instSwitch	= new SoSwitch;
-    instSep	= new SoSeparator;
-    instColor	= new SoBaseColor;
-    instCoords	= new SoCoordinate3;
-    instLine	= new SoLineSet;
+    instSwitch = new SoSwitch;
+    instSep = new SoSeparator;
+    instColor = new SoBaseColor;
+    instCoords = new SoCoordinate3;
+    instLine = new SoLineSet;
     instColor->rgb.setValue(0.2, 0.2, 0.9);
     instSep->addChild(instColor);
     instSep->addChild(instCoords);
@@ -424,14 +423,13 @@ DisplayGraph::update()
     // Make sure the instance line (if any) is ok
     if (instShown != NULL) {
 
-	// Turn off line if either end is not visible
-	if (! instShown->isVisible() ||
-	    ! instShown->getInstance()->isVisible())
-	    toggleInstance(instShown);
+        // Turn off line if either end is not visible
+        if (!instShown->isVisible() || !instShown->getInstance()->isVisible())
+            toggleInstance(instShown);
 
-	// Otherwise, make sure coords are still correct
-	else
-	    setInstanceCoords();
+        // Otherwise, make sure coords are still correct
+        else
+            setInstanceCoords();
     }
 }
 
@@ -449,16 +447,16 @@ DisplayGraph::find(const SoPath *path)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    void	*iconPtr;
-    int		i;
+    void *iconPtr;
+    int   i;
 
     if (path == NULL)
-	return NULL;
+        return NULL;
 
     // Check nodes from tail of path toward head
     for (i = path->getLength() - 1; i >= 0; --i)
-	if (shapeDict.find((unsigned long) path->getNode(i), iconPtr))
-	    return (GraphIcon *) iconPtr;
+        if (shapeDict.find((unsigned long)path->getNode(i), iconPtr))
+            return (GraphIcon *)iconPtr;
 
     // Not found
     return NULL;
@@ -476,9 +474,9 @@ DisplayGraph::findFromScenePath(const SoPath *path)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    GraphIcon	*icon;
-    int		i, index;
-    SbBool	needUpdate = FALSE;
+    GraphIcon *icon;
+    int        i, index;
+    SbBool     needUpdate = FALSE;
 
     // Trace the icons down to the correct one. On the way, make sure
     // the icon is visible: no closed groups or instances.
@@ -486,37 +484,37 @@ DisplayGraph::findFromScenePath(const SoPath *path)
     icon = icons;
 
     if (icon->isClosed()) {
-	icon->openGroup(FALSE);
-	needUpdate = TRUE;
+        icon->openGroup(FALSE);
+        needUpdate = TRUE;
     }
 
     for (i = 1; i < path->getLength(); i++) {
 
-	index = path->getIndex(i);
+        index = path->getIndex(i);
 
-	if (! icon->isGroup() || index >= icon->getNumChildren()) {
-	    fprintf(stderr, "Yipes! bad path in findFromScenePath()\n");
-	    return icon;
-	}
+        if (!icon->isGroup() || index >= icon->getNumChildren()) {
+            fprintf(stderr, "Yipes! bad path in findFromScenePath()\n");
+            return icon;
+        }
 
-	icon = icon->getChild(index);
+        icon = icon->getChild(index);
 
-	// Last icon can be closed or an instance
-	if (i < path->getLength() - 1) {
-	    if (icon->isClosed()) {
-		icon->openGroup(FALSE);
-		needUpdate = TRUE;
-	    }
+        // Last icon can be closed or an instance
+        if (i < path->getLength() - 1) {
+            if (icon->isClosed()) {
+                icon->openGroup(FALSE);
+                needUpdate = TRUE;
+            }
 
-	    else if (icon->isInstance()) {
-		swapInstance(icon);
-		needUpdate = TRUE;
-	    }
-	}
+            else if (icon->isInstance()) {
+                swapInstance(icon);
+                needUpdate = TRUE;
+            }
+        }
     }
 
     if (needUpdate)
-	update();
+        update();
 
     return icon;
 }
@@ -536,19 +534,19 @@ DisplayGraph::toggleInstance(GraphIcon *icon)
     // If there already is an instance showing and it is this icon,
     // just turn it off
     if (instShown == icon) {
-	instSwitch->whichChild = SO_SWITCH_NONE;
-	instShown = NULL;
-	return TRUE;
+        instSwitch->whichChild = SO_SWITCH_NONE;
+        instShown = NULL;
+        return TRUE;
     }
 
     // Find node this icon is an instance of
-    GraphIcon	*instanceOf = icon->getInstance();
+    GraphIcon *instanceOf = icon->getInstance();
 
     // Make sure that node is visible
-    if (! instanceOf->isVisible()) {
-	makeIconVisible(instanceOf);
-	// Recompute positions and all
-	update();
+    if (!instanceOf->isVisible()) {
+        makeIconVisible(instanceOf);
+        // Recompute positions and all
+        update();
     }
 
     // Save the pointer for later
@@ -575,14 +573,14 @@ DisplayGraph::swapInstance(GraphIcon *instanceIcon)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    GraphIcon	*instanceOf, *icon;
-    int		i;
+    GraphIcon *instanceOf, *icon;
+    int        i;
 
     instanceOf = instanceIcon->getInstance();
 
     // Make sure the instance line is still valid, if present
     if (instShown == instanceIcon)
-	instShown = instanceIcon->getInstance();
+        instShown = instanceIcon->getInstance();
 
     // Swap the icon stuff
     instanceIcon->swapInstance();
@@ -590,8 +588,8 @@ DisplayGraph::swapInstance(GraphIcon *instanceIcon)
     // If any other icons were instances of the other icon, make them
     // instances of the given icon
     for (i = 0, icon = icons; i < numIcons; i++, icon++)
-	if (icon->getInstance() == instanceOf)
-	    icon->setInstance(instanceIcon);
+        if (icon->getInstance() == instanceOf)
+            icon->setInstance(instanceIcon);
 
     // Recompute positions and all
     update();
@@ -609,12 +607,12 @@ DisplayGraph::findPathToIcon(SoNode *root, GraphIcon *icon)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoSearchAction	sa;
-    SoPath		*path;
+    SoSearchAction sa;
+    SoPath *       path;
 
     // This may be called with a NULL icon pointer.
     if (icon == NULL)
-	return NULL;
+        return NULL;
 
     sa.setNode(icon->getIconRoot());
     sa.setInterest(SoSearchAction::FIRST);
@@ -624,8 +622,8 @@ DisplayGraph::findPathToIcon(SoNode *root, GraphIcon *icon)
     path = sa.getPath();
 
     if (path == NULL) {
-	fprintf(stderr, "Yow! Can't find path to node!\n");
-	return NULL;
+        fprintf(stderr, "Yow! Can't find path to node!\n");
+        return NULL;
     }
 
     path->ref();
@@ -646,190 +644,190 @@ DisplayGraph::findPathToIcon(SoNode *root, GraphIcon *icon)
 //
 
 SbBool
-DisplayGraph::getPasteLocation(float x, float y,
-			       GraphIcon *&parentIcon, int &childIndex, 
-			       float &xFeedback, float &yFeedback)
+DisplayGraph::getPasteLocation(float x, float y, GraphIcon *&parentIcon,
+                               int &childIndex, float &xFeedback,
+                               float &yFeedback)
 //
 ////////////////////////////////////////////////////////////////////////
 {
 // X coordinate of feedback to right of given icon
-#define NEXT_X_RIGHT(rightIcon)						      \
-	(rightIcon->getPosition()[0] +					      \
-	 .5 * (rightIcon->getSubgraphSize()[0] + iconSpacing[0]))
+#define NEXT_X_RIGHT(rightIcon)                                                \
+    (rightIcon->getPosition()[0] +                                             \
+     .5 * (rightIcon->getSubgraphSize()[0] + iconSpacing[0]))
 
 // X coordinate of feedback to left of given icon
-#define NEXT_X_LEFT(leftIcon)						      \
-	(leftIcon->getPosition()[0] -					      \
-	 .5 * (leftIcon->getSubgraphSize()[0] + iconSpacing[0]))
+#define NEXT_X_LEFT(leftIcon)                                                  \
+    (leftIcon->getPosition()[0] -                                              \
+     .5 * (leftIcon->getSubgraphSize()[0] + iconSpacing[0]))
 
 // X coordinate of feedback between given icons
-#define X_BETWEEN(leftIcon, rightIcon)					      \
-	(.5 * (leftIcon->getPosition()[0] + rightIcon->getPosition()[0]))
+#define X_BETWEEN(leftIcon, rightIcon)                                         \
+    (.5 * (leftIcon->getPosition()[0] + rightIcon->getPosition()[0]))
 
 // Y coordinate of feedback to left or right of given icon
-#define NEXT_Y(icon)	(icon->getPosition()[1] - .5 * icon->getSize()[1])
+#define NEXT_Y(icon) (icon->getPosition()[1] - .5 * icon->getSize()[1])
 
-    GraphIcon	*icon, *nextChild, *lastChild;
-    SbVec2f	point(x, y);
-    float	xPos, yPos, xSize, ySize;
-    float	xl, xr, xFudge, yb, yt;
-    SbBox2f	iconBox;
-    int		index, i;
+    GraphIcon *icon, *nextChild, *lastChild;
+    SbVec2f    point(x, y);
+    float      xPos, yPos, xSize, ySize;
+    float      xl, xr, xFudge, yb, yt;
+    SbBox2f    iconBox;
+    int        index, i;
 
     for (i = 0, icon = icons; i < numIcons; i++, icon++) {
 
-	if (! icon->isVisible())
-	    continue;
+        if (!icon->isVisible())
+            continue;
 
-	// Find the extent of the icon bounding box
-	icon->getPosition(xPos, yPos);
-	icon->getSize(xSize, ySize);
-	xl = xPos - .5 * xSize;
-	xr = xPos + .5 * xSize;
-	yb = yPos - ySize;
-	yt = yPos;
-	iconBox.setBounds(xl, yb, xr, yt);
+        // Find the extent of the icon bounding box
+        icon->getPosition(xPos, yPos);
+        icon->getSize(xSize, ySize);
+        xl = xPos - .5 * xSize;
+        xr = xPos + .5 * xSize;
+        yb = yPos - ySize;
+        yt = yPos;
+        iconBox.setBounds(xl, yb, xr, yt);
 
-	//------------------------------------------------------------------
-	// The point is on the icon
-	//------------------------------------------------------------------
+        //------------------------------------------------------------------
+        // The point is on the icon
+        //------------------------------------------------------------------
 
-	if (iconBox.intersect(point)) {
+        if (iconBox.intersect(point)) {
 
-	    // See if it's a group
-	    if (icon->isGroup()) {
+            // See if it's a group
+            if (icon->isGroup()) {
 
-		parentIcon = icon;
+                parentIcon = icon;
 
-		// If group has no children, draw feedback below icon
-		if (icon->getNumChildren() == 0) {
-		    childIndex = 0;
-		    xFeedback = xPos;
-		    yFeedback = yb - iconSpacing[1];
-		    return TRUE;
-		}
+                // If group has no children, draw feedback below icon
+                if (icon->getNumChildren() == 0) {
+                    childIndex = 0;
+                    xFeedback = xPos;
+                    yFeedback = yb - iconSpacing[1];
+                    return TRUE;
+                }
 
-		// If open group, draw feedback to right of last child
-		else if (icon->isOpen()) {
-		    childIndex = icon->getNumChildren();
-		    lastChild = icon->getChild(childIndex - 1);
-		    xFeedback = NEXT_X_RIGHT(lastChild);
-		    yFeedback = NEXT_Y(lastChild);
-		}
+                // If open group, draw feedback to right of last child
+                else if (icon->isOpen()) {
+                    childIndex = icon->getNumChildren();
+                    lastChild = icon->getChild(childIndex - 1);
+                    xFeedback = NEXT_X_RIGHT(lastChild);
+                    yFeedback = NEXT_Y(lastChild);
+                }
 
-		// If closed group, draw feedback below icon
-		else {
-		    childIndex = icon->getNumChildren();
-		    xFeedback = xPos;
-		    yFeedback = yb - iconSpacing[1];
-		}
+                // If closed group, draw feedback below icon
+                else {
+                    childIndex = icon->getNumChildren();
+                    xFeedback = xPos;
+                    yFeedback = yb - iconSpacing[1];
+                }
 
-		return TRUE;
-	    }
+                return TRUE;
+            }
 
-	    // If non-group, draw feedback halfway to next sibling (if
-	    // any) to right or left, depending on whether the cursor
-	    // is to the right or left of the center of the icon
-	    else {
-		parentIcon = icon->getParent();
-		index = icon->getChildIndex();
+            // If non-group, draw feedback halfway to next sibling (if
+            // any) to right or left, depending on whether the cursor
+            // is to the right or left of the center of the icon
+            else {
+                parentIcon = icon->getParent();
+                index = icon->getChildIndex();
 
-		// Cursor is on left side
-		if (x < xPos) {
-		    childIndex = index;
+                // Cursor is on left side
+                if (x < xPos) {
+                    childIndex = index;
 
-		    if (index == 0)
-			xFeedback = NEXT_X_LEFT(icon);
-		    else {
-			nextChild = parentIcon->getChild(index - 1);
-			xFeedback = X_BETWEEN(nextChild, icon);
-		    }
-		}
+                    if (index == 0)
+                        xFeedback = NEXT_X_LEFT(icon);
+                    else {
+                        nextChild = parentIcon->getChild(index - 1);
+                        xFeedback = X_BETWEEN(nextChild, icon);
+                    }
+                }
 
-		// Cursor is on right side
-		else {
-		    childIndex = index + 1;
+                // Cursor is on right side
+                else {
+                    childIndex = index + 1;
 
-		    if (index == parentIcon->getNumChildren() - 1)
-			xFeedback = NEXT_X_RIGHT(icon);
-		    else {
-			nextChild = parentIcon->getChild(index + 1);
-			xFeedback = X_BETWEEN(icon, nextChild);
-		    }
-		}
+                    if (index == parentIcon->getNumChildren() - 1)
+                        xFeedback = NEXT_X_RIGHT(icon);
+                    else {
+                        nextChild = parentIcon->getChild(index + 1);
+                        xFeedback = X_BETWEEN(icon, nextChild);
+                    }
+                }
 
-		yFeedback = yPos - .5 * ySize;
+                yFeedback = yPos - .5 * ySize;
 
-		return TRUE;
-	    }
-	}
+                return TRUE;
+            }
+        }
 
-	//------------------------------------------------------------------
-	// The point is NOT on the icon, but it may be close enuf to one side
-	//------------------------------------------------------------------
+        //------------------------------------------------------------------
+        // The point is NOT on the icon, but it may be close enuf to one side
+        //------------------------------------------------------------------
 
-	if ((parentIcon = icon->getParent()) != NULL) {
-	    index = icon->getChildIndex();
+        if ((parentIcon = icon->getParent()) != NULL) {
+            index = icon->getChildIndex();
 
-	    // If this is the first child of a group, see if the point
-	    // is close enough to its left
-	    if (index == 0)
-		xFudge = 0.5 * icon->getSubgraphSize()[0] + iconSpacing[0];
+            // If this is the first child of a group, see if the point
+            // is close enough to its left
+            if (index == 0)
+                xFudge = 0.5 * icon->getSubgraphSize()[0] + iconSpacing[0];
 
-	    // Otherwise, see if the point is between it and the next
-	    // icon to the left
-	    else {
-		nextChild = parentIcon->getChild(index - 1);
-		xFudge = xPos - nextChild->getPosition()[0];
-	    }
+            // Otherwise, see if the point is between it and the next
+            // icon to the left
+            else {
+                nextChild = parentIcon->getChild(index - 1);
+                xFudge = xPos - nextChild->getPosition()[0];
+            }
 
-	    iconBox.setBounds(xPos - xFudge, yb, xl, yt);
+            iconBox.setBounds(xPos - xFudge, yb, xl, yt);
 
-	    if (iconBox.intersect(point)) {
-		childIndex = index;
-		if (index == 0)
-		    xFeedback = NEXT_X_LEFT(icon);
-		else
-		    xFeedback = X_BETWEEN(icon, nextChild);
-		yFeedback = yPos - .5 * ySize;
-		return TRUE;
-	    }
+            if (iconBox.intersect(point)) {
+                childIndex = index;
+                if (index == 0)
+                    xFeedback = NEXT_X_LEFT(icon);
+                else
+                    xFeedback = X_BETWEEN(icon, nextChild);
+                yFeedback = yPos - .5 * ySize;
+                return TRUE;
+            }
 
-	    // If this is the last child of a group, see if the point
-	    // is close enough to its right
-	    if (index == parentIcon->getNumChildren() - 1) {
-		xFudge = 0.5 * (icon->getSubgraphSize()[0] + iconSpacing[0]);
+            // If this is the last child of a group, see if the point
+            // is close enough to its right
+            if (index == parentIcon->getNumChildren() - 1) {
+                xFudge = 0.5 * (icon->getSubgraphSize()[0] + iconSpacing[0]);
 
-		iconBox.setBounds(xr, yb, xPos + xFudge, yt);
+                iconBox.setBounds(xr, yb, xPos + xFudge, yt);
 
-		if (iconBox.intersect(point)) {
-		    childIndex = index + 1;
-		    xFeedback = xPos + xFudge;
-		    yFeedback = yPos - .5 * ySize;
-		    return TRUE;
-		}
-	    }
-	}
+                if (iconBox.intersect(point)) {
+                    childIndex = index + 1;
+                    xFeedback = xPos + xFudge;
+                    yFeedback = yPos - .5 * ySize;
+                    return TRUE;
+                }
+            }
+        }
 
-	//------------------------------------------------------------------
-	// Now see if it is below a closed or childless group icon
-	//------------------------------------------------------------------
+        //------------------------------------------------------------------
+        // Now see if it is below a closed or childless group icon
+        //------------------------------------------------------------------
 
-	// See if the point is close below a closed or childless group
-	if (icon->isGroup() &&
-	    (icon->isClosed() || icon->getNumChildren() == 0)) {
+        // See if the point is close below a closed or childless group
+        if (icon->isGroup() &&
+            (icon->isClosed() || icon->getNumChildren() == 0)) {
 
-	    iconBox.setBounds(xl, yb - iconSpacing[1], xr, yb);
+            iconBox.setBounds(xl, yb - iconSpacing[1], xr, yb);
 
-	    if (iconBox.intersect(point)) {
-		parentIcon = icon;
-		childIndex = icon->getNumChildren();
-		xFeedback = xPos;
-		yFeedback = yb - iconSpacing[1];
+            if (iconBox.intersect(point)) {
+                parentIcon = icon;
+                childIndex = icon->getNumChildren();
+                xFeedback = xPos;
+                yFeedback = yb - iconSpacing[1];
 
-		return TRUE;
-	    }
-	}
+                return TRUE;
+            }
+        }
     }
 
     //------------------------------------------------------------------
@@ -855,19 +853,19 @@ DisplayGraph::countNodes(const SoNode *root)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int	num = 1;
+    int num = 1;
 
     // See if node was already counted - if so, it's an instance
-    if (! nodeDict.enter((unsigned long) root, (void *) 1))
-	;
+    if (!nodeDict.enter((unsigned long)root, (void *)1))
+        ;
 
     // Count children if this node is a group
     else if (root->isOfType(SoGroup::getClassTypeId())) {
-	const SoGroup	*g = (const SoGroup *) root;
-	int		i;
+        const SoGroup *g = (const SoGroup *)root;
+        int            i;
 
-	for (i = 0; i < g->getNumChildren(); i++)
-	    num += countNodes(g->getChild(i));
+        for (i = 0; i < g->getNumChildren(); i++)
+            num += countNodes(g->getChild(i));
     }
 
     return num;
@@ -885,16 +883,16 @@ DisplayGraph::checkIconState(GraphIcon *root, SbBool shouldBeHidden)
 ////////////////////////////////////////////////////////////////////////
 {
     if (shouldBeHidden && root->isVisible())
-	root->hide();
+        root->hide();
 
     // Hide children if necessary
     if (root->isGroup()) {
 
-	if (! shouldBeHidden && root->isClosed())
-	    shouldBeHidden = TRUE;
+        if (!shouldBeHidden && root->isClosed())
+            shouldBeHidden = TRUE;
 
-	for (int i = 0; i < root->getNumChildren(); i++)
-	    checkIconState(root->getChild(i), shouldBeHidden);
+        for (int i = 0; i < root->getNumChildren(); i++)
+            checkIconState(root->getChild(i), shouldBeHidden);
     }
 }
 
@@ -910,86 +908,82 @@ DisplayGraph::buildLines()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int			numVisible, numLines, i, j, c;
-    SbVec3f		*pts;
-    int32_t		*inds;
-    GraphIcon		*icon;
-    float		hy, yBar, x, y, sx, sy, cx1, cy1, cx2, cy2;
+    int        numVisible, numLines, i, j, c;
+    SbVec3f *  pts;
+    int32_t *  inds;
+    GraphIcon *icon;
+    float      hy, yBar, x, y, sx, sy, cx1, cy1, cx2, cy2;
 
     // Count non-hidden icons
     numVisible = 0;
     for (i = 0; i < numIcons; i++)
-	if (icons[i].isVisible())
-	    numVisible++;
+        if (icons[i].isVisible())
+            numVisible++;
 
     // All nodes except the root have 1 line above them
     numLines = numVisible - 1;
 
     // All open groups with > 1 children have 2 lines below them
     for (i = 0; i < numIcons; i++)
-	if (icons[i].isGroup() &&
-	    icons[i].getNumChildren() > 1 &&
-	    icons[i].isOpen())
-	    numLines += 2;
+        if (icons[i].isGroup() && icons[i].getNumChildren() > 1 &&
+            icons[i].isOpen())
+            numLines += 2;
 
     // No groups? We're done!
     if (numLines <= 0) {
-	lineSet->coordIndex.deleteValues(0);
-	return;
+        lineSet->coordIndex.deleteValues(0);
+        return;
     }
 
-    hy   = iconSpacing[1] / 2.0;
-    pts  = new SbVec3f[numLines * 2];
+    hy = iconSpacing[1] / 2.0;
+    pts = new SbVec3f[numLines * 2];
     inds = new int32_t[numLines * 3];
 
     // Fill in coordinates
     for (i = c = 0, icon = icons; i < numIcons; i++, icon++) {
 
-	icon->getPosition(x, y);
-	icon->getSize(sx, sy);
+        icon->getPosition(x, y);
+        icon->getSize(sx, sy);
 
-	if (icons[i].isGroup() &&
-	    icons[i].getNumChildren() > 1 &&
-	    icons[i].isOpen()) {
+        if (icons[i].isGroup() && icons[i].getNumChildren() > 1 &&
+            icons[i].isOpen()) {
 
-	    yBar = y - sy - hy;
+            yBar = y - sy - hy;
 
-	    // Line from top icon down
-	    pts[c+0].setValue(x, yBar + hy, 0.0);
-	    pts[c+1].setValue(x, yBar, 0.0);
+            // Line from top icon down
+            pts[c + 0].setValue(x, yBar + hy, 0.0);
+            pts[c + 1].setValue(x, yBar, 0.0);
 
-	    // Horizontal bar
-	    icon->getChild(0)->getPosition(cx1, cy1);
-	    icon->getChild(icon->getNumChildren() - 1)->getPosition(cx2, cy2);
-	    pts[c+2].setValue(cx1, yBar, 0.0);
-	    pts[c+3].setValue(cx2, yBar, 0.0);
-	    c += 4;
+            // Horizontal bar
+            icon->getChild(0)->getPosition(cx1, cy1);
+            icon->getChild(icon->getNumChildren() - 1)->getPosition(cx2, cy2);
+            pts[c + 2].setValue(cx1, yBar, 0.0);
+            pts[c + 3].setValue(cx2, yBar, 0.0);
+            c += 4;
 
-	    for (j = 0; j < icons[i].getNumChildren(); j++) {
-		icon->getChild(j)->getPosition(cx1, cy1);
-		pts[c+0].setValue(cx1, yBar, 0.0);
-		pts[c+1].setValue(cx1, cy1, 0.0);
-		c += 2;
-	    }
-	}
-	else if (icons[i].isGroup() &&
-		 icons[i].getNumChildren() == 1 &&
-		 icons[i].isOpen()) {
-	    // Line from top icon down to child
-	    icon->getChild(0)->getPosition(cx1, cy1);
-	    pts[c+0].setValue(x, y - sy, 0.0);
-	    pts[c+1].setValue(cx1, cy1, 0.0);
-	    c += 2;
-	}
+            for (j = 0; j < icons[i].getNumChildren(); j++) {
+                icon->getChild(j)->getPosition(cx1, cy1);
+                pts[c + 0].setValue(cx1, yBar, 0.0);
+                pts[c + 1].setValue(cx1, cy1, 0.0);
+                c += 2;
+            }
+        } else if (icons[i].isGroup() && icons[i].getNumChildren() == 1 &&
+                   icons[i].isOpen()) {
+            // Line from top icon down to child
+            icon->getChild(0)->getPosition(cx1, cy1);
+            pts[c + 0].setValue(x, y - sy, 0.0);
+            pts[c + 1].setValue(cx1, cy1, 0.0);
+            c += 2;
+        }
     }
 
     // Fill in indices
     c = 0;
     for (i = 0; i < numLines; i++) {
-	inds[c+0] = i * 2;
-	inds[c+1] = i * 2 + 1;
-	inds[c+2] = SO_END_LINE_INDEX;
-	c += 3;
+        inds[c + 0] = i * 2;
+        inds[c + 1] = i * 2 + 1;
+        inds[c + 2] = SO_END_LINE_INDEX;
+        c += 3;
     }
 
     coords->point.setValues(0, numLines * 2, pts);
@@ -997,7 +991,7 @@ DisplayGraph::buildLines()
 
     // Delete old values if not needed any more
     if (lineSet->coordIndex.getNum() > numLines * 3)
-	lineSet->coordIndex.deleteValues(numLines * 3);
+        lineSet->coordIndex.deleteValues(numLines * 3);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1013,11 +1007,11 @@ DisplayGraph::makeIconVisible(GraphIcon *icon)
 {
     // Could this be called on the root? I think not! It's always visible!
     if (icon->getParent() == NULL)
-	return;
+        return;
 
     // Make sure parent is visible
-    if (! icon->getParent()->isVisible())
-	makeIconVisible(icon->getParent());
+    if (!icon->getParent()->isVisible())
+        makeIconVisible(icon->getParent());
 
     // Make sure parent is open
     icon->getParent()->openGroup(FALSE);
@@ -1036,11 +1030,11 @@ DisplayGraph::setInstanceCoords()
 ////////////////////////////////////////////////////////////////////////
 {
     // Find node the shown instance icon is an instance of
-    GraphIcon	*instanceOf = instShown->getInstance();
+    GraphIcon *instanceOf = instShown->getInstance();
 
     // Set instance line to join the center of the two icons
-    float	x1, y1, x2, y2;
-    float	sx1, sy1, sx2, sy2;
+    float x1, y1, x2, y2;
+    float sx1, sy1, sx2, sy2;
     instShown->getPosition(x1, y1);
     instShown->getSize(sx1, sy1);
     instanceOf->getPosition(x2, y2);
@@ -1049,8 +1043,10 @@ DisplayGraph::setInstanceCoords()
     y1 -= sy1 / 2.0;
     y2 -= sy2 / 2.0;
     instCoords->point.set1Value(0, x1, y1, 0.0);
-    instCoords->point.set1Value(1, x1 + .2 * (x2-x1), y1 + .2 * (y2-y1), 3.0);
-    instCoords->point.set1Value(2, x1 + .8 * (x2-x1), y1 + .8 * (y2-y1), 3.0);
+    instCoords->point.set1Value(1, x1 + .2 * (x2 - x1), y1 + .2 * (y2 - y1),
+                                3.0);
+    instCoords->point.set1Value(2, x1 + .8 * (x2 - x1), y1 + .8 * (y2 - y1),
+                                3.0);
     instCoords->point.set1Value(3, x2, y2, 0.0);
 }
 
@@ -1070,15 +1066,15 @@ DisplayGraph::findIconGraph(SoNode *node)
     // always has a valid icon, this loop will always terminate
     // successfully.
 
-    SoType	type;
-    void	*graphPtr;
+    SoType type;
+    void * graphPtr;
 
     type = node->getTypeId();
 
     while (TRUE) {
-	if (iconDict->find((unsigned long) * (int *) &type, graphPtr))
-	    return (SoNode *) graphPtr;
+        if (iconDict->find((unsigned long)*(int *)&type, graphPtr))
+            return (SoNode *)graphPtr;
 
-	type = type.getParent();
+        type = type.getParent();
     }
 }

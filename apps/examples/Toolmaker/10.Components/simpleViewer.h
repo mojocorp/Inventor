@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -52,72 +52,69 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SIMPLE_VIEWER_
-#define  _SIMPLE_VIEWER_
+#ifndef _SIMPLE_VIEWER_
+#define _SIMPLE_VIEWER_
 
 #include <Inventor/Xt/viewers/SoXtFullViewer.h>
 #include <Inventor/SbLinear.h>
-
 
 //////////////////////////////////////////////////////////////////////////////
 //
 //  Class: simpleViewer
 //
-//	simpleViewer - viewer which translates the camera 
+//	simpleViewer - viewer which translates the camera
 //  in the viewer plane.
 //
 //////////////////////////////////////////////////////////////////////////////
 
 class simpleViewer : public SoXtFullViewer {
- public:
+  public:
     // constructor/destructor
-    simpleViewer(
-	Widget parent = NULL,
-	const char *name = NULL, 
-	SbBool buildInsideParent = TRUE, 
-	SoXtFullViewer::BuildFlag flag = BUILD_ALL, 
-	SoXtViewer::Type type = BROWSER);
+    simpleViewer(Widget parent = NULL, const char *name = NULL,
+                 SbBool                    buildInsideParent = TRUE,
+                 SoXtFullViewer::BuildFlag flag = BUILD_ALL,
+                 SoXtViewer::Type          type = BROWSER);
     ~simpleViewer();
-    
+
     // redefine this to also change the cursor (viewerCursor)
-    virtual void	setViewing(SbBool onOrOff);
-    
- protected:
+    virtual void setViewing(SbBool onOrOff);
+
+  protected:
     // redefine this to process the events
-    virtual void	processEvent(XAnyEvent *anyevent);
-    
+    virtual void processEvent(XAnyEvent *anyevent);
+
     // redefine this to also change the cursor (seekCursor)
-    virtual void	setSeekMode(SbBool onOrOff);
-    
+    virtual void setSeekMode(SbBool onOrOff);
+
     // Define those thumb wheels to translate in the viewer plane
-    virtual void    	bottomWheelMotion(float newVal);
-    virtual void    	leftWheelMotion(float newVal);
-    virtual void    	rightWheelMotion(float newVal);
-    virtual void    	bottomWheelStart();
-    virtual void    	leftWheelStart();
-    
+    virtual void bottomWheelMotion(float newVal);
+    virtual void leftWheelMotion(float newVal);
+    virtual void rightWheelMotion(float newVal);
+    virtual void bottomWheelStart();
+    virtual void leftWheelStart();
+
     // redefine this to customize the preference sheet
-    virtual void	createPrefSheet();
-    
+    virtual void createPrefSheet();
+
     // Define this to bring the viewer help card
-    virtual void	openViewerHelpCard();
-    
- private:
+    virtual void openViewerHelpCard();
+
+  private:
     // viewer state variables
-    int		    mode;
-    SbBool	    createdCursors;
-    Cursor	    vwrCursor, seekCursor;
-    SbVec2s	    locator; // mouse position
-    
+    int     mode;
+    SbBool  createdCursors;
+    Cursor  vwrCursor, seekCursor;
+    SbVec2s locator; // mouse position
+
     // camera translation vars
-    SbVec3f	    locator3D;
-    SbPlane	    focalplane;
-    float	    transXspeed, transYspeed;
-    
-    void	    switchMode(int newMode);
-    void	    defineCursors();
-    void	    translateCamera();
-    void	    computeTranslateValues();
+    SbVec3f locator3D;
+    SbPlane focalplane;
+    float   transXspeed, transYspeed;
+
+    void switchMode(int newMode);
+    void defineCursors();
+    void translateCamera();
+    void computeTranslateValues();
 };
 
-#endif  /* _SIMPLE_VIEWER_ */
+#endif /* _SIMPLE_VIEWER_ */

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,7 +54,7 @@
 #include "FieldEditor.h"
 #include "GraphIcon.h"
 
-SoGetBoundingBoxAction	*GraphIcon::bboxAct;
+SoGetBoundingBoxAction *GraphIcon::bboxAct;
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -83,14 +83,14 @@ GraphIcon::GraphIcon()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    sceneNode	= NULL;
-    icon	= NULL;
-    iconGraph	= NULL;
-    numChildren	= -1;		// Not a group
-    children	= NULL;
-    instanceOf  = NULL;		// Not an instance
-    state	= HIDDEN;	// Not visible
-    fieldsShown	= FALSE;
+    sceneNode = NULL;
+    icon = NULL;
+    iconGraph = NULL;
+    numChildren = -1; // Not a group
+    children = NULL;
+    instanceOf = NULL; // Not an instance
+    state = HIDDEN;    // Not visible
+    fieldsShown = FALSE;
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -102,8 +102,7 @@ GraphIcon::GraphIcon()
 GraphIcon::~GraphIcon()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -117,11 +116,11 @@ GraphIcon::buildGraph()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoSeparator	*sep;
+    SoSeparator *sep;
 
-    sep		= new SoSeparator;
-    iconSwitch	= new SoSwitch;
-    translation	= new SoTranslation;
+    sep = new SoSeparator;
+    iconSwitch = new SoSwitch;
+    translation = new SoTranslation;
 
     // Translation value will be set when positions are computed
 
@@ -151,7 +150,7 @@ GraphIcon::computeSize(const SbVec2f &iconSpacing)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float	x, y, z;
+    float x, y, z;
 
     // Reset translation to keep bounding box at origin
     translation->translation.setValue(0.0, 0.0, 0.0);
@@ -169,34 +168,34 @@ GraphIcon::computeSize(const SbVec2f &iconSpacing)
     // to the icon size to get the subgraph size. Use the appropriate
     // spacing values.
     if (numChildren > 0 && state == NORMAL) {
-	int		i;
-	GraphIcon	*child;
-	SbVec2f		childrenSize(0.0, 0.0);
+        int        i;
+        GraphIcon *child;
+        SbVec2f    childrenSize(0.0, 0.0);
 
-	for (i = 0; i < numChildren; i++) {
+        for (i = 0; i < numChildren; i++) {
 
-	    child = &children[i];
+            child = &children[i];
 
-	    child->computeSize(iconSpacing);
+            child->computeSize(iconSpacing);
 
-	    // Keep track of maximum Y size
-	    if (child->subgraphSize[1] > childrenSize[1])
-		 childrenSize[1] = child->subgraphSize[1];
+            // Keep track of maximum Y size
+            if (child->subgraphSize[1] > childrenSize[1])
+                childrenSize[1] = child->subgraphSize[1];
 
-	    // Keep track of total X size
-	    childrenSize[0] += child->subgraphSize[0];
-	    if (i > 0)
-		childrenSize[0] += iconSpacing[0];
-	}
+            // Keep track of total X size
+            childrenSize[0] += child->subgraphSize[0];
+            if (i > 0)
+                childrenSize[0] += iconSpacing[0];
+        }
 
-	// The size in y is the y size of this icon + the maximum
-	// y size of the children's icons plus the vertical spacing.
-	// The size in x is the size of the children's icons, if
-	// bigger than this node's icon.
+        // The size in y is the y size of this icon + the maximum
+        // y size of the children's icons plus the vertical spacing.
+        // The size in x is the size of the children's icons, if
+        // bigger than this node's icon.
 
-	subgraphSize[1] += childrenSize[1] + iconSpacing[1];
-	if (childrenSize[0] > subgraphSize[0])
-	    subgraphSize[0] = childrenSize[0];
+        subgraphSize[1] += childrenSize[1] + iconSpacing[1];
+        if (childrenSize[0] > subgraphSize[0])
+            subgraphSize[0] = childrenSize[0];
     }
 }
 
@@ -208,47 +207,47 @@ GraphIcon::computeSize(const SbVec2f &iconSpacing)
 //
 
 void
-GraphIcon::computePosition(const SbVec2f thisPosition,
-			   const SbVec2f &iconSpacing)
+GraphIcon::computePosition(const SbVec2f  thisPosition,
+                           const SbVec2f &iconSpacing)
 //
 ////////////////////////////////////////////////////////////////////////
 {
     position = thisPosition;
 
     // Set translation to center of icon
-    translation->translation.setValue(position[0],
-				      position[1] - heightOffset,
-				      0.0);
+    translation->translation.setValue(position[0], position[1] - heightOffset,
+                                      0.0);
 
     // Compute visible children's positions
     if (numChildren > 0 && state == NORMAL) {
-	SbVec2f	childPosition;
+        SbVec2f childPosition;
 
-	// Height of children is below this one, figuring in the spacing
-	childPosition[1] = position[1] - (iconSize[1] + iconSpacing[1]);
+        // Height of children is below this one, figuring in the spacing
+        childPosition[1] = position[1] - (iconSize[1] + iconSpacing[1]);
 
-	// Just one child is easy
-	if (numChildren == 1) {
-	    childPosition[0] = position[0];
-	    children[0].computePosition(childPosition, iconSpacing);
-	}
+        // Just one child is easy
+        if (numChildren == 1) {
+            childPosition[0] = position[0];
+            children[0].computePosition(childPosition, iconSpacing);
+        }
 
-	// More than 1 child is a little harder
-	else {
-	    int	i;
+        // More than 1 child is a little harder
+        else {
+            int i;
 
-	    // Position of first child
-	    childPosition[0] = position[0] - 0.5 *
-		(subgraphSize[0] - children[0].subgraphSize[0]);
+            // Position of first child
+            childPosition[0] =
+                position[0] -
+                0.5 * (subgraphSize[0] - children[0].subgraphSize[0]);
 
-	    for (i = 0; i < numChildren; i++) {
-		children[i].computePosition(childPosition, iconSpacing);
-		childPosition[0] += (0.5 * children[i].subgraphSize[0] +
-				     iconSpacing[0]);
-		if (i < numChildren - 1)
-		    childPosition[0] += 0.5 * children[i+1].subgraphSize[0];
-	    }
-	}
+            for (i = 0; i < numChildren; i++) {
+                children[i].computePosition(childPosition, iconSpacing);
+                childPosition[0] +=
+                    (0.5 * children[i].subgraphSize[0] + iconSpacing[0]);
+                if (i < numChildren - 1)
+                    childPosition[0] += 0.5 * children[i + 1].subgraphSize[0];
+            }
+        }
     }
 }
 
@@ -266,8 +265,8 @@ GraphIcon::show()
 {
     // Change state if necessary
     if (state == HIDDEN) {
-	setState(NORMAL);
-	return TRUE;
+        setState(NORMAL);
+        return TRUE;
     }
 
     return FALSE;
@@ -287,8 +286,8 @@ GraphIcon::hide()
 {
     // Change state if necessary
     if (state != HIDDEN) {
-	setState(HIDDEN);
-	return TRUE;
+        setState(HIDDEN);
+        return TRUE;
     }
 
     return FALSE;
@@ -307,21 +306,21 @@ GraphIcon::openGroup(SbBool openAll)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SbBool	rebuild = FALSE;
+    SbBool rebuild = FALSE;
 
     // Change state
     if (state != NORMAL) {
-	setState(NORMAL);
-	rebuild = TRUE;
+        setState(NORMAL);
+        rebuild = TRUE;
     }
 
     // Open children if necessary
     if (openAll) {
-	int	i;
+        int i;
 
-	for (i = 0; i < numChildren; i++)
-	    if (children[i].openGroup(openAll))
-		rebuild = TRUE;
+        for (i = 0; i < numChildren; i++)
+            if (children[i].openGroup(openAll))
+                rebuild = TRUE;
     }
 
     return rebuild;
@@ -341,8 +340,8 @@ GraphIcon::closeGroup()
 {
     // Can't close it if it is already closed or it has no children
     if (state != CLOSED && numChildren > 0) {
-	setState(CLOSED);
-	return TRUE;
+        setState(CLOSED);
+        return TRUE;
     }
 
     return FALSE;
@@ -365,20 +364,20 @@ GraphIcon::toggleGroup()
 
     switch (state) {
 
-      case NORMAL:
-	setState(CLOSED);
-	rebuild = TRUE;
-	break;
+    case NORMAL:
+        setState(CLOSED);
+        rebuild = TRUE;
+        break;
 
-      case CLOSED:
-	// If it is currently closed, open it and display children
-	setState(NORMAL);
-	rebuild = TRUE;
-	break;
+    case CLOSED:
+        // If it is currently closed, open it and display children
+        setState(NORMAL);
+        rebuild = TRUE;
+        break;
 
-      case HIDDEN:
-	// Do nothing
-	break;
+    case HIDDEN:
+        // Do nothing
+        break;
     }
 
     return rebuild;
@@ -396,7 +395,7 @@ GraphIcon::swapInstance()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    GraphIcon	*otherIcon = instanceOf;
+    GraphIcon *otherIcon = instanceOf;
 
     // Set up instance connections in other direction
     otherIcon->setInstance(this);
@@ -410,12 +409,12 @@ GraphIcon::swapInstance()
     otherIcon->setState(NORMAL);
 
     if (otherIcon->isGroup()) {
-	setGroup(otherIcon->getNumChildren(), otherIcon->getChild(0));
-	otherIcon->setGroup(-1, NULL);
+        setGroup(otherIcon->getNumChildren(), otherIcon->getChild(0));
+        otherIcon->setGroup(-1, NULL);
 
-	// Reparent the children
-	for (int i = 0; i < numChildren; i++)
-	    children[i].setParent(this);
+        // Reparent the children
+        for (int i = 0; i < numChildren; i++)
+            children[i].setParent(this);
     }
 }
 
@@ -433,10 +432,10 @@ GraphIcon::showFields()
     // Don't do anything if fields are already displayed or there are
     // no fields in the node
     if (fieldsShown || FieldEditor::getNumFields(sceneNode) == 0)
-	return;
+        return;
 
     // Create and display an instance of the FieldEditor
-    FieldEditor	*editor = new FieldEditor(sceneNode);
+    FieldEditor *editor = new FieldEditor(sceneNode);
 
     editor->setFinishCallback(&GraphIcon::finishShowFieldsCB, this);
     editor->show();
@@ -460,33 +459,33 @@ GraphIcon::setState(IconState newState)
     // If this is not a group or it is a group with no children, never
     // set it to CLOSED (use NORMAL)
     if (numChildren <= 0) {
-	if (newState == CLOSED)
-	    state = NORMAL;
-	else
-	    state = newState;
+        if (newState == CLOSED)
+            state = NORMAL;
+        else
+            state = newState;
     }
 
     // Set the group's state
     else {
-	int		i;
-	IconState	childState;
+        int       i;
+        IconState childState;
 
-	state = newState;
+        state = newState;
 
-	// Set all children to appropriate state
+        // Set all children to appropriate state
 
-	switch (newState) {
-	  case NORMAL:
-	    childState = CLOSED;
-	    break;
-	  case CLOSED:
-	  case HIDDEN:
-	    childState = HIDDEN;
-	    break;
-	}
+        switch (newState) {
+        case NORMAL:
+            childState = CLOSED;
+            break;
+        case CLOSED:
+        case HIDDEN:
+            childState = HIDDEN;
+            break;
+        }
 
-	for (i = 0; i < numChildren; i++)
-	    children[i].setState(childState);
+        for (i = 0; i < numChildren; i++)
+            children[i].setState(childState);
     }
 
     setIconSwitch();
@@ -505,20 +504,20 @@ GraphIcon::setIconSwitch()
 {
     switch (state) {
 
-      case NORMAL:
-	if (isInstance())
-	    iconSwitch->whichChild = 2; // Use instance icon
-	else
-	    iconSwitch->whichChild = 0; // Use regular icon
-	break;
+    case NORMAL:
+        if (isInstance())
+            iconSwitch->whichChild = 2; // Use instance icon
+        else
+            iconSwitch->whichChild = 0; // Use regular icon
+        break;
 
-      case CLOSED:
-	iconSwitch->whichChild = 1; // Use closed icon
-	break;
+    case CLOSED:
+        iconSwitch->whichChild = 1; // Use closed icon
+        break;
 
-      case HIDDEN:
-	iconSwitch->whichChild = SO_SWITCH_NONE; // No icon!
-	break;
+    case HIDDEN:
+        iconSwitch->whichChild = SO_SWITCH_NONE; // No icon!
+        break;
     }
 }
 
@@ -533,5 +532,5 @@ GraphIcon::finishShowFieldsCB(void *userData, FieldEditor *)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    ((GraphIcon *) userData)->fieldsShown = FALSE;
+    ((GraphIcon *)userData)->fieldsShown = FALSE;
 }

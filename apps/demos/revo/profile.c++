@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -67,60 +67,57 @@ static LineManip2 *TheLineManip;
 //
 // The default coordinates for the line manipulator.
 //
-static float defaultCoords[2][3] =
-{
-    { 0.5,  0.2, 0.0 },
-    { 0.5, -0.2, 0.0 },
+static float defaultCoords[2][3] = {
+    {0.5, 0.2, 0.0},
+    {0.5, -0.2, 0.0},
 };
 
 //
 // Grid for window:
 //
 static char *GridString =
-"#Inventor V2.0 ascii\n"
-"Separator {"
-"	PickStyle { style UNPICKABLE }"
-"	LightModel { model BASE_COLOR }"
-"	BaseColor { rgb 0.2 0.2 0.2 }"
-"	Array {"
-"		numElements1 19"
-"		separation1 .1 0 0"
-"		origin CENTER"
-"		Coordinate3 { point [ 0 -1 0, 0 1 0 ] }"
-"		LineSet { numVertices [ 2 ] }"
-"	}"
-"	Array {"
-"		numElements1 19"
-"		separation1 0 .1 0"
-"		origin CENTER"
-"		Coordinate3 { point [ -1 0 0, 1 0 0 ] }"
-"		LineSet { numVertices [ 2 ] }"
-"	}"
-"	BaseColor { rgb 0.4 0.0 0.0 }"
-"	Coordinate3 { point [ -1.0 0.0 0.0, 1.0 0.0 0.0,"
-"			0.0 -1.0 0.0, 0.0 1.0 0.0 ]"
-"	}"
-"	LineSet { numVertices [ 2, 2 ] }"
-"}";
+    "#Inventor V2.0 ascii\n"
+    "Separator {"
+    "	PickStyle { style UNPICKABLE }"
+    "	LightModel { model BASE_COLOR }"
+    "	BaseColor { rgb 0.2 0.2 0.2 }"
+    "	Array {"
+    "		numElements1 19"
+    "		separation1 .1 0 0"
+    "		origin CENTER"
+    "		Coordinate3 { point [ 0 -1 0, 0 1 0 ] }"
+    "		LineSet { numVertices [ 2 ] }"
+    "	}"
+    "	Array {"
+    "		numElements1 19"
+    "		separation1 0 .1 0"
+    "		origin CENTER"
+    "		Coordinate3 { point [ -1 0 0, 1 0 0 ] }"
+    "		LineSet { numVertices [ 2 ] }"
+    "	}"
+    "	BaseColor { rgb 0.4 0.0 0.0 }"
+    "	Coordinate3 { point [ -1.0 0.0 0.0, 1.0 0.0 0.0,"
+    "			0.0 -1.0 0.0, 0.0 1.0 0.0 ]"
+    "	}"
+    "	LineSet { numVertices [ 2, 2 ] }"
+    "}";
 
 //
 // This is called when the mouse leaves the profile window.  It turns
 // off the line manip's hilights.
 //
 static void
-leaveProfileWindow(Widget, XtPointer mydata, XEvent *, Boolean *cont)
-{
+leaveProfileWindow(Widget, XtPointer mydata, XEvent *, Boolean *cont) {
     ((LineManip2 *)mydata)->removeHilights();
 
-    *cont = TRUE;	// Continue dispatching this event
+    *cont = TRUE; // Continue dispatching this event
 }
 
 //
 // Called to get rid of all the points added so far.
 //
 void
-clearPoints()
-{
+clearPoints() {
     SoCoordinate3 *coord = TheLineManip->getCoordinate3();
     coord->point.deleteValues(0);
 }
@@ -133,8 +130,7 @@ clearPoints()
 // normals needs to be generated, etc).
 //
 static void
-profileChangedCallback(void *data, SoSensor *)
-{
+profileChangedCallback(void *data, SoSensor *) {
     RevolutionSurface *s = (RevolutionSurface *)data;
 
     SoCoordinate3 *coord = TheLineManip->getCoordinate3();
@@ -147,8 +143,7 @@ profileChangedCallback(void *data, SoSensor *)
 // the profile window.
 //
 SoNode *
-createProfileGraph(Widget profileWidget, RevolutionSurface *surface)
-{
+createProfileGraph(Widget profileWidget, RevolutionSurface *surface) {
     SoSeparator *result = new SoSeparator;
     result->ref();
 
@@ -157,20 +152,19 @@ createProfileGraph(Widget profileWidget, RevolutionSurface *surface)
     c->position.setValue(0.5, 0.0, 1.0);
     c->nearDistance = 0.5;
     c->farDistance = 1.5;
-    c->focalDistance = 1.0;	
+    c->focalDistance = 1.0;
     c->height = 1.0;
 
     // Axes and labels (appear underneath the line manipulator)
     SoInput in;
     in.setBuffer(GridString, strlen(GridString));
-    SoNode *node;	
+    SoNode *node;
     SoDB::read(&in, node);
     SoSeparator *g1 = (SoSeparator *)node;
-    if (g1 != NULL)
-    {
-	result->addChild(g1);
-   	g1->renderCaching = SoSeparator::ON;
-   	g1->boundingBoxCaching = SoSeparator::ON;
+    if (g1 != NULL) {
+        result->addChild(g1);
+        g1->renderCaching = SoSeparator::ON;
+        g1->boundingBoxCaching = SoSeparator::ON;
     }
 
     SoSeparator *manipGroup = new SoSeparator;
@@ -179,7 +173,7 @@ createProfileGraph(Widget profileWidget, RevolutionSurface *surface)
     SoLightModel *lm = new SoLightModel;
     manipGroup->addChild(lm);
     lm->model = SoLightModel::BASE_COLOR;
- 
+
     SoMaterial *m = new SoMaterial;
     m->diffuseColor.setValue(0.0, 0.8, 0.8);
     manipGroup->addChild(m);
@@ -188,7 +182,7 @@ createProfileGraph(Widget profileWidget, RevolutionSurface *surface)
     TheLineManip->setHilightSize(0.02);
     manipGroup->addChild(TheLineManip);
     SoCoordinate3 *coord = TheLineManip->getCoordinate3();
-    SoNodeSensor *d = new SoNodeSensor(profileChangedCallback, surface);
+    SoNodeSensor * d = new SoNodeSensor(profileChangedCallback, surface);
     d->attach(coord);
     coord->point.setValues(0, 2, defaultCoords);
 
@@ -198,11 +192,10 @@ createProfileGraph(Widget profileWidget, RevolutionSurface *surface)
     //
     surface->createSurface(&coord->point);
 
-    XtAddEventHandler(profileWidget, LeaveWindowMask,
-		      FALSE, leaveProfileWindow, (XtPointer)TheLineManip);
+    XtAddEventHandler(profileWidget, LeaveWindowMask, FALSE, leaveProfileWindow,
+                      (XtPointer)TheLineManip);
 
     result->unrefNoDelete();
 
     return result;
 }
-

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -45,15 +45,15 @@
 
 class MFDouble : public SoMField {
 
-   // This macro is just like the one for single-value fields.
-   SO_MFIELD_HEADER(MFDouble, double, double);
+    // This macro is just like the one for single-value fields.
+    SO_MFIELD_HEADER(MFDouble, double, double);
 
- public:
-   static void    initClass();
+  public:
+    static void initClass();
 
- private:
-   // This returns the number of ASCII values to write per
-   // output line. It can be used to produce more compact
-   // output files for fields containing small value types.
-   virtual int    getNumValuesPerLine() const;
+  private:
+    // This returns the number of ASCII values to write per
+    // output line. It can be used to produce more compact
+    // output files for fields containing small value types.
+    virtual int getNumValuesPerLine() const;
 };

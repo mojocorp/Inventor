@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -58,8 +58,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 void
-IfTypes::getShapeTypes(SoTypeList *types)
-{
+IfTypes::getShapeTypes(SoTypeList *types) {
     types->append(SoShape::getClassTypeId());
     types->append(SoArray::getClassTypeId());
     types->append(SoMultipleCopy::getClassTypeId());
@@ -78,12 +77,11 @@ IfTypes::getShapeTypes(SoTypeList *types)
 /////////////////////////////////////////////////////////////////////////////
 
 SbBool
-IfTypes::isOpaqueGroupType(const SoType &type)
-{
-    return (type.isDerivedFrom(SoFile::getClassTypeId())		||
-	    type.isDerivedFrom(SoLevelOfDetail::getClassTypeId())	||
-	    type.isDerivedFrom(SoLOD::getClassTypeId())			||
-	    type.isDerivedFrom(SoWWWAnchor::getClassTypeId()));
+IfTypes::isOpaqueGroupType(const SoType &type) {
+    return (type.isDerivedFrom(SoFile::getClassTypeId()) ||
+            type.isDerivedFrom(SoLevelOfDetail::getClassTypeId()) ||
+            type.isDerivedFrom(SoLOD::getClassTypeId()) ||
+            type.isDerivedFrom(SoWWWAnchor::getClassTypeId()));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -94,12 +92,11 @@ IfTypes::isOpaqueGroupType(const SoType &type)
 /////////////////////////////////////////////////////////////////////////////
 
 SbBool
-IfTypes::isUnflattenableShape(const SoType &type)
-{
-    return (type.isDerivedFrom(SoLineSet::getClassTypeId())		||
-	    type.isDerivedFrom(SoIndexedLineSet::getClassTypeId())	||
-	    type.isDerivedFrom(SoPointSet::getClassTypeId())		||
-	    type.isDerivedFrom(SoText2::getClassTypeId()));
+IfTypes::isUnflattenableShape(const SoType &type) {
+    return (type.isDerivedFrom(SoLineSet::getClassTypeId()) ||
+            type.isDerivedFrom(SoIndexedLineSet::getClassTypeId()) ||
+            type.isDerivedFrom(SoPointSet::getClassTypeId()) ||
+            type.isDerivedFrom(SoText2::getClassTypeId()));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -109,10 +106,9 @@ IfTypes::isUnflattenableShape(const SoType &type)
 /////////////////////////////////////////////////////////////////////////////
 
 SbBool
-IfTypes::isShape(const SoType &type)
-{
-    return (type.isDerivedFrom(SoShape::getClassTypeId())		||
-	    type.isDerivedFrom(SoArray::getClassTypeId())		||
-	    type.isDerivedFrom(SoMultipleCopy::getClassTypeId())	||
-	    type.isDerivedFrom(SoWWWInline::getClassTypeId()));
+IfTypes::isShape(const SoType &type) {
+    return (type.isDerivedFrom(SoShape::getClassTypeId()) ||
+            type.isDerivedFrom(SoArray::getClassTypeId()) ||
+            type.isDerivedFrom(SoMultipleCopy::getClassTypeId()) ||
+            type.isDerivedFrom(SoWWWInline::getClassTypeId()));
 }

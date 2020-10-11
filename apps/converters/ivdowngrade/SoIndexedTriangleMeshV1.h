@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -54,8 +54,8 @@
  _______________________________________________________________________
  */
 
-#ifndef  _SO_V1INDEXEDTRIANGLEMESH_
-#define  _SO_V1INDEXEDTRIANGLEMESH_
+#ifndef _SO_V1INDEXEDTRIANGLEMESH_
+#define _SO_V1INDEXEDTRIANGLEMESH_
 
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/fields/SoMFInt32.h>
@@ -66,8 +66,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#define SO_END_MESH_INDEX	(-1)	/* End of mesh; start of next one */
-#define SO_SWAP_MESH_INDEX	(-2)	/* Swaps vertices */
+#define SO_END_MESH_INDEX (-1)  /* End of mesh; start of next one */
+#define SO_SWAP_MESH_INDEX (-2) /* Swaps vertices */
 
 class SoIndexedTriangleStripSet;
 
@@ -77,19 +77,20 @@ class SoIndexedTriangleMeshV1 : public SoNode {
 
   public:
     // Fields
-    SoMFInt32		coordIndex;
-    SoMFInt32		materialIndex;
-    SoMFInt32		normalIndex;
-    SoMFInt32		textureCoordIndex;
+    SoMFInt32 coordIndex;
+    SoMFInt32 materialIndex;
+    SoMFInt32 normalIndex;
+    SoMFInt32 textureCoordIndex;
 
     // Constructor
     SoIndexedTriangleMeshV1();
 
     // Convert the 2.0 tri strip set to a 1.0 tmesh
-    static SoNode *	downgrade(SoIndexedTriangleStripSet *tstrip);
-    
-  SoINTERNAL public:
-    static void		initClass();
+    static SoNode *downgrade(SoIndexedTriangleStripSet *tstrip);
+
+    SoINTERNAL
+  public:
+    static void initClass();
 };
 
 #endif /* _SO_V1INDEXEDTRIANGLEMESH_ */

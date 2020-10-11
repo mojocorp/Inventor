@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -47,10 +47,10 @@
  |   Description:
  |      Defines these classes for creating links to be used in linkages.
  |
- |      Link             
- |      RivetHinge       
- |      Crank       
- |      Piston       
+ |      Link
+ |      RivetHinge
+ |      Crank
+ |      Piston
  |
  |   Author(s)          : Paul Isaacs
  |
@@ -58,8 +58,8 @@
  _______________________________________________________________________
 */
 
-#ifndef  _SO_LINK_CLASSES_
-#define  _SO_LINK_CLASSES_
+#ifndef _SO_LINK_CLASSES_
+#define _SO_LINK_CLASSES_
 
 #include <Inventor/engines/SoCompose.h>
 #include <Inventor/engines/SoCalculator.h>
@@ -77,7 +77,7 @@
 //    Class: LinkBase - base class for all links
 //
 //    New nodes in this subclass are:
-//      appearance, 
+//      appearance,
 //    New fields in this subclass are:
 //         none
 //
@@ -89,12 +89,10 @@ class LinkBase : public SoInteractionKit {
     // Define new parts in the catalog
     SO_KIT_CATALOG_ENTRY_HEADER(appearance);
 
-
   public:
-
     virtual SbBool undoConnections();
     virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
-    virtual void setDefaultOnNonWritingFields();
+    virtual void   setDefaultOnNonWritingFields();
 
     // Fields
     SoSFBool draggersOn;
@@ -103,28 +101,28 @@ class LinkBase : public SoInteractionKit {
     // constructor
     LinkBase();
 
-    virtual void errorColor( SbBool useErrorColor );
+    virtual void errorColor(SbBool useErrorColor);
 
     // Turns off draggers before writing, if they are on, and restores them
     // afterwards.
-    virtual void write( SoWriteAction *action );
+    virtual void write(SoWriteAction *action);
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
-    virtual void setDraggers( SbBool on );
+    virtual void setDraggers(SbBool on);
 
   protected:
-
     SoFieldSensor *draggersOnSensor;
-    static void draggersOnSensorCB( void *, SoSensor *);
+    static void    draggersOnSensorCB(void *, SoSensor *);
 
     SoFieldSensor *isErrorSensor;
-    static void isErrorSensorCB( void *, SoSensor *);
+    static void    isErrorSensorCB(void *, SoSensor *);
 
     virtual void handleEvent(SoHandleEventAction *ha);
 
-    SbBool isShowingErrorColor;
+    SbBool  isShowingErrorColor;
     SoNode *savedMaterial;
 
     // destructor
@@ -177,33 +175,32 @@ class SimpleLink : public LinkBase {
     SO_KIT_CATALOG_ENTRY_HEADER(threeDScaleGeom);
 
   public:
-
     virtual SbBool undoConnections();
     virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
-    virtual void setDefaultOnNonWritingFields();
+    virtual void   setDefaultOnNonWritingFields();
 
     // Fields
-    SoSFVec3f    origin;     // location of first link point
-    SoSFFloat    angle;      // angle of rotation from (1,0,0) about Z-axis
-    SoSFFloat    size;       // amount of scale of link
+    SoSFVec3f origin; // location of first link point
+    SoSFFloat angle;  // angle of rotation from (1,0,0) about Z-axis
+    SoSFFloat size;   // amount of scale of link
 
-    SoSFVec3f    endPoint;      // location of second link point.
-				// This is a "read-only" field as far as
-				// connections go. Although you can connect 
-				// points on other links from this one,
-				// you should not try to connect 'endpoint'
-				// from other fields.
+    SoSFVec3f endPoint; // location of second link point.
+                        // This is a "read-only" field as far as
+                        // connections go. Although you can connect
+                        // points on other links from this one,
+                        // you should not try to connect 'endpoint'
+                        // from other fields.
 
     // constructor
     SimpleLink();
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
-    virtual void setDraggers( SbBool on );
+    virtual void setDraggers(SbBool on);
 
   protected:
-
     SoComposeVec3f *sizeZeroZeroEngine;
     SoComposeVec3f *sizeOneOneEngine;
     SoComposeVec3f *sizeSizeOneEngine;
@@ -216,7 +213,7 @@ class SimpleLink : public LinkBase {
 };
 
 ////////////////////////////////////////////////////////////////////
-//    Class: GroundedSimpleLink - subclass of LinkBase with a a dragger to 
+//    Class: GroundedSimpleLink - subclass of LinkBase with a a dragger to
 //                              control the origin field.
 //
 //    New nodes in this subclass are:
@@ -234,30 +231,29 @@ class GroundedSimpleLink : public SimpleLink {
     SO_KIT_CATALOG_ENTRY_HEADER(originDragger);
 
   public:
-
     virtual SbBool undoConnections();
     virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
-    virtual void setDefaultOnNonWritingFields();
+    virtual void   setDefaultOnNonWritingFields();
 
     // Fields - none that are new
 
     // constructor
     GroundedSimpleLink();
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
-    virtual void setDraggers( SbBool on );
-    void setOriginDragger( SbBool on );
+    virtual void setDraggers(SbBool on);
+    void         setOriginDragger(SbBool on);
 
   protected:
-
     // destructor
     virtual ~GroundedSimpleLink();
 };
 
 ////////////////////////////////////////////////////////////////////
-//    Class: Link - subclass of GroundedSimpleLink with endPoint and 
+//    Class: Link - subclass of GroundedSimpleLink with endPoint and
 //                  dragger to control endPoint
 //
 //    New nodes in this subclass are:
@@ -275,24 +271,23 @@ class Link : public GroundedSimpleLink {
     SO_KIT_CATALOG_ENTRY_HEADER(endPointDragger);
 
   public:
-
     virtual SbBool undoConnections();
     virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
-    virtual void setDefaultOnNonWritingFields();
+    virtual void   setDefaultOnNonWritingFields();
 
     // Fields - no new ones here.
 
     // constructor
     Link();
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
-    virtual void setDraggers( SbBool on );
-    void setEndPointDragger( SbBool on );
+    virtual void setDraggers(SbBool on);
+    void         setEndPointDragger(SbBool on);
 
   protected:
-
     LinkEngine *getAngleAndSizeEngine;
 
     // destructor
@@ -317,24 +312,23 @@ class SizedLink : public GroundedSimpleLink {
     SO_KIT_CATALOG_ENTRY_HEADER(sizeDragger);
 
   public:
-
     virtual SbBool undoConnections();
     virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
-    virtual void setDefaultOnNonWritingFields();
+    virtual void   setDefaultOnNonWritingFields();
 
     // Fields - none new.
 
     // constructor
     SizedLink();
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
-    virtual void setDraggers( SbBool on );
-    void setSizeDragger( SbBool on );
+    virtual void setDraggers(SbBool on);
+    void         setSizeDragger(SbBool on);
 
   protected:
-
     SoDecomposeVec3f *sizeFromTranslateEngine;
 
     // destructor
@@ -342,11 +336,11 @@ class SizedLink : public GroundedSimpleLink {
 };
 ////////////////////////////////////////////////////////////////////
 //    Class: RivetHinge - subclass of SizedLink
-//                        Determines angle from 'origin' and 'hingePoint' 
+//                        Determines angle from 'origin' and 'hingePoint'
 //                        field.  Adds dragger to control 'hingePoint'
 //
 //    New nodes in this subclass are:
-//      hingePointDragger, 
+//      hingePointDragger,
 //
 //    New fields in this subclass are:
 //         hingePoint   - location of the rivet hinge
@@ -360,25 +354,24 @@ class RivetHinge : public SizedLink {
     SO_KIT_CATALOG_ENTRY_HEADER(hingePointDragger);
 
   public:
-
     virtual SbBool undoConnections();
     virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
-    virtual void setDefaultOnNonWritingFields();
+    virtual void   setDefaultOnNonWritingFields();
 
     // Fields
-    SoSFVec3f    hingePoint;   // location of the rivet hinge.
+    SoSFVec3f hingePoint; // location of the rivet hinge.
 
     // constructor
     RivetHinge();
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
-    virtual void setDraggers( SbBool on );
-    void setHingePointDragger( SbBool on );
+    virtual void setDraggers(SbBool on);
+    void         setHingePointDragger(SbBool on);
 
   protected:
-
     RivetHingeEngine *myRivetEngine;
 
     // destructor
@@ -404,24 +397,23 @@ class Crank : public SizedLink {
     SO_KIT_CATALOG_ENTRY_HEADER(angleDragger);
 
   public:
-
     virtual SbBool undoConnections();
     virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
-    virtual void setDefaultOnNonWritingFields();
+    virtual void   setDefaultOnNonWritingFields();
 
     // Fields - no new ones.
 
     // constructor
     Crank();
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
-    virtual void setDraggers( SbBool on );
-    void setAngleDragger( SbBool on );
+    virtual void setDraggers(SbBool on);
+    void         setAngleDragger(SbBool on);
 
   protected:
-
     ZAngleFromRotationEngine *angleFromRotationEngine;
 
     // destructor
@@ -456,46 +448,45 @@ class DoubleLink : public LinkBase {
     SO_KIT_CATALOG_ENTRY_HEADER(link2);
 
   public:
-
     virtual SbBool undoConnections();
     virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
-    virtual void setDefaultOnNonWritingFields();
+    virtual void   setDefaultOnNonWritingFields();
 
     // Fields
-    SoSFVec3f    origin1;     // origin of link1
-    SoSFVec3f    origin2;     // origin of link2
-    SoSFFloat    size1;       // size of link1
-    SoSFFloat    size2;       // size of link2
-    SoSFVec3f    sharedPoint; // endPoint of both links.  This is a read-only
-			      // field as far as connections go, since it
-			      // is calculated based on the other four fields.
-			      // You may connect other points from this one,
-			      // but do not connect it from other fields.
-			      // Note, however, that you can drag this point
-			      // with the sharedPointDragger. This results 
-			      // in changing the sizes of the two links while
-			      // keeping the origins stationary.
+    SoSFVec3f origin1;     // origin of link1
+    SoSFVec3f origin2;     // origin of link2
+    SoSFFloat size1;       // size of link1
+    SoSFFloat size2;       // size of link2
+    SoSFVec3f sharedPoint; // endPoint of both links.  This is a read-only
+                           // field as far as connections go, since it
+                           // is calculated based on the other four fields.
+                           // You may connect other points from this one,
+                           // but do not connect it from other fields.
+                           // Note, however, that you can drag this point
+                           // with the sharedPointDragger. This results
+                           // in changing the sizes of the two links while
+                           // keeping the origins stationary.
 
     // constructor
     DoubleLink();
 
-    virtual void errorColor( SbBool useErrorColor );
+    virtual void errorColor(SbBool useErrorColor);
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
-    virtual void setDraggers( SbBool on );
-    void setOrigin1Dragger( SbBool on );
-    void setOrigin2Dragger( SbBool on );
-    void setSharedPointDragger( SbBool on );
+    virtual void setDraggers(SbBool on);
+    void         setOrigin1Dragger(SbBool on);
+    void         setOrigin2Dragger(SbBool on);
+    void         setSharedPointDragger(SbBool on);
 
   protected:
-
-    DoubleLinkMoveOriginEngine   *myOriginEngine;
+    DoubleLinkMoveOriginEngine *  myOriginEngine;
     DoubleLinkMoveSharedPtEngine *mySharedPtEngine;
 
-    static void sharedPtDragStartCB( void *, SoDragger * );
-    static void sharedPtDragFinishCB( void *, SoDragger * );
+    static void sharedPtDragStartCB(void *, SoDragger *);
+    static void sharedPtDragFinishCB(void *, SoDragger *);
 
     // destructor
     virtual ~DoubleLink();
@@ -529,33 +520,32 @@ class Piston : public LinkBase {
     SO_KIT_CATALOG_ENTRY_HEADER(link2);
 
   public:
-
     virtual SbBool undoConnections();
     virtual SbBool setUpConnections(SbBool onOff, SbBool doItAlways = FALSE);
-    virtual void setDefaultOnNonWritingFields();
+    virtual void   setDefaultOnNonWritingFields();
 
     // Fields
-    SoSFVec3f    origin1;
-    SoSFVec3f    origin2;
-    SoSFFloat    size1;
-    SoSFFloat    size2;
+    SoSFVec3f origin1;
+    SoSFVec3f origin2;
+    SoSFFloat size1;
+    SoSFFloat size2;
 
     // constructor
     Piston();
 
-    virtual void errorColor( SbBool useErrorColor );
+    virtual void errorColor(SbBool useErrorColor);
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
-    virtual void setDraggers( SbBool on );
-    void setOrigin1Dragger( SbBool on );
-    void setOrigin2Dragger( SbBool on );
+    virtual void setDraggers(SbBool on);
+    void         setOrigin1Dragger(SbBool on);
+    void         setOrigin2Dragger(SbBool on);
 
   protected:
-
     PistonErrorEngine *myPistonErrorEngine;
-    
+
     // destructor
     virtual ~Piston();
 };
@@ -575,17 +565,16 @@ class Button : public SoDragger {
     SO_KIT_CATALOG_ENTRY_HEADER(buttonActiveText);
 
   public:
-
     // constructor
     Button();
 
-  SoINTERNAL public:
+    SoINTERNAL
+  public:
     static void initClass();
 
   protected:
-
-    static void startCB( void *, SoDragger *);
-    static void finishCB( void *, SoDragger *);
+    static void startCB(void *, SoDragger *);
+    static void finishCB(void *, SoDragger *);
 
     void dragStart();
     void dragFinish();

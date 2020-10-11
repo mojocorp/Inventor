@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -75,17 +75,16 @@ static const char *progName;
 //
 
 static int
-countNodes(const SoNode *root)
-{
+countNodes(const SoNode *root) {
     int numNodes = 1;
 
     if (root->isOfType(SoGroup::getClassTypeId())) {
 
-	const SoGroup	*group = (const SoGroup *) root;
-	int		i;
+        const SoGroup *group = (const SoGroup *)root;
+        int            i;
 
-	for (i = 0; i < group->getNumChildren(); i++)
-	    numNodes += countNodes(group->getChild(i));
+        for (i = 0; i < group->getNumChildren(); i++)
+            numNodes += countNodes(group->getChild(i));
     }
 
     return numNodes;
@@ -97,11 +96,10 @@ countNodes(const SoNode *root)
 //
 
 static void
-printInfo(SoNode *root)
-{
-    SoSearchAction	sa;
-    const SoInfo	*info;
-    int			i;
+printInfo(SoNode *root) {
+    SoSearchAction sa;
+    const SoInfo * info;
+    int            i;
 
     // Set up action to search for SoInfo nodes
     sa.setType(SoInfo::getClassTypeId());
@@ -111,59 +109,55 @@ printInfo(SoNode *root)
     sa.apply(root);
 
     for (i = 0; i < sa.getPaths().getLength(); i++) {
-	info = (const SoInfo *) sa.getPaths()[i]->getTail();
-	printf("%s\n", info->string.getValue().getString());
+        info = (const SoInfo *)sa.getPaths()[i]->getTail();
+        printf("%s\n", info->string.getValue().getString());
     }
 }
 
 static void
-printUsage(const char *progname)
-{
+printUsage(const char *progname) {
     fprintf(stderr, "Usage: %s [-h] [file]\n", progname);
-    fprintf(stderr,
-	    "-h : Print this message (help)\n"
-	    "If no filename is given, standard input will be read\n");
+    fprintf(stderr, "-h : Print this message (help)\n"
+                    "If no filename is given, standard input will be read\n");
 }
 
 static void
-parseArgs(int argc, char **argv, SoInput &in)
-{
-    int err = 0;	// Flag: error in options?
+parseArgs(int argc, char **argv, SoInput &in) {
+    int err = 0; // Flag: error in options?
     int c;
-    
+
     while ((c = getopt(argc, argv, "h")) != -1) {
-	switch(c) {
-	  case 'h':	// Help
-	  default:
-	    err = 1;
-	    break;
-	}
+        switch (c) {
+        case 'h': // Help
+        default:
+            err = 1;
+            break;
+        }
     }
-    if (optind+1 == argc) {	// One optional filename
-	if (! in.openFile(argv[optind])) {
-	    fprintf(stderr, "Could not open file %s\n", argv[optind]);
-	    err = 1;
-	}
-    }
-    else if (optind == argc) {	// No filename
-	if (isatty(fileno(stdin))) {
-	    fprintf(stderr, "Trying to read from standard input, "
-	            "but standard input is a tty!\n");
-	    err = 1;
-	}
-    }
-    else err = 1;
+    if (optind + 1 == argc) { // One optional filename
+        if (!in.openFile(argv[optind])) {
+            fprintf(stderr, "Could not open file %s\n", argv[optind]);
+            err = 1;
+        }
+    } else if (optind == argc) { // No filename
+        if (isatty(fileno(stdin))) {
+            fprintf(stderr, "Trying to read from standard input, "
+                            "but standard input is a tty!\n");
+            err = 1;
+        }
+    } else
+        err = 1;
     if (err) {
-	printUsage(argv[0]);
-	exit(1);
+        printUsage(argv[0]);
+        exit(1);
     }
 }
 
-int main(int argc, char *argv[])
-{
-    SoInput	in;
-    SoNode	*root;
-    SbBool	gotAny = FALSE;
+int
+main(int argc, char *argv[]) {
+    SoInput in;
+    SoNode *root;
+    SbBool  gotAny = FALSE;
 
     progName = argv[0];
 
@@ -173,35 +167,35 @@ int main(int argc, char *argv[])
 
     while (TRUE) {
 
-	if (! SoDB::read(&in, root)) {
-	    fprintf(stderr, "%s: bad data in input\n", progName);
-	    return 1;
-	}
+        if (!SoDB::read(&in, root)) {
+            fprintf(stderr, "%s: bad data in input\n", progName);
+            return 1;
+        }
 
-	if (root == NULL) {
-	    if (! gotAny)
-		printf("%s: no data in input\n", progName);
-	    break;
-	}
+        if (root == NULL) {
+            if (!gotAny)
+                printf("%s: no data in input\n", progName);
+            break;
+        }
 
-	root->ref();
+        root->ref();
 
-	if (! gotAny) {
-	    printf("%s: data format is %s\n", progName,
-		   in.isBinary() ? "binary" : "ASCII");
-	    gotAny = TRUE;
-	}
+        if (!gotAny) {
+            printf("%s: data format is %s\n", progName,
+                   in.isBinary() ? "binary" : "ASCII");
+            gotAny = TRUE;
+        }
 
-	else
-	    printf("-----------------------------------------------------\n");
+        else
+            printf("-----------------------------------------------------\n");
 
-	printf("%s: number of nodes under root is %d\n", progName,
-	       countNodes(root));
+        printf("%s: number of nodes under root is %d\n", progName,
+               countNodes(root));
 
-	printInfo(root);
+        printInfo(root);
 
-	root->unref();
+        root->unref();
     }
 
-    return(0);
+    return (0);
 }

@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -68,8 +68,8 @@ SoWWWInlineV2::initClass()
 
     // Tell the type system whenever it wants to create something
     // of type SoWWWInline to create a SoWWWInlineV2
-    SoType::overrideType(
-		 SoWWWInline::getClassTypeId(), &SoWWWInlineV2::createInstance);
+    SoType::overrideType(SoWWWInline::getClassTypeId(),
+                         &SoWWWInlineV2::createInstance);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -92,9 +92,7 @@ SoWWWInlineV2::SoWWWInlineV2()
 SoWWWInlineV2::~SoWWWInlineV2()
 //
 ////////////////////////////////////////////////////////////////////////
-{
-    
-}
+{}
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -106,23 +104,22 @@ SoWWWInlineV2::write(SoWriteAction *action)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    SoOutput	*out = action->getOutput();
+    SoOutput *out = action->getOutput();
 
     // In write-reference counting phase
     if (out->getStage() == SoOutput::COUNT_REFS) {
-	// add the children to the alternateRep so they can be written
-	// there and USE'd in the real node.
+        // add the children to the alternateRep so they can be written
+        // there and USE'd in the real node.
 
-	// NOTE: may be referenced more than once.  ONLY BUILD
-	// alternateRep ONCE, THOUGH!
-	
-	// SoWWWInline already has an alternateRep field - make sure it is set
-	if (alternateRep.getValue() == NULL && getChildData() != NULL) {
-	    alternateRep.getValue()->enableNotify(FALSE);
-	    alternateRep = getChildData();
-	}
+        // NOTE: may be referenced more than once.  ONLY BUILD
+        // alternateRep ONCE, THOUGH!
+
+        // SoWWWInline already has an alternateRep field - make sure it is set
+        if (alternateRep.getValue() == NULL && getChildData() != NULL) {
+            alternateRep.getValue()->enableNotify(FALSE);
+            alternateRep = getChildData();
+        }
     }
-    
+
     SoWWWInline::write(action);
 }
-
