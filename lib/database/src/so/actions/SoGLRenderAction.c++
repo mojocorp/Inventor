@@ -562,7 +562,7 @@ SoGLRenderAction::renderAllPasses(SoNode *node)
         return;
     }
 
-    float passFrac = 1.0 / (float)getNumPasses();
+    float passFrac = 1.0f / (float)getNumPasses();
 
     for (int pass = 0; pass < getNumPasses(); pass++) {
 

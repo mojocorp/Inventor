@@ -132,7 +132,7 @@ SoRotateSphericalDragger::SoRotateSphericalDragger()
     // start with our own default projector
     // the user can replace if they want
     sphereProj = new SbSphereSectionProjector();
-    ((SbSphereSectionProjector *)sphereProj)->setRadialFactor(0.85);
+    ((SbSphereSectionProjector *)sphereProj)->setRadialFactor(0.85f);
     userProj = FALSE;
 
     // add the callbacks to perform the dragging
@@ -254,7 +254,7 @@ SoRotateSphericalDragger::setProjector(SbSphereProjector *proj)
         // passing in null resets the projector to the default
         userProj = FALSE;
         sphereProj = new SbSphereSectionProjector();
-        ((SbSphereSectionProjector *)sphereProj)->setRadialFactor(0.85);
+        ((SbSphereSectionProjector *)sphereProj)->setRadialFactor(0.85f);
     } else {
         // use the projector passed in
         sphereProj = proj;

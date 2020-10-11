@@ -215,8 +215,8 @@ SoFieldData::overlay(SoFieldContainer *to, const SoFieldContainer *from,
     for (size_t i = 0; i < fromFD->fields.size(); i++) {
 
         // Access the fields using the appropriate field data instances
-        SoField *toField = toFD->getField(to, i);
-        SoField *fromField = fromFD->getField(from, i);
+        SoField *toField = toFD->getField(to, int(i));
+        SoField *fromField = fromFD->getField(from, int(i));
 
         // If both fields have default values, we don't bother copying
         // the value:
@@ -396,7 +396,7 @@ SoFieldData::getEnumData(const char *typeNameArg, int &num, int *&vals,
     for (size_t i = 0; i < enums.size(); i++) {
         SoEnumEntry *e = enums[i];
         if (e->typeName == typeName) {
-            num = e->vals.size();
+            num = int(e->vals.size());
             vals = e->vals.data();
             names = e->names.data();
             return;
@@ -695,8 +695,8 @@ SoFieldData::read(SoInput *in, SoFieldContainer *object,
 {
     size_t i;
     for (i = 0; i < fields.size(); i++) {
-        if (fieldName == getFieldName(i)) {
-            if (!getField(object, i)->read(in, fieldName))
+        if (fieldName == getFieldName(int(i))) {
+            if (!getField(object, int(i))->read(in, fieldName))
                 return FALSE;
             break;
         }
@@ -735,7 +735,7 @@ SoFieldData::write(SoOutput *out, const SoFieldContainer *container) const
         if (out->isBinary()) {
             unsigned short numToWrite = 0;
             for (size_t i = 0; i < fields.size(); i++) {
-                SoField *field = getField(container, i);
+                SoField *field = getField(container, int(i));
                 if (field->shouldWrite())
                     numToWrite++;
             }
@@ -751,10 +751,10 @@ SoFieldData::write(SoOutput *out, const SoFieldContainer *container) const
     // Let each field do its thing
     for (size_t i = 0; i < fields.size(); i++) {
 
-        SoField *field = getField(container, i);
+        SoField *field = getField(container, int(i));
 
         if (field->shouldWrite())
-            field->write(out, getFieldName(i));
+            field->write(out, getFieldName(int(i)));
     }
 }
 
@@ -878,7 +878,7 @@ SoFieldData::isSame(const SoFieldContainer *c1,
 ////////////////////////////////////////////////////////////////////////
 {
     for (size_t i = 0; i < fields.size(); i++) {
-        if (!getField(c1, i)->isSame(*getField(c2, i)))
+        if (!getField(c1, int(i))->isSame(*getField(c2, int(i))))
             return FALSE;
     }
     return TRUE;

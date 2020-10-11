@@ -136,8 +136,8 @@ SoOrthographicCamera::getViewVolume(float useAspectRatio) const
     float camAspect =
         (useAspectRatio != 0.0 ? useAspectRatio : aspectRatio.getValue());
 
-    float xRadius = 0.5 * height.getValue() * camAspect;
-    float yRadius = 0.5 * height.getValue();
+    float xRadius = 0.5f * height.getValue() * camAspect;
+    float yRadius = 0.5f * height.getValue();
 
     // Set up the orthographic camera.
     view.ortho(-xRadius, xRadius, -yRadius, yRadius, nearDistance.getValue(),
@@ -194,7 +194,7 @@ SoOrthographicCamera::viewBoundingBox(const SbBox3f &box, float aspect,
     // window.  We don't need any slack, because the bounding sphere
     // is already bigger than the bounding box.
     if (aspect < 1.0)
-        height = 2.0 * bSphere.getRadius() / aspect;
+        height = 2.0f * bSphere.getRadius() / aspect;
     else
-        height = 2.0 * bSphere.getRadius();
+        height = 2.0f * bSphere.getRadius();
 }

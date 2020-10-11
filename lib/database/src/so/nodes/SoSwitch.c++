@@ -395,7 +395,7 @@ SoSwitch::doChild(SoAction *action, int matchIndex)
             }
             // Now, set the center to be the average:
             if (numCenters != 0)
-                bba->setCenter(totalCenter / numCenters, FALSE);
+                bba->setCenter(totalCenter / float(numCenters), FALSE);
         } else {
             if (matchIndex >= 0)
                 children->traverse(action, 0, matchIndex);

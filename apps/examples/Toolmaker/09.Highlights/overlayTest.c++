@@ -61,8 +61,8 @@ main(int, char *argv[]) {
     OverlayHighlightRenderAction::initClass();
 
     // Open the data file
-    SoInput in;
-    char *  datafile = "/usr/share/src/Inventor/examples/data/monitor.iv";
+    SoInput     in;
+    const char *datafile = "/usr/share/src/Inventor/examples/data/monitor.iv";
     if (!in.openFile(datafile)) {
         fprintf(stderr, "Cannot open %s for reading.\n", datafile);
         exit(1);

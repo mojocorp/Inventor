@@ -546,7 +546,7 @@ SoAsciiText::generateFront(const SbString &string, float width)
     }
 
     for (size_t i = 0; i < string.getLength(); i++) {
-        d->setCharacterIndex(i);
+        d->setCharacterIndex(int32_t(i));
 
         fontCache->generateFrontChar(chars[i], tobj);
 

@@ -86,7 +86,7 @@ static SbVec3f cross(const SbVec3f &a, const SbVec3f &b) { return a.cross(b); }
 static double dot(const SbVec3f &a, const SbVec3f &b) { return a.dot(b); }
 static double length(const SbVec3f &a) { return a.length(); }
 static SbVec3f normalize(const SbVec3f &v) { SbVec3f t=v; t.normalize(); return t; }
-static SbVec3f vec3f(double a, double b, double c) { return SbVec3f(a,b,c); }
+static SbVec3f vec3f(double a, double b, double c) { return SbVec3f(float(a), float(b), float(c)); }
 
 // Keep this up to date with the info in initFuncs()
 #define NFUNCS 25

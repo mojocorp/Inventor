@@ -67,8 +67,8 @@
 
 SbVec3f
 SbBox3f::getCenter() const {
-    return SbVec3f(0.5 * (min[0] + max[0]), 0.5 * (min[1] + max[1]),
-                   0.5 * (min[2] + max[2]));
+    return SbVec3f(0.5f * (min[0] + max[0]), 0.5f * (min[1] + max[1]),
+                   0.5f * (min[2] + max[2]));
 }
 
 //
@@ -437,8 +437,8 @@ SbBox3f::getClosestPoint(const SbVec3f &point)
         return point;
     else if (point == getCenter()) {
         // middle of z side
-        result[0] = (max[0] + min[0]) / 2.0;
-        result[1] = (max[1] + min[1]) / 2.0;
+        result[0] = (max[0] + min[0]) / 2.0f;
+        result[1] = (max[1] + min[1]) / 2.0f;
         result[2] = max[2];
     } else {
         // Find the closest point on a unit box (from -1 to 1),
@@ -449,9 +449,9 @@ SbBox3f::getClosestPoint(const SbVec3f &point)
         SbVec3f vec = point - getCenter();
         float   sizeX, sizeY, sizeZ;
         getSize(sizeX, sizeY, sizeZ);
-        float halfX = sizeX / 2.0;
-        float halfY = sizeY / 2.0;
-        float halfZ = sizeZ / 2.0;
+        float halfX = sizeX / 2.0f;
+        float halfY = sizeY / 2.0f;
+        float halfZ = sizeZ / 2.0f;
         if (halfX > 0.0)
             vec[0] /= halfX;
         if (halfY > 0.0)
@@ -854,7 +854,7 @@ SbXfBox3f::project() const {
 
 SbVec2f
 SbBox2f::getCenter() const {
-    return SbVec2f(0.5 * (min[0] + max[0]), 0.5 * (min[1] + max[1]));
+    return SbVec2f(0.5f * (min[0] + max[0]), 0.5f * (min[1] + max[1]));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1057,7 +1057,7 @@ SbBox2f::getClosestPoint(const SbVec2f &point)
     else if (point == getCenter()) {
         // middle of x side
         result[0] = max[0];
-        result[1] = (max[1] + min[1]) / 2.0;
+        result[1] = (max[1] + min[1]) / 2.0f;
     } else if (min[0] == max[0]) {
         result[0] = min[0];
         result[1] = point[1];
@@ -1073,8 +1073,8 @@ SbBox2f::getClosestPoint(const SbVec2f &point)
         SbVec2f vec = point - getCenter();
         float   sizeX, sizeY;
         getSize(sizeX, sizeY);
-        float halfX = sizeX / 2.0;
-        float halfY = sizeY / 2.0;
+        float halfX = sizeX / 2.0f;
+        float halfY = sizeY / 2.0f;
         if (halfX > 0.0)
             vec[0] /= halfX;
         if (halfY > 0.0)
@@ -1085,7 +1085,7 @@ SbBox2f::getClosestPoint(const SbVec2f &point)
         float magY = std::abs(vec[1]);
 
         if (magX > magY) {
-            result[0] = (vec[0] > 0) ? 1.0 : -1.0;
+            result[0] = (vec[0] > 0) ? 1.0f : -1.0f;
             if (magY > 1.0)
                 magY = 1.0;
             result[1] = (vec[1] > 0) ? magY : -magY;
@@ -1093,11 +1093,11 @@ SbBox2f::getClosestPoint(const SbVec2f &point)
             if (magX > 1.0)
                 magX = 1.0;
             result[0] = (vec[0] > 0) ? magX : -magX;
-            result[1] = (vec[1] > 0) ? 1.0 : -1.0;
+            result[1] = (vec[1] > 0) ? 1.0f : -1.0f;
         } else {
             // must be one of the corners
-            result[0] = (vec[0] > 0) ? 1.0 : -1.0;
-            result[1] = (vec[1] > 0) ? 1.0 : -1.0;
+            result[0] = (vec[0] > 0) ? 1.0f : -1.0f;
+            result[1] = (vec[1] > 0) ? 1.0f : -1.0f;
         }
 
         // scale back the result and move it to the center of the box

@@ -212,7 +212,7 @@ SbViewportRegion::scaleWidth(float ratio)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float halfWidth = vpSize[0] / 2.0;
+    float halfWidth = vpSize[0] / 2.0f;
     float widthCenter = vpOrigin[0] + halfWidth;
 
     vpOrigin[0] = widthCenter - ratio * halfWidth;
@@ -241,7 +241,7 @@ SbViewportRegion::scaleHeight(float ratio)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float halfHeight = vpSize[1] / 2.0;
+    float halfHeight = vpSize[1] / 2.0f;
     float heightCenter = vpOrigin[1] + halfHeight;
 
     vpOrigin[1] = heightCenter - ratio * halfHeight;

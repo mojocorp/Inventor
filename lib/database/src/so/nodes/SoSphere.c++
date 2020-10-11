@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <glad/gl.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SbSphere.h>
@@ -63,26 +64,24 @@
 #include <Inventor/elements/SoComplexityTypeElement.h>
 #include <Inventor/elements/SoGLTextureCoordinateElement.h>
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
-#include <Inventor/elements/SoModelMatrixElement.h>
-#include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoSphere.h>
 
 SO_NODE_SOURCE(SoSphere);
 
 // Computes S and T texture coordinates from point on surface
 #define COMPUTE_S_T(point, s, t)                                               \
-    s = atan2f(point[0], point[2]) * .159 + .5;                                \
-    t = atan2f(point[1], sqrtf(point[0] * point[0] + point[2] * point[2])) *   \
-            .318 +                                                             \
-        .5
+    s = std::atan2(point[0], point[2]) * .159f + .5f;                                \
+    t = std::atan2(point[1], std::sqrt(point[0] * point[0] + point[2] * point[2])) *   \
+            .318f +                                                             \
+        .5f
 
 ;
 // Adjusts S texture coordinate in unstable areas
 #define ADJUST_S(s, octant)                                                    \
     if (s < .001 && (octant == 1 || octant == 3))                              \
-        s = 1.0;                                                               \
+        s = 1.0f;                                                               \
     else if (s > .999 && (octant == 5 || octant == 7))                         \
-    s = 0.0
+    s = 0.0f
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -178,7 +177,7 @@ SoSphere::rayPick(SoRayPickAction *action)
     computeObjectSpaceRay(action);
 
     // Create SbSphere with correct radius, centered at zero
-    float    rad = (radius.isIgnored() ? 1.0 : radius.getValue());
+    float    rad = (radius.isIgnored() ? 1.0f : radius.getValue());
     SbSphere sph(SbVec3f(0., 0., 0.), rad);
 
     // Intersect with pick ray. If found, set up picked point(s)
@@ -218,7 +217,7 @@ SoSphere::computeBBox(SoAction *, SbBox3f &box, SbVec3f &center)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float rad = (radius.isIgnored() ? 1.0 : radius.getValue());
+    float rad = (radius.isIgnored() ? 1.0f : radius.getValue());
 
     box.setBounds(-rad, -rad, -rad, rad, rad, rad);
     center.setValue(0.0, 0.0, 0.0);
@@ -249,7 +248,7 @@ SoSphere::generatePrimitives(SoAction *action)
     // Compute depth based on complexity
     depth = computeDepth(action);
 
-    rad = (radius.isIgnored() ? 1.0 : radius.getValue());
+    rad = (radius.isIgnored() ? 1.0f : radius.getValue());
 
     // Determine whether we should generate our own texture coordinates
     switch (SoTextureCoordinateElement::getType(action->getState())) {
@@ -280,8 +279,8 @@ SoSphere::generatePrimitives(SoAction *action)
             yBot = (float)i / depth;
             yTop = (float)(i + 1) / depth;
 
-            botWidth = 1.0 - yBot;
-            topWidth = 1.0 - yTop;
+            botWidth = 1.0f - yBot;
+            topWidth = 1.0f - yTop;
 
             beginShape(action, TRIANGLE_STRIP);
 
@@ -381,11 +380,11 @@ SoSphere::generatePrimitives(SoAction *action)
         shapeVertex(&pv);
 
         // Third cap vertex
-        vec.setValue(0.0, s_y, 0.0);
+        vec.setValue(0.0, float(s_y), 0.0);
 
         if (genTexCoords) {
             tex[0] = sAvg;
-            tex[1] = s_y * .5 + .5;
+            tex[1] = s_y * .5f + .5f;
         } else
             tex = tce->get(vec * rad, vec);
         pv.setPoint(vec * rad);
@@ -411,7 +410,7 @@ SoSphere::GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float rad = (radius.isIgnored() ? 1.0 : radius.getValue());
+    float rad = (radius.isIgnored() ? 1.0f : radius.getValue());
 
     int     i, j, k, s_x, s_y, s_z, order, octant;
     float   botWidth, topWidth, yTop, yBot, tmp;
@@ -432,8 +431,8 @@ SoSphere::GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
             yBot = (float)i / depth;
             yTop = (float)(i + 1) / depth;
 
-            botWidth = 1.0 - yBot;
-            topWidth = 1.0 - yTop;
+            botWidth = 1.0f - yBot;
+            topWidth = 1.0f - yTop;
 
             glBegin(GL_TRIANGLE_STRIP);
 
@@ -529,11 +528,11 @@ SoSphere::GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
         glVertex3fv((vec * rad).getValue());
 
         // Third cap vertex
-        vec.setValue(0.0, s_y, 0.0);
+        vec.setValue(0.0, float(s_y), 0.0);
 
         if (doTextures) {
             s = sAvg;
-            t = s_y * .5 + .5;
+            t = s_y * .5f + .5f;
             glTexCoord2f(s, t);
         }
         if (sendNormals)
@@ -566,7 +565,7 @@ SoSphere::computeDepth(SoAction *action)
     if (SoComplexityTypeElement::get(action->getState()) ==
         SoComplexityTypeElement::SCREEN_SPACE) {
 
-        float   rad = (radius.isIgnored() ? 1.0 : radius.getValue());
+        float   rad = (radius.isIgnored() ? 1.0f : radius.getValue());
         SbVec3f p(rad, rad, rad);
         SbVec2s rectSize;
         short   maxSize;

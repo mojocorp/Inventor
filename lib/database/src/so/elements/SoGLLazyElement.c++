@@ -663,10 +663,10 @@ SoGLLazyElement::sendVPPacked(SoState *state, const unsigned char *pcolor) {
         glColor4ubv((const GLubyte *)_pcolor);
     else {
         float col4[4];
-        col4[3] = (_pcolor[3]) * 1.0 / 255;
-        col4[2] = (_pcolor[2]) * 1.0 / 255;
-        col4[1] = (_pcolor[1]) * 1.0 / 255;
-        col4[0] = (_pcolor[0]) * 1.0 / 255;
+        col4[3] = (_pcolor[3]) * 1.0f / 255;
+        col4[2] = (_pcolor[2]) * 1.0f / 255;
+        col4[1] = (_pcolor[1]) * 1.0f / 255;
+        col4[0] = (_pcolor[0]) * 1.0f / 255;
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, col4);
     }
 
@@ -1348,13 +1348,13 @@ SoGLLazyElement::reallySend(const SoState *state, uint32_t bitmask)
                     DGL_HTON_INT32(pColors, *(ivState.packedColors));
                     glColor4ubv((GLubyte *)&pColors);
                 } else {
-                    col4[3] = (ivState.packedColors[0] & 0xff) * 1.0 / 255;
+                    col4[3] = (ivState.packedColors[0] & 0xff) * 1.0f / 255;
                     col4[2] =
-                        ((ivState.packedColors[0] & 0xff00) >> 8) * 1.0 / 255;
+                        ((ivState.packedColors[0] & 0xff00) >> 8) * 1.0f / 255;
                     col4[1] = ((ivState.packedColors[0] & 0xff0000) >> 16) *
-                              1.0 / 255;
+                              1.0f / 255;
                     col4[0] = ((ivState.packedColors[0] & 0xff000000) >> 24) *
-                              1.0 / 255;
+                              1.0f / 255;
                     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, col4);
                 }
                 break;
@@ -1411,7 +1411,7 @@ SoGLLazyElement::reallySend(const SoState *state, uint32_t bitmask)
                 realSendBits |= SHININESS_MASK;
                 glState.GLShininess = ivState.shininess;
                 glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS,
-                            (GLfloat)glState.GLShininess * 128.0);
+                            (GLfloat)glState.GLShininess * 128.0f);
                 break;
 
             case (BLENDING_CASE):
@@ -1570,11 +1570,11 @@ SoGLLazyElement::sendDiffuseByIndex(int index) const {
         DGL_HTON_INT32(pColors, *(ivState.packedColors + index));
         glColor4ubv((GLubyte *)&pColors);
     } else {
-        col4[3] = (ivState.packedColors[index] & 0xff) * 1.0 / 255;
-        col4[2] = ((ivState.packedColors[index] & 0xff00) >> 8) * 1.0 / 255;
-        col4[1] = ((ivState.packedColors[index] & 0xff0000) >> 16) * 1.0 / 255;
+        col4[3] = (ivState.packedColors[index] & 0xff) * 1.0f / 255;
+        col4[2] = ((ivState.packedColors[index] & 0xff00) >> 8) * 1.0f / 255;
+        col4[1] = ((ivState.packedColors[index] & 0xff0000) >> 16) * 1.0f / 255;
         col4[0] =
-            ((ivState.packedColors[index] & 0xff000000) >> 24) * 1.0 / 255;
+            ((ivState.packedColors[index] & 0xff000000) >> 24) * 1.0f / 255;
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, col4);
     }
     return;

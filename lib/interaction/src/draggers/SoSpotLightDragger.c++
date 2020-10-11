@@ -56,7 +56,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 #include <stdio.h>
-#include <math.h>
+#include <cmath>
 #include <Inventor/SoDB.h>
 #include <Inventor/SoPath.h>
 #include <Inventor/projectors/SbPlaneProjector.h>
@@ -357,12 +357,12 @@ SoSpotLightDragger::setBeamScaleFromAngle(float beamAngle)
     // This dragger clamps angle values to lie between 0 and PI/2 radians.
     // But we will be more restrictive when we display, so that users
     // can always (hopefully) hit the beam geometry.
-#define TWO_AND_A_HALF_DEGREES 0.043633
+#define TWO_AND_A_HALF_DEGREES 0.043633f
     if (beamAngle < TWO_AND_A_HALF_DEGREES)
         myNewAngle = TWO_AND_A_HALF_DEGREES;
 #undef TWO_AND_A_HALF_DEGREES
     if (beamAngle > (M_PI / 2.0))
-        myNewAngle = (M_PI / 2.0);
+        myNewAngle = float(M_PI / 2.0);
 
     float myCos = cosf(myNewAngle);
     float mySin = sinf(myNewAngle);
@@ -507,9 +507,9 @@ SoSpotLightDragger::drag()
         if (std::abs(curAngle - 0.0) < std::abs((M_PI / 2.0) - curAngle))
             theta = 0.0;
         else
-            theta = M_PI / 2.0;
+            theta = float(M_PI / 2.0f);
     } else if (isPosZ) {
-        theta = M_PI / 2.0;
+        theta = float(M_PI / 2.0);
     } else if (isNewOppositeStart) {
         theta = 0.0;
     } else {
@@ -518,11 +518,11 @@ SoSpotLightDragger::drag()
 
         // Dot product of unit vectors is cosine of angle between them.
         float thetaCos = minusZ.dot(newHitPt);
-        theta = acosf(thetaCos);
+        theta = std::acos(thetaCos);
 
         // clamp theta to lie between 0 and PI/2
-        theta = (theta < 0.0) ? 0.0 : theta;
-        theta = (theta > (M_PI / 2.0)) ? (M_PI / 2.0) : theta;
+        theta = (theta < 0.0) ? 0.0f : theta;
+        theta = (theta > (M_PI / 2.0)) ? float(M_PI / 2.0) : theta;
     }
 
     // Now we've got a new angle.  Set the beamScale appropriately,

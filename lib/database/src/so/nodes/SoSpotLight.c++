@@ -90,7 +90,7 @@ SoSpotLight::SoSpotLight()
     SO_NODE_ADD_FIELD(location, (0.0, 0.0, 1.0));
     SO_NODE_ADD_FIELD(direction, (0.0, 0.0, -1.0));
     SO_NODE_ADD_FIELD(dropOffRate, (0.0));
-    SO_NODE_ADD_FIELD(cutOffAngle, (M_PI / 4.0));
+    SO_NODE_ADD_FIELD(cutOffAngle, (float(M_PI / 4.0)));
     isBuiltIn = TRUE;
 }
 

@@ -223,7 +223,7 @@ SbVec3f::normalize() {
     float len = length();
 
     if (len != 0.0)
-        (*this) *= (1.0 / len);
+        (*this) *= (1.0f / len);
 
     else
         setValue(0.0, 0.0, 0.0);
@@ -343,7 +343,7 @@ SbVec3f::equals(const SbVec3f &v, float tolerance) const {
 SbVec3f
 SbVec3f::getClosestAxis() const {
     SbVec3f axis(0.0, 0.0, 0.0), bestAxis;
-    float   d, max = -21.234;
+    float   d, max = -21.234f;
 
 #define TEST_AXIS()                                                            \
     if ((d = dot(axis)) > max) {                                               \
@@ -724,7 +724,7 @@ SbVec2f::normalize() {
     float len = length();
 
     if (len != 0.0)
-        (*this) *= (1.0 / len);
+        (*this) *= (1.0f / len);
 
     else
         setValue(0.0, 0.0);
@@ -906,7 +906,7 @@ SbVec4f::normalize() {
     float len = length();
 
     if (len != 0.0)
-        (*this) *= (1.0 / len);
+        (*this) *= (1.0f / len);
 
     else
         setValue(0.0, 0.0, 0.0, 0.0);

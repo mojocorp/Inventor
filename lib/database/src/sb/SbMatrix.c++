@@ -411,7 +411,7 @@ SbMatrix::factor(SbMatrix &r, SbVec3f &s, SbMatrix &u, SbVec3f &t,
     si.makeIdentity();
     for (int i = 0; i < 3; i++) {
         s[i] = det_sign * std::sqrt(evalues[i]);
-        si.matrix[i][i] = 1.0 / s[i];
+        si.matrix[i][i] = 1.0f / s[i];
     }
 
     /* (5) Compute U = R^ S! R A. */
@@ -945,7 +945,7 @@ SbMatrix::LUDecomposition(int index[4], float &d) {
     BLOCK4(1);
 
     // BLOCK 5, j = 1
-    dum = 1.0 / (matrix[1][1]);
+    dum = 1.0f / (matrix[1][1]);
     // for(i = j + 1; i < 4; i++)
     matrix[2][1] *= dum;
     matrix[3][1] *= dum;
@@ -1000,7 +1000,7 @@ SbMatrix::LUDecomposition(int index[4], float &d) {
     BLOCK4(2);
 
     // BLOCK 5, j = 2
-    dum = 1.0 / (matrix[2][2]);
+    dum = 1.0f / (matrix[2][2]);
     // for(i = j + 1; i < 4; i++)
     matrix[3][2] *= dum;
 

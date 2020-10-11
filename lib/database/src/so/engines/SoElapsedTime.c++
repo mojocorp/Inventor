@@ -217,7 +217,7 @@ SoElapsedTime::evaluate()
         reset.getValue();
         prevTimeOfDay = now;
         prevTimeOut = SbTime::zero();
-        prevClockTime = prevTimeOut.getValue();
+        prevClockTime = float(prevTimeOut.getValue());
     }
 
     // Figure out which state we're in.  'on' takes precedence over
@@ -285,7 +285,7 @@ SoElapsedTime::evaluate()
     // Update the state variables:
     prevTimeOfDay = now;
     prevTimeOut = tOut;
-    prevClockTime = clockTime.getValue();
+    prevClockTime = float(clockTime.getValue());
 
     // A value is always output.  Note that if the engine is paused or
     // stopped inputChanged() disables notification through timeOut,

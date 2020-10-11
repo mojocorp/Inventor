@@ -175,7 +175,7 @@ SbSphereSheetProjector::project(const SbVec2f &point)
         // is the offsetDist from the plane,
         // and x is dist from the planePoint.
 
-        float f = sphere.getRadius() * sphere.getRadius() / 2.0;
+        float f = sphere.getRadius() * sphere.getRadius() / 2.0f;
         float offsetDist = f / dist;
 
         SbVec3f offset;
@@ -286,13 +286,13 @@ SbSphereSheetProjector::getRotation(const SbVec3f &p1, const SbVec3f &p2)
     float   d = diff.length();
 
     // Check for degenerate cases
-    float t = d / (2.0 * sphere.getRadius());
+    float t = d / (2.0f * sphere.getRadius());
     if (t < 0.000001)
         return SbRotation::identity(); // Too close; no rotation
     else if (t > 1.0)
         return SbRotation::identity(); // Too much; bag it
 
-    float angle = 2.0 * std::asin(t);
+    float angle = 2.0f * std::asin(t);
 
     SbVec3f v1(p1 - planePoint);
     SbVec3f v2(p2 - planePoint);

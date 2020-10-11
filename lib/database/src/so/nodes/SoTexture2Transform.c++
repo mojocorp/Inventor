@@ -246,7 +246,7 @@ SoTexture2Transform::getMatrix(SoGetMatrixAction *action)
         t3.setValue(t2[0], t2[1], 1.0);
         m.setScale(t3);
         ctm.multLeft(m);
-        t3.setValue(1.0 / t2[0], 1.0 / t2[1], 1.0);
+        t3.setValue(1.0f / t2[0], 1.0f / t2[1], 1.0f);
         m.setScale(t3);
         inv.multRight(m);
     }

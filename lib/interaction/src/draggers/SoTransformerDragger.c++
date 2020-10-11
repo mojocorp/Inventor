@@ -122,7 +122,7 @@ SoTransformerDragger::SoTransformerDragger()
     SO_KIT_ADD_FIELD(translation, (0.0, 0.0, 0.0));
     SO_KIT_ADD_FIELD(scaleFactor, (1.0, 1.0, 1.0));
     SO_KIT_ADD_FIELD(rotation, (0.0, 0.0, 0.0, 1.0));
-    SO_KIT_ADD_FIELD(minDiscRotDot, (0.025));
+    SO_KIT_ADD_FIELD(minDiscRotDot, (0.025f));
 
     SO_KIT_INIT_INSTANCE();
 
@@ -149,7 +149,7 @@ SoTransformerDragger::SoTransformerDragger()
 
     planeProj = new SbPlaneProjector;
     lineProj = new SbLineProjector;
-    sphereProj = new SbSphereSectionProjector(0.85);
+    sphereProj = new SbSphereSectionProjector(0.85f);
     cylProj = new SbCylinderPlaneProjector();
 
     currentState = INACTIVE;
@@ -2609,7 +2609,7 @@ SoTransformerDragger::setFeedbackForRotate()
             default:
                 break;
             }
-            myXf->scaleFactor.setValue(1.8, 1.8, 1.8);
+            myXf->scaleFactor.setValue(1.8f, 1.8f, 1.8f);
         } else {
             myXf->translation.setValue(0, 0, 0);
             myXf->scaleFactor.setValue(1, 1, 1);
@@ -3253,7 +3253,7 @@ SoTransformerDragger::isColinear(SbVec2f a1[2], SbVec2f a2[2], int pixels)
     dx = a1[0][0] - a1[1][0];
     dy = a1[0][1] - a1[1][1];
     if (dx == 0.0)
-        dx = 0.0001;
+        dx = 0.0001f;
     slope = dy / dx;
 
     float yIntercept, A, B, C, dist1, dist2;

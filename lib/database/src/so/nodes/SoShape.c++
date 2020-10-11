@@ -1065,13 +1065,13 @@ SoShape::rayPickLineSegment(SoRayPickAction *        action,
         // Compute normal by interpolating vertex normals
         ratioFromV1 = ((point - v1->getPoint()).length() /
                        (v2->getPoint() - v1->getPoint()).length());
-        norm = (v1->getNormal() * (1.0 - ratioFromV1) +
+        norm = (v1->getNormal() * (1.0f - ratioFromV1) +
                 v2->getNormal() * ratioFromV1);
         norm.normalize();
         pp->setObjectNormal(norm);
 
         // Compute texture coordinates the same way
-        texCoord = (v1->getTextureCoords() * (1.0 - ratioFromV1) +
+        texCoord = (v1->getTextureCoords() * (1.0f - ratioFromV1) +
                     v2->getTextureCoords() * ratioFromV1);
         pp->setObjectTextureCoords(texCoord);
 

@@ -221,12 +221,12 @@ SoGLCacheContextElement::getExtID(const char *str)
     for (size_t i = 0; i < extensionList.size(); i++) {
         const extInfo &e = extensionList[i];
         if (e.string == str)
-            return i;
+            return int(i);
     }
     extInfo e;
     e.string = str;
     extensionList.push_back(e);
-    return extensionList.size() - 1;
+    return int(extensionList.size() - 1);
 }
 
 ////////////////////////////////////////////////////////////////////////

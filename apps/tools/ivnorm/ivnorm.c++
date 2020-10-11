@@ -188,7 +188,7 @@ main(int argc, char **argv) {
                     inFileName);
         ok = SoDB::read(&in, node);
         if (verbose)
-            fprintf(stderr, "%s: finished reading graph.\n", argv[0],
+            fprintf(stderr, "%s: finished reading graph from '%s'.\n", argv[0],
                     inFileName);
         if (!ok || !node)
             break;
@@ -204,7 +204,7 @@ main(int argc, char **argv) {
         out.setBinary(in.isBinary());
         wa.apply(node);
         if (verbose)
-            fprintf(stderr, "%s: finished writing graph.\n", argv[0],
+            fprintf(stderr, "%s: finished writing graph to '%s'.\n", argv[0],
                     outFileName);
     }
 

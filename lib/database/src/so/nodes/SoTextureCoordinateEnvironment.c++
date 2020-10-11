@@ -150,7 +150,7 @@ SoTextureCoordinateEnvironment::valueCallback(void *         action,
 
     // Now, figure out reflection vector, from formula:
     // R = P - 2 (N . N) pointE
-    SbVec3f reflection = pointE - 2.0 * normalE.dot(normalE) * pointE;
+    SbVec3f reflection = pointE - 2.0f * normalE.dot(normalE) * pointE;
 
     // Finally, compute s/t coordinates...
     reflection[2] += 1.0;
@@ -158,8 +158,8 @@ SoTextureCoordinateEnvironment::valueCallback(void *         action,
 
     // This is static so we can return a reference to it
     static SbVec4f result;
-    result.setValue(reflection[0] / magnitude + 0.5,
-                    reflection[1] / magnitude + 0.5, 0.0, 1.0);
+    result.setValue(reflection[0] / magnitude + 0.5f,
+                    reflection[1] / magnitude + 0.5f, 0.0f, 1.0f);
 
     return result;
 }

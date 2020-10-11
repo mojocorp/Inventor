@@ -53,7 +53,7 @@
 #include <Inventor/Xt/SoXt.h>
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
 
-static char *overlayScene = "\
+static const char *overlayScene = "\
 #Inventor V2.0 ascii\n\
 \
 Separator { \

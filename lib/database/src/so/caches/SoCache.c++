@@ -233,7 +233,7 @@ SoCache::isValid(const SoState *state) const
     if (invalidated) {
 #ifdef DEBUG
         if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-            fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid ", this);
+            fprintf(stderr, "CACHE DEBUG: cache(%p) not valid ", this);
             fprintf(stderr, "because SoCache::invalidate was called, ");
             fprintf(stderr, "probably because a field or node\n");
             fprintf(stderr, "underneath a node with a cache changed ");
@@ -256,7 +256,7 @@ SoCache::isValid(const SoState *state) const
 
 #ifdef DEBUG
             if (SoDebug::GetEnv("IV_DEBUG_CACHES")) {
-                fprintf(stderr, "CACHE DEBUG: cache(0x%x) not valid", this);
+                fprintf(stderr, "CACHE DEBUG: cache(%p) not valid", this);
                 fprintf(stderr, " because element %s does not match:\n",
                         eltInState->getTypeId().getName().getString());
                 fprintf(stderr, "------\nElement in state:\n");

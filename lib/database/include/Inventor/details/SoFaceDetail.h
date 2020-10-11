@@ -84,7 +84,7 @@ class SoFaceDetail : public SoDetail {
     virtual ~SoFaceDetail();
 
     /// Returns the number of points in the face
-    int32_t getNumPoints() const { return point.size(); }
+    int32_t getNumPoints() const { return int32_t(point.size()); }
 
     /// Returns information about the point forming the \a i'th vertex of the
     /// face, represented as an \a SoPointDetail.

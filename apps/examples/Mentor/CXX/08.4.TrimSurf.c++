@@ -73,7 +73,7 @@
 #include <Inventor/nodes/SoTexture2.h>
 #include <Inventor/nodes/SoTranslation.h>
 
-static char *floorData =
+static const char *floorData =
     "#Inventor V2.0 ascii\n"
     "Separator {\n"
     "   SpotLight {\n"

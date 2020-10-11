@@ -173,7 +173,7 @@ SoLevelOfDetail::doAction(SoAction *action)
 
         // Compute the screen size of the bbox and its area
         SoShape::getScreenSize(state, bboxAction->getBoundingBox(), rectSize);
-        projectedArea = rectSize[0] * rectSize[1];
+        projectedArea = float(rectSize[0] * rectSize[1]);
 
         // Adjust the area based on the complexity
         complexity = SoComplexityElement::get(state);
@@ -182,7 +182,7 @@ SoLevelOfDetail::doAction(SoAction *action)
         // a linear ramp so that complexity 0 always gives the last
         // child (area = 0) and complexity 0.5 uses the area as is.
         if (complexity <= 0.5)
-            projectedArea *= 2.0 * complexity;
+            projectedArea *= 2.0f * complexity;
 
         // For complexity greater than the default, scale the area so
         // that at complexity = 1, the first (most detailed) child is
@@ -190,7 +190,7 @@ SoLevelOfDetail::doAction(SoAction *action)
         // it bigger, though
         else if (projectedArea < screenArea[0] && projectedArea > 0.0) {
             float ratio = screenArea[0] / projectedArea;
-            projectedArea *= (2.0 * (ratio - 1.0) * complexity) - ratio + 2.0;
+            projectedArea *= (2.0f * (ratio - 1.0f) * complexity) - ratio + 2.0f;
         }
 
         for (i = 0; i < numAreas; i++)

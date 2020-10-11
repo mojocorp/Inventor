@@ -804,7 +804,7 @@ SoText3::generateFront(int line)
 
     std::wstring chars = string[line].toStdWString();
     for (size_t i = 0; i < chars.size(); i++) {
-        d->setCharacterIndex(i);
+        d->setCharacterIndex(int(i));
 
         fontCache->generateFrontChar(chars[i], tobj);
 
@@ -831,7 +831,7 @@ SoText3::generateSide(int line)
     SoTextDetail *d = (SoTextDetail *)genPrimVerts[0]->getDetail();
 
     for (size_t i = 0; i < chars.size(); i++) {
-        d->setCharacterIndex(i);
+        d->setCharacterIndex(int(i));
 
         fontCache->generateSideChar(chars[i], generateSideTris);
 

@@ -190,43 +190,43 @@ SoTabPlaneDragger::SoTabPlaneDragger() {
     crdn = SO_GET_ANY_PART(this, "edgeScaleCoords", SoCoordinate3);
     crdn->point.setNum(16);
     pts = crdn->point.startEditing();
-    pts[0].setValue(-.1, .9, .002);
-    pts[1].setValue(.1, .9, .002);
-    pts[2].setValue(.1, 1, .002);
-    pts[3].setValue(-.1, 1, .002);
-    pts[4].setValue(-.1, -1, .002);
-    pts[5].setValue(.1, -1, .002);
-    pts[6].setValue(.1, -.9, .002);
-    pts[7].setValue(-.1, -.9, .002);
-    pts[8].setValue(.9, -.1, .002);
-    pts[9].setValue(1, -.1, .002);
-    pts[10].setValue(1, .1, .002);
-    pts[11].setValue(.9, .1, .002);
-    pts[12].setValue(-1, -.1, .002);
-    pts[13].setValue(-.9, -.1, .002);
-    pts[14].setValue(-.9, .1, .002);
-    pts[15].setValue(-1, .1, .002);
+    pts[0].setValue(-.1f, .9f, .002f);
+    pts[1].setValue(.1f, .9f, .002f);
+    pts[2].setValue(.1f, 1.f, .002f);
+    pts[3].setValue(-.1f, 1.f, .002f);
+    pts[4].setValue(-.1f, -1.f, .002f);
+    pts[5].setValue(.1f, -1.f, .002f);
+    pts[6].setValue(.1f, -.9f, .002f);
+    pts[7].setValue(-.1f, -.9f, .002f);
+    pts[8].setValue(.9f, -.1f, .002f);
+    pts[9].setValue(1.f, -.1f, .002f);
+    pts[10].setValue(1.f, .1f, .002f);
+    pts[11].setValue(.9f, .1f, .002f);
+    pts[12].setValue(-1.f, -.1f, .002f);
+    pts[13].setValue(-.9f, -.1f, .002f);
+    pts[14].setValue(-.9f, .1f, .002f);
+    pts[15].setValue(-1.f, .1f, .002f);
     crdn->point.finishEditing();
 
     crdn = SO_GET_ANY_PART(this, "cornerScaleCoords", SoCoordinate3);
     crdn->point.setNum(16);
     pts = crdn->point.startEditing();
-    pts[0].setValue(.9, .9, .002);
-    pts[1].setValue(1, .9, .002);
-    pts[2].setValue(1, 1, .002);
-    pts[3].setValue(.9, 1, .002);
-    pts[4].setValue(.9, -1, .002);
-    pts[5].setValue(1, -1, .002);
-    pts[6].setValue(1, -.9, .002);
-    pts[7].setValue(.9, -.9, .002);
-    pts[8].setValue(-1, -1, .002);
-    pts[9].setValue(-.9, -1, .002);
-    pts[10].setValue(-.9, -.9, .002);
-    pts[11].setValue(-1, -.9, .002);
-    pts[12].setValue(-1, .9, .002);
-    pts[13].setValue(-.9, .9, .002);
-    pts[14].setValue(-.9, 1, .002);
-    pts[15].setValue(-1, 1, .002);
+    pts[0].setValue(.9f, .9f, .002f);
+    pts[1].setValue(1.f, .9f, .002f);
+    pts[2].setValue(1.f, 1.f, .002f);
+    pts[3].setValue(.9f, 1.f, .002f);
+    pts[4].setValue(.9f, -1.f, .002f);
+    pts[5].setValue(1.f, -1.f, .002f);
+    pts[6].setValue(1.f, -.9f, .002f);
+    pts[7].setValue(.9f, -.9f, .002f);
+    pts[8].setValue(-1.f, -1.f, .002f);
+    pts[9].setValue(-.9f, -1.f, .002f);
+    pts[10].setValue(-.9f, -.9f, .002f);
+    pts[11].setValue(-1.f, -.9f, .002f);
+    pts[12].setValue(-1.f, .9f, .002f);
+    pts[13].setValue(-.9f, .9f, .002f);
+    pts[14].setValue(-.9f, 1.f, .002f);
+    pts[15].setValue(-1.f, 1.f, .002f);
     crdn->point.finishEditing();
 
     // Initialize the indexed face set nodes
@@ -629,9 +629,9 @@ SoTabPlaneDragger::edgeScaleDrag()
         newDist *= -1.0;
 
         // [3] Change in scale is the ratio of newDist to oldDist
-#define TINY 0.0001
+#define TINY 0.0001f
     float delta = (std::abs(oldDist) < TINY || std::abs(newDist) < TINY)
-                      ? 1.0
+                      ? 1.0f
                       : newDist / oldDist;
 #undef TINY
 
@@ -716,14 +716,14 @@ SoTabPlaneDragger::cornerScaleDrag()
     SbVec3f newDiff = newHitPt - projectedScaleCenter;
 
     // [3] Change in scale is the ratio of new to old
-#define TINY 0.0001
+#define TINY 0.0001f
     float xAxisDelta =
         (std::abs(newDiff[0]) < TINY || std::abs(oldDiff[0]) < TINY)
-            ? 1.0
+            ? 1.0f
             : newDiff[0] / oldDiff[0];
     float yAxisDelta =
         (std::abs(newDiff[1]) < TINY || std::abs(oldDiff[1]) < TINY)
-            ? 1.0
+            ? 1.0f
             : newDiff[1] / oldDiff[1];
 #undef TINY
 
@@ -802,8 +802,8 @@ SoTabPlaneDragger::scaleUniformDrag()
     float newDist = newDiff.length();
 
     // [2] Change in scale is ratio of newDist to oldDist
-#define TINY 0.0001
-    float delta = (oldDist < TINY || newDist < TINY) ? 1.0 : newDist / oldDist;
+#define TINY 0.0001f
+    float delta = (oldDist < TINY || newDist < TINY) ? 1.0f : newDist / oldDist;
 #undef TINY
 
     // [3] Check if sign of scale changed.
@@ -889,25 +889,25 @@ SoTabPlaneDragger::reallyAdjustScaleTabSize(SoGLRenderAction *action) {
     // Each dimension is considered separately, because they will almost
     // always be different sizes on screen.
     //
-    SbVec2f localTabSize(2.0 * SCREEN_TAB_SIZE / screenLengths[0],
-                         2.0 * SCREEN_TAB_SIZE / screenLengths[1]);
+    SbVec2f localTabSize(2.0f * SCREEN_TAB_SIZE / screenLengths[0],
+                         2.0f * SCREEN_TAB_SIZE / screenLengths[1]);
 
     SbVec2f innerEdgeDist;
-    innerEdgeDist[0] = 1.0 - localTabSize[0];
-    innerEdgeDist[1] = 1.0 - localTabSize[1];
+    innerEdgeDist[0] = 1.0f - localTabSize[0];
+    innerEdgeDist[1] = 1.0f - localTabSize[1];
 
     SbVec2f outerEdgeDist(1.0, 1.0);
 
     SbVec2f halfTabWidth;
-    halfTabWidth[0] = (localTabSize[0] / 2.0);
-    halfTabWidth[1] = (localTabSize[1] / 2.0);
+    halfTabWidth[0] = (localTabSize[0] / 2.0f);
+    halfTabWidth[1] = (localTabSize[1] / 2.0f);
 
     // Be sure to keep vertices in counter-clockwise order. For each
     // group of four, they go in order:  3  2
     // when front-facing                 0  1
 
     // use a small z value to move points off of cube faces...
-    const float z = .002;
+    const float z = .002f;
 
     SoCoordinate3 *esc = (SoCoordinate3 *)edgeScaleCoords.getValue();
     if (esc != NULL) {
@@ -1011,15 +1011,15 @@ SoTabPlaneDragger::getXYScreenLengths(SbVec2f &       lengths,
 
     // These results are in -1 to 1 space.
     // Get them in 0 to 1 space.
-    plusX[0] = 0.5 * (plusX[0] + 1.0);
-    plusX[1] = 0.5 * (plusX[1] + 1.0);
-    minusX[0] = 0.5 * (minusX[0] + 1.0);
-    minusX[1] = 0.5 * (minusX[1] + 1.0);
+    plusX[0] = 0.5f * (plusX[0] + 1.0f);
+    plusX[1] = 0.5f * (plusX[1] + 1.0f);
+    minusX[0] = 0.5f * (minusX[0] + 1.0f);
+    minusX[1] = 0.5f * (minusX[1] + 1.0f);
 
-    plusY[0] = 0.5 * (plusY[0] + 1.0);
-    plusY[1] = 0.5 * (plusY[1] + 1.0);
-    minusY[0] = 0.5 * (minusY[0] + 1.0);
-    minusY[1] = 0.5 * (minusY[1] + 1.0);
+    plusY[0] = 0.5f * (plusY[0] + 1.0f);
+    plusY[1] = 0.5f * (plusY[1] + 1.0f);
+    minusY[0] = 0.5f * (minusY[0] + 1.0f);
+    minusY[1] = 0.5f * (minusY[1] + 1.0f);
 
     // Find square of the length of each transformed segment,
     // in pixels.

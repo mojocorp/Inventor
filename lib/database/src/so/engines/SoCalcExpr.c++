@@ -346,7 +346,7 @@ Func_d::dup() const {
 }
 float
 Func_d::getFloat() {
-    return (*func)((*args)[0]->getFloat());
+    return (float)(*func)((*args)[0]->getFloat());
 }
 void
 Func_d::setArgs(ExprList *a) {
@@ -366,7 +366,7 @@ Func_dd::dup() const {
 float
 Func_dd::getFloat() {
     Expr *e0 = (*args)[0], *e1 = (*args)[1];
-    return (*func)(e0->getFloat(), e1->getFloat());
+    return (float)(*func)(e0->getFloat(), e1->getFloat());
 }
 void
 Func_dd::setArgs(ExprList *a) {
@@ -388,7 +388,7 @@ Func_id::dup() const {
 float
 Func_id::getFloat() {
     Expr *e0 = (*args)[0], *e1 = (*args)[1];
-    return (*func)((int)e0->getFloat(), e1->getFloat());
+    return (float)(*func)((int)e0->getFloat(), e1->getFloat());
 }
 void
 Func_id::setArgs(ExprList *a) {
@@ -409,7 +409,7 @@ Func_v::dup() const {
 }
 float
 Func_v::getFloat() {
-    return (*func)((*args)[0]->getVec3f());
+    return (float)(*func)((*args)[0]->getVec3f());
 }
 void
 Func_v::setArgs(ExprList *a) {
@@ -448,7 +448,7 @@ Func_vv::dup() const {
 float
 Func_vv::getFloat() {
     Expr *e0 = (*args)[0], *e1 = (*args)[1];
-    return (*func)(e0->getVec3f(), e1->getVec3f());
+    return (float)(*func)(e0->getVec3f(), e1->getVec3f());
 }
 void
 Func_vv::setArgs(ExprList *a) {
@@ -630,7 +630,7 @@ Divide::getVec3f() {
 
 float
 Mod::getFloat() {
-    return (int)a->getFloat() % (int)b->getFloat();
+    return float((int)a->getFloat() % (int)b->getFloat());
 }
 
 float

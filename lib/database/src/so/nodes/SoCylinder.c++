@@ -51,6 +51,7 @@
  _______________________________________________________________________
  */
 
+#include <cmath>
 #include <GL/gl.h>
 #include <Inventor/SbBox.h>
 #include <Inventor/SbCylinder.h>
@@ -66,7 +67,6 @@
 #include <Inventor/elements/SoGLTextureEnabledElement.h>
 #include <Inventor/elements/SoLazyElement.h>
 #include <Inventor/elements/SoMaterialBindingElement.h>
-#include <Inventor/misc/SoState.h>
 #include <Inventor/nodes/SoCylinder.h>
 
 SO_NODE_SOURCE(SoCylinder);
@@ -76,10 +76,10 @@ SO_NODE_SOURCE(SoCylinder);
 
 // Returns S or T texture coord for point on top or bottom of
 // cylinder, given x or z coord
-#define BOT_TEX_S(x) ((x)*.5 + .5)
-#define BOT_TEX_T(z) ((z)*.5 + .5)
+#define BOT_TEX_S(x) ((x)*.5f + .5f)
+#define BOT_TEX_T(z) ((z)*.5f + .5f)
 #define TOP_TEX_S(x) BOT_TEX_S(x)
-#define TOP_TEX_T(z) (1.0 - BOT_TEX_T(z))
+#define TOP_TEX_T(z) (1.0f - BOT_TEX_T(z))
 
 // Cylinder ring geometry (x,z coords of points around 1 cross-section ring)
 SbVec2f *SoCylinder::coordsArray; // Ring x,z coordinates
@@ -274,12 +274,12 @@ SoCylinder::rayPick(SoRayPickAction *action)
                 normal.normalize();
                 pp->setObjectNormal(normal);
 
-                texCoord.setValue(atan2f(enterPoint[0], enterPoint[2]) *
-                                          (1.0 / (2.0 * M_PI)) +
-                                      0.5,
+                texCoord.setValue(std::atan2(enterPoint[0], enterPoint[2]) *
+                                          (1.0f / float(2.0 * M_PI)) +
+                                      0.5f,
                                   (enterPoint[1] + halfHeight) /
-                                      (2.0 * halfHeight),
-                                  0.0, 1.0);
+                                      (2.0f * halfHeight),
+                                  0.0f, 1.0f);
                 pp->setObjectTextureCoords(texCoord);
 
                 detail = new SoCylinderDetail();
@@ -298,9 +298,9 @@ SoCylinder::rayPick(SoRayPickAction *action)
                 normal.normalize();
                 pp->setObjectNormal(normal);
                 texCoord.setValue(
-                    atan2f(exitPoint[0], exitPoint[2]) * (1.0 / (2.0 * M_PI)) +
-                        0.5,
-                    (exitPoint[1] + halfHeight) / (2.0 * halfHeight), 0.0, 1.0);
+                    std::atan2(exitPoint[0], exitPoint[2]) * (1.0f / float(2.0 * M_PI)) +
+                        0.5f,
+                    (exitPoint[1] + halfHeight) / (2.0f * halfHeight), 0.0f, 1.0f);
                 pp->setObjectTextureCoords(texCoord);
                 detail = new SoCylinderDetail();
                 detail->setPart(SIDES);
@@ -332,9 +332,9 @@ SoCylinder::rayPick(SoRayPickAction *action)
                 if (action->isBetweenPlanes(enterPoint) &&
                     (pp = action->addIntersection(enterPoint)) != NULL) {
                     pp->setObjectNormal(norm);
-                    texCoord.setValue(0.5 + enterPoint[0] / (2.0 * radius),
-                                      0.5 - enterPoint[2] / (2.0 * radius), 0.0,
-                                      1.0);
+                    texCoord.setValue(0.5f + enterPoint[0] / (2.0f * radius),
+                                      0.5f - enterPoint[2] / (2.0f * radius), 0.0f,
+                                      1.0f);
                     pp->setObjectTextureCoords(texCoord);
                     if (materialPerPart)
                         pp->setMaterialIndex(1);
@@ -366,9 +366,9 @@ SoCylinder::rayPick(SoRayPickAction *action)
                 action->isBetweenPlanes(enterPoint) &&
                 (pp = action->addIntersection(enterPoint)) != NULL) {
                 pp->setObjectNormal(norm);
-                texCoord.setValue(0.5 + enterPoint[0] / (2.0 * radius),
-                                  0.5 + enterPoint[2] / (2.0 * radius), 0.0,
-                                  1.0);
+                texCoord.setValue(0.5f + enterPoint[0] / float(2.0 * radius),
+                                  0.5f + enterPoint[2] / (2.0f * radius), 0.0f,
+                                  1.0f);
                 pp->setObjectTextureCoords(texCoord);
                 if (materialPerPart)
                     pp->setMaterialIndex(2);
@@ -483,11 +483,11 @@ SoCylinder::generatePrimitives(SoAction *action)
     if (HAS_PART(curParts, SIDES)) {
 
         // Draw each section of sides as a triangle mesh, from top to bottom
-        yTop = 1.0;
-        dy = -2.0 / numSections;
-        tTop = 1.0;
-        dt = -1.0 / numSections;
-        ds = -1.0 / numSides;
+        yTop = 1.0f;
+        dy = -2.0f / numSections;
+        tTop = 1.0f;
+        dt = -1.0f / numSections;
+        ds = -1.0f / numSides;
 
         for (section = 0; section < numSections; section++) {
 
@@ -596,8 +596,8 @@ SoCylinder::generatePrimitives(SoAction *action)
         detail.setPart(TOP);
 
         // Start at the outside and work in
-        outerRadius = 1.0;
-        dRadius = -1.0 / numSections;
+        outerRadius = 1.0f;
+        dRadius = -1.0f / numSections;
         for (section = numSections - 1; section >= 0; --section) {
 
             innerRadius = outerRadius + dRadius;
@@ -729,8 +729,8 @@ SoCylinder::generatePrimitives(SoAction *action)
         detail.setPart(BOTTOM);
 
         // Start at the outside and work in
-        outerRadius = 1.0;
-        dRadius = -1.0 / numSections;
+        outerRadius = 1.0f;
+        dRadius = -1.0f / numSections;
         for (section = numSections - 1; section >= 0; --section) {
 
             innerRadius = outerRadius + dRadius;
@@ -905,11 +905,11 @@ SoCylinder::GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
     if (HAS_PART(curParts, SIDES)) {
 
         // Draw each section of sides as a triangle mesh, from top to bottom
-        yTop = 1.0;
-        dy = -2.0 / numSections;
-        tTop = 1.0;
-        dt = -1.0 / numSections;
-        ds = -1.0 / numSides;
+        yTop = 1.0f;
+        dy = -2.0f / numSections;
+        tTop = 1.0f;
+        dt = -1.0f / numSections;
+        ds = -1.0f / numSides;
 
         for (section = 0; section < numSections; section++) {
 
@@ -988,8 +988,8 @@ SoCylinder::GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
             glNormal3fv(norm.getValue());
 
         // Start at the outside and work in
-        outerRadius = 1.0;
-        dRadius = -1.0 / numSections;
+        outerRadius = 1.0f;
+        dRadius = -1.0f / numSections;
         for (section = numSections - 1; section >= 0; --section) {
 
             innerRadius = outerRadius + dRadius;
@@ -1075,8 +1075,8 @@ SoCylinder::GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
             glNormal3fv(norm.getValue());
 
         // Start at the outside and work in
-        outerRadius = 1.0;
-        dRadius = -1.0 / numSections;
+        outerRadius = 1.0f;
+        dRadius = -1.0f / numSections;
         for (section = numSections - 1; section >= 0; --section) {
 
             innerRadius = outerRadius + dRadius;
@@ -1223,8 +1223,8 @@ SoCylinder::computeRing(SoAction *action, int &numSides, int &numSections,
     ringCoords = coordsArray;
 
     // Compute x and z coordinates around ring
-    theta = 0.0;
-    dTheta = 2.0 * M_PI / numSides;
+    theta = 0.0f;
+    dTheta = float(2.0 * M_PI / numSides);
     for (side = 0; side < numSides; side++) {
         ringCoords[side].setValue(sin(theta), -cos(theta));
         theta += dTheta;
@@ -1243,6 +1243,6 @@ SoCylinder::getSize(float &rad, float &hHeight) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    rad = (radius.isIgnored() ? 1.0 : radius.getValue());
-    hHeight = (height.isIgnored() ? 1.0 : height.getValue() / 2.0);
+    rad = (radius.isIgnored() ? 1.0f : radius.getValue());
+    hHeight = (height.isIgnored() ? 1.0f : height.getValue() / 2.0f);
 }

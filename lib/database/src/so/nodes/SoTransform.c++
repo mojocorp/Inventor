@@ -79,9 +79,9 @@ SO_NODE_SOURCE(SoTransform);
 #define SCALE(vec, matrix, inverse, m)                                         \
     m.setScale(vec);                                                           \
     matrix.multLeft(m);                                                        \
-    vec[0] = 1.0 / vec[0];                                                     \
-    vec[1] = 1.0 / vec[1];                                                     \
-    vec[2] = 1.0 / vec[2];                                                     \
+    vec[0] = 1.0f / vec[0];                                                     \
+    vec[1] = 1.0f / vec[1];                                                     \
+    vec[2] = 1.0f / vec[2];                                                     \
     m.setScale(vec);                                                           \
     inverse.multRight(m)
 

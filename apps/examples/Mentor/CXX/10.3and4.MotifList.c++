@@ -94,7 +94,7 @@ SoTransform *    cubeTransform, *sphereTransform, *coneTransform, *cylTransform;
 
 enum objects { CUBE, SPHERE, CONE, CYL, NUM_OBJECTS };
 
-static char *objectNames[] = {"Cube", "Sphere", "Cone", "Cylinder"};
+static const char *objectNames[] = {"Cube", "Sphere", "Cone", "Cylinder"};
 
 // CODE FOR The Inventor Mentor ENDS HERE
 ///////////////////////////////////////////////////////////////
@@ -230,7 +230,8 @@ createList(Display *display, SoSelection *selection) {
     // Create a table of object names
     XmString *table = new XmString[NUM_OBJECTS];
     for (i = 0; i < NUM_OBJECTS; i++) {
-        table[i] = XmStringCreate(objectNames[i], XmSTRING_DEFAULT_CHARSET);
+        table[i] =
+            XmStringCreate((char *)objectNames[i], XmSTRING_DEFAULT_CHARSET);
     }
 
     // Create the list widget

@@ -264,14 +264,14 @@ SoScale2Dragger::drag()
     float newYAxisDist = newDiff[1];
 
     // [3] Change in scale is the ratio of new to old
-#define TINY 0.0001
+#define TINY 0.0001f
     float xAxisDelta =
         (std::abs(newXAxisDist) < TINY || std::abs(oldXAxisDist) < TINY)
-            ? 1.0
+            ? 1.0f
             : newXAxisDist / oldXAxisDist;
     float yAxisDelta =
         (std::abs(newYAxisDist) < TINY || std::abs(oldYAxisDist) < TINY)
-            ? 1.0
+            ? 1.0f
             : newYAxisDist / oldYAxisDist;
 #undef TINY
 

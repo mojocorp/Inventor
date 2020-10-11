@@ -160,7 +160,7 @@ SoAntiSquish::getUnsquishingMatrix(SbMatrix squishedMatrix,
         return answer;
     }
 
-#define TINY .00001
+#define TINY .00001f
     for (int i = 0; i < 2; i++) {
         if (scaleV[i] < .00001)
             scaleV[i] = TINY;
@@ -180,7 +180,7 @@ SoAntiSquish::getUnsquishingMatrix(SbMatrix squishedMatrix,
     else if (whichSizing == Z)
         scl = scaleV[2];
     else if (whichSizing == AVERAGE_DIMENSION)
-        scl = (scaleV[0] + scaleV[1] + scaleV[2]) / 3.0;
+        scl = (scaleV[0] + scaleV[1] + scaleV[2]) / 3.0f;
     else if (whichSizing == BIGGEST_DIMENSION) {
         scl = (scaleV[0] >= scaleV[1] && scaleV[0] >= scaleV[2])
                   ? scaleV[0]
@@ -214,7 +214,7 @@ SoAntiSquish::getUnsquishingMatrix(SbMatrix squishedMatrix,
     }
 
     float invScl;
-    invScl = 1.0 / scl;
+    invScl = 1.0f / scl;
 
     SbVec3f newScale(scl, scl, scl), newScaleInv(invScl, invScl, invScl);
 

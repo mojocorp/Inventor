@@ -304,6 +304,6 @@ SoNurbsProfile::getVertices(SoState *state, int32_t &nVertices,
     // The render now contains the list of vertices.  Return them to
     // the caller.
     //
-    nVertices = data.numVertices;
+    nVertices = int32_t(data.numVertices);
     vertices = data.vertices;
 }

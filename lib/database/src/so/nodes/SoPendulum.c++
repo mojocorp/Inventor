@@ -246,7 +246,7 @@ SoPendulum::rotationSensorCB(void *data, SoSensor *)
     float a = pendulum->calc->a[0];
     float b = pendulum->calc->b[0];
     // invert the expression: alpha = .5 + .5 sin(a*b*2*PI + c)
-    pendulum->calc->c.setValue(std::asin(2 * alpha - 1) - a * b * 2 * M_PI);
+    pendulum->calc->c.setValue(std::asin(2 * alpha - 1) - a * b * 2 * float(M_PI));
 }
 
 ////////////////////////////////////////////////////////////////////////

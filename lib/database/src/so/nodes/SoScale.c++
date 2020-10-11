@@ -180,7 +180,7 @@ SoScale::getMatrix(SoGetMatrixAction *action)
 {
     if (!scaleFactor.isIgnored() && !scaleFactor.isDefault()) {
         SbVec3f   sc = scaleFactor.getValue();
-        SbVec3f   si(1.0 / sc[0], 1.0 / sc[1], 1.0 / sc[2]);
+        SbVec3f   si(1.0f / sc[0], 1.0f / sc[1], 1.0f / sc[2]);
         SbMatrix &ctm = action->getMatrix();
         SbMatrix &inv = action->getInverse();
         SbMatrix  m;

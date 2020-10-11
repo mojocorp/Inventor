@@ -267,7 +267,7 @@ SoTextureCoordinateBundle::setUpDefaultCoordSpace(SoAction *action)
     // vectors should be the size of the box in that dimension. Since
     // we want the texture to remain square, we use the same length
     // for both dimensions.
-    float tmp = 1.0 / boxSize[coordS];
+    float tmp = 1.0f / boxSize[coordS];
     sVector.setValue(0.0, 0.0, 0.0, -min[coordS] * tmp);
     tVector.setValue(0.0, 0.0, 0.0, -min[coordT] * tmp);
     sVector[coordS] = tVector[coordT] = tmp;

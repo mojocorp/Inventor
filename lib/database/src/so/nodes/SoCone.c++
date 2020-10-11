@@ -83,8 +83,8 @@ SO_NODE_SOURCE(SoCone);
 
 // Returns S or T texture coord for point on bottom of cone, given x
 // or z coord
-#define BOT_TEX_S(x) ((x)*.5 + .5)
-#define BOT_TEX_T(z) ((z)*.5 + .5)
+#define BOT_TEX_S(x) ((x)*.5f + .5f)
+#define BOT_TEX_T(z) ((z)*.5f + .5f)
 
 // Cone ring geometry (x,z coords of points around 1 cross-section ring)
 SbVec2f *SoCone::coordsArray;  // Ring x,z coordinates
@@ -251,7 +251,7 @@ SoCone::rayPick(SoRayPickAction *action)
     // Compute a matrix that will transform a canonical cone (apex at
     // the origin, bottom radius 1) to this cone
     matrix.setTranslate(SbVec3f(0.0, halfHeight, 0.0));
-    matrix2.setScale(SbVec3f(radius, 2.0 * halfHeight, radius));
+    matrix2.setScale(SbVec3f(radius, 2.0f * halfHeight, radius));
     matrix.multLeft(matrix2);
 
     // Compute the object-space picking ray, using the matrix we
@@ -296,10 +296,10 @@ SoCone::rayPick(SoRayPickAction *action)
                 normal.normalize();
                 pp->setObjectNormal(normal);
 
-                texCoord.setValue(atan2f(enterPoint[0], enterPoint[2]) *
-                                          (1.0 / (2.0 * M_PI)) +
-                                      0.5,
-                                  enterPoint[1] + 1.0, 0.0, 1.0);
+                texCoord.setValue(std::atan2(enterPoint[0], enterPoint[2]) *
+                                          (1.0f / float(2.0 * M_PI)) +
+                                      0.5f,
+                                  enterPoint[1] + 1.0f, 0.0, 1.0);
                 pp->setObjectTextureCoords(texCoord);
 
                 detail = new SoConeDetail();
@@ -334,10 +334,10 @@ SoCone::rayPick(SoRayPickAction *action)
                 normal.normalize();
                 pp->setObjectNormal(normal);
 
-                texCoord.setValue(atan2f(exitPoint[0], exitPoint[2]) *
-                                          (1.0 / (2.0 * M_PI)) +
-                                      0.5,
-                                  exitPoint[1] + 1.0, 0.0, 1.0);
+                texCoord.setValue(std::atan2(exitPoint[0], exitPoint[2]) *
+                                          (1.0f / float(2.0 * M_PI)) +
+                                      0.5f,
+                                  exitPoint[1] + 1.0f, 0.0f, 1.0f);
                 pp->setObjectTextureCoords(texCoord);
 
                 detail = new SoConeDetail();
@@ -372,8 +372,8 @@ SoCone::rayPick(SoRayPickAction *action)
 
                 pp->setObjectNormal(norm);
 
-                texCoord.setValue(0.5 + enterPoint[0] / 2.0,
-                                  0.5 + enterPoint[2] / 2.0, 0.0, 1.0);
+                texCoord.setValue(0.5f + enterPoint[0] / 2.0f,
+                                  0.5f + enterPoint[2] / 2.0f, 0.0, 1.0);
                 pp->setObjectTextureCoords(texCoord);
 
                 if (materialPerPart)
@@ -484,16 +484,16 @@ SoCone::generatePrimitives(SoAction *action)
 
     getSize(radius, halfHeight);
 
-    dRadius = 1.0 / numSections;
+    dRadius = 1.0f / numSections;
 
     if (HAS_PART(curParts, SIDES)) {
 
         // Draw each section of sides as a triangle mesh, from top to bottom
         yTop = 1.0;
-        dy = -2.0 / numSections;
+        dy = -2.0f / numSections;
         tTop = 1.0;
-        dt = -1.0 / numSections;
-        ds = 1.0 / numSides;
+        dt = -1.0f / numSections;
+        ds = 1.0f / numSides;
 
         innerRadius = 0.0;
 
@@ -776,16 +776,16 @@ SoCone::GLRenderGeneric(SoGLRenderAction *action, SbBool sendNormals,
     // Make sure first material is sent if necessary
     mb.sendFirst();
 
-    dRadius = 1.0 / numSections;
+    dRadius = 1.0f / numSections;
 
     if (HAS_PART(curParts, SIDES)) {
 
         // Draw each section of sides as a triangle mesh, from top to bottom
         yTop = 1.0;
-        dy = -2.0 / numSections;
+        dy = -2.0f / numSections;
         tTop = 1.0;
-        dt = -1.0 / numSections;
-        ds = 1.0 / numSides;
+        dt = -1.0f / numSections;
+        ds = 1.0f / numSides;
 
         innerRadius = 0.0;
 
@@ -1019,7 +1019,7 @@ SoCone::computeBase(SoAction *action, int &numSides, int &numSections,
 
     // Compute x and z coordinates around base
     theta = 0.0;
-    dTheta = 2.0 * M_PI / numSides;
+    dTheta = 2.0f * float(M_PI / numSides);
 
     // Looking at the XY silhouette of the cone, (t1,t2) is the normal
     // in the XY plane.
@@ -1050,8 +1050,8 @@ SoCone::getSize(float &botRad, float &hHeight) const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    botRad = (bottomRadius.isIgnored() ? 1.0 : bottomRadius.getValue());
-    hHeight = (height.isIgnored() ? 1.0 : height.getValue() / 2.0);
+    botRad = (bottomRadius.isIgnored() ? 1.0f : bottomRadius.getValue());
+    hHeight = (height.isIgnored() ? 1.0f : height.getValue() / 2.0f);
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -1083,24 +1083,24 @@ SoCone::intersectInfiniteCone(const SbLine &ray, SbVec3f &enterPoint,
     // the cone gives us a quadratic, whose a, b, and c coefficients
     // are as follows
     a = dir[0] * dir[0] - dir[1] * dir[1] + dir[2] * dir[2];
-    b = (pos[0] * dir[0] - pos[1] * dir[1] + pos[2] * dir[2]) * 2.0;
+    b = (pos[0] * dir[0] - pos[1] * dir[1] + pos[2] * dir[2]) * 2.0f;
     c = pos[0] * pos[0] - pos[1] * pos[1] + pos[2] * pos[2];
 
     // If the discriminant of the quadratic is negative, there's no
     // intersection
-    discriminant = b * b - 4.0 * a * c;
+    discriminant = b * b - 4.0f * a * c;
     if (discriminant < 0.0)
         return FALSE;
 
-    sqroot = sqrtf(discriminant);
+    sqroot = std::sqrt(discriminant);
 
     // Some Magic to stabilize the answer
     if (b > 0.0) {
-        t0 = -(2.0 * c) / (sqroot + b);
-        t1 = -(sqroot + b) / (2.0 * a);
+        t0 = -(2.0f * c) / (sqroot + b);
+        t1 = -(sqroot + b) / (2.0f * a);
     } else {
-        t0 = (2.0 * c) / (sqroot - b);
-        t1 = (sqroot - b) / (2.0 * a);
+        t0 = (2.0f * c) / (sqroot - b);
+        t1 = (sqroot - b) / (2.0f * a);
     }
 
     enterPoint = pos + t0 * dir;

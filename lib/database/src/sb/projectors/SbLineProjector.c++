@@ -197,8 +197,8 @@ SbLineProjector::project(const SbVec2f &point)
 
             // Convert from [-1,1] range to [0,1] range for normalized coords.
             SbVec3f nrmScnVanish;
-            nrmScnVanish[0] = (1.0 + projVanish[0]) * 0.5;
-            nrmScnVanish[1] = (1.0 + projVanish[1]) * 0.5;
+            nrmScnVanish[0] = (1.0f + projVanish[0]) * 0.5f;
+            nrmScnVanish[1] = (1.0f + projVanish[1]) * 0.5f;
 
             // Finally, get the vanishing point in viewPlane coords:
             SbVec3f vpVanish(nrmScnVanish[0] * vvW, nrmScnVanish[1] * vvH, 0);
@@ -223,8 +223,8 @@ SbLineProjector::project(const SbVec2f &point)
             // an (arbitrary) metric, VANISH_DELTA. Our selection must be more
             // than VANISH_DELTA times the average of viewVolumeHeight and
             // viewVolumeWidth from the vanishing point.
-#define VANISH_DELTA .01
-            float vanishSafetyDist = VANISH_DELTA * .5 * (vvW + vvH);
+#define VANISH_DELTA .01f
+            float vanishSafetyDist = VANISH_DELTA * .5f * (vvW + vvH);
 #undef VANISH_DELTA
             // Make pt0, the point from which we measure distances along vpLine.
             // It will be one extra unit away from vpVanish than safetyDist
@@ -232,7 +232,7 @@ SbLineProjector::project(const SbVec2f &point)
             pt0.setValue(pt0[0], pt0[1], 0);
             SbVec3f pt0ToVanishDir = vpVanish - pt0;
             pt0ToVanishDir.normalize();
-            float pt0ToVanishDist = vanishSafetyDist + 1.0;
+            float pt0ToVanishDist = vanishSafetyDist + 1.0f;
             pt0 = vpVanish - pt0ToVanishDist * pt0ToVanishDir;
 
             // Get vector and dist from pt0 to vpClosestPt

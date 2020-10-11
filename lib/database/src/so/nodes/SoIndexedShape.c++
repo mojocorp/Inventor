@@ -647,7 +647,7 @@ SoIndexedShape::allocateSequential(int howMany)
         const size_t start = consecutiveIndices.size();
         consecutiveIndices.resize(howMany);
         for (size_t i = start; i < consecutiveIndices.size(); i++) {
-            consecutiveIndices[i] = i;
+            consecutiveIndices[i] = int32_t(i);
         }
     }
 }

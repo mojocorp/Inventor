@@ -226,8 +226,8 @@ SoTrackballDragger::SoTrackballDragger()
     animationEnabled = TRUE;
     wasSpinningAtDragStart = FALSE;
 
-    sphereProj = new SbSphereSectionProjector(0.85);
-    stripeProj = new SbCylinderPlaneProjector(0.85);
+    sphereProj = new SbSphereSectionProjector(0.85f);
+    stripeProj = new SbCylinderPlaneProjector(0.85f);
 
     // add the callbacks to perform the dragging
     addStartCallback(&SoTrackballDragger::startCB);
@@ -710,9 +710,9 @@ SoTrackballDragger::scaleDrag()
         newRad *= -1.0;
 
         // [3] Change in scale is ratio of newRad to oldRad
-#define TINY .0001
+#define TINY .0001f
     float delta = (std::abs(oldRad) < TINY || std::abs(newRad) < TINY)
-                      ? 1.0
+                      ? 1.0f
                       : newRad / oldRad;
 #undef TINY
 
@@ -764,7 +764,7 @@ SoTrackballDragger::userStripeDrag()
     // intersections. This makes for a nicer interface of axis picking
     ((SbSphereSectionProjector *)sphereProj)->setTolerance(1.0);
     newHitPt = sphereProj->project(getNormalizedLocaterPosition());
-    ((SbSphereSectionProjector *)sphereProj)->setTolerance(0.85);
+    ((SbSphereSectionProjector *)sphereProj)->setTolerance(0.85f);
 
     // find the new axis
     userAxisVec = newHitPt;
@@ -916,13 +916,13 @@ SoTrackballDragger::spinAnimate()
                                "Zero or negative Dt %f", deltaTime.getValue());
 #endif
 
-        angleVelocity /= deltaTime.getValue();
+        angleVelocity /= float(deltaTime.getValue());
 
         computeAverage = FALSE;
     }
 
     // calculate the change in rotation
-    angle = angleVelocity * sec;
+    angle = float(angleVelocity * sec);
 
     // append the incremental rotation after the current rotation
     SbRotation rotIncrement(averageAxis, angle);

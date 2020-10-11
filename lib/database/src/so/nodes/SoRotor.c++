@@ -227,7 +227,7 @@ SoRotor::rotationSensorCB(void *data, SoSensor *)
         a = rotor->calc->a[0];
         b = rotor->calc->b[0];
         // invert the expression: angle = a*b*2*pi + c    (mod 2 pi)
-        rotor->calc->c.setValue(angle - (a * b * 2 * M_PI));
+        rotor->calc->c.setValue(angle - float(a * b * 2 * M_PI));
 
         rotor->compose->axis.setValue(axis);
     }

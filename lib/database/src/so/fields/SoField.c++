@@ -92,7 +92,8 @@
 // this field, flags.hasAuditors will be TRUE, and this structure is
 // used to contain the extra information needed.  Done this way to
 // save space in the common case.
-struct SoFieldAuditorInfo {
+class SoFieldAuditorInfo {
+public:
     SoFieldContainer *container;
 
     // List of auditors: objects to pass notification to.

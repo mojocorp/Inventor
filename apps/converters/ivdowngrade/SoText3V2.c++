@@ -151,7 +151,7 @@ convToAscii(const SbString &str)
     }
 #ifdef DEBUG
     if (trunc)
-        SoDebugWarning::post(
+        SoDebugError::postWarning(
             "SoText3V2",
             "Note that conversion modified an international text string");
 #endif /*DEBUG*/

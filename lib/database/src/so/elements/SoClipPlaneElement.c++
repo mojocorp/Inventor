@@ -158,7 +158,7 @@ SoClipPlaneElement::push(SoState *)
     // be freed up when this instance goes away, so we save the
     // starting index to allow us to fix this in pop().
     planes = elt->planes;
-    startIndex = planes.size();
+    startIndex = int(planes.size());
     nodeIds = elt->nodeIds;
 }
 
@@ -211,7 +211,7 @@ SoClipPlaneElement::getNum() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    return planes.size();
+    return int(planes.size());
 }
 
 ////////////////////////////////////////////////////////////////////////

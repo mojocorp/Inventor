@@ -81,8 +81,8 @@ main(int argc, char *argv[]) {
     Widget mainWindow = SoXt::init(argv[0]);
 
     // Open the data file
-    SoInput in;
-    char *  datafile = "/usr/share/src/Inventor/examples/data/parkbench.iv";
+    SoInput     in;
+    const char *datafile = "/usr/share/src/Inventor/examples/data/parkbench.iv";
     if (!in.openFile(datafile)) {
         fprintf(stderr, "Cannot open %s for reading.\n", datafile);
         exit(1);

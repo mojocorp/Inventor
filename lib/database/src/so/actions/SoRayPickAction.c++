@@ -203,7 +203,7 @@ SoRayPickAction::setRay(const SbVec3f &start, const SbVec3f &direction,
     // volume. These values will be otherwise ignored.
     if (nearDistance < 0.0) {
         clipToNear = FALSE;
-        nearDistance = 1.1;
+        nearDistance = 1.1f;
     } else
         clipToNear = TRUE;
     if (farDistance < 0.0) {
@@ -265,8 +265,8 @@ SoRayPickAction::computeWorldSpaceRay()
 
     // Figure out the radius of the pick circle in the near plane as a
     // fraction of the viewport size
-    invWidth = 1.0 / vpReg.getViewportSizePixels()[0];
-    invHeight = 1.0 / vpReg.getViewportSizePixels()[1];
+    invWidth = 1.0f / vpReg.getViewportSizePixels()[0];
+    invHeight = 1.0f / vpReg.getViewportSizePixels()[1];
     normRadius = (VPRadius * (invWidth >= invHeight ? invWidth : invHeight));
 
     // If necessary, convert the current pick point from viewport

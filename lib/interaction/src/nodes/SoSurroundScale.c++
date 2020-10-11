@@ -226,7 +226,7 @@ SoSurroundScale::updateMySurroundParams(SoAction *action, const SbMatrix &myInv)
 
         // Find the inverse values
         for (int j = 0; j < 3; j++)
-            cachedInvScale[j] = 1.0 / cachedScale[j];
+            cachedInvScale[j] = 1.0f / cachedScale[j];
     }
 
     // Get the translation for this node to add to the ctm.

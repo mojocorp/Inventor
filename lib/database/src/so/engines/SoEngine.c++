@@ -169,7 +169,7 @@ SoEngine::getOutputs(SoEngineOutputList &list) const
     for (i = 0; i < od->getNumOutputs(); i++) {
         list.append(od->getOutput(this, i));
     }
-    return od->getNumOutputs();
+    return int(od->getNumOutputs());
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -832,7 +832,7 @@ SoEngineOutput::prepareToWrite() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = connections.size() - 1; i >= 0; i--) {
+    for (int i = int(connections.size()) - 1; i >= 0; i--) {
         SoField *f = connections[i];
 #ifdef DEBUG
         if (f->flags.isEngineModifying) {
@@ -858,7 +858,7 @@ SoEngineOutput::doneWriting() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    for (int i = connections.size() - 1; i >= 0; i--) {
+    for (int i = int(connections.size()) - 1; i >= 0; i--) {
         SoField *f = connections[i];
         f->flags.isEngineModifying = FALSE;
     }

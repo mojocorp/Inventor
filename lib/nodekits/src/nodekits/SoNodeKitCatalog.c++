@@ -339,10 +339,10 @@ SoNodekitCatalog::printCheck() const
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    fprintf(stdout, "catalog printout: number of entries = %lu\n",
+    fprintf(stdout, "catalog printout: number of entries = %zu\n",
             entries.size());
     for (size_t i = 0; i < entries.size(); i++) {
-        fprintf(stdout, "#%lu\n", i);
+        fprintf(stdout, "#%zu\n", i);
         entries[i]->printCheck();
     }
 }
@@ -926,7 +926,7 @@ SoNodekitCatalog::clone(SoType typeOfThis) const
             theClone->entries[i] = entries[i]->clone(typeOfThis, typeOfThis);
         else
             theClone->entries[i] = entries[i]->clone();
-        theClone->partNameDict[entries[i]->getName()] = i;
+        theClone->partNameDict[entries[i]->getName()] = int(i);
     }
 
     return theClone;
@@ -1239,7 +1239,6 @@ SoNodekitCatalog::addEntry(const SbName &theName, SoType theType,
 {
     SoNodekitCatalogEntry * parentEntry, *rightEntry, *leftEntry;
     SoNodekitCatalogEntry * newEntry;
-    SoNodekitCatalogEntry **newArray;
 
     // CHECK IF THE NEW ENTRY IS OK
 
@@ -1290,7 +1289,7 @@ SoNodekitCatalog::addEntry(const SbName &theName, SoType theType,
     entries.push_back(newEntry);
 
     // add the new name to the quick-reference part name dictionary
-    partNameDict[theName] = entries.size() - 1;
+    partNameDict[theName] = int(entries.size() - 1);
 
     // parent is no longer a leaf node in the nodekit structure
     if (parentEntry != NULL) {

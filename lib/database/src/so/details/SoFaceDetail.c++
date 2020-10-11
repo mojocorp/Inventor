@@ -116,9 +116,9 @@ SoFaceDetail::copy() const
     newDetail->faceIndex = faceIndex;
     newDetail->partIndex = partIndex;
 
-    newDetail->setNumPoints(point.size());
+    newDetail->setNumPoints(int32_t(point.size()));
     for (size_t i = 0; i < point.size(); i++)
-        newDetail->setPoint(i, &point[i]);
+        newDetail->setPoint(int32_t(i), &point[i]);
 
     return newDetail;
 }

@@ -208,8 +208,8 @@ SoCenterballDragger::SoCenterballDragger()
     // Rotation nodes that orient the parts...
     SoRotation *rNodeX90 = new SoRotation;
     SoRotation *rNodeY90 = new SoRotation;
-    rNodeX90->rotation.setValue(SbVec3f(1, 0, 0), 1.57079);
-    rNodeY90->rotation.setValue(SbVec3f(0, 1, 0), 1.57079);
+    rNodeX90->rotation.setValue(SbVec3f(1, 0, 0), 1.57079f);
+    rNodeY90->rotation.setValue(SbVec3f(0, 1, 0), 1.57079f);
 
     setAnyPartAsDefault("rotX90", rNodeX90);
     setAnyPartAsDefault("rotY90", rNodeY90);

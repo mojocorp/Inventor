@@ -155,8 +155,8 @@ fromObjectSpace(const SbVec3f &vector, const SbMatrix &matrix,
     // And do the viewport transformation:
     const SbVec2s vpSize = vpr.getViewportSizePixels();
     SbVec3f       result;
-    result[0] = (ndc[0] + 1.0) * vpSize[0] / 2.0;
-    result[1] = (ndc[1] + 1.0) * vpSize[1] / 2.0;
+    result[0] = (ndc[0] + 1.0f) * vpSize[0] / 2.0f;
+    result[1] = (ndc[1] + 1.0f) * vpSize[1] / 2.0f;
     // Leave the z coordinate alone
     result[2] = ndc[2];
 
@@ -182,8 +182,8 @@ toObjectSpace(const SbVec3f &pixel, const SbMatrix &matrix,
     // Viewport transformation, to normalized device coordinates:
     const SbVec2s vpSize = vpr.getViewportSizePixels();
     SbVec3f       ndc;
-    ndc[0] = pixel[0] * 2.0 / vpSize[0] - 1.0;
-    ndc[1] = pixel[1] * 2.0 / vpSize[1] - 1.0;
+    ndc[0] = pixel[0] * 2.0f / vpSize[0] - 1.0f;
+    ndc[1] = pixel[1] * 2.0f / vpSize[1] - 1.0f;
     ndc[2] = pixel[2];
 
     SbVec3f result;
@@ -393,7 +393,7 @@ SoText2::rayPick(SoRayPickAction *action)
                     charPosition += fontCache->getCharOffset(chars[chr]);
                     // Assuming left-to-right drawing of characters:
                     if (charPosition[0] >= screenPoint[0]) {
-                        detail->setCharacterIndex(chr);
+                        detail->setCharacterIndex(int(chr));
                         break;
                     }
                 }
@@ -541,7 +541,7 @@ SoText2::getPixelStringOffset(int line)
     SbVec3f       result(0, 0, 0);
     const SbVec2s size = fontCache->getSize(string[line].toStdWString());
     if (justification.getValue() == RIGHT) {
-        result[0] = -size[0];
+        result[0] = float(-size[0]);
     }
     if (justification.getValue() == CENTER) {
         result[0] = -size[0] / 2.0f;

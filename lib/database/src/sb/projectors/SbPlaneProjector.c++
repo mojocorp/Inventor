@@ -291,7 +291,7 @@ SbPlaneProjector::project(const SbVec2f &point)
         // postAffinePlnPnt[2] + distToGo * dirInMyPlane[2] = 0
         float distToGo = (-1 * (postAffinePlnPnt[2])) / dirInMyPlane[2];
         // Go a bit further to insure negative z
-        postAffinePlnPnt = postAffinePlnPnt + 1.1 * distToGo * dirInMyPlane;
+        postAffinePlnPnt = postAffinePlnPnt + 1.1f * distToGo * dirInMyPlane;
     }
 
     // If we've got a perspective view, we may need to clamp the point we
@@ -335,12 +335,12 @@ SbPlaneProjector::project(const SbVec2f &point)
 
         // Transform from [-1,1] range to [0,1] range for normalized coords.
         SbVec3f nrmScnVanish1, nrmScnVanish2, nrmScnPlnPnt;
-        nrmScnVanish1[0] = (1.0 + projVanish1[0]) * 0.5;
-        nrmScnVanish1[1] = (1.0 + projVanish1[1]) * 0.5;
-        nrmScnVanish2[0] = (1.0 + projVanish2[0]) * 0.5;
-        nrmScnVanish2[1] = (1.0 + projVanish2[1]) * 0.5;
-        nrmScnPlnPnt[0] = (1.0 + projPlnPnt[0]) * 0.5;
-        nrmScnPlnPnt[1] = (1.0 + projPlnPnt[1]) * 0.5;
+        nrmScnVanish1[0] = (1.0f + projVanish1[0]) * 0.5f;
+        nrmScnVanish1[1] = (1.0f + projVanish1[1]) * 0.5f;
+        nrmScnVanish2[0] = (1.0f + projVanish2[0]) * 0.5f;
+        nrmScnVanish2[1] = (1.0f + projVanish2[1]) * 0.5f;
+        nrmScnPlnPnt[0] = (1.0f + projPlnPnt[0]) * 0.5f;
+        nrmScnPlnPnt[1] = (1.0f + projPlnPnt[1]) * 0.5f;
 
         // Finally, get the vanishing points in viewPlane coords:
         SbVec3f vpVanish1(nrmScnVanish1[0] * vvW, nrmScnVanish1[1] * vvH, 0);
@@ -396,8 +396,8 @@ SbPlaneProjector::project(const SbVec2f &point)
         // Convert slicePoint1 to viewPlane coords:
         SbVec3f vpSlicePoint;
         vvProj.multVecMatrix(slicePoint1, vpSlicePoint);
-        vpSlicePoint[0] = ((1.0 + vpSlicePoint[0]) * 0.5) * vvW;
-        vpSlicePoint[1] = ((1.0 + vpSlicePoint[1]) * 0.5) * vvH;
+        vpSlicePoint[0] = ((1.0f + vpSlicePoint[0]) * 0.5f) * vvW;
+        vpSlicePoint[1] = ((1.0f + vpSlicePoint[1]) * 0.5f) * vvH;
         vpSlicePoint[2] = 0.0;
         // Now calculate lineToLine, the distance between vpSlicePoint and
         // the horizon:
@@ -406,10 +406,10 @@ SbPlaneProjector::project(const SbVec2f &point)
         // If lineToLine is as big as the average of the viewplane width
         // and height, then the plane is pretty flat on. Reduce lineToLine
         // to be that size.
-        float sizeAverage = 0.5 * (vvW + vvH);
+        float sizeAverage = 0.5f * (vvW + vvH);
         if (lineToLine > sizeAverage)
             lineToLine = sizeAverage;
-#define VANISH_DELTA .01
+#define VANISH_DELTA .01f
         float vanishSafetyDist = VANISH_DELTA * lineToLine;
 #undef VANISH_DELTA
         SbVec3f vpInPoint(point[0] * vvW, point[1] * vvH, 0);

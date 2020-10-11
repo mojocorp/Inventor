@@ -99,8 +99,8 @@ SbRotation::getValue(SbVec3f &axis, float &radians) const
     q[2] = quat[2];
 
     if ((len = q.length()) > 0.00001) {
-        axis = q * (1.0 / len);
-        radians = 2.0 * std::acos(quat[3]);
+        axis = q * (1.0f / len);
+        radians = 2.0f * std::acos(quat[3]);
     }
 
     else {
@@ -154,7 +154,7 @@ SbRotation::invert()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float invNorm = 1.0 / norm();
+    float invNorm = 1.0f / norm();
 
     quat[0] = -quat[0] * invNorm;
     quat[1] = -quat[1] * invNorm;
@@ -284,7 +284,7 @@ SbRotation::setValue(const SbMatrix &m)
     }
     if (m[0][0] + m[1][1] + m[2][2] > m[i][i]) {
         // Compute w first:
-        quat[3] = std::sqrt(m[0][0] + m[1][1] + m[2][2] + m[3][3]) / 2.0;
+        quat[3] = std::sqrt(m[0][0] + m[1][1] + m[2][2] + m[3][3]) / 2.0f;
 
         // And compute other values:
         quat[0] = (m[1][2] - m[2][1]) / (4 * quat[3]);
@@ -296,7 +296,7 @@ SbRotation::setValue(const SbMatrix &m)
         k = (i + 2) % 3;
 
         // Compute first value:
-        quat[i] = std::sqrt(m[i][i] - m[j][j] - m[k][k] + m[3][3]) / 2.0;
+        quat[i] = std::sqrt(m[i][i] - m[j][j] - m[k][k] + m[3][3]) / 2.0f;
 
         // And the others:
         quat[j] = (m[i][j] + m[j][i]) / (4 * quat[i]);
@@ -345,13 +345,13 @@ SbRotation::setValue(const SbVec3f &axis, float radians)
     q = axis;
     q.normalize();
 
-    q *= sinf(radians / 2.0);
+    q *= std::sin(radians / 2.0f);
 
     quat[0] = q[0];
     quat[1] = q[1];
     quat[2] = q[2];
 
-    quat[3] = cosf(radians / 2.0);
+    quat[3] = std::cos(radians / 2.0f);
 
     return (*this);
 }
@@ -401,7 +401,7 @@ SbRotation::setValue(const SbVec3f &rotateFrom, const SbVec3f &rotateTo)
 
     // use half-angle formulae
     // sin^2 t = ( 1 - cos (2t) ) / 2
-    axis *= std::sqrt(0.5 * (1.0 - cost));
+    axis *= std::sqrt(0.5f * (1.0f - cost));
 
     // scale the axis by the sine of half the rotation angle to get
     // the normalized quaternion
@@ -411,7 +411,7 @@ SbRotation::setValue(const SbVec3f &rotateFrom, const SbVec3f &rotateTo)
 
     // cos^2 t = ( 1 + cos (2t) ) / 2
     // w part is cosine of half the rotation angle
-    quat[3] = std::sqrt(0.5 * (1.0 + cost));
+    quat[3] = std::sqrt(0.5f * (1.0f + cost));
 
     return (*this);
 }
@@ -635,7 +635,7 @@ SbRotation::normalize()
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    const float dist = 1.0 / std::sqrt(norm());
+    const float dist = 1.0f / std::sqrt(norm());
 
     quat[0] *= dist;
     quat[1] *= dist;

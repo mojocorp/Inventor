@@ -191,7 +191,7 @@ SoEngineOutputData::getIndex(const SoEngine *      func,
     for (size_t i = 0; i < outputs.size(); i++) {
         const SoOutputEntry *entry = outputs[i];
         if (entry->offset == offset)
-            return i;
+            return int(i);
     }
 
     // This should never happen.
@@ -364,7 +364,7 @@ SoEngineOutputData::writeDescriptions(SoOutput *out, SoEngine *object) const
         out->write(' ');
         out->incrementIndent(2);
     } else {
-        unsigned short numDescriptions = getNumOutputs();
+        unsigned short numDescriptions = (unsigned short)getNumOutputs();
         out->write(numDescriptions);
     }
 
