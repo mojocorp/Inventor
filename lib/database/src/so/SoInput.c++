@@ -96,8 +96,8 @@ struct SoInputFile {
     SbString      name;         // Name of file
     SbString      fullName;     // Name of file with full path
     SbFile        fp;           // File pointer
-    void *        buffer;       // Buffer to read from (or NULL)
-    char *        curBuf;       // Current location in buffer
+    void const *  buffer;       // Buffer to read from (or NULL)
+    char const *  curBuf;       // Current location in buffer
     size_t        bufSize;      // Buffer size
     int           lineNum;      // Number of line currently reading
     SbBool        binary;       // TRUE if file has binary data
@@ -601,7 +601,7 @@ SoInput::getCurFileName() const
 // Use: public
 
 void
-SoInput::setBuffer(void *bufPointer, size_t bufSize)
+SoInput::setBuffer(const void *bufPointer, size_t bufSize)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1333,7 +1333,7 @@ SoInput::readBinaryArray(double *d, size_t length)
 // Use: private
 
 void
-SoInput::convertShort(char *from, short *s)
+SoInput::convertShort(const char *from, short *s)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1351,7 +1351,7 @@ SoInput::convertShort(char *from, short *s)
 // Use: private
 
 void
-SoInput::convertInt32(char *from, int32_t *l)
+SoInput::convertInt32(const char *from, int32_t *l)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1366,7 +1366,7 @@ SoInput::convertInt32(char *from, int32_t *l)
 // Use: private
 
 void
-SoInput::convertFloat(char *from, float *f)
+SoInput::convertFloat(const char *from, float *f)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1381,7 +1381,7 @@ SoInput::convertFloat(char *from, float *f)
 // Use: private
 
 void
-SoInput::convertDouble(char *from, double *d)
+SoInput::convertDouble(const char *from, double *d)
 //
 ////////////////////////////////////////////////////////////////////////
 {
@@ -1397,11 +1397,11 @@ SoInput::convertDouble(char *from, double *d)
 // Use: private
 
 void
-SoInput::convertShortArray(char *from, short *to, size_t len)
+SoInput::convertShortArray(const char *from, short *to, size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char *b = from;
+    char const *b = from;
 
     len >>= 1;        // convert bytes to short
     while (len > 4) { // unroll the loop a bit
@@ -1429,12 +1429,12 @@ SoInput::convertShortArray(char *from, short *to, size_t len)
 // Use: private
 
 void
-SoInput::convertInt32Array(char *from, int32_t *to, size_t len)
+SoInput::convertInt32Array(const char *from, int32_t *to, size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    int32_t *t = to;
-    char *   b = from;
+    int32_t *   t = to;
+    char const *b = from;
 
     while (len > 4) { // unroll the loop a bit
         DGL_NTOH_INT32(t[0], INT32(b));
@@ -1461,12 +1461,12 @@ SoInput::convertInt32Array(char *from, int32_t *to, size_t len)
 // Use: private
 
 void
-SoInput::convertFloatArray(char *from, float *to, size_t len)
+SoInput::convertFloatArray(const char *from, float *to, size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    float *t = to;
-    char * b = from;
+    float *     t = to;
+    char const *b = from;
 
     while (len > 4) { // unroll the loop a bit
         DGL_NTOH_FLOAT(t[0], FLOAT(b));
@@ -1493,11 +1493,11 @@ SoInput::convertFloatArray(char *from, float *to, size_t len)
 // Use: private
 
 void
-SoInput::convertDoubleArray(char *from, double *to, size_t len)
+SoInput::convertDoubleArray(const char *from, double *to, size_t len)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char *b = from;
+    char const *b = from;
 
     len >>= 3;        // convert bytes to doubles
     while (len > 4) { // unroll the loop a bit
@@ -1949,9 +1949,10 @@ SoInput::freeBytesInBuf() const
 
 SbBool
 SoInput::readHex(uint32_t &l) {
-    char   str[32]; // Number can't be longer than this
-    char * s = str;
-    SbBool ret;
+    char        str[32]; // Number can't be longer than this
+    char *      pstr = str;
+    char const *s = str;
+    SbBool      ret;
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
@@ -1976,24 +1977,25 @@ SoInput::readHex(uint32_t &l) {
     // Read from a file
     else {
         skipWhiteSpace();
-        while (curFile->fp.getChar(s)) {
-            if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
-                putBack(*s);
-                *s = '\0';
+        while (curFile->fp.getChar(pstr)) {
+            if (*pstr == ',' || *pstr == ']' || *pstr == '}' ||
+                isspace(*pstr)) {
+                putBack(*pstr);
+                *pstr = '\0';
                 break;
             }
-            s++;
+            pstr++;
         }
 
-        ret = (s - str <= 0) ? FALSE : TRUE;
+        ret = (pstr - str <= 0) ? FALSE : TRUE;
         s = str;
     }
 
     // Convert the hex string we just got into an uint32_teger
     if (ret) {
-        int   i;
-        int   minSize = 3; // Must be at least this many bytes in str
-        char *save = s;
+        int         i;
+        int         minSize = 3; // Must be at least this many bytes in str
+        char const *save = s;
 
         if (*s++ == '0') {
             if (*s == '\0' || *s == ',' || *s == ']' || *s == '}' ||
@@ -2056,10 +2058,11 @@ SoInput::readInteger(int32_t &l)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char   str[32]; // Number can't be longer than this
-    char * s = str;
-    int    i;
-    SbBool ret;
+    char        str[32]; // Number can't be longer than this
+    char *      pstr = str;
+    char const *s = str;
+    int         i;
+    SbBool      ret;
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
@@ -2081,23 +2084,24 @@ SoInput::readInteger(int32_t &l)
 
     // Read from a file
     else {
-        while (curFile->fp.getChar(s)) {
-            if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
-                putBack(*s);
-                *s = '\0';
+        while (curFile->fp.getChar(pstr)) {
+            if (*pstr == ',' || *pstr == ']' || *pstr == '}' ||
+                isspace(*pstr)) {
+                putBack(*pstr);
+                *pstr = '\0';
                 break;
             }
-            s++;
+            pstr++;
         }
 
-        ret = (s - str <= 0) ? FALSE : TRUE;
+        ret = (pstr - str <= 0) ? FALSE : TRUE;
         s = str;
     }
 
     // Convert the string we just got into a int32_t integer
     if (ret) {
-        char *ptr;
-        char *save = s;
+        char const *ptr;
+        char const *save = s;
 
         if (*s == '0') {
             s++;
@@ -2203,10 +2207,11 @@ SoInput::readUnsignedInteger(uint32_t &l)
 //
 ////////////////////////////////////////////////////////////////////////
 {
-    char   str[32]; // Number can't be longer than this
-    char * s = str;
-    int    i;
-    SbBool ret;
+    char        str[32]; // Number can't be longer than this
+    char *      pstr = str;
+    char const *s = str;
+    int         i;
+    SbBool      ret;
 
     // Read from backBuf if it is not empty
     if (backBufIndex >= 0) {
@@ -2228,23 +2233,24 @@ SoInput::readUnsignedInteger(uint32_t &l)
 
     // Read from a file
     else {
-        while (curFile->fp.getChar(s)) {
-            if (*s == ',' || *s == ']' || *s == '}' || isspace(*s)) {
-                putBack(*s);
-                *s = '\0';
+        while (curFile->fp.getChar(pstr)) {
+            if (*pstr == ',' || *pstr == ']' || *pstr == '}' ||
+                isspace(*pstr)) {
+                putBack(*pstr);
+                *pstr = '\0';
                 break;
             }
-            s++;
+            pstr++;
         }
 
-        ret = (s - str <= 0) ? FALSE : TRUE;
+        ret = (pstr - str <= 0) ? FALSE : TRUE;
         s = str;
     }
 
     // Convert the string we just got into an uint32_teger
     if (ret) {
-        char *ptr;
-        char *save = s;
+        char const *ptr;
+        char const *save = s;
 
         if (*s == '0') {
             s++;

@@ -146,7 +146,7 @@ class SoInput {
     const SbString &getCurFileName() const;
 
     /// Sets an in-memory buffer to read from, along with its size.
-    void setBuffer(void *bufPointer, size_t bufSize);
+    void setBuffer(const void *bufPointer, size_t bufSize);
 
     /// Returns number of bytes read from buffer. Returns 0 if not
     /// reading from a buffer.
@@ -292,13 +292,12 @@ class SoInput {
     int readChar(char *string, char charToRead);
 
     // Convert datatypes to network format during writing
-    void convertShort(char *from, short *s);
-    void convertInt32(char *from, int32_t *l);
-    void convertFloat(char *from, float *f);
-    void convertDouble(char *from, double *d);
-    void convertShortArray(char *from, short *to, size_t len);
-    void convertInt32Array(char *from, int32_t *to, size_t len);
-    void convertFloatArray(char *from, float *to, size_t len);
-    void convertDoubleArray(char *from, double *to, size_t len);
+    void convertShort(const char *from, short *s);
+    void convertInt32(const char *from, int32_t *l);
+    void convertFloat(const char *from, float *f);
+    void convertDouble(const char *from, double *d);
+    void convertShortArray(const char *from, short *to, size_t len);
+    void convertInt32Array(const char *from, int32_t *to, size_t len);
+    void convertFloatArray(const char *from, float *to, size_t len);
+    void convertDoubleArray(const char *from, double *to, size_t len);
 };
-
