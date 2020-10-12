@@ -101,11 +101,6 @@
  _______________________________________________________________________
  */
 
-// There is a cycle of include files between SoBaseKit.h and SoSubKit.h
-// SoBaseKit.h must be included before _SO_SUB_KIT_ is defined.  Otherwise,
-// SoBaseKit.h will not compile.
-#include <Inventor/nodekits/SoBaseKit.h>
-
 #pragma once
 
 #include <Inventor/nodes/SoNode.h>
@@ -546,4 +541,3 @@
 #define SO_KIT_INIT_INSTANCE()                                                 \
     createNodekitPartsList();                                                  \
     createDefaultParts()
-

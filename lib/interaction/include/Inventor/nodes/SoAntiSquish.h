@@ -55,6 +55,7 @@
 
 #pragma once
 
+#include <Inventor/SbMatrix.h>
 #include <Inventor/fields/SoFieldData.h>
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/nodes/SoTransformation.h>
@@ -149,4 +150,3 @@ class SoAntiSquish : public SoTransformation {
 
     SbBool recalcNextTime;
 };
-

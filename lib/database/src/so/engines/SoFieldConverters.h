@@ -55,6 +55,11 @@
  */
 
 #include <Inventor/fields/SoFields.h>
+#include <Inventor/engines/SoFieldConverter.h>
+
+class SoFieldData;
+class SoEngineOutput;
+class SoEngineOutputData;
 
 ////////////////////////////////////////////////////////////
 //

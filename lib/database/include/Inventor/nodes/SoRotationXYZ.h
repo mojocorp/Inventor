@@ -55,6 +55,7 @@
 
 #pragma once
 
+#include <Inventor/SbRotation.h>
 #include <Inventor/fields/SoSFEnum.h>
 #include <Inventor/fields/SoSFFloat.h>
 #include <Inventor/nodes/SoTransformation.h>
@@ -118,4 +119,3 @@ class SoRotationXYZ : public SoTransformation {
   protected:
     virtual ~SoRotationXYZ();
 };
-

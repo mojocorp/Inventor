@@ -74,7 +74,6 @@
 #include <Inventor/nodes/SoSubNode.h>
 #include <Inventor/nodes/SoNode.h>
 #include <Inventor/nodekits/SoNodekitParts.h>
-#include <Inventor/nodekits/SoBaseKit.h>
 
 class SoGroup;
 
@@ -231,4 +230,3 @@ class SoNodeKitListPart : public SoNode {
 
     friend class SoBaseKit;
 };
-
