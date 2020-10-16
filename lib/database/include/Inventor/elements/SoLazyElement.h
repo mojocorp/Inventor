@@ -193,10 +193,10 @@ class SoLazyElement : public SoElement {
 
     // Specify inventor defaults for colors, etc.
     static SbColor  getDefaultDiffuse() { return defaultDiffuseColor; }
-    static SbColor  getDefaultAmbient() { return SbColor(0.2, 0.2, 0.2); }
-    static SbColor  getDefaultSpecular() { return SbColor(0.0, 0.0, 0.0); }
-    static SbColor  getDefaultEmissive() { return SbColor(0.0, 0.0, 0.0); }
-    static float    getDefaultShininess() { return 0.2; }
+    static SbColor  getDefaultAmbient() { return SbColor(0.2f, 0.2f, 0.2f); }
+    static SbColor  getDefaultSpecular() { return SbColor(0.0f, 0.0f, 0.0f); }
+    static SbColor  getDefaultEmissive() { return SbColor(0.0f, 0.0f, 0.0f); }
+    static float    getDefaultShininess() { return 0.2f; }
     static uint32_t getDefaultPacked() { return defaultPackedColor; }
     static float    getDefaultTransparency() { return defaultTransparency; }
     static int32_t  getDefaultLightModel() { return PHONG; }

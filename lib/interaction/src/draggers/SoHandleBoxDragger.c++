@@ -110,153 +110,153 @@ SoHandleBoxDragger::SoHandleBoxDragger()
 
     // These parts will all go under the geomSeparator, for efficient
     // rendering
-    SO_KIT_ADD_CATALOG_ENTRY(drawStyle, SoDrawStyle, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(drawStyle, SoDrawStyle, TRUE, geomSeparator, \0,
                              FALSE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(translator1Switch, SoSwitch, TRUE, geomSeparator, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator1Switch, SoSwitch, TRUE, geomSeparator,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator1, SoSeparator, TRUE, translator1Switch,
-                             , TRUE);
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator1Active, SoSeparator, TRUE,
-                             translator1Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator2Switch, SoSwitch, TRUE, geomSeparator, ,
-                             FALSE);
+                             translator1Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator2Switch, SoSwitch, TRUE, geomSeparator,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator2, SoSeparator, TRUE, translator2Switch,
-                             , TRUE);
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator2Active, SoSeparator, TRUE,
-                             translator2Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator3Switch, SoSwitch, TRUE, geomSeparator, ,
-                             FALSE);
+                             translator2Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator3Switch, SoSwitch, TRUE, geomSeparator,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator3, SoSeparator, TRUE, translator3Switch,
-                             , TRUE);
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator3Active, SoSeparator, TRUE,
-                             translator3Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator4Switch, SoSwitch, TRUE, geomSeparator, ,
-                             FALSE);
+                             translator3Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator4Switch, SoSwitch, TRUE, geomSeparator,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator4, SoSeparator, TRUE, translator4Switch,
-                             , TRUE);
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator4Active, SoSeparator, TRUE,
-                             translator4Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator5Switch, SoSwitch, TRUE, geomSeparator, ,
-                             FALSE);
+                             translator4Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator5Switch, SoSwitch, TRUE, geomSeparator,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator5, SoSeparator, TRUE, translator5Switch,
-                             , TRUE);
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator5Active, SoSeparator, TRUE,
-                             translator5Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator6Switch, SoSwitch, TRUE, geomSeparator, ,
-                             FALSE);
+                             translator5Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator6Switch, SoSwitch, TRUE, geomSeparator,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator6, SoSeparator, TRUE, translator6Switch,
-                             , TRUE);
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator6Active, SoSeparator, TRUE,
-                             translator6Switch, , TRUE);
+                             translator6Switch, \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(extruder1Switch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(extruder1Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder1, SoSeparator, TRUE, extruder1Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(extruder1, SoSeparator, TRUE, extruder1Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder1Active, SoSeparator, TRUE,
-                             extruder1Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder2Switch, SoSwitch, TRUE, geomSeparator, ,
+                             extruder1Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(extruder2Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder2, SoSeparator, TRUE, extruder2Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(extruder2, SoSeparator, TRUE, extruder2Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder2Active, SoSeparator, TRUE,
-                             extruder2Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder3Switch, SoSwitch, TRUE, geomSeparator, ,
+                             extruder2Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(extruder3Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder3, SoSeparator, TRUE, extruder3Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(extruder3, SoSeparator, TRUE, extruder3Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder3Active, SoSeparator, TRUE,
-                             extruder3Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder4Switch, SoSwitch, TRUE, geomSeparator, ,
+                             extruder3Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(extruder4Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder4, SoSeparator, TRUE, extruder4Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(extruder4, SoSeparator, TRUE, extruder4Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder4Active, SoSeparator, TRUE,
-                             extruder4Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder5Switch, SoSwitch, TRUE, geomSeparator, ,
+                             extruder4Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(extruder5Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder5, SoSeparator, TRUE, extruder5Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(extruder5, SoSeparator, TRUE, extruder5Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder5Active, SoSeparator, TRUE,
-                             extruder5Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder6Switch, SoSwitch, TRUE, geomSeparator, ,
+                             extruder5Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(extruder6Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(extruder6, SoSeparator, TRUE, extruder6Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(extruder6, SoSeparator, TRUE, extruder6Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(extruder6Active, SoSeparator, TRUE,
-                             extruder6Switch, , TRUE);
+                             extruder6Switch, \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(uniform1Switch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(uniform1Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform1, SoSeparator, TRUE, uniform1Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(uniform1, SoSeparator, TRUE, uniform1Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform1Active, SoSeparator, TRUE, uniform1Switch,
-                             , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform2Switch, SoSwitch, TRUE, geomSeparator, ,
+                             \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(uniform2Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform2, SoSeparator, TRUE, uniform2Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(uniform2, SoSeparator, TRUE, uniform2Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform2Active, SoSeparator, TRUE, uniform2Switch,
-                             , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform3Switch, SoSwitch, TRUE, geomSeparator, ,
+                             \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(uniform3Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform3, SoSeparator, TRUE, uniform3Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(uniform3, SoSeparator, TRUE, uniform3Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform3Active, SoSeparator, TRUE, uniform3Switch,
-                             , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform4Switch, SoSwitch, TRUE, geomSeparator, ,
+                             \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(uniform4Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform4, SoSeparator, TRUE, uniform4Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(uniform4, SoSeparator, TRUE, uniform4Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform4Active, SoSeparator, TRUE, uniform4Switch,
-                             , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform5Switch, SoSwitch, TRUE, geomSeparator, ,
+                             \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(uniform5Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform5, SoSeparator, TRUE, uniform5Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(uniform5, SoSeparator, TRUE, uniform5Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform5Active, SoSeparator, TRUE, uniform5Switch,
-                             , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform6Switch, SoSwitch, TRUE, geomSeparator, ,
+                             \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(uniform6Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform6, SoSeparator, TRUE, uniform6Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(uniform6, SoSeparator, TRUE, uniform6Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform6Active, SoSeparator, TRUE, uniform6Switch,
-                             , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform7Switch, SoSwitch, TRUE, geomSeparator, ,
+                             \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(uniform7Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform7, SoSeparator, TRUE, uniform7Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(uniform7, SoSeparator, TRUE, uniform7Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform7Active, SoSeparator, TRUE, uniform7Switch,
-                             , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform8Switch, SoSwitch, TRUE, geomSeparator, ,
+                             \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(uniform8Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(uniform8, SoSeparator, TRUE, uniform8Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(uniform8, SoSeparator, TRUE, uniform8Switch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(uniform8Active, SoSeparator, TRUE, uniform8Switch,
-                             , TRUE);
+                             \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(arrowTranslation, SoTranslation, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(arrow1Switch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(arrow1Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow1, SoSeparator, TRUE, arrow1Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow2Switch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(arrow1, SoSeparator, TRUE, arrow1Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(arrow2Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow2, SoSeparator, TRUE, arrow2Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow3Switch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(arrow2, SoSeparator, TRUE, arrow2Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(arrow3Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow3, SoSeparator, TRUE, arrow3Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow4Switch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(arrow3, SoSeparator, TRUE, arrow3Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(arrow4Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow4, SoSeparator, TRUE, arrow4Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow5Switch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(arrow4, SoSeparator, TRUE, arrow4Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(arrow5Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow5, SoSeparator, TRUE, arrow5Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow6Switch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(arrow5, SoSeparator, TRUE, arrow5Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(arrow6Switch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(arrow6, SoSeparator, TRUE, arrow6Switch, , TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(arrow6, SoSeparator, TRUE, arrow6Switch, \0, TRUE);
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())

@@ -130,7 +130,7 @@ class SbViewportRegion {
 
     /// Returns aspect ratio (width/height) of viewport
     float getViewportAspectRatio() const {
-        return (vpSizePix[1] == 0 ? 1.0
+        return (vpSizePix[1] == 0 ? 1.0f
                                   : (float)vpSizePix[0] / (float)vpSizePix[1]);
     }
 

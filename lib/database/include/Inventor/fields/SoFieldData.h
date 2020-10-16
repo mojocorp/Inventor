@@ -116,7 +116,7 @@ class SoFieldData {
                  SbBool copyConnections) const;
 
     /// Returns number of fields
-    int getNumFields() const { return fields.size(); }
+    int getNumFields() const { return int(fields.size()); }
 
     /// Returns name of field with given index
     const SbName &getFieldName(int index) const;

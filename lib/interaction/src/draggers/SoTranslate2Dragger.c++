@@ -100,24 +100,24 @@ SoTranslate2Dragger::SoTranslate2Dragger()
 
     // Put this stuff under the geomSeparator so it will draw more
     // efficiently.
-    SO_KIT_ADD_CATALOG_ENTRY(translatorSwitch, SoSwitch, TRUE, geomSeparator, ,
-                             FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator, SoSeparator, TRUE, translatorSwitch, ,
-                             TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translatorSwitch, SoSwitch, TRUE, geomSeparator,
+                             \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator, SoSeparator, TRUE, translatorSwitch,
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translatorActive, SoSeparator, TRUE,
-                             translatorSwitch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(feedbackSwitch, SoSwitch, TRUE, geomSeparator, ,
+                             translatorSwitch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(feedbackSwitch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(feedback, SoSeparator, TRUE, feedbackSwitch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(feedback, SoSeparator, TRUE, feedbackSwitch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(feedbackActive, SoSeparator, TRUE, feedbackSwitch,
-                             , TRUE);
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(axisFeedbackSwitch, SoSwitch, TRUE, geomSeparator,
-                             , FALSE);
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(xAxisFeedback, SoSeparator, TRUE,
-                             axisFeedbackSwitch, , TRUE);
+                             axisFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(yAxisFeedback, SoSeparator, TRUE,
-                             axisFeedbackSwitch, , TRUE);
+                             axisFeedbackSwitch, \0, TRUE);
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())

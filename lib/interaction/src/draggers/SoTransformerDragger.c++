@@ -202,7 +202,7 @@ SoTransformerDragger::makeCatalog() {
     SO_KIT_ADD_CATALOG_ENTRY(overallStyle, SoGroup, TRUE, topSeparator,
                              geomSeparator, FALSE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(translatorSep, SoSeparator, TRUE, topSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(translatorSep, SoSeparator, TRUE, topSeparator, \0,
                              FALSE);
 
     // ORDER OF THESE IS IMPORTANT!
@@ -223,281 +223,281 @@ SoTransformerDragger::makeCatalog() {
 
 void
 SoTransformerDragger::makeTranslaterCatalogParts() {
-    SO_KIT_ADD_CATALOG_ENTRY(translator1Switch, SoSwitch, TRUE, translatorSep, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator1Switch, SoSwitch, TRUE, translatorSep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator1LocateGroup, SoLocateHighlight, TRUE,
-                             translator1Switch, , FALSE);
+                             translator1Switch, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator1, SoSeparator, TRUE,
-                             translator1LocateGroup, , TRUE);
+                             translator1LocateGroup, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator1Active, SoSeparator, TRUE,
-                             translator1Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator2Switch, SoSwitch, TRUE, translatorSep, ,
-                             FALSE);
+                             translator1Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator2Switch, SoSwitch, TRUE, translatorSep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator2LocateGroup, SoLocateHighlight, TRUE,
-                             translator2Switch, , FALSE);
+                             translator2Switch, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator2, SoSeparator, TRUE,
-                             translator2LocateGroup, , TRUE);
+                             translator2LocateGroup, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator2Active, SoSeparator, TRUE,
-                             translator2Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator3Switch, SoSwitch, TRUE, translatorSep, ,
-                             FALSE);
+                             translator2Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator3Switch, SoSwitch, TRUE, translatorSep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator3LocateGroup, SoLocateHighlight, TRUE,
-                             translator3Switch, , FALSE);
+                             translator3Switch, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator3, SoSeparator, TRUE,
-                             translator3LocateGroup, , TRUE);
+                             translator3LocateGroup, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator3Active, SoSeparator, TRUE,
-                             translator3Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator4Switch, SoSwitch, TRUE, translatorSep, ,
-                             FALSE);
+                             translator3Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator4Switch, SoSwitch, TRUE, translatorSep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator4LocateGroup, SoLocateHighlight, TRUE,
-                             translator4Switch, , FALSE);
+                             translator4Switch, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator4, SoSeparator, TRUE,
-                             translator4LocateGroup, , TRUE);
+                             translator4LocateGroup, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator4Active, SoSeparator, TRUE,
-                             translator4Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator5Switch, SoSwitch, TRUE, translatorSep, ,
-                             FALSE);
+                             translator4Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator5Switch, SoSwitch, TRUE, translatorSep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator5LocateGroup, SoLocateHighlight, TRUE,
-                             translator5Switch, , FALSE);
+                             translator5Switch, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator5, SoSeparator, TRUE,
-                             translator5LocateGroup, , TRUE);
+                             translator5LocateGroup, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator5Active, SoSeparator, TRUE,
-                             translator5Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator6Switch, SoSwitch, TRUE, translatorSep, ,
-                             FALSE);
+                             translator5Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator6Switch, SoSwitch, TRUE, translatorSep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator6LocateGroup, SoLocateHighlight, TRUE,
-                             translator6Switch, , FALSE);
+                             translator6Switch, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator6, SoSeparator, TRUE,
-                             translator6LocateGroup, , TRUE);
+                             translator6LocateGroup, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(translator6Active, SoSeparator, TRUE,
-                             translator6Switch, , TRUE);
+                             translator6Switch, \0, TRUE);
 }
 
 void
 SoTransformerDragger::makeRotaterCatalogParts() {
-    SO_KIT_ADD_CATALOG_ENTRY(rotatorSep, SoSeparator, TRUE, topSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotatorSep, SoSeparator, TRUE, topSeparator, \0,
                              FALSE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(rotator1Switch, SoSwitch, TRUE, rotatorSep, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator1Switch, SoSwitch, TRUE, rotatorSep, \0,
                              FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator1LocateGroup, SoLocateHighlight, TRUE,
-                             rotator1Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator1, SoSeparator, TRUE, rotator1LocateGroup, ,
-                             TRUE);
+                             rotator1Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(rotator1, SoSeparator, TRUE, rotator1LocateGroup,
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator1Active, SoSeparator, TRUE, rotator1Switch,
-                             , TRUE);
+                             \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(rotator2Switch, SoSwitch, TRUE, rotatorSep, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator2Switch, SoSwitch, TRUE, rotatorSep, \0,
                              FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator2LocateGroup, SoLocateHighlight, TRUE,
-                             rotator2Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator2, SoSeparator, TRUE, rotator2LocateGroup, ,
-                             TRUE);
+                             rotator2Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(rotator2, SoSeparator, TRUE, rotator2LocateGroup,
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator2Active, SoSeparator, TRUE, rotator2Switch,
-                             , TRUE);
+                             \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(rotator3Switch, SoSwitch, TRUE, rotatorSep, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator3Switch, SoSwitch, TRUE, rotatorSep, \0,
                              FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator3LocateGroup, SoLocateHighlight, TRUE,
-                             rotator3Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator3, SoSeparator, TRUE, rotator3LocateGroup, ,
-                             TRUE);
+                             rotator3Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(rotator3, SoSeparator, TRUE, rotator3LocateGroup,
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator3Active, SoSeparator, TRUE, rotator3Switch,
-                             , TRUE);
+                             \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(rotator4Switch, SoSwitch, TRUE, rotatorSep, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator4Switch, SoSwitch, TRUE, rotatorSep, \0,
                              FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator4LocateGroup, SoLocateHighlight, TRUE,
-                             rotator4Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator4, SoSeparator, TRUE, rotator4LocateGroup, ,
-                             TRUE);
+                             rotator4Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(rotator4, SoSeparator, TRUE, rotator4LocateGroup,
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator4Active, SoSeparator, TRUE, rotator4Switch,
-                             , TRUE);
+                             \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(rotator5Switch, SoSwitch, TRUE, rotatorSep, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator5Switch, SoSwitch, TRUE, rotatorSep, \0,
                              FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator5LocateGroup, SoLocateHighlight, TRUE,
-                             rotator5Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator5, SoSeparator, TRUE, rotator5LocateGroup, ,
-                             TRUE);
+                             rotator5Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(rotator5, SoSeparator, TRUE, rotator5LocateGroup,
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator5Active, SoSeparator, TRUE, rotator5Switch,
-                             , TRUE);
+                             \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(rotator6Switch, SoSwitch, TRUE, rotatorSep, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator6Switch, SoSwitch, TRUE, rotatorSep, \0,
                              FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator6LocateGroup, SoLocateHighlight, TRUE,
-                             rotator6Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator6, SoSeparator, TRUE, rotator6LocateGroup, ,
-                             TRUE);
+                             rotator6Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(rotator6, SoSeparator, TRUE, rotator6LocateGroup,
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator6Active, SoSeparator, TRUE, rotator6Switch,
-                             , TRUE);
+                             \0, TRUE);
 }
 
 void
 SoTransformerDragger::makeScalerCatalogParts() {
-    SO_KIT_ADD_CATALOG_ENTRY(scaleSep, SoSeparator, TRUE, topSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scaleSep, SoSeparator, TRUE, topSeparator, \0,
                              FALSE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(scale1Switch, SoSwitch, TRUE, scaleSep, , FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale1Switch, SoSwitch, TRUE, scaleSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scale1LocateGroup, SoLocateHighlight, TRUE,
-                             scale1Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale1, SoSeparator, TRUE, scale1LocateGroup, ,
+                             scale1Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale1, SoSeparator, TRUE, scale1LocateGroup, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale1Active, SoSeparator, TRUE, scale1Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scale1Active, SoSeparator, TRUE, scale1Switch, \0,
                              TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(scale2Switch, SoSwitch, TRUE, scaleSep, , FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale2Switch, SoSwitch, TRUE, scaleSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scale2LocateGroup, SoLocateHighlight, TRUE,
-                             scale2Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale2, SoSeparator, TRUE, scale2LocateGroup, ,
+                             scale2Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale2, SoSeparator, TRUE, scale2LocateGroup, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale2Active, SoSeparator, TRUE, scale2Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scale2Active, SoSeparator, TRUE, scale2Switch, \0,
                              TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(scale3Switch, SoSwitch, TRUE, scaleSep, , FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale3Switch, SoSwitch, TRUE, scaleSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scale3LocateGroup, SoLocateHighlight, TRUE,
-                             scale3Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale3, SoSeparator, TRUE, scale3LocateGroup, ,
+                             scale3Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale3, SoSeparator, TRUE, scale3LocateGroup, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale3Active, SoSeparator, TRUE, scale3Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scale3Active, SoSeparator, TRUE, scale3Switch, \0,
                              TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(scale4Switch, SoSwitch, TRUE, scaleSep, , FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale4Switch, SoSwitch, TRUE, scaleSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scale4LocateGroup, SoLocateHighlight, TRUE,
-                             scale4Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale4, SoSeparator, TRUE, scale4LocateGroup, ,
+                             scale4Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale4, SoSeparator, TRUE, scale4LocateGroup, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale4Active, SoSeparator, TRUE, scale4Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scale4Active, SoSeparator, TRUE, scale4Switch, \0,
                              TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(scale5Switch, SoSwitch, TRUE, scaleSep, , FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale5Switch, SoSwitch, TRUE, scaleSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scale5LocateGroup, SoLocateHighlight, TRUE,
-                             scale5Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale5, SoSeparator, TRUE, scale5LocateGroup, ,
+                             scale5Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale5, SoSeparator, TRUE, scale5LocateGroup, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale5Active, SoSeparator, TRUE, scale5Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scale5Active, SoSeparator, TRUE, scale5Switch, \0,
                              TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(scale6Switch, SoSwitch, TRUE, scaleSep, , FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale6Switch, SoSwitch, TRUE, scaleSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scale6LocateGroup, SoLocateHighlight, TRUE,
-                             scale6Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale6, SoSeparator, TRUE, scale6LocateGroup, ,
+                             scale6Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale6, SoSeparator, TRUE, scale6LocateGroup, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale6Active, SoSeparator, TRUE, scale6Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scale6Active, SoSeparator, TRUE, scale6Switch, \0,
                              TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(scale7Switch, SoSwitch, TRUE, scaleSep, , FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale7Switch, SoSwitch, TRUE, scaleSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scale7LocateGroup, SoLocateHighlight, TRUE,
-                             scale7Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale7, SoSeparator, TRUE, scale7LocateGroup, ,
+                             scale7Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale7, SoSeparator, TRUE, scale7LocateGroup, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale7Active, SoSeparator, TRUE, scale7Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scale7Active, SoSeparator, TRUE, scale7Switch, \0,
                              TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(scale8Switch, SoSwitch, TRUE, scaleSep, , FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale8Switch, SoSwitch, TRUE, scaleSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scale8LocateGroup, SoLocateHighlight, TRUE,
-                             scale8Switch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale8, SoSeparator, TRUE, scale8LocateGroup, ,
+                             scale8Switch, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(scale8, SoSeparator, TRUE, scale8LocateGroup, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scale8Active, SoSeparator, TRUE, scale8Switch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scale8Active, SoSeparator, TRUE, scale8Switch, \0,
                              TRUE);
 }
 
 void
 SoTransformerDragger::makeAxisFeedbackCatalogParts() {
     SO_KIT_ADD_CATALOG_ENTRY(axisFeedbackSep, SoSeparator, TRUE, geomSeparator,
-                             , FALSE);
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(axisFeedbackLocation, SoTranslation, TRUE,
-                             axisFeedbackSep, , FALSE);
+                             axisFeedbackSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(xAxisFeedbackSwitch, SoSwitch, TRUE,
-                             axisFeedbackSep, , FALSE);
+                             axisFeedbackSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(xAxisFeedbackActive, SoSeparator, TRUE,
-                             xAxisFeedbackSwitch, , TRUE);
+                             xAxisFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(xAxisFeedbackSelect, SoSeparator, TRUE,
-                             xAxisFeedbackSwitch, , TRUE);
+                             xAxisFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(xCrosshairFeedback, SoSeparator, TRUE,
-                             xAxisFeedbackSwitch, , TRUE);
+                             xAxisFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(yAxisFeedbackSwitch, SoSwitch, TRUE,
-                             axisFeedbackSep, , FALSE);
+                             axisFeedbackSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(yAxisFeedbackActive, SoSeparator, TRUE,
-                             yAxisFeedbackSwitch, , TRUE);
+                             yAxisFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(yAxisFeedbackSelect, SoSeparator, TRUE,
-                             yAxisFeedbackSwitch, , TRUE);
+                             yAxisFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(yCrosshairFeedback, SoSeparator, TRUE,
-                             yAxisFeedbackSwitch, , TRUE);
+                             yAxisFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(zAxisFeedbackSwitch, SoSwitch, TRUE,
-                             axisFeedbackSep, , FALSE);
+                             axisFeedbackSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(zAxisFeedbackActive, SoSeparator, TRUE,
-                             zAxisFeedbackSwitch, , TRUE);
+                             zAxisFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(zAxisFeedbackSelect, SoSeparator, TRUE,
-                             zAxisFeedbackSwitch, , TRUE);
+                             zAxisFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(zCrosshairFeedback, SoSeparator, TRUE,
-                             zAxisFeedbackSwitch, , TRUE);
+                             zAxisFeedbackSwitch, \0, TRUE);
 }
 
 void
 SoTransformerDragger::makeBoxFeedbackCatalogParts() {
     SO_KIT_ADD_CATALOG_ENTRY(translateBoxFeedbackSep, SoSeparator, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translateBoxFeedbackSwitch, SoSwitch, TRUE,
-                             translateBoxFeedbackSep, , FALSE);
+                             translateBoxFeedbackSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translateBoxFeedbackRotation, SoRotation, TRUE,
-                             translateBoxFeedbackSwitch, , FALSE);
+                             translateBoxFeedbackSwitch, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translateBoxFeedback, SoSeparator, TRUE,
-                             translateBoxFeedbackSwitch, , TRUE);
+                             translateBoxFeedbackSwitch, \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(scaleBoxFeedbackSwitch, SoSwitch, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scaleBoxFeedback, SoSeparator, TRUE,
-                             scaleBoxFeedbackSwitch, , TRUE);
+                             scaleBoxFeedbackSwitch, \0, TRUE);
 }
 
 void
 SoTransformerDragger::makeWallFeedbackCatalogParts() {
     SO_KIT_ADD_CATALOG_ENTRY(posXWallFeedbackSwitch, SoSwitch, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(posXWallFeedback, SoSeparator, TRUE,
-                             posXWallFeedbackSwitch, , TRUE);
+                             posXWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(posXRoundWallFeedback, SoSeparator, TRUE,
-                             posXWallFeedbackSwitch, , TRUE);
+                             posXWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(posYWallFeedbackSwitch, SoSwitch, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(posYWallFeedback, SoSeparator, TRUE,
-                             posYWallFeedbackSwitch, , TRUE);
+                             posYWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(posYRoundWallFeedback, SoSeparator, TRUE,
-                             posYWallFeedbackSwitch, , TRUE);
+                             posYWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(posZWallFeedbackSwitch, SoSwitch, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(posZWallFeedback, SoSeparator, TRUE,
-                             posZWallFeedbackSwitch, , TRUE);
+                             posZWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(posZRoundWallFeedback, SoSeparator, TRUE,
-                             posZWallFeedbackSwitch, , TRUE);
+                             posZWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(negXWallFeedbackSwitch, SoSwitch, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(negXWallFeedback, SoSeparator, TRUE,
-                             negXWallFeedbackSwitch, , TRUE);
+                             negXWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(negXRoundWallFeedback, SoSeparator, TRUE,
-                             negXWallFeedbackSwitch, , TRUE);
+                             negXWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(negYWallFeedbackSwitch, SoSwitch, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(negYWallFeedback, SoSeparator, TRUE,
-                             negYWallFeedbackSwitch, , TRUE);
+                             negYWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(negYRoundWallFeedback, SoSeparator, TRUE,
-                             negYWallFeedbackSwitch, , TRUE);
+                             negYWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(negZWallFeedbackSwitch, SoSwitch, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(negZWallFeedback, SoSeparator, TRUE,
-                             negZWallFeedbackSwitch, , TRUE);
+                             negZWallFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(negZRoundWallFeedback, SoSeparator, TRUE,
-                             negZWallFeedbackSwitch, , TRUE);
+                             negZWallFeedbackSwitch, \0, TRUE);
 }
 
 void
 SoTransformerDragger::makeRadialFeedbackCatalogParts() {
     SO_KIT_ADD_CATALOG_ENTRY(radialFeedbackSwitch, SoSwitch, TRUE,
-                             geomSeparator, , FALSE);
+                             geomSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(radialFeedback, SoSeparator, TRUE,
-                             radialFeedbackSwitch, , TRUE);
+                             radialFeedbackSwitch, \0, TRUE);
 }
 
 void
@@ -506,25 +506,25 @@ SoTransformerDragger::makeCircleFeedbackCatalogParts() {
     // This is because the antiSquish node can cause matrices that change
     // every frame and might break caches for the whole box.
     SO_KIT_ADD_CATALOG_ENTRY(circleFeedbackSep, SoSeparator, TRUE, topSeparator,
-                             , FALSE);
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(circleFeedbackTransformSwitch, SoSwitch, TRUE,
-                             circleFeedbackSep, , FALSE);
+                             circleFeedbackSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(circleFeedbackAntiSquish, SoAntiSquish, TRUE,
-                             circleFeedbackTransformSwitch, , FALSE);
+                             circleFeedbackTransformSwitch, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(circleFeedbackTransform, SoTransform, TRUE,
-                             circleFeedbackTransformSwitch, , FALSE);
+                             circleFeedbackTransformSwitch, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(xCircleFeedbackSwitch, SoSwitch, TRUE,
-                             circleFeedbackSep, , FALSE);
+                             circleFeedbackSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(xCircleFeedback, SoSeparator, TRUE,
-                             xCircleFeedbackSwitch, , TRUE);
+                             xCircleFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(yCircleFeedbackSwitch, SoSwitch, TRUE,
-                             circleFeedbackSep, , FALSE);
+                             circleFeedbackSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(yCircleFeedback, SoSeparator, TRUE,
-                             yCircleFeedbackSwitch, , TRUE);
+                             yCircleFeedbackSwitch, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(zCircleFeedbackSwitch, SoSwitch, TRUE,
-                             circleFeedbackSep, , FALSE);
+                             circleFeedbackSep, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(zCircleFeedback, SoSeparator, TRUE,
-                             zCircleFeedbackSwitch, , TRUE);
+                             zCircleFeedbackSwitch, \0, TRUE);
 }
 
 ////////////////////////////////////////////////////////////////////////

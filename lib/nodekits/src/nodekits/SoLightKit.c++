@@ -99,16 +99,16 @@ SoLightKit::SoLightKit()
     // and ...ADD_CATALOG_LIST_ENTRY.  See SoSubKit.h for more info
     // on syntax of these macros.
 
-    SO_KIT_ADD_CATALOG_ENTRY(transformGroup, SoTransformSeparator, TRUE, this, ,
-                             TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(transform, SoTransform, TRUE, transformGroup, ,
+    SO_KIT_ADD_CATALOG_ENTRY(transformGroup, SoTransformSeparator, TRUE, this,
+                             \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(transform, SoTransform, TRUE, transformGroup, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(light, SoLight, SoDirectionalLight, FALSE,
-                                      transformGroup, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(iconSeparator, SoSeparator, TRUE, transformGroup, ,
-                             TRUE);
+                                      transformGroup, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(iconSeparator, SoSeparator, TRUE, transformGroup,
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(icon, SoNode, SoCube, TRUE, iconSeparator,
-                                      , TRUE);
+                                      \0, TRUE);
 
     SO_KIT_INIT_INSTANCE();
 }

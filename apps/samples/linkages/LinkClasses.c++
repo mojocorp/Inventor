@@ -1,6 +1,6 @@
 /*
  *
- *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved. 
+ *  Copyright (C) 2000 Silicon Graphics, Inc.  All Rights Reserved.
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Lesser General Public
@@ -18,18 +18,18 @@
  *  otherwise, applies only to this software file.  Patent licenses, if
  *  any, provided herein do not apply to combinations of this program with
  *  other software, or any other product whatsoever.
- * 
+ *
  *  You should have received a copy of the GNU Lesser General Public
  *  License along with this library; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
  *  Contact information: Silicon Graphics, Inc., 1600 Amphitheatre Pkwy,
  *  Mountain View, CA  94043, or:
- * 
- *  http://www.sgi.com 
- * 
- *  For further information regarding this notice, see: 
- * 
+ *
+ *  http://www.sgi.com
+ *
+ *  For further information regarding this notice, see:
+ *
  *  http://oss.sgi.com/projects/GenInfo/NoticeExplan/
  *
  */
@@ -92,8 +92,7 @@ SO_KIT_SOURCE(LinkBase);
 // Use: public
 //
 void
-LinkBase::initClass()
-{
+LinkBase::initClass() {
     SO__KIT_INIT_CLASS(LinkBase, "LinkBase", SoInteractionKit);
 }
 
@@ -103,71 +102,67 @@ LinkBase::initClass()
 //
 // Use: public
 //
-LinkBase::LinkBase()
-{
+LinkBase::LinkBase() {
     SO_KIT_CONSTRUCTOR(LinkBase);
 
     isBuiltIn = TRUE;
 
     // Define new entries to catalog for this class.
-    SO_KIT_ADD_CATALOG_ENTRY(appearance, SoAppearanceKit, TRUE,
-				topSeparator, , TRUE );
-
+    SO_KIT_ADD_CATALOG_ENTRY(appearance, SoAppearanceKit, TRUE, topSeparator,
+                             \0, TRUE);
 
     // Add the new fields.
     SO_KIT_ADD_FIELD(draggersOn, (1));
-    SO_KIT_ADD_FIELD(isError,    (0));
+    SO_KIT_ADD_FIELD(isError, (0));
 
     SO_KIT_INIT_INSTANCE();
 
     isShowingErrorColor = FALSE;
     savedMaterial = NULL;
 
-    draggersOnSensor = new SoFieldSensor(&LinkBase::draggersOnSensorCB, this );;
-    isErrorSensor = new SoFieldSensor(&LinkBase::isErrorSensorCB, this );;
+    draggersOnSensor = new SoFieldSensor(&LinkBase::draggersOnSensorCB, this);
+    ;
+    isErrorSensor = new SoFieldSensor(&LinkBase::isErrorSensorCB, this);
+    ;
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 void
-LinkBase::draggersOnSensorCB(  void *mePtr, SoSensor *)
-{
-    LinkBase *myself = (LinkBase *) mePtr;
+LinkBase::draggersOnSensorCB(void *mePtr, SoSensor *) {
+    LinkBase *myself = (LinkBase *)mePtr;
 
-    myself->setDraggers( myself->draggersOn.getValue() );
+    myself->setDraggers(myself->draggersOn.getValue());
 }
 
 void
-LinkBase::isErrorSensorCB(  void *mePtr, SoSensor *)
-{
-    LinkBase *myself = (LinkBase *) mePtr;
+LinkBase::isErrorSensorCB(void *mePtr, SoSensor *) {
+    LinkBase *myself = (LinkBase *)mePtr;
 
-    myself->errorColor( myself->isError.getValue() );
+    myself->errorColor(myself->isError.getValue());
 }
 
 SbBool
-LinkBase::undoConnections() 
-{
+LinkBase::undoConnections() {
     draggersOnSensor->detach();
     isErrorSensor->detach();
 
-    setDraggers( FALSE );
+    setDraggers(FALSE);
 
     connectionsSetUp = FALSE;
     return !connectionsSetUp;
 }
 
 SbBool
-LinkBase::setUpConnections(SbBool onOff, SbBool doItAlways ) 
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+LinkBase::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( !onOff )
-	return undoConnections();
+    if (!onOff)
+        return undoConnections();
 
-    setDraggers( draggersOn.getValue() );
-    setDraggers( draggersOn.getValue() );
+    setDraggers(draggersOn.getValue());
+    setDraggers(draggersOn.getValue());
 
     draggersOnSensor->attach(&draggersOn);
     isErrorSensor->attach(&isError);
@@ -177,8 +172,7 @@ LinkBase::setUpConnections(SbBool onOff, SbBool doItAlways )
 }
 
 void
-LinkBase::setDefaultOnNonWritingFields()
-{
+LinkBase::setDefaultOnNonWritingFields() {
     // We won't be writing the draggers to file.  We overloaded the
     // write method to turn off connections before writing, which includes
     // turning off the draggers.
@@ -194,80 +188,74 @@ LinkBase::setDefaultOnNonWritingFields()
 // If middle button goes down over this LinkBase, toggle the draggers
 //
 void
-LinkBase::handleEvent(SoHandleEventAction *ha)
-{
-    if ( ha->isHandled() )
-	return;
+LinkBase::handleEvent(SoHandleEventAction *ha) {
+    if (ha->isHandled())
+        return;
 
     // Only if there's no grabber...
-    if ( ha->getGrabber() == NULL  ) {
-    
-	// get event from the action.
-	const SoEvent *event = ha->getEvent();
+    if (ha->getGrabber() == NULL) {
 
-	// If the middle mouse went down...
-	if (SO_MOUSE_PRESS_EVENT(event, BUTTON2)) {
+        // get event from the action.
+        const SoEvent *event = ha->getEvent();
 
-	    // Was there a pick?
-	    // It's over us if we're on the pick path.
-	    SoPickedPoint *pp = (SoPickedPoint *) ha->getPickedPoint();
-	    if (pp && pp->getPath() && pp->getPath()->containsNode(this) ) {
+        // If the middle mouse went down...
+        if (SO_MOUSE_PRESS_EVENT(event, BUTTON2)) {
 
-		// We were picked!
-		// Toggle the draggerOn value...
-		SbBool onNow = draggersOn.getValue();
-		draggersOn.setValue( onNow ? FALSE : TRUE );
-		ha->setHandled();
-		return;
-	    }
-	}
+            // Was there a pick?
+            // It's over us if we're on the pick path.
+            SoPickedPoint *pp = (SoPickedPoint *)ha->getPickedPoint();
+            if (pp && pp->getPath() && pp->getPath()->containsNode(this)) {
+
+                // We were picked!
+                // Toggle the draggerOn value...
+                SbBool onNow = draggersOn.getValue();
+                draggersOn.setValue(onNow ? FALSE : TRUE);
+                ha->setHandled();
+                return;
+            }
+        }
     }
 
     // If we didn't handle the event, let the base class traverse the
     // children
-    SoInteractionKit::handleEvent( ha );
+    SoInteractionKit::handleEvent(ha);
 }
 
 void
-LinkBase::setDraggers( SbBool )
-{
+LinkBase::setDraggers(SbBool) {
     // Do nothing in base class
 }
 
-void 
-LinkBase::errorColor( SbBool useErrorColor )
-{
-    if (isShowingErrorColor == useErrorColor )
-	return;
+void
+LinkBase::errorColor(SbBool useErrorColor) {
+    if (isShowingErrorColor == useErrorColor)
+        return;
 
     if (useErrorColor == FALSE) {
-	setPartAsDefault( "material", savedMaterial );
-	isShowingErrorColor = FALSE;
-    }
-    else {
-	SoNode *newSavedMtl = getAnyPart( "material", FALSE );
-	if (newSavedMtl)
-	    newSavedMtl->ref();
-	if (savedMaterial)
-	    savedMaterial->unref();
-	savedMaterial = newSavedMtl;
-	SoNode *errorMat = SoNode::getByName("ERROR_MATERIAL");
-	setPartAsDefault( "material", errorMat );	
-	isShowingErrorColor = TRUE;
+        setPartAsDefault("material", savedMaterial);
+        isShowingErrorColor = FALSE;
+    } else {
+        SoNode *newSavedMtl = getAnyPart("material", FALSE);
+        if (newSavedMtl)
+            newSavedMtl->ref();
+        if (savedMaterial)
+            savedMaterial->unref();
+        savedMaterial = newSavedMtl;
+        SoNode *errorMat = SoNode::getByName("ERROR_MATERIAL");
+        setPartAsDefault("material", errorMat);
+        isShowingErrorColor = TRUE;
     }
 }
 
 void
-LinkBase::write( SoWriteAction *action )
-{
-    if (action->getOutput()->getStage()  == SoOutput::COUNT_REFS) {
+LinkBase::write(SoWriteAction *action) {
+    if (action->getOutput()->getStage() == SoOutput::COUNT_REFS) {
         // Undo all the connections before counting
-	setUpConnections(FALSE);
-        SoInteractionKit::write( action );
-    }
-    else {
+        setUpConnections(FALSE);
+        SoInteractionKit::write(action);
+    } else {
         // Put back all the connections afterwards.
-        SoInteractionKit::write( action );
+        SoInteractionKit::write(action);
         setUpConnections(TRUE);
     }
 }
@@ -278,8 +266,7 @@ LinkBase::write( SoWriteAction *action )
 //
 // Use: public
 //
-LinkBase::~LinkBase()
-{
+LinkBase::~LinkBase() {
     if (draggersOnSensor)
         delete draggersOnSensor;
     if (isErrorSensor)
@@ -313,8 +300,7 @@ SO_KIT_SOURCE(SimpleLink);
 // Use: public
 //
 void
-SimpleLink::initClass()
-{
+SimpleLink::initClass() {
     SO__KIT_INIT_CLASS(SimpleLink, "SimpleLink", LinkBase);
 }
 
@@ -324,57 +310,56 @@ SimpleLink::initClass()
 //
 // Use: public
 //
-SimpleLink::SimpleLink()
-{
+SimpleLink::SimpleLink() {
     SO_KIT_CONSTRUCTOR(SimpleLink);
 
     isBuiltIn = TRUE;
 
     // Define new entries to catalog for this class.
     SO_KIT_ADD_CATALOG_ENTRY(originTranslator, SoTranslation, TRUE,
-				topSeparator, , FALSE );
+                             topSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(originTranslateGeom, SoSeparator, TRUE,
-				topSeparator, , TRUE );
+                             topSeparator, \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(angleRotator, SoRotationXYZ, TRUE,
-				topSeparator, , FALSE );
-    SO_KIT_ADD_CATALOG_ENTRY(angleRotateGeom, SoSeparator, TRUE,
-				topSeparator, , TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(angleRotator, SoRotationXYZ, TRUE, topSeparator,
+                             \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(angleRotateGeom, SoSeparator, TRUE, topSeparator,
+                             \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(endPointTranslateSeparator, SoSeparator, TRUE,
-				topSeparator, , FALSE );
+                             topSeparator, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(endPointTranslator, SoTranslation, TRUE,
-				endPointTranslateSeparator, , FALSE );
-    SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(endPointTranslateGeom, SoNode, SoCube, TRUE,
-				endPointTranslateSeparator, , TRUE );
+                             endPointTranslateSeparator, \0, FALSE);
+    SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(endPointTranslateGeom, SoNode, SoCube,
+                                      TRUE, endPointTranslateSeparator, \0,
+                                      TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(oneDScaleSeparator, SoSeparator, TRUE,
-				topSeparator, , FALSE );
-    SO_KIT_ADD_CATALOG_ENTRY(oneDScaler, SoScale, TRUE,
-				oneDScaleSeparator, , FALSE );
+                             topSeparator, \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(oneDScaler, SoScale, TRUE, oneDScaleSeparator, \0,
+                             FALSE);
     SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(oneDScaleGeom, SoNode, SoCube, TRUE,
-				oneDScaleSeparator, , TRUE );
+                                      oneDScaleSeparator, \0, TRUE);
 
-     SO_KIT_ADD_CATALOG_ENTRY(twoDScaleSeparator, SoSeparator, TRUE,
- 				topSeparator, , FALSE );
-     SO_KIT_ADD_CATALOG_ENTRY(twoDScaler, SoScale, TRUE,
- 				twoDScaleSeparator, , FALSE );
-     SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(twoDScaleGeom, SoNode, SoCube, TRUE,
- 				twoDScaleSeparator, , TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(twoDScaleSeparator, SoSeparator, TRUE,
+                             topSeparator, \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(twoDScaler, SoScale, TRUE, twoDScaleSeparator, \0,
+                             FALSE);
+    SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(twoDScaleGeom, SoNode, SoCube, TRUE,
+                                      twoDScaleSeparator, \0, TRUE);
 
-     SO_KIT_ADD_CATALOG_ENTRY(threeDScaleSeparator, SoSeparator, TRUE,
- 				topSeparator, , FALSE );
-     SO_KIT_ADD_CATALOG_ENTRY(threeDScaler, SoScale, TRUE,
- 				threeDScaleSeparator, , FALSE );
-     SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(threeDScaleGeom, SoNode, SoCube, TRUE,
- 				threeDScaleSeparator, , TRUE );
-
+    SO_KIT_ADD_CATALOG_ENTRY(threeDScaleSeparator, SoSeparator, TRUE,
+                             topSeparator, \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(threeDScaler, SoScale, TRUE, threeDScaleSeparator,
+                             \0, FALSE);
+    SO_KIT_ADD_CATALOG_ABSTRACT_ENTRY(threeDScaleGeom, SoNode, SoCube, TRUE,
+                                      threeDScaleSeparator, \0, TRUE);
 
     // Add the new fields.
-    SO_KIT_ADD_FIELD(origin,     (0,0,0));
-    SO_KIT_ADD_FIELD(angle,      (0));
-    SO_KIT_ADD_FIELD(size,       (1));
-    SO_KIT_ADD_FIELD(endPoint,   (1,0,0));
+    SO_KIT_ADD_FIELD(origin, (0, 0, 0));
+    SO_KIT_ADD_FIELD(angle, (0));
+    SO_KIT_ADD_FIELD(size, (1));
+    SO_KIT_ADD_FIELD(endPoint, (1, 0, 0));
 
     SO_KIT_INIT_INSTANCE();
 
@@ -398,65 +383,64 @@ SimpleLink::SimpleLink()
     endPointEngine = new EndPointFromParamsEngine;
     endPointEngine->ref();
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 SbBool
-SimpleLink::undoConnections()
-{
-    setDraggers( FALSE );
+SimpleLink::undoConnections() {
+    setDraggers(FALSE);
 
     SoTranslation *trans;
     SoRotationXYZ *rot;
-    SoScale       *scale;
+    SoScale *      scale;
 
     // Translation of Origin
-	trans = (SoTranslation *) getAnyPart("originTranslator",TRUE);
-	trans->translation.disconnect();
+    trans = (SoTranslation *)getAnyPart("originTranslator", TRUE);
+    trans->translation.disconnect();
 
     // Rotation about Angle
-        rot = (SoRotationXYZ *) getAnyPart("angleRotator",TRUE);
-	rot->angle.disconnect();
+    rot = (SoRotationXYZ *)getAnyPart("angleRotator", TRUE);
+    rot->angle.disconnect();
 
     // Translation to EndPoint
-	sizeZeroZeroEngine->x.disconnect();
+    sizeZeroZeroEngine->x.disconnect();
 
-	trans = (SoTranslation *) getAnyPart("endPointTranslator",TRUE);
-	trans->translation.disconnect();
+    trans = (SoTranslation *)getAnyPart("endPointTranslator", TRUE);
+    trans->translation.disconnect();
 
     // oneD scale to EndPoint
-        sizeOneOneEngine->x.disconnect();
+    sizeOneOneEngine->x.disconnect();
 
-	scale = (SoScale *) getAnyPart("oneDScaler", TRUE );
-	scale->scaleFactor.disconnect();
+    scale = (SoScale *)getAnyPart("oneDScaler", TRUE);
+    scale->scaleFactor.disconnect();
 
     // twoD scale to EndPoint
-	sizeSizeOneEngine->x.disconnect();
-	sizeSizeOneEngine->y.disconnect();
+    sizeSizeOneEngine->x.disconnect();
+    sizeSizeOneEngine->y.disconnect();
 
-	scale = (SoScale *) getAnyPart("twoDScaler", TRUE );
-	scale->scaleFactor.disconnect();
+    scale = (SoScale *)getAnyPart("twoDScaler", TRUE);
+    scale->scaleFactor.disconnect();
 
     // threeD scale to EndPoint
-	sizeSizeSizeEngine->x.disconnect();
-	sizeSizeSizeEngine->y.disconnect();
-	sizeSizeSizeEngine->z.disconnect();
+    sizeSizeSizeEngine->x.disconnect();
+    sizeSizeSizeEngine->y.disconnect();
+    sizeSizeSizeEngine->z.disconnect();
 
-	scale = (SoScale *) getAnyPart("threeDScaler", TRUE );
-	scale->scaleFactor.disconnect();
+    scale = (SoScale *)getAnyPart("threeDScaler", TRUE);
+    scale->scaleFactor.disconnect();
 
     // Calculates endPoint field based on other params.
-        endPointEngine->inOrigin.disconnect();
-        endPointEngine->inSize.disconnect();
-        endPointEngine->inAngle.disconnect();
+    endPointEngine->inOrigin.disconnect();
+    endPointEngine->inSize.disconnect();
+    endPointEngine->inAngle.disconnect();
 
-	// This is a field that might be connected from somewhere other than
-	// our own engine. Only disconnect if appropriate.
-	SoEngineOutput *eo;
-	if ( endPoint.getConnectedEngine(eo)) {
-	    if ( eo == &endPointEngine->outEndPoint )
-		endPoint.disconnect();
-	}
+    // This is a field that might be connected from somewhere other than
+    // our own engine. Only disconnect if appropriate.
+    SoEngineOutput *eo;
+    if (endPoint.getConnectedEngine(eo)) {
+        if (eo == &endPointEngine->outEndPoint)
+            endPoint.disconnect();
+    }
 
     LinkBase::undoConnections();
 
@@ -464,76 +448,73 @@ SimpleLink::undoConnections()
     return !connectionsSetUp;
 }
 
-
 SbBool
-SimpleLink::setUpConnections(SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+SimpleLink::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( !onOff )
-	return undoConnections();
+    if (!onOff)
+        return undoConnections();
 
     LinkBase::setUpConnections(onOff, doItAlways);
 
     SoTranslation *trans;
     SoRotationXYZ *rot;
-    SoScale       *scale;
+    SoScale *      scale;
 
     // Translation of Origin
-	trans = (SoTranslation *) getAnyPart("originTranslator",TRUE);
-	trans->translation.connectFrom( &origin );
+    trans = (SoTranslation *)getAnyPart("originTranslator", TRUE);
+    trans->translation.connectFrom(&origin);
 
     // Rotation about Angle
-        rot = (SoRotationXYZ *) getAnyPart("angleRotator",TRUE);
-	if (rot->axis.getValue() != SoRotationXYZ::Z )
-	    rot->axis.setValue(SoRotationXYZ::Z);
-	rot->angle.connectFrom( &angle );
+    rot = (SoRotationXYZ *)getAnyPart("angleRotator", TRUE);
+    if (rot->axis.getValue() != SoRotationXYZ::Z)
+        rot->axis.setValue(SoRotationXYZ::Z);
+    rot->angle.connectFrom(&angle);
 
     // Translation to EndPoint
-	sizeZeroZeroEngine->x.connectFrom( &size );
+    sizeZeroZeroEngine->x.connectFrom(&size);
 
-	trans = (SoTranslation *) getAnyPart("endPointTranslator",TRUE);
-	trans->translation.connectFrom( &sizeZeroZeroEngine->vector );
+    trans = (SoTranslation *)getAnyPart("endPointTranslator", TRUE);
+    trans->translation.connectFrom(&sizeZeroZeroEngine->vector);
 
     // oneD scale to EndPoint
-        sizeOneOneEngine->x.connectFrom( &size );
+    sizeOneOneEngine->x.connectFrom(&size);
 
-	scale = (SoScale *) getAnyPart("oneDScaler", TRUE );
-	scale->scaleFactor.connectFrom( &sizeOneOneEngine->vector );
+    scale = (SoScale *)getAnyPart("oneDScaler", TRUE);
+    scale->scaleFactor.connectFrom(&sizeOneOneEngine->vector);
 
     // twoD scale to EndPoint
-	sizeSizeOneEngine->x.connectFrom( &size );
-	sizeSizeOneEngine->y.connectFrom( &size );
+    sizeSizeOneEngine->x.connectFrom(&size);
+    sizeSizeOneEngine->y.connectFrom(&size);
 
-	scale = (SoScale *) getAnyPart("twoDScaler", TRUE );
-	scale->scaleFactor.connectFrom( &sizeSizeOneEngine->vector );
+    scale = (SoScale *)getAnyPart("twoDScaler", TRUE);
+    scale->scaleFactor.connectFrom(&sizeSizeOneEngine->vector);
 
     // threeD scale to EndPoint
-	sizeSizeSizeEngine->x.connectFrom( &size );
-	sizeSizeSizeEngine->y.connectFrom( &size );
-	sizeSizeSizeEngine->z.connectFrom( &size );
+    sizeSizeSizeEngine->x.connectFrom(&size);
+    sizeSizeSizeEngine->y.connectFrom(&size);
+    sizeSizeSizeEngine->z.connectFrom(&size);
 
-	scale = (SoScale *) getAnyPart("threeDScaler", TRUE );
-	scale->scaleFactor.connectFrom( &sizeSizeSizeEngine->vector );
+    scale = (SoScale *)getAnyPart("threeDScaler", TRUE);
+    scale->scaleFactor.connectFrom(&sizeSizeSizeEngine->vector);
 
     // Calculates endPoint field based on other params.
-        endPointEngine->inOrigin.connectFrom( &origin );
-        endPointEngine->inSize.connectFrom( &size );
-        endPointEngine->inAngle.connectFrom( &angle );
-	// This may be connected from somewhere else. We don't want
-	// to override...
-	if ( ! endPoint.isConnected() )
-	    endPoint.connectFrom( &endPointEngine->outEndPoint );
+    endPointEngine->inOrigin.connectFrom(&origin);
+    endPointEngine->inSize.connectFrom(&size);
+    endPointEngine->inAngle.connectFrom(&angle);
+    // This may be connected from somewhere else. We don't want
+    // to override...
+    if (!endPoint.isConnected())
+        endPoint.connectFrom(&endPointEngine->outEndPoint);
 
-    setDraggers( draggersOn.getValue() );
+    setDraggers(draggersOn.getValue());
 
     connectionsSetUp = onOff;
     return !connectionsSetUp;
 }
 void
-SimpleLink::setDefaultOnNonWritingFields()
-{
+SimpleLink::setDefaultOnNonWritingFields() {
     // This information shouldn't write to file. It will be calculated
     // when read in from file by the engines.
     originTranslator.setDefault(TRUE);
@@ -547,9 +528,8 @@ SimpleLink::setDefaultOnNonWritingFields()
 }
 
 void
-SimpleLink::setDraggers( SbBool on )
-{
-    LinkBase::setDraggers( on );
+SimpleLink::setDraggers(SbBool on) {
+    LinkBase::setDraggers(on);
 }
 
 //
@@ -558,16 +538,15 @@ SimpleLink::setDraggers( SbBool on )
 //
 // Use: public
 //
-SimpleLink::~SimpleLink()
-{
+SimpleLink::~SimpleLink() {
     if (sizeZeroZeroEngine)
-	sizeZeroZeroEngine->unref();
+        sizeZeroZeroEngine->unref();
     if (sizeOneOneEngine)
-	sizeOneOneEngine->unref();
+        sizeOneOneEngine->unref();
     if (sizeSizeOneEngine)
-	sizeSizeOneEngine->unref();
+        sizeSizeOneEngine->unref();
     if (sizeSizeSizeEngine)
-	sizeSizeSizeEngine->unref();
+        sizeSizeSizeEngine->unref();
     if (endPointEngine)
         endPointEngine->unref();
 }
@@ -592,8 +571,7 @@ SO_KIT_SOURCE(GroundedSimpleLink);
 // Use: internal
 //
 void
-GroundedSimpleLink::initClass()
-{
+GroundedSimpleLink::initClass() {
     SO__KIT_INIT_CLASS(GroundedSimpleLink, "GroundedSimpleLink", SimpleLink);
 }
 
@@ -603,27 +581,25 @@ GroundedSimpleLink::initClass()
 //
 // Use: public
 //
-GroundedSimpleLink::GroundedSimpleLink()
-{
+GroundedSimpleLink::GroundedSimpleLink() {
     SO_KIT_CONSTRUCTOR(GroundedSimpleLink);
 
     isBuiltIn = TRUE;
 
     // Define new entries to catalog for this class.
     SO_KIT_ADD_CATALOG_ENTRY(originDragger, SoTranslate2Dragger, TRUE,
-				topSeparator, appearance, TRUE );
+                             topSeparator, appearance, TRUE);
 
     SO_KIT_INIT_INSTANCE();
 
     // Add the new fields. - none for this class
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 SbBool
-GroundedSimpleLink::undoConnections()
-{
-    setDraggers( FALSE );
+GroundedSimpleLink::undoConnections() {
+    setDraggers(FALSE);
 
     // BASE CLASS
     SimpleLink::undoConnections();
@@ -633,81 +609,76 @@ GroundedSimpleLink::undoConnections()
 }
 
 SbBool
-GroundedSimpleLink::setUpConnections(SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+GroundedSimpleLink::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( !onOff )
-	return undoConnections();
+    if (!onOff)
+        return undoConnections();
 
     // BASE CLASS
-	SimpleLink::setUpConnections(onOff, doItAlways);
+    SimpleLink::setUpConnections(onOff, doItAlways);
 
-    setDraggers( draggersOn.getValue() );
+    setDraggers(draggersOn.getValue());
 
     connectionsSetUp = onOff;
     return !connectionsSetUp;
 }
 void
-GroundedSimpleLink::setDefaultOnNonWritingFields()
-{
+GroundedSimpleLink::setDefaultOnNonWritingFields() {
     SimpleLink::setDefaultOnNonWritingFields();
 }
 
 void
-GroundedSimpleLink::setDraggers( SbBool on )
-{
+GroundedSimpleLink::setDraggers(SbBool on) {
     // First call base class
     SimpleLink::setDraggers(on);
 
-    setOriginDragger( on );
+    setOriginDragger(on);
 }
 
 void
-GroundedSimpleLink::setOriginDragger( SbBool on )
-{
-    if ( on == TRUE ) {
+GroundedSimpleLink::setOriginDragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect dragger for origin 
-	// But only do it if the field is not connected to anything else.
-	// We'll also be setting parts from resources, if we can find them.
+        // Create and connect dragger for origin
+        // But only do it if the field is not connected to anything else.
+        // We'll also be setting parts from resources, if we can find them.
 
-	if ( ! origin.isConnected() ) {
-	    // Set to NULL to make sure we get a new one!
-	    setAnyPart("originDragger", NULL );
-	    SoTranslate2Dragger *orDragger 
-		= (SoTranslate2Dragger *) getAnyPart("originDragger", TRUE );
+        if (!origin.isConnected()) {
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("originDragger", NULL);
+            SoTranslate2Dragger *orDragger =
+                (SoTranslate2Dragger *)getAnyPart("originDragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
-	    SoNode *activePart = SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		orDragger->setPartAsDefault("translator", part, FALSE );
-	    if (activePart != NULL)
-		orDragger->setPartAsDefault("translatorActive", 
-					    activePart,FALSE);
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
+            SoNode *activePart = SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
+            if (part != NULL)
+                orDragger->setPartAsDefault("translator", part, FALSE);
+            if (activePart != NULL)
+                orDragger->setPartAsDefault("translatorActive", activePart,
+                                            FALSE);
 
-	    // Load initial value.
-	    if (orDragger->translation.getValue() != origin.getValue())
-		orDragger->translation.setValue(origin.getValue());
+            // Load initial value.
+            if (orDragger->translation.getValue() != origin.getValue())
+                orDragger->translation.setValue(origin.getValue());
 
-	    // Connect our origin field from the output of this dragger.
-	    origin.connectFrom( &orDragger->translation );
-	}
-    }
-    else {
-	SoTranslate2Dragger *orDragger 
-	    = SO_CHECK_ANY_PART(this, "originDragger", SoTranslate2Dragger );
-	if ( orDragger != NULL ) {
-	    SoField *f;
-	    if ( origin.getConnectedField(f) ) {
-		if ( f == &orDragger->translation )
-		    origin.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("originDragger", NULL );
-	}
+            // Connect our origin field from the output of this dragger.
+            origin.connectFrom(&orDragger->translation);
+        }
+    } else {
+        SoTranslate2Dragger *orDragger =
+            SO_CHECK_ANY_PART(this, "originDragger", SoTranslate2Dragger);
+        if (orDragger != NULL) {
+            SoField *f;
+            if (origin.getConnectedField(f)) {
+                if (f == &orDragger->translation)
+                    origin.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("originDragger", NULL);
+        }
     }
 }
 
@@ -717,12 +688,10 @@ GroundedSimpleLink::setOriginDragger( SbBool on )
 //
 // Use: public
 //
-GroundedSimpleLink::~GroundedSimpleLink()
-{
-}
+GroundedSimpleLink::~GroundedSimpleLink() {}
 
 //////////////////////////////////////////////////////////////////////////////
-//    Class: Link - subclass of GroundedSimpleLink with 
+//    Class: Link - subclass of GroundedSimpleLink with
 //                  dragger to control the endPoint
 //
 //    New nodes in this subclass are:
@@ -741,8 +710,7 @@ SO_KIT_SOURCE(Link);
 // Use: internal
 //
 void
-Link::initClass()
-{
+Link::initClass() {
     SO__KIT_INIT_CLASS(Link, "Link", GroundedSimpleLink);
 }
 
@@ -752,39 +720,37 @@ Link::initClass()
 //
 // Use: public
 //
-Link::Link()
-{
+Link::Link() {
     SO_KIT_CONSTRUCTOR(Link);
 
     isBuiltIn = TRUE;
 
     // Define new entries to catalog for this class.
     SO_KIT_ADD_CATALOG_ENTRY(endPointDragger, SoTranslate2Dragger, TRUE,
-				topSeparator, appearance, TRUE );
+                             topSeparator, appearance, TRUE);
 
     SO_KIT_INIT_INSTANCE();
 
     // Add the new fields. - no new ones in this class
 
     // Set the parts that we can find as resources...
-    setPartAsDefault("originTranslateGeom",   "linkOriginTranslateGeom"); 
-    setPartAsDefault("angleRotateGeom",       "linkAngleRotateGeom"); 
-    setPartAsDefault("endPointTranslateGeom", "linkEndPointTranslateGeom"); 
-    setPartAsDefault("oneDScaleGeom",         "linkOneDScaleGeom");
-    setPartAsDefault("twoDScaleGeom",         "linkTwoDScaleGeom");
-    setPartAsDefault("threeDScaleGeom",       "linkThreeDScaleGeom");
-    setPartAsDefault("material",              "linkMaterial");
+    setPartAsDefault("originTranslateGeom", "linkOriginTranslateGeom");
+    setPartAsDefault("angleRotateGeom", "linkAngleRotateGeom");
+    setPartAsDefault("endPointTranslateGeom", "linkEndPointTranslateGeom");
+    setPartAsDefault("oneDScaleGeom", "linkOneDScaleGeom");
+    setPartAsDefault("twoDScaleGeom", "linkTwoDScaleGeom");
+    setPartAsDefault("threeDScaleGeom", "linkThreeDScaleGeom");
+    setPartAsDefault("material", "linkMaterial");
 
     getAngleAndSizeEngine = new LinkEngine;
     getAngleAndSizeEngine->ref();
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 SbBool
-Link::undoConnections()
-{
-    setDraggers( FALSE );
+Link::undoConnections() {
+    setDraggers(FALSE);
 
     getAngleAndSizeEngine->inOrigin.disconnect();
     getAngleAndSizeEngine->inEndPoint.disconnect();
@@ -792,13 +758,13 @@ Link::undoConnections()
     // This is a field that might be connected from somewhere other than
     // our own engine. Only disconnect if appropriate.
     SoEngineOutput *eo;
-    if ( angle.getConnectedEngine(eo)) {
-	if ( eo == &getAngleAndSizeEngine->outAngle )
-    	    angle.disconnect();
+    if (angle.getConnectedEngine(eo)) {
+        if (eo == &getAngleAndSizeEngine->outAngle)
+            angle.disconnect();
     }
-    if ( size.getConnectedEngine(eo)) {
-	if ( eo == &getAngleAndSizeEngine->outSize )
-    	    size.disconnect();
+    if (size.getConnectedEngine(eo)) {
+        if (eo == &getAngleAndSizeEngine->outSize)
+            size.disconnect();
     }
 
     // BASE CLASS
@@ -809,101 +775,96 @@ Link::undoConnections()
 }
 
 SbBool
-Link::setUpConnections(SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+Link::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( !onOff )
-	return undoConnections();
+    if (!onOff)
+        return undoConnections();
 
     // BASE CLASS
-	GroundedSimpleLink::setUpConnections(onOff, doItAlways);
+    GroundedSimpleLink::setUpConnections(onOff, doItAlways);
 
     // In the base class (SimpleLink) the endPoint is
     // connected from the endPointEngine, so that it depends on
     // size and angle.  In this class, the dependency switches.
     // So we disconnect the endPoint if necessary.
     SoEngineOutput *eo;
-    if ( endPoint.getConnectedEngine(eo)) {
-	if ( eo == &endPointEngine->outEndPoint )
-	    endPoint.disconnect();
+    if (endPoint.getConnectedEngine(eo)) {
+        if (eo == &endPointEngine->outEndPoint)
+            endPoint.disconnect();
     }
 
     // Now, connect the angle and size to depend on origin and endPoint.
-    getAngleAndSizeEngine->inOrigin.connectFrom( &origin );
-    getAngleAndSizeEngine->inEndPoint.connectFrom( &endPoint );
+    getAngleAndSizeEngine->inOrigin.connectFrom(&origin);
+    getAngleAndSizeEngine->inEndPoint.connectFrom(&endPoint);
     // This may be connected from somewhere else. We don't want
     // to override...
-    if ( ! angle.isConnected() )
-	angle.connectFrom( &getAngleAndSizeEngine->outAngle );
-    if ( ! size.isConnected() )
-	size.connectFrom( &getAngleAndSizeEngine->outSize );
+    if (!angle.isConnected())
+        angle.connectFrom(&getAngleAndSizeEngine->outAngle);
+    if (!size.isConnected())
+        size.connectFrom(&getAngleAndSizeEngine->outSize);
 
-    setDraggers( draggersOn.getValue() );
+    setDraggers(draggersOn.getValue());
 
     connectionsSetUp = onOff;
     return !connectionsSetUp;
 }
 void
-Link::setDefaultOnNonWritingFields()
-{
+Link::setDefaultOnNonWritingFields() {
     GroundedSimpleLink::setDefaultOnNonWritingFields();
 }
 
 void
-Link::setDraggers( SbBool on )
-{
+Link::setDraggers(SbBool on) {
     // Allow the base class to turn on its draggers...
-    GroundedSimpleLink::setDraggers( on );
+    GroundedSimpleLink::setDraggers(on);
 
-    setEndPointDragger( on );
+    setEndPointDragger(on);
 }
 
 void
-Link::setEndPointDragger( SbBool on )
-{
-    if ( on == TRUE ) {
+Link::setEndPointDragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect dragger for endPoint
-	// But only do it if the field is not connected to anything else.
-	// We'll also be setting parts from resources, if we can find them.
+        // Create and connect dragger for endPoint
+        // But only do it if the field is not connected to anything else.
+        // We'll also be setting parts from resources, if we can find them.
 
-	if ( ! endPoint.isConnected() ) {
+        if (!endPoint.isConnected()) {
 
-	    // Set to NULL to make sure we get a new one!
-	    setAnyPart("endPointDragger", NULL );
-	    SoTranslate2Dragger *xPDrag 
-		= (SoTranslate2Dragger *) getAnyPart("endPointDragger", TRUE );
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("endPointDragger", NULL);
+            SoTranslate2Dragger *xPDrag =
+                (SoTranslate2Dragger *)getAnyPart("endPointDragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
-	    SoNode *activePart = SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		xPDrag->setPartAsDefault("translator", part, FALSE );
-	    if (activePart != NULL)
-		xPDrag->setPartAsDefault("translatorActive", activePart, FALSE);
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
+            SoNode *activePart = SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
+            if (part != NULL)
+                xPDrag->setPartAsDefault("translator", part, FALSE);
+            if (activePart != NULL)
+                xPDrag->setPartAsDefault("translatorActive", activePart, FALSE);
 
-	    // Give an initial value
-	    if (xPDrag->translation.getValue() != endPoint.getValue())
-		xPDrag->translation.setValue(endPoint.getValue());
+            // Give an initial value
+            if (xPDrag->translation.getValue() != endPoint.getValue())
+                xPDrag->translation.setValue(endPoint.getValue());
 
-	    // Connect our endPoint from the dragger.
-	    endPoint.connectFrom( &xPDrag->translation );
-	}
-    }
-    else {
-	SoTranslate2Dragger *xPDrag 
-	    = SO_CHECK_ANY_PART(this, "endPointDragger", SoTranslate2Dragger );
-	if ( xPDrag != NULL ) {
-	    SoField *f;
-	    if ( endPoint.getConnectedField(f) ) {
-		if ( f == &xPDrag->translation )
-		    endPoint.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("endPointDragger", NULL );
-	}
+            // Connect our endPoint from the dragger.
+            endPoint.connectFrom(&xPDrag->translation);
+        }
+    } else {
+        SoTranslate2Dragger *xPDrag =
+            SO_CHECK_ANY_PART(this, "endPointDragger", SoTranslate2Dragger);
+        if (xPDrag != NULL) {
+            SoField *f;
+            if (endPoint.getConnectedField(f)) {
+                if (f == &xPDrag->translation)
+                    endPoint.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("endPointDragger", NULL);
+        }
     }
 }
 
@@ -913,8 +874,7 @@ Link::setEndPointDragger( SbBool on )
 //
 // Use: public
 //
-Link::~Link()
-{
+Link::~Link() {
     if (getAngleAndSizeEngine)
         getAngleAndSizeEngine->unref();
 }
@@ -940,8 +900,7 @@ SO_KIT_SOURCE(SizedLink);
 // Use: internal
 //
 void
-SizedLink::initClass()
-{
+SizedLink::initClass() {
     SO__KIT_INIT_CLASS(SizedLink, "SizedLink", GroundedSimpleLink);
 }
 
@@ -951,16 +910,15 @@ SizedLink::initClass()
 //
 // Use: public
 //
-SizedLink::SizedLink()
-{
+SizedLink::SizedLink() {
     SO_KIT_CONSTRUCTOR(SizedLink);
 
     isBuiltIn = TRUE;
 
     // Define new entries to catalog for this class.
     SO_KIT_ADD_CATALOG_ENTRY(sizeDragger, SoTranslate1Dragger, TRUE,
-		endPointTranslateSeparator, endPointTranslator, TRUE );
-
+                             endPointTranslateSeparator, endPointTranslator,
+                             TRUE);
 
     SO_KIT_INIT_INSTANCE();
 
@@ -969,13 +927,12 @@ SizedLink::SizedLink()
     sizeFromTranslateEngine = new SoDecomposeVec3f;
     sizeFromTranslateEngine->ref();
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 SbBool
-SizedLink::undoConnections()
-{
-    setDraggers( FALSE );
+SizedLink::undoConnections() {
+    setDraggers(FALSE);
 
     // BASE CLASS
     GroundedSimpleLink::undoConnections();
@@ -985,83 +942,79 @@ SizedLink::undoConnections()
 }
 
 SbBool
-SizedLink::setUpConnections(SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+SizedLink::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( !onOff )
-	return undoConnections();
+    if (!onOff)
+        return undoConnections();
 
     // BASE CLASS
-	GroundedSimpleLink::setUpConnections(onOff, doItAlways);
+    GroundedSimpleLink::setUpConnections(onOff, doItAlways);
 
-    setDraggers( draggersOn.getValue() );
+    setDraggers(draggersOn.getValue());
 
     connectionsSetUp = onOff;
     return !connectionsSetUp;
 }
 void
-SizedLink::setDefaultOnNonWritingFields()
-{
+SizedLink::setDefaultOnNonWritingFields() {
     GroundedSimpleLink::setDefaultOnNonWritingFields();
 }
 
 void
-SizedLink::setDraggers( SbBool on )
-{
+SizedLink::setDraggers(SbBool on) {
     // Allow the base class to turn on its draggers...
-    GroundedSimpleLink::setDraggers( on );
+    GroundedSimpleLink::setDraggers(on);
 
-    setSizeDragger( on );
+    setSizeDragger(on);
 }
 
 void
-SizedLink::setSizeDragger( SbBool on )
-{
-    if ( on == TRUE ) {
+SizedLink::setSizeDragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect dragger for size
-	// But only do it if the field is not connected to anything else.
-	// We'll also be setting parts from resources, if we can find them.
+        // Create and connect dragger for size
+        // But only do it if the field is not connected to anything else.
+        // We'll also be setting parts from resources, if we can find them.
 
-	if ( ! size.isConnected() ) {
+        if (!size.isConnected()) {
 
-	    // Set to NULL to make sure we get a new one!
-	    setAnyPart("sizeDragger", NULL );
-	    SoTranslate1Dragger *szDrag 
-		= (SoTranslate1Dragger *) getAnyPart("sizeDragger", TRUE);
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("sizeDragger", NULL);
+            SoTranslate1Dragger *szDrag =
+                (SoTranslate1Dragger *)getAnyPart("sizeDragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("SIZE_DRAGGER");
-	    SoNode *activePart =SoNode::getByName("SIZE_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		szDrag->setPartAsDefault("translator", part, FALSE );
-	    if (activePart != NULL)
-		szDrag->setPartAsDefault("translatorActive", activePart,FALSE );
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("SIZE_DRAGGER");
+            SoNode *activePart = SoNode::getByName("SIZE_DRAGGER_ACTIVE");
+            if (part != NULL)
+                szDrag->setPartAsDefault("translator", part, FALSE);
+            if (activePart != NULL)
+                szDrag->setPartAsDefault("translatorActive", activePart, FALSE);
 
-	    // Initialize the dragger with value from the size field
-	    if (szDrag->translation.getValue() != SbVec3f(size.getValue(),0,0))
-		szDrag->translation.setValue(SbVec3f( size.getValue(), 0, 0 ));
+            // Initialize the dragger with value from the size field
+            if (szDrag->translation.getValue() !=
+                SbVec3f(size.getValue(), 0, 0))
+                szDrag->translation.setValue(SbVec3f(size.getValue(), 0, 0));
 
-	    // Connect our size field from the dragger.
-	    // We need to employ a decompose engine for this.
-	    sizeFromTranslateEngine->vector.connectFrom( &szDrag->translation );
-	    size.connectFrom( &sizeFromTranslateEngine->x );
-	}
-    }
-    else {
-	SoTranslate1Dragger *szDrag 
-	    = SO_CHECK_ANY_PART(this, "sizeDragger", SoTranslate1Dragger );
-	if ( szDrag != NULL ) {
-	    SoEngineOutput *eo;
-	    if (size.getConnectedEngine(eo) ) {
-		if ( eo == &sizeFromTranslateEngine->x )
-		    size.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("sizeDragger", NULL );
-	}
+            // Connect our size field from the dragger.
+            // We need to employ a decompose engine for this.
+            sizeFromTranslateEngine->vector.connectFrom(&szDrag->translation);
+            size.connectFrom(&sizeFromTranslateEngine->x);
+        }
+    } else {
+        SoTranslate1Dragger *szDrag =
+            SO_CHECK_ANY_PART(this, "sizeDragger", SoTranslate1Dragger);
+        if (szDrag != NULL) {
+            SoEngineOutput *eo;
+            if (size.getConnectedEngine(eo)) {
+                if (eo == &sizeFromTranslateEngine->x)
+                    size.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("sizeDragger", NULL);
+        }
     }
 }
 
@@ -1071,15 +1024,14 @@ SizedLink::setSizeDragger( SbBool on )
 //
 // Use: public
 //
-SizedLink::~SizedLink()
-{
+SizedLink::~SizedLink() {
     if (sizeFromTranslateEngine)
         sizeFromTranslateEngine->unref();
 }
 
 ////////////////////////////////////////////////////////////////////
 //    Class: RivetHinge - subclass of SizedLink
-//                        Determines angle from 'origin' and 'hingePoint' 
+//                        Determines angle from 'origin' and 'hingePoint'
 //                        fields.  Contains dragger to control 'hingePoint'.
 //
 //    New nodes in this subclass are:
@@ -1099,8 +1051,7 @@ SO_KIT_SOURCE(RivetHinge);
 // Use: internal
 //
 void
-RivetHinge::initClass()
-{
+RivetHinge::initClass() {
     SO__KIT_INIT_CLASS(RivetHinge, "RivetHinge", SizedLink);
 }
 
@@ -1110,40 +1061,39 @@ RivetHinge::initClass()
 //
 // Use: public
 //
-RivetHinge::RivetHinge()
-{
+RivetHinge::RivetHinge() {
     SO_KIT_CONSTRUCTOR(RivetHinge);
 
     isBuiltIn = TRUE;
 
     // Define new entries to catalog for this class.
     SO_KIT_ADD_CATALOG_ENTRY(hingePointDragger, SoTranslate2Dragger, TRUE,
-				topSeparator, appearance , TRUE );
+                             topSeparator, appearance, TRUE);
 
     // Add the new fields.
-    SO_KIT_ADD_FIELD(hingePoint,    (1,0,0));
+    SO_KIT_ADD_FIELD(hingePoint, (1, 0, 0));
 
     SO_KIT_INIT_INSTANCE();
 
     // Set the parts that we can find as resources...
     setPartAsDefault("originTranslateGeom", "rivetHingeOriginTranslateGeom");
     setPartAsDefault("angleRotateGeom", "rivetHingeAngleRotateGeom");
-    setPartAsDefault("endPointTranslateGeom","rivetHingeEndPointTranslateGeom");
+    setPartAsDefault("endPointTranslateGeom",
+                     "rivetHingeEndPointTranslateGeom");
     setPartAsDefault("oneDScaleGeom", "rivetHingeOneDScaleGeom");
     setPartAsDefault("twoDScaleGeom", "rivetHingeTwoDScaleGeom");
     setPartAsDefault("threeDScaleGeom", "rivetHingeThreeDScaleGeom");
-    setPartAsDefault("material",              "rivetHingeMaterial");
+    setPartAsDefault("material", "rivetHingeMaterial");
 
     myRivetEngine = new RivetHingeEngine;
     myRivetEngine->ref();
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 SbBool
-RivetHinge::undoConnections()
-{
-    setDraggers( FALSE );
+RivetHinge::undoConnections() {
+    setDraggers(FALSE);
 
     myRivetEngine->inOrigin.disconnect();
     myRivetEngine->inSize.disconnect();
@@ -1152,9 +1102,9 @@ RivetHinge::undoConnections()
     // This is a field that might be connected from somewhere other than
     // our own engine. Only disconnect if appropriate.
     SoEngineOutput *eo;
-    if ( angle.getConnectedEngine(eo)) {
-	if ( eo == &myRivetEngine->outAngle )
-    	    angle.disconnect();
+    if (angle.getConnectedEngine(eo)) {
+        if (eo == &myRivetEngine->outAngle)
+            angle.disconnect();
     }
 
     isError.disconnect();
@@ -1167,91 +1117,87 @@ RivetHinge::undoConnections()
 }
 
 SbBool
-RivetHinge::setUpConnections(SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+RivetHinge::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( !onOff )
-	return undoConnections();
+    if (!onOff)
+        return undoConnections();
 
     // BASE CLASS
-	SizedLink::setUpConnections(onOff, doItAlways);
+    SizedLink::setUpConnections(onOff, doItAlways);
 
-    myRivetEngine->inOrigin.connectFrom( &origin );
-    myRivetEngine->inSize.connectFrom( &size );
-    myRivetEngine->inHingePoint.connectFrom( &hingePoint );
+    myRivetEngine->inOrigin.connectFrom(&origin);
+    myRivetEngine->inSize.connectFrom(&size);
+    myRivetEngine->inHingePoint.connectFrom(&hingePoint);
 
     // This may be connected from somewhere else. We don't want
     // to override...
-    if ( ! angle.isConnected() )
-        angle.connectFrom( &myRivetEngine->outAngle );
-    isError.connectFrom( &myRivetEngine->outError );
+    if (!angle.isConnected())
+        angle.connectFrom(&myRivetEngine->outAngle);
+    isError.connectFrom(&myRivetEngine->outError);
 
-    setDraggers( draggersOn.getValue() );
+    setDraggers(draggersOn.getValue());
 
     connectionsSetUp = onOff;
     return !connectionsSetUp;
 }
 void
-RivetHinge::setDefaultOnNonWritingFields()
-{
+RivetHinge::setDefaultOnNonWritingFields() {
     SizedLink::setDefaultOnNonWritingFields();
 }
 
 void
-RivetHinge::setDraggers( SbBool on )
-{
+RivetHinge::setDraggers(SbBool on) {
     // Allow the base class to turn on its draggers...
-    SizedLink::setDraggers( on );
+    SizedLink::setDraggers(on);
 
-    setHingePointDragger( on );
+    setHingePointDragger(on);
 }
 
 void
-RivetHinge::setHingePointDragger( SbBool on )
-{
-    if ( on == TRUE ) {
+RivetHinge::setHingePointDragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect dragger for hingePoint 
-	// But only do it if the field is not connected to anything else.
-	// We'll also be setting parts from resources, if we can find them.
+        // Create and connect dragger for hingePoint
+        // But only do it if the field is not connected to anything else.
+        // We'll also be setting parts from resources, if we can find them.
 
-	if ( ! hingePoint.isConnected() ) {
+        if (!hingePoint.isConnected()) {
 
-		// Set to NULL to make sure we get a new one!
-		setAnyPart("hingePointDragger", NULL );
-	    SoTranslate2Dragger *hpDrag 
-		= (SoTranslate2Dragger *) getAnyPart("hingePointDragger", TRUE);
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("hingePointDragger", NULL);
+            SoTranslate2Dragger *hpDrag =
+                (SoTranslate2Dragger *)getAnyPart("hingePointDragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("HINGE_POINT_DRAGGER");
-	    SoNode *activePart =SoNode::getByName("HINGE_POINT_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		hpDrag->setPartAsDefault("translator", part,FALSE );
-	    if (activePart != NULL)
-		hpDrag->setPartAsDefault("translatorActive", activePart,FALSE );
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("HINGE_POINT_DRAGGER");
+            SoNode *activePart =
+                SoNode::getByName("HINGE_POINT_DRAGGER_ACTIVE");
+            if (part != NULL)
+                hpDrag->setPartAsDefault("translator", part, FALSE);
+            if (activePart != NULL)
+                hpDrag->setPartAsDefault("translatorActive", activePart, FALSE);
 
-	    // Give an initial value
-	    if (hpDrag->translation.getValue() != hingePoint.getValue())
-		hpDrag->translation.setValue(hingePoint.getValue());
+            // Give an initial value
+            if (hpDrag->translation.getValue() != hingePoint.getValue())
+                hpDrag->translation.setValue(hingePoint.getValue());
 
-	    // Connect the hinge point from the dragger translation.
-	    hingePoint.connectFrom( &hpDrag->translation );
-	}
-    }
-    else {
-	SoTranslate2Dragger *hpDrag 
-	    = SO_CHECK_ANY_PART(this, "hingePointDragger", SoTranslate2Dragger);
-	if ( hpDrag != NULL ) {
-	    SoField *f;
-	    if ( hingePoint.getConnectedField(f) ) {
-		if ( f == &hpDrag->translation )
-		    hingePoint.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("hingePointDragger", NULL );
-	}
+            // Connect the hinge point from the dragger translation.
+            hingePoint.connectFrom(&hpDrag->translation);
+        }
+    } else {
+        SoTranslate2Dragger *hpDrag =
+            SO_CHECK_ANY_PART(this, "hingePointDragger", SoTranslate2Dragger);
+        if (hpDrag != NULL) {
+            SoField *f;
+            if (hingePoint.getConnectedField(f)) {
+                if (f == &hpDrag->translation)
+                    hingePoint.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("hingePointDragger", NULL);
+        }
     }
 }
 
@@ -1261,8 +1207,7 @@ RivetHinge::setHingePointDragger( SbBool on )
 //
 // Use: public
 //
-RivetHinge::~RivetHinge()
-{
+RivetHinge::~RivetHinge() {
     if (myRivetEngine)
         myRivetEngine->unref();
 }
@@ -1289,8 +1234,7 @@ SO_KIT_SOURCE(Crank);
 // Use: internal
 //
 void
-Crank::initClass()
-{
+Crank::initClass() {
     SO__KIT_INIT_CLASS(Crank, "Crank", SizedLink);
 }
 
@@ -1300,15 +1244,14 @@ Crank::initClass()
 //
 // Use: public
 //
-Crank::Crank()
-{
+Crank::Crank() {
     SO_KIT_CONSTRUCTOR(Crank);
 
     isBuiltIn = TRUE;
 
     // Define new entries to catalog for this class.
     SO_KIT_ADD_CATALOG_ENTRY(angleDragger, SoRotateDiscDragger, TRUE,
-				topSeparator, angleRotator, TRUE );
+                             topSeparator, angleRotator, TRUE);
 
     SO_KIT_INIT_INSTANCE();
 
@@ -1321,18 +1264,17 @@ Crank::Crank()
     setPartAsDefault("oneDScaleGeom", "crankOneDScaleGeom");
     setPartAsDefault("twoDScaleGeom", "crankTwoDScaleGeom");
     setPartAsDefault("threeDScaleGeom", "crankThreeDScaleGeom");
-    setPartAsDefault("material",              "crankMaterial");
+    setPartAsDefault("material", "crankMaterial");
 
     angleFromRotationEngine = new ZAngleFromRotationEngine;
     angleFromRotationEngine->ref();
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 SbBool
-Crank::undoConnections()
-{
-    setDraggers( FALSE );
+Crank::undoConnections() {
+    setDraggers(FALSE);
 
     // BASE CLASS
     SizedLink::undoConnections();
@@ -1342,88 +1284,83 @@ Crank::undoConnections()
 }
 
 SbBool
-Crank::setUpConnections(SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+Crank::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( !onOff )
-	return undoConnections();
+    if (!onOff)
+        return undoConnections();
 
     // BASE CLASS
-	SizedLink::setUpConnections(onOff, doItAlways);
+    SizedLink::setUpConnections(onOff, doItAlways);
 
-    setDraggers( draggersOn.getValue() );
+    setDraggers(draggersOn.getValue());
 
     connectionsSetUp = onOff;
     return !connectionsSetUp;
 }
 void
-Crank::setDefaultOnNonWritingFields()
-{
+Crank::setDefaultOnNonWritingFields() {
     SizedLink::setDefaultOnNonWritingFields();
 }
 
 void
-Crank::setDraggers( SbBool on )
-{
+Crank::setDraggers(SbBool on) {
     // Allow the base class to turn on its draggers...
-    SizedLink::setDraggers( on );
+    SizedLink::setDraggers(on);
 
-    setAngleDragger( on );
+    setAngleDragger(on);
 }
 
 void
-Crank::setAngleDragger( SbBool on )
-{
-    if ( on == TRUE ) {
+Crank::setAngleDragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect dragger for angle
-	// But only do it if the field is not connected to anything else.
-	// We'll also be setting parts from resources, if we can find them.
+        // Create and connect dragger for angle
+        // But only do it if the field is not connected to anything else.
+        // We'll also be setting parts from resources, if we can find them.
 
-	if ( ! angle.isConnected() ) {
+        if (!angle.isConnected()) {
 
-	    // Set to NULL to make sure we get a new one!
-	    setAnyPart("angleDragger", NULL );
-	    SoRotateDiscDragger *angDrag 
-		= (SoRotateDiscDragger *) getAnyPart("angleDragger", TRUE);
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("angleDragger", NULL);
+            SoRotateDiscDragger *angDrag =
+                (SoRotateDiscDragger *)getAnyPart("angleDragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("ANGLE_DRAGGER");
-	    SoNode *activePart =SoNode::getByName("ANGLE_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		angDrag->setPartAsDefault("rotator", part,FALSE );
-	    if (activePart != NULL)
-		angDrag->setPartAsDefault("rotatorActive", activePart,FALSE );
-	    // Get rid of that nasty axis geometry!
-	    angDrag->setPartAsDefault("feedback", new SoSeparator,FALSE  );
-	    angDrag->setPartAsDefault("feedbackActive", new SoSeparator,FALSE);
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("ANGLE_DRAGGER");
+            SoNode *activePart = SoNode::getByName("ANGLE_DRAGGER_ACTIVE");
+            if (part != NULL)
+                angDrag->setPartAsDefault("rotator", part, FALSE);
+            if (activePart != NULL)
+                angDrag->setPartAsDefault("rotatorActive", activePart, FALSE);
+            // Get rid of that nasty axis geometry!
+            angDrag->setPartAsDefault("feedback", new SoSeparator, FALSE);
+            angDrag->setPartAsDefault("feedbackActive", new SoSeparator, FALSE);
 
-	    // Initialize the dragger with value from the inAngle field
-	    SbRotation initRot(SbVec3f(0,0,1), angle.getValue());
-	    if (angDrag->rotation.getValue() != initRot)
-	        angDrag->rotation.setValue(initRot);
+            // Initialize the dragger with value from the inAngle field
+            SbRotation initRot(SbVec3f(0, 0, 1), angle.getValue());
+            if (angDrag->rotation.getValue() != initRot)
+                angDrag->rotation.setValue(initRot);
 
-	    // Connect our angle field from the rotation in the crank.
-	    // We need to use our engine to convert.
-	    angleFromRotationEngine->inRotation.connectFrom(&angDrag->rotation);
+            // Connect our angle field from the rotation in the crank.
+            // We need to use our engine to convert.
+            angleFromRotationEngine->inRotation.connectFrom(&angDrag->rotation);
 
-	    angle.connectFrom( &angleFromRotationEngine->outAngle );
-	}
-    }
-    else {
-	SoRotateDiscDragger *angDrag 
-	    = SO_CHECK_ANY_PART(this, "angleDragger", SoRotateDiscDragger );
-	if ( angDrag != NULL ) {
-	    SoEngineOutput *eo;
-	    if (angle.getConnectedEngine(eo) ) {
-		if ( eo == &angleFromRotationEngine->outAngle )
-		    angle.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("angleDragger", NULL );
-	}
+            angle.connectFrom(&angleFromRotationEngine->outAngle);
+        }
+    } else {
+        SoRotateDiscDragger *angDrag =
+            SO_CHECK_ANY_PART(this, "angleDragger", SoRotateDiscDragger);
+        if (angDrag != NULL) {
+            SoEngineOutput *eo;
+            if (angle.getConnectedEngine(eo)) {
+                if (eo == &angleFromRotationEngine->outAngle)
+                    angle.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("angleDragger", NULL);
+        }
     }
 }
 
@@ -1433,10 +1370,9 @@ Crank::setAngleDragger( SbBool on )
 //
 // Use: public
 //
-Crank::~Crank()
-{
+Crank::~Crank() {
     if (angleFromRotationEngine)
-	angleFromRotationEngine->unref();
+        angleFromRotationEngine->unref();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1467,8 +1403,7 @@ SO_KIT_SOURCE(DoubleLink);
 // Use: public
 //
 void
-DoubleLink::initClass()
-{
+DoubleLink::initClass() {
     SO__KIT_INIT_CLASS(DoubleLink, "DoubleLink", LinkBase);
 }
 
@@ -1478,57 +1413,55 @@ DoubleLink::initClass()
 //
 // Use: public
 //
-DoubleLink::DoubleLink()
-{
+DoubleLink::DoubleLink() {
     SO_KIT_CONSTRUCTOR(DoubleLink);
 
     isBuiltIn = TRUE;
 
     // Define new entries to catalog for this class.
     SO_KIT_ADD_CATALOG_ENTRY(origin1Dragger, SoTranslate2Dragger, TRUE,
-				topSeparator, , TRUE );
+                             topSeparator, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(origin2Dragger, SoTranslate2Dragger, TRUE,
-				topSeparator, , TRUE );
+                             topSeparator, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(sharedPointDragger, SoTranslate2Dragger, TRUE,
-				topSeparator, , TRUE );
+                             topSeparator, \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(link1, Link, TRUE, topSeparator, , TRUE );
-    SO_KIT_ADD_CATALOG_ENTRY(link2, Link, TRUE, topSeparator, , TRUE );
+    SO_KIT_ADD_CATALOG_ENTRY(link1, Link, TRUE, topSeparator, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(link2, Link, TRUE, topSeparator, \0, TRUE);
 
     // Add the new fields.
-    SO_KIT_ADD_FIELD(origin1,     (0,0,0));
-    SO_KIT_ADD_FIELD(origin2,     (2,0,0));
-    SO_KIT_ADD_FIELD(size1,       (1));
-    SO_KIT_ADD_FIELD(size2,       (1));
-    SO_KIT_ADD_FIELD(sharedPoint, (1,0,0));
+    SO_KIT_ADD_FIELD(origin1, (0, 0, 0));
+    SO_KIT_ADD_FIELD(origin2, (2, 0, 0));
+    SO_KIT_ADD_FIELD(size1, (1));
+    SO_KIT_ADD_FIELD(size2, (1));
+    SO_KIT_ADD_FIELD(sharedPoint, (1, 0, 0));
 
     SO_KIT_INIT_INSTANCE();
 
     // Make sure to create the two link parts.
     // (default geometry will be set up in setUpConnections)
-    SoNode *l1 = getPart( "link1", TRUE );
-    SoNode *l2 = getPart( "link2", TRUE );
+    SoNode *l1 = getPart("link1", TRUE);
+    SoNode *l2 = getPart("link2", TRUE);
 
     myOriginEngine = new DoubleLinkMoveOriginEngine;
     myOriginEngine->ref();
     mySharedPtEngine = new DoubleLinkMoveSharedPtEngine;
     mySharedPtEngine->ref();
 
-    setPartAsDefault("material",   "doubleLinkMaterial");
+    setPartAsDefault("material", "doubleLinkMaterial");
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 SbBool
-DoubleLink::undoConnections()
-{
-    setDraggers( FALSE );
+DoubleLink::undoConnections() {
+    setDraggers(FALSE);
 
     isError.disconnect();
     sharedPoint.disconnect();
 
-    Link *theLink1 = (Link *) getAnyPart("link1", TRUE );
-    Link *theLink2 = (Link *) getAnyPart("link2", TRUE );
+    Link *theLink1 = (Link *)getAnyPart("link1", TRUE);
+    Link *theLink2 = (Link *)getAnyPart("link2", TRUE);
 
     theLink1->origin.disconnect();
     theLink2->origin.disconnect();
@@ -1548,56 +1481,55 @@ DoubleLink::undoConnections()
 }
 
 SbBool
-DoubleLink::setUpConnections(SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+DoubleLink::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( !onOff )
-	return undoConnections();
+    if (!onOff)
+        return undoConnections();
 
     LinkBase::setUpConnections(onOff, doItAlways);
 
-    Link *theLink1 = (Link *) getAnyPart("link1", TRUE );
-    Link *theLink2 = (Link *) getAnyPart("link2", TRUE );
+    Link *theLink1 = (Link *)getAnyPart("link1", TRUE);
+    Link *theLink2 = (Link *)getAnyPart("link2", TRUE);
 
     // Set parts within the two links if they haven't already been
     // set to a non-default value...
     SoNode *part;
     part = SoNode::getByName("doubleLinkOriginTranslateGeom");
-    theLink1->setPartAsDefault("originTranslateGeom", part); 
-    theLink2->setPartAsDefault("originTranslateGeom", part); 
+    theLink1->setPartAsDefault("originTranslateGeom", part);
+    theLink2->setPartAsDefault("originTranslateGeom", part);
     part = SoNode::getByName("doubleLinkAngleRotateGeom");
-    theLink1->setPartAsDefault("angleRotateGeom", part); 
-    theLink2->setPartAsDefault("angleRotateGeom", part); 
+    theLink1->setPartAsDefault("angleRotateGeom", part);
+    theLink2->setPartAsDefault("angleRotateGeom", part);
     part = SoNode::getByName("doubleLinkEndPointTranslateGeom");
-    theLink1->setPartAsDefault("endPointTranslateGeom", part); 
-    theLink2->setPartAsDefault("endPointTranslateGeom", part); 
+    theLink1->setPartAsDefault("endPointTranslateGeom", part);
+    theLink2->setPartAsDefault("endPointTranslateGeom", part);
     part = SoNode::getByName("doubleLinkOneDScaleGeom");
-    theLink1->setPartAsDefault("oneDScaleGeom", part); 
-    theLink2->setPartAsDefault("oneDScaleGeom", part); 
+    theLink1->setPartAsDefault("oneDScaleGeom", part);
+    theLink2->setPartAsDefault("oneDScaleGeom", part);
     part = SoNode::getByName("doubleLinkTwoDScaleGeom");
-    theLink1->setPartAsDefault("twoDScaleGeom", part); 
-    theLink2->setPartAsDefault("twoDScaleGeom", part); 
+    theLink1->setPartAsDefault("twoDScaleGeom", part);
+    theLink2->setPartAsDefault("twoDScaleGeom", part);
     part = SoNode::getByName("doubleLinkThreeDScaleGeom");
-    theLink1->setPartAsDefault("threeDScaleGeom", part); 
-    theLink2->setPartAsDefault("threeDScaleGeom", part); 
+    theLink1->setPartAsDefault("threeDScaleGeom", part);
+    theLink2->setPartAsDefault("threeDScaleGeom", part);
     part = SoNode::getByName("doubleLinkMaterial");
-    theLink1->setPartAsDefault("material", part); 
-    theLink2->setPartAsDefault("material", part); 
+    theLink1->setPartAsDefault("material", part);
+    theLink2->setPartAsDefault("material", part);
 
-    theLink1->setUpConnections(onOff, doItAlways );
-    theLink2->setUpConnections(onOff, doItAlways );
+    theLink1->setUpConnections(onOff, doItAlways);
+    theLink2->setUpConnections(onOff, doItAlways);
 
-    theLink1->origin.connectFrom( &origin1 );
-    theLink2->origin.connectFrom( &origin2 );
-    theLink1->endPoint.connectFrom( &sharedPoint );
-    theLink2->endPoint.connectFrom( &sharedPoint );
+    theLink1->origin.connectFrom(&origin1);
+    theLink2->origin.connectFrom(&origin2);
+    theLink1->endPoint.connectFrom(&sharedPoint);
+    theLink2->endPoint.connectFrom(&sharedPoint);
     theLink1->isError.disconnect();
     theLink2->isError.disconnect();
 
     // Attach connections for the  DoubleLinkMoveOriginEngine
-    // This engine moves the shared point based on the origins and sized of 
+    // This engine moves the shared point based on the origins and sized of
     // the two links.
     // When the sharedPointDragger is being dragger, this engine is disconnected
     // and a different engine is used.  This second engine leaves the origins
@@ -1607,279 +1539,269 @@ DoubleLink::setUpConnections(SbBool onOff, SbBool doItAlways )
     // as if we are using the mechanism of the double-link.
     // While the other engine seems to alter the physical make-up (i.e.,lengths)
     // of the pieces.
-    myOriginEngine->inOrigin1.connectFrom( &origin1 ); 
-    myOriginEngine->inOrigin2.connectFrom( &origin2 ); 
-    myOriginEngine->inSize1.connectFrom( &size1 ); 
-    myOriginEngine->inSize2.connectFrom( &size2 ); 
-    myOriginEngine->inSharedPoint.connectFrom( &sharedPoint ); 
-    sharedPoint.connectFrom( &myOriginEngine->outSharedPoint );
-    isError.connectFrom( &myOriginEngine->outError );
+    myOriginEngine->inOrigin1.connectFrom(&origin1);
+    myOriginEngine->inOrigin2.connectFrom(&origin2);
+    myOriginEngine->inSize1.connectFrom(&size1);
+    myOriginEngine->inSize2.connectFrom(&size2);
+    myOriginEngine->inSharedPoint.connectFrom(&sharedPoint);
+    sharedPoint.connectFrom(&myOriginEngine->outSharedPoint);
+    isError.connectFrom(&myOriginEngine->outError);
 
-
-    setDraggers( draggersOn.getValue() );
+    setDraggers(draggersOn.getValue());
 
     connectionsSetUp = onOff;
     return !connectionsSetUp;
 }
 void
-DoubleLink::setDefaultOnNonWritingFields()
-{
+DoubleLink::setDefaultOnNonWritingFields() {
     // We'd rather not write out these nodes, since their parameters
     // should be reflected by the DoubleLink parameters.
     link1.setDefault(TRUE);
     link2.setDefault(TRUE);
 
-    // We'll even go so far as to set the fields of the sub-links to 
+    // We'll even go so far as to set the fields of the sub-links to
     // default.  So they will only write out if the geometry has been altered.
-    Link *theLink1 = (Link *) getAnyPart("link1", TRUE );
-    if (theLink1 ) {
-	theLink1->isError.setDefault(TRUE);
-	theLink1->origin.setDefault(TRUE);
-	theLink1->angle.setDefault(TRUE);
-	theLink1->size.setDefault(TRUE);
-	theLink1->endPoint.setDefault(TRUE);
+    Link *theLink1 = (Link *)getAnyPart("link1", TRUE);
+    if (theLink1) {
+        theLink1->isError.setDefault(TRUE);
+        theLink1->origin.setDefault(TRUE);
+        theLink1->angle.setDefault(TRUE);
+        theLink1->size.setDefault(TRUE);
+        theLink1->endPoint.setDefault(TRUE);
     }
-    Link *theLink2 = (Link *) getAnyPart("link2", TRUE );
-    if (theLink2 ) {
-	theLink2->isError.setDefault(TRUE);
-	theLink2->origin.setDefault(TRUE);
-	theLink2->angle.setDefault(TRUE);
-	theLink2->size.setDefault(TRUE);
-	theLink2->endPoint.setDefault(TRUE);
+    Link *theLink2 = (Link *)getAnyPart("link2", TRUE);
+    if (theLink2) {
+        theLink2->isError.setDefault(TRUE);
+        theLink2->origin.setDefault(TRUE);
+        theLink2->angle.setDefault(TRUE);
+        theLink2->size.setDefault(TRUE);
+        theLink2->endPoint.setDefault(TRUE);
     }
 
     LinkBase::setDefaultOnNonWritingFields();
 }
 
 void
-DoubleLink::setDraggers( SbBool on )
-{
+DoubleLink::setDraggers(SbBool on) {
     // Turn OFF the draggers in the two links owned by the double link...
     // We have our own draggers to use instead.
-	Link *theLink1 = (Link *) getAnyPart("link1", TRUE );
-	Link *theLink2 = (Link *) getAnyPart("link2", TRUE );
+    Link *theLink1 = (Link *)getAnyPart("link1", TRUE);
+    Link *theLink2 = (Link *)getAnyPart("link2", TRUE);
 
-	theLink1->draggersOn.setValue( FALSE );
-	theLink2->draggersOn.setValue( FALSE );
+    theLink1->draggersOn.setValue(FALSE);
+    theLink2->draggersOn.setValue(FALSE);
 
     // Allow the base class to turn on its draggers...
-	LinkBase::setDraggers( on );
+    LinkBase::setDraggers(on);
 
     // Turn on our special draggers.
-	setOrigin1Dragger(on);
-	setOrigin2Dragger(on);
-	setSharedPointDragger(on);
+    setOrigin1Dragger(on);
+    setOrigin2Dragger(on);
+    setSharedPointDragger(on);
 }
 
 void
-DoubleLink::setOrigin1Dragger( SbBool on )
-{
-    if ( on == TRUE ) {
+DoubleLink::setOrigin1Dragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect draggers if necessary...
+        // Create and connect draggers if necessary...
 
-	if ( ! origin1.isConnected() ) {
+        if (!origin1.isConnected()) {
 
-	    // Set to NULL to make sure we get a new one!
-	    setAnyPart("origin1Dragger", NULL );
-	    SoTranslate2Dragger *or1Drag 
-		= (SoTranslate2Dragger *) getAnyPart("origin1Dragger", TRUE);
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("origin1Dragger", NULL);
+            SoTranslate2Dragger *or1Drag =
+                (SoTranslate2Dragger *)getAnyPart("origin1Dragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
-	    SoNode *activePart =SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		or1Drag->setPartAsDefault("translator", part, FALSE );
-	    if (activePart != NULL)
-		or1Drag->setPartAsDefault("translatorActive", activePart,FALSE);
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
+            SoNode *activePart = SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
+            if (part != NULL)
+                or1Drag->setPartAsDefault("translator", part, FALSE);
+            if (activePart != NULL)
+                or1Drag->setPartAsDefault("translatorActive", activePart,
+                                          FALSE);
 
-	    // Initialize the dragger with value from the origin1 field
-	    if (or1Drag->translation.getValue() != origin1.getValue())
-	        or1Drag->translation.setValue(origin1.getValue());
+            // Initialize the dragger with value from the origin1 field
+            if (or1Drag->translation.getValue() != origin1.getValue())
+                or1Drag->translation.setValue(origin1.getValue());
 
-	    // Connect our origin field from the output of this dragger.
-	    origin1.connectFrom( &or1Drag->translation );
-	}
-    }
-    else {
-	SoTranslate2Dragger *or1Drag 
-	    = SO_CHECK_ANY_PART(this, "origin1Dragger", SoTranslate2Dragger );
-	if ( or1Drag != NULL ) {
-	    SoField *f;
-	    if ( origin1.getConnectedField(f) ) {
-		if ( f == &or1Drag->translation )
-		    origin1.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("origin1Dragger", NULL );
-	}
+            // Connect our origin field from the output of this dragger.
+            origin1.connectFrom(&or1Drag->translation);
+        }
+    } else {
+        SoTranslate2Dragger *or1Drag =
+            SO_CHECK_ANY_PART(this, "origin1Dragger", SoTranslate2Dragger);
+        if (or1Drag != NULL) {
+            SoField *f;
+            if (origin1.getConnectedField(f)) {
+                if (f == &or1Drag->translation)
+                    origin1.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("origin1Dragger", NULL);
+        }
     }
 }
 
 void
-DoubleLink::setOrigin2Dragger( SbBool on )
-{
-    if ( on == TRUE ) {
+DoubleLink::setOrigin2Dragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect draggers if necessary...
+        // Create and connect draggers if necessary...
 
-	if ( ! origin2.isConnected() ) {
+        if (!origin2.isConnected()) {
 
-	    // Set to NULL to make sure we get a new one!
-	    setAnyPart("origin2Dragger", NULL );
-	    SoTranslate2Dragger *or2Drag 
-		= (SoTranslate2Dragger *) getAnyPart("origin2Dragger", TRUE);
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("origin2Dragger", NULL);
+            SoTranslate2Dragger *or2Drag =
+                (SoTranslate2Dragger *)getAnyPart("origin2Dragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
-	    SoNode *activePart =SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		or2Drag->setPartAsDefault("translator", part,FALSE );
-	    if (activePart != NULL)
-		or2Drag->setPartAsDefault("translatorActive", activePart,FALSE);
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
+            SoNode *activePart = SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
+            if (part != NULL)
+                or2Drag->setPartAsDefault("translator", part, FALSE);
+            if (activePart != NULL)
+                or2Drag->setPartAsDefault("translatorActive", activePart,
+                                          FALSE);
 
-	    // Initialize the dragger with value from the origin2 field
-	    if (or2Drag->translation.getValue() != origin2.getValue())
-	        or2Drag->translation.setValue(origin2.getValue());
+            // Initialize the dragger with value from the origin2 field
+            if (or2Drag->translation.getValue() != origin2.getValue())
+                or2Drag->translation.setValue(origin2.getValue());
 
-	    // Connect our origin field from the output of this dragger.
-	    origin2.connectFrom( &or2Drag->translation );
-	}
-    }
-    else {
-	SoTranslate2Dragger *or2Drag 
-	    = SO_CHECK_ANY_PART(this, "origin2Dragger", SoTranslate2Dragger );
-	if ( or2Drag != NULL ) {
-	    SoField *f;
-	    if ( origin2.getConnectedField(f) ) {
-		if ( f == &or2Drag->translation )
-		    origin2.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("origin2Dragger", NULL );
-	}
+            // Connect our origin field from the output of this dragger.
+            origin2.connectFrom(&or2Drag->translation);
+        }
+    } else {
+        SoTranslate2Dragger *or2Drag =
+            SO_CHECK_ANY_PART(this, "origin2Dragger", SoTranslate2Dragger);
+        if (or2Drag != NULL) {
+            SoField *f;
+            if (origin2.getConnectedField(f)) {
+                if (f == &or2Drag->translation)
+                    origin2.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("origin2Dragger", NULL);
+        }
     }
 }
 void
-DoubleLink::setSharedPointDragger( SbBool on )
-{
-    if ( on == TRUE ) {
+DoubleLink::setSharedPointDragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect draggers if necessary...
+        // Create and connect draggers if necessary...
 
-	SoEngineOutput *eo;
-	// If the shared point is either not connected or connected to our
-	// internal engine...
-	if ( !sharedPoint.isConnected() 
-	    || (sharedPoint.getConnectedEngine(eo) && 
-		eo == &myOriginEngine->outSharedPoint )) {
+        SoEngineOutput *eo;
+        // If the shared point is either not connected or connected to our
+        // internal engine...
+        if (!sharedPoint.isConnected() ||
+            (sharedPoint.getConnectedEngine(eo) &&
+             eo == &myOriginEngine->outSharedPoint)) {
 
-	    // Set to NULL to make sure we get a new one!
-	    setAnyPart("sharedPointDragger", NULL );
-	    SoTranslate2Dragger *spDrag 
-		= (SoTranslate2Dragger *) getAnyPart("sharedPointDragger",TRUE);
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("sharedPointDragger", NULL);
+            SoTranslate2Dragger *spDrag =
+                (SoTranslate2Dragger *)getAnyPart("sharedPointDragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
-	    SoNode *activePart =SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		spDrag->setPartAsDefault("translator", part, FALSE );
-	    if (activePart != NULL)
-		spDrag->setPartAsDefault("translatorActive", activePart, FALSE);
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
+            SoNode *activePart = SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
+            if (part != NULL)
+                spDrag->setPartAsDefault("translator", part, FALSE);
+            if (activePart != NULL)
+                spDrag->setPartAsDefault("translatorActive", activePart, FALSE);
 
-	    // Make the sharedPt dragger follow the shared point.
-	    // When the dragger is actually in use, the dragger will lead
-	    // rather than follow.  The sharedPtDragStartCB sees to this.
-	    spDrag->translation.connectFrom( &sharedPoint );
+            // Make the sharedPt dragger follow the shared point.
+            // When the dragger is actually in use, the dragger will lead
+            // rather than follow.  The sharedPtDragStartCB sees to this.
+            spDrag->translation.connectFrom(&sharedPoint);
 
-	    // Do NOT connect our sharedPoint field from output of this dragger.
-	    // By default, sharedPoint is always calculated based on the
-	    // two origins and sizes.
-	    // We we ONLY connect the field while the 
-	    // dragger is in use. The start and end callbacks will connect
-	    // and disconnect the field for us.
-	    spDrag->addStartCallback(  &DoubleLink::sharedPtDragStartCB, this );
-	    spDrag->addFinishCallback( &DoubleLink::sharedPtDragFinishCB, this);
-	}
-    }
-    else {
-	SoTranslate2Dragger *spDrag 
-	    = SO_CHECK_ANY_PART(this,"sharedPointDragger",SoTranslate2Dragger );
-	if ( spDrag != NULL ) {
-	    SoField *f;
-	    if ( sharedPoint.getConnectedField(f) ) {
-		if ( f == &spDrag->translation )
-		    sharedPoint.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("sharedPointDragger", NULL );
-	}
+            // Do NOT connect our sharedPoint field from output of this dragger.
+            // By default, sharedPoint is always calculated based on the
+            // two origins and sizes.
+            // We we ONLY connect the field while the
+            // dragger is in use. The start and end callbacks will connect
+            // and disconnect the field for us.
+            spDrag->addStartCallback(&DoubleLink::sharedPtDragStartCB, this);
+            spDrag->addFinishCallback(&DoubleLink::sharedPtDragFinishCB, this);
+        }
+    } else {
+        SoTranslate2Dragger *spDrag =
+            SO_CHECK_ANY_PART(this, "sharedPointDragger", SoTranslate2Dragger);
+        if (spDrag != NULL) {
+            SoField *f;
+            if (sharedPoint.getConnectedField(f)) {
+                if (f == &spDrag->translation)
+                    sharedPoint.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("sharedPointDragger", NULL);
+        }
     }
 }
 
 // Re-configures the fields to calculate sizes based on fixed origins
 // and a moving shared point.
 // This only is used while the sharedPointDragger is being dragged.
-void 
-DoubleLink::sharedPtDragStartCB( void *mePtr, SoDragger *dragPtr )
-{
-    SoTranslate2Dragger *spDragger = (SoTranslate2Dragger *) dragPtr;
+void
+DoubleLink::sharedPtDragStartCB(void *mePtr, SoDragger *dragPtr) {
+    SoTranslate2Dragger *spDragger = (SoTranslate2Dragger *)dragPtr;
 
-    DoubleLink *myself = (DoubleLink *) mePtr;
+    DoubleLink *myself = (DoubleLink *)mePtr;
 
     myself->size1.disconnect();
     myself->size2.disconnect();
 
     // Make the sharedPt follow the shared point dragger.
-    myself->sharedPoint.connectFrom( &spDragger->translation);
+    myself->sharedPoint.connectFrom(&spDragger->translation);
 
     // Attach connections for the  DoubleLinkMoveSharedPtEngine
-    myself->mySharedPtEngine->inOrigin1.connectFrom( &myself->origin1 ); 
-    myself->mySharedPtEngine->inOrigin2.connectFrom( &myself->origin2 ); 
-    myself->mySharedPtEngine->inSharedPoint.connectFrom( &myself->sharedPoint ); 
-    myself->size1.connectFrom( &myself->mySharedPtEngine->outSize1 );
-    myself->size2.connectFrom( &myself->mySharedPtEngine->outSize2 );
-    myself->isError.connectFrom( &myself->mySharedPtEngine->outError );
+    myself->mySharedPtEngine->inOrigin1.connectFrom(&myself->origin1);
+    myself->mySharedPtEngine->inOrigin2.connectFrom(&myself->origin2);
+    myself->mySharedPtEngine->inSharedPoint.connectFrom(&myself->sharedPoint);
+    myself->size1.connectFrom(&myself->mySharedPtEngine->outSize1);
+    myself->size2.connectFrom(&myself->mySharedPtEngine->outSize2);
+    myself->isError.connectFrom(&myself->mySharedPtEngine->outError);
 }
 
 // Returns fields to default configuration where sharedPoint is calculated
 // based on two origins and two sizes.
 // We do this because we are finished dragging the sharedPoint.
-void 
-DoubleLink::sharedPtDragFinishCB( void *mePtr, SoDragger * )
-{
-    DoubleLink *myself = (DoubleLink *) mePtr;
+void
+DoubleLink::sharedPtDragFinishCB(void *mePtr, SoDragger *) {
+    DoubleLink *myself = (DoubleLink *)mePtr;
 
     myself->sharedPoint.disconnect();
     myself->size1.disconnect();
     myself->size2.disconnect();
 
     // Attach connections for the  DoubleLinkMoveOriginEngine
-    myself->myOriginEngine->inOrigin1.connectFrom( &myself->origin1 ); 
-    myself->myOriginEngine->inOrigin2.connectFrom( &myself->origin2 ); 
-    myself->myOriginEngine->inSize1.connectFrom( &myself->size1 ); 
-    myself->myOriginEngine->inSize2.connectFrom( &myself->size2 ); 
-    myself->myOriginEngine->inSharedPoint.connectFrom( &myself->sharedPoint ); 
+    myself->myOriginEngine->inOrigin1.connectFrom(&myself->origin1);
+    myself->myOriginEngine->inOrigin2.connectFrom(&myself->origin2);
+    myself->myOriginEngine->inSize1.connectFrom(&myself->size1);
+    myself->myOriginEngine->inSize2.connectFrom(&myself->size2);
+    myself->myOriginEngine->inSharedPoint.connectFrom(&myself->sharedPoint);
 
-    myself->sharedPoint.connectFrom( &myself->myOriginEngine->outSharedPoint );
-    myself->isError.connectFrom( &myself->myOriginEngine->outError );
+    myself->sharedPoint.connectFrom(&myself->myOriginEngine->outSharedPoint);
+    myself->isError.connectFrom(&myself->myOriginEngine->outError);
 
     // Make the sharedPt dragger follow the shared point.
-    SoTranslate2Dragger *spDrag 
-	= (SoTranslate2Dragger *) myself->getAnyPart("sharedPointDragger",TRUE);
-    spDrag->translation.connectFrom( &myself->sharedPoint );
+    SoTranslate2Dragger *spDrag =
+        (SoTranslate2Dragger *)myself->getAnyPart("sharedPointDragger", TRUE);
+    spDrag->translation.connectFrom(&myself->sharedPoint);
 }
 
-void 
-DoubleLink::errorColor( SbBool useErrorColor )
-{
-    LinkBase::errorColor( useErrorColor );
+void
+DoubleLink::errorColor(SbBool useErrorColor) {
+    LinkBase::errorColor(useErrorColor);
 
-    Link *theLink1 = (Link *) getAnyPart("link1", TRUE );
-    Link *theLink2 = (Link *) getAnyPart("link2", TRUE );
+    Link *theLink1 = (Link *)getAnyPart("link1", TRUE);
+    Link *theLink2 = (Link *)getAnyPart("link2", TRUE);
 
-    theLink1->isError.setValue( isError.getValue() );
-    theLink2->isError.setValue( isError.getValue() );
+    theLink1->isError.setValue(isError.getValue());
+    theLink2->isError.setValue(isError.getValue());
 }
 
 //
@@ -1888,12 +1810,11 @@ DoubleLink::errorColor( SbBool useErrorColor )
 //
 // Use: public
 //
-DoubleLink::~DoubleLink()
-{
+DoubleLink::~DoubleLink() {
     if (myOriginEngine)
-	myOriginEngine->unref();
+        myOriginEngine->unref();
     if (mySharedPtEngine)
-	mySharedPtEngine->unref();
+        mySharedPtEngine->unref();
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -1923,8 +1844,7 @@ SO_KIT_SOURCE(Piston);
 // Use: internal
 //
 void
-Piston::initClass()
-{
+Piston::initClass() {
     SO__KIT_INIT_CLASS(Piston, "Piston", LinkBase);
 }
 
@@ -1934,45 +1854,43 @@ Piston::initClass()
 //
 // Use: public
 //
-Piston::Piston()
-{
+Piston::Piston() {
     SO_KIT_CONSTRUCTOR(Piston);
 
     isBuiltIn = TRUE;
 
     // Define new entries to catalog for this class.
     SO_KIT_ADD_CATALOG_ENTRY(origin1Dragger, SoTranslate2Dragger, TRUE,
-				topSeparator, , TRUE );
+                             topSeparator, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(origin2Dragger, SoTranslate2Dragger, TRUE,
-				topSeparator, , TRUE );
-    SO_KIT_ADD_CATALOG_ENTRY(link1, RivetHinge, TRUE, topSeparator, , TRUE );
-    SO_KIT_ADD_CATALOG_ENTRY(link2, RivetHinge, TRUE, topSeparator, , TRUE );
+                             topSeparator, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(link1, RivetHinge, TRUE, topSeparator, \0, TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(link2, RivetHinge, TRUE, topSeparator, \0, TRUE);
 
     // Add the new fields.
-    SO_KIT_ADD_FIELD(origin1,      (0,0,0));
-    SO_KIT_ADD_FIELD(origin2,    (1,0,0));
-    SO_KIT_ADD_FIELD(size1,       (1.0));
-    SO_KIT_ADD_FIELD(size2,       (0.5));
+    SO_KIT_ADD_FIELD(origin1, (0, 0, 0));
+    SO_KIT_ADD_FIELD(origin2, (1, 0, 0));
+    SO_KIT_ADD_FIELD(size1, (1.0));
+    SO_KIT_ADD_FIELD(size2, (0.5));
 
     SO_KIT_INIT_INSTANCE();
 
     // Make sure to create the two link parts.
     // (default geometry will be set up in setUpConnections)
-    SoNode *l1 = getPart( "link1", TRUE );
-    SoNode *l2 = getPart( "link2", TRUE );
+    SoNode *l1 = getPart("link1", TRUE);
+    SoNode *l2 = getPart("link2", TRUE);
 
-    setPartAsDefault("material", "pistonMaterial"); 
+    setPartAsDefault("material", "pistonMaterial");
 
     myPistonErrorEngine = new PistonErrorEngine;
     myPistonErrorEngine->ref();
 
-    setUpConnections( TRUE, TRUE );
+    setUpConnections(TRUE, TRUE);
 }
 
 SbBool
-Piston::undoConnections()
-{
-    setDraggers( FALSE );
+Piston::undoConnections() {
+    setDraggers(FALSE);
 
     myPistonErrorEngine->inOrigin1.disconnect();
     myPistonErrorEngine->inOrigin2.disconnect();
@@ -1981,8 +1899,8 @@ Piston::undoConnections()
 
     isError.disconnect();
 
-    RivetHinge *rivet1 = (RivetHinge *) getAnyPart("link1", TRUE );
-    RivetHinge *rivet2 = (RivetHinge *) getAnyPart("link2", TRUE );
+    RivetHinge *rivet1 = (RivetHinge *)getAnyPart("link1", TRUE);
+    RivetHinge *rivet2 = (RivetHinge *)getAnyPart("link2", TRUE);
 
     rivet1->origin.disconnect();
     rivet2->origin.disconnect();
@@ -2006,220 +1924,213 @@ Piston::undoConnections()
 }
 
 SbBool
-Piston::setUpConnections(SbBool onOff, SbBool doItAlways )
-{
-    if ( !doItAlways && connectionsSetUp == onOff)
-	return onOff;
+Piston::setUpConnections(SbBool onOff, SbBool doItAlways) {
+    if (!doItAlways && connectionsSetUp == onOff)
+        return onOff;
 
-    if ( !onOff )
-	return undoConnections();
+    if (!onOff)
+        return undoConnections();
 
     LinkBase::setUpConnections(onOff, doItAlways);
 
-    RivetHinge *rivet1 = (RivetHinge *) getAnyPart("link1", TRUE );
-    RivetHinge *rivet2 = (RivetHinge *) getAnyPart("link2", TRUE );
+    RivetHinge *rivet1 = (RivetHinge *)getAnyPart("link1", TRUE);
+    RivetHinge *rivet2 = (RivetHinge *)getAnyPart("link2", TRUE);
 
     // Set the parts that we can find as resources...
     SoNode *part;
     part = SoNode::getByName("pistonOriginTranslateGeom");
-    rivet1->setPartAsDefault("originTranslateGeom", part); 
-    rivet2->setPartAsDefault("originTranslateGeom", part); 
+    rivet1->setPartAsDefault("originTranslateGeom", part);
+    rivet2->setPartAsDefault("originTranslateGeom", part);
     part = SoNode::getByName("pistonAngleRotateGeom");
-    rivet1->setPartAsDefault("angleRotateGeom", part); 
-    rivet2->setPartAsDefault("angleRotateGeom", part); 
+    rivet1->setPartAsDefault("angleRotateGeom", part);
+    rivet2->setPartAsDefault("angleRotateGeom", part);
     part = SoNode::getByName("pistonEndPointTranslateGeom");
-    rivet1->setPartAsDefault("endPointTranslateGeom", part); 
-    rivet2->setPartAsDefault("endPointTranslateGeom", part); 
+    rivet1->setPartAsDefault("endPointTranslateGeom", part);
+    rivet2->setPartAsDefault("endPointTranslateGeom", part);
     part = SoNode::getByName("pistonOneDScaleGeom");
-    rivet1->setPartAsDefault("oneDScaleGeom", part); 
-    rivet2->setPartAsDefault("oneDScaleGeom", part); 
+    rivet1->setPartAsDefault("oneDScaleGeom", part);
+    rivet2->setPartAsDefault("oneDScaleGeom", part);
     part = SoNode::getByName("pistonTwoDScaleGeom");
-    rivet1->setPartAsDefault("twoDScaleGeom", part); 
-    rivet2->setPartAsDefault("twoDScaleGeom", part); 
+    rivet1->setPartAsDefault("twoDScaleGeom", part);
+    rivet2->setPartAsDefault("twoDScaleGeom", part);
     part = SoNode::getByName("pistonThreeDScaleGeom");
-    rivet1->setPartAsDefault("threeDScaleGeom", part); 
-    rivet2->setPartAsDefault("threeDScaleGeom", part); 
+    rivet1->setPartAsDefault("threeDScaleGeom", part);
+    rivet2->setPartAsDefault("threeDScaleGeom", part);
     part = SoNode::getByName("pistonMaterial");
-    rivet1->setPartAsDefault("material", part); 
-    rivet1->setPartAsDefault("material", part); 
+    rivet1->setPartAsDefault("material", part);
+    rivet1->setPartAsDefault("material", part);
 
-    rivet1->setUpConnections(onOff, doItAlways );
-    rivet2->setUpConnections(onOff, doItAlways );
+    rivet1->setUpConnections(onOff, doItAlways);
+    rivet2->setUpConnections(onOff, doItAlways);
 
-    rivet1->origin.connectFrom( &origin1 );
-    rivet2->origin.connectFrom( &origin2 );
+    rivet1->origin.connectFrom(&origin1);
+    rivet2->origin.connectFrom(&origin2);
 
-    rivet1->hingePoint.connectFrom( &origin2 );
-    rivet2->hingePoint.connectFrom( &origin1 );
+    rivet1->hingePoint.connectFrom(&origin2);
+    rivet2->hingePoint.connectFrom(&origin1);
 
-    rivet1->size.connectFrom( &size1 );
-    rivet2->size.connectFrom( &size2 );
+    rivet1->size.connectFrom(&size1);
+    rivet2->size.connectFrom(&size2);
 
     rivet1->isError.disconnect();
     rivet2->isError.disconnect();
 
-    myPistonErrorEngine->inOrigin1.connectFrom( &origin1 );
-    myPistonErrorEngine->inOrigin2.connectFrom( &origin2 );
-    myPistonErrorEngine->inSize1.connectFrom( &size1 );
-    myPistonErrorEngine->inSize2.connectFrom( &size2 );
+    myPistonErrorEngine->inOrigin1.connectFrom(&origin1);
+    myPistonErrorEngine->inOrigin2.connectFrom(&origin2);
+    myPistonErrorEngine->inSize1.connectFrom(&size1);
+    myPistonErrorEngine->inSize2.connectFrom(&size2);
 
-    isError.connectFrom( &myPistonErrorEngine->outError );
+    isError.connectFrom(&myPistonErrorEngine->outError);
 
-    setDraggers( draggersOn.getValue() );
+    setDraggers(draggersOn.getValue());
 
     connectionsSetUp = onOff;
     return !connectionsSetUp;
 }
 void
-Piston::setDefaultOnNonWritingFields()
-{
+Piston::setDefaultOnNonWritingFields() {
     // We'd rather not write out these nodes, since their parameters
     // should be reflected by the DoubleLink parameters.
     link1.setDefault(TRUE);
     link2.setDefault(TRUE);
 
-    // We'll even go so far as to set the fields of the sub-links to 
+    // We'll even go so far as to set the fields of the sub-links to
     // default.  So they will only write out if the geometry has been altered.
-    RivetHinge *rivet1 = (RivetHinge *) getAnyPart("link1", TRUE );
-    if (rivet1 ) {
-	rivet1->isError.setDefault(TRUE);
-	rivet1->origin.setDefault(TRUE);
-	rivet1->angle.setDefault(TRUE);
-	rivet1->size.setDefault(TRUE);
-	rivet1->endPoint.setDefault(TRUE);
-	rivet1->hingePoint.setDefault(TRUE);
+    RivetHinge *rivet1 = (RivetHinge *)getAnyPart("link1", TRUE);
+    if (rivet1) {
+        rivet1->isError.setDefault(TRUE);
+        rivet1->origin.setDefault(TRUE);
+        rivet1->angle.setDefault(TRUE);
+        rivet1->size.setDefault(TRUE);
+        rivet1->endPoint.setDefault(TRUE);
+        rivet1->hingePoint.setDefault(TRUE);
     }
-    RivetHinge *rivet2 = (RivetHinge *) getAnyPart("link2", TRUE );
-    if (rivet2 ) {
-	rivet2->isError.setDefault(TRUE);
-	rivet2->origin.setDefault(TRUE);
-	rivet2->angle.setDefault(TRUE);
-	rivet2->size.setDefault(TRUE);
-	rivet2->endPoint.setDefault(TRUE);
-	rivet2->hingePoint.setDefault(TRUE);
+    RivetHinge *rivet2 = (RivetHinge *)getAnyPart("link2", TRUE);
+    if (rivet2) {
+        rivet2->isError.setDefault(TRUE);
+        rivet2->origin.setDefault(TRUE);
+        rivet2->angle.setDefault(TRUE);
+        rivet2->size.setDefault(TRUE);
+        rivet2->endPoint.setDefault(TRUE);
+        rivet2->hingePoint.setDefault(TRUE);
     }
 
     LinkBase::setDefaultOnNonWritingFields();
 }
 
 void
-Piston::setDraggers( SbBool on )
-{
+Piston::setDraggers(SbBool on) {
     // Turn OFF the draggers in the two links owned by the double link...
     // We have our own draggers to use instead.
-	RivetHinge *rivet1 = (RivetHinge *) getAnyPart("link1", TRUE );
-	RivetHinge *rivet2 = (RivetHinge *) getAnyPart("link2", TRUE );
+    RivetHinge *rivet1 = (RivetHinge *)getAnyPart("link1", TRUE);
+    RivetHinge *rivet2 = (RivetHinge *)getAnyPart("link2", TRUE);
 
-	rivet1->draggersOn.setValue( FALSE );
-	rivet2->draggersOn.setValue( FALSE );
-
+    rivet1->draggersOn.setValue(FALSE);
+    rivet2->draggersOn.setValue(FALSE);
 
     // Allow the base class to turn on its draggers...
-	LinkBase::setDraggers( on );
+    LinkBase::setDraggers(on);
 
     // Turn on our special draggers.
-	setOrigin1Dragger(on);
-	setOrigin2Dragger(on);
+    setOrigin1Dragger(on);
+    setOrigin2Dragger(on);
 }
 void
-Piston::setOrigin1Dragger( SbBool on )
-{
-    if ( on == TRUE ) {
+Piston::setOrigin1Dragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect draggers if necessary...
+        // Create and connect draggers if necessary...
 
-	if ( ! origin1.isConnected() ) {
+        if (!origin1.isConnected()) {
 
-	    // Set to NULL to make sure we get a new one!
-	    setAnyPart("origin1Dragger", NULL );
-	    SoTranslate2Dragger *or1Drag 
-		= (SoTranslate2Dragger *) getAnyPart("origin1Dragger", TRUE);
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("origin1Dragger", NULL);
+            SoTranslate2Dragger *or1Drag =
+                (SoTranslate2Dragger *)getAnyPart("origin1Dragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
-	    SoNode *activePart =SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		or1Drag->setPartAsDefault("translator", part, FALSE );
-	    if (activePart != NULL)
-		or1Drag->setPartAsDefault("translatorActive", activePart,FALSE);
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
+            SoNode *activePart = SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
+            if (part != NULL)
+                or1Drag->setPartAsDefault("translator", part, FALSE);
+            if (activePart != NULL)
+                or1Drag->setPartAsDefault("translatorActive", activePart,
+                                          FALSE);
 
-	    // Initialize the dragger with value from the origin1 field
-	    if (or1Drag->translation.getValue() != origin1.getValue())
-		or1Drag->translation.setValue(origin1.getValue());
+            // Initialize the dragger with value from the origin1 field
+            if (or1Drag->translation.getValue() != origin1.getValue())
+                or1Drag->translation.setValue(origin1.getValue());
 
-	    // connect from dragger
-	    origin1.connectFrom( &or1Drag->translation );
-	}
-    }
-    else {
-	SoTranslate2Dragger *or1Drag 
-	    = SO_CHECK_ANY_PART(this, "origin1Dragger", SoTranslate2Dragger );
-	if ( or1Drag != NULL ) {
-	    SoField *f;
-	    if ( origin1.getConnectedField(f) ) {
-		if ( f == &or1Drag->translation )
-		    origin1.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("origin1Dragger", NULL );
-	}
+            // connect from dragger
+            origin1.connectFrom(&or1Drag->translation);
+        }
+    } else {
+        SoTranslate2Dragger *or1Drag =
+            SO_CHECK_ANY_PART(this, "origin1Dragger", SoTranslate2Dragger);
+        if (or1Drag != NULL) {
+            SoField *f;
+            if (origin1.getConnectedField(f)) {
+                if (f == &or1Drag->translation)
+                    origin1.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("origin1Dragger", NULL);
+        }
     }
 }
 void
-Piston::setOrigin2Dragger( SbBool on )
-{
-    if ( on == TRUE ) {
+Piston::setOrigin2Dragger(SbBool on) {
+    if (on == TRUE) {
 
-	// Create and connect draggers if necessary...
+        // Create and connect draggers if necessary...
 
-	if ( ! origin2.isConnected() ) {
+        if (!origin2.isConnected()) {
 
-	    // Set to NULL to make sure we get a new one!
-	    setAnyPart("origin2Dragger", NULL );
-	    SoTranslate2Dragger *or2Drag 
-		= (SoTranslate2Dragger *) getAnyPart("origin2Dragger", TRUE);
+            // Set to NULL to make sure we get a new one!
+            setAnyPart("origin2Dragger", NULL);
+            SoTranslate2Dragger *or2Drag =
+                (SoTranslate2Dragger *)getAnyPart("origin2Dragger", TRUE);
 
-	    // Set the parts based on resources
-	    SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
-	    SoNode *activePart =SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
-	    if (part != NULL)
-		or2Drag->setPartAsDefault("translator", part, FALSE );
-	    if (activePart != NULL)
-		or2Drag->setPartAsDefault("translatorActive", activePart,FALSE);
+            // Set the parts based on resources
+            SoNode *part = SoNode::getByName("LINK_POINT_DRAGGER");
+            SoNode *activePart = SoNode::getByName("LINK_POINT_DRAGGER_ACTIVE");
+            if (part != NULL)
+                or2Drag->setPartAsDefault("translator", part, FALSE);
+            if (activePart != NULL)
+                or2Drag->setPartAsDefault("translatorActive", activePart,
+                                          FALSE);
 
-	    // Initialize the dragger with value from the origin2 field
-	    if (or2Drag->translation.getValue() !=origin2.getValue())
-		or2Drag->translation.setValue(origin2.getValue());
+            // Initialize the dragger with value from the origin2 field
+            if (or2Drag->translation.getValue() != origin2.getValue())
+                or2Drag->translation.setValue(origin2.getValue());
 
-	    // connect from dragger
-	    origin2.connectFrom( &or2Drag->translation );
-	}
-    }
-    else {
-	SoTranslate2Dragger *or2Drag 
-	    = SO_CHECK_ANY_PART(this, "origin2Dragger", SoTranslate2Dragger );
-	if ( or2Drag != NULL ) {
-	    SoField *f;
-	    if ( origin2.getConnectedField(f) ) {
-		if ( f == &or2Drag->translation )
-		    origin2.disconnect();
-	    }
-	    // Remove the dragger.
-	    setAnyPart("origin2Dragger", NULL );
-	}
+            // connect from dragger
+            origin2.connectFrom(&or2Drag->translation);
+        }
+    } else {
+        SoTranslate2Dragger *or2Drag =
+            SO_CHECK_ANY_PART(this, "origin2Dragger", SoTranslate2Dragger);
+        if (or2Drag != NULL) {
+            SoField *f;
+            if (origin2.getConnectedField(f)) {
+                if (f == &or2Drag->translation)
+                    origin2.disconnect();
+            }
+            // Remove the dragger.
+            setAnyPart("origin2Dragger", NULL);
+        }
     }
 }
 
-void 
-Piston::errorColor( SbBool useErrorColor )
-{
-    LinkBase::errorColor( useErrorColor );
+void
+Piston::errorColor(SbBool useErrorColor) {
+    LinkBase::errorColor(useErrorColor);
 
-    RivetHinge *rivet1 = (RivetHinge *) getAnyPart("link1", TRUE );
-    RivetHinge *rivet2 = (RivetHinge *) getAnyPart("link2", TRUE );
+    RivetHinge *rivet1 = (RivetHinge *)getAnyPart("link1", TRUE);
+    RivetHinge *rivet2 = (RivetHinge *)getAnyPart("link2", TRUE);
 
-    rivet1->isError.setValue( isError.getValue() );
-    rivet2->isError.setValue( isError.getValue() );
+    rivet1->isError.setValue(isError.getValue());
+    rivet2->isError.setValue(isError.getValue());
 }
 
 //
@@ -2228,85 +2139,72 @@ Piston::errorColor( SbBool useErrorColor )
 //
 // Use: public
 //
-Piston::~Piston()
-{
+Piston::~Piston() {
     if (myPistonErrorEngine)
         myPistonErrorEngine->unref();
 }
 
-
-
-
-
 SO_KIT_SOURCE(Button);
 
 void
-Button::initClass()
-{
-    SO__KIT_INIT_CLASS(Button, "Button", SoDragger );
+Button::initClass() {
+    SO__KIT_INIT_CLASS(Button, "Button", SoDragger);
 }
 
-Button::Button()
-{
+Button::Button() {
     SO_KIT_CONSTRUCTOR(Button);
 
     isBuiltIn = TRUE;
 
-    SO_KIT_ADD_CATALOG_ENTRY(buttonSwitch, SoSwitch, TRUE,
-			    geomSeparator, ,FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(buttonSwitch, SoSwitch, TRUE, geomSeparator, \0,
+                             FALSE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(buttonSep, SoSeparator, TRUE,
-			    buttonSwitch, ,TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(buttonGeom, SoSeparator, TRUE,
-			    buttonSep, ,TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(buttonText, SoSeparator, TRUE,
-			    buttonSep, ,TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(buttonSep, SoSeparator, TRUE, buttonSwitch, \0,
+                             TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(buttonGeom, SoSeparator, TRUE, buttonSep, \0,
+                             TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(buttonText, SoSeparator, TRUE, buttonSep, \0,
+                             TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(buttonActiveSep, SoSeparator, TRUE,
-			    buttonSwitch, ,TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(buttonActiveSep, SoSeparator, TRUE, buttonSwitch,
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(buttonActiveGeom, SoSeparator, TRUE,
-			    buttonActiveSep, ,TRUE);
+                             buttonActiveSep, \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(buttonActiveText, SoSeparator, TRUE,
-			    buttonActiveSep, ,TRUE);
+                             buttonActiveSep, \0, TRUE);
 
     SO_KIT_INIT_INSTANCE();
 
-    setPartAsDefault("buttonGeom",       "buttonButtonGeom");
-    setPartAsDefault("buttonText",       "buttonButtonText");
+    setPartAsDefault("buttonGeom", "buttonButtonGeom");
+    setPartAsDefault("buttonText", "buttonButtonText");
     setPartAsDefault("buttonActiveGeom", "buttonButtonActiveGeom");
     setPartAsDefault("buttonActiveText", "buttonButtonActiveText");
 
-    setSwitchValue(buttonSwitch.getValue(), 0 );
+    setSwitchValue(buttonSwitch.getValue(), 0);
 
-    addStartCallback( &Button::startCB );
-    addFinishCallback( &Button::finishCB );
+    addStartCallback(&Button::startCB);
+    addFinishCallback(&Button::finishCB);
 }
 
-Button::~Button()
-{
-}
+Button::~Button() {}
 
-void 
-Button::dragStart()
-{
-    setSwitchValue( buttonSwitch.getValue(), 1 );
-}
-
-void 
-Button::dragFinish()
-{
-    setSwitchValue( buttonSwitch.getValue(), 0 );
+void
+Button::dragStart() {
+    setSwitchValue(buttonSwitch.getValue(), 1);
 }
 
 void
-Button::startCB(void *, SoDragger *inDragger )
-{
-    Button *b = (Button *) inDragger;
+Button::dragFinish() {
+    setSwitchValue(buttonSwitch.getValue(), 0);
+}
+
+void
+Button::startCB(void *, SoDragger *inDragger) {
+    Button *b = (Button *)inDragger;
     b->dragStart();
 }
 void
-Button::finishCB(void *, SoDragger *inDragger )
-{
-    Button *b = (Button *) inDragger;
+Button::finishCB(void *, SoDragger *inDragger) {
+    Button *b = (Button *)inDragger;
     b->dragFinish();
 }

@@ -123,49 +123,50 @@ SoTrackballDragger::SoTrackballDragger()
 
     // Put this stuff under the geomSeparator so it will draw more
     // efficiently.
-    SO_KIT_ADD_CATALOG_ENTRY(rotatorSwitch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotatorSwitch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator, SoSeparator, TRUE, rotatorSwitch, , TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotatorActive, SoSeparator, TRUE, rotatorSwitch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator, SoSeparator, TRUE, rotatorSwitch, \0,
                              TRUE);
+    SO_KIT_ADD_CATALOG_ENTRY(rotatorActive, SoSeparator, TRUE, rotatorSwitch,
+                             \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(XRotatorSwitch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(XRotatorSwitch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(XRotator, SoSeparator, TRUE, XRotatorSwitch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(XRotator, SoSeparator, TRUE, XRotatorSwitch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(XRotatorActive, SoSeparator, TRUE, XRotatorSwitch,
-                             , TRUE);
+                             \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(YRotatorSwitch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(YRotatorSwitch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(YRotator, SoSeparator, TRUE, YRotatorSwitch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(YRotator, SoSeparator, TRUE, YRotatorSwitch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(YRotatorActive, SoSeparator, TRUE, YRotatorSwitch,
-                             , TRUE);
+                             \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(ZRotatorSwitch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(ZRotatorSwitch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(ZRotator, SoSeparator, TRUE, ZRotatorSwitch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(ZRotator, SoSeparator, TRUE, ZRotatorSwitch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(ZRotatorActive, SoSeparator, TRUE, ZRotatorSwitch,
-                             , TRUE);
+                             \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(userAxisRotation, SoRotation, TRUE, geomSeparator,
-                             , FALSE);
+                             \0, FALSE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(userAxisSwitch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(userAxisSwitch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(userAxis, SoSeparator, TRUE, userAxisSwitch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(userAxis, SoSeparator, TRUE, userAxisSwitch, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(userAxisActive, SoSeparator, TRUE, userAxisSwitch,
-                             , TRUE);
+                             \0, TRUE);
 
-    SO_KIT_ADD_CATALOG_ENTRY(userRotatorSwitch, SoSwitch, TRUE, geomSeparator, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(userRotatorSwitch, SoSwitch, TRUE, geomSeparator,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(userRotator, SoSeparator, TRUE, userRotatorSwitch,
-                             , TRUE);
+                             \0, TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(userRotatorActive, SoSeparator, TRUE,
-                             userRotatorSwitch, , TRUE);
+                             userRotatorSwitch, \0, TRUE);
 
     // read geometry for shared parts
     if (SO_KIT_IS_FIRST_INSTANCE())

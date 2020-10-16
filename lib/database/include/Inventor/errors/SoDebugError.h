@@ -61,6 +61,10 @@
 
 #include <Inventor/errors/SoError.h>
 
+#ifdef ERROR
+#undef ERROR
+#endif
+
 /// Debug error handling.
 /// \ingroup Errors
 /// <tt>SoDebugError</tt> is used for all errors reported from the debugging

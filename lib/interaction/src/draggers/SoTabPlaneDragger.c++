@@ -117,42 +117,42 @@ SoTabPlaneDragger::SoTabPlaneDragger() {
 
     isBuiltIn = TRUE;
 
-    SO_KIT_ADD_CATALOG_ENTRY(planeSwitch, SoSwitch, TRUE, geomSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(planeSwitch, SoSwitch, TRUE, geomSeparator, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator, SoSeparator, TRUE, planeSwitch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(translator, SoSeparator, TRUE, planeSwitch, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scaleTabs, SoSeparator, TRUE, planeSwitch, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scaleTabs, SoSeparator, TRUE, planeSwitch, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(scaleTabMaterial, SoMaterial, TRUE, scaleTabs, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scaleTabMaterial, SoMaterial, TRUE, scaleTabs, \0,
                              TRUE);
-    SO_KIT_ADD_CATALOG_ENTRY(scaleTabHints, SoShapeHints, TRUE, scaleTabs, ,
+    SO_KIT_ADD_CATALOG_ENTRY(scaleTabHints, SoShapeHints, TRUE, scaleTabs, \0,
                              TRUE);
     SO_KIT_ADD_CATALOG_ENTRY(scaleTabMaterialBinding, SoMaterialBinding, TRUE,
-                             scaleTabs, , FALSE);
+                             scaleTabs, \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(scaleTabNormalBinding, SoNormalBinding, TRUE,
-                             scaleTabs, , FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(scaleTabNormal, SoNormal, TRUE, scaleTabs, ,
+                             scaleTabs, \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(scaleTabNormal, SoNormal, TRUE, scaleTabs, \0,
                              FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleCoords, SoCoordinate3, TRUE, scaleTabs, ,
-                             FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleTab0, SoIndexedFaceSet, TRUE, scaleTabs, ,
-                             FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleTab1, SoIndexedFaceSet, TRUE, scaleTabs, ,
-                             FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleTab2, SoIndexedFaceSet, TRUE, scaleTabs, ,
-                             FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleTab3, SoIndexedFaceSet, TRUE, scaleTabs, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleCoords, SoCoordinate3, TRUE, scaleTabs,
+                             \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleTab0, SoIndexedFaceSet, TRUE, scaleTabs,
+                             \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleTab1, SoIndexedFaceSet, TRUE, scaleTabs,
+                             \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleTab2, SoIndexedFaceSet, TRUE, scaleTabs,
+                             \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(edgeScaleTab3, SoIndexedFaceSet, TRUE, scaleTabs,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(cornerScaleCoords, SoCoordinate3, TRUE, scaleTabs,
-                             , FALSE);
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(cornerScaleTab0, SoIndexedFaceSet, TRUE, scaleTabs,
-                             , FALSE);
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(cornerScaleTab1, SoIndexedFaceSet, TRUE, scaleTabs,
-                             , FALSE);
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(cornerScaleTab2, SoIndexedFaceSet, TRUE, scaleTabs,
-                             , FALSE);
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(cornerScaleTab3, SoIndexedFaceSet, TRUE, scaleTabs,
-                             , FALSE);
+                             \0, FALSE);
 
     if (SO_KIT_IS_FIRST_INSTANCE())
         readDefaultParts("tabPlaneDragger.iv", geomBuffer, sizeof(geomBuffer));

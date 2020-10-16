@@ -103,8 +103,8 @@ SoInteractionKit::SoInteractionKit()
     isBuiltIn = TRUE;
 
     // Add a separator to the catalog.
-    SO_KIT_ADD_CATALOG_ENTRY(topSeparator, SoSeparator, TRUE, this, , FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(geomSeparator, SoSeparator, TRUE, topSeparator, ,
+    SO_KIT_ADD_CATALOG_ENTRY(topSeparator, SoSeparator, TRUE, this, \0, FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(geomSeparator, SoSeparator, TRUE, topSeparator, \0,
                              FALSE);
 
     SO_KIT_ADD_FIELD(renderCaching, (AUTO));

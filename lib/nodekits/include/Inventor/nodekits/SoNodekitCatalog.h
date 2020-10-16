@@ -188,7 +188,7 @@ class SoNodekitCatalog {
     static void finishClass();
 
     /// Returns number of entries in the catalog.
-    int getNumEntries() const { return entries.size(); };
+    int getNumEntries() const { return int(entries.size()); };
 
     /// Given the name of a part, returns its part number in the catalog.
     int getPartNumber(const SbName &theName) const;

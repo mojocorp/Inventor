@@ -348,7 +348,7 @@ class SoLightPath {
 
     // Returns full length of path chain (number of nodes)
     // note that public/private distinction is ignored.
-    int getFullLength() const { return indices.size(); }
+    int getFullLength() const { return int(indices.size()); }
 
     // Removes all nodes from indexed node on
     void truncate(int start) { indices.resize(start); }

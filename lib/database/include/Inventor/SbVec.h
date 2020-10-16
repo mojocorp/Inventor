@@ -160,7 +160,7 @@ class SbVec3f {
     SbVec3f &operator*=(float d);
 
     /// Component-wise scalar division operator
-    SbVec3f &operator/=(float d) { return *this *= (1.0 / d); }
+    SbVec3f &operator/=(float d) { return *this *= (1.0f / d); }
 
     /// Component-wise vector addition operator
     SbVec3f &operator+=(SbVec3f v);
@@ -179,7 +179,7 @@ class SbVec3f {
 
     /// Component-wise binary scalar division operator
     friend SbVec3f operator/(const SbVec3f &v, float d) {
-        return v * (1.0 / d);
+        return v * (1.0f / d);
     }
 
     /// Component-wise binary vector addition operator
@@ -368,7 +368,7 @@ class SbVec2f {
     SbVec2f &operator*=(float d);
 
     /// Component-wise scalar division operator
-    SbVec2f &operator/=(float d) { return *this *= (1.0 / d); }
+    SbVec2f &operator/=(float d) { return *this *= (1.0f / d); }
 
     /// Component-wise vector addition operator
     SbVec2f &operator+=(const SbVec2f &u);
@@ -387,7 +387,7 @@ class SbVec2f {
 
     /// Component-wise binary scalar division operator
     friend SbVec2f operator/(const SbVec2f &v, float d) {
-        return v * (1.0 / d);
+        return v * (1.0f / d);
     }
 
     /// Component-wise binary vector addition operator
@@ -565,7 +565,7 @@ class SbVec4f {
     SbVec4f &operator*=(float d);
 
     /// Component-wise scalar division operator
-    SbVec4f &operator/=(float d) { return *this *= (1.0 / d); }
+    SbVec4f &operator/=(float d) { return *this *= (1.0f / d); }
 
     /// Component-wise vector addition operator
     SbVec4f &operator+=(const SbVec4f &u);
@@ -584,7 +584,7 @@ class SbVec4f {
 
     /// Component-wise binary scalar division operator
     friend SbVec4f operator/(const SbVec4f &v, float d) {
-        return v * (1.0 / d);
+        return v * (1.0f / d);
     }
 
     /// Component-wise binary vector addition operator

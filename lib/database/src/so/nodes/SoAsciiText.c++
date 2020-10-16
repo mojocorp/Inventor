@@ -279,8 +279,8 @@ SoAsciiText::computeBBox(SoAction *action, SbBox3f &box, SbVec3f &center)
     const SbVec2f &boxMin = outlineBox.getMin();
     const SbVec2f &boxMax = outlineBox.getMax();
 
-    SbVec3f min(boxMin[0], boxMin[1], 0);
-    SbVec3f max(boxMax[0], boxMax[1], 0);
+    SbVec3f min(boxMin[0], boxMin[1], 0.f);
+    SbVec3f max(boxMax[0], boxMax[1], 0.f);
     box.extendBy(min);
     box.extendBy(max);
 }

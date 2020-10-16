@@ -247,7 +247,7 @@ class SoEngineOutput {
     void removeConnection(SoField *);
 
     // Number of connections this output currently has
-    int getNumConnections() const { return connections.size(); }
+    int getNumConnections() const { return int(connections.size()); }
 
     // Returns the fields this output is writing into
     SoField *operator[](int i) const { return connections[i]; }

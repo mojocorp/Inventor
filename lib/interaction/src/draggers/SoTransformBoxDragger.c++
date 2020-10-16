@@ -116,66 +116,66 @@ SoTransformBoxDragger::SoTransformBoxDragger() {
 
     SO_KIT_ADD_CATALOG_ENTRY(rotator1Sep, SoSeparator, FALSE, topSeparator,
                              geomSeparator, FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator1Rot, SoRotation, TRUE, rotator1Sep, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator1Rot, SoRotation, TRUE, rotator1Sep, \0,
                              FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator1, SoRotateCylindricalDragger, TRUE,
-                             rotator1Sep, , TRUE);
+                             rotator1Sep, \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(rotator2Sep, SoSeparator, FALSE, topSeparator,
                              geomSeparator, FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator2Rot, SoRotation, TRUE, rotator2Sep, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator2Rot, SoRotation, TRUE, rotator2Sep, \0,
                              FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator2, SoRotateCylindricalDragger, TRUE,
-                             rotator2Sep, , TRUE);
+                             rotator2Sep, \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(rotator3Sep, SoSeparator, FALSE, topSeparator,
                              geomSeparator, FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(rotator3Rot, SoRotation, TRUE, rotator3Sep, ,
+    SO_KIT_ADD_CATALOG_ENTRY(rotator3Rot, SoRotation, TRUE, rotator3Sep, \0,
                              FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(rotator3, SoRotateCylindricalDragger, TRUE,
-                             rotator3Sep, , TRUE);
+                             rotator3Sep, \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(translator1Sep, SoSeparator, FALSE, topSeparator,
                              geomSeparator, FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator1Rot, SoRotation, TRUE, translator1Sep, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator1Rot, SoRotation, TRUE, translator1Sep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator1, SoTranslate2Dragger, TRUE,
-                             translator1Sep, , TRUE);
+                             translator1Sep, \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(translator2Sep, SoSeparator, FALSE, topSeparator,
                              geomSeparator, FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator2Rot, SoRotation, TRUE, translator2Sep, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator2Rot, SoRotation, TRUE, translator2Sep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator2, SoTranslate2Dragger, TRUE,
-                             translator2Sep, , TRUE);
+                             translator2Sep, \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(translator3Sep, SoSeparator, FALSE, topSeparator,
                              geomSeparator, FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator3Rot, SoRotation, TRUE, translator3Sep, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator3Rot, SoRotation, TRUE, translator3Sep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator3, SoTranslate2Dragger, TRUE,
-                             translator3Sep, , TRUE);
+                             translator3Sep, \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(translator4Sep, SoSeparator, FALSE, topSeparator,
                              geomSeparator, FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator4Rot, SoRotation, TRUE, translator4Sep, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator4Rot, SoRotation, TRUE, translator4Sep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator4, SoTranslate2Dragger, TRUE,
-                             translator4Sep, , TRUE);
+                             translator4Sep, \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(translator5Sep, SoSeparator, FALSE, topSeparator,
                              geomSeparator, FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator5Rot, SoRotation, TRUE, translator5Sep, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator5Rot, SoRotation, TRUE, translator5Sep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator5, SoTranslate2Dragger, TRUE,
-                             translator5Sep, , TRUE);
+                             translator5Sep, \0, TRUE);
 
     SO_KIT_ADD_CATALOG_ENTRY(translator6Sep, SoSeparator, FALSE, topSeparator,
                              geomSeparator, FALSE);
-    SO_KIT_ADD_CATALOG_ENTRY(translator6Rot, SoRotation, TRUE, translator6Sep, ,
-                             FALSE);
+    SO_KIT_ADD_CATALOG_ENTRY(translator6Rot, SoRotation, TRUE, translator6Sep,
+                             \0, FALSE);
     SO_KIT_ADD_CATALOG_ENTRY(translator6, SoTranslate2Dragger, TRUE,
-                             translator6Sep, , TRUE);
+                             translator6Sep, \0, TRUE);
 
     // Read the default geometry for this dragger
     if (SO_KIT_IS_FIRST_INSTANCE())
