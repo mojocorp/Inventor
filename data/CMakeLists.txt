@@ -1,5 +1,5 @@
 
-set(SOURCES
+set(MODELS
     models/CyberHeads/README
     models/CyberHeads/josie.iv
     models/CyberHeads/paul.iv
@@ -107,7 +107,10 @@ set(SOURCES
     models/wheel.iv
 )
 
-foreach(file ${SOURCES})
-    get_filename_component(dir ${file} DIRECTORY)
-    install(FILES ${file} DESTINATION share/data/${dir} COMPONENT data)
-endforeach()
+set(TEXTURES
+    textures/brick.rgb
+)
+
+install(FILES ${MODELS} DESTINATION data/models COMPONENT data)
+install(FILES ${TEXTURES} DESTINATION data/textures COMPONENT data)
+

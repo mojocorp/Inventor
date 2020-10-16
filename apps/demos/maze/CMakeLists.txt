@@ -11,3 +11,4 @@ set(SOURCES
 add_definitions(-DNO_AUDIO)
 add_executable(maze ${HEADERS} ${SOURCES})
 target_link_libraries(maze Inventor InventorXt)
+install(TARGETS maze DESTINATION bin/demos)

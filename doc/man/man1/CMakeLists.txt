@@ -7,5 +7,5 @@ install(FILES
     ivfix.1
     ivinfo.1
     ivview.1
-DESTINATION man/man1
+DESTINATION doc/man1
 )

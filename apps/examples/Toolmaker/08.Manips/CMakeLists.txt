@@ -19,3 +19,4 @@ set(SOURCES
 
 add_executable(newManips ${HEADERS} ${SOURCES})
 target_link_libraries(newManips Inventor InventorXt)
+install(TARGETS newManips DESTINATION bin/examples/Toolmaker)

@@ -1,7 +1,11 @@
 add_executable(ivToIncludeFile foo.h ivToIncludeFile.c++)
 target_link_libraries(ivToIncludeFile Inventor)
+set_target_properties(ivToIncludeFile PROPERTIES FOLDER "apps/samples")
+install(TARGETS ivToIncludeFile DESTINATION bin/samples)
 
 if (X11_FOUND)
     add_executable(testResults testResults.c++)
     target_link_libraries(testResults Inventor InventorXt)
+    set_target_properties(testResults PROPERTIES FOLDER "apps/samples")
+    install(TARGETS testResults DESTINATION bin/samples)
 endif()

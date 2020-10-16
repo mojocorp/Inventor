@@ -13,3 +13,4 @@ set(SOURCES
 
 add_executable(newNodes ${HEADERS} ${SOURCES})
 target_link_libraries(newNodes Inventor InventorXt)
+install(TARGETS newNodes DESTINATION bin/examples/Toolmaker)

@@ -1,1 +1,1 @@
-install(FILES iv2toiv1 DESTINATION bin)
+install(FILES iv2toiv1 DESTINATION bin/converters)

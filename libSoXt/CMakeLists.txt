@@ -148,9 +148,9 @@ include_directories(src/viewers)
 add_library (InventorXt SHARED ${PUBLIC_HEADERS} ${PRIVATE_HEADERS} ${SOXT_SOURCES})
 target_link_libraries(InventorXt PUBLIC Inventor OpenGL::GL ${MOTIF_LIBRARIES} ${X11_LIBRARIES} ${X11_Xt_LIB} ${X11_Xi_LIB} PRIVATE GLU)
 target_include_directories (InventorXt PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include ${X11_INCLUDE_DIR} ${MOTIF_INCLUDE_DIR})
+set_target_properties(InventorXt PROPERTIES DEBUG_POSTFIX "d")
 
-install(TARGETS InventorXt CONFIGURATIONS Debug DESTINATION lib/InventorDebug)
-install(TARGETS InventorXt CONFIGURATIONS Release DESTINATION lib)
+install(TARGETS InventorXt DESTINATION lib)
 
 foreach ( file ${PUBLIC_HEADERS} )
     get_filename_component( dir ${file} DIRECTORY )

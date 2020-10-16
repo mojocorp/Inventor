@@ -5,3 +5,5 @@ target_link_libraries(ivNodeKitStructure Inventor InventorXt)
 if(UNIX AND NOT APPLE)
     target_link_libraries(ivNodeKitStructure dl)
 endif()
+
+install(TARGETS ivNodeKitStructure DESTINATION bin/samples)

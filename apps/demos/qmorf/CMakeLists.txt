@@ -15,3 +15,5 @@ target_link_libraries(qmorf_objects Inventor)
 
 add_executable(qmorf qmorf.c++)
 target_link_libraries(qmorf Inventor InventorXt qmorf_objects)
+
+install(TARGETS qmorf DESTINATION bin/demos)

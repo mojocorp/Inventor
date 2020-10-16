@@ -40,5 +40,6 @@ set(SOURCES
 
 add_executable(ivfix ${HEADERS} ${SOURCES})
 target_link_libraries(ivfix Inventor)
+set_target_properties(ivfix PROPERTIES FOLDER "apps/tools")
 
-install(TARGETS ivfix DESTINATION bin)
+install(TARGETS ivfix DESTINATION bin/tools)

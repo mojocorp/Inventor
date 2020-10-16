@@ -21,3 +21,4 @@ set(SOURCES
 
 add_executable(drop ${HEADERS} ${SOURCES})
 target_link_libraries(drop Inventor InventorXt)
+install(TARGETS drop DESTINATION bin/demos)

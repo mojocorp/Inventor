@@ -30,3 +30,5 @@ add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/gviewIcons.iv.h
 
 add_executable(gview ${HEADERS} ${SOURCES} ${CMAKE_CURRENT_BINARY_DIR}/gviewIcons.iv.h)
 target_link_libraries(gview Inventor InventorXt)
+
+install(TARGETS gview DESTINATION bin/demos)

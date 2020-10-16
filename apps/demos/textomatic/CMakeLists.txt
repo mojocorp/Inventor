@@ -18,3 +18,5 @@ target_link_libraries(textomatic Inventor InventorXt common ${Iconv_LIBRARIES})
 if(APPLE)
     target_link_libraries(textomatic charset)
 endif()
+
+install(TARGETS textomatic DESTINATION bin/demos)

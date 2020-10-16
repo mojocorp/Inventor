@@ -10,5 +10,9 @@ set(SOURCES
     Faces.c++ 
     Edges.c++
 )
+add_definitions(-D_USE_MATH_DEFINES)
 add_executable(ivnorm ${HEADERS} ${SOURCES})
 target_link_libraries(ivnorm Inventor)
+set_target_properties(ivnorm PROPERTIES FOLDER "apps/tools")
+
+install(TARGETS ivnorm DESTINATION bin/tools)

@@ -15,6 +15,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # necessary for linux, no effect on other platforms.
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
 # Extract version information from git
 find_package(Git REQUIRED)
 execute_process(
@@ -41,3 +43,12 @@ if (BUILD_DOC)
 endif()
 add_subdirectory(apps)
 
+# Package builder
+set(CPACK_PACKAGE_NAME "Inventor")
+set(CPACK_PACKAGE_VENDOR "https://github.com/mojocorp/inventor")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "SGI Open Inventor")
+set(CPACK_PACKAGE_VERSION ${INVENTOR_VERSION})
+set(CPACK_PACKAGE_INSTALL_DIRECTORY "${CMAKE_PROJECT_NAME}")
+set(CPACK_RESOURCE_FILE_LICENSE "${PROJECT_SOURCE_DIR}/COPYING")
+
+include(CPack)

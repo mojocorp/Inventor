@@ -13,3 +13,4 @@ set(SOURCES
 
 add_executable(eventTest ${HEADERS} ${SOURCES})
 target_link_libraries(eventTest Inventor InventorXt)
+install(TARGETS eventTest DESTINATION bin/examples/Toolmaker)

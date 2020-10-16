@@ -36,7 +36,9 @@ set(SOURCES
     SoText3V2.c++
 )
 
+add_definitions(-D_USE_MATH_DEFINES)
 add_executable(ivdowngrade ${HEADERS} ${SOURCES})
 target_link_libraries(ivdowngrade Inventor)
+set_target_properties(ivdowngrade PROPERTIES FOLDER "apps/converters")
 
-install(TARGETS ivdowngrade DESTINATION bin)
+install(TARGETS ivdowngrade DESTINATION bin/converters)

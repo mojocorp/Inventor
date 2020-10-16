@@ -10,3 +10,4 @@ set(SOURCES
 
 add_executable(revo ${HEADERS} ${SOURCES})
 target_link_libraries(revo Inventor InventorXt common)
+install(TARGETS revo DESTINATION bin/demos)

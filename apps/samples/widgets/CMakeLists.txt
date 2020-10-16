@@ -24,3 +24,4 @@ target_include_directories (InventorWidget PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_executable(componentTest componentTest.c++)
 target_link_libraries (componentTest InventorWidget Inventor InventorXt)
+install(TARGETS componentTest DESTINATION bin/samples)

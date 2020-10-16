@@ -865,7 +865,7 @@ set(PP_SOURCES
     database/src/so/nodes/SoLineSet.pp
 )
 
-SOURCE_GROUP("database" FILES ${DATABASE_SOURCES} ${DATABASE_PRIVATE_HEADERS} ${DATABASE_PUBLIC_HEADERS})
+source_group("database" FILES ${DATABASE_SOURCES} ${DATABASE_PRIVATE_HEADERS} ${DATABASE_PUBLIC_HEADERS})
 
 # Run ppp on each pp file
 foreach(file ${PP_SOURCES})
@@ -994,7 +994,7 @@ set(INTERACTION_SOURCES
     interaction/src/nodes/SoSurroundScale.c++
 )
 
-SOURCE_GROUP("interaction" FILES ${INTERACTION_SOURCES} ${INTERACTION_PUBLIC_HEADERS})
+source_group("interaction" FILES ${INTERACTION_SOURCES} ${INTERACTION_PUBLIC_HEADERS})
 
 set(NODEKIT_PUBLIC_HEADERS
     nodekits/include/Inventor/SoNodeKitPath.h
@@ -1102,7 +1102,7 @@ set(NODEKIT_SOURCES
     nodekits/src/upgraders/SoV1WrapperKit.c++
 )
 
-SOURCE_GROUP("nodekits" FILES ${NODEKIT_SOURCES} ${NODEKIT_PUBLIC_HEADERS})
+source_group("nodekits" FILES ${NODEKIT_SOURCES} ${NODEKIT_PUBLIC_HEADERS})
 
 set(PUBLIC_HEADERS ${DATABASE_PUBLIC_HEADERS} ${NODEKIT_PUBLIC_HEADERS} ${INTERACTION_PUBLIC_HEADERS})
 set(PRIVATE_HEADERS ${DATABASE_PRIVATE_HEADERS})
@@ -1115,9 +1115,9 @@ target_link_libraries(Inventor PUBLIC OpenGL::GL ${X11_LIBRARIES} PRIVATE ${THIR
 target_include_directories (Inventor
                             PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/database/include ${CMAKE_CURRENT_SOURCE_DIR}/nodekits/include ${CMAKE_CURRENT_SOURCE_DIR}/interaction/include
                             PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/database/src/sb ${CMAKE_CURRENT_SOURCE_DIR}/database/src/so)
+set_target_properties(Inventor PROPERTIES DEBUG_POSTFIX "d")
 
-install(TARGETS Inventor CONFIGURATIONS Debug DESTINATION lib/InventorDebug COMPONENT devel)
-install(TARGETS Inventor CONFIGURATIONS Release DESTINATION lib)
+install(TARGETS Inventor DESTINATION lib)
 
 foreach ( file ${PUBLIC_HEADERS} )
     get_filename_component( dir ${file} DIRECTORY )

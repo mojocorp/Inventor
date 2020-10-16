@@ -1,2 +1,3 @@
-add_executable(example example.c++)
-target_link_libraries(example Inventor InventorXt)
+add_executable(twoDisplay example.c++)
+target_link_libraries(twoDisplay Inventor InventorXt)
+install(TARGETS twoDisplay DESTINATION bin/samples)

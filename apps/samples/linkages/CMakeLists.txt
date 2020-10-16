@@ -11,3 +11,4 @@ set(SOURCES
 
 add_executable(linkages ${HEADERS} ${SOURCES})
 target_link_libraries(linkages Inventor InventorXt)
+install(TARGETS linkages DESTINATION bin/samples)

@@ -23,3 +23,4 @@ set(SOURCES
 
 add_executable(noodle ${HEADERS} ${SOURCES})
 target_link_libraries(noodle Inventor InventorXt GeneralizedCylinder)
+install(TARGETS noodle DESTINATION bin/demos)
