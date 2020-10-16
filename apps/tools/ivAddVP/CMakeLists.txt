@@ -1,3 +1,7 @@
+if(WIN32)
+include_directories(../../compat)
+endif()
+
 add_executable(ivAddVP ivAddVP.c++)
 target_link_libraries(ivAddVP Inventor)
 set_target_properties(ivAddVP PROPERTIES FOLDER "apps/tools")

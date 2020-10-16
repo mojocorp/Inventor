@@ -10,6 +10,11 @@ set(SOURCES
     Faces.c++ 
     Edges.c++
 )
+
+if(WIN32)
+include_directories(../../compat)
+endif()
+
 add_definitions(-D_USE_MATH_DEFINES)
 add_executable(ivnorm ${HEADERS} ${SOURCES})
 target_link_libraries(ivnorm Inventor)

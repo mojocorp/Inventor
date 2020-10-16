@@ -4,8 +4,8 @@ project(Inventor)
 find_package(X11)
 
 option(BUILD_DOC "Build documentation" ON)
+option(BUILD_APPS "Build applications" ON)
 if(NOT WIN32)
-    option(BUILD_APPS "Build applications" ON)
     option(BUILD_EXAMPLES "Build examples" ON)
 endif()
 

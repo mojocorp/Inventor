@@ -38,6 +38,10 @@ set(SOURCES
     IfWeeder.c++
 )
 
+if(WIN32)
+include_directories(../../compat)
+endif()
+
 add_executable(ivfix ${HEADERS} ${SOURCES})
 target_link_libraries(ivfix Inventor)
 set_target_properties(ivfix PROPERTIES FOLDER "apps/tools")

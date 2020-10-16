@@ -1,3 +1,7 @@
+if(WIN32)
+include_directories(../../compat)
+endif()
+
 add_definitions(-D_USE_MATH_DEFINES)
 add_executable(ivinfo ivinfo.c++)
 target_link_libraries(ivinfo Inventor)

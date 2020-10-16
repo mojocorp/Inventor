@@ -36,6 +36,10 @@ set(SOURCES
     SoText3V2.c++
 )
 
+if(WIN32)
+include_directories(../../compat)
+endif()
+
 add_definitions(-D_USE_MATH_DEFINES)
 add_executable(ivdowngrade ${HEADERS} ${SOURCES})
 target_link_libraries(ivdowngrade Inventor)

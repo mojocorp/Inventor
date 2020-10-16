@@ -54,7 +54,6 @@
 #include <Inventor/SoLists.h>
 #include <Inventor/actions/SoWriteAction.h>
 #include <Inventor/actions/SoSearchAction.h>
-#include <Inventor/misc/SoChildList.h>
 #include <Inventor/nodekits/SoBaseKit.h>
 
 static void
